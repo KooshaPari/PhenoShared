@@ -1,0 +1,4 @@
+#!/bin/bash
+eval "$(ssh-agent -s)" > /dev/null
+ssh-add --apple-use-keychain ~/.ssh/id-git 2>/dev/null
+ssh -o BatchMode=yes desk "$@"
