@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+printf '%s\n' 'agileplus-worklog unavailable: no authorized AgilePlus worklog deployment is installed' >&2
+printf '%s\n' 'This guard does not invoke the missing historical converter or unreleased source command.' >&2
+printf '%s\n' 'Use a reviewed published AgilePlus CLI release that exposes worklog commands.' >&2
+exit 127
