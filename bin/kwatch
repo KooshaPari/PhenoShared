@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+printf '%s\n' 'kwatch unavailable: no authorized deployment is installed' >&2
+printf '%s\n' 'This guard does not run the preserved unproven binary fallback.' >&2
+printf '%s\n' 'Restore only from a canonical source or verified package release.' >&2
+exit 127
