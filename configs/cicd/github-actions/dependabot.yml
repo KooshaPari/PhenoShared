@@ -1,12 +1,29 @@
 version: 2
 updates:
-  - package-ecosystem: github-actions
-    directory: "/"
-    schedule:
-      interval: weekly
-    labels:
-      - dependencies
-      - github-actions
-    assignees:
-      - KooshaPari
-    open-pull-requests-limit: 10
+    - package-ecosystem: github-actions
+      directory: "/"
+      schedule:
+          interval: weekly
+      labels:
+          - dependencies
+          - github-actions
+      assignees:
+          - KooshaPari
+      open-pull-requests-limit: 10
+    - package-ecosystem: gomod
+      directories:
+          - "/templates/hexagonal/hexagonal-go"
+          - "/templates/microservice-scaffold/go"
+          - "/hexagon/templates/go"
+      schedule:
+          interval: weekly
+      labels:
+          - dependencies
+          - go
+      assignees:
+          - KooshaPari
+      open-pull-requests-limit: 10
+      ignore:
+          - dependency-name: "google.golang.org/grpc"
+            versions:
+                - "<= 1.80.0"
