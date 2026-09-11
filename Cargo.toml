@@ -202,7 +202,7 @@ hyper = "1"
 opentelemetry = { version = "0.31", features = ["trace"] }
 opentelemetry-otlp = { version = "0.31", features = ["grpc-tonic"] }
 opentelemetry_sdk = { version = "0.31", features = ["trace"] }
-reqwest = { version = "0.12", features = ["json", "rustls-tls"], default-features = false }
+reqwest = { version = "0.13", features = ["json", "rustls-tls"], default-features = false }
 rusqlite = { version = "0.32", features = ["bundled"] }
 tokio-test = "0.4"
 tokio-util = "0.7"
