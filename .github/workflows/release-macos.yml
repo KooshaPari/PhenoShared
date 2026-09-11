@@ -3,6 +3,7 @@ name: Release macOS (pheno)
 # Calls the reusable workflow at kooshapari/phenotype-fleet-ops.
 # Self-hosted runners only (zero billed minutes).
 # All Apple Developer secrets live in Infisical project 8efe392e-56a6-4c3c-89f9-8141183dd7e8.
+# Pinned to commit fd8373f (the only commit on the file as of 2026-09-10); bump via PR after review.
 
 on:
   push:
@@ -20,7 +21,7 @@ permissions:
 jobs:
   macos:
     name: Build, sign, notarize pheno
-    uses: kooshapari/phenotype-fleet-ops/.github/workflows/macos-release.yml@main
+    uses: kooshapari/phenotype-fleet-ops/.github/workflows/macos-release.yml@fd8373fe0ece4076e8b7e8bf2045342e8e8b0a46 # v1.0.0 (2026-09-01)
     with:
       app-name: pheno
       app-bundle-id: app.phenotype.pheno

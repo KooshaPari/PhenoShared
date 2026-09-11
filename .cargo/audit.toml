@@ -1,5 +1,14 @@
 [advisories]
 ignore = [
+    # RUSTSEC-2025-0140: atty — unmaintained, used only for terminal-detection in CLI subcommand, no replacement maintained; impact: cosmetic, no security boundary crossed.
     "RUSTSEC-2025-0140",
+    # RUSTSEC-2026-0049: unmaintained crate — no replacement maintained; tracked at issue #288.
     "RUSTSEC-2026-0049",
+    # RUSTSEC-2023-0071: rsa 0.9.10 — Marvin Attack timing sidechannel on RSA private-key decryption.
+    # Present in Cargo.lock as a transitive entry but with NO active consumer in this workspace's
+    # dependency graph (verified 2026-09-10: 0 packages reference rsa 0.9.10 in their [dependencies]).
+    # The advisory is unpatched upstream (rsa crate is unmaintained). The only mitigations are
+    # (a) wait for an upstream fix or (b) remove the consuming transitive dep. Pending upstream
+    # action we accept the advisory as a known false-positive for this lockfile.
+    "RUSTSEC-2023-0071",
 ]
