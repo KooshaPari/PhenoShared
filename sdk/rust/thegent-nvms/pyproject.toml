@@ -1,0 +1,16 @@
+[project]
+name = "thegent_nvms"
+version = "0.1.0"
+description = "Python bindings for thegent-nvms (NVMS FFI via pyo3)"
+readme = "README.md"
+license = "MIT OR Apache-2.0"
+requires-python = ">=3.12"
+
+[build-system]
+requires = ["maturin>=1.0"]
+build-backend = "maturin"
+
+[tool.maturin]
+manifest-path = "Cargo.toml"
+features = ["python"]
+module-name = "thegent_nvms"
