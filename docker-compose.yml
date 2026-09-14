@@ -1,0 +1,32 @@
+# docker-compose.yml — NanoVMS production deployment
+# Usage:
+#   docker compose up -d
+#   docker compose logs -f nvms
+#   docker compose down
+
+services:
+  nvms:
+    build: .
+    container_name: nanovms
+    restart: unless-stopped
+    ports:
+      - "8443:8443"
+    environment:
+      - NVMS_TOKEN=${NVMS_TOKEN:?Set NVMS_TOKEN in .env}
+      - NVMS_LOG_LEVEL=${NVMS_LOG_LEVEL:-info}
+    volumes:
+      - nvms-data:/data
+    healthcheck:
+      test: ["CMD", "nvms", "health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    read_only: true
+    tmpfs:
+      - /tmp
+    security_opt:
+      - no-new-privileges:true
+
+volumes:
+  nvms-data:
