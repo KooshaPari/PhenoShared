@@ -93,7 +93,7 @@ type Registry struct {
 }
 
 // NewRegistry returns an empty Registry. Callers should populate it with
-// Register or use DefaultRegistry for the full set of 15+ tiers.
+// Register or use DefaultRegistry for the full set of 30 tiers.
 func NewRegistry() *Registry {
 	return &Registry{
 		adapters:   make(map[string]Adapter),
@@ -265,7 +265,7 @@ var defaultRegistryOnce sync.Once
 var defaultRegistry *Registry
 
 // DefaultRegistry returns a registry pre-populated with the full set of
-// 15 tiers. Construction is lazy and idempotent; the result is safe to
+// 30 tiers. Construction is lazy and idempotent; the result is safe to
 // share across goroutines.
 //
 // All adapters are constructed best-effort: tiers whose runtime is not
