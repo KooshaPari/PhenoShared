@@ -19,8 +19,8 @@ boundary violations.
 | nanovms | Go | ✅ Clean — canonical runtime | None (source of truth) |
 | PhenoCompose | Rust | ✅ Born unified with nanovms | None (intentional monorepo) |
 | BytePort | Go + Svelte | ⚠️ Had embedded NVMS impl (67 files, 7,094 LOC) | **Ejected** via merge of `consolidate/B11-delete-nvms-impl` |
-| thegent | Python + Rust | ⚠️ Embedded BytePort (612 files, 133K LOC) + FFI crate | **BytePort → git submodule**, FFI crate moved to nanovms |
-| phenotype-infra | Go + Rust | ⚠️ Consolidation scaffold with copied code (7,558 LOC) | **Flagged** — scaffold contradicts REP-080 (IaC-only scope) |
+| thegent | Python + Rust | ⚠️ Embedded BytePort (612 files, 133K LOC) + FFI crate + dead code (7,514 LOC) | **BytePort → git submodule**, FFI crate moved to nanovms, dead code deleted |
+| phenotype-infra | Go + Rust | ⚠️ Consolidation scaffold with copied code (7,558 LOC) | **Archived** duplicate crates to `_archived/` per REP-080 (PR #192) |
 | Eidolon | Rust | ✅ Clean — consumer via `sandbox-nanovm` feature flag | None |
 | sharecli | Rust | ✅ Clean — standalone process runtime | None |
 | NetWeave | — | ⚫ Does not exist on disk | None |
@@ -67,28 +67,22 @@ Added `services/colab` submodule note.
 
 Uninitialized dead submodule removed from git index and `.gitmodules`.
 
-## phenotype-infra Boundary Violation
+### 7. thegent Dead Code Removal (7,514 LOC deleted)
 
-**phenotype-infra** is a consolidation monorepo scaffolded to absorb nanovms,
-PhenoCompose, and BytePort. It contains:
+- `sharecli/preserved/`: 25 dead files from archived projects (KWatch, KlipDot,
+  KVirtualStage, KodeVibeGo, KodeVibe, KDesktopVirt)
+- `crates/harness-native/`: migrated to canonical sharecli repo, already
+  excluded from workspace; 20 .rs files removed
+- `.archive/`: stale duplicate test/component files referencing dead byteport paths
 
-| Crate | LOC | Duplicates |
-|-------|-----|------------|
-| `crates/nanovms-core/` | 5,720 Go | Canonical nanovms repo |
-| `crates/nvms-ffi/` + `crates/pheno-compose/` | 1,757 Rust | Canonical PhenoCompose |
-| `tools/byteport/` | 81 Go + Svelte | Canonical BytePort |
+### 8. phenotype-infra Duplicate Crate Archival (633 files moved)
 
-**Per REP-080**, phenotype-infra should "Own shared IaC only; eject BytePort
-back to its repo." The current scaffold contradicts this directive. The
-consolidation approach was abandoned in favor of:
+Per REP-080 and this ADR, moved duplicate code to `_archived/`:
+- `crates/nanovms-core` (5,720 LOC Go) → canonical: nanovms
+- `crates/nvms-ffi` + `crates/pheno-compose` (1,757 LOC Rust) → canonical: PhenoCompose
+- `tools/byteport` (Go + Svelte) → canonical: BytePort
 
-- nanovms as canonical runtime (Go)
-- PhenoCompose as canonical FFI/driver (Rust, born unified)
-- BytePort as canonical product (Go + Svelte, calls nanovms API)
-- Eidolon as consumer (Rust, `sandbox-nanovm` feature flag)
-
-**Recommended:** Archive or delete phenotype-infra crates that duplicate
-canonical repos. Retain only IaC, ADRs, and shared infrastructure config.
+PR: https://github.com/KooshaPari/phenotype-infra/pull/192
 
 ## Decision
 
@@ -104,7 +98,8 @@ canonical repos. Retain only IaC, ADRs, and shared infrastructure config.
   copies. CI validates canonical code only.
 - **Positive:** BytePort CI is now nvms-free and will pass cleanly.
 - **Positive:** thegent no longer carries 133K LOC of embedded BytePort.
-- **Risk:** phenotype-infra crates are now stale. Should be archived or
-  deleted in a follow-up.
+- **Positive:** thegent dead code removed (preserved/, harness-native/, .archive/).
+- **Positive:** phenotype-infra duplicate crates archived to `_archived/`.
+- **Resolved:** phenotype-infra scope now matches REP-080 (IaC + shared infra only).
 - **Risk:** Thegent has 28 GitHub vulnerabilities (2 critical) unrelated to
   this audit but worth triaging.
