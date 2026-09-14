@@ -1,0 +1,22 @@
+[package]
+name = "fuzz"
+version = "0.0.0"
+publish = false
+edition = "2021"
+
+# Own workspace root: keeps this crate fully independent of the parent
+# workspace (cargo-fuzz convention) so tools that load the manifest
+# directly (e.g. CodeQL's rust extractor) succeed.
+[workspace]
+
+[dependencies]
+libfuzzer-sys = "0.4"
+apisync = { path = ".." }
+serde_json = "1.0"
+futures = "0.3"
+
+[[bin]]
+name = "router_dispatch"
+path = "fuzz_targets/router_dispatch.rs"
+test = false
+doc = false

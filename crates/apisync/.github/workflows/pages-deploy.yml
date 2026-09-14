@@ -1,0 +1,64 @@
+name: Deploy Documentation
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'docs/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    permissions:
+      pages: write  # upload-pages-artifact requires it
+      id-token: write  # configure-pages validates the artifact via OIDC
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+
+      - name: Setup Pages
+        uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d # v6.0.0
+
+      - name: Build documentation index
+        run: |
+          mkdir -p _site
+          cp -r docs/* _site/ 2>/dev/null || true
+          if [ ! -f "_site/index.html" ] && [ -f "_site/README.md" ]; then
+            echo '<!DOCTYPE html><html><head><meta http-equiv="refresh" content="0; url=README.md"></head></html>' > _site/index.html
+          elif [ ! -f "_site/index.html" ]; then
+            echo "<html><body><h1>Apisync Documentation</h1><ul>" > _site/index.html
+            find _site -name "*.md" -type f | sed 's|^_site/||' | while read -r f; do
+              echo "<li><a href='$f'>$f</a></li>" >> _site/index.html
+            done
+            echo "</ul></body></html>" >> _site/index.html
+          fi
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
+        with:
+          path: _site
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    needs: build
+    runs-on: ubuntu-24.04
+    name: Deploy
+    permissions:
+      pages: write
+      id-token: write  # deploy-pages authenticates via OIDC
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@cd2ce8fcbc39b97be8ca5fce6e763baed58fa128 # v5.0.0

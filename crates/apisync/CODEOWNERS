@@ -1,0 +1,7 @@
+# CANONICAL CODEOWNERS IS AT .github/CODEOWNERS
+#
+# GitHub reads ownership from .github/CODEOWNERS (checked first), then CODEOWNERS
+# at the repo root. Keeping two files creates silent drift — this file is intentionally
+# empty so .github/CODEOWNERS is the single source of truth.
+#
+# Do not add ownership rules here. Edit .github/CODEOWNERS instead.

@@ -1,0 +1,18 @@
+# Clippy configuration
+#
+# Consolidated from the previous `.clippy.toml` so the health dashboard's
+# required `clippy.toml` file is the single source of truth (having both
+# files made clippy emit a "will be ignored" warning).
+
+avoid-breaking-exported-api = false
+allow-expect-in-tests = true
+allow-unwrap-in-tests = true
+allow-print-in-tests = true
+cognitive-complexity-threshold = 25
+max-fn-params-bools = 3
+too-many-arguments-threshold = 7
+type-complexity-threshold = 250
+too-many-lines-threshold = 100
+large-error-threshold = 1024
+check-private-items = false
+suppress-restriction-lint-in-const = true

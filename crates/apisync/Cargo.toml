@@ -1,0 +1,51 @@
+[package]
+name = "apisync"
+version = "0.2.10"
+edition = "2021"
+description = "Universal API toolkit with REST, GraphQL, and WebSocket support"
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/KooshaPari/Apisync"
+
+[lib]
+name = "apisync"
+path = "src/lib.rs"
+
+[dependencies]
+async-trait = "0.1"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+hyper = { version = "1.0", features = ["full"] }
+hyper-util = { version = "0.1", features = ["tokio", "server", "http1"] }
+http = "1.0"
+http-body-util = "0.1"
+bytes = "1"
+tokio = { version = "1", features = [
+  "net",
+  "rt",
+  "rt-multi-thread",
+  "macros",
+  "sync",
+] }
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+log = "0.4"
+async-graphql = "7"
+tokio-tungstenite = "0.30"
+futures = "0.3"
+parking_lot = "0.12"
+reqwest = { version = "0.13", features = ["json"] }
+
+[dev-dependencies]
+clap = { version = "4.0", features = ["derive"] }
+criterion = { version = "0.8", features = ["html_reports"] }
+proptest = "1.5"
+
+
+[[bench]]
+name = "perf"
+harness = false
+
+[[bench]]
+name = "graphql_benchmark"
+harness = false
+

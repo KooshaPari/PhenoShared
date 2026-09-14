@@ -1,0 +1,43 @@
+# =============================================================================
+# Trunk Check — Unified linting/formatting in GitHub Actions
+# =============================================================================
+# Handles: ruff, mypy, clippy, golangci-lint, prettier, eslint, shellcheck, etc.
+# Free for open source; cached for fast runs
+# =============================================================================
+
+name: Trunk Check
+
+on:
+  pull_request:
+  push:
+    branches: [main, develop]
+  schedule:
+    - cron: '0 3 * * 1'  # Weekly Monday 3am UTC
+
+permissions:
+  contents: read
+
+concurrency:
+  group: trunk-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  trunk-check:
+    name: Lint & Format
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      checks: write  # trunk-action posts check runs with findings
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Trunk Check
+        uses: trunk-io/trunk-action@e1234e67a86010d61ddac8d8ebf4b783e2ffd2fa  # v2.0.0
+
+      - name: Trunk Upgrade (on schedule only)
+        if: github.event_name == 'schedule'
+        uses: trunk-io/trunk-action@e1234e67a86010d61ddac8d8ebf4b783e2ffd2fa  # v2.0.0
+        with:
+          trunk-args: --upgrade
