@@ -1,0 +1,105 @@
+name: Deep Security Scan
+
+on:
+  # Unfiltered: security scanning runs on every branch/tag push so the
+  # OpenSSF SAST check sees analysis on all commits, not just main.
+  push:
+  pull_request:
+    branches: [main]
+  schedule:
+    - cron: '0 0 * * *'  # Daily
+  workflow_dispatch:
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+
+jobs:
+  # 1. Dependency Vulnerability Scan (Snyk-style)
+  dependency-scan:
+    runs-on: ubuntu-latest
+    permissions:
+      security-events: write  # upload-sarif files findings to the Security tab
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@d2a0b60797ff03db6132bd4e2b293f9b37081297 # v-latest: @master
+        with:
+          scan-type: 'fs'
+          ignore-unfixed: true
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+          severity: 'CRITICAL,HIGH'
+
+      - name: Upload Trivy scan results
+        uses: github/codeql-action/upload-sarif@c4dd10e44af883a891fe31ced449bcb4a6728b9b # v3
+        with:
+          sarif_file: 'trivy-results.sarif'
+
+  # 2. Secret Scanning (Trufflehog)
+  secret-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+
+      - name: Secrets scan (trufflehog)
+        uses: trufflesecurity/trufflehog@20652fbbdefffcdaa493a5bf57ab2ac6b1db715b # v3.97.1
+        with:
+          path: ./
+          extra_args: --only-verified
+  # 3. Code Security Analysis (CodeQL)
+  codeql-analysis:
+    runs-on: ubuntu-latest
+    permissions:
+      security-events: write  # upload-sarif files findings to the Security tab
+    strategy:
+      fail-fast: false
+      matrix:
+        language: [rust]
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@cdf488f595d80d6e07e03d4674febd5ab45fa938 # v3
+        with:
+          languages: ${{ matrix.language }}
+
+      - name: Autobuild
+        uses: github/codeql-action/autobuild@c4dd10e44af883a891fe31ced449bcb4a6728b9b # v3
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@cdf488f595d80d6e07e03d4674febd5ab45fa938 # v3
+
+  # 4. Container Security (if Dockerfile exists). hashFiles() is not allowed
+  # in job-level `if`; each step below gates on the repository having a
+  # Dockerfile instead.
+  container-scan:
+    runs-on: ubuntu-latest
+    permissions:
+      security-events: write  # upload-sarif files findings to the Security tab
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Build image
+        if: hashFiles('**/Dockerfile') != ''
+        run: docker build -t app:${{ github.sha }} .
+
+      - name: Scan image with Trivy
+        if: hashFiles('**/Dockerfile') != ''
+        uses: aquasecurity/trivy-action@d2a0b60797ff03db6132bd4e2b293f9b37081297 # v-latest: @master
+        with:
+          image-ref: 'app:${{ github.sha }}'
+          format: 'sarif'
+          output: 'trivy-image-results.sarif'
+
+      - name: Upload image scan results
+        if: hashFiles('**/Dockerfile') != ''
+        uses: github/codeql-action/upload-sarif@c4dd10e44af883a891fe31ced449bcb4a6728b9b # v3
+        with:
+          sarif_file: 'trivy-image-results.sarif'

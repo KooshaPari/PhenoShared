@@ -1,0 +1,50 @@
+version: '3'
+
+vars:
+  PROJECT: apisync
+  RUST_VERSION: "stable"
+
+tasks:
+  build:
+    desc: "Build the crate"
+    cmds:
+      - cargo build --all-targets
+
+  test:
+    desc: "Run all tests"
+    cmds:
+      - cargo test --all-targets
+
+  lint:
+    desc: "Run clippy and format checks"
+    cmds:
+      - cargo clippy --all-targets -- -D warnings
+      - cargo fmt -- --check
+
+  fmt:
+    desc: "Auto-format code"
+    cmds:
+      - cargo fmt
+
+  audit:
+    desc: "Run cargo audit"
+    cmds:
+      - cargo audit
+
+  bench:
+    desc: "Run benchmarks"
+    cmds:
+      - cargo bench
+
+  clean:
+    desc: "Remove build artifacts"
+    cmds:
+      - cargo clean
+      - rm -rf target
+
+  default:
+    desc: "Run the full quality gate (build, lint, test)"
+    cmds:
+      - task: build
+      - task: lint
+      - task: test

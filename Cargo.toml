@@ -89,6 +89,9 @@ members = [
     "crates/configra-ops",
     "crates/phenoctl",
     "crates/settly",
+    # apisync: absorbed 2026-09-14 from KooshaPari/Apisync.
+    # Universal API toolkit with REST, GraphQL, and WebSocket support.
+    "crates/apisync",
 ]
 # Exclude crates that have external-sibling path deps that don't resolve in CI runners.
 # Tracked separately: docket O24.

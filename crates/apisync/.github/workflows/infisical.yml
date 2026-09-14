@@ -1,0 +1,69 @@
+# Pull secrets from Infisical into CI
+# Requires: INFISICAL_TOKEN (machine identity service token) stored in repo secrets
+# Docs: https://infisical.com/docs/cli/usage
+
+name: Infisical Sync
+
+on:
+  workflow_call:
+  workflow_dispatch:
+  push:
+    branches: [main, master]
+    paths:
+      - '.github/workflows/infisical.yml'
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  sync-secrets:
+    name: Pull secrets from Infisical
+    # Previously `blacksmith-2vcpu-ubuntu-2204`, which no runner matched
+    # (jobs queued until the 24h timeout on every PR). Use a standard runner.
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Install Infisical CLI (pinned 0.38.0)
+        run: |
+          # Pinned .deb from the official cloudsmith repo, SHA-256 verified
+          # (scorecard Pinned-Dependencies: no curl|bash, no floating version).
+          DEB_URL="https://dl.cloudsmith.io/public/infisical/infisical-cli/deb/ubuntu/pool/any-version/main/i/in/infisical_0.38.0/infisical_0.38.0_linux_amd64.deb"
+          DEB_SHA256="b77813070e5b59ecdebd399f2d7efbb0158aabbf5d6fba679a1f32e6f3e9d03f"
+          curl -sSL -o /tmp/infisical.deb "$DEB_URL"
+          echo "${DEB_SHA256}  /tmp/infisical.deb" | sha256sum -c -
+          sudo apt-get install -y /tmp/infisical.deb
+
+      - name: Pull secrets to .env
+        env:
+          INFISICAL_TOKEN: ${{ secrets.INFISICAL_TOKEN }}
+          INFISICAL_PROJECT_ID: ${{ vars.INFISICAL_PROJECT_ID || secrets.INFISICAL_PROJECT_ID || '8efe392e-56a6-4c3c-89f9-8141183dd7e8' }}
+          INFISICAL_ENV: ${{ vars.INFISICAL_ENV || github.ref == 'refs/heads/main' && 'prod' || github.ref == 'refs/heads/staging' && 'staging' || 'dev' }}
+        run: |
+          # Validate required secrets are present
+          if [ -z "$INFISICAL_TOKEN" ]; then
+            echo "::error::INFISICAL_TOKEN secret not configured in repo settings"
+            exit 1
+          fi
+          if [ -z "$INFISICAL_PROJECT_ID" ]; then
+            echo "::error::INFISICAL_PROJECT_ID var or secret not set"
+            exit 1
+          fi
+
+          # Pull all secrets from the configured env into .env
+          infisical run \
+            --projectId "$INFISICAL_PROJECT_ID" \
+            --env "$INFISICAL_ENV" \
+            --token "$INFISICAL_TOKEN" \
+            -- bash -c 'echo "Secrets loaded into env successfully" && env | grep -E "^[A-Z_]+=" | grep -v -E "^(PATH|HOME|PWD|SHELL|HOSTNAME|TERM|GITHUB_|RUNNER_|CARGO_|DEPLOY_|INPUT_|IMAGE_|ACTIONS_|STEP_|BOOT_|GRUB_|LS_COLORS|INVOCATION_ID|JOURNAL_)" | head -20'
+
+      - name: Upload secrets as artifact (debug only, never published)
+        if: failure()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: infisical-debug
+          path: .env
+          retention-days: 1
