@@ -55,20 +55,20 @@ nfpms:
       - src: INSTALL.md
         dst: /usr/share/doc/nanovms/INSTALL.md
 
-# ── Homebrew tap ─────────────────────────────────────────────
-brews:
-  - name: nanovms
-    repository:
-      owner: KooshaPari
-      name: homebrew-nanovms
-    homepage: https://github.com/KooshaPari/zz-merge-unk-NanoVMs
-    description: Multi-tier sandbox orchestration engine
-    license: MIT
-    install: |
-      bin.install "nvms"
-      bash_completion.install "completions/nvms.bash" => "nvms"
-      zsh_completion.install "completions/_nvms"
-      fish_completion.install "completions/nvms.fish"
+# ── Homebrew tap (disabled until tap repo created) ──────────
+# brews:
+#   - name: nanovms
+#     repository:
+#       owner: KooshaPari
+#       name: homebrew-nanovms
+#     homepage: https://github.com/KooshaPari/zz-merge-unk-NanoVMs
+#     description: Multi-tier sandbox orchestration engine
+#     license: MIT
+#     install: |
+#       bin.install "nvms"
+#       bash_completion.install "completions/nvms.bash" => "nvms"
+#       zsh_completion.install "completions/_nvms"
+#       fish_completion.install "completions/nvms.fish"
 
 # ── Snapcraft ────────────────────────────────────────────────
 # snapcrafts:
@@ -86,14 +86,14 @@ brews:
 #       nvms:
 #         command: nvms
 
-# ── Winget (Windows Package Manager) ─────────────────────────
-winget:
-  - name: nanovms
-    publisher: KooshaPari
-    publisher_url: https://github.com/KooshaPari
-    short_description: Multi-tier sandbox orchestration engine
-    license: MIT
-    homepage: https://github.com/KooshaPari/zz-merge-unk-NanoVMs
+# ── Winget (disabled until first release) ─────────────────────
+# winget:
+#   - name: nanovms
+#     publisher: KooshaPari
+#     publisher_url: https://github.com/KooshaPari
+#     short_description: Multi-tier sandbox orchestration engine
+#     license: MIT
+#     homepage: https://github.com/KooshaPari/zz-merge-unk-NanoVMs
 
 release:
   github:
