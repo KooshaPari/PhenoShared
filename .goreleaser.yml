@@ -1,3 +1,4 @@
+version: 2
 # goreleaser config (https://goreleaser.com/)
 project_name: nanovms
 
