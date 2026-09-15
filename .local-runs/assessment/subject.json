@@ -1,0 +1,15 @@
+{
+  "kind": "subject",
+  "schema_version": "1.0.0",
+  "id": "nanovms",
+  "label": "NanoVMS - Multi-tier sandbox orchestration engine",
+  "source_kind": "GIT_REPOSITORY",
+  "source_url": "https://github.com/KooshaPari/nanovms",
+  "source_revision": "5c6dfe0b589a4017f744831c16ce22ec6e4ff256",
+  "source_digest": "sha256:bbf71e31ee28c0c6d5c8f64c3e8d63625af48cfefbe1038b889061ec62135806",
+  "tree_digest": "sha256:594bd686f8a56fe53a302786b23946fef62c306d9644a246a8a6d9eab462c8e0",
+  "dirty_worktree": false,
+  "platform": "linux,darwin,windows",
+  "language": "go",
+  "record_status": "OPERATIONAL"
+}

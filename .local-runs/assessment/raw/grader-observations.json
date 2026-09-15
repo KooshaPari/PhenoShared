@@ -1,0 +1,72 @@
+{
+  "positive_control": {
+    "control": "POSITIVE",
+    "all_passed": true,
+    "tests_run": 5,
+    "tests_passed": 5,
+    "observations": [
+      {
+        "test": "version_command",
+        "passed": true,
+        "exit_code": 0,
+        "stdout_preview": "                    _   _ ____  __  __\n                   | \\ | |  _ \\|  \\/  |\n                   |  \\| | | | | |\\/| |\n                   | |\\  | |_| | |  | |\n                   |_| \\_|____/|_|  |_|\n\n"
+      },
+      {
+        "test": "help_command",
+        "passed": true,
+        "exit_code": 0,
+        "stdout_preview": "                    _   _ ____  __  __\n                   | \\ | |  _ \\|  \\/  |\n                   |  \\| | | | | |\\/| |\n                   | |\\  | |_| | |  | |\n                   |_| \\_|____/|_|  |_|\n\n"
+      },
+      {
+        "test": "unknown_command_error",
+        "passed": true,
+        "exit_code": 1,
+        "stderr_preview": "nvms: unknown command \"nonexistent-cmd\"\n"
+      },
+      {
+        "test": "tier_help",
+        "passed": true,
+        "exit_code": 0,
+        "stdout_preview": "Usage: nvms tier <subcommand> [args]\n\nSubcommands:\n  list [--security <low|medium|high|untrusted>] [--json]\n                                  List registered sandbox tiers.\n  info <name>              "
+      },
+      {
+        "test": "vm_help",
+        "passed": true,
+        "exit_code": 0,
+        "stdout_preview": "Usage: nvms vm [--socket <path>] <subcommand> [args]\n\nSubcommands:\n  list                   List all sandboxes\n  exec <id> <cmd...>     Execute a command in a sandbox\n  logs <id>              Stream l"
+      }
+    ]
+  },
+  "negative_control": {
+    "control": "NEGATIVE",
+    "all_rejected": true,
+    "tests_run": 3,
+    "tests_passed": 3,
+    "observations": [
+      {
+        "test": "version_not_valid",
+        "passed": true,
+        "note": "No-op binary should not produce real NanoVMS version output",
+        "exit_code": 0
+      },
+      {
+        "test": "help_not_valid",
+        "passed": true,
+        "note": "No-op binary should not produce real NanoVMS help output",
+        "exit_code": 0
+      },
+      {
+        "test": "deploy_not_valid",
+        "passed": true,
+        "note": "No-op binary should not successfully deploy",
+        "exit_code": 0
+      }
+    ]
+  },
+  "qualified": {
+    "valid_accepted": true,
+    "noop_rejected": true
+  },
+  "binary_path": "/tmp/nvms-grader-test",
+  "binary_digest": "sha256:2ec918843b6f045e1a0673552fcdd5af31b64970a9893bbfc8b55a220f97ba45"
+}

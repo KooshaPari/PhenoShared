@@ -1,0 +1,13 @@
+{
+  "kind": "evidence",
+  "schema_version": "1.0.0",
+  "id": "EV-GRADER-OBS",
+  "subject_digest": "sha256:0b625a44c2eea6c06e0694dea136d39e77f382d0c6b179c1a6072048010006a8",
+  "path": "raw/grader-observations.json",
+  "digest": "sha256:0a57a1ede7b4cbb46edd6ffcdd9e6334c41d7a58337cb536c9daf43f66303c8f",
+  "observed_at": "2026-09-15T08:37:00+00:00",
+  "sensitivity": "PUBLIC",
+  "role": "OBSERVATION",
+  "origin": "LOCAL_OBSERVATION",
+  "summary": "NanoVMS grader positive/negative control observation"
+}

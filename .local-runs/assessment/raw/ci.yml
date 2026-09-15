@@ -1,0 +1,83 @@
+# /Users/kooshapari/CodeProjects/Phenotype/repos/nanovms/.github/workflows/ci.yml
+name: CI
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  changes:
+    runs-on: ubuntu-24.04
+    permissions: { pull-requests: read }
+    outputs:
+      go: ${{ steps.filter.outputs.go }}
+      any: ${{ steps.filter.outputs.any }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with: { fetch-depth: 50 }
+      - uses: dorny/paths-filter@ceb8a2b8f2d89434be7ff52d3de7ec3738c5cc9d
+        id: filter
+        with:
+          filters: |
+            go: ['**/*.go', 'go.mod', 'go.sum', '.github/workflows/ci.yml']
+            any: ['**']
+
+  test:
+    needs: changes
+    if: needs.changes.outputs.go == 'true'
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        # go.mod requires Go 1.25; older toolchains reject the module before tests run.
+        go: ['1.25']
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e
+        with:
+          go-version: ${{ matrix.go }}
+          cache: true
+      - run: go vet ./...
+      - run: go test -race -shuffle=on ./...
+      - name: Build all binaries
+        run: |
+          go build -o /tmp/nanovms ./cmd/nanovms
+          go build -o /tmp/nvms ./cmd/nvms
+
+  lint:
+    needs: changes
+    if: needs.changes.outputs.go == 'true'
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e
+        with:
+          go-version: '1.25'
+          cache: true
+      - uses: golangci/golangci-lint-action@ba0d7d2ec06a0ea1cb5fa41b2e4a3ab91d21278a
+        with:
+          # v2 understands Go 1.25 export data; v1.59 fails with
+          # "unsupported version: 2" while loading sync/atomic.
+          version: v2.12.2
+
+  security:
+    needs: changes
+    if: needs.changes.outputs.go == 'true'
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e
+        with: { go-version: '1.25' }
+      - run: |
+          # Resolve both security tools only from the checked-in go.mod/go.sum lockfile.
+          go install -mod=readonly -modfile .github/workflows/tools/go.mod github.com/securego/gosec/v2/cmd/gosec golang.org/x/vuln/cmd/govulncheck
+          gosec ./...
+          govulncheck ./...

@@ -1,0 +1,54 @@
+{
+  "kind": "assessment",
+  "schema_version": "1.0.0",
+  "id": "ASSESS-NANOVMS-20260914",
+  "assignment_id": "ASSIGN-NANOVMS-20260914",
+  "assignment_digest": "sha256:1fb853a43612780876b6cecc13224171326eb3a1ffbd1d98ee218434e4a840f0",
+  "subject_digest": "sha256:0b625a44c2eea6c06e0694dea136d39e77f382d0c6b179c1a6072048010006a8",
+  "catalog_digest": "sha256:1d6e8a8f14423a541573c0c95b4921979b6da8ba01596a8268b93f6650002e58",
+  "as_of": "2026-09-15T12:00:00+00:00",
+  "record_status": "OPERATIONAL",
+  "epoch_id": "EPOCH-20260914T232353",
+  "result_ids": [
+    "R-I-1",
+    "R-I-2",
+    "R-I-3",
+    "R-I-4",
+    "R-I-5",
+    "R-I-6",
+    "R-I-7",
+    "R-I-8",
+    "R-I-9",
+    "R-I-10",
+    "R-I-11",
+    "R-I-12"
+  ],
+  "evidence_ids": [
+    "EV-I-1",
+    "EV-I-2",
+    "EV-I-3",
+    "EV-I-4",
+    "EV-I-5",
+    "EV-I-6",
+    "EV-I-7",
+    "EV-I-8",
+    "EV-I-9",
+    "EV-I-10",
+    "EV-I-11",
+    "EV-I-12",
+    "EV-GRADER",
+    "EV-GRADER-OBS",
+    "EV-FULL-OBS",
+    "EV-FULL-QUAL"
+  ],
+  "qualification_ids": [
+    "Q-NANOVMS-GRADER",
+    "Q-NANOVMS-FULL"
+  ],
+  "coverage_limitations": [
+    "12-entry CLI profile selection from 1080-entry catalog",
+    "No external audit or registry receipt",
+    "No formal evaluator/grader instrument"
+  ],
+  "registration_state": "NOT_REQUESTED"
+}

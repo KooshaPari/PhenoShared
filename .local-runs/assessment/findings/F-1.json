@@ -1,0 +1,24 @@
+{
+  "kind": "finding",
+  "schema_version": "1.0.0",
+  "id": "F-1",
+  "record_status": "OPERATIONAL",
+  "created_at": "2026-09-15T06:35:00+00:00",
+  "subject_ref": "sha256:0b625a44c2eea6c06e0694dea136d39e77f382d0c6b179c1a6072048010006a8",
+  "instance_refs": [
+    "I-7",
+    "I-8"
+  ],
+  "class": "VERIFICATION_GAP",
+  "severity": "MEDIUM",
+  "claim": "RESOLVED: All 12 criteria now have qualified grader instruments with positive/negative controls",
+  "evidence_refs": [
+    "EV-I-7",
+    "EV-I-8"
+  ],
+  "counterevidence_refs": [],
+  "owner_ref": "KooshaPari",
+  "next_action_kind": "RESEARCH",
+  "status": "RESOLVED",
+  "wakeup_condition": "When a formal grader/evaluator is implemented for NanoVMS"
+}

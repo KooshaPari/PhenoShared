@@ -1,0 +1,13 @@
+{
+  "kind": "evidence",
+  "schema_version": "1.0.0",
+  "id": "EV-I-6",
+  "path": "raw/byteport_contract_test.go",
+  "origin": "LOCAL_OBSERVATION",
+  "digest": "sha256:7d9c35192169ee502125136e94f76650b0b9b5ef98531edb1a54d7f1f1820709",
+  "subject_digest": "sha256:0b625a44c2eea6c06e0694dea136d39e77f382d0c6b179c1a6072048010006a8",
+  "observed_at": "2026-09-15T06:35:00+00:00",
+  "sensitivity": "PUBLIC",
+  "role": "OBSERVATION",
+  "summary": "84 test files verifying outcomes"
+}

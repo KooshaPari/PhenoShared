@@ -1,0 +1,23 @@
+{
+  "kind": "qualification",
+  "schema_version": "1.0.0",
+  "id": "Q-NANOVMS-GRADER",
+  "evaluator_id": "nanovms-outcome-grader",
+  "evaluator_digest": "sha256:c7c4bcc8becaaa9a2a4fec4dbbe573073c164749e5309da438149cb37ace95f9",
+  "status": "QUALIFIED",
+  "scope_instance_ids": [
+    "I-7",
+    "I-8"
+  ],
+  "positive_control_passed": true,
+  "negative_control_passed": true,
+  "evidence_ids": [
+    "EV-GRADER"
+  ],
+  "observed_at": "2026-09-15T07:56:27.764932+00:00",
+  "limitations": [
+    "Grader checks CLI binary output patterns, not full functional correctness.",
+    "Negative control uses a shell script stub, not a compiled Go binary.",
+    "This grader covers PEP-06-02-01 and PEP-06-02-02 only."
+  ]
+}

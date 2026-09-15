@@ -1,0 +1,31 @@
+{
+  "kind": "result",
+  "schema_version": "1.0.0",
+  "id": "R-I-12",
+  "instance_id": "I-12",
+  "criterion_id": "PEP-18-01-04",
+  "assignment_id": "ASSIGN-NANOVMS-20260914",
+  "epoch_id": "EPOCH-20260914T232353",
+  "subject_digest": "sha256:0b625a44c2eea6c06e0694dea136d39e77f382d0c6b179c1a6072048010006a8",
+  "execution": "COMPLETED",
+  "verdict": "PASS",
+  "evidence_state": "CURRENT",
+  "review_status": "ACCEPTED",
+  "observed_at": "2026-09-15T06:35:00+00:00",
+  "expires_at": null,
+  "evidence_ids": [
+    "EV-FULL-OBS"
+  ],
+  "qualification_ids": [
+    "Q-NANOVMS-FULL"
+  ],
+  "evaluator_id": "nanovms-full-grader",
+  "evaluator_digest": "sha256:e33eed9a163d3662cce266c838e4ff31e4984527888a30adfe36cddc4214f0a7",
+  "observation": {
+    "summary": "Full grader: I-12 passed structural/semantic checks",
+    "assertions_executed": 1,
+    "modality": "DYNAMIC"
+  },
+  "supersedes": [],
+  "assignment_digest": "sha256:1fb853a43612780876b6cecc13224171326eb3a1ffbd1d98ee218434e4a840f0"
+}

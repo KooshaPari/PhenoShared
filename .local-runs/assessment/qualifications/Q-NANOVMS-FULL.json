@@ -1,0 +1,30 @@
+{
+  "kind": "qualification",
+  "schema_version": "1.0.0",
+  "id": "Q-NANOVMS-FULL",
+  "evaluator_id": "nanovms-full-grader",
+  "evaluator_digest": "sha256:e33eed9a163d3662cce266c838e4ff31e4984527888a30adfe36cddc4214f0a7",
+  "status": "QUALIFIED",
+  "scope_instance_ids": [
+    "I-1",
+    "I-2",
+    "I-3",
+    "I-4",
+    "I-5",
+    "I-6",
+    "I-9",
+    "I-10",
+    "I-11",
+    "I-12"
+  ],
+  "positive_control_passed": true,
+  "negative_control_passed": true,
+  "evidence_ids": [
+    "EV-FULL-QUAL"
+  ],
+  "observed_at": "2026-09-15T11:02:12.552105+00:00",
+  "limitations": [
+    "Grader covers 10 criteria for NanoVMS.",
+    "Structural and semantic checks, not full functional correctness."
+  ]
+}

@@ -1,0 +1,233 @@
+{
+  "positive_control": {
+    "control": "POSITIVE",
+    "all_passed": true,
+    "tests_run": 10,
+    "tests_passed": 10,
+    "results": [
+      {
+        "test": "delegated_authority",
+        "passed": true,
+        "signals": [
+          "github_org_ownership",
+          "ci_workflows_present",
+          "release_process",
+          "documented_mandate"
+        ],
+        "note": "4/4 authority signals detected",
+        "instance_id": "I-1",
+        "criterion_id": "PEP-01-01-01"
+      },
+      {
+        "test": "distinguishable_beneficiary",
+        "passed": true,
+        "signals": [
+          "user_quickstart",
+          "cli_documented",
+          "user_addressed",
+          "security_policy"
+        ],
+        "note": "4/4 beneficiary signals detected",
+        "instance_id": "I-2",
+        "criterion_id": "PEP-01-02-01"
+      },
+      {
+        "test": "beneficiary_observable",
+        "passed": true,
+        "signals": [
+          "features_section",
+          "code_examples",
+          "comparison_language",
+          "changelog"
+        ],
+        "note": "4/4 observable signals detected",
+        "instance_id": "I-3",
+        "criterion_id": "PEP-01-03-01"
+      },
+      {
+        "test": "parent_linkage",
+        "passed": true,
+        "signals": [
+          "architecture_doc",
+          "adr_records"
+        ],
+        "note": "2/4 linkage signals detected",
+        "instance_id": "I-4",
+        "criterion_id": "PEP-01-04-02"
+      },
+      {
+        "test": "observable_results",
+        "passed": true,
+        "signals": [
+          "test_files:85",
+          "ci_runs_tests",
+          "manifest_defines_behavior",
+          "version_defined"
+        ],
+        "note": "4/4 result signals detected",
+        "instance_id": "I-5",
+        "criterion_id": "PEP-03-02-02"
+      },
+      {
+        "test": "final_outcome",
+        "passed": true,
+        "signals": [
+          "ci_tests",
+          "ci_lints",
+          "release_artifacts"
+        ],
+        "note": "3/5 outcome signals detected",
+        "instance_id": "I-6",
+        "criterion_id": "PEP-03-03-04"
+      },
+      {
+        "test": "subject_snapshot",
+        "passed": true,
+        "signals": [
+          "commit_hash",
+          "version_tag",
+          "manifest_version"
+        ],
+        "note": "3/4 snapshot signals detected",
+        "instance_id": "I-9",
+        "criterion_id": "PEP-17-02-01"
+      },
+      {
+        "test": "coverage_separation",
+        "passed": true,
+        "signals": [
+          "codeowners",
+          "coverage_config",
+          "test_matrix"
+        ],
+        "note": "3/4 coverage signals detected",
+        "instance_id": "I-10",
+        "criterion_id": "PEP-17-03-01"
+      },
+      {
+        "test": "epoch_freezing",
+        "passed": true,
+        "signals": [
+          "git_commit_ref",
+          "release_tag",
+          "changelog",
+          "lock_file"
+        ],
+        "note": "4/4 epoch signals detected",
+        "instance_id": "I-11",
+        "criterion_id": "PEP-17-04-01"
+      },
+      {
+        "test": "slice_mvp",
+        "passed": true,
+        "signals": [
+          "go_builds",
+          "release_workflow",
+          "install_documented"
+        ],
+        "note": "3/4 MVP signals detected",
+        "instance_id": "I-12",
+        "criterion_id": "PEP-18-01-04"
+      }
+    ]
+  },
+  "negative_control": {
+    "control": "NEGATIVE",
+    "all_rejected": true,
+    "tests_run": 10,
+    "tests_passed": 10,
+    "results": [
+      {
+        "test": "delegated_authority",
+        "passed": false,
+        "signals": [],
+        "note": "0/4 authority signals detected",
+        "instance_id": "I-1",
+        "criterion_id": "PEP-01-01-01"
+      },
+      {
+        "test": "distinguishable_beneficiary",
+        "passed": false,
+        "signals": [],
+        "note": "0/4 beneficiary signals detected",
+        "instance_id": "I-2",
+        "criterion_id": "PEP-01-02-01"
+      },
+      {
+        "test": "beneficiary_observable",
+        "passed": false,
+        "signals": [],
+        "note": "0/4 observable signals detected",
+        "instance_id": "I-3",
+        "criterion_id": "PEP-01-03-01"
+      },
+      {
+        "test": "parent_linkage",
+        "passed": false,
+        "signals": [],
+        "note": "0/4 linkage signals detected",
+        "instance_id": "I-4",
+        "criterion_id": "PEP-01-04-02"
+      },
+      {
+        "test": "observable_results",
+        "passed": false,
+        "signals": [],
+        "note": "0/4 result signals detected",
+        "instance_id": "I-5",
+        "criterion_id": "PEP-03-02-02"
+      },
+      {
+        "test": "final_outcome",
+        "passed": false,
+        "signals": [],
+        "note": "0/5 outcome signals detected",
+        "instance_id": "I-6",
+        "criterion_id": "PEP-03-03-04"
+      },
+      {
+        "test": "subject_snapshot",
+        "passed": false,
+        "signals": [],
+        "note": "0/4 snapshot signals detected",
+        "instance_id": "I-9",
+        "criterion_id": "PEP-17-02-01"
+      },
+      {
+        "test": "coverage_separation",
+        "passed": false,
+        "signals": [],
+        "note": "0/4 coverage signals detected",
+        "instance_id": "I-10",
+        "criterion_id": "PEP-17-03-01"
+      },
+      {
+        "test": "epoch_freezing",
+        "passed": false,
+        "signals": [],
+        "note": "0/4 epoch signals detected",
+        "instance_id": "I-11",
+        "criterion_id": "PEP-17-04-01"
+      },
+      {
+        "test": "slice_mvp",
+        "passed": false,
+        "signals": [],
+        "note": "0/4 MVP signals detected",
+        "instance_id": "I-12",
+        "criterion_id": "PEP-18-01-04"
+      }
+    ]
+  },
+  "qualified": {
+    "valid_accepted": true,
+    "noop_rejected": true
+  },
+  "git": {
+    "commit": "5c6dfe0b589a4017f744831c16ce22ec6e4ff256",
+    "branch": "main",
+    "remote": "https://github.com/KooshaPari/nanovms.git",
+    "last_tag": "v1.0.0"
+  },
+  "project": "NanoVMS"
+}

@@ -1,0 +1,31 @@
+{
+  "kind": "result",
+  "schema_version": "1.0.0",
+  "id": "R-I-8",
+  "instance_id": "I-8",
+  "criterion_id": "PEP-06-02-02",
+  "assignment_id": "ASSIGN-NANOVMS-20260914",
+  "epoch_id": "EPOCH-20260914T232353",
+  "subject_digest": "sha256:0b625a44c2eea6c06e0694dea136d39e77f382d0c6b179c1a6072048010006a8",
+  "execution": "COMPLETED",
+  "verdict": "PASS",
+  "evidence_state": "CURRENT",
+  "review_status": "ACCEPTED",
+  "observed_at": "2026-09-15T06:35:00+00:00",
+  "expires_at": null,
+  "evidence_ids": [
+    "EV-GRADER-OBS"
+  ],
+  "qualification_ids": [
+    "Q-NANOVMS-GRADER"
+  ],
+  "evaluator_id": "nanovms-outcome-grader",
+  "evaluator_digest": "sha256:c7c4bcc8becaaa9a2a4fec4dbbe573073c164749e5309da438149cb37ace95f9",
+  "observation": {
+    "summary": "NanoVMS grader passed: valid accepted, no-op rejected",
+    "assertions_executed": 5,
+    "modality": "DYNAMIC"
+  },
+  "supersedes": [],
+  "assignment_digest": "sha256:1fb853a43612780876b6cecc13224171326eb3a1ffbd1d98ee218434e4a840f0"
+}

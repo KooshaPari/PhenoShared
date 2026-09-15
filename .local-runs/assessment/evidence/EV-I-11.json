@@ -1,0 +1,13 @@
+{
+  "kind": "evidence",
+  "schema_version": "1.0.0",
+  "id": "EV-I-11",
+  "path": "raw/ci.yml",
+  "origin": "LOCAL_OBSERVATION",
+  "digest": "sha256:a7426232553b509f9ce7e8a4296a1574c4e287f42b6e2133dd2af1d0ecc28116",
+  "subject_digest": "sha256:0b625a44c2eea6c06e0694dea136d39e77f382d0c6b179c1a6072048010006a8",
+  "observed_at": "2026-09-15T06:35:00+00:00",
+  "sensitivity": "PUBLIC",
+  "role": "OBSERVATION",
+  "summary": "Assignment frozen with pinned criteria"
+}

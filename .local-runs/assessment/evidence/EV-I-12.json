@@ -1,0 +1,13 @@
+{
+  "kind": "evidence",
+  "schema_version": "1.0.0",
+  "id": "EV-I-12",
+  "path": "raw/release.yml",
+  "origin": "LOCAL_OBSERVATION",
+  "digest": "sha256:168f45f0ce062c4a033cc54835f15d1e47d70cc4e3030f2273f56d0a59926750",
+  "subject_digest": "sha256:0b625a44c2eea6c06e0694dea136d39e77f382d0c6b179c1a6072048010006a8",
+  "observed_at": "2026-09-15T06:35:00+00:00",
+  "sensitivity": "PUBLIC",
+  "role": "OBSERVATION",
+  "summary": "CLI releases with multi-platform artifacts"
+}

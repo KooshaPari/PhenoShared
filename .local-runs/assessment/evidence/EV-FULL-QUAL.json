@@ -1,0 +1,13 @@
+{
+  "kind": "evidence",
+  "schema_version": "1.0.0",
+  "id": "EV-FULL-QUAL",
+  "subject_digest": "sha256:0b625a44c2eea6c06e0694dea136d39e77f382d0c6b179c1a6072048010006a8",
+  "path": "raw/full-grader-observations.json",
+  "digest": "sha256:85342e4b8aeb4e5f8685c0d0e125a2bb1bb03f4a2c792d37e2aebbd0ffc352cf",
+  "observed_at": "2026-09-15T11:02:00+00:00",
+  "sensitivity": "PUBLIC",
+  "role": "QUALIFICATION",
+  "origin": "LOCAL_OBSERVATION",
+  "summary": "NanoVMS full grader qualification evidence"
+}

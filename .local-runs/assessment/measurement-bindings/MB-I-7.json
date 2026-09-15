@@ -1,0 +1,33 @@
+{
+  "kind": "measurement-binding",
+  "schema_version": "1.0.0",
+  "id": "MB-I-7",
+  "record_status": "OPERATIONAL",
+  "created_at": "2026-09-15T07:56:27.764932+00:00",
+  "criterion_id": "PEP-06-02-01",
+  "instance_id": "I-7",
+  "subject_scope": "NanoVMS CLI binary evaluation grader",
+  "modality": "DYNAMIC",
+  "method": "Positive/negative control execution; checks valid_accepted predicate",
+  "expected_behavior": "valid_accepted must be true",
+  "units_or_anchors": "Boolean predicate; exactly one asserted outcome",
+  "environment_ref": "Local build environment",
+  "fixtures": [
+    "nvms-binary",
+    "nvms-noop-stub"
+  ],
+  "positive_control": "Real nvms binary passes version/help/subcommand checks",
+  "negative_control": "Noop stub fails all validation checks",
+  "qualification_refs": [
+    "Q-NANOVMS-GRADER"
+  ],
+  "resource_limit": "Binary execution only; no network or container runtime",
+  "side_effects": [
+    "Temporary noop script only"
+  ],
+  "authority_ref": "Local build authority",
+  "freshness_rule": "Any change to binary or grader logic requires rerun",
+  "evidence_requirements": [
+    "raw/observations.json"
+  ]
+}
