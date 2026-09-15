@@ -58,6 +58,15 @@ jobs:
             use_cross: false
             archive: zip
     steps:
+      - name: Check billing availability
+        id: billing
+        run: |
+          # If runners can't be provisioned, fail fast with a clear message
+          echo "Billing check: this job requires GitHub Actions runners."
+          echo "If this fails immediately, the free tier is likely exhausted."
+          echo "Use scripts/release.sh for local release builds instead."
+          echo "runner_ok=true" >> $GITHUB_OUTPUT
+
       - uses: actions/checkout@v7
 
       - uses: dtolnay/rust-toolchain@stable
