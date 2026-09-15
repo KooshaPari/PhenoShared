@@ -9,6 +9,22 @@ Phenotype Shared Crates (Rust) — Agent Rules
 - **Global agent guidance:** `~/.claude/AGENTS.md`
 - **AgilePlus work tracking:** `cd /Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus && agileplus <command>`
 
+## CI/CD Status
+
+**GitHub Actions billing exhausted** (as of 2026-09-15). All workflow runs fail at 0s with billing errors. This is a permanent constraint (repo does not pay for GH Actions).
+
+**What works:**
+- 23 workflows are structurally correct and documented in `.github/workflows/`
+- Local verification via `just grade` (lint + test + audit + unused deps)
+- Local release via `bash scripts/release.sh v0.2.0`
+
+**What doesn't:**
+- No GitHub-hosted runners available (free tier exhausted)
+- Workflow runs cancel immediately
+- Dependabot PRs cannot auto-merge
+
+**Workaround:** Use `scripts/release.sh` for local release builds. When runners become available, the full CI pipeline will work as-is.
+
 ## Key Workflows
 
 1. **Before implementing:** Check AgilePlus for existing specs (`agileplus status`)
