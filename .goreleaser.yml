@@ -101,6 +101,7 @@ release:
     name: zz-merge-unk-NanoVMs
   draft: false
   prerelease: auto
+  replace_existing_artifacts: true
   name_template: "v{{.Version}}"
   header: |
     # nanovms v{{.Version}}
