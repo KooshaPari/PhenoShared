@@ -14,7 +14,8 @@ docs/docset/
 # Rust build artifacts (1.5GB+)
 crates/target/
 **/target/
-Cargo.lock
+# Cargo.lock intentionally committed: workspace has binary crates (agileplus, phenoctl, etc.)
+# Reproducible builds require lock file. release-plz also requires it not be gitignored.
 
 # Node modules (689MB)
 node_modules/
