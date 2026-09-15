@@ -1,0 +1,29 @@
+[package]
+name = "pheno-proc-dedup-fuzz"
+version = "0.0.0"
+authors = ["Automatically generated"]
+publish = false
+edition = "2021"
+
+[package.metadata]
+cargo-fuzz = true
+
+[workspace]
+
+[dependencies]
+libfuzzer-sys = "0.4"
+
+[dependencies.pheno-proc-dedup]
+path = ".."
+
+[[bin]]
+name = "fuzz_bloom_filter"
+path = "fuzz_targets/fuzz_bloom_filter.rs"
+test = false
+doc = false
+
+[[bin]]
+name = "fuzz_dedup_filter"
+path = "fuzz_targets/fuzz_dedup_filter.rs"
+test = false
+doc = false

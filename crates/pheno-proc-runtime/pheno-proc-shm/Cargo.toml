@@ -1,0 +1,22 @@
+[package]
+name = "pheno-proc-shm"
+version = "0.1.0"
+edition = "2021"
+authors = ["Phenotype Team"]
+description = "Shared memory processing for PhenoProc"
+license = "MIT"
+
+[dependencies]
+thiserror = "2.0"
+serde = { version = "1.0", features = ["derive"] }
+
+[dev-dependencies]
+criterion = { version = "0.5", features = ["html_reports"] }
+
+[lib]
+name = "pheno_proc_shm"
+path = "src/lib.rs"
+
+[[bench]]
+name = "shm_benchmark"
+harness = false

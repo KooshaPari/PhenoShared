@@ -1,0 +1,29 @@
+[package]
+name = "pheno-proc-core"
+version = "0.1.0"
+edition = "2021"
+description = "Process management primitives for PhenoProc registry"
+license = "MIT"
+
+[dependencies]
+anyhow = "1.0"
+dashmap = "6"
+runtime-process = { git = "https://github.com/KooshaPari/substrate", package = "runtime-process" }
+substrate-core = { git = "https://github.com/KooshaPari/substrate", package = "substrate-core" }
+tokio = { version = "1.0", features = ["full"] }
+
+[dev-dependencies]
+tokio-test = "0.4"
+uuid = { version = "1.22", features = ["v4"] }
+criterion = { version = "0.5", features = ["html_reports"] }
+pheno-proc-shm = { path = "../pheno-proc-shm" }
+pheno-proc-queue = { path = "../pheno-proc-queue" }
+pheno-proc-dedup = { path = "../pheno-proc-dedup" }
+
+[lib]
+name = "pheno_proc_core"
+path = "src/lib.rs"
+
+[[bench]]
+name = "core_benchmark"
+harness = false
