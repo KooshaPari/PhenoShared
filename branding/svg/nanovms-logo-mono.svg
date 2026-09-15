@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+
+  <!-- Hexagon shell (VM metaphor) -->
+  <polygon points="256,100 370,165 370,295 256,360 142,295 142,165"
+           fill="none" stroke="white" stroke-width="8" stroke-linejoin="round"/>
+
+  <!-- Inner hexagon (sandbox) -->
+  <polygon points="256,145 330,185 330,275 256,315 182,275 182,185"
+           fill="none" stroke="white" stroke-width="4" stroke-linejoin="round" opacity="0.5"/>
+
+  <!-- Center dot (kernel/core) -->
+  <circle cx="256" cy="230" r="16" fill="white"/>
+
+  <!-- Tier lines radiating from center -->
+  <line x1="256" y1="230" x2="256" y2="100" stroke="white" stroke-width="3" opacity="0.4"/>
+  <line x1="256" y1="230" x2="370" y2="165" stroke="white" stroke-width="3" opacity="0.4"/>
+  <line x1="256" y1="230" x2="370" y2="295" stroke="white" stroke-width="3" opacity="0.4"/>
+  <line x1="256" y1="230" x2="256" y2="360" stroke="white" stroke-width="3" opacity="0.4"/>
+  <line x1="256" y1="230" x2="142" y2="295" stroke="white" stroke-width="3" opacity="0.4"/>
+  <line x1="256" y1="230" x2="142" y2="165" stroke="white" stroke-width="3" opacity="0.4"/>
+
+  <!-- Tier dots on vertices -->
+  <circle cx="256" cy="100" r="8" fill="white"/>
+  <circle cx="370" cy="165" r="8" fill="white"/>
+  <circle cx="370" cy="295" r="8" fill="white"/>
+  <circle cx="256" cy="360" r="8" fill="white"/>
+  <circle cx="142" cy="295" r="8" fill="white"/>
+  <circle cx="142" cy="165" r="8" fill="white"/>
+
+  <!-- "nvms" text -->
+  <text x="256" y="440" text-anchor="middle" font-family="'SF Mono', 'Fira Code', 'JetBrains Mono', monospace" font-size="56" font-weight="700" fill="white" letter-spacing="8">nvms</text>
+
+  <!-- Tagline -->
+  <text x="256" y="478" text-anchor="middle" font-family="'SF Mono', 'Fira Code', monospace" font-size="16" fill="white" letter-spacing="4">SANDBOX ORCHESTRATION</text>
+</svg>

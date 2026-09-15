@@ -21,6 +21,11 @@ import (
 	"github.com/kooshapari/nanovms/pkg/deploy"
 )
 
+// version is set at build time via ldflags:
+//
+//	go build -ldflags "-X main.version=1.0.0"
+var version = "dev"
+
 func main() {
 	if len(os.Args) < 2 {
 		printUsage()
@@ -38,7 +43,10 @@ func main() {
 		vmCmd(os.Args[2:])
 	case "tier":
 		tierCmd(os.Args[2:])
+	case "version":
+		printBanner()
 	case "help", "--help", "-h":
+		printBanner()
 		printUsage()
 	default:
 		fmt.Fprintf(os.Stderr, "nvms: unknown command %q\n", os.Args[1])
@@ -129,15 +137,29 @@ Subcommands:
 	}
 }
 
-func printUsage() {
-	fmt.Println(`Usage: nvms <command> [flags]
+func printBanner() {
+	fmt.Println(`                    _   _ ____  __  __
+                   | \ | |  _ \|  \/  |
+                   |  \| | | | | |\/| |
+                   | |\  | |_| | |  | |
+                   |_| \_|____/|_|  |_|
 
+            ██  ██  ██  ██  ██  ██  ██  ██  ██  ██
+            ██  ██  ██  ██  ██  ██  ██  ██  ██  ██
+            └────────────────────────────────────┘
+                  SANDBOX ORCHESTRATION ENGINE
+                       v` + version)
+}
+
+func printUsage() {
+	fmt.Println(`
 Commands:
   deploy              Deploy a workload to the specified tier
   serve               Start the NVMS daemon (HTTP over UDS)
   token               Manage bearer tokens (mint, list, remove)
   vm                  Manage VMs/sandboxes (exec, logs, port-forward)
   tier                 List, inspect, and probe sandbox tiers
+  version             Show version information
   help                Show this help`)
 }
 
