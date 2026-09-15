@@ -1,0 +1,26 @@
+[package]
+name = "surreal-bridge"
+version = "0.1.0"
+edition = "2024"
+description = "SurrealDB embedded with Pheno extensions"
+
+[dependencies]
+tokio = { workspace = true }
+anyhow = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+thiserror = { workspace = true }
+pheno-query = { path = "../pheno-query" }
+pheno-data-core = { path = "../core" }
+tracing = { workspace = true }
+tracing-attributes = { workspace = true }
+# SurrealDB embedded — RocksDB on Unix; in-memory on Windows (no C++ toolchain required)
+[target.'cfg(not(windows))'.dependencies]
+surrealdb = { version = "3.1", default-features = false, features = ["kv-rocksdb", "protocol-ws"] }
+
+[target.'cfg(windows)'.dependencies]
+surrealdb = { version = "3.0", default-features = false, features = ["kv-mem", "protocol-ws"] }
+
+[dev-dependencies]
+tokio-test = "0.4"
+tempfile = "3"
