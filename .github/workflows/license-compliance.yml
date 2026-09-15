@@ -1,6 +1,4 @@
 name: License Compliance
-permissions: read-all
-
 on:
   push:
     paths:

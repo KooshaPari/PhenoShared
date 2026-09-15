@@ -1,6 +1,4 @@
 name: Cross-Project Testing Orchestration
-permissions: read-all
-
 on:
   workflow_dispatch:
     inputs:

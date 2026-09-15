@@ -1,0 +1,10 @@
+# act configuration for phenoDesign
+# Run local CI with: act -P ubuntu-latest=catthehacker/ubuntu:act-latest push
+# Or for specific jobs: act -P ubuntu-latest=catthehacker/ubuntu:act-latest -j rust
+
+# Use linux/amd64 for Apple Silicon compatibility
+container-architecture: linux/amd64
+
+# Default image for ubuntu-latest
+platforms:
+  ubuntu-latest: catthehacker/ubuntu:act-latest

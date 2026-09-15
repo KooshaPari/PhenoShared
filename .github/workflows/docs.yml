@@ -1,8 +1,6 @@
 # VitePress docs: build + Node tests + Playwright smoke.
 # Note: GitHub Actions may fail on account billing; run `task docs:check` locally.
 name: Docs
-permissions: read-all
-
 on:
   push:
     paths:

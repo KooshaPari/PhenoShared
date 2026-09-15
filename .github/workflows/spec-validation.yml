@@ -1,6 +1,4 @@
 name: Spec Validation (specs/main)
-permissions: read-all
-
 on:
   push:
     branches:

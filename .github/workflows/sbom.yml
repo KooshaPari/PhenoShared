@@ -1,8 +1,6 @@
 # CycloneDX SBOM — all Cargo workspace members (supply-chain artifacts).
 # Crate list comes from `cargo metadata` via scripts/ci/generate-workspace-sboms.sh (no duplicated matrix).
 name: SBOM (CycloneDX pilot)
-permissions: read-all
-
 on:
   push:
     branches: [main]
