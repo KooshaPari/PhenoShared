@@ -90,7 +90,6 @@ logs/
 
 # Local GH Actions emulation artifacts
 .github/act-events/
-.worktrees/
 
 # Workspace noise and generated diagnostics
 wt/
@@ -104,13 +103,6 @@ hooks/zig/
 
 # Safari/ browser data
 data/safari/
-
-# Python
-__pycache__/
-*.pyc
-*.pyo
-.pytest_cache/
-
 
 # AI tool artifacts
 .claude/
@@ -212,7 +204,6 @@ tests/doc-sync/
 tests/test_runtime_helpers.py
 EXTRACT_PHENOTYPE_GIT_CORE_REPORT.md
 PHENOTYPE_ERROR_CORE_EXTRACTION_REPORT.md
-.github/workflows/ci.yml
 
 # Rust build artifacts (added 2026-06-08)
 target/
