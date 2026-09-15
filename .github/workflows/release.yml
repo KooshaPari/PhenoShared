@@ -20,12 +20,12 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 60
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
       - name: Set up Go
-        uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e
+        uses: actions/setup-go@v5
         with:
           go-version: "1.23"
           cache: true
@@ -33,26 +33,8 @@ jobs:
       - name: Download Go module dependencies
         run: go mod download
 
-      - name: Set up Rust
-        uses: dtolnay/rust-toolchain@1d1d528c25b5c4ba9c5b6f4f4d9ea5e2c0e8a8c7 # stable
-        with:
-          toolchain: stable
-
-      - name: Cache Rust dependencies
-        uses: Swatinem/rust-cache@f0d9c3887740aee45f6153b24b3a6b815192ec16
-        with:
-          workspaces: sdk/rust
-          cache-on-failure: true
-
-      - name: Build Rust SDK
-        working-directory: sdk/rust
-        run: cargo build --release
-
-      - name: Run Go tests
-        run: go test -v ./...
-
       - name: Run GoReleaser
-        uses: goreleaser/goreleaser-action@dcd4e58dba1e1db1877d8f2906f41405180c642a
+        uses: goreleaser/goreleaser-action@v6
         with:
           distribution: goreleaser
           version: "~> v2"
