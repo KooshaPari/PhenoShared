@@ -43,7 +43,7 @@ nfpms:
     bindir: /usr/local/bin
     section: utils
     priority: optional
-    depends:
+    dependencies:
       - ca-certificates
     recommends:
       - docker.io
@@ -99,8 +99,8 @@ release:
   github:
     owner: KooshaPari
     name: nanovms
-    draft: false
-    prerelease: auto
+  draft: false
+  prerelease: auto
   name_template: "v{{.Version}}"
   header: |
     # nanovms v{{.Version}}
