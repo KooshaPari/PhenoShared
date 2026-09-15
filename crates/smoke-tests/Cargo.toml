@@ -1,0 +1,10 @@
+[package]
+name = "smoke-tests"
+version = "0.1.0"
+edition = "2024"
+description = "Smoke tests for phenoData workspace"
+publish = false
+
+[dependencies]
+pheno-query = { path = "../pheno-query" }
+serde_json = { workspace = true }

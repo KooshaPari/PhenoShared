@@ -92,6 +92,13 @@ members = [
     # apisync: absorbed 2026-09-14 from KooshaPari/Apisync.
     # Universal API toolkit with REST, GraphQL, and WebSocket support.
     "crates/apisync",
+    # pheno-data: absorbed 2026-09-15 from KooshaPari/zz-merge-unk-PhenoData.
+    # Dataset traits, query builder, PG/SurrealDB bridges, and smoke tests.
+    "crates/core",
+    "crates/pheno-query",
+    "crates/pg-bridge",
+    "crates/surreal-bridge",
+    "crates/smoke-tests",
 ]
 # Exclude crates that have external-sibling path deps that don't resolve in CI runners.
 # Tracked separately: docket O24.
