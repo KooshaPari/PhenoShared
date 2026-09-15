@@ -71,20 +71,20 @@ brews:
       fish_completion.install "completions/nvms.fish"
 
 # ── Snapcraft ────────────────────────────────────────────────
-snapcrafts:
-  - name: nanovms
-    publish: true
-    summary: Multi-tier sandbox orchestration engine
-    description: |
-      NanoVMS provides a unified API for creating, managing, and deploying
-      workloads across 30 isolation tiers — from lightweight process isolation
-      to full virtualization.
-    grade: stable
-    confinement: classic
-    base: core22
-    apps:
-      nvms:
-        command: nvms
+# snapcrafts:
+#   - name: nanovms
+#     publish: true
+#     summary: Multi-tier sandbox orchestration engine
+#     description: |
+#       NanoVMS provides a unified API for creating, managing, and deploying
+#       workloads across 30 isolation tiers — from lightweight process isolation
+#       to full virtualization.
+#     grade: stable
+#     confinement: classic
+#     base: core22
+#     apps:
+#       nvms:
+#         command: nvms
 
 # ── Winget (Windows Package Manager) ─────────────────────────
 winget:
