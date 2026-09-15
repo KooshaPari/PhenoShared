@@ -1,0 +1,88 @@
+{
+  "kind": "assessment",
+  "schema_version": "1.0.0",
+  "id": "ASSESS-PHENO-4c3772d",
+  "record_status": "EXECUTED",
+  "assignment_id": "A-PHENO-001",
+  "subject_id": "S-PHENO-4c3772d",
+  "catalog_version": "1.0.0",
+  "profile": "library",
+  "as_of": "2026-09-15T06:20:00Z",
+  "result_ids": ["R-D01-P01","R-D01-P02","R-D01-P03","R-D01-P04","R-D01-P05","R-D01-P06","R-D03-P01","R-D03-P02","R-D03-P03","R-D03-P04","R-D03-P05","R-D03-P06","R-D04-P01","R-D04-P02","R-D04-P03","R-D04-P04","R-D04-P05","R-D04-P06","R-D05-P01","R-D05-P02","R-D05-P03","R-D05-P04","R-D05-P05","R-D05-P06","R-D06-P01","R-D06-P02","R-D06-P03","R-D06-P04","R-D06-P05","R-D06-P06","R-D07-P01","R-D07-P02","R-D07-P03","R-D07-P04","R-D07-P05","R-D07-P06","R-D12-P01","R-D12-P02","R-D12-P03","R-D12-P04","R-D12-P05","R-D12-P06","R-D14-P01","R-D14-P02","R-D14-P03","R-D14-P04","R-D14-P05","R-D14-P06","R-D16-P01","R-D16-P02","R-D16-P03","R-D16-P04","R-D16-P05","R-D16-P06","R-D17-P01","R-D17-P02","R-D17-P03","R-D17-P04","R-D17-P05","R-D17-P06","R-D18-P01","R-D18-P02","R-D18-P03","R-D18-P04","R-D18-P05","R-D18-P06"],
+  "scoring": {
+    "total_criteria": 660,
+    "pass": 193,
+    "fail": 57,
+    "unknown": 410,
+    "assessed_pass_rate": "77.2%",
+    "assessment_coverage": "37.9%",
+    "verified_satisfaction": "29.2%",
+    "optimistic_bound": "91.4%"
+  },
+  "verdict_distribution": {
+    "PASS": 1,
+    "PARTIAL": 33,
+    "WEAK": 22,
+    "UNKNOWN": 10
+  },
+  "domain_scores": {
+    "D01_intent_value": {"pass_rate":"84%","coverage":"42%","pass":21,"fail":4,"unknown":35},
+    "D03_scope_capabilities": {"pass_rate":"76%","coverage":"42%","pass":19,"fail":6,"unknown":35},
+    "D04_architecture": {"pass_rate":"79%","coverage":"47%","pass":22,"fail":6,"unknown":32},
+    "D05_implementation": {"pass_rate":"70%","coverage":"33%","pass":14,"fail":6,"unknown":40},
+    "D06_test_assurance": {"pass_rate":"74%","coverage":"32%","pass":14,"fail":5,"unknown":41},
+    "D07_dev_experience": {"pass_rate":"75%","coverage":"60%","pass":27,"fail":9,"unknown":24},
+    "D12_performance": {"pass_rate":"80%","coverage":"8%","pass":4,"fail":1,"unknown":55},
+    "D14_security": {"pass_rate":"76%","coverage":"35%","pass":16,"fail":5,"unknown":39},
+    "D16_distribution": {"pass_rate":"76%","coverage":"42%","pass":19,"fail":6,"unknown":35},
+    "D17_governance": {"pass_rate":"86%","coverage":"37%","pass":19,"fail":3,"unknown":38},
+    "D18_lifecycle": {"pass_rate":"75%","coverage":"40%","pass":18,"fail":6,"unknown":36}
+  },
+  "maturity_assessment": {
+    "stage": "FEASIBILITY_PROTOTYPE",
+    "definition": "Core functionality implemented and tested by builders. Some integration paths work. Not yet a supported product with external consumers.",
+    "evidence": "73-crate workspace with 447K LOC. Multiple releases (v0.2.0). CLI tools exist. CI pipeline defined but non-functional (billing). Test suite exists (852 files) but cannot be verified in this session. No external consumer evidence."
+  },
+  "critical_gates": {
+    "CI_FUNCTIONAL": "FAIL — GitHub Actions billing exhausted. All 23 workflows fail at 0s.",
+    "TEST_VERIFIED": "BLOCKED — cargo test --workspace times out. 852 test files exist but execution unverified.",
+    "SECURITY_CLEAN": "FAIL — 57 Dependabot alerts (19 high). 4 unmaintained crate warnings.",
+    "LINT_CLEAN": "BLOCKED — cargo clippy --workspace times out. Trunk-check configured but CI non-functional.",
+    "RELEASE_READY": "PASS — release.yml + release.sh exist. Local release pipeline functional."
+  },
+  "coverage_limitations": [
+    "Full workspace clippy/fmt/test execution blocked by timeout (70-crate workspace)",
+    "GitHub Actions billing exhausted — no hosted CI verification possible",
+    "Performance domain (D12) almost entirely unmeasured (8% coverage)",
+    "Security testing (D14) limited to static analysis — no dynamic testing",
+    "User experience (D09), accessibility (D10), visual polish (D11) excluded from library profile",
+    "Single-session assessment — no multi-epoch convergence",
+    "18 contributors observed but contribution workflow not exercised",
+    "No external consumer or adoption evidence available"
+  ],
+  "key_findings": [
+    {"severity":"CRITICAL","finding":"CI pipeline completely non-functional due to GitHub Actions billing exhaustion","domain":"D16","pillar":"D16-P02"},
+    {"severity":"HIGH","finding":"57 Dependabot vulnerabilities (19 high) in transitive dependencies","domain":"D14","pillar":"D14-P05"},
+    {"severity":"HIGH","finding":"267 Rust files exceed 350-line target, 116 exceed 500-line hard limit","domain":"D05","pillar":"D05-P03"},
+    {"severity":"HIGH","finding":"Full workspace cargo commands (clippy, fmt, test, build) timeout","domain":"D05","pillar":"D05-P01"},
+    {"severity":"MEDIUM","finding":"No formal requirements, alternatives analysis, or outcome contracts","domain":"D01","pillar":"D01-P03"},
+    {"severity":"MEDIUM","finding":"No CONTRIBUTING.md or formal contribution guide","domain":"D07","pillar":"D07-P05"},
+    {"severity":"MEDIUM","finding":"No formal threat model or security architecture document","domain":"D14","pillar":"D14-P01"},
+    {"severity":"LOW","finding":"Performance domain (D12) has benchmark infrastructure but no measurements","domain":"D12","pillar":"D12-P02"},
+    {"severity":"LOW","finding":"Generated rustdoc not published","domain":"D16","pillar":"D16-P05"},
+    {"severity":"INFO","finding":"Repository has strong governance scaffolding (AGENTS.md, CLAUDE.md, lefthook, justfile)","domain":"D17","pillar":"D17-P01"}
+  ],
+  "recommended_next_actions": [
+    {"priority":1,"action":"Resolve CI billing — set up self-hosted runner or act-based local CI","domain":"D16","effort":"HIGH"},
+    {"priority":2,"action":"Resolve high-severity Dependabot alerts (19 high)","domain":"D14","effort":"MEDIUM"},
+    {"priority":3,"action":"Decompose files over 500 lines (116 files)","domain":"D05","effort":"HIGH"},
+    {"priority":4,"action":"Split workspace into smaller sub-workspaces to fix cargo timeout","domain":"D05","effort":"HIGH"},
+    {"priority":5,"action":"Add formal requirements and alternatives documentation","domain":"D01","effort":"LOW"},
+    {"priority":6,"action":"Run full test suite and record coverage metrics","domain":"D06","effort":"MEDIUM"},
+    {"priority":7,"action":"Add CONTRIBUTING.md and formalize contribution workflow","domain":"D07","effort":"LOW"},
+    {"priority":8,"action":"Create threat model and security architecture doc","domain":"D14","effort":"MEDIUM"},
+    {"priority":9,"action":"Establish performance baselines and regression detection","domain":"D12","effort":"MEDIUM"},
+    {"priority":10,"action":"Publish rustdoc and establish API documentation pipeline","domain":"D16","effort":"LOW"}
+  ],
+  "registration_state": "NOT_REQUESTED"
+}

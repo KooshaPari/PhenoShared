@@ -1,0 +1,85 @@
+{
+  "kind": "subject-snapshot",
+  "schema_version": "1.0.0",
+  "id": "S-PHENO-4c3772d",
+  "record_status": "OBSERVED",
+  "subject": {
+    "repository": "KooshaPari/zz-pheno",
+    "local_path": "/Users/kooshapari/CodeProjects/Phenotype/repos/pheno",
+    "primary_language": "Rust",
+    "description": "Phenotype Shared Crates — Rust monorepo with 73 workspace members, 240 crate directories, 447K LOC"
+  },
+  "source_revision": {
+    "commit_sha": "4c3772d29847cb8ef200f39e754984f4a0443d47",
+    "tree_sha": "eb28dc4058051c80a968f0a4acc02e3ce547c1fb",
+    "branch": "main",
+    "dirty_worktree": false
+  },
+  "platform": {
+    "os": "macOS",
+    "arch": "aarch64",
+    "rust_toolchain": "stable",
+    "package_manager": "cargo"
+  },
+  "evaluation_period": {
+    "start": "2026-09-15T05:45:00Z",
+    "end": "2026-09-15T06:12:00Z"
+  },
+  "size_metrics": {
+    "workspace_members": 73,
+    "crate_directories": 240,
+    "total_rust_loc": 447164,
+    "total_files": 11768,
+    "test_files": 852,
+    "documentation_files": 510,
+    "example_directories": 17,
+    "files_over_350_lines": 267,
+    "files_over_500_lines": 116,
+    "largest_file_loc": 2655,
+    "git_branches": 2,
+    "git_tags": 11,
+    "contributors": 18,
+    "workflows": 23
+  },
+  "governance": {
+    "license": "MIT",
+    "readme_exists": true,
+    "agents_md_exists": true,
+    "claude_md_exists": true,
+    "justfile_exists": true,
+    "lefthook_exists": true,
+    "deny_toml_exists": true,
+    "gitignore_clean": true,
+    "cargo_lock_exists": true,
+    "conventional_commits": true,
+    "latest_tag": "v0.2.0"
+  },
+  "ci_cd": {
+    "workflow_count": 23,
+    "billing_status": "EXHAUSTED",
+    "local_release_script": true,
+    "act_installed": true,
+    "act_version": "0.2.84"
+  },
+  "security": {
+    "codeql_workflow": true,
+    "cargo_deny_workflow": true,
+    "scorecard_workflow": true,
+    "trunk_check_workflow": true,
+    "dependabot_alerts": {
+      "high": 19,
+      "medium": 27,
+      "low": 11,
+      "total": 57
+    },
+    "cargo_audit_warnings": 4,
+    "cargo_audit_severity": "unmaintained (not vulnerability)"
+  },
+  "top_crates_by_loc": [
+    {"name": "agile-plus", "loc": 150655},
+    {"name": "hexa-kit", "loc": 91594},
+    {"name": "phenotype-gfx", "loc": 15364},
+    {"name": "agileplus-cli", "loc": 12004},
+    {"name": "eyetracker", "loc": 9361}
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "kind": "assignment",
+  "schema_version": "1.0.0",
+  "id": "A-PHENO-001",
+  "record_status": "ACTIVE",
+  "subject_id": "S-PHENO-4c3772d",
+  "profile": "library",
+  "catalog_version": "1.0.0",
+  "applicable_domains": ["D01","D03","D04","D05","D06","D07","D12","D14","D16","D17","D18"],
+  "scope_notes": "73-crate Rust monorepo. Full-catalog discovery not feasible in single session (clippy/fmt timeout on 70-crate workspace). Assessment based on structural observation, file inspection, and existing tool outputs.",
+  "resource_envelope": {
+    "max_duration_minutes": 30,
+    "available_tools": ["cargo","git","gh","ripgrep","find","python3"],
+    "blocked_commands": ["cargo clippy --workspace", "cargo test --workspace", "cargo build --workspace"]
+  },
+  "stop_conditions": [
+    "Clippy/fmt/test timeout on full workspace (documented in AGENTS.md)",
+    "GitHub Actions billing exhausted (no hosted CI available)",
+    "57 Dependabot alerts (19 high) in transitive dependencies"
+  ]
+}
