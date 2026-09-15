@@ -27,7 +27,7 @@ unsafe fn libc_signal_hup() {
     unsafe extern "C" fn handler(_sig: libc::c_int) {
         HUP_RECEIVED.store(true, Ordering::SeqCst);
     }
-    libc::signal(libc::SIGHUP, handler as libc::sighandler_t);
+    libc::signal(libc::SIGHUP, handler as *const () as libc::sighandler_t);
 }
 
 /// Check whether a SIGHUP was received since the last call to this function.
