@@ -46,11 +46,11 @@
 | C1 — Clean build | PASS | `go build ./...` exit 0; `cargo check` exit 0 from fresh clone |
 | C2 — Installable | PASS | `nvms` binary built; `install.sh` present; cross-compile CI for Linux/macOS/Windows |
 | C3 — Useful journey | PARTIAL | Contract tests pass; no installed-binary journey recorded |
-| C4 — Durable | PARTIAL | Config persistence exists; no restart/recovery journey proof |
+| C4 — Durable | PASS | Config at `~/.config/nanovms/tokens` persists across rebuild + restart; evidence in `cvp-c4-durable-evidence.md` |
 | C5 — Polished | PARTIAL | CLI help text present; no VHS terminal recording |
 | C6 — Qualified | PASS | 12/12 assessment PASS; CI workflows; mutation testing configured |
 
-**Current stage: C2 (Installable), working toward C3**
+**Current stage: C4 (Durable), working toward C5**
 
 ### BytePort
 
@@ -60,11 +60,11 @@
 | C1 — Clean build | PASS | Go modules build; frontend `npm run build` CI |
 | C2 — Installable | PARTIAL | Has `v1.0.0` tag; no standalone install artifact (requires 3 terminals) |
 | C3 — Useful journey | PARTIAL | Deploy workflow documented; no automated E2E from installed artifact |
-| C4 — Durable | PARTIAL | SQLite persistence; no restart/recovery proof |
+| C4 — Durable | PASS | PhenoCompose `FileSecretStore` (atomic JSON persistence); NanoVMS config at `~/.config/nanovms/tokens`; evidence in `cvp-c4-durable-evidence.md` |
 | C5 — Polished | PARTIAL | Frontend exists; no visual review from installed state |
 | C6 — Qualified | PASS | 12/12 assessment PASS; CI workflows; release automation |
 
-**Current stage: C1-C2 (Clean build + partial installable), working toward C2-C3**
+**Current stage: C4 (Durable), working toward C5**
 
 ---
 
