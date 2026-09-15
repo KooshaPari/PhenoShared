@@ -29,6 +29,9 @@ audit:
 unused:
     cargo machete
 
+# Full CI grade (used by lefthook pre-push)
+grade: lint test audit unused
+
 # Full local CI sweep
 ci: lint test audit unused
 
