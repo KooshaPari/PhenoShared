@@ -33,7 +33,7 @@ nfpms:
     package_name: nanovms
     file_name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
     vendor: KooshaPari
-    homepage: https://github.com/KooshaPari/nanovms
+    homepage: https://github.com/KooshaPari/zz-merge-unk-NanoVMs
     maintainer: KooshaPari <noreply@github.com>
     description: Multi-tier sandbox orchestration engine
     license: MIT
@@ -61,7 +61,7 @@ brews:
     repository:
       owner: KooshaPari
       name: homebrew-nanovms
-    homepage: https://github.com/KooshaPari/nanovms
+    homepage: https://github.com/KooshaPari/zz-merge-unk-NanoVMs
     description: Multi-tier sandbox orchestration engine
     license: MIT
     install: |
@@ -93,12 +93,12 @@ winget:
     publisher_url: https://github.com/KooshaPari
     short_description: Multi-tier sandbox orchestration engine
     license: MIT
-    homepage: https://github.com/KooshaPari/nanovms
+    homepage: https://github.com/KooshaPari/zz-merge-unk-NanoVMs
 
 release:
   github:
     owner: KooshaPari
-    name: nanovms
+    name: zz-merge-unk-NanoVMs
   draft: false
   prerelease: auto
   name_template: "v{{.Version}}"
