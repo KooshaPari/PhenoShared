@@ -1,0 +1,24 @@
+[package]
+name = "phenotype-port-interfaces"
+version.workspace = true
+edition.workspace = true
+publish.workspace = true
+description = "Port interface trait definitions for the Phenotype formal-verification backend family"
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/KooshaPari/pheno"
+documentation = "https://docs.rs/phenotype-port-interfaces"
+keywords = ["phenotype", "pheno-contracts", "port"]
+categories = ["development-tools"]
+authors = ["kooshapari"]
+
+[lib]
+path = "src/lib.rs"
+
+[dependencies]
+async-trait = { workspace = true }
+chrono = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+thiserror = { workspace = true }
+tokio = { workspace = true }
+uuid = { workspace = true }

@@ -51,6 +51,7 @@ members = [
     "crates/phenotype-observability",
     "crates/phenotype-policy-engine",
     "crates/phenotype-port-traits",
+    "crates/phenotype-port-interfaces",
     "crates/phenotype-ports-canonical",
     "crates/phenotype-process",
     "crates/phenotype-rate-limit",
@@ -177,6 +178,7 @@ phenotype-macros = { path = "crates/phenotype-macros" }
 phenotype-mock = { path = "crates/phenotype-mock" }
 phenotype-policy-engine = { path = "crates/phenotype-policy-engine" }
 phenotype-port-traits = { path = "crates/phenotype-port-traits" }
+phenotype-port-interfaces = { path = "crates/phenotype-port-interfaces" }
 phenotype-ports-canonical = { path = "crates/phenotype-ports-canonical" }
 phenotype-process = { path = "crates/phenotype-process" }
 phenotype-project-registry = { path = "crates/phenotype-project-registry" }
