@@ -71,6 +71,46 @@ max_concurrent: 10
 allowed_tiers: [1, 2, 3]
 ```
 
+## Install
+
+### curl (all platforms)
+```bash
+curl -fsSL https://raw.githubusercontent.com/KooshaPari/nanovms/main/install.sh | sh
+```
+
+### Homebrew (macOS/Linux)
+```bash
+brew install KooshaPari/nanovms/nanovms
+```
+
+### Go
+```bash
+go install github.com/KooshaPari/nanovms/cmd/nvms@latest
+```
+
+### Debian/Ubuntu (.deb)
+Download .deb from https://github.com/KooshaPari/nanovms/releases
+```bash
+sudo dpkg -i nanovms_*_linux_amd64.deb
+```
+
+### Fedora/RHEL (.rpm)
+Download .rpm from https://github.com/KooshaPari/nanovms/releases
+```bash
+sudo rpm -i nanovms_*_linux_amd64.rpm
+```
+
+### Docker
+```bash
+docker pull ghcr.io/KooshaPari/nanovms:latest
+```
+
+### From source
+```bash
+git clone https://github.com/KooshaPari/nanovms
+cd nanovms && go build -o nvms ./cmd/nvms
+```
+
 ## License
 
 See LICENSE file for details.
