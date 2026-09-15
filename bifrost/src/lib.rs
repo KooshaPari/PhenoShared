@@ -1,4 +1,4 @@
-//! Bifrost-backed router adapter for OmniRoute v1.5.
+//! Bifrost-backed router adapter for `OmniRoute` v1.5.
 //!
 //! This crate is the v1.5 pivot target per `D-omni-02` (sign-off at
 //! `docs/sessions/20260705-omniroute-backend-rewrite/05-decisions/00-D-OMNI-SIGNOFF.md`).
@@ -27,6 +27,7 @@
 #![allow(clippy::module_name_repetitions)]
 
 pub mod backend;
+#[cfg(feature = "cache-sqlite")]
 pub mod cache;
 pub mod catalog;
 pub mod error;
@@ -41,6 +42,7 @@ pub use backend::BifrostBackend;
 pub use cache::{BifrostModelCache, ProviderMeta, DEFAULT_TTL_SECS, MAX_ENTRIES_PER_PROVIDER};
 #[cfg(feature = "catalog-fetch")]
 pub use catalog::live::CatalogFetcher;
+#[allow(unused_imports)]
 pub use catalog::{
     CatalogEntry, CatalogWire, InMemoryCatalog, LookupOutcome, ModelCatalog, MAX_CATALOG_ENTRIES,
 };

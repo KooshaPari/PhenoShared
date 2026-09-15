@@ -51,26 +51,31 @@ impl BifrostBackend {
     /// Always returns `Err(Error::BackendUnavailable)` at scaffold time.
     /// When B1 lands, this will be the network or protocol-level error
     /// from the live gateway.
-    pub async fn dispatch(
+    pub fn dispatch(
         &self,
         _request: &RouteRequest,
         _target: &RouteTarget,
-    ) -> Result<RouteOutcome> {
-        Err(unavailable(format!(
+    ) -> std::future::Ready<Result<RouteOutcome>> {
+        std::future::ready(Err(unavailable(format!(
             "bifrost backend stub at {} (B1-B9 not yet landed; \
              caller must fall back to omni-router)",
             self.base_url
-        )))
+        ))))
     }
 
     /// Health probe. Returns `Ok(true)` only when the real backend is wired;
     /// scaffold stub returns `Err(BackendUnavailable)` so health checks
     /// correctly report "not ready".
-    pub async fn health(&self) -> Result<bool> {
-        Err(Error::BackendUnavailable(format!(
+    ///
+    /// # Errors
+    ///
+    /// Returns `Err(Error::BackendUnavailable)` because the gateway
+    /// stub is not yet wired to a live endpoint.
+    pub fn health(&self) -> std::future::Ready<Result<bool>> {
+        std::future::ready(Err(Error::BackendUnavailable(format!(
             "{} (stub, not yet implemented)",
             self.base_url
-        )))
+        ))))
     }
 }
 

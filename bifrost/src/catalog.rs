@@ -7,7 +7,7 @@
 //!    impl that lets the rest of the rewrite run with `default-features`
 //!    (no network deps). The live fetcher is feature-gated behind
 //!    `catalog-fetch` (reqwest).
-//! 2. **Stale-tolerant reads** (mirrors the bifrost_models SQL cache
+//! 2. **Stale-tolerant reads** (mirrors the `bifrost_models` SQL cache
 //!    design from L5-111): expired entries still return data with
 //!    `stale: true` so a degraded gateway never causes a request to
 //!    hard-fail — the caller can decide.
@@ -31,7 +31,7 @@ use tracing::warn;
 use crate::error::{unavailable, Error, Result};
 
 /// Wire format returned by Bifrost's `/v1/models` endpoint. Mirrors the
-/// OpenAI shape (we reuse `data[]` + `id`/`object` fields).
+/// `OpenAI` shape (we reuse `data[]` + `id`/`object` fields).
 #[derive(Debug, Clone, Deserialize, Serialize, PartialEq, Eq)]
 pub struct CatalogEntry {
     /// The model id used by the gateway (e.g. `gpt-4o`, `claude-opus-4`).
@@ -104,7 +104,7 @@ pub trait ModelCatalog: Send + Sync {
     /// - Cap response size at 5,000 entries (hard limit)
     /// - Skip malformed entries (don't fail the whole call)
     /// - Return `Err(Error::BackendUnavailable)` on network failure so
-    ///   the FallbackRouter routes through the v1 placeholder.
+    ///   the `FallbackRouter` routes through the v1 placeholder.
     async fn refresh(&self) -> Result<usize>;
 
     /// Look up a model by id.
@@ -119,7 +119,7 @@ pub trait ModelCatalog: Send + Sync {
     }
 }
 
-/// Hard cap on the number of entries a single refresh() will accept.
+/// Hard cap on the number of entries a single `refresh()` will accept.
 /// Defense against a runaway gateway emitting an unbounded list.
 pub const MAX_CATALOG_ENTRIES: usize = 5_000;
 
@@ -173,7 +173,7 @@ impl InMemoryCatalog {
         }
     }
 
-    /// Default TTL = 1 hour (matches the bifrost_models SQL cache).
+    /// Default TTL = 1 hour (matches the `bifrost_models` SQL cache).
     #[must_use]
     pub fn one_hour() -> Self {
         Self::new(Duration::from_secs(3600))
@@ -272,7 +272,7 @@ impl ModelCatalog for InMemoryCatalog {
     }
 
     fn len(&self) -> usize {
-        self.inner.read().map(|g| g.entries.len()).unwrap_or(0)
+        self.inner.read().map_or(0, |g| g.entries.len())
     }
 }
 

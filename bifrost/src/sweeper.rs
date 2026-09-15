@@ -26,14 +26,14 @@ use std::time::{Duration, Instant};
 
 use tokio_util::sync::CancellationToken;
 
-use crate::catalog::{LookupOutcome, ModelCatalog};
+use crate::catalog::ModelCatalog;
 use crate::error::Error;
 
 /// Policy for the sweeper loop. Decides how often to sweep and how
 /// many failures per pass are tolerated before the rest count as
 /// `remaining_stale`.
 ///
-/// `DEFAULT_TTL` — 1h matches the bifrost_models SQL cache contract
+/// `DEFAULT_TTL` — 1h matches the `bifrost_models` SQL cache contract
 /// from L5-111.
 ///
 /// `DEFAULT_INTERVAL` — 5m sub-TTL cadence. Must be ≥ the FFI
@@ -65,7 +65,7 @@ pub struct RunOutcome {
     /// permanent, the sweeper does not disambiguate).
     pub failed: u32,
     /// Number of entries still stale after this pass (the catalog
-    /// itself was reachable but `refresh()` returned BackendUnavailable
+    /// itself was reachable but `refresh()` returned `BackendUnavailable`
     /// or skipped). Caller decides whether this is "alert now".
     pub remaining_stale: u32,
     /// Wall-clock duration of the pass.
@@ -84,16 +84,19 @@ pub struct Sweeper {
 impl Sweeper {
     /// Constructor. `policy` is cloned so the same `Sweeper` value
     /// can be sent to multiple loops with the same intent.
+    #[must_use]
     pub fn new(policy: RefreshPolicy) -> Self {
         Self { policy }
     }
 
     /// Default-policy constructor.
+    #[must_use]
     pub fn with_defaults() -> Self {
         Self::new(RefreshPolicy::default())
     }
 
     /// Read access to the policy.
+    #[must_use]
     pub fn policy(&self) -> &RefreshPolicy {
         &self.policy
     }
@@ -111,12 +114,12 @@ impl Sweeper {
         let refresh_result = catalog.refresh().await;
 
         let (refreshed, failed, mut remaining_stale) = match refresh_result {
-            Ok(n) => (n as u32, 0, 0),
+            Ok(n) => (u32::try_from(n).unwrap_or_default(), 0, 0),
             Err(Error::BackendUnavailable(_)) => {
                 // Catalog unreachable: every entry it knows about is
                 // still stale. The caller decides whether to alert
                 // when this number exceeds a threshold.
-                (0, 1, catalog.len() as u32)
+                (0, 1, u32::try_from(catalog.len()).unwrap_or_default())
             }
             Err(_) => (0, 1, 0),
         };
@@ -150,7 +153,7 @@ impl Sweeper {
         loop {
             tokio::select! {
                 biased;
-                _ = cancel.cancelled() => return,
+                () = cancel.cancelled() => return,
                 _ = ticker.tick() => {
                     let outcome = self.run_once(catalog.as_ref()).await;
                     on_outcome(&outcome);
@@ -161,7 +164,8 @@ impl Sweeper {
 
     /// Construct a `CancellationToken` for the `run_forever` loop.
     /// Exposed as a thin shim so callers don't need to import
-    /// tokio_util directly.
+    /// `tokio_util` directly.
+    #[must_use]
     pub fn cancellation_token() -> CancellationToken {
         CancellationToken::new()
     }
@@ -174,7 +178,9 @@ mod tests {
     use std::time::Duration;
 
     use super::*;
-    use crate::catalog::{CatalogEntry, CatalogWire, InMemoryCatalog, ModelCatalog};
+    use crate::catalog::{
+        CatalogEntry, CatalogWire, InMemoryCatalog, LookupOutcome, ModelCatalog,
+    };
 
     fn wire_with_two_models() -> CatalogWire {
         let mut ids = HashSet::new();

@@ -4,6 +4,7 @@
 //!
 //! Do not edit manually — regenerate with `cargo build` (uses tonic-build).
 
+#[allow(clippy::result_large_err)]
 pub mod agileplus {
     pub mod v1 {
         tonic::include_proto!("agileplus.v1");
