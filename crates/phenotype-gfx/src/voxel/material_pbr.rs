@@ -450,10 +450,11 @@ impl TextureChannelMap {
             &self.mr_path,
             &self.ao_path,
             &self.orm_path,
-        ] {
-            if let Some(s) = p {
-                out.push(s.as_str());
-            }
+        ]
+        .into_iter()
+        .flatten()
+        {
+            out.push(p.as_str());
         }
         out
     }

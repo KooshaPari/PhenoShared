@@ -51,8 +51,7 @@ impl Clone for PostFxError {
             PostFxError::Json(e) => {
                 // serde_json::Error has no public Clone; use a string + line/col
                 // reconstruction. Round-trip via the line/col constructor.
-                PostFxError::Json(serde_json::Error::io(std::io::Error::new(
-                    std::io::ErrorKind::Other,
+                PostFxError::Json(serde_json::Error::io(std::io::Error::other(
                     e.to_string(),
                 )))
             }

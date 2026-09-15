@@ -51,5 +51,6 @@ pub use ports::shader_availability::{DefaultPostFxShaderAvailability, PostFxShad
 pub use ports::urp_render_graph::{BrpToUrpAdapter, PostFxUrpContext, PostFxUrpPass};
 pub use post_fx_pass_registry::{BlitPassDescriptor, PostFxPassDescriptor, PostFxPassRegistry};
 pub use post_stack::{PostStack, PostStackConfig, DEFAULT_POSTFX_STACK};
+#[allow(deprecated)]
 pub use rendering::{PostFxMaterial, PostFxRenderer, PostFxShader, RenderTarget};
 pub use ssao_pass::SsaoConfig;

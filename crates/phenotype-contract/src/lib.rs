@@ -200,7 +200,7 @@ impl<T: std::fmt::Debug> ContractBuilder<T> {
                     line: line!(),
                     column: column!(),
                 },
-                return_value: format!("{:?}", &self.value),
+                return_value: format!("{:?}", self.value),
             });
         }
         self

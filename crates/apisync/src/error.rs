@@ -63,8 +63,6 @@ impl From<reqwest::Error> for Error {
     fn from(e: reqwest::Error) -> Self {
         if e.is_timeout() {
             Error::Timeout
-        } else if e.is_connect() {
-            Error::Transport(e.to_string())
         } else {
             Error::Transport(e.to_string())
         }

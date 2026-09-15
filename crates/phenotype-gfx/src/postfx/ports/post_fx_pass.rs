@@ -69,7 +69,7 @@ impl PassEffect {
 }
 
 /// Quality settings — the driver passes the current value to each pass.
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, serde::Serialize, serde::Deserialize)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, serde::Serialize, serde::Deserialize, Default)]
 #[serde(rename_all = "snake_case")]
 pub enum PassQuality {
     /// Effect is disabled.
@@ -79,15 +79,10 @@ pub enum PassQuality {
     /// Medium quality (balanced performance).
     Medium,
     /// High quality (more samples, better visuals).
+    #[default]
     High,
     /// Ultra quality (maximum samples, best visuals).
     Ultra,
-}
-
-impl Default for PassQuality {
-    fn default() -> Self {
-        PassQuality::High
-    }
 }
 
 impl PassQuality {
