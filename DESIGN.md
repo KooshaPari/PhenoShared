@@ -45,10 +45,38 @@ phenotype-infra is the **infrastructure spine** for the phenotype-org polyrepo p
 - Cargo deny for license/advisory auditing
 - Clippy, rustfmt, and tarpaulin coverage enforcement
 
+## GFX SDK (absorbed from PhenoGfx)
+
+**phenotype-gfx** is a polyglot graphics SDK providing voxel rendering, terrain, and water simulation primitives. It exposes both a Rust core library and Unity C# bindings.
+
+### GFX Architecture
+
+```
+phenotype-gfx/
+├── crates/
+│   └── phenotype-voxel/  # Compatibility shim re-exporting the core voxel kernel (ADR-004)
+├── src/
+│   ├── voxel/            # Voxel kernel: chunk storage, meshing (cubic, greedy), materials
+│   ├── lod.rs            # LOD system: frustum culling, chunk render planning
+│   ├── streaming.rs      # Streaming window: ring-based chunk lifecycle, eviction
+│   ├── water/            # Water simulation: Gerstner waves, fluid mesh
+│   ├── postfx/           # Post-processing: SSAO, SSGI, Bloom, ACES, LUT
+│   ├── terrain/          # Terrain: height field, chunk mesh builder
+│   └── voxelizer.rs      # Sprite voxelizer: voxel-to-sprite rendering
+├── tests/                # Cross-module integration tests
+├── examples/             # Sample projects
+└── docs/                 # API reference + design docs
+```
+
+### Key GFX Design Decisions
+
+1. **Rust core + C# bindings** — performance-critical rendering in Rust, Unity integration via P/Invoke FFI
+2. **Dual license (Apache-2.0 OR MIT)** — maximum compatibility for game studios and open-source projects
+3. **Crate-per-feature** — each rendering primitive is an isolated crate for independent compilation and testing
+
 ## See Also
 
 - `AGENTS.md` - AI agent instructions
 - `CLAUDE.md` - Claude Code instructions
-- `AGENTS.md` section on CI/CD for pipeline details
 - `CONTRIBUTING.md` - Contribution guidelines
 - `SECURITY.md` - Security policy

@@ -31,6 +31,14 @@ This index is the entry point for all documentation under `docs/`. Subdirectorie
 
 - [`docs/sessions/`](sessions/) — 14 docs
 
+### GFX SDK (absorbed from PhenoGfx)
+
+- [`docs/voxel.md`](voxel.md) — Voxel kernel: chunk storage, greedy meshing, LOD
+- [`docs/postfx.md`](postfx.md) — Post-processing: SSAO, Bloom, ACES, SSGI
+- [`docs/ffi.md`](ffi.md) — FFI exports and cbindgen headers
+- [`docs/unity.md`](unity.md) — Unity C# integration
+- [`docs/development.md`](development.md) — Build, test, run, Cargo features
+
 ## Contributing
 
 - New top-level sections: edit this `README.md` to add them under the right group.
