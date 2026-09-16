@@ -1,5 +1,7 @@
 //! Substrate TUI — terminal UI dashboard for the substrate dispatch surface.
 
+#![allow(dead_code)]
+
 mod app;
 mod boot;
 mod components;

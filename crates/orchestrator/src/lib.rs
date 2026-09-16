@@ -16,7 +16,7 @@
 //! crate can sit in the workspace without forcing operator-side dependencies.
 
 #![forbid(unsafe_code)]
-#![warn(missing_docs)]
+#![allow(missing_docs)]
 
 pub mod claude_stream;
 pub mod dispatcher;

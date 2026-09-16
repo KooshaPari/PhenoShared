@@ -7,8 +7,7 @@
 
 use std::path::{Path, PathBuf};
 use std::pin::Pin;
-use std::sync::Arc;
-use std::task::{Context, Poll, Wake};
+use std::task::{Context, Poll};
 
 use futures_core::Stream;
 use serde::{Deserialize, Serialize};
@@ -130,16 +129,17 @@ impl Stream for WatcherStream {
     }
 }
 
-struct NoopWaker;
-impl Wake for NoopWaker {
-    fn wake(self: Arc<Self>) {}
-}
-
 #[cfg(test)]
 mod tests {
     use super::*;
     use std::io::Write;
-    use std::task::Waker;
+    use std::sync::Arc;
+    use std::task::{Wake, Waker};
+
+    struct NoopWaker;
+    impl Wake for NoopWaker {
+        fn wake(self: Arc<Self>) {}
+    }
 
     fn write_jsonl(dir: &Path, name: &str, body: &str) {
         let tasks = dir.join("tasks");

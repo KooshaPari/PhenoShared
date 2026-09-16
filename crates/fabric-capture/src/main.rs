@@ -3,6 +3,8 @@
 //! Enumerates PowerShell/Console windows, reads their screen buffers,
 //! and posts captured content to tf-web for remote viewing.
 
+#![allow(dead_code)]
+
 mod capture;
 mod clipboard;
 mod client;

@@ -3,6 +3,8 @@
 //! Manages topology, leases, wire transport, and health checks.
 //! Persists state to SQLite via fabric-persist.
 
+#![allow(dead_code)]
+
 mod auth;
 mod config;
 mod coordinator;

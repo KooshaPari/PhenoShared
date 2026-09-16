@@ -66,6 +66,7 @@ pub(crate) fn find_tf_mux_binary() -> Option<PathBuf> {
 }
 
 /// Run a command and return `(exit_success, stdout, stderr)`.
+#[allow(dead_code)]
 async fn run_cmd(
     bin: &Path,
     args: &[&str],

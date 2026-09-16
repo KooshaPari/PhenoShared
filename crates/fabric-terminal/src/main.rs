@@ -4,6 +4,8 @@
 //! Rust gives us memory-safe concurrency for network operations
 //! and the best SSH library ecosystem.
 
+#![allow(dead_code)]
+
 use anyhow::{Context, Result};
 use clap::{Parser, Subcommand};
 use serde::{Deserialize, Serialize};

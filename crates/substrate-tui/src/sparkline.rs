@@ -1,4 +1,5 @@
 //! Latency sparkline chart for provider metrics.
+
 use std::collections::VecDeque;
 
 pub const SPARKLINE_LEN: usize = 60;
