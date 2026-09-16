@@ -1,32 +1,67 @@
-# PhenoTooling: role-specific atlas and qualification
+# PhenoTooling: ABSORBED into Pheno
 
-**Role:** Quality, developer workflow and absorbed tool capabilities
-**Class:** pooled-foundation
-**Repository ID:** 1220333985
-**Status:** Active absorption work in progress.
+**Status:** ABSORBED (2026-09-16)
+**Former Class:** pooled-foundation
+**Former Repository ID:** 1220333985
+**Target:** KooshaPari/pheno (crates/)
 
-## Current State (2026-09-16)
+## Absorption Summary
 
-### Active Branch: `absorb-phenoUtils`
-- Merged foundational Rust utilities into tooling
+All 42 PhenoTooling crates have been absorbed into pheno workspace:
 
-### Recent Absorptions
-| Source | Date | Status |
-|--------|------|--------|
-| phenoUtils | 2026-09-15 | Active |
-| zz-Tokn | 2026-09-14 | Complete |
-| phinbox | 2026-09-10 | Complete |
+| Crate | Status |
+|-------|--------|
+| acceptance-contract | Absorbed |
+| agent-forecast | Absorbed |
+| agent-orchestrator | Absorbed |
+| anthropic-usage-poll | Absorbed |
+| audit-privacy | Absorbed |
+| bench-guard | Absorbed |
+| commit-msg-check | Absorbed |
+| dag-scheduler | Absorbed |
+| doc-link-check | Absorbed |
+| docs-health | Absorbed |
+| fr-coverage | Absorbed |
+| fr-trace | Absorbed |
+| fuzz-setup | Absorbed |
+| heliosbench | Absorbed |
+| legacy-scan | Absorbed |
+| nanovms | Absorbed |
+| perfharness | Absorbed |
+| pheno-crypto | Absorbed |
+| pheno-forge-scaffold | Absorbed |
+| pheno-fs | Absorbed |
+| pheno-net | Absorbed |
+| pheno-schema-port | Absorbed |
+| pheno-shell | Absorbed |
+| pheno-terminal | Absorbed |
+| pheno-testing | Absorbed |
+| phenotype-cli | Absorbed |
+| phenotype-config | Absorbed |
+| phenotype-diff | Absorbed |
+| phenotype-resilience | Absorbed |
+| phenotype-service-registry | Absorbed |
+| phenotype-tooling-observability | Absorbed |
+| phinbox | Absorbed |
+| policystack | Absorbed |
+| ptx | Absorbed |
+| qgate | Absorbed |
+| release-cut | Absorbed |
+| sbom-gen | Absorbed |
+| tasken | Absorbed |
+| temporal-grounding | Absorbed |
+| tokn | Absorbed |
+| tokn-pareto-rs | Absorbed |
+| tokn-tokenledger | Absorbed |
+| worktree-manager | Absorbed |
 
-### Quality Gates
-| Gate | Status |
-|------|--------|
-| G0 Identity | PASS |
-| G1 Docs | PASS |
-| G2 Validation | PASS |
-| G3 Build | PASS |
-| G4 Tests | PARTIAL |
-| G5 Integration | UNKNOWN |
-| G6 Deploy | UNKNOWN |
+## Former Repository
 
-## Repository
-- **GitHub:** https://github.com/KooshaPari/PhenoTooling
+- **GitHub:** https://github.com/KooshaPari/PhenoTooling (now absorbed)
+- **Local:** ~/CodeProjects/Phenotype/repos/PhenoTooling
+
+## Notes
+
+- PhenoTooling repo can be archived after verification
+- All tooling functionality now lives in pheno crates/
+- CI/CD pipelines updated to use pheno workspace
