@@ -94,11 +94,10 @@ where
         ))
         .with_state(state);
 
-    // Dashboard UI routes (no auth, seeded with dogfood data).
-    let dashboard_state = std::sync::Arc::new(tokio::sync::RwLock::new(
-        agileplus_dashboard::app_state::DashboardStore::seeded(),
-    ));
-    let dashboard = agileplus_dashboard::routes::router(dashboard_state);
+    // Dashboard UI routes — stubbed out. The agileplus_dashboard crate lacks
+    // a Cargo.toml manifest and is excluded from the workspace. Re-enable when
+    // the crate is properly added with its own Cargo.toml.
+    let dashboard = Router::new();
 
     Router::new()
         .merge(public)
