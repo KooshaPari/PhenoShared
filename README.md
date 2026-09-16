@@ -1,109 +1,181 @@
-# Phenotype Fabric
+# PhenoMLX\n\nActive Phenotype project. MLX inference with Rust performance cores.\n\n---\n\n# phenotype-omlx
 
-**Working name:** `phenotype-fabric`  
-**Document set version:** 0.1.0-draft  
-**Created:** 2026-08-28  
-**Status:** Research and architecture baseline; not an implementation-complete claim  
-**Scope owner:** Runtime substrate for distributed compute, data locality, interactive I/O, surfaces, transport selection, and real-time quality of service
+MLX-native, multi-backend OMLX research stack for local inference and evaluation.
 
-> A packaged, all-in-one computing environment that makes connected physical machines, operating-system sessions, virtual machines, accelerators, displays, audio devices, input devices, storage, and remote locations appear as one coherent interactive computer—while preserving the physical facts needed to make good placement decisions.
+[![AI slop inside](https://sladge.net/badge.svg)](https://sladge.net) [![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/KooshaPari/phenotype-omlx/total)](https://github.com/KooshaPari/phenotype-omlx/releases)
 
-## The product in one sentence
+> **Fork attribution:** `phenotype-omlx` is KooshaPari's fork of [jundot/omlx](https://github.com/jundot/omlx). Upstream OMLX remains its own project; this repository documents only the extensions maintained in this fork.
 
-Phenotype Fabric exposes one graph, one workspace model, and one UI/API while compiling each link onto the least-expensive valid execution path: direct calls, shared memory, DMA-BUF, IVSHMEM/KVMFR, virtio/vhost, PCIe peer paths, LAN transports, WAN transports, or out-of-band hardware.
+## What this fork does
 
-## What is unified
+This fork extends the upstream OMLX application with a local research stack for multi-backend inference, policy-driven dispatch, model evaluation, and Rust performance experiments across MLX, Metal, vLLM, TensorRT, SGLang, and llama.cpp.
 
-The product shell unifies:
+## Meaningful extensions in this fork
 
-- device, realm, session, application, process, task, data-object, and surface discovery;
-- keyboard, pointer, touch, pen, controller, MIDI, microphone, audio, video, clipboard, file, and storage routing;
-- application and desktop presentation independent of execution location;
-- heterogeneous CPU, GPU, NPU, FPGA, memory, storage, and network placement;
-- hard and soft real-time reservations;
-- topology-aware transport and codec selection;
-- workspace snapshots such as **desk**, **couch**, **bench**, **music**, **game**, and **remote**;
-- human and agent control through the same typed API;
-- evidence, telemetry, audit, and reproducible benchmark output.
+- Rust performance-core workspace for speculative decoding, concurrent execution, TurboQuant, tree attention, and fleet protocol work.
+- Python FFI and research launchers that connect local backends, evaluation surfaces, and agent experiments.
+- Multi-platform client and administration experiments around the upstream application.
 
-The implementation is intentionally **not monolithic**. It wraps and composes proven data planes—Looking Glass/KVMFR, PipeWire/JACK, evdev/uinput/libei, RDP/RAIL, Xpra/Waypipe, Sunshine/Moonlight-class media, platform virtual-display APIs, QUIC, virtio, SMB/NFS/SFTP, Syncthing-class synchronization, and KVM-over-IP—behind stable capabilities.
+## Major capabilities
 
-## What is not unified
+- Local inference and evaluation across supported backends.
+- Speculative decoding, quantization, concurrent execution, and model-research workflows.
+- Apple-Silicon and Metal kernel experimentation alongside portable Rust/Python integration.
 
-This project must not become a universal database or absorb adjacent products:
+## Quick start
 
-- **AgilePlus** owns governed intent, requirements, work packages, acceptance criteria, and evidence gates.
-- **thegent** owns labor/agent delegation and execution intent.
-- **AGSLAG** owns economic allocation, priority, risk, and whether work deserves resources.
-- **Tracera** owns cross-artifact traceability and evidence relationships.
-- **SessionLedger** owns durable operational session history and replay.
-- **ShareCLI** remains a standalone, useful OS-adjacent process/agent runtime and supervisor; it may become a privileged fabric client and local adapter.
-- **NVMS** is the natural ecosystem boundary for runtime inventory and isolation; this specification materially expands the substrate expected beneath it.
-- **labs-compute** remains the bounded research incubator for experimental kernels, device mesh techniques, and prototypes until a capability proves a stable product contract.
+```bash
+./scripts/phenotype-omlx-ready
+./cli/bin/omlx-research doctor
+./cli/bin/omlx-research inference --prompt "Hello" --policy auto
+```
+## What's in this repo
 
-These systems share identifiers and event contracts but retain independent authority and storage.
+| Tier | Path | Purpose |
+| --- | --- | --- |
+| **MLX framework** | `/Applications/oMLX.app/.../framework-mlx-base/lib/python3.11/site-packages` | Upstream OMLX Python 3.11 + TurboQuant+ injected into `mlx.nn.layers.turbo_kv_cache` |
+| **CLI proxy** | `cli/bin/omlx-cli` | Pass-through to the upstream CLI with `PYTHONPATH` pre-set so the CLI sees the same TurboQuant+ as the GUI |
+| **CLI research launcher** | `cli/bin/omlx-research` | Unified entry point: `repl`, `cli`, `gui`, `web`, `doctor`, `status`, `inference`, `spec-decode`, `latentmas`, `tidar`, `bench`, `fleet` |
+| **Web admin** | `python/omlx_research/web.py` | Local HTTP server (`omlx-research web`) serving the research panel + REST endpoints |
+| **GUI admin extensions** | `gui/admin-extensions/` | Drop-in extensions that mount inside the oMLX.app web admin (templates + static + API) |
+| **Python surface** | `python/omlx_research/` | `backends/` (vLLM, TensorRT, SGLang, llama.cpp, MLX, Metal), `engines/` (spec-decode, tree-attn, par-batch, hybrid-dispatch), `agents/` (LatentMAS, TiDAR, SSD, JetSpec schedulers), `cli/` (subcommand CLI) |
+| **Rust perf-core** | `perf-core/` | 5-crate workspace: `spec-decode`, `concurrent-exec`, `turbo-quant`, `tree-attention`, `fleet-proto`. The CPU/Metal hot path is in Rust; Metal kernels are loaded at runtime. |
+| **Python FFI** | `python/ffi/src/lib.rs` | pyo3 bindings so Python can call into the Rust perf-core (compiled as `_phenotype_omlx_core`) |
+| **Reference research repos** | `../turboquant_plus`, `../JetSpec`, `../ssd`, `../LatentMAS`, `../TiDAR` | Original third-party code, surfaced read-only via `phenotype-omlx-env.sh` |
+| **Windows client** | `windows-client/` | PowerShell launcher + planned Tauri GUI |
+| **Linux client** | `linux-client/` | bash launcher + planned Tauri GUI |
+| **macOS desktop** | upstream `/Applications/oMLX.app` | The upstream OMLX app, with our admin-extensions mounted via `OMLX_ADMIN_EXTRA` |
 
-## Non-negotiable design rules
+## Why Rust + Python?
 
-1. **One product surface, many optimized data planes.**
-2. **Remote does not mean network.** Same-process, same-OS, same-host, PCIe-local, LAN, WAN, and out-of-band routes are distinct compilation targets.
-3. **Every stage is guilty until justified.** Copies, serialization, codecs, color conversion, resampling, kernel crossings, and relays are optional graph stages, never assumed.
-4. **Atomic placement is a capability floor, not the default granularity.** The runtime may interpose at syscall/function/kernel/I/O granules, then fuse neighboring decisions into execution regions when distribution overhead dominates.
-5. **Presentation and execution are independent.** A window may live on the MacBook while its process, DSP graph, GPU kernels, and data execute elsewhere.
-6. **Physics remains visible to the optimizer.** Location transparency must never become performance opacity.
-7. **Real-time islands preempt background throughput.** Ableton, live monitoring, MIDI, input, and game frame deadlines are protected from compilers, agents, inference, indexing, and bulk transfers.
-8. **Color and audio semantics are first-class.** HDR metadata, bit depth, primaries, transfer functions, clock domains, latency, and sample accuracy are not “stream settings.”
-9. **Agents may publish surfaces but may not steal focus.**
-10. **Every ambitious claim requires a benchmark, falsification condition, and fallback.**
+Three reasons:
 
-## Reference user environment
+1. **Latency on the hot path.** Speculative decoding, tree attention, and
+   TurboQuant pack/unpack all run per-token. Rust is ~2-5× faster than
+   Python on these CPU-bound inner loops, and Metal shader dispatch is
+   significantly cleaner from Rust than from Python.
+2. **Cross-platform FFI.** The same `perf-core` workspace compiles to a
+   native `.so` / `.dylib` / `.dll` that pyo3 wraps for Python. The Rust
+   surface is also the natural place for the `fleet-proto` JSON-RPC peer
+   protocol used by the Windows / Linux clients.
+3. **Optional Metal kernels.** MLX handles its own Metal dispatch, so the
+   Rust side stays CPU-only for now. If we later want direct Metal calls
+   (e.g., for the speculative tree attention kernel), the same workspace
+   already has `metal` placeholder files in `spec-decode/src/metal.rs`.
 
-The first validation environment is deliberately hostile rather than idle:
+## Quick start
 
-- one main multi-GPU PC hosting a Linux/virtualization environment and multiple disjoint-I/O VMs;
-- one to five bench-test PCs in the room;
-- other PCs across the WAN;
-- a 2021 M1 Pro MacBook Pro used both as its own computer and as a third display/seat;
-- a Samsung C27HG70 2560×1440 high-refresh HDR monitor;
-- concurrent agent development that may compile Rust, run games for end-to-end tests, execute inference, or generate transient VMs;
-- foreground gaming or Ableton Live 12 Suite use;
-- movement between desk and couch without manually reconstructing sessions.
+```bash
+# 1) Verify the stack (idempotent — compiles perf-core on first run)
+./scripts/phenotype-omlx-ready
 
-## Documentation map
+# 2) Interactive REPL with the full stack
+./cli/bin/omlx-research
 
-- [`PRD.md`](PRD.md) — product requirements and user journeys.
-- [`SPECIFICATION.md`](SPECIFICATION.md) — normative system specification and conformance rules.
-- [`HLD.md`](HLD.md) — high-level system architecture.
-- [`ALD.md`](ALD.md) — architecture/abstraction lowering from intent to physical routes.
-- [`LLD.md`](LLD.md) — low-level component and hot-path design.
-- [`UX_SPECIFICATION.md`](UX_SPECIFICATION.md) — simple workspace and expert graph interaction contracts.
-- [`PLAN.md`](PLAN.md) and [`ROADMAP.md`](ROADMAP.md) — phased program and product/research horizons.
-- [`TRACEABILITY.md`](TRACEABILITY.md) — exact prompt-to-requirement-to-evidence chain.
-- [`FUNCTIONAL_REQUIREMENTS.md`](FUNCTIONAL_REQUIREMENTS.md) — traceable functional requirements.
-- [`NON_FUNCTIONAL_REQUIREMENTS.md`](NON_FUNCTIONAL_REQUIREMENTS.md) — performance, quality, reliability, and security requirements.
-- [`intent/`](intent/) — verbatim human prompts and formal intent synthesis.
-- [`specs/`](specs/) — AgilePlus-shaped feature specifications, plans, and task catalogs.
-- [`adr/`](adr/) — architecture decisions and rejected alternatives.
-- [`architecture/`](architecture/) — component, protocol, platform, and graph details.
-- [`sota/`](sota/) — 2026 state-of-the-art and competitive analysis.
-- [`work/`](work/) — WBS, DAG, PERT, critical path, milestones, and research/build order.
-- [`research/`](research/) — hypotheses, experiments, source discipline, and open questions.
-- [`verification/`](verification/) — benchmark, fault, security, compatibility, and acceptance gates.
-- [`ecosystem/`](ecosystem/) — product boundaries and event-contract integration.
-- [`examples/`](examples/) — concrete graph/workspace examples.
-- [`operations/`](operations/) — packaging, deployment, upgrades, SLOs, and recovery.
-- [`risks/`](risks/) — feasibility, threat, licensing, and vendor-dependency registers.
-- [`references/`](references/) — bibliography and source-confidence register.
-- [`INDEX.md`](INDEX.md) and [`TREE.txt`](TREE.txt) — complete navigation and repository tree.
-- [`VALIDATION_REPORT.md`](VALIDATION_REPORT.md) and [`MANIFEST.sha256`](MANIFEST.sha256) — package checks and file hashes.
+# 3) Doctor + status
+./cli/bin/omlx-research doctor
+./cli/bin/omlx-research status
 
-## Honest status
+# 4) Inference via the policy dispatcher
+./cli/bin/omlx-research inference --prompt "Hello" --policy auto
 
-This package is a **complete planning and specification baseline**, not proof that transparent arbitrary-binary fine-grained distributed execution has already been solved. The architecture deliberately separates:
+# 5) Speculative decoding demo
+./cli/bin/omlx-research spec-decode --mode ssd --gamma 5
 
-- capabilities that can be integrated now;
-- capabilities requiring platform-specific implementation;
-- research hypotheses requiring measurement;
-- mechanisms that should remain selective because their coordination cost is usually worse than local execution.
+# 6) LatentMAS fan-out demo
+./cli/bin/omlx-research latentmas --prompt "Plan a 3-day trip" --n-agents 4
 
-The first product can deliver substantial value without solving the hardest research layer. The user-facing shell, graph model, same-host fast paths, workspace switching, agent realm publication, and load-aware process/task placement are independently viable.
+# 7) Web admin (research panel + REST)
+./cli/bin/omlx-research web --port 8080
+
+# 8) Launch the oMLX.app GUI with admin-extensions mounted
+./cli/bin/omlx-research gui
+```
+
+## Architecture
+
+See [`ARCHITECTURE.md`](ARCHITECTURE.md) for the full diagram and tier
+breakdown. Top-level decisions live in [`docs/adr/`](docs/adr/).
+
+## Repository map (merge target for the upstream OMLX fork)
+
+| OMLX tier | phenotype-omlx path | What changed |
+| --- | --- | --- |
+| MLX framework | `perf-core/turbo-quant/` + `/Applications/oMLX.app/.../turbo_kv_cache.py` | TurboQuant+ inject |
+| CLI | `cli/bin/omlx-cli` + `cli/bin/omlx-research` | Pass-through proxy + unified launcher |
+| GUI / web | `gui/admin-extensions/` | Research panel, REST API, static assets |
+| Server | `python/omlx_research/web.py` | Local web admin |
+| Engines | `python/omlx_research/engines/` + `perf-core/spec-decode/` | New engines with Rust perf-core |
+| Backends | `python/omlx_research/backends/` | vLLM / TensorRT / SGLang / llama.cpp / MLX / Metal adapters |
+| Agents | `python/omlx_research/agents/` | LatentMAS, TiDAR, SSD, JetSpec concurrent schedulers |
+| Fleet | `perf-core/fleet-proto/` | JSON-RPC peer protocol + in-memory registry |
+
+## Multi-platform
+
+| Platform | Status | Entry point |
+| --- | --- | --- |
+| macOS (Apple Silicon) | ✅ Production | `/Applications/oMLX.app` + `cli/bin/omlx-research` |
+| Linux | 🟡 Stub | `linux-client/omlx-research` (PyTorch + CUDA / ROCm fallback) |
+| Windows | 🟡 Stub | `windows-client/omlx-research.ps1` (Tauri GUI planned) |
+
+## Multi-engine
+
+| Engine | Tier | Use case |
+| --- | --- | --- |
+| **MLX** (primary) | Apple Silicon | Lowest latency on M-series; required for TurboQuant+ |
+| **Metal** | Apple Silicon | Direct Metal kernel dispatch (advanced) |
+| **vLLM** | Linux / cloud | High-throughput serving on NVIDIA / ROCm |
+| **TensorRT-LLM** | Linux / cloud | Max-throughput inference on NVIDIA |
+| **SGLang** (planned) | Linux / cloud | RadixAttention + structured generation |
+| **llama.cpp** | Any | CPU + GGUF quantization, broadest model support |
+
+The `HybridDispatch` engine picks a backend per-request based on a policy
+(`auto`, `mlx`, `metal`, `vllm`, `tensorrt`, `sglang`, `llamacpp`, `lowest-latency`,
+`highest-throughput`).
+
+## Performance cores (Rust)
+
+```
+perf-core/
+├── Cargo.toml                      # workspace
+├── spec-decode/                    # speculative decoding engine
+│   ├── src/lib.rs
+│   ├── src/backend.rs              # backend trait
+│   ├── src/engine.rs               # draft + verify loop
+│   ├── src/verify.rs               # target verification + acceptance
+│   └── src/metal.rs                # Metal kernel placeholders
+├── concurrent-exec/                # concurrent agent scheduler
+│   ├── src/lib.rs
+│   ├── src/plan.rs                 # execution plan / DAG
+│   ├── src/latentmas.rs            # LatentMAS adapter
+│   ├── src/tidar.rs                # TiDAR adapter
+│   ├── src/ssd.rs                  # SSD adapter
+│   └── src/jetspec.rs              # JetSpec adapter
+├── turbo-quant/                    # CPU SIMD TurboQuant pack/unpack
+│   └── src/lib.rs
+├── tree-attention/                 # tree causal mask + verification
+│   └── src/lib.rs
+└── fleet-proto/                    # JSON-RPC peer protocol
+    └── src/lib.rs
+```
+
+Test status: **5 / 5 Rust crates compile. 5 / 5 unit tests pass.**
+
+## Repo merge history (hwLedger → phenotype-omlx)
+
+The `hwLedger` research project (chore-overhaul-2026-06-30 worktree) is
+**fully merged** into this repo as documentation only. See:
+
+- `docs/adr/2026-06-18/ADR-035A-hwledger-reclassification.md`
+- `docs/boundary/phenotype-omlx.md`
+- `docs/intent/phenotype-omlx.md`
+
+The hwLedger Rust core itself was not merged — it served a different
+purpose (hardware capability ledger) and is now archived at
+`docs/research/architectures/hwledger-archive/`.
+
+## License
+
+See upstream OMLX license for the framework files we proxy. The
+phenotype-omlx additions (perf-core, omlx_research, admin extensions,
+research panel) are MIT-licensed.

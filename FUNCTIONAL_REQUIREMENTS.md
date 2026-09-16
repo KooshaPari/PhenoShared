@@ -1,116 +1,232 @@
-# Functional Requirements
+# Functional Requirements — phenotype-shared
 
-Requirement IDs are stable trace keys. Each requirement maps to one or more source-intent IDs in `intent/002-human-to-requirement-map.md` and to verification rows in `verification/requirements-traceability-matrix.md`.
+Traces to: PRD.md epics E1–E8.
+ID format: FR-{CAT}-{NNN} where CAT = DOM | EVT | CACHE | POL | SM | PORT | APP | TS.
 
-## Product shell and discovery
+---
 
-| ID | Requirement | Priority |
-|---|---|---|
-| PF-FR-001 | The system shall provide a single packaged UI, CLI, SDK, and agent-facing API across supported platforms. | P0 |
-| PF-FR-002 | The system shall discover physical devices, realms, sessions, seats, surfaces, resources, and endpoint capabilities. | P0 |
-| PF-FR-003 | The system shall preserve stable IDs across reconnects and distinguish identity from transient address or display order. | P0 |
-| PF-FR-004 | The system shall present both a simplified workspace UI and an expert graph/patchbay UI. | P0 |
-| PF-FR-005 | The system shall serialize, version, activate, diff, and roll back workspace graphs. | P0 |
-| PF-FR-006 | The system shall expose health, pressure, and route status without requiring users to inspect each backend. | P0 |
+## Domain Model (phenotype-domain)
 
-## Graph and routing
+**FR-DOM-001**: The system SHALL provide strongly-typed value objects for AgentId, TaskId, WorkflowId, PolicyId, AgentStatus, TaskStatus, Priority, Timestamp, AgentName, TaskName, and WorkflowName.
+Traces to: E1.1
 
-| ID | Requirement | Priority |
-|---|---|---|
-| PF-FR-010 | Every connectable capability shall be represented by typed ports with format, timing, security, and locality metadata. | P0 |
-| PF-FR-011 | A desired link shall be distinct from its compiled route. | P0 |
-| PF-FR-012 | Route compilation shall search locality tiers from least expensive to most remote, subject to policy. | P0 |
-| PF-FR-013 | The compiler shall eliminate unnecessary copy, serialization, codec, color-conversion, resampling, and relay stages. | P0 |
-| PF-FR-014 | The compiler shall produce a route explanation with considered alternatives and rejected constraints. | P1 |
-| PF-FR-015 | Route changes shall be transactional with prepare, validate, commit, abort, and rollback. | P0 |
-| PF-FR-016 | Recursive capture/route loops shall be detected and blocked. | P0 |
-| PF-FR-017 | Routes shall replan when topology/capabilities change, but shall not silently violate hard constraints. | P0 |
+**FR-DOM-002**: Value object constructors SHALL validate invariants and return a typed `ValidationError` when input is invalid.
+Traces to: E1.1
 
-## Input and focus
+**FR-DOM-003**: All domain value objects SHALL implement `Debug`, `Clone`, `Serialize`, and `Deserialize`.
+Traces to: E1.1
 
-| ID | Requirement | Priority |
-|---|---|---|
-| PF-FR-020 | A central broker shall route physical and virtual keyboard, mouse, controller, pen, touch, and MIDI input. | P0 |
-| PF-FR-021 | Input focus shall be governed by exclusive leases and monotonically increasing fencing tokens. | P0 |
-| PF-FR-022 | Focus transfer shall synthesize releases for all held keys/buttons before revoking the old route. | P0 |
-| PF-FR-023 | Absolute desktop pointer and raw-relative capture modes shall be explicit and mutually safe. | P0 |
-| PF-FR-024 | Users shall independently cycle input focus, output focus, or both. | P0 |
-| PF-FR-025 | A local break-glass input path shall remain available. | P0 |
-| PF-FR-026 | Agents shall not acquire human input focus without an explicit grant or policy. | P0 |
+**FR-DOM-004**: The domain crate SHALL have zero dependencies on infrastructure or adapter crates.
+Traces to: E1.1, E1.2
 
-## Displays, windows, and surfaces
+**FR-DOM-005**: The system SHALL provide entity base traits with stable identity semantics, aggregate root traits enforcing consistency boundaries, immutable domain event types, and stateless domain service traits.
+Traces to: E1.2
 
-| ID | Requirement | Priority |
-|---|---|---|
-| PF-FR-030 | The system shall support takeover, extend, portal, mirror/pin, and audio-only presentation modes. | P0 |
-| PF-FR-031 | A sink device may advertise a panel as a dynamic virtual monitor for another realm. | P0 |
-| PF-FR-032 | The system shall prefer semantic per-application remoting when compatible and fall back to pixel proxies. | P1 |
-| PF-FR-033 | Pixel-proxy mode shall preserve owned-window relationships, modals, popups, z-order intent, and minimize semantics. | P1 |
-| PF-FR-034 | The system shall support mixed-DPI coordinate translation and raw/semantic text input. | P1 |
-| PF-FR-035 | Protected or unavailable surfaces shall fail explicitly and offer a whole-desktop or out-of-band fallback. | P0 |
-| PF-FR-036 | Surface location shall be independent from process and compute location. | P0 |
-| PF-FR-037 | The system shall allow an agent to publish a surface without forcing it visible or focused. | P0 |
+---
 
-## Video, HDR, and color
+## Event Sourcing (phenotype-event-sourcing)
 
-| ID | Requirement | Priority |
-|---|---|---|
-| PF-FR-040 | Display capability descriptors shall include resolution, scale, refresh, VRR, bit depth, primaries, transfer functions, luminance, and ICC/EDID data where available. | P0 |
-| PF-FR-041 | Video links shall negotiate raw or encoded formats based on locality, source intent, sink capability, and resource pressure. | P0 |
-| PF-FR-042 | Workload profiles shall distinguish desktop-text, gaming, color-critical, and video cadence priorities. | P0 |
-| PF-FR-043 | HDR metadata shall be preserved where possible and explicit tone/gamut mapping shall be recorded where not. | P0 |
-| PF-FR-044 | Encoder, decoder, copy-engine, VRAM, PCIe, and memory-bandwidth pressure shall influence route selection. | P0 |
-| PF-FR-045 | The system shall expose frame pacing, capture, encode, network, decode, composition, and display-stage telemetry. | P0 |
-| PF-FR-046 | Quality degradation shall follow declared profiles rather than uncontrolled queue growth. | P0 |
+**FR-EVT-001**: The system SHALL append events to a named aggregate stream with monotonically increasing sequence numbers.
+Traces to: E2.1
 
-## Audio and MIDI
+**FR-EVT-002**: `EventEnvelope` SHALL carry: typed serializable payload, u64 sequence number, aggregate type string, aggregate ID string, UTC timestamp, and actor string.
+Traces to: E2.1
 
-| ID | Requirement | Priority |
-|---|---|---|
-| PF-FR-050 | Audio, MIDI, OSC, microphone, and control surfaces shall be first-class graph port types. | P0 |
-| PF-FR-051 | Audio routes shall carry sample format, rate, channels, clock domain, target latency, and xrun policy. | P0 |
-| PF-FR-052 | Local routes shall avoid encoding/resampling when compatible direct/shared paths exist. | P0 |
-| PF-FR-053 | Network routes shall estimate clock drift and apply bounded elastic buffering and asynchronous sample-rate conversion when required. | P1 |
-| PF-FR-054 | Audio and video may share synchronization intent but shall retain independent buffering and transport. | P0 |
-| PF-FR-055 | MIDI/control events shall be timestamped and not tunneled as generic USB unless device fidelity requires it. | P1 |
-| PF-FR-056 | The system shall provide protected RT audio islands for Ableton-class workloads. | P0 |
+**FR-EVT-003**: Each appended `EventEnvelope` SHALL include a SHA-256 hash computed over the serialized previous event envelope; the first event in a stream SHALL use a defined genesis hash.
+Traces to: E2.2
 
-## Compute and data plane
+**FR-EVT-004**: The system SHALL expose a hash-chain verification function that traverses all events in a stream and returns `Ok(())` if the chain is intact or a typed error identifying the first broken link.
+Traces to: E2.2
 
-| ID | Requirement | Priority |
-|---|---|---|
-| PF-FR-060 | The system shall inventory CPU topology, NUMA, caches, accelerators, memory domains, storage, NICs, PCIe paths, thermals, and power state. | P0 |
-| PF-FR-061 | Tasks and objects shall declare capabilities, locality, security, consistency, deadline, and resource constraints. | P0 |
-| PF-FR-062 | Placement shall minimize predicted total completion cost including queueing, compute, state movement, data transfer, synchronization, result return, contention, and risk. | P0 |
-| PF-FR-063 | The runtime shall track object identity, versions, authority, replicas, caches, and residency. | P0 |
-| PF-FR-064 | The runtime shall move compute to data or data to compute based on measured total cost. | P0 |
-| PF-FR-065 | Placement granularity may reach task, function, syscall, operation, or accelerator-kernel boundaries where interposition exists. | P2 |
-| PF-FR-066 | The runtime shall fuse repeated fine-grained decisions into execution regions and split regions when conditions diverge. | P1 |
-| PF-FR-067 | The runtime shall support prefetch, replication, speculative execution, cancellation, and cache eviction policies. | P1 |
-| PF-FR-068 | The runtime shall support mobility levels: surface projection, semantic handoff, application checkpoint, process checkpoint, VM migration, and workload rematerialization. | P1 |
-| PF-FR-069 | The runtime shall never represent remote memory or VRAM as uniform local capacity without visible latency/consistency semantics. | P0 |
+**FR-EVT-005**: The system SHALL support snapshot creation and loading via `SnapshotRepository` port with `save_snapshot(aggregate_id, version, state)` and `load_snapshot(aggregate_id)` operations.
+Traces to: E2.3
 
-## QoS and contention
+**FR-EVT-006**: `InMemoryEventStore` SHALL be provided as the default `EventRepository` adapter with no external dependencies.
+Traces to: E2.4
 
-| ID | Requirement | Priority |
-|---|---|---|
-| PF-FR-070 | Work shall be classified into RT0, RT1, RT2, RT3, RT4, Bulk, and Background service classes. | P0 |
-| PF-FR-071 | Resource reservations shall extend across CPU, GPU, encoder/decoder, memory bandwidth, storage I/O, network, thermal, and power constraints. | P0 |
-| PF-FR-072 | Background builds, tests, inference, and agents shall be subordinate to declared foreground deadlines. | P0 |
-| PF-FR-073 | The scheduler shall evict or relocate competing work before distributing tightly coupled game/audio critical paths. | P0 |
-| PF-FR-074 | The system shall support explicit degradation ladders for frame rate, chroma, bitrate, resolution, and optional effects. | P0 |
-| PF-FR-075 | The system shall expose admission-control failure rather than overcommit a hard real-time route. | P0 |
+**FR-EVT-007**: `EventRepository` and `SnapshotRepository` SHALL be Rust trait definitions in the domain ports module, allowing adapters to be swapped without changing application code.
+Traces to: E2.4
 
-## Security, agents, recovery, and integration
+---
 
-| ID | Requirement | Priority |
-|---|---|---|
-| PF-FR-080 | Device enrollment shall use mutually authenticated identities and revocable short-lived credentials. | P0 |
-| PF-FR-081 | Permissions shall be capability-scoped by view, input, audio, microphone, clipboard, file, USB, migration, compute, and focus actions. | P0 |
-| PF-FR-082 | Privileged capture, injection, driver, and KVM components shall be isolated from the UI/control process. | P0 |
-| PF-FR-083 | Clipboard and file objects shall preserve MIME/types, provenance, sensitivity, expiry, and loop suppression. | P0 |
-| PF-FR-084 | Important physical devices shall support an out-of-band recovery route. | P0 |
-| PF-FR-085 | Ephemeral realms shall have owner, purpose, TTL, resource budget, fallback console, and cleanup policy. | P0 |
-| PF-FR-086 | The system shall emit stable events and evidence references for AgilePlus, thegent, Tracera, SessionLedger, AGSLAG, ShareCLI, NVMS, and ledgers without assuming shared storage. | P0 |
-| PF-FR-087 | All focus, route, privilege, migration, and placement decisions shall be auditable. | P0 |
-| PF-FR-088 | The system shall continue local operation during loss of cloud/coordination services where policy permits. | P0 |
+## Cache Adapter (phenotype-cache-adapter)
+
+**FR-CACHE-001**: Cache reads SHALL consult L1 (LRU) first; on an L1 miss they SHALL consult L2 (DashMap); on an L2 hit the entry SHALL be promoted to L1 before returning.
+Traces to: E3.1
+
+**FR-CACHE-002**: L1 capacity (max entries) SHALL be configurable at `CacheConfig` construction and validated to be >= 1.
+Traces to: E3.1
+
+**FR-CACHE-003**: `CacheEntry` SHALL store an expiry deadline (`Instant`); any read of an expired entry SHALL treat it as a miss and evict it from both tiers.
+Traces to: E3.2
+
+**FR-CACHE-004**: TTL SHALL be validated at `CacheConfig` construction; a zero or negative TTL SHALL be rejected with a typed error.
+Traces to: E3.2
+
+**FR-CACHE-005**: The system SHALL expose a `MetricsCollector` trait with `record_hit`, `record_miss`, and `record_eviction` methods.
+Traces to: E3.3
+
+**FR-CACHE-006**: `NoopMetricsCollector` (no-op, zero overhead) and `AtomicMetricsCollector` (lock-free atomic counters) SHALL be provided as built-in implementations.
+Traces to: E3.3
+
+**FR-CACHE-007**: Cache metrics SHALL be accessible as a `CacheMetricsDto` with hit_count, miss_count, eviction_count, and hit_rate fields.
+Traces to: E3.3
+
+**FR-CACHE-008**: Application use cases (`GetFromCache`, `InsertIntoCache`, `RemoveFromCache`, `GetCacheMetrics`) SHALL depend only on `CacheService` port, not on any concrete store type.
+Traces to: E3.4
+
+---
+
+## Policy Engine (phenotype-policy-engine)
+
+**FR-POL-001**: The system SHALL define three `RuleType` variants: `Allow`, `Deny`, and `Require`, each with distinct evaluation semantics.
+Traces to: E4.1
+
+**FR-POL-002**: `Allow` rules SHALL pass when the target fact is absent or matches the regex pattern; `Deny` rules SHALL fail when the fact matches the pattern; `Require` rules SHALL fail when the fact is absent or does not match the pattern.
+Traces to: E4.1
+
+**FR-POL-003**: `Rule` SHALL carry: `rule_type`, `fact` (key), `pattern` (regex string), and optional `description`.
+Traces to: E4.1
+
+**FR-POL-004**: `EvaluationContext` SHALL be a key-value map (String -> Value) supporting typed accessors `get_string`, `get_bool`, `get_int`.
+Traces to: E4.2
+
+**FR-POL-005**: `PolicyEngine` SHALL store policies in a `DashMap` to allow concurrent reads and writes without a global lock.
+Traces to: E4.2
+
+**FR-POL-006**: `PolicyEngine::evaluate_all(context)` SHALL return one `PolicyResult` per registered policy; each result SHALL list all `Violation` structs produced by that policy's rules.
+Traces to: E4.2
+
+**FR-POL-007**: `Violation` SHALL carry: fact key, pattern string, `RuleType`, and `Severity` (Low | Medium | High | Critical).
+Traces to: E4.2
+
+**FR-POL-008**: `PolicyLoader` SHALL parse a TOML file into `Vec<Policy>` and return a typed `PolicyEngineError` for malformed input.
+Traces to: E4.3
+
+**FR-POL-009**: Invalid regex patterns in rules SHALL produce a `PolicyEngineError::RegexCompilationError` at evaluation time, not at load time.
+Traces to: E4.1
+
+---
+
+## State Machine (phenotype-state-machine)
+
+**FR-SM-001**: The `State` trait SHALL require `ordinal() -> u32` (for ordering) and `all_states() -> Vec<Self>` (for validation).
+Traces to: E5.1
+
+**FR-SM-002**: `StateMachine<S: State>` SHALL maintain a current state and a transition table mapping `(from, to)` pairs to optional guard functions.
+Traces to: E5.1
+
+**FR-SM-003**: Attempting a transition not registered in the transition table SHALL return a typed `StateMachineError::InvalidTransition`.
+Traces to: E5.1
+
+**FR-SM-004**: When a transition guard returns false, the transition SHALL be rejected with `StateMachineError::GuardRejected`.
+Traces to: E5.2
+
+**FR-SM-005**: When forward-only mode is enabled, any transition where `to.ordinal() < current.ordinal()` SHALL be rejected with `StateMachineError::BackwardTransitionForbidden`.
+Traces to: E5.3
+
+**FR-SM-006**: Every accepted transition SHALL be appended to an internal ordered history log recording `(from_state, to_state, timestamp)`.
+Traces to: E5.4
+
+**FR-SM-007**: `history()` SHALL return an immutable slice of all recorded transitions in insertion order.
+Traces to: E5.4
+
+---
+
+## Port Interfaces (phenotype-port-interfaces)
+
+**FR-PORT-001**: The `Command` trait SHALL declare an associated `Result` type and require `Serialize + Send + Sync + 'static`.
+Traces to: E6.1
+
+**FR-PORT-002**: `CommandHandler<C: Command>` SHALL declare `async fn handle(&self, command: C) -> Result<C::Result>`.
+Traces to: E6.1
+
+**FR-PORT-003**: The `Query` trait SHALL declare an associated `Output` type.
+Traces to: E6.1
+
+**FR-PORT-004**: `QueryHandler<Q: Query>` SHALL declare `async fn execute(&self, query: Q) -> Result<Q::Output>`.
+Traces to: E6.1
+
+**FR-PORT-005**: `Repository<Entity, Id>` SHALL declare async `find_by_id`, `find_all(page, page_size)`, `save`, `delete`, and `exists` methods returning `Result<_, PortError>`.
+Traces to: E6.2
+
+**FR-PORT-006**: A `RepositoryExt` blanket implementation SHALL add `find_or_create` and `count` to all `Repository` implementors.
+Traces to: E6.2
+
+**FR-PORT-007**: Outbound port traits SHALL be defined for: `CachePort`, `LoggerPort`, `FilesystemPort`, `ConfigPort`, `QueuePort`, `HttpPort`, and `EventBusPort`.
+Traces to: E6.3
+
+**FR-PORT-008**: All outbound port methods SHALL be async and return `Result<_, PortError>`.
+Traces to: E6.3
+
+**FR-PORT-009**: No concrete adapter implementations SHALL exist in this crate; it is a trait-only library.
+Traces to: E6.3
+
+---
+
+## Application Layer (phenotype-application)
+
+**FR-APP-001**: The application crate SHALL define command structs: `CreateAgent`, `UpdateAgent`, `DeleteAgent`, `CreateTask`, `AssignTask`.
+Traces to: E7.1
+
+**FR-APP-002**: The application crate SHALL define query structs: `GetAgentById`, `ListAgents`, `SearchAgents`, `GetTaskMetrics`, `ListTasksByAgent`.
+Traces to: E7.1
+
+**FR-APP-003**: Each command and query SHALL have a corresponding DTO type in the `dto` module for request input and response output.
+Traces to: E7.1
+
+**FR-APP-004**: Handler implementations SHALL depend only on port traits from `phenotype-port-interfaces`; no concrete infrastructure types SHALL be imported.
+Traces to: E7.2
+
+**FR-APP-005**: Handlers SHALL produce typed `ApplicationError` variants (e.g., `ValidationFailed`, `NotFound`, `Conflict`) rather than opaque error strings.
+Traces to: E7.2
+
+---
+
+## TypeScript Packages
+
+**FR-TS-001**: `@helios/errors` SHALL export `ErrorCode` enum covering at minimum: `INTERNAL_ERROR`, `INVALID_ARGUMENT`, `NOT_FOUND`, `ALREADY_EXISTS`, `PERMISSION_DENIED`, `UNAUTHENTICATED`, `RESOURCE_EXHAUSTED`, `CANCELLED`, `UNAVAILABLE`, `NOT_IMPLEMENTED`, `TIMEOUT`, `VALIDATION_ERROR`, `METHOD_NOT_SUPPORTED`, `MISSING_CORRELATION_ID`, `TERMINAL_NOT_FOUND`, `LANE_NOT_FOUND`, `SESSION_NOT_FOUND`, `SESSION_NOT_ATTACHED`, `TERMINAL_BINDING_INVALID`.
+Traces to: E8.1
+
+**FR-TS-002**: `HeliosAppError` SHALL extend `Error` and expose `readonly code: ErrorCode`, `readonly details?: Record<string, unknown>`, and `readonly fatal?: boolean`.
+Traces to: E8.1
+
+**FR-TS-003**: `@helios/types` SHALL export readonly interfaces: `Workspace`, `WorkspaceBinding`, `ProjectBinding`, `Session` with the state union types `WorkspaceState` and session state.
+Traces to: E8.2
+
+**FR-TS-004**: `@helios/ids` SHALL export `generateId(entityType: EntityType): string` that produces a string matching `/^[a-z]{2,3}_[0-9A-HJKMNP-TV-Z]{26}$/`.
+Traces to: E8.3
+
+**FR-TS-005**: `generateId` SHALL throw synchronously if the generated ID fails format validation (debug assertion, not performance-critical).
+Traces to: E8.3
+
+**FR-TS-006**: `validateId(id: string): ValidationResult` SHALL verify format and known prefix.
+Traces to: E8.3
+
+**FR-TS-007**: `parseId(id: string): ParsedId` SHALL extract the `EntityType` and ULID portion from a valid ID string.
+Traces to: E8.3
+
+**FR-TS-008**: `generateCorrelationId()` SHALL be a convenience wrapper that calls `generateId("correlation")`.
+Traces to: E8.3
+
+---
+
+## Workspace Ergonomics and Versioning (phenotype-shared workspace)
+
+**FR-WS-001**: Each crate in the workspace SHALL have its own `[package]` block with `version`, `description`, and `license` fields populated so that the crate is independently publishable to crates.io.
+Traces to: E9.1
+
+**FR-WS-002**: No crate in the workspace SHALL depend on another crate in the same workspace via a path dependency. All inter-service sharing is done by the consuming service depending on individual published crates.
+Traces to: E9.1
+
+**FR-WS-003**: All shared dependencies (serde, tokio, thiserror, dashmap, lru, parking_lot, moka, uuid, chrono, regex, sha2, tracing) SHALL be declared in `[workspace.dependencies]` with pinned major versions. Individual crates SHALL reference them using `workspace = true`.
+Traces to: E9.2
+
+**FR-WS-004**: The workspace root `Cargo.toml` SHALL carry a `[workspace.package]` section defining the shared edition, license, and repository URL inherited by all member crates.
+Traces to: E9.2
+
+**FR-WS-005**: A `CHANGELOG.md` entry SHALL be authored for every published version of any crate, documenting breaking changes, new features, and bug fixes.
+Traces to: E9.3
+
+**FR-WS-006**: Breaking API changes in any crate SHALL result in a major version increment for that crate. Additive changes SHALL result in a minor increment. Bug-fix-only changes SHALL result in a patch increment.
+Traces to: E9.3

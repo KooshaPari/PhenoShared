@@ -1,100 +1,48 @@
----
-governance_version: 1
----
+# phenotype-omlx agent contract
 
-# phenotype-infra — Forge Agents Instructions
+## Worktree hub (required)
 
-This file is read automatically at the start of every Forge conversation
-within this repository. It extends the global `~/forge/AGENTS.md`.
-
----
-
-## <EXTREMELY-IMPORTANT>
-
-If you think there is even a 1% chance a skill might apply to what you are
-doing, you ABSOLUTELY MUST invoke the skill.
-
-If a skill applies to your task, you do not have a choice. You must use it.
-
-This is not negotiable. This is not optional. You cannot rationalize your
-way out of this.
-
-</EXTREMELY-IMPORTANT>
-
-## Skill discovery
-
-- Use the `:skill` command to list every skill Forge has loaded.
-- The `skill` tool is available inside the conversation. Invoke it by name
-  before responding to a user request.
-- Skills live in three locations; precedence is
-  **project `.forge/skills/` > `~/.agents/skills/` > `~/forge/skills/` >
-  built-in**. The `superpowers` skills are installed under
-  `~/forge/skills/superpowers/<name>/SKILL.md`.
-
-## Instruction priority
-
-1. User's explicit instructions (this file, `AGENTS.md`, direct requests) — highest priority
-2. Superpowers skills — override default system behaviour where they conflict
-3. Default system prompt — lowest priority
-
-## Mandatory invocation rules
-
-1. Before responding to ANY user message, invoke the
-   `superpowers/using-superpowers` skill.
-2. Before doing any work that could be characterised as "build X",
-   "add a feature", or "let's make", invoke
-   `superpowers/brainstorming` first.
-3. Before debugging any non-trivial issue, invoke
-   `superpowers/systematic-debugging`.
-4. Before writing any new code, invoke
-   `superpowers/test-driven-development` unless the user explicitly
-   opts out.
-5. Before claiming work is done, invoke
-   `superpowers/verification-before-completion`.
-6. Before opening or responding to a PR, invoke
-   `superpowers/requesting-code-review` (sender) or
-   `superpowers/receiving-code-review` (reviewer).
-7. Before ending a feature branch, invoke
-   `superpowers/finishing-a-development-branch`.
-8. When writing or editing another skill, invoke
-   `superpowers/writing-skills`.
-
-## Project-specific conventions
-
-- **Language stack**: Rust (edition 2021), Go 1.23+, TypeScript/Svelte
-- All Rust crates MUST use `edition = "2021"` and inherit workspace package
-  fields from `[workspace.package]`.
-- Architecture decisions belong in `docs/adr/` as numbered ADR documents.
-- Infrastructure configuration MUST be validated with `cargo check` and
-  `cargo clippy` before commit.
-- Pre-commit hooks are configured — run `pre-commit install` on first clone.
-- Go code must pass `go vet ./crates/nanovms-core/...`.
-- Secret scanning uses `.gitleaks.toml` (extending upstream defaults).
-
-## Crate layout
-
-```
-crates/
-├── nanovms-core/    # Go 3-tier isolation (WASM/gVisor/Firecracker)
-├── nvms-ffi/        # Rust FFI bindings to NVMS Go Core
-├── pheno-compose/   # High-level Rust driver
-└── pheno-config/    # Shared configuration
-```
-
-## Quality checks
+| Path | Role |
+| --- | --- |
+| `repos/phenotype-omlx` | Canonical clone — always on `main`; pull / merge only |
+| `repos/worktrees/phenotype-omlx/<topic>` | Feature work, quality gates, PR prep, analysis |
 
 ```bash
-cargo check --workspace
-cargo test --workspace
-cargo clippy --workspace -- -D warnings
-go vet ./crates/nanovms-core/...
-pre-commit run --all-files
+# From the canonical clone (or via scripts/worktree_add.sh <branch>):
+git -C /Users/kooshapari/CodeProjects/Phenotype/repos/phenotype-omlx \
+  worktree add ../worktrees/phenotype-omlx/<topic> -b <topic>
 ```
 
-## MCP tools available
+- **Canonical GitHub repo:** `KooshaPari/phenotype-omlx` only.
+- **Do not use** archived remotes/clones `zz-archive-phenotype-omlx-tmp` or
+  `zz-archive-phenotype-omlx-temp` (legacy names `phenotype-omlx-tmp` /
+  `phenotype-omlx-temp`). Cutover: `docs/guides/CANONICAL_REPO_CUTOVER.md`.
+- Never author features in the canonical `main` checkout or under any
+  `worktrees/phenotype-omlx-tmp` hub.
+- This directory is an independent Git repository. Never rely on a parent Git worktree.
+- Treat `perf-core/` as the Rust workspace and `python/` as its Python integration surface.
 
-- `github` — read/write issues, PRs, branches, file contents, run actions.
-- `playwright` — headless browser automation for UI testing and verification.
-- `chrome-devtools-mcp` — full DevTools protocol: traces, network, performance.
-- `firecrawl` — web fetch + clean Markdown extraction.
-- `context7` — resolve library docs from a crate ID.
+## §2 — Polyglot language policy (max-optimal, supersedes any "Rust only" markers)
+
+**No language is forbidden.** Pick by measured perf, not by default.
+
+| Tier | Default language | Override when it wins |
+|---|---|---|
+| Perf-cores (SIMD / fusion / kernels) | Rust | Mojo (MLX-native), CUDA (NVIDIA hot paths), C++ (C-API), Zig (FFI ergonomics), Swift (Metal) |
+| Orchestration | Python | Zig/C++ if pyo3 friction; Swift if orchestrating MLX/Metal natively |
+| CLI / wrappers | Bash | Zsh on macOS, PowerShell on Windows |
+| GUI / web | TypeScript / Svelte | SwiftUI on macOS where appropriate |
+| Config | TOML | JSON if downstream tool requires it |
+
+- **All bindings are first-class.** pyo3, UniFFI, ctypes, cffi, JNI, Swift↔ObjC bridges, Mojo↔Python — whatever is canonical for the runtime.
+- **Multi-engine is the default.** MLX/Metal + SGLang + vLLM + TRT-LLM + llama.cpp running concurrently is wired into the NanoVM plugin layer (`python/omlx_research/nanovm/plugins/`); treat this as the normal path.
+- **Experimental languages get sandboxed crates, not blocked.** Mojo, Zig, Nim, Jai, Vale, Carbon → each can get its own `perf-core/<lang>/` crate with its own workspace entry. Nothing is blocked at the agent level.
+- **Do not reintroduce "Rust only" / "use only [...]" markers anywhere in this repo** — the prior restriction has been nulled.
+
+See `docs/adr/2026-07-14/ADR-005-polyglot-policy.md` for the full decision rationale.
+- Do not expose Python bindings for Rust APIs that do not exist in the checked-in crates.
+- Add failing tests before fixing correctness defects, then run focused and workspace checks.
+- Keep generated targets, environments, model weights, and extension artifacts out of Git.
+- Prefer pure, explicit FFI payloads over process-global mutable state.
+- Keep modules at or below 500 lines and target 350 lines; split by coherent responsibility.
+- Record session research and decisions under `docs/sessions/<session-id>/`.

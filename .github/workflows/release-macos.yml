@@ -1,4 +1,4 @@
-name: Release macOS (phenotype-registry)
+name: Release macOS (phenotype-omlx)
 
 # Calls the reusable workflow at kooshapari/phenotype-fleet-ops.
 # Self-hosted runners only (zero billed minutes).
@@ -11,7 +11,7 @@ on:
   workflow_dispatch:
 
 concurrency:
-  group: macos-release-phenotype-registry-${{ github.ref }}
+  group: macos-release-phenotype-omlx-${{ github.ref }}
   cancel-in-progress: false
 
 permissions:
@@ -19,17 +19,17 @@ permissions:
 
 jobs:
   macos:
-    name: Build, sign, notarize phenotype-registry
-    uses: kooshapari/phenotype-fleet-ops/.github/workflows/macos-release.yml@34750e90190db89cdfda6b5272068d78022090fb # main
+    name: Build, sign, notarize phenotype-omlx
+    uses: kooshapari/phenotype-fleet-ops/.github/workflows/macos-release.yml@main
     with:
-      app-name: phenotype-registry
-      app-bundle-id: app.phenotype.registry
+      app-name: phenotype-omlx
+      app-bundle-id: app.phenotype.omlx
       build-cmd: |
-        cargo build --release --locked --target aarch64-apple-darwin --bin phenotype-registry
-        cargo build --release --locked --target aarch64-apple-darwin --bin eidolon-desktop
-        mkdir -p dist/macos
-        cp target/aarch64-apple-darwin/release/phenotype-registry dist/macos/
-        cp target/aarch64-apple-darwin/release/eidolon-desktop dist/macos/
+          cargo build --release --locked --target aarch64-apple-darwin
+          mkdir -p dist/macos
+          cp target/aarch64-apple-darwin/release/phenotype-omlx dist/macos/
+          # No .app bundle yet — distribute as raw binary + DMG for now
+          # (Tauri/Electron wrapper is planned but not implemented)
       entitlements-file: Entitlements.plist
       artifact-dir: dist/macos
       create-dmg: true
