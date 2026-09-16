@@ -8,7 +8,7 @@
 use std::path::{Path, PathBuf};
 use std::pin::Pin;
 use std::sync::Arc;
-use std::task::{Context, Poll, Wake, Waker};
+use std::task::{Context, Poll, Wake};
 
 use futures_core::Stream;
 use serde::{Deserialize, Serialize};
@@ -139,6 +139,7 @@ impl Wake for NoopWaker {
 mod tests {
     use super::*;
     use std::io::Write;
+    use std::task::Waker;
 
     fn write_jsonl(dir: &Path, name: &str, body: &str) {
         let tasks = dir.join("tasks");

@@ -8,12 +8,11 @@
 use std::sync::Arc;
 use std::time::Instant;
 
-use async_trait::async_trait;
 use serde::{Deserialize, Serialize};
 
 use crate::dispatcher::Dispatcher;
 use crate::error::{OrchestratorError, Result};
-use crate::wave::{TaskSpec, WaveConfig};
+use crate::wave::WaveConfig;
 
 /// What a single dispatch invocation returned to the runner.
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
