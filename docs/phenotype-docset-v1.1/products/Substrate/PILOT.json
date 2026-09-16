@@ -1,0 +1,41 @@
+{
+  "id": "PILOT-PRD-SUBSTRATE",
+  "product_id": "PRD-SUBSTRATE",
+  "status": "PLANNED_NOT_EXECUTED",
+  "subject_repository_id": 1269596554,
+  "hypothesis": "A precise control/embedding contract with less integration burden; generic routing alone is already well served.",
+  "baseline_candidates": [
+    "LiteLLM or direct provider clients for model traffic",
+    "Native process APIs for dispatch",
+    "Process Compose",
+    "Temporal for durable orchestration where justified",
+    "Existing agent CLI API adapter"
+  ],
+  "scenario": "Benchmark two distinct workloads rather than a composite score. Model traffic: stream, failover, cancel and account. Process dispatch: spawn, observe, fail, restart and terminate actual tools under explicit scopes. Compare each with the simplest appropriate existing implementation.",
+  "failure_cases": [
+    "Model retry rules incorrectly applied to side-effecting processes",
+    "Cancellation loses ownership",
+    "Output crosses tenants",
+    "Timeout hides a still-running child",
+    "Duplicate provider registry diverges"
+  ],
+  "metrics": [
+    "Correct task semantics",
+    "Latency/throughput/resource overhead",
+    "Embedding ergonomics",
+    "State/recovery correctness",
+    "Dependency and patch burden",
+    "Public API comprehensibility"
+  ],
+  "required_before_execution": [
+    "versioned subjects and fixtures",
+    "predeclared critical invariants",
+    "reviewed non-inferiority margins",
+    "resource and trust limits",
+    "independent outcome oracle",
+    "retained failed-trial policy"
+  ],
+  "results": null,
+  "winner": null,
+  "protocol": "../../research/COMPARATIVE-PILOT-PROTOCOL.md"
+}

@@ -1,0 +1,109 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:phenotype:atlas-plan:1:obligation",
+  "title": "obligation",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[A-Za-z][A-Za-z0-9_.:-]*$",
+      "minLength": 2
+    },
+    "subject_id": {
+      "type": "string",
+      "pattern": "^[A-Za-z][A-Za-z0-9_.:-]*$",
+      "minLength": 2
+    },
+    "capability_id": {
+      "type": "string",
+      "pattern": "^[A-Za-z][A-Za-z0-9_.:-]*$",
+      "minLength": 2
+    },
+    "statement": {
+      "type": "string",
+      "minLength": 1
+    },
+    "source_ids": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 1
+    },
+    "contract_kind": {
+      "type": "string",
+      "enum": [
+        "behavior",
+        "data",
+        "interface",
+        "security",
+        "performance",
+        "experience",
+        "delivery",
+        "research",
+        "architecture"
+      ]
+    },
+    "state": {
+      "type": "string",
+      "enum": [
+        "proposed",
+        "accepted",
+        "superseded",
+        "research",
+        "synthetic"
+      ]
+    },
+    "critical": {
+      "type": "boolean"
+    },
+    "acceptance": {
+      "type": "string",
+      "minLength": 1
+    },
+    "required_profiles": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 1
+    },
+    "verification_ids": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 0
+    },
+    "evidence_ids": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 0
+    },
+    "synthetic": {
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "id",
+    "subject_id",
+    "capability_id",
+    "statement",
+    "source_ids",
+    "contract_kind",
+    "state",
+    "critical",
+    "acceptance",
+    "required_profiles",
+    "verification_ids",
+    "evidence_ids",
+    "synthetic"
+  ],
+  "additionalProperties": false
+}

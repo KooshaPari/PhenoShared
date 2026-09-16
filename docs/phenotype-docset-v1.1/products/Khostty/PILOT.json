@@ -1,0 +1,42 @@
+{
+  "id": "PILOT-PRD-KHOSTTY",
+  "product_id": "PRD-KHOSTTY",
+  "status": "PLANNED_NOT_EXECUTED",
+  "subject_repository_id": 1322607630,
+  "hypothesis": "A specific embedding/workflow improvement with no unacceptable terminal correctness regression.",
+  "baseline_candidates": [
+    "Pinned upstream Ghostty",
+    "Current Ghostty",
+    "WezTerm",
+    "Kitty",
+    "Native platform terminal"
+  ],
+  "scenario": "Run a terminal conformance/workload corpus: Unicode, wide/combining characters, resize/reflow, alternate screen, bracketed paste, IME, modifiers, high output, screen-reader/keyboard navigation and embedded use where promised. Compare both correctness and perceived/recorded latency at the same workload.",
+  "failure_cases": [
+    "Input lost on focus transition",
+    "Escape sequence corrupts state",
+    "Resize loses content",
+    "Paste executes unexpectedly",
+    "Renderer leaks memory under long output",
+    "Embedding changes permission or lifecycle behavior"
+  ],
+  "metrics": [
+    "Conformance failures",
+    "Input/render latency and frame pacing",
+    "Memory after long sessions",
+    "Accessibility and native behavior",
+    "Integration effort for owning applications",
+    "Owned delta maintenance cost"
+  ],
+  "required_before_execution": [
+    "versioned subjects and fixtures",
+    "predeclared critical invariants",
+    "reviewed non-inferiority margins",
+    "resource and trust limits",
+    "independent outcome oracle",
+    "retained failed-trial policy"
+  ],
+  "results": null,
+  "winner": null,
+  "protocol": "../../research/COMPARATIVE-PILOT-PROTOCOL.md"
+}

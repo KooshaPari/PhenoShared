@@ -1,0 +1,42 @@
+{
+  "id": "PILOT-PRD-TRACERA",
+  "product_id": "PRD-TRACERA",
+  "status": "PLANNED_NOT_EXECUTED",
+  "subject_repository_id": 1162254344,
+  "hypothesis": "One persistent explorable product model reduces manual reconciliation across intent, code, contracts and evidence while preserving explainability.",
+  "baseline_candidates": [
+    "Manual Git/search/specification workflow",
+    "Backstage software catalog plus search",
+    "StrictDoc plus source links",
+    "SCIP/LSP search plus a dependency explorer",
+    "CodeScene-style hotspot analysis"
+  ],
+  "scenario": "Import three representative owned products with seeded and retained-real gaps: an unreachable public capability, stale coverage evidence, a changed dependency, a duplicated owner and a legitimate exception. Ask an unfamiliar operator to explain current behavior, locate the issue, identify affected consumers and plan a bounded repair. Repeat after a source change and restart.",
+  "failure_cases": [
+    "Stale revision is presented as current",
+    "Unsupported dynamic edge is asserted as proven",
+    "Replayed ingestion duplicates entities",
+    "Untrusted repository prose becomes a command",
+    "Private evidence leaks into a public projection",
+    "Conflicting requirement is silently overwritten"
+  ],
+  "metrics": [
+    "Correctness and precision/recall on adjudicated gap cases",
+    "Time and interactions to an evidence-backed explanation",
+    "Unsupported-claim rate and abstention quality",
+    "Incremental update latency and stale-result exposure",
+    "Index/model memory and query latency",
+    "Export/import and restart fidelity"
+  ],
+  "required_before_execution": [
+    "versioned subjects and fixtures",
+    "predeclared critical invariants",
+    "reviewed non-inferiority margins",
+    "resource and trust limits",
+    "independent outcome oracle",
+    "retained failed-trial policy"
+  ],
+  "results": null,
+  "winner": null,
+  "protocol": "../../research/COMPARATIVE-PILOT-PROTOCOL.md"
+}

@@ -1,0 +1,42 @@
+{
+  "id": "PILOT-PRD-WORLDSPHEREMOD",
+  "product_id": "PRD-WORLDSPHEREMOD",
+  "status": "PLANNED_NOT_EXECUTED",
+  "subject_repository_id": 1241972761,
+  "hypothesis": "The specific 3D/world presentation improvement with explicit acceptable performance and compatibility trade-offs.",
+  "baseline_candidates": [
+    "Pinned upstream mod",
+    "Current upstream mod",
+    "Unmodified supported game",
+    "Prior owned release"
+  ],
+  "scenario": "Load the same populated world under upstream and the candidate. Traverse camera and LOD ranges, inspect animation and terrain, save/load and disable the mod. Repeat with the declared compatible mod set and on the supported graphics profiles.",
+  "failure_cases": [
+    "LOD pops or resource duplication",
+    "Save incompatibility",
+    "Camera/input mismatch",
+    "Required bundle missing",
+    "New game version breaks hook",
+    "Performance collapse in dense regions",
+    "Disable leaves modified state"
+  ],
+  "metrics": [
+    "Visual correctness and readability",
+    "Frame-time distribution",
+    "Memory and loading stalls",
+    "Compatibility pass/fail",
+    "Recovery/disable behavior",
+    "Actual retained feature delta"
+  ],
+  "required_before_execution": [
+    "versioned subjects and fixtures",
+    "predeclared critical invariants",
+    "reviewed non-inferiority margins",
+    "resource and trust limits",
+    "independent outcome oracle",
+    "retained failed-trial policy"
+  ],
+  "results": null,
+  "winner": null,
+  "protocol": "../../research/COMPARATIVE-PILOT-PROTOCOL.md"
+}

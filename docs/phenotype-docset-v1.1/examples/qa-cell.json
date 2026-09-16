@@ -1,0 +1,78 @@
+{
+  "component": "synthetic-core",
+  "language": "python",
+  "platform": "synthetic-test",
+  "profile": "reference",
+  "family": "unit",
+  "metric": "executable-lines",
+  "subject_id": "SYN-PRODUCT",
+  "revision": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "artifact_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+  "eligible_ids": [
+    "executable-lines-00",
+    "executable-lines-01",
+    "executable-lines-02",
+    "executable-lines-03",
+    "executable-lines-04",
+    "executable-lines-05",
+    "executable-lines-06",
+    "executable-lines-07",
+    "executable-lines-08",
+    "executable-lines-09",
+    "executable-lines-10",
+    "executable-lines-11",
+    "executable-lines-12",
+    "executable-lines-13",
+    "executable-lines-14",
+    "executable-lines-15",
+    "executable-lines-16",
+    "executable-lines-17",
+    "executable-lines-18",
+    "executable-lines-19"
+  ],
+  "covered_ids": [
+    "executable-lines-00",
+    "executable-lines-01",
+    "executable-lines-02",
+    "executable-lines-03",
+    "executable-lines-04",
+    "executable-lines-05",
+    "executable-lines-06",
+    "executable-lines-07",
+    "executable-lines-08",
+    "executable-lines-09",
+    "executable-lines-10",
+    "executable-lines-11",
+    "executable-lines-12",
+    "executable-lines-13",
+    "executable-lines-14",
+    "executable-lines-15",
+    "executable-lines-16",
+    "executable-lines-17"
+  ],
+  "critical_ids": [
+    "executable-lines-00",
+    "executable-lines-01"
+  ],
+  "denominator_sha256": "6c1f6d80d96f505d0a62984532931d21db84b64579b9c946feecef6841c8f56e",
+  "run_id": "synthetic-unit",
+  "run_status": "completed",
+  "outcome": "pass",
+  "accumulator_families": [
+    "unit"
+  ],
+  "checks": [
+    {
+      "id": "positive",
+      "status": "pass"
+    },
+    {
+      "id": "negative",
+      "status": "pass"
+    }
+  ],
+  "evidence_refs": [
+    "synthetic-reference-not-product-proof"
+  ],
+  "data_origin": "synthetic"
+}
