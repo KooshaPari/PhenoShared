@@ -1,0 +1,24 @@
+{
+  "subject_id": "SYN-PRODUCT",
+  "repository_id": 1,
+  "lifecycle": "unresolved",
+  "primary_role": "tool",
+  "domains": [
+    "synthetic"
+  ],
+  "surfaces": [
+    "cli"
+  ],
+  "platforms": [],
+  "ownership": "example-only",
+  "public_topics": [
+    "role-tool",
+    "surface-cli"
+  ],
+  "state": "synthetic",
+  "approval_receipt": null,
+  "source_ids": [
+    "SYN-INTENT"
+  ],
+  "synthetic": true
+}

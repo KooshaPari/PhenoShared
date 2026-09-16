@@ -1,0 +1,59 @@
+APP_NAME = Phenotype Forgejo
+RUN_USER = git
+RUN_MODE = prod
+
+[server]
+PROTOCOL          = http
+HTTP_ADDR         = 127.0.0.1
+HTTP_PORT         = 3000
+DOMAIN            = forgejo.kooshapari.com
+ROOT_URL          = https://forgejo.kooshapari.com/
+SSH_DOMAIN        = forgejo.kooshapari.com
+DISABLE_SSH       = false
+SSH_PORT          = 22
+LFS_START_SERVER  = true
+OFFLINE_MODE      = false
+
+[database]
+DB_TYPE = sqlite3
+PATH    = /var/lib/forgejo/data/forgejo.db
+
+[repository]
+ROOT = /var/lib/forgejo/data/repos
+
+[security]
+INTERNAL_TOKEN = {{ forgejo_internal_token }}
+INSTALL_LOCK   = true
+
+[oauth2]
+JWT_SECRET = {{ forgejo_secret_key }}
+
+[service]
+DISABLE_REGISTRATION            = true
+REQUIRE_SIGNIN_VIEW             = false
+REGISTER_EMAIL_CONFIRM          = false
+ENABLE_NOTIFY_MAIL              = false
+DEFAULT_KEEP_EMAIL_PRIVATE      = true
+DEFAULT_ALLOW_CREATE_ORGANIZATION = true
+
+[session]
+PROVIDER = file
+
+[log]
+MODE      = console
+LEVEL     = info
+ROOT_PATH = /var/lib/forgejo/log
+
+[actions]
+ENABLED                = true
+DEFAULT_ACTIONS_URL    = https://code.forgejo.org
+
+[picture]
+DISABLE_GRAVATAR = true
+
+[indexer]
+ISSUE_INDEXER_TYPE = bleve
+REPO_INDEXER_ENABLED = true
+
+[mailer]
+ENABLED = false

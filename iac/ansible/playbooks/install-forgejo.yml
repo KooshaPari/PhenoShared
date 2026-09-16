@@ -1,0 +1,181 @@
+---
+# install-forgejo.yml — Forgejo self-hosted git + Actions on oci_primary.
+# Binds to 127.0.0.1:3000; Caddy fronts forgejo.kooshapari.com.
+
+- name: Install and configure Forgejo
+  hosts: oci_primary
+  become: true
+  vars:
+    forgejo_version: "9.0.1"
+    forgejo_arch: arm64
+    forgejo_binary: /usr/local/bin/forgejo
+    forgejo_home: /var/lib/forgejo
+    forgejo_etc: /etc/forgejo
+    forgejo_admin_user: koosha
+    forgejo_admin_email: kooshapari@gmail.com
+  tasks:
+    - name: Install runtime deps
+      ansible.builtin.dnf:
+        name: [git, sqlite, openssl]
+        state: present
+
+    - name: Create git user
+      ansible.builtin.user:
+        name: git
+        system: true
+        shell: /bin/bash
+        home: "{{ forgejo_home }}"
+        create_home: true
+
+    - name: Create forgejo dirs
+      ansible.builtin.file:
+        path: "{{ item }}"
+        state: directory
+        owner: git
+        group: git
+        mode: "0750"
+      loop:
+        - "{{ forgejo_home }}/custom"
+        - "{{ forgejo_home }}/data"
+        - "{{ forgejo_home }}/log"
+
+    - name: Create /etc/forgejo
+      ansible.builtin.file:
+        path: "{{ forgejo_etc }}"
+        state: directory
+        owner: root
+        group: git
+        mode: "0770"
+
+    - name: Download Forgejo binary
+      ansible.builtin.get_url:
+        url: "https://codeberg.org/forgejo/forgejo/releases/download/v{{ forgejo_version }}/forgejo-{{ forgejo_version }}-linux-{{ forgejo_arch }}"
+        dest: "{{ forgejo_binary }}"
+        mode: "0755"
+        owner: root
+        group: root
+
+    - name: Generate SECRET_KEY if missing
+      ansible.builtin.shell: openssl rand -base64 32
+      args:
+        creates: "{{ forgejo_etc }}/.secret_key"
+      register: secret_key_gen
+      changed_when: secret_key_gen.rc == 0
+
+    - name: Persist SECRET_KEY
+      ansible.builtin.copy:
+        dest: "{{ forgejo_etc }}/.secret_key"
+        content: "{{ secret_key_gen.stdout }}\n"
+        owner: root
+        group: git
+        mode: "0640"
+        force: false
+      when: secret_key_gen.stdout is defined and secret_key_gen.stdout | length > 0
+
+    - name: Read SECRET_KEY
+      ansible.builtin.slurp:
+        src: "{{ forgejo_etc }}/.secret_key"
+      register: secret_key_slurp
+
+    - name: Generate INTERNAL_TOKEN if missing
+      ansible.builtin.shell: openssl rand -base64 64 | tr -d '\n'
+      args:
+        creates: "{{ forgejo_etc }}/.internal_token"
+      register: internal_token_gen
+      changed_when: internal_token_gen.rc == 0
+
+    - name: Persist INTERNAL_TOKEN
+      ansible.builtin.copy:
+        dest: "{{ forgejo_etc }}/.internal_token"
+        content: "{{ internal_token_gen.stdout }}"
+        owner: root
+        group: git
+        mode: "0640"
+        force: false
+      when: internal_token_gen.stdout is defined and internal_token_gen.stdout | length > 0
+
+    - name: Read INTERNAL_TOKEN
+      ansible.builtin.slurp:
+        src: "{{ forgejo_etc }}/.internal_token"
+      register: internal_token_slurp
+
+    - name: Template app.ini
+      ansible.builtin.template:
+        src: forgejo-app.ini.j2
+        dest: "{{ forgejo_etc }}/app.ini"
+        owner: root
+        group: git
+        mode: "0640"
+      vars:
+        forgejo_secret_key: "{{ secret_key_slurp.content | b64decode | trim }}"
+        forgejo_internal_token: "{{ internal_token_slurp.content | b64decode | trim }}"
+      notify: restart forgejo
+
+    - name: Install forgejo systemd unit
+      ansible.builtin.copy:
+        dest: /etc/systemd/system/forgejo.service
+        mode: "0644"
+        content: |
+          [Unit]
+          Description=Forgejo
+          After=network-online.target
+          Wants=network-online.target
+
+          [Service]
+          Type=simple
+          User=git
+          Group=git
+          WorkingDirectory={{ forgejo_home }}
+          ExecStart={{ forgejo_binary }} web --config {{ forgejo_etc }}/app.ini
+          Restart=always
+          Environment=USER=git HOME={{ forgejo_home }} GITEA_WORK_DIR={{ forgejo_home }}
+
+          [Install]
+          WantedBy=multi-user.target
+
+    - name: Enable + start forgejo
+      ansible.builtin.systemd:
+        name: forgejo
+        daemon_reload: true
+        enabled: true
+        state: started
+
+    - name: Wait for Forgejo to answer on 127.0.0.1:3000
+      ansible.builtin.wait_for:
+        host: 127.0.0.1
+        port: 3000
+        timeout: 60
+
+    - name: Check if admin user already exists
+      ansible.builtin.command: >
+        sudo -u git {{ forgejo_binary }} admin user list --config {{ forgejo_etc }}/app.ini
+      register: forgejo_user_list
+      changed_when: false
+      failed_when: false
+
+    - name: Create admin user (first-run)
+      ansible.builtin.command: >
+        sudo -u git {{ forgejo_binary }} admin user create
+        --admin
+        --username {{ forgejo_admin_user }}
+        --email {{ forgejo_admin_email }}
+        --random-password
+        --config {{ forgejo_etc }}/app.ini
+      register: forgejo_admin_create
+      when: forgejo_admin_user not in forgejo_user_list.stdout
+
+    - name: Capture admin password to /root/.forgejo-admin-password
+      ansible.builtin.copy:
+        dest: /root/.forgejo-admin-password
+        content: "{{ forgejo_admin_create.stdout }}\n"
+        owner: root
+        group: root
+        mode: "0600"
+      when: forgejo_admin_create.changed
+      no_log: true
+
+  handlers:
+    - name: restart forgejo
+      ansible.builtin.systemd:
+        name: forgejo
+        state: restarted

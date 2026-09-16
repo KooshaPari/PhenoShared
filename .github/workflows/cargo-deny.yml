@@ -1,39 +1,18 @@
 name: cargo-deny
-
-permissions: read-all
-
 on:
   push:
     branches: [main]
-    paths:
-      - 'Cargo.toml'
-      - 'Cargo.lock'
   pull_request:
-    paths:
-      - 'Cargo.toml'
-      - 'Cargo.lock'
-  schedule:
-    - cron: '0 9 * * 1'  # Weekly Monday
+    branches: [main]
   workflow_dispatch:
-
+permissions:
+  contents: read
 jobs:
   cargo-deny:
-    name: cargo-deny check
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v7
-
-      - name: Install Rust toolchain
-        uses: dtolnay/rust-toolchain@stable
-
-      - name: Check advisories
-        uses: EmbarkStudios/cargo-deny-action@v2
-        continue-on-error: true
+      - uses: actions/checkout@v7.0.0
+      - uses: EmbarkStudios/cargo-deny-action@v2
         with:
-          command: check advisories
-
-      - name: Check bans, sources, and licenses
-        uses: EmbarkStudios/cargo-deny-action@v2
-        with:
-          command: check bans sources licenses
+          command: check
+          manifest-path: iac/Cargo.toml

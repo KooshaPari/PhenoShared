@@ -1,46 +1,70 @@
-# substrate
+<!-- AI-DD-META:START -->
+<!-- This repository is planned, maintained, and managed by AI Agents only. -->
+<!-- Slop issues are expected and intentionally present as part of an HITL-less -->
+<!-- /minimized AI-DD metaproject of learning, refining, and building brute-force -->
+<!-- training for both agents and the human operator. -->
+![License](https://img.shields.io/github/license/KooshaPari/phenotype-infra?style=flat-square)
+![AI-Slop](https://img.shields.io/badge/AI--DD-Slop%20Expected-orange?style=flat-square)
+![AI-Only-Maintained](https://img.shields.io/badge/Planned%20%26%20Maintained%20by-AI%20Agents%20Only-red?style=flat-square)
+<!-- AI-DD-META:END -->
 
-<p align="center">
-  <a href="assets/brand/substrate-icon.svg"><img src="assets/brand/substrate-icon.svg" alt="substrate" width="160" height="160"></a>
-</p>
-<p align="center"><em>Hexagonal AI dispatch gateway &amp; TUI — proxy, rate-limit, retry, observe.</em></p>
-<p align="center"><sub>Backbone-2 graphite palette · <a href="assets/brand/README.md">brand assets &amp; tokens</a> · theme.rs wired (PR #217) · <a href="docs/assets/identity/">visual identity demo</a></sub></p>
+> **Work state:** SCAFFOLD · **Progress:** `█████░░░░░ 50%`
+> Compute/Infra consolidation monorepo (nanovms + PhenoCompose + BytePort). IaC validates, crates compile, but human-apply-only gate. · updated 2026-06-24
 
-[![AI slop inside](https://sladge.net/badge.svg)](https://sladge.net) [![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/KooshaPari/substrate/total)](https://github.com/KooshaPari/substrate/releases)
+# phenotype-infra — Compute/Infra Consolidation Monorepo
 
----
+> **Consolidation target** for nanovms (Go, 3-tier isolation) + PhenoCompose (Rust FFI + driver) + BytePort (Svelte tooling).
 
-> AI dispatch gateway and TUI — proxy, rate-limit, retry, and observe LLM traffic.
+[![AI slop inside](https://sladge.net/badge.svg)](https://sladge.net) [![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/KooshaPari/phenotype-infra/total)](https://github.com/KooshaPari/phenotype-infra/releases)
 
-## Features
-- **Gateway** (axum 0.8): SSE passthrough, rate limiting, retry with full jitter, fallback chains
-- **Audit log**: rotating JSONL, 50MB limit
-- **Budget tracking**: per-session token/cost budgets via X-Session-Id
-- **Prometheus metrics**: GET /metrics/prometheus
-- **Admin API**: provider toggle, config updates, admin token auth
-- **Config hot-reload**: notify crate file watcher, 200ms debounce
-- **SLA checking**: P50/P95/P99 latency violation detection (defaults 200/500/1000ms)
-- **TUI**: ratatui dashboard with animated boot sequence, live log panel
+This monorepo is created as part of the **L1-Alpha** wave of the Master DAG
+(Compute/Infra + Observability Consolidation). It absorbs three previously
+separate repositories into a single polyglot workspace:
+
+| Component | Source | Language | Role |
+|-----------|--------|----------|------|
+| **nanovms-core** | `nanovms` | Go | 3-tier isolation (WASM/gVisor/Firecracker) |
+| **nvms-ffi** | `PhenoCompose/bindings/rust-ffi` | Rust | `extern "C"` FFI bindings |
+| **pheno-compose** | `PhenoCompose/pheno-compose-driver` | Rust | High-level Rust driver |
+| **byteport** | `BytePort` | Svelte/TS | Infra tooling UI |
+
+## Architecture
+
+```
+phenotype-infra/
+├── crates/
+│   ├── nanovms-core/       # Go source → libnvms_core.a (via CGo)
+│   ├── nvms-ffi/           # Rust FFI bindings
+│   └── pheno-compose/      # High-level Rust driver
+├── tools/
+│   └── byteport/           # Svelte infra tooling
+├── docs/
+│   ├── adr/                # Architecture Decision Records
+│   ├── specs/              # Specifications
+│   ├── governance/         # Governance docs
+│   └── audit/              # Audit scorecards
+└── .github/workflows/      # CI/CD
+```
 
 ## Quick Start
-```
-process-compose up
-# or:
-cargo run -p gateway
-cargo run -p substrate-tui
+
+```bash
+# Build Go static lib
+make nvms-c-archive
+
+# Build Rust workspace
+cargo build --workspace
+
+# Run tests
+cargo test --workspace
+
+# All checks
+cargo check --workspace
+
+# BytePort (Svelte frontend)
+cd tools/byteport && npm install && npm run dev
 ```
 
-## API
-| Endpoint | Description |
-|----------|-------------|
-| GET /health | Gateway health |
-| GET /health/providers | Circuit breaker states |
-| GET /metrics/prometheus | Prometheus format |
-| POST /admin/providers/:id/toggle | Enable/disable provider |
-| GET /budget/:session_id | Budget status |
+## License
 
-## Deploy
-```
-podman build -t substrate-gateway .
-podman run -p 3000:3000 substrate-gateway
-```
+Apache-2.0

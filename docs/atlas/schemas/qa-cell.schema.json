@@ -1,0 +1,183 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:phenotype:atlas-plan:1:qa-cell",
+  "title": "qa-cell",
+  "type": "object",
+  "properties": {
+    "component": {
+      "type": "string",
+      "minLength": 1
+    },
+    "language": {
+      "type": "string",
+      "minLength": 1
+    },
+    "platform": {
+      "type": "string",
+      "minLength": 1
+    },
+    "profile": {
+      "type": "string",
+      "minLength": 1
+    },
+    "family": {
+      "type": "string",
+      "enum": [
+        "unit",
+        "integration",
+        "e2e",
+        "contract",
+        "property",
+        "mutation",
+        "security",
+        "reliability",
+        "performance",
+        "documentation",
+        "packaging",
+        "other"
+      ]
+    },
+    "metric": {
+      "type": "string",
+      "minLength": 1
+    },
+    "subject_id": {
+      "type": "string",
+      "pattern": "^[A-Za-z][A-Za-z0-9_.:-]*$",
+      "minLength": 2
+    },
+    "revision": {
+      "type": "string",
+      "pattern": "^([0-9a-f]{40}|[0-9a-f]{64})$"
+    },
+    "artifact_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "eligible_ids": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 1
+    },
+    "covered_ids": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 0
+    },
+    "critical_ids": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 0
+    },
+    "denominator_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "run_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "run_status": {
+      "type": "string",
+      "enum": [
+        "completed",
+        "running",
+        "not-run",
+        "error",
+        "timeout"
+      ]
+    },
+    "outcome": {
+      "type": "string",
+      "enum": [
+        "pass",
+        "fail",
+        "unknown"
+      ]
+    },
+    "accumulator_families": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 1
+    },
+    "checks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "pass",
+              "fail",
+              "skip",
+              "not-run",
+              "error",
+              "timeout"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "status"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 1
+    },
+    "evidence_refs": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 1
+    },
+    "data_origin": {
+      "type": "string",
+      "enum": [
+        "native",
+        "synthetic"
+      ]
+    }
+  },
+  "required": [
+    "component",
+    "language",
+    "platform",
+    "profile",
+    "family",
+    "metric",
+    "subject_id",
+    "revision",
+    "artifact_sha256",
+    "eligible_ids",
+    "covered_ids",
+    "critical_ids",
+    "denominator_sha256",
+    "run_id",
+    "run_status",
+    "outcome",
+    "accumulator_families",
+    "checks",
+    "evidence_refs",
+    "data_origin"
+  ],
+  "additionalProperties": false
+}

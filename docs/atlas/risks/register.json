@@ -1,0 +1,182 @@
+[
+  {
+    "id": "R01",
+    "title": "Invented source rationale",
+    "failure_mode": "Agents reverse-engineer a convincing story and label it historical.",
+    "mitigation": "Separate observed/inferred/proposed rationale; source-backed adjudication.",
+    "status": "OPEN_RISK_NOT_MEASURED",
+    "owner": "Relevant integration/assurance owner",
+    "residual": "Mitigation requires actual execution and review."
+  },
+  {
+    "id": "R02",
+    "title": "False-green assurance",
+    "failure_mode": "A checker echoes success, ignores errors or returns canned judgments.",
+    "mitigation": "Independent negative controls and qualified native adapters.",
+    "status": "OPEN_RISK_NOT_MEASURED",
+    "owner": "Relevant integration/assurance owner",
+    "residual": "Mitigation requires actual execution and review."
+  },
+  {
+    "id": "R03",
+    "title": "Denominator gaming",
+    "failure_mode": "Difficult files/profiles disappear from coverage inventories.",
+    "mitigation": "Reviewed frozen inventories, zero-hit accounting and deltas.",
+    "status": "OPEN_RISK_NOT_MEASURED",
+    "owner": "Relevant integration/assurance owner",
+    "residual": "Mitigation requires actual execution and review."
+  },
+  {
+    "id": "R04",
+    "title": "Metadata as permission",
+    "failure_mode": "Topics/prefixes interpreted as lifecycle approval.",
+    "mitigation": "Scoped decision ledger plus credential boundary.",
+    "status": "OPEN_RISK_NOT_MEASURED",
+    "owner": "Relevant integration/assurance owner",
+    "residual": "Mitigation requires actual execution and review."
+  },
+  {
+    "id": "R05",
+    "title": "Conflicting writers",
+    "failure_mode": "Source and copied destination drift; workers share manifests.",
+    "mitigation": "Single source/release owner and exclusive target leases.",
+    "status": "OPEN_RISK_NOT_MEASURED",
+    "owner": "Relevant integration/assurance owner",
+    "residual": "Mitigation requires actual execution and review."
+  },
+  {
+    "id": "R06",
+    "title": "Framework patriotism",
+    "failure_mode": "Owned products must win regardless of measured fit.",
+    "mitigation": "Competent baseline, independent study and admissible negative outcomes.",
+    "status": "OPEN_RISK_NOT_MEASURED",
+    "owner": "Relevant integration/assurance owner",
+    "residual": "Mitigation requires actual execution and review."
+  },
+  {
+    "id": "R07",
+    "title": "Universal-wrapper bloat",
+    "failure_mode": "Reuse produces another large custom abstraction.",
+    "mitigation": "Wrap only meaningful policy/stability boundaries.",
+    "status": "OPEN_RISK_NOT_MEASURED",
+    "owner": "Relevant integration/assurance owner",
+    "residual": "Mitigation requires actual execution and review."
+  },
+  {
+    "id": "R08",
+    "title": "Source-data loss",
+    "failure_mode": "Deletion/migration proceeds from file presence.",
+    "mitigation": "Consumer parity, provenance, restoration and separate authorization.",
+    "status": "OPEN_RISK_NOT_MEASURED",
+    "owner": "Relevant integration/assurance owner",
+    "residual": "Mitigation requires actual execution and review."
+  },
+  {
+    "id": "R09",
+    "title": "Privacy leaks",
+    "failure_mode": "Prompts, native captures or embeddings become public.",
+    "mitigation": "Source visibility propagation, approved derivatives and leak tests.",
+    "status": "OPEN_RISK_NOT_MEASURED",
+    "owner": "Relevant integration/assurance owner",
+    "residual": "Mitigation requires actual execution and review."
+  },
+  {
+    "id": "R10",
+    "title": "Context saturation",
+    "failure_mode": "Whole corpus reinjected into every chat.",
+    "mitigation": "Bounded source-linked packets and incremental queries.",
+    "status": "OPEN_RISK_NOT_MEASURED",
+    "owner": "Relevant integration/assurance owner",
+    "residual": "Mitigation requires actual execution and review."
+  },
+  {
+    "id": "R11",
+    "title": "Local work invisibility",
+    "failure_mode": "Remote snapshot treated as total work.",
+    "mitigation": "Local overlay/receipt with immutable identities and real destination.",
+    "status": "OPEN_RISK_NOT_MEASURED",
+    "owner": "Relevant integration/assurance owner",
+    "residual": "Mitigation requires actual execution and review."
+  },
+  {
+    "id": "R12",
+    "title": "Spec inflation",
+    "failure_mode": "Thousands of repetitive records are mistaken for completeness.",
+    "mitigation": "Meaningful units, deduplicated contracts and query/coverage validation.",
+    "status": "OPEN_RISK_NOT_MEASURED",
+    "owner": "Relevant integration/assurance owner",
+    "residual": "Mitigation requires actual execution and review."
+  },
+  {
+    "id": "R13",
+    "title": "Concurrency destroys responsiveness",
+    "failure_mode": "Many heavy jobs interfere with games/DAW.",
+    "mitigation": "Separate resource admission, foreground priorities and contention tests.",
+    "status": "OPEN_RISK_NOT_MEASURED",
+    "owner": "Relevant integration/assurance owner",
+    "residual": "Mitigation requires actual execution and review."
+  },
+  {
+    "id": "R14",
+    "title": "Unsupported engine integration",
+    "failure_mode": "Files are mistaken for actual AgilePlus state.",
+    "mitigation": "Probe deployed version/root contract and retain real receipts.",
+    "status": "OPEN_RISK_NOT_MEASURED",
+    "owner": "Relevant integration/assurance owner",
+    "residual": "Mitigation requires actual execution and review."
+  },
+  {
+    "id": "R15",
+    "title": "Citation staleness",
+    "failure_mode": "Seed URLs or old audits become present truth.",
+    "mitigation": "Pin source/revision/date and report verification boundary.",
+    "status": "OPEN_RISK_NOT_MEASURED",
+    "owner": "Relevant integration/assurance owner",
+    "residual": "Mitigation requires actual execution and review."
+  },
+  {
+    "id": "R16",
+    "title": "Observer claims too much",
+    "failure_mode": "Static extraction treated as complete dynamic behavior.",
+    "mitigation": "Explicit unknowns and runtime/consumer characterization.",
+    "status": "OPEN_RISK_NOT_MEASURED",
+    "owner": "Relevant integration/assurance owner",
+    "residual": "Mitigation requires actual execution and review."
+  },
+  {
+    "id": "R17",
+    "title": "Product gate by scaffold",
+    "failure_mode": "Mock/fixture/player-less build treated as CVP.",
+    "mitigation": "Actual installed public workflow, required assets and failed-run retention.",
+    "status": "OPEN_RISK_NOT_MEASURED",
+    "owner": "Relevant integration/assurance owner",
+    "residual": "Mitigation requires actual execution and review."
+  },
+  {
+    "id": "R18",
+    "title": "Fork ecosystem loss",
+    "failure_mode": "Repository cleanup severs network/history obligations.",
+    "mitigation": "No-delete fork policy and retained patch/upstream identity.",
+    "status": "OPEN_RISK_NOT_MEASURED",
+    "owner": "Relevant integration/assurance owner",
+    "residual": "Mitigation requires actual execution and review."
+  },
+  {
+    "id": "R19",
+    "title": "Metric confounding",
+    "failure_mode": "Different models/languages/cache states yield false causal claims.",
+    "mitigation": "Separate replay, matched live and idiomatic modes.",
+    "status": "OPEN_RISK_NOT_MEASURED",
+    "owner": "Relevant integration/assurance owner",
+    "residual": "Mitigation requires actual execution and review."
+  },
+  {
+    "id": "R20",
+    "title": "Nested archive policy conflict",
+    "failure_mode": "Older included prompt overrides current packet.",
+    "mitigation": "Context-only archive role and explicit precedence in START-HERE.",
+    "status": "OPEN_RISK_NOT_MEASURED",
+    "owner": "Relevant integration/assurance owner",
+    "residual": "Mitigation requires actual execution and review."
+  }
+]

@@ -1,0 +1,27 @@
+[package]
+name = "pheno-cargo-template"
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.78"
+license = "MIT OR Apache-2.0"
+description = "Canonical Phenotype Rust crate template."
+repository = "https://github.com/KooshaPari/pheno-cargo-template"
+readme = "README.md"
+keywords = ["phenotype", "template", "rust"]
+categories = ["development-tools"]
+publish = false
+
+[lib]
+name = "pheno_cargo_template"
+path = "src/lib.rs"
+
+[dependencies]
+
+[dev-dependencies]
+# The template includes a tracing feature flag pattern (per ADR-036).
+# Generated crates may keep or remove this block; it's a starting point.
+tracing = { version = "0.1", optional = true }
+
+[features]
+default = []
+tracing = ["dep:tracing"]

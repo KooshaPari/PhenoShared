@@ -1,15 +1,18 @@
-[1m[33mwarning[0m[1m: unresolved link to `AsyncEventStore`[0m
-  [1m[94m--> [0mcrates/phenotype-event-sourcing/src/lib.rs:10:9
-   [1m[94m|[0m
-[1m[94m10[0m [1m[94m|[0m //! - [`AsyncEventStore`]: Async event store trait
-   [1m[94m|[0m         [1m[33m^^^^^^^^^^^^^^^[0m [1m[33mno item named `AsyncEventStore` in scope[0m
-   [1m[94m|[0m
-   [1m[94m= [0m[1mhelp[0m: to escape `[` and `]` characters, add '\' before them like `\[` or `\]`
-   [1m[94m= [0m[1mnote[0m: `#[warn(rustdoc::broken_intra_doc_links)]` on by default
+ Downloading crates ...
+error: failed to download `indexmap v2.14.0`
 
-[1m[92m Documenting[0m phenotype-iter v0.2.0 (/Users/kooshapari/CodeProjects/Phenotype/repos/pheno/crates/phenotype-iter)
-[1m[33mwarning[0m: `phenotype-event-sourcing` (lib doc) generated 1 warning
-[1m[92m Documenting[0m phenotype-errors v0.2.0 (/Users/kooshapari/CodeProjects/Phenotype/repos/pheno/crates/phenotype-errors)
-[1m[92m Documenting[0m phenotype-port-traits v0.2.0 (/Users/kooshapari/CodeProjects/Phenotype/repos/pheno/crates/phenotype-port-traits)
-[1m[92m    Finished[0m ]8;;https://doc.rust-lang.org/cargo/reference/profiles.html#default-profiles\`dev` profile [unoptimized + debuginfo]]8;;\ target(s) in 3.07s
-[1m[92m   Generated[0m ]8;;file://kooshas-laptop.local/Users/kooshapari/CodeProjects/Phenotype/repos/pheno/target/doc/phenotype_async_traits/index.html\/Users/kooshapari/CodeProjects/Phenotype/repos/pheno/target/doc/phenotype_async_traits/index.html]8;;\ and 20 other files
+Caused by:
+  unable to get packages from source
+
+Caused by:
+  failed to download replaced source registry `crates-io`
+
+Caused by:
+  failed to parse manifest at `/home/kooshapari/.cargo/registry/src/index.crates.io-6f17d22bba15001f/indexmap-2.14.0/Cargo.toml`
+
+Caused by:
+  feature `edition2024` is required
+
+  The package requires the Cargo feature called `edition2024`, but that feature is not stabilized in this version of Cargo (1.75.0).
+  Consider trying a more recent nightly release.
+  See https://doc.rust-lang.org/nightly/cargo/reference/unstable.html#edition-2024 for more information about the status of this feature.

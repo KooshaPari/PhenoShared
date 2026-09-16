@@ -1,44 +1,48 @@
 name: observability-smoke
+
 on:
   push:
-    branches: [main, feat/t22-*]
+    branches:
+      - feat/t22-observability-pheno-tracing-otlp-2026-06-20
   pull_request:
+    branches:
+      - main
 
 jobs:
-  otlp-smoke:
+  observability-smoke:
     runs-on: ubuntu-latest
     timeout-minutes: 15
-    services:
-      otel-collector:
-        image: otel/opentelemetry-collector-contrib:0.96.0
-        ports: [4317:4317, 4318:4318]
-        env:
-          OTELCOL_CONFIG: |
-            receivers:
-              otlp:
-                protocols:
-                  grpc:
-                    endpoint: 0.0.0.0:4317
-                  http:
-                    endpoint: 0.0.0.0:4318
-            exporters:
-              logging:
-                verbosity: detailed
-            service:
-              pipelines:
-                traces: { receivers: [otlp], exporters: [logging] }
-                metrics: { receivers: [otlp], exporters: [logging] }
     steps:
-      - uses: actions/checkout@v7
-      - uses: dtolnay/rust-toolchain@stable
+      - uses: actions/checkout@v4
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: 1.75
+
+      - name: Cache cargo registry and target
+        uses: actions/cache@v6
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            iac/target
+          key: ${{ runner.os }}-cargo-${{ hashFiles('iac/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-
+
       - name: Build observability crate
-        run: cargo build -p phenotype-observability --locked
-      - name: Wait for OTLP gRPC
+        working-directory: iac
+        run: cargo build -p phenotype-infra-observability
+
+      - name: Test observability crate (TracePort roundtrip)
+        working-directory: iac
+        run: cargo test -p phenotype-infra-observability --no-fail-fast
+        env:
+          RUST_LOG: info,phenotype_infra_observability=debug
+
+      - name: Test report
+        if: always()
+        working-directory: iac
         run: |
-          for i in $(seq 1 30); do
-            if (echo > /dev/tcp/localhost/4317) 2>/dev/null; then
-              echo "OTLP gRPC up after ${i}s"; exit 0
-            fi
-            sleep 1
-          done
-          echo "OTLP gRPC never came up"; exit 1
+          echo "T22 observability smoke test complete (pheno-tracing 0.1 substrate; OTLP adapter not yet shipped)."

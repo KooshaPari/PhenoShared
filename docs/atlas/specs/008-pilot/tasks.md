@@ -1,0 +1,50 @@
+# Work references — SPEC-08
+
+- **WP-G06** — Standardize comparative protocols and controlled fixtures; owner Independent evaluation owner; prerequisites WP-G02; unclaimed.
+- **WP-G12** — Adjudicate first completed product/replacement outcome; owner Independent portfolio reviewer; prerequisites WP-G06; unclaimed.
+- **WP-P01-B** — Qualify AgilePlus oracles and comparative baseline; owner AgilePlus assurance owner; prerequisites WP-P01-A, WP-G06; unclaimed.
+- **WP-P01-D** — Qualify AgilePlus CVP and record comparison; owner AgilePlus independent verifier/integration owner; prerequisites WP-P01-B, WP-P01-C; unclaimed.
+- **WP-P02-B** — Qualify HeliosLab oracles and comparative baseline; owner HeliosLab assurance owner; prerequisites WP-P02-A, WP-G06; unclaimed.
+- **WP-P02-D** — Qualify HeliosLab CVP and record comparison; owner HeliosLab independent verifier/integration owner; prerequisites WP-P02-B, WP-P02-C; unclaimed.
+- **WP-P03-B** — Qualify ResearchLedger oracles and comparative baseline; owner ResearchLedger assurance owner; prerequisites WP-P03-A, WP-G06; unclaimed.
+- **WP-P03-D** — Qualify ResearchLedger CVP and record comparison; owner ResearchLedger independent verifier/integration owner; prerequisites WP-P03-B, WP-P03-C; unclaimed.
+- **WP-P04-B** — Qualify SessionLedger oracles and comparative baseline; owner SessionLedger assurance owner; prerequisites WP-P04-A, WP-G06; unclaimed.
+- **WP-P04-D** — Qualify SessionLedger CVP and record comparison; owner SessionLedger independent verifier/integration owner; prerequisites WP-P04-B, WP-P04-C; unclaimed.
+- **WP-P05-B** — Qualify KCode oracles and comparative baseline; owner KCode assurance owner; prerequisites WP-P05-A, WP-G06; unclaimed.
+- **WP-P05-D** — Qualify KCode CVP and record comparison; owner KCode independent verifier/integration owner; prerequisites WP-P05-B, WP-P05-C; unclaimed.
+- **WP-P06-B** — Qualify HeliosLite oracles and comparative baseline; owner HeliosLite assurance owner; prerequisites WP-P06-A, WP-G06; unclaimed.
+- **WP-P06-D** — Qualify HeliosLite CVP and record comparison; owner HeliosLite independent verifier/integration owner; prerequisites WP-P06-B, WP-P06-C; unclaimed.
+- **WP-P07-B** — Qualify HeliosCLI oracles and comparative baseline; owner HeliosCLI assurance owner; prerequisites WP-P07-A, WP-G06; unclaimed.
+- **WP-P07-D** — Qualify HeliosCLI CVP and record comparison; owner HeliosCLI independent verifier/integration owner; prerequisites WP-P07-B, WP-P07-C; unclaimed.
+- **WP-P08-B** — Qualify Khostty oracles and comparative baseline; owner Khostty assurance owner; prerequisites WP-P08-A, WP-G06; unclaimed.
+- **WP-P08-D** — Qualify Khostty CVP and record comparison; owner Khostty independent verifier/integration owner; prerequisites WP-P08-B, WP-P08-C; unclaimed.
+- **WP-P09-B** — Qualify ShareCLI oracles and comparative baseline; owner ShareCLI assurance owner; prerequisites WP-P09-A, WP-G06; unclaimed.
+- **WP-P09-D** — Qualify ShareCLI CVP and record comparison; owner ShareCLI independent verifier/integration owner; prerequisites WP-P09-B, WP-P09-C; unclaimed.
+- **WP-P10-B** — Qualify BytePort oracles and comparative baseline; owner BytePort assurance owner; prerequisites WP-P10-A, WP-G06; unclaimed.
+- **WP-P10-D** — Qualify BytePort CVP and record comparison; owner BytePort independent verifier/integration owner; prerequisites WP-P10-B, WP-P10-C; unclaimed.
+- **WP-P11-B** — Qualify PhenoFabric oracles and comparative baseline; owner PhenoFabric assurance owner; prerequisites WP-P11-A, WP-G06; unclaimed.
+- **WP-P11-D** — Qualify PhenoFabric CVP and record comparison; owner PhenoFabric independent verifier/integration owner; prerequisites WP-P11-B, WP-P11-C; unclaimed.
+- **WP-P12-B** — Qualify Pine oracles and comparative baseline; owner Pine assurance owner; prerequisites WP-P12-A, WP-G06; unclaimed.
+- **WP-P12-D** — Qualify Pine CVP and record comparison; owner Pine independent verifier/integration owner; prerequisites WP-P12-B, WP-P12-C; unclaimed.
+- **WP-P13-B** — Qualify OmniRoute oracles and comparative baseline; owner OmniRoute assurance owner; prerequisites WP-P13-A, WP-G06; unclaimed.
+- **WP-P13-D** — Qualify OmniRoute CVP and record comparison; owner OmniRoute independent verifier/integration owner; prerequisites WP-P13-B, WP-P13-C; unclaimed.
+- **WP-P14-B** — Qualify Substrate oracles and comparative baseline; owner Substrate assurance owner; prerequisites WP-P14-A, WP-G06; unclaimed.
+- **WP-P14-D** — Qualify Substrate CVP and record comparison; owner Substrate independent verifier/integration owner; prerequisites WP-P14-B, WP-P14-C; unclaimed.
+- **WP-P15-B** — Qualify PhenoMLX oracles and comparative baseline; owner PhenoMLX assurance owner; prerequisites WP-P15-A, WP-G06; unclaimed.
+- **WP-P15-D** — Qualify PhenoMLX CVP and record comparison; owner PhenoMLX independent verifier/integration owner; prerequisites WP-P15-B, WP-P15-C; unclaimed.
+- **WP-P16-B** — Qualify Portage oracles and comparative baseline; owner Portage assurance owner; prerequisites WP-P16-A, WP-G06; unclaimed.
+- **WP-P16-D** — Qualify Portage CVP and record comparison; owner Portage independent verifier/integration owner; prerequisites WP-P16-B, WP-P16-C; unclaimed.
+- **WP-P17-B** — Qualify PhenoLab oracles and comparative baseline; owner PhenoLab assurance owner; prerequisites WP-P17-A, WP-G06; unclaimed.
+- **WP-P17-D** — Qualify PhenoLab CVP and record comparison; owner PhenoLab independent verifier/integration owner; prerequisites WP-P17-B, WP-P17-C; unclaimed.
+- **WP-P18-B** — Qualify Civis oracles and comparative baseline; owner Civis assurance owner; prerequisites WP-P18-A, WP-G06; unclaimed.
+- **WP-P18-D** — Qualify Civis CVP and record comparison; owner Civis independent verifier/integration owner; prerequisites WP-P18-B, WP-P18-C; unclaimed.
+- **WP-P19-B** — Qualify Dino oracles and comparative baseline; owner Dino assurance owner; prerequisites WP-P19-A, WP-G06; unclaimed.
+- **WP-P19-D** — Qualify Dino CVP and record comparison; owner Dino independent verifier/integration owner; prerequisites WP-P19-B, WP-P19-C; unclaimed.
+- **WP-P20-B** — Qualify WorldSphereMod oracles and comparative baseline; owner WorldSphereMod assurance owner; prerequisites WP-P20-A, WP-G06; unclaimed.
+- **WP-P20-D** — Qualify WorldSphereMod CVP and record comparison; owner WorldSphereMod independent verifier/integration owner; prerequisites WP-P20-B, WP-P20-C; unclaimed.
+- **WP-P21-B** — Qualify CivicWarfare oracles and comparative baseline; owner CivicWarfare assurance owner; prerequisites WP-P21-A, WP-G06; unclaimed.
+- **WP-P21-D** — Qualify CivicWarfare CVP and record comparison; owner CivicWarfare independent verifier/integration owner; prerequisites WP-P21-B, WP-P21-C; unclaimed.
+- **WP-P22-B** — Qualify Melosviz oracles and comparative baseline; owner Melosviz assurance owner; prerequisites WP-P22-A, WP-G06; unclaimed.
+- **WP-P22-D** — Qualify Melosviz CVP and record comparison; owner Melosviz independent verifier/integration owner; prerequisites WP-P22-B, WP-P22-C; unclaimed.
+
+Completion requires actual accepted evidence, not this list being checked off by the document generator.

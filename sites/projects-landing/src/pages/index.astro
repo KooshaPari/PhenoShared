@@ -1,0 +1,355 @@
+---
+import "../styles/globals.css";
+import reposData from "../../data/repos.json";
+
+type Repo = {
+  name: string;
+  description: string | null;
+  url: string;
+  homepageUrl: string | null;
+  primaryLanguage: { name: string; color: string } | null;
+  stargazerCount: number;
+  pushedAt: string;
+  isArchived: boolean;
+  isFork: boolean;
+  repositoryTopics: { name: string }[] | { nodes: { name: string }[] };
+};
+
+// Flagship projects — visually distinct featured rail.
+// Order = display priority. Edit this array to curate the rail.
+const FLAGSHIPS = ["heliosApp", "AgilePlus", "thegent", "hwLedger", "BytePort"];
+
+const allRepos = (reposData as Repo[])
+  .filter((r) => !r.isArchived && !r.isFork)
+  .sort((a, b) => new Date(b.pushedAt).getTime() - new Date(a.pushedAt).getTime());
+
+const flagshipRepos = FLAGSHIPS
+  .map((name) => allRepos.find((r) => r.name === name))
+  .filter((r): r is Repo => Boolean(r));
+
+const flagshipSet = new Set(flagshipRepos.map((r) => r.name));
+const otherRepos = allRepos.filter((r) => !flagshipSet.has(r.name));
+
+// Normalize topics shape
+function topicsOf(r: Repo): string[] {
+  const t = r.repositoryTopics as any;
+  if (Array.isArray(t)) return t.map((x) => x.name);
+  if (t?.nodes) return t.nodes.map((x: any) => x.name);
+  return [];
+}
+
+const languages = Array.from(
+  new Set(allRepos.map((r) => r.primaryLanguage?.name).filter(Boolean) as string[])
+).sort();
+
+function relTime(iso: string): string {
+  const d = new Date(iso);
+  const days = Math.floor((Date.now() - d.getTime()) / 86_400_000);
+  if (days < 1) return "today";
+  if (days < 30) return `${days}d ago`;
+  if (days < 365) return `${Math.floor(days / 30)}mo ago`;
+  return `${Math.floor(days / 365)}y ago`;
+}
+---
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Phenotype — KooshaPari Projects</title>
+    <meta name="description" content="Phenotype is a developer-tool monorepo for AI-augmented engineering — agent runtimes, governance, and infrastructure built for builders shipping with autonomous coding agents." />
+    <meta property="og:title" content="Phenotype — KooshaPari Projects" />
+    <meta property="og:description" content="Phenotype is a developer-tool monorepo for AI-augmented engineering — agent runtimes, governance, and infrastructure built for builders shipping with autonomous coding agents." />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Phenotype" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Phenotype — KooshaPari Projects" />
+    <meta name="twitter:description" content="Phenotype is a developer-tool monorepo for AI-augmented engineering — agent runtimes, governance, and infrastructure built for builders shipping with autonomous coding agents." />
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>P</text></svg>" />
+  </head>
+  <body class="min-h-screen">
+    <main class="max-w-6xl mx-auto px-6 py-12">
+      <header class="mb-10">
+        <p class="mono text-xs uppercase tracking-widest text-[var(--accent)] mb-3">KooshaPari · Phenotype org</p>
+        <h1 class="text-4xl md:text-5xl font-bold tracking-tight">Phenotype</h1>
+        <p class="text-base md:text-lg mt-4 max-w-3xl leading-relaxed">
+          Phenotype is a <strong>developer-tool monorepo for AI-augmented engineering</strong>, built for
+          <strong>builders shipping with autonomous coding agents</strong>, doing
+          <strong>agent runtimes, governance, and infrastructure that turn prompts into production code.</strong>
+        </p>
+        <p class="text-[var(--muted)] mt-3 mono text-xs">
+          {allRepos.length} active projects · {flagshipRepos.length} flagships · auto-generated from GitHub API
+        </p>
+        <div class="mt-5 flex flex-wrap gap-2">
+          <a href="/koosha" class="cta-btn cta-primary mono text-xs px-3 py-1.5 rounded border">
+            Koosha personal layer →
+          </a>
+          <a href="/brand" class="cta-btn mono text-xs px-3 py-1.5 rounded border">
+            Brand map →
+          </a>
+          <a href="/docs" class="cta-btn mono text-xs px-3 py-1.5 rounded border">
+            Docs →
+          </a>
+        </div>
+      </header>
+
+      <section id="internal-panel" class="internal-panel mb-12" hidden>
+        <div class="internal-copy">
+          <p class="mono text-xs uppercase tracking-widest text-[var(--accent)] mb-2">Internal access detected</p>
+          <h2 class="text-2xl font-bold tracking-tight">Local development portals</h2>
+          <p class="mt-2 text-sm text-[var(--muted)] max-w-2xl">
+            This device appears to be on the Phenotype org network, Tailscale, or a local dev host.
+            Internal links stay hidden on the public internet and reveal only for trusted network contexts.
+          </p>
+        </div>
+        <div class="internal-links">
+          <a href="/koosha" class="internal-link">
+            <span>Koosha layer</span>
+            <small>personal landing</small>
+          </a>
+          <a href="http://localhost:4321" class="internal-link" data-internal-link target="_blank" rel="noopener">
+            <span>Projects dev</span>
+            <small>Astro local preview</small>
+          </a>
+          <a href="/brand" class="internal-link">
+            <span>Brand map</span>
+            <small>landing queue</small>
+          </a>
+          <a href="http://localhost:3000" class="internal-link" data-internal-link target="_blank" rel="noopener">
+            <span>App portal</span>
+            <small>default frontend</small>
+          </a>
+          <a href="http://localhost:3002" class="internal-link" data-internal-link target="_blank" rel="noopener">
+            <span>Hub app</span>
+            <small>phenotype-hub local</small>
+          </a>
+          <a href="http://localhost:9090" class="internal-link" data-internal-link target="_blank" rel="noopener">
+            <span>Metrics</span>
+            <small>local observability</small>
+          </a>
+        </div>
+      </section>
+
+      {flagshipRepos.length > 0 && (
+        <section class="mb-12">
+          <div class="flex items-center gap-3 mb-4">
+            <h2 class="mono text-xs uppercase tracking-widest text-[var(--accent)]">★ Flagships</h2>
+            <span class="flex-1 h-px bg-[var(--border)]"></span>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {flagshipRepos.map((repo) => (
+              <article
+                class="flagship-card group relative block p-5 rounded-lg border-2 bg-gradient-to-br from-[var(--card)] to-[var(--card)] transition hover:-translate-y-0.5"
+                style="border-color: var(--accent);"
+              >
+                <span class="absolute top-3 right-3 mono text-[10px] uppercase tracking-widest text-[var(--accent)]">flagship</span>
+                <div class="flex items-start justify-between gap-3 mb-2 pr-16">
+                  <h3 class="mono font-semibold text-base text-[var(--accent)] truncate">{repo.name}</h3>
+                  {repo.stargazerCount > 0 && (
+                    <span class="mono text-xs text-[var(--muted)] shrink-0">★ {repo.stargazerCount}</span>
+                  )}
+                </div>
+                <p class="text-sm line-clamp-3 min-h-[3.75rem]">
+                  {repo.description ?? <span class="italic opacity-60">No description.</span>}
+                </p>
+                <div class="mt-4 flex items-center justify-between mono text-xs text-[var(--muted)]">
+                  <span class="flex items-center gap-1.5">
+                    {repo.primaryLanguage && (
+                      <>
+                        <span class="inline-block w-2 h-2 rounded-full" style={`background-color: ${repo.primaryLanguage.color}`}></span>
+                        {repo.primaryLanguage.name}
+                      </>
+                    )}
+                  </span>
+                  <span>{relTime(repo.pushedAt)}</span>
+                </div>
+                <div class="mt-4 flex gap-2">
+                  {repo.homepageUrl && (
+                    <a href={repo.homepageUrl} target="_blank" rel="noopener" class="cta-btn cta-primary mono text-xs px-3 py-1.5 rounded border inline-flex items-center gap-1">
+                      Visit site →
+                    </a>
+                  )}
+                  <a href={repo.url} target="_blank" rel="noopener" class="cta-btn mono text-xs px-3 py-1.5 rounded border inline-flex items-center gap-1">
+                    GitHub →
+                  </a>
+                </div>
+              </article>
+            ))}
+          </div>
+        </section>
+      )}
+
+      <section class="mb-8 flex flex-col gap-4">
+        <input
+          type="search"
+          id="search"
+          placeholder="Search projects…"
+          class="w-full px-4 py-3 rounded-lg border bg-[var(--card)] mono text-sm focus:outline-none focus:ring-2 focus:ring-[var(--accent)]"
+          style="border-color: var(--border);"
+        />
+        <div class="flex flex-wrap gap-2" id="lang-filters">
+          <button data-lang="all" class="lang-chip active px-3 py-1 rounded-full mono text-xs border">all</button>
+          {languages.map((lang) => (
+            <button data-lang={lang} class="lang-chip px-3 py-1 rounded-full mono text-xs border" style="border-color: var(--border);">{lang.toLowerCase()}</button>
+          ))}
+        </div>
+      </section>
+
+      <section id="grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {otherRepos.map((repo) => (
+          <article
+            class="repo-card group block p-5 rounded-lg border bg-[var(--card)] transition hover:border-[var(--accent)] hover:-translate-y-0.5"
+            style="border-color: var(--border);"
+            data-name={repo.name.toLowerCase()}
+            data-desc={(repo.description ?? "").toLowerCase()}
+            data-lang={repo.primaryLanguage?.name ?? ""}
+            data-topics={topicsOf(repo).join(",")}
+          >
+            <div class="flex items-start justify-between gap-3 mb-2">
+              <h3 class="mono font-semibold text-base group-hover:text-[var(--accent)] truncate">{repo.name}</h3>
+              {repo.stargazerCount > 0 && (
+                <span class="mono text-xs text-[var(--muted)] shrink-0">★ {repo.stargazerCount}</span>
+              )}
+            </div>
+            <p class="text-sm text-[var(--muted)] line-clamp-3 min-h-[3.75rem]">
+              {repo.description ?? <span class="italic opacity-60">No description.</span>}
+            </p>
+            <div class="mt-4 flex items-center justify-between mono text-xs text-[var(--muted)]">
+              <span class="flex items-center gap-1.5">
+                {repo.primaryLanguage && (
+                  <>
+                    <span class="inline-block w-2 h-2 rounded-full" style={`background-color: ${repo.primaryLanguage.color}`}></span>
+                    {repo.primaryLanguage.name}
+                  </>
+                )}
+              </span>
+              <span>{relTime(repo.pushedAt)}</span>
+            </div>
+            <div class="mt-4 flex gap-2">
+              {repo.homepageUrl && (
+                <a href={repo.homepageUrl} target="_blank" rel="noopener" class="cta-btn cta-primary mono text-xs px-3 py-1.5 rounded border inline-flex items-center gap-1">
+                  Visit site →
+                </a>
+              )}
+              <a href={repo.url} target="_blank" rel="noopener" class="cta-btn mono text-xs px-3 py-1.5 rounded border inline-flex items-center gap-1">
+                GitHub →
+              </a>
+            </div>
+          </article>
+        ))}
+      </section>
+
+      <footer class="mt-16 pt-6 border-t text-xs text-[var(--muted)] mono" style="border-color: var(--border);">
+        Auto-generated from GitHub API · refresh via <code>bun run data:refresh</code> · source on <a href="https://github.com/KooshaPari/phenotype-landing" class="underline hover:text-[var(--accent)]">github</a>
+      </footer>
+    </main>
+
+    <style>
+      .lang-chip { border-color: var(--border); cursor: pointer; }
+      .lang-chip:hover { border-color: var(--accent); color: var(--accent); }
+      .lang-chip.active { background: var(--accent); color: #0a0a0b; border-color: var(--accent); }
+      .repo-card.hidden { display: none; }
+      .flagship-card { box-shadow: 0 0 0 0 var(--accent); transition: box-shadow .2s, transform .2s; }
+      .flagship-card:hover { box-shadow: 0 4px 24px -4px var(--accent); }
+      .cta-btn { border-color: var(--border); transition: all .15s; }
+      .cta-btn:hover { border-color: var(--accent); color: var(--accent); }
+      .cta-primary { background: var(--accent); color: #0a0a0b; border-color: var(--accent); }
+      .cta-primary:hover { opacity: .9; color: #0a0a0b; }
+      .internal-panel {
+        border: 1px solid var(--accent);
+        border-radius: 0.75rem;
+        background:
+          linear-gradient(135deg, var(--accent-soft), transparent 54%),
+          var(--card);
+        padding: 1.25rem;
+        box-shadow: 0 18px 50px -34px var(--accent);
+      }
+      .internal-panel[hidden] { display: none; }
+      .internal-links {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+        gap: 0.75rem;
+        margin-top: 1rem;
+      }
+      .internal-link {
+        border: 1px solid var(--border);
+        border-radius: 0.5rem;
+        background: var(--accent-wash);
+        padding: 0.85rem 0.95rem;
+        text-decoration: none;
+        transition: border-color .15s, transform .15s, background .15s;
+      }
+      .internal-link:hover {
+        border-color: var(--accent);
+        transform: translateY(-1px);
+        background: var(--accent-soft);
+      }
+      .internal-link span {
+        display: block;
+        color: var(--fg);
+        font-weight: 700;
+      }
+      .internal-link small {
+        display: block;
+        color: var(--muted);
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-size: 0.72rem;
+        margin-top: 0.2rem;
+      }
+    </style>
+
+    <script is:inline>
+      (function () {
+        const search = document.getElementById("search");
+        const chips = document.querySelectorAll(".lang-chip");
+        const cards = document.querySelectorAll(".repo-card");
+        let activeLang = "all";
+
+        function apply() {
+          const q = (search.value || "").toLowerCase().trim();
+          cards.forEach((card) => {
+            const name = card.dataset.name || "";
+            const desc = card.dataset.desc || "";
+            const lang = card.dataset.lang || "";
+            const topics = card.dataset.topics || "";
+            const matchQ = !q || name.includes(q) || desc.includes(q) || topics.includes(q);
+            const matchL = activeLang === "all" || lang === activeLang;
+            card.classList.toggle("hidden", !(matchQ && matchL));
+          });
+        }
+
+        search.addEventListener("input", apply);
+        chips.forEach((chip) => {
+          chip.addEventListener("click", () => {
+            chips.forEach((c) => c.classList.remove("active"));
+            chip.classList.add("active");
+            activeLang = chip.dataset.lang;
+            apply();
+          });
+        });
+      })();
+    </script>
+    <script is:inline>
+      (function () {
+        const panel = document.getElementById("internal-panel");
+        if (!panel) return;
+
+        const host = window.location.hostname.toLowerCase();
+        const params = new URLSearchParams(window.location.search);
+        const forced = params.get("internal") === "1" || localStorage.getItem("phenotype_internal") === "1";
+        const tailscaleIp = /^100\.(6[4-9]|[7-9]\d|1[01]\d|12[0-7])\./.test(host);
+        const trustedHost =
+          host === "localhost" ||
+          host === "127.0.0.1" ||
+          host.endsWith(".local") ||
+          host.endsWith(".ts.net") ||
+          host.endsWith(".tailnet") ||
+          tailscaleIp;
+
+        if (forced || trustedHost) {
+          panel.hidden = false;
+        }
+      })();
+    </script>
+  </body>
+</html>

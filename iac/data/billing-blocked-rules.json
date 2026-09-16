@@ -1,0 +1,93 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "description": "Tracks ruleset rules dropped from KooshaPari repos due to GitHub Actions billing exhaustion. Consumed by iac/scripts/restore-rulesets.rs to re-add rules when billing is restored.",
+  "policy_doc": "repos/docs/governance/billing-blocked-rule-compensating-controls.md",
+  "owner": "KooshaPari",
+  "entries": [
+    {
+      "repo": "heliosBench",
+      "ruleset_id": 13277748,
+      "dropped_rules": [
+        "code_quality",
+        "code_scanning",
+        "copilot_code_review",
+        "required_status_checks",
+        "required_deployments"
+      ],
+      "dropped_at": "2026-04-25",
+      "reason": "github-actions-billing-exhausted",
+      "restored_at": null,
+      "restored_by": null
+    },
+    {
+      "repo": "heliosBench",
+      "ruleset_id": 13277783,
+      "dropped_rules": [
+        "code_quality",
+        "code_scanning",
+        "copilot_code_review",
+        "required_status_checks",
+        "required_deployments"
+      ],
+      "dropped_at": "2026-04-25",
+      "reason": "github-actions-billing-exhausted",
+      "restored_at": null,
+      "restored_by": null
+    },
+    {
+      "repo": "thegent",
+      "ruleset_id": 13225769,
+      "dropped_rules": [
+        "code_quality",
+        "code_scanning",
+        "copilot_code_review",
+        "required_status_checks",
+        "required_deployments"
+      ],
+      "dropped_at": "2026-04-25",
+      "reason": "github-actions-billing-exhausted",
+      "restored_at": null,
+      "restored_by": null
+    },
+    {
+      "repo": "BytePort",
+      "ruleset_id": 14621515,
+      "dropped_rules": [
+        "code_quality",
+        "code_scanning",
+        "copilot_code_review",
+        "required_status_checks",
+        "required_deployments"
+      ],
+      "dropped_at": "2026-04-25",
+      "reason": "github-actions-billing-exhausted",
+      "restored_at": null,
+      "restored_by": null
+    },
+    {
+      "repo": "Tracera",
+      "ruleset_id": 13225834,
+      "dropped_rules": [
+        "code_quality",
+        "code_scanning",
+        "copilot_code_review",
+        "required_status_checks",
+        "required_deployments"
+      ],
+      "dropped_at": "2026-04-25",
+      "reason": "github-actions-billing-exhausted",
+      "restored_at": null,
+      "restored_by": null
+    },
+    {
+      "repo": "phenotype-dep-guard",
+      "ruleset_id": null,
+      "dropped_rules": [],
+      "dropped_at": "2026-04-25",
+      "reason": "merge-blocked-no-visible-ruleset",
+      "notes": "PR #3 (dependabot/github_actions/actions/checkout-6) admin merge denied with `MergePullRequest` permission error. No branch protection on main, no repo or org rulesets visible to API. Snyk status check ERRORs but does not appear in required checks. Token scopes: delete_repo, gist, read:org, repo, workflow. Suspect org-level managed policy or Snyk app installation gating. Manual UI merge or Snyk re-run needed.",
+      "restored_at": null,
+      "restored_by": null
+    }
+  ]
+}

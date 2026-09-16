@@ -1,0 +1,1 @@
+{"name":"@phenotype/auth","version":"1.0.0","type":"module","exports":{".": "./src/middleware.ts"},"dependencies":{"@workos-inc/node":"^8.0.0","@workos-inc/authkit-js":"^1.0.0"}}

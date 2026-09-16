@@ -1,776 +1,442 @@
-//! # pheno-config
+// SPDX-License-Identifier: MIT OR Apache-2.0
+//! Centralized configuration for PhenoCompose.
 //!
-//! Canonical typed-configuration loader for the `pheno-*` fleet.
-//! Provides three ways to materialise a [`Config`]:
+//! Provides a layered config loader using [`figment`]:
+//! 1. Hard-coded Rust defaults
+//! 2. `PhenoCompose.toml` config file (optional, CWD)
+//! 3. Environment variables prefixed with `PHENO_`
 //!
-//! 1. [`load_from_env`] — reads `<PREFIX>_*` environment variables and
-//!    parses them into a typed [`Config`]. Required fields
-//!    (`URL`, `DB_PATH`) yield [`ConfigError::MissingField`]; bad
-//!    numeric values (e.g. non-`u16` `PORT`) yield
-//!    [`ConfigError::ParseError`].
-//! 2. [`load_from_file`] — reads a JSON file via `serde_json` and
-//!    deserialises it into a [`Config`]. File-read errors map to
-//!    [`ConfigError::IoError`]; malformed JSON or type mismatches
-//!    map to [`ConfigError::ParseError`].
-//! 3. [`ConfigBuilder`] — programmatic construction with sensible
-//!    defaults (`port = 8080`, `log_level = "info"`,
-//!    `feature_flags = Vec::new()`). Used by tests and by consumers
-//!    that already have all values in memory.
+//! # Key groupings
 //!
-//! ## Design
+//! | Module | Purpose |
+//! |--------|---------|
+//! | [`nvms`] | NVMS driver version / platform labels |
+//! | [`sandbox`] | Sandbox default resources & limits |
+//! | [`perf`] | Performance simulation defaults |
+//! | [`gpu`] | GPU device defaults |
 //!
-//! - 3-variant [`ConfigError`] built on [`thiserror`] (no `anyhow`
-//!   boundary to keep the dependency surface tiny).
-//! - Deliberately a closed `enum` (no `#[non_exhaustive]`) so
-//!   downstream `match` exhaustiveness checks are useful.
-//! - Crate is **standalone**: an empty `[workspace]` table in its
-//!   own `Cargo.toml` keeps it out of the root 56-crate workspace,
-//!   matching the L3 #46 (`pheno-errors`) pattern. Consumers add
-//!   it to their own workspace or depend on it via a path/git
-//!   dependency.
-//! - `Config` derives `Serialize`/`Deserialize` so the same struct
-//!   round-trips through JSON, env, and builder without any
-//!   translation layer.
+//! # Example
 //!
-//! ## Consumers
+//! ```rust
+//! use pheno_config::PhenoConfig;
 //!
-//! Consumed by L5 #81–85 across the `pheno-*` fleet as the single
-//! source of truth for runtime configuration. See
-//! `V3_EXECUTION_LOG_2026_06_10.md` → "L3 #48" for rollout notes.
-//!
-//! ## Example
-//!
+//! let cfg = PhenoConfig::load().expect("config loaded");
+//! assert!(cfg.sandbox.max_sandbox_id_len >= 1);
 //! ```
-//! use pheno_config::ConfigBuilder;
-//!
-//! let cfg = ConfigBuilder::new()
-//!     .url("https://example.com")
-//!     .db_path("/var/lib/app.db")
-//!     .port(9090)
-//!     .log_level("debug")
-//!     .feature_flag("beta")
-//!     .build()
-//!     .expect("config");
-//! assert_eq!(cfg.port, 9090);
-//! assert_eq!(cfg.feature_flags, vec!["beta".to_string()]);
-//! ```
-//!
-//! For env-var loading, see [`load_from_env`]; for JSON file
-//! loading, see [`load_from_file`].
 
-use std::env;
-use std::path::Path;
+#![forbid(unsafe_code)]
+#![deny(missing_docs)]
 
-use secrecy::{ExposeSecret, SecretBox};
+use figment::providers::{Env, Format, Serialized, Toml};
+use figment::Figment;
 use serde::{Deserialize, Serialize};
-use thiserror::Error;
-
-pub mod secret;
-pub use crate::secret::{new_secret, SecretString};
 
 // ---------------------------------------------------------------------------
-// Error type
+// Re-exports
 // ---------------------------------------------------------------------------
 
-/// Errors produced by [`load_from_env`], [`load_from_file`], and
-/// [`ConfigBuilder::build`]. Deliberately a closed 3-variant enum so
-/// downstream `match` exhaustiveness checks are useful.
-#[derive(Debug, Error)]
-pub enum ConfigError {
-    /// A required field (env var or JSON key) was missing.
-    ///
-    /// Returned when `<PREFIX>_URL` or `<PREFIX>_DB_PATH` is unset
-    /// in the environment, or when a JSON config file is missing a
-    /// required key.
-    #[error("missing required config field: {0}")]
-    MissingField(String),
-
-    /// A value was present but could not be parsed into the target
-    /// type (e.g. `<PREFIX>_PORT=not-a-number`, malformed JSON,
-    /// wrong type in a JSON field).
-    #[error("failed to parse config value for `{field}`: {message}")]
-    ParseError {
-        /// Name of the field that failed to parse (e.g. `"PORT"`,
-        /// `"<json>"`).
-        field: String,
-        /// Human-readable parse failure detail.
-        message: String,
-    },
-
-    /// An I/O error occurred while reading a config file from disk.
-    ///
-    /// `std::io::Error` is wrapped via `#[from]` so any fallible
-    /// `std::fs` call inside `load_from_file` propagates naturally
-    /// with the `?` operator.
-    #[error("config I/O error: {0}")]
-    IoError(#[from] std::io::Error),
-}
-
-/// `Result<T, ConfigError>` — the canonical return type for
-/// fallible config-loading functions in the `pheno-*` fleet.
-pub type Result<T> = std::result::Result<T, ConfigError>;
+pub use nvms::NvmsConfig;
+pub use sandbox::SandboxConfig;
+pub use gpu::GpuConfig;
+pub use perf::PerfConfig;
 
 // ---------------------------------------------------------------------------
-// Config struct
+// Top-level config
 // ---------------------------------------------------------------------------
 
-/// The canonical typed runtime configuration consumed by every
-/// `pheno-*` service.
+/// PhenoCompose top-level configuration.
 ///
-/// Derives `Serialize`/`Deserialize` so the same struct round-trips
-/// through:
-/// - [`load_from_file`] (JSON deserialisation)
-/// - [`Config`] → JSON (e.g. for logging the effective config at
-///   startup)
-/// - builder construction
-///
-/// Field semantics:
-/// - [`Config::url`] — service base URL (required).
-/// - [`Config::port`] — service listen port. Defaults to `8080`.
-/// - [`Config::log_level`] — tracing/log filter level. Defaults to
-///   `"info"`. Validated as a non-empty string; downstream crates
-///   (e.g. `pheno-tracing`) do the `tracing::Level` parse.
-/// - [`Config::db_path`] — on-disk database path (required).
-/// - [`Config::feature_flags`] — list of opt-in feature toggles.
-///   Defaults to empty.
-/// - [`Config::secret_value`] — optional redacting wrapper around a
-///   plaintext credential (API token, OAuth secret, ...). The field
-///   is marked `#[serde(skip)]` so secret values are never written
-///   to config snapshots or persisted config files; load it via
-///   `<PREFIX>_SECRET_TOKEN` env vars or the builder, then read it
-///   through [`Config::secret_value`] (and `SecretBox::expose_secret`
-///   at the trust boundary).
-#[derive(Debug, Serialize, Deserialize)]
-pub struct Config {
-    /// Service base URL (required).
-    pub url: String,
-    /// Service listen port. Defaults to `8080`.
-    pub port: u16,
-    /// Tracing/log filter level. Defaults to `"info"`.
-    pub log_level: String,
-    /// On-disk database path (required).
-    pub db_path: String,
-    /// List of opt-in feature toggles. Defaults to `Vec::new()`.
+/// Loaded via [`PhenoConfig::load`] which merges:
+/// - Hard-coded Rust defaults
+/// - `PhenoCompose.toml` (optional) in the current directory
+/// - Environment variables prefixed with `PHENO_`
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct PhenoConfig {
+    /// NVMS driver / platform labels.
     #[serde(default)]
-    pub feature_flags: Vec<String>,
-    /// Optional plaintext credential (API token, OAuth secret,
-    /// webhook signing key, ...). `Debug` redacts to `[REDACTED]`;
-    /// `Drop` zeroises the heap allocation; `Serialize`/`Deserialize`
-    /// skip the field entirely (`#[serde(default, skip)]`) so secrets
-    /// never leak through config snapshots or persisted JSON.
-    #[serde(default, skip)]
-    pub secret_value: Option<SecretBox<str>>,
+    pub nvms: NvmsConfig,
+
+    /// Sandbox defaults and resource limits.
+    #[serde(default)]
+    pub sandbox: SandboxConfig,
+
+    /// Performance simulation defaults.
+    #[serde(default)]
+    pub perf: PerfConfig,
+
+    /// GPU device defaults.
+    #[serde(default)]
+    pub gpu: GpuConfig,
+
+    /// Driver-level defaults.
+    #[serde(default)]
+    pub driver: DriverConfig,
 }
 
-// Hand-rolled `Clone`: `SecretBox<str>` does not (and should not)
-// implement `Clone` because cloning a secret expands its blast radius
-// across more allocations and lifetime boundaries. The implementation
-// below re-wraps the exposed plaintext in a fresh `SecretBox` so
-// `Config::clone()` still produces a fully usable copy, but every
-// call site is forced to consciously accept the multiplication of the
-// secret's footprint.
-impl Clone for Config {
-    fn clone(&self) -> Self {
-        Self {
-            url: self.url.clone(),
-            port: self.port,
-            log_level: self.log_level.clone(),
-            db_path: self.db_path.clone(),
-            feature_flags: self.feature_flags.clone(),
-            secret_value: self
-                .secret_value
-                .as_ref()
-                .map(|s| SecretBox::new(String::from(s.expose_secret()).into_boxed_str())),
-        }
-    }
+/// Driver-level configuration.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct DriverConfig {
+    /// Number of vCPUs for Firecracker instances by default.
+    #[serde(default = "default_firecracker_cpus")]
+    pub firecracker_default_cpus: u32,
+
+    /// Memory in bytes for Firecracker instances by default.
+    #[serde(default = "default_firecracker_memory")]
+    pub firecracker_default_memory_bytes: u64,
 }
 
-// Two `Config`s that share every non-secret field are considered
-// equal. The secret value is intentionally NOT compared: equality of
-// redacted values would either leak timing-channel info (memcmp) or
-// silently drop the secret comparison (always false). Hand-rolled
-// `PartialEq`/`Eq` here replaces the auto-derive we removed when
-// adding `secret_value` (which doesn't itself implement `PartialEq`).
-impl PartialEq for Config {
-    fn eq(&self, other: &Self) -> bool {
-        self.url == other.url
-            && self.port == other.port
-            && self.log_level == other.log_level
-            && self.db_path == other.db_path
-            && self.feature_flags == other.feature_flags
-    }
-}
-
-impl Eq for Config {}
-
-// ---------------------------------------------------------------------------
-// Env-var name constants
-// ---------------------------------------------------------------------------
-
-/// Field name for [`Config::url`] (also the JSON key and env-var
-/// suffix).
-pub const FIELD_URL: &str = "URL";
-/// Field name for [`Config::port`].
-pub const FIELD_PORT: &str = "PORT";
-/// Field name for [`Config::log_level`].
-pub const FIELD_LOG_LEVEL: &str = "LOG_LEVEL";
-/// Field name for [`Config::db_path`].
-pub const FIELD_DB_PATH: &str = "DB_PATH";
-/// Field name for [`Config::feature_flags`].
-pub const FIELD_FEATURE_FLAGS: &str = "FEATURE_FLAGS";
-/// Field name for [`Config::secret_value`] (env-var suffix).
-///
-/// The env-var convention is `<PREFIX>_SECRET_TOKEN` so operators
-/// can inject a single plaintext credential without committing a
-/// secret to a config file. The field is `#[serde(skip)]` on the
-/// struct, so this is the **only** way to populate `secret_value`
-/// from a non-builder source.
-pub const FIELD_SECRET_TOKEN: &str = "SECRET_TOKEN";
-
-fn env_name(prefix: &str, field: &str) -> String {
-    format!("{prefix}_{field}")
-}
-
-fn parse_feature_flags(raw: &str) -> Vec<String> {
-    raw.split(',')
-        .map(str::trim)
-        .filter(|s| !s.is_empty())
-        .map(str::to_owned)
-        .collect()
-}
-
-// ---------------------------------------------------------------------------
-// load_from_env
-// ---------------------------------------------------------------------------
-
-/// Loads a [`Config`] from environment variables matching
-/// `<prefix>_*`.
-///
-/// The expected env-var names are (substituting `<prefix>`):
-/// - `<prefix>_URL` — required → [`ConfigError::MissingField`] when
-///   unset.
-/// - `<prefix>_PORT` — optional `u16`; defaults to `8080`.
-///   Non-numeric values produce [`ConfigError::ParseError`].
-/// - `<prefix>_LOG_LEVEL` — optional string; defaults to `"info"`.
-/// - `<prefix>_DB_PATH` — required → [`ConfigError::MissingField`]
-///   when unset.
-/// - `<prefix>_FEATURE_FLAGS` — optional comma-separated string;
-///   defaults to `Vec::new()`. Whitespace around each flag is
-///   trimmed; empty entries are dropped.
-///
-/// Environment variables not matching `<prefix>_*` are ignored
-/// (this is verified by the
-/// `load_from_env_with_prefix_filters_unrelated_vars` test).
-///
-/// # Errors
-///
-/// - [`ConfigError::MissingField`] when a required env var
-///   (`<PREFIX>_URL` or `<PREFIX>_DB_PATH`) is unset.
-/// - [`ConfigError::ParseError`] when `<PREFIX>_PORT` is set but
-///   not a valid `u16`.
-pub fn load_from_env(prefix: &str) -> Result<Config> {
-    // Required: URL
-    let url = match env::var(env_name(prefix, FIELD_URL)) {
-        Ok(v) => v,
-        Err(env::VarError::NotPresent) => {
-            return Err(ConfigError::MissingField(env_name(prefix, FIELD_URL)));
-        }
-        Err(env::VarError::NotUnicode(_)) => {
-            return Err(ConfigError::ParseError {
-                field: env_name(prefix, FIELD_URL),
-                message: "env value is not valid unicode".to_owned(),
-            });
-        }
-    };
-
-    // Optional with default: PORT
-    let port = match env::var(env_name(prefix, FIELD_PORT)) {
-        Ok(raw) => raw.parse::<u16>().map_err(|e| ConfigError::ParseError {
-            field: env_name(prefix, FIELD_PORT),
-            message: e.to_string(),
-        })?,
-        Err(env::VarError::NotPresent) => 8080_u16,
-        Err(env::VarError::NotUnicode(_)) => {
-            return Err(ConfigError::ParseError {
-                field: env_name(prefix, FIELD_PORT),
-                message: "env value is not valid unicode".to_owned(),
-            });
-        }
-    };
-
-    // Optional with default: LOG_LEVEL
-    let log_level = match env::var(env_name(prefix, FIELD_LOG_LEVEL)) {
-        Ok(v) if !v.is_empty() => v,
-        Ok(_) => String::from("info"),
-        Err(env::VarError::NotPresent) => String::from("info"),
-        Err(env::VarError::NotUnicode(_)) => {
-            return Err(ConfigError::ParseError {
-                field: env_name(prefix, FIELD_LOG_LEVEL),
-                message: "env value is not valid unicode".to_owned(),
-            });
-        }
-    };
-
-    // Required: DB_PATH
-    let db_path = match env::var(env_name(prefix, FIELD_DB_PATH)) {
-        Ok(v) => v,
-        Err(env::VarError::NotPresent) => {
-            return Err(ConfigError::MissingField(env_name(prefix, FIELD_DB_PATH)));
-        }
-        Err(env::VarError::NotUnicode(_)) => {
-            return Err(ConfigError::ParseError {
-                field: env_name(prefix, FIELD_DB_PATH),
-                message: "env value is not valid unicode".to_owned(),
-            });
-        }
-    };
-
-    // Optional with default: FEATURE_FLAGS (comma-separated)
-    let feature_flags = match env::var(env_name(prefix, FIELD_FEATURE_FLAGS)) {
-        Ok(raw) => parse_feature_flags(&raw),
-        Err(env::VarError::NotPresent) => Vec::new(),
-        Err(env::VarError::NotUnicode(_)) => {
-            return Err(ConfigError::ParseError {
-                field: env_name(prefix, FIELD_FEATURE_FLAGS),
-                message: "env value is not valid unicode".to_owned(),
-            });
-        }
-    };
-
-    // Optional: SECRET_TOKEN (wrapped in a redacting `SecretBox` so
-    // `Debug`/serialised output never leaks the plaintext).
-    let secret_value = match env::var(env_name(prefix, FIELD_SECRET_TOKEN)) {
-        Ok(raw) if !raw.is_empty() => Some(SecretBox::new(raw.into_boxed_str())),
-        Ok(_) => None,
-        Err(env::VarError::NotPresent) => None,
-        Err(env::VarError::NotUnicode(_)) => {
-            return Err(ConfigError::ParseError {
-                field: env_name(prefix, FIELD_SECRET_TOKEN),
-                message: "env value is not valid unicode".to_owned(),
-            });
-        }
-    };
-
-    Ok(Config {
-        url,
-        port,
-        log_level,
-        db_path,
-        feature_flags,
-        secret_value,
-    })
-}
-
-// ---------------------------------------------------------------------------
-// load_from_file
-// ---------------------------------------------------------------------------
-
-/// Loads a [`Config`] from a JSON file on disk.
-///
-/// The file is read in full and deserialised via `serde_json`. File
-/// I/O errors propagate as [`ConfigError::IoError`] (via the
-/// `#[from] std::io::Error` impl). Malformed JSON or type
-/// mismatches are mapped to [`ConfigError::ParseError`]. Missing
-/// required JSON keys are mapped to [`ConfigError::MissingField`]
-/// when serde_json's error classifies the failure as a data-shape
-/// problem (i.e. `is_data()`) and the message contains
-/// `"missing field"`.
-pub fn load_from_file(path: &Path) -> Result<Config> {
-    let bytes = std::fs::read(path)?;
-    parse_json_bytes(&bytes)
-}
-
-fn parse_json_bytes(bytes: &[u8]) -> Result<Config> {
-    let cfg: Config = serde_json::from_slice(bytes).map_err(|e| {
-        if e.is_data() {
-            // serde_json reports "missing field `name`" for absent
-            // required keys. Sniff the field name out of the message
-            // so consumers get a structured MissingField error.
-            let msg = e.to_string();
-            if let Some(field) = extract_missing_field_name(&msg) {
-                ConfigError::MissingField(field)
-            } else {
-                ConfigError::ParseError {
-                    field: "<json>".to_owned(),
-                    message: msg,
-                }
-            }
-        } else {
-            ConfigError::ParseError {
-                field: "<json>".to_owned(),
-                message: e.to_string(),
-            }
-        }
-    })?;
-    Ok(cfg)
-}
-
-/// Best-effort extraction of the missing-field name from a
-/// serde_json error message. serde_json produces messages of the
-/// form: `missing field \`name\` at line N column M`.
-fn extract_missing_field_name(msg: &str) -> Option<String> {
-    let marker = "missing field `";
-    let start = msg.find(marker)? + marker.len();
-    let rest = &msg[start..];
-    let end = rest.find('`')?;
-    Some(rest[..end].to_owned())
-}
-
-// ---------------------------------------------------------------------------
-// load_from_toml_file (v0.2.0)
-// ---------------------------------------------------------------------------
-
-/// Loads a [`Config`] from a TOML file on disk.
-///
-/// The file is read in full and deserialised via the `toml` crate
-/// (which is added as a dependency in v0.2.0). The deserialiser
-/// path uses the same `Config` struct, so the same `url/port/
-/// log_level/db_path/feature_flags` keys apply. File I/O errors
-/// propagate as [`ConfigError::IoError`]; malformed TOML or
-/// missing required keys are mapped to
-/// [`ConfigError::MissingField`] (for absent keys) or
-/// [`ConfigError::ParseError`] (for shape mismatches).
-///
-/// # Example
-///
-/// ```toml
-/// # config.toml
-/// url = "https://toml.example.com"
-/// port = 7070
-/// log_level = "info"
-/// db_path = "/var/lib/toml.db"
-/// feature_flags = ["alpha"]
-/// ```
-pub fn load_from_toml_file(path: &Path) -> Result<Config> {
-    let raw = std::fs::read_to_string(path)?;
-    let cfg: Config = toml::from_str(&raw).map_err(|e| {
-        // toml produces messages of the form:
-        //   "missing field `name`"
-        //   "invalid type: ..., expected ..."
-        let msg = e.to_string();
-        if let Some(field) = extract_missing_field_name(&msg) {
-            ConfigError::MissingField(field)
-        } else {
-            ConfigError::ParseError {
-                field: "<toml>".to_owned(),
-                message: msg,
-            }
-        }
-    })?;
-    Ok(cfg)
-}
-
-// ---------------------------------------------------------------------------
-// Config::merge + combine (v0.2.0)
-// ---------------------------------------------------------------------------
-
-impl Config {
-    /// Deep-merges `other` into `self`. Scalar fields (`url`,
-    /// `port`, `log_level`, `db_path`) are overwritten with
-    /// `other`'s value when `other`'s value is non-default; the
-    /// `feature_flags` lists are concatenated (deduplicated,
-    /// order-preserving, `self` first).
-    ///
-    /// "Non-default" for scalars means "non-empty" for `String`
-    /// and "non-zero" for `u16`. This mirrors the env-loader
-    /// semantics: a missing env var falls through to the file
-    /// value, so a `Config` freshly loaded from a file with the
-    /// builder's defaults is treated as a partial overlay.
-    ///
-    /// # Example
-    ///
-    /// ```
-    /// use pheno_config::ConfigBuilder;
-    ///
-    /// let mut base = ConfigBuilder::new()
-    ///     .url("https://base.example.com")
-    ///     .db_path("/var/lib/base.db")
-    ///     .feature_flag("alpha")
-    ///     .build()
-    ///     .expect("base");
-    /// let overlay = ConfigBuilder::new()
-    ///     .url("https://overlay.example.com")
-    ///     .db_path("/var/lib/overlay.db")
-    ///     .feature_flag("beta")
-    ///     .build()
-    ///     .expect("overlay");
-    /// base.merge(&overlay);
-    /// assert_eq!(base.url, "https://overlay.example.com");
-    /// assert_eq!(base.db_path, "/var/lib/overlay.db");
-    /// assert_eq!(
-    ///     base.feature_flags,
-    ///     vec!["alpha".to_owned(), "beta".to_owned()]
-    /// );
-    /// ```
-    pub fn merge(&mut self, other: &Config) {
-        if !other.url.is_empty() {
-            self.url.clone_from(&other.url);
-        }
-        if other.port != 0 {
-            self.port = other.port;
-        }
-        if !other.log_level.is_empty() {
-            self.log_level.clone_from(&other.log_level);
-        }
-        if !other.db_path.is_empty() {
-            self.db_path.clone_from(&other.db_path);
-        }
-        for flag in &other.feature_flags {
-            if !self.feature_flags.contains(flag) {
-                self.feature_flags.push(flag.clone());
-            }
-        }
-        // Secret overlay: take the env/file side if it carries one.
-        // The receiving side (`self`) keeps its original value when
-        // the overlay is `None`, mirroring the "fill in gaps, env
-        // wins" semantics of the other fields.
-        if other.secret_value.is_some() {
-            self.secret_value = other.secret_value.clone();
-        }
-    }
-}
-
-/// Loads a [`Config`] from a TOML file, then overlays env vars
-/// matching `<prefix>_*`. **File values fill in gaps; env vars
-/// override** when present. This is the canonical "12-factor" path:
-/// defaults live in `config.toml`; runtime overrides come from the
-/// environment.
-///
-/// Specifically: the file `Config` is loaded first, then for each
-/// env var matching `<prefix>_*`, the corresponding field is
-/// overwritten. Fields not set in env are kept from the file; this
-/// means env-only override of e.g. `PORT` works without re-stating
-/// `URL` and `DB_PATH`.
-///
-/// # Errors
-///
-/// - [`ConfigError::IoError`] if the file is unreadable.
-/// - [`ConfigError::ParseError`] for malformed TOML.
-/// - [`ConfigError::MissingField`] for absent required TOML
-///   keys (the env layer is the override, not the source of
-///   required fields, so the file MUST be self-sufficient).
-/// - [`ConfigError::ParseError`] from the env-loader overlay
-///   (e.g. invalid `<PREFIX>_PORT`).
-pub fn combine(file: &Path, env_prefix: &str) -> Result<Config> {
-    let mut file_cfg = load_from_toml_file(file)?;
-    let env_cfg = load_from_env_full(env_prefix)?;
-    file_cfg.merge(&env_cfg);
-    Ok(file_cfg)
-}
-
-/// Loads a [`Config`] from env vars matching `<prefix>_*`, but
-/// unlike [`load_from_env`] does NOT require `URL` or `DB_PATH` to
-/// be set — those fields default to empty strings, which the merge
-/// step then fills in from the file. This is the building block
-/// for [`combine`]'s "file is the source of truth for required
-/// fields; env is the override layer" semantics.
-fn load_from_env_full(prefix: &str) -> Result<Config> {
-    let url = env::var(env_name(prefix, FIELD_URL)).unwrap_or_default();
-    let port = match env::var(env_name(prefix, FIELD_PORT)) {
-        Ok(raw) => raw.parse::<u16>().map_err(|e| ConfigError::ParseError {
-            field: env_name(prefix, FIELD_PORT),
-            message: e.to_string(),
-        })?,
-        Err(env::VarError::NotPresent) => 0,
-        Err(env::VarError::NotUnicode(_)) => {
-            return Err(ConfigError::ParseError {
-                field: env_name(prefix, FIELD_PORT),
-                message: "env value is not valid unicode".to_owned(),
-            });
-        }
-    };
-    let log_level = env::var(env_name(prefix, FIELD_LOG_LEVEL)).unwrap_or_default();
-    let db_path = env::var(env_name(prefix, FIELD_DB_PATH)).unwrap_or_default();
-    let feature_flags = match env::var(env_name(prefix, FIELD_FEATURE_FLAGS)) {
-        Ok(raw) => parse_feature_flags(&raw),
-        Err(env::VarError::NotPresent) => Vec::new(),
-        Err(env::VarError::NotUnicode(_)) => {
-            return Err(ConfigError::ParseError {
-                field: env_name(prefix, FIELD_FEATURE_FLAGS),
-                message: "env value is not valid unicode".to_owned(),
-            });
-        }
-    };
-    let secret_value = match env::var(env_name(prefix, FIELD_SECRET_TOKEN)) {
-        Ok(raw) if !raw.is_empty() => Some(SecretBox::new(raw.into_boxed_str())),
-        Ok(_) => None,
-        Err(env::VarError::NotPresent) => None,
-        Err(env::VarError::NotUnicode(_)) => {
-            return Err(ConfigError::ParseError {
-                field: env_name(prefix, FIELD_SECRET_TOKEN),
-                message: "env value is not valid unicode".to_owned(),
-            });
-        }
-    };
-    Ok(Config {
-        url,
-        port,
-        log_level,
-        db_path,
-        feature_flags,
-        secret_value,
-    })
-}
-
-// ---------------------------------------------------------------------------
-// ConfigBuilder
-// ---------------------------------------------------------------------------
-
-impl Config {
-    /// Returns the redacted secret value, if one is configured.
-    ///
-    /// The returned [`SecretBox`] zeroizes its memory on drop and refuses
-    /// to format itself through `Display`/`Debug`. Use
-    /// [`SecretBox::expose_secret`] at the trust boundary (e.g. when
-    /// handing the value to a TLS or HTTP client) — never log the
-    /// result.
-    #[must_use]
-    pub fn secret_value(&self) -> Option<&SecretBox<str>> {
-        self.secret_value.as_ref()
-    }
-}
-
-/// Programmatic [`Config`] construction with sensible defaults.
-///
-/// Defaults:
-/// - `port = 8080`
-/// - `log_level = "info"`
-/// - `feature_flags = Vec::new()`
-/// - `url` and `db_path` are unset (required).
-///
-/// # Example
-///
-/// ```
-/// use pheno_config::ConfigBuilder;
-///
-/// let cfg = ConfigBuilder::new()
-///     .url("https://example.com")
-///     .db_path("/var/lib/app.db")
-///     .port(9090)
-///     .log_level("debug")
-///     .feature_flag("beta")
-///     .build()
-///     .expect("config");
-/// assert_eq!(cfg.port, 9090);
-/// assert_eq!(cfg.feature_flags, vec!["beta".to_string()]);
-/// ```
-#[derive(Debug, Clone)]
-pub struct ConfigBuilder {
-    url: Option<String>,
-    port: u16,
-    log_level: String,
-    db_path: Option<String>,
-    feature_flags: Vec<String>,
-    secret_value: Option<SecretBox<str>>,
-}
-
-impl Default for ConfigBuilder {
+impl Default for DriverConfig {
     fn default() -> Self {
-        Self::new()
+        Self {
+            firecracker_default_cpus: default_firecracker_cpus(),
+            firecracker_default_memory_bytes: default_firecracker_memory(),
+        }
     }
 }
 
-impl ConfigBuilder {
-    /// Default `port = 8080`, `log_level = "info"`,
-    /// `feature_flags = Vec::new()`. `url` and `db_path` are
-    /// `None` and must be set before [`Self::build`].
-    #[must_use]
-    pub fn new() -> Self {
-        Self {
-            url: None,
-            port: 8080,
-            log_level: String::from("info"),
-            db_path: None,
-            feature_flags: Vec::new(),
-            secret_value: None,
+const fn default_firecracker_cpus() -> u32 { 2 }
+const fn default_firecracker_memory() -> u64 { 2 * 1024 * 1024 * 1024 }
+
+// ---------------------------------------------------------------------------
+// NvmsConfig
+// ---------------------------------------------------------------------------
+
+pub mod nvms {
+    //! NVMS driver identification labels.
+
+    use serde::{Deserialize, Serialize};
+
+    /// Labels for the NVMS driver.
+    #[derive(Debug, Clone, Serialize, Deserialize)]
+    pub struct NvmsConfig {
+        /// Version string reported by `nvms_version()`.
+        #[serde(default = "default_version")]
+        pub version: String,
+
+        /// Platform info string reported by `nvms_platform_info()`.
+        #[serde(default = "default_platform")]
+        pub platform: String,
+    }
+
+    impl Default for NvmsConfig {
+        fn default() -> Self {
+            Self {
+                version: default_version(),
+                platform: default_platform(),
+            }
         }
     }
 
-    /// Sets the service base URL (required).
-    #[must_use]
-    pub fn url(mut self, url: impl Into<String>) -> Self {
-        self.url = Some(url.into());
-        self
+    fn default_version() -> String { "1.0.0".to_string() }
+    fn default_platform() -> String { format!("{}/{}", std::env::consts::OS, std::env::consts::ARCH) }
+}
+
+// ---------------------------------------------------------------------------
+// SandboxConfig
+// ---------------------------------------------------------------------------
+
+pub mod sandbox {
+    //! Sandbox resource defaults and constraints.
+
+    use serde::{Deserialize, Serialize};
+
+    /// Sandbox-level configuration.
+    #[derive(Debug, Clone, Serialize, Deserialize)]
+    pub struct SandboxConfig {
+        /// Maximum allowed length for a [`SandboxID`].
+        #[serde(default = "default_max_sandbox_id_len")]
+        pub max_sandbox_id_len: usize,
+
+        /// Estimated startup time in ms for a Wasm tier instance.
+        #[serde(default = "default_wasm_startup_ms")]
+        pub startup_ms_wasm: u32,
+
+        /// Estimated startup time in ms for a gVisor tier instance.
+        #[serde(default = "default_gvisor_startup_ms")]
+        pub startup_ms_gvisor: u32,
+
+        /// Estimated startup time in ms for a Firecracker tier instance.
+        #[serde(default = "default_firecracker_startup_ms")]
+        pub startup_ms_firecracker: u32,
     }
 
-    /// Sets the service listen port. Default `8080`.
-    #[must_use]
-    pub fn port(mut self, port: u16) -> Self {
-        self.port = port;
-        self
+    impl Default for SandboxConfig {
+        fn default() -> Self {
+            Self {
+                max_sandbox_id_len: default_max_sandbox_id_len(),
+                startup_ms_wasm: default_wasm_startup_ms(),
+                startup_ms_gvisor: default_gvisor_startup_ms(),
+                startup_ms_firecracker: default_firecracker_startup_ms(),
+            }
+        }
     }
 
-    /// Sets the tracing/log filter level. Default `"info"`.
-    #[must_use]
-    pub fn log_level(mut self, log_level: impl Into<String>) -> Self {
-        self.log_level = log_level.into();
-        self
+    const fn default_max_sandbox_id_len() -> usize { 128 }
+    const fn default_wasm_startup_ms() -> u32 { 1 }
+    const fn default_gvisor_startup_ms() -> u32 { 90 }
+    const fn default_firecracker_startup_ms() -> u32 { 125 }
+}
+
+// ---------------------------------------------------------------------------
+// PerfConfig
+// ---------------------------------------------------------------------------
+
+pub mod perf {
+    //! Performance simulation defaults (used by the in-process shim).
+
+    use serde::{Deserialize, Serialize};
+
+    /// Performance statistics defaults.
+    #[derive(Debug, Clone, Serialize, Deserialize)]
+    pub struct PerfConfig {
+        /// Simulated startup time in nanoseconds.
+        #[serde(default = "default_startup_ns")]
+        pub startup_time_ns: u64,
+
+        /// Simulated memory used in bytes.
+        #[serde(default = "default_memory_bytes")]
+        pub memory_used_bytes: u64,
+
+        /// Simulated GPU utilization (0.0 – 1.0).
+        #[serde(default = "default_gpu_utilization")]
+        pub gpu_utilization: f64,
     }
 
-    /// Sets the on-disk database path (required).
-    #[must_use]
-    pub fn db_path(mut self, db_path: impl Into<String>) -> Self {
-        self.db_path = Some(db_path.into());
-        self
+    impl Default for PerfConfig {
+        fn default() -> Self {
+            Self {
+                startup_time_ns: default_startup_ns(),
+                memory_used_bytes: default_memory_bytes(),
+                gpu_utilization: default_gpu_utilization(),
+            }
+        }
     }
 
-    /// Appends a single feature flag.
-    #[must_use]
-    pub fn feature_flag(mut self, flag: impl Into<String>) -> Self {
-        self.feature_flags.push(flag.into());
-        self
+    const fn default_startup_ns() -> u64 { 1_000_000 }
+    const fn default_memory_bytes() -> u64 { 64 * 1024 * 1024 }
+    const fn default_gpu_utilization() -> f64 { 0.0 }
+}
+
+// ---------------------------------------------------------------------------
+// GpuConfig
+// ---------------------------------------------------------------------------
+
+pub mod gpu {
+    //! GPU device defaults.
+
+    use serde::{Deserialize, Serialize};
+
+    /// GPU device configuration defaults.
+    #[derive(Debug, Clone, Serialize, Deserialize)]
+    pub struct GpuConfig {
+        /// Simulated GPU memory in bytes.
+        #[serde(default = "default_gpu_memory_bytes")]
+        pub memory_bytes: u64,
+
+        /// Number of compute units / CUDA cores.
+        #[serde(default = "default_compute_units")]
+        pub compute_units: u32,
     }
 
-    /// Replaces the entire feature-flag list. Useful for
-    /// propagating flags from a higher-level config source.
-    #[must_use]
-    pub fn feature_flags(mut self, flags: impl IntoIterator<Item = impl Into<String>>) -> Self {
-        self.feature_flags = flags.into_iter().map(Into::into).collect();
-        self
+    impl Default for GpuConfig {
+        fn default() -> Self {
+            Self {
+                memory_bytes: default_gpu_memory_bytes(),
+                compute_units: default_compute_units(),
+            }
+        }
     }
 
-    /// Wraps `value` in a redacting [`SecretBox`] and stores it.
+    const fn default_gpu_memory_bytes() -> u64 { 8 * 1024 * 1024 * 1024 }
+    const fn default_compute_units() -> u32 { 8 }
+}
+
+// ---------------------------------------------------------------------------
+// Combined defaults
+// ---------------------------------------------------------------------------
+
+impl Default for PhenoConfig {
+    fn default() -> Self {
+        Self {
+            nvms: NvmsConfig::default(),
+            sandbox: SandboxConfig::default(),
+            perf: PerfConfig::default(),
+            gpu: GpuConfig::default(),
+            driver: DriverConfig::default(),
+        }
+    }
+}
+
+impl PhenoConfig {
+    /// Load configuration using figment's layered providers:
     ///
-    /// The secret is zeroized on drop and refused by `Debug`/`Display`
-    /// formatters, so it cannot leak through accidental logging.
-    /// Callers that actually need the plaintext should call
-    /// [`Config::secret_value`] followed by
-    /// [`SecretBox::expose_secret`] at the trust boundary.
-    #[must_use]
-    pub fn secret_value(mut self, value: impl Into<String>) -> Self {
-        self.secret_value = Some(SecretBox::new(value.into().into_boxed_str()));
-        self
-    }
-
-    /// Materialises a [`Config`].
+    /// 1. Hard-coded Rust defaults (via [`Serialized`])
+    /// 2. Optional `PhenoCompose.toml` in the current directory
+    /// 3. Environment variables prefixed with `PHENO_`
+    ///
+    /// Later providers override earlier ones.
     ///
     /// # Errors
     ///
-    /// Returns [`ConfigError::MissingField`] for any unset required
-    /// field (`URL` or `DB_PATH`).
-    pub fn build(self) -> Result<Config> {
-        let url = self
-            .url
-            .ok_or_else(|| ConfigError::MissingField(FIELD_URL.to_owned()))?;
-        let db_path = self
-            .db_path
-            .ok_or_else(|| ConfigError::MissingField(FIELD_DB_PATH.to_owned()))?;
-        Ok(Config {
-            url,
-            port: self.port,
-            log_level: self.log_level,
-            db_path,
-            feature_flags: self.feature_flags,
-            secret_value: self.secret_value,
-        })
+    /// Returns [`figment::Error`] if the TOML file exists but is
+    /// malformed, or if env-var parsing fails.
+    pub fn load() -> Result<Self, figment::Error> {
+        Figment::new()
+            .merge(Serialized::defaults(PhenoConfig::default()))
+            .merge(Toml::file("PhenoCompose.toml"))
+            .merge(Env::prefixed("PHENO_").global())
+            .extract()
+    }
+
+    /// Load configuration, panicking on load errors.
+    ///
+    /// Convenience for `init` / `main` contexts where a missing
+    /// config file is a hard failure.
+    pub fn load_or_panic() -> Self {
+        Self::load().expect("PhenoConfig: failed to load (check PhenoCompose.toml or PHENO_* env vars)")
+    }
+
+    /// Return only the parsed defaults (ignores file and env
+    /// sources).  Useful in tests.
+    pub fn defaults_only() -> Self {
+        PhenoConfig::default()
     }
 }
 
 // ---------------------------------------------------------------------------
-// Tests live in `tests/config_test.rs` (integration tests against the
-// public API). The six L3 #48 spec-named tests are there verbatim:
-// `load_from_env_with_prefix_filters_unrelated_vars`,
-// `load_from_env_defaults_port_8080`, `load_from_file_valid_json`,
-// `load_from_file_missing_file_returns_io_error`,
-// `builder_sets_defaults`, and `missing_required_field_returns_missing_field_error`.
+// Builder-style override
 // ---------------------------------------------------------------------------
+
+impl PhenoConfig {
+    /// Replace the [`NvmsConfig`] section.
+    #[must_use]
+    pub fn with_nvms(mut self, nvms: NvmsConfig) -> Self {
+        self.nvms = nvms;
+        self
+    }
+
+    /// Replace the [`SandboxConfig`] section.
+    #[must_use]
+    pub fn with_sandbox(mut self, sandbox: SandboxConfig) -> Self {
+        self.sandbox = sandbox;
+        self
+    }
+
+    /// Replace the [`PerfConfig`] section.
+    #[must_use]
+    pub fn with_perf(mut self, perf: PerfConfig) -> Self {
+        self.perf = perf;
+        self
+    }
+
+    /// Replace the [`GpuConfig`] section.
+    #[must_use]
+    pub fn with_gpu(mut self, gpu: GpuConfig) -> Self {
+        self.gpu = gpu;
+        self
+    }
+
+    /// Replace the [`DriverConfig`] section.
+    #[must_use]
+    pub fn with_driver(mut self, driver: DriverConfig) -> Self {
+        self.driver = driver;
+        self
+    }
+}
+
+// ---------------------------------------------------------------------------
+// Tests
+// ---------------------------------------------------------------------------
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    // -- Defaults -----------------------------------------------------------
+
+    #[test]
+    fn default_config_has_sane_nvms_values() {
+        let cfg = PhenoConfig::default();
+        assert!(!cfg.nvms.version.is_empty(), "version must not be empty");
+        assert!(!cfg.nvms.platform.is_empty(), "platform must not be empty");
+        assert!(cfg.nvms.platform.contains('/'), "platform should contain '/'");
+    }
+
+    #[test]
+    fn default_config_has_sane_sandbox_values() {
+        let cfg = PhenoConfig::default();
+        assert_eq!(cfg.sandbox.max_sandbox_id_len, 128);
+        assert_eq!(cfg.sandbox.startup_ms_wasm, 1);
+        assert_eq!(cfg.sandbox.startup_ms_gvisor, 90);
+        assert_eq!(cfg.sandbox.startup_ms_firecracker, 125);
+    }
+
+    #[test]
+    fn default_config_has_sane_driver_values() {
+        let cfg = PhenoConfig::default();
+        assert_eq!(cfg.driver.firecracker_default_cpus, 2);
+        assert_eq!(cfg.driver.firecracker_default_memory_bytes, 2 * 1024 * 1024 * 1024);
+    }
+
+    #[test]
+    fn default_config_has_sane_perf_values() {
+        let cfg = PhenoConfig::default();
+        assert_eq!(cfg.perf.startup_time_ns, 1_000_000);
+        assert_eq!(cfg.perf.memory_used_bytes, 64 * 1024 * 1024);
+        assert!((cfg.perf.gpu_utilization - 0.0).abs() < f64::EPSILON);
+    }
+
+    #[test]
+    fn default_config_has_sane_gpu_values() {
+        let cfg = PhenoConfig::default();
+        assert_eq!(cfg.gpu.memory_bytes, 8 * 1024 * 1024 * 1024);
+        assert_eq!(cfg.gpu.compute_units, 8);
+    }
+
+    // -- Load without file --------------------------------------------------
+
+    #[test]
+    fn load_works_without_config_file() {
+        // When no PhenoCompose.toml is present, defaults should be used.
+        let cfg = PhenoConfig::load().expect("load should succeed without file");
+        assert_eq!(cfg.sandbox.max_sandbox_id_len, 128);
+    }
+
+    // -- Builder overrides --------------------------------------------------
+
+    #[test]
+    fn builder_overrides_sandbox() {
+        let sb = sandbox::SandboxConfig {
+            max_sandbox_id_len: 64,
+            ..Default::default()
+        };
+        let cfg = PhenoConfig::default().with_sandbox(sb);
+        assert_eq!(cfg.sandbox.max_sandbox_id_len, 64);
+        assert_eq!(cfg.sandbox.startup_ms_wasm, 1); // unchanged
+    }
+
+    #[test]
+    fn builder_overrides_driver() {
+        let drv = DriverConfig {
+            firecracker_default_cpus: 4,
+            firecracker_default_memory_bytes: 4 * 1024 * 1024 * 1024,
+        };
+        let cfg = PhenoConfig::default().with_driver(drv);
+        assert_eq!(cfg.driver.firecracker_default_cpus, 4);
+        assert_eq!(cfg.driver.firecracker_default_memory_bytes, 4 * 1024 * 1024 * 1024);
+    }
+
+    // -- Serialization round-trip ------------------------------------------
+
+    #[test]
+    fn default_config_round_trips_via_serde() {
+        let cfg = PhenoConfig::default();
+        let json = serde_json::to_string(&cfg).expect("serialize");
+        let deserialized: PhenoConfig = serde_json::from_str(&json).expect("deserialize");
+        assert_eq!(deserialized.sandbox.max_sandbox_id_len, cfg.sandbox.max_sandbox_id_len);
+        assert_eq!(
+            deserialized.driver.firecracker_default_cpus,
+            cfg.driver.firecracker_default_cpus,
+        );
+    }
+}

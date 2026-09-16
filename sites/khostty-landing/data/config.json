@@ -1,0 +1,24 @@
+{
+  "name": "Khostty",
+  "slug": "khostty",
+  "tagline": "Ghostty terminal fork: GPU-accelerated cross-platform terminal emulator.",
+  "domain": "khostty.phenotype.space",
+  "color": "#dc2626",
+  "description": "Ghostty terminal fork: GPU-accelerated cross-platform terminal emulator.",
+  "tier": 2,
+  "repo": "KooshaPari/Khostty",
+  "language": "Rust / Zig",
+  "license": "MIT",
+  "status": "active",
+  "features": [
+    "GPU rendering",
+    "Cross-platform",
+    "Terminal multiplexer",
+    "Custom shaders"
+  ],
+  "links": {
+    "github": "https://github.com/KooshaPari/Khostty",
+    "docs": "https://khostty.phenotype.space/docs",
+    "releases": "https://github.com/KooshaPari/Khostty/releases"
+  }
+}

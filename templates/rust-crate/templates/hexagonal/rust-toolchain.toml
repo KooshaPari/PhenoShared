@@ -1,0 +1,5 @@
+# Migrated from KooshaPari/Apisync (archived 2026-06-19) — original commit d981353
+
+[toolchain]
+channel = "nightly"
+components = ["rustfmt", "clippy", "rust-docs"]

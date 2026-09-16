@@ -1,125 +1,85 @@
 [workspace]
 resolver = "2"
-exclude = ["crates/forge_daemon"]
+
+# =============================================================================
+# phenotype-infra — Compute/Infra Consolidation Monorepo
+# =============================================================================
+#
+# Members will be added as crates are absorbed:
+#   - pheno-config (shared configuration)
+#
+# Archived duplicate crates (per REP-080, ADR-015):
+#   - nanovms-core → canonical: nanovms repo
+#   - nvms-ffi     → canonical: PhenoCompose/bindings/rust-ffi
+#   - pheno-compose → canonical: PhenoCompose/pheno-compose-driver
+#
+# Tooling sub-projects live under tools/ and are NOT workspace members
+# (they use their own build systems).
+# =============================================================================
+
 members = [
-    "crates/substrate",
-    "crates/substrate-core",
-    "crates/engine-spec",
-    "crates/engine-forge",
-    "crates/transport-file",
-    "crates/store-file",
-    "crates/substrate-app",
-    "crates/driver-cli",
-    "crates/driver-http",
-    "crates/driver-argv",
-    "crates/driver-mcp",
-    "crates/gateway",
-    "crates/arch-test",
-    "crates/omniroute-adapter",
-    "crates/routing-phenotype-router",
-    "tools/fake-forge",
-    "tools/fake-codex-cloud",
-    "crates/a2a",
-    "crates/store-sqlite",
-    "crates/supervisor",
-    "crates/wave",
-    "crates/engine-conformance",
-    "crates/engine-codex",
-    "crates/engine-claude",
-    "crates/engine-a2a",
-    "crates/engine-agentapi",
-    "crates/cliproxy-adapter",
-    "crates/substrate-trace",
-    "crates/substrate-schedule",
-    "crates/substrate-dag",
-    "crates/substrate-skills",
-    "crates/substrate-memory",
-    "crates/runtime-process",
-    "crates/file-watcher",
-    "crates/phenotype-mcp",
-    "crates/context-budget",
-    "crates/wave-3lane-tests",
-    "crates/dispatch-bridge",
-    "crates/cloud-dispatch-conformance",
-    "crates/cloud-cursor",
-    "crates/cloud-kilo",
-    "crates/cloud-codex",
-    "crates/substrate-serve-lock",
-    "crates/substrate-tui",
-    "crates/gateway-tools",
-    "crates/orchestrator",
+    # Archived: duplicate crates moved to _archived/ per REP-080.
+    # Canonical repos: nanovms (Go), PhenoCompose (Rust), BytePort (Go+Svelte).
+    # "crates/nanovms-core" — archived → _archived/nanovms-core
+    # "crates/nvms-ffi"     — archived → _archived/nvms-ffi
+    # "crates/pheno-compose" — archived → _archived/pheno-compose
+    "crates/pheno-config",   # Shared configuration
+    "tests",                 # Cross-crate integration tests
+    # infrakit crates (absorbed from PhenoDevOps)
+    "infrakit/crates/phenotype-async-traits",
+    "infrakit/crates/phenotype-cache-adapter",
+    "infrakit/crates/phenotype-contract",
+    "infrakit/crates/phenotype-contracts",
+    "infrakit/crates/phenotype-cost-core",
+    "infrakit/crates/phenotype-crypto",
+    "infrakit/crates/phenotype-error-core",
+    "infrakit/crates/phenotype-error-macros",
+    "infrakit/crates/phenotype-errors",
+    "infrakit/crates/phenotype-event-sourcing",
+    "infrakit/crates/phenotype-git-core",
+    "infrakit/crates/phenotype-health",
+    "infrakit/crates/phenotype-http-client-core",
+    "infrakit/crates/phenotype-iter",
+    "infrakit/crates/phenotype-logging",
+    "infrakit/crates/phenotype-macros",
+    "infrakit/crates/phenotype-mcp",
+    "infrakit/crates/phenotype-observability",
+    "infrakit/crates/phenotype-policy-engine",
+    "infrakit/crates/phenotype-port-traits",
+    "infrakit/crates/phenotype-ports-canonical",
+    "infrakit/crates/phenotype-process",
+    "infrakit/crates/phenotype-shared-config",
+    "infrakit/crates/phenotype-state-machine",
+    "infrakit/crates/phenotype-string",
+    "infrakit/crates/phenotype-telemetry",
+    "infrakit/crates/phenotype-test-infra",
+    "infrakit/crates/phenotype-validation",
 ]
+
 [workspace.package]
-version = "0.3.10"
+version = "0.1.0"
 edition = "2021"
+rust-version = "1.75"
 license = "MIT OR Apache-2.0"
-repository = "https://github.com/KooshaPari/substrate"
-rust-version = "1.80"
+repository = "https://github.com/KooshaPari/phenotype-infra"
+description = "Phenotype Compute/Infra Consolidation Monorepo"
+authors = ["kooshapari"]
+publish = false
 
 [workspace.dependencies]
-substrate-core = { version = "0.3.8", path = "crates/substrate-core" }
-substrate-serve-lock = { version = "0.3.8", path = "crates/substrate-serve-lock" }
-substrate-trace = { version = "0.3.8", path = "crates/substrate-trace" }
-substrate-app = { version = "0.3.8", path = "crates/substrate-app" }
-engine-spec = { version = "0.3.8", path = "crates/engine-spec" }
-a2a = { package = "substrate-a2a", version = "0.3.8", path = "crates/a2a" }
-store-sqlite = { version = "0.3.8", path = "crates/store-sqlite" }
-engine-forge = { version = "0.3.8", path = "crates/engine-forge" }
-forge_daemon = { version = "0.2.0", path = "crates/forge_daemon" }
-serde = { version = "1.0", features = ["derive"] }
-serde_json = "1.0"
-thiserror = "2.0"
-uuid = { version = "1.11", features = ["v4", "serde"] }
 async-trait = "0.1"
-tokio = { version = "1.42", features = ["rt", "rt-multi-thread", "macros", "process", "io-util", "sync", "time", "signal"] }
-regex = "1.11"
-anyhow = "1.0"
-clap = { version = "4.5", features = ["derive", "env"] }
-toml = "1.1"
-
-# --- Phenotype shared infrakit crates (from PhenoInfra) ---
-phenotype-crypto = { git = "https://github.com/KooshaPari/PhenoInfra.git", rev = "e001322" }
-phenotype-health = { git = "https://github.com/KooshaPari/PhenoInfra.git", rev = "e001322" }
-phenotype-observability = { git = "https://github.com/KooshaPari/PhenoInfra.git", rev = "e001322" }
-phenotype-policy-engine = { git = "https://github.com/KooshaPari/PhenoInfra.git", rev = "e001322" }
-phenotype-mcp = { git = "https://github.com/KooshaPari/PhenoInfra.git", rev = "e001322" }
-tempfile = "3.14"
-assert_cmd = "2.0"
-predicates = "3.1"
-dotenvy = "0.15"
+thiserror = "2"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+bindgen = "0.68"
+figment = { version = "0.10", features = ["toml", "env"] }
+anyhow = "1"
 chrono = { version = "0.4", features = ["serde"] }
-rusqlite = { version = "0.40", features = ["bundled"] }
-reqwest = { version = "0.12", default-features = false, features = ["json", "rustls-tls"] }
-croner = "3.0"
-petgraph = "0.8"
-strsim = "0.11"
-command-group = { version = "5.0", features = ["with-tokio"] }
-notify-debouncer-mini = "0.7"
-axum = "0.8"
-tower = "0.5"
-tower-http = { version = "0.7", features = ["trace"] }
-http-body-util = "0.1"
-futures = "0.3"
-futures-core = "0.3"
-parking_lot = "0.12"
-tokio-stream = "0.1"
 tracing = "0.1"
-tracing-subscriber = { version = "0.3", features = ["env-filter", "json"] }
-tracing-opentelemetry = "0.25"
-opentelemetry = "0.32"
-opentelemetry_sdk = { version = "0.32", features = ["rt-tokio"] }
-opentelemetry-otlp = { version = "0.17", features = ["tonic"] }
-fs2 = "0.4"
-libc = "0.2"
-criterion = { version = "0.5", features = ["html_reports"] }
-# Use pheno-otel from PhenoObservability v0.1.0 (ADR-037 substrate).
-# Git + tag + subdirectory form pins the crate to a known-good release
-# so all consumers across the pheno-* fleet see the same OTLP wire-format
-# export surface. See https://github.com/KooshaPari/PhenoObservability/releases/tag/v0.1.0
-pheno-otel = { git = "https://github.com/KooshaPari/PhenoObservability", tag = "v0.1.0", subdirectory = "pheno-otel" }
-
-[profile.release]
-opt-level = "z"
-lto = true
-codegen-units = 1
-strip = true
+tracing-subscriber = "0.3"
+regex = "1"
+tokio = { version = "1", features = ["full"] }
+futures = "0.3"
+zstd = "0.13"
+unicode-normalization = "0.1"
+parking_lot = "0.12"

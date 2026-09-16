@@ -1,0 +1,24 @@
+{
+  "name": "PhenoMLX",
+  "slug": "phenomlx",
+  "tagline": "MLX inference engine: Rust performance cores, multi-backend routing, and evaluation tooling.",
+  "domain": "phenomlx.phenotype.space",
+  "color": "#a855f7",
+  "description": "MLX inference engine: Rust performance cores, multi-backend routing, and evaluation tooling.",
+  "tier": 2,
+  "repo": "KooshaPari/PhenoMLX",
+  "language": "Rust / Python",
+  "license": "MIT",
+  "status": "active",
+  "features": [
+    "MLX backend",
+    "Multi-backend routing",
+    "Eval harness",
+    "Quantization support"
+  ],
+  "links": {
+    "github": "https://github.com/KooshaPari/PhenoMLX",
+    "docs": "https://phenomlx.phenotype.space/docs",
+    "releases": "https://github.com/KooshaPari/PhenoMLX/releases"
+  }
+}

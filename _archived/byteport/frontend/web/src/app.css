@@ -1,0 +1,98 @@
+@config '../tailwind.config.ts';
+@import 'tailwindcss';
+@layer base {
+	:root {
+		--background: #0e1514;
+		--foreground: #dde4e2;
+
+		--muted: #101418;
+		--muted-foreground: #bec9c7;
+
+		--popover: #0e1514;
+		--popover-foreground: #dde4e2;
+
+		--card: #0e1514;
+		--card-foreground: #dde4e2;
+
+		--border: #3f4948;
+		--input: #3f4948;
+
+		--primary: #80d5cf;
+		--primary-foreground: #003734;
+
+		--secondary: #83d2e3;
+		--secondary-foreground: #00363e;
+
+		--accent: #9bcbfb;
+		--accent-foreground: #003353;
+
+		--destructive: #ffb4ab;
+		--destructive-foreground: #690005;
+
+		--ring: #889391;
+
+		--radius: 0.5rem;
+
+		--primary-container: #00504c;
+		--on-primary-container: #9df1eb;
+
+		--secondary-container: #004e5a;
+		--on-secondary-container: #a2eeff;
+
+		--tertiary: #9bcbfb;
+		--on-tertiary: #003353;
+		--tertiary-container: #0e4a73;
+		--on-tertiary-container: #cee5ff;
+
+		--error: #ffb4ab;
+		--on-error: #690005;
+
+		--surface: #101418;
+		--on-surface: #e1e2e8;
+
+		--surface-variant: #3f4948;
+		--on-surface-variant: #bec9c7;
+
+		--outline: #889391;
+	}
+
+	.dark {
+		--background: #101418;
+		--foreground: #e1e2e8;
+
+		--muted: #3f4948;
+		--muted-foreground: #bec9c7;
+
+		--popover: #101418;
+		--popover-foreground: #e1e2e8;
+
+		--card: #101418;
+		--card-foreground: #e1e2e8;
+
+		--border: #3f4948;
+		--input: #3f4948;
+
+		--primary: #80d5cf;
+		--primary-foreground: #003734;
+
+		--secondary: #83d2e3;
+		--secondary-foreground: #00363e;
+
+		--accent: #9bcbfb;
+		--accent-foreground: #003353;
+
+		--destructive: #ffb4ab;
+		--destructive-foreground: #690005;
+
+		--ring: #889391;
+	}
+}
+
+@layer base {
+	* {
+		@apply border-border;
+	}
+	body {
+		@apply bg-background text-foreground;
+	}
+}

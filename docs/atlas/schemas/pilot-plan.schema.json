@@ -1,0 +1,118 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:phenotype:atlas-plan:1:pilot-plan",
+  "title": "pilot-plan",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[A-Za-z][A-Za-z0-9_.:-]*$",
+      "minLength": 2
+    },
+    "subject_id": {
+      "type": "string",
+      "pattern": "^[A-Za-z][A-Za-z0-9_.:-]*$",
+      "minLength": 2
+    },
+    "state": {
+      "type": "string",
+      "enum": [
+        "planned",
+        "running",
+        "completed",
+        "inconclusive",
+        "blocked",
+        "synthetic"
+      ]
+    },
+    "hypothesis": {
+      "type": "string",
+      "minLength": 1
+    },
+    "baseline_ids": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 1
+    },
+    "primary_metrics": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 1
+    },
+    "critical_invariants": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 1
+    },
+    "modes": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "controlled-replay",
+          "matched-live",
+          "idiomatic-stack"
+        ]
+      },
+      "minItems": 1
+    },
+    "fixture_ids": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 0
+    },
+    "result_ids": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 0
+    },
+    "winner": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "sources": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 0
+    },
+    "synthetic": {
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "id",
+    "subject_id",
+    "state",
+    "hypothesis",
+    "baseline_ids",
+    "primary_metrics",
+    "critical_invariants",
+    "modes",
+    "fixture_ids",
+    "result_ids",
+    "winner",
+    "sources",
+    "synthetic"
+  ],
+  "additionalProperties": false
+}

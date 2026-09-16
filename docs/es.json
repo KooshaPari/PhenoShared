@@ -1,0 +1,22 @@
+{
+  "docTitle": "PhenoDocs",
+  "docDescription": "Centro de federación para documentación de múltiples proyectos.",
+  "skipLink": "Saltar al contenido",
+  "pageAnnounceTemplate": "Navegado a: {title}",
+  "nav": {
+    "guide": "Guía",
+    "architecture": "Arquitectura",
+    "api": "API",
+    "governance": "Gobernanza",
+    "roadmap": "Hoja de ruta",
+    "views": "Vistas del espacio de trabajo"
+  },
+  "footer": {
+    "message": "Publicado bajo la licencia MIT.",
+    "copyright": "Copyright © 2024 Kush Team"
+  },
+  "editLink": "Editar esta página en GitHub",
+  "outline": "En esta página",
+  "codeCopy": "Copiar código",
+  "codeCopied": "Copiado al portapapeles"
+}

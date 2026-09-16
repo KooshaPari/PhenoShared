@@ -1,0 +1,140 @@
+# Base configuration
+# environments/base.yaml
+
+version: "1.0"
+
+project:
+  name: myapp
+  tags:
+    app: myapp
+    team: platform
+
+providers:
+  render:
+    auth:
+      type: api_key
+      key_env: RENDER_API_KEY
+
+  supabase:
+    auth:
+      type: api_key
+      key_env: SUPABASE_KEY
+
+resources:
+  - name: api-server
+    type: compute.container
+    provider: render
+    spec:
+      runtime: docker
+      dockerfile: ./Dockerfile
+      port: 8080
+      env:
+        NODE_ENV: ${environment}
+        DATABASE_URL: ${resources.postgres.connection_string}
+
+  - name: postgres
+    type: database.serverless
+    provider: supabase
+    spec:
+      engine: postgresql
+      version: "15"
+
+---
+# Development environment overrides
+# environments/dev.yaml
+
+environment: development
+
+project:
+  region: us-west-2
+
+resources:
+  - name: api-server
+    spec:
+      scale:
+        min: 1
+        max: 2
+      instance_type: small
+      env:
+        LOG_LEVEL: debug
+
+  - name: postgres
+    spec:
+      storage: 5GB
+      backup:
+        enabled: false
+
+---
+# Staging environment overrides
+# environments/staging.yaml
+
+environment: staging
+
+project:
+  region: us-west-2
+
+resources:
+  - name: api-server
+    spec:
+      scale:
+        min: 2
+        max: 5
+      instance_type: medium
+      env:
+        LOG_LEVEL: info
+
+  - name: postgres
+    spec:
+      storage: 10GB
+      backup:
+        enabled: true
+        schedule: "0 3 * * *"
+        retention_days: 7
+
+---
+# Production environment overrides
+# environments/prod.yaml
+
+environment: production
+
+project:
+  region: us-west-2
+
+resources:
+  - name: api-server
+    spec:
+      scale:
+        min: 5
+        max: 20
+      instance_type: large
+      regions: [us-west-2, us-east-1, eu-west-1]  # Multi-region
+      env:
+        LOG_LEVEL: warn
+      monitoring:
+        enabled: true
+        alerts:
+          - metric: cpu_usage
+            condition: ">"
+            threshold: 80
+            duration: 300
+            severity: warning
+          - metric: error_rate
+            condition: ">"
+            threshold: 5
+            duration: 60
+            severity: critical
+
+  - name: postgres
+    spec:
+      storage: 50GB
+      backup:
+        enabled: true
+        schedule: "0 2 * * *"
+        retention_days: 30
+        point_in_time_recovery: true
+    deploy:
+      health_check:
+        type: tcp
+        port: 5432
+        interval: 30s
+        timeout: 5s

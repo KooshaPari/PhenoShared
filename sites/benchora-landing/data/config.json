@@ -1,0 +1,25 @@
+{
+  "name": "Benchora",
+  "slug": "benchora",
+  "tagline": "Performance Benchmarking Framework",
+  "domain": "benchora.phenotype.space",
+  "description": "Rust-native benchmarking and performance testing. Statistical rigor, regression detection, CI integration.",
+  "color": "#7ebab5",
+  "tier": 2,
+  "repo": "KooshaPari/Benchora",
+  "language": "Rust",
+  "license": "MIT",
+  "status": "active",
+  "features": [
+    "Rust Native",
+    "Statistical Analysis",
+    "Regression Detection",
+    "CI Integration",
+    "Custom Reporters"
+  ],
+  "links": {
+    "github": "https://github.com/KooshaPari/Benchora",
+    "docs": "https://benchora.phenotype.space/docs",
+    "releases": "https://github.com/KooshaPari/Benchora/releases"
+  }
+}
