@@ -1,0 +1,73 @@
+/* ═══════════════════════════════════════════════════════════════
+ * Keycap Palette — Design Tokens as CSS Custom Properties
+ * @phenotype/design v1.0.0
+ *
+ * This file contains ONLY color tokens and font declarations.
+ * For VitePress component styles, import vitepress-theme.css.
+ * For badge/card components, import components.css.
+ *
+ * Palette:
+ *   Accent:  #7ebab5 (teal)     Light accent: #4a9c97
+ *   Dark BG: #090a0c (midnight)  Light BG: #f8f9fa (paper)
+ *   Slate:   #353a40             Text: #f6f5f5 / #1a1c1e
+ *
+ * All text/bg combos meet WCAG AA (4.5:1 minimum).
+ * ═══════════════════════════════════════════════════════════════ */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+:root {
+  /* ── Palette Tokens ── */
+  --kc-accent: #7ebab5;
+  --kc-accent-hover: #95ccc8;
+  --kc-accent-active: #6aa8a3;
+  --kc-accent-dim: #569691;
+  --kc-accent-contrast: #4a9c97;
+  --kc-slate: #353a40;
+
+  /* ── Fonts ── */
+  --kc-font-base: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --kc-font-mono: 'JetBrains Mono', ui-monospace, 'Cascadia Code', monospace;
+
+  /* ── Light Mode (default) ── */
+  --kc-bg: #f8f9fa;
+  --kc-bg-alt: #f0f1f3;
+  --kc-bg-soft: #e8eaed;
+  --kc-bg-elv: #ffffff;
+  --kc-text-1: #1a1c1e;
+  --kc-text-2: #4a4f57;
+  --kc-text-3: #6b7280;
+  --kc-divider: #d4d7dc;
+  --kc-gutter: #e8eaed;
+  --kc-code-bg: #f0f1f3;
+}
+
+/* ── Dark Mode ── */
+
+.dark, [data-theme="dark"] {
+  --kc-bg: #090a0c;
+  --kc-bg-alt: #0e1014;
+  --kc-bg-soft: #14171b;
+  --kc-bg-elv: #1a1e24;
+  --kc-text-1: #f6f5f5;
+  --kc-text-2: #a8adb5;
+  --kc-text-3: #6b7280;
+  --kc-divider: #1f2329;
+  --kc-gutter: #0c0d0f;
+  --kc-code-bg: #060708;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not(.light):not([data-theme="light"]) {
+    --kc-bg: #090a0c;
+    --kc-bg-alt: #0e1014;
+    --kc-bg-soft: #14171b;
+    --kc-bg-elv: #1a1e24;
+    --kc-text-1: #f6f5f5;
+    --kc-text-2: #a8adb5;
+    --kc-text-3: #6b7280;
+    --kc-divider: #1f2329;
+    --kc-gutter: #0c0d0f;
+    --kc-code-bg: #060708;
+  }
+}

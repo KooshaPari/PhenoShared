@@ -1,0 +1,51 @@
+---
+export interface Props {
+  text: string;
+  href: string;
+  secondary?: {
+    text: string;
+    href: string;
+  };
+}
+
+const { text, href, secondary } = Astro.props;
+---
+
+<section class="cta">
+  <div class="container">
+    <a href={href} class="primary">{text}</a>
+    {secondary && <a href={secondary.href} class="secondary">{secondary.text}</a>}
+  </div>
+</section>
+
+<style>
+  .cta {
+    padding: 3rem 1rem;
+    text-align: center;
+  }
+  .container {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  .primary {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    background: var(--pheno-primary, #0ea5e9);
+    color: white;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    text-decoration: none;
+    margin: 0.5rem;
+  }
+  .secondary {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    background: transparent;
+    color: var(--pheno-primary, #0ea5e9);
+    border: 2px solid var(--pheno-primary, #0ea5e9);
+    border-radius: 0.5rem;
+    font-weight: 600;
+    text-decoration: none;
+    margin: 0.5rem;
+  }
+</style>

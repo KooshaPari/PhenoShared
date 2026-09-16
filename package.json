@@ -1,0 +1,75 @@
+{
+  "name": "@phenotype/design",
+  "version": "2.0.1",
+  "workspaces": [
+    "packages/*"
+  ],
+  "description": "Keycap palette — shared design tokens, VitePress theme, glass recipes, and style guide for Phenotype projects",
+  "type": "module",
+  "license": "MIT",
+  "sideEffects": ["**/*.css"],
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./css/keycap-palette.css": "./css/keycap-palette.css",
+    "./css/vitepress-theme.css": "./css/vitepress-theme.css",
+    "./css/components.css": "./css/components.css",
+    "./css/glass.css": "./css/glass.css",
+    "./tokens": "./dist/tokens.js",
+    "./tokens/keycap.json": "./tokens/keycap.json",
+    "./vitepress": "./dist/vitepress.js"
+  },
+  "files": [
+    "css/",
+    "dist/",
+    "tokens/",
+    "docs/guide/glass-recipe.md"
+  ],
+  "scripts": {
+    "build": "tsc && cp -R css dist/css",
+    "dev": "vitepress dev docs",
+    "docs:build": "vitepress build docs",
+    "docs:preview": "vitepress preview docs",
+    "test": "vitest run",
+    "test:deno": "deno test -A docs/tests",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "lint": "oxlint",
+    "typecheck": "tsc --noEmit",
+    "format": "oxfmt --write ."
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@vitest/coverage-v8": "^4.1.2",
+    "oxlint": "latest",
+    "typescript": "latest",
+    "vitepress": "latest",
+    "vitest": "^4.1.2",
+    "vue": "latest"
+  },
+  "overrides": {
+    "brace-expansion": "5.0.5",
+    "esbuild": "0.28.1",
+    "postcss": "^8.5.10",
+    "vite": "^6.4.3"
+  },
+  "keywords": [
+    "phenotype",
+    "design-system",
+    "keycap",
+    "vitepress-theme",
+    "design-tokens"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/KooshaPari/phenoDesign"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "packageManager": "bun"
+}

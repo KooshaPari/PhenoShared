@@ -1,0 +1,26 @@
+{
+  "name": "@kooshapari/phenotype-ui",
+  "version": "0.1.0",
+  "publishConfig": {
+    "access": "public"
+  },
+  "description": "Shared Astro components for Phenotype landing pages (canonical home: phenoDesign)",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/KooshaPari/phenoDesign",
+    "directory": "packages/ui"
+  },
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "files": [
+    "src"
+  ],
+  "dependencies": {
+    "@kooshapari/phenotype-design-tokens": "workspace:*"
+  },
+  "peerDependencies": {
+    "astro": "^6.0.0"
+  }
+}

@@ -1,0 +1,60 @@
+---
+export interface Link {
+  text: string;
+  href: string;
+}
+
+export interface Props {
+  brand?: string;
+  links?: Link[];
+  year?: number;
+}
+
+const { brand = "Phenotype", links = [], year = new Date().getFullYear() } = Astro.props;
+---
+
+<footer class="footer">
+  <div class="container">
+    <div class="brand">{brand}</div>
+    {links.length > 0 && (
+      <nav class="nav">
+        {links.map((l) => (
+          <a href={l.href}>{l.text}</a>
+        ))}
+      </nav>
+    )}
+    <div class="copy">&copy; {year} {brand}. All rights reserved.</div>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    padding: 2rem 1rem;
+    background: var(--pheno-dark, #0f172a);
+    color: white;
+    text-align: center;
+  }
+  .container {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  .brand {
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+  .nav {
+    margin-bottom: 1rem;
+  }
+  .nav a {
+    color: rgba(255,255,255,0.7);
+    text-decoration: none;
+    margin: 0 0.75rem;
+  }
+  .nav a:hover {
+    color: white;
+  }
+  .copy {
+    font-size: 0.875rem;
+    opacity: 0.6;
+  }
+</style>
