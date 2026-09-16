@@ -1,0 +1,25 @@
+[package]
+name = "llm-router"
+version = "0.1.0"
+edition = "2024"
+description = "LLM routing with multi-provider support"
+license.workspace = true
+
+[dependencies]
+tokio = { workspace = true }
+anyhow = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+thiserror = { workspace = true }
+reqwest = { version = "0.13", features = ["json", "rustls"] }
+async-trait = "0.1"
+tracing = "0.1"
+dashmap = "7.0.0-rc2"
+# substrate: routing is provided by the canonical adapter and core crates.
+# The facade crate does not expose these as feature-gated modules.
+substrate-core = { git = "https://github.com/KooshaPari/substrate.git", rev = "2a54c729eb42335ffc937d4a6da3230b18da3d76", package = "substrate-core" }
+omniroute-adapter = { git = "https://github.com/KooshaPari/substrate.git", rev = "2a54c729eb42335ffc937d4a6da3230b18da3d76", package = "omniroute-adapter" }
+# tokio/sync is included via workspace tokio (full features)
+
+[dev-dependencies]
+tracing-subscriber = { version = "0.3", features = ["std", "fmt"] }
