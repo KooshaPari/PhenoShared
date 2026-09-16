@@ -1,7 +1,7 @@
 # PhenoShared Comprehensive Handoff
 
-**Date:** 2026-09-16 (Pacific) — updated after PhenoInfra dep resolution + warning cleanup
-**Branch:** main at `00e1fab9`
+**Date:** 2026-09-16 (Pacific) — final state
+**Branch:** main at `d0fe3aa3`
 **Repo:** KooshaPari/PhenoShared (formerly PhenoAI)
 
 ## Repository Identity
@@ -11,7 +11,7 @@
 - **Role:** Pooled foundation monorepo (Rust workspace + absorbed repos)
 - **Workspace members:** 84 (79 original + 2 PhenoRegistry + 3 PhenoInfra)
 - **Total crate dirs:** 310
-- **cargo check:** PASS (0 errors, 44 warnings)
+- **cargo check:** PASS (0 errors, 3 build-system warnings only)
 
 ## Absorption History (chronological)
 
@@ -69,13 +69,12 @@ Future-compat: block v0.1.6, proc-macro-error2 v2.0.1
 ### Critical (0)
 None. Workspace compiles clean.
 
-### High (2)
+### High (1)
 1. **3 PhenoRegistry crates orphaned** - not in workspace, should be integrated or removed
-2. **44 compiler warnings** - mostly missing docs (42), dead code in absorbed crates (14+10 unused items)
 
 ### Medium (3)
-1. **Future-compat warnings** - `block v0.1.6` and `proc-macro-error2 v2.0.1` will be rejected by future Rust
-2. **Origin URLs stale** - several absorbed crates still reference old repo URLs (phenotype-tooling, PhenoObservability)
+1. **Future-compat warnings** - `block v0.1.6` and `proc-macro-error2 v2.0.1` will be rejected by future Rust (upstream deps)
+2. **Origin URLs stale** - 13 external git deps reference repos not yet absorbed (ResilienceKit, Authvault, PhenoObservability, substrate)
 3. **CRLF line ending drift** - 5 session extract files have mixed line endings
 
 ### Low (2)
@@ -140,11 +139,12 @@ These reference repos NOT absorbed into PhenoShared:
 1. ~~Add `phenotype-project-registry` and `phenotype-service-registry` to workspace members~~ DONE
 2. ~~Fix or remove `pheno-registry-python` (broken dep)~~ ORPHANED (harmless)
 3. ~~Resolve git deps that have local copies (PhenoInfra crates)~~ DONE
-4. Update stale origin URLs in absorbed crate manifests
+4. ~~Update stale origin URLs in absorbed crate manifests~~ DONE (no stale metadata URLs found)
+5. Absorb remaining repos (ResilienceKit, Authvault, PhenoObservability, substrate) or switch their deps to workspace = true
 
 ### Phase C: Quality
-1. Fix 44 warnings (42 missing docs, dead code in fabric-capture/substrate-tui)
-2. Address future-compat warnings (block, proc-macro-error2)
+1. ~~Fix 44 warnings (42 missing docs, dead code in fabric-capture/substrate-tui)~~ DONE (44 -> 3 build-system only)
+2. Address future-compat warnings (block, proc-macro-error2) — needs upstream crate updates
 3. Normalize CRLF line endings in session extracts
 
 ### Phase D: Productization
