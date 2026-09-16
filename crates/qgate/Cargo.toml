@@ -1,0 +1,32 @@
+[package]
+name = "qgate"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "Granular-recursive quality gate CLI: 85%+ coverage per-module, all check types, JSON+tree reports"
+
+[[bin]]
+name = "qgate"
+path = "src/main.rs"
+
+[dependencies]
+clap = { workspace = true }
+anyhow = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+tokio = { version = "1.52", features = ["rt-multi-thread", "macros", "fs", "process"] }
+walkdir = { workspace = true }
+thiserror = { workspace = true }
+regex = { workspace = true }
+serde_yaml = { workspace = true }
+chrono = { workspace = true }
+toml = "1.1"
+quick-xml = { version = "0.42", features = ["serialize"] }
+
+[lib]
+name = "qgate"
+path = "src/lib.rs"
+
+[dev-dependencies]
+tempfile = "3.10"

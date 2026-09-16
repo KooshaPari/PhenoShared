@@ -1,0 +1,76 @@
+#!/usr/bin/env zsh
+# bridge-health — diagnostic for the resume-all cross-host bridge daemon
+# Prints:
+#   - daemon running state (PID + uptime)
+#   - last successful pull time + row count
+#   - last N log lines
+#   - per-host snapshot file mtime + size
+#   - exits 0 if all hosts have fresh data (< 240s old)
+#   - exits 1 if any host is stale or missing
+set -euo pipefail
+
+LABEL="com.kooshapari.resume-all-bridge"
+LOG="/Users/kooshapari/Library/Logs/resume-all/bridge.log"
+SNAP_DIR="/Users/kooshapari/.local/share/resume-all"
+STALE_THRESHOLD=240
+
+# 1. Daemon state
+print "=== bridge-health: $(date -u +%Y-%m-%dT%H:%M:%SZ) ==="
+print ""
+daemon_info=$(launchctl list 2>/dev/null | grep "$LABEL" || true)
+if [[ -z "$daemon_info" ]]; then
+  print "  [FAIL] daemon not loaded"
+  print "    hint: launchctl bootstrap gui/\$(id -u) /Users/kooshapari/Library/LaunchAgents/${LABEL}.plist"
+  exit 1
+fi
+pid=$(echo "$daemon_info" | awk '{print $1}')
+last_exit=$(echo "$daemon_info" | awk '{print $2}')
+print "  [OK]   daemon running (pid=$pid, last_exit=$last_exit)"
+
+# 2. Last log lines (last 5 successful pulls)
+print ""
+print "=== Recent bridge log (last 5 successful pulls) ==="
+if [[ -f "$LOG" ]]; then
+  tail -5 "$LOG" | sed 's/^/    /'
+else
+  print "    (no log file at $LOG)"
+fi
+
+# 3. Per-host snapshot state
+print ""
+print "=== Per-host snapshot state ==="
+all_healthy=1
+for snap in "$SNAP_DIR"/*.snapshot.jsonl; do
+  [[ -f "$snap" ]] || continue
+  host=$(basename "$snap" .snapshot.jsonl)
+  # Skip placeholder names
+  if [[ "$host" == --* ]] || [[ "$host" == *.* ]] && [[ ! "$host" =~ ^[a-z-]+$ ]]; then
+    continue
+  fi
+  size=$(stat -f%z "$snap" 2>/dev/null || echo 0)
+  mtime=$(stat -f%m "$snap" 2>/dev/null || echo 0)
+  now=$(date +%s)
+  age=$((now - mtime))
+  rows=$(wc -l < "$snap" 2>/dev/null | tr -d ' ' || echo 0)
+  
+  stat="OK"
+  if (( size < 100 )); then
+    stat="EMPTY"
+    all_healthy=0
+  elif (( age > STALE_THRESHOLD )); then
+    stat="STALE"
+    all_healthy=0
+  fi
+  
+  print "    [$stat] $host: $rows rows, ${size} bytes, age=${age}s"
+done
+
+# 4. Verdict
+print ""
+if (( all_healthy )); then
+  print "  [HEALTHY] all bridge snapshots fresh (< ${STALE_THRESHOLD}s)"
+  exit 0
+else
+  print "  [DEGRADED] one or more bridge snapshots are stale or empty"
+  exit 1
+fi

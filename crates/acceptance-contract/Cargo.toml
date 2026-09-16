@@ -1,0 +1,26 @@
+[package]
+name = "acceptance-contract"
+version.workspace = true
+edition.workspace = true
+description = "Declarative acceptance-contract engine with hard and soft probes"
+
+readme = "README.md"
+license = "Apache-2.0 OR MIT"
+repository = "https://github.com/KooshaPari/phenotype-tooling"
+homepage = "https://github.com/KooshaPari/phenotype-tooling"
+keywords = ["phenotype", "tooling", "cli"]
+categories = ["command-line-utilities"]
+[dependencies]
+anyhow = { workspace = true }
+clap = { workspace = true }
+regex = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+serde_yaml = { workspace = true }
+sha2 = "0.11"
+
+tokio = { workspace = true }
+
+[[bin]]
+name = "acceptance-contract"
+path = "src/main.rs"

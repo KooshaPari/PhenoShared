@@ -1,0 +1,125 @@
+#!/usr/bin/env zsh
+# panes — list active harness panes with 1-sentence summary each.
+#
+# Reads the latest snapshot.jsonl + cross-checks argv via Rust walker.
+# Output: human-readable, grouped by harness.
+
+set -u
+emulate -L zsh
+
+SNAPSHOT="${RESUME_SNAPSHOT:-$HOME/.local/share/resume-all/snapshot.jsonl}"
+if [[ ! -s "$SNAPSHOT" ]]; then
+  echo "(snapshot.jsonl missing or empty — run session-snapshot first)" >&2
+  exit 1
+fi
+
+/usr/bin/python3 - "$SNAPSHOT" <<'PYTHON_EOF'
+import json, sys, subprocess
+from collections import defaultdict
+from pathlib import Path
+
+snap = Path(sys.argv[1])
+rows = [json.loads(line) for line in snap.read_text().splitlines() if line.strip()]
+live = [r for r in rows if not r.get('dead')]
+
+# Re-classify inline so the live output matches what's currently in each pane,
+# regardless of stale classification in the snapshot file.
+def reclass(r):
+    argv = (r.get('argv') or '').lower()
+    cmd = (r.get('cmd') or '').lower()
+    if 'forge' in argv or 'forge' in cmd:
+        return 'forge'
+    if 'codex' in argv or 'codex' in cmd:
+        return 'codex'
+    if 'cursor-agent' in argv or 'cursor' in argv:
+        return 'cursor'
+    if 'kilo' in argv:
+        return 'kilo'
+    if 'opencode' in argv:
+        return 'opencode'
+    if 'droid' in argv:
+        return 'droid'
+    if 'tracera' in argv or 'tracera' in cmd:
+        return 'tracera'
+    if 'hfscope' in argv:
+        return 'hfscope'
+    if 'sftp' in argv or 'sftp' in cmd:
+        return 'ssh-sftp'
+    return r.get('harness', 'shell')
+
+by_h = defaultdict(list)
+for r in live:
+    by_h[reclass(r)].append(r)
+
+print(f"=== PANES ({sum(len(v) for v in by_h.values())} total) ===\n")
+
+import re
+
+def describe(r):
+    argv = (r.get('argv') or '').strip()
+    cmd = (r.get('cmd') or '').strip()
+    base = os.path.basename(cmd) if cmd else ''
+    al = argv.lower()
+    if 'forge' in al and 'conversation-id' in al:
+        m = re.search(r'--conversation-id ([0-9a-f-]+)', argv)
+        return f"forge session {m.group(1)[:8] if m else '?'}"
+    if 'forge' in al:
+        return 'forge (picker mode)'
+    if 'codex' in al and 'search' in al and 'resume' in al:
+        return 'codex (picker mode)'
+    if 'codex' in al:
+        return 'codex'
+    if 'cursor' in al and 'resume' in al:
+        return 'cursor (resume)'
+    if 'cursor' in al:
+        return 'cursor'
+    if 'kilo' in al:
+        return 'kilo (mcp add)'
+    if 'opencode' in al:
+        return 'opencode'
+    if 'droid' in al:
+        return 'droid'
+    if 'tracera' in al:
+        return 'tracera server'
+    if 'hfscope' in al:
+        return 'hfscope'
+    if 'sftp' in al:
+        return 'ssh sftp-server'
+    if base:
+        return f"{base} shell"
+    return 'unknown'
+
+import os
+for h in sorted(by_h):
+    panes = by_h[h]
+    print(f"── {h} ({len(panes)} pane{'s' if len(panes) > 1 else ''})")
+    for i, p in enumerate(panes, 1):
+        sid = (p.get('session_id') or '').strip()
+        cwd = p.get('cwd') or '?'
+        sid_s = f'  [{sid[:36]}]' if sid else ''
+        cwd_s = '' if cwd in ('/', '?') else f'  cwd={cwd}'
+        desc = describe(p)
+        print(f"  {i:>2}. {desc}{sid_s}{cwd_s}")
+    print()
+
+# Process summary — uses live ps, no snapshot dependency
+print()
+print("=== PROCESSES (top 25 by count) ===")
+try:
+    out = subprocess.run(
+        ['/Users/kooshapari/bin/thegent-procx', '--threads', '--all-users'],
+        capture_output=True, text=True, timeout=10,
+    )
+    procs = json.loads(out.stdout)
+    from collections import Counter
+    def basename(cmd):
+        if not cmd:
+            return '?'
+        return cmd.split()[0].split('/')[-1]
+    by_bin = Counter(basename(p.get('cmd', '')) for p in procs)
+    print(f"  Total: {len(procs)}\n")
+    for bn, n in by_bin.most_common(25):
+        print(f"  {n:4d}×  {bn}")
+except Exception as e:
+    print(f"  (procx skipped: {e})")
+PYTHON_EOF

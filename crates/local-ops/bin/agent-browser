@@ -1,0 +1,157 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+EDGE_BIN="/Applications/Microsoft Edge.app/Contents/MacOS/Microsoft Edge"
+CHROME_BIN="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
+DEFAULT_EDGE_PROFILE_DIR="$HOME/Library/Application Support/Microsoft Edge"
+DEFAULT_CHROME_PROFILE_DIR="$HOME/dev/job-hunter/data/chrome-profile"
+DEFAULT_PROFILE_NAME="Default"
+DEFAULT_DEBUG_PORT="9222"
+
+BROWSER="${AGENT_BROWSER:-auto}"
+PROFILE_DIR="${AGENT_BROWSER_PROFILE_DIR:-}"
+PROFILE_NAME="${AGENT_BROWSER_PROFILE_NAME:-$DEFAULT_PROFILE_NAME}"
+DEBUG_PORT="${AGENT_BROWSER_DEBUG_PORT:-$DEFAULT_DEBUG_PORT}"
+HEADLESS="0"
+URL=""
+
+usage() {
+  cat <<USAGE
+Usage: agent-browser [options] [-- <browser args...>]
+
+Options:
+  --browser <auto|edge|chrome>  Browser choice (default: auto, prefers edge)
+  --profile-dir <path>          User data dir (default: browser-specific)
+  --profile-name <name>         Profile directory name (default: Default)
+  --cdp-port <port>             Remote debugging port (default: 9222)
+  --headless                    Run headless (new headless mode)
+  --show                        Run visible/non-headless
+  --url <url>                   Open URL on launch
+  -h, --help                    Show help
+USAGE
+}
+
+EXTRA_ARGS=()
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --browser)
+      BROWSER="${2:-}"
+      shift 2
+      ;;
+    --profile-dir)
+      PROFILE_DIR="${2:-}"
+      shift 2
+      ;;
+    --profile-name)
+      PROFILE_NAME="${2:-}"
+      shift 2
+      ;;
+    --cdp-port)
+      DEBUG_PORT="${2:-}"
+      shift 2
+      ;;
+    --headless)
+      HEADLESS="1"
+      shift
+      ;;
+    --show)
+      HEADLESS="0"
+      shift
+      ;;
+    --url)
+      URL="${2:-}"
+      shift 2
+      ;;
+    -h|--help)
+      usage
+      exit 0
+      ;;
+    --)
+      shift
+      EXTRA_ARGS+=("$@")
+      break
+      ;;
+    *)
+      # Finder launches apps with -psn_*; do not forward it to Chromium.
+      if [[ "$1" == -psn_* ]]; then
+        shift
+        continue
+      fi
+      EXTRA_ARGS+=("$1")
+      shift
+      ;;
+  esac
+done
+
+case "$BROWSER" in
+  auto)
+    if [[ -x "$EDGE_BIN" ]]; then
+      BIN="$EDGE_BIN"
+      BROWSER="edge"
+    elif [[ -x "$CHROME_BIN" ]]; then
+      BIN="$CHROME_BIN"
+      BROWSER="chrome"
+    else
+      echo "Neither Microsoft Edge nor Google Chrome was found." >&2
+      exit 1
+    fi
+    ;;
+  edge)
+    BIN="$EDGE_BIN"
+    [[ -x "$BIN" ]] || { echo "Edge binary not found at: $BIN" >&2; exit 1; }
+    ;;
+  chrome)
+    BIN="$CHROME_BIN"
+    [[ -x "$BIN" ]] || { echo "Chrome binary not found at: $BIN" >&2; exit 1; }
+    ;;
+  *)
+    echo "Invalid --browser value: $BROWSER" >&2
+    usage >&2
+    exit 1
+    ;;
+esac
+
+if [[ ! -d "$PROFILE_DIR" ]]; then
+  case "$BROWSER" in
+    edge)
+      PROFILE_DIR="$DEFAULT_EDGE_PROFILE_DIR"
+      ;;
+    chrome)
+      PROFILE_DIR="$DEFAULT_CHROME_PROFILE_DIR"
+      ;;
+  esac
+fi
+
+if [[ -z "$PROFILE_DIR" ]]; then
+  case "$BROWSER" in
+    edge)
+      PROFILE_DIR="$DEFAULT_EDGE_PROFILE_DIR"
+      ;;
+    chrome)
+      PROFILE_DIR="$DEFAULT_CHROME_PROFILE_DIR"
+      ;;
+  esac
+fi
+
+if [[ ! -d "$PROFILE_DIR" ]]; then
+  echo "Profile directory not found: $PROFILE_DIR" >&2
+  exit 1
+fi
+
+FLAGS=(
+  "--user-data-dir=$PROFILE_DIR"
+  "--profile-directory=$PROFILE_NAME"
+  "--remote-debugging-port=$DEBUG_PORT"
+  "--no-first-run"
+  "--no-default-browser-check"
+)
+
+if [[ "$HEADLESS" == "1" ]]; then
+  FLAGS+=("--headless=new" "--disable-gpu")
+fi
+
+if [[ -n "$URL" ]]; then
+  FLAGS+=("$URL")
+fi
+
+exec "$BIN" "${FLAGS[@]}" "${EXTRA_ARGS[@]}"

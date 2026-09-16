@@ -1,0 +1,4 @@
+#!/usr/bin/env zsh
+# workspace — manage resume-all workspace groups (Phase E11)
+# Wrapper for workspace.py
+exec /opt/homebrew/bin/python3 /Users/kooshapari/bin/workspace.py "$@"

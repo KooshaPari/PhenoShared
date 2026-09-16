@@ -1,0 +1,25 @@
+# CODEOWNERS — Ownership and Review Assignments
+# https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+#
+# PRs touching files in these paths will auto-request reviews from owners.
+
+# Default: repo owner reviews everything
+*                                       @KooshaPari
+
+# Source code
+/src/                                   @KooshaPari
+
+# Tests
+/tests/                                 @KooshaPari
+
+# Documentation
+/docs/                                  @KooshaPari
+*.md                                    @KooshaPari
+
+# CI/CD Pipeline
+/.github/workflows/                     @KooshaPari
+
+# Community files
+/CODE_OF_CONDUCT.md                     @KooshaPari
+/SECURITY.md                            @KooshaPari
+/CONTRIBUTING.md                        @KooshaPari

@@ -1,0 +1,151 @@
+#!/opt/homebrew/bin/python3
+"""
+dr-drill-history — CLI companion to dr-drill-monthly.
+
+Reads the JSONL history written by the monthly wrapper and lets the operator
+browse past drills, view a specific drill's full log, or trigger a manual run
+right now (bypassing the calendar schedule).
+
+Subcommands:
+    list                show the last 12 drills (date + pass/fail)
+    show YYYY-MM-DD     print the full log for the first matching drill
+    run-now             invoke the wrapper immediately, ignoring the calendar
+
+The JSONL file is at ~/.local/share/resume-all/dr-drill-history.jsonl. Each
+record has the shape written by dr-drill-monthly:
+    {ts, ts_epoch, exit_code, log_path, summary_pass_fail}
+
+Exit codes:
+    0 = success
+    1 = user error (bad args, missing log, etc.)
+    2 = the run-now wrapper itself failed
+"""
+from __future__ import annotations
+
+import argparse
+import json
+import os
+import subprocess
+import sys
+from pathlib import Path
+
+HISTORY_PATH = Path.home() / ".local" / "share" / "resume-all" / "dr-drill-history.jsonl"
+WRAPPER_PATH = Path("/Users/kooshapari/bin/dr-drill-monthly")
+LOG_DIR = Path.home() / "Library" / "Logs" / "resume-all"
+
+
+def load_history() -> list[dict]:
+    """Read the JSONL history. Missing file is OK — returns empty list.
+
+    Silently drops blank lines and lines that fail JSON parsing (the file
+    may be partially written by a concurrent wrapper)."""
+    if not HISTORY_PATH.exists():
+        return []
+    out: list[dict] = []
+    try:
+        with HISTORY_PATH.open("r", encoding="utf-8") as fh:
+            for raw in fh:
+                line = raw.strip()
+                if not line:
+                    continue
+                try:
+                    out.append(json.loads(line))
+                except json.JSONDecodeError:
+                    continue
+    except OSError as exc:
+        print(f"error: cannot read {HISTORY_PATH}: {exc}", file=sys.stderr)
+        return []
+    return out
+
+
+def cmd_list(limit: int = 12) -> int:
+    history = load_history()
+    if not history:
+        print(f"no drills recorded yet (history file: {HISTORY_PATH})")
+        return 0
+    # Most recent last in the file → reverse for display, then take last N.
+    window = history[-limit:][::-1]
+    print(f"{'date':<19}  {'exit':>4}  {'result':<5}  log")
+    print("-" * 80)
+    for rec in window:
+        ts = rec.get("ts", "?")
+        ec = rec.get("exit_code", "?")
+        summary = rec.get("summary_pass_fail", "?")
+        log_path = rec.get("log_path", "?")
+        # Trim log_path to just the basename for the table view.
+        short_log = os.path.basename(log_path) if isinstance(log_path, str) else "?"
+        print(f"{ts:<19}  {str(ec):>4}  {summary:<5}  {short_log}")
+    print(f"\n(total {len(history)} record(s); showing last {len(window)})")
+    return 0
+
+
+def cmd_show(date_prefix: str) -> int:
+    """Find the first record whose timestamp starts with date_prefix
+    (typically YYYY-MM-DD or YYYY-MM-DD-HHMMSS) and print its full log."""
+    history = load_history()
+    matches = [r for r in history if isinstance(r.get("ts"), str) and r["ts"].startswith(date_prefix)]
+    if not matches:
+        print(f"error: no drill matching '{date_prefix}' in {HISTORY_PATH}", file=sys.stderr)
+        print("(use 'list' to see available dates)", file=sys.stderr)
+        return 1
+    rec = matches[0]
+    log_path = rec.get("log_path", "")
+    if not log_path or not Path(log_path).exists():
+        print(f"error: log file missing or path unset: {log_path!r}", file=sys.stderr)
+        return 1
+    print(f"# drill at {rec.get('ts')} — exit={rec.get('exit_code')} {rec.get('summary_pass_fail')}")
+    print(f"# log: {log_path}")
+    print()
+    try:
+        with Path(log_path).open("r", encoding="utf-8", errors="replace") as fh:
+            sys.stdout.write(fh.read())
+    except OSError as exc:
+        print(f"error: cannot read log: {exc}", file=sys.stderr)
+        return 1
+    return 0
+
+
+def cmd_run_now() -> int:
+    """Invoke the wrapper immediately, bypassing the launchd calendar."""
+    if not WRAPPER_PATH.exists():
+        print(f"error: wrapper not found: {WRAPPER_PATH}", file=sys.stderr)
+        return 1
+    # Preserve DR_TIMEOUT / DR_NOTIFY if the operator set them in the env.
+    # DR_DRY_RUN is explicitly NOT forwarded — this is meant to be a real run.
+    env = {k: v for k, v in os.environ.items() if k != "DR_DRY_RUN"}
+    print(f"running wrapper: /bin/zsh {WRAPPER_PATH}")
+    proc = subprocess.run(
+        ["/bin/zsh", str(WRAPPER_PATH)],
+        env=env,
+    )
+    return proc.returncode
+
+
+def main(argv: list[str]) -> int:
+    parser = argparse.ArgumentParser(
+        prog="dr-drill-history",
+        description="Browse past DR drills and trigger manual runs.",
+    )
+    sub = parser.add_subparsers(dest="cmd", required=True)
+
+    p_list = sub.add_parser("list", help="show the last N drills (default 12)")
+    p_list.add_argument("--limit", type=int, default=12, help="max records to show")
+
+    p_show = sub.add_parser("show", help="show the full log for one drill")
+    p_show.add_argument("date", help="date prefix, e.g. 2026-08-07")
+
+    sub.add_parser("run-now", help="invoke the wrapper immediately, bypassing the calendar")
+
+    args = parser.parse_args(argv)
+    if args.cmd == "list":
+        return cmd_list(limit=args.limit)
+    if args.cmd == "show":
+        return cmd_show(args.date)
+    if args.cmd == "run-now":
+        return cmd_run_now()
+    parser.error(f"unknown subcommand: {args.cmd}")
+    return 1  # unreachable
+
+
+if __name__ == "__main__":
+    sys.exit(main(sys.argv[1:]))

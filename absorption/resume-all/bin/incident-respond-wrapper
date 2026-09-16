@@ -1,0 +1,8 @@
+#!/bin/zsh
+# incident-respond-wrapper — launched by com.kooshapari.resume-all-incident
+# Calls the Python script in loop mode with 30s interval.
+
+export PATH="/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+
+cd "$HOME" || exit 1
+exec /opt/homebrew/bin/python3 /Users/kooshapari/bin/incident-respond.py loop --interval 30

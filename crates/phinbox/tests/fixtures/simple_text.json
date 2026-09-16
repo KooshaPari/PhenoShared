@@ -1,0 +1,11 @@
+{
+  "title": "Continue with refactor?",
+  "question": "I'll rename 23 identifiers across 8 files. Proceed?",
+  "field": {
+    "kind": "boolean",
+    "label": "Proceed?",
+    "default": true
+  },
+  "urgency": "info",
+  "timeout_secs": 120
+}

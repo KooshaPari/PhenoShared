@@ -1,0 +1,4 @@
+#!/usr/bin/env zsh
+# resume-deps — manage cross-session dependencies (Phase E07)
+# Wrapper for resume-deps.py
+exec /opt/homebrew/bin/python3 /Users/kooshapari/bin/resume-deps.py "$@"

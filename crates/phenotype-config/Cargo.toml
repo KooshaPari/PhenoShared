@@ -1,0 +1,23 @@
+[package]
+name = "phenotype-config"
+version.workspace = true
+edition.workspace = true
+description = "Layered configuration for Phenotype tooling (figment + serde + env)"
+
+readme = "README.md"
+license = "Apache-2.0 OR MIT"
+repository = "https://github.com/KooshaPari/phenotype-tooling"
+homepage = "https://github.com/KooshaPari/phenotype-tooling"
+keywords = ["phenotype", "tooling", "cli"]
+categories = ["command-line-utilities"]
+[dependencies]
+serde = { workspace = true }
+serde_json = { workspace = true }
+serde_yaml = { workspace = true }
+figment = { version = "0.10", features = ["toml", "env", "json", "yaml"] }
+chrono = { workspace = true }
+thiserror = { workspace = true }
+tracing = { workspace = true }
+uncased = "0.9"
+
+[dev-dependencies]

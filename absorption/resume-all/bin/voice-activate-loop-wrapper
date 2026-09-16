@@ -1,0 +1,11 @@
+#!/bin/zsh
+# voice-activate-loop-wrapper — launched by com.kooshapari.resume-all-voice-activate
+# Polls audio devices every 10s and writes voice-state.json for monitoring.
+# NOTE: real wake-word listening requires mic permissions and PyObjC frameworks
+# which aren't available on this machine. Use 'voice-activate.py simulate' for
+# testing the dispatch logic.
+
+export PATH="/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+
+cd "$HOME" || exit 1
+exec /usr/bin/env python3 /Users/kooshapari/bin/voice-activate.py loop --interval 10

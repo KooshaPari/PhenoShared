@@ -1,0 +1,8 @@
+#!/bin/zsh
+# telemetry-alerts-wrapper — launched by com.kooshapari.resume-all-telemetry-alerts
+# Runs telemetry-alerts.py every 5 minutes to log alerts and trigger incidents.
+
+export PATH="/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+export HOME="/Users/kooshapari"
+
+exec /usr/bin/env python3 /Users/kooshapari/bin/telemetry-alerts.py >> /Users/kooshapari/Library/Logs/resume-all/telemetry-alerts.log 2>&1

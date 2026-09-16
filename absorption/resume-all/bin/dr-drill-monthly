@@ -1,0 +1,147 @@
+#!/bin/zsh
+# dr-drill-monthly — Phase F hardening item F10 (wrapper).
+#
+# Thin wrapper around dr-drill.sh that:
+#   * Reads DR_DRY_RUN, DR_TIMEOUT, DR_NOTIFY env vars
+#   * Captures full drill output to a timestamped archive
+#   * Appends a one-line JSON summary to the history JSONL
+#   * On FAIL, appends a "DEGRADED" line to sla-alerts.log (if it exists),
+#     else prints the alert to stderr
+#   * On success, refreshes ~/.local/share/resume-all/health.txt by running
+#     health-check.py so the post-drill snapshot state is visible immediately
+#
+# Usage:
+#   /Users/kooshapari/bin/dr-drill-monthly           # run the drill
+#   DR_DRY_RUN=1 /Users/kooshapari/bin/dr-drill-monthly   # show plan only
+#   DR_TIMEOUT=30 /Users/kooshapari/bin/dr-drill-monthly   # override timeout
+#
+# Exit codes:
+#   0 = drill PASS (or DRY-RUN completed)
+#   1 = drill FAIL (the underlying dr-drill.sh reported failures)
+#   2 = wrapper error (dr-drill.sh missing, etc.)
+
+set -uo pipefail
+emulate -L zsh
+
+DR_DRY_RUN="${DR_DRY_RUN:-0}"
+DR_TIMEOUT="${DR_TIMEOUT:-90}"
+DR_NOTIFY="${DR_NOTIFY:-0}"
+
+DR_SCRIPT="/Users/kooshapari/bin/dr-drill.sh"
+LOG_DIR="/Users/kooshapari/Library/Logs/resume-all"
+DATA_DIR="/Users/kooshapari/.local/share/resume-all"
+HISTORY_JSONL="$DATA_DIR/dr-drill-history.jsonl"
+SLA_ALERTS_LOG="$DATA_DIR/sla-alerts.log"
+HEALTH_SCRIPT="/Users/kooshapari/bin/health-check.py"
+
+TS="$(date +%Y-%m-%d-%H%M%S)"
+TS_ISO="$(date +%Y-%m-%dT%H:%M:%S%z)"
+TS_EPOCH="$(date +%s)"
+LOG_PATH="$LOG_DIR/dr-drill-$TS.log"
+
+# ---------------------------------------------------------------------------
+# Dry-run path — show the plan and exit 0.
+# ---------------------------------------------------------------------------
+
+if [[ "$DR_DRY_RUN" == "1" ]]; then
+    print -r -- "[dr-drill-monthly] DRY-RUN plan:"
+    print -r -- "  script:          $DR_SCRIPT"
+    print -r -- "  log archive:     $LOG_PATH"
+    print -r -- "  history jsonl:   $HISTORY_JSONL"
+    print -r -- "  sla-alerts.log:  $SLA_ALERTS_LOG"
+    print -r -- "  health script:   $HEALTH_SCRIPT"
+    print -r -- "  env: DR_DRY_RUN=$DR_DRY_RUN DR_TIMEOUT=$DR_TIMEOUT DR_NOTIFY=$DR_NOTIFY"
+    print -r -- "  would invoke:    /bin/zsh $DR_SCRIPT (with output redirected to log)"
+    print -r -- "  would append:    one-line JSON summary to $HISTORY_JSONL"
+    print -r -- "  on FAIL:         append 'DEGRADED' to $SLA_ALERTS_LOG (if it exists)"
+    print -r -- "  on PASS:         run health-check.py to refresh health.txt"
+    exit 0
+fi
+
+# ---------------------------------------------------------------------------
+# Preflight
+# ---------------------------------------------------------------------------
+
+if [[ ! -x "$DR_SCRIPT" ]]; then
+    print -r -- "[dr-drill-monthly] FAIL: $DR_SCRIPT is not executable (or missing)" >&2
+    exit 2
+fi
+
+mkdir -p "$LOG_DIR" "$DATA_DIR"
+touch "$HISTORY_JSONL" 2>/dev/null || true
+
+# ---------------------------------------------------------------------------
+# Run the drill, capturing all output to the timestamped archive.
+# ---------------------------------------------------------------------------
+
+print -r -- "[dr-drill-monthly] starting drill at $TS_ISO"
+print -r -- "[dr-drill-monthly] log: $LOG_PATH"
+
+DRILL_EXIT=0
+if DR_TIMEOUT="$DR_TIMEOUT" /bin/zsh "$DR_SCRIPT" >"$LOG_PATH" 2>&1; then
+    DRILL_EXIT=0
+    SUMMARY="PASS"
+    print -r -- "[dr-drill-monthly] drill PASSED (exit 0)"
+else
+    DRILL_EXIT=$?
+    SUMMARY="FAIL"
+    print -r -- "[dr-drill-monthly] drill FAILED (exit $DRILL_EXIT) — see $LOG_PATH" >&2
+fi
+
+# ---------------------------------------------------------------------------
+# Append one-line JSON summary to history JSONL.
+# ---------------------------------------------------------------------------
+
+# Use /opt/homebrew/bin/python3 explicitly — bare `python3` in launchd PATH
+# is /usr/bin/python3 (3.9.x) which lacks modern json niceties.
+JSON_LINE=$(/opt/homebrew/bin/python3 - "$TS_ISO" "$TS_EPOCH" "$DRILL_EXIT" "$LOG_PATH" "$SUMMARY" <<'PY'
+import json, sys
+ts, ts_epoch, exit_code, log_path, summary = sys.argv[1:6]
+record = {
+    "ts": ts,
+    "ts_epoch": int(ts_epoch),
+    "exit_code": int(exit_code),
+    "log_path": log_path,
+    "summary_pass_fail": summary,
+}
+print(json.dumps(record, separators=(",", ":")))
+PY
+)
+
+if [[ -n "$JSON_LINE" ]]; then
+    if ! print -r -- "$JSON_LINE" >> "$HISTORY_JSONL" 2>/dev/null; then
+        print -r -- "[dr-drill-monthly] WARN: could not append to $HISTORY_JSONL" >&2
+    fi
+fi
+
+# ---------------------------------------------------------------------------
+# On FAIL: append a DEGRADED line to sla-alerts.log if it exists, else stderr.
+# ---------------------------------------------------------------------------
+
+if [[ "$DRILL_EXIT" -ne 0 ]]; then
+    ALERT_LINE="$(date +%Y-%m-%dT%H:%M:%S%z) DEGRADED dr-drill exit=$DRILL_EXIT log=$LOG_PATH"
+    if [[ -e "$SLA_ALERTS_LOG" ]]; then
+        if print -r -- "$ALERT_LINE" >> "$SLA_ALERTS_LOG" 2>/dev/null; then
+            print -r -- "[dr-drill-monthly] alert appended to $SLA_ALERTS_LOG"
+        else
+            print -r -- "$ALERT_LINE" >&2
+        fi
+    else
+        print -r -- "$ALERT_LINE" >&2
+    fi
+fi
+
+# ---------------------------------------------------------------------------
+# On PASS: refresh health.txt so the operator sees post-drill state.
+# This "surfaces" the drill result in the health-check view.
+# ---------------------------------------------------------------------------
+
+if [[ "$DRILL_EXIT" -eq 0 && -x "$HEALTH_SCRIPT" ]]; then
+    if /opt/homebrew/bin/python3 "$HEALTH_SCRIPT" >/dev/null 2>&1; then
+        print -r -- "[dr-drill-monthly] health.txt refreshed"
+    else
+        print -r -- "[dr-drill-monthly] WARN: health-check.py failed; health.txt not refreshed" >&2
+    fi
+fi
+
+exit $DRILL_EXIT

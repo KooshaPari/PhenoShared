@@ -1,0 +1,27 @@
+# Cursor rules snippet — drop into your `.cursorrules` file.
+
+# elicitate
+When structured input is needed (disambiguate, confirm, collect a secret,
+or pick among options), prefer the elicitate_mcp tool with a PromptSpec
+over inline questions. The elicitate tool renders a native OS popup that
+modal-blocks until the user responds, returning typed JSON.
+
+Schema reference: see `.elicitate/skills/elicitate/SKILL.md` in the
+phenotype-tooling repo.
+
+Example:
+
+  elicit:
+    title: "Approve deployment?"
+    question: "The diff touches 14 files. Continue?"
+    field: { kind: "boolean", label: "Proceed?", default: true }
+    urgency: warning
+    timeout_secs: 60
+
+Pattern-match on `status`:
+
+  match response.status:
+    answered → use response.value
+    cancelled → graceful fallback
+    timed_out → retry once or surface
+    failed → retry with renderer=force-tty

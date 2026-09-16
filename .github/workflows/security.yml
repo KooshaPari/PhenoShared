@@ -1,0 +1,94 @@
+name: Security
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  schedule:
+    # Weekly Monday 09:00 PDT cron (ADR-042 cadence)
+    - cron: '0 16 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: read
+  security-events: write
+  id-token: write   # required for SLSA provenance
+
+jobs:
+  codeql:
+    name: CodeQL (rust)
+    runs-on: ubuntu-latest
+    permissions:
+      security-events: write
+      contents: read
+      packages: read
+    steps:
+      - uses: actions/checkout@v7
+      - uses: github/codeql-action/init@v4.37.9
+        with:
+          languages: rust
+          queries: security-extended
+      - uses: github/codeql-action/analyze@v4.37.9
+        with:
+          category: "/language:rust"
+
+  dependency-audit:
+    name: Dependency audit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - name: cargo audit
+        run: |
+          cargo install --locked cargo-audit || true
+          cargo audit
+
+  gitleaks:
+    name: Gitleaks secret scan
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - name: Run gitleaks
+        uses: gitleaks/gitleaks-action@v3
+        env:
+          GITLEAKS_CONFIG: .gitleaks.toml
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  sbom:
+    name: SBOM generation (CycloneDX)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - name: Generate SBOM (cargo-cyclonedx)
+        run: |
+          cargo install --locked cargo-cyclonedx || true
+          cargo cyclonedx --format json --override-filename ${{ github.repository }}.sbom.json || cargo cyclonedx --format json
+        continue-on-error: true
+      - name: Upload SBOM artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: sbom
+          path: ${{ github.workspace }}/*.cdx.json
+        if: always()
+
+  provenance:
+    name: Build provenance attestation
+    runs-on: ubuntu-latest
+    needs: [codeql, dependency-audit, gitleaks]
+    permissions:
+      attestations: write
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v7
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+      - name: Build release binary
+        run: cargo build --release -p driver-cli
+      - name: Attest release binary provenance
+        uses: actions/attest-build-provenance@v4
+        with:
+          subject-path: target/release/substrate

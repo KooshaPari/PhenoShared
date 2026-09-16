@@ -1,20 +1,25 @@
-// Policy evaluation result types.
+//! Policy evaluation results and violation types.
+
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Default, Serialize, Deserialize)]
+/// Severity levels for policy violations.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Serialize, Deserialize)]
 pub enum Severity {
-    Info = 0,
-    #[default]
-    Warning = 1,
-    Error = 2,
+    /// Informational message, no action required.
+    Info,
+    /// Warning - recommended action to comply.
+    Warning,
+    /// Error - violation of policy, must be addressed.
+    Error,
 }
 
 impl Severity {
+    /// Returns a string representation of the severity.
     pub fn as_str(&self) -> &'static str {
         match self {
-            Severity::Info => "Info",
-            Severity::Warning => "Warning",
-            Severity::Error => "Error",
+            Severity::Info => "info",
+            Severity::Warning => "warning",
+            Severity::Error => "error",
         }
     }
 }
@@ -25,68 +30,129 @@ impl std::fmt::Display for Severity {
     }
 }
 
+/// A policy violation - a rule that was not satisfied.
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Violation {
-    pub policy_name: String,
+    /// The name of the policy that was violated.
+    pub policy: String,
+    /// The rule type that was violated (Allow, Deny, Require).
     pub rule_type: String,
-    pub pattern: String,
+    /// The condition/pattern that failed.
+    pub condition: String,
+    /// The severity of this violation.
     pub severity: Severity,
+    /// A detailed message about the violation.
     pub message: String,
 }
 
 impl Violation {
+    /// Creates a new violation.
     pub fn new(
-        policy_name: String,
-        rule_type: String,
-        pattern: &str,
+        policy: impl Into<String>,
+        rule_type: impl Into<String>,
+        condition: impl Into<String>,
         severity: Severity,
-        message: String,
+        message: impl Into<String>,
     ) -> Self {
         Self {
-            policy_name,
-            rule_type,
-            pattern: pattern.to_string(),
+            policy: policy.into(),
+            rule_type: rule_type.into(),
+            condition: condition.into(),
             severity,
-            message,
+            message: message.into(),
         }
     }
 }
 
+/// The result of policy evaluation.
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct PolicyResult {
+    /// Whether all policies were satisfied (no error-level violations).
     pub passed: bool,
+    /// List of all violations.
     pub violations: Vec<Violation>,
-    // Reserved for future extensibility (documented but unused)
-    #[serde(skip)]
-    pub _reserved: (),
+    /// Metadata about evaluation.
+    pub metadata: serde_json::Value,
 }
 
 impl PolicyResult {
+    /// Creates a new passing policy result.
     pub fn passed() -> Self {
         Self {
             passed: true,
             violations: Vec::new(),
-            _reserved: (),
+            metadata: serde_json::json!({}),
         }
     }
+
+    /// Creates a new policy result with violations.
     pub fn with_violations(violations: Vec<Violation>) -> Self {
-        let passed = violations.is_empty();
+        let passed = violations.iter().all(|v| v.severity != Severity::Error);
         Self {
             passed,
             violations,
-            _reserved: (),
+            metadata: serde_json::json!({}),
         }
     }
+
+    /// Adds a violation to the result.
     pub fn add_violation(&mut self, violation: Violation) {
-        self.passed = false;
+        if violation.severity == Severity::Error {
+            self.passed = false;
+        }
         self.violations.push(violation);
     }
+
+    /// Gets all error-level violations.
+    pub fn errors(&self) -> Vec<&Violation> {
+        self.violations
+            .iter()
+            .filter(|v| v.severity == Severity::Error)
+            .collect()
+    }
+
+    /// Gets all warning-level violations.
+    pub fn warnings(&self) -> Vec<&Violation> {
+        self.violations
+            .iter()
+            .filter(|v| v.severity == Severity::Warning)
+            .collect()
+    }
+
+    /// Gets all info-level violations.
+    pub fn infos(&self) -> Vec<&Violation> {
+        self.violations
+            .iter()
+            .filter(|v| v.severity == Severity::Info)
+            .collect()
+    }
+
+    /// Returns true if there are any error-level violations.
+    pub fn has_errors(&self) -> bool {
+        !self.errors().is_empty()
+    }
+
+    /// Returns true if there are any warning-level violations.
+    pub fn has_warnings(&self) -> bool {
+        !self.warnings().is_empty()
+    }
+
+    /// Returns a summary string.
     pub fn summary(&self) -> String {
-        if self.passed {
-            "Policy passed".to_string()
-        } else {
-            format!("{} violation(s)", self.violations.len())
-        }
+        let error_count = self.errors().len();
+        let warning_count = self.warnings().len();
+        let info_count = self.infos().len();
+
+        format!(
+            "Policy evaluation: {} errors, {} warnings, {} infos",
+            error_count, warning_count, info_count
+        )
+    }
+}
+
+impl Default for PolicyResult {
+    fn default() -> Self {
+        Self::passed()
     }
 }
 
@@ -95,54 +161,59 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_violation_creation() {
-        let v = Violation::new(
-            "p".to_string(),
-            "R".to_string(),
-            ".",
-            Severity::Error,
-            "m".to_string(),
-        );
-        assert_eq!(v.policy_name, "p");
-        assert_eq!(v.severity, Severity::Error);
-    }
-    #[test]
-    fn test_policy_result_passed() {
-        let r = PolicyResult::passed();
-        assert!(r.passed);
-        assert!(r.violations.is_empty());
-    }
-    #[test]
-    fn test_policy_result_with_violations() {
-        let v = Violation::new(
-            "p".to_string(),
-            "R".to_string(),
-            ".",
-            Severity::Error,
-            "m".to_string(),
-        );
-        let r = PolicyResult::with_violations(vec![v]);
-        assert!(!r.passed);
-        assert_eq!(r.violations.len(), 1);
-    }
-    #[test]
-    fn test_policy_result_summary() {
-        assert_eq!(PolicyResult::passed().summary(), "Policy passed");
-        let v = Violation::new(
-            "p".to_string(),
-            "R".to_string(),
-            ".",
-            Severity::Error,
-            "m".to_string(),
-        );
-        assert_eq!(
-            PolicyResult::with_violations(vec![v]).summary(),
-            "1 violation(s)"
-        );
-    }
-    #[test]
     fn test_severity_ordering() {
         assert!(Severity::Info < Severity::Warning);
         assert!(Severity::Warning < Severity::Error);
+    }
+
+    #[test]
+    fn test_violation_creation() {
+        let v = Violation::new(
+            "test_policy",
+            "Deny",
+            "pattern",
+            Severity::Error,
+            "Test message",
+        );
+        assert_eq!(v.policy, "test_policy");
+        assert_eq!(v.severity, Severity::Error);
+    }
+
+    #[test]
+    fn test_policy_result_passed() {
+        let result = PolicyResult::passed();
+        assert!(result.passed);
+        assert!(result.violations.is_empty());
+    }
+
+    #[test]
+    fn test_policy_result_with_violations() {
+        let violations = vec![Violation::new(
+            "test_policy",
+            "Deny",
+            "pattern",
+            Severity::Error,
+            "Error violation",
+        )];
+        let result = PolicyResult::with_violations(violations);
+        assert!(!result.passed);
+        assert_eq!(result.errors().len(), 1);
+    }
+
+    #[test]
+    fn test_policy_result_summary() {
+        let mut result = PolicyResult::passed();
+        result.add_violation(Violation::new("p1", "Deny", "pat1", Severity::Error, "e1"));
+        result.add_violation(Violation::new(
+            "p1",
+            "Allow",
+            "pat2",
+            Severity::Warning,
+            "w1",
+        ));
+
+        let summary = result.summary();
+        assert!(summary.contains("1 errors"));
+        assert!(summary.contains("1 warnings"));
     }
 }

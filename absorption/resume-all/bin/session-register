@@ -1,0 +1,60 @@
+#!/usr/bin/env zsh
+# session-register — wrap a harness launch so its pane↔session mapping is captured
+# immediately, before the harness's own TUI takes over the pane.
+#
+# Usage (replace your normal launch command):
+#   session-register forge [forge-args...]
+#   session-register codex [codex-args...]
+#   session-register opencode [opencode-args...]
+#   session-register kilo [kilo-args...]
+#   session-register cursor-agent [cursor-args...]
+#
+# What it does:
+#   1. Captures the current tmux pane_id (TMUX_PANE).
+#   2. Writes a placeholder row {"pending": true, "session_id": "pending"} so
+#      resume-all has *something* to point at even if the harness is still
+#      warming up.
+#   3. exec's the harness (replacing this script process — no extra PID).
+#   4. On exit, runs session-snapshot to resolve "pending" → real session ID.
+#
+# This is optional. session-snapshot already walks panes periodically and
+# picks up whatever the harness has stored, so a plain `forge` invocation
+# will eventually be captured. session-register just makes capture
+# instantaneous so resume-all works the *instant* a pane opens.
+
+emulate -L zsh
+setopt err_exit no_unset pipe_fail
+
+harness="$1"; shift || { print -u2 "usage: session-register <harness> [args...]"; exit 2; }
+
+case "$harness" in
+  forge|codex|opencode|kilo|cursor|cursor-agent) ;;
+  *) print -u2 "session-register: unknown harness '$harness'"; exit 2 ;;
+esac
+
+SNAPSHOT_FILE="${RESUME_SNAPSHOT_FILE:-$HOME/.local/share/resume-all/snapshot.jsonl}"
+mkdir -p -- "${SNAPSHOT_FILE:h}"
+
+ts="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+cwd="${PWD}"
+pane_id="${TMUX_PANE:-no-tmux}"
+
+# Stamp *now* so resume-all prefers this row over any older capture.
+python3 - "$pane_id" "$harness" "$cwd" "$ts" "$SNAPSHOT_FILE" <<'PYEOF'
+import json, sys
+pane_id, harness, cwd, ts, snap = sys.argv[1:6]
+with open(snap, "a") as f:
+    f.write(json.dumps({
+        "ts":         ts,
+        "pane_id":    pane_id,
+        "harness":    harness,
+        "session_id": "pending",
+        "cwd":        cwd,
+        "pending":    True,
+    }) + "\n")
+PYEOF
+
+# Hand control to the harness. `exec` replaces this wrapper so the harness
+# becomes the pane's foreground process — exactly what a normal invocation
+# would have done.
+exec "$harness" "$@"

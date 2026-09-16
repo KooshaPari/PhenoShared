@@ -1,0 +1,37 @@
+[package]
+name = "ptx"
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.88"
+description = "Phenotype Tool eXtensions — Phase 3 governance gate wrapper"
+license = "MIT OR Apache-2.0"
+
+readme = "README.md"
+repository = "https://github.com/KooshaPari/phenotype-tooling"
+homepage = "https://github.com/KooshaPari/phenotype-tooling"
+keywords = ["phenotype", "tooling", "cli"]
+categories = ["command-line-utilities"]
+[lib]
+name = "ptx"
+path = "src/lib.rs"
+
+[[bin]]
+name = "ptx"
+path = "src/main.rs"
+
+[dependencies]
+clap = { version = "4.5", features = ["derive", "cargo", "wrap_help"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+serde_yaml = "0.9"
+anyhow = "1"
+thiserror = "2"
+# Re-use the same observability stack as pt so PTX commands emit metrics
+phenotype-tooling-observability = { path = "../phenotype-tooling-observability", optional = true }
+
+[features]
+default = []
+observability = ["dep:phenotype-tooling-observability"]
+
+[dev-dependencies]
+tempfile = "3"

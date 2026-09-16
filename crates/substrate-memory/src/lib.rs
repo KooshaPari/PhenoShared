@@ -1,0 +1,234 @@
+#![forbid(unsafe_code)]
+#![warn(missing_docs)]
+
+//! Two-tier agent memory: bounded ring buffer + persistent SQLite history.
+
+use std::collections::VecDeque;
+use std::sync::Mutex;
+
+use chrono::Utc;
+use store_sqlite::SqliteMemoryStore;
+use substrate_core::memory_port::{MemoryEntry, MemoryPort};
+use uuid::Uuid;
+
+/// Error type for in-memory memory adapters.
+#[derive(Debug, thiserror::Error)]
+pub enum MemoryError {
+    /// Underlying SQLite store failure.
+    #[error("store: {0}")]
+    Store(#[from] store_sqlite::StoreError),
+    /// Generic memory error.
+    #[error("{0}")]
+    Other(String),
+}
+
+/// Bounded ring buffer keeping the most recent `capacity` entries.
+pub struct RingMemory {
+    capacity: usize,
+    entries: Mutex<VecDeque<MemoryEntry>>,
+}
+
+impl RingMemory {
+    /// Create a ring buffer that retains at most `capacity` entries.
+    pub fn new(capacity: usize) -> Self {
+        Self {
+            capacity,
+            entries: Mutex::new(VecDeque::new()),
+        }
+    }
+
+    fn push_entry(&self, key: &str, content: &str) -> Uuid {
+        let id = Uuid::new_v4();
+        self.push_entry_with_id(id, key, content);
+        id
+    }
+
+    fn push_entry_with_id(&self, id: Uuid, key: &str, content: &str) {
+        if self.capacity == 0 {
+            return;
+        }
+        let entry = MemoryEntry {
+            id,
+            key: key.to_string(),
+            content: content.to_string(),
+            created_at: Utc::now().timestamp(),
+        };
+        let mut buf = self.entries.lock().unwrap();
+        if buf.len() >= self.capacity {
+            buf.pop_front();
+        }
+        buf.push_back(entry);
+    }
+}
+
+impl MemoryPort for RingMemory {
+    type Error = MemoryError;
+
+    fn append(&self, key: &str, content: &str) -> Result<Uuid, Self::Error> {
+        Ok(self.push_entry(key, content))
+    }
+
+    fn get(&self, key: &str) -> Result<Option<String>, Self::Error> {
+        let buf = self.entries.lock().unwrap();
+        Ok(buf
+            .iter()
+            .rev()
+            .find(|e| e.key == key)
+            .map(|e| e.content.clone()))
+    }
+
+    fn recent(&self, limit: usize) -> Result<Vec<MemoryEntry>, Self::Error> {
+        let buf = self.entries.lock().unwrap();
+        Ok(buf.iter().rev().take(limit).cloned().collect())
+    }
+
+    fn history(&self) -> Result<Vec<MemoryEntry>, Self::Error> {
+        self.recent(usize::MAX)
+    }
+}
+
+/// Composes a hot [`RingMemory`] tier with a cold [`SqliteMemoryStore`] tier.
+pub struct TwoTierMemory {
+    /// Serializes composite reads and writes so both tiers expose one order.
+    coherence: Mutex<()>,
+    ring: RingMemory,
+    persistent: SqliteMemoryStore,
+}
+
+impl TwoTierMemory {
+    /// Create a two-tier store with ring capacity `ring_capacity`.
+    pub fn in_memory(ring_capacity: usize) -> Result<Self, MemoryError> {
+        Ok(Self {
+            coherence: Mutex::new(()),
+            ring: RingMemory::new(ring_capacity),
+            persistent: SqliteMemoryStore::open_in_memory()?,
+        })
+    }
+}
+
+impl MemoryPort for TwoTierMemory {
+    type Error = MemoryError;
+
+    fn append(&self, key: &str, content: &str) -> Result<Uuid, Self::Error> {
+        let _coherence = self.coherence.lock().unwrap();
+        let id = Uuid::new_v4();
+        self.persistent
+            .append_with_id(id, key, content)
+            .map_err(MemoryError::from)?;
+        self.ring.push_entry_with_id(id, key, content);
+        Ok(id)
+    }
+
+    fn get(&self, key: &str) -> Result<Option<String>, Self::Error> {
+        let _coherence = self.coherence.lock().unwrap();
+        if let Some(v) = self.ring.get(key)? {
+            return Ok(Some(v));
+        }
+        self.persistent.get(key).map_err(MemoryError::from)
+    }
+
+    fn recent(&self, limit: usize) -> Result<Vec<MemoryEntry>, Self::Error> {
+        let _coherence = self.coherence.lock().unwrap();
+        self.ring.recent(limit)
+    }
+
+    fn history(&self) -> Result<Vec<MemoryEntry>, Self::Error> {
+        let _coherence = self.coherence.lock().unwrap();
+        self.persistent.history().map_err(MemoryError::from)
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use std::sync::{Arc, Barrier};
+    use std::thread;
+
+    #[test]
+    fn ring_evicts_oldest_at_capacity() {
+        let ring = RingMemory::new(2);
+        ring.append("a", "1").unwrap();
+        ring.append("b", "2").unwrap();
+        ring.append("c", "3").unwrap();
+        let recent = ring.recent(10).unwrap();
+        assert_eq!(recent.len(), 2);
+        assert_eq!(recent[0].content, "3");
+        assert_eq!(recent[1].content, "2");
+        assert!(recent.iter().all(|e| e.content != "1"));
+    }
+
+    #[test]
+    fn zero_capacity_ring_retains_no_entries() {
+        let ring = RingMemory::new(0);
+        ring.append("a", "1").unwrap();
+
+        assert!(ring.recent(10).unwrap().is_empty());
+        assert_eq!(ring.get("a").unwrap(), None);
+    }
+
+    #[test]
+    fn persistent_round_trip() {
+        let store = SqliteMemoryStore::open_in_memory().unwrap();
+        store.append("topic", "hello").unwrap();
+        assert_eq!(store.get("topic").unwrap(), Some("hello".into()));
+        let hist = store.history().unwrap();
+        assert_eq!(hist.len(), 1);
+        assert_eq!(hist[0].content, "hello");
+    }
+
+    #[test]
+    fn two_tier_compose() {
+        let mem = TwoTierMemory::in_memory(2).unwrap();
+        mem.append("k", "v1").unwrap();
+        mem.append("k", "v2").unwrap();
+        mem.append("k", "v3").unwrap();
+        assert_eq!(mem.get("k").unwrap(), Some("v3".into()));
+        assert_eq!(mem.recent(10).unwrap().len(), 2);
+        assert_eq!(mem.history().unwrap().len(), 3);
+    }
+
+    #[test]
+    fn two_tier_uses_the_same_id_in_both_tiers() {
+        let mem = TwoTierMemory::in_memory(1).unwrap();
+        let id = mem.append("k", "v").unwrap();
+
+        assert_eq!(mem.recent(1).unwrap()[0].id, id);
+        assert_eq!(mem.history().unwrap()[0].id, id);
+    }
+
+    #[test]
+    fn two_tier_zero_capacity_returns_latest_persisted_value_within_one_second() {
+        let mem = TwoTierMemory::in_memory(0).unwrap();
+        let first = mem.append("k", "first").unwrap();
+        let second = mem.append("k", "second").unwrap();
+
+        assert_eq!(mem.get("k").unwrap(), Some("second".into()));
+        let history = mem.history().unwrap();
+        assert_eq!(history[0].id, second);
+        assert_eq!(history[1].id, first);
+    }
+
+    #[test]
+    fn two_tier_concurrent_appends_keep_hot_and_durable_order_aligned() {
+        let mem = Arc::new(TwoTierMemory::in_memory(4).unwrap());
+        let start = Arc::new(Barrier::new(3));
+        let mut workers = Vec::new();
+        for content in ["first", "second"] {
+            let mem = Arc::clone(&mem);
+            let start = Arc::clone(&start);
+            workers.push(thread::spawn(move || {
+                start.wait();
+                mem.append("k", content).unwrap()
+            }));
+        }
+        start.wait();
+        for worker in workers {
+            worker.join().unwrap();
+        }
+
+        let newest_hot = mem.recent(1).unwrap().remove(0);
+        let newest_durable = mem.history().unwrap().remove(0);
+        assert_eq!(newest_hot.id, newest_durable.id);
+        assert_eq!(mem.get("k").unwrap(), Some(newest_durable.content.clone()));
+    }
+}

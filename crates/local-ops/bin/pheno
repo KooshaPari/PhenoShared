@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+printf '%s\n' 'pheno unavailable: no authorized pheno deployment is installed' >&2
+printf '%s\n' 'This guard does not run the unproven /usr/local/bin/pheno fallback.' >&2
+printf '%s\n' 'Restore only from a canonical source or verified package release.' >&2
+exit 127

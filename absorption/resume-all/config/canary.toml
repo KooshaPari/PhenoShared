@@ -1,0 +1,40 @@
+[canary]
+cohort_size_pct = 5
+auto_rollback = true
+cohort_key = "pid_mod_20"
+
+[targets]
+
+[targets.session-snapshot]
+production = "1.0.0"
+canary = "1.1.0-rc1"
+enabled = true
+auto_promote_after_successful_ticks = 100
+binary = "session_snapshot.py"
+max_instances = 1
+rolled_back_at = "2026-08-08T09:37:38Z"
+
+[targets.ipc-daemon]
+production = "0.2.0"
+canary = "0.3.0-rc1"
+enabled = true
+auto_promote_after_successful_ticks = 100
+binary = "sharecli-ipc-daemon"
+max_instances = 1
+rolled_back_at = "2026-08-08T09:37:38Z"
+
+[targets.thegent-mcp]
+production = "0.1.0"
+canary = "0.2.0-rc1"
+enabled = false
+auto_promote_after_successful_ticks = 200
+binary = "thegent-mcp"
+max_instances = 1
+
+[targets.sharecli-tray]
+production = "0.4.0"
+canary = "0.5.0-rc1"
+enabled = false
+auto_promote_after_successful_ticks = 200
+binary = "sharecli-tray"
+max_instances = 1

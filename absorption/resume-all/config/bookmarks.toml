@@ -1,0 +1,58 @@
+# resume-all bookmarks — named shortcuts for partial restore.
+#
+# Use:    resume-all --only=<name>
+#
+# Where <name> matches a top-level key below. Each bookmark is a set of
+# category rules:
+#
+#   cwd_prefixes   list of path prefixes; pane's cwd must start with one
+#   harnesses      list of harness names; pane's harness must equal one
+#   tty_pattern    regex; pane's tty must match
+#
+# Matching semantics:
+#   - OR within a category   (any rule in the list satisfies that category)
+#   - AND across categories  (pane must satisfy every category that has rules)
+#   - categories with no rules (empty list / key absent) are wildcards
+#   - argv-supplied panes (session_id_source == "argv") ALWAYS win
+#     over the bookmark filter; --conversation-id is sacred.
+#
+# Files use TOML (parsed by stdlib tomllib in Python 3.11+, no PyYAML
+# dependency needed).
+#
+# To add a new bookmark: append a new [section] with any subset of the
+# three keys. To disable a bookmark without removing it, prefix the
+# section name with "_" (e.g. [_draft]) — bookmarks beginning with
+# "_" are ignored by the loader.
+#
+# To print the active set:   resume-all bookmarks
+
+# ---------------------------------------------------------------------------
+# "work" — code work panes (CodeProjects/Phenotype/repos + thegent) running
+# on codex/forge/droid harnesses, restricted to the Ghostty ttys017-022
+# cluster that holds the development pane grid.
+# ---------------------------------------------------------------------------
+[work]
+cwd_prefixes = [
+  "/Users/kooshapari/CodeProjects/Phenotype/repos",
+  "/Users/kooshapari/thegent",
+]
+harnesses = ["codex", "forge", "droid"]
+tty_pattern = "^ttys0(1[7-9]|2[0-2])$"
+
+# ---------------------------------------------------------------------------
+# "personal" — Documents/Downloads panes running on claude/cursor harnesses.
+# No tty restriction (any cluster is fine).
+# ---------------------------------------------------------------------------
+[personal]
+cwd_prefixes = [
+  "/Users/kooshapari/Documents",
+  "/Users/kooshapari/Downloads",
+]
+harnesses = ["claude", "cursor"]
+
+# ---------------------------------------------------------------------------
+# Default behavior when no --only is given.
+#   "all"  → restore every pane (current default, preserves existing behavior)
+#   "<name>" → treat this bookmark as the implicit default
+# ---------------------------------------------------------------------------
+default = "all"

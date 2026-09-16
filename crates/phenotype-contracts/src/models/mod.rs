@@ -1,10 +1,23 @@
-//! Domain models for Phenotype contracts.
+//! # Domain Models
+//!
+//! Shared domain models and value objects.
+//!
+//! ## Types
+//!
+//! - **Value Objects**: Immutable objects defined by their attributes
+//! - **Entities**: Objects with identity that persists over time
+//! - **Aggregates**: Cluster of related entities and value objects
+//!
+//! ## Design Principles
+//!
+//! - **Value objects** are compared by their attributes, not identity
+//! - **Entities** have unique IDs and are mutable
+//! - **Aggregates** define consistency boundaries
 
-/// Marker trait for domain entities
-pub trait Entity: Send + Sync {}
+pub mod aggregate;
+pub mod entity;
+pub mod value_object;
 
-/// Marker trait for value objects
-pub trait ValueObject: Send + Sync {}
-
-/// Marker trait for aggregate roots
-pub trait AggregateRoot: Send + Sync {}
+pub use aggregate::AggregateRoot;
+pub use entity::{Entity, EntityExt};
+pub use value_object::ValueObject;

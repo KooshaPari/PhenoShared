@@ -1,0 +1,136 @@
+#!/usr/bin/env zsh
+# tailscale-watch — Watch Tailscale daemon, retry via brew services, emit beads.
+#
+# Designed to be called repeatedly from a launchd daemon (StartInterval=60s).
+# Each invocation:
+#   1. Checks if tailscaled process is running (pgrep).
+#   2. Tries `tailscale status` with hard timeout (may hang in launchd sandbox).
+#   3. Falls back to checking kernel routing table for Tailscale CGNAT routes
+#      (100.64/10, 100.96.0.0/12, 100.100.100.100) — this DOES work in launchd.
+#   4. If Tailscale is DOWN (all three checks fail):
+#      - Writes a state tick to tailscale-watch.ndjson (for MCP consumption)
+#      - Attempts `brew services start tailscale` (prompts for sudo if needed;
+#        we time-bound so launchd doesn't hang)
+#      - Emits a "warn" bead to the cockpit (via bead-ctl.sh)
+#   5. If Tailscale is UP (recovered):
+#      - Emits a "complete" bead (recovery) — only on transition
+#   6. Tracks state in tailscale-watch.state (last_known = up|down)
+#
+# Exit codes:
+#   0 = healthy (Tailscale up)
+#   1 = unhealthy (Tailscale down, recovery attempted or failed)
+#
+# Logs go to stderr which launchd redirects to tailscale-watch.log.
+
+set -euo pipefail
+
+NDJSON="/Users/kooshapari/.local/share/resume-all/tailscale-watch.ndjson"
+STATE_FILE="/Users/kooshapari/.local/share/resume-all/tailscale-watch.state"
+BEAD="/Users/kooshapari/CodeProjects/Phenotype/repos/beads/bead-ctl.sh"
+NOW_ISO=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+
+mkdir -p "$(dirname "$NDJSON")" 2>/dev/null || true
+
+# Read last known state (default "unknown")
+last_state="unknown"
+[[ -f "$STATE_FILE" ]] && last_state=$(cat "$STATE_FILE" | tr -d ' \n')
+
+# Detect Tailscale state via THREE checks (any one positive → up):
+# 1. pgrep tailscaled — process table; may be hidden by launchd sandbox.
+# 2. tailscale status — talks to daemon over socket; may hang in launchd.
+# 3. netstat -rn | grep 100.x — kernel routes; works in launchd context.
+daemon_running="no"
+if pgrep -x tailscaled >/dev/null 2>&1; then
+  daemon_running="yes"
+fi
+has_tailscale_routes="no"
+if netstat -rn 2>/dev/null | grep -qE '^100\.64|^100\.(96|97|100|112|122)'; then
+  has_tailscale_routes="yes"
+fi
+
+# Time-bound tailscale status (in case it hangs due to launchd sandboxing)
+set +e
+status_output=""
+exit_code=0
+tailscale status >/tmp/ts-status.out 2>/tmp/ts-status.err &
+TS_PID=$!
+sleep 3
+if kill -0 $TS_PID 2>/dev/null; then
+  kill $TS_PID 2>/dev/null
+  exit_code=124
+  status_output="TIMEOUT_3s"
+else
+  wait $TS_PID 2>/dev/null
+  exit_code=$?
+  status_output=$(cat /tmp/ts-status.out /tmp/ts-status.err 2>/dev/null || true)
+  rm -f /tmp/ts-status.out /tmp/ts-status.err
+fi
+set -e
+
+# Determine state
+if [[ "$exit_code" == "0" ]] && ! echo "$status_output" | grep -q "failed to connect"; then
+  current_state="up"
+  host_lines=$(echo "$status_output" | grep -cE "^[0-9]+\.")
+elif [[ "$daemon_running" == "yes" || "$has_tailscale_routes" == "yes" ]]; then
+  current_state="up"
+  host_lines=-1
+else
+  current_state="down"
+  host_lines=0
+fi
+
+# Build NDJSON tick (always)
+ts=$(python3 -c "import time; print(int(time.time() * 1000))" 2>/dev/null || echo "$(date +%s)000")
+tick="{\"ts\":${ts},\"ts_iso\":\"${NOW_ISO}\",\"state\":\"${current_state}\",\"last_state\":\"${last_state}\",\"daemon_pid_running\":$([[ \"$daemon_running\" == \"yes\" ]] && echo \"true\" || echo \"false\"),\"has_tailscale_routes\":$([[ \"$has_tailscale_routes\" == \"yes\" ]] && echo \"true\" || echo \"false\"),\"status_exit_code\":${exit_code},\"host_lines\":${host_lines}}"
+print -r -- "$tick" >> "$NDJSON" 2>/dev/null || true
+
+# State transition: down→up
+if [[ "$current_state" == "up" && "$last_state" == "down" ]]; then
+  print -u2 "[tailscale-watch] RECOVERED at $NOW_ISO"
+  if [[ -x "$BEAD" ]]; then
+    "$BEAD" complete "tailscale-daemon" "Tailscale daemon recovered. hosts visible: $host_lines" 2>&1 | print -u2 || true
+  fi
+  echo "$current_state" > "$STATE_FILE"
+  exit 0
+fi
+
+# State transition: up→down (or unknown→down)
+if [[ "$current_state" == "down" && "$last_state" != "down" ]]; then
+  print -u2 "[tailscale-watch] DOWN detected at $NOW_ISO. attempting recovery..."
+  brew_services_output=""
+  if command -v brew >/dev/null 2>&1; then
+    # Run with timeout so launchd doesn't hang waiting for sudo prompt.
+    # brew services start tailscale will prompt for sudo via TouchID —
+    # if no user is present, it times out without changing state.
+    brew_services_output=$(timeout 5 brew services start tailscale 2>&1 || echo "BREW_TIMEOUT_OR_DENIED")
+  fi
+  sleep 2
+  # Re-check: if routes are present OR tailscaled process exists, we're up
+  if pgrep -x tailscaled >/dev/null 2>&1 || netstat -rn 2>/dev/null | grep -qE '^100\.64|^100\.(96|97|100|112|122)'; then
+    print -u2 "[tailscale-watch] recovery SUCCEEDED: $brew_services_output"
+    if [[ -x "$BEAD" ]]; then
+      "$BEAD" complete "tailscale-daemon" "Tailscale daemon recovered via brew services start" 2>&1 | print -u2 || true
+    fi
+    echo "up" > "$STATE_FILE"
+    exit 0
+  else
+    print -u2 "[tailscale-watch] recovery FAILED: $brew_services_output"
+    if [[ -x "$BEAD" ]]; then
+      "$BEAD" warn "tailscale-daemon" "Tailscale daemon is DOWN. brew services returned: ${brew_services_output:0:120}. Manual intervention needed." 2>&1 | print -u2 || true
+    fi
+    echo "$current_state" > "$STATE_FILE"
+    exit 1
+  fi
+fi
+
+# No transition: just record current state if changed
+if [[ "$current_state" != "$last_state" ]]; then
+  echo "$current_state" > "$STATE_FILE"
+fi
+
+# Default exit
+if [[ "$current_state" == "up" ]]; then
+  exit 0
+else
+  exit 1
+fi

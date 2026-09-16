@@ -1,0 +1,15 @@
+[package]
+name = "pheno-fs"
+version = "0.1.0"
+edition = "2021"
+description = "Filesystem utilities for Pheno"
+
+[dependencies]
+tokio = { workspace = true, features = ["fs"] }
+anyhow = { workspace = true }
+walkdir = "2.5"
+sha2 = "0.11"
+hex = "0.4"
+
+[dev-dependencies]
+tokio-test = "0.4"

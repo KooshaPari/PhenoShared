@@ -1,0 +1,9 @@
+# Cargo-nextest configuration for phenotype-forge
+
+[profile.default]
+timeout = { per_test = 120, per_item = 60 }
+formatter = "pretty"
+failure-output = "immediate"
+show_skipped = true
+fail-fast = false
+retries = 1

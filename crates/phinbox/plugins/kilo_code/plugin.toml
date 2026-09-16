@@ -1,0 +1,30 @@
+# phinbox plugin manifest for Kilo Code (kilo)
+# Format reference: kilo mcp add --name <NAME> --command <CMD> --scope user
+
+[plugin]
+name = "phinbox"
+version = "0.9.0"
+agent = "kilo"
+description = "phinbox: native-popup forms + async inbox for agents (Kilo Code MCP server + skill)"
+
+[mcp]
+name = "phinbox-mcp"
+command = "phinbox-mcp"
+# kilo stores its config at ~/.config/kilo/kilo.jsonc (or $KILO_HOME/config.json);
+# the install.sh script registers it via `kilo mcp add --name phinbox-mcp --command phinbox-mcp --scope user`.
+
+[skill]
+source = "../../.phinbox/skills/phinbox/SKILL.md"
+destination = "~/.kilo/skills/phinbox/SKILL.md"
+
+[binaries]
+required = ["phinbox-mcp", "phinbox"]
+install_command = "cargo install --path . --bins phinbox,phinbox-mcp --locked"
+
+[verification]
+mcp_list = "kilo mcp list | grep phinbox-mcp"
+skill_present = "test -f ~/.kilo/skills/phinbox/SKILL.md"
+
+[uninstall]
+mcp_remove = "kilo mcp remove phinbox-mcp --scope user"
+skill_remove = "rm -rf ~/.kilo/skills/phinbox"

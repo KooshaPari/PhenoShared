@@ -1,0 +1,46 @@
+[package]
+name = "httpora-core"
+version = "0.1.0"
+description = "Ergonomic HTTP middleware — rate limiting, retries, circuit breaker, CORS — for Tower-based services"
+edition = "2021"
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/KooshaPari/Quillr"
+documentation = "https://docs.rs/httpora-core"
+
+[dependencies]
+tower = { version = "0.5", features = ["util"], optional = true }
+pin-project = { version = "1", optional = true }
+futures-core = { version = "0.3", optional = true }
+tokio = { version = "1", features = ["time"], optional = true }
+serde = { version = "1", features = ["derive"], optional = true }
+serde_json = { version = "1", optional = true }
+fastrand = "2"
+
+[features]
+default = ["full"]
+full = ["tower", "serde", "serde_json"]
+tower = ["dep:tower", "dep:pin-project", "dep:futures-core", "dep:tokio"]
+serde = ["dep:serde"]
+serde_json = ["dep:serde_json"]
+
+[dev-dependencies]
+tokio = { version = "1", features = ["rt", "macros", "time"] }
+tower = { version = "0.5", features = ["util"] }
+pin-project = "1"
+futures-core = "0.3"
+
+[[test]]
+name = "rate_limit"
+path = "tests/rate_limit_test.rs"
+
+[[test]]
+name = "retry"
+path = "tests/retry_test.rs"
+
+[[test]]
+name = "circuit_breaker"
+path = "tests/circuit_breaker_test.rs"
+
+[[test]]
+name = "cors"
+path = "tests/cors_test.rs"

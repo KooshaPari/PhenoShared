@@ -1,0 +1,17 @@
+#!/bin/zsh
+# leak-detect-wrapper — launchd entry point for the RSS / leak detector.
+#
+# The plist can't have shell logic; this wrapper exec's the python script
+# with the `collect` subcommand. launchd's StartInterval=30 (configured in
+# the plist) provides the periodic scheduling; each invocation writes one
+# JSONL row per monitored process. For an ad-hoc daemon (foreground 30s
+# loop with in-memory slope computation and alerting) invoke
+# `leak-detect run` directly in a terminal.
+#
+# Stdout/stderr from the python process are routed to the plist's
+# StandardOutPath/StandardErrorPath. The wrapper itself stays silent on
+# success so the launchd logs only contain intentional output.
+
+set -e
+
+exec /opt/homebrew/bin/python3 /Users/kooshapari/bin/leak-detect.py collect "$@"

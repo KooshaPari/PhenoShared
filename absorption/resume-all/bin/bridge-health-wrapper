@@ -1,0 +1,15 @@
+#!/usr/bin/env zsh
+# Wrapper for launchd: runs bridge-health and writes result to bridge-health.jsonl
+# so the cockpit dashboard can read it.
+HEALTH_FILE=/Users/kooshapari/.local/share/resume-all/bridge-health.ndjson
+mkdir -p "$(dirname "$HEALTH_FILE")"
+/Users/kooshapari/bin/bridge-health > "/tmp/bridge-health.out" 2>&1
+RC=$?
+TS=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+{
+  printf '{"ts":"%s","healthy":%s,"exit_code":%d,"output":"%s"}\n' \
+    "$TS" \
+    "$([[ $RC -eq 0 ]] && echo true || echo false)" \
+    "$RC" \
+    "$(tr '\n' ' ' < /tmp/bridge-health.out | head -c 4000 | sed 's/"/\\"/g')"
+} >> "$HEALTH_FILE"

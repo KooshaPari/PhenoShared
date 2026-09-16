@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "phinbox_mcp": {
+      "command": "phinbox-mcp",
+      "args": ["serve"],
+      "transport": "stdio",
+      "trustLevel": "trusted"
+    }
+  }
+}

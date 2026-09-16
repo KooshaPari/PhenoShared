@@ -1,0 +1,156 @@
+[package]
+name = "phinbox"
+version = "0.9.0"
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+description = "Native OS popup elicitation tool — Rust library + CLI + MCP server"
+repository = "https://github.com/KooshaPari/phenotype-tooling"
+homepage = "https://github.com/KooshaPari/phenotype-tooling"
+readme = "README.md"
+keywords = ["phenotype", "elicitation", "mcp", "popup", "agent-ux"]
+categories = ["command-line-utilities", "gui", "development-tools"]
+publish = false
+
+[package.metadata.dist]
+# cargo-dist: distribute despite publish = false
+dist = true
+installers = ["shell", "powershell", "npm"]
+npm-scope = "@kooshapari"
+npm-package = "phinbox-mcp"
+install-path = "~/.phinbox/bin"
+features = ["mcp"]
+
+[lib]
+name = "phinbox"
+path = "src/lib.rs"
+
+[[bin]]
+name = "phinbox"
+path = "src/cli/mod.rs"
+
+[[bin]]
+name = "phinbox-mcp"
+path = "src/bin_mcp.rs"
+required-features = ["mcp"]
+
+[[bin]]
+name = "phinbox-app"
+path = "src/bin_app/mod.rs"
+required-features = ["mcp", "tray-native"]
+
+[dependencies]
+clap = { workspace = true, features = ["derive", "env"] }
+serde = { workspace = true, features = ["derive"] }
+serde_json = { workspace = true }
+thiserror = { workspace = true }
+anyhow = { workspace = true }
+tokio = { workspace = true, features = ["rt-multi-thread", "macros", "process", "io-util", "sync", "time", "signal", "net"] }
+tracing = { workspace = true }
+tracing-subscriber = { workspace = true }
+chrono = { workspace = true, features = ["serde"] }
+regex = { workspace = true }
+uuid = { workspace = true, features = ["v4", "serde"] }
+schemars = "1.2"
+crossbeam-channel = "0.5"
+parking_lot = "0.12"
+rmcp = { version = "3.1", features = ["server", "transport-io", "macros"], optional = true }
+inquire = { version = "0.9", features = ["date"] }
+which = "8"
+phenotype-tooling-observability = { path = "../phenotype-tooling-observability", default-features = false, optional = true }
+prometheus = { version = "0.14", optional = true }
+
+# FFI for native tray — only compiled when the `tray-native` feature is on.
+# tray-icon handles its own platform backends; the objc2/windows-sys crates
+# here are for the badge-text and message-pump extras that tray-icon does not
+# expose directly.
+image = { version = "0.25", optional = true, default-features = false, features = ["png"] }
+tray-icon = { version = "0.24", optional = true, default-features = false }
+objc2 = { version = "0.6", optional = true }
+block2 = { version = "0.6", optional = true }
+objc2-app-kit = { version = "0.3", optional = true, default-features = false }
+objc2-foundation = { version = "0.3", optional = true }
+windows-sys = { version = "0.61", optional = true, features = [
+    "Win32_Foundation",
+    "Win32_UI_Shell",
+    "Win32_UI_WindowsAndMessaging",
+] }
+
+# TUI inbox viewer (v0.5.0). ratatui is no_std + needs explicit backend feature;
+# ratatui-crossterm is selected because it works over the same crossterm backend
+# we've already pulled in for signal handling.
+ratatui = { version = "0.30", default-features = false, features = ["crossterm_0_29", "underline-color"] }
+ratatui-crossterm = { version = "0.1", features = ["crossterm_0_29"] }
+crossterm = "0.29"
+
+[features]
+default = ["mcp"]
+observability = ["dep:phenotype-tooling-observability", "dep:prometheus"]
+mcp = ["dep:rmcp"]
+# Real OS tray icon (NSStatusItem on mac, Shell_NotifyIcon on win,
+# libappindicator on linux) with badge counts and menu. Off by default
+# because it pulls platform-specific dependencies and only makes sense
+# when running `phinbox daemon` interactively.
+tray-native = [
+    "dep:tray-icon",
+    "dep:objc2",
+    "dep:objc2-foundation",
+    "dep:objc2-app-kit",
+    "dep:block2",
+    "dep:windows-sys",
+    "dep:image",
+    "objc2-foundation/NSDate",
+    "objc2-foundation/block2",
+]
+
+[dev-dependencies]
+tempfile = "3.8"
+assert_fs = "1.1"
+predicates = "3.1"
+dirs = "6"
+
+[lints.rust]
+unsafe_code = "deny"
+
+[lints.clippy]
+all = { level = "warn", priority = -1 }
+pedantic = { level = "warn", priority = -1 }
+missing_errors_doc = "allow"
+missing_panics_doc = "allow"
+doc_markdown = "allow"
+module_name_repetitions = "allow"
+must_use_candidate = "allow"
+unused_async = "allow"
+too_many_lines = "allow"
+match_same_arms = "allow"
+items_after_statements = "allow"
+format_push_string = "allow"
+needless_pass_by_value = "allow"
+unnecessary_wraps = "allow"
+manual_let_else = "allow"
+case_sensitive_file_extension_comparisons = "allow"
+never_loop = "allow"
+large_enum_variant = "allow"
+cast_possible_wrap = "allow"
+cast_possible_truncation = "allow"
+default_trait_access = "allow"
+needless_continue = "allow"
+unnecessary_sort_by = "allow"
+similar_names = "allow"
+ptr_arg = "allow"
+needless_raw_string_hashes = "allow"
+redundant_closure_for_method_calls = "allow"
+redundant_closure = "allow"
+too_many_bools = "allow"
+option_if_let_else = "allow"
+missing_asserts_for_indexing = "allow"
+doc_overindented_list_items = "allow"
+double_must_use = "allow"
+field_reassign_with_default = "allow"
+assertions_on_constants = "allow"
+manual_div_ceil = "allow"
+cast_sign_loss = "allow"
+trivially_copy_pastable_by_value = "allow"
+needless_pass_by_ref = "allow"
+struct_excessive_bools = "allow"
+module_inception = "allow"

@@ -1,0 +1,27 @@
+[package]
+name = "pareto-rs"
+description = "Pareto analysis helpers for tokenledger"
+repository = "https://github.com/KooshaPari/zz-Tokn"
+version = "0.1.5"
+edition = "2024"
+license = "MIT"
+authors = ["KooshaPari <kooshapari@kooshapari.com>"]
+
+[dependencies]
+anyhow = "1.0"
+chrono = { version = "0.4", features = ["serde"] }
+clap = { version = "4.5", features = ["derive"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+serde_yaml_ng = "0.10"
+prometheus-client = "0.25"
+axum = "0.8"
+tokio = { version = "1.39", features = ["full"] }
+thiserror = "2.0"
+
+[dev-dependencies]
+tokio = { version = "1.39", features = ["macros", "rt-multi-thread"] }
+
+[[bin]]
+name = "pareto-server"
+path = "src/bin/server.rs"

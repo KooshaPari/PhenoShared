@@ -1,0 +1,22 @@
+[package]
+name = "fr-trace"
+version.workspace = true
+edition.workspace = true
+description = "FR -> test traceability scanner (AgilePlus FR-* convention)"
+
+readme = "README.md"
+license = "Apache-2.0 OR MIT"
+repository = "https://github.com/KooshaPari/phenotype-tooling"
+homepage = "https://github.com/KooshaPari/phenotype-tooling"
+keywords = ["phenotype", "tooling", "cli"]
+categories = ["command-line-utilities"]
+[[bin]]
+name = "fr-trace"
+path = "src/main.rs"
+
+[dependencies]
+clap = { workspace = true }
+anyhow = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+walkdir = { workspace = true }

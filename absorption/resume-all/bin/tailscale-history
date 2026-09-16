@@ -1,0 +1,82 @@
+#!/usr/bin/env zsh
+# tailscale-history — Build a rolling history of Tailscale state ticks.
+#
+# Each tick:
+#   1. Reads the latest tailscale-watch.ndjson tick
+#   2. Captures compact summary (state, daemon_pid_running, has_routes, exit_code)
+#
+# Designed to be called repeatedly from a launchd daemon (StartInterval=300s = 5min).
+# Keeps last ~24h of history (288 ticks at 5min intervals).
+
+set -euo pipefail
+
+NDJSON="/Users/kooshapari/.local/share/resume-all/tailscale-history.ndjson"
+SOURCE="/Users/kooshapari/.local/share/resume-all/tailscale-watch.ndjson"
+RETENTION_LINES=288  # 24h at 5min intervals
+
+mkdir -p "$(dirname "$NDJSON")" 2>/dev/null || true
+
+ts=$(python3 -c "import time; print(int(time.time() * 1000))" 2>/dev/null || echo "$(date +%s)000")
+now_iso=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+
+# Read the latest tailscale-watch tick
+state="unknown"
+daemon_pid="false"
+has_routes="false"
+status_exit="-1"
+host_lines="-1"
+if [[ -f "$SOURCE" ]]; then
+  latest=$(tail -1 "$SOURCE" 2>/dev/null)
+  if [[ -n "$latest" ]]; then
+    state=$(echo "$latest" | python3 -c "
+import json, sys
+try:
+    d = json.loads(sys.stdin.read())
+    print(d.get('state', 'unknown'))
+except: print('unknown')
+" 2>/dev/null)
+    daemon_pid=$(echo "$latest" | python3 -c "
+import json, sys
+try:
+    d = json.loads(sys.stdin.read())
+    print(str(d.get('daemon_pid_running', 'false')).lower())
+except: print('false')
+" 2>/dev/null)
+    has_routes=$(echo "$latest" | python3 -c "
+import json, sys
+try:
+    d = json.loads(sys.stdin.read())
+    print(str(d.get('has_tailscale_routes', 'false')).lower())
+except: print('false')
+" 2>/dev/null)
+    status_exit=$(echo "$latest" | python3 -c "
+import json, sys
+try:
+    d = json.loads(sys.stdin.read())
+    print(d.get('status_exit_code', -1))
+except: print(-1)
+" 2>/dev/null)
+    host_lines=$(echo "$latest" | python3 -c "
+import json, sys
+try:
+    d = json.loads(sys.stdin.read())
+    print(d.get('host_lines', -1))
+except: print(-1)
+" 2>/dev/null)
+  fi
+fi
+
+tick="{\"ts\":${ts},\"ts_iso\":\"${now_iso}\",\"state\":\"${state}\",\"daemon_pid_running\":${daemon_pid},\"has_routes\":${has_routes},\"status_exit_code\":${status_exit},\"host_lines\":${host_lines}}"
+
+# Append
+print -r -- "$tick" >> "$NDJSON"
+
+# Truncate
+total=$(wc -l < "$NDJSON" 2>/dev/null | tr -d ' ' || echo 0)
+if (( total > RETENTION_LINES )); then
+  tmp=$(mktemp "${NDJSON}.XXXXXX") || exit 1
+  tail -n "$RETENTION_LINES" "$NDJSON" > "$tmp" 2>/dev/null || true
+  mv "$tmp" "$NDJSON"
+fi
+
+exit 0

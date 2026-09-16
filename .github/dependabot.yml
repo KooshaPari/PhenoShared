@@ -1,23 +1,34 @@
+# .github/dependabot.yml - dependabot for the Phenotype fleet
+# See ADR-042 (security audit cadence). Security-only updates.
+
 version: 2
 updates:
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
       interval: "weekly"
+      day: "monday"
+      time: "09:00"
+      timezone: "America/Los_Angeles"
+    labels:
+      - "dependencies"
+      - "security"
+    groups:
+      github-actions:
+        patterns:
+          - "*"
+    open-pull-requests-limit: 5
 
-  - package-ecosystem: "npm"
-    directory: "/docs"
+  - package-ecosystem: "cargo"
+    directory: "/"
     schedule:
       interval: "weekly"
-    ignore:
-      # GHSA-67mh-4wv8-2f99 (esbuild, dev-server-only request forwarding) and
-      # GHSA-859w-5945-r5v3 / GHSA-jqfx-vfvm-9x3v (vite fs.deny bypass / path
-      # traversal in dev server & optimized deps). No fix is available: the
-      # patched releases require vite 6.x, but vitepress's latest stable
-      # (1.6.3/1.6.4) only supports vite ^5, and vitepress 2.x (which adds
-      # vite 6 support) is alpha-only. These affect `vitepress dev` (local
-      # dev server) only, not the built static docs site. Revisit when
-      # vitepress ships a stable release on vite 6+.
-      - dependency-name: "esbuild"
-      - dependency-name: "vite"
-      - dependency-name: "launch-editor"
+      day: "monday"
+      time: "09:00"
+      timezone: "America/Los_Angeles"
+    labels:
+      - "dependencies"
+      - "security"
+    open-pull-requests-limit: 5
+    # Only security updates
+    # (set via the GitHub UI for the repo: "Security updates: enabled")

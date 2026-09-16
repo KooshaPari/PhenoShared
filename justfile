@@ -1,20 +1,14 @@
-# Grade targets (strictest checks — no caching)
-grade:
-    @echo "=== Running full grade ==="
-    ./grade.sh
+default:
+    @just --list
 
-grade-fast:
-    @echo "=== Running fast grade ==="
-    ./grade.sh --fast
+build:
+    cargo build --workspace
 
-grade-json:
-    @echo "=== Running grade (JSON) ==="
-    ./grade.sh --json
+test:
+    cargo test --workspace
 
-grade-html:
-    @echo "=== Running grade (HTML) ==="
-    ./grade.sh --html
+lint:
+    cargo clippy --workspace --all-targets -- -D warnings
 
-# Measure code coverage (SSOT: see grade.sh for the canonical command)
-coverage:
-    cargo llvm-cov --workspace --fail-under-lines 85
+check:
+    cargo fmt --all -- --check

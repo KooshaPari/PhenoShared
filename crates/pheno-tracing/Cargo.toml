@@ -1,0 +1,49 @@
+[package]
+name = "pheno-tracing"
+version = "0.4.0"
+edition = "2021"
+rust-version = "1.75"
+license = "MIT OR Apache-2.0"
+description = "Canonical port-driven distributed tracing substrate for the pheno-* fleet (ADR-036). Provides TracePort + InMemory/Stdout adapters; consumers depend on this for consistent spans, OTLP export, and fleet-wide observation."
+repository = "https://github.com/KooshaPari/pheno-tracing"
+documentation = "https://docs.rs/pheno-tracing"
+keywords = ["tracing", "observability", "opentelemetry", "phenotype", "otel"]
+categories = ["development-tools", "asynchronous", "api-bindings"]
+readme = "README.md"
+publish = true
+
+# Workspace member of the PhenoVCS workspace root.
+# The standalone [workspace] table was removed so this crate can
+# participate in the PhenoVCS Cargo workspace (crates/ + workspace.dependencies).
+
+[lib]
+name = "pheno_tracing"
+path = "src/lib.rs"
+
+[dependencies]
+async-trait = "0.1"
+serde = { version = "1.0", features = ["derive"] }
+thiserror = "2"
+tokio = { version = "1", features = ["full"] }
+tracing = "0.1"
+
+[dev-dependencies]
+criterion = { version = "0.8", features = ["html_reports"] }
+tokio = { version = "1", features = ["rt", "macros", "test-util"] }
+
+[[bench]]
+name = "sampler_benchmarks"
+harness = false
+
+[features]
+# Forward-compat shim for `tracing 0.2`. The `tracing = "0.1"` dep above is
+# the current default; when 0.2 ships GA, flip the dep and enable this feature
+# in CI to exercise the shim against the real 0.2 API. The feature is a no-op
+# today (empty) — its purpose is to gate the forward-compat test suite at
+# `tests/tracing-0-2-compat.rs` so downstream consumers aren't forced to pull
+# in pre-release deps.
+tracing-0-2 = []
+
+[[package.metadata.docs.rs]]
+targets = ["x86_64-unknown-linux-gnu"]
+all-features = true

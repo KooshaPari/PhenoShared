@@ -1,20 +1,23 @@
-//! Policy rule definitions with cached regex compilation.
-
-use regex::Regex;
-use serde::{Deserialize, Serialize};
+//! Policy rules - Allow, Deny, Require with pattern matching.
 
 use crate::context::EvaluationContext;
 use crate::error::PolicyEngineError;
-use crate::result::Severity;
+use regex::Regex;
+use serde::{Deserialize, Serialize};
 
+/// Types of policy rules.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 pub enum RuleType {
+    /// Allow rule: value matching pattern is allowed.
     Allow,
+    /// Deny rule: value matching pattern is denied.
     Deny,
+    /// Require rule: fact must exist and match pattern.
     Require,
 }
 
 impl RuleType {
+    /// Returns a string representation of the rule type.
     pub fn as_str(&self) -> &'static str {
         match self {
             RuleType::Allow => "Allow",
@@ -30,69 +33,71 @@ impl std::fmt::Display for RuleType {
     }
 }
 
+/// A policy rule with pattern matching.
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Rule {
+    /// The type of rule (Allow, Deny, Require).
     pub rule_type: RuleType,
+    /// The fact key to evaluate.
     pub fact: String,
+    /// The regex pattern to match against the fact value.
     pub pattern: String,
+    /// Optional human-readable description of the rule.
     pub description: Option<String>,
-    #[serde(default = "default_priority")]
-    pub priority: u32,
-    #[serde(skip)]
-    pub severity: Severity,
-    #[serde(skip)]
-    _compiled_regex: Option<regex::Regex>,
-}
-
-fn default_priority() -> u32 {
-    100
 }
 
 impl Rule {
+    /// Creates a new rule.
     pub fn new(rule_type: RuleType, fact: impl Into<String>, pattern: impl Into<String>) -> Self {
-        let pattern = pattern.into();
         Self {
             rule_type,
             fact: fact.into(),
-            pattern: pattern.clone(),
+            pattern: pattern.into(),
             description: None,
-            priority: 100,
-            severity: Severity::Error,
-            _compiled_regex: Regex::new(&pattern).ok(),
         }
     }
 
-    pub fn with_description(mut self, d: impl Into<String>) -> Self {
-        self.description = Some(d.into());
+    /// Sets the description of the rule.
+    pub fn with_description(mut self, description: impl Into<String>) -> Self {
+        self.description = Some(description.into());
         self
     }
 
-    pub fn with_priority(mut self, p: u32) -> Self {
-        self.priority = p;
-        self
-    }
-
-    pub fn with_severity(mut self, s: Severity) -> Self {
-        self.severity = s;
-        self
-    }
-
+    /// Evaluates this rule against a context.
+    ///
+    /// Returns Ok(true) if the rule is satisfied, Ok(false) if violated.
+    /// Returns Err if regex compilation or evaluation fails.
     pub fn evaluate(&self, context: &EvaluationContext) -> Result<bool, PolicyEngineError> {
-        let regex = match &self._compiled_regex {
-            Some(r) => r.clone(),
-            None => {
-                Regex::new(&self.pattern).map_err(|e| PolicyEngineError::RegexCompilationError {
-                    pattern: self.pattern.clone(),
-                    source: e,
-                })?
-            }
-        };
+        let regex =
+            Regex::new(&self.pattern).map_err(|e| PolicyEngineError::RegexCompilationError {
+                pattern: self.pattern.clone(),
+                source: e,
+            })?;
 
         let fact_value = context.get_string(&self.fact);
+
         match self.rule_type {
-            RuleType::Allow => Ok(fact_value.as_ref().is_none_or(|v| regex.is_match(v))),
-            RuleType::Deny => Ok(fact_value.as_ref().is_none_or(|v| !regex.is_match(v))),
-            RuleType::Require => Ok(fact_value.as_ref().is_some_and(|v| regex.is_match(v))),
+            RuleType::Allow => {
+                // Allow: fact must match pattern, or fact not exist is OK
+                match fact_value {
+                    Some(value) => Ok(regex.is_match(&value)),
+                    None => Ok(true), // Absence is allowed
+                }
+            }
+            RuleType::Deny => {
+                // Deny: fact must NOT match pattern
+                match fact_value {
+                    Some(value) => Ok(!regex.is_match(&value)),
+                    None => Ok(true), // Absence is allowed (not denied)
+                }
+            }
+            RuleType::Require => {
+                // Require: fact must exist AND match pattern
+                match fact_value {
+                    Some(value) => Ok(regex.is_match(&value)),
+                    None => Ok(false), // Missing fact fails Require
+                }
+            }
         }
     }
 }
@@ -104,79 +109,92 @@ mod tests {
     #[test]
     fn test_rule_type_display() {
         assert_eq!(RuleType::Allow.as_str(), "Allow");
+        assert_eq!(RuleType::Deny.as_str(), "Deny");
+        assert_eq!(RuleType::Require.as_str(), "Require");
     }
 
     #[test]
     fn test_allow_rule_matching() {
-        let r = Rule::new(RuleType::Allow, "s", "^active$");
+        let rule = Rule::new(RuleType::Allow, "status", "^active$");
         let mut ctx = EvaluationContext::new();
-        ctx.set_string("s", "active");
-        assert!(r.evaluate(&ctx).unwrap());
+        ctx.set_string("status", "active");
+
+        assert!(rule.evaluate(&ctx).unwrap());
     }
 
     #[test]
     fn test_allow_rule_non_matching() {
-        let r = Rule::new(RuleType::Allow, "s", "^active$");
+        let rule = Rule::new(RuleType::Allow, "status", "^active$");
         let mut ctx = EvaluationContext::new();
-        ctx.set_string("s", "inactive");
-        assert!(!r.evaluate(&ctx).unwrap());
+        ctx.set_string("status", "inactive");
+
+        assert!(!rule.evaluate(&ctx).unwrap());
     }
 
     #[test]
     fn test_allow_rule_missing_fact() {
-        let r = Rule::new(RuleType::Allow, "s", "^active$");
-        assert!(r.evaluate(&EvaluationContext::new()).unwrap());
+        let rule = Rule::new(RuleType::Allow, "status", "^active$");
+        let ctx = EvaluationContext::new();
+
+        // Missing fact is allowed
+        assert!(rule.evaluate(&ctx).unwrap());
     }
 
     #[test]
     fn test_deny_rule_matching() {
-        let r = Rule::new(RuleType::Deny, "s", "^banned$");
+        let rule = Rule::new(RuleType::Deny, "status", "^banned$");
         let mut ctx = EvaluationContext::new();
-        ctx.set_string("s", "banned");
-        assert!(!r.evaluate(&ctx).unwrap());
+        ctx.set_string("status", "banned");
+
+        // Deny fails when pattern matches
+        assert!(!rule.evaluate(&ctx).unwrap());
     }
 
     #[test]
-    fn test_deny_rule_missing_fact() {
-        let r = Rule::new(RuleType::Deny, "s", "^banned$");
-        // Missing facts are treated as pass for Deny rules
-        assert!(r.evaluate(&EvaluationContext::new()).unwrap());
+    fn test_deny_rule_non_matching() {
+        let rule = Rule::new(RuleType::Deny, "status", "^banned$");
+        let mut ctx = EvaluationContext::new();
+        ctx.set_string("status", "active");
+
+        // Deny succeeds when pattern doesn't match
+        assert!(rule.evaluate(&ctx).unwrap());
+    }
+
+    #[test]
+    fn test_require_rule_matching() {
+        let rule = Rule::new(RuleType::Require, "email", "^[a-z]+@example\\.com$");
+        let mut ctx = EvaluationContext::new();
+        ctx.set_string("email", "user@example.com");
+
+        assert!(rule.evaluate(&ctx).unwrap());
     }
 
     #[test]
     fn test_require_rule_missing() {
-        let r = Rule::new(RuleType::Require, "e", ".*");
-        assert!(!r.evaluate(&EvaluationContext::new()).unwrap());
+        let rule = Rule::new(RuleType::Require, "email", "^[a-z]+@example\\.com$");
+        let ctx = EvaluationContext::new();
+
+        // Require fails when fact missing
+        assert!(!rule.evaluate(&ctx).unwrap());
+    }
+
+    #[test]
+    fn test_rule_with_description() {
+        let rule = Rule::new(RuleType::Allow, "role", "admin|user")
+            .with_description("User must have valid role");
+
+        assert_eq!(
+            rule.description,
+            Some("User must have valid role".to_string())
+        );
     }
 
     #[test]
     fn test_invalid_regex() {
-        let r = Rule::new(RuleType::Allow, "f", "[invalid");
-        assert!(r.evaluate(&EvaluationContext::new()).is_err());
-    }
+        let rule = Rule::new(RuleType::Allow, "field", "[invalid");
+        let ctx = EvaluationContext::new();
 
-    #[test]
-    fn test_rule_with_priority() {
-        let r = Rule::new(RuleType::Allow, "r", "admin").with_priority(10);
-        assert_eq!(r.priority, 10);
-    }
-
-    #[test]
-    fn test_rule_default_priority() {
-        assert_eq!(Rule::new(RuleType::Allow, "r", "admin").priority, 100);
-    }
-
-    #[test]
-    fn test_rule_with_severity() {
-        let r = Rule::new(RuleType::Require, "e", ".*").with_severity(Severity::Warning);
-        assert_eq!(r.severity, Severity::Warning);
-    }
-
-    #[test]
-    fn test_rule_default_severity() {
-        assert_eq!(
-            Rule::new(RuleType::Deny, "s", "banned").severity,
-            Severity::Error
-        );
+        let result = rule.evaluate(&ctx);
+        assert!(result.is_err());
     }
 }

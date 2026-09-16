@@ -1,22 +1,15 @@
 [package]
 name = "clap-ext"
-version.workspace = true
+version = "0.1.0"
 edition.workspace = true
 rust-version.workspace = true
 license.workspace = true
 repository.workspace = true
-authors.workspace = true
-description = "Shared Rust CLI extension library: common subcommands, config flags, error display for clap-based CLIs"
-keywords = ["cli", "clap", "argparse", "extension", "boilerplate"]
-categories = ["command-line-utilities", "development-tools"]
+description = "Shared Rust CLI extension library: Verbosity, tracing setup, common clap args (vendored; upstream KooshaPari/clap-ext retired)"
 publish = false
 
-# Provenance: absorbed from KooshaPari/clap-ext into the pheno monorepo
-# (docket O17). Source repo archived after absorption.
-
 [dependencies]
-clap = { workspace = true }
-anyhow = { workspace = true }
-thiserror = { workspace = true }
-tracing = { workspace = true }
-tracing-subscriber = { workspace = true }
+clap = { workspace = true, features = ["derive", "wrap_help", "env"] }
+anyhow = "1.0"
+thiserror = "2.0"
+tracing-subscriber = { version = "0.3", features = ["env-filter", "fmt"] }

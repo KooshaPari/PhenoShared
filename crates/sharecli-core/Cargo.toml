@@ -1,0 +1,19 @@
+[package]
+name = "sharecli-core"
+version = "0.8.0"
+edition = "2021"
+description = "Hypervisor engine tier for sharecli — process spawn/lifecycle/IO-ownership with Lock-Wait-Cache coalescing"
+license = "MIT"
+
+[dependencies]
+sharecli-ipc = { path = "../sharecli-ipc" }
+sharecli-fleet = { path = "../sharecli-fleet" }
+sharecli-fuse = { path = "../sharecli-fuse" }
+tokio = { version = "1", features = ["full"] }
+anyhow = "1"
+serde = { version = "1", features = ["derive"] }
+tempfile = "3"
+tracing = "0.1"
+
+[dev-dependencies]
+tokio = { version = "1", features = ["full", "test-util"] }

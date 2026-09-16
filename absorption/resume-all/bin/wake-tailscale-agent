@@ -1,0 +1,142 @@
+#!/usr/bin/env zsh
+# wake-tailscale-agent — Restore Tailscale on system wake + heartbeat.
+#
+# Designed to be invoked by launchd LaunchEvents com.apple.system.powermanagement
+# on system wake. Idempotent — safe to run multiple times.
+#
+# Steps:
+#   1. Detect Tailscale state via 3 methods (pgrep, status, routes)
+#   2. If DOWN, attempt recovery in order:
+#      a. `tailscale up` (rejoin network without restarting daemon)
+#      b. `brew services restart tailscale` (full daemon restart)
+#   3. Emit beads (warn/complete) so user sees state changes
+#   4. Write NDJSON tick to wake-action.ndjson for MCP consumption
+#
+# This is a COMPLEMENT to tailscale-watch — wake-tailscale-agent fires
+# *immediately* on wake (no 60s StartInterval delay), while tailscale-watch
+# provides continuous monitoring.
+
+set -euo pipefail
+
+NDJSON="/Users/kooshapari/.local/share/resume-all/wake-action.ndjson"
+STATE_FILE="/Users/kooshapari/.local/share/resume-all/tailscale-watch.state"
+BEAD="/Users/kooshapari/CodeProjects/Phenotype/repos/beads/bead-ctl.sh"
+NOW_ISO=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+
+mkdir -p "$(dirname "$NDJSON")" 2>/dev/null || true
+
+emit_tick() {
+  local stage="$1"
+  local result="$2"
+  local detail="${3:-}"
+  local clean_detail=$(print -r -- "$detail" \
+    | sed -E $'s/\x1b\\[[0-9;]*[a-zA-Z]//g' \
+    | tr -d '\000-\037\177' \
+    | sed -E 's/[[:space:]]+/ /g' \
+    | head -c 300)
+  local escaped="${clean_detail//\"/\\\"}"
+  local ts=$(python3 -c "import time; print(int(time.time() * 1000))" 2>/dev/null || echo "$(date +%s)000")
+  print "{\"ts\":${ts},\"ts_iso\":\"${NOW_ISO}\",\"stage\":\"${stage}\",\"result\":\"${result}\",\"detail\":\"${escaped}\"}" >> "$NDJSON"
+  print -u2 "[wake-agent] ${stage}: ${result} ${detail}"
+}
+
+# Read last known state
+last_state="unknown"
+[[ -f "$STATE_FILE" ]] && last_state=$(cat "$STATE_FILE" | tr -d ' \n')
+
+emit_tick "wake" "begin" "wake event detected, last_state=${last_state}"
+
+# Detect Tailscale state (3 methods)
+daemon_running="no"
+if pgrep -x tailscaled >/dev/null 2>&1; then
+  daemon_running="yes"
+fi
+has_tailscale_routes="no"
+if netstat -rn 2>/dev/null | grep -qE '^100\.64|^100\.(96|97|100|112|122)'; then
+  has_tailscale_routes="yes"
+fi
+
+# Try tailscale status with timeout
+set +e
+tailscale status >/tmp/ts-wake.out 2>/tmp/ts-wake.err &
+TS_PID=$!
+sleep 3
+if kill -0 $TS_PID 2>/dev/null; then
+  kill $TS_PID 2>/dev/null
+  status_exit=124
+  status_output="TIMEOUT_3s"
+else
+  wait $TS_PID 2>/dev/null
+  status_exit=$?
+  status_output=$(cat /tmp/ts-wake.out /tmp/ts-wake.err 2>/dev/null || true)
+  rm -f /tmp/ts-wake.out /tmp/ts-wake.err
+fi
+set -e
+
+# Determine current state
+if [[ "$status_exit" == "0" ]] && ! echo "$status_output" | grep -q "failed to connect"; then
+  current_state="up"
+elif [[ "$daemon_running" == "yes" || "$has_tailscale_routes" == "yes" ]]; then
+  current_state="up"
+else
+  current_state="down"
+fi
+
+emit_tick "detect" "ok" "state=${current_state} daemon=${daemon_running} routes=${has_tailscale_routes} status_exit=${status_exit}"
+
+# If UP, no action needed
+if [[ "$current_state" == "up" ]]; then
+  emit_tick "noop" "ok" "tailscale already running, no action needed"
+  # Update state file if it changed
+  if [[ "$current_state" != "$last_state" ]]; then
+    echo "up" > "$STATE_FILE"
+  fi
+  exit 0
+fi
+
+# DOWN: attempt recovery
+emit_tick "recover" "begin" "tailscale is down on wake, attempting recovery"
+
+# Step 1: try `tailscale up` (rejoin network, lighter than restarting daemon)
+set +e
+tailscale_up_output=$(timeout 15 tailscale up 2>&1)
+tailscale_up_exit=$?
+set -e
+
+# Re-check after tailscale up
+sleep 3
+if netstat -rn 2>/dev/null | grep -qE '^100\.64|^100\.(96|97|100|112|122)'; then
+  emit_tick "recover" "ok" "tailscale up restored connectivity (exit=${tailscale_up_exit})"
+  if [[ -x "$BEAD" ]]; then
+    "$BEAD" complete "tailscale-daemon" "Tailscale recovered on wake via tailscale up" 2>&1 | print -u2 || true
+  fi
+  echo "up" > "$STATE_FILE"
+  exit 0
+fi
+
+# Step 2: try brew services restart (heavier recovery)
+emit_tick "recover-step2" "begin" "tailscale up did not restore; trying brew services restart"
+
+set +e
+brew_services_output=$(timeout 15 brew services restart tailscale 2>&1)
+brew_services_exit=$?
+set -e
+
+# Wait for daemon to come back up
+sleep 5
+if netstat -rn 2>/dev/null | grep -qE '^100\.64|^100\.(96|97|100|112|122)'; then
+  emit_tick "recover" "ok" "brew services restart restored connectivity (exit=${brew_services_exit})"
+  if [[ -x "$BEAD" ]]; then
+    "$BEAD" complete "tailscale-daemon" "Tailscale recovered on wake via brew services restart" 2>&1 | print -u2 || true
+  fi
+  echo "up" > "$STATE_FILE"
+  exit 0
+fi
+
+# All recovery failed
+emit_tick "recover" "fail" "all recovery attempts failed: up='${tailscale_up_output:0:80}' brew='${brew_services_output:0:80}'"
+if [[ -x "$BEAD" ]]; then
+  "$BEAD" warn "tailscale-daemon" "Tailscale FAILED to recover on wake. Manual intervention needed. brew_services_exit=${brew_services_exit}" 2>&1 | print -u2 || true
+fi
+echo "down" > "$STATE_FILE"
+exit 1

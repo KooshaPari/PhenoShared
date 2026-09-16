@@ -1,0 +1,71 @@
+[package]
+name = "phenotype-cli"
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.88"
+description = "Phenotype tooling CLI facade — `pt <subcmd>` entrypoint into the absorbed compute/infra ecosystem"
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/KooshaPari/phenotype-tooling"
+readme = "README.md"
+homepage = "https://github.com/KooshaPari/phenotype-tooling"
+keywords = ["phenotype", "tooling", "cli"]
+categories = ["command-line-utilities"]
+
+[lib]
+name = "phenotype_cli"
+path = "src/lib.rs"
+
+[[bin]]
+name = "phenotype-cli"
+path = "src/main.rs"
+
+[dependencies]
+clap = { version = "4.5", features = ["derive", "cargo", "wrap_help"] }
+tokio = { version = "1.40", features = ["macros", "rt-multi-thread", "signal"], optional = true }
+anyhow = "1.0"
+thiserror = "2.0"
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter", "fmt"], optional = true }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+phenotype-tooling-observability = { path = "../phenotype-tooling-observability", version = "0.1.0", default-features = false, features = ["server"], optional = true }
+toml = "1"
+serde_yaml = { version = "0.9", optional = true }
+
+[features]
+default = []
+# Tokio async runtime — needed for any I/O-bound subcommand (HTTP, file-watch, exec).
+async = ["dep:tokio", "dep:tracing-subscriber"]
+# Structured logging.
+telemetry = ["dep:tracing-subscriber"]
+# JSON output for scripting/CI.
+json = []
+# Observability subcommand — exposes /metrics, /health, /slo endpoints via axum.
+observability = ["dep:phenotype-tooling-observability", "async"]
+# pt deploy subcommand — wires deploy/health-gate.yml reading + docker compose orchestration.
+deploy = ["dep:serde_yaml", "json", "async"]
+# Note (ORPHAN-2): The 8 `absorbed-*` and `all-absorbed` features that WP-01
+# scaffolded have been removed. They were declared but never referenced in
+# any source file (verified via grep across the whole workspace). The WP-07
+# delegation layer does not depend on them — subcommands dispatch by
+# enum variant and spawn the underlying crate binary unconditionally.
+
+[profile.dev]
+codegen-units = 1
+
+[profile.release]
+codegen-units = 1
+
+[profile.test]
+opt-level = 1
+
+[profile.bench]
+codegen-units = 1
+
+[lints.clippy]
+all = { level = "warn", priority = -1 }
+pedantic = { level = "warn", priority = -1 }
+module_name_repetitions = "allow"
+missing_errors_doc = "allow"
+missing_panics_doc = "allow"
+unsafe_code = "forbid"

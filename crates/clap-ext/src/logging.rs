@@ -1,7 +1,6 @@
 //! tracing-subscriber setup with sensible defaults.
 
-use tracing_subscriber::prelude::*;
-use tracing_subscriber::{fmt, EnvFilter};
+use tracing_subscriber::{fmt, prelude::*, EnvFilter};
 
 /// Initialize tracing-subscriber with the given verbosity level.
 ///

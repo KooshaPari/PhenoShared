@@ -1,0 +1,15 @@
+[package]
+name = "substrate-schedule"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+rust-version.workspace = true
+description = "SchedulePort implementation: cron/interval/daily/weekly next_run via croner."
+
+[dependencies]
+substrate-core = { version = "0.3.8", path = "../substrate-core" }
+croner = "3.0"
+chrono = { workspace = true }
+
+[dev-dependencies]

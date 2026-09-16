@@ -1,0 +1,70 @@
+//! Shared types for the poller: PollOutcome + PollError + per-target counters
+//! + the `MonitorInner` struct that all the impl-Monitor submodules read.
+
+use std::collections::HashMap;
+use std::sync::Arc;
+
+use prometheus_client::registry::Registry;
+use serde::{Deserialize, Serialize};
+use thiserror::Error;
+use tokio::sync::Mutex;
+
+use crate::argis_monitor::alerts::AlertStateTracker;
+use crate::argis_monitor::config::Config;
+use crate::argis_monitor::metrics::Metrics;
+use crate::argis_monitor::ring_buffer::RingBuffer;
+use crate::argis_monitor::state_store::{StateStore, TrackerSnapshot};
+use crate::argis_monitor::webhook;
+
+/// One poll's outcome.
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub struct PollOutcome {
+    pub sample: crate::argis_monitor::metrics::Sample,
+    pub burn_short: f64,
+    pub burn_long: f64,
+    #[serde(default)]
+    pub alert_payloads: Vec<crate::argis_monitor::alerts::AlertPayload>,
+}
+
+/// Errors the poller can encounter.
+#[derive(Debug, Error)]
+#[allow(clippy::large_enum_variant)]
+pub enum PollError {
+    #[error("HTTP transport: {0}")]
+    Transport(#[from] reqwest::Error),
+    #[error("invalid config: {0}")]
+    InvalidConfig(String),
+    #[error("no targets configured")]
+    NoTargets,
+}
+
+/// Per-target ring buffer state.
+pub struct TargetCounters {
+    pub short: RingBuffer,
+    pub long: RingBuffer,
+}
+
+/// Shared state behind the `Monitor` clone.
+pub struct MonitorInner {
+    pub config: Config,
+    pub http: reqwest::Client,
+    pub registry: Arc<Registry>,
+    pub metrics: Arc<Mutex<Metrics>>,
+    pub counters: Mutex<HashMap<String, TargetCounters>>,
+    /// Per-(target, rule) state machine. Keyed by "{target}::{rule.name}".
+    pub alert_trackers: Mutex<HashMap<String, AlertStateTracker>>,
+    /// Last delivery report per webhook URL (for tests + ops introspection).
+    pub last_delivery: Mutex<HashMap<String, webhook::DeliveryReport>>,
+    /// Optional SQLite state store. When present, every alert state transition
+    /// is persisted so the monitor can rehydrate after a restart.
+    pub state_store: Mutex<Option<StateStore>>,
+    /// Slice 34 circuit breaker: recent fire timestamps per "{target}::{rule.name}".
+    /// Used to compute the rolling "N fires in M seconds" check that decides
+    /// whether to auto-disable a noisy rule. Bounded to the largest
+    /// `auto_disable_after` in the active config (so the memory footprint
+    /// stays predictable).
+    pub rule_fire_history: tokio::sync::Mutex<std::collections::HashMap<String, std::collections::VecDeque<u64>>>,
+    /// Slice 34: rules that have been auto-disabled by the circuit breaker.
+    /// The poller skips evaluation for any rule in this set.
+    pub auto_disabled_rules: tokio::sync::Mutex<std::collections::HashSet<String>>,
+}

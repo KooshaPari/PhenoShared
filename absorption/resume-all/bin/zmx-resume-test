@@ -1,0 +1,121 @@
+#!/usr/bin/env zsh
+# zmx-resume-test — Local zmx session resume test (no external dependencies)
+#
+# Validates the resume path locally without SSH or Tailscale:
+#   1. Create a zmx session with a deterministic name (zmx run + bg + detach)
+#   2. Capture session metadata via zmx list
+#   3. Kill the session
+#   4. Verify it's gone
+#   5. Re-create (resume) using zmx run with same name + command
+#   6. Verify session exists again
+#
+# This validates:
+#   - snapshot format → resume command construction
+#   - session_id preservation across resume
+#   - dry-run vs real execution paths
+#
+# Outputs NDJSON test results to zmx-resume-test.ndjson for MCP consumption.
+
+set -euo pipefail
+
+NDJSON="/Users/kooshapari/.local/share/resume-all/zmx-resume-test.ndjson"
+TEST_SESSION="resume-test-$$-$(date +%s)"
+mkdir -p "$(dirname "$NDJSON")" 2>/dev/null || true
+
+# Resolve zmx binary (launchd has minimal PATH)
+ZMX_BIN=""
+for candidate in /opt/homebrew/bin/zmx /usr/local/bin/zmx /usr/bin/zmx; do
+  [[ -x "$candidate" ]] && { ZMX_BIN="$candidate"; break; }
+done
+if [[ -z "$ZMX_BIN" ]]; then
+  print -u2 "[zmx-resume-test] ERROR: zmx not found in PATH or hardcoded paths"
+  exit 2
+fi
+
+emit_tick() {
+  local stage="$1"
+  local result="$2"
+  local detail="${3:-}"
+  # Sanitize detail for JSON: strip ANSI escapes, replace control chars + tabs,
+  # escape quotes. JSON strings may not contain raw control chars (incl \t).
+  local clean_detail=$(print -r -- "$detail" \
+    | sed -E $'s/\x1b\\[[0-9;]*[a-zA-Z]//g' \
+    | tr -d '\000-\037\177' \
+    | sed -E 's/[[:space:]]+/ /g' \
+    | head -c 300)
+  local escaped_detail="${clean_detail//\"/\\\"}"
+  local ts=$(python3 -c "import time; print(int(time.time() * 1000))" 2>/dev/null || echo "$(date +%s)000")
+  local now_iso=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+  print "{\"ts\":${ts},\"ts_iso\":\"${now_iso}\",\"stage\":\"${stage}\",\"result\":\"${result}\",\"session\":\"${TEST_SESSION}\",\"zmx_bin\":\"${ZMX_BIN}\",\"detail\":\"${escaped_detail}\"}" >> "$NDJSON"
+}
+
+cleanup() {
+  "$ZMX_BIN" kill "$TEST_SESSION" >/dev/null 2>&1 || true
+  # Kill any backgrounded zmx processes
+  [[ -n "${ZMX_PID:-}" ]] && kill "$ZMX_PID" 2>/dev/null || true
+}
+trap cleanup EXIT INT TERM
+
+print -u2 "[zmx-resume-test] starting session: $TEST_SESSION (zmx=$ZMX_BIN)"
+emit_tick "init" "ok" "test session named $TEST_SESSION"
+
+# 1. Create the session
+# IMPORTANT: redirect stdin/stdout/stderr to /dev/null AND run in background
+# otherwise zmx exits immediately when the parent shell exits.
+emit_tick "create" "begin" "starting zmx run"
+"$ZMX_BIN" run "$TEST_SESSION" sleep 120 </dev/null >/dev/null 2>&1 &
+ZMX_PID=$!
+sleep 3
+
+# Verify it exists
+if "$ZMX_BIN" ls --short 2>/dev/null | grep -q "^${TEST_SESSION}\$"; then
+  # Get more details
+  details=$("$ZMX_BIN" list 2>/dev/null | grep "name=${TEST_SESSION}" | head -1)
+  emit_tick "create" "ok" "session created: $details"
+else
+  emit_tick "create" "fail" "session did not appear in zmx ls"
+  exit 1
+fi
+
+# 2. Capture snapshot
+emit_tick "snapshot" "begin" "capturing session metadata"
+snapshot_data=$("$ZMX_BIN" list 2>/dev/null | grep "name=${TEST_SESSION}" | head -1)
+emit_tick "snapshot" "ok" "$snapshot_data"
+
+# 3. Kill the session
+emit_tick "kill" "begin" "calling zmx kill"
+"$ZMX_BIN" kill "$TEST_SESSION" >/dev/null 2>&1 || true
+# Also kill backgrounded zmx process
+[[ -n "$ZMX_PID" ]] && kill "$ZMX_PID" 2>/dev/null || true
+sleep 2
+
+if "$ZMX_BIN" ls --short 2>/dev/null | grep -q "^${TEST_SESSION}\$"; then
+  emit_tick "kill" "fail" "session still present after kill"
+  exit 1
+else
+  emit_tick "kill" "ok" "session removed from zmx ls"
+fi
+
+# 4. Resume: re-create using zmx run with same name + command
+emit_tick "resume" "begin" "calling zmx run to resume"
+"$ZMX_BIN" run "$TEST_SESSION" sleep 120 </dev/null >/dev/null 2>&1 &
+ZMX_PID=$!
+sleep 3
+
+if "$ZMX_BIN" ls --short 2>/dev/null | grep -q "^${TEST_SESSION}\$"; then
+  resume_data=$("$ZMX_BIN" list 2>/dev/null | grep "name=${TEST_SESSION}" | head -1)
+  emit_tick "resume" "ok" "session re-created: $resume_data"
+else
+  emit_tick "resume" "fail" "session did not re-appear after resume"
+  exit 1
+fi
+
+# 5. Final cleanup
+emit_tick "cleanup" "begin" "killing test session"
+"$ZMX_BIN" kill "$TEST_SESSION" >/dev/null 2>&1 || true
+[[ -n "$ZMX_PID" ]] && kill "$ZMX_PID" 2>/dev/null || true
+sleep 1
+emit_tick "cleanup" "ok" "test session removed"
+
+print -u2 "[zmx-resume-test] PASSED"
+exit 0

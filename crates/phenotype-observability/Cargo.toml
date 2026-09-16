@@ -2,10 +2,18 @@
 name = "phenotype-observability"
 version.workspace = true
 edition.workspace = true
+description = "Standardized header types and telemetry structures for Phenotype ecosystem"
 license.workspace = true
-rust-version.workspace = true
-description = "Phenotype fleet-wide observability substrate — thin re-export of pheno-tracing (ADR-012, ADR-036)"
+repository.workspace = true
+keywords = ["observability", "headers", "telemetry", "metrics", "tracing"]
+categories = ["development-tools", "monitoring"]
 
 [dependencies]
-async-trait.workspace = true
-tracing = "0.1"
+serde = { workspace = true }
+serde_json = { workspace = true }
+thiserror = { workspace = true }
+uuid = { workspace = true }
+chrono = { workspace = true }
+
+[dev-dependencies]
+tokio = { version = "1.40", features = ["full"] }

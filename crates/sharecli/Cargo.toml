@@ -1,0 +1,191 @@
+[package]
+name = "sharecli"
+version = "0.8.0"
+edition = "2021"
+rust-version = "1.89"
+description = "Shared CLI process manager for multi-project agent orchestration"
+license = "MIT"
+authors = ["Phenotype"]
+repository = "https://github.com/KooshaPari/phenotype-tooling"
+
+[package.metadata.dist]
+installers = ["cargo-binstall"]
+targets = ["aarch64-apple-darwin", "x86_64-unknown-linux-gnu"]
+
+[package.metadata.bundle.macos]
+identifier = "phenotype.sharecli"
+icon = ["assets/icons/sharecli-512x512.png"]
+category = "DeveloperTool"
+
+[[bin]]
+name = "sharecli"
+path = "src/main.rs"
+
+[lib]
+name = "sharecli"
+path = "src/lib.rs"
+
+[dependencies]
+# CLI
+clap = { version = "4.5", features = ["derive", "env"] }
+clap_complete = "4"
+clap_mangen = "0.3"
+tokio = { version = "1", features = ["full"] }
+tokio-util = { version = "0.7", features = ["rt"] }
+axum = { version = "0.8", features = ["ws"] }
+tokio-tungstenite = "0.30"
+futures-util = "0.3"
+fs2 = "0.4"
+libc = "0.2"
+anyhow = "1"
+thiserror = "2"
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter", "fmt", "json"] }
+tracing-appender = "0.2"
+
+# Config
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+toml = "1.1"
+
+# Process management (substrate SDK + adapter)
+substrate = { git = "https://github.com/KooshaPari/substrate", default-features = false }
+runtime-process = { git = "https://github.com/KooshaPari/substrate", package = "runtime-process" }
+sysinfo = "0.39"
+
+# Zig hot core: POSIX semaphore, posix_spawn, setpriority, waitpid
+spawn-core-sys = { path = "../spawn-core-sys" }
+
+# Fleet: device registry + thermal governor + FR-006 proc_scan
+sharecli-fleet = { path = "../sharecli-fleet" }
+sharecli-fuse = { path = "../sharecli-fuse" }
+sharecli-sync = { path = "../sharecli-sync" }
+# Mesh: Maildir task queue + SmartMerger / WorktreePool (FR-010 CLI)
+sharecli-mesh = { path = "../sharecli-mesh" }
+sharecli-session = { path = "../sharecli-session" }
+
+# Thermal TUI
+sharecli-thermal-tui = { path = "../sharecli-thermal-tui" }
+
+# Config hot-reload
+notify = { version = "8", features = ["serde"] }
+
+# process-compose.yaml parsing
+serde_yaml = "0.9"
+
+# Notifications
+notify-rust = { version = "4", optional = true }
+reqwest = { version = "0.13", features = ["json"], optional = true }
+
+# Utilities
+indicatif = "0.18"
+chrono = { version = "0.4", features = ["serde"] }
+dirs = "5"
+sha2 = "0.11"
+opentelemetry = { version = "0.32", features = ["trace"] }
+opentelemetry_sdk = { version = "0.32.1", features = ["rt-tokio", "trace"] }
+opentelemetry-otlp = { version = "0.32", features = ["http-proto", "reqwest-rustls", "trace"] }
+tracing-opentelemetry = "0.33"
+jsonwebtoken = { version = "11", features = ["use_pem", "rust_crypto"] }
+
+[features]
+default = []
+desktop-notifications = ["notify-rust"]
+notifications-http = ["reqwest"]
+jemalloc = ["dep:tikv-jemallocator"]
+dhat-heap = ["dep:dhat"]
+
+[target.'cfg(unix)'.dependencies]
+pprof = { version = "0.15", features = ["protobuf", "prost-codec"] }
+prost = "0.12"
+
+[target.'cfg(not(target_env = "msvc"))'.dependencies]
+tikv-jemallocator = { version = "0.7", optional = true }
+
+[dependencies.dhat]
+version = "0.3"
+optional = true
+
+[dev-dependencies]
+tempfile = "3"
+serial_test = "4"
+tokio = { version = "1", features = ["macros", "rt-multi-thread", "time"] }
+criterion = { version = "0.8", features = ["async_tokio", "html_reports"] }
+sharecli-thermal-tui = { path = "../sharecli-thermal-tui" }
+sharecli-fleet = { path = "../sharecli-fleet" }
+sharecli-core = { path = "../sharecli-core" }
+sharecli-ipc = { path = "../sharecli-ipc" }
+sharecli-tray-linux = { path = "../sharecli-tray-linux" }
+sharecli-tray-windows = { path = "../sharecli-tray-windows" }
+sharecli-fuse = { path = "../sharecli-fuse" }
+ratatui = "0.30"
+proptest = "1.6"
+
+[[bench]]
+name = "config_parse"
+harness = false
+
+[[bench]]
+name = "pool_list"
+harness = false
+
+[[bench]]
+name = "prometheus_render"
+harness = false
+
+[[bench]]
+name = "jwt_auth_validate"
+harness = false
+
+[lints.clippy]
+absurd_extreme_comparisons = "allow"
+approx_constant = "allow"
+bool_assert_comparison = "allow"
+doc_lazy_continuation = "allow"
+doc_overindented_list_items = "allow"
+erasing_op = "allow"
+identity_op = "allow"
+if_same_then_else = "allow"
+inconsistent_digit_grouping = "allow"
+int_plus_one = "allow"
+large_const_arrays = "allow"
+len_without_is_empty = "allow"
+len_zero = "allow"
+lines_filter_map_ok = "allow"
+manual_abs_diff = "allow"
+manual_clamp = "allow"
+manual_div_ceil = "allow"
+manual_hash_one = "allow"
+manual_inspect = "allow"
+manual_is_multiple_of = "allow"
+manual_memcpy = "allow"
+manual_pattern_char_comparison = "allow"
+manual_range_contains = "allow"
+manual_repeat_n = "allow"
+manual_rotate = "allow"
+manual_strip = "allow"
+manual_swap = "allow"
+mem_replace_with_default = "allow"
+needless_bool = "allow"
+needless_borrows_for_generic_args = "allow"
+needless_lifetimes = "allow"
+needless_match = "allow"
+needless_range_loop = "allow"
+new_without_default = "allow"
+redundant_closure = "allow"
+redundant_pattern_matching = "allow"
+replace_box = "allow"
+same_item_push = "allow"
+should_implement_trait = "allow"
+type_complexity = "allow"
+unnecessary_cast = "allow"
+unnecessary_map_or = "allow"
+unused_enumerate_index = "allow"
+upper_case_acronyms = "allow"
+useless_format = "allow"
+useless_vec = "allow"
+vec_init_then_push = "allow"
+
+[lints.rust]
+dead_code = "allow"
+unused_imports = "allow"

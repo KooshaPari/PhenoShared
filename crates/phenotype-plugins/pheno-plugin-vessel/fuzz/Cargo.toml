@@ -1,0 +1,14 @@
+[package]
+name = "fuzz"
+version = "0.0.0"
+publish = false
+edition = "2021"
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/KooshaPari/PhenoPlugins"
+description = "fuzz — Phenotype infrastructure crate (PhenoPlugins)"
+documentation = "https://docs.rs/fuzz"
+keywords = ["phenotype", "pheno-plugins"]
+categories = ["development-tools"]
+authors = ["kooshapari"]
+[dependencies]
+libfuzzer-sys = "0.4"

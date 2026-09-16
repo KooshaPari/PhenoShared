@@ -1,0 +1,19 @@
+#!/bin/zsh
+# sla-monitor-wrapper — launchd entry point for the SLA monitor.
+#
+# The plist can't have shell logic; this wrapper exec's the python script
+# with the `collect` subcommand. launchd's StartInterval=30 (configured in
+# the plist) provides the periodic scheduling; each invocation writes a
+# single sample to the JSONL metrics file. For an ad-hoc daemon (foreground
+# 30s loop with alerting) invoke `sla-monitor run` directly in a terminal.
+#
+# Stdout/stderr from the python process are routed to the plist's
+# StandardOutPath/StandardErrorPath. All output here is intentional
+# (suppressed unless collection fails) so the wrapper itself stays silent.
+#
+# If you change the shebang or path to python3 here, you must also update
+# the plist's ProgramArguments and the .py file's shebang.
+
+set -e
+
+exec /opt/homebrew/bin/python3 /Users/kooshapari/bin/sla-monitor.py collect "$@"

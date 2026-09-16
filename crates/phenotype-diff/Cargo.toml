@@ -1,0 +1,36 @@
+[package]
+name = "phenotype-diff"
+version.workspace = true
+edition.workspace = true
+description = "Line-level unified diff and patch-apply library (migrated from KooshaPari/Diffuse); wraps `similar`"
+
+readme = "README.md"
+license = "Apache-2.0 OR MIT"
+repository = "https://github.com/KooshaPari/phenotype-tooling"
+homepage = "https://github.com/KooshaPari/phenotype-tooling"
+keywords = ["phenotype", "tooling", "cli"]
+categories = ["command-line-utilities"]
+[dependencies]
+similar = "3.1"
+thiserror = { workspace = true }
+serde = { workspace = true }
+
+[dev-dependencies]
+criterion = { workspace = true }
+
+[[bench]]
+name = "diff_lines"
+harness = false
+
+[[bench]]
+name = "diff_apply"
+harness = false
+
+[lints.rust]
+unsafe_code = "forbid"
+
+[lints.clippy]
+pedantic = { level = "warn", priority = -1 }
+missing_errors_doc = "allow"
+missing_panics_doc = "allow"
+module_name_repetitions = "allow"

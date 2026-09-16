@@ -1,0 +1,70 @@
+#!/usr/bin/env zsh
+# bridge-health-watch — Watcher that emits beads on bridge health transitions.
+#
+# Designed to be called repeatedly from a launchd daemon (StartInterval=120s).
+# Each invocation:
+#   1. Computes current bridge health (via bridge-health)
+#   2. Compares to last known state (in bridge-health.state)
+#   3. On transition: emit warn bead (degraded) or complete bead (healthy)
+#   4. Writes a tick to bridge-health-watch.ndjson
+#
+# Anti-pattern: don't run this concurrently with bridge-health (they'll race).
+# Use bridge-health for diagnostics, bridge-health-watch for state tracking.
+
+set -uo pipefail
+
+STATE_FILE="/Users/kooshapari/.local/share/resume-all/bridge-health-watch.state"
+NDJSON="/Users/kooshapari/.local/share/resume-all/bridge-health-watch.ndjson"
+BEAD="/Users/kooshapari/CodeProjects/Phenotype/repos/beads/bead-ctl.sh"
+BRIDGE_HEALTH="/Users/kooshapari/bin/bridge-health"
+
+mkdir -p "$(dirname "$NDJSON")" 2>/dev/null || true
+
+# Read last known state
+last_state="unknown"
+[[ -f "$STATE_FILE" ]] && last_state=$(cat "$STATE_FILE" | tr -d ' \n')
+
+# Run bridge-health, capture exit code
+set +e
+bh_output=$("$BRIDGE_HEALTH" 2>&1)
+bh_exit=$?
+set -e
+
+# Determine current state from exit code
+if (( bh_exit == 0 )); then
+  current_state="healthy"
+else
+  current_state="degraded"
+fi
+
+# Extract detail from output
+detail=$(echo "$bh_output" | grep -E "^\s*\[" | head -3 | tr '\n' ' ' | head -c 200)
+
+# Write NDJSON tick
+ts=$(python3 -c "import time; print(int(time.time() * 1000))" 2>/dev/null || echo "$(date +%s)000")
+now_iso=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+
+# Sanitize detail for JSON
+clean_detail=$(echo "$detail" | tr -d '\000-\037\177' | sed -E 's/[[:space:]]+/ /g' | head -c 200)
+escaped_detail="${clean_detail//\"/\\\"}"
+
+tick="{\"ts\":${ts},\"ts_iso\":\"${now_iso}\",\"state\":\"${current_state}\",\"last_state\":\"${last_state}\",\"detail\":\"${escaped_detail}\"}"
+print -r -- "$tick" >> "$NDJSON"
+
+# Emit bead on transition
+if [[ "$current_state" != "$last_state" ]]; then
+  if [[ "$current_state" == "degraded" ]]; then
+    print -u2 "[bridge-watch] DEGRADED: $clean_detail"
+    if [[ -x "$BEAD" ]]; then
+      "$BEAD" warn "resume-bridge" "Bridge is DEGRADED. ${clean_detail}" 2>&1 | print -u2 || true
+    fi
+  elif [[ "$current_state" == "healthy" && "$last_state" != "unknown" ]]; then
+    print -u2 "[bridge-watch] HEALTHY: $clean_detail"
+    if [[ -x "$BEAD" ]]; then
+      "$BEAD" complete "resume-bridge" "Bridge is HEALTHY. ${clean_detail}" 2>&1 | print -u2 || true
+    fi
+  fi
+  echo "$current_state" > "$STATE_FILE"
+fi
+
+exit 0

@@ -23,16 +23,25 @@ jobs:
     name: Lint & Format
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    permissions:
+      contents: read
+      checks: write
 
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
 
+      - name: Install jq
+        run: sudo apt-get update && sudo apt-get install -y jq
+
       - name: Trunk Check
-        uses: trunk-io/trunk-action@d90b9166660d5e5afae248a58172a3a0e99d56d5  # v1.0.4
+        uses: trunk-io/trunk-action@e1234e67a86010d61ddac8d8ebf4b783e2ffd2fa  # v2.0.0
+        with:
+          setup-deps: true
 
       - name: Trunk Upgrade (on schedule only)
         if: github.event_name == 'schedule'
-        uses: trunk-io/trunk-action@d90b9166660d5e5afae248a58172a3a0e99d56d5  # v1.0.4
+        uses: trunk-io/trunk-action@e1234e67a86010d61ddac8d8ebf4b783e2ffd2fa  # v2.0.0
         with:
+          setup-deps: true
           trunk-args: --upgrade

@@ -1,0 +1,131 @@
+#!/usr/bin/env zsh
+# cross-host-resume-test — Comprehensive cross-host resume test suite.
+#
+# Runs 3 dry-run scenarios via resume-cross.py and validates orchestrator JSON:
+#   1. --wsl FedoraLinux-44 (SSH + WSL path)
+#   2. no --wsl (SSH only)
+#   3. --wsl + --rebuild (triggers fresh snapshot pull before lookup)
+#
+# Emits NDJSON ticks to cross-host-resume-test.ndjson with stages:
+#   - test1-wsl-dryrun
+#   - test2-no-wsl-dryrun
+#   - test3-rebuild-dryrun
+#   - summary
+#
+# Exit 0 if all 3 pass, 1 if any fail.
+
+set -uo pipefail  # No -e because we want to capture failures as ticks, not abort
+
+NDJSON="/Users/kooshapari/.local/share/resume-all/cross-host-resume-test.ndjson"
+RESUME_CROSS="/Users/kooshapari/bin/resume-cross.py"
+HOST="kooshapari-desk"
+mkdir -p "$(dirname "$NDJSON")" 2>/dev/null || true
+
+emit_tick() {
+  local stage="$1"
+  local result="$2"
+  local exit_code="$3"
+  local would_run="${4:-}"
+  # Build the tick via Python so JSON is always valid (escapes quotes properly).
+  python3 -c "
+import json, sys, time
+print(json.dumps({
+  'ts': int(time.time() * 1000),
+  'ts_iso': time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime()),
+  'stage': sys.argv[1],
+  'result': sys.argv[2],
+  'exit_code': int(sys.argv[3]) if sys.argv[3].lstrip('-').isdigit() else 0,
+  'would_run': sys.argv[4][:200],
+}))
+" "$stage" "$result" "$exit_code" "$would_run" >> "$NDJSON" 2>/dev/null || \
+  print "{\"ts\":$(date +%s%3N 2>/dev/null || echo \"$(date +%s)000\"),\"ts_iso\":\"$(date -u +%Y-%m-%dT%H:%M:%SZ)\",\"stage\":\"${stage}\",\"result\":\"${result}\",\"exit_code\":${exit_code},\"would_run\":\"<encode_error>\"}" >> "$NDJSON"
+  print -u2 "[test] ${stage}: ${result} (exit=${exit_code})"
+}
+
+# Verify resume-cross.py exists
+if [[ ! -x "$RESUME_CROSS" ]]; then
+  emit_tick "init" "fail" "127" "resume-cross.py not found at $RESUME_CROSS"
+  exit 1
+fi
+
+total_ok=0
+total_fail=0
+
+# Scenario 1: --wsl FedoraLinux-44
+print -u2 ""
+print -u2 "[test] === Scenario 1: --wsl FedoraLinux-44 ==="
+raw1=$("$RESUME_CROSS" resume --wsl FedoraLinux-44 --dry-run "$HOST" "phase-b:?:1" 2>&1)
+exit1=$?
+parsed1=$(echo "$raw1" | python3 -c "
+import json, sys
+try:
+    d = json.loads(sys.stdin.read())
+    print(d.get('would_run', ''))
+    sys.exit(0)
+except Exception:
+    sys.exit(1)
+" 2>&1)
+if (( exit1 == 0 )) && [[ -n "$parsed1" ]] && echo "$parsed1" | grep -q "wsl -d FedoraLinux-44"; then
+  emit_tick "test1-wsl-dryrun" "ok" "$exit1" "$parsed1"
+  (( total_ok++ ))
+else
+  emit_tick "test1-wsl-dryrun" "fail" "$exit1" "$parsed1"
+  (( total_fail++ ))
+fi
+
+# Scenario 2: no --wsl (just SSH)
+print -u2 ""
+print -u2 "[test] === Scenario 2: no --wsl ==="
+raw2=$("$RESUME_CROSS" resume --dry-run "$HOST" "phase-b:?:1" 2>&1)
+exit2=$?
+parsed2=$(echo "$raw2" | python3 -c "
+import json, sys
+try:
+    d = json.loads(sys.stdin.read())
+    print(d.get('would_run', ''))
+    sys.exit(0)
+except Exception:
+    sys.exit(1)
+" 2>&1)
+if (( exit2 == 0 )) && [[ -n "$parsed2" ]] && echo "$parsed2" | grep -q "ssh $HOST" && ! echo "$parsed2" | grep -q "wsl"; then
+  emit_tick "test2-no-wsl-dryrun" "ok" "$exit2" "$parsed2"
+  (( total_ok++ ))
+else
+  emit_tick "test2-no-wsl-dryrun" "fail" "$exit2" "$parsed2"
+  (( total_fail++ ))
+fi
+
+# Scenario 3: --wsl + --rebuild
+print -u2 ""
+print -u2 "[test] === Scenario 3: --wsl + --rebuild ==="
+raw3=$("$RESUME_CROSS" resume --wsl FedoraLinux-44 --rebuild --dry-run "$HOST" "phase-b:hvc0:2" 2>&1)
+exit3=$?
+parsed3=$(echo "$raw3" | python3 -c "
+import json, sys
+try:
+    d = json.loads(sys.stdin.read())
+    # With --rebuild, the orchestrator may return differently
+    print(d.get('would_run', d.get('rebuild_status', '')))
+    sys.exit(0)
+except Exception:
+    sys.exit(1)
+" 2>&1)
+if (( exit3 == 0 )); then
+  emit_tick "test3-rebuild-dryrun" "ok" "$exit3" "$parsed3"
+  (( total_ok++ ))
+else
+  emit_tick "test3-rebuild-dryrun" "fail" "$exit3" "$parsed3"
+  (( total_fail++ ))
+fi
+
+# Summary tick
+emit_tick "summary" "ok" "0" "total_ok=${total_ok} total_fail=${total_fail}"
+
+print -u2 ""
+print -u2 "[test] === Summary ==="
+print -u2 "[test] Pass: ${total_ok}/3, Fail: ${total_fail}/3"
+
+if (( total_fail > 0 )); then
+  exit 1
+fi
+exit 0

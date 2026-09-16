@@ -1,0 +1,29 @@
+[package]
+name = "phenotype-vessel"
+version = "0.1.0"
+edition = "2021"
+description = "Container utilities"
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/KooshaPari/PhenoPlugins"
+documentation = "https://docs.rs/phenotype-vessel"
+keywords = ["phenotype", "pheno-plugins", "vessel"]
+categories = ["filesystem"]
+authors = ["kooshapari"]
+
+
+[dependencies]
+tokio = { version = "1", features = ["full"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_yaml = "0.9"
+thiserror = "2.0"
+async-trait = "0.1"
+
+[dev-dependencies]
+tokio-test = "0.4"
+criterion = { version = "0.8", features = ["html_reports"] }
+pheno-plugin-core = { path = "../pheno-plugin-core" }
+serde_json = "1.0"
+
+[[bench]]
+name = "perf"
+harness = false

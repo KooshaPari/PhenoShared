@@ -1,114 +1,72 @@
-<!--
-Thanks for opening a pull request!
+# Pull Request
 
-Please complete the sections below. Sections marked with an asterisk
-are required. Reviewers use this template to verify scope, risk, and
-readiness, so please be thorough but concise.
+Thanks for contributing to substrate. Please fill out the sections below so
+reviewers can land your change quickly.
 
-If a section does not apply, write "N/A" rather than deleting it.
--->
+## Summary
 
-## What*
+<!-- 1-3 sentences. What does this PR do and why? -->
 
-<!-- One- or two-sentence summary of the change.
-     Example: "Add retry-with-backoff to the platform SDK client." -->
+## Linked issues / ADRs
 
-## Why*
+- Fixes #
+- Relates to #
+- ADR: docs/adr/XXXX-*.md (if architecture-relevant)
 
-<!-- The motivation: bug, user request, spec link, incident, or tech-debt item.
-     Link the issue, ticket, or design doc (e.g. Closes #123, Refs SPEC.md §4.2). -->
-
-## How*
-
-<!-- Implementation notes reviewers should know.
-     - High-level approach
-     - Key files / modules touched
-     - Non-obvious decisions or trade-offs
-     - Backward-compatibility implications -->
-
-### Type of Change
+## Type of change
 
 - [ ] Bug fix (non-breaking change that fixes an issue)
-- [ ] New feature (non-breaking change that adds functionality)
-- [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
+- [ ] New feature (non-breaking change that adds capability)
+- [ ] Breaking change (fix or feature that changes public API, wire format, or on-disk layout)
 - [ ] Refactor / cleanup (no behavior change)
-- [ ] Performance improvement
-- [ ] Documentation only
-- [ ] Build / CI / tooling
-- [ ] Security fix
+- [ ] Documentation / ADR only
+- [ ] CI / build / tooling
 
-## Testing*
+## FR-IDs / Checklists
 
-<!-- Describe how this was verified. Check all that apply. -->
+<!-- FR-NNN this satisfies, or "n/a — <reason>". -->
 
-- [ ] Unit tests added or updated
-- [ ] Integration / end-to-end tests added or updated
-- [ ] Manual smoke test performed
-- [ ] Lint / format / type-check passes locally
-- [ ] Existing tests still pass
+### Required
 
-### Test Commands
+- [ ] `cargo fmt --all -- --check` passes locally
+- [ ] `cargo clippy --workspace --all-targets -- -D warnings` passes locally
+  (or, for `psub-orchestrator` which has known pre-existing warnings,
+  `cargo clippy -p <affected-crate> --all-targets -- -D warnings`)
+- [ ] `cargo test --workspace` passes locally
+- [ ] If you changed the public API or wire format:
+  - [ ] Added an entry to `CHANGELOG.md` under **Unreleased**
+  - [ ] Updated `ARCHITECTURE.md` and / or `docs/adr/`
+  - [ ] Wrote a migration note in `docs/operations/` if downstream must act
+- [ ] If you added a new dependency: ran `cargo deny check` locally
 
-<!-- Paste the exact commands you ran, e.g. -->
+### Quality
 
-```sh
-# Example:
-# cargo test --workspace
-# pnpm -r test
-# go test ./...
-```
+- [ ] New code has unit tests (`#[cfg(test)] mod tests`)
+- [ ] New public API surfaces have at least one integration test in `tests/`
+- [ ] New parser / codec / state-machine code has a fuzz target in `fuzz/`
+- [ ] Hot-path code is wrapped in `#[tracing::instrument]` and emits useful
+  structured fields (request id, model, provider, outcome, latency_ms)
+- [ ] No `unwrap()` / `expect()` on user-supplied input
+- [ ] No `println!` / `dbg!` left in the diff
 
-### Test Evidence
+### Security (touch any of these? then all four are required)
 
-<!-- Paste relevant output, screenshots, or links to CI runs. -->
+- [ ] Secrets / credentials handling reviewed
+- [ ] Authn / authz path reviewed
+- [ ] Input validation added or confirmed (typed
+      `serde::Deserialize` + length limits)
+- [ ] Error paths return sanitized messages
+      (no `err` chain printed to HTTP clients; use
+      `tracing::warn!(error = ?err, ...)` server-side)
 
-## Checklist*
+## How tested
 
-<!-- Standard pre-merge checks. -->
+<!-- Commands run + result. e.g. `cargo test --workspace` (pass), new tests added. -->
 
-- [ ] My code follows the project's style guidelines
-- [ ] I have performed a self-review of my own code
-- [ ] I have commented my code, particularly in hard-to-understand areas
-- [ ] I have updated the documentation (README, CHANGELOG, docs/) as needed
-- [ ] My changes generate no new warnings
-- [ ] I have added tests that prove my fix is effective or that my feature works
-- [ ] New and existing unit tests pass locally with my changes
-- [ ] Any dependent changes have been merged and published
+## Risk
 
-## Risk & Rollout*
+<!-- Blast radius: crates touched, public-API/behavior changes, migration needs. -->
 
-<!-- Force the author to think about blast radius. -->
+## Rollback
 
-- **Risk level**: `low` / `medium` / `high`
-- **Blast radius**: <!-- who/what is affected: users, services, schemas, etc. -->
-- **Feature flag required?**: `yes` / `no` — if yes, link the flag
-- **Migration / data backfill needed?**: `yes` / `no` — describe
-- **Rollback plan**: <!-- single revert? disable flag? drain queue? -->
-
-### Affected Surfaces
-
-<!-- Check every surface this PR touches. -->
-
-- [ ] Public API / SDK
-- [ ] CLI / install / packaging
-- [ ] Configuration / environment variables
-- [ ] Database schema or migrations
-- [ ] Network / IPC / RPC contracts
-- [ ] Authentication / authorization
-- [ ] Telemetry / logging / tracing
-- [ ] Dependencies (added, removed, or upgraded)
-- [ ] Documentation site or example apps
-
-## Related
-
-<!-- Issues, PRs, design docs, specs. -->
-
-- Closes #
-- Refs #
-- Related: #
-
-## Reviewer Notes
-
-<!-- Anything reviewers should pay extra attention to: tricky logic,
-     concurrency, performance, security, etc. -->
-
+<!-- How to revert safely if this misbehaves. -->

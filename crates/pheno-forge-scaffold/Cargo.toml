@@ -1,0 +1,30 @@
+[package]
+name = "pheno-forge-scaffold"
+version = "0.0.1"
+edition = "2021"
+description = "Documented scaffold-only task-runner shape; ported from phenoForge on 2026-09-10. See ../../PROVENANCE.md."
+license.workspace = true
+publish = false
+
+[[bin]]
+name = "phenotype-forge"
+path = "src/main.rs"
+
+# Dependency list mirrors phenoForge@2fccbc27 verbatim (the audit-closure
+# closure PR #41 added a test that locks the declared dependencies; preserving
+# them here keeps that test meaningful).
+[dependencies]
+clap = { version = "4", features = ["derive"] }
+tokio = { version = "1", features = ["macros", "rt-multi-thread"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+notify = "5"
+toml = "0.5"
+thiserror = "1"
+anyhow = "1"
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+
+[dev-dependencies]
+assert_cmd = "2"
+predicates = "3"

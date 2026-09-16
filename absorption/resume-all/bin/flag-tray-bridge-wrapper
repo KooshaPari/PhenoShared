@@ -1,0 +1,8 @@
+#!/bin/zsh
+# flag-tray-bridge-wrapper — launched by com.kooshapari.resume-all-flag-tray-bridge
+# Polls flag changes every 30s and writes flag-recent.json for the tray.
+
+export PATH="/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+
+cd "$HOME" || exit 1
+exec /opt/homebrew/bin/python3 /Users/kooshapari/bin/flag-tray-bridge.py loop --interval 30

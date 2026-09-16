@@ -1,60 +1,55 @@
-//! Event types for phenotype-event-sourcing.
+//! Generic event envelope with SHA-256 hash chain support.
 
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 
-use crate::hash::{compute_hash, ZERO_HASH};
-
+/// Generic event envelope that works with any serializable event type.
+///
+/// The event is stored in a hash chain where each event includes:
+/// - A unique ID
+/// - A timestamp
+/// - An event type discriminator (as a string)
+/// - The serialized event payload
+/// - The hash of the previous event in the chain
+/// - The hash of this event (computed by the store)
+/// - A monotonically increasing sequence number
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct EventEnvelope<T> {
+pub struct EventEnvelope<T: Serialize> {
+    /// Unique event ID
     pub id: Uuid,
-    pub sequence: i64,
+
+    /// Event timestamp
     pub timestamp: DateTime<Utc>,
-    pub entity_type: String,
-    pub entity_id: String,
+
+    /// The actual event payload (generic type)
     pub payload: T,
+
+    /// Actor who triggered this event (e.g., user ID, system name)
     pub actor: String,
+
+    /// Hash of the previous event in the chain (32 bytes, hex-encoded for storage)
     pub prev_hash: String,
+
+    /// Hash of this event (computed by store, hex-encoded, 32 bytes)
     pub hash: String,
+
+    /// Monotonically increasing sequence number (per entity)
+    pub sequence: i64,
 }
 
-impl<T: Clone + Serialize> EventEnvelope<T> {
-    pub fn new(
-        entity_type: impl Into<String>,
-        entity_id: impl Into<String>,
-        payload: T,
-        actor: impl Into<String>,
-    ) -> Self {
-        let id = Uuid::new_v4();
-        let timestamp = Utc::now();
-        let entity_type = entity_type.into();
-        let entity_id = entity_id.into();
-        let actor_str = actor.into();
-        let sequence = 1;
-        let prev_hash = ZERO_HASH.to_string();
-        let payload_json = serde_json::to_value(&payload).unwrap_or_default();
-        let hash = compute_hash(
-            &id,
-            timestamp,
-            &entity_type,
-            &entity_id,
-            &payload_json,
-            &actor_str,
-            &prev_hash,
-        )
-        .unwrap_or_else(|_| "error".to_string());
-
+impl<T: Serialize> EventEnvelope<T> {
+    /// Create a new event envelope.
+    /// Hash and sequence will be assigned by the store.
+    pub fn new(payload: T, actor: impl Into<String>) -> Self {
         Self {
-            id,
-            sequence,
-            timestamp,
-            entity_type,
-            entity_id,
+            id: Uuid::new_v4(),
+            timestamp: Utc::now(),
             payload,
-            actor: actor_str,
-            prev_hash,
-            hash,
+            actor: actor.into(),
+            prev_hash: "0".repeat(64), // Initial zero hash (32 bytes = 64 hex chars)
+            hash: "".to_string(),      // Will be filled by store
+            sequence: 0,               // Will be filled by store
         }
     }
 }
@@ -65,25 +60,39 @@ mod tests {
 
     #[test]
     fn create_event_envelope() {
-        let event = EventEnvelope::new("users", "user-123", "UserCreated", "system");
-        assert_eq!(event.entity_type, "users");
-        assert_eq!(event.entity_id, "user-123");
-        assert_eq!(event.payload, "UserCreated");
-        assert_eq!(event.actor, "system");
-        assert_eq!(event.prev_hash, ZERO_HASH);
-        assert!(!event.hash.is_empty());
-        assert_eq!(event.sequence, 1);
+        #[derive(Serialize)]
+        struct TestPayload {
+            value: i32,
+        }
+
+        let payload = TestPayload { value: 42 };
+        let event = EventEnvelope::new(payload, "user-123");
+
+        assert!(!event.id.is_nil());
+        assert_eq!(event.actor, "user-123");
+        assert_eq!(event.sequence, 0);
+        assert_eq!(event.hash, "");
     }
 
     #[test]
     fn event_roundtrip_json() {
-        let event = EventEnvelope::new("orders", "order-456", "OrderPlaced", "user-789");
+        #[derive(Serialize, Deserialize, PartialEq, Debug)]
+        struct TestPayload {
+            name: String,
+            count: u32,
+        }
+
+        let payload = TestPayload {
+            name: "test".to_string(),
+            count: 100,
+        };
+        let event = EventEnvelope::new(payload, "actor");
+
         let json = serde_json::to_string(&event).unwrap();
-        let parsed: EventEnvelope<String> = serde_json::from_str(&json).unwrap();
-        assert_eq!(parsed.entity_type, event.entity_type);
-        assert_eq!(parsed.entity_id, event.entity_id);
-        assert_eq!(parsed.payload, event.payload);
-        assert_eq!(parsed.actor, event.actor);
-        assert_eq!(parsed.hash, event.hash);
+        let decoded: EventEnvelope<TestPayload> = serde_json::from_str(&json).unwrap();
+
+        assert_eq!(decoded.actor, "actor");
+        assert_eq!(decoded.payload.name, "test");
+        assert_eq!(decoded.payload.count, 100);
     }
 }

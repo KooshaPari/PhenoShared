@@ -1,0 +1,11 @@
+#!/usr/bin/env zsh
+# canary-wrapper — launchd entry point for the canary deployment system.
+#
+# Mirrors the pattern of leak-detect-wrapper: forwards argv to the python
+# implementation and stays silent on success so launchd's stdout/stderr
+# capture only contains intentional output. Stdout-only — no stderr noise
+# (matches the convention documented in the canary.py header).
+
+set -e
+
+exec /opt/homebrew/bin/python3 /Users/kooshapari/bin/canary.py "$@"

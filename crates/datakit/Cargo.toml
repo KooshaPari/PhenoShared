@@ -1,0 +1,15 @@
+[package]
+name = "datakit"
+version = "0.1.0"
+description = "Data transformation and ETL framework for the Phenotype ecosystem"
+edition = "2021"
+
+[dependencies]
+
+[dev-dependencies]
+criterion = { version = "0.5", features = ["html_reports"] }
+rand = "0.8"
+
+[[bench]]
+name = "criterion_bench"
+harness = false

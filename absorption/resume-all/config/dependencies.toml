@@ -1,0 +1,29 @@
+# Cross-session dependency declarations (Phase E07).
+#
+# When a "trigger" pane exits (its tty disappears from the snapshot.jsonl),
+# the watcher automatically resumes the "depends_on" pane by handing off to
+# resume-all with a synthetic snapshot row.
+#
+# Schema (flat key-value, one table per dependency — no nesting):
+#
+#   name                  — unique label, used in logs and idempotency keys
+#   trigger               — tty of the pane whose death triggers the resume
+#   depends_on            — tty of the pane that should be auto-resumed
+#   trigger_command_match — OPTIONAL regex; only fire if trigger's argv matches
+#   delay_seconds         — OPTIONAL wait before spawning depends_on
+#
+# Use `resume-deps list|validate|dry-run` to inspect.
+#
+# Examples:
+
+[[dependency]]
+name = "tests-after-impl"
+trigger = "ttys017"           # pane that writes tests
+depends_on = "ttys018"        # pane that runs them
+trigger_command_match = "forge.*write"   # only fire if ttys017 ran forge *write*
+
+[[dependency]]
+name = "post-deploy"
+trigger = "ttys020"           # pane that finishes a deploy
+depends_on = "ttys021"        # pane that should pick up next steps
+delay_seconds = 30            # wait 30s after trigger exits before resuming

@@ -1,0 +1,54 @@
+[package]
+name = "phenotype-journey-core"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+authors.workspace = true
+homepage = "https://github.com/KooshaPari/phenotype-journeys"
+readme = "../../README.md"
+description = "Shared types and verification logic for Phenotype journey manifests"
+keywords = ["journey", "manifest", "verification", "phenotype", "cli"]
+categories = ["development-tools", "command-line-utilities"]
+# First crates.io publish is T2 after tag v0.1.0 — see docs/guides/cutting-a-release.md.
+
+[dependencies]
+serde = { workspace = true }
+serde_json = { workspace = true }
+serde_yaml = { workspace = true }
+thiserror = { workspace = true }
+chrono = { workspace = true }
+schemars = { workspace = true }
+jsonschema = { workspace = true }
+regex = "1"
+rust-stemmers = "1.2"
+reqwest = { workspace = true, optional = true }
+
+[target.'cfg(target_os = "macos")'.dependencies]
+objc2 = { version = "0.6", optional = true }
+objc2-foundation = { version = "0.3", optional = true, features = [
+    "NSArray",
+    "NSDictionary",
+    "NSError",
+    "NSObject",
+    "NSString",
+    "NSURL",
+] }
+objc2-vision = { version = "0.3", optional = true, features = [
+    "VNRequest",
+    "VNRequestHandler",
+    "VNRecognizeTextRequest",
+    "VNObservation",
+] }
+
+[features]
+default = []
+live = ["reqwest"]
+# Apple Vision OCR backend (macOS only). Activated at runtime with
+# PHENOTYPE_JOURNEY_OCR_BACKEND=vision.
+vision = ["dep:objc2", "dep:objc2-foundation", "dep:objc2-vision"]
+
+[dev-dependencies]
+serde_json = { workspace = true }
+# serial_test serialises env-var-mutating tests to prevent race conditions.
+serial_test = "4"

@@ -1,0 +1,36 @@
+[package]
+name = "tokenledger-rs"
+version = "0.1.5"
+edition = "2024"
+license = "MIT"
+authors = ["KooshaPari <kooshapari@kooshapari.com>"]
+description = "Token management and pricing governance CLI for AI coding agents"
+repository = "https://github.com/KooshaPari/zz-Tokn"
+keywords = ["tokens", "llm", "cost", "analytics", "cli"]
+categories = ["command-line-utilities"]
+
+[[bin]]
+name = "tokenledger"
+path = "src/main.rs"
+
+[lib]
+name = "tokenledger"
+path = "src/lib.rs"
+
+[dependencies]
+anyhow = "1.0"
+chrono = { version = "0.4", features = ["serde"] }
+clap = { version = "4.5", features = ["derive"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+tokio = { version = "1.39", features = ["full"] }
+reqwest = { version = "0.13", features = ["json"] }
+thiserror = "2.0"
+async-trait = "0.1"
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+walkdir = "2.5"
+serde_yaml_ng = "0.10"
+tempfile = "3.14"
+
+pareto-rs = { path = "../tokn-pareto-rs", version = "0.1.5" }

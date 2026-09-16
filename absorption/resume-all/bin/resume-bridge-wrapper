@@ -1,0 +1,3 @@
+#!/usr/bin/env zsh
+# Wrapper for launchd: pulls a snapshot, exits cleanly so launchd can reschedule.
+exec /Users/kooshapari/bin/resume-bridge pull --wsl FedoraLinux-44 kooshapari-desk

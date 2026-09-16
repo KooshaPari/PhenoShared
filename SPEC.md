@@ -1,63 +1,36 @@
-# pheno-agents-md — SPEC
+# substrate - Specification
 
-## Scope
+## Problem
 
-Generate the canonical `AGENTS.md` file for a pheno-* substrate repo from a
-structured spec (sections, badges, links). Implements the meta-bundle
-enforcement in [ADR-039](docs/adr/2026-06-18/ADR-039-pheno-flake-refresh-template.md).
+`substrate` addresses a specific need in the Phenotype fleet: cross-cutting substrate for the phenotype fleet (foundation layer). Without a canonical implementation, downstream consumers must reinvent the same primitives, leading to fragmentation and divergent behavior across the fleet.
 
-## Generated file sections
+## Solution
 
-1. **Header** — repo name, tier badge, language, maturity.
-2. **Purpose** — 1-paragraph scope statement.
-3. **Public API** — top-level functions/classes.
-4. **Conventions** — when to use, when NOT to use, 5-line quickstart.
-5. **Quality bar** — 71-pillar score, test matrix, CI, license, coverage.
-6. **See also** — links to relevant ADRs and health inventory.
+`substrate` provides a single, well-tested, well-documented implementation of this capability. The package ships with:
+- A stable public API
+- A test matrix (unit + integration; e2e + perf where applicable)
+- Observability hooks (info-level tracing via pheno-tracing where applicable)
+- CI gates (lint, format, test, security audit per ADR-042)
 
-## Spec schema (YAML)
+## Architecture
 
-```yaml
-repo: str  # e.g. "pheno-config"
-tier: 0|1|2|3|4
-language: str  # e.g. "Rust"
-maturity: experimental|alpha|beta|stable
-purpose: str  # 1-paragraph
-public_api:
-  - name: str
-    kind: function|class|module
-    sig: str
-conventions:
-  when_to_use: str
-  when_not_to_use: str
-  quickstart: list[str]  # max 5 lines
-quality:
-  pillars: int  # out of 71
-  tests: str
-  ci: str
-  license: str
-  coverage: str
-see_also:
-  - title: str
-    href: str
-```
+- Language: rust
+- Tier: 0 (0=foundational, 1=core, 2=extension, 3=experimental)
+- Maturity: stable
+- Layout: standard layout per language conventions
+- Hexagonal: ports in `port/`, adapters in `adapter/` (where applicable)
+- Versioning: SemVer
+- License: MIT or Apache-2.0 (per repo)
 
-## Lint rules
+## API
 
-- All 6 sections present.
-- No dead links (HTTP 200 within 60s).
-- Tier badge matches the canonical list.
-- 71-pillar score is integer in [0, 71].
+See `README.md` for the user-facing API. Internal modules are documented via rustdoc / pydoc / godoc / TypeDoc. Example usage in `examples/`.
 
-## CLI
+## Status
 
-```bash
-pheno-agents-md generate --spec spec.yaml --out AGENTS.md
-pheno-agents-md lint AGENTS.md
-```
-
-## See also
-
-- ADR-039 — pheno-flake template
-- ADR-024 — 71-pillar framework
-- L6 fleet health inventory
+- Current tier: 0
+- Maturity: stable
+- Coverage: see `llms.txt`
+- Security: see `SECURITY.md` and `.github/workflows/security.yml`
+- Registry entry: KooshaPari/phenotype-registry/registry/components.lock
+- Maintainer: @KooshaPari

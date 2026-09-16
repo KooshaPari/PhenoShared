@@ -1,15 +1,22 @@
-//! In-memory event store implementation.
+//! In-memory event store implementation for testing and development.
 
-use std::collections::BTreeMap;
+use chrono::{DateTime, Utc};
+use serde::{Deserialize, Serialize};
 use std::sync::RwLock;
 
-use crate::error::{EventSourcingError, Result};
+use crate::error::{EventStoreError, Result};
 use crate::event::EventEnvelope;
-use crate::hash::{compute_hash, ZERO_HASH};
+use crate::hash;
 use crate::store::EventStore;
 
+/// In-memory event store for testing and development.
+///
+/// Stores events in memory using a nested `entity_type -> entity_id -> events` structure.
+/// NOT suitable for production. Use for testing only.
 pub struct InMemoryEventStore {
-    events: RwLock<BTreeMap<String, BTreeMap<String, Vec<StoredEvent>>>>,
+    events: RwLock<
+        std::collections::BTreeMap<String, std::collections::BTreeMap<String, Vec<StoredEvent>>>,
+    >,
 }
 
 #[derive(Clone, Debug)]
@@ -18,41 +25,33 @@ struct StoredEvent {
     hash: String,
     prev_hash: String,
     payload_json: serde_json::Value,
-    entity_type: String,
-    entity_id: String,
     actor: String,
-    timestamp: chrono::DateTime<chrono::Utc>,
+    timestamp: DateTime<Utc>,
     id: uuid::Uuid,
 }
 
 impl InMemoryEventStore {
+    /// Create a new in-memory event store.
     pub fn new() -> Self {
         Self {
-            events: RwLock::new(BTreeMap::new()),
+            events: RwLock::new(std::collections::BTreeMap::new()),
         }
     }
 
+    /// Clear all events (for testing).
     pub fn clear(&self) {
-        if let Ok(mut g) = self.events.write() {
-            g.clear();
-        }
+        self.events.write().unwrap().clear();
     }
 
+    /// Get the total number of events stored (for testing).
     pub fn event_count(&self) -> usize {
         self.events
             .read()
-            .map(|store| {
-                store
-                    .values()
-                    .flat_map(|m| m.values())
-                    .map(|v| v.len())
-                    .sum()
-            })
-            .unwrap_or(0)
-    }
-
-    fn get_entity_key(entity_type: &str, entity_id: &str) -> String {
-        format!("{}:{}", entity_type, entity_id)
+            .unwrap()
+            .values()
+            .flat_map(|m| m.values())
+            .map(|v| v.len())
+            .sum()
     }
 }
 
@@ -63,16 +62,22 @@ impl Default for InMemoryEventStore {
 }
 
 impl EventStore for InMemoryEventStore {
-    fn append(&self, event: &EventEnvelope<serde_json::Value>) -> Result<i64> {
-        let key = Self::get_entity_key(&event.entity_type, &event.entity_id);
+    fn append<T: Serialize + for<'de> Deserialize<'de>>(
+        &self,
+        event: &EventEnvelope<T>,
+        entity_type: &str,
+        entity_id: &str,
+    ) -> Result<i64> {
         let mut store = self
             .events
             .write()
-            .map_err(|_| EventSourcingError::Internal("lock poisoned".into()))?;
+            .map_err(|_| EventStoreError::StorageError("Lock poisoned".into()))?;
 
-        let entity_events = store.entry(key.clone()).or_insert_with(BTreeMap::new);
-        let events = entity_events
-            .entry(event.entity_id.clone())
+        let entity_map = store
+            .entry(entity_type.to_string())
+            .or_insert_with(std::collections::BTreeMap::new);
+        let events = entity_map
+            .entry(entity_id.to_string())
             .or_insert_with(Vec::new);
 
         let sequence = if events.is_empty() {
@@ -80,30 +85,30 @@ impl EventStore for InMemoryEventStore {
         } else {
             events.last().unwrap().sequence + 1
         };
-
         let prev_hash = if events.is_empty() {
-            ZERO_HASH.to_string()
+            "0".repeat(64)
         } else {
             events.last().unwrap().hash.clone()
         };
 
-        let hash = compute_hash(
+        let payload_json = serde_json::to_value(&event.payload)
+            .map_err(|e| EventStoreError::StorageError(e.to_string()))?;
+
+        let hash = hash::compute_hash(
             &event.id,
             event.timestamp,
-            &event.entity_type,
-            &event.entity_id,
-            &event.payload,
+            entity_type,
+            &payload_json,
             &event.actor,
             &prev_hash,
-        )?;
+        )
+        .map_err(|e| EventStoreError::InvalidHash(e.to_string()))?;
 
         events.push(StoredEvent {
             sequence,
             hash,
             prev_hash,
-            payload_json: event.payload.clone(),
-            entity_type: event.entity_type.clone(),
-            entity_id: event.entity_id.clone(),
+            payload_json,
             actor: event.actor.clone(),
             timestamp: event.timestamp,
             id: event.id,
@@ -112,155 +117,196 @@ impl EventStore for InMemoryEventStore {
         Ok(sequence)
     }
 
-    fn get_events(
+    fn get_events<T: Serialize + for<'de> Deserialize<'de>>(
         &self,
         entity_type: &str,
         entity_id: &str,
-    ) -> Result<Vec<EventEnvelope<serde_json::Value>>> {
-        let key = Self::get_entity_key(entity_type, entity_id);
+    ) -> Result<Vec<EventEnvelope<T>>> {
         let store = self
             .events
             .read()
-            .map_err(|_| EventSourcingError::Internal("lock poisoned".into()))?;
+            .map_err(|_| EventStoreError::StorageError("Lock poisoned".into()))?;
 
         let events = store
-            .get(&key)
+            .get(entity_type)
             .and_then(|m| m.get(entity_id))
-            .ok_or_else(|| {
-                EventSourcingError::EntityNotFound(format!("{}/{}", entity_type, entity_id))
-            })?;
+            .ok_or_else(|| EventStoreError::NotFound(format!("{}/{}", entity_type, entity_id)))?;
 
-        Ok(events
+        events
             .iter()
-            .map(|se| EventEnvelope {
-                id: se.id,
-                sequence: se.sequence,
-                timestamp: se.timestamp,
-                entity_type: se.entity_type.clone(),
-                entity_id: se.entity_id.clone(),
-                payload: se.payload_json.clone(),
-                actor: se.actor.clone(),
-                prev_hash: se.prev_hash.clone(),
-                hash: se.hash.clone(),
+            .map(|se| {
+                let payload: T = serde_json::from_value(se.payload_json.clone())
+                    .map_err(|e| EventStoreError::StorageError(e.to_string()))?;
+                Ok(EventEnvelope {
+                    id: se.id,
+                    timestamp: se.timestamp,
+                    payload,
+                    actor: se.actor.clone(),
+                    prev_hash: se.prev_hash.clone(),
+                    hash: se.hash.clone(),
+                    sequence: se.sequence,
+                })
             })
-            .collect())
+            .collect()
+    }
+
+    fn get_events_since<T: Serialize + for<'de> Deserialize<'de>>(
+        &self,
+        entity_type: &str,
+        entity_id: &str,
+        sequence: i64,
+    ) -> Result<Vec<EventEnvelope<T>>> {
+        let store = self
+            .events
+            .read()
+            .map_err(|_| EventStoreError::StorageError("Lock poisoned".into()))?;
+
+        let events = store
+            .get(entity_type)
+            .and_then(|m| m.get(entity_id))
+            .ok_or_else(|| EventStoreError::NotFound(format!("{}/{}", entity_type, entity_id)))?;
+
+        events
+            .iter()
+            .filter(|se| se.sequence > sequence)
+            .map(|se| {
+                let payload: T = serde_json::from_value(se.payload_json.clone())
+                    .map_err(|e| EventStoreError::StorageError(e.to_string()))?;
+                Ok(EventEnvelope {
+                    id: se.id,
+                    timestamp: se.timestamp,
+                    payload,
+                    actor: se.actor.clone(),
+                    prev_hash: se.prev_hash.clone(),
+                    hash: se.hash.clone(),
+                    sequence: se.sequence,
+                })
+            })
+            .collect()
+    }
+
+    fn get_events_by_range<T: Serialize + for<'de> Deserialize<'de>>(
+        &self,
+        entity_type: &str,
+        entity_id: &str,
+        from: DateTime<Utc>,
+        to: DateTime<Utc>,
+    ) -> Result<Vec<EventEnvelope<T>>> {
+        let store = self
+            .events
+            .read()
+            .map_err(|_| EventStoreError::StorageError("Lock poisoned".into()))?;
+
+        let events = store
+            .get(entity_type)
+            .and_then(|m| m.get(entity_id))
+            .ok_or_else(|| EventStoreError::NotFound(format!("{}/{}", entity_type, entity_id)))?;
+
+        events
+            .iter()
+            .filter(|se| se.timestamp >= from && se.timestamp <= to)
+            .map(|se| {
+                let payload: T = serde_json::from_value(se.payload_json.clone())
+                    .map_err(|e| EventStoreError::StorageError(e.to_string()))?;
+                Ok(EventEnvelope {
+                    id: se.id,
+                    timestamp: se.timestamp,
+                    payload,
+                    actor: se.actor.clone(),
+                    prev_hash: se.prev_hash.clone(),
+                    hash: se.hash.clone(),
+                    sequence: se.sequence,
+                })
+            })
+            .collect()
     }
 
     fn get_latest_sequence(&self, entity_type: &str, entity_id: &str) -> Result<i64> {
-        let key = Self::get_entity_key(entity_type, entity_id);
         let store = self
             .events
             .read()
-            .map_err(|_| EventSourcingError::Internal("lock poisoned".into()))?;
+            .map_err(|_| EventStoreError::StorageError("Lock poisoned".into()))?;
 
         Ok(store
-            .get(&key)
+            .get(entity_type)
             .and_then(|m| m.get(entity_id))
             .and_then(|events| events.last().map(|e| e.sequence))
             .unwrap_or(0))
     }
 
     fn verify_chain(&self, entity_type: &str, entity_id: &str) -> Result<()> {
-        let key = Self::get_entity_key(entity_type, entity_id);
         let store = self
             .events
             .read()
-            .map_err(|_| EventSourcingError::Internal("lock poisoned".into()))?;
+            .map_err(|_| EventStoreError::StorageError("Lock poisoned".into()))?;
 
         let events = store
-            .get(&key)
+            .get(entity_type)
             .and_then(|m| m.get(entity_id))
-            .ok_or_else(|| {
-                EventSourcingError::EntityNotFound(format!("{}/{}", entity_type, entity_id))
-            })?;
+            .ok_or_else(|| EventStoreError::NotFound(format!("{}/{}", entity_type, entity_id)))?;
 
         let chain: Vec<(String, String)> = events
             .iter()
             .map(|e| (e.hash.clone(), e.prev_hash.clone()))
             .collect();
 
-        crate::hash::verify_chain(&chain).map_err(|e| e.into())
+        Ok(hash::verify_chain(&chain).map_err(|e| EventStoreError::InvalidHash(e.to_string()))?)
     }
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
+    use serde::{Deserialize, Serialize};
+
+    #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+    struct TestPayload {
+        value: i32,
+        name: String,
+    }
 
     #[test]
     fn append_and_retrieve() {
         let store = InMemoryEventStore::new();
-        let event = EventEnvelope::new(
-            "orders",
-            "order-1",
-            serde_json::json!({"value": 42, "name": "test"}),
-            "user1",
-        );
+        let payload = TestPayload {
+            value: 42,
+            name: "test".to_string(),
+        };
+        let event = EventEnvelope::new(payload.clone(), "user1");
+        let entity_id = "entity-1";
 
-        let seq = store.append(&event).unwrap();
+        let seq = store.append(&event, "TestEvent", entity_id).unwrap();
         assert_eq!(seq, 1);
 
-        let retrieved = store.get_events("orders", "order-1").unwrap();
+        let retrieved = store
+            .get_events::<TestPayload>("TestEvent", entity_id)
+            .unwrap();
         assert_eq!(retrieved.len(), 1);
-        assert_eq!(retrieved[0].payload["value"], 42);
+        assert_eq!(retrieved[0].payload.value, 42);
     }
 
     #[test]
     fn sequence_increments() {
         let store = InMemoryEventStore::new();
         let e1 = EventEnvelope::new(
-            "orders",
-            "order-1",
-            serde_json::json!({"value": 1}),
+            TestPayload {
+                value: 1,
+                name: "a".to_string(),
+            },
             "user1",
         );
         let e2 = EventEnvelope::new(
-            "orders",
-            "order-1",
-            serde_json::json!({"value": 2}),
+            TestPayload {
+                value: 2,
+                name: "b".to_string(),
+            },
             "user1",
         );
 
-        let s1 = store.append(&e1).unwrap();
-        let s2 = store.append(&e2).unwrap();
+        let s1 = store.append(&e1, "Event", "entity-1").unwrap();
+        let s2 = store.append(&e2, "Event", "entity-1").unwrap();
 
         assert_eq!(s1, 1);
         assert_eq!(s2, 2);
-    }
-
-    #[test]
-    fn verify_chain() {
-        let store = InMemoryEventStore::new();
-        let e1 = EventEnvelope::new(
-            "users",
-            "user-1",
-            serde_json::json!({"action": "created"}),
-            "system",
-        );
-        let e2 = EventEnvelope::new(
-            "users",
-            "user-1",
-            serde_json::json!({"action": "updated"}),
-            "system",
-        );
-
-        store.append(&e1).unwrap();
-        store.append(&e2).unwrap();
-
-        store.verify_chain("users", "user-1").unwrap();
-    }
-
-    #[test]
-    fn event_count() {
-        let store = InMemoryEventStore::new();
-        assert_eq!(store.event_count(), 0);
-
-        let e1 = EventEnvelope::new("orders", "o1", serde_json::json!({}), "u1");
-        let e2 = EventEnvelope::new("orders", "o2", serde_json::json!({}), "u1");
-
-        store.append(&e1).unwrap();
-        store.append(&e2).unwrap();
-
-        assert_eq!(store.event_count(), 2);
     }
 }

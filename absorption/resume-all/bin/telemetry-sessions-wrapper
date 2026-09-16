@@ -1,0 +1,8 @@
+#!/bin/zsh
+# telemetry-sessions-wrapper — launched by com.kooshapari.resume-all-telemetry
+# Collects one telemetry tick every 5 minutes and appends to telemetry.ndjson.
+
+export PATH="/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+export HOME="/Users/kooshapari"
+
+exec /usr/bin/env python3 /Users/kooshapari/bin/telemetry-sessions.py >> /Users/kooshapari/Library/Logs/resume-all/telemetry-sessions.log 2>&1

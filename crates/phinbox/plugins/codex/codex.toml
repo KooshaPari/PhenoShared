@@ -1,0 +1,23 @@
+# Codex MCP + skills config for phinbox.
+#
+# Codex reads `~/.codex/mcp.toml` (global) and merges with per-repo
+# `.codex/mcp.toml`. This file shows the phinbox entry to add.
+
+[mcp_servers.phinbox_mcp]
+command = "phinbox-mcp"
+args = ["serve"]
+disabled = false
+trust_level = "trusted"
+
+[skills.phinbox]
+path = ".phinbox/skills/phinbox/SKILL.md"
+auto_activate = true
+trigger_keywords = [
+    "ask user",
+    "confirm with user",
+    "need approval",
+    "user input",
+    "should i",
+    "popup",
+    "elicit",
+]

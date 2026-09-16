@@ -1,0 +1,80 @@
+#!/usr/bin/env zsh
+# bridge-history — Build a rolling history of bridge snapshot states.
+#
+# Each tick:
+#   1. Reads the current bridge-health.ndjson latest tick
+#   2. Reads per-host snapshot.jsonl stats (rows, size, age)
+#   3. Writes a compact summary to bridge-history.ndjson (one row per host)
+#
+# Designed to be called repeatedly from a launchd daemon (StartInterval=300s = 5min).
+# Keeps last ~24h of history (288 ticks at 5min intervals).
+
+set -euo pipefail
+
+NDJSON="/Users/kooshapari/.local/share/resume-all/bridge-history.ndjson"
+SNAP_DIR="/Users/kooshapari/.local/share/resume-all"
+BRIDGE_HEALTH="/Users/kooshapari/.local/share/resume-all/bridge-health.ndjson"
+RETENTION_LINES=288  # 24h at 5min intervals
+
+mkdir -p "$(dirname "$NDJSON")" 2>/dev/null || true
+
+ts=$(python3 -c "import time; print(int(time.time() * 1000))" 2>/dev/null || echo "$(date +%s)000")
+now_iso=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+
+# Read bridge health latest
+bh_healthy="unknown"
+bh_exit_code="?"
+if [[ -f "$BRIDGE_HEALTH" ]]; then
+  last_health=$(tail -1 "$BRIDGE_HEALTH" 2>/dev/null)
+  if [[ -n "$last_health" ]]; then
+    bh_healthy=$(echo "$last_health" | python3 -c "
+import json, sys
+try:
+    d = json.loads(sys.stdin.read())
+    print(d.get('healthy', 'unknown'))
+except: print('unknown')
+" 2>/dev/null)
+    bh_exit_code=$(echo "$last_health" | python3 -c "
+import json, sys
+try:
+    d = json.loads(sys.stdin.read())
+    print(d.get('exit_code', '?'))
+except: print('?')
+" 2>/dev/null)
+  fi
+fi
+
+# Build per-host stats
+host_lines=""
+for snap in "$SNAP_DIR"/*.snapshot.jsonl; do
+  [[ -f "$snap" ]] || continue
+  host=$(basename "$snap" .snapshot.jsonl)
+  size=$(stat -f%z "$snap" 2>/dev/null || echo 0)
+  rows=$(wc -l < "$snap" 2>/dev/null | tr -d ' ' || echo 0)
+  mtime=$(stat -f%m "$snap" 2>/dev/null || echo 0)
+  now=$(date +%s)
+  age=$((now - mtime))
+
+  host_json="{\"host\":\"${host}\",\"rows\":${rows},\"size_bytes\":${size},\"age_seconds\":${age}}"
+  if [[ -z "$host_lines" ]]; then
+    host_lines="$host_json"
+  else
+    host_lines="${host_lines},${host_json}"
+  fi
+done
+
+# Build the tick
+tick="{\"ts\":${ts},\"ts_iso\":\"${now_iso}\",\"bridge_healthy\":\"${bh_healthy}\",\"bridge_exit_code\":\"${bh_exit_code}\",\"hosts\":[${host_lines}]}"
+
+# Append
+print -r -- "$tick" >> "$NDJSON"
+
+# Truncate (keep last N lines)
+total=$(wc -l < "$NDJSON" 2>/dev/null | tr -d ' ' || echo 0)
+if (( total > RETENTION_LINES )); then
+  tmp=$(mktemp "${NDJSON}.XXXXXX") || exit 1
+  tail -n "$RETENTION_LINES" "$NDJSON" > "$tmp" 2>/dev/null || true
+  mv "$tmp" "$NDJSON"
+fi
+
+exit 0

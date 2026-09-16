@@ -1,0 +1,25 @@
+[package]
+name = "store-sqlite"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+rust-version.workspace = true
+description = "SQLite-backed MailboxStore, ClaimPort, MemoryPort, and EventStorePort adapters (bundled SQLite)."
+readme = "README.md"
+keywords = ["sqlite", "store", "claim", "substrate"]
+categories = ["database"]
+
+[dependencies]
+a2a.workspace = true
+substrate-core.workspace = true
+rusqlite = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+uuid = { workspace = true }
+thiserror = { workspace = true }
+chrono = { workspace = true }
+strsim = "0.11"
+
+[dev-dependencies]
+tempfile = { workspace = true }

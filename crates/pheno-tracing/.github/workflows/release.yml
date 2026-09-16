@@ -1,0 +1,38 @@
+name: release
+on:
+  push:
+    tags: ['v*']
+permissions:
+  contents: write
+  id-token: write   # for keyless cosign
+jobs:
+  release:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+      - uses: dtolnay/rust-toolchain@29eef336d9b2848a0b548edc03f92a220660cdb8 # stable
+      - name: Build
+        run: cargo build --release --locked
+      - name: SBOM (CycloneDX)
+        uses: CycloneDX/gh-cycldx-rust-action@v1
+        with:
+          args: --format json --output sbom.json
+      - name: cosign sign-blob (keyless OIDC)
+        uses: sigstore/cosign-installer@398d4b0eeef1380460a10c8013a76f728fb906ac # v3
+      - run: |
+          cosign sign-blob --yes \
+            --output-signature sbom.sig \
+            --output-certificate sbom.pem \
+            sbom.json
+      - name: SLSA L3 provenance
+        uses: slsa-framework/slsa-github-generator@f7dd8c54c2067bafc12ca7a55595d5ee9b75204a # v2.1.0
+        with:
+          base64-subjects: ${{ needs.build.outputs.hashes }}
+      - name: Upload release assets
+        uses: softprops/action-gh-release@de2c0eb89ae2a093876385947365aca7b0e5f844 # v1
+        with:
+          files: |
+            sbom.json
+            sbom.sig
+            sbom.pem
+          generate_release_notes: true

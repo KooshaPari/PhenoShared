@@ -1,61 +1,20 @@
-# pheno-agents-md
+# substrate
 
-> AI-agent context (AGENTS.md) generation rules + template for the Phenotype fleet. Renders the 60-100 line 'agent constitution' for any repo from a small YAML config.
+> Cross-cutting substrate for the Phenotype fleet (foundation layer). Part of the Phenotype-org fleet canonical substrate registry (see KooshaPari/phenotype-registry).
 
-## Quickstart
+## Docs
+- [README.md](README.md): entry point and project overview
+- [SPEC.md](SPEC.md): one-page spec (Problem / Solution / Architecture / API / Status)
+- [CHANGELOG.md](CHANGELOG.md): version history
+- [SECURITY.md](SECURITY.md): security policy and reporting
 
-```toml
-# Cargo.toml
-[dependencies]
-pheno-agents-md = "0.1"
-```
+## Optional
+- [WORKLOG.md](WORKLOG.md): pheno-worklog-schema v2.1 (if present)
+- [docs/adr/](docs/adr/): architecture decision records (if present)
 
-```bash
-# install the CLI
-cargo install pheno-agents-md
-# generate AGENTS.md from pheno-agents-md.yaml
-pheno-agents-md --out ./AGENTS.md
-```
-
-## Public API
-
-```rust
-pheno_agents_md::AgentConfig { build, test, lint, audit, sign, repo_name, extra_dont_touch }
-pheno_agents_md::render(&cfg, default_repo_name) -> String
-pheno_agents_md::load_config(&Path) -> Result<AgentConfig>
-pheno_agents_md::write_agents_md(&cfg, &str, &Path) -> Result<()>
-```
-
-## Files
-
-- `Cargo.toml`
-- `README.md`
-- `src/lib.rs`
-- `src/main.rs`
-- `src/pheno_agents_md/`
-- `tests/`
-- `AGENTS.md`
-- `llms.txt`
-- `WORKLOG.md`
-- `CHANGELOG.md`
-- `LICENSE-MIT`
-- `.github/workflows/ci.yml`
-
-## Conventions
-
-- Conventional Commits (`feat:`, `fix:`, `chore:`, `docs:`, `refactor:`).
-- rustfmt + clippy (`-D warnings`); `#![warn(missing_docs)]` on the
-  public API.
-- 80% lib coverage gate (ADR-023 Rule 3.1); see `coverage` job in
-  `.github/workflows/ci.yml`.
-- Standalone crate (empty `[workspace]` table in `Cargo.toml`); not
-  a member of the root monorepo workspace.
-- WORKLOG.md is the change history (v2.1 schema, 7 cols + `device`).
-
-## See also
-
-- `AGENTS.md` — agent context.
-- `WORKLOG.md` — change history (v2.1 schema).
-- `CHANGELOG.md` — release notes.
-- `LICENSE-MIT` / `LICENSE-APACHE` — dual license.
-- Sibling: pheno-llms-txt, pheno-prompt-test, pheno-vibecoding-guard, pheno-worklog-schema.
+## Notes
+- Language/runtime: rust
+- Tier: 0
+- Test coverage: 70%
+- Registry entry: KooshaPari/phenotype-registry/registry/components.lock
+- Maintained by: KooshaPari

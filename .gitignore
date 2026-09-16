@@ -1,26 +1,9 @@
-# Phenotype-org standard .gitignore — Rust
-# Source: https://github.com/KooshaPari/phenotype-tooling/blob/main/templates/gitignore-rust
-
-# Build artifacts
-/target/
-**/*.rs.bk
-Cargo.lock.bak
-
-# Editor
-.idea/
-.vscode/
-*.swp
-
-# OS
-.DS_Store
-Thumbs.db
-
-# Logs
+/target
+**/target
+.cargo-target-isolated/
+.env
 *.log
+.substrate/
 
-# Pine-specific (notebook scaffolding and grading)
-.grading-targets/
-.grade-reports/
-grade.sh
-just-grade.snippet
-lefthook.yml
+.substrate-gw/
+vendor/

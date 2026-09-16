@@ -1,0 +1,19 @@
+[package]
+name = "dag-scheduler"
+version.workspace = true
+edition.workspace = true
+description = "Run acceptance-contracts through a dependency-ordered DAG"
+
+readme = "README.md"
+license = "Apache-2.0 OR MIT"
+repository = "https://github.com/KooshaPari/phenotype-tooling"
+homepage = "https://github.com/KooshaPari/phenotype-tooling"
+keywords = ["phenotype", "tooling", "cli"]
+categories = ["command-line-utilities"]
+[dependencies]
+acceptance-contract = { path = "../acceptance-contract" }
+anyhow = { workspace = true }
+clap = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+serde_yaml = { workspace = true }

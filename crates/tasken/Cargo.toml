@@ -1,0 +1,63 @@
+[package]
+name = "tasken"
+version = "0.1.0"
+edition = "2021"
+description = "Universal task execution framework with scheduling, workflow orchestration, and plugin support."
+license = "MIT OR Apache-2.0"
+authors = ["Phenotype <dev@kooshapari.com>"]
+readme = "README.md"
+repository = "https://github.com/KooshaPari/zz-Tasken"
+documentation = "https://docs.rs/tasken"
+rust-version = "1.75"
+
+[dependencies]
+cron-parser = "0.11"
+petgraph = "0.8.3"
+
+# Async
+async-trait = "0.1"
+tokio = { workspace = true, features = ["full"] }
+futures = "0.3"
+
+# Serialization
+serde = { workspace = true }
+serde_json = { workspace = true }
+
+# Time
+chrono = { workspace = true }
+
+# CLI
+clap = { workspace = true }
+dotenvy = "0.15"
+libc = "0.2"
+
+# File system watching
+notify = { version = "8", features = ["macos_kqueue"] }
+
+# Error handling
+thiserror = { workspace = true }
+anyhow = { workspace = true }
+
+# Utilities
+uuid = { workspace = true }
+dirs = "6"
+
+# Configuration
+envy = "0.4"
+
+# Parsing
+toml = "1.1"
+serde_yaml = { workspace = true }
+
+# Observability
+tracing = { workspace = true }
+tracing-subscriber = { workspace = true, features = ["json", "registry"] }
+opentelemetry = { version = "0.32", optional = true }
+
+[dev-dependencies]
+tempfile = "3"
+temp-env = "0.3"
+
+[features]
+default = []
+otel = ["dep:opentelemetry"]

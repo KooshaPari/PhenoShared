@@ -1,0 +1,71 @@
+# resume-all workspaces — named groups of panes (Phase E11).
+#
+# Use:    resume-all --workspace=<name>
+#         workspace panes <name>          # list live panes in this workspace
+#         workspace dry-run <name>        # preview `resume-all --workspace=<name> --dry-run`
+#
+# Each workspace is a set of category rules:
+#
+#   cwd_prefixes   list of path prefixes; pane's cwd must start with one
+#   harnesses      OPTIONAL list of harness names; pane's harness must equal one
+#   description    OPTIONAL human-readable label (informational only)
+#
+# Matching semantics (mirrors bookmarks):
+#   - OR within a category     (any rule in the list satisfies that category)
+#   - AND across categories    (pane must satisfy every category that has rules)
+#   - missing/empty category   is a wildcard (does not constrain)
+#   - argv-supplied panes (session_id_source == "argv") ALWAYS win
+#     over the workspace filter; --conversation-id is sacred.
+#
+# Workspaces complement (do NOT replace) bookmarks:
+#   - bookmarks    live in ~/.config/resume-all/bookmarks.toml    (per-snapshot rule, tty-clusters)
+#   - workspaces   live in ~/.config/resume-all/workspaces.toml   (project groupings, cwd-only)
+#
+# To add a new workspace: append a new [[workspace]] block.
+# To print the active set:    resume-all workspaces
+#                                or  workspace list
+
+# ---------------------------------------------------------------------------
+# "phenotype" — the Phenotype monorepo + seed bridge. All dev harnesses.
+# ---------------------------------------------------------------------------
+[[workspace]]
+name = "phenotype"
+cwd_prefixes = [
+    "/Users/kooshapari/CodeProjects/Phenotype/",
+    "/Users/kooshapari/CodeProjects/Phenotype-seed/",
+]
+harnesses = ["codex", "forge", "cursor", "kilo", "droid", "opencode"]
+description = "Phenotype monorepo + seed bridge"
+
+# ---------------------------------------------------------------------------
+# "thegent" — thegent Rust crates workspace.
+# ---------------------------------------------------------------------------
+[[workspace]]
+name = "thegent"
+cwd_prefixes = ["/Users/kooshapari/thegent/"]
+harnesses = ["codex", "forge", "droid"]
+description = "thegent crates workspace"
+
+# ---------------------------------------------------------------------------
+# "personal" — personal projects + notes. No harness filter (matches all).
+# ---------------------------------------------------------------------------
+[[workspace]]
+name = "personal"
+cwd_prefixes = [
+    "/Users/kooshapari/personal/",
+    "/Users/kooshapari/notes/",
+]
+# no harnesses filter = match all
+description = "Personal projects"
+
+# ---------------------------------------------------------------------------
+# "harness-infra" — resume-all / sharecli development surface.
+# ---------------------------------------------------------------------------
+[[workspace]]
+name = "harness-infra"
+cwd_prefixes = [
+    "/Users/kooshapari/CodeProjects/Phenotype/repos/",
+    "/Users/kooshapari/handoff/",
+    "/Users/kooshapari/bin/",
+]
+description = "Resume-all / sharecli development"

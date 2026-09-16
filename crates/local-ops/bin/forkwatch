@@ -1,0 +1,63 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+usage() {
+  cat <<USAGE
+forkwatch watch     # live watch process counts + top process names
+forkwatch snap      # one-shot snapshot into /tmp/forkwatch-<time>.log
+forkwatch panic     # try to kill common fork-storm sources (cursor-agent/rg/git/node)
+USAGE
+}
+
+stamp() { date "+%Y-%m-%d_%H-%M-%S"; }
+
+snap() {
+  local out="/tmp/forkwatch-$(stamp).log"
+  {
+    echo "### time"; date
+    echo "### user"; id
+    echo "### maxproc kernel"; sysctl kern.maxproc kern.maxprocperuid || true
+    echo "### launchctl limits"; launchctl limit maxproc maxfiles || true
+    echo "### ulimit"; ulimit -a || true
+    echo "### process counts"; echo -n "total: "; ps -A | wc -l; echo -n "user: "; ps -u "$USER" | wc -l
+    echo "### top by count (user)"; ps -u "$USER" -o comm= | sort | uniq -c | sort -nr | head -50
+    echo "### top CPU (user)"; ps -u "$USER" -o pid,pcpu,pmem,comm | sort -nrk2 | head -30
+  } | tee "$out"
+  echo "wrote $out"
+}
+
+panic() {
+  # don't fail if pkill doesn't find anything
+  pkill -f "cursor-agent" 2>/dev/null || true
+  pkill -f "Cursor.*agent" 2>/dev/null || true
+  pkill -f "rg" 2>/dev/null || true
+  pkill -f "ripgrep" 2>/dev/null || true
+  pkill -f "git" 2>/dev/null || true
+  pkill -f "node" 2>/dev/null || true
+  echo "panic kill attempted"
+}
+
+watch_loop() {
+  echo "Press Ctrl-C to stop. Tip: run 'forkwatch snap' in another terminal when it starts spiking."
+  while true; do
+    clear
+    echo "time: $(date)"
+    echo -n "processes (total): "; ps -A | wc -l
+    echo -n "processes (user ): "; ps -u "$USER" | wc -l
+    echo
+    echo "Top process names by count (user):"
+    ps -u "$USER" -o comm= | sort | uniq -c | sort -nr | head -20
+    echo
+    echo "If you are melting down: run  'forkwatch panic'"
+    sleep 0.5
+  done
+}
+
+cmd="${1:-}"
+case "$cmd" in
+  watch) watch_loop ;;
+  snap) snap ;;
+  panic) panic ;;
+  ""|-h|--help) usage ;;
+  *) echo "unknown cmd: $cmd"; usage; exit 2 ;;
+esac
