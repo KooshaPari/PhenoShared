@@ -85,7 +85,7 @@ version = "0.3.10"
 edition = "2021"
 authors = ["<REDACTED> <koosha@phenotype.space>"]
 license = "MIT OR Apache-2.0"
-repository = "https://github.com/<REDACTED>/substrate"
+repository = "https://github.com/KooshaPari/substrate"
 rust-version = "1.80"
 
 [workspace.dependencies]
@@ -148,7 +148,7 @@ criterion = { version = "0.5", features = ["html_reports"] }
 # Use pheno-otel from PhenoObservability v0.1.0 (ADR-037 substrate).
 # Git + tag + subdirectory form pins the crate to a known-good release
 # so all consumers across the pheno-* fleet see the same OTLP wire-format
-# export surface. See https://github.com/<REDACTED>/PhenoObservability/releases/tag/v0.1.0
+# export surface. See https://github.com/KooshaPari/PhenoObservability/releases/tag/v0.1.0
 pheno-otel = { path = "crates/argis-extensions/pheno-otel", version = "0.1.0" }
 
 # --- PhenoFabric dependencies (absorbed 2026-09-16) ---
