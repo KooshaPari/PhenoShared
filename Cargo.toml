@@ -75,6 +75,10 @@ members = [
     # --- PhenoRegistry crates (absorbed from PhenoRegistry) ---
     "crates/phenotype-project-registry",
     "crates/phenotype-service-registry",
+    # --- PhenoInfra crates (absorbed from PhenoInfra) ---
+    "crates/phenotype-crypto",
+    "crates/phenotype-observability",
+    "crates/phenotype-policy-engine",
 ]
 [workspace.package]
 version = "0.3.10"
@@ -103,14 +107,15 @@ tokio = { version = "1.42", features = ["rt", "rt-multi-thread", "macros", "proc
 regex = "1.11"
 anyhow = "1.0"
 clap = { version = "4.5", features = ["derive", "env"] }
+dashmap = "6"
 toml = "1.1"
 
 # --- Phenotype shared infrakit crates (from PhenoInfra) ---
-phenotype-crypto = { git = "https://github.com/KooshaPari/PhenoInfra.git", rev = "e001322" }
+phenotype-crypto = { path = "crates/phenotype-crypto", version = "0.2.0" }
 phenotype-health = { path = "crates/phenotype-health", version = "0.2.0" }
-phenotype-observability = { git = "https://github.com/KooshaPari/PhenoInfra.git", rev = "e001322" }
-phenotype-policy-engine = { git = "https://github.com/KooshaPari/PhenoInfra.git", rev = "e001322" }
-phenotype-mcp = { git = "https://github.com/KooshaPari/PhenoInfra.git", rev = "e001322" }
+phenotype-observability = { path = "crates/phenotype-observability", version = "0.3.10" }
+phenotype-policy-engine = { path = "crates/phenotype-policy-engine", version = "0.3.10" }
+phenotype-mcp = { path = "crates/phenotype-mcp", version = "0.3.10" }
 tempfile = "3.14"
 assert_cmd = "2.0"
 predicates = "3.1"

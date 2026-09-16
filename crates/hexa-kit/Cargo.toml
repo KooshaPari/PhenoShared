@@ -136,7 +136,7 @@ phenotype-event-sourcing = { path = "crates/phenotype-event-sourcing" }
 # ResilienceKit = phenotype-resilience DOMAIN_ROLES owner
 phenotype-http-client-core = { git = "https://github.com/KooshaPari/ResilienceKit", branch = "main" }
 phenotype-state-machine = { git = "https://github.com/KooshaPari/ResilienceKit", branch = "main" }
-phenotype-policy-engine = { git = "https://github.com/KooshaPari/ResilienceKit", branch = "main" }
+phenotype-policy-engine = { workspace = true }
 phenotype-logging = { git = "https://github.com/KooshaPari/PhenoObservability", branch = "main", package = "phenotype-logging" }
 phenotype-time = { path = "crates/phenotype-time" }
 phenotype-rate-limit = { path = "crates/phenotype-rate-limit" }
@@ -145,9 +145,9 @@ phenotype-retry = { path = "crates/phenotype-retry" }
 phenotype-async-traits = { git = "https://github.com/KooshaPari/phenotype-rust-sdk", branch = "main" }
 phenotype-macros = { git = "https://github.com/KooshaPari/phenotype-rust-sdk", branch = "main" }
 phenotype-config-loader = { git = "https://github.com/KooshaPari/phenotype-config", branch = "main" }
-phenotype-mcp = { git = "https://github.com/KooshaPari/substrate", branch = "main" }
+phenotype-mcp = { workspace = true }
 # ResilienceKit traits crate (HealthChecker API — PO runtime differs)
-phenotype-health = { git = "https://github.com/KooshaPari/ResilienceKit", branch = "main", package = "phenotype-health" }
+phenotype-health = { workspace = true }
 # archive-if-unused stub — inline HexaKit shim; zero phenoShared git deps fleet-wide (ADR-ECO-014)
 phenotype-cache-adapter = { path = "crates/phenotype-cache-adapter" }
 phenotype-contract-adapters = { path = "crates/phenotype-contract-adapters" }
@@ -158,7 +158,7 @@ phenotype-contracts = { git = "https://github.com/KooshaPari/phenotype-rust-sdk"
 phenotype-security-aggregator = { git = "https://github.com/KooshaPari/Authvault", branch = "main", package = "phenotype-security-aggregator" }
 phenotype-test-infra = { git = "https://github.com/KooshaPari/TestingKit", branch = "main" }
 phenotype-cipher = { git = "https://github.com/KooshaPari/Authvault", branch = "main", package = "phenotype-cipher" }
-phenotype-crypto = { git = "https://github.com/KooshaPari/Authvault", branch = "main", package = "phenotype-crypto" }
+phenotype-crypto = { workspace = true }
 phenotype-casbin-wrapper = { git = "https://github.com/KooshaPari/Authvault", branch = "main", package = "phenotype-casbin-wrapper" }
 phenotype-iter = { git = "https://github.com/KooshaPari/phenotype-types", branch = "main", package = "phenotype-iter" }
 phenotype-string = { git = "https://github.com/KooshaPari/phenotype-types", branch = "main", package = "phenotype-string" }
