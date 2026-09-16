@@ -70,11 +70,13 @@ members = [
     "crates/fabric-research-ledger",
     "examples/full-demo",
     # --- GFX SDK crates (absorbed from PhenoGfx) ---
+    "crates/phenotype-gfx",
     "crates/phenotype-voxel",
 ]
 [workspace.package]
 version = "0.3.10"
 edition = "2021"
+authors = ["KooshaPari <koosha@phenotype.space>"]
 license = "MIT OR Apache-2.0"
 repository = "https://github.com/KooshaPari/substrate"
 rust-version = "1.80"
@@ -139,7 +141,7 @@ criterion = { version = "0.5", features = ["html_reports"] }
 # Git + tag + subdirectory form pins the crate to a known-good release
 # so all consumers across the pheno-* fleet see the same OTLP wire-format
 # export surface. See https://github.com/KooshaPari/PhenoObservability/releases/tag/v0.1.0
-pheno-otel = { git = "https://github.com/KooshaPari/PhenoObservability", tag = "v0.1.0", subdirectory = "pheno-otel" }
+pheno-otel = { path = "crates/argis-extensions/pheno-otel", version = "0.1.0" }
 
 # --- PhenoFabric dependencies (absorbed 2026-09-16) ---
 blake3 = "1.5"
@@ -156,10 +158,10 @@ bytemuck = { version = "1", features = ["derive"] }
 glam = { version = "0.29", features = ["serde"] }
 metrics = { version = "0.24", default-features = false }
 zstd = "0.13"
-prometheus = { version = "0.14", optional = true }
-bevy = { version = "0.18.1", default-features = false, features = ["bevy_asset", "bevy_mesh"], optional = true }
-wgpu = { version = "22", optional = true }
-pollster = { version = "0.3", optional = true }
+prometheus = { version = "0.14" }
+bevy = { version = "0.18.1", default-features = false, features = ["bevy_asset", "bevy_mesh"] }
+wgpu = { version = "22" }
+pollster = { version = "0.3" }
 
 [workspace.lints.rust]
 unsafe_code = "forbid"

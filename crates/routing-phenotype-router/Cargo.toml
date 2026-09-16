@@ -10,7 +10,7 @@ publish = false
 
 [dependencies]
 substrate-core = { version = "0.3.8", path = "../substrate-core" }
-phenotype-router = { git = "https://github.com/KooshaPari/phenotype-router" }
+phenotype-router = { path = "../phenotype-router", version = "0.2.0" }
 async-trait.workspace = true
 serde.workspace = true
 serde_json.workspace = true
