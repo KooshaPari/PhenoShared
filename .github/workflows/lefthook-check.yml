@@ -1,0 +1,78 @@
+name: Lefthook CI Validation
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+env:
+  LEFTHOOK_VERSION: 2.1.12
+  LEFTHOOK_SHA256: 22ff1ad48d1a0f4dca8d6b7e920056c6a9015f9204e5b693858ed9c2db759a16
+
+jobs:
+  pre-commit-check:
+    name: Pre-commit Checks
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+
+      - name: Set up Python
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7
+        with:
+          python-version: "3.11"
+
+      - name: Install lefthook
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(uname -sm)" = "Linux x86_64"
+          install_dir=$(mktemp -d "$RUNNER_TEMP/lefthook.XXXXXX")
+          curl --fail --show-error --silent --location --retry 3 \
+            "https://github.com/evilmartians/lefthook/releases/download/v${LEFTHOOK_VERSION}/lefthook_${LEFTHOOK_VERSION}_Linux_x86_64" \
+            --output "$install_dir/lefthook"
+          printf '%s  %s\n' "$LEFTHOOK_SHA256" "$install_dir/lefthook" | sha256sum --check --strict
+          chmod 0755 "$install_dir/lefthook"
+          test "$("$install_dir/lefthook" version)" = "$LEFTHOOK_VERSION"
+          printf '%s\n' "$install_dir" >> "$GITHUB_PATH"
+
+      - name: Run pre-commit hooks
+        run: lefthook run pre-commit --no-auto-install
+
+  commit-msg-check:
+    name: Commit Message Validation
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          fetch-depth: 0
+
+      - name: Install lefthook
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(uname -sm)" = "Linux x86_64"
+          install_dir=$(mktemp -d "$RUNNER_TEMP/lefthook.XXXXXX")
+          curl --fail --show-error --silent --location --retry 3 \
+            "https://github.com/evilmartians/lefthook/releases/download/v${LEFTHOOK_VERSION}/lefthook_${LEFTHOOK_VERSION}_Linux_x86_64" \
+            --output "$install_dir/lefthook"
+          printf '%s  %s\n' "$LEFTHOOK_SHA256" "$install_dir/lefthook" | sha256sum --check --strict
+          chmod 0755 "$install_dir/lefthook"
+          test "$("$install_dir/lefthook" version)" = "$LEFTHOOK_VERSION"
+          printf '%s\n' "$install_dir" >> "$GITHUB_PATH"
+
+      - name: Validate commit message format
+        env:
+          PR_TITLE: ${{ github.event.pull_request.title }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          # Keep untrusted PR metadata out of shell source.
+          printf '%s\n' "$PR_TITLE" > .git/COMMIT_MSG_TEMP
+          lefthook run commit-msg --no-auto-install .git/COMMIT_MSG_TEMP

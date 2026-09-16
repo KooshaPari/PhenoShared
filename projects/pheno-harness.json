@@ -1,0 +1,21 @@
+{
+  "name": "pheno-harness",
+  "renamed_to": "PhenoLab",
+  "renamed_to_full_name": "KooshaPari/PhenoLab",
+  "role": "agent-experiment-lab",
+  "lifecycle": "active",
+  "status": "active-renamed",
+  "description": "Phenotype-org experimental lab for kernel writing, LLM tuning, and router config tuning. Renamed from pheno-harness to PhenoLab (PascalCase) on 2026-09-09. The prior `ABSORBED into phenodag` entry from 2026-06-24 was reversed by operator decision 2026-09-09: pheno-harness is the operator's personal sandbox for agent-driven experimentation, not a product. The previous test-harness scope was incomplete.",
+  "repo_path": "KooshaPari/pheno-harness",
+  "renamed_repo_path": "KooshaPari/PhenoLab",
+  "default_branch": "main",
+  "language": "Python",
+  "disposition": "RETAIN_AS_LAB",
+  "absorbed_into": null,
+  "domain": "experiments/llm-tuning/kernels",
+  "boundary": "agent-experimentation-sandbox",
+  "tombstone_reason": null,
+  "rename_reason": "Operator decision 2026-09-09: this is a sandbox/lab for kernel writing and LLM tuning, not a product or test harness. Renamed to PhenoLab (PascalCase) per operator direction. Un-archived.",
+  "agent11_evidence": "/Users/kooshapari/Downloads/chat1-portfolio-audit-2026-09-05/agent11-evidence/portfolio-ledger-reconciliation.md",
+  "registry_author": "agent11 (operator reconciliation 2026-09-09)"
+}

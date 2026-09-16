@@ -1,0 +1,72 @@
+{
+  "task_id": "L5-130",
+  "date": "2026-06-21",
+  "repo": "phenotype-apps",
+  "category": "chore",
+  "title": "helioscope retirement follow-up audit: replace stale 'Helioscope' references across the monorepo",
+  "commit_sha": "a0520cee34a0531579fe86c8793ae8a84c78e805",
+  "pr_number": 599,
+  "status": "completed",
+  "author": "forge",
+  "device": "macbook",
+  "notes": [
+    "Helioscope (KooshaPari/helioscope) was retired 2026-06-21 per the v12-20 closure rationale in findings/2026-06-21-helioscope-cancellation-rationale.md. This worklog is the follow-up audit that scans the Phenotype monorepo for remaining stale 'Helioscope' references and opens minimum-scope PRs to retire them.",
+    "Two cleanup PRs opened: helios-cli#599 (docs: README/CLAUDE/AGENTS — replace 'Helioscope' product name with 'Helios CLI', add tombstone callout pointing to retirement rationale) and phenotype-registry#340 (docs/intent/helioscope.md + docs/boundary/helioscope.md mark status=retired with superseded_by=helios-cli; scripts/resolve-collision.py folds 'helioscope' and 'helioscope-wtrees' aliases to HeliosCLI).",
+    "Branch protections respected: did NOT touch any branch in the parallel-agent owner set (chore/l5-105-, chore/l5-110-, ci/v12-gates-, chore/orch-v12-, chore/T4-v14-, chore/deny-, wip-2026-, feat/v12-, melosviz-wt/, v14-T1/T2/T3/T5/T6/T8-).",
+    "Did NOT touch /Users/kooshapari/CodeProjects/Phenotype/repos/Civis or /tmp/civis-* per task constraint. Worked in isolated worktrees under /private/tmp/helioscope-cleanup-0f62790a/.",
+    "TOMBSTONE-classified references (intentional historical markers) left untouched: phenotype-registry-helioscope-final/RATIONALIZATION_PLAN.md line 209 (records 'helioscope -> helios-cli REDIRECT' as the canonical supersession record) and registry/disposition-index.json rows at lines 522-532 (canonical supersession record). These are the source-of-truth for the retirement, not stale references.",
+    "References classified: 13 total found, 11 STALE → ACTIVE (helios-cli) or TOMBSTONE, 2 TOMBSTONE (left untouched in registry-helioscope-final). 0 ACTIVE and 0 DOC-HISTORICAL. See findings/2026-06-21-L5-130-helioscope-retirement-cleanup.md for full breakdown."
+  ],
+  "started_at": "2026-06-21T08:30:00Z",
+  "completed_at": "2026-06-21T08:57:32Z",
+  "scope": {
+    "modified_repos": [
+      "helios-cli (README.md, CLAUDE.md, AGENTS.md) — branch chore/l5-130-helioscope-stale-docs-2026-06-21",
+      "phenotype-registry (docs/intent/helioscope.md, docs/boundary/helioscope.md, scripts/resolve-collision.py) — branch chore/l5-130-helioscope-stale-registry-2026-06-21"
+    ],
+    "no_touch_repos": [
+      "/Users/kooshapari/CodeProjects/Phenotype/repos/Civis (excluded per task constraint)",
+      "/tmp/civis-* (excluded per task constraint)",
+      "phenotype-registry-helioscope-final (TOMBSTONE-classified references left intact)"
+    ],
+    "no_touch_branches": [
+      "chore/l5-105-*", "chore/l5-110-*", "ci/v12-gates-*", "chore/orch-v12-*",
+      "chore/T4-v14-*", "chore/deny-*", "wip-2026-*", "feat/v12-*",
+      "melosviz-wt/*", "v14-T1-*", "v14-T2-*", "v14-T3-*", "v14-T5-*",
+      "v14-T6-*", "v14-T8-*"
+    ]
+  },
+  "prs": {
+    "helios-cli": {
+      "number": 599,
+      "url": "https://github.com/KooshaPari/helios-cli/pull/599",
+      "branch": "chore/l5-130-helioscope-stale-docs-2026-06-21",
+      "commit": "a0520cee34a0531579fe86c8793ae8a84c78e805",
+      "diffstat": "AGENTS.md | 2 +- | CLAUDE.md | 4 ++-- | README.md | 6 +++++- | 3 files changed, 8 insertions(+), 4 deletions(-)"
+    },
+    "phenotype-registry": {
+      "number": 340,
+      "url": "https://github.com/KooshaPari/phenotype-registry/pull/340",
+      "branch": "chore/l5-130-helioscope-stale-registry-2026-06-21",
+      "commit": "e667c24b23b78afc4b59781d062fb5e281c770b7",
+      "diffstat": "docs/boundary/helioscope.md | 34 +++++++++++++++++++++------------- | docs/intent/helioscope.md | 17 +++++++++++++---- | scripts/resolve-collision.py | 6 ++++-- | 3 files changed, 38 insertions(+), 19 deletions(-)"
+    }
+  },
+  "verification": {
+    "gh_pr_create": "pass — both PRs created and visible in gh pr list with state=OPEN",
+    "git_status": "pass — both worktrees have a single new commit on top of main with no local cruft",
+    "branch_protection": "pass — branch names match the chore/l5-130- pattern (NOT in the parallel-agent owner set)",
+    "no_touch": "pass — confirmed no edits to Civis, /tmp/civis-*, or the locked branches listed above"
+  },
+  "summary": "Follow-up audit complete. Two minimum-scope cleanup PRs opened (helios-cli#599 and phenotype-registry#340). 11 STALE references folded to ACTIVE or TOMBSTONE; 2 TOMBSTONE references in phenotype-registry-helioscope-final left intact (they ARE the canonical supersession record). Recommended next-step for the 4-week retirement closure: open a phenotype-registry-helioscope-final tombstone PR that demotes the registry-fork to an archive-only state, then delete the legacy KooshaPari/helioscope upstream after a 7-day grace period. See findings/2026-06-21-L5-130-helioscope-retirement-cleanup.md for the full report.",
+  "supersedes": "KooshaPari/helioscope (RETIRED 2026-06-21)",
+  "refs": {
+    "retirement_rationale": "findings/2026-06-21-helioscope-cancellation-rationale.md",
+    "l5_130_report": "findings/2026-06-21-L5-130-helioscope-retirement-cleanup.md",
+    "adr_025": "docs/adr/2026-06-17/ADR-025-worklog-v2-1-device-column.md",
+    "tombstone_records": [
+      "phenotype-registry-helioscope-final/RATIONALIZATION_PLAN.md (L209)",
+      "phenotype-registry-helioscope-final/registry/disposition-index.json (L522-532)"
+    ]
+  }
+}

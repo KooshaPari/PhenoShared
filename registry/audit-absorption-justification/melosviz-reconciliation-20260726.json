@@ -1,0 +1,52 @@
+{
+  "schema": "phenotype-registry.reconciliation.v1",
+  "audited_at": "2026-07-26T05:57:00Z",
+  "subject": "Melosviz boundary reconciliation",
+  "policy": "preserve historical claims; no deletion, archive, reset, or absorption performed",
+  "active_sources": [
+    {
+      "name": "Melosviz",
+      "remote": "https://github.com/KooshaPari/Melosviz",
+      "visibility": "public",
+      "archived": false,
+      "default_branch": "main",
+      "sha": "f31cf0cc42e272dc8d9523e91aa064509ad6d57c",
+      "size_kb": 54907,
+      "surface": "FastAPI/Python backend, Rust workspace, Tauri/Electrobun desktop, TypeScript web client",
+      "current_disposition": "KEEP_STANDALONE_RECONCILED",
+      "local_recovery_ref": "recovery/melosviz-local-20260726",
+      "local_recovery_commit": "ab2469d"
+    },
+    {
+      "name": "backend (melosviz package)",
+      "remote": "https://github.com/KooshaPari/backend",
+      "visibility": "private",
+      "archived": false,
+      "default_branch": "main",
+      "sha": "7105f6d0a6cabaf6669412a8ebe33aed30b01861",
+      "size_kb": 48,
+      "surface": "Python package melosviz 0.1.0; src/melosviz (17 source files) and tests",
+      "current_disposition": "KEEP_STANDALONE_RECONCILED"
+    }
+  ],
+  "historical_claims_preserved": [
+    {
+      "source": "registry/disposition-index.json#repo-backend-melosviz",
+      "claim": "absorbed into phenotype-python-sdk/packages/melosviz",
+      "status": "historical-conflict; not deleted or rewritten"
+    },
+    {
+      "source": "registry/disposition-index.json#FINAL-Melosviz",
+      "claim": "absorbed into phenotype-apps/apps/melosviz; source archived",
+      "status": "historical-conflict; contradicted by current unarchived public remote"
+    }
+  ],
+  "decision": "Keep both active source repositories explicit. Do not merge the app into phenotype-apps or the package into phenotype-python-sdk until a sponsor-approved spec defines ownership and transfer mechanics.",
+  "verification": [
+    "gh api repos/KooshaPari/Melosviz reports archived=false and main=f31cf0cc",
+    "gh api repos/KooshaPari/backend reports private=true, archived=false, main=7105f6d",
+    "backend/pyproject.toml declares name=melosviz and version=0.1.0",
+    "local Melosviz dirty state is preserved on recovery/melosviz-local-20260726; generated tsbuildinfo remains untracked"
+  ],
+  "no_loss": true
+}

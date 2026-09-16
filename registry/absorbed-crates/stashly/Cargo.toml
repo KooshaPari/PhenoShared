@@ -1,0 +1,53 @@
+[package]
+name = "stashly"
+version = "0.2.0"
+edition = "2021"
+authors = ["Phenotype Team"]
+description = "Universal caching abstraction with TTL, multi-tier, and singleflight support — absorbs thegent-cache"
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/KooshaPari/Stashly"
+documentation = "https://docs.rs/stashly"
+keywords = ["cache", "caching", "memory", "redis", "ttl", "tiered", "singleflight"]
+categories = ["caching", "data-structures"]
+rust-version = "1.75"
+
+[dependencies]
+# Async runtime
+tokio = { version = "1", features = ["full"] }
+async-trait = "0.1"
+
+# Serialization
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+
+# Time
+chrono = { version = "0.4", features = ["serde"] }
+
+# Error handling
+thiserror = "2.0"
+anyhow = "1.0"
+
+# Logging
+tracing = "0.1"
+
+# Caching
+lru = "0.18"
+dashmap = "6.1"
+parking_lot = "0.12"
+
+# HashMap for hashing
+hashlink = "0.12"
+
+[dev-dependencies]
+criterion = { version = "0.8", features = ["html_reports", "async_tokio"] }
+tokio-test = "0.4"
+tempfile = "3"
+tokio = { version = "1", features = ["full"] }
+
+[profile.release]
+lto = true
+codegen-units = 1
+
+[[bench]]
+name = "perf"
+harness = false

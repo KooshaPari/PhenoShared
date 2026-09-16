@@ -1,0 +1,87 @@
+{
+  "audit_id": "gap-cohort-20260726",
+  "captured_at": "2026-07-26T00:26:30Z",
+  "scope": "high-value GitHub raw-name gaps with local checkouts",
+  "source_of_truth": {
+    "github_owner": "KooshaPari",
+    "registry_head": "b19cc4d",
+    "github_repo_count": 296,
+    "registry_project_json_count": 154
+  },
+  "candidates": [
+    {
+      "name": "hfscope",
+      "remote": "https://github.com/KooshaPari/hfscope",
+      "visibility": "private",
+      "local_path": "repos/hfscope",
+      "local_branch": "main",
+      "local_sha": "5fb7525",
+      "local_status": "clean",
+      "description": "Hugging Face model scope UI and API",
+      "language_surface": "go",
+      "disposition": "KEEP_STANDALONE",
+      "target": "hfscope",
+      "rationale": "Private product boundary with a distinct Go service and no verified parent-equivalence evidence."
+    },
+    {
+      "name": "forgecode",
+      "remote": "https://github.com/KooshaPari/forgecode",
+      "upstream_remote": "https://github.com/tailcallhq/forgecode",
+      "visibility": "public",
+      "local_path": "repos/forgecode",
+      "local_branch": "main",
+      "local_sha": "b7007fff1",
+      "local_status": "clean",
+      "description": "Phenotype-org fork of the upstream forgecode agentic coding CLI",
+      "language_surface": "rust",
+      "disposition": "REVIEW_FORK_POLICY",
+      "target": "forgecode",
+      "rationale": "Fork-bound source with upstream provenance, but the existing disposition-index contains a conflicting TOO_LARGE_RETIRE entry. Preserve both histories and require an explicit fork reconciliation/release decision before any archive or absorption."
+    },
+    {
+      "name": "Melosviz",
+      "remote": "https://github.com/KooshaPari/Melosviz",
+      "visibility": "public",
+      "local_path": "repos/Melosviz",
+      "local_branch": "main",
+      "local_sha": "f31cf0c",
+      "local_status": "dirty=2",
+      "description": "Music-to-visual generation toolkit with FastAPI, Tauri/Electrobun, Python, Rust, and web clients",
+      "language_surface": "python,rust,typescript",
+      "disposition": "KEEP_STANDALONE_PENDING_PRESERVATION",
+      "target": "Melosviz",
+      "rationale": "Multi-runtime application boundary; dirty local state must be snapshot-preserved before any consolidation or archive decision. Existing disposition-index entries conflict between phenotype-apps and phenotype-python-sdk targets, requiring sponsor/spec resolution."
+    },
+    {
+      "name": "airlock",
+      "remote": "https://github.com/KooshaPari/airlock",
+      "visibility": "public",
+      "local_path": "repos/airlock",
+      "local_branch": "main",
+      "local_sha": "c7e4c74",
+      "local_status": "dirty=1",
+      "description": "Agent coordination daemon with locks, shared state, presence, events, and task queue over MCP",
+      "language_surface": "go",
+      "disposition": "KEEP_STANDALONE_PENDING_PRESERVATION",
+      "target": "airlock",
+      "rationale": "Distinct coordination-plane primitive; dirty local state requires preservation before any parent-boundary decision."
+    }
+  ],
+  "actions_taken": [
+    "No source files, branches, worktrees, or remotes were deleted or reset.",
+    "No candidate was merged into a parent repository.",
+    "Registry project records remain unchanged until reviewable boundary PRs are prepared.",
+    "hfscope newer dirty state (main ahead two commits with internal/hfapi/client.go modified) was preserved at origin/wip/20260726T0035-18c5afca018b7cf8.",
+    "Melosviz dirty state was preserved at origin/wip/20260726T0030-18c5af8711ff27d0.",
+    "airlock dirty state was preserved at origin/wip/20260726T0030-18c5af886ad6d190."
+  ],
+  "additional_active_gap": {
+    "name": "phenotype-apps",
+    "remote": "https://github.com/KooshaPari/phenotype-apps",
+    "default_branch": "apps-extract",
+    "remote_size_kb": 1739253,
+    "local_provenance": "local commit 5a06720 was cloud-preserved as recovery/phenotype-apps-local-20260726",
+    "risk": "Large apps collection lacks a canonical projects/phenotype-apps.json record and needs a boundary audit before further absorption."
+  },
+  "next_gate": "Create recovery snapshots for dirty candidates, resolve the Melosviz and Forgecode disposition conflicts, then add canonical project records in a reviewable registry PR."
+}

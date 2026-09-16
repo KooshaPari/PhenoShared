@@ -1,0 +1,25 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: phenohandbook
+  title: PhenoHandbook
+  description: Patterns, anti-patterns, guidelines, and best practices for the Phenotype ecosystem
+  annotations:
+    github.com/project-slug: KooshaPari/PhenoHandbook
+    backstage.io/techdocs-ref: dir:./
+    phenotype.dev/registry-type: handbook
+    phenotype.dev/documentation: mkdocs
+  tags:
+    - patterns
+    - guidelines
+    - documentation
+    - handbook
+    - best-practices
+spec:
+  type: documentation
+  lifecycle: production
+  owner: team-platform
+  system: phenotype-registry
+  dependsOn:
+    - component:phenospecs
+    - component:hexakit

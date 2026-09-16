@@ -1,0 +1,15 @@
+[toolchain]
+channel = "1.85"
+components = [
+    "rustfmt",
+    "clippy",
+    "rust-src",
+]
+targets = [
+    "x86_64-apple-darwin",
+    "aarch64-apple-darwin",
+]
+profile = "default"
+
+[typing]
+nightly_channel = "beta"

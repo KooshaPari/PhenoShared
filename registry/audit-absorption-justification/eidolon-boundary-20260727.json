@@ -1,0 +1,52 @@
+{
+  "audit_date": "2026-07-27",
+  "repository": "KooshaPari/Eidolon",
+  "scope": "live remote metadata, default-branch source shape, license, and registry contradiction review",
+  "remote": {
+    "private": true,
+    "archived": false,
+    "default_branch": "main",
+    "default_branch_sha": "04255cdbe76a62583b1925505cee6909a43244c6",
+    "pushed_at": "2026-07-24T10:17:08Z",
+    "updated_at": "2026-07-24T06:19:40Z",
+    "branches_observed": 100,
+    "license_files": ["LICENSE-MIT", "LICENSE-APACHE"]
+  },
+  "source_shape": {
+    "language": "Rust",
+    "workspace_members": [
+      "crates/phenotype-error-core",
+      "crates/eidolon-core",
+      "crates/eidolon-desktop",
+      "crates/eidolon-mobile",
+      "crates/eidolon-sandbox"
+    ],
+    "role": "agent-runtime",
+    "capabilities": ["desktop automation", "mobile automation", "sandbox and VM automation", "PlayCua dispatch"]
+  },
+  "registry_findings": [
+    {
+      "record": "projects/Eidolon.json",
+      "stale_claim": "absorbed_into phenotype-go-sdk+nanovms",
+      "correction": "live repository is active, private, and canonical standalone"
+    },
+    {
+      "record": "projects/Eidolon-2026-06-25.json",
+      "disposition": "historical snapshot",
+      "handling": "retained as provenance; not authoritative for current boundary"
+    },
+    {
+      "record": "projects/Eidolon-archive.json",
+      "disposition": "archive recovery",
+      "handling": "retained as archive lineage; no deletion or pruning"
+    },
+    {
+      "record": "registry/absorbed-crates/eidolon",
+      "disposition": "forensic integration copy",
+      "handling": "retained as pheno integration provenance, not evidence of remote absorption"
+    }
+  ],
+  "decision": "KEEP_CANONICAL_STANDALONE",
+  "rationale": "The live remote is an active Rust workspace with explicit MIT/Apache licensing, five runtime crates, and recent development. Its device/sandbox agent-runtime boundary is materially broader than the historical SDK/nanovms absorption note. Keep the remote repository canonical; maintain integration copies and historical records without deletion.",
+  "next_gate": "Sponsor review before any absorption, archive deletion, branch pruning, or source relocation."
+}

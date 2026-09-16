@@ -1,0 +1,60 @@
+[package]
+name = "omniroute-core"
+version = "0.1.0"
+edition = "2021"
+authors = ["PhenoLang Team"]
+description = "Core Rust engine for OmniRoute - intelligent LLM request routing"
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/phenotype/PhenoLang"
+keywords = ["llm", "routing", "ai", "openai", "anthropic"]
+categories = ["network-programming", "web-programming"]
+
+[lib]
+name = "omniroute_core"
+path = "src/lib.rs"
+
+[[bin]]
+name = "omniroute-core"
+path = "src/bin/omniroute-core.rs"
+
+[dependencies]
+# Web framework
+axum = { version = "0.8", features = ["macros"] }
+tower = { version = "0.5", features = ["util"] }
+tower-http = { version = "0.6", features = ["trace", "cors"] }
+
+# HTTP client
+reqwest = { version = "0.12", features = ["json", "stream", "multipart"] }
+
+# Async runtime
+tokio = { version = "1", features = ["full"] }
+
+# Serialization
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+
+# Logging & tracing
+# Logging & tracing
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter", "json", "fmt"] }
+tracing-opentelemetry = "0.26"
+
+# Observability
+opentelemetry = { version = "0.26", features = ["trace"] }
+opentelemetry_sdk = { version = "0.26", features = ["rt-tokio"] }
+opentelemetry-otlp = { version = "0.26", default-features = false, features = ["tonic", "trace"] }
+
+# Error handling
+thiserror = "1"
+anyhow = "1"
+
+# Utilities
+futures = "0.3"
+async-trait = "0.1"
+async-stream = "0.3"
+tokio-stream = { version = "0.1", features = ["sync"] }
+bytes = "1"
+clap = { version = "4", features = ["derive"] }
+[dev-dependencies]
+tokio-test = "0.4"
+mockito = "1"

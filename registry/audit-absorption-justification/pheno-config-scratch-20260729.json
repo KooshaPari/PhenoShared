@@ -1,0 +1,38 @@
+{
+  "audit_date": "2026-07-29",
+  "repository": "KooshaPari/pheno-config",
+  "requested_aliases": ["phenoConfig", "phenotype-config"],
+  "remote_checks": {
+    "phenoConfig": "404 NOT FOUND",
+    "phenotype-config": "404 NOT FOUND",
+    "pheno-config": {
+      "private": true,
+      "archived": false,
+      "default_branch": "main",
+      "head_sha": "4c492eedcddc625956f58951f91806c831625269",
+      "size_kb": 13,
+      "license": null,
+      "pushed_at": "2026-07-28T00:25:14Z"
+    }
+  },
+  "content_findings": {
+    "readme": "Scratch / tooling archive; gitified 2026-07-15 from a plain directory",
+    "tracked_files": [".circleci", ".github", ".gitignore", ".mergify.yml", "Cargo.lock", "README.md", "trunk.yaml"],
+    "cargo_manifest": false,
+    "rust_sources": false,
+    "source_workspace": false,
+    "reported_residue": "Cargo.lock + target/ residue (cargo ghost workspace)"
+  },
+  "boundary_decision": {
+    "disposition": "ARCHIVE_ONLY",
+    "target": null,
+    "reason": "No source or manifest supports absorption. Existing phenotype-registry records for pheno-config (phenotype-infra crate) and phenotype-config (legacy 404) remain distinct; this record prevents alias confusion.",
+    "deletion_authorized": false,
+    "remote_archive_performed": false
+  },
+  "verification": [
+    "GitHub REST repository metadata queried 2026-07-29",
+    "Fresh clone inspected at 4c492eedcddc625956f58951f91806c831625269",
+    "README, tracked file list, and Cargo manifest/source presence checked"
+  ]
+}

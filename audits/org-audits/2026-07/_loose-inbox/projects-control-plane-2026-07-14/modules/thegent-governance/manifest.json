@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "repo_patterns": [
+    "*"
+  ],
+  "repo_ref_overrides": {},
+  "repo_runner_overrides": {},
+  "repo_command_overrides": {},
+  "repo_env_profile_overrides": {},
+  "default_ref": "HEAD"
+}

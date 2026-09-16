@@ -1,0 +1,43 @@
+{
+  "_comment": "AIRLOCK V2 hook config for Claude Code. Merge 'hooks' block into ~/.claude/settings.json. Fires airlock-v2-hook.sh on PostToolUse (Edit|Write|MultiEdit) and Stop. Conservative: short timeout, idempotent, only touches working trees under ~/CodeProjects/Phenotype/repos/.",
+  "version": 1,
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/Users/kooshapari/CodeProjects/Phenotype/repos/_phenofleet-decisions/airlock-v2/hooks/airlock-v2-hook.sh",
+            "description": "Airlock V2: auto-commit + push wip branch after every Claude edit tool call",
+            "timeout": 30
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/Users/kooshapari/CodeProjects/Phenotype/repos/_phenofleet-decisions/airlock-v2/hooks/airlock-v2-hook.sh",
+            "description": "Airlock V2: final reconciliation + push on Claude session end",
+            "timeout": 30
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/Users/kooshapari/CodeProjects/Phenotype/repos/_phenofleet-decisions/airlock-v2/hooks/airlock-v2-hook.sh",
+            "description": "Airlock V2: register session start (logs event; no commit expected on clean tree)",
+            "timeout": 30
+          }
+        ]
+      }
+    ]
+  }
+}

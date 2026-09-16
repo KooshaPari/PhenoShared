@@ -1,0 +1,59 @@
+{
+  "audit_id": "refresh-cohort-20260726",
+  "audited_at": "2026-07-26T05:54:00Z",
+  "scope": "Remote-head refresh for active or recently restored small repositories already represented in phenotype-registry",
+  "method": "GitHub repository metadata and default-branch head SHA queried read-only; no source mutation",
+  "records": [
+    {
+      "name": "Quillr",
+      "remote": "KooshaPari/Quillr",
+      "visibility": "public",
+      "archived": false,
+      "license": "MIT",
+      "default_branch": "main",
+      "head_sha": "e2501987af10f661d35a89848cb877c6198030fb",
+      "updated_at": "2026-07-25T17:42:47Z",
+      "registry_disposition": "ABSORB",
+      "registry_target": "Httpora",
+      "finding": "Remote repository is active and received a new default-branch head after the 2026-07-17 identity-reconciliation audit. Existing absorption target is stale until current source/identity comparison is rerun.",
+      "recommended_disposition": "REVIEW_TARGET_CONFLICT",
+      "next_gate": "Compare Quillr and Httpora manifests, commit ancestry, licenses, and release surfaces before any transfer or deletion. Preserve both remotes."
+    },
+    {
+      "name": "Grapheon",
+      "remote": "KooshaPari/Grapheon",
+      "visibility": "private",
+      "archived": false,
+      "license": "MIT",
+      "default_branch": "airlock-recovery/wip/2026-07-15-recovered-545e737-main",
+      "head_sha": "58ce84b2071ab0b7cf8bae5ec294d5613f3ee96a",
+      "updated_at": "2026-07-26T05:31:46Z",
+      "registry_disposition": "ABSORB",
+      "registry_target": "pheno/crates/grapheon",
+      "finding": "Remote default branch is an Airlock recovery branch and the repository is private; current registry row has no recovery SHA and still claims queued absorption. This is provenance debt, not proof that source can be absorbed.",
+      "recommended_disposition": "KEEP_STANDALONE_PENDING_BOUNDARY_REVIEW",
+      "next_gate": "Capture/verify local and remote recovery provenance, inspect workspace boundaries, and obtain sponsor approval before changing private-source disposition."
+    },
+    {
+      "name": "Agentora",
+      "remote": "KooshaPari/Agentora",
+      "visibility": "public",
+      "archived": false,
+      "license": "MIT",
+      "default_branch": "main",
+      "head_sha": "c7edae858b264e075210a7b5fc574b3d0da4fe4d",
+      "updated_at": "2026-07-24T07:26:50Z",
+      "registry_disposition": "ABSORB",
+      "registry_target": "pheno/crates/agentora",
+      "finding": "Remote head is newer than the 2026-07-17 queued row, which contains no source SHA or merge proof. Existing row is a proposal, not evidence of landed absorption.",
+      "recommended_disposition": "KEEP_STANDALONE_PENDING_BOUNDARY_REVIEW",
+      "next_gate": "Compare Agentora workspace members and APIs with pheno/thegent, preserve current head, then decide branch import versus standalone parent."
+    }
+  ],
+  "safety": {
+    "deletions": 0,
+    "forced_updates": 0,
+    "remote_mutations": 0,
+    "claim": "Evidence refresh only; no disposition is changed by this artifact."
+  }
+}

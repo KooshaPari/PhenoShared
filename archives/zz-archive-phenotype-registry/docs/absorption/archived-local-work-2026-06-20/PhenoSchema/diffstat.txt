@@ -1,0 +1,6 @@
+ .editorconfig            | 21 ++++++++++++++++++++
+ .gitattributes           | 30 +++++++++++++++++++++++++++++
+ .github/workflows/ci.yml | 11 +++++++++++
+ deny.toml                | 50 ++++++++++++++++++++++++++++++++++++++++++------
+ ports/Cargo.toml         |  6 ++++++
+ 5 files changed, 112 insertions(+), 6 deletions(-)

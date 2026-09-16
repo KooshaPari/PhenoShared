@@ -1,0 +1,30 @@
+name: happy-path-precommit
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+
+jobs:
+  guard:
+    name: happy-path collapse guard
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10  # v6
+        with:
+          fetch-depth: 0
+      - name: Test R3 allowlist
+        run: |
+          bash governance/test-happy-path-allowlist.sh
+      - name: Run guard against HEAD diff
+        run: |
+          bash governance/happy-path-precommit.sh
+        env:
+          HAPPY_PATH_FAIL_ON: block
+          HAPPY_PATH_BASE: >-
+            ${{ github.event.pull_request.base.sha || github.event.before }}
+          HAPPY_PATH_HEAD: >-
+            ${{ github.event.pull_request.head.sha || github.sha }}
+      - name: Show recent diff
+        if: always()
+        run: git log -1 --format='%h %s' && git diff HEAD~1 --unified=0 | head -200

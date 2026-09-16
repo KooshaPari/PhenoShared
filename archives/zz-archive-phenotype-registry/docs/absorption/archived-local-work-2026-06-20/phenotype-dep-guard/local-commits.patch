@@ -1,0 +1,221 @@
+diff --git a/.github/CODEOWNERS b/.github/CODEOWNERS
+new file mode 100644
+index 0000000..3175448
+--- /dev/null
++++ b/.github/CODEOWNERS
+@@ -0,0 +1,4 @@
++# CODEOWNERS for phenotype-dep-guard
++# All changes require review from @kooshapari.
++
++* @kooshapari
+diff --git a/.github/ISSUE_TEMPLATE/bug_report.md b/.github/ISSUE_TEMPLATE/bug_report.md
+new file mode 100644
+index 0000000..62cb9ac
+--- /dev/null
++++ b/.github/ISSUE_TEMPLATE/bug_report.md
+@@ -0,0 +1,38 @@
++---
++name: Bug report
++about: Report a defect in phenotype-dep-guard
++title: "[bug] "
++labels: bug
++assignees: kooshapari
++---
++
++## Describe the bug
++
++<!-- A clear, concise description of what the bug is. -->
++
++## Reproduction
++
++<!-- Minimal steps to reproduce. Code snippet preferred. -->
++
++```rust
++// paste code here
++```
++
++## Expected behavior
++
++<!-- What you expected to happen. -->
++
++## Actual behavior
++
++<!-- What actually happened. Include stderr/output. -->
++
++## Environment
++
++- OS:
++- Rust toolchain (`rustc --version`):
++- `phenotype-dep-guard` version / commit:
++- Relevant flags / config:
++
++## Additional context
++
++<!-- Logs, screenshots, or anything else that helps. -->
+diff --git a/.github/ISSUE_TEMPLATE/feature_request.md b/.github/ISSUE_TEMPLATE/feature_request.md
+new file mode 100644
+index 0000000..279139a
+--- /dev/null
++++ b/.github/ISSUE_TEMPLATE/feature_request.md
+@@ -0,0 +1,27 @@
++---
++name: Feature request
++about: Suggest a new capability for phenotype-dep-guard
++title: "[feat] "
++labels: enhancement
++assignees: kooshapari
++---
++
++## Problem
++
++<!-- What problem does this solve? Who is affected? -->
++
++## Proposed solution
++
++<!-- Describe the desired behavior. -->
++
++## Alternatives considered
++
++<!-- Other approaches you weighed, and why this one is better. -->
++
++## Acceptance criteria
++
++- [ ] ...
++
++## Additional context
++
++<!-- Links, prior art, references. -->
+diff --git a/.github/ISSUE_TEMPLATE/question.md b/.github/ISSUE_TEMPLATE/question.md
+new file mode 100644
+index 0000000..b954b5f
+--- /dev/null
++++ b/.github/ISSUE_TEMPLATE/question.md
+@@ -0,0 +1,15 @@
++---
++name: Question
++about: Ask a question about phenotype-dep-guard
++title: "[q] "
++labels: question
++assignees: kooshapari
++---
++
++## Question
++
++<!-- What would you like to know? -->
++
++## Context
++
++<!-- What are you trying to accomplish? What have you tried? -->
+diff --git a/.github/PULL_REQUEST_TEMPLATE.md b/.github/PULL_REQUEST_TEMPLATE.md
+new file mode 100644
+index 0000000..04d8037
+--- /dev/null
++++ b/.github/PULL_REQUEST_TEMPLATE.md
+@@ -0,0 +1,33 @@
++<!-- .github/PULL_REQUEST_TEMPLATE.md -->
++
++## Summary
++
++<!-- One-paragraph description of the change. -->
++
++## Type of change
++
++- [ ] Bug fix (non-breaking change that fixes an issue)
++- [ ] New feature (non-breaking change that adds functionality)
++- [ ] Breaking change (fix or feature that would cause existing functionality to change)
++- [ ] Documentation / chore (no production code change)
++
++## Related issues
++
++<!-- Link any related issues: Fixes #123, Relates to #456 -->
++
++## Changes
++
++<!-- Bullet list of the concrete changes in this PR. -->
++
++## Verification
++
++- [ ] `just ci` passes locally
++- [ ] New / updated tests cover the change
++- [ ] Documentation updated (if user-facing)
++
++## Checklist
++
++- [ ] I have read the contributing guidelines
++- [ ] I have added tests that prove the fix/feature works
++- [ ] I have updated relevant docs
++- [ ] My changes generate no new warnings
+diff --git a/CHANGELOG.md b/CHANGELOG.md
+new file mode 100644
+index 0000000..33f9bab
+--- /dev/null
++++ b/CHANGELOG.md
+@@ -0,0 +1,22 @@
++# Changelog
++
++All notable changes to this project will be documented in this file.
++
++The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
++and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
++
++## [Unreleased]
++
++### Added
++- `CODEOWNERS` — `@kooshapari` owns all paths.
++- `justfile` — common dev tasks (`fmt`, `lint`, `check`, `test`, `ci`, `audit`).
++- Pull request template (`.github/PULL_REQUEST_TEMPLATE.md`).
++- Issue templates (`bug_report`, `feature_request`, `question`).
++
++## [0.0.0] — 2026-06-20
++
++### Added
++- Initial governance scaffolding for the `phenotype-dep-guard` repository.
++
++[Unreleased]: https://github.com/KooshaPari/phenotype-dep-guard/compare/HEAD
++[0.0.0]: https://github.com/KooshaPari/phenotype-dep-guard/releases/tag/v0.0.0
+diff --git a/justfile b/justfile
+new file mode 100644
+index 0000000..3f79412
+--- /dev/null
++++ b/justfile
+@@ -0,0 +1,40 @@
++# justfile for phenotype-dep-guard
++# https://github.com/casey/just
++
++set shell := ["bash", "-cu"]
++
++default:
++    @just --list
++
++# Format the Rust workspace
++fmt:
++    cargo fmt --all
++
++# Lint with clippy (deny warnings)
++lint:
++    cargo clippy --all-targets --all-features -- -D warnings
++
++# Type/build check
++check:
++    cargo check --all-targets --all-features
++
++# Run the test suite
++test:
++    cargo test --all-features
++
++# Run tests + clippy + fmt-check
++ci: fmt lint check test
++    @echo "ci: ok"
++
++# Clean build artifacts
++clean:
++    cargo clean
++
++# Audit dependencies for security advisories
++audit:
++    cargo audit
++
++# Bump version (usage: just version 0.1.0)
++version VERSION:
++    @echo "Bumping to {{VERSION}}"
++    @sed -i '' 's/^version = ".*"/version = "{{VERSION}}"/' Cargo.toml

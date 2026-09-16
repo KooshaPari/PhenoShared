@@ -1,0 +1,46 @@
+{
+  "name": "PhenoSpecs",
+  "full_name": "KooshaPari/zz-no-archive-PhenoSpecs",
+  "description": "Central specification registry for Phenotype ADRs, API contracts, templates, and traceability data \u2014 TOMBSTONED 2026-09-09 (main branch now README-only). Git history preserved on `hist` branch. The spec/artifact home role is being consolidated into `phenotype-registry` (see catalog/registry.yaml). Do NOT use this repo for new specs.",
+  "languages": [
+    "html",
+    "python",
+    "typescript",
+    "rust",
+    "javascript",
+    "css",
+    "just",
+    "shell",
+    "markdown"
+  ],
+  "primary_language": "documentation",
+  "status": "tombstoned",
+  "has_readme": true,
+  "type": "specification-governance-spine",
+  "path": "repos/zz-no-archive-PhenoSpecs",
+  "role": "adrs-contracts-and-spec-traceability (historical)",
+  "domain_role": "governance-spine (historical)",
+  "boundary": "specifications-and-contracts (historical)",
+  "gh_url": "https://github.com/KooshaPari/zz-no-archive-PhenoSpecs",
+  "default_branch": "main",
+  "remote_default_sha": "c7df3ae",
+  "license": "MIT OR Apache-2.0",
+  "disposition": "CONTENT_MIGRATED",
+  "canonical_routing": false,
+  "absorbed_into": "phenotype-registry",
+  "tombstone_reason": "Content migrated into phenotype-registry per operator decision 2026-09-09. Overrides prior 2026-07-26 KEEP_CANONICAL audit conclusion (which had been respected as long as PhenoSpecs stayed alive; once tombstoned, the content home role consolidates here). Git history preserved on KooshaPari/zz-no-archive-PhenoSpecs (hist branch).",
+  "agent11_evidence": "/Users/kooshapari/Downloads/chat1-portfolio-audit-2026-09-05/agent11-evidence/portfolio-ledger-reconciliation.md",
+  "prior_claim": {
+    "absorbed_into": "phenotype-registry+papers",
+    "result": "stale_or_unsupported",
+    "reason": "Current repository remains public, active, and explicitly assigned the ADRs/contracts role; no parity, migration, or source-history merge proof was found."
+  },
+  "audit_artifact": "registry/audit-absorption-justification/phenospecs-boundary-20260726.json",
+  "registry_author": "agent11 (operator reconciliation 2026-09-09)",
+  "migrated_to": {
+    "repo": "phenotype-registry",
+    "path": "registry/specs/from-PhenoSpecs/registry.yaml",
+    "history_preserved_at": "KooshaPari/zz-no-archive-PhenoSpecs (hist branch)",
+    "migration_date": "2026-09-09"
+  }
+}

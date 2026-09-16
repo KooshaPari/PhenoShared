@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "wave": "20260722-repository-preservation-wave",
+  "owner": "KooshaPari",
+  "policy": {"archive": false, "delete": false, "rename": false, "force_push": false},
+  "candidates": [
+    {"source":"AgilePlus-recovery-20260714","target":"AgilePlus","disposition":"parent_reachable","refs":{"branches":1,"tags":0,"releases":0},"gate":"record reachable source head","w1":"not_required","w2":"pending"},
+    {"source":"AgilePlus-recovery-evidence-20260714","target":"AgilePlus evidence artifacts","disposition":"evidence_hold","refs":{"branches":1,"tags":0,"releases":0},"gate":"manifest and checksum 112012704 bytes","w1":"blocked","w2":"pending"},
+    {"source":"agileplus-spec-harmonizer-tool-archive-2026-07-14","target":"AgilePlus","disposition":"provenance_import","refs":{"branches":1,"tags":1,"releases":0},"gate":"preserve branch and tag; prove crate superset","w1":"pending","w2":"pending"},
+    {"source":"Tracera-electrobun-recovery-20260715","target":"Tracera","disposition":"empty_shell","refs":{"branches":0,"tags":0,"releases":0},"gate":"local payload search","w1":"blocked","w2":"pending"},
+    {"source":"Tracera-jwks-runtime-recovery-20260715","target":"Tracera","disposition":"empty_shell","refs":{"branches":0,"tags":0,"releases":0},"gate":"local payload search","w1":"blocked","w2":"pending"},
+    {"source":"Tracera-jwt-contract-recovery-wt","target":"Tracera","disposition":"empty_shell","refs":{"branches":0,"tags":0,"releases":0},"gate":"local payload search","w1":"blocked","w2":"pending"},
+    {"source":"Tracera-recovery-20260713","target":"Tracera","disposition":"empty_shell","refs":{"branches":0,"tags":0,"releases":0},"gate":"local payload search","w1":"blocked","w2":"pending"},
+    {"source":"Tracera-workos-hostname-reconcile-20260715","target":"Tracera","disposition":"empty_shell","refs":{"branches":0,"tags":0,"releases":0},"gate":"local payload search","w1":"blocked","w2":"pending"},
+    {"source":"OmniRoute-superroot-recovery","target":"OmniRoute","disposition":"empty_shell","refs":{"branches":0,"tags":0,"releases":0},"gate":"local payload search","w1":"blocked","w2":"pending"},
+    {"source":"omniroute-monorepo-archive","target":"OmniRoute","disposition":"provenance_import","refs":{"branches":2,"tags":0,"releases":0},"gate":"import both branches into archive namespace","w1":"pending","w2":"pending"},
+    {"source":"omniroute-rust","target":"undecided per crate","disposition":"hold_decompose","refs":{"branches":2,"tags":0,"releases":0},"gate":"13-crate ownership and consumer audit","w1":"blocked","w2":"pending"},
+    {"source":"zz-archive-phenotype-omlx-temp","target":"phenotype-omlx","disposition":"hold_omlx","refs":{"branches":16,"tags":0,"releases":0},"gate":"all-ref graph comparison","w1":"blocked","w2":"pending"},
+    {"source":"zz-archive-phenotype-omlx-tmp","target":"phenotype-omlx","disposition":"import_one_missing_ref","refs":{"branches":29,"tags":0,"releases":0},"gate":"import missing main; 28 of 29 already represented","w1":"pending","w2":"pending"},
+    {"source":"phenotype-org-audits-archive","target":"phenotype-registry audit artifacts","disposition":"empty_shell","refs":{"branches":0,"tags":0,"releases":0},"gate":"local payload search","w1":"blocked","w2":"pending"},
+    {"source":"phenotype-org-audits-archive2","target":"phenotype-registry","disposition":"registry_evidence_import","refs":{"branches":7,"tags":0,"releases":0},"gate":"redact and dedupe audit evidence","w1":"pending","w2":"pending"},
+    {"source":"thegent-pr2-v2-uncommitted-2026-07-14","target":"thegent","disposition":"recovery_import","refs":{"branches":1,"tags":0,"releases":0},"gate":"preserve base SHA and exclude runtime state","w1":"pending","w2":"pending"},
+    {"source":"thegent-dispatch-archive-2026-07-14","target":"substrate","disposition":"provenance_import","refs":{"branches":3,"tags":0,"releases":0},"gate":"prove dispatch parity and consumers","w1":"pending","w2":"pending"},
+    {"source":"thegent-sharecli","target":"sharecli or phenotype-tooling","disposition":"hold_dedupe","refs":{"branches":16,"tags":0,"releases":0},"gate":"feature comparison with thegent-cli-share and sharecli","w1":"blocked","w2":"pending"},
+    {"source":"phenoVessel","target":"PhenoPlugins/pheno-plugin-vessel","disposition":"hold_parity","refs":{"branches":2,"tags":1,"releases":1},"gate":"preserve release and prove target parity","w1":"blocked","w2":"pending"},
+    {"source":"phenoStandards","target":"phenokits-commons and phenotype-org-governance","disposition":"governance_split_import","refs":{"branches":3,"tags":0,"releases":0},"gate":"classify templates versus reusable workflows","w1":"pending","w2":"pending"}
+  ]
+}

@@ -1,0 +1,53 @@
+{
+  "artifact": "dino-fork-lineage-20260726",
+  "generated_at": "2026-07-26T04:24:00Z",
+  "scope": "KooshaPari/Dino-fork versus KooshaPari/Dino ancestry and boundary",
+  "evidence": {
+    "dino_fork": {
+      "url": "https://github.com/KooshaPari/Dino-fork",
+      "is_fork": false,
+      "parent": null,
+      "default_branch": "wsm/agileplus-dag-20260610",
+      "head": "3e0bd5a50a732bef632664cef74548044301471e",
+      "latest_observed_commit": "3e0bd5a50a732bef632664cef74548044301471e",
+      "license": "MIT",
+      "visibility": "public",
+      "pushed_at": "2026-07-24T05:55:15Z",
+      "size_kb": 656472
+    },
+    "dino": {
+      "url": "https://github.com/KooshaPari/Dino",
+      "is_fork": false,
+      "parent": null,
+      "default_branch": "main",
+      "head": "8b1960c8522083ad393c80f52da5f007ab0f7f50",
+      "license": "MIT",
+      "visibility": "public",
+      "pushed_at": "2026-07-22T01:12:57Z",
+      "size_kb": 656788
+    },
+    "compare": {
+      "endpoint": "Dino/main...Dino-fork:wsm/agileplus-dag-20260610",
+      "status": "diverged",
+      "ahead_by": 104,
+      "behind_by": 28,
+      "total_commits": 104,
+      "merge_base": "0d60908f478b1a619fc91eef602efa2bda11ec07",
+      "files_changed": 300
+    },
+    "local": {
+      "dino_fork_checkout": null,
+      "related_checkout": "AgilePlus/Dino",
+      "related_checkout_head": "f282c0b194659ad94f982792a82edbcca913fd4a",
+      "related_checkout_origin": "git@github.com:KooshaPari/AgilePlus.git",
+      "interpretation": "AgilePlus/Dino is not a Dino-fork checkout and must not be treated as local preservation evidence for Dino-fork."
+    }
+  },
+  "decision": {
+    "recommended_disposition": "KEEP_STANDALONE_PENDING_LINEAGE_DECISION",
+    "target": null,
+    "reason": "The repositories share a product family but are independent GitHub repositories with divergent histories. Redirecting Dino-fork to Dino or phenotype-apps without a sponsor-approved ancestry/reconciliation plan would lose provenance and obscure the AgilePlus DAG branch.",
+    "next_gate": "Sponsor chooses archive-only lineage versus a reviewed, commit-level reconciliation into Dino; no deletion, force-push, or absorption is authorized by this audit."
+  },
+  "source": "GitHub REST repository metadata and compare API, plus read-only local checkout inspection"
+}

@@ -1,0 +1,17 @@
+{
+  "name": "nexus",
+  "languages": [],
+  "primary_language": "service-registry",
+  "status": "queued",
+  "has_readme": true,
+  "type": "service-registry",
+  "path": "repos/nexus",
+  "disposition": "KEEP",
+  "wave": "2026-07-23-boundary-audit",
+  "queued_at": "2026-07-23",
+  "proposed_target": "nexus",
+  "proposed_target_repo": "nexus",
+  "proposed_target_path": ".",
+  "absorption_note": null,
+  "note": "Standalone service registry/discovery candidate; compare with phenotype-registry catalog before consolidation."
+}

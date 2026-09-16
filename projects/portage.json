@@ -1,0 +1,13 @@
+{
+  "name": "portage",
+  "languages": [],
+  "primary_language": "unknown",
+  "status": "active",
+  "has_readme": true,
+  "type": "fork",
+  "path": "repos/portage",
+  "disposition": "RETIRE",
+  "wave": "surface-reduction-1",
+  "absorbed_into": "upstream",
+  "note": "Upstream-maintained fork — active in dev (unarchived 2026-07-17); BOUNDARY_OWNERS 5/5; custom Phenotype extensions."
+}

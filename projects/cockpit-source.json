@@ -1,0 +1,25 @@
+{
+  "name": "cockpit-source",
+  "languages": ["Python"],
+  "primary_language": "Python",
+  "status": "active",
+  "has_readme": true,
+  "has_license": false,
+  "type": "tooling",
+  "path": "repos/cockpit-source",
+  "gh_url": "https://github.com/KooshaPari/cockpit",
+  "remote_default_branch": "main",
+  "visibility": "private",
+  "disposition": "KEEP",
+  "domain_role": "local-operational-cockpit-source",
+  "boundary": "cockpit-source-custodian",
+  "audit_date": "2026-09-01",
+  "audit_evidence": [
+    "gh repo view confirms private, non-archived repository",
+    "Repo tracks source and tests only (README.md): dashboard/cockpit-dashboard.py, tools/build_leapfrog_cockpit.py, tests/test_build_leapfrog_cockpit.py",
+    "Active worktrees: fix/cockpit-provenance-review-20260816 (provenance ledger work, no-delete policy)",
+    "BOUNDARY_OWNERS.md lines 119-138 registers the 'cockpit publication' boundary as UNASSIGNED; cockpit-source is the SOURCE custodian distinct from the UNASSIGNED publication boundary"
+  ],
+  "audit_artifact": "phenotype-registry/audits/absorption-justifications/cockpit-source-2026-09-01.md",
+  "note": "cockpit-source is the local operational cockpit generator custodian. It produces the launchd dashboard wrapper and the Leapfrog multi-view static cockpit. Source-only repo by design; generated HTML/runtime telemetry excluded from Git. Distinct from the UNASSIGNED cockpit publication boundary in BOUNDARY_OWNERS.md §3."
+}

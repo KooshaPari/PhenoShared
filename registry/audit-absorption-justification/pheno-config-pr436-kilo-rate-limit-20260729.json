@@ -1,0 +1,36 @@
+{
+  "audit_id": "pheno-config-pr436-kilo-rate-limit-20260729",
+  "captured_at": "2026-07-29T05:37:23Z",
+  "pull_request": 436,
+  "head_sha": "d8cca93968c1ec87057f7d56428a4e8c74649ce3",
+  "scope": "Provenance-only audit of the external Kilo review result for the pheno-config scratch provenance record.",
+  "check": {
+    "name": "Kilo Code Review",
+    "status": "completed",
+    "conclusion": "failure",
+    "started_at": "2026-07-29T01:44:36Z",
+    "completed_at": "2026-07-29T02:03:37Z",
+    "check_run_url": "https://github.com/KooshaPari/phenotype-registry/runs/90459259285",
+    "review_url": "https://app.kilo.ai/code-reviews/4089051a-2d9b-4aaf-8840-43902cddc0bf",
+    "provider_summary": "Review failed: Assistant request was rate limited",
+    "annotations": 0,
+    "findings": []
+  },
+  "independent_checks": {
+    "Summary": "pass",
+    "semgrep-cloud-platform/scan": "pass",
+    "SonarCloud Code Analysis": "pass",
+    "Socket Security: Project Report": "pass",
+    "Socket Security: Pull Request Alerts": "pass",
+    "GitGuardian Security Checks": "pass",
+    "Mergify Merge Protections": "skipping",
+    "Mergify Merge Queue": "skipping",
+    "Macroscope - Correctness Check": "skipping",
+    "CodeRabbit": "pass (review rate limited; no findings)"
+  },
+  "classification": "transient_external_review_failure",
+  "resolution": "Kilo emitted no code or security findings; its failed conclusion is attributable solely to provider request rate limiting. Preserve this artifact and rerun Kilo when capacity permits.",
+  "source_changes": false,
+  "no_loss": "No source repository was deleted, archived, reset, cleaned, pruned, or force-updated by this follow-up.",
+  "merge_gate": "Do not represent PR #436 as Kilo-reviewed until a successful rerun exists; any exception must remain explicitly documented and sponsor/governance approved."
+}

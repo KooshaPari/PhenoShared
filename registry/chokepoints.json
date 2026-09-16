@@ -1,0 +1,198 @@
+{
+  "version": "1.2.2",
+  "updated": "2026-06-19",
+  "description": "External dependents blocking relocation or archive. Repoint manifests to DOMAIN_ROLES canonical paths — not HexaKit monorepo paths (v2 charter). phenoShared is interim staging only (ADR-ECO-014); never a terminal repoint target. 2026-06-18: added phenotype-gfx-pr-10-merge chokepoint gating archive of 4 sister repos (L5-104.7, ADR-004 + ADR-031).",
+  "chokepoints": [
+    {
+      "id": "Pyron",
+      "blocks_sources": ["pheno", "Stashly", "Settly", "PhenoAgent", "Traceon"],
+      "repoint_to": ["phenotype-config", "PhenoObservability", "phenotype-resilience", "Tasken", "Eventra", "Authvault", "Configra", "TestingKit"],
+      "interim_staging": "phenoShared",
+      "status": "verified-clean",
+      "wave": "G3",
+      "verified_at": "2026-06-19",
+      "pr": "KooshaPari/Pyron#61",
+      "note": "P4 DELETE-eligible: vendored contracts/pheno-mcp dropped; git pins → Configra/PhenoObservability/Authvault/Eventra/Agentora/phenoShared interim; cargo check green; 0 external git deps on Pyron"
+    },
+    {
+      "id": "PhenoObservability",
+      "blocks_sources": ["Traceon", "ObservabilityKit"],
+      "repoint_to": ["PhenoObservability workspace paths post-Wave-A"],
+      "status": "repointed",
+      "wave": "G2",
+      "repointed_at": "2026-06-17",
+      "pr": "KooshaPari/PhenoObservability"
+    },
+    {
+      "id": "DevHex",
+      "blocks_sources": ["PlatformKit"],
+      "repoint_to": ["phenotype-go-sdk packages/devhex"],
+      "status": "repointed",
+      "wave": "G3",
+      "repointed_at": "2026-06-17",
+      "note": "Consumer doc: canonical library github.com/KooshaPari/devenv-abstraction"
+    },
+    {
+      "id": "thegent",
+      "blocks_sources": ["AuthKit", "BytePort"],
+      "repoint_to": ["Authvault", "phenotype-tooling"],
+      "status": "verified-clean",
+      "wave": "G2",
+      "verified_at": "2026-06-18",
+      "note": "No HexaKit/AuthKit/Traceon/stashly deps in Cargo.toml or pyproject.toml manifests; Wave F re-verify"
+    },
+    {
+      "id": "phenoRouterMonitor",
+      "blocks_sources": ["pheno"],
+      "repoint_to": ["phenotype-types", "phenotype-resilience", "PhenoObservability"],
+      "interim_staging": "phenoShared",
+      "status": "repointed",
+      "wave": "G2",
+      "repointed_at": "2026-06-17",
+      "pr": "KooshaPari/phenoRouterMonitor#632"
+    },
+    {
+      "id": "Tracera",
+      "blocks_sources": ["AuthKit"],
+      "repoint_to": ["Authvault"],
+      "status": "verified-clean",
+      "wave": "W18b",
+      "verified_at": "2026-06-18",
+      "pr": "KooshaPari/Tracera#632",
+      "note": "AuthKit repoint #629; dead phenoShared workspace dep removed #632 — W18b fleet gate done"
+    },
+    {
+      "id": "phenotype-go-sdk",
+      "blocks_sources": ["McpKit"],
+      "repoint_to": ["PhenoMCP"],
+      "status": "verified-clean",
+      "wave": "G2",
+      "verified_at": "2026-06-17",
+      "pr": "KooshaPari/phenotype-go-sdk#14",
+      "note": "McpKit packages canonical in-repo"
+    }
+  ],
+  "pheno_fleet_blockers": [
+    {
+      "id": "PhenoCompose",
+      "blocks_archive": "pheno",
+      "manifest": "Cargo.toml",
+      "repoint_to": ["phenotype-config", "phenotype-types", "phenotype-resilience", "PhenoObservability", "Eventra"],
+      "interim_staging": "phenoShared",
+      "status": "verified-clean",
+      "wave": "W18b",
+      "priority": "P0",
+      "adr": "ADR-ECO-014",
+      "verified_at": "2026-06-18",
+      "note": "No KooshaPari/pheno or phenoShared git pins in manifests (188 files scanned); in-repo path deps only"
+    },
+    {
+      "id": "Agentora",
+      "blocks_archive": "pheno",
+      "repoint_to": ["phenotype-config", "phenotype-types", "phenotype-resilience", "PhenoObservability", "Eventra"],
+      "interim_staging": "phenoShared",
+      "status": "repointed",
+      "wave": "W18b",
+      "adr": "ADR-ECO-014",
+      "repointed_at": "2026-06-18",
+      "pr": "KooshaPari/Agentora#90",
+      "note": "W18b stub crates repointed: phenotype-errors, phenotype-error-macros → phenotype-types; phenotype-config-loader → phenotype-config (no phenoShared git pins)"
+    },
+    {
+      "id": "AgilePlus",
+      "blocks_archive": "pheno",
+      "repoint_to": ["phenotype-config", "phenotype-types"],
+      "interim_staging": "phenoShared",
+      "status": "repointed",
+      "wave": "W18b",
+      "adr": "ADR-ECO-014",
+      "repointed_at": "2026-06-18",
+      "pr": "KooshaPari/AgilePlus#763",
+      "note": "Fleet manifest repoint to phenotype-config + phenotype-types terminal owners"
+    },
+    {
+      "id": "PhenoPlugins",
+      "blocks_archive": "pheno",
+      "repoint_to": ["phenotype-types", "phenotype-config"],
+      "interim_staging": "phenoShared",
+      "status": "repointed",
+      "wave": "W18b",
+      "adr": "ADR-ECO-014",
+      "repointed_at": "2026-06-18",
+      "pr": "KooshaPari/PhenoPlugins#104",
+      "note": "Fleet manifest repoint to phenotype-types + phenotype-config terminal owners"
+    },
+    {
+      "id": "phenotype-gfx",
+      "blocks_archive": "pheno",
+      "repoint_to": ["phenotype-types"],
+      "interim_staging": "phenoShared",
+      "status": "repointed",
+      "wave": "W18b",
+      "adr": "ADR-ECO-014",
+      "repointed_at": "2026-06-19",
+      "pr": "KooshaPari/phenotype-gfx#13",
+      "note": "Fleet manifest: sister-repo CI retired + `crates/phenotype-voxel` compat shim; W18b pheno scan verified-clean"
+    },
+    {
+      "id": "phenotype-gfx-pr-10-merge",
+      "type": "pr-merge",
+      "target_pr": "KooshaPari/phenotype-gfx#10",
+      "blocks_repos": ["phenotype-voxel", "phenotype-terrain", "phenotype-water", "phenotype-postfx"],
+      "blocks_action": "archive",
+      "status": "cleared",
+      "wave": "L5-104.7",
+      "adr": "ADR-004+ADR-031",
+      "cleared_at": "2026-06-18",
+      "merged_sha": "5380b2bd5a117f1d93e2641bb88d4dacc7a031ea",
+      "note": "PR #10 merged 2026-06-18 (sha 5380b2bd). 4 sister repos absorbed into KooshaPari/phenotype-gfx (311 tests pass, 18,957 lines migrated). All 4 source repos archived + deleted 2026-06-18 (delete_repo scope). Chokepoint CLEARED."
+    },
+    {
+      "id": "Civis",
+      "blocks_archive": "pheno",
+      "repoint_to": ["phenotype-config", "phenotype-types", "Authvault"],
+      "interim_staging": "phenoShared",
+      "status": "repointed",
+      "wave": "W18b",
+      "adr": "ADR-ECO-014",
+      "repointed_at": "2026-06-19",
+      "pr": "KooshaPari/Civis#581",
+      "note": "Fleet manifest: `phenotype-voxel` git dep → phenotype-gfx compat crate; W18b pheno scan verified-clean (phenoShared workflow delegates separate lane)"
+    },
+    {
+      "id": "phenotype-teamcomm",
+      "blocks_archive": "pheno",
+      "repoint_to": ["phenotype-types", "Eventra"],
+      "interim_staging": "phenoShared",
+      "status": "repointed",
+      "wave": "W18b",
+      "adr": "ADR-ECO-014",
+      "repointed_at": "2026-06-19",
+      "pr": "KooshaPari/phenotype-teamcomm#2",
+      "note": "W18b manifest scan pass documented; no pheno/phenoShared git pins in Cargo.toml"
+    },
+    {
+      "id": "phenotype-go-sdk",
+      "blocks_archive": "pheno",
+      "repoint_to": ["phenotype-types"],
+      "interim_staging": "phenoShared",
+      "status": "verified-clean",
+      "wave": "W18b",
+      "adr": "ADR-ECO-014",
+      "verified_at": "2026-06-19",
+      "note": "Manifest scan: no KooshaPari/pheno or phenoShared git deps in go.mod/Cargo.toml; reusable workflow callers remain"
+    },
+    {
+      "id": "TestingKit",
+      "blocks_archive": "pheno",
+      "repoint_to": ["PhenoObservability"],
+      "interim_staging": "phenoShared",
+      "status": "repointed",
+      "wave": "W18b",
+      "adr": "ADR-ECO-014",
+      "repointed_at": "2026-06-18",
+      "pr": "KooshaPari/TestingKit#8",
+      "note": "phenotype-health → PhenoObservability on main; no pheno monorepo pins"
+    }
+  ]
+}

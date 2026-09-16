@@ -1,0 +1,11 @@
+62dc8fb (HEAD -> chore/dependabot-2026-06-08, wip/2026-06-20-PhenoSchema-recovery) chore: tier-0 hygiene snapshot 2026-06-20
+5ccf346 chore(governance): complete SSOT tier-0 for PhenoSchema
+1fb0697 (origin/chore/dependabot-2026-06-08) chore(tier-0): orch-v10-007 hygiene
+ba515a6 ci: add OSSF Scorecard supply-chain security workflow
+e964dec chore(governance): add CODEOWNERS with @kooshapari as default owner
+a96de4d docs(changelog): add CHANGELOG.md with [Unreleased] section
+a756fdb chore(governance): add CODE_OF_CONDUCT.md,CONTRIBUTING.md,SECURITY.md,LICENSE
+d104825 Add ISSUE_TEMPLATE: bug, feature, security, question + chooser config
+40416bd ci: add comprehensive PULL_REQUEST_TEMPLATE.md
+416b0f6 chore(ci): add dependabot.yml for ecosystem automation
+cc0ef98 (origin/main, main) feat(PhenoSchema): T68 hexagonal Schema port + Zod + JsonSchema adapters + 5 tests

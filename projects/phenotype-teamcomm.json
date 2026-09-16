@@ -1,0 +1,15 @@
+{
+  "name": "phenotype-teamcomm",
+  "languages": ["rust"],
+  "primary_language": "rust",
+  "status": "active",
+  "has_readme": true,
+  "type": "focused-primitive-novel",
+  "path": "repos/phenotype-teamcomm",
+  "disposition": "FOCUSED_PRIMITIVE",
+  "wave": "2026-07-17-boundary-correction",
+  "absorbed_into": "self (focused primitive, kept separate)",
+  "absorption_note": "phenotype-teamcomm is a focused primitive under active development per user directive (2026-07-17). 'Too novel new and we want focus on it while primitive e.g. well manage your boundaries.' Local workspace has 17 root files including AGENTS.md, ARCHITECTURE.md, SPEC.md, WORKLOG.md, plus crates/, configs/, schemas/, docs/, tests/. NOT an absorption target — leave separate, manage its boundaries as it matures. Per ADR-007 §'Focused primitive under active development', this disposition is hard-excluded from the absorption queue.",
+  "note": "User-directive captured in registry: focused primitive, separate workspace, manage boundaries while maturing.",
+  "adr": "ADR-007"
+}

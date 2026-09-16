@@ -1,0 +1,23 @@
+{
+  "name": "pheno-errors",
+  "full_name": "KooshaPari/pheno-errors",
+  "description": "Scratch / tooling archive (cargo ghost workspace residue)",
+  "default_branch": "main",
+  "languages": [],
+  "primary_language": "n/a",
+  "status": "active",
+  "lifecycle": "recovery-only",
+  "visibility": "private",
+  "archived": false,
+  "has_readme": true,
+  "type": "scratch-archive",
+  "path": "repos/pheno-errors",
+  "disposition": "ARCHIVE_ONLY",
+  "absorbed_into": "pheno",
+  "target": "pheno/crates/phenotype-error-core",
+  "absorption_note": "Historical AppError design and variants remain absorbed into phenotype-error-core per ADR-ECO-027. The current private remote is a re-created, source-free cargo-ghost residue and is retained only for recovery provenance; no new absorption is inferred.",
+  "adr": "ADR-ECO-027-pheno-errors-absorption",
+  "current_remote_sha": "01b850e4b9f8ba8ed667c34f35fa46d7cef37214",
+  "audit_artifact": "audits/absorption-justifications/pheno-errors-reconciliation-20260729.md",
+  "note": "Re-audited 2026-07-29: phenoErrors and phenotype-errors aliases are 404; pheno-errors is private/unarchived and contains README, Cargo.lock, CI/lint/merge configuration only (no Cargo.toml or Rust source, no license). Historical absorption claim is preserved; current disposition is ARCHIVE_ONLY/recovery-only."
+}

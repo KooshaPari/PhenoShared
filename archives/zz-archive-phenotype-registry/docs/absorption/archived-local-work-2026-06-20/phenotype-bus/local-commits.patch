@@ -1,0 +1,993 @@
+diff --git a/.editorconfig b/.editorconfig
+index 3c17a0f..852a54b 100644
+--- a/.editorconfig
++++ b/.editorconfig
+@@ -1,23 +1,135 @@
+-# EditorConfig — Phenotype org canonical
+-# https://editorconfig.org
++# Phenotype-org standard .editorconfig (v2 / 2026-06-14)
++#
++# Source: https://github.com/KooshaPari/phenotype-tooling/blob/main/templates/.editorconfig
++#
++# EditorConfig: https://editorconfig.org
++# Test that your editor respects this file:
++#   npx editorconfig-cli-check
++#   # or
++#   ec --version && ec .
++#
++# Rules in .editorconfig are "last match wins" for matching sections, so
++# file-type-specific overrides MUST come AFTER the catch-all `[*]` block.
++#
++# Changes from v1 (2026-06-11):
++#   * default indent_size = 2 (was 4) — most modern stacks use 2
++#   * added explicit sections for: vue, svelte, astro, css/scss/less,
++#     graphql, protobuf, thrift, haml, slim, erlang/elixir, haskell,
++#     terraform/hcl, dockerfile, shell, markdown
++#   * markdown now disables trim_trailing_whitespace (preserves hard line
++#     breaks) and disables insert_final_newline (preserves trailing space
++#     used for <br/>) — this was true in v1 too; documented here for
++#     clarity
++#   * Makefile section forces tabs (v1 behavior; kept)
++#   * .gitignore / .dockerignore / .npmignore use 1-space soft indents
++#   * lockfile formats are explicitly marked `insert_final_newline = false`
++#     to avoid noisy diffs on `cargo update` / `npm install`
++#   * shell scripts (.sh, .bash, .zsh) now use 4-space indents to match
++#     the bash standard
++
+ root = true
+ 
++# ── default for all files ───────────────────────────────────────────────────
+ [*]
+ charset = utf-8
+ end_of_line = lf
+ insert_final_newline = true
+-indent_style = tab
+-indent_size = 2
+ trim_trailing_whitespace = true
++indent_style = space
++indent_size = 2
++
++# ── systems languages (4-space, conservative) ──────────────────────────────
++[*.{rs,go,c,cc,cpp,cxx,h,hpp,java,kt,kts,scala,sbt}]
++indent_size = 4
++[*.{swift,m,h,mm}]
++indent_size = 4
+ 
+-[*.{rs,toml,py,go,md,yaml,yml,json,html,css,scss}]
++# ── functional languages ───────────────────────────────────────────────────
++[*.{hs,elm,ml,fs,fsx,clj,cljs,cljc}]
+ indent_size = 2
+ 
+-[*.{ts,tsx,js,jsx,mjs,cjs}]
++# ── dynamic / scripting languages (2-space, modern) ────────────────────────
++[*.{ts,tsx,js,jsx,mjs,cjs,vue,svelte,astro}]
+ indent_size = 2
+ 
+-[Makefile]
+-indent_style = tab
++# ── web / styles ───────────────────────────────────────────────────────────
++[*.{css,scss,less,sass,styl,pcss,postcss}]
++indent_size = 2
++[*.{html,htm,xhtml,xml,svg}]
++indent_size = 2
++[*.graphql,*.gql]
++indent_size = 2
++[*.{proto,thrift,avsc}]
++indent_size = 2
++
++# ── data formats ───────────────────────────────────────────────────────────
++[*.{json,json5,jsonc}]
++indent_size = 2
++[*.{yaml,yml}]
++indent_size = 2
++[*.toml]
++indent_size = 2
+ 
++# ── documentation (preserve trailing whitespace for hard line breaks) ──────
+ [*.md]
+-trim_trailing_whitespace = false  # trailing spaces = line break in Markdown
++trim_trailing_whitespace = false
++# Trailing double-space = line break. insert_final_newline = true is OK
++# because markdown parsers ignore the trailing blank line at EOF.
++
++# ── Ruby / Python / Elixir (PEP 8 / community style) ───────────────────────
++[*.{py,pyi}]
++indent_size = 4
++[*.{rb,rake,gemspec}]
++indent_size = 2
++[*.{ex,exs,eex,heex,leex}]
++indent_size = 2
++
++# ── shell (use 4 spaces for clarity in nested blocks) ─────────────────────
++[*.{sh,bash,zsh,ksh,fish}]
++indent_size = 4
++
++# ── SQL / DB ───────────────────────────────────────────────────────────────
++[*.{sql,pgsql,psql,plsql}]
++indent_size = 2
++
++# ── infrastructure ─────────────────────────────────────────────────────────
++[*.{tf,tfvars,hcl,nomad}]
++indent_size = 2
++[Dockerfile,*.dockerfile,Containerfile]
++indent_size = 2
++[*.{nginx,conf,cfg,ini}]
++indent_size = 2
++
++# ── lockfiles (preserve as-is; do not reformat) ────────────────────────────
++[{Cargo.lock,package-lock.json,yarn.lock,pnpm-lock.yaml,bun.lockb,bun.lock,poetry.lock,uv.lock,go.sum,Gemfile.lock,composer.lock,mix.lock,flake.lock}]
++indent_style = space
++indent_size = 2
++insert_final_newline = true
++
++# ── ignore files (no trim; spaces at EOL are insignificant) ────────────────
++[{.gitignore,.dockerignore,.npmignore,.eslintignore,.prettierignore,.stylelintignore}]
++indent_size = 1
++trim_trailing_whitespace = false
++
++# ── Makefile requires hard tabs ────────────────────────────────────────────
++[Makefile,makefile,GNUmakefile,*.mk]
++indent_style = tab
++
++# ── CMake / Ninja / Meson (4-space, hard tabs disallowed) ─────────────────
++[{CMakeLists.txt,*.cmake,meson.build,*.ninja}]
++indent_style = space
++indent_size = 4
++
++# ── Go modules (preserve as-is) ────────────────────────────────────────────
++[go.mod]
++insert_final_newline = true
++indent_size = 2
++
++# ── diffs and patches ──────────────────────────────────────────────────────
++[*.{diff,patch}]
++trim_trailing_whitespace = false
++
++# ── Windows shell scripts (cmd, bat) — CRLF required ──────────────────────
++[*.{bat,cmd,ps1}]
++end_of_line = crlf
++indent_size = 4
+\ No newline at end of file
+diff --git a/.github/CODEOWNERS b/.github/CODEOWNERS
+index 88fec07..e5fe6fb 100644
+--- a/.github/CODEOWNERS
++++ b/.github/CODEOWNERS
+@@ -1 +1,17 @@
+-* @KooshaPari
++# Phenotype-org standard CODEOWNERS (v2 / 2026-06-14)
++#
++# Source: https://github.com/KooshaPari/phenotype-tooling/blob/main/templates/CODEOWNERS
++#
++# Place this file at one of:
++#     .github/CODEOWNERS        # recommended (GitHub-recognized)
++#     CODEOWNERS                # also recognized, repo root
++#     docs/CODEOWNERS           # recognized, lower precedence
++#
++# Rules in CODEOWNERS are "last match wins" — put specific overrides at
++# the BOTTOM. The default "*" owner is intentionally set to the
++# org-admin handle; override per-path as needed.
++
++# ── catch-all owner ────────────────────────────────────────────────────────
++# Every PR must get approval from at least one of these reviewers unless
++# a more specific block below overrides.
++* @KooshaPari
+\ No newline at end of file
+diff --git a/.github/ISSUE_TEMPLATE/bug.md b/.github/ISSUE_TEMPLATE/bug.md
+deleted file mode 100644
+index 2df367a..0000000
+--- a/.github/ISSUE_TEMPLATE/bug.md
++++ /dev/null
+@@ -1,25 +0,0 @@
+----
+-name: Bug Report
+-about: Report a defect
+-title: "[BUG] "
+-labels: bug
+----
+-
+-## Describe the bug
+-<!-- Clear, concise description -->
+-
+-## Reproduction steps
+-1.
+-2.
+-3.
+-
+-## Expected behavior
+-
+-## Actual behavior
+-
+-## Environment
+-- OS:
+-- Rust version:
+-- Crate version:
+-
+-## Additional context
+diff --git a/.github/ISSUE_TEMPLATE/bug_report.md b/.github/ISSUE_TEMPLATE/bug_report.md
+new file mode 100644
+index 0000000..4cadb0e
+--- /dev/null
++++ b/.github/ISSUE_TEMPLATE/bug_report.md
+@@ -0,0 +1,42 @@
++---
++name: Bug Report
++about: Report a defect in phenotype-bus
++title: "[BUG] "
++labels: ["bug", "triage"]
++assignees: []
++---
++
++## Describe the bug
++
++<!-- Clear, concise description of the bug -->
++
++## Reproduction steps
++
++1.
++2.
++3.
++
++## Expected behavior
++
++<!-- What did you expect to happen? -->
++
++## Actual behavior
++
++<!-- What actually happened? Include stack traces if applicable. -->
++
++## Environment
++
++- OS:
++- Rust version (`rustc --version`):
++- Crate version:
++- Feature flags enabled:
++
++## Additional context
++
++<!-- Links to related issues, PRs, or specs. Screenshots / traces if helpful. -->
++
++## Acceptance criteria
++
++- [ ] Repro confirmed by maintainer
++- [ ] Fix proposed or PR opened
++- [ ] Regression test added
+\ No newline at end of file
+diff --git a/.github/ISSUE_TEMPLATE/config.yml b/.github/ISSUE_TEMPLATE/config.yml
+new file mode 100644
+index 0000000..8b297e9
+--- /dev/null
++++ b/.github/ISSUE_TEMPLATE/config.yml
+@@ -0,0 +1,17 @@
++# Phenotype-org standard issue template chooser (v1 / 2026-06-14)
++#
++# Source: https://github.com/KooshaPari/phenotype-tooling/blob/main/templates/.github/ISSUE_TEMPLATE/config.yml
++#
++# GitHub renders this file as the "issue chooser" dialog when users click
++# "New issue". Each `[]` row is a link to a template; the contact links
++# go at the bottom.
++
++blank_issues_enabled: false
++
++contact_links:
++  - name: phenotype-bus maintainer (KooshaPari)
++    url: https://github.com/KooshaPari
++    about: Direct contact for questions that don't fit a bug or feature request.
++  - name: Security advisory (private disclosure)
++    url: https://github.com/KooshaPari/phenotype-bus/security/advisories/new
++    about: Please use this for any security-sensitive reports. See SECURITY.md.
+\ No newline at end of file
+diff --git a/.github/ISSUE_TEMPLATE/feature.md b/.github/ISSUE_TEMPLATE/feature.md
+deleted file mode 100644
+index 2ad68c5..0000000
+--- a/.github/ISSUE_TEMPLATE/feature.md
++++ /dev/null
+@@ -1,16 +0,0 @@
+----
+-name: Feature Request
+-about: Suggest a new feature
+-title: "[FEATURE] "
+-labels: enhancement
+----
+-
+-## Problem
+-<!-- What user need is unmet? -->
+-
+-## Proposed solution
+-
+-## Alternatives considered
+-
+-## Acceptance criteria
+-- [ ]
+diff --git a/.github/ISSUE_TEMPLATE/feature_request.md b/.github/ISSUE_TEMPLATE/feature_request.md
+new file mode 100644
+index 0000000..3f1ebf0
+--- /dev/null
++++ b/.github/ISSUE_TEMPLATE/feature_request.md
+@@ -0,0 +1,34 @@
++---
++name: Feature Request
++about: Suggest a new feature for phenotype-bus
++title: "[FEATURE] "
++labels: ["enhancement", "triage"]
++assignees: []
++---
++
++## Problem
++
++<!-- What user need is unmet? What problem are you trying to solve? -->
++
++## Proposed solution
++
++<!-- Describe the API or behavior you'd like to see. -->
++
++## Alternatives considered
++
++<!-- What other approaches did you consider, and why this one? -->
++
++## Acceptance criteria
++
++<!-- How will we know this is done? -->
++
++- [ ]
++- [ ]
++
++## Out of scope
++
++<!-- What this proposal does NOT include. -->
++
++## Related
++
++<!-- Links to related issues, PRs, or specs (e.g. FUNCTIONAL_REQUIREMENTS.md). -->
+\ No newline at end of file
+diff --git "a/.github/workflows/\033[01;31m\033[Kci.yml\033[m\033[K" "b/.github/workflows/\033[01;31m\033[Kci.yml\033[m\033[K"
+deleted file mode 100644
+index 21f7d72..0000000
+--- "a/.github/workflows/\033[01;31m\033[Kci.yml\033[m\033[K"
++++ /dev/null
+@@ -1,7 +0,0 @@
+-
+-  check-cliff-template:
+-    runs-on: ubuntu-latest
+-    steps:
+-      - uses: actions/checkout@v4
+-      - name: Check cliff.toml adoption
+-        run: ./scripts/check-cliff-template.sh
+diff --git a/.github/workflows/audit.yml b/.github/workflows/audit.yml
+index d6d1697..5920033 100644
+--- a/.github/workflows/audit.yml
++++ b/.github/workflows/audit.yml
+@@ -1,5 +1,4 @@
+ name: CodeQL (Rust)
+-
+ on:
+   push:
+     branches: [main]
+@@ -14,6 +13,10 @@ on:
+ concurrency:
+   group: ${{ github.workflow }}-${{ github.ref }}
+   cancel-in-progress: true
++
++permissions:
++  contents: read
++
+ jobs:
+   analyze:
+     name: Analyze (rust)
+@@ -25,14 +28,14 @@ jobs:
+       security-events: write
+     steps:
+       - name: Checkout
+-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.1.1
++        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+       - name: Initialize CodeQL
+-        uses: github/codeql-action/init@8aad20d150bbac5944a9f9d289da16a4b0d87c1e
++        uses: github/codeql-action/init@8aad20d150bbac5944a9f9d289da16a4b0d87c1e # v3
+         with:
+           languages: rust
+       - name: Autobuild
+-        uses: github/codeql-action/autobuild@8aad20d150bbac5944a9f9d289da16a4b0d87c1e
++        uses: github/codeql-action/autobuild@8aad20d150bbac5944a9f9d289da16a4b0d87c1e # v3
+       - name: Perform CodeQL Analysis
+-        uses: github/codeql-action/analyze@8aad20d150bbac5944a9f9d289da16a4b0d87c1e
++        uses: github/codeql-action/analyze@8aad20d150bbac5944a9f9d289da16a4b0d87c1e # v3
+         with:
+-          category: "/language:rust"
++          category: "/language:rust"
+\ No newline at end of file
+diff --git a/.github/workflows/ci.yml b/.github/workflows/ci.yml
+index 2431592..0108502 100644
+--- a/.github/workflows/ci.yml
++++ b/.github/workflows/ci.yml
+@@ -1,15 +1,34 @@
+ name: CI
+-on: [push, pull_request]
++on:
++  push:
++    branches: [main]
++  pull_request:
++    branches: [main]
+ 
+ concurrency:
+   group: ${{ github.workflow }}-${{ github.ref }}
+   cancel-in-progress: true
++
++permissions:
++  contents: read
++
+ jobs:
+   test:
++    name: cargo test + clippy
+     runs-on: ubuntu-24.04
++    timeout-minutes: 30
+     steps:
+-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+-      - uses: dtolnay/rust-toolchain@stable
+-      - uses: Swatinem/rust-cache@e18b497796c12c097a38f9edb9d0641fb99eee32
+-      - run: cargo test --all-features
+-      - run: cargo clippy --all-features -- -D warnings 2>/dev/null || cargo check
++      - name: Checkout
++        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
++        with:
++          persist-credentials: false
++      - name: Set up Rust toolchain (stable)
++        uses: dtolnay/rust-toolchain@29eef336d9b2848a0b548edc03f92a220660cdb8 # stable
++      - name: Cache cargo registry and build artifacts
++        uses: Swatinem/rust-cache@e18b497796c12c097a38f9d289da16a4b0d87c1e # v2.7.5
++      - name: cargo fmt --check
++        run: cargo fmt --all -- --check
++      - name: cargo clippy
++        run: cargo clippy --workspace --all-targets -- -D warnings
++      - name: cargo test
++        run: cargo test --workspace --locked --all-features
+\ No newline at end of file
+diff --git a/.github/workflows/release.yml b/.github/workflows/release.yml
+new file mode 100644
+index 0000000..5da9b82
+--- /dev/null
++++ b/.github/workflows/release.yml
+@@ -0,0 +1,37 @@
++name: Release
++on:
++  push:
++    tags: ['v*']
++  workflow_dispatch:
++    inputs:
++      crate:
++        description: 'Specific crate to publish (empty = all publishable)'
++        required: false
++
++permissions:
++  contents: read
++
++
++concurrency:
++  group: ${{ github.workflow }}-${{ github.ref }}
++  cancel-in-progress: true
++
++jobs:
++  publish:
++    runs-on: ubuntu-24.04
++    environment: release
++    steps:
++      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
++      - uses: dtolnay/rust-toolchain@29eef336d9b2848a0b548edc03f92a220660cdb8 # stable
++      - name: Publish to crates.io
++        env:
++          CARGO_REGISTRY_TOKEN: ${{ secrets.CARGO_REGISTRY_TOKEN }}
++        run: |
++          if [ -n "${{ inputs.crate }}" ]; then
++            cargo publish -p "${{ inputs.crate }}" --no-verify
++          else
++            for name in $(cargo metadata --format-version=1 --no-deps | jq -r '.packages[] | select(.publish != []) | .name'); do
++              echo "Publishing $name"
++              cargo publish -p "$name" --no-verify || echo "  skip $name (likely path-dep or already published)"
++            done
++          fi
+\ No newline at end of file
+diff --git a/.github/workflows/scorecard.yml b/.github/workflows/scorecard.yml
+index b6e38dc..e18435c 100644
+--- a/.github/workflows/scorecard.yml
++++ b/.github/workflows/scorecard.yml
+@@ -12,6 +12,7 @@ permissions: read-all
+ concurrency:
+   group: ${{ github.workflow }}-${{ github.ref }}
+   cancel-in-progress: true
++
+ jobs:
+   analysis:
+     name: Scorecard analysis
+@@ -23,22 +24,22 @@ jobs:
+       actions: read
+ 
+     steps:
+-      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
++      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+         with:
+           persist-credentials: false
+ 
+-      - uses: ossf/scorecard-action@f2ea147fec3c2f0d459703eba7405b5e9bcd8c8f
++      - uses: ossf/scorecard-action@4eaacf0543bb3f2c246792bd56e8cdeffafb205a # v2.4.3
+         with:
+           results_file: results.sarif
+           results_format: sarif
+           publish_results: true
+ 
+-      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
++      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v4
+         with:
+           name: SARIF file
+           path: results.sarif
+           retention-days: 5
+ 
+-      - uses: github/codeql-action/upload-sarif@8aad20d150bbac5944a9f9d289da16a4b0d87c1e
++      - uses: github/codeql-action/upload-sarif@0630e39f3f7cb718c552f6c8711786b07960b612 # v3
+         with:
+-          sarif_file: results.sarif
++          sarif_file: results.sarif
+\ No newline at end of file
+diff --git a/Cargo.lock b/Cargo.lock
+index e40d553f0d5500cb97f09b04b31beb565c3ceb81..bbce99b9db9df8d521ea9d17b98a4b90199d754b 100644
+GIT binary patch
+delta 74
+zcmV-Q0JZ<j*a4@&0k9DRvp@vM29x&-$+L(JtO2u45sm?qCl$uCe;J7ZlN=imlU^GM
+glVnI1vxpmC60@c*M*@=yF&YJPWpZR?vqUinJ1->~IsgCw
+
+delta 1538
+zcmZvcKX05x5XNOEB#v<$8!2}9qr@CUN@1UNXJ&VHfnZyy!3j!__Rnl`#J+>~?jpiB
+zprPRX25Bgu09}nl3M!z6hJx=w!QR=1TyS;Td*64SXJ&rSe)H49uYW9jzkY5rJq-Q6
+z9Cnr;OEc^Z`dhcRI?y%k4<CHA3nbawoDF0h*@#a%pjcqT+LVl-iYcDZmuLb7txGVv
+z5P;UkWoX}A-*|7(PvfSM{%Gg3v5cj&y}Z?t$J6s+Z#a^^G&{pl6Grmj$?RDfkH(D*
+zchaDdc6aSsON-YgE9ZW@aQ%fs|2KSZk5W+Da}WWWbr57CBVrJWlq7^;bOuU^leU(<
+zFO<nT%|&PQj8n&}&0si;5{`Dpqu$}L)r+sSzhC;Llji@Q8<^_4F6cJU!G2c3BvL9D
+za7fXqKnW2zVh9=Qfl{U{%7RxGy@jX{&{)q#*#NH7KD)FrdAj`F!q)tl<^)Zby1L!J
+zb9Yx`v^Jzv3}9UVs-SWt(8M`p3Eml%BDs_mD+SJB9g8U@S8K+GIPLiLvv%}pXdd<Y
+z4^CFFd28Oxe>;1A4XSIp?X%l=_goZTFqaTY$w9z#RaT09Ag_ZCE=EpKvWhNe4oF<A
+zb&<4D0i&Pp;p*zV;;E6zhbvz#w0~WWRirj4;<GL`E6+)aPnFKvD@gsVl9gT*ZA%2l
+zF?(>9jEO)R9ptIV`oFlH#9+I<vG&F-`CQU?G-&3C><#9Q!(RVU+g;mOIV~~8Wk$=#
+zSC%fG#A;?#ag5@8GOG4!&{Q6MbV+keDw2;mGBdG4${{%Am=tGgOu@n_>6y{Cv-axw
+zndFqms?h#<`RAompEH>l3iyQ1=?WgyIf9KQdccaAaIC=$R+nUityWM0(BA1}bK+0~
+z?N4PoXEwCh8%#y^lcX5X)JEz!S!!{h2oSQV{FwrPK9xXJvQ`96>gy7N%{H)R*2j2H
+z{l9b+YNBSw#i5C;K%tNZk4UJIb1_NTx-hai7$#F3NUDRYkyUk`h}IiN#Ie2i{zkj^
+zj-8f0p3%%{4YVQAh7omCx*lEqUV9HQiw;RS?+A%7kxwykAzS&2s)Sr0;Vg*Ll9Q*a
+zUoI>?&&SOdP?)uHCL9-z<S0FCCcA52ys|o%VEFp}{XKNqSOfJkDp`y+F>0w8Q;k9O
+zQLh8-v(-K@FnP8Jluf<VxNuH&tj89=ee31PkDWV<?ZLtFl`wqLPdlfV`gZ&G+t)9i
+V0NOs=yn6nV;h;acadYY2e*hH+(4qhU
+
+diff --git a/Cargo.toml b/Cargo.toml
+index 0b80d8a..768118a 100644
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -15,16 +15,12 @@ repository = "https://github.com/KooshaPari/phenotype-bus"
+ [dependencies]
+ tokio = { version = "1.39", features = ["sync", "rt", "rt-multi-thread", "macros", "time"] }
+ serde = { version = "1.0", features = ["derive"] }
+-serde_json = "1.0"
+ thiserror = "2.0"
+-anyhow = "1.0"
+ tracing = "0.1"
+ tracing-subscriber = { version = "0.3", features = ["env-filter", "fmt"] }
+ async-trait = "0.1"
+ uuid = { version = "1.10", features = ["v4", "serde"] }
+ chrono = { version = "0.4", features = ["serde"] }
+-futures = "0.3"
+-async-channel = "2.3"
+ 
+ [dev-dependencies]
+ tokio = { version = "1.39", features = ["full"] }
+diff --git a/deny.toml b/deny.toml
+index 0662d72..39be7f4 100644
+--- a/deny.toml
++++ b/deny.toml
+@@ -1,24 +1,86 @@
+-[advisories]
+-db-path = "$CARGO_HOME/advisory-db"
++# cargo-deny config — Phenotype-org standard (v2 / 2026-06-14)
++#
++# Source: https://github.com/KooshaPari/phenotype-tooling/blob/main/templates/deny.toml
++#
++# Install cargo-deny: cargo install --locked cargo-deny
++# Run locally: cargo deny check
++# Run in CI: see .github/workflows/deny.yml
++#
++# Changes from v1 (2026-06-11):
++#   + [graph] all-features = false → true (full advisory coverage)
++#   + [graph] feature-depth = 1 (cap the graph to 1-level features)
++#   + [licenses] allow list expanded (BSL-1.0, EPL-2.0, MPL-2.0 variants)
++#   + [licenses] confidence-threshold = 0.8 (require ≥ 80% license confidence)
++#   + [advisories] version = 2 (RUSTSEC schema v2)
++#   + [advisories] ignore = []  (fail-loud: do not silently ignore CVEs)
++#   + [bans] wildcards = "deny", multiple-versions = "warn"
++#   + [sources] unknown-registry = "deny", unknown-git = "deny"
++#   + [sources] allow-registry = only crates.io
++
++# ── graph ───────────────────────────────────────────────────────────────────
++[graph]
++all-features = true
++feature-depth = 1
++optional-deps = false
++no-default-features = false
++target = "x86_64-unknown-linux-gnu"
+ 
++# ── licenses ───────────────────────────────────────────────────────────────
+ [licenses]
+ allow = [
+     "MIT",
+     "Apache-2.0",
++    "Apache-2.0 WITH LLVM-exception",
+     "BSD-2-Clause",
+     "BSD-3-Clause",
+     "ISC",
+-    "Zlib",
++    "Unicode-DFS-2016",
+     "Unicode-3.0",
+     "MPL-2.0",
+     "0BSD",
+     "CC0-1.0",
++    "Zlib",
++    "Unlicense",
++    "BSL-1.0",
++    "EPL-2.0",
++    "CDLA-Permissive-2.0",
++    "OpenSSL",
++    "NCSA",
+ ]
++confidence-threshold = 0.8
+ 
++# ── advisories ─────────────────────────────────────────────────────────────
++[advisories]
++version = 2
++ignore = []
++
++# ── bans ────────────────────────────────────────────────────────────────────
+ [bans]
+ multiple-versions = "warn"
+ wildcards = "deny"
++highlight = "all"
++allow = []
++deny = []
++skip = []
++skip-tree = []
+ 
++# ── sources ────────────────────────────────────────────────────────────────
+ [sources]
+-unknown-registry = "warn"
++unknown-registry = "deny"
++unknown-git = "deny"
+ allow-registry = ["https://github.com/rust-lang/crates.io-index"]
++allow-git = []
++
++# ── patch ───────────────────────────────────────────────────────────────────
++[patch]
++
++# ── output ─────────────────────────────────────────────────────────────────
++output = ""
++
++# ── unstable ────────────────────────────────────────────────────────────────
++[unstable]
++printWarnings = false
++bump = false
++msrv = false
++ignore-source = false
++external-default-features = false
+\ No newline at end of file
+diff --git a/docs/intent/phenotype-bus.md b/docs/intent/phenotype-bus.md
+index c58f6a4..9c1e410 100644
+--- a/docs/intent/phenotype-bus.md
++++ b/docs/intent/phenotype-bus.md
+@@ -27,22 +27,22 @@ device: macbook
+ 
+ | Date | Source | File | Tag |
+ | ---- | ------ | ---- | --- |
+-| ? | claude-code | `docs/curated-prompts/claude-code/unknown/0a87dae4e443ac58.md` | policy-setting |
+-| ? | claude-code | `docs/curated-prompts/claude-code/unknown/118e80cbcd4c9f95.md` | bugfix |
+-| ? | claude-code | `docs/curated-prompts/claude-code/unknown/13e8b623cae980bb.md` | repo-defining |
++| ? | claude-code | `docs/curated-prompts/claude-code/unknown/3573d8bc4a812643.md` | bugfix |
++| ? | claude-code | `docs/curated-prompts/claude-code/unknown/32f16ecd70774b1c.md` | bugfix |
+ | ? | claude-code | `docs/curated-prompts/claude-code/unknown/1b0b632d33c2d74c.md` | bugfix |
++| ? | claude-code | `docs/curated-prompts/claude-code/unknown/745b6754c9a4f829.md` | narrative |
+ | ? | claude-code | `docs/curated-prompts/claude-code/unknown/2fa7d90f3c4eb2ff.md` | policy-setting |
+-| ? | claude-code | `docs/curated-prompts/claude-code/unknown/32f16ecd70774b1c.md` | bugfix |
+-| ? | claude-code | `docs/curated-prompts/claude-code/unknown/3573d8bc4a812643.md` | bugfix |
++| ? | claude-code | `docs/curated-prompts/claude-code/unknown/ef7f395790fc89e2.md` | policy-setting |
++| ? | claude-code | `docs/curated-prompts/claude-code/unknown/da40f80d86adbb45.md` | narrative |
++| ? | claude-code | `docs/curated-prompts/claude-code/unknown/13e8b623cae980bb.md` | repo-defining |
++| ? | claude-code | `docs/curated-prompts/claude-code/unknown/118e80cbcd4c9f95.md` | bugfix |
++| ? | claude-code | `docs/curated-prompts/claude-code/unknown/6bc5c47ab9786a67.md` | implementation |
+ | ? | claude-code | `docs/curated-prompts/claude-code/unknown/3beaa6f6803ab4a6.md` | idea |
+ | ? | claude-code | `docs/curated-prompts/claude-code/unknown/4bb75a3c1b147422.md` | policy-setting |
+-| ? | claude-code | `docs/curated-prompts/claude-code/unknown/6bc5c47ab9786a67.md` | implementation |
+-| ? | claude-code | `docs/curated-prompts/claude-code/unknown/745b6754c9a4f829.md` | narrative |
+ | ? | claude-code | `docs/curated-prompts/claude-code/unknown/7be2c5e60fcb4006.md` | implementation |
+ | ? | claude-code | `docs/curated-prompts/claude-code/unknown/8cb3945918d99320.md` | narrative |
+ | ? | claude-code | `docs/curated-prompts/claude-code/unknown/b7d9b0563e90783a.md` | policy-setting |
+-| ? | claude-code | `docs/curated-prompts/claude-code/unknown/da40f80d86adbb45.md` | narrative |
+-| ? | claude-code | `docs/curated-prompts/claude-code/unknown/ef7f395790fc89e2.md` | policy-setting |
++| ? | claude-code | `docs/curated-prompts/claude-code/unknown/0a87dae4e443ac58.md` | policy-setting |
+ 
+ ## Bound Plans
+ 
+diff --git a/justfile b/justfile
+index 93e4e57..180a218 100644
+--- a/justfile
++++ b/justfile
+@@ -29,6 +29,29 @@ audit:
+     cargo deny check
+     cargo audit
+ 
++# cargo-deny only (licenses, advisories, bans, sources)
++deny:
++    cargo deny check
++
++# Self-grade: report tier-0 hygiene posture
++grade:
++    @echo "== phenotype-bus tier-0 grade =="
++    @echo "-- justfile targets --"
++    @just --list
++    @echo "-- workflows --"
++    @ls -1 .github/workflows
++    @echo "-- governance --"
++    @for f in CODE_OF_CONDUCT.md CONTRIBUTING.md SECURITY.md CHANGELOG.md deny.toml .editorconfig .gitattributes .github/CODEOWNERS .github/PULL_REQUEST_TEMPLATE.md; do \
++        [ -f "$f" ] && echo "  ok  $f" || echo "  MISS $f"; \
++    done
++    @echo "-- issue templates --"
++    @for f in .github/ISSUE_TEMPLATE/bug_report.md .github/ISSUE_TEMPLATE/feature_request.md .github/ISSUE_TEMPLATE/config.yml; do \
++        [ -f "$f" ] && echo "  ok  $f" || echo "  MISS $f"; \
++    done
++    @echo "-- rust toolchain --"
++    @rustc --version
++    @cargo --version
++
+ # Find unused dependencies
+ unused:
+     cargo machete
+diff --git a/src/config.rs b/src/config.rs
+new file mode 100644
+index 0000000..88165bb
+--- /dev/null
++++ b/src/config.rs
+@@ -0,0 +1,195 @@
++//! Configuration for the phenotype-bus event bus.
++//!
++//! All configuration is driven by environment variables with sensible defaults,
++//! so the bus works out of the box without any explicit configuration.
++//!
++//! # Environment Variables
++//!
++//! | Variable | Default | Description |
++//! |---|---|---|
++//! | `PHENOTYPE_BUS_LOG_LEVEL` | `info` | Default log level when `RUST_LOG` is unset |
++//! | `PHENOTYPE_BUS_RETRY_MAX_ATTEMPTS` | `3` | Max delivery attempts per handler |
++//! | `PHENOTYPE_BUS_RETRY_BACKOFF_MS` | `10` | Backoff between retries (milliseconds) |
++//!
++//! # Usage
++//!
++//! ```ignore
++//! use phenotype_bus::Config;
++//!
++//! let cfg = Config::from_env();
++//! let bus = phenotype_bus::events::InMemoryBus::with_retry(cfg.bus.retry_policy());
++//! ```
++
++use std::time::Duration;
++
++/// Global bus configuration loaded from environment variables.
++///
++/// Create one with [`Config::from_env`] or [`Config::default`].
++#[derive(Clone, Debug)]
++pub struct Config {
++    /// Observability settings.
++    pub observability: ObservabilityConfig,
++    /// Bus runtime settings.
++    pub bus: BusConfig,
++}
++
++/// Observability configuration.
++#[derive(Clone, Debug)]
++pub struct ObservabilityConfig {
++    /// Default log level when `RUST_LOG` is not set.
++    ///
++    /// Read from `PHENOTYPE_BUS_LOG_LEVEL` (default: `"info"`).
++    pub default_log_level: String,
++}
++
++/// Bus runtime configuration.
++#[derive(Clone, Debug)]
++pub struct BusConfig {
++    /// Maximum number of delivery attempts per handler.
++    ///
++    /// Read from `PHENOTYPE_BUS_RETRY_MAX_ATTEMPTS` (default: `3`).
++    pub retry_max_attempts: usize,
++
++    /// Backoff duration between retries in milliseconds.
++    ///
++    /// Read from `PHENOTYPE_BUS_RETRY_BACKOFF_MS` (default: `10`).
++    pub retry_backoff_ms: u64,
++}
++
++impl Config {
++    /// Load configuration from environment variables.
++    ///
++    /// Falls back to documented defaults for any unset variable.
++    pub fn from_env() -> Self {
++        Self {
++            observability: ObservabilityConfig::from_env(),
++            bus: BusConfig::from_env(),
++        }
++    }
++}
++
++impl Default for Config {
++    fn default() -> Self {
++        Self::from_env()
++    }
++}
++
++impl ObservabilityConfig {
++    /// Load observability config from environment variables.
++    pub fn from_env() -> Self {
++        Self {
++            default_log_level: std::env::var("PHENOTYPE_BUS_LOG_LEVEL")
++                .unwrap_or_else(|_| "info".to_string()),
++        }
++    }
++}
++
++impl Default for ObservabilityConfig {
++    fn default() -> Self {
++        Self::from_env()
++    }
++}
++
++impl BusConfig {
++    /// Load bus config from environment variables.
++    ///
++    /// Defaults are sourced from
++    /// [`RetryPolicy::default`](crate::events::RetryPolicy::default) so the
++    /// env-driven surface and the in-code default cannot drift.
++    pub fn from_env() -> Self {
++        let default_policy = crate::events::RetryPolicy::default();
++        Self {
++            retry_max_attempts: std::env::var("PHENOTYPE_BUS_RETRY_MAX_ATTEMPTS")
++                .ok()
++                .and_then(|v| v.parse().ok())
++                .unwrap_or(default_policy.max_attempts),
++            retry_backoff_ms: std::env::var("PHENOTYPE_BUS_RETRY_BACKOFF_MS")
++                .ok()
++                .and_then(|v| v.parse().ok())
++                .unwrap_or(default_policy.backoff.as_millis() as u64),
++        }
++    }
++
++    /// Build a [`RetryPolicy`](crate::events::RetryPolicy) from this configuration.
++    pub fn retry_policy(&self) -> crate::events::RetryPolicy {
++        crate::events::RetryPolicy {
++            max_attempts: self.retry_max_attempts,
++            backoff: Duration::from_millis(self.retry_backoff_ms),
++        }
++    }
++}
++
++impl Default for BusConfig {
++    fn default() -> Self {
++        Self::from_env()
++    }
++}
++
++#[cfg(test)]
++mod tests {
++    use super::*;
++    use std::sync::Mutex;
++
++    // Tests below mutate process-wide env vars. Serialize them so parallel
++    // test threads don't observe each other's env state.
++    static ENV_LOCK: Mutex<()> = Mutex::new(());
++
++    #[test]
++    fn from_env_uses_defaults_when_unset() {
++        let _g = ENV_LOCK.lock().unwrap();
++        // Unset any env vars that might interfere
++        std::env::remove_var("PHENOTYPE_BUS_LOG_LEVEL");
++        std::env::remove_var("PHENOTYPE_BUS_RETRY_MAX_ATTEMPTS");
++        std::env::remove_var("PHENOTYPE_BUS_RETRY_BACKOFF_MS");
++
++        let cfg = Config::from_env();
++        assert_eq!(cfg.observability.default_log_level, "info");
++        assert_eq!(cfg.bus.retry_max_attempts, 3);
++        assert_eq!(cfg.bus.retry_backoff_ms, 10);
++    }
++
++    #[test]
++    fn from_env_reads_environment() {
++        let _g = ENV_LOCK.lock().unwrap();
++        std::env::set_var("PHENOTYPE_BUS_LOG_LEVEL", "debug");
++        std::env::set_var("PHENOTYPE_BUS_RETRY_MAX_ATTEMPTS", "5");
++        std::env::set_var("PHENOTYPE_BUS_RETRY_BACKOFF_MS", "100");
++
++        let cfg = Config::from_env();
++        assert_eq!(cfg.observability.default_log_level, "debug");
++        assert_eq!(cfg.bus.retry_max_attempts, 5);
++        assert_eq!(cfg.bus.retry_backoff_ms, 100);
++
++        // Clean up
++        std::env::remove_var("PHENOTYPE_BUS_LOG_LEVEL");
++        std::env::remove_var("PHENOTYPE_BUS_RETRY_MAX_ATTEMPTS");
++        std::env::remove_var("PHENOTYPE_BUS_RETRY_BACKOFF_MS");
++    }
++
++    #[test]
++    fn retry_policy_from_config() {
++        let _g = ENV_LOCK.lock().unwrap();
++        let cfg = BusConfig {
++            retry_max_attempts: 7,
++            retry_backoff_ms: 250,
++        };
++
++        let policy = cfg.retry_policy();
++        assert_eq!(policy.max_attempts, 7);
++        assert_eq!(policy.backoff, Duration::from_millis(250));
++    }
++
++    #[test]
++    fn invalid_env_var_falls_back_to_default() {
++        let _g = ENV_LOCK.lock().unwrap();
++        std::env::set_var("PHENOTYPE_BUS_RETRY_MAX_ATTEMPTS", "not-a-number");
++        std::env::set_var("PHENOTYPE_BUS_RETRY_BACKOFF_MS", "also-not");
++
++        let cfg = BusConfig::from_env();
++        assert_eq!(cfg.retry_max_attempts, 3);
++        assert_eq!(cfg.retry_backoff_ms, 10);
++
++        std::env::remove_var("PHENOTYPE_BUS_RETRY_MAX_ATTEMPTS");
++        std::env::remove_var("PHENOTYPE_BUS_RETRY_BACKOFF_MS");
++    }
++}
+diff --git a/src/lib.rs b/src/lib.rs
+index 297d0cc..4a50d22 100644
+--- a/src/lib.rs
++++ b/src/lib.rs
+@@ -13,10 +13,17 @@
+ //! in-memory bus pattern has been lifted to
+ //! [`phenoEvents`](https://github.com/KooshaPari/phenoEvents) (PR #9).
+ //! This crate will be archived on 2026-06-25.
++//!
++//! # Configuration
++//!
++//! See the [`config`] module for environment-variable-driven configuration.
+ 
++pub mod config;
+ pub mod events;
+ pub mod observability;
+ 
++pub use config::Config;
++
+ /// Crate version, sourced from `Cargo.toml` at compile time.
+ pub const VERSION: &str = env!("CARGO_PKG_VERSION");
+ 
+diff --git a/src/observability.rs b/src/observability.rs
+index fe25abf..c2dbea7 100644
+--- a/src/observability.rs
++++ b/src/observability.rs
+@@ -3,14 +3,22 @@
+ use tracing::Span;
+ use tracing_subscriber::EnvFilter;
+ 
++use crate::config::ObservabilityConfig;
++
+ /// Initialize a global tracing subscriber driven by `RUST_LOG`.
+ ///
++/// When `RUST_LOG` is unset, falls back to
++/// [`PHENOTYPE_BUS_LOG_LEVEL`](ObservabilityConfig::default_log_level)
++/// environment variable, or `"info"` if that is also unset.
++///
+ /// Idempotent: subsequent calls are no-ops, so tests and binaries can call
+ /// this freely without panicking on re-initialization.
+ pub fn init_tracing() {
++    let default_level = ObservabilityConfig::from_env().default_log_level;
+     let _ = tracing_subscriber::fmt()
+         .with_env_filter(
+-            EnvFilter::try_from_default_env().unwrap_or_else(|_| EnvFilter::new("info")),
++            EnvFilter::try_from_default_env()
++                .unwrap_or_else(|_| EnvFilter::new(&default_level)),
+         )
+         .with_target(false)
+         .try_init();

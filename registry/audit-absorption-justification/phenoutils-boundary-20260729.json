@@ -1,0 +1,67 @@
+{
+  "audit_id": "phenoutils-boundary-20260729",
+  "captured_at": "2026-07-29T00:29:21Z",
+  "scope": "canonical-boundary refresh for KooshaPari/phenoUtils",
+  "source": {
+    "repo": "KooshaPari/phenoUtils",
+    "url": "https://github.com/KooshaPari/phenoUtils",
+    "visibility": "public",
+    "archived": false,
+    "default_branch": "main",
+    "default_sha": "6fa1a43a06b945796d0b69d7423129e56f46ac98",
+    "license": "MIT",
+    "remote_branches": 24,
+    "workspace_members": [
+      "crates/pheno-shell",
+      "crates/pheno-fs",
+      "crates/pheno-crypto",
+      "crates/pheno-net",
+      "crates/pheno-testing",
+      "crates/pheno-schema-port"
+    ],
+    "last_push": "2026-07-28T00:17:20Z",
+    "local_checkout": false
+  },
+  "target": {
+    "registry_project": "projects/phenoUtils.json",
+    "canonical_boundary": "phenoUtils",
+    "candidate_parent": "phenotype-shared",
+    "candidate_parent_path": "crates/",
+    "decision": "KEEP_CANONICAL_PARENT",
+    "target_evidence": [
+      "phenoUtils/Cargo.toml at 6fa1a43 defines six workspace members",
+      "phenotype-shared current manifest owns different crates and no crate-by-crate parity report exists"
+    ]
+  },
+  "validation": {
+    "command": "cargo test --workspace --all-targets --quiet",
+    "result": "failed-before-build",
+    "finding": "Cargo rejects the virtual manifest because root Cargo.toml contains a forbidden [dependencies] section",
+    "security_scope": "No source mutation or dependency remediation performed",
+    "license_files": ["LICENSE", "LICENSE-MIT", "LICENSE-APACHE"]
+  },
+  "branch_coverage": {
+    "remote_branch_count": 24,
+    "policy": "Preserve all remote branches; no branch deletion or force-push authorized",
+    "restore_command": "git clone https://github.com/KooshaPari/phenoUtils.git"
+  },
+  "last_resort_exceptions": [
+    {
+      "status": "NO_ABSORPTION_EXCEPTION",
+      "reason": "No source merge is proposed. The six-crate primitive parent remains independently recoverable and current.",
+      "residual_gap": "API/test parity with phenotype-shared is unmeasured; the source Cargo manifest also needs owner remediation.",
+      "why_archive_is_insufficient": "Archiving would erase the active canonical primitive boundary and lose ongoing branch/history provenance."
+    }
+  ],
+  "deletion_gate": {
+    "required": false,
+    "reason": "Decision is additive and non-destructive; source is active and unarchived.",
+    "gate_reference": "bin/repo-delete-gate.sh"
+  },
+  "actions": [
+    "Refresh the stale queued/ABSORB registry card to active KEEP_CANONICAL_PARENT.",
+    "Record current SHA, branch count, license, workspace members, and validation failure.",
+    "Do not merge phenoUtils into phenotype-shared until crate/API/test parity is demonstrated.",
+    "Do not delete, archive, prune, reset, or force-push any source history."
+  ]
+}

@@ -1,0 +1,36 @@
+[workspace]
+members = [
+    "crates/phenotype-error-core",
+    "crates/eidolon-core",
+    "crates/eidolon-desktop",
+    "crates/eidolon-mobile",
+    "crates/eidolon-sandbox",
+]
+
+resolver = "2"
+
+[workspace.package]
+rust-version = "1.75"
+version = "0.0.1"
+edition = "2021"
+authors = ["Phenotype Team"]
+repository = "https://github.com/KooshaPari/Eidolon"
+license = "MIT OR Apache-2.0"
+
+[workspace.dependencies]
+# proptest: property-based testing. Used in eidolon-core tests for event/trait
+# roundtrip and invariant checks (L11 quality gate).
+proptest = "1.6"
+thiserror = "2.0"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+tokio = { version = "1.39", features = ["full"] }
+log = "0.4"
+# tracing: structured, contextual diagnostics (spans + events). Replaces ad-hoc
+# log:: calls across the workspace to enable OpenTelemetry export and async span
+# propagation. Keep log as a facade for third-party crates that still use it.
+tracing = "0.1"
+async-trait = "0.1"
+uuid = { version = "1.6", features = ["v4", "serde"] }
+anyhow = "1.0"
+phenotype-error-core = { path = "crates/phenotype-error-core" }

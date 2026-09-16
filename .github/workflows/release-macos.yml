@@ -1,0 +1,38 @@
+name: Release macOS (phenotype-registry)
+
+# Calls the reusable workflow at kooshapari/phenotype-fleet-ops.
+# Self-hosted runners only (zero billed minutes).
+# All Apple Developer secrets live in Infisical project 8efe392e-56a6-4c3c-89f9-8141183dd7e8.
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+  workflow_dispatch:
+
+concurrency:
+  group: macos-release-phenotype-registry-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  macos:
+    name: Build, sign, notarize phenotype-registry
+    uses: kooshapari/phenotype-fleet-ops/.github/workflows/macos-release.yml@34750e90190db89cdfda6b5272068d78022090fb # main
+    with:
+      app-name: phenotype-registry
+      app-bundle-id: app.phenotype.registry
+      build-cmd: |
+        cargo build --release --locked --target aarch64-apple-darwin --bin phenotype-registry
+        cargo build --release --locked --target aarch64-apple-darwin --bin eidolon-desktop
+        mkdir -p dist/macos
+        cp target/aarch64-apple-darwin/release/phenotype-registry dist/macos/
+        cp target/aarch64-apple-darwin/release/eidolon-desktop dist/macos/
+      entitlements-file: Entitlements.plist
+      artifact-dir: dist/macos
+      create-dmg: true
+      sign-identity: "Developer ID Application"
+    secrets:
+      INFISICAL_TOKEN: ${{ secrets.INFISICAL_TOKEN }}

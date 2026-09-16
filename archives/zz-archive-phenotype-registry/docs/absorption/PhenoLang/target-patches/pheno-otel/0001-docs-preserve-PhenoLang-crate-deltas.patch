@@ -1,0 +1,1755 @@
+From a948e7719a996009ff314412582f583260049d6b Mon Sep 17 00:00:00 2001
+From: forge orchestrator <forge@phenotype.local>
+Date: Sat, 20 Jun 2026 02:51:56 -0700
+Subject: [PATCH] docs: preserve PhenoLang crate deltas
+
+---
+ .../ORIGIN.md                                 |   3 +
+ .../crates/phenotype-health/CLAUDE.md         |  73 +++
+ .../crates/phenotype-health/Cargo.toml        |  15 +
+ .../crates/phenotype-health/src/checkers.rs   | 164 +++++++
+ .../crates/phenotype-health/src/lib.rs        | 185 ++++++++
+ .../crates/phenotype-health/src/project.rs    | 261 ++++++++++
+ .../crates/phenotype-health/src/tests.rs      | 178 +++++++
+ .../crates/phenotype-logging/Cargo.toml       |  17 +
+ .../crates/phenotype-logging/src/config.rs    | 122 +++++
+ .../crates/phenotype-logging/src/lib.rs       |  11 +
+ .../crates/phenotype-logging/src/otel.rs      |  89 ++++
+ .../phenotype-logging/src/subscriber.rs       |  53 +++
+ .../crates/phenotype-telemetry/Cargo.toml     |  16 +
+ .../crates/phenotype-telemetry/src/lib.rs     | 445 ++++++++++++++++++
+ 14 files changed, 1632 insertions(+)
+ create mode 100644 pheno-otel/archive/PhenoLang-observability-2026-06-20/ORIGIN.md
+ create mode 100644 pheno-otel/archive/PhenoLang-observability-2026-06-20/crates/phenotype-health/CLAUDE.md
+ create mode 100644 pheno-otel/archive/PhenoLang-observability-2026-06-20/crates/phenotype-health/Cargo.toml
+ create mode 100644 pheno-otel/archive/PhenoLang-observability-2026-06-20/crates/phenotype-health/src/checkers.rs
+ create mode 100644 pheno-otel/archive/PhenoLang-observability-2026-06-20/crates/phenotype-health/src/lib.rs
+ create mode 100644 pheno-otel/archive/PhenoLang-observability-2026-06-20/crates/phenotype-health/src/project.rs
+ create mode 100644 pheno-otel/archive/PhenoLang-observability-2026-06-20/crates/phenotype-health/src/tests.rs
+ create mode 100644 pheno-otel/archive/PhenoLang-observability-2026-06-20/crates/phenotype-logging/Cargo.toml
+ create mode 100644 pheno-otel/archive/PhenoLang-observability-2026-06-20/crates/phenotype-logging/src/config.rs
+ create mode 100644 pheno-otel/archive/PhenoLang-observability-2026-06-20/crates/phenotype-logging/src/lib.rs
+ create mode 100644 pheno-otel/archive/PhenoLang-observability-2026-06-20/crates/phenotype-logging/src/otel.rs
+ create mode 100644 pheno-otel/archive/PhenoLang-observability-2026-06-20/crates/phenotype-logging/src/subscriber.rs
+ create mode 100644 pheno-otel/archive/PhenoLang-observability-2026-06-20/crates/phenotype-telemetry/Cargo.toml
+ create mode 100644 pheno-otel/archive/PhenoLang-observability-2026-06-20/crates/phenotype-telemetry/src/lib.rs
+
+diff --git a/pheno-otel/archive/PhenoLang-observability-2026-06-20/ORIGIN.md b/pheno-otel/archive/PhenoLang-observability-2026-06-20/ORIGIN.md
+new file mode 100644
+index 0000000000..b0c1b06efc
+--- /dev/null
++++ b/pheno-otel/archive/PhenoLang-observability-2026-06-20/ORIGIN.md
+@@ -0,0 +1,3 @@
++# PhenoLang crate preservation
++
++Preserved from `KooshaPari/PhenoLang` on 2026-06-20 for deletion-readiness traceability. These copies are archival inputs for the owning target repo and do not replace active target implementations.
+diff --git a/pheno-otel/archive/PhenoLang-observability-2026-06-20/crates/phenotype-health/CLAUDE.md b/pheno-otel/archive/PhenoLang-observability-2026-06-20/crates/phenotype-health/CLAUDE.md
+new file mode 100644
+index 0000000000..dd8bdd06a5
+--- /dev/null
++++ b/pheno-otel/archive/PhenoLang-observability-2026-06-20/crates/phenotype-health/CLAUDE.md
+@@ -0,0 +1,73 @@
++# phenotype-health — CLAUDE.md
++
++## Project Overview
++
++A Rust library providing health checking and observability for Phenotype ecosystem services. Implements liveness, readiness, and startup probes for cloud-native deployments.
++
++**Language**: Rust
++**Location**: `crates/phenotype-health/`
++**Published**: Yes (to crates.io or internal registry)
++
++## Phenotype Federated Hybrid Architecture
++
++This project is part of the Phenotype Federated Hybrid Architecture:
++
++### Phenotype Docs Chassis
++Provides VitePress configuration and design tokens for documentation.
++
++See: `docs/reference/PHENOTYPE_DOCS_CHASSIS_INTERFACE.md`
++
++### AgilePlus Governance Chassis
++Defines specification-driven delivery with PRD, ADR, FUNCTIONAL_REQUIREMENTS, and FR traceability.
++
++See: `docs/reference/AGILEPLUS_GOVERNANCE_CHASSIS.md`
++
++**For this project**:
++- Maintain `/FUNCTIONAL_REQUIREMENTS.md` with FR-HEALTH-XXX IDs
++- Tag all tests with comment: `// Traces to: FR-HEALTH-NNN`
++- Map code entities in `docs/reference/CODE_ENTITY_MAP.md`
++- Create worklog entries in `docs/worklogs/` per phase
++
++## Specification Documents
++
++**Root-level files** (in monorepo root):
++- `/FUNCTIONAL_REQUIREMENTS.md` — Granular requirements for phenotype-health
++- `/docs/worklogs/` — Phase-based worklog entries
++- `/docs/reference/CODE_ENTITY_MAP.md` — Code ↔ requirements mapping
++
++## Testing & Traceability
++
++All tests MUST reference an FR:
++
++```rust
++// Traces to: FR-HEALTH-001
++#[test]
++fn test_liveness_probe_check() {
++    // Test body
++}
++```
++
++Run: `cargo test --lib phenotype_health`
++
++## Build & Quality
++
++```bash
++cd crates/phenotype-health
++cargo test
++cargo clippy
++cargo fmt
++```
++
++## Development Notes
++
++- Kubernetes-native health check implementation (liveness, readiness, startup)
++- Pluggable checker system for custom health validators
++- Integration with observability/metrics pipelines
++- Used by AgilePlus dashboard and agent services
++
++## See Also
++
++- **AgilePlus Governance**: `docs/reference/AGILEPLUS_GOVERNANCE_CHASSIS.md`
++- **Phenotype Docs**: `docs/reference/PHENOTYPE_DOCS_CHASSIS_INTERFACE.md`
++- **Monorepo Root**: `../../../CLAUDE.md`
++
+diff --git a/pheno-otel/archive/PhenoLang-observability-2026-06-20/crates/phenotype-health/Cargo.toml b/pheno-otel/archive/PhenoLang-observability-2026-06-20/crates/phenotype-health/Cargo.toml
+new file mode 100644
+index 0000000000..3339b19191
+--- /dev/null
++++ b/pheno-otel/archive/PhenoLang-observability-2026-06-20/crates/phenotype-health/Cargo.toml
+@@ -0,0 +1,15 @@
++[package]
++name = "phenotype-health"
++version = "0.2.0"
++edition = "2021"
++license = "MIT"
++[lib]
++path = "src/lib.rs"
++[dependencies]
++serde = { version = "1", features = ["derive"] }
++thiserror = "2"
++tokio = { version = "1", features = ["time"] }
++chrono = { version = "0.4", features = ["serde"] }
++[dev-dependencies]
++tokio = { version = "1", features = ["full"] }
++serde_json = "1"
+diff --git a/pheno-otel/archive/PhenoLang-observability-2026-06-20/crates/phenotype-health/src/checkers.rs b/pheno-otel/archive/PhenoLang-observability-2026-06-20/crates/phenotype-health/src/checkers.rs
+new file mode 100644
+index 0000000000..a29e6d0d10
+--- /dev/null
++++ b/pheno-otel/archive/PhenoLang-observability-2026-06-20/crates/phenotype-health/src/checkers.rs
+@@ -0,0 +1,164 @@
++//! Common health checker implementations.
++
++use crate::{HealthChecker, HealthStatus};
++use std::future::Future;
++use std::pin::Pin;
++use std::sync::Arc;
++
++/// Health checker that probes a database connection via a user-supplied closure.
++pub struct DatabaseHealthChecker<F>
++where
++    F: Fn() -> Pin<Box<dyn Future<Output = bool> + Send>> + Send + Sync,
++{
++    name: String,
++    probe: F,
++}
++
++impl<F> DatabaseHealthChecker<F>
++where
++    F: Fn() -> Pin<Box<dyn Future<Output = bool> + Send>> + Send + Sync,
++{
++    pub fn new(name: impl Into<String>, probe: F) -> Self {
++        Self {
++            name: name.into(),
++            probe,
++        }
++    }
++}
++
++impl<F> HealthChecker for DatabaseHealthChecker<F>
++where
++    F: Fn() -> Pin<Box<dyn Future<Output = bool> + Send>> + Send + Sync,
++{
++    fn name(&self) -> &str {
++        &self.name
++    }
++
++    fn check(&self) -> Pin<Box<dyn Future<Output = HealthStatus> + Send + '_>> {
++        Box::pin(async {
++            if (self.probe)().await {
++                HealthStatus::Healthy
++            } else {
++                HealthStatus::Unhealthy
++            }
++        })
++    }
++}
++
++/// Health checker that probes a cache connection via a user-supplied closure.
++pub struct CacheHealthChecker<F>
++where
++    F: Fn() -> Pin<Box<dyn Future<Output = bool> + Send>> + Send + Sync,
++{
++    name: String,
++    probe: F,
++}
++
++impl<F> CacheHealthChecker<F>
++where
++    F: Fn() -> Pin<Box<dyn Future<Output = bool> + Send>> + Send + Sync,
++{
++    pub fn new(name: impl Into<String>, probe: F) -> Self {
++        Self {
++            name: name.into(),
++            probe,
++        }
++    }
++}
++
++impl<F> HealthChecker for CacheHealthChecker<F>
++where
++    F: Fn() -> Pin<Box<dyn Future<Output = bool> + Send>> + Send + Sync,
++{
++    fn name(&self) -> &str {
++        &self.name
++    }
++
++    fn check(&self) -> Pin<Box<dyn Future<Output = HealthStatus> + Send + '_>> {
++        Box::pin(async {
++            if (self.probe)().await {
++                HealthStatus::Healthy
++            } else {
++                HealthStatus::Degraded
++            }
++        })
++    }
++}
++
++/// Health checker that hits an external HTTP-like service via a user-supplied closure.
++pub struct ExternalServiceHealthChecker<F>
++where
++    F: Fn() -> Pin<Box<dyn Future<Output = bool> + Send>> + Send + Sync,
++{
++    name: String,
++    probe: F,
++}
++
++impl<F> ExternalServiceHealthChecker<F>
++where
++    F: Fn() -> Pin<Box<dyn Future<Output = bool> + Send>> + Send + Sync,
++{
++    pub fn new(name: impl Into<String>, probe: F) -> Self {
++        Self {
++            name: name.into(),
++            probe,
++        }
++    }
++}
++
++impl<F> HealthChecker for ExternalServiceHealthChecker<F>
++where
++    F: Fn() -> Pin<Box<dyn Future<Output = bool> + Send>> + Send + Sync,
++{
++    fn name(&self) -> &str {
++        &self.name
++    }
++
++    fn check(&self) -> Pin<Box<dyn Future<Output = HealthStatus> + Send + '_>> {
++        Box::pin(async {
++            if (self.probe)().await {
++                HealthStatus::Healthy
++            } else {
++                HealthStatus::Unhealthy
++            }
++        })
++    }
++}
++
++/// Health checker that reports memory usage. Returns `Degraded` when usage
++/// exceeds the configured threshold percentage (0.0..1.0).
++pub struct MemoryHealthChecker {
++    threshold: f64,
++    /// Returns (used_bytes, total_bytes).
++    probe: Arc<dyn Fn() -> (u64, u64) + Send + Sync>,
++}
++
++impl MemoryHealthChecker {
++    pub fn new(threshold: f64, probe: impl Fn() -> (u64, u64) + Send + Sync + 'static) -> Self {
++        Self {
++            threshold,
++            probe: Arc::new(probe),
++        }
++    }
++}
++
++impl HealthChecker for MemoryHealthChecker {
++    fn name(&self) -> &str {
++        "memory"
++    }
++
++    fn check(&self) -> Pin<Box<dyn Future<Output = HealthStatus> + Send + '_>> {
++        let (used, total) = (self.probe)();
++        let ratio = if total == 0 {
++            0.0
++        } else {
++            used as f64 / total as f64
++        };
++        let status = if ratio > self.threshold {
++            HealthStatus::Degraded
++        } else {
++            HealthStatus::Healthy
++        };
++        Box::pin(async move { status })
++    }
++}
+diff --git a/pheno-otel/archive/PhenoLang-observability-2026-06-20/crates/phenotype-health/src/lib.rs b/pheno-otel/archive/PhenoLang-observability-2026-06-20/crates/phenotype-health/src/lib.rs
+new file mode 100644
+index 0000000000..7ef5b8fe53
+--- /dev/null
++++ b/pheno-otel/archive/PhenoLang-observability-2026-06-20/crates/phenotype-health/src/lib.rs
+@@ -0,0 +1,185 @@
++//! # Phenotype Health
++//!
++//! Shared health check abstraction for Phenotype services.
++//!
++//! Provides a unified `HealthChecker` trait, a `HealthMonitor` for managing
++//! multiple checks, and common checker implementations (database, cache,
++//! external service, memory).
++
++mod checkers;
++mod project;
++#[cfg(test)]
++mod tests;
++
++pub use checkers::{
++    CacheHealthChecker, DatabaseHealthChecker, ExternalServiceHealthChecker, MemoryHealthChecker,
++};
++
++pub use project::{
++    DimensionScore, Finding, HealthBand, HealthDimension, HealthSummary, LanguageStack,
++    ProjectHealth, Severity,
++};
++
++use serde::Serialize;
++use std::future::Future;
++use std::pin::Pin;
++use std::time::{Duration, Instant};
++
++/// Overall status of a health check.
++#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize)]
++#[serde(rename_all = "lowercase")]
++pub enum HealthStatus {
++    Healthy,
++    Degraded,
++    Unhealthy,
++    Unknown,
++}
++
++impl HealthStatus {
++    /// Returns the worse of two statuses (Unhealthy > Degraded > Unknown > Healthy).
++    #[must_use]
++    pub fn worse(self, other: Self) -> Self {
++        use HealthStatus::*;
++        match (self, other) {
++            (Unhealthy, _) | (_, Unhealthy) => Unhealthy,
++            (Degraded, _) | (_, Degraded) => Degraded,
++            (Unknown, _) | (_, Unknown) => Unknown,
++            _ => Healthy,
++        }
++    }
++}
++
++/// A single health check probe. Implement this for each dependency your service
++/// needs to verify (database, cache, external API, etc.).
++pub trait HealthChecker: Send + Sync {
++    /// Human-readable name for this checker (e.g. "postgres", "redis").
++    fn name(&self) -> &str;
++
++    /// Run the check and return the status.
++    fn check(&self) -> Pin<Box<dyn Future<Output = HealthStatus> + Send + '_>>;
++}
++
++/// Result of a single health check execution.
++#[derive(Debug, Clone, Serialize)]
++pub struct HealthCheckResult {
++    pub service: String,
++    pub status: HealthStatus,
++    #[serde(serialize_with = "serialize_duration_ms")]
++    pub duration: Duration,
++    #[serde(skip_serializing_if = "Option::is_none")]
++    pub details: Option<String>,
++}
++
++fn serialize_duration_ms<S: serde::Serializer>(d: &Duration, s: S) -> Result<S::Ok, S::Error> {
++    s.serialize_u64(d.as_millis() as u64)
++}
++
++/// Configuration for health checking behavior.
++#[derive(Debug, Clone)]
++pub struct HealthCheckConfig {
++    pub enabled: bool,
++    pub interval: Duration,
++    pub timeout: Duration,
++    pub success_threshold: u32,
++    pub failure_threshold: u32,
++}
++
++impl Default for HealthCheckConfig {
++    fn default() -> Self {
++        Self {
++            enabled: true,
++            interval: Duration::from_secs(30),
++            timeout: Duration::from_secs(5),
++            success_threshold: 1,
++            failure_threshold: 3,
++        }
++    }
++}
++
++/// Aggregate health response suitable for JSON serialization on `/health`.
++#[derive(Debug, Serialize)]
++pub struct HealthResponse {
++    pub status: HealthStatus,
++    pub checks: Vec<HealthCheckResult>,
++}
++
++/// Manages multiple `HealthChecker` instances, runs them with timeouts, and
++/// aggregates results.
++pub struct HealthMonitor {
++    checkers: Vec<Box<dyn HealthChecker>>,
++    config: HealthCheckConfig,
++}
++
++impl HealthMonitor {
++    #[must_use]
++    pub fn new() -> Self {
++        Self {
++            checkers: Vec::new(),
++            config: HealthCheckConfig::default(),
++        }
++    }
++
++    #[must_use]
++    pub fn with_config(config: HealthCheckConfig) -> Self {
++        Self {
++            checkers: Vec::new(),
++            config,
++        }
++    }
++
++    pub fn add_checker(&mut self, checker: impl HealthChecker + 'static) {
++        self.checkers.push(Box::new(checker));
++    }
++
++    /// Run all registered checkers and return individual results.
++    pub async fn check_all(&self) -> Vec<HealthCheckResult> {
++        let mut results = Vec::with_capacity(self.checkers.len());
++        for checker in &self.checkers {
++            let start = Instant::now();
++            let status = tokio::time::timeout(self.config.timeout, checker.check()).await;
++            let duration = start.elapsed();
++
++            let (status, details) = match status {
++                Ok(s) => (s, None),
++                Err(_) => (
++                    HealthStatus::Unhealthy,
++                    Some(format!(
++                        "timeout after {}ms",
++                        self.config.timeout.as_millis()
++                    )),
++                ),
++            };
++
++            results.push(HealthCheckResult {
++                service: checker.name().to_owned(),
++                status,
++                duration,
++                details,
++            });
++        }
++        results
++    }
++
++    /// Compute the aggregate status across all checkers.
++    pub async fn overall_status(&self) -> HealthStatus {
++        let results = self.check_all().await;
++        results
++            .iter()
++            .fold(HealthStatus::Healthy, |acc, r| acc.worse(r.status))
++    }
++
++    /// Produce a full `HealthResponse` for `/health` endpoints.
++    pub async fn health_response(&self) -> HealthResponse {
++        let checks = self.check_all().await;
++        let status = checks
++            .iter()
++            .fold(HealthStatus::Healthy, |acc, r| acc.worse(r.status));
++        HealthResponse { status, checks }
++    }
++}
++
++impl Default for HealthMonitor {
++    fn default() -> Self {
++        Self::new()
++    }
++}
+diff --git a/pheno-otel/archive/PhenoLang-observability-2026-06-20/crates/phenotype-health/src/project.rs b/pheno-otel/archive/PhenoLang-observability-2026-06-20/crates/phenotype-health/src/project.rs
+new file mode 100644
+index 0000000000..5581481f27
+--- /dev/null
++++ b/pheno-otel/archive/PhenoLang-observability-2026-06-20/crates/phenotype-health/src/project.rs
+@@ -0,0 +1,261 @@
++//! Project-level health tracking types for unified dashboard.
++//!
++//! Provides types for tracking project health across documentation,
++//! test coverage, security, dependencies, compliance, and code quality.
++
++use chrono::{DateTime, Utc};
++use serde::{Deserialize, Serialize};
++use std::collections::HashMap;
++
++/// Health dimensions tracked per project
++#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
++#[serde(rename_all = "snake_case")]
++pub enum HealthDimension {
++    /// Documentation completeness
++    Documentation,
++    /// Test coverage percentage
++    TestCoverage,
++    /// Security posture
++    Security,
++    /// Dependency freshness
++    Dependencies,
++    /// Governance compliance
++    Compliance,
++    /// Code quality metrics
++    CodeQuality,
++}
++
++impl HealthDimension {
++    /// Weight of this dimension in overall health score
++    pub fn weight(&self) -> f32 {
++        match self {
++            Self::Documentation => 0.15,
++            Self::TestCoverage => 0.20,
++            Self::Security => 0.25,
++            Self::Dependencies => 0.15,
++            Self::Compliance => 0.15,
++            Self::CodeQuality => 0.10,
++        }
++    }
++
++    /// Display name for this dimension
++    pub fn display_name(&self) -> &'static str {
++        match self {
++            Self::Documentation => "Documentation",
++            Self::TestCoverage => "Test Coverage",
++            Self::Security => "Security",
++            Self::Dependencies => "Dependencies",
++            Self::Compliance => "Compliance",
++            Self::CodeQuality => "Code Quality",
++        }
++    }
++}
++
++/// Overall health classification band
++#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
++#[serde(rename_all = "lowercase")]
++pub enum HealthBand {
++    /// 90-100: Excellent health
++    Excellent,
++    /// 75-89: Good health with minor issues
++    Good,
++    /// 60-74: Fair health, needs attention
++    Fair,
++    /// 40-59: Poor health, significant issues
++    Poor,
++    /// 0-39: Critical health, immediate action required
++    Critical,
++}
++
++impl HealthBand {
++    /// Classify score into band
++    pub fn from_score(score: f32) -> Self {
++        if score >= 90.0 {
++            Self::Excellent
++        } else if score >= 75.0 {
++            Self::Good
++        } else if score >= 60.0 {
++            Self::Fair
++        } else if score >= 40.0 {
++            Self::Poor
++        } else {
++            Self::Critical
++        }
++    }
++}
++
++/// Score and findings for a specific health dimension
++#[derive(Debug, Clone, Serialize, Deserialize)]
++pub struct DimensionScore {
++    /// Calculated score (0-100)
++    pub score: f32,
++    /// Target score
++    pub target: f32,
++    /// Raw value (e.g., percentage, count)
++    pub raw_value: f32,
++    /// Unit of the raw value
++    pub unit: String,
++    /// Individual findings for this dimension
++    pub findings: Vec<Finding>,
++}
++
++/// Individual finding within a dimension
++#[derive(Debug, Clone, Serialize, Deserialize)]
++pub struct Finding {
++    /// Severity of the finding
++    pub severity: Severity,
++    /// Human-readable message
++    pub message: String,
++    /// File path if applicable
++    #[serde(skip_serializing_if = "Option::is_none")]
++    pub file_path: Option<String>,
++    /// Line number if applicable
++    #[serde(skip_serializing_if = "Option::is_none")]
++    pub line_number: Option<u32>,
++}
++
++/// Severity level of findings
++#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
++#[serde(rename_all = "lowercase")]
++pub enum Severity {
++    /// Informational finding
++    Info,
++    /// Warning - should be addressed
++    Warning,
++    /// Error - must be addressed
++    Error,
++    /// Critical - immediate action required
++    Critical,
++}
++
++/// Detected programming language
++#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
++#[serde(rename_all = "lowercase", tag = "type")]
++pub enum LanguageStack {
++    /// Rust project
++    Rust,
++    /// TypeScript/JavaScript project
++    TypeScript,
++    /// Python project
++    Python,
++    /// Go project
++    Go,
++    /// Multiple languages
++    Mixed(Vec<String>),
++}
++
++impl LanguageStack {
++    /// Detect from project files
++    pub fn detect(project_path: &std::path::Path) -> Self {
++        let mut languages = Vec::new();
++
++        if project_path.join("Cargo.toml").exists() {
++            languages.push("Rust".to_string());
++        }
++        if project_path.join("package.json").exists() {
++            languages.push("TypeScript".to_string());
++        }
++        if project_path.join("pyproject.toml").exists()
++            || project_path.join("setup.py").exists()
++            || project_path.join("requirements.txt").exists()
++        {
++            languages.push("Python".to_string());
++        }
++        if project_path.join("go.mod").exists() {
++            languages.push("Go".to_string());
++        }
++
++        match languages.len() {
++            0 => Self::Rust, // Default to Rust
++            1 => match languages[0].as_str() {
++                "Rust" => Self::Rust,
++                "TypeScript" => Self::TypeScript,
++                "Python" => Self::Python,
++                "Go" => Self::Go,
++                _ => Self::Rust,
++            },
++            _ => Self::Mixed(languages),
++        }
++    }
++}
++
++/// Complete project health record
++#[derive(Debug, Clone, Serialize, Deserialize)]
++pub struct ProjectHealth {
++    /// Repository name
++    pub repo_name: String,
++    /// Owner/organization
++    pub owner: String,
++    /// Detected language stack
++    pub language: LanguageStack,
++    /// Overall health score (0-100)
++    pub overall_score: f32,
++    /// Health band classification
++    pub band: HealthBand,
++    /// Dimension-level scores
++    pub dimensions: HashMap<HealthDimension, DimensionScore>,
++    /// When last scanned
++    pub last_scan: DateTime<Utc>,
++    /// Scanner version
++    pub scan_version: String,
++}
++
++impl ProjectHealth {
++    /// Calculate overall score from dimensions
++    pub fn calculate_overall(&self) -> f32 {
++        self.dimensions
++            .iter()
++            .map(|(dim, score)| dim.weight() * score.score)
++            .sum()
++    }
++
++    /// Get summary of all findings
++    pub fn all_findings(&self) -> Vec<&Finding> {
++        self.dimensions.values().flat_map(|d| d.findings.iter()).collect()
++    }
++}
++
++/// Summary of health across multiple projects
++#[derive(Debug, Clone, Serialize, Deserialize)]
++pub struct HealthSummary {
++    /// Total projects scanned
++    pub total_projects: usize,
++    /// Average score across all projects
++    pub average_score: f32,
++    /// Projects by band
++    pub by_band: HashMap<HealthBand, usize>,
++    /// Common issues across projects
++    pub common_issues: Vec<String>,
++}
++
++#[cfg(test)]
++mod tests {
++    use super::*;
++
++    #[test]
++    fn test_health_band_from_score() {
++        assert_eq!(HealthBand::from_score(95.0), HealthBand::Excellent);
++        assert_eq!(HealthBand::from_score(80.0), HealthBand::Good);
++        assert_eq!(HealthBand::from_score(65.0), HealthBand::Fair);
++        assert_eq!(HealthBand::from_score(50.0), HealthBand::Poor);
++        assert_eq!(HealthBand::from_score(30.0), HealthBand::Critical);
++    }
++
++    #[test]
++    fn test_dimension_weight() {
++        assert_eq!(HealthDimension::Security.weight(), 0.25);
++        assert_eq!(HealthDimension::TestCoverage.weight(), 0.20);
++        assert!(HealthDimension::Documentation.weight() > 0.0);
++    }
++
++    #[test]
++    fn test_language_detection() {
++        // Test would require creating temp directories
++        // For now just verify the enum variants work
++        let _lang = LanguageStack::Rust;
++        let _lang = LanguageStack::TypeScript;
++        let _lang = LanguageStack::Python;
++        let _lang = LanguageStack::Go;
++        let _lang = LanguageStack::Mixed(vec!["Rust".to_string(), "TypeScript".to_string()]);
++    }
++}
+diff --git a/pheno-otel/archive/PhenoLang-observability-2026-06-20/crates/phenotype-health/src/tests.rs b/pheno-otel/archive/PhenoLang-observability-2026-06-20/crates/phenotype-health/src/tests.rs
+new file mode 100644
+index 0000000000..a10b76bc9a
+--- /dev/null
++++ b/pheno-otel/archive/PhenoLang-observability-2026-06-20/crates/phenotype-health/src/tests.rs
+@@ -0,0 +1,178 @@
++use crate::{
++    CacheHealthChecker, DatabaseHealthChecker, ExternalServiceHealthChecker, HealthCheckConfig,
++    HealthChecker, HealthMonitor, HealthStatus, MemoryHealthChecker,
++};
++use std::pin::Pin;
++use std::time::Duration;
++
++// --- HealthStatus tests ---
++
++#[test]
++fn worse_returns_unhealthy_over_anything() {
++    assert_eq!(
++        HealthStatus::Healthy.worse(HealthStatus::Unhealthy),
++        HealthStatus::Unhealthy
++    );
++    assert_eq!(
++        HealthStatus::Unhealthy.worse(HealthStatus::Healthy),
++        HealthStatus::Unhealthy
++    );
++}
++
++#[test]
++fn worse_returns_degraded_over_healthy() {
++    assert_eq!(
++        HealthStatus::Healthy.worse(HealthStatus::Degraded),
++        HealthStatus::Degraded
++    );
++}
++
++#[test]
++fn worse_returns_unknown_over_healthy() {
++    assert_eq!(
++        HealthStatus::Healthy.worse(HealthStatus::Unknown),
++        HealthStatus::Unknown
++    );
++}
++
++#[test]
++fn worse_healthy_healthy_is_healthy() {
++    assert_eq!(
++        HealthStatus::Healthy.worse(HealthStatus::Healthy),
++        HealthStatus::Healthy
++    );
++}
++
++// --- Stub checker for tests ---
++
++struct StubChecker {
++    name: &'static str,
++    status: HealthStatus,
++}
++
++impl HealthChecker for StubChecker {
++    fn name(&self) -> &str {
++        self.name
++    }
++
++    fn check(&self) -> Pin<Box<dyn std::future::Future<Output = HealthStatus> + Send + '_>> {
++        let s = self.status;
++        Box::pin(async move { s })
++    }
++}
++
++struct SlowChecker;
++
++impl HealthChecker for SlowChecker {
++    fn name(&self) -> &str {
++        "slow"
++    }
++
++    fn check(&self) -> Pin<Box<dyn std::future::Future<Output = HealthStatus> + Send + '_>> {
++        Box::pin(async {
++            tokio::time::sleep(Duration::from_secs(10)).await;
++            HealthStatus::Healthy
++        })
++    }
++}
++
++// --- HealthMonitor tests ---
++
++#[tokio::test]
++async fn monitor_no_checkers_is_healthy() {
++    let monitor = HealthMonitor::new();
++    assert_eq!(monitor.overall_status().await, HealthStatus::Healthy);
++}
++
++#[tokio::test]
++async fn monitor_all_healthy() {
++    let mut monitor = HealthMonitor::new();
++    monitor.add_checker(StubChecker {
++        name: "a",
++        status: HealthStatus::Healthy,
++    });
++    monitor.add_checker(StubChecker {
++        name: "b",
++        status: HealthStatus::Healthy,
++    });
++    assert_eq!(monitor.overall_status().await, HealthStatus::Healthy);
++}
++
++#[tokio::test]
++async fn monitor_one_unhealthy() {
++    let mut monitor = HealthMonitor::new();
++    monitor.add_checker(StubChecker {
++        name: "a",
++        status: HealthStatus::Healthy,
++    });
++    monitor.add_checker(StubChecker {
++        name: "b",
++        status: HealthStatus::Unhealthy,
++    });
++    assert_eq!(monitor.overall_status().await, HealthStatus::Unhealthy);
++}
++
++#[tokio::test]
++async fn monitor_timeout_yields_unhealthy() {
++    let config = HealthCheckConfig {
++        timeout: Duration::from_millis(50),
++        ..Default::default()
++    };
++    let mut monitor = HealthMonitor::with_config(config);
++    monitor.add_checker(SlowChecker);
++    let results = monitor.check_all().await;
++    assert_eq!(results.len(), 1);
++    assert_eq!(results[0].status, HealthStatus::Unhealthy);
++    assert!(results[0].details.as_ref().unwrap().contains("timeout"));
++}
++
++#[tokio::test]
++async fn health_response_json_serialization() {
++    let mut monitor = HealthMonitor::new();
++    monitor.add_checker(StubChecker {
++        name: "db",
++        status: HealthStatus::Healthy,
++    });
++    let resp = monitor.health_response().await;
++    let json = serde_json::to_string(&resp).unwrap();
++    assert!(json.contains("\"status\":\"healthy\""));
++    assert!(json.contains("\"service\":\"db\""));
++}
++
++// --- Checker implementation tests ---
++
++#[tokio::test]
++async fn database_checker_healthy() {
++    let checker = DatabaseHealthChecker::new("pg", || Box::pin(async { true }));
++    assert_eq!(checker.check().await, HealthStatus::Healthy);
++}
++
++#[tokio::test]
++async fn database_checker_unhealthy() {
++    let checker = DatabaseHealthChecker::new("pg", || Box::pin(async { false }));
++    assert_eq!(checker.check().await, HealthStatus::Unhealthy);
++}
++
++#[tokio::test]
++async fn cache_checker_degraded_on_failure() {
++    let checker = CacheHealthChecker::new("redis", || Box::pin(async { false }));
++    assert_eq!(checker.check().await, HealthStatus::Degraded);
++}
++
++#[tokio::test]
++async fn external_service_checker() {
++    let checker = ExternalServiceHealthChecker::new("api", || Box::pin(async { true }));
++    assert_eq!(checker.check().await, HealthStatus::Healthy);
++}
++
++#[tokio::test]
++async fn memory_checker_healthy_below_threshold() {
++    let checker = MemoryHealthChecker::new(0.8, || (400, 1000));
++    assert_eq!(checker.check().await, HealthStatus::Healthy);
++}
++
++#[tokio::test]
++async fn memory_checker_degraded_above_threshold() {
++    let checker = MemoryHealthChecker::new(0.8, || (900, 1000));
++    assert_eq!(checker.check().await, HealthStatus::Degraded);
++}
+diff --git a/pheno-otel/archive/PhenoLang-observability-2026-06-20/crates/phenotype-logging/Cargo.toml b/pheno-otel/archive/PhenoLang-observability-2026-06-20/crates/phenotype-logging/Cargo.toml
+new file mode 100644
+index 0000000000..d2681422d2
+--- /dev/null
++++ b/pheno-otel/archive/PhenoLang-observability-2026-06-20/crates/phenotype-logging/Cargo.toml
+@@ -0,0 +1,17 @@
++[package]
++name = "phenotype-logging"
++version = "0.2.0"
++edition = "2021"
++license = "MIT"
++
++[lib]
++path = "src/lib.rs"
++
++[dependencies]
++serde = { version = "1", features = ["derive"] }
++thiserror = "2"
++tracing = "0.1"
++tracing-subscriber = "0.3"
++
++[dev-dependencies]
++tokio = { version = "1", features = ["full"] }
+diff --git a/pheno-otel/archive/PhenoLang-observability-2026-06-20/crates/phenotype-logging/src/config.rs b/pheno-otel/archive/PhenoLang-observability-2026-06-20/crates/phenotype-logging/src/config.rs
+new file mode 100644
+index 0000000000..bfd64df53f
+--- /dev/null
++++ b/pheno-otel/archive/PhenoLang-observability-2026-06-20/crates/phenotype-logging/src/config.rs
+@@ -0,0 +1,122 @@
++//! Logging configuration types.
++
++use serde::{Deserialize, Serialize};
++
++/// Log level configuration.
++#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
++#[serde(rename_all = "lowercase")]
++pub enum LogLevel {
++    Trace,
++    Debug,
++    Info,
++    Warn,
++    Error,
++}
++
++impl LogLevel {
++    /// Parse from environment variable value.
++    pub fn from_env(var: &str) -> Option<Self> {
++        match var.to_lowercase().as_str() {
++            "trace" => Some(Self::Trace),
++            "debug" => Some(Self::Debug),
++            "info" => Some(Self::Info),
++            "warn" | "warning" => Some(Self::Warn),
++            "error" => Some(Self::Error),
++            _ => None,
++        }
++    }
++
++    /// Get the corresponding tracing Level.
++    pub fn to_tracing_level(self) -> tracing::Level {
++        match self {
++            Self::Trace => tracing::Level::TRACE,
++            Self::Debug => tracing::Level::DEBUG,
++            Self::Info => tracing::Level::INFO,
++            Self::Warn => tracing::Level::WARN,
++            Self::Error => tracing::Level::ERROR,
++        }
++    }
++}
++
++impl Default for LogLevel {
++    fn default() -> Self {
++        Self::Info
++    }
++}
++
++/// Output format for logs.
++#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
++#[serde(rename_all = "lowercase")]
++pub enum OutputFormat {
++    /// Human-readable format for development.
++    Pretty,
++    /// Compact format for production.
++    Compact,
++    /// JSON format for log aggregation.
++    Json,
++}
++
++impl Default for OutputFormat {
++    fn default() -> Self {
++        #[cfg(debug_assertions)]
++        return Self::Pretty;
++        #[cfg(not(debug_assertions))]
++        return Self::Compact;
++    }
++}
++
++/// Logging configuration.
++#[derive(Debug, Clone, Serialize, Deserialize)]
++pub struct LogConfig {
++    /// Minimum log level.
++    pub level: LogLevel,
++    /// Output format.
++    pub format: OutputFormat,
++    /// Whether to include timestamps.
++    pub include_timestamp: bool,
++    /// Whether to include target/module names.
++    pub include_target: bool,
++    /// Whether to include thread names.
++    pub include_thread_id: bool,
++    /// Custom env filter (e.g., "info,my_crate=debug").
++    pub env_filter: Option<String>,
++}
++
++impl Default for LogConfig {
++    fn default() -> Self {
++        Self {
++            level: LogLevel::default(),
++            format: OutputFormat::default(),
++            include_timestamp: true,
++            include_target: true,
++            include_thread_id: false,
++            env_filter: None,
++        }
++    }
++}
++
++impl LogConfig {
++    /// Load from environment variables.
++    pub fn from_env() -> Self {
++        let level = std::env::var("RUST_LOG")
++            .ok()
++            .and_then(|v| LogLevel::from_env(&v))
++            .unwrap_or_default();
++
++        let format = std::env::var("LOG_FORMAT")
++            .ok()
++            .and_then(|v| match v.to_lowercase().as_str() {
++                "pretty" | "human" => Some(OutputFormat::Pretty),
++                "compact" | "short" => Some(OutputFormat::Compact),
++                "json" => Some(OutputFormat::Json),
++                _ => None,
++            })
++            .unwrap_or_default();
++
++        Self {
++            level,
++            format,
++            ..Default::default()
++        }
++    }
++}
+diff --git a/pheno-otel/archive/PhenoLang-observability-2026-06-20/crates/phenotype-logging/src/lib.rs b/pheno-otel/archive/PhenoLang-observability-2026-06-20/crates/phenotype-logging/src/lib.rs
+new file mode 100644
+index 0000000000..30a6834010
+--- /dev/null
++++ b/pheno-otel/archive/PhenoLang-observability-2026-06-20/crates/phenotype-logging/src/lib.rs
+@@ -0,0 +1,11 @@
++//! phenotype-logging
++
++use thiserror::Error;
++
++#[derive(Debug, Error)]
++pub enum Error {
++    #[error("{0}")]
++    Invalid(String),
++}
++
++pub type Result<T> = std::result::Result<T, Error>;
+diff --git a/pheno-otel/archive/PhenoLang-observability-2026-06-20/crates/phenotype-logging/src/otel.rs b/pheno-otel/archive/PhenoLang-observability-2026-06-20/crates/phenotype-logging/src/otel.rs
+new file mode 100644
+index 0000000000..a686147f95
+--- /dev/null
++++ b/pheno-otel/archive/PhenoLang-observability-2026-06-20/crates/phenotype-logging/src/otel.rs
+@@ -0,0 +1,89 @@
++//! OpenTelemetry integration.
++
++use opentelemetry_sdk::{runtime, trace as sdktrace};
++use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
++
++/// Initialize tracing with OpenTelemetry OTLP exporter.
++pub fn init_with_otel(service_name: &str, otlp_endpoint: &str) -> Result<(), OTelError> {
++    // Create OTLP exporter
++    let otlp_exporter = opentelemetry_otlp::SpanExporter::builder()
++        .with_tonic()
++        .with_endpoint(otlp_endpoint)
++        .build()
++        .map_err(|e| OTelError::ExportError(e.to_string()))?;
++
++    // Create tracer provider
++    let tracer_provider = opentelemetry_sdk::trace::TracerProvider::builder()
++        .with_batch_exporter(otlp_exporter, runtime::Tokio)
++        .with_resource(opentelemetry_sdk::Resource::new(vec![
++            opentelemetry::KeyValue::new("service.name", service_name),
++        ]))
++        .build();
++
++    let tracer = tracer_provider.tracer(service_name);
++
++    // Create OpenTelemetry tracing layer
++    let otel_layer = tracing_opentelemetry::layer().with_tracer(tracer);
++
++    // Initialize subscriber with OTLP
++    tracing_subscriber::registry()
++        .with(tracing_subscriber::EnvFilter::from_default_env())
++        .with(tracing_subscriber::fmt::layer())
++        .with(otel_layer)
++        .init();
++
++    Ok(())
++}
++
++/// Initialize OpenTelemetry with a custom resource.
++pub fn init_with_resource(
++    service_name: &str,
++    otlp_endpoint: &str,
++    attributes: Vec<(&str, &str)>,
++) -> Result<(), OTelError> {
++    let resource = opentelemetry_sdk::Resource::new(vec![
++        opentelemetry::KeyValue::new("service.name", service_name),
++    ])
++    .merge(&opentelemetry_sdk::Resource::new(
++        attributes
++            .into_iter()
++            .map(|(k, v)| opentelemetry::KeyValue::new(k, v))
++            .collect::<Vec<_>>(),
++    ));
++
++    let otlp_exporter = opentelemetry_otlp::SpanExporter::builder()
++        .with_tonic()
++        .with_endpoint(otlp_endpoint)
++        .build()
++        .map_err(|e| OTelError::ExportError(e.to_string()))?;
++
++    let tracer_provider = opentelemetry_sdk::trace::TracerProvider::builder()
++        .with_batch_exporter(otlp_exporter, runtime::Tokio)
++        .with_resource(resource)
++        .build();
++
++    let tracer = tracer_provider.tracer(service_name);
++
++    let otel_layer = tracing_opentelemetry::layer().with_tracer(tracer);
++
++    tracing_subscriber::registry()
++        .with(tracing_subscriber::EnvFilter::from_default_env())
++        .with(tracing_subscriber::fmt::layer())
++        .with(otel_layer)
++        .init();
++
++    Ok(())
++}
++
++/// OpenTelemetry errors.
++#[derive(Debug, thiserror::Error)]
++pub enum OTelError {
++    #[error("export error: {0}")]
++    ExportError(String),
++
++    #[error("configuration error: {0}")]
++    ConfigError(String),
++
++    #[error("runtime error: {0}")]
++    RuntimeError(String),
++}
+diff --git a/pheno-otel/archive/PhenoLang-observability-2026-06-20/crates/phenotype-logging/src/subscriber.rs b/pheno-otel/archive/PhenoLang-observability-2026-06-20/crates/phenotype-logging/src/subscriber.rs
+new file mode 100644
+index 0000000000..cd29b883de
+--- /dev/null
++++ b/pheno-otel/archive/PhenoLang-observability-2026-06-20/crates/phenotype-logging/src/subscriber.rs
+@@ -0,0 +1,53 @@
++//! Tracing subscriber initialization.
++
++use crate::config::{LogConfig, LogLevel, OutputFormat};
++
++/// Initialize the tracing subscriber with the given configuration.
++pub fn init(config: LogConfig) {
++    let env_filter = config
++        .env_filter
++        .as_deref()
++        .map(tracing_subscriber::EnvFilter::try_from_default_env)
++        .transpose()
++        .unwrap_or_else(|_| {
++            tracing_subscriber::EnvFilter::try_from_default_env()
++                .unwrap_or_else(|_| tracing_subscriber::EnvFilter::new("info"))
++        });
++
++    let layer = match config.format {
++        OutputFormat::Pretty => {
++            tracing_subscriber::fmt::layer()
++                .with_target(config.include_target)
++                .with_thread_ids(config.include_thread_id)
++                .with_file(true)
++                .with_line_number(true)
++        }
++        OutputFormat::Compact => {
++            tracing_subscriber::fmt::layer()
++                .with_target(config.include_target)
++                .with_thread_ids(config.include_thread_id)
++                .compact()
++        }
++        OutputFormat::Json => {
++            tracing_subscriber::fmt::layer()
++                .json()
++                .with_target(config.include_target)
++                .with_thread_ids(config.include_thread_id)
++        }
++    };
++
++    tracing_subscriber::registry()
++        .with(env_filter)
++        .with(layer)
++        .init();
++}
++
++/// Initialize with default configuration.
++pub fn init_default() {
++    init(LogConfig::default());
++}
++
++/// Initialize from environment variables.
++pub fn init_from_env() {
++    init(LogConfig::from_env());
++}
+diff --git a/pheno-otel/archive/PhenoLang-observability-2026-06-20/crates/phenotype-telemetry/Cargo.toml b/pheno-otel/archive/PhenoLang-observability-2026-06-20/crates/phenotype-telemetry/Cargo.toml
+new file mode 100644
+index 0000000000..b7b611b5de
+--- /dev/null
++++ b/pheno-otel/archive/PhenoLang-observability-2026-06-20/crates/phenotype-telemetry/Cargo.toml
+@@ -0,0 +1,16 @@
++[package]
++name = "phenotype-telemetry"
++version.workspace = true
++edition.workspace = true
++license.workspace = true
++[lib]
++path = "src/lib.rs"
++[dependencies]
++serde = { workspace = true, features = ["derive"] }
++serde_json.workspace = true
++thiserror.workspace = true
++chrono.workspace = true
++tracing.workspace = true
++tracing-subscriber.workspace = true
++[dev-dependencies]
++tokio.workspace = true
+diff --git a/pheno-otel/archive/PhenoLang-observability-2026-06-20/crates/phenotype-telemetry/src/lib.rs b/pheno-otel/archive/PhenoLang-observability-2026-06-20/crates/phenotype-telemetry/src/lib.rs
+new file mode 100644
+index 0000000000..0537eaeb93
+--- /dev/null
++++ b/pheno-otel/archive/PhenoLang-observability-2026-06-20/crates/phenotype-telemetry/src/lib.rs
+@@ -0,0 +1,445 @@
++//! # phenotype-telemetry
++//!
++//! Lightweight telemetry abstractions for Phenotype ecosystem.
++//!
++//! Provides traits for metrics, tracing, and structured logging that can be
++//! implemented by any backend (e.g., OpenTelemetry, Prometheus, etc.).
++//!
++//! # Example
++//!
++//! ```rust
++//! use phenotype_telemetry::{MetricsRecorder, SpanContext, TelemetryError};
++//!
++//! fn record_metrics(recorder: &dyn MetricsRecorder) {
++//!     recorder.increment_counter("requests_total", 1, &[]);
++//!     recorder.record_histogram("request_duration_ms", 42.0, &[]);
++//! }
++//! ```
++
++use serde::{Deserialize, Serialize};
++use thiserror::Error;
++
++// ---------------------------------------------------------------------------
++// Error
++// ---------------------------------------------------------------------------
++
++/// Errors that can occur during telemetry operations.
++#[derive(Debug, Error)]
++#[error(transparent)]
++pub struct TelemetryError {
++    #[from]
++    inner: Box<dyn std::error::Error + Send + Sync>,
++}
++
++impl TelemetryError {
++    /// Create a new telemetry error with a message.
++    pub fn new(msg: impl Into<String>) -> Self {
++        Self {
++            inner: msg.into().into(),
++        }
++    }
++}
++
++// ---------------------------------------------------------------------------
++// Metrics
++// ---------------------------------------------------------------------------
++
++/// Trait for recording metrics.
++///
++/// Implementors can forward to Prometheus, OpenTelemetry, StatsD, etc.
++pub trait MetricsRecorder: Send + Sync {
++    /// Increment a counter by `value`.
++    fn increment_counter(&self, name: &str, value: u64, labels: &[(&str, &str)]);
++
++    /// Record a histogram value.
++    fn record_histogram(&self, name: &str, value: f64, labels: &[(&str, &str)]);
++
++    /// Record a gauge value.
++    fn record_gauge(&self, name: &str, value: f64, labels: &[(&str, &str)]);
++}
++
++/// No-op metrics recorder for testing or disabled telemetry.
++pub struct NoopMetrics;
++
++impl NoopMetrics {
++    pub fn new() -> Self {
++        Self
++    }
++}
++
++impl Default for NoopMetrics {
++    fn default() -> Self {
++        Self::new()
++    }
++}
++
++impl MetricsRecorder for NoopMetrics {
++    fn increment_counter(&self, _name: &str, _value: u64, _labels: &[(&str, &str)]) {}
++    fn record_histogram(&self, _name: &str, _value: f64, _labels: &[(&str, &str)]) {}
++    fn record_gauge(&self, _name: &str, _value: f64, _labels: &[(&str, &str)]) {}
++}
++
++// ---------------------------------------------------------------------------
++// Tracing
++// ---------------------------------------------------------------------------
++
++/// Context for a distributed trace span.
++#[derive(Clone, Debug, Default, Serialize, Deserialize)]
++pub struct SpanContext {
++    /// Trace identifier (128-bit, hex-encoded).
++    pub trace_id: String,
++    /// Span identifier (64-bit, hex-encoded).
++    pub span_id: String,
++    /// Parent span identifier, if any.
++    pub parent_span_id: Option<String>,
++}
++
++impl SpanContext {
++    /// Create a new root span context with generated IDs.
++    pub fn new(trace_id: impl Into<String>, span_id: impl Into<String>) -> Self {
++        Self {
++            trace_id: trace_id.into(),
++            span_id: span_id.into(),
++            parent_span_id: None,
++        }
++    }
++
++    /// Create a child span context.
++    pub fn child(&self, span_id: impl Into<String>) -> Self {
++        Self {
++            trace_id: self.trace_id.clone(),
++            span_id: span_id.into(),
++            parent_span_id: Some(self.span_id.clone()),
++        }
++    }
++
++    /// Check if this is a no-op/empty context.
++    pub fn is_noop(&self) -> bool {
++        self.trace_id.is_empty() || self.trace_id == "00000000000000000000000000000000"
++    }
++}
++
++/// Trait for distributed tracing.
++pub trait Tracer: Send + Sync {
++    /// Start a new span.
++    fn start_span(&self, name: &str, parent: Option<&SpanContext>) -> SpanContext;
++
++    /// End a span.
++    fn end_span(&self, ctx: &SpanContext);
++
++    /// Add an event to a span.
++    fn add_span_event(&self, ctx: &SpanContext, name: &str, attrs: &[(&str, &str)]);
++
++    /// Record an error in a span.
++    fn set_span_error(&self, ctx: &SpanContext, error: &str);
++}
++
++/// No-op tracer for testing or disabled telemetry.
++pub struct NoopTracer;
++
++impl NoopTracer {
++    pub fn new() -> Self {
++        Self
++    }
++}
++
++impl Default for NoopTracer {
++    fn default() -> Self {
++        Self::new()
++    }
++}
++
++impl Tracer for NoopTracer {
++    fn start_span(&self, _name: &str, _parent: Option<&SpanContext>) -> SpanContext {
++        SpanContext::default()
++    }
++
++    fn end_span(&self, _ctx: &SpanContext) {}
++    fn add_span_event(&self, _ctx: &SpanContext, _name: &str, _attrs: &[(&str, &str)]) {}
++    fn set_span_error(&self, _ctx: &SpanContext, _error: &str) {}
++}
++
++// ---------------------------------------------------------------------------
++// Logging
++// ---------------------------------------------------------------------------
++
++/// Log severity levels.
++#[derive(Clone, Copy, Debug, Serialize, Deserialize, PartialEq, Eq)]
++#[serde(rename_all = "lowercase")]
++pub enum LogLevel {
++    Trace,
++    Debug,
++    Info,
++    Warn,
++    Error,
++}
++
++impl std::str::FromStr for LogLevel {
++    type Err = ();
++
++    fn from_str(s: &str) -> Result<Self, Self::Err> {
++        Ok(match s.to_lowercase().as_str() {
++            "trace" => Self::Trace,
++            "debug" => Self::Debug,
++            "info" => Self::Info,
++            "warn" | "warning" => Self::Warn,
++            "error" | "err" => Self::Error,
++            _ => Self::Info,
++        })
++    }
++}
++
++impl std::fmt::Display for LogLevel {
++    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
++        match self {
++            Self::Trace => write!(f, "trace"),
++            Self::Debug => write!(f, "debug"),
++            Self::Info => write!(f, "info"),
++            Self::Warn => write!(f, "warn"),
++            Self::Error => write!(f, "error"),
++        }
++    }
++}
++
++/// A structured log entry.
++#[derive(Clone, Debug, Serialize, Deserialize)]
++pub struct LogEntry {
++    pub level: LogLevel,
++    pub message: String,
++    pub timestamp: chrono::DateTime<chrono::Utc>,
++    pub fields: std::collections::HashMap<String, serde_json::Value>,
++    pub span_context: Option<SpanContext>,
++}
++
++impl LogEntry {
++    /// Create a new log entry.
++    pub fn new(level: LogLevel, message: impl Into<String>) -> Self {
++        Self {
++            level,
++            message: message.into(),
++            timestamp: chrono::Utc::now(),
++            fields: std::collections::HashMap::new(),
++            span_context: None,
++        }
++    }
++
++    /// Add a field to the entry.
++    pub fn with_field(mut self, key: impl Into<String>, value: impl Serialize) -> Self {
++        if let Ok(v) = serde_json::to_value(value) {
++            self.fields.insert(key.into(), v);
++        }
++        self
++    }
++
++    /// Attach a span context.
++    pub fn with_span(mut self, ctx: SpanContext) -> Self {
++        self.span_context = Some(ctx);
++        self
++    }
++}
++
++/// Convenience constructors.
++impl LogEntry {
++    pub fn trace(msg: impl Into<String>) -> Self {
++        Self::new(LogLevel::Trace, msg)
++    }
++    pub fn debug(msg: impl Into<String>) -> Self {
++        Self::new(LogLevel::Debug, msg)
++    }
++    pub fn info(msg: impl Into<String>) -> Self {
++        Self::new(LogLevel::Info, msg)
++    }
++    pub fn warn(msg: impl Into<String>) -> Self {
++        Self::new(LogLevel::Warn, msg)
++    }
++    pub fn error(msg: impl Into<String>) -> Self {
++        Self::new(LogLevel::Error, msg)
++    }
++}
++
++/// Trait for structured logging.
++pub trait Logger: Send + Sync {
++    /// Log a structured entry.
++    fn log(&self, entry: &LogEntry);
++
++    /// Log at info level.
++    fn log_info(&self, msg: &str);
++
++    /// Log at warn level.
++    fn log_warn(&self, msg: &str);
++
++    /// Log at error level.
++    fn log_error(&self, msg: &str);
++}
++
++/// No-op logger for testing or disabled telemetry.
++pub struct NoopLogger;
++
++impl NoopLogger {
++    pub fn new() -> Self {
++        Self
++    }
++}
++
++impl Default for NoopLogger {
++    fn default() -> Self {
++        Self::new()
++    }
++}
++
++impl Logger for NoopLogger {
++    fn log(&self, _entry: &LogEntry) {}
++    fn log_info(&self, _msg: &str) {}
++    fn log_warn(&self, _msg: &str) {}
++    fn log_error(&self, _msg: &str) {}
++}
++
++// ---------------------------------------------------------------------------
++// Telemetry trait (combined interface)
++// ---------------------------------------------------------------------------
++
++/// Combined telemetry interface.
++pub trait Telemetry: MetricsRecorder + Tracer + Logger {}
++
++impl<T: MetricsRecorder + Tracer + Logger> Telemetry for T {}
++
++/// No-op telemetry implementation.
++pub struct NoopTelemetry {
++    metrics: NoopMetrics,
++    tracer: NoopTracer,
++    logger: NoopLogger,
++}
++
++impl NoopTelemetry {
++    pub fn new() -> Self {
++        Self {
++            metrics: NoopMetrics,
++            tracer: NoopTracer,
++            logger: NoopLogger,
++        }
++    }
++}
++
++impl Default for NoopTelemetry {
++    fn default() -> Self {
++        Self::new()
++    }
++}
++
++impl MetricsRecorder for NoopTelemetry {
++    fn increment_counter(&self, name: &str, value: u64, labels: &[(&str, &str)]) {
++        self.metrics.increment_counter(name, value, labels)
++    }
++    fn record_histogram(&self, name: &str, value: f64, labels: &[(&str, &str)]) {
++        self.metrics.record_histogram(name, value, labels)
++    }
++    fn record_gauge(&self, name: &str, value: f64, labels: &[(&str, &str)]) {
++        self.metrics.record_gauge(name, value, labels)
++    }
++}
++
++impl Tracer for NoopTelemetry {
++    fn start_span(&self, name: &str, parent: Option<&SpanContext>) -> SpanContext {
++        self.tracer.start_span(name, parent)
++    }
++    fn end_span(&self, ctx: &SpanContext) {
++        self.tracer.end_span(ctx)
++    }
++    fn add_span_event(&self, ctx: &SpanContext, name: &str, attrs: &[(&str, &str)]) {
++        self.tracer.add_span_event(ctx, name, attrs)
++    }
++    fn set_span_error(&self, ctx: &SpanContext, error: &str) {
++        self.tracer.set_span_error(ctx, error)
++    }
++}
++
++impl Logger for NoopTelemetry {
++    fn log(&self, entry: &LogEntry) {
++        self.logger.log(entry)
++    }
++    fn log_info(&self, msg: &str) {
++        self.logger.log_info(msg)
++    }
++    fn log_warn(&self, msg: &str) {
++        self.logger.log_warn(msg)
++    }
++    fn log_error(&self, msg: &str) {
++        self.logger.log_error(msg)
++    }
++}
++
++// ---------------------------------------------------------------------------
++// Tests
++// ---------------------------------------------------------------------------
++
++#[cfg(test)]
++mod tests {
++    use super::*;
++    use std::str::FromStr;
++
++    #[test]
++    fn test_log_level_from_str() {
++        assert_eq!(LogLevel::from_str("debug"), Ok(LogLevel::Debug));
++        assert_eq!(LogLevel::from_str("DEBUG"), Ok(LogLevel::Debug));
++        assert_eq!(LogLevel::from_str("warning"), Ok(LogLevel::Warn));
++        assert_eq!(LogLevel::from_str("err"), Ok(LogLevel::Error));
++        assert_eq!(LogLevel::from_str("unknown"), Ok(LogLevel::Info));
++    }
++
++    #[test]
++    fn test_log_entry_fluent() {
++        let entry = LogEntry::info("test message")
++            .with_field("user_id", "42")
++            .with_field("count", 5);
++
++        assert_eq!(entry.level, LogLevel::Info);
++        assert_eq!(entry.message, "test message");
++        assert_eq!(entry.fields.get("user_id").unwrap(), "42");
++        assert_eq!(entry.fields.get("count").unwrap(), &5);
++    }
++
++    #[test]
++    fn test_span_context_hierarchy() {
++        let root = SpanContext::new("trace-123", "span-1");
++        assert!(root.parent_span_id.is_none());
++
++        let child = root.child("span-2");
++        assert_eq!(child.trace_id, "trace-123");
++        assert_eq!(child.span_id, "span-2");
++        assert_eq!(child.parent_span_id, Some("span-1".to_string()));
++    }
++
++    #[test]
++    fn test_span_context_is_noop() {
++        let noop = SpanContext::default();
++        assert!(noop.is_noop());
++
++        let valid = SpanContext::new("abc", "def");
++        assert!(!valid.is_noop());
++    }
++
++    #[test]
++    fn test_noop_telemetry() {
++        let telemetry = NoopTelemetry::new();
++
++        telemetry.increment_counter("test", 1, &[]);
++        telemetry.record_histogram("test", 42.0, &[]);
++        telemetry.record_gauge("test", 1.0, &[]);
++
++        let ctx = telemetry.start_span("test", None);
++        telemetry.add_span_event(&ctx, "event", &[("k", "v")]);
++        telemetry.set_span_error(&ctx, "oops");
++        telemetry.end_span(&ctx);
++
++        telemetry.log_info("hello");
++        telemetry.log_warn("warn");
++        telemetry.log_error("error");
++        telemetry.log(&LogEntry::info("struct"));
++    }
++
++    #[test]
++    fn test_telemetry_error() {
++        let err = TelemetryError::new("test error");
++        assert!(err.to_string().contains("test error"));
++    }
++}
+-- 
+2.50.1 (Apple Git-155)
+

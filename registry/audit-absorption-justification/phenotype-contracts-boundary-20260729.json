@@ -1,0 +1,69 @@
+{
+  "audit": "phenotype-contracts-boundary-20260729",
+  "audit_date": "2026-07-29",
+  "sources": [
+    {
+      "repository": "https://github.com/KooshaPari/phenotype-contracts",
+      "default_branch": "main",
+      "remote_sha": "cc8f34ed34a3f1ae2ba7edd6810a902e51738693",
+      "private": false,
+      "archived": false,
+      "license": null,
+      "observed_at": "2026-07-29T00:24:02Z",
+      "surface": [
+        "README.md",
+        "provider-models/provider-model.schema.json",
+        "provider-models/oauth-refresh-policy.schema.json",
+        "provider-models/resilience-policy.schema.json"
+      ],
+      "decision": "AFFIRM",
+      "target": null,
+      "rationale": "This is the neutral language-agnostic provider/model contract and policy-spec source of truth. Its schemas are deliberately consumed by forgecode, OmniRoute, and cliproxyapi-plusplus rather than being a runtime library. Keep the repository as the contracts spine; do not copy language-specific implementations into it."
+    },
+    {
+      "repository": "https://github.com/KooshaPari/PhenoContracts",
+      "default_branch": "main",
+      "remote_sha": "39afa275e15bc1191dfc18f123e214ebfcf5d715",
+      "private": false,
+      "archived": false,
+      "license": "MIT",
+      "observed_at": "2026-07-29T00:24:10Z",
+      "surface": [
+        "ports/contract_verifier.ts",
+        "ports/adapters/prusti.ts",
+        "ports/adapters/kani.ts",
+        "ports/adapters/coq.ts",
+        "ports/tests/contract_verifier.test.ts",
+        "rust/crates/phenotype-contracts",
+        "rust/crates/phenotype-port-interfaces",
+        "rust/crates/phenotype-port-traits",
+        "LICENSE"
+      ],
+      "decision": "KEEP_STANDALONE_PENDING_BOUNDARY_REVIEW",
+      "target": null,
+      "rationale": "The active remote still contains a polyglot formal-verification workspace. The historical ABSORB claim naming PhenoSpecs and TestingKit has no recorded target commit or parity artifact, so it cannot be treated as completed. Preserve the source and historical claim while requiring a future manifest/ancestry/API/test-parity review before any split, copy, archive, or delete operation."
+    }
+  ],
+  "prior_registry_conflicts": [
+    "projects/phenotype-contracts.json said queued/KEEP despite the live remote being active.",
+    "projects/PhenoContracts.json said ABSORB into PhenoSpecs + TestingKit while the source remote remained active and non-archived.",
+    "catalog/registry.yaml and registry/disposition-index.json retain historical archived/deleted/absorbed rows for both names; those records are preserved as history, not treated as current remote evidence."
+  ],
+  "boundary_map": {
+    "phenotype-contracts": "canonical neutral schema/policy SSOT",
+    "PhenoContracts": "formal-verification ports/adapters and Rust contract crates",
+    "PhenoSpecs": "specification authoring/governance tooling; no proven source migration from PhenoContracts",
+    "TestingKit": "runtime verification/test ownership candidate; no proven source migration from PhenoContracts"
+  },
+  "preservation": {
+    "source_mutation": false,
+    "deletion": false,
+    "force_push": false,
+    "restore": "git clone https://github.com/KooshaPari/phenotype-contracts.git and git clone https://github.com/KooshaPari/PhenoContracts.git; verify the recorded main SHAs"
+  },
+  "follow_up": [
+    "Add an explicit license to phenotype-contracts before broad downstream reuse.",
+    "Run manifest, ancestry, API, and test-parity analysis before reconsidering PhenoContracts consolidation.",
+    "Reconcile historical catalog/disposition rows only through a separate provenance-preserving governance pass."
+  ]
+}

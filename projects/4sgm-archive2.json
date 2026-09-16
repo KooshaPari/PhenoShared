@@ -1,0 +1,16 @@
+{
+  "name": "4sgm-archive2",
+  "languages": [],
+  "primary_language": "archive",
+  "status": "retired",
+  "has_readme": true,
+  "type": "archive",
+  "path": "repos/4sgm-archive2",
+  "disposition": "ARCHIVE",
+  "wave": "2026-07-23-boundary-audit",
+  "proposed_target": "4sgm",
+  "proposed_target_repo": "4sgm",
+  "proposed_target_path": ".",
+  "absorption_note": "Archive-only recovery of deleted 4sgm; do not treat as active source.",
+  "note": "Remote preservation record for deleted source history."
+}

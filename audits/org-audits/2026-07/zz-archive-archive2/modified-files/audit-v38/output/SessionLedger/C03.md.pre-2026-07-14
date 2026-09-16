@@ -1,0 +1,113 @@
+CLUSTER_START cluster=C03 repo=SessionLedger pillars=L30 date=2026-07-04
+
+# Profile: Rust workspace (sl-daemon compiler + sl-viewer Dioxus 0.6 desktop app).
+
+### L30.1 — Spec & FR Clarity
+score: 0  glyph: ✗
+evidence:
+  - MISSING: docs/functional_requirements.md / FUNCTIONAL_REQUIREMENTS.md (grep → 0)
+  - README.md (76 lines) describes the tool but is not an FR catalog
+gaps:
+  - No machine-readable FR-NNN catalog — effort: M
+soft_goal_delta: not started
+
+### L30.2 — Task Decomposability
+score: 1  glyph: △
+evidence:
+  - No PLAN.md/WORK_DAG.md; crate split (sl-daemon/sl-viewer) implies units but no tagged DAG backlog in-repo
+gaps:
+  - No effort-tagged task DAG referencing FR-IDs — effort: M
+soft_goal_delta: not started
+
+### L30.3 — Test-as-Guardrail Coverage
+score: 3  glyph: ✓
+evidence:
+  - 86 files carry #[test]/#[tokio::test]
+  - .github/workflows/qgate.yml — quality gate; nightly-mutants.yml — mutation testing (strong signal)
+  - .github/workflows/ci.yml runs the suite
+gaps:
+  - Coverage threshold config not confirmed in-repo — effort: S
+soft_goal_delta: mutation testing wired — above-baseline
+
+### L30.4 — Docs-as-Agent-Context
+score: 1  glyph: △
+evidence:
+  - README.md present (76 lines) but short; no AGENTS.md (see L30.11); no llms.txt
+gaps:
+  - No AGENTS.md / llms.txt agent-context entrypoint — effort: S
+soft_goal_delta: README only
+
+### L30.5 — Build & Setup Hermetics
+score: 2  glyph: ~
+evidence:
+  - Cargo.toml:9 rust-version = "1.85" (MSRV pinned)
+  - README.md:37 documents `cargo install dioxus-cli` setup
+  - No .env.example / rust-toolchain.toml confirmed
+gaps:
+  - No rust-toolchain.toml pin / .env.example — effort: S
+soft_goal_delta: MSRV in manifest; toolchain file missing
+
+### L30.6 — User-Story Gap Detection Readiness
+score: 1  glyph: △
+evidence:
+  - grep todo!()/unimplemented!() → 0 (no reachable stubs)
+  - sl-viewer has an empty-state (history_tab.rs:199) — partial friction surface
+  - MISSING: USER_JOURNEYS.md / journey tests
+gaps:
+  - No user-journey definitions / outside-in journey tests — effort: M
+soft_goal_delta: empty-state present; journeys absent
+
+### L30.7 — Visual / Creative Polish Gap Detection Readiness
+score: 1  glyph: △
+evidence:
+  - sl-viewer is a Dioxus GUI (styled, 127 style:/class: usages) but NO VISUAL_SPEC.md / docs/visual/ and no golden/screenshot tests
+gaps:
+  - No visual acceptance spec for the viewer — effort: M
+soft_goal_delta: not started
+
+### L30.8 — Autonomous PR Quality
+score: 1  glyph: △
+evidence:
+  - MISSING: .github/PULL_REQUEST_TEMPLATE.md
+  - CI gates strong (ci/qgate/nightly-mutants) but no PR template with required sections
+gaps:
+  - No PR template (What/Why/How-tested/FR-IDs/Risk/Rollback) — effort: S
+soft_goal_delta: strong CI gates; template missing
+
+### L30.9 — Conflict & Concurrency Safety
+score: 2  glyph: ~
+evidence:
+  - Workspace crate isolation (sl-daemon/sl-viewer) supports parallel work
+  - .claude/worktrees/ present (worktree workflow in practice)
+gaps:
+  - No AGENTS.md documenting the worktree/parallel workflow — effort: S
+soft_goal_delta: worktrees used; undocumented
+
+### L30.10 — Feedback Loop Speed
+score: 2  glyph: ~
+evidence:
+  - Cargo workspace enables `cargo test -p <crate>` scoped loops
+  - qgate.yml provides CI feedback
+gaps:
+  - No measured check/test timing; no nextest/sccache config confirmed — effort: S
+soft_goal_delta: scoped crates; no measured budget
+
+### L30.11 — Agent Context Entrypoint
+score: 0  glyph: ✗
+evidence:
+  - MISSING: AGENTS.md at repo root (and no llms.txt sibling)
+gaps:
+  - Add AGENTS.md (build/test/lint/key-files/forbidden-ops/gotchas) — effort: S
+soft_goal_delta: not started
+
+### L30.12 — Story-Gap & Friction Detection Tooling
+score: 0  glyph: ✗
+evidence:
+  - MISSING: docs/friction-log.md AND .github/ISSUE_TEMPLATE/user-friction.yml
+  - No FR-coverage/traceability tooling in CI
+gaps:
+  - No friction-log / user-friction intake / FR-gap report — effort: M
+soft_goal_delta: not started
+
+CLUSTER_TOTAL score=14/36 pct=39% grade=F
+CLUSTER_DONE cluster=C03 repo=SessionLedger

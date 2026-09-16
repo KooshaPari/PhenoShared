@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "recorded_on": "2026-08-16T01:37:00Z",
+  "purpose": "Immutable point-in-time Beads cockpit ledger custody cursor; not live state, rendered output, publication, promotion, merge, archive, or retirement evidence.",
+  "source_commit_parent": "bb7718a0dad30076e29135ceb6ca2c59d1914db1",
+  "source_paths": {
+    "beads_log": "/Users/kooshapari/CodeProjects/Phenotype/repos/phenotype-dag/beads.jsonl"
+  },
+  "copied_files": [
+    {
+      "path": "beads.jsonl",
+      "source_path": "/Users/kooshapari/CodeProjects/Phenotype/repos/phenotype-dag/beads.jsonl",
+      "sha256": "6b5dd8b9286c7d4ac491eb35146df5eef51f9d2c8cf12dd2309d32794ee34c70",
+      "bytes": 1025156,
+      "records": 1398
+    }
+  ],
+  "excluded_artifacts_and_writers": [
+    {
+      "path": "/Users/kooshapari/CodeProjects/Phenotype/repos/cockpit/bead-cockpit-20260809-191131-f5ca38f7.html",
+      "reason": "Derived rendered output; excluded from source-only custody."
+    }
+  ],
+  "validation_checks": [
+    "strict JSON parsing of copied beads.jsonl",
+    "SHA-256 and byte-size parity against provenance-manifest.json",
+    "git diff --check",
+    "direct remote ref verification",
+    "second-provider R2 upload and streamed hash verification"
+  ]
+}

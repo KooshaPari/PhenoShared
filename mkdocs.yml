@@ -1,0 +1,141 @@
+# MkDocs Configuration for PhenoHandbook
+# Living documentation site for patterns & guidelines
+
+site_name: PhenoHandbook
+site_description: Patterns, anti-patterns, guidelines, and best practices for the Phenotype ecosystem
+site_author: Phenotype Team
+site_url: https://phenotype.dev/handbook
+
+# Repository
+repo_name: KooshaPari/PhenoHandbook
+repo_url: https://github.com/KooshaPari/PhenoHandbook
+
+# Theme
+theme:
+  name: material
+  palette:
+    - scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.expand
+    - navigation.path
+    - navigation.top
+    - search.suggest
+    - search.highlight
+    - content.tabs.link
+    - content.code.copy
+
+# Plugins
+plugins:
+  - search
+  - minify:
+      minify_html: true
+
+# Extensions
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - tables
+  - attr_list
+  - md_in_html
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator:
+        !!python/name:material.extensions.emoji.to_svg # Navigation
+
+
+nav:
+  - Home: index.md
+  - Patterns:
+      - Architecture:
+          - patterns/architecture/index.md
+          - Hexagonal: patterns/architecture/hexagonal.md
+          - Clean Architecture: patterns/architecture/clean.md
+      - Authentication:
+          - patterns/auth/index.md
+          - OAuth PKCE: patterns/auth/oauth-pkce.md
+          - JWT Management: patterns/auth/jwt-management.md
+      - Caching:
+          - patterns/caching/index.md
+          - Multi-Tier: patterns/caching/multi-tier.md
+          - Cache-Aside: patterns/caching/cache-aside.md
+      - Async:
+          - patterns/async/index.md
+          - Actor Model: patterns/async/actor-model.md
+          - CQRS: patterns/async/cqrs.md
+      - Agents:
+          - patterns/agents/index.md
+          - Orchestration: patterns/agents/orchestration.md
+      - Observability:
+          - patterns/observability/index.md
+          - Distributed Tracing: patterns/observability/tracing.md
+      - CLI:
+          - patterns/cli/index.md
+          - Command Pattern: patterns/cli/command-pattern.md
+      - Storage:
+          - patterns/storage/index.md
+      - Testing:
+          - patterns/testing/index.md
+          - BDD: patterns/testing/bdd.md
+          - Property-Based: patterns/testing/property-based.md
+      - Governance:
+          - MCP Fork Selection: patterns/governance/mcp-fork-selection.md
+          - Retired MCP repos: patterns/governance/retired-mcp-repos.md
+  - Anti-Patterns:
+      - anti-patterns/README.md
+      - MCP:
+          - Language-bucket SDK: anti-patterns/language-bucket-sdk.md
+          - Mirror to empty repo: anti-patterns/mirror-to-empty-repo.md
+      - Security:
+          - anti-patterns/security/plaintext-tokens.md
+          - anti-patterns/security/hardcoded-secrets.md
+      - Architecture:
+          - anti-patterns/architecture/big-ball-of-mud.md
+      - Performance:
+          - anti-patterns/performance/n-plus-1.md
+  - Guidelines:
+      - guidelines/index.md
+      - Rust: guidelines/rust.md
+      - Go: guidelines/go.md
+      - TypeScript: guidelines/typescript.md
+      - Python: guidelines/python.md
+      - Code Review: guidelines/code-review.md
+  - Methodologies:
+      - methodologies/index.md
+      - TDD Workflow: methodologies/tdd.md
+      - BDD Workflow: methodologies/bdd.md
+      - DDD Workflow: methodologies/ddd.md
+      - SDD Workflow: methodologies/sdd.md
+  - Checklists:
+      - checklists/index.md
+      - Pre-Deployment: checklists/deployment.md
+      - Security Review: checklists/security.md
+      - Testing: checklists/testing.md
+
+# Extra
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/KooshaPari
+  version:
+    provider: mike
+
+# Copyright
+copyright: Copyright &copy; 2026 Phenotype Project

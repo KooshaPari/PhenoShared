@@ -1,0 +1,63 @@
+{
+  "audit_id": "phenospecs-boundary-20260726",
+  "captured_at": "2026-07-26T10:46:00Z",
+  "scope": "KooshaPari/PhenoSpecs remote boundary and existing registry claims",
+  "remote": {
+    "url": "https://github.com/KooshaPari/PhenoSpecs",
+    "visibility": "public",
+    "archived": false,
+    "fork": false,
+    "default_branch": "main",
+    "default_sha": "8852c0101c51f97ac015fea97f35d2caf79baec6",
+    "head_commit": "merge: import PhenoContracts",
+    "created_at": "2026-04-04T08:20:58Z",
+    "pushed_at": "2026-07-25T15:42:30Z",
+    "github_disk_kb": 1926,
+    "branch_count": 30,
+    "tracked_blob_count": 568,
+    "license": "MIT OR Apache-2.0",
+    "topics": ["adr", "api-contracts", "phenotype-org", "registry", "specs"]
+  },
+  "source_evidence": {
+    "readme_role": "ADRs / contracts; canonical source for architecture decision records, API contracts, and specifications",
+    "agents_role": "spec template spine; documentation and registry data only; no runtime, SDK, library, or service",
+    "top_level_surfaces": [
+      "adrs/",
+      "specs/",
+      "registry.yaml",
+      "archive/",
+      "docs/",
+      "research/",
+      "LICENSE",
+      "LICENSE-MIT",
+      "LICENSE-APACHE"
+    ],
+    "governance_spine": {
+      "phenotype-registry": "INDEX",
+      "PhenoSpecs": "ADRs / contracts",
+      "PhenoHandbook": "CONVENTIONS",
+      "phenotype-org-governance": "ENFORCEMENT"
+    },
+    "traceability_boundary": "registry.yaml is explicitly a spec-to-implementation traceability index; ECOSYSTEM_MAP.md in phenotype-registry remains the ecosystem index"
+  },
+  "prior_registry_claim": {
+    "existing_row": "projects/PhenoSpecs.json",
+    "prior_disposition": "AFFIRM",
+    "prior_absorbed_into": "phenotype-registry+papers",
+    "prior_audit_artifact": "PhenoSpecs-2026-06-25.md",
+    "result": "stale_or_unsupported",
+    "contradiction": "The live repository and its role documentation establish a distinct canonical ADR/contract/spec boundary; no source merge or parity evidence authorizes absorption."
+  },
+  "decision": {
+    "disposition": "KEEP_CANONICAL",
+    "target": "PhenoSpecs",
+    "reason": "Retain the repository as the canonical specification and governance-contract source. Link it from phenotype-registry without copying or absorbing its source history.",
+    "next_gate": "Refresh stale traceability entries against ECOSYSTEM_MAP.md and add explicit cross-links only where implementation parity is proven."
+  },
+  "actions_taken": [
+    "No source files, branches, worktrees, remotes, or history were deleted, reset, archived, or rewritten.",
+    "No local PhenoSpecs checkout was found under the current repos container; no local-only work required recovery capture.",
+    "Remote facts were read through GitHub API and the exact default-branch SHA was recorded for provenance."
+  ],
+  "registry_author": "phenotype-registry (boundary audit)"
+}

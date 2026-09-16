@@ -1,0 +1,29 @@
+{
+  "id": "rename-pheno-dag-to-phenotype-dag-core-2026-09-01",
+  "name": "phenotype-dag-core (formerly pheno-dag)",
+  "type": "rename-tombstone",
+  "audit_date": "2026-09-01",
+  "old_path": "crates/pheno-dag",
+  "new_path": "crates/phenotype-dag-core",
+  "old_package_name": "pheno-dag",
+  "new_package_name": "phenotype-dag-core",
+  "reason": "Name collision with the now-deleted KooshaPari/phenodag (Go multi-agent DAG, fully absorbed into Tracera spec 008 + AgilePlus mirror). The Rust DAG foundation here was extracted from BytePort per its Cargo.toml and is unrelated to the Go product.",
+  "scope": "phenotype-registry",
+  "files_renamed": [
+    "crates/pheno-dag → crates/phenotype-dag-core",
+    "ADR-dag-duplication.md → ADR-dag-collision-phenodag-phenodag-2026-09-01.md",
+    "crates/phenotype-dag-core/Cargo.toml: name = \"pheno-dag\" → name = \"phenotype-dag-core\"",
+    "crates/phenotype-dag-core/src/lib.rs: doc-comments updated",
+    "crates/phenotype-dag-core/src/serialize.rs: doctest imports updated (pheno_dag:: → phenotype_dag_core::)",
+    "Cargo.toml (workspace): members entry updated",
+    "docs/adrs/ADR-ECO-023-sdk-consolidation.md: prose updated"
+  ],
+  "external_consumers": "NONE — verified across all KooshaPari repos via search/code API; no Cargo.toml depends on pheno-dag from outside phenotype-registry",
+  "internal_compile": "cargo check --workspace passes cleanly (phenotype-dag-core v0.1.0 compiles)",
+  "adr": "ADR-dag-collision-phenodag-phenodag-2026-09-01.md",
+  "registry_pr": "phenotype-registry#543",
+  "registry_version": "v1.6.83 → v1.6.84",
+  "disposition": "TOMBSTONE_RENAME",
+  "executed_by": "Forge (Audit)",
+  "execution_date": "2026-09-01"
+}

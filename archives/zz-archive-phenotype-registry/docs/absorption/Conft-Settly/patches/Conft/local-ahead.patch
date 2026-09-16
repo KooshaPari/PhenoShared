@@ -1,0 +1,127 @@
+From ea9d0bed5bcdd41bca92d443c20b35de61ae8a22 Mon Sep 17 00:00:00 2001
+From: Recovery Script <recovery@phenotype.local>
+Date: Sat, 20 Jun 2026 03:54:39 -0700
+Subject: [PATCH] chore: tier-0 hygiene snapshot 2026-06-20
+
+---
+ SPEC.md              | 32 ++++++++++++++++++++++++++++++++
+ WORKLOG.md           |  8 ++++++++
+ docs/intent/Conft.md | 22 +++++++++++-----------
+ llms.txt             | 12 ++++++++++++
+ 4 files changed, 63 insertions(+), 11 deletions(-)
+ create mode 100644 SPEC.md
+ create mode 100644 WORKLOG.md
+ create mode 100644 llms.txt
+
+diff --git a/SPEC.md b/SPEC.md
+new file mode 100644
+index 0000000..1f503aa
+--- /dev/null
++++ b/SPEC.md
+@@ -0,0 +1,32 @@
++# Conft — Specification
++
++**Version:** 0.1.0
++**Status:** ARCHIVED
++**Last Updated:** 2026-06-19
++
++## Purpose
++
++Conft was the canonical TypeScript configuration edge layer for the Phenotype
++organization, providing Zod-validated config bindings. All content has been
++absorbed into Configra.
++
++## History
++
++- **Created:** 2026-06-15 (as part of ADR-022 Rust/TS edge split)
++- **Absorbed:** 2026-06-18 (ADR-031 / L5-111)
++- **Contents:** TypeScript `@phenotype/config-ts` package, Zod schemas,
++  Taskfile, E2E suite, SLSA attestation
++
++## Migration
++
++All content migrated to `KooshaPari/Configra`:
++- `typescript/packages/conft/` → Configra `typescript/packages/conft/`
++- Zod schemas → Configra `crates/config-schema/` (adapted to Rust)
++- E2E suite → Configra test infrastructure
++- ADR governance → Configra `docs/`
++
++## Related ADRs
++
++- ADR-022 — config consolidation (Rust/TS edge split)
++- ADR-031 — Configra absorb decision
++- ADR-035 — Configra migration gates
+diff --git a/WORKLOG.md b/WORKLOG.md
+new file mode 100644
+index 0000000..4ef1c61
+--- /dev/null
++++ b/WORKLOG.md
+@@ -0,0 +1,8 @@
++# Worklog — Conft
++
++**Schema:** v2.1
++**Device:** macbook
++
++| Date | Task ID | Layer | Action | Files | Notes |
++|------|---------|-------|--------|-------|-------|
++| 2026-06-19 | side-05-178 | governance | add | SPEC.md, WORKLOG.md, llms.txt | Meta-bundle (T33 v9); repos archived after absorption |
+diff --git a/docs/intent/Conft.md b/docs/intent/Conft.md
+index 1f8b9c7..25986d2 100644
+--- a/docs/intent/Conft.md
++++ b/docs/intent/Conft.md
+@@ -27,23 +27,23 @@ device: macbook
+ 
+ | Date | Source | File | Tag |
+ | ---- | ------ | ---- | --- |
+-| ? | claude-code | `docs/curated-prompts/claude-code/unknown/102090c327198db9.md` | narrative |
+-| ? | claude-code | `docs/curated-prompts/claude-code/unknown/377b483a1f535da6.md` | policy-setting |
+-| ? | claude-code | `docs/curated-prompts/claude-code/unknown/3882c770330a2323.md` | policy-setting |
+-| ? | claude-code | `docs/curated-prompts/claude-code/unknown/3a5edf089ddf1ef1.md` | narrative |
+ | ? | claude-code | `docs/curated-prompts/claude-code/unknown/4302564123a89264.md` | narrative |
+-| ? | claude-code | `docs/curated-prompts/claude-code/unknown/44f3f653aa09e017.md` | implementation |
+-| ? | claude-code | `docs/curated-prompts/claude-code/unknown/4837e17f663c54d6.md` | narrative |
+ | ? | claude-code | `docs/curated-prompts/claude-code/unknown/652de300644d368b.md` | narrative |
+-| ? | claude-code | `docs/curated-prompts/claude-code/unknown/6880070d10838831.md` | narrative |
+-| ? | claude-code | `docs/curated-prompts/claude-code/unknown/6c4e5cee930adbaa.md` | narrative |
++| ? | claude-code | `docs/curated-prompts/claude-code/unknown/102090c327198db9.md` | narrative |
+ | ? | claude-code | `docs/curated-prompts/claude-code/unknown/81b0360796f9e0bb.md` | narrative |
+-| ? | claude-code | `docs/curated-prompts/claude-code/unknown/982a3cc202d21890.md` | policy-setting |
+-| ? | claude-code | `docs/curated-prompts/claude-code/unknown/98baad27839180a9.md` | policy-setting |
+ | ? | claude-code | `docs/curated-prompts/claude-code/unknown/a2d60f0d988232dc.md` | narrative |
+-| ? | claude-code | `docs/curated-prompts/claude-code/unknown/c127b44cae376e4e.md` | policy-setting |
++| ? | claude-code | `docs/curated-prompts/claude-code/unknown/4837e17f663c54d6.md` | narrative |
+ | ? | claude-code | `docs/curated-prompts/claude-code/unknown/c427ec7684aff16e.md` | narrative |
++| ? | claude-code | `docs/curated-prompts/claude-code/unknown/3a5edf089ddf1ef1.md` | narrative |
++| ? | claude-code | `docs/curated-prompts/claude-code/unknown/44f3f653aa09e017.md` | implementation |
+ | ? | claude-code | `docs/curated-prompts/claude-code/unknown/f4d951ed1fdf5427.md` | policy-setting |
++| ? | claude-code | `docs/curated-prompts/claude-code/unknown/98baad27839180a9.md` | policy-setting |
++| ? | claude-code | `docs/curated-prompts/claude-code/unknown/377b483a1f535da6.md` | policy-setting |
++| ? | claude-code | `docs/curated-prompts/claude-code/unknown/3882c770330a2323.md` | policy-setting |
++| ? | claude-code | `docs/curated-prompts/claude-code/unknown/982a3cc202d21890.md` | policy-setting |
++| ? | claude-code | `docs/curated-prompts/claude-code/unknown/6880070d10838831.md` | narrative |
++| ? | claude-code | `docs/curated-prompts/claude-code/unknown/6c4e5cee930adbaa.md` | narrative |
++| ? | claude-code | `docs/curated-prompts/claude-code/unknown/c127b44cae376e4e.md` | policy-setting |
+ 
+ ## Bound Plans
+ 
+diff --git a/llms.txt b/llms.txt
+new file mode 100644
+index 0000000..5721538
+--- /dev/null
++++ b/llms.txt
+@@ -0,0 +1,12 @@
++# Conft — LLM Context (ARCHIVED)
++
++Conft was the TypeScript configuration edge layer for the Phenotype
++organization. All content has been absorbed into Configra.
++
++Key facts:
++- Primary: TypeScript (Zod-validated config bindings)
++- Historic package: `@phenotype/config-ts`
++- Status: ARCHIVED — all content at ../Configra
++- ADRs: ADR-022 (Rust/TS split), ADR-031 (absorb decision)
++
++No further development occurs in this repo.
+-- 
+2.50.1 (Apple Git-155)
+

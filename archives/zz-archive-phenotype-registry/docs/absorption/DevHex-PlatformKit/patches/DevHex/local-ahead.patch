@@ -1,0 +1,231 @@
+From eb0aaf8908c3fa0ab158802cb198a494d330cba5 Mon Sep 17 00:00:00 2001
+From: Recovery Script <recovery@phenotype.local>
+Date: Thu, 18 Jun 2026 02:54:32 -0700
+Subject: [PATCH 1/2] feat: add L7-001 intent+boundary snapshot docs
+
+Propagated from KooshaPari/phenotype-registry @ chore/l7-001-curation-snapshot (a1aa44660).
+Files: docs/boundary/<repo>.md, docs/intent/<repo>.md
+These are read-only governance docs; do not edit locally.
+---
+ docs/boundary/DevHex.md | 46 ++++++++++++++++++++++++++++++++
+ docs/intent/DevHex.md   | 58 +++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 104 insertions(+)
+ create mode 100644 docs/boundary/DevHex.md
+ create mode 100644 docs/intent/DevHex.md
+
+diff --git a/docs/boundary/DevHex.md b/docs/boundary/DevHex.md
+new file mode 100644
+index 0000000..e2eea5c
+--- /dev/null
++++ b/docs/boundary/DevHex.md
+@@ -0,0 +1,46 @@
++<!--
++propagated-from: KooshaPari/phenotype-registry @ chore/l7-001-curation-snapshot
++date: 2026-06-17
++source-commit: a1aa44660
++do-not-edit-locally: regenerate via scripts/propagate-intent-to-repos.py
++                     or update in the source-of-truth registry repo
++-->
++---
++repo: "DevHex"
++role: unknown
++status: active
++last_boundary_review: 2026-06-17
++review_cadence: 30d
++in_scope:
++  - "<to be filled>"
++out_of_scope:
++  - "<to be filled>"
++---
++
++# Boundary — DevHex
++
++## In Scope
++
++<To be filled.>
++
++## Out of Scope
++
++| Not here | Lives in | Reason |
++| -------- | -------- | ------ |
++| <capability> | <other-repo-or-N/A> | <why> |
++
++## Boundary Crossings
++
++| Crossing | Direction | Surface | Status |
++| -------- | --------- | ------- | ------ |
++| <capability or interface> | <this-repo→other\|other→this-repo> | <Trait / HTTP / CLI / file / event> | <green\|amber\|red> |
++
++## Last Boundary Review
++
++**Date:** 2026-06-17
++**Reviewer:** forge subagent (L7-001 sweep)
++**Worklog / finding:** `worklogs/L7-001-intent-boundary-curation-2026-06-17.json`
++**Decisions:**
++- Initial scaffolding; needs human review.
++
++**Next review:** 2026-07-17
+diff --git a/docs/intent/DevHex.md b/docs/intent/DevHex.md
+new file mode 100644
+index 0000000..f196d79
+--- /dev/null
++++ b/docs/intent/DevHex.md
+@@ -0,0 +1,58 @@
++<!--
++propagated-from: KooshaPari/phenotype-registry @ chore/l7-001-curation-snapshot
++date: 2026-06-17
++source-commit: a1aa44660
++do-not-edit-locally: regenerate via scripts/propagate-intent-to-repos.py
++                     or update in the source-of-truth registry repo
++-->
++---
++repo: "DevHex"
++aliases: []
++role: unknown
++status: active
++last_verified: 2026-06-17
++bound_prompts: 1
++bound_plans: 0
++bound_responses: 0
++device: macbook
++---
++
++# Intent — DevHex
++
++## Intent Statement
++
++<To be filled in by hand from the most recent binding prompt. This repo is bound to 1 prompts, 0 plans, and 0 agent responses captured between 2025-08 and 2026-06-17.>
++
++## Bound Prompts
++
++| Date | Source | File | Tag |
++| ---- | ------ | ---- | --- |
++| ? | claude-code | `docs/curated-prompts/claude-code/unknown/12856c8a1e688f2e.md` | implementation |
++
++## Bound Plans
++
++| Date | Source | File | Status |
++| ---- | ------ | ---- | ------ |
++
++## Bound Responses (specs, ideas, plans from agents)
++
++| Date | Source | File | Kind |
++| ---- | ------ | ---- | ---- |
++
++## Boundary
++
++See: [`docs/boundary/DevHex.md`](../boundary/DevHex.md)
++
++## Ecosystem Role
++
++<See `ECOSYSTEM_MAP.md` for the canonical ecosystem role.>
++
++## Open Questions
++
++- <To be filled from the latest prompt on this repo.>
++
++## Change Log
++
++| Date | Change | Worklog |
++| ---- | ------ | ------- |
++| 2026-06-17 | Initial binding (L7-001 sweep) | `worklogs/L7-001-intent-boundary-curation-2026-06-17.json` |
+-- 
+2.50.1 (Apple Git-155)
+
+
+From 3fb387194c48c93342246229eb34aac3430dcef4 Mon Sep 17 00:00:00 2001
+From: Recovery Script <recovery@phenotype.local>
+Date: Sat, 20 Jun 2026 03:49:56 -0700
+Subject: [PATCH 2/2] chore: intent-doc snapshot 2026-06-20
+
+---
+ .gitattributes | 29 +++++++++++++++++++++++++++++
+ LFS_AUDIT.md   | 40 ++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 69 insertions(+)
+ create mode 100644 .gitattributes
+ create mode 100644 LFS_AUDIT.md
+
+diff --git a/.gitattributes b/.gitattributes
+new file mode 100644
+index 0000000..fe733be
+--- /dev/null
++++ b/.gitattributes
+@@ -0,0 +1,29 @@
++# Git LFS 3-tier policy (ADR-027)
++
++# ============================================================
++# TIER 1 — ALWAYS track (mandatory LFS)
++# ============================================================
++# (None for this repo — no iOS/Unity/Unreal/disk image assets)
++
++# ============================================================
++# TIER 2 — ON-DEMAND track (LFS only when justified)
++# ============================================================
++# (None currently — all source code, no binary artifacts)
++
++# ============================================================
++# TIER 3 — NEVER track (explicit non-LFS) — normal git
++# ============================================================
++*.go     text diff=golang
++*.json   text
++*.md     text
++*.yaml   text diff=yaml
++*.yml    text diff=yaml
++*.sh     text eol=lf
++Makefile text
++Dockerfile text
++
++# Lockfiles
++go.sum   text
++
++# Coverage output — generated, not LFS
++coverage.out text
+diff --git a/LFS_AUDIT.md b/LFS_AUDIT.md
+new file mode 100644
+index 0000000..c8d4bee
+--- /dev/null
++++ b/LFS_AUDIT.md
+@@ -0,0 +1,40 @@
++# LFS 3-Tier Policy Audit — DevHex
++
++**Date:** 2026-06-19
++**Agent:** orch-w3-c
++**ADR:** ADR-027
++**Task:** task-198 (T35 v9)
++
++## Repo Profile
++
++- **Name:** DevHex
++- **Type:** Go SDK/CLI toolkit
++- **Path:** `DevHex/`
++
++## Audit Results
++
++### Tier 1 — Always Track (mandatory LFS)
++
++**None.** DevHex is a pure Go project with no iOS/Unity/Unreal assets.
++
++### Tier 2 — On-Demand Track
++
++**None.** All artifacts are source code, configs, or documentation.
++
++### Tier 3 — Never Track
++
++All source (`.go`), configs (`.json`, `.yaml`), documentation (`.md`),
++and lockfiles (go.sum) are correctly handled by normal git.
++
++`coverage.out` is a generated artifact (go test coverage) — should be
++`.gitignore`d, not LFS-tracked.
++
++## Recommendations
++
++1. **Add `coverage.out` to `.gitignore`** (generated artifact)
++2. **No LFS needed** — this repo can be cloned `--without-lfs`
++
++## Changes Made
++
++- Created `DevHex/.gitattributes` with the 3-tier policy
++- Created this audit doc (`DevHex/LFS_AUDIT.md`)
+-- 
+2.50.1 (Apple Git-155)
+

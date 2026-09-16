@@ -1,0 +1,64 @@
+{
+  "audit_id": "phenovcs-boundary-20260726",
+  "captured_at": "2026-07-26T10:42:00Z",
+  "scope": "KooshaPari/PhenoVCS remote boundary revalidation and registry stale-state correction",
+  "remote": {
+    "url": "https://github.com/KooshaPari/PhenoVCS",
+    "visibility": "public",
+    "is_archived": false,
+    "default_branch": "main",
+    "default_sha": "509928e52325614a693c59ff45d41fbb7357805b",
+    "last_pushed_at": "2026-07-25T13:42:59Z",
+    "license_spdx": "MIT OR Apache-2.0",
+    "description": "Version control primitives registry with Git worktree management"
+  },
+  "local": {
+    "path": "repos/PhenoVCS",
+    "presence": "no local checkout found during this audit",
+    "preservation": "remote history and all refs left untouched; no deletion, reset, or force-push"
+  },
+  "surface": {
+    "workspace": "Rust Cargo workspace, resolver=2, rust-version=1.75",
+    "members": [
+      "crates/pheno-vcs-core",
+      "crates/worktree-manager",
+      "crates/airlock-v2",
+      "crates/phenovcs-observability",
+      "crates/pheno-tracing",
+      "crates/clap-ext",
+      "ports"
+    ],
+    "boundary": "VCS primitives, worktree lifecycle, multi-backend ports, airlock, and observability",
+    "documentation": ["README.md", "SPEC.md", "PRD.md", "ADR.md", "docs/boundary/DISPOSITION.md"],
+    "architecture_evidence": "Hexagonal worktree-manager with domain/application/ports/infrastructure layers and separate Vcs ports/adapters"
+  },
+  "validation": [
+    {
+      "command": "git clone https://github.com/KooshaPari/PhenoVCS",
+      "result": "pass",
+      "evidence": "main resolved at 509928e52325614a693c59ff45d41fbb7357805b"
+    },
+    {
+      "command": "gh repo view KooshaPari/PhenoVCS --json isArchived,licenseInfo",
+      "result": "pass",
+      "evidence": "isArchived=false; repository license MIT; workspace manifest declares MIT OR Apache-2.0"
+    },
+    {
+      "command": "cargo test --workspace",
+      "result": "fail",
+      "evidence": "Build completed; 74 tests passed and 1 failed in pheno-tracing::compat::tests::shim_version_is_semver_pre_release because package version is 0.1.0 without the required pre-release tag. This is a source-repo quality gate, not a boundary or provenance failure."
+    }
+  ],
+  "decision": {
+    "disposition": "KEEP_STANDALONE",
+    "target": "PhenoVCS",
+    "rationale": "PhenoVCS is an active, coherent VCS-domain workspace. A multi-crate worktree/ports/airlock boundary cannot be safely copied into a single crate or generic tooling target, and no source absorption is authorized by this evidence audit.",
+    "prior_state_correction": "The registry claimed ARCHIVE_ONLY/absorbed and GitHub archived on 2026-07-17; current remote truth is unarchived and actively pushed on 2026-07-25. This PR corrects metadata only and preserves history.",
+    "next_gate": "If integration is later desired, propose versioned crate/API dependencies or an AgilePlus spec; do not copy source trees or delete the standalone repository."
+  },
+  "actions_taken": [
+    "Added this revalidation artifact.",
+    "Changed the project row and disposition-index entry from stale archived/absorbed state to active/keep-standalone.",
+    "Did not modify PhenoVCS source, branches, worktrees, or GitHub settings."
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "repo": "KooshaPari/Tokn",
+  "reviewed_at": "2026-07-26T10:48:00Z",
+  "remote": {
+    "visibility": "public",
+    "license": "MIT",
+    "default_branch": "main",
+    "head_sha": "3c905b290660cf6edbefc3fe788e4654a8b22428",
+    "updated_at": "2026-07-24T02:29:16Z",
+    "pushed_at": "2026-07-25T08:30:22Z"
+  },
+  "local_provenance": {
+    "path": "repos/Tokn",
+    "audit_sha": "336acab2af203a50db22d893a78bc47dc5bb5055",
+    "worktree_status": "clean",
+    "remote_ahead_only": "Cargo.lock Dependabot commits on remote; no source divergence"
+  },
+  "scope": {
+    "language": "Rust",
+    "workspace_members": ["tokenledger-rs", "pareto-rs"],
+    "domain": "LLM token/cost usage accounting and Pareto routing",
+    "consumer": "OmniRoute via tokenledger::routing"
+  },
+  "decision": "KEEP_CANONICAL_STANDALONE",
+  "target": "KooshaPari/Tokn",
+  "sessionledger_boundary": "No absorption: SessionLedger captures/replays sessions; Tokn governs token economics and routing.",
+  "stale_record_corrected": "registry/disposition-index.json repo-Tokn TOO_LARGE_RETIRE/archive-only classification from 2026-07-17",
+  "evidence": [
+    "README.md declares tokenledger routing substrate and two-crate workspace",
+    "Cargo.toml declares MIT license and members crates/tokenledger + crates/pareto-rs",
+    "OmniRoute registry record names Tokn/tokenledger::routing as its Rust counterpart"
+  ]
+}

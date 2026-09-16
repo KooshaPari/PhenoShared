@@ -1,0 +1,28 @@
+# Enforces the org conventions via the governance reusable gate.
+name: conventions
+on:
+  workflow_dispatch:
+  push:
+    branches: ["**"]
+  pull_request:
+    branches: ["**"]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  conventions-lint:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v4
+      - name: Run conventions-lint
+        env:
+          STRICT_IN: "false"
+        run: |
+          chmod +x ./scripts/conventions-lint.sh
+          if [ "$STRICT_IN" = "true" ]; then export STRICT=1; else export STRICT=0; fi
+          ./scripts/conventions-lint.sh .

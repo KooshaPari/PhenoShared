@@ -1,0 +1,54 @@
+{
+  "audit_date": "2026-07-29",
+  "cluster": "pheno-errors",
+  "decision": "CANONICAL_PARENT_CANDIDATE_WITH_PROVENANCE_RISK",
+  "canonical_candidate": {
+    "repository": "pheno",
+    "paths": [
+      "crates/phenotype-error-core",
+      "crates/phenotype-errors"
+    ],
+    "evidence_sha": "eb94c5779cb63f1424b91ee19daf5caa5430d8f6",
+    "role": "concrete layered error implementation plus facade"
+  },
+  "surfaces": [
+    {
+      "surface": "KooshaPari/pheno-errors",
+      "state": "private_scratch_residue",
+      "sha": "01b850e4b9f8ba8ed667c34f35fa46d7cef37214",
+      "decision": "TOMBSTONE_CANDIDATE",
+      "reason": "README/Cargo.lock/CI residue only; no Cargo.toml, source, or license; preserve remote history"
+    },
+    {
+      "surface": "OmniRoute/extensions/argis/pheno-errors",
+      "state": "parent_local_implementation",
+      "decision": "KEEP_PARENT_LOCAL",
+      "reason": "434 LOC AppError implementation is coupled to OmniRoute"
+    },
+    {
+      "surface": "PlayCua/crates/pheno-errors",
+      "state": "app_local_implementation",
+      "decision": "KEEP_PENDING_MIGRATION_PROOF",
+      "reason": "131 LOC app-specific AppError is not proven equivalent"
+    },
+    {
+      "surface": "PhenoObservability/vendor/phenotype-error-core",
+      "state": "transitional_vendor_copy",
+      "decision": "KEEP_PENDING_UPSTREAM_PROVENANCE",
+      "reason": "586 LOC executable copy and facade; upstream target unresolved"
+    },
+    {
+      "surface": "Agentora/crates/phenotype-errors",
+      "state": "deprecated_reexport_shim",
+      "decision": "KEEP_AS_SHIM_PENDING_MIGRATION",
+      "reason": "Facade is not an independent canonical implementation"
+    }
+  ],
+  "unresolved_provenance": [
+    "phenoShared currently returns 404",
+    "phenotype-types currently returns 404",
+    "pheno CANONICAL.md describes those missing repositories as upstream"
+  ],
+  "archive_policy": "Do not archive or delete any remote until canonical implementation, migration tests, and immutable history preservation are verified.",
+  "registry_author": "phenotype-registry (overlap audit)"
+}

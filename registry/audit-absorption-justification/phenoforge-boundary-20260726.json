@@ -1,0 +1,55 @@
+{
+  "audit_date": "2026-07-26",
+  "repository": "phenoForge",
+  "remote": "https://github.com/KooshaPari/phenoForge",
+  "remote_default_branch": "main",
+  "remote_default_sha": "5a1a2cdf0425bf2c20f2f6ed0a5027dbb582a004",
+  "evidence": {
+    "visibility": "public",
+    "archived": false,
+    "github_disk_kb": 230,
+    "clone_size": "940K",
+    "tracked_files": 83,
+    "languages": ["Rust", "Shell"],
+    "license": "MIT",
+    "cargo_package": "phenotype-forge v0.1.0",
+    "remote_branch_count": 15,
+    "local_checkout": "AgilePlus/phenoForge",
+    "local_checkout_kind": "git submodule",
+    "local_submodule_pointer": "8433020594adef6609f79348c49a0381396549db",
+    "submodule_pointer_is_ancestor_of_remote_main": true,
+    "branch_inventory": {
+      "non_default_branches": 17,
+      "unique_commits_ahead_of_main": {
+        "chore/workflow-hygiene-20260528": 3,
+        "chore/cargo-keywords": 1,
+        "chore/gov-bootstrap-2026-05-02": 1,
+        "dependabot-and-review-branches": "14 additional branches with one commit each or already merged ancestry"
+      },
+      "policy": "Retain branch refs and audit each unique-content branch before any absorption or archive operation."
+    },
+    "scope": [
+      "parallel task execution",
+      "dependency graph resolution",
+      "hot reload",
+      "plugin system",
+      "incremental builds and caching",
+      "remote execution and profiling"
+    ]
+  },
+  "prior_registry_claim": {
+    "status": "retired",
+    "absorbed_into": "Tasken",
+    "claim": "source repo deleted 2026-06-16",
+    "result": "contradicted by current reachable public remote"
+  },
+  "decision": "REVIEW_TARGET_CONFLICT",
+  "reason": "The source is live and materially scoped as a Rust task runner. AgilePlus documentation proposes eventual routing into the pheno monorepo, while the stale registry row claims Tasken absorption. No parity or merge proof authorizes either absorption target yet.",
+  "required_follow_up": [
+    "Compare pheno task-runner crates and Tasken against phenoForge functionality and history.",
+    "Record branch-by-branch disposition before any merge or archive action.",
+    "Retain the standalone remote and AgilePlus submodule pointer until a sponsor-approved target is proven.",
+    "Do not delete, archive, flatten, or rewrite source history."
+  ],
+  "registry_author": "phenotype-registry (boundary audit)"
+}

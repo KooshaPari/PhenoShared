@@ -1,0 +1,22 @@
+{
+  "audit_date": "2026-07-26",
+  "repository": "pheno",
+  "remote": "https://github.com/KooshaPari/pheno",
+  "remote_default_branch": "main",
+  "remote_default_sha": "9047e9dc36a586994976f1b4a8574039623d3475",
+  "evidence": {
+    "description": "Pheno Rust monorepo workspace - 170K+ LOC, 11 workspace members (AgilePlus, phenoDesign, PhenoLibs, etc.)",
+    "visibility": "public",
+    "local_checkout": false,
+    "member_boundary_policy": "preserve workspace members as explicit boundaries"
+  },
+  "decision": "KEEP_CANONICAL_PARENT",
+  "reason": "The repository is the canonical public workspace parent and was absent from the registry despite multiple registered pheno-* members. Registration improves routing without claiming member absorption or local recovery.",
+  "follow_up": [
+    "Enumerate all 11 workspace members against registry records.",
+    "Capture local checkout or branch provenance if discovered.",
+    "Review AgilePlus member routing against the parent boundary before any merge.",
+    "Do not delete, flatten, or rewrite member histories."
+  ],
+  "registry_author": "phenotype-registry (boundary audit)"
+}

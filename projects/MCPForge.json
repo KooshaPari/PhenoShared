@@ -1,0 +1,24 @@
+{
+  "name": "MCPForge",
+  "renamed_to": "zz-archive-MCPForge",
+  "renamed_to_full_name": "KooshaPari/zz-archive-MCPForge",
+  "role": "go-lsp-tooling",
+  "lifecycle": "archived",
+  "status": "archived",
+  "description": "Go LSP server tooling. Archived 2026-09-09 per operator decision. Preserved work: defect fix in `internal/lsp/transport.go:Call` (PR #49) for context-cancellation handling — commit 633de3e. Also 4 SHA-pin fixes (PRs #50/#51/#52) for trunk-action, setup-go, and golangci-lint-action. Git history preserved on `hist` branch; main = archival README.",
+  "repo_path": "KooshaPari/MCPForge",
+  "renamed_repo_path": "KooshaPari/zz-archive-MCPForge",
+  "default_branch": "main",
+  "language": "Go",
+  "disposition": "ARCHIVED",
+  "absorbed_into": null,
+  "archive_reason": "Operator decision 2026-09-09: no consumer-deployed evidence; 5 integration-test failures require language servers not in CI; the LSP patterns are now captured in PR #49's test suite + commit message. Honest answer to 'do we need or want it': archive-now, not archival-incubate.",
+  "valuable_preserved_artifacts": [
+    "633de3e fix(lsp): respect ctx.Done() in Client.Call",
+    "2f31665 fix(workflow): pin trunk-action to verified v1.0.4 SHA",
+    "7349719 fix(workflow): pin setup-go + golangci-lint-action to verified SHAs (had tag-object SHA bug)",
+    "eccec2c fix(workflow): pin golangci-lint-action to verified v6.5.0 commit SHA (amend)"
+  ],
+  "agent11_evidence": "/Users/kooshapari/Downloads/chat1-portfolio-audit-2026-09-05/agent11-evidence/portfolio-ledger-reconciliation.md",
+  "registry_author": "agent11 (operator reconciliation 2026-09-09)"
+}

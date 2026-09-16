@@ -1,0 +1,3 @@
+Source: /Users/kooshapari/CodeProjects/Phenotype/repos/thegent-pr2-v2/
+Captured: 2026-07-14
+Reason: Worktree had 5 modified + 28 untracked files that would be lost if cleaned up.

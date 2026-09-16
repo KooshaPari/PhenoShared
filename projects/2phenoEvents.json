@@ -1,0 +1,24 @@
+{
+  "name": "2phenoEvents",
+  "languages": [
+    "rust"
+  ],
+  "primary_language": "rust",
+  "status": "archived",
+  "has_readme": true,
+  "type": "event-bus-recovery",
+  "path": "repos/2phenoEvents",
+  "disposition": "HISTORICAL_ALIAS_TOMBSTONE",
+  "wave": "2026-07-23-boundary-audit",
+  "canonical_lineage": "phenoEvents",
+  "canonical_owner": "KooshaPari/phenoEvents",
+  "source_commit": "5bb0c894e44a50079035b3d5ab5d31946fc445c1",
+  "source_commit_provenance": "Reachable root restore commit in KooshaPari/phenoEvents; it records restoration from the pheno absorb branch.",
+  "current_remote_status": "not_found_404",
+  "remote_verified_at": "2026-08-05",
+  "historical_absorption_status": "not_applicable",
+  "absorption_note": "No source movement is authorized: the historical alias has no resolvable remote, and its preserved source commit is already reachable in canonical phenoEvents.",
+  "note": "Historical recovery alias retained for provenance. This is not a never-existed claim and not an absorption queue item.",
+  "lifecycle": "tombstone-only",
+  "audit_artifact": "audits/absorption-justifications/2phenoEvents-reconciliation-20260805.md"
+}

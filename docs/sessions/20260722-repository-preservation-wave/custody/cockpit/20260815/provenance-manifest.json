@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "recorded_on": "2026-08-15",
+  "purpose": "Immutable point-in-time custody record; not live-state, rendered-output, publication, promotion, functional absorption, or archive evidence.",
+  "custody_owner": "phenotype-registry, provisional evidence custodian under Boundary + DAG SSOT; canonical functional owner for Beads/phenotype-dag ledger remains undecided.",
+  "source_paths": {
+    "beads_log": "/Users/kooshapari/CodeProjects/Phenotype/repos/phenotype-dag/beads.jsonl"
+  },
+  "copied_files": [
+    {
+      "path": "beads.jsonl",
+      "source_path": "/Users/kooshapari/CodeProjects/Phenotype/repos/phenotype-dag/beads.jsonl",
+      "sha256": "cd8c799267542fd3d9b0c14acfaae7af49340092f79312e5447cce54c35f94b6",
+      "bytes": 1010716,
+      "records": 1391
+    }
+  ],
+  "excluded_inputs": [],
+  "excluded_artifacts_and_writers": [
+    {
+      "path": "/Users/kooshapari/CodeProjects/Phenotype/repos/cockpit/bead-cockpit-20260809-191131-f5ca38f7.html",
+      "reason": "Derived rendered output; excluded from source-only custody."
+    },
+    {
+      "path": "/Users/kooshapari/CodeProjects/Phenotype/repos/beads/bead-cockpit.py",
+      "reason": "Separate source boundary; not silently recaptured with the mutable ledger."
+    }
+  ],
+  "validation_checks": [
+    "strict line-by-line JSON parsing of copied beads.jsonl",
+    "SHA-256 and byte-size parity against this provenance manifest",
+    "git diff --check"
+  ],
+  "next_gate": "Record canonical functional owner before integration; no archive, merge, or retirement decision is authorized."
+}

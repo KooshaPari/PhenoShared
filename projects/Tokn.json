@@ -1,0 +1,26 @@
+{
+  "name": "Tokn",
+  "languages": [
+    "rust"
+  ],
+  "primary_language": "rust",
+  "full_name": "KooshaPari/Tokn",
+  "status": "active",
+  "has_readme": true,
+  "type": "usage-ledger",
+  "path": "repos/Tokn",
+  "disposition": "KEEP_CANONICAL_STANDALONE",
+  "remote_default_branch": "main",
+  "remote_head_sha": "3c905b290660cf6edbefc3fe788e4654a8b22428",
+  "local_audit_sha": "336acab2af203a50db22d893a78bc47dc5bb5055",
+  "workspace_members": ["tokenledger-rs", "pareto-rs"],
+  "license": "MIT",
+  "canonical_consumer": "OmniRoute (tokenledger::routing)",
+  "wave": "2026-07-23-boundary-audit",
+  "queued_at": "2026-07-23",
+  "proposed_target": "Tokn",
+  "proposed_target_repo": "Tokn",
+  "proposed_target_path": ".",
+  "absorption_note": null,
+  "note": "Standalone TokenLedger runtime with two Rust workspace crates and its own contracts/release surface. Keep as canonical standalone; do not absorb into SessionLedger (different domain: token/cost economics vs session capture/replay)."
+}

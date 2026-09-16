@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  com.phenotype.cleanup-daemon.plist
+  ----------------------------
+  Launches the 8-hourly cleanup daemon: consolidates wip/* branches, force-
+  pushes the consolidated branch to origin, deletes source branches (only
+  after verifying the consolidated branch is on origin), and tarballs stale
+  airlock v1 entries to _phenofleet-decisions/airlock-cleanup/<id>.tar.zst.
+
+  INSTALL (do not auto-load — user inspects first):
+    cp com.phenotype.cleanup-daemon.plist ~/Library/LaunchAgents/
+    launchctl load -w ~/Library/LaunchAgents/com.phenotype.cleanup-daemon.plist
+    launchctl list | grep com.phenotype.cleanup-daemon
+  UNINSTALL:
+    launchctl bootout gui/$UID/com.phenotype.cleanup-daemon 2>/dev/null \
+      || launchctl unload ~/Library/LaunchAgents/com.phenotype.cleanup-daemon.plist
+    rm ~/Library/LaunchAgents/com.phenotype.cleanup-daemon.plist
+-->
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.phenotype.cleanup-daemon</string>
+
+    <key>ProgramArguments</key>
+    <array>
+        <string>/usr/bin/env</string>
+        <string>python3</string>
+        <string>/Users/kooshapari/CodeProjects/Phenotype/repos/_phenofleet-decisions/airlock-v2/daemons/cleanup-daemon.py</string>
+        <string>--loop</string>
+    </array>
+
+    <key>RunAtLoad</key>
+    <true/>
+
+    <key>KeepAlive</key>
+    <true/>
+
+    <key>ProcessType</key>
+    <string>Background</string>
+
+    <key>ThrottleInterval</key>
+    <integer>60</integer>
+
+    <key>Nice</key>
+    <integer>10</integer>
+
+    <key>StandardOutPath</key>
+    <string>/Users/kooshapari/.airlock-v2/logs/cleanup.stdout.log</string>
+
+    <key>StandardErrorPath</key>
+    <string>/Users/kooshapari/.airlock-v2/logs/cleanup.stderr.log</string>
+
+    <key>WorkingDirectory</key>
+    <string>/Users/kooshapari</string>
+
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>PATH</key>
+        <string>/usr/local/bin:/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+        <key>HOME</key>
+        <string>/Users/kooshapari</string>
+        <key>AIRLOCK_V2_ROOT</key>
+        <string>/Users/kooshapari/CodeProjects/Phenotype/repos</string>
+        <key>AIRLOCK_V2_LOG_DIR</key>
+        <string>/Users/kooshapari/.airlock-v2/logs</string>
+        <key>AIRLOCK_V2_LOCK_PATH</key>
+        <string>/tmp/airlock-v2.cleanup.lock</string>
+        <key>AIRLOCK_V2_STALE_DAYS</key>
+        <string>30</string>
+        <key>AIRLOCK_V2_ARCHIVE_DAYS</key>
+        <string>30</string>
+        <key>AIRLOCK_V2_DRY_RUN</key>
+        <string>0</string>
+    </dict>
+</dict>
+</plist>

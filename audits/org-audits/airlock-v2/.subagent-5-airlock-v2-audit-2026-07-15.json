@@ -1,0 +1,226 @@
+{
+  "audit": {
+    "id": "subagent-5-airlock-v2-audit",
+    "date": "2026-07-15",
+    "version": "2.0.0",
+    "task": "Build airlock-v2 persistent infrastructure (hooks + auto-commit daemon + 8hr cleanup daemon)",
+    "status": "completed"
+  },
+  "context": {
+    "operating_system": "macos",
+    "container_policy": "/Users/kooshapari/CodeProjects/Phenotype/repos is a container, NOT a git working tree",
+    "legacy_airlock_daemon": {
+      "pid": 2508,
+      "socket": "~/.airlock/socket",
+      "jsonrpc_over_socket": true,
+      "runs_to_date": 510,
+      "untouched_by_v2": true
+    },
+    "philosophy": "Conservative in refusal to delete without remote-backed state; aggressive in saving every agent action."
+  },
+  "deliverables": {
+    "hooks": [
+      {
+        "path": "_phenofleet-decisions/airlock-v2/hooks/codex-hooks.json",
+        "purpose": "Codex ~/.codex/config.toml [hooks] section",
+        "events_handled": ["PostToolUse", "Stop"],
+        "lines": 33,
+        "syntax_valid": true
+      },
+      {
+        "path": "_phenofleet-decisions/airlock-v2/hooks/claude-hooks.json",
+        "purpose": "Claude Code ~/.claude/settings.json hooks section",
+        "events_handled": ["PostToolUse", "Stop"],
+        "lines": 43,
+        "syntax_valid": true
+      },
+      {
+        "path": "_phenofleet-decisions/airlock-v2/hooks/cursor-hooks.json",
+        "purpose": "Cursor ~/.cursor/hooks.json (best-effort; experimental support)",
+        "events_handled": ["afterEdit", "afterShellExecution", "stop"],
+        "lines": 31,
+        "syntax_valid": true
+      },
+      {
+        "path": "_phenofleet-decisions/airlock-v2/hooks/airlock-v2-hook.sh",
+        "purpose": "Shell script that reads event JSON from stdin, identifies cwd, commits wip branch if dirty",
+        "executable": true,
+        "lines": 291,
+        "bash_syntax_valid": true,
+        "features": [
+          "reads stdin event JSON (jq preferred, python3 fallback, $PWD last resort)",
+          "canonicalizes paths via python3 os.path.realpath (handles macOS /var -> /private/var symlink)",
+          "skips repos outside AIRLOCK_V2_ROOT",
+          "idempotent — re-running on clean tree is no-op",
+          "creates wip/<date>-<agent>-<event_id> branch",
+          "best-effort push to upstream; never force-pushes",
+          "best-effort notify to legacy airlock daemon socket (non-blocking 2s timeout)",
+          "30s timeout safe (intended to run from launchd wrapper)"
+        ]
+      }
+    ],
+    "daemons": [
+      {
+        "path": "_phenofleet-decisions/airlock-v2/daemons/auto-commit-daemon.py",
+        "purpose": "15-minute auto-commit daemon that walks repos/ for dirty working trees",
+        "executable": true,
+        "lines": 471,
+        "py_compile_valid": true,
+        "features": [
+          "fcntl lockfile for re-entrancy",
+          "graceful shutdown on SIGTERM / SIGINT",
+          "structured JSON logging to ~/.airlock-v2/logs/auto-commit.log",
+          "probes legacy airlock daemon socket (~/.airlock/socket) and skips sweep if busy",
+          "honors AIRLOCK_V2_AIRLOCK_SOCKET override (used by smoke test)",
+          "creates wip/<date>-<auto> branch per sweep",
+          "pushes to upstream; falls back to local-only if no upstream",
+          "per-repo 45s timeout; never blocks the loop",
+          "configurable AIRLOCK_V2_INTERVAL (default 900 = 15min)",
+          "DRY_RUN mode for safe smoke-testing",
+          "--once mode for single-pass smoke-testing"
+        ]
+      },
+      {
+        "path": "_phenofleet-decisions/airlock-v2/daemons/com.phenotype.auto-commit-daemon.plist",
+        "purpose": "launchd plist for auto-commit daemon",
+        "lines": 74,
+        "plutil_lint_valid": true,
+        "schedule": "StartInterval 900 (every 15 minutes)",
+        "loaded_into_launchctl": false,
+        "loaded_reason": "user policy: human inspection required before launchctl load"
+      },
+      {
+        "path": "_phenofleet-decisions/airlock-v2/daemons/cleanup-daemon.py",
+        "purpose": "8-hour cleanup daemon that consolidates wip/* branches and archives stale airlock entries",
+        "executable": true,
+        "lines": 689,
+        "py_compile_valid": true,
+        "features": [
+          "fcntl lockfile for re-entrancy",
+          "graceful shutdown on SIGTERM / SIGINT",
+          "structured JSON logging to ~/.airlock-v2/logs/cleanup.log",
+          "walks all wip/* branches across all repos",
+          "consolidates each repo's wip/* cluster into wip/<date>-consolidated (squash merge)",
+          "pushes consolidated branch to upstream",
+          "deletes original wip/* branches LOCALLY only after remote-confirmed backup",
+          "archives ~/.airlock/repos/<id>/ older than 30 days to tar.zst with sha256 sidecar",
+          "NEVER deletes the original airlock entry — leaves it intact for human review",
+          "DRY_RUN mode for safe smoke-testing",
+          "configurable AIRLOCK_V2_STALE_DAYS / AIRLOCK_V2_ARCHIVE_DAYS (default 30)"
+        ]
+      },
+      {
+        "path": "_phenofleet-decisions/airlock-v2/daemons/com.phenotype.cleanup-daemon.plist",
+        "purpose": "launchd plist for cleanup daemon",
+        "lines": 77,
+        "plutil_lint_valid": true,
+        "schedule": "StartInterval 28800 (every 8 hours)",
+        "loaded_into_launchctl": false,
+        "loaded_reason": "user policy: human inspection required before launchctl load"
+      }
+    ],
+    "smoke_test": {
+      "path": "_phenofleet-decisions/airlock-v2/airlock-v2-smoke-test.sh",
+      "executable": true,
+      "lines": 296,
+      "bash_syntax_valid": true,
+      "last_result": "PASS (20/0/3 — 20 PASS, 0 FAIL, 3 SKIP)",
+      "coverage": [
+        "preflight (airlock-v2 dir, REPO_ROOT, python3, git, bash)",
+        "syntax checks (py_compile + bash -n + plutil -lint)",
+        "JSON validity (3 hook configs)",
+        "smoke repo creation (git init + initial commit + dirty state)",
+        "auto-commit daemon --once against isolated temp scan root",
+        "wip/-auto branch verification",
+        "hook script invocation with synthetic Codex event",
+        "wip/<agent>-<event_id> branch verification",
+        "cleanup daemon --once in DRY_RUN mode",
+        "log file presence sanity"
+      ],
+      "exit_codes": "0 = pass, 1 = setup fail, 2 = assertion fail, 3 = cleanup warning"
+    },
+    "docs": [
+      {
+        "path": "_phenofleet-decisions/airlock-v2/INSTALL.md",
+        "lines": 335,
+        "purpose": "Step-by-step installation guide for humans"
+      },
+      {
+        "path": "_phenofleet-decisions/airlock-v2/README.md",
+        "lines": 265,
+        "purpose": "Architecture overview, design philosophy, operational characteristics"
+      }
+    ]
+  },
+  "syntax_check_results": {
+    "auto-commit-daemon.py": "py_compile rc=0 OK",
+    "cleanup-daemon.py": "py_compile rc=0 OK",
+    "airlock-v2-hook.sh": "bash -n rc=0 OK",
+    "airlock-v2-smoke-test.sh": "bash -n rc=0 OK",
+    "com.phenotype.auto-commit-daemon.plist": "plutil -lint OK",
+    "com.phenotype.cleanup-daemon.plist": "plutil -lint OK",
+    "codex-hooks.json": "json.load OK",
+    "claude-hooks.json": "json.load OK",
+    "cursor-hooks.json": "json.load OK"
+  },
+  "smoke_test_results": {
+    "exit_code": 0,
+    "pass": 20,
+    "fail": 0,
+    "skip": 3,
+    "timestamp_utc": "2026-07-16T00:49:xx",
+    "wip_branches_created": [
+      "wip/2026-07-16-0049-auto  (auto-commit daemon)",
+      "wip/2026-07-16-0049-smoke-smoke-23283  (hook script)"
+    ]
+  },
+  "safety_compliance": {
+    "no_launchctl_load": true,
+    "no_modify_existing_airlock_config": true,
+    "remote_backup_verified_before_delete": true,
+    "all_daemon_actions_logged": true,
+    "fcntl_lockfile_for_reentrancy": true,
+    "graceful_sigterm_handling": true
+  },
+  "additive_changes_only": {
+    "touched": [
+      "_phenofleet-decisions/airlock-v2/ (entirely new)",
+      "~/.airlock-v2/logs/ (new directory, written by daemons)"
+    ],
+    "not_touched": [
+      "~/.airlock/ (legacy daemon config + state)",
+      "~/.codex/",
+      "~/.claude/",
+      "~/.cursor/",
+      "any existing repo under repos/"
+    ],
+    "user_must_run_install_steps": [
+      "merge codex-hooks.json snippets into ~/.codex/config.toml",
+      "merge claude-hooks.json snippets into ~/.claude/settings.json",
+      "copy plists to ~/Library/LaunchAgents/ and `launchctl load` them",
+      "(legacy airlock daemon may be left running untouched)"
+    ]
+  },
+  "deliverable_files": [
+    "_phenofleet-decisions/airlock-v2/hooks/codex-hooks.json",
+    "_phenofleet-decisions/airlock-v2/hooks/claude-hooks.json",
+    "_phenofleet-decisions/airlock-v2/hooks/cursor-hooks.json",
+    "_phenofleet-decisions/airlock-v2/hooks/airlock-v2-hook.sh",
+    "_phenofleet-decisions/airlock-v2/daemons/auto-commit-daemon.py",
+    "_phenofleet-decisions/airlock-v2/daemons/com.phenotype.auto-commit-daemon.plist",
+    "_phenofleet-decisions/airlock-v2/daemons/cleanup-daemon.py",
+    "_phenofleet-decisions/airlock-v2/daemons/com.phenotype.cleanup-daemon.plist",
+    "_phenofleet-decisions/airlock-v2/airlock-v2-smoke-test.sh",
+    "_phenofleet-decisions/airlock-v2/INSTALL.md",
+    "_phenofleet-decisions/airlock-v2/README.md",
+    "_phenofleet-decisions/airlock-v2/.subagent-5-airlock-v2-audit-2026-07-15.json (this file)"
+  ],
+  "total_lines": 2605,
+  "next_steps_for_user": [
+    "Read _phenofleet-decisions/airlock-v2/README.md for architecture overview",
+    "Read _phenofleet-decisions/airlock-v2/INSTALL.md and follow installation steps",
+    "Inspect the two .plist files before `launchctl load`-ing them",
+    "After install, monitor ~/.airlock-v2/logs/*.log for daemon activity",
+    "If smoke test is rerun during dev, expect rc=0 and the same wip/* branches to keep accumulating"
+  ]
+}

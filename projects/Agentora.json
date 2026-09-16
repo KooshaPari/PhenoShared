@@ -1,0 +1,31 @@
+{
+  "name": "Agentora",
+  "languages": [
+    "Rust"
+  ],
+  "primary_language": "Rust",
+  "status": "active",
+  "has_readme": true,
+  "type": "agent-framework",
+  "path": "repos/Agentora",
+  "gh_url": "https://github.com/KooshaPari/Agentora",
+  "default_branch": "main",
+  "remote_head": "c7edae858b264e075210a7b5fc574b3d0da4fe4d",
+  "remote_size_kb": 9382,
+  "license": "MIT",
+  "role": "agent-framework-and-phenotype-agent-workspace",
+  "domain_role": "agent-runtime-library",
+  "boundary": "skills-tools-memory-and-agent-lifecycle",
+  "disposition": "KEEP_STANDALONE_PENDING_BOUNDARY_REVIEW",
+  "absorbed_into": null,
+  "absorption_note": "Historic ABSORB -> pheno (crates/agentora) claims are not supported by source-level migration proof. Keep the live upstream intact while comparing embedded pheno-agent and shared phenotype crates against pheno and thegent.",
+  "rationale": "Public, active MIT Rust workspace (9.4 MB; 43-crate scale) with agentkit skills/tools/two-tier memory/lifecycle APIs and embedded phenotype-agent crates. It overlaps thegent at agent execution/runtime concerns but is not a proven replacement: thegent remains the Python/Rust orchestration runtime and Agentora remains the Rust framework/library boundary.",
+  "overlap": {
+    "thegent": "complementary runtime/orchestration surface; no absorption without contract and dependency proof",
+    "pheno": "potential parent for selected crates, but no verified migration or parity evidence",
+    "decision": "preserve both boundaries; perform explicit crate-level comparison before any merge"
+  },
+  "audit_artifact": "registry/audit-agentora-boundary-20260727.json",
+  "audit_date": "2026-07-27",
+  "note": "Boundary correction: stale queued/ABSORB row replaced with live provenance and an explicit no-loss review state."
+}

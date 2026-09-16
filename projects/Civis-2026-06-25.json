@@ -1,0 +1,13 @@
+{
+  "name": "Civis",
+  "disposition": "AFFIRM",
+  "absorbed_into": null,
+  "status": "active",
+  "audit_artifact": "Civis-2026-06-25.md",
+  "repo_path": "KooshaPari/Civis",
+  "description": "Emergent civ simulation game — Rust monorepo (33 crates, 2.3GB, 780+ commits, Bevy-based)",
+  "role": "federated-tools",
+  "audited_at": "2026-06-25",
+  "lifecycle": "active",
+  "guardian": "kooshapari"
+}

@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+# pheno argis - delegate to the v4 argis CLI.
+# The argis CLI lives in /Users/kooshapari/CodeProjects/Phenotype/repos/OmniRoute-frontend-svelte-2026-07-05/bin/argis
+# but is also symlinked to ~/bin/argis (on PATH). This wrapper just
+# invokes whichever the user has.
+exec argis "$@"

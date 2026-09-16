@@ -1,0 +1,55 @@
+{
+  "audit_id": "repoledger-boundary-20260726",
+  "captured_at": "2026-07-26T04:24:00Z",
+  "scope": "KooshaPari/RepoLedger local checkout and public remote boundary",
+  "remote": {
+    "url": "https://github.com/KooshaPari/RepoLedger",
+    "visibility": "public",
+    "default_branch": "main",
+    "default_sha": "b664b757215df00a49536a861372cf864cb98bf1",
+    "description": "pnpm monorepo for the repo-ledger ecosystem console",
+    "size_kb": 52,
+    "license_spdx": null,
+    "last_pushed_at": "2026-07-22T13:01:00Z"
+  },
+  "local": {
+    "path": "repos/RepoLedger",
+    "branch": "main",
+    "head": "b664b757215df00a49536a861372cf864cb98bf1",
+    "status": "clean",
+    "tracked_files": 26,
+    "tracked_lines": 4902,
+    "ignored_generated_paths": [
+      "apps/ecosystem-console/dist/",
+      "apps/ecosystem-console/node_modules/",
+      "apps/ecosystem-console/server/server",
+      "node_modules/"
+    ]
+  },
+  "surface": {
+    "frontend": "React 19 + @xyflow/react + Vite + TypeScript",
+    "backend": "Go HTTP/WebSocket server under apps/ecosystem-console/server",
+    "workspace": "pnpm monorepo",
+    "tracked_license_file": false,
+    "readme_file": false
+  },
+  "validation": [
+    {
+      "command": "pnpm --dir apps/ecosystem-console run build",
+      "result": "pass",
+      "evidence": "tsc -b and Vite production build; 196 modules transformed"
+    }
+  ],
+  "decision": {
+    "disposition": "KEEP_STANDALONE",
+    "target": "RepoLedger",
+    "rationale": "Distinct governance-console boundary with UI and Go state backend. It can consume registry data but should not absorb registry source or managed runtime repositories.",
+    "risk": "No tracked license or README; licensing and operator documentation are required before treating it as distributable enterprise OSS.",
+    "next_gate": "Add an explicit license and canonical operator documentation in RepoLedger; then evaluate read-only registry API integration."
+  },
+  "actions_taken": [
+    "No source files, branches, worktrees, or remotes were deleted or reset.",
+    "No dirty local source required recovery preservation; checkout matched origin/main.",
+    "Ignored build and dependency outputs were not added to the registry record."
+  ]
+}

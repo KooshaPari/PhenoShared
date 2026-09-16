@@ -1,0 +1,33 @@
+{
+  "_comment": "AIRLOCK V2 hook config for Codex. Merge the 'hooks' block into ~/.codex/config.toml or place directly in ~/.codex/hooks.json (Codex supports both TOML and JSON hook formats). The script auto-commits dirty work and pushes to a wip/<date>-<agent>-<event-id> branch on every PostToolUse and Stop event. Idempotent and timeout-safe (30s). Conservative: only touches working trees under ~/CodeProjects/Phenotype/repos/.",
+  "version": 1,
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/Users/kooshapari/CodeProjects/Phenotype/repos/_phenofleet-decisions/airlock-v2/hooks/airlock-v2-hook.sh",
+            "description": "Airlock V2: auto-commit + push wip branch after every Codex tool call",
+            "timeout": 30
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/Users/kooshapari/CodeProjects/Phenotype/repos/_phenofleet-decisions/airlock-v2/hooks/airlock-v2-hook.sh",
+            "description": "Airlock V2: final reconciliation + push on Codex session end",
+            "timeout": 30
+          }
+        ]
+      }
+    ]
+  },
+  "_toml_equivalent": "For ~/.codex/config.toml users, the equivalent blocks are:\n\n[[hooks.post_tool_use]]\nmatcher = \"*\"\ncommand = \"/Users/kooshapari/CodeProjects/Phenotype/repos/_phenofleet-decisions/airlock-v2/hooks/airlock-v2-hook.sh\"\ndescription = \"Airlock V2: auto-commit + push wip branch after every Codex tool call\"\ntimeout = 30\n\n[[hooks.stop]]\ncommand = \"/Users/kooshapari/CodeProjects/Phenotype/repos/_phenofleet-decisions/airlock-v2/hooks/airlock-v2-hook.sh\"\ndescription = \"Airlock V2: final reconciliation + push on Codex session end\"\ntimeout = 30\n",
+  "_trusted_hash_note": "If the user has Codex [hooks.state] sha256-trust enabled (per agent-integration survey Section 9.5), add the sha256 of airlock-v2-hook.sh to the trust list before loading this hook config. Compute with: shasum -a 256 /Users/kooshapari/CodeProjects/Phenotype/repos/_phenofleet-decisions/airlock-v2/hooks/airlock-v2-hook.sh"
+}

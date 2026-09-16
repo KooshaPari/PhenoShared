@@ -1,0 +1,447 @@
+{
+  "score": 36,
+  "total": 88,
+  "percentage": 40.909090909090914,
+  "results": [
+    {
+      "id": 1,
+      "name": "README",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "name": "LICENSE",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "name": "CONTRIBUTING",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "name": "CODE_OF_CONDUCT",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "name": "SECURITY",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "name": "CHANGELOG",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "name": "CLAUDE_MD",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "name": "EDITORCONFIG",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "name": "GITIGNORE",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "name": "DOCKERFILE",
+      "passed": false
+    },
+    {
+      "id": 11,
+      "name": "DOCKER_COMPOSE",
+      "passed": false
+    },
+    {
+      "id": 12,
+      "name": "MAKEFILE",
+      "passed": false
+    },
+    {
+      "id": 13,
+      "name": "JUSTFILE",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "name": "PACKAGE_JSON",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "name": "PYPROJECT_TOML",
+      "passed": false
+    },
+    {
+      "id": 16,
+      "name": "CARGO_TOML",
+      "passed": true
+    },
+    {
+      "id": 17,
+      "name": "GO_MOD",
+      "passed": false
+    },
+    {
+      "id": 18,
+      "name": "ENV_EXAMPLE",
+      "passed": false
+    },
+    {
+      "id": 19,
+      "name": "CI_WORKFLOW",
+      "passed": true
+    },
+    {
+      "id": 20,
+      "name": "CODEOWNERS",
+      "passed": true
+    },
+    {
+      "id": 21,
+      "name": "DEPENDABOT",
+      "passed": true
+    },
+    {
+      "id": 22,
+      "name": "ISSUE_TEMPLATE",
+      "passed": true
+    },
+    {
+      "id": 23,
+      "name": "PR_TEMPLATE",
+      "passed": true
+    },
+    {
+      "id": 24,
+      "name": "FUZZ_TESTS",
+      "passed": true
+    },
+    {
+      "id": 25,
+      "name": "BENCHMARKS",
+      "passed": true
+    },
+    {
+      "id": 26,
+      "name": "MUTANT_TESTS",
+      "passed": true
+    },
+    {
+      "id": 27,
+      "name": "UNIT_TESTS",
+      "passed": true
+    },
+    {
+      "id": 28,
+      "name": "INTEGRATION_TESTS",
+      "passed": false
+    },
+    {
+      "id": 29,
+      "name": "E2E_TESTS",
+      "passed": false
+    },
+    {
+      "id": 30,
+      "name": "CODE_COVERAGE",
+      "passed": true
+    },
+    {
+      "id": 31,
+      "name": "LINTING",
+      "passed": false
+    },
+    {
+      "id": 32,
+      "name": "FORMATTING",
+      "passed": false
+    },
+    {
+      "id": 33,
+      "name": "SECURITY_SCANNING",
+      "passed": false
+    },
+    {
+      "id": 34,
+      "name": "DEPENDENCY_AUDIT",
+      "passed": false
+    },
+    {
+      "id": 35,
+      "name": "OPENAPI_SPEC",
+      "passed": false
+    },
+    {
+      "id": 36,
+      "name": "DOCS_SITE",
+      "passed": true
+    },
+    {
+      "id": 37,
+      "name": "I18N",
+      "passed": false
+    },
+    {
+      "id": 38,
+      "name": "A11Y",
+      "passed": false
+    },
+    {
+      "id": 39,
+      "name": "LOAD_TESTING",
+      "passed": false
+    },
+    {
+      "id": 40,
+      "name": "CONTAINER_SCANNING",
+      "passed": false
+    },
+    {
+      "id": 41,
+      "name": "FEATURE_FLAGS",
+      "passed": true
+    },
+    {
+      "id": 42,
+      "name": "LOGGING",
+      "passed": false
+    },
+    {
+      "id": 43,
+      "name": "MONITORING",
+      "passed": false
+    },
+    {
+      "id": 44,
+      "name": "TRACING",
+      "passed": true
+    },
+    {
+      "id": 45,
+      "name": "ALERTING",
+      "passed": false
+    },
+    {
+      "id": 46,
+      "name": "RATE_LIMITING",
+      "passed": true
+    },
+    {
+      "id": 47,
+      "name": "CACHING",
+      "passed": false
+    },
+    {
+      "id": 48,
+      "name": "SSL_TLS",
+      "passed": false
+    },
+    {
+      "id": 49,
+      "name": "WAF",
+      "passed": false
+    },
+    {
+      "id": 50,
+      "name": "MFA",
+      "passed": false
+    },
+    {
+      "id": 51,
+      "name": "RBAC",
+      "passed": false
+    },
+    {
+      "id": 52,
+      "name": "AUDIT_LOGS",
+      "passed": true
+    },
+    {
+      "id": 53,
+      "name": "DATABASE_MIGRATIONS",
+      "passed": false
+    },
+    {
+      "id": 54,
+      "name": "ENV_VARS",
+      "passed": false
+    },
+    {
+      "id": 55,
+      "name": "KUBERNETES",
+      "passed": false
+    },
+    {
+      "id": 56,
+      "name": "HELM",
+      "passed": false
+    },
+    {
+      "id": 57,
+      "name": "TERRAFORM",
+      "passed": false
+    },
+    {
+      "id": 58,
+      "name": "ANSIBLE",
+      "passed": false
+    },
+    {
+      "id": 59,
+      "name": "CLOUDFORMATION",
+      "passed": false
+    },
+    {
+      "id": 60,
+      "name": "CANARY_DEPLOY",
+      "passed": false
+    },
+    {
+      "id": 61,
+      "name": "ROLLBACK",
+      "passed": true
+    },
+    {
+      "id": 62,
+      "name": "DATA_PRIVACY",
+      "passed": false
+    },
+    {
+      "id": 63,
+      "name": "COMPLIANCE",
+      "passed": false
+    },
+    {
+      "id": 64,
+      "name": "LICENSE_SCANNING",
+      "passed": false
+    },
+    {
+      "id": 65,
+      "name": "SECRET_SCANNING",
+      "passed": true
+    },
+    {
+      "id": 66,
+      "name": "IAAC",
+      "passed": false
+    },
+    {
+      "id": 67,
+      "name": "CDN",
+      "passed": false
+    },
+    {
+      "id": 68,
+      "name": "FIREWALL",
+      "passed": false
+    },
+    {
+      "id": 69,
+      "name": "VPN",
+      "passed": true
+    },
+    {
+      "id": 70,
+      "name": "SSO",
+      "passed": true
+    },
+    {
+      "id": 71,
+      "name": "BACKUPS",
+      "passed": true
+    },
+    {
+      "id": 72,
+      "name": "DISASTER_RECOVERY",
+      "passed": false
+    },
+    {
+      "id": 73,
+      "name": "STRESS_TESTING",
+      "passed": false
+    },
+    {
+      "id": 74,
+      "name": "PERFORMANCE_TESTING",
+      "passed": false
+    },
+    {
+      "id": 75,
+      "name": "SEO",
+      "passed": true
+    },
+    {
+      "id": 76,
+      "name": "ANALYTICS",
+      "passed": true
+    },
+    {
+      "id": 77,
+      "name": "FEEDBACK",
+      "passed": false
+    },
+    {
+      "id": 78,
+      "name": "SUPPORT",
+      "passed": true
+    },
+    {
+      "id": 79,
+      "name": "ROADMAP",
+      "passed": false
+    },
+    {
+      "id": 80,
+      "name": "STATUS_PAGE",
+      "passed": false
+    },
+    {
+      "id": 81,
+      "name": "INCIDENT_RESPONSE",
+      "passed": false
+    },
+    {
+      "id": 82,
+      "name": "DATA_SEEDING",
+      "passed": false
+    },
+    {
+      "id": 83,
+      "name": "DATA_CLEANUP",
+      "passed": true
+    },
+    {
+      "id": 84,
+      "name": "THROTTLING",
+      "passed": false
+    },
+    {
+      "id": 85,
+      "name": "BUSINESS_CONTINUITY",
+      "passed": false
+    },
+    {
+      "id": 86,
+      "name": "SUCCESSION_PLANNING",
+      "passed": false
+    },
+    {
+      "id": 87,
+      "name": "SHIPPING",
+      "passed": false
+    },
+    {
+      "id": 88,
+      "name": "RELEASE_NOTES",
+      "passed": false
+    }
+  ]
+}

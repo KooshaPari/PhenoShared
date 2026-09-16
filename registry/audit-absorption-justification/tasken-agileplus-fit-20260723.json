@@ -1,0 +1,28 @@
+{
+  "audit_date": "2026-07-23",
+  "source": "KooshaPari/Tasken",
+  "candidate_parent": "KooshaPari/AgilePlus",
+  "tasken_package": "taskkit",
+  "tasken_surface": [
+    "domain/scheduler.rs",
+    "domain/tasks.rs",
+    "domain/workflows.rs",
+    "domain/runners.rs",
+    "application/commands.rs",
+    "application/queries.rs",
+    "application/services.rs",
+    "infrastructure/observability.rs"
+  ],
+  "agileplus_surface": [
+    "crates/agileplus-pipeline",
+    "crates/agileplus-convoy",
+    "crates/agileplus-graph",
+    "crates/agileplus-sync",
+    "crates/agileplus-plane"
+  ],
+  "finding": "Conceptual overlap exists around workflow execution, graph/convoy coordination, and synchronization, but no exact crate/package identity or API equivalence was established.",
+  "disposition": "KEEP_STANDALONE_PENDING_ADAPTER_SPIKE",
+  "proposed_target": "AgilePlus",
+  "next_gate": "Compare public traits, persistence contracts, event semantics, and license before any subtree merge.",
+  "policy": "preserve-first; no source merge or deletion performed"
+}

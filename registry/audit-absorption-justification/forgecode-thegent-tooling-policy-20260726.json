@@ -1,0 +1,22 @@
+{
+  "audit_id": "forgecode-thegent-tooling-policy-20260726",
+  "audited_at": "2026-07-26T05:51:00Z",
+  "scope": ["forgecode", "thegent", "phenotype-tooling", "pheno-forge-plugins"],
+  "policy": "A live remote or preserved local history cannot be marked absorbed or retired without an explicit verified target boundary.",
+  "evidence": [
+    {"project":"forgecode","remote":"KooshaPari/forgecode","sha":"b7007fff1c9c58c3bd4d7f45ac8cb1748dc08f19","license":"Apache-2.0","archived":false,"decision":"KEEP_CANONICAL_FORK","reason":"Active fork; Dmouse92 mirror archival finding does not retire this repository."},
+    {"project":"thegent","remote":"KooshaPari/thegent","sha":"6a142313cdc1e68812a49d6932fe334828808b83","license":"MIT","archived":false,"decision":"KEEP_CANONICAL","reason":"Active agent runtime; recovery commit is provenance-only."},
+    {"project":"phenotype-tooling","remote":"KooshaPari/phenotype-tooling","sha":"42f1c29b495fa2a9acbbc3eeff0aaad5fa76aad7","license":"MIT","archived":false,"decision":"KEEP_CANONICAL","reason":"Active tooling/plugin spine; recovery commit does not imply unrelated absorption."},
+    {"project":"pheno-forge-plugins","remote":"KooshaPari/pheno-forge-plugins","sha":"be25f5f45fe64401467cfdb00d837d93cfa95896","license":"NOASSERTION","archived":false,"decision":"REVIEW_TARGET_CONFLICT","reason":"Registry proposes ABSORB into phenotype-tooling, but no target path or licensing proof exists; preserve standalone history."}
+  ],
+  "contradictions_resolved": [
+    "Dmouse92/forgecode archive evidence concerns a stale mirror, not KooshaPari/forgecode.",
+    "thegent and phenotype-tooling recovery refs are preservation evidence, not production merge proof.",
+    "pheno-forge-plugins remains explicit target-conflict review, not inferred absorption."
+  ],
+  "required_followups": [
+    "Verify pheno-forge-plugins licensing and map each plugin to a concrete phenotype-tooling path before ABSORB.",
+    "Keep forgecode, thegent, and phenotype-tooling as separate canonical boundaries until interface tests pass.",
+    "Refresh remote SHA evidence during the next registry sweep; no deletion or forced migration is authorized."
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "name": "phenotype-mcp-asset",
+  "languages": [
+    "rust"
+  ],
+  "primary_language": "rust",
+  "status": "folded",
+  "has_readme": true,
+  "type": "pheno-*-lib",
+  "substrate": "pheno-*-lib",
+  "category": "lib",
+  "path": "repos/PhenoFastMCP-rust/crates/fastmcp-asset",
+  "disposition": "SUPERSEDE",
+  "wave": "surface-reduction-1",
+  "extracted_from": "KooshaPari/McpKit",
+  "extraction_path": "McpKit/rust/phenotype-mcp-asset/",
+  "extraction_date": "2026-06-18",
+  "extraction_audit": "findings/2026-06-18-McpKit-source-inventory.md",
+  "absorbed_into": "KooshaPari/PhenoFastMCP-rust/crates/fastmcp-asset",
+  "absorption_pr": "KooshaPari/phenotype-mcp-asset#1 (McpKit extraction PR B \u2014 substrate carve-out)",
+  "supersedes_path": "McpKit/rust/phenotype-mcp-asset/",
+  "redirect": "fastmcp-asset inside PhenoFastMCP-rust; temporary standalone repo deleted after fold",
+  "domain_role": "mcp-asset",
+  "core_lang": "rust",
+  "edge_langs": [],
+  "consumer_docs": "phenotype-registry/registry/domain-roles.json#domains.id=mcp-asset",
+  "adr": "ADR-003",
+  "supersedes_adr": [
+    "ADR-003",
+    "ADR-017"
+  ],
+  "rationale": "McpKit was a multi-substrate mega-repo (Python+TS+Rust pack handlers, asset library, agent servers). The Rust asset carve-out first landed as KooshaPari/phenotype-mcp-asset, then was folded into PhenoFastMCP-rust as crates/fastmcp-asset so Rust MCP framework assets live with the Rust FastMCP target instead of another generic standalone substrate repo. The Python carve-out is agentmcp-hex (row #54) and the agent-runner substrate is in KooshaPari/Agentora (row #53).",
+  "stack": "rust",
+  "role_in_fleet": "Rust FastMCP workspace crate - reusable capability for MCP pack/asset handling. Consumed by PhenoFastMCP-rust and downstream MCP server implementations.",
+  "test_status": "folded source and provenance into PhenoFastMCP-rust/crates/fastmcp-asset; standalone repo superseded",
+  "last_reviewed": "2026-06-20"
+}

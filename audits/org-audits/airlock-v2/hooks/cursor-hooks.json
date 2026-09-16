@@ -1,0 +1,31 @@
+{
+  "_comment": "AIRLOCK V2 hook config for Cursor. Cursor does NOT have an event-driven hook surface (per agent-integration survey Section 3.1). The closest analogues are: (a) Shell() allow-list permissions, and (b) custom file-watcher hooks via ~/.cursor/hooks/ if supported by the Cursor version. We provide BOTH paths: a permissions block (always supported) and a hooks block (only effective if the user's Cursor version supports it — currently 2026.07.08-0c04a8a which does NOT have a hooks field).",
+  "version": 1,
+  "permissions": {
+    "_comment": "Add these entries to ~/.cursor/cli-config.json permissions.allow. Once the agent has permission to call airlock-v2-hook.sh, it can be invoked by name from any tool call.",
+    "allow": [
+      "Shell(/Users/kooshapari/CodeProjects/Phenotype/repos/_phenofleet-decisions/airlock-v2/hooks/airlock-v2-hook.sh)",
+      "Shell(/Users/kooshapari/CodeProjects/Phenotype/repos/_phenofleet-decisions/airlock-v2/hooks/airlock-v2-hook.sh *)"
+    ],
+    "_agent_instruction": "Additionally, add this to your project AGENTS.md or CLAUDE.md for Cursor: 'After every Edit/Write tool call, run /Users/kooshapari/CodeProjects/Phenotype/repos/_phenofleet-decisions/airlock-v2/hooks/airlock-v2-hook.sh to commit work-in-progress.'"
+  },
+  "hooks": {
+    "_comment": "Cursor 2026.07.08 does NOT natively support this block — but provides the canonical shape for future versions. Do NOT add this to cli-config.json until Cursor ships hooks support.",
+    "afterFileEdit": [
+      {
+        "type": "command",
+        "command": "/Users/kooshapari/CodeProjects/Phenotype/repos/_phenofleet-decisions/airlock-v2/hooks/airlock-v2-hook.sh",
+        "description": "Airlock V2: auto-commit + push wip branch after every Cursor file edit",
+        "timeout": 30
+      }
+    ],
+    "stop": [
+      {
+        "type": "command",
+        "command": "/Users/kooshapari/CodeProjects/Phenotype/repos/_phenofleet-decisions/airlock-v2/hooks/airlock-v2-hook.sh",
+        "description": "Airlock V2: final reconciliation + push on Cursor agent stop",
+        "timeout": 30
+      }
+    ]
+  }
+}

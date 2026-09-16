@@ -1,0 +1,29 @@
+{
+  "name": "phenoDesign",
+  "languages": [
+    "typescript"
+  ],
+  "primary_language": "typescript",
+  "status": "live",
+  "has_readme": true,
+  "type": "design-system",
+  "path": "repos/phenoDesign",
+  "disposition": "DECLARE_SPINE",
+  "spine_role": "CREATIVITY_DESIGN_UX",
+  "wave": "2026-07-20-creativity-spine-restoration",
+  "boundary_artifact": "docs/boundary/PhenoDesign.md",
+  "spine_artifact": "docs/spine/phenoDesign.md",
+  "related_repos": [
+    "KooshaPari/asset-engine"
+  ],
+  "restored_at": "2026-07-20T00:00:00.000000Z",
+  "unarchived_at": "2026-07-20T00:00:00.000000Z",
+  "absorption_reversed": true,
+  "prior_absorption": {
+    "date": "2026-07-17",
+    "target": "phenodocs (packages/design)",
+    "reversed_reason": "Creativity/design/UX requires a dedicated spine repo; token package remains consumable from phenoDesign canonical source."
+  },
+  "note": "Spine repo for creativity, art, design, and UX across Phenotype. Owns @phenotype/design tokens, VitePress theme, component patterns, and design governance. Asset pipeline extracted to KooshaPari/asset-engine (formerly engine/). GitHub unarchived 2026-07-20.",
+  "adr": "ADR-ECO-014"
+}

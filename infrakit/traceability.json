@@ -1,0 +1,13 @@
+{
+  "name": "phenotype-infrakit",
+  "version": "0.1.0",
+  "specs": ["INFRA-001"],
+  "absorption": {
+    "source_repo": "KooshaPari/phenotype-infrakit",
+    "absorbed_into": "KooshaPari/phenotype-registry",
+    "absorption_date": "2026-09-10",
+    "session_id": "absorb/infrakit-2026-09-10",
+    "method": "content-migration",
+    "pr": 554
+  }
+}

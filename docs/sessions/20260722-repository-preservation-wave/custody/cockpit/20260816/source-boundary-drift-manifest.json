@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "recorded_on": "2026-08-16",
+  "purpose": "Immutable observation of Beads source-boundary drift. The captured root beads.jsonl is a distinct three-record file and explicitly not a replacement for the prior 1,418-record custody snapshot.",
+  "source_paths": {
+    "prior_live_ledger": "/Users/kooshapari/CodeProjects/Phenotype/repos/phenotype-dag/beads.jsonl",
+    "observed_root_ledger": "/Users/kooshapari/CodeProjects/Phenotype/repos/beads.jsonl",
+    "prior_generator": "/Users/kooshapari/CodeProjects/Phenotype/repos/beads/bead-cockpit.py",
+    "prior_rendered_output": "/Users/kooshapari/CodeProjects/Phenotype/repos/cockpit/bead-cockpit-20260809-191131-f5ca38f7.html"
+  },
+  "copied_files": [
+    {
+      "path": "root-beads.jsonl",
+      "source_path": "/Users/kooshapari/CodeProjects/Phenotype/repos/beads.jsonl",
+      "sha256": "5c95dec9ce50225571d688f185f7ccd8823ccdd44a869e0a30692f57fccec241",
+      "bytes": 1353,
+      "records": 3,
+      "classification": "separate observed artifact; not replacement for prior Beads SSOT"
+    }
+  ],
+  "missing_observed_paths": [
+    "/Users/kooshapari/CodeProjects/Phenotype/repos/beads",
+    "/Users/kooshapari/CodeProjects/Phenotype/repos/phenotype-dag",
+    "/Users/kooshapari/CodeProjects/Phenotype/repos/cockpit"
+  ],
+  "required_recovery": [
+    "retain prior GitHub WIP ff7647ddb4cb66a80ba28814757aceb27a8fb0db and its R2 packet as the last complete known ledger",
+    "identify the authorized actor/source of the path removal",
+    "restore only through a separately governed source recovery, never by treating root-beads.jsonl as parity",
+    "re-establish tracked runtime, ledger, and publication ownership before resuming live cockpit writes"
+  ],
+  "validation_checks": [
+    "strict JSON parsing of root-beads.jsonl",
+    "SHA-256 and byte-size parity",
+    "absence checks on former source directories",
+    "git diff --check",
+    "direct GitHub ref verification",
+    "R2 remote readback"
+  ],
+  "parent_custody_commit": "ff7647ddb4cb66a80ba28814757aceb27a8fb0db"
+}

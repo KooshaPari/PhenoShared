@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  com.phenotype.auto-commit-daemon.plist
+  ----------------------------
+  Launches /Users/kooshapari/CodeProjects/Phenotype/repos/_phenofleet-decisions/airlock-v2/daemons/auto-commit-daemon.py
+  in --loop mode, sweeping ~/CodeProjects/Phenotype/repos/ for dirty git
+  working trees every 15 minutes and committing them as wip/<date>-auto branches.
+
+  INSTALL (do not auto-load — user inspects first):
+    cp com.phenotype.auto-commit-daemon.plist ~/Library/LaunchAgents/
+    launchctl load -w ~/Library/LaunchAgents/com.phenotype.auto-commit-daemon.plist
+    launchctl list | grep com.phenotype.auto-commit-daemon
+  UNINSTALL:
+    launchctl bootout gui/$UID/com.phenotype.auto-commit-daemon 2>/dev/null \
+      || launchctl unload ~/Library/LaunchAgents/com.phenotype.auto-commit-daemon.plist
+    rm ~/Library/LaunchAgents/com.phenotype.auto-commit-daemon.plist
+-->
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.phenotype.auto-commit-daemon</string>
+
+    <key>ProgramArguments</key>
+    <array>
+        <string>/usr/bin/env</string>
+        <string>python3</string>
+        <string>/Users/kooshapari/CodeProjects/Phenotype/repos/_phenofleet-decisions/airlock-v2/daemons/auto-commit-daemon.py</string>
+        <string>--loop</string>
+    </array>
+
+    <key>RunAtLoad</key>
+    <true/>
+
+    <key>KeepAlive</key>
+    <true/>
+
+    <key>ProcessType</key>
+    <string>Background</string>
+
+    <key>ThrottleInterval</key>
+    <integer>30</integer>
+
+    <key>Nice</key>
+    <integer>5</integer>
+
+    <key>StandardOutPath</key>
+    <string>/Users/kooshapari/.airlock-v2/logs/auto-commit.stdout.log</string>
+
+    <key>StandardErrorPath</key>
+    <string>/Users/kooshapari/.airlock-v2/logs/auto-commit.stderr.log</string>
+
+    <key>WorkingDirectory</key>
+    <string>/Users/kooshapari</string>
+
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>PATH</key>
+        <string>/usr/local/bin:/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+        <key>HOME</key>
+        <string>/Users/kooshapari</string>
+        <key>AIRLOCK_V2_INTERVAL</key>
+        <string>900</string>
+        <key>AIRLOCK_V2_ROOT</key>
+        <string>/Users/kooshapari/CodeProjects/Phenotype/repos</string>
+        <key>AIRLOCK_V2_LOG_DIR</key>
+        <string>/Users/kooshapari/.airlock-v2/logs</string>
+        <key>AIRLOCK_V2_LOCK_PATH</key>
+        <string>/tmp/airlock-v2.auto-commit.lock</string>
+        <key>AIRLOCK_V2_DRY_RUN</key>
+        <string>0</string>
+    </dict>
+</dict>
+</plist>

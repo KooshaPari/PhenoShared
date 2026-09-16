@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "recorded_on": "2026-08-12",
+  "purpose": "Custody record for the approved, bounded cockpit source capture; not a live-state or rendered-artifact publication.",
+  "source_paths": {
+    "builder": "/Users/kooshapari/CodeProjects/Phenotype/repos/cockpit/build_leapfrog_cockpit.py",
+    "beads_log": "/Users/kooshapari/CodeProjects/Phenotype/repos/phenotype-dag/beads.jsonl"
+  },
+  "copied_files": [
+    {
+      "path": "build_leapfrog_cockpit.py",
+      "source_path": "/Users/kooshapari/CodeProjects/Phenotype/repos/cockpit/build_leapfrog_cockpit.py",
+      "sha256": "ed0713cc991f2721824d6e1dadd55d464aa45726508b4d5dfcdf6c633d3c6c97",
+      "bytes": 41601
+    },
+    {
+      "path": "beads.jsonl",
+      "source_path": "/Users/kooshapari/CodeProjects/Phenotype/repos/phenotype-dag/beads.jsonl",
+      "sha256": "408aa972db5de928a1442e64b654d9f696708eab81e7c1d23fd5cb691e42ba79",
+      "bytes": 571365
+    }
+  ],
+  "excluded_inputs": [
+    {
+      "path": "/Users/kooshapari/.agileplus/audit.jsonl",
+      "reason": "External audit mirror excluded without copying content because the scanner reported 22 hits."
+    }
+  ],
+  "excluded_artifacts_and_writers": [
+    {
+      "path": "/Users/kooshapari/CodeProjects/Phenotype/repos/cockpit/bead-cockpit-20260809-191131-f5ca38f7.html",
+      "reason": "Rendered HTML is derived output and is not retained in this source-only custody capture."
+    },
+    {
+      "path": "/Users/kooshapari/CodeProjects/Phenotype/repos/cockpit/bead-cockpit-20260809-193102-multi.html",
+      "reason": "Legacy rendered reference is excluded as a derived artifact."
+    },
+    {
+      "path": "/Users/kooshapari/CodeProjects/Phenotype/repos/beads/bead-cockpit.py",
+      "reason": "Secondary competing cockpit writer is excluded to preserve a single approved builder capture."
+    }
+  ],
+  "historical_builder_provenance": {
+    "recorded_builder_path": "/Users/kooshapari/CodeProjects/Phenotype/repos/cockpit/build_leapfrog_cockpit.py",
+    "actual_configured_inputs": [
+      "/Users/kooshapari/CodeProjects/Phenotype/repos/phenotype-dag/beads.jsonl"
+    ],
+    "source_documentation_mismatch": "The copied builder's historical source documentation names ~/.agileplus/audit.jsonl as a mirror input, but its BEAD_SOURCES configuration contains only phenotype-dag/beads.jsonl. The audit mirror is neither a supported configured input nor a captured input for this custody record.",
+    "execution_prohibited": "This is non-executable historical provenance. Do not run the copied builder against live paths: its fixed output path is an excluded rendered cockpit HTML artifact and execution can overwrite that live file."
+  },
+  "validation_checks": [
+    "python3 -m json.tool provenance-manifest.json",
+    "python3 -m py_compile build_leapfrog_cockpit.py",
+    "strict line-by-line JSON parsing of beads.jsonl",
+    "SHA256 and byte-size parity of copied files against this manifest",
+    "git diff --check"
+  ]
+}

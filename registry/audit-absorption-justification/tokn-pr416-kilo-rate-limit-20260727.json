@@ -1,0 +1,18 @@
+{
+  "pull_request": 416,
+  "repo": "KooshaPari/phenotype-registry",
+  "head_sha": "564a5aa",
+  "reviewed_at": "2026-07-27T00:48:00Z",
+  "check": "Kilo Code Review",
+  "result": "transient_rate_limit",
+  "provider_message": "Review failed: Assistant request was rate limited",
+  "resolution": "No source or registry finding was reported by Kilo; rerun is required when provider capacity permits.",
+  "other_checks": {
+    "semgrep": "pass",
+    "sonarcloud": "pass",
+    "socket_security": "pass",
+    "gitguardian": "pass",
+    "coderabbit": "pass_rate_limited_review"
+  },
+  "merge_policy": "Do not treat this provider failure as a code defect; retain PR open until sponsor-approved rerun or documented exception."
+}

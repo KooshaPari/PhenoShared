@@ -1,0 +1,314 @@
+#!/bin/bash
+#==========================================
+# pheno-compute - Global CLI for 3090 Ti Desktop
+# Install: ln -s /path/to/pheno-compute-layer/bin/pheno ~/bin/pheno
+#==========================================
+
+set -e
+
+# Configuration
+COMPUTE_HOST="desk"  # kooshapari-desk via Tailscale
+COMPUTE_IP="100.96.135.160"
+WSL_IP="100.84.189.31"  # WSL Tailscale IP
+WSL_USER="kooshapari"
+WSL_SSH_PORT="2222"
+TIMEOUT=15
+
+# Script locations
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+SCRIPTS_DIR="$SCRIPT_DIR/../scripts"
+
+# Colors
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+BLUE='\033[0;34m'
+YELLOW='\033[1;33m'
+NC='\033[0m'
+
+log_info() { echo -e "${GREEN}[INFO]${NC} $1"; }
+log_warn() { echo -e "${YELLOW}[WARN]${NC} $1"; }
+log_error() { echo -e "${RED}[ERROR]${NC} $1"; }
+log_debug() { echo -e "${BLUE}[DEBUG]${NC} $1"; }
+
+#----------------------------------
+# Connection checks
+#----------------------------------
+check_connection() {
+    timeout 5 ssh -o BatchMode=yes -o ConnectTimeout=5 $COMPUTE_HOST "echo ok" 2>/dev/null
+}
+
+check_tailscale_ssh() {
+    ssh -o BatchMode=yes -o ConnectTimeout=5 "$COMPUTE_HOST" "echo ok" 2>/dev/null
+}
+
+#----------------------------------
+# GPU Operations
+#----------------------------------
+gpu_status() {
+    ssh $COMPUTE_HOST "nvidia-smi --query-gpu=name,memory.used,memory.total,temperature.gpu,utilization.gpu,power.draw --format=csv,noheader,nounits" 2>/dev/null
+}
+
+gpu_full() {
+    ssh $COMPUTE_HOST "nvidia-smi" 2>/dev/null
+}
+
+gpu_processes() {
+    ssh $COMPUTE_HOST "nvidia-smi --query-compute-apps=pid,name,used_memory --format=csv" 2>/dev/null
+}
+
+#----------------------------------
+# System Info
+#----------------------------------
+sysinfo() {
+    log_info "Desktop System Info:"
+    ssh $COMPUTE_HOST "hostname; wmic os get Caption,Version /format:list | findstr /i 'caption version'" 2>/dev/null || \
+    ssh $COMPUTE_HOST "uname -a" 2>/dev/null || echo "Unable to get system info"
+    echo ""
+    log_info "GPU Info:"
+    gpu_status
+}
+
+#----------------------------------
+# Python/Pip environment
+#----------------------------------
+py_versions() {
+    ssh $COMPUTE_HOST "python --version; pip --version" 2>/dev/null || echo "Python not configured"
+}
+
+#----------------------------------
+# vLLM operations
+#----------------------------------
+vllm_status() {
+    log_info "Checking vLLM..."
+    ssh $COMPUTE_HOST "pip show vllm 2>/dev/null || echo 'vllm not installed'" 2>/dev/null
+}
+
+#----------------------------------
+# LLM inference server operations
+#----------------------------------
+llm_status() {
+    log_info "Checking managed LLM inference endpoint..."
+    if [[ -x "$SCRIPTS_DIR/check-server.sh" ]]; then
+        "$SCRIPTS_DIR/check-server.sh"
+    else
+        log_warn "check-server.sh not found at $SCRIPTS_DIR"
+        # Fallback: curl the endpoint directly
+        log_info "Attempting direct endpoint check..."
+        if curl -s --connect-timeout 5 "http://${COMPUTE_IP}:8080/v1/models" > /dev/null 2>&1; then
+            log_info "LLM endpoint is reachable"
+            log_info "URL: http://${COMPUTE_IP}:8080/v1"
+        else
+            log_warn "LLM endpoint not reachable"
+            log_info "URL: http://${COMPUTE_IP}:8080/v1"
+            log_info "Start with: scripts/start-llm-server.sh"
+        fi
+    fi
+}
+
+#----------------------------------
+# Tailscale operations
+#----------------------------------
+tailscale_status() {
+    log_info "Tailscale status:"
+    ssh $COMPUTE_HOST "tailscale status 2>/dev/null || echo 'Tailscale not available in WSL'" 2>/dev/null
+}
+
+tailscale_ssh_enable() {
+    log_info "Enabling Tailscale SSH on WSL..."
+    ssh $COMPUTE_HOST "wsl -e sudo tailscale up --ssh 2>/dev/null || echo 'WSL Tailscale needs setup'" 2>/dev/null
+}
+
+#----------------------------------
+# WSL SSH operations (direct to WSL)
+#----------------------------------
+wsl_ssh() {
+    if [[ -z "$*" ]]; then
+        log_error "Usage: pheno wsl-ssh <command>"
+        return 1
+    fi
+    log_debug "WSL SSH: $*"
+    ssh -p $WSL_SSH_PORT -o ConnectTimeout=10 $WSL_USER@$WSL_IP "$@"
+}
+
+wsl_shell() {
+    ssh -t -p $WSL_SSH_PORT $WSL_USER@$WSL_IP "cd ~ && $SHELL"
+}
+
+wsl_gpu() {
+    # Call nvidia-smi via Windows from WSL
+    wsl_ssh "powershell.exe -Command 'C:\\Program Files\\NVIDIA Corporation\\NVSMI\\nvidia-smi.exe --query-gpu=name,memory.total --format=csv,noheader'"
+}
+
+wsl_status() {
+    log_info "WSL SSH Status:"
+    timeout 5 ssh -o BatchMode=yes -p $WSL_SSH_PORT $WSL_USER@$WSL_IP "hostname" 2>/dev/null && echo " - Connected" || echo " - Not connected"
+    log_info "WSL Tailscale IP: $WSL_IP"
+}
+
+#----------------------------------
+# WSL operations (via Windows)
+#----------------------------------
+wsl_list() {
+    log_info "WSL Status:"
+    ssh $COMPUTE_HOST "wsl --list --verbose" 2>/dev/null
+}
+
+wsl_ip() {
+    ssh $COMPUTE_HOST "wsl -e hostname -I" 2>/dev/null
+}
+
+#----------------------------------
+# Remote command execution
+#----------------------------------
+run() {
+    if [[ -z "$*" ]]; then
+        log_error "Usage: pheno run <command>"
+        return 1
+    fi
+    log_debug "Running: $*"
+    ssh $COMPUTE_HOST "$@"
+}
+
+shell() {
+    ssh -t $COMPUTE_HOST "cd ~ && $SHELL"
+}
+
+#----------------------------------
+# File operations
+#----------------------------------
+scp_to() {
+    local src="$1"
+    local dest="${2:-.}"
+    scp -r "$src" "$COMPUTE_HOST:$dest"
+}
+
+scp_from() {
+    local src="$1"
+    local dest="${2:-.}"
+    scp -r "$COMPUTE_HOST:$src" "$dest"
+}
+
+#----------------------------------
+# Service status
+#----------------------------------
+services() {
+    log_info "Checking services..."
+    ssh $COMPUTE_HOST "powershell -Command 'Get-Service | Where-Object {\$_.Status -eq \"Running\"} | Select-Object -First 10 Name,Status'" 2>/dev/null
+}
+
+#----------------------------------
+# Help
+#----------------------------------
+show_help() {
+    cat << 'EOF'
+pheno-compute - Access 3090 Ti Desktop via Tailscale
+
+Usage: pheno <command> [args]
+
+Commands:
+  status, s        Check SSH connection status
+  gpu, g           GPU status (quick)
+  gpu-full, gf     Full nvidia-smi output
+  gpu-proc, gp     GPU processes
+  sysinfo, si      System information
+  py, pyver        Python/Pip versions
+  vllm, vl         Check vLLM installation
+  llm              Check managed LLM inference endpoint
+  ts, tailscale    Tailscale status
+  wsl, w           WSL status (via Windows)
+  wsl-ssh, ws      Direct SSH to WSL (port 2222)
+  wsl-gpu, wg      GPU via WSL SSH
+  run, r <cmd>     Run command on desktop
+  shell, sh        Interactive shell
+  argis         Delegate to the v4 argis master CLI (deploy/serve/cutover on desktop)
+  argo          Alias for argis
+  scp-to <src> [dest]   Copy files to desktop
+  scp-from <src> [dest] Copy files from desktop
+  help, h          Show this help
+
+Examples:
+  pheno gpu
+  pheno llm
+  pheno wsl-ssh hostname
+  pheno wsl-gpu
+  pheno run nvidia-smi -L
+  pheno shell
+EOF
+}
+
+#----------------------------------
+# Main
+#----------------------------------
+main() {
+    case "${1:-}" in
+        status|s)
+            if check_connection >/dev/null 2>&1; then
+                log_info "SSH: Connected to $COMPUTE_HOST"
+                gpu_status
+            else
+                log_error "SSH: Not connected to $COMPUTE_HOST"
+            fi
+            echo ""
+            log_info "LLM endpoint: http://${COMPUTE_IP}:8080/v1"
+            ;;
+        gpu|g)
+            gpu_status
+            ;;
+        gpu-full|gf)
+            gpu_full
+            ;;
+        gpu-proc|gp)
+            gpu_processes
+            ;;
+        sysinfo|si)
+            sysinfo
+            ;;
+        py|pyver)
+            py_versions
+            ;;
+        vllm|vl)
+            vllm_status
+            ;;
+        llm)
+            llm_status
+            ;;
+        ts|tailscale)
+            tailscale_status
+            ;;
+        wsl|w)
+            wsl_list
+            ;;
+        wsl-ssh|ws)
+            shift
+            wsl_ssh "$@"
+            ;;
+        wsl-gpu|wg)
+            wsl_gpu
+            ;;
+        run|r)
+            shift
+            run "$@"
+            ;;
+        shell|sh)
+            shell
+            ;;
+        scp-to)
+            shift
+            scp_to "$@"
+            ;;
+        scp-from)
+            shift
+            scp_from "$@"
+            ;;
+        help|h|"")
+            show_help
+            ;;
+        *)
+            log_error "Unknown command: $1"
+            show_help
+            exit 1
+            ;;
+    esac
+}
+
+main "$@"

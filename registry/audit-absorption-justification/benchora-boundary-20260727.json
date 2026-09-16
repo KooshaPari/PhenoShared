@@ -1,0 +1,47 @@
+{
+  "name": "Benchora",
+  "audit_date": "2026-07-27",
+  "source": {
+    "repository": "https://github.com/KooshaPari/Benchora",
+    "default_branch": "main",
+    "remote_sha": "66120c1211d7f5bb2c7f5f440e582d5c059f79ce",
+    "local_branch": "feat/cross-repo-audit-fixes",
+    "local_sha": "b4fd1465f2ee2867670153f16ddbcd6bd9c25c27",
+    "local_ahead_of_remote_main": 1,
+    "working_tree_clean": true
+  },
+  "evidence": {
+    "language": "rust",
+    "crate": "benchora 0.2.0",
+    "license": "MIT (LICENSE and Cargo.toml)",
+    "spec_and_docs": ["SPEC.md", "ARCHITECTURE.md", "README.md"],
+    "capabilities": [
+      "Criterion benchmark harnesses",
+      "benchora CLI for run/report/baseline/compare/list/mutate",
+      "SQLite-backed benchmark baselines",
+      "mutation-testing and xDD contract tracking"
+    ],
+    "validation": {
+      "command": "cargo test --locked -q",
+      "result": "pass",
+      "tests_passed": 122,
+      "tests_ignored": 1
+    }
+  },
+  "boundary_decision": {
+    "disposition": "AFFIRM",
+    "canonical_parent": "pheno",
+    "boundary": "perf-harness",
+    "absorbed_into": null,
+    "rationale": "Benchora is a focused, published Rust benchmarking and xDD framework with an explicit specification, MIT license, CLI, and baseline persistence. It complements rather than duplicates phenotype-tooling or heliosBench; retain the standalone crate and route benchmark consumers to it through the registry."
+  },
+  "preservation": {
+    "no_deletion": true,
+    "existing_local_preservation_refs": [
+      "wip/2026-07-22-benchora-local-preservation",
+      "wip/20260722T0533-18c485bee9986c40",
+      "wip/20260722T1247-18c49d6e588493b0",
+      "wip/20260722T1305-18c49e70a592e3c0"
+    ]
+  }
+}

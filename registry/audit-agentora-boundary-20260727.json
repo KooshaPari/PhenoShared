@@ -1,0 +1,31 @@
+{
+  "audit": "agentora-boundary-20260727",
+  "repo": "KooshaPari/Agentora",
+  "observed": {
+    "default_branch": "main",
+    "head": "c7edae858b264e075210a7b5fc574b3d0da4fe4d",
+    "archived": false,
+    "private": false,
+    "license": "MIT",
+    "size_kb": 9382,
+    "updated_at": "2026-07-24T07:28:05Z",
+    "workspace": "Rust multi-crate workspace",
+    "readme_surface": "agentkit skills, tool registry, two-tier memory, lifecycle events",
+    "embedded_surfaces": ["crates/pheno-agent", "phenotype-* support crates", "forgecode-core", "bifrost-routing"]
+  },
+  "prior_registry_conflicts": [
+    "projects/Agentora.json was queued with disposition ABSORB and proposed target pheno (crates/agentora)",
+    "registry/disposition-index.json contains archived/TOO_LARGE_RETIRE and later canonical-AFFIRMED entries for the same live repository",
+    "historical entries describe the repository as Python despite current remote being Rust"
+  ],
+  "boundary_decision": {
+    "disposition": "KEEP_STANDALONE_PENDING_BOUNDARY_REVIEW",
+    "absorbed_into": null,
+    "reason": "Live multi-crate workspace; embedded pheno-agent crates do not prove all Agentora APIs migrated into pheno. Preserve upstream history and defer extraction until crate-level dependency, API, and test-parity evidence exists."
+  },
+  "overlap_review": {
+    "thegent": {"head": "6a142313cdc1e68812a49d6932fe334828808b83", "license": "MIT", "role": "agent execution/orchestration runtime", "relationship": "complementary; contract comparison required"},
+    "pheno": {"head": "9047e9dc36a586994976f1b4a8574039623d3475", "license": "MIT", "role": "Rust monorepo parent", "relationship": "possible parent for selected crates only; migration unproven"}
+  },
+  "preservation": {"action": "registry-only correction", "source_mutation": false, "deletion": false, "force_push": false}
+}

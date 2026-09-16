@@ -1,0 +1,19 @@
+{
+  "name": "pheno-forge-plugins",
+  "languages": [
+    "shell"
+  ],
+  "primary_language": "shell",
+  "status": "active",
+  "has_readme": true,
+  "type": "plugin-bundle",
+  "path": "repos/pheno-forge-plugins",
+  "disposition": "REVIEW_TARGET_CONFLICT",
+  "wave": "2026-07-17-queue-refresh-batch3",
+  "absorbed_into": null,
+  "absorption_note": "Sidecar bundle for antinomyhq/forgecode — 6 plugins (memory + config + tracing) as per-machine systemd units. Target: phenotype-tooling/plugins/pheno-forge/ as a plugin pack. Could also split: memory→PhenoMemory, config→Configra, tracing→pheno-tracing.",
+  "note": "Live remote re-audited 2026-07-26; target path and license remain unverified. Preserve standalone history pending plugin-by-plugin mapping.",
+  "remote_default_sha_at_audit": "be25f5f45fe64401467cfdb00d837d93cfa95896",
+  "audit_artifact": "registry/audit-absorption-justification/forgecode-thegent-tooling-policy-20260726.json",
+  "adr": "ADR-ECO-006"
+}

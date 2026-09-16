@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "recorded_on": "2026-08-16",
+  "purpose": "Immutable point-in-time custody record for the Beads event ledger after the independent-host restore probe; not live-state, publication, promotion, or retirement evidence.",
+  "source_paths": {
+    "beads_log": "/Users/kooshapari/CodeProjects/Phenotype/repos/phenotype-dag/beads.jsonl"
+  },
+  "copied_files": [
+    {
+      "path": "beads.jsonl",
+      "source_path": "/Users/kooshapari/CodeProjects/Phenotype/repos/phenotype-dag/beads.jsonl",
+      "sha256": "1a302a0fc6888b73c40389f306a9af3dcd751d986833044d5788aa0e4e198300",
+      "bytes": 1062905,
+      "records": 1417
+    }
+  ],
+  "excluded_artifacts_and_writers": [
+    {
+      "path": "/Users/kooshapari/CodeProjects/Phenotype/repos/cockpit/bead-cockpit-20260809-191131-f5ca38f7.html",
+      "reason": "Derived rendered output; regenerated separately from the retained ledger."
+    },
+    {
+      "path": "/Users/kooshapari/CodeProjects/Phenotype/repos/beads/bead-ctl.sh",
+      "reason": "Operational writer retained under provisional pheno-harness runtime ownership; not a registry custody copy."
+    }
+  ],
+  "validation_checks": [
+    "strict line-by-line JSON parsing",
+    "SHA-256 and byte-size parity",
+    "git diff --check",
+    "direct GitHub ref verification",
+    "R2 remote readback and strict JSON parsing"
+  ],
+  "parent_custody_commit": "b44067375cd1682524b6bd8cafbbd5253fb5ab4c"
+}

@@ -1,0 +1,31 @@
+name: Dedup Check
+on:
+  push:
+    branches: [main]
+  pull_request:
+jobs:
+  dedup:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          fetch-depth: 0
+      - name: Compare DAG crates with upstream
+        run: |
+          echo "Checking if pheno-dag matches byteport-dag upstream..."
+          UPSTREAM="https://raw.githubusercontent.com/KooshaPari/BytePort/main/crates/byteport-dag/src"
+          LOCAL="crates/pheno-dag/src"
+          FAIL=0
+          for f in dag.rs topo.rs schema.rs serialize.rs; do
+            curl -sf "$UPSTREAM/$f" -o /tmp/upstream_$f 2>/dev/null || { echo "SKIP $f (upstream not found)"; continue; }
+            if ! diff -q /tmp/upstream_$f "$LOCAL/$f" >/dev/null 2>&1; then
+              echo "DIVERGED: $f"
+              diff -u /tmp/upstream_$f "$LOCAL/$f" | head -20
+              FAIL=1
+            else
+              echo "IDENTICAL: $f"
+            fi
+          done
+          if [ "$FAIL" = "1" ]; then
+            echo "::warning::pheno-dag has diverged from byteport-dag. Consider updating both or consolidating."
+          fi

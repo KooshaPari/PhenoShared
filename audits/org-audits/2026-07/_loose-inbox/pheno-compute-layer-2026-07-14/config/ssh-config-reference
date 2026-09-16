@@ -1,0 +1,73 @@
+#==========================================
+# SSH Config for All AI Tools
+# Add to ~/.ssh/config or use as reference
+#==========================================
+
+#----------------------------------
+# kooshapari-desk (3090 Ti)
+#----------------------------------
+Host kooshapari-desk desk desk-tail
+    HostName kooshapari-desk.tail2b570.ts.net
+    User kooshapari
+    ForwardAgent yes
+    IdentityFile ~/.ssh/id-git
+    AddKeysToAgent yes
+    UseKeychain yes
+    BatchMode yes
+    ConnectTimeout 10
+    ServerAliveInterval 60
+    ServerAliveCountMax 3
+
+# Direct IP fallback (Tailscale)
+Host koosh-desk desk-ip
+    HostName 100.96.135.160
+    User koosh
+    IdentityFile ~/.ssh/id-git
+    AddKeysToAgent yes
+    BatchMode yes
+    ConnectTimeout 10
+    StrictHostKeyChecking accept-new
+
+#----------------------------------
+# WSL Tailscale SSH
+#----------------------------------
+Host desk-wsl desk-ts
+    HostName kooshapari-desk.tail2b570.ts.net
+    User kooshapari
+    ProxyCommand tailscale ssh --stdio %h
+    IdentityFile ~/.ssh/id-git
+    BatchMode yes
+    ConnectTimeout 10
+
+#----------------------------------
+# Claude Code / Claude CLI
+#----------------------------------
+# Add to ~/.claude.json:
+# {
+#   "invocationTimeout": 120,
+#   "env": {
+#     "COMPUTE_HOST": "desk",
+#     "COMPUTE_IP": "100.96.135.160"
+#   }
+# }
+
+#----------------------------------
+# Forge / Claude Desktop
+#----------------------------------
+# Add MCP server config to:
+# ~/.config/claude-desktop/mcp_settings.json
+
+#----------------------------------
+# Cursor Agent
+#----------------------------------
+# Add to Cursor settings:
+# {
+#   "cursorai.remoteSshHost": "desk",
+#   "cursorai.computeHost": "100.96.135.160"
+# }
+
+#----------------------------------
+# Codex / OpenAI CLI
+#----------------------------------
+# export CODECLASSIFY_SSH_HOST=desk
+# export COMPUTE_HOST=kooshapari-desk

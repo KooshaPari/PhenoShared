@@ -1,0 +1,37 @@
+{
+  "audit_id": "pr402-kilo-rate-limit-20260726",
+  "captured_at": "2026-07-26T01:13:33Z",
+  "pull_request": 402,
+  "head_sha_at_exception": "47a89f093c963df3d9baba8809d6ad707b4b9ab1",
+  "current_head_sha": "ab7ebaf",
+  "purpose": "Record preservation-manifest gate exception without silently merging",
+  "check": {
+    "name": "Kilo Code Review",
+    "conclusion": "failure",
+    "summary": "Review failed: Assistant request was rate limited",
+    "details_url": "https://app.kilo.ai/code-reviews/0a9d3f17-4e3e-4e75-a555-ec7e22dd722d"
+  },
+  "other_checks": {
+    "semgrep": "pass",
+    "sonarcloud": "pass",
+    "gitguardian": "pass",
+    "socket": "pass",
+    "summary": "pass",
+    "mergify": "neutral/skipped",
+    "coderabbit": "rate-limited/commentary"
+  },
+  "scope": "Evidence-only preservation manifest for hwLedger, Tracera, phenotype-tooling, pheno-harness, SessionLedger, phenotype-omlx, ShareCLI, and thegent recovery refs.",
+  "disposition": "RESOLVED_BY_SUCCESSFUL_RERUN",
+  "resolution": {
+    "pr402_merge_commit": "4aa9809a31b683c9d87e6acc3886735653d0cc03",
+    "pr402_merged_at": "2026-07-26T01:34:05Z",
+    "later_kilo_result": "pass",
+    "note": "The initial rate-limited Kilo result was superseded by a successful rerun before PR #402 merged."
+  },
+  "invariants": [
+    "No source repository was deleted, reset, cleaned, or merged by PR #402.",
+    "All listed recovery refs were pushed before this audit was created.",
+    "The Kilo failure is attributed to service rate limiting, not a reported code finding."
+  ],
+  "next_gate": "Retain this audit as historical evidence; no exception merge was required."
+}

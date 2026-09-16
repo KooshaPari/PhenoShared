@@ -1,0 +1,36 @@
+{
+  "audit_date": "2026-07-23",
+  "scope": "KooshaPari GitHub repositories <= 1000 KB compared with projects/*.json",
+  "policy": "preserve-first; no deletion or branch pruning",
+  "candidates": [
+    {"repo": "4sgm-archive2", "disposition": "ARCHIVE", "canonical_source": "4sgm"},
+    {"repo": "Eidolon-archive", "disposition": "ARCHIVE", "canonical_source": "Eidolon"},
+    {"repo": "phenotype-org-audits-archive", "disposition": "ARCHIVE", "canonical_source": "phenotype-org-audits"},
+    {"repo": "planify-wt-archive", "disposition": "ARCHIVE", "canonical_source": "Planify2", "source_remote_exists": false, "provenance_status": "unresolved_local_clone"},
+    {"repo": "home-recovery-2026-07-archive", "disposition": "ARCHIVE", "canonical_source": null},
+    {"repo": "zen", "disposition": "ARCHIVE", "canonical_source": "HexaKit"},
+    {"repo": "phenotype-gateway", "disposition": "ARCHIVE", "canonical_source": "HexaKit"},
+    {"repo": "omniroute-monorepo-archive", "disposition": "ARCHIVE", "canonical_source": "OmniRoute"},
+    {"repo": "pheno-mcp-router", "disposition": "ABSORB_CANDIDATE", "canonical_source": "phenotype-router"},
+    {"repo": "nexus", "disposition": "KEEP", "canonical_source": null},
+    {"repo": "tehgent", "disposition": "ABSORB_CANDIDATE", "canonical_source": "thegent"},
+    {"repo": "pheno-agents-md", "disposition": "ABSORB_CANDIDATE", "canonical_source": "phenotype-tooling"},
+    {"repo": "agent-platform", "disposition": "KEEP_RECOVERY", "canonical_source": null},
+    {"repo": "phenotype-router", "disposition": "KEEP", "canonical_source": null},
+    {"repo": "Stashly", "disposition": "KEEP", "canonical_source": null},
+    {"repo": "thegent-sharecli", "disposition": "ABSORB_CANDIDATE", "canonical_source": "thegent"},
+    {"repo": "2phenoEvents", "disposition": "HISTORICAL_ALIAS_TOMBSTONE", "historical_disposition": "ABSORB_CANDIDATE", "canonical_source": "phenoEvents", "reconciled_at": "2026-08-05", "reconciliation_artifact": "audits/absorption-justifications/2phenoEvents-reconciliation-20260805.md"},
+    {"repo": "Project-Spyn", "disposition": "HITL", "canonical_source": null},
+    {"repo": "benchmark", "disposition": "ARCHIVE_OR_KEEP", "canonical_source": null},
+    {"repo": "benchmarks", "disposition": "ARCHIVE_OR_KEEP", "canonical_source": null}
+  ],
+  "evidence": {
+    "github_repo_count": 296,
+    "registry_project_json_count": 154,
+    "raw_name_gap_rows": 142,
+    "archive_rows_in_registry": 5,
+    "source_scan": "GitHub REST user/repos, size <= 1000 KB",
+    "verification": ["all project JSON parses", "duplicate project stems absent"],
+    "next_gate": "sponsor review before any absorption, archive deletion, or worktree pruning"
+  }
+}

@@ -1,0 +1,66 @@
+{
+  "audit_date": "2026-09-01",
+  "scope": "G2.B — pointer README replacement on KooshaPari/Apisync (archived 2026-06-19)",
+  "policy": "preserve-first; archived repos keep read-only history and gain a root pointer README per phenotype-omlx/docs/guides/GITHUB_ARCHIVE_POLICY.md step 6",
+  "task_id": "G2.B",
+  "deliverable_artifact": "phenotype-registry/registry/absorbed-crates/apisync/README.md",
+  "supporting_artifacts": [
+    "phenotype-registry/registry/absorbed-crates/apisync/ABSORPTION.md",
+    "phenotype-registry/registry/absorbed-crates/apisync/UPSTREAM.md"
+  ],
+  "candidates": [
+    {
+      "repo": "Apisync",
+      "remote": "https://github.com/KooshaPari/Apisync.git",
+      "github_state": "archived (read-only)",
+      "archived_on": "2026-06-19",
+      "disposition": "POINTER_README_ADDED",
+      "canonical_source": "phenotype-tooling/docs/absorbed-from-apikit/",
+      "immediate_successor": "KooshaPari/apikit (also archived 2026-06-21)",
+      "active_canonical_home": "KooshaPari/phenotype-tooling (docs/absorbed-from-apikit/)",
+      "absorption_chain": [
+        "KooshaPari/Apisync → KooshaPari/apikit (v0.1.0 extraction)",
+        "KooshaPari/apikit → phenotype-tooling/docs/absorbed-from-apikit (full governance + src + CI + docs absorption 2026-06-21)"
+      ],
+      "pointer_readme_path": "registry/absorbed-crates/apisync/README.md",
+      "suppressed_rename": "held until org-wide zz-archive-* sweep; remote URL preserved for traceability with introspections",
+      "evidence": [
+        "phenotype-tooling/docs/absorbed-from-apikit/ABSORPTION.md",
+        "phenotype-tooling/docs/absorbed-from-apikit/CHANGELOG.md (entries dated 2026-06-20)",
+        "phenotype-registry/docs/operations/wave14-gateway-ssot-2026-06-17.md (task #1 reference)",
+        "pheno/.gitmodules (Apisync submodule stanza, line 4–6)",
+        "pheno/crates/hexa-kit/docs/adr/origin/001..005-apisync-*.md (origin lineage header referencing commit d981353)",
+        "phenotype-registry/docs/intent/Apisync.md (4 bound prompts)",
+        "phenotype-registry/docs/boundary/Apisync.md (initial scaffolding, last review 2026-06-17)"
+      ],
+      "verification": {
+        "github_is_archived": true,
+        "github_homepage_field_target": "https://github.com/KooshaPari/phenotype-tooling/tree/main/docs/absorbed-from-apikit",
+        "github_description_target": "SUPERSEDED 2026-06-19 — migrated into apikit, absorbed into phenotype-tooling/docs/absorbed-from-apikit. Do not push here.",
+        "registry_intent_records_preserved": true,
+        "pheno_submodule_pin_status": "removed in phenotype-core workspace (HexaKit #271); submodule entry remains in pheno/.gitmodules pending sweep"
+      },
+      "followups": [
+        "PR the new README.md to KooshaPari/Apisync main (admin-merge, archive bypass).",
+        "Set repo Homepage + Description per GITHUB_ARCHIVE_POLICY steps 4–5.",
+        "Future org-wide rename: KooshaPari/Apisync → KooshaPari/zz-archive-Apisync (post central registry rename sweep).",
+        "Append a session-log entry under ~/.forge/audit/<ts>-G2-B.md."
+      ]
+    }
+  ],
+  "evidence": {
+    "absorbing_collection_file_count": 107,
+    "absorbing_collection_gitlinks": 9,
+    "registry_bound_prompts": 4,
+    "first_seen": "2025-08",
+    "last_seen": "2026-06",
+    "hexa_kit_unblock_pr": "HexaKit#271 (validation/string pin → KooshaPari/phenotype-types)"
+  },
+  "policy_refs": [
+    "phenotype-omlx/docs/guides/GITHUB_ARCHIVE_POLICY.md (STRICT — never delete GitHub repos)",
+    "phenotype-omlx/docs/guides/CANONICAL_REPO_CUTOVER.md (single canonical home; read-only history pointers)"
+  ],
+  "produced_by": "G2.B — write new README.md on KooshaPari/Apisync pointing at upstream",
+  "produced_at": "2026-09-01",
+  "produced_by_actor": "Forge subagent — pointer README authoring"
+}

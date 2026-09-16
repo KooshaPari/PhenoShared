@@ -1,0 +1,37 @@
+{
+  "audit": "quillr-boundary-20260727",
+  "repo": "KooshaPari/Quillr",
+  "observed": {
+    "default_branch": "main",
+    "head": "e2501987af10f661d35a89848cb877c6198030fb",
+    "archived": false,
+    "private": false,
+    "license": "MIT",
+    "updated_at": "2026-07-25T17:42:47Z",
+    "workspace": "TypeScript package plus Rust crate at crates/httpora-core",
+    "readme_surface": "shared HTTP toolkit; @kooshapari/quillts and httpora-core release surfaces",
+    "rust_tests": "30 + 7 + 2 + 5 + 6 + 5 passing; 16 ignored"
+  },
+  "prior_registry_conflicts": [
+    "projects/Quillr.json claimed ABSORB into Httpora",
+    "registry/disposition-index.json records a 2026-07-17 split migration and 2026-07-19 source deletion",
+    "KooshaPari/Httpora now returns GitHub 404 while Quillr is active and restored"
+  ],
+  "boundary_decision": {
+    "disposition": "KEEP_STANDALONE_PENDING_BOUNDARY_REVIEW",
+    "absorbed_into": null,
+    "reason": "Current remote contains independent Rust and TypeScript package surfaces and has no verifiable source migration to pheno or phenodocs. Preserve both source and historical claims; require manifest, ancestry, API, and test-parity evidence before any import or archive operation."
+  },
+  "overlap_review": {
+    "pheno": "potential parent for crates/httpora-core only; migration unproven",
+    "phenodocs": "potential parent for @kooshapari/quillts only; migration unproven",
+    "httpora": "historical identity target is unavailable (GitHub 404); not current evidence of Quillr absorption"
+  },
+  "preservation": {
+    "action": "registry-only correction",
+    "source_mutation": false,
+    "deletion": false,
+    "force_push": false,
+    "remote_head_recorded": true
+  }
+}

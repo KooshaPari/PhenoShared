@@ -1,0 +1,19 @@
+{
+  "name": "thegent-sharecli",
+  "languages": [
+    "python"
+  ],
+  "primary_language": "python",
+  "status": "queued",
+  "has_readme": true,
+  "type": "deprecated-duplicate",
+  "path": "repos/thegent-sharecli",
+  "disposition": "ABSORB",
+  "wave": "2026-07-23-boundary-audit",
+  "queued_at": "2026-07-23",
+  "proposed_target": "thegent",
+  "proposed_target_repo": "thegent",
+  "proposed_target_path": "sharecli/",
+  "absorption_note": "Duplicate of sharecli; preserve remote history and absorb only after runtime stabilization.",
+  "note": "Deprecated duplicate helper."
+}

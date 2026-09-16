@@ -1,0 +1,21 @@
+{
+  "name": "phenoResearchEngine",
+  "languages": [
+    "python"
+  ],
+  "primary_language": "python",
+  "status": "deprecated",
+  "has_readme": true,
+  "type": "research-tool",
+  "path": "repos/phenoResearchEngine",
+  "disposition": "REVIEW_TARGET_CONFLICT",
+  "wave": "2026-07-17-prototype-batch-2",
+  "remote": "https://github.com/KooshaPari/phenoResearchEngine",
+  "remote_default_branch": "main",
+  "remote_default_sha": "ae736233e612dd1f744b1619e374d22771def3b1",
+  "remote_private": true,
+  "remote_archived": false,
+  "disposition_note": "Historical absorption claim requires sponsor reconciliation. The private source repo remains unarchived and has post-deprecation commits through 2026-07-02. Its DEPRECATED.md names a packages/phenotype-research target, but that path is absent from phenoAI; pheno/main instead links a separate phenotype-research-engine submodule at efb1656e03b02bc2bc76256fb46f709b1f388ca6. Preserve source as deprecated until target identity and transfer provenance are proven.",
+  "note": "Re-audited 2026-07-27 against GitHub API and pheno/phenoAI trees. Prior 2026-07-17 ABSORB record retained in audit history; no deletion or destructive archive action performed.",
+  "adr": "ADR-ECO-013"
+}

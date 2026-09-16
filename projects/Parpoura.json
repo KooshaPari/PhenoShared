@@ -1,0 +1,11 @@
+{
+  "name": "Parpoura",
+  "languages": ["rust"],
+  "primary_language": "rust",
+  "status": "active",
+  "has_readme": true,
+  "type": "shared-lib",
+  "path": "repos/Parpoura",
+  "disposition": "AFFIRM",
+  "note": "Audited 2026-07-17; message routing and synchronization layer."
+}

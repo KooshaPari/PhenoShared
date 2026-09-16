@@ -1,0 +1,22 @@
+{
+  "name": "Eidolon",
+  "full_name": "KooshaPari/Eidolon",
+  "description": "Phenotype-org agent runtime for desktop, mobile, and sandbox automation",
+  "role": "agent-runtime",
+  "disposition": "KEEP_CANONICAL_STANDALONE",
+  "source": "boundary-review-20260727",
+  "audit_artifact": "registry/audit-absorption-justification/eidolon-boundary-20260727.json",
+  "status": "active",
+  "repo_path": "KooshaPari/Eidolon",
+  "ecosystem": "agent-runtime",
+  "domain": "device-and-sandbox-automation",
+  "private": true,
+  "archived": false,
+  "default_branch": "main",
+  "default_branch_sha": "04255cdbe76a62583b1925505cee6909a43244c6",
+  "license": "MIT OR Apache-2.0",
+  "workspace": "Rust workspace (5 crates)",
+  "branches_observed": 100,
+  "historical_records": ["projects/Eidolon-2026-06-25.json", "projects/Eidolon-archive.json"],
+  "boundary_note": "Prior absorption claims are superseded: the live private repository is an active Rust agent-runtime canonical surface. Preserve pheno/eidolon crate lineage as integration provenance; do not treat Eidolon as absorbed or archive-only without sponsor approval."
+}

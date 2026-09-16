@@ -1,0 +1,29 @@
+{
+  "audit": "quillr-kilo-rate-limit-20260727",
+  "pull_request": 422,
+  "commit": "9f3e50c",
+  "observed_at": "2026-07-27T01:42:29Z",
+  "check": {
+    "name": "Kilo Code Review",
+    "conclusion": "failure",
+    "details_url": "https://app.kilo.ai/code-reviews/2dfca2b0-2f19-4047-b794-8bdde695bfdb",
+    "summary": "Review failed: Assistant request was rate limited",
+    "annotations": 0,
+    "findings": []
+  },
+  "independent_checks": {
+    "semgrep": "pass",
+    "sonar": "pass",
+    "socket": "pass",
+    "gitguardian": "pass",
+    "summary": "pass",
+    "coderabbit": "pass (review rate limited)"
+  },
+  "policy": {
+    "classification": "transient_external_review_failure",
+    "source_changes": false,
+    "security_findings": 0,
+    "exception": "Kilo failure is attributable to provider request rate limiting, not a code finding. Preserve this artifact and rerun Kilo when capacity is available; do not represent the PR as Kilo-reviewed until a successful rerun exists.",
+    "merge_gate": "Sponsor or repository governance may merge only under the documented rate-limit exception after all independent checks pass; no deletion, transfer, or force push is authorized by this artifact."
+  }
+}

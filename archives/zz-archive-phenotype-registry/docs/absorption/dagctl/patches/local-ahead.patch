@@ -1,0 +1,101 @@
+From 4a93ce3bb85d948e40432d1d36f1ce32ac1ed5d7 Mon Sep 17 00:00:00 2001
+From: KooshaPari <koosha@example.com>
+Date: Sat, 20 Jun 2026 04:11:52 -0700
+Subject: [PATCH] chore: tier-0 hygiene snapshot 2026-06-20
+
+---
+ .github/workflows/audit.yml     | 44 +++++++++++++++++++++++++++++++++
+ .github/workflows/scorecard.yml | 30 ++++++++++++++++++++++
+ 2 files changed, 74 insertions(+)
+ create mode 100644 .github/workflows/audit.yml
+ create mode 100644 .github/workflows/scorecard.yml
+
+diff --git a/.github/workflows/audit.yml b/.github/workflows/audit.yml
+new file mode 100644
+index 0000000..31361db
+--- /dev/null
++++ b/.github/workflows/audit.yml
+@@ -0,0 +1,44 @@
++name: Security Audit
++
++on:
++  push:
++    branches: [main]
++  pull_request:
++    branches: [main]
++  schedule:
++    - cron: '0 6 * * 1'  # every Monday 06:00 UTC
++
++permissions:
++  contents: read
++
++jobs:
++  gitleaks:
++    name: Gitleaks Secret Scan
++    runs-on: ubuntu-latest
++    steps:
++      - uses: actions/checkout@v4
++        with:
++          fetch-depth: 0
++
++      - name: Run gitleaks
++        uses: gitleaks/gitleaks-action@v2
++        env:
++          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
++
++  repo-scan:
++    name: Repository Security Scan
++    runs-on: ubuntu-latest
++    steps:
++      - uses: actions/checkout@v4
++        with:
++          fetch-depth: 0
++
++      - name: Check for secrets in files
++        run: |
++          set -euo pipefail
++          # Basic check: no .env files committed
++          if find . -name '.env' -not -path './.github/*' | grep -q .; then
++            echo "::error::Found .env files in repository"
++            exit 1
++          fi
++          echo "No obvious security issues found."
+diff --git a/.github/workflows/scorecard.yml b/.github/workflows/scorecard.yml
+new file mode 100644
+index 0000000..5a682be
+--- /dev/null
++++ b/.github/workflows/scorecard.yml
+@@ -0,0 +1,30 @@
++name: OSSF Scorecard
++
++on:
++  push:
++    branches: [main]
++  schedule:
++    - cron: '0 6 * * 1'  # every Monday 06:00 UTC
++
++permissions: read-all
++
++jobs:
++  scorecard:
++    name: Scorecard Analysis
++    runs-on: ubuntu-latest
++    steps:
++      - uses: actions/checkout@v4
++        with:
++          persist-credentials: false
++
++      - name: Run analysis
++        uses: ossf/scorecard-action@v2.4.0
++        with:
++          results_file: results.sarif
++          results_format: sarif
++          publish_results: true
++
++      - name: Upload SARIF to GitHub
++        uses: github/codeql-action/upload-sarif@v3
++        with:
++          sarif_file: results.sarif
+-- 
+2.50.1 (Apple Git-155)
+

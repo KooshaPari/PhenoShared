@@ -1,0 +1,159 @@
+# Legacy Tooling Anti-Pattern Policy
+# Self-contained policy for the AppGen repository.
+#
+# Defines rules that flag "legacy tooling" anti-patterns. The scanner
+# (tools/legacy-enforcement/scanner/legacy_tooling_scanner.py) reads
+# this file and emits a JSON/MD report.
+#
+# Rule schema:
+#   id:          Stable identifier (LT-XXX).
+#   severity:    critical | high | medium | low
+#   description: Human-readable description (single-line string).
+#   globs:       List of glob patterns (paths to scan). Empty = repo-wide metadata.
+#   forbid:      List of regex patterns; matches are violations.
+#   require:     Optional list of regex patterns that MUST be present.
+#
+# A violation is recorded when:
+#   - a file matches a glob AND its content matches any `forbid` regex, OR
+#   - a file matches a glob AND none of the `require` patterns appear.
+#
+# Workflow contract: the scanner exits non-zero on Critical/High
+# violations and zero otherwise. The CI runs it in --report-only
+# (always exits zero) so PR comments still surface findings without
+# blocking merges while the gate is in WARN mode.
+
+version: 1
+
+rules:
+  # ─── JS/TS Source Hygiene ────────────────────────────────────────────────────
+  - id: LT-001
+    severity: medium
+    description: "No `console.log` debug statements should be committed to library or production source. Use a logger module instead."
+    globs:
+      - "**/*.js"
+      - "**/*.jsx"
+      - "**/*.ts"
+      - "**/*.tsx"
+    forbid:
+      - "(^|[^\\w])console\\.log\\("
+    exclude:
+      - "**/logger.ts"
+      - "**/logger.js"
+
+  - id: LT-002
+    severity: medium
+    description: "`debugger` statements are forbidden in committed source."
+    globs:
+      - "**/*.js"
+      - "**/*.jsx"
+      - "**/*.ts"
+      - "**/*.tsx"
+    forbid:
+      - "(^|[^\\w])debugger\\b"
+
+  - id: LT-003
+    severity: low
+    description: "No TODO/FIXME/HACK/XXX markers in committed source. Track work via issues, not source comments."
+    globs:
+      - "**/*.js"
+      - "**/*.jsx"
+      - "**/*.ts"
+      - "**/*.tsx"
+    forbid:
+      - "(^|[^\\w])(TODO|FIXME|HACK|XXX)\\b"
+
+  # ─── Package Manifest Hygiene ───────────────────────────────────────────────
+  - id: LT-010
+    severity: high
+    description: "Do not pin Node to EOL versions in CI matrices. EOL majors produce false negatives in security scans."
+    globs:
+      - ".github/workflows/*.yml"
+      - ".github/workflows/*.yaml"
+    forbid:
+      - "node-version:\\s*['\"]?(14|16|18)\\.x"
+      - "node-version:\\s*['\"]?(14|16|18)['\"\\s]"
+
+  - id: LT-011
+    severity: high
+    description: "`npm ci` requires a committed lockfile. Either commit package-lock.json or switch to `npm install --legacy-peer-deps`."
+    globs:
+      - ".github/workflows/*.yml"
+      - ".github/workflows/*.yaml"
+    forbid:
+      - "(^|\\s)npm ci(\\s|$)"
+
+  - id: LT-012
+    severity: high
+    description: "Do not reference non-existent external scanner policies by actions/checkout of repos outside this org. Always vendor or inline the tool."
+    globs:
+      - ".github/workflows/*.yml"
+      - ".github/workflows/*.yaml"
+    forbid:
+      - "repository: kooshapari/phenotype"
+      - "repository: KooshaPari/phenotype"
+
+  # ─── Repo Hygiene ───────────────────────────────────────────────────────────
+  - id: LT-020
+    severity: critical
+    description: "`node_modules/` must never be committed. The `.gitignore` MUST contain a `node_modules/` entry."
+    globs:
+      - ".gitignore"
+    require:
+      - "(^|/)node_modules/?$"
+
+  - id: LT-021
+    severity: high
+    description: "Build output directories must be ignored (each entry must end with a `/` and not be over-broad like a bare `dist` token)."
+    globs:
+      - ".gitignore"
+    require:
+      - "(^|/)(dist|build)/?$"
+    forbid:
+      - "(^|/)(dist|build)(?![/\\s\\n])"
+
+  # ─── React Native / Expo Anti-Patterns ──────────────────────────────────────
+  - id: LT-030
+    severity: medium
+    description: "Avoid mixing `react-navigation` (v4/v5 standalone) with the modular `@react-navigation/*` packages. Use only the modular packages."
+    globs:
+      - "package.json"
+    forbid:
+      - "\"react-navigation\":\\s*\"\\^?[0-9]"
+
+  - id: LT-031
+    severity: medium
+    description: "Do not use the unmaintained `reanimated-bottom-sheet`; prefer `@gorhom/bottom-sheet` or direct `react-native-reanimated` usage."
+    globs:
+      - "package.json"
+    forbid:
+      - '"reanimated-bottom-sheet":'
+
+  # ─── Documentation Hygiene ──────────────────────────────────────────────────
+  - id: LT-040
+    severity: low
+    description: "Avoid hard-coded 'AI-Agent-Only' / 'AI-Slop' disclaimers in README that discourage future contributors."
+    globs:
+      - "README.md"
+    forbid:
+      - "AI-Agent-Only Repository"
+      - "AI-Slop"
+
+  # ─── Workflow Hygiene ───────────────────────────────────────────────────────
+  - id: LT-050
+    severity: high
+    description: "CI must not use `continue-on-error: true` on critical gate steps (lint, test, build, secret-scan, vuln-scan). WARN-mode advisories are the only acceptable use."
+    globs:
+      - ".github/workflows/*.yml"
+      - ".github/workflows/*.yaml"
+    forbid:
+      - "continue-on-error:\\s*true"
+
+  # ─── Secret Hygiene (best-effort regex; TruffleHog is authoritative) ────────
+  - id: LT-060
+    severity: critical
+    description: "No API tokens, private keys, or high-entropy secrets should be committed in tracked source files (best-effort regex check; TruffleHog is the authoritative scanner)."
+    globs:
+      - "**/*.{js,jsx,ts,tsx,json,yml,yaml,env,sh,ps1}"
+    forbid:
+      - "AKIA[0-9A-Z]{16}"
+      - "-----BEGIN (RSA |EC |DSA |OPENSSH )?PRIVATE KEY-----"

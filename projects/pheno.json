@@ -1,0 +1,22 @@
+{
+  "name": "pheno",
+  "languages": ["rust", "typescript", "python", "go", "swift"],
+  "primary_language": "rust",
+  "status": "active",
+  "has_readme": true,
+  "type": "rust-monorepo",
+  "path": "repos/pheno",
+  "role": "multi-crate-parent",
+  "domain_role": "runtime-and-domain-monorepo",
+  "boundary": "canonical-rust-workspace-parent",
+  "gh_url": "https://github.com/KooshaPari/pheno",
+  "default_branch": "main",
+  "remote_default_sha_at_audit": "9047e9dc36a586994976f1b4a8574039623d3475",
+  "disposition": "KEEP_CANONICAL_PARENT",
+  "canonical_routing": true,
+  "absorbed_into": null,
+  "absorption_note": "Canonical parent for the public Pheno Rust workspace. Keep its 11 workspace members and crate boundaries explicit; do not flatten member repositories or infer absorption from shared naming.",
+  "rationale": "Active public Rust monorepo described as 170K+ LOC with 11 workspace members, including AgilePlus, phenoDesign, and PhenoLibs. Registering the parent closes a major registry boundary gap while preserving member-level provenance.",
+  "audit_artifact": "registry/audit-absorption-justification/pheno-parent-boundary-20260726.json",
+  "registry_author": "phenotype-registry (boundary audit)"
+}

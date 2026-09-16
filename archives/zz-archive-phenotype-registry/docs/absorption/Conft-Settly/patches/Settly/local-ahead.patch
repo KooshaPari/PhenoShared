@@ -1,0 +1,2769 @@
+From 6d42361097f779f0238cc57ed7a4d4c670b8a93d Mon Sep 17 00:00:00 2001
+From: KooshaPari <koosha@example.com>
+Date: Sat, 20 Jun 2026 01:22:59 -0700
+Subject: [PATCH 1/4] docs: deprecate Settly in favour of Configra mono-repo
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Settly has been absorbed into the Configra workspace at
+KooshaPari/Configra/crates/settly/. This standalone repo is now
+deprecated — all future development will happen in Configra.
+---
+ DEPRECATED.md | 20 ++++++++++++++++++++
+ 1 file changed, 20 insertions(+)
+ create mode 100644 DEPRECATED.md
+
+diff --git a/DEPRECATED.md b/DEPRECATED.md
+new file mode 100644
+index 0000000..862fd25
+--- /dev/null
++++ b/DEPRECATED.md
+@@ -0,0 +1,20 @@
++# DEPRECATED — Settly
++
++**This repository is no longer maintained.**
++
++Settly has been absorbed into the [Configra](https://github.com/KooshaPari/Configra) monorepo as a workspace member crate at `crates/settly/`.
++
++## Migration
++
++All future development, issue tracking, and releases happen in Configra:
++
++- **Repo:** https://github.com/KooshaPari/Configra
++- **Crate path:** `crates/settly/`
++- **Cargo dependency:** `settly = { git = "https://github.com/KooshaPari/Configra" }` (once published)
++
++## History
++
++- **2026-06-18:** Source code copied verbatim into Configra workspace
++- **2026-06-20:** Standalone repo archived
++
++See `Configra/ABSORBED-FROM/Settly/` for the snapshot of the code at absorption time.
+-- 
+2.50.1 (Apple Git-155)
+
+
+From 5a151eba1a144be077eb59bea8d49d5a774f5a1d Mon Sep 17 00:00:00 2001
+From: KooshaPari <koosha@example.com>
+Date: Sat, 20 Jun 2026 01:56:56 -0700
+Subject: [PATCH 2/4] chore(orch-v11-016): full governance + tier-0 hygiene for
+ Settly
+
+---
+ .gitattributes                      |  62 +++++++++
+ .github/CODEOWNERS                  |  66 +++++++--
+ .github/ISSUE_TEMPLATE/security.yml |  79 +++++++++++
+ .github/dependabot.yml              |  56 +++++++-
+ .github/pull_request_template.md    |  84 ++++++++++--
+ .github/workflows/audit.yml         | 132 ++++++++++++++++++
+ .github/workflows/release.yml       |  86 ++++++++++--
+ .github/workflows/scorecard.yml     |  52 ++++++++
+ CHANGELOG.md                        |  45 ++++++-
+ CODE_OF_CONDUCT.md                  | 133 +++++++++++++++++++
+ CONTRIBUTING.md                     | 166 ++++++++++++++++++++++-
+ SECURITY.md                         |  85 +++++++++++-
+ justfile                            | 199 ++++++++++++++++++++++++++++
+ 13 files changed, 1197 insertions(+), 48 deletions(-)
+ create mode 100644 .gitattributes
+ create mode 100644 .github/ISSUE_TEMPLATE/security.yml
+ create mode 100644 .github/workflows/audit.yml
+ create mode 100644 .github/workflows/scorecard.yml
+ create mode 100644 CODE_OF_CONDUCT.md
+ create mode 100644 justfile
+
+diff --git a/.gitattributes b/.gitattributes
+new file mode 100644
+index 0000000..4bb6957
+--- /dev/null
++++ b/.gitattributes
+@@ -0,0 +1,62 @@
++# Git attributes
++# https://git-scm.com/docs/gitattributes
++
++# Auto-detect text files and normalize line endings to LF
++* text=auto eol=lf
++
++# Force LF for shell scripts (avoid CRLF issues on Windows)
++*.sh        text eol=lf
++*.bash      text eol=lf
++
++# Rust source
++*.rs        text diff=rust
++
++# Markdown
++*.md        text eol=lf
++*.markdown  text eol=lf
++
++# YAML / JSON / TOML (text config)
++*.yml       text eol=lf
++*.yaml      text eol=lf
++*.json      text eol=lf
++*.toml      text eol=lf
++*.cfg       text eol=lf
++*.ini       text eol=lf
++
++# Lockfiles are not diffable, generate them rather than merge
++Cargo.lock  linguist-generated=true merge=bundle
++package-lock.json   linguist-generated=true merge=bundle
++yarn.lock            linguist-generated=true merge=bundle
++pnpm-lock.yaml       linguist-generated=true merge=bundle
++composer.lock        linguist-generated=true merge=bundle
++Gemfile.lock         linguist-generated=true merge=bundle
++poetry.lock          linguist-generated=true merge=bundle
++Pipfile.lock         linguist-generated=true merge=bundle
++
++# Vendored / generated / large
++vendor/**     -text diff
++target/**      -text linguist-generated
++node_modules/** -text linguist-generated
++dist/**        -text linguist-generated
++build/**       -text linguist-generated
++
++# Binary
++*.png   binary
++*.jpg   binary
++*.jpeg  binary
++*.gif   binary
++*.ico   binary
++*.pdf   binary
++*.zip   binary
++*.gz    binary
++*.tgz   binary
++*.tar   binary
++*.wasm  binary
++
++# Linguist overrides for accurate GitHub language stats
++docs/*              linguist-documentation
++.github/            linguist-documentation
++*.md                linguist-documentation
++
++# rustfmt/clippy markers
++/.rustfmt.toml      export-subst
+\ No newline at end of file
+diff --git a/.github/CODEOWNERS b/.github/CODEOWNERS
+index 09e65d6..4256727 100644
+--- a/.github/CODEOWNERS
++++ b/.github/CODEOWNERS
+@@ -1,14 +1,60 @@
+-# CODEOWNERS - Repository ownership
+-# Auto-generated by pheno-cli
++# CODEOWNERS — Repository ownership
++# https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
++#
++# Order matters: later entries override earlier ones.
++# The last matching pattern wins.
+ 
+-# Default owners for everything
++# Default owners — every file requires review from at least one
+ * @KooshaPari
+ 
+-# Libraries
+-/libs/* @KooshaPari
+-/crates/* @KooshaPari
+-/packages/* @KooshaPari
++# Rust source
++/src/                    @KooshaPari
++/tests/                  @KooshaPari
++/benches/                @KooshaPari
++/fuzz/                   @KooshaPari
++/Cargo.toml              @KooshaPari
++/Cargo.lock              @KooshaPari
+ 
+-# Infrastructure
+-/infra/* @KooshaPari
+-/.github/workflows/* @KooshaPari
++# Domain layer — strict review
++/src/domain/             @KooshaPari
++/src/application/        @KooshaPari
++
++# Adapter layer — broader review
++/src/adapters/           @KooshaPari
++/src/infrastructure/     @KooshaPari
++
++# API surface
++/src/api/                @KooshaPari
++
++# Configuration
++/config/                 @KooshaPari
++/deny.toml               @KooshaPari
++/mise.toml               @KooshaPari
++/rust-toolchain.toml     @KooshaPari
++
++# Governance
++/CODE_OF_CONDUCT.md      @KooshaPari
++/CONTRIBUTING.md         @KooshaPari
++/SECURITY.md             @KooshaPari
++/CHANGELOG.md            @KooshaPari
++/LICENSE                 @KooshaPari
++/README.md               @KooshaPari
++
++# CI / governance files — highest review bar
++/.github/workflows/      @KooshaPari
++/.github/CODEOWNERS      @KooshaPari
++/.github/dependabot.yml  @KooshaPari
++/.github/ISSUE_TEMPLATE/ @KooshaPari
++/.github/pull_request_template.md @KooshaPari
++
++# Documentation
++/docs/                   @KooshaPari
++/SPEC.md                 @KooshaPari
++/PRD.md                  @KooshaPari
++/PLAN.md                 @KooshaPari
++/ADR.md                  @KooshaPari
++/AGENTS.md               @KooshaPari
++/CLAUDE.md               @KooshaPari
++
++# Dependabot auto-PRs require explicit approval (helps prevent supply-chain footguns)
++/Cargo.lock              @KooshaPari
+\ No newline at end of file
+diff --git a/.github/ISSUE_TEMPLATE/security.yml b/.github/ISSUE_TEMPLATE/security.yml
+new file mode 100644
+index 0000000..101db55
+--- /dev/null
++++ b/.github/ISSUE_TEMPLATE/security.yml
+@@ -0,0 +1,79 @@
++name: Security Vulnerability Report
++description: Privately report a security vulnerability (use email for sensitive issues)
++labels: ["security", "triage"]
++# This form is for low-sensitivity issues only. For sensitive disclosures,
++# follow SECURITY.md and email the maintainer directly.
++body:
++  - type: markdown
++    attributes:
++      value: |
++        ## ⚠️ Read SECURITY.md First
++        For **sensitive** vulnerabilities (active exploitation, zero-days,
++        credentials/secrets exposure, supply-chain compromise), please **do
++        not** use this form. Email
++        [koosha@example.com](mailto:koosha@example.com) directly or use
++        [GitHub's private vulnerability reporting](../../security/advisories/new).
++        This template is intended for **non-sensitive** hardening suggestions.
++
++  - type: textarea
++    id: summary
++    attributes:
++      label: Vulnerability Summary
++      placeholder: One-paragraph description of the issue.
++      validations:
++        required: true
++
++  - type: input
++    id: severity
++    attributes:
++      label: Estimated Severity
++      placeholder: "low | medium | high | critical"
++      validations:
++        required: true
++
++  - type: textarea
++    id: component
++    attributes:
++      label: Affected Component(s)
++      placeholder: |
++        - crate/area:
++        - version(s):
++        - file(s)/symbol(s):
++      validations:
++        required: true
++
++  - type: textarea
++    id: repro
++    attributes:
++      label: Reproduction Steps
++      placeholder: |
++        1.
++        2.
++        3.
++      validations:
++        required: true
++
++  - type: textarea
++    id: impact
++    attributes:
++      label: Impact
++      placeholder: Confidentiality / Integrity / Availability consequences.
++      validations:
++        required: true
++
++  - type: textarea
++    id: remediation
++    attributes:
++      label: Suggested Remediation (optional)
++      placeholder: Any fix ideas, mitigations, or workarounds you can share.
++
++  - type: checkboxes
++    id: disclosure
++    attributes:
++      label: Disclosure Preferences
++      options:
++        - label: "I am OK with public disclosure after a fix is released."
++        - label: "I would like to coordinate disclosure timing."
++          required: false
++        - label: "I prefer to remain anonymous."
++          required: false
+\ No newline at end of file
+diff --git a/.github/dependabot.yml b/.github/dependabot.yml
+index d35ba57..9437fc1 100644
+--- a/.github/dependabot.yml
++++ b/.github/dependabot.yml
+@@ -1,12 +1,64 @@
+ version: 2
++
++# Settly is now a crate inside the Configra mono-repo. This config keeps
++# the standalone Settly repo hygienic while it remains in maintenance mode.
++
+ updates:
+-  - package-ecosystem: "github-actions"
++  # Cargo (Rust) — primary ecosystem
++  - package-ecosystem: "cargo"
+     directory: "/"
+     schedule:
+       interval: "weekly"
++      day: "monday"
++      time: "06:00"
++      timezone: "UTC"
+     open-pull-requests-limit: 10
+-  - package-ecosystem: "cargo"
++    labels:
++      - "dependencies"
++      - "rust"
++      - "automated"
++    # Group minor + patch updates to reduce PR churn
++    groups:
++      rust-minor:
++        patterns:
++          - "*"
++        update-types:
++          - "minor"
++          - "patch"
++    # Ignore major updates for high-blast-radius crates
++    ignore:
++      - dependency-name: "tokio"
++        update-types: ["version-update:semver-major"]
++      - dependency-name: "sqlx"
++        update-types: ["version-update:semver-major"]
++      - dependency-name: "serde"
++        update-types: ["version-update:semver-major"]
++
++  # GitHub Actions — pinned via @main or SHA; weekly check
++  - package-ecosystem: "github-actions"
+     directory: "/"
+     schedule:
+       interval: "weekly"
++      day: "tuesday"
++      time: "06:00"
++      timezone: "UTC"
+     open-pull-requests-limit: 10
++    labels:
++      - "dependencies"
++      - "ci"
++      - "automated"
++    groups:
++      github-actions:
++        patterns:
++          - "*"
++
++  # Docker — only if a Dockerfile is added in the future
++  - package-ecosystem: "docker"
++    directory: "/Dockerfile"
++    schedule:
++      interval: "weekly"
++    open-pull-requests-limit: 5
++    labels:
++      - "dependencies"
++      - "docker"
++      - "automated"
+\ No newline at end of file
+diff --git a/.github/pull_request_template.md b/.github/pull_request_template.md
+index 7e3bcec..54bf121 100644
+--- a/.github/pull_request_template.md
++++ b/.github/pull_request_template.md
+@@ -1,19 +1,83 @@
+-# Pull Request Description
++---
++name: Pull Request
++about: Submit changes for review
++title: "<type>(<scope>): <description>"
++labels: []
++assignees: []
++---
+ 
+ ## Summary
+-<!-- What does this PR do? -->
++
++<!-- One-paragraph description of what this PR does and why. -->
++
++## Linked Issues
++
++<!-- Fixes #123, Closes #456, Refs #789. Use "Fixes" to auto-close. -->
+ 
+ ## Type of Change
+-- [ ] Bug fix
+-- [ ] New feature
+-- [ ] Breaking change
++
++- [ ] Bug fix (non-breaking change that fixes an issue)
++- [ ] New feature (non-breaking change that adds functionality)
++- [ ] Breaking change (fix or feature that would cause existing functionality to change)
+ - [ ] Documentation update
++- [ ] Refactor / cleanup
++- [ ] CI / tooling
++- [ ] Security fix
++
++## What Changed
++
++<!-- A bulleted list of concrete changes. -->
++
++- 
++
++## Screenshots / Recordings
++
++<!-- If applicable, add screenshots or screen recordings to demonstrate the change. -->
+ 
+ ## Testing
+-<!-- How was this tested? -->
++
++<!-- How was this verified? Include test commands, manual steps, etc. -->
++
++- [ ] Unit tests added/updated
++- [ ] Integration tests added/updated
++- [ ] Doctests updated
++- [ ] Manual testing performed
++
++**Test commands run:**
++
++```bash
++cargo fmt --all -- --check
++cargo clippy --all-targets --all-features -- -D warnings
++cargo test --all-features
++```
+ 
+ ## Checklist
+-- [ ] Code follows project style guidelines
+-- [ ] Self-review completed
+-- [ ] Tests added/updated
+-- [ ] Documentation updated
++
++- [ ] My code follows the project's style guidelines (see `CONTRIBUTING.md`)
++- [ ] I have performed a self-review of my own code
++- [ ] I have commented my code, particularly in hard-to-understand areas
++- [ ] I have made corresponding changes to the documentation
++- [ ] My changes generate no new warnings
++- [ ] I have added tests that prove my fix/feature works
++- [ ] New and existing unit tests pass locally with my changes
++- [ ] Any dependent changes have been merged and published downstream
++- [ ] I have updated `CHANGELOG.md` under `[Unreleased]`
++
++## Governance / Compliance
++
++- [ ] No new secrets (tokens, keys, passwords) are committed
++- [ ] No new license-restricted dependencies (verified by `cargo deny check`)
++- [ ] No new direct `unwrap()`/`expect()` calls in library code
++- [ ] Public API changes are documented in `CHANGELOG.md` and reflected in rustdoc
++- [ ] Branch follows the convention `worktrees/<topic>/`
++
++## Risk Assessment
++
++<!-- Optional: describe the risk profile and rollback plan. -->
++
++**Risk level:** low | medium | high
++**Rollback plan:**
++
++## Additional Notes
++
++<!-- Anything else reviewers should know. -->
+\ No newline at end of file
+diff --git a/.github/workflows/audit.yml b/.github/workflows/audit.yml
+new file mode 100644
+index 0000000..01cb586
+--- /dev/null
++++ b/.github/workflows/audit.yml
+@@ -0,0 +1,132 @@
++name: Audit
++
++on:
++  push:
++    branches: [main]
++  pull_request:
++    branches: [main]
++  schedule:
++    # Daily at 03:00 UTC — offsets cargo-deny (Mon 09:00) and scorecard (Mon 06:00)
++    - cron: "0 3 * * *"
++  workflow_dispatch:
++
++permissions:
++  contents: read
++  security-events: write
++
++jobs:
++  # Aggregate advisories across crates.io / OSV / GHSA into one SARIF
++  audit:
++    name: RustSec Audit
++    runs-on: ubuntu-latest
++    steps:
++      - name: Checkout
++        uses: actions/checkout@v6
++        with:
++          persist-credentials: false
++
++      - name: Install Rust toolchain
++        uses: dtolnay/rust-toolchain@stable
++
++      - name: Cache cargo registry
++        uses: Swatinem/rust-cache@v2
++        with:
++          cache-on-failure: true
++
++      - name: Install cargo-audit
++        run: cargo install --locked cargo-audit
++
++      - name: Run cargo-audit
++        run: cargo audit --deny warnings
++
++      - name: Convert cargo-audit JSON to SARIF
++        if: always()
++        run: |
++          set -euo pipefail
++          cargo audit --json > audit.json || true
++          if [ -s audit.json ]; then
++            # cargo-audit emits a JSON object with a `.vulnerabilities` array.
++            # Convert that into SARIF so the result lands in the Security tab.
++            python3 - <<'PY'
++          import json, datetime, sys
++          with open("audit.json") as f:
++              data = json.load(f)
++          vulns = data.get("vulnerabilities", {}).get("found", []) if isinstance(data.get("vulnerabilities"), dict) else []
++          if not vulns:
++              print("No vulnerabilities found.", file=sys.stderr)
++              sys.exit(0)
++          results = []
++          for v in vulns:
++              ad = v.get("advisory", {})
++              results.append({
++                  "ruleId": ad.get("id", "RUSTSEC"),
++                  "level": "error",
++                  "message": {"text": ad.get("title", "RustSec advisory")},
++                  "locations": [{
++                      "physicalLocation": {
++                          "artifactLocation": {"uri": "Cargo.lock"}
++                      }
++                  }]
++              })
++          sarif = {
++              "$schema": "https://json.schemastore.org/sarif-2.1.0.json",
++              "version": "2.1.0",
++              "runs": [{
++                  "tool": {"driver": {"name": "cargo-audit", "version": data.get("database", {}).get("version", "unknown")}},
++                  "results": results,
++              }],
++          }
++          with open("audit.sarif", "w") as f:
++              json.dump(sarif, f)
++          PY
++          fi
++
++      - name: Upload SARIF
++        if: always() && hashFiles('audit.sarif') != ''
++        uses: github/codeql-action/upload-sarif@v4
++        with:
++          sarif_file: audit.sarif
++          category: cargo-audit
++
++  # Supply-chain license + source verification via cargo-deny
++  deny:
++    name: cargo-deny
++    runs-on: ubuntu-latest
++    steps:
++      - name: Checkout
++        uses: actions/checkout@v6
++        with:
++          persist-credentials: false
++
++      - name: Install Rust toolchain
++        uses: dtolnay/rust-toolchain@stable
++
++      - name: Cache cargo
++        uses: Swatinem/rust-cache@v2
++        with:
++          cache-on-failure: true
++
++      - name: cargo-deny
++        uses: EmbarkStudios/cargo-deny-action@v2
++        with:
++          rust-version: stable
++          command: check
++          arguments: --hide-inclusion-graph
++
++  # Outdated dependency visibility (informational, never failing)
++  outdated:
++    name: Outdated Dependencies
++    runs-on: ubuntu-latest
++    continue-on-error: true
++    steps:
++      - name: Checkout
++        uses: actions/checkout@v6
++
++      - name: Install Rust toolchain
++        uses: dtolnay/rust-toolchain@stable
++
++      - name: Install cargo-outdated
++        run: cargo install --locked cargo-outdated
++
++      - name: Show outdated dependencies
++        run: cargo outdated --workspace --root-deps-only --exit-code 0
+\ No newline at end of file
+diff --git a/.github/workflows/release.yml b/.github/workflows/release.yml
+index 71f8d68..196bfd2 100644
+--- a/.github/workflows/release.yml
++++ b/.github/workflows/release.yml
+@@ -4,54 +4,112 @@ on:
+   push:
+     branches: [main]
+     paths-ignore:
+-      - 'docs/**'
+-      - '**.md'
++      - "docs/**"
++      - "**.md"
++      - ".github/ISSUE_TEMPLATE/**"
++      - ".github/PULL_REQUEST_TEMPLATE.md"
++  workflow_dispatch:
++    inputs:
++      tag:
++        description: "Tag to publish (e.g. v0.1.0). Leave blank to use Cargo.toml."
++        required: false
++        default: ""
+ 
+ permissions:
+   contents: write
+   packages: write
++  id-token: write
+ 
+ jobs:
+   release:
++    name: Build & Publish
+     runs-on: ubuntu-latest
+-    if: contains(github.event.head_commit.message, 'release:') || contains(github.event.head_commit.message, 'chore(release)')
++    if: |
++      github.event_name == 'workflow_dispatch' ||
++      contains(github.event.head_commit.message, 'release:') ||
++      contains(github.event.head_commit.message, 'chore(release)')
+     outputs:
+-      version: $123steps.version.outputs.version125
++      version: ${{ steps.version.outputs.version }}
+     steps:
+-      - uses: actions/checkout@v6
++      - name: Checkout
++        uses: actions/checkout@v6
+         with:
+           fetch-depth: 0
+ 
+-      
+       - name: Setup Rust
+         uses: dtolnay/rust-toolchain@stable
+ 
++      - name: Cache cargo
++        uses: Swatinem/rust-cache@v2
++        with:
++          cache-on-failure: true
++
+       - name: Build
+-        run: cargo build --release
++        run: cargo build --release --locked
+ 
+       - name: Test
+-        run: cargo test --release
++        run: cargo test --release --locked
+ 
+       - name: Determine version
+         id: version
+         run: |
+-          VERSION=$(grep '^version' Cargo.toml | head -1 | cut -d'"' -f2)
+-          echo "version=$VERSION" >> $GITHUB_OUTPUT
++          if [ -n "${{ inputs.tag }}" ]; then
++            VERSION="${{ inputs.tag }}"
++          else
++            VERSION=$(grep '^version' Cargo.toml | head -1 | cut -d'"' -f2)
++          fi
++          echo "version=${VERSION#v}" >> "$GITHUB_OUTPUT"
++          echo "Resolved version: $VERSION"
+ 
+       - name: Publish to crates.io
++        if: github.event_name == 'workflow_dispatch'
+         run: |
+-          cargo publish --token $123secrets.CARGO_REGISTRY_TOKEN125
+-      
++          echo "::add-mask::${{ secrets.CARGO_REGISTRY_TOKEN }}"
++          cargo publish --token "${{ secrets.CARGO_REGISTRY_TOKEN }}" --locked
+ 
+   promote:
++    name: Promote to staging
+     needs: release
++    if: github.event_name == 'workflow_dispatch' && success()
+     runs-on: ubuntu-latest
+     steps:
+-      - uses: actions/checkout@v6
++      - name: Checkout
++        uses: actions/checkout@v6
+ 
+       - name: Promote to staging
+         uses: KooshaPari/phenotypeActions/promote@main
+         with:
+-          version: $123needs.release.outputs.version125
++          version: ${{ needs.release.outputs.version }}
+           channel: beta
+           registry: crates.io
++
++  github-release:
++    name: GitHub Release
++    needs: release
++    if: github.event_name == 'workflow_dispatch' && success()
++    runs-on: ubuntu-latest
++    permissions:
++      contents: write
++    steps:
++      - name: Checkout
++        uses: actions/checkout@v6
++        with:
++          fetch-depth: 0
++
++      - name: Generate notes (git-cliff)
++        uses: orhun/git-cliff-action@v4
++        with:
++          config: cliff.toml
++          args: --tag v${{ needs.release.outputs.version }} --latest --strip header
++        env:
++          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
++
++      - name: Create GitHub release
++        uses: softprops/action-gh-release@v2
++        with:
++          tag_name: v${{ needs.release.outputs.version }}
++          name: "v${{ needs.release.outputs.version }}"
++          body: ${{ env.CLIFF }}
++          draft: false
++          prerelease: false
++          generate_release_notes: false
+\ No newline at end of file
+diff --git a/.github/workflows/scorecard.yml b/.github/workflows/scorecard.yml
+new file mode 100644
+index 0000000..087cc2a
+--- /dev/null
++++ b/.github/workflows/scorecard.yml
+@@ -0,0 +1,52 @@
++name: OpenSSF Scorecard
++
++on:
++  push:
++    branches: [main]
++  pull_request:
++    branches: [main]
++  schedule:
++    # Weekly on Mondays at 06:00 UTC
++    - cron: "0 6 * * 1"
++  workflow_dispatch:
++
++permissions: read-all
++
++jobs:
++  scorecard:
++    name: OpenSSF Scorecard
++    runs-on: ubuntu-latest
++    permissions:
++      # Required for the scorecard action to publish results
++      security-events: write
++      # id-token: write is required for the scorecard-action's OIDC token
++      id-token: write
++      contents: read
++      actions: read
++    steps:
++      - name: Checkout source
++        uses: actions/checkout@v6
++        with:
++          persist-credentials: false
++
++      - name: Run OpenSSF Scorecard
++        uses: ossf/scorecard-action@v2.4.3
++        with:
++          # Branch to evaluate; this is the canonical branch for the repo.
++          branch: ${{ github.event.repository.default_branch }}
++          # Scorecard results are published to the security-tab.
++          results_file: results.sarif
++          results_format: sarif
++          # Publish results to the Security tab of the repo.
++          publish_results: true
++        env:
++          # PAT or GITHUB_AUTH_TOKEN with repo:security_events scope.
++          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
++
++      # Upload SARIF to the GitHub code-scanning dashboard for trend visibility.
++      - name: Upload SARIF results
++        if: always()
++        uses: github/codeql-action/upload-sarif@v4
++        with:
++          sarif_file: results.sarif
++          category: scorecard
+\ No newline at end of file
+diff --git a/CHANGELOG.md b/CHANGELOG.md
+index d25c8db..15aaa0a 100644
+--- a/CHANGELOG.md
++++ b/CHANGELOG.md
+@@ -2,10 +2,43 @@
+ 
+ All notable changes to Settly will be documented in this file.
+ 
+-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
++The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
+ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+ 
+-## [0.1.0] - YYYY-MM-DD
++> **Status**: Settly has been absorbed into the
++> [Configra](https://github.com/KooshaPari/Configra) mono-repo at
++> `crates/settly/`. This standalone repository is preserved for historical
++> reference. New releases will be cut from the Configra workspace.
++
++## [Unreleased]
++
++### Added
++
++- Initial release: TOML/YAML/JSON format support
++- Layered configuration (defaults → file → environment)
++- Environment variable overrides
++- Schema validation via `validator` derive
++- Async adapters with idempotency tokens and DLQ fallback
++- Submission service with retry and dead-letter queue semantics
++- Comprehensive workflow governance (CI, security, deny, scorecard, release)
++- Tier-0 project hygiene: CODE_OF_CONDUCT, CONTRIBUTING, SECURITY, deny, dependabot
++- OpenSSF Scorecard supply-chain posture tracking
++- Justfile alongside Taskfile for command-runner flexibility
++
++### Changed
++
++### Deprecated
++
++- **This standalone repository** — superseded by the Configra mono-repo
++  (`crates/settly/`). All new development targets the Configra workspace.
++
++### Removed
++
++### Fixed
++
++### Security
++
++## [0.1.0] - Initial
+ 
+ ### Added
+ 
+@@ -16,6 +49,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
+ - Layered configuration
+ - Environment variable override
+ - Basic validation
++- Universal configuration management
++- Multiple format support
++- Layered configs (env, file, defaults)
++- Schema validation
++- Environment-specific overrides
+ 
+ ### Features
+ 
+@@ -34,3 +72,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
+ ### Fixed
+ 
+ ### Security
++
++[Unreleased]: https://github.com/KooshaPari/Settly/compare/v0.1.0...HEAD
++[0.1.0]: https://github.com/KooshaPari/Settly/releases/tag/v0.1.0
+\ No newline at end of file
+diff --git a/CODE_OF_CONDUCT.md b/CODE_OF_CONDUCT.md
+new file mode 100644
+index 0000000..0057eb0
+--- /dev/null
++++ b/CODE_OF_CONDUCT.md
+@@ -0,0 +1,133 @@
++# Code of Conduct
++
++## Our Pledge
++
++We as members, contributors, and leaders pledge to make participation in the
++Settly community a harassment-free experience for everyone, regardless of age,
++body size, visible or invisible disability, ethnicity, sex characteristics,
++gender identity and expression, level of experience, education, socio-economic
++status, nationality, personal appearance, race, religion, or sexual identity
++and orientation.
++
++We pledge to act and interact in ways that contribute to an open, welcoming,
++diverse, inclusive, and healthy community.
++
++## Our Standards
++
++Examples of behavior that contributes to a positive environment for our
++community include:
++
++- Demonstrating empathy and kindness toward other people
++- Being respectful of differing opinions, viewpoints, and experiences
++- Giving and gracefully accepting constructive feedback
++- Accepting responsibility and apologizing to those affected by our mistakes,
++  and learning from the experience
++- Focusing on what is best not just for us as individuals, but for the overall
++  community
++
++Examples of unacceptable behavior include:
++
++- The use of sexualized language or imagery, and sexual attention or advances of
++  any kind
++- Trolling, insulting or derogatory comments, and personal or political attacks
++- Public or private harassment
++- Publishing others' private information, such as a physical or email address,
++  without their explicit permission
++- Other conduct which could reasonably be considered inappropriate in a
++  professional setting
++
++## Enforcement Responsibilities
++
++Community leaders are responsible for clarifying and enforcing our standards of
++acceptable behavior and will take appropriate and fair corrective action in
++response to any behavior that they deem inappropriate, threatening, offensive,
++or harmful.
++
++Community leaders have the right and responsibility to remove, edit, or reject
++comments, commits, code, wiki edits, issues, and other contributions that are
++not aligned to this Code of Conduct, and will communicate reasons for moderation
++decisions when appropriate.
++
++## Scope
++
++This Code of Conduct applies within all community spaces, and also applies when
++an individual is officially representing the community in public spaces.
++Examples of representing our community include using an official e-mail
++address, posting via an official social media account, or acting as an appointed
++representative at an online or offline event.
++
++## Enforcement
++
++Instances of abusive, harassing, or otherwise unacceptable behavior may be
++reported to the community leaders responsible for enforcement at
++[koosha@example.com](mailto:koosha@example.com). All complaints will be reviewed
++and investigated promptly and fairly.
++
++All community leaders are obligated to respect the privacy and security of the
++reporter of any incident.
++
++## Enforcement Guidelines
++
++Community leaders will follow these Community Impact Guidelines in determining
++the consequences of any action they deem in violation of this Code of Conduct:
++
++### 1. Correction
++
++**Community Impact**: Use of inappropriate language or other behavior deemed
++unprofessional or unwelcome in the community.
++
++**Consequence**: A private, written warning from community leaders, providing
++clarity around the nature of the violation and an explanation of why the
++behavior was inappropriate. A public apology may be requested.
++
++### 2. Warning
++
++**Community Impact**: A violation through a single incident or series of
++actions.
++
++**Consequence**: A warning with consequences for continued behavior. No
++interaction with the people involved, including unsolicited interaction with
++those enforcing the Code of Conduct, for a specified period of time. This
++includes avoiding interactions in community spaces as well as external channels
++like social media. Violating these terms may lead to a temporary or permanent
++ban.
++
++### 3. Temporary Ban
++
++**Community Impact**: A serious violation of community standards, including
++sustained inappropriate behavior.
++
++**Consequence**: A temporary ban from any sort of interaction or public
++communication with the community for a specified period of time. No public or
++private interaction with the people involved, including unsolicited interaction
++with those enforcing the Code of Conduct, is allowed during this period.
++Violating these terms may lead to a permanent ban.
++
++### 4. Permanent Ban
++
++**Community Impact**: Demonstrating a pattern of violation of community
++standards, including sustained inappropriate behavior, harassment of an
++individual, or aggression toward or disparagement of classes of individuals.
++
++**Consequence**: A permanent ban from any sort of public interaction within the
++community.
++
++## Attribution
++
++This Code of Conduct is adapted from the [Contributor Covenant][homepage],
++version 2.1, available at
++[https://www.contributor-covenant.org/version/2/1/code_of_conduct.html][v2.1].
++
++Community Impact Guidelines were inspired by
++[Mozilla's code of conduct enforcement ladder][mozilla].
++
++[homepage]: https://www.contributor-covenant.org
++[v2.1]: https://www.contributor-covenant.org/version/2/1/code_of_conduct.html
++[mozilla]: https://github.com/mozilla/diversity
++
++For answers to common questions about this code of conduct, see the FAQ at
++[https://www.contributor-covenant.org/faq][faq]. Translations are available at
++[https://www.contributor-covenant.org/translations][translations].
++
++[faq]: https://www.contributor-covenant.org/faq
++[translations]: https://www.contributor-covenant.org/translations
+\ No newline at end of file
+diff --git a/CONTRIBUTING.md b/CONTRIBUTING.md
+index 31d37ee..2f5e63b 100644
+--- a/CONTRIBUTING.md
++++ b/CONTRIBUTING.md
+@@ -1,8 +1,162 @@
+-# Contributing Guidelines
++# Contributing to Settly
+ 
+-We welcome contributions! Please follow these steps:
++Thank you for your interest in contributing to **Settly** — settings management
++with validation, versioning, and migration support.
+ 
+-1. Fork the repository
+-2. Create your feature branch
+-3. Ensure all tests pass
+-4. Submit a Pull Request
++> **Note**: Settly is now maintained as a crate within the
++> [Configra](https://github.com/KooshaPari/Configra) mono-repo at
++> `crates/settly/`. This standalone repository is preserved for historical
++> reference. New contributions should target the Configra workspace.
++
++## Table of Contents
++
++- [Code of Conduct](#code-of-conduct)
++- [Getting Started](#getting-started)
++- [Development Workflow](#development-workflow)
++- [Pull Request Process](#pull-request-process)
++- [Coding Standards](#coding-standards)
++- [Testing](#testing)
++- [Commit Messages](#commit-messages)
++- [Reporting Bugs](#reporting-bugs)
++- [Suggesting Features](#suggesting-features)
++
++## Code of Conduct
++
++This project and everyone participating in it is governed by the
++[Code of Conduct](CODE_OF_CONDUCT.md). By participating, you are expected to
++uphold this code. Report unacceptable behavior to
++[koosha@example.com](mailto:koosha@example.com).
++
++## Getting Started
++
++### Prerequisites
++
++- **Rust** ≥ 1.75 (see `rust-toolchain.toml`)
++- **mise** or **rustup** for toolchain management
++- **Task** (Taskfile runner) — `brew install go-task` or `mise use task`
++- **cargo-deny**, **cargo-audit**, **cargo-outdated** (optional but recommended)
++
++### Clone and Build
++
++```bash
++git clone https://github.com/KooshaPari/Settly.git
++cd Settly
++cargo build
++cargo test
++```
++
++### Recommended Local Tasks
++
++```bash
++task quality       # fmt + lint + test + audit
++task quality:strict   # CI-equivalent pipeline
++```
++
++Or via `just`:
++
++```bash
++just check
++just ci
++```
++
++## Development Workflow
++
++1. **Fork** the repository (or work directly on a feature branch in the
++   upstream repo if you have write access).
++2. Create a feature branch following the convention `worktrees/<topic>/`:
++
++   ```bash
++   git checkout -b worktrees/your-feature-name
++   ```
++
++3. Make your changes in small, focused commits.
++4. Run the quality gate locally:
++
++   ```bash
++   task quality:strict
++   ```
++
++5. Push your branch and open a Pull Request against `main`.
++6. Address review feedback promptly.
++
++## Pull Request Process
++
++1. Update the `CHANGELOG.md` under the `## [Unreleased]` section for any
++   user-visible change.
++2. Ensure the PR description references any related issues.
++3. All CI checks must pass:
++   - Rust CI (`ci.yml`)
++   - Security audit (`security.yml`)
++   - cargo-deny (`cargo-deny.yml`)
++   - OpenSSF Scorecard (`scorecard.yml`)
++4. A CODEOWNER must approve before merge.
++5. Squash-merge with a conventional-commit-style message (see below).
++
++## Coding Standards
++
++- **Formatting**: `cargo fmt --all` (enforced in CI)
++- **Linting**: `cargo clippy --all-targets --all-features -- -D warnings`
++- **Line length**: 100 chars (see `.editorconfig`)
++- **Indentation**: 4 spaces for Rust, 2 spaces for YAML/JSON/Markdown/TOML
++- **Documentation**: Public APIs must have rustdoc comments
++- **Error handling**: Use `thiserror` for library errors, `anyhow` only at
++  application boundaries
++- **No `unwrap()`/`expect()`** in library code without a justifying comment
++
++## Testing
++
++- **Unit tests** live alongside source in `#[cfg(test)] mod tests` blocks.
++- **Integration tests** live in `tests/` at the workspace root.
++- **Doctests** are encouraged for all public API examples.
++- **Coverage** is tracked via `cargo-llvm-cov` and reported via Codecov.
++
++Target: maintain or improve the line/branch coverage of touched modules.
++
++## Commit Messages
++
++We follow [Conventional Commits](https://www.conventionalcommits.org/):
++
++```
++<type>(<scope>): <description>
++
++[optional body]
++
++[optional footer(s)]
++```
++
++Types: `feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `test`, `build`,
++`ci`, `chore`, `revert`.
++
++Examples:
++
++```
++feat(domain): add migration hooks for v2 schema
++fix(adapters): correct idempotency key collision
++docs: update README with migration guide
++ci: add OpenSSF scorecard workflow
++```
++
++## Reporting Bugs
++
++Use the [Bug Report](../../issues/new?template=bug.yml) issue template. Include:
++
++- A clear, descriptive title
++- Steps to reproduce
++- Expected vs. actual behavior
++- Rust version (`rustc --version`) and OS
++- Relevant logs or stack traces
++
++## Suggesting Features
++
++Use the [Feature Request](../../issues/new?template=feature.yml) template.
++Describe the motivation, proposed solution, and any alternatives considered.
++
++## License
++
++By contributing, you agree that your contributions will be dual-licensed under
++MIT OR Apache-2.0, at the discretion of the project maintainers. See
++[LICENSE](LICENSE) for details.
++
++## Questions?
++
++Open a discussion or reach out at [koosha@example.com](mailto:koosha@example.com).
+\ No newline at end of file
+diff --git a/SECURITY.md b/SECURITY.md
+index 9015d1c..ecec314 100644
+--- a/SECURITY.md
++++ b/SECURITY.md
+@@ -1,7 +1,84 @@
+ # Security Policy
+ 
++## Supported Versions
++
++Settly is now maintained as a crate within the
++[Configra](https://github.com/KooshaPari/Configra) mono-repo. The versions of
++this standalone repo listed below are receiving security updates:
++
++| Version | Supported          |
++| ------- | ------------------ |
++| 0.1.x   | :white_check_mark: |
++| < 0.1   | :x:                |
++
+ ## Reporting a Vulnerability
+-If you discover a security vulnerability, please report it responsibly:
+-1. Do not open a public GitHub issue.
+-2. Email the maintainers.
+-3. Allow time for assessment before public disclosure.
++
++**Please do not report security vulnerabilities through public GitHub issues.**
++
++Instead, please report them privately via one of the following channels:
++
++1. **Email**: [koosha@example.com](mailto:koosha@example.com) (encrypted
++   communication preferred — PGP key available on request).
++2. **GitHub Security Advisories**: Use the
++   [private vulnerability reporting](../../security/advisories/new) feature on
++   this repository.
++3. **Direct contact**: Reach out to a maintainer through a trusted channel.
++
++### What to Include
++
++To help us triage and respond quickly, please include as much of the following
++as possible:
++
++- **Type of vulnerability** (e.g., RCE, DoS, info disclosure, supply chain)
++- **Affected component(s)** and version(s)
++- **Attack scenario** and preconditions
++- **Proof-of-concept** or reproducer (private PoC strongly preferred)
++- **Impact assessment** (worst-case consequences)
++- **Your contact info** for follow-up questions
++
++### Our Commitments
++
++When you submit a report, we commit to:
++
++- **Acknowledge** receipt within **3 business days**
++- **Triage** and provide an initial assessment within **10 business days**
++- **Keep you informed** of progress toward a fix
++- **Credit** you in the advisory (unless you request anonymity)
++- **Coordinate disclosure** timing with you — we will not publicly disclose
++  the issue until a fix is available, or until an agreed-upon disclosure date
++
++### Safe Harbor
++
++We will not pursue legal action against researchers who:
++
++- Make a good-faith effort to avoid privacy violations, data destruction, or
++  service disruption
++- Only interact with accounts they own or have explicit permission to access
++- Stop testing immediately and report findings if they encounter user data
++- Do not exploit a vulnerability beyond what is necessary to demonstrate it
++
++## Security Update Process
++
++1. A private security advisory is opened.
++2. Maintainers triage, develop, and review a fix in a private fork.
++3. A release is prepared with the fix and a CVE is requested if applicable.
++4. Coordinated public disclosure occurs after a grace period (typically 90
++   days from confirmation, or sooner if a fix is available).
++5. The advisory is published with full credit to the reporter.
++
++## Supply Chain Security
++
++We employ the following supply-chain defenses:
++
++- **`cargo-deny`** (`deny.toml`) — enforces license allow-list, source
++  restrictions, and known-vulnerability checks
++- **`cargo-audit`** — runs on every CI run via the security workflow
++- **Dependabot** — weekly automated PRs for upstream advisories
++- **OpenSSF Scorecard** — periodic supply-chain posture evaluation
++- **Pinned GitHub Actions** via commit SHAs (where applicable)
++- **Branch protection** on `main` requiring CODEOWNER approval
++
++## Acknowledgments
++
++We gratefully acknowledge the security researchers and contributors who have
++helped improve Settly's security posture.
+\ No newline at end of file
+diff --git a/justfile b/justfile
+new file mode 100644
+index 0000000..bb10346
+--- /dev/null
++++ b/justfile
+@@ -0,0 +1,199 @@
++# justfile — Settly
++# https://github.com/casey/just
++#
++# Settly is now maintained inside the Configra mono-repo. This justfile
++# mirrors the most common Taskfile targets so contributors can use either
++# command runner when iterating on this standalone repository.
++#
++# Usage:
++#     just                # show this help
++#     just check          # fmt-check + clippy + test
++#     just ci             # full CI-equivalent pipeline
++#     just audit          # security audits (deny + audit + outdated)
++
++set dotenv-load := false
++set positional-arguments := true
++
++# Default: list available recipes
++default:
++    @just --list
++
++# ─────────────────────────────────────────────────────────────────────────────
++# Setup
++# ─────────────────────────────────────────────────────────────────────────────
++
++# Install recommended cargo extensions
++install-tools:
++    cargo install --locked cargo-deny || true
++    cargo install --locked cargo-audit || true
++    cargo install --locked cargo-outdated || true
++    cargo install --locked cargo-llvm-cov || true
++    rustup component add rustfmt clippy
++
++# ─────────────────────────────────────────────────────────────────────────────
++# Build
++# ─────────────────────────────────────────────────────────────────────────────
++
++# Build the library and binaries in debug mode
++build:
++    cargo build --all-targets
++
++# Build optimized release artifacts
++build-release:
++    cargo build --release --all-targets
++
++# Check the whole workspace without producing artifacts
++check-workspace:
++    cargo check --all-targets --all-features
++
++# ─────────────────────────────────────────────────────────────────────────────
++# Format & Lint
++# ─────────────────────────────────────────────────────────────────────────────
++
++# Format all code (in-place)
++fmt:
++    cargo fmt --all
++
++# Verify formatting (CI mode)
++fmt-check:
++    cargo fmt --all -- --check
++
++# Run clippy with warnings-as-errors
++lint:
++    cargo clippy --all-targets --all-features -- -D warnings
++
++# Run clippy with security-focused lints
++lint-security:
++    cargo clippy --all-targets --all-features -- \
++        -D warnings \
++        -W clippy::panic \
++        -W clippy::unwrap_used \
++        -W clippy::expect_used \
++        -W clippy::todo \
++        -W clippy::dbg_macro
++
++# ─────────────────────────────────────────────────────────────────────────────
++# Test
++# ─────────────────────────────────────────────────────────────────────────────
++
++# Run unit + integration tests
++test:
++    cargo test --all-features
++
++# Run all tests including doctests
++test-all:
++    cargo test --all-features --doc
++    cargo test --all-features
++
++# Run tests with nextest (faster, better UX)
++test-nextest:
++    cargo nextest run --all-features
++
++# Run tests and generate coverage report
++coverage:
++    cargo llvm-cov --all-features --workspace --html
++    @echo "Coverage report at target/llvm-cov/html/index.html"
++
++# ─────────────────────────────────────────────────────────────────────────────
++# Security & Supply Chain
++# ─────────────────────────────────────────────────────────────────────────────
++
++# Run cargo-deny against deny.toml
++deny:
++    cargo deny check
++
++# Run cargo-audit against Cargo.lock
++audit:
++    cargo audit
++
++# Show outdated dependencies
++outdated:
++    cargo outdated --workspace --root-deps-only
++
++# Aggregate security pipeline
++security: deny audit outdated
++    @echo "Security checks complete."
++
++# ─────────────────────────────────────────────────────────────────────────────
++# Aggregate pipelines
++# ─────────────────────────────────────────────────────────────────────────────
++
++# Quick local check (format + lint + test)
++check: fmt-check lint test
++    @echo "✓ check passed"
++
++# Strict CI-equivalent pipeline
++ci: fmt-check lint-security test-all security
++    @echo "✓ CI pipeline passed"
++
++# Full quality gate used before opening a PR
++precommit: fmt-check lint-security test-all
++    @echo "✓ precommit checks passed"
++
++# ─────────────────────────────────────────────────────────────────────────────
++# Documentation
++# ─────────────────────────────────────────────────────────────────────────────
++
++# Build rustdoc with broken-link detection
++doc:
++    RUSTDOCFLAGS="-D warnings" cargo doc --no-deps --all-features
++
++# Open the locally-built rustdoc in the default browser
++doc-open: doc
++    @if [ "$(uname)" = "Darwin" ]; then \
++        open target/doc/settly/index.html; \
++    else \
++        xdg-open target/doc/settly/index.html; \
++    fi
++
++# ─────────────────────────────────────────────────────────────────────────────────
++# Benchmarks
++# ──────────────────────────────────────────────────────────────────────────────
++
++# Run the perf benchmark
++bench:
++    cargo bench --bench perf
++
++# ─────────────────────────────────────────────────────────────────────────────
++# Release
++# ─────────────────────────────────────────────────────────────────────────────
++
++# Dry-run publish to crates.io
++publish-dry:
++    cargo publish --dry-run --allow-dirty
++
++# Build a release tarball
++package: build-release
++    cargo package --allow-dirty
++
++# ─────────────────────────────────────────────────────────────────────────────
++# Housekeeping
++# ─────────────────────────────────────────────────────────────────────────────
++
++# Remove build artifacts
++clean:
++    cargo clean
++
++# Remove build artifacts AND the target directory
++nuke: clean
++    rm -rf target
++
++# Run rustfmt + clippy --fix to auto-correct trivial issues
++fix:
++    cargo fmt --all
++    cargo clippy --all-targets --all-features --fix --allow-dirty --allow-staged
++
++# Update the Cargo.lock to the latest compatible versions
++update:
++    cargo update
++
++# Show the resolved dependency tree
++tree:
++    cargo tree --all-features
++
++# Confirm the current toolchain matches rust-toolchain.toml
++doctor:
++    @echo "rustc:  $(rustc --version)"
++    @echo "cargo:  $(cargo --version)"
++    @echo "just:   $(just --version)"
++    @echo "task:   $(task --version 2>/dev/null || echo 'not installed')"
+\ No newline at end of file
+-- 
+2.50.1 (Apple Git-155)
+
+
+From 1e69dce58847d4ec5edbdea00fbc6aa46afafc92 Mon Sep 17 00:00:00 2001
+From: KooshaPari <koosha@example.com>
+Date: Sat, 20 Jun 2026 02:02:22 -0700
+Subject: [PATCH 3/4] chore: governance tier-0 pass and config module addition
+
+---
+ CONFIG.md                     |  54 ++++++++++++++
+ Cargo.lock                    |  42 ++++-------
+ Cargo.toml                    |   2 +-
+ config/example.json           |   6 ++
+ config/example.toml           |  26 +++++++
+ config/example.yaml           |  26 +++++++
+ src/adapters/idempotency.rs   |   4 +-
+ src/application/submission.rs |  12 ++++
+ src/domain/mod.rs             |   2 +
+ src/domain/settings.rs        | 130 ++++++++++++++++++++++++++++++++++
+ 10 files changed, 274 insertions(+), 30 deletions(-)
+ create mode 100644 CONFIG.md
+ create mode 100644 config/example.json
+ create mode 100644 config/example.toml
+ create mode 100644 config/example.yaml
+ create mode 100644 src/domain/settings.rs
+
+diff --git a/CONFIG.md b/CONFIG.md
+new file mode 100644
+index 0000000..e8db273
+--- /dev/null
++++ b/CONFIG.md
+@@ -0,0 +1,54 @@
++# Configuration
++
++Settly is a configuration management framework.  This document describes how to
++configure the **framework itself** (its own behaviour) — not how to use Settly
++to manage *your* application's configuration (see the API docs for that).
++
++## Framework Settings (`SettlySettings`)
++
++The `SettlySettings` struct controls runtime behaviour of Settly's built-in
++components.  Every field has a sensible default, so you only need to override
++what you need.
++
++| Field                   | Type    | Default | Description                              |
++|-------------------------|---------|---------|------------------------------------------|
++| `idempotency_ttl_secs`  | `u64`   | 86_400  | Idempotency cache TTL (seconds, 24h).    |
++| `max_retries`           | `u32`   | 3       | Max retry attempts per submission.       |
++
++### Example — Programmatic
++
++```rust
++use settly::domain::settings::SettlySettings;
++
++let settings = SettlySettings {
++    idempotency_ttl_secs: 3600,   // 1 hour
++    ..Default::default()
++};
++```
++
++### Example — Config File (TOML)
++
++```toml
++[settly]
++idempotency_ttl_secs = 3600
++max_retries = 5
++```
++
++See `config/example.toml`, `config/example.yaml`, and `config/example.json` for
++full examples in all three supported formats.
++
++## How It Works
++
++1. The framework defines `SettlySettings` with `serde::Deserialize` + `Default`.
++2. Users embed a `[settly]` section in their own config files.
++3. When loading config via `FileSource`, the `[settly]` key is parsed into
++   runtime settings by the component that needs them (e.g.
++   `InMemoryIdempotencyStore` calls `SettlySettings::default()`).
++
++## Adding a New Setting
++
++1. Add the field to `SettlySettings` in `src/domain/settings.rs`.
++2. Provide a `#[serde(default = "...")]` helper function and a `DEFAULT_*`
++   constant.
++3. Use the constant in the component that needs the value.
++4. Update `config/example.toml` and this table.
+diff --git a/Cargo.lock b/Cargo.lock
+index b11e303..55acd39 100644
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -869,16 +869,6 @@ version = "1.0.1"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "b9e0384b61958566e926dc50660321d12159025e767c18e043daf26b70104c39"
+ 
+-[[package]]
+-name = "idna"
+-version = "0.5.0"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "634d9b1461af396cad843f47fdba5597a4f9e6ddd4bfb6ff5d85028c25cb12f6"
+-dependencies = [
+- "unicode-bidi",
+- "unicode-normalization",
+-]
+-
+ [[package]]
+ name = "idna"
+ version = "1.1.0"
+@@ -1306,27 +1296,25 @@ dependencies = [
+ ]
+ 
+ [[package]]
+-name = "proc-macro-error"
+-version = "1.0.4"
++name = "proc-macro-error-attr2"
++version = "2.0.0"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "da25490ff9892aab3fcf7c36f08cfb902dd3e71ca0f9f9517bea02a73a5ce38c"
++checksum = "96de42df36bb9bba5542fe9f1a054b8cc87e172759a1868aa05c1f3acc89dfc5"
+ dependencies = [
+- "proc-macro-error-attr",
+  "proc-macro2",
+  "quote",
+- "syn 1.0.109",
+- "version_check",
+ ]
+ 
+ [[package]]
+-name = "proc-macro-error-attr"
+-version = "1.0.4"
++name = "proc-macro-error2"
++version = "2.0.1"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "a1be40180e52ecc98ad80b184934baf3d0d29f979574e439af5a55274b35f869"
++checksum = "11ec05c52be0a07b08061f7dd003e7d7092e0472bc731b4af7bb1ef876109802"
+ dependencies = [
++ "proc-macro-error-attr2",
+  "proc-macro2",
+  "quote",
+- "version_check",
++ "syn 2.0.117",
+ ]
+ 
+ [[package]]
+@@ -2284,7 +2272,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "ff67a8a4397373c3ef660812acab3268222035010ab8680ec4215f38ba3d0eed"
+ dependencies = [
+  "form_urlencoded",
+- "idna 1.1.0",
++ "idna",
+  "percent-encoding",
+  "serde",
+ ]
+@@ -2315,11 +2303,11 @@ dependencies = [
+ 
+ [[package]]
+ name = "validator"
+-version = "0.18.1"
++version = "0.20.0"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "db79c75af171630a3148bd3e6d7c4f42b6a9a014c2945bc5ed0020cbb8d9478e"
++checksum = "43fb22e1a008ece370ce08a3e9e4447a910e92621bb49b85d6e48a45397e7cfa"
+ dependencies = [
+- "idna 0.5.0",
++ "idna",
+  "once_cell",
+  "regex",
+  "serde",
+@@ -2331,13 +2319,13 @@ dependencies = [
+ 
+ [[package]]
+ name = "validator_derive"
+-version = "0.18.2"
++version = "0.20.0"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "df0bcf92720c40105ac4b2dda2a4ea3aa717d4d6a862cc217da653a4bd5c6b10"
++checksum = "b7df16e474ef958526d1205f6dda359fdfab79d9aa6d54bafcb92dcd07673dca"
+ dependencies = [
+  "darling",
+  "once_cell",
+- "proc-macro-error",
++ "proc-macro-error2",
+  "proc-macro2",
+  "quote",
+  "syn 2.0.117",
+diff --git a/Cargo.toml b/Cargo.toml
+index df8f7ef..7afd5b1 100644
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -29,7 +29,7 @@ anyhow = "1.0"
+ # Utilities
+ uuid = { version = "1", features = ["v4", "serde"] }
+ chrono = { version = "0.4", features = ["serde"] }
+-validator = { version = "0.18", features = ["derive"] }
++validator = { version = "0.20", features = ["derive"] }
+ 
+ # Database
+ tokio-postgres = "0.7"
+diff --git a/config/example.json b/config/example.json
+new file mode 100644
+index 0000000..5455afd
+--- /dev/null
++++ b/config/example.json
+@@ -0,0 +1,6 @@
++{
++  "settly": {
++    "idempotency_ttl_secs": 86_400,
++    "max_retries": 3
++  }
++}
+diff --git a/config/example.toml b/config/example.toml
+new file mode 100644
+index 0000000..26fb821
+--- /dev/null
++++ b/config/example.toml
+@@ -0,0 +1,26 @@
++# =============================================================================
++# Settly — Example Configuration (TOML)
++# =============================================================================
++#
++# This file demonstrates how to configure the Settly framework itself using its
++# built-in configuration system.  Load it with FileSource, merge it into your
++# Config, and the framework will pick up the reserved "settly" namespace.
++#
++# Usage:
++#   let config = ConfigBuilder::new()
++#       .with_source(FileSource::new("config/example.toml"), LayerPriority::Local)
++#       .await?
++#       .build()?;
++#
++# =============================================================================
++
++[settly]
++# Idempotency cache TTL in seconds (default: 86400 = 24 hours).
++# After this many seconds, a cached submission result is considered stale and
++# the executor will be re-invoked on the next identical key.
++idempotency_ttl_secs = 86_400
++
++# Maximum number of retry attempts per submission (default: 3).
++# The executor is called up to (max_retries + 1) times before the submission is
++# moved to the dead-letter queue.
++max_retries = 3
+diff --git a/config/example.yaml b/config/example.yaml
+new file mode 100644
+index 0000000..adc43d0
+--- /dev/null
++++ b/config/example.yaml
+@@ -0,0 +1,26 @@
++# =============================================================================
++# Settly — Example Configuration (YAML)
++# =============================================================================
++#
++# This file demonstrates how to configure the Settly framework itself using its
++# built-in configuration system.  Load it with FileSource, merge it into your
++# Config, and the framework will pick up the reserved "settly" namespace.
++#
++# Usage:
++#   let config = ConfigBuilder::new()
++#       .with_source(FileSource::new("config/example.yaml"), LayerPriority::Local)
++#       .await?
++#       .build()?;
++#
++# =============================================================================
++
++settly:
++  # Idempotency cache TTL in seconds (default: 86400 = 24 hours).
++  # After this many seconds, a cached submission result is considered stale and
++  # the executor will be re-invoked on the next identical key.
++  idempotency_ttl_secs: 86_400
++
++  # Maximum number of retry attempts per submission (default: 3).
++  # The executor is called up to (max_retries + 1) times before the submission
++  # is moved to the dead-letter queue.
++  max_retries: 3
+diff --git a/src/adapters/idempotency.rs b/src/adapters/idempotency.rs
+index ec70870..6ea7467 100644
+--- a/src/adapters/idempotency.rs
++++ b/src/adapters/idempotency.rs
+@@ -32,9 +32,9 @@ pub fn new(ttl: Duration) -> Self {
+         }
+     }
+ 
+-    /// Default TTL: 24 hours.
++    /// Default TTL: 24 hours (from `SettlySettings`).
+     pub fn default_ttl() -> Self {
+-        Self::new(Duration::from_secs(86_400))
++        Self::new(crate::domain::settings::SettlySettings::default().idempotency_ttl())
+     }
+ }
+ 
+diff --git a/src/application/submission.rs b/src/application/submission.rs
+index 5f489e8..a8a0f66 100644
+--- a/src/application/submission.rs
++++ b/src/application/submission.rs
+@@ -48,6 +48,18 @@ pub fn new(
+         }
+     }
+ 
++    /// Construct a new service with default retry limit (from `SettlySettings`).
++    pub fn with_defaults(
++        store: Arc<dyn IdempotencyStore>,
++        dlq: Arc<dyn DeadLetterQueue>,
++    ) -> Self {
++        Self::new(
++            store,
++            dlq,
++            crate::domain::settings::DEFAULT_MAX_RETRIES,
++        )
++    }
++
+     /// Submit work identified by `key`.
+     ///
+     /// `executor` is only called if `key` is not already in the idempotency
+diff --git a/src/domain/mod.rs b/src/domain/mod.rs
+index e1f868e..599872b 100644
+--- a/src/domain/mod.rs
++++ b/src/domain/mod.rs
+@@ -2,6 +2,7 @@
+ 
+ pub mod config;
+ pub mod layers;
++pub mod settings;
+ pub mod sources;
+ pub mod validation;
+ pub mod ports;
+@@ -11,6 +12,7 @@
+ // Re-exports
+ pub use config::{Config, ConfigValue, ConfigPath};
+ pub use layers::{Layer, LayerPriority, LayerStack, MergeStrategy};
++pub use settings::SettlySettings;
+ pub use sources::Source;
+ pub use validation::Validator;
+ pub use errors::ConfigError;
+diff --git a/src/domain/settings.rs b/src/domain/settings.rs
+new file mode 100644
+index 0000000..4c79731
+--- /dev/null
++++ b/src/domain/settings.rs
+@@ -0,0 +1,130 @@
++//! Framework-level configuration for Settly itself.
++//!
++//! `SettlySettings` controls how the library behaves — timeouts, retries,
++//! cache policies, etc.  It can be serialised / deserialised alongside
++//! user configuration (as a reserved `settly` key) or constructed
++//! programmatically.
++//!
++//! # Defaults
++//!
++//! Every field has a sensible default exposed via `Default`, so you only
++//! need to set the values you want to override.
++//!
++//! ```rust
++//! use settly::domain::settings::SettlySettings;
++//!
++//! let settings = SettlySettings::default();
++//! assert_eq!(settings.idempotency_ttl_secs, 86_400);
++//! assert_eq!(settings.max_retries, 3);
++//! ```
++
++use serde::{Deserialize, Serialize};
++use std::time::Duration;
++
++// ---------------------------------------------------------------------------
++// Named constants — useful when you want to reference a default inline.
++// ---------------------------------------------------------------------------
++
++/// Default TTL for idempotency cache entries (24 hours in seconds).
++pub const DEFAULT_IDEMPOTENCY_TTL_SECS: u64 = 86_400;
++
++/// Default maximum retry attempts for submission execution.
++pub const DEFAULT_MAX_RETRIES: u32 = 3;
++
++// ---------------------------------------------------------------------------
++// Settings struct
++// ---------------------------------------------------------------------------
++
++/// Top-level framework settings for Settly.
++///
++/// | Field                 | Type    | Default | Description                               |
++/// |-----------------------|---------|---------|-------------------------------------------|
++/// | `idempotency_ttl_secs` | `u64`  | 86400   | Idempotency cache TTL (seconds).          |
++/// | `max_retries`         | `u32`   | 3       | Max retry attempts per submission.        |
++#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
++pub struct SettlySettings {
++    /// TTL for idempotency cache entries in seconds.
++    /// Default: 86_400 (24 hours).
++    #[serde(default = "default_idempotency_ttl_secs")]
++    pub idempotency_ttl_secs: u64,
++
++    /// Maximum number of retry attempts per submission.
++    /// Default: 3.
++    #[serde(default = "default_max_retries")]
++    pub max_retries: u32,
++}
++
++// ---------------------------------------------------------------------------
++// Serde default helpers
++// ---------------------------------------------------------------------------
++
++fn default_idempotency_ttl_secs() -> u64 {
++    DEFAULT_IDEMPOTENCY_TTL_SECS
++}
++
++fn default_max_retries() -> u32 {
++    DEFAULT_MAX_RETRIES
++}
++
++// ---------------------------------------------------------------------------
++// Default impl
++// ---------------------------------------------------------------------------
++
++impl Default for SettlySettings {
++    fn default() -> Self {
++        Self {
++            idempotency_ttl_secs: DEFAULT_IDEMPOTENCY_TTL_SECS,
++            max_retries: DEFAULT_MAX_RETRIES,
++        }
++    }
++}
++
++// ---------------------------------------------------------------------------
++// Convenience accessors
++// ---------------------------------------------------------------------------
++
++impl SettlySettings {
++    /// Return the idempotency TTL as a `Duration`.
++    pub fn idempotency_ttl(&self) -> Duration {
++        Duration::from_secs(self.idempotency_ttl_secs)
++    }
++}
++
++// ---------------------------------------------------------------------------
++// Tests
++// ---------------------------------------------------------------------------
++
++#[cfg(test)]
++mod tests {
++    use super::*;
++
++    #[test]
++    fn test_defaults() {
++        let settings = SettlySettings::default();
++        assert_eq!(settings.idempotency_ttl_secs, 86_400);
++        assert_eq!(settings.max_retries, 3);
++    }
++
++    #[test]
++    fn test_ttl_duration() {
++        let settings = SettlySettings::default();
++        assert_eq!(settings.idempotency_ttl(), Duration::from_secs(86_400));
++    }
++
++    #[test]
++    fn test_serde_roundtrip() {
++        let settings = SettlySettings::default();
++        let json = serde_json::to_string(&settings).unwrap();
++        let deserialized: SettlySettings = serde_json::from_str(&json).unwrap();
++        assert_eq!(settings, deserialized);
++    }
++
++    #[test]
++    fn test_deserialize_partial() {
++        let json = r#"{"max_retries": 5}"#;
++        let settings: SettlySettings = serde_json::from_str(json).unwrap();
++        // idempotency_ttl_secs should fall back to default
++        assert_eq!(settings.idempotency_ttl_secs, 86_400);
++        assert_eq!(settings.max_retries, 5);
++    }
++}
+-- 
+2.50.1 (Apple Git-155)
+
+
+From 0d01bb9bae1d15526691c67547a4bb2003718346 Mon Sep 17 00:00:00 2001
+From: KooshaPari <koosha@example.com>
+Date: Sat, 20 Jun 2026 03:54:18 -0700
+Subject: [PATCH 4/4] chore: tier-0 hygiene snapshot 2026-06-20
+
+---
+ .github/CODEOWNERS                        |  74 +++++----
+ .github/ISSUE_TEMPLATE/bug.yml            |  30 ----
+ .github/ISSUE_TEMPLATE/bug_report.md      |  40 +++++
+ .github/ISSUE_TEMPLATE/config.yml         |  18 ++
+ .github/ISSUE_TEMPLATE/feature.yml        |  21 ---
+ .github/ISSUE_TEMPLATE/feature_request.md |  34 ++++
+ .github/workflows/audit.yml               |   5 +
+ .github/workflows/cargo-deny.yml          |  25 ---
+ .github/workflows/ci.yml                  |  13 +-
+ .github/workflows/deny.yml                |  44 +++++
+ .github/workflows/release.yml             |   5 +
+ .github/workflows/scorecard.yml           |   5 +
+ Cargo.lock                                | 192 ++++++++++++++++++++++
+ Cargo.toml                                |   1 +
+ justfile                                  |   5 +
+ 15 files changed, 397 insertions(+), 115 deletions(-)
+ delete mode 100644 .github/ISSUE_TEMPLATE/bug.yml
+ create mode 100644 .github/ISSUE_TEMPLATE/bug_report.md
+ create mode 100644 .github/ISSUE_TEMPLATE/config.yml
+ delete mode 100644 .github/ISSUE_TEMPLATE/feature.yml
+ create mode 100644 .github/ISSUE_TEMPLATE/feature_request.md
+ delete mode 100644 .github/workflows/cargo-deny.yml
+ create mode 100644 .github/workflows/deny.yml
+
+diff --git a/.github/CODEOWNERS b/.github/CODEOWNERS
+index 4256727..296a3da 100644
+--- a/.github/CODEOWNERS
++++ b/.github/CODEOWNERS
+@@ -1,60 +1,64 @@
+ # CODEOWNERS — Repository ownership
+ # https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+ #
++# GitHub usernames are case-insensitive in CODEOWNERS matching, but we
++# normalize to lowercase (@kooshapari) for grep-ability and tooling
++# consistency. Add additional owners here as the project grows.
++#
+ # Order matters: later entries override earlier ones.
+ # The last matching pattern wins.
+ 
+ # Default owners — every file requires review from at least one
+-* @KooshaPari
++* @kooshapari
+ 
+ # Rust source
+-/src/                    @KooshaPari
+-/tests/                  @KooshaPari
+-/benches/                @KooshaPari
+-/fuzz/                   @KooshaPari
+-/Cargo.toml              @KooshaPari
+-/Cargo.lock              @KooshaPari
++/src/                    @kooshapari
++/tests/                  @kooshapari
++/benches/                @kooshapari
++/fuzz/                   @kooshapari
++/Cargo.toml              @kooshapari
++/Cargo.lock              @kooshapari
+ 
+ # Domain layer — strict review
+-/src/domain/             @KooshaPari
+-/src/application/        @KooshaPari
++/src/domain/             @kooshapari
++/src/application/        @kooshapari
+ 
+ # Adapter layer — broader review
+-/src/adapters/           @KooshaPari
+-/src/infrastructure/     @KooshaPari
++/src/adapters/           @kooshapari
++/src/infrastructure/     @kooshapari
+ 
+ # API surface
+-/src/api/                @KooshaPari
++/src/api/                @kooshapari
+ 
+ # Configuration
+-/config/                 @KooshaPari
+-/deny.toml               @KooshaPari
+-/mise.toml               @KooshaPari
+-/rust-toolchain.toml     @KooshaPari
++/config/                 @kooshapari
++/deny.toml               @kooshapari
++/mise.toml               @kooshapari
++/rust-toolchain.toml     @kooshapari
+ 
+ # Governance
+-/CODE_OF_CONDUCT.md      @KooshaPari
+-/CONTRIBUTING.md         @KooshaPari
+-/SECURITY.md             @KooshaPari
+-/CHANGELOG.md            @KooshaPari
+-/LICENSE                 @KooshaPari
+-/README.md               @KooshaPari
++/CODE_OF_CONDUCT.md      @kooshapari
++/CONTRIBUTING.md         @kooshapari
++/SECURITY.md             @kooshapari
++/CHANGELOG.md            @kooshapari
++/LICENSE                 @kooshapari
++/README.md               @kooshapari
+ 
+ # CI / governance files — highest review bar
+-/.github/workflows/      @KooshaPari
+-/.github/CODEOWNERS      @KooshaPari
+-/.github/dependabot.yml  @KooshaPari
+-/.github/ISSUE_TEMPLATE/ @KooshaPari
+-/.github/pull_request_template.md @KooshaPari
++/.github/workflows/      @kooshapari
++/.github/CODEOWNERS      @kooshapari
++/.github/dependabot.yml  @kooshapari
++/.github/ISSUE_TEMPLATE/ @kooshapari
++/.github/pull_request_template.md @kooshapari
+ 
+ # Documentation
+-/docs/                   @KooshaPari
+-/SPEC.md                 @KooshaPari
+-/PRD.md                  @KooshaPari
+-/PLAN.md                 @KooshaPari
+-/ADR.md                  @KooshaPari
+-/AGENTS.md               @KooshaPari
+-/CLAUDE.md               @KooshaPari
++/docs/                   @kooshapari
++/SPEC.md                 @kooshapari
++/PRD.md                  @kooshapari
++/PLAN.md                 @kooshapari
++/ADR.md                  @kooshapari
++/AGENTS.md               @kooshapari
++/CLAUDE.md               @kooshapari
+ 
+ # Dependabot auto-PRs require explicit approval (helps prevent supply-chain footguns)
+-/Cargo.lock              @KooshaPari
+\ No newline at end of file
++/Cargo.lock              @kooshapari
+\ No newline at end of file
+diff --git a/.github/ISSUE_TEMPLATE/bug.yml b/.github/ISSUE_TEMPLATE/bug.yml
+deleted file mode 100644
+index 0ff6e1a..0000000
+--- a/.github/ISSUE_TEMPLATE/bug.yml
++++ /dev/null
+@@ -1,30 +0,0 @@
+-name: Bug Report
+-description: Report something that is not working
+-labels: [bug]
+-body:
+-  - type: markdown
+-    attributes:
+-      value: |
+-        ## Bug Description
+-        Describe the bug clearly.
+-
+-  - type: textarea
+-    id: steps
+-    attributes:
+-      label: Steps to Reproduce
+-      placeholder: |
+-        1. Go to '...'
+-        2. Click on '...'
+-        3. See error
+-
+-  - type: textarea
+-    id: expected
+-    attributes:
+-      label: Expected Behavior
+-      placeholder: What should happen
+-
+-  - type: textarea
+-    id: actual
+-    attributes:
+-      label: Actual Behavior
+-      placeholder: What actually happens
+diff --git a/.github/ISSUE_TEMPLATE/bug_report.md b/.github/ISSUE_TEMPLATE/bug_report.md
+new file mode 100644
+index 0000000..67b3530
+--- /dev/null
++++ b/.github/ISSUE_TEMPLATE/bug_report.md
+@@ -0,0 +1,40 @@
++<!--
++  Bug report — keep this section, then fill in the prompts below.
++  Please include enough detail to reproduce the issue deterministically.
++-->
++
++**Describe the bug**
++A clear and concise description of what the bug is.
++
++**To Reproduce**
++Steps to reproduce the behavior:
++
++1. `cargo build ...`
++2. `cargo run ...`
++3. See error
++
++**Expected behavior**
++A clear and concise description of what you expected to happen.
++
++**Actual behavior**
++What actually happens. Include the full error message, stack trace, or
++unexpected output.
++
++**Environment**
++
++- Settly version (commit SHA or crate version): <!-- e.g. v0.1.0 or 1e69dce -->
++- Rust toolchain (`rustc --version`): <!-- e.g. rustc 1.82.0 -->
++- OS: <!-- e.g. macOS 15.0, Ubuntu 24.04 -->
++- Architecture: <!-- x86_64 / aarch64 -->
++
++**Code sample / config**
++
++<!-- Minimal code or config that triggers the bug. -->
++
++```rust
++// ...
++```
++
++**Additional context**
++Add any other context about the problem here (links, screenshots,
++related issues, etc.).
+\ No newline at end of file
+diff --git a/.github/ISSUE_TEMPLATE/config.yml b/.github/ISSUE_TEMPLATE/config.yml
+new file mode 100644
+index 0000000..20b38a9
+--- /dev/null
++++ b/.github/ISSUE_TEMPLATE/config.yml
+@@ -0,0 +1,18 @@
++# Issue template chooser — Settly
++# https://docs.github.com/en/communities/using-templates-to-encourage-useful-issues-and-pull-requests/configuring-issue-templates-for-your-repository
++
++blank_issues_enabled: false  # force contributors to pick a template
++
++contact_links:
++  - name: Security disclosure (private)
++    url: /KooshaPari/Settly/security/advisories/new
++    about: |
++      **Do not report security vulnerabilities on GitHub Issues.** Use
++      GitHub's private vulnerability reporting or follow SECURITY.md
++      to email the maintainer directly.
++
++  - name: Discussions / questions
++    url: /KooshaPari/Settly/discussions
++    about: |
++      For usage questions, design discussion, or general Q&A — please
++      use Discussions instead of opening an Issue.
+\ No newline at end of file
+diff --git a/.github/ISSUE_TEMPLATE/feature.yml b/.github/ISSUE_TEMPLATE/feature.yml
+deleted file mode 100644
+index 2ecfdf6..0000000
+--- a/.github/ISSUE_TEMPLATE/feature.yml
++++ /dev/null
+@@ -1,21 +0,0 @@
+-name: Feature Request
+-description: Suggest a new feature
+-labels: [enhancement]
+-body:
+-  - type: markdown
+-    attributes:
+-      value: |
+-        ## Feature Description
+-        Describe the feature you'd like.
+-
+-  - type: textarea
+-    id: motivation
+-    attributes:
+-      label: Motivation
+-      placeholder: Why is this needed
+-
+-  - type: textarea
+-    id: proposal
+-    attributes:
+-      label: Proposed Solution
+-      placeholder: How should it work
+diff --git a/.github/ISSUE_TEMPLATE/feature_request.md b/.github/ISSUE_TEMPLATE/feature_request.md
+new file mode 100644
+index 0000000..e9ba869
+--- /dev/null
++++ b/.github/ISSUE_TEMPLATE/feature_request.md
+@@ -0,0 +1,34 @@
++<!--
++  Feature request — keep this section, then fill in the prompts below.
++  Focus on the problem you want to solve, not just the solution.
++-->
++
++**Is your feature request related to a problem? Please describe.**
++A clear and concise description of what the problem is. Ex. I'm always
++frustrated when [...]
++
++**Describe the solution you'd like**
++A clear and concise description of what you want to happen.
++
++**Describe alternatives you've considered**
++Any alternative solutions or features you've considered.
++
++**API / UX sketch**
++Optional. Show what a minimal API, config shape, or CLI invocation
++might look like. Pseudocode is fine.
++
++```rust
++// Example shape
++```
++
++**Impact**
++Who benefits from this feature and how? What is the impact if it is
++not built?
++
++- Users affected: <!-- e.g. all library users, only CLI users, ops teams -->
++- Effort estimate: <!-- small / medium / large -->
++- Breaking change: <!-- yes / no -->
++
++**Additional context**
++Add any other context, links, prior art, or screenshots about the
++feature request here.
+\ No newline at end of file
+diff --git a/.github/workflows/audit.yml b/.github/workflows/audit.yml
+index 01cb586..0230dd5 100644
+--- a/.github/workflows/audit.yml
++++ b/.github/workflows/audit.yml
+@@ -10,6 +10,11 @@ on:
+     - cron: "0 3 * * *"
+   workflow_dispatch:
+ 
++# Cancel superseded runs for the same ref (don't queue stale audits).
++concurrency:
++  group: ${{ github.workflow }}-${{ github.workflow_ref }}-${{ github.ref }}
++  cancel-in-progress: true
++
+ permissions:
+   contents: read
+   security-events: write
+diff --git a/.github/workflows/cargo-deny.yml b/.github/workflows/cargo-deny.yml
+deleted file mode 100644
+index c75782d..0000000
+--- a/.github/workflows/cargo-deny.yml
++++ /dev/null
+@@ -1,25 +0,0 @@
+-name: cargo-deny
+-
+-on:
+-  push:
+-    branches: [main]
+-  pull_request:
+-    branches: [main]
+-  workflow_dispatch:
+-  schedule:
+-    - cron: "0 9 * * 1"
+-
+-jobs:
+-  cargo-deny:
+-    runs-on: ubuntu-latest
+-    steps:
+-      - name: Checkout
+-        uses: actions/checkout@v6
+-
+-      - name: Install Rust toolchain
+-        uses: dtolnay/rust-toolchain@stable
+-
+-      - name: Run cargo-deny
+-        uses: EmbarkStudios/cargo-deny-action@v2
+-        with:
+-          rust-version: stable
+diff --git a/.github/workflows/ci.yml b/.github/workflows/ci.yml
+index 1f8f2dc..cebda91 100644
+--- a/.github/workflows/ci.yml
++++ b/.github/workflows/ci.yml
+@@ -7,21 +7,26 @@ on:
+     branches: [main]
+   workflow_dispatch:
+ 
++# Cancel in-progress runs for the same ref to save runner minutes.
+ concurrency:
+-  group: ${{ github.workflow }}-${{ github.ref }}
++  group: ${{ github.workflow }}-${{ github.workflow_ref }}-${{ github.ref }}
+   cancel-in-progress: true
+ 
++# Minimal permissions — only what the workflow actually needs.
++permissions:
++  contents: read
++
+ jobs:
+   ci:
+     name: Rust CI
+-    uses: KooshaPari/template-commons/.github/workflows/reusable-rust-ci.yml@main
++    uses: KooshaPari/template-commons/.github/workflows/reusable-rust-ci.yml@v1.2.0
+     with:
+       rust-version: stable
+       enable-coverage: true
+ 
+   security:
+     name: Security Audit
+-    uses: KooshaPari/template-commons/.github/workflows/reusable-security-scan.yml@main
++    uses: KooshaPari/template-commons/.github/workflows/reusable-security-scan.yml@v1.2.0
+     with:
+       language: rust
+     secrets:
+@@ -29,4 +34,4 @@ jobs:
+ 
+   phenotype-validate:
+     name: Governance Validation
+-    uses: KooshaPari/phenotypeActions/.github/workflows/validate-governance.yml@main
++    uses: KooshaPari/phenotypeActions/.github/workflows/validate-governance.yml@v1.0.0
+diff --git a/.github/workflows/deny.yml b/.github/workflows/deny.yml
+new file mode 100644
+index 0000000..8e4c061
+--- /dev/null
++++ b/.github/workflows/deny.yml
+@@ -0,0 +1,44 @@
++name: deny
++
++on:
++  push:
++    branches: [main]
++  pull_request:
++    branches: [main]
++  workflow_dispatch:
++  schedule:
++    # Weekly on Mondays at 09:00 UTC — license/source/advisory snapshot
++    - cron: "0 9 * * 1"
++
++# Cancel superseded runs for the same ref.
++concurrency:
++  group: ${{ github.workflow }}-${{ github.workflow_ref }}-${{ github.ref }}
++  cancel-in-progress: true
++
++permissions:
++  contents: read
++
++jobs:
++  cargo-deny:
++    name: cargo-deny
++    runs-on: ubuntu-latest
++    steps:
++      - name: Checkout
++        uses: actions/checkout@v6
++        with:
++          persist-credentials: false
++
++      - name: Install Rust toolchain
++        uses: dtolnay/rust-toolchain@stable
++
++      - name: Cache cargo registry
++        uses: Swatinem/rust-cache@v2
++        with:
++          cache-on-failure: true
++
++      - name: Run cargo-deny
++        uses: EmbarkStudios/cargo-deny-action@v2
++        with:
++          rust-version: stable
++          command: check
++          arguments: --hide-inclusion-graph
+diff --git a/.github/workflows/release.yml b/.github/workflows/release.yml
+index 196bfd2..6f412a8 100644
+--- a/.github/workflows/release.yml
++++ b/.github/workflows/release.yml
+@@ -20,6 +20,11 @@ permissions:
+   packages: write
+   id-token: write
+ 
++# Releases are manual + tag-driven — serialize to avoid racing publishes.
++concurrency:
++  group: ${{ github.workflow }}-${{ github.workflow_ref }}-${{ github.ref }}
++  cancel-in-progress: false
++
+ jobs:
+   release:
+     name: Build & Publish
+diff --git a/.github/workflows/scorecard.yml b/.github/workflows/scorecard.yml
+index 087cc2a..ffb5446 100644
+--- a/.github/workflows/scorecard.yml
++++ b/.github/workflows/scorecard.yml
+@@ -12,6 +12,11 @@ on:
+ 
+ permissions: read-all
+ 
++# Scorecard can be expensive — serialize and let stale runs be cancelled.
++concurrency:
++  group: ${{ github.workflow }}-${{ github.workflow_ref }}-${{ github.ref }}
++  cancel-in-progress: true
++
+ jobs:
+   scorecard:
+     name: OpenSSF Scorecard
+diff --git a/Cargo.lock b/Cargo.lock
+index 55acd39..ef6a0f2 100644
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -39,6 +39,18 @@ dependencies = [
+  "libc",
+ ]
+ 
++[[package]]
++name = "anes"
++version = "0.1.6"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "4b46cbb362ab8752921c97e041f5e366ee6297bd428a31275b9fcf1e380f7299"
++
++[[package]]
++name = "anstyle"
++version = "1.0.14"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "940b3a0ca603d1eade50a4846a2afffd5ef57a9feac2c0e2ec2e14f9ead76000"
++
+ [[package]]
+ name = "anyhow"
+ version = "1.0.102"
+@@ -169,6 +181,12 @@ version = "1.11.1"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "1e748733b7cbc798e1434b6ac524f0c1ff2ab456fe201501e6497c8417a4fc33"
+ 
++[[package]]
++name = "cast"
++version = "0.3.0"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "37b2a672a2cb129a2e41c10b1224bb368f9f37a2b16b612598138befd7b37eb5"
++
+ [[package]]
+ name = "cc"
+ version = "1.2.62"
+@@ -210,6 +228,58 @@ dependencies = [
+  "windows-link",
+ ]
+ 
++[[package]]
++name = "ciborium"
++version = "0.2.2"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "42e69ffd6f0917f5c029256a24d0161db17cea3997d185db0d35926308770f0e"
++dependencies = [
++ "ciborium-io",
++ "ciborium-ll",
++ "serde",
++]
++
++[[package]]
++name = "ciborium-io"
++version = "0.2.2"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "05afea1e0a06c9be33d539b876f1ce3692f4afea2cb41f740e7743225ed1c757"
++
++[[package]]
++name = "ciborium-ll"
++version = "0.2.2"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "57663b653d948a338bfb3eeba9bb2fd5fcfaecb9e199e87e1eda4d9e8b240fd9"
++dependencies = [
++ "ciborium-io",
++ "half",
++]
++
++[[package]]
++name = "clap"
++version = "4.6.1"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "1ddb117e43bbf7dacf0a4190fef4d345b9bad68dfc649cb349e7d17d28428e51"
++dependencies = [
++ "clap_builder",
++]
++
++[[package]]
++name = "clap_builder"
++version = "4.6.0"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "714a53001bf66416adb0e2ef5ac857140e7dc3a0c48fb28b2f10762fc4b5069f"
++dependencies = [
++ "anstyle",
++ "clap_lex",
++]
++
++[[package]]
++name = "clap_lex"
++version = "1.1.0"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "c8d4a3bb8b1e0c1050499d1815f5ab16d04f0959b233085fb31653fbfc9d98f9"
++
+ [[package]]
+ name = "cmov"
+ version = "0.5.3"
+@@ -290,6 +360,40 @@ version = "2.5.0"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "217698eaf96b4a3f0bc4f3662aaa55bdf913cd54d7204591faa790070c6d0853"
+ 
++[[package]]
++name = "criterion"
++version = "0.5.1"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "f2b12d017a929603d80db1831cd3a24082f8137ce19c69e6447f54f5fc8d692f"
++dependencies = [
++ "anes",
++ "cast",
++ "ciborium",
++ "clap",
++ "criterion-plot",
++ "is-terminal",
++ "itertools",
++ "num-traits",
++ "once_cell",
++ "oorandom",
++ "regex",
++ "serde",
++ "serde_derive",
++ "serde_json",
++ "tinytemplate",
++ "walkdir",
++]
++
++[[package]]
++name = "criterion-plot"
++version = "0.5.0"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "6b50826342786a51a89e2da3a28f1c32b06e387201bc2d19791f622c673706b1"
++dependencies = [
++ "cast",
++ "itertools",
++]
++
+ [[package]]
+ name = "crossbeam-queue"
+ version = "0.3.12"
+@@ -305,6 +409,12 @@ version = "0.8.21"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "d0a5c400df2834b80a4c3327b3aad3a4c4cd4de0629063962b03235697506a28"
+ 
++[[package]]
++name = "crunchy"
++version = "0.2.4"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "460fbee9c2c2f33933d720630a6a0bac33ba7053db5344fac858d4b8952d77d5"
++
+ [[package]]
+ name = "crypto-common"
+ version = "0.1.7"
+@@ -651,6 +761,17 @@ dependencies = [
+  "wasip3",
+ ]
+ 
++[[package]]
++name = "half"
++version = "2.7.1"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "6ea2d84b969582b4b1864a92dc5d27cd2b77b622a8d79306834f1be5ba20d84b"
++dependencies = [
++ "cfg-if",
++ "crunchy",
++ "zerocopy",
++]
++
+ [[package]]
+ name = "hashbrown"
+ version = "0.14.5"
+@@ -700,6 +821,12 @@ version = "0.5.0"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "2304e00983f87ffb38b55b444b5e3b60a884b5d30c0fca7d82fe33449bbe55ea"
+ 
++[[package]]
++name = "hermit-abi"
++version = "0.5.2"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "fc0fef456e4baa96da950455cd02c081ca953b141298e41db3fc7e36b1da849c"
++
+ [[package]]
+ name = "hex"
+ version = "0.4.3"
+@@ -902,6 +1029,26 @@ dependencies = [
+  "serde_core",
+ ]
+ 
++[[package]]
++name = "is-terminal"
++version = "0.4.17"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "3640c1c38b8e4e43584d8df18be5fc6b0aa314ce6ebf51b53313d4306cca8e46"
++dependencies = [
++ "hermit-abi",
++ "libc",
++ "windows-sys 0.61.2",
++]
++
++[[package]]
++name = "itertools"
++version = "0.10.5"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "b0fd2260e829bddf4cb6ea802289de2f86d6a7a690192fbe91b3f46e0f2c8473"
++dependencies = [
++ "either",
++]
++
+ [[package]]
+ name = "itoa"
+ version = "1.0.18"
+@@ -1130,6 +1277,12 @@ version = "1.21.4"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "9f7c3e4beb33f85d45ae3e3a1792185706c8e16d043238c593331cc7cd313b50"
+ 
++[[package]]
++name = "oorandom"
++version = "11.1.5"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "d6790f58c7ff633d8771f42965289203411a5e5c68388703c06e14f24770b41e"
++
+ [[package]]
+ name = "parking"
+ version = "2.2.1"
+@@ -1514,6 +1667,15 @@ version = "1.0.23"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "9774ba4a74de5f7b1c1451ed6cd5285a32eddb5cccb8cc655a4e50009e06477f"
+ 
++[[package]]
++name = "same-file"
++version = "1.0.6"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "93fc1dc3aaa9bfed95e02e6eadabb4baf7e3078b0bd1b4d7b6b0b68378900502"
++dependencies = [
++ "winapi-util",
++]
++
+ [[package]]
+ name = "scopeguard"
+ version = "1.2.0"
+@@ -1598,6 +1760,7 @@ dependencies = [
+  "anyhow",
+  "async-trait",
+  "chrono",
++ "criterion",
+  "redis",
+  "serde",
+  "serde_json",
+@@ -2042,6 +2205,16 @@ dependencies = [
+  "zerovec",
+ ]
+ 
++[[package]]
++name = "tinytemplate"
++version = "1.2.1"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "be4d6b5f19ff7664e8c98d03e2139cb510db9b0a60b55f8e8709b689d939b6bc"
++dependencies = [
++ "serde",
++ "serde_json",
++]
++
+ [[package]]
+ name = "tinyvec"
+ version = "1.11.0"
+@@ -2343,6 +2516,16 @@ version = "0.9.5"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "0b928f33d975fc6ad9f86c8f283853ad26bdd5b10b7f1542aa2fa15e2289105a"
+ 
++[[package]]
++name = "walkdir"
++version = "2.5.0"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "29790946404f91d9c5d06f9874efddea1dc06c5efe94541a7d6863108e3a5e4b"
++dependencies = [
++ "same-file",
++ "winapi-util",
++]
++
+ [[package]]
+ name = "wasi"
+ version = "0.11.1+wasi-snapshot-preview1"
+@@ -2503,6 +2686,15 @@ dependencies = [
+  "web-sys",
+ ]
+ 
++[[package]]
++name = "winapi-util"
++version = "0.1.11"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "c2a7b1c03c876122aa43f3020e6c3c3ee5c05081c9a00739faf7503aeba10d22"
++dependencies = [
++ "windows-sys 0.61.2",
++]
++
+ [[package]]
+ name = "windows-core"
+ version = "0.62.2"
+diff --git a/Cargo.toml b/Cargo.toml
+index 7afd5b1..759a36b 100644
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -43,6 +43,7 @@ tracing = "0.1"
+ 
+ [dev-dependencies]
+ tempfile = "3"
++criterion = { version = "0.5", default-features = false, features = ["html_reports"] }
+ 
+ [profile.release]
+ lto = true
+diff --git a/justfile b/justfile
+index bb10346..b60a12b 100644
+--- a/justfile
++++ b/justfile
+@@ -130,6 +130,11 @@ ci: fmt-check lint-security test-all security
+ precommit: fmt-check lint-security test-all
+     @echo "✓ precommit checks passed"
+ 
++# Composite "grade" — what we expect a contributor to run before pushing.
++# Mirrors CI but adds doc + tree for a fuller pre-push snapshot.
++grade: fmt-check lint-security test-all security doc tree
++    @echo "✓ grade passed (fmt + lint + tests + security + doc + tree)"
++
+ # ─────────────────────────────────────────────────────────────────────────────
+ # Documentation
+ # ─────────────────────────────────────────────────────────────────────────────
+-- 
+2.50.1 (Apple Git-155)
+

@@ -1,0 +1,187 @@
+{
+  "version": "1.2.0",
+  "updated": "2026-06-19",
+  "description": "Integration meta-repo lockfile — pins canonical fleet repos to immutable refs. CI validates cross-repo compatibility at pinned SHAs.",
+  "_archive_notes": {
+    "McpKit": {
+      "status": "archived",
+      "archived_date": "2026-06-18",
+      "reason": "Source repo KooshaPari/McpKit archived on GitHub; pushes return 'This repository was archived so it is read-only'. Pin retained at c557c3ce (final state before archive); new commits are local-only and not reflected on the lock. Target substrates PhenoMCP#164 + PhenoMCPServers carry the absorbed content per ADR-003 / ADR-017 supersession."
+    },
+    "phenoShared": {
+      "status": "restored-archived",
+      "restored_date": "2026-06-19",
+      "previously_deleted": "2026-06-19",
+      "reason": "P4 decompose complete; last live pin (HexaKit phenotype-cache-adapter) drained via #285; Pyron #62 also gutted. Restored as archived. No live cargo pins remain. Final pin b45ca51d (hexa-kit pre-#285 phenoShared HEAD) retained here for audit. Terminal owners per ADR-ECO-014."
+    },
+    "Pyron": {
+      "status": "restored-archived",
+      "restored_date": "2026-06-19",
+      "previously_deleted": "2026-06-19",
+      "reason": "CORRECTION 2026-06-19: prior 'deleted' / 404 tombstone was premature. Pyron #61 left generic phenotype-contracts pin on phenoShared until ResilienceKit #4 drained it. #62 gutted the rest. Repo restored as archived 2026-06-19; no live cargo pins remain. Terminal owners per ADR-ECO-014."
+    },
+    "phenotype-mcp-asset": {
+      "status": "archived",
+      "archived_date": "2026-06-18",
+      "reason": "9-module Rust scaffold (asset discovery/pack/handler/validation), no CI, no LICENSE, zero consumers. Byte-identical copy preserved in McpKit GitHub archive (L5-104). Pin retained at 718edf80."
+    },
+    "phenotype-analytics": {
+      "status": "archived",
+      "archived_date": "2026-06-18",
+      "reason": "100 LOC async-trait interface library (AnalyticsClient/AnalyticsBackend/Trackable), no concrete backends, zero tests, zero consumers. Created <24h before archive (L5-104). Pin retained at 25622c4a."
+    },
+    "phenotype-registry-data": {
+      "status": "archived",
+      "archived_date": "2026-06-18",
+      "reason": "5.7 MB MANIFEST.tsv index of L7-001 corpus (52,627 entries). Merged into KooshaPari/phenotype-registry as MANIFEST_L7-001.tsv + worklog-L7-001.json (L5-104)."
+    },
+    "pheno-framework-lint": {
+      "status": "archived",
+      "archived_date": "2026-06-19",
+      "reason": "Absorbed into HexaKit as scripts/audit-tools/pheno_framework_lint.py via PR KooshaPari/HexaKit#292 (re-targeted from pheno-scaffold-kit#3 after external deletion 2026-06-20). Source repo DELETED."
+    },
+    "pheno-drift-detector": {
+      "status": "archived",
+      "archived_date": "2026-06-19",
+      "reason": "Absorbed into HexaKit as scripts/audit-tools/pheno_drift_detector.py via PR KooshaPari/HexaKit#292 (re-targeted from pheno-scaffold-kit#3 after external deletion 2026-06-20). Source repo DELETED."
+    },
+    "pheno-predict": {
+      "status": "archived",
+      "archived_date": "2026-06-19",
+      "reason": "Absorbed into HexaKit as scripts/audit-tools/pheno_predict.py via PR KooshaPari/HexaKit#292 (re-targeted from pheno-scaffold-kit#3 after external deletion 2026-06-20). Source repo DELETED."
+    },
+    "forge-runner-scripts": {
+      "status": "archived",
+      "archived_date": "2026-06-19",
+      "reason": "33 operational shell/python scripts (~290 KB) from ~/.forge/. Split: 2 dag_*.py -> phenodag (Go rewrite, L5-113 2026-06-18); 32 files -> monorepo findings/forge-runner-scripts/ (PR KooshaPari/phenotype-org-audits#49 was orphaned when phenotype-org-audits was deleted externally 2026-06-20)."
+    },
+    "pheno-scaffold-kit": {
+      "status": "archived",
+      "archived_date": "2026-06-20",
+      "reason": "Umbrella scaffold CLI for stdlib-only pheno-* governance tools (L72/L73/L74 + 4 siblings). Absorbed pheno-predict, pheno-framework-lint, pheno-drift-detector via PR #3 (recovery after external deletion). Now archived as the absorption target is complete; umbrella pattern documented in ADR-023 + AGENTS.md."
+    },
+    "phenotype-bus": {
+      "status": "archived",
+      "archived_date": "2026-06-20",
+      "reason": "Archived private Rust event-bus repo. Direct absorption target phenoEvents#9 lifted InMemoryBus adapter plus audit/deny/cliff/version helper; PhenoObservability stale CI tarball dependency removed in commit 37d1ee0. 2026-06-20 delete-readiness sweep: phenokits-commons#7 merged docs disposition; Eidolon#66 and Sidekick#75 remove unused production Cargo path deps; PhenoObservability#178 removes stale phenotype-bus test/docs surface in favor of phenotype-event-bus. phenotype-apps#43 removes raw apps-extract gitlinks for Pyron, phenotype-bus, and PhenoContracts. Hard delete deferred until those cleanup PRs merge and post-merge code search/tree checks are clean."
+    },
+    "PhenoContracts": {
+      "status": "hold-decompose",
+      "reason": "Repo-level PhenoContracts record. Current repo is active/non-archived and owns formal-verification TS ports/adapters plus Rust crates. No external runtime consumers found in 2026-06-20 scoped search, but deletion is not safe until content is absorbed or explicitly split: Rust phenotype-contracts remains governed by ADR-ECO-014/domain slices, while formal-verification adapters need a terminal owner before archive."
+    }
+  },
+  "components": {
+    "phenotype-registry": {
+      "repo": "KooshaPari/phenotype-registry",
+      "ref": "main",
+      "sha": "1eeed5be90ed7c7b983e047475977de034db0f93"
+    },
+    "phenotype-registry-data": {
+      "repo": "KooshaPari/phenotype-registry-data",
+      "ref": "main",
+      "status": "archived",
+      "archived_date": "2026-06-18",
+      "note": "Merged into KooshaPari/phenotype-registry as MANIFEST_L7-001.tsv + worklog-L7-001.json (L5-104)"
+    },
+    "HexaKit": {
+      "repo": "KooshaPari/HexaKit",
+      "ref": "main",
+      "sha": "d83d1ca26a347e8c5898fc0b28e99a8d54a9ad05"
+    },
+    "phenotype-rust-sdk": {
+      "repo": "KooshaPari/phenotype-rust-sdk",
+      "ref": "main",
+      "sha": "cbf1ccf4077dd631f388ea9e02b7beed2a515f5f"
+    },
+    "phenotype-types": {
+      "repo": "KooshaPari/phenotype-types",
+      "ref": "main",
+      "sha": "faa56746434d7f53f3b2028d8cd99d70392049ed"
+    },
+    "TestingKit": {
+      "repo": "KooshaPari/TestingKit",
+      "ref": "main",
+      "sha": "1a0449faab2f7e851f79b935b30d7e0e0ff4c83c"
+    },
+    "PhenoObservability": {
+      "repo": "KooshaPari/PhenoObservability",
+      "ref": "main",
+      "sha": "7e14ba5a91459e900f13459c5ff8a8f028651f8f"
+    },
+    "substrate": {
+      "repo": "KooshaPari/substrate",
+      "ref": "main",
+      "sha": "6e8b35f85697b1b1dc95d5f37451dfa4f7a6af3f"
+    },
+    "Authvault": {
+      "repo": "KooshaPari/Authvault",
+      "ref": "main",
+      "sha": "c2bbf90e45fba29d15f1ec6c2f0e250685dccbb8"
+    },
+    "Eventra": {
+      "repo": "KooshaPari/Eventra",
+      "ref": "main",
+      "sha": "7374d76337f710f35bfb6e045278022dd1f8f11e"
+    },
+    "Agentora": {
+      "repo": "KooshaPari/Agentora",
+      "ref": "main",
+      "sha": "77f4dd2b3f289999c04d97cb613089fd57ba9118"
+    },
+    "ResilienceKit": {
+      "repo": "KooshaPari/ResilienceKit",
+      "ref": "main",
+      "sha": "93cbac70b2306e570a5a46e862150c968f64327e"
+    },
+    "phenotype-python-sdk": {
+      "repo": "KooshaPari/phenotype-python-sdk",
+      "ref": "main",
+      "sha": "844c05ab76ebb40d83d1078f5782707135754423"
+    },
+    "phenotype-gateway": {
+      "repo": "KooshaPari/phenotype-gateway",
+      "ref": "master",
+      "sha": "3974924ac29432cd5fd78797550ca8cfaad10829"
+    },
+    "McpKit": {
+      "repo": "KooshaPari/McpKit",
+      "ref": "main",
+      "sha": "c557c3ce3a3d1d90e93736a9a4105f6030f34cf7",
+      "status": "archived",
+      "archived_date": "2026-06-18"
+    },
+    "phenotype-analytics": {
+      "repo": "KooshaPari/phenotype-analytics",
+      "ref": "main",
+      "sha": "25622c4ae77b6806cd2c6eb84acc6342be45d05d",
+      "status": "archived",
+      "archived_date": "2026-06-18"
+    },
+    "nexus": {
+      "repo": "KooshaPari/nexus",
+      "ref": "main",
+      "sha": "8db484e7d360238b12491634190e8a36a7f0d6d3"
+    },
+    "phenoUtils": {
+      "repo": "KooshaPari/phenoUtils",
+      "ref": "main",
+      "sha": "a5b4f7a799fa7c26166e1d0535c59e3639758cdb"
+    },
+    "phenotype-mcp-asset": {
+      "repo": "KooshaPari/PhenoFastMCP-rust",
+      "ref": "main",
+      "sha": "718edf808de6ab16f2f9602a763c5c7ac983fb22",
+      "status": "archived",
+      "archived_date": "2026-06-18",
+      "path": "crates/fastmcp-asset"
+    },
+    "phenotype-tooling": {
+      "repo": "KooshaPari/phenotype-tooling",
+      "ref": "main"
+    },
+    "PhenoMCP": {
+      "repo": "KooshaPari/PhenoMCP",
+      "ref": "main"
+    }
+  }
+}

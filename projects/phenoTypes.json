@@ -1,0 +1,19 @@
+{
+  "name": "phenoTypes",
+  "languages": ["python"],
+  "primary_language": "python",
+  "status": "retired",
+  "has_readme": true,
+  "has_spec": false,
+  "type": "stub",
+  "path": "repos/phenoTypes",
+  "absorbed_into": "phenotype-types",
+  "absorption_note": "Empty skeleton; type definitions were recorded as living in phenotype-types; source repo deleted 2026-06-16",
+  "disposition": "RETIRE",
+  "remote_url": "https://github.com/KooshaPari/phenoTypes",
+  "remote_state": "404_not_found_verified_2026-07-29",
+  "absorption_target_state": "phenotype-types_404_not_found_verified_2026-07-29",
+  "local_recovery_state": "no_checkout_or_archive_found_under_Phenotype_repos_verified_2026-07-29",
+  "boundary_note": "Preserve this historical stub and absorption claim, but do not retarget it to another repository without recovered source/spec evidence; the recorded phenotype-types destination is itself unavailable.",
+  "audit_date": "2026-07-29"
+}

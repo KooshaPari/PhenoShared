@@ -1,0 +1,20 @@
+{
+  "name": "asset-engine",
+  "languages": [
+    "python",
+    "shell"
+  ],
+  "primary_language": "python",
+  "status": "live",
+  "has_readme": true,
+  "type": "asset-pipeline",
+  "path": "repos/asset-engine",
+  "disposition": "DECLARE_BOUNDARY_OWNER",
+  "wave": "2026-07-20-creativity-spine-restoration",
+  "boundary_artifact": "docs/boundary/asset-engine.md",
+  "extracted_from": "KooshaPari/phenoDesign/engine",
+  "extracted_at": "2026-07-20T00:00:00.000000Z",
+  "spine_peer": "KooshaPari/phenoDesign",
+  "note": "Canonical asset pipeline (Blender, ImageMagick, FFmpeg, Adobe CC, Unreal). Extracted from phenoDesign/engine/ on 2026-07-20. Owns render orchestration and tool legs; phenoDesign owns design tokens and UX spine.",
+  "adr": "ADR-ECO-014"
+}
