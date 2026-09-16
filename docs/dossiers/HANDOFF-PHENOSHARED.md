@@ -1,7 +1,7 @@
 # PhenoShared Comprehensive Handoff
 
-**Date:** 2026-09-16 (Pacific)
-**Branch:** main at `cd13e96a` (pending push of registry integration)
+**Date:** 2026-09-16 (Pacific) — updated after PhenoInfra dep resolution + warning cleanup
+**Branch:** main at `00e1fab9`
 **Repo:** KooshaPari/PhenoShared (formerly PhenoAI)
 
 ## Repository Identity
@@ -9,9 +9,9 @@
 - **Former name:** PhenoAI
 - **Current name:** PhenoShared
 - **Role:** Pooled foundation monorepo (Rust workspace + absorbed repos)
-- **Workspace members:** 81 (79 + 2 newly integrated PhenoRegistry crates)
+- **Workspace members:** 84 (79 original + 2 PhenoRegistry + 3 PhenoInfra)
 - **Total crate dirs:** 310
-- **cargo check:** PASS (0 errors, 47 warnings)
+- **cargo check:** PASS (0 errors, 44 warnings)
 
 ## Absorption History (chronological)
 
@@ -71,7 +71,7 @@ None. Workspace compiles clean.
 
 ### High (2)
 1. **3 PhenoRegistry crates orphaned** - not in workspace, should be integrated or removed
-2. **47 compiler warnings** - mostly missing docs (26), unused imports (3), unused structs (5)
+2. **44 compiler warnings** - mostly missing docs (42), dead code in absorbed crates (14+10 unused items)
 
 ### Medium (3)
 1. **Future-compat warnings** - `block v0.1.6` and `proc-macro-error2 v2.0.1` will be rejected by future Rust
@@ -104,26 +104,46 @@ docs/                      # Atlas dossiers, architecture docs, sessions
 
 ## External Dependencies (git)
 
-| Dependency | Source | Status |
-|-----------|--------|--------|
-| `phenotype-crypto` | PhenoInfra.git @ e001322 | EXISTS (200 OK) |
-| `phenotype-health` | PhenoInfra.git @ e001322 | EXISTS |
-| `phenotype-observability` | PhenoInfra.git @ e001322 | EXISTS |
-| `phenotype-policy-engine` | PhenoInfra.git @ e001322 | EXISTS |
-| `phenotype-mcp` | PhenoInfra.git @ e001322 | EXISTS |
+### Resolved to Local Paths (as of `53c252ce`)
+All PhenoInfra git deps now use local path dependencies:
 
-Note: PhenoInfra was absorbed but these git deps still reference the external repo. Local copies exist at `crates/phenotype-policy-engine/` and `crates/phenotype-mcp/` but the workspace still pulls from git.
+| Dependency | Was Git | Now Local Path |
+|-----------|---------|----------------|
+| `phenotype-crypto` | PhenoInfra.git | `crates/phenotype-crypto/` |
+| `phenotype-health` | PhenoInfra.git | `crates/phenotype-health/` |
+| `phenotype-observability` | PhenoInfra.git | `crates/phenotype-observability/` |
+| `phenotype-policy-engine` | PhenoInfra.git | `crates/phenotype-policy-engine/` |
+| `phenotype-mcp` | PhenoInfra.git | `crates/phenotype-mcp/` |
+
+### Remaining External Git Deps
+These reference repos NOT absorbed into PhenoShared:
+
+| Dependency | Source | Crate |
+|-----------|--------|-------|
+| `phenotype-http-client-core` | ResilienceKit.git | hexa-kit |
+| `phenotype-state-machine` | ResilienceKit.git | hexa-kit |
+| `phenotype-logging` | PhenoObservability.git | hexa-kit |
+| `phenotype-auth-contracts` | Authvault.git | hexa-kit |
+| `phenotype-security-aggregator` | Authvault.git | hexa-kit |
+| `phenotype-cipher` | Authvault.git | hexa-kit |
+| `phenotype-casbin-wrapper` | Authvault.git | hexa-kit |
+| `phenotype-sentry-config` | PhenoObservability.git | hexa-kit |
+| `phenotype-telemetry` | PhenoObservability.git | hexa-kit |
+| `substrate-core` | substrate.git | llm-router |
+| `omniroute-adapter` | substrate.git | llm-router |
+| `substrate` | substrate.git | sharecli |
+| `runtime-process` | substrate.git | sharecli |
 
 ## What's Next
 
 ### Phase B: Integration Cleanup
 1. ~~Add `phenotype-project-registry` and `phenotype-service-registry` to workspace members~~ DONE
 2. ~~Fix or remove `pheno-registry-python` (broken dep)~~ ORPHANED (harmless)
-3. Resolve git deps that have local copies (PhenoInfra crates)
+3. ~~Resolve git deps that have local copies (PhenoInfra crates)~~ DONE
 4. Update stale origin URLs in absorbed crate manifests
 
 ### Phase C: Quality
-1. Fix 47 warnings (missing docs, unused imports)
+1. Fix 44 warnings (42 missing docs, dead code in fabric-capture/substrate-tui)
 2. Address future-compat warnings (block, proc-macro-error2)
 3. Normalize CRLF line endings in session extracts
 
