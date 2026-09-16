@@ -11,7 +11,7 @@ upstream orchestrator merges)
 ## 1. T9.2 secret-block resolution — VERIFIED
 
 **Commit:** `db801bb7ef` (`chore(governance): T9.2.1-3 + 2 v9 subagent outputs (T13-y, T21)`)
-**Author:** Koosha Pari <koosha@phenotype.com>, 2026-06-18 21:51:45 -0700
+**Author:** Koosha Pari <<REDACTED>@phenotype.com>, 2026-06-18 21:51:45 -0700
 **File:** `findings/2026-06-18-T9-2-secret-block-resolution.md` (107 lines, restored this turn)
 
 ### Resolution verification

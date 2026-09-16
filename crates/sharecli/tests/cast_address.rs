@@ -72,7 +72,7 @@ fn fr_cast_001_parse_rejects_negative_pane() {
 /// PaneAddress::parse handles ssh user@host form.
 #[test]
 fn fr_cast_001_parse_ssh_user_at_host() {
-    let addr = PaneAddress::parse("workstation:ssh:koosha@10.0.0.5:0:3").expect("parse ok");
+    let addr = PaneAddress::parse("workstation:ssh:<REDACTED>@10.0.0.5:0:3").expect("parse ok");
     assert_eq!(addr.machine, "workstation");
     match &addr.host {
         Host::Ssh { user, host } => {

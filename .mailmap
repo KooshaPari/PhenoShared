@@ -2,7 +2,7 @@
 # Maps bot/auto identities to a single operator identity.
 # Non-destructive: git will render the canonical name without rewriting history.
 KooshaPari <kooshapari@gmail.com>
-KooshaPari <kooshapari@phenotype.ai>
+KooshaPari <kooshapari<REDACTED>@phenotype.ai>
 KooshaPari <kooshapari@phenotype.local>
 KooshaPari <forge@phenotype.dev>
 KooshaPari <forge@KooshaPari.local>
@@ -14,7 +14,7 @@ KooshaPari <airlock-v2-auto@MacBookPro.lan1.local>
 KooshaPari <autocommit@KooshaPari.dev>
 KooshaPari <ci-fix@tracera.local>
 KooshaPari <claude@anthropic.com>
-KooshaPari <claude@phenotype.ai>
+KooshaPari <claude<REDACTED>@phenotype.ai>
 KooshaPari <claude@phenotype.local>
 KooshaPari <kooshapari@KooshaPari.local>
 KooshaPari <claude@KooshaPari.local>

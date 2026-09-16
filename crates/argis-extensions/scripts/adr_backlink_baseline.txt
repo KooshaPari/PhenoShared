@@ -7417,7 +7417,7 @@ Date:   Sun Jun 21 15:46:15 2026 -0700
 [32m+[m
 [32m+[m[32mCounts are **line-based** (sum of `rg -c` per pattern). One line can have multiple[m
 [32m+[m[32mmatches in the case of `pheno-port-adapter/SECURITY.md:18` (2 occurrences of[m
-[32m+[m[32m`koosha@phenotype.local` on the same line — mailto link + plain text).[m
+[32m+[m[32m`<REDACTED>@phenotype.local` on the same line — mailto link + plain text).[m
 [32m+[m
 [32m+[m[32m| Crate | Files | Bytes | Email | SSN | AWS | Pwd | Sec | Key | **Total** |[m
 [32m+[m[32m|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|[m
@@ -7440,7 +7440,7 @@ Date:   Sun Jun 21 15:46:15 2026 -0700
 [32m+[m[32m| `pheno-worklog-schema` | 20 | 31,210 | 1 | 0 | 0 | 0 | 0 | 0 | **1** |[m
 [32m+[m[32m| **TOTAL (17 crates)** | **228** | **~835 KB** | **12** | **0** | **0** | **3** | **2** | **5** | **22** |[m
 [32m+[m
-[32m+[m[32m¹ `pheno-port-adapter/SECURITY.md:18` contains 2 occurrences of `koosha@phenotype.local` on a single line[m
+[32m+[m[32m¹ `pheno-port-adapter/SECURITY.md:18` contains 2 occurrences of `<REDACTED>@phenotype.local` on a single line[m
 [32m+[m[32m(plain text + markdown mailto link), counted as 1 line / 2 matches.[m
 [32m+[m
 [32m+[m[32m---[m
@@ -7460,7 +7460,7 @@ Date:   Sun Jun 21 15:46:15 2026 -0700
 [32m+[m[32m| 4 | `pheno-config/src/secrets.rs:163` | apiKey | `let _ = ApiKey::new("");` | **FP** — unit test for empty-input panic (`test_new_rejects_empty`); empty string by design |[m
 [32m+[m[32m| 5 | `pheno-config/src/secrets.rs:169` | apiKey | `let key = ApiKey::new(raw);` | **FP** — continuation of #2; `raw` is bound on line 168 to `"sk-live-abc123"` |[m
 [32m+[m[32m| 6 | `pheno-config/src/secrets.rs:182` | apiKey | `let key = ApiKey::new(raw);` | **FP** — continuation of #3; `raw` is bound on line 181 to `"sk-live-abc123"` |[m
-[32m+[m[32m| 7 | `pheno-port-adapter/SECURITY.md:18` | email (×2) | `koosha@phenotype.local` | **FP** — SECURITY.md org contact (RFC 6762 `.local` TLD = non-routable placeholder) |[m
+[32m+[m[32m| 7 | `pheno-port-adapter/SECURITY.md:18` | email (×2) | `<REDACTED>@phenotype.local` | **FP** — SECURITY.md org contact (RFC 6762 `.local` TLD = non-routable placeholder) |[m
 [32m+[m[32m| 8 | `pheno-config/src/secrets.rs:26-27` | apiKey + password | doc comment: `ApiKey::expose` / `DbPassword::expose` | **FP** — module-level `//!` doc comment explaining the newtype API; method names only |[m
 [32m+[m[32m| 9 | `pheno-config/docs/architecture/pheno-config.md:99` | secret | `` `secret://…` reference in TOML is resolved at `find_value` time `` | **FP** — architecture doc explaining the `secret://` URI scheme (placeholder for Vault/secret-store indirection) |[m
 [32m+[m[32m| 10 | `pheno-mcp-router/docs/architecture/pheno-mcp-router.md:114` | secret | `` `secret://…` references from prompts before they `` | **FP** — architecture doc explaining the `secret://` URI scheme (same scheme, sibling crate) |[m
@@ -7479,10 +7479,10 @@ Date:   Sun Jun 21 15:46:15 2026 -0700
 [32m+[m[32m| `pheno-scaffold-kit/SPEC.md:38` | email | `me@example.com` | **FP** — spec example |[m
 [32m+[m[32m| `pheno-scaffold-kit/README.md:35` | email | `me@example.com` | **FP** — README quickstart example |[m
 [32m+[m[32m| `pheno-scaffold-kit/examples/quickstart.py:10` | email | `me@example.com` | **FP** — example code |[m
-[32m+[m[32m| `pheno-scaffold-kit/pyproject.toml:13` | email | `koosha@phenotype.local` | **FP** — PEP 621 `authors` field (`.local` TLD) |[m
-[32m+[m[32m| `pheno-llms-txt/pyproject.toml:13` | email | `koosha@phenotype.local` | **FP** — PEP 621 `authors` field |[m
-[32m+[m[32m| `pheno-vibecoding-guard/pyproject.toml:13` | email | `koosha@phenotype.local` | **FP** — PEP 621 `authors` field |[m
-[32m+[m[32m| `pheno-worklog-schema/pyproject.toml:13` | email | `koosha@phenotype.local` | **FP** — PEP 621 `authors` field |[m
+[32m+[m[32m| `pheno-scaffold-kit/pyproject.toml:13` | email | `<REDACTED>@phenotype.local` | **FP** — PEP 621 `authors` field (`.local` TLD) |[m
+[32m+[m[32m| `pheno-llms-txt/pyproject.toml:13` | email | `<REDACTED>@phenotype.local` | **FP** — PEP 621 `authors` field |[m
+[32m+[m[32m| `pheno-vibecoding-guard/pyproject.toml:13` | email | `<REDACTED>@phenotype.local` | **FP** — PEP 621 `authors` field |[m
+[32m+[m[32m| `pheno-worklog-schema/pyproject.toml:13` | email | `<REDACTED>@phenotype.local` | **FP** — PEP 621 `authors` field |[m
 [32m+[m
 [32m+[m[32m---[m
 [32m+[m
@@ -7503,7 +7503,7 @@ Date:   Sun Jun 21 15:46:15 2026 -0700
 [32m+[m[32m   flag these. The standard mitigation (`.trufflehog-allowlist.txt` allowlisting the test[m
 [32m+[m[32m   block) is already in place at `pheno-secret-scan/.trufflehog-allowlist.txt` (per[m
 [32m+[m[32m   `pheno-secret-scan/README.md` §3).[m
-[32m+[m[32m4. **Is the email a real person's address?** No — `koosha@phenotype.local` uses the[m
+[32m+[m[32m4. **Is the email a real person's address?** No — `<REDACTED>@phenotype.local` uses the[m
 [32m+[m[32m   RFC 6762 `.local` mDNS TLD (non-routable, single-LAN-only). `me@example.com` and[m
 [32m+[m[32m   `test@example.com` are reserved by RFC 2606 §2 as example domains.[m
 [32m+[m
@@ -7547,7 +7547,7 @@ Date:   Sun Jun 21 15:46:15 2026 -0700
 [32m+[m[32m   (e.g. `gitleaks` with `allowlist` regexes). Verify the allowlist is already referenced[m
 [32m+[m[32m   by the `pheno-secret-scan` GitHub Actions workflow before adding entries.[m
 [32m+[m[32m4. **Add `pheno-port-adapter/SECURITY.md:18` to the allowlist** as a single-line entry[m
-[32m+[m[32m   (`SECURITY\.md:koosha@phenotype\.local`) — it currently generates 2 false-positive[m
+[32m+[m[32m   (`SECURITY\.md:<REDACTED>@phenotype\.local`) — it currently generates 2 false-positive[m
 [32m+[m[32m   matches per scan.[m
 [32m+[m[32m5. **Cadence.** Per ADR-042 (security audit cadence), the full secret scan + dependency[m
 [32m+[m[32m   audit + supply-chain check runs **monthly**. Next sweep: 2026-07-20. This SIDE-22[m

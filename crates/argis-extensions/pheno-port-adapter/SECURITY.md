@@ -15,7 +15,7 @@ have found a security vulnerability, please report it to us as described below.
 
 Instead, please report them via email to the repository maintainer:
 
-- **Koosha Pari** — [koosha@phenotype.local](mailto:koosha@phenotype.local)
+- **Koosha Pari** — [<REDACTED>@phenotype.local](mailto:<REDACTED>@phenotype.local)
 
 You should receive a response within 48 hours. If for some reason you do not,
 please follow up to ensure we received your original message.

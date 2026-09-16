@@ -6,12 +6,12 @@
 // Tag taxonomy + governance: see docs/governance/tailscale-policy.md.
 {
   "tagOwners": {
-    "tag:phenotype-mesh": ["koosha@gmail.com"],
-    "tag:oci":            ["koosha@gmail.com"],
-    "tag:gcp":            ["koosha@gmail.com"],
-    "tag:aws":            ["koosha@gmail.com"],
-    "tag:vercel-build":   ["koosha@gmail.com"],
-    "tag:home-desktop":   ["koosha@gmail.com"]
+    "tag:phenotype-mesh": ["<REDACTED>@gmail.com"],
+    "tag:oci":            ["<REDACTED>@gmail.com"],
+    "tag:gcp":            ["<REDACTED>@gmail.com"],
+    "tag:aws":            ["<REDACTED>@gmail.com"],
+    "tag:vercel-build":   ["<REDACTED>@gmail.com"],
+    "tag:home-desktop":   ["<REDACTED>@gmail.com"]
   },
 
   "acls": [
@@ -24,7 +24,7 @@
     // Admin user can reach every mesh node (any port) from any device.
     {
       "action": "accept",
-      "src":    ["koosha@gmail.com"],
+      "src":    ["<REDACTED>@gmail.com"],
       "dst":    ["tag:phenotype-mesh:*"]
     }
     // No public-port rules. No `autogroup:internet` rules. Egress to public
@@ -38,7 +38,7 @@
   "ssh": [
     {
       "action":      "check",
-      "src":         ["tag:home-desktop", "koosha@gmail.com"],
+      "src":         ["tag:home-desktop", "<REDACTED>@gmail.com"],
       "dst":         ["tag:phenotype-mesh"],
       "users":       ["root", "ubuntu", "phenotype"],
       "checkPeriod": "24h"
@@ -53,7 +53,7 @@
   // Deny-all is implicit in Tailscale ACL: anything not matched above is denied.
   "tests": [
     {
-      "src":    "koosha@gmail.com",
+      "src":    "<REDACTED>@gmail.com",
       "accept": ["tag:phenotype-mesh:22", "tag:oci:443"]
     },
     {

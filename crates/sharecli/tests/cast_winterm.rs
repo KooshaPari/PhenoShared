@@ -29,10 +29,10 @@ fn exit_ok() -> std::process::ExitStatus {
 
 #[test]
 fn send_to_ssh_host_pipes_text_to_remote_clipboard() {
-    let addr = PaneAddress::parse("winbox:ssh:koosha@192.168.1.100:0:0").unwrap();
+    let addr = PaneAddress::parse("winbox:ssh:<REDACTED>@192.168.1.100:0:0").unwrap();
     let cmds = vec![(
         "ssh",
-        &["koosha@192.168.1.100", "powershell", "-NoProfile", "-Command", "$input | Set-Clipboard"]
+        &["<REDACTED>@192.168.1.100", "powershell", "-NoProfile", "-Command", "$input | Set-Clipboard"]
             as &[&str],
     )];
     let runner = MockProcessRunner::from_ok(&cmds);

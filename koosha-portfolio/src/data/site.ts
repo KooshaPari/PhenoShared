@@ -36,7 +36,7 @@ export const socials: Link[] = [
   { label: "GitHub", href: "https://github.com/<REDACTED>", external: true },
   { label: "LinkedIn", href: "https://www.linkedin.com/in/<REDACTED>", external: true },
   { label: "Devpost", href: "https://devpost.com/<REDACTED>", external: true },
-  { label: "Email", href: "mailto:koosha@<REDACTED>.com", external: true },
+  { label: "Email", href: "mailto:<REDACTED>@<REDACTED>.com", external: true },
 ];
 
 export const profileFacts = [

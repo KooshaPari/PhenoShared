@@ -7,7 +7,7 @@ name = "cli-builder-kit"
 version = "0.1.0"
 description = "Unified CLI framework SDK abstracting argparse, Click, and Typer - write once, deploy anywhere"
 authors = [
-    {name = "Koosha Pari", email = "koosha@example.com"}
+    {name = "Koosha Pari", email = "<REDACTED>@example.com"}
 ]
 readme = "README.md"
 requires-python = ">=3.10"

@@ -83,7 +83,7 @@ members = [
 [workspace.package]
 version = "0.3.10"
 edition = "2021"
-authors = ["<REDACTED> <koosha@phenotype.space>"]
+authors = ["<REDACTED> <<REDACTED>@phenotype.space>"]
 license = "MIT OR Apache-2.0"
 repository = "https://github.com/KooshaPari/substrate"
 rust-version = "1.80"

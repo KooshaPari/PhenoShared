@@ -238,10 +238,10 @@ mod tests {
     #[test]
     fn parse_notify_cfg_full() {
         let cfg = parse_notify_cfg(Some(
-            "native,imessage:koosha@icloud.com,email:k@k.com,webhook:https://ntfy.sh/x",
+            "native,imessage:<REDACTED>@icloud.com,email:k@k.com,webhook:https://ntfy.sh/x",
         ));
         assert!(cfg.native);
-        assert_eq!(cfg.imessage_target.as_deref(), Some("koosha@icloud.com"));
+        assert_eq!(cfg.imessage_target.as_deref(), Some("<REDACTED>@icloud.com"));
         assert_eq!(cfg.email_target.as_deref(), Some("k@k.com"));
         assert_eq!(
             cfg.webhook_url.as_deref(),

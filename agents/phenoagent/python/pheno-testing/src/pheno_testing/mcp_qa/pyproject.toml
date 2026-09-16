@@ -7,7 +7,7 @@ name = "mcp-qa"
 version = "1.0.0"
 description = "Comprehensive testing framework for Model Context Protocol servers"
 authors = [
-    {name = "Koosha Pari", email = "koosha@example.com"}
+    {name = "Koosha Pari", email = "<REDACTED>@example.com"}
 ]
 readme = "README.md"
 requires-python = ">=3.10"

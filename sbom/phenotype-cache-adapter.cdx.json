@@ -76,7 +76,7 @@
     {
       "type": "library",
       "bom-ref": "registry+https://github.com/rust-lang/crates.io-index#allocator-api2@0.2.21",
-      "author": "Zakarum <zaq.dev@icloud.com>",
+      "author": "Zakarum <<REDACTED>@icloud.com>",
       "name": "allocator-api2",
       "version": "0.2.21",
       "description": "Mirror of Rust's allocator API",

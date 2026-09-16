@@ -84,7 +84,7 @@ The two "DM92-only" entries are:
 
 | Branch | DM92 SHA | KP SHA | Match? | Category | Notes |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| `feat/session-viewer` | `7065903a01f176e5bd4e73d977ba919b2000a79d` | `7065903a01f176e5bd4e73d977ba919b2000a79d` | ✅ byte-for-byte | **A** | Author: "Phenotype Agent" `<agent@phenotype.ai>`, 2026-06-15T05:35:04Z. Identical on both. Already on KP. |
+| `feat/session-viewer` | `7065903a01f176e5bd4e73d977ba919b2000a79d` | `7065903a01f176e5bd4e73d977ba919b2000a79d` | ✅ byte-for-byte | **A** | Author: "Phenotype Agent" `<<REDACTED>@phenotype.ai>`, 2026-06-15T05:35:04Z. Identical on both. Already on KP. |
 | `main` | `61553a827f472b4aba30c02126d4ac87962832d9` | `70e43e7a44b06b121485f6602d761398c0e21bd1` | ❌ different | **B** | DM92 main = vanilla upstream `csv-parse` bump (2026-06-15). KP main = merged PR #20 + upstream catch-ups + Phenotype governance (2026-06-16). DM92 is **stale**, not divergent in the "interesting" sense. |
 
 ### 2.3 Category C — DM92-only branches (376 total)
@@ -146,7 +146,7 @@ Plus `main` (which IS on DM92 and upstream, so it's the only "shared" branch).
 ### 3.1 Category A deep-dive: `feat/session-viewer`
 
 - **SHA (both):** `7065903a01f176e5bd4e73d977ba919b2000a79d`
-- **Author (both):** `Phenotype Agent <agent@phenotype.ai>`
+- **Author (both):** `Phenotype Agent <<REDACTED>@phenotype.ai>`
 - **Date (both):** 2026-06-15T05:35:04Z
 - **Message (both):** `fix(ui): apply user_initiated_conversations filter to SelectCommand::Conversation`
 - **Present on upstream `tailcallhq/forgecode`?** No — `gh api repos/tailcallhq/forgecode/branches/feat/session-viewer` returns `404 Branch not found`.

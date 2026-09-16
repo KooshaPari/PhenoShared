@@ -1,7 +1,7 @@
 # Second-Half 4-Repo Absorption Audit — L5-110/111/112
 
 **Date:** 2026-06-19 11:35 PDT
-**Auditor:** Phenotype Agent <agent@phenotype.ai>
+**Auditor:** Phenotype Agent <<REDACTED>@phenotype.ai>
 **Device:** macbook
 **Layer:** L5 (substrate-level audit)
 **Action:** absorption-audit + merge + archive

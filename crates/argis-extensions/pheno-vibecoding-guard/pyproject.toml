@@ -10,7 +10,7 @@ readme = "README.md"
 requires-python = ">=3.10"
 license = {text = "MIT OR Apache-2.0"}
 authors = [
-    {name = "<REDACTED>", email = "koosha@phenotype.local"},
+    {name = "<REDACTED>", email = "<REDACTED>@phenotype.local"},
 ]
 keywords = ["vibecoding", "ai-assisted", "guard", "lint", "phenotype"]
 classifiers = [

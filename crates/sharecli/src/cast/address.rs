@@ -225,10 +225,10 @@ mod tests {
 
     #[test]
     fn peel_pane_window_keeps_ssh_form_intact() {
-        // `ssh:koosha@10.0.0.5:0:3` — host part is `ssh:koosha@10.0.0.5`
-        let (p, w, host) = peel_pane_window("ssh:koosha@10.0.0.5:0:3").expect("ok");
+        // `ssh:<REDACTED>@10.0.0.5:0:3` — host part is `ssh:<REDACTED>@10.0.0.5`
+        let (p, w, host) = peel_pane_window("ssh:<REDACTED>@10.0.0.5:0:3").expect("ok");
         assert_eq!((p, w), (3, 0));
-        assert_eq!(host, "ssh:koosha@10.0.0.5");
+        assert_eq!(host, "ssh:<REDACTED>@10.0.0.5");
     }
 
     // --- proptest (C07 L66 / T-650) ---
