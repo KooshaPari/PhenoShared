@@ -1,171 +1,160 @@
-# Architecture Decision Records -- phenodocs
-
-**Version:** 1.1
-**Date:** 2026-03-26
+# Architecture Decision Records — phenotype-shared
 
 ---
 
-## ADR-001: VitePress as Documentation Engine
+## ADR-001: Cargo Workspace with Zero Inter-Crate Dependencies
 
-**Status:** Accepted
-**Date:** 2026-03-26
+**Status**: Accepted
+**Date**: 2026-03-26
+**Traces to**: FR-DOM-004, FR-PORT-009
 
-**Context:**
-The Phenotype organization needs a fast, Markdown-first static site generator that supports Vue components, full-text search, dark/light theming, and clean URL generation. The generator must produce a completely static output deployable to GitHub Pages without a server.
+**Context**: Shared infrastructure must be consumable per-crate. A monolithic shared library forces consumers to take all transitive deps even when they need only one primitive (e.g., just the policy engine).
 
-**Decision:**
-Use VitePress 1.x as the documentation engine for both the federation hub and the `@phenotype/docs` shared package.
+**Decision**: Use a Cargo workspace where workspace-level `[workspace.dependencies]` pins shared dependency versions, but each crate's `Cargo.toml` selects only what it needs. No crate in the workspace depends on another crate in the workspace.
 
-**Rationale (from actual config):**
-- `defineConfig` and `DefaultTheme` APIs enable strongly typed configuration with TypeScript
-- Built-in `provider: 'local'` search requires no external service
-- `cleanUrls: true` and `lastUpdated: true` are first-class VitePress features used in production config
-- Vue 3 SFCs (`.vue`) integrate natively as VitePress theme components
-- Markdown line numbers and dual code theme (`github-light`/`github-dark`) are built-in
+**Alternatives considered**:
+- Single flat crate with feature flags: rejected because feature flag combinatorics are hard to test and document.
+- Separate repos per crate: rejected because coordinating dep version bumps across repos is operationally expensive at this stage.
 
-**Alternatives Considered:**
-- **Docusaurus** — React-based, heavier bundle, incompatible with Vue SFC component approach
-- **MkDocs** — Python runtime, less extensible for custom Vue components
-- **Astro** — More flexible but higher configuration burden; VitePress is purpose-built for docs
-
-**Consequences:**
-- Node.js (>=20) and Bun are required build-time dependencies
-- All custom components must be Vue 3 SFCs (21 components in `packages/docs/src/theme/components/`)
-- `vue-tsc` is required for type-checking `.vue` files alongside TypeScript
+**Consequences**:
+- Clean, auditable dependency graphs per crate.
+- Individual crate versioning and publishing is straightforward.
+- Workspace-level `cargo test --workspace` validates all crates together.
+- A shared type (e.g., a common `DomainError`) cannot be imported from a sibling crate; it must be defined locally or in a shared foundation crate outside this workspace.
 
 ---
 
-## ADR-002: Bun as Package Manager and Script Runner
+## ADR-002: Hexagonal Architecture (Ports and Adapters) in Every Crate
 
-**Status:** Accepted
-**Date:** 2026-03-26
+**Status**: Accepted
+**Date**: 2026-03-26
+**Traces to**: FR-CACHE-008, FR-EVT-007, FR-PORT-001 to FR-PORT-009
 
-**Context:**
-The project needs a fast package manager compatible with npm workspaces for the `packages/docs` sub-package. Speed of `bun install` matters for CI.
+**Context**: Infrastructure primitives (cache, event store, state machine) must be swappable without touching application logic. Services need to mock these for testing.
 
-**Decision:**
-Use Bun 1.x (`packageManager: "bun@1.3.10"` in `package.json`) for dependency installation and script execution.
+**Decision**: Every substantial crate follows hexagonal architecture with three layers:
+- `domain/` — entities, value objects, port traits, domain services. No external deps beyond `serde`, `thiserror`, `uuid`, `chrono`.
+- `application/` — use cases, commands/queries, DTOs. Depends only on domain layer ports.
+- `adapters/` — concrete implementations (in-memory, HTTP, Postgres, Redis). Depends on domain ports; never imported by domain or application.
 
-**Rationale:**
-- `bun.lock` is present at repo root; `packageManager` field enforces Bun
-- `workspace:*` protocol in `package.json` is natively supported by Bun
-- `bun run dev/build/preview/check` matches existing scripts
-- `bun run typecheck` invokes `vue-tsc` which is a devDependency installed by Bun
+**Alternatives considered**:
+- Layered architecture (Controller → Service → Repository): rejected because it still couples service layer to infrastructure via concrete types.
+- No architectural constraint: rejected because it led to test-hostile, tightly coupled code in earlier Phenotype services.
 
-**Alternatives Considered:**
-- **pnpm** — Also supports `workspace:*`; no compelling reason to change given existing Bun lockfile
-- **npm** — No native workspace hoisting; slower
-
-**Consequences:**
-- CI and local dev environments must have Bun installed
-- Python tooling (`uv`, `pyproject.toml`) runs in parallel via `uv run` for `scripts/check_docs_links.py`
+**Consequences**:
+- Application code is testable with pure in-memory adapters; no Docker required for unit tests.
+- Adding a new adapter (e.g., SQLite event store) requires implementing a port trait only — application code is untouched.
+- More boilerplate per crate (port traits + use case structs), but that cost is paid once and amortized across all consumers.
 
 ---
 
-## ADR-003: @phenotype/docs as a Separate Publishable Workspace Package
+## ADR-003: SHA-256 Hash Chains for Event Integrity
 
-**Status:** Accepted
-**Date:** 2026-03-26
+**Status**: Accepted
+**Date**: 2026-03-26
+**Traces to**: FR-EVT-003, FR-EVT-004
 
-**Context:**
-The VitePress theme, config factory, sidebar generator, deep-merge utility, and Vue components need to be reusable across all Phenotype project documentation sites without copy-paste.
+**Context**: Event sourcing requires tamper detection. Soft audit trails (sequence numbers only) can be silently corrupted by database updates.
 
-**Decision:**
-Extract the shared layer into a workspace package at `packages/docs` with package name `@phenotype/docs`, published to GitHub Packages (`npm.pkg.github.com`). The hub consumes it as `"@phenotype/docs": "workspace:*"`.
+**Decision**: Each `EventEnvelope` contains a `hash` field: `SHA-256(serialize(previous_envelope))`. The first event in a stream uses a defined genesis constant (`"genesis"`). A verification pass traverses the full stream and recomputes hashes.
 
-**Rationale (from actual code):**
-- `packages/docs/package.json` defines `"name": "@phenotype/docs"` and `"private": false`
-- Export map exposes five entry points: `./theme`, `./config`, `./utils`, `./types`, `./css/custom.css`
-- Keycap palette and VitePress theme CSS come from `@phenotype/design` (`KooshaPari/phenoDesign`); phenodocs does not fork design tokens
-- `publishConfig.registry: "https://npm.pkg.github.com"` is set
-- `createPhenotypeConfig` in `./config` calls `deepMerge` from `./utils` — intra-package, type-safe
+**Alternatives considered**:
+- No integrity check: rejected because the crate targets governance and audit use cases.
+- HMAC with a shared secret: rejected because it requires key management infrastructure; SHA-256 chaining provides tamper-evidence without secrets.
+- Merkle tree: rejected as over-engineered for per-stream linear event logs.
 
-**Alternatives Considered:**
-- **Inline in hub** — Zero reuse; other Phenotype projects cannot adopt consistent theme
-- **Separate git repo** — Heavier release cycle; workspace reference more convenient during development
-
-**Consequences:**
-- Downstream projects need `.npmrc` with `@phenotype:registry=https://npm.pkg.github.com` and a GitHub Packages auth token
-- Breaking changes to config API require a semver bump
-- All 21 Vue components must be maintained in this package
+**Consequences**:
+- Appending an event is slightly more expensive (one SHA-256 hash per append).
+- Verification is O(n) in event count; callers should checkpoint verification frequency.
+- Any out-of-order insert or update to a past event breaks the chain and is detectable.
 
 ---
 
-## ADR-004: TypeScript-First Config with deepMerge Override Pattern
+## ADR-004: DashMap for Thread-Safe Policy Registry
 
-**Status:** Accepted
-**Date:** 2026-03-26
+**Status**: Accepted
+**Date**: 2026-03-26
+**Traces to**: FR-POL-005
 
-**Context:**
-VitePress config can be complex. Consumers need to extend Phenotype defaults without rewriting them. Simple `Object.assign` loses nested structure; JSON merge patches are not type-safe.
+**Context**: `PolicyEngine` must support concurrent reads (policy evaluation) and occasional writes (add/remove policy) in a multi-threaded Tokio runtime without a global `RwLock`.
 
-**Decision:**
-Implement `deepMerge<T>(target, source)` in `packages/docs/src/utils/config-merger.ts` and use it in `createPhenotypeConfig` to merge consumer `overrides` on top of the base config. Arrays are concatenated; nested objects are recursed; primitives override.
+**Decision**: Use `DashMap<String, Policy>` from the `dashmap` crate. `DashMap` uses sharded locking internally, giving fine-grained read parallelism and non-blocking concurrent writes to different shards.
 
-**Rationale:**
-- `deepMerge` is ~30 lines, zero dependencies, fully typed
-- `createPhenotypeConfig` returns `ReturnType<typeof defineConfig>` — consumers get exact VitePress type inference
-- Pattern is auditable and avoids hidden magic (no Proxy, no `lodash.merge`)
+**Alternatives considered**:
+- `Arc<RwLock<HashMap>>`: simple but creates a global write bottleneck; any policy add blocks all readers.
+- `Arc<Mutex<HashMap>>`: worse than RwLock for read-heavy workloads.
+- Immutable snapshot on write (copy-on-write): complex and wastes memory for large policy sets.
 
-**Alternatives Considered:**
-- **lodash.merge** — Extra dependency; `lodash` is not in the lockfile
-- **Spread-only** — Loses nested config structure (e.g. `themeConfig.sidebar` would be replaced, not merged)
-- **Custom DSL** — Unnecessary complexity for a static config
-
-**Consequences:**
-- `deepMerge` must handle all VitePress config shapes (plain objects and arrays only — no class instances)
-- Test coverage for `deepMerge` edge cases is important to prevent silent config override bugs
+**Consequences**:
+- Near-zero contention for read-dominant workloads.
+- `DashMap` is a workspace dependency shared by `phenotype-cache-adapter` and `phenotype-policy-engine`.
+- Iteration over all policies acquires short-lived shard locks sequentially; callers must not hold shard refs across await points.
 
 ---
 
-## ADR-005: Filesystem-Driven Sidebar Generation
+## ADR-005: Regex Pattern Matching for Policy Rules
 
-**Status:** Accepted
-**Date:** 2026-03-26
+**Status**: Accepted
+**Date**: 2026-03-26
+**Traces to**: FR-POL-001, FR-POL-009
 
-**Context:**
-Documentation sections grow over time. Maintaining sidebar configuration by hand leads to drift between the filesystem and the nav tree. A convention-based auto-generator reduces maintenance burden.
+**Context**: Policy rules need flexible matching on fact values. Simple equality is insufficient for patterns like IP range prefixes, email domains, or role name prefixes.
 
-**Decision:**
-Implement `generateSidebar({ srcDir, prefix, capitalizeGroups? })` in `packages/docs/src/utils/sidebar-generator.ts`. It reads the filesystem at build time via `readdirSync`/`statSync` and produces `DefaultTheme.SidebarItem[]`.
+**Decision**: Each `Rule` stores a `pattern: String` compiled to `Regex` at evaluation time. Compilation errors surface as `PolicyEngineError::RegexCompilationError`.
 
-**Rationale (from actual code):**
-- `index.md` → placed first as `{ text: 'Overview', link: '<prefix>/' }` — standard convention
-- Subdirectories → `{ text: label, collapsed: true, items: [...] }` — collapsible groups
-- `.md` files → `{ text: titleCased, link: '<prefix>/<name>' }` — individual pages
-- `capitalizeGroups` option (default `true`) — cosmetic control without re-implementing the traversal
-- Returns `[]` gracefully on missing directories (try/catch around `readdirSync`)
+**Alternatives considered**:
+- Glob patterns: simpler but cannot express character classes or anchoring precisely.
+- Compiled `Regex` stored in `Rule`: preferred long-term but requires `Regex` to be `Send + Sync + Clone` or wrapped in `Arc`; deferred to avoid premature optimization.
+- CEL (Common Expression Language): powerful but adds a large parser dependency.
 
-**Alternatives Considered:**
-- **VitePress `rewrites` + manual sidebar** — Error-prone; no single source of truth
-- **vitepress-sidebar plugin** — External dependency; less control over layer-specific conventions
-
-**Consequences:**
-- Sidebar order is alphabetical by default; non-alphabetical ordering requires either filename prefixes or explicit overrides via `ConfigOptions.sidebar`
-- Empty directories produce no sidebar items (correct behavior; enforced by `children.length > 0` check)
+**Consequences**:
+- Regex compilation cost on every rule evaluation; acceptable for policy evaluation frequencies (not hot path).
+- Invalid regex is a configuration error surfaced at runtime, not at TOML load time; callers should validate patterns on load if desired.
+- `regex` crate is a workspace dependency.
 
 ---
 
-## ADR-006: Layered Content Architecture (0–4)
+## ADR-006: Forward-Only Ordinal Enforcement in State Machine
 
-**Status:** Accepted
-**Date:** 2026-03-26
+**Status**: Accepted
+**Date**: 2026-03-26
+**Traces to**: FR-SM-005
 
-**Context:**
-The Phenotype documentation corpus spans ephemeral scratch notes, in-progress research, formal specifications, changelogs, and curated knowledge. A flat structure makes content discovery difficult for different audiences.
+**Context**: Many entity lifecycles (task progression, order fulfillment, agent startup) are strictly forward-only. Allowing backward transitions requires consumers to add their own guards everywhere.
 
-**Decision:**
-Define five content layers encoded in `DocLayer.level: 0 | 1 | 2 | 3 | 4` (typed in `packages/docs/src/types/index.ts`). Map to directory views: lab (`/views/`), docs (`/index/specs`), audit (`/index/worklogs`), kb. The `DocStatusBadge` component renders per-layer visual badges.
+**Decision**: `State` trait requires `ordinal() -> u32`. `StateMachine` has an optional `forward_only` flag. When enabled, transitions where `to.ordinal() < current.ordinal()` are rejected with `StateMachineError::BackwardTransitionForbidden` before the guard is evaluated.
 
-**Rationale:**
-- Five discrete levels rather than free-form tags — enables consistent badge styling by numeric level
-- Layers map to the Document Index sub-routes already implemented: `planning`, `specs`, `research`, `worklogs`, `other`
-- `DocLayer` type in `@phenotype/docs/types` ensures all consumers use the same schema
+**Alternatives considered**:
+- Encode forward-only as a property of each transition: more granular but verbose; callers repeat `from.ordinal() < to.ordinal()` in every guard.
+- Derive ordinal from enum discriminant automatically: requires proc-macro; out of scope for a foundation crate.
 
-**Alternatives Considered:**
-- **Free-form frontmatter tags** — No schema enforcement; inconsistent UI rendering
-- **Separate VitePress sites per layer** — Fragmented search; no unified navigation
+**Consequences**:
+- Consumer must assign stable ordinals to states; reordering enum variants without updating ordinals is a logic bug.
+- Forward-only check is O(1) per transition.
+- Consumers that need bidirectional FSMs simply leave `forward_only = false`.
 
-**Consequences:**
-- All Phenotype documentation authors must understand layer semantics before tagging content
-- Level 0 (ephemeral) is internal-only and should not appear in the deployed site's public navigation
+---
+
+## ADR-007: ULID-Based Prefixed IDs for TypeScript Packages
+
+**Status**: Accepted
+**Date**: 2026-03-26
+**Traces to**: FR-TS-004 to FR-TS-008
+
+**Context**: TypeScript services need globally unique, sortable entity IDs that are self-describing (the ID itself reveals entity type) and safe for URL usage.
+
+**Decision**: IDs are `{prefix}_{ulid}` strings where:
+- `prefix` is 2–3 lowercase ASCII letters from `PREFIX_MAP` keyed by `EntityType`.
+- `ulid` is a 26-character Crockford Base32 ULID (sortable, monotonic, URL-safe).
+- Format validated against `/^[a-z]{2,3}_[0-9A-HJKMNP-TV-Z]{26}$/`.
+
+**Alternatives considered**:
+- UUID v4: not sortable, not self-describing.
+- Snowflake IDs: require a node ID coordination service.
+- NanoID: no time component, not sortable.
+
+**Consequences**:
+- IDs are database-sortable by creation time within an entity type.
+- Parsing an ID recovers `EntityType` without a DB lookup.
+- Adding a new entity type requires updating `PREFIX_MAP` and `REVERSE_PREFIX_MAP`; must choose a unique prefix.
+- Generated IDs are validated synchronously in `generateId`; a format mismatch throws immediately (debug assertion — negligible on production paths).

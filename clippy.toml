@@ -1,6 +1,8 @@
-avoid-breaking-exported-api = false
-disallowed-names = []
-disallowed-methods = []
-imports-ignores = []
-too-many-arguments-threshold = 8
-type-complexity-threshold = 250
+# Clippy lints configuration
+warn = ["clippy::all", "clippy::pedantic"]
+allow = [
+  "clippy::module_name_repetitions",
+  "clippy::must_use_candidate",
+  "clippy::missing_errors_doc",
+  "clippy::missing_panics_doc",
+]

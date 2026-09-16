@@ -1,350 +1,252 @@
-# Architecture
+# phenotype-omlx Architecture
 
-## What this is
-
-Phenotype Fabric is a **runtime substrate** for a distributed interactive
-operating environment. It exposes one graph, one workspace model, and one
-UI/API while compiling each link (input, output, file, process, object,
-storage) onto the least-expensive valid execution path: direct calls,
-shared memory, DMA-BUF, IVSHMEM/KVMFR, virtio/vhost, PCIe peer paths,
-LAN transports, WAN transports, or out-of-band hardware.
-
-It is **not a remote desktop**, **not a cluster scheduler**, and **not a
-replacement for adjacent products** (AgilePlus, thegent, AGSLAG, Tracera,
-SessionLedger, ShareCLI). It is the physical-execution substrate those
-products compose with.
-
-**Lifecycle:** `specified` — architecture baseline. No code is shipped yet.
-
-## Tech stack
-
-| Layer | Choice | Why |
-|-------|--------|-----|
-| Spec language | Markdown + JSON schemas + OpenAPI 3 + Protobuf | Spec is the artifact; verifiability matters more than runtime |
-| Graph schema | `architecture/schemas/graph.schema.json` (typed node/port/link) | Universal I/O across video/audio/HID/file/object/control |
-| Event schema | `architecture/schemas/event.proto` | Forward-compatible, language-neutral, signed event stream |
-| Policy schema | `architecture/schemas/policy.schema.json` | Declarative; reviewed by humans and tools |
-| Workspace schema | `architecture/schemas/workspace.schema.json` | Serializable cross-device state |
-| Capability schema | `architecture/schemas/capability.schema.json` | Versioned adapter descriptors |
-| Route schema | `architecture/schemas/route.schema.json` | Compiled route plans |
-| Task schema | `architecture/schemas/task.schema.json` | Placed work descriptors |
-| Process supervisors | `process-compose` (planned) | Cross-platform, well-understood |
-| Real-time engine | `pf-rt-engine` (planned) | Pre-allocated rings, no dynamic allocation on RT threads |
-| Real OS data planes (planned) | Looking Glass/KVMFR, PipeWire/JACK, evdev/uinput, RDP/RAIL, Sunshine/Moonlight, QUIC, virtio, SMB/NFS, Syncthing, KVM-over-IP | Proven adapters — Fabric composes, doesn't reinvent |
-| Verification harness | `verification/` (benchmark, fault, security, compat) | Evidence before claims |
-
-> **Status note:** the implementation language/runtime is not yet chosen.
-> HLD and LLD name components (`pf-coordinator`, `pf-endpointd`,
-> `pf-rt-engine`, etc.) and contracts but do not lock to a stack. See
-> ADR-0020 — provisional name, "the right Rust vs Go vs C vs language-X
-> decision is a separate ADR once we know which components must be
-> privileged, real-time, portable, or easily inspected."
-
-## High-level diagram
+## Tier diagram
 
 ```
-                +--------------------+
-                |  Human principal   |
-                +--------------------+
-                          |
-                          v
-+-----------------+   +-------------------+   +--------------------+
-|  Agent/service  |-->|   pf-shell (UI)   |<--|   CLI / SDK / API   |
-|   principals    |   +-------------------+   +--------------------+
-+-----------------+             |
-                                v
-+----------------------------------------------------------+
-|                  pf-coordinator (control)                |
-|  - identity, capability grants                           |
-|  - device/realm/resource registry                        |
-|  - desired graph, topology epochs                        |
-|  - route leases, fencing tokens                          |
-|  - audit + evidence refs                                 |
-+----------------------------------------------------------+
-        |               |               |               |
-        v               v               v               v
-+------------+  +-----------------+  +---------------+  +-------------+
-|  Graph +   |  |  pf-rt-engine   |  | I/O + surface |  | Compute +   |
-|  placement |  | (real-time      |  | data planes   |  | data plane  |
-|  compiler  |  |  scheduler +    |  | (KVMFR,       |  | (placement, |
-|            |  |  admission)     |  |  PipeWire,    |  |  residency, |
-|            |  |                 |  |  evdev, etc.) |  |  migration) |
-+------------+  +-----------------+  +---------------+  +-------------+
-        \             |              |              /
-         \            v              v             /
-          +----------------------------------------+
-          |      Endpoint agents (per device)      |
-          |   pf-endpointd + narrowly-scoped       |
-          |   helpers: input / display / audio /   |
-          |   resource / oob                       |
-          +----------------------------------------+
-                          |
-                          v
-+------------------------------------------------------------+
-|   Nodes: Linux / Windows / macOS / VMs / remote / OOB hw   |
-+------------------------------------------------------------+
-
-        |   Evidence & event flow   |
-        v
-+----------------------------------------------------------------+
-| Ecosystem: AgilePlus · thegent · AGSLAG · Tracera · Ledgers · |
-|           ShareCLI · NVMS · labs-compute                       |
-+----------------------------------------------------------------+
+┌──────────────────────────────────────────────────────────────────────────┐
+│  CLIENTS (macOS / Windows / Linux)                                        │
+│  ┌────────────────────┐  ┌────────────────────┐  ┌────────────────────┐  │
+│  │  macOS             │  │  Windows           │  │  Linux             │  │
+│  │  oMLX.app (Electron)│  │  Tauri GUI (planned)│  │  Tauri GUI (planned)│  │
+│  │  + admin-extensions │  │  omlx-research.ps1 │  │  omlx-research     │  │
+│  └─────────┬──────────┘  └─────────┬──────────┘  └─────────┬──────────┘  │
+│            │                       │                       │              │
+│            ▼                       ▼                       ▼              │
+│  ┌──────────────────────────────────────────────────────────────────┐    │
+│  │  cli/bin/omlx-research  (unified launcher)                        │    │
+│  │  sources scripts/phenotype-omlx-env.sh                            │    │
+│  │  • repl / cli / gui / web / python / pip / doctor / status        │    │
+│  └──────────────────────────────────────────────────────────────────┘    │
+└─────────────────────────────┬────────────────────────────────────────────┘
+                              │  PYTHONPATH
+                              ▼
+┌──────────────────────────────────────────────────────────────────────────┐
+│  PYTHON SURFACE  (python/omlx_research/)                                  │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐  │
+│  │  backends/   │  │  engines/    │  │  agents/     │  │  cli/        │  │
+│  │  vllm        │  │  spec-decode │  │  LatentMAS   │  │  status      │  │
+│  │  tensorrt    │  │  tree-attn   │  │  TiDAR       │  │  inference   │  │
+│  │  sglang      │  │  par-batch   │  │  SSD         │  │  spec-decode │  │
+│  │  llamacpp    │  │  hybrid-     │  │  JetSpec     │  │  latentmas   │  │
+│  │  mlx (★)     │  │    dispatch  │  │  scheduler   │  │  tidar       │  │
+│  │  metal       │  │              │  │              │  │  bench       │  │
+│  └──────┬───────┘  └──────┬───────┘  └──────┬───────┘  └──────┬───────┘  │
+│         │                 │                 │                 │          │
+│         │                 │                 │                 ▼          │
+│         │                 │                 │       ┌──────────────────┐ │
+│         │                 │                 │       │  web.py          │ │
+│         │                 │                 │       │  HTTP admin      │ │
+│         │                 │                 │       └──────────────────┘ │
+└─────────┼─────────────────┼─────────────────┼────────────────────────────┘
+          │                 │                 │
+          ▼                 ▼                 ▼
+┌──────────────────────────────────────────────────────────────────────────┐
+│  RUST PERF-CORE  (perf-core/)                                             │
+│  ┌──────────────────┐ ┌──────────────────┐ ┌──────────────────┐         │
+│  │  spec-decode     │ │  concurrent-exec │ │  turbo-quant     │         │
+│  │  • engine.rs     │ │  • plan.rs       │ │  • pack/unpack   │         │
+│  │  • verify.rs     │ │  • latentmas.rs  │ │  • Lloyd-Max     │         │
+│  │  • metal.rs      │ │  • tidar.rs      │ │  • Beta centroids│         │
+│  │  • backend.rs    │ │  • ssd.rs        │ │                  │         │
+│  │                  │ │  • jetspec.rs    │ │                  │         │
+│  └──────────────────┘ └──────────────────┘ └──────────────────┘         │
+│  ┌──────────────────┐ ┌──────────────────┐                                │
+│  │  tree-attention  │ │  fleet-proto     │                                │
+│  │  • causal mask   │ │  • JSON-RPC      │                                │
+│  │  • verify        │ │  • peer registry │                                │
+│  └──────────────────┘ └──────────────────┘                                │
+│           ▲                                                               │
+│           │ pyo3 FFI                                                       │
+│           │                                                               │
+│  ┌──────────────────────────────────────────────────────────────────┐    │
+│  │  python/ffi/src/lib.rs  →  _phenotype_omlx_core  (.so/.dylib/.dll)│    │
+│  └──────────────────────────────────────────────────────────────────┘    │
+└──────────────────────────────────────────────────────────────────────────┘
+                              │
+                              ▼
+┌──────────────────────────────────────────────────────────────────────────┐
+│  BACKENDS  (compiled engines)                                             │
+│  ┌────────────┐ ┌────────────┐ ┌────────────┐ ┌────────────┐ ┌─────────┐ │
+│  │  MLX ★     │ │  Metal     │ │  vLLM      │ │  TensorRT  │ │  llama  │ │
+│  │  Apple Sili│ │  Apple Sili│ │  Linux+    │ │  Linux+    │ │  .cpp   │ │
+│  │  Primary   │ │  Direct    │ │  NVIDIA    │ │  NVIDIA    │ │  Any    │ │
+│  │  TurboQ+   │ │  kernels   │ │  ROCm(opt) │ │  SGLang(opt)│ │  GGUF   │ │
+│  └────────────┘ └────────────┘ └────────────┘ └────────────┘ └─────────┘ │
+└──────────────────────────────────────────────────────────────────────────┘
+                              │
+                              ▼
+┌──────────────────────────────────────────────────────────────────────────┐
+│  HARDWARE                                                                  │
+│  ┌──────────────────────────┐  ┌──────────────────────────────────────┐  │
+│  │  Apple Silicon (M1/M2/M3)│  │  NVIDIA / ROCm / CPU                 │  │
+│  │  Metal + AMX + Neural Eng│  │  CUDA cores / ROCm / AVX-512         │  │
+│  └──────────────────────────┘  └──────────────────────────────────────┘  │
+└──────────────────────────────────────────────────────────────────────────┘
 ```
 
-## Directory map
+★ = primary / recommended path
 
-| Path | Purpose | Touch when... |
-|------|---------|---------------|
-| `PRD.md` | Product Requirements (vision, JTBDs, epics, success metrics) | revising scope or releasing |
-| `SPECIFICATION.md` | Normative index — "shall/should/may" language, mandatory invariants | resolving a behavioral conflict |
-| `HLD.md` | High-level system architecture + locality tiers L0–L8 | changing component boundaries |
-| `ALD.md` | Architecture/abstraction lowering (intent → physical) | extending the compilation pipeline |
-| `LLD.md` | Low-level component + hot-path design (cost model, fusion/fission, RT rules) | implementing a data-plane component |
-| `UX_SPECIFICATION.md` | Workspace + graph interaction contracts | designing the UI |
-| `GOVERNANCE.md` | Decision authority, lifecycle, evidence rule, ADR rule, security triggers | proposing an architecture change |
-| `GOVERNANCE.md#specification-lifecycle` | Captured → Synthesized → Specified → Researched → Planned → Implementing → Validated → Shipped → Retrospected | promoting any document/release |
-| `intent/` | Verbatim human prompts + intent synthesis + non-negotiables | referencing the original goals |
-| `specs/001..012/` | 12 AgilePlus-shaped feature specs (E1–E12 epics) | implementing a feature |
-| `adr/` | 22 architecture decision records + INDEX | recording a decision or rejection |
-| `architecture/` | 14 component docs + openapi.yaml + 6 JSON schemas + 1 proto | editing a component contract |
-| `architecture/schemas/` | graph, capability, route, policy, task, workspace (JSON) + event.proto | changing the wire schema |
-| `ecosystem/` | boundaries.md, sharecli.md, thegent.md, agileplus.md, agslag.md, tracera.md, ledgers.md, nvms-labs-compute.md, event-contracts.{md,json}, integration-matrix.md | integrating with adjacent products |
-| `examples/` | 8 reference scenarios + 2 graph-config YAML examples | demonstrating a feature to a user |
-| `operations/` | config-and-policy, deployment-topologies, incident-response, observability, packaging, recovery, slo-sla, support-matrix, upgrades | deploying or operating Fabric |
-| `references/` | BIBLIOGRAPHY, source-map, source-status, url-inventory | citing evidence or research |
-| `research/` | hypotheses, experiments, graduation-gates, literature-map, open-questions, research-program, source-register | designing a new mechanism |
-| `risks/` | feasibility, legal-licensing, risk-register.{md,json}, threat-model, vendor-dependency | assessing feasibility/lock-in |
-| `sota/` | 14 competitive-class analyses (deskflow, parsec, looking-glass, evdev, seamless-app, audio-network, etc.) | understanding existing solutions |
-| `verification/` | acceptance-gates, audio-rt-test-plan, benchmark-plan, compatibility-matrix, fault-injection, latency-methodology, requirements-traceability.{md,json}, security-test-plan, video-hdr-test-plan, benchmark-catalog.json, fault-catalog.json | proving a claim |
-| `work/` | WBS, DAG, PERT, critical-path, milestones, build-order, dependency-register, staffing-agent-plan, release-plan, cost-model, tasks.json (137 tasks), wbs.csv | planning the program |
-| `INDEX.md`, `TREE.txt`, `MANIFEST.sha256` | Navigation + file hash manifest | finding a file / verifying integrity |
+## Tier responsibilities
 
-## Key abstractions
+### 1. Clients
 
-The non-negotiable objects new contributors must understand to read any
-component of Fabric:
+Three client surfaces, all wired to the same `omlx_research` Python surface:
 
-1. **Node / port / link** — the universal I/O graph (E2). A *node* is a
-   realm, device, application, process, surface, or object. A *port* is a
-   typed I/O endpoint. A *link* connects ports with a policy. The
-   compiler consumes a desired link and emits a route plan.
-2. **Locality tier (L0–L8)** — the physical execution boundary the
-   compiler reasons about. L0 same-process, L1 same-OS, L2 same-host
-   different realm, L3 same-PCIe, L4 same-host isolated, L5 wired LAN,
-   L6 routed LAN/Wi-Fi, L7 WAN, L8 OOB/preboot. See `HLD.md`.
-3. **Stage** — a unit of work the compiler composes into a route.
-   Stages are `capture|transform|copy|encode|transport|decode|compose|inject|store`
-   and advertise fixed cost, per-byte cost, queue model, locality,
-   resource claims, timing class, and failure modes. See `LLD.md`.
-4. **Topology epoch** — a signed, versioned snapshot of the device/realm
-   registry. Every route plan is bound to an epoch; topology changes
-   force recompilation, never silent mid-stream changes.
-5. **Fencing token** — a monotonically increasing token that proves a
-   route lease is still valid. Stale tokens cannot produce input or
-   output after lease transfer. See `architecture/state-machines.md`.
-6. **RT class (RT0–Bulk)** — explicit service class. RT0 = hard deadline
-   (input, audio), RT1 = soft (UI), RT2 = streaming, RT3 = bulk, Bulk =
-   background. RT0 reservations are admitted before activation; no
-   silent overcommit. See `architecture/scheduler.md`.
-7. **Ecosystem authority** — Fabric owns *physical execution substrate*;
-   it explicitly does **not** own governed intent (AgilePlus), agent
-   dispatch (thegent), economic allocation (AGSLAG), evidence graph
-   (Tracera), session history (SessionLedger), or process supervision
-   (ShareCLI). Event contracts are the only shared boundary. See
-   `ecosystem/boundaries.md`.
+| Client | Status | Notes |
+| --- | --- | --- |
+| **macOS** (`oMLX.app`) | ✅ Production | The upstream OMLX Electron app. We inject our admin-extensions via `OMLX_ADMIN_EXTRA` and the TurboQuant+ module via the bundled MLX framework path. No app-bundle modification required. |
+| **Windows** (`omlx-research.ps1`) | 🟡 Stub | PowerShell launcher that calls `python -m omlx_research.cli`. Tauri GUI planned. |
+| **Linux** (`omlx-research`) | 🟡 Stub | bash launcher. Tauri GUI + ROCm/CUDA backends planned. |
 
-## Data flow for the 3 most important user actions
+### 2. Unified launcher
 
-### 1. User moves input focus from desk PC to couch MacBook
+`cli/bin/omlx-research` is a single bash entry point that:
 
-```
-User presses "global input cycle" hotkey
-  -> pf-shell posts focus change to pf-coordinator
-  -> coordinator validates identity + capability + topology epoch
-  -> graph compiler selects new route plan:
-       input source = desk-PC-evdev-broker
-       input sink    = macbook-uinput-helper
-       candidates ordered by locality tier:
-         L2 IVSHMEM (rejected: not available)
-         L5 LAN direct  (rejected: pressure on link)
-         L7 WAN relay   (rejected: deadline)
-         L0 same-host   (rejected: across host boundary)
-       winner: L5 LAN direct QUIC datagram with pressed-key ledger
-  -> RT admission reserves input-class slice on both endpoints
-  -> coordinator allocates fencing token N+1
-  -> endpoints COMMIT(token=N+1, activation_time=T)
-  -> previous route drains, releases its lease
-  -> coordinator updates desired graph version to N+1
-  -> evidence exporter logs route + cost to Tracera
-```
+1. Sources `scripts/phenotype-omlx-env.sh` (sets `PYTHONPATH`, `PATH`, activates the venv, exposes the `use-latentmas` / `use-tidar` aliases).
+2. Injects the OMLX framework's bundled MLX **first** on `PYTHONPATH` so TurboQuant+ is the version Python picks up.
+3. Dispatches by subcommand to one of: `repl`, `cli` (proxy to upstream `omlx-cli`), `gui` (`open -a oMLX.app --args --admin-ext ...`), `web` (local HTTP admin), `python`, `pip`, `doctor`, `status`, or any `omlx_research.cli` subcommand.
 
-### 2. Agent creates a VM and publishes a desktop surface
+`cli/bin/omlx-cli` is a thin bash proxy that re-execs `/Applications/oMLX.app/Contents/MacOS/omlx-cli` with the same env. Both files are committed and `chmod +x`-ed.
+
+### 3. Python surface (`python/omlx_research/`)
+
+- `backends/` — uniform `BackendBase` interface; six implementations (MLX, Metal, vLLM, TensorRT, SGLang, llama.cpp). Each advertises its `BackendCapabilities` so `HybridDispatch` can pick one.
+- `engines/` — speculative, tree-attention, parallel-batch, hybrid-dispatch. These compose backends and add policy logic.
+- `agents/` — adapters for LatentMAS, TiDAR, SSD, JetSpec. Each exposes `async step(prompt, state)`. The `ConcurrentScheduler` fans out, chains, or falls back between them.
+- `cli/` — argparse subcommand CLI (see `python/omlx_research/cli/__init__.py::main`).
+- `web.py` — small `http.server`-based local admin that serves the GUI extension's templates and exposes the same REST endpoints as JSON.
+
+### 4. Rust perf-core (`perf-core/`)
+
+Five-crate Cargo workspace, all `cargo check --workspace` clean, all `cargo test --workspace` green:
+
+| Crate | Purpose | Hot path |
+| --- | --- | --- |
+| `spec-decode` | Draft + verify loop (SSD / draft-model / Medusa) | Engine, verify, Metal placeholders |
+| `concurrent-exec` | Execution-plan DAG + agent adapters | LatentMAS, TiDAR, SSD, JetSpec |
+| `turbo-quant` | CPU SIMD pack/unpack + Lloyd-Max centroids | Bit-packing kernel |
+| `tree-attention` | Tree causal mask + token verification | Mask builder, verify |
+| `fleet-proto` | JSON-RPC peer protocol + registry | Envelope, dispatch |
+
+The Python FFI (`python/ffi/src/lib.rs`) uses pyo3 to expose the Rust surface as the `_phenotype_omlx_core` module. The FFI crate is optional — the Python surface falls back to pure-Python implementations if the `.so` isn't built.
+
+### 5. Backends (compiled engines)
+
+| Engine | Platform | Notes |
+| --- | --- | --- |
+| **MLX** | Apple Silicon | Primary path. TurboQuant+ inject is in `mlx.nn.layers.turbo_kv_cache`. |
+| **Metal** | Apple Silicon | Direct Metal kernel dispatch. Used by `turbo_mlx.ssd` and `turbo_mlx.jetspec`. |
+| **vLLM** | Linux + NVIDIA / ROCm | High-throughput serving. |
+| **TensorRT-LLM** | Linux + NVIDIA | Max-throughput inference. |
+| **SGLang** | Linux + NVIDIA | RadixAttention + structured generation. *Planned — adapter stub in place.* |
+| **llama.cpp** | Any | GGUF + CPU/Metal/CUDA. Broadest model coverage. |
+
+The `HybridDispatch` policy decides per-request which backend to use:
+
+- `auto` — pick the first available in the priority list (MLX > Metal > vLLM > TensorRT > SGLang > llama.cpp)
+- `mlx` / `metal` / `vllm` / `tensorrt` / `sglang` / `llamacpp` — force a specific backend
+- `lowest-latency` — pick the lowest-p50 backend
+- `highest-throughput` — pick the highest tokens/sec
+
+### 6. Hardware
+
+- **Apple Silicon (M1 / M2 / M3 / M4)** — primary. MLX + Metal + AMX + Neural Engine.
+- **NVIDIA / ROCm / CPU** — Linux / cloud. PyTorch + TensorRT / vLLM / llama.cpp.
+
+## Data flow: a single inference call
 
 ```
-Agent calls API: create_ephemeral_realm(spec, ttl=30m, surfaces=["desktop"])
-  -> pf-coordinator validates principal identity + capability grant
-  -> coordinator requests capability inventory from endpointd on chosen host
-  -> graph compiler allocates resources: CPU/GPU/memory/storage slice
-  -> pf-workerd spawns the VM (via QEMU/KVM + virtio)
-  -> VM lifecycle wired into a transient realm; certificate + TTL issued
-  -> VM advertises a virtual display + window via Looking Glass/KVMFR
-  -> agent publishes the surface to the user's graph canvas
-  -> non-stealing attention: the surface appears pinned to a corner;
-     user opts in to take focus
-  -> TTL countdown starts; on expiry, the realm is torn down
-     and the surface is retracted; evidence ref retained
+user → omlx-research inference --prompt "Hello" --policy auto
+  ↓
+python -m omlx_research.cli inference
+  ↓
+engines/hybrid_dispatch.py::HybridDispatch.generate(policy=AUTO)
+  ↓
+  Probe each backend in priority order (MLX, Metal, vLLM, TensorRT, SGLang, llama.cpp)
+  → pick first one that .is_available() and has the requested model
+  ↓
+backends/mlx_backend.py::MlxBackend.generate(req)
+  → rust perf-core (optional) for tokenization + sampling
+  → mlx_lm.generate (or mlx_vlm for vision)
+  → stream tokens back to caller
+  ↓
+Rust perf-core: speculative decoding (if enabled)
+  → draft γ tokens with the draft model (or self-speculative / Medusa head)
+  → verify with the target model
+  → commit accepted prefix, resample rejected tail
+  → repeat until EOS or max_tokens
+  ↓
+streamed response → CLI stdout / web admin / GUI extension
 ```
 
-### 3. User launches Ableton while a Rust build is running
+## Data flow: a multi-agent concurrent call
 
 ```
-User starts Ableton Live 12 Suite
-  -> pf-coordinator classifies the workload: RT0 (audio hard deadline)
-  -> RT admission checks current reservations:
-       RT0 input: 200us budget
-       RT0 audio: 1500us buffer at 48kHz
-       Bulk: rust build currently consuming 12 cores + encoder
-  -> admission prunes the Bulk class first:
-       CPU affinity pinned to non-RT cores (E9.2)
-       GPU encoder reservation capped (E9.3)
-       memory bandwidth share reduced
-  -> Ableton launches with audio class reservation
-  -> scheduler reports xrun count = 0; p99 buffer fill = 78%
-  -> if xrun threshold exceeded: Bulk further degraded before audio breaks
-  -> evidence: topology snapshot + p50/p95/p99/xrun count
-     -> exported to Tracera, attached to the work-package ID in AgilePlus
+user → omlx-research latentmas --prompt "Plan a trip" --n-agents 4
+  ↓
+python -m omlx_research.cli latentmas
+  ↓
+agents/scheduler.py::ConcurrentScheduler
+  ↓
+  Build DAG: prompt → [agent_0, agent_1, agent_2, agent_3] (fan-out) → reduce
+  ↓
+  asyncio.gather(*[agent.step(prompt, state) for agent in agents])
+  ↓
+  Each agent wraps a third-party model:
+    - LatentMasRunner → LatentMAS methods (latent_mas, latent_cot, latent_tot)
+    - TidarRunner    → TiDAR hybrid AR+diffusion
+    - SsdRunner      → SSD self-speculative decoding
+    - JetSpecRunner  → JetSpec draft-head tree
+  ↓
+  Reduce (concatenate / vote / rerank) → final answer
+  ↓
+streamed response → CLI / web / GUI
 ```
 
-## How to run locally
+## Concurrency model
 
-There is no implementation to run yet. Spec validation:
+Three layers of concurrency, each appropriate for its tier:
 
-```bash
-# Verify all 6 JSON schemas are well-formed
-for s in architecture/schemas/*.json; do
-  python3 -c "import json; json.load(open('$s'))" && echo "OK: $s"
-done
+| Layer | Model | Why |
+| --- | --- | --- |
+| **HTTP admin** | ThreadingMixIn + daemon threads | Per-request isolation; `omlx-research web` is a low-volume admin surface |
+| **Python agents** | `asyncio.gather` + `asyncio.Queue` | I/O-bound fan-out; minimal overhead |
+| **Rust perf-core** | `Arc<Mutex<…>>` + work-stealing | CPU-bound; threads pinned to performance cores where possible |
 
-# Verify event.proto is syntactically valid
-which protoc && protoc --proto_path=architecture/schemas \
-  --descriptor_set_out=/dev/null architecture/schemas/event.proto
+The `ConcurrentScheduler` exposes `Strategy::Sequential`, `Strategy::FanOut`,
+`Strategy::Reduce`, `Strategy::DAG` for the four common multi-agent shapes.
 
-# Verify openapi.yaml is well-formed
-python3 -c "import yaml; yaml.safe_load(open('architecture/openapi.yaml'))"
+## Why these languages?
 
-# Verify the doc tree, manifest, and traceability are consistent
-diff <(find . -type f | sort) <(python3 -c "
-import json
-m = json.load(open('MANIFEST.sha256'))
-print('\n'.join(sorted(m.keys())))")
-```
+| Language | Role | Why |
+| --- | --- | --- |
+| **Python** | Glue / surface | The OMLX framework, the upstream CLI, the GUI, and the venv are all Python. |
+| **Rust** | Hot path | CPU-bound inner loops (spec-decode, pack/unpack) need native speed. pyo3 FFI lets us keep the Python surface idiomatic. |
+| **Mojo** | (planned) | When Mojo's Python interop stabilizes, port the pack/unpack kernels for a free 2-3× on Apple Silicon. |
+| **Zig** | (planned) | When we need direct Metal/MSL calls without going through MLX, Zig is the leanest option. |
+| **Go** | (planned) | For the fleet-proto peer protocol when we want a standalone server binary. |
+| **C++** | (existing) | The upstream OMLX framework + MLX core. We don't touch it. |
 
-Future:
+## What changes when an upstream OMLX release lands
 
-```bash
-# Once the implementation lands:
-cargo build --release  # (or go build, etc. — see ADR for stack choice)
-./target/release/pf-coordinator --config /etc/pf/coordinator.toml &
-./target/release/pf-endpointd --config /etc/pf/endpointd.toml &
-./target/release/pf-shell
-```
+`scripts/phenotype-omlx-env.sh` is read on every `omlx-research` invocation.
+If `/Applications/oMLX.app` is replaced by a new version, the script
+automatically picks up the new framework path. The TurboQuant+ module lives
+in `~/.omlx/turboquant-plus/mlx/nn/layers/turbo_kv_cache.py` (a persistent
+copy) **and** in the OMLX framework's site-packages. The PYTHONPATH order
+in `phenotype-omlx-env.sh` prefers the framework, so a fresh OMLX install
+inherits our inject automatically.
 
-## How tests work
+## What we modify in the OMLX app bundle
 
-There are no unit tests yet (no implementation). The verification
-artifacts in `verification/` define the gates a future implementation
-must pass:
+Two files. Both are reproducible from this repo:
 
-- `test-strategy.md` — overall strategy
-- `acceptance-gates.md` — release-blocking criteria
-- `benchmark-plan.md` + `benchmark-catalog.json` — performance evidence
-- `fault-injection.md` + `fault-catalog.json` — failure modes
-- `security-test-plan.md` — security evidence
-- `audio-rt-test-plan.md` — real-time audio evidence
-- `video-hdr-test-plan.md` — HDR/video evidence
-- `latency-methodology.md` — measurement boundary discipline
-- `compatibility-matrix.md` — adapter / OS / device support
-- `requirements-traceability.{md,json}` — every claim linked to FR/NFR
+1. `/Applications/oMLX.app/Contents/Resources/Python/framework-mlx-base/lib/python3.11/site-packages/mlx/nn/layers/turbo_kv_cache.py` — copy of `~/.omlx/turboquant-plus/mlx/nn/layers/turbo_kv_cache.py`. Re-copy on every OMLX update via `./scripts/phenotype-omlx-ready` (or a one-liner: `cp ~/.omlx/turboquant-plus/mlx/nn/layers/turbo_kv_cache.py "/Applications/oMLX.app/Contents/Resources/Python/framework-mlx-base/lib/python3.11/site-packages/mlx/nn/layers/"`).
+2. **Nothing else.** The `.app` binary, the Electron bundle, the JS assets, the FastAPI server — all untouched.
 
-## Where the risk lives
+## Future work
 
-The 5 areas most likely to bite new contributors, in order of severity:
-
-1. **Lying about "transparent" / "zero-copy" / "hard real-time"** — the
-   evidence rule (`GOVERNANCE.md#evidence-rule`) is non-negotiable.
-   These claims require topology, version, workload, p50/p95/p99/worst,
-   failure behavior, and reproducible scripts. No claim is accepted
-   based on architecture intent alone.
-2. **Adding a 13th top-level service or repo** — `CONTRIBUTING.md`
-   forbids this. The integration boundary must be an adapter or
-   package, not a new product. ShareCLI, thegent, AgilePlus, AGSLAG,
-   Tracera, SessionLedger already own adjacent responsibilities.
-3. **Coupling presentation to execution** — non-goal. A window may live
-   on the MacBook while its process, GPU kernels, and data execute
-   elsewhere. The shared-memory/data plane (`architecture/object-plane.md`)
-   and surface-proxy (`architecture/surface-proxy.md`) keep these
-   independent.
-4. **Privileged code scope** — `pf-input-helper`, `pf-display-helper`,
-   `pf-audio-helper`, `pf-resource-helper`, `pf-oob-adapter` are the
-   only narrowly-scoped privileged components. Anything that requires
-   kernel/driver installation, input capture/injection, screen/audio
-   capture, virtual display/audio/HID creation, or remote wake must
-   trigger a security review per `GOVERNANCE.md#security-review-triggers`.
-5. **Topology / configuration drift** — the spec lifecycle requires
-   every behavioral change to update WBS, traceability, tests, risks,
-   source register, and compatibility data. A change that touches
-   behavior without touching these is rejected at review.
-
-## Open questions / known gaps
-
-These are the explicit open questions at the end of the 0.1 baseline.
-A new contributor should investigate in roughly this order:
-
-1. **Implementation language** — ADR-0020 leaves the Rust/Go/C/
-   language-X choice undecided. The right answer depends on which
-   components must be privileged, real-time, portable, or easily
-   inspected. The next ADR is "choose the language for the first
-   three components: pf-coordinator, pf-endpointd, pf-rt-engine."
-2. **Atomic placement vs fused regions** — the cost model and
-   fusion/fission rules in `LLD.md` are theory. The `research/`
-   directory has open hypotheses; the next R&D step is to *measure*
-   the local baseline and prove the coordination tax before any
-   interposition code is written.
-3. **Worst-case latency bound** — `NON_FUNCTIONAL_REQUIREMENTS.md`
-   names targets (input p95 < 50ms, prepared video first frame < 250ms)
-   but the source of those numbers is the user's reference environment,
-   not measurement. Real p50/p95/p99/worst numbers must be collected
-   before any release can claim "shipped."
-4. **WAN real-time guarantees** — explicitly a non-goal. WAN
-   routes are best-effort with adaptive degradation. The fallback
-   for an audio stream that misses deadlines is graceful
-   concealment, not retransmission.
-5. **R0 scope** — the first independently-valuable release is
-   "Measurement and adapter lab" (topology inventory + benchmark
-   harness + Looking Glass/PipeWire/evdev adapters). It has not been
-   broken into atomic tasks beyond `work/tasks.json` PF-WP-000 (5)
-   and PF-WP-010 (6) tasks. The rest of the WBS is "Planned" but not
-   sized for a single engineer-week.
-6. **Spec lifecycle** — the spec is at `Specified` (per
-   `GOVERNANCE.md#specification-lifecycle`). Promotion to `Researched`
-   requires the research program to produce measurable evidence for
-   the data-locality and adaptive-granularity claims. The
-   `research/research-program.md` defines the next experiments.
-
-## What to read first
-
-In order, for a new contributor:
-
-1. `PRD.md` — the why
-2. `README.md` — the non-negotiables
-3. `SPECIFICATION.md` — the mandatory invariants
-4. `HLD.md` — the components + locality tiers
-5. `LLD.md` — the hot-path rules + cost model
-6. `GOVERNANCE.md` — the rules of engagement
-7. `adr/INDEX.md` + `work/wbs.md` — the decisions and the plan
-8. The single spec that matches the work you're doing under `specs/`
-9. The single component doc under `architecture/` for the component
-   you're touching
-10. The matching `verification/` test plan + `verification/requirements-traceability.json`
-    before claiming a feature is "done"
+- Mojo port of `turbo-quant` (planned for Q3 2026 — see `docs/adr/`).
+- Tauri-based desktop shell (replaces Electron when the upstream OMLX app adopts it).
+- GPU fleet-proto with libp2p for the Windows / Linux clients.
+- Direct Metal shader dispatch from `perf-core/spec-decode/src/metal.rs` (currently placeholder).

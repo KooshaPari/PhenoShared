@@ -2,43 +2,41 @@
 
 ## Supported Versions
 
+We provide security updates for the following versions of **phenotype-shared-temp**:
+
 | Version | Supported          |
 | ------- | ------------------ |
-| 0.1.x   | :white_check_mark: |
+| v0.1.x  | :white_check_mark: |
+| < v0.1  | :x:                |
 
 ## Reporting a Vulnerability
 
-If you discover a security vulnerability in Phenotype Fabric, please report it responsibly.
+We take the security of **phenotype-shared-temp** seriously. If you discover a security vulnerability, please do NOT open a public issue. Instead, report it privately.
 
-**Do not open a public GitHub issue for security vulnerabilities.**
+Please report any security concerns directly to the maintainers at [kooshapari@gmail.com](mailto:kooshapari@gmail.com).
 
-Instead, please email: **security@phenotype.dev** (or the repository maintainer directly).
+### What to include in your report
+- A detailed description of the vulnerability
+- Steps to reproduce (proof of concept)
+- Potential impact on the system or user data
+- Any suggested fixes or mitigations
 
-### What to include
+We will acknowledge your report within 48 hours and provide a timeline for resolution.
 
-- Description of the vulnerability
-- Steps to reproduce
-- Potential impact assessment
-- Any suggested fix (if available)
+## Security Best Practices (Rust)
 
-### Response timeline
+- **Dependency Scanning**: All dependencies are scanned for vulnerabilities
+- **Input Validation**: All user inputs are validated and sanitized
+- **Secret Management**: Secrets are managed via environment variables, never hardcoded
+- **Error Handling**: Error messages do not expose sensitive information
+- **Logging**: Sensitive data is redacted from logs
 
-| Action | Target |
-| --- | --- |
-| Acknowledgement | 48 hours |
-| Initial assessment | 5 business days |
-| Fix or mitigation | 30 days for critical/high severity |
+## Hardening Measures
 
-We will work with you to understand and resolve the issue promptly. We appreciate your help in keeping Phenotype Fabric secure.
+- **Static Analysis**: Regular SAST scans using security linters
+- **Dependency Audit**: Automated vulnerability scanning in CI
+- **Code Review**: Security-focused review for all changes
+- **Minimal Dependencies**: Keep dependency count minimal to reduce attack surface
 
-## Security Architecture
-
-The system can observe screens/audio/input, inject control, create realms, move data and access preboot KVMs. Treat compromise as workstation/credential compromise.
-
-- Threat model: [`risks/threat-model.md`](risks/threat-model.md)
-- Security architecture: [`architecture/security.md`](architecture/security.md)
-- Security verification: [`verification/security-test-plan.md`](verification/security-test-plan.md)
-- Incident response: [`operations/incident-response.md`](operations/incident-response.md)
-- Pairing/privilege ADR: [`adr/0019-mutual-pairing-privileged-isolation.md`](adr/0019-mutual-pairing-privileged-isolation.md)
-
-Security issues must not be placed in public logs/evidence bundles.
+---
+Thank you for helping keep the ecosystem secure!

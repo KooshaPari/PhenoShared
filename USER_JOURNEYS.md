@@ -1,262 +1,234 @@
-# AgilePlus User Journeys
+# User Journeys — phenotype-shared
 
-**Version:** 1.0  
-**Status:** Approved  
-**Date:** 2026-03-26
-
----
-
-## Overview
-
-This document describes the key user journeys for AgilePlus, covering the perspectives of:
-1. **AI Coding Agents** — autonomous execution of work packages
-2. **Solo Developers** — manual specification and oversight
-3. **Agent Orchestrators** — fleet management and dispatch
-4. **Platform Engineers** — governance and compliance operations
-
-Each journey maps to one or more epics and demonstrates how the system supports the target user's goals.
+**Version:** 1.0.0
+**Traces to:** PRD.md epics E1–E8
 
 ---
 
-## Journey 1: AI Agent Completes a Feature (E1, E2, E6, E7)
+## UJ-1: Service Author Adds a New Phenotype Service Using the Domain Model
 
-**Persona**: AI Coding Agent (Claude Code, Codex)  
-**Goal**: Execute a work package to completion with minimal human intervention  
-**Time**: 30–120 minutes per work package
+```
+Service author adds phenotype-domain to Cargo.toml
+         |
+         v
+Defines bounded-context value objects (AgentId, TaskId, Priority)
+using provided types from phenotype_domain::value_objects
+         |
+         v
+Author implements domain entities (Agent, Task) implementing
+entity base traits from phenotype_domain::entities
+         |
+         v
+Author writes aggregates that enforce consistency boundaries
+using AgentAggregate or TaskAggregate patterns from phenotype_domain::aggregates
+         |
+         v
+Domain compiles with zero infrastructure deps
+         |
+         v
+Author plugs in adapters (phenotype-postgres-adapter, phenotype-redis-adapter)
+via the ports defined in phenotype-port-interfaces
+         |
+         v
+Service tests run with in-memory adapters; no Docker required
+```
 
-### Preconditions
-- Feature is in **Researched** or **Planned** state
-- Work package is assigned to agent with clear acceptance criteria
-- Worktree is prepared with target branch and base commit
-- Governance contract defines evidence requirements (tests, CI output, review)
-
-### Steps
-
-1. **Agent receives task dispatch** (E6.1)
-   - MCP server provides work package context (spec, acceptance criteria, file scope)
-   - Agent receives prompt with task instructions, feature context, and module ownership
-
-2. **Agent checks governance requirements** (E2)
-   - MCP tool queries governance contract
-   - Agent understands what evidence types are required (test coverage, CI build status, code review)
-   - Agent identifies dependency graph for upstream/downstream work packages (E1.4)
-
-3. **Agent implements work package** (E4.4, E6.1)
-   - Agent creates feature branch in isolated worktree
-   - Agent writes code, commits with descriptive messages
-   - Agent runs local tests and linting
-
-4. **Agent collects evidence** (E2.2)
-   - Agent runs unit tests and captures coverage reports
-   - Agent runs CI pipeline (GitHub Actions / GH CLI) and saves output
-   - Agent runs security scanner (semgrep, trivy, or similar) and collects results
-   - MCP tool records all evidence artifacts linked to work package
-
-5. **Agent submits PR** (E4.16)
-   - Agent uses MCP tool to generate PR description from work package metadata, evidence, and audit trail
-   - Agent opens PR on target branch with generated description
-   - Agent updates work package state to **Implementing** → **Validated**
-
-6. **Agent enters review loop** (E6.3)
-   - Human or AI reviewer provides severity-classified comments (critical/major/minor)
-   - Agent receives feedback via MCP tool
-   - Agent addresses critical/major issues, commits fixes
-   - Loop repeats until:
-     - ✅ **Approved** → move to step 7
-     - ❌ **Rejected** → WP marked **Blocked**, review with human
-     - ⏱️ **Max cycles reached** → escalate to human review
-
-7. **Agent ships work** (E4.7)
-   - Work package state transitions to **Done**
-   - Feature state advances (Implementing → Validated → Shipped)
-   - MCP tool records state transition with actor attribution in immutable audit log (E3.1)
-   - Event is published to NATS for external sync (E7.3)
-   - If Plane.so sync is configured, feature is updated to reflect completed work (E7.1)
-
-### Post-Conditions
-- Work package state: **Done**
-- Feature may advance to **Shipped** if all WPs are done
-- Audit log contains hash-chained entries for all transitions
-- External systems (Plane.so, GitHub) are synced with new feature state
+**Actors:** Service author, Rust compiler
+**Goal:** Stand up a new bounded-context service conforming to DDD patterns without
+re-implementing shared domain primitives.
+**Success criteria:**
+- `cargo check` passes with zero warnings in the new service crate.
+- All domain types (AgentId, TaskId, etc.) originate from `phenotype-domain`.
+- No concrete adapter type is imported in the domain or application layers.
 
 ---
 
-## Journey 2: Solo Developer Specifies and Tracks a Feature (E1, E4, E5)
+## UJ-2: Operator Enables Event Integrity Audit on an Existing Aggregate
 
-**Persona**: Solo Developer  
-**Goal**: Create a feature specification, assign it to a cycle, dispatch agents, and monitor progress  
-**Time**: 1–2 days for specification; 5–10 days for full implementation cycle
+```
+Operator enables phenotype-event-sourcing in service Cargo.toml
+         |
+         v
+Application layer creates InMemoryEventStore (or swaps in SQLx adapter)
+         |
+         v
+Every aggregate mutation appends an EventEnvelope with typed payload,
+sequence number, actor, and SHA-256 hash of previous event
+         |
+         v
+Operator triggers verify_chain(aggregate_id) on demand or on schedule
+         |
+         v
+Chain verification returns Ok(()) — all events are intact
+     OR
+Chain verification returns Err(HashChainError { sequence, .. }) —
+tampered event identified by sequence number
+         |
+         v
+Operator sees audit log with full event history and can replay state
+from any snapshot checkpoint
+```
 
-### Preconditions
-- User has AgilePlus CLI installed and initialized
-- Local Git repository with target project
-- Optional: Plane.so account linked for external sync
-
-### Steps
-
-1. **Developer creates a feature** (E1.1, E4.1)
-   - CLI: `agileplus specify --name "Dark mode toggle" --desc "..."`
-   - System creates feature with slug `dark-mode-toggle`, assigns unique ID
-   - Kitty-specs directory structure created: `kitty-specs/dark-mode-toggle/{spec.md, plan.md, acceptance_criteria.md}`
-
-2. **Developer assigns to cycle and module** (E1.5, E1.6, E4.11, E4.12)
-   - CLI: `agileplus module create --name "UI Improvements"`
-   - CLI: `agileplus cycle create --name "Sprint 3"`
-   - Feature tracking enables sprint-based planning
-
-3. **Developer reviews feature status** (E5.4, E5.2)
-   - CLI: `agileplus show dark-mode-toggle`
-   - Web dashboard displays feature timeline, module affiliation, and associated work packages
-
-4. **Developer researches feature** (E4.2)
-   - CLI: `agileplus research dark-mode-toggle --agent claude-code`
-   - Agent analyzes codebase, identifies relevant files
-   - Feature state transitions to **Researched**
-
-5. **Developer creates plan** (E1.3, E4.3)
-   - CLI: `agileplus plan dark-mode-toggle --decompose`
-   - System creates work packages with dependencies
-
-6. **Developer defines governance** (E2.1)
-   - Creates governance.yaml with evidence requirements
-   - Unit tests: >80% coverage
-   - Code review: ≥1 approval
-
-7. **Developer dispatches agents** (E6.1, E6.2)
-   - CLI: `agileplus implement dark-mode-toggle --agents 4`
-   - Agents begin execution in isolated worktrees
-
-8. **Developer monitors progress** (E6.3)
-   - CLI: `agileplus queue --watch` displays real-time agent progress
-   - Dashboard shows review cycle status
-
-9. **Developer validates and ships** (E2.4, E4.7)
-   - CLI: `agileplus validate dark-mode-toggle`
-   - CLI: `agileplus ship dark-mode-toggle`
-
-10. **Developer generates retrospective** (E4.8)
-    - CLI: `agileplus retrospective dark-mode-toggle`
-    - System generates metrics and learning report
+**Actors:** Operator, service, event store
+**Goal:** Enable tamper-detection audit trails on event-sourced aggregates.
+**Success criteria:**
+- `verify_chain` traverses all events and returns `Ok(())` when no tampering occurred.
+- A single modified event in the chain causes `Err` with the offending sequence number.
+- Snapshots reduce replay time for aggregates with >100 events.
 
 ---
 
-## Journey 3: Agent Orchestrator Manages a Fleet (E6, E7)
+## UJ-3: Service Author Uses the Two-Tier Cache for an Expensive Computation
 
-**Persona**: Agent Orchestrator  
-**Goal**: Dispatch and monitor multiple AI agents across features  
-**Time**: 10–15 minutes per day for monitoring
+```
+Author adds phenotype-cache-adapter to Cargo.toml
+         |
+         v
+Author constructs TieredCache::new(capacity, ttl)
+or uses CacheConfigBuilder for fine-grained config
+         |
+         v
+On first request: cache.get(&key) returns None (miss)
+         |
+         v
+Author computes expensive result and calls cache.insert(key, value)
+         |
+         v
+On subsequent requests: L1 LRU hit returns value in O(1) without
+hitting L2 or the underlying data source
+         |
+         v
+After L1 eviction: L2 DashMap hit promotes entry back to L1
+         |
+         v
+After TTL expiry: entry treated as miss; stale data never served
+         |
+         v
+Author reads CacheMetricsDto to observe l1_hits, l2_hits, misses,
+promotions, evictions — confirms expected cache behaviour
+```
 
-### Preconditions
-- Multiple features queued with work packages
-- Agent pool configured (4–20 agents)
-- Governance contracts defined
-
-### Steps
-
-1. **Orchestrator views backlog** (E4.13)
-   - CLI: `agileplus queue --status`
-   - Dashboard shows sprint burndown and agent utilization
-
-2. **Orchestrator configures dispatch** (E6.1)
-   - CLI: `agileplus implement batch --features dark-mode,notifications,api-docs --max-agents 12`
-
-3. **Orchestrator monitors fleet** (E6.2)
-   - Dashboard displays real-time agent status
-   - REST API provides detailed metrics
-
-4. **Orchestrator handles failures** (E6.3)
-   - Reviews failed work packages and reassigns as needed
-
-5. **Orchestrator validates and ships** (E2.4, E4.7)
-   - CLI: `agileplus validate batch --features dark-mode,notifications,api-docs`
-   - CLI: `agileplus ship batch --target main`
-
----
-
-## Journey 4: Platform Engineer Enforces Governance (E2, E3)
-
-**Persona**: Platform Engineer  
-**Goal**: Define and enforce governance rules  
-**Time**: 1–2 hours setup; ongoing monitoring
-
-### Preconditions
-- CI/CD pipeline configured
-- Policy rules defined
-
-### Steps
-
-1. **Engineer defines governance contracts** (E2.1)
-   - Creates policies/security.yaml, policies/quality.yaml
-
-2. **Engineer binds contracts** (E2.1)
-   - CLI: `agileplus governance bind dark-mode policies/security.yaml`
-
-3. **Engineer validates compliance** (E2.4)
-   - CLI: `agileplus validate --feature dark-mode`
-
-4. **Engineer queries audit trail** (E3.1)
-   - REST API: `GET /audit/features/dark-mode`
-
-5. **Engineer monitors policy compliance** (E10.3)
-   - Dashboard shows compliance metrics across all features
+**Actors:** Service author, cache
+**Goal:** Reduce redundant computation by caching results with automatic TTL expiry and
+observability hooks.
+**Success criteria:**
+- L1 hit rate >= 80% under typical hot-key workloads.
+- Expired entries are never returned.
+- Metrics accurately reflect actual hit/miss/eviction counts.
 
 ---
 
-## Journey 5: External Team Syncs with Plane.so (E7.1, E7.3)
+## UJ-4: Governance Author Loads and Evaluates Security Policies from TOML
 
-**Persona**: Project Manager  
-**Goal**: Keep Plane.so issues in sync with AgilePlus features  
-**Time**: Setup 15 min; automatic thereafter
+```
+Governance author writes a TOML policy file:
+  [[policies]]
+  name = "no-public-ips"
+  [[policies.rules]]
+  rule_type = "Deny"
+  fact = "ip_address"
+  pattern = "^0\.0\.0\.0$"
+  severity = "Critical"
+         |
+         v
+PolicyLoader::from_file("policies.toml") parses the file into Vec<Policy>
+         |
+         v
+PolicyEngine::with_policies(policies) registers all policies
+         |
+         v
+Service builds EvaluationContext from request facts:
+  ctx.insert("ip_address", "0.0.0.0");
+         |
+         v
+PolicyEngine::evaluate_all(&ctx) returns Vec<PolicyResult>
+         |
+         v
+Author checks results: PolicyResult for "no-public-ips" contains
+  Violation { fact: "ip_address", severity: Critical, rule_type: Deny }
+         |
+         v
+Service rejects the request and logs the violation
+```
 
-### Preconditions
-- AgilePlus feature exists
-- Plane.so issue exists
-- Sync mapping configured
-
-### Steps
-
-1. **Engineer configures sync** (E7.1)
-   - CLI: `agileplus sync configure --type plane.so --api-key $KEY`
-
-2. **Engineer initiates sync** (E7.1)
-   - CLI: `agileplus sync plane.so --direction bidirectional`
-
-3. **Bidirectional updates** (E7.1, E7.3)
-   - AgilePlus updates Plane.so on state changes
-   - Plane.so updates AgilePlus on external changes
-
-4. **Conflict resolution** (E7.1)
-   - Concurrent edits detected
-   - User resolves: `agileplus sync resolve --feature dark-mode --action prefer-local`
-
----
-
-## Key Touchpoints and State Transitions
-
-| Journey | Epic | Key Commands | States |
-|---------|------|-------------|--------|
-| AI Agent | E1, E2, E6, E7 | `dispatch`, `review-loop`, `ship` | Implementing → Shipped |
-| Solo Dev | E1, E4, E5 | `specify`, `plan`, `implement`, `ship` | Created → Shipped |
-| Orchestrator | E6, E7 | `implement batch`, `ship batch` | Multi-feature parallel |
-| Platform Eng | E2, E3 | `governance bind`, `validate` | All features enforced |
-| Sync | E7 | `sync configure`, `sync resolve` | Bidirectional sync |
-
----
-
-## Success Metrics
-
-- **AI Agent**: Completes WP without human intervention; governance passes
-- **Solo Dev**: Specification-to-shipped in <5 working days
-- **Orchestrator**: >80% agent utilization; >95% success rate
-- **Platform Eng**: 100% governance compliance; zero audit tampering
-- **Sync**: <1 min sync latency; <5% conflict rate
+**Actors:** Governance author, service, policy engine
+**Goal:** Codify and enforce governance rules without recompiling the service.
+**Success criteria:**
+- Policy files load and evaluate without code changes.
+- `Deny` violations at `Critical` severity are returned for matching facts.
+- An invalid TOML file produces a typed `PolicyEngineError` at load time.
 
 ---
 
-## Design Principles
+## UJ-5: Service Author Models an Order Lifecycle with the State Machine
 
-1. **Immutable Audit Trail** — Every state change recorded and verifiable
-2. **Evidence-Driven** — Features ship only when governance satisfied
-3. **Autonomous Agents** — Minimal human intervention required
-4. **Local-First** — Core functionality offline; external sync optional
-5. **Extensible** — Pluggable adapters via ports
+```
+Author defines OrderState enum implementing State trait:
+  Draft (ordinal 0), Confirmed (1), Shipped (2), Delivered (3)
+         |
+         v
+Author constructs StateMachine::new(OrderState::Draft)
+with forward_only = true
+         |
+         v
+Author registers transitions:
+  (Draft -> Confirmed, guard: inventory_available)
+  (Confirmed -> Shipped, guard: payment_captured)
+  (Shipped -> Delivered, guard: delivery_confirmed)
+         |
+         v
+Valid transition: sm.transition(OrderState::Confirmed) succeeds
+when inventory_available guard returns true
+         |
+         v
+Invalid guard: transition returns Err(StateMachineError::GuardRejected)
+when payment_captured guard returns false
+         |
+         v
+Backward transition: sm.transition(OrderState::Draft) returns
+Err(StateMachineError::BackwardTransitionForbidden) — forward-only enforced
+         |
+         v
+Author calls sm.history() and sees full ordered transition log
+for audit and debugging
+```
+
+**Actors:** Service author, state machine
+**Goal:** Enforce entity lifecycle state progressions with guard-validated transitions
+and a full history log.
+**Success criteria:**
+- Valid forward transitions succeed when guards pass.
+- Guard failures and backward transitions return typed errors.
+- `history()` contains a correct ordered record of all accepted transitions.
+
+---
+
+## UJ-6: TypeScript Service Author Creates a Typesafe Entity ID
+
+```
+TypeScript service imports @helios/ids
+         |
+         v
+Author calls generateId("agent") -> "ag_01H9ZXK2..."
+         |
+         v
+Author calls validateId(id) -> { valid: true }
+         |
+         v
+Author calls parseId(id) -> { entityType: "agent", ulid: "01H9ZXK2..." }
+         |
+         v
+Author stores id in database; database sorts correctly by creation time
+because ULID is monotonically increasing
+         |
+         v
+Author uses generateCorrelationId() for request tracing across services
+```
+
+**Actors:** TypeScript service author
+**Goal:** Generate globally unique, sortable, self-describing entity IDs without a
+coordination service.
+**Success criteria:**
+- `generateId` produces IDs matching `/^[a-z]{2,3}_[0-9A-HJKMNP-TV-Z]{26}$/`.
+- `parseId` recovers the entity type from the prefix without a DB lookup.
+- IDs are sorted correctly by their ULID component (monotonic within millisecond).
