@@ -1,74 +1,44 @@
-# Security Policy - substrate
+# Security Policy
 
-## 1. Supported Versions
+## Supported Versions
 
 | Version | Supported          |
 | ------- | ------------------ |
-| latest  | :white_check_mark: |
-| < latest| :x:                |
+| 0.1.x   | :white_check_mark: |
 
-Only the latest tagged release receives security updates. Older versions are not patched; please upgrade.
+## Reporting a Vulnerability
 
-## 2. Reporting a Vulnerability
+If you discover a security vulnerability in Phenotype Fabric, please report it responsibly.
 
-If you discover a security vulnerability in `substrate`, please report it privately:
+**Do not open a public GitHub issue for security vulnerabilities.**
 
-- **Email:** kooshapari@kooshapari.com
-- **GitHub:** Open a private security advisory via the Security tab on this repository
-- **DO NOT** open a public issue, PR, or discussion for security vulnerabilities
-- **DO NOT** disclose the vulnerability publicly until we have issued a fix and an advisory
+Instead, please email: **security@phenotype.dev** (or the repository maintainer directly).
 
-We aim to acknowledge new reports within **3 business days** and to issue a fix or mitigation within **30 days** for critical issues.
+### What to include
 
-## 3. Vulnerability Disclosure Process
+- Description of the vulnerability
+- Steps to reproduce
+- Potential impact assessment
+- Any suggested fix (if available)
 
-1. **Report received** - maintainer acknowledges and assigns a CVE-style tracking ID.
-2. **Triage** - severity assessed (Critical / High / Medium / Low) using CVSS 3.1.
-3. **Patch development** - fix authored in a private fork; CI validates the fix.
-4. **Coordinated disclosure** - embargo window negotiated (default 90 days from report).
-5. **Public advisory** - GitHub Security Advisory + CVE assignment + release notes.
+### Response timeline
 
-## 4. Security Update Cadence
+| Action | Target |
+| --- | --- |
+| Acknowledgement | 48 hours |
+| Initial assessment | 5 business days |
+| Fix or mitigation | 30 days for critical/high severity |
 
-- **Critical / High:** patch release within 7 days; GHSA published simultaneously
-- **Medium:** patch release within 30 days
-- **Low:** bundled into next regular release
+We will work with you to understand and resolve the issue promptly. We appreciate your help in keeping Phenotype Fabric secure.
 
-Cadence is codified in ADR-042 (security audit cadence, monthly sweep via `scripts/audit.sh`).
+## Security Architecture
 
-## 5. Scope
+The system can observe screens/audio/input, inject control, create realms, move data and access preboot KVMs. Treat compromise as workstation/credential compromise.
 
-In scope:
-- The `substrate` source tree on the default branch
-- Tagged releases on the default branch
-- Pre-built artifacts published from CI (crates.io / PyPI / npm / Go modules)
+- Threat model: [`risks/threat-model.md`](risks/threat-model.md)
+- Security architecture: [`architecture/security.md`](architecture/security.md)
+- Security verification: [`verification/security-test-plan.md`](verification/security-test-plan.md)
+- Incident response: [`operations/incident-response.md`](operations/incident-response.md)
+- Pairing/privilege ADR: [`adr/0019-mutual-pairing-privileged-isolation.md`](adr/0019-mutual-pairing-privileged-isolation.md)
 
-Out of scope:
-- Issues in transitive dependencies (report upstream)
-- Issues requiring physical access to the user's machine
-- Denial-of-service via resource exhaustion in user-supplied inputs (best-effort mitigation only)
-
-## 6. Security Tooling
-
-This repository runs the following security tooling on every push and weekly cron:
-
-- `cargo audit` / `pip-audit` / `npm audit` / `govulncheck` - dependency CVE scanning
-- `gitleaks` - secret detection (`.gitleaks.toml` allowlists only explicit,
-  publicly documented RFC/test-vector values; new secrets still fail the scan)
-- `trivy` - image and filesystem vulnerability scanning
-- `cargo-cyclonedx` / `syft` - SBOM generation (CycloneDX format)
-- `slsa-github-generator` - SLSA Build Level 3 provenance attestation
-- CodeQL - static analysis for the primary language
-
-See `.github/workflows/security.yml` and `scripts/audit.sh` for full configuration.
-
-## 7. Dependencies and Supply Chain
-
-- All dependencies pinned via lockfile (Cargo.lock / poetry.lock / package-lock.json / go.sum)
-- `dependabot.yml` configured for security-only updates (see `.github/dependabot.yml`)
-- Renovate is not used
-- SBOMs are generated on every release and attached to the GitHub release
-
-## 8. Acknowledgements
-
-We thank the security researchers and contributors who report vulnerabilities responsibly.
+Security issues must not be placed in public logs/evidence bundles.

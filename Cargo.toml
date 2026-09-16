@@ -1,6 +1,6 @@
 [workspace]
 resolver = "2"
-exclude = ["crates/forge_daemon"]
+exclude = ["crates/forge_daemon", "crates/fabric-frame-transport/fuzz", "crates/fabric-gui/src-tauri"]
 members = [
     "crates/substrate",
     "crates/substrate-core",
@@ -48,6 +48,29 @@ members = [
     "crates/substrate-tui",
     "crates/gateway-tools",
     "crates/orchestrator",
+    # --- PhenoFabric crates (absorbed 2026-09-16) ---
+    "crates/fabric-capability",
+    "crates/fabric-capability-ffi",
+    "crates/fabric-checker",
+    "crates/fabric-graph",
+    "crates/fabric-graph-cli",
+    "crates/fabric-persist",
+    "crates/fabric-daemon",
+    "crates/fabric-cli",
+    "crates/fabric-tray",
+    "crates/fabric-gui",
+    "crates/fabric-web",
+    "crates/fabric-frame-transport",
+    "crates/phenotype-nvms-adapter",
+    "crates/fabric-integration-tests",
+    "crates/fabric-tui",
+    "crates/fabric-workspace",
+    "crates/fabric-surface-mojo",
+    "crates/fabric-orchestrator",
+    "crates/fabric-terminal",
+    "crates/fabric-capture",
+    "crates/fabric-research-ledger",
+    "examples/full-demo",
 ]
 [workspace.package]
 version = "0.3.10"
@@ -117,6 +140,19 @@ criterion = { version = "0.5", features = ["html_reports"] }
 # so all consumers across the pheno-* fleet see the same OTLP wire-format
 # export surface. See https://github.com/KooshaPari/PhenoObservability/releases/tag/v0.1.0
 pheno-otel = { git = "https://github.com/KooshaPari/PhenoObservability", tag = "v0.1.0", subdirectory = "pheno-otel" }
+
+# --- PhenoFabric dependencies (absorbed 2026-09-16) ---
+blake3 = "1.5"
+ed25519-dalek = { version = "2.1", features = ["rand_core"] }
+rand_core = "0.6"
+schemars = { version = "0.8", features = ["derive", "chrono"] }
+jsonschema = "0.27"
+fabric-capability = { path = "crates/fabric-capability" }
+fabric-graph = { path = "crates/fabric-graph" }
+
+[workspace.lints.rust]
+unsafe_code = "forbid"
+unused_must_use = "deny"
 
 [profile.release]
 opt-level = "z"

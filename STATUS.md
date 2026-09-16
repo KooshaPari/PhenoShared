@@ -1,67 +1,40 @@
-# STATUS
+# Document and Project Status
 
-## Repository
+**As of:** 2026-08-28  
+**Lifecycle state:** `specified`  
+**Confidence:** Architecture baseline is strong; several fine-grained execution mechanisms remain research hypotheses.
 
-- **Name**: Pine
-- **Purpose**: Wine-equivalent compatibility layer for Phenotype OS
-- **Stack**: Rust (workspace), mdbook (docs)
-- **Branch**: `main`
-- **License**: MIT / Apache-2.0
+## Readiness by capability
 
-## Build State
-
-| Dimension | Status |
-|---|---|
-| Build | PASS — `cargo build --workspace` succeeds |
-| Test | PASS — `cargo test --workspace` passes (placeholder tests) |
-| Format | PASS — `cargo fmt --all` clean |
-| Lint | PASS — `cargo clippy` clean |
-| Audit | SKIPPED — `cargo-audit` not installed in local dev |
-| Docs | PASS — `mdbook build` succeeds |
-
-## Quality Gates
-
-| Gate | State | Notes |
+| Capability | Status | Evidence required before implementation claim |
 |---|---|---|
-| CI/CD | PASS | `.github/workflows/ci.yml` with build, test, docs, lint |
-| Security | PASS | `trufflehog.yml` with SHA-pinned official action |
-| Governance | PASS | `LICENSE`, `AGENTS.md`, `CODEOWNERS`, `SECURITY.md`, `CHANGELOG.md` |
-| Reusable workflows | N/A | Not yet using `phenoShared` reusables (no Rust reusable yet) |
+| Unified graph/object model | Specified | Schema validation, reference implementation, round-trip persistence |
+| Packaged UI/API shell | Specified | Install/upgrade prototype on Linux, Windows, macOS |
+| Same-host input routing | Integration-ready | evdev/uinput/libei latency and stuck-key stress tests |
+| Same-host VFIO display | Integration-ready | Looking Glass/KVMFR benchmarks under concurrent GPU/CPU load |
+| LAN desktop streaming | Integration-ready | Sunshine/Moonlight/Parsec adapter comparison |
+| WAN desktop streaming | Integration-ready | NAT traversal, congestion, relay, loss, and security tests |
+| Per-window semantic remoting | Partly integration-ready | RAIL/Xpra/Waypipe capability matrix |
+| Universal pixel-proxy windows | Research/prototype | owned-window graph, IME, DPI, protected surfaces, encoder scaling |
+| Audio/MIDI graph | Integration-ready locally | PipeWire/JACK/WASAPI/CoreAudio adapter prototypes |
+| Network live-audio routing | Research/prototype | clock drift, ASRC, jitter, xrun, round-trip measurement |
+| Data/object locality plane | Specified | immutable object store and residency benchmark |
+| Process/task placement | Prototype-ready | ShareCLI/NVMS adapter, build farm, agent task demonstrations |
+| Atomic syscall/function placement | Research | interposition overhead and region-fusion proof |
+| Cross-OS arbitrary process migration | Explicitly non-general | use semantic handoff, checkpoint, VM migration, or rematerialization |
+| Hard real-time isolation | Platform-specific research | measured deadline protection under adversarial contention |
+| Agent-created ephemeral realms | Specified | enrollment, TTL, permissions, fallback-console demo |
+| Full evidence/trace integration | Specified boundary | Tracera/SessionLedger event contracts |
 
-## Worktrees / Stashes
+## Document quality gates
 
-| Type | Count | State |
-|---|---|---|
-| Worktrees | 1 | Main checkout only |
-| Stashes | 0 | None |
-
-## Branches / PRs
-
-| Branch | Status | Action |
-|---|---|---|
-| `main` | Default | Current |
-| `origin/ci/fix-trufflehog-actions-rot` | MERGED | Merged into main (trufflehog.yml update) |
-| `origin/chore/workflow-hygiene-20260606-Pine` | MERGED | Merged into main (permissions + concurrency) |
-| `origin/chore/docs-validation-ci` | MERGED | Merged into main |
-| `origin/chore/deploy-marker-Pine` | STALE | To delete |
-| `origin/chore/worklog-seed-Pine` | STALE | To delete |
-| `origin/dependabot/dependabot-yml` | STALE | To delete |
-| `origin/feat/journey-impl` | STALE | To delete |
-| `origin/fix/license-badge` | STALE | To delete |
-| `origin/pr-3` | STALE | To delete |
-| `origin/pr-3-fresh` | STALE | To delete |
-
-## Next Steps
-
-1. Push `main` to origin (7 commits ahead).
-2. Delete stale remote branches via GitHub UI or `git push origin --delete`.
-3. Fill `ElfLoader` with real `goblin` ELF parsing.
-4. Add integration tests for syscall translation.
-5. Define a trait-based plugin system for OS syscall translators.
-
-## Recent Changes
-
-- 2026-06-08: Merged `ci/fix-trufflehog-actions-rot` and `chore/workflow-hygiene-20260606-Pine`.
-- 2026-06-08: Added `Taskfile.yml` (org standard).
-- 2026-06-08: Added `STATUS.md`.
-- 2026-06-08: Added build + test jobs to CI workflow.
+- [x] Human intent captured verbatim.
+- [x] Synthesis maps prompts to requirements and decisions.
+- [x] PRD, FRs, NFRs, HLD, LLD, domain model, and API baseline included.
+- [x] AgilePlus-style specifications, plans, and task catalogs included.
+- [x] ADRs record accepted and rejected alternatives.
+- [x] WBS, DAG, PERT, critical path, research plan, and acceptance gates included.
+- [x] Competitive/SOTA families exceed the requested 25 entries where a meaningful class exists.
+- [x] User-facing and technical differentiation are separated.
+- [x] Current claims are tagged by source confidence.
+- [x] File hashes and validation report are generated with the archive.
