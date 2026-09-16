@@ -1,0 +1,53 @@
+# SFT from verified traces — 3090 Ti (24GB)
+# Supervised fine-tune on RLVR-verified JSONL
+
+experiment: sft_traces
+description: "SFT on verifier-passing traces for routine patch role"
+
+inherits:
+  - "${PHENO_ROOT}/config/role_lora.yaml"
+  - "${PHENO_ROOT}/training/rlvr_config.yaml"
+
+base_model:
+  model_net: lfm25_8b_a1b
+  tier: local.lfm25_8b_a1b
+  path: "${PHENO_LFM25_8B_A1B:-}"
+  quant: Q4_K_M
+
+training:
+  method: sft
+  lr: 5.0e-5
+  epochs: 1
+  batch_size: 2
+  grad_accum: 4
+  max_seq_len: 4096
+  warmup_ratio: 0.03
+  output_dir: "${PHENO_ROOT}/state/sft/traces"
+
+hardware:
+  gpu: "RTX 3090 Ti"
+  vram_gb: 24
+  precision: qlora_int4
+  max_gpu_mem_gb: 22
+
+data:
+  root: "${HOME}/.omniroute/training"
+  sources:
+    - glob: "verified_*.jsonl"
+      kind: verified
+      min_pass_score: 0.75
+    - glob: "traces_patch_*.jsonl"
+      kind: trace
+  train_val_split: 0.95
+  min_samples: 256
+
+rlvr:
+  config: "${PHENO_ROOT}/training/rlvr_config.yaml"
+  pass_threshold: 0.75
+  required_checks:
+    - json_valid
+    - tests_pass
+
+gates:
+  min_verifier_pass_rate: 0.80
+  target_pass_rate: 0.85

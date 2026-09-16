@@ -1,3 +1,5 @@
-# Getting Started
+# Guide
 
-See the project [README](https://github.com/KooshaPari/phenotype-infrakit) for setup and usage instructions.
+> TODO: Document guides for phenodocs.
+
+**Referenced by:** docs links in phenodocs

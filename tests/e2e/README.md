@@ -1,3 +1,3 @@
 # End-to-End Tests
 
-Placeholder for substrate E2E tests.
+Placeholder for phenotype-infra E2E tests.

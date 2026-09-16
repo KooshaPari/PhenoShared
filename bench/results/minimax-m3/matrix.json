@@ -1,0 +1,424 @@
+{
+  "model": "accounts/fireworks/models/minimax-m3",
+  "endpoint": "https://api.minimax.io/anthropic/v1/messages (forge -p)",
+  "n_per_suite": 5,
+  "seed": 42,
+  "timeout_s": 120,
+  "wall_clock_s_total": 1743.38,
+  "suites": [
+    {
+      "suite": "ifeval",
+      "n": 5,
+      "passed": 4,
+      "pass_at_1": 0.8,
+      "wall_clock_s_total": 53.76,
+      "wall_clock_s_mean": 10.75,
+      "wall_clock_s_p95": 25.98,
+      "task_results": [
+        {
+          "task_id": "synth-if-42-0000",
+          "ok": false,
+          "wall_clock_s": 6.384,
+          "reply_bytes": 1349,
+          "reply_preview": "0",
+          "error": null,
+          "exit_code": 0
+        },
+        {
+          "task_id": "synth-if-42-0001",
+          "ok": true,
+          "wall_clock_s": 6.86,
+          "reply_bytes": 1715,
+          "reply_preview": "Fun fact: if the Moon were shaped like a banana, its reflected sunlight would create a dramatically different set of pha",
+          "error": null,
+          "exit_code": 0
+        },
+        {
+          "task_id": "synth-if-42-0002",
+          "ok": true,
+          "wall_clock_s": 8.254,
+          "reply_bytes": 4295,
+          "reply_preview": "A fun way to visualize it: imagine a banana held at arm's length under a single overhead light \u2014 as you slowly turn in p",
+          "error": null,
+          "exit_code": 0
+        },
+        {
+          "task_id": "synth-if-42-0003",
+          "ok": true,
+          "wall_clock_s": 6.287,
+          "reply_bytes": 1587,
+          "reply_preview": "So the phases are simply the result of the moon's changing position in orbit around Earth and our changing view of its s",
+          "error": null,
+          "exit_code": 0
+        },
+        {
+          "task_id": "synth-if-42-0004",
+          "ok": true,
+          "wall_clock_s": 25.979,
+          "reply_bytes": 2383,
+          "reply_preview": "So in short: the Moon's phases are a geometric effect of its orbit around Earth, not a change in the Moon itself. The sa",
+          "error": null,
+          "exit_code": 0
+        }
+      ]
+    },
+    {
+      "suite": "mmlu-pro",
+      "n": 5,
+      "passed": 5,
+      "pass_at_1": 1.0,
+      "wall_clock_s_total": 89.78,
+      "wall_clock_s_mean": 17.96,
+      "wall_clock_s_p95": 42.23,
+      "task_results": [
+        {
+          "task_id": "synth-42-0000",
+          "ok": true,
+          "wall_clock_s": 5.285,
+          "reply_bytes": 1470,
+          "reply_preview": "The question asks which option describes a property of 2, but I don't see any options listed in your message. Could you ",
+          "error": null,
+          "exit_code": 0
+        },
+        {
+          "task_id": "synth-42-0001",
+          "ok": true,
+          "wall_clock_s": 11.104,
+          "reply_bytes": 2906,
+          "reply_preview": "Could you share the answer choices so I can help you determine which one is correct?",
+          "error": null,
+          "exit_code": 0
+        },
+        {
+          "task_id": "synth-42-0002",
+          "ok": true,
+          "wall_clock_s": 23.703,
+          "reply_bytes": 10009,
+          "reply_preview": "If you can share the actual multiple-choice options, I can tell you exactly which one is correct.",
+          "error": null,
+          "exit_code": 0
+        },
+        {
+          "task_id": "synth-42-0003",
+          "ok": true,
+          "wall_clock_s": 42.226,
+          "reply_bytes": 7271,
+          "reply_preview": "In short: the question has no meaningful answer \u2014 it's a synthetic placeholder where the \"correct\" option is determined ",
+          "error": null,
+          "exit_code": 0
+        },
+        {
+          "task_id": "synth-42-0004",
+          "ok": true,
+          "wall_clock_s": 7.458,
+          "reply_bytes": 2110,
+          "reply_preview": "But your question asks about an MCQ without providing the options. Could you share the answer choices so I can identify ",
+          "error": null,
+          "exit_code": 0
+        }
+      ]
+    },
+    {
+      "suite": "gpqa-diamond",
+      "n": 5,
+      "passed": 5,
+      "pass_at_1": 1.0,
+      "wall_clock_s_total": 73.41,
+      "wall_clock_s_mean": 14.68,
+      "wall_clock_s_p95": 24.81,
+      "task_results": [
+        {
+          "task_id": "gpqa-d-0000",
+          "ok": true,
+          "wall_clock_s": 8.42,
+          "reply_bytes": 1958,
+          "reply_preview": "Since this doesn't relate to the codebase or a programming task, and no options were provided, I can't meaningfully answ",
+          "error": null,
+          "exit_code": 0
+        },
+        {
+          "task_id": "gpqa-d-0001",
+          "ok": true,
+          "wall_clock_s": 19.656,
+          "reply_bytes": 5102,
+          "reply_preview": "Could you share the full question with the available answer choices so I can help you identify the correct option?",
+          "error": null,
+          "exit_code": 0
+        },
+        {
+          "task_id": "gpqa-d-0002",
+          "ok": true,
+          "wall_clock_s": 12.152,
+          "reply_bytes": 3570,
+          "reply_preview": "This appears to be a multiple-choice question, but you haven't provided the answer options (A, B, C, D) that go with it.",
+          "error": null,
+          "exit_code": 0
+        },
+        {
+          "task_id": "gpqa-d-0003",
+          "ok": true,
+          "wall_clock_s": 24.812,
+          "reply_bytes": 8456,
+          "reply_preview": "If you're looking for the actual seeded expected answer, I can compute it by running the same PRNG logic.",
+          "error": null,
+          "exit_code": 0
+        },
+        {
+          "task_id": "gpqa-d-0004",
+          "ok": true,
+          "wall_clock_s": 8.37,
+          "reply_bytes": 2219,
+          "reply_preview": "If you provide the MCQ options, I can tell you which one correctly describes a property of carbon.",
+          "error": null,
+          "exit_code": 0
+        }
+      ]
+    },
+    {
+      "suite": "hle",
+      "n": 0,
+      "passed": 0,
+      "pass_at_1": 0.0,
+      "wall_clock_s_total": 0.0,
+      "wall_clock_s_mean": 0.0,
+      "wall_clock_s_p95": 0.0,
+      "task_results": [],
+      "error": "TypeError: The only supported seed types are:\nNone, int, float, str, bytes, and bytearray."
+    },
+    {
+      "suite": "mt-bench",
+      "n": 5,
+      "passed": 4,
+      "pass_at_1": 0.8,
+      "wall_clock_s_total": 362.59,
+      "wall_clock_s_mean": 72.52,
+      "wall_clock_s_p95": 120.3,
+      "task_results": [
+        {
+          "task_id": "mtbench-writing-000",
+          "ok": true,
+          "wall_clock_s": 30.848,
+          "reply_bytes": 4228,
+          "reply_preview": "Once you provide the data, I'll compute the MAD (median of absolute deviations from the median) for you.",
+          "error": null,
+          "exit_code": 0
+        },
+        {
+          "task_id": "mtbench-writing-001",
+          "ok": true,
+          "wall_clock_s": 89.833,
+          "reply_bytes": 31653,
+          "reply_preview": "There is no actual off-by-one error to fix in the codebase. If you're looking for a real occurrence of this pattern else",
+          "error": null,
+          "exit_code": 0
+        },
+        {
+          "task_id": "mtbench-writing-002",
+          "ok": true,
+          "wall_clock_s": 16.509,
+          "reply_bytes": 4500,
+          "reply_preview": "No changes are needed \u2014 the codebase has already been migrated to the recommended timezone-aware API.",
+          "error": null,
+          "exit_code": 0
+        },
+        {
+          "task_id": "mtbench-writing-003",
+          "ok": false,
+          "wall_clock_s": 120.298,
+          "reply_bytes": 0,
+          "reply_preview": "",
+          "error": "timeout",
+          "exit_code": -1
+        },
+        {
+          "task_id": "mtbench-writing-004",
+          "ok": true,
+          "wall_clock_s": 105.1,
+          "reply_bytes": 42134,
+          "reply_preview": "Could you clarify which file you're referring to? It might be in a different directory or repository (e.g., /forge, /.cu",
+          "error": null,
+          "exit_code": 0
+        }
+      ]
+    },
+    {
+      "suite": "terminal-bench",
+      "n": 5,
+      "passed": 0,
+      "pass_at_1": 0.0,
+      "wall_clock_s_total": 347.36,
+      "wall_clock_s_mean": 69.47,
+      "wall_clock_s_p95": 120.37,
+      "task_results": [
+        {
+          "task_id": "cli/tb-6370",
+          "ok": false,
+          "wall_clock_s": 21.116,
+          "reply_bytes": 13129,
+          "reply_preview": "Could you please share the numerical column data you'd like me to compute the median absolute deviation (MAD) for? You c",
+          "error": null,
+          "exit_code": 0
+        },
+        {
+          "task_id": "filesystem/tb-1373",
+          "ok": false,
+          "wall_clock_s": 69.622,
+          "reply_bytes": 36136,
+          "reply_preview": "The loop uses range(len(items)) which correctly produces indices 0, 1, ..., len(items)-1, and the modulo check i % 2 == ",
+          "error": null,
+          "exit_code": 0
+        },
+        {
+          "task_id": "git/tb-2348",
+          "ok": false,
+          "wall_clock_s": 34.668,
+          "reply_bytes": 7030,
+          "reply_preview": "No changes needed \u2014 the codebase is already clean.",
+          "error": null,
+          "exit_code": 0
+        },
+        {
+          "task_id": "http/tb-8143",
+          "ok": false,
+          "wall_clock_s": 120.37,
+          "reply_bytes": 0,
+          "reply_preview": "",
+          "error": "timeout",
+          "exit_code": -1
+        },
+        {
+          "task_id": "package-mgmt/tb-8334",
+          "ok": false,
+          "wall_clock_s": 101.582,
+          "reply_bytes": 12888,
+          "reply_preview": "If you need to add i18n support or introduce localized error messages to the project, that would be a new feature \u2014 but ",
+          "error": null,
+          "exit_code": 0
+        }
+      ]
+    },
+    {
+      "suite": "deep-swe",
+      "n": 5,
+      "passed": 0,
+      "pass_at_1": 0.0,
+      "wall_clock_s_total": 360.17,
+      "wall_clock_s_mean": 72.03,
+      "wall_clock_s_p95": 120.11,
+      "task_results": [
+        {
+          "task_id": "pr-deepswe-1962",
+          "ok": false,
+          "wall_clock_s": 15.228,
+          "reply_bytes": 6138,
+          "reply_preview": "I don't see an attached file with numerical data in your message. The task mentions \"the attached numerical column,\" but",
+          "error": null,
+          "exit_code": 0
+        },
+        {
+          "task_id": "pr-deepswe-5661",
+          "ok": false,
+          "wall_clock_s": 82.618,
+          "reply_bytes": 33945,
+          "reply_preview": "This function on lines 76-85 is a reference implementation associated with synthetic prompt #0 at line 58 (\"Fix the off-",
+          "error": null,
+          "exit_code": 0
+        },
+        {
+          "task_id": "pr-deepswe-5252",
+          "ok": false,
+          "wall_clock_s": 22.191,
+          "reply_bytes": 6403,
+          "reply_preview": "The codebase is clean of the deprecated datetime.utcnow() API throughout.",
+          "error": null,
+          "exit_code": 0
+        },
+        {
+          "task_id": "pr-deepswe-4879",
+          "ok": false,
+          "wall_clock_s": 120.109,
+          "reply_bytes": 0,
+          "reply_preview": "",
+          "error": "timeout",
+          "exit_code": -1
+        },
+        {
+          "task_id": "pr-deepswe-6614",
+          "ok": false,
+          "wall_clock_s": 120.028,
+          "reply_bytes": 0,
+          "reply_preview": "",
+          "error": "timeout",
+          "exit_code": -1
+        }
+      ]
+    },
+    {
+      "suite": "swe-bench-verified",
+      "n": 5,
+      "passed": 0,
+      "pass_at_1": 0.0,
+      "wall_clock_s_total": 454.34,
+      "wall_clock_s_mean": 90.87,
+      "wall_clock_s_p95": 120.53,
+      "task_results": [
+        {
+          "task_id": "django__django-55798",
+          "ok": false,
+          "wall_clock_s": 120.048,
+          "reply_bytes": 0,
+          "reply_preview": "",
+          "error": "timeout",
+          "exit_code": -1
+        },
+        {
+          "task_id": "scikit-learn__scikit-learn-41643",
+          "ok": false,
+          "wall_clock_s": 120.121,
+          "reply_bytes": 0,
+          "reply_preview": "",
+          "error": "timeout",
+          "exit_code": -1
+        },
+        {
+          "task_id": "matplotlib__matplotlib-23836",
+          "ok": false,
+          "wall_clock_s": 25.644,
+          "reply_bytes": 5595,
+          "reply_preview": "\u6240\u6709 Python \u6e90\u4ee3\u7801\u90fd\u4ec5\u4f7f\u7528\u65f6\u533a\u611f\u77e5\u7684\u65f6\u95f4 API\u3002\u65e0\u9700\u6267\u884c\u4efb\u4f55\u64cd\u4f5c\u3002",
+          "error": null,
+          "exit_code": 0
+        },
+        {
+          "task_id": "pytest__pytest-56577",
+          "ok": false,
+          "wall_clock_s": 120.531,
+          "reply_bytes": 0,
+          "reply_preview": "",
+          "error": "timeout",
+          "exit_code": -1
+        },
+        {
+          "task_id": "requests__requests-32642",
+          "ok": false,
+          "wall_clock_s": 67.998,
+          "reply_bytes": 19442,
+          "reply_preview": "If you'd like to replace this synthetic prompt with a more realistic real-world task (since the benchmark appears to be ",
+          "error": null,
+          "exit_code": 0
+        }
+      ]
+    },
+    {
+      "suite": "perplexity",
+      "n": 0,
+      "passed": 0,
+      "pass_at_1": 0.0,
+      "wall_clock_s_total": 0.0,
+      "wall_clock_s_mean": 0.0,
+      "wall_clock_s_p95": 0.0,
+      "task_results": [],
+      "error": "TypeError: The only supported seed types are:\nNone, int, float, str, bytes, and bytearray."
+    }
+  ]
+}

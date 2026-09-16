@@ -1,0 +1,16 @@
+# Tracera trace-store configuration for pheno-harness.
+#
+# v0.12 WBS-PERT-100 task 12 (Phase 1 — Tracera adapter config).
+# Loaded by pheno/trace_store/config.py:load_config().
+#
+# Default endpoint: http://127.0.0.1:8080 (matches docs/integrations/tracera-api.md).
+# Bearer token resolved at runtime from the env var named in api_token_env.
+
+host: "127.0.0.1"
+port: 8080
+base_url: null              # if set, overrides host:port construction
+api_token_env: "TRACERA_API_TOKEN"
+timeout: 5.0
+batch_size: 32
+enabled: false              # feature flag for dual-write (WBS task 17+)
+session_id: null            # optional default session id when callers omit one

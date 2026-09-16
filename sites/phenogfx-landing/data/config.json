@@ -1,0 +1,24 @@
+{
+  "name": "PhenoGfx",
+  "slug": "phenogfx",
+  "tagline": "GFX SDK: polyglot graphics with Rust voxel substrate and C# terrain and water rendering.",
+  "domain": "phenogfx.phenotype.space",
+  "color": "#f97316",
+  "description": "GFX SDK: polyglot graphics with Rust voxel substrate and C# terrain and water rendering.",
+  "tier": 2,
+  "repo": "KooshaPari/PhenoGfx",
+  "language": "Rust / C#",
+  "license": "MIT",
+  "status": "active",
+  "features": [
+    "Voxel rendering",
+    "Terrain engine",
+    "Water simulation",
+    "GPU shaders"
+  ],
+  "links": {
+    "github": "https://github.com/KooshaPari/PhenoGfx",
+    "docs": "https://phenogfx.phenotype.space/docs",
+    "releases": "https://github.com/KooshaPari/PhenoGfx/releases"
+  }
+}

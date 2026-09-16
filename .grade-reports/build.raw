@@ -1,4 +1,22 @@
-[1m[92m   Compiling[0m phenotype-iter v0.2.0 (/Users/kooshapari/CodeProjects/Phenotype/repos/pheno/crates/phenotype-iter)
-[1m[92m   Compiling[0m phenotype-errors v0.2.0 (/Users/kooshapari/CodeProjects/Phenotype/repos/pheno/crates/phenotype-errors)
-[1m[92m   Compiling[0m phenotype-port-traits v0.2.0 (/Users/kooshapari/CodeProjects/Phenotype/repos/pheno/crates/phenotype-port-traits)
-[1m[92m    Finished[0m ]8;;https://doc.rust-lang.org/cargo/reference/profiles.html#default-profiles\`dev` profile [unoptimized + debuginfo]]8;;\ target(s) in 2.71s
+ Downloading crates ...
+  Downloaded inlinable_string v0.1.15
+  Downloaded toml_write v0.1.2
+  Downloaded thiserror-impl v1.0.69
+  Downloaded pear v0.2.9
+  Downloaded thiserror v1.0.69
+  Downloaded toml v0.8.23
+  Downloaded yansi v1.0.1
+  Downloaded figment v0.10.19
+  Downloaded toml_edit v0.22.27
+  Downloaded indexmap v2.14.0
+error: failed to download replaced source registry `crates-io`
+
+Caused by:
+  failed to parse manifest at `/home/kooshapari/.cargo/registry/src/index.crates.io-6f17d22bba15001f/indexmap-2.14.0/Cargo.toml`
+
+Caused by:
+  feature `edition2024` is required
+
+  The package requires the Cargo feature called `edition2024`, but that feature is not stabilized in this version of Cargo (1.75.0).
+  Consider trying a more recent nightly release.
+  See https://doc.rust-lang.org/nightly/cargo/reference/unstable.html#edition-2024 for more information about the status of this feature.

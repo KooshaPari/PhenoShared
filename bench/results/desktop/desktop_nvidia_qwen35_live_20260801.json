@@ -1,0 +1,151 @@
+{
+  "schema_version": "pheno.desktop-live-evidence.v2",
+  "captured_at": "2026-08-01T23:41:08Z",
+  "authorization": {
+    "window_id": "desktop-live-20260801T104424Z",
+    "requested_by": "sponsor",
+    "mac_inference": "paused",
+    "harbor_authorized": false
+  },
+  "contract": {
+    "path": "config/desktop_nvidia_qwen35_lane.yaml",
+    "sha256": "ac27fd9d2ce3903bbb873fb47de22eff052c8333cd374e618202a1955356cea5",
+    "source_commit": "742206009a7e87fd100a17e28de6996218bdeb7d",
+    "declared_status": "planning_only"
+  },
+  "host": {
+    "hostname": "KOOSHAPARI-DESK",
+    "platform": "Windows host with WSL2",
+    "wsl_distribution": "FedoraLinux-44",
+    "nvidia_driver": "581.80",
+    "devices": [
+      {"physical_index": 0, "uuid": "GPU-e1e28703-34bd-e46b-6dc1-d7c39fa5612c", "name": "NVIDIA GeForce GTX 1080 Ti", "compute_capability": "6.1", "vram_mib": 11264, "role": "helper"},
+      {"physical_index": 1, "uuid": "GPU-8d337a84-43de-158d-7526-7175288a6064", "name": "NVIDIA GeForce RTX 3090 Ti", "compute_capability": "8.6", "vram_mib": 24564, "role": "primary"}
+    ]
+  },
+  "model": {
+    "canonical_id": "Qwen/Qwen3.5-0.8B",
+    "hf_snapshot_revision": "2fc06364715b967f1860aea9cf38778875588b17",
+    "gguf_path": "D:/WSL/model-cache/qwen35-08b-q4/qwen35-08b.Q4_K_M.gguf",
+    "gguf_sha256": "7BC67CD64869CD1C7393918515DD8754913F7462035A3F20B7045EE33722A0B2",
+    "gguf_bytes": 529297344,
+    "quantization": "Q4_K_M"
+  },
+  "runtimes": {
+    "vllm": {"version": "0.26.0", "revision": "0.26.0", "binary_path": "/home/kooshapari/mambaforge/envs/vllm/bin/python", "binary_sha256": "3efe4f240ebea0fa136ba8a74d7eebc679a812f77c3024e0c6c720c4966bcab9", "torch": "2.11.0+cu130", "cuda_toolkit": "13.0 (torch build)", "cuda_visible_devices": "1", "logical_device": "cuda:0", "device": "rtx_3090_ti", "url": "http://127.0.0.1:8000"},
+    "llama_cpp": {"build": "b10012-c71854292", "binary_sha256": "CE876E81E0A25E5A036F8365561337C9032628678A86B3DE25DFFC76A60B6839", "cuda_toolkit": "12.4", "cuda_visible_devices": "1", "logical_device": "CUDA0", "device": "gtx_1080_ti", "url": "http://127.0.0.1:8082"}
+  },
+  "smokes": [
+    {"run_id": "qwen35-vllm-3090ti-desktop-ok", "runtime": "vllm", "http_status": 200, "response": "DESKTOP_OK", "prompt": "Reply with exactly DESKTOP_OK.", "max_tokens": 16, "fallback_detected": false},
+    {"run_id": "qwen35-llamacpp-1080ti-helper-ok", "runtime": "llama.cpp", "http_status": 200, "response": "HELPER_OK", "prompt": "Reply with exactly HELPER_OK.", "max_tokens": 32, "fallback_detected": false}
+  ],
+  "runs": [
+    {
+      "run_id": "qwen35-vllm-3090ti-desktop-ok",
+      "runtime": "vllm",
+      "started_at": "2026-08-01T10:44:24Z",
+      "finished_at": "2026-08-01T10:51:55Z",
+      "workload_executed": true,
+      "dry_run": false,
+      "timeout_seconds": 120,
+      "max_concurrency": 1,
+      "http_status": 200,
+      "request": {"endpoint": "/v1/chat/completions", "max_tokens": 16, "temperature": 0, "prompt": "Reply with exactly DESKTOP_OK."},
+      "response_assertion": "DESKTOP_OK",
+      "fallback_detected": false
+    },
+    {
+      "run_id": "qwen35-llamacpp-1080ti-helper-ok",
+      "runtime": "llama.cpp",
+      "started_at": "2026-08-01T10:56:55Z",
+      "finished_at": "2026-08-01T10:57:16Z",
+      "workload_executed": true,
+      "dry_run": false,
+      "timeout_seconds": 120,
+      "max_concurrency": 1,
+      "http_status": 200,
+      "request": {"endpoint": "/v1/chat/completions", "max_tokens": 32, "temperature": 0, "prompt": "Reply with exactly HELPER_OK."},
+      "response_assertion": "HELPER_OK",
+      "fallback_detected": false
+    }
+  ],
+  "llama_bench": {
+    "binary_sha256": "4E32377FEF5922B22060C5C0D7FC4C4090EA59FD8A8E0C30DB10B3350A31CEDF",
+    "command": "-ngl 99 -dev CUDA0 -mg 0 -p 128 -n 64 -r 1 -b 512 -ub 512",
+    "results": [
+      {"device": "rtx_3090_ti", "cuda_visible_devices": "0", "prompt_tokens_per_second": 4495.44, "decode_tokens_per_second": 300.03, "exit_code": 0},
+      {"device": "gtx_1080_ti", "cuda_visible_devices": "1", "prompt_tokens_per_second": 4791.03, "decode_tokens_per_second": 132.04, "exit_code": 0}
+    ]
+  },
+  "repeatability": {
+    "helper": {
+      "device": "gtx_1080_ti",
+      "prompt": "Reply with exactly HELPER_REPEAT_OK.",
+      "runs": [
+        {"iteration": 1, "response": "HELPER_REPEAT_OK", "elapsed_ms": 646.91, "completion_tokens_per_second": 117.82726522917402},
+        {"iteration": 2, "response": "HELPER_REPEAT_OK", "elapsed_ms": 104.03, "completion_tokens_per_second": 121.45060603852414},
+        {"iteration": 3, "response": "HELPER_REPEAT_OK", "elapsed_ms": 110.07, "completion_tokens_per_second": 119.88395233414055}
+      ],
+      "passed": 3,
+      "failed": 0
+    },
+    "primary": {"status": "deferred_user_owned_runtime", "blocking_process": "vLLM LFM2.5-8B-A1B", "blocking_port": 19000, "action": "no_contend_or_stop", "repeat_runs": 0}
+  },
+  "harness_evaluations": [
+    {
+      "status": "pass",
+      "runtime": "transformers-eager-pascal-helper",
+      "transport": "non-streaming",
+      "endpoint": "ssh-tunnel:127.0.0.1:19002",
+      "served_model": "Qwen/Qwen3.5-0.8B",
+      "result_path": "bench/results/desktop/perf_helper_pascal_nonstream_20260802c.json",
+      "manifest_path": "bench/results/desktop/perf_helper_pascal_nonstream_20260802c.manifest.json",
+      "result_sha256": "13ab1af947811f17c581abc486c17486bde4ff915c32abca5cd63f9304ebbfd5",
+      "success_count": 3,
+      "error_count": 0,
+      "warmup_error_count": 0,
+      "measurement_quality": "non_streaming_total_latency_proxy",
+      "placement_note": "Endpoint process placement was observed on both GPU UUIDs; this diagnostic pass is not promotion evidence."
+    },
+    {
+      "status": "pass_with_measurement_gap",
+      "runtime": "transformers-eager-pascal-helper",
+      "transport": "non-streaming",
+      "endpoint": "ssh-tunnel:127.0.0.1:19003",
+      "served_model": "Qwen/Qwen3.5-0.8B",
+      "result_path": "bench/results/desktop/perf_helper_pascal_cuda0_20260802.json",
+      "manifest_path": "bench/results/desktop/perf_helper_pascal_cuda0_20260802.manifest.json",
+      "result_sha256": "ac8e5c5bd553604592b342c7076da1a657c0417eee04544f60ad03ed997d33b4",
+      "success_count": 3,
+      "error_count": 0,
+      "warmup_error_count": 0,
+      "measurement_quality": "non_streaming_total_latency_proxy",
+      "placement_contract": "CUDA_VISIBLE_DEVICES=0",
+      "gpu_memory_delta_mib": {"gtx_1080_ti": 1669, "rtx_3090_ti": 22},
+      "resource_sample_count": 0,
+      "placement_note": "Dedicated helper and existing supervisor both report CUDA_VISIBLE_DEVICES=0; nvidia-smi process attribution is ambiguous under WSL, but memory delta was isolated to the GTX 1080 Ti while RTX 3090 memory was unchanged."
+    }
+  ],
+  "promotion": {
+    "status": "blocked",
+    "gates": {
+      "exact_qwen35_model_and_revision": true,
+      "exact_quantized_artifact_and_sha256": true,
+      "captured_dual_gpu_device_manifest": true,
+      "runtime_binary_and_driver_provenance": true,
+      "bounded_single_worker_smoke": true,
+      "repeated_result_envelope_with_no_fallback_ambiguity": false,
+      "harbor_or_eval_window_authorized": false
+    },
+    "diagnostic_gates": {"helper_repeatability": true, "primary_repeatability": false, "harness_eval": true},
+    "provenance_gaps": [
+      "primary repeatability deferred while user-owned LFM2.5-8B-A1B occupies port 19000",
+      "isolated helper harness run has zero host resource samples because macOS psutil host_statistics64 failed",
+      "Harbor/eval authorization is still absent"
+    ]
+  },
+  "artifact_integrity": {
+    "algorithm": "sha256(canonical-json-without-result_artifact_sha256)",
+    "result_artifact_sha256": "c5823ba450436439c8d67ea1dfec107950e4ace791b9b376af709d7425c15076"
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "id": "SYN-PILOT",
+  "subject_id": "SYN-PRODUCT",
+  "state": "planned",
+  "hypothesis": "A maintained task facility needs less custom recovery code.",
+  "baseline_ids": [
+    "SYN-DIRECT"
+  ],
+  "primary_metrics": [
+    "recovery-correctness",
+    "operator-actions"
+  ],
+  "critical_invariants": [
+    "no-duplicate-side-effect"
+  ],
+  "modes": [
+    "controlled-replay"
+  ],
+  "fixture_ids": [
+    "SYN-FIXTURE"
+  ],
+  "result_ids": [],
+  "winner": null,
+  "sources": [
+    "SYN-INTENT"
+  ],
+  "synthetic": true
+}

@@ -1,0 +1,260 @@
+# pheno-serve-dev local inference serving plane.
+
+# SGLang is the primary local path. The primary slot has one resident model;
+
+# all starts require explicit local paths through scripts/pheno_slot.py.
+
+
+
+server:
+
+  # Harbor tasks run inside a Podman VM. The proxy must be reachable through
+
+  # host.containers.internal; firewall policy remains the local-only control.
+
+  host: "0.0.0.0"
+
+  port: 21080
+
+  base_url: "http://127.0.0.1:21080/v1"
+
+  upstream_timeout_s: 60
+
+  metrics_path: "/metrics"
+
+  events_path: "logs/pheno_serve/events.jsonl"
+
+  state_path: "state/pheno_serve.json"
+
+  # When true, admission checks are bypassed for active profiles with a base_url.
+
+  # Only for local dev/eval — never enable in production.
+
+  dev_mode: true
+
+
+
+engine_slots:
+
+  vllm_primary:
+
+    base_url: "http://127.0.0.1:19600/v1"   # TB2 durable LFM lane (systemd tb2-19600-lane, vLLM 0.26.0, 16K ctx) - canonical per Codex thread lane ownership; :19000 is rogue per tb2-lane-watchdog
+
+    residency: one_model_at_a_time
+
+    selection: explicit_manual_swap
+
+    aliases: [local/lfm2.5-8b-a1b]
+
+    note: "vllm_primary is the canonical serving path; one resident model at a time"
+
+
+
+headers:
+
+  capture:
+
+    - X-Pheno-Run-Id
+
+    - X-Pheno-Lane
+
+    - X-Pheno-Role
+
+    - X-Pheno-Route-Kind
+
+    - X-Pheno-Eval-Suite
+
+    - X-Pheno-Bypass-Reason
+
+
+
+profiles:
+
+
+
+  local/qwen35-08b:
+
+    engine: llama_cpp
+
+    model_ref: Qwen/Qwen3.5-0.8B
+
+    candidate_id: qwen35-08b
+
+    device_id: rtx_1080_ti   # native-Windows lane (no WSL dependency)
+
+    model_path: "${PHENO_QWEN35_08B:-}"
+
+    base_url: "http://127.0.0.1:8080/v1"
+
+    backend_mode: openai_chat
+
+    status: inactive    # PURGED 2026-08-08 - Qwen + llama.cpp banned (user rule)
+
+    engine_slot: native_qwen   # local llama-server.exe on 1080 Ti, NOT vllm_primary
+
+    default: false
+
+    role_fit: [routine, coding_subagent, multi_turn, reasoning, fast_iteration]
+
+    release_date: "2026-01-15"
+
+    notes: |
+
+      Smallest 2026 default for fast iteration. 0.8B params, dense.
+
+      Fits any GPU. Context 32k. Default Qwen3.5 generation; replaces qwen3-1.7b.
+
+      Native-Windows llama-server lane (port 8080) — no WSL dependency.
+
+    runtime_admission:
+
+      lane_id: rtx1080_qwen35_08b_llamacpp_32k
+
+      cell_id: tb2_llamacpp_qwen35_08b_rtx1080ti_32k
+
+      authorization_request: config/authorization_requests/compute/rtx1080_qwen35_08b_launch.json
+
+    decode:
+
+      method: baseline
+
+      max_context: 32768
+
+      flags: ["--ctx-size", "32768", "--n-gpu-layers", "99", "--batch-size", "512", "--threads", "8"]
+
+
+
+  local/lfm2.5-8b-a1b:
+
+    engine: vllm
+
+    model_ref: lfm25-8b-a1b
+
+    api_model_name: local/lfm25-8b-a1b   # upstream served name on tb2-19600-lane (must match the lane's --served-model-name; TB2 unit file serves lfm25-8b-a1b,local/lfm25-8b-a1b)
+
+    candidate_id: lfm2.5-8b-a1b
+
+    device_id: rtx_3090_ti
+
+    model_path: "${PHENO_LFM25_8B_A1B:-}"
+
+    base_url: "http://127.0.0.1:19600/v1"
+
+    backend_mode: openai_chat
+
+    status: active    # TB2 durable LFM lane (tb2-19600-lane) - canonical; vLLM on 3090 Ti via systemd, 16K ctx (2026-08-08)
+
+    engine_slot: vllm_primary
+
+    default: false
+
+    role_fit: [routine, coding_subagent, multi_turn, reasoning, long_context, hybrid_thinking]
+
+    release_date: "2026-05-28"
+
+    notes: |
+
+      Freshest 2026 MoE: 8B total / ~1B active params. Hybrid (LIV short-conv + full attention).
+
+      24 layers, 32 experts, 4 active per token. 128k context. Ampere (RTX 3090 Ti) only.
+
+      Hybrid reasoning model with <think> block. Sibling: LFM2.5-1.2B-Instruct (Pascal/1080 Ti, via llama.cpp GGUF).
+
+      Native-Windows llama.cpp lane on 3090 Ti (Q4 GGUF, --n-gpu-layers 99) - no WSL dependency.
+
+    runtime_admission:
+
+      lane_id: rtx3090_lfm25_8b_a1b_llamacpp_32k
+
+      cell_id: tb2_llamacpp_lfm25_8b_rtx3090ti_32k
+
+      authorization_request: config/authorization_requests/compute/rtx3090_lfm25_8b_launch_native_2026-08-07.json
+
+    decode:
+
+      method: baseline
+
+      max_context: 32768
+
+      flags: ["--ctx-size", "32768", "--n-gpu-layers", "99", "--batch-size", "512", "--threads", "8"]
+
+
+
+  mac/mlx-small:
+
+    model_ref: mac.small_worker
+
+    base_url: null
+
+    status: planned_remote_worker
+
+    role_fit: [draft, monitoring, cache_warm]
+
+
+
+metrics:
+
+  per_request:
+
+    - request_id
+
+    - run_id
+
+    - lane
+
+    - role
+
+    - model_alias
+
+    - engine
+
+    - prompt_tokens
+
+    - completion_tokens
+
+    - cache_read_tokens
+
+    - cache_write_tokens
+
+    - ttft_ms
+
+    - itl_ms_p50
+
+    - itl_ms_p95
+
+    - decode_tok_s
+
+    - total_tok_s
+
+    - queue_wait_ms
+
+    - batch_size
+
+    - concurrency
+
+    - prefix_cache_hit
+
+    - vram_peak_gb
+
+    - ram_peak_gb
+
+    - cpu_pct
+
+    - gpu_util_pct
+
+    - engine_error
+
+    - finish_reason
+
+    - restart_count
+
+    - fallback_taken
+
+    - spec_method
+
+    - draft_model
+
+    - accept_rate
+
+    - verify_overhead_ms
+

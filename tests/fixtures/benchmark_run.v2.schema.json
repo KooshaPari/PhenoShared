@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://phenotype.local/schemas/benchmark_run.v2.schema.json",
+  "title": "Signed agent harness benchmark replay",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "tenant_id", "session_id", "run_id", "attempt_id", "deterministic_identity", "subject", "lease", "task_manifest", "events", "result", "provenance", "signature"],
+  "properties": {
+    "schema_version": {"const": "2.0.0"},
+    "tenant_id": {"type": "string", "minLength": 1},
+    "session_id": {"type": "string", "pattern": "^ses_[a-f0-9]{64}$"},
+    "run_id": {"type": "string", "pattern": "^run_[a-f0-9]{64}$"},
+    "attempt_id": {"type": "string", "pattern": "^att_[a-f0-9]{64}$"},
+    "deterministic_identity": {"$ref": "#/$defs/identity"},
+    "subject": {"$ref": "#/$defs/subject"},
+    "lease": {"$ref": "#/$defs/lease"},
+    "task_manifest": {"$ref": "#/$defs/task_manifest"},
+    "events": {
+      "type": "array",
+      "minItems": 4,
+      "contains": {"type": "object", "properties": {"type": {"const": "run_finished"}}, "required": ["type"]},
+      "minContains": 1,
+      "items": {"$ref": "#/$defs/event"}
+    },
+    "result": {"$ref": "#/$defs/result"},
+    "provenance": {"$ref": "#/$defs/provenance"},
+    "signature": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["algorithm", "key_id", "signature_b64"],
+      "properties": {
+        "algorithm": {"const": "ed25519"},
+        "key_id": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$"},
+        "signature_b64": {"type": "string", "pattern": "^[A-Za-z0-9+/]+={0,2}$", "minLength": 86, "maxLength": 88}
+      }
+    }
+  },
+  "$defs": {
+    "hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "identity": {
+      "type": "object", "additionalProperties": false,
+      "required": ["algorithm", "canonical_json_sha256", "inputs"],
+      "properties": {
+        "algorithm": {"const": "sha256(canonical-json(inputs))"},
+        "canonical_json_sha256": {"$ref": "#/$defs/hash"},
+        "inputs": {"type": "object", "required": ["repo", "commit", "harness", "model", "task_id", "hardware"]}
+      }
+    },
+    "subject": {
+      "type": "object", "additionalProperties": false,
+      "required": ["repo", "commit", "harness", "runtime", "model", "hardware"],
+      "properties": {
+        "repo": {"type": "string"}, "commit": {"type": "string", "pattern": "^[a-f0-9]{7,64}$"},
+        "harness": {"type": "string"}, "runtime": {"type": "string"}, "model": {"type": "string"},
+        "provider": {"type": "string"}, "hardware": {"type": "string"},
+        "network": {"type": "object", "additionalProperties": false, "required": ["mode", "egress_policy"], "properties": {"mode": {"enum": ["offline", "restricted", "open"]}, "egress_policy": {"type": "string"}}}
+      }
+    },
+    "lease": {"type": "object", "additionalProperties": false, "required": ["lease_id", "owner", "ttl_seconds", "heartbeat_interval_seconds"], "properties": {"lease_id": {"type": "string"}, "owner": {"type": "string"}, "ttl_seconds": {"type": "number", "exclusiveMinimum": 0}, "heartbeat_interval_seconds": {"type": "number", "exclusiveMinimum": 0}}},
+    "task_manifest": {"type": "object", "additionalProperties": false, "required": ["task_id", "input_sha256", "timeout_seconds", "assertions", "judge"], "properties": {"task_id": {"type": "string"}, "input_sha256": {"$ref": "#/$defs/hash"}, "timeout_seconds": {"type": "number", "exclusiveMinimum": 0}, "assertions": {"type": "array", "minItems": 1}, "judge": {"type": "object", "additionalProperties": false, "required": ["name", "version"], "properties": {"name": {"type": "string"}, "version": {"type": "string"}}}}},
+    "event": {"type": "object", "additionalProperties": false, "required": ["event_id", "seq", "ts", "type", "payload_sha256", "causality", "details"], "properties": {"event_id": {"type": "string", "pattern": "^evt_[a-f0-9]{64}$"}, "seq": {"type": "integer", "minimum": 0}, "ts": {"type": "string", "format": "date-time"}, "type": {"enum": ["run_started", "tool_call", "tool_result", "compaction", "checkpoint", "run_finished"]}, "payload_sha256": {"$ref": "#/$defs/hash"}, "checkpoint_id": {"type": "string"}, "causality": {"type": "object", "additionalProperties": false, "required": ["tenant_id", "session_id", "run_id", "attempt_id"], "properties": {"tenant_id": {"type": "string"}, "session_id": {"type": "string"}, "run_id": {"type": "string"}, "attempt_id": {"type": "string"}}}, "details": {"type": "object"}}},
+    "result": {"type": "object", "additionalProperties": false, "required": ["status", "outcome_sha256", "replay_hash", "failure_class", "artifacts"], "properties": {"status": {"enum": ["passed", "failed", "timeout", "cancelled"]}, "outcome_sha256": {"$ref": "#/$defs/hash"}, "replay_hash": {"$ref": "#/$defs/hash"}, "failure_class": {"enum": ["none", "assertion", "tool", "policy", "lease", "timeout", "infra", "model", "unknown"]}, "artifacts": {"type": "array", "items": {"type": "object", "additionalProperties": false, "required": ["kind", "uri", "sha256"], "properties": {"kind": {"type": "string"}, "uri": {"type": "string"}, "sha256": {"$ref": "#/$defs/hash"}}}}}},
+    "provenance": {"type": "object", "additionalProperties": false, "required": ["collector", "collected_at", "source_hashes"], "properties": {"collector": {"type": "string"}, "collected_at": {"type": "string", "format": "date-time"}, "source_hashes": {"type": "object", "additionalProperties": {"$ref": "#/$defs/hash"}}}}
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "timestamp": "2026-07-22T08:44:03.722053+00:00",
+  "provider": "pheno_serve",
+  "models": {
+    "local/qwen35-08b": {
+      "label": "qwen35-08b-local",
+      "direct": {
+        "ok": false,
+        "status": 404,
+        "error": "{\"error\":{\"message\":\"Model not found, inaccessible, and/or not deployed\",\"param\":\"model\",\"code\":\"NOT_FOUND\",\"type\":\"error\"},\"request_id\":\"chatcmpl-6f9d6eb8f4f94a41937c1478deaf59a1\"}"
+      },
+      "route": null
+    },
+    "local/lfm25-8b-a1b": {
+      "label": "lfm25-8b-a1b-local",
+      "direct": {
+        "ok": false,
+        "status": 404,
+        "error": "{\"error\":{\"message\":\"Model not found, inaccessible, and/or not deployed\",\"param\":\"model\",\"code\":\"NOT_FOUND\",\"type\":\"error\"},\"request_id\":\"chatcmpl-65563a2c6dea42239fd7d1d4489765fe\"}"
+      },
+      "route": null
+    },
+    "local/ornith-8b": {
+      "label": "ornith-8b-local",
+      "direct": {
+        "ok": false,
+        "status": 404,
+        "error": "{\"error\":{\"message\":\"Model not found, inaccessible, and/or not deployed\",\"param\":\"model\",\"code\":\"NOT_FOUND\",\"type\":\"error\"},\"request_id\":\"chatcmpl-04eca447a11a416facf511e2595a575d\"}"
+      },
+      "route": null
+    }
+  }
+}

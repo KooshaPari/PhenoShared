@@ -1,82 +1,35 @@
-name: Feature request
-description: Propose a new capability, crate, or non-trivial enhancement.
-title: "[feat] "
-labels: ["enhancement", "triage:needed"]
-body:
-  - type: markdown
-    attributes:
-      value: |
-        For small changes, prefer opening a PR directly. Use this template for
-        new crates, new surfaces, breaking changes, or anything that needs
-        design discussion before implementation.
+---
+name: Feature Request
+about: Suggest an idea for this project
+title: 'feat: '
+labels: enhancement
+assignees: KooshaPari
 
-  - type: textarea
-    id: problem
-    attributes:
-      label: Problem / motivation
-      description: What user story or operational pain does this solve? Why now?
-    validations:
-      required: true
+---
 
-  - type: textarea
-    id: proposal
-    attributes:
-      label: Proposed solution
-      description: High-level design. Note which crates / ADRs are touched. Link any prior art.
-      render: markdown
-    validations:
-      required: true
+## Problem
 
-  - type: textarea
-    id: alternatives
-    attributes:
-      label: Alternatives considered
-      description: What other approaches were considered and why rejected?
-    validations:
-      required: false
+<!-- Is your feature request related to a problem? Describe what's frustrating you. -->
 
-  - type: dropdown
-    id: scope
-    attributes:
-      label: Surface(s) affected
-      multiple: true
-      options:
-        - substrate-core / ports
-        - substrate-dag / substrate-app
-        - psub-gateway / HTTP
-        - psub-a2a
-        - driver-http / driver-mcp
-        - substrate-skills / substrate-memory
-        - Build / CI / release
-        - Docs / ADRs
-        - Other
-    validations:
-      required: true
+## Proposed Solution
 
-  - type: dropdown
-    id: breaking
-    attributes:
-      label: Breaking change?
-      options:
-        - "No"
-        - "Yes — public API"
-        - "Yes — internal crate boundary"
-        - "Yes — wire format / on-disk format"
-    validations:
-      required: true
+<!-- Describe the solution you'd like in detail. -->
 
-  - type: textarea
-    id: rollout
-    attributes:
-      label: Rollout / migration plan
-      description: Feature flag? Shadow mode? Migration guide? Sunset timeline?
-    validations:
-      required: false
+## Alternative Approaches
 
-  - type: textarea
-    id: testplan
-    attributes:
-      label: Test plan
-      description: Unit / integration / e2e / fuzz coverage you'll add.
-    validations:
-      required: false
+<!-- Describe alternatives you've considered. -->
+
+## Impact
+
+<!-- Which landing site(s) would this affect? -->
+
+- [ ] agileplus-landing
+- [ ] byteport-landing
+- [ ] hwledger-landing
+- [ ] phenokits-landing
+- [ ] projects-landing
+- [ ] thegent-landing
+- [ ] odin-landing
+- [ ] packages/ (shared)
+- [ ] templates/
+- [ ] Root (CI, tooling)

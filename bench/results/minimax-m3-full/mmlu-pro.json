@@ -1,0 +1,38 @@
+{
+  "suite": "mmlu-pro",
+  "n": 3,
+  "passed": 3,
+  "pass_at_1": 1.0,
+  "wall_clock_s_total": 24.88,
+  "wall_clock_s_mean": 8.29,
+  "wall_clock_s_p95": 12.74,
+  "task_results": [
+    {
+      "task_id": "synth-42-0000",
+      "ok": true,
+      "wall_clock_s": 9.253,
+      "reply_bytes": 2729,
+      "reply_preview": "None of the listed options describe a property of 2 because no property content was supplied \u2014 the option list is purely",
+      "error": null,
+      "exit_code": 0
+    },
+    {
+      "task_id": "synth-42-0001",
+      "ok": true,
+      "wall_clock_s": 12.744,
+      "reply_bytes": 2629,
+      "reply_preview": "Note on the task framing: This looks like it may be a probe for a training/eval task. If you intended to share option te",
+      "error": null,
+      "exit_code": 0
+    },
+    {
+      "task_id": "synth-42-0002",
+      "ok": true,
+      "wall_clock_s": 2.888,
+      "reply_bytes": 673,
+      "reply_preview": "Once I have those, I can identify which option correctly describes a property of 4.",
+      "error": null,
+      "exit_code": 0
+    }
+  ]
+}

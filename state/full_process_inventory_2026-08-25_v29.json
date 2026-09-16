@@ -1,0 +1,3747 @@
+{
+  "schema_version": "pheno.process-inventory.v3",
+  "as_of_utc": "2026-08-26T05:22:44Z",
+  "hostname": "kooshapari-desk",
+  "git_head": "e7e54025f4a73c482793f05ced43a7365992b187",
+  "git_branch": "main",
+  "session_under_resume": {
+    "codex_thread_id": "019f6249-d74c-7540-885f-588c3d51ac3a",
+    "user_directive": "proc (Aug 25, 2026) v29",
+    "pheno_harness_branch": "main",
+    "pheno_harness_head": "e7e5402"
+  },
+  "host_gpu_state": [
+    {
+      "index": 0,
+      "name": "NVIDIA GeForce RTX 3090 Ti",
+      "memory_used_mib": 9574,
+      "memory_total_mib": 24564,
+      "utilization_gpu_pct": 4
+    }
+  ],
+  "wsl_status": "WSL RUNNING ...  \\n SERVICE_NAME: WslService  \\n         TYPE               : 10  WIN32_OWN_PROCESS   \\n         STATE              : 4  RUNNING  \\n                                 (STOPPABLE, NOT_PAUSABLE, IGNORES_SHUTDOWN) \\n         WIN32_EXIT_CODE    : 0  (0x0) \\n         SERVICE_EXIT_CODE  : 0  (0x0) \\n         CHECKPOINT         : 0x0 \\n         WAIT_HINT          : 0x0 \\n ",
+  "windows_process_count": 430,
+  "windows_processes": [
+    {
+      "pid": 0,
+      "name": "System Idle Process",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 4,
+      "name": "System",
+      "rss_mb": 16.7,
+      "cmd": ""
+    },
+    {
+      "pid": 240,
+      "name": "Secure System.exe",
+      "rss_mb": 196.1,
+      "cmd": ""
+    },
+    {
+      "pid": 300,
+      "name": "Registry",
+      "rss_mb": 80.5,
+      "cmd": ""
+    },
+    {
+      "pid": 904,
+      "name": "smss.exe",
+      "rss_mb": 0.4,
+      "cmd": ""
+    },
+    {
+      "pid": 1116,
+      "name": "svchost.exe",
+      "rss_mb": 3.8,
+      "cmd": ""
+    },
+    {
+      "pid": 1204,
+      "name": "svchost.exe",
+      "rss_mb": 3.4,
+      "cmd": ""
+    },
+    {
+      "pid": 1384,
+      "name": "conhost.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 1396,
+      "name": "csrss.exe",
+      "rss_mb": 2.8,
+      "cmd": ""
+    },
+    {
+      "pid": 1480,
+      "name": "wininit.exe",
+      "rss_mb": 3.4,
+      "cmd": ""
+    },
+    {
+      "pid": 1488,
+      "name": "csrss.exe",
+      "rss_mb": 4.6,
+      "cmd": ""
+    },
+    {
+      "pid": 1556,
+      "name": "svchost.exe",
+      "rss_mb": 0.4,
+      "cmd": ""
+    },
+    {
+      "pid": 1568,
+      "name": "services.exe",
+      "rss_mb": 9.2,
+      "cmd": ""
+    },
+    {
+      "pid": 1596,
+      "name": "winlogon.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 1688,
+      "name": "LsaIso.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 1696,
+      "name": "lsass.exe",
+      "rss_mb": 21.6,
+      "cmd": ""
+    },
+    {
+      "pid": 1852,
+      "name": "svchost.exe",
+      "rss_mb": 2.9,
+      "cmd": ""
+    },
+    {
+      "pid": 1888,
+      "name": "fontdrvhost.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 1896,
+      "name": "fontdrvhost.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 1944,
+      "name": "WUDFHost.exe",
+      "rss_mb": 0.4,
+      "cmd": ""
+    },
+    {
+      "pid": 1952,
+      "name": "svchost.exe",
+      "rss_mb": 9.6,
+      "cmd": ""
+    },
+    {
+      "pid": 2120,
+      "name": "svchost.exe",
+      "rss_mb": 0.5,
+      "cmd": ""
+    },
+    {
+      "pid": 2156,
+      "name": "dwm.exe",
+      "rss_mb": 41.2,
+      "cmd": ""
+    },
+    {
+      "pid": 2196,
+      "name": "svchost.exe",
+      "rss_mb": 3.1,
+      "cmd": ""
+    },
+    {
+      "pid": 2204,
+      "name": "WUDFHost.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 2412,
+      "name": "svchost.exe",
+      "rss_mb": 9.6,
+      "cmd": ""
+    },
+    {
+      "pid": 2420,
+      "name": "svchost.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 2464,
+      "name": "svchost.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 2472,
+      "name": "svchost.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 2496,
+      "name": "svchost.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 2512,
+      "name": "svchost.exe",
+      "rss_mb": 0.5,
+      "cmd": ""
+    },
+    {
+      "pid": 2740,
+      "name": "svchost.exe",
+      "rss_mb": 0.5,
+      "cmd": ""
+    },
+    {
+      "pid": 2748,
+      "name": "svchost.exe",
+      "rss_mb": 0.5,
+      "cmd": ""
+    },
+    {
+      "pid": 2756,
+      "name": "svchost.exe",
+      "rss_mb": 1.6,
+      "cmd": ""
+    },
+    {
+      "pid": 2864,
+      "name": "svchost.exe",
+      "rss_mb": 2.5,
+      "cmd": ""
+    },
+    {
+      "pid": 2940,
+      "name": "svchost.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 2948,
+      "name": "svchost.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 2996,
+      "name": "svchost.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 3004,
+      "name": "svchost.exe",
+      "rss_mb": 0.5,
+      "cmd": ""
+    },
+    {
+      "pid": 3040,
+      "name": "svchost.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 3152,
+      "name": "WUDFHost.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 3176,
+      "name": "svchost.exe",
+      "rss_mb": 0.5,
+      "cmd": ""
+    },
+    {
+      "pid": 3208,
+      "name": "svchost.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 3264,
+      "name": "svchost.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 3368,
+      "name": "svchost.exe",
+      "rss_mb": 4.7,
+      "cmd": ""
+    },
+    {
+      "pid": 3416,
+      "name": "svchost.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 3492,
+      "name": "svchost.exe",
+      "rss_mb": 0.5,
+      "cmd": ""
+    },
+    {
+      "pid": 3616,
+      "name": "svchost.exe",
+      "rss_mb": 0.5,
+      "cmd": ""
+    },
+    {
+      "pid": 3704,
+      "name": "svchost.exe",
+      "rss_mb": 1.6,
+      "cmd": ""
+    },
+    {
+      "pid": 3744,
+      "name": "RuntimeBroker.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 3752,
+      "name": "svchost.exe",
+      "rss_mb": 0.3,
+      "cmd": ""
+    },
+    {
+      "pid": 3780,
+      "name": "vmms.exe",
+      "rss_mb": 2.1,
+      "cmd": ""
+    },
+    {
+      "pid": 3820,
+      "name": "svchost.exe",
+      "rss_mb": 0.5,
+      "cmd": ""
+    },
+    {
+      "pid": 3892,
+      "name": "NVDisplay.Container.exe",
+      "rss_mb": 6.8,
+      "cmd": ""
+    },
+    {
+      "pid": 3916,
+      "name": "taskhostw.exe",
+      "rss_mb": 0.8,
+      "cmd": ""
+    },
+    {
+      "pid": 3924,
+      "name": "audiodg.exe",
+      "rss_mb": 8.0,
+      "cmd": ""
+    },
+    {
+      "pid": 3944,
+      "name": "svchost.exe",
+      "rss_mb": 0.5,
+      "cmd": ""
+    },
+    {
+      "pid": 3984,
+      "name": "svchost.exe",
+      "rss_mb": 3.5,
+      "cmd": ""
+    },
+    {
+      "pid": 4032,
+      "name": "svchost.exe",
+      "rss_mb": 0.9,
+      "cmd": ""
+    },
+    {
+      "pid": 4040,
+      "name": "svchost.exe",
+      "rss_mb": 1.2,
+      "cmd": ""
+    },
+    {
+      "pid": 4048,
+      "name": "svchost.exe",
+      "rss_mb": 0.5,
+      "cmd": ""
+    },
+    {
+      "pid": 4104,
+      "name": "svchost.exe",
+      "rss_mb": 0.5,
+      "cmd": ""
+    },
+    {
+      "pid": 4168,
+      "name": "Memory Compression.exe",
+      "rss_mb": -958.0,
+      "cmd": ""
+    },
+    {
+      "pid": 4196,
+      "name": "svchost.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 4212,
+      "name": "dasHost.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 4360,
+      "name": "svchost.exe",
+      "rss_mb": 8.5,
+      "cmd": ""
+    },
+    {
+      "pid": 4400,
+      "name": "svchost.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 4476,
+      "name": "svchost.exe",
+      "rss_mb": 1.3,
+      "cmd": ""
+    },
+    {
+      "pid": 4560,
+      "name": "svchost.exe",
+      "rss_mb": 1.1,
+      "cmd": ""
+    },
+    {
+      "pid": 4764,
+      "name": "svchost.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 4768,
+      "name": "svchost.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 4776,
+      "name": "svchost.exe",
+      "rss_mb": 0.5,
+      "cmd": ""
+    },
+    {
+      "pid": 4784,
+      "name": "vpnagent.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 5016,
+      "name": "svchost.exe",
+      "rss_mb": 1.0,
+      "cmd": ""
+    },
+    {
+      "pid": 5136,
+      "name": "svchost.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 5188,
+      "name": "SearchHost.exe",
+      "rss_mb": 2.7,
+      "cmd": ""
+    },
+    {
+      "pid": 5256,
+      "name": "svchost.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 5344,
+      "name": "svchost.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 5396,
+      "name": "LogiRegistryService.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 5448,
+      "name": "svchost.exe",
+      "rss_mb": 3.2,
+      "cmd": ""
+    },
+    {
+      "pid": 5540,
+      "name": "svchost.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 5684,
+      "name": "spoolsv.exe",
+      "rss_mb": 0.1,
+      "cmd": ""
+    },
+    {
+      "pid": 5704,
+      "name": "svchost.exe",
+      "rss_mb": 0.2,
+      "cmd": ""
+    },
+    {
+      "pid": 5768,
+      "name": "svchost.exe",
+      "rss_mb": 3.6,
+      "cmd": ""
+    },
+    {
+      "pid": 5780,
+      "name": "svchost.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 5788,
+      "name": "NZXT CAM.exe",
+      "rss_mb": 1.7,
+      "cmd": ""
+    },
+    {
+      "pid": 5808,
+      "name": "svchost.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 5816,
+      "name": "svchost.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 5832,
+      "name": "nvcontainer.exe",
+      "rss_mb": 15.1,
+      "cmd": ""
+    },
+    {
+      "pid": 5836,
+      "name": "svchost.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 5848,
+      "name": "GTSDataSync.exe",
+      "rss_mb": 0.7,
+      "cmd": ""
+    },
+    {
+      "pid": 5912,
+      "name": "svchost.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 5952,
+      "name": "GameInputRedistService.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 5956,
+      "name": "MigrationService.exe",
+      "rss_mb": 0.1,
+      "cmd": ""
+    },
+    {
+      "pid": 6044,
+      "name": "wlanext.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 6060,
+      "name": "mDNSResponder.exe",
+      "rss_mb": 0.8,
+      "cmd": ""
+    },
+    {
+      "pid": 6068,
+      "name": "deskflow-daemon.exe",
+      "rss_mb": 0.3,
+      "cmd": ""
+    },
+    {
+      "pid": 6080,
+      "name": "barrierd.exe",
+      "rss_mb": 3.4,
+      "cmd": ""
+    },
+    {
+      "pid": 6088,
+      "name": "GameInputRedistService.exe",
+      "rss_mb": 1.6,
+      "cmd": ""
+    },
+    {
+      "pid": 6096,
+      "name": "NVDisplay.Container.exe",
+      "rss_mb": 0.6,
+      "cmd": ""
+    },
+    {
+      "pid": 6100,
+      "name": "DtsApo4Service.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 6108,
+      "name": "AdobeUpdateService.exe",
+      "rss_mb": 0.1,
+      "cmd": ""
+    },
+    {
+      "pid": 6116,
+      "name": "service.exe",
+      "rss_mb": 0.2,
+      "cmd": ""
+    },
+    {
+      "pid": 6132,
+      "name": "svchost.exe",
+      "rss_mb": 10.5,
+      "cmd": ""
+    },
+    {
+      "pid": 6140,
+      "name": "IpOverUsbSvc.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 6156,
+      "name": "GooglePlayGamesServices.exe",
+      "rss_mb": 5.7,
+      "cmd": ""
+    },
+    {
+      "pid": 6164,
+      "name": "svchost.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 6192,
+      "name": "logi_lamparray_service.AMD64.exe",
+      "rss_mb": 0.2,
+      "cmd": ""
+    },
+    {
+      "pid": 6200,
+      "name": "EasyTuneEngineService.exe",
+      "rss_mb": 3.9,
+      "cmd": ""
+    },
+    {
+      "pid": 6232,
+      "name": "MpDefenderCoreService.exe",
+      "rss_mb": 14.8,
+      "cmd": ""
+    },
+    {
+      "pid": 6240,
+      "name": "svchost.exe",
+      "rss_mb": 1.3,
+      "cmd": ""
+    },
+    {
+      "pid": 6248,
+      "name": "JetBrains.Etw.Collector.Host.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 6300,
+      "name": "AdjustService.exe",
+      "rss_mb": 3.6,
+      "cmd": ""
+    },
+    {
+      "pid": 6316,
+      "name": "mullvad-daemon.exe",
+      "rss_mb": 0.3,
+      "cmd": ""
+    },
+    {
+      "pid": 6356,
+      "name": "svchost.exe",
+      "rss_mb": 0.4,
+      "cmd": ""
+    },
+    {
+      "pid": 6360,
+      "name": "sihost.exe",
+      "rss_mb": 1.3,
+      "cmd": ""
+    },
+    {
+      "pid": 6400,
+      "name": "svchost.exe",
+      "rss_mb": 0.4,
+      "cmd": ""
+    },
+    {
+      "pid": 6472,
+      "name": "NvBroadcast.Container.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 6480,
+      "name": "nvcontainer.exe",
+      "rss_mb": 0.3,
+      "cmd": ""
+    },
+    {
+      "pid": 6576,
+      "name": "vmcompute.exe",
+      "rss_mb": 1.2,
+      "cmd": ""
+    },
+    {
+      "pid": 6584,
+      "name": "nvcontainer.exe",
+      "rss_mb": 1.9,
+      "cmd": ""
+    },
+    {
+      "pid": 6588,
+      "name": "MicrosoftStartFeedProvider.exe",
+      "rss_mb": 0.2,
+      "cmd": ""
+    },
+    {
+      "pid": 6596,
+      "name": "PreSonusHardwareAccessService.exe",
+      "rss_mb": 4.7,
+      "cmd": ""
+    },
+    {
+      "pid": 6648,
+      "name": "TCPSVCS.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 6656,
+      "name": "sunshinesvc.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 6664,
+      "name": "sqlwriter.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 6708,
+      "name": "sshd.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 6800,
+      "name": "svchost.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 6816,
+      "name": "svchost.exe",
+      "rss_mb": 0.2,
+      "cmd": ""
+    },
+    {
+      "pid": 6824,
+      "name": "svchost.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 6852,
+      "name": "svchost.exe",
+      "rss_mb": 0.2,
+      "cmd": ""
+    },
+    {
+      "pid": 6860,
+      "name": "MsMpEng.exe",
+      "rss_mb": 563.3,
+      "cmd": ""
+    },
+    {
+      "pid": 6876,
+      "name": "vmmemCmZygote.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 6936,
+      "name": "wslservice.exe",
+      "rss_mb": 5.6,
+      "cmd": ""
+    },
+    {
+      "pid": 6972,
+      "name": "GigabyteUpdateService.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 7204,
+      "name": "NVIDIA Broadcast UI.exe",
+      "rss_mb": 0.4,
+      "cmd": ""
+    },
+    {
+      "pid": 7300,
+      "name": "RtkAudUService64.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 7576,
+      "name": "NvBroadcast.Container.exe",
+      "rss_mb": 0.3,
+      "cmd": ""
+    },
+    {
+      "pid": 7604,
+      "name": "svchost.exe",
+      "rss_mb": 2.1,
+      "cmd": ""
+    },
+    {
+      "pid": 7680,
+      "name": "msedgewebview2.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 7812,
+      "name": "QuickCPU.exe",
+      "rss_mb": 11.5,
+      "cmd": ""
+    },
+    {
+      "pid": 7932,
+      "name": "codex.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 8400,
+      "name": "svchost.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 9340,
+      "name": "svchost.exe",
+      "rss_mb": 0.2,
+      "cmd": ""
+    },
+    {
+      "pid": 9520,
+      "name": "svchost.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 9876,
+      "name": "nvcontainer.exe",
+      "rss_mb": 0.1,
+      "cmd": ""
+    },
+    {
+      "pid": 9932,
+      "name": "svchost.exe",
+      "rss_mb": 0.5,
+      "cmd": ""
+    },
+    {
+      "pid": 10244,
+      "name": "pwsh.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 10272,
+      "name": "OpenConsole.exe",
+      "rss_mb": 0.1,
+      "cmd": ""
+    },
+    {
+      "pid": 10300,
+      "name": "NZXT CAM.exe",
+      "rss_mb": 7.6,
+      "cmd": ""
+    },
+    {
+      "pid": 10308,
+      "name": "WidgetBoard.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 10572,
+      "name": "svchost.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 10956,
+      "name": "crashpad_handler.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 11132,
+      "name": "svchost.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 11468,
+      "name": "cam_helper.exe",
+      "rss_mb": 15.4,
+      "cmd": ""
+    },
+    {
+      "pid": 11504,
+      "name": "svchost.exe",
+      "rss_mb": 0.9,
+      "cmd": ""
+    },
+    {
+      "pid": 11508,
+      "name": "sunshine.exe",
+      "rss_mb": 1.3,
+      "cmd": ""
+    },
+    {
+      "pid": 11516,
+      "name": "conhost.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 11728,
+      "name": "svchost.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 11808,
+      "name": "svchost.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 11828,
+      "name": "svchost.exe",
+      "rss_mb": 2.8,
+      "cmd": ""
+    },
+    {
+      "pid": 11948,
+      "name": "svchost.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 11964,
+      "name": "svchost.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 11968,
+      "name": "svchost.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 12132,
+      "name": "gamingservices.exe",
+      "rss_mb": 3.1,
+      "cmd": ""
+    },
+    {
+      "pid": 12140,
+      "name": "gamingservicesnet.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 12544,
+      "name": "AggregatorHost.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 12828,
+      "name": "svchost.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 12864,
+      "name": "svchost.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 13072,
+      "name": "svchost.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 13400,
+      "name": "svchost.exe",
+      "rss_mb": 3.2,
+      "cmd": ""
+    },
+    {
+      "pid": 13472,
+      "name": "crashpad_handler.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 13648,
+      "name": "svchost.exe",
+      "rss_mb": 6.4,
+      "cmd": ""
+    },
+    {
+      "pid": 14052,
+      "name": "svchost.exe",
+      "rss_mb": 0.7,
+      "cmd": ""
+    },
+    {
+      "pid": 14088,
+      "name": "NgcIso.exe",
+      "rss_mb": 0.9,
+      "cmd": ""
+    },
+    {
+      "pid": 14228,
+      "name": "NZXT CAM.exe",
+      "rss_mb": 21.1,
+      "cmd": ""
+    },
+    {
+      "pid": 14292,
+      "name": "svchost.exe",
+      "rss_mb": 6.5,
+      "cmd": ""
+    },
+    {
+      "pid": 14408,
+      "name": "NisSrv.exe",
+      "rss_mb": 6.8,
+      "cmd": ""
+    },
+    {
+      "pid": 14600,
+      "name": "forge.exe",
+      "rss_mb": 1.3,
+      "cmd": ""
+    },
+    {
+      "pid": 14688,
+      "name": "Skyve.Service.exe",
+      "rss_mb": 20.5,
+      "cmd": ""
+    },
+    {
+      "pid": 15020,
+      "name": "TextInputHost.exe",
+      "rss_mb": 4.7,
+      "cmd": ""
+    },
+    {
+      "pid": 15224,
+      "name": "GameInputSvc.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 15252,
+      "name": "GameInputSvc.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 15420,
+      "name": "dllhost.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 15804,
+      "name": "SearchIndexer.exe",
+      "rss_mb": 15.0,
+      "cmd": ""
+    },
+    {
+      "pid": 15856,
+      "name": "forge.exe",
+      "rss_mb": 1.1,
+      "cmd": ""
+    },
+    {
+      "pid": 16396,
+      "name": "xgamehelper.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 16580,
+      "name": "explorer.exe",
+      "rss_mb": 1.8,
+      "cmd": ""
+    },
+    {
+      "pid": 16608,
+      "name": "ShellHost.exe",
+      "rss_mb": 0.1,
+      "cmd": ""
+    },
+    {
+      "pid": 16912,
+      "name": "CrossDeviceResume.exe",
+      "rss_mb": 0.1,
+      "cmd": ""
+    },
+    {
+      "pid": 17064,
+      "name": "ShellExperienceHost.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 17668,
+      "name": "NVIDIA Overlay.exe",
+      "rss_mb": 26.5,
+      "cmd": ""
+    },
+    {
+      "pid": 18416,
+      "name": "svchost.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 18636,
+      "name": "pwsh.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 18688,
+      "name": "msedgewebview2.exe",
+      "rss_mb": 5.1,
+      "cmd": ""
+    },
+    {
+      "pid": 18792,
+      "name": "msedgewebview2.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 18808,
+      "name": "msedgewebview2.exe",
+      "rss_mb": 2.5,
+      "cmd": ""
+    },
+    {
+      "pid": 19168,
+      "name": "msedgewebview2.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 19480,
+      "name": "msedgewebview2.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 19872,
+      "name": "ApCent.exe",
+      "rss_mb": 11.6,
+      "cmd": ""
+    },
+    {
+      "pid": 20072,
+      "name": "sensord.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 20372,
+      "name": "WmiPrvSE.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 20552,
+      "name": "ChsIME.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 20820,
+      "name": "SecurityHealthService.exe",
+      "rss_mb": 4.2,
+      "cmd": ""
+    },
+    {
+      "pid": 20912,
+      "name": "WindowsTerminal.exe",
+      "rss_mb": 45.7,
+      "cmd": ""
+    },
+    {
+      "pid": 20964,
+      "name": "ctfmon.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 21124,
+      "name": "svchost.exe",
+      "rss_mb": 0.5,
+      "cmd": ""
+    },
+    {
+      "pid": 21208,
+      "name": "conhost.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 21308,
+      "name": "NVIDIA Broadcast.exe",
+      "rss_mb": 1.9,
+      "cmd": ""
+    },
+    {
+      "pid": 21440,
+      "name": "NZXT CAM.exe",
+      "rss_mb": 114.8,
+      "cmd": ""
+    },
+    {
+      "pid": 21476,
+      "name": "msedge.exe",
+      "rss_mb": 0.2,
+      "cmd": ""
+    },
+    {
+      "pid": 21696,
+      "name": "conhost.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 21920,
+      "name": "svchost.exe",
+      "rss_mb": 2.1,
+      "cmd": ""
+    },
+    {
+      "pid": 22048,
+      "name": "NZXT CAM.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 22192,
+      "name": "miss.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 22396,
+      "name": "pwsh.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 22960,
+      "name": "msedge.exe",
+      "rss_mb": 2.3,
+      "cmd": ""
+    },
+    {
+      "pid": 23096,
+      "name": "msedge.exe",
+      "rss_mb": 5.5,
+      "cmd": ""
+    },
+    {
+      "pid": 23128,
+      "name": "Focusrite Notifier.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 23136,
+      "name": "droid.exe",
+      "rss_mb": 3.9,
+      "cmd": ""
+    },
+    {
+      "pid": 23256,
+      "name": "cam_helper.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 23316,
+      "name": "GraphicsCardEngine.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 23832,
+      "name": "WidgetService.exe",
+      "rss_mb": 0.5,
+      "cmd": ""
+    },
+    {
+      "pid": 23928,
+      "name": "msedge.exe",
+      "rss_mb": 93.2,
+      "cmd": ""
+    },
+    {
+      "pid": 24456,
+      "name": "pythonw.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 24480,
+      "name": "steamwebhelper.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 24484,
+      "name": "pwsh.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 25604,
+      "name": "node.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 25832,
+      "name": "SRService.exe",
+      "rss_mb": 0.6,
+      "cmd": ""
+    },
+    {
+      "pid": 26208,
+      "name": "OpenConsole.exe",
+      "rss_mb": 0.5,
+      "cmd": ""
+    },
+    {
+      "pid": 26400,
+      "name": "msedge.exe",
+      "rss_mb": 3.2,
+      "cmd": ""
+    },
+    {
+      "pid": 26524,
+      "name": "codex-code-mode-host.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 26856,
+      "name": "OpenConsole.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 28528,
+      "name": "SRUpdateService.exe",
+      "rss_mb": 0.1,
+      "cmd": ""
+    },
+    {
+      "pid": 29348,
+      "name": "dllhost.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 29508,
+      "name": "droid.exe",
+      "rss_mb": 25.6,
+      "cmd": ""
+    },
+    {
+      "pid": 29804,
+      "name": "WindowsTerminal.exe",
+      "rss_mb": 11.0,
+      "cmd": ""
+    },
+    {
+      "pid": 29976,
+      "name": "svchost.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 30264,
+      "name": "OpenConsole.exe",
+      "rss_mb": 0.6,
+      "cmd": ""
+    },
+    {
+      "pid": 30320,
+      "name": "pwsh.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 30368,
+      "name": "forge.exe",
+      "rss_mb": 21.7,
+      "cmd": ""
+    },
+    {
+      "pid": 31448,
+      "name": "node.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 32504,
+      "name": "AppActions.exe",
+      "rss_mb": 6.3,
+      "cmd": ""
+    },
+    {
+      "pid": 33388,
+      "name": "steamwebhelper.exe",
+      "rss_mb": 4.7,
+      "cmd": ""
+    },
+    {
+      "pid": 35224,
+      "name": "pwsh.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 35584,
+      "name": "codex.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 38532,
+      "name": "msedge.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 40056,
+      "name": "taskhostw.exe",
+      "rss_mb": 2.6,
+      "cmd": ""
+    },
+    {
+      "pid": 40064,
+      "name": "conhost.exe",
+      "rss_mb": 0.6,
+      "cmd": ""
+    },
+    {
+      "pid": 40752,
+      "name": "msedge.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 41788,
+      "name": "msedge.exe",
+      "rss_mb": 1.1,
+      "cmd": ""
+    },
+    {
+      "pid": 41972,
+      "name": "svchost.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 42008,
+      "name": "XboxPcAppFT.exe",
+      "rss_mb": 2.3,
+      "cmd": ""
+    },
+    {
+      "pid": 42892,
+      "name": "NVIDIA Overlay.exe",
+      "rss_mb": 17.6,
+      "cmd": ""
+    },
+    {
+      "pid": 43448,
+      "name": "svchost.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 43884,
+      "name": "WUDFHost.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 45844,
+      "name": "VSSVC.exe",
+      "rss_mb": 0.1,
+      "cmd": ""
+    },
+    {
+      "pid": 46428,
+      "name": "svchost.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 48780,
+      "name": "GSv6Fwd.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 49212,
+      "name": "pwsh.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 51436,
+      "name": "svchost.exe",
+      "rss_mb": 0.5,
+      "cmd": ""
+    },
+    {
+      "pid": 51556,
+      "name": "svchost.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 73324,
+      "name": "OpenConsole.exe",
+      "rss_mb": 0.6,
+      "cmd": ""
+    },
+    {
+      "pid": 73388,
+      "name": "AppVShNotify.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 78992,
+      "name": "svchost.exe",
+      "rss_mb": 3.2,
+      "cmd": ""
+    },
+    {
+      "pid": 79076,
+      "name": "pwsh.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 88632,
+      "name": "OfficeClickToRun.exe",
+      "rss_mb": 1.4,
+      "cmd": ""
+    },
+    {
+      "pid": 90528,
+      "name": "NVIDIA Overlay.exe",
+      "rss_mb": 14.7,
+      "cmd": ""
+    },
+    {
+      "pid": 92644,
+      "name": "NVIDIA Overlay.exe",
+      "rss_mb": 2.8,
+      "cmd": ""
+    },
+    {
+      "pid": 93772,
+      "name": "msedge.exe",
+      "rss_mb": 0.9,
+      "cmd": ""
+    },
+    {
+      "pid": 95372,
+      "name": "NVIDIA Overlay.exe",
+      "rss_mb": 2.8,
+      "cmd": ""
+    },
+    {
+      "pid": 95608,
+      "name": "UserOOBEBroker.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 96012,
+      "name": "StartMenuExperienceHost.exe",
+      "rss_mb": 0.4,
+      "cmd": ""
+    },
+    {
+      "pid": 97740,
+      "name": "OpenConsole.exe",
+      "rss_mb": 0.1,
+      "cmd": ""
+    },
+    {
+      "pid": 97948,
+      "name": "droid.exe",
+      "rss_mb": 43.6,
+      "cmd": ""
+    },
+    {
+      "pid": 103844,
+      "name": "nvfvsdksvc_x64.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 105836,
+      "name": "steamwebhelper.exe",
+      "rss_mb": 2.5,
+      "cmd": ""
+    },
+    {
+      "pid": 106384,
+      "name": "OpenConsole.exe",
+      "rss_mb": 1.3,
+      "cmd": ""
+    },
+    {
+      "pid": 107088,
+      "name": "RuntimeBroker.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 107224,
+      "name": "pwsh.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 107620,
+      "name": "droid.exe",
+      "rss_mb": 68.5,
+      "cmd": ""
+    },
+    {
+      "pid": 107720,
+      "name": "pwsh.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 108636,
+      "name": "OpenConsole.exe",
+      "rss_mb": 0.9,
+      "cmd": ""
+    },
+    {
+      "pid": 110128,
+      "name": "msedge.exe",
+      "rss_mb": 0.2,
+      "cmd": ""
+    },
+    {
+      "pid": 110636,
+      "name": "RuntimeBroker.exe",
+      "rss_mb": 0.5,
+      "cmd": ""
+    },
+    {
+      "pid": 110820,
+      "name": "msedge.exe",
+      "rss_mb": 1.2,
+      "cmd": ""
+    },
+    {
+      "pid": 110952,
+      "name": "msedge.exe",
+      "rss_mb": 1.1,
+      "cmd": ""
+    },
+    {
+      "pid": 111636,
+      "name": "msedge.exe",
+      "rss_mb": 0.2,
+      "cmd": ""
+    },
+    {
+      "pid": 111928,
+      "name": "pwsh.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 112548,
+      "name": "codex.exe",
+      "rss_mb": 6.5,
+      "cmd": ""
+    },
+    {
+      "pid": 112916,
+      "name": "pwsh.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 112940,
+      "name": "OpenConsole.exe",
+      "rss_mb": 0.6,
+      "cmd": ""
+    },
+    {
+      "pid": 112972,
+      "name": "droid.exe",
+      "rss_mb": 176.8,
+      "cmd": ""
+    },
+    {
+      "pid": 113040,
+      "name": "pwsh.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 113048,
+      "name": "pwsh.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 113148,
+      "name": "crashpad_handler.dll.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 113256,
+      "name": "pwsh.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 113732,
+      "name": "forge.exe",
+      "rss_mb": 1.3,
+      "cmd": ""
+    },
+    {
+      "pid": 114220,
+      "name": "OpenConsole.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 115264,
+      "name": "OpenConsole.exe",
+      "rss_mb": 0.6,
+      "cmd": ""
+    },
+    {
+      "pid": 115288,
+      "name": "OpenConsole.exe",
+      "rss_mb": 0.7,
+      "cmd": ""
+    },
+    {
+      "pid": 115376,
+      "name": "conhost.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 115804,
+      "name": "OpenConsole.exe",
+      "rss_mb": 0.6,
+      "cmd": ""
+    },
+    {
+      "pid": 115984,
+      "name": "OpenConsole.exe",
+      "rss_mb": 1.2,
+      "cmd": ""
+    },
+    {
+      "pid": 116148,
+      "name": "OpenConsole.exe",
+      "rss_mb": 0.4,
+      "cmd": ""
+    },
+    {
+      "pid": 116160,
+      "name": "node.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 116372,
+      "name": "PresentMon_x64.exe",
+      "rss_mb": 2.3,
+      "cmd": ""
+    },
+    {
+      "pid": 116540,
+      "name": "cmd.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 116556,
+      "name": "forge.exe",
+      "rss_mb": 1.4,
+      "cmd": ""
+    },
+    {
+      "pid": 116728,
+      "name": "pwsh.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 116780,
+      "name": "droid.exe",
+      "rss_mb": 36.4,
+      "cmd": ""
+    },
+    {
+      "pid": 116892,
+      "name": "node.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 117032,
+      "name": "OpenConsole.exe",
+      "rss_mb": 0.6,
+      "cmd": ""
+    },
+    {
+      "pid": 117120,
+      "name": "msedge.exe",
+      "rss_mb": 0.8,
+      "cmd": ""
+    },
+    {
+      "pid": 117264,
+      "name": "pwsh.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 117532,
+      "name": "droid.exe",
+      "rss_mb": 26.9,
+      "cmd": ""
+    },
+    {
+      "pid": 117576,
+      "name": "droid.exe",
+      "rss_mb": 92.0,
+      "cmd": ""
+    },
+    {
+      "pid": 117652,
+      "name": "pwsh.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 117840,
+      "name": "msedge.exe",
+      "rss_mb": 0.2,
+      "cmd": ""
+    },
+    {
+      "pid": 117876,
+      "name": "OpenConsole.exe",
+      "rss_mb": 0.7,
+      "cmd": ""
+    },
+    {
+      "pid": 118312,
+      "name": "pwsh.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 118324,
+      "name": "OpenConsole.exe",
+      "rss_mb": 0.8,
+      "cmd": ""
+    },
+    {
+      "pid": 118396,
+      "name": "forge.exe",
+      "rss_mb": 28.2,
+      "cmd": ""
+    },
+    {
+      "pid": 118504,
+      "name": "pwsh.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 118608,
+      "name": "OpenConsole.exe",
+      "rss_mb": 0.6,
+      "cmd": ""
+    },
+    {
+      "pid": 118736,
+      "name": "OpenConsole.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 118872,
+      "name": "nvrla.exe",
+      "rss_mb": 0.3,
+      "cmd": ""
+    },
+    {
+      "pid": 118924,
+      "name": "forge.exe",
+      "rss_mb": 1.1,
+      "cmd": ""
+    },
+    {
+      "pid": 119048,
+      "name": "forge.exe",
+      "rss_mb": 1.2,
+      "cmd": ""
+    },
+    {
+      "pid": 119080,
+      "name": "OpenConsole.exe",
+      "rss_mb": 1.3,
+      "cmd": ""
+    },
+    {
+      "pid": 119096,
+      "name": "droid.exe",
+      "rss_mb": 70.5,
+      "cmd": ""
+    },
+    {
+      "pid": 119120,
+      "name": "conhost.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 119124,
+      "name": "forge.exe",
+      "rss_mb": 311.4,
+      "cmd": ""
+    },
+    {
+      "pid": 119436,
+      "name": "node.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 120040,
+      "name": "droid.exe",
+      "rss_mb": 28.4,
+      "cmd": ""
+    },
+    {
+      "pid": 120132,
+      "name": "droid.exe",
+      "rss_mb": 80.5,
+      "cmd": ""
+    },
+    {
+      "pid": 120200,
+      "name": "pwsh.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 120304,
+      "name": "pwsh.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 120392,
+      "name": "droid.exe",
+      "rss_mb": 53.7,
+      "cmd": ""
+    },
+    {
+      "pid": 120704,
+      "name": "droid.exe",
+      "rss_mb": 38.6,
+      "cmd": ""
+    },
+    {
+      "pid": 120708,
+      "name": "droid.exe",
+      "rss_mb": 40.3,
+      "cmd": ""
+    },
+    {
+      "pid": 121068,
+      "name": "pwsh.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 121104,
+      "name": "OpenConsole.exe",
+      "rss_mb": 0.9,
+      "cmd": ""
+    },
+    {
+      "pid": 121244,
+      "name": "OpenConsole.exe",
+      "rss_mb": 0.6,
+      "cmd": ""
+    },
+    {
+      "pid": 121352,
+      "name": "droid.exe",
+      "rss_mb": 62.1,
+      "cmd": ""
+    },
+    {
+      "pid": 121592,
+      "name": "esbuild.exe",
+      "rss_mb": 1.5,
+      "cmd": ""
+    },
+    {
+      "pid": 122004,
+      "name": "droid.exe",
+      "rss_mb": 166.7,
+      "cmd": ""
+    },
+    {
+      "pid": 122180,
+      "name": "findstr.exe",
+      "rss_mb": 0.5,
+      "cmd": ""
+    },
+    {
+      "pid": 122768,
+      "name": "droid.exe",
+      "rss_mb": 26.4,
+      "cmd": ""
+    },
+    {
+      "pid": 123084,
+      "name": "node.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 123400,
+      "name": "cmd.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 123504,
+      "name": "codex-code-mode-host.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 123608,
+      "name": "droid.exe",
+      "rss_mb": 40.7,
+      "cmd": ""
+    },
+    {
+      "pid": 123772,
+      "name": "droid.exe",
+      "rss_mb": 34.7,
+      "cmd": ""
+    },
+    {
+      "pid": 123832,
+      "name": "node.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 123992,
+      "name": "OpenConsole.exe",
+      "rss_mb": 0.6,
+      "cmd": ""
+    },
+    {
+      "pid": 124080,
+      "name": "node.exe",
+      "rss_mb": 30.5,
+      "cmd": ""
+    },
+    {
+      "pid": 124196,
+      "name": "droid.exe",
+      "rss_mb": 4.9,
+      "cmd": ""
+    },
+    {
+      "pid": 124260,
+      "name": "pwsh.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 124596,
+      "name": "OpenConsole.exe",
+      "rss_mb": 0.5,
+      "cmd": ""
+    },
+    {
+      "pid": 124760,
+      "name": "droid.exe",
+      "rss_mb": 9.9,
+      "cmd": ""
+    },
+    {
+      "pid": 125532,
+      "name": "FvContainer.System.exe",
+      "rss_mb": 1.7,
+      "cmd": ""
+    },
+    {
+      "pid": 125688,
+      "name": "droid.exe",
+      "rss_mb": 26.7,
+      "cmd": ""
+    },
+    {
+      "pid": 125728,
+      "name": "EdgeGameAssist.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 125780,
+      "name": "msedge.exe",
+      "rss_mb": 0.2,
+      "cmd": ""
+    },
+    {
+      "pid": 126040,
+      "name": "powershell.exe",
+      "rss_mb": 74.4,
+      "cmd": ""
+    },
+    {
+      "pid": 126324,
+      "name": "OpenConsole.exe",
+      "rss_mb": 0.1,
+      "cmd": ""
+    },
+    {
+      "pid": 126820,
+      "name": "pwsh.exe",
+      "rss_mb": 78.8,
+      "cmd": ""
+    },
+    {
+      "pid": 127012,
+      "name": "trunk.exe",
+      "rss_mb": 1.9,
+      "cmd": ""
+    },
+    {
+      "pid": 127396,
+      "name": "forge.exe",
+      "rss_mb": -943.1,
+      "cmd": ""
+    },
+    {
+      "pid": 127600,
+      "name": "keyboxd.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 128168,
+      "name": "FvContainer.exe",
+      "rss_mb": 2.2,
+      "cmd": ""
+    },
+    {
+      "pid": 128464,
+      "name": "pythonw.exe",
+      "rss_mb": 0.8,
+      "cmd": ""
+    },
+    {
+      "pid": 128620,
+      "name": "steamwebhelper.exe",
+      "rss_mb": 251.6,
+      "cmd": ""
+    },
+    {
+      "pid": 128680,
+      "name": "pwsh.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 128884,
+      "name": "nvsphelper64.exe",
+      "rss_mb": 0.2,
+      "cmd": ""
+    },
+    {
+      "pid": 129660,
+      "name": "steamwebhelper.exe",
+      "rss_mb": 7.9,
+      "cmd": ""
+    },
+    {
+      "pid": 129716,
+      "name": "conhost.exe",
+      "rss_mb": 3.4,
+      "cmd": ""
+    },
+    {
+      "pid": 129908,
+      "name": "cmd.exe",
+      "rss_mb": 0.9,
+      "cmd": ""
+    },
+    {
+      "pid": 130628,
+      "name": "gh.exe",
+      "rss_mb": 2.5,
+      "cmd": ""
+    },
+    {
+      "pid": 130872,
+      "name": "steamservice.exe",
+      "rss_mb": 0.7,
+      "cmd": ""
+    },
+    {
+      "pid": 131232,
+      "name": "steamwebhelper.exe",
+      "rss_mb": 15.5,
+      "cmd": ""
+    },
+    {
+      "pid": 131260,
+      "name": "python.exe",
+      "rss_mb": 19.4,
+      "cmd": ""
+    },
+    {
+      "pid": 131556,
+      "name": "msedge.exe",
+      "rss_mb": 1.5,
+      "cmd": ""
+    },
+    {
+      "pid": 131612,
+      "name": "svchost.exe",
+      "rss_mb": 11.2,
+      "cmd": ""
+    },
+    {
+      "pid": 132516,
+      "name": "vmmemWSL.exe",
+      "rss_mb": -1067.1,
+      "cmd": ""
+    },
+    {
+      "pid": 132552,
+      "name": "codex-code-mode-host.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 133764,
+      "name": "steamwebhelper.exe",
+      "rss_mb": 3.3,
+      "cmd": ""
+    },
+    {
+      "pid": 133816,
+      "name": "codex.exe",
+      "rss_mb": 2.8,
+      "cmd": ""
+    },
+    {
+      "pid": 134468,
+      "name": "wslrelay.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 134880,
+      "name": "steam.exe",
+      "rss_mb": 16.5,
+      "cmd": ""
+    },
+    {
+      "pid": 135120,
+      "name": "vmwp.exe",
+      "rss_mb": 3.4,
+      "cmd": ""
+    },
+    {
+      "pid": 136328,
+      "name": "parsecd.exe",
+      "rss_mb": 20.4,
+      "cmd": ""
+    },
+    {
+      "pid": 137724,
+      "name": "node.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 138248,
+      "name": "parsecd.exe",
+      "rss_mb": 9.0,
+      "cmd": ""
+    },
+    {
+      "pid": 138672,
+      "name": "cmd.exe",
+      "rss_mb": 7.8,
+      "cmd": ""
+    },
+    {
+      "pid": 140108,
+      "name": "Cities2.exe",
+      "rss_mb": -1363.0,
+      "cmd": ""
+    },
+    {
+      "pid": 140356,
+      "name": "codex.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 140380,
+      "name": "gameoverlayui64.exe",
+      "rss_mb": 1.6,
+      "cmd": ""
+    },
+    {
+      "pid": 140772,
+      "name": "deskflow-core.exe",
+      "rss_mb": 0.5,
+      "cmd": ""
+    },
+    {
+      "pid": 142596,
+      "name": "bun.exe",
+      "rss_mb": 3.7,
+      "cmd": ""
+    },
+    {
+      "pid": 142968,
+      "name": "svchost.exe",
+      "rss_mb": 12.4,
+      "cmd": ""
+    },
+    {
+      "pid": 142984,
+      "name": "svchost.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 143044,
+      "name": "codex.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 143988,
+      "name": "node.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 144280,
+      "name": "svchost.exe",
+      "rss_mb": 28.1,
+      "cmd": ""
+    },
+    {
+      "pid": 144604,
+      "name": "codex-code-mode-host.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 144804,
+      "name": "GameBarPresenceWriter.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 146060,
+      "name": "SearchProtocolHost.exe",
+      "rss_mb": 4.8,
+      "cmd": ""
+    },
+    {
+      "pid": 146468,
+      "name": "sort.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 146516,
+      "name": "MoUsoCoreWorker.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 146592,
+      "name": "svchost.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 147092,
+      "name": "conhost.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 147228,
+      "name": "SaveEnroller.Daemon.exe",
+      "rss_mb": 0.3,
+      "cmd": ""
+    },
+    {
+      "pid": 147968,
+      "name": "SaveChecker.Daemon.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 148080,
+      "name": "UnityCrashHandler64.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 148904,
+      "name": "BackgroundDownload.exe",
+      "rss_mb": 8.4,
+      "cmd": ""
+    },
+    {
+      "pid": 149172,
+      "name": "codex.exe",
+      "rss_mb": 7.7,
+      "cmd": ""
+    },
+    {
+      "pid": 149184,
+      "name": "msedge.exe",
+      "rss_mb": 0.2,
+      "cmd": ""
+    },
+    {
+      "pid": 149652,
+      "name": "deskflow.exe",
+      "rss_mb": 2.8,
+      "cmd": ""
+    },
+    {
+      "pid": 150328,
+      "name": "WmiPrvSE.exe",
+      "rss_mb": 1.2,
+      "cmd": ""
+    },
+    {
+      "pid": 150352,
+      "name": "svchost.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 150496,
+      "name": "codex.exe",
+      "rss_mb": 3.0,
+      "cmd": ""
+    },
+    {
+      "pid": 150868,
+      "name": "MoNotificationUx.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 151368,
+      "name": "WmiPrvSE.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 152852,
+      "name": "python.exe",
+      "rss_mb": 15.2,
+      "cmd": ""
+    },
+    {
+      "pid": 153024,
+      "name": "StashIt.Daemon.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 153412,
+      "name": "powershell.exe",
+      "rss_mb": 5.2,
+      "cmd": ""
+    },
+    {
+      "pid": 154332,
+      "name": "conhost.exe",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 155108,
+      "name": "svchost.exe",
+      "rss_mb": 1.1,
+      "cmd": ""
+    }
+  ],
+  "listening_ports_count": 53,
+  "listening_ports": [
+    {
+      "local_port": 7,
+      "pid": 6648,
+      "process_name": "TCPSVCS.exe"
+    },
+    {
+      "local_port": 9,
+      "pid": 6648,
+      "process_name": "TCPSVCS.exe"
+    },
+    {
+      "local_port": 13,
+      "pid": 6648,
+      "process_name": "TCPSVCS.exe"
+    },
+    {
+      "local_port": 17,
+      "pid": 6648,
+      "process_name": "TCPSVCS.exe"
+    },
+    {
+      "local_port": 19,
+      "pid": 6648,
+      "process_name": "TCPSVCS.exe"
+    },
+    {
+      "local_port": 22,
+      "pid": 6708,
+      "process_name": "sshd.exe"
+    },
+    {
+      "local_port": 80,
+      "pid": 4,
+      "process_name": "System"
+    },
+    {
+      "local_port": 135,
+      "pid": 1952,
+      "process_name": "svchost.exe"
+    },
+    {
+      "local_port": 139,
+      "pid": 4,
+      "process_name": "System"
+    },
+    {
+      "local_port": 443,
+      "pid": 4,
+      "process_name": "System"
+    },
+    {
+      "local_port": 445,
+      "pid": 4,
+      "process_name": "System"
+    },
+    {
+      "local_port": 2179,
+      "pid": 3780,
+      "process_name": "vmms.exe"
+    },
+    {
+      "local_port": 3001,
+      "pid": 142596,
+      "process_name": "bun.exe"
+    },
+    {
+      "local_port": 3128,
+      "pid": 112548,
+      "process_name": "codex.exe"
+    },
+    {
+      "local_port": 3129,
+      "pid": 150496,
+      "process_name": "codex.exe"
+    },
+    {
+      "local_port": 3130,
+      "pid": 149172,
+      "process_name": "codex.exe"
+    },
+    {
+      "local_port": 3131,
+      "pid": 133816,
+      "process_name": "codex.exe"
+    },
+    {
+      "local_port": 3389,
+      "pid": 11828,
+      "process_name": "svchost.exe"
+    },
+    {
+      "local_port": 5040,
+      "pid": 9340,
+      "process_name": "svchost.exe"
+    },
+    {
+      "local_port": 5354,
+      "pid": 6060,
+      "process_name": "mDNSResponder.exe"
+    },
+    {
+      "local_port": 5357,
+      "pid": 4,
+      "process_name": "System"
+    },
+    {
+      "local_port": 8081,
+      "pid": 112548,
+      "process_name": "codex.exe"
+    },
+    {
+      "local_port": 8082,
+      "pid": 150496,
+      "process_name": "codex.exe"
+    },
+    {
+      "local_port": 8083,
+      "pid": 149172,
+      "process_name": "codex.exe"
+    },
+    {
+      "local_port": 8084,
+      "pid": 133816,
+      "process_name": "codex.exe"
+    },
+    {
+      "local_port": 9102,
+      "pid": 128464,
+      "process_name": "pythonw.exe"
+    },
+    {
+      "local_port": 19600,
+      "pid": 124080,
+      "process_name": "node.exe"
+    },
+    {
+      "local_port": 20131,
+      "pid": 124080,
+      "process_name": "node.exe"
+    },
+    {
+      "local_port": 24800,
+      "pid": 140772,
+      "process_name": "deskflow-core.exe"
+    },
+    {
+      "local_port": 24801,
+      "pid": 6080,
+      "process_name": "barrierd.exe"
+    },
+    {
+      "local_port": 27036,
+      "pid": 134880,
+      "process_name": "steam.exe"
+    },
+    {
+      "local_port": 27060,
+      "pid": 134880,
+      "process_name": "steam.exe"
+    },
+    {
+      "local_port": 47984,
+      "pid": 11508,
+      "process_name": "sunshine.exe"
+    },
+    {
+      "local_port": 47989,
+      "pid": 11508,
+      "process_name": "sunshine.exe"
+    },
+    {
+      "local_port": 47990,
+      "pid": 11508,
+      "process_name": "sunshine.exe"
+    },
+    {
+      "local_port": 48010,
+      "pid": 11508,
+      "process_name": "sunshine.exe"
+    },
+    {
+      "local_port": 49664,
+      "pid": 1696,
+      "process_name": "lsass.exe"
+    },
+    {
+      "local_port": 49665,
+      "pid": 1480,
+      "process_name": "wininit.exe"
+    },
+    {
+      "local_port": 49666,
+      "pid": 3752,
+      "process_name": "svchost.exe"
+    },
+    {
+      "local_port": 49667,
+      "pid": 3984,
+      "process_name": "svchost.exe"
+    },
+    {
+      "local_port": 49668,
+      "pid": 5684,
+      "process_name": "spoolsv.exe"
+    },
+    {
+      "local_port": 49670,
+      "pid": 4784,
+      "process_name": "vpnagent.exe"
+    },
+    {
+      "local_port": 49671,
+      "pid": 6596,
+      "process_name": "PreSonusHardwareAccessService.exe"
+    },
+    {
+      "local_port": 49693,
+      "pid": 1568,
+      "process_name": "services.exe"
+    },
+    {
+      "local_port": 49694,
+      "pid": 11808,
+      "process_name": "svchost.exe"
+    },
+    {
+      "local_port": 53129,
+      "pid": 124080,
+      "process_name": "node.exe"
+    },
+    {
+      "local_port": 53131,
+      "pid": 124080,
+      "process_name": "node.exe"
+    },
+    {
+      "local_port": 53134,
+      "pid": 124080,
+      "process_name": "node.exe"
+    },
+    {
+      "local_port": 56653,
+      "pid": 134880,
+      "process_name": "steam.exe"
+    },
+    {
+      "local_port": 56659,
+      "pid": 134880,
+      "process_name": "steam.exe"
+    },
+    {
+      "local_port": 60802,
+      "pid": 123344,
+      "process_name": ""
+    },
+    {
+      "local_port": 62522,
+      "pid": 4784,
+      "process_name": "vpnagent.exe"
+    },
+    {
+      "local_port": 63835,
+      "pid": 127012,
+      "process_name": "trunk.exe"
+    }
+  ],
+  "top_processes": [
+    {
+      "name": "svchost.exe",
+      "count": 106
+    },
+    {
+      "name": "OpenConsole.exe",
+      "count": 26
+    },
+    {
+      "name": "pwsh.exe",
+      "count": 26
+    },
+    {
+      "name": "droid.exe",
+      "count": 22
+    },
+    {
+      "name": "msedge.exe",
+      "count": 18
+    },
+    {
+      "name": "conhost.exe",
+      "count": 10
+    },
+    {
+      "name": "forge.exe",
+      "count": 10
+    },
+    {
+      "name": "node.exe",
+      "count": 10
+    },
+    {
+      "name": "codex.exe",
+      "count": 8
+    },
+    {
+      "name": "steamwebhelper.exe",
+      "count": 7
+    },
+    {
+      "name": "msedgewebview2.exe",
+      "count": 6
+    },
+    {
+      "name": "NVIDIA Overlay.exe",
+      "count": 5
+    },
+    {
+      "name": "NZXT CAM.exe",
+      "count": 5
+    },
+    {
+      "name": "WUDFHost.exe",
+      "count": 4
+    },
+    {
+      "name": "cmd.exe",
+      "count": 4
+    },
+    {
+      "name": "codex-code-mode-host.exe",
+      "count": 4
+    },
+    {
+      "name": "nvcontainer.exe",
+      "count": 4
+    },
+    {
+      "name": "RuntimeBroker.exe",
+      "count": 3
+    },
+    {
+      "name": "WmiPrvSE.exe",
+      "count": 3
+    },
+    {
+      "name": "GameInputRedistService.exe",
+      "count": 2
+    },
+    {
+      "name": "GameInputSvc.exe",
+      "count": 2
+    },
+    {
+      "name": "NVDisplay.Container.exe",
+      "count": 2
+    },
+    {
+      "name": "NvBroadcast.Container.exe",
+      "count": 2
+    },
+    {
+      "name": "WindowsTerminal.exe",
+      "count": 2
+    },
+    {
+      "name": "cam_helper.exe",
+      "count": 2
+    },
+    {
+      "name": "crashpad_handler.exe",
+      "count": 2
+    },
+    {
+      "name": "csrss.exe",
+      "count": 2
+    },
+    {
+      "name": "dllhost.exe",
+      "count": 2
+    },
+    {
+      "name": "fontdrvhost.exe",
+      "count": 2
+    },
+    {
+      "name": "parsecd.exe",
+      "count": 2
+    },
+    {
+      "name": "powershell.exe",
+      "count": 2
+    },
+    {
+      "name": "python.exe",
+      "count": 2
+    },
+    {
+      "name": "pythonw.exe",
+      "count": 2
+    },
+    {
+      "name": "taskhostw.exe",
+      "count": 2
+    },
+    {
+      "name": "AdjustService.exe",
+      "count": 1
+    },
+    {
+      "name": "AdobeUpdateService.exe",
+      "count": 1
+    },
+    {
+      "name": "AggregatorHost.exe",
+      "count": 1
+    },
+    {
+      "name": "ApCent.exe",
+      "count": 1
+    },
+    {
+      "name": "AppActions.exe",
+      "count": 1
+    },
+    {
+      "name": "AppVShNotify.exe",
+      "count": 1
+    },
+    {
+      "name": "BackgroundDownload.exe",
+      "count": 1
+    },
+    {
+      "name": "ChsIME.exe",
+      "count": 1
+    },
+    {
+      "name": "Cities2.exe",
+      "count": 1
+    },
+    {
+      "name": "CrossDeviceResume.exe",
+      "count": 1
+    },
+    {
+      "name": "DtsApo4Service.exe",
+      "count": 1
+    },
+    {
+      "name": "EasyTuneEngineService.exe",
+      "count": 1
+    },
+    {
+      "name": "EdgeGameAssist.exe",
+      "count": 1
+    },
+    {
+      "name": "Focusrite Notifier.exe",
+      "count": 1
+    },
+    {
+      "name": "FvContainer.System.exe",
+      "count": 1
+    },
+    {
+      "name": "FvContainer.exe",
+      "count": 1
+    },
+    {
+      "name": "GSv6Fwd.exe",
+      "count": 1
+    },
+    {
+      "name": "GTSDataSync.exe",
+      "count": 1
+    },
+    {
+      "name": "GameBarPresenceWriter.exe",
+      "count": 1
+    },
+    {
+      "name": "GigabyteUpdateService.exe",
+      "count": 1
+    },
+    {
+      "name": "GooglePlayGamesServices.exe",
+      "count": 1
+    },
+    {
+      "name": "GraphicsCardEngine.exe",
+      "count": 1
+    },
+    {
+      "name": "IpOverUsbSvc.exe",
+      "count": 1
+    },
+    {
+      "name": "JetBrains.Etw.Collector.Host.exe",
+      "count": 1
+    },
+    {
+      "name": "LogiRegistryService.exe",
+      "count": 1
+    },
+    {
+      "name": "LsaIso.exe",
+      "count": 1
+    },
+    {
+      "name": "Memory Compression.exe",
+      "count": 1
+    },
+    {
+      "name": "MicrosoftStartFeedProvider.exe",
+      "count": 1
+    },
+    {
+      "name": "MigrationService.exe",
+      "count": 1
+    },
+    {
+      "name": "MoNotificationUx.exe",
+      "count": 1
+    },
+    {
+      "name": "MoUsoCoreWorker.exe",
+      "count": 1
+    },
+    {
+      "name": "MpDefenderCoreService.exe",
+      "count": 1
+    },
+    {
+      "name": "MsMpEng.exe",
+      "count": 1
+    },
+    {
+      "name": "NVIDIA Broadcast UI.exe",
+      "count": 1
+    },
+    {
+      "name": "NVIDIA Broadcast.exe",
+      "count": 1
+    },
+    {
+      "name": "NgcIso.exe",
+      "count": 1
+    },
+    {
+      "name": "NisSrv.exe",
+      "count": 1
+    },
+    {
+      "name": "OfficeClickToRun.exe",
+      "count": 1
+    },
+    {
+      "name": "PreSonusHardwareAccessService.exe",
+      "count": 1
+    },
+    {
+      "name": "PresentMon_x64.exe",
+      "count": 1
+    },
+    {
+      "name": "QuickCPU.exe",
+      "count": 1
+    },
+    {
+      "name": "Registry",
+      "count": 1
+    },
+    {
+      "name": "RtkAudUService64.exe",
+      "count": 1
+    },
+    {
+      "name": "SRService.exe",
+      "count": 1
+    },
+    {
+      "name": "SRUpdateService.exe",
+      "count": 1
+    },
+    {
+      "name": "SaveChecker.Daemon.exe",
+      "count": 1
+    },
+    {
+      "name": "SaveEnroller.Daemon.exe",
+      "count": 1
+    },
+    {
+      "name": "SearchHost.exe",
+      "count": 1
+    },
+    {
+      "name": "SearchIndexer.exe",
+      "count": 1
+    },
+    {
+      "name": "SearchProtocolHost.exe",
+      "count": 1
+    },
+    {
+      "name": "Secure System.exe",
+      "count": 1
+    },
+    {
+      "name": "SecurityHealthService.exe",
+      "count": 1
+    },
+    {
+      "name": "ShellExperienceHost.exe",
+      "count": 1
+    },
+    {
+      "name": "ShellHost.exe",
+      "count": 1
+    },
+    {
+      "name": "Skyve.Service.exe",
+      "count": 1
+    },
+    {
+      "name": "StartMenuExperienceHost.exe",
+      "count": 1
+    },
+    {
+      "name": "StashIt.Daemon.exe",
+      "count": 1
+    },
+    {
+      "name": "System",
+      "count": 1
+    },
+    {
+      "name": "System Idle Process",
+      "count": 1
+    },
+    {
+      "name": "TCPSVCS.exe",
+      "count": 1
+    },
+    {
+      "name": "TextInputHost.exe",
+      "count": 1
+    },
+    {
+      "name": "UnityCrashHandler64.exe",
+      "count": 1
+    },
+    {
+      "name": "UserOOBEBroker.exe",
+      "count": 1
+    },
+    {
+      "name": "VSSVC.exe",
+      "count": 1
+    },
+    {
+      "name": "WidgetBoard.exe",
+      "count": 1
+    },
+    {
+      "name": "WidgetService.exe",
+      "count": 1
+    },
+    {
+      "name": "XboxPcAppFT.exe",
+      "count": 1
+    },
+    {
+      "name": "audiodg.exe",
+      "count": 1
+    },
+    {
+      "name": "barrierd.exe",
+      "count": 1
+    },
+    {
+      "name": "bun.exe",
+      "count": 1
+    },
+    {
+      "name": "crashpad_handler.dll.exe",
+      "count": 1
+    },
+    {
+      "name": "ctfmon.exe",
+      "count": 1
+    },
+    {
+      "name": "dasHost.exe",
+      "count": 1
+    },
+    {
+      "name": "deskflow-core.exe",
+      "count": 1
+    },
+    {
+      "name": "deskflow-daemon.exe",
+      "count": 1
+    },
+    {
+      "name": "deskflow.exe",
+      "count": 1
+    },
+    {
+      "name": "dwm.exe",
+      "count": 1
+    },
+    {
+      "name": "esbuild.exe",
+      "count": 1
+    },
+    {
+      "name": "explorer.exe",
+      "count": 1
+    },
+    {
+      "name": "findstr.exe",
+      "count": 1
+    },
+    {
+      "name": "gameoverlayui64.exe",
+      "count": 1
+    },
+    {
+      "name": "gamingservices.exe",
+      "count": 1
+    },
+    {
+      "name": "gamingservicesnet.exe",
+      "count": 1
+    },
+    {
+      "name": "gh.exe",
+      "count": 1
+    },
+    {
+      "name": "keyboxd.exe",
+      "count": 1
+    },
+    {
+      "name": "logi_lamparray_service.AMD64.exe",
+      "count": 1
+    },
+    {
+      "name": "lsass.exe",
+      "count": 1
+    },
+    {
+      "name": "mDNSResponder.exe",
+      "count": 1
+    },
+    {
+      "name": "miss.exe",
+      "count": 1
+    },
+    {
+      "name": "mullvad-daemon.exe",
+      "count": 1
+    },
+    {
+      "name": "nvfvsdksvc_x64.exe",
+      "count": 1
+    },
+    {
+      "name": "nvrla.exe",
+      "count": 1
+    },
+    {
+      "name": "nvsphelper64.exe",
+      "count": 1
+    },
+    {
+      "name": "sensord.exe",
+      "count": 1
+    },
+    {
+      "name": "service.exe",
+      "count": 1
+    },
+    {
+      "name": "services.exe",
+      "count": 1
+    },
+    {
+      "name": "sihost.exe",
+      "count": 1
+    },
+    {
+      "name": "smss.exe",
+      "count": 1
+    },
+    {
+      "name": "sort.exe",
+      "count": 1
+    },
+    {
+      "name": "spoolsv.exe",
+      "count": 1
+    },
+    {
+      "name": "sqlwriter.exe",
+      "count": 1
+    },
+    {
+      "name": "sshd.exe",
+      "count": 1
+    },
+    {
+      "name": "steam.exe",
+      "count": 1
+    },
+    {
+      "name": "steamservice.exe",
+      "count": 1
+    },
+    {
+      "name": "sunshine.exe",
+      "count": 1
+    },
+    {
+      "name": "sunshinesvc.exe",
+      "count": 1
+    },
+    {
+      "name": "trunk.exe",
+      "count": 1
+    },
+    {
+      "name": "vmcompute.exe",
+      "count": 1
+    },
+    {
+      "name": "vmmemCmZygote.exe",
+      "count": 1
+    },
+    {
+      "name": "vmmemWSL.exe",
+      "count": 1
+    },
+    {
+      "name": "vmms.exe",
+      "count": 1
+    },
+    {
+      "name": "vmwp.exe",
+      "count": 1
+    },
+    {
+      "name": "vpnagent.exe",
+      "count": 1
+    },
+    {
+      "name": "wininit.exe",
+      "count": 1
+    },
+    {
+      "name": "winlogon.exe",
+      "count": 1
+    },
+    {
+      "name": "wlanext.exe",
+      "count": 1
+    },
+    {
+      "name": "wslrelay.exe",
+      "count": 1
+    },
+    {
+      "name": "wslservice.exe",
+      "count": 1
+    },
+    {
+      "name": "xgamehelper.exe",
+      "count": 1
+    }
+  ],
+  "top_port_owners": [
+    {
+      "pid": 4,
+      "port_count": 5
+    },
+    {
+      "pid": 6648,
+      "port_count": 5
+    },
+    {
+      "pid": 124080,
+      "port_count": 5
+    },
+    {
+      "pid": 11508,
+      "port_count": 4
+    },
+    {
+      "pid": 134880,
+      "port_count": 4
+    },
+    {
+      "pid": 4784,
+      "port_count": 2
+    },
+    {
+      "pid": 112548,
+      "port_count": 2
+    },
+    {
+      "pid": 133816,
+      "port_count": 2
+    },
+    {
+      "pid": 149172,
+      "port_count": 2
+    },
+    {
+      "pid": 150496,
+      "port_count": 2
+    },
+    {
+      "pid": 1480,
+      "port_count": 1
+    },
+    {
+      "pid": 1568,
+      "port_count": 1
+    },
+    {
+      "pid": 1696,
+      "port_count": 1
+    },
+    {
+      "pid": 1952,
+      "port_count": 1
+    },
+    {
+      "pid": 3752,
+      "port_count": 1
+    },
+    {
+      "pid": 3780,
+      "port_count": 1
+    },
+    {
+      "pid": 3984,
+      "port_count": 1
+    },
+    {
+      "pid": 5684,
+      "port_count": 1
+    },
+    {
+      "pid": 6060,
+      "port_count": 1
+    },
+    {
+      "pid": 6080,
+      "port_count": 1
+    },
+    {
+      "pid": 6596,
+      "port_count": 1
+    },
+    {
+      "pid": 6708,
+      "port_count": 1
+    },
+    {
+      "pid": 9340,
+      "port_count": 1
+    },
+    {
+      "pid": 11808,
+      "port_count": 1
+    },
+    {
+      "pid": 11828,
+      "port_count": 1
+    },
+    {
+      "pid": 123344,
+      "port_count": 1
+    },
+    {
+      "pid": 127012,
+      "port_count": 1
+    },
+    {
+      "pid": 128464,
+      "port_count": 1
+    },
+    {
+      "pid": 140772,
+      "port_count": 1
+    },
+    {
+      "pid": 142596,
+      "port_count": 1
+    }
+  ],
+  "docker_procs_alive": [
+    [
+      135120,
+      "vmwp.exe"
+    ]
+  ],
+  "docker_ps": "failed to connect to the docker API at npipe:////./pipe/docker_engine; check if the path is correct and if the daemon is running: open //./pipe/docker_engine: The system cannot find the file specified.",
+  "docker_count": 0,
+  "env_keys_count": 123,
+  "env": {
+    "ADB": "C:\\Users\\koosh\\platform-tools\\adb.exe",
+    "ALLUSERSPROFILE": "C:\\ProgramData",
+    "ANDROID_HOME": "C:\\Users\\koosh\\AppData\\Local\\Android\\Sdk",
+    "APPDATA": "C:\\Users\\koosh\\AppData\\Roaming",
+    "BAT_CONFIG_DIR": "C:\\Users\\koosh\\scoop\\apps\\bat\\current",
+    "BUN_PTY_LIB": "B:/~BUN/root/rust_pty-fazdxkv2.dll",
+    "CARGO_TARGET_DIR": "C:\\temp\\wt-proto-mcp-target",
+    "CHOCOLATEYINSTALL": "C:\\ProgramData\\chocolatey",
+    "CHOCOLATEYLASTPATHUPDATE": "133520878415695114",
+    "CHOCOLATEYTOOLSLOCATION": "C:\\tools",
+    "COMMONPROGRAMFILES": "C:\\Program Files\\Common Files",
+    "COMMONPROGRAMFILES(X86)": "C:\\Program Files (x86)\\Common Files",
+    "COMMONPROGRAMW6432": "C:\\Program Files\\Common Files",
+    "COMPUTERNAME": "KOOSHAPARI-DESK",
+    "COMSPEC": "C:\\WINDOWS\\system32\\cmd.exe",
+    "COPILOT": "C:\\Program Files\\copilot.exe",
+    "CSII_ENTITIESVERSION": "1.3.10",
+    "CSII_INSTALLATIONPATH": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Cities Skylines II",
+    "CSII_LOCALMODSPATH": "C:\\Users\\koosh\\AppData\\LocalLow\\Colossal Order\\Cities Skylines II\\Mods",
+    "CSII_MANAGEDPATH": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Cities Skylines II\\Cities2_Data\\Managed",
+    "CSII_MODPOSTPROCESSORPATH": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Cities Skylines II\\Cities2_Data\\Content\\Game\\.ModdingToolchain\\ModPostProcessor\\ModPostProcessor.exe",
+    "CSII_MODPUBLISHERPATH": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Cities Skylines II\\Cities2_Data\\Content\\Game\\.ModdingToolchain\\ModPublisher\\ModPublisher.exe",
+    "CSII_MSCORLIBPATH": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Cities Skylines II\\Cities2_Data\\Managed\\mscorlib.dll",
+    "CSII_PATHSET": "Build",
+    "CSII_PDXCACHEPATH": "C:\\Users\\koosh\\AppData\\LocalLow\\Colossal Order\\Cities Skylines II\\.pdxsdk",
+    "CSII_PDXMODSPATH": "C:\\Users\\koosh\\AppData\\LocalLow\\Colossal Order\\Cities Skylines II\\.cache\\Mods",
+    "CSII_TOOLPATH": "C:\\Users\\koosh\\AppData\\LocalLow\\Colossal Order\\Cities Skylines II\\.cache\\Modding",
+    "CSII_UNITYMODPROJECTPATH": "C:\\Users\\koosh\\AppData\\LocalLow\\Colossal Order\\Cities Skylines II\\.cache\\Modding\\UnityModsProject",
+    "CSII_UNITYVERSION": "2022.3.62f2",
+    "CSII_USERDATAPATH": "C:\\Users\\koosh\\AppData\\LocalLow\\Colossal Order\\Cities Skylines II",
+    "CUDA_HOME": "C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v13.4",
+    "CUDA_PATH": "C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v13.4",
+    "CUDA_PATH_V12_9": "C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v12.9",
+    "CUDA_PATH_V13_4": "C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v13.4",
+    "CUDNN_PATH": "C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v13.4",
+    "CURSOR_CLIMB2_BOOT": "1",
+    "DEBIAN_FRONTEND": "noninteractive",
+    "DINO_GAME_PATH": "G:\\SteamLibrary\\steamapps\\common\\Diplomacy is Not an Option",
+    "DRIVERDATA": "C:\\Windows\\System32\\Drivers\\DriverData",
+    "ENCRYPTION_KEY": "t1rSGxkBSy38s8+JNLvHkvJAax4zO/KRsli27VSu6Ks=",
+    "FACTORY_API_BASE_URL": "https://api.factory.ai",
+    "FACTORY_DEPLOYMENT_ENV": "production",
+    "FACTORY_DROID_AUTO_UPDATE_ENABLED": "false",
+    "FACTORY_ENV": "production",
+    "FACTORY_OTEL_ENABLED": "true",
+    "FACTORY_UPSTREAM_CLIENT_TYPE": "cli",
+    "FIREWORKS_API_KEY": "fpk_WjmoRmuKzqYpxJBp73Zveo",
+    "FORCE_COLOR": "0",
+    "GCM_INTERACTIVE": "never",
+    "GIT_ASKPASS": "",
+    "GIT_EDITOR": "true",
+    "GIT_SEQUENCE_EDITOR": "true",
+    "GIT_SSH_COMMAND": "ssh -o BatchMode=yes -o StrictHostKeyChecking=accept-new",
+    "GIT_TERMINAL_PROMPT": "0",
+    "GOPATH": "C:\\Users\\koosh\\go",
+    "HOME": "C:\\Users\\koosh",
+    "HOMEDRIVE": "C:",
+    "HOMEPATH": "\\Users\\koosh",
+    "INTELLIJ IDEA": "C:\\Program Files\\JetBrains\\IntelliJ IDEA 2024.1.1\\bin;",
+    "INTEL_DEV_REDIST": "C:\\Program Files (x86)\\Common Files\\Intel\\Shared Libraries\\",
+    "JAVA_HOME": "C:\\Program Files\\Microsoft\\jdk-21.0.11.10-hotspot\\",
+    "LOCALAPPDATA": "C:\\Users\\koosh\\AppData\\Local",
+    "LOGONSERVER": "\\\\KOOSHAPARI-DESK",
+    "MIC_LD_LIBRARY_PATH": "C:\\Program Files (x86)\\Common Files\\Intel\\Shared Libraries\\compiler\\lib\\mic",
+    "NDK_HOME": "C:\\Users\\koosh\\AppData\\Local\\Android\\Sdk\\ndk\\28.0.12674087",
+    "NODE_EXTRA_CA_CERTS": "C:\\Users\\koosh\\.factory\\cache\\certs\\factory-cli-child-certs.pem",
+    "NODE_OPTIONS": "--max-old-space-size=8192",
+    "NODE_USE_SYSTEM_CA": "1",
+    "NUMBER_OF_PROCESSORS": "16",
+    "NVCC_PREPEND_PATH": "C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v13.4\\bin",
+    "OCULUSBASE": "C:\\Program Files\\Oculus\\",
+    "OMNIROUTE_API_KEY": "sk-a6e8236359cd319b-3w6jyp-b0931376",
+    "ONEDRIVE": "C:\\Users\\koosh\\OneDrive",
+    "OPENAI_URL": "http://127.0.0.1:20128/v1",
+    "OS": "Windows_NT",
+    "PATH": "C:\\Program Files\\PowerShell\\7-preview;C:\\Users\\koosh\\.factory\\bin;C:\\Program Files\\PowerShell\\7-preview;C:\\Program Files\\Rio\\;C:\\Python314\\Scripts\\;C:\\Python314\\;C:\\Program Files\\Microsoft\\jdk-21.0.11.10-hotspot\\bin;C:\\Users\\koosh\\AppData\\Local\\Programs\\Python\\Python311\\Scripts\\;C:\\Users\\koosh\\AppData\\Local\\Programs\\Python\\Python311\\;C:\\Python313\\Scripts\\;C:\\Python313\\;C:\\Program Files (x86)\\Common Files\\Intel\\Shared Libraries\\redist\\intel64\\compiler;C:\\Program Files\\Eclipse Adoptium\\jdk-11.0.15.10-hotspot\\bin;C:\\Program Files (x86)\\Common Files\\Oracle\\Java\\javapath;c:\\program files\\oculus\\support\\oculus-runtime;c:\\program files\\imagemagick-7.1.0-q16-hdri;c:\\windows\\system32;c:\\windows;c:\\windows\\system32\\wbem;c:\\windows\\system32\\windowspowershell\\v1.0\\;c:\\windows\\system32\\openssh\\;c:\\program files\\git\\cmd;c:\\program files\\git\\mingw64\\bin;c:\\program files\\git\\usr\\bin;c:\\program files\\dotnet\\;c:\\program files\\microchip\\xc8\\v2.31\\bin;c:\\programdata\\chocolatey\\bin;c:\\program files\\docker\\docker\\resources\\bin;c:\\programdata\\dockerdesktop\\version-bin;C:\\Program Files (x86)\\NVIDIA Corporation\\PhysX\\Common;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Program Files\\Microsoft SQL Server\\130\\Tools\\Binn\\;C:\\Program Files\\OpenSSH-Win64;C:\\Program Files\\Amazon\\AWSCLIV2\\;C:\\Program Files\\Tesseract-OCR;C:\\Program Files\\OpenJDK\\jdk-19.0.2\\bin;C:\\Program Files\\ojdkbuild\\java-1.8.0-openjdk-1.8.0.332-1\\bin;C:\\Program Files\\ojdkbuild\\java-1.8.0-openjdk-1.8.0.332-1\\jre\\bin;C:\\Program Files;C:\\Program Files\\Tailscale\\;c:\\Program Files\\GitHub CLI\\;c:\\Program Files (x86)\\PowerShell\\7\\;C:\\Program Files\\Mullvad VPN\\resources;C:\\Program Files\\NVIDIA Corporation\\NVIDIA app\\NvDLISR;c:\\Users\\koosh\\AppData\\Local\\Programs\\cursor\\resources\\app\\bin;C:\\Program Files\\Microsoft SQL Server\\150\\Tools\\Binn\\;C:\\Users\\koosh;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\Program Files\\Git\\cmd;C:\\Program Files\\Git\\mingw64\\bin;C:\\Program Files\\Git\\usr\\bin;C:\\Program Files (x86)\\Google\\Cloud SDK\\google-cloud-sdk\\bin;C:\\Program Files (x86)\\Windows Kits\\10\\Windows Performance Toolkit\\;C:\\Program Files\\PowerShell\\7-preview\\preview;C:\\Program Files (x86)\\cloudflared\\;C:\\Program Files\\CMake\\bin;C:\\Program Files\\Sunshine;C:\\Program Files\\Sunshine\\tools;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Program Files\\Microsoft SQL Server\\170\\Tools\\Binn\\;C:\\Program Files\\Microsoft SQL Server\\Client SDK\\ODBC\\170\\Tools\\Binn\\;C:\\Program Files\\Go\\bin;C:\\Program Files\\nodejs\\;C:\\Program Files\\Docker\\Docker\\resources\\bin;C:\\Program Files\\WSL\\;C:\\Program Files\\RedHat\\Podman\\;C:\\Program Files\\WezTerm;C:\\Program Files\\NVIDIA Corporation\\Nsight Compute 2026.3.0\\;C:\\Program Files\\PowerShell\\7\\;C:\\Users\\koosh\\.unsloth\\studio\\bin;C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v13.4\\bin;C:\\Program Files\\CMake\\bin;C:\\Users\\koosh\\.pixi\\bin;C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v13.4\\libnvvp;C:\\Users\\koosh\\scoop\\apps\\mingw-winlibs\\current\\bin;C:\\Program Files\\PowerShell\\7-preview;C:\\Users\\koosh\\scoop\\apps\\starship\\current;C:\\Users\\koosh\\go1.25\\bin;C:\\Users\\koosh\\AppData\\Local\\agy\\bin;C:\\Users\\koosh\\scoop\\apps\\libvips\\current\\bin;C:\\Users\\koosh\\.local\\bin;C:\\Users\\koosh\\AppData\\Local\\Programs\\Forge;C:\\Users\\koosh\\.bun\\bin;C:\\Users\\koosh\\scoop\\apps\\postgresql\\current\\bin;C:\\Users\\koosh\\AppData\\Local\\pnpm;C:\\Users\\koosh\\.cargo\\bin;C:\\Program Files\\MySQL\\MySQL Shell 8.0\\bin\\;C:\\Users\\koosh\\AppData\\Local\\Programs\\Python\\Python310\\Scripts\\;C:\\Users\\koosh\\AppData\\Local\\Programs\\Python\\Python310\\;C:\\Users\\koosh\\scoop\\shims;C:\\Users\\koosh\\AppData\\Local\\Microsoft\\WindowsApps;C:\\Users\\koosh\\AppData\\Local\\Programs\\Microsoft VS Code\\bin;C:\\Users\\koosh\\spicetify-cli;C:\\Users\\koosh\\.dotnet\\tools;C:\\Users\\koosh\\platform-tools;C:\\tools\\neovim\\nvim-win64\\bin;'C:\\Program Files';C:\\iverilog\\bin;C:\\iverilog\\gtkwave\\bin;C:\\ProgramData\\mingw64\\mingw64\\bin;C:\\Users\\koosh\\AppData\\Local\\JetBrains\\Toolbox\\scripts;C:\\Program Files\\JetBrains\\IntelliJ IDEA 2024.1.1\\bin;C:\\Users\\koosh\\go\\bin;C:\\Users\\koosh\\AppData\\Local\\Programs\\Ollama;C:\\Users\\koosh\\AppData\\Local\\Android\\Sdk;C:\\Users\\koosh\\AppData\\Local\\Google\\Cloud SDK\\google-cloud-sdk\\bin;C:\\Users\\koosh\\AppData\\Local\\Programs\\Windsurf\\bin;C:\\Users\\koosh\\bin;C:\\Users\\koosh\\AppData\\Local\\Microsoft\\WinGet\\Links;C:\\zig;C:\\Users\\koosh\\AppData\\Local\\cursor-agent;C:\\Users\\koosh\\AppData\\Roaming\\npm;C:\\Program Files\\Unity\\Hub\\Editor\\2022.3.62f3\\Editor;C:\\Users\\koosh\\omniroute-dev;C:\\Users\\koosh\\.nimble\\bin;C:\\Users\\koosh\\ponyc-0.67.0\\bin;C:\\Users\\koosh\\AppData\\Local\\Programs\\heliosLite;C:\\Users\\koosh\\AppData\\Local\\Microsoft\\WindowsApps;",
+    "PATHEXT": ".COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC;.PY;.PYW;.CPL",
+    "PGDATA": "C:\\Users\\koosh\\scoop\\apps\\postgresql\\current\\data",
+    "PG_INCLUDE_DIR": "C:\\Users\\koosh\\scoop\\apps\\postgresql\\current\\include",
+    "PG_LIB_DIR": "C:\\Users\\koosh\\scoop\\apps\\postgresql\\current\\lib",
+    "PHENO_LFM25_8B_A1B": "D:\\WSL\\model-cache\\lfm25-8b-a1b",
+    "PHENO_ORNITH_8B": "D:\\WSL\\model-cache\\ornith-8b",
+    "PHENO_QWEN35_08B": "D:\\WSL\\model-cache\\qwen35-08b",
+    "PNPM_HOME": "C:\\Users\\koosh\\AppData\\Local\\pnpm",
+    "POWERSHELL_DISTRIBUTION_CHANNEL": "MSI:Windows 10 Pro",
+    "POWERSHELL_TELEMETRY_OPTOUT": "1",
+    "PROCESSOR_ARCHITECTURE": "AMD64",
+    "PROCESSOR_IDENTIFIER": "AMD64 Family 25 Model 33 Stepping 0, AuthenticAMD",
+    "PROCESSOR_LEVEL": "25",
+    "PROCESSOR_REVISION": "2100",
+    "PROGRAMDATA": "C:\\ProgramData",
+    "PROGRAMFILES": "C:\\Program Files",
+    "PROGRAMFILES(X86)": "C:\\Program Files (x86)",
+    "PROGRAMW6432": "C:\\Program Files",
+    "PSEXECUTIONPOLICYPREFERENCE": "Bypass",
+    "PSMODULEPATH": "D:\\koosh\\Documents\\PowerShell\\Modules;C:\\Program Files\\PowerShell\\Modules;c:\\program files\\powershell\\7-preview\\Modules;C:\\Windows\\system32\\WindowsPowerShell\\v1.0\\Modules;C:\\Users\\koosh\\Documents\\PowerShell\\Modules;C:\\Program Files\\WindowsPowerShell\\Modules;C:\\WINDOWS\\system32\\WindowsPowerShell\\v1.0\\Modules;C:\\Program Files (x86)\\Google\\Cloud SDK\\google-cloud-sdk\\platform\\PowerShell",
+    "PUBLIC": "C:\\Users\\Public",
+    "PYTHON311": "C:\\Users\\koosh\\AppData\\Local\\Programs\\Python\\Python311",
+    "PYTHONIOENCODING": "utf-8",
+    "PYTHONUNBUFFERED": "1",
+    "PYTHONUTF8": "1",
+    "SERVICE_KEY": "69438bb4a39c6e5ad86678846642a5c6f0b8a0299d467c40d674722e46805bcb",
+    "SESSIONNAME": "Console",
+    "SPIN": "C:\\Users\\koosh\\spin.exe",
+    "SSH_ASKPASS": "",
+    "SUDO_ASKPASS": "",
+    "SYSTEMDRIVE": "C:",
+    "SYSTEMROOT": "C:\\WINDOWS",
+    "TEMP": "C:\\Users\\koosh\\AppData\\Local\\Temp",
+    "TMP": "C:\\Users\\koosh\\AppData\\Local\\Temp",
+    "TORCHINDUCTOR_CACHE_DIR": "C:\\Users\\koosh\\.unsloth\\studio\\TORCHINDUCTOR_CACHE_DIR",
+    "USERDOMAIN": "KOOSHAPARI-DESK",
+    "USERDOMAIN_ROAMINGPROFILE": "KOOSHAPARI-DESK",
+    "USERNAME": "koosh",
+    "USERPROFILE": "C:\\Users\\koosh",
+    "VIVETOOL": "C:\\Users\\koosh\\ViVeTool.exe",
+    "WINDIR": "C:\\WINDOWS",
+    "WSLENV": "WT_SESSION:WT_PROFILE_ID:",
+    "WT_PROFILE_ID": "{a3a2e83a-884a-5379-baa8-16f193a13b21}",
+    "WT_SESSION": "9d601864-cb57-4c16-9d4b-dd8ba281d606",
+    "_python_version": "3.14.5",
+    "_platform": "Windows-11-10.0.28120-SP0",
+    "_hostname": "kooshapari-desk"
+  },
+  "capture_method": "stdlib: powershell Get-Process + netstat + nvidia-smi + wsl --status + docker ps",
+  "scope": "windows_hosts",
+  "notes": "as_of=2026-08-26T05:22:44Z; hostname=kooshapari-desk; git=main@e7e5402; wsl=WSL RUNNING; gpu=NVIDIA GeForce RTX 3090 Ti used=9574/24564MiB util=4%; gpus=1 (single-GPU; 1080 Ti absent from nvidia-smi, RTX 3090 Ti only); Cities2.exe=present; Paradox Launcher.exe=absent; 3090Ti-VRAM-vs-v22: +7006 MiB (v22=2568) vs-v21: +6752 MiB (v21=2822) vs-v20: +292 MiB (v20=9282); docker_containers=0 docker_procs_alive=1; anomalies: droid.exe=22 llama-server.exe=0 python.exe=2 special-ports[19000/19095/21080]: none; v29=capture 2026-08-25 (proc v29; v28 was 474/55/2007); capture_method=stdlib: powershell Get-Process + netstat + nvidia-smi + wsl --status + docker ps"
+}

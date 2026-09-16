@@ -1,0 +1,78 @@
+# Cloud four-role tier mapping (plan Part C)
+combo_id: Main
+
+budget_states:
+  minimax_m3:
+    monthly_cap_tokens: 12000000000
+    green_pct: 0.60
+    yellow_pct: 0.80
+    red_pct: 0.95
+    blackout_pct: 1.00
+
+roles:
+  emergency:
+    description: "Final judge — verifier fails 2x, security/architecture, manual override"
+    providers:
+      - provider: claude
+        model: claude-opus-4-8
+        max_pct_monthly: 0.05
+      - provider: openai
+        model: gpt-5.5
+        effort: xhigh
+        max_pct_monthly: 0.08
+      - provider: minimax
+        model: minimax-m3
+        fallback: true
+
+  teacher:
+    description: "Trace harvest for training corpus — budgeted 2-5M tok/mo structured"
+    monthly_target_tokens: [2000000, 5000000]
+    providers:
+      - provider: claude
+        model: claude-opus-4-8
+        tags: [route_labels, context_pairs, judge_rubrics]
+      - provider: openai
+        model: gpt-5.5
+        tags: [failure_corrections, minimal_traces]
+      - provider: local
+        model: local/qwen35-08b
+        tags: [baseline_traces]
+
+  parallel_lanes:
+    description: "Harness parallel execution lanes"
+    lanes:
+      - lane: architecture
+        tool: forge
+        model: claude-opus-4-8
+      - lane: ci_pr
+        tool: agent-runner
+        model: gpt-5.3-codex-spark
+        concurrency: 3
+      - lane: routine
+        tool: omniroute
+        model: local/qwen35-08b
+      - lane: medium_hard
+        tool: omniroute
+        model: inclusionai/ling-2.6-flash
+      - lane: research
+        tool: cursor-task
+        model: composer
+
+  sunset:
+    description: "Transition buffer — track % local vs cloud"
+    criteria:
+      routine_local_pct: 0.85
+      emergency_pct_max: 0.10
+      cost_per_accepted_step_reduction_pct: 0.60
+      minimax_cap_usage_max: 0.80
+    metrics_export: "${HOME}/.omniroute/training/sunset_metrics.jsonl"
+
+escalation_ladder:
+  - needle
+  - qwen35_08b_local
+  - lfm25_8b_a1b_local
+  - ornith_8b_local
+  - omniroute_main
+  - ling_26_flash
+  - granite_41_8b
+  - qwen35_flash

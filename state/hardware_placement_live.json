@@ -1,0 +1,107 @@
+{
+  "schema_version": "pheno.hardware_placement_plan.v2",
+  "as_of": "2026-07-28T08:14:41Z",
+  "gpus": [
+    {
+      "index": 0,
+      "name": "NVIDIA GeForce GTX 1080 Ti",
+      "vram_mib": 11264,
+      "compute_capability": "sm_61",
+      "driver_version": "581.80",
+      "pci_bus_id": "00000000:04:00.0",
+      "role": "legacy_helper",
+      "status": "visible_idle",
+      "engines": [
+        "llama.cpp CUDA (sm_61 native)",
+        "vllm-pascal 0.7.3 (legacy archs only)"
+      ]
+    },
+    {
+      "index": 1,
+      "name": "NVIDIA GeForce RTX 3090 Ti",
+      "vram_mib": 24564,
+      "compute_capability": "sm_86",
+      "driver_version": "581.80",
+      "pci_bus_id": "00000000:0C:00.0",
+      "role": "primary_inference",
+      "status": "active",
+      "engines": [
+        "vllm >=0.22.1",
+        "sglang (when sm_86 kernel built)",
+        "llama.cpp CUDA (sm_86 native)"
+      ]
+    }
+  ],
+  "placements": [
+    {
+      "model_alias": "local/qwen35-08b",
+      "gpu_index": 1,
+      "gpu_name": "RTX 3090 Ti",
+      "status": "candidate",
+      "role": "primary"
+    },
+    {
+      "model_alias": "local/lfm25-8b-a1b",
+      "gpu_index": 1,
+      "gpu_name": "RTX 3090 Ti",
+      "status": "active_serving",
+      "role": "primary",
+      "note": "served via vLLM 0.22.1 on port 19000 (Fedora 44 WSL)"
+    },
+    {
+      "model_alias": "local/lfm25-1_2b-instruct",
+      "gpu_index": 0,
+      "gpu_name": "GTX 1080 Ti",
+      "status": "candidate",
+      "role": "legacy_helper",
+      "engine": "llama.cpp CUDA (sm_61)",
+      "note": "draft/needle inference, verification, eval shards \u2014 not sustained decoding"
+    },
+    {
+      "model_alias": "local/qwen35-08b",
+      "gpu_index": 0,
+      "gpu_name": "GTX 1080 Ti",
+      "status": "candidate",
+      "role": "legacy_helper",
+      "engine": "llama.cpp CUDA (sm_61)",
+      "note": "helper lane for companion tasks"
+    }
+  ],
+  "workload_routes": [
+    {
+      "workload_class": "primary_inference",
+      "preferred_gpu": 1,
+      "gpu_name": "RTX 3090 Ti",
+      "tier": "latency_primary",
+      "models": [
+        "lfm25-8b-a1b",
+        "qwen35-08b",
+        "ornith-8b"
+      ]
+    },
+    {
+      "workload_class": "legacy_helper",
+      "preferred_gpu": 0,
+      "gpu_name": "GTX 1080 Ti",
+      "tier": "legacy_helper",
+      "models": [
+        "lfm25-1_2b-instruct",
+        "qwen35-08b",
+        "small_gguf_drafts"
+      ],
+      "role": "draft/needle inference, verification, trace preprocessing, eval shards"
+    },
+    {
+      "workload_class": "verifier_reranker",
+      "preferred_gpu": 0,
+      "gpu_name": "GTX 1080 Ti",
+      "tier": "legacy_helper",
+      "note": "non-generation workload, fits in 11 GB"
+    }
+  ],
+  "rules_in_force": {
+    "freshness": "Models >=2026 release only. Qwen2.5/3.0 are forbidden.",
+    "pooling": "No pooled VRAM \u2014 separate process per GPU",
+    "tensor_parallel": "Not supported across sm_61 + sm_86"
+  }
+}

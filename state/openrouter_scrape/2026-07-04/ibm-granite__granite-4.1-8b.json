@@ -1,0 +1,81 @@
+{
+  "id": "ibm-granite/granite-4.1-8b",
+  "scraped_at": "2026-07-04T09:59:19.488753+00:00",
+  "api_found": true,
+  "page_found": true,
+  "api": {
+    "id": "ibm-granite/granite-4.1-8b",
+    "canonical_slug": "ibm-granite/granite-4.1-8b-20260429",
+    "hugging_face_id": "ibm-granite/granite-4.1-8b",
+    "name": "IBM: Granite 4.1 8B",
+    "created": 1777577071,
+    "description": "Granite 4.1 8B is a dense, decoder-only 8-billion-parameter language model from IBM, part of the Granite 4.1 family. It supports a 131K-token context window and is designed for enterprise tasks...",
+    "context_length": 131072,
+    "architecture": {
+      "modality": "text->text",
+      "input_modalities": [
+        "text"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "tokenizer": "Other",
+      "instruct_type": null
+    },
+    "pricing": {
+      "prompt": "0.00000005",
+      "completion": "0.0000001",
+      "input_cache_read": "0.00000005"
+    },
+    "top_provider": {
+      "context_length": 131072,
+      "max_completion_tokens": 131072,
+      "is_moderated": false
+    },
+    "per_request_limits": null,
+    "supported_parameters": [
+      "frequency_penalty",
+      "logprobs",
+      "max_tokens",
+      "presence_penalty",
+      "repetition_penalty",
+      "response_format",
+      "seed",
+      "stop",
+      "structured_outputs",
+      "temperature",
+      "tool_choice",
+      "tools",
+      "top_k",
+      "top_logprobs",
+      "top_p"
+    ],
+    "default_parameters": {
+      "temperature": null,
+      "top_p": null,
+      "top_k": null,
+      "frequency_penalty": null,
+      "presence_penalty": null,
+      "repetition_penalty": null
+    },
+    "supported_voices": null,
+    "knowledge_cutoff": null,
+    "expiration_date": null,
+    "links": {
+      "details": "/api/v1/models/ibm-granite/granite-4.1-8b-20260429/endpoints"
+    },
+    "benchmarks": {
+      "design_arena": [],
+      "artificial_analysis": {
+        "intelligence_index": null,
+        "coding_index": 9.5,
+        "agentic_index": null
+      }
+    }
+  },
+  "page_url": "https://openrouter.ai/ibm-granite/granite-4.1-8b",
+  "page": {
+    "title": "Granite 4.1 8B - API Pricing &amp; Benchmarks | OpenRouter",
+    "visible_text_sample": "Granite 4.1 8B - API Pricing &amp; Benchmarks | OpenRouter Skip to content OpenRouter Search \u2318 K Models Fusion Chat Rankings Apps Enterprise Pricing Docs OpenRouter \u00a9 2026 OpenRouter, Inc Product Chat Rankings Apps Models Providers Pricing Enterprise Labs Company About Blog Careers Hiring Privacy Terms of Service Support State of AI Works With OR Data Developer Documentation API Reference SDK Status Connect Discord GitHub LinkedIn X YouTube IBM: Granite 4.1 8B ibm-granite / granite-4.1-8b Model weights Compare Playground Quick Start Granite 4.1 8B is a dense, decoder-only 8-billion-parameter language model from IBM, part of the Granite 4.1 family. It supports a 131K-token context window and is designed for enterprise tasks including tool calling, retrieval-augmented generation (RAG), code generation with fill-in-the-middle support, text summarization, classification, and extraction. The model handles 12 languages (English, German, Spanish, French, Japanese, Portuguese, Arabic, Czech, Italian, Korean, Dutch, and Chinese) and implements OpenAI-compatible tool calling. Released under the Apache 2.0 license. Modalities In / Out Price $0.05 / $0.10 per 1M Context 131K Released Apr 30, 2026 IBM: Granite 4.1 8B Compare Playground Quick Start Providers Effective Pricing Performance Uptime Benchmarks Apps Activity Providers Providers This model is hosted by one provider. OpenRouter forwards every request to it directly \u2014 no routing decisions to make. Effective Pricing The chart below shows the average price customers are actually paying after prompt caching. Depending on the amount of repeated context you send, this can be 60\u201380% cheaper than the provider list price. Shown are rolling averages from the past 30 days. Performance Throughput is how fast the model writes (tokens per second \u2014 higher is better). Latency is total round-trip time (lower is better). TTFT is time-to-first-token \u2014 how long before you see anything appear (lower is better). Uptime Percent of requests that succeeded over the last 30 days. OpenRouter monitors every provider continuously and automatically retries on the next-best provider when one returns an error. Benchmarks Scores on standardized evaluations. Higher percentages are better \u2014 and rank percentile shows where this model lands among all models on OpenRouter. Apps Public apps that send the most traffic to this model. Good signal for what real production workloads look like \u2014 and a hint at which use cases this model is best suited for. Activity Token volume and request traffic to this model over time. Quick Start Drop-in code to call this model. OpenRouter&#x27;s API is OpenAI-compatible \u2014 most SDKs work by just swapping the base URL. The only thing that changes between models is the model slug below."
+  }
+}

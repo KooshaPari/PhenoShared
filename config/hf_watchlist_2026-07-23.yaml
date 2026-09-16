@@ -1,0 +1,66 @@
+# HF glance 2026-07-23 — metadata only (no downloads).
+# Locked local TB2 matrix remains qwen35-08b / lfm25-8b-a1b / ornith-8b until admit.
+
+schema_version: pheno.hf-watchlist.v1
+as_of: "2026-07-23"
+policy:
+  mutate_locked_shortlist: false
+  allow_model_artifact_download: false
+  current_local_matrix:
+    - local/qwen35-08b
+    - local/lfm25-8b-a1b
+    - local/ornith-8b
+
+candidates:
+  - id: Nanbeige/Nanbeige4.2-3B
+    priority: P0
+    why: >
+      Fresh 3B Looped Transformer agentic model (2026-07-22). Card claims TB2
+      mean 44.1 and beats larger Qwen3.5/Gemma4 on several agent benches. Apache-2.0.
+      Fits 3090 easily (~4.2B bf16 / ~2–3GB Q4).
+    reported_tb20: 44.1
+    hf: https://huggingface.co/Nanbeige/Nanbeige4.2-3B
+    gguf_community:
+      - Andgihat/Nanbeige4.2-3B-GGUF  # UD-Q4_K_XL etc; arch=nanbeige
+    runtime_gate: >
+      Upstream llama.cpp (b10012) does NOT load nanbeige arch. Official path is
+      git clone -b nanbeige42 https://github.com/Nanbeige/llama.cpp.git — separate
+      binary from current D:\WSL\tools\llama.cpp-b10012-cuda12.4.
+    admit_path:
+      - build Nanbeige llama.cpp fork OR transformers/vLLM once supported
+      - pull Q4_K_M / UD-Q4_K_XL after admit
+      - add local/nanbeige42-3b to harbor_tbench_models + start_llama_local.ps1
+    status: watch_runtime_fork
+
+  - id: google/diffusiongemma-26B-A4B-it
+    priority: P1
+    why: >
+      Experimental block-diffusion Gemma4 MoE (26B total / ~4B active). Very fast
+      decode; multimodal; Apache-2.0. Interesting for latency/agent turn speed,
+      not a drop-in for Terminus chat-completions.
+    hf: https://huggingface.co/google/diffusiongemma-26B-A4B-it
+    quant_note: nvidia/diffusiongemma-26B-A4B-it-NVFP4 for Hopper-friendly path
+    runtime_gate: >
+      Needs DiffusionGemma / Diffusers or vLLM diffusion path — not llama-server
+      OpenAI chat. 24GB 3090 is tight at full; QAT/NVFP4 may fit but stack differs
+      from local TB2 llama recipe.
+    admit_path:
+      - smoke via transformers DiffusionGemmaForBlockDiffusion or vLLM when ready
+      - separate eval lane (latency/agent), not replace qwen/lfm/ornith matrix
+    status: watch_stack
+
+  - id: MiniMaxAI/MiniMax-M3
+    priority: P2
+    why: Large fresh release (high likes); too big for single-GPU local TB2 first pass.
+    status: watch_cloud_or_offload
+
+  - id: LiquidAI/LFM2.5-VL-1.6B-GGUF
+    priority: P2
+    why: Small VL companion to existing LFM text lane; useful if TB gains image tasks.
+    status: watch_vl
+
+notes:
+  - evidence_registry.yaml updated with Nanbeige4.2 + DiffusionGemma resolve/query rows.
+  - Do not interrupt in-flight local/qwen35-08b full TB2 for these.
+  - Next admit after qwen finishes: still LFM then Ornith on current llama-server;
+    Nanbeige only after nanbeige42 fork binary is built and chat-smoked on :8001.

@@ -1,0 +1,959 @@
+<div id="readme" class="md" data-path="README.md"><article class="markdown-body entry-content container-lg" itemprop="text"><div class="markdown-heading" dir="auto"><h1 class="heading-element" dir="auto">BytePort</h1><a id="user-content-byteport" class="anchor" aria-label="Permalink: BytePort" href="#byteport"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a></div>
+<div class="markdown-heading" dir="auto"><h2 class="heading-element" dir="auto">What is this</h2><a id="user-content-what-is-this" class="anchor" aria-label="Permalink: What is this" href="#what-is-this"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a></div>
+<p dir="auto"><strong>BytePort is a self-hosted IaC deployment + portfolio platform for developer projects.</strong> Define one manifest (<code>odin.nvms</code>) at your repo root and BytePort provisions a MicroVM-backed deployment on your own cloud, registers the resulting endpoints with a portfolio site, and uses an LLM to generate showcase metadata for each project.</p>
+<div class="markdown-heading" dir="auto"><h3 class="heading-element" dir="auto">Canonical stack</h3><a id="user-content-canonical-stack" class="anchor" aria-label="Permalink: Canonical stack" href="#canonical-stack"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a></div>
+<p dir="auto">This README previously disagreed with itself (Loco.rs / Rust / Tauri / SvelteKit references appeared in different sections). The actual shipping stack is:</p>
+<ul dir="auto">
+<li><strong>Backend:</strong> Go 1.25 — <code>backend/byteport</code> (Gin + GORM + SQLite, PASETO auth, AWS SDK)</li>
+<li><strong>Frontend:</strong> SvelteKit 2 + Svelte 5 + Tailwind 4, packaged as a <strong>Tauri 2</strong> desktop/mobile shell — <code>frontend/web</code></li>
+<li><strong>MicroVM runtime:</strong> Spin / <code>nvms</code> Go service — <code>backend/nvms</code></li>
+<li><strong>Dev orchestration:</strong> <code>./start dev</code> (tmux) and <code>./start prod</code> — see below</li>
+<li><strong>Persistence:</strong> SQLite via GORM</li>
+</ul>
+<p dir="auto">There is no Rust workspace at the repo root; previous mentions of Loco.rs were aspirational and have been removed. The Rust toolchain only appears via Tauri's bundler under <code>frontend/web</code>.</p>
+<div class="markdown-heading" dir="auto"><h3 class="heading-element" dir="auto">Running it</h3><a id="user-content-running-it" class="anchor" aria-label="Permalink: Running it" href="#running-it"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a></div>
+<div class="highlight highlight-source-shell notranslate position-relative overflow-auto" dir="auto" data-snippet-clipboard-copy-content="./start dev     # tmux session: SvelteKit dev (port 5173) + `air` hot-reload Go backend
+./start prod    # builds the SvelteKit frontend, runs `npm start`, then `go run main.go`"><pre>./start dev     <span class="pl-c"><span class="pl-c">#</span> tmux session: SvelteKit dev (port 5173) + `air` hot-reload Go backend</span>
+./start prod    <span class="pl-c"><span class="pl-c">#</span> builds the SvelteKit frontend, runs `npm start`, then `go run main.go`</span></pre></div>
+<p dir="auto"><code>./start</code> requires <code>tmux</code> (dev mode), <code>npm</code>, and <code>go</code>. Edit the hardcoded paths inside <code>./start</code> if your checkout is not at <code>~/temp-PRODVERCEL/Rust/webApp/byte_port</code> — that path is a leftover from the original author's machine and will be parameterized in a follow-up.</p>
+<div class="markdown-heading" dir="auto"><h3 class="heading-element" dir="auto">Credentials</h3><a id="user-content-credentials" class="anchor" aria-label="Permalink: Credentials" href="#credentials"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a></div>
+<p dir="auto">Demo portfolio integration (Slickport) expects credentials you set yourself. <strong>Do not</strong> use any credential string copied from an older revision of this README; replace <code>&lt;YOUR_API_KEY&gt;</code> placeholders with values from your own deployment.</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h2 class="heading-element" dir="auto">An IAC Deployment + UX Generation platform for Software Developer Portfolios</h2><a id="user-content-an-iac-deployment--ux-generation-platform-for-software-developer-portfolios" class="anchor" aria-label="Permalink: An IAC Deployment + UX Generation platform for Software Developer Portfolios" href="#an-iac-deployment--ux-generation-platform-for-software-developer-portfolios"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a></div>
+<div class="markdown-heading" dir="auto"><h2 class="heading-element" dir="auto">With One IAC File Defining your Application Structured and related infra, Byteport deploys your project from your github repository onto your aws cloud platform, then utilizing chatgpt(soon llama) to then send object templates for additions to demonstration/portfolio sites to display and provide interaction access to these projects (and show them off automagically!)</h2><a id="user-content-with-one-iac-file-defining-your-application-structured-and-related-infra-byteport-deploys-your-project-from-your-github-repository-onto-your-aws-cloud-platform-then-utilizing-chatgptsoon-llama-to-then-send-object-templates-for-additions-to-demonstrationportfolio-sites-to-display-and-provide-interaction-access-to-these-projects-and-show-them-off-automagically" class="anchor" aria-label="Permalink: With One IAC File Defining your Application Structured and related infra, Byteport deploys your project from your github repository onto your aws cloud platform, then utilizing chatgpt(soon llama) to then send object templates for additions to demonstration/portfolio sites to display and provide interaction access to these projects (and show them off automagically!)" href="#with-one-iac-file-defining-your-application-structured-and-related-infra-byteport-deploys-your-project-from-your-github-repository-onto-your-aws-cloud-platform-then-utilizing-chatgptsoon-llama-to-then-send-object-templates-for-additions-to-demonstrationportfolio-sites-to-display-and-provide-interaction-access-to-these-projects-and-show-them-off-automagically"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a></div>
+<div class="markdown-heading" dir="auto"><h3 class="heading-element" dir="auto"><a href="https://drive.google.com/file/d/1ZJeQOPHCNY1aHjXprNrmxMNi9hZaYSPW/view?usp=sharing" rel="nofollow">Example</a></h3><a id="user-content-example" class="anchor" aria-label="Permalink: Example" href="#example"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a></div>
+<div class="markdown-heading" dir="auto"><h3 class="heading-element" dir="auto">Refer to <a href="https://github.com/kooshapari/fixit-go">Fixit-Go</a> <a href="https://github.com/kooshapari/chatta">Chatta</a> For Project Examples, <a href="https://github.com/kooshapari/slickport">Slickport</a> for Portfolio integration example</h3><a id="user-content-refer-to-fixit-go-chatta-for-project-examples-slickport-for-portfolio-integration-example" class="anchor" aria-label="Permalink: Refer to Fixit-GoChatta For Project Examples, Slickport for Portfolio integration example" href="#refer-to-fixit-go-chatta-for-project-examples-slickport-for-portfolio-integration-example"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a></div>
+<div class="markdown-heading" dir="auto"><h2 class="heading-element" dir="auto">Quickstart</h2><a id="user-content-quickstart" class="anchor" aria-label="Permalink: Quickstart" href="#quickstart"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a></div>
+<div class="markdown-heading" dir="auto"><h3 class="heading-element" dir="auto">Prepwork:</h3><a id="user-content-prepwork" class="anchor" aria-label="Permalink: Prepwork:" href="#prepwork"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a></div>
+<ul dir="auto">
+<li>Install SpinCLI, golang etc</li>
+<li>Clone Project, open 3 terminals -&gt; backend\byteport -&gt; spin build up, backend\nvms -&gt; go run main.go , frontend\web -&gt; npm i -&gt; npm run dev</li>
+<li>Grab Demosite and startup(if you don't want to setup api routes rn either remove the demonstrator call in the deploy function OR clone and run slickport with npm run dev and provide localhost:5180, &lt;YOUR_API_KEY&gt; for credentials)</li>
+<li>localhost:5173/signup -&gt; signup -&gt; first time setup -&gt; home -&gt; ready</li>
+</ul>
+<div class="markdown-heading" dir="auto"><h3 class="heading-element" dir="auto">Deploy Prep</h3><a id="user-content-deploy-prep" class="anchor" aria-label="Permalink: Deploy Prep" href="#deploy-prep"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a></div>
+<ul dir="auto">
+<li>Grab an application and in the root create a README.md, and an odin.nvms, follow pattern below:
+NAME: app
+DESCRIPTION: basic todo
+SERVICES:</li>
+<li>NAME: "main" (REQUIRED - Points to url/, typically for frontend)</li>
+<li>PATH: "./frontend"</li>
+<li>PORT: 8080</li>
+<li>ENV={hello=hi} (not tested)</li>
+<li>NAME: "backend""</li>
+<li>PATH: "./backend"</li>
+<li>PORT: 8081</li>
+<li>Readme will be fed as part of prompt to describe your project and add context, do a quick detailed bullet list etc</li>
+<li>map all API URLs in your program to /service/apiaction other than main which takes /*</li>
+<li>If too lazy refer to Chatta or Fixit-Go repos which are ready for byteport deployment</li>
+</ul>
+<div class="markdown-heading" dir="auto"><h3 class="heading-element" dir="auto">Deploy</h3><a id="user-content-deploy" class="anchor" aria-label="Permalink: Deploy" href="#deploy"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a></div>
+<ul dir="auto">
+<li>Go to UI, pick repo, write name and descr(rest are useless atm) deploy, wait a bit (no user ui progress indication atm refer to spin instance in terminal), check portfolio and dashboard, instance now avail.</li>
+</ul>
+<div class="markdown-heading" dir="auto"><h2 class="heading-element" dir="auto">GPT YAP BELOW (outdated)</h2><a id="user-content-gpt-yap-below-outdated" class="anchor" aria-label="Permalink: GPT YAP BELOW (outdated)" href="#gpt-yap-below-outdated"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a></div>
+<div class="markdown-heading" dir="auto"><h1 class="heading-element" dir="auto">Project Manifesto: <strong>BytePort</strong> - MicroVM Cloud Management and Portfolio Integration</h1><a id="user-content-project-manifesto-byteport---microvm-cloud-management-and-portfolio-integration" class="anchor" aria-label="Permalink: Project Manifesto: BytePort - MicroVM Cloud Management and Portfolio Integration" href="#project-manifesto-byteport---microvm-cloud-management-and-portfolio-integration"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a></div>
+<div class="snippet-clipboard-content notranslate position-relative overflow-auto" data-snippet-clipboard-copy-content="                   ▄     ▀
+                              ▀  ▄
+           ▄       ▀     ▄  ▄ ▄▀
+                             ▄ ▀▄▄
+                   ▄     ▀    ▀  ▀▄▀█▄
+                                     ▀█▄
+
+▄▄▄▄▄▄▄ ▄▄▄▄▄▄▄▄▄ ▄▄▄▄▄▄▄▄▄▄▄ ▄▄▄▄▄▄▄▄▄ ▀▀█
+██████ █████ ███ █████ ███ █████ ███ ▀█
+██████ █████ ███ █████ ▀▀▀ █████ ███ ▄█▄
+██████ █████ ███ █████ █████ ███ ████▄
+██████ █████ ███ █████ ▄▄▄ █████ ███ █████
+██████ █████ ███ ████ ███ █████ ███ ████▀
+▀▀▀██▄ ▀▀▀▀▀▀▀▀▀▀ ▀▀▀▀▀▀▀▀▀▀ ▀▀▀▀▀▀▀▀▀▀ ██▀
+▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀
+https://loco.rs
+
+environment: development
+database: automigrate
+logger: debug
+compilation: debug
+modes: server
+
+listening on localhost:5150"><pre class="notranslate"><code>                   ▄     ▀
+                              ▀  ▄
+           ▄       ▀     ▄  ▄ ▄▀
+                             ▄ ▀▄▄
+                   ▄     ▀    ▀  ▀▄▀█▄
+                                     ▀█▄
+
+▄▄▄▄▄▄▄ ▄▄▄▄▄▄▄▄▄ ▄▄▄▄▄▄▄▄▄▄▄ ▄▄▄▄▄▄▄▄▄ ▀▀█
+██████ █████ ███ █████ ███ █████ ███ ▀█
+██████ █████ ███ █████ ▀▀▀ █████ ███ ▄█▄
+██████ █████ ███ █████ █████ ███ ████▄
+██████ █████ ███ █████ ▄▄▄ █████ ███ █████
+██████ █████ ███ ████ ███ █████ ███ ████▀
+▀▀▀██▄ ▀▀▀▀▀▀▀▀▀▀ ▀▀▀▀▀▀▀▀▀▀ ▀▀▀▀▀▀▀▀▀▀ ██▀
+▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀
+https://loco.rs
+
+environment: development
+database: automigrate
+logger: debug
+compilation: debug
+modes: server
+
+listening on localhost:5150
+</code></pre></div>
+<div class="markdown-heading" dir="auto"><h2 class="heading-element" dir="auto">Table of Contents</h2><a id="user-content-table-of-contents" class="anchor" aria-label="Permalink: Table of Contents" href="#table-of-contents"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a></div>
+<ol dir="auto">
+<li><a href="#introduction">Introduction</a></li>
+<li><a href="#project-overview">Project Overview</a></li>
+<li><a href="#objectives">Objectives</a></li>
+<li><a href="#technologies-and-tools">Technologies and Tools</a></li>
+<li><a href="#project-architecture">Project Architecture</a></li>
+<li><a href="#development-phases-and-timeline">Development Phases and Timeline</a></li>
+<li><a href="#implementation-details">Implementation Details</a></li>
+<li><a href="#deployment-strategy">Deployment Strategy</a></li>
+<li><a href="#security-considerations">Security Considerations</a></li>
+<li><a href="#testing-and-quality-assurance">Testing and Quality Assurance</a></li>
+<li><a href="#project-management-and-collaboration">Project Management and Collaboration</a></li>
+<li><a href="#conclusion">Conclusion</a></li>
+</ol>
+<hr>
+<div class="markdown-heading" dir="auto"><h2 class="heading-element" dir="auto">Introduction</h2><a id="user-content-introduction" class="anchor" aria-label="Permalink: Introduction" href="#introduction"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a></div>
+<p dir="auto">This manifesto outlines the development of <strong>BytePort</strong>, a cloud-based platform for deploying and managing applications using a custom-developed MicroVM technology called <strong>NanoVMS</strong>. The project leverages <strong>SvelteKit</strong> for the frontend and <strong>Loco.rs</strong> for the backend. BytePort aims to provide a Docker-like experience for deploying applications but uses lightweight virtual machines instead of containers, offering users greater control and isolation.</p>
+<div class="markdown-heading" dir="auto"><h2 class="heading-element" dir="auto">Project Overview</h2><a id="user-content-project-overview" class="anchor" aria-label="Permalink: Project Overview" href="#project-overview"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a></div>
+<p dir="auto"><strong>Project Name:</strong> BytePort - MicroVM Cloud Management and Portfolio Integration</p>
+<p dir="auto"><strong>MicroVM Technology Name:</strong> NanoVMS</p>
+<p dir="auto"><strong>Description:</strong></p>
+<p dir="auto">BytePort is a cloud solution for deploying web applications and other projects directly from Git repositories. It creates and deploys pre-configured MicroVMs based on user specifications using the custom-developed <strong>NanoVMS</strong> technology. Upon successful deployment, BytePort integrates the project into the user's portfolio (e.g., <code>kooshapari.com</code>), adding project pages and linking the frontend of each web app to its respective project. Non-web app projects can also be deployed with custom configurations. Clients can view, debug, clone, and rebuild these instances as needed.</p>
+<div class="markdown-heading" dir="auto"><h2 class="heading-element" dir="auto">Objectives</h2><a id="user-content-objectives" class="anchor" aria-label="Permalink: Objectives" href="#objectives"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a></div>
+<div class="markdown-heading" dir="auto"><h3 class="heading-element" dir="auto">Primary Objectives</h3><a id="user-content-primary-objectives" class="anchor" aria-label="Permalink: Primary Objectives" href="#primary-objectives"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a></div>
+<ul dir="auto">
+<li><strong>Develop NanoVMS MicroVM Technology:</strong>
+<ul dir="auto">
+<li>Create a custom lightweight virtualization platform to run single-purpose VMs efficiently.</li>
+</ul>
+</li>
+<li><strong>Implement VM Management System:</strong>
+<ul dir="auto">
+<li>Develop a system to manage MicroVMs without relying on Docker.</li>
+</ul>
+</li>
+<li><strong>Frontend Development with SvelteKit:</strong>
+<ul dir="auto">
+<li>Build a dynamic and responsive dashboard for users to manage their MicroVMs and portfolio integrations.</li>
+</ul>
+</li>
+<li><strong>Backend Development with Loco.rs:</strong>
+<ul dir="auto">
+<li>Implement a high-performance backend using Rust and Loco.rs for secure and efficient processing.</li>
+</ul>
+</li>
+<li><strong>Integration with Git Repositories:</strong>
+<ul dir="auto">
+<li>Allow users to deploy applications directly from their Git repositories using custom configuration files.</li>
+</ul>
+</li>
+<li><strong>Portfolio Integration:</strong>
+<ul dir="auto">
+<li>Automate the addition of project pages to user portfolios, including generating descriptions and screenshots.</li>
+</ul>
+</li>
+</ul>
+<div class="markdown-heading" dir="auto"><h3 class="heading-element" dir="auto">Secondary Objectives</h3><a id="user-content-secondary-objectives" class="anchor" aria-label="Permalink: Secondary Objectives" href="#secondary-objectives"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a></div>
+<ul dir="auto">
+<li><strong>Future Integration of Custom Hypervisor and OS:</strong>
+<ul dir="auto">
+<li>Design the system to allow future insertion of a custom hypervisor and operating system.</li>
+</ul>
+</li>
+<li><strong>Learning-Oriented Development:</strong>
+<ul dir="auto">
+<li>Combine learning and development phases, ensuring relevant concepts are learned just before implementation.</li>
+</ul>
+</li>
+<li><strong>User Authentication and AWS Account Linking:</strong>
+<ul dir="auto">
+<li>Use databases for secure user authentication and link to their AWS accounts.</li>
+</ul>
+</li>
+<li><strong>LLM Integration:</strong>
+<ul dir="auto">
+<li>Utilize Language Learning Models (LLMs) to generate portfolio components like descriptions, with opt-out and review options.</li>
+</ul>
+</li>
+</ul>
+<div class="markdown-heading" dir="auto"><h2 class="heading-element" dir="auto">Technologies and Tools</h2><a id="user-content-technologies-and-tools" class="anchor" aria-label="Permalink: Technologies and Tools" href="#technologies-and-tools"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a></div>
+<div class="markdown-heading" dir="auto"><h3 class="heading-element" dir="auto">Frontend</h3><a id="user-content-frontend" class="anchor" aria-label="Permalink: Frontend" href="#frontend"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a></div>
+<ul dir="auto">
+<li><strong>Framework:</strong> SvelteKit</li>
+<li><strong>Language:</strong> TypeScript</li>
+<li><strong>Styling:</strong> Tailwind CSS</li>
+<li><strong>State Management:</strong> Svelte stores</li>
+<li><strong>HTTP Client:</strong> Fetch API</li>
+</ul>
+<div class="markdown-heading" dir="auto"><h3 class="heading-element" dir="auto">Backend</h3><a id="user-content-backend" class="anchor" aria-label="Permalink: Backend" href="#backend"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a></div>
+<ul dir="auto">
+<li><strong>Framework:</strong> Loco.rs (Rust)</li>
+<li><strong>Language:</strong> Rust</li>
+<li><strong>Database:</strong> SQLite (development), PostgreSQL (production)</li>
+<li><strong>ORM:</strong> Diesel</li>
+<li><strong>MicroVM Technology:</strong> NanoVMS (custom-developed)</li>
+<li><strong>Authentication:</strong> JSON Web Tokens (JWT)</li>
+</ul>
+<div class="markdown-heading" dir="auto"><h3 class="heading-element" dir="auto">DevOps and Deployment</h3><a id="user-content-devops-and-deployment" class="anchor" aria-label="Permalink: DevOps and Deployment" href="#devops-and-deployment"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a></div>
+<ul dir="auto">
+<li><strong>Cloud Platform:</strong> AWS (EC2, S3, IAM)</li>
+<li><strong>CI/CD Tools:</strong> GitHub Actions</li>
+<li><strong>Containerization:</strong> Not used; deployment is based on MicroVMs</li>
+</ul>
+<div class="markdown-heading" dir="auto"><h3 class="heading-element" dir="auto">Development Tools</h3><a id="user-content-development-tools" class="anchor" aria-label="Permalink: Development Tools" href="#development-tools"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a></div>
+<ul dir="auto">
+<li><strong>Version Control:</strong> Git</li>
+<li><strong>IDE:</strong> Visual Studio Code with Rust and Svelte extensions</li>
+<li><strong>Project Management:</strong> GitHub Projects</li>
+</ul>
+<div class="markdown-heading" dir="auto"><h2 class="heading-element" dir="auto">Project Architecture</h2><a id="user-content-project-architecture" class="anchor" aria-label="Permalink: Project Architecture" href="#project-architecture"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a></div>
+<div class="markdown-heading" dir="auto"><h3 class="heading-element" dir="auto">Overview</h3><a id="user-content-overview" class="anchor" aria-label="Permalink: Overview" href="#overview"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a></div>
+<p dir="auto">BytePort will follow a modular architecture, with a focus on the custom-developed MicroVM technology, <strong>NanoVMS</strong>, which provides lightweight virtualization without the overhead of full virtual machines or the complexity of containers. The system allows users to deploy applications in isolated environments, customized through declarative configuration files.</p>
+<div class="markdown-heading" dir="auto"><h3 class="heading-element" dir="auto">Components</h3><a id="user-content-components" class="anchor" aria-label="Permalink: Components" href="#components"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a></div>
+<ol dir="auto">
+<li>
+<p dir="auto"><strong>Frontend (SvelteKit):</strong></p>
+<ul dir="auto">
+<li>Manages user interactions, including submission of MicroVM configurations.</li>
+<li>Provides interfaces for portfolio integration settings.</li>
+</ul>
+</li>
+<li>
+<p dir="auto"><strong>Backend (Loco.rs):</strong></p>
+<ul dir="auto">
+<li>Parses custom configuration files (similar to Dockerfile clones).</li>
+<li>Generates scripts for MicroVM initialization.</li>
+<li>Manages MicroVM provisioning, orchestration, and lifecycle using NanoVMS.</li>
+<li>Handles business logic, data processing, and database interactions.</li>
+</ul>
+</li>
+<li>
+<p dir="auto"><strong>Database:</strong></p>
+<ul dir="auto">
+<li>Stores user data, MicroVM configurations, state information, and logs.</li>
+</ul>
+</li>
+<li>
+<p dir="auto"><strong>MicroVM Layer (NanoVMS):</strong></p>
+<ul dir="auto">
+<li>Custom-developed lightweight virtualization platform.</li>
+<li>Runs single-purpose VMs efficiently.</li>
+<li>Supports rapid cloning and booting of MicroVMs from base images.</li>
+</ul>
+</li>
+<li>
+<p dir="auto"><strong>Portfolio Integration Module:</strong></p>
+<ul dir="auto">
+<li>Automates updates to user portfolios after successful deployments.</li>
+<li>Uses LLMs to generate project descriptions with user approval.</li>
+</ul>
+</li>
+</ol>
+<div class="markdown-heading" dir="auto"><h3 class="heading-element" dir="auto">Data Flow</h3><a id="user-content-data-flow" class="anchor" aria-label="Permalink: Data Flow" href="#data-flow"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a></div>
+<ul dir="auto">
+<li><strong>User Interaction:</strong>
+<ul dir="auto">
+<li>Users submit configuration files via the frontend.</li>
+</ul>
+</li>
+<li><strong>Configuration Parsing:</strong>
+<ul dir="auto">
+<li>Backend parses the configuration and generates initialization scripts.</li>
+</ul>
+</li>
+<li><strong>MicroVM Provisioning:</strong>
+<ul dir="auto">
+<li>Backend orchestrates MicroVM creation and initialization using NanoVMS.</li>
+</ul>
+</li>
+<li><strong>Application Deployment:</strong>
+<ul dir="auto">
+<li>MicroVM pulls the Git repository and starts the application as per configuration.</li>
+</ul>
+</li>
+<li><strong>Portfolio Update:</strong>
+<ul dir="auto">
+<li>If enabled, the system updates the user's portfolio with project details.</li>
+</ul>
+</li>
+</ul>
+<div class="markdown-heading" dir="auto"><h2 class="heading-element" dir="auto">Development Phases and Timeline</h2><a id="user-content-development-phases-and-timeline" class="anchor" aria-label="Permalink: Development Phases and Timeline" href="#development-phases-and-timeline"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a></div>
+<p dir="auto">The development timeline combines learning and implementation phases, ensuring that relevant concepts are learned just before they are applied.</p>
+<div class="markdown-heading" dir="auto"><h3 class="heading-element" dir="auto">Phase 1: Project Setup and Planning (Week 1)</h3><a id="user-content-phase-1-project-setup-and-planning-week-1" class="anchor" aria-label="Permalink: Phase 1: Project Setup and Planning (Week 1)" href="#phase-1-project-setup-and-planning-week-1"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a></div>
+<ul dir="auto">
+<li><strong>Learning Objectives:</strong>
+<ul dir="auto">
+<li>Basics of Rust, SvelteKit, and virtualization concepts.</li>
+</ul>
+</li>
+<li><strong>Development Tasks:</strong>
+<ul dir="auto">
+<li>Set up repositories and development environments.</li>
+<li>Define project requirements and specifications.</li>
+<li>Design database schema and API endpoints.</li>
+</ul>
+</li>
+</ul>
+<div class="markdown-heading" dir="auto"><h3 class="heading-element" dir="auto">Phase 2: Backend Foundations (Weeks 2-3)</h3><a id="user-content-phase-2-backend-foundations-weeks-2-3" class="anchor" aria-label="Permalink: Phase 2: Backend Foundations (Weeks 2-3)" href="#phase-2-backend-foundations-weeks-2-3"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a></div>
+<ul dir="auto">
+<li><strong>Learning Objectives:</strong>
+<ul dir="auto">
+<li>Advanced Rust programming and Loco.rs framework.</li>
+</ul>
+</li>
+<li><strong>Development Tasks:</strong>
+<ul dir="auto">
+<li>Implement user authentication and AWS account linking.</li>
+<li>Develop basic API endpoints.</li>
+<li>Integrate with the database using Diesel ORM.</li>
+</ul>
+</li>
+</ul>
+<div class="markdown-heading" dir="auto"><h3 class="heading-element" dir="auto">Phase 3: Frontend Foundations (Weeks 3-4)</h3><a id="user-content-phase-3-frontend-foundations-weeks-3-4" class="anchor" aria-label="Permalink: Phase 3: Frontend Foundations (Weeks 3-4)" href="#phase-3-frontend-foundations-weeks-3-4"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a></div>
+<ul dir="auto">
+<li><strong>Learning Objectives:</strong>
+<ul dir="auto">
+<li>Advanced features of SvelteKit and Tailwind CSS.</li>
+</ul>
+</li>
+<li><strong>Development Tasks:</strong>
+<ul dir="auto">
+<li>Set up the SvelteKit project.</li>
+<li>Design UI/UX prototypes.</li>
+<li>Implement authentication flows on the frontend.</li>
+</ul>
+</li>
+</ul>
+<div class="markdown-heading" dir="auto"><h3 class="heading-element" dir="auto">Phase 4: Development of NanoVMS MicroVM Technology (Weeks 4-6)</h3><a id="user-content-phase-4-development-of-nanovms-microvm-technology-weeks-4-6" class="anchor" aria-label="Permalink: Phase 4: Development of NanoVMS MicroVM Technology (Weeks 4-6)" href="#phase-4-development-of-nanovms-microvm-technology-weeks-4-6"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a></div>
+<ul dir="auto">
+<li><strong>Learning Objectives:</strong>
+<ul dir="auto">
+<li>Deep understanding of virtualization, OS-level isolation, and kernel features.</li>
+</ul>
+</li>
+<li><strong>Development Tasks:</strong>
+<ul dir="auto">
+<li>Develop the NanoVMS platform to manage MicroVMs.</li>
+<li>Implement the necessary system calls and kernel interactions.</li>
+<li>Ensure the platform provides efficient and secure isolation.</li>
+</ul>
+</li>
+</ul>
+<div class="markdown-heading" dir="auto"><h3 class="heading-element" dir="auto">Phase 5: Integration of VM Configuration Management (Weeks 6-7)</h3><a id="user-content-phase-5-integration-of-vm-configuration-management-weeks-6-7" class="anchor" aria-label="Permalink: Phase 5: Integration of VM Configuration Management (Weeks 6-7)" href="#phase-5-integration-of-vm-configuration-management-weeks-6-7"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a></div>
+<ul dir="auto">
+<li><strong>Learning Objectives:</strong>
+<ul dir="auto">
+<li>Configuration management and automation tools.</li>
+</ul>
+</li>
+<li><strong>Development Tasks:</strong>
+<ul dir="auto">
+<li>Define the syntax and structure of custom configuration files.</li>
+<li>Implement parsing logic in the backend.</li>
+<li>Integrate MicroVM initialization scripts generation.</li>
+</ul>
+</li>
+</ul>
+<div class="markdown-heading" dir="auto"><h3 class="heading-element" dir="auto">Phase 6: Portfolio Integration Module (Weeks 7-8)</h3><a id="user-content-phase-6-portfolio-integration-module-weeks-7-8" class="anchor" aria-label="Permalink: Phase 6: Portfolio Integration Module (Weeks 7-8)" href="#phase-6-portfolio-integration-module-weeks-7-8"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a></div>
+<ul dir="auto">
+<li><strong>Learning Objectives:</strong>
+<ul dir="auto">
+<li>Basics of LLMs and their integration into applications.</li>
+</ul>
+</li>
+<li><strong>Development Tasks:</strong>
+<ul dir="auto">
+<li>Implement portfolio integration features.</li>
+<li>Integrate LLMs for generating project descriptions.</li>
+<li>Set up screenshot generation or image upload functionalities.</li>
+</ul>
+</li>
+</ul>
+<div class="markdown-heading" dir="auto"><h3 class="heading-element" dir="auto">Phase 7: Full Integration and Testing (Weeks 8-9)</h3><a id="user-content-phase-7-full-integration-and-testing-weeks-8-9" class="anchor" aria-label="Permalink: Phase 7: Full Integration and Testing (Weeks 8-9)" href="#phase-7-full-integration-and-testing-weeks-8-9"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a></div>
+<ul dir="auto">
+<li><strong>Learning Objectives:</strong>
+<ul dir="auto">
+<li>Testing methodologies and tools.</li>
+</ul>
+</li>
+<li><strong>Development Tasks:</strong>
+<ul dir="auto">
+<li>Connect frontend with backend APIs.</li>
+<li>Perform unit, integration, and end-to-end tests.</li>
+<li>Debug and resolve identified issues.</li>
+</ul>
+</li>
+</ul>
+<div class="markdown-heading" dir="auto"><h3 class="heading-element" dir="auto">Phase 8: Deployment and DevOps (Week 10)</h3><a id="user-content-phase-8-deployment-and-devops-week-10" class="anchor" aria-label="Permalink: Phase 8: Deployment and DevOps (Week 10)" href="#phase-8-deployment-and-devops-week-10"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a></div>
+<ul dir="auto">
+<li><strong>Learning Objectives:</strong>
+<ul dir="auto">
+<li>AWS services and CI/CD pipelines.</li>
+</ul>
+</li>
+<li><strong>Development Tasks:</strong>
+<ul dir="auto">
+<li>Set up AWS infrastructure (EC2 instances, IAM roles).</li>
+<li>Configure CI/CD pipelines with GitHub Actions.</li>
+<li>Deploy the application to the cloud environment.</li>
+</ul>
+</li>
+</ul>
+<div class="markdown-heading" dir="auto"><h3 class="heading-element" dir="auto">Phase 9: Security and Optimization (Week 11)</h3><a id="user-content-phase-9-security-and-optimization-week-11" class="anchor" aria-label="Permalink: Phase 9: Security and Optimization (Week 11)" href="#phase-9-security-and-optimization-week-11"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a></div>
+<ul dir="auto">
+<li><strong>Learning Objectives:</strong>
+<ul dir="auto">
+<li>Security best practices and performance optimization.</li>
+</ul>
+</li>
+<li><strong>Development Tasks:</strong>
+<ul dir="auto">
+<li>Implement SSL/TLS for secure communication.</li>
+<li>Optimize application performance.</li>
+<li>Conduct security audits and penetration testing.</li>
+</ul>
+</li>
+</ul>
+<div class="markdown-heading" dir="auto"><h3 class="heading-element" dir="auto">Phase 10: Documentation and Finalization (Week 12)</h3><a id="user-content-phase-10-documentation-and-finalization-week-12" class="anchor" aria-label="Permalink: Phase 10: Documentation and Finalization (Week 12)" href="#phase-10-documentation-and-finalization-week-12"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a></div>
+<ul dir="auto">
+<li><strong>Development Tasks:</strong>
+<ul dir="auto">
+<li>Write comprehensive documentation (API docs, user guides).</li>
+<li>Prepare deployment scripts and environment configurations.</li>
+<li>Conduct a final review and make necessary adjustments.</li>
+</ul>
+</li>
+</ul>
+<div class="markdown-heading" dir="auto"><h2 class="heading-element" dir="auto">Implementation Details</h2><a id="user-content-implementation-details" class="anchor" aria-label="Permalink: Implementation Details" href="#implementation-details"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a></div>
+<div class="markdown-heading" dir="auto"><h3 class="heading-element" dir="auto">Backend Implementation</h3><a id="user-content-backend-implementation" class="anchor" aria-label="Permalink: Backend Implementation" href="#backend-implementation"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a></div>
+<ul dir="auto">
+<li>
+<p dir="auto"><strong>Routing and Controllers:</strong></p>
+<ul dir="auto">
+<li>Define RESTful API routes using Loco.rs.</li>
+<li>Implement controllers for handling requests and responses.</li>
+</ul>
+</li>
+<li>
+<p dir="auto"><strong>Authentication Middleware:</strong></p>
+<ul dir="auto">
+<li>Implement JWT-based authentication.</li>
+<li>Secure API endpoints with middleware.</li>
+</ul>
+</li>
+<li>
+<p dir="auto"><strong>Database Models and ORM:</strong></p>
+<ul dir="auto">
+<li>Define models for users, MicroVMs, projects, and logs.</li>
+<li>Use Diesel ORM for database interactions.</li>
+</ul>
+</li>
+<li>
+<p dir="auto"><strong>MicroVM Management (NanoVMS):</strong></p>
+<ul dir="auto">
+<li>Integrate NanoVMS for MicroVM provisioning and lifecycle management.</li>
+<li>Implement APIs to create, start, stop, and delete MicroVMs.</li>
+<li>Develop an abstraction layer for future integration with custom hypervisor and OS.</li>
+</ul>
+</li>
+<li>
+<p dir="auto"><strong>Configuration Parsing:</strong></p>
+<ul dir="auto">
+<li>Develop logic to parse custom configuration files.</li>
+<li>Generate initialization scripts based on user specifications.</li>
+</ul>
+</li>
+</ul>
+<div class="markdown-heading" dir="auto"><h3 class="heading-element" dir="auto">Frontend Implementation</h3><a id="user-content-frontend-implementation" class="anchor" aria-label="Permalink: Frontend Implementation" href="#frontend-implementation"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a></div>
+<ul dir="auto">
+<li>
+<p dir="auto"><strong>Routing:</strong></p>
+<ul dir="auto">
+<li>Use SvelteKit's file-based routing for pages (e.g., <code>/dashboard</code>, <code>/projects</code>).</li>
+</ul>
+</li>
+<li>
+<p dir="auto"><strong>State Management:</strong></p>
+<ul dir="auto">
+<li>Utilize Svelte stores for managing global state.</li>
+</ul>
+</li>
+<li>
+<p dir="auto"><strong>UI Components:</strong></p>
+<ul dir="auto">
+<li>Create reusable components with Tailwind CSS styling.</li>
+<li>Implement responsive design for various devices.</li>
+</ul>
+</li>
+<li>
+<p dir="auto"><strong>API Integration:</strong></p>
+<ul dir="auto">
+<li>Develop a service layer for API calls.</li>
+<li>Handle errors and loading states gracefully.</li>
+</ul>
+</li>
+<li>
+<p dir="auto"><strong>Portfolio Integration:</strong></p>
+<ul dir="auto">
+<li>Implement interfaces for users to manage portfolio settings.</li>
+<li>Provide options to opt-in or opt-out of portfolio additions.</li>
+</ul>
+</li>
+</ul>
+<div class="markdown-heading" dir="auto"><h2 class="heading-element" dir="auto">Deployment Strategy</h2><a id="user-content-deployment-strategy" class="anchor" aria-label="Permalink: Deployment Strategy" href="#deployment-strategy"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a></div>
+<div class="markdown-heading" dir="auto"><h3 class="heading-element" dir="auto">Backend Deployment</h3><a id="user-content-backend-deployment" class="anchor" aria-label="Permalink: Backend Deployment" href="#backend-deployment"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a></div>
+<ul dir="auto">
+<li>
+<p dir="auto"><strong>AWS Deployment:</strong></p>
+<ul dir="auto">
+<li>Deploy the backend on AWS EC2 instances.</li>
+<li>Use IAM roles for secure resource access.</li>
+</ul>
+</li>
+<li>
+<p dir="auto"><strong>MicroVM Deployment:</strong></p>
+<ul dir="auto">
+<li>Use NanoVMS to run MicroVMs on the host system.</li>
+<li>Ensure that the infrastructure supports the custom MicroVM technology.</li>
+</ul>
+</li>
+</ul>
+<div class="markdown-heading" dir="auto"><h3 class="heading-element" dir="auto">Frontend Deployment</h3><a id="user-content-frontend-deployment" class="anchor" aria-label="Permalink: Frontend Deployment" href="#frontend-deployment"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a></div>
+<ul dir="auto">
+<li><strong>Static Site Generation:</strong>
+<ul dir="auto">
+<li>Build the SvelteKit app for production.</li>
+<li>Serve static files via AWS S3 and CloudFront.</li>
+</ul>
+</li>
+</ul>
+<div class="markdown-heading" dir="auto"><h3 class="heading-element" dir="auto">CI/CD Pipelines</h3><a id="user-content-cicd-pipelines" class="anchor" aria-label="Permalink: CI/CD Pipelines" href="#cicd-pipelines"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a></div>
+<ul dir="auto">
+<li><strong>Automation:</strong>
+<ul dir="auto">
+<li>Use GitHub Actions for automated builds and deployments.</li>
+<li>Implement testing stages in the pipeline.</li>
+</ul>
+</li>
+</ul>
+<div class="markdown-heading" dir="auto"><h2 class="heading-element" dir="auto">Security Considerations</h2><a id="user-content-security-considerations" class="anchor" aria-label="Permalink: Security Considerations" href="#security-considerations"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a></div>
+<ul dir="auto">
+<li>
+<p dir="auto"><strong>Authentication and Authorization:</strong></p>
+<ul dir="auto">
+<li>Enforce strong password policies.</li>
+<li>Implement role-based access control (RBAC).</li>
+</ul>
+</li>
+<li>
+<p dir="auto"><strong>Data Protection:</strong></p>
+<ul dir="auto">
+<li>Encrypt sensitive data in transit and at rest.</li>
+<li>Regularly back up databases securely.</li>
+</ul>
+</li>
+<li>
+<p dir="auto"><strong>Network Security:</strong></p>
+<ul dir="auto">
+<li>Configure AWS security groups and firewalls.</li>
+<li>Use HTTPS with SSL certificates.</li>
+</ul>
+</li>
+<li>
+<p dir="auto"><strong>Isolation:</strong></p>
+<ul dir="auto">
+<li>Ensure that NanoVMS provides strong isolation between MicroVMs.</li>
+<li>Implement security measures to prevent cross-VM interference.</li>
+</ul>
+</li>
+<li>
+<p dir="auto"><strong>Vulnerability Management:</strong></p>
+<ul dir="auto">
+<li>Keep dependencies updated.</li>
+<li>Conduct regular security audits.</li>
+</ul>
+</li>
+</ul>
+<div class="markdown-heading" dir="auto"><h2 class="heading-element" dir="auto">Testing and Quality Assurance</h2><a id="user-content-testing-and-quality-assurance" class="anchor" aria-label="Permalink: Testing and Quality Assurance" href="#testing-and-quality-assurance"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a></div>
+<ul dir="auto">
+<li>
+<p dir="auto"><strong>Testing Strategies:</strong></p>
+<ul dir="auto">
+<li><strong>Unit Testing:</strong> Test individual components and functions.</li>
+<li><strong>Integration Testing:</strong> Test interactions between frontend, backend, and MicroVMs.</li>
+<li><strong>End-to-End Testing:</strong> Simulate user workflows.</li>
+</ul>
+</li>
+<li>
+<p dir="auto"><strong>Continuous Testing:</strong></p>
+<ul dir="auto">
+<li>Integrate tests into the CI/CD pipeline.</li>
+<li>Automate test execution on code commits.</li>
+</ul>
+</li>
+<li>
+<p dir="auto"><strong>Performance Testing:</strong></p>
+<ul dir="auto">
+<li>Use tools to assess application performance.</li>
+<li>Optimize based on results.</li>
+</ul>
+</li>
+</ul>
+<div class="markdown-heading" dir="auto"><h2 class="heading-element" dir="auto">Project Management and Collaboration</h2><a id="user-content-project-management-and-collaboration" class="anchor" aria-label="Permalink: Project Management and Collaboration" href="#project-management-and-collaboration"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a></div>
+<ul dir="auto">
+<li>
+<p dir="auto"><strong>Agile Methodology:</strong></p>
+<ul dir="auto">
+<li>Use Scrum with sprints aligned to learning and development phases.</li>
+<li>Conduct regular stand-ups and retrospectives.</li>
+</ul>
+</li>
+<li>
+<p dir="auto"><strong>Version Control:</strong></p>
+<ul dir="auto">
+<li>Use Git with a branching strategy like GitFlow.</li>
+</ul>
+</li>
+<li>
+<p dir="auto"><strong>Communication:</strong></p>
+<ul dir="auto">
+<li>Use platforms like Slack for real-time communication.</li>
+<li>Document progress and decisions in shared documents.</li>
+</ul>
+</li>
+</ul>
+<div class="markdown-heading" dir="auto"><h2 class="heading-element" dir="auto">Conclusion</h2><a id="user-content-conclusion" class="anchor" aria-label="Permalink: Conclusion" href="#conclusion"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a></div>
+<p dir="auto">BytePort aims to revolutionize application deployment by providing a custom MicroVM management solution through the development of <strong>NanoVMS</strong>. This approach offers the isolation and control of virtual machines with the efficiency closer to containers. By combining learning and development, the project not only builds a powerful tool but also enhances the developer's expertise in key technologies. The system is designed with future expansion in mind, including the integration of a custom hypervisor and operating system, making BytePort a forward-thinking platform in the cloud management space.</p>
+<hr>
+<p dir="auto"><em>This updated manifesto reflects the incorporation of the custom-developed MicroVM technology, NanoVMS, aligning the project's goals with the necessary technologies and development strategies to achieve them.</em>
+Extended Project Manifesto: Integrating Hypervisor and OS Development into BytePort</p>
+<p dir="auto">Table of Contents</p>
+<div class="snippet-clipboard-content notranslate position-relative overflow-auto" data-snippet-clipboard-copy-content="1.	Introduction
+2.	Extended Project Overview
+3.	Objectives
+4.	Technologies and Tools
+5.	Extended Project Architecture
+6.	Development Phases and Timeline
+7.	Implementation Details
+8.	Integration Strategy
+9.	Security Considerations
+10.	Testing and Quality Assurance
+11.	Project Management and Collaboration
+12.	Conclusion"><pre class="notranslate"><code>1.	Introduction
+2.	Extended Project Overview
+3.	Objectives
+4.	Technologies and Tools
+5.	Extended Project Architecture
+6.	Development Phases and Timeline
+7.	Implementation Details
+8.	Integration Strategy
+9.	Security Considerations
+10.	Testing and Quality Assurance
+11.	Project Management and Collaboration
+12.	Conclusion
+</code></pre></div>
+<p dir="auto">Introduction</p>
+<p dir="auto">This manifesto outlines the extended development of the BytePort platform by incorporating a custom Hypervisor/Emulator and a Custom Operating System (OS), all built using Rust or a language other than C/C++. The goal is to create a comprehensive, end-to-end solution for VM management, virtualization, and OS operation, enhancing learning and showcasing advanced system programming capabilities.</p>
+<p dir="auto">Extended Project Overview</p>
+<p dir="auto">Project Name: BytePort Extended VM Management Platform</p>
+<p dir="auto">Description: Building upon the initial BytePort VM Management Service, this extended project aims to develop a homemade hypervisor and a custom operating system. These components will integrate seamlessly with the existing platform, providing users with deeper control over virtualization and the underlying OS, and offering an enriched educational experience in systems programming.</p>
+<p dir="auto">Objectives</p>
+<p dir="auto">Primary Objectives:</p>
+<div class="snippet-clipboard-content notranslate position-relative overflow-auto" data-snippet-clipboard-copy-content="•	Hypervisor/Emulator Development:
+•	Develop a custom hypervisor to manage virtual machines at a low level.
+•	Implement essential virtualization functionalities (CPU virtualization, memory management, I/O handling).
+•	Ensure compatibility with the existing VM management platform.
+•	Custom Operating System Development:
+•	Design and implement a basic OS kernel.
+•	Provide essential OS features (process management, file system, networking).
+•	Optimize the OS for use within the hypervisor environment."><pre class="notranslate"><code>•	Hypervisor/Emulator Development:
+•	Develop a custom hypervisor to manage virtual machines at a low level.
+•	Implement essential virtualization functionalities (CPU virtualization, memory management, I/O handling).
+•	Ensure compatibility with the existing VM management platform.
+•	Custom Operating System Development:
+•	Design and implement a basic OS kernel.
+•	Provide essential OS features (process management, file system, networking).
+•	Optimize the OS for use within the hypervisor environment.
+</code></pre></div>
+<p dir="auto">Secondary Objectives:</p>
+<div class="snippet-clipboard-content notranslate position-relative overflow-auto" data-snippet-clipboard-copy-content="•	Integrate the custom hypervisor with the BytePort platform for seamless VM management.
+•	Enable users to deploy and manage the custom OS within their virtual machines.
+•	Document the development process for educational purposes.
+•	Enhance security measures at the virtualization and OS levels."><pre class="notranslate"><code>•	Integrate the custom hypervisor with the BytePort platform for seamless VM management.
+•	Enable users to deploy and manage the custom OS within their virtual machines.
+•	Document the development process for educational purposes.
+•	Enhance security measures at the virtualization and OS levels.
+</code></pre></div>
+<p dir="auto">Technologies and Tools</p>
+<p dir="auto">Hypervisor Development:</p>
+<div class="snippet-clipboard-content notranslate position-relative overflow-auto" data-snippet-clipboard-copy-content="•	Language: Rust
+•	Virtualization Techniques: Hardware-assisted virtualization (using technologies like Intel VT-x or AMD-V)
+•	Libraries and Crates:
+•	vm-virt: For virtualization abstractions
+•	kvm-bindings and kvm-ioctls: For interfacing with the Linux KVM API (if using KVM)
+•	Debugging Tools:
+•	GDB with Rust support
+•	QEMU for emulation and testing"><pre class="notranslate"><code>•	Language: Rust
+•	Virtualization Techniques: Hardware-assisted virtualization (using technologies like Intel VT-x or AMD-V)
+•	Libraries and Crates:
+•	vm-virt: For virtualization abstractions
+•	kvm-bindings and kvm-ioctls: For interfacing with the Linux KVM API (if using KVM)
+•	Debugging Tools:
+•	GDB with Rust support
+•	QEMU for emulation and testing
+</code></pre></div>
+<p dir="auto">OS Development:</p>
+<div class="snippet-clipboard-content notranslate position-relative overflow-auto" data-snippet-clipboard-copy-content="•	Language: Rust
+•	Operating System Development Libraries:
+•	bootloader: For booting the OS kernel
+•	x86_64: For low-level hardware interaction
+•	uart_16550: For serial port communication
+•	Build Tools:
+•	cargo-xbuild or cargo with appropriate targets
+•	Debugging and Testing:
+•	QEMU for emulation
+•	Bochs or VirtualBox for virtualization testing"><pre class="notranslate"><code>•	Language: Rust
+•	Operating System Development Libraries:
+•	bootloader: For booting the OS kernel
+•	x86_64: For low-level hardware interaction
+•	uart_16550: For serial port communication
+•	Build Tools:
+•	cargo-xbuild or cargo with appropriate targets
+•	Debugging and Testing:
+•	QEMU for emulation
+•	Bochs or VirtualBox for virtualization testing
+</code></pre></div>
+<p dir="auto">Existing Technologies (from previous project):</p>
+<div class="snippet-clipboard-content notranslate position-relative overflow-auto" data-snippet-clipboard-copy-content="•	Frontend: SvelteKit, TypeScript, Tailwind CSS
+•	Backend: Loco.rs (Rust), SQLx or Diesel ORM
+•	DevOps and Deployment: Docker, AWS"><pre class="notranslate"><code>•	Frontend: SvelteKit, TypeScript, Tailwind CSS
+•	Backend: Loco.rs (Rust), SQLx or Diesel ORM
+•	DevOps and Deployment: Docker, AWS
+</code></pre></div>
+<p dir="auto">Extended Project Architecture</p>
+<p dir="auto">Overview</p>
+<p dir="auto">The extended BytePort platform will consist of three main layers:</p>
+<div class="snippet-clipboard-content notranslate position-relative overflow-auto" data-snippet-clipboard-copy-content="1.	Frontend Interface (SvelteKit):
+•	Remains largely the same, providing user interfaces for VM and OS management.
+2.	Backend Services (Loco.rs):
+•	Enhanced to interface with the custom hypervisor.
+•	Manages VM life cycles and OS deployment within VMs.
+3.	Virtualization Layer:
+•	Custom Hypervisor: Replaces or augments existing virtualization tools.
+•	Custom OS: Runs within the virtual machines managed by the hypervisor."><pre class="notranslate"><code>1.	Frontend Interface (SvelteKit):
+•	Remains largely the same, providing user interfaces for VM and OS management.
+2.	Backend Services (Loco.rs):
+•	Enhanced to interface with the custom hypervisor.
+•	Manages VM life cycles and OS deployment within VMs.
+3.	Virtualization Layer:
+•	Custom Hypervisor: Replaces or augments existing virtualization tools.
+•	Custom OS: Runs within the virtual machines managed by the hypervisor.
+</code></pre></div>
+<p dir="auto">Data Flow</p>
+<div class="snippet-clipboard-content notranslate position-relative overflow-auto" data-snippet-clipboard-copy-content="•	User Interaction: Users issue commands via the frontend to manage VMs and deploy the custom OS.
+•	API Requests: Frontend sends requests to the backend API.
+•	Backend Processing: Backend communicates with the hypervisor to manage VMs and with the OS for operations within VMs.
+•	Hypervisor Operations: Hypervisor handles low-level VM management, resource allocation, and execution of the custom OS.
+•	Response: System states and outputs are communicated back to the user through the frontend."><pre class="notranslate"><code>•	User Interaction: Users issue commands via the frontend to manage VMs and deploy the custom OS.
+•	API Requests: Frontend sends requests to the backend API.
+•	Backend Processing: Backend communicates with the hypervisor to manage VMs and with the OS for operations within VMs.
+•	Hypervisor Operations: Hypervisor handles low-level VM management, resource allocation, and execution of the custom OS.
+•	Response: System states and outputs are communicated back to the user through the frontend.
+</code></pre></div>
+<p dir="auto">Development Phases and Timeline</p>
+<p dir="auto">Phase 1: Research and Planning (Weeks 1-2)</p>
+<div class="snippet-clipboard-content notranslate position-relative overflow-auto" data-snippet-clipboard-copy-content="•	Hypervisor Research:
+•	Study existing hypervisors (KVM, Xen, Firecracker) and their architectures.
+•	Understand hardware virtualization features (Intel VT-x, AMD-V).
+•	OS Development Planning:
+•	Define the scope and features of the custom OS.
+•	Plan kernel architecture and essential modules."><pre class="notranslate"><code>•	Hypervisor Research:
+•	Study existing hypervisors (KVM, Xen, Firecracker) and their architectures.
+•	Understand hardware virtualization features (Intel VT-x, AMD-V).
+•	OS Development Planning:
+•	Define the scope and features of the custom OS.
+•	Plan kernel architecture and essential modules.
+</code></pre></div>
+<p dir="auto">Phase 2: Hypervisor Development (Weeks 3-8)</p>
+<div class="snippet-clipboard-content notranslate position-relative overflow-auto" data-snippet-clipboard-copy-content="•	Week 3-4:
+•	Set up the development environment for low-level Rust programming.
+•	Implement CPU virtualization and basic VM creation.
+•	Week 5-6:
+•	Implement memory management for VMs.
+•	Handle I/O virtualization and device emulation.
+•	Week 7-8:
+•	Integrate the hypervisor with the backend services.
+•	Test VM management functionalities via the frontend."><pre class="notranslate"><code>•	Week 3-4:
+•	Set up the development environment for low-level Rust programming.
+•	Implement CPU virtualization and basic VM creation.
+•	Week 5-6:
+•	Implement memory management for VMs.
+•	Handle I/O virtualization and device emulation.
+•	Week 7-8:
+•	Integrate the hypervisor with the backend services.
+•	Test VM management functionalities via the frontend.
+</code></pre></div>
+<p dir="auto">Phase 3: OS Development (Weeks 5-10)</p>
+<div class="snippet-clipboard-content notranslate position-relative overflow-auto" data-snippet-clipboard-copy-content="•	Week 5-6:
+•	Bootloader implementation to load the OS kernel.
+•	Basic kernel initialization and CPU setup.
+•	Week 7-8:
+•	Implement memory management (paging, segmentation).
+•	Develop process management and scheduling.
+•	Week 9-10:
+•	Implement a simple file system.
+•	Add basic networking capabilities."><pre class="notranslate"><code>•	Week 5-6:
+•	Bootloader implementation to load the OS kernel.
+•	Basic kernel initialization and CPU setup.
+•	Week 7-8:
+•	Implement memory management (paging, segmentation).
+•	Develop process management and scheduling.
+•	Week 9-10:
+•	Implement a simple file system.
+•	Add basic networking capabilities.
+</code></pre></div>
+<p dir="auto">Phase 4: Integration and Testing (Weeks 11-12)</p>
+<div class="snippet-clipboard-content notranslate position-relative overflow-auto" data-snippet-clipboard-copy-content="•	Hypervisor and OS Integration:
+•	Ensure the custom OS runs smoothly within the custom hypervisor.
+•	Optimize performance and resource utilization.
+•	System Testing:
+•	Perform extensive testing of the hypervisor and OS.
+•	Debug and fix issues related to virtualization and OS operations."><pre class="notranslate"><code>•	Hypervisor and OS Integration:
+•	Ensure the custom OS runs smoothly within the custom hypervisor.
+•	Optimize performance and resource utilization.
+•	System Testing:
+•	Perform extensive testing of the hypervisor and OS.
+•	Debug and fix issues related to virtualization and OS operations.
+</code></pre></div>
+<p dir="auto">Phase 5: Platform Integration (Weeks 13-14)</p>
+<div class="snippet-clipboard-content notranslate position-relative overflow-auto" data-snippet-clipboard-copy-content="•	Backend Updates:
+•	Modify backend services to support new hypervisor functionalities.
+•	Update API endpoints for extended VM and OS management.
+•	Frontend Enhancements:
+•	Add interfaces for deploying and interacting with the custom OS.
+•	Implement monitoring tools for VM and OS performance."><pre class="notranslate"><code>•	Backend Updates:
+•	Modify backend services to support new hypervisor functionalities.
+•	Update API endpoints for extended VM and OS management.
+•	Frontend Enhancements:
+•	Add interfaces for deploying and interacting with the custom OS.
+•	Implement monitoring tools for VM and OS performance.
+</code></pre></div>
+<p dir="auto">Phase 6: Documentation and Finalization (Weeks 15-16)</p>
+<div class="snippet-clipboard-content notranslate position-relative overflow-auto" data-snippet-clipboard-copy-content="•	Documentation:
+•	Document the hypervisor and OS development processes.
+•	Update user guides and API documentation.
+•	Final Review:
+•	Conduct security audits.
+•	Prepare the system for deployment."><pre class="notranslate"><code>•	Documentation:
+•	Document the hypervisor and OS development processes.
+•	Update user guides and API documentation.
+•	Final Review:
+•	Conduct security audits.
+•	Prepare the system for deployment.
+</code></pre></div>
+<p dir="auto">Implementation Details</p>
+<p dir="auto">Hypervisor Implementation</p>
+<div class="snippet-clipboard-content notranslate position-relative overflow-auto" data-snippet-clipboard-copy-content="•	CPU Virtualization:
+•	Use hardware virtualization extensions to create virtual CPUs.
+•	Handle context switching between VMs and the host.
+•	Memory Management:
+•	Implement virtual memory mapping for VMs.
+•	Use Extended Page Tables (EPT) or Nested Paging.
+•	I/O Virtualization:
+•	Emulate essential devices (storage, network interfaces).
+•	Implement paravirtualized drivers for performance.
+•	Interfacing with Backend:
+•	Expose an API or CLI for backend interaction.
+•	Ensure thread safety and concurrency control."><pre class="notranslate"><code>•	CPU Virtualization:
+•	Use hardware virtualization extensions to create virtual CPUs.
+•	Handle context switching between VMs and the host.
+•	Memory Management:
+•	Implement virtual memory mapping for VMs.
+•	Use Extended Page Tables (EPT) or Nested Paging.
+•	I/O Virtualization:
+•	Emulate essential devices (storage, network interfaces).
+•	Implement paravirtualized drivers for performance.
+•	Interfacing with Backend:
+•	Expose an API or CLI for backend interaction.
+•	Ensure thread safety and concurrency control.
+</code></pre></div>
+<p dir="auto">OS Implementation</p>
+<div class="snippet-clipboard-content notranslate position-relative overflow-auto" data-snippet-clipboard-copy-content="•	Boot Process:
+•	Develop a bootloader compliant with BIOS or UEFI.
+•	Initialize hardware components and system state.
+•	Kernel Architecture:
+•	Use a modular monolithic or microkernel approach.
+•	Implement core modules for process and memory management.
+•	Process Management:
+•	Create a scheduler for multitasking.
+•	Implement inter-process communication (IPC) mechanisms.
+•	File System:
+•	Design a simple file system (e.g., FAT12/16/32).
+•	Implement file operations (read, write, open, close).
+•	Networking:
+•	Develop basic networking stack (TCP/IP).
+•	Support network communication within VMs."><pre class="notranslate"><code>•	Boot Process:
+•	Develop a bootloader compliant with BIOS or UEFI.
+•	Initialize hardware components and system state.
+•	Kernel Architecture:
+•	Use a modular monolithic or microkernel approach.
+•	Implement core modules for process and memory management.
+•	Process Management:
+•	Create a scheduler for multitasking.
+•	Implement inter-process communication (IPC) mechanisms.
+•	File System:
+•	Design a simple file system (e.g., FAT12/16/32).
+•	Implement file operations (read, write, open, close).
+•	Networking:
+•	Develop basic networking stack (TCP/IP).
+•	Support network communication within VMs.
+</code></pre></div>
+<p dir="auto">Integration Strategy</p>
+<p dir="auto">Seamless Integration with Backend</p>
+<div class="snippet-clipboard-content notranslate position-relative overflow-auto" data-snippet-clipboard-copy-content="•	API Extensions:
+•	Extend backend APIs to include hypervisor control commands.
+•	Add endpoints for OS deployment and management.
+•	Backend-Hypervisor Communication:
+•	Use IPC mechanisms or direct library calls.
+•	Ensure secure and efficient communication channels."><pre class="notranslate"><code>•	API Extensions:
+•	Extend backend APIs to include hypervisor control commands.
+•	Add endpoints for OS deployment and management.
+•	Backend-Hypervisor Communication:
+•	Use IPC mechanisms or direct library calls.
+•	Ensure secure and efficient communication channels.
+</code></pre></div>
+<p dir="auto">Frontend Enhancements</p>
+<div class="snippet-clipboard-content notranslate position-relative overflow-auto" data-snippet-clipboard-copy-content="•	User Interface Updates:
+•	Add controls for hypervisor settings and VM configurations.
+•	Provide dashboards for OS-level monitoring.
+•	User Experience:
+•	Ensure that the complexity of hypervisor and OS management is abstracted for the user.
+•	Offer guided workflows for common tasks."><pre class="notranslate"><code>•	User Interface Updates:
+•	Add controls for hypervisor settings and VM configurations.
+•	Provide dashboards for OS-level monitoring.
+•	User Experience:
+•	Ensure that the complexity of hypervisor and OS management is abstracted for the user.
+•	Offer guided workflows for common tasks.
+</code></pre></div>
+<p dir="auto">Compatibility Considerations</p>
+<div class="snippet-clipboard-content notranslate position-relative overflow-auto" data-snippet-clipboard-copy-content="•	Backward Compatibility:
+•	Ensure existing functionalities remain unaffected.
+•	Provide options to use the custom hypervisor or existing virtualization tools.
+•	Modular Design:
+•	Design components to be interchangeable.
+•	Facilitate future enhancements or replacements."><pre class="notranslate"><code>•	Backward Compatibility:
+•	Ensure existing functionalities remain unaffected.
+•	Provide options to use the custom hypervisor or existing virtualization tools.
+•	Modular Design:
+•	Design components to be interchangeable.
+•	Facilitate future enhancements or replacements.
+</code></pre></div>
+<div class="snippet-clipboard-content notranslate position-relative overflow-auto" data-snippet-clipboard-copy-content=""><pre class="notranslate"><code>
+</code></pre></div>
+</article></div>

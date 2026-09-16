@@ -3,108 +3,63 @@ name: Release
 on:
   push:
     tags:
-      - 'v*.*.*'
+      - "v*"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  packages: write
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
-env:
-  CARGO_TERM_COLOR: always
-
-permissions:
-  contents: write
-
 jobs:
-  build:
-    name: Build
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
-      - uses: dtolnay/rust-toolchain@29eef336d9b2848a0b548edc03f92a220660cdb8
-        with:
-          toolchain: stable
-      - uses: Swatinem/rust-cache@e18b497796c12c097a38f9edb9d0641fb99eee32
-      - run: cargo build --workspace --all-targets
-
-  test:
-    name: Test
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
-      - uses: dtolnay/rust-toolchain@29eef336d9b2848a0b548edc03f92a220660cdb8
-        with:
-          toolchain: stable
-      - uses: Swatinem/rust-cache@e18b497796c12c097a38f9edb9d0641fb99eee32
-      - run: cargo test --workspace
-
   release:
-    name: Create Release
-    needs: [build, test]
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
+    name: Release
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Generate Release Notes
-        id: changelog
-        run: |
-          TAG="${GITHUB_REF#refs/tags/}"
-          PREV=$(git describe --tags --abbrev=0 HEAD^ 2>/dev/null || echo "")
-          if [ -n "$PREV" ]; then
-            RANGE="${PREV}..${TAG}"
-          else
-            RANGE=""
-          fi
-
-          generate_section() {
-            local title="$1"
-            local pattern="$2"
-            local commits
-            commits=$(git log --pretty=format:"- %s (%h)" "${RANGE}" | { grep -E "^- ${pattern}" || true; } | head -n50)
-            if [ -n "$commits" ]; then
-              echo "### ${title}"
-              echo "${commits}"
-              echo ""
-            fi
-          }
-
-          NOTES=""
-          NOTES+="$(generate_section "Features" "feat[(:]")"
-          NOTES+="$(generate_section "Fixes" "fix[(:]")"
-          NOTES+="$(generate_section "Documentation" "docs[(:]")"
-          NOTES+="$(generate_section "Refactoring" "refactor[(:]")"
-          NOTES+="$(generate_section "Tests" "test[(:]")"
-          NOTES+="$(generate_section "Chores" "chore[(:]")"
-
-          OTHER=$(git log --pretty=format:"- %s (%h)" "${RANGE}" | { grep -vE "^- (feat|fix|docs|refactor|test|chore)[(:]" || true; } | head -n50)
-          if [ -n "$OTHER" ]; then
-            NOTES+=$'\n'"### Other Changes"
-            NOTES+=$'\n'"${OTHER}"
-            NOTES+=$'\n'
-          fi
-
-          if [ -z "$NOTES" ]; then
-            NOTES="No conventional commits found in this release."
-          fi
-
-          echo "body<<EOF" >> "$GITHUB_OUTPUT"
-          echo "$NOTES" >> "$GITHUB_OUTPUT"
-          echo "EOF" >> "$GITHUB_OUTPUT"
-
-      - name: Create GitHub Release
-        uses: softprops/action-gh-release@2f0f4a0bbb18a8ef73a7e2715d3f57e7b9b3932c
+      - name: Set up Go
+        uses: actions/setup-go@v7
         with:
-          body: ${{ steps.changelog.outputs.body }}
-          generate_release_notes: false
+          go-version: "1.24"
+          cache: true
 
-      - name: Publish to crates.io
+      - name: Build Go static lib (libnvms_core.a)
+        working-directory: crates/nanovms-core/bindings/go-c-export
         run: |
-          for crate in $(find crates -maxdepth 2 -name Cargo.toml | xargs -I{} sh -c 'dirname {}'); do
-            echo "Publishing ${crate}..."
-            cargo publish --manifest-path "${crate}/Cargo.toml" --token ${{ secrets.CARGO_REGISTRY_TOKEN }} || true
-          done
-        continue-on-error: true
+          go build -buildmode=c-archive -o ${{ github.workspace }}/target/libnvms_core.a .
+
+      - name: Set up Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: stable
+
+      - name: Cache Rust dependencies
+        uses: Swatinem/rust-cache@v2
+        with:
+          cache-on-failure: true
+
+      - name: Build all Rust crates
+        run: cargo build --release --workspace
+
+      - name: Run Go tests
+        working-directory: crates/nanovms-core
+        run: go test -v ./...
+
+      - name: Run Rust tests
+        run: cargo test --workspace
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v7
+        with:
+          name: phenotype-infra-binaries
+          path: |
+            target/release/libpheno_compose_driver.*
+            target/release/libnvms_ffi.*
+            target/release/libpheno_config.*

@@ -1,0 +1,12 @@
+# pheno-drift-detector override config (per ADR-043)
+# Use this to mark capabilities as keep-in-app (with justification) so the weekly
+# scan does not file issues for them.
+
+# Default: no overrides (every capability is scanned).
+overrides: []
+# Example:
+# overrides:
+#   - path: src/legacy_thing.rs
+#     reason: "tied to app-specific state in apps/web; would lose context if extracted"
+#     set_by: kooshapari
+#     set_date: 2026-06-18

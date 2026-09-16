@@ -1,0 +1,179 @@
+{
+  "schema_version": "pheno.perf.v1",
+  "engine": "unknown",
+  "model": "local/qwen35-08b",
+  "base_url": null,
+  "synthetic": true,
+  "elapsed_ms": 40.53640004713088,
+  "warmup": {
+    "requested": 1,
+    "results": [
+      {
+        "elapsed_ms": 2.7226998936384916,
+        "ttft_ms": 1.3613499468192458,
+        "completion_tokens": 16,
+        "decode_tok_s": 5876.519860812986,
+        "measurement_quality": "synthetic"
+      }
+    ],
+    "error_count": 0
+  },
+  "levels": [
+    {
+      "concurrency": 1,
+      "request_count": 4,
+      "success_count": 4,
+      "error_count": 0,
+      "wall_ms": 14.012100058607757,
+      "aggregate_tokens": 64,
+      "aggregate_tokens_per_s": 4567.480943777891,
+      "latency_ms_p50": 2.036800025962293,
+      "latency_ms_p95": 2.4880000855773687,
+      "results": [
+        {
+          "elapsed_ms": 1.7404999816790223,
+          "ttft_ms": 0.8702499908395112,
+          "completion_tokens": 16,
+          "decode_tok_s": 9192.76079771351,
+          "measurement_quality": "synthetic"
+        },
+        {
+          "elapsed_ms": 1.4831000007689,
+          "ttft_ms": 0.74155000038445,
+          "completion_tokens": 16,
+          "decode_tok_s": 10788.213870747046,
+          "measurement_quality": "synthetic"
+        },
+        {
+          "elapsed_ms": 2.036800025962293,
+          "ttft_ms": 1.0184000129811466,
+          "completion_tokens": 16,
+          "decode_tok_s": 7855.459444252877,
+          "measurement_quality": "synthetic"
+        },
+        {
+          "elapsed_ms": 2.4880000855773687,
+          "ttft_ms": 1.2440000427886844,
+          "completion_tokens": 16,
+          "decode_tok_s": 6430.867946006127,
+          "measurement_quality": "synthetic"
+        }
+      ]
+    },
+    {
+      "concurrency": 2,
+      "request_count": 4,
+      "success_count": 4,
+      "error_count": 0,
+      "wall_ms": 5.784400040283799,
+      "aggregate_tokens": 64,
+      "aggregate_tokens_per_s": 11064.241676628571,
+      "latency_ms_p50": 2.3615999380126595,
+      "latency_ms_p95": 2.5337999686598778,
+      "results": [
+        {
+          "elapsed_ms": 2.06389999948442,
+          "ttft_ms": 1.03194999974221,
+          "completion_tokens": 16,
+          "decode_tok_s": 7752.31358302095,
+          "measurement_quality": "synthetic"
+        },
+        {
+          "elapsed_ms": 2.3615999380126595,
+          "ttft_ms": 1.1807999690063298,
+          "completion_tokens": 16,
+          "decode_tok_s": 6775.067928509672,
+          "measurement_quality": "synthetic"
+        },
+        {
+          "elapsed_ms": 1.5121999895200133,
+          "ttft_ms": 0.7560999947600067,
+          "completion_tokens": 16,
+          "decode_tok_s": 10580.611103613717,
+          "measurement_quality": "synthetic"
+        },
+        {
+          "elapsed_ms": 2.5337999686598778,
+          "ttft_ms": 1.2668999843299389,
+          "completion_tokens": 16,
+          "decode_tok_s": 6314.626331163139,
+          "measurement_quality": "synthetic"
+        }
+      ]
+    },
+    {
+      "concurrency": 4,
+      "request_count": 4,
+      "success_count": 4,
+      "error_count": 0,
+      "wall_ms": 3.703800030052662,
+      "aggregate_tokens": 64,
+      "aggregate_tokens_per_s": 17279.55059147457,
+      "latency_ms_p50": 1.8223000224679708,
+      "latency_ms_p95": 3.036599955521524,
+      "results": [
+        {
+          "elapsed_ms": 3.036599955521524,
+          "ttft_ms": 1.518299977760762,
+          "completion_tokens": 16,
+          "decode_tok_s": 5269.050989382651,
+          "measurement_quality": "synthetic"
+        },
+        {
+          "elapsed_ms": 1.8223000224679708,
+          "ttft_ms": 0.9111500112339854,
+          "completion_tokens": 16,
+          "decode_tok_s": 8780.112935701409,
+          "measurement_quality": "synthetic"
+        },
+        {
+          "elapsed_ms": 1.553799957036972,
+          "ttft_ms": 0.776899978518486,
+          "completion_tokens": 16,
+          "decode_tok_s": 10297.335849147077,
+          "measurement_quality": "synthetic"
+        },
+        {
+          "elapsed_ms": 1.7222000751644373,
+          "ttft_ms": 0.8611000375822186,
+          "completion_tokens": 16,
+          "decode_tok_s": 9290.442051845983,
+          "measurement_quality": "synthetic"
+        }
+      ]
+    }
+  ],
+  "probe_overhead_ms": {
+    "mean_ms": 14.999000006355345,
+    "max_ms": 17.43240002542734
+  },
+  "resources": {
+    "sample_count": 1,
+    "process_cpu_percent": {
+      "mean": 0.0,
+      "peak": 0.0
+    },
+    "process_rss_bytes": {
+      "mean": 29777920.0,
+      "peak": 29777920.0
+    },
+    "system_cpu_percent": {
+      "mean": 0.0,
+      "peak": 0.0
+    },
+    "system_ram_used_bytes": {
+      "mean": 39544102912.0,
+      "peak": 39544102912.0
+    },
+    "system_ram_percent": {
+      "mean": 57.6,
+      "peak": 57.6
+    },
+    "gpus": {}
+  },
+  "measurement_notes": [
+    "TTFT is time to first nonempty streamed content chunk.",
+    "ITL is inter-SSE-chunk timing, not guaranteed one token per chunk.",
+    "Synthetic mode measures harness scheduling only, not model inference."
+  ]
+}

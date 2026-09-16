@@ -1,0 +1,74 @@
+{
+  "schema_version": "pheno.tb2-matrix.v1",
+  "as_of": "2026-07-29T00:23:05Z",
+  "session_under_resume": "019f6249-d74c-7540-885f-588c3d51ac3a",
+  "matrix_name": "1080_helper_wave_v1",
+  "device": "GTX 1080 Ti (GPU 0, sm_61, 11264 MiB)",
+  "build_used": "D:\\WSL\\tools\\llama.cpp-b10012-cuda12.4 (b10012, CUDA 12.4)",
+  "smoke_baseline": {
+    "model": "lfm25-8b-a1b.Q4_K_M.gguf",
+    "prompt_t_per_s": 16.9,
+    "generation_t_per_s": 123.5,
+    "artifact": "state/gtx1080_smoke_2026-07-28.json"
+  },
+  "matrix_rows": [
+    {
+      "id": "1080_lfm25_8b_a1b_q4_tb20_baseline",
+      "model_alias": "lfm25-8b-a1b",
+      "gguf_path": "D:\\WSL\\model-cache\\lfm25-8b-a1b-q4\\lfm25-8b-a1b.Q4_K_M.gguf",
+      "size_gib": 4.79,
+      "quantization": "Q4_K_M",
+      "suite": "TB2.0",
+      "subset": "dataset_acquired_verifier_unverified",
+      "role": "draft/needle (legacy_helper)",
+      "expected_t_per_s_gen": "100-130",
+      "expected_t_per_s_prompt": "15-20"
+    },
+    {
+      "id": "1080_ornith_8b_q4_tb20_baseline",
+      "model_alias": "ornith-8b",
+      "gguf_path": "D:\\WSL\\model-cache\\ornith-8b-q4\\ornith-8b.Q4_K_M.gguf (TBD)",
+      "size_gib": 4.5,
+      "quantization": "Q4_K_M",
+      "suite": "TB2.0",
+      "subset": "dataset_acquired_verifier_unverified",
+      "role": "draft/needle (legacy_helper)",
+      "expected_t_per_s_gen": "100-140",
+      "expected_t_per_s_prompt": "15-22"
+    },
+    {
+      "id": "1080_lfm25_1p2b_q4_tb20_draft",
+      "model_alias": "lfm25-1p2b",
+      "gguf_path": "D:\\WSL\\model-cache\\lfm25-1p2b-q4\\ (TBD)",
+      "size_gib": 0.85,
+      "quantization": "Q4_K_M",
+      "suite": "TB2.0",
+      "subset": "dataset_acquired_verifier_unverified",
+      "role": "fast draft (legacy_helper)",
+      "expected_t_per_s_gen": "200-300",
+      "expected_t_per_s_prompt": "30-50"
+    },
+    {
+      "id": "1080_qwen35_08b_q4_tb20_needle",
+      "model_alias": "qwen35-08b",
+      "gguf_path": "D:\\WSL\\model-cache\\qwen35-08b-q4\\ (TBD)",
+      "size_gib": 0.65,
+      "quantization": "Q4_K_M",
+      "suite": "TB2.0",
+      "subset": "dataset_acquired_verifier_unverified",
+      "role": "needle/extract (legacy_helper)",
+      "expected_t_per_s_gen": "250-350",
+      "expected_t_per_s_prompt": "40-60"
+    }
+  ],
+  "execution_command_template": "D:\\WSL\\tools\\llama.cpp-b10012-cuda12.4\\llama-bench.exe -m \"{gguf}\" -ngl 99 -c 4096 -p 512 -n 256 --cuda-devices 0 --repetitions 3",
+  "outputs_to_capture": [
+    "prompt_eval_t/s",
+    "generation_t/s",
+    "gpu0_vram_peak_mib",
+    "sm_61_kernel_dispatch_count"
+  ],
+  "ready_to_run": true,
+  "prereq_satisfied": true,
+  "next_action": "Execute llama-bench for each row above; record results into state/bench/1080_helper_wave_v1_*.json"
+}

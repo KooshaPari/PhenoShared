@@ -1,0 +1,61 @@
+{
+  "health": {
+    "ok": true,
+    "service": "pheno-serve-dev"
+  },
+  "models": {
+    "object": "list",
+    "data": [
+      {
+        "id": "local/qwen35-08b",
+        "object": "model",
+        "owned_by": "pheno-serve-dev",
+        "engine": "llama_cpp",
+        "status": "active"
+      },
+      {
+        "id": "local/lfm25-8b-a1b",
+        "object": "model",
+        "owned_by": "pheno-serve-dev",
+        "engine": "sglang",
+        "status": "planned"
+      },
+      {
+        "id": "local/ornith-8b",
+        "object": "model",
+        "owned_by": "pheno-serve-dev",
+        "engine": "sglang",
+        "status": "planned"
+      },
+      {
+        "id": "local/lfm25-8b-a1b-vllm",
+        "object": "model",
+        "owned_by": "pheno-serve-dev",
+        "engine": "vllm",
+        "status": "planned"
+      },
+      {
+        "id": "local/ornith-8b-vllm",
+        "object": "model",
+        "owned_by": "pheno-serve-dev",
+        "engine": "vllm",
+        "status": "planned"
+      },
+      {
+        "id": "local/lfm25-8b-a1b-trtllm",
+        "object": "model",
+        "owned_by": "pheno-serve-dev",
+        "engine": "tensorrt_llm",
+        "status": "planned_compile_once"
+      },
+      {
+        "id": "mac/mlx-small",
+        "object": "model",
+        "owned_by": "pheno-serve-dev",
+        "engine": "mlx",
+        "status": "planned_remote_worker"
+      }
+    ]
+  },
+  "completion": null
+}

@@ -1,0 +1,16 @@
+[
+  {
+    "mode": "baseline",
+    "sha256": "1f5fa6c14363b8d00aa4590c982ccec3868945d71f8ab88d36f80ca3cb330c79",
+    "elapsed_ms": 1029.5221,
+    "completion_tokens": 128,
+    "content_chars": 515
+  },
+  {
+    "mode": "ngram-simple",
+    "sha256": "1f5fa6c14363b8d00aa4590c982ccec3868945d71f8ab88d36f80ca3cb330c79",
+    "elapsed_ms": 1135.2097,
+    "completion_tokens": 128,
+    "content_chars": 515
+  }
+]

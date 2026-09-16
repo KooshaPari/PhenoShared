@@ -1,0 +1,43 @@
+{
+  "id": "PILOT-PRD-PHENOFABRIC",
+  "product_id": "PRD-PHENOFABRIC",
+  "status": "PLANNED_NOT_EXECUTED",
+  "subject_repository_id": 1363521465,
+  "hypothesis": "A unified user workflow with topology-aware efficient placement, not merely a new transport protocol or a collection of wrapped tools.",
+  "baseline_candidates": [
+    "Configured Looking Glass plus local input/audio routing",
+    "Sunshine/Moonlight plus software KVM",
+    "Parsec plus platform file/clipboard sharing",
+    "RDP/seamless app workflow where supported",
+    "Direct local/native workflow"
+  ],
+  "scenario": "Desk-to-laptop-to-desk operation with one real application and two actual nodes. Then add a same-host VM route. Keep keyboard/mouse ownership exclusive, switch presentation/audio, transfer one clipboard/file item and recover from a disconnect. Measure each locality cohort separately while background build/inference load runs.",
+  "failure_cases": [
+    "Stale input lease causes duplicate control",
+    "Audio feedback or unbounded buffering",
+    "Secret clipboard delivered to wrong session",
+    "Unknown capability accepted",
+    "Disconnect loses or repeats an action",
+    "Protected foreground deadline missed",
+    "Codec assumption unsupported by endpoint"
+  ],
+  "metrics": [
+    "User steps and time to restore workspace",
+    "Capture-to-display boundary plus end-to-end separately",
+    "Latency distribution and frame pacing",
+    "Audio underruns/drift",
+    "Color/HDR fidelity and supported fallbacks",
+    "Resource load and recovery fidelity"
+  ],
+  "required_before_execution": [
+    "versioned subjects and fixtures",
+    "predeclared critical invariants",
+    "reviewed non-inferiority margins",
+    "resource and trust limits",
+    "independent outcome oracle",
+    "retained failed-trial policy"
+  ],
+  "results": null,
+  "winner": null,
+  "protocol": "../../research/COMPARATIVE-PILOT-PROTOCOL.md"
+}

@@ -1,0 +1,41 @@
+{
+  "id": "PILOT-PRD-MELOSVIZ",
+  "product_id": "PRD-MELOSVIZ",
+  "status": "PLANNED_NOT_EXECUTED",
+  "subject_repository_id": 1262466303,
+  "hypothesis": "A faster music-specific path to controllable, repeatable visual work with reliable output, not generic graphics novelty.",
+  "baseline_candidates": [
+    "TouchDesigner workflow",
+    "Blender plus scripted/offline rendering",
+    "A simple audio-reactive visualizer",
+    "Existing manual DAW/media pipeline"
+  ],
+  "scenario": "Use the same authorized music excerpt to import, analyze, play/synchronize, edit a scene, render/export and reopen. Then replace the track, change timing, use a new preset, disable a backend and recover. Compare actual output and editing effort, not only generation latency.",
+  "failure_cases": [
+    "Stub backend produces plausible but wrong output",
+    "A/V drift",
+    "Render cancelled but resources remain",
+    "Export missing codec/frames",
+    "Preset version cannot reopen",
+    "Private source media published unintentionally"
+  ],
+  "metrics": [
+    "Time to useful visualization and revision",
+    "A/V synchronization error",
+    "Frame pacing and render duration",
+    "Output correctness and visual quality",
+    "Recovery and project portability",
+    "Dependency/licensing burden"
+  ],
+  "required_before_execution": [
+    "versioned subjects and fixtures",
+    "predeclared critical invariants",
+    "reviewed non-inferiority margins",
+    "resource and trust limits",
+    "independent outcome oracle",
+    "retained failed-trial policy"
+  ],
+  "results": null,
+  "winner": null,
+  "protocol": "../../research/COMPARATIVE-PILOT-PROTOCOL.md"
+}

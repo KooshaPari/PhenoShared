@@ -1,0 +1,203 @@
+/* ═══════════════════════════════════════════════════════════════
+ * Phenotype Glass Recipes — Per-OS Glassmorphism
+ * @phenotype/design v1.0.0
+ *
+ * Three platform-tuned glass techniques sharing the Keycap palette.
+ * Requires keycap-palette.css for --kc-* tokens.
+ *
+ * Usage:
+ *   Import this file after keycap-palette.css.
+ *   Apply the class for your target surface:
+ *
+ *     .glass-neo      — Android-style neo-glass (frosted panel)
+ *     .glass-liquid   — macOS liquid glass (translucent chrome)
+ *     .glass-mica     — Windows Mica (acrylic tinted system blur)
+ *
+ *   Each class is self-contained; override --glass-* vars locally.
+ *
+ * See docs/GLASS_RECIPE.md for full rationale + icon agent spec.
+ * ═══════════════════════════════════════════════════════════════ */
+
+/* ── Shared glass custom properties ── */
+
+:root {
+  /* Blur radii */
+  --glass-blur-neo:    16px;
+  --glass-blur-liquid: 20px;
+  --glass-blur-mica:   40px;
+
+  /* Saturation boost */
+  --glass-saturate-neo:    1.1;
+  --glass-saturate-liquid: 1.4;
+  --glass-saturate-mica:   1.8;
+
+  /* Background fill opacity (light mode) */
+  --glass-fill-neo-light:    rgba(248, 249, 250, 0.72);
+  --glass-fill-liquid-light: rgba(255, 255, 255, 0.60);
+  --glass-fill-mica-light:   rgba(248, 249, 250, 0.82);
+
+  /* Background fill opacity (dark mode) */
+  --glass-fill-neo-dark:    rgba(9, 10, 12, 0.72);
+  --glass-fill-liquid-dark: rgba(20, 23, 27, 0.60);
+  --glass-fill-mica-dark:   rgba(9, 10, 12, 0.85);
+
+  /* Border / specular highlights */
+  --glass-border-light: rgba(255, 255, 255, 0.45);
+  --glass-border-dark:  rgba(255, 255, 255, 0.08);
+  --glass-specular-light: rgba(255, 255, 255, 0.70);
+  --glass-specular-dark:  rgba(255, 255, 255, 0.12);
+
+  /* Teal accent tint (Keycap accent at low opacity) */
+  --glass-tint-accent: rgba(126, 186, 181, 0.06);
+}
+
+/* ─────────────────────────────────────────────────────────────
+ * ANDROID NEO-GLASS
+ * Inspiration: Material You frosted panel
+ * Technique:
+ *   - backdrop-filter: blur(16px) saturate(1.1)
+ *   - solid-ish fill: bg at 72% opacity
+ *   - 1px border with 45% white specular (light) / 8% (dark)
+ *   - subtle box-shadow for depth separation
+ *   - no inner specular line — clean, flat-ish
+ * Suitable for: cards, sheets, bottom-nav panels
+ * ───────────────────────────────────────────────────────────── */
+
+.glass-neo {
+  backdrop-filter: blur(var(--glass-blur-neo)) saturate(var(--glass-saturate-neo));
+  -webkit-backdrop-filter: blur(var(--glass-blur-neo)) saturate(var(--glass-saturate-neo));
+  background: var(--glass-fill-neo-light);
+  border: 1px solid var(--glass-border-light);
+  border-radius: 16px;
+  box-shadow:
+    0 2px 8px rgba(0, 0, 0, 0.08),
+    0 0 0 0.5px rgba(255, 255, 255, 0.3) inset;
+}
+
+.dark .glass-neo,
+[data-theme="dark"] .glass-neo {
+  background: var(--glass-fill-neo-dark);
+  border-color: var(--glass-border-dark);
+  box-shadow:
+    0 4px 16px rgba(0, 0, 0, 0.40),
+    0 0 0 0.5px rgba(255, 255, 255, 0.06) inset;
+}
+
+/* ─────────────────────────────────────────────────────────────
+ * MACOS LIQUID GLASS
+ * Inspiration: macOS Sequoia / visionOS liquid chrome
+ * Technique:
+ *   - backdrop-filter: blur(20px) saturate(1.4)
+ *   - thinner fill: bg at 60% opacity
+ *   - top specular line: 1px gradient border at top edge
+ *   - multi-layer box-shadow for depth + inner highlight
+ *   - subtle teal accent tint overlay
+ * Suitable for: nav bars, toolbars, floating panels, popovers
+ * ───────────────────────────────────────────────────────────── */
+
+.glass-liquid {
+  backdrop-filter: blur(var(--glass-blur-liquid)) saturate(var(--glass-saturate-liquid));
+  -webkit-backdrop-filter: blur(var(--glass-blur-liquid)) saturate(var(--glass-saturate-liquid));
+  background:
+    linear-gradient(
+      180deg,
+      var(--glass-specular-light) 0%,
+      transparent 8%
+    ),
+    var(--glass-fill-liquid-light);
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  border-bottom-color: rgba(255, 255, 255, 0.25);
+  border-radius: 14px;
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.10),
+    0 1px 0 rgba(255, 255, 255, 0.80) inset,
+    0 -1px 0 rgba(0, 0, 0, 0.05) inset;
+}
+
+.dark .glass-liquid,
+[data-theme="dark"] .glass-liquid {
+  background:
+    linear-gradient(
+      180deg,
+      var(--glass-specular-dark) 0%,
+      transparent 10%
+    ),
+    var(--glass-fill-liquid-dark),
+    var(--glass-tint-accent);
+  border-color: rgba(255, 255, 255, 0.10);
+  border-bottom-color: rgba(255, 255, 255, 0.04);
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.60),
+    0 1px 0 rgba(255, 255, 255, 0.10) inset,
+    0 -1px 0 rgba(0, 0, 0, 0.30) inset;
+}
+
+/* ─────────────────────────────────────────────────────────────
+ * WINDOWS MICA
+ * Inspiration: Windows 11 Mica / Acrylic material
+ * Technique:
+ *   - backdrop-filter: blur(40px) saturate(1.8)  — heavy blur
+ *   - high-opacity fill: 82–85% to approximate Mica's
+ *     system-color tinting (true Mica requires OS API;
+ *     CSS approximation uses the bg token heavily blended)
+ *   - 1px border matching system chrome divider
+ *   - no inner specular — Mica is matte/flat by design
+ *   - teal tint overlay for brand consistency
+ * Suitable for: app sidebars, titlebar-adjacent panels,
+ *               settings pages, taskbar-style surfaces
+ * ───────────────────────────────────────────────────────────── */
+
+.glass-mica {
+  backdrop-filter: blur(var(--glass-blur-mica)) saturate(var(--glass-saturate-mica));
+  -webkit-backdrop-filter: blur(var(--glass-blur-mica)) saturate(var(--glass-saturate-mica));
+  background: var(--glass-fill-mica-light);
+  border: 1px solid var(--kc-divider);
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+.dark .glass-mica,
+[data-theme="dark"] .glass-mica {
+  background:
+    var(--glass-fill-mica-dark),
+    var(--glass-tint-accent);
+  border-color: var(--kc-divider);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.50);
+}
+
+/* ─────────────────────────────────────────────────────────────
+ * UTILITY: Phenotype frosted nav bar
+ * The nav glass technique used in the design showcase.
+ * Mirrors .VPNav glass override in vitepress-theme.css
+ * but as a reusable utility class.
+ * Values: blur 12-14px, fill 88%, divider border
+ * ───────────────────────────────────────────────────────────── */
+
+.glass-nav {
+  backdrop-filter: blur(14px) saturate(1.2);
+  -webkit-backdrop-filter: blur(14px) saturate(1.2);
+  background: color-mix(in oklab, var(--kc-bg) 88%, transparent);
+  border-bottom: 1px solid var(--kc-divider);
+}
+
+/* ─────────────────────────────────────────────────────────────
+ * UTILITY: Swatch badge overlay
+ * Small frosted label over colored swatches.
+ * Values: blur 4px, rgba black 50%
+ * ───────────────────────────────────────────────────────────── */
+
+.glass-badge {
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  background: rgba(9, 10, 12, 0.50);
+  color: #f6f5f5;
+  border-radius: 4px;
+  padding: 3px 6px;
+  font-size: 10px;
+  font-family: var(--kc-font-mono);
+}
+
+[data-theme="light"] .glass-badge {
+  background: rgba(255, 255, 255, 0.70);
+  color: #1a1c1e;
+}

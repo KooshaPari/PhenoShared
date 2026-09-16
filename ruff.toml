@@ -1,0 +1,39 @@
+[lint]
+select = ["E", "F", "W", "I", "N", "UP", "B", "C4", "SIM"]
+ignore = [
+    "E501",
+    "N806",
+    "N803",
+    "N802",
+    "N812",
+    "N814",
+    "N817",
+    "N818",
+    "N999",
+    "E701",
+    "E702",
+    "E741",
+    "E402",
+    "B007",
+    "B023",
+    "B904",
+    "B905",
+    "B017",
+    "SIM102",
+    "SIM105",
+    "SIM108",
+    "SIM112",
+    "SIM115",
+    "SIM117",
+    "UP031",
+]
+
+[format]
+quote-style = "double"
+indent-style = "space"
+
+[lint.per-file-ignores]
+"__init__.py" = ["F401"]
+"tests/*" = ["B011"]
+"kernels/qwen3.5-0.8b/**/*.py" = ["N806", "N803", "E741", "B007", "N999"]
+"beads/*.py" = ["N999"]

@@ -1,0 +1,46 @@
+[package]
+name = "fabric-daemon"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+repository.workspace = true
+authors.workspace = true
+description = "Long-running coordinator daemon for Phenotype Fabric. Manages topology, leases, wire transport, and health checks."
+
+[[bin]]
+name = "fabric-daemon"
+path = "src/main.rs"
+
+[lints]
+workspace = true
+
+[dependencies]
+fabric-graph.workspace = true
+fabric-capability.workspace = true
+fabric-persist = { path = "../fabric-persist" }
+fabric-frame-transport = { path = "../fabric-frame-transport" }
+serde.workspace = true
+serde_json.workspace = true
+uuid.workspace = true
+chrono.workspace = true
+thiserror.workspace = true
+clap = { version = "4", features = ["derive"] }
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["json", "env-filter"] }
+prometheus = "0.13"
+opentelemetry = "0.27"
+opentelemetry_sdk = "0.27"
+opentelemetry-otlp = "0.27"
+tracing-opentelemetry = "0.28"
+toml = "0.8"
+ctrlc = "3"
+tokio = { version = "1", features = ["net", "io-util", "time", "process", "macros", "rt"] }
+reqwest = { version = "0.12", features = ["json"] }
+jsonwebtoken = "9"
+
+[dev-dependencies]
+tempfile = "3"
+fabric-checker = { path = "../fabric-checker" }
+fabric-frame-transport = { path = "../fabric-frame-transport" }
+phenotype-nvms-adapter = { path = "../phenotype-nvms-adapter" }

@@ -1,0 +1,30 @@
+name: bench-throughput-stress
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'bench/**'
+      - 'demos/bench-throughput-stress/**'
+  workflow_dispatch:
+
+jobs:
+  demo:
+    runs-on: macos-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Run stress driver (15s, N=8)
+        run: |
+          cd demos/bench-throughput-stress
+          N=8 duration_s=15 bash scripts/stress.sh
+          python3 scripts/aggregate.py > artifacts/metrics.json
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: bench-throughput-stress
+          path: demos/bench-throughput-stress/artifacts/
+          if-no-files-found: warn

@@ -1,75 +1,81 @@
-# syntax=docker/dockerfile:1.7
-# Multi-stage Dockerfile for the substrate gateway + CLI.
-# Resulting image is ~120 MB (Debian-slim distroless-style runtime).
+# ──────────────────────────────────────────────────────────────────────
+# Multi-stage Dockerfile for Phenotype Fabric daemon
+# ──────────────────────────────────────────────────────────────────────
+# Stage 1: Build both fabric-daemon and fabric-cli (cli used for health)
+# Stage 2: Minimal runtime image
+# ──────────────────────────────────────────────────────────────────────
 
-# -------- Stage 1: build --------
-FROM rust:1.82-slim-bookworm AS builder
+# ── Stage 1: Builder ─────────────────────────────────────────────────
+FROM rust:1.81-slim AS builder
 
-# Build deps
 RUN apt-get update && apt-get install -y --no-install-recommends \
-        pkg-config libssl-dev ca-certificates \
+        pkg-config \
+        libssl-dev \
+        ca-certificates \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /build
 
-# Cache deps separately from source
+# Cache dependency builds: copy manifests first, create dummy sources, build deps.
 COPY Cargo.toml Cargo.lock ./
-COPY crates crates
-COPY fuzz fuzz
-RUN mkdir -p fuzz && touch fuzz/.gitkeep && \
-    cargo fetch --locked
+COPY crates/fabric-daemon/Cargo.toml crates/fabric-daemon/Cargo.toml
+COPY crates/fabric-cli/Cargo.toml crates/fabric-cli/Cargo.toml
+COPY crates/fabric-graph/Cargo.toml crates/fabric-graph/Cargo.toml
+COPY crates/fabric-capability/Cargo.toml crates/fabric-capability/Cargo.toml
+COPY crates/fabric-persist/Cargo.toml crates/fabric-persist/Cargo.toml
+COPY crates/fabric-checker/Cargo.toml crates/fabric-checker/Cargo.toml
+COPY crates/fabric-workspace/Cargo.toml crates/fabric-workspace/Cargo.toml
+COPY crates/fabric-frame-transport/Cargo.toml crates/fabric-frame-transport/Cargo.toml
+COPY crates/phenotype-nvms-adapter/Cargo.toml crates/phenotype-nvms-adapter/Cargo.toml
 
-# Build release binaries (use workspace settings for max perf)
-COPY . .
-RUN cargo build --release \
-        -p driver-cli \
-        -p psub-gateway \
-        -p driver-http
+# Create stub lib.rs / main.rs for each workspace member so cargo can resolve deps.
+RUN mkdir -p crates/fabric-daemon/src crates/fabric-cli/src crates/fabric-graph/src \
+             crates/fabric-capability/src crates/fabric-persist/src \
+             crates/fabric-checker/src crates/fabric-workspace/src \
+             crates/fabric-frame-transport/src crates/phenotype-nvms-adapter/src && \
+    for crate in fabric-graph fabric-capability fabric-persist fabric-checker \
+                 fabric-workspace fabric-frame-transport phenotype-nvms-adapter; do \
+        echo "pub fn _stub() {}" > "crates/${crate}/src/lib.rs"; \
+    done && \
+    echo "fn main() {}" > crates/fabric-daemon/src/main.rs && \
+    echo "fn main() {}" > crates/fabric-cli/src/main.rs
 
-# Strip debug symbols to shrink image
-RUN strip target/release/substrate && \
-    strip target/release/substrate-gateway && \
-    strip target/release/substrate-http
+# Pre-build dependencies (cached unless Cargo.toml changes).
+RUN cargo build --release --locked 2>/dev/null || cargo build --release
 
-# -------- Stage 2: runtime --------
+# Now copy real source and rebuild only the targets we need.
+COPY crates/ crates/
+
+RUN cargo build --release --bin fabric-daemon --bin fabric-cli
+
+# ── Stage 2: Runtime ─────────────────────────────────────────────────
 FROM debian:bookworm-slim AS runtime
 
-# Add a non-root user
-RUN groupadd --system --gid 1001 substrate && \
-    useradd  --system --uid 1001 --gid substrate --create-home substrate
-
-# CA certs for upstream provider TLS, /tini for signal handling
 RUN apt-get update && apt-get install -y --no-install-recommends \
-        ca-certificates curl tini \
+        ca-certificates \
+        curl \
     && rm -rf /var/lib/apt/lists/*
 
-# Substrate config + data
-ENV SUBSTRATE_HOME=/var/lib/substrate \
-    RUST_LOG=info \
-    RUST_BACKTRACE=1 \
-    PSUB_GATEWAY_BIND=0.0.0.0:8080
+# Create unrooted daemon user.
+RUN groupadd --gid 1000 fabric && \
+    useradd  --uid 1000 --gid fabric --shell /bin/false --create-home fabric
 
-WORKDIR /var/lib/substrate
+# State directory for SQLite database and workspace data.
+RUN mkdir -p /var/lib/fabric && chown fabric:fabric /var/lib/fabric
 
-# Copy binaries from builder
-COPY --from=builder --chown=substrate:substrate \
-    /build/target/release/substrate            /usr/local/bin/substrate
-COPY --from=builder --chown=substrate:substrate \
-    /build/target/release/substrate-gateway    /usr/local/bin/substrate-gateway
-COPY --from=builder --chown=substrate:substrate \
-    /build/target/release/substrate-http     /usr/local/bin/substrate-http
+# Copy binaries from builder.
+COPY --from=builder /build/target/release/fabric-daemon /usr/local/bin/fabric-daemon
+COPY --from=builder /build/target/release/fabric-cli     /usr/local/bin/fabric-cli
 
-COPY --chown=substrate:substrate docs/openapi.yaml  /etc/substrate/openapi.yaml
+# Expose wire-server port.
+EXPOSE 9400
 
-USER substrate
+# Health check: send a health_check message over the wire protocol.
+# fabric-daemon health --connect uses the TCP wire protocol on port 9400.
+HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
+    CMD /usr/local/bin/fabric-cli health --connect 127.0.0.1:9400 || exit 1
 
-EXPOSE 8080
+USER fabric
 
-# Healthcheck hits the in-process liveness probe (cheap, no auth).
-HEALTHCHECK --interval=30s --timeout=5s --start-period=15s --retries=3 \
-    CMD ["curl", "--fail", "--silent", "http://127.0.0.1:8080/healthz"]
-
-ENTRYPOINT ["/usr/bin/tini", "--"]
-
-# Default process is the HTTP gateway.
-CMD ["substrate-gateway"]
+ENTRYPOINT ["/usr/local/bin/fabric-daemon"]
+CMD ["start"]

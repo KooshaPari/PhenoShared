@@ -1,0 +1,68 @@
+{
+  "timestamp": "2026-08-08T21:28:40.105062+00:00",
+  "wheel": {
+    "path": "/home/kooshapari/sglang-src/sgl-kernel/dist/sgl_kernel-0.1.0-cp39-abi3-linux_x86_64.whl",
+    "sha256_expected": "099f8dcdc59f06ce644a2b045e8129ecc5e66afef36e959885106223ee8e494e",
+    "sha256_actual": "099f8dcdc59f06ce644a2b045e8129ecc5e66afef36e959885106223ee8e494e",
+    "inner_common_ops_abi3_so_sha256": "2c998f5dc08029d8398b96624e184ae498c9d218dfecac48526082c9dc87ad09"
+  },
+  "target_venv": {
+    "path": "/home/kooshapari/.pheno-serve-venv",
+    "python_binary": "/home/kooshapari/.pheno-serve-venv/bin/python",
+    "python_version": "Python 3.14.6",
+    "sglang_version_before": "0.3.6.post2 (imported OK pre-install)",
+    "sglang_import_after_install_rc": 0,
+    "sglang_import_after_install_output": "sglang version: 0.3.6.post2",
+    "torch_version": "2.11.0+cu130 (cuda 13.0)",
+    "c10_cuda_check_signature_defined": "_ZN3c104cuda29c10_cuda_check_implementationEiPKcS2_jb (5th arg: unsigned int)"
+  },
+  "pip_install": {
+    "command": "/home/kooshapari/.pheno-serve-venv/bin/python -m pip install --force-reinstall --no-deps /home/kooshapari/sglang-src/sgl-kernel/dist/sgl_kernel-0.1.0-cp39-abi3-linux_x86_64.whl",
+    "rc": 0,
+    "last_lines": [
+      "Processing /home/kooshapari/sglang-src/sgl-kernel/dist/sgl_kernel-0.1.0-cp39-abi3-linux_x86_64.whl",
+      "Installing collected packages: sgl-kernel",
+      "  Attempting uninstall: sgl-kernel",
+      "    Found existing installation: sgl-kernel 0.3.21",
+      "    Uninstalling sgl-kernel-0.3.21:",
+      "      Successfully uninstalled sgl-kernel-0.3.21",
+      "Successfully installed sgl-kernel-0.1.0"
+    ],
+    "pip_show_after": "Name: sgl-kernel / Version: 0.1.0"
+  },
+  "import_verification": {
+    "command": "/home/kooshapari/.pheno-serve-venv/bin/python -c \"import sgl_kernel; print('sgl_kernel OK', sgl_kernel.__file__)\"",
+    "rc": 1,
+    "output": "Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n    import sgl_kernel; print('sgl_kernel OK', sgl_kernel.__file__)\n    ^^^^^^^^^^^^^^^^^\n  File \"/home/kooshapari/.pheno-serve-venv/lib64/python3.14/site-packages/sgl_kernel/__init__.py\", line 12, in <module>\n    from sgl_kernel import common_ops\nImportError: /home/kooshapari/.pheno-serve-venv/lib64/python3.14/site-packages/sgl_kernel/common_ops.abi3.so: undefined symbol: _ZN3c104cuda29c10_cuda_check_implementationEiPKcS2_ib",
+    "installed_site_packages_listing": {
+      "has_common_ops_abi3_so": true,
+      "has_flash_ops_abi3_so": false,
+      "common_ops_abi3_so_size_bytes": 71658768,
+      "installed_common_ops_abi3_so_sha256": "2c998f5dc08029d8398b96624e184ae498c9d218dfecac48526082c9dc87ad09"
+    }
+  },
+  "api_smoke": {
+    "command": "/home/kooshapari/.pheno-serve-venv/bin/python -c \"from sgl_kernel import moe_align_block_size, topk_softmax; print('API OK')\"",
+    "rc": 1,
+    "output": "Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n    from sgl_kernel import moe_align_block_size, topk_softmax; print('API OK')\n    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/kooshapari/.pheno-serve-venv/lib64/python3.14/site-packages/sgl_kernel/__init__.py\", line 12, in <module>\n    from sgl_kernel import common_ops\nImportError: /home/kooshapari/.pheno-serve-venv/lib64/python3.14/site-packages/sgl_kernel/common_ops.abi3.so: undefined symbol: _ZN3c104cuda29c10_cuda_check_implementationEiPKcS2_ib",
+    "note": "fails in target venv because module import fails (see import_verification)"
+  },
+  "load_test_under_matching_torch": {
+    "summary": "Wheel extracted to /tmp/sglk_wheeltest (ephemeral, no venv modified) and imported with .vllm-pascal-venv/bin/python (torch 2.7.1+cu126 = the exact torch the wheel was built against).",
+    "result": "sgl_kernel OK /tmp/sglk_wheeltest/sgl_kernel/__init__.py | version: 0.1.0 | torch: 2.7.1+cu126",
+    "api_imports": "OK: moe_align_block_size, topk_softmax, rmsnorm, gelu_and_mul, apply_rope_with_cos_sin_cache_inplace",
+    "rc": 0
+  },
+  "build_evidence": {
+    "cmake_cache_python_executable": "/home/kooshapari/.vllm-pascal-venv/bin/python (torch 2.7.1+cu126)",
+    "cmake_cache_cuda_compiler": "/usr/local/cuda-13.3/bin/nvcc",
+    "wheel_undefined_c10_symbol": "_ZN3c104cuda29c10_cuda_check_implementationEiPKcS2_ib (5th arg: int)"
+  },
+  "gpu_free_memory_at_check": {
+    "rc": 0,
+    "output": "0, NVIDIA GeForce GTX 1080 Ti, 8954 MiB, 2153 MiB\n1, NVIDIA GeForce RTX 3090 Ti, 21428 MiB, 2886 MiB",
+    "note": "RTX 3090 Ti (index 1) is the sm_86 GPU; free memory listed in MiB. Lane vLLM services hold most of it; CPU-only install/import does not need GPU memory."
+  },
+  "verdict": "INSTALLED_PARTIAL",
+  "verdict_reason": "pip install succeeded (rc=0, sgl-kernel 0.1.0 replaces 0.3.21) and the installed common_ops.abi3.so is byte-identical to the wheel's copy (sha256 2c998f5dc08029d8398b96624e184ae498c9d218dfecac48526082c9dc87ad09 both). However `import sgl_kernel` FAILS in the SGLang lane venv .pheno-serve-venv (torch 2.11.0+cu130): undefined symbol _ZN3c104cuda29c10_cuda_check_implementationEiPKcS2_ib (c10::cuda::c10_cuda_check_implementation with 5th arg 'int'), while this torch defines the 'unsigned int' variant. The wheel was built against torch 2.7.1+cu126 (build python = .vllm-pascal-venv, per sgl-kernel/build/CMakeCache.txt) which defines the 'int' variant. Load test with torch 2.7.1+cu126 confirms the wheel is sound and all API symbols import. Note: `import sglang` still works (0.3.6.post2; sgl_kernel is imported lazily), but any actual use of sgl_kernel ops in the lane fails until the ABI is aligned. FIX REQUIRED: rebuild the wheel against torch 2.11.0+cu130 (the .pheno-serve-venv runtime), or align the lane runtime torch to a version whose libc10_cuda exports the 'int' variant (e.g. torch 2.7.1). Until then sgl_kernel 0.1.0 cannot be imported in the SGLang lane venv."
+}

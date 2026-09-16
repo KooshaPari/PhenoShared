@@ -1,49 +1,20 @@
 [package]
 name = "pheno-config"
-version = "0.2.0"
+version = "0.1.0"
 edition = "2021"
-license = "MIT"
-authors = ["Phenotype Team"]
-description = "Canonical typed-config loader for the pheno-* fleet. Reads <PREFIX>_* env vars (with a ConfigBuilder for programmatic construction), JSON config files, and TOML config files, returning a Config struct with url/port/log_level/db_path/feature_flags. Includes a 12-factor `combine()` that overlays env over TOML."
-repository = "https://github.com/KooshaPari/pheno"
-keywords = ["config", "phenotype", "pheno-config", "env", "settings"]
-categories = ["config", "rust-patterns"]
-# Absorbed into Configra per ADR-031 follow-up (L5-104.7). The crate
-# name and public API are preserved verbatim — consumers continue to
-# depend on `pheno-config` exactly as before. Only the source-of-
-# truth repo has moved from KooshaPari/phenotype-apps (where the
-# meta-repo's pheno-config/ subdir lived) to KooshaPari/Configra.
-publish = true
-rust-version = "1.86"
-
-[lib]
-name = "pheno_config"
-path = "src/lib.rs"
+description = "PhenoCompose centralized configuration — figment-backed, layered config (TOML + env + defaults)"
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/KooshaPari/phenotype-infra"
+authors = ["kooshapari"]
+publish = false
 
 [dependencies]
-# thiserror stays at 1.0 for API stability — the workspace pin is 2,
-# but a v1 → v2 migration would force a breaking change on every
-# pheno-* consumer.
-thiserror = "1.0"
-serde = { workspace = true }
-serde_json = { workspace = true }
-toml = { workspace = true }
-# ADR-036: opt-in `tracing` support, gated by the `tracing` feature.
-# Consumers add `pheno-config = { version = "0.2", features = ["tracing"] }`
-# to opt into the OTLP substrate.
-tracing = { workspace = true, optional = true }
-secrecy = { workspace = true }
-
-[features]
-default = []
-# ADR-036: opt into `tracing` so `ConfigBuilder::build` can emit spans
-tracing = ["dep:tracing"]
+serde = { workspace = true, features = ["derive"] }
+figment = { version = "0.10", features = ["toml", "env"] }
 
 [dev-dependencies]
 serde_json = { workspace = true }
-tempfile = { workspace = true }
-# ADR-036: test that tracing spans emit (use OTEL_SDK_DISABLED=true in CI)
-tracing-test = "0.2"
 
-[[package.metadata.docs.rs]]
-targets = ["x86_64-unknown-linux-gnu"]
+[lib]
+name = "pheno_config"
+crate-type = ["lib"]

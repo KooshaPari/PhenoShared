@@ -1,0 +1,160 @@
+{
+  "arch": "Qwen3.5-0.8B",
+  "adapter": "mlx",
+  "timestamp": 1784369306.676332,
+  "results": [
+    {
+      "suite": "bfcl",
+      "n": 2,
+      "passed": 0,
+      "wrong": 2,
+      "errored": 0,
+      "wall_clock_s": 0.00047707557678222656,
+      "pass_at_1": 0.0
+    },
+    {
+      "suite": "deep-swe",
+      "n": 2,
+      "passed": 2,
+      "wrong": 0,
+      "errored": 0,
+      "wall_clock_s": 0.0004458427429199219,
+      "pass_at_1": 1.0
+    },
+    {
+      "suite": "gpqa-diamond",
+      "n": 2,
+      "passed": 1,
+      "wrong": 1,
+      "errored": 0,
+      "wall_clock_s": 0.00024437904357910156,
+      "pass_at_1": 0.5
+    },
+    {
+      "suite": "hle",
+      "n": 2,
+      "passed": 2,
+      "wrong": 0,
+      "errored": 0,
+      "wall_clock_s": 0.0001010894775390625,
+      "pass_at_1": 1.0
+    },
+    {
+      "suite": "ifeval",
+      "n": 2,
+      "passed": 0,
+      "wrong": 2,
+      "errored": 0,
+      "wall_clock_s": 0.0006220340728759766,
+      "pass_at_1": 0.0
+    },
+    {
+      "suite": "mmlu-pro",
+      "n": 2,
+      "passed": 0,
+      "wrong": 2,
+      "errored": 0,
+      "wall_clock_s": 0.00023603439331054688,
+      "pass_at_1": 0.0
+    },
+    {
+      "suite": "mt-bench",
+      "n": 2,
+      "passed": 0,
+      "wrong": 2,
+      "errored": 0,
+      "wall_clock_s": 0.00037384033203125,
+      "pass_at_1": 0.0
+    },
+    {
+      "suite": "perplexity",
+      "n": 2,
+      "passed": 2,
+      "wrong": 0,
+      "errored": 0,
+      "wall_clock_s": 8.797645568847656e-05,
+      "pass_at_1": 1.0
+    },
+    {
+      "suite": "swe-bench-verified",
+      "n": 2,
+      "passed": 2,
+      "wrong": 0,
+      "errored": 0,
+      "wall_clock_s": 0.0002818107604980469,
+      "pass_at_1": 1.0
+    },
+    {
+      "suite": "terminal-bench",
+      "n": 2,
+      "passed": 1,
+      "wrong": 1,
+      "errored": 0,
+      "wall_clock_s": 0.0002722740173339844,
+      "pass_at_1": 0.5
+    },
+    {
+      "suite": "kernelbench",
+      "n": 2,
+      "passed": 2,
+      "wrong": 0,
+      "errored": 0,
+      "wall_clock_s": 0.002145051956176758,
+      "pass_at_1": 1.0
+    },
+    {
+      "suite": "browsercomp",
+      "n": 2,
+      "passed": 1,
+      "wrong": 1,
+      "errored": 0,
+      "wall_clock_s": 4.887580871582031e-05,
+      "pass_at_1": 0.5
+    },
+    {
+      "suite": "osworld",
+      "n": 2,
+      "passed": 1,
+      "wrong": 1,
+      "errored": 0,
+      "wall_clock_s": 8.20159912109375e-05,
+      "pass_at_1": 0.5
+    },
+    {
+      "suite": "pinchbench",
+      "n": 2,
+      "passed": 2,
+      "wrong": 0,
+      "errored": 0,
+      "wall_clock_s": 3.790855407714844e-05,
+      "pass_at_1": 1.0
+    },
+    {
+      "suite": "arc-agi-2",
+      "n": 2,
+      "passed": 2,
+      "wrong": 0,
+      "errored": 0,
+      "wall_clock_s": 4.291534423828125e-05,
+      "pass_at_1": 1.0
+    },
+    {
+      "suite": "vending-bench",
+      "n": 2,
+      "passed": 1,
+      "wrong": 1,
+      "errored": 0,
+      "wall_clock_s": 1.5974044799804688e-05,
+      "pass_at_1": 0.5
+    },
+    {
+      "suite": "startup-bench",
+      "n": 2,
+      "passed": 0,
+      "wrong": 2,
+      "errored": 0,
+      "wall_clock_s": 3.314018249511719e-05,
+      "pass_at_1": 0.0
+    }
+  ]
+}

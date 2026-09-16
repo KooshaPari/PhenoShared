@@ -1,0 +1,19 @@
+﻿{
+    "schema_version":  "phenolm.wsl_relocation.v1",
+    "distro":  "Ubuntu-22.04",
+    "source_base_path":  "C:\\Users\\koosh\\AppData\\Local\\Packages\\CanonicalGroupLimited.Ubuntu22.04LTS_79rhkp1fndgsc\\LocalState",
+    "source_vhdx":  "C:\\Users\\koosh\\AppData\\Local\\Packages\\CanonicalGroupLimited.Ubuntu22.04LTS_79rhkp1fndgsc\\LocalState\\ext4.vhdx",
+    "source_vhdx_exists":  true,
+    "source_vhdx_bytes":  34433138688,
+    "target_root":  "D:\\WSL\\Ubuntu-22.04",
+    "target_drive":  "D:",
+    "target_free_bytes":  549687865344,
+    "minimum_target_free_bytes":  53687091200,
+    "disk_admission":  "pass",
+    "mode":  "plan",
+    "destructive_step_requires_confirm_unregister":  true,
+    "other_distros_touched":  [
+
+                              ],
+    "export_before_unregister":  true
+}

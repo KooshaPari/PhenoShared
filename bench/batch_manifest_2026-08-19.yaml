@@ -1,0 +1,16 @@
+# N21 — Batch manifest (Forward DAG v2)
+# Single SGLang reservation for N06+N07+N08+N09. Qwen :30000 is sibling-owned; do not bind.
+reservation:
+  endpoint: http://127.0.0.1:30000/v1
+  model: local/qwen35-08b
+  max_restarts: 1
+  window_h: 4
+jobs:
+  - id: N06_terminus
+    config: bench/results/portage/N06_terminus_20260808/job_config.terminus.granite.yaml
+  - id: N07_rep6
+    config: bench/results/portage/rep6/job_config.granite.yaml
+  - id: N08_tbench20
+    config: bench/results/tbench/2.0/job_config.yaml
+  - id: N09_tbench21
+    config: bench/results/tbench/2.1/N09_tb21_full_granite_20260808/job_config.granite.yaml

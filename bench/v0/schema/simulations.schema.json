@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "pheno.bench.v0.simulation.v1",
+  "title": "V0 simulation (never promotable as measured)",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "simulation_id",
+    "case_id",
+    "evidence_class",
+    "provenance",
+    "model_spec_sha256",
+    "inputs_sha256",
+    "outputs"
+  ],
+  "properties": {
+    "schema_version": { "const": "pheno.bench.v0.simulation.v1" },
+    "simulation_id": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "case_id": { "type": "string", "minLength": 1, "maxLength": 256 },
+    "evidence_class": { "const": "simulated" },
+    "provenance": { "$ref": "observations.schema.json#/$defs/provenance" },
+    "model_spec_sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "inputs_sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "outputs": { "type": "object" }
+  }
+}

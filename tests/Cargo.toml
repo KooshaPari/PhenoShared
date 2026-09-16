@@ -1,0 +1,46 @@
+[package]
+name = "phenotype-infra-tests"
+version = "0.1.0"
+edition = "2021"
+description = "Cross-crate integration tests for phenotype-infra monorepo"
+publish = false
+
+[[test]]
+name = "integration"
+path = "integration_test.rs"
+
+[dependencies]
+nvms-ffi = { path = "../crates/nvms-ffi" }
+pheno-compose-driver = { path = "../crates/pheno-compose" }
+pheno-config = { path = "../crates/pheno-config" }
+serde_json = { workspace = true }
+
+# ── Integration tests (subdirectory) ────────────────────────────────────────
+[[test]]
+name = "integration_ffi_driver_bridge"
+path = "integration/ffi_driver_bridge.rs"
+
+[[test]]
+name = "integration_config_integration"
+path = "integration/config_integration.rs"
+
+[[test]]
+name = "integration_error_propagation"
+path = "integration/error_propagation.rs"
+
+[[test]]
+name = "integration_instance_lifecycle"
+path = "integration/instance_lifecycle.rs"
+
+[[test]]
+name = "integration_health_pipeline"
+path = "integration/health_pipeline.rs"
+
+# ── E2E tests (subdirectory) ────────────────────────────────────────────────
+[[test]]
+name = "e2e_full_lifecycle"
+path = "e2e/full_lifecycle.rs"
+
+[[test]]
+name = "e2e_config_driven_deployment"
+path = "e2e/config_driven_deployment.rs"

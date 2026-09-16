@@ -1,0 +1,62 @@
+FROM: aws-ubuntu:minimal
+NAME: trading-platform
+
+CLUSTER:
+  order-processor:
+    INSTANCES: 10-30
+    PATH: ./order-processor
+    BUILD: cargo build --release
+    SCALE:
+      LATENCY_THRESHOLD: 10ms
+
+  market-data:
+    INSTANCES: 5-15
+    PATH: ./market-data
+    BUILD: cargo build --release
+    SCALE:
+      MESSAGE_RATE: 10000
+
+  risk-calculator:
+    INSTANCES: 3-10
+    PATH: ./risk
+    BUILD: cargo build --release
+
+SERVICES:
+  frontend:
+    PATH: ./frontend
+    BUILD: npm run build
+    PORT: 3000
+
+  api:
+    PATH: ./api
+    BUILD: cargo build --release
+    PORT: 8080
+
+AWS:
+  REGION: us-east-1
+  SERVICES:
+    - TYPE: Aurora
+      ENGINE: postgres
+      MODE: CLUSTER
+    - TYPE: ElastiCache
+      ENGINE: redis
+      MODE: CLUSTER
+      SIZE: cache.r6g.2xlarge
+    - TYPE: MSK
+      NAME: market-data
+    - TYPE: MemoryDB
+      SIZE: db.r6g.2xlarge
+    - TYPE: S3
+      NAME: trading-data
+
+NETWORK:
+  DOMAIN: trading.example.com
+  SSL: true
+  LOAD_BALANCER:
+    TYPE: NLB
+    SSL: true
+  SECURITY:
+    VPC: true
+    PRIVATE_SUBNETS: true
+    RULES:
+      LATENCY_THRESHOLD: 1ms

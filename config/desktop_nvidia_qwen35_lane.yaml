@@ -1,0 +1,147 @@
+# Desktop NVIDIA lane contract for the paused-Mac / future local-runtime window.
+#
+# This file is declarative: it does not authorize installation, model loading,
+# server startup, Harbor execution, or benchmark execution.  A future runner
+# must consume this contract and obtain an explicit execution window before it
+# may do any of those things.
+schema_version: pheno.desktop-nvidia.qwen35-lane.v1
+effective_date: "2026-08-01"
+status: planning_only
+
+scope:
+  owner: pheno-harness
+  purpose: qwen35_desktop_evidence
+  model_family_allowlist: [Qwen3.5]
+  model_family_denylist: [Qwen2.5]
+  canonical_model: Qwen/Qwen3.5-0.8B
+  local_alias: local/qwen35-08b
+  mac_inference: paused
+  cross_platform_head: desktop_nvidia
+
+execution_policy:
+  allow_model_download: false
+  allow_install: false
+  allow_server_launch: false
+  allow_model_inference: false
+  allow_benchmark_execution: false
+  allow_harbor: false
+  require_explicit_window: true
+  max_concurrent_workers: 1
+  topology: independent_workers
+  tensor_parallel: forbidden
+  inter_gpu_transfer: forbidden_by_default
+  implicit_model_migration: forbidden
+
+hardware:
+  host:
+    platform: desktop_linux_or_wsl
+    ram_gb_min: 64
+  devices:
+    rtx_3090_ti:
+      role: primary
+      nvidia_smi_index: 1
+      architecture: sm_86
+      vram_mib: 24564
+      cuda_visible_devices: "1"
+      pytorch_device: cuda:0
+      llama_cpp_isolated_device: CUDA0
+      allowed_runtimes: [llama_cpp, sglang, vllm, tensorrt_llm]
+    gtx_1080_ti:
+      role: helper
+      nvidia_smi_index: 0
+      architecture: sm_61
+      vram_mib: 11264
+      cuda_visible_devices: "0"
+      pytorch_device: cuda:0
+      llama_cpp_isolated_device: CUDA0
+      allowed_runtimes: [llama_cpp_cuda12_legacy]
+      tensor_parallel: forbidden
+  visibility_notes:
+    - nvidia_smi_indices_are_physical_and_stable_only_with_a_captured_device_manifest
+    - cuda_visible_devices_is_runtime_specific_and_must_be_verified_against_the_device_manifest
+    - llama_cpp_device_indices_are_runtime_specific_and_must_not_be_reused_as_cuda_indices
+  runtime_device_mappings:
+    observed_host: KOOSHAPARI-DESK
+    vllm_wsl:
+      visibility_variable: CUDA_VISIBLE_DEVICES
+      logical_device: cuda:0
+      physical_to_visible_index:
+        gtx_1080_ti: "0"
+        rtx_3090_ti: "1"
+    llama_cpp_windows_b10012:
+      build: b10012-c71854292
+      visibility_variable: CUDA_VISIBLE_DEVICES
+      logical_device: CUDA0
+      physical_to_visible_index:
+        gtx_1080_ti: "1"
+        rtx_3090_ti: "0"
+      note: "Windows llama.cpp enumeration is reversed relative to the WSL vLLM mapping on the captured host."
+
+runtime_policy:
+  qwen35_08b:
+    primary:
+      device: rtx_3090_ti
+      runtime_candidates: [llama_cpp, sglang, vllm]
+      status: deferred_until_explicit_window
+    helper:
+      device: gtx_1080_ti
+      runtime_candidates: [llama_cpp_cuda12_legacy]
+      status: deferred_until_explicit_window
+  unsupported_without_new_review:
+    - mixed_gpu_tensor_parallel
+    - cross_gpu_layer_split
+    - automatic_offload
+    - cloud_or_harbor_execution
+
+provenance_requirements:
+  model:
+    - canonical_huggingface_id
+    - immutable_revision
+    - artifact_sha256
+    - artifact_bytes
+    - quantization_format
+  runtime:
+    - runtime_name_and_version
+    - runtime_revision_or_build_id
+    - binary_sha256
+    - driver_version
+    - cuda_toolkit_version
+  device:
+    - nvidia_smi_query_with_index_uuid_name_architecture_and_vram
+    - cuda_visible_devices
+    - logical_device_mapping
+  run:
+    - contract_sha256
+    - explicit_window_id
+    - started_at_and_finished_at
+    - workload_executed
+    - dry_run
+    - timeout_seconds
+    - max_concurrency
+    - result_artifact_sha256
+
+promotion_gates:
+  - exact_qwen35_model_and_revision
+  - exact_quantized_artifact_and_sha256
+  - captured_dual_gpu_device_manifest
+  - runtime_binary_and_driver_provenance
+  - bounded_single_worker_smoke
+  - repeated_result_envelope_with_no_fallback_ambiguity
+  - harbor_or_eval_window_authorized
+
+external_backend_references:
+  unsloth:
+    integration_mode: external_openai_compatible_api
+    source_url: https://github.com/unslothai/unsloth
+    copy_source: false
+    required_model_family: Qwen3.5
+    allowed_semantics:
+      - gguf_model_discovery
+      - explicit_gpu_layer_offload
+      - openai_compatible_endpoint
+      - independent_worker_placement
+    prohibited_surfaces:
+      - studio
+      - unsloth_cli
+      - vendored_agpl_source
+    provenance_boundary: pheno_harness_run_envelope

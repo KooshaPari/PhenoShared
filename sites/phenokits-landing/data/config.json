@@ -1,0 +1,23 @@
+{
+  "name": "PhenoKits",
+  "slug": "phenokits",
+  "domain": "phenokits.kooshapari.com",
+  "description": "The Phenotype org's shared-artifact monorepo. 12 categories of cross-org templates, configs, libs, governance, and security assets.",
+  "tier": 2,
+  "repo": "KooshaPari/PhenoKits",
+  "language": "Mixed / Templates",
+  "license": "MIT",
+  "status": "active",
+  "features": [
+    "Umbrella workspace checkout",
+    "Shared governance templates",
+    "Security configs and policies",
+    "CI/CD templates",
+    "HexaKit sub-monorepo"
+  ],
+  "links": {
+    "github": "https://github.com/KooshaPari/PhenoKits",
+    "docs": "https://phenokits.kooshapari.com/docs",
+    "releases": "https://github.com/KooshaPari/PhenoKits/releases"
+  }
+}

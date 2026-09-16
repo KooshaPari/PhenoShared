@@ -1,0 +1,24 @@
+{
+  "name": "HeliosLite",
+  "slug": "helioslite",
+  "tagline": "AI pair programmer CLI for Claude, GPT, Gemini, Grok, Deepseek, and 300+ models.",
+  "domain": "helioslite.phenotype.space",
+  "color": "#2563eb",
+  "description": "AI pair programmer CLI for Claude, GPT, Gemini, Grok, Deepseek, and 300+ models.",
+  "tier": 2,
+  "repo": "KooshaPari/HeliosLite",
+  "language": "Rust",
+  "license": "MIT",
+  "status": "active",
+  "features": [
+    "300+ model support",
+    "Pair programming mode",
+    "Terminal UI",
+    "Streaming responses"
+  ],
+  "links": {
+    "github": "https://github.com/KooshaPari/HeliosLite",
+    "docs": "https://helioslite.phenotype.space/docs",
+    "releases": "https://github.com/KooshaPari/HeliosLite/releases"
+  }
+}

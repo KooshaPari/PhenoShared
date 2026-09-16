@@ -1,0 +1,86 @@
+---
+# oci-baseline.yml — invoked by oci-post-acquire (step 4) on a freshly-won OCI
+# Always-Free instance. Idempotent; safe to re-run on partial failure.
+#
+# Inventory is dynamic: `oci-post-acquire` invokes via `-i <ip>,` with user
+# `ubuntu`. SSH key auth assumed (lottery daemon uploads `~/.ssh/id_ed25519.pub`
+# during instance launch).
+
+- name: OCI baseline (post-acquire step 4)
+  hosts: all
+  become: true
+  gather_facts: true
+  vars:
+    phenotype_user: phenotype
+    phenotype_hostname: "oci-1"
+    base_packages:
+      - build-essential
+      - curl
+      - git
+      - htop
+      - jq
+      - tmux
+      - ufw
+      - unattended-upgrades
+
+  tasks:
+    - name: Set hostname
+      ansible.builtin.hostname:
+        name: "{{ phenotype_hostname }}"
+
+    - name: Install base packages
+      ansible.builtin.apt:
+        name: "{{ base_packages }}"
+        update_cache: true
+        state: present
+
+    - name: Create phenotype user
+      ansible.builtin.user:
+        name: "{{ phenotype_user }}"
+        groups: sudo
+        shell: /bin/bash
+        create_home: true
+
+    - name: Authorize SSH key for phenotype user
+      ansible.posix.authorized_key:
+        user: "{{ phenotype_user }}"
+        state: present
+        key: "{{ lookup('file', lookup('env', 'HOME') + '/.ssh/id_ed25519.pub') }}"
+
+    - name: Harden sshd (no root, no password)
+      ansible.builtin.copy:
+        dest: /etc/ssh/sshd_config.d/99-phenotype.conf
+        owner: root
+        mode: "0644"
+        content: |
+          PermitRootLogin no
+          PasswordAuthentication no
+          KbdInteractiveAuthentication no
+      notify: restart sshd
+
+    - name: Allow SSH + Tailscale via UFW
+      community.general.ufw:
+        rule: allow
+        port: "{{ item }}"
+      loop: ["22", "41641"]
+
+    - name: Enable UFW (default deny incoming)
+      community.general.ufw:
+        state: enabled
+        policy: deny
+        direction: incoming
+
+    - name: Mark node as joined to phenotype mesh
+      ansible.builtin.copy:
+        dest: /etc/phenotype-node
+        owner: root
+        mode: "0644"
+        content: |
+          role=oci-baseline
+          joined_at={{ ansible_date_time.iso8601 }}
+
+  handlers:
+    - name: restart sshd
+      ansible.builtin.service:
+        name: ssh
+        state: restarted

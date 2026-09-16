@@ -1,0 +1,56 @@
+{
+  "schema_version": "pheno.dual_gpu_smoke.v1",
+  "measured_at": "2026-07-17T21:13:35.9756165-07:00",
+  "command": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts\\run_dual_gpu_smoke.ps1",
+  "raw_log": "state/dual_gpu_smoke_2026-07-17.log",
+  "model": "D:\\WSL\\model-cache\\qwen35-08b-q4\\qwen35-08b.Q4_K_M.gguf",
+  "bench_binary": "D:\\WSL\\tools\\llama.cpp-b10012-cuda12.4\\llama-bench.exe",
+  "cuda_mapping_notes": {
+    "nvidia_smi_index_0": "GTX 1080 Ti",
+    "nvidia_smi_index_1": "RTX 3090 Ti",
+    "llama_cpp_cuda0": "RTX 3090 Ti (when both visible)",
+    "llama_cpp_cuda1": "GTX 1080 Ti (when both visible)",
+    "pytorch_sglang_vllm": "use CUDA_VISIBLE_DEVICES=1 for 3090 Ti"
+  },
+  "results": [
+    {
+      "gpu": "rtx_3090_ti",
+      "cuda_visible_devices": "0",
+      "quant": "Q4_K_M",
+      "pp128_tok_s": 5479.59,
+      "tg64_tok_s": 276.77,
+      "vram_mib": 24563
+    },
+    {
+      "gpu": "gtx_1080_ti",
+      "cuda_visible_devices": "1",
+      "quant": "Q4_K_M",
+      "pp128_tok_s": 1556.11,
+      "tg64_tok_s": 117.66,
+      "vram_mib": 11263
+    }
+  ],
+  "placement_ratio_tg64": 2.352,
+  "prior_policy_ratio": 2.339,
+  "placement_conclusion": "RTX 3090 Ti remains the primary generation tier; GTX 1080 Ti remains an independent helper tier.",
+  "single_gpu_mode": {
+    "supported": true,
+    "isolation": "Set CUDA_VISIBLE_DEVICES before launching each independent Windows llama.cpp process.",
+    "windows_llama_cpp_mapping": {
+      "CUDA_VISIBLE_DEVICES=0": "RTX 3090 Ti primary",
+      "CUDA_VISIBLE_DEVICES=1": "GTX 1080 Ti helper"
+    },
+    "mixed_gpu_tensor_parallel": "not_proven"
+  },
+  "engines": {
+    "sglang_wsl_8000": "healthy_http_200",
+    "llama_cpp_primary_8080": "healthy_http_200",
+    "llama_cpp_helper_8081": "healthy_http_200",
+    "pheno_serve_21080": "healthy_http_200"
+  },
+  "gpu_visibility": {
+    "windows": ["GTX 1080 Ti", "RTX 3090 Ti"],
+    "wsl_ubuntu_22_04": ["GTX 1080 Ti", "RTX 3090 Ti"],
+    "driver": "581.80"
+  }
+}

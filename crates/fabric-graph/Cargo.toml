@@ -1,0 +1,37 @@
+[package]
+name = "fabric-graph"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+repository.workspace = true
+authors.workspace = true
+description = "Fabric topology graph model and route compilation"
+
+[dependencies]
+fabric-capability = { workspace = true }
+serde = { workspace = true }
+serde_json.workspace = true
+uuid.workspace = true
+chrono.workspace = true
+blake3.workspace = true
+thiserror.workspace = true
+anyhow = "1.0"
+tracing = "0.1"
+url = "2.5"
+
+[dev-dependencies]
+criterion = { version = "0.5", features = ["html_reports"] }
+proptest = "1"
+
+[[bench]]
+name = "compiler"
+harness = false
+
+[[test]]
+name = "property_tests"
+path = "tests/property_tests.rs"
+
+[[test]]
+name = "lease_properties"
+path = "tests/lease_properties.rs"

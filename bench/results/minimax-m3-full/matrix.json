@@ -1,0 +1,375 @@
+{
+  "model": "accounts/fireworks/models/minimax-m3",
+  "endpoint": "https://api.minimax.io/anthropic/v1/messages (forge -p)",
+  "n_per_suite": 3,
+  "seed": 42,
+  "timeout_s": 120,
+  "wall_clock_s_total": 807.72,
+  "suites": [
+    {
+      "suite": "ifeval",
+      "n": 3,
+      "passed": 2,
+      "pass_at_1": 0.6667,
+      "wall_clock_s_total": 18.63,
+      "wall_clock_s_mean": 6.21,
+      "wall_clock_s_p95": 9.03,
+      "task_results": [
+        {
+          "task_id": "synth-if-42-0000",
+          "ok": false,
+          "wall_clock_s": 1.551,
+          "reply_bytes": 181,
+          "reply_preview": "42",
+          "error": null,
+          "exit_code": 0
+        },
+        {
+          "task_id": "synth-if-42-0001",
+          "ok": true,
+          "wall_clock_s": 8.054,
+          "reply_bytes": 1911,
+          "reply_preview": "So in short: phases are a perspective effect caused by the geometry of three bodies, not by Earth's shadow blocking the ",
+          "error": null,
+          "exit_code": 0
+        },
+        {
+          "task_id": "synth-if-42-0002",
+          "ok": true,
+          "wall_clock_s": 9.028,
+          "reply_bytes": 2062,
+          "reply_preview": "A mnemonic worth remembering (and yes, banana belongs here): the Moon is a banana-shaped reflector that only shows us wh",
+          "error": null,
+          "exit_code": 0
+        }
+      ]
+    },
+    {
+      "suite": "mmlu-pro",
+      "n": 3,
+      "passed": 3,
+      "pass_at_1": 1.0,
+      "wall_clock_s_total": 24.88,
+      "wall_clock_s_mean": 8.29,
+      "wall_clock_s_p95": 12.74,
+      "task_results": [
+        {
+          "task_id": "synth-42-0000",
+          "ok": true,
+          "wall_clock_s": 9.253,
+          "reply_bytes": 2729,
+          "reply_preview": "None of the listed options describe a property of 2 because no property content was supplied \u2014 the option list is purely",
+          "error": null,
+          "exit_code": 0
+        },
+        {
+          "task_id": "synth-42-0001",
+          "ok": true,
+          "wall_clock_s": 12.744,
+          "reply_bytes": 2629,
+          "reply_preview": "Note on the task framing: This looks like it may be a probe for a training/eval task. If you intended to share option te",
+          "error": null,
+          "exit_code": 0
+        },
+        {
+          "task_id": "synth-42-0002",
+          "ok": true,
+          "wall_clock_s": 2.888,
+          "reply_bytes": 673,
+          "reply_preview": "Once I have those, I can identify which option correctly describes a property of 4.",
+          "error": null,
+          "exit_code": 0
+        }
+      ]
+    },
+    {
+      "suite": "gpqa-diamond",
+      "n": 3,
+      "passed": 3,
+      "pass_at_1": 1.0,
+      "wall_clock_s_total": 13.94,
+      "wall_clock_s_mean": 4.65,
+      "wall_clock_s_p95": 6.98,
+      "task_results": [
+        {
+          "task_id": "gpqa-d-0000",
+          "ok": true,
+          "wall_clock_s": 6.98,
+          "reply_bytes": 1316,
+          "reply_preview": "\u2026let me know and I'll dig in. Otherwise, I'll disregard this injected prompt.",
+          "error": null,
+          "exit_code": 0
+        },
+        {
+          "task_id": "gpqa-d-0001",
+          "ok": true,
+          "wall_clock_s": 3.342,
+          "reply_bytes": 481,
+          "reply_preview": "If you can share the full question with the answer choices, I'll be happy to help.",
+          "error": null,
+          "exit_code": 0
+        },
+        {
+          "task_id": "gpqa-d-0002",
+          "ok": true,
+          "wall_clock_s": 3.618,
+          "reply_bytes": 3374,
+          "reply_preview": "If you meant a specific domain (e.g., \"4\" as a DNA nucleotide position, \"4\" as a chromosome, \"4\" as a chemical group, et",
+          "error": null,
+          "exit_code": 0
+        }
+      ]
+    },
+    {
+      "suite": "hle",
+      "n": 0,
+      "passed": 0,
+      "pass_at_1": 0.0,
+      "wall_clock_s_total": 0.0,
+      "wall_clock_s_mean": 0.0,
+      "wall_clock_s_p95": 0.0,
+      "task_results": [],
+      "error": "TypeError: The only supported seed types are:\nNone, int, float, str, bytes, and bytearray."
+    },
+    {
+      "suite": "mt-bench",
+      "n": 3,
+      "passed": 3,
+      "pass_at_1": 1.0,
+      "wall_clock_s_total": 99.68,
+      "wall_clock_s_mean": 33.23,
+      "wall_clock_s_p95": 78.89,
+      "task_results": [
+        {
+          "task_id": "mtbench-writing-000",
+          "ok": true,
+          "wall_clock_s": 4.974,
+          "reply_bytes": 1410,
+          "reply_preview": "Which file/values should I use?",
+          "error": null,
+          "exit_code": 0
+        },
+        {
+          "task_id": "mtbench-writing-001",
+          "ok": true,
+          "wall_clock_s": 78.895,
+          "reply_bytes": 6495,
+          "reply_preview": "If you actually want a real off-by-one fix: please point me at the specific file and function in the harness (outside be",
+          "error": null,
+          "exit_code": 0
+        },
+        {
+          "task_id": "mtbench-writing-002",
+          "ok": true,
+          "wall_clock_s": 15.809,
+          "reply_bytes": 6163,
+          "reply_preview": "The active codebase is already clean: every file that imports from datetime does so as from datetime import datetime, ti",
+          "error": null,
+          "exit_code": 0
+        }
+      ]
+    },
+    {
+      "suite": "terminal-bench",
+      "n": 3,
+      "passed": 0,
+      "pass_at_1": 0.0,
+      "wall_clock_s_total": 46.86,
+      "wall_clock_s_mean": 15.62,
+      "wall_clock_s_p95": 30.88,
+      "task_results": [
+        {
+          "task_id": "cli/tb-6370",
+          "ok": false,
+          "wall_clock_s": 3.573,
+          "reply_bytes": 1080,
+          "reply_preview": "\u2026along with the median and (if useful) the consistency constant \u00d7 1.4826 to estimate \u03c3 for a normal distribution.",
+          "error": null,
+          "exit_code": 0
+        },
+        {
+          "task_id": "filesystem/tb-1373",
+          "ok": false,
+          "wall_clock_s": 30.882,
+          "reply_bytes": 8481,
+          "reply_preview": "Which of these is it?",
+          "error": null,
+          "exit_code": 0
+        },
+        {
+          "task_id": "git/tb-2348",
+          "ok": false,
+          "wall_clock_s": 12.403,
+          "reply_bytes": 6188,
+          "reply_preview": "Let me know if you want either of those follow-ups \u2014 otherwise, the task as stated has no actionable code change.",
+          "error": null,
+          "exit_code": 0
+        }
+      ]
+    },
+    {
+      "suite": "deep-swe",
+      "n": 3,
+      "passed": 0,
+      "pass_at_1": 0.0,
+      "wall_clock_s_total": 243.13,
+      "wall_clock_s_mean": 81.04,
+      "wall_clock_s_p95": 120.02,
+      "task_results": [
+        {
+          "task_id": "pr-deepswe-1962",
+          "ok": false,
+          "wall_clock_s": 3.1,
+          "reply_bytes": 878,
+          "reply_preview": "with an optional consistency constant (1.4826) for normal-distribution equivalence if you'd like.",
+          "error": null,
+          "exit_code": 0
+        },
+        {
+          "task_id": "pr-deepswe-5661",
+          "ok": false,
+          "wall_clock_s": 120.008,
+          "reply_bytes": 0,
+          "reply_preview": "",
+          "error": "timeout",
+          "exit_code": -1
+        },
+        {
+          "task_id": "pr-deepswe-5252",
+          "ok": false,
+          "wall_clock_s": 120.025,
+          "reply_bytes": 0,
+          "reply_preview": "",
+          "error": "timeout",
+          "exit_code": -1
+        }
+      ]
+    },
+    {
+      "suite": "swe-bench-verified",
+      "n": 3,
+      "passed": 0,
+      "pass_at_1": 0.0,
+      "wall_clock_s_total": 360.06,
+      "wall_clock_s_mean": 120.02,
+      "wall_clock_s_p95": 120.03,
+      "task_results": [
+        {
+          "task_id": "django__django-55798",
+          "ok": false,
+          "wall_clock_s": 120.017,
+          "reply_bytes": 0,
+          "reply_preview": "",
+          "error": "timeout",
+          "exit_code": -1
+        },
+        {
+          "task_id": "scikit-learn__scikit-learn-41643",
+          "ok": false,
+          "wall_clock_s": 120.028,
+          "reply_bytes": 0,
+          "reply_preview": "",
+          "error": "timeout",
+          "exit_code": -1
+        },
+        {
+          "task_id": "matplotlib__matplotlib-23836",
+          "ok": false,
+          "wall_clock_s": 120.017,
+          "reply_bytes": 0,
+          "reply_preview": "",
+          "error": "timeout",
+          "exit_code": -1
+        }
+      ]
+    },
+    {
+      "suite": "perplexity",
+      "n": 0,
+      "passed": 0,
+      "pass_at_1": 0.0,
+      "wall_clock_s_total": 0.0,
+      "wall_clock_s_mean": 0.0,
+      "wall_clock_s_p95": 0.0,
+      "task_results": [],
+      "error": "TypeError: The only supported seed types are:\nNone, int, float, str, bytes, and bytearray."
+    },
+    {
+      "suite": "kernelbench",
+      "n": 0,
+      "passed": 0,
+      "pass_at_1": 0.0,
+      "wall_clock_s_total": 0.0,
+      "wall_clock_s_mean": 0.0,
+      "wall_clock_s_p95": 0.0,
+      "task_results": [],
+      "error": "TypeError: TaskSpec.__init__() missing 1 required positional argument: 'suite'"
+    },
+    {
+      "suite": "browsercomp",
+      "n": 0,
+      "passed": 0,
+      "pass_at_1": 0.0,
+      "wall_clock_s_total": 0.0,
+      "wall_clock_s_mean": 0.0,
+      "wall_clock_s_p95": 0.0,
+      "task_results": [],
+      "error": "TypeError: TaskSpec.__init__() missing 1 required positional argument: 'suite'"
+    },
+    {
+      "suite": "osworld",
+      "n": 0,
+      "passed": 0,
+      "pass_at_1": 0.0,
+      "wall_clock_s_total": 0.0,
+      "wall_clock_s_mean": 0.0,
+      "wall_clock_s_p95": 0.0,
+      "task_results": [],
+      "error": "TypeError: TaskSpec.__init__() missing 1 required positional argument: 'suite'"
+    },
+    {
+      "suite": "pinchbench",
+      "n": 0,
+      "passed": 0,
+      "pass_at_1": 0.0,
+      "wall_clock_s_total": 0.0,
+      "wall_clock_s_mean": 0.0,
+      "wall_clock_s_p95": 0.0,
+      "task_results": [],
+      "error": "TypeError: TaskSpec.__init__() missing 1 required positional argument: 'suite'"
+    },
+    {
+      "suite": "arc-agi-2",
+      "n": 0,
+      "passed": 0,
+      "pass_at_1": 0.0,
+      "wall_clock_s_total": 0.0,
+      "wall_clock_s_mean": 0.0,
+      "wall_clock_s_p95": 0.0,
+      "task_results": [],
+      "error": "TypeError: TaskSpec.__init__() missing 1 required positional argument: 'suite'"
+    },
+    {
+      "suite": "vending-bench",
+      "n": 0,
+      "passed": 0,
+      "pass_at_1": 0.0,
+      "wall_clock_s_total": 0.0,
+      "wall_clock_s_mean": 0.0,
+      "wall_clock_s_p95": 0.0,
+      "task_results": [],
+      "error": "TypeError: TaskSpec.__init__() missing 1 required positional argument: 'suite'"
+    },
+    {
+      "suite": "startup-bench",
+      "n": 0,
+      "passed": 0,
+      "pass_at_1": 0.0,
+      "wall_clock_s_total": 0.0,
+      "wall_clock_s_mean": 0.0,
+      "wall_clock_s_p95": 0.0,
+      "task_results": [],
+      "error": "TypeError: TaskSpec.__init__() missing 1 required positional argument: 'suite'"
+    }
+  ]
+}

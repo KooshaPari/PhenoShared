@@ -1,3 +1,3 @@
 # Integration Tests
 
-Placeholder for substrate integration tests.
+Placeholder for phenotype-infra integration tests.

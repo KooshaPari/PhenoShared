@@ -1,0 +1,158 @@
+/* ═══════════════════════════════════════════════════════════════
+ * Keycap VitePress Theme — Full theme override
+ * @phenotype/design v1.0.0
+ *
+ * Import this single file in your VitePress theme to get
+ * the complete Keycap palette + all component styles.
+ *
+ * Usage in .vitepress/theme/index.ts:
+ *   import '@phenotype/design/css/vitepress-theme.css'
+ *
+ * Or if installed locally:
+ *   import './keycap-palette.css'  (copy from this package)
+ * ═══════════════════════════════════════════════════════════════ */
+
+@import './keycap-palette.css';
+@import './components.css';
+
+/* ── VitePress Variable Mapping ── */
+
+:root {
+  --vp-font-family-base: var(--kc-font-base);
+  --vp-font-family-mono: var(--kc-font-mono);
+
+  --vp-c-brand-1: #7ebab5;
+  --vp-c-brand-2: #6aa8a3;
+  --vp-c-brand-3: #569691;
+
+  --vp-c-bg: var(--kc-bg);
+  --vp-c-bg-alt: var(--kc-bg-alt);
+  --vp-c-bg-soft: var(--kc-bg-soft);
+  --vp-c-bg-elv: var(--kc-bg-elv);
+
+  --vp-c-text-1: var(--kc-text-1);
+  --vp-c-text-2: var(--kc-text-2);
+  --vp-c-text-3: var(--kc-text-3);
+
+  --vp-c-divider: var(--kc-divider);
+  --vp-c-gutter: var(--kc-gutter);
+
+  --vp-c-tip-1: var(--kc-accent-contrast);
+  --vp-c-tip-bg: var(--kc-bg-soft);
+  --vp-c-tip-soft: var(--kc-bg-alt);
+
+  --vp-code-block-bg: var(--kc-code-bg);
+  --vp-code-bg: var(--kc-bg-soft);
+
+  --vp-button-brand-bg: var(--kc-accent-dim);
+  --vp-button-brand-text: #ffffff;
+  --vp-button-brand-hover-bg: #4a8a85;
+  --vp-button-brand-hover-text: #ffffff;
+  --vp-button-brand-active-bg: #3e7e79;
+  --vp-button-brand-active-text: #ffffff;
+
+  --vp-button-alt-bg: var(--kc-bg-soft);
+  --vp-button-alt-text: var(--kc-text-2);
+  --vp-button-alt-hover-bg: var(--kc-divider);
+  --vp-button-alt-hover-text: var(--kc-text-1);
+
+  --vp-home-hero-name-color: transparent;
+  --vp-home-hero-name-background: linear-gradient(135deg, var(--kc-text-1) 0%, var(--kc-accent-contrast) 100%);
+
+  --vp-c-default-1: var(--kc-divider);
+  --vp-c-default-2: var(--kc-bg-soft);
+  --vp-c-default-3: var(--kc-bg-alt);
+  --vp-c-default-soft: var(--kc-bg-alt);
+}
+
+.dark {
+  --vp-c-brand-1: #7ebab5;
+  --vp-c-brand-2: #6aa8a3;
+  --vp-c-brand-3: #569691;
+
+  --vp-c-tip-1: #7ebab5;
+
+  --vp-button-brand-bg: #7ebab5;
+  --vp-button-brand-text: #090a0c;
+  --vp-button-brand-hover-bg: #95ccc8;
+  --vp-button-brand-hover-text: #060708;
+  --vp-button-brand-active-bg: #6aa8a3;
+  --vp-button-brand-active-text: #090a0c;
+
+  --vp-button-alt-bg: #353a40;
+  --vp-button-alt-text: #a8adb5;
+  --vp-button-alt-hover-bg: #3e444b;
+  --vp-button-alt-hover-text: #f6f5f5;
+
+  --vp-home-hero-name-background: linear-gradient(135deg, #95ccc8 0%, #569691 100%);
+
+  --vp-c-default-1: #353a40;
+}
+
+/* ── Typography ── */
+
+.vp-doc { line-height: 1.75; }
+.vp-doc h1 { font-weight: 700; letter-spacing: -0.03em; }
+.vp-doc h2 { font-weight: 600; letter-spacing: -0.02em; border-top: none; padding-top: 32px; }
+.vp-doc h3 { font-weight: 600; letter-spacing: -0.01em; }
+
+.vp-doc a { text-decoration-color: rgba(126, 186, 181, 0.3); }
+.vp-doc a:hover { text-decoration-color: var(--kc-accent); }
+:root .vp-doc a { color: #4a9c97; }
+:root .vp-doc a:hover { color: #3e8a85; }
+.dark .vp-doc a { color: #7ebab5; }
+.dark .vp-doc a:hover { color: #95ccc8; }
+
+/* ── Nav ── */
+
+.VPNav { border-bottom: 1px solid var(--vp-c-divider) !important; }
+.dark .VPNav { background: rgba(9, 10, 12, 0.88) !important; backdrop-filter: blur(12px); }
+:root .VPNav { background: rgba(248, 249, 250, 0.88) !important; backdrop-filter: blur(12px); }
+
+/* ── Sidebar ── */
+
+.VPSidebar { background: var(--vp-c-bg) !important; border-right: 1px solid var(--vp-c-divider); }
+.VPSidebarItem .text { font-size: 13px; }
+.dark .VPSidebarItem.is-active > .item > .link > .text { color: #7ebab5; font-weight: 600; }
+:root .VPSidebarItem.is-active > .item > .link > .text { color: #4a9c97; font-weight: 600; }
+
+/* ── Code blocks ── */
+
+.vp-code-group .tabs label { background: transparent; border-bottom: 2px solid transparent; }
+.vp-code-group .tabs label.active { border-bottom-color: var(--vp-c-brand-1); }
+.dark .vp-code-group .tabs label.active { color: #f6f5f5; }
+div[class*='language-'] { border: 1px solid var(--vp-c-divider); border-radius: 8px; }
+div[class*='language-'] code { font-size: 13px; }
+
+/* ── Hero ── */
+
+.VPHero .name { font-size: 56px !important; font-weight: 800; letter-spacing: -0.04em; line-height: 1.1; }
+.VPHero .text { font-size: 20px !important; color: var(--vp-c-text-2); font-weight: 400; letter-spacing: -0.01em; }
+.VPHero .tagline { font-size: 16px !important; color: var(--vp-c-text-3); line-height: 1.6; }
+.VPHero .actions .action { margin-right: 12px; }
+
+/* ── Feature cards ── */
+
+.VPFeature { background: var(--vp-c-bg-soft) !important; border: 1px solid var(--vp-c-divider) !important; border-radius: 12px; transition: border-color 0.2s, transform 0.2s; }
+.dark .VPFeature:hover { border-color: #7ebab5 !important; transform: translateY(-2px); }
+:root .VPFeature:hover { border-color: #4a9c97 !important; transform: translateY(-2px); }
+.VPFeature .title { font-weight: 600; font-size: 15px; }
+.VPFeature .details { font-size: 13px; color: var(--vp-c-text-3); line-height: 1.6; }
+
+/* ── Tables ── */
+
+.vp-doc table { border-collapse: collapse; }
+.vp-doc tr { border-top: 1px solid var(--vp-c-divider); }
+.vp-doc th { font-weight: 600; font-size: 13px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--vp-c-text-3); }
+.vp-doc td { font-size: 14px; }
+
+/* ── Quick start block ── */
+
+.quick-start { margin: 32px 0; padding: 24px; background: var(--vp-c-bg-soft); border: 1px solid var(--vp-c-divider); border-radius: 12px; }
+.quick-start h3 { margin-top: 0; font-size: 14px; text-transform: uppercase; letter-spacing: 0.05em; }
+:root .quick-start h3 { color: #4a9c97; }
+.dark .quick-start h3 { color: #7ebab5; }
+
+/* ── Footer ── */
+
+.VPFooter { border-top: 1px solid var(--vp-c-divider); }

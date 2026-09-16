@@ -1,0 +1,113 @@
+{
+  "schema_version": "pheno.owner-authorization-request.v1",
+  "request_kind": "commit_push_recovery_preserve_branch",
+  "request_sha256": "6ea8eaeece213fe917968340a1d3688616d47aa89ca2ea0d8e17206674e14a03",
+  "created_at_utc": "2026-07-24T07:36:30Z",
+  "expires_at_utc": "2026-07-25T07:36:30Z",
+  "authority": "none",
+  "requested_not_granted": true,
+  "status": "requested_not_granted",
+  "executed": false,
+  "approved_by": null,
+  "device_profile": null,
+  "subject": {
+    "branch": "recovery/preserve-20260717-0301",
+    "repo": "KooshaPari/pheno-harness",
+    "commits_in_scope": [
+      {"sha": "d26f84b4837b24fdb206e78242b2fcc52108a80d", "subject": "Record final local qwen35-08b Terminal-Bench 2.0 scoreboard.", "files_added_or_changed": 1, "files_count": 1},
+      {"sha": "40839bffa0b6bd54d70b0d131d0c52edb8a5d71c", "subject": "Launch local TB2 matrix tooling for LFM/Ornith and record 1080 absence.", "files_added_or_changed": 3, "files_count": 3},
+      {"sha": "5c22f2b185b9d4c466583f2fda1dcb0112900771", "subject": "Enforce canonical stack first: no interim llama defaults.", "files_added_or_changed": null, "files_count": null}
+    ],
+    "commits_already_on_branch": true,
+    "branch_state": "0 ahead, 0 behind origin/main; dirty working tree (84 files / +2874 / -764) is NOT in scope for this request",
+    "rationale": "User/Cursor authored these three commits after the Codex session hit usage_limit_exceeded. They are the only durable artifact of 2026-07-23 work and currently exist only in the local worktree. Pushing the branch preserves the work on origin without forcing a merge into main."
+  },
+  "requested_scope": {
+    "allowed_actions_if_separately_granted": [
+      "git add -- state/session_resume_2026-07-24_019f6249.json state/tb2_evidence_manifest_2026-07-24.json state/session_resume_report_2026-07-24.md state/owner_authorization_requests/commit_push_recovery_preserve_branch_2026-07-24.json",
+      "git commit -m \"Snapshot Codex session resume + TB2 evidence + commit/push authorization packet (session 019f6249)\"",
+      "git push origin recovery/preserve-20260717-0301:recovery/preserve-20260717-0301",
+      "git rev-parse origin/recovery/preserve-20260717-0301 post-push to record the new remote SHA in the snapshot",
+      "update state/session_resume_2026-07-24_019f6249.json (only the git_state_now fields) to record origin/recovery/preserve-20260717-0301 SHA, then re-commit that update as a follow-on commit"
+    ],
+    "explicitly_out_of_scope": [
+      "any merge into main",
+      "any force-push (--force, --force-with-lease)",
+      "any reset, rebase, or history rewrite on the branch",
+      "any push of unrelated dirty files in the working tree (84 files / +2874 / -764 stay local)",
+      "any 1080 Ti install, Mac workstream mutation, weight download, or pheno-serve launch",
+      "any local-server activation, process spawn, or service start"
+    ]
+  },
+  "policy": {
+    "decision_state": "requested_not_granted",
+    "authorization_granted": false,
+    "fabricates_approval": false,
+    "grants_authority": false,
+    "independently_selectable": true,
+    "executes_actions": false,
+    "self_executable": false,
+    "operator_must_explicitly_approve": true,
+    "approval_gate": "owner must reply with the literal token 'APPROVE commit_push_recovery_preserve_branch' (or equivalent unambiguous approval) before any of the listed commands may be executed"
+  },
+  "evidence_bindings": [
+    {"path": "state/session_resume_2026-07-24_019f6249.json", "file_sha256": "e3c56b441f04377db9895be7f8ee30f683cae240b0521a6689eb8f4c9bfb02f8", "role": "machine-readable snapshot of git/working-tree/process state at the moment this request was authored"},
+    {"path": "state/tb2_evidence_manifest_2026-07-24.json", "file_sha256": "f9664bfbbc96eac449d2206d3126f85718453a0c96128b6f68429635a0e585bc", "role": "TB2 evidence index covering the three commits' eval results"},
+    {"path": "state/session_resume_report_2026-07-24.md", "file_sha256": "de0a30bb36f02b197832dfafff8f0d5cf37ea910d944e0fb2bdfb5618407780f", "role": "human-readable narrative accompanying the packet"},
+    {"path": "state/canonical_stack_first_2026-07-23.json", "file_sha256": "e1aac410ff8bc2ea4de2e636b8cb8f426fefbd09e878c91fd5103f950e67281e", "role": "owner policy: interim engines forbidden; pheno-serve only"},
+    {"path": "state/canonical_admission_gap_2026-07-23.json", "file_sha256": "4138cb897b86265e5043d693744aae22a3d89f5ef9720cb17b011e48ef4c652a", "role": "hard gap evidence: no sglang/qwen35-08b lane declared; gtx1080 helper not yet exposed"},
+    {"path": "state/gtx1080_visibility_2026-07-23.json", "file_sha256": "5eab92998979ece540d3a0308bc5733d30d3755a2b32cff599491b36b617b88b", "role": "nvidia-smi only shows 3090 Ti; 1080 Ti still needs driver recovery"},
+    {"path": "state/topology_fingerprint_2026-07-23.json", "file_sha256": "44f721353f3aa7e8d44f3c2a14707a43824aedb7daaa39b6ae7ee2816a577b9c", "role": "Windows PnP sees both GPUs; WSL only sees 3090 Ti"},
+    {"path": "harbor/run_local_matrix.ps1", "file_sha256": "4dd9a3f176401cedb853717cf8fced019e3187b39f863c82e770e90e0473c7f5", "role": "added by 40839bf (TB2 matrix launcher for LFM/Ornith)"},
+    {"path": "harbor/start_llama_local.ps1", "file_sha256": "2e67026e1f0203584e2a9923361b36907e5f2b8ca5c7de963884b7f51a346c18", "role": "modified by 40839bf (timeout and -np 1 pin)"},
+    {"path": "harbor/run_tbench_local.ps1", "file_sha256": "0bf495c0b2f1d00c84077896b6acf0e45a0c26a6e886828805c49a230bb7b26e", "role": "added/modified by 5c22f2b (canonical-stack-first TB2 launcher)"},
+    {"path": "scripts/tb2_canonical_stack_watch.ps1", "file_sha256": "e5666e8141c30581ce24260425c728438cdd1b69919d6b84795b373f9bf62b06", "role": "added/modified by 5c22f2b (canonical-stack watchdog)"},
+    {"path": "eval/results/tbench_local_qwen35_final_20260723.json", "file_sha256": "506bea88e5ab0992f216b23ae3f953e9bd728d5ca908b91e2abf3becd8217133", "role": "added by d26f84b (TB2.0 scoreboard: 89 trials, 0 reward)"},
+    {"path": "config/tbench20_representative_subset.json", "file_sha256": "418c9704998d4afb4ecc2b99827cb09617abc68fdf7fc4985222ece272629e7f", "role": "TB2.0 representative-6 subset manifest used by the six 20260724 dry-run trials"}
+  ],
+  "prohibitions": [
+    "no_implicit_follow_on_authority",
+    "no_scope_expansion",
+    "no_force_push",
+    "no_merge_into_main",
+    "no_reset_or_rebase",
+    "no_modification_of_out_of_scope_files",
+    "no_1080_install",
+    "no_mac_workstream_mutation",
+    "no_weight_download",
+    "no_pheno_serve_launch",
+    "no_process_spawn",
+    "abort_on_approval_token_mismatch"
+  ],
+  "prerequisites": [
+    "owner must reply with explicit, unambiguous approval (token: APPROVE commit_push_recovery_preserve_branch)",
+    "git remote origin must be reachable (best-effort connectivity check; if not reachable, report and abort)",
+    "working tree contains only the four files in the allowed_actions list as new entries; any untracked file outside that list aborts the sequence"
+  ],
+  "risk_boundaries": [
+    "the only commands run are the five in requested_scope.allowed_actions_if_separately_granted, in that order",
+    "the branch is recovery/preserve-20260717-0301 only; main is untouched",
+    "no interactive prompts; non-interactive flags only (-m for commit, no --force, no --set-upstream unless already configured)",
+    "if any step fails, the operator reports the failure and stops; no retry, no fallback"
+  ],
+  "rollback": {
+    "automatic": false,
+    "pre_push": "local-only operation; no rollback needed if approval is given but operator chooses not to push",
+    "post_push_undo_possible": true,
+    "post_push_undo_method": "git push origin :recovery/preserve-20260717-0301 (only with a separately-issued owner authorization; never automatic)"
+  },
+  "audit": {
+    "request_author": "session 019f6249-d74c-7540-885f-588c3d51ac3a (Codex thread resume on 2026-07-24)",
+    "request_terminal": "Windows shell C:\\WINDOWS\\system32\\cmd.exe at C:\\Users\\koosh\\pheno-harness",
+    "request_time_utc": "2026-07-24T07:36:30Z",
+    "slice_mode": "bounded read-only continuation marker; this packet is the only mutation authorization requested",
+    "files_written_by_this_slice": [
+      "state/session_resume_2026-07-24_019f6249.json",
+      "state/tb2_evidence_manifest_2026-07-24.json",
+      "state/session_resume_report_2026-07-24.md",
+      "state/owner_authorization_requests/commit_push_recovery_preserve_branch_2026-07-24.json"
+    ],
+    "remote_calls_made": 0,
+    "mutations_outside_state_dir": 0
+  }
+}

@@ -1,0 +1,80 @@
+{
+  "id": "tencent/hy3-preview",
+  "scraped_at": "2026-07-04T09:59:21.401681+00:00",
+  "api_found": true,
+  "page_found": true,
+  "api": {
+    "id": "tencent/hy3-preview",
+    "canonical_slug": "tencent/hy3-preview-20260421",
+    "hugging_face_id": "tencent/Hy3-preview",
+    "name": "Tencent: Hy3 preview",
+    "created": 1776878150,
+    "description": "Hy3 preview is a high-efficiency Mixture-of-Experts model from Tencent designed for agentic workflows and production use. It supports configurable reasoning levels across disabled, low, and high modes, allowing it to...",
+    "context_length": 262144,
+    "architecture": {
+      "modality": "text->text",
+      "input_modalities": [
+        "text"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "tokenizer": "Other",
+      "instruct_type": null
+    },
+    "pricing": {
+      "prompt": "0.000000063",
+      "completion": "0.00000021",
+      "input_cache_read": "0.000000021"
+    },
+    "top_provider": {
+      "context_length": 262144,
+      "max_completion_tokens": null,
+      "is_moderated": false
+    },
+    "per_request_limits": null,
+    "supported_parameters": [
+      "frequency_penalty",
+      "include_reasoning",
+      "max_tokens",
+      "presence_penalty",
+      "reasoning",
+      "seed",
+      "stop",
+      "temperature",
+      "tool_choice",
+      "tools",
+      "top_k",
+      "top_p"
+    ],
+    "default_parameters": {
+      "temperature": 0.9,
+      "top_p": 1,
+      "top_k": null,
+      "frequency_penalty": null,
+      "presence_penalty": null,
+      "repetition_penalty": null
+    },
+    "supported_voices": null,
+    "knowledge_cutoff": null,
+    "expiration_date": null,
+    "links": {
+      "details": "/api/v1/models/tencent/hy3-preview-20260421/endpoints"
+    },
+    "reasoning": {
+      "mandatory": false,
+      "default_enabled": true,
+      "supported_efforts": [
+        "high",
+        "low",
+        "none"
+      ],
+      "default_effort": "high"
+    }
+  },
+  "page_url": "https://openrouter.ai/tencent/hy3-preview",
+  "page": {
+    "title": "Hy3 preview - API Pricing &amp; Benchmarks | OpenRouter",
+    "visible_text_sample": "Hy3 preview - API Pricing &amp; Benchmarks | OpenRouter Skip to content OpenRouter Search \u2318 K Models Fusion Chat Rankings Apps Enterprise Pricing Docs OpenRouter \u00a9 2026 OpenRouter, Inc Product Chat Rankings Apps Models Providers Pricing Enterprise Labs Company About Blog Careers Hiring Privacy Terms of Service Support State of AI Works With OR Data Developer Documentation API Reference SDK Status Connect Discord GitHub LinkedIn X YouTube Tencent: Hy3 preview tencent / hy3-preview Model weights Compare Playground Quick Start Hy3 preview is a high-efficiency Mixture-of-Experts model from Tencent designed for agentic workflows and production use. It supports configurable reasoning levels across disabled, low, and high modes, allowing it to balance speed and depth depending on the task, while delivering strong code generation and reliable performance across multi-step, real-world workflows. Modalities In / Out Price $0.063 / $0.21 per 1M Context 262K Released Apr 22, 2026 Tencent: Hy3 preview Compare Playground Quick Start Providers Effective Pricing Performance Uptime Benchmarks Apps Activity Providers Providers Different companies host the same model. OpenRouter routes your request to one of them based on the routing mode you pick \u2014 Balanced (price + speed), Nitro (fastest), or Exacto (one fixed provider). Effective Pricing The chart below shows the average price customers are actually paying after prompt caching. Depending on the amount of repeated context you send, this can be 60\u201380% cheaper than the provider list price. Shown are rolling averages from the past 30 days. Performance Throughput is how fast the model writes (tokens per second \u2014 higher is better). Latency is total round-trip time (lower is better). TTFT is time-to-first-token \u2014 how long before you see anything appear (lower is better). Uptime Percent of requests that succeeded over the last 30 days. OpenRouter monitors every provider continuously and automatically retries on the next-best provider when one returns an error. Benchmarks Scores on standardized evaluations. Higher percentages are better \u2014 and rank percentile shows where this model lands among all models on OpenRouter. Apps Public apps that send the most traffic to this model. Good signal for what real production workloads look like \u2014 and a hint at which use cases this model is best suited for. Activity Token volume and request traffic to this model over time. Quick Start Drop-in code to call this model. OpenRouter&#x27;s API is OpenAI-compatible \u2014 most SDKs work by just swapping the base URL. The only thing that changes between models is the model slug below. Standard"
+  }
+}

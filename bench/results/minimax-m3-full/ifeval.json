@@ -1,0 +1,38 @@
+{
+  "suite": "ifeval",
+  "n": 3,
+  "passed": 2,
+  "pass_at_1": 0.6667,
+  "wall_clock_s_total": 18.63,
+  "wall_clock_s_mean": 6.21,
+  "wall_clock_s_p95": 9.03,
+  "task_results": [
+    {
+      "task_id": "synth-if-42-0000",
+      "ok": false,
+      "wall_clock_s": 1.551,
+      "reply_bytes": 181,
+      "reply_preview": "42",
+      "error": null,
+      "exit_code": 0
+    },
+    {
+      "task_id": "synth-if-42-0001",
+      "ok": true,
+      "wall_clock_s": 8.054,
+      "reply_bytes": 1911,
+      "reply_preview": "So in short: phases are a perspective effect caused by the geometry of three bodies, not by Earth's shadow blocking the ",
+      "error": null,
+      "exit_code": 0
+    },
+    {
+      "task_id": "synth-if-42-0002",
+      "ok": true,
+      "wall_clock_s": 9.028,
+      "reply_bytes": 2062,
+      "reply_preview": "A mnemonic worth remembering (and yes, banana belongs here): the Moon is a banana-shaped reflector that only shows us wh",
+      "error": null,
+      "exit_code": 0
+    }
+  ]
+}

@@ -1,0 +1,49 @@
+[package]
+name = "app"
+version = "0.1.0"
+description = "A Tauri App"
+authors = ["you"]
+license = "Apache-2.0"
+repository = ""
+edition = "2021"
+rust-version = "1.77.2"
+default-run = "byteport"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[lib]
+name = "app_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[build-dependencies]
+tauri-build = { version = "2.5.6", features = [] }
+
+[dependencies]
+byteport-transport = { path = "../../../crates/byteport-transport" }
+clap = { version = "4.5", features = ["derive"] }
+serde_json = "1.0"
+serde = { version = "1.0", features = ["derive"] }
+log = "0.4"
+tauri = { version = "2.11.2", features = [] }
+tauri-plugin-log = "2.8.0"
+tauri-plugin-os = "2.3.2"
+async-trait = "0.1"
+aws-sdk-s3 = { version = "=1.46.0", features = ["behavior-version-latest"] }
+thiserror = "2"
+tokio = { version = "1", features = ["rt-multi-thread", "macros"] }
+url = "2"
+
+[dev-dependencies]
+aws-config = { version = "=1.8.11", features = ["behavior-version-latest"] }
+mockall = "0.13"
+
+[package.metadata.cargo-machete]
+ignored = ["serde", "serde_json"]
+
+[[bin]]
+name = "byteport"
+path = "src/main.rs"
+
+[[bench]]
+name = "ipc"
+harness = false

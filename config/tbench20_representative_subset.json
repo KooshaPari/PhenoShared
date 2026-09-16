@@ -1,0 +1,44 @@
+{
+  "schema_version": "phenolm.tbench.subset.v1",
+  "suite": "terminal-bench@2.0",
+  "source_revision": "69671fbaac6d67a7ef0dfec016cc38a64ef7a77c",
+  "selection": "fixed representative local pilot; one trial per task; no training or promotion authority",
+  "task_ids": [
+    "headless-terminal",
+    "log-summary-date-ranges",
+    "fix-code-vulnerability",
+    "build-cython-ext",
+    "sqlite-db-truncate",
+    "query-optimize"
+  ],
+  "tasks": [
+    {
+      "task_id": "headless-terminal",
+      "tree_sha256": "b1d8abcedac3d7fbf3449ca884f445b640e0ed0fbdf42833ffe180a7c29828f7"
+    },
+    {
+      "task_id": "log-summary-date-ranges",
+      "tree_sha256": "27d2cec8c18fbc62d1e6c0bbacaa1eb41b9ba2e0f6b2ba6c81e00da9fb39ca4d"
+    },
+    {
+      "task_id": "fix-code-vulnerability",
+      "tree_sha256": "795fc0c4da9bb3e95903b7b442d479e3f94d467b6f177a5df6eb8162d34061af"
+    },
+    {
+      "task_id": "build-cython-ext",
+      "tree_sha256": "dbe6313d8ae017d8dcd9752e06436781613814cf508a499510cf91a191145b9f"
+    },
+    {
+      "task_id": "sqlite-db-truncate",
+      "tree_sha256": "ad7a0b75ddce335b72a678ed0d8178eb46e4b62f0814c9a213d71919172af1b2"
+    },
+    {
+      "task_id": "query-optimize",
+      "tree_sha256": "d67abb2c184710d9236ee3c69ac3f1195e35257eeee1c61657fd7148ebe8ce60"
+    }
+  ],
+  "full_tree_manifest_sha256": "898f3fedf64a181e3c295f68a35a443aa0533f8d67a3c3c4fb65de40d33cd784",
+  "registry_task_manifest_sha256": "e7194cc243002a8d4b2665448d3b621df525c22be57bc14fdfa013b777d2e29f",
+  "task_ids_sha256": "edf24151bcad356d4247f59c68693329ef9b39eaee09e030f187298312490d4b",
+  "subset_manifest_sha256": "eba88d78411f8606f33c005629434622c1381e1ec41d0fba8e5c1dff27d7aa82"
+}

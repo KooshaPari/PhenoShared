@@ -1,34 +1,51 @@
-# .github/dependabot.yml - dependabot for the Phenotype fleet
-# See ADR-042 (security audit cadence). Security-only updates.
-
 version: 2
 updates:
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
       interval: "weekly"
-      day: "monday"
-      time: "09:00"
-      timezone: "America/Los_Angeles"
-    labels:
-      - "dependencies"
-      - "security"
-    groups:
-      github-actions:
-        patterns:
-          - "*"
-    open-pull-requests-limit: 5
 
-  - package-ecosystem: "cargo"
-    directory: "/"
+  - package-ecosystem: "terraform"
+    directory: "/iac/terraform"
     schedule:
       interval: "weekly"
-      day: "monday"
-      time: "09:00"
-      timezone: "America/Los_Angeles"
-    labels:
-      - "dependencies"
-      - "security"
+
+  - package-ecosystem: "terraform"
+    directory: "/iac/terraform/oci"
+    schedule:
+      interval: "weekly"
+
+  - package-ecosystem: "terraform"
+    directory: "/iac/terraform/gcp"
+    schedule:
+      interval: "weekly"
+
+  - package-ecosystem: "terraform"
+    directory: "/iac/terraform/aws"
+    schedule:
+      interval: "weekly"
+
+  - package-ecosystem: "terraform"
+    directory: "/iac/terraform/cloudflare"
+    schedule:
+      interval: "weekly"
+
+  # Rust workspace covering oci-lottery, oci-post-acquire, and
+  # tailscale/tailscale-keygen. landing-bootstrap is excluded from this
+  # workspace and tracked separately below.
+  - package-ecosystem: "cargo"
+    directory: "/iac"
+    schedule:
+      interval: "weekly"
     open-pull-requests-limit: 5
-    # Only security updates
-    # (set via the GitHub UI for the repo: "Security updates: enabled")
+    groups:
+      iac-rust-deps:
+        patterns:
+          - "*"
+
+  # Standalone Rust crate (detached workspace, uses ureq instead of reqwest).
+  - package-ecosystem: "cargo"
+    directory: "/iac/landing-bootstrap"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5

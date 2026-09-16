@@ -1,0 +1,31 @@
+{
+  "schema_version": "pheno.kernel-build-followon.v1",
+  "as_of_utc": "2026-08-08T14:50:00Z",
+  "session": {"codex_thread_id": "019f6249-d74c-7540-885f-588c3d51ac3a", "continuation_session": true},
+  "attempt_18": {
+    "outcome": "MAJOR MILESTONE - all 38/38 common_ops .o DONE + 4 flash_ops .o, then BLOCKED by ptxas SIGSEGV on sm90 kernels",
+    "strategy_validated": "incremental ninja resume survived 3 poweroffs (11:32, 12:07, 12:39 UTC); build dir persisted; .o accumulated 11 -> 38",
+    "toolchain_fixes_applied": [
+      "csrc/moe/moe_topk_softmax_kernels.cu: cub::Sum->cuda::std::plus, cub::Max()->cuda::maximum (CUDA 13.3 CCCL removed cub::Sum)",
+      "include/flashinfer/sampling.cuh new wrapper: legacy cub::Sum/Max/Min structs + exact-match max/min templates for ::max(float,int) ambiguity",
+      "_deps/repo-flash-attention-src/hopper/epilogue_fwd.hpp: sm90_get_smem_store_op_for_accumulator 3-arg->2-arg; CopyOpR2S=AutoVectorizingCopyWithAssumedAlignment<128>"
+    ],
+    "new_blocker": {
+      "symptom": "nvcc error: 'ptxas' died due to signal 11 (SIGSEGV) - deterministic x3 (boots 18/19/20) on flash_fwd_hdimall_bf16_packgqa_sm90.cu",
+      "prelude": "ptxas info: wgmma.mma_async instructions serialized; 'setmaxnreg' ignored (register-heavy FlashAttnFwdSm90 kernel)",
+      "root_cause": "CUDA 13.3 ptxas SIGSEGV on register-heavy sm90 (Hopper) flash-attn kernel; only CUDA 13.3 installed; not OOM (37GB free)",
+      "relevance": "sm90 kernels are IRRELEVANT for the sm_86 3090 Ti target - they would never run",
+      "cost_if_not_skipped": "~60 sm90 instantiation TUs at ~20 min each at -j1 = ~20h"
+    },
+    "resume_state": {
+      "build_dir": "/home/kooshapari/sglang-src/sgl-kernel/build intact; 38/38 common_ops + 4 flash_ops .o; no ninja running; build.ninja current (sm_86 + threads=4)",
+      "remaining": "flash_ops sm90 TUs (skip/disable) + link common_ops.abi3.so + uv build wheel",
+      "wheel_target": "/home/kooshapari/sglang-src/sgl-kernel/dist/sgl_kernel-*.whl"
+    }
+  },
+  "decision_for_attempt_19": {
+    "primary": "EXCLUDE sm90 flash_ops instantiations - target GPU is sm_86 (3090 Ti); sm90 kernels are dead code for this wheel. Investigate sgl-kernel CMake options (SGL_KERNEL_ENABLE_FA3 was OFF; flash_ops arch gating) or flash-attn build flags to compile sm80 only.",
+    "fallback": "ptxas workaround on flash_ops flags: -Xptxas -O1 or --maxrregcount via re-configure",
+    "then": "ninja resume -> link .so -> uv build --wheel -Cbuild-dir=build . --no-build-isolation -> record wheel, do NOT install"
+  }
+}

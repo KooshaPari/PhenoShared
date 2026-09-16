@@ -1,0 +1,89 @@
+{"id": "meta-llama/Llama-3.1-70B-Instruct", "reason": "params_b=70.55 out of [0.8,35.0]", "params_b": 70.554, "tags": [], "gated": null}
+{"id": "meta-llama/Llama-3.3-70B-Instruct", "reason": "params_b=70.55 out of [0.8,35.0]", "params_b": 70.554, "tags": [], "gated": null}
+{"id": "meta-llama/Llama-3.1-405B", "reason": "params_b=405.85 out of [0.8,35.0]", "params_b": 405.853, "tags": [], "gated": null}
+{"id": "meta-llama/Llama-3.1-405B-Instruct", "reason": "params_b=405.85 out of [0.8,35.0]", "params_b": 405.853, "tags": [], "gated": null}
+{"id": "meta-llama/Meta-Llama-3-70B", "reason": "params_b=70.55 out of [0.8,35.0]", "params_b": 70.554, "tags": [], "gated": null}
+{"id": "meta-llama/Llama-3.1-70B", "reason": "params_b=70.55 out of [0.8,35.0]", "params_b": 70.554, "tags": [], "gated": null}
+{"id": "meta-llama/Meta-Llama-3-70B-Instruct", "reason": "params_b=70.55 out of [0.8,35.0]", "params_b": 70.554, "tags": [], "gated": null}
+{"id": "meta-llama/Llama-3.1-405B-Instruct-FP8", "reason": "params_b=405.87 out of [0.8,35.0]", "params_b": 405.869, "tags": [], "gated": null}
+{"id": "meta-llama/Llama-2-70b-hf", "reason": "params_b=68.98 out of [0.8,35.0]", "params_b": 68.977, "tags": [], "gated": null}
+{"id": "meta-llama/Llama-2-70b-chat-hf", "reason": "params_b=68.98 out of [0.8,35.0]", "params_b": 68.977, "tags": [], "gated": null}
+{"id": "meta-llama/CodeLlama-70b-Instruct-hf", "reason": "params_b=68.98 out of [0.8,35.0]", "params_b": 68.977, "tags": [], "gated": null}
+{"id": "meta-llama/Llama-3.1-405B-FP8", "reason": "params_b=405.87 out of [0.8,35.0]", "params_b": 405.869, "tags": [], "gated": null}
+{"id": "meta-llama/CodeLlama-70b-hf", "reason": "params_b=68.98 out of [0.8,35.0]", "params_b": 68.977, "tags": [], "gated": null}
+{"id": "meta-llama/CodeLlama-70b-Python-hf", "reason": "params_b=68.98 out of [0.8,35.0]", "params_b": 68.977, "tags": [], "gated": null}
+{"id": "meta-llama/Llama-2-70b", "reason": "params_b=70.00 out of [0.8,35.0]", "params_b": 70.0, "tags": [], "gated": null}
+{"id": "meta-llama/Llama-2-70b-chat", "reason": "params_b=70.00 out of [0.8,35.0]", "params_b": 70.0, "tags": [], "gated": null}
+{"id": "mistralai/Devstral-Small-2507_gguf", "reason": "no param count", "params_b": null, "tags": [], "gated": null}
+{"id": "mistralai/Magistral-Small-2507-GGUF", "reason": "no param count", "params_b": null, "tags": [], "gated": null}
+{"id": "google/gemma-3-270m", "reason": "params_b=0.27 out of [0.8,35.0]", "params_b": 0.268, "tags": [], "gated": null}
+{"id": "google/gemma-3-270m-it", "reason": "params_b=0.27 out of [0.8,35.0]", "params_b": 0.268, "tags": [], "gated": null}
+{"id": "google/reformer-crime-and-punishment", "reason": "no param count", "params_b": null, "tags": [], "gated": null}
+{"id": "google/t5gemma-s-s-prefixlm", "reason": "params_b=0.31 out of [0.8,35.0]", "params_b": 0.313, "tags": [], "gated": null}
+{"id": "google/t5gemma-b-b-ul2", "reason": "params_b=0.59 out of [0.8,35.0]", "params_b": 0.591, "tags": [], "gated": null}
+{"id": "google/functiongemma-270m-it", "reason": "params_b=0.27 out of [0.8,35.0]", "params_b": 0.268, "tags": [], "gated": null}
+{"id": "google/reformer-enwik8", "reason": "no param count", "params_b": null, "tags": [], "gated": null}
+{"id": "google/t5gemma-b-b-prefixlm", "reason": "params_b=0.59 out of [0.8,35.0]", "params_b": 0.591, "tags": [], "gated": null}
+{"id": "google/t5gemma-b-b-prefixlm-it", "reason": "params_b=0.59 out of [0.8,35.0]", "params_b": 0.591, "tags": [], "gated": null}
+{"id": "google/t5gemma-s-s-ul2", "reason": "params_b=0.31 out of [0.8,35.0]", "params_b": 0.313, "tags": [], "gated": null}
+{"id": "google/t5-small-ssm-nq", "reason": "no param count", "params_b": null, "tags": [], "gated": null}
+{"id": "google/t5-large-ssm-nq", "reason": "no param count", "params_b": null, "tags": [], "gated": null}
+{"id": "google/t5-xl-ssm-nq", "reason": "no param count", "params_b": null, "tags": [], "gated": null}
+{"id": "google/t5-xxl-ssm-nq", "reason": "no param count", "params_b": null, "tags": [], "gated": null}
+{"id": "google/gemma-3-270m-it-qat-q4_0-unquantized", "reason": "params_b=0.27 out of [0.8,35.0]", "params_b": 0.268, "tags": [], "gated": null}
+{"id": "google/t5gemma-s-s-prefixlm-it", "reason": "params_b=0.31 out of [0.8,35.0]", "params_b": 0.313, "tags": [], "gated": null}
+{"id": "google/t5gemma-b-b-ul2-it", "reason": "params_b=0.59 out of [0.8,35.0]", "params_b": 0.591, "tags": [], "gated": null}
+{"id": "google/gemma-3-270m-qat-q4_0-unquantized", "reason": "params_b=0.27 out of [0.8,35.0]", "params_b": 0.268, "tags": [], "gated": null}
+{"id": "google/t5gemma-s-s-ul2-it", "reason": "params_b=0.31 out of [0.8,35.0]", "params_b": 0.313, "tags": [], "gated": null}
+{"id": "microsoft/DialoGPT-medium", "reason": "no param count", "params_b": null, "tags": [], "gated": null}
+{"id": "microsoft/Phi-3.5-MoE-instruct", "reason": "params_b=41.87 out of [0.8,35.0]", "params_b": 41.873, "tags": [], "gated": null}
+{"id": "microsoft/biogpt", "reason": "no param count", "params_b": null, "tags": [], "gated": null}
+{"id": "microsoft/Phi-3-mini-4k-instruct-gguf", "reason": "no param count", "params_b": null, "tags": [], "gated": null}
+{"id": "microsoft/DialoGPT-small", "reason": "params_b=0.18 out of [0.8,35.0]", "params_b": 0.176, "tags": [], "gated": null}
+{"id": "microsoft/phi-4-gguf", "reason": "no param count", "params_b": null, "tags": [], "gated": null}
+{"id": "microsoft/BioGPT-Large", "reason": "no param count", "params_b": null, "tags": [], "gated": null}
+{"id": "microsoft/CodeGPT-small-py", "reason": "no param count", "params_b": null, "tags": [], "gated": null}
+{"id": "microsoft/DialoGPT-large", "reason": "no param count", "params_b": null, "tags": [], "gated": null}
+{"id": "microsoft/CodeGPT-small-java", "reason": "no param count", "params_b": null, "tags": [], "gated": null}
+{"id": "microsoft/CodeGPT-small-java-adaptedGPT2", "reason": "no param count", "params_b": null, "tags": [], "gated": null}
+{"id": "microsoft/CodeGPT-small-py-adaptedGPT2", "reason": "no param count", "params_b": null, "tags": [], "gated": null}
+{"id": "microsoft/Promptist", "reason": "no param count", "params_b": null, "tags": [], "gated": null}
+{"id": "microsoft/Phi-3-mini-4k-instruct-onnx", "reason": "no param count", "params_b": null, "tags": [], "gated": null}
+{"id": "microsoft/Dayhoff-170m-UR90", "reason": "params_b=0.17 out of [0.8,35.0]", "params_b": 0.17, "tags": [], "gated": null}
+{"id": "microsoft/BioGPT-Large-PubMedQA", "reason": "no param count", "params_b": null, "tags": [], "gated": null}
+{"id": "microsoft/Dayhoff-170m-GR", "reason": "params_b=0.17 out of [0.8,35.0]", "params_b": 0.17, "tags": [], "gated": null}
+{"id": "microsoft/MAI-DS-R1", "reason": "params_b=671.03 out of [0.8,35.0]", "params_b": 671.026, "tags": [], "gated": null}
+{"id": "microsoft/GRIN-MoE", "reason": "no param count", "params_b": null, "tags": [], "gated": null}
+{"id": "microsoft/Phi-3.5-mini-instruct-onnx", "reason": "no param count", "params_b": null, "tags": [], "gated": null}
+{"id": "microsoft/Phi-3-mini-4k-instruct-onnx-web", "reason": "no param count", "params_b": null, "tags": [], "gated": null}
+{"id": "microsoft/Dayhoff-170M-GRS-SS-134000", "reason": "params_b=0.17 out of [0.8,35.0]", "params_b": 0.17, "tags": [], "gated": null}
+{"id": "microsoft/Dayhoff-170M-UR90-HL-48000", "reason": "params_b=0.17 out of [0.8,35.0]", "params_b": 0.17, "tags": [], "gated": null}
+{"id": "microsoft/Dayhoff-170M-GRS-SS-110000", "reason": "params_b=0.17 out of [0.8,35.0]", "params_b": 0.17, "tags": [], "gated": null}
+{"id": "microsoft/Dayhoff-170M-GRS-SS-62000", "reason": "params_b=0.17 out of [0.8,35.0]", "params_b": 0.17, "tags": [], "gated": null}
+{"id": "microsoft/Dayhoff-170M-GRS-SS-86000", "reason": "params_b=0.17 out of [0.8,35.0]", "params_b": 0.17, "tags": [], "gated": null}
+{"id": "microsoft/Dayhoff-170M-GRS-SS-98000", "reason": "params_b=0.17 out of [0.8,35.0]", "params_b": 0.17, "tags": [], "gated": null}
+{"id": "microsoft/Dayhoff-170M-GRS-SS-14000", "reason": "params_b=0.17 out of [0.8,35.0]", "params_b": 0.17, "tags": [], "gated": null}
+{"id": "microsoft/Dayhoff-170M-GRS-SS-50000", "reason": "params_b=0.17 out of [0.8,35.0]", "params_b": 0.17, "tags": [], "gated": null}
+{"id": "microsoft/Dayhoff-170M-GRS-SS-74000", "reason": "params_b=0.17 out of [0.8,35.0]", "params_b": 0.17, "tags": [], "gated": null}
+{"id": "microsoft/Phi-3-mini-128k-instruct-onnx", "reason": "no param count", "params_b": null, "tags": [], "gated": null}
+{"id": "microsoft/Dayhoff-170m-UR50", "reason": "params_b=0.17 out of [0.8,35.0]", "params_b": 0.17, "tags": [], "gated": null}
+{"id": "microsoft/Dayhoff-170M-GRS-SS-26000", "reason": "params_b=0.17 out of [0.8,35.0]", "params_b": 0.17, "tags": [], "gated": null}
+{"id": "microsoft/Dayhoff-170M-GRS-SS-122000", "reason": "params_b=0.17 out of [0.8,35.0]", "params_b": 0.17, "tags": [], "gated": null}
+{"id": "microsoft/Phi-3-medium-128k-instruct-onnx-cpu", "reason": "no param count", "params_b": null, "tags": [], "gated": null}
+{"id": "microsoft/Dayhoff-170M-GRS-SS-38000", "reason": "params_b=0.17 out of [0.8,35.0]", "params_b": 0.17, "tags": [], "gated": null}
+{"id": "allenai/Llama-3.1-Tulu-3-405B", "reason": "params_b=405.00 out of [0.8,35.0]", "params_b": 405.0, "tags": [], "gated": null}
+{"id": "allenai/Llama-3.1-Tulu-3-70B", "reason": "params_b=70.55 out of [0.8,35.0]", "params_b": 70.554, "tags": [], "gated": null}
+{"id": "Qwen/Qwen3-0.6B", "reason": "params_b=0.75 out of [0.8,35.0]", "params_b": 0.752, "tags": [], "gated": null}
+{"id": "Qwen/Qwen2.5-0.5B-Instruct", "reason": "params_b=0.49 out of [0.8,35.0]", "params_b": 0.494, "tags": [], "gated": null}
+{"id": "Qwen/Qwen2.5-0.5B", "reason": "params_b=0.49 out of [0.8,35.0]", "params_b": 0.494, "tags": [], "gated": null}
+{"id": "Qwen/Qwen3-Coder-Next-FP8", "reason": "params_b=79.68 out of [0.8,35.0]", "params_b": 79.679, "tags": [], "gated": null}
+{"id": "Qwen/Qwen3-0.6B-FP8", "reason": "params_b=0.75 out of [0.8,35.0]", "params_b": 0.752, "tags": [], "gated": null}
+{"id": "Qwen/Qwen3-Coder-Next", "reason": "params_b=79.67 out of [0.8,35.0]", "params_b": 79.674, "tags": [], "gated": null}
+{"id": "Qwen/Qwen2-0.5B", "reason": "params_b=0.49 out of [0.8,35.0]", "params_b": 0.494, "tags": [], "gated": null}
+{"id": "Qwen/Qwen2.5-72B-Instruct-AWQ", "reason": "params_b=72.96 out of [0.8,35.0]", "params_b": 72.958, "tags": [], "gated": null}
+{"id": "Qwen/Qwen3-0.6B-Base", "reason": "params_b=0.60 out of [0.8,35.0]", "params_b": 0.596, "tags": [], "gated": null}
+{"id": "Qwen/Qwen3-235B-A22B", "reason": "params_b=235.09 out of [0.8,35.0]", "params_b": 235.094, "tags": [], "gated": null}
+{"id": "Qwen/Qwen2.5-72B-Instruct", "reason": "params_b=72.71 out of [0.8,35.0]", "params_b": 72.706, "tags": [], "gated": null}
+{"id": "Qwen/Qwen2-0.5B-Instruct", "reason": "params_b=0.49 out of [0.8,35.0]", "params_b": 0.494, "tags": [], "gated": null}
+{"id": "Qwen/Qwen3-Coder-480B-A35B-Instruct-FP8", "reason": "params_b=480.18 out of [0.8,35.0]", "params_b": 480.184, "tags": [], "gated": null}
+{"id": "Qwen/Qwen3-Next-80B-A3B-Instruct-FP8", "reason": "params_b=81.33 out of [0.8,35.0]", "params_b": 81.33, "tags": [], "gated": null}

@@ -1,0 +1,221 @@
+---
+import "../../styles/globals.css";
+
+// Tier-3 microfrontend: /docs/* — renders source repo's docs/ tree.
+// Spec: phenotype-infra/docs/governance/path-microfrontends-tier3.md
+
+const REPO = "KooshaPari/AgilePlus";
+const { slug } = Astro.params;
+const path = slug ? `docs/${slug}` : "docs";
+
+interface GhContentEntry {
+  name: string;
+  path: string;
+  type: "file" | "dir";
+  download_url: string | null;
+  html_url: string;
+}
+
+async function ghJson(p: string): Promise<any> {
+  const res = await fetch(`https://api.github.com/${p}`, {
+    headers: {
+      Accept: "application/vnd.github+json",
+      "User-Agent": "agileplus-landing-build",
+      ...(process.env.GITHUB_TOKEN
+        ? { Authorization: `Bearer ${process.env.GITHUB_TOKEN}` }
+        : {}),
+    },
+  });
+  if (!res.ok) return null;
+  return res.json();
+}
+
+async function ghRaw(p: string): Promise<string | null> {
+  const res = await fetch(`https://api.github.com/${p}`, {
+    headers: {
+      Accept: "application/vnd.github.raw",
+      "User-Agent": "agileplus-landing-build",
+      ...(process.env.GITHUB_TOKEN
+        ? { Authorization: `Bearer ${process.env.GITHUB_TOKEN}` }
+        : {}),
+    },
+  });
+  if (!res.ok) return null;
+  return res.text();
+}
+
+async function ghHtml(p: string): Promise<string | null> {
+  const res = await fetch(`https://api.github.com/${p}`, {
+    headers: {
+      Accept: "application/vnd.github.html+json",
+      "User-Agent": "agileplus-landing-build",
+      ...(process.env.GITHUB_TOKEN
+        ? { Authorization: `Bearer ${process.env.GITHUB_TOKEN}` }
+        : {}),
+    },
+  });
+  if (!res.ok) return null;
+  return res.text();
+}
+
+export async function getStaticPaths() {
+  // Recursively walk docs/ via the GitHub Trees API.
+  async function walk(): Promise<string[]> {
+    const tree = await fetch(
+      `https://api.github.com/repos/KooshaPari/AgilePlus/git/trees/main?recursive=1`,
+      {
+        headers: {
+          Accept: "application/vnd.github+json",
+          "User-Agent": "agileplus-landing-build",
+          ...(process.env.GITHUB_TOKEN
+            ? { Authorization: `Bearer ${process.env.GITHUB_TOKEN}` }
+            : {}),
+        },
+      },
+    );
+    if (!tree.ok) return [];
+    const data: any = await tree.json();
+    if (!data.tree) return [];
+    return data.tree
+      .filter(
+        (n: any) =>
+          n.type === "blob" &&
+          n.path.startsWith("docs/") &&
+          (n.path.endsWith(".md") || n.path.endsWith(".mdx")),
+      )
+      .map((n: any) => n.path.replace(/^docs\//, "").replace(/\.mdx?$/, ""));
+  }
+  const paths = await walk();
+  // Always emit a root /docs as well.
+  return [
+    { params: { slug: undefined } },
+    ...paths.map((p) => ({ params: { slug: p } })),
+  ];
+}
+
+// Resolve content for the requested path.
+let title = slug ?? "Docs";
+let bodyHtml = "";
+let degraded = false;
+let degradeReason = "";
+
+const listing = await ghJson(`repos/${REPO}/contents/${path}?ref=main`);
+
+if (Array.isArray(listing)) {
+  // Directory listing.
+  title = slug ?? "Docs";
+  const entries = listing as GhContentEntry[];
+  const items = entries
+    .filter((e) => e.type === "dir" || e.name.match(/\.mdx?$/))
+    .map((e) => {
+      const href =
+        e.type === "dir"
+          ? `/docs/${e.path.replace(/^docs\//, "")}`
+          : `/docs/${e.path.replace(/^docs\//, "").replace(/\.mdx?$/, "")}`;
+      return `<li><a class="doc-link" href="${href}">${e.name}</a></li>`;
+    })
+    .join("\n");
+  bodyHtml = items
+    ? `<ul class="doc-list">${items}</ul>`
+    : `<p class="muted">Directory <code>${path}</code> is empty.</p>`;
+} else if (listing && typeof listing === "object" && "type" in listing) {
+  // Single file. Render via the HTML accept header for a server-side markdown render.
+  const html = await ghHtml(`repos/${REPO}/contents/${path}.md?ref=main`);
+  if (html) {
+    bodyHtml = html;
+    title = slug ?? "Docs";
+  } else {
+    degraded = true;
+    degradeReason = `Could not render <code>${path}.md</code>.`;
+  }
+} else {
+  // Try .md fallback.
+  const html = await ghHtml(`repos/${REPO}/contents/${path}.md?ref=main`);
+  if (html) {
+    bodyHtml = html;
+  } else {
+    const raw = await ghRaw(`repos/${REPO}/contents/${path}.md?ref=main`);
+    if (raw) {
+      // Last-ditch: raw markdown wrapped in <pre>.
+      bodyHtml = `<pre class="raw-md">${raw.replace(/[<>&]/g, (c) => ({ "<": "&lt;", ">": "&gt;", "&": "amp;" })[c] ?? c)}</pre>`;
+    } else {
+      degraded = true;
+      degradeReason = `No content found at <code>${path}</code> in <code>${REPO}</code>.`;
+    }
+  }
+}
+---
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title} · AgilePlus docs</title>
+    <meta name="description" content={`Documentation: ${title}`} />
+  </head>
+  <body class="min-h-screen">
+    <main class="max-w-4xl mx-auto px-6 py-12">
+      <nav class="mono text-xs text-[var(--muted)] mb-6">
+        <a href="/" class="hover:text-[var(--accent)]">agileplus</a>
+        <span class="mx-1">/</span>
+        <a href="/docs" class="hover:text-[var(--accent)]">docs</a>
+        {slug && (
+          <>
+            <span class="mx-1">/</span>
+            <span>{slug}</span>
+          </>
+        )}
+      </nav>
+
+      <h1 class="text-3xl font-bold mb-6">{title}</h1>
+
+      {degraded ? (
+        <div class="degraded">
+          <h2 class="mono text-sm uppercase tracking-wider mb-2">Source unavailable</h2>
+          <p set:html={degradeReason}></p>
+          <p class="mt-3 text-sm text-[var(--muted)]">
+            View the source on
+            <a href={`https://github.com/${REPO}/tree/main/${path}`} class="underline">GitHub</a>.
+          </p>
+        </div>
+      ) : (
+        <article class="readme-prose" set:html={bodyHtml}></article>
+      )}
+
+      <footer class="mt-16 pt-6 border-t text-xs text-[var(--muted)] mono" style="border-color: var(--border);">
+        Built from
+        <a href={`https://github.com/${REPO}/tree/main/${path}`} class="underline hover:text-[var(--accent)]">
+          {REPO}/{path}
+        </a>
+      </footer>
+    </main>
+
+    <style is:global>
+      .doc-list { list-style: none; padding: 0; }
+      .doc-list li { padding: 0.5rem 0; border-bottom: 1px solid var(--border); }
+      .doc-link { color: var(--accent); text-decoration: none; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.95rem; }
+      .doc-link:hover { text-decoration: underline; }
+      .muted { color: var(--muted); }
+      .raw-md { white-space: pre-wrap; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.9rem; padding: 1rem; background: var(--card); border: 1px solid var(--border); border-radius: 0.5rem; }
+      .degraded {
+        border: 1px solid var(--border);
+        border-left: 3px solid var(--accent);
+        padding: 1rem 1.25rem;
+        background: var(--card);
+        border-radius: 0.5rem;
+      }
+      .readme-prose { line-height: 1.7; }
+      .readme-prose h1, .readme-prose h2, .readme-prose h3 { font-weight: 700; margin-top: 2rem; margin-bottom: 0.75rem; line-height: 1.2; }
+      .readme-prose h1 { font-size: 2rem; border-bottom: 1px solid var(--border); padding-bottom: 0.5rem; }
+      .readme-prose h2 { font-size: 1.5rem; border-bottom: 1px solid var(--border); padding-bottom: 0.3rem; }
+      .readme-prose h3 { font-size: 1.2rem; }
+      .readme-prose p, .readme-prose ul, .readme-prose ol { margin-bottom: 1rem; }
+      .readme-prose ul, .readme-prose ol { padding-left: 1.5rem; }
+      .readme-prose li { margin-bottom: 0.25rem; }
+      .readme-prose a { color: var(--accent); text-decoration: underline; }
+      .readme-prose code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; background: var(--card); padding: 0.1rem 0.4rem; border-radius: 0.25rem; font-size: 0.9em; }
+      .readme-prose pre { background: var(--card); border: 1px solid var(--border); padding: 1rem; border-radius: 0.5rem; overflow-x: auto; margin-bottom: 1rem; }
+      .readme-prose pre code { background: transparent; padding: 0; }
+    </style>
+  </body>
+</html>

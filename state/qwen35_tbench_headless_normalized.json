@@ -1,0 +1,35 @@
+{
+  "schema_version": "phenolm.harbor_trial.v1",
+  "status": "completed",
+  "scoreable": true,
+  "model_id": "openai/local/qwen35-08b",
+  "suite": "terminal-bench@2.0",
+  "job_artifact": "C:\\Users\\koosh\\pheno-harness\\jobs\\harbor\\2026-07-16__18-06-24",
+  "trial": "headless-terminal__bZVx3vu",
+  "task": "D:\\WSL\\eval-cache\\harbor-terminal-bench-2.0\\terminal-bench\\headless-terminal",
+  "metrics": {
+    "reward": 0.0,
+    "trial_count": 1,
+    "error_count": 0,
+    "input_tokens": 2168,
+    "cache_tokens": 865,
+    "output_tokens": 583,
+    "episodes": 2
+  },
+  "verifier": {
+    "present": true,
+    "rewards": {
+      "reward": 0.0
+    }
+  },
+  "exception": null,
+  "job_stats": {
+    "completed_trials": 1,
+    "errored_trials": 0
+  },
+  "timing": {
+    "started_at": "2026-07-17T01:07:28.660503Z",
+    "finished_at": "2026-07-17T01:14:01.196628Z"
+  },
+  "promotion": "baseline_only; garden policy decides promotion"
+}

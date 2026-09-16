@@ -1,0 +1,126 @@
+# Inference runner launch templates — OpenAI-compatible endpoints for Harbor/OmniRoute
+# Point harbor_tbench_routes local_direct entries at these bases.
+
+runners:
+  sglang:
+    port: 8000
+    base_url: "http://127.0.0.1:8000/v1"
+    # Phase 1.1 tiered-memory anchor: SGLang PR #20126 (UVM-based MoE expert
+    # offload, all-GPU compute). PyPI 0.5.10.post1 does not yet ship the PR;
+    # install via git+https ref until the PR lands upstream. See
+    # pyproject.toml [tiered-memory] extra.
+    install: "pip install 'sglang @ git+https://github.com/sgl-project/sglang.git@refs/pull/20126/head'"
+    cherry_pick_pr: 20126
+    serve_template: >-
+      python -m sglang.launch_server --model-path {model_path} --port 8000 --host
+      127.0.0.1 --dtype auto --mem-fraction-static 0.85
+      --chunked-prefill-size 4096 --enable-prefix-caching
+      --page-size 64
+    # Phase 1.5/1.6 tiered-memory tuning knobs. Pulled from the INDEX for the
+    # 2026-07-17 tiered-memory-bootstrap plan. Surfaced here so the runner
+    # template + manifest stay the single source of truth.
+    tiered_memory:
+      chunked_prefill_size: 4096
+      mem_fraction_static: 0.85
+      page_size: 64
+      enable_prefix_caching: true   # Phase 1.6 RadixAttention path
+      expert_offload_num_resident: null   # PR #20126 CLI; null = disabled
+      expert_offload_prefetch: speculative   # PR #20126 CLI; null = disabled
+    best_for: [terminus_2, multi_turn, shared_prefix]
+    env:
+      CUDA_VISIBLE_DEVICES: "1"
+
+  vllm:
+    port: 8001
+    base_url: "http://127.0.0.1:8001/v1"
+    # Phase 1.1 tiered-memory anchor: vLLM PR #37190 (CachedWeightProvider /
+    # --moe-expert-cache-size). PyPI 0.28.0 does not yet ship the PR; install
+    # via git+https ref until the PR lands upstream. See pyproject.toml
+    # [tiered-memory] extra.
+    install: "pip install 'vllm @ git+https://github.com/vllm-project/vllm.git@refs/pull/37190/head'"
+    cherry_pick_pr: 37190
+    serve_template: >-
+      vllm serve {model_path} --port 8001 --dtype auto --max-model-len 8192
+      --gpu-memory-utilization 0.85 --max-num-seqs 16 --enforce-eager
+      --moe-expert-cache-size 8
+    # Phase 1.5 tiered-memory tuning knobs. PR #37190 requires --enforce-eager
+    # (CUDA-graph compat deferred to upstream PR 2); --moe-expert-cache-size
+    # enables the per-layer LFRU expert cache. max_num_seeds bounds the KV
+    # pressure curve at fixed context.
+    tiered_memory:
+      gpu_memory_utilization: 0.85
+      max_num_seqs: 16
+      enforce_eager: true   # required by vLLM PR #37190
+      moe_expert_cache_size: 8   # PR #37190 CLI; sweep N ∈ {4,8,16,32}
+    best_for: [broad_model_support, awq_gptq]
+    env:
+      CUDA_VISIBLE_DEVICES: "1"
+
+  llama_server_legacy_helper:
+    port: 8081
+    base_url: "http://127.0.0.1:8081/v1"
+    notes: "CUDA 12/Pascal probe only; never join the Ampere tensor-parallel group."
+    execution_gate: cuda12_legacy_probe
+    binary: "D:/WSL/tools/llama.cpp-b10012-cuda12.4/llama-server.exe"
+    device: CUDA0
+    env:
+      CUDA_VISIBLE_DEVICES: "1"
+    serve_template: >-
+      {binary} -m {model_path} --port 8081 --host 127.0.0.1 -ngl 99 -dev CUDA0
+      -c 8192
+
+  vllm_zaya:
+    port: 8001
+    base_url: "http://127.0.0.1:8001/v1"
+    notes: "Blocked: requires a pinned Zyphra vLLM fork and preapproved local artifact."
+    execution_gate: blocked
+    artifact_policy: preapproved_local_path_only
+    serve_template: >-
+      vllm serve {model_path} --dtype bfloat16 --port 8001 --reasoning-parser
+      qwen3 --enable-auto-tool-choice --tool-call-parser zaya_xml
+
+  vllm_dflash:
+    port: 8001
+    base_url: "http://127.0.0.1:8001/v1"
+    vllm_min: "0.20.1"
+    notes: "DFlash block-diffusion draft — see decode_acceleration_matrix.yaml"
+    serve_template: >-
+      vllm serve {model_path} --port 8001 --dtype auto --gpu-memory-utilization
+      0.85 --speculative-config '{{"method": "dflash", "model":
+      "{draft_path}", "num_speculative_tokens": 7}}'
+    matrix_ref: config/decode_acceleration_matrix.yaml
+    prepare_script: scripts/decode_prepare.py
+
+  sglang_dflash:
+    port: 8000
+    base_url: "http://127.0.0.1:8000/v1"
+    notes: "SGLang + SpecForge DFlash path — validate vs vLLM on agent traces"
+    repo: https://github.com/sgl-project/SpecForge
+    matrix_ref: config/decode_acceleration_matrix.yaml
+
+  llama_server:
+    port: 8080
+    base_url: "http://127.0.0.1:8080/v1"
+    notes: "Existing pheno-harness path — config/launch/*.yaml"
+    script: scripts/start_local_swarm.ps1
+
+  bitnet_cpp:
+    port: null
+    notes: "CPU inference — not OpenAI API; use only for compatible BitNet draft/control artifacts, not Cactus Needle"
+    repo: https://github.com/microsoft/BitNet
+
+  tensorrt_llm:
+    port: 8002
+    base_url: "http://127.0.0.1:8002/v1"
+    install: "pip install 'tensorrt_llm==1.2.1'"
+    best_for: [stable_release_candidate, compiled_profile]
+    quantizer: "NVIDIA Model Optimizer; compile/probe only on RTX 3090 Ti"
+    notes: "Optional compile-once comparison on the Ampere RTX 3090 Ti; do not treat native NVFP4 or FP8 as an Ampere baseline."
+    env:
+      CUDA_VISIBLE_DEVICES: "1"
+
+harbor_integration:
+  env_vars:
+    OPENAI_API_KEY: "{required_local_api_key}"
+    OPENAI_BASE_URL: "{runner.base_url}"
+  model_flag: "openai/{api_model_name}"

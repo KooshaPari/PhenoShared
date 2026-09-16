@@ -1,0 +1,40 @@
+name: release-landing-packages
+
+on:
+  push:
+    tags:
+      - "landing-packages-v*"
+  pull_request:
+    paths:
+      - "packages/design-tokens/**"
+      - "packages/ui/**"
+      - ".github/workflows/release-landing-packages.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - package: packages/ui
+            name: "@kooshapari/phenotype-ui"
+          - package: packages/design-tokens
+            name: "@kooshapari/phenotype-design-tokens"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v1
+      - run: bun install
+      - name: Publish ${{ matrix.name }}
+        working-directory: ${{ matrix.package }}
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            npm publish --dry-run
+          else
+            npm publish
+          fi

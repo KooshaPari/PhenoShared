@@ -1,0 +1,21 @@
+tunnel: {{ cloudflared_tunnel_id | default('<PLACEHOLDER_TUNNEL_UUID>') }}
+credentials-file: /etc/cloudflared/credentials.json
+
+ingress:
+  - hostname: forgejo.kooshapari.com
+    service: https://127.0.0.1:443
+    originRequest:
+      noTLSVerify: true
+  - hostname: ci.kooshapari.com
+    service: https://127.0.0.1:443
+    originRequest:
+      noTLSVerify: true
+  - hostname: vault.kooshapari.com
+    service: https://127.0.0.1:443
+    originRequest:
+      noTLSVerify: true
+  - hostname: grafana.kooshapari.com
+    service: https://127.0.0.1:443
+    originRequest:
+      noTLSVerify: true
+  - service: http_status:404

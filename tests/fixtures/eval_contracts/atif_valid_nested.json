@@ -1,0 +1,92 @@
+{
+  "schema_version": "ATIF-v1.7",
+  "session_id": "offline-run-001",
+  "trajectory_id": "parent-001",
+  "agent": {
+    "name": "pheno-orchestrator",
+    "version": "0.1"
+  },
+  "steps": [
+    {
+      "step_id": 1,
+      "source": "user",
+      "message": "Delegate one offline check."
+    },
+    {
+      "step_id": 2,
+      "source": "agent",
+      "message": "Delegating the check.",
+      "llm_call_count": 1,
+      "tool_calls": [
+        {
+          "tool_call_id": "delegate-1",
+          "function_name": "delegate",
+          "arguments": {
+            "task": "inspect fixture"
+          }
+        }
+      ],
+      "observation": {
+        "results": [
+          {
+            "source_call_id": "delegate-1",
+            "content": "Subagent completed the check.",
+            "subagent_trajectory_ref": [
+              {
+                "trajectory_id": "child-001",
+                "session_id": "offline-run-001"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "subagent_trajectories": [
+    {
+      "schema_version": "ATIF-v1.7",
+      "session_id": "offline-run-001",
+      "trajectory_id": "child-001",
+      "agent": {
+        "name": "pheno-worker",
+        "version": "0.1"
+      },
+      "steps": [
+        {
+          "step_id": 1,
+          "source": "user",
+          "message": "Inspect the fixture."
+        },
+        {
+          "step_id": 2,
+          "source": "agent",
+          "message": "Reading the fixture.",
+          "llm_call_count": 1,
+          "tool_calls": [
+            {
+              "tool_call_id": "read-1",
+              "function_name": "read_file",
+              "arguments": {
+                "path": "fixture.txt"
+              }
+            }
+          ],
+          "observation": {
+            "results": [
+              {
+                "source_call_id": "read-1",
+                "content": "ok"
+              }
+            ]
+          }
+        },
+        {
+          "step_id": 3,
+          "source": "agent",
+          "message": "The fixture is valid.",
+          "llm_call_count": 1
+        }
+      ]
+    }
+  ]
+}

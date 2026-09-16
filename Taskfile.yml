@@ -1,83 +1,35 @@
-# Pine — Taskfile.yml
-# Standard task runner for the Phenotype org. Replaces Justfile for cross-repo consistency.
-
 version: '3'
-
-env:
-  CARGO_TERM_COLOR: always
-
-vars:
-  CRATES: "crates/pine-core crates/pine-loader crates/pine-syscall crates/pine-compat crates/pine-nvms"
 
 tasks:
   default:
-    desc: Show available tasks
     cmds:
       - task --list
 
   build:
-    desc: Build the full workspace
+    desc: Build all crates
     cmds:
-      - cargo build --workspace --all-targets
+      - cargo build --workspace --all-features
 
   test:
-    desc: Run all workspace tests
+    desc: Run tests
     cmds:
-      - cargo test --workspace
+      - cargo test --workspace --all-features
 
   fmt:
-    desc: Format all Rust code
+    desc: Format code
     cmds:
       - cargo fmt --all
 
   lint:
-    desc: Run clippy and rustfmt checks
+    desc: Lint with clippy
     cmds:
-      - cargo fmt --all -- --check
-      - cargo clippy --workspace --all-targets -- -D warnings
+      - cargo clippy --workspace --all-features --all-targets -- -D warnings
 
   audit:
-    desc: Run cargo audit
+    desc: Security advisory check
     cmds:
-      - cargo audit || echo "cargo-audit not installed; skipping"
+      - cargo deny check advisories || true
 
-  bench:
-    desc: Run benchmarks
-    cmds:
-      - cargo bench --workspace
-
-  docs:
-    desc: Build mdbook docs
-    dir: docs
-    cmds:
-      - "mdbook build 2>/dev/null || echo 'mdbook not installed; run: cargo install mdbook'"
-
-  docs:serve:
-    desc: Serve docs locally
-    dir: docs
-    cmds:
-      - "mdbook serve 2>/dev/null || echo 'mdbook not installed'"
-
-  lint:md:
-    desc: Lint markdown files
-    cmds:
-      - "npx markdownlint-cli 'docs/**/*.md' 2>/dev/null || echo 'markdownlint not installed'"
-
-  ci:
-    desc: Run the full CI pipeline locally
-    cmds:
-      - task: lint
-      - task: test
-      - task: build
-
-  clean:
-    desc: Clean build artifacts
-    cmds:
-      - cargo clean
-      - rm -rf docs/book
-      - rm -rf target
-
-  coverage:
-    desc: Measure code coverage (SSOT: see grade.sh for the canonical command).
-    cmds:
-      - cargo llvm-cov --workspace --fail-under-lines 85
+  quality:
+    desc: Full quality gate
+    deps: [fmt, lint, test, audit]

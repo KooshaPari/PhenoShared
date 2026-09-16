@@ -1,0 +1,122 @@
+{
+  "created_at": "2026-07-23T09:55:35.039224+00:00",
+  "differential": {
+    "both_green": true,
+    "faster": "helios_cli",
+    "pass_rate_delta": 0.0,
+    "semantic_green": true,
+    "wall_s_mean_delta": 0.8817116943331105,
+    "winner": "tie"
+  },
+  "fixture_id": "dual-harness-shared-3task-20260722",
+  "fixture_path": "/Users/kooshapari/CodeProjects/Phenotype/repos/pheno-harness/plans/2026-07-22-dual-harness-matrix/fixtures/shared-3task.v1.json",
+  "helios_cli": {
+    "harness_id": "helios_cli",
+    "pass_rate": 1.0,
+    "passed": 3,
+    "semantic_passed": 0,
+    "semantic_total": 0,
+    "tasks": [
+      {
+        "exit_code": 0,
+        "harness_id": "helios_cli",
+        "ok": true,
+        "reason": "ok",
+        "score_plane": "process_smoke",
+        "stderr_preview": "",
+        "stdout_preview": "OK\n",
+        "task_id": "dh-t1-echo-ok",
+        "timed_out": false,
+        "wall_s": 0.05684166699938942
+      },
+      {
+        "exit_code": 0,
+        "harness_id": "helios_cli",
+        "ok": true,
+        "reason": "ok",
+        "score_plane": "process_smoke",
+        "stderr_preview": "",
+        "stdout_preview": "/private/var/folders/wl/z8733y815nzg28yy0_1_lh7w0000gn/T/dual-helios_cli-m9d_x5g3\n",
+        "task_id": "dh-t2-workdir-isolation",
+        "timed_out": false,
+        "wall_s": 0.02861404099894571
+      },
+      {
+        "exit_code": null,
+        "harness_id": "helios_cli",
+        "ok": true,
+        "reason": "timeout_as_expected",
+        "score_plane": "process_smoke",
+        "stderr_preview": "timeout",
+        "stdout_preview": "",
+        "task_id": "dh-t3-timeout-guard",
+        "timed_out": true,
+        "wall_s": 1.0118461250021937
+      }
+    ],
+    "total": 3,
+    "wall_s_mean": 0.36576727766684297,
+    "wall_s_sum": 1.0973018330005289
+  },
+  "loop": {
+    "mode": "observe",
+    "next": "re-run after adapter change; append ledger row each iteration"
+  },
+  "planify2": {
+    "harness_id": "planify2",
+    "pass_rate": 1.0,
+    "passed": 3,
+    "semantic_passed": 0,
+    "semantic_total": 0,
+    "tasks": [
+      {
+        "exit_code": 0,
+        "harness_id": "planify2",
+        "ok": true,
+        "reason": "ok",
+        "score_plane": "process_smoke",
+        "stderr_preview": "",
+        "stdout_preview": "OK\n",
+        "task_id": "dh-t1-echo-ok",
+        "timed_out": false,
+        "wall_s": 1.1023248749988852
+      },
+      {
+        "exit_code": 0,
+        "harness_id": "planify2",
+        "ok": true,
+        "reason": "ok",
+        "score_plane": "process_smoke",
+        "stderr_preview": "",
+        "stdout_preview": "/private/var/folders/wl/z8733y815nzg28yy0_1_lh7w0000gn/T/dual-planify2-y91fjitc\n",
+        "task_id": "dh-t2-workdir-isolation",
+        "timed_out": false,
+        "wall_s": 1.577413750001142
+      },
+      {
+        "exit_code": null,
+        "harness_id": "planify2",
+        "ok": true,
+        "reason": "timeout_as_expected",
+        "score_plane": "process_smoke",
+        "stderr_preview": "timeout",
+        "stdout_preview": "",
+        "task_id": "dh-t3-timeout-guard",
+        "timed_out": true,
+        "wall_s": 1.0626982909998333
+      }
+    ],
+    "total": 3,
+    "wall_s_mean": 1.2474789719999535,
+    "wall_s_sum": 3.7424369159998605
+  },
+  "recommendations": [
+    "planify2 slower mean wall \u2014 profile node adapter startup",
+    "promote next fixture version with one semantic task"
+  ],
+  "schema_version": "pheno.dual_harness.optimize.v1",
+  "score_plane": "harness",
+  "score_planes": [
+    "harness"
+  ]
+}
