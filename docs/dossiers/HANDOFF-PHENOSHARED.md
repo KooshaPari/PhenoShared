@@ -1,7 +1,7 @@
 # PhenoShared Comprehensive Handoff
 
 **Date:** 2026-09-16 (Pacific) — final state
-**Branch:** main at `d0fe3aa3`
+**Branch:** main at `0605f2f1`
 **Repo:** KooshaPari/PhenoShared (formerly PhenoAI)
 
 ## Repository Identity
@@ -9,7 +9,7 @@
 - **Former name:** PhenoAI
 - **Current name:** PhenoShared
 - **Role:** Pooled foundation monorepo (Rust workspace + absorbed repos)
-- **Workspace members:** 84 (79 original + 2 PhenoRegistry + 3 PhenoInfra)
+- **Workspace members:** 76 (verified via `cargo metadata --no-deps`)
 - **Total crate dirs:** 310
 - **cargo check:** PASS (0 errors, 3 build-system warnings only)
 
