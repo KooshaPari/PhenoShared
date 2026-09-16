@@ -1,9 +1,6 @@
 [submodule "vendor/phenodocs"]
 	path = vendor/phenodocs
 	url = https://github.com/KooshaPari/phenodocs.git
-[submodule "Apisync"]
-	path = Apisync
-	url = https://github.com/KooshaPari/Apisync.git
 [submodule "BytePort"]
 	path = BytePort
 	url = https://github.com/KooshaPari/BytePort.git
