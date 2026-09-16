@@ -1,0 +1,99 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:phenotype:atlas-plan:1:dissatisfaction",
+  "title": "dissatisfaction",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[A-Za-z][A-Za-z0-9_.:-]*$",
+      "minLength": 2
+    },
+    "subject_id": {
+      "type": "string",
+      "pattern": "^[A-Za-z][A-Za-z0-9_.:-]*$",
+      "minLength": 2
+    },
+    "capability_id": {
+      "type": "string",
+      "pattern": "^[A-Za-z][A-Za-z0-9_.:-]*$",
+      "minLength": 2
+    },
+    "kind": {
+      "type": "string",
+      "enum": [
+        "missing",
+        "defect",
+        "complexity",
+        "duplication",
+        "experience",
+        "performance",
+        "security",
+        "delivery",
+        "claim-gap",
+        "unknown"
+      ]
+    },
+    "observation": {
+      "type": "string",
+      "minLength": 1
+    },
+    "evidence_ids": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 0
+    },
+    "impact": {
+      "type": "string",
+      "minLength": 1
+    },
+    "alternatives": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 1
+    },
+    "proposed_resolution": {
+      "type": "string",
+      "minLength": 1
+    },
+    "acceptance": {
+      "type": "string",
+      "minLength": 1
+    },
+    "state": {
+      "type": "string",
+      "enum": [
+        "candidate",
+        "confirmed",
+        "accepted-for-work",
+        "resolved",
+        "rejected",
+        "synthetic"
+      ]
+    },
+    "synthetic": {
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "id",
+    "subject_id",
+    "capability_id",
+    "kind",
+    "observation",
+    "evidence_ids",
+    "impact",
+    "alternatives",
+    "proposed_resolution",
+    "acceptance",
+    "state",
+    "synthetic"
+  ],
+  "additionalProperties": false
+}

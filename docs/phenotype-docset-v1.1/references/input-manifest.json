@@ -1,0 +1,50 @@
+[
+  {
+    "original_name": "portfolio-62-audit-2026-09-15.zip",
+    "path": "references/prior-packages/portfolio-62-audit-2026-09-15.zip",
+    "sha256": "b1522f0005c3ca5025bfa2258cbf15c8be9d9fe508817c88df2158810b4f06cc",
+    "size_bytes": 270502,
+    "role": "CONTEXT_ONLY_NOT_CURRENT_AUTHORITY",
+    "native_products_validated_by_this_package": false
+  },
+  {
+    "original_name": "portfolio-assurance-v2.zip",
+    "path": "references/prior-packages/portfolio-assurance-v2.zip",
+    "sha256": "bc01882d435ed7179d2019167f70db586177d5eedee0377813234bf0b6f76c9c",
+    "size_bytes": 151899,
+    "role": "CONTEXT_ONLY_NOT_CURRENT_AUTHORITY",
+    "native_products_validated_by_this_package": false
+  },
+  {
+    "original_name": "portfolio-delivery-readiness-v3.zip",
+    "path": "references/prior-packages/portfolio-delivery-readiness-v3.zip",
+    "sha256": "c548367619f15e96143cfa8dbbd6b5343d768b0b7b1780ea48ab23688bd4fc8c",
+    "size_bytes": 295829,
+    "role": "CONTEXT_ONLY_NOT_CURRENT_AUTHORITY",
+    "native_products_validated_by_this_package": false
+  },
+  {
+    "original_name": "phenotype-cvp-audit-2026-09-14.zip",
+    "path": "references/prior-packages/phenotype-cvp-audit-2026-09-14.zip",
+    "sha256": "ec8a22661e85b82fdd099beee8d61e78315b596581534295d2eff97970f6afb3",
+    "size_bytes": 219595,
+    "role": "CONTEXT_ONLY_NOT_CURRENT_AUTHORITY",
+    "native_products_validated_by_this_package": false
+  },
+  {
+    "original_name": "civis-game-first-2026-09-14.zip",
+    "path": "references/prior-packages/civis-game-first-2026-09-14.zip",
+    "sha256": "b111825c2be813c2df7f7691fe66cb643c7c7f05a68341ec0def5d6d02088d08",
+    "size_bytes": 247095,
+    "role": "CONTEXT_ONLY_NOT_CURRENT_AUTHORITY",
+    "native_products_validated_by_this_package": false
+  },
+  {
+    "original_name": "docs.zip",
+    "path": "references/prior-packages/fabric-specification-prior.zip",
+    "sha256": "469af93b3c94759ed4be453b511c3897bb2450dec0b8c6fdddf66172aefb1681",
+    "size_bytes": 394528,
+    "role": "CONTEXT_ONLY_NOT_CURRENT_AUTHORITY",
+    "native_products_validated_by_this_package": false
+  }
+]

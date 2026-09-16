@@ -1,0 +1,364 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:phenotype:atlas:ecosystem-impact:1",
+  "title": "Ecosystem impact planning attachment",
+  "description": "Structure-only change-planning record. Does not authorize, authenticate or qualify a change. Bind evidence to the owning atlas/work system.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "id",
+    "subject_id",
+    "change_kind",
+    "materiality",
+    "intent",
+    "capability_owner",
+    "existing_work_refs",
+    "reuse",
+    "consumers",
+    "preserved_contract",
+    "ecosystem_effects",
+    "future_seams",
+    "coordination",
+    "verification",
+    "lifecycle_approval",
+    "synthetic"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.0"
+    },
+    "id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "subject_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "change_kind": {
+      "enum": [
+        "implementation",
+        "refactor",
+        "dependency",
+        "interface",
+        "schema",
+        "workflow",
+        "docs",
+        "assets",
+        "other"
+      ]
+    },
+    "materiality": {
+      "enum": [
+        "local-no-contract-impact",
+        "consumer-impacting"
+      ]
+    },
+    "intent": {
+      "type": "string",
+      "minLength": 1
+    },
+    "capability_owner": {
+      "type": "string",
+      "minLength": 1
+    },
+    "existing_work_refs": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true,
+      "minItems": 1
+    },
+    "reuse": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "internal_search",
+        "external_search",
+        "options",
+        "selected",
+        "rationale"
+      ],
+      "properties": {
+        "internal_search": {
+          "type": "string",
+          "minLength": 1
+        },
+        "external_search": {
+          "type": "string",
+          "minLength": 1
+        },
+        "options": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true,
+          "minItems": 1
+        },
+        "selected": {
+          "type": "string",
+          "minLength": 1
+        },
+        "rationale": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "consumers": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "tier",
+          "basis",
+          "constraints",
+          "verification_plan",
+          "results",
+          "owner"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "tier": {
+            "enum": [
+              "current",
+              "committed",
+              "plausible",
+              "unknown"
+            ]
+          },
+          "basis": {
+            "type": "string",
+            "minLength": 1
+          },
+          "owner": {
+            "type": "string",
+            "minLength": 1
+          },
+          "constraints": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "uniqueItems": true,
+            "minItems": 1
+          },
+          "verification_plan": {
+            "type": "string",
+            "minLength": 1
+          },
+          "results": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      }
+    },
+    "preserved_contract": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true,
+      "minItems": 1
+    },
+    "ecosystem_effects": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "baseline",
+        "expected_benefits",
+        "downstream_costs",
+        "measurement_status",
+        "unknowns"
+      ],
+      "properties": {
+        "baseline": {
+          "type": "string",
+          "minLength": 1
+        },
+        "expected_benefits": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true,
+          "minItems": 1
+        },
+        "downstream_costs": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true,
+          "minItems": 1
+        },
+        "measurement_status": {
+          "enum": [
+            "unmeasured",
+            "estimate-only",
+            "evidence-linked"
+          ]
+        },
+        "unknowns": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        }
+      }
+    },
+    "future_seams": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true,
+      "minItems": 1
+    },
+    "coordination": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "write_scope",
+        "other_owner_actions",
+        "compatibility_rollout",
+        "rollback",
+        "temporary_bridge_exit"
+      ],
+      "properties": {
+        "write_scope": {
+          "type": "string",
+          "minLength": 1
+        },
+        "other_owner_actions": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "compatibility_rollout": {
+          "type": "string",
+          "minLength": 1
+        },
+        "rollback": {
+          "type": "string",
+          "minLength": 1
+        },
+        "temporary_bridge_exit": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "verification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "plan",
+        "state",
+        "evidence_refs",
+        "review_owner"
+      ],
+      "properties": {
+        "plan": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true,
+          "minItems": 1
+        },
+        "state": {
+          "enum": [
+            "planned",
+            "blocked",
+            "evidence-ready-for-review"
+          ]
+        },
+        "evidence_refs": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "review_owner": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "lifecycle_approval": {
+      "const": false
+    },
+    "synthetic": {
+      "type": "boolean"
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "materiality": {
+            "const": "consumer-impacting"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "consumers": {
+            "minItems": 1
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "verification": {
+            "properties": {
+              "state": {
+                "const": "evidence-ready-for-review"
+              }
+            }
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "verification": {
+            "properties": {
+              "evidence_refs": {
+                "minItems": 1
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

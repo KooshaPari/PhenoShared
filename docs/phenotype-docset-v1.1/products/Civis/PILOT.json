@@ -1,0 +1,44 @@
+{
+  "id": "PILOT-PRD-CIVIS",
+  "product_id": "PRD-CIVIS",
+  "status": "PLANNED_NOT_EXECUTED",
+  "subject_repository_id": 1164684442,
+  "hypothesis": "A convincing persistent world with fluid but meaningful god/leader/individual play and understandable systemic consequences.",
+  "baseline_candidates": [
+    "Existing Civis candidate before changes",
+    "Relevant city/colony/godgame user-task references",
+    "Bevy current client",
+    "Godot direct Rust or godot-bevy candidate",
+    "Current qualified Unreal or Unity candidate"
+  ],
+  "scenario": "Use one living settlement with a visible water/food constraint. Intervene as god, redirect a leader-level action, inhabit an affected person, save/quit/reopen and continue. Leave a bounded background run and inspect source-backed changes. Separately compare rendering/authoring paths on the same checkpoint and content target.",
+  "failure_cases": [
+    "Role switch loses identity or intent",
+    "Missing required asset silently becomes primitive",
+    "Save omits cultural/social state",
+    "Background time jump destroys world",
+    "Determinism assumption blocks useful concurrency",
+    "LOD change duplicates resources",
+    "Unattended summary invents events"
+  ],
+  "metrics": [
+    "Playable coherent journey and qualitative clarity",
+    "Frame pacing and interaction latency",
+    "Visual/audio acceptance under supported profiles",
+    "Save/recovery fidelity",
+    "Overnight resource/time behavior",
+    "Agent content-iteration friction",
+    "No imposed engine winner without evidence"
+  ],
+  "required_before_execution": [
+    "versioned subjects and fixtures",
+    "predeclared critical invariants",
+    "reviewed non-inferiority margins",
+    "resource and trust limits",
+    "independent outcome oracle",
+    "retained failed-trial policy"
+  ],
+  "results": null,
+  "winner": null,
+  "protocol": "../../research/COMPARATIVE-PILOT-PROTOCOL.md"
+}
