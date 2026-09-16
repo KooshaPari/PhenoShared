@@ -6194,6 +6194,7 @@ name = "phenotype-policy-engine"
 version = "0.3.10"
 dependencies = [
  "dashmap",
+ "proptest",
  "regex",
  "serde",
  "serde_json",
@@ -6210,6 +6211,7 @@ dependencies = [
  "phenotype-health",
  "serde",
  "serde_json",
+ "tempfile",
  "tokio",
 ]
 

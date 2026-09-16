@@ -105,7 +105,7 @@ proptest! {
         let mut context = EvaluationContext::new();
         context.set_string(fact, value);
 
-        let result = engine.evaluate_single(&name, &context).unwrap();
+        let result = engine.evaluate_policy(&name, &context).unwrap();
 
         prop_assert!(result.passed);
         prop_assert!(result.violations.is_empty());
