@@ -1,0 +1,274 @@
+{
+  "schema_version": 1,
+  "generated_at_utc": "2026-07-16T10:45:45.146631+00:00",
+  "system": {
+    "platform": "macOS-27.0-arm64-arm-64bit-Mach-O",
+    "machine": "arm64",
+    "python": "3.14.5",
+    "mlx_version": "0.32.0"
+  },
+  "methodology": {
+    "workload": "full Qwen logits forward [batch, context] -> [batch, context, vocab]",
+    "stock_mlx_source": "mlx_lm model forward in an isolated subprocess per variant",
+    "weights": "the supplied mlx_lm model; no synthetic-weight timings are used for stock-MLX rows",
+    "batches": [
+      1,
+      8
+    ],
+    "contexts": [
+      1,
+      128
+    ],
+    "iters": 3,
+    "warmup": 1,
+    "timing_boundary": "wall clock around evaluated forwards after warmup, followed by mx.synchronize()",
+    "pheno_metal_workload": "not run: current real-weights implementation is RMSNorm-only decode",
+    "environment_overrides": {}
+  },
+  "comparison_policy": {
+    "end_to_end_metric_policy": "Only same-workload measurements are comparable.",
+    "pheno_metal_caveat": "Pheno Metal is not an end-to-end Qwen comparator: the available real-weights decode runs RMSNorm only; attention, MLP, and projection kernels are not wired into that decode path.",
+    "unsupported_claims": [
+      "No Pheno-versus-stock-MLX end-to-end latency, throughput, or speedup is calculated.",
+      "Component validation timings are not substituted for full-model performance."
+    ]
+  },
+  "rows": [
+    {
+      "batch": 1,
+      "context_tokens": 1,
+      "workload": "full_qwen_forward_logits",
+      "comparison_status": "not_comparable",
+      "pheno_metal": {
+        "execution_status": "unsupported",
+        "reason": "Pheno Metal is not an end-to-end Qwen comparator: the available real-weights decode runs RMSNorm only; attention, MLP, and projection kernels are not wired into that decode path.",
+        "metrics": null
+      },
+      "stock_mlx": {
+        "batch": 1,
+        "context_tokens": 1,
+        "worker_command": [
+          "/private/tmp/pheno-qwen-mlx-venv/bin/python",
+          "-c",
+          "<embedded stock-MLX worker>"
+        ],
+        "elapsed_wall_ms": 10450.029040999652,
+        "execution_status": "completed",
+        "ms_per_forward": 12.171028000011574,
+        "tokens_per_sec": 82.16232844087196,
+        "shape": [
+          1,
+          1,
+          248320
+        ],
+        "finite": true
+      }
+    },
+    {
+      "batch": 1,
+      "context_tokens": 128,
+      "workload": "full_qwen_forward_logits",
+      "comparison_status": "not_comparable",
+      "pheno_metal": {
+        "execution_status": "unsupported",
+        "reason": "Pheno Metal is not an end-to-end Qwen comparator: the available real-weights decode runs RMSNorm only; attention, MLP, and projection kernels are not wired into that decode path.",
+        "metrics": null
+      },
+      "stock_mlx": {
+        "batch": 1,
+        "context_tokens": 128,
+        "worker_command": [
+          "/private/tmp/pheno-qwen-mlx-venv/bin/python",
+          "-c",
+          "<embedded stock-MLX worker>"
+        ],
+        "elapsed_wall_ms": 7157.166249999136,
+        "execution_status": "completed",
+        "ms_per_forward": 154.85218066654247,
+        "tokens_per_sec": 826.5947528090305,
+        "shape": [
+          1,
+          128,
+          248320
+        ],
+        "finite": true
+      }
+    },
+    {
+      "batch": 8,
+      "context_tokens": 1,
+      "workload": "full_qwen_forward_logits",
+      "comparison_status": "not_comparable",
+      "pheno_metal": {
+        "execution_status": "unsupported",
+        "reason": "Pheno Metal is not an end-to-end Qwen comparator: the available real-weights decode runs RMSNorm only; attention, MLP, and projection kernels are not wired into that decode path.",
+        "metrics": null
+      },
+      "stock_mlx": {
+        "batch": 8,
+        "context_tokens": 1,
+        "worker_command": [
+          "/private/tmp/pheno-qwen-mlx-venv/bin/python",
+          "-c",
+          "<embedded stock-MLX worker>"
+        ],
+        "elapsed_wall_ms": 6233.958124998026,
+        "execution_status": "completed",
+        "ms_per_forward": 33.125083333288785,
+        "tokens_per_sec": 241.50882639321438,
+        "shape": [
+          8,
+          1,
+          248320
+        ],
+        "finite": true
+      }
+    },
+    {
+      "batch": 8,
+      "context_tokens": 128,
+      "workload": "full_qwen_forward_logits",
+      "comparison_status": "not_comparable",
+      "pheno_metal": {
+        "execution_status": "unsupported",
+        "reason": "Pheno Metal is not an end-to-end Qwen comparator: the available real-weights decode runs RMSNorm only; attention, MLP, and projection kernels are not wired into that decode path.",
+        "metrics": null
+      },
+      "stock_mlx": {
+        "batch": 8,
+        "context_tokens": 128,
+        "worker_command": [
+          "/private/tmp/pheno-qwen-mlx-venv/bin/python",
+          "-c",
+          "<embedded stock-MLX worker>"
+        ],
+        "elapsed_wall_ms": 12919.51550000158,
+        "execution_status": "completed",
+        "ms_per_forward": 2221.655958333334,
+        "tokens_per_sec": 460.91745040856614,
+        "shape": [
+          8,
+          128,
+          248320
+        ],
+        "finite": true
+      }
+    }
+  ],
+  "pheno_validation_evidence": {
+    "report_path": "/Users/kooshapari/CodeProjects/Phenotype/pheno-harness-compare/kernels/qwen3.5-0.8b/bench/results/validate_latest.json",
+    "comparison_caveat": "Pheno Metal is not an end-to-end Qwen comparator: the available real-weights decode runs RMSNorm only; attention, MLP, and projection kernels are not wired into that decode path.",
+    "component_results": [
+      {
+        "name": "RMSNorm",
+        "passed": true,
+        "metal_available": true,
+        "mlx_ms": 0.7835197448730469,
+        "metal_ms": 2.4540328979492188,
+        "max_abs_diff_metal": 0.0625,
+        "notes": "max_diff=6.250e-02"
+      },
+      {
+        "name": "RoPE",
+        "passed": true,
+        "metal_available": true,
+        "mlx_ms": 0.7739639282226562,
+        "metal_ms": 1.7619132995605469,
+        "max_abs_diff_metal": 0.015625,
+        "notes": "max_diff=1.562e-02"
+      },
+      {
+        "name": "SwiGLU",
+        "passed": true,
+        "metal_available": true,
+        "mlx_ms": 0.33832550048828125,
+        "metal_ms": 11.266794204711914,
+        "max_abs_diff_metal": 0.0625,
+        "notes": "max_diff=6.250e-02"
+      },
+      {
+        "name": "sigmoid_gate",
+        "passed": true,
+        "metal_available": true,
+        "mlx_ms": 0.4125213623046875,
+        "metal_ms": 3.4439563751220703,
+        "max_abs_diff_metal": 0.03125,
+        "notes": "max_diff=3.125e-02"
+      },
+      {
+        "name": "attention_decode",
+        "passed": true,
+        "metal_available": true,
+        "mlx_ms": 0.7288742065429688,
+        "metal_ms": 15.272760391235352,
+        "max_abs_diff_metal": 0.53515625,
+        "notes": "max_diff=5.352e-01"
+      },
+      {
+        "name": "causal_conv1d_step",
+        "passed": true,
+        "metal_available": false,
+        "mlx_ms": 0.33588409423828125,
+        "metal_ms": null,
+        "max_abs_diff_metal": null,
+        "notes": ""
+      },
+      {
+        "name": "linear_attn_step",
+        "passed": true,
+        "metal_available": false,
+        "mlx_ms": 0.5774784088134766,
+        "metal_ms": null,
+        "max_abs_diff_metal": null,
+        "notes": ""
+      },
+      {
+        "name": "gemv_decode",
+        "passed": true,
+        "metal_available": false,
+        "mlx_ms": 0.6364822387695312,
+        "metal_ms": null,
+        "max_abs_diff_metal": null,
+        "notes": ""
+      },
+      {
+        "name": "gemm_bf16",
+        "passed": true,
+        "metal_available": false,
+        "mlx_ms": 1.0187149047851562,
+        "metal_ms": null,
+        "max_abs_diff_metal": null,
+        "notes": ""
+      },
+      {
+        "name": "fused_argmax",
+        "passed": true,
+        "metal_available": true,
+        "mlx_ms": 24.9721622467041,
+        "metal_ms": 20.051393508911133,
+        "max_abs_diff_metal": 5830.0,
+        "notes": "max_diff=5830  ref_tok=235686 metal_tok=229856"
+      },
+      {
+        "name": "decode_step_batched",
+        "passed": true,
+        "metal_available": true,
+        "mlx_ms": 0.006875000508443918,
+        "metal_ms": 0.8760830005485332,
+        "max_abs_diff_metal": null,
+        "notes": "status=0 L=24 H=1024 (batched vs per-op) check=stub_mode_dispatch_only"
+      },
+      {
+        "name": "end_to_end",
+        "passed": true,
+        "metal_available": false,
+        "mlx_ms": -1.0,
+        "metal_ms": null,
+        "max_abs_diff_metal": null,
+        "notes": "subprocess rc=0"
+      }
+    ],
+    "report_status": "loaded",
+    "metal_available": true
+  }
+}

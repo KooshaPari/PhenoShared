@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "run_id": "run-fixture-bundle",
+  "suite": "fixture-suite",
+  "created_at": "2026-07-14T00:00:00+00:00",
+  "metadata": {},
+  "nodes": [
+    {
+      "id": "run-fixture-bundle",
+      "kind": "run",
+      "name": "fixture run",
+      "status": "finished",
+      "started_at": "2026-07-14T00:00:00+00:00",
+      "finished_at": "2026-07-14T00:00:01+00:00",
+      "duration_ms": 1000.0,
+      "attributes": {}
+    },
+    {
+      "id": "verifier-1",
+      "kind": "verifier",
+      "name": "fixture verifier",
+      "status": "passed",
+      "started_at": "2026-07-14T00:00:00.500000+00:00",
+      "finished_at": "2026-07-14T00:00:01+00:00",
+      "duration_ms": 500.0,
+      "attributes": {
+        "task_id": "task-alpha"
+      }
+    }
+  ],
+  "edges": [
+    {
+      "source": "run-fixture-bundle",
+      "target": "verifier-1",
+      "kind": "contains"
+    }
+  ]
+}

@@ -1,0 +1,70 @@
+{
+  "id": "qwen/qwen3.5-flash-02-23",
+  "scraped_at": "2026-07-04T09:59:21.726596+00:00",
+  "api_found": true,
+  "page_found": true,
+  "api": {
+    "id": "qwen/qwen3.5-flash-02-23",
+    "canonical_slug": "qwen/qwen3.5-flash-20260224",
+    "hugging_face_id": null,
+    "name": "Qwen: Qwen3.5-Flash",
+    "created": 1772053776,
+    "description": "The Qwen3.5 native vision-language Flash models are built on a hybrid architecture that integrates a linear attention mechanism with a sparse mixture-of-experts model, achieving higher inference efficiency. Compared to the...",
+    "context_length": 1000000,
+    "architecture": {
+      "modality": "text+image+video->text",
+      "input_modalities": [
+        "text",
+        "image",
+        "video"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "tokenizer": "Qwen3",
+      "instruct_type": null
+    },
+    "pricing": {
+      "prompt": "0.000000065",
+      "completion": "0.00000026"
+    },
+    "top_provider": {
+      "context_length": 1000000,
+      "max_completion_tokens": 65536,
+      "is_moderated": false
+    },
+    "per_request_limits": null,
+    "supported_parameters": [
+      "include_reasoning",
+      "max_tokens",
+      "presence_penalty",
+      "reasoning",
+      "response_format",
+      "seed",
+      "structured_outputs",
+      "temperature",
+      "tool_choice",
+      "tools",
+      "top_p"
+    ],
+    "default_parameters": {
+      "temperature": null,
+      "top_p": null,
+      "frequency_penalty": null
+    },
+    "supported_voices": null,
+    "knowledge_cutoff": null,
+    "expiration_date": null,
+    "links": {
+      "details": "/api/v1/models/qwen/qwen3.5-flash-20260224/endpoints"
+    },
+    "reasoning": {
+      "mandatory": false
+    }
+  },
+  "page_url": "https://openrouter.ai/qwen/qwen3.5-flash-02-23",
+  "page": {
+    "title": "Qwen3.5-Flash - API Pricing &amp; Providers | OpenRouter",
+    "visible_text_sample": "Qwen3.5-Flash - API Pricing &amp; Providers | OpenRouter Skip to content OpenRouter Search \u2318 K Models Fusion Chat Rankings Apps Enterprise Pricing Docs OpenRouter \u00a9 2026 OpenRouter, Inc Product Chat Rankings Apps Models Providers Pricing Enterprise Labs Company About Blog Careers Hiring Privacy Terms of Service Support State of AI Works With OR Data Developer Documentation API Reference SDK Status Connect Discord GitHub LinkedIn X YouTube Qwen: Qwen3.5-Flash qwen / qwen3.5-flash-02-23 Compare Playground Quick Start The Qwen3.5 native vision-language Flash models are built on a hybrid architecture that integrates a linear attention mechanism with a sparse mixture-of-experts model, achieving higher inference efficiency. Compared to the 3 series, these models deliver a leap forward in performance for both pure text and multimodal tasks, offering fast response times while balancing inference speed and overall performance. Modalities In / Out Price 35 % off $0.065 / $0.26 per 1M Context 1M Released Feb 25, 2026 Qwen: Qwen3.5-Flash Compare Playground Quick Start Providers Effective Pricing Performance Uptime Apps Activity Providers Providers This model is hosted by one provider. OpenRouter forwards every request to it directly \u2014 no routing decisions to make. Effective Pricing The chart below shows the average price customers are actually paying after prompt caching. Depending on the amount of repeated context you send, this can be 60\u201380% cheaper than the provider list price. Shown are rolling averages from the past 30 days. Performance Throughput is how fast the model writes (tokens per second \u2014 higher is better). Latency is total round-trip time (lower is better). TTFT is time-to-first-token \u2014 how long before you see anything appear (lower is better). Uptime Percent of requests that succeeded over the last 30 days. OpenRouter monitors every provider continuously and automatically retries on the next-best provider when one returns an error. Apps Public apps that send the most traffic to this model. Good signal for what real production workloads look like \u2014 and a hint at which use cases this model is best suited for. Activity Token volume and request traffic to this model over time. Quick Start Drop-in code to call this model. OpenRouter&#x27;s API is OpenAI-compatible \u2014 most SDKs work by just swapping the base URL. The only thing that changes between models is the model slug below."
+  }
+}

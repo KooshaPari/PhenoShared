@@ -1,0 +1,71 @@
+{
+  "id": "arcee-ai/trinity-mini",
+  "scraped_at": "2026-07-04T09:59:18.986185+00:00",
+  "api_found": true,
+  "page_found": true,
+  "api": {
+    "id": "arcee-ai/trinity-mini",
+    "canonical_slug": "arcee-ai/trinity-mini-20251201",
+    "hugging_face_id": "arcee-ai/Trinity-Mini",
+    "name": "Arcee AI: Trinity Mini",
+    "created": 1764601720,
+    "description": "Trinity Mini is a 26B-parameter (3B active) sparse mixture-of-experts language model featuring 128 experts with 8 active per token. Engineered for efficient reasoning over long contexts (131k) with robust function...",
+    "context_length": 131072,
+    "architecture": {
+      "modality": "text->text",
+      "input_modalities": [
+        "text"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "tokenizer": "Other",
+      "instruct_type": null
+    },
+    "pricing": {
+      "prompt": "0.000000045",
+      "completion": "0.00000015"
+    },
+    "top_provider": {
+      "context_length": 131072,
+      "max_completion_tokens": 131072,
+      "is_moderated": false
+    },
+    "per_request_limits": null,
+    "supported_parameters": [
+      "include_reasoning",
+      "logprobs",
+      "max_completion_tokens",
+      "max_tokens",
+      "reasoning",
+      "response_format",
+      "stop",
+      "structured_outputs",
+      "temperature",
+      "tool_choice",
+      "tools",
+      "top_k",
+      "top_logprobs",
+      "top_p"
+    ],
+    "default_parameters": {
+      "temperature": 0.15,
+      "top_p": 0.75,
+      "frequency_penalty": null
+    },
+    "supported_voices": null,
+    "knowledge_cutoff": null,
+    "expiration_date": null,
+    "links": {
+      "details": "/api/v1/models/arcee-ai/trinity-mini-20251201/endpoints"
+    },
+    "reasoning": {
+      "mandatory": true
+    }
+  },
+  "page_url": "https://openrouter.ai/arcee-ai/trinity-mini",
+  "page": {
+    "title": "Trinity Mini - API Pricing &amp; Providers | OpenRouter",
+    "visible_text_sample": "Trinity Mini - API Pricing &amp; Providers | OpenRouter Skip to content OpenRouter Search \u2318 K Models Fusion Chat Rankings Apps Enterprise Pricing Docs OpenRouter \u00a9 2026 OpenRouter, Inc Product Chat Rankings Apps Models Providers Pricing Enterprise Labs Company About Blog Careers Hiring Privacy Terms of Service Support State of AI Works With OR Data Developer Documentation API Reference SDK Status Connect Discord GitHub LinkedIn X YouTube Arcee AI: Trinity Mini arcee-ai / trinity-mini Model weights Compare Playground Quick Start Trinity Mini is a 26B-parameter (3B active) sparse mixture-of-experts language model featuring 128 experts with 8 active per token. Engineered for efficient reasoning over long contexts (131k) with robust function calling and multi-step agent workflows. Modalities In / Out Price $0.045 / $0.15 per 1M Context 131K Released Dec 1, 2025 Arcee AI: Trinity Mini Compare Playground Quick Start Providers Effective Pricing Performance Uptime Apps Activity Providers Providers This model is hosted by one provider. OpenRouter forwards every request to it directly \u2014 no routing decisions to make. Effective Pricing The chart below shows the average price customers are actually paying after prompt caching. Depending on the amount of repeated context you send, this can be 60\u201380% cheaper than the provider list price. Shown are rolling averages from the past 30 days. Performance Throughput is how fast the model writes (tokens per second \u2014 higher is better). Latency is total round-trip time (lower is better). TTFT is time-to-first-token \u2014 how long before you see anything appear (lower is better). Uptime Percent of requests that succeeded over the last 30 days. OpenRouter monitors every provider continuously and automatically retries on the next-best provider when one returns an error. Apps Public apps that send the most traffic to this model. Good signal for what real production workloads look like \u2014 and a hint at which use cases this model is best suited for. Activity Token volume and request traffic to this model over time. Quick Start Drop-in code to call this model. OpenRouter&#x27;s API is OpenAI-compatible \u2014 most SDKs work by just swapping the base URL. The only thing that changes between models is the model slug below."
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "suite": "terminal-bench@2.1",
+  "suite_status": "availability_unverified",
+  "model_alias": "local/qwen35-08b",
+  "route": "local_pheno_serve",
+  "base_url": "http://127.0.0.1:21080/v1",
+  "n_attempts": 1,
+  "subset": "16",
+  "run_mode": "dry_run",
+  "provider_cost_usd": 0,
+  "created_at": "2026-07-16T03:14:49.815309+00:00",
+  "integrity": {
+    "local_only": true,
+    "cloud_evals_disabled": true,
+    "no_training_on_eval_tasks": true,
+    "single_attempt_only": true
+  }
+}

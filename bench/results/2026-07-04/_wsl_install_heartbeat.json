@@ -1,0 +1,8 @@
+{
+  "step": "apt_update",
+  "status": "running",
+  "message": "apt-get update",
+  "timestamp": "2026-07-17T10:02:03Z",
+  "elapsed_s": 0,
+  "log_file": "/mnt/c/Users/koosh/pheno-harness/bench/results/2026-07-04/_wsl_install_2026-07-17T10-02-03Z.log"
+}

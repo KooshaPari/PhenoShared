@@ -1,0 +1,70 @@
+# portage/helios_bench Stage 2 config — terminus-2 + Qwen3.5-2B (sglang)
+#
+# 2B variant used while the 9B/vLLM lane (:30100) is still being ramped.
+# Routes portage's openai/ prefix to the rebuilt sglang :30000 (Qwen3.5-2B).
+# Produced the session-best Stage 2 sweep: 11/11 finished, 7 PASS, mean 0.636
+# (2026-09-03__20-40-00).
+#
+# Usage:
+#   harbor run -c bench/job_configs/job_config.pheno-harness.qwen-2b.yaml
+#
+# Requires:
+#   - sglang serving Qwen3.5-2B on 0.0.0.0:30000 (WSL)
+#   - Reachable from Windows at http://172.28.189.254:30000
+#   - podman API listening (podman-tcp at 172.28.189.254:2375)
+#
+# STRICT QWEN3.5+ RULE: Qwen3.5-2B (compliant; no Qwen2.5).
+# enable_thinking=false preserved (kills Qwen3.5 thinking death-spiral).
+
+jobs_dir: C:/Users/koosh/pheno-harness/bench/jobs/pheno_harness_helios_synth1_2b
+n_attempts: 1
+timeout_multiplier: 2.0
+
+orchestrator:
+  type: local
+  n_concurrent_trials: 1
+  quiet: false
+
+environment:
+  type: docker
+  force_build: false
+  delete: true
+
+agents:
+  - name: terminus-2
+    model_name: /home/kooshapari/models/Qwen3.5-2B
+    kwargs:
+      api_base: http://172.28.189.254:30000/v1
+      parser_name: xml
+      llm_kwargs:
+        api_key: pheno-serve-dev
+        custom_llm_provider: openai
+      llm_call_kwargs:
+        extra_body:
+          chat_template_kwargs:
+            enable_thinking: false
+      enable_summarize: false
+      model_info:
+        max_tokens: 2048
+        max_input_tokens: 1800
+        max_output_tokens: 2048
+        input_cost_per_token: 0.0
+        output_cost_per_token: 0.0
+
+datasets:
+  - path: C:/Users/koosh/pheno-harness/bench/datasets/helios_bench
+    task_names:
+      - helios_bench__palindrome
+      - helios_bench__buggy_add
+      - helios_bench__debug_division
+      - helios_bench__fibonacci
+      - helios_bench__log_parser
+      - helios_bench__refactor_loop
+      - helios_bench__write_tests
+      - helios_bench__binary_search
+      - helios_bench__matrix_multiply
+      - helios_bench__merge_sort
+      - helios_bench__word_count
+    # 11 tasks — excludes helios_bench__bayesian_sampler (too verbose for a 2B
+    # model; its long rejection-sampling loops overflow on small context).
+    # Terminus-2 XML parser + Qwen3.5-2B + enable_thinking=false.

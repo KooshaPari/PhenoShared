@@ -1,0 +1,126 @@
+{
+  "timestamp": "2026-09-01T01:15:22.373480+00:00",
+  "dataset": "test",
+  "router_reference": null,
+  "by_route_kind": {
+    "omniroute_cloud": {
+      "best": {
+        "model_id": "m1",
+        "label": "Cloud",
+        "route_kind": "omniroute_cloud",
+        "routing_policy": "rr",
+        "mean": 0.85,
+        "n_trials": 10,
+        "n_errors": 0,
+        "pass_at_1": 0.8,
+        "tokens_in": 1000,
+        "tokens_out": 500,
+        "tok_s": 30.0,
+        "cost_usd": 0.1,
+        "pillars": {
+          "accuracy": 1.0,
+          "speed": 0.8,
+          "cost": 0.9,
+          "composite": 0.91
+        },
+        "job_dir": "/tmp/m1",
+        "combo": false
+      },
+      "count": 1
+    },
+    "local_direct": {
+      "best": {
+        "model_id": "m2",
+        "label": "Local",
+        "route_kind": "local_direct",
+        "routing_policy": "direct",
+        "mean": 0.7,
+        "n_trials": 8,
+        "n_errors": 0,
+        "pass_at_1": 0.5,
+        "tokens_in": 2000,
+        "tokens_out": 1000,
+        "tok_s": 20.0,
+        "cost_usd": 0.0,
+        "pillars": {
+          "accuracy": 0.8,
+          "speed": 0.5,
+          "cost": 1.0,
+          "composite": 0.76
+        },
+        "job_dir": "/tmp/m2",
+        "combo": false
+      },
+      "count": 1
+    }
+  },
+  "models": [
+    {
+      "model_id": "m1",
+      "label": "Cloud",
+      "route_kind": "omniroute_cloud",
+      "routing_policy": "rr",
+      "mean": 0.85,
+      "n_trials": 10,
+      "n_errors": 0,
+      "pass_at_1": 0.8,
+      "tokens_in": 1000,
+      "tokens_out": 500,
+      "tok_s": 30.0,
+      "cost_usd": 0.1,
+      "pillars": {
+        "accuracy": 1.0,
+        "speed": 0.8,
+        "cost": 0.9,
+        "composite": 0.91
+      },
+      "job_dir": "/tmp/m1",
+      "combo": false
+    },
+    {
+      "model_id": "m2",
+      "label": "Local",
+      "route_kind": "local_direct",
+      "routing_policy": "direct",
+      "mean": 0.7,
+      "n_trials": 8,
+      "n_errors": 0,
+      "pass_at_1": 0.5,
+      "tokens_in": 2000,
+      "tokens_out": 1000,
+      "tok_s": 20.0,
+      "cost_usd": 0.0,
+      "pillars": {
+        "accuracy": 0.8,
+        "speed": 0.5,
+        "cost": 1.0,
+        "composite": 0.76
+      },
+      "job_dir": "/tmp/m2",
+      "combo": false
+    }
+  ],
+  "combo_reference": [],
+  "best_composite": {
+    "model_id": "m1",
+    "label": "Cloud",
+    "route_kind": "omniroute_cloud",
+    "routing_policy": "rr",
+    "mean": 0.85,
+    "n_trials": 10,
+    "n_errors": 0,
+    "pass_at_1": 0.8,
+    "tokens_in": 1000,
+    "tokens_out": 500,
+    "tok_s": 30.0,
+    "cost_usd": 0.1,
+    "pillars": {
+      "accuracy": 1.0,
+      "speed": 0.8,
+      "cost": 0.9,
+      "composite": 0.91
+    },
+    "job_dir": "/tmp/m1",
+    "combo": false
+  }
+}

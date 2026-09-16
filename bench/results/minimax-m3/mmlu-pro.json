@@ -1,0 +1,56 @@
+{
+  "suite": "mmlu-pro",
+  "n": 5,
+  "passed": 5,
+  "pass_at_1": 1.0,
+  "wall_clock_s_total": 89.78,
+  "wall_clock_s_mean": 17.96,
+  "wall_clock_s_p95": 42.23,
+  "task_results": [
+    {
+      "task_id": "synth-42-0000",
+      "ok": true,
+      "wall_clock_s": 5.285,
+      "reply_bytes": 1470,
+      "reply_preview": "The question asks which option describes a property of 2, but I don't see any options listed in your message. Could you ",
+      "error": null,
+      "exit_code": 0
+    },
+    {
+      "task_id": "synth-42-0001",
+      "ok": true,
+      "wall_clock_s": 11.104,
+      "reply_bytes": 2906,
+      "reply_preview": "Could you share the answer choices so I can help you determine which one is correct?",
+      "error": null,
+      "exit_code": 0
+    },
+    {
+      "task_id": "synth-42-0002",
+      "ok": true,
+      "wall_clock_s": 23.703,
+      "reply_bytes": 10009,
+      "reply_preview": "If you can share the actual multiple-choice options, I can tell you exactly which one is correct.",
+      "error": null,
+      "exit_code": 0
+    },
+    {
+      "task_id": "synth-42-0003",
+      "ok": true,
+      "wall_clock_s": 42.226,
+      "reply_bytes": 7271,
+      "reply_preview": "In short: the question has no meaningful answer \u2014 it's a synthetic placeholder where the \"correct\" option is determined ",
+      "error": null,
+      "exit_code": 0
+    },
+    {
+      "task_id": "synth-42-0004",
+      "ok": true,
+      "wall_clock_s": 7.458,
+      "reply_bytes": 2110,
+      "reply_preview": "But your question asks about an MCQ without providing the options. Could you share the answer choices so I can identify ",
+      "error": null,
+      "exit_code": 0
+    }
+  ]
+}

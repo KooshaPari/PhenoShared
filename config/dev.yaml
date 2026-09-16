@@ -1,0 +1,26 @@
+# config/dev.yaml — per-environment overrides for the dev cohort.
+#
+# Loaded when PHENO_ENV=dev (the default when unset). Use this file to
+# tune runtime config without editing pheno_runtime.yaml — every key
+# here shadows the corresponding key in pheno_runtime.yaml.
+#
+# v0.13 Phase 1 task 7: per-env overrides (dev=off, staging=on, prod=on)
+# v0.13 Phase 1 task 15: enable dual-write in dev (PHENO_ENV=dev)
+
+# Tracera dev defaults — connection to a local Grapheon Tracera worktree
+tracera:
+  host: "127.0.0.1"
+  port: 8080
+  enabled: false               # dev stays off by default; flip via env override
+
+# Trace bridges — dev cohort = "off" but sample_rate = 1.0 for fast feedback
+trace_bridges:
+  dual_write: true
+  dual_write_default: true
+  dual_write_sample_rate: 1.0
+  cohort_policies:
+    dev: "on"
+  include_kinds: []
+
+# Schema version — must match the loader's supported set.
+schema_version: 2

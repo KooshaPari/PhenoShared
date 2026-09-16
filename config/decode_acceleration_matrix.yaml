@@ -1,0 +1,388 @@
+# Decode acceleration matrix — F_d multiplier (prefill/decode speed)
+# Covers: AR speculative, DFlash (block diffusion draft), SSD, ultra-low-bit drafts,
+# diffusion-as-target research, KV/eviction, kernel backends.
+# Pair with eval pillars speed + motion; quality unchanged if lossless verify passes.
+# Updated: 2026-07-14
+
+execution_policy:
+  phase: review_only
+  allow_network: false
+  allow_downloads: false
+  allow_server_launch: false
+  activation_requires: [explicit_user_approval, exact_artifact_hashes, runtime_probe]
+
+measured_local_controls:
+  qwen35_ngram_simple_3090:
+    artifact: state/qwen35_spec_ngram_probe_manifest.json
+    status: negative_control
+    output_payload_hashes_equal: true
+    baseline_median_tok_s: 106.856896
+    ngram_simple_median_tok_s: 103.753880
+    default_enable: false
+    reason: "Exact output in the probe, but no throughput gain; retain as a regression control."
+
+principle: |
+  Drafting methods edit F_d (decode throughput), not W or Q directly. Target model verifies
+  all proposals — lossless when acceptance checks pass. DFlash uses diffusion only in the
+  DRAFT stage; full diffusion-LLM targets remain research. Risky-action gate still applies
+  to verified output before tool execution.
+
+# Index model (spec-001): separate W, K, F_p, F_d, Q — do not collapse knobs
+multiplier_axis: F_d
+
+stack_order:
+  - baseline_autoregressive
+  - ar_speculative_draft      # 0.6B AR, EAGLE-3
+  - diffusion_block_draft     # DFlash — primary upgrade path 2026
+  - confidence_scheduled_draft # DSpark — released artifacts with method-specific runtime gates
+  - ssd_branch_predrafting    # Speculative Speculative Decoding / Saguaro
+  - moe_self_assisted_speculation # SpecMoE-class offload research; not a serving toggle
+  - ultra_low_bit_draft       # BitNet / ternary draft tiers
+  - kv_poly_eviction          # PolyKV-class — after quant stable
+  - dllm_full_target          # research — non-AR generation end-to-end
+
+categories:
+  autoregressive_speculative:
+    description: "Sequential draft model; mature llama-server + vLLM path"
+    methods:
+      speculative_06b:
+        id: speculative_06b
+        status: quarantined_unverified_pair
+        draft_hf: null
+        draft_local: sub1b.draft_06b
+        launch_overlay: config/launch/draft_06b.yaml
+        runner: [llama_server]
+        pairs_with_targets: []
+        rejected_unverified_pairs: [qwen3.5-0.8b, lfm2.5-8b-a1b, ornith-8b]
+        eligible: false
+        block_size: 1
+        notes: "A generic 0.6B draft is not a valid cross-family pair. Restore a target only after tokenizer, vocabulary, architecture interface, and checkpoint compatibility are proven."
+
+      eagle3:
+        id: eagle3
+        status: benchmark_baseline
+        draft_hf: "RedHatAI/Qwen3-8B-speculator.eagle3"  # verify at pull
+        runner: [vllm]
+        pairs_with_targets: [qwen3-8b]
+        rejected_incompatible_pairs: [granite-4.1-8b]
+        speculation_length: 7
+        notes: "Matched Qwen3 control only; the Qwen3 head is not a Granite speculator"
+
+      medusa:
+        id: medusa
+        status: research
+        runner: [vllm]
+        notes: "Parallel decoding heads — compare vs DFlash on same target"
+
+  diffusion_block_draft:
+    description: "Block diffusion drafter — parallel mask-fill in O(1) forward per block"
+    methods:
+      dflash:
+        id: dflash
+        status: priority
+        tool: z-lab/dflash
+        runner: [vllm, sglang]
+        vllm_min: "0.20.1"
+        block_size_default: 16
+        num_speculative_tokens: 7
+        serve_template: >-
+          vllm serve {target_hf} --port 8001 --dtype auto --speculative-config
+          '{"method": "dflash", "model": "{dflash_hf}",
+          "num_speculative_tokens": 7}'
+        training: NVIDIA/Model-Optimizer modelopt dflash recipe
+        quality: lossless  # target verifies every block
+        published_speedup: "up to 6x vs AR baseline; ~2.5x vs EAGLE-3 (Qwen3-8B class)"
+        references:
+          paper: https://arxiv.org/abs/2602.06036
+          repo: https://github.com/z-lab/dflash
+          nvidia_doc: https://github.com/NVIDIA/Model-Optimizer/blob/main/examples/speculative_decoding/doc/dflash.md
+
+      dflare:
+        id: dflare
+        status: released_custom_research
+        tool: Tencent/AngelSlim
+        runner: [angelslim_pytorch_custom]
+        stock_vllm_path: false
+        stock_sglang_path: false
+        released_heads: [qwen3-4b, qwen3-8b, gpt-oss-20b]
+        eligible: false
+        activation_requires: [dflash_local_win, exact_head_target_match, explicit_user_approval]
+        notes: "Public code/docs/checkpoints exist, but the released path is a custom AngelSlim PyTorch benchmark/training flow rather than stock vLLM or SGLang serving"
+        references:
+          paper: https://arxiv.org/abs/2606.02091
+          repo: https://github.com/Tencent/AngelSlim
+          docs: https://angelslim.readthedocs.io/zh-cn/latest/features/speculative_decoding/dflare.html
+
+  confidence_scheduled_speculative:
+    description: "DSpark — confidence-scheduled speculative drafting; released support is model-specific"
+    methods:
+      dspark:
+        id: dspark
+        status: released_artifacts_method_specific_runtime_support
+        tool: deepseek-ai/DeepSpec
+        runner: [deepspec_research, vllm_deepseek_v4_specialized, vllm_qwen3_control]
+        released_targets: [deepseek-v4, qwen3-4b, qwen3-8b, qwen3-14b, gemma4-12b]
+        frontier_tournament_targets: [gemma4-12b]
+        legacy_method_controls: [qwen3-4b, qwen3-8b, qwen3-14b]
+        gemma4_12b_runtime: deepspec_research_only_vllm_pr_47216_open
+        qwen3_5_or_3_6_checkpoint_found: false
+        stable_sglang_release_path: false
+        eligible: false
+        activation_requires: [exact_deepspec_checkpoint, target_match, explicit_user_approval]
+        notes: "DeepSpec released Gemma4 and legacy-Qwen3 checkpoints. Generic Qwen3/DeepSeek-V4 vLLM support is merged, but Gemma4 DSpark remains blocked on open vLLM PR #47216; do not infer support from artifact availability."
+        references:
+          repo: https://github.com/deepseek-ai/DeepSpec
+          checkpoints: https://huggingface.co/collections/deepseek-ai/deepspec
+          vllm_deepseek_v4: https://docs.vllm.ai/en/v0.25.0/api/vllm/models/deepseek_v4/nvidia/dspark/
+
+  speculative_speculative_decoding:
+    description: "SSD/Saguaro — same-request branch pre-drafting that overlaps draft work with target verification"
+    methods:
+      ssd:
+        id: double_speculative_ssd
+        status: lab_only
+        scope: same_request
+        reuses_cross_request_cache: false
+        depends_on: []
+        composition_with_dflash: unvalidated_research
+        execution_gate: timing_simulator_then_explicit_approval
+        notes: |
+          Speculative Speculative Decoding predicts likely verifier outcomes and prepares
+          alternative draft branches while the target verifies the current proposal. It is
+          not cross-request cache reuse, not solid-state-drive caching, and does not depend
+          on DFlash. The published Saguaro-style reference layout assumes a separate helper
+          path and newer multi-GPU hardware; start with a trace-driven timing simulator.
+        runner: [saguaro_reference_research]
+        reference_hardware: [cuda_12_8_or_newer, h100_class_multi_gpu, separate_draft_gpu]
+        references:
+          paper: https://arxiv.org/abs/2603.03251
+          repo: https://github.com/tanishqkumar/ssd
+
+      domino_tree:
+        id: domino_tree
+        status: paper_and_reference_code_review_only
+        scope: same_request_tree_speculation
+        distinct_from: [ddtree, caddtree, domino]
+        eligible: false
+        execution_gate: offline_trace_simulator_then_explicit_approval
+        notes: "DominoTree is its own speculative tree method; do not alias it to diffusion DDTree/CaDDTree or the separate Domino repository."
+        references:
+          paper: https://arxiv.org/abs/2607.08642
+          repo: https://github.com/slin-zhq/Domino-Tree
+
+  moe_self_assisted_speculation:
+    description: "MoE-specific self-assisted speculation/offload research; no retrofit is implied for tournament checkpoints"
+    methods:
+      specmoe:
+        id: specmoe
+        status: paper_only
+        paper: https://arxiv.org/abs/2604.10152
+        runner: []
+        eligible: false
+        activation_requires: [public_pinned_implementation, exact_supported_checkpoint, measured_offload_bottleneck, explicit_user_approval]
+        notes: "Evaluate only if a finalist actually spills experts and a released implementation supports its exact architecture."
+
+      speculating_experts:
+        id: speculating_experts
+        status: paper_only
+        paper: https://arxiv.org/abs/2603.19289
+        runner: []
+        eligible: false
+        activation_requires: [public_pinned_implementation, exact_supported_checkpoint, transfer_stall_trace, quality_non_regression, explicit_user_approval]
+        notes: "Expert prediction/prefetch may alter work and quality; creator-reported TPOT gains require local reproduction."
+
+  ultra_low_bit_draft:
+    description: "Sub-1B drafts for needle/router — not primary TB2 target servers"
+    methods:
+      bitnet_draft:
+        id: bitnet_draft
+        status: wired_cpu
+        hf: microsoft/bitnet-b1.58-2B-4T
+        runner: [bitnet_cpp]
+        role: [compatible_bitnet_draft_or_control]
+        notes: "Native 1.58-bit — bitnet.cpp only; not a Cactus Needle artifact or runtime"
+
+      ternary_draft:
+        id: ternary_draft
+        status: research
+        runner: [custom_kernels]
+        notes: "1.58–2bit draft research; compare accept rate vs bitnet on same target"
+
+      codescout_17b_draft:
+        id: codescout_17b_draft
+        status: candidate
+        hf: OpenHands/CodeScout-1.7B
+        runner: [vllm, sglang]
+        pairs_with_targets: [codescout-4b]
+        rejected_incompatible_pairs: [granite-4.1-8b]
+
+  diffusion_full_target:
+    description: "dLLM generates without AR verify loop — quality risk; TB2 research only"
+    methods:
+      dllm_research:
+        id: diffusion_llm_target
+        status: backlog
+        examples: [LLaDA-class, Dream-class, block_diffusion_LM]
+        tb2_primary: false
+        notes: "Underperforms AR on general benchmarks today; DFlash confines diffusion to draft"
+
+  kv_and_context:
+    methods:
+      polykv:
+        id: polykv
+        status: research
+        axis: K
+        notes: "KV eviction/selection — pairs after RotorQuant winner (kv_bakeoff.yaml)"
+      latentmas:
+        id: latentmas
+        status: research
+        spec: agileplus-specs/spec-013-latentmas-research
+        axis: [K, token_burn]
+        notes: "Latent multi-agent — 70-80% token reduction claim; needs self-hosted backbone"
+
+kernel_backends:
+  # Agent server on 3090 Ti — prefer CUDA-native stacks
+  recommended_3090:
+    - cuda_vllm
+    - cuda_sglang
+    - triton_kernels  # inside vLLM/SGLang; not standalone WebGPU path
+  needle_cpu_tiers:
+    - cpu_bitnet_cpp
+    - onnxruntime  # ranker/router only
+  not_primary_agent_server:
+    - webgpu
+    - vulkan_compute
+  notes: |
+    WebGPU is for browser/edge demos — not optimal for 3090 terminus-2 serving.
+    If custom sub-1B kernels needed, evaluate Triton vs hand CUDA before WebGPU.
+
+# Exact or quarantined DFlash target/drafter mappings from primary repositories.
+dflash_checkpoints:
+  - target_id: codescout-4b
+    target_hf: OpenHands/CodeScout-4B
+    dflash_hf: null
+    rejected_proxy_hf: z-lab/Qwen3-4B-DFlash-b16
+    proxy: true
+    status: quarantined_incompatible_proxy
+    eligible: false
+    reason: "A Qwen3 DFlash checkpoint is not a CodeScout-specific drafter"
+    priority: 1
+
+  - target_id: qwen3.5-0.8b
+    target_hf: Qwen/Qwen3.5-0.8B
+    dflash_hf: null
+    rejected_proxy_hf: z-lab/Qwen3-4B-DFlash-b16
+    proxy: true
+    status: quarantined_incompatible_proxy
+    eligible: false
+    reason: "Different generation, architecture, and parameter scale; no matched interface is established"
+    priority: 2
+
+  - target_id: granite-4.1-8b
+    target_hf: ibm-granite/granite-4.1-8b
+    dflash_hf: null
+    rejected_proxy_hf: z-lab/Qwen3-8B-DFlash-b16
+    proxy: true
+    status: quarantined_incompatible_proxy
+    eligible: false
+    reason: "A Qwen3 DFlash checkpoint is not a Granite-specific drafter"
+    priority: 3
+
+  - target_id: qwen3-30b-a3b
+    target_hf: Qwen/Qwen3-30B-A3B
+    dflash_hf: null
+    rejected_proxy_hf: z-lab/Qwen3-Coder-30B-A3B-DFlash
+    proxy: true
+    status: quarantined_target_mismatch
+    eligible: false
+    reason: "Qwen3-Coder drafter cannot be relabeled as a Qwen3 non-Coder match"
+    priority: 4
+    requires: [moe_riy_ptq]
+
+  - target_id: qwen3.5-35b-a3b
+    target_hf: Qwen/Qwen3.5-35B-A3B
+    target_revision: 59d61f3ce65a6d9863b86d2e96597125219dc754
+    dflash_hf: z-lab/Qwen3.5-35B-A3B-DFlash
+    dflash_revision: 52cb554b4995dede3e2e1bdb129cdb1f3529332b
+    proxy: false
+    status: review_only_exact_pair_candidate
+    eligible: false
+    preferred_first_runtime: sglang
+    activation_requires: [provenance_checked_ampere_target_quant, target_plus_draft_kv_headroom, exact_pair_runtime_probe, exact_parser_probe, explicit_user_approval]
+    priority: 5
+
+  - target_id: gemma4-12b
+    target_hf: google/gemma-4-12B-it
+    target_revision: 0e2b1058541244490925fbacf8972041435691ac
+    dflash_hf: deepseek-ai/dflash_gemma4_12b_block7
+    dflash_revision: 7490ce60c7630107917fe558e2bbe3dcec6195cb
+    proxy: false
+    status: review_only_exact_pair_candidate
+    eligible: false
+    preferred_first_runtime: sglang
+    runtime_support_commit: 5ea0d1d093819213f1953275362029dbc91633be
+    draft_license_metadata_missing: true
+    activation_requires: [provenance_checked_target_quant, target_plus_draft_kv_headroom, exact_pair_runtime_probe, exact_parser_probe, non_thinking_and_domain_validation, explicit_user_approval]
+    priority: 6
+
+  - target_id: laguna-xs-2.1
+    target_hf: poolside/Laguna-XS-2.1
+    target_revision: 5e82aa8f740e86e9898e1f13a2a02683d167b8c7
+    dflash_hf: poolside/Laguna-XS-2.1-DFlash
+    dflash_revision: 2e783135b1590c16c392ad9613e427f1090daa48
+    alternate_dflash_hf: poolside/Laguna-XS-2.1-DFlash-FP8
+    alternate_dflash_revision: 546b72f86fc6733913fec0cb8a5d6c1cd4ce2895
+    proxy: false
+    status: review_only_exact_pair_candidate
+    eligible: false
+    preferred_first_runtime: vllm
+    runtime_min: "0.25.0"
+    runtime_support_commit: 4c3c64fcf76450d3d0bbfd3d1725eade0f214710
+    tool_template_fix_commit: 258f8de91f99b40a4dfb234e55a09e9493c6ece8
+    activation_requires: [provenance_checked_ampere_target_quant, target_plus_draft_kv_headroom, exact_pair_runtime_probe, exact_parser_probe, local_acceptance_measurement, explicit_user_approval]
+    priority: 7
+
+  - target_id: zaya1-8b
+    target_hf: Zyphra/ZAYA1-8B
+    dflash_hf: null
+    status: train_or_wait
+    priority: 8
+
+# First decode sweep candidate on 3090 (planning only; execution policy above applies)
+first_sweep:
+  description: "Only an exact, primary-source-resolved target/drafter pair may enter the DFlash sweep"
+  pairs:
+    - target: qwen3.5-35b-a3b
+      decode: [baseline, dflash]
+      runner: sglang
+      status: review_only
+      metrics: [tok_s_decode, accept_rate, latency_p95_ms, harbor_1task_mean]
+  command: |
+    python scripts/decode_prepare.py check --target qwen3.5-35b-a3b --method dflash
+
+eval_gates:
+  before_promotion:
+    - accept_rate_min_vs_eagle3: 1.0  # match or beat EAGLE-3 on YOUR traces
+    - tok_s_decode_min_gain: 1.25      # 25% vs baseline on same target
+    - harbor_mean_delta_max_loss: 0.0  # lossless — no TB2 regression
+    - risky_action_gate_pass_rate_min: 0.95
+  metrics:
+    - tok_s_decode
+    - accept_rate
+    - draft_latency_ms
+    - verify_overhead_ms
+    - harbor_mean
+    - motion_forward_rate
+
+playground_matrix: config/playground_matrix.yaml
+inference_runners: config/inference_runners.yaml
+risky_action_gate: config/risky_action_gate.yaml
+prepare_script: scripts/decode_prepare.py
+
+references:
+  dflash: https://github.com/z-lab/dflash
+  dflare: https://github.com/Tencent/AngelSlim
+  dspark: https://github.com/deepseek-ai/DeepSpec
+  specforge: https://github.com/sgl-project/SpecForge
+  google_ssd_tpu: https://developers.googleblog.com/supercharging-llm-inference-on-google-tpus-achieving-3x-speedups-with-diffusion-style-speculative-decoding/
+  bitnet: https://github.com/microsoft/BitNet

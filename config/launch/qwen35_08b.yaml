@@ -1,0 +1,13 @@
+# Qwen3.5 0.8B — always-on local drafter / tiny worker
+model: local.qwen35_08b
+args:
+  - "{binary}"
+  - "-m"
+  - "{path}"
+  - "--port"
+  - "{port}"
+  - "-c"
+  - "{kv_ctx}"
+  - "-ngl"
+  - "99"
+  - "{ik_flags}"

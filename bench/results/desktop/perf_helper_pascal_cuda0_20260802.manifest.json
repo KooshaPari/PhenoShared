@@ -1,0 +1,17 @@
+{
+  "schema_version": "pheno.desktop-lane-eval-plan.v1",
+  "runtime": "helper",
+  "base_url": "http://127.0.0.1:19003",
+  "engine_label": "desktop-transformers-pascal-helper-cuda0",
+  "model": "local/qwen35-08b",
+  "request_model": "Qwen/Qwen3.5-0.8B",
+  "transport": "non-streaming",
+  "window_id": "desktop-qwen35-isolated-20260802",
+  "contract_sha256": "ac27fd9d2ce3903bbb873fb47de22eff052c8333cd374e618202a1955356cea5",
+  "execute": true,
+  "output": "bench/results/desktop/perf_helper_pascal_cuda0_20260802.json",
+  "manifest_output": "bench/results/desktop/perf_helper_pascal_cuda0_20260802.manifest.json",
+  "executed_at": "2026-08-02T08:49:30.616224+00:00",
+  "result_sha256": "ac8e5c5bd553604592b342c7076da1a657c0417eee04544f60ad03ed997d33b4",
+  "result_schema": "pheno.perf.v1"
+}

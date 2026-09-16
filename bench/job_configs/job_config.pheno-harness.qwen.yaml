@@ -1,0 +1,71 @@
+# portage/helios_bench Stage 2 config — terminus-2 + Qwen3.5-9B (vLLM)
+#
+# Routes portage's openai/ prefix to local vLLM :30100 (Qwen3.5-9B).
+#
+# Usage:
+#   harbor run -c bench/job_configs/job_config.pheno-harness.qwen.yaml
+#
+# Requires:
+#   - vLLM serving Qwen3.5-9B on 0.0.0.0:30100 (WSL, durable /mnt/d weights)
+#   - Launch via portage fork: serving/serve.sh  (reproducible, systemd-supervisable)
+#   - Reachable from Windows at http://172.28.189.254:30100
+#   - podman API listening (podman-tcp at 172.28.189.254:2375)
+#
+# **STRICT QWEN3.5+ RULE**: per session policy, when using Qwen we must use
+# Qwen3.5+ (no Qwen2.5). Engine is vLLM, not sglang: sglang-kernel 0.4.x
+# ships only sm90/sm100 wheels (drops Ampere/sm86 = the RTX 3090 Ti), while
+# vLLM ships Ampere wheels on the modern torch stack.
+# Same enable_thinking=false fix preserved (kills Qwen3.5 thinking death-spiral).
+
+jobs_dir: C:/Users/koosh/pheno-harness/bench/jobs/pheno_harness_helios_synth1
+n_attempts: 1
+timeout_multiplier: 2.0
+
+orchestrator:
+  type: local
+  n_concurrent_trials: 1
+  quiet: false
+
+environment:
+  type: docker
+  force_build: false
+  delete: true
+
+agents:
+  - name: terminus-2
+    model_name: qwen35-9b
+    kwargs:
+      api_base: http://172.28.189.254:30100/v1
+      parser_name: xml
+      llm_kwargs:
+        api_key: pheno-serve-dev
+        custom_llm_provider: openai
+      llm_call_kwargs:
+        extra_body:
+          chat_template_kwargs:
+            enable_thinking: false
+      enable_summarize: false
+      model_info:
+        max_tokens: 2048
+        max_input_tokens: 1800
+        max_output_tokens: 2048
+        input_cost_per_token: 0.0
+        output_cost_per_token: 0.0
+
+datasets:
+  - path: C:/Users/koosh/pheno-harness/bench/datasets/helios_bench
+    task_names:
+      - helios_bench__palindrome
+      - helios_bench__buggy_add
+      - helios_bench__debug_division
+      - helios_bench__fibonacci
+      - helios_bench__log_parser
+      - helios_bench__refactor_loop
+      - helios_bench__write_tests
+      - helios_bench__binary_search
+      - helios_bench__matrix_multiply
+      - helios_bench__merge_sort
+      - helios_bench__word_count
+    # 11 tasks — excludes helios_bench__bayesian_sampler (too verbose for small models).
+    # Terminus-2 XML parser + Qwen3.5-9B + enable_thinking=false.
+    # Lifecycle fix committed: tmux_session guards against disappeared containers.

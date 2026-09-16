@@ -1,0 +1,44 @@
+{
+  "schema_version": "pheno.stack-policy.v1",
+  "as_of": "2026-07-23T23:20:00Z",
+  "policy": {
+    "interim_engines_forbidden": true,
+    "required_serving_plane": "pheno-serve-dev",
+    "required_primary_engine": "sglang",
+    "required_alias": "local/qwen35-08b",
+    "required_device": "rtx_3090_ti",
+    "harbor_api_base": "http://127.0.0.1:21080/v1"
+  },
+  "stopped": {
+    "llama_server_interim_tb2": true,
+    "reason": "Owner requirement: never interim; get canonical stack working first."
+  },
+  "current_blockers": {
+    "pheno_serve_models": "empty — profiles lack runtime_admission bindings",
+    "upstream_sglang_8000": "down",
+    "coverage_cell": "local/qwen35-08b::sglang::rtx_3090_ti status=unsupported (engine not declared for candidate)",
+    "artifact": "only closed 0.8B blob is GGUF for 1080 llama helper; SGLang needs HF-compatible weights",
+    "runtime_admission_2026-07-19": {
+      "admitted": 0,
+      "denied": 2,
+      "lanes": [
+        "rtx3090_qwen35_9b_vllm_c0",
+        "gtx1080_qwen35_08b_llama_helper"
+      ],
+      "note": "No admitted lane exists yet for local/qwen35-08b + sglang + rtx_3090_ti"
+    },
+    "dual_gpu_stack_primary_lane": "rtx3090_qwen35_9b_vllm_c0 (mismatched vs TB2 alias local/qwen35-08b / sglang)",
+    "live_topology_2026-07-23": "not captured — climb2-race.log lock blocked shell"
+  },
+  "gap_board": "state/canonical_admission_gap_2026-07-23.json",
+  "next_ordered_gates": [
+    "Owner binary choice: A declare 08b+sglang+3090 lane, or B retarget TB2 to declared 9B cell",
+    "Clear climb2 lock + refresh topology fingerprint",
+    "Close identity/artifact/runtime for chosen cell (HF bytes for sglang; not GGUF)",
+    "Owner-grant launch+route + endpoint lease (not a bypass)",
+    "Bind runtime_admission into config/pheno_serve.yaml",
+    "Launch SGLang via admitted launcher only",
+    "Verify :21080/v1/models + chat smoke",
+    "Only then Harbor TB2 against :21080"
+  ]
+}

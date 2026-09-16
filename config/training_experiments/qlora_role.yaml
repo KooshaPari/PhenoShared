@@ -1,0 +1,45 @@
+# QLoRA role adapter experiment — 3090 Ti (24GB)
+# References existing role LoRA + RLVR configs
+
+experiment: qlora_role
+description: "Per-role QLoRA on locked LFM2.5 local workhorse from verified traces"
+
+inherits:
+  - "${PHENO_ROOT}/config/role_lora.yaml"
+  - "${PHENO_ROOT}/training/rlvr_config.yaml"
+
+base_model:
+  model_net: lfm25_8b_a1b
+  tier: local.lfm25_8b_a1b
+  path: "${PHENO_LFM25_8B_A1B:-}"
+  quant: Q4_K_M
+
+training:
+  method: qlora
+  rank: 16
+  alpha: 32
+  lr: 2.0e-4
+  batch_size: 4
+  max_seq_len: 4096
+  gradient_checkpointing: true
+  output_dir: "${PHENO_ROLE_LORAS:-state/role_loras}"
+
+hardware:
+  gpu: "RTX 3090 Ti"
+  vram_gb: 24
+  precision: qlora_int4
+  max_gpu_mem_gb: 22  # headroom for OS + local server
+
+data:
+  root: "${HOME}/.omniroute/training"
+  verified_glob: "verified_*.jsonl"
+  trace_glob: "traces_*.jsonl"
+  min_samples_per_role: 32
+
+rlvr:
+  pass_threshold: 0.75
+  reward_weights_ref: training/rlvr_config.yaml#rewards.weights
+
+gates:
+  min_verifier_pass_rate: 0.75
+  max_regression_vs_baseline: 0.05

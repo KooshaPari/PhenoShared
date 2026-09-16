@@ -1,0 +1,48 @@
+{
+  "schema": "pheno.sgl-lane-readiness.v1",
+  "as_of_utc": "2026-08-08",
+  "codex_thread_id": "019f6249-d74c-7540-885f-588c3d51ac3a",
+  "wheel": {
+    "sha256": "e462074c3c8c58f96f0562f78086494114c2123114ae81abbfc2b737361e2763",
+    "size_bytes": 15871510,
+    "build_torch": "2.11.0+cu130",
+    "shim_note": "Build tree includes new shim include/ATen/core/List_inl.h (torch-2.11 parse fix).",
+    "wsl_path": "/home/kooshapari/sglang-src/sgl-kernel/dist/sgl_kernel-0.1.0-cp39-abi3-linux_x86_64.whl"
+  },
+  "install": {
+    "venv": "/home/kooshapari/.pheno-serve-venv",
+    "python_version": "3.14.6",
+    "sglang_version": "0.3.6.post2",
+    "torch_version": "2.11.0+cu130",
+    "pip_rc": 0,
+    "import_ok": true,
+    "so_sha256": "dc94a9032f6327f66d8ec519fb35d89cd46c8f95f0a3d8fd3653be71201ebd29",
+    "matches_wheel": true
+  },
+  "gpu_smoke": {
+    "device": "NVIDIA GeForce RTX 3090 Ti (torch device 0 in WSL)",
+    "capability": [8, 6],
+    "ops": [
+      { "name": "moe_align_block_size", "result": "PASS" },
+      { "name": "rmsnorm", "result": "PASS" },
+      { "name": "gelu_and_mul", "result": "PASS" },
+      { "name": "apply_rope_with_cos_sin_cache_inplace", "result": "PASS", "note": "head_size=64 (head_size=32 unsupported by flashinfer shape constraint)" },
+      { "name": "topk_softmax", "result": "PASS" },
+      { "name": "top_k_top_p_sampling_from_probs", "result": "PASS" }
+    ],
+    "ops_passed": 6,
+    "ops_total": 6,
+    "peak_alloc_mib": 0.141,
+    "server_test": {
+      "status": "SKIPPED",
+      "reason": "Host nvidia-smi shows RTX 3090 Ti free = 1746 MiB (< 2 GB, and below the >= 3 GB gate for the server test); lane vLLM services are resident (~21.5 GB used). Launching a server on the shared GPU with 1.7 GB physical free risks disturbing live lane services."
+    }
+  },
+  "verdict": "LANE_READY_GPU_SMOKE_PASS",
+  "verdict_reason": "sgl-kernel sm_86 wheel (sha256 e462074c) installed into the SGLang lane venv (pip rc=0, import OK, installed common_ops.abi3.so sha256 dc94a903 matches the wheel inner copy); all 6 GPU kernel smoke ops PASS on the RTX 3090 Ti (capability (8,6) = sm_86) with 0.141 MiB peak allocation; SGLang server test skipped by design due to shared-GPU memory gate. Readiness is at the GPU smoke level; full SGLang lane bring-up remains gated by the caveats below.",
+  "caveats": [
+    "moe_align_block_size ARG SCHEMA MISMATCH: installed sglang 0.3.6.post2 calls moe_align_block_size with 6 args, but the new wheel's C++ schema requires 8 (no defaults) - possible runtime incompatibility for the lane's SGLang servers. Flag for follow-up before full SGLang lane bring-up.",
+    "port 19000 (LFM2.5-8B-A1B llama-server lane) had no listener at last check - pre-existing lane state, not caused by this work."
+  ],
+  "notes": "Wheel history: sha256 099f8dcd...e494e (built against torch 2.7.1+cu126) was SUPERSEDED by sha256 e462074c...2763 (rebuilt against torch 2.11.0+cu130, the lane runtime). Reason: torch ABI - the torch 2.7.1 build exported c10_cuda_check_implementation with an 'int' 5th arg while torch 2.11.0+cu130 defines the 'unsigned int' variant, causing an undefined-symbol import failure (see install_evidence). The rebuild resolves the ABI mismatch; the old evidence files are preserved as-is to document the journey."
+}

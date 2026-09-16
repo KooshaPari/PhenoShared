@@ -1,0 +1,3190 @@
+{
+  "schema_version": "pheno.process-inventory.v3",
+  "as_of_utc": "2026-08-08T02:41:45Z",
+  "session_under_resume": {
+    "codex_thread_id": "019f6249-d74c-7540-885f-588c3d51ac3a",
+    "user_directive": "proc (Aug 7, 2026)",
+    "pheno_harness_branch": "wip/2026-07-28-pheno-harness-m80-d76",
+    "pheno_harness_head": "4cf7eae"
+  },
+  "host_gpu_state": [
+    {
+      "index": 0,
+      "name": "NVIDIA GeForce GTX 1080 Ti",
+      "memory_used_mib": 601,
+      "memory_total_mib": 10506,
+      "utilization_gpu_pct": 0
+    },
+    {
+      "index": 1,
+      "name": "NVIDIA GeForce RTX 3090 Ti",
+      "memory_used_mib": 9393,
+      "memory_total_mib": 14921,
+      "utilization_gpu_pct": 67
+    }
+  ],
+  "wsl_status": "\u4e00\u4100\u4d00\u4500\u2000\u2000\u2000\u2000\u2000\u2000\u2000\u2000\u2000\u2000\u2000\u2000\u2000\u2000\u2000\u2000\u2000\u2000\u2000\u2000\u2000\u2000\u5300\u5400\u4100\u5400\u4500\u2000\u2000\u2000\u2000\u2000\u2000\u2000\u2000\u2000\u2000\u2000\u5600\u4500\u5200\u5300\u4900\u4f00\u4e00\u0a00\u0a00\u2a00\u2000\u4600\u6500\u6400\u6f00\u7200\u6100\u4c00\u6900\u6e00\u7500\u7800\u2d00\u3400\u3400\u2000\u2000\u2000\u2000\u2000\u2000\u2000\u2000\u2000\u2000\u2000\u2000\u5200\u7500\u6e00\u6e00\u6900\u6e00\u6700\u2000\u2000\u2000\u2000\u2000\u2000\u2000\u2000\u2000\u3200\u0a00\u0a00\u2000\u2000\u6400\u6f00\u6300\u6b00\u6500\u7200\u2d00\u6400\u6500\u7300\u6b00\u7400\u6f00\u7000\u2000\u2000\u2000\u2000\u2000\u2000\u2000\u2000\u2000\u2000\u2000\u2000\u5300\u7400\u6f00\u7000\u7000\u6500\u6400\u2000\u2000\u2000\u2000\u2000\u2000\u2000\u2000\u2000\u3200\u0a00\u0a00\u2000\u2000\u7000\u6f00\u6400\u6d00\u6100\u6e00\u2d00\u6d00\u6100\u6300\u6800\u6900\u6e00\u6500\u2d00\u6400\u6500\u6600\u6100\u7500\u6c00\u7400\u2000\u2000\u2000\u2000\u5300\u7400\u6f00\u7000\u7000\u6500\u6400\u2000\u2000\u2000\u2000\u2000\u2000\u2000\u2000\u2000\u3200\u0a00\u0a00",
+  "windows_process_count": 442,
+  "windows_processes": [
+    {
+      "pid": 0,
+      "name": "System Idle Process",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 4,
+      "name": "System",
+      "rss_mb": 25.6,
+      "cmd": ""
+    },
+    {
+      "pid": 300,
+      "name": "Registry",
+      "rss_mb": 70.2,
+      "cmd": ""
+    },
+    {
+      "pid": 904,
+      "name": "smss.exe",
+      "rss_mb": 0.5,
+      "cmd": ""
+    },
+    {
+      "pid": 1384,
+      "name": "svchost.exe",
+      "rss_mb": 5.1,
+      "cmd": ""
+    },
+    {
+      "pid": 1456,
+      "name": "csrss.exe",
+      "rss_mb": 3.3,
+      "cmd": ""
+    },
+    {
+      "pid": 1556,
+      "name": "wininit.exe",
+      "rss_mb": 1.6,
+      "cmd": ""
+    },
+    {
+      "pid": 1564,
+      "name": "csrss.exe",
+      "rss_mb": 4.2,
+      "cmd": ""
+    },
+    {
+      "pid": 1636,
+      "name": "services.exe",
+      "rss_mb": 15.6,
+      "cmd": ""
+    },
+    {
+      "pid": 1664,
+      "name": "winlogon.exe",
+      "rss_mb": 1.3,
+      "cmd": ""
+    },
+    {
+      "pid": 1684,
+      "name": "svchost.exe",
+      "rss_mb": 1.0,
+      "cmd": ""
+    },
+    {
+      "pid": 1724,
+      "name": "LsaIso.exe",
+      "rss_mb": 0.5,
+      "cmd": ""
+    },
+    {
+      "pid": 1732,
+      "name": "lsass.exe",
+      "rss_mb": 19.1,
+      "cmd": ""
+    },
+    {
+      "pid": 1788,
+      "name": "WUDFHost.exe",
+      "rss_mb": 1.6,
+      "cmd": ""
+    },
+    {
+      "pid": 1868,
+      "name": "svchost.exe",
+      "rss_mb": 9.3,
+      "cmd": ""
+    },
+    {
+      "pid": 1900,
+      "name": "fontdrvhost.exe",
+      "rss_mb": 0.7,
+      "cmd": ""
+    },
+    {
+      "pid": 1908,
+      "name": "fontdrvhost.exe",
+      "rss_mb": 0.5,
+      "cmd": ""
+    },
+    {
+      "pid": 1988,
+      "name": "WUDFHost.exe",
+      "rss_mb": 1.3,
+      "cmd": ""
+    },
+    {
+      "pid": 2040,
+      "name": "svchost.exe",
+      "rss_mb": 13.7,
+      "cmd": ""
+    },
+    {
+      "pid": 2056,
+      "name": "svchost.exe",
+      "rss_mb": 1.0,
+      "cmd": ""
+    },
+    {
+      "pid": 2100,
+      "name": "WUDFHost.exe",
+      "rss_mb": 0.9,
+      "cmd": ""
+    },
+    {
+      "pid": 2156,
+      "name": "dwm.exe",
+      "rss_mb": 82.7,
+      "cmd": ""
+    },
+    {
+      "pid": 2260,
+      "name": "svchost.exe",
+      "rss_mb": 1.9,
+      "cmd": ""
+    },
+    {
+      "pid": 2396,
+      "name": "steamwebhelper.exe",
+      "rss_mb": 24.6,
+      "cmd": "C:\\Program Files (x86)\\Steam\\bin\\cef\\cef.win64\\steamwebhelper.exe -nocrashdialog -lang=en_US -cachedir=C:\\Users\\koosh\\AppData\\Local\\Steam\\htmlcache -steampid=29076 -buildid=1785799196 -steamid=0 -logdir=C:\\Program Files (x86)\\Steam\\logs -uimode=7 -st"
+    },
+    {
+      "pid": 2412,
+      "name": "msedgewebview2.exe",
+      "rss_mb": 4.6,
+      "cmd": "C:\\Program Files (x86)\\Microsoft\\EdgeWebView\\Application\\151.0.4129.72\\msedgewebview2.exe --type=utility --utility-sub-type=network.mojom.NetworkService --lang=en-US --service-sandbox-type=none --noerrdialogs --user-agent=Mozilla/5.0 (Windows NT 10.0"
+    },
+    {
+      "pid": 2420,
+      "name": "svchost.exe",
+      "rss_mb": 21.5,
+      "cmd": ""
+    },
+    {
+      "pid": 2452,
+      "name": "svchost.exe",
+      "rss_mb": 1.3,
+      "cmd": ""
+    },
+    {
+      "pid": 2488,
+      "name": "svchost.exe",
+      "rss_mb": 1.1,
+      "cmd": ""
+    },
+    {
+      "pid": 2496,
+      "name": "svchost.exe",
+      "rss_mb": 1.9,
+      "cmd": ""
+    },
+    {
+      "pid": 2504,
+      "name": "svchost.exe",
+      "rss_mb": 0.8,
+      "cmd": ""
+    },
+    {
+      "pid": 2512,
+      "name": "svchost.exe",
+      "rss_mb": 4.8,
+      "cmd": ""
+    },
+    {
+      "pid": 2520,
+      "name": "svchost.exe",
+      "rss_mb": 2.7,
+      "cmd": ""
+    },
+    {
+      "pid": 2824,
+      "name": "svchost.exe",
+      "rss_mb": 1.2,
+      "cmd": ""
+    },
+    {
+      "pid": 2860,
+      "name": "svchost.exe",
+      "rss_mb": 5.0,
+      "cmd": ""
+    },
+    {
+      "pid": 2868,
+      "name": "svchost.exe",
+      "rss_mb": 3.5,
+      "cmd": ""
+    },
+    {
+      "pid": 2960,
+      "name": "pwsh.exe",
+      "rss_mb": 2.6,
+      "cmd": "C:\\Program Files\\PowerShell\\7-preview\\pwsh.exe"
+    },
+    {
+      "pid": 2988,
+      "name": "svchost.exe",
+      "rss_mb": 7.6,
+      "cmd": ""
+    },
+    {
+      "pid": 3000,
+      "name": "svchost.exe",
+      "rss_mb": 1.3,
+      "cmd": ""
+    },
+    {
+      "pid": 3012,
+      "name": "svchost.exe",
+      "rss_mb": 0.8,
+      "cmd": ""
+    },
+    {
+      "pid": 3020,
+      "name": "svchost.exe",
+      "rss_mb": 0.7,
+      "cmd": ""
+    },
+    {
+      "pid": 3056,
+      "name": "svchost.exe",
+      "rss_mb": 1.1,
+      "cmd": ""
+    },
+    {
+      "pid": 3184,
+      "name": "NVDisplay.Container.exe",
+      "rss_mb": 8.3,
+      "cmd": ""
+    },
+    {
+      "pid": 3272,
+      "name": "msedge.exe",
+      "rss_mb": 10.2,
+      "cmd": "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe --type=renderer --extension-process --renderer-sub-type=extension --pdf-upsell-enabled --video-capture-use-gpu-memory-buffer --lang=en-US --js-flags --device-scale-factor=1 --num-raster-thr"
+    },
+    {
+      "pid": 3292,
+      "name": "svchost.exe",
+      "rss_mb": 6.6,
+      "cmd": ""
+    },
+    {
+      "pid": 3316,
+      "name": "GraphicsCardEngine.exe",
+      "rss_mb": 3.1,
+      "cmd": "C:\\Program Files (x86)\\GIGABYTE\\EasyTuneEngineService\\GraphicsCardEngine.exe"
+    },
+    {
+      "pid": 3372,
+      "name": "cloudflared.exe",
+      "rss_mb": 15.8,
+      "cmd": "C:\\Program Files (x86)\\cloudflared\\cloudflared.exe tunnel run --token eyJhIjoiNDlkY2U1MTI4MjI5ODdlMDUyMmYwZmFlZmZiY2MwYzgiLCJ0IjoiNmRhZjViM2QtMTI3ZS00M2E3LThhZjEtNjc1NTlkZTNhYTYwIiwicyI6Im0vNnZrUUpVaHVJdG14WVBoYUVydmZMTFQwTzdYVjU3QzhUdEFrbWZTalZsYkVB"
+    },
+    {
+      "pid": 3392,
+      "name": "RuntimeBroker.exe",
+      "rss_mb": 8.3,
+      "cmd": "C:\\Windows\\System32\\RuntimeBroker.exe -Embedding"
+    },
+    {
+      "pid": 3540,
+      "name": "svchost.exe",
+      "rss_mb": 6.7,
+      "cmd": ""
+    },
+    {
+      "pid": 3560,
+      "name": "svchost.exe",
+      "rss_mb": 1.1,
+      "cmd": ""
+    },
+    {
+      "pid": 3592,
+      "name": "svchost.exe",
+      "rss_mb": 1.0,
+      "cmd": ""
+    },
+    {
+      "pid": 3744,
+      "name": "mscopilot.exe",
+      "rss_mb": 3.1,
+      "cmd": "C:\\Program Files (x86)\\Microsoft\\Copilot\\Application\\mscopilot.exe --type=renderer --subproc-heap-profiling --video-capture-use-gpu-memory-buffer --lang=en-US --js-flags --device-scale-factor=1 --num-raster-threads=4 --enable-main-frame-before-activa"
+    },
+    {
+      "pid": 3804,
+      "name": "svchost.exe",
+      "rss_mb": 2.5,
+      "cmd": ""
+    },
+    {
+      "pid": 3816,
+      "name": "PowerToys.exe",
+      "rss_mb": 5.0,
+      "cmd": "C:\\Program Files\\PowerToys\\PowerToys.exe"
+    },
+    {
+      "pid": 3856,
+      "name": "svchost.exe",
+      "rss_mb": 5.3,
+      "cmd": ""
+    },
+    {
+      "pid": 3872,
+      "name": "svchost.exe",
+      "rss_mb": 1.9,
+      "cmd": ""
+    },
+    {
+      "pid": 3876,
+      "name": "svchost.exe",
+      "rss_mb": 14.7,
+      "cmd": ""
+    },
+    {
+      "pid": 3888,
+      "name": "svchost.exe",
+      "rss_mb": 0.9,
+      "cmd": ""
+    },
+    {
+      "pid": 3924,
+      "name": "svchost.exe",
+      "rss_mb": 3.8,
+      "cmd": ""
+    },
+    {
+      "pid": 4000,
+      "name": "vmms.exe",
+      "rss_mb": 5.3,
+      "cmd": ""
+    },
+    {
+      "pid": 4032,
+      "name": "msedgewebview2.exe",
+      "rss_mb": 1.2,
+      "cmd": "C:\\Program Files (x86)\\Microsoft\\EdgeWebView\\Application\\151.0.4129.72\\msedgewebview2.exe --type=crashpad-handler --user-data-dir=C:\\Users\\koosh\\AppData\\Local\\Packages\\MicrosoftWindows.Client.CBS_cw5n1h2txyewy\\LocalState\\EBWebView /prefetch:4 /pfhost"
+    },
+    {
+      "pid": 4048,
+      "name": "svchost.exe",
+      "rss_mb": 0.9,
+      "cmd": ""
+    },
+    {
+      "pid": 4056,
+      "name": "svchost.exe",
+      "rss_mb": 2.2,
+      "cmd": ""
+    },
+    {
+      "pid": 4164,
+      "name": "nvcontainer.exe",
+      "rss_mb": 3.9,
+      "cmd": "C:\\Program Files\\NVIDIA Corporation\\NvContainer\\nvcontainer.exe -f C:\\ProgramData\\NVIDIA Corporation\\NVIDIA App\\NvContainer\\NvContainerUser%dSPUser.log -d C:\\Program Files\\NVIDIA Corporation\\NvContainer\\plugins\\SPUser -r -l 3 -p 30000 -st C:\\Program "
+    },
+    {
+      "pid": 4192,
+      "name": "WUDFHost.exe",
+      "rss_mb": 0.9,
+      "cmd": ""
+    },
+    {
+      "pid": 4200,
+      "name": "WidgetBoard.exe",
+      "rss_mb": 2.0,
+      "cmd": "C:\\Program Files\\WindowsApps\\MicrosoftWindows.Client.WebExperience_526.19501.0.0_x64__cw5n1h2txyewy\\WidgetBoard.exe -RegisterProcessAsComServer -ServerName:Microsoft.Windows.WidgetBoardServer"
+    },
+    {
+      "pid": 4244,
+      "name": "svchost.exe",
+      "rss_mb": 8.3,
+      "cmd": ""
+    },
+    {
+      "pid": 4264,
+      "name": "svchost.exe",
+      "rss_mb": 1.2,
+      "cmd": ""
+    },
+    {
+      "pid": 4296,
+      "name": "svchost.exe",
+      "rss_mb": 0.5,
+      "cmd": ""
+    },
+    {
+      "pid": 4304,
+      "name": "svchost.exe",
+      "rss_mb": 3.6,
+      "cmd": ""
+    },
+    {
+      "pid": 4312,
+      "name": "svchost.exe",
+      "rss_mb": 1.3,
+      "cmd": ""
+    },
+    {
+      "pid": 4412,
+      "name": "svchost.exe",
+      "rss_mb": 0.5,
+      "cmd": ""
+    },
+    {
+      "pid": 4424,
+      "name": "svchost.exe",
+      "rss_mb": 1.3,
+      "cmd": ""
+    },
+    {
+      "pid": 4436,
+      "name": "svchost.exe",
+      "rss_mb": 2.4,
+      "cmd": ""
+    },
+    {
+      "pid": 4472,
+      "name": "MemCompression",
+      "rss_mb": 4504.2,
+      "cmd": ""
+    },
+    {
+      "pid": 4572,
+      "name": "svchost.exe",
+      "rss_mb": 6.9,
+      "cmd": ""
+    },
+    {
+      "pid": 4648,
+      "name": "svchost.exe",
+      "rss_mb": 9.7,
+      "cmd": ""
+    },
+    {
+      "pid": 4656,
+      "name": "GSv6Fwd.exe",
+      "rss_mb": 1.4,
+      "cmd": ""
+    },
+    {
+      "pid": 4716,
+      "name": "svchost.exe",
+      "rss_mb": 1.1,
+      "cmd": ""
+    },
+    {
+      "pid": 4924,
+      "name": "svchost.exe",
+      "rss_mb": 2.1,
+      "cmd": ""
+    },
+    {
+      "pid": 4932,
+      "name": "svchost.exe",
+      "rss_mb": 1.4,
+      "cmd": ""
+    },
+    {
+      "pid": 4944,
+      "name": "vpnagent.exe",
+      "rss_mb": 2.7,
+      "cmd": ""
+    },
+    {
+      "pid": 4964,
+      "name": "dasHost.exe",
+      "rss_mb": 1.3,
+      "cmd": ""
+    },
+    {
+      "pid": 5080,
+      "name": "XboxPcAppFT.exe",
+      "rss_mb": 3.1,
+      "cmd": "C:\\Program Files\\WindowsApps\\Microsoft.GamingApp_2608.1001.17.0_x64__8wekyb3d8bbwe\\XboxPcAppFT.exe -Embedding"
+    },
+    {
+      "pid": 5092,
+      "name": "svchost.exe",
+      "rss_mb": 0.5,
+      "cmd": ""
+    },
+    {
+      "pid": 5140,
+      "name": "JetBrains.Etw.Collector.Host.exe",
+      "rss_mb": 0.6,
+      "cmd": ""
+    },
+    {
+      "pid": 5196,
+      "name": "svchost.exe",
+      "rss_mb": 0.9,
+      "cmd": ""
+    },
+    {
+      "pid": 5280,
+      "name": "EasyTuneEngineService.exe",
+      "rss_mb": 4.5,
+      "cmd": ""
+    },
+    {
+      "pid": 5344,
+      "name": "DtsApo4Service.exe",
+      "rss_mb": 1.0,
+      "cmd": ""
+    },
+    {
+      "pid": 5368,
+      "name": "OfficeClickToRun.exe",
+      "rss_mb": 6.3,
+      "cmd": ""
+    },
+    {
+      "pid": 5436,
+      "name": "svchost.exe",
+      "rss_mb": 1.0,
+      "cmd": ""
+    },
+    {
+      "pid": 5460,
+      "name": "OpenConsole.exe",
+      "rss_mb": 16.6,
+      "cmd": "C:\\Program Files\\WindowsApps\\Microsoft.WindowsTerminal_1.24.11911.0_x64__8wekyb3d8bbwe\\OpenConsole.exe --headless --textMeasurement graphemes --width 138 --height 68 --signal 0xfb4 --server 0xfcc"
+    },
+    {
+      "pid": 5556,
+      "name": "svchost.exe",
+      "rss_mb": 1.3,
+      "cmd": ""
+    },
+    {
+      "pid": 5664,
+      "name": "svchost.exe",
+      "rss_mb": 1.0,
+      "cmd": ""
+    },
+    {
+      "pid": 5668,
+      "name": "audiodg.exe",
+      "rss_mb": 14.9,
+      "cmd": "C:\\WINDOWS\\system32\\AUDIODG.EXE 0x0000000000000778"
+    },
+    {
+      "pid": 5680,
+      "name": "spoolsv.exe",
+      "rss_mb": 4.3,
+      "cmd": ""
+    },
+    {
+      "pid": 5888,
+      "name": "svchost.exe",
+      "rss_mb": 2.3,
+      "cmd": ""
+    },
+    {
+      "pid": 5900,
+      "name": "NVDisplay.Container.exe",
+      "rss_mb": 5.3,
+      "cmd": ""
+    },
+    {
+      "pid": 5980,
+      "name": "svchost.exe",
+      "rss_mb": 1.4,
+      "cmd": ""
+    },
+    {
+      "pid": 6028,
+      "name": "svchost.exe",
+      "rss_mb": 0.9,
+      "cmd": ""
+    },
+    {
+      "pid": 6036,
+      "name": "barrierd.exe",
+      "rss_mb": 4.7,
+      "cmd": ""
+    },
+    {
+      "pid": 6044,
+      "name": "svchost.exe",
+      "rss_mb": 1.3,
+      "cmd": ""
+    },
+    {
+      "pid": 6052,
+      "name": "svchost.exe",
+      "rss_mb": 13.3,
+      "cmd": ""
+    },
+    {
+      "pid": 6060,
+      "name": "MigrationService.exe",
+      "rss_mb": 1.7,
+      "cmd": ""
+    },
+    {
+      "pid": 6072,
+      "name": "mDNSResponder.exe",
+      "rss_mb": 1.3,
+      "cmd": ""
+    },
+    {
+      "pid": 6080,
+      "name": "deskflow-daemon.exe",
+      "rss_mb": 0.4,
+      "cmd": ""
+    },
+    {
+      "pid": 6088,
+      "name": "IpOverUsbSvc.exe",
+      "rss_mb": 1.5,
+      "cmd": ""
+    },
+    {
+      "pid": 6096,
+      "name": "AdobeUpdateService.exe",
+      "rss_mb": 1.2,
+      "cmd": ""
+    },
+    {
+      "pid": 6104,
+      "name": "svchost.exe",
+      "rss_mb": 20.7,
+      "cmd": ""
+    },
+    {
+      "pid": 6112,
+      "name": "GameInputRedistService.exe",
+      "rss_mb": 3.1,
+      "cmd": ""
+    },
+    {
+      "pid": 6120,
+      "name": "service.exe",
+      "rss_mb": 0.9,
+      "cmd": ""
+    },
+    {
+      "pid": 6128,
+      "name": "GTSDataSync.exe",
+      "rss_mb": 8.7,
+      "cmd": ""
+    },
+    {
+      "pid": 6136,
+      "name": "LogiRegistryService.exe",
+      "rss_mb": 0.7,
+      "cmd": ""
+    },
+    {
+      "pid": 6152,
+      "name": "GooglePlayGamesServices.exe",
+      "rss_mb": 25.1,
+      "cmd": ""
+    },
+    {
+      "pid": 6176,
+      "name": "svchost.exe",
+      "rss_mb": 4.4,
+      "cmd": ""
+    },
+    {
+      "pid": 6232,
+      "name": "miss.exe",
+      "rss_mb": 4.3,
+      "cmd": ""
+    },
+    {
+      "pid": 6268,
+      "name": "AdjustService.exe",
+      "rss_mb": 4.8,
+      "cmd": ""
+    },
+    {
+      "pid": 6280,
+      "name": "MpDefenderCoreService.exe",
+      "rss_mb": 20.6,
+      "cmd": ""
+    },
+    {
+      "pid": 6304,
+      "name": "mullvad-daemon.exe",
+      "rss_mb": 1.4,
+      "cmd": ""
+    },
+    {
+      "pid": 6336,
+      "name": "mysqld.exe",
+      "rss_mb": 1.7,
+      "cmd": ""
+    },
+    {
+      "pid": 6516,
+      "name": "GameBarPresenceWriter.exe",
+      "rss_mb": 2.7,
+      "cmd": "C:\\Windows\\System32\\GameBarPresenceWriter.exe -ServerName:Windows.Gaming.GameBar.Internal.PresenceWriterServer"
+    },
+    {
+      "pid": 6536,
+      "name": "pservice.exe",
+      "rss_mb": 1.1,
+      "cmd": ""
+    },
+    {
+      "pid": 6548,
+      "name": "nvcontainer.exe",
+      "rss_mb": 3.6,
+      "cmd": ""
+    },
+    {
+      "pid": 6604,
+      "name": "vmcompute.exe",
+      "rss_mb": 2.7,
+      "cmd": ""
+    },
+    {
+      "pid": 6612,
+      "name": "TCPSVCS.EXE",
+      "rss_mb": 0.6,
+      "cmd": ""
+    },
+    {
+      "pid": 6628,
+      "name": "RtkAudUService64.exe",
+      "rss_mb": 1.3,
+      "cmd": ""
+    },
+    {
+      "pid": 6636,
+      "name": "sqlwriter.exe",
+      "rss_mb": 0.8,
+      "cmd": ""
+    },
+    {
+      "pid": 6644,
+      "name": "SRService.exe",
+      "rss_mb": 1.5,
+      "cmd": ""
+    },
+    {
+      "pid": 6652,
+      "name": "SRUpdateService.exe",
+      "rss_mb": 1.1,
+      "cmd": ""
+    },
+    {
+      "pid": 6728,
+      "name": "OpenConsole.exe",
+      "rss_mb": 1.8,
+      "cmd": "C:\\Program Files\\WindowsApps\\Microsoft.WindowsTerminal_1.24.11911.0_x64__8wekyb3d8bbwe\\OpenConsole.exe --headless --textMeasurement graphemes --width 77 --height 11 --signal 0x217c --server 0x1850"
+    },
+    {
+      "pid": 6732,
+      "name": "msedge.exe",
+      "rss_mb": 7.4,
+      "cmd": "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe --type=utility --utility-sub-type=edge_search_indexer.mojom.SearchIndexerInterfaceBroker --lang=en-US --service-sandbox-type=search_indexer --message-loop-type-ui --video-capture-use-gpu-me"
+    },
+    {
+      "pid": 6756,
+      "name": "PreSonusHardwareAccessService.exe",
+      "rss_mb": 6.7,
+      "cmd": ""
+    },
+    {
+      "pid": 6768,
+      "name": "NvBroadcast.Container.exe",
+      "rss_mb": 1.2,
+      "cmd": ""
+    },
+    {
+      "pid": 6788,
+      "name": "sshd.exe",
+      "rss_mb": 0.9,
+      "cmd": ""
+    },
+    {
+      "pid": 6800,
+      "name": "conhost.exe",
+      "rss_mb": 0.6,
+      "cmd": "\\??\\C:\\WINDOWS\\system32\\conhost.exe 0x4"
+    },
+    {
+      "pid": 6816,
+      "name": "sunshinesvc.exe",
+      "rss_mb": 0.5,
+      "cmd": ""
+    },
+    {
+      "pid": 6920,
+      "name": "svchost.exe",
+      "rss_mb": 0.5,
+      "cmd": ""
+    },
+    {
+      "pid": 6960,
+      "name": "tailscaled.exe",
+      "rss_mb": 13.7,
+      "cmd": ""
+    },
+    {
+      "pid": 6968,
+      "name": "svchost.exe",
+      "rss_mb": 0.6,
+      "cmd": ""
+    },
+    {
+      "pid": 6976,
+      "name": "MsMpEng.exe",
+      "rss_mb": 592.1,
+      "cmd": ""
+    },
+    {
+      "pid": 6992,
+      "name": "wslservice.exe",
+      "rss_mb": 10.2,
+      "cmd": ""
+    },
+    {
+      "pid": 7016,
+      "name": "GigabyteUpdateService.exe",
+      "rss_mb": 1.0,
+      "cmd": ""
+    },
+    {
+      "pid": 7024,
+      "name": "svchost.exe",
+      "rss_mb": 1.0,
+      "cmd": ""
+    },
+    {
+      "pid": 7040,
+      "name": "svchost.exe",
+      "rss_mb": 1.7,
+      "cmd": ""
+    },
+    {
+      "pid": 7072,
+      "name": "svchost.exe",
+      "rss_mb": 2.6,
+      "cmd": ""
+    },
+    {
+      "pid": 7140,
+      "name": "Unity.Licensing.Client.exe",
+      "rss_mb": 7.7,
+      "cmd": "C:\\Program Files\\Unity Hub\\UnityLicensingClient_V1\\Unity.Licensing.Client.exe --namedPipe Unity-LicenseClient-koosh --cloudEnvironment production"
+    },
+    {
+      "pid": 7160,
+      "name": "steamwebhelper.exe",
+      "rss_mb": 2.6,
+      "cmd": "C:\\Program Files (x86)\\Steam\\bin\\cef\\cef.win64\\steamwebhelper.exe --type=crashpad-handler /prefetch:4 --max-uploads=5 --max-db-size=20 --max-db-age=5 --monitor-self-annotation=ptype=crashpad-handler --database=C:\\Program Files (x86)\\Steam\\dumps --met"
+    },
+    {
+      "pid": 7400,
+      "name": "svchost.exe",
+      "rss_mb": 1.1,
+      "cmd": ""
+    },
+    {
+      "pid": 7440,
+      "name": "crashpad_handler.dll",
+      "rss_mb": 4.1,
+      "cmd": "C:/Program Files (x86)/Steam/steamapps/common/Cities Skylines II/Cities2_Data\\Plugins\\x86_64\\crashpad_handler.dll --no-rate-limit --database=C:\\Users\\koosh\\AppData\\LocalLow\\Colossal Order\\Cities Skylines II\\.cache\\backtrace\\crashpad --metrics-dir=C:\\"
+    },
+    {
+      "pid": 7616,
+      "name": "svchost.exe",
+      "rss_mb": 2.4,
+      "cmd": ""
+    },
+    {
+      "pid": 7624,
+      "name": "msedge.exe",
+      "rss_mb": 3.3,
+      "cmd": "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe --type=utility --utility-sub-type=media.mojom.CdmServiceBroker --lang=en-US --service-sandbox-type=cdm --video-capture-use-gpu-memory-buffer --skip-read-main-dll --metrics-shmem-handle=1173"
+    },
+    {
+      "pid": 7812,
+      "name": "conhost.exe",
+      "rss_mb": 0.7,
+      "cmd": "\\??\\C:\\WINDOWS\\system32\\conhost.exe 0x4"
+    },
+    {
+      "pid": 8108,
+      "name": "msedge.exe",
+      "rss_mb": 191.7,
+      "cmd": "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe --profile-directory=Default"
+    },
+    {
+      "pid": 8368,
+      "name": "svchost.exe",
+      "rss_mb": 2.1,
+      "cmd": ""
+    },
+    {
+      "pid": 8496,
+      "name": "deskflow-core.exe",
+      "rss_mb": 2.1,
+      "cmd": ""
+    },
+    {
+      "pid": 8564,
+      "name": "parsecd.exe",
+      "rss_mb": 65.5,
+      "cmd": ""
+    },
+    {
+      "pid": 8920,
+      "name": "conhost.exe",
+      "rss_mb": 0.6,
+      "cmd": ""
+    },
+    {
+      "pid": 9048,
+      "name": "com.docker.service",
+      "rss_mb": 1.5,
+      "cmd": ""
+    },
+    {
+      "pid": 9196,
+      "name": "Unity Hub.exe",
+      "rss_mb": 6.7,
+      "cmd": "C:\\Program Files\\Unity Hub\\Unity Hub.exe --type=gpu-process --user-data-dir=C:\\Users\\koosh\\AppData\\Roaming\\UnityHub --gpu-preferences=SAAAAAAAAADgAAAEAAAAAAAAAAAAAGAAAQAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAQAAAAAAAAABAAAAAAAAAACAAAAAAAAAAIAAAAAAAA"
+    },
+    {
+      "pid": 9644,
+      "name": "NvBroadcast.Container.exe",
+      "rss_mb": 2.8,
+      "cmd": ""
+    },
+    {
+      "pid": 10128,
+      "name": "svchost.exe",
+      "rss_mb": 1.8,
+      "cmd": ""
+    },
+    {
+      "pid": 10212,
+      "name": "AggregatorHost.exe",
+      "rss_mb": 4.4,
+      "cmd": ""
+    },
+    {
+      "pid": 10224,
+      "name": "Unity Hub.exe",
+      "rss_mb": 30.1,
+      "cmd": "C:\\Program Files\\Unity Hub\\Unity Hub.exe unityhub://2022.3.70f1/a70afc22862c"
+    },
+    {
+      "pid": 10276,
+      "name": "Unity Hub.exe",
+      "rss_mb": 25.0,
+      "cmd": "C:\\Program Files\\Unity Hub\\Unity Hub.exe --type=renderer --user-data-dir=C:\\Users\\koosh\\AppData\\Roaming\\UnityHub --standard-schemes=localasset --secure-schemes=sentry-ipc --bypasscsp-schemes=localasset,sentry-ipc --cors-schemes=localasset,sentry-ipc "
+    },
+    {
+      "pid": 10280,
+      "name": "svchost.exe",
+      "rss_mb": 17.5,
+      "cmd": ""
+    },
+    {
+      "pid": 10300,
+      "name": "svchost.exe",
+      "rss_mb": 6.4,
+      "cmd": "C:\\WINDOWS\\system32\\svchost.exe -k LocalService -p -s NPSMSvc"
+    },
+    {
+      "pid": 10924,
+      "name": "nvcontainer.exe",
+      "rss_mb": 4.0,
+      "cmd": ""
+    },
+    {
+      "pid": 10996,
+      "name": "svchost.exe",
+      "rss_mb": 19.1,
+      "cmd": "C:\\WINDOWS\\system32\\svchost.exe -k ClipboardSvcGroup -p -s cbdhsvc"
+    },
+    {
+      "pid": 11436,
+      "name": "msedge.exe",
+      "rss_mb": 6.5,
+      "cmd": "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe --type=utility --utility-sub-type=storage.mojom.StorageService --lang=en-US --service-sandbox-type=service --startup-read-main-dll --metrics-shmem-handle=3232,i,18436640180169952235,1794917"
+    },
+    {
+      "pid": 11484,
+      "name": "svchost.exe",
+      "rss_mb": 1.0,
+      "cmd": ""
+    },
+    {
+      "pid": 11636,
+      "name": "rustc.exe",
+      "rss_mb": 777.6,
+      "cmd": "C:\\Users\\koosh\\.rustup\\toolchains\\1.96-x86_64-pc-windows-msvc\\bin\\rustc.exe --crate-name forge --edition=2024 crates\\forge_main\\src\\main.rs --error-format=json --json=diagnostic-rendered-ansi,artifacts,future-incompat --crate-type bin --emit=dep-info"
+    },
+    {
+      "pid": 11808,
+      "name": "svchost.exe",
+      "rss_mb": 1.8,
+      "cmd": ""
+    },
+    {
+      "pid": 11816,
+      "name": "tailscaled.exe",
+      "rss_mb": 24.1,
+      "cmd": ""
+    },
+    {
+      "pid": 11840,
+      "name": "OpenConsole.exe",
+      "rss_mb": 12.0,
+      "cmd": "C:\\Program Files\\WindowsApps\\Microsoft.WindowsTerminal_1.24.11911.0_x64__8wekyb3d8bbwe\\OpenConsole.exe --headless --textMeasurement graphemes --width 86 --height 24 --signal 0x1aec --server 0x1b0c"
+    },
+    {
+      "pid": 11904,
+      "name": "NgcIso.exe",
+      "rss_mb": 0.9,
+      "cmd": ""
+    },
+    {
+      "pid": 11960,
+      "name": "crashpad_handler.exe",
+      "rss_mb": 0.6,
+      "cmd": ""
+    },
+    {
+      "pid": 12256,
+      "name": "msedge.exe",
+      "rss_mb": 38.0,
+      "cmd": "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe --type=utility --utility-sub-type=network.mojom.NetworkService --lang=en-US --service-sandbox-type=none --startup-read-main-dll --metrics-shmem-handle=2800,i,2966053163241100192,53219395784"
+    },
+    {
+      "pid": 12316,
+      "name": "svchost.exe",
+      "rss_mb": 9.3,
+      "cmd": ""
+    },
+    {
+      "pid": 12348,
+      "name": "svchost.exe",
+      "rss_mb": 9.4,
+      "cmd": ""
+    },
+    {
+      "pid": 12436,
+      "name": "svchost.exe",
+      "rss_mb": 4.3,
+      "cmd": ""
+    },
+    {
+      "pid": 12456,
+      "name": "msedge.exe",
+      "rss_mb": 57.6,
+      "cmd": "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe --type=renderer --extension-process --renderer-sub-type=extension --pdf-upsell-enabled --video-capture-use-gpu-memory-buffer --lang=en-US --js-flags --device-scale-factor=1 --num-raster-thr"
+    },
+    {
+      "pid": 12616,
+      "name": "vmmemCmZygote",
+      "rss_mb": 0.0,
+      "cmd": ""
+    },
+    {
+      "pid": 12644,
+      "name": "WmiPrvSE.exe",
+      "rss_mb": 1.5,
+      "cmd": ""
+    },
+    {
+      "pid": 12856,
+      "name": "sunshine.exe",
+      "rss_mb": 5.3,
+      "cmd": ""
+    },
+    {
+      "pid": 12864,
+      "name": "conhost.exe",
+      "rss_mb": 0.7,
+      "cmd": ""
+    },
+    {
+      "pid": 12960,
+      "name": "msedge.exe",
+      "rss_mb": 85.4,
+      "cmd": "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe --type=gpu-process --gpu-preferences=WAAAAAAAAADgAAAEAAAAAAAAAAAAAGAAQAAAAAAAAAADAAAAAAAAADgAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAKAAAAAAAAAAoAAAAAAAAAAgAAAAAAAAAEAAAAAIAAAABAAAAAAAAAAgA"
+    },
+    {
+      "pid": 12980,
+      "name": "pwsh.exe",
+      "rss_mb": 32.6,
+      "cmd": "C:\\Program Files\\PowerShell\\7-preview\\pwsh.exe"
+    },
+    {
+      "pid": 13324,
+      "name": "svchost.exe",
+      "rss_mb": 0.7,
+      "cmd": ""
+    },
+    {
+      "pid": 13364,
+      "name": "svchost.exe",
+      "rss_mb": 1.1,
+      "cmd": ""
+    },
+    {
+      "pid": 13648,
+      "name": "ApplicationFrameHost.exe",
+      "rss_mb": 3.5,
+      "cmd": "C:\\WINDOWS\\system32\\ApplicationFrameHost.exe -Embedding"
+    },
+    {
+      "pid": 13716,
+      "name": "svchost.exe",
+      "rss_mb": 1.2,
+      "cmd": ""
+    },
+    {
+      "pid": 13888,
+      "name": "wlanext.exe",
+      "rss_mb": 1.0,
+      "cmd": ""
+    },
+    {
+      "pid": 13924,
+      "name": "svchost.exe",
+      "rss_mb": 1.1,
+      "cmd": ""
+    },
+    {
+      "pid": 14008,
+      "name": "SaveEnroller.Daemon.exe",
+      "rss_mb": 3.6,
+      "cmd": "C:\\Users\\koosh\\AppData\\LocalLow\\Colossal Order\\Cities Skylines II\\.cache\\Mods\\pdx_mods\\103929_3\\SaveEnroller.Daemon.exe C:/Users/koosh/AppData/LocalLow/Colossal Order/Cities Skylines II\\ModsData C:/Users/koosh/AppData/LocalLow/Colossal Order/Cities S"
+    },
+    {
+      "pid": 14064,
+      "name": "GameInputRedistService.exe",
+      "rss_mb": 1.8,
+      "cmd": "C:\\Program Files\\Microsoft GameInput\\x64\\GameInputRedistService.exe /session=\\\\.\\pipe\\GameInputServiceSession-002fb70569483089-00000001"
+    },
+    {
+      "pid": 14192,
+      "name": "msedge.exe",
+      "rss_mb": 1.8,
+      "cmd": "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe --type=crashpad-handler --user-data-dir=C:\\Users\\koosh\\AppData\\Local\\Microsoft\\Edge\\User Data /prefetch:4 --monitor-self-annotation=ptype=crashpad-handler --database=C:\\Users\\koosh\\AppData\\"
+    },
+    {
+      "pid": 14316,
+      "name": "nvcontainer.exe",
+      "rss_mb": 21.7,
+      "cmd": "C:\\Program Files\\NVIDIA Corporation\\NvContainer\\nvcontainer.exe -f C:\\ProgramData\\NVIDIA Corporation\\NVIDIA App\\NvContainer\\NvContainerUser%d.log -d C:\\Program Files\\NVIDIA Corporation\\NvContainer\\plugins\\User -r -l 3 -p 30000 -c"
+    },
+    {
+      "pid": 14472,
+      "name": "svchost.exe",
+      "rss_mb": 9.6,
+      "cmd": ""
+    },
+    {
+      "pid": 14536,
+      "name": "RuntimeBroker.exe",
+      "rss_mb": 5.3,
+      "cmd": "C:\\Windows\\System32\\RuntimeBroker.exe -Embedding"
+    },
+    {
+      "pid": 14940,
+      "name": "WindowsTerminal.exe",
+      "rss_mb": 32.7,
+      "cmd": "C:\\Program Files\\WindowsApps\\Microsoft.WindowsTerminalPreview_1.25.1912.0_x64__8wekyb3d8bbwe\\WindowsTerminal.exe -Embedding"
+    },
+    {
+      "pid": 15320,
+      "name": "NVIDIA Overlay.exe",
+      "rss_mb": 13.3,
+      "cmd": "C:\\Program Files\\NVIDIA Corporation\\NVIDIA App\\CEF\\NVIDIA Overlay.exe --type=utility --utility-sub-type=network.mojom.NetworkService --lang=en-US --service-sandbox-type=none --no-sandbox --start-stack-profiler --user-data-dir=C:\\Users\\koosh\\AppData\\L"
+    },
+    {
+      "pid": 15340,
+      "name": "parsecd.exe",
+      "rss_mb": 19.9,
+      "cmd": "C:\\Program Files\\Parsec\\parsecd.exe :app_silent=1 SERVICE_LAUNCHED_V13 LOADER_V17 PARSEC_IPC_4a1c94dd226d08b9"
+    },
+    {
+      "pid": 15380,
+      "name": "sihost.exe",
+      "rss_mb": 14.0,
+      "cmd": "sihost.exe"
+    },
+    {
+      "pid": 15428,
+      "name": "svchost.exe",
+      "rss_mb": 1.0,
+      "cmd": "C:\\WINDOWS\\system32\\svchost.exe -k BthAppGroup -p -s BluetoothUserService"
+    },
+    {
+      "pid": 15436,
+      "name": "svchost.exe",
+      "rss_mb": 20.3,
+      "cmd": "C:\\WINDOWS\\system32\\svchost.exe -k UnistackSvcGroup -s CDPUserSvc"
+    },
+    {
+      "pid": 15508,
+      "name": "svchost.exe",
+      "rss_mb": 1.0,
+      "cmd": "C:\\WINDOWS\\system32\\svchost.exe -k LocalSystemNetworkRestricted -p -s webthreatdefusersvc"
+    },
+    {
+      "pid": 15624,
+      "name": "svchost.exe",
+      "rss_mb": 7.1,
+      "cmd": "C:\\WINDOWS\\system32\\svchost.exe -k UnistackSvcGroup -s WpnUserService"
+    },
+    {
+      "pid": 15704,
+      "name": "NZXT CAM.exe",
+      "rss_mb": 18.1,
+      "cmd": "C:\\Program Files\\NZXT CAM\\NZXT CAM.exe --startup"
+    },
+    {
+      "pid": 15720,
+      "name": "msedge.exe",
+      "rss_mb": 10.9,
+      "cmd": "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe --type=renderer --extension-process --renderer-sub-type=extension --pdf-upsell-enabled --video-capture-use-gpu-memory-buffer --lang=en-US --js-flags --device-scale-factor=1 --num-raster-thr"
+    },
+    {
+      "pid": 15732,
+      "name": "taskhostw.exe",
+      "rss_mb": 5.2,
+      "cmd": "taskhostw.exe {222A245B-E637-4AE9-A93F-A59CA119A75E}"
+    },
+    {
+      "pid": 15856,
+      "name": "svchost.exe",
+      "rss_mb": 12.3,
+      "cmd": ""
+    },
+    {
+      "pid": 15868,
+      "name": "QuickCPU.exe",
+      "rss_mb": 29.4,
+      "cmd": "C:\\Program Files\\QuickCPU\\QuickCPU.exe /background"
+    },
+    {
+      "pid": 15920,
+      "name": "NVIDIA Broadcast UI.exe",
+      "rss_mb": 2.4,
+      "cmd": "C:\\Program Files\\NVIDIA Corporation\\NVIDIA Broadcast\\NVIDIA Broadcast UI.exe -minimized"
+    },
+    {
+      "pid": 15968,
+      "name": "svchost.exe",
+      "rss_mb": 3.1,
+      "cmd": ""
+    },
+    {
+      "pid": 15980,
+      "name": "svchost.exe",
+      "rss_mb": 2.5,
+      "cmd": ""
+    },
+    {
+      "pid": 16028,
+      "name": "SaveChecker.Daemon.exe",
+      "rss_mb": 0.7,
+      "cmd": "C:\\Users\\koosh\\AppData\\LocalLow\\Colossal Order\\Cities Skylines II\\.cache\\Mods\\pdx_mods\\101159_3\\SaveChecker.Daemon.exe C:/Users/koosh/AppData/LocalLow/Colossal Order/Cities Skylines II\\ModsData\\.SaveChecker C:/Users/koosh/AppData/LocalLow/Colossal Or"
+    },
+    {
+      "pid": 16296,
+      "name": "msedge.exe",
+      "rss_mb": 32.4,
+      "cmd": "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe --type=renderer --pdf-upsell-enabled --video-capture-use-gpu-memory-buffer --lang=en-US --js-flags --device-scale-factor=1 --num-raster-threads=4 --enable-main-frame-before-activation --ren"
+    },
+    {
+      "pid": 16472,
+      "name": "svchost.exe",
+      "rss_mb": 3.8,
+      "cmd": ""
+    },
+    {
+      "pid": 16488,
+      "name": "steamwebhelper.exe",
+      "rss_mb": 3.3,
+      "cmd": "C:\\Program Files (x86)\\Steam\\bin\\cef\\cef.win64\\steamwebhelper.exe --type=utility --utility-sub-type=storage.mojom.StorageService --lang=en-US --service-sandbox-type=service --enable-chrome-runtime --user-data-dir=C:\\Users\\koosh\\AppData\\Local\\Steam\\ht"
+    },
+    {
+      "pid": 17020,
+      "name": "conhost.exe",
+      "rss_mb": 0.7,
+      "cmd": "\\??\\C:\\WINDOWS\\system32\\conhost.exe 0x4"
+    },
+    {
+      "pid": 17136,
+      "name": "CrossDeviceResume.exe",
+      "rss_mb": 4.1,
+      "cmd": "C:\\Windows\\SystemApps\\MicrosoftWindows.Client.CBS_cw5n1h2txyewy\\CrossDeviceResume.exe /tileid MicrosoftWindows.Client.CBS_cw5n1h2txyewy!CrossDeviceResumeApp"
+    },
+    {
+      "pid": 17236,
+      "name": "msedge.exe",
+      "rss_mb": 7.7,
+      "cmd": "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe --type=renderer --pdf-upsell-enabled --video-capture-use-gpu-memory-buffer --lang=en-US --js-flags --device-scale-factor=1 --num-raster-threads=4 --enable-main-frame-before-activation --ren"
+    },
+    {
+      "pid": 17344,
+      "name": "updatechecker.exe",
+      "rss_mb": 4.2,
+      "cmd": "C:\\Program Files\\MiniTool Partition Wizard 12\\updatechecker.exe /administrator"
+    },
+    {
+      "pid": 17688,
+      "name": "nvsphelper64.exe",
+      "rss_mb": 1.7,
+      "cmd": "C:\\Program Files\\NVIDIA Corporation\\NVIDIA App\\ShadowPlay\\nvsphelper64.exe"
+    },
+    {
+      "pid": 17760,
+      "name": "NisSrv.exe",
+      "rss_mb": 7.6,
+      "cmd": ""
+    },
+    {
+      "pid": 17788,
+      "name": "pwsh.exe",
+      "rss_mb": 41.4,
+      "cmd": "C:\\Program Files\\PowerShell\\7-preview\\pwsh.exe"
+    },
+    {
+      "pid": 17808,
+      "name": "ApCent.exe",
+      "rss_mb": 17.5,
+      "cmd": "C:\\Program Files (x86)\\Gigabyte\\AppCenter\\ApCent.exe"
+    },
+    {
+      "pid": 17844,
+      "name": "EdgeGameAssist.exe",
+      "rss_mb": 0.0,
+      "cmd": "C:\\Program Files\\WindowsApps\\Microsoft.Edge.GameAssist_1.0.4019.0_x64__8wekyb3d8bbwe\\EdgeGameAssist.exe -ServerName:App.AppXjs7v3smdq2xg9r0emdwc70mxxcrc31jq.mca"
+    },
+    {
+      "pid": 17868,
+      "name": "msedge.exe",
+      "rss_mb": 80.3,
+      "cmd": "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe --type=renderer --pdf-upsell-enabled --video-capture-use-gpu-memory-buffer --lang=en-US --js-flags --device-scale-factor=1 --num-raster-threads=4 --enable-main-frame-before-activation --ren"
+    },
+    {
+      "pid": 17924,
+      "name": "StashIt.Daemon.exe",
+      "rss_mb": 0.7,
+      "cmd": "C:\\Users\\koosh\\AppData\\LocalLow\\Colossal Order\\Cities Skylines II\\.cache\\Mods\\pdx_mods\\100369_6\\StashIt.Daemon.exe C:/Users/koosh/AppData/LocalLow/Colossal Order/Cities Skylines II 31096"
+    },
+    {
+      "pid": 18252,
+      "name": "msedgewebview2.exe",
+      "rss_mb": 21.6,
+      "cmd": "C:\\Program Files (x86)\\Microsoft\\EdgeWebView\\Application\\151.0.4129.72\\msedgewebview2.exe --embedded-browser-webview=1 --webview-exe-name=SearchHost.exe --webview-exe-version=2607.6004.0.6000 --user-data-dir=C:\\Users\\koosh\\AppData\\Local\\Packages\\Micr"
+    },
+    {
+      "pid": 18408,
+      "name": "msedge.exe",
+      "rss_mb": 3.5,
+      "cmd": "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe --type=utility --utility-sub-type=audio.mojom.AudioService --lang=en-US --service-sandbox-type=audio --video-capture-use-gpu-memory-buffer --skip-read-main-dll --metrics-shmem-handle=12108,"
+    },
+    {
+      "pid": 18604,
+      "name": "NVIDIA Overlay.exe",
+      "rss_mb": 24.8,
+      "cmd": "C:\\Program Files\\NVIDIA Corporation\\NVIDIA App\\CEF\\NVIDIA Overlay.exe"
+    },
+    {
+      "pid": 18876,
+      "name": "svchost.exe",
+      "rss_mb": 5.7,
+      "cmd": "C:\\WINDOWS\\system32\\svchost.exe -k UdkSvcGroup -s UdkUserSvc"
+    },
+    {
+      "pid": 19008,
+      "name": "NVIDIA Broadcast.exe",
+      "rss_mb": 15.6,
+      "cmd": "C:\\Program Files\\NVIDIA Corporation\\NVIDIA Broadcast\\NvVirtualCamera\\NVIDIA Broadcast.exe"
+    },
+    {
+      "pid": 19144,
+      "name": "SearchIndexer.exe",
+      "rss_mb": 60.7,
+      "cmd": ""
+    },
+    {
+      "pid": 19572,
+      "name": "SecurityHealthService.exe",
+      "rss_mb": 16.6,
+      "cmd": ""
+    },
+    {
+      "pid": 19732,
+      "name": "msedgewebview2.exe",
+      "rss_mb": 13.3,
+      "cmd": "C:\\Program Files (x86)\\Microsoft\\EdgeWebView\\Application\\151.0.4129.72\\msedgewebview2.exe --type=renderer --noerrdialogs --user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; Cortana 1.18.9.23723; 10.0.0.0.28120.2630) AppleWebKit/537.36 (KHTML, like"
+    },
+    {
+      "pid": 19820,
+      "name": "gameoverlayui64.exe",
+      "rss_mb": 3.8,
+      "cmd": "C:\\Program Files (x86)\\Steam\\gameoverlayui64.exe -pid 31096 -steampid 29076 -manuallyclearframes 0 -gameid 949230"
+    },
+    {
+      "pid": 20112,
+      "name": "NVIDIA Overlay.exe",
+      "rss_mb": 6.9,
+      "cmd": "C:\\Program Files\\NVIDIA Corporation\\NVIDIA App\\CEF\\NVIDIA Overlay.exe --type=gpu-process --no-sandbox --start-stack-profiler --user-data-dir=C:\\Users\\koosh\\AppData\\Local\\NVIDIA Corporation\\NVIDIA Overlay\\CefCache --gpu-preferences=UAAAAAAAAADgAQAMAAA"
+    },
+    {
+      "pid": 20120,
+      "name": "msedgewebview2.exe",
+      "rss_mb": 5.6,
+      "cmd": "C:\\Program Files (x86)\\Microsoft\\EdgeWebView\\Application\\151.0.4129.72\\msedgewebview2.exe --type=gpu-process --noerrdialogs --user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; Cortana 1.18.9.23723; 10.0.0.0.28120.2630) AppleWebKit/537.36 (KHTML, l"
+    },
+    {
+      "pid": 20132,
+      "name": "steamwebhelper.exe",
+      "rss_mb": 11.4,
+      "cmd": "C:\\Program Files (x86)\\Steam\\bin\\cef\\cef.win64\\steamwebhelper.exe --type=utility --utility-sub-type=network.mojom.NetworkService --lang=en-US --service-sandbox-type=none --start-stack-profiler --enable-chrome-runtime --user-data-dir=C:\\Users\\koosh\\Ap"
+    },
+    {
+      "pid": 20208,
+      "name": "msedgewebview2.exe",
+      "rss_mb": 3.9,
+      "cmd": "C:\\Program Files (x86)\\Microsoft\\EdgeWebView\\Application\\151.0.4129.72\\msedgewebview2.exe --type=utility --utility-sub-type=storage.mojom.StorageService --lang=en-US --service-sandbox-type=service --noerrdialogs --user-agent=Mozilla/5.0 (Windows NT 1"
+    },
+    {
+      "pid": 20324,
+      "name": "msedge.exe",
+      "rss_mb": 6.1,
+      "cmd": "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe --type=renderer --pdf-upsell-enabled --video-capture-use-gpu-memory-buffer --lang=en-US --js-flags --device-scale-factor=1 --num-raster-threads=4 --enable-main-frame-before-activation --ren"
+    },
+    {
+      "pid": 20408,
+      "name": "NVIDIA Overlay.exe",
+      "rss_mb": 3.2,
+      "cmd": "C:\\Program Files\\NVIDIA Corporation\\NVIDIA App\\CEF\\NVIDIA Overlay.exe --type=utility --utility-sub-type=storage.mojom.StorageService --lang=en-US --service-sandbox-type=service --no-sandbox --user-data-dir=C:\\Users\\koosh\\AppData\\Local\\NVIDIA Corporat"
+    },
+    {
+      "pid": 20412,
+      "name": "PowerToys.ColorPickerUI.exe",
+      "rss_mb": 0.7,
+      "cmd": "C:\\Program Files\\PowerToys\\modules\\ColorPicker\\PowerToys.ColorPickerUI.exe 3816"
+    },
+    {
+      "pid": 20416,
+      "name": "PowerToys.PowerLauncher.exe",
+      "rss_mb": 14.4,
+      "cmd": "C:\\Program Files\\PowerToys\\modules\\launcher\\PowerToys.PowerLauncher.exe -powerToysPid 3816 --started-from-runner"
+    },
+    {
+      "pid": 20512,
+      "name": "NZXT CAM.exe",
+      "rss_mb": 29.9,
+      "cmd": "C:\\Program Files\\NZXT CAM\\NZXT CAM.exe --type=gpu-process --user-data-dir=C:\\Users\\koosh\\AppData\\Roaming\\NZXT CAM --gpu-preferences=UAAAAAAAAADgAAAMAAAAAAAAAAAAAAAAAABgAAEAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAEAAAAAAAAAAIAAAAAAAAAA"
+    },
+    {
+      "pid": 21256,
+      "name": "conhost.exe",
+      "rss_mb": 0.6,
+      "cmd": "\\??\\C:\\WINDOWS\\system32\\conhost.exe 0x4"
+    },
+    {
+      "pid": 21688,
+      "name": "NVIDIA Overlay.exe",
+      "rss_mb": 9.8,
+      "cmd": "C:\\Program Files\\NVIDIA Corporation\\NVIDIA App\\CEF\\NVIDIA Overlay.exe --type=renderer --enable-dinosaur-easter-egg-alt-images --origin-trial-disabled-features=CanvasTextNg|WebAssemblyCustomDescriptors --start-stack-profiler --user-data-dir=C:\\Users\\k"
+    },
+    {
+      "pid": 21800,
+      "name": "msedge.exe",
+      "rss_mb": 4.6,
+      "cmd": "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe --type=renderer --pdf-upsell-enabled --video-capture-use-gpu-memory-buffer --lang=en-US --js-flags --device-scale-factor=1 --num-raster-threads=4 --enable-main-frame-before-activation --ren"
+    },
+    {
+      "pid": 22296,
+      "name": "Unity Hub.exe",
+      "rss_mb": 1.1,
+      "cmd": "C:\\Program Files\\Unity Hub\\Unity Hub.exe C:\\Program Files\\Unity Hub\\resources\\app.asar\\build\\main\\installerProcess.js --winInstaller abd19e13-189c-4143-b683-8995611c9a79"
+    },
+    {
+      "pid": 22364,
+      "name": "AppActions.exe",
+      "rss_mb": 7.0,
+      "cmd": "C:\\Windows\\SystemApps\\MicrosoftWindows.Client.CBS_cw5n1h2txyewy\\AppActions.exe -Embedding"
+    },
+    {
+      "pid": 22500,
+      "name": "msedge.exe",
+      "rss_mb": 6.9,
+      "cmd": "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe --type=renderer --pdf-upsell-enabled --video-capture-use-gpu-memory-buffer --lang=en-US --js-flags --device-scale-factor=1 --num-raster-threads=4 --enable-main-frame-before-activation --ren"
+    },
+    {
+      "pid": 22552,
+      "name": "sensord.exe",
+      "rss_mb": 4.1,
+      "cmd": "C:\\Program Files (x86)\\GIGABYTE\\SIV\\Sensord.exe"
+    },
+    {
+      "pid": 22564,
+      "name": "steamservice.exe",
+      "rss_mb": 1.9,
+      "cmd": ""
+    },
+    {
+      "pid": 22628,
+      "name": "ctfmon.exe",
+      "rss_mb": 13.0,
+      "cmd": "/QuitInfo:0000000000000318;0000000000000304;"
+    },
+    {
+      "pid": 22856,
+      "name": "GameInputSvc.exe",
+      "rss_mb": 2.4,
+      "cmd": ""
+    },
+    {
+      "pid": 23084,
+      "name": "PowerToys.KeyboardManagerEngine.exe",
+      "rss_mb": 1.2,
+      "cmd": "C:\\Program Files\\PowerToys\\modules\\KeyboardManager\\KeyboardManagerEngine\\PowerToys.KeyboardManagerEngine.exe 3816"
+    },
+    {
+      "pid": 23232,
+      "name": "ChsIME.exe",
+      "rss_mb": 0.8,
+      "cmd": "C:\\Windows\\System32\\InputMethod\\CHS\\ChsIME.exe -Embedding"
+    },
+    {
+      "pid": 23240,
+      "name": "svchost.exe",
+      "rss_mb": 1.5,
+      "cmd": ""
+    },
+    {
+      "pid": 23444,
+      "name": "mscopilot.exe",
+      "rss_mb": 37.9,
+      "cmd": "C:\\Program Files (x86)\\Microsoft\\Copilot\\Application\\mscopilot.exe --no-startup-window --win-session-start"
+    },
+    {
+      "pid": 23840,
+      "name": "NZXT CAM.exe",
+      "rss_mb": 3.0,
+      "cmd": "C:\\Program Files\\NZXT CAM\\NZXT CAM.exe --type=utility --utility-sub-type=network.mojom.NetworkService --lang=en-US --service-sandbox-type=none --user-data-dir=C:\\Users\\koosh\\AppData\\Roaming\\NZXT CAM --secure-schemes=sentry-ipc --bypasscsp-schemes=sen"
+    },
+    {
+      "pid": 24244,
+      "name": "PowerToys.FancyZones.exe",
+      "rss_mb": 3.0,
+      "cmd": "C:\\Program Files\\PowerToys\\modules\\FancyZones\\PowerToys.FancyZones.exe 3816"
+    },
+    {
+      "pid": 24344,
+      "name": "Launch.exe",
+      "rss_mb": 4.1,
+      "cmd": "C:\\Program Files (x86)\\Gigabyte\\AppCenter\\Launch.exe -upd C:\\Users\\koosh\\AppData\\Local\\Temp\\AppCenter\\UpdPack_B26.0730.1.exe"
+    },
+    {
+      "pid": 24532,
+      "name": "PowerToys.AlwaysOnTop.exe",
+      "rss_mb": 1.3,
+      "cmd": "C:\\Program Files\\PowerToys\\modules\\AlwaysOnTop\\PowerToys.AlwaysOnTop.exe 3816"
+    },
+    {
+      "pid": 24616,
+      "name": "PowerToys.PowerOCR.exe",
+      "rss_mb": 1.8,
+      "cmd": "C:\\Program Files\\PowerToys\\modules\\PowerOCR\\PowerToys.PowerOCR.exe 3816"
+    },
+    {
+      "pid": 24864,
+      "name": "Focusrite Notifier.exe",
+      "rss_mb": 1.2,
+      "cmd": "C:\\Program Files\\Focusrite\\Drivers\\Focusrite Notifier.exe"
+    },
+    {
+      "pid": 25196,
+      "name": "deskflow.exe",
+      "rss_mb": 5.7,
+      "cmd": "C:\\Program Files\\Deskflow\\deskflow.exe"
+    },
+    {
+      "pid": 25488,
+      "name": "Unity Hub.exe",
+      "rss_mb": 10.5,
+      "cmd": "C:\\Program Files\\Unity Hub\\Unity Hub.exe --type=utility --utility-sub-type=network.mojom.NetworkService --lang=en-US --service-sandbox-type=none --user-data-dir=C:\\Users\\koosh\\AppData\\Roaming\\UnityHub --standard-schemes=localasset --secure-schemes=se"
+    },
+    {
+      "pid": 25616,
+      "name": "msedge.exe",
+      "rss_mb": 8.4,
+      "cmd": "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe --type=utility --utility-sub-type=video_capture.mojom.VideoCaptureService --lang=en-US --service-sandbox-type=none --video-capture-use-gpu-memory-buffer --skip-read-main-dll --metrics-shmem"
+    },
+    {
+      "pid": 25880,
+      "name": "NZXT CAM.exe",
+      "rss_mb": 1.3,
+      "cmd": "C:\\Program Files\\NZXT CAM\\NZXT CAM.exe --type=crashpad-handler --user-data-dir=C:\\Users\\koosh\\AppData\\Roaming\\NZXT CAM /prefetch:4 --no-rate-limit --monitor-self-annotation=ptype=crashpad-handler --database=C:\\Users\\koosh\\AppData\\Roaming\\NZXT CAM\\Cra"
+    },
+    {
+      "pid": 26076,
+      "name": "WindowsTerminal.exe",
+      "rss_mb": 140.7,
+      "cmd": "C:\\Program Files\\WindowsApps\\Microsoft.WindowsTerminal_1.24.11911.0_x64__8wekyb3d8bbwe\\WindowsTerminal.exe"
+    },
+    {
+      "pid": 26240,
+      "name": "OpenConsole.exe",
+      "rss_mb": 2.1,
+      "cmd": "C:\\Program Files\\WindowsApps\\Microsoft.WindowsTerminal_1.24.11911.0_x64__8wekyb3d8bbwe\\OpenConsole.exe --headless --textMeasurement graphemes --width 120 --height 30 --signal 0xab0 --server 0x998"
+    },
+    {
+      "pid": 26248,
+      "name": "pwsh.exe",
+      "rss_mb": 2.6,
+      "cmd": "C:\\Program Files\\PowerShell\\7-preview\\pwsh.exe"
+    },
+    {
+      "pid": 26680,
+      "name": "cam_helper.exe",
+      "rss_mb": 0.9,
+      "cmd": " --elevation-server 84f362f9-a58d-496d-aa1a-0a6724143597 --run-id 3a9fbcb6027b43ae94ae89567fdff608 --app-version NZXT CAM@4.76.5 --environment production --log-directory C:\\Users\\koosh\\AppData\\Roaming\\NZXT CAM\\logs --disable-sentry --log-level INFO -"
+    },
+    {
+      "pid": 26692,
+      "name": "conhost.exe",
+      "rss_mb": 1.5,
+      "cmd": "\\??\\C:\\WINDOWS\\system32\\conhost.exe 0x4"
+    },
+    {
+      "pid": 26748,
+      "name": "cam_helper.exe",
+      "rss_mb": 16.3,
+      "cmd": "\\\\?\\C:\\Program Files\\NZXT CAM\\resources\\app.asar.unpacked\\node_modules\\@nzxt\\cam-core\\dist\\cam_helper.exe --transfer-server 2f477fa4-1fec-457a-a580-3ada628bfef5 --refresh-server d2c3a6ba-d8b1-4a52-81ea-6b4b98d8a4bf --run-id 3a9fbcb6027b43ae94ae89567f"
+    },
+    {
+      "pid": 26756,
+      "name": "svchost.exe",
+      "rss_mb": 1.4,
+      "cmd": ""
+    },
+    {
+      "pid": 26824,
+      "name": "msedge.exe",
+      "rss_mb": 6.4,
+      "cmd": "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe --type=renderer --pdf-upsell-enabled --video-capture-use-gpu-memory-buffer --lang=en-US --js-flags --device-scale-factor=1 --num-raster-threads=4 --enable-main-frame-before-activation --ren"
+    },
+    {
+      "pid": 26828,
+      "name": "RuntimeBroker.exe",
+      "rss_mb": 1.7,
+      "cmd": "C:\\Windows\\System32\\RuntimeBroker.exe -Embedding"
+    },
+    {
+      "pid": 27272,
+      "name": "NZXT CAM.exe",
+      "rss_mb": 105.2,
+      "cmd": "C:\\Program Files\\NZXT CAM\\NZXT CAM.exe --type=renderer --user-data-dir=C:\\Users\\koosh\\AppData\\Roaming\\NZXT CAM --secure-schemes=sentry-ipc --bypasscsp-schemes=sentry-ipc --cors-schemes=sentry-ipc --fetch-schemes=sentry-ipc --app-user-model-id=NZXT.CA"
+    },
+    {
+      "pid": 27440,
+      "name": "mscopilot.exe",
+      "rss_mb": 1.4,
+      "cmd": "C:\\Program Files (x86)\\Microsoft\\Copilot\\Application\\mscopilot.exe --type=crashpad-handler --user-data-dir=C:\\Users\\koosh\\AppData\\Local\\Microsoft\\Copilot\\User Data /prefetch:4 --monitor-self-annotation=ptype=crashpad-handler --database=C:\\Users\\koosh"
+    },
+    {
+      "pid": 27772,
+      "name": "mscopilot.exe",
+      "rss_mb": 47.0,
+      "cmd": "C:\\Program Files (x86)\\Microsoft\\Copilot\\Application\\mscopilot.exe --type=gpu-process --subproc-heap-profiling --gpu-preferences=WAAAAAAAAADgAAAEAAAAAAAAAAAAAGAAQAAAAAAAAAADAAAAAAAAADgAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAKAAAAAAAAAAoAAAAAAAAAAgAA"
+    },
+    {
+      "pid": 27776,
+      "name": "mscopilot.exe",
+      "rss_mb": 25.1,
+      "cmd": "C:\\Program Files (x86)\\Microsoft\\Copilot\\Application\\mscopilot.exe --type=utility --utility-sub-type=network.mojom.NetworkService --lang=en-US --service-sandbox-type=none --subproc-heap-profiling --startup-read-main-dll --metrics-shmem-handle=2852,i,"
+    },
+    {
+      "pid": 27852,
+      "name": "mscopilot.exe",
+      "rss_mb": 2.3,
+      "cmd": "C:\\Program Files (x86)\\Microsoft\\Copilot\\Application\\mscopilot.exe --type=utility --utility-sub-type=storage.mojom.StorageService --lang=en-US --service-sandbox-type=service --subproc-heap-profiling --startup-read-main-dll --metrics-shmem-handle=3192"
+    },
+    {
+      "pid": 28164,
+      "name": "msedge.exe",
+      "rss_mb": 4.6,
+      "cmd": "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe --type=renderer --extension-process --renderer-sub-type=extension --pdf-upsell-enabled --video-capture-use-gpu-memory-buffer --lang=en-US --js-flags --device-scale-factor=1 --num-raster-thr"
+    },
+    {
+      "pid": 28284,
+      "name": "Rainmeter.exe",
+      "rss_mb": 25.8,
+      "cmd": "C:\\Program Files\\Rainmeter\\Rainmeter.exe"
+    },
+    {
+      "pid": 28740,
+      "name": "svchost.exe",
+      "rss_mb": 1.5,
+      "cmd": ""
+    },
+    {
+      "pid": 28756,
+      "name": "conhost.exe",
+      "rss_mb": 0.8,
+      "cmd": "\\??\\C:\\WINDOWS\\system32\\conhost.exe 0x4"
+    },
+    {
+      "pid": 29008,
+      "name": "WidgetService.exe",
+      "rss_mb": 3.5,
+      "cmd": "C:\\Program Files\\WindowsApps\\Microsoft.WidgetsPlatformRuntime_1.6.19.0_x64__8wekyb3d8bbwe\\WidgetService\\WidgetService.exe -RegisterProcessAsComServer -Embedding"
+    },
+    {
+      "pid": 29076,
+      "name": "steam.exe",
+      "rss_mb": 17.7,
+      "cmd": "C:\\Program Files (x86)\\Steam\\steam.exe"
+    },
+    {
+      "pid": 29096,
+      "name": "Skyve.Service.exe",
+      "rss_mb": 111.1,
+      "cmd": ""
+    },
+    {
+      "pid": 29160,
+      "name": "MicrosoftStartFeedProvider.exe",
+      "rss_mb": 3.3,
+      "cmd": "C:\\Program Files\\WindowsApps\\Microsoft.StartExperiencesApp_1.380.2.0_x64__8wekyb3d8bbwe\\MicrosoftStartFeedProvider\\MicrosoftStartFeedProvider.exe -Embedding"
+    },
+    {
+      "pid": 29436,
+      "name": "svchost.exe",
+      "rss_mb": 0.9,
+      "cmd": ""
+    },
+    {
+      "pid": 29596,
+      "name": "svchost.exe",
+      "rss_mb": 6.9,
+      "cmd": ""
+    },
+    {
+      "pid": 29632,
+      "name": "msedge.exe",
+      "rss_mb": 7.1,
+      "cmd": "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe --type=renderer --pdf-upsell-enabled --video-capture-use-gpu-memory-buffer --lang=en-US --js-flags --device-scale-factor=1 --num-raster-threads=4 --enable-main-frame-before-activation --ren"
+    },
+    {
+      "pid": 29660,
+      "name": "agileplus-dashboard.exe",
+      "rss_mb": 0.8,
+      "cmd": "E:\\agileplus-target\\release\\agileplus-dashboard.exe"
+    },
+    {
+      "pid": 29768,
+      "name": "steamwebhelper.exe",
+      "rss_mb": 3.6,
+      "cmd": "C:\\Program Files (x86)\\Steam\\bin\\cef\\cef.win64\\steamwebhelper.exe --type=renderer --enable-dinosaur-easter-egg-alt-images --enable-chrome-runtime --user-data-dir=C:\\Users\\koosh\\AppData\\Local\\Steam\\htmlcache --user-agent-product=Valve Steam Client --b"
+    },
+    {
+      "pid": 30060,
+      "name": "svchost.exe",
+      "rss_mb": 1.4,
+      "cmd": ""
+    },
+    {
+      "pid": 30084,
+      "name": "svchost.exe",
+      "rss_mb": 1.0,
+      "cmd": ""
+    },
+    {
+      "pid": 30292,
+      "name": "svchost.exe",
+      "rss_mb": 1.8,
+      "cmd": ""
+    },
+    {
+      "pid": 30316,
+      "name": "steamwebhelper.exe",
+      "rss_mb": 35.6,
+      "cmd": "C:\\Program Files (x86)\\Steam\\bin\\cef\\cef.win64\\steamwebhelper.exe --type=renderer --enable-dinosaur-easter-egg-alt-images --enable-chrome-runtime --user-data-dir=C:\\Users\\koosh\\AppData\\Local\\Steam\\htmlcache --user-agent-product=Valve Steam Client --b"
+    },
+    {
+      "pid": 30364,
+      "name": "steamwebhelper.exe",
+      "rss_mb": 11.5,
+      "cmd": "C:\\Program Files (x86)\\Steam\\bin\\cef\\cef.win64\\steamwebhelper.exe --type=gpu-process --start-stack-profiler --enable-chrome-runtime --user-data-dir=C:\\Users\\koosh\\AppData\\Local\\Steam\\htmlcache --user-agent-product=Valve Steam Client --buildid=1785799"
+    },
+    {
+      "pid": 30912,
+      "name": "msedge.exe",
+      "rss_mb": 13.0,
+      "cmd": "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe --type=renderer --pdf-upsell-enabled --video-capture-use-gpu-memory-buffer --lang=en-US --js-flags --device-scale-factor=1 --num-raster-threads=4 --enable-main-frame-before-activation --ren"
+    },
+    {
+      "pid": 31096,
+      "name": "Cities2.exe",
+      "rss_mb": 4017.3,
+      "cmd": "Cities2.exe --pdx-launcher-session-token d724057b-5788-4e42-a19f-b4ab68b94b5a --paradox-account-userid 736941ee-b2c2-4e58-99ce-e9c6ac5eddc2 -developerMode"
+    },
+    {
+      "pid": 31116,
+      "name": "UnityCrashHandler64.exe",
+      "rss_mb": 1.0,
+      "cmd": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Cities Skylines II\\UnityCrashHandler64.exe --attach 31096 1821050212352"
+    },
+    {
+      "pid": 31124,
+      "name": "msedge.exe",
+      "rss_mb": 8.4,
+      "cmd": "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe --type=renderer --pdf-upsell-enabled --video-capture-use-gpu-memory-buffer --lang=en-US --js-flags --device-scale-factor=1 --num-raster-threads=4 --enable-main-frame-before-activation --ren"
+    },
+    {
+      "pid": 31600,
+      "name": "droid.exe",
+      "rss_mb": 345.8,
+      "cmd": "C:\\Users\\koosh\\bin\\droid.exe exec --input-format stream-jsonrpc --output-format stream-jsonrpc"
+    },
+    {
+      "pid": 31636,
+      "name": "pwsh.exe",
+      "rss_mb": 31.6,
+      "cmd": "C:\\Program Files\\PowerShell\\7-preview\\pwsh.exe"
+    },
+    {
+      "pid": 32188,
+      "name": "svchost.exe",
+      "rss_mb": 1.2,
+      "cmd": ""
+    },
+    {
+      "pid": 32836,
+      "name": "Spotify.exe",
+      "rss_mb": 302.4,
+      "cmd": "C:\\Users\\koosh\\AppData\\Roaming\\Spotify\\Spotify.exe --type=renderer --origin-trial-disabled-features=CanvasTextNg|WebAssemblyCustomDescriptors --no-pre-read-main-dll --user-data-dir=C:\\Users\\koosh\\AppData\\Local\\Spotify --log-severity=disable --user-ag"
+    },
+    {
+      "pid": 33252,
+      "name": "Spotify.exe",
+      "rss_mb": 271.6,
+      "cmd": "Spotify.exe /UPDATECOMPLETE"
+    },
+    {
+      "pid": 33268,
+      "name": "Spotify.exe",
+      "rss_mb": 1.5,
+      "cmd": "C:\\Users\\koosh\\AppData\\Roaming\\Spotify\\Spotify.exe --type=crashpad-handler /prefetch:4 --max-uploads=5 --max-db-size=20 --max-db-age=5 --monitor-self-annotation=ptype=crashpad-handler --database=C:\\Users\\koosh\\AppData\\Local\\Spotify\\User Data\\Crashpad"
+    },
+    {
+      "pid": 33476,
+      "name": "Spotify.exe",
+      "rss_mb": 46.9,
+      "cmd": "C:\\Users\\koosh\\AppData\\Roaming\\Spotify\\Spotify.exe --type=gpu-process --no-pre-read-main-dll --start-stack-profiler --user-data-dir=C:\\Users\\koosh\\AppData\\Local\\Spotify --log-severity=disable --user-agent-product=Chrome/146.0.7680.179 Spotify/1.2.95."
+    },
+    {
+      "pid": 33488,
+      "name": "Spotify.exe",
+      "rss_mb": 24.5,
+      "cmd": "C:\\Users\\koosh\\AppData\\Roaming\\Spotify\\Spotify.exe --type=utility --utility-sub-type=network.mojom.NetworkService --lang=en-US --service-sandbox-type=none --no-pre-read-main-dll --start-stack-profiler --user-data-dir=C:\\Users\\koosh\\AppData\\Local\\Spot"
+    },
+    {
+      "pid": 33528,
+      "name": "Spotify.exe",
+      "rss_mb": 6.1,
+      "cmd": "C:\\Users\\koosh\\AppData\\Roaming\\Spotify\\Spotify.exe --type=utility --utility-sub-type=storage.mojom.StorageService --lang=en-US --service-sandbox-type=service --no-pre-read-main-dll --user-data-dir=C:\\Users\\koosh\\AppData\\Local\\Spotify --log-severity=d"
+    },
+    {
+      "pid": 34496,
+      "name": "conhost.exe",
+      "rss_mb": 0.8,
+      "cmd": "\\??\\C:\\WINDOWS\\system32\\conhost.exe 0x4"
+    },
+    {
+      "pid": 35144,
+      "name": "svchost.exe",
+      "rss_mb": 1.0,
+      "cmd": "C:\\WINDOWS\\system32\\svchost.exe -k DevicesFlow -s DevicesFlowUserSvc"
+    },
+    {
+      "pid": 35240,
+      "name": "OpenConsole.exe",
+      "rss_mb": 1.9,
+      "cmd": "C:\\Program Files\\WindowsApps\\Microsoft.WindowsTerminal_1.24.11911.0_x64__8wekyb3d8bbwe\\OpenConsole.exe --headless --textMeasurement graphemes --width 42 --height 22 --signal 0x21f4 --server 0x21e0"
+    },
+    {
+      "pid": 35536,
+      "name": "svchost.exe",
+      "rss_mb": 2.4,
+      "cmd": ""
+    },
+    {
+      "pid": 36012,
+      "name": "svchost.exe",
+      "rss_mb": 2.5,
+      "cmd": "C:\\WINDOWS\\system32\\svchost.exe -k BcastDVRUserService -s BcastDVRUserService"
+    },
+    {
+      "pid": 36332,
+      "name": "Spotify.exe",
+      "rss_mb": 4.0,
+      "cmd": "C:\\Users\\koosh\\AppData\\Roaming\\Spotify\\Spotify.exe --type=utility --utility-sub-type=media.mojom.CdmServiceBroker --lang=en-US --service-sandbox-type=cdm --video-capture-use-gpu-memory-buffer --no-pre-read-main-dll --user-data-dir=C:\\Users\\koosh\\AppD"
+    },
+    {
+      "pid": 36808,
+      "name": "logi_lamparray_service.AMD64.exe",
+      "rss_mb": 0.9,
+      "cmd": ""
+    },
+    {
+      "pid": 37416,
+      "name": "pwsh.exe",
+      "rss_mb": 2.7,
+      "cmd": "C:\\Program Files\\PowerShell\\7-preview\\pwsh.exe"
+    },
+    {
+      "pid": 37920,
+      "name": "python.exe",
+      "rss_mb": 5.4,
+      "cmd": "C:\\Python313\\python.exe -m pheno.serve.server --config C:\\Users\\koosh\\pheno-harness\\config\\pheno_serve.yaml"
+    },
+    {
+      "pid": 39300,
+      "name": "OpenConsole.exe",
+      "rss_mb": 2.2,
+      "cmd": "C:\\Program Files\\WindowsApps\\Microsoft.WindowsTerminal_1.24.11911.0_x64__8wekyb3d8bbwe\\OpenConsole.exe --headless --textMeasurement graphemes --width 86 --height 24 --signal 0x9a0 --server 0x1584"
+    },
+    {
+      "pid": 40500,
+      "name": "OpenConsole.exe",
+      "rss_mb": 10.6,
+      "cmd": "C:\\Program Files\\WindowsApps\\Microsoft.WindowsTerminal_1.24.11911.0_x64__8wekyb3d8bbwe\\OpenConsole.exe --headless --textMeasurement graphemes --width 43 --height 22 --signal 0x1f0c --server 0x1eac"
+    },
+    {
+      "pid": 40524,
+      "name": "rustc.exe",
+      "rss_mb": 781.2,
+      "cmd": "C:\\Users\\koosh\\.rustup\\toolchains\\1.96-x86_64-pc-windows-msvc\\bin\\rustc.exe --crate-name helioslite --edition=2024 crates\\forge_main\\src\\main.rs --error-format=json --json=diagnostic-rendered-ansi,artifacts,future-incompat --crate-type bin --emit=dep"
+    },
+    {
+      "pid": 41352,
+      "name": "OpenConsole.exe",
+      "rss_mb": 2.1,
+      "cmd": "C:\\Program Files\\WindowsApps\\Microsoft.WindowsTerminal_1.24.11911.0_x64__8wekyb3d8bbwe\\OpenConsole.exe --headless --textMeasurement graphemes --width 42 --height 22 --signal 0x1bb4 --server 0x1e90"
+    },
+    {
+      "pid": 41396,
+      "name": "droid.exe",
+      "rss_mb": 310.4,
+      "cmd": "C:\\Users\\koosh\\bin\\droid.exe"
+    },
+    {
+      "pid": 41580,
+      "name": "pwsh.exe",
+      "rss_mb": 9.5,
+      "cmd": "C:\\Program Files\\PowerShell\\7-preview\\pwsh.exe"
+    },
+    {
+      "pid": 41908,
+      "name": "pwsh.exe",
+      "rss_mb": 2.5,
+      "cmd": "C:\\Program Files\\PowerShell\\7-preview\\pwsh.exe"
+    },
+    {
+      "pid": 42116,
+      "name": "pwsh.exe",
+      "rss_mb": 3.0,
+      "cmd": "C:\\Program Files\\PowerShell\\7-preview\\pwsh.exe"
+    },
+    {
+      "pid": 42852,
+      "name": "OpenConsole.exe",
+      "rss_mb": 11.7,
+      "cmd": "C:\\Program Files\\WindowsApps\\Microsoft.WindowsTerminal_1.24.11911.0_x64__8wekyb3d8bbwe\\OpenConsole.exe --headless --textMeasurement graphemes --width 86 --height 24 --signal 0x1898 --server 0x1610"
+    },
+    {
+      "pid": 43016,
+      "name": "SystemSettings.exe",
+      "rss_mb": 0.0,
+      "cmd": "C:\\Windows\\ImmersiveControlPanel\\SystemSettings.exe -ServerName:microsoft.windows.immersivecontrolpanel"
+    },
+    {
+      "pid": 43324,
+      "name": "pwsh.exe",
+      "rss_mb": 37.7,
+      "cmd": "C:\\Program Files\\PowerShell\\7-preview\\pwsh.exe"
+    },
+    {
+      "pid": 43484,
+      "name": "svchost.exe",
+      "rss_mb": 1.0,
+      "cmd": ""
+    },
+    {
+      "pid": 43776,
+      "name": "msedge.exe",
+      "rss_mb": 4.0,
+      "cmd": "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe --type=renderer --pdf-upsell-enabled --video-capture-use-gpu-memory-buffer --lang=en-US --js-flags --device-scale-factor=1 --num-raster-threads=4 --enable-main-frame-before-activation --ren"
+    },
+    {
+      "pid": 43792,
+      "name": "dllhost.exe",
+      "rss_mb": 1.5,
+      "cmd": "C:\\WINDOWS\\system32\\DllHost.exe /Processid:{17696EAC-9568-4CF5-BB8C-82515AAD6C09}"
+    },
+    {
+      "pid": 43796,
+      "name": "TrustedInstaller.exe",
+      "rss_mb": 0.9,
+      "cmd": ""
+    },
+    {
+      "pid": 44508,
+      "name": "OpenConsole.exe",
+      "rss_mb": 1.5,
+      "cmd": "C:\\Program Files\\WindowsApps\\Microsoft.WindowsTerminal_1.24.11911.0_x64__8wekyb3d8bbwe\\OpenConsole.exe --headless --textMeasurement graphemes --width 183 --height 50 --signal 0x1368 --server 0x424"
+    },
+    {
+      "pid": 44512,
+      "name": "TiWorker.exe",
+      "rss_mb": 1.5,
+      "cmd": ""
+    },
+    {
+      "pid": 44536,
+      "name": "msedge.exe",
+      "rss_mb": 30.6,
+      "cmd": "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe --type=renderer --pdf-upsell-enabled --video-capture-use-gpu-memory-buffer --lang=en-US --js-flags --device-scale-factor=1 --num-raster-threads=4 --enable-main-frame-before-activation --ren"
+    },
+    {
+      "pid": 44900,
+      "name": "dllhost.exe",
+      "rss_mb": 2.1,
+      "cmd": "C:\\WINDOWS\\system32\\DllHost.exe /Processid:{DFB65C4C-B34F-435D-AFE9-A86218684AA8}"
+    },
+    {
+      "pid": 44980,
+      "name": "OpenConsole.exe",
+      "rss_mb": 16.8,
+      "cmd": "C:\\Program Files\\WindowsApps\\Microsoft.WindowsTerminal_1.24.11911.0_x64__8wekyb3d8bbwe\\OpenConsole.exe --headless --textMeasurement graphemes --width 42 --height 22 --signal 0x23a0 --server 0x23a4"
+    },
+    {
+      "pid": 45044,
+      "name": "pwsh.exe",
+      "rss_mb": 36.2,
+      "cmd": "C:\\Program Files\\PowerShell\\7-preview\\pwsh.exe"
+    },
+    {
+      "pid": 45212,
+      "name": "OpenConsole.exe",
+      "rss_mb": 6.9,
+      "cmd": "C:\\Program Files\\WindowsApps\\Microsoft.WindowsTerminal_1.24.11911.0_x64__8wekyb3d8bbwe\\OpenConsole.exe --headless --textMeasurement graphemes --width 42 --height 22 --signal 0x25c8 --server 0x2580"
+    },
+    {
+      "pid": 45224,
+      "name": "pwsh.exe",
+      "rss_mb": 32.4,
+      "cmd": "C:\\Program Files\\PowerShell\\7-preview\\pwsh.exe"
+    },
+    {
+      "pid": 45624,
+      "name": "helioslite.exe",
+      "rss_mb": 34.3,
+      "cmd": "C:\\Users\\koosh\\AppData\\Local\\Programs\\heliosLite\\helioslite.exe"
+    },
+    {
+      "pid": 45640,
+      "name": "SearchProtocolHost.exe",
+      "rss_mb": 11.4,
+      "cmd": "C:\\WINDOWS\\System32\\SearchProtocolHost.exe Global\\UsGthrFltPipeMssGthrPipe_S-1-5-21-257966176-1189734195-700740566-100188_ Global\\UsGthrCtrlFltPipeMssGthrPipe_S-1-5-21-257966176-1189734195-700740566-100188 1 -2147483646 Software\\Microsoft\\Windows Sea"
+    },
+    {
+      "pid": 46320,
+      "name": "OptionalFeatures.exe",
+      "rss_mb": 1.5,
+      "cmd": "C:\\WINDOWS\\system32\\OptionalFeatures.exe"
+    },
+    {
+      "pid": 46748,
+      "name": "msedge.exe",
+      "rss_mb": 31.9,
+      "cmd": "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe --type=renderer --pdf-upsell-enabled --video-capture-use-gpu-memory-buffer --lang=en-US --js-flags --device-scale-factor=1 --num-raster-threads=4 --enable-main-frame-before-activation --ren"
+    },
+    {
+      "pid": 46792,
+      "name": "msedge.exe",
+      "rss_mb": 6.7,
+      "cmd": "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe --type=renderer --pdf-upsell-enabled --video-capture-use-gpu-memory-buffer --lang=en-US --js-flags --device-scale-factor=1 --num-raster-threads=4 --enable-main-frame-before-activation --ren"
+    },
+    {
+      "pid": 47020,
+      "name": "explorer.exe",
+      "rss_mb": 142.7,
+      "cmd": "C:\\WINDOWS\\Explorer.EXE"
+    },
+    {
+      "pid": 47312,
+      "name": "ShellExperienceHost.exe",
+      "rss_mb": 0.0,
+      "cmd": "C:\\Windows\\SystemApps\\ShellExperienceHost_cw5n1h2txyewy\\ShellExperienceHost.exe -ServerName:App.AppXtk181tbxbce2qsex02s8tw7hfxa9xb3t.mca"
+    },
+    {
+      "pid": 48608,
+      "name": "msedge.exe",
+      "rss_mb": 7.4,
+      "cmd": "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe --type=renderer --pdf-upsell-enabled --video-capture-use-gpu-memory-buffer --lang=en-US --js-flags --device-scale-factor=1 --num-raster-threads=4 --enable-main-frame-before-activation --ren"
+    },
+    {
+      "pid": 49020,
+      "name": "msedge.exe",
+      "rss_mb": 4.5,
+      "cmd": "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe --type=renderer --pdf-upsell-enabled --video-capture-use-gpu-memory-buffer --lang=en-US --js-flags --device-scale-factor=1 --num-raster-threads=4 --enable-main-frame-before-activation --ren"
+    },
+    {
+      "pid": 50276,
+      "name": "VSSVC.exe",
+      "rss_mb": 1.2,
+      "cmd": ""
+    },
+    {
+      "pid": 50496,
+      "name": "TextInputHost.exe",
+      "rss_mb": 28.5,
+      "cmd": "C:\\Windows\\SystemApps\\MicrosoftWindows.Client.CBS_cw5n1h2txyewy\\TextInputHost.exe -ServerName:InputApp.AppXk0k6mrh4r2q0ct33a9wgbez0x7v9cz5y.mca"
+    },
+    {
+      "pid": 50820,
+      "name": "StartMenuExperienceHost.exe",
+      "rss_mb": 119.9,
+      "cmd": "C:\\Windows\\SystemApps\\Microsoft.Windows.StartMenuExperienceHost_cw5n1h2txyewy\\StartMenuExperienceHost.exe -ServerName:FullTrustApp.AppXykjsye98af63ez2annt9djke8trg8stn.mca"
+    },
+    {
+      "pid": 51192,
+      "name": "SearchHost.exe",
+      "rss_mb": 50.7,
+      "cmd": "C:\\Windows\\SystemApps\\MicrosoftWindows.Client.CBS_cw5n1h2txyewy\\SearchHost.exe -ServerName:CortanaUI.AppXstmwaab17q5s3y22tp6apqz7a45vwv65.mca"
+    },
+    {
+      "pid": 52212,
+      "name": "taskhostw.exe",
+      "rss_mb": 2.3,
+      "cmd": "taskhostw.exe"
+    },
+    {
+      "pid": 56156,
+      "name": "conhost.exe",
+      "rss_mb": 0.6,
+      "cmd": "\\??\\C:\\WINDOWS\\system32\\conhost.exe 0x4"
+    },
+    {
+      "pid": 68552,
+      "name": "GameInputSvc.exe",
+      "rss_mb": 0.7,
+      "cmd": ""
+    },
+    {
+      "pid": 68724,
+      "name": "svchost.exe",
+      "rss_mb": 0.9,
+      "cmd": ""
+    },
+    {
+      "pid": 69216,
+      "name": "msedge.exe",
+      "rss_mb": 51.8,
+      "cmd": "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe --type=renderer --extension-process --renderer-sub-type=extension --pdf-upsell-enabled --video-capture-use-gpu-memory-buffer --lang=en-US --js-flags --device-scale-factor=1 --num-raster-thr"
+    },
+    {
+      "pid": 69336,
+      "name": "WmiPrvSE.exe",
+      "rss_mb": 8.5,
+      "cmd": ""
+    },
+    {
+      "pid": 71668,
+      "name": "powershell.exe",
+      "rss_mb": 19.1,
+      "cmd": ""
+    },
+    {
+      "pid": 71720,
+      "name": "OpenConsole.exe",
+      "rss_mb": 1.8,
+      "cmd": "C:\\Program Files\\WindowsApps\\Microsoft.WindowsTerminal_1.24.11911.0_x64__8wekyb3d8bbwe\\OpenConsole.exe --headless --textMeasurement graphemes --width 96 --height 24 --signal 0xecc --server 0x2a9c"
+    },
+    {
+      "pid": 72256,
+      "name": "cargo.exe",
+      "rss_mb": 9.1,
+      "cmd": "C:\\Users\\koosh\\.rustup\\toolchains\\1.96-x86_64-pc-windows-msvc\\bin\\cargo.exe build --release --bin helioslite --bin forge"
+    },
+    {
+      "pid": 72732,
+      "name": "llama-server.exe",
+      "rss_mb": 4.5,
+      "cmd": "D:\\WSL\\tools\\llama.cpp-b10012-cuda12.4\\llama-server.exe -m D:\\WSL\\model-cache\\lfm25-8b-a1b-q4\\lfm25-8b-a1b.Q4_K_M.gguf --port 19000 --host 127.0.0.1 -ngl 99 -c 32768 -np 1 --alias local/lfm25-8b-a1b"
+    },
+    {
+      "pid": 72816,
+      "name": "cmd.exe",
+      "rss_mb": 7.9,
+      "cmd": "c:\\windows\\system32\\cmd.exe /c cd /d C:\\Python313 && C:\\Python313\\python.exe C:\\Users\\koosh\\AppData\\Local\\Temp\\kproc_aug07_v6.py"
+    },
+    {
+      "pid": 73200,
+      "name": "vmmemWSL",
+      "rss_mb": 5775.2,
+      "cmd": ""
+    },
+    {
+      "pid": 73812,
+      "name": "pwsh.exe",
+      "rss_mb": 3.2,
+      "cmd": "C:\\Program Files\\PowerShell\\7-preview\\pwsh.exe"
+    },
+    {
+      "pid": 73932,
+      "name": "python.exe",
+      "rss_mb": 21.1,
+      "cmd": "C:\\Python313\\python.exe C:\\Users\\koosh\\AppData\\Local\\Temp\\kproc_aug07_v6.py"
+    },
+    {
+      "pid": 73972,
+      "name": "droid.exe",
+      "rss_mb": 444.2,
+      "cmd": "C:\\Users\\koosh\\bin\\droid.exe"
+    },
+    {
+      "pid": 73984,
+      "name": "WmiPrvSE.exe",
+      "rss_mb": 12.1,
+      "cmd": ""
+    },
+    {
+      "pid": 74760,
+      "name": "SecurityHealthHost.exe",
+      "rss_mb": 0.9,
+      "cmd": "\\\\?\\C:\\Windows\\System32\\SecurityHealth\\10.0.29628.1000-0\\SecurityHealthHost.exe {E041C90B-68BA-42C9-991E-477B73A75C90} -Embedding"
+    },
+    {
+      "pid": 74908,
+      "name": "msedge.exe",
+      "rss_mb": 35.3,
+      "cmd": "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe --type=renderer --pdf-upsell-enabled --video-capture-use-gpu-memory-buffer --lang=en-US --js-flags --device-scale-factor=1 --num-raster-threads=4 --enable-main-frame-before-activation --ren"
+    },
+    {
+      "pid": 75124,
+      "name": "SecHealthUI.exe",
+      "rss_mb": 7.9,
+      "cmd": "C:\\Program Files\\WindowsApps\\Microsoft.SecHealthUI_1000.29628.1000.0_x64__8wekyb3d8bbwe\\SecHealthUI.exe -ServerName:SecHealthUI.AppX8tam42xc7v2czs3s1nt0nkxvfjtepzp9.mca"
+    },
+    {
+      "pid": 76592,
+      "name": "wslrelay.exe",
+      "rss_mb": 2.1,
+      "cmd": " --mode 1 --vm-id {3a6f276e-6979-4c44-8982-5225a33aa43e} --handle 1820"
+    },
+    {
+      "pid": 76852,
+      "name": "identity_helper.exe",
+      "rss_mb": 3.7,
+      "cmd": "C:\\Program Files (x86)\\Microsoft\\Copilot\\Application\\152.0.4191.2\\identity_helper.exe --type=utility --utility-sub-type=text_services.mojom.TextServicesManager --lang=en-US --service-sandbox-type=windows_package_identity --message-loop-type-ui --vide"
+    },
+    {
+      "pid": 76932,
+      "name": "svchost.exe",
+      "rss_mb": 1.2,
+      "cmd": ""
+    },
+    {
+      "pid": 78416,
+      "name": "ShellHost.exe",
+      "rss_mb": 5.1,
+      "cmd": "C:\\Windows\\System32\\ShellHost.exe"
+    },
+    {
+      "pid": 78824,
+      "name": "powershell.exe",
+      "rss_mb": 2.8,
+      "cmd": "C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe -NoExit -NoProfile -ExecutionPolicy Bypass -Command & 'C:\\Users\\koosh\\.unsloth\\studio\\unsloth_studio\\Scripts\\unsloth.exe' studio -p 8889"
+    },
+    {
+      "pid": 78984,
+      "name": "svchost.exe",
+      "rss_mb": 45.4,
+      "cmd": ""
+    },
+    {
+      "pid": 79580,
+      "name": "pwsh.exe",
+      "rss_mb": 82.7,
+      "cmd": "pwsh.exe -ExecutionPolicy Bypass -Command cmd /c \"cd /d C:\\Python313 && C:\\Python313\\python.exe C:\\Users\\koosh\\AppData\\Local\\Temp\\kproc_aug07_v6.py\""
+    },
+    {
+      "pid": 79924,
+      "name": "dllhost.exe",
+      "rss_mb": 5.0,
+      "cmd": "C:\\WINDOWS\\system32\\DllHost.exe /Processid:{DFB65C4C-B34F-435D-AFE9-A86218684AA8}"
+    },
+    {
+      "pid": 80020,
+      "name": "EtwHostServiceUpdater.exe",
+      "rss_mb": 2.5,
+      "cmd": "C:\\Program Files\\JetBrains\\ETW Host\\16\\Updater\\EtwHostServiceUpdater.exe"
+    },
+    {
+      "pid": 80084,
+      "name": "conhost.exe",
+      "rss_mb": 0.8,
+      "cmd": "\\??\\C:\\WINDOWS\\system32\\conhost.exe 0x4"
+    },
+    {
+      "pid": 80256,
+      "name": "mscopilot.exe",
+      "rss_mb": 9.0,
+      "cmd": "C:\\Program Files (x86)\\Microsoft\\Copilot\\Application\\mscopilot.exe --type=renderer --subproc-heap-profiling --video-capture-use-gpu-memory-buffer --lang=en-US --js-flags --device-scale-factor=1 --num-raster-threads=4 --enable-main-frame-before-activa"
+    },
+    {
+      "pid": 80564,
+      "name": "UserOOBEBroker.exe",
+      "rss_mb": 5.0,
+      "cmd": "C:\\Windows\\System32\\oobe\\UserOOBEBroker.exe -Embedding"
+    },
+    {
+      "pid": 81132,
+      "name": "vmwp.exe",
+      "rss_mb": 7.2,
+      "cmd": ""
+    },
+    {
+      "pid": 82520,
+      "name": "droid.exe",
+      "rss_mb": 460.7,
+      "cmd": "C:\\Users\\koosh\\bin\\droid.exe"
+    },
+    {
+      "pid": 83016,
+      "name": "droid.exe",
+      "rss_mb": 409.2,
+      "cmd": "C:\\Users\\koosh\\bin\\droid.exe"
+    },
+    {
+      "pid": 83060,
+      "name": "droid.exe",
+      "rss_mb": 134.6,
+      "cmd": "C:\\Users\\koosh\\bin\\droid.exe exec --input-format stream-jsonrpc --output-format stream-jsonrpc"
+    },
+    {
+      "pid": 83220,
+      "name": "wslhost.exe",
+      "rss_mb": 12.2,
+      "cmd": " --vm-id {3a6f276e-6979-4c44-8982-5225a33aa43e} --handle 2360"
+    },
+    {
+      "pid": 83376,
+      "name": "forge.exe",
+      "rss_mb": 26.6,
+      "cmd": "C:\\Users\\koosh\\AppData\\Local\\Programs\\Forge\\forge.exe --conversation-id da2850c2-3987-4201-b5e8-276320513f96"
+    },
+    {
+      "pid": 83420,
+      "name": "dllhost.exe",
+      "rss_mb": 1.2,
+      "cmd": "C:\\WINDOWS\\system32\\DllHost.exe /Processid:{973D20D7-562D-44B9-B70B-5A0F49CCDF3F}"
+    },
+    {
+      "pid": 83748,
+      "name": "gamingservicesnet.exe",
+      "rss_mb": 1.3,
+      "cmd": ""
+    },
+    {
+      "pid": 83920,
+      "name": "svchost.exe",
+      "rss_mb": 5.8,
+      "cmd": ""
+    },
+    {
+      "pid": 84064,
+      "name": "OpenConsole.exe",
+      "rss_mb": 1.5,
+      "cmd": "C:\\Program Files\\WindowsApps\\Microsoft.WindowsTerminalPreview_1.25.1912.0_x64__8wekyb3d8bbwe\\OpenConsole.exe -Embedding"
+    },
+    {
+      "pid": 84248,
+      "name": "droid.exe",
+      "rss_mb": 388.7,
+      "cmd": "C:\\Users\\koosh\\bin\\droid.exe"
+    },
+    {
+      "pid": 84284,
+      "name": "python.exe",
+      "rss_mb": 38.4,
+      "cmd": "C:\\Users\\koosh\\.unsloth\\studio\\unsloth_studio\\Scripts\\python.exe C:\\Users\\koosh\\.unsloth\\studio\\unsloth_studio\\Scripts\\unsloth.exe studio -p 8889"
+    },
+    {
+      "pid": 84356,
+      "name": "svchost.exe",
+      "rss_mb": 1.0,
+      "cmd": ""
+    },
+    {
+      "pid": 84816,
+      "name": "OpenConsole.exe",
+      "rss_mb": 1.5,
+      "cmd": "C:\\Program Files\\WindowsApps\\Microsoft.WindowsTerminal_1.24.11911.0_x64__8wekyb3d8bbwe\\OpenConsole.exe --headless --textMeasurement graphemes --width 180 --height 50 --signal 0x2858 --server 0xe5c"
+    },
+    {
+      "pid": 84880,
+      "name": "unsloth.exe",
+      "rss_mb": 0.5,
+      "cmd": "C:\\Users\\koosh\\.unsloth\\studio\\unsloth_studio\\Scripts\\unsloth.exe studio -p 8889"
+    },
+    {
+      "pid": 84944,
+      "name": "python.exe",
+      "rss_mb": 0.4,
+      "cmd": "C:\\Users\\koosh\\.unsloth\\studio\\unsloth_studio\\Scripts\\python.exe C:\\Users\\koosh\\.unsloth\\studio\\unsloth_studio\\Scripts\\unsloth.exe studio -p 8889"
+    },
+    {
+      "pid": 85084,
+      "name": "mscopilot.exe",
+      "rss_mb": 19.6,
+      "cmd": "C:\\Program Files (x86)\\Microsoft\\Copilot\\Application\\mscopilot.exe --type=renderer --top-chrome-webui --subproc-heap-profiling --video-capture-use-gpu-memory-buffer --lang=en-US --js-flags --device-scale-factor=1 --num-raster-threads=4 --enable-main-"
+    },
+    {
+      "pid": 85436,
+      "name": "droid.exe",
+      "rss_mb": 358.8,
+      "cmd": "C:\\Users\\koosh\\bin\\droid.exe exec --input-format stream-jsonrpc --output-format stream-jsonrpc"
+    },
+    {
+      "pid": 86088,
+      "name": "cargo.exe",
+      "rss_mb": 1.6,
+      "cmd": "C:\\Users\\koosh\\.cargo\\bin\\cargo.exe build --release --bin helioslite --bin forge"
+    },
+    {
+      "pid": 86676,
+      "name": "droid.exe",
+      "rss_mb": 283.0,
+      "cmd": "C:\\Users\\koosh\\bin\\droid.exe exec --input-format stream-jsonrpc --output-format stream-jsonrpc"
+    },
+    {
+      "pid": 87024,
+      "name": "droid.exe",
+      "rss_mb": 409.4,
+      "cmd": "C:\\Users\\koosh\\bin\\droid.exe"
+    },
+    {
+      "pid": 87272,
+      "name": "xgamehelper.exe",
+      "rss_mb": 0.7,
+      "cmd": "C:\\WINDOWS\\system32\\XGameHelper.exe #Global\\{A1E7C30E-358D-4F05-BC05-6D2547F0DD14}"
+    },
+    {
+      "pid": 87924,
+      "name": "gamingservices.exe",
+      "rss_mb": 15.9,
+      "cmd": ""
+    },
+    {
+      "pid": 88228,
+      "name": "droid.exe",
+      "rss_mb": 261.6,
+      "cmd": "C:\\Users\\koosh\\bin\\droid.exe exec --input-format stream-jsonrpc --output-format stream-jsonrpc"
+    },
+    {
+      "pid": 88552,
+      "name": "mscopilot.exe",
+      "rss_mb": 2.7,
+      "cmd": "C:\\Program Files (x86)\\Microsoft\\Copilot\\Application\\mscopilot.exe --type=renderer --subproc-heap-profiling --video-capture-use-gpu-memory-buffer --lang=en-US --js-flags --device-scale-factor=1 --num-raster-threads=4 --enable-main-frame-before-activa"
+    },
+    {
+      "pid": 88936,
+      "name": "conhost.exe",
+      "rss_mb": 2.0,
+      "cmd": "\\??\\C:\\WINDOWS\\system32\\conhost.exe 0x4"
+    },
+    {
+      "pid": 89172,
+      "name": "cmd.exe",
+      "rss_mb": 3.2,
+      "cmd": "C:\\WINDOWS\\system32\\cmd.exe /c C:\\Users\\koosh\\AppData\\Local\\Programs\\Forge\\_forge_swap.cmd "
+    },
+    {
+      "pid": 89240,
+      "name": "mscopilot.exe",
+      "rss_mb": 149.1,
+      "cmd": "C:\\Program Files (x86)\\Microsoft\\Copilot\\Application\\mscopilot.exe --type=renderer --subproc-heap-profiling --video-capture-use-gpu-memory-buffer --lang=en-US --js-flags --device-scale-factor=1 --num-raster-threads=4 --enable-main-frame-before-activa"
+    },
+    {
+      "pid": 89392,
+      "name": "vctip.exe",
+      "rss_mb": 9.7,
+      "cmd": "C:\\Program Files\\Microsoft Visual Studio\\18\\Community\\VC\\Tools\\MSVC\\14.51.36231\\bin\\HostX64\\x64\\VCTIP.EXE"
+    },
+    {
+      "pid": 89692,
+      "name": "msedge.exe",
+      "rss_mb": 59.8,
+      "cmd": "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe --type=renderer --extension-process --renderer-sub-type=extension --pdf-upsell-enabled --video-capture-use-gpu-memory-buffer --lang=en-US --js-flags --device-scale-factor=1 --num-raster-thr"
+    },
+    {
+      "pid": 89932,
+      "name": "msedge.exe",
+      "rss_mb": 162.3,
+      "cmd": "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe --type=renderer --pdf-upsell-enabled --video-capture-use-gpu-memory-buffer --lang=en-US --js-flags --device-scale-factor=1 --num-raster-threads=4 --enable-main-frame-before-activation --ren"
+    },
+    {
+      "pid": 90256,
+      "name": "svchost.exe",
+      "rss_mb": 1.5,
+      "cmd": ""
+    },
+    {
+      "pid": 90348,
+      "name": "droid.exe",
+      "rss_mb": 351.3,
+      "cmd": "C:\\Users\\koosh\\bin\\droid.exe"
+    },
+    {
+      "pid": 90652,
+      "name": "droid.exe",
+      "rss_mb": 454.2,
+      "cmd": "C:\\Users\\koosh\\bin\\droid.exe"
+    },
+    {
+      "pid": 91204,
+      "name": "conhost.exe",
+      "rss_mb": 9.5,
+      "cmd": "\\??\\C:\\WINDOWS\\system32\\conhost.exe 0x4"
+    },
+    {
+      "pid": 91356,
+      "name": "smartscreen.exe",
+      "rss_mb": 12.9,
+      "cmd": "C:\\Windows\\System32\\smartscreen.exe -Embedding"
+    },
+    {
+      "pid": 91464,
+      "name": "cmd.exe",
+      "rss_mb": 1.3,
+      "cmd": "C:\\WINDOWS\\System32\\cmd.exe /c C:\\Users\\koosh\\forge_tmp\\rebuild_splitdb.bat"
+    },
+    {
+      "pid": 91588,
+      "name": "conhost.exe",
+      "rss_mb": 10.8,
+      "cmd": ""
+    },
+    {
+      "pid": 91656,
+      "name": "conhost.exe",
+      "rss_mb": 1.4,
+      "cmd": "\\??\\C:\\WINDOWS\\system32\\conhost.exe 0x4"
+    },
+    {
+      "pid": 92168,
+      "name": "conhost.exe",
+      "rss_mb": 9.6,
+      "cmd": "\\??\\C:\\WINDOWS\\system32\\conhost.exe 0x4"
+    },
+    {
+      "pid": 92380,
+      "name": "msrdc.exe",
+      "rss_mb": 70.0,
+      "cmd": "msrdc.exe /wslg /silent /v:3A6F276E-6979-4C44-8982-5225A33AA43E /hvsocketserviceid:00000001-FACB-11E6-BD58-64006A7986D3 /plugin:WSLDVC_PACKAGE /wslgsharedmemorypath:WSL\\3A6F276E-6979-4C44-8982-5225A33AA43E\\wslg C:\\Program Files\\WSL\\wslg.rdp"
+    },
+    {
+      "pid": 92528,
+      "name": "pwsh.exe",
+      "rss_mb": 2.6,
+      "cmd": "C:\\Program Files\\PowerShell\\7-preview\\pwsh.exe"
+    },
+    {
+      "pid": 92896,
+      "name": "droid.exe",
+      "rss_mb": 406.5,
+      "cmd": "C:\\Users\\koosh\\bin\\droid.exe exec --input-format stream-jsonrpc --output-format stream-jsonrpc"
+    },
+    {
+      "pid": 92972,
+      "name": "droid.exe",
+      "rss_mb": 113.5,
+      "cmd": "C:\\Users\\koosh\\bin\\droid.exe exec --input-format stream-jsonrpc --output-format stream-jsonrpc"
+    },
+    {
+      "pid": 93448,
+      "name": "msedge.exe",
+      "rss_mb": 38.5,
+      "cmd": "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe --type=renderer --pdf-upsell-enabled --video-capture-use-gpu-memory-buffer --lang=en-US --js-flags --device-scale-factor=1 --num-raster-threads=4 --enable-main-frame-before-activation --ren"
+    },
+    {
+      "pid": 93816,
+      "name": "wslhost.exe",
+      "rss_mb": 12.7,
+      "cmd": " --vm-id {3a6f276e-6979-4c44-8982-5225a33aa43e} --handle 1556"
+    },
+    {
+      "pid": 94664,
+      "name": "droid.exe",
+      "rss_mb": 152.8,
+      "cmd": "C:\\Users\\koosh\\bin\\droid.exe exec --input-format stream-jsonrpc --output-format stream-jsonrpc"
+    },
+    {
+      "pid": 94920,
+      "name": "droid.exe",
+      "rss_mb": 160.0,
+      "cmd": "C:\\Users\\koosh\\bin\\droid.exe exec --input-format stream-jsonrpc --output-format stream-jsonrpc"
+    },
+    {
+      "pid": 95076,
+      "name": "droid.exe",
+      "rss_mb": 399.0,
+      "cmd": "C:\\Users\\koosh\\bin\\droid.exe"
+    },
+    {
+      "pid": 95088,
+      "name": "SearchProtocolHost.exe",
+      "rss_mb": 12.0,
+      "cmd": ""
+    }
+  ],
+  "listening_ports_count": 77,
+  "listening_ports": [
+    {
+      "local_port": 49669,
+      "pid": 6756,
+      "process_name": "PreSonusHardwareAccessService.exe"
+    },
+    {
+      "local_port": 139,
+      "pid": 4,
+      "process_name": "System"
+    },
+    {
+      "local_port": 49664,
+      "pid": 1732,
+      "process_name": "lsass.exe"
+    },
+    {
+      "local_port": 49697,
+      "pid": 13924,
+      "process_name": "svchost.exe"
+    },
+    {
+      "local_port": 19,
+      "pid": 6612,
+      "process_name": "TCPSVCS.EXE"
+    },
+    {
+      "local_port": 47989,
+      "pid": 12856,
+      "process_name": "sunshine.exe"
+    },
+    {
+      "local_port": 7,
+      "pid": 6612,
+      "process_name": "TCPSVCS.EXE"
+    },
+    {
+      "local_port": 21080,
+      "pid": 37920,
+      "process_name": "python.exe"
+    },
+    {
+      "local_port": 49668,
+      "pid": 5680,
+      "process_name": "spoolsv.exe"
+    },
+    {
+      "local_port": 49669,
+      "pid": 6756,
+      "process_name": "PreSonusHardwareAccessService.exe"
+    },
+    {
+      "local_port": 5357,
+      "pid": 4,
+      "process_name": "System"
+    },
+    {
+      "local_port": 13,
+      "pid": 6612,
+      "process_name": "TCPSVCS.EXE"
+    },
+    {
+      "local_port": 49669,
+      "pid": 6756,
+      "process_name": "PreSonusHardwareAccessService.exe"
+    },
+    {
+      "local_port": 47990,
+      "pid": 12856,
+      "process_name": "sunshine.exe"
+    },
+    {
+      "local_port": 49665,
+      "pid": 1556,
+      "process_name": "wininit.exe"
+    },
+    {
+      "local_port": 17,
+      "pid": 6612,
+      "process_name": "TCPSVCS.EXE"
+    },
+    {
+      "local_port": 2375,
+      "pid": 76592,
+      "process_name": "wslrelay.exe"
+    },
+    {
+      "local_port": 445,
+      "pid": 4,
+      "process_name": "System"
+    },
+    {
+      "local_port": 8889,
+      "pid": 84284,
+      "process_name": "python.exe"
+    },
+    {
+      "local_port": 5040,
+      "pid": 16472,
+      "process_name": "svchost.exe"
+    },
+    {
+      "local_port": 3389,
+      "pid": 12436,
+      "process_name": "svchost.exe"
+    },
+    {
+      "local_port": 49696,
+      "pid": 1636,
+      "process_name": "services.exe"
+    },
+    {
+      "local_port": 13,
+      "pid": 6612,
+      "process_name": "TCPSVCS.EXE"
+    },
+    {
+      "local_port": 22,
+      "pid": 6788,
+      "process_name": "sshd.exe"
+    },
+    {
+      "local_port": 3306,
+      "pid": 6336,
+      "process_name": "mysqld.exe"
+    },
+    {
+      "local_port": 62522,
+      "pid": 4944,
+      "process_name": "vpnagent.exe"
+    },
+    {
+      "local_port": 48982,
+      "pid": 11816,
+      "process_name": "tailscaled.exe"
+    },
+    {
+      "local_port": 49666,
+      "pid": 2860,
+      "process_name": "svchost.exe"
+    },
+    {
+      "local_port": 47984,
+      "pid": 12856,
+      "process_name": "sunshine.exe"
+    },
+    {
+      "local_port": 57621,
+      "pid": 33252,
+      "process_name": "Spotify.exe"
+    },
+    {
+      "local_port": 5354,
+      "pid": 6072,
+      "process_name": "mDNSResponder.exe"
+    },
+    {
+      "local_port": 27060,
+      "pid": 29076,
+      "process_name": "steam.exe"
+    },
+    {
+      "local_port": 5355,
+      "pid": 76592,
+      "process_name": "wslrelay.exe"
+    },
+    {
+      "local_port": 80,
+      "pid": 4,
+      "process_name": "System"
+    },
+    {
+      "local_port": 49667,
+      "pid": 4244,
+      "process_name": "svchost.exe"
+    },
+    {
+      "local_port": 139,
+      "pid": 4,
+      "process_name": "System"
+    },
+    {
+      "local_port": 24800,
+      "pid": 8496,
+      "process_name": "deskflow-core.exe"
+    },
+    {
+      "local_port": 5355,
+      "pid": 76592,
+      "process_name": "wslrelay.exe"
+    },
+    {
+      "local_port": 135,
+      "pid": 2040,
+      "process_name": "svchost.exe"
+    },
+    {
+      "local_port": 24801,
+      "pid": 6036,
+      "process_name": "barrierd.exe"
+    },
+    {
+      "local_port": 49670,
+      "pid": 4944,
+      "process_name": "vpnagent.exe"
+    },
+    {
+      "local_port": 48010,
+      "pid": 12856,
+      "process_name": "sunshine.exe"
+    },
+    {
+      "local_port": 443,
+      "pid": 4,
+      "process_name": "System"
+    },
+    {
+      "local_port": 9,
+      "pid": 6612,
+      "process_name": "TCPSVCS.EXE"
+    },
+    {
+      "local_port": 139,
+      "pid": 4,
+      "process_name": "System"
+    },
+    {
+      "local_port": 7768,
+      "pid": 33252,
+      "process_name": "Spotify.exe"
+    },
+    {
+      "local_port": 49696,
+      "pid": 1636,
+      "process_name": "services.exe"
+    },
+    {
+      "local_port": 3000,
+      "pid": 29660,
+      "process_name": "agileplus-dashboard.exe"
+    },
+    {
+      "local_port": 48982,
+      "pid": 11816,
+      "process_name": "tailscaled.exe"
+    },
+    {
+      "local_port": 9,
+      "pid": 6612,
+      "process_name": "TCPSVCS.EXE"
+    },
+    {
+      "local_port": 7777,
+      "pid": 76592,
+      "process_name": "wslrelay.exe"
+    },
+    {
+      "local_port": 7,
+      "pid": 6612,
+      "process_name": "TCPSVCS.EXE"
+    },
+    {
+      "local_port": 19,
+      "pid": 6612,
+      "process_name": "TCPSVCS.EXE"
+    },
+    {
+      "local_port": 22,
+      "pid": 6788,
+      "process_name": "sshd.exe"
+    },
+    {
+      "local_port": 49665,
+      "pid": 1556,
+      "process_name": "wininit.exe"
+    },
+    {
+      "local_port": 27036,
+      "pid": 29076,
+      "process_name": "steam.exe"
+    },
+    {
+      "local_port": 49668,
+      "pid": 5680,
+      "process_name": "spoolsv.exe"
+    },
+    {
+      "local_port": 17,
+      "pid": 6612,
+      "process_name": "TCPSVCS.EXE"
+    },
+    {
+      "local_port": 49664,
+      "pid": 1732,
+      "process_name": "lsass.exe"
+    },
+    {
+      "local_port": 445,
+      "pid": 4,
+      "process_name": "System"
+    },
+    {
+      "local_port": 20241,
+      "pid": 3372,
+      "process_name": "cloudflared.exe"
+    },
+    {
+      "local_port": 49669,
+      "pid": 6756,
+      "process_name": "PreSonusHardwareAccessService.exe"
+    },
+    {
+      "local_port": 3389,
+      "pid": 12436,
+      "process_name": "svchost.exe"
+    },
+    {
+      "local_port": 55012,
+      "pid": 33252,
+      "process_name": "Spotify.exe"
+    },
+    {
+      "local_port": 49666,
+      "pid": 2860,
+      "process_name": "svchost.exe"
+    },
+    {
+      "local_port": 5357,
+      "pid": 4,
+      "process_name": "System"
+    },
+    {
+      "local_port": 3306,
+      "pid": 6336,
+      "process_name": "mysqld.exe"
+    },
+    {
+      "local_port": 2179,
+      "pid": 4000,
+      "process_name": "vmms.exe"
+    },
+    {
+      "local_port": 80,
+      "pid": 4,
+      "process_name": "System"
+    },
+    {
+      "local_port": 51764,
+      "pid": 29076,
+      "process_name": "steam.exe"
+    },
+    {
+      "local_port": 49697,
+      "pid": 13924,
+      "process_name": "svchost.exe"
+    },
+    {
+      "local_port": 443,
+      "pid": 4,
+      "process_name": "System"
+    },
+    {
+      "local_port": 19000,
+      "pid": 72732,
+      "process_name": "llama-server.exe"
+    },
+    {
+      "local_port": 49667,
+      "pid": 4244,
+      "process_name": "svchost.exe"
+    },
+    {
+      "local_port": 135,
+      "pid": 2040,
+      "process_name": "svchost.exe"
+    },
+    {
+      "local_port": 51769,
+      "pid": 29076,
+      "process_name": "steam.exe"
+    },
+    {
+      "local_port": 2179,
+      "pid": 4000,
+      "process_name": "vmms.exe"
+    }
+  ],
+  "top_processes": [
+    {
+      "name": "svchost.exe",
+      "count": 108
+    },
+    {
+      "name": "msedge.exe",
+      "count": 34
+    },
+    {
+      "name": "droid.exe",
+      "count": 18
+    },
+    {
+      "name": "conhost.exe",
+      "count": 16
+    },
+    {
+      "name": "pwsh.exe",
+      "count": 15
+    },
+    {
+      "name": "OpenConsole.exe",
+      "count": 15
+    },
+    {
+      "name": "mscopilot.exe",
+      "count": 10
+    },
+    {
+      "name": "steamwebhelper.exe",
+      "count": 7
+    },
+    {
+      "name": "Spotify.exe",
+      "count": 7
+    },
+    {
+      "name": "msedgewebview2.exe",
+      "count": 6
+    },
+    {
+      "name": "Unity Hub.exe",
+      "count": 5
+    },
+    {
+      "name": "NVIDIA Overlay.exe",
+      "count": 5
+    },
+    {
+      "name": "NZXT CAM.exe",
+      "count": 5
+    },
+    {
+      "name": "WUDFHost.exe",
+      "count": 4
+    },
+    {
+      "name": "nvcontainer.exe",
+      "count": 4
+    }
+  ],
+  "top_port_owners": [
+    {
+      "pid": 4,
+      "port_count": 11
+    },
+    {
+      "pid": 6612,
+      "port_count": 10
+    },
+    {
+      "pid": 6756,
+      "port_count": 4
+    },
+    {
+      "pid": 12856,
+      "port_count": 4
+    },
+    {
+      "pid": 76592,
+      "port_count": 4
+    },
+    {
+      "pid": 29076,
+      "port_count": 4
+    },
+    {
+      "pid": 33252,
+      "port_count": 3
+    },
+    {
+      "pid": 1732,
+      "port_count": 2
+    },
+    {
+      "pid": 13924,
+      "port_count": 2
+    },
+    {
+      "pid": 5680,
+      "port_count": 2
+    }
+  ],
+  "docker_procs_alive": [
+    [
+      9048,
+      "com.docker.service"
+    ],
+    [
+      12616,
+      "vmmemCmZygote"
+    ],
+    [
+      73200,
+      "vmmemWSL"
+    ]
+  ],
+  "capture_method": "psutil.net_connections + psutil.process_iter",
+  "scope": "windows_hosts"
+}

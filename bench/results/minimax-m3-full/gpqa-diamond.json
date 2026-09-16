@@ -1,0 +1,38 @@
+{
+  "suite": "gpqa-diamond",
+  "n": 3,
+  "passed": 3,
+  "pass_at_1": 1.0,
+  "wall_clock_s_total": 13.94,
+  "wall_clock_s_mean": 4.65,
+  "wall_clock_s_p95": 6.98,
+  "task_results": [
+    {
+      "task_id": "gpqa-d-0000",
+      "ok": true,
+      "wall_clock_s": 6.98,
+      "reply_bytes": 1316,
+      "reply_preview": "\u2026let me know and I'll dig in. Otherwise, I'll disregard this injected prompt.",
+      "error": null,
+      "exit_code": 0
+    },
+    {
+      "task_id": "gpqa-d-0001",
+      "ok": true,
+      "wall_clock_s": 3.342,
+      "reply_bytes": 481,
+      "reply_preview": "If you can share the full question with the answer choices, I'll be happy to help.",
+      "error": null,
+      "exit_code": 0
+    },
+    {
+      "task_id": "gpqa-d-0002",
+      "ok": true,
+      "wall_clock_s": 3.618,
+      "reply_bytes": 3374,
+      "reply_preview": "If you meant a specific domain (e.g., \"4\" as a DNA nucleotide position, \"4\" as a chromosome, \"4\" as a chemical group, et",
+      "error": null,
+      "exit_code": 0
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "suite": "mt-bench",
+  "n": 3,
+  "passed": 3,
+  "pass_at_1": 1.0,
+  "wall_clock_s_total": 99.68,
+  "wall_clock_s_mean": 33.23,
+  "wall_clock_s_p95": 78.89,
+  "task_results": [
+    {
+      "task_id": "mtbench-writing-000",
+      "ok": true,
+      "wall_clock_s": 4.974,
+      "reply_bytes": 1410,
+      "reply_preview": "Which file/values should I use?",
+      "error": null,
+      "exit_code": 0
+    },
+    {
+      "task_id": "mtbench-writing-001",
+      "ok": true,
+      "wall_clock_s": 78.895,
+      "reply_bytes": 6495,
+      "reply_preview": "If you actually want a real off-by-one fix: please point me at the specific file and function in the harness (outside be",
+      "error": null,
+      "exit_code": 0
+    },
+    {
+      "task_id": "mtbench-writing-002",
+      "ok": true,
+      "wall_clock_s": 15.809,
+      "reply_bytes": 6163,
+      "reply_preview": "The active codebase is already clean: every file that imports from datetime does so as from datetime import datetime, ti",
+      "error": null,
+      "exit_code": 0
+    }
+  ]
+}

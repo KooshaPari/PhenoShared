@@ -1,0 +1,50 @@
+{
+  "app": {
+    "name": "pheno-harness",
+    "description": "pheno-harness - Helios ecosystem component",
+    "version": "1.0.0"
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "success": "Success",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "submit": "Submit",
+    "reset": "Reset",
+    "close": "Close",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous",
+    "search": "Search...",
+    "filter": "Filter",
+    "sort_by": "Sort by",
+    "no_results": "No results found",
+    "required_field": "This field is required",
+    "invalid_email": "Please enter a valid email address",
+    "password_mismatch": "Passwords do not match",
+    "welcome": "Welcome to pheno-harness",
+    "dashboard": "Dashboard",
+    "settings": "Settings",
+    "profile": "Profile",
+    "logout": "Logout",
+    "login": "Login",
+    "register": "Register"
+  },
+  "navigation": {
+    "home": "Home",
+    "about": "About Us",
+    "contact": "Contact",
+    "docs": "Documentation",
+    "support": "Support"
+  },
+  "errors": {
+    "not_found": "Page not found",
+    "forbidden": "Access denied",
+    "server_error": "Internal server error",
+    "network_error": "Network connection error"
+  }
+}

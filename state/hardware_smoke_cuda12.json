@@ -1,0 +1,59 @@
+{
+  "schema_version": "pheno.hardware_smoke.v1",
+  "checked_at": "2026-07-16T02:35:46.0312377Z",
+  "toolchain": "D:\\WSL\\tools\\llama.cpp-b10012-cuda12.4",
+  "gpu_index": 0,
+  "gpu": "NVIDIA GeForce GTX 1080 Ti",
+  "tests": [
+    {
+      "model": "local/qwen35-08b",
+      "status": "pass",
+      "generation_tok_s": 111.5,
+      "evidence": "state/qwen1080_cuda12_smoke.stdout.log",
+      "perf_evidence": "state/qwen1080_perf_real.json",
+      "aggregate_tok_s_by_concurrency": {
+        "1": 23.24,
+        "2": 26.62,
+        "4": 30.34
+      }
+    },
+    {
+      "model": "local/lfm25-8b-a1b",
+      "status": "pass",
+      "generation_tok_s": 98.3,
+      "evidence": "state/lfm1080_cuda12_smoke.stdout.log",
+      "perf_evidence": "state/lfm1080_perf_real.json",
+      "aggregate_tok_s_by_concurrency": {
+        "1": 143.95,
+        "2": 158.78,
+        "4": 206.44
+      }
+    }
+  ],
+  "comparison_3090": "not_scored_active_foreground_gpu_workload",
+  "shared_3090_evidence": {
+    "toolchain": "D:\\WSL\\tools\\llama.cpp-b10012-cuda12.4",
+    "llama_cpp_device": "CUDA0",
+    "model": "local/qwen35-08b",
+    "perf_evidence": "state/qwen3090_cuda12_shared_perf.json",
+    "status": "contended_not_baseline",
+    "gpu_workload": "Cities2",
+    "aggregate_tok_s_by_concurrency": {
+      "1": 27.2,
+      "2": 7.8,
+      "4": 36.51
+    }
+  },
+  "heterogeneous_shared_evidence": {
+    "status": "pass_contended",
+    "perf_evidence": "state/qwen_heterogeneous_shared_perf.json",
+    "workers": "CUDA1_1080+CUDA0_3090",
+    "concurrency": 4,
+    "requests": 8,
+    "success_count": 8,
+    "aggregate_tok_s": 23.21,
+    "p95_ms": 1692.49,
+    "assignment": "4_each",
+    "exclusion_reason": "Cities2 remained active on CUDA0"
+  }
+}

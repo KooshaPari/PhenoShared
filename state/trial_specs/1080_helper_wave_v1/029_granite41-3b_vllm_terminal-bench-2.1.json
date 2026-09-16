@@ -1,0 +1,30 @@
+{
+  "schema_version": "pheno.trial-spec.v1",
+  "as_of": "2026-07-29T00:23:05Z",
+  "session_under_resume": "019f6249-d74c-7540-885f-588c3d51ac3a",
+  "trial_id": "029_granite41-3b_vllm_terminal-bench-2.1",
+  "model_family": "IBM Granite",
+  "model_alias": "granite41-3b",
+  "candidate_id": "ibm-granite/granite-4.1-3b-instruct-preview",
+  "registry_entry": "state/evidence_registry/model_candidates_2026-07-28.json#granite41-3b",
+  "runtime": "vLLM",
+  "sm_target": "sm_86",
+  "device": "RTX 3090 Ti (primary)",
+  "suite": "TB2.1",
+  "subset": "deepseek-ai__terminal-bench-2.1 (dataset_acquired_verifier_unverified)",
+  "estimated_size_gib": 6.5,
+  "license": "Apache-2.0 (Granite family standard)",
+  "rationale": "IBM Granite 4.1 series (2026) targets enterprise workloads; 3B is the sweet spot for 3090 Ti (fits in 24 GB VRAM with KV cache headroom). Adds IBM-grade tool-calling stability to the model matrix.",
+  "evidence_to_collect": [
+    "reward@1",
+    "tool_call_pass_rate",
+    "kv_cache_peak_mib",
+    "t_per_s_prompt",
+    "t_per_s_gen"
+  ],
+  "expected_outcome": "TB2.1 baseline; comparison vs nanbeige41-3b (existing spec 026) and lfm25-1p2b (existing spec 023)",
+  "weight_download_required": true,
+  "download_uri_intent": "https://huggingface.co/ibm-granite/granite-4.1-3b-instruct-preview",
+  "blocked_by": "weight_download_authorization (capture_authorization gate, Tier 3)",
+  "ready_to_run": false
+}

@@ -1,0 +1,83 @@
+{
+  "schema_version": "pheno.kernel-build-followon.v1",
+  "as_of_utc": "2026-08-08T03:30:00Z",
+  "session": {
+    "codex_thread_id": "019f6249-d74c-7540-885f-588c3d51ac3a",
+    "continuation_session": true,
+    "delegation_model": "subagent workers (build relaunch / lane health / tb2 scoreboard)"
+  },
+  "outcome": "FAILED_TO_LAUNCH",
+  "classification": "environment blocker - WSL service wedge, not a build outcome",
+  "blocker": {
+    "service": "WslService",
+    "state": "STOP_PENDING",
+    "duration_min": 31,
+    "evidence": [
+      "every wsl.exe invocation hung (rc=124 after timeout)",
+      "wslservice.exe pid 6992 alive 22.4h, terminate/kill ACCESS_DENIED",
+      "sc stop/start WslService -> Access denied (rc=5)",
+      "STOP_PENDING persisted with 20s of zero hung clients",
+      "8-16 hung wsl.exe clients at 0% CPU queued behind service (cleaned, ~16, none SYSTEM-protected)"
+    ],
+    "recovery_required": [
+      "elevated session: taskkill /F /PID 6992 (wslservice.exe) OR sc stop WslService && sc start WslService",
+      "OR host reboot (currently forbidden)",
+      "OR coordinate with external actor who has elevation"
+    ],
+    "protected_procs_untouched": [
+      ["6992", "wslservice.exe"],
+      ["9048", "com.docker.service"],
+      ["12616", "vmmemCmZygote"]
+    ]
+  },
+  "build_state": {
+    "runner_launched": false,
+    "distro": "FedoraLinux-44",
+    "distro_fs_intact": true,
+    "deps_preseeded_intact": "/home/kooshapari/sgl-kernel-deps",
+    "resume_scripts": {
+      "C:\\Users\\koosh\\AppData\\Local\\Temp\\kbuild_final_0802.sh": "3115B intact",
+      "C:\\Users\\koosh\\AppData\\Local\\Temp\\kbuild_runner_final_0802.py": "2027B intact"
+    },
+    "wheel_produced": false,
+    "log_lines_added": 0,
+    "exit_file_modified": false
+  },
+  "resume_path_after_unblock": [
+    "boot FedoraLinux-44",
+    "push kbuild_final_0802.sh to /tmp and chmod +x",
+    "launch kbuild_runner_final_0802.py foreground (holds VM alive, up to 1h)",
+    "poll /home/kooshapari/sgl_kernel_build.log, wheel target /home/kooshapari/sglang-src/sgl-kernel/dist/sgl_kernel-*.whl"
+  ],
+  "sibling_workstream_results": {
+    "lane_health_2026-08-08": {
+      "19000": "HEALTHY llama-server local/lfm25-8b-a1b (8.4B Q4_K)",
+      "19095": "HEALTHY llama-server ornith (9.2B Q4_K) - extra lane not in prior inventory",
+      "21080": "HEALTHY pheno-serve proxy but stale catalog (advertises qwen35-08b/lfm2.5-8b-a1b; actual lanes serve lfm25-8b-a1b/ornith)",
+      "19001": "DEAD - vllm-pascal helper gone; inference is llama.cpp only",
+      "gpu_attribution": "models resident on RTX 3090 Ti (GPU 1)"
+    },
+    "tb2_scoreboard_2026-08-08": {
+      "verdict": "PARTIAL",
+      "artifact": "state/tb2_scoreboard_2026-08-08.json",
+      "commit": "5340a2a",
+      "tasks": 6,
+      "passed": 4,
+      "pass_rate": 0.667,
+      "per_model": {
+        "local/lfm25-8b-a1b": "2/3 (fail: json extraction, 256-token deliberation empty content)",
+        "ornith": "2/3 (fail: arithmetic truncated at 384 tokens)"
+      },
+      "canonical_tools_blocked": [
+        "scripts/tbench_scoreboard.py: ModuleNotFoundError eval.tbench (source deleted, only .pyc remain)",
+        "harbor/run_tbench_local.ps1: needs docker engine pipe, defaults to dead :8000",
+        "scripts/run_tbench_v21.py: missing eval.tbench_v21 + harbor deps"
+      ]
+    }
+  },
+  "gpu_state_at_close": {
+    "gpu0_1080ti": "3.8 GB used / 7.3 GB free / 0%",
+    "gpu1_3090ti": "20.7 GB used / 3.6 GB free / 26%",
+    "note": "parallel workstream actively using 3090 Ti; build is CPU-bound so no contention caused"
+  }
+}

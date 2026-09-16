@@ -1,0 +1,26 @@
+{
+  "schema_version": "phenolm.gguf_conversion.v1",
+  "created_at": "2026-07-14T23:39:19.961644+00:00",
+  "model_alias": "local/qwen35-08b",
+  "source": "D:\\WSL\\model-cache\\qwen35-08b",
+  "output": "D:\\WSL\\model-cache\\qwen35-08b-q4_k_m.gguf",
+  "quantization": "Q4_K_M",
+  "intermediate": "D:\\WSL\\model-cache\\qwen35-08b-q4_k_m.f16.gguf",
+  "source_config_sha256": "b90b86f35c8e6925ef74ee04d0e758f0a845c83a42089ad82bbaa948de9b4204",
+  "conversion_performed": false,
+  "eval_artifact": false,
+  "command": [
+    "D:\\tools\\llama.cpp\\convert_hf_to_gguf.py",
+    "D:\\WSL\\model-cache\\qwen35-08b",
+    "--outfile",
+    "D:\\WSL\\model-cache\\qwen35-08b-q4_k_m.f16.gguf",
+    "--outtype",
+    "f16"
+  ],
+  "quantize_command": [
+    "D:\\tools\\llama.cpp\\llama-quantize.exe",
+    "D:\\WSL\\model-cache\\qwen35-08b-q4_k_m.f16.gguf",
+    "D:\\WSL\\model-cache\\qwen35-08b-q4_k_m.gguf",
+    "Q4_K_M"
+  ]
+}

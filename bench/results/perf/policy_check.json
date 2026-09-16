@@ -1,0 +1,68 @@
+{
+  "schema_version": "pheno.perf.v1",
+  "engine": "unknown",
+  "model": "local/qwen35-08b",
+  "base_url": null,
+  "synthetic": true,
+  "elapsed_ms": 33.19099999498576,
+  "warmup": {
+    "requested": 0,
+    "results": [],
+    "error_count": 0
+  },
+  "levels": [
+    {
+      "concurrency": 1,
+      "request_count": 1,
+      "success_count": 1,
+      "error_count": 0,
+      "wall_ms": 13.178499997593462,
+      "aggregate_tokens": 16,
+      "aggregate_tokens_per_s": 1214.0987216239917,
+      "latency_ms_p50": 2.951200003735721,
+      "latency_ms_p95": 2.951200003735721,
+      "results": [
+        {
+          "elapsed_ms": 2.951200003735721,
+          "ttft_ms": 1.4756000018678606,
+          "completion_tokens": 16,
+          "decode_tok_s": 5421.523441226179,
+          "measurement_quality": "synthetic"
+        }
+      ]
+    }
+  ],
+  "probe_overhead_ms": {
+    "mean_ms": 17.79119996353984,
+    "max_ms": 18.912200001068413
+  },
+  "resources": {
+    "sample_count": 1,
+    "process_cpu_percent": {
+      "mean": 0.0,
+      "peak": 0.0
+    },
+    "process_rss_bytes": {
+      "mean": 30273536.0,
+      "peak": 30273536.0
+    },
+    "system_cpu_percent": {
+      "mean": 0.0,
+      "peak": 0.0
+    },
+    "system_ram_used_bytes": {
+      "mean": 37971865600.0,
+      "peak": 37971865600.0
+    },
+    "system_ram_percent": {
+      "mean": 55.3,
+      "peak": 55.3
+    },
+    "gpus": {}
+  },
+  "measurement_notes": [
+    "TTFT is time to first nonempty streamed content chunk.",
+    "ITL is inter-SSE-chunk timing, not guaranteed one token per chunk.",
+    "Synthetic mode measures harness scheduling only, not model inference."
+  ]
+}

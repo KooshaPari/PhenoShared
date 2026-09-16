@@ -1,0 +1,147 @@
+{
+  "schema_version": "pheno.perf.v1",
+  "engine": "desktop-transformers-pascal-helper",
+  "model": "local/qwen35-08b",
+  "request_model": "Qwen/Qwen3.5-0.8B",
+  "base_url": "http://127.0.0.1:19002",
+  "synthetic": false,
+  "elapsed_ms": 1817.9379159992095,
+  "warmup": {
+    "requested": 1,
+    "results": [
+      {
+        "status": 200,
+        "elapsed_ms": 562.5989999989542,
+        "ttft_ms": null,
+        "itl_ms": [],
+        "itl_ms_p50": null,
+        "itl_ms_p95": null,
+        "completion": "Status: Ready for input\n",
+        "reasoning": "",
+        "reasoning_tokens": 0,
+        "completion_tokens": 8,
+        "prompt_tokens": 18,
+        "total_tokens": 26,
+        "raw_usage": {
+          "prompt_tokens": 18,
+          "completion_tokens": 8,
+          "total_tokens": 26
+        },
+        "measurement_quality": "non_streaming_total_latency_proxy",
+        "decode_tok_s": 14.219719551607575
+      }
+    ],
+    "error_count": 0
+  },
+  "transport": "non-streaming",
+  "levels": [
+    {
+      "concurrency": 1,
+      "request_count": 3,
+      "success_count": 3,
+      "error_count": 0,
+      "wall_ms": 1254.606333000993,
+      "aggregate_tokens": 24,
+      "aggregate_tokens_per_s": 19.129506498339193,
+      "latency_ms_p50": 413.82687499935855,
+      "latency_ms_p95": 418.38970800017705,
+      "results": [
+        {
+          "status": 200,
+          "elapsed_ms": 413.82687499935855,
+          "ttft_ms": null,
+          "itl_ms": [],
+          "itl_ms_p50": null,
+          "itl_ms_p95": null,
+          "completion": "Status: Ready for input\n",
+          "reasoning": "",
+          "reasoning_tokens": 0,
+          "completion_tokens": 8,
+          "prompt_tokens": 18,
+          "total_tokens": 26,
+          "raw_usage": {
+            "prompt_tokens": 18,
+            "completion_tokens": 8,
+            "total_tokens": 26
+          },
+          "measurement_quality": "non_streaming_total_latency_proxy",
+          "decode_tok_s": 19.33175558018652
+        },
+        {
+          "status": 200,
+          "elapsed_ms": 392.452707999837,
+          "ttft_ms": null,
+          "itl_ms": [],
+          "itl_ms_p50": null,
+          "itl_ms_p95": null,
+          "completion": "Status: Ready for input\n",
+          "reasoning": "",
+          "reasoning_tokens": 0,
+          "completion_tokens": 8,
+          "prompt_tokens": 18,
+          "total_tokens": 26,
+          "raw_usage": {
+            "prompt_tokens": 18,
+            "completion_tokens": 8,
+            "total_tokens": 26
+          },
+          "measurement_quality": "non_streaming_total_latency_proxy",
+          "decode_tok_s": 20.384621731297425
+        },
+        {
+          "status": 200,
+          "elapsed_ms": 418.38970800017705,
+          "ttft_ms": null,
+          "itl_ms": [],
+          "itl_ms_p50": null,
+          "itl_ms_p95": null,
+          "completion": "Status: Ready for input\n",
+          "reasoning": "",
+          "reasoning_tokens": 0,
+          "completion_tokens": 8,
+          "prompt_tokens": 18,
+          "total_tokens": 26,
+          "raw_usage": {
+            "prompt_tokens": 18,
+            "completion_tokens": 8,
+            "total_tokens": 26
+          },
+          "measurement_quality": "non_streaming_total_latency_proxy",
+          "decode_tok_s": 19.120929236616437
+        }
+      ]
+    }
+  ],
+  "probe_overhead_ms": {
+    "mean_ms": 0.06830533311585896,
+    "max_ms": 0.11191699923074339
+  },
+  "resources": {
+    "sample_count": 4,
+    "process_cpu_percent": {
+      "mean": 28.1,
+      "peak": 107.0
+    },
+    "process_rss_bytes": {
+      "mean": 34316288.0,
+      "peak": 38273024.0
+    },
+    "system_cpu_percent": {
+      "mean": 40.2,
+      "peak": 80.7
+    },
+    "system_ram_used_bytes": {
+      "mean": 5497917440.0,
+      "peak": 5580947456.0
+    },
+    "system_ram_percent": {
+      "mean": 83.575,
+      "peak": 83.8
+    },
+    "gpus": {}
+  },
+  "measurement_notes": [
+    "Total request latency is reported; TTFT/ITL are unavailable for non-streaming transport.",
+    "Thinking mode: disabled."
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "pheno.bench.v0.hypothesis.v1",
+  "title": "V0 hypothesis",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "hypothesis_id",
+    "case_id",
+    "claim",
+    "expected_direction",
+    "linked_case_ids",
+    "provenance"
+  ],
+  "properties": {
+    "schema_version": { "const": "pheno.bench.v0.hypothesis.v1" },
+    "hypothesis_id": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "case_id": { "type": "string", "minLength": 1, "maxLength": 256 },
+    "claim": { "type": "string", "minLength": 1, "maxLength": 1024 },
+    "expected_direction": { "enum": ["increase", "decrease", "no_change"] },
+    "linked_case_ids": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string", "minLength": 1, "maxLength": 256 }
+    },
+    "provenance": { "$ref": "observations.schema.json#/$defs/provenance" }
+  }
+}

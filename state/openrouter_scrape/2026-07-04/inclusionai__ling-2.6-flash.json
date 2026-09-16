@@ -1,0 +1,73 @@
+{
+  "id": "inclusionai/ling-2.6-flash",
+  "scraped_at": "2026-07-04T09:59:17.920930+00:00",
+  "api_found": true,
+  "page_found": true,
+  "api": {
+    "id": "inclusionai/ling-2.6-flash",
+    "canonical_slug": "inclusionai/ling-2.6-flash-20260421",
+    "hugging_face_id": "",
+    "name": "inclusionAI: Ling-2.6-flash",
+    "created": 1776795886,
+    "description": "Ling-2.6-flash is an instant (instruct) model from inclusionAI with 104B total parameters and 7.4B active parameters, designed for real-world agents that require fast responses, strong execution, and high token efficiency....",
+    "context_length": 262144,
+    "architecture": {
+      "modality": "text->text",
+      "input_modalities": [
+        "text"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "tokenizer": "Other",
+      "instruct_type": null
+    },
+    "pricing": {
+      "prompt": "0.00000001",
+      "completion": "0.00000003",
+      "input_cache_read": "0.000000002"
+    },
+    "top_provider": {
+      "context_length": 262144,
+      "max_completion_tokens": 32768,
+      "is_moderated": false
+    },
+    "per_request_limits": null,
+    "supported_parameters": [
+      "frequency_penalty",
+      "logprobs",
+      "max_tokens",
+      "presence_penalty",
+      "repetition_penalty",
+      "response_format",
+      "seed",
+      "stop",
+      "structured_outputs",
+      "temperature",
+      "tool_choice",
+      "tools",
+      "top_k",
+      "top_logprobs",
+      "top_p"
+    ],
+    "default_parameters": {
+      "temperature": null,
+      "top_p": null,
+      "top_k": null,
+      "frequency_penalty": null,
+      "presence_penalty": null,
+      "repetition_penalty": null
+    },
+    "supported_voices": null,
+    "knowledge_cutoff": null,
+    "expiration_date": null,
+    "links": {
+      "details": "/api/v1/models/inclusionai/ling-2.6-flash-20260421/endpoints"
+    }
+  },
+  "page_url": "https://openrouter.ai/inclusionai/ling-2.6-flash",
+  "page": {
+    "title": "Ling-2.6-flash - API Pricing &amp; Benchmarks | OpenRouter",
+    "visible_text_sample": "Ling-2.6-flash - API Pricing &amp; Benchmarks | OpenRouter Skip to content OpenRouter Search \u2318 K Models Fusion Chat Rankings Apps Enterprise Pricing Docs OpenRouter \u00a9 2026 OpenRouter, Inc Product Chat Rankings Apps Models Providers Pricing Enterprise Labs Company About Blog Careers Hiring Privacy Terms of Service Support State of AI Works With OR Data Developer Documentation API Reference SDK Status Connect Discord GitHub LinkedIn X YouTube inclusionAI: Ling-2.6-flash inclusionai / ling-2.6-flash Compare Playground Quick Start Ling-2.6-flash is an instant (instruct) model from inclusionAI with 104B total parameters and 7.4B active parameters, designed for real-world agents that require fast responses, strong execution, and high token efficiency. It delivers performance comparable to state-of-the-art models at a similar scale while significantly reducing token usage across coding, document processing, and lightweight agent workflows. Modalities In / Out Price 90 % off $0.01 / $0.03 per 1M Context 262K Released Apr 21, 2026 inclusionAI: Ling-2.6-flash Compare Playground Quick Start Providers Effective Pricing Performance Uptime Benchmarks Apps Activity Providers Providers This model is hosted by one provider. OpenRouter forwards every request to it directly \u2014 no routing decisions to make. Effective Pricing The chart below shows the average price customers are actually paying after prompt caching. Depending on the amount of repeated context you send, this can be 60\u201380% cheaper than the provider list price. Shown are rolling averages from the past 30 days. Performance Throughput is how fast the model writes (tokens per second \u2014 higher is better). Latency is total round-trip time (lower is better). TTFT is time-to-first-token \u2014 how long before you see anything appear (lower is better). Uptime Percent of requests that succeeded over the last 30 days. OpenRouter monitors every provider continuously and automatically retries on the next-best provider when one returns an error. Benchmarks Scores on standardized evaluations. Higher percentages are better \u2014 and rank percentile shows where this model lands among all models on OpenRouter. Apps Public apps that send the most traffic to this model. Good signal for what real production workloads look like \u2014 and a hint at which use cases this model is best suited for. Activity Token volume and request traffic to this model over time. Quick Start Drop-in code to call this model. OpenRouter&#x27;s API is OpenAI-compatible \u2014 most SDKs work by just swapping the base URL. The only thing that changes between models is the model slug below."
+  }
+}

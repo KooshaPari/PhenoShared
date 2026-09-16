@@ -1,0 +1,11 @@
+{
+    "version": "0002_add_seed_corpus",
+    "up": [
+        "CREATE TABLE IF NOT EXISTS bench_seed_corpus (id INTEGER PRIMARY KEY AUTOINCREMENT, suite TEXT NOT NULL, prompt TEXT NOT NULL, expected_verdict TEXT NOT NULL, created_at INTEGER NOT NULL)",
+        "CREATE INDEX IF NOT EXISTS idx_seed_corpus_suite ON bench_seed_corpus(suite)"
+    ],
+    "down": [
+        "DROP TABLE IF EXISTS bench_seed_corpus"
+    ],
+    "note": "Add bench_seed_corpus table for regression seed prompts"
+}

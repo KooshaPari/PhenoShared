@@ -1,0 +1,83 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "pheno.bench.v0.slice.v1",
+  "title": "V0 first-slice artifact",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "slice_id",
+    "suite",
+    "provenance",
+    "gpu_uuids",
+    "cases",
+    "observations",
+    "derived_metrics",
+    "simulations",
+    "hypotheses",
+    "summary"
+  ],
+  "properties": {
+    "schema_version": { "const": "pheno.bench.v0.slice.v1" },
+    "slice_id": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "suite": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "revision"],
+      "properties": {
+        "name": { "type": "string" },
+        "revision": { "type": "string" }
+      }
+    },
+    "provenance": { "$ref": "observations.schema.json#/$defs/provenance" },
+    "gpu_uuids": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "observations.schema.json#/$defs/gpu_uuid" },
+      "uniqueItems": true
+    },
+    "cases": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["case_id", "outcome"],
+        "properties": {
+          "case_id": { "type": "string" },
+          "outcome": { "enum": ["pass", "fail", "blocked"] },
+          "observation_id": { "type": ["string", "null"], "pattern": "^[0-9a-f]{64}$" },
+          "derived_id": { "type": ["string", "null"], "pattern": "^[0-9a-f]{64}$" },
+          "hypothesis_id": { "type": ["string", "null"], "pattern": "^[0-9a-f]{64}$" }
+        }
+      }
+    },
+    "observations": {
+      "type": "array",
+      "items": { "$ref": "observations.schema.json" }
+    },
+    "derived_metrics": {
+      "type": "array",
+      "items": { "$ref": "derived_metrics.schema.json" }
+    },
+    "simulations": {
+      "type": "array",
+      "items": { "$ref": "simulations.schema.json" }
+    },
+    "hypotheses": {
+      "type": "array",
+      "items": { "$ref": "hypotheses.schema.json" }
+    },
+    "summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["measured_count", "blocked_count", "pass_count", "fail_count"],
+      "properties": {
+        "measured_count": { "type": "integer", "minimum": 0 },
+        "blocked_count": { "type": "integer", "minimum": 0 },
+        "pass_count": { "type": "integer", "minimum": 0 },
+        "fail_count": { "type": "integer", "minimum": 0 }
+      }
+    }
+  }
+}

@@ -1,0 +1,324 @@
+{
+  "as_of": "2026-07-23T11:14:48.046039+00:00",
+  "job_dir": "D:\\WSL\\eval-cache\\pheno-harbor-jobs\\2026-07-22__20-17-38",
+  "model": "openai/local/qwen35-08b",
+  "stats": {
+    "n_completed_trials": 45,
+    "n_errored_trials": 30,
+    "n_running_trials": 1,
+    "n_pending_trials": 43,
+    "n_cancelled_trials": 0,
+    "n_retries": 0,
+    "evals": {
+      "terminus-2__local/qwen35-08b__terminal-bench": {
+        "n_trials": 15,
+        "n_errors": 30,
+        "metrics": [
+          {
+            "mean": 0.0
+          }
+        ],
+        "pass_at_k": {},
+        "reward_stats": {
+          "reward": {
+            "0.0": [
+              "bn-fit-modify__2KSaXgd",
+              "chess-best-move__zATzyGU",
+              "circuit-fibsqrt__uWvsnBD",
+              "cobol-modernization__eDEAput",
+              "configure-git-webserver__Bhaxjay",
+              "constraints-scheduling__59aAWKC",
+              "count-dataset-tokens__ZwfvE7a",
+              "crack-7z-hash__8BUDhkW",
+              "custom-memory-heap-crash__CXKxfz2",
+              "extract-moves-from-video__U3ZBMSG",
+              "financial-document-processor__Vmt2Jhx",
+              "fix-git__GeHfC3L",
+              "gcode-to-text__XcFAneJ",
+              "git-leak-recovery__4N5eJJb",
+              "gpt2-codegolf__qPpE4ws"
+            ]
+          }
+        },
+        "exception_stats": {
+          "ContextLengthExceededError": [
+            "adaptive-rejection-sampler__hYtBMoZ",
+            "code-from-image__zefq8mm",
+            "feal-linear-cryptanalysis__VBNx3nx",
+            "filter-js-from-html__q3FrgLV",
+            "make-doom-for-mips__jFuMfnV"
+          ],
+          "OutputLengthExceededError": [
+            "break-filter-js-from-html__2cvBme6",
+            "dna-insert__cmPFyeG",
+            "extract-elf__29MrYJS",
+            "feal-differential-cryptanalysis__7KseCGQ",
+            "fix-code-vulnerability__eaB4z7z",
+            "fix-ocaml-gc__i5reY3d",
+            "git-multibranch__DKMgBJy",
+            "headless-terminal__Wj6VfyX"
+          ],
+          "InternalServerError": [
+            "build-cython-ext__F4ckxiY",
+            "cancel-async-tasks__sGXXCC7",
+            "dna-assembly__b8FieuV"
+          ],
+          "EnvironmentStartTimeoutError": [
+            "build-pmars__c9WVcx5",
+            "build-pov-ray__EGZxDBg",
+            "caffe-cifar-10__DKr2ciK"
+          ],
+          "AgentSetupTimeoutError": [
+            "compile-compcert__xiH4zdT"
+          ],
+          "RuntimeError": [
+            "db-wal-recovery__NKPQuot",
+            "distribution-search__KtrkzTN",
+            "hf-model-inference__BcmqxhY",
+            "install-windows-3.11__8ixZJ8f",
+            "kv-store-grpc__FTDanWc",
+            "large-scale-text-editing__7ncYxxN",
+            "largest-eigenval__eV3kTKq",
+            "llm-inference-batching-scheduler__GKkVx4T",
+            "log-summary-date-ranges__2FtTvFb",
+            "mailman__fRLZggF"
+          ]
+        }
+      }
+    },
+    "n_input_tokens": 421991,
+    "n_cache_tokens": 311083,
+    "n_output_tokens": 36876,
+    "cost_usd": null
+  },
+  "finished_at": null,
+  "n_reward_1": 0,
+  "n_reward_0": 15,
+  "trials": [
+    {
+      "trial": "adaptive-rejection-sampler__hYtBMoZ",
+      "reward": null,
+      "error": "ContextLengthExceededError"
+    },
+    {
+      "trial": "bn-fit-modify__2KSaXgd",
+      "reward": 0.0,
+      "error": null
+    },
+    {
+      "trial": "break-filter-js-from-html__2cvBme6",
+      "reward": null,
+      "error": "OutputLengthExceededError"
+    },
+    {
+      "trial": "build-cython-ext__F4ckxiY",
+      "reward": null,
+      "error": "InternalServerError"
+    },
+    {
+      "trial": "build-pmars__c9WVcx5",
+      "reward": null,
+      "error": "EnvironmentStartTimeoutError"
+    },
+    {
+      "trial": "build-pov-ray__EGZxDBg",
+      "reward": null,
+      "error": "EnvironmentStartTimeoutError"
+    },
+    {
+      "trial": "caffe-cifar-10__DKr2ciK",
+      "reward": null,
+      "error": "EnvironmentStartTimeoutError"
+    },
+    {
+      "trial": "cancel-async-tasks__sGXXCC7",
+      "reward": null,
+      "error": "InternalServerError"
+    },
+    {
+      "trial": "chess-best-move__zATzyGU",
+      "reward": 0.0,
+      "error": null
+    },
+    {
+      "trial": "circuit-fibsqrt__uWvsnBD",
+      "reward": 0.0,
+      "error": null
+    },
+    {
+      "trial": "cobol-modernization__eDEAput",
+      "reward": 0.0,
+      "error": null
+    },
+    {
+      "trial": "code-from-image__zefq8mm",
+      "reward": null,
+      "error": "ContextLengthExceededError"
+    },
+    {
+      "trial": "compile-compcert__xiH4zdT",
+      "reward": null,
+      "error": "AgentSetupTimeoutError"
+    },
+    {
+      "trial": "configure-git-webserver__Bhaxjay",
+      "reward": 0.0,
+      "error": null
+    },
+    {
+      "trial": "constraints-scheduling__59aAWKC",
+      "reward": 0.0,
+      "error": null
+    },
+    {
+      "trial": "count-dataset-tokens__ZwfvE7a",
+      "reward": 0.0,
+      "error": null
+    },
+    {
+      "trial": "crack-7z-hash__8BUDhkW",
+      "reward": 0.0,
+      "error": null
+    },
+    {
+      "trial": "custom-memory-heap-crash__CXKxfz2",
+      "reward": 0.0,
+      "error": null
+    },
+    {
+      "trial": "db-wal-recovery__NKPQuot",
+      "reward": null,
+      "error": "RuntimeError"
+    },
+    {
+      "trial": "distribution-search__KtrkzTN",
+      "reward": null,
+      "error": "RuntimeError"
+    },
+    {
+      "trial": "dna-assembly__b8FieuV",
+      "reward": null,
+      "error": "InternalServerError"
+    },
+    {
+      "trial": "dna-insert__cmPFyeG",
+      "reward": null,
+      "error": "OutputLengthExceededError"
+    },
+    {
+      "trial": "extract-elf__29MrYJS",
+      "reward": null,
+      "error": "OutputLengthExceededError"
+    },
+    {
+      "trial": "extract-moves-from-video__U3ZBMSG",
+      "reward": 0.0,
+      "error": null
+    },
+    {
+      "trial": "feal-differential-cryptanalysis__7KseCGQ",
+      "reward": null,
+      "error": "OutputLengthExceededError"
+    },
+    {
+      "trial": "feal-linear-cryptanalysis__VBNx3nx",
+      "reward": null,
+      "error": "ContextLengthExceededError"
+    },
+    {
+      "trial": "filter-js-from-html__q3FrgLV",
+      "reward": null,
+      "error": "ContextLengthExceededError"
+    },
+    {
+      "trial": "financial-document-processor__Vmt2Jhx",
+      "reward": 0.0,
+      "error": null
+    },
+    {
+      "trial": "fix-code-vulnerability__eaB4z7z",
+      "reward": null,
+      "error": "OutputLengthExceededError"
+    },
+    {
+      "trial": "fix-git__GeHfC3L",
+      "reward": 0.0,
+      "error": null
+    },
+    {
+      "trial": "fix-ocaml-gc__i5reY3d",
+      "reward": null,
+      "error": "OutputLengthExceededError"
+    },
+    {
+      "trial": "gcode-to-text__XcFAneJ",
+      "reward": 0.0,
+      "error": null
+    },
+    {
+      "trial": "git-leak-recovery__4N5eJJb",
+      "reward": 0.0,
+      "error": null
+    },
+    {
+      "trial": "git-multibranch__DKMgBJy",
+      "reward": null,
+      "error": "OutputLengthExceededError"
+    },
+    {
+      "trial": "gpt2-codegolf__qPpE4ws",
+      "reward": 0.0,
+      "error": null
+    },
+    {
+      "trial": "headless-terminal__Wj6VfyX",
+      "reward": null,
+      "error": "OutputLengthExceededError"
+    },
+    {
+      "trial": "hf-model-inference__BcmqxhY",
+      "reward": null,
+      "error": "RuntimeError"
+    },
+    {
+      "trial": "install-windows-3.11__8ixZJ8f",
+      "reward": null,
+      "error": "RuntimeError"
+    },
+    {
+      "trial": "kv-store-grpc__FTDanWc",
+      "reward": null,
+      "error": "RuntimeError"
+    },
+    {
+      "trial": "large-scale-text-editing__7ncYxxN",
+      "reward": null,
+      "error": "RuntimeError"
+    },
+    {
+      "trial": "largest-eigenval__eV3kTKq",
+      "reward": null,
+      "error": "RuntimeError"
+    },
+    {
+      "trial": "llm-inference-batching-scheduler__GKkVx4T",
+      "reward": null,
+      "error": "RuntimeError"
+    },
+    {
+      "trial": "log-summary-date-ranges__2FtTvFb",
+      "reward": null,
+      "error": "RuntimeError"
+    },
+    {
+      "trial": "mailman__fRLZggF",
+      "reward": null,
+      "error": "RuntimeError"
+    },
+    {
+      "trial": "make-doom-for-mips__jFuMfnV",
+      "reward": null,
+      "error": "ContextLengthExceededError"
+    }
+  ]
+}

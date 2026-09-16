@@ -1,0 +1,21 @@
+[Unit]
+Description=TB2 vLLM lane :30100 (Qwen3.5-9B, Ampere/sm86)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=kooshapari
+Environment="CUDA_VISIBLE_DEVICES=0"
+Environment="HF_HOME=/home/kooshapari/.cache/huggingface"
+Environment="LD_LIBRARY_PATH=/usr/lib/wsl/lib:/usr/local/cuda-13.3/lib64"
+Environment="PATH=/home/kooshapari/mambaforge/envs/vllm-ampere/bin:/usr/local/cuda-13.3/bin:/usr/bin:/bin"
+ExecStart=/home/kooshapari/mambaforge/envs/vllm-ampere/bin/python -m vllm.entrypoints.openai.api_server --model /home/kooshapari/models/Qwen3.5-9B --host 0.0.0.0 --port 30100 --trust-remote-code --gpu-memory-utilization 0.88 --max-model-len 8192 --tensor-parallel-size 1
+Restart=always
+RestartSec=5
+TimeoutStartSec=1800
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

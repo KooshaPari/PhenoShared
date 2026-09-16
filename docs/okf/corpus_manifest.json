@@ -1,0 +1,381 @@
+{
+  "schema_version": "pheno.okf.corpus_manifest.v1",
+  "generated_at": "2026-07-17T09:46:38.745817+00:00",
+  "pattern": "ChatGPT-*.md",
+  "note": "Windows glob is case-sensitive for extension; CHATGPT-*.md resolves to same ChatGPT-*.md files.",
+  "roots": [
+    {
+      "path": "D:/koosh/Downloads",
+      "exists": true,
+      "file_count": 50
+    },
+    {
+      "path": "C:/Users/koosh/Downloads",
+      "exists": true,
+      "file_count": 0
+    }
+  ],
+  "summary": {
+    "total_files": 50,
+    "unique_sha256": 48,
+    "total_bytes": 9736879
+  },
+  "evidence_registry": {
+    "config": "config/evidence_registry.yaml",
+    "adapter": "pheno/evidence/adapters/local_corpus.py",
+    "evidence_class": "L",
+    "url_scheme": "local://sha256/<digest>"
+  },
+  "files": [
+    {
+      "filename": "ChatGPT-3D God-Game Simulation Design (1).md",
+      "path": "D:/koosh/Downloads/ChatGPT-3D God-Game Simulation Design (1).md",
+      "size_bytes": 136866,
+      "mtime_utc": "2026-04-30T08:07:48.638769+00:00",
+      "sha256": "df324f52e010f5f23dc3f769041229fcfad6355bbc53ada7c06847abf69ff07e"
+    },
+    {
+      "filename": "ChatGPT-3D God-Game Simulation Design.md",
+      "path": "D:/koosh/Downloads/ChatGPT-3D God-Game Simulation Design.md",
+      "size_bytes": 124697,
+      "mtime_utc": "2026-05-29T03:57:59.968926+00:00",
+      "sha256": "1dfbfc0aa2f002a727ec0ad130e61d53a801afd19182116b7fc17645c9c14a9c"
+    },
+    {
+      "filename": "ChatGPT-Agent Flow Optimization.md",
+      "path": "D:/koosh/Downloads/ChatGPT-Agent Flow Optimization.md",
+      "size_bytes": 49278,
+      "mtime_utc": "2026-07-04T00:59:35.763307+00:00",
+      "sha256": "646a4d05feb934ce2765e3368cafeb3fff21e895bafe6d9075a1dd7c450ac502"
+    },
+    {
+      "filename": "ChatGPT-Agent Orchestration Game Concept.md",
+      "path": "D:/koosh/Downloads/ChatGPT-Agent Orchestration Game Concept.md",
+      "size_bytes": 139274,
+      "mtime_utc": "2026-06-14T03:51:46.056170+00:00",
+      "sha256": "760bfac4bacf458c6d5bcbae2f2cc09882a6c9fab96168553af58647000a562d"
+    },
+    {
+      "filename": "ChatGPT-Agent Setup Cost Analysis.md",
+      "path": "D:/koosh/Downloads/ChatGPT-Agent Setup Cost Analysis.md",
+      "size_bytes": 239248,
+      "mtime_utc": "2026-06-14T03:51:12.564554+00:00",
+      "sha256": "1a5d06646edaefcaea91f9faa3fc442873ba09264ebb1dfe1ea13ab1be03a098"
+    },
+    {
+      "filename": "ChatGPT-Agent-Aware Speculative Decoding.md",
+      "path": "D:/koosh/Downloads/ChatGPT-Agent-Aware Speculative Decoding.md",
+      "size_bytes": 86642,
+      "mtime_utc": "2026-07-04T00:56:10.721067+00:00",
+      "sha256": "40367eafa68468ff0b8e4c58101d5437e4793997aebaa6d3a1dcdeb29ac5e5dc"
+    },
+    {
+      "filename": "ChatGPT-AI Inference Hardware Costs (1).md",
+      "path": "D:/koosh/Downloads/ChatGPT-AI Inference Hardware Costs (1).md",
+      "size_bytes": 8685,
+      "mtime_utc": "2026-07-04T00:58:09.474413+00:00",
+      "sha256": "0ec53079f29772b20135190d51dba1af9ba8b7c8903ea594bb1b90e440729f8e"
+    },
+    {
+      "filename": "ChatGPT-AI Inference Hardware Costs.md",
+      "path": "D:/koosh/Downloads/ChatGPT-AI Inference Hardware Costs.md",
+      "size_bytes": 8654,
+      "mtime_utc": "2026-06-14T03:50:53.901888+00:00",
+      "sha256": "6d02c96918ded8b57fea264932b0b39bc9f319f76c5736a1a3810afeacf17568"
+    },
+    {
+      "filename": "ChatGPT-API vs Local Compute.md",
+      "path": "D:/koosh/Downloads/ChatGPT-API vs Local Compute.md",
+      "size_bytes": 19615,
+      "mtime_utc": "2026-06-14T03:51:32.089092+00:00",
+      "sha256": "8a18160fc607155739e598e6b39e70fbad6e99b6877390d7f57558694454b58b"
+    },
+    {
+      "filename": "ChatGPT-Best Modding DX!UX Games.md",
+      "path": "D:/koosh/Downloads/ChatGPT-Best Modding DX!UX Games.md",
+      "size_bytes": 11399,
+      "mtime_utc": "2026-03-10T05:02:58.751491+00:00",
+      "sha256": "d85849d3634fc77c4dbce889e5c27f67e0fdadb06a9b3e8c42eb062c34fa25bd"
+    },
+    {
+      "filename": "ChatGPT-Coding Agents and Intent Graphs (1).md",
+      "path": "D:/koosh/Downloads/ChatGPT-Coding Agents and Intent Graphs (1).md",
+      "size_bytes": 30968,
+      "mtime_utc": "2026-07-04T00:57:56.062707+00:00",
+      "sha256": "b593aa9ebd32002389ef7e8deb3cff790193a7bb135c5d50ab79531d16bcb1ed"
+    },
+    {
+      "filename": "ChatGPT-Coding Agents and Intent Graphs.md",
+      "path": "D:/koosh/Downloads/ChatGPT-Coding Agents and Intent Graphs.md",
+      "size_bytes": 30937,
+      "mtime_utc": "2026-06-14T03:50:53.496948+00:00",
+      "sha256": "43601d7fb04ec413279ab8bfacca0061115343c7db51661dd7ce7a726a3f5856"
+    },
+    {
+      "filename": "ChatGPT-Compression Pruning Review (1).md",
+      "path": "D:/koosh/Downloads/ChatGPT-Compression Pruning Review (1).md",
+      "size_bytes": 1245244,
+      "mtime_utc": "2026-06-13T08:25:54.651180+00:00",
+      "sha256": "436a355bcfba341c8712edd33f3760babb2766862913014a7ec5cab86d434843"
+    },
+    {
+      "filename": "ChatGPT-Compression Pruning Review (2).md",
+      "path": "D:/koosh/Downloads/ChatGPT-Compression Pruning Review (2).md",
+      "size_bytes": 1278644,
+      "mtime_utc": "2026-07-04T00:58:16.114520+00:00",
+      "sha256": "4ab2cd3d133cb22cd71acb01895d29fdb77aa9024685a37c4414dee53331e85a"
+    },
+    {
+      "filename": "ChatGPT-Compression Pruning Review.md",
+      "path": "D:/koosh/Downloads/ChatGPT-Compression Pruning Review.md",
+      "size_bytes": 1245244,
+      "mtime_utc": "2026-06-13T08:25:53.094096+00:00",
+      "sha256": "f2e5a2dbb7da24d1960563ab9147af8733e72939492b34e96b3b72a912132e66"
+    },
+    {
+      "filename": "ChatGPT-Concurrent Lint Command Handling.md",
+      "path": "D:/koosh/Downloads/ChatGPT-Concurrent Lint Command Handling.md",
+      "size_bytes": 16673,
+      "mtime_utc": "2026-07-04T00:59:46.396428+00:00",
+      "sha256": "942785ed90e584cb5e229047dcb3ced6c9cc58508af7ca33e1300898e90b350c"
+    },
+    {
+      "filename": "ChatGPT-Efficiency Evolutions Post-MoE (1).md",
+      "path": "D:/koosh/Downloads/ChatGPT-Efficiency Evolutions Post-MoE (1).md",
+      "size_bytes": 35541,
+      "mtime_utc": "2026-07-04T00:58:05.938706+00:00",
+      "sha256": "3a9aaee099c55bca8d4f496a36c7e096679ddffef88e623c09cce0d669a2d87a"
+    },
+    {
+      "filename": "ChatGPT-Efficiency Evolutions Post-MoE.md",
+      "path": "D:/koosh/Downloads/ChatGPT-Efficiency Evolutions Post-MoE.md",
+      "size_bytes": 35510,
+      "mtime_utc": "2026-06-14T03:50:53.495428+00:00",
+      "sha256": "bc4ac8fad8910180ebe9bd154dfdadd8334792667d3e26b796f24589802f4f97"
+    },
+    {
+      "filename": "ChatGPT-Enterprise Tech Job Search (1).md",
+      "path": "D:/koosh/Downloads/ChatGPT-Enterprise Tech Job Search (1).md",
+      "size_bytes": 225524,
+      "mtime_utc": "2026-03-10T21:04:52.543509+00:00",
+      "sha256": "1e234d97f8e7236b4a60f23a5091337b1521a46ca41023a3281da6c837bea130"
+    },
+    {
+      "filename": "ChatGPT-Enterprise Tech Job Search (2).md",
+      "path": "D:/koosh/Downloads/ChatGPT-Enterprise Tech Job Search (2).md",
+      "size_bytes": 225524,
+      "mtime_utc": "2026-03-10T21:04:54.659960+00:00",
+      "sha256": "a4755f7c05c409c30859d283004200694f96714af8be1a8e6b974fa188a83741"
+    },
+    {
+      "filename": "ChatGPT-Enterprise Tech Job Search (3).md",
+      "path": "D:/koosh/Downloads/ChatGPT-Enterprise Tech Job Search (3).md",
+      "size_bytes": 225524,
+      "mtime_utc": "2026-03-10T21:04:56.782079+00:00",
+      "sha256": "3e955ec7a1217f495ce9c38a35cf8279eb741c652bb836071ac8f1d2d7979c53"
+    },
+    {
+      "filename": "ChatGPT-Enterprise Tech Job Search (4).md",
+      "path": "D:/koosh/Downloads/ChatGPT-Enterprise Tech Job Search (4).md",
+      "size_bytes": 225524,
+      "mtime_utc": "2026-03-10T21:04:58.793725+00:00",
+      "sha256": "641dd7f98999c09047d21f105394ddffb277546f19d548f48e6828e9803cd52c"
+    },
+    {
+      "filename": "ChatGPT-Enterprise Tech Job Search (5).md",
+      "path": "D:/koosh/Downloads/ChatGPT-Enterprise Tech Job Search (5).md",
+      "size_bytes": 225524,
+      "mtime_utc": "2026-03-10T21:05:01.113726+00:00",
+      "sha256": "0572792ecb6e3cc2d36ebad3bcba613ec01194639e49d76b32d9984d374636bf"
+    },
+    {
+      "filename": "ChatGPT-Enterprise Tech Job Search.md",
+      "path": "D:/koosh/Downloads/ChatGPT-Enterprise Tech Job Search.md",
+      "size_bytes": 225524,
+      "mtime_utc": "2026-03-10T21:04:50.114080+00:00",
+      "sha256": "8f058141f642d0539f97bf0d424ea3b9888d93816dbe7f9344cd9904bcf98396"
+    },
+    {
+      "filename": "ChatGPT-Feature graph system design.md",
+      "path": "D:/koosh/Downloads/ChatGPT-Feature graph system design.md",
+      "size_bytes": 188145,
+      "mtime_utc": "2026-07-04T00:59:42.672116+00:00",
+      "sha256": "2480042c654da12cbea11289055314275469d037f3da731de5fdfd47b0c30b58"
+    },
+    {
+      "filename": "ChatGPT-Futuristic Warfare Modding.md",
+      "path": "D:/koosh/Downloads/ChatGPT-Futuristic Warfare Modding.md",
+      "size_bytes": 79916,
+      "mtime_utc": "2026-03-10T05:03:06.973194+00:00",
+      "sha256": "811adcb1000193f04b36ee7bdba66a832b7c959b07fe75912c44f89e576d020b"
+    },
+    {
+      "filename": "ChatGPT-GPU Rentals Safety Review.md",
+      "path": "D:/koosh/Downloads/ChatGPT-GPU Rentals Safety Review.md",
+      "size_bytes": 43754,
+      "mtime_utc": "2026-06-14T03:51:36.537607+00:00",
+      "sha256": "db67d55b180a30d4283f7fe3e040c2fe3bea4afa933d0a15359deb1ed292ab4e"
+    },
+    {
+      "filename": "ChatGPT-Incorporation as Agent.md",
+      "path": "D:/koosh/Downloads/ChatGPT-Incorporation as Agent.md",
+      "size_bytes": 6179,
+      "mtime_utc": "2026-06-14T03:50:53.414437+00:00",
+      "sha256": "ff316e9945f0d69f8389225fb7102eca765759b2b2c1da009ee70d7a233f68c3"
+    },
+    {
+      "filename": "ChatGPT-Kimi DeepSeek MoE Cost.md",
+      "path": "D:/koosh/Downloads/ChatGPT-Kimi DeepSeek MoE Cost.md",
+      "size_bytes": 27619,
+      "mtime_utc": "2026-06-14T03:51:41.327880+00:00",
+      "sha256": "6cd4b0460c724f63afedf5fd0a9361f6e3bd234d2783ba5a2feb00c9e7e14791"
+    },
+    {
+      "filename": "ChatGPT-LatentMAS vs TextMAS comparison (1).md",
+      "path": "D:/koosh/Downloads/ChatGPT-LatentMAS vs TextMAS comparison (1).md",
+      "size_bytes": 111591,
+      "mtime_utc": "2026-07-04T00:58:19.263547+00:00",
+      "sha256": "8f7689f5581e7db8310912269c15fffbd0b6e09255fdd19bc8cc74abce0e0d0e"
+    },
+    {
+      "filename": "ChatGPT-LatentMAS vs TextMAS comparison.md",
+      "path": "D:/koosh/Downloads/ChatGPT-LatentMAS vs TextMAS comparison.md",
+      "size_bytes": 98504,
+      "mtime_utc": "2026-06-14T03:51:59.336292+00:00",
+      "sha256": "ebeabf9b43b8fe8f1c73259d7d3719352e3c48df51797358d0220d580d895eb6"
+    },
+    {
+      "filename": "ChatGPT-LLM Architectures Discussion.md",
+      "path": "D:/koosh/Downloads/ChatGPT-LLM Architectures Discussion.md",
+      "size_bytes": 85270,
+      "mtime_utc": "2026-07-04T00:59:31.776517+00:00",
+      "sha256": "3fbe57f56ba8d36e7b27630d0d896063e91aa3bbc26c9953c01c3f35bd6350e4"
+    },
+    {
+      "filename": "ChatGPT-Machine Comparison for AI.md",
+      "path": "D:/koosh/Downloads/ChatGPT-Machine Comparison for AI.md",
+      "size_bytes": 308587,
+      "mtime_utc": "2026-07-04T00:56:01.898601+00:00",
+      "sha256": "d32d7a644b3f5c728fe6c884446909f5d586997067c05129c986a23e54e2db3d"
+    },
+    {
+      "filename": "ChatGPT-Modding 3090 Ti VRAM.md",
+      "path": "D:/koosh/Downloads/ChatGPT-Modding 3090 Ti VRAM.md",
+      "size_bytes": 878641,
+      "mtime_utc": "2026-07-17T09:42:03.079716+00:00",
+      "sha256": "7fc62190fb25086fa4634d5258c271b312b2e4c3e2054c46712199e18b916ec1"
+    },
+    {
+      "filename": "ChatGPT-Model improvements under $500.md",
+      "path": "D:/koosh/Downloads/ChatGPT-Model improvements under $500.md",
+      "size_bytes": 13133,
+      "mtime_utc": "2026-07-04T00:56:05.656586+00:00",
+      "sha256": "7cb2b0065d42ac484ade5fb87b3157cb8b3b4722122bcefe122ca31ce3a85348"
+    },
+    {
+      "filename": "ChatGPT-Model Inference Costs 2026.md",
+      "path": "D:/koosh/Downloads/ChatGPT-Model Inference Costs 2026.md",
+      "size_bytes": 244943,
+      "mtime_utc": "2026-07-04T00:59:53.925954+00:00",
+      "sha256": "e8f90a6f531992d15d722b63788f7f11a243a588be9a403771c57633a05d3b3b"
+    },
+    {
+      "filename": "ChatGPT-Pairwise Test Case Generation (1).md",
+      "path": "D:/koosh/Downloads/ChatGPT-Pairwise Test Case Generation (1).md",
+      "size_bytes": 3328,
+      "mtime_utc": "2026-06-17T06:24:51.132401+00:00",
+      "sha256": "d1d434d87211847a23eb72123babf5fe19e651e377126dce1dd6e40bd9915a5d"
+    },
+    {
+      "filename": "ChatGPT-Pairwise Test Case Generation (2).md",
+      "path": "D:/koosh/Downloads/ChatGPT-Pairwise Test Case Generation (2).md",
+      "size_bytes": 3328,
+      "mtime_utc": "2026-06-17T06:24:51.133586+00:00",
+      "sha256": "d1d434d87211847a23eb72123babf5fe19e651e377126dce1dd6e40bd9915a5d"
+    },
+    {
+      "filename": "ChatGPT-Pairwise Test Case Generation (3).md",
+      "path": "D:/koosh/Downloads/ChatGPT-Pairwise Test Case Generation (3).md",
+      "size_bytes": 3328,
+      "mtime_utc": "2026-06-17T06:25:13.002921+00:00",
+      "sha256": "78acb8240429523ef6428bcc36e6995dab1514f352ba461cd1682480855ef96f"
+    },
+    {
+      "filename": "ChatGPT-Pairwise Test Case Generation.md",
+      "path": "D:/koosh/Downloads/ChatGPT-Pairwise Test Case Generation.md",
+      "size_bytes": 3328,
+      "mtime_utc": "2026-06-17T06:24:51.082562+00:00",
+      "sha256": "d1d434d87211847a23eb72123babf5fe19e651e377126dce1dd6e40bd9915a5d"
+    },
+    {
+      "filename": "ChatGPT-RLVR-AF Optimization Proposal (1).md",
+      "path": "D:/koosh/Downloads/ChatGPT-RLVR-AF Optimization Proposal (1).md",
+      "size_bytes": 81401,
+      "mtime_utc": "2026-07-04T00:58:03.716161+00:00",
+      "sha256": "6276ce0c35b6254dabb971dc5e379a0134bffca3242ebf9011f68448ee2fb271"
+    },
+    {
+      "filename": "ChatGPT-RLVR-AF Optimization Proposal.md",
+      "path": "D:/koosh/Downloads/ChatGPT-RLVR-AF Optimization Proposal.md",
+      "size_bytes": 81524,
+      "mtime_utc": "2026-06-14T03:50:53.902920+00:00",
+      "sha256": "f66a5f446f95dc14d03ca89460bc08422f595bd81ad837e2d386151748cd52bf"
+    },
+    {
+      "filename": "ChatGPT-RTX 3090 Throughput Analysis.md",
+      "path": "D:/koosh/Downloads/ChatGPT-RTX 3090 Throughput Analysis.md",
+      "size_bytes": 30727,
+      "mtime_utc": "2026-06-14T03:51:00.938585+00:00",
+      "sha256": "f76584429acd5d03f42274da14ead8bbb5c2f95b813b3b2ee47f7d3dbbf0e7b1"
+    },
+    {
+      "filename": "ChatGPT-Small MoEs Use Cases.md",
+      "path": "D:/koosh/Downloads/ChatGPT-Small MoEs Use Cases.md",
+      "size_bytes": 12361,
+      "mtime_utc": "2026-06-14T03:51:37.836560+00:00",
+      "sha256": "f7aaef2fd90263475d4eb83254d8b41882a53cc052830ad8a9d7a489cf3347c7"
+    },
+    {
+      "filename": "ChatGPT-Software Project Traceability Tools.md",
+      "path": "D:/koosh/Downloads/ChatGPT-Software Project Traceability Tools.md",
+      "size_bytes": 41227,
+      "mtime_utc": "2026-06-14T03:50:53.462815+00:00",
+      "sha256": "3fd6a6eff105da8efda33fa5c3f20b8f2c2e0b5942315dbc1d3fbf48f7f83725"
+    },
+    {
+      "filename": "ChatGPT-Star Wars Asset Sources.md",
+      "path": "D:/koosh/Downloads/ChatGPT-Star Wars Asset Sources.md",
+      "size_bytes": 36429,
+      "mtime_utc": "2026-03-12T02:17:19.545516+00:00",
+      "sha256": "4cde92a986e1cd8e6469ff57707bb9a39d53997d5fb9afdea393db9138f28a7a"
+    },
+    {
+      "filename": "ChatGPT-Star Wars Modding Framework.md",
+      "path": "D:/koosh/Downloads/ChatGPT-Star Wars Modding Framework.md",
+      "size_bytes": 61664,
+      "mtime_utc": "2026-03-10T05:02:54.441798+00:00",
+      "sha256": "6cb5363486dfccc1bd5de077f53d4d20078e0e83d85a538e3f6e54044f5b72ee"
+    },
+    {
+      "filename": "ChatGPT-User-level Deterministic Cache.md",
+      "path": "D:/koosh/Downloads/ChatGPT-User-level Deterministic Cache.md",
+      "size_bytes": 862110,
+      "mtime_utc": "2026-07-04T00:59:27.449327+00:00",
+      "sha256": "3821fd75d9dc1e7b81642e7c4b592f941f8662c11ccf33f550a6fd31ce2562b0"
+    },
+    {
+      "filename": "ChatGPT-VRAM and Scaling Factors (1).md",
+      "path": "D:/koosh/Downloads/ChatGPT-VRAM and Scaling Factors (1).md",
+      "size_bytes": 166805,
+      "mtime_utc": "2026-07-04T00:58:23.781410+00:00",
+      "sha256": "c15bb484032ac8c9cefafd4afbe617f214a9370354183bdd2ab26d0f0ddd6032"
+    },
+    {
+      "filename": "ChatGPT-VRAM and Scaling Factors.md",
+      "path": "D:/koosh/Downloads/ChatGPT-VRAM and Scaling Factors.md",
+      "size_bytes": 166774,
+      "mtime_utc": "2026-06-14T03:51:50.506535+00:00",
+      "sha256": "d81d67baa1eb3dfce8e76019c5b3362d3e3b5612c8fc835bcfdf15f5b93bd703"
+    }
+  ]
+}

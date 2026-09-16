@@ -1,0 +1,65 @@
+{
+  "model_id": "Qwen3.5-0.8B",
+  "arch_yaml": "/Users/kooshapari/CodeProjects/Phenotype/pheno-harness-validation/kernels/qwen3.5-0.8b/arch.yaml",
+  "system": {
+    "platform": "macOS-27.0-arm64-arm-64bit-Mach-O",
+    "machine": "arm64",
+    "python": "3.14.5",
+    "mlx_version": "0.31.0",
+    "is_apple_silicon": true
+  },
+  "seq_lens": [
+    1,
+    16
+  ],
+  "batch": 1,
+  "iters": 2,
+  "warmup": 1,
+  "seed": 7,
+  "results": [
+    {
+      "seq_len": 1,
+      "batch": 1,
+      "iters": 2,
+      "warmup": 1,
+      "total_ms": 144.4230079650879,
+      "ms_per_forward": 72.21150398254395,
+      "tokens_per_sec": 13.848209008937621,
+      "tokens_per_iter": 1,
+      "peak_mlx_mb": 2738.6832370758057,
+      "shape_ok": true,
+      "shape": [
+        1,
+        1,
+        248320
+      ],
+      "finite": true,
+      "passed": true
+    },
+    {
+      "seq_len": 16,
+      "batch": 1,
+      "iters": 2,
+      "warmup": 1,
+      "total_ms": 268.54610443115234,
+      "ms_per_forward": 134.27305221557617,
+      "tokens_per_sec": 119.16017202254334,
+      "tokens_per_iter": 16,
+      "peak_mlx_mb": 2563.144681930542,
+      "shape_ok": true,
+      "shape": [
+        1,
+        16,
+        248320
+      ],
+      "finite": true,
+      "passed": true
+    }
+  ],
+  "summary": {
+    "n_passed": 2,
+    "n_total": 2,
+    "decode_tok_per_sec": 13.848209008937621,
+    "max_seq_ms": 134.27305221557617
+  }
+}

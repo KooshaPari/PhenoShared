@@ -1,0 +1,16 @@
+{
+  "timestamp": "2026-07-24T07:31:37.377606+00:00",
+  "dataset": "terminal-bench@2.0",
+  "target_mean": 0.8,
+  "integrity": {
+    "no_oracle_in_leaderboard": true,
+    "no_training_on_eval_tasks": true,
+    "exclude_from_dpo": true,
+    "exclude_from_distill": true,
+    "single_attempt_only": true
+  },
+  "models": [],
+  "combo_reference": [],
+  "best_individual": null,
+  "meets_target": false
+}

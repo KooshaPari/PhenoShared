@@ -1,0 +1,35 @@
+{
+  "schema_version": "pheno.kernel-build-followon.v1",
+  "as_of_utc": "2026-08-08T15:00:00Z",
+  "session": {"codex_thread_id": "019f6249-d74c-7540-885f-588c3d51ac3a", "continuation_session": true},
+  "outcome": "SUCCESS - sgl-kernel sm_86 wheel BUILT",
+  "attempt_19": {
+    "result": "WHEEL FOUND",
+    "exclusion": "patched CMakeLists.txt lines 137-142: FA3 (flash_ops sm90 target) only set ON under explicit SGL_KERNEL_ENABLE_SM90A=ON; sm90 gencode append kept byte-identical; .bak backup made",
+    "reconfigure": "cmake -S . -B build -DCMAKE_CUDA_ARCHITECTURES=86 -DUSE_NVTX=OFF -DFETCHCONTENT_FULLY_DISCONNECTED=ON -DSGL_KERNEL_COMPILE_THREADS=1 -> RC=0; 38/38 common_ops .o preserved; sm90 edges 121->0; total ninja edges 1444->567",
+    "build": "ninja -j1: single remaining edge [1/1] Linking common_ops.abi3.so completed in ~1 min",
+    "ptxas_sigsegv": "ELIMINATED - zero sm90 TUs compiled"
+  },
+  "wheel": {
+    "wsl_path": "/home/kooshapari/sglang-src/sgl-kernel/dist/sgl_kernel-0.1.0-cp39-abi3-linux_x86_64.whl",
+    "windows_path": "state/wheels/sgl_kernel-0.1.0-cp39-abi3-linux_x86_64.whl",
+    "size_bytes": 15874110,
+    "sha256": "099f8dcdc59f06ce644a2b045e8129ecc5e66afef36e959885106223ee8e494e",
+    "contents": "sgl_kernel/common_ops.abi3.so present; flash_ops.abi3.so absent (intended)",
+    "installed": false
+  },
+  "lane_caveat": {
+    "python/sgl_kernel/flash_attn.py:7 imports flash_ops unconditionally -> ImportError if that module imported",
+    "verified_safe": "sgl_kernel/__init__.py and attention.py do NOT import flash_attn.py; sglang checkout has zero imports of sgl_kernel.flash_attn; import sgl_kernel works on sm_86 lane"
+  },
+  "journey_summary": {
+    "attempts_14_17": "patch --threads=32->4 + sm_86-only gencode eliminated WSL wedge; external lane-infra poweroffs were sole blocker",
+    "attempt_18": "incremental ninja resume survived 3 poweroffs; 38/38 common_ops .o done; 3 toolchain fixes (cub::Sum, max/min ambiguity, cutlass-3.9 API); hit deterministic ptxas SIGSEGV on sm90 kernels",
+    "attempt_19": "excluded sm90 flash_ops (dead code for sm_86 target) -> link + wheel succeeded"
+  },
+  "next_steps": [
+    "pip install state/wheels/sgl_kernel-0.1.0-cp39-abi3-linux_x86_64.whl into .pheno-serve-venv when authorized",
+    "smoke test SGLang lane: import sgl_kernel; run Qwen3-0.6B or similar small model to exercise prefill kernels",
+    "update 3090 Ti SGLang lane readiness evidence"
+  ]
+}

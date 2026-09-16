@@ -1,0 +1,47 @@
+[package]
+name = "pheno-qwen-kernels"
+version = "0.1.0"
+edition = "2021"
+description = "Qwen3.5 0.8B Metal kernel engine for Apple Silicon (M-series)"
+license = "Apache-2.0"
+build = "build.rs"
+
+[lib]
+name = "pheno_qwen_kernels"
+# rlib is required so integration tests can `use pheno_qwen_kernels::*`.
+# staticlib + cdylib are required so Zig / Nim / C++ can dlopen/dylink it.
+crate-type = ["rlib", "staticlib", "cdylib"]
+
+[dependencies]
+thiserror = "1.0"
+tracing = "0.1"
+parking_lot = "0.12"
+libc = "0.2"
+# criterion is bench-only (see [features] / [[bench]] below).  Declared
+# here as optional so `cargo test` does not have to compile it.
+criterion = { version = "0.5", features = ["html_reports"], optional = true }
+
+
+
+[build-dependencies]
+cc = "1"
+bindgen = { version = "0.69", optional = true }
+
+[[bench]]
+name = "decode_bench"
+harness = false
+required-features = ["bench"]
+
+[features]
+default = []
+codegen-bindings = ["dep:bindgen"]
+bench = ["dep:criterion"]
+
+[profile.release]
+lto = "fat"
+opt-level = 3
+codegen-units = 1
+panic = "abort"
+
+[profile.dev]
+opt-level = 1

@@ -1,0 +1,97 @@
+# Qwen3.5 0.8B — Architecture constants
+# Source: https://huggingface.co/Qwen/Qwen3.5-0.8B/resolve/main/config.json
+# Snapshot: 2026-07-13
+#
+# This file is the single source of truth for kernel shape parameters.
+# C header (include/qwen3_5.h), Rust crate, Zig build, and Metal kernels
+# all derive constants from this file via codegen. Do not hand-edit
+# derived artifacts without regenerating.
+
+model:
+  id: "Qwen3.5-0.8B"
+  hf: "Qwen/Qwen3.5-0.8B"
+  arch: "qwen3_5_text"
+  family: "qwen3.5"
+  kind: "hybrid_attention"          # linear + full, alternating
+  dtype: "bfloat16"
+  vocab_size: 248320
+  hidden_size: 1024
+  intermediate_size: 3584
+  num_hidden_layers: 24
+  max_position_embeddings: 262144
+  rms_norm_eps: 1.0e-6
+  tie_word_embeddings: true
+  hidden_act: "silu"                # SwiGLU gate
+  attn_output_gate: true            # sigmoid-gated attention output
+  partial_rotary_factor: 0.25       # only 25% of head_dim is rope-rotated
+  rope_theta: 10000000
+  mrope:                            # multi-modal rotary
+    interleaved: true
+    section: [11, 11, 10]           # 32 = (11+11+10) = 0.25 * head_dim
+
+  # ---------- Full attention (GQA 4:1) ----------
+  full_attention:
+    num_attention_heads: 8
+    num_key_value_heads: 2           # GQA ratio 4:1
+    head_dim: 256
+    attention_bias: false
+    attention_dropout: 0.0
+    full_attention_interval: 4       # every 4th layer
+    full_attention_layer_indices: [3, 7, 11, 15, 19, 23]   # 6 of 24
+
+  # ---------- Linear attention (DeltaNet-style gated recurrent) ----------
+  linear_attention:
+    num_layers: 19                   # 24 - 6 = 18  + 1 pad = 19 in spec
+    num_key_heads: 16
+    num_value_heads: 16
+    key_head_dim: 128
+    value_head_dim: 128
+    conv_kernel_dim: 4               # 1D causal depthwise conv pre-attn
+    state_dim_per_head: 128          # recurrent state = value_head_dim
+
+  # ---------- Multi-token prediction (MTP) ----------
+  mtp:
+    num_hidden_layers: 1
+    use_dedicated_embeddings: false
+    # MTP can be used as a free drafter for speculative decode
+    role: "speculative_draft"
+
+  # ---------- Hybrid layer schedule ----------
+  layer_types:
+    # 24 layers, every 4th is full attention (layers 3,7,11,15,19,23)
+    # generated: 3 linear, then 1 full, repeating — last block stays linear
+    schedule: |
+      [L, L, L, F, L, L, L, F, L, L, L, F, L, L, L, F, L, L, L, F, L, L, L, F]
+    full_count: 6
+    linear_count: 18
+
+  # ---------- Parameter count (sanity) ----------
+  params:
+    approximate_total_m: 800
+    approximate_active_per_token_m: 800
+    notes: |
+      Dense hybrid. Linear-attn recurrent state is per-token memory, not weights.
+      The 0.8B class is single-GPU friendly; full 8B Qwen3.5 would be 10x this.
+
+# ---------- Kernel dispatch choices (optimal for Apple Silicon M-series) ----------
+kernel_strategy:
+  target_devices: ["apple_m1", "apple_m2", "apple_m3", "apple_m4"]
+  default_simdgroup_size: 32
+  threadgroup_size_default: 256
+  dtype_compute: "bfloat16"
+  dtype_accumulator: "float"
+  dtype_state_cache: "bfloat16"     # KV cache for full attn
+  dtype_recurrent_state: "float32"  # DeltaNet state stays fp32 to avoid drift
+
+  # Per-op kernel choices (all hand-tuned Metal MSL, no fallback to MPS defaults)
+  ops:
+    rmsnorm: "fused_ssm_rmsnorm"        # fused input+residual+norm (pre-norm style)
+    rope: "mrope_partial_interleaved"   # partial rotary 0.25, mrope_section
+    qkv_proj: "fused_linear_bf16"       # single GEMM producing [Q|K|V] then split
+    ffn_up_gate: "fused_swiglu_pack"    # gate,up,down packed + on-the-fly silu
+    full_attention: "flash_attn_v2_gqa" # flash-attention 2 with GQA 4:1 broadcast
+    linear_attention: "deltanet_v1"     # gated delta-rule recurrent
+    attn_output_gate: "sigmoid_gate"    # sigmoid(out_proj * o_gate)
+    sampling: "fused_topk_topp_argmax"  # single-pass greedy/temperature/topk/topp
+    embedding: "gather_bf16"           # tied with lm_head
+    lm_head: "matmul_bf16"             # hidden @ embed.T

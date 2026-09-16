@@ -1,0 +1,156 @@
+# KV compression bakeoff matrix — planning scaffold (Phase 4)
+# Review-only until the user authorizes hardware, artifacts, and execution.
+
+execution_policy:
+  phase: review_only
+  allow_network: false
+  allow_downloads: false
+  allow_cloud_provisioning: false
+  allow_execution: false
+  activation_requires: [explicit_user_approval, exact_artifact_hashes, pinned_runtime]
+
+burst:
+  provider: vastai  # or runpod, lambda — set PHENO_BURST_PROVIDER
+  gpu: "RTX 5090"
+  gpu_count: 2
+  hourly_usd: 0.618
+  region_preference: us-east
+
+model:
+  tier: local.lfm25_8b_a1b
+  path: "${PHENO_LFM25_8B_A1B:-}"
+  ctx: 32768
+  n_predict: 256
+  prompt_file: "${PHENO_ROOT}/bench/prompts/long_ctx.txt"
+
+trace_suite:
+  dir: "${HOME}/.omniroute/training"
+  glob: "traces_*.jsonl"
+  max_traces: 50
+  min_accepted_steps: 10
+
+# Executable by the current llama.cpp scaffold only after execution_policy is lifted.
+# Stock vLLM TurboQuant and community TurboQuant+ are intentionally kept out of
+# this list because they require different engines and must not be conflated.
+variants:
+  - id: no_kv
+    label: "No KV compression (FP16 baseline)"
+    llama_flags: "-c 32768"
+    ctk: f16
+    ctv: f16
+
+  - id: kv8
+    label: "KV8 (q8_0 cache)"
+    llama_flags: "-c 32768"
+    ctk: q8_0
+    ctv: q8_0
+
+  - id: kv4
+    label: "KV4 (q4_0 cache)"
+    llama_flags: "-c 32768"
+    ctk: q4_0
+    ctv: q4_0
+
+measured_evidence:
+  artifact: state/qwen35_kv_cache_bakeoff.json
+  model: local/qwen35-08b
+  weight_quantization: Q4_K_M
+  runtime: llama.cpp-b10012-cuda12.4
+  workload: "n_prompt=512, n_gen=128, flash_attn=on, one measured repetition"
+  results:
+    rtx_3090_ti:
+      f16: {prompt_tok_s: 6574.77, generation_tok_s: 177.15}
+      q8_0: {prompt_tok_s: 5745.27, generation_tok_s: 156.75}
+      q4_0: {prompt_tok_s: 5996.32, generation_tok_s: 143.92}
+    gtx_1080_ti:
+      f16: {prompt_tok_s: 4385.99, generation_tok_s: 55.58}
+      q8_0: {prompt_tok_s: 4905.52, generation_tok_s: 82.08}
+      q4_0: {prompt_tok_s: 5040.45, generation_tok_s: 52.31}
+  quality_status: throughput_only_non_scoreable
+  tq_plus_status: unresolved_runtime_and_artifact
+  promotion_gate: "Require coding/tool JSON, long-context retrieval, p95 latency, and VRAM evidence before selecting a KV type."
+
+experimental_variants:
+  - id: vllm_turboquant_k8v4
+    label: "Stock vLLM TurboQuant K8/V4"
+    implementation: stock_vllm
+    runtime: vllm
+    status: review_only
+    executable_by_current_script: false
+    allow_downloads: false
+    runtime_config: {kv_cache_dtype: turboquant_k8v4}
+    notes: "Upstream vLLM TurboQuant cell; not TurboQuant+ and not a llama.cpp flag set"
+
+  - id: vllm_turboquant_4bit_nc
+    label: "Stock vLLM TurboQuant 4-bit non-coherent"
+    implementation: stock_vllm
+    runtime: vllm
+    status: research_only
+    executable_by_current_script: false
+    allow_downloads: false
+    runtime_config: {kv_cache_dtype: turboquant_4bit_nc}
+    notes: "Quality-risk research cell; it cannot promote before K8/V4 passes"
+
+  - id: community_turboquant_plus_format_review
+    label: "Community TurboQuant+ format review"
+    implementation: community_turboquant_plus_fork
+    runtime: ik_llama_cpp_fork
+    status: review_only_source_and_cli_resolution_required
+    executable_by_current_script: false
+    allow_downloads: false
+    reported_current_formats: [turbo2, turbo3, turbo4]
+    notes: "Community fork proposal, not stock vLLM TurboQuant. Legacy TQ1 naming is forbidden; resolve and pin the exact fork revision and CLI before generating a command."
+
+research_watchlist:
+  rotorquant:
+    status: review_only
+    executable_variant: false
+    notes: "A plain llama.cpp q4 cache is not RotorQuant. Add a cell only for a pinned implementation with its actual rotation path."
+  vericache:
+    status: paper_watchlist_no_public_implementation
+    executable_variant: false
+    allow_downloads: false
+    paper: https://arxiv.org/abs/2605.17613
+    semantics: "Draft with compressed KV, then verify with full KV to catch divergence"
+    public_implementation_found: false
+    notes: "Paper-level method only. Aggregate similarity can hide catastrophic code/tool divergence, so it cannot be represented as a runnable integration without released code."
+    promotion_requires:
+      - public_implementation_released_and_pinned
+      - released_runtime_path_pinned
+      - exact_target_artifact_hash
+      - deterministic_cache_correctness_test
+      - quality_non_regression_on_agent_suite
+      - long_context_retrieval_and_tool_json_pass
+      - exact_tool_argument_match
+      - patch_parse_and_tests_pass
+      - long_generation_divergence_bound
+      - greedy_output_identity
+      - concurrency_p99_and_vram_measurement
+
+metrics:
+  primary: accepted_steps_per_sec_per_gb
+  secondary:
+    - tok_per_s
+    - vram_gb
+    - p95_latency_s
+    - quality_delta_vs_no_kv
+
+selection:
+  min_quality_retention: 0.95
+  max_task_quality_delta: 0.0
+  require_tool_schema_non_regression: true
+  require_long_context_retrieval_non_regression: true
+  tie_breaker: vram_gb
+
+output:
+  results_dir: "${PHENO_ROOT}/bench/results/kv_bakeoff"
+  winner_state: "${PHENO_ROOT}/state/kv_winner.json"
+
+deploy:
+  target_gpu: "RTX 3090 Ti"
+  apply_to:
+    - local.qwen35_08b
+    - local.lfm25_8b_a1b
+    - local.ornith_8b
+  long_ctx_only: true
+  min_ctx: 16384

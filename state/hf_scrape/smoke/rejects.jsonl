@@ -1,0 +1,9 @@
+{"id": "google/gemma-3-270m", "reason": "params_b=0.27 out of [0.8,35.0]", "params_b": 0.268, "tags": [], "gated": null}
+{"id": "Qwen/Qwen3-0.6B", "reason": "params_b=0.75 out of [0.8,35.0]", "params_b": 0.752, "tags": [], "gated": null}
+{"id": "deepseek-ai/DeepSeek-R1", "reason": "params_b=684.53 out of [0.8,35.0]", "params_b": 684.531, "tags": [], "gated": null}
+{"id": "deepseek-ai/DeepSeek-R1-0528", "reason": "params_b=684.53 out of [0.8,35.0]", "params_b": 684.531, "tags": [], "gated": null}
+{"id": "inclusionAI/LLaDA2.1-flash", "reason": "params_b=102.89 out of [0.8,35.0]", "params_b": 102.89, "tags": [], "gated": null}
+{"id": "moonshotai/Kimi-K2-Instruct-0905", "reason": "params_b=1026.47 out of [0.8,35.0]", "params_b": 1026.471, "tags": [], "gated": null}
+{"id": "moonshotai/Kimi-K2-Instruct", "reason": "params_b=1026.47 out of [0.8,35.0]", "params_b": 1026.471, "tags": [], "gated": null}
+{"id": "zai-org/GLM-5-FP8", "reason": "params_b=753.91 out of [0.8,35.0]", "params_b": 753.91, "tags": [], "gated": null}
+{"id": "bigcode/tiny_starcoder_py", "reason": "params_b=0.16 out of [0.8,35.0]", "params_b": 0.164, "tags": [], "gated": null}
