@@ -1,7 +1,7 @@
 # PhenoShared Comprehensive Handoff
 
 **Date:** 2026-09-16 (Pacific) — final state
-**Branch:** main at `0605f2f1`
+**Branch:** main at `1056f3e8`
 **Repo:** KooshaPari/PhenoShared (formerly PhenoAI)
 
 ## Repository Identity
@@ -11,7 +11,7 @@
 - **Role:** Pooled foundation monorepo (Rust workspace + absorbed repos)
 - **Workspace members:** 76 (verified via `cargo metadata --no-deps`)
 - **Total crate dirs:** 310
-- **cargo check:** PASS (0 errors, 3 build-system warnings only)
+- **cargo check:** PASS (0 errors, 1 future-compat warning only)
 
 ## Absorption History (chronological)
 
@@ -73,7 +73,7 @@ None. Workspace compiles clean.
 1. **3 PhenoRegistry crates orphaned** - not in workspace, should be integrated or removed
 
 ### Medium (3)
-1. **Future-compat warnings** - `block v0.1.6` and `proc-macro-error2 v2.0.1` will be rejected by future Rust (upstream deps)
+1. **Future-compat warning** - `block v0.1.6` and `proc-macro-error2 v2.0.1` will be rejected by future Rust (upstream deps, not fixable locally)
 2. **Origin URLs stale** - 13 external git deps reference repos not yet absorbed (ResilienceKit, Authvault, PhenoObservability, substrate)
 3. **CRLF line ending drift** - 5 session extract files have mixed line endings
 
@@ -143,9 +143,9 @@ These reference repos NOT absorbed into PhenoShared:
 5. Absorb remaining repos (ResilienceKit, Authvault, PhenoObservability, substrate) or switch their deps to workspace = true
 
 ### Phase C: Quality
-1. ~~Fix 44 warnings (42 missing docs, dead code in fabric-capture/substrate-tui)~~ DONE (44 -> 3 build-system only)
-2. Address future-compat warnings (block, proc-macro-error2) — needs upstream crate updates
-3. Normalize CRLF line endings in session extracts
+1. ~~Fix all code and build-system warnings~~ DONE (47 -> 0 code, 3 -> 1 build-system)
+2. ~~CRLF line endings~~ DONE (.gitattributes already normalizes; working tree cleaned)
+3. Future-compat (block, proc-macro-error2) — needs upstream crate updates
 
 ### Phase D: Productization
 1. Classify registry/ data for tracking
