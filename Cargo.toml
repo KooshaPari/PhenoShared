@@ -72,6 +72,9 @@ members = [
     # --- GFX SDK crates (absorbed from PhenoGfx) ---
     "crates/phenotype-gfx",
     "crates/phenotype-voxel",
+    # --- PhenoRegistry crates (absorbed from PhenoRegistry) ---
+    "crates/phenotype-project-registry",
+    "crates/phenotype-service-registry",
 ]
 [workspace.package]
 version = "0.3.10"
@@ -104,7 +107,7 @@ toml = "1.1"
 
 # --- Phenotype shared infrakit crates (from PhenoInfra) ---
 phenotype-crypto = { git = "https://github.com/KooshaPari/PhenoInfra.git", rev = "e001322" }
-phenotype-health = { git = "https://github.com/KooshaPari/PhenoInfra.git", rev = "e001322" }
+phenotype-health = { path = "crates/phenotype-health", version = "0.2.0" }
 phenotype-observability = { git = "https://github.com/KooshaPari/PhenoInfra.git", rev = "e001322" }
 phenotype-policy-engine = { git = "https://github.com/KooshaPari/PhenoInfra.git", rev = "e001322" }
 phenotype-mcp = { git = "https://github.com/KooshaPari/PhenoInfra.git", rev = "e001322" }

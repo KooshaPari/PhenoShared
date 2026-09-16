@@ -22,15 +22,15 @@ PhenoRegistry content absorbed into PhenoShared:
 
 ## What Remains (NOT DONE)
 
-### 1. Workspace Member Registration
+### 1. ~~Workspace Member Registration~~ DONE
 
-Three PhenoRegistry crates exist but are NOT in `Cargo.toml` workspace members:
+Two PhenoRegistry crates added to workspace members, one left orphaned:
 
-| Crate | Uses workspace deps? | Integration status |
-|-------|---------------------|-------------------|
-| `phenotype-project-registry` | YES (serde, serde_json) | Ready to add to workspace members |
-| `phenotype-service-registry` | YES (anyhow, serde, tokio, thiserror, uuid, chrono) | Ready to add to workspace members |
-| `pheno-registry-python` | NO | BLOCKED: depends on `phenotype-registry = { path = "../.." }` which points to workspace root (virtual manifest). Needs a real `phenotype-registry` crate or the dep must be rewritten |
+| Crate | Status | Notes |
+|-------|--------|-------|
+| `phenotype-project-registry` | **INTEGRATED** | Added missing deps (anyhow, phenotype-health, tokio), switched phenotype-health to local path |
+| `phenotype-service-registry` | **INTEGRATED** | Already clean, uses workspace deps |
+| `pheno-registry-python` | ORPHANED | Depends on non-existent `phenotype-registry` crate. Stays out of workspace |
 
 ### 2. Registry Data Audit
 

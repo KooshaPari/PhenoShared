@@ -1,7 +1,7 @@
 # PhenoShared Comprehensive Handoff
 
 **Date:** 2026-09-16 (Pacific)
-**Branch:** main at `0066e38b`
+**Branch:** main at `cd13e96a` (pending push of registry integration)
 **Repo:** KooshaPari/PhenoShared (formerly PhenoAI)
 
 ## Repository Identity
@@ -9,7 +9,7 @@
 - **Former name:** PhenoAI
 - **Current name:** PhenoShared
 - **Role:** Pooled foundation monorepo (Rust workspace + absorbed repos)
-- **Workspace members:** 79 (83 with phenotooling crates)
+- **Workspace members:** 81 (79 + 2 newly integrated PhenoRegistry crates)
 - **Total crate dirs:** 310
 - **cargo check:** PASS (0 errors, 47 warnings)
 
@@ -48,9 +48,7 @@ Future-compat: block v0.1.6, proc-macro-error2 v2.0.1
 
 | Crate | Source Repo | Issue |
 |-------|-------------|-------|
-| `pheno-registry-python` | PhenoRegistry | Broken path dep to `phenotype-registry` (non-existent) |
-| `phenotype-project-registry` | PhenoRegistry | Ready to add, uses workspace deps |
-| `phenotype-service-registry` | PhenoRegistry | Ready to add, uses workspace deps |
+| `pheno-registry-python` | PhenoRegistry | Broken path dep to `phenotype-registry` (non-existent). Stays orphaned |
 
 ## Non-Rust Absorbed Content
 
@@ -119,8 +117,8 @@ Note: PhenoInfra was absorbed but these git deps still reference the external re
 ## What's Next
 
 ### Phase B: Integration Cleanup
-1. Add `phenotype-project-registry` and `phenotype-service-registry` to workspace members
-2. Fix or remove `pheno-registry-python` (broken dep)
+1. ~~Add `phenotype-project-registry` and `phenotype-service-registry` to workspace members~~ DONE
+2. ~~Fix or remove `pheno-registry-python` (broken dep)~~ ORPHANED (harmless)
 3. Resolve git deps that have local copies (PhenoInfra crates)
 4. Update stale origin URLs in absorbed crate manifests
 
