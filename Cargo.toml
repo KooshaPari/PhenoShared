@@ -13,7 +13,6 @@ members = [
     "crates/driver-http",
     "crates/driver-argv",
     "crates/driver-mcp",
-    "crates/gateway",
     "crates/arch-test",
     "crates/omniroute-adapter",
     "crates/routing-phenotype-router",
@@ -46,7 +45,6 @@ members = [
     "crates/cloud-codex",
     "crates/substrate-serve-lock",
     "crates/substrate-tui",
-    "crates/gateway-tools",
     "crates/orchestrator",
 ]
 [workspace.package]
