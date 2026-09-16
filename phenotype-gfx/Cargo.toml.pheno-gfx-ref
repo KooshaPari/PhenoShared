@@ -1,0 +1,132 @@
+[workspace]
+resolver = "2"
+members = [".", "crates/phenotype-voxel"]
+
+[package]
+name = "phenotype-gfx"
+version = "0.2.0"
+edition = "2021"
+rust-version = "1.75.0"
+description = "Unified graphics kernel: voxel, LOD, streaming, postfx, water, voxelizer, terrain. Single Rust core per ADR-004."
+license = "MIT OR Apache-2.0"
+readme = "README.md"
+repository = "https://github.com/KooshaPari/phenotype-gfx"
+keywords = ["graphics", "voxel", "terrain", "water", "postfx"]
+categories = ["game-engines", "graphics", "data-structures"]
+
+[lib]
+name = "phenotype_gfx"
+path = "src/lib.rs"
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+# L5-109 (2026-06-18): voxel crate inlined into src/voxel/ — drop git dep, add direct deps.
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+bytemuck = { version = "1", features = ["derive"] }
+thiserror = "2"
+# glam 0.29 for water/postfx math; 0.18+ broke Vec3 ABI relative to 0.27
+glam = { version = "0.29", features = ["serde"] }
+# L5-110 terrain uses UUID v4 ids for material registry keys.
+uuid = { version = "1", features = ["v4", "serde"] }
+# L5-obs (2026-06-30): structured tracing — zero-cost when no subscriber is wired.
+tracing = { version = "0.1", default-features = false, features = ["std", "attributes"] }
+# metrics facade — no-op when no recorder is installed; consumers opt-in to prometheus/statsd.
+metrics = { version = "0.24", default-features = false }
+# Zstd compression for streaming chunk persistence
+zstd = "0.13"
+
+# OTLP + Prometheus observability (feature-gated)
+# L5-advisory (2026-09-08): bumped prometheus 0.13 -> 0.14 and opentelemetry 0.28 -> 0.29
+#   to clear RUSTSEC-2024-0437 (protobuf 2.x uncontrolled recursion in skip_group).
+#   prometheus 0.14 uses protobuf ^3.7.2 (patched); opentelemetry-prometheus 0.29
+#   no longer pulls protobuf directly. opentelemetry_sdk stays at 0.32 to keep
+#   workspace alignment with the prior partial-bump.
+opentelemetry = { version = "0.29", optional = true }
+opentelemetry_sdk = { version = "0.32", features = ["rt-tokio"], optional = true }
+opentelemetry-otlp = { version = "0.29", features = ["grpc-tonic"], optional = true }
+opentelemetry-prometheus = { version = "0.29", optional = true }
+prometheus = { version = "0.14", optional = true }
+tokio = { version = "1", features = ["rt-multi-thread", "macros", "fs", "io-util"], optional = true }
+
+# Bevy adapter is optional — only pulled in when consumers need ECS integration
+bevy = { version = "0.18.1", default-features = false, features = ["bevy_asset", "bevy_mesh"], optional = true }
+
+# GPU compute dispatch backend (wgpu 22). Pulled in only when the `gpu` feature
+# is enabled so non-GPU consumers (CI lint, wasm-bindgen build) are unaffected.
+wgpu = { version = "22", optional = true }
+# Tiny executor for wgpu's async handles in tests and the convenience constructor.
+pollster = { version = "0.3", optional = true }
+
+[dev-dependencies]
+criterion = "0.5"
+proptest = "1.4"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+tracing-test = "0.2"
+anyhow = "1.0"
+# wgpu is dev-only when `gpu` is enabled in non-default builds.
+wgpu = { version = "22" }
+pollster = "0.3"
+
+[[bench]]
+name = "voxelizer_bench"
+harness = false
+
+[[bench]]
+name = "mesher_compare"
+harness = false
+
+[[bench]]
+name = "perf_suite"
+harness = false
+
+[[bench]]
+name = "post_stack_bench"
+harness = false
+
+[[example]]
+name = "consume_mesh"
+path = "examples/consume_mesh.rs"
+
+[[example]]
+name = "terrain_demo"
+path = "examples/terrain_demo.rs"
+
+[[example]]
+name = "water_demo"
+path = "examples/water_demo.rs"
+
+[[example]]
+name = "postfx_demo"
+path = "examples/postfx_demo.rs"
+
+[[example]]
+name = "full_scene"
+path = "examples/full_scene.rs"
+
+[[example]]
+name = "networking_demo"
+path = "examples/networking_demo.rs"
+
+[[example]]
+name = "ecs_integration"
+path = "examples/ecs_integration.rs"
+
+[features]
+default = []
+bevy = ["dep:bevy"]
+# GPU compute dispatch via wgpu. Pulls in wgpu + pollster; enables the
+# `phenotype_gfx::compute::gpu_mesher` module with `GpuMesher` and the
+# `tests/gpu_compute_smoke.rs` integration test.
+gpu = ["dep:wgpu", "dep:pollster"]
+# OTLP + Prometheus observability stack
+otlp = ["dep:opentelemetry", "dep:opentelemetry_sdk", "dep:opentelemetry-otlp", "dep:tokio"]
+prometheus = ["dep:opentelemetry-prometheus", "dep:prometheus"]
+full-obs = ["otlp", "prometheus"]
+# SIMD-accelerated voxel meshing (SSE2 on x86_64, scalar fallback elsewhere)
+simd = []
+
+# C-ABI layer for C# P/Invoke / Unity interop
+c_api = []
+# Zstd-compressed disk chunk persistence for streaming
+zstd-storage = ["dep:tokio"]

@@ -71,6 +71,8 @@ members = [
     "crates/fabric-capture",
     "crates/fabric-research-ledger",
     "examples/full-demo",
+    # --- GFX SDK crates (absorbed from PhenoGfx) ---
+    "crates/phenotype-voxel",
 ]
 [workspace.package]
 version = "0.3.10"
@@ -149,6 +151,17 @@ schemars = { version = "0.8", features = ["derive", "chrono"] }
 jsonschema = "0.27"
 fabric-capability = { path = "crates/fabric-capability" }
 fabric-graph = { path = "crates/fabric-graph" }
+
+# --- GFX SDK crates (absorbed from PhenoGfx) ---
+phenotype-voxel = { version = "0.2.0", path = "crates/phenotype-voxel" }
+bytemuck = { version = "1", features = ["derive"] }
+glam = { version = "0.29", features = ["serde"] }
+metrics = { version = "0.24", default-features = false }
+zstd = "0.13"
+prometheus = { version = "0.14", optional = true }
+bevy = { version = "0.18.1", default-features = false, features = ["bevy_asset", "bevy_mesh"], optional = true }
+wgpu = { version = "22", optional = true }
+pollster = { version = "0.3", optional = true }
 
 [workspace.lints.rust]
 unsafe_code = "forbid"
