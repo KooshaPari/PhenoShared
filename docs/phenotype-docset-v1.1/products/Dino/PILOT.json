@@ -1,0 +1,41 @@
+{
+  "id": "PILOT-PRD-DINO",
+  "product_id": "PRD-DINO",
+  "status": "PLANNED_NOT_EXECUTED",
+  "subject_repository_id": 1177712269,
+  "hypothesis": "A safer and faster practical mod-authoring workflow with real game integration and useful diagnostics.",
+  "baseline_candidates": [
+    "Ordinary supported manual mod workflow",
+    "Relevant game mod loader/SDK",
+    "Direct pack scripts",
+    "Pinned injector/upstream baseline"
+  ],
+  "scenario": "Author the same small visible gameplay/content pack manually and using DINOForge. Add an asset, change behavior, create a conflicting pack and unsupported version, reload where promised, restart the game, update and uninstall. Capture the actual game and companion UI.",
+  "failure_cases": [
+    "Pack accepted but not loaded",
+    "Missing asset silently ignored",
+    "Mod conflict corrupts save",
+    "Game update breaks injector",
+    "Disable/uninstall leaves hooks active",
+    "UI claims success without runtime receipt"
+  ],
+  "metrics": [
+    "Time to first working pack",
+    "Iteration and diagnosis effort",
+    "Compatibility/failure isolation",
+    "Runtime overhead",
+    "Asset quality and fidelity",
+    "Clean disable/recovery"
+  ],
+  "required_before_execution": [
+    "versioned subjects and fixtures",
+    "predeclared critical invariants",
+    "reviewed non-inferiority margins",
+    "resource and trust limits",
+    "independent outcome oracle",
+    "retained failed-trial policy"
+  ],
+  "results": null,
+  "winner": null,
+  "protocol": "../../research/COMPARATIVE-PILOT-PROTOCOL.md"
+}

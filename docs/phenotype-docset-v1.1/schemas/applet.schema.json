@@ -1,0 +1,157 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:phenotype:atlas-plan:1:applet",
+  "title": "applet",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[A-Za-z][A-Za-z0-9_.:-]*$",
+      "minLength": 2
+    },
+    "version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "subject_id": {
+      "type": "string",
+      "pattern": "^[A-Za-z][A-Za-z0-9_.:-]*$",
+      "minLength": 2
+    },
+    "provided_capabilities": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 0
+    },
+    "required_capabilities": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 0
+    },
+    "optional_capabilities": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 0
+    },
+    "ports": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "direction": {
+            "type": "string",
+            "enum": [
+              "provides",
+              "requires"
+            ]
+          },
+          "contract_id": {
+            "type": "string",
+            "pattern": "^[A-Za-z][A-Za-z0-9_.:-]*$",
+            "minLength": 2
+          }
+        },
+        "required": [
+          "name",
+          "direction",
+          "contract_id"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 0
+    },
+    "owned_state_ids": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 0
+    },
+    "permission_ids": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 0
+    },
+    "resource_profile_ids": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 0
+    },
+    "surfaces": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "library",
+          "cli",
+          "gui",
+          "api",
+          "mcp",
+          "daemon",
+          "audio",
+          "video",
+          "none"
+        ]
+      },
+      "minItems": 0
+    },
+    "children": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 0
+    },
+    "lifecycle_contract_id": {
+      "type": "string",
+      "pattern": "^[A-Za-z][A-Za-z0-9_.:-]*$",
+      "minLength": 2
+    },
+    "federation_policy": {
+      "type": "string",
+      "minLength": 1
+    },
+    "synthetic": {
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "id",
+    "version",
+    "subject_id",
+    "provided_capabilities",
+    "required_capabilities",
+    "optional_capabilities",
+    "ports",
+    "owned_state_ids",
+    "permission_ids",
+    "resource_profile_ids",
+    "surfaces",
+    "children",
+    "lifecycle_contract_id",
+    "federation_policy",
+    "synthetic"
+  ],
+  "additionalProperties": false
+}

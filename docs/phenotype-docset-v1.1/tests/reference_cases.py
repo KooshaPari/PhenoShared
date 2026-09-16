@@ -1,0 +1,50 @@
+from __future__ import annotations
+import copy,json
+from pathlib import Path
+ROOT=Path(__file__).resolve().parents[1]
+def fixture():return json.loads((ROOT/'examples/qa-manifest.json').read_text()),json.loads((ROOT/'examples/qa-report-synthetic.json').read_text())
+
+def vectors():
+    return [
+        ('wrong_subject',lambda m,r:r['cells'][0].update(subject_id='OTHER')),
+        ('wrong_revision',lambda m,r:r['cells'][0].update(revision='c'*40)),
+        ('wrong_artifact',lambda m,r:r['cells'][0].update(artifact_sha256='c'*64)),
+        ('below_floor',lambda m,r:r['cells'][0].update(covered_ids=r['cells'][0]['eligible_ids'][:16])),
+        ('missing_critical',lambda m,r:r['cells'][0].update(covered_ids=r['cells'][0]['eligible_ids'][1:])),
+        ('changed_critical',lambda m,r:r['cells'][0].update(critical_ids=[])),
+        ('duplicate_eligible',lambda m,r:r['cells'][0]['eligible_ids'].append(r['cells'][0]['eligible_ids'][0])),
+        ('duplicate_covered',lambda m,r:r['cells'][0]['covered_ids'].append(r['cells'][0]['covered_ids'][0])),
+        ('duplicate_critical',lambda m,r:r['cells'][0]['critical_ids'].append(r['cells'][0]['critical_ids'][0])),
+        ('unknown_covered',lambda m,r:r['cells'][0]['covered_ids'].append('unknown-case')),
+        ('changed_inventory',lambda m,r:r['cells'][0]['eligible_ids'].__setitem__(-1,'changed-case')),
+        ('bad_report_digest',lambda m,r:r['cells'][0].update(denominator_sha256='0'*64)),
+        ('bad_manifest_digest',lambda m,r:m['required_cells'][0].update(denominator_sha256='0'*64)),
+        ('no_required_cells',lambda m,r:m.update(required_cells=[])),
+        ('report_cells_wrong_type',lambda m,r:r.update(cells={})),
+        ('expected_duplicate_cell',lambda m,r:m['required_cells'].append(copy.deepcopy(m['required_cells'][0]))),
+        ('reported_duplicate_cell',lambda m,r:r['cells'].append(copy.deepcopy(r['cells'][0]))),
+        ('unknown_cell',lambda m,r:r['cells'][0].update(metric='invented-metric')),
+        ('missing_family',lambda m,r:r.update(cells=[c for c in r['cells'] if c['family']!='integration'])),
+        ('missing_run',lambda m,r:r['cells'][0].update(run_id='')),
+        ('run_not_completed',lambda m,r:r['cells'][0].update(run_status='not-run')),
+        ('run_failed',lambda m,r:r['cells'][0].update(outcome='fail')),
+        ('mixed_accumulator',lambda m,r:r['cells'][0].update(accumulator_families=['unit','integration'])),
+        ('same_run_two_families',lambda m,r:r['cells'][4].update(run_id=r['cells'][0]['run_id'])),
+        ('no_checks',lambda m,r:r['cells'][0].update(checks=[])),
+        ('skipped_required_check',lambda m,r:r['cells'][0]['checks'][1].update(status='skip')),
+        ('duplicate_check',lambda m,r:r['cells'][0]['checks'].append(copy.deepcopy(r['cells'][0]['checks'][0]))),
+        ('malformed_check',lambda m,r:r['cells'][0].update(checks=['not-an-object'])),
+        ('no_evidence_ref',lambda m,r:r['cells'][0].update(evidence_refs=[])),
+        ('unknown_origin',lambda m,r:r['cells'][0].update(data_origin='claimed')),
+        ('floor_below_policy',lambda m,r:m['required_cells'][0].update(minimum_percent=84)),
+        ('floor_bool',lambda m,r:m['required_cells'][0].update(minimum_percent=True)),
+        ('missing_identity',lambda m,r:r['cells'][0].update(component='')),
+        ('no_revision_expectation',lambda m,r:m.update(revision=None)),
+        ('invalid_manifest_version',lambda m,r:m.update(schema_version='future')),
+        ('invalid_report_version',lambda m,r:r.update(schema_version='future')),
+        ('bad_id_type',lambda m,r:r['cells'][0].update(eligible_ids=[None])),
+        ('empty_eligible',lambda m,r:r['cells'][0].update(eligible_ids=[])),
+        ('critical_not_eligible_manifest',lambda m,r:m['required_cells'][0].update(critical_ids=['missing'])),
+        ('empty_required_checks',lambda m,r:m['required_cells'][0].update(required_checks=[])),
+        ('stronger_floor',lambda m,r:m['required_cells'][0].update(minimum_percent=95)),
+    ]

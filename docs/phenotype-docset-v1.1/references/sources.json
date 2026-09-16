@@ -1,0 +1,290 @@
+[
+  {
+    "id": "SRC-SCIP",
+    "url": "https://github.com/sourcegraph/scip",
+    "title": "SCIP semantic code index protocol",
+    "role": "Candidate indexing/interchange; qualify producer/language coverage.",
+    "evidence_status": "REFERENCE_CARRIED_OR_CANDIDATE_NOT_REFETCHED_IN_PACKAGING",
+    "last_verified_in_this_package": null,
+    "implementation_or_benchmark_claim": false
+  },
+  {
+    "id": "SRC-LSP",
+    "url": "https://microsoft.github.io/language-server-protocol/",
+    "title": "Language Server Protocol",
+    "role": "Reuse semantic editor services; runtime edges remain incomplete.",
+    "evidence_status": "REFERENCE_CARRIED_OR_CANDIDATE_NOT_REFETCHED_IN_PACKAGING",
+    "last_verified_in_this_package": null,
+    "implementation_or_benchmark_claim": false
+  },
+  {
+    "id": "SRC-TREESITTER",
+    "url": "https://tree-sitter.github.io/tree-sitter/",
+    "title": "Tree-sitter",
+    "role": "Syntax parsing candidate; not an authority for full dynamic reachability.",
+    "evidence_status": "REFERENCE_CARRIED_OR_CANDIDATE_NOT_REFETCHED_IN_PACKAGING",
+    "last_verified_in_this_package": null,
+    "implementation_or_benchmark_claim": false
+  },
+  {
+    "id": "SRC-STRICTDOC",
+    "url": "https://strictdoc.readthedocs.io/",
+    "title": "StrictDoc",
+    "role": "Requirements and source traceability comparator.",
+    "evidence_status": "REFERENCE_CARRIED_OR_CANDIDATE_NOT_REFETCHED_IN_PACKAGING",
+    "last_verified_in_this_package": null,
+    "implementation_or_benchmark_claim": false
+  },
+  {
+    "id": "SRC-BACKSTAGE",
+    "url": "https://backstage.io/docs/features/software-catalog/",
+    "title": "Backstage catalog",
+    "role": "Software catalog comparator; not a full product-semantic model.",
+    "evidence_status": "REFERENCE_CARRIED_OR_CANDIDATE_NOT_REFETCHED_IN_PACKAGING",
+    "last_verified_in_this_package": null,
+    "implementation_or_benchmark_claim": false
+  },
+  {
+    "id": "SRC-LYCHEE",
+    "url": "https://lychee.cli.rs/",
+    "title": "Lychee",
+    "role": "Link-checking reuse candidate.",
+    "evidence_status": "REFERENCE_CARRIED_OR_CANDIDATE_NOT_REFETCHED_IN_PACKAGING",
+    "last_verified_in_this_package": null,
+    "implementation_or_benchmark_claim": false
+  },
+  {
+    "id": "SRC-COMPONENT",
+    "url": "https://component-model.bytecodealliance.org/design/worlds.html",
+    "title": "WebAssembly Component Model",
+    "role": "Typed import/export composition; not all semantic contracts.",
+    "evidence_status": "REFERENCE_CARRIED_OR_CANDIDATE_NOT_REFETCHED_IN_PACKAGING",
+    "last_verified_in_this_package": null,
+    "implementation_or_benchmark_claim": false
+  },
+  {
+    "id": "SRC-OAI-AGENTS",
+    "url": "https://openai.github.io/openai-agents-python/",
+    "title": "OpenAI Agents SDK",
+    "role": "Framework baseline; inspect current documented control/guardrail boundaries.",
+    "evidence_status": "REFERENCE_CARRIED_OR_CANDIDATE_NOT_REFETCHED_IN_PACKAGING",
+    "last_verified_in_this_package": null,
+    "implementation_or_benchmark_claim": false
+  },
+  {
+    "id": "SRC-LANGGRAPH",
+    "url": "https://docs.langchain.com/oss/python/langgraph/overview",
+    "title": "LangGraph",
+    "role": "Graph execution and persistence baseline; side-effect semantics require testing.",
+    "evidence_status": "REFERENCE_CARRIED_OR_CANDIDATE_NOT_REFETCHED_IN_PACKAGING",
+    "last_verified_in_this_package": null,
+    "implementation_or_benchmark_claim": false
+  },
+  {
+    "id": "SRC-CREWAI",
+    "url": "https://docs.crewai.com/en/concepts/flows",
+    "title": "CrewAI Flows",
+    "role": "Workflow/role model comparator.",
+    "evidence_status": "REFERENCE_CARRIED_OR_CANDIDATE_NOT_REFETCHED_IN_PACKAGING",
+    "last_verified_in_this_package": null,
+    "implementation_or_benchmark_claim": false
+  },
+  {
+    "id": "SRC-MASTRA",
+    "url": "https://mastra.ai/docs",
+    "title": "Mastra",
+    "role": "Provisional intended interpretation of Mastro; typed TS workflow comparator.",
+    "evidence_status": "REFERENCE_CARRIED_OR_CANDIDATE_NOT_REFETCHED_IN_PACKAGING",
+    "last_verified_in_this_package": null,
+    "implementation_or_benchmark_claim": false
+  },
+  {
+    "id": "SRC-PYDANTICAI",
+    "url": "https://ai.pydantic.dev/",
+    "title": "PydanticAI",
+    "role": "Typed model/tools and test substitution comparator.",
+    "evidence_status": "REFERENCE_CARRIED_OR_CANDIDATE_NOT_REFETCHED_IN_PACKAGING",
+    "last_verified_in_this_package": null,
+    "implementation_or_benchmark_claim": false
+  },
+  {
+    "id": "SRC-RIG",
+    "url": "https://docs.rig.rs/",
+    "title": "Rig",
+    "role": "Rust-native framework comparator to avoid language-only attribution.",
+    "evidence_status": "REFERENCE_CARRIED_OR_CANDIDATE_NOT_REFETCHED_IN_PACKAGING",
+    "last_verified_in_this_package": null,
+    "implementation_or_benchmark_claim": false
+  },
+  {
+    "id": "SRC-ZOTERO",
+    "url": "https://www.zotero.org/support/collections_and_tags",
+    "title": "Zotero",
+    "role": "Research management comparator.",
+    "evidence_status": "REFERENCE_CARRIED_OR_CANDIDATE_NOT_REFETCHED_IN_PACKAGING",
+    "last_verified_in_this_package": null,
+    "implementation_or_benchmark_claim": false
+  },
+  {
+    "id": "SRC-OBSIDIAN",
+    "url": "https://help.obsidian.md/",
+    "title": "Obsidian",
+    "role": "Local file/vault workflow comparator.",
+    "evidence_status": "REFERENCE_CARRIED_OR_CANDIDATE_NOT_REFETCHED_IN_PACKAGING",
+    "last_verified_in_this_package": null,
+    "implementation_or_benchmark_claim": false
+  },
+  {
+    "id": "SRC-LANGFUSE",
+    "url": "https://langfuse.com/docs/observability/data-model",
+    "title": "Langfuse",
+    "role": "Trace/session comparator, not necessarily raw harness archive replacement.",
+    "evidence_status": "REFERENCE_CARRIED_OR_CANDIDATE_NOT_REFETCHED_IN_PACKAGING",
+    "last_verified_in_this_package": null,
+    "implementation_or_benchmark_claim": false
+  },
+  {
+    "id": "SRC-GHOSTTY",
+    "url": "https://ghostty.org/docs",
+    "title": "Ghostty",
+    "role": "Terminal upstream baseline.",
+    "evidence_status": "REFERENCE_CARRIED_OR_CANDIDATE_NOT_REFETCHED_IN_PACKAGING",
+    "last_verified_in_this_package": null,
+    "implementation_or_benchmark_claim": false
+  },
+  {
+    "id": "SRC-PROCESSCOMPOSE",
+    "url": "https://f1bonacc1.github.io/process-compose/",
+    "title": "Process Compose",
+    "role": "Process supervision baseline.",
+    "evidence_status": "REFERENCE_CARRIED_OR_CANDIDATE_NOT_REFETCHED_IN_PACKAGING",
+    "last_verified_in_this_package": null,
+    "implementation_or_benchmark_claim": false
+  },
+  {
+    "id": "SRC-COOLIFY",
+    "url": "https://coolify.io/docs/",
+    "title": "Coolify",
+    "role": "Deployment comparator; test persistent-data rollback separately.",
+    "evidence_status": "REFERENCE_CARRIED_OR_CANDIDATE_NOT_REFETCHED_IN_PACKAGING",
+    "last_verified_in_this_package": null,
+    "implementation_or_benchmark_claim": false
+  },
+  {
+    "id": "SRC-DOKPLOY",
+    "url": "https://docs.dokploy.com/",
+    "title": "Dokploy",
+    "role": "Deployment comparator.",
+    "evidence_status": "REFERENCE_CARRIED_OR_CANDIDATE_NOT_REFETCHED_IN_PACKAGING",
+    "last_verified_in_this_package": null,
+    "implementation_or_benchmark_claim": false
+  },
+  {
+    "id": "SRC-LITELLM",
+    "url": "https://docs.litellm.ai/",
+    "title": "LiteLLM",
+    "role": "Model gateway normalization/routing baseline.",
+    "evidence_status": "REFERENCE_CARRIED_OR_CANDIDATE_NOT_REFETCHED_IN_PACKAGING",
+    "last_verified_in_this_package": null,
+    "implementation_or_benchmark_claim": false
+  },
+  {
+    "id": "SRC-HARBOR",
+    "url": "https://www.harborframework.com/docs/tasks",
+    "title": "Harbor",
+    "role": "Task/environment runner baseline.",
+    "evidence_status": "REFERENCE_CARRIED_OR_CANDIDATE_NOT_REFETCHED_IN_PACKAGING",
+    "last_verified_in_this_package": null,
+    "implementation_or_benchmark_claim": false
+  },
+  {
+    "id": "SRC-INSPECT",
+    "url": "https://inspect.aisi.org.uk/",
+    "title": "Inspect AI",
+    "role": "Evaluation composition/scoring comparator.",
+    "evidence_status": "REFERENCE_CARRIED_OR_CANDIDATE_NOT_REFETCHED_IN_PACKAGING",
+    "last_verified_in_this_package": null,
+    "implementation_or_benchmark_claim": false
+  },
+  {
+    "id": "SRC-TOUCHDESIGNER",
+    "url": "https://derivative.ca/UserGuide/TouchDesigner",
+    "title": "TouchDesigner",
+    "role": "Procedural realtime creative workflow comparator.",
+    "evidence_status": "REFERENCE_CARRIED_OR_CANDIDATE_NOT_REFETCHED_IN_PACKAGING",
+    "last_verified_in_this_package": null,
+    "implementation_or_benchmark_claim": false
+  },
+  {
+    "id": "SRC-OPENFEATURE",
+    "url": "https://openfeature.dev/docs/reference/intro/",
+    "title": "OpenFeature",
+    "role": "Feature-flag provider/contract reuse.",
+    "evidence_status": "REFERENCE_CARRIED_OR_CANDIDATE_NOT_REFETCHED_IN_PACKAGING",
+    "last_verified_in_this_package": null,
+    "implementation_or_benchmark_claim": false
+  },
+  {
+    "id": "SRC-STORYBOOK",
+    "url": "https://storybook.js.org/docs/writing-tests/accessibility-testing",
+    "title": "Storybook accessibility testing",
+    "role": "Check fail-versus-todo policy; tooling presence is not enforcement.",
+    "evidence_status": "REFERENCE_CARRIED_OR_CANDIDATE_NOT_REFETCHED_IN_PACKAGING",
+    "last_verified_in_this_package": null,
+    "implementation_or_benchmark_claim": false
+  },
+  {
+    "id": "SRC-VHS",
+    "url": "https://github.com/charmbracelet/vhs",
+    "title": "VHS",
+    "role": "Terminal capture; keep exit/assertion evidence separate from video.",
+    "evidence_status": "REFERENCE_CARRIED_OR_CANDIDATE_NOT_REFETCHED_IN_PACKAGING",
+    "last_verified_in_this_package": null,
+    "implementation_or_benchmark_claim": false
+  },
+  {
+    "id": "SRC-PLAYWRIGHT",
+    "url": "https://playwright.dev/docs/test-intro",
+    "title": "Playwright",
+    "role": "Browser execution/capture; native product and backend boundaries remain explicit.",
+    "evidence_status": "REFERENCE_CARRIED_OR_CANDIDATE_NOT_REFETCHED_IN_PACKAGING",
+    "last_verified_in_this_package": null,
+    "implementation_or_benchmark_claim": false
+  },
+  {
+    "id": "SRC-OTEL",
+    "url": "https://opentelemetry.io/docs/specs/otel/",
+    "title": "OpenTelemetry",
+    "role": "Trace/log/metric contracts, not product authority.",
+    "evidence_status": "REFERENCE_CARRIED_OR_CANDIDATE_NOT_REFETCHED_IN_PACKAGING",
+    "last_verified_in_this_package": null,
+    "implementation_or_benchmark_claim": false
+  },
+  {
+    "id": "SRC-SPDX",
+    "url": "https://spdx.dev/",
+    "title": "SPDX",
+    "role": "Software provenance/license inventory reuse.",
+    "evidence_status": "REFERENCE_CARRIED_OR_CANDIDATE_NOT_REFETCHED_IN_PACKAGING",
+    "last_verified_in_this_package": null,
+    "implementation_or_benchmark_claim": false
+  },
+  {
+    "id": "SRC-CYCLONEDX",
+    "url": "https://cyclonedx.org/",
+    "title": "CycloneDX",
+    "role": "Dependency/component inventory reuse.",
+    "evidence_status": "REFERENCE_CARRIED_OR_CANDIDATE_NOT_REFETCHED_IN_PACKAGING",
+    "last_verified_in_this_package": null,
+    "implementation_or_benchmark_claim": false
+  },
+  {
+    "id": "SRC-JSONSCHEMA",
+    "url": "https://json-schema.org/draft/2020-12",
+    "title": "JSON Schema 2020-12",
+    "role": "Package schema dialect, separate from producer authentication.",
+    "evidence_status": "REFERENCE_CARRIED_OR_CANDIDATE_NOT_REFETCHED_IN_PACKAGING",
+    "last_verified_in_this_package": null,
+    "implementation_or_benchmark_claim": false
+  }
+]

@@ -1,0 +1,42 @@
+{
+  "id": "PILOT-PRD-PHENOMLX",
+  "product_id": "PRD-PHENOMLX",
+  "status": "PLANNED_NOT_EXECUTED",
+  "subject_repository_id": 1214745478,
+  "hypothesis": "A reproducible quality-preserving throughput, memory or workflow improvement over the actual upstream baseline.",
+  "baseline_candidates": [
+    "Pinned upstream OMLX",
+    "Current upstream OMLX",
+    "MLX-LM serving",
+    "llama.cpp on supported hardware",
+    "Other relevant local inference server"
+  ],
+  "scenario": "On the same Apple hardware, load the same supported model/quantization and run cold/warm request sets at declared concurrency. Measure quality on fixed prompts, latency distributions and memory. Cancel, unload, restart and create controlled memory pressure; test the actual install recipe on a clean environment.",
+  "failure_cases": [
+    "OOM returns corrupted output",
+    "Cancelled request persists indefinitely",
+    "Wrong cache reuse",
+    "Model unload leaks residency",
+    "Version injection fails silently",
+    "Benchmark compares unequal models"
+  ],
+  "metrics": [
+    "Quality/non-inferiority first",
+    "TTFT and inter-token latency distributions",
+    "Sustained tokens/s at declared concurrency",
+    "Peak/residual memory",
+    "Time to clean install",
+    "Recovery after pressure/failure"
+  ],
+  "required_before_execution": [
+    "versioned subjects and fixtures",
+    "predeclared critical invariants",
+    "reviewed non-inferiority margins",
+    "resource and trust limits",
+    "independent outcome oracle",
+    "retained failed-trial policy"
+  ],
+  "results": null,
+  "winner": null,
+  "protocol": "../../research/COMPARATIVE-PILOT-PROTOCOL.md"
+}

@@ -1,0 +1,112 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:phenotype:atlas-plan:1:topic-proposal",
+  "title": "topic-proposal",
+  "type": "object",
+  "properties": {
+    "subject_id": {
+      "type": "string",
+      "pattern": "^[A-Za-z][A-Za-z0-9_.:-]*$",
+      "minLength": 2
+    },
+    "repository_id": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "lifecycle": {
+      "type": "string",
+      "enum": [
+        "active",
+        "incubating",
+        "maintenance",
+        "paused",
+        "reference",
+        "tombstoned",
+        "unresolved"
+      ]
+    },
+    "primary_role": {
+      "type": "string",
+      "minLength": 1
+    },
+    "domains": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 1
+    },
+    "surfaces": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 0
+    },
+    "platforms": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 0
+    },
+    "ownership": {
+      "type": "string",
+      "minLength": 1
+    },
+    "public_topics": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z0-9][a-z0-9-]{0,49}$"
+      },
+      "maxItems": 20,
+      "uniqueItems": true
+    },
+    "state": {
+      "type": "string",
+      "enum": [
+        "proposal",
+        "accepted-not-applied",
+        "applied-observed",
+        "synthetic"
+      ]
+    },
+    "approval_receipt": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "source_ids": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 0
+    },
+    "synthetic": {
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "subject_id",
+    "repository_id",
+    "lifecycle",
+    "primary_role",
+    "domains",
+    "surfaces",
+    "platforms",
+    "ownership",
+    "public_topics",
+    "state",
+    "approval_receipt",
+    "source_ids",
+    "synthetic"
+  ],
+  "additionalProperties": false
+}
