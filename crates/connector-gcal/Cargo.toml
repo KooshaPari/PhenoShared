@@ -1,0 +1,36 @@
+[package]
+name = "connector-gcal"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+
+[features]
+default = []
+keychain = ["dep:focus-crypto", "dep:secrecy"]
+# Dev-only live Google Calendar integration test opt-in.
+live-gcal = []
+
+[dependencies]
+focus-connectors = { path = "../focus-connectors" }
+focus-events = { path = "../focus-events" }
+focus-crypto = { path = "../focus-crypto", optional = true }
+phenotype-observably-macros = { path = "../../../PhenoObservability/crates/phenotype-observably-macros" }
+secrecy = { workspace = true, optional = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+thiserror = { workspace = true }
+anyhow = { workspace = true }
+async-trait = { workspace = true }
+reqwest = { workspace = true }
+oauth2 = { workspace = true }
+tokio = { workspace = true }
+chrono = { workspace = true }
+uuid = { workspace = true }
+tracing = { workspace = true }
+url = "2.5"
+
+[dev-dependencies]
+wiremock = "0.6"
+tokio = { workspace = true }
+serde_json = { workspace = true }

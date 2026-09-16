@@ -1,0 +1,33 @@
+[package]
+name = "focus-asset-fetcher"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+
+[[bin]]
+name = "focalpoint-fetch-assets"
+path = "src/main.rs"
+
+[dependencies]
+reqwest = { workspace = true, features = ["blocking"] }
+tokio = { workspace = true, features = ["rt", "macros"] }
+serde = { workspace = true }
+serde_json.workspace = true
+thiserror.workspace = true
+anyhow.workspace = true
+chrono.workspace = true
+uuid = { workspace = true, features = ["v4"] }
+clap = { version = "4.5", features = ["derive"] }
+regex = "1.11"
+walkdir = "2.4"
+sha2 = "0.10"
+hex = "0.4"
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+url = "2.5"
+tempfile = "3.10"
+
+[dev-dependencies]
+mockall = "0.12"
+tempfile = "3.10"

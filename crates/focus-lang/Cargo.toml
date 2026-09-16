@@ -1,0 +1,26 @@
+[package]
+name = "focus-lang"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+starlark = "0.13"
+serde.workspace = true
+serde_json.workspace = true
+chrono.workspace = true
+uuid.workspace = true
+thiserror.workspace = true
+anyhow.workspace = true
+focus-ir = { path = "../focus-ir" }
+csv.workspace = true
+serde_yaml.workspace = true
+
+[dev-dependencies]
+criterion = { workspace = true }
+tempfile = "3.11"
+
+[[bench]]
+name = "starlark_compile"
+harness = false

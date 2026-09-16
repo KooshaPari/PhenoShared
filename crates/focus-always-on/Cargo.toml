@@ -1,0 +1,21 @@
+[package]
+name = "focus-always-on"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+serde = { workspace = true }
+serde_json = { workspace = true }
+thiserror = { workspace = true }
+anyhow = { workspace = true }
+chrono = { workspace = true }
+tokio = { workspace = true, features = ["sync"] }
+async-trait = { workspace = true }
+tracing = { workspace = true }
+phenotype-observably-macros = { path = "../../../PhenoObservability/crates/phenotype-observably-macros" }
+
+# Local crates
+focus-events = { path = "../focus-events" }
+focus-domain = { path = "../focus-domain" }

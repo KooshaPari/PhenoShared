@@ -1,0 +1,40 @@
+[package]
+name = "focus-eval"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+focus-audit = { path = "../focus-audit" }
+focus-domain = { path = "../focus-domain" }
+focus-events = { path = "../focus-events" }
+focus-rewards = { path = "../focus-rewards" }
+focus-penalties = { path = "../focus-penalties" }
+focus-rules = { path = "../focus-rules" }
+focus-storage = { path = "../focus-storage" }
+focus-sync = { path = "../focus-sync" }
+focus-observability = { path = "../focus-observability" }
+phenotype-observably-macros = { path = "../../../PhenoObservability/crates/phenotype-observably-macros" }
+serde.workspace = true
+serde_json.workspace = true
+chrono.workspace = true
+uuid.workspace = true
+async-trait.workspace = true
+anyhow.workspace = true
+tokio.workspace = true
+tracing.workspace = true
+rayon.workspace = true
+parking_lot.workspace = true
+
+[dev-dependencies]
+tokio = { workspace = true, features = ["macros", "rt-multi-thread"] }
+criterion = { workspace = true }
+
+[[bench]]
+name = "eval_tick"
+harness = true
+
+[[bench]]
+name = "eval_batched"
+harness = true

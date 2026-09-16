@@ -1,0 +1,30 @@
+[package]
+name = "focus-plugin-sdk"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+serde = { workspace = true }
+serde_json.workspace = true
+thiserror.workspace = true
+anyhow.workspace = true
+chrono.workspace = true
+tracing.workspace = true
+ed25519-dalek.workspace = true
+toml.workspace = true
+sha2.workspace = true
+
+# WASM runtime
+wasmtime = "^44.0"
+wasmtime-wasi = "^44.0"
+
+# HTTP capability
+reqwest.workspace = true
+tokio = { workspace = true, features = ["full"] }
+
+[dev-dependencies]
+tokio = { workspace = true }
+sha2.workspace = true
+rand_core.workspace = true

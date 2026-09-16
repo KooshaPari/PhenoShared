@@ -1,0 +1,37 @@
+[package]
+name = "connector-canvas"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+
+[features]
+default = []
+keychain = ["dep:focus-crypto", "dep:secrecy"]
+# Enables the dev-only live Canvas integration test (`tests/integration_live.rs`).
+# Still `#[ignore]`-gated; opt in via `--features live-canvas -- --ignored`.
+live-canvas = []
+
+[dependencies]
+focus-connectors = { path = "../focus-connectors" }
+focus-events = { path = "../focus-events" }
+focus-crypto = { path = "../focus-crypto", optional = true }
+secrecy = { workspace = true, optional = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+thiserror = { workspace = true }
+anyhow = { workspace = true }
+async-trait = { workspace = true }
+reqwest = { workspace = true }
+oauth2 = { workspace = true }
+tokio = { workspace = true }
+chrono = { workspace = true }
+uuid = { workspace = true }
+tracing = { workspace = true }
+phenotype-observably-macros = { path = "../../../PhenoObservability/crates/phenotype-observably-macros" }
+url = "2.5"
+
+[dev-dependencies]
+wiremock = "0.6"
+tokio = { workspace = true }
+serde_json = { workspace = true }

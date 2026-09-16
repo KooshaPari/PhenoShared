@@ -1,0 +1,56 @@
+[package]
+name = "focus-mcp-server"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+description = "MCP (Model Context Protocol) server exposing FocalPoint rule/task/wallet/audit surface as tools"
+
+[[bin]]
+name = "focalpoint-mcp-server"
+path = "src/main.rs"
+
+[dependencies]
+focus-storage = { path = "../focus-storage" }
+focus-planning = { path = "../focus-planning" }
+focus-audit = { path = "../focus-audit" }
+focus-rules = { path = "../focus-rules" }
+focus-templates = { path = "../focus-templates" }
+focus-rewards = { path = "../focus-rewards" }
+focus-penalties = { path = "../focus-penalties" }
+focus-domain = { path = "../focus-domain" }
+focus-events = { path = "../focus-events" }
+focus-connectors = { path = "../focus-connectors" }
+focus-observability = { path = "../focus-observability" }
+
+# MCP SDK
+mcp-sdk.workspace = true
+tokio = { workspace = true, features = ["macros", "rt-multi-thread", "io-util", "sync"] }
+serde.workspace = true
+serde_json.workspace = true
+anyhow.workspace = true
+thiserror.workspace = true
+tracing.workspace = true
+tracing-subscriber.workspace = true
+clap.workspace = true
+uuid.workspace = true
+chrono.workspace = true
+async-trait.workspace = true
+dirs.workspace = true
+futures.workspace = true
+
+# HTTP + WebSocket
+axum = { version = "0.7", optional = true }
+tower = { version = "0.5", optional = true }
+tower-http = { version = "0.6", features = ["trace"], optional = true }
+tokio-tungstenite = { version = "0.23", optional = true }
+http = { version = "1", optional = true }
+
+[dev-dependencies]
+tokio = { workspace = true, features = ["macros", "rt-multi-thread"] }
+
+[features]
+default = []
+http-sse = ["axum", "tower", "tower-http", "http"]
+websocket = ["tokio-tungstenite"]
+remote = ["http-sse", "websocket"]

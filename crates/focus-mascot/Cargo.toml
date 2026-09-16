@@ -1,0 +1,17 @@
+[package]
+name = "focus-mascot"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+serde.workspace = true
+thiserror.workspace = true
+chrono.workspace = true
+async-trait.workspace = true
+tracing.workspace = true
+focus-coaching = { path = "../focus-coaching" }
+
+[dev-dependencies]
+tokio = { workspace = true, features = ["macros", "rt-multi-thread"] }

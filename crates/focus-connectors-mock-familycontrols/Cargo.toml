@@ -1,0 +1,21 @@
+[package]
+name = "focus-connectors-mock-familycontrols"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+focus-connectors = { path = "../focus-connectors" }
+focus-events = { path = "../focus-events" }
+focus-storage = { path = "../focus-storage" }
+async-trait.workspace = true
+chrono = { workspace = true, features = ["serde"] }
+serde.workspace = true
+serde_json.workspace = true
+thiserror.workspace = true
+uuid = { workspace = true, features = ["v4"] }
+tokio = { workspace = true, features = ["time"] }
+
+[dev-dependencies]
+tokio = { workspace = true, features = ["full"] }

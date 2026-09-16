@@ -1,0 +1,19 @@
+[package]
+name = "connector-testkit"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+focus-connectors = { path = "../focus-connectors" }
+focus-events = { path = "../focus-events" }
+serde.workspace = true
+thiserror.workspace = true
+
+[dev-dependencies]
+async-trait.workspace = true
+tokio = { workspace = true }
+chrono.workspace = true
+uuid.workspace = true
+serde_json.workspace = true

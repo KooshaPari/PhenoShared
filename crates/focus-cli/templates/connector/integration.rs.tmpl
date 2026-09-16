@@ -1,0 +1,22 @@
+//! Integration test for {{Name}} connector.
+
+use wiremock::matchers::method;
+use wiremock::{Mock, MockServer, ResponseTemplate};
+use {{name}}_connector::api::{{Name}}Client;
+
+#[tokio::test]
+async fn test_hello_endpoint() {
+    let mock_server = MockServer::start().await;
+
+    Mock::given(method("GET"))
+        .and(wiremock::matchers::path("/hello"))
+        .respond_with(ResponseTemplate::new(200).set_body_string("Hello from {{Name}}"))
+        .mount(&mock_server)
+        .await;
+
+    let client = {{Name}}Client::new(reqwest::Client::new());
+    let result = client.hello().await;
+
+    assert!(result.is_ok());
+    assert_eq!(result.unwrap(), "Hello from {{Name}}");
+}

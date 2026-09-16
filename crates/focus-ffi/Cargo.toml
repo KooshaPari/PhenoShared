@@ -1,0 +1,64 @@
+[package]
+name = "focus-ffi"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+
+[lib]
+crate-type = ["cdylib", "staticlib", "lib"]
+name = "focus_ffi"
+
+[[bin]]
+name = "uniffi-bindgen"
+path = "src/bin/uniffi-bindgen.rs"
+
+[dependencies]
+thiserror.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+chrono.workspace = true
+anyhow.workspace = true
+async-trait.workspace = true
+tokio = { workspace = true, features = ["rt-multi-thread", "sync", "macros"] }
+uuid = { workspace = true }
+uniffi = { workspace = true, features = ["cli"] }
+
+focus-mascot = { path = "../focus-mascot" }
+focus-domain = { path = "../focus-domain" }
+focus-events = { path = "../focus-events" }
+focus-rules = { path = "../focus-rules" }
+focus-eval = { path = "../focus-eval" }
+focus-rewards = { path = "../focus-rewards" }
+focus-penalties = { path = "../focus-penalties" }
+focus-audit = { path = "../focus-audit" }
+focus-storage = { path = "../focus-storage" }
+focus-policy = { path = "../focus-policy" }
+focus-sync = { path = "../focus-sync" }
+focus-connectors = { path = "../focus-connectors" }
+focus-coaching = { path = "../focus-coaching" }
+focus-rituals = { path = "../focus-rituals" }
+focus-planning = { path = "../focus-planning" }
+focus-scheduler = { path = "../focus-scheduler" }
+focus-calendar = { path = "../focus-calendar" }
+focus-crypto = { path = "../focus-crypto" }
+focus-templates = { path = "../focus-templates" }
+focus-always-on = { path = "../focus-always-on" }
+focus-backup = { path = "../focus-backup" }
+focus-demo-seed = { path = "../focus-demo-seed" }
+focus-connectors-mock-familycontrols = { path = "../focus-connectors-mock-familycontrols", optional = true }
+connector-canvas = { path = "../connector-canvas", features = ["keychain"] }
+connector-gcal = { path = "../connector-gcal", features = ["keychain"] }
+connector-github = { path = "../connector-github", features = ["keychain"] }
+reqwest = { workspace = true }
+secrecy = { workspace = true }
+
+[features]
+mock-familycontrols = ["focus-connectors-mock-familycontrols"]
+
+[dev-dependencies]
+tempfile = "3"
+wiremock = "0.6"
+
+[build-dependencies]
+uniffi_build = { version = "0.28", features = ["builtin-bindgen"] }

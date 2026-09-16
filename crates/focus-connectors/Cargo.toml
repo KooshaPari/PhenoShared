@@ -1,0 +1,31 @@
+[package]
+name = "focus-connectors"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+focus-domain = { path = "../focus-domain" }
+focus-events = { path = "../focus-events" }
+phenotype-observably-macros = { path = "../../../PhenoObservability/crates/phenotype-observably-macros" }
+serde.workspace = true
+serde_json.workspace = true
+async-trait.workspace = true
+thiserror.workspace = true
+chrono.workspace = true
+uuid.workspace = true
+anyhow.workspace = true
+secrecy.workspace = true
+hmac = "0.12"
+sha2 = { workspace = true }
+subtle = "2.1"
+hex = "0.4"
+base64 = "0.22"
+reqwest = { workspace = true, features = ["json"] }
+jsonwebtoken = "10"
+tokio = { workspace = true, features = ["sync"] }
+tracing = { workspace = true }
+
+[dev-dependencies]
+tokio = { workspace = true, features = ["macros", "rt", "rt-multi-thread"] }

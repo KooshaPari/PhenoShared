@@ -1,0 +1,25 @@
+[package]
+name = "focus-rule-suggester"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+serde.workspace = true
+serde_json.workspace = true
+thiserror.workspace = true
+anyhow.workspace = true
+uuid.workspace = true
+chrono.workspace = true
+async-trait.workspace = true
+tokio.workspace = true
+tracing.workspace = true
+
+focus-audit = { workspace = true }
+focus-events = { workspace = true }
+focus-rules = { workspace = true }
+focus-storage = { workspace = true }
+focus-domain = { workspace = true }
+
+[dev-dependencies]

@@ -1,0 +1,28 @@
+[package]
+name = "focus-demo-seed"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+anyhow.workspace = true
+chrono.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+uuid = { workspace = true, features = ["v4"] }
+thiserror.workspace = true
+tracing.workspace = true
+
+# Domain & storage
+focus-storage = { path = "../focus-storage" }
+focus-domain = { path = "../focus-domain" }
+focus-audit = { path = "../focus-audit" }
+focus-planning = { path = "../focus-planning" }
+focus-rewards = { path = "../focus-rewards" }
+focus-rules = { path = "../focus-rules" }
+focus-connectors = { path = "../focus-connectors" }
+focus-events = { path = "../focus-events" }
+
+[dev-dependencies]
+tokio = { workspace = true, features = ["macros", "rt"] }

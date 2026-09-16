@@ -1,0 +1,38 @@
+[package]
+name = "connector-linear"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+publish = false
+
+[dependencies]
+# Workspace
+focus-events.workspace = true
+focus-connectors.workspace = true
+
+# Core
+serde.workspace = true
+serde_json.workspace = true
+thiserror.workspace = true
+anyhow.workspace = true
+uuid.workspace = true
+chrono.workspace = true
+tokio.workspace = true
+
+# HTTP
+reqwest = { version = "0.12", features = ["json"] }
+http = "1.1"
+
+# Async
+async-trait.workspace = true
+
+# Logging
+tracing.workspace = true
+
+# Observability
+phenotype-observably-macros = { path = "../../../PhenoObservability/crates/phenotype-observably-macros" }
+
+[dev-dependencies]
+wiremock = "0.6"
+tokio = { workspace = true, features = ["full"] }

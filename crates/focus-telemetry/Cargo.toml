@@ -1,0 +1,27 @@
+[package]
+name = "focus-telemetry"
+version = "0.0.1"
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+serde = { workspace = true }
+serde_json = { workspace = true }
+thiserror = { workspace = true }
+anyhow = { workspace = true }
+uuid = { workspace = true }
+chrono = { workspace = true }
+tokio = { workspace = true, features = ["rt-multi-thread"] }
+async-trait = { workspace = true }
+rusqlite = { workspace = true }
+sha2 = { workspace = true }
+hex = { workspace = true }
+tracing = { workspace = true }
+regex = "1.10"
+reqwest = { workspace = true }
+url = { workspace = true }
+
+[dev-dependencies]
+tempfile = "3.8"
+tokio-test = "0.4"

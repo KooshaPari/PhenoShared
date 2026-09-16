@@ -1,0 +1,22 @@
+[package]
+name = "focus-transpilers"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+focus-ir = { path = "../focus-ir" }
+focus-rules = { path = "../focus-rules" }
+focus-templates = { path = "../focus-templates" }
+focus-domain = { path = "../focus-domain" }
+serde.workspace = true
+serde_json.workspace = true
+toml.workspace = true
+anyhow.workspace = true
+thiserror.workspace = true
+uuid = { workspace = true, features = ["serde", "v5"] }
+chrono = { workspace = true, features = ["serde"] }
+
+[dev-dependencies]
+proptest = "1.4"

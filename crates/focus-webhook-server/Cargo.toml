@@ -1,0 +1,57 @@
+[package]
+name = "focus-webhook-server"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+
+[[bin]]
+name = "focalpoint-webhook-server"
+path = "src/main.rs"
+
+[dependencies]
+focus-domain = { path = "../focus-domain" }
+focus-events = { path = "../focus-events" }
+focus-connectors = { path = "../focus-connectors" }
+focus-sync = { path = "../focus-sync" }
+connector-github = { path = "../connector-github" }
+focus-plugin-sdk = { path = "../focus-plugin-sdk" }
+focus-observability = { path = "../focus-observability" }
+
+serde.workspace = true
+serde_json.workspace = true
+async-trait.workspace = true
+thiserror.workspace = true
+chrono.workspace = true
+uuid.workspace = true
+tokio = { workspace = true, features = ["macros", "rt", "sync"] }
+anyhow.workspace = true
+
+# HTTP
+axum = "0.7"
+bytes = "1.7"
+tower = "0.4"
+tower-http = { version = "0.5", features = ["trace"] }
+hyper = "1.4"
+
+# Crypto
+hmac = "0.12"
+sha2 = { workspace = true }
+subtle = "2.1"
+jsonwebtoken = "10"
+reqwest = { workspace = true, features = ["json"] }
+base64 = "0.22"
+hex = "0.4"
+
+# Logging
+tracing = { workspace = true }
+tracing-subscriber = { workspace = true, features = ["env-filter", "fmt"] }
+
+# CLI
+clap = { workspace = true }
+
+# Config
+secrecy = { workspace = true }
+
+[dev-dependencies]
+tokio = { workspace = true, features = ["macros", "rt", "rt-multi-thread"] }

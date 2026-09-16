@@ -1,0 +1,44 @@
+[package]
+name = "focus-cli"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+
+[[bin]]
+name = "focus"
+path = "src/main.rs"
+
+[dependencies]
+clap.workspace = true
+anyhow.workspace = true
+chrono.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+toml.workspace = true
+tokio = { workspace = true, features = ["macros", "rt-multi-thread"] }
+uuid.workspace = true
+dirs.workspace = true
+focus-storage = { path = "../focus-storage" }
+focus-audit = { path = "../focus-audit" }
+focus-planning = { path = "../focus-planning" }
+focus-templates = { path = "../focus-templates" }
+focus-rules = { path = "../focus-rules" }
+focus-replay = { path = "../focus-replay" }
+focus-rewards = { path = "../focus-rewards" }
+focus-penalties = { path = "../focus-penalties" }
+focus-domain = { path = "../focus-domain" }
+focus-demo-seed = { path = "../focus-demo-seed" }
+focus-lang = { path = "../focus-lang" }
+focus-observability = { path = "../focus-observability" }
+tracing.workspace = true
+reqwest = { workspace = true, features = ["blocking"] }
+urlencoding = "2.1"
+csv.workspace = true
+serde_yaml.workspace = true
+
+[dev-dependencies]
+wiremock = "0.6"
+tokio = { workspace = true, features = ["macros", "rt"] }
+assert_cmd = "2.0"
+predicates = "3.1"

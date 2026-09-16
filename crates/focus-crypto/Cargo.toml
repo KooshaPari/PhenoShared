@@ -1,0 +1,32 @@
+[package]
+name = "focus-crypto"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+serde.workspace = true
+thiserror.workspace = true
+anyhow.workspace = true
+ring.workspace = true
+secrecy.workspace = true
+uuid.workspace = true
+chrono.workspace = true
+
+# Secure storage backends. Target-cfg gated so the workspace builds on all
+# supported platforms without pulling unused deps.
+[target.'cfg(target_vendor = "apple")'.dependencies]
+security-framework = "3.0"
+
+[target.'cfg(target_os = "linux")'.dependencies]
+secret-service = { version = "5.0", features = ["rt-tokio-crypto-rust"] }
+tokio = { workspace = true, features = ["rt"] }
+
+[[bench]]
+name = "focus_crypto_benchmarks"
+harness = false
+
+[dev-dependencies]
+tokio = { workspace = true, features = ["macros", "rt-multi-thread"] }
+criterion = "0.5"
