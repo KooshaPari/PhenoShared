@@ -14,4 +14,5 @@ path = "src/main.rs"
 [[bin]]
 name = "bench-fake-forge"
 path = "src/bench_main.rs"
-description = "Bench harness variant: prints a conv-id and exits, regardless of argv. Used by the F5 bench to measure daemon-dispatch overhead (the daemon builds the argv)."
+# Bench harness variant: prints a conv-id and exits, regardless of argv.
+# Used by the F5 bench to measure daemon-dispatch overhead.
