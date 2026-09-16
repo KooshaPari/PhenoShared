@@ -1,0 +1,42 @@
+{
+  "id": "PILOT-PRD-BYTEPORT",
+  "product_id": "PRD-BYTEPORT",
+  "status": "PLANNED_NOT_EXECUTED",
+  "subject_repository_id": 861430079,
+  "hypothesis": "Less operator work for the local/native or heterogeneous deployment case while maintaining recovery correctness.",
+  "baseline_candidates": [
+    "Coolify",
+    "Dokploy",
+    "Direct cloud deployment recipe",
+    "A minimal container/native-service setup",
+    "Accepted platform-native deployment"
+  ],
+  "scenario": "Deploy one stateless and one small stateful application through the actual supported target. Change configuration, publish a bad image, fail readiness, introduce a data migration and roll back according to the declared policy. Use a clean machine without private sibling checkouts.",
+  "failure_cases": [
+    "Partial provision reported healthy",
+    "Credentials leak to build logs",
+    "Retry duplicates resources",
+    "Bad image leaves service down without recovery",
+    "Database incorrectly rolled back with binary",
+    "Teardown destroys unowned state"
+  ],
+  "metrics": [
+    "Time/actions to working service",
+    "Recovery correctness",
+    "Manual interventions",
+    "Resource and deployment cost",
+    "Clean reproducibility",
+    "Backup/restore proof and migration safety"
+  ],
+  "required_before_execution": [
+    "versioned subjects and fixtures",
+    "predeclared critical invariants",
+    "reviewed non-inferiority margins",
+    "resource and trust limits",
+    "independent outcome oracle",
+    "retained failed-trial policy"
+  ],
+  "results": null,
+  "winner": null,
+  "protocol": "../../research/COMPARATIVE-PILOT-PROTOCOL.md"
+}

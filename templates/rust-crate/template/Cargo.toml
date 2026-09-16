@@ -1,0 +1,34 @@
+[package]
+name = "pheno-cargo-template"
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.78"
+license = "MIT OR Apache-2.0"
+description = "Phenotype substrate crate scaffolded from pheno-cargo-template; v8 governance pre-filled (ADR-041, ADR-042, ADR-043)."
+repository = "https://github.com/KooshaPari/pheno-cargo-template"
+readme = "README.md"
+keywords = ["phenotype", "substrate", "v8-governance", "ADR-041", "ADR-042", "ADR-043"]
+categories = ["development-tools"]
+publish = false
+
+[lib]
+name = "pheno_cargo_template"
+path = "src/lib.rs"
+
+[dependencies]
+
+[dev-dependencies]
+# The template includes a tracing feature flag pattern (per ADR-036).
+# Generated crates may keep or remove this block; it's a starting point.
+tracing = { version = "0.1", optional = true }
+
+[features]
+default = []
+tracing = ["dep:tracing"]
+
+[package.metadata.phenotype]
+# Tier declaration mirrored from .framework-lint.yaml.
+# Update both files together when promoting (per ADR-042).
+tier = "pheno-*-lib"
+# Governance ADRs that apply to this crate (pre-filled per template).
+governance = ["ADR-041", "ADR-042", "ADR-043", "ADR-044", "ADR-045"]

@@ -1,30 +1,22 @@
 ---
-name: Bug report
-about: Report a bug or defect
-title: "[BUG] "
-labels: ["bug"]
+name: 🐛 Bug report
+description: Report something that isn't working
+labels: bug
+title: "[Bug]: "
 ---
 
-## Description
+**Describe the bug**
+A clear and concise description of what the bug is.
 
-<!-- Clear description of what's broken -->
-
-## Reproduction
-
+**To Reproduce**
+Steps to reproduce the behavior:
 1.
 2.
 3.
 
-## Expected vs actual
+**Expected behavior**
+A clear description of what you expected to happen.
 
-- Expected:
-- Actual:
-
-## Environment
-
-- OS:
-- Version:
-
-## Logs / screenshots
-
-<!-- If applicable, add screenshots or paste relevant log output -->
+**Environment:**
+ - OS: [e.g. macOS, Linux]
+ - Version [e.g. 0.1.0]

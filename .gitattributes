@@ -1,4 +1,19 @@
-*.yml text eol=lf
-*.yaml text eol=lf
-*.md text eol=lf
-*.toml text eol=lf
+# Auto detect text files and perform LF normalization
+* text=auto eol=lf
+
+# Rust
+*.rs text diff=rust
+Cargo.lock text -diff
+
+# Config / docs
+*.toml text
+*.yml text
+*.yaml text
+*.md text diff=markdown
+*.json text
+
+# Binary
+*.png binary
+*.jpg binary
+*.ico binary
+*.pdf binary

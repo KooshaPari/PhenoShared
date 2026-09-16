@@ -1,1 +1,9 @@
-* @kooshapari
+# CODEOWNERS — phenotype-infra (root-level alias)
+#
+# GitHub load order:
+#   1. .github/CODEOWNERS  (canonical — detailed rules live there)
+#   2. /CODEOWNERS         (this file — simplified fallback)
+#   3. /docs/CODEOWNERS
+#
+# See: https://docs.github.com/en/repositories/managing-your-repositorys-settings-features/customizing-your-repository/about-code-owners
+* @KooshaPari

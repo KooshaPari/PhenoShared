@@ -1,0 +1,51 @@
+---
+export interface Props {
+  repo: string;
+  token?: string;
+}
+
+const { repo, token } = Astro.props;
+
+// Build-time fetch from GitHub API (same pattern as projects-landing)
+const headers: Record<string, string> = {
+  Accept: "application/vnd.github+json",
+  "X-GitHub-Api-Version": "2022-11-28",
+  "User-Agent": "phenotype-landing",
+};
+if (token) headers.Authorization = `Bearer ${token}`;
+
+let stats = { stars: 0, forks: 0, updated: "" };
+try {
+  const res = await fetch(`https://api.github.com/repos/${repo}`, { headers });
+  if (res.ok) {
+    const json = await res.json();
+    stats = {
+      stars: json.stargazers_count ?? 0,
+      forks: json.forks_count ?? 0,
+      updated: json.pushed_at ? new Date(json.pushed_at).toLocaleDateString() : "",
+    };
+  }
+} catch {
+  // fallback: leave defaults
+}
+---
+
+<div class="github-stats">
+  <span class="stat">⭐ {stats.stars}</span>
+  <span class="stat">🍴 {stats.forks}</span>
+  {stats.updated && <span class="stat">Updated {stats.updated}</span>}
+</div>
+
+<style>
+  .github-stats {
+    display: inline-flex;
+    gap: 1rem;
+    font-size: 0.875rem;
+    color: var(--text-muted, #64748b);
+  }
+  .stat {
+    background: var(--bg-surface, #f8fafc);
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+  }
+</style>

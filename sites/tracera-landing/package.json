@@ -1,0 +1,21 @@
+{
+  "name": "tracera-landing",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Byteport landing page (byteport.kooshapari.com)",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "data:refresh": "node scripts/fetch-readme.mjs"
+  },
+  "dependencies": {
+    "@astrojs/check": "^0.9.4",
+    "@types/node": "^24.10.1",
+    "astro": "^7.2.2",
+    "@tailwindcss/vite": "^4.0.0",
+    "tailwindcss": "^4.0.0",
+    "typescript": "^6.0.3"
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "name": "CivicWarfare",
+  "slug": "civicwarfare",
+  "tagline": "Cities: Skylines II infrastructure survival mod: docs and changelog.",
+  "domain": "civicwarfare.phenotype.space",
+  "color": "#facc15",
+  "description": "Cities: Skylines II infrastructure survival mod: docs and changelog.",
+  "tier": 3,
+  "repo": "KooshaPari/CivicWarfare",
+  "language": "C# / Unity",
+  "license": "MIT",
+  "status": "active",
+  "features": [
+    "Cities: Skylines II mod",
+    "Infrastructure survival",
+    "Gameplay systems",
+    "Mod docs"
+  ],
+  "links": {
+    "github": "https://github.com/KooshaPari/CivicWarfare",
+    "docs": "https://civicwarfare.phenotype.space/docs",
+    "releases": "https://github.com/KooshaPari/CivicWarfare/releases"
+  }
+}

@@ -1,0 +1,16 @@
+# pheno-framework-lint config (per ADR-042)
+# This file declares the canonical tier for this crate.
+# Update this file when you promote the crate (lib → SDK → framework → service).
+# See ADR-042 for tier-gate requirements.
+
+tier: pheno-*-lib  # one of: pheno-*-lib, phenotype-*-sdk, phenotype-*-framework, federated-service
+port-adapter: true  # set true when promoted to SDK (tier 2+)
+conventions-doc: conventions.md  # set when promoted to framework (tier 3+)
+federated-service: false  # set true when promoted to service (tier 4)
+deployment: null  # set to "helm" | "docker-compose" | "nix" when promoted to service
+
+# Tier-specific rules (per ADR-042):
+# Tier 1 (lib): no required rules
+# Tier 2 (SDK): port-adapter=true, 80% coverage, 2+ polyglot consumers
+# Tier 3 (framework): conventions-doc present, 70% coverage, IoC lifecycle, 3+ examples
+# Tier 4 (service): federated-service=true, 60% coverage, mTLS, OTLP, deployment story

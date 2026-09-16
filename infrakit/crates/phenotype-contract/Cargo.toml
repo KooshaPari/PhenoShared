@@ -1,0 +1,15 @@
+[package]
+name = "phenotype-contract"
+version = "0.2.0"
+edition = "2021"
+license = "MIT"
+authors = ["Phenotype Team"]
+repository = "https://github.com/KooshaPari/PhenoInfra"
+description = "Contract types for the Phenotype ecosystem"
+
+[lib]
+path = "src/lib.rs"
+
+[dependencies]
+serde = { workspace = true, features = ["derive"] }
+thiserror.workspace = true

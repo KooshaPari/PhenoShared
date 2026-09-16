@@ -1,0 +1,49 @@
+name: terraform-plan
+
+on:
+  pull_request:
+    paths:
+      - "iac/terraform/**"
+      - ".github/workflows/terraform-plan.yml"
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  plan:
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        module:
+          - iac/terraform
+          - iac/terraform/oci
+          - iac/terraform/gcp
+          - iac/terraform/aws
+          - iac/terraform/cloudflare
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@dfe3c3f87815947d99a8997f908cb6525fc44e9e
+        with:
+          terraform_version: "1.7.5"
+          terraform_wrapper: false
+
+      - name: Terraform fmt
+        working-directory: ${{ matrix.module }}
+        run: terraform fmt -check -diff
+
+      - name: Terraform init (no backend)
+        working-directory: ${{ matrix.module }}
+        run: terraform init -backend=false
+
+      - name: Terraform validate
+        working-directory: ${{ matrix.module }}
+        run: terraform validate
+
+      # NOTE: `terraform plan` requires credentials; skipped in CI.
+      # Plans run locally via `iac/scripts/bootstrap-oci.sh` with bw-injected creds.
+      - name: Plan (skipped — no creds in CI)
+        run: echo "Plan skipped in CI — see docs/runbooks/ for local plan procedure."

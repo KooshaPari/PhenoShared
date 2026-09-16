@@ -1,0 +1,16 @@
+[package]
+name = "phenotype-logging"
+version = "0.2.0"
+edition = "2024"
+license = "MIT OR Apache-2.0"
+authors = ["Phenotype Infra <infra@phenotype.dev>"]
+description = "In-workspace tracing init + re-exports for the phenotype-infra iac/* daemons. Wraps tracing + tracing-subscriber; once pheno-tracing v0.5.0 is published (with the missing pheno-otel sibling) this crate will switch to re-exporting it per ADR-036."
+publish = false
+
+[dependencies]
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter", "fmt"] }
+anyhow = "1.0"
+
+[lib]
+path = "src/lib.rs"

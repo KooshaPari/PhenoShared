@@ -1,0 +1,177 @@
+---
+import "../styles/globals.css";
+import readmeSnapshot from "../data/readme.html?raw";
+
+// Fetch repo metadata + README at build time. Strategy: try live GitHub API
+// (uses GITHUB_TOKEN if set in Vercel env to avoid 60/hr unauthenticated rate
+// limit), but ALWAYS fall back to a committed snapshot so the page never
+// ships with "README unavailable". Refresh snapshots locally with
+// `bun run data:refresh`.
+const REPO = "KooshaPari/BytePort";
+const GITHUB_TOKEN = import.meta.env.GITHUB_TOKEN;
+
+async function gh<T = unknown>(
+  path: string,
+  accept = "application/vnd.github+json",
+): Promise<T | null> {
+  try {
+    const res = await fetch(`https://api.github.com/${path}`, {
+      headers: {
+        Accept: accept,
+        "User-Agent": "byteport-landing-build",
+        ...(GITHUB_TOKEN
+          ? { Authorization: `Bearer ${GITHUB_TOKEN}` }
+          : {}),
+      },
+    });
+    if (!res.ok) {
+      console.warn(`[index] GitHub ${path} -> ${res.status}; falling back to snapshot`);
+      return null;
+    }
+    return (accept.includes("html") ? await res.text() : await res.json()) as T;
+  } catch (err) {
+    console.warn(`[index] GitHub ${path} fetch failed: ${(err as Error).message}; falling back to snapshot`);
+    return null;
+  }
+}
+
+const meta: any = (await gh(`repos/${REPO}`)) ?? {
+  description: "",
+  stargazers_count: 0,
+  pushed_at: new Date().toISOString(),
+  language: "Rust",
+  homepage: "",
+};
+const description = meta.description || "Byteport is a high-performance binary serialization and protocol framework for Rust.";
+
+const liveReadme = await gh<string>(
+  `repos/${REPO}/readme`,
+  "application/vnd.github.html+json",
+);
+const readmeHtml: string = liveReadme ?? readmeSnapshot;
+
+const releases: any[] = (await gh<any[]>(`repos/${REPO}/releases?per_page=5`)) ?? [];
+---
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Byteport — High-performance binary serialization and protocol framework</title>
+    <meta name="description" content={description} />
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>A</text></svg>" />
+  </head>
+  <body class="min-h-screen">
+    <header class="max-w-4xl mx-auto px-4 sm:px-6 pt-10 sm:pt-12 mb-0">
+      <div class="mono text-xs text-[var(--muted)] mb-2">
+        <a href="https://projects.kooshapari.com" class="hover:text-[var(--accent)]">phenotype</a>
+        <span class="mx-1">/</span>
+        <span>byteport</span>
+      </div>
+      <h1 class="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight mb-3">Byteport</h1>
+      <p class="text-base sm:text-lg text-[var(--muted)] max-w-2xl">{description}</p>
+
+      <div class="mt-6 flex flex-col sm:flex-row flex-wrap gap-3 mono text-sm">
+        <a href={`https://github.com/${REPO}`} target="_blank" rel="noopener"
+           class="px-4 py-2 rounded-lg border bg-[var(--card)] hover:border-[var(--accent)] hover:text-[var(--accent)] transition focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
+           style="border-color: var(--border);">
+          github →
+        </a>
+        {meta.homepage && (
+          <a href={meta.homepage} target="_blank" rel="noopener"
+             class="px-4 py-2 rounded-lg border bg-[var(--card)] hover:border-[var(--accent)] hover:text-[var(--accent)] transition focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
+             style="border-color: var(--border);">
+            docs →
+          </a>
+        )}
+        <span class="px-4 py-2 rounded-lg mono text-xs text-[var(--muted)] flex items-center gap-2"
+              style="border: 1px solid var(--border);" aria-label={`${meta.stargazers_count} stars · ${meta.language ?? "Rust"}`}>
+          ★ {meta.stargazers_count} · {meta.language ?? "Rust"}
+        </span>
+      </div>
+    </header>
+
+    <nav class="max-w-4xl mx-auto px-4 sm:px-6 mt-6 flex flex-wrap gap-2 mono text-xs" aria-label="Tier-3 microfrontends">
+      <a href="/docs" class="tier3-link">/docs</a>
+      <a href="/qa" class="tier3-link">/qa</a>
+      <a href="/otel" class="tier3-link">/otel</a>
+    </nav>
+
+    <main class="max-w-4xl mx-auto px-4 sm:px-6 pb-12 mt-10" id="main-content">
+      {releases.length > 0 && (
+        <section class="mb-10" aria-labelledby="releases-heading">
+          <h2 id="releases-heading" class="mono text-sm uppercase tracking-wider text-[var(--muted)] mb-3">Latest releases</h2>
+          <ul class="space-y-2">
+            {releases.slice(0, 3).map((r: any) => (
+              <li class="flex flex-wrap items-baseline gap-3 mono text-sm">
+                <a href={r.html_url} target="_blank" rel="noopener" class="text-[var(--accent)] hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]">{r.tag_name}</a>
+                <span class="text-[var(--muted)] truncate">{r.name ?? ""}</span>
+                <span class="ml-auto text-xs text-[var(--muted)] shrink-0">
+                  <time datetime={r.published_at}>{new Date(r.published_at).toLocaleDateString()}</time>
+                </span>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
+      <section class="readme-prose" aria-label="Repository README" set:html={readmeHtml}></section>
+    </main>
+
+    <footer class="max-w-4xl mx-auto px-4 sm:px-6 mt-16 pt-6 border-t text-xs text-[var(--muted)] mono pb-10" style="border-color: var(--border);">
+      byteport.kooshapari.com · auto-built from <a href={`https://github.com/${REPO}`} class="underline hover:text-[var(--accent)]">{REPO}</a> · part of <a href="https://projects.kooshapari.com" class="underline hover:text-[var(--accent)]">projects.kooshapari.com</a>
+    </footer>
+
+    <style is:global>
+      .readme-prose { line-height: 1.7; }
+      .readme-prose h1, .readme-prose h2, .readme-prose h3 {
+        font-weight: 700;
+        margin-top: 2rem;
+        margin-bottom: 0.75rem;
+        line-height: 1.2;
+      }
+      .readme-prose h1 { font-size: 2rem; border-bottom: 1px solid var(--border); padding-bottom: 0.5rem; }
+      .readme-prose h2 { font-size: 1.5rem; border-bottom: 1px solid var(--border); padding-bottom: 0.3rem; }
+      .readme-prose h3 { font-size: 1.2rem; }
+      .readme-prose p, .readme-prose ul, .readme-prose ol { margin-bottom: 1rem; }
+      .readme-prose ul, .readme-prose ol { padding-left: 1.5rem; }
+      .readme-prose li { margin-bottom: 0.25rem; }
+      .readme-prose a { color: var(--accent); text-decoration: underline; }
+      .readme-prose code {
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        background: var(--card);
+        padding: 0.1rem 0.4rem;
+        border-radius: 0.25rem;
+        font-size: 0.9em;
+      }
+      .readme-prose pre {
+        background: var(--card);
+        border: 1px solid var(--border);
+        padding: 1rem;
+        border-radius: 0.5rem;
+        overflow-x: auto;
+        margin-bottom: 1rem;
+      }
+      .readme-prose pre code { background: transparent; padding: 0; }
+      .readme-prose blockquote {
+        border-left: 3px solid var(--accent);
+        padding-left: 1rem;
+        color: var(--muted);
+        margin: 1rem 0;
+      }
+      .readme-prose table { border-collapse: collapse; margin-bottom: 1rem; }
+      .readme-prose th, .readme-prose td { border: 1px solid var(--border); padding: 0.5rem 0.75rem; }
+      .readme-prose img { display: inline-block; }
+      .tier3-link {
+        padding: 0.4rem 0.8rem;
+        border-radius: 0.4rem;
+        border: 1px solid var(--border);
+        color: var(--muted);
+        text-decoration: none;
+        transition: color 120ms, border-color 120ms;
+      }
+      .tier3-link:hover,
+      .tier3-link:focus-visible { color: var(--accent); border-color: var(--accent); }
+    </style>
+  </body>
+</html>

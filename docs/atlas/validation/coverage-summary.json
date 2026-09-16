@@ -1,0 +1,43 @@
+{
+  "subject": "scripts/assurance_check.py",
+  "subject_sha256": "dadd23b70242dcbee52f7087ab3e0b4afc9620dcb7276d637bd9e992f1880078",
+  "suites_independent": true,
+  "fixtures_shared": true,
+  "unit_boundary": "Direct functions plus mocked CLI input errors",
+  "integration_boundary": "Real JSON files and CLI main in process",
+  "e2e_boundary": "Actual child-process CLI, separately instrumented by coverage.py",
+  "function_coverage": "NOT_MEASURED; no native function metric claimed",
+  "product_coverage": "NOT_MEASURED",
+  "measurements": {
+    "unit": {
+      "covered_lines": 136,
+      "eligible_lines": 137,
+      "line_percent": 99.27007299270073,
+      "covered_branches": 75,
+      "eligible_branches": 76,
+      "branch_percent": 98.6842105263158,
+      "scope": "scripts/assurance_check.py only; synthetic checker fixtures, not portfolio tests",
+      "measurement_file": "coverage-unit.json"
+    },
+    "integration": {
+      "covered_lines": 136,
+      "eligible_lines": 137,
+      "line_percent": 99.27007299270073,
+      "covered_branches": 75,
+      "eligible_branches": 76,
+      "branch_percent": 98.6842105263158,
+      "scope": "scripts/assurance_check.py only; synthetic checker fixtures, not portfolio tests",
+      "measurement_file": "coverage-integration.json"
+    },
+    "e2e": {
+      "covered_lines": 134,
+      "eligible_lines": 137,
+      "line_percent": 97.81021897810218,
+      "covered_branches": 75,
+      "eligible_branches": 76,
+      "branch_percent": 98.6842105263158,
+      "scope": "scripts/assurance_check.py only; synthetic checker fixtures, not portfolio tests",
+      "measurement_file": "coverage-e2e.json"
+    }
+  }
+}

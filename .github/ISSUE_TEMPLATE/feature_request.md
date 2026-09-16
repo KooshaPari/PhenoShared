@@ -1,22 +1,15 @@
 ---
-name: Feature request
-about: Suggest an enhancement
-title: "[FEAT] "
-labels: ["enhancement"]
+name: 🚀 Feature request
+description: Suggest a new feature or improvement
+labels: enhancement
+title: "[Feature]: "
 ---
 
-## Problem
+**Is your feature request related to a problem? Please describe.**
+A clear and concise description of what the problem is.
 
-<!-- What pain point are you trying to solve? -->
+**Describe the solution you'd like**
+A clear and concise description of what you want to happen.
 
-## Proposed solution
-
-<!-- Your idea -->
-
-## Alternatives considered
-
-<!-- Other approaches -->
-
-## Additional context
-
-<!-- Screenshots, links, examples -->
+**Describe alternatives you've considered**
+A clear and concise description of any alternative solutions or features you've considered.

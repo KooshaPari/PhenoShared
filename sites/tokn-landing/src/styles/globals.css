@@ -1,0 +1,40 @@
+@import "tailwindcss";
+
+/* impeccable CSS baseline — github.com/pbakaus/impeccable */
+*, *::before, *::after { box-sizing: border-box; }
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+img, video { max-width: 100%; height: auto; }
+input, button, textarea, select { font: inherit; }
+p, h1, h2, h3, h4, h5, h6 { overflow-wrap: break-word; }
+
+:root {
+  color-scheme: dark light;
+  --bg: #0a0a0b;
+  --fg: #ededed;
+  --muted: #8a8a93;
+  --border: #1f1f23;
+  --accent: #f97316;
+  --card: #111114;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --bg: #fafafa;
+    --fg: #0a0a0b;
+    --muted: #6b6b73;
+    --border: #e5e5e8;
+    --card: #ffffff;
+  }
+}
+
+html, body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+.mono { font-family: ui-monospace, SFMono-Regular, "JetBrains Mono", Menlo, monospace; }

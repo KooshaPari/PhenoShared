@@ -1,0 +1,54 @@
+# SC3 Attestation Verification Template
+name: Verify Release Attestation
+
+on:
+  push:
+    tags:
+      - "v*"
+  release:
+    types:
+      - published
+
+permissions:
+  contents: read
+  id-token: write
+  attestations: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    name: gh attestation verify
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+
+      - name: Install gh
+        run: type gh >/dev/null 2>&1 || (apt-get update && apt-get install -y gh)
+
+      - name: Authenticate gh
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | gh auth login --with-token
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build artifact (for verification source)
+        run: |
+          mkdir -p dist
+          echo "build artifact" > dist/artifact
+
+      - name: Verify provenance for this build
+        run: |
+          if [ -n "${{ github.event.release.tag_name }}" ]; then
+            TAG="${{ github.event.release.tag_name }}"
+          else
+            TAG="${GITHUB_REF_NAME}"
+          fi
+          echo "Verifying artifact provenance for ${TAG}..."
+          gh attestation verify dist/artifact --repo ${{ github.repository }} || {
+            echo "::error::Attestation verification failed for ${TAG}"
+            exit 1
+          }
+          echo "Attestation verification passed for ${TAG}"

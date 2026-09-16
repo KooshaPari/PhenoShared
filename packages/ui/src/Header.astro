@@ -1,0 +1,56 @@
+---
+export interface Link {
+  text: string;
+  href: string;
+}
+
+export interface Props {
+  brand?: string;
+  links?: Link[];
+}
+
+const { brand = "Phenotype", links = [] } = Astro.props;
+---
+
+<header class="header">
+  <div class="container">
+    <a href="/" class="brand">{brand}</a>
+    {links.length > 0 && (
+      <nav class="nav">
+        {links.map((l) => (
+          <a href={l.href}>{l.text}</a>
+        ))}
+      </nav>
+    )}
+  </div>
+</header>
+
+<style>
+  .header {
+    padding: 1rem;
+    background: white;
+    border-bottom: 1px solid var(--border, #e2e8f0);
+  }
+  .container {
+    max-width: 1000px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .brand {
+    font-weight: 700;
+    font-size: 1.25rem;
+    color: var(--pheno-dark, #0f172a);
+    text-decoration: none;
+  }
+  .nav a {
+    color: var(--text-muted, #64748b);
+    text-decoration: none;
+    margin-left: 1.5rem;
+    font-weight: 500;
+  }
+  .nav a:hover {
+    color: var(--pheno-primary, #0ea5e9);
+  }
+</style>
