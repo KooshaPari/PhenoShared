@@ -32,6 +32,9 @@ sha2 = "0.10"
 chrono = { version = "0.4", features = ["serde"] }
 askama = "0.12"
 
+[features]
+default = []
+
 [dev-dependencies]
 tokio = { version = "1", features = ["full"] }
 axum-test = "19"
