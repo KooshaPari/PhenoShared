@@ -14,7 +14,7 @@
     ],
     "component": {
       "type": "library",
-      "bom-ref": "path+file:///Users/kooshapari/CodeProjects/Phenotype/repos/pheno/crates/phenotype-string#0.2.0",
+      "bom-ref": "path+file:///Users/<REDACTED>/CodeProjects/Phenotype/repos/pheno/crates/phenotype-string#0.2.0",
       "name": "phenotype-string",
       "version": "0.2.0",
       "scope": "required",
@@ -27,7 +27,7 @@
       "components": [
         {
           "type": "library",
-          "bom-ref": "path+file:///Users/kooshapari/CodeProjects/Phenotype/repos/pheno/crates/phenotype-string#0.2.0 bin-target-0",
+          "bom-ref": "path+file:///Users/<REDACTED>/CodeProjects/Phenotype/repos/pheno/crates/phenotype-string#0.2.0 bin-target-0",
           "name": "phenotype_string",
           "version": "0.2.0",
           "purl": "pkg:cargo/phenotype-string@0.2.0?download_url=file://.#src/lib.rs"
@@ -866,7 +866,7 @@
   ],
   "dependencies": [
     {
-      "ref": "path+file:///Users/kooshapari/CodeProjects/Phenotype/repos/pheno/crates/phenotype-string#0.2.0",
+      "ref": "path+file:///Users/<REDACTED>/CodeProjects/Phenotype/repos/pheno/crates/phenotype-string#0.2.0",
       "dependsOn": [
         "registry+https://github.com/rust-lang/crates.io-index#regex@1.12.3",
         "registry+https://github.com/rust-lang/crates.io-index#serde@1.0.228",

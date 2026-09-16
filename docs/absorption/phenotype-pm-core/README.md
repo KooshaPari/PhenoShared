@@ -4,8 +4,8 @@
 
 | Field | Value |
 |-------|-------|
-| Source repo | `KooshaPari/phenotype-pm-core` |
-| Target repo | `KooshaPari/phenotype-tooling` |
+| Source repo | `<REDACTED>/phenotype-pm-core` |
+| Target repo | `<REDACTED>/phenotype-tooling` |
 | Target paths | `crates/traceability-core/`, `crates/traceability-decorators/`, `crates/trace-gate/` |
 | Absorbed date | 2026-07-17 |
 | Absorbed by | forge agent (batch absorption) |

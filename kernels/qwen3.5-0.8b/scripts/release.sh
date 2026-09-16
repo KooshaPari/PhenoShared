@@ -24,7 +24,7 @@
 #   * On the `main` branch with a clean working tree (we commit any
 #     build-all output but warn about other dirty files).
 #   * `gh` CLI authenticated, `origin` pointing at
-#     git@github.com:KooshaPari/pheno-harness.git.
+#     git@github.com:<REDACTED>/pheno-harness.git.
 
 set -euo pipefail
 

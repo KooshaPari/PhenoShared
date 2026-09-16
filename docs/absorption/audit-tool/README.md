@@ -7,7 +7,7 @@
 ## What was absorbed
 
 **audit-tool v2** (single-file Python repo-quality audit scorecard)
-absorbed from `KooshaPari/audit-tool` into
+absorbed from `<REDACTED>/audit-tool` into
 `phenotype-registry/scripts/audit.py` on branch
 `absorb/audit-tool-2026-07-17`.
 
@@ -30,7 +30,7 @@ governance scripts (`incident-purge-readiness.py`, `validate-catalog.py`,
 ## Verification
 
 ```
-$ python3 scripts/audit.py /Users/kooshapari/CodeProjects/Phenotype/repos/phenotype-registry
+$ python3 scripts/audit.py /Users/<REDACTED>/CodeProjects/Phenotype/repos/phenotype-registry
 {
   "repo": "phenotype-registry",
   "kind": "rust",
@@ -44,7 +44,7 @@ $ python3 scripts/audit.py /Users/kooshapari/CodeProjects/Phenotype/repos/phenot
 
 ## Source repo
 
-`KooshaPari/audit-tool` archived on GitHub 2026-07-17.
+`<REDACTED>/audit-tool` archived on GitHub 2026-07-17.
 
 ## Disposition
 

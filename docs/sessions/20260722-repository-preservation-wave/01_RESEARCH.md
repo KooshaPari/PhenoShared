@@ -2,7 +2,7 @@
 
 ## Findings
 
-- GitHub owner is `KooshaPari`; 291 owned repositories were enumerated.
+- GitHub owner is `<REDACTED>`; 291 owned repositories were enumerated.
 - `AgilePlus` is the canonical spec-lifecycle platform spine, not a catch-all archive owner.
 - Seven source remotes are empty shells; emptiness does not prove namesake local work reached cloud.
 - `AgilePlus-recovery-20260714` is already reachable from canonical AgilePlus.

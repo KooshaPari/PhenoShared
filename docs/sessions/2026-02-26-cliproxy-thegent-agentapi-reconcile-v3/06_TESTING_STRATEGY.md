@@ -26,7 +26,7 @@
 ## 2. Manual Verification Checklist
 
 - [ ] `gh auth status` shows logged in
-- [ ] `gh pr list -R KooshaPari/cliproxyapi-plusplus --state open | wc -l` confirms expected count
+- [ ] `gh pr list -R <REDACTED>/cliproxyapi-plusplus --state open | wc -l` confirms expected count
 - [ ] Sample 5 PRs: `gh pr checks <n>` returns green for all checks
 - [ ] Governance doc accessible at `docs/governance/stacked-prs/05-pr-reconciliation.md`
 - [ ] Index updated at `docs/governance/stacked-prs/README.md`

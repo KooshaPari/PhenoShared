@@ -1,7 +1,7 @@
 # Heavy-runner cron — Install guide
 
 **Target host:** Phenotype heavy-runner (a Linux box; **not** the MacBook).
-**Target user:** `kooshapari` (sudo not required for the install itself).
+**Target user:** `<REDACTED>` (sudo not required for the install itself).
 **Reference:** ADR-044 § "Migration sequence" — T27.1 (heavy-runner install) + T27.2 (GitHub Actions backup) + T27.3 (AGENTS.md Wave Plan v9 update).
 
 This is the one-time install. Total wall-clock: ~15 min. The cron itself runs 3 weekly jobs (pheno-predict, pheno-drift-detector, pheno-framework-lint); the GitHub Actions backup fires when the heavy-runner is down.
@@ -26,9 +26,9 @@ command -v flock && flock --version | head -1
 # (c) Python 3.8 or newer
 python3 --version   # expect: Python 3.8+ (3.10+ recommended)
 
-# (d) gh authenticated as KooshaPari
+# (d) gh authenticated as <REDACTED>
 gh auth status
-#   expect: "Logged in to github.com account KooshaPari (...)"
+#   expect: "Logged in to github.com account <REDACTED> (...)"
 #   if not: gh auth login
 ```
 
@@ -41,7 +41,7 @@ If any check fails, stop and remediate. The cron relies on all 4.
 ```bash
 mkdir -p ~/CodeProjects/Phenotype
 cd ~/CodeProjects/Phenotype
-git clone git@github.com:KooshaPari/phenotype-org-audits.git repos
+git clone git@github.com:<REDACTED>/phenotype-org-audits.git repos
 cd repos
 # Verify the 3 CLI tools are present (this is the canonical monorepo path):
 test -x pheno-predict/pheno_predict.py       && echo "OK pheno-predict"
@@ -173,7 +173,7 @@ bash ops/heavy-runner-cron/dry-run.sh
 | :--------------------------------------------------- | :------------------------------------------------- | :------------------------------------------------------------------------------- |
 | `flock: command not found`                          | `util-linux` not installed                         | `apt install util-linux` / `dnf install util-linux`                             |
 | Cron line in `crontab -l` but no log files appear    | `SLACK_FLEET_WEBHOOK` missing → wrapper exits 1 → silent failure | `sudo cat /etc/phenotype-fleet.env`; re-source from `~/.bashrc`               |
-| `cron: can't open display: ...` or auth errors       | `gh` not authenticated                            | `gh auth login` (re-auth as KooshaPari)                                          |
+| `cron: can't open display: ...` or auth errors       | `gh` not authenticated                            | `gh auth login` (re-auth as <REDACTED>)                                          |
 | `python3: can't open file 'pheno-predict/...'`       | `$REPOS_ROOT` wrong / not in cron env              | Hard-code the absolute path in `crontab` (the install script already does this)  |
 | Cron runs but exits 2 every week                     | Tool found candidates/hits (this is normal)        | Read `~/.fleet-cron/<tool>-<date>.log`; auto-filed GitHub issue should be in `phenotype-org-audits` |
 | `install-cron.sh` exits 2 (refuses)                  | Hostname is MacBook or contains `mac`              | **This is correct** — cron is for `device:heavy-runner` only (ADR-023)          |

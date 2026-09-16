@@ -25,5 +25,5 @@ Do not re-implement the port logic in C#.
 
 ## Source repos
 
-- Upstream C#: <https://github.com/KooshaPari/phenotype-water> (now archived)
+- Upstream C#: <https://github.com/<REDACTED>/phenotype-water> (now archived)
 - Rust port: [`/src/water/`](../src/water/) in this crate

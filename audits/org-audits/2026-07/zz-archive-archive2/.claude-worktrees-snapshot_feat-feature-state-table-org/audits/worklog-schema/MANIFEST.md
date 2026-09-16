@@ -1,7 +1,7 @@
 # MANIFEST — pheno-worklog-schema absorbed content
 
 **Absorption date:** 2026-06-20
-**Source repo:** KooshaPari/pheno-worklog-schema
+**Source repo:** <REDACTED>/pheno-worklog-schema
 **Source branch:** main @ 02e2ba32b95369bc7b65e7f5bfe407f624bc9c36
 **Target path:** `phenotype-org-audits/audits/worklog-schema/`
 

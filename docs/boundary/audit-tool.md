@@ -3,7 +3,7 @@
 ## Status
 
 **Absorbed 2026-07-17** into `phenotype-registry/scripts/audit.py`.
-Source repo `KooshaPari/audit-tool` archived.
+Source repo `<REDACTED>/audit-tool` archived.
 
 ## Boundary
 
@@ -48,7 +48,7 @@ The audit-tool provides:
 
 | Old | New |
 |-----|-----|
-| `KooshaPari/audit-tool` | (archived) |
+| `<REDACTED>/audit-tool` | (archived) |
 | Standalone audit.py | `phenotype-registry/scripts/audit.py` |
 
 ## Consumer pattern

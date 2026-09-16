@@ -1,7 +1,7 @@
 //! `hexa gateway` subcommand — manage the phenotype-router HTTP delegate.
 //!
 //! Replaces the H10 absorption surface that was scoped to the now-archived
-//! `KooshaPari/phenotype-gateway` repo. The router binary itself lives in
+//! `<REDACTED>/phenotype-gateway` repo. The router binary itself lives in
 //! `crates/phenotype-router/src/bin/phenotype-router.rs`; this subcommand is
 //! a thin lifecycle wrapper (start / stop / status) suitable for local
 //! development and CI smoke tests.

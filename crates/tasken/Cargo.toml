@@ -4,9 +4,9 @@ version = "0.1.0"
 edition = "2021"
 description = "Universal task execution framework with scheduling, workflow orchestration, and plugin support."
 license = "MIT OR Apache-2.0"
-authors = ["Phenotype <dev@kooshapari.com>"]
+authors = ["Phenotype <dev@<REDACTED>.com>"]
 readme = "README.md"
-repository = "https://github.com/KooshaPari/zz-Tasken"
+repository = "https://github.com/<REDACTED>/zz-Tasken"
 documentation = "https://docs.rs/tasken"
 rust-version = "1.75"
 

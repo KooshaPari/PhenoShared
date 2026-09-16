@@ -119,7 +119,7 @@ class TenantManager:
         self,
         base_fallback_port: int = 9000,
         base_proxy_port: int = 9100,
-        tunnel_domain: str = "kooshapari.com",
+        tunnel_domain: str = "<REDACTED>.com",
     ):
         """
         Initialize multi-tenant manager.

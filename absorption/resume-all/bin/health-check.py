@@ -10,10 +10,10 @@ writes a human-readable status file:
   2. Snapshot file at ~/.local/share/resume-all/snapshot.jsonl
      (must exist, be < 90s old, parse as JSONL)
   3. All four launchd jobs:
-       com.kooshapari.resume-all-snapshot
-       com.kooshapari.resume-all-ipc
-       com.kooshapari.resume-all-watch
-       com.kooshapari.resume-all-zmx
+       com.<REDACTED>.resume-all-snapshot
+       com.<REDACTED>.resume-all-ipc
+       com.<REDACTED>.resume-all-watch
+       com.<REDACTED>.resume-all-zmx
 
 Writes a status block to ~/.local/share/resume-all/health.txt with an
 Overall: HEALTHY or DEGRADED line. Exit code 0 = HEALTHY, 1 = DEGRADED.
@@ -45,18 +45,18 @@ LAUNCHD_UID = os.getuid()
 LAUNCHD_GUI_DOMAIN = f"gui/{LAUNCHD_UID}"
 
 LAUNCHD_JOBS: tuple[str, ...] = (
-    "com.kooshapari.resume-all-snapshot",
-    "com.kooshapari.resume-all-ipc",
-    "com.kooshapari.resume-all-watch",
-    "com.kooshapari.resume-all-zmx",
+    "com.<REDACTED>.resume-all-snapshot",
+    "com.<REDACTED>.resume-all-ipc",
+    "com.<REDACTED>.resume-all-watch",
+    "com.<REDACTED>.resume-all-zmx",
 )
 
 # Exit codes the snapshot/zmx jobs return when no Ghostty/tmux backend is
 # detected -- this is the documented "expected" failure mode when the
 # session was launched from a non-Ghostty pane (e.g. droid harness).
 EXPECTED_NO_BACKEND_EXIT_CODES: dict[str, frozenset[int]] = {
-    "com.kooshapari.resume-all-snapshot": frozenset({2}),
-    "com.kooshapari.resume-all-zmx": frozenset({2}),
+    "com.<REDACTED>.resume-all-snapshot": frozenset({2}),
+    "com.<REDACTED>.resume-all-zmx": frozenset({2}),
 }
 
 

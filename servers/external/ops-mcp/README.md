@@ -33,7 +33,7 @@ Model Context Protocol (MCP) server for the nanoVMs `ops` unikernel toolchain, e
 
 ```bash
 # Navigate to repo
-cd /Users/kooshapari/CodeProjects/Phenotype/repos/phenotype-ops-mcp
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos/phenotype-ops-mcp
 
 # Build the MCP server
 go build -o ops-mcp ./cmd/server

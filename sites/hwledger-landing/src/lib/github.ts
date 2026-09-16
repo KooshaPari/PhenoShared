@@ -11,7 +11,7 @@ const USER_AGENT = 'hwledger-landing-build';
 
 /**
  * Fetch from GitHub API with automatic token handling and error fallback.
- * @param path - API path (e.g., 'repos/KooshaPari/hwLedger')
+ * @param path - API path (e.g., 'repos/<REDACTED>/hwLedger')
  * @param accept - Accept header media type
  * @returns Parsed JSON/text response or null on failure
  */

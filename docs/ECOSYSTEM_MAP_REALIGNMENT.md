@@ -3,7 +3,7 @@
 > **Authority:** `phenotype-registry` (INDEX / boundary SSOT)
 > **Scope:** P1 of the Phenotype Ownership Program — audit the registry and
 > realign the ecosystem map to current owned-repo reality.
-> **Ground truth:** `gh repo list KooshaPari` (142 repos: 102 live, 40 archived)
+> **Ground truth:** `gh repo list <REDACTED>` (142 repos: 102 live, 40 archived)
 > reconciled against the 88 OWNED repos in the Ownership Program.
 
 ## Summary
@@ -29,7 +29,7 @@ source.
 
 - **All 88 owned repos exist on GitHub and are LIVE** (none archived, no typos /
   renames). Verified by set-diff of the owned list against
-  `gh repo list KooshaPari`.
+  `gh repo list <REDACTED>`.
 - Languages, fork-status, and last-push dates were pulled from `gh` and encoded
   per entry (`language`, plus `archetype: fork-tool` where `isFork`).
 
@@ -43,8 +43,8 @@ now added with `tier`, `architecture`, `archetype`, `language`, and `role`.
 ### B. Removed / not-carried-forward
 | Old entry | Reason |
 |-----------|--------|
-| `pheno-mcp-router` (KooshaPari/pheno-mcp-router) | Repo **archived** on GitHub AND not in the owned-88; not a current owned substrate. Its substrate classification lives in absorption history, not the active owned catalog. |
-| `phenotype-sdk` (KooshaPari/phenotype-sdk) | **No such live repo** in `gh repo list`. The real owned SDKs are `phenotype-go-sdk` and `phenotype-python-sdk` (both present and active). Replaced by those two concrete entries. |
+| `pheno-mcp-router` (<REDACTED>/pheno-mcp-router) | Repo **archived** on GitHub AND not in the owned-88; not a current owned substrate. Its substrate classification lives in absorption history, not the active owned catalog. |
+| `phenotype-sdk` (<REDACTED>/phenotype-sdk) | **No such live repo** in `gh repo list`. The real owned SDKs are `phenotype-go-sdk` and `phenotype-python-sdk` (both present and active). Replaced by those two concrete entries. |
 
 ### C. Status corrections
 | Repo | Old status | Corrected | Evidence |

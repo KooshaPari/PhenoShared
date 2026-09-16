@@ -16,4 +16,4 @@
 
 set -e
 
-exec /opt/homebrew/bin/python3 /Users/kooshapari/bin/sla-monitor.py collect "$@"
+exec /opt/homebrew/bin/python3 /Users/<REDACTED>/bin/sla-monitor.py collect "$@"

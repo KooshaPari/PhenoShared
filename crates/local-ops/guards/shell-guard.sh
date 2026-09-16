@@ -41,8 +41,8 @@ if [[ $# -ge 1 ]]; then
   COMMAND="$*"
 fi
 
-if [[ -x "/Users/kooshapari/.claude/bin/policy-gate-check.sh" ]] && [[ -n "$COMMAND" ]]; then
-  "/Users/kooshapari/.claude/bin/policy-gate-check.sh" "$TOOL" "$COMMAND" >/dev/null 2>&1 || {
+if [[ -x "/Users/<REDACTED>/.claude/bin/policy-gate-check.sh" ]] && [[ -n "$COMMAND" ]]; then
+  "/Users/<REDACTED>/.claude/bin/policy-gate-check.sh" "$TOOL" "$COMMAND" >/dev/null 2>&1 || {
     # Policy gate blocks with exit code 2; propagate while keeping noise low.
     exit $?
   }

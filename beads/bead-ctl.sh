@@ -23,13 +23,13 @@
 
 set -e
 
-BEADS_FILE="/Users/kooshapari/CodeProjects/Phenotype/repos/phenotype-dag/beads.jsonl"
-BEADS_LOCK="/Users/kooshapari/CodeProjects/Phenotype/repos/phenotype-dag/.beads.lock"
+BEADS_FILE="/Users/<REDACTED>/CodeProjects/Phenotype/repos/phenotype-dag/beads.jsonl"
+BEADS_LOCK="/Users/<REDACTED>/CodeProjects/Phenotype/repos/phenotype-dag/.beads.lock"
 
 # Path to the pheno-harness repo root, used by the dual-write block to
 # import the AgilePlus adapter. Override with PHENO_HARNESS_ROOT env
 # var if the layout differs (e.g. in airlock-only environments).
-PHENO_HARNESS_ROOT="${PHENO_HARNESS_ROOT:-/Users/kooshapari/CodeProjects/Phenotype/repos/pheno-harness}"
+PHENO_HARNESS_ROOT="${PHENO_HARNESS_ROOT:-/Users/<REDACTED>/CodeProjects/Phenotype/repos/pheno-harness}"
 
 # Compute ephemeral agent identity (deterministic across calls in same session)
 HOSTNAME=$(hostname -s 2>/dev/null || echo "unknown")

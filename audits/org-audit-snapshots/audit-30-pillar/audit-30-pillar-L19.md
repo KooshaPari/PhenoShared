@@ -94,7 +94,7 @@ End-to-end supply-chain integrity for the bloc: lockfile presence + pinning, aut
 4. **Pick one of Renovate / Dependabot per repo** — standardize on Renovate for crates that need grouping (thegent's polyglot monorepo) and Dependabot for single-ecosystem crates. Effort: S.
 5. **Land a `uv.lock` (or pip-tools `requirements.txt`) in `phenotype-dep-guard`** and document `pip install -r requirements.lock` in README. Effort: S.
 6. **Resolve the `reusable-trufflehog.yml` reference mismatch** in `phenotype-dep-guard/.github/workflows/trufflehog.yml:14` — the file is not in `phenotype-tooling/.github/workflows/` under that exact name. Either create it or update the `uses:` ref. Effort: S.
-7. **Wire `phenotype-dep-guard` as a federated supply-chain check** — every core repo's `ci.yml` should `uses: KooshaPari/phenotype-dep-guard/.github/workflows/reusable-dep-guard.yml@main` with `fail-on: high`. Effort: S.
+7. **Wire `phenotype-dep-guard` as a federated supply-chain check** — every core repo's `ci.yml` should `uses: <REDACTED>/phenotype-dep-guard/.github/workflows/reusable-dep-guard.yml@main` with `fail-on: high`. Effort: S.
 8. **Add `osv-scanner` to `Tracely` and `Tracera` CI** — `osv-scanner --format sarif --output osv.sarif .` + upload to code-scanning. Effort: S.
 9. **Backfill Tracely `Cargo.lock` + lockfile discipline into `deny.toml`** — Tracely's `deny.toml` content not verified in this audit; ensure `[advisories]` `db-path = "$CARGO_HOME/advisory-db"` and `[bans]` `wildcards = "deny"`. Effort: S.
 10. **Reduce thegent's Dependabot cadence to weekly** with `groups: { python-security: { ... } }` to aggregate patches into a single PR. Effort: S.

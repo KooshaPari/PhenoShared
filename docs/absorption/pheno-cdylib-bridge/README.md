@@ -4,8 +4,8 @@
 
 | Field | Value |
 |-------|-------|
-| Source repo | `KooshaPari/pheno-cdylib-bridge` |
-| Target repo | `KooshaPari/pheno` (monorepo) |
+| Source repo | `<REDACTED>/pheno-cdylib-bridge` |
+| Target repo | `<REDACTED>/pheno` (monorepo) |
 | Target paths | `crates/pheno-cdylib-bridge/` |
 | Absorbed date | 2026-07-17 |
 | Absorbed by | forge agent |
@@ -72,5 +72,5 @@ itself was not absorbed; it remains in the GitHub archive).
 ## Provenance
 
 Branch: `origin/absorb/pheno-cdylib-bridge-2026-07-17` on
-`KooshaPari/pheno`. Source repo `KooshaPari/pheno-cdylib-bridge`
+`<REDACTED>/pheno`. Source repo `<REDACTED>/pheno-cdylib-bridge`
 archived via `gh repo archive`.

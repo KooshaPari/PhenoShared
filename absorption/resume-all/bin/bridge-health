@@ -9,9 +9,9 @@
 #   - exits 1 if any host is stale or missing
 set -euo pipefail
 
-LABEL="com.kooshapari.resume-all-bridge"
-LOG="/Users/kooshapari/Library/Logs/resume-all/bridge.log"
-SNAP_DIR="/Users/kooshapari/.local/share/resume-all"
+LABEL="com.<REDACTED>.resume-all-bridge"
+LOG="/Users/<REDACTED>/Library/Logs/resume-all/bridge.log"
+SNAP_DIR="/Users/<REDACTED>/.local/share/resume-all"
 STALE_THRESHOLD=240
 
 # 1. Daemon state
@@ -20,7 +20,7 @@ print ""
 daemon_info=$(launchctl list 2>/dev/null | grep "$LABEL" || true)
 if [[ -z "$daemon_info" ]]; then
   print "  [FAIL] daemon not loaded"
-  print "    hint: launchctl bootstrap gui/\$(id -u) /Users/kooshapari/Library/LaunchAgents/${LABEL}.plist"
+  print "    hint: launchctl bootstrap gui/\$(id -u) /Users/<REDACTED>/Library/LaunchAgents/${LABEL}.plist"
   exit 1
 fi
 pid=$(echo "$daemon_info" | awk '{print $1}')

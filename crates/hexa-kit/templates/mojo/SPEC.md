@@ -18,11 +18,11 @@ Template for Mojo projects in the Phenotype ecosystem.
 
 ```bash
 # Use template
-copier copy gh:KooshaPari/template-lang-mojo ./my-project
+copier copy gh:<REDACTED>/template-lang-mojo ./my-project
 
 # Or
 mkdir my-project && cd my-project
-curl -sL https://github.com/KooshaPari/template-lang-mojo/archive/main.tar.gz | tar xz --strip-components=1
+curl -sL https://github.com/<REDACTED>/template-lang-mojo/archive/main.tar.gz | tar xz --strip-components=1
 ```
 
 ## Structure

@@ -27,7 +27,7 @@ set -uo pipefail
 
 # ---------- config ----------
 REPO_ROOT="${AIRLOCK_V2_ROOT:-$HOME/CodeProjects/Phenotype/repos}"
-AIRLOCK_V2="/Users/kooshapari/CodeProjects/Phenotype/repos/_phenofleet-decisions/airlock-v2"
+AIRLOCK_V2="/Users/<REDACTED>/CodeProjects/Phenotype/repos/_phenofleet-decisions/airlock-v2"
 # Use an ISOLATED temp scan root so the auto-commit daemon does not scan the
 # real ~250 git repos under REPO_ROOT. The smoke repo is placed at
 # <SMOKE_SCAN_ROOT>/<SMOKE_BIN>/ so the daemon only discovers the smoke

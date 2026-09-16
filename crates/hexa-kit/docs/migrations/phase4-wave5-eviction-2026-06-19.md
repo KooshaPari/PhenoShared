@@ -1,7 +1,7 @@
 # Phase 4 wave 5 — HexaKit eviction (tasks 56–70)
 
 **Date:** 2026-06-19  
-**Predecessor:** Phase 3 Wave A/B ([#271](https://github.com/KooshaPari/HexaKit/pull/271)), Wave H ([#269](https://github.com/KooshaPari/HexaKit/pull/269))
+**Predecessor:** Phase 3 Wave A/B ([#271](https://github.com/<REDACTED>/HexaKit/pull/271)), Wave H ([#269](https://github.com/<REDACTED>/HexaKit/pull/269))
 
 ## Workspace exclude + git pin
 

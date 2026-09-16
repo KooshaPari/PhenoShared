@@ -4,7 +4,7 @@
 **Auditor:** Forge (autonomous governance audit)
 **Date:** 2026-07-17
 **Phase:** Queue Refresh — `2026-07-17-queue-refresh-batch4`
-**Source Repo:** `KooshaPari/pheno-forge-smoke` (cloned locally at `repos/pheno-forge-smoke`)
+**Source Repo:** `<REDACTED>/pheno-forge-smoke` (cloned locally at `repos/pheno-forge-smoke`)
 **Verdict:** **ABSORB** with target `pheno (crates/pheno-forge-smoke)`
 **Confidence:** HIGH (0.85) — content audited, single-purpose crate, sibling pair fits cleanly
 
@@ -12,7 +12,7 @@
 
 ## Source
 
-`pheno-forge-smoke` is the **single-purpose smoke binary** owned by `kooshapari`.
+`pheno-forge-smoke` is the **single-purpose smoke binary** owned by `<REDACTED>`.
 - Last push: `2026-07-16T10:38:36Z`
 - Default branch: `wip/2026-07-16-0029-auto`
 - Languages: ['rust']
@@ -24,7 +24,7 @@
 ### Why this is in scope for absorption review
 
 This repo is in scope because it is one of the **`2026-07-17-queue-refresh-batch4`**
-candidates — a fresh wave of 10 least-active non-archived repos on the kooshapari
+candidates — a fresh wave of 10 least-active non-archived repos on the <REDACTED>
 remote. It's a sibling-binary to `pheno-cdylib-bridge` (which was absorbed earlier
 today at commit `26ec806` on the `pheno` monorepo).
 
@@ -94,7 +94,7 @@ the **first PR in the post-merge follow-up wave** (ADR-097 + ADR-098).
 disposition-index after this audit lands.
 
 This is a **POST-ABSORPTION** audit (the transfer already happened). The crate is
-now at `KooshaPari/pheno` → `crates/pheno-forge-smoke/`. Build + test pass; binary
+now at `<REDACTED>/pheno` → `crates/pheno-forge-smoke/`. Build + test pass; binary
 runs; bridge-missing path is graceful.
 
 ## Confidence
@@ -102,7 +102,7 @@ runs; bridge-missing path is graceful.
 **Confidence:** 0.85 (HIGH).
 
 **Confidence drivers:**
-- **+0.30** — Repo is real, non-archived, on kooshapari remote.
+- **+0.30** — Repo is real, non-archived, on <REDACTED> remote.
 - **+0.20** — Target absorber (`pheno (monorepo crates/pheno-forge-smoke)`) is a canonical spine per RATIONALIZATION_PLAN.md.
 - **+0.15** — Disposition matches standing rationale in plan docs (ADR-096 explicit).
 - **+0.10** — Content audit complete: 700 LOC, 11 deps (9 mapped to workspace), no path-deps, no external consumers to repoint.
@@ -117,12 +117,12 @@ runs; bridge-missing path is graceful.
 
 ```bash
 # Pre-absorption snapshot (already captured by GitHub archive command)
-gh repo archive KooshaPari/pheno-forge-smoke
-git clone https://github.com/KooshaPari/pheno-forge-smoke.git /tmp/pheno-forge-smoke-pre-absorption
+gh repo archive <REDACTED>/pheno-forge-smoke
+git clone https://github.com/<REDACTED>/pheno-forge-smoke.git /tmp/pheno-forge-smoke-pre-absorption
 ```
 
 **Restore posture:** Source repo will be archived after this absorption PR is pushed.
-Local clone at `/Users/kooshapari/CodeProjects/Phenotype/repos/pheno-forge-smoke` will
+Local clone at `/Users/<REDACTED>/CodeProjects/Phenotype/repos/pheno-forge-smoke` will
 be retained for forensic reconciliation per the container policy.
 
 ---

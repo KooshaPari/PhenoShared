@@ -1,8 +1,8 @@
 # `phenotype-router` Security Audit (Baseline, v0.2.0)
 
 **Date:** 2026-06-21
-**Scope:** `phenotype-router` Rust scaffold at `KooshaPari/phenotype-router` @ `6e147d8` (`feat: substrate-bar bootstrap for phenotype-router (v0.2.0)`)
-**Auditor:** Forge (orchestrator-level) — KooshaPari
+**Scope:** `phenotype-router` Rust scaffold at `<REDACTED>/phenotype-router` @ `6e147d8` (`feat: substrate-bar bootstrap for phenotype-router (v0.2.0)`)
+**Auditor:** Forge (orchestrator-level) — <REDACTED>
 **Audit class:** FIRST security audit on this substrate. Baseline.
 **Rescoping note:** Per the rescoping laid out in this turn, this audit is **Option A** — actual `phenotype-router` Rust scaffold (Cargo.toml v0.2.0, thiserror + 4 transitives). NOT Go; NOT Bifrost v1.5.21; NOT SLSA/cosign (those scope to the parent monorepo per ADR-077/ADR-078).
 
@@ -132,7 +132,7 @@ Returned 27 matches, all benign:
 
 ## 5. Branch protection (via `gh api`)
 
-**Command:** `gh api /repos/KooshaPari/phenotype-router/branches/main/protection`
+**Command:** `gh api /repos/<REDACTED>/phenotype-router/branches/main/protection`
 
 **Result:** ❌ **NOT PROTECTED**
 
@@ -146,7 +146,7 @@ Returned 27 matches, all benign:
 
 **Implication:** Direct pushes to `main` are permitted; there is no required-review gate, no required-status-check, no linear-history enforcement. For a Tier-1 fleet-critical substrate (ADR-040), this is a **P1** gap.
 
-`CODEOWNERS` exists (`phenotype-router/CODEOWNERS:1-41`) and routes all reviews to `@KooshaPari`, but CODEOWNERS does NOT enforce reviews on its own — that requires branch protection with `require_code_owner_reviews = true`.
+`CODEOWNERS` exists (`phenotype-router/CODEOWNERS:1-41`) and routes all reviews to `@<REDACTED>`, but CODEOWNERS does NOT enforce reviews on its own — that requires branch protection with `require_code_owner_reviews = true`.
 
 ---
 
@@ -172,7 +172,7 @@ Source: `findings/71-pillar-refresh-template.md` §6 (canonical L-numbering, sup
 
 ```json
 {
-  "repo": "KooshaPari/phenotype-router",
+  "repo": "<REDACTED>/phenotype-router",
   "commit": "6e147d8",
   "audit_date": "2026-06-21",
   "audit_class": "baseline (first audit on this substrate)",
@@ -201,7 +201,7 @@ Source: `findings/71-pillar-refresh-template.md` §6 (canonical L-numbering, sup
   "issues_opened": [
     {
       "number": 5,
-      "url": "https://github.com/KooshaPari/phenotype-router/issues/5",
+      "url": "https://github.com/<REDACTED>/phenotype-router/issues/5",
       "severity": "MEDIUM",
       "finding_id": "F-1",
       "title": "[security] cargo audit + cargo deny not wired into CI (F-1, MEDIUM)",
@@ -213,7 +213,7 @@ Source: `findings/71-pillar-refresh-template.md` §6 (canonical L-numbering, sup
     "name": "security",
     "color": "#b60205",
     "description": "Security finding or vulnerability report",
-    "repo": "KooshaPari/phenotype-router"
+    "repo": "<REDACTED>/phenotype-router"
   }
 }
 ```
@@ -225,13 +225,13 @@ Source: `findings/71-pillar-refresh-template.md` §6 (canonical L-numbering, sup
 | Sev | ID | Title | Location |
 |---|---|---|---|
 | **MEDIUM** | F-1 | `cargo audit` + `cargo deny` not wired into CI | `.github/workflows/ci.yml:1-104` |
-| LOW | F-2 | `main` branch has no GitHub branch protection | `KooshaPari/phenotype-router` settings |
+| LOW | F-2 | `main` branch has no GitHub branch protection | `<REDACTED>/phenotype-router` settings |
 | LOW | F-3 | No `SECURITY.md` (no vuln-reporting channel, no response runbook) | repo root |
 | INFO | F-4 | `deny.toml` allow-list has 8 over-permissive license entries | `phenotype-router/deny.toml:17-30` |
 
 **HIGH/CRITICAL count: 0.** Per the strict criterion ("Open GitHub issues for any HIGH/CRITICAL findings"), no issues would be opened by that rule alone. However, the highest-impact actionable finding (F-1) was filed as a `security`-labeled tracking issue to establish the baseline remediation backlog:
 
-- **Issue #5** (MEDIUM, F-1): <https://github.com/KooshaPari/phenotype-router/issues/5> — "cargo audit + cargo deny not wired into CI (F-1, MEDIUM)" — `security` label applied.
+- **Issue #5** (MEDIUM, F-1): <https://github.com/<REDACTED>/phenotype-router/issues/5> — "cargo audit + cargo deny not wired into CI (F-1, MEDIUM)" — `security` label applied.
 - `security` label created on the repo (color `#b60205`, description "Security finding or vulnerability report"). It did not exist prior to this audit.
 
 ---
@@ -268,9 +268,9 @@ These belong to the parent monorepo / runtime substrate layer, not the `phenotyp
 - `cargo audit --json` — 2026-06-21, ran from `phenotype-router/`, advisory-db @ `776615bd3`, 0 vulnerabilities
 - `cargo deny check` — 2026-06-21, all 4 sub-checks green, 8 cosmetic warnings
 - `gitleaks detect --no-git --source . --verbose` — 2026-06-21, 404 MB scanned, 0 leaks
-- `gh api /repos/KooshaPari/phenotype-router/branches/main/protection` — 2026-06-21, HTTP 404 (branch not protected)
+- `gh api /repos/<REDACTED>/phenotype-router/branches/main/protection` — 2026-06-21, HTTP 404 (branch not protected)
 - Manual `grep -rn "secret|password|token|SECURITY"` in src/tests/benches — 27 matches, all LLM-text-token context, no real secrets
 - `gh label create security --color b60205` — 2026-06-21, label did not exist on repo prior to this audit
-- `gh issue create --label security --repo KooshaPari/phenotype-router` — 2026-06-21, opened **issue #5** (F-1 MEDIUM)
+- `gh issue create --label security --repo <REDACTED>/phenotype-router` — 2026-06-21, opened **issue #5** (F-1 MEDIUM)
 
-**Auditor:** Forge (orchestrator), KooshaPari keyring (`gh auth status` confirmed `KooshaPari` active 2026-06-21, scopes `delete_repo gist read:org repo workflow`).
+**Auditor:** Forge (orchestrator), <REDACTED> keyring (`gh auth status` confirmed `<REDACTED>` active 2026-06-21, scopes `delete_repo gist read:org repo workflow`).

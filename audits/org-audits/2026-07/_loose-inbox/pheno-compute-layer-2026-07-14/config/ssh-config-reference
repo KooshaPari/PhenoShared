@@ -4,11 +4,11 @@
 #==========================================
 
 #----------------------------------
-# kooshapari-desk (3090 Ti)
+# <REDACTED>-desk (3090 Ti)
 #----------------------------------
-Host kooshapari-desk desk desk-tail
-    HostName kooshapari-desk.tail2b570.ts.net
-    User kooshapari
+Host <REDACTED>-desk desk desk-tail
+    HostName <REDACTED>-desk.tail2b570.ts.net
+    User <REDACTED>
     ForwardAgent yes
     IdentityFile ~/.ssh/id-git
     AddKeysToAgent yes
@@ -32,8 +32,8 @@ Host koosh-desk desk-ip
 # WSL Tailscale SSH
 #----------------------------------
 Host desk-wsl desk-ts
-    HostName kooshapari-desk.tail2b570.ts.net
-    User kooshapari
+    HostName <REDACTED>-desk.tail2b570.ts.net
+    User <REDACTED>
     ProxyCommand tailscale ssh --stdio %h
     IdentityFile ~/.ssh/id-git
     BatchMode yes
@@ -70,4 +70,4 @@ Host desk-wsl desk-ts
 # Codex / OpenAI CLI
 #----------------------------------
 # export CODECLASSIFY_SSH_HOST=desk
-# export COMPUTE_HOST=kooshapari-desk
+# export COMPUTE_HOST=<REDACTED>-desk

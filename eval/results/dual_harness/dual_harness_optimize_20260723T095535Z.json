@@ -9,7 +9,7 @@
     "winner": "tie"
   },
   "fixture_id": "dual-harness-shared-3task-20260722",
-  "fixture_path": "/Users/kooshapari/CodeProjects/Phenotype/repos/pheno-harness/plans/2026-07-22-dual-harness-matrix/fixtures/shared-3task.v1.json",
+  "fixture_path": "/Users/<REDACTED>/CodeProjects/Phenotype/repos/pheno-harness/plans/2026-07-22-dual-harness-matrix/fixtures/shared-3task.v1.json",
   "helios_cli": {
     "harness_id": "helios_cli",
     "pass_rate": 1.0,

@@ -14,7 +14,7 @@
     ],
     "component": {
       "type": "library",
-      "bom-ref": "path+file:///Users/kooshapari/CodeProjects/Phenotype/repos/pheno/crates/phenotype-cache-adapter#0.2.0",
+      "bom-ref": "path+file:///Users/<REDACTED>/CodeProjects/Phenotype/repos/pheno/crates/phenotype-cache-adapter#0.2.0",
       "name": "phenotype-cache-adapter",
       "version": "0.2.0",
       "scope": "required",
@@ -27,7 +27,7 @@
       "components": [
         {
           "type": "library",
-          "bom-ref": "path+file:///Users/kooshapari/CodeProjects/Phenotype/repos/pheno/crates/phenotype-cache-adapter#0.2.0 bin-target-0",
+          "bom-ref": "path+file:///Users/<REDACTED>/CodeProjects/Phenotype/repos/pheno/crates/phenotype-cache-adapter#0.2.0 bin-target-0",
           "name": "phenotype_cache_adapter",
           "version": "0.2.0",
           "purl": "pkg:cargo/phenotype-cache-adapter@0.2.0?download_url=file://.#src/lib.rs"
@@ -1622,7 +1622,7 @@
   ],
   "dependencies": [
     {
-      "ref": "path+file:///Users/kooshapari/CodeProjects/Phenotype/repos/pheno/crates/phenotype-cache-adapter#0.2.0",
+      "ref": "path+file:///Users/<REDACTED>/CodeProjects/Phenotype/repos/pheno/crates/phenotype-cache-adapter#0.2.0",
       "dependsOn": [
         "registry+https://github.com/rust-lang/crates.io-index#dashmap@5.5.3",
         "registry+https://github.com/rust-lang/crates.io-index#lru@0.16.4",

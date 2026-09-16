@@ -3,9 +3,9 @@ kind: Component
 metadata:
   name: phenohandbook-absorbed
   title: PhenoHandbook (absorbed)
-  description: Patterns, anti-patterns, guidelines, and best practices for the Phenotype ecosystem (absorbed from KooshaPari/PhenoHandbook)
+  description: Patterns, anti-patterns, guidelines, and best practices for the Phenotype ecosystem (absorbed from <REDACTED>/PhenoHandbook)
   annotations:
-    github.com/project-slug: KooshaPari/phenotype-registry
+    github.com/project-slug: <REDACTED>/phenotype-registry
     backstage.io/techdocs-ref: dir:./
     phenotype.dev/registry-type: handbook
     phenotype.dev/documentation: vitepress

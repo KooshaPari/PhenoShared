@@ -2,7 +2,7 @@
 
 ## Source
 
-- **Repository:** [KooshaPari/zz-merge-unk-eyetracker](https://github.com/KooshaPari/zz-merge-unk-eyetracker)
+- **Repository:** [<REDACTED>/zz-merge-unk-eyetracker](https://github.com/<REDACTED>/zz-merge-unk-eyetracker)
 - **Absorbed:** 2026-09-15
 - **License:** MIT (see LICENSE in source repo)
 

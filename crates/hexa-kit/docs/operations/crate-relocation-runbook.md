@@ -76,7 +76,7 @@ For Python/TS edges, mirror the same pattern in `pyproject.toml`, `package.json`
 
 Org-wide dependency repoint is the highest-risk step. Batch dependent PRs when chokepoints fan out.
 
-1. Search: `gh api search/code?q=<crate_name>+org:KooshaPari`
+1. Search: `gh api search/code?q=<crate_name>+org:<REDACTED>`
 2. For each dependent repo in chokepoint matrix, open a repoint PR:
    - Replace HexaKit path/git dep with canonical domain repo + version pin.
 3. Merge dependent PRs **before** or **in parallel with** target merge (never leave dangling path deps).

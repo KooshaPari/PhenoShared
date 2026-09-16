@@ -1,6 +1,6 @@
 [Unit]
 Description=teamcomm daemon — cross-agent coordination bus
-Documentation=https://github.com/KooshaPari/phenotype-teamcomm
+Documentation=https://github.com/<REDACTED>/phenotype-teamcomm
 Requires=network.target
 After=network.target
 

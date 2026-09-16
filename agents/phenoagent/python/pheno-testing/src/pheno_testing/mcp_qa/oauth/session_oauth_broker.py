@@ -186,7 +186,7 @@ class SessionOAuthBroker:
 
                 email = credentials["email"]
                 password = credentials["password"]
-                endpoint = os.getenv("ZEN_MCP_ENDPOINT", "https://zen.kooshapari.com/mcp")
+                endpoint = os.getenv("ZEN_MCP_ENDPOINT", "https://zen.<REDACTED>.com/mcp")
 
             except Exception as e:
                 raise RuntimeError(
@@ -286,9 +286,9 @@ class SessionOAuthBroker:
         print("   🔗 Creating session MCP client...")
         print(f"   🎫 Token: {tokens.access_token[:20]}... ({tokens.provider})")
 
-        email = os.getenv("ZEN_TEST_EMAIL", "kooshapari@gmail.com")
+        email = os.getenv("ZEN_TEST_EMAIL", "<REDACTED>@gmail.com")
         password = os.getenv("ZEN_TEST_PASSWORD")
-        endpoint = os.getenv("ZEN_MCP_ENDPOINT", "https://zen.kooshapari.com/mcp")
+        endpoint = os.getenv("ZEN_MCP_ENDPOINT", "https://zen.<REDACTED>.com/mcp")
 
         # Create client with existing authentication
         # In production, you'd configure the client directly with tokens

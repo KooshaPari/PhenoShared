@@ -38,4 +38,4 @@ This workspace includes the following kits:
 
 ## Links
 
-- [Repository](https://github.com/KooshaPari/hexacore)
+- [Repository](https://github.com/<REDACTED>/hexacore)

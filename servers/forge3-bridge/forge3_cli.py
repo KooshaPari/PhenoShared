@@ -45,7 +45,7 @@ from dataclasses import dataclass
 from typing import Any, Optional
 
 DEFAULT_WS = os.environ.get("FORGE3_WS", "ws://127.0.0.1:9753")
-DEFAULT_BIN = os.environ.get("FORGE3_BIN", shutil.which("forge3") or "/Users/kooshapari/.cargo/bin/forge3")
+DEFAULT_BIN = os.environ.get("FORGE3_BIN", shutil.which("forge3") or "/Users/<REDACTED>/.cargo/bin/forge3")
 
 
 # ----------------------------- transport layer -----------------------------

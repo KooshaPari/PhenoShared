@@ -61,7 +61,7 @@ async def start_server_with_smart_networking(
                 logger.warn(f"Health probe timed out: https://{expected_host}/healthz")
 
             if os.getenv("TUNNEL_PATH_ROUTE", "").lower() == "true":
-                domain_env = os.getenv("TUNNEL_DOMAIN", "kooshapari.com").lower()
+                domain_env = os.getenv("TUNNEL_DOMAIN", "<REDACTED>.com").lower()
                 raw_srvc = (
                     os.getenv("SRVC")
                     or os.getenv("SERVICE_SLUG")

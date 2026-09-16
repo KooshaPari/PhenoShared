@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "Personal landing page for kooshapari.com",
+  "description": "Personal landing page for <REDACTED>.com",
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",

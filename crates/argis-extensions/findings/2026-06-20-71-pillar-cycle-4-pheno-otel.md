@@ -152,7 +152,7 @@
 | Pillar | Score | Evidence |
 |---|---:|---|
 | L69 OpenSSF Best Practices | 3 | `scorecard.yml` workflow (1,079 bytes) + `audit.yml` + `deny.yml` + branch protection upstream. |
-| L70 Roles & responsibilities | 3 | `CODEOWNERS` (`pheno-otel/CODEOWNERS`); `AGENTS.md` declares "Owner: KooshaPari (orch-v11-044)"; 4 issue templates. |
+| L70 Roles & responsibilities | 3 | `CODEOWNERS` (`pheno-otel/CODEOWNERS`); `AGENTS.md` declares "Owner: <REDACTED> (orch-v11-044)"; 4 issue templates. |
 | L71 Sustainability | 2 | `Cargo.toml:5` `license = "MIT OR Apache-2.0"`; `SECURITY.md`; no `FUNDING.yml` at this path (would be in publishing repo). |
 
 ---

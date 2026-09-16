@@ -21,5 +21,5 @@ The authoritative per-repository evidence is `artifacts/wave-2-repository-eviden
 ## Links
 
 - AgilePlus spec: `ecosystem-consolidation-wave-2-20260723`
-- Parent PR: https://github.com/KooshaPari/phenotype-registry/pull/395
+- Parent PR: https://github.com/<REDACTED>/phenotype-registry/pull/395
 - Boundary SSOT: `BOUNDARY_OWNERS.md`

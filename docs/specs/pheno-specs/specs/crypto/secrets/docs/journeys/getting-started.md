@@ -24,13 +24,13 @@
 
 ```bash
 # macOS via Homebrew (recommended)
-brew install kooshapari/tap/guardis
+brew install <REDACTED>/tap/guardis
 
 # Linux via curl
 curl -sSL https://install.guardis.io | sh
 
 # Via Go (latest stable)
-go install github.com/kooshapari/guardis/cmd/guardis@latest
+go install github.com/<REDACTED>/guardis/cmd/guardis@latest
 
 # Verify installation
 guardis version

@@ -3,7 +3,7 @@
   "captured_at": "2026-07-26T00:26:30Z",
   "scope": "high-value GitHub raw-name gaps with local checkouts",
   "source_of_truth": {
-    "github_owner": "KooshaPari",
+    "github_owner": "<REDACTED>",
     "registry_head": "b19cc4d",
     "github_repo_count": 296,
     "registry_project_json_count": 154
@@ -11,7 +11,7 @@
   "candidates": [
     {
       "name": "hfscope",
-      "remote": "https://github.com/KooshaPari/hfscope",
+      "remote": "https://github.com/<REDACTED>/hfscope",
       "visibility": "private",
       "local_path": "repos/hfscope",
       "local_branch": "main",
@@ -25,7 +25,7 @@
     },
     {
       "name": "forgecode",
-      "remote": "https://github.com/KooshaPari/forgecode",
+      "remote": "https://github.com/<REDACTED>/forgecode",
       "upstream_remote": "https://github.com/tailcallhq/forgecode",
       "visibility": "public",
       "local_path": "repos/forgecode",
@@ -40,7 +40,7 @@
     },
     {
       "name": "Melosviz",
-      "remote": "https://github.com/KooshaPari/Melosviz",
+      "remote": "https://github.com/<REDACTED>/Melosviz",
       "visibility": "public",
       "local_path": "repos/Melosviz",
       "local_branch": "main",
@@ -54,7 +54,7 @@
     },
     {
       "name": "airlock",
-      "remote": "https://github.com/KooshaPari/airlock",
+      "remote": "https://github.com/<REDACTED>/airlock",
       "visibility": "public",
       "local_path": "repos/airlock",
       "local_branch": "main",
@@ -77,7 +77,7 @@
   ],
   "additional_active_gap": {
     "name": "phenotype-apps",
-    "remote": "https://github.com/KooshaPari/phenotype-apps",
+    "remote": "https://github.com/<REDACTED>/phenotype-apps",
     "default_branch": "apps-extract",
     "remote_size_kb": 1739253,
     "local_provenance": "local commit 5a06720 was cloud-preserved as recovery/phenotype-apps-local-20260726",

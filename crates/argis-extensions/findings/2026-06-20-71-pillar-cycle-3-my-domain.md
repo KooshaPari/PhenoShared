@@ -1,7 +1,7 @@
 # 71-Pillar Weekly Cycle 3 — Eidolon, agent-platform, mobile-mcp, mobile-cli
 
 **Date:** 2026-06-20 (Saturday)
-**Cycle:** 3 (4 KooshaPari-owned repos under the agent-runtime × device-modality domain)
+**Cycle:** 3 (4 <REDACTED>-owned repos under the agent-runtime × device-modality domain)
 **Trigger:** Owner request to add the 4 interface-domain repos (Eidolon, agent-platform, mobile-cli, mobile-mcp) to the 71-pillar framework per ADR-024 / ADR-041.
 **Scorer:** Forge orchestrator (single-track subagent)
 **Schema:** [findings/71-pillar-2026-06-17-schema.md](findings/71-pillar-2026-06-17-schema.md) (L1-L71, 9 domains, 0-3 scale, N/A=3 for inapplicable).
@@ -39,7 +39,7 @@
 | 8. Documentation & SSOT (L64-L68) | 2.20 | 2.20 | 1.40 | 1.80 | **1.90** |
 | 9. Governance & Sustainability (L69-L71) | 2.33 | 1.33 | 1.33 | 1.67 | **1.67** |
 
-**Insight:** Eidolon is the strongest of the four (mean 2.18, **PASSES the 2.00 bar**) thanks to its mature Rust workspace with 13 CI workflows, deny.toml + SBOM + OpenSSF Scorecard + codeql + release-attestation + slsa.md. **agent-platform** is the strongest TypeScript substrate in the cycle (mean 1.96, just under the 2.00 bar) with the hexagonal port/adapter pattern and OTLP telemetry wrapper. **mobile-mcp + mobile-cli** score lower on DX and Docs because they are non-KooshaPari-original (forked from Mobile-Next) with no AGENTS.md / no SPEC.md at the repo level; they are strong on Architecture and UX (mature CLI surface, JSON-RPC server) but weak on Governance (no CODEOWNERS, no SUPPORT.md).
+**Insight:** Eidolon is the strongest of the four (mean 2.18, **PASSES the 2.00 bar**) thanks to its mature Rust workspace with 13 CI workflows, deny.toml + SBOM + OpenSSF Scorecard + codeql + release-attestation + slsa.md. **agent-platform** is the strongest TypeScript substrate in the cycle (mean 1.96, just under the 2.00 bar) with the hexagonal port/adapter pattern and OTLP telemetry wrapper. **mobile-mcp + mobile-cli** score lower on DX and Docs because they are non-<REDACTED>-original (forked from Mobile-Next) with no AGENTS.md / no SPEC.md at the repo level; they are strong on Architecture and UX (mature CLI surface, JSON-RPC server) but weak on Governance (no CODEOWNERS, no SUPPORT.md).
 
 **Combined cycle 1 + cycle 2 + cycle 3 fleet (19 repos):**
 
@@ -60,10 +60,10 @@ Four repos that are the **interface domain** for agent runtime × device modalit
 
 | # | Repo | Local path | Git remote | Default branch | Latest commit | LoC |
 |---|---|---|---|---|---|---:|
-| 1 | Eidolon | `Eidolon/` | `git@github.com:KooshaPari/Eidolon.git` (per CLAUDE.md) | `main` | `Cargo.toml.bak` @ Apr 25 | ~3,000 |
-| 2 | agent-platform | `agent-platform/` | `git@github.com:KooshaPari/agent-platform.git` | `main` | AGENTS.md @ Jun 20 | ~1,500 |
-| 3 | mobile-mcp | `mobile-cli-mobile-mcp-wt-2026-06-17/{server,eidolon.go}` | `git@github.com:KooshaPari/mobile-cli.git` (co-located) | `main` @ `d018ea3` (PR #1 eidolon endpoint) | `eidolon.go` 227 LOC + `server/*.go` ~2,500 LOC |
-| 4 | mobile-cli | `mobile-cli-mobile-mcp-wt-2026-06-17/` | `git@github.com:KooshaPari/mobile-cli.git` | `main` @ `d018ea3` | v0.3.85 (CHANGELOG.md:1) |
+| 1 | Eidolon | `Eidolon/` | `git@github.com:<REDACTED>/Eidolon.git` (per CLAUDE.md) | `main` | `Cargo.toml.bak` @ Apr 25 | ~3,000 |
+| 2 | agent-platform | `agent-platform/` | `git@github.com:<REDACTED>/agent-platform.git` | `main` | AGENTS.md @ Jun 20 | ~1,500 |
+| 3 | mobile-mcp | `mobile-cli-mobile-mcp-wt-2026-06-17/{server,eidolon.go}` | `git@github.com:<REDACTED>/mobile-cli.git` (co-located) | `main` @ `d018ea3` (PR #1 eidolon endpoint) | `eidolon.go` 227 LOC + `server/*.go` ~2,500 LOC |
+| 4 | mobile-cli | `mobile-cli-mobile-mcp-wt-2026-06-17/` | `git@github.com:<REDACTED>/mobile-cli.git` | `main` @ `d018ea3` | v0.3.85 (CHANGELOG.md:1) |
 
 > **Note:** mobile-mcp and mobile-cli live in the same git repo (`mobile-cli`) and same worktree (`mobile-cli-mobile-mcp-wt-2026-06-17`). They are scored as **separate logical surfaces** because they target different substrate roles per ADR-023:
 > - **mobile-cli** = CLI binary + commands (interface domain; not a federated service)
@@ -89,7 +89,7 @@ Per the task spec, all test claims were verified by running the actual test comm
 ## 1. Eidolon (Rust workspace × 4 crates) — **mean 2.18 / 3, PASS (Tier 2 graduated)**
 
 **Local path:** `Eidolon/`
-**Git remote:** `git@github.com:KooshaPari/Eidolon.git` (per `Eidolon/CLAUDE.md:1-10`; the Cargo workspace `repository = "https://github.com/KooshaPari/phenotype-infrakit"` is the umbrella).
+**Git remote:** `git@github.com:<REDACTED>/Eidolon.git` (per `Eidolon/CLAUDE.md:1-10`; the Cargo workspace `repository = "https://github.com/<REDACTED>/phenotype-infrakit"` is the umbrella).
 **Workspace members (`Eidolon/Cargo.toml:3-7`):** `eidolon-core`, `eidolon-desktop`, `eidolon-mobile`, `eidolon-sandbox`.
 **Test baseline:** `cargo test --workspace` → 135 / 0 passed.
 
@@ -206,7 +206,7 @@ Per the task spec, all test claims were verified by running the actual test comm
 | Pillar | Score | Evidence |
 |---|---:|---|
 | L69 OpenSSF Best Practices | 3 | OpenSSF Scorecard workflow (`scorecard.yml`) + SBOM + codeql + branch protection; weekly cadence |
-| L70 Roles & responsibilities | 2 | `CODEOWNERS` (`* @KooshaPari`); no role matrix |
+| L70 Roles & responsibilities | 2 | `CODEOWNERS` (`* @<REDACTED>`); no role matrix |
 | L71 Sustainability | 2 | `FUNDING.yml`; `release-registry.toml`; no `CODE_OF_CONDUCT.md` (only `.github/FUNDING.yml`) |
 
 **Eidolon mean:** 2.18 / 3 → **PASS** (mean ≥ 2.00), Tier 2 graduated. **6/9 domains PASS** (Arch 2.42, QC 2.75, DX 2.40, UX 2.00 [NA-counted], Sec 2.40, Gov 2.33). **P0 gaps:** L57 metrics, L12 service mesh, L49 auth. **Top unlock:** add `tracing-subscriber` + `tracing-opentelemetry` for L56/L57/L58 (+0.5 to mean).
@@ -216,7 +216,7 @@ Per the task spec, all test claims were verified by running the actual test comm
 ## 2. agent-platform (TypeScript, hexagonal ports) — **mean 1.96 / 3, near-PASS (Tier 1 substrate)**
 
 **Local path:** `agent-platform/`
-**Git remote:** `git@github.com:KooshaPari/agent-platform.git` (per `AGENTS.md:1`).
+**Git remote:** `git@github.com:<REDACTED>/agent-platform.git` (per `AGENTS.md:1`).
 **Test baseline:** `npx vitest run` → **8 test files, 106 tests passed, 0 failed**.
 **Single-pane role:** canonical T66 substrate for agent-runtime ↔ device modality per ADR-023 Rule 3 + ADR-014 hexagonal L4 ports.
 
@@ -235,7 +235,7 @@ Per the task spec, all test claims were verified by running the actual test comm
 | L9 Backward compatibility | 2 | Branded types prevent drift; no semver policy doc; conventional commits only |
 | L10 Loose coupling | 3 | All adapters use the `getTracer()` no-op fallback; transport interface is swappable; `NullXyzTransport` for every adapter (per AGENTS.md:83-87) |
 | L11 Portability | 3 | Pure TS ESM (Node 26+); runs in Node, Bun, Deno; only `@opentelemetry/api` as runtime dep |
-| L12 Service mesh / gateway | 0 | Pure port/adapter lib, no gateway; gateway is `KooshaPari/Eidolon` MCP server |
+| L12 Service mesh / gateway | 0 | Pure port/adapter lib, no gateway; gateway is `<REDACTED>/Eidolon` MCP server |
 
 ### 2.2 Performance (L13-L19) — **mean 1.43**
 
@@ -350,7 +350,7 @@ Per the task spec, all test claims were verified by running the actual test comm
 - `server/websocket.go` + `server/websocket_test.go` — WS transport
 - `docs/openrpc.json` + `docs/openrpc.md` — OpenRPC spec
 
-**Git remote:** `git@github.com:KooshaPari/mobile-cli.git` (mobile-mcp is a sub-surface of the `mobile-cli` repo per `git log --oneline -1` → `d018ea3 feat(eidolon): add --eidolon-endpoint flag for EidolonStage dispatch (#1)`).
+**Git remote:** `git@github.com:<REDACTED>/mobile-cli.git` (mobile-mcp is a sub-surface of the `mobile-cli` repo per `git log --oneline -1` → `d018ea3 feat(eidolon): add --eidolon-endpoint flag for EidolonStage dispatch (#1)`).
 **Test baseline:** subset of mobile-cli — `go test ./... ./server/... ./eidolon_test.go` → all pass (covered by the 123 PASS count in mobile-cli).
 
 ### 3.1 Architecture (AX) — L1-L12 — **mean 1.75**
@@ -476,7 +476,7 @@ Per the task spec, all test claims were verified by running the actual test comm
 ## 4. mobile-cli (Go CLI binary + commands) — **mean 1.86 / 3 (Tier 1 substrate)**
 
 **Local path:** `mobile-cli-mobile-mcp-wt-2026-06-17/`
-**Git remote:** `git@github.com:KooshaPari/mobile-cli.git`
+**Git remote:** `git@github.com:<REDACTED>/mobile-cli.git`
 **Test baseline:** `go test ./...` → **9 packages, 123 PASS / 0 FAIL** (`mobilecli`, `cli`, `commands`, `devices`, `devices/wda`, `pkg/avc2mp4`, `server`, `utils`; `agents`, `assets`, `daemon`, `rpc`, `types` have no test files).
 **Latest version:** v0.3.85 (CHANGELOG.md:1).
 
@@ -724,4 +724,4 @@ Per the task spec, all test claims were verified by running the actual test comm
 
 ---
 
-**Cycle 3 rollup — generated 2026-06-20 by Forge orchestrator (this turn). Cross-cutting 71-pillar fleet view now spans 19 repos across 3 cycles (7 + 8 + 4). Eidolon is the first KooshaPari-owned interface-domain repo to PASS the 2.00 bar at mean 2.18.**
+**Cycle 3 rollup — generated 2026-06-20 by Forge orchestrator (this turn). Cross-cutting 71-pillar fleet view now spans 19 repos across 3 cycles (7 + 8 + 4). Eidolon is the first <REDACTED>-owned interface-domain repo to PASS the 2.00 bar at mean 2.18.**

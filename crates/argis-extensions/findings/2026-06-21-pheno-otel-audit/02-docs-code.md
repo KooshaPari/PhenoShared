@@ -1,6 +1,6 @@
 # Phase 1B — Docs/Code Analysis: `pheno-otel`
 
-**Scope:** `/Users/kooshapari/CodeProjects/Phenotype/repos/pheno-otel/`
+**Scope:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos/pheno-otel/`
 **Date:** 2026-06-21 (system date)
 **Audit series:** `findings/2026-06-21-pheno-otel-audit/`
 **Phase 1B** (this file): docs/code parity, API contract validation, bug tally
@@ -50,7 +50,7 @@
 |---|---|---|
 | `AGENTS.md:3` "ACTIVE (governance meta-bundle for the `pheno-otel` substrate canonical)" | ✅ TRUE | Matches `SPEC.md:3-5` "Substrate role: canonical OTLP wire-format export substrate (per ADR-037)" |
 | `AGENTS.md:5` "Date: 2026-06-20" | ⚠️ STALE | Today is 2026-06-21; AGENTS.md is 1 day stale. Per `STATUS.md:3` the cadence is weekly Monday, so this is within tolerance |
-| `AGENTS.md:5` "Owner: KooshaPari (orch-v11-044)" | ✅ TRUE | Verified via `git log` (branch `chore/orch-v11-044-tier-0-governance-pheno-otel-2026-06-20` tip `d20cbc7256`) |
+| `AGENTS.md:5` "Owner: <REDACTED> (orch-v11-044)" | ✅ TRUE | Verified via `git log` (branch `chore/orch-v11-044-tier-0-governance-pheno-otel-2026-06-20` tip `d20cbc7256`) |
 | `AGENTS.md:7` "Substrate role: Rust library (per ADR-012 + ADR-036B substrate canonicals)" | ⚠️ **MISMATCH** | ADR-012 + ADR-036B are about `pheno-tracing`, not `pheno-otel`. The actual canonical ADR for pheno-otel is ADR-037 (per `SPEC.md:6`, `Cargo.toml:7`). Cross-reference mis-attribution. |
 | `AGENTS.md:15` "executable Rust source is currently maintained in `FocalPoint/pheno-otel/`" | ❌ **FALSE** | The working tree has a fully-functional `src/` tree (`src/lib.rs:1-209`, plus exporters, propagation, metrics) — code does NOT live in `FocalPoint/pheno-otel/` only. **The `pheno-otel/` path is BOTH governance AND the executable source.** This claim is stale from a prior organizational model. |
 | `AGENTS.md:28-38` "Substrate invariants (per ADR-023 Rule 3.1)" (7 invariants) | ⚠️ PARTIAL | Spec ✅, Docs ✅ (8 governance files), Tests ⚠️ (40 inline + 7 integration = 47 tests, but 6 will not compile due to missing `proptest` dev-dep), Observability ⚠️ (this crate IS the observability substrate, so OTLP export via `pheno-tracing` doesn't apply self-referentially), Coverage gate ⚠️ (gate wired in `ci.yml:135-140` but no published number), CI gate ✅, Worklog v2.1 ✅ (`WORKLOG.md` exists per inventory §1.5) |
@@ -285,7 +285,7 @@ Per llmstxt.org spec:
 | `llms.txt:41` "scorecard.yml ... weekly Mon 12:00 UTC" | `scorecard.yml:6` `cron: "0 2 * * 0"` (Sunday 02:00 UTC) | ❌ **MISMATCH** (day-of-week AND hour wrong) |
 | `llms.txt:39` "cargo-deny + cargo-audit + TruffleHog" | `audit.yml:10-25` runs `cargo audit` only; **no cargo-deny, no TruffleHog** (cargo-deny is in `deny.yml`) | ❌ **PHANTOM CLAIM** (TruffleHog is not in any workflow) |
 | `llms.txt:44` "daily cargo + weekly github-actions updates" | `dependabot.yml` is weekly Monday 09:00 PDT (per inventory §6), not daily | ❌ **MISMATCH** |
-| `llms.txt:45` "ownership table (default @KooshaPari)" | `.github/CODEOWNERS` is a symlink to root `CODEOWNERS` (per inventory §1.4) | ✅ (the symlink resolves to root) |
+| `llms.txt:45` "ownership table (default @<REDACTED>)" | `.github/CODEOWNERS` is a symlink to root `CODEOWNERS` (per inventory §1.4) | ✅ (the symlink resolves to root) |
 | `llms.txt:54` "`pheno-tracing` — canonical observability substrate (ADR-036)" | Correct attribution (ADR-036, not ADR-037) | ✅ |
 | `llms.txt:65-67` "ADR-037 ... analogous substrate-assignment ADR; this crate is the OTLP export substrate in the same family" | Correct | ✅ |
 | `llms.txt:78` "this crate scored ~49/213 = 23%, Tier 0" | Consistent with `STATUS.md:60` | ✅ (but both are stale per §4.2) |
@@ -740,8 +740,8 @@ Wait — actually, the `#[cfg(loom)]` attribute means the entire test file is ga
 
 ## 9. examples/ and benches/ directories
 
-**Confirmed:** `ls /Users/kooshapari/CodeProjects/Phenotype/repos/pheno-otel/examples` → directory does not exist.
-**Confirmed:** `ls /Users/kooshapari/CodeProjects/Phenotype/repos/pheno-otel/benches` → directory does not exist.
+**Confirmed:** `ls /Users/<REDACTED>/CodeProjects/Phenotype/repos/pheno-otel/examples` → directory does not exist.
+**Confirmed:** `ls /Users/<REDACTED>/CodeProjects/Phenotype/repos/pheno-otel/benches` → directory does not exist.
 
 **`target/debug/examples`** exists as a Cargo build artifact directory (compilation output, not source).
 
@@ -799,7 +799,7 @@ All 4 features are **phantom** — no `Cargo.toml` features (`[features]` table 
 **`Justfile:122` → `./scripts/release.sh`** is called by the `release VER` recipe.
 **`Justfile:120-122`** documentation says "Cut a release. VER = semver tag (e.g., 0.2.0)".
 
-**Defect:** `ls /Users/kooshapari/CodeProjects/Phenotype/repos/pheno-otel/scripts` returns no entries. **No `scripts/release.sh` exists.** The `release` recipe will fail at runtime.
+**Defect:** `ls /Users/<REDACTED>/CodeProjects/Phenotype/repos/pheno-otel/scripts` returns no entries. **No `scripts/release.sh` exists.** The `release` recipe will fail at runtime.
 
 **Severity:** HIGH for `just release` invocation (defect §15.A7). The CI release path uses `.github/workflows/release.yml:39-42` directly, not the Justfile recipe, so the CI release flow is OK; only local-release flows break.
 
@@ -1338,7 +1338,7 @@ For the Phase 2 final audit, this Phase 1B report identifies:
 ## 17. Verification (per task directive)
 
 ```
-$ wc -l /Users/kooshapari/CodeProjects/Phenotype/repos/findings/2026-06-21-pheno-otel-audit/02-docs-code.md
+$ wc -l /Users/<REDACTED>/CodeProjects/Phenotype/repos/findings/2026-06-21-pheno-otel-audit/02-docs-code.md
 ```
 
 Target: 1000-1500 lines per user directive. This file is structured for that range; the line count will be available after write.

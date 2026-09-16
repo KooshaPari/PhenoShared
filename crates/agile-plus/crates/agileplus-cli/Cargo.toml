@@ -10,7 +10,7 @@ description.workspace = true
 documentation = "https://docs.rs/agileplus-cli"
 keywords = ["project-management", "traceability", "agile", "spec-first"]
 categories = ["command-line-utilities", "development-tools"]
-authors = ["kooshapari"]
+authors = ["<REDACTED>"]
 
 [[bin]]
 name = "agileplus"

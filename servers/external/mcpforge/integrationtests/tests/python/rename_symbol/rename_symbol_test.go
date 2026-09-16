@@ -7,9 +7,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/KooshaPari/MCPForge/integrationtests/tests/common"
-	"github.com/KooshaPari/MCPForge/integrationtests/tests/python/internal"
-	"github.com/KooshaPari/MCPForge/internal/tools"
+	"github.com/<REDACTED>/MCPForge/integrationtests/tests/common"
+	"github.com/<REDACTED>/MCPForge/integrationtests/tests/python/internal"
+	"github.com/<REDACTED>/MCPForge/internal/tools"
 )
 
 // TestRenameSymbol tests the RenameSymbol functionality with the Python language server

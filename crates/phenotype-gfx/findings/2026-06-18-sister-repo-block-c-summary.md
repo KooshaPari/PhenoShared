@@ -2,7 +2,7 @@
 
 **Date:** 2026-06-18
 **Author:** L5-113 (audit-sync mission)
-**PR:** <https://github.com/KooshaPari/phenotype-gfx/pull/10>
+**PR:** <https://github.com/<REDACTED>/phenotype-gfx/pull/10>
 **Branch:** `feat/port-sister-repos-2026-06-18` → `main`
 **ADRs:** ADR-004 (single Rust core + thin FFI edges), ADR-031 (absorb, do not coexist)
 **Companion audit doc:** the 4 re-issued Block-C audits in this directory:
@@ -123,18 +123,18 @@ same PR.
 
 ## 5. Cross-references
 
-- **PR:** <https://github.com/KooshaPari/phenotype-gfx/pull/10>
+- **PR:** <https://github.com/<REDACTED>/phenotype-gfx/pull/10>
 - **Branch:** `feat/port-sister-repos-2026-06-18` (in
-  `KooshaPari/phenotype-gfx`)
+  `<REDACTED>/phenotype-gfx`)
 - **Audits:** the 4 re-issued Block-C audits in this directory.
-- **Source SSOT (legacy):** `KooshaPari/phenotype-registry/docs/rationalization/block-c-consolidation.md`
+- **Source SSOT (legacy):** `<REDACTED>/phenotype-registry/docs/rationalization/block-c-consolidation.md`
 - **SSOT (current):** `phenotype-gfx/AGENTS.md` + the 4 audit docs in
   `phenotype-gfx/findings/`.
 
 ## 6. Sign-off
 
 - **Mission:** L5-113 (audit-sync, 2026-06-18)
-- **PR:** <https://github.com/KooshaPari/phenotype-gfx/pull/10>
+- **PR:** <https://github.com/<REDACTED>/phenotype-gfx/pull/10>
 - **Verdict:** **4/4 sister repos SUPERSEDED → `phenotype-gfx`.**
 - **Audit docs:** 4 files in `phenotype-gfx/findings/`.
 - **Summary doc:** this file.

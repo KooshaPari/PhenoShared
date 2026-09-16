@@ -2,12 +2,12 @@
 name = "phenotype-diff"
 version.workspace = true
 edition.workspace = true
-description = "Line-level unified diff and patch-apply library (migrated from KooshaPari/Diffuse); wraps `similar`"
+description = "Line-level unified diff and patch-apply library (migrated from <REDACTED>/Diffuse); wraps `similar`"
 
 readme = "README.md"
 license = "Apache-2.0 OR MIT"
-repository = "https://github.com/KooshaPari/phenotype-tooling"
-homepage = "https://github.com/KooshaPari/phenotype-tooling"
+repository = "https://github.com/<REDACTED>/phenotype-tooling"
+homepage = "https://github.com/<REDACTED>/phenotype-tooling"
 keywords = ["phenotype", "tooling", "cli"]
 categories = ["command-line-utilities"]
 [dependencies]

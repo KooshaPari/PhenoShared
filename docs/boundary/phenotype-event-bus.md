@@ -3,14 +3,14 @@
 **Status:** historical and unverified
 
 Earlier registry records described `phenotype-event-bus` as a crate absorbed
-from `KooshaPari/phenoEvents` into `KooshaPari/pheno`. That description is
+from `<REDACTED>/phenoEvents` into `<REDACTED>/pheno`. That description is
 retained as provenance only. The 2026-08-05 recheck of pheno main
 `81d850837848800aa7a3e6a6f007b91b6555ef07` found no documented
 `crates/phenotype-event-bus`, `crates/pheno-events`, or
 `crates/phenoevents-observability` target path.
 
 The live canonical owner of the runtime event-bus boundary is
-`KooshaPari/phenoEvents` at
+`<REDACTED>/phenoEvents` at
 `be6573c68797cc611a99533bca6dc1c3dcdb0c88`. This document does not establish a
 current pheno package, dependency, interface contract, or restore procedure.
 

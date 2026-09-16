@@ -1,7 +1,7 @@
 # CI Real Repair — Empirical Gate Triage (eco-044-gate-triage)
 
 **Branch:** `fix/agileplus-ci-real-repair`
-**Target PR observed:** KooshaPari/AgilePlus#800
+**Target PR observed:** <REDACTED>/AgilePlus#800
 **Date:** 2026-06-25
 **Method:** Read each failing job's log via `gh api .../actions/jobs/{id}/logs`, identify the
 *real* error, and apply the smallest possible fix in `.github/workflows/`.
@@ -361,8 +361,8 @@ must explicitly opt out so the CI run is the sole analysis path.
 
 ```yaml
 args: >
-  -Dsonar.projectKey=KooshaPari_AgilePlus
-  -Dsonar.organization=kooshapari
+  -Dsonar.projectKey=<REDACTED>_AgilePlus
+  -Dsonar.organization=<REDACTED>
   -Dsonar.autoAnalysis.disable=true
 ```
 

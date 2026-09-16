@@ -14,17 +14,17 @@ Combined intent: **migrate all 4 in a single wave, ensure full integration, arch
 
 | # | Source repo (size) | Target repo | Target path | PR | Status |
 |---|---|---|---|---|---|
-| 1 | `KooshaPari/dagctl` (62 KB, archived) | `KooshaPari/phenodag` | (already merged in earlier waves) + `VERSION` + `CHANGELOG` + `docs/dagctl-absorption.md` | [phenodag#13](https://github.com/KooshaPari/phenodag/pull/13) | OPEN (+93) |
-| 2 | `KooshaPari/kwality` (6.6 MB, archived) | `KooshaPari/phenotype-tooling` | `docs/absorbed-from-kwality/` (extends PR #157) | [phenotype-tooling#158](https://github.com/KooshaPari/phenotype-tooling/pull/158) | OPEN (+29,422, 93 files) |
-| 3 | `KooshaPari/phenotype-auth-ts` (16 KB, archived) | `KooshaPari/AuthKit` | `typescript/packages/auth-ts/` (polyglot SDK, npm workspace) | [AuthKit#120](https://github.com/KooshaPari/AuthKit/pull/120) | OPEN (+1,901) |
-| 4 | `KooshaPari/dinoforge-packs` (744 KB, archived) | `KooshaPari/Dino` | `packs/community-contributions/dinoforge-packs-mirror/` + `packs/example-balance/` | [Dino#297](https://github.com/KooshaPari/Dino/pull/297) | OPEN (+2,329) |
+| 1 | `<REDACTED>/dagctl` (62 KB, archived) | `<REDACTED>/phenodag` | (already merged in earlier waves) + `VERSION` + `CHANGELOG` + `docs/dagctl-absorption.md` | [phenodag#13](https://github.com/<REDACTED>/phenodag/pull/13) | OPEN (+93) |
+| 2 | `<REDACTED>/kwality` (6.6 MB, archived) | `<REDACTED>/phenotype-tooling` | `docs/absorbed-from-kwality/` (extends PR #157) | [phenotype-tooling#158](https://github.com/<REDACTED>/phenotype-tooling/pull/158) | OPEN (+29,422, 93 files) |
+| 3 | `<REDACTED>/phenotype-auth-ts` (16 KB, archived) | `<REDACTED>/AuthKit` | `typescript/packages/auth-ts/` (polyglot SDK, npm workspace) | [AuthKit#120](https://github.com/<REDACTED>/AuthKit/pull/120) | OPEN (+1,901) |
+| 4 | `<REDACTED>/dinoforge-packs` (744 KB, archived) | `<REDACTED>/Dino` | `packs/community-contributions/dinoforge-packs-mirror/` + `packs/example-balance/` | [Dino#297](https://github.com/<REDACTED>/Dino/pull/297) | OPEN (+2,329) |
 
 ## Source archive status (verified 2026-06-18)
 
-- `KooshaPari/dagctl` — **ARCHIVED** (set 2026-06-17 22:44, pre-existing)
-- `KooshaPari/kwality` — **ARCHIVED** (set 2026-06-18 in this turn)
-- `KooshaPari/phenotype-auth-ts` — **ARCHIVED** (set 2026-06-18 in this turn)
-- `KooshaPari/dinoforge-packs` — **ARCHIVED** (set 2026-06-18 in this turn)
+- `<REDACTED>/dagctl` — **ARCHIVED** (set 2026-06-17 22:44, pre-existing)
+- `<REDACTED>/kwality` — **ARCHIVED** (set 2026-06-18 in this turn)
+- `<REDACTED>/phenotype-auth-ts` — **ARCHIVED** (set 2026-06-18 in this turn)
+- `<REDACTED>/dinoforge-packs` — **ARCHIVED** (set 2026-06-18 in this turn)
 
 ## Manual delete commands (post-archive)
 
@@ -32,10 +32,10 @@ The active `gh` token has scopes `'gist', 'read:org', 'repo', 'workflow'` — **
 
 | Repo | URL |
 |---|---|
-| `KooshaPari/dagctl` | <https://github.com/KooshaPari/dagctl/settings#dangerZone> |
-| `KooshaPari/kwality` | <https://github.com/KooshaPari/kwality/settings#dangerZone> |
-| `KooshaPari/phenotype-auth-ts` | <https://github.com/KooshaPari/phenotype-auth-ts/settings#dangerZone> |
-| `KooshaPari/dinoforge-packs` | <https://github.com/KooshaPari/dinoforge-packs/settings#dangerZone> |
+| `<REDACTED>/dagctl` | <https://github.com/<REDACTED>/dagctl/settings#dangerZone> |
+| `<REDACTED>/kwality` | <https://github.com/<REDACTED>/kwality/settings#dangerZone> |
+| `<REDACTED>/phenotype-auth-ts` | <https://github.com/<REDACTED>/phenotype-auth-ts/settings#dangerZone> |
+| `<REDACTED>/dinoforge-packs` | <https://github.com/<REDACTED>/dinoforge-packs/settings#dangerZone> |
 
 Steps: Settings → General → "Danger Zone" → "Delete this repository" → type the repo name to confirm.
 
@@ -58,8 +58,8 @@ Each PR includes a per-file or per-dir absorption log in the PR body, so reviewe
 
 ## Related
 
-- kilo audit #144 (`KooshaPari/phenotype-registry` PR #144)
-- `KooshaPari/phenotype-registry` PR #151 (v3.3.1 patch storage)
-- `KooshaPari/phenotype-registry` PR #145 (ECOSYSTEM_MAP update)
+- kilo audit #144 (`<REDACTED>/phenotype-registry` PR #144)
+- `<REDACTED>/phenotype-registry` PR #151 (v3.3.1 patch storage)
+- `<REDACTED>/phenotype-registry` PR #145 (ECOSYSTEM_MAP update)
 - ADR-022 (config consolidation)
 - ADR-023 (app substrate placement)

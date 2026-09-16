@@ -6,7 +6,7 @@
 
 - **Severity**: HIGH
 - **Impact**: All live PR operations blocked (list, checks, comments, merge).
-- **Symptom**: `gh auth status` returns expired/invalid token for `KooshaPari`.
+- **Symptom**: `gh auth status` returns expired/invalid token for `<REDACTED>`.
 - **Workaround**: Defer live operations; use local-only git state for planning.
 - **Fix**: Run `gh auth login` with fresh token.
 

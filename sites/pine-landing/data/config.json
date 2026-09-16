@@ -6,7 +6,7 @@
   "color": "#059669",
   "description": "Wine-equivalent for Phenotype: Windows and cross-platform app compatibility layer.",
   "tier": 1,
-  "repo": "KooshaPari/Pine",
+  "repo": "<REDACTED>/Pine",
   "language": "Rust",
   "license": "MIT",
   "status": "active",
@@ -17,8 +17,8 @@
     "CI + cargo-deny"
   ],
   "links": {
-    "github": "https://github.com/KooshaPari/Pine",
+    "github": "https://github.com/<REDACTED>/Pine",
     "docs": "https://pine.phenotype.space/docs",
-    "releases": "https://github.com/KooshaPari/Pine/releases"
+    "releases": "https://github.com/<REDACTED>/Pine/releases"
   }
 }

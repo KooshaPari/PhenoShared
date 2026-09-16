@@ -1,6 +1,6 @@
 # docs-site audit archive
 
-`audit_scorecard-2026-06-18.json` is the 30-pillar audit scorecard for `KooshaPari/docs-site`,
+`audit_scorecard-2026-06-18.json` is the 30-pillar audit scorecard for `<REDACTED>/docs-site`,
 preserved as a fleet-history snapshot.
 
 - **Repo deleted:** 2026-06-18 (per ADR-040 deletion recipe)

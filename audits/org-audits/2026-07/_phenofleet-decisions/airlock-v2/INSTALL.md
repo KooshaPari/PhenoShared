@@ -48,7 +48,7 @@ Before any install, run the smoke test to confirm everything is wired
 correctly:
 
 ```bash
-cd /Users/kooshapari/CodeProjects/Phenotype/repos/_phenofleet-decisions/airlock-v2
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos/_phenofleet-decisions/airlock-v2
 ./airlock-v2-smoke-test.sh
 ```
 
@@ -91,7 +91,7 @@ jq -r '.hooks.PostToolUse[0].hooks[0].command' ~/.claude/settings.json
    `[hooks.state]` sha256-trust enabled for hooks, add the hook's sha256:
 
 ```bash
-shasum -a 256 /Users/kooshapari/CodeProjects/Phenotype/repos/_phenofleet-decisions/airlock-v2/hooks/airlock-v2-hook.sh
+shasum -a 256 /Users/<REDACTED>/CodeProjects/Phenotype/repos/_phenofleet-decisions/airlock-v2/hooks/airlock-v2-hook.sh
 ```
 
 ### A.2 — Codex
@@ -121,7 +121,7 @@ Steps:
 
    ```
    After every Edit/Write tool call, run:
-     /Users/kooshapari/CodeProjects/Phenotype/repos/_phenofleet-decisions/airlock-v2/hooks/airlock-v2-hook.sh
+     /Users/<REDACTED>/CodeProjects/Phenotype/repos/_phenofleet-decisions/airlock-v2/hooks/airlock-v2-hook.sh
    ```
 
 ### A.4 — Other agents (thegent, forge, gemini, copilot, droid, factory, aider)
@@ -146,7 +146,7 @@ dirty.
 ### B.1 — Inspect the plist (do NOT load yet)
 
 ```bash
-cat /Users/kooshapari/CodeProjects/Phenotype/repos/_phenofleet-decisions/airlock-v2/daemons/com.phenotype.auto-commit-daemon.plist
+cat /Users/<REDACTED>/CodeProjects/Phenotype/repos/_phenofleet-decisions/airlock-v2/daemons/com.phenotype.auto-commit-daemon.plist
 ```
 
 Things to verify before loading:
@@ -165,7 +165,7 @@ root and not crash:
 
 ```bash
 AIRLOCK_V2_DRY_RUN=1 \
-  python3 /Users/kooshapari/CodeProjects/Phenotype/repos/_phenofleet-decisions/airlock-v2/daemons/auto-commit-daemon.py --once
+  python3 /Users/<REDACTED>/CodeProjects/Phenotype/repos/_phenofleet-decisions/airlock-v2/daemons/auto-commit-daemon.py --once
 ```
 
 You should see log lines on stderr like
@@ -175,7 +175,7 @@ Ctrl-C to exit if it loops; in `--once` mode it exits after one pass.
 ### B.3 — Install
 
 ```bash
-cp /Users/kooshapari/CodeProjects/Phenotype/repos/_phenofleet-decisions/airlock-v2/daemons/com.phenotype.auto-commit-daemon.plist \
+cp /Users/<REDACTED>/CodeProjects/Phenotype/repos/_phenofleet-decisions/airlock-v2/daemons/com.phenotype.auto-commit-daemon.plist \
    ~/Library/LaunchAgents/
 launchctl load -w ~/Library/LaunchAgents/com.phenotype.auto-commit-daemon.plist
 launchctl list | grep com.phenotype.auto-commit-daemon
@@ -210,7 +210,7 @@ This is a heavier daemon that runs every 8 hours. It:
 ### C.1 — Inspect
 
 ```bash
-cat /Users/kooshapari/CodeProjects/Phenotype/repos/_phenofleet-decisions/airlock-v2/daemons/com.phenotype.cleanup-daemon.plist
+cat /Users/<REDACTED>/CodeProjects/Phenotype/repos/_phenofleet-decisions/airlock-v2/daemons/com.phenotype.cleanup-daemon.plist
 ```
 
 The default interval is 28 800 seconds (8 hours). Adjust by setting
@@ -222,7 +222,7 @@ large wip branch sets and cause repeated merge conflicts.
 
 ```bash
 AIRLOCK_V2_DRY_RUN=1 \
-  python3 /Users/kooshapari/CodeProjects/Phenotype/repos/_phenofleet-decisions/airlock-v2/daemons/cleanup-daemon.py --once
+  python3 /Users/<REDACTED>/CodeProjects/Phenotype/repos/_phenofleet-decisions/airlock-v2/daemons/cleanup-daemon.py --once
 ```
 
 Confirm it scans the repos without errors. Watch for
@@ -231,7 +231,7 @@ Confirm it scans the repos without errors. Watch for
 ### C.3 — Install
 
 ```bash
-cp /Users/kooshapari/CodeProjects/Phenotype/repos/_phenofleet-decisions/airlock-v2/daemons/com.phenotype.cleanup-daemon.plist \
+cp /Users/<REDACTED>/CodeProjects/Phenotype/repos/_phenofleet-decisions/airlock-v2/daemons/com.phenotype.cleanup-daemon.plist \
    ~/Library/LaunchAgents/
 launchctl load -w ~/Library/LaunchAgents/com.phenotype.cleanup-daemon.plist
 launchctl list | grep com.phenotype.cleanup-daemon

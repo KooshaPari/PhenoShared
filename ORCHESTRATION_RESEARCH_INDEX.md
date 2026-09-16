@@ -1,6 +1,6 @@
 # Multi-Agent Orchestration Research — Quick Index (March 2026)
 
-**Full Document**: `/Users/kooshapari/CodeProjects/Phenotype/repos/MULTI_AGENT_ORCHESTRATION_COMPARISON_2026.md` (383 lines)
+**Full Document**: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/MULTI_AGENT_ORCHESTRATION_COMPARISON_2026.md` (383 lines)
 
 ---
 

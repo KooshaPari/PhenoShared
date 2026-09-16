@@ -35,5 +35,5 @@ Total: 140 files, 175 items (incl. directories).
 
 ## Outcome
 
-Source repo `KooshaPari/phenoResearchEngine` archived on GitHub.
+Source repo `<REDACTED>/phenoResearchEngine` archived on GitHub.
 Registry disposition-index updated: disposition=ABSORB, target=pheno (monorepo).

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # conventions-lint — checks a repo against the Phenotype org conventions
 # (PhenoHandbook patterns/). Local enforcement copy derived from:
-#   https://github.com/KooshaPari/phenotype-org-governance/blob/main/scripts/conventions-lint.sh
+#   https://github.com/<REDACTED>/phenotype-org-governance/blob/main/scripts/conventions-lint.sh
 #
 # Usage: conventions-lint.sh [REPO_DIR]
 #   REPO_DIR defaults to the current directory.
@@ -73,8 +73,8 @@ if [ -d .github/workflows ]; then
     warn "workflows use ubuntu-latest — pin ubuntu-24.04 for reproducibility"
   fi
   # Phantom-action rot class (repository-not-found refs seen org-wide).
-  if grep -rqsE 'uses:\s*(trufflehog/actions|KooshaPari/phenotypeActions)' .github/workflows 2>/dev/null; then
-    fail "phantom action ref (trufflehog/actions or KooshaPari/phenotypeActions) — does not resolve; use canonical action"
+  if grep -rqsE 'uses:\s*(trufflehog/actions|<REDACTED>/phenotypeActions)' .github/workflows 2>/dev/null; then
+    fail "phantom action ref (trufflehog/actions or <REDACTED>/phenotypeActions) — does not resolve; use canonical action"
   fi
 fi
 

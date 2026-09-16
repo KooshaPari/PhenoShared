@@ -151,7 +151,7 @@
       "edge_langs": [],
       "status": "archived-superseded",
       "superseded_by": "AuthKit",
-      "rationale": "Authvault archived 2026-06-20 (c7994b9); superseded by AuthKit (KooshaPari/AuthKit, created 2026-06-24). FR-AUTHV-018 landed in AuthKit commit 064b310. New auth work goes to AuthKit."
+      "rationale": "Authvault archived 2026-06-20 (c7994b9); superseded by AuthKit (<REDACTED>/AuthKit, created 2026-06-24). FR-AUTHV-018 landed in AuthKit commit 064b310. New auth work goes to AuthKit."
     },
     {
       "id": "auth-runtime",
@@ -230,7 +230,7 @@
         "typescript"
       ],
       "py_edge": null,
-      "policy": "rust-canonical (httpora-core) + ts-client (@kooshapari/quillts)",
+      "policy": "rust-canonical (httpora-core) + ts-client (@<REDACTED>/quillts)",
       "status": "active",
       "rationale": "Added 2026-06-23: Quillr canonical http-middleware boundary."
     }

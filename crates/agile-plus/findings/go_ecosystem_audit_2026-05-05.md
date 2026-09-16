@@ -2,7 +2,7 @@
 
 **Date:** 2026-05-05
 **Auditor:** Claude Code
-**Scope:** `/Users/kooshapari/CodeProjects/Phenotype/repos`
+**Scope:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos`
 
 ---
 
@@ -49,7 +49,7 @@ Top 5 Go repos by file count analyzed.
 - **go mod tidy:** FAILED — network error reaching proxy.golang.org
 - **go vet:** Not run due to network issues
 - **golangci-lint:** Not run due to network issues
-- **Issue:** Module has local dependencies on `github.com/kooshapari/CLIProxyAPI/v7` that require network access
+- **Issue:** Module has local dependencies on `github.com/<REDACTED>/CLIProxyAPI/v7` that require network access
 
 ### cliproxyapi-plusplus (3,993 files)
 - **go mod tidy:** FAILED — same CLIProxyAPI dependency issue

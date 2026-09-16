@@ -13,8 +13,8 @@ policy:
         actions: ["write"]
         match:
           target_path_patterns:
-            - "/Users/kooshapari/CodeProjects/Phenotype/repos/agentops-policy-federation/policies/*"
-            - "/Users/kooshapari/.claude/settings.json"
+            - "/Users/<REDACTED>/CodeProjects/Phenotype/repos/agentops-policy-federation/policies/*"
+            - "/Users/<REDACTED>/.claude/settings.json"
 
       # ── Read-Only Shell Commands (everywhere) ─────────────────────
       - id: "phenotype-allow-readonly-shell"
@@ -131,16 +131,16 @@ policy:
             - "git worktree prune*"
             - "git submodule*"
           cwd_patterns:
-            - "/Users/kooshapari/CodeProjects/Phenotype/repos/*-wtrees/*"
-            - "/Users/kooshapari/CodeProjects/Phenotype/repos/*-wtrees/*/*"
-            - "/Users/kooshapari/CodeProjects/Phenotype/repos/*-wtrees/*/*/*"
-            - "/Users/kooshapari/CodeProjects/Phenotype/repos/*/.worktrees/*"
-            - "/Users/kooshapari/CodeProjects/Phenotype/repos/*/.worktrees/*/*"
-            - "/Users/kooshapari/CodeProjects/Phenotype/repos/*/PROJECT-wtrees/*"
-            - "/Users/kooshapari/CodeProjects/Phenotype/repos/*/PROJECT-wtrees/*/*"
-            - "/Users/kooshapari/CodeProjects/Phenotype/repos/worktrees/*"
-            - "/Users/kooshapari/CodeProjects/Phenotype/repos/worktrees/*/*"
-            - "/Users/kooshapari/CodeProjects/Phenotype/repos/worktrees/*/*/*"
+            - "/Users/<REDACTED>/CodeProjects/Phenotype/repos/*-wtrees/*"
+            - "/Users/<REDACTED>/CodeProjects/Phenotype/repos/*-wtrees/*/*"
+            - "/Users/<REDACTED>/CodeProjects/Phenotype/repos/*-wtrees/*/*/*"
+            - "/Users/<REDACTED>/CodeProjects/Phenotype/repos/*/.worktrees/*"
+            - "/Users/<REDACTED>/CodeProjects/Phenotype/repos/*/.worktrees/*/*"
+            - "/Users/<REDACTED>/CodeProjects/Phenotype/repos/*/PROJECT-wtrees/*"
+            - "/Users/<REDACTED>/CodeProjects/Phenotype/repos/*/PROJECT-wtrees/*/*"
+            - "/Users/<REDACTED>/CodeProjects/Phenotype/repos/worktrees/*"
+            - "/Users/<REDACTED>/CodeProjects/Phenotype/repos/worktrees/*/*"
+            - "/Users/<REDACTED>/CodeProjects/Phenotype/repos/worktrees/*/*/*"
 
       - id: "phenotype-allow-worktree-writes"
         description: "Allow file writes targeting any Phenotype worktree directory."
@@ -149,27 +149,27 @@ policy:
         actions: ["write"]
         match:
           cwd_patterns:
-            - "/Users/kooshapari/CodeProjects/Phenotype/repos/*-wtrees/*"
-            - "/Users/kooshapari/CodeProjects/Phenotype/repos/*-wtrees/*/*"
-            - "/Users/kooshapari/CodeProjects/Phenotype/repos/*-wtrees/*/*/*"
-            - "/Users/kooshapari/CodeProjects/Phenotype/repos/*/.worktrees/*"
-            - "/Users/kooshapari/CodeProjects/Phenotype/repos/*/.worktrees/*/*"
-            - "/Users/kooshapari/CodeProjects/Phenotype/repos/*/PROJECT-wtrees/*"
-            - "/Users/kooshapari/CodeProjects/Phenotype/repos/*/PROJECT-wtrees/*/*"
-            - "/Users/kooshapari/CodeProjects/Phenotype/repos/worktrees/*"
-            - "/Users/kooshapari/CodeProjects/Phenotype/repos/worktrees/*/*"
-            - "/Users/kooshapari/CodeProjects/Phenotype/repos/worktrees/*/*/*"
+            - "/Users/<REDACTED>/CodeProjects/Phenotype/repos/*-wtrees/*"
+            - "/Users/<REDACTED>/CodeProjects/Phenotype/repos/*-wtrees/*/*"
+            - "/Users/<REDACTED>/CodeProjects/Phenotype/repos/*-wtrees/*/*/*"
+            - "/Users/<REDACTED>/CodeProjects/Phenotype/repos/*/.worktrees/*"
+            - "/Users/<REDACTED>/CodeProjects/Phenotype/repos/*/.worktrees/*/*"
+            - "/Users/<REDACTED>/CodeProjects/Phenotype/repos/*/PROJECT-wtrees/*"
+            - "/Users/<REDACTED>/CodeProjects/Phenotype/repos/*/PROJECT-wtrees/*/*"
+            - "/Users/<REDACTED>/CodeProjects/Phenotype/repos/worktrees/*"
+            - "/Users/<REDACTED>/CodeProjects/Phenotype/repos/worktrees/*/*"
+            - "/Users/<REDACTED>/CodeProjects/Phenotype/repos/worktrees/*/*/*"
           target_path_patterns:
-            - "/Users/kooshapari/CodeProjects/Phenotype/repos/*-wtrees/*"
-            - "/Users/kooshapari/CodeProjects/Phenotype/repos/*-wtrees/*/*"
-            - "/Users/kooshapari/CodeProjects/Phenotype/repos/*-wtrees/*/*/*"
-            - "/Users/kooshapari/CodeProjects/Phenotype/repos/*/.worktrees/*"
-            - "/Users/kooshapari/CodeProjects/Phenotype/repos/*/.worktrees/*/*"
-            - "/Users/kooshapari/CodeProjects/Phenotype/repos/*/PROJECT-wtrees/*"
-            - "/Users/kooshapari/CodeProjects/Phenotype/repos/*/PROJECT-wtrees/*/*"
-            - "/Users/kooshapari/CodeProjects/Phenotype/repos/worktrees/*"
-            - "/Users/kooshapari/CodeProjects/Phenotype/repos/worktrees/*/*"
-            - "/Users/kooshapari/CodeProjects/Phenotype/repos/worktrees/*/*/*"
+            - "/Users/<REDACTED>/CodeProjects/Phenotype/repos/*-wtrees/*"
+            - "/Users/<REDACTED>/CodeProjects/Phenotype/repos/*-wtrees/*/*"
+            - "/Users/<REDACTED>/CodeProjects/Phenotype/repos/*-wtrees/*/*/*"
+            - "/Users/<REDACTED>/CodeProjects/Phenotype/repos/*/.worktrees/*"
+            - "/Users/<REDACTED>/CodeProjects/Phenotype/repos/*/.worktrees/*/*"
+            - "/Users/<REDACTED>/CodeProjects/Phenotype/repos/*/PROJECT-wtrees/*"
+            - "/Users/<REDACTED>/CodeProjects/Phenotype/repos/*/PROJECT-wtrees/*/*"
+            - "/Users/<REDACTED>/CodeProjects/Phenotype/repos/worktrees/*"
+            - "/Users/<REDACTED>/CodeProjects/Phenotype/repos/worktrees/*/*"
+            - "/Users/<REDACTED>/CodeProjects/Phenotype/repos/worktrees/*/*/*"
 
       - id: "phenotype-allow-worktree-writes-any-cwd"
         description: "Allow file writes targeting any Phenotype worktree directory regardless of cwd. Agents launched from a canonical repo root must still be able to write into worktree target paths."
@@ -178,16 +178,16 @@ policy:
         actions: ["write"]
         match:
           target_path_patterns:
-            - "/Users/kooshapari/CodeProjects/Phenotype/repos/*-wtrees/*"
-            - "/Users/kooshapari/CodeProjects/Phenotype/repos/*-wtrees/*/*"
-            - "/Users/kooshapari/CodeProjects/Phenotype/repos/*-wtrees/*/*/*"
-            - "/Users/kooshapari/CodeProjects/Phenotype/repos/*/.worktrees/*"
-            - "/Users/kooshapari/CodeProjects/Phenotype/repos/*/.worktrees/*/*"
-            - "/Users/kooshapari/CodeProjects/Phenotype/repos/*/PROJECT-wtrees/*"
-            - "/Users/kooshapari/CodeProjects/Phenotype/repos/*/PROJECT-wtrees/*/*"
-            - "/Users/kooshapari/CodeProjects/Phenotype/repos/worktrees/*"
-            - "/Users/kooshapari/CodeProjects/Phenotype/repos/worktrees/*/*"
-            - "/Users/kooshapari/CodeProjects/Phenotype/repos/worktrees/*/*/*"
+            - "/Users/<REDACTED>/CodeProjects/Phenotype/repos/*-wtrees/*"
+            - "/Users/<REDACTED>/CodeProjects/Phenotype/repos/*-wtrees/*/*"
+            - "/Users/<REDACTED>/CodeProjects/Phenotype/repos/*-wtrees/*/*/*"
+            - "/Users/<REDACTED>/CodeProjects/Phenotype/repos/*/.worktrees/*"
+            - "/Users/<REDACTED>/CodeProjects/Phenotype/repos/*/.worktrees/*/*"
+            - "/Users/<REDACTED>/CodeProjects/Phenotype/repos/*/PROJECT-wtrees/*"
+            - "/Users/<REDACTED>/CodeProjects/Phenotype/repos/*/PROJECT-wtrees/*/*"
+            - "/Users/<REDACTED>/CodeProjects/Phenotype/repos/worktrees/*"
+            - "/Users/<REDACTED>/CodeProjects/Phenotype/repos/worktrees/*/*"
+            - "/Users/<REDACTED>/CodeProjects/Phenotype/repos/worktrees/*/*/*"
 
       # Inline python (heredoc) is classified as Bash write-via-exec; target_paths may be empty if the
       # hook cannot extract paths. Match on command + cwd only so worktree edits are not default-ask.
@@ -203,16 +203,16 @@ policy:
             - "python <<*"
             - "*python <<*"
           cwd_patterns:
-            - "/Users/kooshapari/CodeProjects/Phenotype/repos/*-wtrees/*"
-            - "/Users/kooshapari/CodeProjects/Phenotype/repos/*-wtrees/*/*"
-            - "/Users/kooshapari/CodeProjects/Phenotype/repos/*-wtrees/*/*/*"
-            - "/Users/kooshapari/CodeProjects/Phenotype/repos/*/.worktrees/*"
-            - "/Users/kooshapari/CodeProjects/Phenotype/repos/*/.worktrees/*/*"
-            - "/Users/kooshapari/CodeProjects/Phenotype/repos/*/PROJECT-wtrees/*"
-            - "/Users/kooshapari/CodeProjects/Phenotype/repos/*/PROJECT-wtrees/*/*"
-            - "/Users/kooshapari/CodeProjects/Phenotype/repos/worktrees/*"
-            - "/Users/kooshapari/CodeProjects/Phenotype/repos/worktrees/*/*"
-            - "/Users/kooshapari/CodeProjects/Phenotype/repos/worktrees/*/*/*"
+            - "/Users/<REDACTED>/CodeProjects/Phenotype/repos/*-wtrees/*"
+            - "/Users/<REDACTED>/CodeProjects/Phenotype/repos/*-wtrees/*/*"
+            - "/Users/<REDACTED>/CodeProjects/Phenotype/repos/*-wtrees/*/*/*"
+            - "/Users/<REDACTED>/CodeProjects/Phenotype/repos/*/.worktrees/*"
+            - "/Users/<REDACTED>/CodeProjects/Phenotype/repos/*/.worktrees/*/*"
+            - "/Users/<REDACTED>/CodeProjects/Phenotype/repos/*/PROJECT-wtrees/*"
+            - "/Users/<REDACTED>/CodeProjects/Phenotype/repos/*/PROJECT-wtrees/*/*"
+            - "/Users/<REDACTED>/CodeProjects/Phenotype/repos/worktrees/*"
+            - "/Users/<REDACTED>/CodeProjects/Phenotype/repos/worktrees/*/*"
+            - "/Users/<REDACTED>/CodeProjects/Phenotype/repos/worktrees/*/*/*"
 
       - id: "phenotype-allow-readonly-git"
         description: "Allow read-only git commands anywhere."
@@ -319,16 +319,16 @@ policy:
             - "pnpm add*"
             - "yarn add*"
           cwd_patterns:
-            - "/Users/kooshapari/CodeProjects/Phenotype/repos/*-wtrees/*"
-            - "/Users/kooshapari/CodeProjects/Phenotype/repos/*-wtrees/*/*"
-            - "/Users/kooshapari/CodeProjects/Phenotype/repos/*-wtrees/*/*/*"
-            - "/Users/kooshapari/CodeProjects/Phenotype/repos/*/.worktrees/*"
-            - "/Users/kooshapari/CodeProjects/Phenotype/repos/*/.worktrees/*/*"
-            - "/Users/kooshapari/CodeProjects/Phenotype/repos/*/PROJECT-wtrees/*"
-            - "/Users/kooshapari/CodeProjects/Phenotype/repos/*/PROJECT-wtrees/*/*"
-            - "/Users/kooshapari/CodeProjects/Phenotype/repos/worktrees/*"
-            - "/Users/kooshapari/CodeProjects/Phenotype/repos/worktrees/*/*"
-            - "/Users/kooshapari/CodeProjects/Phenotype/repos/worktrees/*/*/*"
+            - "/Users/<REDACTED>/CodeProjects/Phenotype/repos/*-wtrees/*"
+            - "/Users/<REDACTED>/CodeProjects/Phenotype/repos/*-wtrees/*/*"
+            - "/Users/<REDACTED>/CodeProjects/Phenotype/repos/*-wtrees/*/*/*"
+            - "/Users/<REDACTED>/CodeProjects/Phenotype/repos/*/.worktrees/*"
+            - "/Users/<REDACTED>/CodeProjects/Phenotype/repos/*/.worktrees/*/*"
+            - "/Users/<REDACTED>/CodeProjects/Phenotype/repos/*/PROJECT-wtrees/*"
+            - "/Users/<REDACTED>/CodeProjects/Phenotype/repos/*/PROJECT-wtrees/*/*"
+            - "/Users/<REDACTED>/CodeProjects/Phenotype/repos/worktrees/*"
+            - "/Users/<REDACTED>/CodeProjects/Phenotype/repos/worktrees/*/*"
+            - "/Users/<REDACTED>/CodeProjects/Phenotype/repos/worktrees/*/*/*"
 
       - id: "phenotype-allow-introspection"
         description: "Allow safe system introspection commands anywhere."
@@ -385,7 +385,7 @@ policy:
         actions: ["exec"]
         match:
           command_patterns:
-            - "mkdir -p /Users/kooshapari/CodeProjects/Phenotype/repos/*"
+            - "mkdir -p /Users/<REDACTED>/CodeProjects/Phenotype/repos/*"
 
       - id: "phenotype-allow-repo-coordination"
         description: "Allow read-only repo coordination loops and inventory commands."
@@ -394,12 +394,12 @@ policy:
         actions: ["exec"]
         match:
           command_patterns:
-            - "for d in /Users/kooshapari/CodeProjects/Phenotype/repos/*/; do [ -d \"$d/.git\" ] && echo \"$d\"; done"
-            - "for d in /Users/kooshapari/CodeProjects/Phenotype/repos/*-wtrees/; do echo *basename*ls*done"
+            - "for d in /Users/<REDACTED>/CodeProjects/Phenotype/repos/*/; do [ -d \"$d/.git\" ] && echo \"$d\"; done"
+            - "for d in /Users/<REDACTED>/CodeProjects/Phenotype/repos/*-wtrees/; do echo *basename*ls*done"
             - "for repo in trace cliproxyapi++ heliosCLI agentapi-plusplus thegent; do echo \"=== $repo ===\" && *ls \"$repo/.github/workflows/\""
-            - "cd /Users/kooshapari/CodeProjects/Phenotype/repos && for repo in trace cliproxyapi++ heliosCLI agentapi-plusplus thegent; do echo \"=== $repo ===\" && *ls \"$repo/.github/workflows/\""
+            - "cd /Users/<REDACTED>/CodeProjects/Phenotype/repos && for repo in trace cliproxyapi++ heliosCLI agentapi-plusplus thegent; do echo \"=== $repo ===\" && *ls \"$repo/.github/workflows/\""
             - "for repo in agentapi-plusplus-composite-actions bifrost-extensions-composite-actions cliproxyapi++-composite-actions agentapi-plusplus-governance bifrost-extensions-governance; do echo \"=== $repo ===\"; *ls \"$repo/.github/\""
-            - "cd /Users/kooshapari/CodeProjects/Phenotype/repos && for repo in agentapi-plusplus-composite-actions bifrost-extensions-composite-actions cliproxyapi++-composite-actions agentapi-plusplus-governance bifrost-extensions-governance; do echo \"=== $repo ===\"; *ls \"$repo/.github/\""
+            - "cd /Users/<REDACTED>/CodeProjects/Phenotype/repos && for repo in agentapi-plusplus-composite-actions bifrost-extensions-composite-actions cliproxyapi++-composite-actions agentapi-plusplus-governance bifrost-extensions-governance; do echo \"=== $repo ===\"; *ls \"$repo/.github/\""
             - "for repo in 4sgm bifrost-extensions portage cliproxyapi++ agentapi-plusplus AgilePlus civ helios-cli parpour thegent tokenledger trace; do echo \"=== $repo ===\" && (cd \"$repo\" 2>/dev/null && git log --oneline -1 --format=\"%h %ci %s\") 2>/dev/null || echo \"NOT FOUND\"; done"
             - "for repo in trace cliproxyapi++ heliosCLI agentapi-plusplus thegent portage AgilePlus; do echo \"=== $repo ===\" && [ -f \"$repo/Dockerfile\" ] && echo \"Dockerfile: YES\" || echo \"Dockerfile: NO\" && [ -f \"$repo/docker-compose.yml\" ] || [ -f \"$repo/docker-compose.yaml\" ] && echo \"Docker Compose: YES\" || echo \"Docker Compose: NO\" && [ -d \"$repo/.devcontainer\" ] && echo \"DevContainer: YES\" || echo \"DevContainer: NO\" && [ -f \"$repo/.github/required-checks.txt\" ] && echo \"Required Checks: YES\" || echo \"Required Checks: NO\" && CLAUDE_SIZE=$(wc -c < \"$repo/CLAUDE.md\" 2>/dev/null || echo \"0\") && [ \"$CLAUDE_SIZE\" -gt 500 ] && echo \"CLAUDE.md: substantial (${CLAUDE_SIZE} bytes)\" || echo \"CLAUDE.md: minimal/empty\"; done"
             - "for repo in phenotype-go-kit phenotype-shared template-commons thegent; do echo \"=== $repo ===\"; *Pre-commit: YES*"
@@ -433,7 +433,7 @@ policy:
         actions: ["exec"]
         match:
           command_patterns:
-            - "mv /Users/kooshapari/CodeProjects/Phenotype/repos/* /Users/kooshapari/CodeProjects/Phenotype/repos/.archive/*"
+            - "mv /Users/<REDACTED>/CodeProjects/Phenotype/repos/* /Users/<REDACTED>/CodeProjects/Phenotype/repos/.archive/*"
 
       - id: "phenotype-deny-destructive-repo-removal"
         description: "Block direct repo removal; move the repo into .archive or trashbin instead."
@@ -442,4 +442,4 @@ policy:
         actions: ["exec"]
         match:
           command_patterns:
-            - "rm -rf /Users/kooshapari/CodeProjects/Phenotype/repos/*"
+            - "rm -rf /Users/<REDACTED>/CodeProjects/Phenotype/repos/*"

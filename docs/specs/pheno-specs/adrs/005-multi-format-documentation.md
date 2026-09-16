@@ -245,7 +245,7 @@ domain: auth
 status: implemented
 created: 2024-01-15
 updated: 2024-03-20
-author: @kooshapari
+author: @<REDACTED>
 tags: [auth, oauth, security]
 implements: [ADR-012]
 ---
@@ -300,7 +300,7 @@ id: ADR-005
 title: Multi-Format Documentation Strategy
 status: accepted
 date: 2026-04-04
-author: @kooshapari
+author: @<REDACTED>
 tags: [documentation, process]
 implements: []
 ---
@@ -466,7 +466,7 @@ paths:
 1. [MADR Specification](https://adr.github.io/madr/) - Markdown ADR format
 2. [OpenAPI 3.1.0](https://spec.openapis.org/oas/v3.1.0) - API specification standard
 3. [Spectral](https://stoplight.io/open-source/spectral) - OpenAPI linter
-4. [kitty-spec format](https://github.com/KooshaPari/AgilePlus/tree/main/kitty-specs) - Internal spec format
+4. [kitty-spec format](https://github.com/<REDACTED>/AgilePlus/tree/main/kitty-specs) - Internal spec format
 5. [RESEARCH.md](../RESEARCH.md) - Documentation system comparison
 
 ---

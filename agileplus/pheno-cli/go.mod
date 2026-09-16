@@ -1,4 +1,4 @@
-module github.com/KooshaPari/pheno-cli
+module github.com/<REDACTED>/pheno-cli
 
 go 1.24.2
 

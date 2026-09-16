@@ -6,7 +6,7 @@
 
 ---
 
-## T-TG.0 — `KooshaPari/thegent`
+## T-TG.0 — `<REDACTED>/thegent`
 
 ### Remote Metadata
 
@@ -37,7 +37,7 @@
 
 ### Critical Finding
 
-`thegent-nvms` is a **crate inside thegent** that duplicates the standalone `KooshaPari/nanovms` repo (now merged with Phase 1 + NV-200..203 fixes). This is the **thegent absorption pattern** that nanovms — when it gets re-merged into thegent — will follow. ADR-026 will codify this.
+`thegent-nvms` is a **crate inside thegent** that duplicates the standalone `<REDACTED>/nanovms` repo (now merged with Phase 1 + NV-200..203 fixes). This is the **thegent absorption pattern** that nanovms — when it gets re-merged into thegent — will follow. ADR-026 will codify this.
 
 ### Proposed DAG Units (deferred)
 
@@ -58,7 +58,7 @@
 
 ---
 
-## T-TR.0 — `KooshaPari/Tracera`
+## T-TR.0 — `<REDACTED>/Tracera`
 
 ### Remote Metadata
 
@@ -99,7 +99,7 @@
 
 ---
 
-## T-AV.0 — `KooshaPari/Authvault` (read-only)
+## T-AV.0 — `<REDACTED>/Authvault` (read-only)
 
 ### Status: ARCHIVED
 

@@ -3,7 +3,7 @@
 
 ## Executive Summary
 
-This plan proposes adopting **substrate** (KooshaPari/substrate @ ecee354) + **forge-dev** (KooshaPari/forgecode) as the unified dispatch backend for Phenotype agent workflows, replacing the current ad-hoc mix of native `Agent()` tool, `codex exec` direct invocation, and `forge -p` flags.
+This plan proposes adopting **substrate** (<REDACTED>/substrate @ ecee354) + **forge-dev** (<REDACTED>/forgecode) as the unified dispatch backend for Phenotype agent workflows, replacing the current ad-hoc mix of native `Agent()` tool, `codex exec` direct invocation, and `forge -p` flags.
 
 **Current state:** dispatch is scattered across 3 primitives with no centralized model-tier routing or resilience orchestration.
 
@@ -17,7 +17,7 @@ This plan proposes adopting **substrate** (KooshaPari/substrate @ ecee354) + **f
 
 ### Substrate Snapshot
 
-**Repo:** KooshaPari/substrate (HEAD @ ecee354, v2.0.0-ready)
+**Repo:** <REDACTED>/substrate (HEAD @ ecee354, v2.0.0-ready)
 
 **Maturity:** Release-ready · 150+ tests · clippy clean · 6 driver faces + 10 engine adapters + 6 port traits.
 
@@ -35,7 +35,7 @@ This plan proposes adopting **substrate** (KooshaPari/substrate @ ecee354) + **f
 3. **MCP** (`driver-mcp` / FastMCP Python)
    - Tools: `substrate_dispatch`, `substrate_plan`, `substrate_route`, team mailbox (send/inbox/task list)
    - OMNIROUTE_URL config; dispatch tools cap messages at 4096 bytes UTF-8
-   - Absorbs `KooshaPari/dispatch-mcp` (per-tier tool aliases: `dispatch_worker`, `dispatch_main`, …)
+   - Absorbs `<REDACTED>/dispatch-mcp` (per-tier tool aliases: `dispatch_worker`, `dispatch_main`, …)
    - Status: available but not wired into Phenotype workflow runners yet
 
 **Hexagonal core** (`substrate-core`):
@@ -57,7 +57,7 @@ This plan proposes adopting **substrate** (KooshaPari/substrate @ ecee354) + **f
 
 ### Forgecode (forge-dev) Snapshot
 
-**Repo:** KooshaPari/forgecode (HEAD @ 9326a72da, v2.13.14)
+**Repo:** <REDACTED>/forgecode (HEAD @ 9326a72da, v2.13.14)
 
 **Maturity:** Production-ready · 33-crate workspace · Phenotype-org fork of upstream tailcallhq/forgecode.
 
@@ -329,13 +329,13 @@ Three ad-hoc primitives:
 ### Repositories Impacted
 | Repo | Change | Timing |
 |------|--------|--------|
-| KooshaPari/substrate | Fix CodexEngine argv; wire MCP into ecosystem | Phase 1-2 |
-| KooshaPari/forgecode | Ensure dogfooding; document CLI contract | Phase 1 |
-| KooshaPari/phenofleet | Replace codex exec with substrate CLI | Phase 3 |
-| KooshaPari/OmniRoute | Absorb substrate MCP; wire skill composition | Phase 2-3 |
-| KooshaPari/thegent-dispatch | Replace Agent() with substrate heavy tier | Phase 3 |
-| KooshaPari/Eidolon | Replace Agent() with substrate main tier | Phase 3 |
-| KooshaPari/sharecli | Hook ProcessPort for build contention | Phase 4 (optional) |
+| <REDACTED>/substrate | Fix CodexEngine argv; wire MCP into ecosystem | Phase 1-2 |
+| <REDACTED>/forgecode | Ensure dogfooding; document CLI contract | Phase 1 |
+| <REDACTED>/phenofleet | Replace codex exec with substrate CLI | Phase 3 |
+| <REDACTED>/OmniRoute | Absorb substrate MCP; wire skill composition | Phase 2-3 |
+| <REDACTED>/thegent-dispatch | Replace Agent() with substrate heavy tier | Phase 3 |
+| <REDACTED>/Eidolon | Replace Agent() with substrate main tier | Phase 3 |
+| <REDACTED>/sharecli | Hook ProcessPort for build contention | Phase 4 (optional) |
 
 ---
 

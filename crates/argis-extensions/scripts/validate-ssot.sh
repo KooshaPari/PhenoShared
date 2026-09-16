@@ -47,7 +47,7 @@ while IFS= read -r row; do
     source=$(echo "$row" | awk -F'|' '{print $3}' | xargs)
     # Skip header/separator rows
     [ -z "$domain" ] || [ "$domain" = "---" ] || [ "$source" = "---" ] && continue
-    # Local path check (strip prefix like `KooshaPari/repo` or `org/repo`)
+    # Local path check (strip prefix like `<REDACTED>/repo` or `org/repo`)
     local_path=$(echo "$source" | sed -E 's|^[A-Za-z0-9_-]+/[A-Za-z0-9_.-]+||;s|^/||')
     # If source is a local path, verify it exists
     if [[ "$local_path" == /* ]] || [[ "$local_path" =~ \.md$ ]] || [[ "$local_path" =~ ^docs/ ]] || [[ "$local_path" =~ ^pheno- ]] || [[ "$local_path" =~ ^phenotype- ]]; then

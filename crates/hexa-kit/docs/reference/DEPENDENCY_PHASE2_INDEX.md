@@ -291,7 +291,7 @@
 
 All Phase 2 documents stored in:
 ```
-/Users/kooshapari/CodeProjects/Phenotype/repos/docs/reference/
+/Users/<REDACTED>/CodeProjects/Phenotype/repos/docs/reference/
 ```
 
 ### Core Documents
@@ -379,13 +379,13 @@ All documents are:
 ### Verification
 ```bash
 # Check file sizes
-ls -lh /Users/kooshapari/CodeProjects/Phenotype/repos/docs/reference/DEPENDENCY_PHASE2*
+ls -lh /Users/<REDACTED>/CodeProjects/Phenotype/repos/docs/reference/DEPENDENCY_PHASE2*
 
 # Check line counts
-wc -l /Users/kooshapari/CodeProjects/Phenotype/repos/docs/reference/DEPENDENCY_PHASE2*
+wc -l /Users/<REDACTED>/CodeProjects/Phenotype/repos/docs/reference/DEPENDENCY_PHASE2*
 
 # Check for UTF-8 encoding
-file -b /Users/kooshapari/CodeProjects/Phenotype/repos/docs/reference/DEPENDENCY_PHASE2*.md
+file -b /Users/<REDACTED>/CodeProjects/Phenotype/repos/docs/reference/DEPENDENCY_PHASE2*.md
 ```
 
 ---
@@ -440,7 +440,7 @@ For questions about:
 ## Next Action: Start with OVERVIEW.md
 
 👉 **Read this file next:**
-`/Users/kooshapari/CodeProjects/Phenotype/repos/docs/reference/DEPENDENCY_PHASE2_OVERVIEW.md`
+`/Users/<REDACTED>/CodeProjects/Phenotype/repos/docs/reference/DEPENDENCY_PHASE2_OVERVIEW.md`
 
 **Estimated reading time:** 15 minutes
 

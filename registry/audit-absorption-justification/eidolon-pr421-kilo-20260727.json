@@ -1,7 +1,7 @@
 {
   "audit_date": "2026-07-27",
   "pull_request": 421,
-  "repository": "KooshaPari/phenotype-registry",
+  "repository": "<REDACTED>/phenotype-registry",
   "scope": "post-check audit for Eidolon boundary refresh",
   "checks": {
     "Kilo Code Review": {

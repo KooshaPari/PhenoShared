@@ -1,10 +1,10 @@
-# Absorbed Crate: stashly (KooshaPari/Stashly)
+# Absorbed Crate: stashly (<REDACTED>/Stashly)
 
 ## Source
 
 | Field | Value |
 | --- | --- |
-| Source repo | KooshaPari/Stashly |
+| Source repo | <REDACTED>/Stashly |
 | Source size | 3138 LOC |
 | Source branches | 14 |
 | Source absorbed on | 2026-07-17 |
@@ -44,6 +44,6 @@ inside the pheno workspace.
 
 - Phase 1: registry forensic copy at `registry/absorbed-crates/stashly/`
 - Phase 2: pheno monorepo workspace member + tests (portage-federation handoff)
-- Phase 3: archive source `gh repo archive KooshaPari/Stashly -y`
+- Phase 3: archive source `gh repo archive <REDACTED>/Stashly -y`
 
 Registry row: queue-repo-Stashly → absorbed (this commit).

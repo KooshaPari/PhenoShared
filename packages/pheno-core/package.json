@@ -31,7 +31,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/KooshaPari/phenotype-infrakit"
+    "url": "https://github.com/<REDACTED>/phenotype-infrakit"
   },
   "license": "MIT",
   "devDependencies": {

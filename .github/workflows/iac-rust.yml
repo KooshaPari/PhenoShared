@@ -30,7 +30,7 @@ concurrency:
 
 jobs:
   workspace:
-    # Linux runner only — KooshaPari Actions billing constraint forbids macOS/Windows.
+    # Linux runner only — <REDACTED> Actions billing constraint forbids macOS/Windows.
     name: cargo check (iac workspace)
     runs-on: ubuntu-24.04
     steps:

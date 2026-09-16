@@ -58,7 +58,7 @@ jobs:
           version = "0.3.0"
           edition = "2021"
           description = "AgilePlus - Spec-first project management CLI"
-          authors = ["KooshaPari"]
+          authors = ["<REDACTED>"]
           "@
           Set-Content -Path temp-msi-pkg/Cargo.toml -Value $cargoToml
 
@@ -67,7 +67,7 @@ jobs:
 
           # Create License.rtf
           $license = @"
-          {\rtf1\ansi\ansicpg1252\deff0\nouicompat\deflang1033{\fonttbl{\f0\fnil\fcharset0 Calibri;}}{\colortbl;\red0\green0\blue0;}{\*\expandedcolortbl;}\margl1440\margr1440\margtsxn1440\margbsxn1440\ltrpara\ltrch\frtlch \fbidis\fcs1 \af0\ltrch\loch {\*\fldinst HYPERLINK "https://github.com/KooshaPari/AgilePlus"}{\fldrslt AgilePlus on GitHub}}\par AgilePlus CLI - Spec-first project management\par Dual licensed under MIT OR Apache-2.0\par
+          {\rtf1\ansi\ansicpg1252\deff0\nouicompat\deflang1033{\fonttbl{\f0\fnil\fcharset0 Calibri;}}{\colortbl;\red0\green0\blue0;}{\*\expandedcolortbl;}\margl1440\margr1440\margtsxn1440\margbsxn1440\ltrpara\ltrch\frtlch \fbidis\fcs1 \af0\ltrch\loch {\*\fldinst HYPERLINK "https://github.com/<REDACTED>/AgilePlus"}{\fldrslt AgilePlus on GitHub}}\par AgilePlus CLI - Spec-first project management\par Dual licensed under MIT OR Apache-2.0\par
           "@
           Set-Content -Path temp-msi-pkg/wix/License.rtf -Value $license
 
@@ -89,7 +89,7 @@ jobs:
           <?xml version="1.0" encoding="utf-8"?>
           <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
             <Product Id="*" Name="AgilePlus CLI" Language="1033" Version="0.3.0.0"
-                     Manufacturer="KooshaPari" UpgradeCode="12345678-1234-1234-1234-123456789ABC">
+                     Manufacturer="<REDACTED>" UpgradeCode="12345678-1234-1234-1234-123456789ABC">
               <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
               <Media Id="1" Cabinet="AgilePlusCLI.cab" EmbedCab="yes" />
 
@@ -179,7 +179,7 @@ jobs:
 
             ## Links
             - [Documentation](https://docs.rs/agileplus-cli)
-            - [GitHub Repository](https://github.com/KooshaPari/AgilePlus)
+            - [GitHub Repository](https://github.com/<REDACTED>/AgilePlus)
             - [Crates.io](https://crates.io/crates/agileplus-cli)
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

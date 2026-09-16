@@ -1066,7 +1066,7 @@ def cmd_test() -> int:
         # does not split on whitespace, so passing a multi-word string is
         # not a supported use case — only single-token inputs are tested.
         check("plain", _basename("sharecli-tray"), "sharecli-tray")
-        check("with_path", _basename("/Users/kooshapari/bin/sharecli-tray"), "sharecli-tray")
+        check("with_path", _basename("/Users/<REDACTED>/bin/sharecli-tray"), "sharecli-tray")
         check("python_token", _basename("/opt/homebrew/bin/python3"), "python3")
         check("empty", _basename(""), "")
 

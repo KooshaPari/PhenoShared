@@ -71,7 +71,7 @@
 Once both tokens are ready:
 
 ```bash
-cd /Users/kooshapari/CodeProjects/Phenotype/repos
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos
 
 # 1. Create Sentry projects (uses ~/.sentryclirc token)
 echo "=== Creating 3 Sentry projects ==="

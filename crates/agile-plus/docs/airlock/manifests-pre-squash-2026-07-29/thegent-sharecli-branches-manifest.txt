@@ -1,7 +1,7 @@
 === Exporting thegent-sharecli branches manifest ===
 Generated: 2026-07-29T06:57:48Z
-Repo: KooshaPari/thegent-sharecli
-Local clone: /Users/kooshapari/CodeProjects/Phenotype/repos/thegent-sharecli
+Repo: <REDACTED>/thegent-sharecli
+Local clone: /Users/<REDACTED>/CodeProjects/Phenotype/repos/thegent-sharecli
 HEAD: 0f3e721e7b971149dcf59f851977ebda019f8e33
 HEAD subject: ci: fix workflow for Python project and enable integration/consolidate
 

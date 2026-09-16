@@ -25,8 +25,8 @@
 ## Why not merge elsewhere
 
 We deliberately did NOT target:
-- `KooshaPari/phenotype-tooling` — tooling layer, not the substrate layer.
-- `KooshaPari/pheno-forge-plugins` — different scope (6 sidecar plugins,
+- `<REDACTED>/phenotype-tooling` — tooling layer, not the substrate layer.
+- `<REDACTED>/pheno-forge-plugins` — different scope (6 sidecar plugins,
   not the smoke binary).
 
 ## State captured
@@ -43,7 +43,7 @@ We deliberately did NOT target:
 
 - Squash (PR #282) — 4/4 of the substrate family
 - Verified on remote HEAD via
-  `gh api repos/KooshaPari/pheno/contents/crates/pheno-forge-smoke`
+  `gh api repos/<REDACTED>/pheno/contents/crates/pheno-forge-smoke`
 
 ## Forward-looking note
 

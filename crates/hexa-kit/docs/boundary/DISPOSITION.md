@@ -2,8 +2,8 @@
 
 **Status:** Draft assessment
 **Date:** 2026-06-16
-**Repo:** `KooshaPari/HexaKit` (a.k.a. `phenotype-infrakit`)
-**Charter:** [`phenotype-registry/docs/rationalization/boundary-shaping.md`](https://github.com/KooshaPari/phenotype-registry/blob/main/docs/rationalization/boundary-shaping.md) (cited inline as **[charter]**)
+**Repo:** `<REDACTED>/HexaKit` (a.k.a. `phenotype-infrakit`)
+**Charter:** [`phenotype-registry/docs/rationalization/boundary-shaping.md`](https://github.com/<REDACTED>/phenotype-registry/blob/main/docs/rationalization/boundary-shaping.md) (cited inline as **[charter]**)
 
 This document applies the **three dispositions** from the ecosystem boundary-shaping
 charter — **DECOMPOSE**, **ABSORB**, **DYNAMIC-KEEP** — to every top-level module,
@@ -21,7 +21,7 @@ Per **[charter §Target topology]**, HexaKit is the **Scaffolding** layer: it ow
 *project + file templates / generators* that bootstrap new repos onto the Phenotype
 architectural patterns. It is **not** a lib holder.
 
-Concretely, the recommended end-state for `KooshaPari/HexaKit` is:
+Concretely, the recommended end-state for `<REDACTED>/HexaKit` is:
 
 | Concern | Owner after disposition |
 |---|---|
@@ -44,7 +44,7 @@ infra-generic config files. The 53-crate Rust workspace dissolves into
 
 **Fleet bootstrap:** new repos enter the ecosystem via **`hexakit init`**, specified
 in [`docs/scaffolding/FLEET_INIT.md`](../scaffolding/FLEET_INIT.md). That command
-stamps TestingKit hooks, KooshaPari/.github workflow templates, and a
+stamps TestingKit hooks, <REDACTED>/.github workflow templates, and a
 `BOUNDARY.md` from the domain role picker — scaffolding only, no domain crate copies.
 
 ---
@@ -134,7 +134,7 @@ Dispositions map to the **[charter]** target topology:
 | 48 | `Metron/` (workspace member) | Metrics collection (Prometheus, StatsD, JSON exporters) | **ABSORB** | `PhenoObservability` | README: "Metron is the observability backbone for all Phenotype services". **Wave A (2026-06-17):** `MIGRATED.md` stub added (runbook step 6); source retained pending repoint. |
 | 49 | `Traceon/` (workspace member) | Distributed tracing (OpenTelemetry, OTLP, Jaeger, Zipkin) | **ABSORB** | `PhenoObservability` | Charter + HexaKit BOUNDARY.md: "Telemetry → PhenoObservability / Tracely". **Wave A (2026-06-17):** `MIGRATED.md` stub added (runbook step 6); source retained pending repoint. |
 | 50 | `forgecode-fork/` (workspace member) | Fork of `forgecode` code generator (Phenotype-specific transforms) | **ABSORB** | `HexaKit` (scaffolding-gen) | It's a code generator; scaffolding is the natural home (or stay as a separate fork repo if upstream sync matters). |
-| 51 | `libs/nexus` (workspace member) | Service registry + discovery | **DECOMPOSE** | new `nexus` repo (README already points at `KooshaPari/nexus`) | The crate's own README documents it as a standalone repo. |
+| 51 | `libs/nexus` (workspace member) | Service registry + discovery | **DECOMPOSE** | new `nexus` repo (README already points at `<REDACTED>/nexus`) | The crate's own README documents it as a standalone repo. |
 | 52–56 | `agileplus/crates/agileplus-benchmarks`, `agileplus-domain`, `agileplus-events`, `agileplus-graph`, `agileplus-sqlite`, `agileplus-triage` | AgilePlus platform sub-crates | **DECOMPOSE** | `agileplus` repo (its own platform) | The `agileplus/` umbrella is already a separate platform concern; sub-crates stay together as one platform repo. |
 | 57 | `agileplus-mcp/` (top-level standalone) | AgilePlus MCP server | **DECOMPOSE** | `agileplus` repo (or its own `agileplus-mcp` repo) | Standalone AgilePlus component; relocate with the AgilePlus platform. |
 
@@ -240,7 +240,7 @@ either real code, planning artifacts, or stale placeholders.
 
 ## 8. Citation
 
-- **Charter:** [`phenotype-registry/docs/rationalization/boundary-shaping.md`](https://github.com/KooshaPari/phenotype-registry/blob/main/docs/rationalization/boundary-shaping.md) — Ecosystem Boundary-Shaping Charter, status *Active*, date 2026-06-16. Three dispositions: DECOMPOSE / ABSORB / DYNAMIC-KEEP. Doctrine: *no delete-on-sight*. Target topology: HexaKit = scaffolding, domain SDKs = McpKit / AuthKit / ResilienceKit / TestingKit / PhenoObservability / phenotype-gfx, umbrella = phenoSDK, too-small monorepo = phenoShared.
+- **Charter:** [`phenotype-registry/docs/rationalization/boundary-shaping.md`](https://github.com/<REDACTED>/phenotype-registry/blob/main/docs/rationalization/boundary-shaping.md) — Ecosystem Boundary-Shaping Charter, status *Active*, date 2026-06-16. Three dispositions: DECOMPOSE / ABSORB / DYNAMIC-KEEP. Doctrine: *no delete-on-sight*. Target topology: HexaKit = scaffolding, domain SDKs = McpKit / AuthKit / ResilienceKit / TestingKit / PhenoObservability / phenotype-gfx, umbrella = phenoSDK, too-small monorepo = phenoShared.
 - **HexaKit self-declaration:** `BOUNDARY.md` (status ACTIVE) — "HexaKit is **not** a lib collection holder." Domain SDKs listed as install-separately.
 - **Fleet scaffold generator:** [`docs/scaffolding/FLEET_INIT.md`](../scaffolding/FLEET_INIT.md) — `hexakit init` design (hooks, CI templates, BOUNDARY.md, STACK_POLICY lang gate, phenoSDK manifest extras).
 - **HexaKit Cargo workspace:** `Cargo.toml` lines 10–71 — 53 members.

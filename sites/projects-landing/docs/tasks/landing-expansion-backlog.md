@@ -11,8 +11,8 @@ Track the next shippable landing, docs, and branding surfaces after the Tier 1
 
 ## Tier 1 Router
 
-- `projects-landing`: canonical Phenotype and KooshaPari project hub.
-- `/koosha`: personal KooshaPari layer for the public project graph.
+- `projects-landing`: canonical Phenotype and <REDACTED> project hub.
+- `/koosha`: personal <REDACTED> layer for the public project graph.
 - `/brand`: public landing and microfrontend rollout map for shipped, next, and
   infrastructure surfaces.
 - Next router work: federated docs source selection, org-wide QA aggregation, real

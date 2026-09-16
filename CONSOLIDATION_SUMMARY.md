@@ -17,7 +17,7 @@ This consolidation initiative brings together scattered governance templates, pr
 
 ### 1. CLAUDE.md Base Template ✅
 
-**Location**: `/Users/kooshapari/CodeProjects/Phenotype/repos/platforms/thegent/dotfiles/governance/`
+**Location**: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/platforms/thegent/dotfiles/governance/`
 
 **Files**:
 - `CLAUDE.base.md` (500+ lines) — Canonical template for all Phenotype projects
@@ -49,7 +49,7 @@ cp dotfiles/governance/CLAUDE.base.md my-project/CLAUDE.md
 
 ### 2. Pre-commit Hook Configuration ✅
 
-**Location**: `/Users/kooshapari/CodeProjects/Phenotype/repos/platforms/thegent/dotfiles/hooks/`
+**Location**: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/platforms/thegent/dotfiles/hooks/`
 
 **Files**:
 - `.pre-commit-config.base.yaml` (400+ lines) — Canonical configuration
@@ -82,7 +82,7 @@ pre-commit install
 
 ### 3. Quality Gate Scripts ✅
 
-**Location**: `/Users/kooshapari/CodeProjects/Phenotype/repos/platforms/thegent/templates/quality/`
+**Location**: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/platforms/thegent/templates/quality/`
 
 **Files**:
 - `quality-gate.base.sh` (500+ lines) — Bash script template
@@ -123,7 +123,7 @@ task quality                         # Via Taskfile
 
 ### 4. Linter Configuration Templates ✅
 
-**Location**: `/Users/kooshapari/CodeProjects/Phenotype/repos/platforms/thegent/templates/linters/`
+**Location**: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/platforms/thegent/templates/linters/`
 
 **Files**:
 - `README.md` (650+ lines) — Master guide for all linter configurations
@@ -160,7 +160,7 @@ ruff check .
 
 ### 5. Comprehensive Audit Report ✅
 
-**Location**: `/Users/kooshapari/CodeProjects/Phenotype/repos/platforms/thegent/`
+**Location**: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/platforms/thegent/`
 
 **File**:
 - `CONSOLIDATION_AUDIT.md` (1000+ lines) — Complete audit results and metrics
@@ -323,7 +323,7 @@ ruff check .
 ### Consolidated Templates (thegent)
 
 ```
-/Users/kooshapari/CodeProjects/Phenotype/repos/platforms/thegent/
+/Users/<REDACTED>/CodeProjects/Phenotype/repos/platforms/thegent/
 ├── dotfiles/governance/
 │   ├── CLAUDE.base.md           (500 lines)
 │   └── README.md                (450 lines)

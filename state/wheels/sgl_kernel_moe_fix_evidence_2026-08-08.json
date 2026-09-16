@@ -2,8 +2,8 @@
   "mission": "Codex thread 019f6249-d74c-7540-885f-588c3d51ac3a - resolve moe_align_block_size arg-count mismatch between sglang 0.3.6.post2 and rebuilt sgl-kernel wheel",
   "timestamp_local": "2026-08-08T17:41:42-07:00",
   "timestamp_utc": "2026-08-09T00:41:06Z",
-  "host": "Windows 10 host build 10.0.28120, WSL distro FedoraLinux-44, user kooshapari",
-  "venv": "/home/kooshapari/.pheno-serve-venv (python 3.14.6, sglang 0.3.6.post2, torch 2.11.0+cu130)",
+  "host": "Windows 10 host build 10.0.28120, WSL distro FedoraLinux-44, user <REDACTED>",
+  "venv": "/home/<REDACTED>/.pheno-serve-venv (python 3.14.6, sglang 0.3.6.post2, torch 2.11.0+cu130)",
   "delta_found": {
     "summary": "sgl_kernel.moe_align_block_size python wrapper required 8 positional args with no defaults; 6-arg callers (sglang <= 0.3.6 style, sgl-kernel < 0.4.x) omit the two workspace buffers token_cnts_buffer and cumsum_buffer -> TypeError.",
     "old_6_arg_call_repro": "moe_align_block_size(topk_ids, num_experts, block_size, sorted_token_ids, experts_ids, num_tokens_post_pad) raised: TypeError: moe_align_block_size() missing 2 required positional arguments: 'token_cnts_buffer' and 'cumsum_buffer'",
@@ -21,22 +21,22 @@
   },
   "fix": {
     "approach": "STEP2a - python-side compatibility wrapper in the build repo (no C++ / ABI change)",
-    "file": "/home/kooshapari/sglang-src/sgl-kernel/python/sgl_kernel/moe.py",
+    "file": "/home/<REDACTED>/sglang-src/sgl-kernel/python/sgl_kernel/moe.py",
     "diff_summary": "moe_align_block_size: added token_cnts_buffer=None, cumsum_buffer=None defaults. When either is None, allocate torch.int32 workspace on topk_ids.device using sizes from tests/test_moe_align.py (token_cnts_buffer: (num_experts+1)*num_experts; cumsum_buffer: num_experts+1). 8-arg behavior for direct users unchanged (exact same torch.ops.sgl_kernel.moe_align_block_size.default call). Rationale comment added. git diff --stat: python/sgl_kernel/moe.py | 29 +++++++++++++++++++++++++++-- (27 insertions, 2 deletions). No .pyi / py.typed stubs exist.",
     "constraints_respected": "No docker, no sudo, no global installs, no rm -rf of build dir, no re-seed, no reconfigure; only edited python/sgl_kernel/moe.py in the build repo; CMakeLists.txt, include/ATen shim, toolchain fixes untouched"
   },
   "wheel": {
-    "path": "/home/kooshapari/sglang-src/sgl-kernel/dist/sgl_kernel-0.1.0-cp39-abi3-linux_x86_64.whl",
+    "path": "/home/<REDACTED>/sglang-src/sgl-kernel/dist/sgl_kernel-0.1.0-cp39-abi3-linux_x86_64.whl",
     "sha256": "661a0c0c6cb0aadb2272c2ef87b40c53240f0619a1b100dc6a9012da79105e5d",
     "size_bytes": 15871901,
     "previous_sha256": "e462074c3c8c58f96f0562f78086494114c2123114ae81abbfc2b737361e2763",
     "so_inside_sha256": "dc94a9032f6327f66d8ec519fb35d89cd46c8f95f0a3d8fd3653be71201ebd29",
     "so_unchanged": true,
-    "build_method": "/home/kooshapari/.pheno-serve-venv/bin/python -m pip wheel --no-build-isolation --no-deps -Cbuild-dir=build . -w dist/ with SKBUILD_BUILD_DIR=/home/kooshapari/sglang-src/sgl-kernel/build. ninja -C build -n reported 'no work to do' (python-only change), so NO C++ recompile; scikit-build-core assembled a fresh wheel with the updated moe.py (zip-rebuild shortcut NOT needed).",
-    "previous_wheel_path": "/home/kooshapari/sglang-src/sgl-kernel/dist/sgl_kernel-0.1.0-cp39-abi3-linux_x86_64.whl (overwritten in place by rebuild)"
+    "build_method": "/home/<REDACTED>/.pheno-serve-venv/bin/python -m pip wheel --no-build-isolation --no-deps -Cbuild-dir=build . -w dist/ with SKBUILD_BUILD_DIR=/home/<REDACTED>/sglang-src/sgl-kernel/build. ninja -C build -n reported 'no work to do' (python-only change), so NO C++ recompile; scikit-build-core assembled a fresh wheel with the updated moe.py (zip-rebuild shortcut NOT needed).",
+    "previous_wheel_path": "/home/<REDACTED>/sglang-src/sgl-kernel/dist/sgl_kernel-0.1.0-cp39-abi3-linux_x86_64.whl (overwritten in place by rebuild)"
   },
   "install": {
-    "command": "/home/kooshapari/.pheno-serve-venv/bin/python -m pip install --force-reinstall --no-deps /home/kooshapari/sglang-src/sgl-kernel/dist/sgl_kernel-0.1.0-cp39-abi3-linux_x86_64.whl",
+    "command": "/home/<REDACTED>/.pheno-serve-venv/bin/python -m pip install --force-reinstall --no-deps /home/<REDACTED>/sglang-src/sgl-kernel/dist/sgl_kernel-0.1.0-cp39-abi3-linux_x86_64.whl",
     "rc": 0
   },
   "verify": {

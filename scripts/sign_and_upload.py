@@ -84,7 +84,7 @@ def main():
     for path in [tar_path, sig_path, cert_path, sha_path]:
         subprocess.run(
             ["gh", "release", "upload", tag, path,
-             "--repo", "KooshaPari/pheno-harness",
+             "--repo", "<REDACTED>/pheno-harness",
              "--clobber"],
             check=True,
         )

@@ -1,7 +1,7 @@
 # Site Infrastructure
 
-PhenoKits landing is served from Vercel at `https://phenokits.kooshapari.com` and
-mirrored to GitHub Pages at `https://kooshapari.github.io/phenokits-landing/`.
+PhenoKits landing is served from Vercel at `https://phenokits.<REDACTED>.com` and
+mirrored to GitHub Pages at `https://<REDACTED>.github.io/phenokits-landing/`.
 
 The Pages workflow builds with `GITHUB_PAGES=true`, which makes Astro emit links
 under `/phenokits-landing/`. The custom-domain build keeps `/` as the base path.

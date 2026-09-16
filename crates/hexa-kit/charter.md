@@ -46,7 +46,7 @@ Bootstrap Phenotype-org repositories with architectural templates, governance sh
 
 | Action | Authority |
 |--------|-----------|
-| Merge to `main` | KooshaPari + 1 reviewer |
+| Merge to `main` | <REDACTED> + 1 reviewer |
 | Agent-authored PR | Allowed per [review.md](review.md) |
 | Scope expansion into domain SDKs | **Blocked** — requires charter amendment |
 

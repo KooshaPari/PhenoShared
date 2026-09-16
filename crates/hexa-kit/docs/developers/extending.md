@@ -344,7 +344,7 @@ sync:
 
     - type: github
       api_token: ${GITHUB_TOKEN}
-      repo_owner: KooshaPari
+      repo_owner: <REDACTED>
       repo_name: AgilePlus
 
 agent:

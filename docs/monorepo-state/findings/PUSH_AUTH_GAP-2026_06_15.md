@@ -1,32 +1,32 @@
-# Push Auth Gap — re-auth as KooshaPari done; structural issue confirmed (2026-06-15 18:42 PDT)
+# Push Auth Gap — re-auth as <REDACTED> done; structural issue confirmed (2026-06-15 18:42 PDT)
 
-**Status update:** `gh auth switch --user KooshaPari` re-auth completed 2026-06-15
+**Status update:** `gh auth switch --user <REDACTED>` re-auth completed 2026-06-15
 18:40 PDT. The 4 previously-unreachable remotes (origin, github, worklogs, dmouse)
-are now reachable from `KooshaPari`'s account.
+are now reachable from `<REDACTED>`'s account.
 
 ## Post-auth diagnosis (2026-06-15 18:42)
 
-| Remote | URL | Pre-auth | Post-auth | Reach from KooshaPari |
+| Remote | URL | Pre-auth | Post-auth | Reach from <REDACTED> |
 |---|---|---|---|---|
-| `argis` | `git@github.com:KooshaPari/argis-extensions.git` | ✅ | ✅ | ✅ (wrong repo) |
-| `pheno` | `https://github.com/KooshaPari/phenoShared.git` | ✅ | ✅ | ✅ (wrong repo) |
-| `voxel` | `git@github.com:KooshaPari/phenotype-voxel.git` | ✅ | ✅ | ✅ (wrong repo) |
+| `argis` | `git@github.com:<REDACTED>/argis-extensions.git` | ✅ | ✅ | ✅ (wrong repo) |
+| `pheno` | `https://github.com/<REDACTED>/phenoShared.git` | ✅ | ✅ | ✅ (wrong repo) |
+| `voxel` | `git@github.com:<REDACTED>/phenotype-voxel.git` | ✅ | ✅ | ✅ (wrong repo) |
 | `dmouse` | `https://github.com/Dmouse92/AgilePlus.git` | ❌ 404 | ❌ 404 | ❌ (Dmouse92 is a CLIENT account; never push there) |
 | `github` | `https://github.com/Phenotype/Phenotype.git` | ❌ 404 | ❌ 404 | ❌ (org doesn't exist) |
-| `origin` | `https://github.com/KooshaPari/FocalPoint.git` | ❌ 404 | ❌ 404 | ❌ (iOS app, wrong repo for monorepo changes) |
-| `worklogs` | `https://github.com/KooshaPari/worklogs.git` | ❌ 404 | ❌ 404 | ❌ (separate worklogs repo, not the monorepo) |
+| `origin` | `https://github.com/<REDACTED>/FocalPoint.git` | ❌ 404 | ❌ 404 | ❌ (iOS app, wrong repo for monorepo changes) |
+| `worklogs` | `https://github.com/<REDACTED>/worklogs.git` | ❌ 404 | ❌ 404 | ❌ (separate worklogs repo, not the monorepo) |
 
 ## Structural finding: the `repos/` directory has NO upstream remote
 
 `Phenotype/Phenotype` org does not exist (404 from `gh api orgs/Phenotype`).
-`KooshaPari/Phenotype` does not exist (the `origin` URL is wrong — it points to
-`KooshaPari/FocalPoint`, which is the iOS app, not the monorepo).
-`KooshaPari/repos` does not exist (the directory name "repos" is a local
+`<REDACTED>/Phenotype` does not exist (the `origin` URL is wrong — it points to
+`<REDACTED>/FocalPoint`, which is the iOS app, not the monorepo).
+`<REDACTED>/repos` does not exist (the directory name "repos" is a local
 convention, not a GitHub repo name).
 
 This means the **`repos/` directory is local-only**. It contains ~280 sub-repos
 (submodules, worktrees, or just directories) that each have their own remote
-(`KooshaPari/AgilePlus`, `KooshaPari/pheno`, `KooshaPari/PhenoCompose`, etc.) —
+(`<REDACTED>/AgilePlus`, `<REDACTED>/pheno`, `<REDACTED>/PhenoCompose`, etc.) —
 but the `repos/` container itself is not on GitHub.
 
 **Implication:** The 37 commits on `chore/w5-adrs-sota-2026-06-15` (worklogs,
@@ -47,19 +47,19 @@ The 4 GitHub API operations that were blocked:
 
 | # | Operation | Status |
 |---|---|---|
-| 1 | NetScript DEPRECATED.md push (`KooshaPari/NetScript`) | UNBLOCKED |
+| 1 | NetScript DEPRECATED.md push (`<REDACTED>/NetScript`) | UNBLOCKED |
 | 2 | NetScript GitHub archive flag | UNBLOCKED |
 | 3 | Settly GitHub archive flag (ADR-012 PR-8) | UNBLOCKED |
 | 4 | Any future pushes to sub-repos (AgilePlus, PhenoMCP, etc.) | UNBLOCKED |
 
-These can now proceed from `KooshaPari`'s account.
+These can now proceed from `<REDACTED>`'s account.
 
 ## Auth scope confirmation
 
 ```
 $ gh auth status
 github.com
-  ✓ Logged in to github.com account KooshaPari (keyring)
+  ✓ Logged in to github.com account <REDACTED> (keyring)
   - Active account: true
   - Token: gho_************************************
   - Token scopes: 'gist', 'read:org', 'repo', 'workflow'
@@ -67,15 +67,15 @@ github.com
   - Active account: false
 ```
 
-**Active account is now `KooshaPari`.** `Dmouse92` is a client account
+**Active account is now `<REDACTED>`.** `Dmouse92` is a client account
 that should never be pushed to (per the user's 2026-06-15 18:40 PDT
 directive).
 
 ## Action items for the next 5 minutes
 
-1. **Push NetScript `chore/adr-001-archive-2026-06-15`** to `KooshaPari/NetScript`
-2. **Archive `KooshaPari/NetScript`** via `gh api -X PATCH ... -f archived=true`
-3. **Archive `KooshaPari/Settly`** (ADR-012 PR-8)
+1. **Push NetScript `chore/adr-001-archive-2026-06-15`** to `<REDACTED>/NetScript`
+2. **Archive `<REDACTED>/NetScript`** via `gh api -X PATCH ... -f archived=true`
+3. **Archive `<REDACTED>/Settly`** (ADR-012 PR-8)
 4. **Bundle the 37-commit W5 branch** to a `.bundle` file as a recovery artifact
 
 ## v6 + W5 commit trail (still local)
@@ -102,6 +102,6 @@ All commits reachable from `HEAD` on `chore/w5-adrs-sota-2026-06-15`:
 To export the full history as a bundle:
 
 ```bash
-cd /Users/kooshapari/CodeProjects/Phenotype/repos
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos
 git bundle create /tmp/w5-sota-2026-06-15.bundle --all
 ```

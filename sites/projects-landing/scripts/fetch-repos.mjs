@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Build-time fetch of KooshaPari repos -> data/repos.json
+// Build-time fetch of <REDACTED> repos -> data/repos.json
 // Justification (scripting policy): runs inside the Astro/Node build runtime; replaces
 // the prior shell+gh dependency so Vercel builds (which have no `gh` CLI) can refresh
 // data on every deploy. A standalone Rust binary would require a separate toolchain
@@ -18,7 +18,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const __filename = fileURLToPath(import.meta.url);
 const __isMain = resolve(process.argv[1] || "") === __filename;
 const OUT = resolve(__dirname, "..", "data", "repos.json");
-const USER = "KooshaPari";
+const USER = "<REDACTED>";
 const PER_PAGE = 100;
 
 // Retry constants

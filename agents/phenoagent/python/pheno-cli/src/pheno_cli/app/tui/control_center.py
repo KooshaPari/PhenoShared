@@ -93,7 +93,7 @@ class PhenoControlCenter:
                 "description": "Atoms MCP Server",
                 "working_directory": None,  # Will be detected
                 "default_port": 50002,
-                "tunnel_domain": "atomcp.kooshapari.com",
+                "tunnel_domain": "atomcp.<REDACTED>.com",
                 "processes": ["atoms-mcp"],
                 "resources": ["fallback", "proxy"],
             },
@@ -102,7 +102,7 @@ class PhenoControlCenter:
                 "description": "Zen MCP Server",
                 "working_directory": None,  # Will be detected
                 "default_port": 50001,
-                "tunnel_domain": "zen.kooshapari.com",
+                "tunnel_domain": "zen.<REDACTED>.com",
                 "processes": ["zen-mcp"],
                 "resources": ["fallback", "proxy"],
             },
@@ -111,7 +111,7 @@ class PhenoControlCenter:
                 "description": "Byteport Service",
                 "working_directory": None,  # Will be detected
                 "default_port": 50003,
-                "tunnel_domain": "byteport.kooshapari.com",
+                "tunnel_domain": "byteport.<REDACTED>.com",
                 "processes": ["byteport-service"],
                 "resources": ["fallback", "proxy"],
             },

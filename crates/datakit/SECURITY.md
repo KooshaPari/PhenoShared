@@ -3,7 +3,7 @@
 ## Reporting a Vulnerability
 
 If you discover a potential security vulnerability, report it privately through the
-repository's [private vulnerability reporting form](https://github.com/KooshaPari/DataKit/security/advisories/new).
+repository's [private vulnerability reporting form](https://github.com/<REDACTED>/DataKit/security/advisories/new).
 Do not open a public issue for an undisclosed vulnerability.
 
 - Open **Security** → **Advisories** in the repository and file a new report, or use
@@ -23,7 +23,7 @@ Maintainers will triage and acknowledge new reports as soon as possible.
 GitHub security advisories private reporting is expected to be enabled in repository settings.
 
 Report security issues privately through the
-[new draft advisory form](https://github.com/KooshaPari/DataKit/security/advisories/new).
+[new draft advisory form](https://github.com/<REDACTED>/DataKit/security/advisories/new).
 
 Include affected versions, impact, and reproducible steps.
 For sensitive issues, do not include exploit details or sensitive proof-of-concept data in public places.

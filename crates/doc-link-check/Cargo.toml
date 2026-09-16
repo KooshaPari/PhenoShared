@@ -7,8 +7,8 @@ publish = false
 
 readme = "README.md"
 description = "Doc link checker for phenotype-tooling"
-repository = "https://github.com/KooshaPari/phenotype-tooling"
-homepage = "https://github.com/KooshaPari/phenotype-tooling"
+repository = "https://github.com/<REDACTED>/phenotype-tooling"
+homepage = "https://github.com/<REDACTED>/phenotype-tooling"
 keywords = ["phenotype", "tooling", "cli"]
 categories = ["command-line-utilities"]
 [dependencies]

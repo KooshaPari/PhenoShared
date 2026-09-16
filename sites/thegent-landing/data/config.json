@@ -1,10 +1,10 @@
 {
   "name": "thegent",
   "slug": "thegent",
-  "domain": "thegent.kooshapari.com",
+  "domain": "thegent.<REDACTED>.com",
   "description": "Phenotype dotfiles manager, platform bootstrap tool, and polyglot development hub. Python CLI with Rust performance extensions and multi-agent orchestration.",
   "tier": 2,
-  "repo": "KooshaPari/thegent",
+  "repo": "<REDACTED>/thegent",
   "language": "Python / Rust",
   "license": "MIT",
   "status": "active",
@@ -16,8 +16,8 @@
     "Project templates for 10+ language stacks"
   ],
   "links": {
-    "github": "https://github.com/KooshaPari/thegent",
-    "docs": "https://thegent.kooshapari.com/docs",
-    "releases": "https://github.com/KooshaPari/thegent/releases"
+    "github": "https://github.com/<REDACTED>/thegent",
+    "docs": "https://thegent.<REDACTED>.com/docs",
+    "releases": "https://github.com/<REDACTED>/thegent/releases"
   }
 }

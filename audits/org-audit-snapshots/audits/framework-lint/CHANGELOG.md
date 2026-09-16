@@ -46,4 +46,4 @@ project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   § "Schema" should be updated to the v1.1 schema once
   `findings/71-pillar-2026-06-19-schema.md` is authored.
 
-[0.1.0]: https://github.com/KooshaPari/pheno-framework-lint/releases/tag/v0.1.0
+[0.1.0]: https://github.com/<REDACTED>/pheno-framework-lint/releases/tag/v0.1.0

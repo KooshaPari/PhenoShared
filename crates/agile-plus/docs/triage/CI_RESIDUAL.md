@@ -1,7 +1,7 @@
 # CI Residual Repair — Post-#809 Gate Triage (eco-044-gate-triage)
 
 **Branch:** `fix/agileplus-ci-residual`
-**Target PR observed:** KooshaPari/AgilePlus#808
+**Target PR observed:** <REDACTED>/AgilePlus#808
 **Date:** 2026-06-25
 **Method:** Read each still-failing job's log via `gh run view <id> --log-failed`, identify
 the *real* error, and apply the smallest possible fix in `.github/workflows/`.
@@ -160,7 +160,7 @@ unchanged.
                 failed with exit code 3
 ```
 
-**Root cause:** SonarCloud project `KooshaPari_AgilePlus` has Automatic
+**Root cause:** SonarCloud project `<REDACTED>_AgilePlus` has Automatic
 Analysis enabled; an explicit CI scan collides with it. The previous fix
 (`-Dsonar.autoAnalysis.disable=true`) is already on `main` in
 `.github/workflows/sonarcloud.yml`. The PR #808 run shows the old workflow
@@ -173,8 +173,8 @@ discoverable by anyone running the scanner locally and so the project's
 identity is documented in-repo:
 
 ```
-sonar.projectKey=KooshaPari_AgilePlus
-sonar.organization=kooshapari
+sonar.projectKey=<REDACTED>_AgilePlus
+sonar.organization=<REDACTED>
 ```
 
 `SONAR_TOKEN` is already wired via `secrets.SONAR_TOKEN` in the workflow's

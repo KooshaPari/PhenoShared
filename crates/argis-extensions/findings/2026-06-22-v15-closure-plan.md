@@ -5,7 +5,7 @@
 **Date:** 2026-06-22 (system_date 2026-06-21)
 **Author:** Forge, v22 cycle-12 orchestrator
 **v15 branch:** `chore/v15-71-pillar-cycle-5-p0-2026-06-21` (`1f921be45a` HEAD)
-**v15 closure PR:** [KooshaPari/phenotype-apps#83](https://github.com/KooshaPari/phenotype-apps/pull/83) (merged 2026-06-21T20:17:27Z)
+**v15 closure PR:** [<REDACTED>/phenotype-apps#83](https://github.com/<REDACTED>/phenotype-apps/pull/83) (merged 2026-06-21T20:17:27Z)
 
 ---
 
@@ -23,7 +23,7 @@ The task brief describes "5 v15 PRs", but the actual repo state is **5 deliverab
 | 4 | `cache-stats` dashboard | In commit `1f921be45a` (no separate PR) | ✅ shipped | Nothing — landed on v15 branch |
 | 5 | `worklog schema enforcer` | In commit `1f921be45a` (no separate PR) | ✅ shipped | Nothing — landed on v15 branch |
 
-**Closure PR for the cycle as a whole:** [#83](https://github.com/KooshaPari/phenotype-apps/pull/83) — `docs(v15): closure report — 9/9 tracks shipped, 5.9-pillar mean 2.53→2.71` — merged 2026-06-21T20:17:27Z by self-merge (per ADR-029 / track-8-self-merge-postmortem policy).
+**Closure PR for the cycle as a whole:** [#83](https://github.com/<REDACTED>/phenotype-apps/pull/83) — `docs(v15): closure report — 9/9 tracks shipped, 5.9-pillar mean 2.53→2.71` — merged 2026-06-21T20:17:27Z by self-merge (per ADR-029 / track-8-self-merge-postmortem policy).
 
 ---
 
@@ -96,7 +96,7 @@ The companion finding file `findings/2026-06-21-v15-closure-deliverables.md` (22
 - **Path:** `scripts/cache_stats_dashboard.py` (241 LoC, 8,844 B)
 - **Status:** ✅ shipped on v15 branch
 - **Capabilities:** Reads JSON array, JSONL, single object, or aggregated cache-stats-pages.yml shape; per-repo + fleet tier classification (good/warn/bad); Markdown mode for PR comments
-- **Refs:** L31 cache stats, [KooshaPari/phenotype-apps#90b949a43](https://github.com/KooshaPari/phenotype-apps/commit/090b949a43) (v19-T1 cache stats Pages deployer)
+- **Refs:** L31 cache stats, [<REDACTED>/phenotype-apps#90b949a43](https://github.com/<REDACTED>/phenotype-apps/commit/090b949a43) (v19-T1 cache stats Pages deployer)
 - **What's needed to "close":** nothing — done.
 
 ### 5. `scripts/worklog_schema_check.sh` — pre-commit hook for WORKLOG.md v2.1
@@ -131,7 +131,7 @@ Based on the v15 closure PR #83 (which closed the cycle), the closure checklist 
 
 The v15 commit message explicitly notes: "pheno-mcp-router is submodule-only". If we want full fleet coverage, follow-up work is:
 
-1. Land `cliff.toml` in `KooshaPari/pheno-mcp-router` via a separate PR
+1. Land `cliff.toml` in `<REDACTED>/pheno-mcp-router` via a separate PR
 2. Add to a fleet-wide cliff.toml inventory check (could be a v16 T2 cycle-6 task)
 
 **Effort estimate:** 30 min (1 file, ~52 LoC, copied verbatim from pheno-config/cliff.toml). Trivial.
@@ -198,9 +198,9 @@ If the task brief intended to gate v15 closure on 5 separate PRs (one per delive
 
 ## Cross-references
 
-- **v15 closure PR:** [KooshaPari/phenotype-apps#83](https://github.com/KooshaPari/phenotype-apps/pull/83)
-- **v15 AGENTS.md update:** [KooshaPari/phenotype-apps#87](https://github.com/KooshaPari/phenotype-apps/pull/87)
-- **v16 cycle-6 probe PR:** [KooshaPari/phenotype-apps#85](https://github.com/KooshaPari/phenotype-apps/pull/85)
+- **v15 closure PR:** [<REDACTED>/phenotype-apps#83](https://github.com/<REDACTED>/phenotype-apps/pull/83)
+- **v15 AGENTS.md update:** [<REDACTED>/phenotype-apps#87](https://github.com/<REDACTED>/phenotype-apps/pull/87)
+- **v16 cycle-6 probe PR:** [<REDACTED>/phenotype-apps#85](https://github.com/<REDACTED>/phenotype-apps/pull/85)
 - **Companion finding:** `findings/2026-06-21-v15-closure-deliverables.md` (in v15 branch only, not in local sparse-checkout)
 - **Deliverables commit:** `1f921be45a` on `chore/v15-71-pillar-cycle-5-p0-2026-06-21`
 - **v15 closure report:** `findings/2026-06-21-v15-closure-report.md` (PR #83)

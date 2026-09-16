@@ -32,7 +32,7 @@ jobs:
           cat > legacy_tooling_report.md <<MD
           # Legacy Tooling Scan Report
 
-          Scanner source was previously loaded from deleted KooshaPari/phenoShared.
+          Scanner source was previously loaded from deleted <REDACTED>/phenoShared.
           This workflow remains WARN-mode and produces an empty report until the scanner is rehomed.
           MD
 

@@ -2,15 +2,15 @@
 
 **This repository is no longer maintained.**
 
-Settly has been absorbed into the [Configra](https://github.com/KooshaPari/Configra) monorepo as a workspace member crate at `crates/settly/`.
+Settly has been absorbed into the [Configra](https://github.com/<REDACTED>/Configra) monorepo as a workspace member crate at `crates/settly/`.
 
 ## Migration
 
 All future development, issue tracking, and releases happen in Configra:
 
-- **Repo:** https://github.com/KooshaPari/Configra
+- **Repo:** https://github.com/<REDACTED>/Configra
 - **Crate path:** `crates/settly/`
-- **Cargo dependency:** `settly = { git = "https://github.com/KooshaPari/Configra" }` (once published)
+- **Cargo dependency:** `settly = { git = "https://github.com/<REDACTED>/Configra" }` (once published)
 
 ## History
 

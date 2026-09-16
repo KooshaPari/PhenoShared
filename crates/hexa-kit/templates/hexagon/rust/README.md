@@ -59,7 +59,7 @@ All packages apply these methodologies:
 
 ```bash
 # Clone the workspace
-git clone https://github.com/KooshaPari/kits.git
+git clone https://github.com/<REDACTED>/kits.git
 cd kits
 
 # Build all packages

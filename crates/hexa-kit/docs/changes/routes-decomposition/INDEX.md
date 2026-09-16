@@ -162,12 +162,12 @@ See **COMPLETION_REPORT.md** for full verification details.
 
 ### Source Code (After Merge)
 ```
-/Users/kooshapari/CodeProjects/Phenotype/repos/crates/agileplus-dashboard/src/routes/
+/Users/<REDACTED>/CodeProjects/Phenotype/repos/crates/agileplus-dashboard/src/routes/
 ```
 
 ### Documentation (On Main)
 ```
-/Users/kooshapari/CodeProjects/Phenotype/repos/docs/changes/routes-decomposition/
+/Users/<REDACTED>/CodeProjects/Phenotype/repos/docs/changes/routes-decomposition/
 ├── INDEX.md (this file)
 ├── COMPLETION_REPORT.md
 ├── IMPLEMENTATION_SUMMARY.md

@@ -222,10 +222,10 @@ The new `tests.rs` module provides comprehensive coverage:
 ### Source Code Location
 
 **Worktree (Development)**:  
-`/Users/kooshapari/CodeProjects/Phenotype/repos/.worktrees/phase2-routes-dashboard/crates/agileplus-dashboard/src/routes/`
+`/Users/<REDACTED>/CodeProjects/Phenotype/repos/.worktrees/phase2-routes-dashboard/crates/agileplus-dashboard/src/routes/`
 
 **Canonical (After Merge)**:  
-`/Users/kooshapari/CodeProjects/Phenotype/repos/crates/agileplus-dashboard/src/routes/`
+`/Users/<REDACTED>/CodeProjects/Phenotype/repos/crates/agileplus-dashboard/src/routes/`
 
 ### Documentation Files
 

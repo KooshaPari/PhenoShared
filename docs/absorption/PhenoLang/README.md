@@ -1,8 +1,8 @@
 # PhenoLang absorption disposition
 
 Date: 2026-06-20
-Source repo: `KooshaPari/PhenoLang`
-Local path: `/Users/kooshapari/CodeProjects/Phenotype/repos/PhenoLang`
+Source repo: `<REDACTED>/PhenoLang`
+Local path: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/PhenoLang`
 Observed branch: `main`
 Observed state: clean after clone
 

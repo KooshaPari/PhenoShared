@@ -46,7 +46,7 @@ FR-1: Every `uses:` line referencing a third-party action MUST pin to a
 40-character commit SHA resolved against the action's upstream default branch.
 FR-2: Tag-style refs (e.g. `@v4`, `@stable`, `@main`) are forbidden in
 `uses:` lines; the only permitted trailing token is a 40-char SHA.
-FR-3: First-party actions owned by the org (under `KooshaPari/*`) follow the
+FR-3: First-party actions owned by the org (under `<REDACTED>/*`) follow the
 same SHA rule.
 FR-4: A pre-commit or pre-merge check MUST fail the build when an unpinned or
 malformed `uses:` is introduced.

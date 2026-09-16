@@ -1,6 +1,6 @@
 # AgilePlus Workspace Deep Audit
 **Date:** 2026-03-30
-**Repository:** `git@github.com:KooshaPari/AgilePlus.git`
+**Repository:** `git@github.com:<REDACTED>/AgilePlus.git`
 **Branch:** `main` (ahead of origin by 3 commits)
 **Workspace Size:** 563 MB
 **Last Commit:** c150756 — test(phase2.5): add comprehensive integration tests for plugin system
@@ -19,7 +19,7 @@ AgilePlus is a **separate, active Git repository** maintained independently of p
 
 | Property | Value |
 |----------|-------|
-| **Remote URL** | `git@github.com:KooshaPari/AgilePlus.git` |
+| **Remote URL** | `git@github.com:<REDACTED>/AgilePlus.git` |
 | **Current Branch** | `main` |
 | **Commit Ahead** | 3 commits (local) |
 | **Latest Commit** | c150756 (phase2.5 plugin integration tests) |

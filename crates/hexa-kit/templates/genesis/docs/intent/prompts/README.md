@@ -11,7 +11,7 @@ This directory holds **verbatim user prompts** extracted from agent session logs
 | **Claude Code** | `~/.claude/projects/` | Session JSON / markdown exports |
 | **Codex** | `~/.codex/` or IDE-specific store | Tool version varies |
 
-Spec: [HexaKit docs/genesis/INTENT_SPEC.md](https://github.com/KooshaPari/HexaKit/blob/main/docs/genesis/INTENT_SPEC.md)
+Spec: [HexaKit docs/genesis/INTENT_SPEC.md](https://github.com/<REDACTED>/HexaKit/blob/main/docs/genesis/INTENT_SPEC.md)
 
 ## Extract
 

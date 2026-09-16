@@ -2627,7 +2627,7 @@
       "pid": 416000,
       "name": "pwsh.exe",
       "rss_mb": 81.4,
-      "cmd": "pwsh.exe -ExecutionPolicy Bypass -Command Start-Sleep -Seconds 600; gh pr checks 741 -R KooshaPari/sharecli 2>&1 | Select-String -Pattern \"fail|pending\" | Select-Object -First 12; echo ===740===; gh pr view 740 -R KooshaPari/sharecli --json reviewDecision,mergedAt 2>&1 | Select-Object -First 1"
+      "cmd": "pwsh.exe -ExecutionPolicy Bypass -Command Start-Sleep -Seconds 600; gh pr checks 741 -R <REDACTED>/sharecli 2>&1 | Select-String -Pattern \"fail|pending\" | Select-Object -First 12; echo ===740===; gh pr view 740 -R <REDACTED>/sharecli --json reviewDecision,mergedAt 2>&1 | Select-Object -First 1"
     },
     {
       "pid": 416120,

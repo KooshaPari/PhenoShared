@@ -304,7 +304,7 @@ A: Phase 3 (AgilePlus file decomposition), see PHASE2_CONSOLIDATED_SUMMARY.md "W
 
 All Phase 2 documents are in:
 ```
-/Users/kooshapari/CodeProjects/Phenotype/repos/docs/worklogs/
+/Users/<REDACTED>/CodeProjects/Phenotype/repos/docs/worklogs/
 ```
 
 **Planning documents** (main):

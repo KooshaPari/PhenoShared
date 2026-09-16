@@ -6,7 +6,7 @@
   "color": "#7ebab5",
   "description": "Intelligent task orchestration with multi-agent coordination, priority queues, and real-time progress tracking.",
   "tier": 2,
-  "repo": "KooshaPari/Tasken",
+  "repo": "<REDACTED>/Tasken",
   "language": "Rust / React / TypeScript",
   "license": "MIT",
   "status": "active",
@@ -18,8 +18,8 @@
     "Web dashboard + desktop app"
   ],
   "links": {
-    "github": "https://github.com/KooshaPari/Tasken",
+    "github": "https://github.com/<REDACTED>/Tasken",
     "docs": "https://tasken.phenotype.space/docs",
-    "releases": "https://github.com/KooshaPari/Tasken/releases"
+    "releases": "https://github.com/<REDACTED>/Tasken/releases"
   }
 }

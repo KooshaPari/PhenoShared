@@ -1,29 +1,29 @@
 # Upstream — Apisync
 
 This document is the repoint map for anyone who still references
-`KooshaPari/Apisync` directly (Cargo git deps, `pheno` submodules, IDE links,
+`<REDACTED>/Apisync` directly (Cargo git deps, `pheno` submodules, IDE links,
 CI caches, or historical prompt records).
 
 ## Supersession chain
 
 ```
-KooshaPari/Apisync                  ← archived, do not push
+<REDACTED>/Apisync                  ← archived, do not push
         │
         │  v0.1.0 extraction → became `apikit`
         ▼
-KooshaPari/apikit                   ← archived, do not push
+<REDACTED>/apikit                   ← archived, do not push
         │
         │  full absorption (governance + src + CI + tooling + docs + ADRs)
         ▼
-KooshaPari/phenotype-tooling/
+<REDACTED>/phenotype-tooling/
   └─ docs/absorbed-from-apikit/      ← ACTIVE canonical home
 ```
 
 | Stage | Repo | URL | State | Last meaningful commit |
 | ----- | ---- | --- | ----- | ---------------------- |
-| 0 (here) | Apisync | https://github.com/KooshaPari/Apisync | archived | 2026-06-08 (per original README) |
-| 1 | apikit | https://github.com/KooshaPari/apikit | archived | 2026-06-21 |
-| 2 (active) | phenotype-tooling — `docs/absorbed-from-apikit/` | https://github.com/KooshaPari/phenotype-tooling/tree/main/docs/absorbed-from-apikit | active | continuous |
+| 0 (here) | Apisync | https://github.com/<REDACTED>/Apisync | archived | 2026-06-08 (per original README) |
+| 1 | apikit | https://github.com/<REDACTED>/apikit | archived | 2026-06-21 |
+| 2 (active) | phenotype-tooling — `docs/absorbed-from-apikit/` | https://github.com/<REDACTED>/phenotype-tooling/tree/main/docs/absorbed-from-apikit | active | continuous |
 
 ## Repoint instructions by surface
 
@@ -31,14 +31,14 @@ KooshaPari/phenotype-tooling/
 
 | Before | After |
 | ------ | ----- |
-| `apisync = { git = "https://github.com/KooshaPari/Apisync.git" }` | `apikit = { git = "https://github.com/KooshaPari/phenotype-tooling.git" }` (see `phenotype-tooling/docs/absorbed-from-apikit/Cargo.toml`) |
+| `apisync = { git = "https://github.com/<REDACTED>/Apisync.git" }` | `apikit = { git = "https://github.com/<REDACTED>/phenotype-tooling.git" }` (see `phenotype-tooling/docs/absorbed-from-apikit/Cargo.toml`) |
 | `git = ".../Apisync.git" rev = "<sha>"` | drop the dep; the absorbed crate surface lives in the workspace member `apikit` inside `phenotype-tooling` |
-| Pinning Apisync ADRs (`adr/` in dependent code) | switch to `[`docs/governance/adr/001..005-*.md`](https://github.com/KooshaPari/phenotype-tooling/tree/main/docs/absorbed-from-apikit/docs/governance/adr)` references |
+| Pinning Apisync ADRs (`adr/` in dependent code) | switch to `[`docs/governance/adr/001..005-*.md`](https://github.com/<REDACTED>/phenotype-tooling/tree/main/docs/absorbed-from-apikit/docs/governance/adr)` references |
 
 If you specifically need the **original** `Cargo.toml` shape (package name
 `apisync`, original repo URL, v0.1.0 version), the verbatim legacy manifest
 is preserved at
-[`phenotype-tooling/docs/absorbed-from-apikit/Cargo.toml.apisync-legacy`](https://github.com/KooshaPari/phenotype-tooling/blob/main/docs/absorbed-from-apikit/Cargo.toml.apisync-legacy).
+[`phenotype-tooling/docs/absorbed-from-apikit/Cargo.toml.apisync-legacy`](https://github.com/<REDACTED>/phenotype-tooling/blob/main/docs/absorbed-from-apikit/Cargo.toml.apisync-legacy).
 
 ### Git submodule — `pheno` workspace
 
@@ -47,12 +47,12 @@ is preserved at
 ```
 [submodule "Apisync"]
     path = Apisync
-    url = https://github.com/KooshaPari/Apisync.git
+    url = https://github.com/<REDACTED>/Apisync.git
 ```
 
 The `phenotype-core` workspace no longer compiles against the Apisync
 submodule as of Wave 14 (task #1, hexa-kit #271: git pin repointed to
-`KooshaPari/phenotype-types` main). If you still see a submodule pin in a
+`<REDACTED>/phenotype-types` main). If you still see a submodule pin in a
 fork, remove it:
 
 ```bash
@@ -70,7 +70,7 @@ intentional, replace the URL with the absorbed manifest path:
 ```ini
 [submodule "Apisync"]
     path = vendor/apikit
-    url = https://github.com/KooshaPari/phenotype-tooling.git
+    url = https://github.com/<REDACTED>/phenotype-tooling.git
     # use a path-filter sparse-checkout if you only need Apisync's slice:
     #   git config submodule.vendor/apikit.sparseCheckout true
 ```
@@ -79,7 +79,7 @@ intentional, replace the URL with the absorbed manifest path:
 
 HexaKit's architecture ADR files at
 `pheno/crates/hexa-kit/docs/adr/origin/001..005-apisync-*.md` carry the
-"origin" lineage header `<!-- Migrated from KooshaPari/Apisync (archived
+"origin" lineage header `<!-- Migrated from <REDACTED>/Apisync (archived
 2026-06-19) — original commit d981353 -->`. These files continue to point
 at the absorbing collection's mirror at
 `phenotype-tooling/docs/absorbed-from-apikit/docs/governance/adr/001..005-*.md`
@@ -97,15 +97,15 @@ these continue to back-route prompt reconstructions that reference
 ## Operational checklist (operator)
 
 When this pointer `README.md` is pushed (or PR'd) to
-`KooshaPari/Apisync`:
+`<REDACTED>/Apisync`:
 
 - [ ] Push branch with the new `README.md` to a feature branch (e.g.
       `chore/supersede-pointer-2026-09-01`).
-- [ ] Open a PR against `KooshaPari/Apisync` `main`; the repo is archived,
+- [ ] Open a PR against `<REDACTED>/Apisync` `main`; the repo is archived,
       so the PR is a "documentation-only supersession" and will be admin-merged
       or applied via a workflow bypass.
 - [ ] On merge, set the GitHub repo **Homepage** field to
-      `https://github.com/KooshaPari/phenotype-tooling/tree/main/docs/absorbed-from-apikit`
+      `https://github.com/<REDACTED>/phenotype-tooling/tree/main/docs/absorbed-from-apikit`
       (per `GITHUB_ARCHIVE_POLICY` step 5).
 - [ ] On merge, set the GitHub repo **Description** to
       `SUPERSEDED 2026-06-19 — migrated into apikit, absorbed into phenotype-tooling/docs/absorbed-from-apikit. Do not push here.`

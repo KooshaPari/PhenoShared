@@ -3,8 +3,8 @@
 **Date:** 2026-06-17  
 **Wave 14 (ADR-ECO-014):** Terminal owner repoint from interim phenoShared staging  
 **Disposition step:** HexaKit DISPOSITION #16 — Wave E absorption stub  
-**Canonical repo:** https://github.com/KooshaPari/phenotype-types  
-**ADR:** [ADR-ECO-014-phenoshared-decompose](https://github.com/KooshaPari/phenotype-registry/blob/main/docs/adrs/ADR-ECO-014-phenoshared-decompose.md)
+**Canonical repo:** https://github.com/<REDACTED>/phenotype-types  
+**ADR:** [ADR-ECO-014-phenoshared-decompose](https://github.com/<REDACTED>/phenotype-registry/blob/main/docs/adrs/ADR-ECO-014-phenoshared-decompose.md)
 
 ## What changed
 
@@ -17,7 +17,7 @@
 1. Depend on `phenotype-errors` from **phenotype-types**, not phenoShared or HexaKit:
 
 ```toml
-phenotype-errors = { git = "https://github.com/KooshaPari/phenotype-types", branch = "main" }
+phenotype-errors = { git = "https://github.com/<REDACTED>/phenotype-types", branch = "main" }
 ```
 
 2. See DOMAIN_ROLES and disposition-index row id **16**.

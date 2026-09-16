@@ -1,7 +1,7 @@
 # Duplication Audit Expansion - Completion Report
 
 **Date:** 2026-03-29
-**Task:** Expand `/Users/kooshapari/CodeProjects/Phenotype/repos/docs/worklogs/DUPLICATION.md` from ~1,891 lines to ~5,600 lines
+**Task:** Expand `/Users/<REDACTED>/CodeProjects/Phenotype/repos/docs/worklogs/DUPLICATION.md` from ~1,891 lines to ~5,600 lines
 
 ---
 

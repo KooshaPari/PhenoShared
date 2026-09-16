@@ -5,7 +5,7 @@ import { resolveSiteBase } from '../../packages/site-base/resolve-base.mjs';
 
 // https://astro.build
 export default defineConfig({
-  site: 'https://projects.kooshapari.com',
+  site: 'https://projects.<REDACTED>.com',
   base: resolveSiteBase('projects-landing'),
   vite: {
     plugins: [tailwindcss()],

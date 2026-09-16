@@ -5,7 +5,7 @@
 
 set -euo pipefail
 
-REPO_ROOT="/Users/kooshapari/CodeProjects/Phenotype/repos"
+REPO_ROOT="/Users/<REDACTED>/CodeProjects/Phenotype/repos"
 AUDIT_HOME="$REPO_ROOT/phenotype-org-audits"
 
 # Delegate to authoritative inventory agent (implemented in Rust/Codex/external)

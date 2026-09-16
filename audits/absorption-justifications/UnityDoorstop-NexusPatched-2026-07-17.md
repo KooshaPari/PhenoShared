@@ -1,8 +1,8 @@
 # UnityDoorstop-NexusPatched — Absorption Justification
 
 **Status:** QUEUED 2026-07-17 (batch2 refresh)
-**Source:** `KooshaPari/UnityDoorstop-NexusPatched` (1.1 MB, 8 branches, last push 2026-06-22)
-**Target:** `KooshaPari/phenotype-legacy-collection` (new aggregator spine for non-phenotype legacy repos)
+**Source:** `<REDACTED>/UnityDoorstop-NexusPatched` (1.1 MB, 8 branches, last push 2026-06-22)
+**Target:** `<REDACTED>/phenotype-legacy-collection` (new aggregator spine for non-phenotype legacy repos)
 **Disposition:** ABSORB
 
 ## Confidence
@@ -20,7 +20,7 @@
 ## Restore procedure
 
 ```sh
-gh repo unarchive KooshaPari/UnityDoorstop-NexusPatched
+gh repo unarchive <REDACTED>/UnityDoorstop-NexusPatched
 # In legacy-collection spine:
 git rm -r games/unity-doorstop-nexus-patched/
 git commit -m "revert: undo UnityDoorstop-NexusPatched absorption"
@@ -28,4 +28,4 @@ git commit -m "revert: undo UnityDoorstop-NexusPatched absorption"
 
 ## Cross-references
 
-- Disposition row: `registry/disposition-index.json` search `"KooshaPari/UnityDoorstop-NexusPatched"`
+- Disposition row: `registry/disposition-index.json` search `"<REDACTED>/UnityDoorstop-NexusPatched"`

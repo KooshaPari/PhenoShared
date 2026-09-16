@@ -263,7 +263,7 @@ async def run_mcp_tests(
         from tests.framework import TestRunner
 
         summary = await run_mcp_tests(
-            mcp_endpoint="https://zen.kooshapari.com/mcp",
+            mcp_endpoint="https://zen.<REDACTED>.com/mcp",
             test_runner_class=TestRunner,
             parallel=True,
             workers=16

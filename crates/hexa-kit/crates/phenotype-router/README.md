@@ -6,7 +6,7 @@ auto-combo variants; HTTP delegate to `cliproxy++` (Go plane) for
 
 ## Origin
 
-Absorbed from `KooshaPari/phenotype-gateway::spikes/rust/router` (H10 spike).
+Absorbed from `<REDACTED>/phenotype-gateway::spikes/rust/router` (H10 spike).
 The gateway repo is now archived and re-created as a deprecated mirror;
 the live router lives here.
 

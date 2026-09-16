@@ -1,7 +1,7 @@
 # Absorption Record: curated-traces
 
 **Date**: 2026-07-17
-**Source**: `KooshaPari/curated-traces`
+**Source**: `<REDACTED>/curated-traces`
 **Target**: `PhenoObservability/curated-traces/`
 **Wave**: `2026-07-17-queue-refresh-2`
 **Disposition**: `ABSORB`
@@ -29,4 +29,4 @@
 ## Verification
 
 - Branch: `PhenoObservability:overlay/logify-2026-07-17` (commit `5ec1646`)
-- Source `KooshaPari/curated-traces` archived 2026-07-17
+- Source `<REDACTED>/curated-traces` archived 2026-07-17

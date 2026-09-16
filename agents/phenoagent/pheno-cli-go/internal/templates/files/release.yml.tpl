@@ -122,7 +122,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Promote to staging
-        uses: KooshaPari/phenotypeActions/promote@main
+        uses: <REDACTED>/phenotypeActions/promote@main
         with:
           version: ${{ '{' }}needs.release.outputs.version{{ '}' }}
           channel: beta

@@ -31,8 +31,8 @@ version = "0.2.1"
 edition = "2024"
 license = "MIT"
 rust-version = "1.88"
-authors = ["Koosha Pari <kooshapari@kooshapari.com>"]
-repository = "https://github.com/KooshaPari/AgilePlus"
+authors = ["Koosha Pari <<REDACTED>@<REDACTED>.com>"]
+repository = "https://github.com/<REDACTED>/AgilePlus"
 homepage = "https://phenotype.space/agileplus"
 description = "AgilePlus — spec-first project management CLI (FR/NFR traceability)"
 
@@ -125,9 +125,9 @@ async-trait = "0.1"
 askama = "0.12"
 
 # Plugin crates (external from separate repos) — disabled for standalone build
-# agileplus-plugin-core = { git = "https://github.com/KooshaPari/agileplus-plugin-core" }
-# agileplus-plugin-git = { git = "https://github.com/KooshaPari/agileplus-plugin-git" }
-# agileplus-plugin-sqlite = { git = "https://github.com/KooshaPari/agileplus-plugin-sqlite" }
+# agileplus-plugin-core = { git = "https://github.com/<REDACTED>/agileplus-plugin-core" }
+# agileplus-plugin-git = { git = "https://github.com/<REDACTED>/agileplus-plugin-git" }
+# agileplus-plugin-sqlite = { git = "https://github.com/<REDACTED>/agileplus-plugin-sqlite" }
 
 # Git
 gix = "0.83"

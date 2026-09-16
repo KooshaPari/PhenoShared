@@ -528,21 +528,21 @@ pub fn log_http_error(
 
 For each repository, add these secrets to GitHub Settings → Secrets and variables → Actions:
 
-### AgilePlus (`KooshaPari/AgilePlus`)
+### AgilePlus (`<REDACTED>/AgilePlus`)
 
 ```
 SENTRY_DSN_AGILEPLUS=https://[project-key]@o[org-id].ingest.us.sentry.io/[project-id]
 SENTRY_AUTH_TOKEN=[auth-token-for-releases]
 ```
 
-### phenotype-infrakit (`KooshaPari/phenotype-infrakit`)
+### phenotype-infrakit (`<REDACTED>/phenotype-infrakit`)
 
 ```
 SENTRY_DSN_INFRAKIT=https://[project-key]@o[org-id].ingest.us.sentry.io/[project-id]
 SENTRY_AUTH_TOKEN=[auth-token-for-releases]
 ```
 
-### heliosCLI (`KooshaPari/heliosCLI`)
+### heliosCLI (`<REDACTED>/heliosCLI`)
 
 ```
 SENTRY_DSN_HELIOSCLI=https://[project-key]@o[org-id].ingest.us.sentry.io/[project-id]

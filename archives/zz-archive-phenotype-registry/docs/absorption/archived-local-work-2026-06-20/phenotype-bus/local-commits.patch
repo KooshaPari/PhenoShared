@@ -7,7 +7,7 @@ index 3c17a0f..852a54b 100644
 -# https://editorconfig.org
 +# Phenotype-org standard .editorconfig (v2 / 2026-06-14)
 +#
-+# Source: https://github.com/KooshaPari/phenotype-tooling/blob/main/templates/.editorconfig
++# Source: https://github.com/<REDACTED>/phenotype-tooling/blob/main/templates/.editorconfig
 +#
 +# EditorConfig: https://editorconfig.org
 +# Test that your editor respects this file:
@@ -153,10 +153,10 @@ index 88fec07..e5fe6fb 100644
 --- a/.github/CODEOWNERS
 +++ b/.github/CODEOWNERS
 @@ -1 +1,17 @@
--* @KooshaPari
+-* @<REDACTED>
 +# Phenotype-org standard CODEOWNERS (v2 / 2026-06-14)
 +#
-+# Source: https://github.com/KooshaPari/phenotype-tooling/blob/main/templates/CODEOWNERS
++# Source: https://github.com/<REDACTED>/phenotype-tooling/blob/main/templates/CODEOWNERS
 +#
 +# Place this file at one of:
 +#     .github/CODEOWNERS        # recommended (GitHub-recognized)
@@ -170,7 +170,7 @@ index 88fec07..e5fe6fb 100644
 +# ── catch-all owner ────────────────────────────────────────────────────────
 +# Every PR must get approval from at least one of these reviewers unless
 +# a more specific block below overrides.
-+* @KooshaPari
++* @<REDACTED>
 \ No newline at end of file
 diff --git a/.github/ISSUE_TEMPLATE/bug.md b/.github/ISSUE_TEMPLATE/bug.md
 deleted file mode 100644
@@ -260,7 +260,7 @@ index 0000000..8b297e9
 @@ -0,0 +1,17 @@
 +# Phenotype-org standard issue template chooser (v1 / 2026-06-14)
 +#
-+# Source: https://github.com/KooshaPari/phenotype-tooling/blob/main/templates/.github/ISSUE_TEMPLATE/config.yml
++# Source: https://github.com/<REDACTED>/phenotype-tooling/blob/main/templates/.github/ISSUE_TEMPLATE/config.yml
 +#
 +# GitHub renders this file as the "issue chooser" dialog when users click
 +# "New issue". Each `[]` row is a link to a template; the contact links
@@ -269,11 +269,11 @@ index 0000000..8b297e9
 +blank_issues_enabled: false
 +
 +contact_links:
-+  - name: phenotype-bus maintainer (KooshaPari)
-+    url: https://github.com/KooshaPari
++  - name: phenotype-bus maintainer (<REDACTED>)
++    url: https://github.com/<REDACTED>
 +    about: Direct contact for questions that don't fit a bug or feature request.
 +  - name: Security advisory (private disclosure)
-+    url: https://github.com/KooshaPari/phenotype-bus/security/advisories/new
++    url: https://github.com/<REDACTED>/phenotype-bus/security/advisories/new
 +    about: Please use this for any security-sensitive reports. See SECURITY.md.
 \ No newline at end of file
 diff --git a/.github/ISSUE_TEMPLATE/feature.md b/.github/ISSUE_TEMPLATE/feature.md
@@ -557,7 +557,7 @@ diff --git a/Cargo.toml b/Cargo.toml
 index 0b80d8a..768118a 100644
 --- a/Cargo.toml
 +++ b/Cargo.toml
-@@ -15,16 +15,12 @@ repository = "https://github.com/KooshaPari/phenotype-bus"
+@@ -15,16 +15,12 @@ repository = "https://github.com/<REDACTED>/phenotype-bus"
  [dependencies]
  tokio = { version = "1.39", features = ["sync", "rt", "rt-multi-thread", "macros", "time"] }
  serde = { version = "1.0", features = ["derive"] }
@@ -583,7 +583,7 @@ index 0662d72..39be7f4 100644
 -db-path = "$CARGO_HOME/advisory-db"
 +# cargo-deny config — Phenotype-org standard (v2 / 2026-06-14)
 +#
-+# Source: https://github.com/KooshaPari/phenotype-tooling/blob/main/templates/deny.toml
++# Source: https://github.com/<REDACTED>/phenotype-tooling/blob/main/templates/deny.toml
 +#
 +# Install cargo-deny: cargo install --locked cargo-deny
 +# Run locally: cargo deny check
@@ -947,7 +947,7 @@ index 297d0cc..4a50d22 100644
 +++ b/src/lib.rs
 @@ -13,10 +13,17 @@
  //! in-memory bus pattern has been lifted to
- //! [`phenoEvents`](https://github.com/KooshaPari/phenoEvents) (PR #9).
+ //! [`phenoEvents`](https://github.com/<REDACTED>/phenoEvents) (PR #9).
  //! This crate will be archived on 2026-06-25.
 +//!
 +//! # Configuration

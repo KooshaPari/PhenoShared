@@ -83,7 +83,7 @@ Total estimated: ~90min live execution + 20min for auth + 30min CodeRabbit.
 
 | Blocker | Severity | Resolution |
 |---------|----------|------------|
-| `gh auth` invalid for `KooshaPari` | HIGH | Run `gh auth login` |
+| `gh auth` invalid for `<REDACTED>` | HIGH | Run `gh auth login` |
 | CodeRabbit rate limit exceeded | MEDIUM | Wait 1hr cooldown, retry |
 | cliproxyapi++ shared CI drift | HIGH | Fix template-commons workflow |
 | `thegent` `upstream` remote 404 | HIGH | Reconfigure git remotes |

@@ -1,4 +1,4 @@
-module github.com/kooshapari/bifrost-extensions/slm-server
+module github.com/<REDACTED>/bifrost-extensions/slm-server
 
 go 1.25.4
 

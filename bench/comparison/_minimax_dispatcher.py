@@ -31,7 +31,7 @@ from bench.comparison._direct_minimax_adapter import (
 )
 from bench.comparison._forge_reply_parser import _extract_reply
 
-FORGE_BIN = "/Users/kooshapari/.local/bin/forge"
+FORGE_BIN = "/Users/<REDACTED>/.local/bin/forge"
 DIRECT_TIMEOUT_CAP_S = 60.0
 DEFAULT_BACKEND = "auto"  # auto | direct | forge
 
@@ -85,7 +85,7 @@ def _call_forge(prompt: str, timeout_s: int) -> dict[str, Any]:
     started = time.monotonic()
     env = {
         **os.environ,
-        "PATH": "/usr/bin:/bin:/usr/local/bin:/Users/kooshapari/.local/bin",
+        "PATH": "/usr/bin:/bin:/usr/local/bin:/Users/<REDACTED>/.local/bin",
     }
     try:
         proc = subprocess.run(  # nosec B603

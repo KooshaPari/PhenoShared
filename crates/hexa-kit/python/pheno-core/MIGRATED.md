@@ -2,7 +2,7 @@
 
 **Date:** 2026-06-18  
 **Disposition step:** Wave F — `python/pheno-core` stub redirect  
-**Canonical repo:** https://github.com/KooshaPari/phenotype-python-sdk
+**Canonical repo:** https://github.com/<REDACTED>/phenotype-python-sdk
 
 ## What changed
 

@@ -167,7 +167,7 @@
       "pid": 2388,
       "name": "pwsh.exe",
       "rss_mb": 80.9,
-      "cmd": "pwsh.exe -ExecutionPolicy Bypass -Command wsl -d FedoraLinux-44 -u kooshapari -e bash -c 'export PATH=/home/kooshapari/.local/bin:$PATH; sleep 3; ss -tlnp 2>/dev/null | grep 7777 | head -1 || (echo \"restarting...\"; nohup podman system service -t 0 tcp:0.0.0.0:7777 >/tmp/podman-api.log 2>&1 & sleep 4; ss -tlnp 2>/dev/null | grep 7777 | head -1); echo ===; curl -s -m 5 http://127.0.0.1:7777/v3.4.0/libpod/_ping 2>&1 | head -c 60' 2>&1\necho ''\necho '===LAUNCH-OBS-STACK==='\nwsl -d FedoraLinux-44 -u kooshapari -e bash -c 'export PATH=/home/kooshapari/.local/bin:$PATH; bash /mnt/c/Users/koosh/portage/observability/launch_obs_stack.sh 2>&1 | tail -25' 2>&1"
+      "cmd": "pwsh.exe -ExecutionPolicy Bypass -Command wsl -d FedoraLinux-44 -u <REDACTED> -e bash -c 'export PATH=/home/<REDACTED>/.local/bin:$PATH; sleep 3; ss -tlnp 2>/dev/null | grep 7777 | head -1 || (echo \"restarting...\"; nohup podman system service -t 0 tcp:0.0.0.0:7777 >/tmp/podman-api.log 2>&1 & sleep 4; ss -tlnp 2>/dev/null | grep 7777 | head -1); echo ===; curl -s -m 5 http://127.0.0.1:7777/v3.4.0/libpod/_ping 2>&1 | head -c 60' 2>&1\necho ''\necho '===LAUNCH-OBS-STACK==='\nwsl -d FedoraLinux-44 -u <REDACTED> -e bash -c 'export PATH=/home/<REDACTED>/.local/bin:$PATH; bash /mnt/c/Users/koosh/portage/observability/launch_obs_stack.sh 2>&1 | tail -25' 2>&1"
     },
     {
       "pid": 2396,
@@ -3161,7 +3161,7 @@
       "pid": 442068,
       "name": "pwsh.exe",
       "rss_mb": 79.1,
-      "cmd": "pwsh.exe -ExecutionPolicy Bypass -Command Start-Sleep -Seconds 660; gh pr checks 741 -R KooshaPari/sharecli 2>&1 | Select-String -Pattern \"fail|pending\" | Select-Object -First 10"
+      "cmd": "pwsh.exe -ExecutionPolicy Bypass -Command Start-Sleep -Seconds 660; gh pr checks 741 -R <REDACTED>/sharecli 2>&1 | Select-String -Pattern \"fail|pending\" | Select-Object -First 10"
     },
     {
       "pid": 442172,
@@ -3179,7 +3179,7 @@
       "pid": 442740,
       "name": "wsl.exe",
       "rss_mb": 13.1,
-      "cmd": "c:\\windows\\system32\\wsl.exe -d FedoraLinux-44 -u kooshapari -e bash -c export PATH=/home/kooshapari/.local/bin:$PATH; bash /mnt/c/Users/koosh/portage/observability/launch_obs_stack.sh 2>&1 | tail -25"
+      "cmd": "c:\\windows\\system32\\wsl.exe -d FedoraLinux-44 -u <REDACTED> -e bash -c export PATH=/home/<REDACTED>/.local/bin:$PATH; bash /mnt/c/Users/koosh/portage/observability/launch_obs_stack.sh 2>&1 | tail -25"
     },
     {
       "pid": 443000,
@@ -3191,7 +3191,7 @@
       "pid": 443076,
       "name": "wsl.exe",
       "rss_mb": 7.8,
-      "cmd": "c:\\windows\\system32\\wsl.exe -d FedoraLinux-44 -u kooshapari -e bash -c export PATH=/home/kooshapari/.local/bin:$PATH; bash /mnt/c/Users/koosh/portage/observability/launch_obs_stack.sh 2>&1 | tail -25"
+      "cmd": "c:\\windows\\system32\\wsl.exe -d FedoraLinux-44 -u <REDACTED> -e bash -c export PATH=/home/<REDACTED>/.local/bin:$PATH; bash /mnt/c/Users/koosh/portage/observability/launch_obs_stack.sh 2>&1 | tail -25"
     }
   ],
   "listening_ports_count": 70,

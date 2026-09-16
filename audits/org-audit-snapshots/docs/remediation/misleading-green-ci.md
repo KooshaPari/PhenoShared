@@ -62,5 +62,5 @@ Wire this via the shared reusable workflows (ties into P2.5 / #65 federation-ado
 
 - [ ] MCPForge `fr-coverage.yml` runs real coverage + threshold; no `|| true`
 - [ ] KlipDot blocking gates drop `continue-on-error`
-- [x] sharecli test suite compiles; zero-tests-collected fails CI; coverage enforced (coverage.yml llvm-cov + test-count guard; ci-success fail-on-dep-failure — see KooshaPari/sharecli feat/sharecli-v38-audit-ci-truth)
+- [x] sharecli test suite compiles; zero-tests-collected fails CI; coverage enforced (coverage.yml llvm-cov + test-count guard; ci-success fail-on-dep-failure — see <REDACTED>/sharecli feat/sharecli-v38-audit-ci-truth)
 - [ ] org guardrail (echo-gate / continue-on-error / zero-tests lint) wired into reusable workflows

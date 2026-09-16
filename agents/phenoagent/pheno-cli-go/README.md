@@ -7,7 +7,7 @@
 ### Go Install
 
 ```bash
-go install github.com/KooshaPari/pheno-cli@latest
+go install github.com/<REDACTED>/pheno-cli@latest
 ```
 
 ### Binary Download
@@ -16,7 +16,7 @@ Pre-built binaries are available from the releases page for Linux (amd64, arm64)
 
 ```bash
 # macOS (Apple Silicon)
-curl -L https://github.com/KooshaPari/pheno-cli/releases/latest/download/pheno-darwin-arm64 -o /usr/local/bin/pheno
+curl -L https://github.com/<REDACTED>/pheno-cli/releases/latest/download/pheno-darwin-arm64 -o /usr/local/bin/pheno
 chmod +x /usr/local/bin/pheno
 ```
 

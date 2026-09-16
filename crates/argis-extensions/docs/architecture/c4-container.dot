@@ -55,7 +55,7 @@ digraph C4_Container {
     style=filled;
     color=lightgray;
     "Vault" [shape=cylinder, label="Vault\n(L50 backend\nADR-083)"];
-    "GitHub" [shape=cylinder, label="GitHub\n(KooshaPari\nsource-of-truth)"];
+    "GitHub" [shape=cylinder, label="GitHub\n(<REDACTED>\nsource-of-truth)"];
   }
 
   // Edges (key flows)

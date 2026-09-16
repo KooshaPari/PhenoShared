@@ -1,6 +1,6 @@
 # Worklog — pheno-tracing
 
-Schema v2.1 (ADR-015, ADR-025, ADR-030). See `/Users/kooshapari/CodeProjects/Phenotype/repos/findings/2026-06-17-L5-103-worklog-v2-1.md` and `/Users/kooshapari/CodeProjects/Phenotype/repos/pheno-worklog-schema/SPEC-v2.1.md`.
+Schema v2.1 (ADR-015, ADR-025, ADR-030). See `/Users/<REDACTED>/CodeProjects/Phenotype/repos/findings/2026-06-17-L5-103-worklog-v2-1.md` and `/Users/<REDACTED>/CodeProjects/Phenotype/repos/pheno-worklog-schema/SPEC-v2.1.md`.
 
 | Date | Task ID | Layer | Action | Files | Notes | device |
 |------|---------|-------|--------|-------|-------|--------|

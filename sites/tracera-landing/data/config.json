@@ -4,7 +4,7 @@
   "domain": "phenotype.space/tracera",
   "description": "Requirements traceability & impact analysis. ISO-29148/DO-178C coverage matrix, blast-radius impact, and a spec-first governance gate — shipped as a single native Rust (axum) binary with 20 endpoints, no Python.",
   "tier": 1,
-  "repo": "KooshaPari/Tracera",
+  "repo": "<REDACTED>/Tracera",
   "language": "Rust",
   "license": "MIT",
   "status": "active",
@@ -17,13 +17,13 @@
     "Cloudflare edge worker deploy"
   ],
   "links": {
-    "github": "https://github.com/KooshaPari/Tracera",
+    "github": "https://github.com/<REDACTED>/Tracera",
     "docs": "https://phenotype.space/tracera/docs",
-    "releases": "https://github.com/KooshaPari/Tracera/releases"
+    "releases": "https://github.com/<REDACTED>/Tracera/releases"
   },
   "badges": [
-    "https://img.shields.io/github/actions/workflow/status/KooshaPari/Tracera/ci.yml?branch=main&label=build",
-    "https://img.shields.io/github/v/release/KooshaPari/Tracera?include_prereleases&sort=semver",
-    "https://img.shields.io/github/license/KooshaPari/Tracera"
+    "https://img.shields.io/github/actions/workflow/status/<REDACTED>/Tracera/ci.yml?branch=main&label=build",
+    "https://img.shields.io/github/v/release/<REDACTED>/Tracera?include_prereleases&sort=semver",
+    "https://img.shields.io/github/license/<REDACTED>/Tracera"
   ]
 }

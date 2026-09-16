@@ -124,7 +124,7 @@ def maybe_trigger_incident(level: str, key: str, msg: str) -> bool:
     # Trigger
     try:
         r = subprocess.run(
-            ["/Users/kooshapari/bin/incident-respond.py", "log",
+            ["/Users/<REDACTED>/bin/incident-respond.py", "log",
              f"--severity={level}", f"--source=telemetry",
              f"--summary={key}", f"--detail={msg}"],
             capture_output=True, text=True, timeout=10,

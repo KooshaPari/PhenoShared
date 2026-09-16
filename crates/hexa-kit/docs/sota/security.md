@@ -8,7 +8,7 @@
 
 ## Controls
 
-- `review.md` org blocklist (non-KooshaPari remotes, force-push)
+- `review.md` org blocklist (non-<REDACTED> remotes, force-push)
 - `trufflehog` / secret scan workflows in template `.github/`
 - Charter blocks new domain crates without review
 

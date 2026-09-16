@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT OR Apache-2.0
-// SPDX-FileCopyrightText: 2026 KooshaPari <kooshapari@gmail.com>
+// SPDX-FileCopyrightText: 2026 <REDACTED> <<REDACTED>@gmail.com>
 
 //! Unit tests for the PostFxPassRegistry and IPostFxPass interface.
 //! These tests run in any NUnit-compatible test runner (NUnit 3.13+).

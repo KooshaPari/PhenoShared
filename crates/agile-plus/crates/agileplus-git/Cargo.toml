@@ -4,12 +4,12 @@ version.workspace = true
 edition.workspace = true
 rust-version.workspace = true
 license = "MIT OR Apache-2.0"
-repository = "https://github.com/KooshaPari/AgilePlus"
+repository = "https://github.com/<REDACTED>/AgilePlus"
 description = "agileplus git — Phenotype infrastructure crate (AgilePlus)"
 documentation = "https://docs.rs/agileplus-git"
 keywords = ["phenotype", "agileplus", "git"]
 categories = ["development-tools::version-control"]
-authors = ["kooshapari"]
+authors = ["<REDACTED>"]
 
 [dependencies]
 agileplus-domain = { path = "../agileplus-domain" }

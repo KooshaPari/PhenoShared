@@ -24,7 +24,7 @@ implementation.
 There is nothing to build or run yet. To contribute governance updates:
 
 ```bash
-git clone https://github.com/KooshaPari/phenotype-hub.git
+git clone https://github.com/<REDACTED>/phenotype-hub.git
 cd phenotype-hub
 ```
 
@@ -39,5 +39,5 @@ Edit the markdown documents directly.
 
 ## Links
 
-- Canonical repo: https://github.com/KooshaPari/phenotype-hub
-- Phenotype ecosystem: https://github.com/KooshaPari
+- Canonical repo: https://github.com/<REDACTED>/phenotype-hub
+- Phenotype ecosystem: https://github.com/<REDACTED>

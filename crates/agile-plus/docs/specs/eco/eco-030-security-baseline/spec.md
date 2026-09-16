@@ -23,7 +23,7 @@ The 9-clone audit (`worklogs/clone-fill-audit-20260605.json`) shows 8/9 repos la
 
 ## Functional Requirements
 - **FR-1**: Every active repo MUST have a `SECURITY.md` referencing the Phenotype Org `security.txt` and a `private-vuln-reporting@phenotype.local` mailbox.
-- **FR-2**: Every active repo MUST have `LICENSE` (MIT preferred; Apache-2.0 acceptable for non-KooshaPari code).
+- **FR-2**: Every active repo MUST have `LICENSE` (MIT preferred; Apache-2.0 acceptable for non-<REDACTED> code).
 - **FR-3**: Every active repo MUST have a `.github/CODEOWNERS` mapping critical paths to owners.
 - **FR-4**: CI MUST run `cargo audit` (or `npm audit` / `pip-audit` / `govulncheck` as appropriate) on every PR.
 - **FR-5**: A pre-commit hook MUST run trufflehog secret-scan on staged files.

@@ -37,7 +37,7 @@ target/release/airlock-v2 autocommit
 target/release/airlock-v2 cleanup --dry-run
 
 # Register a repo:
-target/release/airlock-v2 register /Users/kooshapari/CodeProjects/Phenotype/repos/PhenoVCS
+target/release/airlock-v2 register /Users/<REDACTED>/CodeProjects/Phenotype/repos/PhenoVCS
 
 # Audit every registered repo:
 target/release/airlock-v2 audit

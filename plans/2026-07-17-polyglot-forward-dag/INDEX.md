@@ -92,4 +92,4 @@ flowchart TD
 
 ## Install note
 
-Disk gate uses WSL `$HOME`. NOPASSWD set for `kooshapari`. Python fallback 3.10 is temporary — **3.14t preferred**.
+Disk gate uses WSL `$HOME`. NOPASSWD set for `<REDACTED>`. Python fallback 3.10 is temporary — **3.14t preferred**.

@@ -14,4 +14,4 @@
 
 set -e
 
-exec /opt/homebrew/bin/python3 /Users/kooshapari/bin/leak-detect.py collect "$@"
+exec /opt/homebrew/bin/python3 /Users/<REDACTED>/bin/leak-detect.py collect "$@"

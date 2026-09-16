@@ -7,8 +7,8 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/kooshapari/nanovms/internal/domain"
-	"github.com/kooshapari/nanovms/pkg/tier"
+	"github.com/<REDACTED>/nanovms/internal/domain"
+	"github.com/<REDACTED>/nanovms/pkg/tier"
 )
 
 // Config represents a deployment configuration.

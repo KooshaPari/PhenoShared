@@ -69,12 +69,12 @@ Eight Python / Rust / TypeScript substrate repos that were NOT in the cycle 1 or
 ### pheno-vibecoding-guard (orphan, mean 0.78)
 
 - All 9 domains at 1.0 or below. **Fleet-worst** alongside pheno-worklog-schema.
-- Repo exists on `KooshaPari/pheno-vibecoding-guard` per `gh search`; no local source on this sparse-checkout cone. No `AGENTS.md`, no `SPEC.md`, no `WORKLOG.md`, no `CHANGELOG.md`, no CI. L30 (dev environment), L38 (AGENTS.md), L64 (API reference), L69 (issue templates) all absent.
+- Repo exists on `<REDACTED>/pheno-vibecoding-guard` per `gh search`; no local source on this sparse-checkout cone. No `AGENTS.md`, no `SPEC.md`, no `WORKLOG.md`, no `CHANGELOG.md`, no CI. L30 (dev environment), L38 (AGENTS.md), L64 (API reference), L69 (issue templates) all absent.
 
 ### pheno-worklog-schema (orphan, mean 0.94)
 
 - All 9 domains at 1.1 or below.
-- Same situation as pheno-vibecoding-guard: repo exists at `KooshaPari/pheno-worklog-schema`; no local source. ADR-015 v2.1 schema bump was authored LOCALLY in the monorepo (`pheno-worklog-schema/SPEC-v2.1.md`) and pushed to the orphan via `KooshaPari/pheno-worklog-schema#1`.
+- Same situation as pheno-vibecoding-guard: repo exists at `<REDACTED>/pheno-worklog-schema`; no local source. ADR-015 v2.1 schema bump was authored LOCALLY in the monorepo (`pheno-worklog-schema/SPEC-v2.1.md`) and pushed to the orphan via `<REDACTED>/pheno-worklog-schema#1`.
 - P0 gaps identical shape to pheno-vibecoding-guard.
 
 ### pheno-profiling (mean 1.56)

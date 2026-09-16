@@ -48,7 +48,7 @@ fi
 # evidence/mfa-check.sh
 # Verifies MFA is enforced for all human access
 set -euo pipefail
-USERS_WITHOUT_MFA=$(gh api /orgs/KooshaPari/members --jq '.[] | select(.two_factor_authentication_disabled==true) | .login')
+USERS_WITHOUT_MFA=$(gh api /orgs/<REDACTED>/members --jq '.[] | select(.two_factor_authentication_disabled==true) | .login')
 if [ -z "$USERS_WITHOUT_MFA" ]; then
   echo "PASS: all org members have MFA enabled"
   exit 0

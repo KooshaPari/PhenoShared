@@ -88,11 +88,11 @@ or `curl` echo. The full 30-min soak and 1000-trial burst run on
 
 | PR  | Repo                                  | Branch                                              | Scope                              |
 |-----|---------------------------------------|-----------------------------------------------------|------------------------------------|
-| PR-1| `KooshaPari/pheno-config`             | `feat/l17-l18-config-knobs-2026-06-22`              | 4-knob struct + 12-factor cascade  |
-| PR-2| `KooshaPari/pheno-otel`               | `feat/l17-l18-otel-cache-pool-2026-06-22`          | OTLP export cache + exporter pool  |
-| PR-3| `KooshaPari/pheno-events`             | `feat/l17-l18-event-bus-cache-2026-06-22`          | subscriber dedup cache             |
-| PR-4| `KooshaPari/pheno-mcp-router`         | `feat/l17-l18-llmport-pool-2026-06-22`              | LlmPort connection pool + tok cache|
-| PR-5| `KooshaPari/pheno-port-adapter`       | `feat/l17-l18-port-pool-2026-06-22`                 | hexagonal Adapter pool              |
+| PR-1| `<REDACTED>/pheno-config`             | `feat/l17-l18-config-knobs-2026-06-22`              | 4-knob struct + 12-factor cascade  |
+| PR-2| `<REDACTED>/pheno-otel`               | `feat/l17-l18-otel-cache-pool-2026-06-22`          | OTLP export cache + exporter pool  |
+| PR-3| `<REDACTED>/pheno-events`             | `feat/l17-l18-event-bus-cache-2026-06-22`          | subscriber dedup cache             |
+| PR-4| `<REDACTED>/pheno-mcp-router`         | `feat/l17-l18-llmport-pool-2026-06-22`              | LlmPort connection pool + tok cache|
+| PR-5| `<REDACTED>/pheno-port-adapter`       | `feat/l17-l18-port-pool-2026-06-22`                 | hexagonal Adapter pool              |
 
 All 5 PRs land on the same `chore/v24-71-pillar-cycle-14-p1-2026-06-22`
 wave branch before cycle-14 probe (per ADR-092 acceptance).

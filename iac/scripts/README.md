@@ -10,7 +10,7 @@ Phenotype fleet. These are operator-run; they do not get invoked by CI.
 | `bootstrap-oci.sh` | Oracle Cloud ARM VM | Stand up Forgejo + Woodpecker backbone. |
 | `register-home-runner.sh` | macOS / Linux | Register a home act_runner against Forgejo. |
 | `health-check.sh` | Any | Probe runner + Forgejo liveness. |
-| `install-windows-runner.ps1` | **Windows 11 AMD64 desktop** | Dedicated Forgejo runner on `kooshapari-desk.tail2b570.ts.net`. |
+| `install-windows-runner.ps1` | **Windows 11 AMD64 desktop** | Dedicated Forgejo runner on `<REDACTED>-desk.tail2b570.ts.net`. |
 
 ---
 
@@ -31,7 +31,7 @@ Phenotype fleet. These are operator-run; they do not get invoked by CI.
 - Windows 11 (AMD64).
 - Tailscale installed (`C:\Program Files\Tailscale\tailscale.exe`) and up (`tailscale up`).
 - Elevated PowerShell (Run as Administrator).
-- Machine reachable at `kooshapari-desk.tail2b570.ts.net` on the tailnet.
+- Machine reachable at `<REDACTED>-desk.tail2b570.ts.net` on the tailnet.
 - Outbound HTTPS to `gitea.com` (for the initial binary download only).
 
 ### Run it

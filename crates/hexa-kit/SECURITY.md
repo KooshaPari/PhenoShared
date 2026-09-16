@@ -13,7 +13,7 @@ Only the latest tagged release receives security updates. Older versions are not
 
 If you discover a security vulnerability in `HexaKit`, please report it privately:
 
-- **Email:** kooshapari@kooshapari.com
+- **Email:** <REDACTED>@<REDACTED>.com
 - **GitHub:** Open a private security advisory via the Security tab on this repository
 - **DO NOT** open a public issue, PR, or discussion for security vulnerabilities
 - **DO NOT** disclose the vulnerability publicly until we have issued a fix and an advisory

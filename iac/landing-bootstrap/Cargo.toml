@@ -6,7 +6,7 @@
 name = "phenotype-landing-bootstrap"
 version = "0.1.0"
 edition = "2024"
-description = "Bootstrap Tier 2 org-pages: scaffold <project>.kooshapari.com landing pages from a template, create CF DNS, push to GitHub, deploy to Vercel."
+description = "Bootstrap Tier 2 org-pages: scaffold <project>.<REDACTED>.com landing pages from a template, create CF DNS, push to GitHub, deploy to Vercel."
 license = "MIT OR Apache-2.0"
 authors = ["Phenotype Infra <infra@phenotype.dev>"]
 

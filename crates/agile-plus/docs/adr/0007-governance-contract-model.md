@@ -9,7 +9,7 @@ Accepted
 AgilePlus gates feature lifecycle transitions (spec → ship) with versioned rules and
 evidence requirements. That vocabulary was duplicated in `agileplus-domain` while Tracera
 and other Phenotype consumers need the same semantics. ADR-0005 moved shared types to
-[`traceability-core`](https://github.com/KooshaPari/phenotype-pm-core) (PM-core spine).
+[`traceability-core`](https://github.com/<REDACTED>/phenotype-pm-core) (PM-core spine).
 
 ## Decision
 

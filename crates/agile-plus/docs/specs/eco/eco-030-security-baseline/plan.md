@@ -4,7 +4,7 @@
 A fleet where every active repo has SECURITY.md, LICENSE, CODEOWNERS, and a CI gate that audits deps + secrets.
 
 ## Scope
-- All 117 Phenotype / KooshaPari repos.
+- All 117 Phenotype / <REDACTED> repos.
 
 ## Implementation Steps
 1. Author `AgilePlus/security-template/SECURITY.md`, `LICENSE`, `CODEOWNERS` templates.

@@ -10,7 +10,7 @@ v14 added SLSA + cosign at the monorepo level. v16 promotes those patterns to **
 
 ## Release workflow template
 
-`/Users/kooshapari/CodeProjects/Phenotype/repos/.github/workflows/release.yml`:
+`/Users/<REDACTED>/CodeProjects/Phenotype/repos/.github/workflows/release.yml`:
 
 ```yaml
 name: release

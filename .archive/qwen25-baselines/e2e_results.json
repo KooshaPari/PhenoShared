@@ -1,6 +1,6 @@
 {
   "model": "a5339a4131f135d0fdc6a5c8b5bbed2753bbe0f3",
-  "model_path": "/Users/kooshapari/.cache/huggingface/models--mlx-community--Qwen2.5-0.5B-Instruct-4bit/snapshots/a5339a4131f135d0fdc6a5c8b5bbed2753bbe0f3",
+  "model_path": "/Users/<REDACTED>/.cache/huggingface/models--mlx-community--Qwen2.5-0.5B-Instruct-4bit/snapshots/a5339a4131f135d0fdc6a5c8b5bbed2753bbe0f3",
   "arch": "Model",
   "prompt": "def fibonacci(n):\n    ",
   "max_tokens": 64,

@@ -15,7 +15,7 @@ First-publish checklist and one-command finish after `NPM_TOKEN` is configured.
 
 ### Why `v2.0.1` (not reusing `v2.0.0`)
 
-- Git tag `v2.0.0` points at `@kooshapari/design` and has a GitHub release, but **never**
+- Git tag `v2.0.0` points at `@<REDACTED>/design` and has a GitHub release, but **never**
   triggered a successful npm publish (no `NPM_TOKEN`, zero `publish.yml` runs).
 - `2.0.1` is the first semver aligned with `@phenotype/design` SSOT for registry consumers.
 
@@ -23,16 +23,16 @@ First-publish checklist and one-command finish after `NPM_TOKEN` is configured.
 
 ```bash
 # 1. Configure npm automation token (once)
-gh secret set NPM_TOKEN -R KooshaPari/phenoDesign --body "$NPM_TOKEN"
+gh secret set NPM_TOKEN -R <REDACTED>/phenoDesign --body "$NPM_TOKEN"
 
 # 2. Dry-run the publish workflow (optional)
-gh workflow run publish.yml -R KooshaPari/phenoDesign -f dry_run=true
+gh workflow run publish.yml -R <REDACTED>/phenoDesign -f dry_run=true
 
 # 3. Create GitHub release → triggers publish.yml on release:published
 gh release create v2.0.1 \
-  -R KooshaPari/phenoDesign \
+  -R <REDACTED>/phenoDesign \
   --title "v2.0.1 — @phenotype/design (first npm)" \
-  --notes "First public npm release of @phenotype/design. Fleet consumers can switch from github:KooshaPari/phenoDesign to bun add @phenotype/design@2.0.1."
+  --notes "First public npm release of @phenotype/design. Fleet consumers can switch from github:<REDACTED>/phenoDesign to bun add @phenotype/design@2.0.1."
 
 # 4. Verify
 npm view @phenotype/design version
@@ -55,7 +55,7 @@ npm publish --access public
 After `2.0.1` is on npm, fleet repos can replace:
 
 ```json
-"@phenotype/design": "github:KooshaPari/phenoDesign"
+"@phenotype/design": "github:<REDACTED>/phenoDesign"
 ```
 
 with:

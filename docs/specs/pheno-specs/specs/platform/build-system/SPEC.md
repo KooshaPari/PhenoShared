@@ -1590,7 +1590,7 @@ auto_load = true
 
 [[plugins.registry]]
 name = "official"
-url = "https://plugins.kooshapari.com"
+url = "https://plugins.<REDACTED>.com"
 
 # Remote execution
 [remote]
@@ -2209,7 +2209,7 @@ cargo install pheno-forge
 brew install phenotype/tap/forge
 
 # Direct download
-curl -sSL https://get.kooshapari.com/forge | sh
+curl -sSL https://get.<REDACTED>.com/forge | sh
 
 # Docker
 docker run -v $(pwd):/workspace phenotype/forge build

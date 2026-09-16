@@ -2,7 +2,7 @@
 """SSOT audit: verify every repo has SSOT.md with required sections."""
 from __future__ import annotations
 import os, sys, json
-ROOT = "/Users/kooshapari/CodeProjects/Phenotype/repos"
+ROOT = "/Users/<REDACTED>/CodeProjects/Phenotype/repos"
 def audit(repo: str) -> dict:
     result = {"repo": repo, "has_ssot": False, "has_agents": False, "has_justfile": False, "has_llms": False, "has_deny": False}
     for f, key in [("SSOT.md","has_ssot"),("AGENTS.md","has_agents"),("justfile","has_justfile"),("llms.txt","has_llms"),("deny.toml","has_deny")]:

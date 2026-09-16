@@ -41,7 +41,7 @@ All repositories listed below have been moved to `.archive/` for cold storage pe
 To restore any archived repository:
 
 ```bash
-cd /Users/kooshapari/CodeProjects/Phenotype/repos
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos
 mv .archive/<repo-name> .
 ```
 

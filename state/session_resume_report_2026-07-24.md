@@ -5,7 +5,7 @@
 - **HEAD:** `5c22f2b185b9d4c466583f2fda1dcb0112900771`
 - **Divergence vs `origin/main`:** 0 ahead, 0 behind (no remote state changed during the gap)
 - **Working tree:** dirty, 84 files changed (+2874 / −764) — 4 more files / +32 / −27 than at the last agent turn on 2026-07-23T16:02Z
-- **State of protected external assets:** GitHub repo `KooshaPari/pheno-harness` `isArchived=false` (unchanged from session turn); no `pheno.serve.server` / python / node writers running; no listeners on the pheno-serve port range (20128/28128/38128/48128).
+- **State of protected external assets:** GitHub repo `<REDACTED>/pheno-harness` `isArchived=false` (unchanged from session turn); no `pheno.serve.server` / python / node writers running; no listeners on the pheno-serve port range (20128/28128/38128/48128).
 - **Companion deliverables in this slice:** `state/session_resume_2026-07-24_019f6249.json` (machine-readable snapshot), `state/tb2_evidence_manifest_2026-07-24.json` (TB2 evidence index), and `state/owner_authorization_requests/commit_push_recovery_preserve_branch_2026-07-24.json` (authorization packet, see §5).
 
 ---
@@ -16,7 +16,7 @@ The Codex CLI in `C:\Users\koosh\.codex\sessions\2026\07\14\rollout-2026-07-14T1
 
 ## 2. What changed during the gap (2026-07-23 16:02Z → 2026-07-24 07:30Z)
 
-Three new local commits, all authored by `KooshaPari <kooshapari@gmail.com>` with `Co-authored-by: Cursor <cursoragent@cursor.com>` — meaning the user kept advancing with Cursor in parallel:
+Three new local commits, all authored by `<REDACTED> <<REDACTED>@gmail.com>` with `Co-authored-by: Cursor <cursoragent@cursor.com>` — meaning the user kept advancing with Cursor in parallel:
 
 | SHA | Subject | Files | Verdict |
 |---|---|---|---|

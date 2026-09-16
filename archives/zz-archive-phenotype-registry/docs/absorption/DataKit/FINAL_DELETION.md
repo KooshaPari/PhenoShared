@@ -1,7 +1,7 @@
 # DataKit final deletion package
 
 Date: 2026-06-20
-Source repo: `KooshaPari/DataKit`
+Source repo: `<REDACTED>/DataKit`
 Decision: `DELETE`
 
 ## Evidence summary
@@ -19,4 +19,4 @@ Decision: `DELETE`
 
 ## Final recommendation
 
-The matrix supports deleting `KooshaPari/DataKit`. All package content was folded into `phenotype-python-sdk`, and the only Rust delta was preserved in `Eventra`.
+The matrix supports deleting `<REDACTED>/DataKit`. All package content was folded into `phenotype-python-sdk`, and the only Rust delta was preserved in `Eventra`.

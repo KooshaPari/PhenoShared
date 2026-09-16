@@ -55,7 +55,7 @@ class ProjectInfraContext:
         self,
         project_name: str,
         *,
-        domain: str = "kooshapari.com",
+        domain: str = "<REDACTED>.com",
         config_dir: str | None = None,
         enable_proxy: bool = True,
         proxy_port: int = 9100,
@@ -726,7 +726,7 @@ class ProjectInfraContext:
 def project_infra_context(
     project_name: str,
     *,
-    domain: str = "kooshapari.com",
+    domain: str = "<REDACTED>.com",
     config_dir: str | None = None,
     enable_proxy: bool = True,
     proxy_port: int = 9100,
@@ -759,7 +759,7 @@ def quick_project_setup(
     project_name: str,
     services: dict[str, dict[str, Any]],
     *,
-    domain: str = "kooshapari.com",
+    domain: str = "<REDACTED>.com",
     enable_proxy: bool = True,
 ) -> dict[str, Any]:
     """

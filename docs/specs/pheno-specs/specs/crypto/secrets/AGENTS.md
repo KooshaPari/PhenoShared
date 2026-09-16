@@ -4,7 +4,7 @@
 
 - **Name**: Guardis (Security & Compliance Platform)
 - **Description**: Security scanning, policy enforcement, and compliance monitoring platform
-- **Location**: `/Users/kooshapari/CodeProjects/Phenotype/repos/Guardis`
+- **Location**: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/Guardis`
 - **Language Stack**: TypeScript, Node.js 20+, PostgreSQL
 - **Published**: Private (Phenotype org)
 
@@ -12,7 +12,7 @@
 
 ```bash
 # Navigate to project
-cd /Users/kooshapari/CodeProjects/Phenotype/repos/Guardis
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos/Guardis
 
 # Install dependencies
 npm install
@@ -182,7 +182,7 @@ opa eval -i input.json -d policies/ 'data.security.violations'
 
 - [Open Policy Agent](https://www.openpolicyagent.org/)
 - [SARIF Specification](https://sarifweb.azurewebsites.net/)
-- [Phenotype Registry](https://github.com/KooshaPari/phenotype-registry)
+- [Phenotype Registry](https://github.com/<REDACTED>/phenotype-registry)
 
 ## Agent Notes
 

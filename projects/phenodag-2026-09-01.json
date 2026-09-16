@@ -11,7 +11,7 @@
   "boundary": "queue-claim-orchestrator",
   "stack": "go-1.22",
   "v0": "0.3.0",
-  "gh_url": "https://github.com/KooshaPari/phenodag",
+  "gh_url": "https://github.com/<REDACTED>/phenodag",
   "default_branch": "main",
   "homepage": "phenodag.phenotype.space",
   "remote_default_sha_at_audit": "fdc2512b",

@@ -17,7 +17,7 @@ out_of_scope:
 
 **TOO_LARGE_RETIRE** (per fleet-absorption-eligibility-2026-07-17 policy).
 
-`KooshaPari/HeliosLab` is a sprawling experimental/lab repo (55 remote branches, multi-language). Per the boundary correction 2026-07-17, it has been marked as **not absorption-eligible** because:
+`<REDACTED>/HeliosLab` is a sprawling experimental/lab repo (55 remote branches, multi-language). Per the boundary correction 2026-07-17, it has been marked as **not absorption-eligible** because:
 
 - Scope is too sprawling to consolidate into a single spine target.
 - Lab/experimentation content is not a candidate for permanent absorption; it should remain a standalone playground.
@@ -45,7 +45,7 @@ None expected — HeliosLab is intentionally a leaf with no production dependenc
 ## Restore Procedure (if experiments need to be revived)
 
 ```bash
-gh repo unarchive KooshaPari/HeliosLab -y
+gh repo unarchive <REDACTED>/HeliosLab -y
 ```
 
 ## Last Boundary Review

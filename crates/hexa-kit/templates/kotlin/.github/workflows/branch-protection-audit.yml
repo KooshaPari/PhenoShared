@@ -14,4 +14,4 @@ permissions:
 
 jobs:
   branch-protection-audit:
-    uses: KooshaPari/template-commons/.github/workflows/reusable-branch-protection-audit.yml@main
+    uses: <REDACTED>/template-commons/.github/workflows/reusable-branch-protection-audit.yml@main

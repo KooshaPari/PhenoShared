@@ -7,8 +7,8 @@
 
 ## AgilePlus Mandate
 All work MUST be tracked in AgilePlus.
-Reference: /Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus
-CLI: cd /Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus && agileplus <command>
+Reference: /Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus
+CLI: cd /Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus && agileplus <command>
 
 ## Stack & Commands
 ```bash
@@ -23,4 +23,4 @@ CLI: cd /Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus && agileplus <c
 ```
 
 ## References
-- Parent workspace: /Users/kooshapari/CodeProjects/Phenotype/repos/CLAUDE.md
+- Parent workspace: /Users/<REDACTED>/CodeProjects/Phenotype/repos/CLAUDE.md

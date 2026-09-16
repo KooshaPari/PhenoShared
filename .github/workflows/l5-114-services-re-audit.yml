@@ -35,10 +35,10 @@ jobs:
         run: |
           set -euo pipefail
           declare -A SOURCES=(
-            ["phenotype-voxel"]="KooshaPari/phenotype-voxel"
-            ["phenotype-terrain"]="KooshaPari/phenotype-terrain"
-            ["phenotype-water"]="KooshaPari/phenotype-water"
-            ["phenotype-postfx"]="KooshaPari/phenotype-postfx"
+            ["phenotype-voxel"]="<REDACTED>/phenotype-voxel"
+            ["phenotype-terrain"]="<REDACTED>/phenotype-terrain"
+            ["phenotype-water"]="<REDACTED>/phenotype-water"
+            ["phenotype-postfx"]="<REDACTED>/phenotype-postfx"
           )
           AUDIT_RESULTS="[]"
           for name in "${!SOURCES[@]}"; do

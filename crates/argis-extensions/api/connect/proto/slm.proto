@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package bifrost.slm.v1;
 
-option go_package = "github.com/kooshapari/bifrost-extensions/api/connect/gen/slm/v1;slmv1";
+option go_package = "github.com/<REDACTED>/bifrost-extensions/api/connect/gen/slm/v1;slmv1";
 
 // RouterSLM provides intelligent model routing decisions
 service RouterSLM {

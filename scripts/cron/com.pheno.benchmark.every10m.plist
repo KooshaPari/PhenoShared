@@ -8,7 +8,7 @@
 
     <key>ProgramArguments</key>
     <array>
-        <string>/Users/kooshapari/CodeProjects/Phenotype/pheno-harness/scripts/cron/every_10m.sh</string>
+        <string>/Users/<REDACTED>/CodeProjects/Phenotype/pheno-harness/scripts/cron/every_10m.sh</string>
     </array>
 
     <key>StartInterval</key>
@@ -22,7 +22,7 @@
     <key>EnvironmentVariables</key>
     <dict>
         <key>PHENO_ROOT</key>
-        <string>/Users/kooshapari/CodeProjects/Phenotype/pheno-harness</string>
+        <string>/Users/<REDACTED>/CodeProjects/Phenotype/pheno-harness</string>
         <key>PATH</key>
         <string>/usr/bin:/bin:/usr/local/bin:/opt/homebrew/bin</string>
     </dict>

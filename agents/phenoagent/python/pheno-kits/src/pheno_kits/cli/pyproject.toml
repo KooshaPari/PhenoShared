@@ -42,8 +42,8 @@ dev = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/kooshapari/cli-builder-kit"
-Repository = "https://github.com/kooshapari/cli-builder-kit"
+Homepage = "https://github.com/<REDACTED>/cli-builder-kit"
+Repository = "https://github.com/<REDACTED>/cli-builder-kit"
 Documentation = "https://cli-builder-kit.readthedocs.io"
 
 [tool.setuptools.packages.find]

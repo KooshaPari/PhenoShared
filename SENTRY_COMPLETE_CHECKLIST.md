@@ -84,7 +84,7 @@ gh secret list | grep SENTRY
 ```
 1. Go to: https://sentry.io/settings/phenotype/integrations/github/
 2. Click "Install" if not done
-3. Authorize KooshaPari GitHub organization
+3. Authorize <REDACTED> GitHub organization
 4. Grant necessary permissions
 5. Verify status shows "Installed"
 ```
@@ -255,7 +255,7 @@ gh secret set SENTRY_DSN_AGILEPLUS --body 'https://test@test.ingest.sentry.io/0'
 - **Full guide**: `/docs/reports/SENTRY_TIER1_FINALIZATION.md`
 - **Verification**: `/docs/checklists/SENTRY_DEPLOYMENT_VERIFICATION.md`
 - **Dashboard**: https://sentry.io/organizations/phenotype/
-- **Secrets setup**: https://github.com/KooshaPari/AgilePlus/settings/secrets/actions
+- **Secrets setup**: https://github.com/<REDACTED>/AgilePlus/settings/secrets/actions
 
 ## Troubleshooting
 

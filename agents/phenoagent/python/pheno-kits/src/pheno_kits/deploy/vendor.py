@@ -96,7 +96,7 @@ class PhenoVendor:
             candidates = [
                 self.project_root.parent / "pheno-sdk",
                 Path.home() / "temp-PRODVERCEL/485/kush/pheno-sdk",
-                Path("/Users/kooshapari/temp-PRODVERCEL/485/kush/pheno-sdk"),
+                Path("/Users/<REDACTED>/temp-PRODVERCEL/485/kush/pheno-sdk"),
             ]
             for candidate in candidates:
                 if candidate.exists() and candidate.is_dir():

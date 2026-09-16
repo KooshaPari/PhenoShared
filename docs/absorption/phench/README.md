@@ -4,8 +4,8 @@
 
 | Field | Value |
 |-------|-------|
-| Source repo | `KooshaPari/phench` |
-| Target repo | `KooshaPari/phenotype-tooling` |
+| Source repo | `<REDACTED>/phench` |
+| Target repo | `<REDACTED>/phenotype-tooling` |
 | Target paths | `crates/phench/` |
 | Absorbed date | 2026-07-17 |
 | Absorbed by | forge agent |
@@ -76,5 +76,5 @@ All 17 tests pass.
 ## Provenance
 
 Branch: `origin/salvage/phenotype-tooling-workspace-2026-07-15`
-on `KooshaPari/phenotype-tooling`. Source repo
-`KooshaPari/phench` archived via `gh repo archive`.
+on `<REDACTED>/phenotype-tooling`. Source repo
+`<REDACTED>/phench` archived via `gh repo archive`.

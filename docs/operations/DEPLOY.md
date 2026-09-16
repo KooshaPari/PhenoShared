@@ -33,10 +33,10 @@ cargo build --release --workspace --exclude fuzz
 ### Docker image (GHCR)
 
 ```bash
-docker build -t ghcr.io/kooshapari/substrate/gateway:latest .
+docker build -t ghcr.io/<REDACTED>/substrate/gateway:latest .
 # Multi-arch build:
 docker buildx build --platform linux/amd64,linux/arm64 \
-  -t ghcr.io/kooshapari/substrate/gateway:latest \
+  -t ghcr.io/<REDACTED>/substrate/gateway:latest \
   --push .
 ```
 
@@ -144,7 +144,7 @@ sudo systemctl enable --now substrate-gateway substrate-http
 version: "3.9"
 services:
   gateway:
-    image: ghcr.io/kooshapari/substrate/gateway:latest
+    image: ghcr.io/<REDACTED>/substrate/gateway:latest
     ports:
       - "8080:8080"
     environment:
@@ -191,7 +191,7 @@ spec:
     spec:
       containers:
         - name: gateway
-          image: ghcr.io/kooshapari/substrate/gateway:latest
+          image: ghcr.io/<REDACTED>/substrate/gateway:latest
           ports:
             - containerPort: 8080
               name: http

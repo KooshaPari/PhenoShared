@@ -5,7 +5,7 @@ import json
 import re
 import sys
 
-DB = "/Users/kooshapari/forge/.forge.db"
+DB = "/Users/<REDACTED>/forge/.forge.db"
 
 TASK_RE = re.compile(r"<task>(.*?)</task>", re.DOTALL)
 SYS_DATE_RE = re.compile(r"<system_date>.*", re.DOTALL)

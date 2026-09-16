@@ -43,13 +43,13 @@ imports the canonical artifact instead of duplicating it.
 
 | Concern | Canonical home (SSOT) | Every repo imports it as |
 |---|---|---|
-| Errors | [`pheno-errors`](https://github.com/KooshaPari/phenotype/tree/main/pheno-errors) (L3 #46) | `pheno_errors::AppError` |
-| Logging / tracing | [`pheno-tracing`](https://github.com/KooshaPari/phenotype/tree/main/pheno-tracing) (L3 #47) | `pheno_tracing::init()` / `init_json()` |
-| Config | [`pheno-config`](https://github.com/KooshaPari/phenotype/tree/main/pheno-config) (L3 #48) | `pheno_config::load::<MyConfig>()` |
-| Telemetry (OTel) | [`pheno-otel`](https://github.com/KooshaPari/phenotype/tree/main/pheno-otel) (L3 #49) | `pheno_otel::init(endpoint)` |
-| Schemas (TS) | [`pheno-zod-schemas`](https://github.com/KooshaPari/phenotype/tree/main/pheno-zod-schemas) (L3 #53) | `import { UserSchema } from "@pheno/zod-schemas"` |
-| Schemas (Py) | [`pheno-pydantic-models`](https://github.com/KooshaPari/phenotype/tree/main/pheno-pydantic-models) (L3 #53) | `from pheno_pydantic_models import User` |
-| CLI base | [`pheno-cli-base`](https://github.com/KooshaPari/phenotype/tree/main/pheno-cli-base) (L3 #50) | `pheno_cli_base::main!()` |
+| Errors | [`pheno-errors`](https://github.com/<REDACTED>/phenotype/tree/main/pheno-errors) (L3 #46) | `pheno_errors::AppError` |
+| Logging / tracing | [`pheno-tracing`](https://github.com/<REDACTED>/phenotype/tree/main/pheno-tracing) (L3 #47) | `pheno_tracing::init()` / `init_json()` |
+| Config | [`pheno-config`](https://github.com/<REDACTED>/phenotype/tree/main/pheno-config) (L3 #48) | `pheno_config::load::<MyConfig>()` |
+| Telemetry (OTel) | [`pheno-otel`](https://github.com/<REDACTED>/phenotype/tree/main/pheno-otel) (L3 #49) | `pheno_otel::init(endpoint)` |
+| Schemas (TS) | [`pheno-zod-schemas`](https://github.com/<REDACTED>/phenotype/tree/main/pheno-zod-schemas) (L3 #53) | `import { UserSchema } from "@pheno/zod-schemas"` |
+| Schemas (Py) | [`pheno-pydantic-models`](https://github.com/<REDACTED>/phenotype/tree/main/pheno-pydantic-models) (L3 #53) | `from pheno_pydantic_models import User` |
+| CLI base | [`pheno-cli-base`](https://github.com/<REDACTED>/phenotype/tree/main/pheno-cli-base) (L3 #50) | `pheno_cli_base::main!()` |
 | Tokio runtime | `pheno-tokio-base` (L3 #54) | `pheno_tokio_base::runtime()` |
 
 When a project is scaffolded from `pheno-ssot-template`, the
@@ -249,7 +249,7 @@ invariants will be checked against your new project.
 | `justfile` | Task runner for template maintenance |
 | `docs/governance/README.md` | Governance policies and fleet references |
 | `deny.toml` | cargo-deny config matching the fleet baseline (see `DENY_TOML_DIVERGENCE_2026_06_10.md`) |
-| `CODEOWNERS` | Default owner `@KooshaPari` for every path |
+| `CODEOWNERS` | Default owner `@<REDACTED>` for every path |
 | `LICENSE` | MIT license (Copyright 2026 Koosha Pari) |
 | `SECURITY.md` | Reporting channel, supported versions, disclosure policy |
 | `CONTRIBUTING.md` | Conventional commits, PR process, governance references |

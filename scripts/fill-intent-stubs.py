@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Fill TODO sections in 8 stub files + 3 extraction targets with real prose.
-Run from /Users/kooshapari/CodeProjects/Phenotype/repos/phenotype-registry-curation-data
+Run from /Users/<REDACTED>/CodeProjects/Phenotype/repos/phenotype-registry-curation-data
 """
 from pathlib import Path
 
@@ -41,7 +41,7 @@ STUB_PROSE = {
         "role": "external-tool",
         "intent": "forgecode is the upstream Forge CLI binary, vendored as a PhenoCliBase-compatible plugin. It is consumed by thegent and OmniRoute as a primary agent-coding model provider. Local wrapper provides the Phenotype ecosystem shim (config, telemetry, auth) on top of the upstream binary.",
         "in_scope": "Wrapper config; telemetry; auth shim; version pinning",
-        "out_of_scope": "The upstream Forge CLI itself (lives at https://github.com/kooshapari/forge); model weights; API endpoints",
+        "out_of_scope": "The upstream Forge CLI itself (lives at https://github.com/<REDACTED>/forge); model weights; API endpoints",
     },
     "phenoObservability": {
         "role": "observability-stack",

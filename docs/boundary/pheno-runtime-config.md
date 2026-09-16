@@ -1,8 +1,8 @@
 # Boundary: pheno-runtime-config
 
 **Status**: ABSORBED (recorded 2026-07-17, registry v1.6.30)
-**Source**: `KooshaPari/pheno-runtime-config`
-**Target**: `KooshaPari/pheno` monorepo `crates/pheno-runtime-config/`
+**Source**: `<REDACTED>/pheno-runtime-config`
+**Target**: `<REDACTED>/pheno` monorepo `crates/pheno-runtime-config/`
 
 ## Type
 

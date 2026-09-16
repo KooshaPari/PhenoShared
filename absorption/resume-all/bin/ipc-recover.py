@@ -38,7 +38,7 @@ from pathlib import Path
 HOME = Path.home()
 IPC_SOCKET = HOME / "Library" / "Application Support" / "sharecli" / "ipc.sock"
 DAEMON_BIN = HOME / "bin" / "sharecli-ipc-daemon"
-LAUNCHD_LABEL = "com.kooshapari.resume-all-ipc"
+LAUNCHD_LABEL = "com.<REDACTED>.resume-all-ipc"
 LAUNCHD_PLIST = HOME / "Library" / "LaunchAgents" / f"{LAUNCHD_LABEL}.plist"
 LAUNCHD_GUI_DOMAIN = f"gui/{os.getuid()}"
 

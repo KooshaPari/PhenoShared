@@ -16,7 +16,7 @@ with multiple views:
 The page is the source of truth for agents: they discover directives
 (prompts/intents/goals of concern) by polling this page.
 
-Output: <filename>.html in /Users/kooshapari/CodeProjects/Phenotype/repos/cockpit/
+Output: <filename>.html in /Users/<REDACTED>/CodeProjects/Phenotype/repos/cockpit/
 """
 
 from __future__ import annotations
@@ -33,8 +33,8 @@ import tempfile
 from collections import Counter, defaultdict
 from pathlib import Path
 
-BEADS = Path("/Users/kooshapari/CodeProjects/Phenotype/repos/phenotype-dag/beads.jsonl")
-OUT_DIR = Path("/Users/kooshapari/CodeProjects/Phenotype/repos/cockpit")
+BEADS = Path("/Users/<REDACTED>/CodeProjects/Phenotype/repos/phenotype-dag/beads.jsonl")
+OUT_DIR = Path("/Users/<REDACTED>/CodeProjects/Phenotype/repos/cockpit")
 OUT_DIR.mkdir(parents=True, exist_ok=True)
 
 KIND_COLORS = {
@@ -1714,7 +1714,7 @@ def render_html(beads: list[dict], generated_at: str, content_hash: str) -> str:
 <footer>
 Generated as of {generated_at} · ID: <code>bead-cockpit-{generated_at[:10].replace("-", "")}-{content_hash}</code><br>
 Output filename is caller-selected; preserve this ID and source ledger path for provenance.<br>
-Source: <code>/Users/kooshapari/CodeProjects/Phenotype/repos/phenotype-dag/beads.jsonl</code> · {summary["total"]} beads · {summary["targets_count"]} targets · {summary["agents_count"]} agents<br>
+Source: <code>/Users/<REDACTED>/CodeProjects/Phenotype/repos/phenotype-dag/beads.jsonl</code> · {summary["total"]} beads · {summary["targets_count"]} targets · {summary["agents_count"]} agents<br>
 <span style="opacity:0.6;">Append-only source projection · seven lenses · regenerate to ingest newer evidence</span>
 </footer>
 

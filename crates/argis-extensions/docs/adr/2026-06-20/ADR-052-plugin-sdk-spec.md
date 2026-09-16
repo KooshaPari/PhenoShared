@@ -2,7 +2,7 @@
 
 - **Status:** Accepted — 2026-06-20 (re-accepted 2026-06-20 15:14 PDT after parallel subagent reverted; closes §8 Option B trio with ADR-050 + ADR-051)
 - **Date:** 2026-06-20
-- **Decision:** @KooshaPari (pending)
+- **Decision:** @<REDACTED> (pending)
 - **Plan:** [`plans/2026-06-20-v11-dag-router-rebuild.md`](../../plans/2026-06-20-v11-dag-router-rebuild.md) §L2.5 + §L3
 - **Wave:** v11 L5 — Documentation / Governance (T5.4)
 - **Paired with:** ADR-050 (Router rebuild: Option B); ADR-051 (Bifrost as library)

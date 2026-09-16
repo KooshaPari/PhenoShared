@@ -54,7 +54,7 @@ jobs:
       - name: checkout sibling phenotype-registry-curation-data
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
-          repository: KooshaPari/phenotype-registry-curation-data
+          repository: <REDACTED>/phenotype-registry-curation-data
           path: ../phenotype-registry-curation-data
           fetch-depth: 1
           persist-credentials: false

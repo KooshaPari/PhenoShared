@@ -3,7 +3,7 @@
 **Status:** ABSORBED (2026-09-16)
 **Former Class:** pooled-foundation
 **Former Repository ID:** 1220333985
-**Target:** KooshaPari/pheno (crates/)
+**Target:** <REDACTED>/pheno (crates/)
 
 ## Absorption Summary
 
@@ -57,7 +57,7 @@ All 42 PhenoTooling crates have been absorbed into pheno workspace:
 
 ## Former Repository
 
-- **GitHub:** https://github.com/KooshaPari/PhenoTooling (now absorbed)
+- **GitHub:** https://github.com/<REDACTED>/PhenoTooling (now absorbed)
 - **Local:** ~/CodeProjects/Phenotype/repos/PhenoTooling
 
 ## Notes

@@ -8,8 +8,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/KooshaPari/MCPForge/internal/lsp"
-	"github.com/KooshaPari/MCPForge/internal/protocol"
+	"github.com/<REDACTED>/MCPForge/internal/lsp"
+	"github.com/<REDACTED>/MCPForge/internal/protocol"
 )
 
 // GetDiagnosticsForFile retrieves diagnostics for a specific file from the language server

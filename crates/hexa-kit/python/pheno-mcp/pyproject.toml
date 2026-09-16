@@ -5,11 +5,11 @@ build-backend = "hatchling.build"
 [project]
 name = "pheno-mcp"
 version = "1.0.0"
-description = "DEPRECATED stub — canonical Python package at https://github.com/KooshaPari/PhenoMCP; Rust MCP runtime at substrate"
+description = "DEPRECATED stub — canonical Python package at https://github.com/<REDACTED>/PhenoMCP; Rust MCP runtime at substrate"
 readme = "README.md"
 requires-python = ">=3.10"
 authors = [
-    {name = "Phenotype Team", email = "team@kooshapari.com"}
+    {name = "Phenotype Team", email = "team@<REDACTED>.com"}
 ]
 license = {text = "MIT"}
 keywords = [
@@ -26,11 +26,11 @@ classifiers = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/KooshaPari/PhenoMCP"
-Repository = "https://github.com/KooshaPari/PhenoMCP"
-Documentation = "https://github.com/KooshaPari/PhenoMCP#readme"
-"Migrated from" = "https://github.com/KooshaPari/HexaKit/tree/main/python/pheno-mcp"
-"Rust runtime" = "https://github.com/KooshaPari/substrate"
+Homepage = "https://github.com/<REDACTED>/PhenoMCP"
+Repository = "https://github.com/<REDACTED>/PhenoMCP"
+Documentation = "https://github.com/<REDACTED>/PhenoMCP#readme"
+"Migrated from" = "https://github.com/<REDACTED>/HexaKit/tree/main/python/pheno-mcp"
+"Rust runtime" = "https://github.com/<REDACTED>/substrate"
 
 [tool.hatch.build.targets.wheel]
 only-include = ["README.md", "MIGRATED.md"]

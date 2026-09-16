@@ -1,7 +1,7 @@
 # MANIFEST — pheno-framework-lint absorbed content
 
 **Absorption date:** 2026-06-19
-**Source repo:** KooshaPari/pheno-framework-lint (archived 2026-06-19 08:37:56 UTC, L5-112)
+**Source repo:** <REDACTED>/pheno-framework-lint (archived 2026-06-19 08:37:56 UTC, L5-112)
 **Source branch:** chore/l5-110-substrate-quality-bar-2026-06-19 @ d990c5e
 
 All files in `audits/framework-lint/` (excluding MANIFEST.md and the README's 5-line migration header) are byte-identical copies of the source.

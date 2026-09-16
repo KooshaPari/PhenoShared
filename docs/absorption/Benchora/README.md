@@ -4,8 +4,8 @@
 
 | Field | Value |
 |-------|-------|
-| Source repo | `KooshaPari/Benchora` |
-| Target repo | `KooshaPari/phenotype-tooling` |
+| Source repo | `<REDACTED>/Benchora` |
+| Target repo | `<REDACTED>/phenotype-tooling` |
 | Target path | `crates/benchora/` |
 | Absorbed date | 2026-07-17 |
 | Absorbed by | forge agent (batch absorption) |

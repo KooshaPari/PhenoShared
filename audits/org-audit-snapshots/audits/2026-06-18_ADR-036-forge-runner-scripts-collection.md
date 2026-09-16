@@ -1,6 +1,6 @@
 # ADR-036: forge-runner-scripts is the canonical collection repo for reusable forge runner scripts
 
-`KooshaPari/forge-runner-scripts` is the canonical home for reusable forge runner scripts. It is curated from the operator's local `~/.forge/` (forge resume runs, autoqueue, commands, loop) into a 33-file / 468 KB dotfile-style collection with a single `install.sh` installer.
+`<REDACTED>/forge-runner-scripts` is the canonical home for reusable forge runner scripts. It is curated from the operator's local `~/.forge/` (forge resume runs, autoqueue, commands, loop) into a 33-file / 468 KB dotfile-style collection with a single `install.sh` installer.
 
 **Status:** Accepted
 **Date:** 2026-06-18
@@ -23,7 +23,7 @@ The scripts are not git-tracked. They are not shareable. When the operator switc
 
 ## Decision
 
-**`KooshaPari/forge-runner-scripts` is the canonical collection repo for the operator's reusable forge runner scripts.**
+**`<REDACTED>/forge-runner-scripts` is the canonical collection repo for the operator's reusable forge runner scripts.**
 
 ### Curation policy
 
@@ -34,7 +34,7 @@ The scripts are not git-tracked. They are not shareable. When the operator switc
 ### Layout
 
 ```
-KooshaPari/forge-runner-scripts/
+<REDACTED>/forge-runner-scripts/
 ├── bin/
 │   ├── subagents-orchestration/   # scripts that orchestrate multiple subagents
 │   └── autoqueue/                 # autoqueue scripts
@@ -58,7 +58,7 @@ The installer is idempotent: re-running it does not duplicate or overwrite local
 
 ```bash
 # Fresh install
-git clone https://github.com/KooshaPari/forge-runner-scripts
+git clone https://github.com/<REDACTED>/forge-runner-scripts
 cd forge-runner-scripts
 ./install.sh
 

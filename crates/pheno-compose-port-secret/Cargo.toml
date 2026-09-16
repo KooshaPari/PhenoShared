@@ -5,11 +5,11 @@ edition = "2021"
 license = "MIT OR Apache-2.0"
 description = "Phenotype Compose SecretStore port trait — the canonical hex-architecture port for storing, retrieving, listing, and deleting versioned secrets. Adapters implement SecretStore to bridge to local secret backends (in-memory map, JSON file, vault, k8s secrets, ...)."
 publish = false
-repository = "https://github.com/KooshaPari/PhenoCompose"
+repository = "https://github.com/<REDACTED>/PhenoCompose"
 documentation = "https://docs.rs/phenocompose-port-secret"
 keywords = ["phenotype", "pheno-compose", "port", "secret"]
 categories = ["development-tools"]
-authors = ["kooshapari"]
+authors = ["<REDACTED>"]
 
 [lib]
 path = "src/lib.rs"

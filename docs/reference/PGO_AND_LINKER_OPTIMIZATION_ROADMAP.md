@@ -604,7 +604,7 @@ rustflags = ["-C", "link-arg=-fuse-ld=mold"]
 
 ```bash
 # Verify mold is being used
-cd /Users/kooshapari/CodeProjects/Phenotype/repos
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos
 RUSTFLAGS="-v" cargo build --release 2>&1 | grep -i "mold\|lld\|ld"
 
 # Check link time

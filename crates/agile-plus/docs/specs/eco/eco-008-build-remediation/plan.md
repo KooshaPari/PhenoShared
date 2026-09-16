@@ -11,7 +11,7 @@ Resolve the 7 build issues documented in `worklogs/build-triage-20260605.json` (
 ## Implementation Steps
 
 ### Pre-flight (all repos)
-1. `df -h /Users/kooshapari` — confirm ≥ 20 GiB free. If below, skip `cargo check` and mark verification as deferred.
+1. `df -h /Users/<REDACTED>` — confirm ≥ 20 GiB free. If below, skip `cargo check` and mark verification as deferred.
 2. `git status --short --branch` in each affected worktree to confirm clean baseline.
 
 ### WP-01 phenoAI

@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT OR Apache-2.0
-// SPDX-FileCopyrightText: 2026 KooshaPari <kooshapari@gmail.com>
+// SPDX-FileCopyrightText: 2026 <REDACTED> <<REDACTED>@gmail.com>
 
 //! ZodAdapter (delegates to zod-types via a JSON Schema bridge).
 

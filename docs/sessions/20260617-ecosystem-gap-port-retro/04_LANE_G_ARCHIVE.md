@@ -8,15 +8,15 @@
 
 | Repo | `isArchived` | Notes |
 |------|--------------|-------|
-| `KooshaPari/PhenoProc` | `true` | pre-archived; Agentora #79 merged |
-| `KooshaPari/PhenoKits` | `true` | pre-archived; phenokits-commons #3 merged |
-| `KooshaPari/Metron` | `true` | archived this session via `gh api` PATCH |
+| `<REDACTED>/PhenoProc` | `true` | pre-archived; Agentora #79 merged |
+| `<REDACTED>/PhenoKits` | `true` | pre-archived; phenokits-commons #3 merged |
+| `<REDACTED>/Metron` | `true` | archived this session via `gh api` PATCH |
 | ObservabilityKit | N/A | never a standalone GitHub repo; package in phenotype-python-sdk |
 
 ## Verification
 
 ```bash
-gh repo view KooshaPari/Metron --json name,isArchived
+gh repo view <REDACTED>/Metron --json name,isArchived
 # {"isArchived":true,"name":"Metron"}
 ```
 

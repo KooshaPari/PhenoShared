@@ -2,7 +2,7 @@
 """regen-ecosystem-map.py — auto-regenerate ECOSYSTEM_MAP.md from SSOT inputs.
 
 This script is the CI-gated regenerator for ``ECOSYSTEM_MAP.md`` (the
-canonical live ecosystem index for the KooshaPari/phenotype-registry repo).
+canonical live ecosystem index for the <REDACTED>/phenotype-registry repo).
 
 SSOT inputs (read in this order):
 
@@ -307,7 +307,7 @@ def render(
 
     parts: list[str] = []
     parts.append(
-        f"""# KooshaPari Ecosystem Map
+        f"""# <REDACTED> Ecosystem Map
 
 > **Auto-regenerated.** Do not hand-edit the auto sections. See the
 > drift-detection comment block at the bottom for the regen script + CI gates.

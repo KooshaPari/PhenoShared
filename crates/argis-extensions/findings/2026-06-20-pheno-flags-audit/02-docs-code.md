@@ -2,12 +2,12 @@
 
 **Date:** 2026-06-20
 **Phase:** 1B (docs + code only; matrix / decision deferred to Phase 2)
-**Source location:** `/Users/kooshapari/CodeProjects/Phenotype/repos/argis-extensions/pheno-flags/`
-**Substrate location (for comparison only):** `/Users/kooshapari/CodeProjects/Phenotype/repos/pheno/crates/phenotype-flags/`
+**Source location:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos/argis-extensions/pheno-flags/`
+**Substrate location (for comparison only):** `/Users/<REDACTED>/CodeProjects/Phenotype/repos/pheno/crates/phenotype-flags/`
 
-> **Path correction:** The task brief says the source lives at `/Users/kooshapari/CodeProjects/Phenotype/repos/pheno-flags/`. The actual location is **one level deeper** at `/Users/kooshapari/CodeProjects/Phenotype/repos/argis-extensions/pheno-flags/` (the subtree is a sub-folder of the `argis-extensions` monorepo, not at the `repos/` root). The substrate lives at `/Users/kooshapari/CodeProjects/Phenotype/repos/pheno/crates/phenotype-flags/`. All file references in this report use the actual paths.
+> **Path correction:** The task brief says the source lives at `/Users/<REDACTED>/CodeProjects/Phenotype/repos/pheno-flags/`. The actual location is **one level deeper** at `/Users/<REDACTED>/CodeProjects/Phenotype/repos/argis-extensions/pheno-flags/` (the subtree is a sub-folder of the `argis-extensions` monorepo, not at the `repos/` root). The substrate lives at `/Users/<REDACTED>/CodeProjects/Phenotype/repos/pheno/crates/phenotype-flags/`. All file references in this report use the actual paths.
 
-> **No standalone GitHub repo** for this source. The subtree exists ONLY on disk within `argis-extensions`. The 71-pillar audit (`findings/71-pillar-2026-06-20-pheno-flags.md:5`) lists `Repo: KooshaPari/pheno-flags (v0.1.0)` but no such GitHub repo was created — this is a discrepancy worth flagging to Phase 2.
+> **No standalone GitHub repo** for this source. The subtree exists ONLY on disk within `argis-extensions`. The 71-pillar audit (`findings/71-pillar-2026-06-20-pheno-flags.md:5`) lists `Repo: <REDACTED>/pheno-flags (v0.1.0)` but no such GitHub repo was created — this is a discrepancy worth flagging to Phase 2.
 
 ---
 
@@ -332,7 +332,7 @@ The example's docstring (`:9-11`) shows the run command: `cargo run --example ot
 **Impact:** The `Cargo.lock` ships deps that are never exercised, and the CI step `cargo test --all-features` (`.github/workflows/ci.yml:19`) will resolve them every run. The AGENTS.md description of the test framework is misleading.
 
 ### P-1B-07 — **MEDIUM** — `Cargo.toml:1` — `[workspace]` is empty + crate is not a member of the root monorepo
-**Evidence:** `Cargo.toml:1` declares `[workspace]` (empty); the argis-extensions monorepo root has **no `Cargo.toml` at all** (`/Users/kooshapari/CodeProjects/Phenotype/repos/argis-extensions/Cargo.toml` does not exist). Compare: the substrate at `pheno/crates/phenotype-flags/Cargo.toml:1` has the same `[workspace]` empty pattern, but it lives inside the `pheno` monorepo (which has a root `Cargo.toml`).
+**Evidence:** `Cargo.toml:1` declares `[workspace]` (empty); the argis-extensions monorepo root has **no `Cargo.toml` at all** (`/Users/<REDACTED>/CodeProjects/Phenotype/repos/argis-extensions/Cargo.toml` does not exist). Compare: the substrate at `pheno/crates/phenotype-flags/Cargo.toml:1` has the same `[workspace]` empty pattern, but it lives inside the `pheno` monorepo (which has a root `Cargo.toml`).
 **Description:** The `pheno-flags` subtree is a standalone package, not a workspace member. It cannot share a `Cargo.lock` with `argis-extensions` (the parent isn't a Cargo workspace). It also cannot share lockfiles with the substrate (`pheno/crates/phenotype-flags/`), which is in a different monorepo. This is fine **if** the subtree is intended to be lifted out as a standalone crate on `crates.io` (which `Cargo.toml:12 publish = true` suggests), but it is inconsistent with the "absorb into argis-extensions monorepo" workflow that AGENTS.md's "Stack" and "Key Commands" sections imply.
 **Impact:** The crate's "substrate" status is ambiguous. It cannot be tested in lockstep with other `argis-extensions/pheno-*` siblings (e.g. `pheno-port-adapter`, `config`) because there is no `argis-extensions/Cargo.toml`. Phase 2 needs to decide: lift to a real workspace, or commit to standalone-on-crates.io.
 
@@ -380,9 +380,9 @@ The example's docstring (`:9-11`) shows the run command: `cargo run --example ot
 **Description:** Cosmetic. `"ff-free"` looks like a typo/abbreviation; if meant as "fossil-free" or "flag-flip-free" it should be expanded. Otherwise harmless — `cargo publish` will accept any 5 short keywords.
 **Impact:** Cosmetic; unusual keyword may make the crate harder to discover on crates.io.
 
-### P-1B-17 — **INFO** — `findings/71-pillar-2026-06-20-pheno-flags.md:6` — `Repo: KooshaPari/pheno-flags (v0.1.0)` but no such GitHub repo
-**Evidence:** Audit metadata line 5-6: `Repo: KooshaPari/pheno-flags (v0.1.0)` / `Commit: TBD (scored at ref chore/tier-0-hygiene-orch-v10-025)`. The local subtree is at `argis-extensions/pheno-flags/`, not at a `KooshaPari/pheno-flags` GitHub repo. `gh repo view KooshaPari/pheno-flags` would need to be checked from the orchestrator (not done in Phase 1B).
-**Description:** The 71-pillar audit's metadata block references a GitHub repo that may or may not exist. Phase 2 should verify with `gh api /repos/KooshaPari/pheno-flags` and resolve the discrepancy.
+### P-1B-17 — **INFO** — `findings/71-pillar-2026-06-20-pheno-flags.md:6` — `Repo: <REDACTED>/pheno-flags (v0.1.0)` but no such GitHub repo
+**Evidence:** Audit metadata line 5-6: `Repo: <REDACTED>/pheno-flags (v0.1.0)` / `Commit: TBD (scored at ref chore/tier-0-hygiene-orch-v10-025)`. The local subtree is at `argis-extensions/pheno-flags/`, not at a `<REDACTED>/pheno-flags` GitHub repo. `gh repo view <REDACTED>/pheno-flags` would need to be checked from the orchestrator (not done in Phase 1B).
+**Description:** The 71-pillar audit's metadata block references a GitHub repo that may or may not exist. Phase 2 should verify with `gh api /repos/<REDACTED>/pheno-flags` and resolve the discrepancy.
 **Impact:** Unclear; depends on whether the repo exists upstream.
 
 ### P-1B-18 — **INFO** — `Cargo.toml:1` `[workspace]` declaration

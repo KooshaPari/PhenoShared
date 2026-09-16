@@ -6,7 +6,7 @@ title: Getting Started
 
 This page is a quick, opinionated path from a fresh checkout of Pine to a
 green local build. It is intentionally short — for the deep design, see
-[ARCHITECTURE.md](https://github.com/KooshaPari/Pine/blob/main/docs/ARCHITECTURE.md).
+[ARCHITECTURE.md](https://github.com/<REDACTED>/Pine/blob/main/docs/ARCHITECTURE.md).
 
 ## Prerequisites
 
@@ -39,7 +39,7 @@ The five crates that make up the Pine workspace are:
 ## Clone and build
 
 ```bash
-git clone https://github.com/KooshaPari/Pine.git
+git clone https://github.com/<REDACTED>/Pine.git
 cd Pine
 cargo build --workspace --all-targets
 ```
@@ -125,9 +125,9 @@ a token, use an obvious placeholder such as `YOUR_API_TOKEN` or
 
 ## Next steps
 
-- Read [ARCHITECTURE.md](https://github.com/KooshaPari/Pine/blob/main/docs/ARCHITECTURE.md)
+- Read [ARCHITECTURE.md](https://github.com/<REDACTED>/Pine/blob/main/docs/ARCHITECTURE.md)
   for the full layer design and the Win32 → Phenotype syscall mapping.
-- Skim [SSOT.md](https://github.com/KooshaPari/Pine/blob/main/docs/SSOT.md)
+- Skim [SSOT.md](https://github.com/<REDACTED>/Pine/blob/main/docs/SSOT.md)
   for the current architectural state and the dependency DAG.
 - Open an issue or pull request on
-  [GitHub](https://github.com/KooshaPari/Pine) — contributions welcome.
+  [GitHub](https://github.com/<REDACTED>/Pine) — contributions welcome.

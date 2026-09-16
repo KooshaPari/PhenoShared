@@ -279,11 +279,11 @@ and carry the active strict-pause banner in the original repos.
 
 | Repo | Decision | Effective | Vendor | Pointer |
 |------|----------|-----------|--------|---------|
-| `KooshaPari/Authvault` | STRICT PAUSE archive (absorbed into AuthKit) | 2026-07-05 | n/a (AuthKit is canonical) | session `2026-07-05-polyrepo-portfolio-strategy` |
-| `KooshaPari/AtomsBot` | STRICT PAUSE archive | 2026-07-05 | n/a (banner in repo) | session `2026-07-05-polyrepo-portfolio-strategy` |
-| `KooshaPari/GDK` | STRICT PAUSE archive | 2026-07-05 | n/a (banner in repo) | session `2026-07-05-polyrepo-portfolio-strategy` |
-| `KooshaPari/KaskMan` | STRICT PAUSE archive | 2026-07-05 | `archive/kaskman/` (this repo) | session `2026-07-05-polyrepo-portfolio-strategy` |
-| `KooshaPari/phenodag` | THIN REDIRECTOR (features absorbed into Tracera + AgilePlus) | 2026-07-05 | n/a (redirector) | PR `phenodag#29` + `Tracera#723` + `AgilePlus#895` |
+| `<REDACTED>/Authvault` | STRICT PAUSE archive (absorbed into AuthKit) | 2026-07-05 | n/a (AuthKit is canonical) | session `2026-07-05-polyrepo-portfolio-strategy` |
+| `<REDACTED>/AtomsBot` | STRICT PAUSE archive | 2026-07-05 | n/a (banner in repo) | session `2026-07-05-polyrepo-portfolio-strategy` |
+| `<REDACTED>/GDK` | STRICT PAUSE archive | 2026-07-05 | n/a (banner in repo) | session `2026-07-05-polyrepo-portfolio-strategy` |
+| `<REDACTED>/KaskMan` | STRICT PAUSE archive | 2026-07-05 | `archive/kaskman/` (this repo) | session `2026-07-05-polyrepo-portfolio-strategy` |
+| `<REDACTED>/phenodag` | THIN REDIRECTOR (features absorbed into Tracera + AgilePlus) | 2026-07-05 | n/a (redirector) | PR `phenodag#29` + `Tracera#723` + `AgilePlus#895` |
 
 **Promotion (NOT archives):**
 

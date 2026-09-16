@@ -10,7 +10,7 @@
 
 ## Context
 
-The KooshaPari GitHub organization currently contains 226 repositories spanning multiple years of development, experimentation, and iteration. This portfolio has grown organically without systematic governance, resulting in significant maintenance burden, discoverability problems, and unclear ownership signals.
+The <REDACTED> GitHub organization currently contains 226 repositories spanning multiple years of development, experimentation, and iteration. This portfolio has grown organically without systematic governance, resulting in significant maintenance burden, discoverability problems, and unclear ownership signals.
 
 Many repositories are single-commit stubs that were created as placeholders for planned work that never materialized. Legacy Odin projects (from a previous technology stack) sit alongside active Rust/TypeScript/Python projects. Two orphaned database entries reference repositories that no longer exist on GitHub, causing failures in automated tooling that queries the portfolio.
 
@@ -157,7 +157,7 @@ The 226-repo portfolio is unmanageable:
 
 ## Traces
 
-- Related: kooshapari-stale-repo-triage
+- Related: <REDACTED>-stale-repo-triage
 - Related: 019-private-repo-catalog
 - Related: 018-template-repo-cleanup
 - Related: 021-polyrepo-ecosystem-stabilization

@@ -2,7 +2,7 @@
 
 - **Status:** Accepted — 2026-06-20 (§8 Option B per user directive "do all of the above"; supersedes AGENTS.md §8 AWAITING state)
 - **Date:** 2026-06-20
-- **Decision:** @KooshaPari — 2026-06-20 (accepted via orchestrator on `wip/stash-1-v11-agents-md-refresh-2026-06-20`)
+- **Decision:** @<REDACTED> — 2026-06-20 (accepted via orchestrator on `wip/stash-1-v11-agents-md-refresh-2026-06-20`)
 - **Plan:** [`plans/2026-06-20-v11-dag-router-rebuild.md`](../../plans/2026-06-20-v11-dag-router-rebuild.md)
 - **Research:** [`plans/2026-06-20-router-architecture-2026-research.md`](../../plans/2026-06-20-router-architecture-2026-research.md) §5 (Rebuild Decision — 3 Options)
 - **Wave:** v11 L5 — Documentation / Governance (T5.2)
@@ -59,7 +59,7 @@ OTel-native spans.
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│ Phenotype Router (Go) — KooshaPari-owned                        │
+│ Phenotype Router (Go) — <REDACTED>-owned                        │
 │                                                                 │
 │  ┌─────────────────────────────────────────────────────────┐    │
 │  │ Router Core (decision layer)                            │    │
@@ -195,14 +195,14 @@ exit criteria (`bifrost-extensions` builds + 9 plugin tests pass on v1.5.21).
 
 | ID | Priority | Action | Owner | Track |
 |---|---|---|---|---|
-| FU1 | P0 | Resolve research §8 Q1-Q5 (user decisions) | @KooshaPari | Pre-L2 |
+| FU1 | P0 | Resolve research §8 Q1-Q5 (user decisions) | @<REDACTED> | Pre-L2 |
 | FU2 | P0 | L1.1-L1.4: Bifrost upgrade + 9-plugin regression | forge-1 | L1 |
 | FU3 | P0 | L2.1-L2.5: `phenotype-router` v0.1.0 (decision flow + 1 health-aware provider + OTel + hot-reload of 1 plugin) | forge-2/3 | L2 |
 | FU4 | P0 | L3.6 first: `contentsafety` mandatory pre-routing | forge-3 | L3 |
 | FU5 | P0 | ADR-051 (Bifrost library role) + ADR-052 (plugin SDK spec) authored in this wave | forge-1 | L5 |
 | FU6 | P1 | L4.2: `pheno-tracing` Go client per ADR-036 | forge-3 | L4 |
 | FU7 | P1 | `cliproxyapi-plusplus` bridge-mode cutover | forge-1 | L3.5 |
-| FU8 | P2 | `OmniRoute` archive decision after Option B is live | @KooshaPari | Post-v11 |
+| FU8 | P2 | `OmniRoute` archive decision after Option B is live | @<REDACTED> | Post-v11 |
 | FU9 | P2 | 71-pillar refresh for `phenotype-router` after v0.1.0 ships | worklog-schema circle | Post-L2 |
 | FU10 | P2 | Coverage gates per ADR-040 (80% lib / 70% framework / 60% federated service) | forge-2 | L3 |
 

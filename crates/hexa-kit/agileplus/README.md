@@ -1,5 +1,5 @@
 > **MIGRATED (2026-06-17):** Canonical AgilePlus workspace is
-> [`KooshaPari/AgilePlus`](https://github.com/KooshaPari/AgilePlus).
+> [`<REDACTED>/AgilePlus`](https://github.com/<REDACTED>/AgilePlus).
 > This subtree is a retired audit copy — not a HexaKit workspace member.
 
 # repos — CodeProjects/Phenotype organizational shelf

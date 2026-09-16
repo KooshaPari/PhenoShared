@@ -2,8 +2,8 @@
 
 **Date:** 2026-06-20
 **Phase:** 1C (target-parity / candidate survey only; matrix + decision deferred to Phase 2)
-**Source path:** `/Users/kooshapari/CodeProjects/Phenotype/repos/pheno-flags/` (subtree; **NO standalone GitHub repo**)
-**Canonical substrate path:** `/Users/kooshapari/CodeProjects/Phenotype/repos/pheno/crates/phenotype-flags/` (the recommended target)
+**Source path:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos/pheno-flags/` (subtree; **NO standalone GitHub repo**)
+**Canonical substrate path:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos/pheno/crates/phenotype-flags/` (the recommended target)
 **Upstream Phase 1 context:**
 - Phase 1A — `findings/2026-06-20-pheno-flags-audit/01-source-inventory.md` (891 lines)
 - Phase 1B — `findings/2026-06-20-pheno-flags-audit/02-docs-code.md` (497 lines)
@@ -22,7 +22,7 @@
 
 | Field | Value |
 |---|---|
-| **Repo / path** | `KooshaPari/pheno` monorepo → `crates/phenotype-flags/` |
+| **Repo / path** | `<REDACTED>/pheno` monorepo → `crates/phenotype-flags/` |
 | **Plausibility** | **HIGH** |
 | **Verdict** | **ACCEPT (RECOMMENDED)** |
 | **Public API** | Byte-equivalent to source modulo `pheno_flags` → `phenotype_flags` rename (see §2.3 diff) |
@@ -39,7 +39,7 @@ Citation: `pheno/crates/phenotype-flags/src/lib.rs:1-360` (full file read), `phe
 
 | Field | Value |
 |---|---|
-| **Repo / path** | `/Users/kooshapari/CodeProjects/Phenotype/repos/pheno-config/` (also absorbed into `Configra/crates/pheno-config/` per ADR-031) |
+| **Repo / path** | `/Users/<REDACTED>/CodeProjects/Phenotype/repos/pheno-config/` (also absorbed into `Configra/crates/pheno-config/` per ADR-031) |
 | **Plausibility** | **LOW** |
 | **Verdict** | **REJECT** |
 | **Evidence** | `Configra/crates/pheno-config/src/lib.rs:144` (`pub feature_flags: Vec<String>`), `:167` (`fn parse_feature_flags(raw: &str) -> Vec<String>`), `:190-191` (env var `<prefix>_FEATURE_FLAGS` is a **comma-separated string of names**, not a boolean eval table) |
@@ -51,7 +51,7 @@ Citation: `Configra/crates/pheno-config/src/lib.rs:144` (the `feature_flags: Vec
 
 | Field | Value |
 |---|---|
-| **Repo / path** | `/Users/kooshapari/CodeProjects/Phenotype/repos/Configra/` |
+| **Repo / path** | `/Users/<REDACTED>/CodeProjects/Phenotype/repos/Configra/` |
 | **Plausibility** | **LOW** |
 | **Verdict** | **REJECT** |
 | **Evidence** | Same as candidate (b) — `Configra/crates/pheno-config/src/lib.rs:144,167,190-191` |
@@ -63,10 +63,10 @@ Citation: `phenotype-registry/registry/disposition-index.json:1172-1180` (`repo-
 
 | Field | Value |
 |---|---|
-| **Repo / path** | `/Users/kooshapari/CodeProjects/Phenotype/repos/pheno-context/` (claimed in `pheno-flags/AGENTS.md:96`) |
+| **Repo / path** | `/Users/<REDACTED>/CodeProjects/Phenotype/repos/pheno-context/` (claimed in `pheno-flags/AGENTS.md:96`) |
 | **Plausibility** | **N/A — does not exist** |
 | **Verdict** | **REJECT** |
-| **Evidence** | `ls /Users/kooshapari/CodeProjects/Phenotype/repos/pheno-context` → `No such file or directory` (shell output 2026-06-20 18:30 PDT). Also `find argis-extensions -name 'pheno-context'` (per Phase 1B §2.2 line 84) returns empty. |
+| **Evidence** | `ls /Users/<REDACTED>/CodeProjects/Phenotype/repos/pheno-context` → `No such file or directory` (shell output 2026-06-20 18:30 PDT). Also `find argis-extensions -name 'pheno-context'` (per Phase 1B §2.2 line 84) returns empty. |
 | **Primary rejection reason** | **Repo does not exist** on disk; `pheno-flags/AGENTS.md:96` and `:98` reference `pheno-context` and `pheno-tracing` as if they were siblings, but neither exists in the local monorepo clone. The substrate candidate (a) is the only surviving reference point. |
 
 Citation: shell `ls pheno-context` 2026-06-20 18:30 PDT; `pheno-flags/AGENTS.md:96` (the broken cross-ref).
@@ -75,7 +75,7 @@ Citation: shell `ls pheno-context` 2026-06-20 18:30 PDT; `pheno-flags/AGENTS.md:
 
 | Field | Value |
 |---|---|
-| **Repo / path** | `/Users/kooshapari/CodeProjects/Phenotype/repos/pheno-port-adapter/` (Rust, lives at `pheno/crates/pheno-port-adapter/` per pheno monorepo member list) |
+| **Repo / path** | `/Users/<REDACTED>/CodeProjects/Phenotype/repos/pheno-port-adapter/` (Rust, lives at `pheno/crates/pheno-port-adapter/` per pheno monorepo member list) |
 | **Plausibility** | **LOW** |
 | **Verdict** | **REJECT** |
 | **Evidence** | `pheno-port-adapter` exposes the **hexagonal `Port` trait + `Adapter` impl** pattern (ADR-014, ADR-038). `pheno-flags` is a **stateless in-memory predicate** (`FlagSet { HashMap<String, bool> }`), not a port/adapter pair. There is no abstraction boundary to extract; the impl is the contract. |
@@ -87,7 +87,7 @@ Citation: `pheno-port-adapter/src/lib.rs` (Port trait, Adapter impl pattern per 
 
 | Field | Value |
 |---|---|
-| **Repo / path** | `/Users/kooshapari/CodeProjects/Phenotype/repos/phenotype-registry/` |
+| **Repo / path** | `/Users/<REDACTED>/CodeProjects/Phenotype/repos/phenotype-registry/` |
 | **Plausibility** | **N/A (not a code target)** |
 | **Verdict** | **REJECT (not a candidate)** |
 | **Evidence** | `phenotype-registry/registry/disposition-index.json:1141-1150` already contains the **`gw-pheno-flags`** row with `disposition: ARCHIVED, target: pheno/crates/phenotype-flags, fsm: done, relocated_date: 2026-06-20`. |
@@ -99,7 +99,7 @@ Citation: `phenotype-registry/registry/disposition-index.json:1141-1150`.
 
 | Field | Value |
 |---|---|
-| **Repo / path** | `/Users/kooshapari/CodeProjects/Phenotype/repos/PhenoCompose/` |
+| **Repo / path** | `/Users/<REDACTED>/CodeProjects/Phenotype/repos/PhenoCompose/` |
 | **Plausibility** | **N/A — language mismatch** |
 | **Verdict** | **REJECT** |
 | **Evidence** | `PhenoCompose/Cargo.toml` exists (it's a polyglot meta-project), but `find . -name 'Cargo.toml' -exec grep -l 'name = "pheno-flags"' {} \;` returns nothing under `PhenoCompose/` (per Phase 1A §5.1 find pattern). PhenoCompose is a *composition* layer, not a single-crate substrate. |
@@ -111,43 +111,43 @@ Citation: Phase 1A §5.1 (find result over repos/ shows no `PhenoCompose/crates/
 
 | Field | Value |
 |---|---|
-| **Repo / path** | `/Users/kooshapari/CodeProjects/Phenotype/repos/phenotype-python-sdk/` |
+| **Repo / path** | `/Users/<REDACTED>/CodeProjects/Phenotype/repos/phenotype-python-sdk/` |
 | **Plausibility** | **NONE** |
 | **Verdict** | **REJECT** |
 | **Evidence** | Python polyglot SDK. Rust `pheno-flags` cannot merge into a Python-only repo. The substrate-pattern per ADR-022 (the only related ADR in the dispatch) reserves Rust crates for `pheno-*-lib` family. |
 | **Primary rejection reason** | **Language mismatch.** `phenotype-python-sdk` is a Python SDK (`pyproject.toml` per directory listing). Rust `pheno-flags` cannot be absorbed here. |
 
-Citation: `/Users/kooshapari/CodeProjects/Phenotype/repos/phenotype-python-sdk/` directory listing (Python artifacts only, no `Cargo.toml` with pheno-flags).
+Citation: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/phenotype-python-sdk/` directory listing (Python artifacts only, no `Cargo.toml` with pheno-flags).
 
 ### i. `pheno-scaffold-kit` (Python umbrella)
 
 | Field | Value |
 |---|---|
-| **Repo / path** | `/Users/kooshapari/CodeProjects/Phenotype/repos/pheno-scaffold-kit/` |
+| **Repo / path** | `/Users/<REDACTED>/CodeProjects/Phenotype/repos/pheno-scaffold-kit/` |
 | **Plausibility** | **NONE** |
 | **Verdict** | **REJECT** |
 | **Evidence** | Python umbrella (`pyproject.toml`, scaffold templates). No `Cargo.toml` references `pheno-flags` as a workspace member. |
 | **Primary rejection reason** | **Language mismatch** + **wrong substrate type** (scaffolding template, not feature-flag store). |
 
-Citation: `/Users/kooshapari/CodeProjects/Phenotype/repos/pheno-scaffold-kit/` directory listing.
+Citation: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/pheno-scaffold-kit/` directory listing.
 
 ### j. `pheno-mcp-router` (Python MCP router)
 
 | Field | Value |
 |---|---|
-| **Repo / path** | `/Users/kooshapari/CodeProjects/Phenotype/repos/pheno-mcp-router/` |
+| **Repo / path** | `/Users/<REDACTED>/CodeProjects/Phenotype/repos/pheno-mcp-router/` |
 | **Plausibility** | **NONE** |
 | **Verdict** | **REJECT** |
 | **Evidence** | Python MCP router (`pyproject.toml`, `src/` is Python). Has `AGENTS.md`, `llms.txt`, etc. but is a router, not a flags substrate. |
 | **Primary rejection reason** | **Language mismatch** + **wrong substrate type** (router, not flag store). |
 
-Citation: `/Users/kooshapari/CodeProjects/Phenotype/repos/pheno-mcp-router/` directory listing (`pyproject.toml`, `src/` Python).
+Citation: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/pheno-mcp-router/` directory listing (`pyproject.toml`, `src/` Python).
 
 ### k. `AgilePlus/crates/pheno-flags` (**NOTABLE — divergent API: `Resolver` typed flag store**)
 
 | Field | Value |
 |---|---|
-| **Repo / path** | `/Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus/crates/pheno-flags/` |
+| **Repo / path** | `/Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus/crates/pheno-flags/` |
 | **Plausibility** | **MEDIUM (parallel implementation, divergent API)** |
 | **Verdict** | **PARTIAL** — separate decision scope, **NOT** an absorption target for the source `pheno-flags` |
 | **Crate name** | `pheno-flags` (same as source!) but **divergent API** |
@@ -229,7 +229,7 @@ Citation: `pheno/crates/phenotype-flags/src/lib.rs:1-360` (full file read).
 
 ### 2.3 Substrate vs source diff (verified)
 
-Citation: shell `diff -u /Users/kooshapari/CodeProjects/Phenotype/repos/pheno/crates/phenotype-flags/src/lib.rs /Users/kooshapari/CodeProjects/Phenotype/repos/pheno-flags/src/lib.rs | head -200` (executed 2026-06-20 18:30 PDT).
+Citation: shell `diff -u /Users/<REDACTED>/CodeProjects/Phenotype/repos/pheno/crates/phenotype-flags/src/lib.rs /Users/<REDACTED>/CodeProjects/Phenotype/repos/pheno-flags/src/lib.rs | head -200` (executed 2026-06-20 18:30 PDT).
 
 **Diff summary:** The unified diff contains exactly **two classes of change**:
 
@@ -316,14 +316,14 @@ The source `pheno-flags` has **unique surface elements** compared to the substra
 All three `gh search code` calls returned `error connecting to api.github.com`:
 
 ```
-$ gh search code 'use pheno_flags' --owner KooshaPari --limit 30
+$ gh search code 'use pheno_flags' --owner <REDACTED> --limit 30
 error connecting to api.github.com
 check your internet connection or https://githubstatus.com
 
-$ gh search code 'pheno_flags::' --owner KooshaPari --limit 30
+$ gh search code 'pheno_flags::' --owner <REDACTED> --limit 30
 error connecting to api.github.com
 
-$ gh search code 'pheno-flags' --owner KooshaPari --limit 30
+$ gh search code 'pheno-flags' --owner <REDACTED> --limit 30
 error connecting to api.github.com
 ```
 
@@ -331,11 +331,11 @@ error connecting to api.github.com
 
 Phase 1A §6.3 (run at 16:28 PDT, before the outage) reported **15 matches** across 5 repos:
 
-- 7 hits in `KooshaPari/argis-extensions` (the source subtree itself)
-- 3 hits in `KooshaPari/AgilePlus` (API B subtree)
-- 3 hits in `KooshaPari/PlayCua` (the **only real external consumer** — `native/src/main.rs`, `native/src/app/mod.rs`, `native/tests/integration_smoke.rs`)
-- 2 hits in `KooshaPari/FocalPoint` (API A mirror)
-- 4 hits in `KooshaPari/phenotype-apps` (worklog-only + remote-only — `phenotype-apps/` not checked out locally)
+- 7 hits in `<REDACTED>/argis-extensions` (the source subtree itself)
+- 3 hits in `<REDACTED>/AgilePlus` (API B subtree)
+- 3 hits in `<REDACTED>/PlayCua` (the **only real external consumer** — `native/src/main.rs`, `native/src/app/mod.rs`, `native/tests/integration_smoke.rs`)
+- 2 hits in `<REDACTED>/FocalPoint` (API A mirror)
+- 4 hits in `<REDACTED>/phenotype-apps` (worklog-only + remote-only — `phenotype-apps/` not checked out locally)
 
 Of these, only the PlayCua hit-trio is a real **Cargo-workspace consumer**; all others are intra-crate self-references in subtrees or worklog JSON files.
 
@@ -344,7 +344,7 @@ Of these, only the PlayCua hit-trio is a real **Cargo-workspace consumer**; all 
 Command (executed 2026-06-20 18:30 PDT):
 
 ```
-$ cd /Users/kooshapari/CodeProjects/Phenotype/repos && \
+$ cd /Users/<REDACTED>/CodeProjects/Phenotype/repos && \
     git grep -ln 'use pheno_flags' -- ':!**/pheno-flags/**' ':!**/phenotype-flags/**' ':!**/target/**'
 ```
 
@@ -404,7 +404,7 @@ Citation: shell `git grep` 2026-06-20 18:30 PDT.
 Command (executed 2026-06-20 18:30 PDT):
 
 ```
-$ cd /Users/kooshapari/CodeProjects/Phenotype/repos && \
+$ cd /Users/<REDACTED>/CodeProjects/Phenotype/repos && \
     git grep -l 'pheno-flags = ' -- ':!**/Cargo.lock' ':!**/target/**'
 ```
 
@@ -416,9 +416,9 @@ pheno-flags/benches/Cargo.toml
 
 Citation: shell `git grep` 2026-06-20 18:30 PDT.
 
-### 3.5 SPECIAL ATTENTION: Phase 1A found 15 `use pheno_flags` matches in `KooshaPari/PlayCua` (3 files) — verified locally
+### 3.5 SPECIAL ATTENTION: Phase 1A found 15 `use pheno_flags` matches in `<REDACTED>/PlayCua` (3 files) — verified locally
 
-**PlayCua IS checked out locally** at `/Users/kooshapari/CodeProjects/Phenotype/repos/PlayCua/` (Phase 1A §5.5 noted `phenotype-apps` is **not** checked out locally; but `PlayCua` IS). Local `git grep` for `pheno_flags|pheno-flags` in `PlayCua/`:
+**PlayCua IS checked out locally** at `/Users/<REDACTED>/CodeProjects/Phenotype/repos/PlayCua/` (Phase 1A §5.5 noted `phenotype-apps` is **not** checked out locally; but `PlayCua` IS). Local `git grep` for `pheno_flags|pheno-flags` in `PlayCua/`:
 
 ```
 Binary file Cargo.lock matches
@@ -444,7 +444,7 @@ The `= { workspace = true }` syntax means the workspace root must define a `[wor
 **CRITICAL FINDING — PlayCua's workspace is currently broken:**
 
 ```
-$ cd /Users/kooshapari/CodeProjects/Phenotype/repos/PlayCua && cargo metadata --no-deps
+$ cd /Users/<REDACTED>/CodeProjects/Phenotype/repos/PlayCua && cargo metadata --no-deps
 error: failed to load manifest for workspace member `.../PlayCua/native`
 referenced by workspace at `.../PlayCua/Cargo.toml`
 
@@ -483,7 +483,7 @@ Citation: shell `git grep` 2026-06-20 18:30 PDT, `repos/` monorepo root.
 
 ### 4.1 What "decision shape" means here
 
-The 7 prior absorption audits (per AGENTS.md §"4-repo retirement" 2026-06-18) used an established taxonomy of decision shapes. This case does not fit any of them cleanly because **the source has NO upstream GitHub repo to migrate FROM** — every prior case (kwality, dagctl, AuthKit-via-phenotype-auth-ts, dinoforge-packs) had a source `KooshaPari/<repo>` with a real `gh repo delete`-able upstream.
+The 7 prior absorption audits (per AGENTS.md §"4-repo retirement" 2026-06-18) used an established taxonomy of decision shapes. This case does not fit any of them cleanly because **the source has NO upstream GitHub repo to migrate FROM** — every prior case (kwality, dagctl, AuthKit-via-phenotype-auth-ts, dinoforge-packs) had a source `<REDACTED>/<repo>` with a real `gh repo delete`-able upstream.
 
 The closest analog is the **`phenotype-error-core` audit #7** (per AGENTS.md: "parallel to `phenotype-error-core` from audit #7"), which also had a canonical substrate at `pheno/crates/phenotype-error-core` and no standalone GitHub repo.
 
@@ -557,7 +557,7 @@ Citation: `phenotype-registry/registry/disposition-index.json` (full file is 121
 
 ### 5.2 Search for "pheno-flags" / "phenotype-flags" / "pheno_flags" / "phenotype_flags" in registry
 
-Citation: shell `grep -n -i 'pheno-flags\|phenotype-flags\|pheno_flags\|phenotype_flags' /Users/kooshapari/CodeProjects/Phenotype/repos/phenotype-registry/registry/disposition-index.json` (2026-06-20 18:30 PDT).
+Citation: shell `grep -n -i 'pheno-flags\|phenotype-flags\|pheno_flags\|phenotype_flags' /Users/<REDACTED>/CodeProjects/Phenotype/repos/phenotype-registry/registry/disposition-index.json` (2026-06-20 18:30 PDT).
 
 **Result: 4 lines, all in the single `gw-pheno-flags` row** (line 1141, 1142, 1144, 1149). No other rows mention any of the four name variants.
 
@@ -566,7 +566,7 @@ Citation: shell `grep -n -i 'pheno-flags\|phenotype-flags\|pheno_flags\|phenotyp
 | Field | Value | Interpretation |
 |---|---|---|
 | `id` | `gw-pheno-flags` | `gw-` prefix is the "gateway" namespace, distinct from `repo-` (standalone repo) and `crates-` (HexaKit crate). Suggests the registry viewed `pheno-flags` as a "gateway" surface (a polyglot polyrepo bridge), not a single-crate standalone repo. |
-| `path` | `pheno-flags` | The local subtree path (no `KooshaPari/` prefix, no `/crates/` prefix). |
+| `path` | `pheno-flags` | The local subtree path (no `<REDACTED>/` prefix, no `/crates/` prefix). |
 | `disposition` | `ARCHIVED` | Decision is **archive** (not `DEPRECATE`, not `ABSORB`, not `DYNAMIC-KEEP`). Archive is the strongest disposition — terminal. |
 | `target` | `pheno/crates/phenotype-flags` | Canonical substrate location. |
 | `wave` | `2026-06-20` | Today's date — the row was written **today**. |
@@ -626,7 +626,7 @@ The grep returned exactly 4 lines, all from the `gw-pheno-flags` row. There are 
 
 For the matrix/decision phase:
 
-1. **Source has no standalone GitHub repo** — `KooshaPari/pheno-flags` returns HTTP 404 (per Phase 1A §6.1); the only local copy is the `argis-extensions/pheno-flags/` subtree and the re-created `repos/pheno-flags/` worktree.
+1. **Source has no standalone GitHub repo** — `<REDACTED>/pheno-flags` returns HTTP 404 (per Phase 1A §6.1); the only local copy is the `argis-extensions/pheno-flags/` subtree and the re-created `repos/pheno-flags/` worktree.
 2. **Recommended target is `pheno/crates/phenotype-flags/`** — byte-equivalent public API, registry already points here, governance inherited from `pheno` monorepo root.
 3. **Registry row `gw-pheno-flags` already records `ARCHIVED` + `done`** — Phase 2 should back-fill the empty `adr` field with a closure-doc reference.
 4. **Public API divergence** between substrate and source is **zero** (pure rename + test-suite split). Phase 2 absorb is a `mv` operation, not a `merge`.

@@ -1,10 +1,10 @@
-# ARCHIVED — `KooshaPari/phenoVessel`
+# ARCHIVED — `<REDACTED>/phenoVessel`
 
 ## Tombstone (user absolute-path allowed)
 
 | field | value |
 |-------|-------|
-| source | `KooshaPari/phenoVessel` (Private, HTML/Other, Feb 2025) |
+| source | `<REDACTED>/phenoVessel` (Private, HTML/Other, Feb 2025) |
 | absorbed into | `PhenoPlugins/crates/pheno-plugin-vessel/phenotype-vessel` |
 | absorbed date | 2026-04-03 (per user feedback: 'merged into PhenoPlugins as pheno-plugin-vessel crate') |
 | docket | `phenotype-registry/docs/absorption/phenovessel/SUPERSEDES.md` |

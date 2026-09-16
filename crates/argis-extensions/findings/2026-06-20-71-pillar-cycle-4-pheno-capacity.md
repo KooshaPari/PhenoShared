@@ -2,7 +2,7 @@
 
 **Date:** 2026-06-20 (Saturday)
 **Cycle:** 4 (T13 batch 9F, last early-cadence cycle)
-**Trigger:** ADR-035A + ADR-036 (CLOSED 2026-06-19) — `pheno-capacity` was extracted from `HwLedger` (per `KooshaPari/pheno-capacity#1` merge) and is now the canonical pure-math substrate for LLM VRAM estimation. v0.2.0 (L5-115) added attention-kind awareness (MQA/GQA/MLA/SSM/HYBRID/SINK + MoE).
+**Trigger:** ADR-035A + ADR-036 (CLOSED 2026-06-19) — `pheno-capacity` was extracted from `HwLedger` (per `<REDACTED>/pheno-capacity#1` merge) and is now the canonical pure-math substrate for LLM VRAM estimation. v0.2.0 (L5-115) added attention-kind awareness (MQA/GQA/MLA/SSM/HYBRID/SINK + MoE).
 **Scorer:** Forge orchestrator (single-track subagent)
 **Schema:** [findings/71-pillar-refresh-template.md](71-pillar-refresh-template.md) (L1-L71, 9 domains, 0-3 scale, N/A=3 for inapplicable).
 **Prior cycles:** [findings/2026-06-20-71-pillar-cycle-3-my-domain.md](2026-06-20-71-pillar-cycle-3-my-domain.md) (Eidolon + agent-platform + mobile-mcp + mobile-cli).
@@ -140,7 +140,7 @@
 | Pillar | Score | Evidence |
 |---|---:|---|
 | L64 README quality | 3 | `README.md` (7,295 bytes — substantial); badges, scope, why, when to use, when NOT to use, examples. |
-| L65 ADR tracking | 3 | `Cargo.toml:14-15` `repository = "https://github.com/KooshaPari/pheno-capacity"`; ADR-035A + L5-105 cited in `AGENTS.md` and `docs/SPEC.md`. |
+| L65 ADR tracking | 3 | `Cargo.toml:14-15` `repository = "https://github.com/<REDACTED>/pheno-capacity"`; ADR-035A + L5-105 cited in `AGENTS.md` and `docs/SPEC.md`. |
 | L66 SSOT conventions | 3 | This IS the SSOT for LLM VRAM math per ADR-035A + L5-105; HwLedger's Streamlit consumes it. |
 | L67 API reference docs | 3 | `docs/SPEC.md` is the formal API contract; `docs/methodology.md` is the formula/citation reference; `llms.txt` is LLM-indexable; module docstrings are exhaustive. |
 | L68 Code-level documentation | 3 | Module-level `//!` on all 5 files; `///` on all public items; inline citations to papers in `src/math.rs:1-10` and `src/attention.rs:1-16`. |
@@ -152,7 +152,7 @@
 | Pillar | Score | Evidence |
 |---|---:|---|
 | L69 OpenSSF Best Practices | 2 | `deny.toml` + zero deps + semver; no OpenSSF Scorecard at this path (would be in publishing repo). |
-| L70 Roles & responsibilities | 3 | AGENTS.md: "Owner: KooshaPari (orch-v11-044)"; ADR-035A records the extraction; 3 issue templates. |
+| L70 Roles & responsibilities | 3 | AGENTS.md: "Owner: <REDACTED> (orch-v11-044)"; ADR-035A records the extraction; 3 issue templates. |
 | L71 Sustainability | 3 | Dual-license MIT/Apache-2.0; `AGENTS.md` cites ADR-035A extraction plan + L5-115 v0.2.0 plan; 3 issue templates + PR template. |
 
 ---
@@ -177,4 +177,4 @@ This is the **first** 71-pillar scorecard for `pheno-capacity`. The extraction f
 
 ---
 
-*Generated 2026-06-20 by Forge orchestrator (T13 batch 9F cycle 4). Schema: [findings/71-pillar-refresh-template.md](71-pillar-refresh-template.md). Cross-ref: ADR-035A (extraction from HwLedger, L5-105), ADR-036 (CLOSED 2026-06-19), L5-115 (v0.2.0 attention-kind awareness), `KooshaPari/pheno-capacity#1` (initial extraction merge), `pheno-capacity/CHANGELOG.md` (v0.1.0 → v0.2.0).*
+*Generated 2026-06-20 by Forge orchestrator (T13 batch 9F cycle 4). Schema: [findings/71-pillar-refresh-template.md](71-pillar-refresh-template.md). Cross-ref: ADR-035A (extraction from HwLedger, L5-105), ADR-036 (CLOSED 2026-06-19), L5-115 (v0.2.0 attention-kind awareness), `<REDACTED>/pheno-capacity#1` (initial extraction merge), `pheno-capacity/CHANGELOG.md` (v0.1.0 → v0.2.0).*

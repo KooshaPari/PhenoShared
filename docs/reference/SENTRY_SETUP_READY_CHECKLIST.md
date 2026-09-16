@@ -62,7 +62,7 @@ Use this checklist to verify that all Sentry projects and GitHub secrets are con
 
 ### Organization Secrets Created
 
-- [ ] Navigated to: `https://github.com/organizations/KooshaPari/settings/secrets/actions`
+- [ ] Navigated to: `https://github.com/organizations/<REDACTED>/settings/secrets/actions`
 - [ ] `SENTRY_DSN_AGILEPLUS` secret created with full DSN value
 - [ ] `SENTRY_DSN_INFRAKIT` secret created with full DSN value
 - [ ] `SENTRY_DSN_HELIOSCLI` secret created with full DSN value
@@ -70,17 +70,17 @@ Use this checklist to verify that all Sentry projects and GitHub secrets are con
 ### Repository Access Verified
 
 **AgilePlus Repository**
-- [ ] `https://github.com/KooshaPari/AgilePlus/settings/secrets/actions` opened
+- [ ] `https://github.com/<REDACTED>/AgilePlus/settings/secrets/actions` opened
 - [ ] `SENTRY_DSN_AGILEPLUS` visible in organization secrets
 - [ ] Status shows: "Available"
 
 **phenotype-infrakit Repository**
-- [ ] `https://github.com/KooshaPari/phenotype-infrakit/settings/secrets/actions` opened
+- [ ] `https://github.com/<REDACTED>/phenotype-infrakit/settings/secrets/actions` opened
 - [ ] `SENTRY_DSN_INFRAKIT` visible in organization secrets
 - [ ] Status shows: "Available"
 
 **heliosCLI Repository**
-- [ ] `https://github.com/KooshaPari/heliosCLI/settings/secrets/actions` opened
+- [ ] `https://github.com/<REDACTED>/heliosCLI/settings/secrets/actions` opened
 - [ ] `SENTRY_DSN_HELIOSCLI` visible in organization secrets
 - [ ] Status shows: "Available"
 
@@ -93,7 +93,7 @@ Use this checklist to verify that all Sentry projects and GitHub secrets are con
 - [ ] `.env` file created from `.env.example`
 - [ ] `SENTRY_DSN` set to project DSN
 - [ ] `SENTRY_ENVIRONMENT` set to `development`
-- [ ] File location: `/Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus/.env`
+- [ ] File location: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus/.env`
 - [ ] File is in `.gitignore`: ✅
 - [ ] Content verified (not committed to git): ✅
 
@@ -102,7 +102,7 @@ Use this checklist to verify that all Sentry projects and GitHub secrets are con
 - [ ] `.env` file created from `.env.example`
 - [ ] `SENTRY_DSN` set to project DSN
 - [ ] `SENTRY_ENVIRONMENT` set to `development`
-- [ ] File location: `/Users/kooshapari/CodeProjects/Phenotype/repos/phenotype-infrakit/.env`
+- [ ] File location: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/phenotype-infrakit/.env`
 - [ ] File is in `.gitignore`: ✅
 - [ ] Content verified (not committed to git): ✅
 
@@ -111,7 +111,7 @@ Use this checklist to verify that all Sentry projects and GitHub secrets are con
 - [ ] `.env` file created from `.env.example`
 - [ ] `SENTRY_DSN` set to project DSN
 - [ ] `SENTRY_ENVIRONMENT` set to `development`
-- [ ] File location: `/Users/kooshapari/CodeProjects/Phenotype/repos/heliosCLI/.env`
+- [ ] File location: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/heliosCLI/.env`
 - [ ] File is in `.gitignore`: ✅
 - [ ] Content verified (not committed to git): ✅
 

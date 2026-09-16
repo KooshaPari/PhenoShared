@@ -199,7 +199,7 @@ repos:
 
 ## Quality Gate Script
 
-**Location**: `/Users/kooshapari/CodeProjects/Phenotype/repos/scripts/quality-gate.sh`
+**Location**: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/scripts/quality-gate.sh`
 
 **Features**:
 - Auto-detects Rust, Python, Go projects
@@ -378,7 +378,7 @@ git push --no-verify    # Bypass pre-push
 
 ## References
 
-- **Setup Guide**: `/Users/kooshapari/CodeProjects/Phenotype/repos/docs/reference/LINTING_AND_QUALITY_SETUP.md`
+- **Setup Guide**: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/docs/reference/LINTING_AND_QUALITY_SETUP.md`
 - **Pre-Commit Framework**: https://pre-commit.com/
 - **Ruff**: https://docs.astral.sh/ruff/
 - **Clippy**: https://github.com/rust-lang/rust-clippy

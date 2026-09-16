@@ -1,6 +1,6 @@
 # audit-v38 Scorecard — sharecli
 
-**Repo:** KooshaPari/sharecli
+**Repo:** <REDACTED>/sharecli
 **Date:** 2026-07-12
 **Repo-type profile:** CLI+daemon
 **Auditor:** cursor-agent cluster-fleet (C00–C11); T-200 FR-002 + threat/release lifts
@@ -199,8 +199,8 @@ Root `audit_scorecard.json` tracks this v38 card. Do not use the legacy Python 3
 
 ## Spine links
 
-- Rubric: [phenotype-org-audits/audit-v38](https://github.com/KooshaPari/phenotype-org-audits/tree/main/audit-v38)
-- Spine index: [docs/SPINE-INDEX.md](https://github.com/KooshaPari/phenotype-org-audits/blob/main/docs/SPINE-INDEX.md)
+- Rubric: [phenotype-org-audits/audit-v38](https://github.com/<REDACTED>/phenotype-org-audits/tree/main/audit-v38)
+- Spine index: [docs/SPINE-INDEX.md](https://github.com/<REDACTED>/phenotype-org-audits/blob/main/docs/SPINE-INDEX.md)
 - CI truth notes: `audit/CI_TRUTH_FINDINGS.md`
 - Boundary: `audit/BOUNDARY_VERIFY_2026-07-10.md`
 

@@ -9,7 +9,7 @@
 ```text
 rg -n -i --hidden --glob '!.git/**' --glob '!docs/**' --glob '!*.md' \
   --glob '!*.jsonl' --glob '!target/**' --glob '!node_modules/**' \
-  'KooshaPari/Grapheon|github.com/.*/Grapheon|grapheon.pheno|GRAPHEON_API|TRACERA_API' \
+  '<REDACTED>/Grapheon|github.com/.*/Grapheon|grapheon.pheno|GRAPHEON_API|TRACERA_API' \
   pheno phenotype-registry phenotype-go-sdk phenotype-python-sdk \
   phenotype-tooling AgilePlus Tracera
 ```
@@ -21,9 +21,9 @@ rg -n -i --hidden --glob '!.git/**' --glob '!docs/**' --glob '!*.md' \
 | `Tracera/frontend/apps/web/vite.config.mjs:416-418` | Mentions the Rust Grapheon service only to keep it separate from the canonical Tracera gateway; target is `VITE_API_URL` or `127.0.0.1:18000` | Intentional safety boundary | No repoint required |
 | `Tracera/scripts/validate-oracle-ports.py:9` and `validate-oracle-compose.py` | Reserves host port 8080 for Grapheon | Intentional collision guard | Preserve invariant |
 | `Tracera/docs/sessions/20260722-rich-dashboard-recovery/capability-manifest.json:5` | Records `origin/legacy/grapheon-wip-final-2026-07-17` | Historical snapshot metadata | Do not rewrite historical evidence |
-| `phenotype-registry/projects/Grapheon.json` and DSPI-16 | Live identity now points to `KooshaPari/zz-archive-grapheon`; obsolete `pheno` target cleared in commit `0ce5cd12` | Reconciled canonical governance | No further repoint |
-| `phenotype-registry/registry/audit-absorption-justification/refresh-cohort-20260726.json` | Records the pre-rename `KooshaPari/Grapheon` remote | Historical audit snapshot | Preserve unchanged; superseded by live DSPI-16 |
-| Runtime URL/repository search | No active consumer URL or package import targeting `KooshaPari/Grapheon` was found | No live stale consumer identified | End-to-end usage remains unproven |
+| `phenotype-registry/projects/Grapheon.json` and DSPI-16 | Live identity now points to `<REDACTED>/zz-archive-grapheon`; obsolete `pheno` target cleared in commit `0ce5cd12` | Reconciled canonical governance | No further repoint |
+| `phenotype-registry/registry/audit-absorption-justification/refresh-cohort-20260726.json` | Records the pre-rename `<REDACTED>/Grapheon` remote | Historical audit snapshot | Preserve unchanged; superseded by live DSPI-16 |
+| Runtime URL/repository search | No active consumer URL or package import targeting `<REDACTED>/Grapheon` was found | No live stale consumer identified | End-to-end usage remains unproven |
 
 ## Gate conclusion
 

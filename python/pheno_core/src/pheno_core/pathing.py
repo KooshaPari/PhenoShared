@@ -97,7 +97,7 @@ def ensure_pheno_sdk_on_path(hints: Iterable[Path] | None = None) -> bool:
         candidates.extend(
             [
                 home / "temp-PRODVERCEL" / "485" / "kush" / "pheno-sdk",
-                Path("/Users/kooshapari/temp-PRODVERCEL/485/kush/pheno-sdk"),
+                Path("/Users/<REDACTED>/temp-PRODVERCEL/485/kush/pheno-sdk"),
             ],
         )
     except Exception:

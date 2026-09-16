@@ -131,7 +131,7 @@ fn build_feature_events(
                 Some(sha) => (
                     Some(sha.clone()),
                     Some(format!(
-                        "https://github.com/KooshaPari/AgilePlus/commit/{sha}"
+                        "https://github.com/<REDACTED>/AgilePlus/commit/{sha}"
                     )),
                 ),
                 None => (None, None),

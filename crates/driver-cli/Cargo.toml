@@ -42,7 +42,7 @@ tempfile.workspace = true
 # Backbone-2 visual identity (decision 2026-07-06 by substrate-mesh).
 # Icon source of truth: ../../assets/brand/substrate-icon.svg.
 name = "substrate"
-identifier = "ai.kooshapari.substrate"
+identifier = "ai.<REDACTED>.substrate"
 icon = ["../../assets/icons/substrate.iconset"]
 resources = []
 category = "DeveloperTool"

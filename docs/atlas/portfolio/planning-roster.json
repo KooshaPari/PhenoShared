@@ -300,13 +300,13 @@
       "authorization": "not_granted_by_package"
     },
     {
-      "id": "SUP-KOOSHAPARI",
+      "id": "SUP-<REDACTED>",
       "repository_id": 1349458262,
-      "name": "KooshaPari",
+      "name": "<REDACTED>",
       "class": "supporting-surface",
       "role": "Public portfolio and landing/publication consumer",
       "planned_seats": 0,
-      "dossier": "products/KooshaPari/DOSSIER.md",
+      "dossier": "products/<REDACTED>/DOSSIER.md",
       "authorization": "not_granted_by_package"
     },
     {

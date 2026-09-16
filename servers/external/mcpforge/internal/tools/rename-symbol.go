@@ -6,9 +6,9 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/KooshaPari/MCPForge/internal/lsp"
-	"github.com/KooshaPari/MCPForge/internal/protocol"
-	"github.com/KooshaPari/MCPForge/internal/utilities"
+	"github.com/<REDACTED>/MCPForge/internal/lsp"
+	"github.com/<REDACTED>/MCPForge/internal/protocol"
+	"github.com/<REDACTED>/MCPForge/internal/utilities"
 )
 
 // RenameSymbol renames a symbol (variable, function, class, etc.) at the specified position

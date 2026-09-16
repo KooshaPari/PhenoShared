@@ -1,7 +1,7 @@
 package utilities
 
 import (
-	"github.com/KooshaPari/MCPForge/internal/logging"
+	"github.com/<REDACTED>/MCPForge/internal/logging"
 )
 
 var coreLogger = logging.NewLogger(logging.Core)

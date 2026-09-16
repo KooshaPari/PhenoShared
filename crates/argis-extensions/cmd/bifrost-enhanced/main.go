@@ -15,9 +15,9 @@ import (
 
 	"github.com/maximhq/bifrost/core/schemas"
 
-	"github.com/kooshapari/bifrost-extensions/plugins/intelligentrouter"
-	"github.com/kooshapari/bifrost-extensions/plugins/learning"
-	"github.com/kooshapari/bifrost-extensions/plugins/smartfallback"
+	"github.com/<REDACTED>/bifrost-extensions/plugins/intelligentrouter"
+	"github.com/<REDACTED>/bifrost-extensions/plugins/learning"
+	"github.com/<REDACTED>/bifrost-extensions/plugins/smartfallback"
 )
 
 func main() {

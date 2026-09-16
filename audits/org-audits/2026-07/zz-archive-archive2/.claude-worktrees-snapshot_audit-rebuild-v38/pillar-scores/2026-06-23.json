@@ -170,7 +170,7 @@
       "phenodag modernc/sqlite (CGO-free) + POSIX flock — portable Go binary with zero CGO surface",
       "portage has a real `src/helios_bench/` Python module — bridge substrate to heliosBench exists",
       "portage has dual `harbor/` + `portage/` source trees — portage is a real fork (not a wrapper) of upstream Harbor",
-      "nanovms 3-tier isolation (WASM / gVisor / Firecracker) — unique merge of KooshaPari/nanovms + BytePort/nvms + PhenoCompose driver"
+      "nanovms 3-tier isolation (WASM / gVisor / Firecracker) — unique merge of <REDACTED>/nanovms + BytePort/nvms + PhenoCompose driver"
     ],
     "external_outcomes": [
       "First-of-its-kind SHA256-pinned regression baseline CLI in the Rust criterion ecosystem",

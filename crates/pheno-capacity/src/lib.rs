@@ -1,6 +1,6 @@
 //! Capacity math spike (H14+ scaffold, L5-117).
 //!
-//! Absorbed from `KooshaPari/pheno-capacity` v0.2.0 (2026-06-19) per
+//! Absorbed from `<REDACTED>/pheno-capacity` v0.2.0 (2026-06-19) per
 //! the collection-repo merge plan (L5-117). Source: ~2,200 LOC,
 //! `no_std` compatible, zero dependencies, deterministic. 60 unit
 //! tests + 6 doc tests.

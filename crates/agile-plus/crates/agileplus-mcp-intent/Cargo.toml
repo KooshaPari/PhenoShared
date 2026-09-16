@@ -5,11 +5,11 @@ edition.workspace = true
 rust-version.workspace = true
 description = "MCP tool + HTTP service for converting user prompts into AgilePlus intent graphs"
 license = "MIT OR Apache-2.0"
-repository = "https://github.com/KooshaPari/AgilePlus"
+repository = "https://github.com/<REDACTED>/AgilePlus"
 documentation = "https://docs.rs/agileplus-mcp-intent"
 keywords = ["phenotype", "agileplus", "mcp"]
 categories = ["api-bindings"]
-authors = ["kooshapari"]
+authors = ["<REDACTED>"]
 
 [[bin]]
 name = "agileplus-mcp-intent"

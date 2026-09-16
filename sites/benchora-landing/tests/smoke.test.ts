@@ -19,7 +19,7 @@ describe("benchora-landing smoke", () => {
       readFileSync(resolve(root, "src/data/repo.json"), "utf8"),
     );
     expect(repo).toBeTypeOf("object");
-    expect(repo.full_name).toBe("KooshaPari/Benchora");
+    expect(repo.full_name).toBe("<REDACTED>/Benchora");
     expect(typeof repo.description).toBe("string");
   });
 

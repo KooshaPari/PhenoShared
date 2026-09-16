@@ -1,5 +1,5 @@
 From 3b7658f43091567527cd326bab422c056c840ee3 Mon Sep 17 00:00:00 2001
-From: KooshaPari <kooshapari@gmail.com>
+From: <REDACTED> <<REDACTED>@gmail.com>
 Date: Tue, 16 Jun 2026 17:26:05 -0700
 Subject: [PATCH 1/4] docs(block-c): AuthKit audit + fold plan into Authvault
 
@@ -20,13 +20,13 @@ index 0000000..2d0f206
 +**Auditor:** Block-C consolidation (#2)
 +**Tracker:** [`phenotype-registry/docs/rationalization/block-c-consolidation.md`](../..) — row 2 of the strategic-merges table
 +**Verdict:** **Fold. AuthKit is a true duplicate (self-admitted) of canonical Authvault. Archive after fold.**
-+**Companion PR on Authvault:** `KooshaPari/Authvault#<TBD>` (this PR is on AuthKit, the source side)
++**Companion PR on Authvault:** `<REDACTED>/Authvault#<TBD>` (this PR is on AuthKit, the source side)
 +
 +---
 +
 +## 1. Purpose & scope
 +
-+`KooshaPari/AuthKit` was created as a pre-extraction staging repo for shared
++`<REDACTED>/AuthKit` was created as a pre-extraction staging repo for shared
 +Phenotype infrastructure crates that would eventually move to `phenoShared`. Per
 +its own README:
 +
@@ -44,7 +44,7 @@ index 0000000..2d0f206
 +nothing auth-related to fold; we archive the empty-named sibling and keep the
 +real auth SDK (`Authvault`) as the sole canonical home.
 +
-+`KooshaPari/Authvault` is the canonical Rust auth framework for the
++`<REDACTED>/Authvault` is the canonical Rust auth framework for the
 +Phenotype ecosystem (hexagonal architecture, OAuth2/JWT/RBAC/ABAC, session
 +management, refresh-token rotation, audit, vault, signing — full
 +`FR-AUTH-001..010` coverage already shipped on its main branch).
@@ -238,10 +238,10 @@ index 0000000..2d0f206
 +   `block-c-consolidation.md` from `in progress` to `done` and update the
 +   `authvault` row in the per-repo audits table from `⏳` to `✅`.
 +3. **No code migration to Authvault.** AuthKit contributes zero functional
-+   surface; there is nothing to PR against `KooshaPari/Authvault`.
++   surface; there is nothing to PR against `<REDACTED>/Authvault`.
 +4. **Mark AuthKit as archived on GitHub.** Repo settings → Archive this
 +   repository. Add the `archived` topic and a `README.md` redirect banner
-+   pointing to `KooshaPari/Authvault`. Per the durability rule
++   pointing to `<REDACTED>/Authvault`. Per the durability rule
 +   (`phenotype-registry/docs/rationalization/block-c-consolidation.md` §
 +   "Durability rule"), this audit and the tracker are the durable record;
 +   forge job logs are not.

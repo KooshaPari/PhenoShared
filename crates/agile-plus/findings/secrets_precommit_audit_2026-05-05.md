@@ -1,7 +1,7 @@
 # Secrets & Pre-commit Audit
 
 **Date:** 2026-05-05
-**Scope:** `/Users/kooshapari/CodeProjects/Phenotype/repos`
+**Scope:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos`
 
 ---
 

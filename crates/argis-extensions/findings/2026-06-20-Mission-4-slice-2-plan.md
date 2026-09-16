@@ -6,7 +6,7 @@
 
 ## Target
 
-- **Consumer:** `KooshaPari/pheno-config` (Rust)
+- **Consumer:** `<REDACTED>/pheno-config` (Rust)
 - **Source dep:** `phenotype-config = "0.1"`
 - **Target dep:** `configra = "0.1"`
 
@@ -15,7 +15,7 @@
 ### PR 1: Compat shim (pheno-config internal)
 
 - Branch: `chore/l5-104-pheno-config-to-configra-shim-2026-06-20`
-- Repo: `KooshaPari/pheno-config`
+- Repo: `<REDACTED>/pheno-config`
 - Diff:
   - `Cargo.toml`: add `configra = "0.1"` alongside existing `phenotype-config = "0.1"`
   - `src/compat.rs`: re-export `phenotype_config::Config` shape via `configra::Config` adapter
@@ -31,7 +31,7 @@
 ### PR 5: Registry flip
 
 - Branch: `chore/l5-104-pheno-config-uses-configra-2026-06-20`
-- Repo: `KooshaPari/phenotype-registry`
+- Repo: `<REDACTED>/phenotype-registry`
 - Diff: row `pheno-config` `uses: phenotype-config` → `uses: configra`
 
 ## Acceptance criteria

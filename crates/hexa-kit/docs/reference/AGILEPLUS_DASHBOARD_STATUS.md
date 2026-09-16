@@ -364,17 +364,17 @@ npm run build  # Creates dist/ (static files served by Axum)
 ## File Manifest
 
 **Backend (Production)**
-- `/Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus/crates/agileplus-dashboard/src/routes.rs` (90KB)
-- `/Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus/crates/agileplus-dashboard/src/templates.rs` (11KB)
-- `/Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus/crates/agileplus-dashboard/src/process_detector.rs` (11KB)
+- `/Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus/crates/agileplus-dashboard/src/routes.rs` (90KB)
+- `/Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus/crates/agileplus-dashboard/src/templates.rs` (11KB)
+- `/Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus/crates/agileplus-dashboard/src/process_detector.rs` (11KB)
 
 **Frontend (Staged)**
-- `/Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus/crates/agileplus-dashboard/web/vite.config.ts` ✅
-- `/Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus/crates/agileplus-dashboard/web/tsconfig.json` ✅
-- `/Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus/crates/agileplus-dashboard/web/package.json` ✅
-- `/Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus/crates/agileplus-dashboard/web/src/lib/utils.ts` ✅
-- `/Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus/crates/agileplus-dashboard/web/src/components/` ❌ EMPTY
-- `/Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus/crates/agileplus-dashboard/web/src/pages/` ❌ EMPTY
+- `/Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus/crates/agileplus-dashboard/web/vite.config.ts` ✅
+- `/Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus/crates/agileplus-dashboard/web/tsconfig.json` ✅
+- `/Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus/crates/agileplus-dashboard/web/package.json` ✅
+- `/Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus/crates/agileplus-dashboard/web/src/lib/utils.ts` ✅
+- `/Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus/crates/agileplus-dashboard/web/src/components/` ❌ EMPTY
+- `/Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus/crates/agileplus-dashboard/web/src/pages/` ❌ EMPTY
 
 ---
 

@@ -26,7 +26,7 @@ func main() {
 		routerModel     = flag.String("router-model", "", "Model for router (default: auto-detect)")
 		summarizerModel = flag.String("summarizer-model", "", "Model for summarizer (default: auto-detect)")
 		validatorModel  = flag.String("validator-model", "", "Model for validator (default: auto-detect)")
-		repoOwner       = flag.String("repo-owner", "kooshapari", "GitHub repo owner for updates")
+		repoOwner       = flag.String("repo-owner", "<REDACTED>", "GitHub repo owner for updates")
 		repoName        = flag.String("repo-name", "bifrost-extensions", "GitHub repo name for updates")
 		showVersion     = flag.Bool("version", false, "Show version and exit")
 	)

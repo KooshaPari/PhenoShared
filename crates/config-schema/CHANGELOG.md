@@ -17,7 +17,7 @@ follows [SemVer 2.0.0](https://semver.org/spec/v2.0.0.html).
 
 ### Notes
 - Source: `Conft/crates/config-schema/` (drained in PR
-  `KooshaPari/Configra#47`, 2026-06-18).
+  `<REDACTED>/Configra#47`, 2026-06-18).
 
 ## [0.1.0] — 2026-06-18
 

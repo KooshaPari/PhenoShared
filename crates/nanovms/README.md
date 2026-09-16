@@ -1,6 +1,6 @@
 # NVMS - NanoVM Service (Unified)
 
-> **Merged Implementation**: KooshaPari/nanovms + BytePort/nvms + PhenoCompose Driver
+> **Merged Implementation**: <REDACTED>/nanovms + BytePort/nvms + PhenoCompose Driver
 
 NVMS provides **3-tier isolation** for secure, efficient application deployment:
 - **Tier 1 (WASM)**: ~1ms startup, fast tools, trusted code
@@ -52,7 +52,7 @@ pheno-compose deploy --runtime nvms --config nvms.yaml
 
 | Component | Source | Status | Contribution |
 |-----------|--------|--------|--------------|
-| **Core 3-tier isolation** | KooshaPari/nanovms | ✅ Complete | WASM/gVisor/Firecracker |
+| **Core 3-tier isolation** | <REDACTED>/nanovms | ✅ Complete | WASM/gVisor/Firecracker |
 | **AWS deployment** | BytePort/nvms | ✅ Merged | Firecracker orchestration |
 | **Unified interface** | PhenoCompose | ✅ New | Rust driver, standardization |
 
@@ -71,7 +71,7 @@ pheno-compose deploy --runtime nvms --config nvms.yaml
 curl -fsSL https://get.nvms.dev | sh
 
 # Or build from source
-git clone https://github.com/KooshaPari/nvms.git
+git clone https://github.com/<REDACTED>/nvms.git
 cd nvms && go build ./cmd/nvms
 
 # Install PhenoCompose driver

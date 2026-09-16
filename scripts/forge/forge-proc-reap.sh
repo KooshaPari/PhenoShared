@@ -26,7 +26,7 @@
 set -uo pipefail
 
 readonly ZOMBIE_AGE_MIN=60    # 1 hour (parent spec); kept in minutes
-readonly WORKTREE_ROOT="${PHENO_ROOT:-/Users/kooshapari/CodeProjects/Phenotype/repos/pheno-harness}"
+readonly WORKTREE_ROOT="${PHENO_ROOT:-/Users/<REDACTED>/CodeProjects/Phenotype/repos/pheno-harness}"
 
 STATE_FILE="${HOME}/.pheno-harness/state/forge-proc-reap.last"
 mkdir -p "$(dirname "${STATE_FILE}")"

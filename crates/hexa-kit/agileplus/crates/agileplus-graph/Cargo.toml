@@ -3,12 +3,12 @@ name = "agileplus-graph"
 version = "0.1.0"
 edition = "2024"
 license = "MIT OR Apache-2.0"
-repository = "https://github.com/KooshaPari/HexaKit"
+repository = "https://github.com/<REDACTED>/HexaKit"
 description = "agileplus graph — graph-backed relationship store (Feature/WorkPackage/Agent/Project/Label) with Cypher dispatch (HexaKit)"
 documentation = "https://docs.rs/agileplus-graph"
 keywords = ["phenotype", "hexa", "graph", "neo4j"]
 categories = ["data-structures"]
-authors = ["kooshapari"]
+authors = ["<REDACTED>"]
 
 [lib]
 path = "src/lib.rs"

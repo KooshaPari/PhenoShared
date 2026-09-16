@@ -6,7 +6,7 @@
 - **Title**: heliosApp Completion and Modernization
 - **Created**: 2026-03-25
 - **State**: in_progress
-- **Repo**: /Users/kooshapari/CodeProjects/Phenotype/repos/heliosApp
+- **Repo**: /Users/<REDACTED>/CodeProjects/Phenotype/repos/heliosApp
 
 ## Overview
 

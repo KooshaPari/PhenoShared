@@ -6,7 +6,7 @@
   "color": "#78716c",
   "description": "Incubating: local-first research ledger and LLM knowledge base.",
   "tier": 2,
-  "repo": "KooshaPari/ResearchLedger",
+  "repo": "<REDACTED>/ResearchLedger",
   "language": "Rust",
   "license": "MIT",
   "status": "active",
@@ -17,8 +17,8 @@
     "Markdown-native"
   ],
   "links": {
-    "github": "https://github.com/KooshaPari/ResearchLedger",
+    "github": "https://github.com/<REDACTED>/ResearchLedger",
     "docs": "https://researchledger.phenotype.space/docs",
-    "releases": "https://github.com/KooshaPari/ResearchLedger/releases"
+    "releases": "https://github.com/<REDACTED>/ResearchLedger/releases"
   }
 }

@@ -4,7 +4,7 @@
 **Lane:** Phase 3 / Lane 4 (governance audit)
 **Scope:** Quick 30-pillar baseline check for missing `gitleaks`, `deny`, `CODEOWNERS` configs across AgilePlus, Tracera, Tracely.
 **Branch:** `fix/batch2-governance-p3` (in AgilePlus monorepo)
-**Owner:** @KooshaPari
+**Owner:** @<REDACTED>
 
 ---
 
@@ -15,7 +15,7 @@ After investigation, all three resolve to the **same git repository**:
 
 | Logical name | Workspace path | Git remote | Status |
 |--------------|---------------|------------|--------|
-| AgilePlus    | `C:/Users/koosh/Dev/AgilePlus` | `https://github.com/KooshaPari/AgilePlus.git` | **canonical** working tree |
+| AgilePlus    | `C:/Users/koosh/Dev/AgilePlus` | `https://github.com/<REDACTED>/AgilePlus.git` | **canonical** working tree |
 | Tracera      | `Tracera/`, `Tracera-wtrees/` | same remote (shared `.git`) | **stub** at root + feature worktrees |
 | Tracely      | `Tracely/`, `Tracely-wtrees/` | same remote (shared `.git`) | **stub** at root + feature worktrees |
 
@@ -47,7 +47,7 @@ Path: `deny.toml` (657 bytes, 35 lines)
 
 ### AgilePlus — `CODEOWNERS` (✅)
 Path: `CODEOWNERS` (558 bytes, 19 lines)
-- Single owner `@KooshaPari` across `/crates/`, `/apps/`, `/tools/`, all `*.md`, `*.yml`, `*.yaml`, default `*`.
+- Single owner `@<REDACTED>` across `/crates/`, `/apps/`, `/tools/`, all `*.md`, `*.yml`, `*.yaml`, default `*`.
 - **No changes needed** — scoped ownership baseline is in place.
 
 ### AgilePlus — `.gitleaks.toml` (❌ → ✅ fixed in this PR)

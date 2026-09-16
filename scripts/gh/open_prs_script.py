@@ -13,17 +13,17 @@ def run_command(cmd, cwd=None):
         return None
 
 def main():
-    repo_dir = "/Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus"
+    repo_dir = "/Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus"
     
     # 1. Get all remote branches (excluding main and HEAD)
-    res = run_command(f"{GH_PATH} api repos/KooshaPari/AgilePlus/branches --paginate --jq '.[].name'", cwd=repo_dir)
+    res = run_command(f"{GH_PATH} api repos/<REDACTED>/AgilePlus/branches --paginate --jq '.[].name'", cwd=repo_dir)
     if not res or res.returncode != 0:
         print("Failed to get branches")
         return
     branches = [b.strip() for b in res.stdout.strip().split("\n") if b.strip() and b.strip() != "main"]
     
     # 2. Get all open PRs
-    res = run_command(f"{GH_PATH} pr list --repo KooshaPari/AgilePlus --state open --json headRefName", cwd=repo_dir)
+    res = run_command(f"{GH_PATH} pr list --repo <REDACTED>/AgilePlus --state open --json headRefName", cwd=repo_dir)
     if not res or res.returncode != 0:
         print("Failed to get open PRs")
         return
@@ -42,7 +42,7 @@ def main():
         print(f"\nProcessing branch: {branch}")
         
         # 1. Try to open PR
-        res = run_command(f"{GH_PATH} pr create --repo KooshaPari/AgilePlus --head {branch} --base main --title '[{branch}] sync: align with main' --body 'Ensuring every branch has an open PR.'", cwd=repo_dir)
+        res = run_command(f"{GH_PATH} pr create --repo <REDACTED>/AgilePlus --head {branch} --base main --title '[{branch}] sync: align with main' --body 'Ensuring every branch has an open PR.'", cwd=repo_dir)
         
         if res and res.returncode == 0:
             print(f"Successfully created PR for {branch}")
@@ -72,7 +72,7 @@ def main():
             push_res = run_command(f"git push origin {branch}", cwd=repo_dir)
             if push_res and push_res.returncode == 0:
                 # Try creating PR again
-                res = run_command(f"{GH_PATH} pr create --repo KooshaPari/AgilePlus --head {branch} --base main --title '[{branch}] sync: align with main' --body 'Ensuring every branch has an open PR after merging main.'", cwd=repo_dir)
+                res = run_command(f"{GH_PATH} pr create --repo <REDACTED>/AgilePlus --head {branch} --base main --title '[{branch}] sync: align with main' --body 'Ensuring every branch has an open PR after merging main.'", cwd=repo_dir)
                 if res and res.returncode == 0:
                     print(f"Successfully created PR for {branch} after merge")
                     report.append(f"CREATED (after merge): {branch}")

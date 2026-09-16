@@ -156,7 +156,7 @@ class HeuristicCritic(BaseCritic):
 class ForgeCritic(BaseCritic):
     """Critic that sends trail summaries to forge -p and parses diagnosis."""
 
-    FORGE_BIN = "/Users/kooshapari/.local/bin/forge"
+    FORGE_BIN = "/Users/<REDACTED>/.local/bin/forge"
 
     def analyze(self, trail: Trail) -> CriticReport:
         """Send the trail summary to ``forge -p`` and merge with heuristic fallback."""
@@ -177,7 +177,7 @@ class ForgeCritic(BaseCritic):
                 timeout=60,
                 env={
                     **os.environ,
-                    "PATH": "/usr/bin:/bin:/usr/local/bin:/Users/kooshapari/.local/bin",
+                    "PATH": "/usr/bin:/bin:/usr/local/bin:/Users/<REDACTED>/.local/bin",
                 },
             )
             reply = proc.stdout or ""

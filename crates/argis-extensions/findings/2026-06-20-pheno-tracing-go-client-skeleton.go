@@ -86,7 +86,7 @@ const ShutdownTimeout = 5 * time.Second
 // InstrumentName is the OTel instrumentation library name passed to
 // Tracer() callers. The schema does not require it; it is purely for
 // downstream filtering on the collector side.
-const InstrumentName = "github.com/kooshapari/phenotype-router/tracing"
+const InstrumentName = "github.com/<REDACTED>/phenotype-router/tracing"
 
 // Span / attribute / event name constants. These mirror §4-§6 of
 // findings/2026-06-20-otel-span-schema.md exactly. Do not change without

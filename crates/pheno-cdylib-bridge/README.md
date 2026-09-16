@@ -7,7 +7,7 @@ pure-Rust crates via `cgo` or `plugin.Open()` without rewriting them in Go.
 
 ## Status: ABSORBED into `pheno` workspace
 
-This crate was absorbed from https://github.com/KooshaPari/pheno-cdylib-bridge
+This crate was absorbed from https://github.com/<REDACTED>/pheno-cdylib-bridge
 on **2026-08-14** per docket `plans/dockets/N15-pheno-substrate-family.md`.
 
 ## C-ABI Surface

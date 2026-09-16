@@ -1,6 +1,6 @@
 # Contributing to heliosBench
 
-Thanks for your interest. This project is part of the [Phenotype](https://github.com/KooshaPari) ecosystem.
+Thanks for your interest. This project is part of the [Phenotype](https://github.com/<REDACTED>) ecosystem.
 
 ## Workflow
 

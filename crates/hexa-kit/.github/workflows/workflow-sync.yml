@@ -41,7 +41,7 @@ jobs:
             for workflow in .github/workflows/*.yml; do
               filename=$(basename "$workflow")
               echo "  - $filename"
-              gh workflow run "https://raw.githubusercontent.com/KooshaPari/$repo/main/.github/workflows/$filename" || true
+              gh workflow run "https://raw.githubusercontent.com/<REDACTED>/$repo/main/.github/workflows/$filename" || true
             done
           done
         continue-on-error: true

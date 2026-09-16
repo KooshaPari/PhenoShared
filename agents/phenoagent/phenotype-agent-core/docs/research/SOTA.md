@@ -858,8 +858,8 @@ Agents moving to edge devices:
 ### Internal References
 
 1. [SPEC.md](./SPEC.md) — Core specification
-2. [PhenoHandbook SOTA](https://github.com/KooshaPari/PhenoHandbook/blob/main/SOTA.md) — Patterns research
-3. [Hexagonal Architecture ADR](https://github.com/KooshaPari/PhenoHandbook/blob/main/adrs/001-hexagonal-architecture.md) — Architecture pattern
+2. [PhenoHandbook SOTA](https://github.com/<REDACTED>/PhenoHandbook/blob/main/SOTA.md) — Patterns research
+3. [Hexagonal Architecture ADR](https://github.com/<REDACTED>/PhenoHandbook/blob/main/adrs/001-hexagonal-architecture.md) — Architecture pattern
 
 ### External References
 

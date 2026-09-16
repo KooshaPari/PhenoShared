@@ -7,7 +7,7 @@
 | ---------------- | -------------------------------------------------------------- |
 | Status           | ✓ Active — migration in flight (sibling PR)                    |
 | Scope            | 13 SpecKitty cursor commands + scoring engine                  |
-| Owner            | KooshaPari / AgilePlus (Rust workspace)                        |
+| Owner            | <REDACTED> / AgilePlus (Rust workspace)                        |
 | Successor        | `ap` (agileplus-cli) — see `crates/agileplus-cli/`             |
 | Supersedes       | `.cursor/commands/spec-kitty.*.md`                            |
 | Cross-references | `crates/agileplus-governance/src/scoring_engine.rs:6`          |

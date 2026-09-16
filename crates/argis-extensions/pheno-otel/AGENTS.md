@@ -2,7 +2,7 @@
 
 > **Status:** ACTIVE (governance meta-bundle for the `pheno-otel` substrate canonical in the Phenotype monorepo)
 > **Date:** 2026-06-20
-> **Owner:** KooshaPari (orch-v11-044)
+> **Owner:** <REDACTED> (orch-v11-044)
 > **Supersedes:** none (initial governance import)
 > **Substrate role:** Rust library (per ADR-012 + ADR-036B substrate canonicals)
 
@@ -93,6 +93,6 @@ See `CHANGELOG.md` for the full list.
 
 ## Contact
 
-- Owner: KooshaPari (<https://github.com/KooshaPari>)
+- Owner: <REDACTED> (<https://github.com/<REDACTED>>)
 - Issues: use `.github/ISSUE_TEMPLATE/`
 - Security: see `SECURITY.md`

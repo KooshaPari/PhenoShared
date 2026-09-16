@@ -4,8 +4,8 @@ import (
 	"context"
 	"time"
 
-	"github.com/kooshapari/bifrost-extensions/api/graphql/gen"
-	"github.com/kooshapari/bifrost-extensions/api/graphql/model"
+	"github.com/<REDACTED>/bifrost-extensions/api/graphql/gen"
+	"github.com/<REDACTED>/bifrost-extensions/api/graphql/model"
 )
 
 type accountResolver struct{ *Resolver }

@@ -8,7 +8,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "/Users/kooshapari/CodeProjects/Phenotype/repos/_phenofleet-decisions/airlock-v2/hooks/airlock-v2-hook.sh",
+            "command": "/Users/<REDACTED>/CodeProjects/Phenotype/repos/_phenofleet-decisions/airlock-v2/hooks/airlock-v2-hook.sh",
             "description": "Airlock V2: auto-commit + push wip branch after every Claude edit tool call",
             "timeout": 30
           }
@@ -20,7 +20,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "/Users/kooshapari/CodeProjects/Phenotype/repos/_phenofleet-decisions/airlock-v2/hooks/airlock-v2-hook.sh",
+            "command": "/Users/<REDACTED>/CodeProjects/Phenotype/repos/_phenofleet-decisions/airlock-v2/hooks/airlock-v2-hook.sh",
             "description": "Airlock V2: final reconciliation + push on Claude session end",
             "timeout": 30
           }
@@ -32,7 +32,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "/Users/kooshapari/CodeProjects/Phenotype/repos/_phenofleet-decisions/airlock-v2/hooks/airlock-v2-hook.sh",
+            "command": "/Users/<REDACTED>/CodeProjects/Phenotype/repos/_phenofleet-decisions/airlock-v2/hooks/airlock-v2-hook.sh",
             "description": "Airlock V2: register session start (logs event; no commit expected on clean tree)",
             "timeout": 30
           }

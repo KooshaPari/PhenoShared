@@ -20,7 +20,7 @@
 
 | PR | Repo | Status |
 |---|---|---|
-| `KooshaPari/phenotype-apps#<TBD>` | phenotype-apps (this monorepo) | OPEN, `--auto --squash` queued per track-8 self-merge rule |
+| `<REDACTED>/phenotype-apps#<TBD>` | phenotype-apps (this monorepo) | OPEN, `--auto --squash` queued per track-8 self-merge rule |
 
 ## What was deferred
 
@@ -34,7 +34,7 @@
 
 - `git ls-remote --heads origin 'feat/l5-117*'` → 0 results
 - `git ls-remote --heads origin 'feat/*pheno-capacity*'` → 0 results
-- `gh pr list --repo KooshaPari/phenotype-gateway --state all` → 0 results
+- `gh pr list --repo <REDACTED>/phenotype-gateway --state all` → 0 results
 - `phenotype-registry/registry/disposition-index.json` → 4 rows confirmed `fsm: archived`
   - `block-c-phenotype-voxel` (line 820)
   - `block-c-phenotype-terrain` (line 806)

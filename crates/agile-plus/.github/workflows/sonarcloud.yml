@@ -21,8 +21,8 @@ jobs:
         uses: SonarSource/sonarqube-scan-action@45f27363d4ff7d6b16baa0516490f10c52bdd5fc
         with:
           args: >
-            -Dsonar.projectKey=KooshaPari_AgilePlus
-            -Dsonar.organization=kooshapari
+            -Dsonar.projectKey=<REDACTED>_AgilePlus
+            -Dsonar.organization=<REDACTED>
             -Dsonar.autoAnalysis.disable=true
         env:
           GITHUB_TOKEN: ${{ github.token }}

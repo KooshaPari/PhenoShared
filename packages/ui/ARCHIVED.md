@@ -1,11 +1,11 @@
 # Moved: `@phenotype/landing-ui`
 
-Canonical source: [`KooshaPari/phenoDesign`](https://github.com/KooshaPari/phenoDesign) → `packages/ui/`
+Canonical source: [`<REDACTED>/phenoDesign`](https://github.com/<REDACTED>/phenoDesign) → `packages/ui/`
 
 ```json
 {
   "dependencies": {
-    "@phenotype/landing-ui": "github:KooshaPari/phenoDesign"
+    "@phenotype/landing-ui": "github:<REDACTED>/phenoDesign"
   }
 }
 ```

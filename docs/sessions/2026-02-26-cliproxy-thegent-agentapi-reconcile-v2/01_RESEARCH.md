@@ -77,8 +77,8 @@
 
 ## 4. URLs & References
 
-- `https://github.com/KooshaPari/cliproxyapi-plusplus`
-- `https://github.com/KooshaPari/cliproxyapi++`
-- `https://github.com/KooshaPari/thegent`
-- `https://github.com/KooshaPari/agentapi-plusplus`
-- `https://github.com/KooshaPari/template-commons` (source of shared workflows)
+- `https://github.com/<REDACTED>/cliproxyapi-plusplus`
+- `https://github.com/<REDACTED>/cliproxyapi++`
+- `https://github.com/<REDACTED>/thegent`
+- `https://github.com/<REDACTED>/agentapi-plusplus`
+- `https://github.com/<REDACTED>/template-commons` (source of shared workflows)

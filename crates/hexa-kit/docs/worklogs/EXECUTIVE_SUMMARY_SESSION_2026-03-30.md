@@ -16,7 +16,7 @@
 
 **Fix dirty working tree FIRST:**
 ```bash
-cd /Users/kooshapari/CodeProjects/Phenotype/repos
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos
 git checkout python/  # discard changes
 # OR
 git add python/pheno-core/src/pheno_core/__init__.py && git commit -m "fix: update"

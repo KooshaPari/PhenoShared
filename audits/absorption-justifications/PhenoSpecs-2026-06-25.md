@@ -4,8 +4,8 @@
 
 ## Source
 
-- **Repo:** `KooshaPari/PhenoSpecs`
-- **GitHub URL:** https://github.com/KooshaPari/PhenoSpecs
+- **Repo:** `<REDACTED>/PhenoSpecs`
+- **GitHub URL:** https://github.com/<REDACTED>/PhenoSpecs
 - **Archived at:** false
 - **Default branch at audit time:** `main`
 - **Visibility at audit time:** public
@@ -24,7 +24,7 @@
 
 ## Target
 
-- **Receiving repo:** `KooshaPari/phenotype-infra` (https://github.com/KooshaPari/phenotype-infra)
+- **Receiving repo:** `<REDACTED>/phenotype-infra` (https://github.com/<REDACTED>/phenotype-infra)
 - **Receiving path:** `docs/absorbed-from-PhenoSpecs/`
 - **Local mirror path:** none
 - **Bundle file:** none (live repo; no bundle needed)
@@ -58,7 +58,7 @@
 - **Total branches (remote):** 12
 - **Open issues at audit time:** 0
 - **Bundle reference:** NONE — repo is live, no bundle required
-- **Source-tombstone posture:** `KooshaPari/PhenoSpecs` returns 200 OK via `gh api`
+- **Source-tombstone posture:** `<REDACTED>/PhenoSpecs` returns 200 OK via `gh api`
 
 | Category | Count | Notes |
 |---|---|---|
@@ -96,10 +96,10 @@ Parity: PARTIAL for the code surface — PhenoSpecs is a standalone spec tooling
 
 | Source Item | Source Evidence | Category | Source State | Target Repo | Target Evidence | Status | Deletion Justification | Risk if Deleted | Required Action |
 |---|---|---|---|---|---|---|---|---|---|
-| `PhenoSpecs/TypeScript code` | `gh api repos/KooshaPari/PhenoSpecs/languages` | sdk-code | active | `KooshaPari/phenotype-infra` | `docs/absorbed-from-PhenoSpecs/` | AFFIRM | Not yet absorbed; cluster-discovery audit | Medium; unique spec tooling | cluster-discovery baseline |
-| `PhenoSpecs/branches` (12) | `gh api repos/KooshaPari/PhenoSpecs/branches` | branch-coverage | active | `KooshaPari/phenotype-infra` | `docs/absorbed-from-PhenoSpecs/` | AFFIRM | Not yet absorbed | Low-medium | see BRANCH_INVENTORY |
-| `PhenoSpecs/.github/workflows/` | `gh api` API listing | ci-workflow | active | `KooshaPari/phenotype-infra` | `docs/absorbed-from-PhenoSpecs/` | AFFIRM | Not yet absorbed | Low | scanned, not migrated |
-| `PhenoSpecs/docs/` + `README.md` | `gh api` API listing | documentation | active | `KooshaPari/phenotype-infra` | `docs/absorbed-from-PhenoSpecs/` | AFFIRM | Not yet absorbed | Low | enumerated, not migrated |
+| `PhenoSpecs/TypeScript code` | `gh api repos/<REDACTED>/PhenoSpecs/languages` | sdk-code | active | `<REDACTED>/phenotype-infra` | `docs/absorbed-from-PhenoSpecs/` | AFFIRM | Not yet absorbed; cluster-discovery audit | Medium; unique spec tooling | cluster-discovery baseline |
+| `PhenoSpecs/branches` (12) | `gh api repos/<REDACTED>/PhenoSpecs/branches` | branch-coverage | active | `<REDACTED>/phenotype-infra` | `docs/absorbed-from-PhenoSpecs/` | AFFIRM | Not yet absorbed | Low-medium | see BRANCH_INVENTORY |
+| `PhenoSpecs/.github/workflows/` | `gh api` API listing | ci-workflow | active | `<REDACTED>/phenotype-infra` | `docs/absorbed-from-PhenoSpecs/` | AFFIRM | Not yet absorbed | Low | scanned, not migrated |
+| `PhenoSpecs/docs/` + `README.md` | `gh api` API listing | documentation | active | `<REDACTED>/phenotype-infra` | `docs/absorbed-from-PhenoSpecs/` | AFFIRM | Not yet absorbed | Low | enumerated, not migrated |
 
 ## Last-Resort-Exceptions
 
@@ -117,15 +117,15 @@ No exceptions to the AFFIRM verdict are granted.
 
 ```bash
 # Live repo (active source): restore by re-cloning the upstream.
-git clone --bare https://github.com/KooshaPari/PhenoSpecs.git PhenoSpecs.git
+git clone --bare https://github.com/<REDACTED>/PhenoSpecs.git PhenoSpecs.git
 
 # Disaster-recovery posture:
-gh api repos/KooshaPari/PhenoSpecs           # confirm repo still exists (200 OK)
-gh repo clone KooshaPari/PhenoSpecs /tmp/PhenoSpecs-migration
+gh api repos/<REDACTED>/PhenoSpecs           # confirm repo still exists (200 OK)
+gh repo clone <REDACTED>/PhenoSpecs /tmp/PhenoSpecs-migration
 ```
 
-**Restore prerequisites:** GitHub org read access for `KooshaPari/PhenoSpecs`.
-**Documented restore path:** `git clone --bare https://github.com/KooshaPari/PhenoSpecs.git`.
+**Restore prerequisites:** GitHub org read access for `<REDACTED>/PhenoSpecs`.
+**Documented restore path:** `git clone --bare https://github.com/<REDACTED>/PhenoSpecs.git`.
 
 ## Gate Tooling Reference
 

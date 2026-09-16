@@ -103,12 +103,12 @@ impl TracePort for StdoutAdapter { /* prints to stdout */ }
 ## 7. Migration story
 
 - **Before this PR:** `pheno-tracing` was scattered across 5 duplicates:
-  - `./crates/pheno-tracing/` (in `KooshaPari/pheno`)
+  - `./crates/pheno-tracing/` (in `<REDACTED>/pheno`)
   - `./FocalPoint/crates/pheno-tracing/`
   - `./FocalPoint/pheno-tracing/`
   - `./PhenoCompose/packages/pheno-tracing/` (TypeScript mirror, out of scope)
   - `/private/tmp/t15-batch-output/rust/pheno-tracing/` (T15.5 batch output)
-- **After this PR:** `KooshaPari/pheno-tracing` is the **single canonical top-level substrate repo**. All scattered copies will be removed in follow-up PRs (see `KooshaPari/phenotype-registry#<TBD>` + `KooshaPari/pheno#<TBD>`).
+- **After this PR:** `<REDACTED>/pheno-tracing` is the **single canonical top-level substrate repo**. All scattered copies will be removed in follow-up PRs (see `<REDACTED>/phenotype-registry#<TBD>` + `<REDACTED>/pheno#<TBD>`).
 
 ## 8. Quality bar (ADR-023 Rule 3.1)
 

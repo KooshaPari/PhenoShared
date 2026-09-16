@@ -78,7 +78,7 @@ unbounded run.
   "schema_version": "1",
   "script": "test-all",
   "timestamp_utc": "2026-06-21T22:46:13Z",
-  "workspace_root": "/Users/kooshapari/CodeProjects/Phenotype/repos",
+  "workspace_root": "/Users/<REDACTED>/CodeProjects/Phenotype/repos",
   "result_file": "2026-06-21.json",
   "toolchain": {
     "rust": "rustc 1.95.0 (...)",
@@ -145,17 +145,17 @@ script bug — the script faithfully reports it).
 ### stdout
 
 ```
-[22:46:14] discovered 3 pheno-* crate(s) under /Users/kooshapari/CodeProjects/Phenotype/repos
+[22:46:14] discovered 3 pheno-* crate(s) under /Users/<REDACTED>/CodeProjects/Phenotype/repos
 [22:46:14] [pheno-drift-detector] lang=unknown  →  skipped (no test manifest)
 [22:46:15] [pheno-framework-lint] lang=unknown  →  skipped (no test manifest)
 [22:46:15] [pheno-port-adapter] lang=rust  cmd='cargo test --no-fail-fast --color=never'
 [22:46:17] [pheno-port-adapter] status=failed  passed=0 failed=0 ignored=0  rc=101  1054ms
-[22:46:21] wrote /Users/kooshapari/CodeProjects/Phenotype/repos/test-results/2026-06-21.json
+[22:46:21] wrote /Users/<REDACTED>/CodeProjects/Phenotype/repos/test-results/2026-06-21.json
 
 === test-all summary ===
   crates: 3 total, 0 passed, 1 failed, 2 skipped
   tests:  0 passed, 0 failed, 0 ignored
-  report: /Users/kooshapari/CodeProjects/Phenotype/repos/test-results/2026-06-21.json
+  report: /Users/<REDACTED>/CodeProjects/Phenotype/repos/test-results/2026-06-21.json
 ```
 
 ### `test-results/2026-06-21.json`
@@ -165,7 +165,7 @@ script bug — the script faithfully reports it).
   "schema_version": "1",
   "script": "test-all",
   "timestamp_utc": "2026-06-21T22:46:13Z",
-  "workspace_root": "/Users/kooshapari/CodeProjects/Phenotype/repos",
+  "workspace_root": "/Users/<REDACTED>/CodeProjects/Phenotype/repos",
   "result_file": "2026-06-21.json",
   "toolchain": {
     "rust": "rustc 1.95.0 (59807616e 2026-04-14) (Homebrew)",

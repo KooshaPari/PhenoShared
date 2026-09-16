@@ -46,7 +46,7 @@ jobs:
         continue-on-error: true
         run: |
           git clone --depth 1 \
-            "https://x-access-token:${{ github.token }}@github.com/KooshaPari/phenoShared.git" \
+            "https://x-access-token:${{ github.token }}@github.com/<REDACTED>/phenoShared.git" \
             "${{ github.workspace }}/../phenoShared"
 
       - name: Install cargo-deny

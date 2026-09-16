@@ -22,7 +22,7 @@ Do not add new domain libraries here — use HexaKit templates to wire imports.
 
 | Package | Status |
 |---------|--------|
-| `python/pheno-types` | **Migrated** — stub pointer to [phenotype-types](https://github.com/KooshaPari/phenotype-types) |
+| `python/pheno-types` | **Migrated** — stub pointer to [phenotype-types](https://github.com/<REDACTED>/phenotype-types) |
 | Other `python/pheno-*` | Pending disposition (separate lanes) |
 
 ## Current recovery frontier

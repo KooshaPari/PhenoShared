@@ -24,9 +24,9 @@
 
 set -euo pipefail
 
-NDJSON="/Users/kooshapari/.local/share/resume-all/tailscale-watch.ndjson"
-STATE_FILE="/Users/kooshapari/.local/share/resume-all/tailscale-watch.state"
-BEAD="/Users/kooshapari/CodeProjects/Phenotype/repos/beads/bead-ctl.sh"
+NDJSON="/Users/<REDACTED>/.local/share/resume-all/tailscale-watch.ndjson"
+STATE_FILE="/Users/<REDACTED>/.local/share/resume-all/tailscale-watch.state"
+BEAD="/Users/<REDACTED>/CodeProjects/Phenotype/repos/beads/bead-ctl.sh"
 NOW_ISO=$(date -u +%Y-%m-%dT%H:%M:%SZ)
 
 mkdir -p "$(dirname "$NDJSON")" 2>/dev/null || true

@@ -23,7 +23,7 @@ Verified per-repo CODEOWNERS presence via `gh api`, then executed FU3:
 | AtomsBot-2nd | **404 — repo does not exist** | N/A | Skipped |
 | AtomsBot-wtrees | **404 — repo does not exist** | N/A | Skipped |
 
-**FocalPoint PR #140:** `https://github.com/KooshaPari/FocalPoint/pull/140`
+**FocalPoint PR #140:** `https://github.com/<REDACTED>/FocalPoint/pull/140`
 **Title:** `docs(governance): add ADR-023 PAUSED soft-block to CODEOWNERS (2026-06-20)`
 **State:** OPEN
 

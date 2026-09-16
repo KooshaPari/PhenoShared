@@ -76,4 +76,4 @@ The routing decision can override the lane default via
 
 The `substrate/crates/wave-3lane-tests` crate exercises all three lanes
 against in-memory stub engines + `engine-agentapi` (offline mode). See
-[`substrate@55ae4bc`](https://github.com/KooshaPari/substrate/commit/55ae4bc).
+[`substrate@55ae4bc`](https://github.com/<REDACTED>/substrate/commit/55ae4bc).

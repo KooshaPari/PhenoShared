@@ -1,8 +1,8 @@
 # phenotype-infrakit — Absorption Justification
 
 **Status:** QUEUED 2026-07-17 (batch2 refresh)
-**Source:** `KooshaPari/phenotype-infrakit` (49 KB, last push 2026-07-15, remote-only)
-**Target:** `KooshaPari/phenotype-tooling` at `infrakit/`
+**Source:** `<REDACTED>/phenotype-infrakit` (49 KB, last push 2026-07-15, remote-only)
+**Target:** `<REDACTED>/phenotype-tooling` at `infrakit/`
 **Disposition:** ABSORB
 
 ## Confidence
@@ -19,7 +19,7 @@
 ## Restore procedure
 
 ```sh
-gh repo unarchive KooshaPari/phenotype-infrakit
+gh repo unarchive <REDACTED>/phenotype-infrakit
 # In phenotype-tooling spine:
 git rm -r infrakit/
 git commit -m "revert: undo phenotype-infrakit absorption"
@@ -27,4 +27,4 @@ git commit -m "revert: undo phenotype-infrakit absorption"
 
 ## Cross-references
 
-- Disposition row: search `"KooshaPari/phenotype-infrakit"` in `registry/disposition-index.json`
+- Disposition row: search `"<REDACTED>/phenotype-infrakit"` in `registry/disposition-index.json`

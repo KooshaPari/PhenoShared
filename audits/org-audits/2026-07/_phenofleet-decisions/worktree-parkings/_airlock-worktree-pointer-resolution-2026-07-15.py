@@ -18,7 +18,7 @@ import sys
 from datetime import datetime
 from pathlib import Path
 
-REPO_ROOT = Path("/Users/kooshapari/CodeProjects/Phenotype/repos")
+REPO_ROOT = Path("/Users/<REDACTED>/CodeProjects/Phenotype/repos")
 PARK = REPO_ROOT / "_phenofleet-decisions" / "worktree-parkings"
 DATE = "2026-07-15"
 AUDIT_JSON = REPO_ROOT / ".airlock-worktree-pointer-2026-07-15.json"
@@ -118,68 +118,68 @@ AUDIT_ORPHANS = [
 OUTER_ORPHANS = [
     {
         "kind": "worktree_pointer_orphan",
-        "path": "/Users/kooshapari/CodeProjects/Phenotype/_archive/2026-06-08/thegent-clean-wt-docs/.git",
-        "expected_target": "/Users/kooshapari/CodeProjects/Phenotype/repos/thegent-clean/.git/worktrees/thegent-clean-wt-docs",
+        "path": "/Users/<REDACTED>/CodeProjects/Phenotype/_archive/2026-06-08/thegent-clean-wt-docs/.git",
+        "expected_target": "/Users/<REDACTED>/CodeProjects/Phenotype/repos/thegent-clean/.git/worktrees/thegent-clean-wt-docs",
         "note": "thegent-clean repo is absent from repos/; archived worktree on disk",
-        "parent_dir": "/Users/kooshapari/CodeProjects/Phenotype/_archive/2026-06-08",
+        "parent_dir": "/Users/<REDACTED>/CodeProjects/Phenotype/_archive/2026-06-08",
         "snapshot_dirname": "thegent-clean-wt-docs",
     },
     {
         "kind": "worktree_pointer_orphan",
-        "path": "/Users/kooshapari/CodeProjects/Phenotype/_archive/2026-06-08/thegent-clean-wt-ruff/.git",
-        "expected_target": "/Users/kooshapari/CodeProjects/Phenotype/repos/thegent-clean/.git/worktrees/thegent-clean-wt-ruff",
+        "path": "/Users/<REDACTED>/CodeProjects/Phenotype/_archive/2026-06-08/thegent-clean-wt-ruff/.git",
+        "expected_target": "/Users/<REDACTED>/CodeProjects/Phenotype/repos/thegent-clean/.git/worktrees/thegent-clean-wt-ruff",
         "note": "Same; archived worktree on disk",
-        "parent_dir": "/Users/kooshapari/CodeProjects/Phenotype/_archive/2026-06-08",
+        "parent_dir": "/Users/<REDACTED>/CodeProjects/Phenotype/_archive/2026-06-08",
         "snapshot_dirname": "thegent-clean-wt-ruff",
     },
     {
         "kind": "worktree_pointer_orphan",
-        "path": "/Users/kooshapari/CodeProjects/Phenotype/_archive/2026-06-08/thegent-clean-wt-policy/.git",
-        "expected_target": "/Users/kooshapari/CodeProjects/Phenotype/repos/thegent-clean/.git/worktrees/thegent-clean-wt-policy",
+        "path": "/Users/<REDACTED>/CodeProjects/Phenotype/_archive/2026-06-08/thegent-clean-wt-policy/.git",
+        "expected_target": "/Users/<REDACTED>/CodeProjects/Phenotype/repos/thegent-clean/.git/worktrees/thegent-clean-wt-policy",
         "note": "Same; archived worktree on disk",
-        "parent_dir": "/Users/kooshapari/CodeProjects/Phenotype/_archive/2026-06-08",
+        "parent_dir": "/Users/<REDACTED>/CodeProjects/Phenotype/_archive/2026-06-08",
         "snapshot_dirname": "thegent-clean-wt-policy",
     },
     {
         "kind": "worktree_pointer_orphan",
-        "path": "/Users/kooshapari/CodeProjects/Phenotype/_archive/2026-06-08/thegent-clean-wt-parallel/.git",
-        "expected_target": "/Users/kooshapari/CodeProjects/Phenotype/repos/thegent-clean/.git/worktrees/thegent-clean-wt-parallel",
+        "path": "/Users/<REDACTED>/CodeProjects/Phenotype/_archive/2026-06-08/thegent-clean-wt-parallel/.git",
+        "expected_target": "/Users/<REDACTED>/CodeProjects/Phenotype/repos/thegent-clean/.git/worktrees/thegent-clean-wt-parallel",
         "note": "Same; archived worktree on disk",
-        "parent_dir": "/Users/kooshapari/CodeProjects/Phenotype/_archive/2026-06-08",
+        "parent_dir": "/Users/<REDACTED>/CodeProjects/Phenotype/_archive/2026-06-08",
         "snapshot_dirname": "thegent-clean-wt-parallel",
     },
     {
         "kind": "worktree_pointer_orphan",
-        "path": "/Users/kooshapari/CodeProjects/Phenotype/_archive/2026-06-08/thegent-clean-wt-idea/.git",
-        "expected_target": "/Users/kooshapari/CodeProjects/Phenotype/repos/thegent-clean/.git/worktrees/thegent-clean-wt-idea",
+        "path": "/Users/<REDACTED>/CodeProjects/Phenotype/_archive/2026-06-08/thegent-clean-wt-idea/.git",
+        "expected_target": "/Users/<REDACTED>/CodeProjects/Phenotype/repos/thegent-clean/.git/worktrees/thegent-clean-wt-idea",
         "note": "Same; archived worktree on disk",
-        "parent_dir": "/Users/kooshapari/CodeProjects/Phenotype/_archive/2026-06-08",
+        "parent_dir": "/Users/<REDACTED>/CodeProjects/Phenotype/_archive/2026-06-08",
         "snapshot_dirname": "thegent-clean-wt-idea",
     },
     {
         "kind": "worktree_pointer_orphan",
-        "path": "/Users/kooshapari/CodeProjects/Phenotype/recovery/home-audit-20260715/heliosApp/tree-archive-copy/8711057fb661/persistent/.git",
-        "expected_target": "/Users/kooshapari/.airlock/repos/8711057fb661.git/worktrees/persistent",
+        "path": "/Users/<REDACTED>/CodeProjects/Phenotype/recovery/home-audit-20260715/heliosApp/tree-archive-copy/8711057fb661/persistent/.git",
+        "expected_target": "/Users/<REDACTED>/.airlock/repos/8711057fb661.git/worktrees/persistent",
         "note": "Airlock bare mirror gone (post-prune); worktree dir still on disk",
-        "parent_dir": "/Users/kooshapari/CodeProjects/Phenotype/recovery/home-audit-20260715/heliosApp/tree-archive-copy/8711057fb661",
+        "parent_dir": "/Users/<REDACTED>/CodeProjects/Phenotype/recovery/home-audit-20260715/heliosApp/tree-archive-copy/8711057fb661",
         "source_dirname": "persistent",
         "snapshot_dirname": "heliosApp-persistent-8711057fb661",
     },
     {
         "kind": "worktree_pointer_orphan",
-        "path": "/Users/kooshapari/CodeProjects/Phenotype/recovery/home-audit-20260715/heliosApp/tree-archive-copy/8711057fb661/5ffb5ebd-13d7-4e47-9aad-1e4d8f0daa9e/.git",
-        "expected_target": "/Users/kooshapari/.airlock/repos/8711057fb661.git/worktrees/5ffb5ebd-13d7-4e47-9aad-1e4d8f0daa9e",
+        "path": "/Users/<REDACTED>/CodeProjects/Phenotype/recovery/home-audit-20260715/heliosApp/tree-archive-copy/8711057fb661/5ffb5ebd-13d7-4e47-9aad-1e4d8f0daa9e/.git",
+        "expected_target": "/Users/<REDACTED>/.airlock/repos/8711057fb661.git/worktrees/5ffb5ebd-13d7-4e47-9aad-1e4d8f0daa9e",
         "note": "Same",
-        "parent_dir": "/Users/kooshapari/CodeProjects/Phenotype/recovery/home-audit-20260715/heliosApp/tree-archive-copy/8711057fb661",
+        "parent_dir": "/Users/<REDACTED>/CodeProjects/Phenotype/recovery/home-audit-20260715/heliosApp/tree-archive-copy/8711057fb661",
         "source_dirname": "5ffb5ebd-13d7-4e47-9aad-1e4d8f0daa9e",
         "snapshot_dirname": "heliosApp-5ffb5ebd-8711057fb661",
     },
     {
         "kind": "worktree_pointer_orphan",
-        "path": "/Users/kooshapari/CodeProjects/Phenotype/recovery/home-audit-20260715/heliosApp/tree-archive-copy/8711057fb661/2a97c405-f982-4e17-972a-07c34f5c385c/.git",
-        "expected_target": "/Users/kooshapari/.airlock/repos/8711057fb661.git/worktrees/2a97c405-f982-4e17-972a-07c34f5c385c",
+        "path": "/Users/<REDACTED>/CodeProjects/Phenotype/recovery/home-audit-20260715/heliosApp/tree-archive-copy/8711057fb661/2a97c405-f982-4e17-972a-07c34f5c385c/.git",
+        "expected_target": "/Users/<REDACTED>/.airlock/repos/8711057fb661.git/worktrees/2a97c405-f982-4e17-972a-07c34f5c385c",
         "note": "Same",
-        "parent_dir": "/Users/kooshapari/CodeProjects/Phenotype/recovery/home-audit-20260715/heliosApp/tree-archive-copy/8711057fb661",
+        "parent_dir": "/Users/<REDACTED>/CodeProjects/Phenotype/recovery/home-audit-20260715/heliosApp/tree-archive-copy/8711057fb661",
         "source_dirname": "2a97c405-f982-4e17-972a-07c34f5c385c",
         "snapshot_dirname": "heliosApp-2a97c405-8711057fb661",
     },
@@ -189,25 +189,25 @@ OUTER_ORPHANS = [
 SUPERPOWTERS = [
     {
         "kind": "superpowers_worktree",
-        "path": "/Users/kooshapari/.config/superpowers/worktrees/forgecode/forge-eval-production/.git",
+        "path": "/Users/<REDACTED>/.config/superpowers/worktrees/forgecode/forge-eval-production/.git",
         "expected_target": None,
         "note": "Active superpowers worktree - do not touch",
     },
     {
         "kind": "superpowers_worktree",
-        "path": "/Users/kooshapari/.config/superpowers/worktrees/melosviz/feat-b10-conductor/.git",
+        "path": "/Users/<REDACTED>/.config/superpowers/worktrees/melosviz/feat-b10-conductor/.git",
         "expected_target": None,
         "note": "Active superpowers worktree - do not touch",
     },
     {
         "kind": "superpowers_worktree",
-        "path": "/Users/kooshapari/.config/superpowers/worktrees/Tracera/fix-tracera-docker-contract/.git",
-        "expected_target": "/Users/kooshapari/CodeProjects/Phenotype/repos/Tracera/.git/worktrees/fix-tracera-docker-contract",
+        "path": "/Users/<REDACTED>/.config/superpowers/worktrees/Tracera/fix-tracera-docker-contract/.git",
+        "expected_target": "/Users/<REDACTED>/CodeProjects/Phenotype/repos/Tracera/.git/worktrees/fix-tracera-docker-contract",
         "note": "DANGLING: superpowers worktree whose target gitdir no longer exists in Tracera. Dir contents intact. Per policy: detect-only.",
     },
     {
         "kind": "superpowers_worktree",
-        "path": "/Users/kooshapari/.config/superpowers/worktrees/Tracera-recovery-20260713/tracera-runtime-auth-wbs80-20260714/.git",
+        "path": "/Users/<REDACTED>/.config/superpowers/worktrees/Tracera-recovery-20260713/tracera-runtime-auth-wbs80-20260714/.git",
         "expected_target": None,
         "note": "Active superpowers worktree - do not touch",
     },
@@ -217,7 +217,7 @@ SUPERPOWTERS = [
 THEGENT_STUB = [
     {
         "kind": "thegent_worktree",
-        "path": "/Users/kooshapari/.thegent/worktrees/1481461ff257",
+        "path": "/Users/<REDACTED>/.thegent/worktrees/1481461ff257",
         "expected_target": None,
         "note": "Runtime stub - contains agent-1.fallback.lock and pool_state.txt only; not a git worktree (no .git file)",
     },
@@ -227,8 +227,8 @@ THEGENT_STUB = [
 VENV_IGNORE = [
     {
         "kind": "venv_cache_pointer",
-        "path": "/Users/kooshapari/CodeProjects/Phenotype/repos/Grapheon/.venv/lib/python3.13/site-packages/temporalio/bridge/sdk-core/.git",
-        "expected_target": "/Users/kooshapari/CodeProjects/Phenotype/repos/Grapheon/.venv/lib/python3.13/site-packages/.git/modules/sdk-core",
+        "path": "/Users/<REDACTED>/CodeProjects/Phenotype/repos/Grapheon/.venv/lib/python3.13/site-packages/temporalio/bridge/sdk-core/.git",
+        "expected_target": "/Users/<REDACTED>/CodeProjects/Phenotype/repos/Grapheon/.venv/lib/python3.13/site-packages/.git/modules/sdk-core",
         "note": "Python venv cache vendoring temporalio SDK; not a user-managed worktree",
     },
 ]

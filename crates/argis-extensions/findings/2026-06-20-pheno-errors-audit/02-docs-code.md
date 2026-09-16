@@ -2,9 +2,9 @@
 
 **Audit agent:** Phase 1B (docs/spec/intent + source code features)
 **Date:** 2026-06-20
-**Repo path:** `/Users/kooshapari/CodeProjects/Phenotype/repos/pheno-errors/`
-**Branch context:** `chore/v12-71-pillar-p0-remediation-2026-06-20` (one of 22+ branches touching this dir; not the `main` of the upstream `KooshaPari/argis-extensions` monorepo that contains this sub-tree)
-**Discovery note:** `pheno-errors/` is a sub-directory of the `KooshaPari/argis-extensions` monorepo clone at `repos/`, NOT a standalone git repo. `git rev-parse --show-toplevel` returns `/Users/kooshapari/CodeProjects/Phenotype/repos`. Remotes point to `KooshaPari/argis-extensions.git` and `KooshaPari/phenotype-apps.git`. There is no `pheno-errors/` git directory of its own at GitHub `KooshaPari/pheno-errors` either (HTTP probe 404 on `main` and `master`).
+**Repo path:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos/pheno-errors/`
+**Branch context:** `chore/v12-71-pillar-p0-remediation-2026-06-20` (one of 22+ branches touching this dir; not the `main` of the upstream `<REDACTED>/argis-extensions` monorepo that contains this sub-tree)
+**Discovery note:** `pheno-errors/` is a sub-directory of the `<REDACTED>/argis-extensions` monorepo clone at `repos/`, NOT a standalone git repo. `git rev-parse --show-toplevel` returns `/Users/<REDACTED>/CodeProjects/Phenotype/repos`. Remotes point to `<REDACTED>/argis-extensions.git` and `<REDACTED>/phenotype-apps.git`. There is no `pheno-errors/` git directory of its own at GitHub `<REDACTED>/pheno-errors` either (HTTP probe 404 on `main` and `master`).
 
 ---
 
@@ -54,7 +54,7 @@ Every README / SPEC / ADR / session claim about `pheno-errors` traced to a file:
 | D-36 | `pheno-errors/justfile` | 1–2 | "Phenotype-org standard justfile" | Standardization claim | **partial** — present but the AGENTS.md refers to recipes (`just coverage`) that are not defined here |
 | D-37 | `pheno-errors/justfile` | 30–32 | "unused: cargo machete" | Recipe | **valid** — matches `justfile:30-32` |
 | D-38 | `pheno-errors/deny.toml` | 1–5 | "Mirror of the Phenotype-org standard deny policy" | Standardization claim | **valid** — standard 21-license allowlist + `[sources]` allow-registry + `[bans]` empty deny |
-| D-39 | `pheno-errors/.github/CODEOWNERS` | 4–5 | "Default owner: * @KooshaPari" | Ownership | **valid** — single-owner rule |
+| D-39 | `pheno-errors/.github/CODEOWNERS` | 4–5 | "Default owner: * @<REDACTED>" | Ownership | **valid** — single-owner rule |
 | D-40 | `pheno-errors/Cargo.toml` | 16 | "pheno-otel = { path = '../pheno-otel' }" | Path dep | **partial** — valid path dep, but `../pheno-otel` exists only when consumed from within the local monorepo clone; not portable to external consumers |
 
 ### 1.2 Cross-referenced (external) docs
@@ -225,7 +225,7 @@ No other doctests exist (only 1 `//!` block + 95 `///` lines).
 
 ### 4.1 Examples on current branch
 
-**Zero.** `find /Users/kooshapari/CodeProjects/Phenotype/repos/pheno-errors -type d -name examples` returns no result. AGENTS.md at line 37 says `cargo test --features snapshot` which implies examples should exist; they don't on this branch.
+**Zero.** `find /Users/<REDACTED>/CodeProjects/Phenotype/repos/pheno-errors -type d -name examples` returns no result. AGENTS.md at line 37 says `cargo test --features snapshot` which implies examples should exist; they don't on this branch.
 
 ### 4.2 Examples on sibling branches (branch-only)
 
@@ -302,7 +302,7 @@ No other doctests exist (only 1 `//!` block + 95 `///` lines).
 - **`From<anyhow::Error>` walks the cause chain** (`src/lib.rs:227-232`) instead of relying on `Display`, with explicit comment explaining why. Well-designed.
 - **All 5 variants are documented with multi-line `///`** explaining when to use each. Excellent UX for consumers.
 - **No `#[non_exhaustive]`** is deliberate — comment at `src/lib.rs:38-41` explains the reasoning (match exhaustiveness checks useful at call sites).
-- **PhenoLang archive at `pheno-errors/archive/PhenoLang-errors-2026-06-20/`** exists on branch `chore/preserve-phenolang-errors-2026-06-20` (commit `212260ffa9`) — preserves `phenotype-error-core`, `phenotype-error-macros`, `phenotype-errors` from `KooshaPari/PhenoLang`. This is a docs-only artifact, not part of current `pheno-errors` buildable surface.
+- **PhenoLang archive at `pheno-errors/archive/PhenoLang-errors-2026-06-20/`** exists on branch `chore/preserve-phenolang-errors-2026-06-20` (commit `212260ffa9`) — preserves `phenotype-error-core`, `phenotype-error-macros`, `phenotype-errors` from `<REDACTED>/PhenoLang`. This is a docs-only artifact, not part of current `pheno-errors` buildable surface.
 
 ### 6.3 Potential bugs / smells
 
@@ -371,7 +371,7 @@ No other doctests exist (only 1 `//!` block + 95 `///` lines).
 | `examples/quickstart.rs` | `78f2c908b4` → `c583faf8c7` deleted | `78f2c908b4` | Old API shape |
 | `tests/smoke.rs` | `78f2c908b4` → `c583faf8c7` deleted | `78f2c908b4` | Old API shape (mostly compatible) |
 | `tests/tracing_test.rs` | `78f2c908b4` → `c583faf8c7` deleted | `78f2c908b4` | Uses non-existent `tracing` feature |
-| `archive/PhenoLang-errors-2026-06-20/...` | `chore/preserve-phenolang-errors-2026-06-20` | `212260ffa9` | 9 archived files: `phenotype-error-core/`, `phenotype-error-macros/`, `phenotype-errors/` (all from `KooshaPari/PhenoLang`) |
+| `archive/PhenoLang-errors-2026-06-20/...` | `chore/preserve-phenolang-errors-2026-06-20` | `212260ffa9` | 9 archived files: `phenotype-error-core/`, `phenotype-error-macros/`, `phenotype-errors/` (all from `<REDACTED>/PhenoLang`) |
 
 ### 8.3 Dependency manifest (`Cargo.toml`)
 
@@ -381,7 +381,7 @@ name = "pheno-errors"
 version = "0.1.0"
 edition = "2021"
 license = "MIT"
-repository = "https://github.com/KooshaPari/pheno-errors"
+repository = "https://github.com/<REDACTED>/pheno-errors"
 description = "Canonical AppError type for the pheno-* fleet. Consolidates the 5 most-common error patterns into a single, dependency-light crate."
 
 [dependencies]
@@ -414,7 +414,7 @@ No features defined. No `[lib]` overrides. No `[workspace]` table. No MSRV speci
 - [x] Public items counted: **19** (1 enum + 5 variants + 1 type alias + 8 methods + 4 From impls)
 - [x] Test functions counted: **12** (10 unit + 2 property)
 - [x] Public items missing doc comments: **0**
-- [x] `git remote -v` consulted: origin points to `KooshaPari/argis-extensions`, not standalone `pheno-errors`
+- [x] `git remote -v` consulted: origin points to `<REDACTED>/argis-extensions`, not standalone `pheno-errors`
 
 ### 8.5 Key cross-references
 

@@ -16,7 +16,7 @@
 
 ## Purpose
 
-This is the master index for the KooshaPari repo consolidation pass dated 2026-07-29. It enumerates each group, the dockets produced, and the per-group approval gate before any squashing.
+This is the master index for the <REDACTED> repo consolidation pass dated 2026-07-29. It enumerates each group, the dockets produced, and the per-group approval gate before any squashing.
 
 ## Group-Level Dockets
 

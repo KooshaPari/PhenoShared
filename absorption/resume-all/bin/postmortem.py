@@ -165,7 +165,7 @@ def _classify_root_cause(incidents: list[dict]) -> str:
 
     # All launchd jobs degraded = system-level issue
     job_incidents = sum(c for k, c in classes.items()
-                        if k.startswith("com.kooshapari."))
+                        if k.startswith("com.<REDACTED>."))
     if job_incidents >= 3:
         return (
             "Multiple launchd-managed jobs degraded simultaneously. "

@@ -4,7 +4,7 @@
 
 - **standard_id:** `kilo-code-stand@1`
 - **applies_to:** all PRs; agent-authored commits
-- **owner:** KooshaPari
+- **owner:** <REDACTED>
 - **charter:** [charter.md](charter.md)
 - **sota:** [SOTA.md](SOTA.md)
 

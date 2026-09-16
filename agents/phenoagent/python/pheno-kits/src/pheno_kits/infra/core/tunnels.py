@@ -44,7 +44,7 @@ class Tunnel:
 @dataclass
 class TunnelConfig:
     """Tunnel configuration."""
-    domain: str = "kooshapari.com"
+    domain: str = "<REDACTED>.com"
     cloudflared_dir: Path = field(default_factory=lambda: Path.home() / ".cloudflared")
     startup_timeout: float = 30.0
     health_check_interval: float = 60.0
@@ -107,7 +107,7 @@ class TunnelManager:
 
         Example:
             >>> url = await manager.create("myapp", 8080)
-            >>> print(url)  # https://myapp.kooshapari.com
+            >>> print(url)  # https://myapp.<REDACTED>.com
         """
         if provider == "cloudflare":
             return await self._create_cloudflare_tunnel(subdomain, port)

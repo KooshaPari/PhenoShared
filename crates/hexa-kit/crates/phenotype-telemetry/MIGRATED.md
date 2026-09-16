@@ -2,7 +2,7 @@
 
 **Date:** 2026-06-18  
 **Disposition row:** HexaKit DISPOSITION #39 — Wave A  
-**Canonical repo:** https://github.com/KooshaPari/PhenoObservability  
+**Canonical repo:** https://github.com/<REDACTED>/PhenoObservability  
 **Git pin:** `PhenoObservability` branch `main`
 
 ## What changed
@@ -14,5 +14,5 @@
 ## For consumers
 
 ```toml
-phenotype-telemetry = { git = "https://github.com/KooshaPari/PhenoObservability", branch = "main", package = "phenotype-telemetry" }
+phenotype-telemetry = { git = "https://github.com/<REDACTED>/PhenoObservability", branch = "main", package = "phenotype-telemetry" }
 ```

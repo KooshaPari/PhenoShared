@@ -56,6 +56,6 @@ The `pheno-utils-*` crate family provides substrate-utility primitives:
 **Date:** 2026-07-17
 **Reviewer:** forge subagent (wave 2026-07-17-queue-refresh-2)
 **Decision:** ABSORBED into `pheno/crates/pheno-utils-*/`
-**Source repo:** `KooshaPari/phenoUtils` archived 2026-07-17
+**Source repo:** `<REDACTED>/phenoUtils` archived 2026-07-17
 
 **Next review:** 2026-08-17

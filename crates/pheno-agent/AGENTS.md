@@ -4,7 +4,7 @@
 
 - **Name**: PhenoAgent
 - **Description**: Agent API and CLI components for the Phenotype ecosystem - core agent infrastructure
-- **Location**: `/Users/kooshapari/CodeProjects/Phenotype/repos/PhenoAgent`
+- **Location**: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/PhenoAgent`
 - **Language Stack**: Rust (primary), Go (components)
 - **Published**: Internal (Phenotype ecosystem)
 
@@ -12,7 +12,7 @@
 
 ```bash
 # Navigate to PhenoAgent
-cd /Users/kooshapari/CodeProjects/Phenotype/repos/PhenoAgent
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos/PhenoAgent
 
 # Rust components
 cargo build

@@ -28,11 +28,11 @@
 ## Why not merge elsewhere
 
 We deliberately did NOT target:
-- `KooshaPari/Configra` — Configra is for static config (TOML/JSON),
+- `<REDACTED>/Configra` — Configra is for static config (TOML/JSON),
   not hot-reloadable runtime state.
-- `KooshaPari/PhenoObservability` — observability is a consumer, not
+- `<REDACTED>/PhenoObservability` — observability is a consumer, not
   a config loader.
-- `KooshaPari/Authvault` — Authvault is for secrets/credentials, not
+- `<REDACTED>/Authvault` — Authvault is for secrets/credentials, not
   generic runtime config.
 
 ## State captured
@@ -47,7 +47,7 @@ We deliberately did NOT target:
 
 The `gw-pheno` gate (registry row, fsm=in-progress) plans to dismantle
 the pheno monorepo around 2026-08-01, redistributing agileplus-* crates
-to `KooshaPari/AgilePlus` and the remaining phenotype-* crates to their
+to `<REDACTED>/AgilePlus` and the remaining phenotype-* crates to their
 respective owners. At that time, pheno-runtime-config will move from
 `pheno/crates/pheno-runtime-config` to
 `AgilePlus/crates/pheno-runtime-config`. This registry row will be

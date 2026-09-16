@@ -11,7 +11,7 @@ concurrency:
 
 
 # Delegates to phenoShared reusable workflow.
-# See: https://github.com/KooshaPari/phenoShared/blob/main/.github/workflows/self-merge-gate.yml
+# See: https://github.com/<REDACTED>/phenoShared/blob/main/.github/workflows/self-merge-gate.yml
 
 
 
@@ -20,4 +20,4 @@ permissions:
 
 jobs:
   gate:
-    uses: KooshaPari/phenoShared/.github/workflows/self-merge-gate.yml@d95bb6755390f73c56ea496b246d098fbf97bbe9
+    uses: <REDACTED>/phenoShared/.github/workflows/self-merge-gate.yml@d95bb6755390f73c56ea496b246d098fbf97bbe9

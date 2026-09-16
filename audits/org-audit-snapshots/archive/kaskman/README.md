@@ -1,7 +1,7 @@
 # KaskMan Dashboard Scripts (vendor snapshot, 2026-07-05)
 
 ## Source
-- Repo: `KooshaPari/KaskMan` (GitHub-archived 2026-07-05, strict pause)
+- Repo: `<REDACTED>/KaskMan` (GitHub-archived 2026-07-05, strict pause)
 - Local source: `KaskMan/` (top-level polyrepo checkout)
 - Vendor date: 2026-07-05
 - Vendor agent: root (manager lane)

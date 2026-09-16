@@ -33,13 +33,13 @@ FR authority and spec-driven PM workspace for agent + human teams.
 | SOTA | [SOTA.md](SOTA.md) |
 | OKF | [okf/manifest.okf.yaml](okf/manifest.okf.yaml) |
 
-Authority: [phenotype-registry DOMAIN_ROLES](https://github.com/KooshaPari/phenotype-registry/blob/main/DOMAIN_ROLES.md)
+Authority: [phenotype-registry DOMAIN_ROLES](https://github.com/<REDACTED>/phenotype-registry/blob/main/DOMAIN_ROLES.md)
 
 ## Decision rights
 
 | Action | Authority |
 |--------|-----------|
-| Merge to `main` | KooshaPari + 1 reviewer |
+| Merge to `main` | <REDACTED> + 1 reviewer |
 
 ## Changelog
 

@@ -157,7 +157,7 @@ notifications:
       - "#testing-alerts"
 
   dashboard:
-    url: "https://dashboard.kooshapari.com/testing"
+    url: "https://dashboard.<REDACTED>.com/testing"
     refresh_interval: "5m"
 
 # Metrics Collection

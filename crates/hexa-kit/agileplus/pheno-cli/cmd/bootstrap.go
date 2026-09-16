@@ -8,9 +8,9 @@ import (
 	"strings"
 
 	"github.com/spf13/cobra"
-	"github.com/KooshaPari/pheno-cli/internal/detect"
-	"github.com/KooshaPari/pheno-cli/internal/rollout"
-	"github.com/KooshaPari/pheno-cli/internal/templates"
+	"github.com/<REDACTED>/pheno-cli/internal/detect"
+	"github.com/<REDACTED>/pheno-cli/internal/rollout"
+	"github.com/<REDACTED>/pheno-cli/internal/templates"
 )
 
 var (

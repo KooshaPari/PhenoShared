@@ -96,13 +96,13 @@ and uploads only.
 
 ## Reuse
 
-- **`KooshaPari/phenotype-ops#2`** (llama-cpp Dockerfile + compose) —
+- **`<REDACTED>/phenotype-ops#2`** (llama-cpp Dockerfile + compose) —
   container builds via this PR can chain a `cyclonedx-bom` step that emits
   a container SBOM alongside the Rust SBOM; the diff workflow handles both.
 - **`pheno-port-adapter/.github/workflows/sbom-diff.yml`** (v21-T1, L48) —
   shares the `cargo-cyclonedx` install step + output path conventions; copy-paste
   portable to other substrate crates.
-- **`KooshaPari/pheno-tracing`** (ADR-012 / ADR-036B canonical) — OTLP
+- **`<REDACTED>/pheno-tracing`** (ADR-012 / ADR-036B canonical) — OTLP
   export for the gate's annotations and execution-time metrics (per ADR-042B
   substrate quality bar).
 

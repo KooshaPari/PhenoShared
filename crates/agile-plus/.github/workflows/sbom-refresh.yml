@@ -9,7 +9,7 @@ permissions:
 
 jobs:
   call-sbom-refresh:
-    uses: KooshaPari/phenotype-tooling/.github/workflows/sbom-monthly.yml@main
+    uses: <REDACTED>/phenotype-tooling/.github/workflows/sbom-monthly.yml@main
     with:
       repo_path: '.'
       build_system: 'rust'

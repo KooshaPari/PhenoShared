@@ -11,7 +11,7 @@ Add to Cursor's `~/.cursor/mcp.json` or project-level `.cursor/mcp.json`:
       "command": "npx",
       "args": ["-y", "@agileplus/mcp"],
       "env": {
-        "AGILEPLUS_HOME": "/Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus"
+        "AGILEPLUS_HOME": "/Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus"
       }
     }
   }
@@ -25,7 +25,7 @@ Add to Cursor's terminal configuration:
 ```bash
 # In ~/.zshrc or ~/.bashrc
 export PATH="$HOME/bin:$PATH"
-export AGILEPLUS_HOME="/Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus"
+export AGILEPLUS_HOME="/Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus"
 alias ap="agileplus"
 ```
 

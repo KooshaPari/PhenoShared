@@ -6,8 +6,8 @@ description = "Detects scripting-policy violations and deprecated library usage"
 
 readme = "README.md"
 license = "Apache-2.0 OR MIT"
-repository = "https://github.com/KooshaPari/phenotype-tooling"
-homepage = "https://github.com/KooshaPari/phenotype-tooling"
+repository = "https://github.com/<REDACTED>/phenotype-tooling"
+homepage = "https://github.com/<REDACTED>/phenotype-tooling"
 keywords = ["phenotype", "tooling", "cli"]
 categories = ["command-line-utilities"]
 [[bin]]

@@ -3,7 +3,7 @@
 set -euo pipefail
 
 PLIST="com.pheno.benchmark.every10m.plist"
-SRC="/Users/kooshapari/CodeProjects/Phenotype/pheno-harness/scripts/cron/$PLIST"
+SRC="/Users/<REDACTED>/CodeProjects/Phenotype/pheno-harness/scripts/cron/$PLIST"
 DST="$HOME/Library/LaunchAgents/$PLIST"
 
 cp "$SRC" "$DST"

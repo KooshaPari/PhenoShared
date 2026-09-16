@@ -14,7 +14,7 @@
 |---|---|---|---|---|---|---|---|---|---|
 | 1 | `pheno-errors` | ✓ `pheno-errors/Cargo.toml:1` | ✓ `pheno-errors/deny.toml:1` | partial (no `db-path`, no `db-urls`, no `yanked`) | ✓ version=2, 19 licenses, confidence=0.8 | ✓ `deny=[]` (empty), `wildcards=deny`, `multiple-versions=warn` | ✓ `allow-registry`, `unknown-git=deny`, `unknown-registry=deny` | ✓ `pheno-errors/.github/workflows/cargo-deny.yml:1` (weekly cron, PR, push) | **4/5** |
 | 2 | `pheno-otel` | ✓ `pheno-otel/Cargo.toml:1` | ✓ `pheno-otel/deny.toml:1` | ✓ `db-path`, `db-urls`, `yanked=warn` | ✓ version=2, 13 licenses, confidence=0.8, `exceptions=[]` | ✓ **2 concrete deny entries** (openssl<0.10.70, chrono<0.4.31) + `allow=[]`, `skip=[]`, `skip-tree=[]` | ✓ `allow-registry`, `allow-git` (commented for KP mirror) | ✓ `pheno-otel/.github/workflows/deny.yml:1` (daily cron, `--all-features check`) | **5/5** |
-| 3 | `pheno-port-adapter` | ✓ `pheno-port-adapter/Cargo.toml:1` | ✓ `pheno-port-adapter/deny.toml:1` | ✓ most rigorous: `vulnerability=deny`, `unmaintained=warn`, `notice=warn`, `unsound=deny`, `yanked=deny` + `db-path`, `db-urls` | ✓ `unlicensed=deny`, `allow-osi-freedoms=true`, `copyleft=deny`, `default=deny`, 10 licenses + `[[licenses.clarify]]` block | ✓ `deny=[]` empty but bans coverage via sources `allow-org={github=[KooshaPari]}` | ✓ `unknown-registry=deny`, `unknown-git=deny`, **`allow-org`**, `allow-git=[]` | ✓ `pheno-port-adapter/.github/workflows/audit.yml:21` (cargo deny --all-features check) | **5/5** |
+| 3 | `pheno-port-adapter` | ✓ `pheno-port-adapter/Cargo.toml:1` | ✓ `pheno-port-adapter/deny.toml:1` | ✓ most rigorous: `vulnerability=deny`, `unmaintained=warn`, `notice=warn`, `unsound=deny`, `yanked=deny` + `db-path`, `db-urls` | ✓ `unlicensed=deny`, `allow-osi-freedoms=true`, `copyleft=deny`, `default=deny`, 10 licenses + `[[licenses.clarify]]` block | ✓ `deny=[]` empty but bans coverage via sources `allow-org={github=[<REDACTED>]}` | ✓ `unknown-registry=deny`, `unknown-git=deny`, **`allow-org`**, `allow-git=[]` | ✓ `pheno-port-adapter/.github/workflows/audit.yml:21` (cargo deny --all-features check) | **5/5** |
 | 4 | `pheno-tracing` | ✓ `pheno-tracing/Cargo.toml:1` | ✓ `pheno-tracing/deny.toml:1` | partial (no `db-path`, no `db-urls`; only `yanked=deny` + `version=2`) | ✓ version=2, 15 licenses, confidence=0.8 | ✓ `multiple-versions=warn`, `wildcards=deny`, `highlight=all` (commented) | ✓ `allow-registry`, `unknown-git=deny`, `unknown-registry=deny`, `allow-git=[]` | ✓ `pheno-tracing/.github/workflows/ci.yml:57` (`cargo deny check`) | **4/5** |
 | 5 | `pheno-config` | ✓ `pheno-config/Cargo.toml:1` | **✗ none** | — | — | — | — | **✗ no `.github/workflows/`** | **0/5** |
 | 6 | `pheno-context` | ✓ `pheno-context/Cargo.toml:1` | **✗ none** | — | — | — | — | **✗ no `.github/workflows/`** | **0/5** |
@@ -251,13 +251,13 @@ skip = []
 skip-tree = []
 
 # ─── Sources ────────────────────────────────────────────────────────────────
-# crates.io + the KooshaPari organization allowlist (mirrors pheno-port-adapter).
+# crates.io + the <REDACTED> organization allowlist (mirrors pheno-port-adapter).
 [sources]
 unknown-registry = "deny"
 unknown-git = "deny"
 allow-registry = ["https://github.com/rust-lang/crates.io-index"]
 allow-git = []
-allow-org = { github = ["KooshaPari"] }
+allow-org = { github = ["<REDACTED>"] }
 
 # ─── SPDX ──────────────────────────────────────────────────────────────────
 # Use SPDX expressions throughout (cargo-deny v0.14+).

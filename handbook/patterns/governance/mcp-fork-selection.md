@@ -6,12 +6,12 @@
 
 Before the first edit in an MCP session, read in order:
 
-1. [ADR-017: MCP Polyrepo Boundaries](https://github.com/KooshaPari/PhenoSpecs/blob/main/adrs/017-mcp-polyrepo-boundaries.md)
-2. [PhenoMCPServers `catalog/registry.yaml`](https://github.com/KooshaPari/PhenoMCPServers/blob/main/catalog/registry.yaml)
+1. [ADR-017: MCP Polyrepo Boundaries](https://github.com/<REDACTED>/PhenoSpecs/blob/main/adrs/017-mcp-polyrepo-boundaries.md)
+2. [PhenoMCPServers `catalog/registry.yaml`](https://github.com/<REDACTED>/PhenoMCPServers/blob/main/catalog/registry.yaml)
 3. Target repo `PHENO.md` + `FORK-NOTES.md`
-4. [ADR-018: Agent Session Zero-Loop SSOT](https://github.com/KooshaPari/PhenoSpecs/blob/main/adrs/018-agent-session-zero-loop-ssot.md) — skills and dogfood ritual
+4. [ADR-018: Agent Session Zero-Loop SSOT](https://github.com/<REDACTED>/PhenoSpecs/blob/main/adrs/018-agent-session-zero-loop-ssot.md) — skills and dogfood ritual
 
-Agent skills (PhenoMCPServers): [`mcp-boundary-guard`](https://github.com/KooshaPari/PhenoMCPServers/blob/main/skills/mcp-boundary-guard/SKILL.md), [`github-fork-policy`](https://github.com/KooshaPari/PhenoMCPServers/blob/main/skills/github-fork-policy/SKILL.md), [`language-tier-picker`](https://github.com/KooshaPari/PhenoMCPServers/tree/main/skills), [`substrate-vs-servers`](https://github.com/KooshaPari/PhenoMCPServers/tree/main/skills).
+Agent skills (PhenoMCPServers): [`mcp-boundary-guard`](https://github.com/<REDACTED>/PhenoMCPServers/blob/main/skills/mcp-boundary-guard/SKILL.md), [`github-fork-policy`](https://github.com/<REDACTED>/PhenoMCPServers/blob/main/skills/github-fork-policy/SKILL.md), [`language-tier-picker`](https://github.com/<REDACTED>/PhenoMCPServers/tree/main/skills), [`substrate-vs-servers`](https://github.com/<REDACTED>/PhenoMCPServers/tree/main/skills).
 
 ## Decision tree
 
@@ -38,10 +38,10 @@ What are you building or changing?
 
 | Need | Phenotype repo | Upstream parent | Layer |
 |------|----------------|-----------------|-------|
-| fastmcp ergonomics (macros, server builder) | [PhenoFastMCP-rust](https://github.com/KooshaPari/PhenoFastMCP-rust) | `Dicklesworthstone/fastmcp_rust` | Framework |
-| Official rmcp / spec SDK | [PhenoRMCP](https://github.com/KooshaPari/PhenoRMCP) | `modelcontextprotocol/rust-sdk` | Spec |
+| fastmcp ergonomics (macros, server builder) | [PhenoFastMCP-rust](https://github.com/<REDACTED>/PhenoFastMCP-rust) | `Dicklesworthstone/fastmcp_rust` | Framework |
+| Official rmcp / spec SDK | [PhenoRMCP](https://github.com/<REDACTED>/PhenoRMCP) | `modelcontextprotocol/rust-sdk` | Spec |
 
-**Never** fork `modelcontextprotocol/rust-sdk` into a repo named PhenoFastMCP-rust. Session `40d15363` required a full re-parent because of this confusion — see [ADR-018 Appendix A](https://github.com/KooshaPari/PhenoSpecs/blob/main/adrs/018-agent-session-zero-loop-ssot.md).
+**Never** fork `modelcontextprotocol/rust-sdk` into a repo named PhenoFastMCP-rust. Session `40d15363` required a full re-parent because of this confusion — see [ADR-018 Appendix A](https://github.com/<REDACTED>/PhenoSpecs/blob/main/adrs/018-agent-session-zero-loop-ssot.md).
 
 ### Framework fork parents (normative)
 
@@ -52,7 +52,7 @@ What are you building or changing?
 | PhenoFastMCP-rust | Dicklesworthstone/fastmcp_rust | 0 |
 | PhenoRMCP | modelcontextprotocol/rust-sdk | 0 |
 
-Verify `fork: true` and parent after every fork — see [github-fork-policy skill](https://github.com/KooshaPari/PhenoMCPServers/blob/main/skills/github-fork-policy/SKILL.md) and [mirror-to-empty-repo anti-pattern](../../anti-patterns/mirror-to-empty-repo.md).
+Verify `fork: true` and parent after every fork — see [github-fork-policy skill](https://github.com/<REDACTED>/PhenoMCPServers/blob/main/skills/github-fork-policy/SKILL.md) and [mirror-to-empty-repo anti-pattern](../../anti-patterns/mirror-to-empty-repo.md).
 
 ## Do / Don't
 
@@ -61,7 +61,7 @@ Verify `fork: true` and parent after every fork — see [github-fork-policy skil
 - **DO** place deployable servers in PhenoMCPServers, not inside framework fork repos.
 - **DON'T** create language-bucket SDK repos — see [language-bucket-sdk anti-pattern](../../anti-patterns/language-bucket-sdk.md).
 - **DON'T** mirror-push into an empty GitHub repo instead of forking.
-- **DON'T** host protocol core in Python/TS when a tier-0 Rust/Zig lane exists — see [LANGUAGE-TIERS-AND-ROLES](https://github.com/KooshaPari/PhenoMCPServers/blob/main/docs/LANGUAGE-TIERS-AND-ROLES.md).
+- **DON'T** host protocol core in Python/TS when a tier-0 Rust/Zig lane exists — see [LANGUAGE-TIERS-AND-ROLES](https://github.com/<REDACTED>/PhenoMCPServers/blob/main/docs/LANGUAGE-TIERS-AND-ROLES.md).
 
 ## Why
 
@@ -69,8 +69,8 @@ Three layers (framework / implementations / runtime) plus a separate spec SDK fo
 
 ## Related
 
-- [ADR-017](https://github.com/KooshaPari/PhenoSpecs/blob/main/adrs/017-mcp-polyrepo-boundaries.md) — polyrepo boundaries
-- [ADR-018](https://github.com/KooshaPari/PhenoSpecs/blob/main/adrs/018-agent-session-zero-loop-ssot.md) — zero-loop pre-flight and skills
-- [PhenoMCPServers DOGFOOD](https://github.com/KooshaPari/PhenoMCPServers/blob/main/docs/DOGFOOD.md) — session ritual
+- [ADR-017](https://github.com/<REDACTED>/PhenoSpecs/blob/main/adrs/017-mcp-polyrepo-boundaries.md) — polyrepo boundaries
+- [ADR-018](https://github.com/<REDACTED>/PhenoSpecs/blob/main/adrs/018-agent-session-zero-loop-ssot.md) — zero-loop pre-flight and skills
+- [PhenoMCPServers DOGFOOD](https://github.com/<REDACTED>/PhenoMCPServers/blob/main/docs/DOGFOOD.md) — session ritual
 - [language-bucket-sdk anti-pattern](../../anti-patterns/language-bucket-sdk.md)
 - [mirror-to-empty-repo anti-pattern](../../anti-patterns/mirror-to-empty-repo.md)

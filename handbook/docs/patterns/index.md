@@ -91,4 +91,4 @@ Patterns should follow the [kitty-spec format](../../kitty-specs/) from PhenoSpe
 
 ---
 
-*Part of the [Phenotype Registry System](https://github.com/KooshaPari/phenotype-registry)*
+*Part of the [Phenotype Registry System](https://github.com/<REDACTED>/phenotype-registry)*

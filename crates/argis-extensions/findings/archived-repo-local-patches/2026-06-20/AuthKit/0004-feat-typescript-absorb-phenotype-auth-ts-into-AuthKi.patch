@@ -1,5 +1,5 @@
 From f3c2a3813e0695ed4c2b96897ba21525fb060a7b Mon Sep 17 00:00:00 2001
-From: KooshaPari <42529354+KooshaPari@users.noreply.github.com>
+From: <REDACTED> <42529354+<REDACTED>@users.noreply.github.com>
 Date: Thu, 18 Jun 2026 02:02:41 -0700
 Subject: [PATCH 4/4] feat(typescript): absorb @phenotype/auth-ts into AuthKit
  (ADR-022) (#120)
@@ -7,8 +7,8 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Source: KooshaPari/phenotype-auth-ts (ARCHIVED.md target = libs/auth-ts)
-Target: KooshaPari/AuthKit/typescript/packages/auth-ts/ (existing npm
+Source: <REDACTED>/phenotype-auth-ts (ARCHIVED.md target = libs/auth-ts)
+Target: <REDACTED>/AuthKit/typescript/packages/auth-ts/ (existing npm
 workspace, workspaces: ["packages/*"] — auth-ts becomes the second package
 alongside the polyglot SDK).
 
@@ -31,9 +31,9 @@ archived after this PR merges (gh token lacks delete_repo scope; the
 4 manual `gh repo delete` commands are documented in the notes file).
 
 Refs: ADR-022 (config consolidation), ADR-023 (substrate placement),
-findings/2026-06-17-L5-104-dmouse92-to-kooshapari.md (migration matrix).
+findings/2026-06-17-L5-104-dmouse92-to-<REDACTED>.md (migration matrix).
 
-Co-authored-by: KooshaPari <kooshapari@local>
+Co-authored-by: <REDACTED> <<REDACTED>@local>
 ---
  typescript/packages/auth-ts/.editorconfig     |  15 +
  typescript/packages/auth-ts/.gitignore        |  44 +++
@@ -147,7 +147,7 @@ index 0000000..bea70b7
 +++ b/typescript/packages/auth-ts/.gitignore
 @@ -0,0 +1,44 @@
 +# Phenotype-org standard .gitignore — Node
-+# Source: https://github.com/KooshaPari/phenotype-tooling/blob/main/templates/gitignore-node
++# Source: https://github.com/<REDACTED>/phenotype-tooling/blob/main/templates/gitignore-node
 +
 +node_modules/
 +dist/
@@ -372,7 +372,7 @@ index 0000000..5482b23
 +  - family-names: "Pari"
 +    given-names: "Koosha"
 +    affiliation: "Phenotype"
-+repository-code: "https://github.com/KooshaPari/phenotype-auth-ts"
++repository-code: "https://github.com/<REDACTED>/phenotype-auth-ts"
 +url: "https://phenotype.space"
 +license: "MIT OR Apache-2.0"
 diff --git a/typescript/packages/auth-ts/CODEOWNERS b/typescript/packages/auth-ts/CODEOWNERS
@@ -382,7 +382,7 @@ index 0000000..009b678
 +++ b/typescript/packages/auth-ts/CODEOWNERS
 @@ -0,0 +1,2 @@
 +# Catch-all
-+*       @KooshaPari
++*       @<REDACTED>
 diff --git a/typescript/packages/auth-ts/FUNCTIONAL_REQUIREMENTS.md b/typescript/packages/auth-ts/FUNCTIONAL_REQUIREMENTS.md
 new file mode 100644
 index 0000000..4a8d16f
@@ -438,7 +438,7 @@ index 0000000..b070f11
 +++ b/typescript/packages/auth-ts/FUNDING.yml
 @@ -0,0 +1,2 @@
 +# Funding configuration
-+github: KooshaPari
++github: <REDACTED>
 diff --git a/typescript/packages/auth-ts/LICENSE b/typescript/packages/auth-ts/LICENSE
 new file mode 100644
 index 0000000..86e8df2
@@ -526,9 +526,9 @@ index 0000000..337f73a
 +<!-- Slop issues are expected and intentionally present as part of an HITL-less -->
 +<!-- /minimized AI-DD metaproject of learning, refining, and building brute-force -->
 +<!-- training for both agents and the human operator. -->
-+![Downloads](https://img.shields.io/github/downloads/KooshaPari/phenotype-auth-ts/total?style=flat-square&label=downloads&color=blue)
-+![GitHub release](https://img.shields.io/github/v/release/KooshaPari/phenotype-auth-ts?style=flat-square&label=release)
-+![License](https://img.shields.io/github/license/KooshaPari/phenotype-auth-ts?style=flat-square)
++![Downloads](https://img.shields.io/github/downloads/<REDACTED>/phenotype-auth-ts/total?style=flat-square&label=downloads&color=blue)
++![GitHub release](https://img.shields.io/github/v/release/<REDACTED>/phenotype-auth-ts?style=flat-square&label=release)
++![License](https://img.shields.io/github/license/<REDACTED>/phenotype-auth-ts?style=flat-square)
 +![AI-Slop](https://img.shields.io/badge/AI--DD-Slop%20Expected-orange?style=flat-square)
 +![AI-Only-Maintained](https://img.shields.io/badge/Planned%20%26%20Maintained%20by-AI%20Agents%20Only-red?style=flat-square)
 +![HITL-less](https://img.shields.io/badge/HITL--less%20AI--DD-metaproject-yellow?style=flat-square)
@@ -1057,7 +1057,7 @@ index 0000000..e82e267
 @@ -0,0 +1,6 @@
 +# Iconography Standard
 +
-+Implements the [phenotype-infra iconography standard](https://github.com/kooshapari/phenotype-infra/blob/main/docs/governance/iconography-standard.md).
++Implements the [phenotype-infra iconography standard](https://github.com/<REDACTED>/phenotype-infra/blob/main/docs/governance/iconography-standard.md).
 +
 +Three styles: Fluent (stroke), Material (filled+outlined), Liquid Glass (blur).
 +All icons: 24×24 SVG, `currentColor`, `role="img"`, `aria-label`.
@@ -1232,7 +1232,7 @@ index 0000000..fa1f342
 +  },
 +  "devDependencies": {
 +    "mermaid": "^11.15.0",
-+    "phenotype-ts-utils": "github:KooshaPari/phenotype-ts-utils#v0.1.0",
++    "phenotype-ts-utils": "github:<REDACTED>/phenotype-ts-utils#v0.1.0",
 +    "typescript": "^6.0.3",
 +    "vitepress": "^1.6.4",
 +    "vitepress-plugin-mermaid": "^2.0.17",
@@ -1260,8 +1260,8 @@ index 0000000..1495e3e
 --- /dev/null
 +++ b/typescript/packages/auth-ts/sonar-project.properties
 @@ -0,0 +1,2 @@
-+sonar.organization=kooshapari
-+sonar.projectKey=KooshaPari_phenotype-auth-ts
++sonar.organization=<REDACTED>
++sonar.projectKey=<REDACTED>_phenotype-auth-ts
 diff --git a/typescript/packages/auth-ts/src/adapters/jwt-provider.ts b/typescript/packages/auth-ts/src/adapters/jwt-provider.ts
 new file mode 100644
 index 0000000..9e805db
@@ -1752,7 +1752,7 @@ index 0000000..0aa6972
 + * the real value is in (a) the dep-resolves-cleanly guarantee and
 + * (b) showing other repos that the integration is straightforward.
 + *
-+ * See https://github.com/KooshaPari/phenotype-ts-utils/releases/tag/v0.1.0
++ * See https://github.com/<REDACTED>/phenotype-ts-utils/releases/tag/v0.1.0
 + */
 +import { describe, expect, it } from 'vitest';
 +import {

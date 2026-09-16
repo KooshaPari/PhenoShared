@@ -1,10 +1,10 @@
 # PhenoLang branch index — gw-phenolang triage (2026-06-18)
 
-**Source:** `KooshaPari/PhenoLang` remote heads (28 branches).  
+**Source:** `<REDACTED>/PhenoLang` remote heads (28 branches).  
 **Target:** `phenoUtils` extraction index per Wave H charter H8.  
 **Disposition row:** `gw-phenolang` — ABSORB → phenoUtils, `fsm: done` (2026-06-18).
 
-**Canonical index:** [phenoUtils/docs/phenolang-monorepo-index.md](https://github.com/KooshaPari/phenoUtils/blob/main/docs/phenolang-monorepo-index.md) (phenoUtils#63, phenoUtils#66).
+**Canonical index:** [phenoUtils/docs/phenolang-monorepo-index.md](https://github.com/<REDACTED>/phenoUtils/blob/main/docs/phenolang-monorepo-index.md) (phenoUtils#63, phenoUtils#66).
 
 ## Summary
 

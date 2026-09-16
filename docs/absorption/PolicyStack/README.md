@@ -4,8 +4,8 @@
 
 | Field | Value |
 |-------|-------|
-| Source repo | `KooshaPari/PolicyStack` |
-| Target repo | `KooshaPari/phenotype-python-sdk` |
+| Source repo | `<REDACTED>/PolicyStack` |
+| Target repo | `<REDACTED>/phenotype-python-sdk` |
 | Target path | `packages/policystack/` |
 | Absorbed date | 2026-07-17 |
 | Absorbed by | forge agent (batch absorption) |

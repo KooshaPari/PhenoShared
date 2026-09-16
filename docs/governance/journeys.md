@@ -22,7 +22,7 @@ Use the hwLedger pattern as the model:
 - `cli-journeys/keyframes/<journey>/frame-###.png` for frame assets
 
 The full standard lives in
-[phenotype-infra/docs/governance/journey-traceability-standard.md](https://github.com/kooshapari/phenotype-infra/blob/main/docs/governance/journey-traceability-standard.md).
+[phenotype-infra/docs/governance/journey-traceability-standard.md](https://github.com/<REDACTED>/phenotype-infra/blob/main/docs/governance/journey-traceability-standard.md).
 
 ## Adoption Order
 

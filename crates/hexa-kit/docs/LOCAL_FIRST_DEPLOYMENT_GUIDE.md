@@ -11,7 +11,7 @@
 brew install process-compose
 
 # 2. Clone/navigate to repo
-cd /Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus
 
 # 3. Create data directories
 mkdir -p data/{nats,dragonfly,neo4j,minio}

@@ -253,10 +253,10 @@ SENTRY_ENVIRONMENT=development
 
 ```
 Sentry: https://sentry.io/
-GitHub Secrets: https://github.com/organizations/KooshaPari/settings/secrets/actions
-AgilePlus: https://github.com/KooshaPari/AgilePlus
-phenotype-infrakit: https://github.com/KooshaPari/phenotype-infrakit
-heliosCLI: https://github.com/KooshaPari/heliosCLI
+GitHub Secrets: https://github.com/organizations/<REDACTED>/settings/secrets/actions
+AgilePlus: https://github.com/<REDACTED>/AgilePlus
+phenotype-infrakit: https://github.com/<REDACTED>/phenotype-infrakit
+heliosCLI: https://github.com/<REDACTED>/heliosCLI
 ```
 
 ---
@@ -338,7 +338,7 @@ These documents should be updated when:
 ### Location
 
 ```
-/Users/kooshapari/CodeProjects/Phenotype/repos/docs/guides/
+/Users/<REDACTED>/CodeProjects/Phenotype/repos/docs/guides/
 ```
 
 ### Maintenance

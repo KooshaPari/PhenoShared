@@ -12,11 +12,11 @@ set -euo pipefail
 
 HOST="${HOST:-0.0.0.0}"
 PORT="${PORT:-30100}"
-MODEL_PATH="${MODEL_PATH:-/home/kooshapari/models/Qwen3.5-9B}"
-VLLM_PY="${VLLM_PY:-/home/kooshapari/mambaforge/envs/vllm-ampere/bin/python}"
+MODEL_PATH="${MODEL_PATH:-/home/<REDACTED>/models/Qwen3.5-9B}"
+VLLM_PY="${VLLM_PY:-/home/<REDACTED>/mambaforge/envs/vllm-ampere/bin/python}"
 
 export CUDA_VISIBLE_DEVICES="${CUDA_VISIBLE_DEVICES:-0}"
-export HF_HOME="${HF_HOME:-/home/kooshapari/.cache/huggingface}"
+export HF_HOME="${HF_HOME:-/home/<REDACTED>/.cache/huggingface}"
 export LD_LIBRARY_PATH="/usr/lib/wsl/lib:/usr/local/cuda-13.3/lib64:${LD_LIBRARY_PATH:-}"
 
 exec "$VLLM_PY" -m vllm.entrypoints.openai.api_server \

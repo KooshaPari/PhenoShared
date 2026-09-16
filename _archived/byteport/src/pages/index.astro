@@ -7,7 +7,7 @@ import readmeSnapshot from "../data/readme.html?raw";
 // limit), but ALWAYS fall back to a committed snapshot so the page never
 // ships with "README unavailable". Refresh snapshots locally with
 // `bun run data:refresh`.
-const REPO = "KooshaPari/BytePort";
+const REPO = "<REDACTED>/BytePort";
 const GITHUB_TOKEN = import.meta.env.GITHUB_TOKEN;
 
 async function gh<T = unknown>(
@@ -64,7 +64,7 @@ const releases: any[] = (await gh<any[]>(`repos/${REPO}/releases?per_page=5`)) ?
   <body class="min-h-screen">
     <header class="max-w-4xl mx-auto px-4 sm:px-6 pt-10 sm:pt-12 mb-0">
       <div class="mono text-xs text-[var(--muted)] mb-2">
-        <a href="https://projects.kooshapari.com" class="hover:text-[var(--accent)]">phenotype</a>
+        <a href="https://projects.<REDACTED>.com" class="hover:text-[var(--accent)]">phenotype</a>
         <span class="mx-1">/</span>
         <span>byteport</span>
       </div>
@@ -119,7 +119,7 @@ const releases: any[] = (await gh<any[]>(`repos/${REPO}/releases?per_page=5`)) ?
     </main>
 
     <footer class="max-w-4xl mx-auto px-4 sm:px-6 mt-16 pt-6 border-t text-xs text-[var(--muted)] mono pb-10" style="border-color: var(--border);">
-      byteport.kooshapari.com · auto-built from <a href={`https://github.com/${REPO}`} class="underline hover:text-[var(--accent)]">{REPO}</a> · part of <a href="https://projects.kooshapari.com" class="underline hover:text-[var(--accent)]">projects.kooshapari.com</a>
+      byteport.<REDACTED>.com · auto-built from <a href={`https://github.com/${REPO}`} class="underline hover:text-[var(--accent)]">{REPO}</a> · part of <a href="https://projects.<REDACTED>.com" class="underline hover:text-[var(--accent)]">projects.<REDACTED>.com</a>
     </footer>
 
     <style is:global>

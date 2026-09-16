@@ -10,10 +10,10 @@
 
 | Repo | Role | PR | Change |
 |------|------|-----|--------|
-| phenotype-journeys | test | [#111](https://github.com/KooshaPari/phenotype-journeys/pull/111) | Genesis rollout |
-| Conft | config (TS) | [#93](https://github.com/KooshaPari/Conft/pull/93) | Genesis rollout |
-| phenotype-dep-guard | platform | [#51](https://github.com/KooshaPari/phenotype-dep-guard/pull/51) | Genesis rollout |
-| Pyron | infra | [#53](https://github.com/KooshaPari/Pyron/pull/53) | Pheno shelf lockstep — remove broken submodule members; git-pin domain repos |
+| phenotype-journeys | test | [#111](https://github.com/<REDACTED>/phenotype-journeys/pull/111) | Genesis rollout |
+| Conft | config (TS) | [#93](https://github.com/<REDACTED>/Conft/pull/93) | Genesis rollout |
+| phenotype-dep-guard | platform | [#51](https://github.com/<REDACTED>/phenotype-dep-guard/pull/51) | Genesis rollout |
+| Pyron | infra | [#53](https://github.com/<REDACTED>/Pyron/pull/53) | Pheno shelf lockstep — remove broken submodule members; git-pin domain repos |
 
 ## Pyron lockstep detail
 

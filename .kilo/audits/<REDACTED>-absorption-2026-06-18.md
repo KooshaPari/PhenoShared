@@ -1,4 +1,4 @@
-# KooshaPari Source-Repo Absorption & Deletion-Justification Audit
+# <REDACTED> Source-Repo Absorption & Deletion-Justification Audit
 
 **Audit date:** 2026-06-18
 **Auditor:** Kilo (cloud agent)
@@ -13,12 +13,12 @@
 
 | Source repo | Decision | Confidence | One-paragraph rationale |
 |---|---|---|---|
-| `KooshaPari/dagctl` | **DELETE_AFTER_PATCHES** | high | Source `README.md` says "SUPERSEDED — dagctl capabilities merged into phenodag"; `phenodag/docs/dagctl-merge-status.md` records `sd-dagctl-01..05` as Done; `phenodag/docs/adr/ADR-dag-superset-merge.md` (Accepted) confirms the union. Every meaningful dagctl capability (`internal/remoteclaim`, v3 commands, operational/meta/visualization/dedup commands, HTML template) is in `phenodag` `main` or queued for `v1.0.0-rc.1`. Only the GitHub archive action and final `v3.3.x` tag are open. |
-| `KooshaPari/kwality` | **DELETE_AFTER_PATCHES** | low | Repo is archived but carries the explicit `STRICTLY DO NOT DELETE NOR UNARCHIVE` user promise. Current tooling has no parity for LLM validation, DeepEval/Playwright/Neo4j stacks, multi-tenant Go validation server, or Rust runtime validator. The closest "better" target is `phenotype-tooling` `quality-gate` + `bench-guard` + `legacy-scan` + `fr-trace` (mostly stubs) and `TestingKit` Rust workspace (no LLM validation). The Go/Rust code, k8s manifests, monitor configs, ADRs, and supply-chain CI branches in `kwality` are not represented. Recommend extraction of branch-only ADRs/SBOM/SLSA into `phenotype-tooling` and moving the rest into an archive-only state, not deletion. |
-| `KooshaPari/phenotype-auth-ts` | **DELETE_AFTER_PATCHES** | medium | `ARCHIVED.md` states the source is migrated to `libs/auth-ts` as a neutral TS OAuth2/OIDC library, but no public `KooshaPari/libs` or `KooshaPari/auth-ts` repo exists (GitHub API 404). `AuthKit` is a pre-extraction staging repo that does **not** yet contain an auth SDK. The TS source is minimal (Token, Claims, ports, `MemoryTokenStore`, `PlaceholderJwtVerifier`); most README features (OAuth, OIDC, API key, WebAuthn, cross-runtime) are unimplemented. Vitest tests pass for what is implemented. Recommend extracting the working core into a new `phenotype-shared`/`phenoShared` TS package and archiving the source. |
-| `KooshaPari/dinoforge-packs` | **PRESERVE** | high | Packs are content artifacts (units, factions, buildings, doctrines, weapons, waves) for the active `Dino` DINOForge framework. `Dino` does not currently host a community packs folder. README explicitly says "inactive but still mutable" and "not archived". Manifest references asset paths that do not exist; `warfare-starwars` ids do not match actual YAML ids. Preservation as `Dino/community-packs/` subtree + a manifest-reconciliation PR is the safe action. |
-| `KooshaPari/Configra` | **NOT_FOUND** | high | Public GitHub returns 404 for both `KooshaPari/Configra` and `kooshapari/Configra`; `FocalPoint#130` confirms "Configra: confirmed phantom (404)". Out of scope for deletion-justification. Any remaining `Configra` work is covered by `Conft` and `phenoShared` config crates. |
-| `KooshaPari/Logify` | **NOT_FOUND** | high | Public GitHub returns 404 for `KooshaPari/Logify`; no relevant public repo exists. Out of scope; cannot recommend any action without a reachable source. |
+| `<REDACTED>/dagctl` | **DELETE_AFTER_PATCHES** | high | Source `README.md` says "SUPERSEDED — dagctl capabilities merged into phenodag"; `phenodag/docs/dagctl-merge-status.md` records `sd-dagctl-01..05` as Done; `phenodag/docs/adr/ADR-dag-superset-merge.md` (Accepted) confirms the union. Every meaningful dagctl capability (`internal/remoteclaim`, v3 commands, operational/meta/visualization/dedup commands, HTML template) is in `phenodag` `main` or queued for `v1.0.0-rc.1`. Only the GitHub archive action and final `v3.3.x` tag are open. |
+| `<REDACTED>/kwality` | **DELETE_AFTER_PATCHES** | low | Repo is archived but carries the explicit `STRICTLY DO NOT DELETE NOR UNARCHIVE` user promise. Current tooling has no parity for LLM validation, DeepEval/Playwright/Neo4j stacks, multi-tenant Go validation server, or Rust runtime validator. The closest "better" target is `phenotype-tooling` `quality-gate` + `bench-guard` + `legacy-scan` + `fr-trace` (mostly stubs) and `TestingKit` Rust workspace (no LLM validation). The Go/Rust code, k8s manifests, monitor configs, ADRs, and supply-chain CI branches in `kwality` are not represented. Recommend extraction of branch-only ADRs/SBOM/SLSA into `phenotype-tooling` and moving the rest into an archive-only state, not deletion. |
+| `<REDACTED>/phenotype-auth-ts` | **DELETE_AFTER_PATCHES** | medium | `ARCHIVED.md` states the source is migrated to `libs/auth-ts` as a neutral TS OAuth2/OIDC library, but no public `<REDACTED>/libs` or `<REDACTED>/auth-ts` repo exists (GitHub API 404). `AuthKit` is a pre-extraction staging repo that does **not** yet contain an auth SDK. The TS source is minimal (Token, Claims, ports, `MemoryTokenStore`, `PlaceholderJwtVerifier`); most README features (OAuth, OIDC, API key, WebAuthn, cross-runtime) are unimplemented. Vitest tests pass for what is implemented. Recommend extracting the working core into a new `phenotype-shared`/`phenoShared` TS package and archiving the source. |
+| `<REDACTED>/dinoforge-packs` | **PRESERVE** | high | Packs are content artifacts (units, factions, buildings, doctrines, weapons, waves) for the active `Dino` DINOForge framework. `Dino` does not currently host a community packs folder. README explicitly says "inactive but still mutable" and "not archived". Manifest references asset paths that do not exist; `warfare-starwars` ids do not match actual YAML ids. Preservation as `Dino/community-packs/` subtree + a manifest-reconciliation PR is the safe action. |
+| `<REDACTED>/Configra` | **NOT_FOUND** | high | Public GitHub returns 404 for both `<REDACTED>/Configra` and `<REDACTED>/Configra`; `FocalPoint#130` confirms "Configra: confirmed phantom (404)". Out of scope for deletion-justification. Any remaining `Configra` work is covered by `Conft` and `phenoShared` config crates. |
+| `<REDACTED>/Logify` | **NOT_FOUND** | high | Public GitHub returns 404 for `<REDACTED>/Logify`; no relevant public repo exists. Out of scope; cannot recommend any action without a reachable source. |
 
 **Overall recommendation:** `DELETE_AFTER_PATCHES` for `dagctl`, `kwality`, `phenotype-auth-ts`; `PRESERVE` (with merge action) for `dinoforge-packs`; `NOT_FOUND` (no action) for `Configra` and `Logify`.
 
@@ -26,14 +26,14 @@
 
 ## 2. SOURCE_INVENTORY
 
-### 2.1 `KooshaPari/dagctl`
+### 2.1 `<REDACTED>/dagctl`
 - **Default branch:** `main` @ `2c8ef50`; **tags:** `v3.3.0` @ `966159e`.
 - **Code:** 10 Go files in repo root (`dagctl.go`, `dagctl_v3_seed.go`, `dagctl_v3_extend2.go`, `dagctl_v3_extend3.go`, `dagctl_extras.go`, `dagctl_viz2.go`, `dagctl_dedup2.go`, `dagctl_meta2.go`, `dagctl_test2.go`, `dagctl_remote_claim.go`) + `internal/remoteclaim/{types,store,sqlite,local,github,flock}.go` + `dagctl_dag_template.html`.
 - **Tests:** `internal/remoteclaim/remoteclaim_test.go`. No CI workflows in repo.
 - **Docs:** `README.md` only (152 lines). No `docs/`, ADRs, or charters.
 - **Status:** Implemented CLI; `README.md` says "SUPERSEDED — dagctl capabilities merged into phenodag"; `extend3-v3` is defined in code but not wired into the command map.
 
-### 2.2 `KooshaPari/kwality`
+### 2.2 `<REDACTED>/kwality`
 - **Default branch:** `main` @ `7055f97`; **tags:** `v1.0.0` @ `a6072bb`. **Refs:** 31 branches.
 - **Code (Go):** `cmd/kwality/main.go`, `cmd/kwality-cli/main.go`, `internal/server/gin_server.go`, `internal/handlers/*`, `internal/database/database.go`, `internal/orchestrator/orchestrator.go`, `internal/validation/*`, `internal/engines/static_analysis.go`, `internal/config/config.go`.
 - **Code (Rust):** `engines/runtime-validator/{Cargo.toml, src/{lib,container,fuzzing,metrics,performance,security,validation}.rs}`.
@@ -44,7 +44,7 @@
 - **CI:** 9 workflows (CI, CI/CD, CI/CD production, trufflehog, quality-gate, doc-links, fr-coverage, legacy-tooling-gate, dependabot, release-drafter).
 - **Status:** Repo is archived; README carries `STRICTLY DO NOT DELETE NOR UNARCHIVE - Personal Project - LLM validation platform`. Default branch is Go/Rust; `v1.0.0` was JS/TS/Node (now deleted). Many docker-compose references to missing files; `auth.go` returns 501 on refresh; `runtime_validator_test.go` schema-mismatch fixes live on a non-default branch.
 
-### 2.3 `KooshaPari/phenotype-auth-ts`
+### 2.3 `<REDACTED>/phenotype-auth-ts`
 - **Default branch:** `main` @ `7b6b4a8`. **Refs:** 19 branches. **Tags:** none.
 - **Code (TS):** `src/domain/{token,claims,errors}.ts`, `src/ports/index.ts`, `src/adapters/{memory-token-store,jwt-provider}.ts`, `src/index.ts`. No `src/application/`, no `src/adapters/jwt/`, no `src/adapters/oauth/`, no `src/adapters/oidc/`, no `src/adapters/webauthn/`, no `src/adapters/apiKey/`.
 - **Tests:** `tests/core.test.ts`, `tests/token.contract.test.ts`, `tests/phenotype-ts-utils.test.ts` (33 passing).
@@ -52,7 +52,7 @@
 - **Manifests/CI:** `package.json`, `package-lock.json`, `tsconfig.json`, `vitest.config.ts`, `Taskfile.yml`, `renovate.json5`, `.nvmrc`; 9 CI workflows.
 - **Status:** `ARCHIVED.md` says migrated to `libs/auth-ts` as neutral `auth-ts` package. README and ADR promise OAuth2/OIDC/API key/WebAuthn/jose/cross-runtime, but the actual code is only Token/Claims/Ports/`PlaceholderJwtVerifier` (always rejects) + `MemoryTokenStore`. Docs usage example imports wrong path and wrong store method signature.
 
-### 2.4 `KooshaPari/dinoforge-packs`
+### 2.4 `<REDACTED>/dinoforge-packs`
 - **Default branch:** `main` @ `65573c7`. **Refs:** 21 branches. **Tags:** none.
 - **Content:** `example-balance/{pack.yaml, units/militia.yaml, factions/defenders.yaml, buildings/barracks.yaml, stats/melee-buff.yaml}` and `warfare-starwars/{pack.yaml, manifest.yaml, units/{clone-trooper,republic_units,cis_units}.yaml, factions/{republic,cis}.yaml, buildings/{republic_buildings,cis_buildings}.yaml, doctrines/{republic_doctrines,cis_doctrines}.yaml, weapons/blasters.yaml, waves/clone_wars_waves.yaml}`.
 - **Tests:** `tests/smoke_test.go`.
@@ -60,12 +60,12 @@
 - **CI:** 7 workflows; quality-gate/fr-coverage/doc-links are echo stubs.
 - **Status:** Inactive but not archived. `manifest.yaml` references `arc-trooper`, `at-te`, `clone-gunship`, `b1-battle-droid`, `b2-super-battle-droid`, `droideka`, `hailfire-droid` ids and `assets/textures/republic_icon.png`, `assets/textures/cis_icon.png`, `assets/audio/clone_wars_theme.ogg` that do not exist.
 
-### 2.5 `KooshaPari/Configra`
-- **Public GitHub API:** 404 (both `KooshaPari/Configra` and `kooshapari/Configra`).
+### 2.5 `<REDACTED>/Configra`
+- **Public GitHub API:** 404 (both `<REDACTED>/Configra` and `<REDACTED>/Configra`).
 - **`FocalPoint#130` evidence:** "Configra: confirmed phantom (404). `pheno-context` is request-context (not config), excluded."
 - **No branches, no tags, no code, no docs.**
 
-### 2.6 `KooshaPari/Logify`
+### 2.6 `<REDACTED>/Logify`
 - **Public GitHub API:** 404.
 - **No branches, no tags, no code, no docs.**
 
@@ -108,17 +108,17 @@
 
 | Target | Repo | Owns | Evidence |
 |---|---|---|---|
-| `phenodag` | `KooshaPari/phenodag` | Superset DAG CLI that absorbs `dagctl`; SQLite + modernc.org/sqlite, POSIX flock, `internal/remoteclaim`, v3 commands, 38+ commands, YAML presets, 5 presets. | `phenodag/README.md:1-141`, `phenodag/docs/adr/ADR-dag-superset-merge.md` (Accepted, "retire nothing"), `phenodag/docs/dagctl-merge-status.md` (sd-dagctl-01..05 Done, except `sd-dagctl-04` v1.0.0-rc.1 release and `sd-dagctl-05` GitHub archive). |
-| `phenotype-tooling` | `KooshaPari/phenotype-tooling` | Consolidated Rust workspace of CLIs: `quality-gate`, `bench-guard`, `fr-trace`, `legacy-scan`, `docs-health`, `dag-scheduler`, `acceptance-contract`, `agent-orchestrator`, `agent-forecast`, `temporal-grounding`, `worktree-manager`, `phenotype-resilience`, `phenotype-service-registry`, `phenotype-diff`, `sbom-gen`, `release-cut`, `fr-coverage`, `doc-link-check`, `commit-msg-check`, `audit-privacy`, `fuzz-setup`, `anthropic-usage-poll`. Most are stubs (TODO placeholders). | `phenotype-tooling/Cargo.toml:1-55`, `phenotype-tooling/crates/quality-gate/src/main.rs` (3 TODO lines), `phenotype-tooling/crates/fr-trace/src/main.rs` (4 TODO lines), `phenotype-tooling/crates/bench-guard/src/main.rs` (real impl + 9 tests). |
-| `TestingKit` | `KooshaPari/TestingKit` | Rust test-utilities workspace: `phenotype-testing`, `phenotype-mock`, `phenotype-test-fixtures`, `phenotype-test-infra`, `phenotype-compliance-scanner`, `phenotype-bdd`. Python submodules are empty. | `TestingKit/README.md:1-129`, `TestingKit/rust/phenotype-compliance-scanner/src/lib.rs`. |
-| `Benchora` | `KooshaPari/Benchora` | Rust benchmarking framework (`gauge`) — 30% pre-1.0 scaffold. | `Benchora/README.md:1-89`, `Benchora/SPEC.md`. |
-| `Tracera` | `KooshaPari/Tracera` | Agent-native requirements traceability (Go backend, Python matrix, router CRUD, scorer) with comprehensive Playwright/Go/Vitest/pytest validation pipeline. | `Tracera/.github/workflows/test-validation.yml:1-220+`, `Tracera/backend/tests/validation_test.go:1-220+`. |
-| `AuthKit` | `KooshaPari/AuthKit` | Pre-extraction staging repo: 5 Rust crates (`phenotype-bid`, `phenotype-content-hash`, `phenotype-contracts`, `phenotype-policy-engine`, `phenotype-security-aggregator`); SPEC/PRD describe OAuth2/OIDC/SAML/WebAuthn/RBAC/ABAC, but **no auth SDK code is checked in**. | `AuthKit/README.md:1-80`, `AuthKit/docs/SPEC.md:1-260+`. |
-| `phenoShared` | `KooshaPari/phenoShared` | Rust infrastructure toolkit: `phenotype-domain`, `phenotype-application`, `phenotype-port-interfaces`, `phenotype-contracts`, `phenotype-event-sourcing`, `phenotype-cache-adapter`, `phenotype-policy-engine`, `phenotype-state-machine`, **`phenotype-config-core`**, **`phenotype-config-loader`**, `phenotype-error-core`, `phenotype-health`, `phenotype-postgres-adapter`, `phenotype-redis-adapter`, `phenotype-http-adapter`, `phenotype-http-client-core`, `ffi_utils`. | `phenoShared/crates/phenotype-config-core/{Cargo.toml, src/lib.rs}`, `phenoShared/crates/phenotype-config-loader/{Cargo.toml, src/lib.rs}`. |
-| `Conft` | `KooshaPari/Conft` | Rust `configkit` at `rust/phenotype-config/` + TS `@phenotype/config-ts` at `typescript/packages/conft/` (layered config, file/env/CLI precedence, TOML/YAML/JSON/ENV, schema validation, hot reload, env profiles, secrets). README status: maintenance, work-state alpha. | `Conft/README.md:1-121`, `Conft/typescript/packages/conft/src/{index.ts, domain/config.ts, ports/config-source.ts, adapters/{file-adapter,env-adapter}.ts}`. |
-| `Dino` | `KooshaPari/Dino` | C# DINOForge general-purpose mod platform (Unity/BepInEx Mono CLR), registries, schemas, pack compiler, MCP server. Does not currently host a community packs folder. | `Dino/README.md`, `Dino/schemas/pack-manifest.schema.json`, `Dino/schemas/unit.schema.yaml`. |
-| `phenotype-registry` | `KooshaPari/phenotype-registry` | Ecosystem index (`ECOSYSTEM_MAP.md`) + PhenoSpecs/PhenoHandbook/phenotype-org-governance spine links. PhenoSpecs `registry.yaml` is stale (last updated 2026-04-04). | `phenotype-registry/README.md` (GitHub). |
-| `libs/auth-ts` (implied target from `ARCHIVED.md`) | 404 | Public `KooshaPari/libs` and `KooshaPari/auth-ts` repos do not exist on GitHub. | GitHub API 404. |
+| `phenodag` | `<REDACTED>/phenodag` | Superset DAG CLI that absorbs `dagctl`; SQLite + modernc.org/sqlite, POSIX flock, `internal/remoteclaim`, v3 commands, 38+ commands, YAML presets, 5 presets. | `phenodag/README.md:1-141`, `phenodag/docs/adr/ADR-dag-superset-merge.md` (Accepted, "retire nothing"), `phenodag/docs/dagctl-merge-status.md` (sd-dagctl-01..05 Done, except `sd-dagctl-04` v1.0.0-rc.1 release and `sd-dagctl-05` GitHub archive). |
+| `phenotype-tooling` | `<REDACTED>/phenotype-tooling` | Consolidated Rust workspace of CLIs: `quality-gate`, `bench-guard`, `fr-trace`, `legacy-scan`, `docs-health`, `dag-scheduler`, `acceptance-contract`, `agent-orchestrator`, `agent-forecast`, `temporal-grounding`, `worktree-manager`, `phenotype-resilience`, `phenotype-service-registry`, `phenotype-diff`, `sbom-gen`, `release-cut`, `fr-coverage`, `doc-link-check`, `commit-msg-check`, `audit-privacy`, `fuzz-setup`, `anthropic-usage-poll`. Most are stubs (TODO placeholders). | `phenotype-tooling/Cargo.toml:1-55`, `phenotype-tooling/crates/quality-gate/src/main.rs` (3 TODO lines), `phenotype-tooling/crates/fr-trace/src/main.rs` (4 TODO lines), `phenotype-tooling/crates/bench-guard/src/main.rs` (real impl + 9 tests). |
+| `TestingKit` | `<REDACTED>/TestingKit` | Rust test-utilities workspace: `phenotype-testing`, `phenotype-mock`, `phenotype-test-fixtures`, `phenotype-test-infra`, `phenotype-compliance-scanner`, `phenotype-bdd`. Python submodules are empty. | `TestingKit/README.md:1-129`, `TestingKit/rust/phenotype-compliance-scanner/src/lib.rs`. |
+| `Benchora` | `<REDACTED>/Benchora` | Rust benchmarking framework (`gauge`) — 30% pre-1.0 scaffold. | `Benchora/README.md:1-89`, `Benchora/SPEC.md`. |
+| `Tracera` | `<REDACTED>/Tracera` | Agent-native requirements traceability (Go backend, Python matrix, router CRUD, scorer) with comprehensive Playwright/Go/Vitest/pytest validation pipeline. | `Tracera/.github/workflows/test-validation.yml:1-220+`, `Tracera/backend/tests/validation_test.go:1-220+`. |
+| `AuthKit` | `<REDACTED>/AuthKit` | Pre-extraction staging repo: 5 Rust crates (`phenotype-bid`, `phenotype-content-hash`, `phenotype-contracts`, `phenotype-policy-engine`, `phenotype-security-aggregator`); SPEC/PRD describe OAuth2/OIDC/SAML/WebAuthn/RBAC/ABAC, but **no auth SDK code is checked in**. | `AuthKit/README.md:1-80`, `AuthKit/docs/SPEC.md:1-260+`. |
+| `phenoShared` | `<REDACTED>/phenoShared` | Rust infrastructure toolkit: `phenotype-domain`, `phenotype-application`, `phenotype-port-interfaces`, `phenotype-contracts`, `phenotype-event-sourcing`, `phenotype-cache-adapter`, `phenotype-policy-engine`, `phenotype-state-machine`, **`phenotype-config-core`**, **`phenotype-config-loader`**, `phenotype-error-core`, `phenotype-health`, `phenotype-postgres-adapter`, `phenotype-redis-adapter`, `phenotype-http-adapter`, `phenotype-http-client-core`, `ffi_utils`. | `phenoShared/crates/phenotype-config-core/{Cargo.toml, src/lib.rs}`, `phenoShared/crates/phenotype-config-loader/{Cargo.toml, src/lib.rs}`. |
+| `Conft` | `<REDACTED>/Conft` | Rust `configkit` at `rust/phenotype-config/` + TS `@phenotype/config-ts` at `typescript/packages/conft/` (layered config, file/env/CLI precedence, TOML/YAML/JSON/ENV, schema validation, hot reload, env profiles, secrets). README status: maintenance, work-state alpha. | `Conft/README.md:1-121`, `Conft/typescript/packages/conft/src/{index.ts, domain/config.ts, ports/config-source.ts, adapters/{file-adapter,env-adapter}.ts}`. |
+| `Dino` | `<REDACTED>/Dino` | C# DINOForge general-purpose mod platform (Unity/BepInEx Mono CLR), registries, schemas, pack compiler, MCP server. Does not currently host a community packs folder. | `Dino/README.md`, `Dino/schemas/pack-manifest.schema.json`, `Dino/schemas/unit.schema.yaml`. |
+| `phenotype-registry` | `<REDACTED>/phenotype-registry` | Ecosystem index (`ECOSYSTEM_MAP.md`) + PhenoSpecs/PhenoHandbook/phenotype-org-governance spine links. PhenoSpecs `registry.yaml` is stale (last updated 2026-04-04). | `phenotype-registry/README.md` (GitHub). |
+| `libs/auth-ts` (implied target from `ARCHIVED.md`) | 404 | Public `<REDACTED>/libs` and `<REDACTED>/auth-ts` repos do not exist on GitHub. | GitHub API 404. |
 
 ---
 
@@ -173,9 +173,9 @@
 | kwality E2E workflow (branch `chore/e2e-2026-06-16`) | `.github/workflows/e2e.yml`, `tests/e2e_smoke_test.go` | CI/Tests | implemented | `phenotype-tooling` | absent | BRANCH_ONLY | Minimal Go E2E smoke. | low | port to `phenotype-tooling` if it adopts Go tests; otherwise drop. |
 | kwality Dependabot branches | 8 branches | CI | superseded | n/a | n/a | INTENTIONALLY_DEPRECATED | `main` already has equivalent updates. | low | close. |
 | kwality `cursor/committed-debugging-notes-cleanup-2d7b` | branch tip | Cleanup | implemented | n/a | n/a | INTENTIONALLY_DEPRECATED | Cleanup branch for accidentally committed notes. | low | close. |
-| phenotype-auth-ts `ARCHIVED.md` | `ARCHIVED.md` | Docs | implemented | `libs/auth-ts` (claimed target) | not found on GitHub | NOT_COVERED | Claimed target does not exist. | medium | create `KooshaPari/libs/auth-ts` or land the auth core in `phenoShared` TypeScript surface. |
+| phenotype-auth-ts `ARCHIVED.md` | `ARCHIVED.md` | Docs | implemented | `libs/auth-ts` (claimed target) | not found on GitHub | NOT_COVERED | Claimed target does not exist. | medium | create `<REDACTED>/libs/auth-ts` or land the auth core in `phenoShared` TypeScript surface. |
 | phenotype-auth-ts `README.md` (OAuth2/OIDC/WebAuthn/cross-runtime claims) | `README.md:1-260+` | Docs | docs-only | n/a | n/a | NOT_COVERED | The README describes features the code does not implement. | medium | rewrite README to match actual code, or implement the missing features. |
-| `src/domain/token.ts` (`Token`, `TokenRequest`, `TokenResponse`, `TokenError`) | `src/domain/token.ts:1-...` | Code | implemented | none (TS target) | n/a | NOT_COVERED | AuthKit is Rust-only and pre-extraction; `phenoShared` is Rust; no `libs/auth-ts` public repo. | medium | port to `phenoShared/crates/phenotype-auth` (Rust) or to a new `KooshaPari/libs/auth-ts` TypeScript package. |
+| `src/domain/token.ts` (`Token`, `TokenRequest`, `TokenResponse`, `TokenError`) | `src/domain/token.ts:1-...` | Code | implemented | none (TS target) | n/a | NOT_COVERED | AuthKit is Rust-only and pre-extraction; `phenoShared` is Rust; no `libs/auth-ts` public repo. | medium | port to `phenoShared/crates/phenotype-auth` (Rust) or to a new `<REDACTED>/libs/auth-ts` TypeScript package. |
 | `src/domain/claims.ts` (`JwtClaims`) | `src/domain/claims.ts` | Code | implemented | none (TS target) | n/a | NOT_COVERED | Same as above. | medium | same. |
 | `src/domain/errors.ts` (`AuthErrors`) | `src/domain/errors.ts` | Code | implemented | none (TS target) | n/a | NOT_COVERED | Same as above. | medium | same. |
 | `src/ports/index.ts` (`TokenProvider`, `TokenStore`, `TokenVerifier`, `ClaimsValidationOptions`) | `src/ports/index.ts:1-...` | Code | implemented | none (TS target) | n/a | NOT_COVERED | Same as above. | medium | same. |
@@ -184,7 +184,7 @@
 | `src/index.ts` | source path | Code | implemented | none | n/a | NOT_COVERED | Public API surface. | low | port. |
 | `tests/core.test.ts` (token errors, memory store, claim validation) | `tests/core.test.ts:1-...` | Tests | implemented (33 passing) | none | n/a | NOT_COVERED | Tests pass but are not adopted by a target. | medium | port alongside code. |
 | `tests/token.contract.test.ts` | source path | Tests | implemented | none | n/a | NOT_COVERED | Contract tests for tokens. | medium | port. |
-| `tests/phenotype-ts-utils.test.ts` | source path | Tests | implemented | `KooshaPari/phenotype-ts-utils` | consumed as devDep (smoke) | DONE | Smoke tests for utility adoption already pass. | low | none |
+| `tests/phenotype-ts-utils.test.ts` | source path | Tests | implemented | `<REDACTED>/phenotype-ts-utils` | consumed as devDep (smoke) | DONE | Smoke tests for utility adoption already pass. | low | none |
 | `package.json` (`@phenotype/auth-ts`, vitest/vitepress, `phenotype-ts-utils`) | `package.json:1-...` | Manifest | implemented | n/a | n/a | SUPERSEDED_PARITY | Migration target is `auth-ts` (per `ARCHIVED.md`). | low | rename to `auth-ts` in target. |
 | `docs/.vitepress/*`, `docs/index.md`, `docs/getting-started.md` | source paths | Docs | implemented (broken examples) | none | n/a | PARTIAL | Docs site builds, but examples import wrong paths and use wrong store method signature. | medium | fix examples or archive. |
 | `adr/ADR-001-architecture.md` (hexagonal) | source path | ADR | implemented | none | n/a | NOT_COVERED | AuthKit's ADRs cover a different scope (Rust). | low | migrate to `PhenoSpecs/adrs/`. |
@@ -208,7 +208,7 @@
 | `docs/sessions/20260428-taskfile-dinoforge-packs/*` | source path | Docs | implemented | `Dino` | `Dino` has its own session logs | SUPERSEDED_PARITY | Session log specific to Taskfile language detection work. | low | migrate or drop. |
 | `docs/worklogs/README.md` | source path | Docs | implemented | n/a | n/a | INTENTIONALLY_DEPRECATED | Standard worklog README. | low | drop. |
 | `FUNCTIONAL_REQUIREMENTS.md` (stub) | source path | Docs | scaffold | `Dino` | `Dino` has FRs | SUPERSEDED_PARITY | Stub only. | low | drop. |
-| Quality-gate, fr-coverage, doc-links workflows (echo stubs) | `.github/workflows/{quality-gate,fr-coverage,doc-links}.yml` | CI | scaffold | `phenoShared` reusable workflows | `KooshaPari/phenoShared/.github/workflows/*` (already pinned on main) | SUPERSEDED_PARITY | Stub workflows are already replaced by shared reusable workflows. | low | none. |
+| Quality-gate, fr-coverage, doc-links workflows (echo stubs) | `.github/workflows/{quality-gate,fr-coverage,doc-links}.yml` | CI | scaffold | `phenoShared` reusable workflows | `<REDACTED>/phenoShared/.github/workflows/*` (already pinned on main) | SUPERSEDED_PARITY | Stub workflows are already replaced by shared reusable workflows. | low | none. |
 | `ci.yml` | `.github/workflows/ci.yml` | CI | implemented | `Dino` | `Dino` has its own CI | SUPERSEDED_PARITY | Generic pack CI. | low | drop. |
 | `trufflehog.yml` | `.github/workflows/trufflehog.yml` | CI | implemented | `phenoShared` | shared reusable | SUPERSEDED_PARITY | Already shared. | low | none. |
 | `scorecard.yml`, `alert-sync-issues.yml` | source paths | CI | implemented | `phenoShared` | shared reusable | SUPERSEDED_PARITY | Same. | low | none. |
@@ -233,7 +233,7 @@
 3. **kwality `engines/runtime-validator` Rust crate** — port clean version to `phenoShared` or drop.
 4. **kwality `internal/engines/static_analysis.go`** — port to `phenotype-tooling/crates/static-analysis` or drop.
 5. **kwality `fix/integration-test-schema-missing-fields`** — cherry-pick into `Tracera` or drop.
-6. **phenotype-auth-ts TS core** — port to `phenoShared` TypeScript surface, a new `KooshaPari/libs/auth-ts`, or another TS auth consumer. Rewrite README to match code or implement missing features.
+6. **phenotype-auth-ts TS core** — port to `phenoShared` TypeScript surface, a new `<REDACTED>/libs/auth-ts`, or another TS auth consumer. Rewrite README to match code or implement missing features.
 7. **phenotype-auth-ts `PlaceholderJwtVerifier`** — implement against `jose`/JWKS or drop.
 8. **dinoforge-packs `warfare-starwars/manifest.yaml`** — reconcile ids and assets before subtree merge into `Dino`.
 9. **dinoforge-packs reference pack `example-balance/`** — subtree into `Dino/community-packs/`.
@@ -249,7 +249,7 @@
 ## 7. LAST_RESORT_EXCEPTIONS
 
 1. **kwality repo** — `STRICTLY DO NOT DELETE NOR UNARCHIVE - Personal Project - LLM validation platform` (user promise) and absence of parity for LLM/DeepEval/Playwright/Neo4j/Go validation server/Rust runtime validator. Minimum patch: extract branch-only ADRs/SBOM/SLSA into `phenotype-tooling`; honor archive status; do not delete.
-2. **phenotype-auth-ts** — `ARCHIVED.md` migration target (`libs/auth-ts`) is GitHub-404. Minimum patch: create a reachable target (`KooshaPari/libs/auth-ts` or `phenoShared` TS surface), port the working core, and re-archive.
+2. **phenotype-auth-ts** — `ARCHIVED.md` migration target (`libs/auth-ts`) is GitHub-404. Minimum patch: create a reachable target (`<REDACTED>/libs/auth-ts` or `phenoShared` TS surface), port the working core, and re-archive.
 3. **dinoforge-packs** — content is preserved; only the destination is missing. Minimum patch: add `Dino/community-packs/example-balance/` and `Dino/community-packs/warfare-starwars/` subtrees, reconcile the `warfare-starwars/manifest.yaml`, then archive `dinoforge-packs` or keep it as a mutable community-submit registry per the original spec.
 
 ---
@@ -295,7 +295,7 @@
 ### 6. Final deletion recommendation
 - **`dagctl`: DELETE_AFTER_PATCHES.** Required patches: (a) add `extend3-v3` shim and `-db` alias in `phenodag`; (b) cut `phenodag` v1.0.0-rc.1; (c) tag final `v3.3.x` on `dagctl`; (d) GitHub archive `dagctl` (do not delete git history or releases).
 - **`kwality`: DELETE_AFTER_PATCHES (with archive only).** Required patches: (a) cherry-pick branch-only ADRs/SBOM/SLSA into `phenotype-tooling`; (b) port the schema-aligned Rust `runtime-validator` to `phenoShared`; (c) port the `static_analysis.go` to `phenotype-tooling/crates/static-analysis`; (d) honor the user's archive-only promise.
-- **`phenotype-auth-ts`: DELETE_AFTER_PATCHES.** Required patches: (a) make the `libs/auth-ts` migration target reachable (create `KooshaPari/libs/auth-ts` or a `phenoShared` TS surface); (b) port the working core; (c) re-archive.
+- **`phenotype-auth-ts`: DELETE_AFTER_PATCHES.** Required patches: (a) make the `libs/auth-ts` migration target reachable (create `<REDACTED>/libs/auth-ts` or a `phenoShared` TS surface); (b) port the working core; (c) re-archive.
 - **`dinoforge-packs`: PRESERVE.** Required action: subtree `example-balance/` and `warfare-starwars/` into `Dino/community-packs/`, reconcile the manifest, then either archive `dinoforge-packs` or keep it as the community-submit registry.
 - **`Configra` / `Logify`: NOT_FOUND.** No action.
 
@@ -305,7 +305,7 @@
 
 1. **dagctl**: file PR in `phenodag` adding `extend3-v3` shim and `-db` alias; cut `phenodag` v1.0.0-rc.1; tag `dagctl` v3.3.1 with README redirect; GitHub archive `dagctl`.
 2. **kwality**: open PR into `phenotype-tooling` cherry-picking `chore/sbom-2026-06-16`, `chore/provenance-metadata-2026-06-16`, `chore/verify-attest-2026-06-16`, `chore/slsa-build-2026-06-16`; port `engines/runtime-validator/src/{lib,validation,security,performance,container,fuzzing,metrics}.rs` to `phenoShared/crates/phenotype-runtime-validator` (or drop); port `internal/engines/static_analysis.go` to `phenotype-tooling/crates/static-analysis`; close governance/superseded branches; honor archive status.
-3. **phenotype-auth-ts**: confirm target with user (create `KooshaPari/libs/auth-ts` or a `phenoShared` TS surface); port `src/domain/`, `src/ports/`, `src/adapters/memory-token-store.ts`, and a real `jose`-backed `JwtVerifier`; rewrite README to match code; close Dependabot/superseded branches; re-archive.
+3. **phenotype-auth-ts**: confirm target with user (create `<REDACTED>/libs/auth-ts` or a `phenoShared` TS surface); port `src/domain/`, `src/ports/`, `src/adapters/memory-token-store.ts`, and a real `jose`-backed `JwtVerifier`; rewrite README to match code; close Dependabot/superseded branches; re-archive.
 4. **dinoforge-packs**: file `Dino/community-packs/{example-balance,warfare-starwars}/` subtrees; reconcile `warfare-starwars/manifest.yaml`; migrate or drop smoke test; archive the source repo or keep as mutable community-submit registry.
 5. **phenotype-registry / PhenoSpecs**: refresh `ECOSYSTEM_MAP.md` and `PhenoSpecs/registry.yaml` to reflect the absorption outcomes (phenoShared ownership of `phenotype-config`, `phenodag` ownership of `dagctl`, `Conft` ownership of the TS config surface, `Dino/community-packs/` ownership of the Star Wars content pack).
 6. **phenotype-tooling**: port any remaining reusable workflows from `kwality` so the `phenotype-shared` reusable set is the single source of truth.

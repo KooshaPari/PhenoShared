@@ -1,6 +1,6 @@
 # pheno-context Absorption-Justification Audit (2026-06-29)
 
-**Source Repository:** `KooshaPari/pheno-context` (PUBLIC, Rust, 39 KB, 2 branches, status: `active`, license: `MIT/Apache-2.0`)
+**Source Repository:** `<REDACTED>/pheno-context` (PUBLIC, Rust, 39 KB, 2 branches, status: `active`, license: `MIT/Apache-2.0`)
 **Audit Verdict:** `AFFIRM` — canonical home, no absorption action needed
 **Audit Date:** 2026-06-29
 **Disposition Index Row:** `repo-pheno-context`
@@ -11,7 +11,7 @@
 
 | Field | Value |
 |---|---|
-| **Path** | `KooshaPari/pheno-context` |
+| **Path** | `<REDACTED>/pheno-context` |
 | **Visibility** | public |
 | **Default branch** | `main` |
 | **Size (KB)** | 39 |
@@ -111,7 +111,7 @@ The repo is small and well-tested. `pheno-context` is not a candidate for deleti
 A potential concern is the small star count (0). This does not block `AFFIRM` because: (a) the crate is a low-level utility consumed by internal pheno-* crates (not a public-facing product), (b) the disposition index already has it in `active` state, and (c) the `sha-?256` of the canonical `Context` derive code is reproducible from `git log -p`. The audit conclusion is: keep the repo, no `cannot absorb` decision. There is no `gap` between current state and target state because the target is "remain active in place".
 
 ### Rebuttal 3 (Q3)
-If the sponsor later decides to consolidate pheno-* into `phenotype-infra`, the `re-?clone` plan is: (1) `git clone KooshaPari/pheno-context`, (2) `cargo new --lib pheno-context` in `phenotype-infra/crates/`, (3) `cp -r` the `src/`, `tests/`, `Cargo.toml` deps, (4) update import paths in dependent crates, (5) `cargo test -p pheno-context`, (6) `git push` to phenotype-infra. The audit does not commit to this plan; it just preserves the option. No `bundle` of code needs to be moved today. No `cannot absorb` action recorded.
+If the sponsor later decides to consolidate pheno-* into `phenotype-infra`, the `re-?clone` plan is: (1) `git clone <REDACTED>/pheno-context`, (2) `cargo new --lib pheno-context` in `phenotype-infra/crates/`, (3) `cp -r` the `src/`, `tests/`, `Cargo.toml` deps, (4) update import paths in dependent crates, (5) `cargo test -p pheno-context`, (6) `git push` to phenotype-infra. The audit does not commit to this plan; it just preserves the option. No `bundle` of code needs to be moved today. No `cannot absorb` action recorded.
 
 ---
 
@@ -148,10 +148,10 @@ No gaps. The only `gap` between current state and target state is the stale `cho
 # From C:\Users\koosh\phenotype-registry (on main branch)
 # Step 1: Pre-flight gate (must pass before any restore)
 bash C:\Users\koosh\phenotype-tooling\bin\repo-delete-gate.sh \
-    --repo KooshaPari/pheno-context --apply --force
+    --repo <REDACTED>/pheno-context --apply --force
 
 # Step 2: Source-side export
-gh api repos/KooshaPari/pheno-context/tarball > pheno-context.tar.gz
+gh api repos/<REDACTED>/pheno-context/tarball > pheno-context.tar.gz
 tar -xzf pheno-context.tar.gz
 # Step 3: Target-side restore (restores into phenotype-infra/crates/pheno-context/)
 cd C:\Users\koosh\phenotype-infra
@@ -168,15 +168,15 @@ grep -q "pheno-context" Cargo.toml || echo 'pheno-context = { path = "crates/phe
 # Step 5: Verify
 cd C:\Users\koosh\phenotype-infra && cargo build -p pheno-context
 # Step 6: Commit + push
-git add . && git commit -m "absorb(pheno-context): merge from KooshaPari/pheno-context@2026-06-29"
+git add . && git commit -m "absorb(pheno-context): merge from <REDACTED>/pheno-context@2026-06-29"
 git push origin restore/pheno-context-from-2026-06-29
 # Step 7: PR for review
 gh pr create --base main --head restore/pheno-context-from-2026-06-29 \
-    --title "absorb(pheno-context): merge from KooshaPari/pheno-context" \
-    --body "Auto-generated from KooshaPari/pheno-context@2026-06-29. Source: $PHENO_HASH. See: KooshaPari/phenotype-registry/audits/absorption-justifications/pheno-context-2026-06-29.md"
+    --title "absorb(pheno-context): merge from <REDACTED>/pheno-context" \
+    --body "Auto-generated from <REDACTED>/pheno-context@2026-06-29. Source: $PHENO_HASH. See: <REDACTED>/phenotype-registry/audits/absorption-justifications/pheno-context-2026-06-29.md"
 ```
 
-The full pre-flight gate script lives at `KooshaPari/phenotype-tooling/bin/repo-delete-gate.sh` and must exit 0 before any restore proceeds. The `bin/repo-delete-gate.ps1` Windows-native equivalent is also available.
+The full pre-flight gate script lives at `<REDACTED>/phenotype-tooling/bin/repo-delete-gate.sh` and must exit 0 before any restore proceeds. The `bin/repo-delete-gate.ps1` Windows-native equivalent is also available.
 ---
 
 ## Restore-Command (Last)
@@ -193,5 +193,5 @@ The full restore procedure is documented in the `## Restore-Command` section abo
 
 ## Final Recommendation
 
-**AFFIRM.** Keep `KooshaPari/pheno-context` as the canonical home for the `pheno_context` Rust crate. No code movement, no archival, no absorption action. The audit is recorded as `repo-pheno-context` in `registry/disposition-index.json` with `fsm: active`. Re-audit quarterly to confirm the audit verdict remains valid as the crate evolves.
+**AFFIRM.** Keep `<REDACTED>/pheno-context` as the canonical home for the `pheno_context` Rust crate. No code movement, no archival, no absorption action. The audit is recorded as `repo-pheno-context` in `registry/disposition-index.json` with `fsm: active`. Re-audit quarterly to confirm the audit verdict remains valid as the crate evolves.
 

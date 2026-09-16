@@ -80,4 +80,4 @@ repo can be deleted from GH.
 - primary absorb commit: `be5da947` on `pheno` main
 - target row: `repo-pheno-research-audit20260901` (registry v1.6.83, NEW)
 - target: `pheno` (monorepo root, 13 files at root + 9 absorbed earlier)
-- source repo: `KooshaPari/pheno-research` (archived, private→public)
+- source repo: `<REDACTED>/pheno-research` (archived, private→public)

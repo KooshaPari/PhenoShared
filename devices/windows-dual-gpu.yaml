@@ -1,5 +1,5 @@
 id: windows.dual_gpu
-host: kooshapari-desk
+host: <REDACTED>-desk
 tailscale_ip: 100.96.135.160
 roles:
   G:

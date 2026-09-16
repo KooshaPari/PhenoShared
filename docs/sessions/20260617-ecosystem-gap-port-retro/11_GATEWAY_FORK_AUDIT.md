@@ -92,7 +92,7 @@ No shared git history. Archived `agentapi` has 6–7 docs-only commits (CODEOWNE
 ## Verification commands
 
 ```bash
-gh api repos/KooshaPari/{repo}/branches --paginate --jq 'length'
-gh search code "agentapi-plusplus org:KooshaPari" --limit 50
-gh search code "cliproxyapi org:KooshaPari" --limit 50
+gh api repos/<REDACTED>/{repo}/branches --paginate --jq 'length'
+gh search code "agentapi-plusplus org:<REDACTED>" --limit 50
+gh search code "cliproxyapi org:<REDACTED>" --limit 50
 ```

@@ -11,7 +11,7 @@ DATE="2026-06-20"
 check_repo() {
   local repo="$1"
   local result
-  result=$(gh api repos/KooshaPari/$repo --jq '.archived // "not_found"' 2>&1)
+  result=$(gh api repos/<REDACTED>/$repo --jq '.archived // "not_found"' 2>&1)
   case "$result" in
     "true")
       echo "SKIP (archived): $repo"
@@ -43,34 +43,34 @@ create_or_update_codeowners() {
   echo "  → Processing $repo ($mode)..."
 
   # Create branch
-  SHA=$(gh api repos/KooshaPari/$repo/git/refs/heads/main --jq '.object.sha' 2>/dev/null ||
-        gh api repos/KooshaPari/$repo/git/refs/heads/master --jq '.object.sha' 2>/dev/null) || {
+  SHA=$(gh api repos/<REDACTED>/$repo/git/refs/heads/main --jq '.object.sha' 2>/dev/null ||
+        gh api repos/<REDACTED>/$repo/git/refs/heads/master --jq '.object.sha' 2>/dev/null) || {
     echo "  ERROR: cannot resolve default branch for $repo"
     return 1
   }
 
-  gh api repos/KooshaPari/$repo/git/refs \
+  gh api repos/<REDACTED>/$repo/git/refs \
     -f ref="refs/heads/$BRANCH" \
     -f sha="$SHA" \
     --silent 2>/dev/null || echo "  Branch may already exist"
 
   # Check if CODEOWNERS exists
   local cur_sha exists
-  exists=$(gh api repos/KooshaPari/$repo/contents/.github/CODEOWNERS --jq '.sha' 2>/dev/null) || exists=""
+  exists=$(gh api repos/<REDACTED>/$repo/contents/.github/CODEOWNERS --jq '.sha' 2>/dev/null) || exists=""
 
   if [ "$mode" = "soft-block" ]; then
     # Append ADR-023 comment to existing CODEOWNERS
     if [ -n "$exists" ]; then
       cur_sha="$exists"
       local current
-      current=$(gh api repos/KooshaPari/$repo/contents/.github/CODEOWNERS --jq '.content' | tr -d '\n' | base64 -d 2>/dev/null)
+      current=$(gh api repos/<REDACTED>/$repo/contents/.github/CODEOWNERS --jq '.content' | tr -d '\n' | base64 -d 2>/dev/null)
       local new_content="${current}
 # ADR-023 ($DATE): PAUSED. New work requires a bucket_change worklog entry.
 # See docs/adr/2026-06-15/ADR-023-agent-effort-governance.md Rule 2.
-* @KooshaPari"
+* @<REDACTED>"
       local encoded
       encoded=$(echo -n "$new_content" | base64)
-      gh api repos/KooshaPari/$repo/contents/.github/CODEOWNERS \
+      gh api repos/<REDACTED>/$repo/contents/.github/CODEOWNERS \
         -X PUT \
         -f message="docs(governance): ADR-023 PAUSED soft-block ($DATE)" \
         -f content="$encoded" \
@@ -80,8 +80,8 @@ create_or_update_codeowners() {
     else
       encoded=$(echo -n "# ADR-023 ($DATE): PAUSED. New work requires a bucket_change worklog entry.
 # See docs/adr/2026-06-15/ADR-023-agent-effort-governance.md Rule 2.
-* @KooshaPari" | base64)
-      gh api repos/KooshaPari/$repo/contents/.github/CODEOWNERS \
+* @<REDACTED>" | base64)
+      gh api repos/<REDACTED>/$repo/contents/.github/CODEOWNERS \
         -X PUT \
         -f message="docs(governance): create CODEOWNERS with ADR-023 PAUSED soft-block ($DATE)" \
         -f content="$encoded" \
@@ -95,13 +95,13 @@ create_or_update_codeowners() {
     local mining_content="# ADR-023 ($DATE): PAUSED-as-target. Capstone sponsor not in good standing.
 # Reference material only. New feature branches require ADR-023 amendment.
 # Archival mining PRs (docs, tests, schemas only) allowed.
-/docs/ @KooshaPari
-/tests/ @KooshaPari
-/schemas/ @KooshaPari
-* @KooshaPari"
+/docs/ @<REDACTED>
+/tests/ @<REDACTED>
+/schemas/ @<REDACTED>
+* @<REDACTED>"
     if [ -n "$exists" ]; then
       cur_sha="$exists"
-      gh api repos/KooshaPari/$repo/contents/.github/CODEOWNERS \
+      gh api repos/<REDACTED>/$repo/contents/.github/CODEOWNERS \
         -X PUT \
         -f message="docs(governance): ADR-023 archival-mining CODEOWNERS ($DATE)" \
         -f content="$(echo -n "$mining_content" | base64)" \
@@ -109,7 +109,7 @@ create_or_update_codeowners() {
         -f branch="$BRANCH" \
         --silent
     else
-      gh api repos/KooshaPari/$repo/contents/.github/CODEOWNERS \
+      gh api repos/<REDACTED>/$repo/contents/.github/CODEOWNERS \
         -X PUT \
         -f message="docs(governance): create CODEOWNERS with ADR-023 archival-mining rules ($DATE)" \
         -f content="$(echo -n "$mining_content" | base64)" \
@@ -120,7 +120,7 @@ create_or_update_codeowners() {
     local body="Per ADR-023 Rule 2, $repo is PAUSED-as-target (capstone sponsor not in good standing). Archival mining of docs/tests/schemas permitted; new feature branches require an ADR amendment."
   fi
 
-  gh pr create --repo KooshaPari/$repo \
+  gh pr create --repo <REDACTED>/$repo \
     --base main \
     --head "$BRANCH" \
     --title "$title" \
@@ -153,5 +153,5 @@ done
 
 echo ""
 echo "=== ALL DONE ==="
-echo "FocalPoint PR #140: https://github.com/KooshaPari/FocalPoint/pull/140"
+echo "FocalPoint PR #140: https://github.com/<REDACTED>/FocalPoint/pull/140"
 echo "Other 4 repos already terminal (archived or 404)"

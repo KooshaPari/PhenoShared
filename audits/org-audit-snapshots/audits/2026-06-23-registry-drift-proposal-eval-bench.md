@@ -64,7 +64,7 @@
   "domain_role": "eval",
   "boundary": "eval-harness",
   "stack": "python",
-  "gh_url": "https://github.com/KooshaPari/pheno-harness",
+  "gh_url": "https://github.com/<REDACTED>/pheno-harness",
   "wave": "L7-001",
   "disposition": "AFFIRM",
   "rationale": "Local routing, compression stack, RLVR eval, Harbor terminal-bench for OmniRoute Main on a single-GPU (3090 Ti) operator stack. 999-file ref-pr-diff fixture bundle. Eval pillars: token burn, accuracy, speed, cost, motion, quality, safety.",

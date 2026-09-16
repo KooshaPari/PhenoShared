@@ -224,7 +224,7 @@ from kinfra import ServiceManager, ServiceConfig, KInfra
 from kinfra.templates import resources
 from kinfra.adapters import resource_from_dict
 
-manager = ServiceManager(KInfra(domain="zen.kooshapari.com"))
+manager = ServiceManager(KInfra(domain="zen.<REDACTED>.com"))
 
 # Local NATS for real-time messaging
 manager.resource_manager.add_resource_adapter(

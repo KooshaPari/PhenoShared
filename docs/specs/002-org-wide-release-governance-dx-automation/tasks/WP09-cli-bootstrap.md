@@ -45,7 +45,7 @@ This work package implements the `pheno bootstrap` command to automate DX scaffo
 - Templates use Go `text/template` with embedded files (no external file dependencies)
 - Task definitions must match mise task syntax and be idempotent
 - Pre-commit/pre-push hooks are shell scripts with minimal dependencies (only git and installed tools)
-- CI workflows reference `KooshaPari/phenotypeActions` repository reusable workflows
+- CI workflows reference `<REDACTED>/phenotypeActions` repository reusable workflows
 - Should support overwriting existing files with `--force` flag
 - Dry-run mode must show all files that would be created without modifying filesystem
 
@@ -93,7 +93,7 @@ This work package implements the `pheno bootstrap` command to automate DX scaffo
      - File write fails: error with path and reason
   5. Support interactive mode (future): prompt for choices if ambiguous
 
-- **Files**: `/Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus/cmd/bootstrap.go`
+- **Files**: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus/cmd/bootstrap.go`
 - **Parallel?**: No (prerequisite for T050–T055)
 - **Notes**: Use `os.Stat` to check if files exist before writing; provide clear error messages; respect existing configurations when possible (merge rather than overwrite)
 
@@ -150,7 +150,7 @@ This work package implements the `pheno bootstrap` command to automate DX scaffo
     - `\{\{ eq .Language "go" \}\}` → conditional rendering per language
   5. Error handling: wrap template errors with file name and context
 
-- **Files**: `/Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus/internal/templates/templates.go`, `/Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus/internal/templates/files/*.tpl`
+- **Files**: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus/internal/templates/templates.go`, `/Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus/internal/templates/files/*.tpl`
 - **Parallel?**: No (prerequisite for T051–T055)
 - **Notes**: Use `//go:embed` to embed files at compile time; ensure template files are valid Go templates; test template rendering with sample contexts
 
@@ -270,7 +270,7 @@ description = "Run integration tests"
   4. Include release tasks: release:promote, release:status
   5. Validate that tasks are idempotent (can run multiple times without issues)
 
-- **Files**: `/Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus/internal/templates/files/mise.toml.tpl`
+- **Files**: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus/internal/templates/files/mise.toml.tpl`
 - **Parallel?**: Yes (after T050)
 - **Notes**: Use conditional rendering (if/else) to generate language-specific tasks; ensure all referenced tools are either built-in or commonly installed; test generated file is valid TOML
 
@@ -312,7 +312,7 @@ description = "Run integration tests"
   5. Ensure hook is executable and has proper shebang
   6. Test with sample commit messages (both valid and invalid)
 
-- **Files**: `/Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus/internal/templates/files/pre-commit.sh.tpl`
+- **Files**: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus/internal/templates/files/pre-commit.sh.tpl`
 - **Parallel?**: Yes (after T050)
 - **Notes**: Use basic POSIX shell commands to avoid dependencies; handle quoted commit messages correctly; be lenient on format check failure (don't block commit)
 
@@ -376,7 +376,7 @@ description = "Run integration tests"
   3. Ensure hook is executable and has proper shebang
   4. Handle case where mise tasks don't exist (graceful fallback)
 
-- **Files**: `/Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus/internal/templates/files/pre-push.sh.tpl`
+- **Files**: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus/internal/templates/files/pre-push.sh.tpl`
 - **Parallel?**: Yes (after T050)
 - **Notes**: Use POSIX-compatible regex syntax; handle missing tasks gracefully (warn but don't fail); ensure hook doesn't interfere with automated pushes (CI/CD systems)
 
@@ -399,7 +399,7 @@ description = "Run integration tests"
          runs-on: ubuntu-latest
          steps:
            - uses: actions/checkout@v4
-           - uses: KooshaPari/phenotypeActions/.github/workflows/gate-check.yml@v1
+           - uses: <REDACTED>/phenotypeActions/.github/workflows/gate-check.yml@v1
              with:
               language: \{\{ .Language \}\}
               channel: alpha
@@ -421,7 +421,7 @@ description = "Run integration tests"
          runs-on: ubuntu-latest
          steps:
            - uses: actions/checkout@v4
-           - uses: KooshaPari/phenotypeActions/.github/workflows/promote.yml@v1
+           - uses: <REDACTED>/phenotypeActions/.github/workflows/promote.yml@v1
              with:
                language: \{\{ .Language \}\}
                registry: \{\{ .Registry \}\}
@@ -437,7 +437,7 @@ description = "Run integration tests"
          needs: promote
          steps:
            - uses: actions/checkout@v4
-           - uses: KooshaPari/phenotypeActions/.github/workflows/changelog.yml@v1
+           - uses: <REDACTED>/phenotypeActions/.github/workflows/changelog.yml@v1
              with:
                version: \$&#123;&#123; github.ref_name &#125;&#125;
      ```
@@ -445,7 +445,7 @@ description = "Run integration tests"
   4. Support language variable substitution
   5. Include necessary secrets and inputs
 
-- **Files**: `/Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus/internal/templates/files/ci.yml.tpl`, `/Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus/internal/templates/files/release.yml.tpl`
+- **Files**: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus/internal/templates/files/ci.yml.tpl`, `/Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus/internal/templates/files/release.yml.tpl`
 - **Parallel?**: Yes (after T050)
 - **Notes**: Use v4 of actions/checkout; reference phenotypeActions with semantic versioning; support language and registry variable substitution
 
@@ -503,7 +503,7 @@ description = "Run integration tests"
   4. Include breaking changes in output
   5. Ensure output format matches semantic versioning
 
-- **Files**: `/Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus/internal/templates/files/cliff.toml.tpl`
+- **Files**: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus/internal/templates/files/cliff.toml.tpl`
 - **Parallel?**: Yes (after T050)
 - **Notes**: Use valid TOML and git-cliff template syntax; test template with sample commits; ensure changelog output is readable and follows organization standards
 
@@ -561,7 +561,7 @@ description = "Run integration tests"
   5. Test both dry-run and actual file generation
   6. Ensure test runs in <5 seconds
 
-- **Files**: `/Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus/cmd/bootstrap_test.go`, `/Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus/internal/templates/templates_test.go`
+- **Files**: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus/cmd/bootstrap_test.go`, `/Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus/internal/templates/templates_test.go`
 - **Parallel?**: Yes (after T049–T055)
 - **Notes**: Use `ioutil.TempDir` for safe temp directory creation; verify file permissions with `os.Stat`; use `bytes.Buffer` to capture command output; mock language detection if needed
 

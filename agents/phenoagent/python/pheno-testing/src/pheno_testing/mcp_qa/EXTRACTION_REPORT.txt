@@ -4,8 +4,8 @@ MCP-QA FRAMEWORK EXTRACTION - FINAL REPORT
 
 EXTRACTION COMPLETE ✅
 
-Source Location: /Users/kooshapari/temp-PRODVERCEL/485/kush/atoms-mcp-prod/pheno_vendor/mcp_qa/
-Target Location: /Users/kooshapari/temp-PRODVERCEL/485/kush/pheno-sdk/src/pheno/testing/mcp_qa/
+Source Location: /Users/<REDACTED>/temp-PRODVERCEL/485/kush/atoms-mcp-prod/pheno_vendor/mcp_qa/
+Target Location: /Users/<REDACTED>/temp-PRODVERCEL/485/kush/pheno-sdk/src/pheno/testing/mcp_qa/
 
 ================================================================================
 FILES EXTRACTED
@@ -238,7 +238,7 @@ EXTRACTION COMPLETE
 ================================================================================
 
 The MCP-QA framework is now a standalone, reusable testing library at:
-/Users/kooshapari/temp-PRODVERCEL/485/kush/pheno-sdk/src/pheno/testing/mcp_qa/
+/Users/<REDACTED>/temp-PRODVERCEL/485/kush/pheno-sdk/src/pheno/testing/mcp_qa/
 
 All Atoms-specific code has been abstracted into configurable parameters
 and base classes. Projects can now extend the framework for their own

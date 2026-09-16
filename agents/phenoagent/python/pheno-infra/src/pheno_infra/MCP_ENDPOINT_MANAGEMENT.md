@@ -60,7 +60,7 @@ Human-readable environment description:
 ```python
 from kinfra import SmartInfraManager
 
-manager = SmartInfraManager(project_name="atoms_mcp", domain="kooshapari.com")
+manager = SmartInfraManager(project_name="atoms_mcp", domain="<REDACTED>.com")
 
 # Detect current environment
 env = manager.detect_environment()
@@ -153,7 +153,7 @@ from kinfra import SmartInfraManager
 # Initialize for atoms_mcp project
 manager = SmartInfraManager(
     project_name="atoms_mcp",
-    domain="kooshapari.com"
+    domain="<REDACTED>.com"
 )
 
 # Auto-detect and configure
@@ -213,7 +213,7 @@ The system recognizes these domain patterns:
 ### Local
 - `localhost`
 - `127.0.0.1`
-- `kooshapari.com`
+- `<REDACTED>.com`
 
 ## Integration with Endpoint Registry
 
@@ -241,11 +241,11 @@ endpoint = get_mcp_endpoint("prod")
 
 ## Complete Example
 
-See `/Users/kooshapari/KInfra/libraries/python/kinfra/examples/mcp_endpoint_example.py` for a comprehensive example.
+See `/Users/<REDACTED>/KInfra/libraries/python/kinfra/examples/mcp_endpoint_example.py` for a comprehensive example.
 
 ```bash
-cd /Users/kooshapari/KInfra/libraries/python
-PYTHONPATH=/Users/kooshapari/KInfra/libraries/python:$PYTHONPATH \
+cd /Users/<REDACTED>/KInfra/libraries/python
+PYTHONPATH=/Users/<REDACTED>/KInfra/libraries/python:$PYTHONPATH \
     python3 kinfra/examples/mcp_endpoint_example.py
 ```
 
@@ -264,7 +264,7 @@ These functions will continue to work and will be available in the new architect
 
 ## Files Modified
 
-1. **`/Users/kooshapari/KInfra/libraries/python/kinfra/smart_infra_manager.py`**
+1. **`/Users/<REDACTED>/KInfra/libraries/python/kinfra/smart_infra_manager.py`**
    - Added `detect_environment()` method
    - Added `get_mcp_endpoint()` method
    - Added `get_mcp_config()` method
@@ -272,11 +272,11 @@ These functions will continue to work and will be available in the new architect
    - Added MCP-specific convenience functions
    - Added environment pattern constants
 
-2. **`/Users/kooshapari/KInfra/libraries/python/kinfra/__init__.py`**
+2. **`/Users/<REDACTED>/KInfra/libraries/python/kinfra/__init__.py`**
    - Exported MCP-specific functions
    - Added to `__all__` list
 
-3. **`/Users/kooshapari/KInfra/libraries/python/kinfra/examples/mcp_endpoint_example.py`**
+3. **`/Users/<REDACTED>/KInfra/libraries/python/kinfra/examples/mcp_endpoint_example.py`**
    - Created comprehensive usage example
 
 ## Testing
@@ -285,7 +285,7 @@ All MCP endpoint management features have been tested and verified:
 
 ```bash
 # Test direct module
-cd /Users/kooshapari/KInfra/libraries/python
+cd /Users/<REDACTED>/KInfra/libraries/python
 python3 -c "from kinfra.infrastructure_manager import get_mcp_endpoint; print(get_mcp_endpoint('prod'))"
 
 # Test package exports

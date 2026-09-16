@@ -1,7 +1,7 @@
 # Complete Profiler System
 
 > **⚠️ ARCHIVED — Superseded by ObservabilityKit**  
-> Profila's profiling and observability functionality has been superseded by [ObservabilityKit](https://github.com/KooshaPari/ObservabilityKit).  
+> Profila's profiling and observability functionality has been superseded by [ObservabilityKit](https://github.com/<REDACTED>/ObservabilityKit).  
 > See [`MOVED_TO_OBSERVABILITYKIT.md`](MOVED_TO_OBSERVABILITYKIT.md) for the full script-level mapping to ObservabilityKit equivalents.
 >
 > **Script cross-reference (11 scripts → ObservabilityKit):**

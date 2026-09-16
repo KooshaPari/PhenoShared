@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/spf13/cobra"
-	"github.com/KooshaPari/pheno-cli/internal/plugin"
+	"github.com/<REDACTED>/pheno-cli/internal/plugin"
 )
 
 func init() {

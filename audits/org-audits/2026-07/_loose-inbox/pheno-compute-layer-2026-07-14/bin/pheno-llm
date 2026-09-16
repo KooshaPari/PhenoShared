@@ -80,7 +80,7 @@ restart() {
 
 # View logs
 logs() {
-    $SSH_CMD 'cmd /c wsl -d Ubuntu-22.04 -e bash -c "tail -f /home/kooshapari/llm-server/granite.log"'
+    $SSH_CMD 'cmd /c wsl -d Ubuntu-22.04 -e bash -c "tail -f /home/<REDACTED>/llm-server/granite.log"'
 }
 
 # Download a model
@@ -99,7 +99,7 @@ download() {
 # List available models
 list_models() {
     log_info "Available models in WSL:"
-    $SSH_CMD 'cmd /c wsl -d Ubuntu-22.04 -e bash -c "ls -lh /home/kooshapari/llm-models/" 2>/dev/null'
+    $SSH_CMD 'cmd /c wsl -d Ubuntu-22.04 -e bash -c "ls -lh /home/<REDACTED>/llm-models/" 2>/dev/null'
 }
 
 # Test inference

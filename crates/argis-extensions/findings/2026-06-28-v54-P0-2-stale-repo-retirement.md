@@ -6,12 +6,12 @@
 
 ## Summary
 
-Verified 66 unique repo references from `AGENTS.md` against GitHub (`gh api repos/KooshaPari/<name>`). **25 stale references found** — repos listed as active fleet members that return HTTP 404 (deleted, absorbed, or never created as standalone GitHub repos).
+Verified 66 unique repo references from `AGENTS.md` against GitHub (`gh api repos/<REDACTED>/<name>`). **25 stale references found** — repos listed as active fleet members that return HTTP 404 (deleted, absorbed, or never created as standalone GitHub repos).
 
 ## Methodology
 
 For each repo listed in AGENTS.md sections:
-1. `gh api repos/KooshaPari/<name> --jq '{name, isArchived}'` to check existence and archived status
+1. `gh api repos/<REDACTED>/<name> --jq '{name, isArchived}'` to check existence and archived status
 2. Cross-referenced against documented ADR dispositions (DELETE / MERGE / ARCHIVE)
 3. Marked stale with strikethrough + parenthetical status in AGENTS.md
 

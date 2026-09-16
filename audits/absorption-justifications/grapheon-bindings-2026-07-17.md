@@ -3,8 +3,8 @@
 **Audit ID:** ABS-JUS-grapheon-bindings-2026-07-17
 **Auditor:** Forge (autonomous governance audit)
 **Date:** 2026-07-17
-**Phase:** Queue Refresh — 10 new least-active candidates from kooshapari remote
-**Source Repo:** `gh api repos/KooshaPari/grapheon-bindings` (remote)
+**Phase:** Queue Refresh — 10 new least-active candidates from <REDACTED> remote
+**Source Repo:** `gh api repos/<REDACTED>/grapheon-bindings` (remote)
 **Verdict:** **ABSORB** with target `phenotype-go-sdk`
 **Confidence:** MEDIUM (0.65) — pending deeper content audit before transfer
 
@@ -12,7 +12,7 @@
 
 ## Source
 
-`grapheon-bindings` is the **library** repo owned by `kooshapari`.
+`grapheon-bindings` is the **library** repo owned by `<REDACTED>`.
 - Last push: `Go bindings for Grapheon (canonical graph library)`
 - Default branch: `main` (assumed).
 - Languages: ['go']
@@ -22,7 +22,7 @@
 ### Why this is in scope for absorption review
 
 This repo is in scope because it is one of the **10 new least-active non-archived repos**
-on the kooshapari remote that are NOT yet tracked in `registry/disposition-index.json`.
+on the <REDACTED> remote that are NOT yet tracked in `registry/disposition-index.json`.
 The queue refresh is part of the standing "always keep 10 repos in queue" directive.
 
 The disposition is **ABSORB** with target `phenotype-go-sdk` per:
@@ -52,7 +52,7 @@ required before transfer:
 **Confidence:** 0.65 (MEDIUM).
 
 **Confidence drivers:**
-- **+0.30** — Repo is real, non-archived, on kooshapari remote.
+- **+0.30** — Repo is real, non-archived, on <REDACTED> remote.
 - **+0.20** — Target absorber (`phenotype-go-sdk`) is a canonical spine per RATIONALIZATION_PLAN.md.
 - **+0.15** — Disposition matches standing rationale in plan docs.
 - **-0.20** — No deep content audit yet (language, tests, dependents).
@@ -66,8 +66,8 @@ required before transfer:
 
 ```bash
 # Pre-absorption snapshot
-gh repo archive KooshaPari/grapheon-bindings  # archive after absorption PR merges
-git clone https://github.com/KooshaPari/grapheon-bindings.git /tmp/grapheon-bindings-pre-absorption
+gh repo archive <REDACTED>/grapheon-bindings  # archive after absorption PR merges
+git clone https://github.com/<REDACTED>/grapheon-bindings.git /tmp/grapheon-bindings-pre-absorption
 ```
 
 **Restore posture:** Source repo will be archived after the absorption PR merges.

@@ -13,7 +13,7 @@ jobs:
       - name: Compare DAG crates with upstream
         run: |
           echo "Checking if pheno-dag matches byteport-dag upstream..."
-          UPSTREAM="https://raw.githubusercontent.com/KooshaPari/BytePort/main/crates/byteport-dag/src"
+          UPSTREAM="https://raw.githubusercontent.com/<REDACTED>/BytePort/main/crates/byteport-dag/src"
           LOCAL="crates/pheno-dag/src"
           FAIL=0
           for f in dag.rs topo.rs schema.rs serialize.rs; do

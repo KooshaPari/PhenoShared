@@ -6,9 +6,9 @@ _2026-09-01 audit note — supersedes the Tier-3-P3-INFRA-CLUSTER proposal which
 
 | Repo | Primary language | Domain | Canonical consumer |
 |---|---|---|---|
-| `KooshaPari/phenotype-infra` | Rust (workspace) | **Compute / VM isolation** — nanovms-core (Go → C-static), nvms-ffi, pheno-compose, pheno-config | Apps that need WASM/gVisor/Firecracker micro-VMs (3-tier isolation) |
-| `KooshaPari/phenotype-fleet-ops` | YAML/justfile/Markdown | **Reusable CI/CD + ops governance** — `.github/workflows/*`, pillars, policy templates, manifest CLI | All `phenotype-*` repos via `uses: phenotype-ops/.github/workflows/...` |
-| `KooshaPari/phenotype-infrakit` | Rust (workspace) | **Infra utilities + tooling** — separate module | Apps that need shared infra helpers |
+| `<REDACTED>/phenotype-infra` | Rust (workspace) | **Compute / VM isolation** — nanovms-core (Go → C-static), nvms-ffi, pheno-compose, pheno-config | Apps that need WASM/gVisor/Firecracker micro-VMs (3-tier isolation) |
+| `<REDACTED>/phenotype-fleet-ops` | YAML/justfile/Markdown | **Reusable CI/CD + ops governance** — `.github/workflows/*`, pillars, policy templates, manifest CLI | All `phenotype-*` repos via `uses: phenotype-ops/.github/workflows/...` |
+| `<REDACTED>/phenotype-infrakit` | Rust (workspace) | **Infra utilities + tooling** — separate module | Apps that need shared infra helpers |
 
 ## Why these are siblings, not merge candidates
 

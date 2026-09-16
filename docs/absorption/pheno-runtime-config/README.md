@@ -1,7 +1,7 @@
 # pheno-runtime-config absorption
 
-**Source repo**: `KooshaPari/pheno-runtime-config`
-**Absorbing repo**: `KooshaPari/pheno` (monorepo)
+**Source repo**: `<REDACTED>/pheno-runtime-config`
+**Absorbing repo**: `<REDACTED>/pheno` (monorepo)
 **Target path**: `crates/pheno-runtime-config/`
 **Recorded**: 2026-07-17, registry commit TBD (v1.6.30)
 **Disposition row**: `repo-pheno-runtime-config` (id 168 region)
@@ -53,12 +53,12 @@ implemented inside various repos (pheno, Configra) and consolidated into
 
 ## Status (recorded 2026-07-17)
 
-- Source repo `KooshaPari/pheno-runtime-config` was last pushed 2026-06-28.
+- Source repo `<REDACTED>/pheno-runtime-config` was last pushed 2026-06-28.
 - No subsequent pushes since absorption queue pickup 2026-07-17.
-- Target `KooshaPari/pheno` workspace is being dismantled per `gw-pheno`
+- Target `<REDACTED>/pheno` workspace is being dismantled per `gw-pheno`
   gate (in-progress). Until agileplus-* and phenotype-* crate relocations
   settle (planned 2026-08-01), pheno-runtime-config sits at
   `crates/pheno-runtime-config` in pheno as the canonical Rust home.
 - Once `gw-pheno` completes, this crate will reland at
-  `KooshaPari/AgilePlus/crates/pheno-runtime-config` (per pheno-monorepo
+  `<REDACTED>/AgilePlus/crates/pheno-runtime-config` (per pheno-monorepo
   split plan). This row will be re-affirmed at that time.

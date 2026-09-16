@@ -19,7 +19,7 @@ on:
       - '**.md'
 
 # Thin caller that adopts the phenoShared reusable Rust CI workflow.
-# Pinned to HEAD SHA of KooshaPari/phenoShared@main until PR #85 merges and
+# Pinned to HEAD SHA of <REDACTED>/phenoShared@main until PR #85 merges and
 # exposes `.github/workflows/reusable/ci.yml`. Once merged, re-pin to a tag
 # (e.g. @v1) per the phenoShared release policy.
 permissions:
@@ -27,6 +27,6 @@ permissions:
 
 jobs:
   rust-ci:
-    uses: KooshaPari/phenoShared/.github/workflows/ci.yml@4b820a6d1eca7884e692e4ec4edf2b59732809cd
+    uses: <REDACTED>/phenoShared/.github/workflows/ci.yml@4b820a6d1eca7884e692e4ec4edf2b59732809cd
     with:
       language: rust

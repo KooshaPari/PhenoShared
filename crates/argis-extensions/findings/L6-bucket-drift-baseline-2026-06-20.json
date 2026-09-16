@@ -1,7 +1,7 @@
 {
   "schema_version": "l6-bucket-drift/v1",
   "generated_at": "2026-06-20T08:26:15Z",
-  "source": "/Users/kooshapari/CodeProjects/Phenotype/repos/scripts/l6_bucket_drift_check.py",
+  "source": "/Users/<REDACTED>/CodeProjects/Phenotype/repos/scripts/l6_bucket_drift_check.py",
   "adr_anchor": "docs/adr/2026-06-15/ADR-023-agent-effort-governance.md",
   "paused_repos": [
     "AtomsBot",

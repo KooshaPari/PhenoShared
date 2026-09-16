@@ -12,7 +12,7 @@
 
 **phenotype-infrakit** is a Rust workspace containing 5 independent infrastructure crates implementing driven adapters for hexagonal architecture.
 
-**Repository**: `/Users/kooshapari/CodeProjects/Phenotype/repos/repos/worktrees/phenotype-infrakit/chore/merge-worklogs/`
+**Repository**: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/repos/worktrees/phenotype-infrakit/chore/merge-worklogs/`
 
 **Total LOC**: ~2,350 across all crates
 **Architecture**: Hexagonal (Ports & Adapters)
@@ -1046,7 +1046,7 @@ export function estimateTokens(text: string, model?: string): number;
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/KooshaPari/phenotype-infrakit.git",
+    "url": "https://github.com/<REDACTED>/phenotype-infrakit.git",
     "directory": "packages/pheno-core"
   },
   "keywords": ["hexagonal-architecture", "ports-adapters", "ddd"],

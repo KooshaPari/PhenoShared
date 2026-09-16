@@ -37,9 +37,9 @@ retired_anti_patterns:
       Conflicts with the tier model: Go is tier-1 edges only, not a second
       core and not a place for cross-domain library dumping.
     replacement:
-      - KooshaPari/PhenoFastMCP-go   # tier-1 MCP framework fork
-      - KooshaPari/MCPForge          # tier-1 LSP / HTTP MCP edge
-      - KooshaPari/phenotype-ops-mcp # tier-1 ops / unikernel edge
+      - <REDACTED>/PhenoFastMCP-go   # tier-1 MCP framework fork
+      - <REDACTED>/MCPForge          # tier-1 LSP / HTTP MCP edge
+      - <REDACTED>/phenotype-ops-mcp # tier-1 ops / unikernel edge
     successor_role: edge-gateway
     successor_tier: 1
   - id: phenotype-rust-sdk
@@ -50,10 +50,10 @@ retired_anti_patterns:
       Generic Rust catch-all — same anti-pattern as phenotype-go-sdk.
       Rust belongs to tier-0 domain forks, not a language bucket.
     replacement:
-      - KooshaPari/PhenoFastMCP-rust # tier-0 MCP framework fork (fastmcp_rust)
-      - KooshaPari/PhenoRMCP         # tier-0 MCP spec SDK (rmcp)
-      - KooshaPari/substrate         # tier-0 fleet runtime (driver-* crates)
-      - KooshaPari/phenoUtils       # tier-0 hex ports, crypto, fs
+      - <REDACTED>/PhenoFastMCP-rust # tier-0 MCP framework fork (fastmcp_rust)
+      - <REDACTED>/PhenoRMCP         # tier-0 MCP spec SDK (rmcp)
+      - <REDACTED>/substrate         # tier-0 fleet runtime (driver-* crates)
+      - <REDACTED>/phenoUtils       # tier-0 hex ports, crypto, fs
     successor_role: mcp-framework
     successor_tier: 0
 
@@ -61,7 +61,7 @@ retired_anti_patterns:
 # Deprecated Go repos remain in server wiring as deprecated entries below.
 go_tier1_inventory:
   - id: phenofastmcp-go
-    repo: https://github.com/KooshaPari/PhenoFastMCP-go
+    repo: https://github.com/<REDACTED>/PhenoFastMCP-go
     role: mcp-framework
     tier: 1
     justification: "Fork of mark3labs/mcp-go; upstream is Go-native. Provides HTTP/SSE MCP edge servers."
@@ -73,7 +73,7 @@ go_tier1_inventory:
 
 framework:
   rust:
-    repo: https://github.com/KooshaPari/PhenoFastMCP-rust
+    repo: https://github.com/<REDACTED>/PhenoFastMCP-rust
     upstream: https://github.com/Dicklesworthstone/fastmcp_rust
     fork_parent: Dicklesworthstone/fastmcp_rust
     tier: 0
@@ -81,14 +81,14 @@ framework:
     parallel_lane: phenofastmcp-rust
     note: fastmcp-equivalent Rust framework; spec SDK is PhenoRMCP
   rmcp:
-    repo: https://github.com/KooshaPari/PhenoRMCP
+    repo: https://github.com/<REDACTED>/PhenoRMCP
     upstream: https://github.com/modelcontextprotocol/rust-sdk
     fork_parent: modelcontextprotocol/rust-sdk
     tier: 0
     role: mcp-spec-sdk
     note: official rmcp — not PhenoFastMCP branding
   go:
-    repo: https://github.com/KooshaPari/PhenoFastMCP-go
+    repo: https://github.com/<REDACTED>/PhenoFastMCP-go
     upstream: https://github.com/mark3labs/mcp-go
     fork_parent: mark3labs/mcp-go
     tier: 1
@@ -96,7 +96,7 @@ framework:
     parallel_lane: phenofastmcp-go
     justification: HTTP/SSE MCP edge servers; upstream is Go-native (MCPForge)
   python:
-    repo: https://github.com/KooshaPari/PhenoFastMCP
+    repo: https://github.com/<REDACTED>/PhenoFastMCP
     upstream: https://github.com/PrefectHQ/fastmcp
     fork_parent: PrefectHQ/fastmcp
     baseline_tag: v3.4.2
@@ -106,7 +106,7 @@ framework:
     toolchain: "py3.14; uv"
     note: fastmcp binding tier — not protocol core long-term
   zig:
-    repo: https://github.com/KooshaPari/PhenoFastMCP-zig
+    repo: https://github.com/<REDACTED>/PhenoFastMCP-zig
     upstream: https://github.com/modelcontextprotocol/rust-sdk
     fork_parent: modelcontextprotocol/rust-sdk
     tier: 0
@@ -116,7 +116,7 @@ framework:
     start_trigger: rmcp superset stabilizes (see issue #8)
     note: tier-0 parallel lane; same fork-parent rules as rust; NOT in phenotype-rust-sdk bucket
   mojo:
-    repo: https://github.com/KooshaPari/PhenoFastMCP-mojo
+    repo: https://github.com/<REDACTED>/PhenoFastMCP-mojo
     upstream: https://github.com/modelcontextprotocol/rust-sdk
     fork_parent: modelcontextprotocol/rust-sdk
     tier: 0
@@ -126,7 +126,7 @@ framework:
     start_trigger: rmcp superset stabilizes (see issue #8)
     note: tier-0 parallel lane; same fork-parent rules as rust; NOT in phenotype-rust-sdk bucket
   typescript:
-    repo: https://github.com/KooshaPari/PhenoFastMCP-ts
+    repo: https://github.com/<REDACTED>/PhenoFastMCP-ts
     upstream: https://github.com/modelcontextprotocol/typescript-sdk
     fork_parent: modelcontextprotocol/typescript-sdk
     tier: 2
@@ -189,7 +189,7 @@ servers:
     title: MCPForge LSP server
     description: Semantic code tools via language servers
     package: servers/external/mcpforge
-    repo: https://github.com/KooshaPari/MCPForge
+    repo: https://github.com/<REDACTED>/MCPForge
     language: go
     transport: stdio
     entry:
@@ -202,7 +202,7 @@ servers:
     title: NanoVM ops MCP
     description: Unikernel instance and image lifecycle
     package: servers/external/ops-mcp
-    repo: https://github.com/KooshaPari/phenotype-ops-mcp
+    repo: https://github.com/<REDACTED>/phenotype-ops-mcp
     language: go
     transport: stdio
     entry:
@@ -258,7 +258,7 @@ servers:
   - id: agileplus-mcp-intent
     title: AgilePlus intent graph MCP
     description: Rule-based prompt-to-intent-graph MCP tool and HTTP API (Rust)
-    repo: https://github.com/KooshaPari/AgilePlus
+    repo: https://github.com/<REDACTED>/AgilePlus
     package: crates/agileplus-mcp-intent
     language: rust
     framework: rmcp
@@ -274,7 +274,7 @@ servers:
   - id: agileplus-mcp
     title: AgilePlus FastMCP bridge
     description: Python FastMCP bridge from LLM tools to AgilePlus gRPC/API (planned)
-    repo: https://github.com/KooshaPari/AgilePlus
+    repo: https://github.com/<REDACTED>/AgilePlus
     package: agileplus-mcp
     language: python
     framework: fastmcp

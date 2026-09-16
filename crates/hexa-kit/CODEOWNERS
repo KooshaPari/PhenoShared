@@ -1,35 +1,35 @@
-# Global code owners for KooshaPari org
-* @KooshaPari
+# Global code owners for <REDACTED> org
+* @<REDACTED>
 
 # Infrastructure as code
-/iac/ @KooshaPari
-/.github/ @KooshaPari
+/iac/ @<REDACTED>
+/.github/ @<REDACTED>
 
 # Security-sensitive
-/SECURITY.md @KooshaPari
-/.github/dependabot.yml @KooshaPari
+/SECURITY.md @<REDACTED>
+/.github/dependabot.yml @<REDACTED>
 
 # Resilience crates (retry, rate-limit)
-/crates/phenotype-retry/ @KooshaPari
-/crates/phenotype-rate-limit/ @KooshaPari
+/crates/phenotype-retry/ @<REDACTED>
+/crates/phenotype-rate-limit/ @<REDACTED>
 
 # Routing plane
-/crates/phenotype-router/ @KooshaPari
+/crates/phenotype-router/ @<REDACTED>
 
 # Observability stubs (canonical in PhenoObservability)
-/crates/phenotype-telemetry/ @KooshaPari
-/crates/phenotype-health/ @KooshaPari
+/crates/phenotype-telemetry/ @<REDACTED>
+/crates/phenotype-health/ @<REDACTED>
 
 # Core shared crates
-/crates/phenotype-core/ @KooshaPari
-/crates/phenotype-port-traits/ @KooshaPari
-/crates/phenotype-ports-canonical/ @KooshaPari
-/crates/phenotype-shared-config/ @KooshaPari
-/crates/phenotype-infrastructure/ @KooshaPari
+/crates/phenotype-core/ @<REDACTED>
+/crates/phenotype-port-traits/ @<REDACTED>
+/crates/phenotype-ports-canonical/ @<REDACTED>
+/crates/phenotype-shared-config/ @<REDACTED>
+/crates/phenotype-infrastructure/ @<REDACTED>
 
 # Compliance / error tooling
-/crates/phenotype-compliance-scanner/ @KooshaPari
-/crates/phenotype-error-macros/ @KooshaPari
+/crates/phenotype-compliance-scanner/ @<REDACTED>
+/crates/phenotype-error-macros/ @<REDACTED>
 
 # CLI
-/crates/hexakit-cli/ @KooshaPari
+/crates/hexakit-cli/ @<REDACTED>

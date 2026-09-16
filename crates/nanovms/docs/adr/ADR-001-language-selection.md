@@ -2,7 +2,7 @@
 
 **Date**: 2026-04-02
 **Status**: Proposed
-**Deciders**: KooshaPari
+**Deciders**: <REDACTED>
 
 ## Context
 

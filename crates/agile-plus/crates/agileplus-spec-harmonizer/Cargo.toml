@@ -19,7 +19,7 @@ keywords = [
   "traceability",
 ]
 categories = ["development-tools", "parser-implementations", "data-structures"]
-authors = ["kooshapari"]
+authors = ["<REDACTED>"]
 
 [lib]
 name = "agileplus_spec_harmonizer"

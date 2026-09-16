@@ -2,7 +2,7 @@
 
 **Date:** 2026-06-21
 **Auditor:** Forge (synthesis pass)
-**Subject:** `KooshaPari/pheno-port-adapter` (GitHub) ↔ `repos/pheno-port-adapter/` (local monorepo subtree)
+**Subject:** `<REDACTED>/pheno-port-adapter` (GitHub) ↔ `repos/pheno-port-adapter/` (local monorepo subtree)
 **Status of GitHub remote:** `archived:true, size:0` (vestigial placeholder; 0 commits since 2024; 0 stargazers; 0 forks)
 **Status of local subtree:** Active, on `chore/v19-71-pillar-cycle-9-p0-2026-06-21` (v19 wave, cycle-9 P0 closure)
 **Authority:** ADR-014 (L4 hexagonal port-adapter substrate), ADR-038 (formal L4 policy, supersedes ADR-014 reference for v8 sweep), ADR-040 (test coverage gates per tier), ADR-042B (substrate quality bar)
@@ -21,7 +21,7 @@
 |---|---|
 | **Shape** | 9 — CANONICAL_SUBSTRATE_LOCAL_SUBTREE (new in v19, extends 7-shape prior taxonomy) |
 | **Confidence** | **HIGH** (concrete, evidence-driven; 0 acceptance of absorption candidates; 0 external consumers; 3 stale local duplicates identified for removal) |
-| **GitHub `KooshaPari/pheno-port-adapter`** | **PRESERVE** (vestigial placeholder, do NOT delete — keep as a redirect/discovery surface per ADR-026/028) |
+| **GitHub `<REDACTED>/pheno-port-adapter`** | **PRESERVE** (vestigial placeholder, do NOT delete — keep as a redirect/discovery surface per ADR-026/028) |
 | **Local `repos/pheno-port-adapter/`** | **PRESERVE as canonical home** of the L4 substrate |
 | **3 stale local duplicate paths** | **DELETE** (orphan copies, no upstream consumer, see §3.4) |
 | **Bug remediation** | **REQUIRED** (19 documented bugs in §6.1; all P2 because covered by tests at the boundary) |
@@ -39,7 +39,7 @@
 
 1. **C-1 (P1):** Delete 3 stale local duplicate paths (see §3.4). All 3 are orphan copies of the canonical subtree; deletion is macbook-safe (~2 min wall; `git rm` + commit on the audit-tracking branch).
 2. **C-2 (P1):** Strip 4 long-lived local branches that have 0 ahead / 0 behind (cleaned up in v19 cycle 9) — see §3.3 branch inventory.
-3. **C-3 (P2):** Add a 1-line `STATUS.md` marker to the GitHub placeholder so the redirect/discovery intent is visible (`This substrate is maintained at KooshaPari/phenotype-apps monorepo; see ADR-014/ADR-038`).
+3. **C-3 (P2):** Add a 1-line `STATUS.md` marker to the GitHub placeholder so the redirect/discovery intent is visible (`This substrate is maintained at <REDACTED>/phenotype-apps monorepo; see ADR-014/ADR-038`).
 4. **C-4 (P2):** File 3 follow-up issues in the monorepo for the 19 documented bugs (§6.1); batch them into a single P2 cycle, not a P0 because the boundary-test surface is intact.
 5. **C-5 (P3):** Add a `WORKLOG.md` v2.1 entry to the local subtree once `device:` field is canonicalized (per ADR-030; deadline 2026-06-22 for v2.0 deprecation).
 
@@ -58,7 +58,7 @@ Headline numbers:
 
 | Metric | Value | Source |
 |---|---|---|
-| **Canonical local path** | `/Users/kooshapari/CodeProjects/Phenotype/repos/pheno-port-adapter/` | `01-source-inventory.md:18` |
+| **Canonical local path** | `/Users/<REDACTED>/CodeProjects/Phenotype/repos/pheno-port-adapter/` | `01-source-inventory.md:18` |
 | **Current branch** | `chore/v19-71-pillar-cycle-9-p0-2026-06-21` | `01-source-inventory.md:26` |
 | **HEAD commit** | `4bba938854` (L4 port-adapter wave 5 — v17 closure) | `01-source-inventory.md:32` |
 | **LoC in `src/`** | ~1,420 (Rust) | `01-source-inventory.md:71` |
@@ -231,7 +231,7 @@ This matches the `pheno-errors` audit (1/8 accepted, outcome MERGE) and `pheno-f
 ### 4.5 External (non-monorepo) target parity
 
 - **crates.io:** 0 reverse dependencies of `pheno-port-adapter` 0.1.0 (verified 2026-06-21 via `cargo search port-adapter` and `crates.io` web search).
-- **GitHub dependents (public):** 0 (`gh api /repos/KooshaPari/pheno-port-adapter/dependents` returns 0 dependents; 0 stargazers; 0 watchers; 0 forks).
+- **GitHub dependents (public):** 0 (`gh api /repos/<REDACTED>/pheno-port-adapter/dependents` returns 0 dependents; 0 stargazers; 0 watchers; 0 forks).
 - **Internal `phenotype-apps` monorepo consumers:** 3 (above).
 
 **Conclusion:** Substrate has zero external blast radius. PRESERVE is the lowest-risk, highest-information-preservation outcome.
@@ -337,11 +337,11 @@ This matches the `pheno-errors` audit (1/8 accepted, outcome MERGE) and `pheno-f
 
 | # | Source Item | Source Evidence | Category | Source State | Target Repo | Target Evidence | Status | Deletion Justification | Risk if Deleted | Required Action |
 |---|---|---|---|---|---|---|---|---|---|
-| 67 | `KooshaPari/pheno-port-adapter` repo | `gh api /repos/KooshaPari/pheno-port-adapter` → `archived:true, size:0` | GitHub | VESTIGIAL | `repos/pheno-port-adapter/` | self | INTENTIONALLY_DEPRECATED | Vestigial placeholder, 0 commits since 2024 | LOW | KEEP as redirect surface (C-3) |
-| 68 | `KooshaPari/pheno-port-adapter/README.md` | `gh api /repos/KooshaPari/pheno-port-adapter/readme` | GitHub | VESTIGIAL | n/a | n/a | INTENTIONALLY_DEPRECATED | Stale (pre-v17 README) | LOW | Update via C-3 |
-| 69 | `KooshaPari/pheno-port-adapter/.github/workflows/` | `gh api /repos/KooshaPari/pheno-port-adapter/contents/.github/workflows` | GitHub | VESTIGIAL | n/a | n/a | INTENTIONALLY_DEPRECATED | Stale CI from 2024 | LOW | KEEP (do not delete CI; protects against accidental use) |
-| 70 | `KooshaPari/pheno-port-adapter/Cargo.toml` | `gh api /repos/KooshaPari/pheno-port-adapter/contents/Cargo.toml` | GitHub | VESTIGIAL | n/a | n/a | INTENTIONALLY_DEPRECATED | Stale, version 0.0.1 | LOW | KEEP (vestigial) |
-| 71 | `KooshaPari/pheno-port-adapter/src/` | `gh api /repos/KooshaPari/pheno-port-adapter/contents/src` | GitHub | VESTIGIAL | n/a | n/a | INTENTIONALLY_DEPRECATED | Stale, pre-L4 design | LOW | KEEP (vestigial) |
+| 67 | `<REDACTED>/pheno-port-adapter` repo | `gh api /repos/<REDACTED>/pheno-port-adapter` → `archived:true, size:0` | GitHub | VESTIGIAL | `repos/pheno-port-adapter/` | self | INTENTIONALLY_DEPRECATED | Vestigial placeholder, 0 commits since 2024 | LOW | KEEP as redirect surface (C-3) |
+| 68 | `<REDACTED>/pheno-port-adapter/README.md` | `gh api /repos/<REDACTED>/pheno-port-adapter/readme` | GitHub | VESTIGIAL | n/a | n/a | INTENTIONALLY_DEPRECATED | Stale (pre-v17 README) | LOW | Update via C-3 |
+| 69 | `<REDACTED>/pheno-port-adapter/.github/workflows/` | `gh api /repos/<REDACTED>/pheno-port-adapter/contents/.github/workflows` | GitHub | VESTIGIAL | n/a | n/a | INTENTIONALLY_DEPRECATED | Stale CI from 2024 | LOW | KEEP (do not delete CI; protects against accidental use) |
+| 70 | `<REDACTED>/pheno-port-adapter/Cargo.toml` | `gh api /repos/<REDACTED>/pheno-port-adapter/contents/Cargo.toml` | GitHub | VESTIGIAL | n/a | n/a | INTENTIONALLY_DEPRECATED | Stale, version 0.0.1 | LOW | KEEP (vestigial) |
+| 71 | `<REDACTED>/pheno-port-adapter/src/` | `gh api /repos/<REDACTED>/pheno-port-adapter/contents/src` | GitHub | VESTIGIAL | n/a | n/a | INTENTIONALLY_DEPRECATED | Stale, pre-L4 design | LOW | KEEP (vestigial) |
 
 ### 5.7 Category G — Documentation assets (canonical home)
 
@@ -523,7 +523,7 @@ None of these conditions apply to `pheno-port-adapter`'s 15 candidates. The 2 PA
 
 ### 8.1 Executive decision
 
-**The substrate is preserved.** `pheno-port-adapter` is the canonical L4 hexagonal port-adapter substrate for the fleet, codified in ADR-014 and elevated to formal policy in ADR-038. The local `repos/pheno-port-adapter/` subtree is its canonical home. The GitHub `KooshaPari/pheno-port-adapter` is a vestigial placeholder (`archived:true, size:0`) retained as a redirect surface for external discovery (per ADR-026/028).
+**The substrate is preserved.** `pheno-port-adapter` is the canonical L4 hexagonal port-adapter substrate for the fleet, codified in ADR-014 and elevated to formal policy in ADR-038. The local `repos/pheno-port-adapter/` subtree is its canonical home. The GitHub `<REDACTED>/pheno-port-adapter` is a vestigial placeholder (`archived:true, size:0`) retained as a redirect surface for external discovery (per ADR-026/028).
 
 The decision to PRESERVE (rather than DELETE_AFTER_PATCHES or MERGE) rests on three concrete observations:
 
@@ -555,7 +555,7 @@ The decision is supported by:
 - **`02-docs-code.md:1224` lines** of docs-and-code cross-reference, including the bug list (19 bugs, all P2-or-below except 1 P1), coverage gap (78% vs 80% target), and missing `WORKLOG.md`/`CANONICAL.md`.
 - **`03-target-parity.md:811` lines** of target parity analysis, with 0/15 candidates accepted.
 - **§3 branch inventory** above (23 branches, 16 actionable for cleanup).
-- **`gh api /repos/KooshaPari/pheno-port-adapter`** confirming `archived:true, size:0`.
+- **`gh api /repos/<REDACTED>/pheno-port-adapter`** confirming `archived:true, size:0`.
 
 The evidence is sufficient for HIGH confidence.
 
@@ -617,7 +617,7 @@ The substrate is in its correct state: canonical home, 0 external blast radius, 
 | # | Action | Time | Author | Notes |
 |---|---|---|---|---|
 | P2-1 | **C-4 bugs #1, 2, 4-19:** Fix remaining 18 P2/P3 bugs in a single PR | 2-3 hours | macbook | Test-covered at the boundary; mostly mechanical |
-| P2-2 | **C-3:** Add STATUS.md marker to GitHub `KooshaPari/pheno-port-adapter` via PR (or web edit) | 10 min | macbook | 1-line redirect: "This substrate is maintained at KooshaPari/phenotype-apps monorepo" |
+| P2-2 | **C-3:** Add STATUS.md marker to GitHub `<REDACTED>/pheno-port-adapter` via PR (or web edit) | 10 min | macbook | 1-line redirect: "This substrate is maintained at <REDACTED>/phenotype-apps monorepo" |
 | P2-3 | **C-5:** Add `WORKLOG.md` v2.1 to `repos/pheno-port-adapter/` (with `device: macbook` per ADR-030) | 15 min | macbook | Required by ADR-030; v2.0 deprecation 2026-06-22 |
 | P2-4 | Fix CHANGELOG.md test count (50 → 87) | 2 min | macbook | Trivial |
 

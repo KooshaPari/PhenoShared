@@ -1,6 +1,6 @@
 # Substrate Audit — DAG / WBS / Rubric Plan
 
-> **Audit baseline:** kooshapari/substrate @ `cb9a3e7` (psub- prefix rename)
+> **Audit baseline:** <REDACTED>/substrate @ `cb9a3e7` (psub- prefix rename)
 > **Audit date:** 2026-07-08
 > **Current score:** **83.2 / 100 (Grade B+)** across 140 pillars
 > **Remediation:** Main track complete (Phase0 + Phase1 + Phase2).

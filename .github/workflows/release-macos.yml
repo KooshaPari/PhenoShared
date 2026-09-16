@@ -1,6 +1,6 @@
 name: Release macOS (phenotype-omlx)
 
-# Calls the reusable workflow at kooshapari/phenotype-fleet-ops.
+# Calls the reusable workflow at <REDACTED>/phenotype-fleet-ops.
 # Self-hosted runners only (zero billed minutes).
 # All Apple Developer secrets live in Infisical project 8efe392e-56a6-4c3c-89f9-8141183dd7e8.
 
@@ -20,7 +20,7 @@ permissions:
 jobs:
   macos:
     name: Build, sign, notarize phenotype-omlx
-    uses: kooshapari/phenotype-fleet-ops/.github/workflows/macos-release.yml@main
+    uses: <REDACTED>/phenotype-fleet-ops/.github/workflows/macos-release.yml@main
     with:
       app-name: phenotype-omlx
       app-bundle-id: app.phenotype.omlx

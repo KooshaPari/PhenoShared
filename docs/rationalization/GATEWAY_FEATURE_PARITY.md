@@ -58,7 +58,7 @@ Plugin plane inside phenotype-gateway `third_party/argis-extensions` → `packag
 
 ## Go smoke results (H9 closeout — phenotype-gateway #12)
 
-Smoke infra: [phenotype-gateway #6](https://github.com/KooshaPari/phenotype-gateway/pull/6); pin bump [phenotype-gateway #12](https://github.com/KooshaPari/phenotype-gateway/pull/12) (`3974924`); CI `continue-on-error` removed when 4/4 forks pass.
+Smoke infra: [phenotype-gateway #6](https://github.com/<REDACTED>/phenotype-gateway/pull/6); pin bump [phenotype-gateway #12](https://github.com/<REDACTED>/phenotype-gateway/pull/12) (`3974924`); CI `continue-on-error` removed when 4/4 forks pass.
 
 | Plane | Submodule pin | Smoke command | Result | Fix / notes |
 |-------|---------------|---------------|--------|-----------------|
@@ -67,7 +67,7 @@ Smoke infra: [phenotype-gateway #6](https://github.com/KooshaPari/phenotype-gate
 | argis-extensions | `0419dcf` | `go build ./...` | **pass** | graphql/gen committed argis-extensions#82 |
 | bifrost/transports | `9c0d904` | `go build ./...` in `transports/` | **pass** | UI embed stub bifrost#9; monorepo replaces bifrost#10 |
 
-**Summary:** 4/4 Go plane smokes pass at H9 pins (2026-06-19). **H10 absorption complete** — anchor boundaries in `packages/*` per [ABSORPTION.md](https://github.com/KooshaPari/phenotype-gateway/blob/master/docs/ABSORPTION.md) (phenotype-gateway #14–#16).
+**Summary:** 4/4 Go plane smokes pass at H9 pins (2026-06-19). **H10 absorption complete** — anchor boundaries in `packages/*` per [ABSORPTION.md](https://github.com/<REDACTED>/phenotype-gateway/blob/master/docs/ABSORPTION.md) (phenotype-gateway #14–#16).
 
 ## Spike status (2026-06-19)
 
@@ -100,9 +100,9 @@ Smoke infra: [phenotype-gateway #6](https://github.com/KooshaPari/phenotype-gate
 | `packages/argis` | **anchor** | PIN/BOUNDARY + smoke (#15) |
 | `packages/router` | **delegate** | ComboVariant + HTTP delegate to cliproxy `/v1/chat/completions` (#16) |
 
-Absorption model: submodule canonical, gateway owns boundaries — [ABSORPTION.md](https://github.com/KooshaPari/phenotype-gateway/blob/master/docs/ABSORPTION.md).
+Absorption model: submodule canonical, gateway owns boundaries — [ABSORPTION.md](https://github.com/<REDACTED>/phenotype-gateway/blob/master/docs/ABSORPTION.md).
 
-OmniRoute desktop spike docs merged ([#74](https://github.com/KooshaPari/OmniRoute/pull/74)) per ADR-ECO-015.
+OmniRoute desktop spike docs merged ([#74](https://github.com/<REDACTED>/OmniRoute/pull/74)) per ADR-ECO-015.
 
 ## Promotion checklist (per component)
 

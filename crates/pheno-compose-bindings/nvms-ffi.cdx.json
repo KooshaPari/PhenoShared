@@ -14,13 +14,13 @@
     ],
     "authors": [
       {
-        "name": "kooshapari"
+        "name": "<REDACTED>"
       }
     ],
     "component": {
       "type": "library",
-      "bom-ref": "path+file:///Users/kooshapari/CodeProjects/Phenotype/repos/PhenoCompose/bindings/rust-ffi#nvms-ffi@0.1.0",
-      "author": "kooshapari",
+      "bom-ref": "path+file:///Users/<REDACTED>/CodeProjects/Phenotype/repos/PhenoCompose/bindings/rust-ffi#nvms-ffi@0.1.0",
+      "author": "<REDACTED>",
       "name": "nvms-ffi",
       "version": "0.1.0",
       "description": "Rust FFI bindings to NVMS Go Core",
@@ -38,13 +38,13 @@
         },
         {
           "type": "vcs",
-          "url": "https://github.com/KooshaPari/PhenoCompose"
+          "url": "https://github.com/<REDACTED>/PhenoCompose"
         }
       ],
       "components": [
         {
           "type": "library",
-          "bom-ref": "path+file:///Users/kooshapari/CodeProjects/Phenotype/repos/PhenoCompose/bindings/rust-ffi#nvms-ffi@0.1.0 bin-target-0",
+          "bom-ref": "path+file:///Users/<REDACTED>/CodeProjects/Phenotype/repos/PhenoCompose/bindings/rust-ffi#nvms-ffi@0.1.0 bin-target-0",
           "name": "nvms_ffi",
           "version": "0.1.0",
           "purl": "pkg:cargo/nvms-ffi@0.1.0?download_url=file://.#src/lib.rs"
@@ -1042,7 +1042,7 @@
   ],
   "dependencies": [
     {
-      "ref": "path+file:///Users/kooshapari/CodeProjects/Phenotype/repos/PhenoCompose/bindings/rust-ffi#nvms-ffi@0.1.0",
+      "ref": "path+file:///Users/<REDACTED>/CodeProjects/Phenotype/repos/PhenoCompose/bindings/rust-ffi#nvms-ffi@0.1.0",
       "dependsOn": [
         "registry+https://github.com/rust-lang/crates.io-index#bindgen@0.68.1"
       ]

@@ -6,7 +6,7 @@ license.workspace = true
 publish = false
 
 # Example binary exercising the clap-ext library. Absorbed from
-# KooshaPari/clap-ext/examples/basic during flattening (docket O17).
+# <REDACTED>/clap-ext/examples/basic during flattening (docket O17).
 
 [dependencies]
 clap-ext = { path = "../clap-ext" }

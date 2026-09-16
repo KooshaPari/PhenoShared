@@ -5,10 +5,10 @@ metadata:
   title: HexaKit
   description: Multi-language hexagonal architecture templates and kits
   annotations:
-    github.com/project-slug: KooshaPari/HexaKit
+    github.com/project-slug: <REDACTED>/HexaKit
     backstage.io/techdocs-ref: dir:./docs
-    kooshapari.com/registry-type: templates
-    kooshapari.com/language: polyglot
+    <REDACTED>.com/registry-type: templates
+    <REDACTED>.com/language: polyglot
   tags:
     - templates
     - hexagonal

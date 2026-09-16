@@ -34,8 +34,8 @@
 ## WP-02: Delete 8 obvious test/typo repos
 
 **File Scope:**
-- Read: [GitHub repositories `agentapi-deprec`, `tehgent`, `BytePort-TestPortfolio`, `Byteport-TestZip`, `P2`, `Tokn`, `argisexec`, `acp`; local clones under `/Users/kooshapari/CodeProjects/Phenotype/repos/`]
-- Write: [GitHub repositories `agentapi-deprec`, `tehgent`, `BytePort-TestPortfolio`, `Byteport-TestZip`, `P2`, `Tokn`, `argisexec`, `acp`; local clones under `/Users/kooshapari/CodeProjects/Phenotype/repos/`]
+- Read: [GitHub repositories `agentapi-deprec`, `tehgent`, `BytePort-TestPortfolio`, `Byteport-TestZip`, `P2`, `Tokn`, `argisexec`, `acp`; local clones under `/Users/<REDACTED>/CodeProjects/Phenotype/repos/`]
+- Write: [GitHub repositories `agentapi-deprec`, `tehgent`, `BytePort-TestPortfolio`, `Byteport-TestZip`, `P2`, `Tokn`, `argisexec`, `acp`; local clones under `/Users/<REDACTED>/CodeProjects/Phenotype/repos/`]
 **Depends on:** WP-01
 **Effort:** M
 
@@ -46,14 +46,14 @@
 
 ### Tasks
 
-- [ ] T011 — agentapi-deprec (deprecated, replaced by plusplus) — `/Users/kooshapari/CodeProjects/Phenotype/repos/agentapi-deprec/`
-- [ ] T012 — tehgent (typo of thegent) — `/Users/kooshapari/CodeProjects/Phenotype/repos/tehgent/`
-- [ ] T013 — BytePort-TestPortfolio (test artifact) — `/Users/kooshapari/CodeProjects/Phenotype/repos/BytePort-TestPortfolio/`
-- [ ] T014 — Byteport-TestZip (test artifact) — `/Users/kooshapari/CodeProjects/Phenotype/repos/Byteport-TestZip/`
-- [ ] T015 — P2 (placeholder) — `/Users/kooshapari/CodeProjects/Phenotype/repos/P2/`
-- [ ] T016 — Tokn (truncated name) — `/Users/kooshapari/CodeProjects/Phenotype/repos/Tokn/`
-- [ ] T017 — argisexec (typo/abbrev) — `/Users/kooshapari/CodeProjects/Phenotype/repos/argisexec/`
-- [ ] T018 — acp (ambiguous) — `/Users/kooshapari/CodeProjects/Phenotype/repos/acp/`
+- [ ] T011 — agentapi-deprec (deprecated, replaced by plusplus) — `/Users/<REDACTED>/CodeProjects/Phenotype/repos/agentapi-deprec/`
+- [ ] T012 — tehgent (typo of thegent) — `/Users/<REDACTED>/CodeProjects/Phenotype/repos/tehgent/`
+- [ ] T013 — BytePort-TestPortfolio (test artifact) — `/Users/<REDACTED>/CodeProjects/Phenotype/repos/BytePort-TestPortfolio/`
+- [ ] T014 — Byteport-TestZip (test artifact) — `/Users/<REDACTED>/CodeProjects/Phenotype/repos/Byteport-TestZip/`
+- [ ] T015 — P2 (placeholder) — `/Users/<REDACTED>/CodeProjects/Phenotype/repos/P2/`
+- [ ] T016 — Tokn (truncated name) — `/Users/<REDACTED>/CodeProjects/Phenotype/repos/Tokn/`
+- [ ] T017 — argisexec (typo/abbrev) — `/Users/<REDACTED>/CodeProjects/Phenotype/repos/argisexec/`
+- [ ] T018 — acp (ambiguous) — `/Users/<REDACTED>/CodeProjects/Phenotype/repos/acp/`
 
 ## WP-03: Clean 22 GB build artifacts locally
 
@@ -70,11 +70,11 @@
 
 ### Tasks
 
-- [ ] T019 — `rm -rf heliosCLI/bazel-*` (~30 GB savings) — `/Users/kooshapari/CodeProjects/Phenotype/repos/heliosCLI/bazel-*`
-- [ ] T020 — `rm -rf */node_modules` (~5 GB savings) — `/Users/kooshapari/CodeProjects/Phenotype/repos/*/node_modules`
-- [ ] T021 — `rm -rf */.venv` (~3 GB savings) — `/Users/kooshapari/CodeProjects/Phenotype/repos/*/.venv`
-- [ ] T022 — `cargo clean` in workspace target (~1.5 GB savings) — `/Users/kooshapari/CodeProjects/Phenotype/repos/*/target`
-- [ ] T023 — Delete all `.log` files at shelf root (~200 MB) — `/Users/kooshapari/CodeProjects/Phenotype/repos/*.log`
+- [ ] T019 — `rm -rf heliosCLI/bazel-*` (~30 GB savings) — `/Users/<REDACTED>/CodeProjects/Phenotype/repos/heliosCLI/bazel-*`
+- [ ] T020 — `rm -rf */node_modules` (~5 GB savings) — `/Users/<REDACTED>/CodeProjects/Phenotype/repos/*/node_modules`
+- [ ] T021 — `rm -rf */.venv` (~3 GB savings) — `/Users/<REDACTED>/CodeProjects/Phenotype/repos/*/.venv`
+- [ ] T022 — `cargo clean` in workspace target (~1.5 GB savings) — `/Users/<REDACTED>/CodeProjects/Phenotype/repos/*/target`
+- [ ] T023 — Delete all `.log` files at shelf root (~200 MB) — `/Users/<REDACTED>/CodeProjects/Phenotype/repos/*.log`
 
 ## WP-04: Enforce .gitignore across 9 cloned repos
 
@@ -104,8 +104,8 @@
 ## WP-05: Set up org-level .github repo with reusable workflows
 
 **File Scope:**
-- Read: [`github.com/KooshaPari/.github`, `.github/workflows/`, active repo workflow files under `.github/workflows/*.yml`]
-- Write: [`github.com/KooshaPari/.github`, `.github/workflows/`, active repo workflow files under `.github/workflows/*.yml`]
+- Read: [`github.com/<REDACTED>/.github`, `.github/workflows/`, active repo workflow files under `.github/workflows/*.yml`]
+- Write: [`github.com/<REDACTED>/.github`, `.github/workflows/`, active repo workflow files under `.github/workflows/*.yml`]
 **Depends on:** WP-04
 **Effort:** L
 
@@ -116,7 +116,7 @@
 
 ### Tasks
 
-- [ ] T033 — Create github.com/KooshaPari/.github repo — `github.com/KooshaPari/.github`
+- [ ] T033 — Create github.com/<REDACTED>/.github repo — `github.com/<REDACTED>/.github`
 - [ ] T034 — Move 32 workflow files from shelf root to .github/workflows/ — `.github/workflows/`
 - [ ] T035 — Create reusable ci-rust.yml workflow — `.github/workflows/ci-rust.yml`
 - [ ] T036 — Create reusable ci-python.yml workflow — `.github/workflows/ci-python.yml`
@@ -235,7 +235,7 @@
 - [ ] T069 — thegent: Merge `refactor/cleanup-error-variants` → main — `thegent/`
 - [ ] T070 — heliosApp: Merge `feat/fix-typescript-vite-federation` → main — `heliosApp/`
 - [ ] T071 — heliosCLI: Merge `refactor/decouple-harness-crates` → main — `heliosCLI/`
-- [ ] T072 — Verify all repos on main branch — `/Users/kooshapari/CodeProjects/Phenotype/repos/`
+- [ ] T072 — Verify all repos on main branch — `/Users/<REDACTED>/CodeProjects/Phenotype/repos/`
 
 ## WP-10b: Batch ecosystem audits (automatable probes)
 
@@ -251,11 +251,11 @@
 
 ### Tasks
 
-- [x] T187 — Dirty tree audit: identify repos with uncommitted changes — `/Users/kooshapari/CodeProjects/Phenotype/repos/*/`
-- [x] T188 — Cargo check probes: run cargo check on all Cargo repos — `/Users/kooshapari/CodeProjects/Phenotype/repos/*/Cargo.toml`
-- [x] T189 — deny.toml staleness: find all repos with deny.toml — `/Users/kooshapari/CodeProjects/Phenotype/repos/*/deny.toml`
-- [x] T190 — target/.gitignore presence: find repos missing target/.gitignore — `/Users/kooshapari/CodeProjects/Phenotype/repos/*/target/.gitignore`
-- [x] T191 — README presence: find repos missing README files — `/Users/kooshapari/CodeProjects/Phenotype/repos/*/README.md`
+- [x] T187 — Dirty tree audit: identify repos with uncommitted changes — `/Users/<REDACTED>/CodeProjects/Phenotype/repos/*/`
+- [x] T188 — Cargo check probes: run cargo check on all Cargo repos — `/Users/<REDACTED>/CodeProjects/Phenotype/repos/*/Cargo.toml`
+- [x] T189 — deny.toml staleness: find all repos with deny.toml — `/Users/<REDACTED>/CodeProjects/Phenotype/repos/*/deny.toml`
+- [x] T190 — target/.gitignore presence: find repos missing target/.gitignore — `/Users/<REDACTED>/CodeProjects/Phenotype/repos/*/target/.gitignore`
+- [x] T191 — README presence: find repos missing README files — `/Users/<REDACTED>/CodeProjects/Phenotype/repos/*/README.md`
 
 ---
 
@@ -333,11 +333,11 @@
 
 ### Tasks
 
-- [ ] T092 — Create separate GitHub org or use personal account — `github.com/KooshaPari`
+- [ ] T092 — Create separate GitHub org or use personal account — `github.com/<REDACTED>`
 - [ ] T093 — Move koosha-portfolio — `koosha-portfolio/`
 - [ ] T094 — Move dotfiles — `dotfiles/`
 - [ ] T095 — Move vibeproxy (after audit) — `vibeproxy/`
-- [ ] T096 — Remove from local shelf — `/Users/kooshapari/CodeProjects/Phenotype/repos/`
+- [ ] T096 — Remove from local shelf — `/Users/<REDACTED>/CodeProjects/Phenotype/repos/`
 - [ ] T097 — Exclude from CI/CD and AgilePlus tracking — `.github/workflows/`, `kitty-specs/`
 
 ## WP-14: Set up GitHub Packages for @phenotype/*
@@ -436,8 +436,8 @@
 - [ ] T112 — Create base AGENTS.md template — `AGENTS.md`
 - [ ] T113 — Create base CLAUDE.md template — `CLAUDE.md`
 - [ ] T114 — Create base README.md template — `README.md`
-- [ ] T115 — Distribute to all ~190 active repos — `/Users/kooshapari/CodeProjects/Phenotype/repos/`
-- [ ] T116 — Verify template adoption — `/Users/kooshapari/CodeProjects/Phenotype/repos/`
+- [ ] T115 — Distribute to all ~190 active repos — `/Users/<REDACTED>/CodeProjects/Phenotype/repos/`
+- [ ] T116 — Verify template adoption — `/Users/<REDACTED>/CodeProjects/Phenotype/repos/`
 
 ---
 
@@ -502,7 +502,7 @@
 ### Tasks
 
 - [ ] T128 — Define /health endpoint standard — `docs/`
-- [ ] T129 — Implement in all services — `/Users/kooshapari/CodeProjects/Phenotype/repos/`
+- [ ] T129 — Implement in all services — `/Users/<REDACTED>/CodeProjects/Phenotype/repos/`
 - [ ] T130 — Set up health monitoring — `health-monitoring/`
 
 ## WP-22: Set up Sentry for all production services
@@ -521,7 +521,7 @@
 ### Tasks
 
 - [ ] T131 — Configure Sentry projects — `sentry.io`
-- [ ] T132 — Add Sentry SDK to all services — `/Users/kooshapari/CodeProjects/Phenotype/repos/`
+- [ ] T132 — Add Sentry SDK to all services — `/Users/<REDACTED>/CodeProjects/Phenotype/repos/`
 - [ ] T133 — Set up alerting rules — `sentry.io`
 
 ## WP-23: Complete thegent Phase 3 (memory)
@@ -607,7 +607,7 @@
 - [ ] T151 — core workspace (contracts, errors) — `phenotype-infrakit/core/`
 - [ ] T152 — runtime workspace (event-sourcing, cache, state-machine) — `phenotype-infrakit/runtime/`
 - [ ] T153 — tools workspace (policy-engine, validation) — `phenotype-infrakit/tools/`
-- [ ] T154 — Update downstream consumers — `/Users/kooshapari/CodeProjects/Phenotype/repos/`
+- [ ] T154 — Update downstream consumers — `/Users/<REDACTED>/CodeProjects/Phenotype/repos/`
 
 ---
 
@@ -667,8 +667,8 @@
 ### Tasks
 
 - [ ] T161 — Configure GitHub Actions cache (30 days) — `.github/workflows/`
-- [ ] T162 — Configure GitHub Releases (permanent) — `github.com/KooshaPari/*/releases`
-- [ ] T163 — Configure GHCR (90 days) — `ghcr.io/kooshapari`
+- [ ] T162 — Configure GitHub Releases (permanent) — `github.com/<REDACTED>/*/releases`
+- [ ] T163 — Configure GHCR (90 days) — `ghcr.io/<REDACTED>`
 - [ ] T164 — Configure S3/GitHub Pages for benchmarks — `docs/benchmarks/`
 
 ## WP-30: Implement template versioning and distribution
@@ -706,7 +706,7 @@
 
 ### Tasks
 
-- [ ] T169 — Systematic clone of all GitHub repos — `/Users/kooshapari/CodeProjects/Phenotype/repos/`
+- [ ] T169 — Systematic clone of all GitHub repos — `/Users/<REDACTED>/CodeProjects/Phenotype/repos/`
 - [ ] T170 — Add AGENTS.md, CLAUDE.md, README.md where missing — `AGENTS.md`, `CLAUDE.md`, `README.md`
 - [ ] T171 — Set up docs/sessions/ directories — `docs/sessions/`
 - [ ] T172 — Verify git health — `.git/`
@@ -728,8 +728,8 @@
 
 - [ ] T173 — Verify all repos reference org workflows — `*/.github/workflows/`
 - [ ] T174 — Fix any CI failures — `*/.github/workflows/`
-- [ ] T175 — Set up branch protection rules — `github.com/KooshaPari/*/settings/branches`
-- [ ] T176 — Configure required status checks — `github.com/KooshaPari/*/settings/branches`
+- [ ] T175 — Set up branch protection rules — `github.com/<REDACTED>/*/settings/branches`
+- [ ] T176 — Configure required status checks — `github.com/<REDACTED>/*/settings/branches`
 
 ## WP-33: Governance audit — verify compliance
 

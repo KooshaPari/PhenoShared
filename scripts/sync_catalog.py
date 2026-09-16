@@ -50,7 +50,7 @@ def load_index(path: Path) -> dict:
     index_by_path = {}
     for idx, row in enumerate(data["rows"]):
         raw_path = str(row.get("path", "")).strip()
-        # Normalize: remove "KooshaPari/" prefix if present
+        # Normalize: remove "<REDACTED>/" prefix if present
         normalized = raw_path.split("/")[-1].lower()
         fsm = row.get("fsm", "").lower()
         

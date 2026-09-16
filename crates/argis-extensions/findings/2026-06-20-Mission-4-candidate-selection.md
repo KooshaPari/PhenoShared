@@ -14,7 +14,7 @@
 ## Methodology
 
 `rg 'phenotype-config' Cargo.toml pyproject.toml go.mod package.json` across
-`/Users/kooshapari/CodeProjects/Phenotype/repos/*/`. For each hit, score
+`/Users/<REDACTED>/CodeProjects/Phenotype/repos/*/`. For each hit, score
 on 4 dimensions (1-3 each, max 12):
 
 - **Maintainability** (M): how active is the repo? Recent commits, open issues, no > 6-month stale code.

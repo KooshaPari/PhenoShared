@@ -2,7 +2,7 @@
 
 - **Status:** Accepted — 2026-06-20 (paired with ADR-050 acceptance; takes effect on Option B adoption per §8 user directive)
 - **Date:** 2026-06-20
-- **Decision:** @KooshaPari — 2026-06-20 (accepted via orchestrator on `wip/stash-1-v11-agents-md-refresh-2026-06-20`)
+- **Decision:** @<REDACTED> — 2026-06-20 (accepted via orchestrator on `wip/stash-1-v11-agents-md-refresh-2026-06-20`)
 - **Plan:** [`plans/2026-06-20-v11-dag-router-rebuild.md`](../../plans/2026-06-20-v11-dag-router-rebuild.md) §L1 + §L2
 - **Research:** [`plans/2026-06-20-router-architecture-2026-research.md`](../../plans/2026-06-20-router-architecture-2026-research.md) §1, §5, §6
 - **Wave:** v11 L5 — Documentation / Governance (T5.3)
@@ -11,7 +11,7 @@
 
 ## Context
 
-`bifrost-extensions` (`KooshaPari/bifrost-extensions`; local mirror
+`bifrost-extensions` (`<REDACTED>/bifrost-extensions`; local mirror
 `argis-extensions`) is a fork of `maximhq/bifrost` carrying 9 Phenotype-owned
 plugins: `intelligentrouter` (1,103 LoC), `learning` (2,006), `promptadapter`
 (1,630), `smartfallback` (736), `contextfolding` (418), `voyage` (437),
@@ -194,7 +194,7 @@ owns both call sites.
 | FU5 | P1 | `pheno-framework-lint` rule for the dependency matrix in §4 (per ADR-048) | forge-1 | L2.5 |
 | FU6 | P1 | Update `bifrost-extensions/README.md` to reflect transport-only role + migration pointer | forge-1 | L1 |
 | FU7 | P1 | Update `phenotype-router/README.md` to declare ownership of decision layer | forge-2 | L2 |
-| FU8 | P2 | Archive decision for `OmniRoute` after Option B is live | @KooshaPari | Post-v11 |
+| FU8 | P2 | Archive decision for `OmniRoute` after Option B is live | @<REDACTED> | Post-v11 |
 | FU9 | P2 | Coverage gates per ADR-040 applied to both `phenotype-router` (70% framework) and `bifrost-extensions` (60% federated service) | forge-2 | Post-L3 |
 
 ## Alternatives considered

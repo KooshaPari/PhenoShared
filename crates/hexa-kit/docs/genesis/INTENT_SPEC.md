@@ -60,7 +60,7 @@ source: cursor
 session_id: b561a593-1729-44da-b90d-0cfbdf9d72ef
 captured_at: 2026-06-16T12:00:00Z
 verbatim_hash: sha256:abc123...
-repository_context: KooshaPari/HexaKit
+repository_context: <REDACTED>/HexaKit
 transcript: ~/.cursor/projects/.../b561a593....jsonl
 turn: 1
 ---

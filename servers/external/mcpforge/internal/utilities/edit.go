@@ -8,7 +8,7 @@ import (
 	"strings"
 
 	"github.com/davecgh/go-spew/spew"
-	"github.com/KooshaPari/MCPForge/internal/protocol"
+	"github.com/<REDACTED>/MCPForge/internal/protocol"
 )
 
 var (

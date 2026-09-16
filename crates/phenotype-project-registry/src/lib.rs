@@ -127,7 +127,7 @@ impl ProjectRegistry {
         let workflow_count = self.count_workflows(path).await;
 
         // Try to extract GitHub owner from git remote or use default
-        let owner = self.detect_owner(path).await.unwrap_or_else(|| "KooshaPari".to_string());
+        let owner = self.detect_owner(path).await.unwrap_or_else(|| "<REDACTED>".to_string());
 
         Some(ProjectMetadata {
             name: name.to_string(),

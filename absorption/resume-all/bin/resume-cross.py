@@ -176,7 +176,7 @@ def _build_local_resume(host: str, pane_id: str, wsl_distro: str | None,
     if rebuild and not dry_run:
         try:
             rebuild_proc = subprocess.run(
-                ["/Users/kooshapari/bin/resume-bridge", "pull",
+                ["/Users/<REDACTED>/bin/resume-bridge", "pull",
                  "--host", host] + (["--wsl", wsl_distro] if wsl_distro else []),
                 capture_output=True, text=True, timeout=60,
             )

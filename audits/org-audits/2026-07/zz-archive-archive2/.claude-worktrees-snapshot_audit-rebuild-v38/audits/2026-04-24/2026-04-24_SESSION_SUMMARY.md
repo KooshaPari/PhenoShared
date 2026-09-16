@@ -165,7 +165,7 @@
 
 ## Files & Locations
 
-- **Audit Documents:** `/Users/kooshapari/CodeProjects/Phenotype/repos/docs/org-audit-2026-04/`
+- **Audit Documents:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos/docs/org-audit-2026-04/`
   - `INDEX.md` — 59-repo status matrix
   - `SYSTEMIC_ISSUES.md` — Cross-repo patterns
   - `archived.md` — 15 archived repos (2 waves)
@@ -177,12 +177,12 @@
   - `dep_alignment.md` — 10 Rust repos, 3 bumped, 4 flagged
   - `loc_reverify.md` — 9 archive candidates, verdicts finalized
 
-- **Governance Templates:** `/Users/kooshapari/CodeProjects/Phenotype/repos/docs/templates/`
+- **Governance Templates:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos/docs/templates/`
   - `CLAUDE.template.md` — Minimal project governance
   - `AGENTS.template.md` — Local agent contract
   - `worklog.template.md` — Worklog structure
 
-- **Collections Planning:** `/Users/kooshapari/CodeProjects/Phenotype/repos/docs/org-audit-2026-04/CONSOLIDATION_MAPPING.md`
+- **Collections Planning:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos/docs/org-audit-2026-04/CONSOLIDATION_MAPPING.md`
 
 ---
 

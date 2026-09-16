@@ -40,7 +40,7 @@ class ProjectConfig(BaseProjectConfig):
     fallback_port_offset: int = 0
     proxy_port_offset: int = 0
     health_endpoint: str | None = None
-    tunnel_domain: str | None = "kooshapari.com"
+    tunnel_domain: str | None = "<REDACTED>.com"
     env_vars: dict[str, str] = field(default_factory=dict)
     working_directory: str | None = None
     auto_start: bool = False
@@ -290,7 +290,7 @@ class ProjectRegistry:
                 fallback_port_offset=1,
                 proxy_port_offset=1,
                 health_endpoint="/health",
-                tunnel_domain="kooshapari.com",
+                tunnel_domain="<REDACTED>.com",
                 auto_start=False,
             ),
             "zen": ProjectConfig(
@@ -300,7 +300,7 @@ class ProjectRegistry:
                 fallback_port_offset=2,
                 proxy_port_offset=2,
                 health_endpoint="/health",
-                tunnel_domain="kooshapari.com",
+                tunnel_domain="<REDACTED>.com",
                 auto_start=False,
             ),
         }

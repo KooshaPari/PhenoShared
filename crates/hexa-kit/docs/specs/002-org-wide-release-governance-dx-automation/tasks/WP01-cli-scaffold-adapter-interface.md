@@ -35,8 +35,8 @@ WP01 establishes the foundational CLI structure and adapter interface that all d
 
 1. Create a new Go module at the root of the AgilePlus repository:
    ```bash
-   cd /Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus
-   go mod init github.com/KooshaPari/pheno-cli
+   cd /Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus
+   go mod init github.com/<REDACTED>/pheno-cli
    ```
 
 2. Install core dependencies (Go 1.23+):
@@ -134,7 +134,7 @@ WP01 establishes the foundational CLI structure and adapter interface that all d
    package main
 
    import (
-     "github.com/KooshaPari/pheno-cli/cmd"
+     "github.com/<REDACTED>/pheno-cli/cmd"
    )
 
    func main() {
@@ -347,7 +347,7 @@ WP01 establishes the foundational CLI structure and adapter interface that all d
    import (
      "os"
      "path/filepath"
-     "github.com/KooshaPari/pheno-cli/internal/adapters"
+     "github.com/<REDACTED>/pheno-cli/internal/adapters"
    )
 
    type Language string

@@ -11,7 +11,7 @@
 
 | v9 §1.2 premise | Reality (2026-06-19) |
 |---|---|
-| `KooshaPari/pheno` is LIVE; "TO ARCHIVE post-migration" | `KooshaPari/pheno` is **ALREADY ARCHIVED** (`gh api` returns `"archived": true`, last push `2026-06-19T08:12:10Z`) |
+| `<REDACTED>/pheno` is LIVE; "TO ARCHIVE post-migration" | `<REDACTED>/pheno` is **ALREADY ARCHIVED** (`gh api` returns `"archived": true`, last push `2026-06-19T08:12:10Z`) |
 | "21 duplicate crate copies" need to be migrated | 19/22 pheno WS members are **already in HexaKit's `exclude` list** with explicit canonical owners; the 2 remaining (phenotype-error-macros, phenotype-port-traits) are intentional HexaKit scaffolds; 2 (agileplus-nats, phenotype-retry) are pheno-only and deferred to v10 |
 | 3-5 absorbing PRs needed | 0 absorbing PRs needed — all 19 canonicalized duplicates are at `fsm: "done"` in the registry with PR references |
 
@@ -74,7 +74,7 @@ $ awk '/^exclude = \[/,/^\]/' HexaKit/Cargo.toml \
 19
 
 # pheno: ALREADY ARCHIVED on GitHub
-$ gh api /repos/KooshaPari/pheno | jq -r '.archived'
+$ gh api /repos/<REDACTED>/pheno | jq -r '.archived'
 true
 ```
 

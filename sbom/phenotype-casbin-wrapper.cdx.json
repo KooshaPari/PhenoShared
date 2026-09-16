@@ -14,7 +14,7 @@
     ],
     "component": {
       "type": "library",
-      "bom-ref": "path+file:///Users/kooshapari/CodeProjects/Phenotype/repos/pheno/crates/phenotype-casbin-wrapper#0.2.0",
+      "bom-ref": "path+file:///Users/<REDACTED>/CodeProjects/Phenotype/repos/pheno/crates/phenotype-casbin-wrapper#0.2.0",
       "name": "phenotype-casbin-wrapper",
       "version": "0.2.0",
       "description": "Casbin adapter providing policy enforcement for the Phenotype ecosystem",
@@ -28,7 +28,7 @@
       "components": [
         {
           "type": "library",
-          "bom-ref": "path+file:///Users/kooshapari/CodeProjects/Phenotype/repos/pheno/crates/phenotype-casbin-wrapper#0.2.0 bin-target-0",
+          "bom-ref": "path+file:///Users/<REDACTED>/CodeProjects/Phenotype/repos/pheno/crates/phenotype-casbin-wrapper#0.2.0 bin-target-0",
           "name": "phenotype_casbin_wrapper",
           "version": "0.2.0",
           "purl": "pkg:cargo/phenotype-casbin-wrapper@0.2.0?download_url=file://.#src/lib.rs"
@@ -2095,7 +2095,7 @@
   ],
   "dependencies": [
     {
-      "ref": "path+file:///Users/kooshapari/CodeProjects/Phenotype/repos/pheno/crates/phenotype-casbin-wrapper#0.2.0",
+      "ref": "path+file:///Users/<REDACTED>/CodeProjects/Phenotype/repos/pheno/crates/phenotype-casbin-wrapper#0.2.0",
       "dependsOn": [
         "registry+https://github.com/rust-lang/crates.io-index#casbin@2.20.0",
         "registry+https://github.com/rust-lang/crates.io-index#serde@1.0.228",

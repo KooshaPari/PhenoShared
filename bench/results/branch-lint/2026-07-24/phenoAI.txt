@@ -1,4 +1,4 @@
-# branch-lint: /Users/kooshapari/CodeProjects/Phenotype/repos/phenoAI
+# branch-lint: /Users/<REDACTED>/CodeProjects/Phenotype/repos/phenoAI
 # scanned=27 allowed=16 grandfathered=0 violations=11
 # VIOLATIONS:
   build-triage-phenoAI  reason=no_allowed_prefix

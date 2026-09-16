@@ -7,10 +7,10 @@
 set -e
 
 # Configuration
-COMPUTE_HOST="desk"  # kooshapari-desk via Tailscale
+COMPUTE_HOST="desk"  # <REDACTED>-desk via Tailscale
 COMPUTE_IP="100.96.135.160"
 WSL_IP="100.84.189.31"  # WSL Tailscale IP
-WSL_USER="kooshapari"
+WSL_USER="<REDACTED>"
 WSL_SSH_PORT="2222"
 TIMEOUT=15
 

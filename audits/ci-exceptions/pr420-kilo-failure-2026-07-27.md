@@ -1,6 +1,6 @@
 # PR420 Kilo review failure audit
 
-**Pull request:** `KooshaPari/phenotype-registry#420`  
+**Pull request:** `<REDACTED>/phenotype-registry#420`  
 **Head:** `2331e82` (`audit: reconcile Grapheon absorption audit`)  
 **Check:** `Kilo Code Review`  
 **Run:** `6e05d285-f7a7-4338-ac86-1970b8f96b2c`  

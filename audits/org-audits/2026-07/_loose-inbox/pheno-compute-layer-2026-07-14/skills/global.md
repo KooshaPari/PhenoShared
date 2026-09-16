@@ -3,7 +3,7 @@
 In the original local source tree, this was a symlink:
 
 ```
-skills/global -> /Users/kooshapari/CodeProjects/Phenotype/skills
+skills/global -> /Users/<REDACTED>/CodeProjects/Phenotype/skills
 ```
 
 The symlink target was a local-machine-only path pointing to the developer's

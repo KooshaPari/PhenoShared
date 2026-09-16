@@ -49,7 +49,7 @@ Created 7 comprehensive documents in `/docs/reference/`:
 
 **Command**:
 ```bash
-cd /Users/kooshapari/CodeProjects/Phenotype/repos
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos
 ls -la AgilePlus/src/
 cat AgilePlus/package.json | grep -A 20 '"dependencies"'
 ```
@@ -61,7 +61,7 @@ cat AgilePlus/package.json | grep -A 20 '"dependencies"'
 
 **Command**:
 ```bash
-cd /Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus
 bun add -D @module-federation/enhanced @module-federation/utilities
 bun outdated @module-federation/enhanced
 ```

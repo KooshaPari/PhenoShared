@@ -83,7 +83,7 @@ Apache-2.0 OR MIT (your choice). See `LICENSE-APACHE` and `LICENSE-MIT`.
 - **ADR-096**: forgecode improvement (the locked stack)
 - **ADR-097**: eval harness design (next wave)
 - **ADR-098**: additional adapters (graphiti, hipporag — next wave)
-- `KooshaPari/pheno-forge-plugins` v0.1.0
-- `KooshaPari/pheno-cdylib-bridge` v0.1.0
-- `KooshaPari/thegent#1144` (thegent-memory v2)
+- `<REDACTED>/pheno-forge-plugins` v0.1.0
+- `<REDACTED>/pheno-cdylib-bridge` v0.1.0
+- `<REDACTED>/thegent#1144` (thegent-memory v2)
 - `tailcallhq/forgecode#3559` (upstream forge_pheno_memory)

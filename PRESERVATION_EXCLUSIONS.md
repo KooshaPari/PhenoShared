@@ -2,7 +2,7 @@
 
 This recovery snapshot preserves the dirty source state of `pheno` without
 mutating the original checkout. It is based on parent commit
-`be5da947c3fc747746b11f6f3010f9f15a7b21cb` from `KooshaPari/pheno` `main`.
+`be5da947c3fc747746b11f6f3010f9f15a7b21cb` from `<REDACTED>/pheno` `main`.
 
 ## Included
 

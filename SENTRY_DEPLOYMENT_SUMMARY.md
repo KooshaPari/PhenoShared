@@ -32,9 +32,9 @@ Sentry error tracking has been fully deployed to Tier 1 repositories with end-to
 **Status**: `.github/workflows/sentry-error-tracking.yml` deployed to all 3 repos
 
 **Locations**:
-- `/Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus/.github/workflows/sentry-error-tracking.yml`
-- `/Users/kooshapari/CodeProjects/Phenotype/repos/heliosCLI/.github/workflows/sentry-error-tracking.yml`
-- `/Users/kooshapari/CodeProjects/Phenotype/repos/phenotype-infrakit/.github/workflows/sentry-error-tracking.yml`
+- `/Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus/.github/workflows/sentry-error-tracking.yml`
+- `/Users/<REDACTED>/CodeProjects/Phenotype/repos/heliosCLI/.github/workflows/sentry-error-tracking.yml`
+- `/Users/<REDACTED>/CodeProjects/Phenotype/repos/phenotype-infrakit/.github/workflows/sentry-error-tracking.yml`
 
 **Triggers**:
 - Push to main branch
@@ -91,7 +91,7 @@ gh secret set SENTRY_DSN_PHENOTYPE_INFRAKIT --body '<dsn-from-sentry>'
 
 1. Go to: https://sentry.io/settings/phenotype/integrations/github/
 2. Click "Authorize GitHub" (one-time)
-3. Grant access to KooshaPari organization
+3. Grant access to <REDACTED> organization
 4. Create alert rule for auto-issue creation
 
 ### Step 3: Run Manual Verification

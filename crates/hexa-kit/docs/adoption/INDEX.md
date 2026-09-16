@@ -39,7 +39,7 @@ Unified foundation providing design system, documentation, and governance.
 
 1. **Add submodule** (1 min)
    ```bash
-   git submodule add https://github.com/KooshaPari/phenotype-docs.git docs/.phenotype-chassis
+   git submodule add https://github.com/<REDACTED>/phenotype-docs.git docs/.phenotype-chassis
    ```
 
 2. **Configure VitePress** (2 min)
@@ -116,6 +116,6 @@ Week 9-10:  Orchestration
 
 ## References
 
-- [@phenotype/docs](https://github.com/KooshaPari/phenotype-docs)
+- [@phenotype/docs](https://github.com/<REDACTED>/phenotype-docs)
 - [Webpack Module Federation](https://webpack.js.org/concepts/module-federation/)
-- [AgilePlus Specs](https://github.com/KooshaPari/phenotype-infrakit/tree/main/kitty-specs)
+- [AgilePlus Specs](https://github.com/<REDACTED>/phenotype-infrakit/tree/main/kitty-specs)

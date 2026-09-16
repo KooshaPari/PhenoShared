@@ -80,7 +80,7 @@ Five work packages (WP1.1 — WP1.5) decompose SSOT Phase 1 into focused, parall
 ./scripts/setup-specs-branch.sh
 
 # Check protection
-gh api repos/KooshaPari/phenotype-infrakit/branches/specs/main/protection
+gh api repos/<REDACTED>/phenotype-infrakit/branches/specs/main/protection
 
 # Test push to agent branch (should succeed)
 git checkout -b specs/agent-test-wp11
@@ -247,7 +247,7 @@ cargo build --release --package phenotype-batch-merger
 
 # Integration test: Real repo
 cd /tmp/test-repo
-git clone https://github.com/KooshaPari/phenotype-infrakit.git test
+git clone https://github.com/<REDACTED>/phenotype-infrakit.git test
 cd test
 git checkout specs/main
 

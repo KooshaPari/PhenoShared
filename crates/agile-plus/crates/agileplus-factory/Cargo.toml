@@ -5,11 +5,11 @@ edition.workspace = true
 rust-version.workspace = true
 description = "Dark-factory loop: queue -> claim -> worktree -> trail -> PR. Unattended code factory for AgilePlus."
 license = "MIT OR Apache-2.0"
-repository = "https://github.com/KooshaPari/AgilePlus"
+repository = "https://github.com/<REDACTED>/AgilePlus"
 documentation = "https://docs.rs/agileplus-factory"
 keywords = ["phenotype", "agileplus", "factory"]
 categories = ["rust-patterns"]
-authors = ["kooshapari"]
+authors = ["<REDACTED>"]
 
 [dependencies]
 agileplus-triage = { path = "../agileplus-triage" }

@@ -8,7 +8,7 @@ from __future__ import annotations
 import argparse, datetime as dt, json, math, os, shutil, struct, subprocess, sys, tempfile, time, wave
 from pathlib import Path
 
-BIN = Path('/Users/kooshapari/bin')
+BIN = Path('/Users/<REDACTED>/bin')
 DATA = Path.home() / '.local/share/resume-all'
 VOICE = DATA / 'voice'
 STATE = DATA / 'voice-state.json'

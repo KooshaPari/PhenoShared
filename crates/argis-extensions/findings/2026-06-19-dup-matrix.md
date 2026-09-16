@@ -6,7 +6,7 @@
 
 ## Methodology
 
-Each repo in scope for Stage1 was scanned for features, types, and utilities that overlap with another KooshaPari repo. The matrix below captures:
+Each repo in scope for Stage1 was scanned for features, types, and utilities that overlap with another <REDACTED> repo. The matrix below captures:
 - **Duplicated feature** — what overlaps
 - **Source repos** — which repos have it
 - **Canonical target** — where it should live

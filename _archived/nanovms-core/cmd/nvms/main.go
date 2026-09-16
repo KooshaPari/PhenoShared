@@ -7,7 +7,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/kooshapari/nanovms/pkg/deploy"
+	"github.com/<REDACTED>/nanovms/pkg/deploy"
 )
 
 func main() {

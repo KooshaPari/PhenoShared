@@ -259,7 +259,7 @@ $ ls Cargo.toml
 ls: Cargo.toml: No such file or directory
 ```
 
-A `Cargo.lock` exists at the root (`/Users/kooshapari/CodeProjects/Phenotype/repos/Cargo.lock`, 203,814 bytes, dated 2026-06-19) but **without a root `Cargo.toml`, this lockfile is orphaned / stale** — it is not actively maintained by any workspace `cargo` invocation. Per AGENTS.md, the monorepo root is **not** a single workspace; sub-crates are standalone (each declaring `[workspace]` to opt out of any surrounding workspace lookup). The lockfile is a fossil.
+A `Cargo.lock` exists at the root (`/Users/<REDACTED>/CodeProjects/Phenotype/repos/Cargo.lock`, 203,814 bytes, dated 2026-06-19) but **without a root `Cargo.toml`, this lockfile is orphaned / stale** — it is not actively maintained by any workspace `cargo` invocation. Per AGENTS.md, the monorepo root is **not** a single workspace; sub-crates are standalone (each declaring `[workspace]` to opt out of any surrounding workspace lookup). The lockfile is a fossil.
 
 ### 4.2 No `.cargo/config.toml`
 
@@ -341,7 +341,7 @@ inherits = "dev"
 
 #### Option B — Fleet-wide `.cargo/config.toml` (less per-crate duplication)
 
-Create `/Users/kooshapari/CodeProjects/Phenotype/repos/.cargo/config.toml` (this directory currently only has `audit-rules.toml`, so adding `config.toml` is non-conflicting):
+Create `/Users/<REDACTED>/CodeProjects/Phenotype/repos/.cargo/config.toml` (this directory currently only has `audit-rules.toml`, so adding `config.toml` is non-conflicting):
 
 ```toml
 # Fleet-wide cargo configuration (SIDE-17, ADR-proposed).
@@ -439,9 +439,9 @@ Out of scope for SIDE-17 but surfaced during read:
 - `FocalPoint/pheno-agents-md/` — empty stub
 - `focalpoint-wt-v12-16-17/pheno-agents-md/` — empty stub
 - `focalpoint-wt-v12-16-17/pheno-cargo-template/` — empty stub
-- `/Users/kooshapari/CodeProjects/Phenotype/repos/.cargo/audit-rules.toml` — confirmed not profile-related
-- `/Users/kooshapari/CodeProjects/Phenotype/repos/Cargo.toml` — **does not exist**
-- `/Users/kooshapari/CodeProjects/Phenotype/repos/Cargo.lock` — stale orphan (no root `Cargo.toml` to maintain it)
+- `/Users/<REDACTED>/CodeProjects/Phenotype/repos/.cargo/audit-rules.toml` — confirmed not profile-related
+- `/Users/<REDACTED>/CodeProjects/Phenotype/repos/Cargo.toml` — **does not exist**
+- `/Users/<REDACTED>/CodeProjects/Phenotype/repos/Cargo.lock` — stale orphan (no root `Cargo.toml` to maintain it)
 - AGENTS.md §"Stale / warnings" — pre-existing note about root `Cargo.toml` workspace inconsistency
 - ADR-023 (App-level repo triage, L5-101) — bucket governance for sub-crates
 - ADR-040 (Test coverage gates per tier) — criterion as fleet benchmark tool

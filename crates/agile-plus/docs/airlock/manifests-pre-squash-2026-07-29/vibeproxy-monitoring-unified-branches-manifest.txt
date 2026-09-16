@@ -1,7 +1,7 @@
 === Exporting vibeproxy-monitoring-unified branches manifest ===
 Generated: 2026-07-29T06:57:56Z
-Repo: KooshaPari/vibeproxy-monitoring-unified
-Local clone: /Users/kooshapari/CodeProjects/Phenotype/repos/vibeproxy-monitoring-unified
+Repo: <REDACTED>/vibeproxy-monitoring-unified
+Local clone: /Users/<REDACTED>/CodeProjects/Phenotype/repos/vibeproxy-monitoring-unified
 HEAD: ffe6c6c8310c1ed09040d5f47b0f6b953e94535b
 HEAD subject: chore: commit untracked infrastructure files
 
@@ -13,7 +13,7 @@ HEAD subject: chore: commit untracked infrastructure files
 
 === NOVEL COMMITS PER BRANCH (vs main) ===
   NOVEL(2) | feat/exporter-v1-envelope | d866b8781ccd66cffdfcf21449afe18f659ced0d | 2026-07-22 | fix(ci): run exporter unit tests without broken reusable workflow
-  NOVEL(7) | origin | 5dc8d0274593ac17334293bf309dc178da194ee8 | 2026-07-28 | Merge pull request #42 from KooshaPari/ci/add-ci-stack-1785199086
-  NOVEL(7) | origin/main | 5dc8d0274593ac17334293bf309dc178da194ee8 | 2026-07-28 | Merge pull request #42 from KooshaPari/ci/add-ci-stack-1785199086
+  NOVEL(7) | origin | 5dc8d0274593ac17334293bf309dc178da194ee8 | 2026-07-28 | Merge pull request #42 from <REDACTED>/ci/add-ci-stack-1785199086
+  NOVEL(7) | origin/main | 5dc8d0274593ac17334293bf309dc178da194ee8 | 2026-07-28 | Merge pull request #42 from <REDACTED>/ci/add-ci-stack-1785199086
 
 === END MANIFEST ===

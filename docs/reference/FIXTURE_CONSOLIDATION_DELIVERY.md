@@ -335,7 +335,7 @@ TOTAL: 2,700+ lines across 9 documents
 
 ## Files Created
 
-### Location: `/Users/kooshapari/CodeProjects/Phenotype/repos/docs/reference/`
+### Location: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/docs/reference/`
 
 ```
 docs/reference/

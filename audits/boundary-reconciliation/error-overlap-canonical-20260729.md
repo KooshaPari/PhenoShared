@@ -6,7 +6,7 @@ Treat `pheno/crates/phenotype-error-core` plus its `phenotype-errors` facade as 
 
 ## Evidence
 
-- `KooshaPari/pheno-errors` is private scratch residue at `01b850e4`; it has no Cargo manifest or Rust source.
+- `<REDACTED>/pheno-errors` is private scratch residue at `01b850e4`; it has no Cargo manifest or Rust source.
 - `pheno` contains the implemented layered error core and facade.
 - OmniRoute and PlayCua contain parent-local/app-local implementations with different coupling and semantics.
 - PhenoObservability and Agentora contain transitional/vendor or deprecated facades.

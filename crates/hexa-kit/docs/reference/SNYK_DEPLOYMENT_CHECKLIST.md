@@ -12,17 +12,17 @@
 
 - [ ] **Deployment script exists**: `/scripts/snyk-deploy.sh`
   ```bash
-  test -f /Users/kooshapari/CodeProjects/Phenotype/repos/scripts/snyk-deploy.sh && echo "✅"
+  test -f /Users/<REDACTED>/CodeProjects/Phenotype/repos/scripts/snyk-deploy.sh && echo "✅"
   ```
 
 - [ ] **Policy generator exists**: `/scripts/snyk-policy-generator.sh`
   ```bash
-  test -f /Users/kooshapari/CodeProjects/Phenotype/repos/scripts/snyk-policy-generator.sh && echo "✅"
+  test -f /Users/<REDACTED>/CodeProjects/Phenotype/repos/scripts/snyk-policy-generator.sh && echo "✅"
   ```
 
 - [ ] **GitHub workflow exists**: `/.github/workflows/snyk-scan.yml`
   ```bash
-  test -f /Users/kooshapari/CodeProjects/Phenotype/repos/.github/workflows/snyk-scan.yml && echo "✅"
+  test -f /Users/<REDACTED>/CodeProjects/Phenotype/repos/.github/workflows/snyk-scan.yml && echo "✅"
   ```
 
 - [ ] **Documentation exists**:
@@ -30,7 +30,7 @@
   - `docs/reference/SNYK_QUICK_REFERENCE.md`
   - `SNYK_AUTOMATION_READY.md`
   ```bash
-  test -f /Users/kooshapari/CodeProjects/Phenotype/repos/docs/reference/SNYK_SETUP_GUIDE.md && echo "✅"
+  test -f /Users/<REDACTED>/CodeProjects/Phenotype/repos/docs/reference/SNYK_SETUP_GUIDE.md && echo "✅"
   ```
 
 ### Local Environment
@@ -115,7 +115,7 @@
 ### Option A: Organization Secret (Recommended)
 
 - [ ] **Navigate to org settings**
-  - Go: https://github.com/KooshaPari/settings/secrets
+  - Go: https://github.com/<REDACTED>/settings/secrets
   - Or: GitHub > Settings (top-right) > Organization Settings > Secrets
 
 - [ ] **Create new secret**
@@ -133,7 +133,7 @@
 For each Tier 1 repo:
 
 - [ ] **Navigate to repo secrets**
-  - Go: https://github.com/KooshaPari/AgilePlus/settings/secrets
+  - Go: https://github.com/<REDACTED>/AgilePlus/settings/secrets
   - (Replace AgilePlus with phenotype-infrakit, heliosCLI, etc.)
 
 - [ ] **Create secret for each repo**
@@ -164,8 +164,8 @@ For each Tier 1 repo:
   - Should show your token (or *****)
 
 - [ ] **Working directory is correct**
-  - `pwd` → `/Users/kooshapari/CodeProjects/Phenotype/repos`
-  - If not: `cd /Users/kooshapari/CodeProjects/Phenotype/repos`
+  - `pwd` → `/Users/<REDACTED>/CodeProjects/Phenotype/repos`
+  - If not: `cd /Users/<REDACTED>/CodeProjects/Phenotype/repos`
 
 - [ ] **Target repos exist**
   ```bash
@@ -312,7 +312,7 @@ These policies define vulnerability suppression rules and scan exclusions."
   ```
 
 - [ ] **Verify on GitHub**
-  - Go: https://github.com/KooshaPari/repos/commits/main
+  - Go: https://github.com/<REDACTED>/repos/commits/main
   - Confirm commit appears
   - Click commit to verify `.snyk` files changed
 
@@ -345,7 +345,7 @@ These policies define vulnerability suppression rules and scan exclusions."
   ```
 
 - [ ] **Verify on GitHub**
-  - Go: https://github.com/KooshaPari/AgilePlus/blob/main/.github/workflows/snyk-scan.yml
+  - Go: https://github.com/<REDACTED>/AgilePlus/blob/main/.github/workflows/snyk-scan.yml
   - Should see file contents
 
 #### phenotype-infrakit
@@ -389,9 +389,9 @@ These policies define vulnerability suppression rules and scan exclusions."
 ### Check Workflow Activation
 
 - [ ] **Go to Actions tab for each repo**
-  - https://github.com/KooshaPari/AgilePlus/actions
-  - https://github.com/KooshaPari/phenotype-infrakit/actions
-  - https://github.com/KooshaPari/heliosCLI/actions
+  - https://github.com/<REDACTED>/AgilePlus/actions
+  - https://github.com/<REDACTED>/phenotype-infrakit/actions
+  - https://github.com/<REDACTED>/heliosCLI/actions
 
 - [ ] **Verify workflow appears in list**
   - Should show "Snyk Security Scan" in workflow list
@@ -421,18 +421,18 @@ These policies define vulnerability suppression rules and scan exclusions."
 ### Enable GitHub Code Scanning
 
 - [ ] **Go to Security settings for each repo**
-  - https://github.com/KooshaPari/AgilePlus/settings (Security tab)
+  - https://github.com/<REDACTED>/AgilePlus/settings (Security tab)
   - Check "Code Scanning Alerts" is enabled
 
 - [ ] **View Code Scanning dashboard**
-  - Go: https://github.com/KooshaPari/AgilePlus/security/code-scanning
+  - Go: https://github.com/<REDACTED>/AgilePlus/security/code-scanning
   - Should show vulnerabilities from Snyk SARIF uploads
   - May be empty if no vulnerabilities found
 
 - [ ] **Repeat for all Tier 1 repos**
-  - [ ] AgilePlus: https://github.com/KooshaPari/AgilePlus/security/code-scanning
-  - [ ] phenotype-infrakit: https://github.com/KooshaPari/phenotype-infrakit/security/code-scanning
-  - [ ] heliosCLI: https://github.com/KooshaPari/heliosCLI/security/code-scanning
+  - [ ] AgilePlus: https://github.com/<REDACTED>/AgilePlus/security/code-scanning
+  - [ ] phenotype-infrakit: https://github.com/<REDACTED>/phenotype-infrakit/security/code-scanning
+  - [ ] heliosCLI: https://github.com/<REDACTED>/heliosCLI/security/code-scanning
 
 ---
 
@@ -468,7 +468,7 @@ These policies define vulnerability suppression rules and scan exclusions."
 ### Verify GitHub Integration
 
 - [ ] **Check GitHub Code Scanning**
-  - Go: https://github.com/KooshaPari/repos/security/code-scanning
+  - Go: https://github.com/<REDACTED>/repos/security/code-scanning
   - Should show vulnerabilities from Snyk scans
   - Multiple repos should be visible
 

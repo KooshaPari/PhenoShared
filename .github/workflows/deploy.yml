@@ -11,7 +11,7 @@ permissions:
   contents: read
 jobs:
   deploy:
-    uses: KooshaPari/phenoShared/.github/workflows/vitepress-pages.yml@d1f40cb9482add27c57925be5085cabe2c20d8be # pinned from @ref; org SHA may shift on new commits
+    uses: <REDACTED>/phenoShared/.github/workflows/vitepress-pages.yml@d1f40cb9482add27c57925be5085cabe2c20d8be # pinned from @ref; org SHA may shift on new commits
     with:
       concurrency_group: pheno-vitepress-pages
     permissions:

@@ -4,7 +4,7 @@
 //! objectives. Replaces the simpler weighted-sum scoring in [`super::pareto_router`]
 //! with a proper non-dominated sort suitable for multi-objective model selection.
 //!
-//! Origin: `KooshaPari/helios-cli/src/helios_router_ui/pareto/engine.py`
+//! Origin: `<REDACTED>/helios-cli/src/helios_router_ui/pareto/engine.py`
 //! Migration date: 2026-06-20 (T35).
 //!
 //! # Algorithm

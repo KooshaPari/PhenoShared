@@ -2,13 +2,13 @@
   "timestamp": "2026-08-08T23:50:55Z",
   "session": "codex-thread-019f6249-d74c-7540-885f-588c3d51ac3a",
   "wheel": {
-    "path": "/home/kooshapari/sglang-src/sgl-kernel/dist/sgl_kernel-0.1.0-cp39-abi3-linux_x86_64.whl",
+    "path": "/home/<REDACTED>/sglang-src/sgl-kernel/dist/sgl_kernel-0.1.0-cp39-abi3-linux_x86_64.whl",
     "size_bytes": 15871510,
     "sha256": "e462074c3c8c58f96f0562f78086494114c2123114ae81abbfc2b737361e2763"
   },
   "pip_install": {
     "rc": 0,
-    "command": "/home/kooshapari/.pheno-serve-venv/bin/python -m pip install --force-reinstall --no-deps /home/kooshapari/sglang-src/sgl-kernel/dist/sgl_kernel-0.1.0-cp39-abi3-linux_x86_64.whl",
+    "command": "/home/<REDACTED>/.pheno-serve-venv/bin/python -m pip install --force-reinstall --no-deps /home/<REDACTED>/sglang-src/sgl-kernel/dist/sgl_kernel-0.1.0-cp39-abi3-linux_x86_64.whl",
     "output_last_8_lines": [
       "  Attempting uninstall: sgl-kernel",
       "    Found existing installation: sgl-kernel 0.1.0",
@@ -17,15 +17,15 @@
       "Successfully installed sgl-kernel-0.1.0",
       "",
       "[notice] A new release of pip is available: 26.0.1 -> 26.2.1",
-      "[notice] To update, run: /home/kooshapari/.pheno-serve-venv/bin/python -m pip install --upgrade pip"
+      "[notice] To update, run: /home/<REDACTED>/.pheno-serve-venv/bin/python -m pip install --upgrade pip"
     ]
   },
   "import_verify": {
     "status": "PASS",
-    "output": "IMPORT_OK 0.1.0\nPACKAGE_FILE /home/kooshapari/.pheno-serve-venv/lib64/python3.14/site-packages/sgl_kernel/__init__.py\nCOMMON_OPS_FILE /home/kooshapari/.pheno-serve-venv/lib64/python3.14/site-packages/sgl_kernel/common_ops.abi3.so\nSO_EXISTS True"
+    "output": "IMPORT_OK 0.1.0\nPACKAGE_FILE /home/<REDACTED>/.pheno-serve-venv/lib64/python3.14/site-packages/sgl_kernel/__init__.py\nCOMMON_OPS_FILE /home/<REDACTED>/.pheno-serve-venv/lib64/python3.14/site-packages/sgl_kernel/common_ops.abi3.so\nSO_EXISTS True"
   },
   "so_sha256": {
-    "installed_path": "/home/kooshapari/.pheno-serve-venv/lib64/python3.14/site-packages/sgl_kernel/common_ops.abi3.so",
+    "installed_path": "/home/<REDACTED>/.pheno-serve-venv/lib64/python3.14/site-packages/sgl_kernel/common_ops.abi3.so",
     "installed": "dc94a9032f6327f66d8ec519fb35d89cd46c8f95f0a3d8fd3653be71201ebd29",
     "wheel_inner": "dc94a9032f6327f66d8ec519fb35d89cd46c8f95f0a3d8fd3653be71201ebd29",
     "match": true,
@@ -75,7 +75,7 @@
   "files": {
     "smoke_script": "/tmp/sglk_smoke_2026-08-08.py",
     "smoke_results_json": "/tmp/sglk_smoke_results_2026-08-08.json",
-    "evidence_wsl": "/home/kooshapari/sgl_kernel_smoke_evidence_2026-08-08.json",
+    "evidence_wsl": "/home/<REDACTED>/sgl_kernel_smoke_evidence_2026-08-08.json",
     "evidence_windows": "C:\\Users\\koosh\\pheno-harness\\state\\wheels\\sgl_kernel_smoke_evidence_2026-08-08.json"
   }
 }

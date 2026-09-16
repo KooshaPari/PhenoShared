@@ -107,7 +107,7 @@ This index is the master list of every repo bound to a `docs/intent/<repo>.md` a
 
 ## Pending binding (scraped but not yet bound)
 
-Records that don't have a project context, or whose project context is to a directory we don't recognise as a repo, end up in `docs/curated-prompts/_orphan/`. The biggest orphan category is `/Users/kooshapari/CodeProjects/Phenotype/repos` (~10k records) which maps to the **phenotype-registry** meta-repo (already bound, see row 1).
+Records that don't have a project context, or whose project context is to a directory we don't recognise as a repo, end up in `docs/curated-prompts/_orphan/`. The biggest orphan category is `/Users/<REDACTED>/CodeProjects/Phenotype/repos` (~10k records) which maps to the **phenotype-registry** meta-repo (already bound, see row 1).
 
 Weekly re-render (per ADR-024) will keep this file in sync.
 

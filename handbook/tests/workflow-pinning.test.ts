@@ -14,7 +14,7 @@ const WORKFLOWS_DIR = join(__dirname, "..", ".github", "workflows");
 // Actions that are exempt from SHA pinning because they don't have SHA-pinnable refs
 const EXEMPT_ACTIONS = [
   // Reusable workflow calls use `@ref` syntax, not action SHAs
-  "KooshaPari/",
+  "<REDACTED>/",
 ];
 
 describe("GitHub Actions SHA pinning", () => {

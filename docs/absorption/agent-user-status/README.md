@@ -1,8 +1,8 @@
-# Absorption — KooshaPari/agent-user-status → phenotype-tooling/crates/agent-user-status
+# Absorption — <REDACTED>/agent-user-status → phenotype-tooling/crates/agent-user-status
 
 **Status:** ABSORBED 2026-07-17
-**Source repo:** `KooshaPari/agent-user-status` @ `112287548359ba5c18ff1e7b047c8334f050532f` (2026-06-20)
-**Absorbing repo:** `KooshaPari/phenotype-tooling`
+**Source repo:** `<REDACTED>/agent-user-status` @ `112287548359ba5c18ff1e7b047c8334f050532f` (2026-06-20)
+**Absorbing repo:** `<REDACTED>/phenotype-tooling`
 **Absorbing branch:** `salvage/phenotype-tooling-workspace-2026-07-15`
 **Absorbing commit:** `29ce5dd4d7baecd4920e5ccedca744eee5422a10`
 **Registry row:** `repo-agent-user-status` flipped `AFFIRM/active` → `ABSORB/absorbed`
@@ -21,7 +21,7 @@
 
 ## Why phenotype-tooling
 
-The original auto-generated audit pointed at `KooshaPari/Agentora` (Rust agent-orchestration
+The original auto-generated audit pointed at `<REDACTED>/Agentora` (Rust agent-orchestration
 workspace), but the Python source cannot embed in Agentora without breaking its `[workspace]`
 semantics. `phenotype-tooling` already hosts Python subpackages via the `crates/phench`
 precedent — Python package embedded under `crates/` WITHOUT registering in
@@ -40,7 +40,7 @@ runtime for coding agents) is a developer-tooling concern.
 ## Restore command
 
 ```bash
-gh repo clone KooshaPari/agent-user-status /tmp/agent-user-status-restore
+gh repo clone <REDACTED>/agent-user-status /tmp/agent-user-status-restore
 ```
 
 ## Audit / boundary references

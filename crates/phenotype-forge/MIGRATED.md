@@ -2,7 +2,7 @@
 
 **Date:** 2026-06-17  
 **Disposition:** Agentora PhenoProc audit copy — **not canonical**  
-**Canonical:** https://github.com/KooshaPari/HexaKit  
+**Canonical:** https://github.com/<REDACTED>/HexaKit  
 **Authority:** `PHENOTYPE_HEXAKIT_REPOINT.md` wave 3
 
 ## For consumers
@@ -10,7 +10,7 @@
 Do not depend on this Agentora staging path. Use:
 
 ```toml
-`phenotype-forge` = { git = "https://github.com/KooshaPari/HexaKit", branch = "main" }
+`phenotype-forge` = { git = "https://github.com/<REDACTED>/HexaKit", branch = "main" }
 ```
 
 ## For Agentora maintainers

@@ -7,7 +7,7 @@ Enforces ADR-ECO-017 (substrate schema conventions):
   - ports/adapters are set when architecture is `hexagonal-l4`.
   - Every entry's `boundary` / `intent` paths resolve on disk
     (unless explicitly null).
-  - Slugs are unique and repo paths match `^KooshaPari/<name>$`.
+  - Slugs are unique and repo paths match `^<REDACTED>/<name>$`.
 
 Exit codes: 0 = clean, 1 = one or more validation failures, 2 = I/O.
 """
@@ -36,7 +36,7 @@ VALID_ARCHITECTURES = {"hexagonal-l4", "layered", "microkernel", "none"}
 VALID_STATUS = {"active", "archived", "deprecated", "absorbed"}
 
 RE_ID = re.compile(r"^[a-z0-9-]+$")
-RE_REPO = re.compile(r"^KooshaPari/[A-Za-z0-9_.-]+$")
+RE_REPO = re.compile(r"^<REDACTED>/[A-Za-z0-9_.-]+$")
 RE_PORT = re.compile(r"^[A-Z][A-Za-z0-9]+Port$")
 RE_ADAPTER = re.compile(r"^[A-Z][A-Za-z0-9]+Adapter$")
 
@@ -97,7 +97,7 @@ def main() -> int:
         # repo
         repo = entry.get("repo", "")
         if not RE_REPO.match(repo):
-            fail(f"{slug}: repo `{repo}` must match ^KooshaPari/<name>$")
+            fail(f"{slug}: repo `{repo}` must match ^<REDACTED>/<name>$")
             fails += 1
         else:
             pass_(f"{slug}: repo OK ({repo})")

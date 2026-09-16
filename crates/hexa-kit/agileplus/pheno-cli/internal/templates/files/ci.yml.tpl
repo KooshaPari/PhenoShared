@@ -101,4 +101,4 @@ jobs:
 
   phenotype-validate:
     runs-on: ubuntu-latest
-    uses: KooshaPari/phenotypeActions/.github/workflows/validate-governance.yml@main
+    uses: <REDACTED>/phenotypeActions/.github/workflows/validate-governance.yml@main

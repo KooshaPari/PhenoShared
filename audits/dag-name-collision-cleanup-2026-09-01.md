@@ -6,7 +6,7 @@ Two products with the name `pheno-dag` (or `phenodag`) existed in the ecosystem:
 
 | | Rust DAG foundation | Go multi-agent DAG |
 |---|---|---|
-| Path | `phenotype-registry/crates/pheno-dag/` | `KooshaPari/phenodag` (was a separate GH repo) |
+| Path | `phenotype-registry/crates/pheno-dag/` | `<REDACTED>/phenodag` (was a separate GH repo) |
 | Language | Rust | Go |
 | Origin | Extracted from BytePort per its Cargo.toml | Multi-agent multi-project DAG (SQLite + flock, v3-180 preset, hybrid similarity, atomic claims, mangled-git scan) |
 | Size | small (lib.rs + serialize.rs) | 282 KB, 13 queue files + spec |
@@ -20,7 +20,7 @@ Renamed the Rust foundation `crates/pheno-dag` → `crates/phenotype-dag-core` (
 
 ### Why the Rust name had to change
 
-- The Go `KooshaPari/phenodag` was a publicly-visible product (homepage `phenodag.phenotype.space`, 1 open issue).
+- The Go `<REDACTED>/phenodag` was a publicly-visible product (homepage `phenodag.phenotype.space`, 1 open issue).
 - Its GitHub repo was archived in the L7 sweep on 2026-08-14 and then **deleted** on 2026-09-01 after full absorption into Tracera.
 - However, the Rust DAG foundation inside `phenotype-registry` was extracted from BytePort per its Cargo.toml, predates the Go product, and has nothing to do with multi-agent work.
 - The Rust name being `pheno-dag` was a historical accident — it pre-dated the Go product.
@@ -41,7 +41,7 @@ Renamed the Rust foundation `crates/pheno-dag` → `crates/phenotype-dag-core` (
 ### Verification
 
 - `cargo check --workspace` passes cleanly: `phenotype-dag-core v0.1.0` compiles.
-- Verified across all KooshaPari repos via `search/code?q=pheno-dag+repo:KooshaPari/<repo>` API: **no external Cargo.toml depends on `pheno-dag`** outside of `phenotype-registry` itself.
+- Verified across all <REDACTED> repos via `search/code?q=pheno-dag+repo:<REDACTED>/<repo>` API: **no external Cargo.toml depends on `pheno-dag`** outside of `phenotype-registry` itself.
 - The only remaining historical references to `pheno-dag` are in `phenotype-omlx/docs/sessions/2026-07-18-metal-model-runtime/21_TURN_14_RESUME_NOTES.md` (historical session notes — left unchanged, do not rewrite history).
 
 ### Registry updates
@@ -57,7 +57,7 @@ Renamed the Rust foundation `crates/pheno-dag` → `crates/phenotype-dag-core` (
 
 ## Why this matters
 
-The Go product (`KooshaPari/phenodag`) was absorbed into Tracera spec 008 via PRs #723, #725, #727 and AgilePlus via PR #895, then deleted from GH on 2026-09-01. Without this rename, downstream consumers would have a `phenotype-dag-core` (Rust) and a "phenodag" (Tracera spec 008 mirror) coexisting under confusing names. The rename establishes a clean namespace.
+The Go product (`<REDACTED>/phenodag`) was absorbed into Tracera spec 008 via PRs #723, #725, #727 and AgilePlus via PR #895, then deleted from GH on 2026-09-01. Without this rename, downstream consumers would have a `phenotype-dag-core` (Rust) and a "phenodag" (Tracera spec 008 mirror) coexisting under confusing names. The rename establishes a clean namespace.
 
 ## Related work
 

@@ -11,7 +11,7 @@
 | Path | Canonical owner | Action |
 |------|-----------------|--------|
 | `Metron/` | `PhenoObservability/crates/metrickit` | Workspace member removed; repo archived |
-| `agileplus/crates/*` | `KooshaPari/AgilePlus` | Workspace members removed; Agentora staging removed (#81) |
+| `agileplus/crates/*` | `<REDACTED>/AgilePlus` | Workspace members removed; Agentora staging removed (#81) |
 
 Trees remain on disk with `README` redirect stubs for audit; `exclude` in root `Cargo.toml`.
 
@@ -40,7 +40,7 @@ Trees remain on disk with `README` redirect stubs for audit; `exclude` in root `
 |------|-----------------|--------|
 | `crates/settly` | phenotype-config | ✅ exclude + Wave 8 stub prune |
 | `crates/stashly` | phenoShared / phenotype-types | ✅ exclude #250 |
-| `forgecode-fork` | HexaKit scaffold (ADR-003) | **note** — no separate repo; `KooshaPari/forgecode` external fork (Tasken boundary) |
+| `forgecode-fork` | HexaKit scaffold (ADR-003) | **note** — no separate repo; `<REDACTED>/forgecode` external fork (Tasken boundary) |
 
 ---
 
@@ -130,7 +130,7 @@ PO `phenotype-health-axum` / `phenotype-health-cli` remain PO-only runtime layer
 
 ### Phase 4 wave 5 (2026-06-19) — config-core + stub prune tail — **complete**
 
-Wave 5a (#277) drained 7 interim phenoShared git pins; wave 5b (#278 @ `d83d1ca`) drained remaining 11 pins — **zero** `KooshaPari/phenoShared` workspace git deps on HexaKit main. Backlog tasks #56–#64, #68–#70 closed; registry ledger [#235](https://github.com/KooshaPari/phenotype-registry/pull/235), [#242](https://github.com/KooshaPari/phenotype-registry/pull/242).
+Wave 5a (#277) drained 7 interim phenoShared git pins; wave 5b (#278 @ `d83d1ca`) drained remaining 11 pins — **zero** `<REDACTED>/phenoShared` workspace git deps on HexaKit main. Backlog tasks #56–#64, #68–#70 closed; registry ledger [#235](https://github.com/<REDACTED>/phenotype-registry/pull/235), [#242](https://github.com/<REDACTED>/phenotype-registry/pull/242).
 
 | Crate / action | Action | PR |
 |----------------|--------|-----|
@@ -143,16 +143,16 @@ Wave 5a (#277) drained 7 interim phenoShared git pins; wave 5b (#278 @ `d83d1ca`
 
 **Workspace audit (task #70):** 15 members, 52 excluded — scaffold-only target approaching.
 
-**Org grep checkpoint (task #68):** zero new `KooshaPari/HexaKit` path deps in fleet manifests (2026-06-19); see `docs/disposition/hexakit-path-deps-checkpoint-2026-06-19.md`.
+**Org grep checkpoint (task #68):** zero new `<REDACTED>/HexaKit` path deps in fleet manifests (2026-06-19); see `docs/disposition/hexakit-path-deps-checkpoint-2026-06-19.md`.
 
 ---
 
 ## Wave 5b — phenoShared git pin drain complete (2026-06-19)
 
 HexaKit `feat/wave5b-phenoshared-drain` → merged **HexaKit#278** @ `d83d1ca`.  
-**Zero** `KooshaPari/phenoShared` git pins remain in `HexaKit/Cargo.toml` workspace.dependencies.
+**Zero** `<REDACTED>/phenoShared` git pins remain in `HexaKit/Cargo.toml` workspace.dependencies.
 
-> **Correction 2026-06-19:** Wave 5b had a regression. The "0 pins remain" claim above was **true at HexaKit #278 merge**, but became **false again at HexaKit #279** which reverted the `phenotype-cache-adapter` pin back to `KooshaPari/phenoShared` because the `libs/phenotype-cache-adapter` path stub was never pushed to remote. After phenoShared was hard-deleted, HexaKit `main` was left pointing at a 404 repo. **HexaKit #285** ("drain last phenoShared pin via cache-adapter inline stub") added an in-tree path stub at `crates/phenotype-cache-adapter-stub` and dropped the phenoShared pin — making the "0 pins remain" claim true again. **The #278 → #279 → #285 sequence is the documented regression.** Pyron #62 gutted the rest of the tombstone-prep work. Both `phenoShared` and `Pyron` are now restored as archived; fleet-wide rescan confirms zero live cargo pins across the org.
+> **Correction 2026-06-19:** Wave 5b had a regression. The "0 pins remain" claim above was **true at HexaKit #278 merge**, but became **false again at HexaKit #279** which reverted the `phenotype-cache-adapter` pin back to `<REDACTED>/phenoShared` because the `libs/phenotype-cache-adapter` path stub was never pushed to remote. After phenoShared was hard-deleted, HexaKit `main` was left pointing at a 404 repo. **HexaKit #285** ("drain last phenoShared pin via cache-adapter inline stub") added an in-tree path stub at `crates/phenotype-cache-adapter-stub` and dropped the phenoShared pin — making the "0 pins remain" claim true again. **The #278 → #279 → #285 sequence is the documented regression.** Pyron #62 gutted the rest of the tombstone-prep work. Both `phenoShared` and `Pyron` are now restored as archived; fleet-wide rescan confirms zero live cargo pins across the org.
 
 ### Wave 5b drained (verified on owner `main` via `cargo check -p phenotype-core`)
 
@@ -183,7 +183,7 @@ HexaKit `feat/wave5b-phenoshared-drain` → merged **HexaKit#278** @ `d83d1ca`.
 | `phenotype-agent-contracts` | Agentora | `rust/phenotype-agent-contracts` |
 | `phenotype-security-aggregator` | Authvault | `authkit/rust/phenotype-security-aggregator` |
 
-**Verification:** `cargo check -p phenotype-core` green; `rg 'KooshaPari/phenoShared' Cargo.toml` → 0 workspace git pins.
+**Verification:** `cargo check -p phenotype-core` green; `rg '<REDACTED>/phenoShared' Cargo.toml` → 0 workspace git pins.
 
 ---
 
@@ -202,7 +202,7 @@ HexaKit `feat/wave5b-phenoshared-drain` → merged **HexaKit#278** @ `d83d1ca`.
 ```bash
 # After HexaKit P0 PR merges:
 rg '"Metron"|agileplus/crates' HexaKit/Cargo.toml   # expect 0 member lines
-rg 'KooshaPari/HexaKit' org manifests --glob 'Cargo.toml'  # shrinking over waves
+rg '<REDACTED>/HexaKit' org manifests --glob 'Cargo.toml'  # shrinking over waves
 ```
 
 ---
@@ -212,8 +212,8 @@ rg 'KooshaPari/HexaKit' org manifests --glob 'Cargo.toml'  # shrinking over wave
 The "0 pins remain" claim in wave 5b above was **premature**. The actual sequence was:
 
 1. **HexaKit #278** at `d83d1ca` drained 11 phenoShared pins — the "0 pins remain" line became *temporarily true*.
-2. **HexaKit #279** reverted the `phenotype-cache-adapter` pin back to `KooshaPari/phenoShared` because `libs/phenotype-cache-adapter` path stub was never pushed to remote. "0 pins remain" became **false** again.
-3. `KooshaPari/phenoShared` was hard-deleted at this point. HexaKit `main` was left pointing at a 404 repo.
+2. **HexaKit #279** reverted the `phenotype-cache-adapter` pin back to `<REDACTED>/phenoShared` because `libs/phenotype-cache-adapter` path stub was never pushed to remote. "0 pins remain" became **false** again.
+3. `<REDACTED>/phenoShared` was hard-deleted at this point. HexaKit `main` was left pointing at a 404 repo.
 4. **HexaKit #285** ("drain last phenoShared pin via cache-adapter inline stub") added an in-tree path stub at `crates/phenotype-cache-adapter-stub` and dropped the phenoShared pin. "0 pins remain" is now true.
 5. **Pyron #62** gutted Pyron to tombstone-prep; the `phenotype-contracts` pin from Pyron #61 was already drained by **ResilienceKit #4** (Wave 5b fleet drain).
 

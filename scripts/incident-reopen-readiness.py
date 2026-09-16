@@ -15,7 +15,7 @@ from pathlib import Path
 
 
 DEFAULT_INCIDENT_DOC = Path("docs/operations/secrets-pii-incident-2026-06-20.md")
-DEFAULT_REPOSITORY = "KooshaPari/phenotype-registry"
+DEFAULT_REPOSITORY = "<REDACTED>/phenotype-registry"
 DEFAULT_INCIDENT_ISSUE = 320
 DEFAULT_TREE_SCANNER = Path("scripts/retained-history-secret-scan.py")
 

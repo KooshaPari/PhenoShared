@@ -15,16 +15,16 @@
 | Stream | State | Evidence |
 |---|---|---|
 | **Dmouse92 migration** | ⏸ SKIPPED per user instruction 2026-06-17 | User: "skip that entirely now" |
-| **AgilePlus** | ✅ DONE — `wip/stash-2026-06-14-spdx-license-headers-2026-06-17` pushed to KooshaPari | `git ls-remote --heads origin` confirms 4ebef382d |
+| **AgilePlus** | ✅ DONE — `wip/stash-2026-06-14-spdx-license-headers-2026-06-17` pushed to <REDACTED> | `git ls-remote --heads origin` confirms 4ebef382d |
 | **pheno** | ✅ DONE — 2 WIP branches pushed; stashes resolved | `wip/stash-2026-05-02-pheno-cli-adapter-refactor-2026-06-17` + `wip/migrate-from-dmouse-chore-adr-012-2026-06-17` |
-| **dispatch-mcp** | ✅ DONE — repo CREATED on KooshaPari (didn't exist), 4 branches pushed | `gh repo create KooshaPari/dispatch-mcp` + `wip/migrate-from-dmouse-w2-1-2026-06-17` |
-| **phenotype-ops** | ✅ DONE — origin switched from Dmouse92→KooshaPari; branch in sync | `git remote -v` shows KooshaPari/phenotype-ops |
-| **monorepo (repos/)** | ⚠ STRANDED — 3 governance commits unpushable (no KooshaPari/repos remote exists, LFS blocks argis) | `gh repo view KooshaPari/repos` → "Could not resolve" |
+| **dispatch-mcp** | ✅ DONE — repo CREATED on <REDACTED> (didn't exist), 4 branches pushed | `gh repo create <REDACTED>/dispatch-mcp` + `wip/migrate-from-dmouse-w2-1-2026-06-17` |
+| **phenotype-ops** | ✅ DONE — origin switched from Dmouse92→<REDACTED>; branch in sync | `git remote -v` shows <REDACTED>/phenotype-ops |
+| **monorepo (repos/)** | ⚠ STRANDED — 3 governance commits unpushable (no <REDACTED>/repos remote exists, LFS blocks argis) | `gh repo view <REDACTED>/repos` → "Could not resolve" |
 | **l4-80-wt (FocalPoint)** | ⚠ STRANDED — 1 commit unpushable (repo archived) | `git push` → "Repository not archived" |
 | **l4-68 worktree** | ⚠ STRANDED — 3 commits unpushable (submodule LFS, divergent history from argis) | LFS reject + merge-base fails |
 | **audit-30pillar worktree** | ⚠ STRANDED — 484 commits ahead of argis (history diverged from different upstream) | `merge-base --all` returns empty |
 
-### Net result: **4/4 target repos pushed to KooshaPari**, **0 Dmouse92 push destinations remain active** (legacy Dmouse92 *fetch* remote still in monorepo per user instruction to skip). **3 stranded worktrees** documented with patch plan for follow-up.
+### Net result: **4/4 target repos pushed to <REDACTED>**, **0 Dmouse92 push destinations remain active** (legacy Dmouse92 *fetch* remote still in monorepo per user instruction to skip). **3 stranded worktrees** documented with patch plan for follow-up.
 
 ---
 
@@ -34,9 +34,9 @@
 |---|---|
 | **AgilePlus** | `DELETE_AFTER_PATCHES` — push WIP branch (done), optionally land SPDX header sweep in a follow-up PR |
 | **pheno** | `DELETE_AFTER_PATCHES` — 2 WIP branches pushed; stashes converted to commit history; superseded stashes dropped |
-| **dispatch-mcp** | `DELETE_AFTER_PATCHES` — repo CREATED on KooshaPari, Dmouse92 remote removed, all 4 branches pushed |
-| **phenotype-ops** | `PRESERVE` — already in sync, no action needed; Dmouse92 origin swapped to KooshaPari |
-| **repos/ (monorepo)** | `ARCHIVE_ONLY` — 3 stranded commits require infra decision (LFS recovery OR new KooshaPari/repos) |
+| **dispatch-mcp** | `DELETE_AFTER_PATCHES` — repo CREATED on <REDACTED>, Dmouse92 remote removed, all 4 branches pushed |
+| **phenotype-ops** | `PRESERVE` — already in sync, no action needed; Dmouse92 origin swapped to <REDACTED> |
+| **repos/ (monorepo)** | `ARCHIVE_ONLY` — 3 stranded commits require infra decision (LFS recovery OR new <REDACTED>/repos) |
 | **l4-80-wt (FocalPoint)** | `ARCHIVE_ONLY` — work in worktree, parent repo archived |
 | **l4-68 worktree** | `ARCHIVE_ONLY` — work stranded, push-blocked |
 | **audit-30pillar worktree** | `ARCHIVE_ONLY` — work stranded, divergent history from upstream |
@@ -83,19 +83,19 @@
 
 | Repo | Origin | Dmouse92 remote |
 |---|---|---|
-| **AgilePlus** | `git@github.com:KooshaPari/AgilePlus.git` ✅ | None (was `helios-cli` → `KooshaPari/AgilePlus`, removed as wrong; was `dmouse` was a no-op fetch) |
-| **pheno** | `git@github.com:KooshaPari/pheno.git` ✅ | None (was `dmouse` → `Dmouse92/AgilePlus`? — removed) |
-| **dispatch-mcp** | `git@github.com:KooshaPari/dispatch-mcp.git` ✅ NEW | None (was `dmouse` → `Dmouse92/dispatch-mcp`? — removed) |
-| **phenotype-ops** | `git@github.com:KooshaPari/phenotype-ops.git` ✅ | None (was `origin` → `Dmouse92/phenotype-ops`? — fixed) |
-| **monorepo (repos/)** | None (has `argis` = KooshaPari/argis-extensions, but divergent history) | `dmouse` → `Dmouse92/AgilePlus.git` (per user, SKIPPED) |
+| **AgilePlus** | `git@github.com:<REDACTED>/AgilePlus.git` ✅ | None (was `helios-cli` → `<REDACTED>/AgilePlus`, removed as wrong; was `dmouse` was a no-op fetch) |
+| **pheno** | `git@github.com:<REDACTED>/pheno.git` ✅ | None (was `dmouse` → `Dmouse92/AgilePlus`? — removed) |
+| **dispatch-mcp** | `git@github.com:<REDACTED>/dispatch-mcp.git` ✅ NEW | None (was `dmouse` → `Dmouse92/dispatch-mcp`? — removed) |
+| **phenotype-ops** | `git@github.com:<REDACTED>/phenotype-ops.git` ✅ | None (was `origin` → `Dmouse92/phenotype-ops`? — fixed) |
+| **monorepo (repos/)** | None (has `argis` = <REDACTED>/argis-extensions, but divergent history) | `dmouse` → `Dmouse92/AgilePlus.git` (per user, SKIPPED) |
 
 ### 2.4 Worktree inventory (post wrap-up)
 
 | Worktree | Path | Repo | Branch | State |
 |---|---|---|---|---|
-| Main | `/Users/kooshapari/CodeProjects/Phenotype/repos` | monorepo | `chore/w5-adrs-sota-2026-06-15` | 3 commits ahead, stranded |
-| audit-30pillar | `/Users/kooshapari/CodeProjects/Phenotype/repos/.worktrees/audit-30pillar` | monorepo | `audit/30-pillar-fleet` | 484 ahead, stranded |
-| l4-68 | `/Users/kooshapari/CodeProjects/Phenotype/repos/.worktrees/l4-68-pheno-context-2026-06-11` | monorepo | `chore/l4-68-pheno-context-2026-06-11` | 3 ahead, stranded |
+| Main | `/Users/<REDACTED>/CodeProjects/Phenotype/repos` | monorepo | `chore/w5-adrs-sota-2026-06-15` | 3 commits ahead, stranded |
+| audit-30pillar | `/Users/<REDACTED>/CodeProjects/Phenotype/repos/.worktrees/audit-30pillar` | monorepo | `audit/30-pillar-fleet` | 484 ahead, stranded |
+| l4-68 | `/Users/<REDACTED>/CodeProjects/Phenotype/repos/.worktrees/l4-68-pheno-context-2026-06-11` | monorepo | `chore/l4-68-pheno-context-2026-06-11` | 3 ahead, stranded |
 | l4-80-wt | `/private/tmp/l4-80-wt` | FocalPoint | `chore/l4-80-pheno-otel-backends-2026-06-11` | 1 ahead, archived parent |
 
 ---
@@ -114,7 +114,7 @@
 - **`main`** — created 2026-06-17; pushed from local main.
 - **`chore/w2-1-dispatch-mcp-2026-06-15`** — pushed from local.
 - **`feat/openai-compat-provider-2026-06-15`** — pushed from local.
-- **`wip/migrate-from-dmouse-w2-1-2026-06-17`** — created from Dmouse92/dispatch-mcp's `chore/w2-1-dispatch-mcp-2026-06-15` at `a1aaef2d1ef7ce63c4239432b954d006eb33ba14` (1 commit ahead of local `874a0237`). Branch name retained as historical marker per user instruction. Migration to KooshaPari/dispatch-mcp done.
+- **`wip/migrate-from-dmouse-w2-1-2026-06-17`** — created from Dmouse92/dispatch-mcp's `chore/w2-1-dispatch-mcp-2026-06-15` at `a1aaef2d1ef7ce63c4239432b954d006eb33ba14` (1 commit ahead of local `874a0237`). Branch name retained as historical marker per user instruction. Migration to <REDACTED>/dispatch-mcp done.
 
 ### 3.4 phenotype-ops
 - **`chore/sha-pin-2026-06-16`** — in sync at 8dd8631. No push needed.
@@ -123,7 +123,7 @@
 - **`chore/w5-adrs-sota-2026-06-15`** — 3 commits ahead of argis/main:
   - `d83900c4a7 docs(governance): refresh AGENTS.md, STATUS.md, SSOT.md — 2026-06-17` — adds ADR-024/025 references, 71-pillar audit mention
   - `1fa5350939 docs(autonomous-2026-06-15): 4 deliverables + ADR-022 (config consolidation)`
-  - `d52061c2e0 docs(findings): PUSH_AUTH_GAP update — re-auth as KooshaPari done (2026-06-15 18:42)`
+  - `d52061c2e0 docs(findings): PUSH_AUTH_GAP update — re-auth as <REDACTED> done (2026-06-15 18:42)`
 - **`chore/l4-68-pheno-context-2026-06-11`** (l4-68 worktree) — 3 commits ahead of argis/main:
   - `d8960dfd80 feat(pheno-context): author canonical request context (L4 #68)` — 286 line new crate
   - `636cc1c04a feat(l3-53-pheno-zod-pydantic-2026-06-11): chore/l3-53-pheno-zod-pydantic-2026-06-11 (#122)`
@@ -142,12 +142,12 @@
 
 | Source item | Target | Parity | Evidence |
 |---|---|---|---|
-| SPDX license headers sweep (AgilePlus) | KooshaPari/AgilePlus | PUSHED as WIP | `git ls-remote --heads origin wip/stash-2026-06-14-spdx-license-headers-2026-06-17` |
-| Go adapter refactor (pheno) | KooshaPari/pheno | PUSHED as WIP | `git ls-remote --heads origin wip/stash-2026-05-02-pheno-cli-adapter-refactor-2026-06-17` |
-| Rust error code additions (pheno) | KooshaPari/pheno | PUSHED as WIP | Same commit |
-| Dmouse92 W2-1 work (dispatch-mcp) | KooshaPari/dispatch-mcp | PUSHED as WIP | `git ls-remote --heads origin wip/migrate-from-dmouse-w2-1-2026-06-17` |
-| Dmouse92 chore/adr-012 (pheno) | KooshaPari/pheno | PUSHED as WIP | `git ls-remote --heads origin wip/migrate-from-dmouse-chore-adr-012-2026-06-17` |
-| Monorepo 3 governance commits | (no target) | NO_PARITY | No KooshaPari/repos exists |
+| SPDX license headers sweep (AgilePlus) | <REDACTED>/AgilePlus | PUSHED as WIP | `git ls-remote --heads origin wip/stash-2026-06-14-spdx-license-headers-2026-06-17` |
+| Go adapter refactor (pheno) | <REDACTED>/pheno | PUSHED as WIP | `git ls-remote --heads origin wip/stash-2026-05-02-pheno-cli-adapter-refactor-2026-06-17` |
+| Rust error code additions (pheno) | <REDACTED>/pheno | PUSHED as WIP | Same commit |
+| Dmouse92 W2-1 work (dispatch-mcp) | <REDACTED>/dispatch-mcp | PUSHED as WIP | `git ls-remote --heads origin wip/migrate-from-dmouse-w2-1-2026-06-17` |
+| Dmouse92 chore/adr-012 (pheno) | <REDACTED>/pheno | PUSHED as WIP | `git ls-remote --heads origin wip/migrate-from-dmouse-chore-adr-012-2026-06-17` |
+| Monorepo 3 governance commits | (no target) | NO_PARITY | No <REDACTED>/repos exists |
 | l4-80 worklog commit | (no target) | NO_PARITY | FocalPoint archived |
 | l4-68 pheno-context crate | (no target) | NO_PARITY | argis/LFS blocks |
 | audit-30pillar 484 commits | (no target) | NO_PARITY | History divergence |
@@ -158,29 +158,29 @@
 
 | Source Item | Source Evidence | Category | Source State | Target Repo | Target Evidence | Status | Deletion Justification | Risk if Deleted | Required Action |
 |---|---|---|---|---|---|---|---|---|---|
-| AgilePlus `stash@{0}` (SPDX) | `git stash show -p stash@{0}` (4960 lines) | Stash | pushed | KooshaPari/AgilePlus | `wip/stash-2026-06-14-spdx-license-headers-2026-06-17` @ 4ebef382d | DONE | Source moved to target WIP branch | LOW | None (land in PR) |
+| AgilePlus `stash@{0}` (SPDX) | `git stash show -p stash@{0}` (4960 lines) | Stash | pushed | <REDACTED>/AgilePlus | `wip/stash-2026-06-14-spdx-license-headers-2026-06-17` @ 4ebef382d | DONE | Source moved to target WIP branch | LOW | None (land in PR) |
 | AgilePlus `stash@{1}` (code()) | `git stash show -p stash@{1}` (32 lines) | Stash | dropped | main branch's `to_envelope()` | `agileplus-events/src/domain_event.rs` has `to_envelope()` + wire serialization tests | SUPERSEDED_BETTER | Strictly stronger design — `code()` → full envelope | LOW | None (already gone) |
-| pheno `stash@{0}` (Go refactor) | `git stash show -p stash@{0}` | Stash | pushed | KooshaPari/pheno | `wip/stash-2026-05-02-pheno-cli-adapter-refactor-2026-06-17` | DONE | Source moved to target WIP branch | LOW | None (land in PR) |
+| pheno `stash@{0}` (Go refactor) | `git stash show -p stash@{0}` | Stash | pushed | <REDACTED>/pheno | `wip/stash-2026-05-02-pheno-cli-adapter-refactor-2026-06-17` | DONE | Source moved to target WIP branch | LOW | None (land in PR) |
 | pheno `stash@{1}` (Taskfile.yml) | `git stash show -p stash@{1}` | Stash | dropped | main branch (9589c61) | `git show main:Taskfile.yml` has grade targets | SUPERSEDED_PARITY | Same content already on main | LOW | None |
 | l4-80 Justfile stash | `git stash show -p` (17 lines) | Stash | dropped | main has `grade-html` | `git show HEAD:Justfile` | SUPERSEDED_BETTER | Main has the same 3 + `grade-html`; working tree was partial | LOW | None |
-| monorepo `chore/w5-adrs-sota` (3 commits) | `git log argis/main..HEAD` | Branch | stranded | None | No `KooshaPari/repos` exists | LAST_RESORT_EXCEPTION | Real governance updates; cannot push | HIGH if lost | Create `KooshaPari/repos` or extract to phenotype-registry |
+| monorepo `chore/w5-adrs-sota` (3 commits) | `git log argis/main..HEAD` | Branch | stranded | None | No `<REDACTED>/repos` exists | LAST_RESORT_EXCEPTION | Real governance updates; cannot push | HIGH if lost | Create `<REDACTED>/repos` or extract to phenotype-registry |
 | monorepo `chore/l4-68-pheno-context` (3 commits, 286 line crate) | `git log argis/main..HEAD` | Branch | stranded | None | LFS reject | LAST_RESORT_EXCEPTION | Real crate work (L4 #68) | HIGH if lost | Restore LFS OR cherry-pick to phenoShared |
 | monorepo `audit/30-pillar-fleet` (484 commits) | `git log argis/main..HEAD` | Branch | stranded | None | Divergent history | LAST_RESORT_EXCEPTION | Massive governance work | HIGH if lost | Sync to argis/main first, then re-apply |
 | l4-80-wt 1 unpushed commit (worklog) | `git log origin/HEAD..HEAD` | Branch | stranded | None | Repo archived (FocalPoint) | LAST_RESORT_EXCEPTION | Worklog doc only | MEDIUM | Re-commit to phenotype-org-audits or phenodocs |
-| Dmouse92/chore/w2-1-dispatch-mcp | Dmouse92/dispatch-mcp@a1aaef2d | Branch | migrated | KooshaPari/dispatch-mcp | `wip/migrate-from-dmouse-w2-1-2026-06-17` | DONE | Source moved to target | LOW | None |
-| Dmouse92/chore/adr-012 (pheno) | Dmouse92/pheno@7a803ddc4 | Branch | migrated | KooshaPari/pheno | `wip/migrate-from-dmouse-chore-adr-012-2026-06-17` | DONE | Source moved to target | LOW | None |
-| phenotype-ops `chore/sha-pin-2026-06-16` | `git status` (in sync) | Branch | synced | KooshaPari/phenotype-ops | `git ls-remote` confirms 8dd8631 | DONE | Already in sync | LOW | None |
+| Dmouse92/chore/w2-1-dispatch-mcp | Dmouse92/dispatch-mcp@a1aaef2d | Branch | migrated | <REDACTED>/dispatch-mcp | `wip/migrate-from-dmouse-w2-1-2026-06-17` | DONE | Source moved to target | LOW | None |
+| Dmouse92/chore/adr-012 (pheno) | Dmouse92/pheno@7a803ddc4 | Branch | migrated | <REDACTED>/pheno | `wip/migrate-from-dmouse-chore-adr-012-2026-06-17` | DONE | Source moved to target | LOW | None |
+| phenotype-ops `chore/sha-pin-2026-06-16` | `git status` (in sync) | Branch | synced | <REDACTED>/phenotype-ops | `git ls-remote` confirms 8dd8631 | DONE | Already in sync | LOW | None |
 
 ---
 
 ## 6. GAPS_AND_EXCEPTIONS
 
-### 6.1 Hard block: monorepo has no KooshaPari remote
-The local monorepo at `/Users/kooshapari/CodeProjects/Phenotype/repos` was originally created from a "Specify template" and has **no `KooshaPari/repos` remote**. The `argis` remote is set to `KooshaPari/argis-extensions` but that repo has a **different git history** (started from "Initial commit: Argis gateway extensions (migrated from Kogito/bifrost-extensions)") so it cannot accept these pushes.
+### 6.1 Hard block: monorepo has no <REDACTED> remote
+The local monorepo at `/Users/<REDACTED>/CodeProjects/Phenotype/repos` was originally created from a "Specify template" and has **no `<REDACTED>/repos` remote**. The `argis` remote is set to `<REDACTED>/argis-extensions` but that repo has a **different git history** (started from "Initial commit: Argis gateway extensions (migrated from Kogito/bifrost-extensions)") so it cannot accept these pushes.
 
 **3 stranded governance commits cannot be recovered without one of:**
-1. Create `KooshaPari/repos` and push the local history (would also need to address 170+ submodule pointer drifts)
-2. Cherry-pick the 3 commits into a different KooshaPari repo (e.g., `phenotype-org-audits` or `phenotype-registry`)
+1. Create `<REDACTED>/repos` and push the local history (would also need to address 170+ submodule pointer drifts)
+2. Cherry-pick the 3 commits into a different <REDACTED> repo (e.g., `phenotype-org-audits` or `phenotype-registry`)
 3. Restore missing LFS objects so the argis push works (submodules lack `argis` remote config)
 
 ### 6.2 Soft block: l4-80-wt parent is archived
@@ -190,20 +190,20 @@ The `FocalPoint` repo is archived on GitHub (per `gh repo view` showing "public,
 Submodules in the monorepo are checked out from Dmouse92/AgilePlus, and pushing the monorepo branches to `argis` requires submodule LFS objects that aren't in local cache. The 286-line pheno-context crate from `d8960dfd80` is real and recoverable, but blocked by the same root cause as 6.1.
 
 ### 6.4 Soft block: audit-30pillar divergent history
-The `audit/30-pillar-fleet` branch is 484 commits ahead of `argis/main` because the local monorepo's history started from a different root commit. Cannot push to argis. The 30 audit files exist locally and could be copied to `phenotype-org-audits/` in the KooshaPari monorepo (which is the conceptual home per the existing AGENTS.md).
+The `audit/30-pillar-fleet` branch is 484 commits ahead of `argis/main` because the local monorepo's history started from a different root commit. Cannot push to argis. The 30 audit files exist locally and could be copied to `phenotype-org-audits/` in the <REDACTED> monorepo (which is the conceptual home per the existing AGENTS.md).
 
 ---
 
 ## 7. LAST_RESORT_EXCEPTIONS
 
-Per user instruction, **Dmouse92 work is excluded** from this list (user said "skip that entirely now"). The exceptions below are all KooshaPari-targetable but require either new infra (KooshaPari/repos) or LFS recovery.
+Per user instruction, **Dmouse92 work is excluded** from this list (user said "skip that entirely now"). The exceptions below are all <REDACTED>-targetable but require either new infra (<REDACTED>/repos) or LFS recovery.
 
 | # | Item | Why it cannot be deleted | Minimum action |
 |---|---|---|---|
-| 1 | monorepo `chore/w5-adrs-sota` (3 commits including ADR-024/025/71-pillar references) | 2026-06-17 governance refresh; mentions the wrap-up + 71-pillar framework this audit depends on | Create `KooshaPari/repos` OR cherry-pick `d83900c4a7` to `KooshaPari/phenotype-org-audits` |
-| 2 | monorepo `chore/l4-68-pheno-context` (`d8960dfd80` — 286-line canonical request context crate) | Real, reviewed code (L4 #68) | Restore LFS or cherry-pick to `KooshaPari/phenoShared` |
-| 3 | monorepo `audit/30-pillar-fleet` (484 commits of governance/audit work) | Contains the 30-pillar audit files this document extends | Extract `audit-30-pillar-L*.md` files to `KooshaPari/phenotype-org-audits` |
-| 4 | l4-80-wt worklog commit `69fe8cddee` | Worklog doc for L4 #80 (pheno-otel backends) | Re-commit to `KooshaPari/phenotype-otel` `docs/` |
+| 1 | monorepo `chore/w5-adrs-sota` (3 commits including ADR-024/025/71-pillar references) | 2026-06-17 governance refresh; mentions the wrap-up + 71-pillar framework this audit depends on | Create `<REDACTED>/repos` OR cherry-pick `d83900c4a7` to `<REDACTED>/phenotype-org-audits` |
+| 2 | monorepo `chore/l4-68-pheno-context` (`d8960dfd80` — 286-line canonical request context crate) | Real, reviewed code (L4 #68) | Restore LFS or cherry-pick to `<REDACTED>/phenoShared` |
+| 3 | monorepo `audit/30-pillar-fleet` (484 commits of governance/audit work) | Contains the 30-pillar audit files this document extends | Extract `audit-30-pillar-L*.md` files to `<REDACTED>/phenotype-org-audits` |
+| 4 | l4-80-wt worklog commit `69fe8cddee` | Worklog doc for L4 #80 (pheno-otel backends) | Re-commit to `<REDACTED>/phenotype-otel` `docs/` |
 
 ---
 
@@ -258,7 +258,7 @@ The 71-pillar is structured as:
 | L22 | LFS Handling | Tech | ✓ (BLOCKED — see 6.3) |
 | L23 | Worktree Isolation | Tech | ✓ |
 | L24 | Stash Lifecycle | Tech | ✓ (5/5 resolved) |
-| L25 | Monorepo Polyrepo Trade-off | Tech | ⚠ (no KooshaPari/repos) |
+| L25 | Monorepo Polyrepo Trade-off | Tech | ⚠ (no <REDACTED>/repos) |
 | L26 | Remote Topology (origin vs Dmouse92) | Tech | ✓ (1 leftover per user) |
 | L27 | PRCP Pattern (ADR-018) | Tech | ✓ |
 | L28 | PRCP Reconciliation | Tech | ✓ |
@@ -277,9 +277,9 @@ The 71-pillar is structured as:
 | **L41** | **License Visibility: LICENSE + SPDX** | **UX** | **✓ (AgilePlus WIP pushes this forward)** |
 | **L42** | **Governance Visibility: CODEOWNERS** | **UX** | **✓ (root has it)** |
 | **L43** | **Agent Spec: spec.md reachable from repo root** | **AX** | **△ (5 repos have it)** |
-| **L44** | **Agent Dispatch: dispatch-mcp integration** | **AX** | **✓ (KooshaPari/dispatch-mcp now exists)** |
+| **L44** | **Agent Dispatch: dispatch-mcp integration** | **AX** | **✓ (<REDACTED>/dispatch-mcp now exists)** |
 | **L45** | **Agent Onboarding: agent-assignments.md** | **AX** | **△ (in .claude/ but not in every repo)** |
-| **L46** | **Agent DAG: phenodag reachability** | **AX** | **✓ (phenodag exists; KooshaPari/phenodag created 2026-06-17)** |
+| **L46** | **Agent DAG: phenodag reachability** | **AX** | **✓ (phenodag exists; <REDACTED>/phenodag created 2026-06-17)** |
 | **L47** | **Subagent Prompt Templates** | **AX** | **△ (in .claude/)** |
 | **L48** | **Worklog-to-Plan Bridge** | **AX** | **✓ (worklog schema V2.1)** |
 | **L49** | **Agent Recovery: WIP branch preservation** | **AX** | **✓ (this wrap-up is the proof)** |
@@ -312,13 +312,13 @@ The 71-pillar is structured as:
 
 **Source inventory summary:**
 - **5 stashes** resolved (2 pushed as WIP, 3 dropped as superseded)
-- **9 unique branches** processed (5 pushed to KooshaPari, 4 stranded in monorepo/FocalPoint)
+- **9 unique branches** processed (5 pushed to <REDACTED>, 4 stranded in monorepo/FocalPoint)
 - **4 remotes** repaired (AgilePlus had `helios-cli` typo; pheno/dispatch-mcp/phenotype-ops had Dmouse92 origins)
-- **1 new repo created** on KooshaPari (dispatch-mcp didn't exist)
+- **1 new repo created** on <REDACTED> (dispatch-mcp didn't exist)
 - **0 Dmouse92 push destinations remain active** (legacy `dmouse` fetch remote still in monorepo per user)
 
 **Branch inventory summary:**
-- **5 branches** successfully pushed to KooshaPari
+- **5 branches** successfully pushed to <REDACTED>
 - **4 branches** stranded (3 monorepo + 1 FocalPoint)
 - **0 branches** abandoned with loss of work
 
@@ -329,7 +329,7 @@ The 71-pillar is structured as:
 - **LAST_RESORT_EXCEPTION**: 4 items (all monorepo strands)
 
 **Gaps and exceptions:**
-- **6.1** No `KooshaPari/repos` exists (monorepo has no home)
+- **6.1** No `<REDACTED>/repos` exists (monorepo has no home)
 - **6.2** l4-80-wt parent (FocalPoint) is archived
 - **6.3** Submodule LFS missing (blocks monorepo pushes)
 - **6.4** audit-30pillar history diverged from argis upstream
@@ -347,12 +347,12 @@ The 71-pillar is structured as:
 | monorepo 3 governance commits | YES — ADR-024/025 + 71-pillar framework | Stranded | Local copy intact; recoverable via cherry-pick |
 | l4-68 pheno-context crate (286 lines) | YES — real reviewed code | Stranded | Local copy intact in worktree |
 | audit-30pillar (484 commits) | YES — extensive governance work | Stranded | 30-pillar files exist at `repos/audit-30-pillar-L*.md` |
-| Dmouse92 dispatch-mcp worklog a1aaef2d | YES — real W2-1 work | Migrated to wip/* branch | Source preserved on KooshaPari/dispatch-mcp |
+| Dmouse92 dispatch-mcp worklog a1aaef2d | YES — real W2-1 work | Migrated to wip/* branch | Source preserved on <REDACTED>/dispatch-mcp |
 | Dmouse92 pheno adr-012 7a803ddc4 | NO — local chore/adr-012 is strict superset (1 commit ahead) | Migrated to wip/* branch as historical marker | Local has the more complete version |
 
 ### 8.5 Last-resort exceptions
 
-See Section 7. All 4 exceptions are recoverable with a small infra decision (create `KooshaPari/repos` OR extract specific commits to existing repos).
+See Section 7. All 4 exceptions are recoverable with a small infra decision (create `<REDACTED>/repos` OR extract specific commits to existing repos).
 
 ### 8.6 Final deletion recommendation
 
@@ -374,16 +374,16 @@ See Section 7. All 4 exceptions are recoverable with a small infra decision (cre
 
 ### 9.1 Immediate (do now, ~10 min)
 
-1. **Spot-check the 5 pushed WIP branches exist on KooshaPari** — already verified above, but a final round of `git fetch && git status` per repo is cheap insurance.
+1. **Spot-check the 5 pushed WIP branches exist on <REDACTED>** — already verified above, but a final round of `git fetch && git status` per repo is cheap insurance.
 2. **Document the stranded monorepo state** in `findings/2026-06-17-stranded-monorepo.md` so the next session knows.
 
 ### 9.2 Short-term (next session, ~1-2 h)
 
-3. **Create `KooshaPari/repos`** if the user agrees, and push the monorepo history. OR **extract specific stranded commits** to existing KooshaPari repos:
-   - `d83900c4a7 docs(governance): refresh AGENTS.md, STATUS.md, SSOT.md — 2026-06-17` → `KooshaPari/phenotype-org-audits` `docs/2026-06-17/`
-   - `d8960dfd80 feat(pheno-context): author canonical request context (L4 #68)` → `KooshaPari/phenoShared` `crates/pheno-context/`
-   - `audit-30-pillar-L*.md` (30 files) → `KooshaPari/phenotype-org-audits` `audit-30-pillar/`
-4. **L4 #80 worklog** `69fe8cddee` → `KooshaPari/phenotype-otel` `docs/worklog-L4-080.md`
+3. **Create `<REDACTED>/repos`** if the user agrees, and push the monorepo history. OR **extract specific stranded commits** to existing <REDACTED> repos:
+   - `d83900c4a7 docs(governance): refresh AGENTS.md, STATUS.md, SSOT.md — 2026-06-17` → `<REDACTED>/phenotype-org-audits` `docs/2026-06-17/`
+   - `d8960dfd80 feat(pheno-context): author canonical request context (L4 #68)` → `<REDACTED>/phenoShared` `crates/pheno-context/`
+   - `audit-30-pillar-L*.md` (30 files) → `<REDACTED>/phenotype-org-audits` `audit-30-pillar/`
+4. **L4 #80 worklog** `69fe8cddee` → `<REDACTED>/phenotype-otel` `docs/worklog-L4-080.md`
 5. **Land SPDX WIP in AgilePlus** as a real PR (or close it if undesired — it adds 595 lines of header boilerplate to 542 files)
 6. **Land the 2 pheno WIPs** (Go adapter refactor + adr-012 cherry-pick) or close as historical
 
@@ -525,7 +525,7 @@ This audit implements + references the following ADRs (see `docs/adr/2026-06-17/
 | **ADR-026** | Factory AI Agent Readiness (external standard) | § 10 (full crosswalk) |
 | **ADR-027** | Git LFS 3-tier strategy (skip/proxy/rewrite) | § 2.2 (monorepo strand push-blocked per ADR-027) |
 | **ADR-028** | Monorepo architecture eval (hybrid-with-staging-repo) | § 2.2 (monorepo state policy) |
-| **ADR-029** | Dmouse92 → KooshaPari migration | § 0 (Stream 0: SKIPPED per user) |
+| **ADR-029** | Dmouse92 → <REDACTED> migration | § 0 (Stream 0: SKIPPED per user) |
 | **ADR-030** | WORKLOG v2.1 fleet-wide rollout (this turn) | § 11 (4/30 repos migrated, see T4.6) |
 | **ADR-031** | Configra absorb (phenotype-config → Configra rename) | § 9.3 (deferred to Phase 3, T19) |
 | **ADR-032** | pheno-worklog-schema ≠ AgilePlus worklog | § 0 (primitive lib, not a duplicate) |
@@ -579,7 +579,7 @@ Co-Authored-By: Claude Opus 4.7 <noreply@anthropic.com>
 
 ```
 d83900c4a7 docs(governance): refresh AGENTS.md, STATUS.md, SSOT.md — 2026-06-17
-  - AGENTS.md: update date to 2026-06-17, add ADR-024 (71-pillar) + ADR-025 (worklog v2.1) sections (queued), add 71-pillar audit section (queued), update auth to KooshaPari
+  - AGENTS.md: update date to 2026-06-17, add ADR-024 (71-pillar) + ADR-025 (worklog v2.1) sections (queued), add 71-pillar audit section (queued), update auth to <REDACTED>
   - STATUS.md: update date + HEAD to 04c2c7b1af wip(meta), expand ADRs to 25 (6+11+8), add v7 DAG in-flight section, add app-level triage + 71-pillar sections
   - SSOT.md: add ADR-023 governance + app-level triage + worklog schema references; add L5 precedence rule
 
@@ -588,9 +588,9 @@ d83900c4a7 docs(governance): refresh AGENTS.md, STATUS.md, SSOT.md — 2026-06-1
   to disk but uncommitted when the shell's posix_spawn quota was
   exhausted (turns 11-15 of this session).
 
-d52061c2e0 docs(findings): PUSH_AUTH_GAP update — re-auth as KooshaPari done (2026-06-15 18:42)
+d52061c2e0 docs(findings): PUSH_AUTH_GAP update — re-auth as <REDACTED> done (2026-06-15 18:42)
   Dmouse92 is a client account — never push there.
-  All work goes to KooshaPari.
+  All work goes to <REDACTED>.
 ```
 
 ---
@@ -614,7 +614,7 @@ git push origin --all  # for the new dispatch-mcp repo
 git config lfs.allowincompletepush true
 
 # Identity proof
-gh auth status  # confirmed KooshaPari active
+gh auth status  # confirmed <REDACTED> active
 ```
 
 ---

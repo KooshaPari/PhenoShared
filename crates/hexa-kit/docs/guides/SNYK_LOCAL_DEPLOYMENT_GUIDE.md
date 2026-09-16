@@ -69,7 +69,7 @@ snyk test --dry-run
 Verify all Phenotype repos are cloned:
 
 ```bash
-ls -la /Users/kooshapari/CodeProjects/Phenotype/repos | grep -E "^d"
+ls -la /Users/<REDACTED>/CodeProjects/Phenotype/repos | grep -E "^d"
 ```
 
 **Expected Output:** Directories including:
@@ -115,9 +115,9 @@ echo $SNYK_TOKEN
 ### 2.2: Navigate to Repository Root
 
 ```bash
-cd /Users/kooshapari/CodeProjects/Phenotype/repos
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos
 pwd
-# Output should be: /Users/kooshapari/CodeProjects/Phenotype/repos
+# Output should be: /Users/<REDACTED>/CodeProjects/Phenotype/repos
 ```
 
 ### 2.3: Verify Deployment Script Exists
@@ -169,7 +169,7 @@ When the script starts, you'll see:
 ============================================================
 Snyk Security Deployment Script
 ============================================================
-Repository Root: /Users/kooshapari/CodeProjects/Phenotype/repos
+Repository Root: /Users/<REDACTED>/CodeProjects/Phenotype/repos
 Report Directory: .snyk-reports
 Timestamp: 2026-03-30 14:32:15
 
@@ -198,7 +198,7 @@ As the script runs, you'll see output for each repository:
 
 ```
 Scanning: AgilePlus
-  Repository: /Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus
+  Repository: /Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus
   Type: Rust + JavaScript
   Status: In progress...
 
@@ -245,7 +245,7 @@ If you want to monitor progress in a separate terminal:
 
 ```bash
 # Terminal 2 (while script runs in Terminal 1)
-watch -n 5 'ls -lh /Users/kooshapari/CodeProjects/Phenotype/repos/.snyk-reports/*.json | tail -5'
+watch -n 5 'ls -lh /Users/<REDACTED>/CodeProjects/Phenotype/repos/.snyk-reports/*.json | tail -5'
 ```
 
 This shows newly created report files every 5 seconds.
@@ -259,7 +259,7 @@ This shows newly created report files every 5 seconds.
 #### Example 1: Rust-Only Repository
 ```
 Scanning: phenotype-infrakit
-  Repository: /Users/kooshapari/CodeProjects/Phenotype/repos/phenotype-infrakit
+  Repository: /Users/<REDACTED>/CodeProjects/Phenotype/repos/phenotype-infrakit
   Type: Rust
   Status: In progress...
 
@@ -281,7 +281,7 @@ Scanning: phenotype-infrakit
 #### Example 2: Multi-Language Repository
 ```
 Scanning: AgilePlus
-  Repository: /Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus
+  Repository: /Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus
   Type: Rust + JavaScript + Go
   Status: In progress...
 
@@ -304,7 +304,7 @@ Scanning: AgilePlus
 #### Example 3: Repository with No Vulnerabilities
 ```
 Scanning: phenotype-contracts
-  Repository: /Users/kooshapari/CodeProjects/Phenotype/repos/phenotype-contracts
+  Repository: /Users/<REDACTED>/CodeProjects/Phenotype/repos/phenotype-contracts
   Type: Rust
   Status: In progress...
 
@@ -358,7 +358,7 @@ Total Vulnerabilities Found: 45
   Low:      17
 
 Report Files Generated: 30
-  Location: /Users/kooshapari/CodeProjects/Phenotype/repos/.snyk-reports/
+  Location: /Users/<REDACTED>/CodeProjects/Phenotype/repos/.snyk-reports/
   Summary: .snyk-reports/report.txt
   Detailed: .snyk-reports/*.json
 
@@ -370,7 +370,7 @@ Next Steps: Review .snyk-reports/report.txt
 ### 6.2: Verify Reports Created
 
 ```bash
-ls -la /Users/kooshapari/CodeProjects/Phenotype/repos/.snyk-reports/
+ls -la /Users/<REDACTED>/CodeProjects/Phenotype/repos/.snyk-reports/
 ```
 
 **Expected Output:**
@@ -388,7 +388,7 @@ drwx------ ... .snyk-reports
 View the summary report:
 
 ```bash
-cat /Users/kooshapari/CodeProjects/Phenotype/repos/.snyk-reports/report.txt
+cat /Users/<REDACTED>/CodeProjects/Phenotype/repos/.snyk-reports/report.txt
 ```
 
 **Expected Output (first 50 lines):**
@@ -475,7 +475,7 @@ export SNYK_TOKEN="new-token-here"
 timeout 1800 ./scripts/snyk-deploy.sh
 
 # Or manually scan one repository
-cd /Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus
 snyk test --json > ../snyk-reports/AgilePlus.json
 ```
 
@@ -486,13 +486,13 @@ snyk test --json > ../snyk-reports/AgilePlus.json
 **Solution:**
 ```bash
 # Check permissions
-ls -la /Users/kooshapari/CodeProjects/Phenotype/repos/.snyk-reports
+ls -la /Users/<REDACTED>/CodeProjects/Phenotype/repos/.snyk-reports
 
 # Fix permissions
-chmod -R 755 /Users/kooshapari/CodeProjects/Phenotype/repos/.snyk-reports
+chmod -R 755 /Users/<REDACTED>/CodeProjects/Phenotype/repos/.snyk-reports
 
 # Or remove and let script recreate
-rm -rf /Users/kooshapari/CodeProjects/Phenotype/repos/.snyk-reports
+rm -rf /Users/<REDACTED>/CodeProjects/Phenotype/repos/.snyk-reports
 ./scripts/snyk-deploy.sh
 ```
 
@@ -506,7 +506,7 @@ rm -rf /Users/kooshapari/CodeProjects/Phenotype/repos/.snyk-reports
 3. Run individual scans on problem repos:
 
 ```bash
-cd /Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus
 snyk test --json-file-output=snyk-report.json
 ```
 

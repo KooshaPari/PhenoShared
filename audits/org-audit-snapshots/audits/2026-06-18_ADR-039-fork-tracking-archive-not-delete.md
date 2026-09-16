@@ -14,9 +14,9 @@ The fleet contains a small set of repos that are forks of upstream projects:
 
 | Fleet repo | Upstream | Reason for fork |
 |---|---|---|
-| `KooshaPari/Planify` | upstream `planify-org/planify` | Fleet-specific patches that have not been upstreamed |
-| `KooshaPari/portage` | upstream `gentoo/portage` | Same |
-| `KooshaPari/phenotype-ops-mcp` | upstream `mcp-org/ops-mcp` | Same |
+| `<REDACTED>/Planify` | upstream `planify-org/planify` | Fleet-specific patches that have not been upstreamed |
+| `<REDACTED>/portage` | upstream `gentoo/portage` | Same |
+| `<REDACTED>/phenotype-ops-mcp` | upstream `mcp-org/ops-mcp` | Same |
 
 These forks are tracked in the kilo audit at row #144 (P2 priority). The audit note: *"fork repos that diverge from upstream; archive-not-delete to preserve the divergent history."*
 
@@ -47,10 +47,10 @@ Delete is reserved for repos that are 100% internal to the fleet with no upstrea
 
 ### CLI vs UI for delete
 
-The active `KooshaPari` token (as of 2026-06-18) has scopes `'gist', 'read:org', 'repo', 'workflow'`. **`delete_repo` is not in this set.** Therefore:
+The active `<REDACTED>` token (as of 2026-06-18) has scopes `'gist', 'read:org', 'repo', 'workflow'`. **`delete_repo` is not in this set.** Therefore:
 
-- The `gh repo delete` CLI is unavailable for the `KooshaPari` account.
-- The only way to delete a repo under the `KooshaPari` account is via the GitHub UI (Settings → General → Danger Zone → Delete this repository).
+- The `gh repo delete` CLI is unavailable for the `<REDACTED>` account.
+- The only way to delete a repo under the `<REDACTED>` account is via the GitHub UI (Settings → General → Danger Zone → Delete this repository).
 - This is a **safety property**, not a bug: an operator with a stolen / leaked token cannot mass-delete repos via CLI.
 
 This policy is ratified in the "Stale / warnings" section of AGENTS.md (under the 4-repo retirement § 2026-06-18) and is the underlying rationale for ADR-040 (the deletion recipe).
@@ -59,7 +59,7 @@ This policy is ratified in the "Stale / warnings" section of AGENTS.md (under th
 
 A user directive to delete a fork is valid only if it:
 
-1. Names the fork by full path (`github.com/KooshaPari/Planify` or similar).
+1. Names the fork by full path (`github.com/<REDACTED>/Planify` or similar).
 2. Is in a session message (not a stale note in AGENTS.md or a comment in a PR).
 3. Is followed by an audit artifact per ADR-040 (deletion recipe).
 

@@ -2,7 +2,7 @@
   "lane_id": "wave-a-wp03-metron",
   "disposition_ids": [48],
   "fsm_state": "claimed",
-  "repo": "KooshaPari/PhenoObservability",
+  "repo": "<REDACTED>/PhenoObservability",
   "worktree": "PhenoObservability-wtrees/wave-a",
   "branch": "feat/obs-metron-relocate",
   "owns": ["Metron/**"],

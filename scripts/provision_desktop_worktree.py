@@ -13,9 +13,9 @@ What it does:
 
 Usage:
   python3 scripts/provision_desktop_worktree.py \\
-    --host kooshapari@100.x.x.x \\
+    --host <REDACTED>@100.x.x.x \\
     --branch fix/desktop-vllm-runtime \\
-    --worktree-dir /home/kooshapari/pheno-harness \\
+    --worktree-dir /home/<REDACTED>/pheno-harness \\
     [--dry-run]
 """
 

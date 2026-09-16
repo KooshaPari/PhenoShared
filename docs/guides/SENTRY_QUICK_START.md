@@ -51,7 +51,7 @@ gh secret list | grep SENTRY
 ```
 1. Go to: https://sentry.io/settings/phenotype/integrations/github/
 2. Click "Install" if not already done
-3. Grant access to KooshaPari GitHub organization
+3. Grant access to <REDACTED> GitHub organization
 4. Authorize Sentry GitHub app
 ```
 
@@ -161,7 +161,7 @@ cargo test --lib sentry_config
 # Go to: https://sentry.io/organizations/phenotype/
 
 # 4. If still failing, check workflow logs
-gh workflow view sentry-error-tracking.yml -R KooshaPari/AgilePlus
+gh workflow view sentry-error-tracking.yml -R <REDACTED>/AgilePlus
 ```
 
 ### Disable Error Tracking (Emergency Only)
@@ -174,7 +174,7 @@ gh secret delete SENTRY_DSN_AGILEPLUS
 gh secret set SENTRY_DSN_AGILEPLUS --body 'https://test@test.ingest.sentry.io/0'
 
 # Restart workflow to apply changes
-gh workflow run sentry-error-tracking.yml -R KooshaPari/AgilePlus
+gh workflow run sentry-error-tracking.yml -R <REDACTED>/AgilePlus
 ```
 
 ## Troubleshooting

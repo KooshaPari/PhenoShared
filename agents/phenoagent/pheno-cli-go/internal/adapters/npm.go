@@ -12,7 +12,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/KooshaPari/pheno-cli/internal/version"
+	"github.com/<REDACTED>/pheno-cli/internal/version"
 )
 
 type npmPackageJSON struct {

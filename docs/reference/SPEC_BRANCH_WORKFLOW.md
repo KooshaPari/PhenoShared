@@ -22,7 +22,7 @@ The `specs/main` branch is the canonical single source of truth (SSOT) for all F
 
 ```bash
 # If starting fresh
-git clone https://github.com/KooshaPari/phenotype-infrakit.git
+git clone https://github.com/<REDACTED>/phenotype-infrakit.git
 cd phenotype-infrakit
 git checkout specs/main
 git pull origin specs/main

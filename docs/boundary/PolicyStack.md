@@ -41,5 +41,5 @@ migrated as part of this Python absorption. Its canonical home would be
 
 ## Outcome
 
-Source repo `KooshaPari/PolicyStack` archived on GitHub.
+Source repo `<REDACTED>/PolicyStack` archived on GitHub.
 Registry disposition-index updated: disposition=ABSORB, target=phenotype-python-sdk.

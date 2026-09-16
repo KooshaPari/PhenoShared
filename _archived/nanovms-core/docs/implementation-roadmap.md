@@ -39,7 +39,7 @@ Q1 2026          Q2 2026          Q3 2026          Q4 2026
 
 ```bash
 # Initialize Go module
-go mod init github.com/KooshaPari/nanovms
+go mod init github.com/<REDACTED>/nanovms
 
 # Create directory structure
 mkdir -p cmd/nanovms \

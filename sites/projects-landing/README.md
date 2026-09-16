@@ -1,15 +1,15 @@
 # projects-landing
 
-Phenotype org portfolio — auto-generated landing page at <https://projects.kooshapari.com>.
+Phenotype org portfolio — auto-generated landing page at <https://projects.<REDACTED>.com>.
 
-Static site listing all active KooshaPari / Phenotype org repositories with topic filters and search. Built with Astro 6 + Tailwind CSS 4. Deployed on Vercel with a GitHub Pages governance mirror.
+Static site listing all active <REDACTED> / Phenotype org repositories with topic filters and search. Built with Astro 6 + Tailwind CSS 4. Deployed on Vercel with a GitHub Pages governance mirror.
 
 ## Stack
 
 - **Framework**: Astro 6 (static, with light client-side islands for filter/search)
 - **Styling**: Tailwind CSS 4 (`@tailwindcss/vite`) + impeccable CSS reset
 - **Data**: `data/repos.json` snapshot from GitHub API (`scripts/fetch-repos.mjs`)
-- **Deploy**: Vercel (static output, custom domain `projects.kooshapari.com`) plus GitHub Pages mirror
+- **Deploy**: Vercel (static output, custom domain `projects.<REDACTED>.com`) plus GitHub Pages mirror
 
 ## Development
 
@@ -58,7 +58,7 @@ vercel link --yes               # first time only
 vercel deploy --prod
 ```
 
-Custom domain `projects.kooshapari.com` is wired via Cloudflare CNAME → `cname.vercel-dns.com` (record id `2ee0d797675e4fdc5fe5fcf37677fa2f`).
+Custom domain `projects.<REDACTED>.com` is wired via Cloudflare CNAME → `cname.vercel-dns.com` (record id `2ee0d797675e4fdc5fe5fcf37677fa2f`).
 
 GitHub Pages deploys from `.github/workflows/pages.yml` as a static mirror of `dist/`.
 It builds with `GITHUB_PAGES=true`, which sets Astro's base path to
@@ -76,7 +76,7 @@ be on `localhost`, `127.0.0.1`, `.local`, `.ts.net`, `.tailnet`, or a
 ## Layout
 
 - `src/pages/index.astro` — single page, renders all cards from `data/repos.json` at build time
-- `src/pages/koosha.astro` — personal-level KooshaPari landing layer over the project graph
+- `src/pages/koosha.astro` — personal-level <REDACTED> landing layer over the project graph
 - `src/styles/globals.css` — Tailwind import + impeccable reset + theme tokens
 - `scripts/fetch-repos.mjs` — refresh data snapshot (GitHub API)
 - `data/repos.json` — committed snapshot (refreshed by hand or in CI)
@@ -85,4 +85,4 @@ be on `localhost`, `127.0.0.1`, `.local`, `.ts.net`, `.tailnet`, or a
 
 ## Governance
 
-Implements the Phenotype "Org Pages Default Expansion" standing policy: every project gets a portfolio entry here plus a `<project>.kooshapari.com` landing page with `/docs`, `/otel`, `/qa`, `/preview/<pr#>` path-based microfrontends.
+Implements the Phenotype "Org Pages Default Expansion" standing policy: every project gets a portfolio entry here plus a `<project>.<REDACTED>.com` landing page with `/docs`, `/otel`, `/qa`, `/preview/<pr#>` path-based microfrontends.

@@ -15,7 +15,7 @@ The Phenotype org has 36 catalogued goals spanning 4 primary projects (AgilePlus
 
 ### WS1: AgilePlus Platform
 
-**Repo:** `/Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus`
+**Repo:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus`
 **Manifest state:** `current_branch: main`, `uncommitted_count: 1`, branches WP00–WP19 exist locally for spec 001 (WP02–WP19 unmerged to main), spec 002 has no merge evidence, spec 003 all 21 WPs merged.
 
 ---
@@ -76,7 +76,7 @@ The Phenotype org has 36 catalogued goals spanning 4 primary projects (AgilePlus
 
 ### WS2: heliosApp — Agent IDE
 
-**Repo:** `/Users/kooshapari/CodeProjects/Phenotype/repos/heliosApp`
+**Repo:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos/heliosApp`
 **Manifest state:** `current_branch: heliosapp-upstream-recon` (NOT on main — needs attention), `uncommitted_count: 1`, 20+ spec WP branches exist locally. 30 specs fully defined (spec+plan+tasks), with 2 specs missing plan files (029, 030).
 **Note:** heliosApp canonical repo is NOT on `main`. This violates the worktree commandment. The branch `heliosapp-upstream-recon` is active.
 
@@ -188,7 +188,7 @@ The Phenotype org has 36 catalogued goals spanning 4 primary projects (AgilePlus
 
 ### WS3: heliosCLI — Terminal Core
 
-**Repo:** `/Users/kooshapari/CodeProjects/Phenotype/repos/heliosCLI`
+**Repo:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos/heliosCLI`
 **Manifest state:** `current_branch: chore/normalize-dirty-20260303-heliosCLI` (NOT on main), `uncommitted_count: 1`, 1 spec (`001-codex-tui-renderer-optimization`, spec only — no plan or tasks).
 
 ---
@@ -248,7 +248,7 @@ The Phenotype org has 36 catalogued goals spanning 4 primary projects (AgilePlus
 
 ### WS4: thegent — Agent Framework
 
-**Repo:** `/Users/kooshapari/CodeProjects/Phenotype/repos/thegent`
+**Repo:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos/thegent`
 **Manifest state:** `current_branch: int/mod-split-stage-1` (NOT on main), `uncommitted_count: 0`, 1 spec (`001-hexagonal-polyglot-repo-audit-plan`, spec only — no plan or tasks).
 
 ---

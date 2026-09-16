@@ -35,5 +35,5 @@ Total: 158 files.
 
 ## Outcome
 
-Source repo `KooshaPari/KodeVibe` archived on GitHub.
+Source repo `<REDACTED>/KodeVibe` archived on GitHub.
 Registry disposition-index updated: disposition=ABSORB, target=phenotype-tooling.

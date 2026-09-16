@@ -4,7 +4,7 @@
   "lifecycle": "active",
   "status": "active",
   "description": "Canonical workspace for CivLab — a headless, deterministic civilization simulation engine (Rust, hecs ECS, fixed-point i64). 33+ crates spanning engine, server, voxel, build, genetics, economy, species, agents, diplomacy, laws, research, tactics, planet, protocol-3d, mod-host, and 20+ more. ECS server-authoritative headless sim with multi-client rendering (Bevy CI/reference, Unreal visuals, Godot game UX, Web L2 sandbox+ops).",
-  "repo_path": "KooshaPari/Civis",
+  "repo_path": "<REDACTED>/Civis",
   "default_branch": "main",
   "language": "Rust",
   "size_kb": 2322641,

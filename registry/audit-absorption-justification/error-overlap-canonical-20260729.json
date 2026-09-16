@@ -13,7 +13,7 @@
   },
   "surfaces": [
     {
-      "surface": "KooshaPari/pheno-errors",
+      "surface": "<REDACTED>/pheno-errors",
       "state": "private_scratch_residue",
       "sha": "01b850e4b9f8ba8ed667c34f35fa46d7cef37214",
       "decision": "TOMBSTONE_CANDIDATE",

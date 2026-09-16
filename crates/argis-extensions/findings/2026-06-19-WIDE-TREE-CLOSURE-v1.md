@@ -4,7 +4,7 @@
 **Closure date:** 2026-06-19
 **Owner:** interactive-parent-1
 **DAG file:** `FocalPoint/FLEET_DAG.db`
-**Remote:** `KooshaPari/phenotype-apps` @ `d74ff6a714`
+**Remote:** `<REDACTED>/phenotype-apps` @ `d74ff6a714`
 
 ## 1. Headline Numbers
 
@@ -74,7 +74,7 @@ This pattern bypasses the `dagctl` CLI (which nil-panicked under rapid-fire) and
 | 9 | T83-T85 (dup/gov/obs-features) | `chore(findings): 30 more...` | `e4...` | 460 |
 | 10 | T86-T88 (sota/dry/final-dup) | `chore(findings): 30 more...` | `d7...` | **490** |
 
-All batches pushed to `KooshaPari/phenotype-apps:main` via `--force-with-lease --recurse-submodules=off --no-verify` (the submodule check hangs on large submodule pointer diffs from prior sessions; this is the documented workaround).
+All batches pushed to `<REDACTED>/phenotype-apps:main` via `--force-with-lease --recurse-submodules=off --no-verify` (the submodule check hangs on large submodule pointer diffs from prior sessions; this is the documented workaround).
 
 ## 5. Pattern Library (placeholders for follow-up work)
 
@@ -138,7 +138,7 @@ xtask binary, cargo-nextest, cargo-hakari, cargo-chef, sccache, mold/lld, cargo-
 These items require **actual subagent slots** (not placeholder claims) and were deferred to the next session:
 
 - **Real research output for 490 placeholder findings** — each finding is a 1-page stub; the real 1-page analysis with web search + code refs is work that requires a subagent with internet access
-- **PR creation on KooshaPari** — Dmouse92 token lacks collaborator permission; placeholder PRs to be opened by KooshaPari directly
+- **PR creation on <REDACTED>** — Dmouse92 token lacks collaborator permission; placeholder PRs to be opened by <REDACTED> directly
 - **Per-repo CI workflows** — pheno-ci-templates is the substrate; per-repo `.github/workflows/ci.yml` to be generated per the substrate spec
 - **Cargo workspace audit** — actual `cargo audit --deny warnings` + `cargo +nightly miri test` runs
 
@@ -166,11 +166,11 @@ This is documented in `AGENTS.md` under "Stale / warnings".
 ## 8. Next Session Bootstrap
 
 When resuming:
-1. `cd /Users/kooshapari/CodeProjects/Phenotype/repos`
+1. `cd /Users/<REDACTED>/CodeProjects/Phenotype/repos`
 2. `git checkout main && git pull --rebase`
 3. `./FocalPoint/dagctl status` → confirm 490 done
 4. Pick **3-5 placeholder findings** and execute real research on each (web search + code refs + ≥1 PR per finding)
-5. Open real PRs on KooshaPari/* for any completed work
+5. Open real PRs on <REDACTED>/* for any completed work
 
 The DAG is **stable and fully drained** — ready for the next wave of actual work, not placeholder claiming.
 
@@ -181,4 +181,4 @@ The DAG is **stable and fully drained** — ready for the next wave of actual wo
 - Plans: `plans/2026-06-18-v8-dag-stable.md` (v8 plan that this v9 wave extends)
 - ADRs: `docs/adr/2026-06-18/` (ADR-035..049) + `docs/adr/2026-06-19/` (ADR-050..056)
 - Findings: `findings/2026-06-19-*.md` (490 files in `findings/2026-06-19-wide-*.md`)
-- Status: `KooshaPari/phenotype-apps:main` @ `d74ff6a714`
+- Status: `<REDACTED>/phenotype-apps:main` @ `d74ff6a714`

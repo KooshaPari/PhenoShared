@@ -4,7 +4,7 @@ created_at: 2026-06-05T00:00:00Z
 date: 2026-06-05
 owner: repo-steward
 plan_status: NOT_STARTED
-retirement_criteria: Every active KooshaPari service emits structured logs, OpenTelemetry metrics, and traces; a unified dashboard exists; coverage report is 100% for active services.
+retirement_criteria: Every active <REDACTED> service emits structured logs, OpenTelemetry metrics, and traces; a unified dashboard exists; coverage report is 100% for active services.
 slug: eco-031-observability-baseline
 spec_id: eco-031
 state: PENDING
@@ -16,7 +16,7 @@ type: operational
 # Observability Baseline
 
 ## Problem
-KooshaPari services emit logs in inconsistent formats (plain text, JSON, mixed) and have no standardized metrics or traces. When a user reports an issue, the team cannot correlate logs to performance data or reconstruct a request flow. There is no single dashboard that surfaces the health of the ecosystem.
+<REDACTED> services emit logs in inconsistent formats (plain text, JSON, mixed) and have no standardized metrics or traces. When a user reports an issue, the team cannot correlate logs to performance data or reconstruct a request flow. There is no single dashboard that surfaces the health of the ecosystem.
 
 ## Target Users
 Repo stewards, on-call operators, spec authors, downstream consumers, and end users reporting issues.

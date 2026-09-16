@@ -1,7 +1,7 @@
 # phenotype-contracts consumer manifest (D-01 slice 1)
 
 **Source:** HexaKit `crates/phenotype-contracts`  
-**Interim canonical:** phenoShared `crates/phenotype-contracts` (git pin [HexaKit#264](https://github.com/KooshaPari/HexaKit/pull/264))  
+**Interim canonical:** phenoShared `crates/phenotype-contracts` (git pin [HexaKit#264](https://github.com/<REDACTED>/HexaKit/pull/264))  
 **Plan:** [contracts-decompose-plan.md](./contracts-decompose-plan.md)  
 **Scan date:** 2026-06-18  
 **Method:** `migration-work` workspace `Cargo.toml` grep; GitHub code search attempted (TLS timeout — local scan authoritative)
@@ -26,7 +26,7 @@
 
 ## 2026-06-20 repo-level PhenoContracts sweep
 
-GitHub code search for external runtime consumers of `PhenoContracts`, `phenotype-contracts`, and `contract_verifier` found no live external `Cargo.toml`, `package.json`, or `go.mod` dependency on the `KooshaPari/PhenoContracts` repo itself. Hits are either inside `PhenoContracts`, historical docs/worklogs, or separate in-flight `phenotype-contracts` crate copies governed by this manifest.
+GitHub code search for external runtime consumers of `PhenoContracts`, `phenotype-contracts`, and `contract_verifier` found no live external `Cargo.toml`, `package.json`, or `go.mod` dependency on the `<REDACTED>/PhenoContracts` repo itself. Hits are either inside `PhenoContracts`, historical docs/worklogs, or separate in-flight `phenotype-contracts` crate copies governed by this manifest.
 
 Delete-readiness ruling: **hold-decompose**, not archive-ready. The repo remains active/non-archived and owns formal-verification TS ports/adapters (`ports/contract_verifier.ts`, `ports/adapters/kani.ts`, `ports/adapters/prusti.ts`) plus Rust crate surfaces. Archive/delete is safe only after those adapter surfaces are absorbed into a named terminal owner or explicitly retired in a follow-up ADR.
 ## Slice 1 scope (in progress)

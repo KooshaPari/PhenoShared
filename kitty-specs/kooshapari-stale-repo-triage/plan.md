@@ -1,4 +1,4 @@
-# Plan: kooshapari-stale-repo-triage
+# Plan: <REDACTED>-stale-repo-triage
 **Date**: 2026-03-29 | **WPs**: 1
 
 ## Work Packages

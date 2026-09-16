@@ -5,11 +5,11 @@ edition.workspace = true
 rust-version.workspace = true
 description = "Convoy primitive: two-phase commit bead coordination for MEOW"
 license = "MIT OR Apache-2.0"
-repository = "https://github.com/KooshaPari/AgilePlus"
+repository = "https://github.com/<REDACTED>/AgilePlus"
 documentation = "https://docs.rs/agileplus-convoy"
 keywords = ["phenotype", "agileplus", "convoy"]
 categories = ["asynchronous"]
-authors = ["kooshapari"]
+authors = ["<REDACTED>"]
 
 [dependencies]
 agileplus-triage = { path = "../agileplus-triage" }

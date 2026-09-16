@@ -10,7 +10,7 @@
 ## Documents Generated
 
 ### 1. DUPLICATION.md (Original - 2,217 lines)
-**Location:** `/Users/kooshapari/CodeProjects/Phenotype/repos/docs/worklogs/DUPLICATION.md`
+**Location:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos/docs/worklogs/DUPLICATION.md`
 
 **Contents:**
 - Executive summary of all duplication findings
@@ -27,7 +27,7 @@
 ---
 
 ### 2. DUPLICATION_EXPANSION_20260329.md (New - 797 lines, ~25KB)
-**Location:** `/Users/kooshapari/CodeProjects/Phenotype/repos/docs/worklogs/DUPLICATION_EXPANSION_20260329.md`
+**Location:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos/docs/worklogs/DUPLICATION_EXPANSION_20260329.md`
 
 **Contents:**
 Detailed expansions with 5+ case studies per category:
@@ -119,19 +119,19 @@ Detailed expansions with 5+ case studies per category:
 ## File Location Reference
 
 ### Original Duplication Analysis
-- **Primary Document:** `/Users/kooshapari/CodeProjects/Phenotype/repos/docs/worklogs/DUPLICATION.md`
+- **Primary Document:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos/docs/worklogs/DUPLICATION.md`
 - **Line Count:** 2,217 lines
 - **Size:** 85+ KB
 - **Status:** Comprehensive baseline audit
 
 ### Expansion with Detailed Case Studies
-- **New Document:** `/Users/kooshapari/CodeProjects/Phenotype/repos/docs/worklogs/DUPLICATION_EXPANSION_20260329.md`
+- **New Document:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos/docs/worklogs/DUPLICATION_EXPANSION_20260329.md`
 - **Line Count:** 797 lines (~800 lines total)
 - **Size:** 25 KB
 - **Status:** 5+ detailed case studies per major category
 
 ### This Summary
-- **Document:** `/Users/kooshapari/CodeProjects/Phenotype/repos/docs/worklogs/DUPLICATION_AUDIT_SUMMARY.md`
+- **Document:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos/docs/worklogs/DUPLICATION_AUDIT_SUMMARY.md`
 - **Purpose:** Cross-reference guide for all audit materials
 
 ---

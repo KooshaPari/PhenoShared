@@ -60,7 +60,7 @@ cargo test -p release-cut
 
 ```bash
 # From FocalPoint root:
-cd /Users/kooshapari/CodeProjects/Phenotype/repos/FocalPoint
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos/FocalPoint
 
 # Dry-run
 cargo run -p release-cut -- v0.0.7

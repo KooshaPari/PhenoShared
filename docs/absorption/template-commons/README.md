@@ -3,8 +3,8 @@
 - **Date:** 2026-07-17
 - **Wave:** 2026-07-17-queue-refresh (batch3)
 - **Agent:** #4 (this session)
-- **Source repo:** `KooshaPari/template-commons`
-- **Target repo:** `KooshaPari/phenokits-commons` (as `templates/` subtree)
+- **Source repo:** `<REDACTED>/template-commons`
+- **Target repo:** `<REDACTED>/phenokits-commons` (as `templates/` subtree)
 - **Branch used in target:** `wip/2026-07-16-0029-auto`
 - **Resulting commit on target:** `4441d804` "feat(templates): absorb 12 templates + kitty-specs from template-commons"
 
@@ -88,7 +88,7 @@ phenokits-commons has its own governance layer (`AGENTS.md`, `SSOT.md`, `STATUS.
 
 ## Post-absorption actions
 
-1. Archive source repo on GitHub: `gh repo archive KooshaPari/template-commons -y`
+1. Archive source repo on GitHub: `gh repo archive <REDACTED>/template-commons -y`
 2. Update `registry/disposition-index.json`:
    - `fsm: active → absorbed`
    - `archived: false → true`
@@ -97,7 +97,7 @@ phenokits-commons has its own governance layer (`AGENTS.md`, `SSOT.md`, `STATUS.
 ## Provenance / chain of custody
 
 ```
-KooshaPari/template-commons (main @ 2026-07-15)
+<REDACTED>/template-commons (main @ 2026-07-15)
   -> /tmp/template-commons-scratch (depth-1 clone, ephemeral)
      -> /Users/.../phenokits-commons/templates/{phenotype-{config,id,logging,py-kit,testing,toolkit},plugin-typescript,phenotype-go-*}
      -> /Users/.../phenokits-commons/docs/template-kitty-specs/001-commons/{plan.md,spec.md}

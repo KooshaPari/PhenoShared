@@ -46,7 +46,7 @@ import sys
 import time
 from pathlib import Path
 
-BIN = Path("/Users/kooshapari/bin")
+BIN = Path("/Users/<REDACTED>/bin")
 DATA = Path.home() / ".local/share/resume-all"
 SNAPSHOT = DATA / "snapshot.jsonl"
 TELEMETRY = DATA / "telemetry.ndjson"
@@ -104,7 +104,7 @@ def probe_ipc() -> tuple[bool, int]:
 
 def probe_launchd() -> dict:
     """Probe launchd jobs. Returns dict with counts."""
-    plists = list(LAUNCH_AGENTS.glob("com.kooshapari.*.plist"))
+    plists = list(LAUNCH_AGENTS.glob("com.<REDACTED>.*.plist"))
     total = len(plists)
     ok = 0
     degraded = 0

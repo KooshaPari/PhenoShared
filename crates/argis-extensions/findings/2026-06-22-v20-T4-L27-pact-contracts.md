@@ -2,8 +2,8 @@
 
 **Track:** T4 (Cycle 10 P1 reduction, L27)
 **Status:** ⏸ DEFERRED — blocked on `pheno-mcp-router` + `pheno-mcp-router-ffi` local clones
-**Target Repos:** `KooshaPari/pheno-mcp-router` (provider), `KooshaPari/pheno-mcp-router-ffi` (consumer)
-**Author:** KooshaPari, 2026-06-21
+**Target Repos:** `<REDACTED>/pheno-mcp-router` (provider), `<REDACTED>/pheno-mcp-router-ffi` (consumer)
+**Author:** <REDACTED>, 2026-06-21
 **ADR:** ADR-084 (cycle 10 P1 reduction)
 
 ---

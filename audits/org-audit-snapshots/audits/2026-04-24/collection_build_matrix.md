@@ -25,7 +25,7 @@ All 5 named collections verified with phenotype-bus integration:
 ### Sidekick (Multi-provider agent dispatch)
 
 ```bash
-$ cd /Users/kooshapari/CodeProjects/Phenotype/repos/Sidekick && cargo check --workspace
+$ cd /Users/<REDACTED>/CodeProjects/Phenotype/repos/Sidekick && cargo check --workspace
     Checking sidekick-dispatch v0.0.1
     Checking sidekick-messaging v0.0.1
     Finished `dev` profile [unoptimized + debuginfo] target(s) in 1.76s
@@ -43,7 +43,7 @@ $ cd /Users/kooshapari/CodeProjects/Phenotype/repos/Sidekick && cargo check --wo
 ### Eidolon (Device automation)
 
 ```bash
-$ cd /Users/kooshapari/CodeProjects/Phenotype/repos/Eidolon && cargo check --workspace
+$ cd /Users/<REDACTED>/CodeProjects/Phenotype/repos/Eidolon && cargo check --workspace
 warning: `eidolon-desktop` (lib) generated 1 warning
     Finished `dev` profile [unoptimized + debuginfo] target(s) in 8.14s
 ```
@@ -62,7 +62,7 @@ warning: `eidolon-desktop` (lib) generated 1 warning
 ### Observably (Distributed observability)
 
 ```bash
-$ cd /Users/kooshapari/CodeProjects/Phenotype/repos/Observably && cargo check --workspace
+$ cd /Users/<REDACTED>/CodeProjects/Phenotype/repos/Observably && cargo check --workspace
 warning: `observably-logging` (lib) generated 1 warning
 warning: `observably-sentinel` (lib) generated 1 warning
     Finished `dev` profile [unoptimized + debuginfo] target(s) in 1.35s
@@ -81,7 +81,7 @@ warning: `observably-sentinel` (lib) generated 1 warning
 ### Stashly (State & event management)
 
 ```bash
-$ cd /Users/kooshapari/CodeProjects/Phenotype/repos/Stashly && cargo check --workspace
+$ cd /Users/<REDACTED>/CodeProjects/Phenotype/repos/Stashly && cargo check --workspace
 warning: `stashly-migrations` (lib) generated 1 warning
     Finished `dev` profile [unoptimized + debuginfo] target(s) in 2.01s
 ```
@@ -100,7 +100,7 @@ warning: `stashly-migrations` (lib) generated 1 warning
 ### Paginary (Knowledge collection)
 
 ```bash
-$ cd /Users/kooshapari/CodeProjects/Phenotype/repos/Paginary && bun install
+$ cd /Users/<REDACTED>/CodeProjects/Phenotype/repos/Paginary && bun install
 bun install v1.3.11
 Resolving dependencies
 error: GET https://registry.npmjs.org/@vitepress%2ftheme-default - 404

@@ -117,7 +117,7 @@ index 0000000..9a7e16e
 +  "_linter": {
 +    "tool": "pheno-framework-lint",
 +    "version_implied": "1.0.0",
-+    "invocation": "python3 pheno-framework-lint/pheno_framework_lint.py check --path /Users/kooshapari/CodeProjects/Phenotype/repos/pheno-mcp-router",
++    "invocation": "python3 pheno-framework-lint/pheno_framework_lint.py check --path /Users/<REDACTED>/CodeProjects/Phenotype/repos/pheno-mcp-router",
 +    "exit_code": 2,
 +    "run_at": "2026-06-19T05:00:00-07:00",
 +    "notes": "Linter ran against the inferred current tier (pheno-*-lib) per the directory-name regex. The single warning (handler keyword in tests/test_ports.py) is a false positive at lib tier — the keyword is in a test file's `request handler` docstring, not business logic. PROMOTION.md Gate 1/2/3 evaluations document sdk-tier readiness: 2+ polyglot consumers (dispatch-mcp + phenotype-config, both consuming the LlmPort trait), stable API since 0.1.0 (2026-06-11), no breaking changes (3 commits ported from dispatch-mcp W2-1 are all additive), CHANGELOG.md follows Keep-a-Changelog 1.1.0 + SemVer 2.0.0."

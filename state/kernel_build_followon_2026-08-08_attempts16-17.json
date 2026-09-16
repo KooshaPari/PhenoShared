@@ -17,7 +17,7 @@
   "established_facts": [
     "Post-patch build is healthy: no wedge, no compile errors (warnings-only), ninja -j1 + nvcc --threads 4 coexists with lane vLLM",
     "ONLY remaining blocker: lane infrastructure periodically powers off the WSL VM (observed 09:39, 09:55 UTC, ~16 min apart)",
-    "Build dir /home/kooshapari/sglang-src/sgl-kernel/build persists on vhdx across VM restarts (attempt 16's 11 .o survived)",
+    "Build dir /home/<REDACTED>/sglang-src/sgl-kernel/build persists on vhdx across VM restarts (attempt 16's 11 .o survived)",
     "Full script run does rm -rf build + re-seed each time - loses accumulated progress; full build needs ~35-45 min uninterrupted",
     "Build script is CRLF; LF copy kbuild_final_0802_lf.sh is the working entry"
   ],

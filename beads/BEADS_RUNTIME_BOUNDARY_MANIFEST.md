@@ -8,8 +8,8 @@ claim merge readiness, installed-runtime proof, ledger migration, or release.
 
 ## Provenance
 
-- Loose source directory: `/Users/kooshapari/CodeProjects/Phenotype/repos/beads`
-- Governed parent: `KooshaPari/pheno-harness`
+- Loose source directory: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/beads`
+- Governed parent: `<REDACTED>/pheno-harness`
 - Parent base: `21a4e4353bd16132214384ce1377a5455a9a6ef9`
 - Preservation branch: `chore/preserve-beads-runtime-boundary-20260814`
 
@@ -27,7 +27,7 @@ claim merge readiness, installed-runtime proof, ledger migration, or release.
 ## Explicit exclusions
 
 - External canonical ledger reference only:
-  `/Users/kooshapari/CodeProjects/Phenotype/repos/phenotype-dag/beads.jsonl`
+  `/Users/<REDACTED>/CodeProjects/Phenotype/repos/phenotype-dag/beads.jsonl`
   (known SHA-256 prefix `675db341`). Ledger contents were not read, copied,
   staged, or committed.
 - `~/.agileplus/config.json` and all tokens are excluded.

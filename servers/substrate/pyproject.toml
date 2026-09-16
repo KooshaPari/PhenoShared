@@ -8,7 +8,7 @@ dependencies = [
     "httpx",
 ]
 # Pin to PhenoFastMCP when published:
-# phenofastmcp @ git+https://github.com/KooshaPari/PhenoFastMCP.git@v3.4.2
+# phenofastmcp @ git+https://github.com/<REDACTED>/PhenoFastMCP.git@v3.4.2
 
 [project.optional-dependencies]
 dev = ["pytest"]

@@ -9,5 +9,5 @@
 - Local source **pruned** Phase 3 — redirect stub only.
 
 ```toml
-phenotype-string = { git = "https://github.com/KooshaPari/phenoShared", branch = "main", package = "phenotype-string" }
+phenotype-string = { git = "https://github.com/<REDACTED>/phenoShared", branch = "main", package = "phenotype-string" }
 ```

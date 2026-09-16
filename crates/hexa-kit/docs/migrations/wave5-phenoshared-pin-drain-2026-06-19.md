@@ -39,5 +39,5 @@
 
 ```bash
 cargo check -p phenotype-core
-rg 'KooshaPari/phenoShared' Cargo.toml
+rg '<REDACTED>/phenoShared' Cargo.toml
 ```

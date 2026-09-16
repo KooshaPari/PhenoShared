@@ -22,7 +22,7 @@ at runtime.
 | 6 | Chromatic Aberration  | `ChromaticConfig`        | `src/postfx/chromatic_pass.rs`        |
 | 7 | LUT Color Grading     | `LutConfig`              | `src/postfx/lut_pass.rs`              |
 
-> **Upstream:** <https://github.com/KooshaPari/phenotype-postfx>
+> **Upstream:** <https://github.com/<REDACTED>/phenotype-postfx>
 
 ## PostStack
 

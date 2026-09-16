@@ -6,7 +6,7 @@
   "color": "#06b6d4",
   "description": "Fabric mesh: capability descriptors, route compiler, failover, trust-root, and multi-tenant fairness.",
   "tier": 2,
-  "repo": "KooshaPari/PhenoFabric",
+  "repo": "<REDACTED>/PhenoFabric",
   "language": "Rust",
   "license": "MIT",
   "status": "active",
@@ -17,8 +17,8 @@
     "Trust-root auth"
   ],
   "links": {
-    "github": "https://github.com/KooshaPari/PhenoFabric",
+    "github": "https://github.com/<REDACTED>/PhenoFabric",
     "docs": "https://phenofabric.phenotype.space/docs",
-    "releases": "https://github.com/KooshaPari/PhenoFabric/releases"
+    "releases": "https://github.com/<REDACTED>/PhenoFabric/releases"
   }
 }

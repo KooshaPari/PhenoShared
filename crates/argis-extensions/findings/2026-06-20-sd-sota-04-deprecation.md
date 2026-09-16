@@ -30,7 +30,7 @@ Read-only audit performed before any mutation:
 | AGENTS.md              | Generic Phenotype template; no deprecation guidance |
 | CHANGELOG.md           | Empty `[Unreleased]` with stub sections |
 | pyproject.toml         | `Development Status :: 3 - Alpha` — contradicts archive state |
-| GitHub archived flag   | **NOT set** — repo still active on KooshaPari |
+| GitHub archived flag   | **NOT set** — repo still active on <REDACTED> |
 | Last commit on local   | `47254ca chore(phenoResearchEngine): recover stash@{0} (2026-06-20)` |
 | Companion finding      | `findings/deps-audit-2026-06-20-phenoResearchEngine.md` (P0: 12 undeclared runtime deps) |
 
@@ -73,19 +73,19 @@ The repo is already effectively archived (per ARCHIVED.md) but not formally depr
 |---|---|---|
 | Deprecation effective | 2026-06-20 (today) | Files updated locally |
 | Compatibility shim expiry | 2026-09-18 (90 days) | Downstream consumers MUST migrate by this date |
-| Final GitHub archive | Post-orchestrator approval | `gh repo archive --yes` on KooshaPari/phenoResearchEngine |
+| Final GitHub archive | Post-orchestrator approval | `gh repo archive --yes` on <REDACTED>/phenoResearchEngine |
 | Final PyPI release | Post-orchestrator approval | 0.1.1 with deprecation-only changes |
 | Fleet-index removal | Post-orchestrator approval | Remove from `phenotype-registry` |
 
 ## 6. Out-of-scope orchestrator actions
 
-The following require orchestrator (KooshaPari) approval and are **NOT** performed
+The following require orchestrator (<REDACTED>) approval and are **NOT** performed
 by this sub-task:
 
-1. `gh repo archive --yes KooshaPari/phenoResearchEngine` — would mark the repo read-only on GitHub.
+1. `gh repo archive --yes <REDACTED>/phenoResearchEngine` — would mark the repo read-only on GitHub.
 2. Publishing `phenotype-research-engine==0.1.1` to PyPI with the new classifiers.
 3. Removing the package from `phenotype-registry/registry/repos.json` (or marking it `fsm: archived`).
-4. Pruning any open issues / PRs on KooshaPari/phenoResearchEngine.
+4. Pruning any open issues / PRs on <REDACTED>/phenoResearchEngine.
 5. Notifying any known downstream consumers (none identified in this audit).
 
 ## 7. Verification

@@ -61,7 +61,7 @@ hardware:
     - cuda_visible_devices_is_runtime_specific_and_must_be_verified_against_the_device_manifest
     - llama_cpp_device_indices_are_runtime_specific_and_must_not_be_reused_as_cuda_indices
   runtime_device_mappings:
-    observed_host: KOOSHAPARI-DESK
+    observed_host: <REDACTED>-DESK
     vllm_wsl:
       visibility_variable: CUDA_VISIBLE_DEVICES
       logical_device: cuda:0

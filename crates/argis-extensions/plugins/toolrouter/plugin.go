@@ -9,8 +9,8 @@ import (
 	"github.com/google/uuid"
 	"github.com/maximhq/bifrost/core/schemas"
 
-	"github.com/kooshapari/bifrost-extensions/db/sqlc"
-	"github.com/kooshapari/bifrost-extensions/slm"
+	"github.com/<REDACTED>/bifrost-extensions/db/sqlc"
+	"github.com/<REDACTED>/bifrost-extensions/slm"
 )
 
 // Config configures the tool router plugin

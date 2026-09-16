@@ -39,7 +39,7 @@ ls -la /dev/kvm
 
 ```bash
 # Download latest release
-curl -L https://github.com/KooshaPari/nanovms/releases/latest/download/nanovms-linux-amd64.tar.gz \
+curl -L https://github.com/<REDACTED>/nanovms/releases/latest/download/nanovms-linux-amd64.tar.gz \
   -o nanovms.tar.gz
 
 # Extract
@@ -56,7 +56,7 @@ nanovms version
 
 ```bash
 # Clone repository
-git clone https://github.com/KooshaPari/nanovms.git
+git clone https://github.com/<REDACTED>/nanovms.git
 cd nanovms
 
 # Build
@@ -73,19 +73,19 @@ nanovms version
 
 ```bash
 # Pull image
-docker pull ghcr.io/kooshapari/nanovms:latest
+docker pull ghcr.io/<REDACTED>/nanovms:latest
 
 # Run with Docker
 docker run -it --rm \
   --privileged \
   -v /dev/kvm:/dev/kvm \
-  ghcr.io/kooshapari/nanovms:latest
+  ghcr.io/<REDACTED>/nanovms:latest
 
 # Or with Podman
 podman run -it --rm \
   --privileged \
   -v /dev/kvm:/dev/kvm \
-  ghcr.io/kooshapari/nanovms:latest
+  ghcr.io/<REDACTED>/nanovms:latest
 ```
 
 ## Rust SDK Quick Start
@@ -95,10 +95,10 @@ podman run -it --rm \
 ```bash
 # Add to your Cargo.toml
 [dependencies]
-nvms-sdk = { git = "https://github.com/KooshaPari/nanovms", subdir = "sdk/rust" }
+nvms-sdk = { git = "https://github.com/<REDACTED>/nanovms", subdir = "sdk/rust" }
 
 # Or clone and build locally
-git clone https://github.com/KooshaPari/nanovms.git
+git clone https://github.com/<REDACTED>/nanovms.git
 cd nanovms/sdk/rust
 cargo build
 ```
@@ -443,6 +443,6 @@ sudo iptables -L -n | grep nanovms
 
 ### Community
 
-- [GitHub Discussions](https://github.com/KooshaPari/nanovms/discussions)
+- [GitHub Discussions](https://github.com/<REDACTED>/nanovms/discussions)
 - [Discord](https://discord.gg/nanovms)
 - [Matrix](https://matrix.to/#/#nanovms:matrix.org)

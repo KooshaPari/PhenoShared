@@ -2,7 +2,7 @@
 
 # clap-ext
 
-[![CI](https://github.com/KooshaPari/clap-ext/actions/workflows/ci.yml/badge.svg)](https://github.com/KooshaPari/clap-ext/actions/workflows/ci.yml)
+[![CI](https://github.com/<REDACTED>/clap-ext/actions/workflows/ci.yml/badge.svg)](https://github.com/<REDACTED>/clap-ext/actions/workflows/ci.yml)
 [![License: MIT OR Apache-2.0](https://img.shields.io/badge/license-MIT%20OR%20Apache--2.0-blue.svg)](LICENSE-MIT)
 [![Crates.io](https://img.shields.io/crates/v/clap-ext.svg)](https://crates.io/crates/clap-ext)
 

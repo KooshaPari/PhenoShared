@@ -2,7 +2,7 @@ name: a11y (phenodocs)
 
 # AT1 — VitePress docsite WCAG 2.1 AA gate.
 # Calls the reusable a11y workflow defined at
-# `KooshaPari/OmniRoute-3rd/.github/workflows/reusable-a11y.yml`.
+# `<REDACTED>/OmniRoute-3rd/.github/workflows/reusable-a11y.yml`.
 
 on:
   push:
@@ -31,7 +31,7 @@ concurrency:
 
 jobs:
   wcag:
-    uses: KooshaPari/OmniRoute-3rd/.github/workflows/reusable-a11y.yml@main
+    uses: <REDACTED>/OmniRoute-3rd/.github/workflows/reusable-a11y.yml@main
     with:
       app_name: phenodocs
       app_dir: '.'

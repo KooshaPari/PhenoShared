@@ -29,7 +29,7 @@ def run_on_mac(cmd: str, env: dict | None = None, timeout: int = 60) -> tuple[st
         "-o", "ConnectTimeout=10",
         "-o", "StrictHostKeyChecking=no",
         "-o", "ServerAliveInterval=5",
-        "kooshapari@100.112.14.98",
+        "<REDACTED>@100.112.14.98",
         f"bash --noprofile --norc -c {subprocess.list2cmdline([wrapped])}",
     ]
     p = subprocess.run(ssh, capture_output=True, text=True, timeout=timeout)
@@ -44,7 +44,7 @@ def transfer_file(local: bytes, remote: str, mode: int = 0o600) -> tuple[bool, s
         "ssh",
         "-o", "ConnectTimeout=10",
         "-o", "StrictHostKeyChecking=no",
-        "kooshapari@100.112.14.98",
+        "<REDACTED>@100.112.14.98",
         f"bash --noprofile --norc -c {subprocess.list2cmdline([cmd])}",
     ]
     p = subprocess.run(ssh, input=b64, capture_output=True, text=True, timeout=30)
@@ -55,7 +55,7 @@ def transfer_file(local: bytes, remote: str, mode: int = 0o600) -> tuple[bool, s
 
 def main():
     tag = "v0.41"
-    repo_mac = "/Users/kooshapari/CodeProjects/Phenotype/repos/pheno-harness"
+    repo_mac = "/Users/<REDACTED>/CodeProjects/Phenotype/repos/pheno-harness"
 
     # 1. Get gh token
     print("== Getting gh auth token ==", flush=True)
@@ -94,7 +94,7 @@ def main():
     print(f"== Creating/verifying {tag} release ==", flush=True)
     local = subprocess.run(
         ["gh", "release", "view", f"{tag}-pheno-harness-summit",
-         "--repo", "KooshaPari/pheno-harness"],
+         "--repo", "<REDACTED>/pheno-harness"],
         capture_output=True, text=True, timeout=15,
     )
     if local.returncode != 0:
@@ -148,7 +148,7 @@ Public key: cosign.pub at the repo root.
             f"export PATH=/usr/bin:/bin:/usr/local/bin:~/bin:$PATH && "
             f"export GH_TOKEN=$(cat /tmp/gh_token) && "
             f"gh release create {tag}-pheno-harness-summit "
-            f"--repo KooshaPari/pheno-harness "
+            f"--repo <REDACTED>/pheno-harness "
             f"--title '{tag}-pheno-harness-summit' "
             f"--notes-file /tmp/release_notes.md",
             timeout=60,
@@ -216,7 +216,7 @@ Public key: cosign.pub at the repo root.
     print(f"== Verifying {tag} release ==", flush=True)
     local = subprocess.run(
         ["gh", "release", "view", f"{tag}-pheno-harness-summit",
-         "--repo", "KooshaPari/pheno-harness", "--json", "assets"],
+         "--repo", "<REDACTED>/pheno-harness", "--json", "assets"],
         capture_output=True, text=True, timeout=15,
     )
     if local.returncode == 0:

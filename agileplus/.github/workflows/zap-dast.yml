@@ -20,4 +20,4 @@ jobs:
         run: |
           zap/wrapper.sh \
             -t http://localhost:8080 \
-            -g https://github.com/kooshapari/phenotype-infrakit
+            -g https://github.com/<REDACTED>/phenotype-infrakit

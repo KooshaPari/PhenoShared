@@ -22,5 +22,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Notes
 
 - PR 3 of the 3-PR forgecode improvement sequence (ADR-096).
-- Depends on `thegent-memory` v2 (KooshaPari/thegent#1144).
+- Depends on `thegent-memory` v2 (<REDACTED>/thegent#1144).
 - See `thegent/docs/specs/cdylib-bridge/v1.md` for the canonical SPEC.

@@ -1,12 +1,12 @@
 # Contributing to phenotype-terrain
 
-Thanks for your interest in contributing to **phenotype-terrain**, part of the [Phenotype](https://github.com/KooshaPari) ecosystem of shared packages for Unity/WorldBox mods.
+Thanks for your interest in contributing to **phenotype-terrain**, part of the [Phenotype](https://github.com/<REDACTED>) ecosystem of shared packages for Unity/WorldBox mods.
 
 ## AgilePlus spec mandate
 
 All non-trivial work in this organization is tracked in **AgilePlus**. Before opening a PR for a feature or substantive change:
 
-1. Check the [AgilePlus](https://github.com/KooshaPari/AgilePlus) spec registry for an existing spec.
+1. Check the [AgilePlus](https://github.com/<REDACTED>/AgilePlus) spec registry for an existing spec.
 2. If none exists, open one (`agileplus specify --title "<feature>" --description "<desc>"`) and link it from your PR description.
 3. Trivial fixes (typos, dependency bumps, doc tweaks) do not require a spec.
 
@@ -15,7 +15,7 @@ All non-trivial work in this organization is tracked in **AgilePlus**. Before op
 This is a C# class library targeting `.NET` with a Unity-friendly API surface.
 
 ```bash
-git clone https://github.com/KooshaPari/phenotype-terrain.git
+git clone https://github.com/<REDACTED>/phenotype-terrain.git
 cd phenotype-terrain
 dotnet build phenotype-terrain.csproj
 dotnet test  # when tests exist
@@ -49,7 +49,7 @@ Commit subjects follow the same prefix style:
 - Keep PRs focused and small; split unrelated changes.
 - Ensure the build, tests, lint, and format checks above pass locally before pushing.
 - Describe **what** changed and **why**. Link the AgilePlus spec, issue, or ADR.
-- Expect review from `@KooshaPari` per `CODEOWNERS`; be responsive to feedback.
+- Expect review from `@<REDACTED>` per `CODEOWNERS`; be responsive to feedback.
 - Squash-merge is the default; the PR title becomes the commit subject.
 
 ## Quality gates

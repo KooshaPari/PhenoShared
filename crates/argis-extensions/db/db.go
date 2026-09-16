@@ -9,7 +9,7 @@ import (
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
 
-	"github.com/kooshapari/bifrost-extensions/db/sqlc"
+	"github.com/<REDACTED>/bifrost-extensions/db/sqlc"
 )
 
 // DB wraps the connection pool and provides access to generated queries.

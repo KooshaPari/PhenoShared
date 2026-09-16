@@ -35,4 +35,4 @@ cd docs && npm install && npm run docs:dev
 - `.github/workflows/legacy-tooling-gate.yml` — Quality gate workflow
 
 ## Reference
-Global Phenotype rules: see `~/.claude/CLAUDE.md` or `/Users/kooshapari/CodeProjects/Phenotype/repos/CLAUDE.md`
+Global Phenotype rules: see `~/.claude/CLAUDE.md` or `/Users/<REDACTED>/CodeProjects/Phenotype/repos/CLAUDE.md`

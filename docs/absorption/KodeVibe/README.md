@@ -4,8 +4,8 @@
 
 | Field | Value |
 |-------|-------|
-| Source repo | `KooshaPari/KodeVibe` |
-| Target repo | `KooshaPari/phenotype-tooling` |
+| Source repo | `<REDACTED>/KodeVibe` |
+| Target repo | `<REDACTED>/phenotype-tooling` |
 | Target path | `tools/kodevibe/` |
 | Absorbed date | 2026-07-17 |
 | Absorbed by | forge agent (batch absorption) |

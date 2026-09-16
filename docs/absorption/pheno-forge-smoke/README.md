@@ -1,7 +1,7 @@
 # Absorption Record: pheno-forge-smoke
 
-**Source:** `KooshaPari/pheno-forge-smoke`
-**Target:** `KooshaPari/pheno` (monorepo) → `crates/pheno-forge-smoke/`
+**Source:** `<REDACTED>/pheno-forge-smoke`
+**Target:** `<REDACTED>/pheno` (monorepo) → `crates/pheno-forge-smoke/`
 **Date:** 2026-07-17
 **Wave:** `2026-07-17-queue-refresh-batch4`
 **Disposition:** ABSORB (fsm: active → absorbed)
@@ -12,8 +12,8 @@
 
 | Field | Value |
 |-------|-------|
-| Source repo | `KooshaPari/pheno-forge-smoke` |
-| Target repo | `KooshaPari/pheno` (monorepo) |
+| Source repo | `<REDACTED>/pheno-forge-smoke` |
+| Target repo | `<REDACTED>/pheno` (monorepo) |
 | Target paths | `crates/pheno-forge-smoke/` |
 | Source last commit | `66815e4` (wip: auto-commit daemon 2026-07-16T10:38:10Z) |
 | Absorbed date | 2026-07-17 |
@@ -26,7 +26,7 @@
 
 | Source | Target | Notes |
 |--------|--------|-------|
-| `Cargo.toml` | `pheno/crates/pheno-forge-smoke/Cargo.toml` | Pinned deps converted to `workspace = true` where possible (`tokio`, `serde`, `serde_json`, `anyhow`, `chrono`, `clap`, `tracing`, `tracing-subscriber`, `reqwest`). `libloading` and `colored` not in workspace.dependencies; pinned concrete versions. Added `tracing-subscriber` `env-filter` feature (needed by `EnvFilter`). Removed `[profile.release]` (workspace root owns it). Added `publish = false`. `repository` updated to `KooshaPari/pheno`. |
+| `Cargo.toml` | `pheno/crates/pheno-forge-smoke/Cargo.toml` | Pinned deps converted to `workspace = true` where possible (`tokio`, `serde`, `serde_json`, `anyhow`, `chrono`, `clap`, `tracing`, `tracing-subscriber`, `reqwest`). `libloading` and `colored` not in workspace.dependencies; pinned concrete versions. Added `tracing-subscriber` `env-filter` feature (needed by `EnvFilter`). Removed `[profile.release]` (workspace root owns it). Added `publish = false`. `repository` updated to `<REDACTED>/pheno`. |
 | `src/lib.rs` | `pheno/crates/pheno-forge-smoke/src/lib.rs` | No changes needed (self-contained; references `libloading::Library` directly) |
 | `src/main.rs` | `pheno/crates/pheno-forge-smoke/src/main.rs` | No changes needed (imports `pheno_forge_smoke::{Bridge, default_bridge_path, ...}` from sibling lib) |
 | `README.md` | `pheno/crates/pheno-forge-smoke/README.md` | Copied as-is; references `../pheno-cdylib-bridge` which is now a sibling path under `crates/` |
@@ -61,8 +61,8 @@
   serde_json, anyhow, chrono, clap, tracing, tracing-subscriber, reqwest).
 - **Feature enable**: `tracing-subscriber` `env-filter` feature enabled (workspace
   dep has no features enabled; needed for `tracing_subscriber::EnvFilter`).
-- **Repo URL**: `repository` updated from `KooshaPari/pheno-forge-smoke` →
-  `KooshaPari/pheno`.
+- **Repo URL**: `repository` updated from `<REDACTED>/pheno-forge-smoke` →
+  `<REDACTED>/pheno`.
 - **Publish**: `publish = false` added (it's an internal CLI; matches pattern from
   `pheno-cdylib-bridge`).
 - **`[profile.release]` removed**: workspace root owns release profile.
@@ -112,8 +112,8 @@ The 0/0/0 test result is correct for this crate: the source repo had no unit tes
 
 ## Provenance
 
-Branch: `absorb/pheno-forge-smoke-2026-07-17` on `KooshaPari/pheno`.
-Source repo `KooshaPari/pheno-forge-smoke` to be archived via `gh repo archive`.
+Branch: `absorb/pheno-forge-smoke-2026-07-17` on `<REDACTED>/pheno`.
+Source repo `<REDACTED>/pheno-forge-smoke` to be archived via `gh repo archive`.
 
 ## Notes for follow-up PRs
 

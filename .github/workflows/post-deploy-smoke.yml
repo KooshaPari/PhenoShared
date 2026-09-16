@@ -24,7 +24,7 @@ jobs:
       - name: Download published binary
         run: |
           set -euo pipefail
-          BIN_URL=$(curl -fsSL "https://api.github.com/repos/KooshaPari/substrate/releases/latest" \
+          BIN_URL=$(curl -fsSL "https://api.github.com/repos/<REDACTED>/substrate/releases/latest" \
             | jq -r '.assets[] | select(.name | test("substrate.*x86_64.*linux"; "i")) | .browser_download_url' \
             | head -1)
           if [ -z "$BIN_URL" ]; then

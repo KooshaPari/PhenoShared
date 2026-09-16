@@ -2,7 +2,7 @@
   {
     "name": "phenotype-registry",
     "description": "Phenotype Registry System - Master index connecting specs, patterns, and templates",
-    "url": "https://github.com/KooshaPari/phenotype-registry",
+    "url": "https://github.com/<REDACTED>/phenotype-registry",
     "homepageUrl": null,
     "primaryLanguage": {
       "name": "TypeScript",
@@ -30,7 +30,7 @@
   {
     "name": "pheno-framework-lint",
     "description": "Substrate graduation & tier-convention linter (ADR-042, L73).",
-    "url": "https://github.com/KooshaPari/pheno-framework-lint",
+    "url": "https://github.com/<REDACTED>/pheno-framework-lint",
     "homepageUrl": null,
     "primaryLanguage": {
       "name": "Python",
@@ -45,8 +45,8 @@
   {
     "name": "Dino",
     "description": "Dino — DINOForge general-purpose mod platform for AI agents",
-    "url": "https://github.com/KooshaPari/Dino",
-    "homepageUrl": "https://kooshapari.github.io/Dino/",
+    "url": "https://github.com/<REDACTED>/Dino",
+    "homepageUrl": "https://<REDACTED>.github.io/Dino/",
     "primaryLanguage": {
       "name": "C#",
       "color": ""
@@ -60,7 +60,7 @@
   {
     "name": "pheno-secret-scan",
     "description": "Phenotype fleet tier-0 secret-scanning config (trufflehog allowlist, pre-commit hooks, GitHub Actions workflows)",
-    "url": "https://github.com/KooshaPari/pheno-secret-scan",
+    "url": "https://github.com/<REDACTED>/pheno-secret-scan",
     "homepageUrl": null,
     "primaryLanguage": {
       "name": "Just",
@@ -75,7 +75,7 @@
   {
     "name": "PhenoVCS",
     "description": "Version control primitives registry with Git worktree management",
-    "url": "https://github.com/KooshaPari/PhenoVCS",
+    "url": "https://github.com/<REDACTED>/PhenoVCS",
     "homepageUrl": null,
     "primaryLanguage": {
       "name": "Rust",
@@ -90,8 +90,8 @@
   {
     "name": "thegent",
     "description": "Python agent runtime with tool registry, LLM provider abstraction, and agent orchestration",
-    "url": "https://github.com/KooshaPari/thegent",
-    "homepageUrl": "https://thegent.kooshapari.com",
+    "url": "https://github.com/<REDACTED>/thegent",
+    "homepageUrl": "https://thegent.<REDACTED>.com",
     "primaryLanguage": {
       "name": "Python",
       "color": ""
@@ -105,7 +105,7 @@
   {
     "name": "phenoRouterMonitor",
     "description": "LLM router with monitoring backend (Rust) and Pareto analysis dashboard (Streamlit)",
-    "url": "https://github.com/KooshaPari/phenoRouterMonitor",
+    "url": "https://github.com/<REDACTED>/phenoRouterMonitor",
     "homepageUrl": null,
     "primaryLanguage": {
       "name": "Rust",
@@ -120,7 +120,7 @@
   {
     "name": "phenotype-ops",
     "description": null,
-    "url": "https://github.com/KooshaPari/phenotype-ops",
+    "url": "https://github.com/<REDACTED>/phenotype-ops",
     "homepageUrl": null,
     "primaryLanguage": {
       "name": "Rust",
@@ -135,7 +135,7 @@
   {
     "name": "phenoForge",
     "description": "phenoForge: meta-forge for pheno-* crate compilation pipeline",
-    "url": "https://github.com/KooshaPari/phenoForge",
+    "url": "https://github.com/<REDACTED>/phenoForge",
     "homepageUrl": null,
     "primaryLanguage": {
       "name": "Rust",
@@ -150,7 +150,7 @@
   {
     "name": "pheno-otel-wt",
     "description": "OpenTelemetry + WebThings integration — wide-tree variant (orch-v12-s3-015: CODEOWNERS + governance)",
-    "url": "https://github.com/KooshaPari/pheno-otel-wt",
+    "url": "https://github.com/<REDACTED>/pheno-otel-wt",
     "homepageUrl": null,
     "primaryLanguage": null,
     "stargazerCount": 0,
@@ -162,7 +162,7 @@
   {
     "name": "OmniRoute",
     "description": "OmniRoute — AI gateway for multi-provider LLMs: OpenAI-compatible endpoint with smart routing across Anthropic, OpenAI, Google, Groq, DeepSeek, and 300+ models.",
-    "url": "https://github.com/KooshaPari/OmniRoute",
+    "url": "https://github.com/<REDACTED>/OmniRoute",
     "homepageUrl": "https://www.npmjs.com/package/omniroute",
     "primaryLanguage": {
       "name": "TypeScript",
@@ -177,7 +177,7 @@
   {
     "name": "HeliosCLI",
     "description": "Phenotype HeliosCLI",
-    "url": "https://github.com/KooshaPari/HeliosCLI",
+    "url": "https://github.com/<REDACTED>/HeliosCLI",
     "homepageUrl": null,
     "primaryLanguage": {
       "name": "Rust",
@@ -192,7 +192,7 @@
   {
     "name": "phenoUtils",
     "description": "Foundational Rust utility crates for the Phenotype ecosystem: CLI shells, async filesystem, cryptography (ring/argon2), network helpers, and testing fixtures.",
-    "url": "https://github.com/KooshaPari/phenoUtils",
+    "url": "https://github.com/<REDACTED>/phenoUtils",
     "homepageUrl": null,
     "primaryLanguage": {
       "name": "Rust",
@@ -217,7 +217,7 @@
   {
     "name": "BytePort",
     "description": "Phenotype-org infrastructure tooling",
-    "url": "https://github.com/KooshaPari/BytePort",
+    "url": "https://github.com/<REDACTED>/BytePort",
     "homepageUrl": null,
     "primaryLanguage": {
       "name": "Svelte",
@@ -232,7 +232,7 @@
   {
     "name": "phenotype-dep-guard",
     "description": "Dependency guard for pheno repos",
-    "url": "https://github.com/KooshaPari/phenotype-dep-guard",
+    "url": "https://github.com/<REDACTED>/phenotype-dep-guard",
     "homepageUrl": null,
     "primaryLanguage": null,
     "stargazerCount": 0,
@@ -244,7 +244,7 @@
   {
     "name": "HexaKit",
     "description": "Phenotype-org hexagonal architecture toolkit",
-    "url": "https://github.com/KooshaPari/HexaKit",
+    "url": "https://github.com/<REDACTED>/HexaKit",
     "homepageUrl": "https://hexakit.phenotype.space",
     "primaryLanguage": {
       "name": "Rust",
@@ -259,7 +259,7 @@
   {
     "name": "thegent-sharecli",
     "description": "DEPRECATED duplicate of sharecli — absorb into thegent when runtime stabilizes",
-    "url": "https://github.com/KooshaPari/thegent-sharecli",
+    "url": "https://github.com/<REDACTED>/thegent-sharecli",
     "homepageUrl": null,
     "primaryLanguage": {
       "name": "Python",
@@ -274,7 +274,7 @@
   {
     "name": "pheno-capacity",
     "description": "Pure-math library for VRAM estimation, model-fit scoring, and hardware capacity planning. no_std compatible; zero dependencies.",
-    "url": "https://github.com/KooshaPari/pheno-capacity",
+    "url": "https://github.com/<REDACTED>/pheno-capacity",
     "homepageUrl": null,
     "primaryLanguage": {
       "name": "Rust",
@@ -289,7 +289,7 @@
   {
     "name": "phenotype-python-sdk",
     "description": "Phenotype-org Python SDK — consolidates McpKit/TestingKit/AuthKit/ResilienceKit/PhenoKits Python packages",
-    "url": "https://github.com/KooshaPari/phenotype-python-sdk",
+    "url": "https://github.com/<REDACTED>/phenotype-python-sdk",
     "homepageUrl": null,
     "primaryLanguage": {
       "name": "Python",
@@ -304,7 +304,7 @@
   {
     "name": "KlipDot",
     "description": "STRICTLY DO NOT DELETE NOR UNARCHIVE - Legacy Archived AI-DD Project - Universal terminal image interceptor",
-    "url": "https://github.com/KooshaPari/KlipDot",
+    "url": "https://github.com/<REDACTED>/KlipDot",
     "homepageUrl": null,
     "primaryLanguage": {
       "name": "Rust",
@@ -319,7 +319,7 @@
   {
     "name": "phenotype-hub",
     "description": "Phenotype org hub repository — governance scaffold (AGENTS, CLAUDE, FR templates); pre-foundational, no implementation yet",
-    "url": "https://github.com/KooshaPari/phenotype-hub",
+    "url": "https://github.com/<REDACTED>/phenotype-hub",
     "homepageUrl": null,
     "primaryLanguage": {
       "name": "JavaScript",
@@ -350,7 +350,7 @@
   {
     "name": "phenotype-landing",
     "description": "Monorepo: all Phenotype org landing pages (odin, thegent, projects, byteport, agileplus, phenokits, hwledger)",
-    "url": "https://github.com/KooshaPari/phenotype-landing",
+    "url": "https://github.com/<REDACTED>/phenotype-landing",
     "homepageUrl": null,
     "primaryLanguage": {
       "name": "Astro",
@@ -365,7 +365,7 @@
   {
     "name": "PlayCua",
     "description": "Bare-metal computer-use agent with Rust + Python",
-    "url": "https://github.com/KooshaPari/PlayCua",
+    "url": "https://github.com/<REDACTED>/PlayCua",
     "homepageUrl": null,
     "primaryLanguage": {
       "name": "Rust",
@@ -390,7 +390,7 @@
   {
     "name": "phenotype-go-sdk",
     "description": "Phenotype-org Go SDK — consolidates PlatformKit/DevHex/McpKit Go packages",
-    "url": "https://github.com/KooshaPari/phenotype-go-sdk",
+    "url": "https://github.com/<REDACTED>/phenotype-go-sdk",
     "homepageUrl": null,
     "primaryLanguage": {
       "name": "Go",
@@ -405,7 +405,7 @@
   {
     "name": "phenodocs",
     "description": "Phenotype documentation system with VitePress",
-    "url": "https://github.com/KooshaPari/phenodocs",
+    "url": "https://github.com/<REDACTED>/phenodocs",
     "homepageUrl": null,
     "primaryLanguage": {
       "name": "Vue",
@@ -420,7 +420,7 @@
   {
     "name": "phenoShared",
     "description": "Phenotype-org shared crates",
-    "url": "https://github.com/KooshaPari/phenoShared",
+    "url": "https://github.com/<REDACTED>/phenoShared",
     "homepageUrl": null,
     "primaryLanguage": null,
     "stargazerCount": 0,
@@ -442,7 +442,7 @@
   {
     "name": "PhenoFastMCP-rust",
     "description": "Rust framework for building Model Context Protocol servers with cancel-correct async, zero-copy serialization, and first-class tool/resource/prompt abstractions",
-    "url": "https://github.com/KooshaPari/PhenoFastMCP-rust",
+    "url": "https://github.com/<REDACTED>/PhenoFastMCP-rust",
     "homepageUrl": null,
     "primaryLanguage": {
       "name": "Rust",
@@ -457,7 +457,7 @@
   {
     "name": "hwLedger",
     "description": "Phenotype-org hardware ledger",
-    "url": "https://github.com/KooshaPari/hwLedger",
+    "url": "https://github.com/<REDACTED>/hwLedger",
     "homepageUrl": "https://hwledger.phenotype.space",
     "primaryLanguage": null,
     "stargazerCount": 0,
@@ -482,7 +482,7 @@
   {
     "name": "HeliosLab",
     "description": "Phenotype-org research lab",
-    "url": "https://github.com/KooshaPari/HeliosLab",
+    "url": "https://github.com/<REDACTED>/HeliosLab",
     "homepageUrl": "https://helioslab.phenotype.space",
     "primaryLanguage": {
       "name": "TypeScript",
@@ -510,7 +510,7 @@
   {
     "name": "clap-ext",
     "description": "Shared Rust CLI extension library: common subcommands, config flags, error display for clap-based CLIs",
-    "url": "https://github.com/KooshaPari/clap-ext",
+    "url": "https://github.com/<REDACTED>/clap-ext",
     "homepageUrl": null,
     "primaryLanguage": {
       "name": "Rust",
@@ -525,7 +525,7 @@
   {
     "name": "argis-extensions",
     "description": "Argis gateway extensions - routing, SLM, embeddings, plugin architecture",
-    "url": "https://github.com/KooshaPari/argis-extensions",
+    "url": "https://github.com/<REDACTED>/argis-extensions",
     "homepageUrl": null,
     "primaryLanguage": {
       "name": "Go",
@@ -556,7 +556,7 @@
   {
     "name": "portage",
     "description": "Harbor framework for agent evaluations and RL environments",
-    "url": "https://github.com/KooshaPari/portage",
+    "url": "https://github.com/<REDACTED>/portage",
     "homepageUrl": "https://harborframework.com/",
     "primaryLanguage": {
       "name": "Python",
@@ -587,7 +587,7 @@
   {
     "name": "apikit",
     "description": "HTTP toolkit — REST, GraphQL, and WebSocket adapters (extracted from Apisync, apikit v0.1.0)",
-    "url": "https://github.com/KooshaPari/apikit",
+    "url": "https://github.com/<REDACTED>/apikit",
     "homepageUrl": null,
     "primaryLanguage": {
       "name": "Rust",
@@ -602,7 +602,7 @@
   {
     "name": "Tasken",
     "description": "Phenotype-org task orchestration",
-    "url": "https://github.com/KooshaPari/Tasken",
+    "url": "https://github.com/<REDACTED>/Tasken",
     "homepageUrl": "https://tasken.phenotype.space",
     "primaryLanguage": {
       "name": "Rust",
@@ -617,7 +617,7 @@
   {
     "name": "PhenoSpecs",
     "description": "Phenotype Specification Registry - Central source of truth for specs, ADRs, and API contracts",
-    "url": "https://github.com/KooshaPari/PhenoSpecs",
+    "url": "https://github.com/<REDACTED>/PhenoSpecs",
     "homepageUrl": "https://phenotype.space/specs/",
     "primaryLanguage": {
       "name": "TypeScript",
@@ -651,7 +651,7 @@
   {
     "name": "PhenoObservability",
     "description": "Phenotype-org observability primitives",
-    "url": "https://github.com/KooshaPari/PhenoObservability",
+    "url": "https://github.com/<REDACTED>/PhenoObservability",
     "homepageUrl": "https://phenoobservability.phenotype.space",
     "primaryLanguage": {
       "name": "Rust",
@@ -666,7 +666,7 @@
   {
     "name": "PhenoContracts",
     "description": "Archived contract verification source; repo-level gate tracked in phenotype-registry",
-    "url": "https://github.com/KooshaPari/PhenoContracts",
+    "url": "https://github.com/<REDACTED>/PhenoContracts",
     "homepageUrl": null,
     "primaryLanguage": {
       "name": "TypeScript",
@@ -681,7 +681,7 @@
   {
     "name": "AgilePlus",
     "description": "Phenotype-org spec-driven development",
-    "url": "https://github.com/KooshaPari/AgilePlus",
+    "url": "https://github.com/<REDACTED>/AgilePlus",
     "homepageUrl": "https://agileplus.phenotype.space",
     "primaryLanguage": {
       "name": "Rust",
@@ -696,7 +696,7 @@
   {
     "name": "Civis",
     "description": "Phenotype-org governance",
-    "url": "https://github.com/KooshaPari/Civis",
+    "url": "https://github.com/<REDACTED>/Civis",
     "homepageUrl": "https://civis.phenotype.space",
     "primaryLanguage": {
       "name": "Rust",
@@ -711,7 +711,7 @@
   {
     "name": "agent-platform",
     "description": "Preserved local WIP from agent-platform",
-    "url": "https://github.com/KooshaPari/agent-platform",
+    "url": "https://github.com/<REDACTED>/agent-platform",
     "homepageUrl": null,
     "primaryLanguage": {
       "name": "TypeScript",
@@ -726,7 +726,7 @@
   {
     "name": "phenotype-apps",
     "description": "Phenotype apps — iOS + web shell assets (apps/ subdir of meta-repo extracted to its own home, per ADR-023 app-policy: apps are self-repod)",
-    "url": "https://github.com/KooshaPari/phenotype-apps",
+    "url": "https://github.com/<REDACTED>/phenotype-apps",
     "homepageUrl": null,
     "primaryLanguage": {
       "name": "HTML",
@@ -741,7 +741,7 @@
   {
     "name": "phenokits-commons",
     "description": "Phenotype org cross-cutting commons: governance templates, hexagon ADRs, shared libs (go/ts) — extracted from the Python SDK (see ADR-006). Canonical index: phenotype-registry.",
-    "url": "https://github.com/KooshaPari/phenokits-commons",
+    "url": "https://github.com/<REDACTED>/phenokits-commons",
     "homepageUrl": null,
     "primaryLanguage": {
       "name": "Python",
@@ -756,7 +756,7 @@
   {
     "name": "GDK",
     "description": "GDK - General Development Kit (Rust monorepo)",
-    "url": "https://github.com/KooshaPari/GDK",
+    "url": "https://github.com/<REDACTED>/GDK",
     "homepageUrl": null,
     "primaryLanguage": {
       "name": "Rust",
@@ -771,8 +771,8 @@
   {
     "name": "Tracera",
     "description": "Agent-native multi-view requirements traceability and project management system",
-    "url": "https://github.com/KooshaPari/Tracera",
-    "homepageUrl": "https://kooshapari.github.io/Tracera/",
+    "url": "https://github.com/<REDACTED>/Tracera",
+    "homepageUrl": "https://<REDACTED>.github.io/Tracera/",
     "primaryLanguage": {
       "name": "Python",
       "color": ""
@@ -786,7 +786,7 @@
   {
     "name": "helios-cli",
     "description": "Phenotype-org multi-runtime CLI",
-    "url": "https://github.com/KooshaPari/helios-cli",
+    "url": "https://github.com/<REDACTED>/helios-cli",
     "homepageUrl": "https://helios-cli.phenotype.space",
     "primaryLanguage": {
       "name": "Python",
@@ -801,7 +801,7 @@
   {
     "name": "pheno-scaffold-kit",
     "description": "Python scaffolding template for pheno-* repos (framework substrate, ADR-023)",
-    "url": "https://github.com/KooshaPari/pheno-scaffold-kit",
+    "url": "https://github.com/<REDACTED>/pheno-scaffold-kit",
     "homepageUrl": null,
     "primaryLanguage": {
       "name": "Python",
@@ -816,7 +816,7 @@
   {
     "name": "phenotype-gateway",
     "description": "Phenotype gateway (H10 absorption archive; see HexaKit for active development)",
-    "url": "https://github.com/KooshaPari/phenotype-gateway",
+    "url": "https://github.com/<REDACTED>/phenotype-gateway",
     "homepageUrl": null,
     "primaryLanguage": {
       "name": "Rust",
@@ -831,7 +831,7 @@
   {
     "name": "PhenoMCPServers",
     "description": "Phenotype MCP implementations registry — servers, skills, plugins, and agent artifacts",
-    "url": "https://github.com/KooshaPari/PhenoMCPServers",
+    "url": "https://github.com/<REDACTED>/PhenoMCPServers",
     "homepageUrl": null,
     "primaryLanguage": {
       "name": "Python",
@@ -846,7 +846,7 @@
   {
     "name": "agentapi-plusplus",
     "description": "HTTP API for Claude Code, Goose, Aider, Gemini, Amp, and Codex",
-    "url": "https://github.com/KooshaPari/agentapi-plusplus",
+    "url": "https://github.com/<REDACTED>/agentapi-plusplus",
     "homepageUrl": null,
     "primaryLanguage": {
       "name": "Go",
@@ -861,7 +861,7 @@
   {
     "name": "phenotype-tooling",
     "description": "Phenotype org internal tooling: usage-poll, agent-forecast, temporal-grounding",
-    "url": "https://github.com/KooshaPari/phenotype-tooling",
+    "url": "https://github.com/<REDACTED>/phenotype-tooling",
     "homepageUrl": null,
     "primaryLanguage": {
       "name": "Svelte",
@@ -876,7 +876,7 @@
   {
     "name": "sharecli",
     "description": "Shared CLI process manager for multi-project agent orchestration",
-    "url": "https://github.com/KooshaPari/sharecli",
+    "url": "https://github.com/<REDACTED>/sharecli",
     "homepageUrl": null,
     "primaryLanguage": {
       "name": "Rust",
@@ -891,7 +891,7 @@
   {
     "name": "PhenoPlugins",
     "description": "Phenotype-org plugin framework",
-    "url": "https://github.com/KooshaPari/PhenoPlugins",
+    "url": "https://github.com/<REDACTED>/PhenoPlugins",
     "homepageUrl": "https://phenoplugins.phenotype.space",
     "primaryLanguage": {
       "name": "Rust",
@@ -906,7 +906,7 @@
   {
     "name": "FocalPoint",
     "description": "Phenotype-org dependency management",
-    "url": "https://github.com/KooshaPari/FocalPoint",
+    "url": "https://github.com/<REDACTED>/FocalPoint",
     "homepageUrl": "https://focalpoint.phenotype.space",
     "primaryLanguage": {
       "name": "Svelte",
@@ -937,7 +937,7 @@
   {
     "name": "chatta",
     "description": "chatta — Svelte-based chat application and UI components",
-    "url": "https://github.com/KooshaPari/chatta",
+    "url": "https://github.com/<REDACTED>/chatta",
     "homepageUrl": null,
     "primaryLanguage": {
       "name": "Svelte",
@@ -952,8 +952,8 @@
   {
     "name": "cliproxyapi-plusplus",
     "description": "The Plus version of CLIProxyAPI",
-    "url": "https://github.com/KooshaPari/cliproxyapi-plusplus",
-    "homepageUrl": "https://kooshapari.github.io/cliproxyapi-plusplus/",
+    "url": "https://github.com/<REDACTED>/cliproxyapi-plusplus",
+    "homepageUrl": "https://<REDACTED>.github.io/cliproxyapi-plusplus/",
     "primaryLanguage": {
       "name": "HTML",
       "color": ""
@@ -967,7 +967,7 @@
   {
     "name": "PolicyStack",
     "description": "Phenotype PolicyStack — policy federation CLI and contracts",
-    "url": "https://github.com/KooshaPari/PolicyStack",
+    "url": "https://github.com/<REDACTED>/PolicyStack",
     "homepageUrl": null,
     "primaryLanguage": {
       "name": "Python",
@@ -982,7 +982,7 @@
   {
     "name": "Apisync",
     "description": "API synchronization and integration platform — auto-syncs OpenAPI/GraphQL schemas with versioning, conflict resolution, webhooks, and audit logging",
-    "url": "https://github.com/KooshaPari/Apisync",
+    "url": "https://github.com/<REDACTED>/Apisync",
     "homepageUrl": null,
     "primaryLanguage": {
       "name": "Rust",
@@ -997,7 +997,7 @@
   {
     "name": "PhenoSchema",
     "description": "Preserved local WIP from PhenoSchema",
-    "url": "https://github.com/KooshaPari/PhenoSchema",
+    "url": "https://github.com/<REDACTED>/PhenoSchema",
     "homepageUrl": null,
     "primaryLanguage": {
       "name": "Rust",
@@ -1012,7 +1012,7 @@
   {
     "name": "rich-cli-kit",
     "description": "Rich CLI toolkit for terminal UX",
-    "url": "https://github.com/KooshaPari/rich-cli-kit",
+    "url": "https://github.com/<REDACTED>/rich-cli-kit",
     "homepageUrl": null,
     "primaryLanguage": {
       "name": "Rust",
@@ -1027,7 +1027,7 @@
   {
     "name": "phenotype-infra",
     "description": "Phenotype compute mesh: OCI + CF + GCP + AWS + Vercel + TS — ADRs, specs, IaC, runbooks",
-    "url": "https://github.com/KooshaPari/phenotype-infra",
+    "url": "https://github.com/<REDACTED>/phenotype-infra",
     "homepageUrl": null,
     "primaryLanguage": {
       "name": "Rust",
@@ -1042,7 +1042,7 @@
   {
     "name": "phenoData",
     "description": "Pheno data-layer workspace: SurrealDB embedded bridge, Postgres+pgvector bridge, and unified pheno-query planner (Rust).",
-    "url": "https://github.com/KooshaPari/phenoData",
+    "url": "https://github.com/<REDACTED>/phenoData",
     "homepageUrl": null,
     "primaryLanguage": {
       "name": "Rust",
@@ -1057,7 +1057,7 @@
   {
     "name": "Zerokit",
     "description": "Restored: Zerokit",
-    "url": "https://github.com/KooshaPari/Zerokit",
+    "url": "https://github.com/<REDACTED>/Zerokit",
     "homepageUrl": null,
     "primaryLanguage": null,
     "stargazerCount": 0,
@@ -1069,7 +1069,7 @@
   {
     "name": "TestingKit",
     "description": "Phenotype-org testing domain SDK",
-    "url": "https://github.com/KooshaPari/TestingKit",
+    "url": "https://github.com/<REDACTED>/TestingKit",
     "homepageUrl": null,
     "primaryLanguage": {
       "name": "Python",
@@ -1084,7 +1084,7 @@
   {
     "name": "dagctl",
     "description": "DAG control CLI (binary — source in phenodag)",
-    "url": "https://github.com/KooshaPari/dagctl",
+    "url": "https://github.com/<REDACTED>/dagctl",
     "homepageUrl": null,
     "primaryLanguage": null,
     "stargazerCount": 0,
@@ -1096,7 +1096,7 @@
   {
     "name": "pheno-tracing",
     "description": "Phenotype canonical tracing substrate (ADR-036) — port-driven distributed tracing for the pheno-* fleet (TracePort + InMemoryAdapter + StdoutAdapter)",
-    "url": "https://github.com/KooshaPari/pheno-tracing",
+    "url": "https://github.com/<REDACTED>/pheno-tracing",
     "homepageUrl": null,
     "primaryLanguage": {
       "name": "Rust",
@@ -1111,7 +1111,7 @@
   {
     "name": "Pine",
     "description": "Wine-equivalent for Phenotype — Windows and cross-platform application compatibility layer",
-    "url": "https://github.com/KooshaPari/Pine",
+    "url": "https://github.com/<REDACTED>/Pine",
     "homepageUrl": null,
     "primaryLanguage": {
       "name": "Rust",
@@ -1126,7 +1126,7 @@
   {
     "name": "phenotype-journeys",
     "description": "Reusable journey harness (Rust CLI + Vue components + Playwright helper) for the Phenotype ecosystem",
-    "url": "https://github.com/KooshaPari/phenotype-journeys",
+    "url": "https://github.com/<REDACTED>/phenotype-journeys",
     "homepageUrl": null,
     "primaryLanguage": {
       "name": "Rust",
@@ -1141,7 +1141,7 @@
   {
     "name": "Dino-fork",
     "description": null,
-    "url": "https://github.com/KooshaPari/Dino-fork",
+    "url": "https://github.com/<REDACTED>/Dino-fork",
     "homepageUrl": null,
     "primaryLanguage": {
       "name": "C#",
@@ -1156,7 +1156,7 @@
   {
     "name": "Agentora",
     "description": "Rust hexagonal-architecture framework for AI agents — skill system, tool registry, two-tier memory (ring + persistent), and serializable lifecycle events",
-    "url": "https://github.com/KooshaPari/Agentora",
+    "url": "https://github.com/<REDACTED>/Agentora",
     "homepageUrl": null,
     "primaryLanguage": {
       "name": "Python",
@@ -1171,7 +1171,7 @@
   {
     "name": "PhenoAgent",
     "description": "Phenotype agent core, daemon, and CLI — extracted from phenotype-infra",
-    "url": "https://github.com/KooshaPari/PhenoAgent",
+    "url": "https://github.com/<REDACTED>/PhenoAgent",
     "homepageUrl": null,
     "primaryLanguage": {
       "name": "Rust",
@@ -1202,7 +1202,7 @@
   {
     "name": "Tokn",
     "description": "TokenLedger - LLM cost and usage tracking",
-    "url": "https://github.com/KooshaPari/Tokn",
+    "url": "https://github.com/<REDACTED>/Tokn",
     "homepageUrl": "https://tokn.phenotype.space",
     "primaryLanguage": {
       "name": "Rust",
@@ -1217,7 +1217,7 @@
   {
     "name": "MCPForge",
     "description": "mcp-language-server gives MCP enabled clients access semantic tools like get definition, references, rename, and diagnostics.",
-    "url": "https://github.com/KooshaPari/MCPForge",
+    "url": "https://github.com/<REDACTED>/MCPForge",
     "homepageUrl": null,
     "primaryLanguage": {
       "name": "Go",
@@ -1232,7 +1232,7 @@
   {
     "name": "pheno",
     "description": "Pheno Rust monorepo workspace — 170K+ LOC, 11 workspace members (AgilePlus, phenoDesign, PhenoLibs, etc.)",
-    "url": "https://github.com/KooshaPari/pheno",
+    "url": "https://github.com/<REDACTED>/pheno",
     "homepageUrl": "https://pheno.phenotype.space",
     "primaryLanguage": {
       "name": "Rust",
@@ -1260,7 +1260,7 @@
   {
     "name": "PhenoHandbook",
     "description": "Phenotype Handbook - Patterns, guidelines, anti-patterns, and methodologies for building software",
-    "url": "https://github.com/KooshaPari/PhenoHandbook",
+    "url": "https://github.com/<REDACTED>/PhenoHandbook",
     "homepageUrl": "https://phenotype.space/handbook/",
     "primaryLanguage": {
       "name": "Shell",
@@ -1291,7 +1291,7 @@
   {
     "name": "Authvault",
     "description": "Authentication and authorization framework with OAuth2, JWT, RBAC/ABAC, and multi-tenant support",
-    "url": "https://github.com/KooshaPari/Authvault",
+    "url": "https://github.com/<REDACTED>/Authvault",
     "homepageUrl": null,
     "primaryLanguage": {
       "name": "Rust",
@@ -1306,7 +1306,7 @@
   {
     "name": "phenotype-gfx",
     "description": "Phenotype GFX SDK — polyglot graphics collection: Rust voxel substrate + C# terrain & water, unified branding/versioning/interop.",
-    "url": "https://github.com/KooshaPari/phenotype-gfx",
+    "url": "https://github.com/<REDACTED>/phenotype-gfx",
     "homepageUrl": null,
     "primaryLanguage": {
       "name": "Rust",
@@ -1321,7 +1321,7 @@
   {
     "name": "phenotype-teamcomm",
     "description": "Phenotype phenotype-teamcomm",
-    "url": "https://github.com/KooshaPari/phenotype-teamcomm",
+    "url": "https://github.com/<REDACTED>/phenotype-teamcomm",
     "homepageUrl": null,
     "primaryLanguage": {
       "name": "Rust",
@@ -1336,7 +1336,7 @@
   {
     "name": "phenoEvents",
     "description": "PhenoEvents - EventBus port with hexagonal architecture",
-    "url": "https://github.com/KooshaPari/phenoEvents",
+    "url": "https://github.com/<REDACTED>/phenoEvents",
     "homepageUrl": null,
     "primaryLanguage": {
       "name": "Rust",
@@ -1351,7 +1351,7 @@
   {
     "name": "PhenoProc",
     "description": "Phenotype processor workspace for AI agent infrastructure and tools",
-    "url": "https://github.com/KooshaPari/PhenoProc",
+    "url": "https://github.com/<REDACTED>/PhenoProc",
     "homepageUrl": null,
     "primaryLanguage": {
       "name": "Python",
@@ -1366,7 +1366,7 @@
   {
     "name": "PhenoFastMCP",
     "description": "🚀 The fast, Pythonic way to build MCP servers and clients.",
-    "url": "https://github.com/KooshaPari/PhenoFastMCP",
+    "url": "https://github.com/<REDACTED>/PhenoFastMCP",
     "homepageUrl": "https://gofastmcp.com",
     "primaryLanguage": {
       "name": "Python",
@@ -1381,7 +1381,7 @@
   {
     "name": "phenodag",
     "description": "Multi-agent multi-project DAG (single-file Go, SQLite + flock) — built-in v3-180 preset, hybrid similarity, atomic claims, mangled-git scan, side-DAG back-fill",
-    "url": "https://github.com/KooshaPari/phenodag",
+    "url": "https://github.com/<REDACTED>/phenodag",
     "homepageUrl": null,
     "primaryLanguage": {
       "name": "Go",
@@ -1396,7 +1396,7 @@
   {
     "name": "pheno-context",
     "description": "Phenotype canonical request context — pheno-*-lib substrate for the pheno-* fleet. Builder, header extraction, structured metadata. (Recovered from stranded l4-68 worktree, 2026-06-17)",
-    "url": "https://github.com/KooshaPari/pheno-context",
+    "url": "https://github.com/<REDACTED>/pheno-context",
     "homepageUrl": null,
     "primaryLanguage": {
       "name": "Rust",
@@ -1411,7 +1411,7 @@
   {
     "name": "pheno-agents-md",
     "description": "pheno-agents-md: scaffold-kit for AI agent context (AGENTS.md generation)",
-    "url": "https://github.com/KooshaPari/pheno-agents-md",
+    "url": "https://github.com/<REDACTED>/pheno-agents-md",
     "homepageUrl": null,
     "primaryLanguage": {
       "name": "Rust",
@@ -1426,7 +1426,7 @@
   {
     "name": "Settly",
     "description": "Universal configuration management with layered configs, validation, and environment-aware settings",
-    "url": "https://github.com/KooshaPari/Settly",
+    "url": "https://github.com/<REDACTED>/Settly",
     "homepageUrl": null,
     "primaryLanguage": {
       "name": "Rust",
@@ -1441,7 +1441,7 @@
   {
     "name": "mobile-mcp",
     "description": "Model Context Protocol Server for Mobile Automation and Scraping (iOS, Android, Emulators, Simulators and Real Devices)",
-    "url": "https://github.com/KooshaPari/mobile-mcp",
+    "url": "https://github.com/<REDACTED>/mobile-mcp",
     "homepageUrl": "https://mobilenext.ai",
     "primaryLanguage": {
       "name": "TypeScript",
@@ -1456,7 +1456,7 @@
   {
     "name": "WorldSphereMod",
     "description": "The 3D Worldbox Mod",
-    "url": "https://github.com/KooshaPari/WorldSphereMod",
+    "url": "https://github.com/<REDACTED>/WorldSphereMod",
     "homepageUrl": "https://worldspheremod.vercel.app",
     "primaryLanguage": {
       "name": "C#",
@@ -1471,7 +1471,7 @@
   {
     "name": "forgecode",
     "description": "AI enabled pair programmer for Claude, GPT, O Series, Grok, Deepseek, Gemini and 300+ models",
-    "url": "https://github.com/KooshaPari/forgecode",
+    "url": "https://github.com/<REDACTED>/forgecode",
     "homepageUrl": "https://forgecode.dev",
     "primaryLanguage": {
       "name": "Rust",
@@ -1486,7 +1486,7 @@
   {
     "name": "bifrost",
     "description": "Fastest enterprise AI gateway (50x faster than LiteLLM) with adaptive load balancer, cluster mode, guardrails, 1000+ models support & <100 µs overhead at 5k RPS.",
-    "url": "https://github.com/KooshaPari/bifrost",
+    "url": "https://github.com/<REDACTED>/bifrost",
     "homepageUrl": "https://www.getmaxim.ai/bifrost",
     "primaryLanguage": {
       "name": "Go",
@@ -1501,7 +1501,7 @@
   {
     "name": "vibeproxy-monitoring-unified",
     "description": "Unified monitoring scaffold for VibeProxy ecosystem — pre-implementation governance/spec stubs (AGENTS, CLAUDE, FR, SPEC)",
-    "url": "https://github.com/KooshaPari/vibeproxy-monitoring-unified",
+    "url": "https://github.com/<REDACTED>/vibeproxy-monitoring-unified",
     "homepageUrl": null,
     "primaryLanguage": null,
     "stargazerCount": 0,
@@ -1528,8 +1528,8 @@
   },
   {
     "name": "phenoDesign",
-    "description": "Design tokens and VitePress theme package (@kooshapari/design); CSS keycap palette, components, and W3C DTCG tokens",
-    "url": "https://github.com/KooshaPari/phenoDesign",
+    "description": "Design tokens and VitePress theme package (@<REDACTED>/design); CSS keycap palette, components, and W3C DTCG tokens",
+    "url": "https://github.com/<REDACTED>/phenoDesign",
     "homepageUrl": null,
     "primaryLanguage": {
       "name": "TypeScript",
@@ -1560,7 +1560,7 @@
   {
     "name": "nexus",
     "description": "Service registry and discovery for microservices (Wave H)",
-    "url": "https://github.com/KooshaPari/nexus",
+    "url": "https://github.com/<REDACTED>/nexus",
     "homepageUrl": null,
     "primaryLanguage": {
       "name": "Rust",
@@ -1575,7 +1575,7 @@
   {
     "name": "Conft",
     "description": "Phenotype configuration workspace (standalone)",
-    "url": "https://github.com/KooshaPari/Conft",
+    "url": "https://github.com/<REDACTED>/Conft",
     "homepageUrl": null,
     "primaryLanguage": {
       "name": "TypeScript",
@@ -1590,7 +1590,7 @@
   {
     "name": "AuthKit",
     "description": "Authentication and security SDK for the Phenotype ecosystem",
-    "url": "https://github.com/KooshaPari/AuthKit",
+    "url": "https://github.com/<REDACTED>/AuthKit",
     "homepageUrl": null,
     "primaryLanguage": {
       "name": "Rust",
@@ -1605,7 +1605,7 @@
   {
     "name": "Melosviz",
     "description": "Music-to-visual generation toolkit: FastAPI backend, desktop (Tauri/Electrobun), Python + Rust SDKs, web client.",
-    "url": "https://github.com/KooshaPari/Melosviz",
+    "url": "https://github.com/<REDACTED>/Melosviz",
     "homepageUrl": null,
     "primaryLanguage": {
       "name": "Python",
@@ -1620,7 +1620,7 @@
   {
     "name": "Planify",
     "description": "Canonical Plane fork for Phenotype/AgilePlus — project management UI (candidate frontend #1). Consolidated from main+master branches.",
-    "url": "https://github.com/KooshaPari/Planify",
+    "url": "https://github.com/<REDACTED>/Planify",
     "homepageUrl": "http://plane.so",
     "primaryLanguage": {
       "name": "TypeScript",
@@ -1635,7 +1635,7 @@
   {
     "name": "AppGen",
     "description": "STRICTLY DO NOT DELETE NOR UNARCHIVE - Personal project template for rapid app prototyping",
-    "url": "https://github.com/KooshaPari/AppGen",
+    "url": "https://github.com/<REDACTED>/AppGen",
     "homepageUrl": null,
     "primaryLanguage": {
       "name": "TypeScript",
@@ -1650,7 +1650,7 @@
   {
     "name": "PhenoDevOps",
     "description": "Phenotype PhenoDevOps domain workspace",
-    "url": "https://github.com/KooshaPari/PhenoDevOps",
+    "url": "https://github.com/<REDACTED>/PhenoDevOps",
     "homepageUrl": null,
     "primaryLanguage": {
       "name": "Rust",
@@ -1664,8 +1664,8 @@
   },
   {
     "name": "helioscope",
-    "description": "SUPERSEDED — use https://github.com/KooshaPari/helios-cli (canonical Phenotype-org Helios CLI fork). Former heliosCLI rename.",
-    "url": "https://github.com/KooshaPari/helioscope",
+    "description": "SUPERSEDED — use https://github.com/<REDACTED>/helios-cli (canonical Phenotype-org Helios CLI fork). Former heliosCLI rename.",
+    "url": "https://github.com/<REDACTED>/helioscope",
     "homepageUrl": null,
     "primaryLanguage": {
       "name": "Rust",
@@ -1680,7 +1680,7 @@
   {
     "name": "DINOForge-UnityDoorstop",
     "description": "Doorstop -- run C# before Unity does!",
-    "url": "https://github.com/KooshaPari/DINOForge-UnityDoorstop",
+    "url": "https://github.com/<REDACTED>/DINOForge-UnityDoorstop",
     "homepageUrl": null,
     "primaryLanguage": {
       "name": "C",
@@ -1695,7 +1695,7 @@
   {
     "name": "Httpora",
     "description": "HTTP client/server framework with middleware support",
-    "url": "https://github.com/KooshaPari/Httpora",
+    "url": "https://github.com/<REDACTED>/Httpora",
     "homepageUrl": null,
     "primaryLanguage": {
       "name": "Python",
@@ -1710,7 +1710,7 @@
   {
     "name": "heliosBench",
     "description": "An internal tool or component for the Phenotype ecosystem.",
-    "url": "https://github.com/KooshaPari/heliosBench",
+    "url": "https://github.com/<REDACTED>/heliosBench",
     "homepageUrl": null,
     "primaryLanguage": {
       "name": "Python",
@@ -1725,7 +1725,7 @@
   {
     "name": "vibeproxy",
     "description": "Deprecated fork of automaze.io VibeProxy — native macOS menu-bar app routing AI coding tools through Claude/ChatGPT/Gemini subscriptions via CLIProxyAPIPlus",
-    "url": "https://github.com/KooshaPari/vibeproxy",
+    "url": "https://github.com/<REDACTED>/vibeproxy",
     "homepageUrl": null,
     "primaryLanguage": {
       "name": "Swift",
@@ -1740,7 +1740,7 @@
   {
     "name": "phenoXdd",
     "description": "150+ software engineering methodologies and xDD patterns",
-    "url": "https://github.com/KooshaPari/phenoXdd",
+    "url": "https://github.com/<REDACTED>/phenoXdd",
     "homepageUrl": null,
     "primaryLanguage": null,
     "stargazerCount": 0,
@@ -1752,7 +1752,7 @@
   {
     "name": "phenoAI",
     "description": "Phenotype AI agent workspace and tooling",
-    "url": "https://github.com/KooshaPari/phenoAI",
+    "url": "https://github.com/<REDACTED>/phenoAI",
     "homepageUrl": null,
     "primaryLanguage": {
       "name": "Rust",
@@ -1767,7 +1767,7 @@
   {
     "name": "eyetracker",
     "description": "Phenotype eye-tracking framework — Rust core + UniFFI bindings",
-    "url": "https://github.com/KooshaPari/eyetracker",
+    "url": "https://github.com/<REDACTED>/eyetracker",
     "homepageUrl": null,
     "primaryLanguage": {
       "name": "Kotlin",
@@ -1782,7 +1782,7 @@
   {
     "name": "Benchora",
     "description": "Rust benchmarking and performance-testing framework for the Phenotype ecosystem — criterion-based load testing, regression tracking, and metrics",
-    "url": "https://github.com/KooshaPari/Benchora",
+    "url": "https://github.com/<REDACTED>/Benchora",
     "homepageUrl": null,
     "primaryLanguage": {
       "name": "Rust",
@@ -1797,7 +1797,7 @@
   {
     "name": "substrate",
     "description": null,
-    "url": "https://github.com/KooshaPari/substrate",
+    "url": "https://github.com/<REDACTED>/substrate",
     "homepageUrl": null,
     "primaryLanguage": {
       "name": "Rust",
@@ -1812,7 +1812,7 @@
   {
     "name": "docs-site",
     "description": "docs-site: Phenotype public documentation site",
-    "url": "https://github.com/KooshaPari/docs-site",
+    "url": "https://github.com/<REDACTED>/docs-site",
     "homepageUrl": null,
     "primaryLanguage": null,
     "stargazerCount": 0,
@@ -1824,7 +1824,7 @@
   {
     "name": "PhenoProject",
     "description": "Phenotype PhenoProject domain workspace",
-    "url": "https://github.com/KooshaPari/PhenoProject",
+    "url": "https://github.com/<REDACTED>/PhenoProject",
     "homepageUrl": null,
     "primaryLanguage": {
       "name": "TypeScript",
@@ -1839,7 +1839,7 @@
   {
     "name": "DataKit",
     "description": "Preserved local WIP from DataKit (absorbed into phenotype-python-sdk per #53)",
-    "url": "https://github.com/KooshaPari/DataKit",
+    "url": "https://github.com/<REDACTED>/DataKit",
     "homepageUrl": null,
     "primaryLanguage": null,
     "stargazerCount": 0,
@@ -1851,7 +1851,7 @@
   {
     "name": "pheno-profiling",
     "description": "System profiling library (profiler.sh + complexity_analyzer + system_metrics). Replaces Profila per ADR-021. Cross-language Python lib, pheno-*-lib substrate (ADR-023).",
-    "url": "https://github.com/KooshaPari/pheno-profiling",
+    "url": "https://github.com/<REDACTED>/pheno-profiling",
     "homepageUrl": null,
     "primaryLanguage": {
       "name": "Shell",
@@ -1866,7 +1866,7 @@
   {
     "name": "localbase3",
     "description": "localbase3 — Localhost development environment bootstrap",
-    "url": "https://github.com/KooshaPari/localbase3",
+    "url": "https://github.com/<REDACTED>/localbase3",
     "homepageUrl": null,
     "primaryLanguage": {
       "name": "HTML",
@@ -1881,7 +1881,7 @@
   {
     "name": "PhenoFastMCP-go",
     "description": "A Go implementation of the Model Context Protocol (MCP), enabling seamless integration between LLM applications and external data sources and tools.",
-    "url": "https://github.com/KooshaPari/PhenoFastMCP-go",
+    "url": "https://github.com/<REDACTED>/PhenoFastMCP-go",
     "homepageUrl": "http://mcp-go.dev/",
     "primaryLanguage": {
       "name": "Go",
@@ -1896,7 +1896,7 @@
   {
     "name": "Quillr",
     "description": "Restored: Quillr",
-    "url": "https://github.com/KooshaPari/Quillr",
+    "url": "https://github.com/<REDACTED>/Quillr",
     "homepageUrl": null,
     "primaryLanguage": {
       "name": "Shell",
@@ -1911,7 +1911,7 @@
   {
     "name": "PhenoRMCP",
     "description": "The official Rust SDK for the Model Context Protocol",
-    "url": "https://github.com/KooshaPari/PhenoRMCP",
+    "url": "https://github.com/<REDACTED>/PhenoRMCP",
     "homepageUrl": null,
     "primaryLanguage": {
       "name": "Rust",
@@ -1926,7 +1926,7 @@
   {
     "name": "mobile-cli",
     "description": "Universal command-line tool for managing iOS and Android devices, simulators, emulators and apps",
-    "url": "https://github.com/KooshaPari/mobile-cli",
+    "url": "https://github.com/<REDACTED>/mobile-cli",
     "homepageUrl": "https://mobilenext.ai",
     "primaryLanguage": null,
     "stargazerCount": 0,
@@ -1938,7 +1938,7 @@
   {
     "name": "tehgent",
     "description": "TehGent - AI-powered code review and development assistant",
-    "url": "https://github.com/KooshaPari/tehgent",
+    "url": "https://github.com/<REDACTED>/tehgent",
     "homepageUrl": null,
     "primaryLanguage": null,
     "stargazerCount": 0,
@@ -1950,7 +1950,7 @@
   {
     "name": "Stashly",
     "description": "Universal caching abstraction with TTL, multi-tier caching, singleflight, and multi-backend support",
-    "url": "https://github.com/KooshaPari/Stashly",
+    "url": "https://github.com/<REDACTED>/Stashly",
     "homepageUrl": null,
     "primaryLanguage": {
       "name": "Rust",
@@ -1965,7 +1965,7 @@
   {
     "name": ".github",
     "description": null,
-    "url": "https://github.com/KooshaPari/.github",
+    "url": "https://github.com/<REDACTED>/.github",
     "homepageUrl": null,
     "primaryLanguage": null,
     "stargazerCount": 0,
@@ -1977,7 +1977,7 @@
   {
     "name": "Profila",
     "description": "Unified system and code profiling toolkit for the Phenotype agent ecosystem - CPU, memory, and I/O analysis",
-    "url": "https://github.com/KooshaPari/Profila",
+    "url": "https://github.com/<REDACTED>/Profila",
     "homepageUrl": null,
     "primaryLanguage": {
       "name": "Python",
@@ -1992,7 +1992,7 @@
   {
     "name": "heliosApp",
     "description": "An internal tool or component for the Phenotype ecosystem.",
-    "url": "https://github.com/KooshaPari/heliosApp",
+    "url": "https://github.com/<REDACTED>/heliosApp",
     "homepageUrl": null,
     "primaryLanguage": {
       "name": "TypeScript",
@@ -2007,7 +2007,7 @@
   {
     "name": "nanovms",
     "description": "Lightweight headless VM abstraction for AI agents — three-tier isolation (WASM ~1ms / gVisor ~90ms / Firecracker microVM ~125ms) with Go CLI",
-    "url": "https://github.com/KooshaPari/nanovms",
+    "url": "https://github.com/<REDACTED>/nanovms",
     "homepageUrl": null,
     "primaryLanguage": {
       "name": "Go",
@@ -2022,8 +2022,8 @@
   {
     "name": "slickport",
     "description": "Strictly-personal TypeScript port of Slicker HTTP/socket utility suite — type-safe fetch, middleware chains, and SSR-friendly streams.",
-    "url": "https://github.com/KooshaPari/slickport",
-    "homepageUrl": "https://github.com/KooshaPari/slickport",
+    "url": "https://github.com/<REDACTED>/slickport",
+    "homepageUrl": "https://github.com/<REDACTED>/slickport",
     "primaryLanguage": {
       "name": "TypeScript",
       "color": ""
@@ -2037,7 +2037,7 @@
   {
     "name": "spec-kitty",
     "description": "Spec-driven development workflow for Phenotype — 14 slash commands, kitty-specs lifecycle",
-    "url": "https://github.com/KooshaPari/spec-kitty",
+    "url": "https://github.com/<REDACTED>/spec-kitty",
     "homepageUrl": null,
     "primaryLanguage": null,
     "stargazerCount": 0,
@@ -2049,7 +2049,7 @@
   {
     "name": "Compound-Spheres-3D",
     "description": "WSM3D fork of MelvinShwuaner/Compound-Spheres with height-field renderer + perf fixes",
-    "url": "https://github.com/KooshaPari/Compound-Spheres-3D",
+    "url": "https://github.com/<REDACTED>/Compound-Spheres-3D",
     "homepageUrl": null,
     "primaryLanguage": {
       "name": "C#",
@@ -2064,7 +2064,7 @@
   {
     "name": "phenoXddLib",
     "description": "Cross-cutting xDD utilities library: property testing, contract verification, mutation coverage",
-    "url": "https://github.com/KooshaPari/phenoXddLib",
+    "url": "https://github.com/<REDACTED>/phenoXddLib",
     "homepageUrl": null,
     "primaryLanguage": {
       "name": "Rust",
@@ -2079,7 +2079,7 @@
   {
     "name": "PlatformKit",
     "description": "Phenotype PlatformKit — Go devenv and devhex tooling",
-    "url": "https://github.com/KooshaPari/PlatformKit",
+    "url": "https://github.com/<REDACTED>/PlatformKit",
     "homepageUrl": null,
     "primaryLanguage": {
       "name": "Go",
@@ -2094,7 +2094,7 @@
   {
     "name": "KodeVibeGo",
     "description": "STRICTLY DO NOT DELETE NOR UNARCHIVE - Personal Project - Phenotype ecosystem component (deprecated, consolidated into HexaKit)",
-    "url": "https://github.com/KooshaPari/KodeVibeGo",
+    "url": "https://github.com/<REDACTED>/KodeVibeGo",
     "homepageUrl": null,
     "primaryLanguage": {
       "name": "Go",
@@ -2109,7 +2109,7 @@
   {
     "name": "Traceon",
     "description": "Distributed tracing framework with OpenTelemetry support",
-    "url": "https://github.com/KooshaPari/Traceon",
+    "url": "https://github.com/<REDACTED>/Traceon",
     "homepageUrl": null,
     "primaryLanguage": {
       "name": "Rust",
@@ -2124,8 +2124,8 @@
   {
     "name": "projects-landing",
     "description": "Phenotype org portfolio (auto-generated from gh repo list)",
-    "url": "https://github.com/KooshaPari/projects-landing",
-    "homepageUrl": "https://projects.kooshapari.com",
+    "url": "https://github.com/<REDACTED>/projects-landing",
+    "homepageUrl": "https://projects.<REDACTED>.com",
     "primaryLanguage": {
       "name": "Astro",
       "color": ""
@@ -2139,7 +2139,7 @@
   {
     "name": "RIP-Fitness-App",
     "description": "🏋️‍♂️ Complete fitness app combining MacroFactor adaptive nutrition, Strong workout tracking, and comprehensive health integration. Built with modern Android architecture, Jetpack Compose, and production-ready CI/CD.",
-    "url": "https://github.com/KooshaPari/RIP-Fitness-App",
+    "url": "https://github.com/<REDACTED>/RIP-Fitness-App",
     "homepageUrl": null,
     "primaryLanguage": {
       "name": "Kotlin",
@@ -2154,7 +2154,7 @@
   {
     "name": "Project-Spyn",
     "description": "ASU FSE100 Project",
-    "url": "https://github.com/KooshaPari/Project-Spyn",
+    "url": "https://github.com/<REDACTED>/Project-Spyn",
     "homepageUrl": null,
     "primaryLanguage": {
       "name": "MATLAB",

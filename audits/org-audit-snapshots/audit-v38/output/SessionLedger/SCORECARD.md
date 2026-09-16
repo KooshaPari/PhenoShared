@@ -1,6 +1,6 @@
 # audit-v38 Scorecard — SessionLedger
 
-**Repo:** KooshaPari/SessionLedger
+**Repo:** <REDACTED>/SessionLedger
 **Date:** 2026-07-14
 **Repo-type profile:** CLI+daemon + desktop (sl-daemon + sl-viewer)
 **Auditor:** cursor-w33-reaudit

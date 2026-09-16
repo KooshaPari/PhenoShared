@@ -8,7 +8,7 @@ CLI tools and agent infrastructure for the AgilePlus ecosystem.
 ## Repository
 
 ```
-/Users/kooshapari/CodeProjects/Phenotype/repos/thegent
+/Users/<REDACTED>/CodeProjects/Phenotype/repos/thegent
 ```
 
 ## Architecture

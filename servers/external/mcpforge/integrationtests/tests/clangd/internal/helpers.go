@@ -5,7 +5,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/KooshaPari/MCPForge/integrationtests/tests/common"
+	"github.com/<REDACTED>/MCPForge/integrationtests/tests/common"
 )
 
 // GetTestSuite returns a test suite for Clangd language server tests

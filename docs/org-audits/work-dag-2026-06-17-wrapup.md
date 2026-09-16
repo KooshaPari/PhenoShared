@@ -5,7 +5,7 @@
 ---
 
 ## Legend
-- ✅ DONE — work landed on KooshaPari
+- ✅ DONE — work landed on <REDACTED>
 - 🟡 PUSHED_AS_WIP — work preserved as wip/* branch awaiting follow-up PR
 - 🟠 STRANDED — work in local worktree, no working remote (ARCHIVE_ONLY)
 - 🔵 SKIPPED — explicitly de-scoped by user (Dmouse92)
@@ -36,7 +36,7 @@
 │ T4: Fix          │            │ T5: Push         │            │ T6: Fix          │
 │ AgilePlus origin │            │ pheno wip        │            │ dispatch-mcp     │
 │ (helios-cli →    │            │ (stash 0 → wip/  │            │ origin (Dmouse92 │
-│ KooshaPari/      │            │  pheno-cli-      │            │ → KooshaPari/    │
+│ <REDACTED>/      │            │  pheno-cli-      │            │ → <REDACTED>/    │
 │ AgilePlus)       │            │  adapter-        │            │ dispatch-mcp)    │
 └────────┬─────────┘            │  refactor)       │            │ + CREATE new repo│
          │                      └────────┬─────────┘            └────────┬─────────┘
@@ -53,7 +53,7 @@
 │ T8: Drop         │            │ T9: Drop         │            │ T10: Push all    │
 │ AgilePlus stash 1│            │ pheno stash 1    │            │ dispatch-mcp     │
 │ (code() super-   │            │ (Taskfile.yml    │            │ branches to new  │
-│ seded)           │            │  already on main)│            │ KooshaPari repo  │
+│ seded)           │            │  already on main)│            │ <REDACTED> repo  │
 └────────┬─────────┘            └────────┬─────────┘            └────────┬─────────┘
          │                               │                               │
          │                               │                               ▼
@@ -67,7 +67,7 @@
          │                               │                             │
          ▼                               ▼                             ▼
          ┌─────────────────────────────────────────────────────────────┐
-         │ T12: Update phenotype-ops origin (Dmouse92 → KooshaPari)  │
+         │ T12: Update phenotype-ops origin (Dmouse92 → <REDACTED>)  │
          │ T13: Verify chore/sha-pin in sync                          │
          └─────────────────────────────┬───────────────────────────────┘
                                        │
@@ -82,7 +82,7 @@
                         ┌──────────────────────────┐
                         │ T15: STRANDED — 3 mono-  │
                         │ repo governance commits  │
-                        │ (no KooshaPari/repos)    │
+                        │ (no <REDACTED>/repos)    │
                         │ [ARCHIVE_ONLY]           │
                         └────────┬─────────────────┘
                                  │
@@ -142,7 +142,7 @@
 | Task | Description | Status | Evidence |
 |---|---|---|---|
 | T1 | Survey AgilePlus state (2 stashes found) | ✅ DONE | `git stash list` showed 2 stashes |
-| T4 | Fix AgilePlus origin (`helios-cli` → KooshaPari/AgilePlus) | ✅ DONE | `git remote -v` shows correct origin |
+| T4 | Fix AgilePlus origin (`helios-cli` → <REDACTED>/AgilePlus) | ✅ DONE | `git remote -v` shows correct origin |
 | T7 | Push `wip/stash-2026-06-14-spdx-license-headers-2026-06-17` | 🟡 PUSHED_AS_WIP | `git ls-remote --heads origin` confirms `4ebef382d` |
 | T8 | Drop `stash@{1}` (code() superseded by to_envelope()) | ✅ DONE | `git stash list` empty |
 
@@ -158,23 +158,23 @@
 
 | Task | Description | Status | Evidence |
 |---|---|---|---|
-| T3 | Survey dispatch-mcp (no KooshaPari repo existed; Dmouse92 was origin) | ✅ DONE | `gh repo view KooshaPari/dispatch-mcp` failed |
-| T6 | Fix origin + CREATE new KooshaPari/dispatch-mcp | ✅ DONE | `gh repo create KooshaPari/dispatch-mcp` |
+| T3 | Survey dispatch-mcp (no <REDACTED> repo existed; Dmouse92 was origin) | ✅ DONE | `gh repo view <REDACTED>/dispatch-mcp` failed |
+| T6 | Fix origin + CREATE new <REDACTED>/dispatch-mcp | ✅ DONE | `gh repo create <REDACTED>/dispatch-mcp` |
 | T10 | Push all 4 local branches (main, chore/w2-1, feat/openai-compat) | ✅ DONE | `git push origin --all` |
-| T11 | Migrate Dmouse92 W2-1 work to `wip/migrate-from-dmouse-w2-1-2026-06-17` | 🟡 PUSHED_AS_WIP | `a1aaef2d` migrated to KooshaPari/dispatch-mcp |
+| T11 | Migrate Dmouse92 W2-1 work to `wip/migrate-from-dmouse-w2-1-2026-06-17` | 🟡 PUSHED_AS_WIP | `a1aaef2d` migrated to <REDACTED>/dispatch-mcp |
 
 ### Stream D: phenotype-ops wrap-up (T12, T13)
 
 | Task | Description | Status | Evidence |
 |---|---|---|---|
-| T12 | Fix phenotype-ops origin (Dmouse92 → KooshaPari) | ✅ DONE | `git remote -v` shows KooshaPari/phenotype-ops |
+| T12 | Fix phenotype-ops origin (Dmouse92 → <REDACTED>) | ✅ DONE | `git remote -v` shows <REDACTED>/phenotype-ops |
 | T13 | Verify `chore/sha-pin-2026-06-16` in sync | ✅ DONE | `8dd8631` matches origin |
 
 ### Stream E: Strands (T15-T18)
 
 | Task | Description | Status | Evidence |
 |---|---|---|---|
-| T15 | monorepo 3 governance commits (chore/w5-adrs-sota) | 🟠 STRANDED | `git log argis/main..HEAD` shows 3 ahead; no KooshaPari/repos |
+| T15 | monorepo 3 governance commits (chore/w5-adrs-sota) | 🟠 STRANDED | `git log argis/main..HEAD` shows 3 ahead; no <REDACTED>/repos |
 | T16 | l4-80-wt 1 worklog commit (FocalPoint) | 🟠 STRANDED | `git push` → "Repository not archived" |
 | T17 | l4-68 3 commits including 286-line pheno-context crate | 🟠 STRANDED | LFS reject + submodule remotes missing |
 | T18 | audit-30pillar 484 commits | 🟠 STRANDED | `merge-base --all` empty (divergent history) |
@@ -207,7 +207,7 @@ The 4 wrap-up streams (AgilePlus, pheno, dispatch-mcp, phenotype-ops) are **full
 
 | # | Risk | Mitigation |
 |---|---|---|
-| 1 | Stranded monorepo commits lost if worktree is deleted | Documented in audit; next session must decide KooshaPari/repos vs cherry-pick |
+| 1 | Stranded monorepo commits lost if worktree is deleted | Documented in audit; next session must decide <REDACTED>/repos vs cherry-pick |
 | 2 | Submodule LFS cache missing | Re-run `git lfs fetch --all` once argis-extensions submodule remotes are configured |
 | 3 | dispatch-mcp repo creation accidental default settings | `gh repo create --public --description "..." --clone=false` (we used --clone=false, no source push) |
 | 4 | WIP branches never landed | Tagged in audit as `PUSHED_AS_WIP` for follow-up PR cycle |
@@ -219,7 +219,7 @@ The 4 wrap-up streams (AgilePlus, pheno, dispatch-mcp, phenotype-ops) are **full
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│ F1: Create KooshaPari/repos (decision needed)               │
+│ F1: Create <REDACTED>/repos (decision needed)               │
 │     OR cherry-pick 3 stranded commits to existing repos     │
 └─────────────────────────┬───────────────────────────────────┘
                           │

@@ -132,7 +132,7 @@ Remaining Tier 2/3 + archived repos awaiting Batch 2 deployment.
 
 **Post-wave-2 commit ready:**
 ```bash
-cd /Users/kooshapari/CodeProjects/Phenotype/repos
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos
 git add docs/org-audit-2026-04/UPLIFT_REPORT.md docs/org-audit-2026-04/NEXT_WAVE_BACKLOG.md docs/org-audit-2026-04/SYSTEMIC_ISSUES.md
 git -c commit.gpgsign=false commit -m "docs(org): wave-2 UPLIFT refresh + NEXT_WAVE_BACKLOG"
 ```

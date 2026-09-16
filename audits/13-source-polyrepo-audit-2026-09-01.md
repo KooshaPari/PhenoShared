@@ -2,7 +2,7 @@
 
 **Author**: Forge (wave J)
 **Date**: 2026-09-01
-**Scope**: GitHub repos under `KooshaPari/*` (13 sources total)
+**Scope**: GitHub repos under `<REDACTED>/*` (13 sources total)
 **Contract docs**:
 - `~/Downloads/03-forensic-ssot-recovery.md` (operating contract)
 - `~/Downloads/04-polyrepo-ecosystem-consolidation.md` (consolidation contract)
@@ -31,14 +31,14 @@
 
 | # | Repo | Absorb PR | Tech |
 |---|---|---|---|
-| 1 | `KooshaPari/heliosBench` | `phenotype-tooling#78` (`172ab8fd`) | `git-subtree-split: 5f85de67`, history-preserving |
-| 2 | `KooshaPari/pheno-cdylib-bridge` | `pheno#282` (`c3f47016`) | squash with provenance |
-| 3 | `KooshaPari/pheno-runtime-config` | `pheno#282` (`c3f47016`, 1/4) | squash with provenance |
-| 4 | `KooshaPari/pheno-forge-smoke` | `pheno#282` (`c3f47016`, 1/4) | squash with provenance |
-| 5 | `KooshaPari/phenodag` | `Tracera#723`+`#725`+`#727`, `AgilePlus#895` | phased migration; 11 queue files + spec doc |
-| 6 | `KooshaPari/pheno-research` | `pheno` `be5da947` + earlier commits | full recovery: 13 via be5da947 + 9 via earlier |
-| 7 | `KooshaPari/pheno-control-plane` | local commit in `chore/absorb-pheno-control-plane-2026-09-01` (phenotype-fleet-ops worktree, **pending push**) | subtree absorb, 7 files |
-| 8 | `KooshaPari/pheno-forge-plugins` | local commit in `chore/absorb-pheno-forge-plugins-2026-09-01` (phenotype-tooling worktree, **pending push**) | subtree absorb, 6 plugins + systemd unit |
+| 1 | `<REDACTED>/heliosBench` | `phenotype-tooling#78` (`172ab8fd`) | `git-subtree-split: 5f85de67`, history-preserving |
+| 2 | `<REDACTED>/pheno-cdylib-bridge` | `pheno#282` (`c3f47016`) | squash with provenance |
+| 3 | `<REDACTED>/pheno-runtime-config` | `pheno#282` (`c3f47016`, 1/4) | squash with provenance |
+| 4 | `<REDACTED>/pheno-forge-smoke` | `pheno#282` (`c3f47016`, 1/4) | squash with provenance |
+| 5 | `<REDACTED>/phenodag` | `Tracera#723`+`#725`+`#727`, `AgilePlus#895` | phased migration; 11 queue files + spec doc |
+| 6 | `<REDACTED>/pheno-research` | `pheno` `be5da947` + earlier commits | full recovery: 13 via be5da947 + 9 via earlier |
+| 7 | `<REDACTED>/pheno-control-plane` | local commit in `chore/absorb-pheno-control-plane-2026-09-01` (phenotype-fleet-ops worktree, **pending push**) | subtree absorb, 7 files |
+| 8 | `<REDACTED>/pheno-forge-plugins` | local commit in `chore/absorb-pheno-forge-plugins-2026-09-01` (phenotype-tooling worktree, **pending push**) | subtree absorb, 6 plugins + systemd unit |
 
 Repos #1–#6 have absorbed content **already on remote main**.
 Repos #7–#8 have absorb content committed **locally only**; the user must push the
@@ -136,14 +136,14 @@ git -C worktrees/tooling-absorb-pheno-forge-plugins-2026-09-01 push origin chore
 # Then open phenotype-tooling PR and merge.
 
 # After all 3 PRs merge:
-gh repo delete KooshaPari/heliosBench            --yes   # PR phenotype-tooling#78
-gh repo delete KooshaPari/pheno-cdylib-bridge    --yes   # PR pheno#282
-gh repo delete KooshaPari/pheno-runtime-config   --yes   # PR pheno#282
-gh repo delete KooshaPari/pheno-forge-smoke      --yes   # PR pheno#282
-gh repo delete KooshaPari/phenodag               --yes   # PRs Tracera#723/#725/#727 + AgilePlus#895
-gh repo delete KooshaPari/pheno-research         --yes   # be5da947 + earlier
-gh repo delete KooshaPari/pheno-control-plane    --yes   # local absorb staged
-gh repo delete KooshaPari/pheno-forge-plugins    --yes   # local absorb staged
+gh repo delete <REDACTED>/heliosBench            --yes   # PR phenotype-tooling#78
+gh repo delete <REDACTED>/pheno-cdylib-bridge    --yes   # PR pheno#282
+gh repo delete <REDACTED>/pheno-runtime-config   --yes   # PR pheno#282
+gh repo delete <REDACTED>/pheno-forge-smoke      --yes   # PR pheno#282
+gh repo delete <REDACTED>/phenodag               --yes   # PRs Tracera#723/#725/#727 + AgilePlus#895
+gh repo delete <REDACTED>/pheno-research         --yes   # be5da947 + earlier
+gh repo delete <REDACTED>/pheno-control-plane    --yes   # local absorb staged
+gh repo delete <REDACTED>/pheno-forge-plugins    --yes   # local absorb staged
 ```
 
 ## Outstanding (post-deletion)
@@ -160,10 +160,10 @@ gh repo delete KooshaPari/pheno-forge-plugins    --yes   # local absorb staged
 ## Method (evidence-based)
 
 Each source was verified by:
-1. `gh api repos/KooshaPari/<src>` — confirms existence, archived flag, last push
-2. `gh api repos/KooshaPari/<target>/contents/<expected-path>` — confirms the
+1. `gh api repos/<REDACTED>/<src>` — confirms existence, archived flag, last push
+2. `gh api repos/<REDACTED>/<target>/contents/<expected-path>` — confirms the
    absorbed path lives on the target's remote HEAD
-3. `gh api search/commits?q=repo:KooshaPari/<target>+<src>` — finds the actual
+3. `gh api search/commits?q=repo:<REDACTED>/<target>+<src>` — finds the actual
    absorb commit(s) on each candidate target
 4. Read the absorb commit's message + file list — confirms scope, technique
    (squash / subtree / orphan merge), and provenance

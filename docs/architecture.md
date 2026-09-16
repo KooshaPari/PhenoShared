@@ -36,7 +36,7 @@ Pine provides application compatibility through:
 ## nvms Integration Strategy
 
 Pine builds on `nvms` (nanovms repo) as the isolation layer. The `nvms` CLI is a
-Go binary (`github.com/kooshapari/nanovms`) that exposes VM lifecycle via
+Go binary (`github.com/<REDACTED>/nanovms`) that exposes VM lifecycle via
 subcommands. It is used as a subprocess from Pine's Rust core.
 
 ### nvms CLI Command Reference

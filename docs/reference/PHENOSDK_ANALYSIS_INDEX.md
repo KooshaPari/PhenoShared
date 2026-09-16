@@ -22,7 +22,7 @@ This index consolidates all analysis, specifications, and implementation guidanc
 
 ### 1. PHENOSDK_EXTRACTION_STRATEGY.md (Root Level)
 
-**Location**: `/Users/kooshapari/CodeProjects/Phenotype/repos/PHENOSDK_EXTRACTION_STRATEGY.md`
+**Location**: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/PHENOSDK_EXTRACTION_STRATEGY.md`
 
 **Purpose**: High-level strategy and executive summary
 
@@ -32,7 +32,7 @@ This index consolidates all analysis, specifications, and implementation guidanc
 
 ### 2. docs/research/PHENOSDK_PACKAGE_AUDIT.md
 
-**Location**: `/Users/kooshapari/CodeProjects/Phenotype/repos/docs/research/PHENOSDK_PACKAGE_AUDIT.md`
+**Location**: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/docs/research/PHENOSDK_PACKAGE_AUDIT.md`
 
 **Purpose**: Detailed technical audit and interface specifications
 
@@ -42,7 +42,7 @@ This index consolidates all analysis, specifications, and implementation guidanc
 
 ### 3. docs/checklists/PHENOSDK_IMPLEMENTATION_CHECKLIST.md
 
-**Location**: `/Users/kooshapari/CodeProjects/Phenotype/repos/docs/checklists/PHENOSDK_IMPLEMENTATION_CHECKLIST.md`
+**Location**: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/docs/checklists/PHENOSDK_IMPLEMENTATION_CHECKLIST.md`
 
 **Purpose**: Step-by-step implementation tracking
 
@@ -52,7 +52,7 @@ This index consolidates all analysis, specifications, and implementation guidanc
 
 ### 4. docs/reference/PHENOSDK_PR_TEMPLATE.md
 
-**Location**: `/Users/kooshapari/CodeProjects/Phenotype/repos/docs/reference/PHENOSDK_PR_TEMPLATE.md`
+**Location**: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/docs/reference/PHENOSDK_PR_TEMPLATE.md`
 
 **Purpose**: PR submission template and guidance
 

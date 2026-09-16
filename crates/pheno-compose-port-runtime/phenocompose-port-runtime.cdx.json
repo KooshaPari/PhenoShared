@@ -14,13 +14,13 @@
     ],
     "authors": [
       {
-        "name": "kooshapari"
+        "name": "<REDACTED>"
       }
     ],
     "component": {
       "type": "library",
-      "bom-ref": "path+file:///Users/kooshapari/CodeProjects/Phenotype/repos/PhenoCompose/crates/port-runtime#phenocompose-port-runtime@0.1.0",
-      "author": "kooshapari",
+      "bom-ref": "path+file:///Users/<REDACTED>/CodeProjects/Phenotype/repos/PhenoCompose/crates/port-runtime#phenocompose-port-runtime@0.1.0",
+      "author": "<REDACTED>",
       "name": "phenocompose-port-runtime",
       "version": "0.1.0",
       "description": "Phenotype Compose Runtime port trait — the canonical hex-architecture port for spawning/stopping/statusing containers from an ImageRef. Adapters implement Runtime to bridge to local container engines (docker, podman, systemd-nspawn, k8s, ...).",
@@ -38,13 +38,13 @@
         },
         {
           "type": "vcs",
-          "url": "https://github.com/KooshaPari/PhenoCompose"
+          "url": "https://github.com/<REDACTED>/PhenoCompose"
         }
       ],
       "components": [
         {
           "type": "library",
-          "bom-ref": "path+file:///Users/kooshapari/CodeProjects/Phenotype/repos/PhenoCompose/crates/port-runtime#phenocompose-port-runtime@0.1.0 bin-target-0",
+          "bom-ref": "path+file:///Users/<REDACTED>/CodeProjects/Phenotype/repos/PhenoCompose/crates/port-runtime#phenocompose-port-runtime@0.1.0 bin-target-0",
           "name": "phenocompose_port_runtime",
           "version": "0.1.0",
           "purl": "pkg:cargo/phenocompose-port-runtime@0.1.0?download_url=file://.#src/lib.rs"
@@ -61,8 +61,8 @@
   "components": [
     {
       "type": "library",
-      "bom-ref": "path+file:///Users/kooshapari/CodeProjects/Phenotype/repos/PhenoCompose/crates/port-types#phenocompose-port-types@0.1.0",
-      "author": "kooshapari",
+      "bom-ref": "path+file:///Users/<REDACTED>/CodeProjects/Phenotype/repos/PhenoCompose/crates/port-types#phenocompose-port-types@0.1.0",
+      "author": "<REDACTED>",
       "name": "phenocompose-port-types",
       "version": "0.1.0",
       "description": "Phenotype Compose port type definitions (Manifest, ComposedArtifact, PublishTarget, PublishReceipt, ImageRef, ContainerId, ContainerStatus) — the shared value types that flow across the Composer / Publisher / Runtime port traits.",
@@ -72,7 +72,7 @@
           "expression": "MIT OR Apache-2.0"
         }
       ],
-      "purl": "pkg:cargo/phenocompose-port-types@0.1.0?download_url=file:///Users/kooshapari/CodeProjects/Phenotype/repos/PhenoCompose/crates/port-types",
+      "purl": "pkg:cargo/phenocompose-port-types@0.1.0?download_url=file:///Users/<REDACTED>/CodeProjects/Phenotype/repos/PhenoCompose/crates/port-types",
       "externalReferences": [
         {
           "type": "documentation",
@@ -80,7 +80,7 @@
         },
         {
           "type": "vcs",
-          "url": "https://github.com/KooshaPari/PhenoCompose"
+          "url": "https://github.com/<REDACTED>/PhenoCompose"
         }
       ]
     },
@@ -269,14 +269,14 @@
   ],
   "dependencies": [
     {
-      "ref": "path+file:///Users/kooshapari/CodeProjects/Phenotype/repos/PhenoCompose/crates/port-runtime#phenocompose-port-runtime@0.1.0",
+      "ref": "path+file:///Users/<REDACTED>/CodeProjects/Phenotype/repos/PhenoCompose/crates/port-runtime#phenocompose-port-runtime@0.1.0",
       "dependsOn": [
-        "path+file:///Users/kooshapari/CodeProjects/Phenotype/repos/PhenoCompose/crates/port-types#phenocompose-port-types@0.1.0",
+        "path+file:///Users/<REDACTED>/CodeProjects/Phenotype/repos/PhenoCompose/crates/port-types#phenocompose-port-types@0.1.0",
         "registry+https://github.com/rust-lang/crates.io-index#thiserror@2.0.18"
       ]
     },
     {
-      "ref": "path+file:///Users/kooshapari/CodeProjects/Phenotype/repos/PhenoCompose/crates/port-types#phenocompose-port-types@0.1.0",
+      "ref": "path+file:///Users/<REDACTED>/CodeProjects/Phenotype/repos/PhenoCompose/crates/port-types#phenocompose-port-types@0.1.0",
       "dependsOn": [
         "registry+https://github.com/rust-lang/crates.io-index#thiserror@2.0.18"
       ]

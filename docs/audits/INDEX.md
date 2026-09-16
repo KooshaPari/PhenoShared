@@ -112,7 +112,7 @@
 ## Files Location
 
 ```
-/Users/kooshapari/CodeProjects/Phenotype/repos/docs/audits/
+/Users/<REDACTED>/CodeProjects/Phenotype/repos/docs/audits/
 
 CARGO_WORKSPACE_AUDIT_2026-03-30.md      (Primary report)
 CARGO_AUDIT_QUICK_REFERENCE.md           (Quick summary)
@@ -125,7 +125,7 @@ INDEX.md                                 (This file)
 ## Audit Metadata
 
 - **Date**: 2026-03-30
-- **Repository**: phenotype-infrakit (https://github.com/KooshaPari/phenotype-infrakit)
+- **Repository**: phenotype-infrakit (https://github.com/<REDACTED>/phenotype-infrakit)
 - **Scope**: Root Cargo.toml workspace configuration
 - **Analysis Method**: Static file analysis, grep patterns, direct inspection
 - **Confidence Level**: High

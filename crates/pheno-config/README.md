@@ -10,7 +10,7 @@
 > from env vars, JSON files, or TOML files — with a canonical **12-factor
 > `combine()`** that overlays env over TOML.
 
-> **Heads-up — this crate now lives inside `KooshaPari/Configra`.**
+> **Heads-up — this crate now lives inside `<REDACTED>/Configra`.**
 > The source-of-truth repo moved on 2026-06-18 (ADR-031 follow-up,
 > L5-104.7). The crate name, version, and public API are unchanged;
 > every consumer's `Cargo.toml` keeps working without modification.

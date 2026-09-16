@@ -1111,7 +1111,7 @@ if cross_host_enabled:
                 # session_id field (now wired in this session).
                 try:
                     _cross_proc = subprocess.run(
-                        ["/Users/kooshapari/bin/resume-cross.py", "resume",
+                        ["/Users/<REDACTED>/bin/resume-cross.py", "resume",
                          "--dry-run", cross_host_target, _pane_id],
                         capture_output=True, text=True, timeout=10,
                     )

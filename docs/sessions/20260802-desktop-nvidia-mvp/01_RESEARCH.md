@@ -10,7 +10,7 @@
 
 ## Verified desktop facts
 
-- Host: `KOOSHAPARI-DESK`, Windows + WSL2 FedoraLinux-44.
+- Host: `<REDACTED>-DESK`, Windows + WSL2 FedoraLinux-44.
 - GTX 1080 Ti is the helper; RTX 3090 Ti is the primary.
 - vLLM uses `CUDA_VISIBLE_DEVICES=1` and logical `cuda:0` for the 3090.
 - Windows llama.cpp uses `CUDA_VISIBLE_DEVICES=1` and logical `CUDA0` for the

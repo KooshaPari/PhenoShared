@@ -10,7 +10,7 @@
 
 The 71-pillar cycle-3 audit (`findings/2026-06-20-71-pillar-cycle-3-probe.md`)
 flagged **L25 (Supply-Chain Security)** at score **1/3** for the parent
-monorepo `KooshaPari/phenotype-apps`. The probe found:
+monorepo `<REDACTED>/phenotype-apps`. The probe found:
 
 - A pre-existing `.github/workflows/slsa.yml` pinned to
   `slsa-framework/slsa-github-generator@v1.10.0` (Apr 2024).
@@ -57,7 +57,7 @@ generates SLSA Build L3 provenance on every published release:
   12-month lag because L25 requires exact-pin reproducibility. A v15 track
   should bump to v2.1.0 with an audited diff.
 - Requires the GitHub Attestations API to be enabled for the org (it is
-  for `KooshaPari`; verified 2026-06-20).
+  for `<REDACTED>`; verified 2026-06-20).
 
 ## Acceptance criteria
 

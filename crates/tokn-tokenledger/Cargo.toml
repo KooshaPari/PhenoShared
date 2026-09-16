@@ -3,9 +3,9 @@ name = "tokenledger-rs"
 version = "0.1.5"
 edition = "2024"
 license = "MIT"
-authors = ["KooshaPari <kooshapari@kooshapari.com>"]
+authors = ["<REDACTED> <<REDACTED>@<REDACTED>.com>"]
 description = "Token management and pricing governance CLI for AI coding agents"
-repository = "https://github.com/KooshaPari/zz-Tokn"
+repository = "https://github.com/<REDACTED>/zz-Tokn"
 keywords = ["tokens", "llm", "cost", "analytics", "cli"]
 categories = ["command-line-utilities"]
 

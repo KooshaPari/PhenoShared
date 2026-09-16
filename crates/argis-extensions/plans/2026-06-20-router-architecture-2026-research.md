@@ -1,6 +1,6 @@
 # 2026 Router Architecture Landscape — Research for Argis/Bifrost/Cliproxyapi/9-router Rebuild
 
-**Author:** Forge (orchestrator) on behalf of KooshaPari
+**Author:** Forge (orchestrator) on behalf of <REDACTED>
 **Date:** 2026-06-20
 **Status:** Research complete; architecture decision pending
 **Drivers:** Upstream Bifrost drift (v1.2.30 → v1.5.21, 3 minor versions); user directive "rework given changes as of 2026 for our router arch that we will rebuild and own ourselves"
@@ -11,11 +11,11 @@
 
 | Repo | Type | Loc | Status | Remote |
 |------|------|-----|--------|--------|
-| `bifrost-extensions` (a.k.a. `argis-extensions` local) | Fork + 9 plugins on top of `maximhq/bifrost` | 7,283 LoC Go | Pinned at `bifrost/core v1.2.30` | `KooshaPari/bifrost-extensions` |
-| `cliproxyapi-plusplus` | Go LLM API proxy | ~5k LoC | Active; `deny.toml` added 2026-06-19 | `KooshaPari/cliproxyapi-plusplus` |
-| `OmniRoute` | Local Rust federated router (worktrees) | varied | User-directed SKIP | `KooshaPari/OmniRoute` (read-only refs) |
-| `Tokn` | Rust routing substrate | hexagonal | Active | `KooshaPari/Tokn` |
-| `phenotype-gateway` | Federated service gateway | active | `spikes/rust/capacity/` contains absorbed pheno-capacity | `KooshaPari/phenotype-gateway` |
+| `bifrost-extensions` (a.k.a. `argis-extensions` local) | Fork + 9 plugins on top of `maximhq/bifrost` | 7,283 LoC Go | Pinned at `bifrost/core v1.2.30` | `<REDACTED>/bifrost-extensions` |
+| `cliproxyapi-plusplus` | Go LLM API proxy | ~5k LoC | Active; `deny.toml` added 2026-06-19 | `<REDACTED>/cliproxyapi-plusplus` |
+| `OmniRoute` | Local Rust federated router (worktrees) | varied | User-directed SKIP | `<REDACTED>/OmniRoute` (read-only refs) |
+| `Tokn` | Rust routing substrate | hexagonal | Active | `<REDACTED>/Tokn` |
+| `phenotype-gateway` | Federated service gateway | active | `spikes/rust/capacity/` contains absorbed pheno-capacity | `<REDACTED>/phenotype-gateway` |
 
 ### bifrost-extensions 9 Plugins (current)
 
@@ -126,7 +126,7 @@ What changed across LLM router/gateway design from 2024 → 2026:
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│ Phenotype Router (Go) — NEW, KooshaPari-owned                   │
+│ Phenotype Router (Go) — NEW, <REDACTED>-owned                   │
 │                                                                 │
 │  ┌─────────────────────────────────────────────────────────┐    │
 │  │ Router Core (router-core/)                              │    │

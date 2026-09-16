@@ -20,5 +20,5 @@ for Rust (615KB). Absorbed as a crate in the phenotype-tooling workspace.
 
 ## Outcome
 
-Source repo `KooshaPari/Benchora` archived on GitHub.
+Source repo `<REDACTED>/Benchora` archived on GitHub.
 Registry disposition-index updated: disposition=ABSORB, target=phenotype-tooling.

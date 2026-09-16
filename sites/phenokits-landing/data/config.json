@@ -1,10 +1,10 @@
 {
   "name": "PhenoKits",
   "slug": "phenokits",
-  "domain": "phenokits.kooshapari.com",
+  "domain": "phenokits.<REDACTED>.com",
   "description": "The Phenotype org's shared-artifact monorepo. 12 categories of cross-org templates, configs, libs, governance, and security assets.",
   "tier": 2,
-  "repo": "KooshaPari/PhenoKits",
+  "repo": "<REDACTED>/PhenoKits",
   "language": "Mixed / Templates",
   "license": "MIT",
   "status": "active",
@@ -16,8 +16,8 @@
     "HexaKit sub-monorepo"
   ],
   "links": {
-    "github": "https://github.com/KooshaPari/PhenoKits",
-    "docs": "https://phenokits.kooshapari.com/docs",
-    "releases": "https://github.com/KooshaPari/PhenoKits/releases"
+    "github": "https://github.com/<REDACTED>/PhenoKits",
+    "docs": "https://phenokits.<REDACTED>.com/docs",
+    "releases": "https://github.com/<REDACTED>/PhenoKits/releases"
   }
 }

@@ -13,7 +13,7 @@
   "role": "event-bus-library",
   "domain_role": "event-runtime",
   "boundary": "standalone-event-bus-runtime",
-  "gh_url": "https://github.com/KooshaPari/phenoEvents",
+  "gh_url": "https://github.com/<REDACTED>/phenoEvents",
   "remote_default_branch": "main",
   "remote_head_sha": "be6573c68797cc611a99533bca6dc1c3dcdb0c88",
   "branch_count": 23,

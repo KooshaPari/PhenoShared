@@ -2,7 +2,7 @@
  * Resolve Astro/VitePress base path for org deploy targets.
  *
  * - `*.phenotype.space` and custom domains: `/` (root)
- * - GitHub Pages project URL (`kooshapari.github.io/<repo>/`): `/<repo>/`
+ * - GitHub Pages project URL (`<REDACTED>.github.io/<repo>/`): `/<repo>/`
  *
  * Override with `DOCS_BASE`, `BASE_PATH`, or `VITEPRESS_BASE`.
  * Do not key off `GITHUB_ACTIONS`; CI builds for Cloudflare also run in Actions.

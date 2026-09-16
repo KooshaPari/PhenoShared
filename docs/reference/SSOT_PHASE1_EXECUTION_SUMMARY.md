@@ -338,7 +338,7 @@ Score = (87.5% × 0.25) + (94% × 0.25) + (97.6% × 0.20) + (65% × 0.20) + (95%
 
 ```bash
 # Check branch protection
-gh api repos/KooshaPari/phenotype-infrakit/branches/specs/main/protection | jq .
+gh api repos/<REDACTED>/phenotype-infrakit/branches/specs/main/protection | jq .
 
 # Verify registry files exist
 ls -lh /repos/{SPECS,ADR,PLAN,USER_JOURNEYS}_REGISTRY.md

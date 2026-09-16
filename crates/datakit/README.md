@@ -7,7 +7,7 @@ This repo is on permanent pause. Code preserved for reference. No active develop
 
 > [!WARNING]
 > **DEPRECATED — ARCHIVE RECOMMENDED**
-> This repository has been superseded by [`phenotype-python-sdk/packages/data-kit`](https://github.com/KooshaPari/phenotype-python-sdk).
+> This repository has been superseded by [`phenotype-python-sdk/packages/data-kit`](https://github.com/<REDACTED>/phenotype-python-sdk).
 > The content here is pre-alpha planning-phase code (10% complete). See [TOMBSTONE.md](./TOMBSTONE.md) for full context.
 
 > **Work-state:** planning | `[#---------]` | 10%
@@ -19,7 +19,7 @@ This repo is on permanent pause. Code preserved for reference. No active develop
 
 **Data transformation and ETL framework** for the Phenotype ecosystem.
 
-[![AI slop inside](https://sladge.net/badge.svg)](https://sladge.net) [![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/KooshaPari/DataKit/total)](https://github.com/KooshaPari/DataKit/releases)
+[![AI slop inside](https://sladge.net/badge.svg)](https://sladge.net) [![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/<REDACTED>/DataKit/total)](https://github.com/<REDACTED>/DataKit/releases)
 
 ## Usage / Quickstart
 

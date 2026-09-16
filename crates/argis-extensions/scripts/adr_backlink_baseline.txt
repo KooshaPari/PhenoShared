@@ -1,5 +1,5 @@
 [33mcommit 3b647bcb2e7b2fa6f1e9af893036f1dd9ab210ce[m
-Author: kooshapari <kooshapari@users.noreply.github.com>
+Author: <REDACTED> <<REDACTED>@users.noreply.github.com>
 Date:   Sun Jun 21 15:46:15 2026 -0700
 
     feat(adr-lint): cross-reference regression gate (T1 v20)
@@ -164,7 +164,7 @@ Date:   Sun Jun 21 15:46:15 2026 -0700
 [32m+[m
 [32m+[m[32m**Scope:**[m
 [32m+[m[32m- Enable Vault `auth/oidc` for GitHub Actions, Buildkite, Jenkins (per ADR-079 reference impl).[m
-[32m+[m[32m- Bind OIDC claims to Vault policies: `repo:kooshapari/*:ref:refs/heads/main` → `policy/ci-main`; `repo:kooshapari/*:ref:refs/heads/chore/*` → `policy/ci-pr`.[m
+[32m+[m[32m- Bind OIDC claims to Vault policies: `repo:<REDACTED>/*:ref:refs/heads/main` → `policy/ci-main`; `repo:<REDACTED>/*:ref:refs/heads/chore/*` → `policy/ci-pr`.[m
 [32m+[m[32m- Map humans via Okta OIDC (existing IdP); MFA enforced on every login.[m
 [32m+[m[32m- Remove 47 long-lived `secrets.*` entries from `.github/workflows/*.yml` across 12 repos.[m
 [32m+[m
@@ -266,7 +266,7 @@ Date:   Sun Jun 21 15:46:15 2026 -0700
 [32m+[m[32m| **R1** | Vault cluster becomes single point of failure; HA standby fails to take over | Medium | High | Raft integrated storage with 1 leader + 2 standby; quarterly `vault operator raft snapshot save`; chaos day in Phase 4 verifies HA failover in < 60s | FTE-1 |[m
 [32m+[m[32m| **R2** | OIDC token replay across CI providers (GitHub token used to fetch from Buildkite) | Medium | High | `bound_audiences` set per provider; `bound_subject` pinned to provider's claim; `wrap_ttl = 300s` for any wrapped token; weekly audit query for cross-provider token use | FTE-2 |[m
 [32m+[m[32m| **R3** | Migration PR breaks CI for > 4 hours | High | Medium | Each workflow migration PR includes a documented `git revert` path; CI monitored via pheno-otel; per-workflow rollback runs in < 5 min | FTE-2 |[m
-[32m+[m[32m| **R4** | Archived repos (`phenotype-ops`, `pheno-tracing`) still hold live tokens | Low | High | Phase 1 Week 2 audit: `gh api repos/kooshapari/{phenotype-ops,pheno-tracing}/actions/secrets` and rotate every token found; document as `gh repo archive` prerequisite | FTE-3 |[m
+[32m+[m[32m| **R4** | Archived repos (`phenotype-ops`, `pheno-tracing`) still hold live tokens | Low | High | Phase 1 Week 2 audit: `gh api repos/<REDACTED>/{phenotype-ops,pheno-tracing}/actions/secrets` and rotate every token found; document as `gh repo archive` prerequisite | FTE-3 |[m
 [32m+[m[32m| **R5** | Dependabot vulnerabilities block the cutover (43 open) | Medium | Low | Dependabot queue is parallelized to L51 (`pheno-bot` sweep); cutover proceeds once Vault paths are wired, regardless of dependabot backlog; SLSA L3 provenance (ADR-080) handles binary provenance post-cutover | FTE-3 |[m
 [32m+[m
 [32m+[m[32m**Risk budget:** All 5 risks are **accepted** with mitigations in place. No risk requires escalation to the security review board. R1 and R2 require explicit chaos-day verification before cutover.[m
@@ -355,10 +355,10 @@ Date:   Sun Jun 21 15:46:15 2026 -0700
 [32m+[m
 [32m+[m[32m| Provider | Claim | Bound value | Vault policy |[m
 [32m+[m[32m|----------|-------|-------------|--------------|[m
-[32m+[m[32m| GitHub Actions | `repository` | `kooshapari/*` | `policy/ci-main` (main), `policy/ci-pr` (other refs) |[m
+[32m+[m[32m| GitHub Actions | `repository` | `<REDACTED>/*` | `policy/ci-main` (main), `policy/ci-pr` (other refs) |[m
 [32m+[m[32m| GitHub Actions | `ref` | `refs/heads/main`, `refs/heads/chore/*` | as above |[m
 [32m+[m[32m| GitHub Actions | `aud` | `vault.example.internal` | tighten in Phase 2 W5 |[m
-[32m+[m[32m| Buildkite | `organization_slug` | `kooshapari` | `policy/ci-main` |[m
+[32m+[m[32m| Buildkite | `organization_slug` | `<REDACTED>` | `policy/ci-main` |[m
 [32m+[m[32m| Buildkite | `pipeline_slug` | `*` | as above |[m
 [32m+[m[32m| Jenkins | `jenkins_url` | `https://ci.example.internal/` | `policy/ci-main` |[m
 [32m+[m[32m| Okta (human) | `email` | `*@phenotype.dev` | `policy/human-admin` (with MFA) |[m
@@ -714,13 +714,13 @@ Date:   Sun Jun 21 15:46:15 2026 -0700
 [32m+[m
 [32m+[m[32m**Pen-test scope doc (per engagement):** `docs/security/pen-test-{YYYY-Qn}-scope.md` is published 4 weeks before engagement start, with the full asset list, threat model summary, rules of engagement, and out-of-scope items.[m
 [32m+[m
-[32m+[m[32m**Bounty program page:** `https://github.com/KooshaPari/phenotype-apps/security/policy` (GitHub Security Policy) cross-linked from `phenotype.org/.well-known/security.txt` per RFC 9116.[m
+[32m+[m[32m**Bounty program page:** `https://github.com/<REDACTED>/phenotype-apps/security/policy` (GitHub Security Policy) cross-linked from `phenotype.org/.well-known/security.txt` per RFC 9116.[m
 [32m+[m
 [32m+[m[32m## 3. Scope[m
 [32m+[m
 [32m+[m[32m**In scope (every engagement, 2027+):**[m
 [32m+[m
-[32m+[m[32m- **47 active repos** under `github.com/KooshaPari/*` (per the registry's `fsm: active` rows in `phenotype-registry/registry/disposition-index.json`).[m
+[32m+[m[32m- **47 active repos** under `github.com/<REDACTED>/*` (per the registry's `fsm: active` rows in `phenotype-registry/registry/disposition-index.json`).[m
 [32m+[m[32m- **9 substrate crates** (`pheno-config`, `pheno-context`, `pheno-errors`, `pheno-flags`, `pheno-otel`, `pheno-port-adapter`, `pheno-tracing`, `pheno-mcp-router`, `pheno-capacity`) plus their dependents in the workspace.[m
 [32m+[m[32m- **All public APIs** — REST endpoints exposed by `phenotype-router`, gRPC services in `phenotype-hub`, and the 6 federated services (`phenoMCP`, `phenoObservability`, `phenoEvents`).[m
 [32m+[m[32m- **Federation endpoints** — OIDC discovery, JWKS, mTLS handshake paths (per ADR-046 + ADR-079).[m
@@ -960,7 +960,7 @@ Date:   Sun Jun 21 15:46:15 2026 -0700
 [32m+[m
 [32m+[m[32m## Mission[m
 [32m+[m
-[32m+[m[32mClose the **43 open Dependabot alerts** on the default branch of `KooshaPari/phenotype-apps` by opening one PR per fix cluster (group of CVEs closed by a single package version bump).[m
+[32m+[m[32mClose the **43 open Dependabot alerts** on the default branch of `<REDACTED>/phenotype-apps` by opening one PR per fix cluster (group of CVEs closed by a single package version bump).[m
 [32m+[m
 [32m+[m[32m## Result summary[m
 [32m+[m
@@ -988,23 +988,23 @@ Date:   Sun Jun 21 15:46:15 2026 -0700
 [32m+[m
 [32m+[m[32m| PR | Title | Cluster | CVEs closed | Files |[m
 [32m+[m[32m|----|-------|---------|------------:|-------|[m
-[32m+[m[32m| [#71](https://github.com/KooshaPari/phenotype-apps/pull/71) | `fix(deps): bump next to 16.1.7 (closes 26 CVEs)` | next 14.2.0 → 16.1.7 | **26** | `unified-review/package.json`, `package-lock.json` |[m
-[32m+[m[32m| [#72](https://github.com/KooshaPari/phenotype-apps/pull/72) | `fix(deps): bump uuid to 12.0.1 (closes 1 CVE)` | uuid ^9.0.0 → ^12.0.1 | **1** | `unified-review/package.json`, `package-lock.json` |[m
-[32m+[m[32m| [#73](https://github.com/KooshaPari/phenotype-apps/pull/73) | `fix(deps): override postcss to ^8.5.10 (closes 1 CVE)` | postcss override | **1** | `unified-review/package.json`, `package-lock.json` |[m
-[32m+[m[32m| [#74](https://github.com/KooshaPari/phenotype-apps/pull/74) | `fix(deps): override vite to ^8.0.16 (closes 3 CVEs)` | vite ^5.4.21 → ^8.0.16 | **3** | `Parpoura-5th/package.json`, `package-lock.json` |[m
-[32m+[m[32m| [#75](https://github.com/KooshaPari/phenotype-apps/pull/75) | `fix(deps): override esbuild to ^0.28.1 (closes 1 CVE)` | esbuild ^0.21.5 → ^0.28.1 | **1** | `Parpoura-5th/package.json`, `package-lock.json` |[m
-[32m+[m[32m| [#76](https://github.com/KooshaPari/phenotype-apps/pull/76) | `fix(deps): bump mako to 1.3.12 (closes 1 CVE)` | mako 1.3.11 → 1.3.12 | **1** | `Parpoura-5th/uv.lock` |[m
-[32m+[m[32m| [#78](https://github.com/KooshaPari/phenotype-apps/pull/78) | `fix(deps): bump git2 to 0.20.4 (closes 1 CVE)` | git2 0.18 → 0.20.4 | **1** | `phenotype-ops/tools/phenotype-manifest/Cargo.toml` |[m
-[32m+[m[32m| [#79](https://github.com/KooshaPari/phenotype-apps/pull/79) | `fix(deps): bump gix to 0.83.0 (closes 5 CVEs)` | gix 0.68 → 0.83.0 (pulls gix-features +0.41.0, gitoxide +0.52.1) | **5** | `phenotype-ops/tools/phenotype-manifest/Cargo.toml` |[m
-[32m+[m[32m| [#80](https://github.com/KooshaPari/phenotype-apps/pull/80) | `fix(deps): bump python-jose to 3.4.0 (closes 2 CVEs incl. 1 critical)` | python-jose 3.3.0 → 3.4.0 | **2** | `phenotype-ops/review-surface/requirements.txt` |[m
-[32m+[m[32m| [#81](https://github.com/KooshaPari/phenotype-apps/pull/81) | `fix(deps): bump js-yaml to ^4.2.0 (closes 1 CVE)` | js-yaml ^4.1.0 → ^4.2.0 (lockfile already at 4.2.0; constraint bump only) | **1** | `unified-review/package.json` |[m
+[32m+[m[32m| [#71](https://github.com/<REDACTED>/phenotype-apps/pull/71) | `fix(deps): bump next to 16.1.7 (closes 26 CVEs)` | next 14.2.0 → 16.1.7 | **26** | `unified-review/package.json`, `package-lock.json` |[m
+[32m+[m[32m| [#72](https://github.com/<REDACTED>/phenotype-apps/pull/72) | `fix(deps): bump uuid to 12.0.1 (closes 1 CVE)` | uuid ^9.0.0 → ^12.0.1 | **1** | `unified-review/package.json`, `package-lock.json` |[m
+[32m+[m[32m| [#73](https://github.com/<REDACTED>/phenotype-apps/pull/73) | `fix(deps): override postcss to ^8.5.10 (closes 1 CVE)` | postcss override | **1** | `unified-review/package.json`, `package-lock.json` |[m
+[32m+[m[32m| [#74](https://github.com/<REDACTED>/phenotype-apps/pull/74) | `fix(deps): override vite to ^8.0.16 (closes 3 CVEs)` | vite ^5.4.21 → ^8.0.16 | **3** | `Parpoura-5th/package.json`, `package-lock.json` |[m
+[32m+[m[32m| [#75](https://github.com/<REDACTED>/phenotype-apps/pull/75) | `fix(deps): override esbuild to ^0.28.1 (closes 1 CVE)` | esbuild ^0.21.5 → ^0.28.1 | **1** | `Parpoura-5th/package.json`, `package-lock.json` |[m
+[32m+[m[32m| [#76](https://github.com/<REDACTED>/phenotype-apps/pull/76) | `fix(deps): bump mako to 1.3.12 (closes 1 CVE)` | mako 1.3.11 → 1.3.12 | **1** | `Parpoura-5th/uv.lock` |[m
+[32m+[m[32m| [#78](https://github.com/<REDACTED>/phenotype-apps/pull/78) | `fix(deps): bump git2 to 0.20.4 (closes 1 CVE)` | git2 0.18 → 0.20.4 | **1** | `phenotype-ops/tools/phenotype-manifest/Cargo.toml` |[m
+[32m+[m[32m| [#79](https://github.com/<REDACTED>/phenotype-apps/pull/79) | `fix(deps): bump gix to 0.83.0 (closes 5 CVEs)` | gix 0.68 → 0.83.0 (pulls gix-features +0.41.0, gitoxide +0.52.1) | **5** | `phenotype-ops/tools/phenotype-manifest/Cargo.toml` |[m
+[32m+[m[32m| [#80](https://github.com/<REDACTED>/phenotype-apps/pull/80) | `fix(deps): bump python-jose to 3.4.0 (closes 2 CVEs incl. 1 critical)` | python-jose 3.3.0 → 3.4.0 | **2** | `phenotype-ops/review-surface/requirements.txt` |[m
+[32m+[m[32m| [#81](https://github.com/<REDACTED>/phenotype-apps/pull/81) | `fix(deps): bump js-yaml to ^4.2.0 (closes 1 CVE)` | js-yaml ^4.1.0 → ^4.2.0 (lockfile already at 4.2.0; constraint bump only) | **1** | `unified-review/package.json` |[m
 [32m+[m[32m| | | **Total** | **42** | |[m
 [32m+[m
 [32m+[m[32m## Issue opened (1)[m
 [32m+[m
 [32m+[m[32m| Issue | Title | CVE |[m
 [32m+[m[32m|-------|-------|-----|[m
-[32m+[m[32m| [#77](https://github.com/KooshaPari/phenotype-apps/issues/77) | Unfixable Dependabot alert #5: ecdsa (CVE-2024-23342 / GHSA-wj6h-64fc-37mp) — Minerva timing attack, no patch available | CVE-2024-23342 |[m
+[32m+[m[32m| [#77](https://github.com/<REDACTED>/phenotype-apps/issues/77) | Unfixable Dependabot alert #5: ecdsa (CVE-2024-23342 / GHSA-wj6h-64fc-37mp) — Minerva timing attack, no patch available | CVE-2024-23342 |[m
 [32m+[m
 [32m+[m[32m**Why no PR for #5:** python-ecdsa maintainers explicitly consider the Minerva P-256 timing attack out of scope; `first_patched_version` is `null`. Recommended remediation: replace `python-jose` with `pyjwt[crypto]` (drops the unmaintained `python-ecdsa` transitive entirely).[m
 [32m+[m
@@ -1066,16 +1066,16 @@ Date:   Sun Jun 21 15:46:15 2026 -0700
 [32m+[m
 [32m+[m[32m```bash[m
 [32m+[m[32m# Re-fetch alert list and confirm all 42 fixable CVEs have matching PR branches:[m
-[32m+[m[32mgh api "repos/KooshaPari/phenotype-apps/dependabot/alerts?state=open&per_page=100" \[m
+[32m+[m[32mgh api "repos/<REDACTED>/phenotype-apps/dependabot/alerts?state=open&per_page=100" \[m
 [32m+[m[32m  | jq '.[] | {number, package: .security_advisory.vulnerabilities[0].package.name, fix: .security_advisory.vulnerabilities[0].first_patched_version.identifier}'[m
 [32m+[m
 [32m+[m[32m# List all opened dependabot PRs:[m
-[32m+[m[32mgh pr list --repo KooshaPari/phenotype-apps --state open \[m
+[32m+[m[32mgh pr list --repo <REDACTED>/phenotype-apps --state open \[m
 [32m+[m[32m  --json number,headRefName,title \[m
 [32m+[m[32m  | jq '.[] | select(.headRefName | startswith("fix/dependabot-"))'[m
 [32m+[m
 [32m+[m[32m# Verify PR #74 (vite override) closed alert #4:[m
-[32m+[m[32mgh pr view 74 --repo KooshaPari/phenotype-apps --json files,title,body[m
+[32m+[m[32mgh pr view 74 --repo <REDACTED>/phenotype-apps --json files,title,body[m
 [32m+[m[32m```[m
 [32m+[m
 [32m+[m[32m## Constraint compliance[m
@@ -1234,7 +1234,7 @@ Date:   Sun Jun 21 15:46:15 2026 -0700
 [32m+[m
 [32m+[m[32m3. **No "outdated dep" condition exists.** The audit's stated goal (list crates where current < latest) returns 0 actionable items, because there is no `latest` to compare against. This is consistent with the project's monorepo substrate design (ADR-013 / ADR-022 / ADR-023): reusable capabilities are vendored as sibling crates, not consumed from a registry.[m
 [32m+[m
-[32m+[m[32m4. **Reproducibility gap (out of scope but worth noting).** Path-only deps break air-gapped builds and create submodule-drift risk. If reproducibility matters, switch to `git = "https://github.com/KooshaPari/<repo>", tag = "v0.1.0"` for the 3 publishable crates. This is a separate hardening track, not an "outdated dep" issue.[m
+[32m+[m[32m4. **Reproducibility gap (out of scope but worth noting).** Path-only deps break air-gapped builds and create submodule-drift risk. If reproducibility matters, switch to `git = "https://github.com/<REDACTED>/<repo>", tag = "v0.1.0"` for the 3 publishable crates. This is a separate hardening track, not an "outdated dep" issue.[m
 [32m+[m
 [32m+[m[32m5. **Mirror-source drift (also out of scope).** `pheno-otel`, `pheno-port-adapter`, `pheno-errors`, `pheno-context` each exist at multiple paths. Mirrors declare identical versions (0.1.0) and identical core metadata, but a deeper diff (e.g. `[dependencies]` divergence, README drift) was not part of this audit. Recommend a follow-up mirror-vs-canonical diff if drift becomes a concern.[m
 [32m+[m
@@ -1529,7 +1529,7 @@ Date:   Sun Jun 21 15:46:15 2026 -0700
 [32m+[m
 [32m+[m[32m#### `cargo tree -p pheno-otel`[m
 [32m+[m[32m```[m
-[32m+[m[32mpheno-otel v0.1.0 (/Users/kooshapari/CodeProjects/Phenotype/repos/pheno-otel)[m
+[32m+[m[32mpheno-otel v0.1.0 (/Users/<REDACTED>/CodeProjects/Phenotype/repos/pheno-otel)[m
 [32m+[m[32m├── serde v1.0.228[m
 [32m+[m[32m├── serde_json v1.0.150[m
 [32m+[m[32m└── thiserror v2.0.18[m
@@ -1538,9 +1538,9 @@ Date:   Sun Jun 21 15:46:15 2026 -0700
 [32m+[m
 [32m+[m[32m#### `cargo tree -p pheno-port-adapter` (top 8 lines)[m
 [32m+[m[32m```[m
-[32m+[m[32mpheno-port-adapter v0.1.0 (/Users/kooshapari/CodeProjects/Phenotype/repos/pheno-port-adapter)[m
+[32m+[m[32mpheno-port-adapter v0.1.0 (/Users/<REDACTED>/CodeProjects/Phenotype/repos/pheno-port-adapter)[m
 [32m+[m[32m├── async-trait v0.1.89[m
-[32m+[m[32m├── pheno-otel v0.1.0 (/Users/kooshapari/CodeProjects/Phenotype/repos/pheno-otel)[m
+[32m+[m[32m├── pheno-otel v0.1.0 (/Users/<REDACTED>/CodeProjects/Phenotype/repos/pheno-otel)[m
 [32m+[m[32m│   ├── serde v1.0.228[m
 [32m+[m[32m│   ├── serde_json v1.0.150[m
 [32m+[m[32m│   └── thiserror v2.0.18[m
@@ -1551,9 +1551,9 @@ Date:   Sun Jun 21 15:46:15 2026 -0700
 [32m+[m
 [32m+[m[32m#### `cargo tree -p pheno-errors` (top 8 lines)[m
 [32m+[m[32m```[m
-[32m+[m[32mpheno-errors v0.1.0 (/Users/kooshapari/CodeProjects/Phenotype/repos/pheno-errors)[m
+[32m+[m[32mpheno-errors v0.1.0 (/Users/<REDACTED>/CodeProjects/Phenotype/repos/pheno-errors)[m
 [32m+[m[32m├── anyhow v1.0.102[m
-[32m+[m[32m├── pheno-otel v0.1.0 (/Users/kooshapari/CodeProjects/Phenotype/repos/pheno-otel)[m
+[32m+[m[32m├── pheno-otel v0.1.0 (/Users/<REDACTED>/CodeProjects/Phenotype/repos/pheno-otel)[m
 [32m+[m[32m│   ├── serde v1.0.228[m
 [32m+[m[32m│   ├── serde_json v1.0.150[m
 [32m+[m[32m│   └── thiserror v2.0.18[m
@@ -1871,20 +1871,20 @@ Date:   Sun Jun 21 15:46:15 2026 -0700
 [32m+[m[32m```[m
 [32m+[m[32mpheno-context/:[m
 [32m+[m[32mtotal 0[m
-[32m+[m[32mdrwxr-xr-x@   4 kooshapari  staff   128 Jun 21 13:25 .[m
-[32m+[m[32mdrwxr-xr-x@ 250 kooshapari  staff  8000 Jun 21 13:30 ..[m
-[32m+[m[32mdrwxr-xr-x@   3 kooshapari  staff    96 Jun 21 13:13 docs[m
-[32m+[m[32mdrwxr-xr-x@   3 kooshapari  staff    96 Jun 21 13:25 src[m
+[32m+[m[32mdrwxr-xr-x@   4 <REDACTED>  staff   128 Jun 21 13:25 .[m
+[32m+[m[32mdrwxr-xr-x@ 250 <REDACTED>  staff  8000 Jun 21 13:30 ..[m
+[32m+[m[32mdrwxr-xr-x@   3 <REDACTED>  staff    96 Jun 21 13:13 docs[m
+[32m+[m[32mdrwxr-xr-x@   3 <REDACTED>  staff    96 Jun 21 13:25 src[m
 [32m+[m
 [32m+[m[32mpheno-config/:[m
 [32m+[m[32mtotal 8[m
-[32m+[m[32mdrwxr-xr-x@   7 kooshapari  staff   224 Jun 21 13:13 .[m
-[32m+[m[32mdrwxr-xr-x@ 250 kooshapari  staff  8000 Jun 21 13:30 ..[m
-[32m+[m[32mdrwxr-xr-x@   4 kooshapari  staff   128 Jun 21 13:13 docs[m
-[32m+[m[32mdrwxr-xr-x@   5 kooshapari  staff   160 Jun 21 13:13 i18n[m
-[32m+[m[32m-rw-r--r--@   1 kooshapari  staff  1584 Jun 21 02:39 llms.txt[m
-[32m+[m[32mdrwxr-xr-x@   4 kooshapari  staff   128 Jun 21 13:31 src[m
-[32m+[m[32mdrwxr-xr-x@   3 kooshapari  staff    96 Jun 21 02:39 tests[m
+[32m+[m[32mdrwxr-xr-x@   7 <REDACTED>  staff   224 Jun 21 13:13 .[m
+[32m+[m[32mdrwxr-xr-x@ 250 <REDACTED>  staff  8000 Jun 21 13:30 ..[m
+[32m+[m[32mdrwxr-xr-x@   4 <REDACTED>  staff   128 Jun 21 13:13 docs[m
+[32m+[m[32mdrwxr-xr-x@   5 <REDACTED>  staff   160 Jun 21 13:13 i18n[m
+[32m+[m[32m-rw-r--r--@   1 <REDACTED>  staff  1584 Jun 21 02:39 llms.txt[m
+[32m+[m[32mdrwxr-xr-x@   4 <REDACTED>  staff   128 Jun 21 13:31 src[m
+[32m+[m[32mdrwxr-xr-x@   3 <REDACTED>  staff    96 Jun 21 02:39 tests[m
 [32m+[m[32m```[m
 [32m+[m
 [32m+[m[32m`find pheno-context -name "Cargo.toml" -maxdepth 4` → no results.[m
@@ -1909,7 +1909,7 @@ Date:   Sun Jun 21 15:46:15 2026 -0700
 [32m+[m[32m---[m
 [32m+[m
 [32m+[m[32m**Audit date:** 2026-06-21[m
-[32m+[m[32m**Method reproducibility:** All evidence in this doc can be re-verified by re-running the `cargo tree -p <repo>` and `grep` commands listed above from `/Users/kooshapari/CodeProjects/Phenotype/repos/`. The `ls -la`/`find` commands under A.3 are also fully reproducible.[m
+[32m+[m[32m**Method reproducibility:** All evidence in this doc can be re-verified by re-running the `cargo tree -p <repo>` and `grep` commands listed above from `/Users/<REDACTED>/CodeProjects/Phenotype/repos/`. The `ls -la`/`find` commands under A.3 are also fully reproducible.[m
 [32m+[m[32m**Cross-references:** SIDE-01 (`findings/2026-06-21-SIDE-01-dep-audit.md`) covers the crates.io-publication dimension. This doc (SIDE-04) covers the internal dep version-alignment dimension. Both reach the same zero-drift conclusion via different routes.[m
 [1mdiff --git a/findings/2026-06-21-SIDE-10-async-runtime.md b/findings/2026-06-21-SIDE-10-async-runtime.md[m
 [1mnew file mode 100644[m
@@ -2163,7 +2163,7 @@ Date:   Sun Jun 21 15:46:15 2026 -0700
 [32m+[m[32m**Action:**[m
 [32m+[m
 [32m+[m[32m- Update `.git/info/sparse-checkout` to include `pheno-config/Cargo.toml` (and likewise for `pheno-context`, `pheno-flags`, and any other pheno-* Rust repo missing its manifest).[m
-[32m+[m[32m- Alternatively, push the audit to verify against `KooshaPari/pheno-config` on GitHub directly.[m
+[32m+[m[32m- Alternatively, push the audit to verify against `<REDACTED>/pheno-config` on GitHub directly.[m
 [32m+[m
 [32m+[m[32m### R-4 (P3 / governance gap): Author the v17 T6 ADR doc[m
 [32m+[m
@@ -3296,20 +3296,20 @@ Date:   Sun Jun 21 15:46:15 2026 -0700
 [32m+[m
 [32m+[m[32m**Pattern:** `https://<owner>.github.io/<repo>/cache-stats/`[m
 [32m+[m
-[32m+[m[32m**This repo:** `https://kooshapari.github.io/repos/cache-stats/`[m
+[32m+[m[32m**This repo:** `https://<REDACTED>.github.io/repos/cache-stats/`[m
 [32m+[m
 [32m+[m[32m**Sample data URLs (after first deploy):**[m
 [32m+[m
-[32m+[m[32m- `https://kooshapari.github.io/repos/cache-stats/index.html` — dashboard[m
-[32m+[m[32m- `https://kooshapari.github.io/repos/cache-stats/history.jsonl` — raw JSONL history[m
-[32m+[m[32m- `https://kooshapari.github.io/repos/cache-stats/latest.json` — most recent run snapshot[m
-[32m+[m[32m- `https://kooshapari.github.io/repos/cache-stats/fleet.json` — last-7-day rollup[m
-[32m+[m[32m- `https://kooshapari.github.io/repos/cache-stats/README.md` — metric definition[m
+[32m+[m[32m- `https://<REDACTED>.github.io/repos/cache-stats/index.html` — dashboard[m
+[32m+[m[32m- `https://<REDACTED>.github.io/repos/cache-stats/history.jsonl` — raw JSONL history[m
+[32m+[m[32m- `https://<REDACTED>.github.io/repos/cache-stats/latest.json` — most recent run snapshot[m
+[32m+[m[32m- `https://<REDACTED>.github.io/repos/cache-stats/fleet.json` — last-7-day rollup[m
+[32m+[m[32m- `https://<REDACTED>.github.io/repos/cache-stats/README.md` — metric definition[m
 [32m+[m
 [32m+[m[32m> **Note on the URL path:** GitHub Pages serves from `/<repo>/` (not[m
-[32m+[m[32m> `/<owner>/<repo>/`) — the canonical project page for `KooshaPari/repos`[m
-[32m+[m[32m> is `https://kooshapari.github.io/repos/`. Until the user/organization[m
-[32m+[m[32m> `kooshapari.github.io` Pages site is configured to serve a custom domain or[m
+[32m+[m[32m> `/<owner>/<repo>/`) — the canonical project page for `<REDACTED>/repos`[m
+[32m+[m[32m> is `https://<REDACTED>.github.io/repos/`. Until the user/organization[m
+[32m+[m[32m> `<REDACTED>.github.io` Pages site is configured to serve a custom domain or[m
 [32m+[m[32m> a `gh-pages` branch from a different repo, the dashboard will live at the[m
 [32m+[m[32m> repo's `/cache-stats/` subpath. The dashboard's `fetch()` calls use[m
 [32m+[m[32m> relative paths (`./history.jsonl`) so they work at any subpath.[m
@@ -3378,7 +3378,7 @@ Date:   Sun Jun 21 15:46:15 2026 -0700
 [32m+[m[32m8. The commit lands on `main` → triggers `cache-stats-pages.yml` (which also[m
 [32m+[m[32m   listens for `push: paths: docs/cache-stats/**`).[m
 [32m+[m[32m9. `cache-stats-pages.yml` uploads `docs/cache-stats/` as a Pages artifact and[m
-[32m+[m[32m   deploys to `https://kooshapari.github.io/repos/cache-stats/`.[m
+[32m+[m[32m   deploys to `https://<REDACTED>.github.io/repos/cache-stats/`.[m
 [32m+[m
 [32m+[m[32mEnd-to-end latency: ~3-5 minutes from CI completion to dashboard refresh.[m
 [32m+[m
@@ -3401,7 +3401,7 @@ Date:   Sun Jun 21 15:46:15 2026 -0700
 [32m+[m
 [32m+[m[32m| Risk | Severity | Mitigation |[m
 [32m+[m[32m|---|---|---|[m
-[32m+[m[32m| GitHub Pages not enabled on `KooshaPari/repos` | M | Add a one-time "Pages: Build from branch `/`" config to repo settings; included in PR description. |[m
+[32m+[m[32m| GitHub Pages not enabled on `<REDACTED>/repos` | M | Add a one-time "Pages: Build from branch `/`" config to repo settings; included in PR description. |[m
 [32m+[m[32m| `gh run download` requires `actions: read` + `contents: read` | L | Both are in the workflow's `permissions:` block. |[m
 [32m+[m[32m| Submodule pointer drift in this monorepo's local clone can race with `git push` of the history append | M | The `push` step in `cache-stats.yml` only commits `docs/cache-stats/*` (additions to existing files), so submodule noise is irrelevant to the remote. |[m
 [32m+[m[32m| `cache-stats.yml` fires on `pull_request` runs too | L | `if: github.event.workflow_run.event == 'push'` gate ensures only main-branch CI runs are recorded. |[m
@@ -3440,7 +3440,7 @@ Date:   Sun Jun 21 15:46:15 2026 -0700
 [32m+[m
 [32m+[m[32m**Status:** IMPLEMENTATION COMPLETE. **NOT PUSHED** per task instructions.[m
 [32m+[m[32m**Next-step (blocked on user):** push to remote → enable GitHub Pages on[m
-[32m+[m[32m`KooshaPari/repos` → first CI run → dashboard goes live.[m
+[32m+[m[32m`<REDACTED>/repos` → first CI run → dashboard goes live.[m
 [32m+[m
 [32m+[m[32m---[m
 [32m+[m
@@ -3485,10 +3485,10 @@ Date:   Sun Jun 21 15:46:15 2026 -0700
 [32m+[m
 [32m+[m[32m## 0. Scope reconciliation (CRITICAL)[m
 [32m+[m
-[32m+[m[32mThe task specifies audit of `/Users/kooshapari/CodeProjects/Phenotype/repos/spikes/go/phenotype-router/internal/`.[m
+[32m+[m[32mThe task specifies audit of `/Users/<REDACTED>/CodeProjects/Phenotype/repos/spikes/go/phenotype-router/internal/`.[m
 [32m+[m
 [32m+[m[32m**That directory does not exist.** Verified via:[m
-[32m+[m[32m- `ls /Users/kooshapari/CodeProjects/Phenotype/repos/spikes/go/phenotype-router/` → `e2e/` only[m
+[32m+[m[32m- `ls /Users/<REDACTED>/CodeProjects/Phenotype/repos/spikes/go/phenotype-router/` → `e2e/` only[m
 [32m+[m[32m- `git log --all -- 'spikes/go/phenotype-router/internal/**'` → 0 commits ever[m
 [32m+[m[32m- `git ls-files spikes/go/phenotype-router/` → `e2e/e2e_test.go` only[m
 [32m+[m[32m- `find / -type d -path '*spikes*phenotype-router*'` → 0 hits[m
@@ -3512,7 +3512,7 @@ Date:   Sun Jun 21 15:46:15 2026 -0700
 [32m+[m
 [32m+[m[32m| Tool | Version | Result |[m
 [32m+[m[32m|---|---|---|[m
-[32m+[m[32m| `gosec` | `dev` (local install `/Users/kooshapari/go/bin/gosec`) | 0 issues on spike (G104/G201/G202/G204/G304/G401/G402/G404/G501-G504); SSA panic on plugins (unresolved external deps `bifrost-extensions/{costengine,db/sqlc,plugins/learning,slm}`) |[m
+[32m+[m[32m| `gosec` | `dev` (local install `/Users/<REDACTED>/go/bin/gosec`) | 0 issues on spike (G104/G201/G202/G204/G304/G401/G402/G404/G501-G504); SSA panic on plugins (unresolved external deps `bifrost-extensions/{costengine,db/sqlc,plugins/learning,slm}`) |[m
 [32m+[m[32m| `grep -E` (manual) | n/a | All 6 task categories covered below |[m
 [32m+[m[32m| `git show ad724388f3:spikes/go/phenotype-router/e2e/e2e_test.go` | n/a | File extracted (the only spike file) |[m
 [32m+[m
@@ -3566,7 +3566,7 @@ Date:   Sun Jun 21 15:46:15 2026 -0700
 [32m+[m
 [32m+[m[32m- **The Rust production crate** `phenotype-router` (audited separately at `findings/2026-06-21-phenotype-router-security-audit.md`, 2026-06-21, 276 lines, by Forge).[m
 [32m+[m[32m- **Bifrost v1.5.21** upstream (out of scope per ADR-050/051; consumers via `bifrost_adapter.rs`).[m
-[32m+[m[32m- **`internal/sdk`** — the package referenced by `e2e_test.go:39` (`github.com/KooshaPari/phenotype-router/internal/sdk`) does not exist on any tracked branch. This is the "11 undefined-type errors" referenced in the package doc. Resolving this is V12-T17 per `findings/2026-06-21-V12-T16-e2e-harness.md` §9.[m
+[32m+[m[32m- **`internal/sdk`** — the package referenced by `e2e_test.go:39` (`github.com/<REDACTED>/phenotype-router/internal/sdk`) does not exist on any tracked branch. This is the "11 undefined-type errors" referenced in the package doc. Resolving this is V12-T17 per `findings/2026-06-21-V12-T16-e2e-harness.md` §9.[m
 [32m+[m[32m- **Pen-test / bug bounty** — separate V19-T5 deliverable per ADR-080 (`docs/adr/2026-06-21/ADR-080-pen-test-bug-bounty-roadmap.md`).[m
 [32m+[m
 [32m+[m[32m---[m
@@ -3591,8 +3591,8 @@ Date:   Sun Jun 21 15:46:15 2026 -0700
 [32m+[m[32m# `phenotype-router` Security Audit (Baseline, v0.2.0)[m
 [32m+[m
 [32m+[m[32m**Date:** 2026-06-21[m
-[32m+[m[32m**Scope:** `phenotype-router` Rust scaffold at `KooshaPari/phenotype-router` @ `6e147d8` (`feat: substrate-bar bootstrap for phenotype-router (v0.2.0)`)[m
-[32m+[m[32m**Auditor:** Forge (orchestrator-level) — KooshaPari[m
+[32m+[m[32m**Scope:** `phenotype-router` Rust scaffold at `<REDACTED>/phenotype-router` @ `6e147d8` (`feat: substrate-bar bootstrap for phenotype-router (v0.2.0)`)[m
+[32m+[m[32m**Auditor:** Forge (orchestrator-level) — <REDACTED>[m
 [32m+[m[32m**Audit class:** FIRST security audit on this substrate. Baseline.[m
 [32m+[m[32m**Rescoping note:** Per the rescoping laid out in this turn, this audit is **Option A** — actual `phenotype-router` Rust scaffold (Cargo.toml v0.2.0, thiserror + 4 transitives). NOT Go; NOT Bifrost v1.5.21; NOT SLSA/cosign (those scope to the parent monorepo per ADR-077/ADR-078).[m
 [32m+[m
@@ -3722,7 +3722,7 @@ Date:   Sun Jun 21 15:46:15 2026 -0700
 [32m+[m
 [32m+[m[32m## 5. Branch protection (via `gh api`)[m
 [32m+[m
-[32m+[m[32m**Command:** `gh api /repos/KooshaPari/phenotype-router/branches/main/protection`[m
+[32m+[m[32m**Command:** `gh api /repos/<REDACTED>/phenotype-router/branches/main/protection`[m
 [32m+[m
 [32m+[m[32m**Result:** ❌ **NOT PROTECTED**[m
 [32m+[m
@@ -3736,7 +3736,7 @@ Date:   Sun Jun 21 15:46:15 2026 -0700
 [32m+[m
 [32m+[m[32m**Implication:** Direct pushes to `main` are permitted; there is no required-review gate, no required-status-check, no linear-history enforcement. For a Tier-1 fleet-critical substrate (ADR-040), this is a **P1** gap.[m
 [32m+[m
-[32m+[m[32m`CODEOWNERS` exists (`phenotype-router/CODEOWNERS:1-41`) and routes all reviews to `@KooshaPari`, but CODEOWNERS does NOT enforce reviews on its own — that requires branch protection with `require_code_owner_reviews = true`.[m
+[32m+[m[32m`CODEOWNERS` exists (`phenotype-router/CODEOWNERS:1-41`) and routes all reviews to `@<REDACTED>`, but CODEOWNERS does NOT enforce reviews on its own — that requires branch protection with `require_code_owner_reviews = true`.[m
 [32m+[m
 [32m+[m[32m---[m
 [32m+[m
@@ -3762,7 +3762,7 @@ Date:   Sun Jun 21 15:46:15 2026 -0700
 [32m+[m
 [32m+[m[32m```json[m
 [32m+[m[32m{[m
-[32m+[m[32m  "repo": "KooshaPari/phenotype-router",[m
+[32m+[m[32m  "repo": "<REDACTED>/phenotype-router",[m
 [32m+[m[32m  "commit": "6e147d8",[m
 [32m+[m[32m  "audit_date": "2026-06-21",[m
 [32m+[m[32m  "audit_class": "baseline (first audit on this substrate)",[m
@@ -3791,7 +3791,7 @@ Date:   Sun Jun 21 15:46:15 2026 -0700
 [32m+[m[32m  "issues_opened": [[m
 [32m+[m[32m    {[m
 [32m+[m[32m      "number": 5,[m
-[32m+[m[32m      "url": "https://github.com/KooshaPari/phenotype-router/issues/5",[m
+[32m+[m[32m      "url": "https://github.com/<REDACTED>/phenotype-router/issues/5",[m
 [32m+[m[32m      "severity": "MEDIUM",[m
 [32m+[m[32m      "finding_id": "F-1",[m
 [32m+[m[32m      "title": "[security] cargo audit + cargo deny not wired into CI (F-1, MEDIUM)",[m
@@ -3803,7 +3803,7 @@ Date:   Sun Jun 21 15:46:15 2026 -0700
 [32m+[m[32m    "name": "security",[m
 [32m+[m[32m    "color": "#b60205",[m
 [32m+[m[32m    "description": "Security finding or vulnerability report",[m
-[32m+[m[32m    "repo": "KooshaPari/phenotype-router"[m
+[32m+[m[32m    "repo": "<REDACTED>/phenotype-router"[m
 [32m+[m[32m  }[m
 [32m+[m[32m}[m
 [32m+[m[32m```[m
@@ -3815,13 +3815,13 @@ Date:   Sun Jun 21 15:46:15 2026 -0700
 [32m+[m[32m| Sev | ID | Title | Location |[m
 [32m+[m[32m|---|---|---|---|[m
 [32m+[m[32m| **MEDIUM** | F-1 | `cargo audit` + `cargo deny` not wired into CI | `.github/workflows/ci.yml:1-104` |[m
-[32m+[m[32m| LOW | F-2 | `main` branch has no GitHub branch protection | `KooshaPari/phenotype-router` settings |[m
+[32m+[m[32m| LOW | F-2 | `main` branch has no GitHub branch protection | `<REDACTED>/phenotype-router` settings |[m
 [32m+[m[32m| LOW | F-3 | No `SECURITY.md` (no vuln-reporting channel, no response runbook) | repo root |[m
 [32m+[m[32m| INFO | F-4 | `deny.toml` allow-list has 8 over-permissive license entries | `phenotype-router/deny.toml:17-30` |[m
 [32m+[m
 [32m+[m[32m**HIGH/CRITICAL count: 0.** Per the strict criterion ("Open GitHub issues for any HIGH/CRITICAL findings"), no issues would be opened by that rule alone. However, the highest-impact actionable finding (F-1) was filed as a `security`-labeled tracking issue to establish the baseline remediation backlog:[m
 [32m+[m
-[32m+[m[32m- **Issue #5** (MEDIUM, F-1): <https://github.com/KooshaPari/phenotype-router/issues/5> — "cargo audit + cargo deny not wired into CI (F-1, MEDIUM)" — `security` label applied.[m
+[32m+[m[32m- **Issue #5** (MEDIUM, F-1): <https://github.com/<REDACTED>/phenotype-router/issues/5> — "cargo audit + cargo deny not wired into CI (F-1, MEDIUM)" — `security` label applied.[m
 [32m+[m[32m- `security` label created on the repo (color `#b60205`, description "Security finding or vulnerability report"). It did not exist prior to this audit.[m
 [32m+[m
 [32m+[m[32m---[m
@@ -3858,12 +3858,12 @@ Date:   Sun Jun 21 15:46:15 2026 -0700
 [32m+[m[32m- `cargo audit --json` — 2026-06-21, ran from `phenotype-router/`, advisory-db @ `776615bd3`, 0 vulnerabilities[m
 [32m+[m[32m- `cargo deny check` — 2026-06-21, all 4 sub-checks green, 8 cosmetic warnings[m
 [32m+[m[32m- `gitleaks detect --no-git --source . --verbose` — 2026-06-21, 404 MB scanned, 0 leaks[m
-[32m+[m[32m- `gh api /repos/KooshaPari/phenotype-router/branches/main/protection` — 2026-06-21, HTTP 404 (branch not protected)[m
+[32m+[m[32m- `gh api /repos/<REDACTED>/phenotype-router/branches/main/protection` — 2026-06-21, HTTP 404 (branch not protected)[m
 [32m+[m[32m- Manual `grep -rn "secret|password|token|SECURITY"` in src/tests/benches — 27 matches, all LLM-text-token context, no real secrets[m
 [32m+[m[32m- `gh label create security --color b60205` — 2026-06-21, label did not exist on repo prior to this audit[m
-[32m+[m[32m- `gh issue create --label security --repo KooshaPari/phenotype-router` — 2026-06-21, opened **issue #5** (F-1 MEDIUM)[m
+[32m+[m[32m- `gh issue create --label security --repo <REDACTED>/phenotype-router` — 2026-06-21, opened **issue #5** (F-1 MEDIUM)[m
 [32m+[m
-[32m+[m[32m**Auditor:** Forge (orchestrator), KooshaPari keyring (`gh auth status` confirmed `KooshaPari` active 2026-06-21, scopes `delete_repo gist read:org repo workflow`).[m
+[32m+[m[32m**Auditor:** Forge (orchestrator), <REDACTED> keyring (`gh auth status` confirmed `<REDACTED>` active 2026-06-21, scopes `delete_repo gist read:org repo workflow`).[m
 \ No newline at end of file[m
 [1mdiff --git a/findings/2026-06-21-sub-clone-disposition-phase-1.md b/findings/2026-06-21-sub-clone-disposition-phase-1.md[m
 [1mnew file mode 100644[m
@@ -3895,10 +3895,10 @@ Date:   Sun Jun 21 15:46:15 2026 -0700
 [32m+[m[32m| `.gitmodules` (submodule pointers) | **Does not exist** at monorepo root. `cat .gitmodules` returns "No such file or directory". |[m
 [32m+[m[32m| `.git/modules/<name>/` (submodule gitdirs) | **None of the 5 exist** in `.git/modules/`. |[m
 [32m+[m[32m| Working branch | `ci/v12-gates-2026-06-21` (a CI gate branch, not main) |[m
-[32m+[m[32m| Working tree remote | `origin = github.com/KooshaPari/phenotype-apps.git` (the previously-reported `argis` remote is the second remote on this checkout) |[m
+[32m+[m[32m| Working tree remote | `origin = github.com/<REDACTED>/phenotype-apps.git` (the previously-reported `argis` remote is the second remote on this checkout) |[m
 [32m+[m[32m| Sparse-checkout state | **Disabled** (`core.sparseCheckout=false`, `core.sparseCheckoutCone=false`) — contradicts AGENTS.md claim of cone-mode sparse-checkout |[m
 [32m+[m
-[32m+[m[32m**Implication:** The 5 directories are **independent git clones** (each with its own `origin` pointing to `github.com/KooshaPari/<name>.git`), not git submodules. The Step 2 commands (`git submodule deinit`, `git rm $repo` against the monorepo index) would not work as written and would be inappropriate without a `.gitmodules` entry.[m
+[32m+[m[32m**Implication:** The 5 directories are **independent git clones** (each with its own `origin` pointing to `github.com/<REDACTED>/<name>.git`), not git submodules. The Step 2 commands (`git submodule deinit`, `git rm $repo` against the monorepo index) would not work as written and would be inappropriate without a `.gitmodules` entry.[m
 [32m+[m
 [32m+[m[32m---[m
 [32m+[m
@@ -3932,7 +3932,7 @@ Date:   Sun Jun 21 15:46:15 2026 -0700
 [32m+[m
 [32m+[m[32m```[m
 [32m+[m[32mbranch: chore/L62-hexakit-adopt-2026-06-21   ← NOT trunk[m
-[32m+[m[32mremote:  git@github.com:KooshaPari/HexaKit.git[m
+[32m+[m[32mremote:  git@github.com:<REDACTED>/HexaKit.git[m
 [32m+[m[32mHEAD:    6f82788 chore(obs): L62 adopt pheno-otel::ErrorCounter for HexaKit  ← Jun 21[m
 [32m+[m[32mprev:    33e49ad chore: rebase marker (#300)[m
 [32m+[m[32mprev:    c658479 feat(rust): H14.3 alias resolver for model-id routing (#302)[m
@@ -3956,7 +3956,7 @@ Date:   Sun Jun 21 15:46:15 2026 -0700
 [32m+[m
 [32m+[m[32m```[m
 [32m+[m[32mbranch: chore/tier-0-hygiene-batch   ← NOT trunk[m
-[32m+[m[32mremote:  git@github.com:KooshaPari/Tracera.git[m
+[32m+[m[32mremote:  git@github.com:<REDACTED>/Tracera.git[m
 [32m+[m[32mHEAD:    b6c4ef85b chore: tier-0 hygiene snapshot 2026-06-20[m
 [32m+[m[32mprev:    b7fd88b57 chore(tracera): recover stash@{0} (L7-001 hygiene batch …)[m
 [32m+[m[32mprev:    3423caf27 chore(tier-0): orch-v10-015 hygiene[m
@@ -3979,7 +3979,7 @@ Date:   Sun Jun 21 15:46:15 2026 -0700
 [32m+[m
 [32m+[m[32m```[m
 [32m+[m[32mbranch: fix/l5-119-quality-p0-2026-06-20   ← NOT trunk[m
-[32m+[m[32mremote:  git@github.com:KooshaPari/PhenoContracts.git[m
+[32m+[m[32mremote:  git@github.com:<REDACTED>/PhenoContracts.git[m
 [32m+[m[32mHEAD:    f9defc7 fix(ci): switch TruffleHog to filesystem mode; ignore coverage/ dir[m
 [32m+[m[32mprev:    2d37994 fix(ci): switch TruffleHog to filesystem mode (handles first commit)[m
 [32m+[m[32mprev:    66b6270 chore: tier-0 hygiene snapshot 2026-06-20[m
@@ -4023,7 +4023,7 @@ Date:   Sun Jun 21 15:46:15 2026 -0700
 [32m+[m[32m2. **Confirm the working branch.** `ci/v12-gates-2026-06-21` is a CI gate branch; submodule-pointer changes here may belong on `main` / `master` / a `chore/<req-id>-sub-clone-disposition-<date>` branch instead.[m
 [32m+[m[32m3. **Trunk-only verification must be per-checkout.** Each developer / CI runner may have a different working-tree state. The audit must be re-run at the moment of deletion, not relied on from another machine.[m
 [32m+[m[32m4. **HexaKit/Tracera/PhenoContracts have live L-number work** (L7-001 hygiene, L62 obs adopt, L5-119 quality P0). Even if trunk-only is later confirmed, the v14 wave in progress is touching these repos; coordinate with active owners.[m
-[32m+[m[32m5. **HeliosCLI / Pyron absence** may already be the result of prior cleanup (consistent with the 2026-06-18 4-repo retirement documented in AGENTS.md) — verify with `gh repo view` against `KooshaPari/HeliosCLI` and `KooshaPari/Pyron` before assuming they're missing.[m
+[32m+[m[32m5. **HeliosCLI / Pyron absence** may already be the result of prior cleanup (consistent with the 2026-06-18 4-repo retirement documented in AGENTS.md) — verify with `gh repo view` against `<REDACTED>/HeliosCLI` and `<REDACTED>/Pyron` before assuming they're missing.[m
 [32m+[m
 [32m+[m[32m---[m
 [32m+[m
@@ -4044,7 +4044,7 @@ Date:   Sun Jun 21 15:46:15 2026 -0700
 [1m--- /dev/null[m
 [1m+++ b/findings/2026-06-21-v14-ci-rot-diagnosis.md[m
 [36m@@ -0,0 +1,335 @@[m
-[32m+[m[32m# v14 CI Rot Diagnosis — KooshaPari/phenotype-apps[m
+[32m+[m[32m# v14 CI Rot Diagnosis — <REDACTED>/phenotype-apps[m
 [32m+[m
 [32m+[m[32m**Date:** 2026-06-21[m
 [32m+[m[32m**Investigator:** Forge (post-conversation handoff)[m
@@ -4136,7 +4136,7 @@ Date:   Sun Jun 21 15:46:15 2026 -0700
 [32m+[m[32m##[error]An error occurred trying to start process '/usr/bin/bash' with working directory[m
 [32m+[m[32m'/home/runner/work/phenotype-apps/phenotype-apps/pheno-flags'. No such file or directory[m
 [32m+[m[32m```[m
-[32m+[m[32m**Reality check:** `ls pheno-port-adapter pheno-errors pheno-otel` succeed on `main`; **`pheno-flags` does not exist** anywhere on `main` (verified by `pheno-port-adapter/src/lib.rs` lookup). The `pheno-flags` substrate lives in a different repo (`pheno-flags` is a separate `KooshaPari/pheno-flags` not vendored into phenotype-apps).[m
+[32m+[m[32m**Reality check:** `ls pheno-port-adapter pheno-errors pheno-otel` succeed on `main`; **`pheno-flags` does not exist** anywhere on `main` (verified by `pheno-port-adapter/src/lib.rs` lookup). The `pheno-flags` substrate lives in a different repo (`pheno-flags` is a separate `<REDACTED>/pheno-flags` not vendored into phenotype-apps).[m
 [32m+[m[32m**Fix (≥2 LoC):** Either (a) delete the `chaos-flags-stress` job (it's a no-op for this repo), or (b) change `working-directory` to `pheno-port-adapter` (matching the L11 perf benchmark which exists there).[m
 [32m+[m
 [32m+[m[32m#### A4. `sbom` (×2 in branch protection) ❌ → Cargo.toml missing at root[m
@@ -4333,22 +4333,22 @@ Date:   Sun Jun 21 15:46:15 2026 -0700
 [32m+[m
 [32m+[m[32m```bash[m
 [32m+[m[32m# Workflow definitions (read from main branch, NOT apps-extract default)[m
-[32m+[m[32mgh api /repos/KooshaPari/phenotype-apps/contents/.github/workflows/chaos.yml?ref=main -q .content | base64 -d[m
-[32m+[m[32mgh api /repos/KooshaPari/phenotype-apps/contents/.github/workflows/perf-gate.yml?ref=main -q .content | base64 -d[m
-[32m+[m[32mgh api /repos/KooshaPari/phenotype-apps/contents/.github/workflows/ssot-inject.yml?ref=main -q .content | base64 -d[m
-[32m+[m[32mgh api /repos/KooshaPari/phenotype-apps/contents/.github/workflows/sbom.yml?ref=main -q .content | base64 -d[m
-[32m+[m[32mgh api /repos/KooshaPari/phenotype-apps/contents/.github/workflows/deny.yml?ref=main -q .content | base64 -d[m
-[32m+[m[32mgh api /repos/KooshaPari/phenotype-apps/contents/.github/workflows/fuzz.yml?ref=main -q .content | base64 -d[m
+[32m+[m[32mgh api /repos/<REDACTED>/phenotype-apps/contents/.github/workflows/chaos.yml?ref=main -q .content | base64 -d[m
+[32m+[m[32mgh api /repos/<REDACTED>/phenotype-apps/contents/.github/workflows/perf-gate.yml?ref=main -q .content | base64 -d[m
+[32m+[m[32mgh api /repos/<REDACTED>/phenotype-apps/contents/.github/workflows/ssot-inject.yml?ref=main -q .content | base64 -d[m
+[32m+[m[32mgh api /repos/<REDACTED>/phenotype-apps/contents/.github/workflows/sbom.yml?ref=main -q .content | base64 -d[m
+[32m+[m[32mgh api /repos/<REDACTED>/phenotype-apps/contents/.github/workflows/deny.yml?ref=main -q .content | base64 -d[m
+[32m+[m[32mgh api /repos/<REDACTED>/phenotype-apps/contents/.github/workflows/fuzz.yml?ref=main -q .content | base64 -d[m
 [32m+[m
 [32m+[m[32m# Failure logs (latest failed runs, all on main push event)[m
-[32m+[m[32mgh run view 27898873547 --repo KooshaPari/phenotype-apps --log-failed  # chaos + pheno-flags stress[m
-[32m+[m[32mgh run view 27900989300 --repo KooshaPari/phenotype-apps --log-failed  # ssot-inject[m
-[32m+[m[32mgh run view 27900989633 --repo KooshaPari/phenotype-apps --log-failed  # perf-gate[m
-[32m+[m[32mgh run view 27900916528 --repo KooshaPari/phenotype-apps --log-failed  # sbom[m
-[32m+[m[32mgh run view 27900989653 --repo KooshaPari/phenotype-apps --log-failed  # deny + govulncheck[m
+[32m+[m[32mgh run view 27898873547 --repo <REDACTED>/phenotype-apps --log-failed  # chaos + pheno-flags stress[m
+[32m+[m[32mgh run view 27900989300 --repo <REDACTED>/phenotype-apps --log-failed  # ssot-inject[m
+[32m+[m[32mgh run view 27900989633 --repo <REDACTED>/phenotype-apps --log-failed  # perf-gate[m
+[32m+[m[32mgh run view 27900916528 --repo <REDACTED>/phenotype-apps --log-failed  # sbom[m
+[32m+[m[32mgh run view 27900989653 --repo <REDACTED>/phenotype-apps --log-failed  # deny + govulncheck[m
 [32m+[m
 [32m+[m[32m# PR fingerprint (25 open, 13 with v14 fails)[m
-[32m+[m[32mgh pr list --repo KooshaPari/phenotype-apps --state open --json number,title,headRefName,mergeable,statusCheckRollup --limit 30[m
+[32m+[m[32mgh pr list --repo <REDACTED>/phenotype-apps --state open --json number,title,headRefName,mergeable,statusCheckRollup --limit 30[m
 [32m+[m[32m```[m
 [32m+[m
 [32m+[m[32m---[m
@@ -5165,7 +5165,7 @@ Date:   Sun Jun 21 15:46:15 2026 -0700
 [32m+[m
 [32m+[m[32m## Release workflow template[m
 [32m+[m
-[32m+[m[32m`/Users/kooshapari/CodeProjects/Phenotype/repos/.github/workflows/release.yml`:[m
+[32m+[m[32m`/Users/<REDACTED>/CodeProjects/Phenotype/repos/.github/workflows/release.yml`:[m
 [32m+[m
 [32m+[m[32m```yaml[m
 [32m+[m[32mname: release[m
@@ -5712,7 +5712,7 @@ Date:   Sun Jun 21 15:46:15 2026 -0700
 [32m+[m[32m# evidence/mfa-check.sh[m
 [32m+[m[32m# Verifies MFA is enforced for all human access[m
 [32m+[m[32mset -euo pipefail[m
-[32m+[m[32mUSERS_WITHOUT_MFA=$(gh api /orgs/KooshaPari/members --jq '.[] | select(.two_factor_authentication_disabled==true) | .login')[m
+[32m+[m[32mUSERS_WITHOUT_MFA=$(gh api /orgs/<REDACTED>/members --jq '.[] | select(.two_factor_authentication_disabled==true) | .login')[m
 [32m+[m[32mif [ -z "$USERS_WITHOUT_MFA" ]; then[m
 [32m+[m[32m  echo "PASS: all org members have MFA enabled"[m
 [32m+[m[32m  exit 0[m
@@ -6044,7 +6044,7 @@ Date:   Sun Jun 21 15:46:15 2026 -0700
 [32m+[m[32m| **2026-09-01 → 2026-09-30** | **External pen test (Q3 2026)** | Trail of Bits (or Cure53) | Pen-test report; daily check-ins |[m
 [32m+[m[32m| **2026-10-01** | Pen-test triage of findings begins | sec-eng-1 | Triaged findings in HackerOne / GitHub Security Advisories draft |[m
 [32m+[m[32m| **2026-10-15** | Bug-bounty RFP issued (HackerOne) | security circle lead | Bounty program agreement |[m
-[32m+[m[32m| **2026-10-31** | Bounty program page live; program config in HackerOne | sec-eng-1 | Live `https://hackerone.com/kooshapari` page |[m
+[32m+[m[32m| **2026-10-31** | Bounty program page live; program config in HackerOne | sec-eng-1 | Live `https://hackerone.com/<REDACTED>` page |[m
 [32m+[m[32m| **2026-11-01** | **Bug bounty launch** | security circle lead | Public launch post + Slack #fleet-security |[m
 [32m+[m[32m| **2026-11-15** | Mid-pilot retro (Slack async) | security circle lead | Retro doc (`docs/security/pilot-2026-h2-retro-mid.md`) |[m
 [32m+[m[32m| **2026-12-15** | Pilot closure; L53 71-pillar re-audit | orch-v19 | Updated scorecard |[m
@@ -6095,7 +6095,7 @@ Date:   Sun Jun 21 15:46:15 2026 -0700
 [32m+[m
 [32m+[m[32m### 3.1 HackerOne program config[m
 [32m+[m
-[32m+[m[32m- [ ] **Program name:** `KooshaPari / phenotype` (public program; managed by HackerOne).[m
+[32m+[m[32m- [ ] **Program name:** `<REDACTED> / phenotype` (public program; managed by HackerOne).[m
 [32m+[m[32m- [ ] **Scope:** 47 active repos (per the registry); explicit PAUSED-app no-go.[m
 [32m+[m[32m- [ ] **Bounty range:** Critical $25K–$100K, High $5K–$25K, Medium $500–$5K, Low $100–$500.[m
 [32m+[m[32m- [ ] **Pool:** $20K / year minimum, refillable on overspend (per ADR-080 § 5).[m
@@ -6104,7 +6104,7 @@ Date:   Sun Jun 21 15:46:15 2026 -0700
 [32m+[m
 [32m+[m[32m### 3.2 Public surface[m
 [32m+[m
-[32m+[m[32m- [ ] **GitHub Security Policy:** `KooshaPari/phenotype-apps/security/policy` (the canonical link target).[m
+[32m+[m[32m- [ ] **GitHub Security Policy:** `<REDACTED>/phenotype-apps/security/policy` (the canonical link target).[m
 [32m+[m[32m- [ ] **`.well-known/security.txt`:** at `phenotype.org/.well-known/security.txt` per RFC 9116, pointing to the HackerOne program page.[m
 [32m+[m[32m- [ ] **Launch post:** `phenotype.org/blog/bug-bounty-launch` published 2026-11-01; cross-linked from HackerOne, GitHub Security tab, and `#fleet-security` Slack.[m
 [32m+[m[32m- [ ] **Researcher onboarding doc:** `docs/security/bounty-researcher-guide.md` (HackerOne program description + scope + safe-harbor language).[m
@@ -6163,7 +6163,7 @@ Date:   Sun Jun 21 15:46:15 2026 -0700
 [32m+[m[32m- [ ] `docs/security/pilot-2026-h2-closure.md` (published 2026-12-31)[m
 [32m+[m[32m- [ ] `phenotype.org/.well-known/security.txt` (live 2026-11-01)[m
 [32m+[m[32m- [ ] `phenotype.org/blog/bug-bounty-launch` (published 2026-11-01)[m
-[32m+[m[32m- [ ] `KooshaPari/phenotype-apps/security/policy` (live 2026-10-31)[m
+[32m+[m[32m- [ ] `<REDACTED>/phenotype-apps/security/policy` (live 2026-10-31)[m
 [32m+[m
 [32m+[m[32mAll 9 files are **MacBook-OK per ADR-023 Rule 1** (markdown / config, no cargo / network / sim). Total estimated ~600 LoC of new docs.[m
 [32m+[m
@@ -6883,7 +6883,7 @@ Date:   Sun Jun 21 15:46:15 2026 -0700
 [32m+[m[32mls: Cargo.toml: No such file or directory[m
 [32m+[m[32m```[m
 [32m+[m
-[32m+[m[32mA `Cargo.lock` exists at the root (`/Users/kooshapari/CodeProjects/Phenotype/repos/Cargo.lock`, 203,814 bytes, dated 2026-06-19) but **without a root `Cargo.toml`, this lockfile is orphaned / stale** — it is not actively maintained by any workspace `cargo` invocation. Per AGENTS.md, the monorepo root is **not** a single workspace; sub-crates are standalone (each declaring `[workspace]` to opt out of any surrounding workspace lookup). The lockfile is a fossil.[m
+[32m+[m[32mA `Cargo.lock` exists at the root (`/Users/<REDACTED>/CodeProjects/Phenotype/repos/Cargo.lock`, 203,814 bytes, dated 2026-06-19) but **without a root `Cargo.toml`, this lockfile is orphaned / stale** — it is not actively maintained by any workspace `cargo` invocation. Per AGENTS.md, the monorepo root is **not** a single workspace; sub-crates are standalone (each declaring `[workspace]` to opt out of any surrounding workspace lookup). The lockfile is a fossil.[m
 [32m+[m
 [32m+[m[32m### 4.2 No `.cargo/config.toml`[m
 [32m+[m
@@ -6965,7 +6965,7 @@ Date:   Sun Jun 21 15:46:15 2026 -0700
 [32m+[m
 [32m+[m[32m#### Option B — Fleet-wide `.cargo/config.toml` (less per-crate duplication)[m
 [32m+[m
-[32m+[m[32mCreate `/Users/kooshapari/CodeProjects/Phenotype/repos/.cargo/config.toml` (this directory currently only has `audit-rules.toml`, so adding `config.toml` is non-conflicting):[m
+[32m+[m[32mCreate `/Users/<REDACTED>/CodeProjects/Phenotype/repos/.cargo/config.toml` (this directory currently only has `audit-rules.toml`, so adding `config.toml` is non-conflicting):[m
 [32m+[m
 [32m+[m[32m```toml[m
 [32m+[m[32m# Fleet-wide cargo configuration (SIDE-17, ADR-proposed).[m
@@ -7063,9 +7063,9 @@ Date:   Sun Jun 21 15:46:15 2026 -0700
 [32m+[m[32m- `FocalPoint/pheno-agents-md/` — empty stub[m
 [32m+[m[32m- `focalpoint-wt-v12-16-17/pheno-agents-md/` — empty stub[m
 [32m+[m[32m- `focalpoint-wt-v12-16-17/pheno-cargo-template/` — empty stub[m
-[32m+[m[32m- `/Users/kooshapari/CodeProjects/Phenotype/repos/.cargo/audit-rules.toml` — confirmed not profile-related[m
-[32m+[m[32m- `/Users/kooshapari/CodeProjects/Phenotype/repos/Cargo.toml` — **does not exist**[m
-[32m+[m[32m- `/Users/kooshapari/CodeProjects/Phenotype/repos/Cargo.lock` — stale orphan (no root `Cargo.toml` to maintain it)[m
+[32m+[m[32m- `/Users/<REDACTED>/CodeProjects/Phenotype/repos/.cargo/audit-rules.toml` — confirmed not profile-related[m
+[32m+[m[32m- `/Users/<REDACTED>/CodeProjects/Phenotype/repos/Cargo.toml` — **does not exist**[m
+[32m+[m[32m- `/Users/<REDACTED>/CodeProjects/Phenotype/repos/Cargo.lock` — stale orphan (no root `Cargo.toml` to maintain it)[m
 [32m+[m[32m- AGENTS.md §"Stale / warnings" — pre-existing note about root `Cargo.toml` workspace inconsistency[m
 [32m+[m[32m- ADR-023 (App-level repo triage, L5-101) — bucket governance for sub-crates[m
 [32m+[m[32m- ADR-040 (Test coverage gates per tier) — criterion as fleet benchmark tool[m
@@ -7559,7 +7559,7 @@ Date:   Sun Jun 21 15:46:15 2026 -0700
 [32m+[m[32m## Reproduce this scan[m
 [32m+[m
 [32m+[m[32m```bash[m
-[32m+[m[32mcd /Users/kooshapari/CodeProjects/Phenotype/repos[m
+[32m+[m[32mcd /Users/<REDACTED>/CodeProjects/Phenotype/repos[m
 [32m+[m
 [32m+[m[32mCRATES="pheno-config pheno-context pheno-drift-detector pheno-errors \[m
 [32m+[m[32m        pheno-flags pheno-framework-lint pheno-llms-txt pheno-mcp-router \[m

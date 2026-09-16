@@ -10,7 +10,7 @@ readme = "README.md"
 requires-python = ">=3.10"
 license = {text = "MIT OR Apache-2.0"}
 authors = [
-    {name = "KooshaPari", email = "koosha@phenotype.local"},
+    {name = "<REDACTED>", email = "koosha@phenotype.local"},
 ]
 keywords = ["llms.txt", "llm", "index", "phenotype", "substrate"]
 classifiers = [
@@ -40,8 +40,8 @@ dev = [
 pheno-llms-txt = "pheno_llms_txt.__main__:main"
 
 [project.urls]
-Homepage = "https://github.com/KooshaPari/phenotype-apps"
-Issues = "https://github.com/KooshaPari/phenotype-apps/issues"
+Homepage = "https://github.com/<REDACTED>/phenotype-apps"
+Issues = "https://github.com/<REDACTED>/phenotype-apps/issues"
 
 [tool.setuptools.packages.find]
 where = ["src"]

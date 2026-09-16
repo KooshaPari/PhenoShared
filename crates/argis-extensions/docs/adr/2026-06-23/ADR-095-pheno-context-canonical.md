@@ -29,8 +29,8 @@ Two concepts. One name. The conflict is the root cause of the T3 halt.
 
 | Crate | Repo | Responsibility | Status |
 |---|---|---|---|
-| **`pheno-context`** | `KooshaPari/pheno-context` (standalone) | HTTP request context — request_id, span_id, trace_id, user_id, org_id, metadata bag | **CANONICAL** — already exists at worktree `phenotype-apps-L39-wt/pheno-context/`; promote worktree to standalone repo |
-| **`pheno-runtime-config`** | `KooshaPari/pheno-runtime-config` (NEW) | Hot-reloadable runtime configuration values — `Reloadable` trait, `notify`-based file watcher, SIGHUP fallback, atomic swap | **NEW** — L37 target; v26 T9 deliverable |
+| **`pheno-context`** | `<REDACTED>/pheno-context` (standalone) | HTTP request context — request_id, span_id, trace_id, user_id, org_id, metadata bag | **CANONICAL** — already exists at worktree `phenotype-apps-L39-wt/pheno-context/`; promote worktree to standalone repo |
+| **`pheno-runtime-config`** | `<REDACTED>/pheno-runtime-config` (NEW) | Hot-reloadable runtime configuration values — `Reloadable` trait, `notify`-based file watcher, SIGHUP fallback, atomic swap | **NEW** — L37 target; v26 T9 deliverable |
 | **`pheno-context::oidc`** | (module inside `pheno-context`) | OIDC header validation helper | **MOVED** — relocate `repos/pheno-context/src/oidc.rs` content into the standalone crate as a `pheno_context::oidc` module |
 
 ### Where the meta-repo `pheno-context/` orphan goes
@@ -79,15 +79,15 @@ Three reasons:
 
 ### T0 (this week, 2 hrs wall)
 
-1. Create `KooshaPari/pheno-runtime-config` repo with scaffold (AGENTS.md, Cargo.toml, README, LICENSE-MIT, src/lib.rs skeleton)
-2. Open `KooshaPari/pheno-context#1` — PR promoting worktree to standalone repo; moves `oidc.rs` content in as feature-gated module
-3. Open `KooshaPari/phenotype-apps#148` (or whichever meta-repo PR) — PR removing meta-repo `pheno-context/` orphan after standalone is canonical
-4. Update `phenotype-registry` disposition: meta-repo `pheno-context` → `fsm: relocated`, target `KooshaPari/pheno-context`
-5. Update `phenotype-registry` row: `KooshaPari/pheno-context` → `fsm: active`, owner = worktree maintainer
+1. Create `<REDACTED>/pheno-runtime-config` repo with scaffold (AGENTS.md, Cargo.toml, README, LICENSE-MIT, src/lib.rs skeleton)
+2. Open `<REDACTED>/pheno-context#1` — PR promoting worktree to standalone repo; moves `oidc.rs` content in as feature-gated module
+3. Open `<REDACTED>/phenotype-apps#148` (or whichever meta-repo PR) — PR removing meta-repo `pheno-context/` orphan after standalone is canonical
+4. Update `phenotype-registry` disposition: meta-repo `pheno-context` → `fsm: relocated`, target `<REDACTED>/pheno-context`
+5. Update `phenotype-registry` row: `<REDACTED>/pheno-context` → `fsm: active`, owner = worktree maintainer
 
 ### T9 (week 2, 3 days wall, gated on T0)
 
-1. Move orphan `repos/pheno-context/src/hot_reload.rs` content to `KooshaPari/pheno-runtime-config/src/reloadable.rs`
+1. Move orphan `repos/pheno-context/src/hot_reload.rs` content to `<REDACTED>/pheno-runtime-config/src/reloadable.rs`
 2. Implement `Reloadable<T>` trait (`fn reload(&self) -> Result<T, ReloadError>` + `fn current(&self) -> &T` + `fn watch(&self)`)
 3. Add `notify` v6 backend + SIGHUP fallback
 4. Add `arc-swap` for lock-free reads + `tokio::sync::watch` for async fan-out

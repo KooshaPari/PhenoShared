@@ -1,7 +1,7 @@
 # Contributing to HexaKit
 
 Thank you for your interest in contributing! This repository is part of the
-[Phenotype](https://github.com/KooshaPari) ecosystem.
+[Phenotype](https://github.com/<REDACTED>) ecosystem.
 
 ## Prerequisites
 
@@ -13,7 +13,7 @@ Thank you for your interest in contributing! This repository is part of the
 ## Development Workflow
 
 1. **Spec first.** All non-trivial work must be tracked in
-   [AgilePlus](https://github.com/KooshaPari/AgilePlus). Check for an existing
+   [AgilePlus](https://github.com/<REDACTED>/AgilePlus). Check for an existing
    spec under `kitty-specs/` before implementing; otherwise create one with
    `agileplus specify --title "<feature>"`.
 2. **Branch.** Cut feature branches from `main` using the form

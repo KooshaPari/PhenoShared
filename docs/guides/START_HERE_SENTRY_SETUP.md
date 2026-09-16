@@ -26,7 +26,7 @@ If you're in a hurry, here's the 30-second version:
 1. Go to https://sentry.io/
 2. Create 3 projects (one per repository, Rust platform)
 3. Copy the DSN from each project
-4. Go to https://github.com/organizations/KooshaPari/settings/secrets/actions
+4. Go to https://github.com/organizations/<REDACTED>/settings/secrets/actions
 5. Create 3 organization secrets (SENTRY_DSN_AGILEPLUS, SENTRY_DSN_INFRAKIT, SENTRY_DSN_HELIOSCLI)
 6. Update local `.env` files with DSN values
 7. Verify everything works using the checklist
@@ -219,18 +219,18 @@ SENTRY_DSN_HELIOSCLI
 
 ```
 Sentry: https://sentry.io/
-GitHub Secrets: https://github.com/organizations/KooshaPari/settings/secrets/actions
-AgilePlus: https://github.com/KooshaPari/AgilePlus
-phenotype-infrakit: https://github.com/KooshaPari/phenotype-infrakit
-heliosCLI: https://github.com/KooshaPari/heliosCLI
+GitHub Secrets: https://github.com/organizations/<REDACTED>/settings/secrets/actions
+AgilePlus: https://github.com/<REDACTED>/AgilePlus
+phenotype-infrakit: https://github.com/<REDACTED>/phenotype-infrakit
+heliosCLI: https://github.com/<REDACTED>/heliosCLI
 ```
 
 ### Local `.env` Locations
 
 ```
-/Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus/.env
-/Users/kooshapari/CodeProjects/Phenotype/repos/phenotype-infrakit/.env
-/Users/kooshapari/CodeProjects/Phenotype/repos/heliosCLI/.env
+/Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus/.env
+/Users/<REDACTED>/CodeProjects/Phenotype/repos/phenotype-infrakit/.env
+/Users/<REDACTED>/CodeProjects/Phenotype/repos/heliosCLI/.env
 ```
 
 ---
@@ -274,7 +274,7 @@ docs/
     └── SENTRY_QUICK_REFERENCE.md           (Quick lookup)
 ```
 
-All files are in `/Users/kooshapari/CodeProjects/Phenotype/repos/docs/`
+All files are in `/Users/<REDACTED>/CodeProjects/Phenotype/repos/docs/`
 
 ---
 

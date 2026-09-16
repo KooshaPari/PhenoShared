@@ -3141,4 +3141,4 @@ app.get('/api/premium-content', flagMiddleware, async (req, res) => {
 
 *This document represents the current state of feature flag systems as of April 2026. The landscape evolves rapidly; quarterly reviews are recommended to keep information current.*
 
-*For questions or corrections, contact: flagward-team@kooshapari.com*
+*For questions or corrections, contact: flagward-team@<REDACTED>.com*

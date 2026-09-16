@@ -9,9 +9,9 @@ GitHub estate and the aliases `phenoErrors` and `phenotype-errors`.
 
 | Repository | Result |
 |---|---|
-| `KooshaPari/phenoErrors` | GitHub API 404 |
-| `KooshaPari/phenotype-errors` | GitHub API 404 |
-| `KooshaPari/pheno-errors` | private, unarchived, default `main`, no license metadata |
+| `<REDACTED>/phenoErrors` | GitHub API 404 |
+| `<REDACTED>/phenotype-errors` | GitHub API 404 |
+| `<REDACTED>/pheno-errors` | private, unarchived, default `main`, no license metadata |
 
 Current `pheno-errors` default-branch SHA is
 `01b850e4b9f8ba8ed667c34f35fa46d7cef37214` (pushed 2026-07-28).
@@ -41,9 +41,9 @@ force-push, or history rewrite is authorized or performed.
 ## Reproduction commands
 
 ```zsh
-gh api repos/KooshaPari/phenoErrors
-gh api repos/KooshaPari/phenotype-errors
-gh api repos/KooshaPari/pheno-errors
-gh api 'repos/KooshaPari/pheno-errors/git/trees/main?recursive=1'
-gh api 'repos/KooshaPari/pheno-errors/commits?per_page=10'
+gh api repos/<REDACTED>/phenoErrors
+gh api repos/<REDACTED>/phenotype-errors
+gh api repos/<REDACTED>/pheno-errors
+gh api 'repos/<REDACTED>/pheno-errors/git/trees/main?recursive=1'
+gh api 'repos/<REDACTED>/pheno-errors/commits?per_page=10'
 ```

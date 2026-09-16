@@ -4,7 +4,7 @@ Snapshot date: 2026-07-14
 
 ## Completed external change
 
-The private GitHub repository `KooshaPari/pheno-harness` was verified archived,
+The private GitHub repository `<REDACTED>/pheno-harness` was verified archived,
 then unarchived by changing only the repository `archived` metadata field. A
 read-back confirmed `archived: false`. No branch, commit, issue, permission,
 local file, or worktree state was changed as part of the unarchive operation.
@@ -143,7 +143,7 @@ source checkout and independently pin them:
 
 ```powershell
 python scripts/acquire_reconciliation_remote_snapshot.py `
-  --repository KooshaPari/pheno-harness `
+  --repository <REDACTED>/pheno-harness `
   --expected-default-branch main `
   --base-sha 63aa0bebff442ea06c31d6bcac6ffe6dc4467e57 `
   --local-sha e069e24c8ee7bbd0feaba79bbada24078239f04c `

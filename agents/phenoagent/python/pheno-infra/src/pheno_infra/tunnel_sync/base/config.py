@@ -20,7 +20,7 @@ class TunnelConfig:
     Runtime configuration for tunnel operations.
     """
 
-    domain: str = "kooshapari.com"
+    domain: str = "<REDACTED>.com"
     cloudflared_dir: Path = Path.home() / ".cloudflared"
     tunnel_startup_timeout: float = 30.0
     health_check_interval: float = 60.0

@@ -17,7 +17,7 @@ and dependency graphs:
      topological sort (Kahn + DFS), parallel-bucket scheduler, enriched
      node/edge schema, YAML/JSON serialization
 
-2. **`KooshaPari/phenodag`** (Go, public 282 KB) — *now deleted*
+2. **`<REDACTED>/phenodag`** (Go, public 282 KB) — *now deleted*
    - Multi-agent multi-project DAG with SQLite + flock, v3-180 preset,
      atomic claims, heartbeat, dedup, mangled-git scan
    - Phased migration complete: absorbed into Tracera spec 008 + 11 queue
@@ -76,7 +76,7 @@ the collision before any downstream consumer picks up the bad name.
   archived separately; it describes a different concern (dedup vs
   BytePort, not collision with phenodag)
 - Any docs referencing `pheno-dag` crate name updated (no external
-  Cargo.toml deps found via `search/code` across all KooshaPari repos)
+  Cargo.toml deps found via `search/code` across all <REDACTED> repos)
 
 ### Registry tracking
 

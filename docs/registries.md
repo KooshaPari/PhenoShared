@@ -43,14 +43,14 @@ Deleted or absorbed source repos retain history in `projects/*.json` with `absor
 
 | Retired source | Canonical owner |
 |----------------|-----------------|
-| phenoVessel | [PhenoPlugins/pheno-plugin-vessel](https://github.com/KooshaPari/PhenoPlugins) |
-| phenoTypes | [phenotype-types](https://github.com/KooshaPari/phenotype-types) |
-| phenoPatch, Diffuse | [phenotype-tooling/phenotype-diff](https://github.com/KooshaPari/phenotype-tooling) |
-| Servion | [phenotype-tooling/phenotype-service-registry](https://github.com/KooshaPari/phenotype-tooling) |
-| Guardrail | [phenotype-tooling/phenotype-resilience](https://github.com/KooshaPari/phenotype-tooling) |
-| Cryptora | [phenoUtils/pheno-crypto](https://github.com/KooshaPari/phenoUtils) |
-| forge, phenoForge | [Tasken](https://github.com/KooshaPari/Tasken) |
-| router-docs | [OmniRoute/docs/research/archive/router-docs/](https://github.com/KooshaPari/OmniRoute/tree/main/docs/research/archive/router-docs) |
+| phenoVessel | [PhenoPlugins/pheno-plugin-vessel](https://github.com/<REDACTED>/PhenoPlugins) |
+| phenoTypes | [phenotype-types](https://github.com/<REDACTED>/phenotype-types) |
+| phenoPatch, Diffuse | [phenotype-tooling/phenotype-diff](https://github.com/<REDACTED>/phenotype-tooling) |
+| Servion | [phenotype-tooling/phenotype-service-registry](https://github.com/<REDACTED>/phenotype-tooling) |
+| Guardrail | [phenotype-tooling/phenotype-resilience](https://github.com/<REDACTED>/phenotype-tooling) |
+| Cryptora | [phenoUtils/pheno-crypto](https://github.com/<REDACTED>/phenoUtils) |
+| forge, phenoForge | [Tasken](https://github.com/<REDACTED>/Tasken) |
+| router-docs | [OmniRoute/docs/research/archive/router-docs/](https://github.com/<REDACTED>/OmniRoute/tree/main/docs/research/archive/router-docs) |
 
 ## phenotype-registry (this repo) — Capability & Intent SSOT
 
@@ -71,7 +71,7 @@ Contracts and templates:
 Scripts that maintain the SSOT:
 
 - [`scripts/scrape.py`](./scripts/scrape.py) — scrape the curated prompt corpus from each source agent's local store
-- [`scripts/run-windows.sh`](./scripts/run-windows.sh) — driver for the Windows-side scrape (run over Tailscale SSH from `kooshapari-desk`)
+- [`scripts/run-windows.sh`](./scripts/run-windows.sh) — driver for the Windows-side scrape (run over Tailscale SSH from `<REDACTED>-desk`)
 - [`scripts/render-per-repo.py`](./scripts/render-per-repo.py) — render `docs/intent/<repo>.md` and `docs/boundary/<repo>.md` from the curated corpus + ALIASES
 - [`scripts/propagate-intent-to-repos.py`](./scripts/propagate-intent-to-repos.py) — push the rendered per-repo intent + boundary files into every implementation repo
 - [`scripts/resolve-collision.py`](./scripts/resolve-collision.py) — detect and resolve canonical-name collisions across legacy names
@@ -80,17 +80,17 @@ Scripts that maintain the SSOT:
 Coverage:
 
 - Per-repo `docs/intent/<repo>.md` and `docs/boundary/<repo>.md` exist for every repo bound by the L7-001 sweep. **122 per-repo intent + 121 per-repo boundary files committed.**
-- Curated corpus: **45,091 records** bound to **108 repos** (Mac + Windows via Tailscale SSH to `kooshapari-desk`). Sources: `claude-code`, `codex`, `cursor-agent`, `forge`, `droid`, `aider`, `other`.
+- Curated corpus: **45,091 records** bound to **108 repos** (Mac + Windows via Tailscale SSH to `<REDACTED>-desk`). Sources: `claude-code`, `codex`, `cursor-agent`, `forge`, `droid`, `aider`, `other`.
 
 ## Boundary owners and rationalization
 
 Use phenotype-registry when the question is **who owns this capability** or **what merges next**.
 
-- [`BOUNDARY_OWNERS.md`](https://github.com/KooshaPari/phenotype-registry/blob/main/BOUNDARY_OWNERS.md) — scaffold vs SDK vs domain workspace; delete gate
+- [`BOUNDARY_OWNERS.md`](https://github.com/<REDACTED>/phenotype-registry/blob/main/BOUNDARY_OWNERS.md) — scaffold vs SDK vs domain workspace; delete gate
 - [`ZERO_LOOP_ECOSYSTEM_PLAN.md`](./rationalization/ZERO_LOOP_ECOSYSTEM_PLAN.md) — master DAG, phases, metrics
 - [`ECOSYSTEM_DAG.md`](./rationalization/ECOSYSTEM_DAG.md) — 20-lane parallel recipe
 - [`SESSION_ARTIFACT_PROTOCOL.md`](./rationalization/SESSION_ARTIFACT_PROTOCOL.md) — agent session folders
-- [`RATIONALIZATION_EXECUTION.md`](https://github.com/KooshaPari/phenotype-registry/blob/main/RATIONALIZATION_EXECUTION.md) — merge order + archive shortlist
+- [`RATIONALIZATION_EXECUTION.md`](https://github.com/<REDACTED>/phenotype-registry/blob/main/RATIONALIZATION_EXECUTION.md) — merge order + archive shortlist
 
 **AgilePlus** owns spec lifecycle; **phenokits-commons** owns governance templates; this repo owns boundary SSOT.
 

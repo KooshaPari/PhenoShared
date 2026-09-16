@@ -18,7 +18,7 @@ projects:
     fallback_port_offset: 0  # Uses port 9000 + 0 = 9000
     proxy_port_offset: 0     # Uses port 9100 + 0 = 9100
     health_endpoint: "/health"
-    tunnel_domain: "kooshapari.com"
+    tunnel_domain: "<REDACTED>.com"
     working_directory: "~/temp-PRODVERCEL/485/clean/atomsbot"
     auto_start: false
     dependencies: []
@@ -37,7 +37,7 @@ projects:
     fallback_port_offset: 1  # Uses port 9000 + 1 = 9001
     proxy_port_offset: 1     # Uses port 9100 + 1 = 9101
     health_endpoint: "/health"
-    tunnel_domain: "kooshapari.com"
+    tunnel_domain: "<REDACTED>.com"
     working_directory: "~/temp-PRODVERCEL/485/kush/zen-mcp-server"
     auto_start: false
     dependencies: []
@@ -69,7 +69,7 @@ metadata:
 #   fallback_port_offset: 2
 #   proxy_port_offset: 2
 #   health_endpoint: "/status"
-#   tunnel_domain: "kooshapari.com"
+#   tunnel_domain: "<REDACTED>.com"
 #   working_directory: "/path/to/example_project"
 #   auto_start: false
 #   dependencies: ["atoms"]  # Starts after atoms

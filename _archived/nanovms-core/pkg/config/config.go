@@ -8,7 +8,7 @@ import (
 
 	"gopkg.in/yaml.v3"
 
-	"github.com/kooshapari/nanovms/internal/domain"
+	"github.com/<REDACTED>/nanovms/internal/domain"
 )
 
 // NVMSConfig represents the top-level NVMS configuration file.

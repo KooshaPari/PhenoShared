@@ -7,8 +7,8 @@ Compliance standard: registry/audit-absorption-justification/schema.json (14/14 
 
 ## Source
 
-- **Repo:** `KooshaPari/agent-user-status`
-- **GitHub URL:** https://github.com/KooshaPari/agent-user-status
+- **Repo:** `<REDACTED>/agent-user-status`
+- **GitHub URL:** https://github.com/<REDACTED>/agent-user-status
 - **Archived at:** False
 - **Default branch at audit time:** `main`
 - **Last commit SHA on default branch:** `c1b9404`
@@ -20,7 +20,7 @@ Compliance standard: registry/audit-absorption-justification/schema.json (14/14 
 
 ## Target
 
-- **Receiving repo:** `KooshaPari/Agentora`
+- **Receiving repo:** `<REDACTED>/Agentora`
 - **Receiving path:** `n/a`
 - **Local mirror path:** `repos/agent-user-status`
 - **Bundle file:** none (live repo; no bundle needed)
@@ -39,7 +39,7 @@ Compliance standard: registry/audit-absorption-justification/schema.json (14/14 
 - **Total branches (remote):** 34
 - **Open issues at audit time:** 4
 - **Bundle reference:** NONE — repo is live, no bundle required
-- **Source-tombstone posture:** `KooshaPari/agent-user-status` active on GitHub
+- **Source-tombstone posture:** `<REDACTED>/agent-user-status` active on GitHub
 
 ## BRANCH_INVENTORY
 
@@ -134,14 +134,14 @@ Compliance standard: registry/audit-absorption-justification/schema.json (14/14 
 
 | Source Item | Source Evidence | Category | Source State | Target Repo | Target Evidence | Status | Deletion Justification | Risk if Deleted | Required Action |
 |---|---|---|---|---|---|---|---|---|---|
-| `agent-user-status/code` | `gh api` | sdk-code | active | `KooshaPari/Agentora` | `n/a` | AFFIRM | AFFIRM — active status component under agent-control domain. | Medium | Scanned and reviewed |
-| `agent-user-status/branches` | `gh api` | branch-coverage | active | `KooshaPari/Agentora` | `n/a` | AFFIRM | Branch coverage reviewed | Low | Scanned and reviewed |
+| `agent-user-status/code` | `gh api` | sdk-code | active | `<REDACTED>/Agentora` | `n/a` | AFFIRM | AFFIRM — active status component under agent-control domain. | Medium | Scanned and reviewed |
+| `agent-user-status/branches` | `gh api` | branch-coverage | active | `<REDACTED>/Agentora` | `n/a` | AFFIRM | Branch coverage reviewed | Low | Scanned and reviewed |
 
 ## Last-Resort-Exceptions
 
 - **Rebuttal #1: "Delete agent-user-status now."** Rebutted: agent-user-status has active code history. We must verify parity or archive instead of deleting. The residual gap is managed by target absorption.
 - **Rebuttal #2: "Archive-not-deletion is insufficient."** Rebutted: Archival is the preferred path to preserve history on the remote while disabling write access, complying with BOUNDARY_OWNERS.
-- **Rebuttal #3: "agent-user-status cannot absorb exception."** Rebutted: The target `KooshaPari/Agentora` can absorb the exception because it is the canonical repository for this boundary domain role.
+- **Rebuttal #3: "agent-user-status cannot absorb exception."** Rebutted: The target `<REDACTED>/Agentora` can absorb the exception because it is the canonical repository for this boundary domain role.
 
 No exceptions to the AFFIRM verdict are granted.
 
@@ -149,7 +149,7 @@ No exceptions to the AFFIRM verdict are granted.
 
 ```bash
 # Disaster-recovery posture:
-git clone https://github.com/KooshaPari/agent-user-status.git /tmp/agent-user-status-restore
+git clone https://github.com/<REDACTED>/agent-user-status.git /tmp/agent-user-status-restore
 # Verify bundle sha-256 (re-clone path is clean)
 ```
 
@@ -178,11 +178,11 @@ as a queue entry. Subsequent absorption task (2026-07-17) promoted the row to:
 - `core_lang: python`
 - `absorbed_commit: 29ce5dd4` on branch `salvage/phenotype-tooling-workspace-2026-07-15`
 - `archived: true` (GitHub `isArchived=true` verified post-`gh repo archive`)
-- `absorbing_repo: KooshaPari/phenotype-tooling`
+- `absorbing_repo: <REDACTED>/phenotype-tooling`
 
 ### Why phenotype-tooling (not Agentora, despite the original audit's Agentora target)
 
-The original auto-generated audit declared `KooshaPari/Agentora` as the receiver, but:
+The original auto-generated audit declared `<REDACTED>/Agentora` as the receiver, but:
 
 1. Agentora is a Rust agent-orchestration workspace (47 crates); the Python source
    cannot be embedded without breaking Agentora's `[workspace]` semantics.

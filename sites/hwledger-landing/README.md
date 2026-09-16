@@ -1,10 +1,10 @@
 # hwledger-landing
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![CI](https://img.shields.io/github/actions/workflow/status/KooshaPari/phenotype-landing/ci.yml?branch=main)](https://github.com/KooshaPari/phenotype-landing/actions)
+[![CI](https://img.shields.io/github/actions/workflow/status/<REDACTED>/phenotype-landing/ci.yml?branch=main)](https://github.com/<REDACTED>/phenotype-landing/actions)
 [![TypeScript](https://img.shields.io/badge/typescript-5%2B-3178C6?logo=typescript)](https://www.typescriptlang.org/)
 
-Production landing page at `hwledger.kooshapari.com` for [KooshaPari/hwLedger](https://github.com/KooshaPari/hwLedger), an LLM capacity planner, fleet ledger, and desktop inference runtime. Part of the Phenotype org-pages architecture (Tier 2; Tier 1 is `projects.kooshapari.com`).
+Production landing page at `hwledger.<REDACTED>.com` for [<REDACTED>/hwLedger](https://github.com/<REDACTED>/hwLedger), an LLM capacity planner, fleet ledger, and desktop inference runtime. Part of the Phenotype org-pages architecture (Tier 2; Tier 1 is `projects.<REDACTED>.com`).
 
 ## Purpose
 
@@ -15,7 +15,7 @@ Provide a cohesive entry point to Hwledger documentation, dashboards, and QA rep
 - **Frontend:** Astro 6 (static HTML at build time)
 - **Styling:** Tailwind CSS 4 with impeccable design baseline
 - **Deployment:** Vercel plus a GitHub Pages mirror
-- **Domain:** `hwledger.kooshapari.com` via Cloudflare CNAME
+- **Domain:** `hwledger.<REDACTED>.com` via Cloudflare CNAME
 - **Data sources:** GitHub API (README, releases), PhenoObservability UI, QA JSON reports
 
 ## Stack Details
@@ -46,7 +46,7 @@ tokio = { version = "1.0", features = ["full"] }
 
 ```bash
 # Clone repository
-git clone https://github.com/KooshaPari/phenotype-landing.git
+git clone https://github.com/<REDACTED>/phenotype-landing.git
 cd phenotype-landing/sites/hwledger-landing
 
 # Install dependencies
@@ -79,7 +79,7 @@ vercel --prod
 
 ## Path Microfrontends
 
-Per Phenotype org-pages standing policy, `hwledger.kooshapari.com` hosts multiple surfaces as path-based microfrontends:
+Per Phenotype org-pages standing policy, `hwledger.<REDACTED>.com` hosts multiple surfaces as path-based microfrontends:
 
 | Path | Component | Status | Purpose |
 |------|-----------|--------|---------|
@@ -93,7 +93,7 @@ Per Phenotype org-pages standing policy, `hwledger.kooshapari.com` hosts multipl
 
 Each microfrontend is isolated and mounted independently. The `/docs` route is the
 GitHub-backed docs browser in `src/pages/docs/[...slug].astro`; it walks the
-`docs/` tree from the `KooshaPari/hwLedger` repo and renders markdown from the
+`docs/` tree from the `<REDACTED>/hwLedger` repo and renders markdown from the
 GitHub Contents API.
 
 ```astro
@@ -112,7 +112,7 @@ GITHUB_TOKEN=ghp_xxxx           # Increases rate limit to 5000 req/hr
 
 # Vercel deployment
 VERCEL_ENV=production|staging    # Set by Vercel automatically
-VERCEL_URL=hwledger.kooshapari.com
+VERCEL_URL=hwledger.<REDACTED>.com
 
 # OTel UI embed
 PHENO_OTLP_UI_URL=https://observability.example.com
@@ -128,7 +128,7 @@ Edit `src/pages/index.astro`:
 ```astro
 ---
 // src/pages/index.astro
-const REPO = "KooshaPari/hwLedger";
+const REPO = "<REDACTED>/hwLedger";
 ---
 
 <section class="hero">
@@ -188,7 +188,7 @@ vercel --target staging
 CNAME hwledger → cname.vercel-dns.com
 
 # Verify
-nslookup hwledger.kooshapari.com
+nslookup hwledger.<REDACTED>.com
 # Should resolve to Vercel IP
 ```
 
@@ -202,7 +202,7 @@ nslookup hwledger.kooshapari.com
 
 ## Related
 
-- [Hwledger](https://github.com/KooshaPari/hwLedger) — Main project repository
-- [projects.kooshapari.com](https://github.com/KooshaPari/portfolio) — Tier 1 landing (all projects)
+- [Hwledger](https://github.com/<REDACTED>/hwLedger) — Main project repository
+- [projects.<REDACTED>.com](https://github.com/<REDACTED>/portfolio) — Tier 1 landing (all projects)
 - [phenotype-design](../phenotype-design/) — Design system & components
-- [Org Pages Architecture](https://github.com/KooshaPari/phenotype-infrakit/docs/governance/org-pages-architecture.md)
+- [Org Pages Architecture](https://github.com/<REDACTED>/phenotype-infrakit/docs/governance/org-pages-architecture.md)

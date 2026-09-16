@@ -24,7 +24,7 @@ async fn setup_analytics_registry() -> BddResult<StepRegistry> {
     registry.given("the API key is valid", |ctx, _args| async move {
         let config = AnalyticsConfig {
             api_key: "test-api-key".to_string(),
-            endpoint: "https://test.analytics.kooshapari.com".to_string(),
+            endpoint: "https://test.analytics.<REDACTED>.com".to_string(),
             batch_size: 100,
             flush_interval_secs: 30,
             debug: true,
@@ -114,7 +114,7 @@ async fn setup_analytics_registry() -> BddResult<StepRegistry> {
     registry.given("the API key is empty", |ctx, _args| async move {
         let config = AnalyticsConfig {
             api_key: "".to_string(),
-            endpoint: "https://test.analytics.kooshapari.com".to_string(),
+            endpoint: "https://test.analytics.<REDACTED>.com".to_string(),
             batch_size: 100,
             flush_interval_secs: 30,
             debug: true,

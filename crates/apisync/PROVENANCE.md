@@ -2,12 +2,12 @@
 
 ## Source Repository
 - **Name**: Apisync
-- **URL**: https://github.com/KooshaPari/Apisync
+- **URL**: https://github.com/<REDACTED>/Apisync
 - **Version at absorption**: 0.2.10
 - **License**: MIT OR Apache-2.0
 
 ## Absorption Details
-- **Absorbed by**: KooshaPari/pheno
+- **Absorbed by**: <REDACTED>/pheno
 - **Date**: 2026-09-14
 - **Commit at source**: (depth=1 clone, see git log)
 - **Target path**: crates/apisync/

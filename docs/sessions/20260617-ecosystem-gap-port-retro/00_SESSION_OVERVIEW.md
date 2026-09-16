@@ -31,5 +31,5 @@ Complete PhenoProc boundary absorption with split targets, document loops, and p
 | Master plan | `docs/rationalization/ZERO_LOOP_ECOSYSTEM_PLAN.md` |
 | DAG | `docs/rationalization/ECOSYSTEM_DAG.md` |
 | Agentora tracker | Agentora `docs/absorption/PHENOPROC_GAP_PORT.md` |
-| PR #79 | https://github.com/KooshaPari/Agentora/pull/79 |
-| PR #76 | https://github.com/KooshaPari/phenotype-registry/pull/76 |
+| PR #79 | https://github.com/<REDACTED>/Agentora/pull/79 |
+| PR #76 | https://github.com/<REDACTED>/phenotype-registry/pull/76 |

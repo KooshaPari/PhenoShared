@@ -281,7 +281,7 @@ ships with a worklog entry keyed on the attribute / event / span name.
 
 - Go skeleton: `2026-06-20-pheno-tracing-go-client-skeleton.go`
 - Go test:    `2026-06-20-pheno-tracing-go-client-skeleton_test.go`
-- Substrate:  `KooshaPari/pheno-observability` (collector; not modified by this task)
+- Substrate:  `<REDACTED>/pheno-observability` (collector; not modified by this task)
 - ADR-050:    router-architecture Option B (Bifrost-as-library)
 - ADR-051:    Phenotype-owned decision layer
 - ADR-012:    `pheno-tracing` canonical across pheno-* repos

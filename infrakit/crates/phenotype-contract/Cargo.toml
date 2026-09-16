@@ -4,7 +4,7 @@ version = "0.2.0"
 edition = "2021"
 license = "MIT"
 authors = ["Phenotype Team"]
-repository = "https://github.com/KooshaPari/PhenoInfra"
+repository = "https://github.com/<REDACTED>/PhenoInfra"
 description = "Contract types for the Phenotype ecosystem"
 
 [lib]

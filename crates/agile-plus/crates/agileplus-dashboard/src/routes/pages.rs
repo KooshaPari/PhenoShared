@@ -116,7 +116,7 @@ pub async fn hub_page() -> Response {
             tagline: "Ecosystem docs hub",
             stack: "TypeScript · Vue",
             port: Some(4100),
-            github: "https://github.com/KooshaPari/phenodocs",
+            github: "https://github.com/<REDACTED>/phenodocs",
             category: "docs",
         },
         EcosystemProject {
@@ -124,7 +124,7 @@ pub async fn hub_page() -> Response {
             tagline: "Spec-driven PM platform",
             stack: "Rust · Tauri",
             port: Some(4101),
-            github: "https://github.com/KooshaPari/AgilePlus",
+            github: "https://github.com/<REDACTED>/AgilePlus",
             category: "app",
         },
         EcosystemProject {
@@ -132,7 +132,7 @@ pub async fn hub_page() -> Response {
             tagline: "TypeScript runtime app",
             stack: "TypeScript · Bun",
             port: Some(4102),
-            github: "https://github.com/KooshaPari/heliosApp",
+            github: "https://github.com/<REDACTED>/heliosApp",
             category: "app",
         },
         EcosystemProject {
@@ -140,7 +140,7 @@ pub async fn hub_page() -> Response {
             tagline: "Agent framework",
             stack: "TypeScript · Python",
             port: Some(4103),
-            github: "https://github.com/KooshaPari/thegent",
+            github: "https://github.com/<REDACTED>/thegent",
             category: "lib",
         },
         EcosystemProject {
@@ -148,7 +148,7 @@ pub async fn hub_page() -> Response {
             tagline: "LLM gateway extensions",
             stack: "Go",
             port: Some(4104),
-            github: "https://github.com/KooshaPari/bifrost-extensions",
+            github: "https://github.com/<REDACTED>/bifrost-extensions",
             category: "lib",
         },
         EcosystemProject {
@@ -156,7 +156,7 @@ pub async fn hub_page() -> Response {
             tagline: "CI validation",
             stack: "TypeScript",
             port: Some(4105),
-            github: "https://github.com/KooshaPari/civ",
+            github: "https://github.com/<REDACTED>/civ",
             category: "docs",
         },
         EcosystemProject {
@@ -164,7 +164,7 @@ pub async fn hub_page() -> Response {
             tagline: "Requirements traceability",
             stack: "Python · Go · TS",
             port: Some(4110),
-            github: "https://github.com/KooshaPari/trace",
+            github: "https://github.com/<REDACTED>/trace",
             category: "app",
         },
         EcosystemProject {
@@ -172,7 +172,7 @@ pub async fn hub_page() -> Response {
             tagline: "Agent HTTP API",
             stack: "Go",
             port: None,
-            github: "https://github.com/KooshaPari/agentapi-plusplus",
+            github: "https://github.com/<REDACTED>/agentapi-plusplus",
             category: "api",
         },
         EcosystemProject {
@@ -180,7 +180,7 @@ pub async fn hub_page() -> Response {
             tagline: "Multi-provider CLI proxy",
             stack: "Go",
             port: None,
-            github: "https://github.com/KooshaPari/cliproxyapi-plusplus",
+            github: "https://github.com/<REDACTED>/cliproxyapi-plusplus",
             category: "api",
         },
     ];

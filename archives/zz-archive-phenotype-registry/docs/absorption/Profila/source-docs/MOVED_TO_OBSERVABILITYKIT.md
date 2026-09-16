@@ -1,6 +1,6 @@
 # Moved to ObservabilityKit
 
-**2026-06-20** — Profila's profiling and observability functionality has been superseded by [ObservabilityKit](https://github.com/KooshaPari/ObservabilityKit).
+**2026-06-20** — Profila's profiling and observability functionality has been superseded by [ObservabilityKit](https://github.com/<REDACTED>/ObservabilityKit).
 
 ## Script Mapping
 
@@ -33,4 +33,4 @@ Profila provided a set of Bash and Python scripts for system profiling, code ana
 
 ## Archive
 
-Profila repository is archived at [KooshaPari/Profila](https://github.com/KooshaPari/Profila). For new observability work, use [ObservabilityKit](https://github.com/KooshaPari/ObservabilityKit).
+Profila repository is archived at [<REDACTED>/Profila](https://github.com/<REDACTED>/Profila). For new observability work, use [ObservabilityKit](https://github.com/<REDACTED>/ObservabilityKit).

@@ -269,7 +269,7 @@ All 20 deployed repos now have:
 
 ## Missing Tier 2 Repos (Action Required)
 
-Six Tier 2 repos not found in `/Users/kooshapari/CodeProjects/Phenotype/repos/`:
+Six Tier 2 repos not found in `/Users/<REDACTED>/CodeProjects/Phenotype/repos/`:
 
 1. **bifrost-extensions**
 2. **phenotype-design**
@@ -281,8 +281,8 @@ Six Tier 2 repos not found in `/Users/kooshapari/CodeProjects/Phenotype/repos/`:
 ### Investigation Actions:
 1. Check if repos exist in alternate directories:
    ```bash
-   find /Users/kooshapari/CodeProjects -name "bifrost-extensions" -type d
-   find /Users/kooshapari/CodeProjects -name "phenotype-design" -type d
+   find /Users/<REDACTED>/CodeProjects -name "bifrost-extensions" -type d
+   find /Users/<REDACTED>/CodeProjects -name "phenotype-design" -type d
    ```
 
 2. Check repos inventory by searching the local workspace root and repo READMEs
@@ -297,10 +297,10 @@ Six Tier 2 repos not found in `/Users/kooshapari/CodeProjects/Phenotype/repos/`:
 ## Execution Artifacts
 
 **Scripts Created:**
-1. `/Users/kooshapari/CodeProjects/Phenotype/repos/scripts/deploy-sast-to-repos.sh`
+1. `/Users/<REDACTED>/CodeProjects/Phenotype/repos/scripts/deploy-sast-to-repos.sh`
    - Bash version (for reference/future use)
 
-2. `/Users/kooshapari/CodeProjects/Phenotype/repos/scripts/deploy_sast.py`
+2. `/Users/<REDACTED>/CodeProjects/Phenotype/repos/scripts/deploy_sast.py`
    - Python version (executed successfully)
 
 **Reports Generated:**

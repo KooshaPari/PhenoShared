@@ -107,7 +107,7 @@ CI runs `smoke-go` with `continue-on-error: true` until fork gates green.
 
 | Item | Action |
 |------|--------|
-| Canonical OmniRoute | `dev\OmniRoute` (KooshaPari/OmniRoute) |
+| Canonical OmniRoute | `dev\OmniRoute` (<REDACTED>/OmniRoute) |
 | Broken OmniRoute clone | `C:\Users\koosh\OmniRoute` — removed 2026-06-18 |
 | phenotype-gateway stash | `local-scaffold` superseded by #5 — do not re-apply |
 | cliproxyapi-plusplus | cloned to `dev\cliproxyapi-plusplus` |

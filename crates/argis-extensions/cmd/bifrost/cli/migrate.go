@@ -8,7 +8,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/kooshapari/bifrost-extensions/db"
+	"github.com/<REDACTED>/bifrost-extensions/db"
 )
 
 var (

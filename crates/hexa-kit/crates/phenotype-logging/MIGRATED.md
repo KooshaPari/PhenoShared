@@ -2,7 +2,7 @@
 
 **Date:** 2026-06-18  
 **Disposition row:** HexaKit DISPOSITION #26 — Wave A  
-**Canonical repo:** https://github.com/KooshaPari/PhenoObservability  
+**Canonical repo:** https://github.com/<REDACTED>/PhenoObservability  
 **Git pin:** `PhenoObservability` branch `main` (PhenoObservability#169)
 
 ## What changed
@@ -14,7 +14,7 @@
 ## For consumers
 
 ```toml
-phenotype-logging = { git = "https://github.com/KooshaPari/PhenoObservability", branch = "main", package = "phenotype-logging" }
+phenotype-logging = { git = "https://github.com/<REDACTED>/PhenoObservability", branch = "main", package = "phenotype-logging" }
 ```
 
 ## For HexaKit maintainers

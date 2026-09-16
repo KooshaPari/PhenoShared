@@ -11,7 +11,7 @@
   "boundary": "tailnet-control-plane",
   "stack": "podman-docker-compose",
   "v0": "0.1.0",
-  "gh_url": "https://github.com/KooshaPari/pheno-control-plane",
+  "gh_url": "https://github.com/<REDACTED>/pheno-control-plane",
   "default_branch": "main",
   "remote_default_sha_at_audit": null,
   "wave": "J-13source-audit-staged",

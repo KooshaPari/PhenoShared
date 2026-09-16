@@ -7,10 +7,10 @@ This directory holds governance and policy documents specific to the
 
 The canonical fleet governance is maintained in the Phenotype monorepo:
 
-- [`docs/governance/background_agent_policy.md`](https://github.com/KooshaPari/phenotype/blob/main/docs/governance/background_agent_policy.md) —
+- [`docs/governance/background_agent_policy.md`](https://github.com/<REDACTED>/phenotype/blob/main/docs/governance/background_agent_policy.md) —
   Background-agent dispatch policy, failure-handling expectations, and
   fleet composition rules.
-- [`docs/governance/`](https://github.com/KooshaPari/phenotype/tree/main/docs/governance) —
+- [`docs/governance/`](https://github.com/<REDACTED>/phenotype/tree/main/docs/governance) —
   Full governance directory (SSOT for all cross-repo policies).
 
 ## Template-specific governance
@@ -20,7 +20,7 @@ to every rendered project:
 
 | Artifact | Purpose |
 |---|---|
-| `CODEOWNERS` | Default owner (`@KooshaPari`) for every path |
+| `CODEOWNERS` | Default owner (`@<REDACTED>`) for every path |
 | `CONTRIBUTING.md` | Conventional commits, SSOT invariants, PR process |
 | `SECURITY.md` | Reporting channel, cargo-deny, CodeQL |
 | `deny.toml` | cargo-deny baseline (authkit conservative) |

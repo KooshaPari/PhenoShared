@@ -238,5 +238,5 @@ Phase 1 Timeline (Parallel)
 
 **Report compiled:** 2026-03-29 (ongoing)
 **Next update:** When agents complete (expected ~3-4 hours)
-**Status page:** Check agent progress via `/private/tmp/claude-501/-Users-kooshapari-CodeProjects-Phenotype-repos/tasks/{agent-id}.output`
+**Status page:** Check agent progress via `/private/tmp/claude-501/-Users-<REDACTED>-CodeProjects-Phenotype-repos/tasks/{agent-id}.output`
 

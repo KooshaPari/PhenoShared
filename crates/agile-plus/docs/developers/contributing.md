@@ -67,7 +67,7 @@ How to set up your development environment, follow the development workflow, and
 ### Clone and Build
 
 ```bash
-git clone https://github.com/KooshaPari/AgilePlus.git
+git clone https://github.com/<REDACTED>/AgilePlus.git
 cd AgilePlus
 
 # Build entire workspace
@@ -521,10 +521,10 @@ Checking formatting... All files formatted correctly!
 ## Getting Help
 
 **Issues**: Report bugs or suggest features at:
-https://github.com/KooshaPari/AgilePlus/issues
+https://github.com/<REDACTED>/AgilePlus/issues
 
 **Discussions**: Ask questions or brainstorm at:
-https://github.com/KooshaPari/AgilePlus/discussions
+https://github.com/<REDACTED>/AgilePlus/discussions
 
 **Existing work**: Check planned features in:
 `kitty-specs/` — specifications for in-progress or planned features
@@ -536,7 +536,7 @@ https://docs.agileplus.dev
 
 If you need help:
 1. Comment on the issue you're working on
-2. Tag maintainers: `@KooshaPari`
+2. Tag maintainers: `@<REDACTED>`
 3. Ask in discussions
 4. Review architecture docs for context
 
@@ -627,7 +627,7 @@ If a PR regresses performance by >10% on any benchmark, CI will flag it.
 
 ## Code of Conduct
 
-Be respectful, inclusive, and collaborative. See [CODE_OF_CONDUCT.md](https://github.com/KooshaPari/AgilePlus/blob/main/CODE_OF_CONDUCT.md).
+Be respectful, inclusive, and collaborative. See [CODE_OF_CONDUCT.md](https://github.com/<REDACTED>/AgilePlus/blob/main/CODE_OF_CONDUCT.md).
 
 ## Next Steps
 

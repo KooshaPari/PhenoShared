@@ -76,7 +76,7 @@ Per `findings/71-pillar-2026-06-20-weekly-2.md`:
 
 **Per-repo org mean lift:** +0.02. **Total:** +0.16.
 
-### T5: L46 branch protection rulesets (8h, on KooshaPari/* org)
+### T5: L46 branch protection rulesets (8h, on <REDACTED>/* org)
 
 **Repos:** 8 substrate repos as the pilot.
 
@@ -122,7 +122,7 @@ Total: **2 weeks, 24h actual work, +0.31 org mean lift**.
 - 8 substrate repos have all 6 tracks' deliverables (some may already have a few)
 - 4 of those repos gain their FIRST CI workflows (L29)
 - 8 of those repos gain `pheno-tracing` wiring (L57)
-- 8 rulesets live on `KooshaPari/{repo}` main branches (L46)
+- 8 rulesets live on `<REDACTED>/{repo}` main branches (L46)
 - Per-repo org mean moves from current ~1.50 to ~1.80
 
 ## Cross-references

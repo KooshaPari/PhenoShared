@@ -39,7 +39,7 @@
 
 ## pheno fleet blockers (second-order)
 
-Chokepoints green for named consumers; org manifest scan still finds `KooshaPari/pheno` in:
+Chokepoints green for named consumers; org manifest scan still finds `<REDACTED>/pheno` in:
 
 - PhenoCompose (critical — engine repo)
 - Agentora, AgilePlus, PhenoPlugins, phenotype-gfx

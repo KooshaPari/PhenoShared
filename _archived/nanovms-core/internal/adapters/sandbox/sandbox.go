@@ -13,8 +13,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/kooshapari/nanovms/internal/domain"
-	"github.com/kooshapari/nanovms/internal/ports"
+	"github.com/<REDACTED>/nanovms/internal/domain"
+	"github.com/<REDACTED>/nanovms/internal/ports"
 )
 
 // cryptoRandReader is the global random reader used for ID generation.

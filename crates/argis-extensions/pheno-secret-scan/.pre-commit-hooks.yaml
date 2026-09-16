@@ -12,7 +12,7 @@
 #     # 1. Add pheno-secret-scan as a submodule, copy the file in, or
 #     #    point pre-commit at the upstream URL:
 #     #    repos:
-#     #      - repo: https://github.com/KooshaPari/pheno-secret-scan
+#     #      - repo: https://github.com/<REDACTED>/pheno-secret-scan
 #     #        rev: v0.1.0
 #     #        hooks:
 #     #          - id: trufflehog

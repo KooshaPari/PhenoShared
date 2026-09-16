@@ -1,9 +1,9 @@
 # substrate-adapters-bundle — Absorption Justification
 
 **Status:** ARCHIVED 2026-07-17 (redundant-shims)
-**Source:** `KooshaPari/substrate-adapters-bundle` (216 KB, 2 branches, last push 2026-06-25)
+**Source:** `<REDACTED>/substrate-adapters-bundle` (216 KB, 2 branches, last push 2026-06-25)
 **Disposition:** ARCHIVE_ONLY (no physical transfer — canonical source already exists)
-**Canonical source:** `KooshaPari/substrate` (AFFIRM, active)
+**Canonical source:** `<REDACTED>/substrate` (AFFIRM, active)
 
 ## Confidence
 
@@ -26,7 +26,7 @@ Each shim's Cargo.toml points at the canonical substrate crate via `path = "../s
 
 ## Why ARCHIVE_ONLY (no physical transfer)
 
-1. The 8 canonical crates already exist in `KooshaPari/substrate` with the **same crate names**.
+1. The 8 canonical crates already exist in `<REDACTED>/substrate` with the **same crate names**.
 2. Copying the shims into pheno would create a parallel re-export path that the rest of pheno doesn't need (substrate is consumed directly by other crates, not through these shims).
 3. The bundle's stated purpose was "OSS consumers who want one version pin for all adapters" — a distribution concern that doesn't apply to in-workspace usage.
 
@@ -51,9 +51,9 @@ The substrate repo is `AFFIRM` (active) — it remains the canonical source of t
 ## Restore procedure
 
 ```sh
-gh repo unarchive KooshaPari/substrate-adapters-bundle
+gh repo unarchive <REDACTED>/substrate-adapters-bundle
 # In registry spine:
-cd /Users/kooshapari/CodeProjects/Phenotype/repos/phenotype-registry
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos/phenotype-registry
 # Edit registry/disposition-index.json: change fsm from "absorbed" back to "active"
 # Restore projects/substrate-adapters-bundle.json from git history (revert to queued status)
 ```
@@ -62,8 +62,8 @@ Note: there's no `pheno/crates/` change to revert because no physical transfer o
 
 ## Cross-references
 
-- Disposition row: `registry/disposition-index.json` → `"KooshaPari/substrate-adapters-bundle"`
+- Disposition row: `registry/disposition-index.json` → `"<REDACTED>/substrate-adapters-bundle"`
 - Boundary doc: `docs/boundary/substrate-adapters-bundle.md`
-- Canonical source: https://github.com/KooshaPari/substrate
-- Source repo (now archived): https://github.com/KooshaPari/substrate-adapters-bundle
-- Related registry row: `KooshaPari/substrate` (AFFIRM, active)
+- Canonical source: https://github.com/<REDACTED>/substrate
+- Source repo (now archived): https://github.com/<REDACTED>/substrate-adapters-bundle
+- Related registry row: `<REDACTED>/substrate` (AFFIRM, active)

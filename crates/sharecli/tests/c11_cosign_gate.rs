@@ -129,7 +129,7 @@ fn c11_cosign_signature_verification_passes() {
     };
 
     let identity = std::env::var("COSIGN_IDENTITY_REGEXP")
-        .unwrap_or_else(|_| "https://github.com/KooshaPari/sharecli/.*".to_string());
+        .unwrap_or_else(|_| "https://github.com/<REDACTED>/sharecli/.*".to_string());
     let issuer = std::env::var("COSIGN_OIDC_ISSUER")
         .unwrap_or_else(|_| "https://token.actions.githubusercontent.com".to_string());
 
@@ -180,7 +180,7 @@ fn c11_cosign_rekor_transparency_log_entry_exists() {
     };
 
     let identity = std::env::var("COSIGN_IDENTITY_REGEXP")
-        .unwrap_or_else(|_| "https://github.com/KooshaPari/sharecli/.*".to_string());
+        .unwrap_or_else(|_| "https://github.com/<REDACTED>/sharecli/.*".to_string());
     let issuer = std::env::var("COSIGN_OIDC_ISSUER")
         .unwrap_or_else(|_| "https://token.actions.githubusercontent.com".to_string());
 

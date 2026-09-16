@@ -4,8 +4,8 @@ title: helioscope retirement closure — chose helios-cli as canonical
 date: 2026-06-21
 dag_task_id: v12-20
 cancelled_task_id: task-05-10
-retired_repo: KooshaPari/helioscope
-canonical_repo: KooshaPari/helios-cli
+retired_repo: <REDACTED>/helioscope
+canonical_repo: <REDACTED>/helios-cli
 status: closure-approved
 references:
   - helios-cli/docs/rationalization/helioscope-absorption.md
@@ -16,7 +16,7 @@ references:
 # helioscope retirement — closure rationale (v12-20)
 
 **TL;DR:** `task-05-10` ("helioscope: add docs/SSOT.md") is **cancelled**.
-We are **not** scaffolding `KooshaPari/helioscope` with a SPEC.md + AGENTS.md.
+We are **not** scaffolding `<REDACTED>/helioscope` with a SPEC.md + AGENTS.md.
 Instead, **helios-cli** is the canonical codex fork in the Phenotype fleet,
 and **helioscope** is retired by archive + README redirect per the plan
 already documented at `helios-cli/docs/rationalization/helioscope-absorption.md`
@@ -87,15 +87,15 @@ That contradicts the fleet state:
 
 Per the absorption assessment § "Recommended path (reversible, PR-only)":
 
-1. **Archive** `KooshaPari/helioscope` with a husk README redirecting to
-   `KooshaPari/helios-cli`. This is an org-admin `gh repo archive` operation
+1. **Archive** `<REDACTED>/helioscope` with a husk README redirecting to
+   `<REDACTED>/helios-cli`. This is an org-admin `gh repo archive` operation
    and must be done from a privileged context — not from inside this meta-repo.
 2. **Cherry-pick audit** — if any of the ~283 helioscope-only commits contain
    unique fixes not on helios-cli, open targeted cherry-pick PRs. Do not bulk
    subtree.
 3. **Update `phenotype-registry` redirect table** with the `helioscope →
    helios-cli` pointer when the archive lands. That is a separate PR in
-   `KooshaPari/phenotype-registry`.
+   `<REDACTED>/phenotype-registry`.
 
 ## 5. DAG actions
 
@@ -106,7 +106,7 @@ Per the absorption assessment § "Recommended path (reversible, PR-only)":
    - Open `phenotype-registry` PR adding `helioscope → helios-cli` redirect row.
    - Open helios-cli PR cherry-picking any of the 283 unique commits that
      contain net-new security/workspace fixes not already on `main`.
-   - File org-admin archive request for `KooshaPari/helioscope` once the
+   - File org-admin archive request for `<REDACTED>/helioscope` once the
      redirect lands (cannot be done from inside this repo).
 
 ## 6. References

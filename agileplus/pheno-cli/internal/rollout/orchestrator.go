@@ -7,9 +7,9 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/KooshaPari/pheno-cli/internal/detect"
-	"github.com/KooshaPari/pheno-cli/internal/manifest"
-	"github.com/KooshaPari/pheno-cli/internal/templates"
+	"github.com/<REDACTED>/pheno-cli/internal/detect"
+	"github.com/<REDACTED>/pheno-cli/internal/manifest"
+	"github.com/<REDACTED>/pheno-cli/internal/templates"
 )
 
 // RolloutOptions configures a bulk bootstrap run.

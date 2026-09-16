@@ -11,7 +11,7 @@
 
 Of the 5 repos analyzed, **only 2 pairs involve real code duplication** (tracely-core and tracely-sentinel copied between PhenoObservability and Tracely). The remaining relationships are **complementary layers** in an observability stack — not duplicates that need consolidation, but co-existing abstractions at different architectural levels.
 
-**Canonical SSOT recommendation:** `KooshaPari/PhenoObservability` — the 13-crate monorepo that already absorbed Metron (`metrickit`), Traceon (`tracingkit`), and Logify (`logkit` as subtree).
+**Canonical SSOT recommendation:** `<REDACTED>/PhenoObservability` — the 13-crate monorepo that already absorbed Metron (`metrickit`), Traceon (`tracingkit`), and Logify (`logkit` as subtree).
 
 ---
 
@@ -166,11 +166,11 @@ Application Layer
 
 | Role | Repo | Action |
 |------|------|--------|
-| **Canonical SSOT** | **`KooshaPari/PhenoObservability`** | **Absorb the two drifting crates** from Tracely, **continue subtree-syncing** Logify, **document boundary** with pheno-tracing and Tokn |
-| **Archived as-readonly** | `KooshaPari/Tracely` | Merge meaningful drift into PhenoObservability, then archive. No new development. |
-| **Upstream kept (subtree source)** | `KooshaPari/Logify` | Keep standalone as the canonical upstream for `logkit`. PhenoObservability vendors via subtree. Sync periodically. |
-| **Keep separate** | `KooshaPari/pheno-tracing` | Fleet-wide port contract. Lightweight dep for all pheno-* crates. Documented boundary. |
-| **Keep separate** | `KooshaPari/Tokn` | FinOps for AI. Token accounting is its own domain. Will produce usage data that feeds into observability dashboards but is not itself observability infrastructure. |
+| **Canonical SSOT** | **`<REDACTED>/PhenoObservability`** | **Absorb the two drifting crates** from Tracely, **continue subtree-syncing** Logify, **document boundary** with pheno-tracing and Tokn |
+| **Archived as-readonly** | `<REDACTED>/Tracely` | Merge meaningful drift into PhenoObservability, then archive. No new development. |
+| **Upstream kept (subtree source)** | `<REDACTED>/Logify` | Keep standalone as the canonical upstream for `logkit`. PhenoObservability vendors via subtree. Sync periodically. |
+| **Keep separate** | `<REDACTED>/pheno-tracing` | Fleet-wide port contract. Lightweight dep for all pheno-* crates. Documented boundary. |
+| **Keep separate** | `<REDACTED>/Tokn` | FinOps for AI. Token accounting is its own domain. Will produce usage data that feeds into observability dashboards but is not itself observability infrastructure. |
 
 ### Tokn adjacency
 
@@ -254,7 +254,7 @@ All 4 phases can be done in **any order** since they are independent, but Phase 
 | Risk | Likelihood | Impact | Mitigation |
 |------|-----------|--------|------------|
 | **Phase 1 merge conflict**: The two versions of tracely-core/sentinel have drifted enough that auto-merge may conflict | Medium | Medium — manual resolution needed on ~5 files | Run `diff` before merging. Resolve each conflict with preference for **PhenoObservability's test annotations** + **Tracely's error type improvements**. Verify via `cargo build` + `cargo test`. |
-| **Orphaned consumers**: Some downstream crate depends on the standalone `Tracely` repo and will break when archived | Low | Medium — broken builds until migration | Search `Cargo.toml` files across all phenotype repos for `KooshaPari/Tracely` references. Update them to `KooshaPari/PhenoObservability` as part of Phase 1. |
+| **Orphaned consumers**: Some downstream crate depends on the standalone `Tracely` repo and will break when archived | Low | Medium — broken builds until migration | Search `Cargo.toml` files across all phenotype repos for `<REDACTED>/Tracely` references. Update them to `<REDACTED>/PhenoObservability` as part of Phase 1. |
 | **Logify subtree drift**: Logify evolves independently and the subtree in PhenoObservability falls behind | Low | Low — Logify is at ~17 files and changing slowly | Set a calendar reminder for monthly `git subtree pull` or add a CI check that compares SHAs. |
 | **Tokn dependency confusion**: Someone tries to "merge Tokn into PhenoObservability" because "they're both observability" | Medium | High — architectural damage | Document clearly in both `BOUNDARY.md` and this plan that Tokn is **not** observability — it is FinOps for AI agents. Add `Tokn` to PhenoObservability's "Does NOT own" section. |
 | **False assumption of duplication**: Future developer sees 5 repos and assumes they all overlap | Medium | Low — wasted analysis time | This plan serves as the authoritative dedup reference. Link to it from `AGENTS.md` files in all 5 repos. |
@@ -275,8 +275,8 @@ Each phase is safe because:
 
 ### Must-do (blocking)
 
-- [ ] **RESOLVE DRIFT (Phase 1)**: Merge tracely-core and tracely-sentinel from `KooshaPari/Tracely` into `KooshaPari/PhenoObservability`, preferring richer error types from Tracely and keeping test annotations from PhenoObservability
-- [ ] **SEARCH CONSUMERS**: `grep -r "KooshaPari/Tracely" --include="Cargo.toml"` across all phenotype repos; update each to point to `KooshaPari/PhenoObservability`
+- [ ] **RESOLVE DRIFT (Phase 1)**: Merge tracely-core and tracely-sentinel from `<REDACTED>/Tracely` into `<REDACTED>/PhenoObservability`, preferring richer error types from Tracely and keeping test annotations from PhenoObservability
+- [ ] **SEARCH CONSUMERS**: `grep -r "<REDACTED>/Tracely" --include="Cargo.toml"` across all phenotype repos; update each to point to `<REDACTED>/PhenoObservability`
 - [ ] **ARCHIVE Tracely**: Add `"archived": true` to repo settings + archival notice to README
 - [ ] **DOCUMENT IN PO BOUNDARY.md**: Add Tokn as "complementary — not owned"
 

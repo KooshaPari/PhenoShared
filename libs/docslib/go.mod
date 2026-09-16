@@ -1,3 +1,3 @@
-module github.com/kooshapari/docslib
+module github.com/<REDACTED>/docslib
 
 go 1.21

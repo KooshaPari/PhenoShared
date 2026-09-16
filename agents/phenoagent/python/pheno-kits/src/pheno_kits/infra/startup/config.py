@@ -58,7 +58,7 @@ class StartupConfig:
         resource adapter (e.g. ``type``, ``image``, ``ports`` for Docker
         resources) plus metadata such as ``mode`` and ``scope``.
     domain:
-        Base domain used for tunnel routing. Defaults to ``kooshapari.com``.
+        Base domain used for tunnel routing. Defaults to ``<REDACTED>.com``.
     enable_tunnel:
         Whether to create an ingress tunnel for the primary service.
     enable_fallback:
@@ -77,7 +77,7 @@ class StartupConfig:
     preferred_port: int
     tunnel_subdomain: str
     resources: dict[str, dict[str, Any]] = field(default_factory=dict)
-    domain: str = "kooshapari.com"
+    domain: str = "<REDACTED>.com"
     enable_tunnel: bool = True
     enable_fallback: bool = True
     enable_proxy: bool = False

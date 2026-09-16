@@ -40,8 +40,8 @@ Both green. Aggregate gate score: **4/4 PASS**.
 ## Push evidence
 
 `wip-2026-06-19-configra-gate-remediation` pushed to
-`KooshaPari/Configra` (origin). PR URL:
-`https://github.com/KooshaPari/Configra/pull/new/wip-2026-06-19-configra-gate-remediation`.
+`<REDACTED>/Configra` (origin). PR URL:
+`https://github.com/<REDACTED>/Configra/pull/new/wip-2026-06-19-configra-gate-remediation`.
 
 ## Findings authored (local)
 

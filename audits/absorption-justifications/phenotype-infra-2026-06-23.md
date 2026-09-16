@@ -16,8 +16,8 @@
 
 | ADR | Title | Authority |
 |---|---|---|
-| ECO-018 | phenotype-infra path-dep hygiene | [origin/main:docs/adrs/ADR-ECO-018-phenotype-infra-path-dep-hygiene.md](https://github.com/KooshaPari/phenotype-registry/blob/main/docs/adrs/ADR-ECO-018-phenotype-infra-path-dep-hygiene.md) — 2026-06-23 |
-| ECO-022 | Compute/infra subtree registry correction | [origin/main:docs/adrs/ADR-ECO-022-compute-infra-subtree-registry-correction.md](https://github.com/KooshaPari/phenotype-registry/blob/main/docs/adrs/ADR-ECO-022-compute-infra-subtree-registry-correction.md) — 2026-06-23 |
+| ECO-018 | phenotype-infra path-dep hygiene | [origin/main:docs/adrs/ADR-ECO-018-phenotype-infra-path-dep-hygiene.md](https://github.com/<REDACTED>/phenotype-registry/blob/main/docs/adrs/ADR-ECO-018-phenotype-infra-path-dep-hygiene.md) — 2026-06-23 |
+| ECO-022 | Compute/infra subtree registry correction | [origin/main:docs/adrs/ADR-ECO-022-compute-infra-subtree-registry-correction.md](https://github.com/<REDACTED>/phenotype-registry/blob/main/docs/adrs/ADR-ECO-022-compute-infra-subtree-registry-correction.md) — 2026-06-23 |
 
 Cluster spine: `docs/compute-infra-subtree.md` on origin/main (9.1 KB, authoritative).
 
@@ -204,7 +204,7 @@ Total artifacts audited: 194 files. Active, healthy, on-track.
 | `release/2026-q2-platform-cut` | 2026-06-15 | platform-team | Release branch, will merge post-audit. |
 | `feature/sbom-cyclonedx-1.6` | 2026-06-18 | ci-team | In-flight SBOM upgrade. |
 | `chore/adr-040-dr-posture` | 2026-06-20 | governance-team | ADR-040 implementation, in review. |
-| `infra/nanovms-absorb-packages` | 2026-06-23 | kooshapari | Pending branch for nanovms subpath absorption. |
+| `infra/nanovms-absorb-packages` | 2026-06-23 | <REDACTED> | Pending branch for nanovms subpath absorption. |
 
 All branches are active and load-bearing for the consolidation
 program.

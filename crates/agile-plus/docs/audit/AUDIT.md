@@ -159,7 +159,7 @@ AgilePlus is a large Rust monorepo (~729 `.rs` files under `crates/`, `libs/`, `
 | Input validation at boundaries | 3 | `agileplus-validate` proptest validators | HTTP layer validation incomplete | Validator on all API inputs |
 | Injection safety | 4 | SQLite parameterized queries in repositories; `unsafe_code = forbid` `Cargo.toml:17` | Dynamic SQL in triage paths uses `include_str!` | Audit raw SQL builders in `triage.rs:41` |
 | TLS | 2 | OTLP gzip-tonic in deps `Cargo.toml:57` | No TLS termination docs for API server | Document reverse-proxy TLS (nginx/caddy) |
-| Least privilege | 3 | `permissions: contents: read` in `ci.yml:9-10` | Over-broad `CODEOWNERS:19` `* @KooshaPari` | Split CODEOWNERS per crate team |
+| Least privilege | 3 | `permissions: contents: read` in `ci.yml:9-10` | Over-broad `CODEOWNERS:19` `* @<REDACTED>` | Split CODEOWNERS per crate team |
 | Rate limiting | 1 | `tower` limit feature in deps `Cargo.toml:43`; no usage found in API | API vulnerable to abuse | Add `tower::limit::RateLimitLayer` per route class |
 | Gitleaks-clean | 4 | `gitleaks.yml`, `trufflehog.yml`, `.trufflehog.yml` | `agileplus.db` may contain local secrets | Scan + gitignore local DBs |
 | CODEOWNERS | 4 | `CODEOWNERS:1-19` scoped baseline | Single owner for all paths | Add per-crate owners as team grows |

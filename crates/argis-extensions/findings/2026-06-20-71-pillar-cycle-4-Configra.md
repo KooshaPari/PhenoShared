@@ -152,7 +152,7 @@
 | Pillar | Score | Evidence |
 |---|---:|---|
 | L69 OpenSSF Best Practices | 2 | `deny.toml` + workspace pinned deps + semver; no OpenSSF Scorecard at this path (would be in publishing repo). |
-| L70 Roles & responsibilities | 2 | `Cargo.toml:27` lists single `authors = ["KooshaPari"]`; no `CODEOWNERS` at this path; ADR-031 + L5-110 record ownership. |
+| L70 Roles & responsibilities | 2 | `Cargo.toml:27` lists single `authors = ["<REDACTED>"]`; no `CODEOWNERS` at this path; ADR-031 + L5-110 record ownership. |
 | L71 Sustainability | 3 | `FUNDING.yml` at workspace root; ADR-031 records long-term absorb plan; 4 migration docs committed as `archive`-style evidence. |
 
 ---

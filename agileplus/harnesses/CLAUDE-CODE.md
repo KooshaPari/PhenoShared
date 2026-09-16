@@ -11,7 +11,7 @@ Add to your Claude Code configuration (`~/.claude/projects.d/agileplus.json` or 
   "command": "agileplus",
   "args": ["--project", "{PROJECT_PATH}"],
   "env": {
-    "AGILEPLUS_HOME": "/Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus",
+    "AGILEPLUS_HOME": "/Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus",
     "AGILEPLUS_MCP": "true"
   }
 }

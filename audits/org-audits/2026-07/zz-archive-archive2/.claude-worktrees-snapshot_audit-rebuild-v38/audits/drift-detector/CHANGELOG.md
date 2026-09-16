@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **Substrate quality bar (ADR-023 Rule 3.1)** — initial release with:
   - `AGENTS.md` — L74 drift-detection discipline context, ADR cross-references
-  - `LICENSE-MIT` — MIT, Copyright (c) 2026 KooshaPari
+  - `LICENSE-MIT` — MIT, Copyright (c) 2026 <REDACTED>
   - `deny.toml` — Python supply-chain policy stub
   - `SPEC.md` — 1-page L74 spec (3-pass algorithm, output formats)
   - `CHANGELOG.md` — this file

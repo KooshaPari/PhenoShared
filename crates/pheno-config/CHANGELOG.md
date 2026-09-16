@@ -14,8 +14,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - **2026-06-18:** Source-of-truth repo moved from
-  `KooshaPari/phenotype-apps` (meta-repo `repos/pheno-config/` subdir) to
-  `KooshaPari/Configra` (workspace member at `crates/pheno-config/`).
+  `<REDACTED>/phenotype-apps` (meta-repo `repos/pheno-config/` subdir) to
+  `<REDACTED>/Configra` (workspace member at `crates/pheno-config/`).
   Crate name, version, lib name, and public API are unchanged — every
   consumer's `Cargo.toml` keeps working without modification. See
   ADR-031 follow-up (L5-104.7) for the absorption rationale.

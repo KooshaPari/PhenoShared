@@ -33,8 +33,8 @@
 # ---------------------------------------------------------------------------
 [work]
 cwd_prefixes = [
-  "/Users/kooshapari/CodeProjects/Phenotype/repos",
-  "/Users/kooshapari/thegent",
+  "/Users/<REDACTED>/CodeProjects/Phenotype/repos",
+  "/Users/<REDACTED>/thegent",
 ]
 harnesses = ["codex", "forge", "droid"]
 tty_pattern = "^ttys0(1[7-9]|2[0-2])$"
@@ -45,8 +45,8 @@ tty_pattern = "^ttys0(1[7-9]|2[0-2])$"
 # ---------------------------------------------------------------------------
 [personal]
 cwd_prefixes = [
-  "/Users/kooshapari/Documents",
-  "/Users/kooshapari/Downloads",
+  "/Users/<REDACTED>/Documents",
+  "/Users/<REDACTED>/Downloads",
 ]
 harnesses = ["claude", "cursor"]
 

@@ -1,5 +1,5 @@
 //! Compatibility crate for fleet consumers migrating off the archived
-//! `KooshaPari/phenotype-voxel` repo.
+//! `<REDACTED>/phenotype-voxel` repo.
 //!
 //! Canonical implementation lives in [`phenotype_gfx::voxel`] per ADR-004.
 

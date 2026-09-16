@@ -1,21 +1,21 @@
 # `Repos-phenodocs-2026-07-15` — Absorbed Uncommitted Snapshot
 
 This directory preserves the contents of
-`KooshaPari/zz-archive-Repos-phenodocs-uncommitted-2026-07-15` (archived
+`<REDACTED>/zz-archive-Repos-phenodocs-uncommitted-2026-07-15` (archived
 2026-07-15), which was a snapshot of uncommitted and unpushed work in
-`/Users/kooshapari/Repos/phenodocs/` taken on 2026-07-15.
+`/Users/<REDACTED>/Repos/phenodocs/` taken on 2026-07-15.
 
 **Date merged:** 2026-08-08
-**Source commit:** `KooshaPari/zz-archive-Repos-phenodocs-uncommitted-2026-07-15@main`
+**Source commit:** `<REDACTED>/zz-archive-Repos-phenodocs-uncommitted-2026-07-15@main`
 **Merger:** forge-airlock (manual semantic integration)
 
 ## What this archive was
 
 A working-tree + 41-ahead-branch snapshot of the **secondary** phenodocs
-working tree at `/Users/kooshapari/Repos/phenodocs/` (note: `Repos/`, not
+working tree at `/Users/<REDACTED>/Repos/phenodocs/` (note: `Repos/`, not
 `CodeProjects/Phenotype/repos/`). At the time of capture:
 
-- **Branch:** `main` with **41 commits ahead** of `KooshaPari/phenodocs origin/main`,
+- **Branch:** `main` with **41 commits ahead** of `<REDACTED>/phenodocs origin/main`,
   110 commits behind
 - **3 modified files:** `agents.lock`, `agents.toml`, `scripts/check_docs_links.py`
 - **28 untracked files** under `docs/sessions/2026-02-26-cliproxy-*` (4 sessions × 7 docs each)

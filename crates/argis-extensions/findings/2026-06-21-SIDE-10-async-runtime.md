@@ -244,7 +244,7 @@ This matches `pheno-port-adapter`'s main-dep choice (`pheno-port-adapter/Cargo.t
 **Action:**
 
 - Update `.git/info/sparse-checkout` to include `pheno-config/Cargo.toml` (and likewise for `pheno-context`, `pheno-flags`, and any other pheno-* Rust repo missing its manifest).
-- Alternatively, push the audit to verify against `KooshaPari/pheno-config` on GitHub directly.
+- Alternatively, push the audit to verify against `<REDACTED>/pheno-config` on GitHub directly.
 
 ### R-4 (P3 / governance gap): Author the v17 T6 ADR doc
 

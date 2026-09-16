@@ -8,7 +8,7 @@ def phenotype_root() -> Path:
     configured = os.environ.get("THGENT_PHENOTYPE_ROOT")
     if configured:
         return Path(configured).expanduser().resolve()
-    return Path("/Users/kooshapari/CodeProjects/Phenotype").resolve()
+    return Path("/Users/<REDACTED>/CodeProjects/Phenotype").resolve()
 
 
 def projects_root() -> Path:

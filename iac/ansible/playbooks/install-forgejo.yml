@@ -1,6 +1,6 @@
 ---
 # install-forgejo.yml — Forgejo self-hosted git + Actions on oci_primary.
-# Binds to 127.0.0.1:3000; Caddy fronts forgejo.kooshapari.com.
+# Binds to 127.0.0.1:3000; Caddy fronts forgejo.<REDACTED>.com.
 
 - name: Install and configure Forgejo
   hosts: oci_primary
@@ -12,7 +12,7 @@
     forgejo_home: /var/lib/forgejo
     forgejo_etc: /etc/forgejo
     forgejo_admin_user: koosha
-    forgejo_admin_email: kooshapari@gmail.com
+    forgejo_admin_email: <REDACTED>@gmail.com
   tasks:
     - name: Install runtime deps
       ansible.builtin.dnf:

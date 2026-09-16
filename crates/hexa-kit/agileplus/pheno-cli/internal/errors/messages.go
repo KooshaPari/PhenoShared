@@ -7,7 +7,7 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/KooshaPari/pheno-cli/internal/adapters"
+	"github.com/<REDACTED>/pheno-cli/internal/adapters"
 )
 
 // userMessage maps a sentinel error to a human-readable, actionable string.
@@ -46,7 +46,7 @@ func FormatError(err error) string {
 
 	// Fallback: surface the error message without a stack trace.
 	return fmt.Sprintf("Error: %s\n\nIf this problem persists, run with --verbose for details "+
-		"or open an issue at https://github.com/KooshaPari/pheno-cli/issues.", err.Error())
+		"or open an issue at https://github.com/<REDACTED>/pheno-cli/issues.", err.Error())
 }
 
 // FormatErrorVerbose is like FormatError but also includes the underlying

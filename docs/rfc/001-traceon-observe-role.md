@@ -11,7 +11,7 @@
 
 ## Summary
 
-Move the **Traceon hexagonal tracing core** (`tracingkit` crate, formerly `KooshaPari/Traceon`) out of HexaKit `crates/` into the **`observe` role workspace** owned by **PhenoObservability**. **phenotype-otel** remains a **thin OTLP init bridge** — it must not absorb domain tracing logic.
+Move the **Traceon hexagonal tracing core** (`tracingkit` crate, formerly `<REDACTED>/Traceon`) out of HexaKit `crates/` into the **`observe` role workspace** owned by **PhenoObservability**. **phenotype-otel** remains a **thin OTLP init bridge** — it must not absorb domain tracing logic.
 
 This RFC explicitly rejects:
 
@@ -105,7 +105,7 @@ Optional dependency edge: `phenotype-otel` may depend on `tracingkit` for shared
 - [ ] Remove `Traceon/` from HexaKit workspace `Cargo.toml`.
 - [ ] Remove tracing domain from HexaKit `crates/` (genesis-only enforcement).
 - [ ] HexaKit CI green; update charter transitional note.
-- [ ] Archive `KooshaPari/Traceon` if not already archived (verify zero external deps).
+- [ ] Archive `<REDACTED>/Traceon` if not already archived (verify zero external deps).
 
 ### Phase 4 — Python edge & docs
 

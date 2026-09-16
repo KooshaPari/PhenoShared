@@ -1,8 +1,8 @@
 # phenotype-go-kit — Absorption Justification
 
 **Status:** QUEUED 2026-07-17 (batch2 refresh)
-**Source:** `KooshaPari/phenotype-go-kit` (last push 2026-07-15, remote-only)
-**Target:** `KooshaPari/phenotype-go-sdk` at `phenotype-go-kit/`
+**Source:** `<REDACTED>/phenotype-go-kit` (last push 2026-07-15, remote-only)
+**Target:** `<REDACTED>/phenotype-go-sdk` at `phenotype-go-kit/`
 **Disposition:** ABSORB
 
 ## Confidence
@@ -19,7 +19,7 @@
 ## Restore procedure
 
 ```sh
-gh repo unarchive KooshaPari/phenotype-go-kit
+gh repo unarchive <REDACTED>/phenotype-go-kit
 # In phenotype-go-sdk spine:
 git rm -r phenotype-go-kit/
 git commit -m "revert: undo phenotype-go-kit absorption"
@@ -27,4 +27,4 @@ git commit -m "revert: undo phenotype-go-kit absorption"
 
 ## Cross-references
 
-- Disposition row: search `"KooshaPari/phenotype-go-kit"` in `registry/disposition-index.json`
+- Disposition row: search `"<REDACTED>/phenotype-go-kit"` in `registry/disposition-index.json`

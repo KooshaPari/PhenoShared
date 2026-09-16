@@ -1,10 +1,10 @@
-# Absorbed Crate: Eidolon (KooshaPari/Eidolon)
+# Absorbed Crate: Eidolon (<REDACTED>/Eidolon)
 
 ## Source
 
 | Field | Value |
 | --- | --- |
-| Source repo | KooshaPari/Eidolon |
+| Source repo | <REDACTED>/Eidolon |
 | Source size | 6094 LOC Rust (5 crates) |
 | Source branches | 92 |
 | Source absorbed on | 2026-07-18 |
@@ -49,6 +49,6 @@ crates/
 
 - Phase 1: registry forensic copy at `registry/absorbed-crates/eidolon/`
 - Phase 2: pheno monorepo workspace member + tests (portage-federation handoff)
-- Phase 3: archive source `gh repo archive KooshaPari/Eidolon -y`
+- Phase 3: archive source `gh repo archive <REDACTED>/Eidolon -y`
 
 Registry row: repo-Eidolon → absorbed (this commit).

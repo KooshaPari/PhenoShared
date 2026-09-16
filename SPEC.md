@@ -14,7 +14,7 @@ The factory must scale: adding a new landing = dropping a new directory under `s
 | `sites/byteport-landing` | Astro + Bun | BytePort **marketing** (not the app) |
 | `sites/hwledger-landing` | Astro + Bun | HW Ledger landing |
 | `sites/phenokits-landing` | Astro + Bun | Phenokits catalog landing |
-| `sites/projects-landing` | Astro + Bun | `projects.kooshapari.com` portfolio |
+| `sites/projects-landing` | Astro + Bun | `projects.<REDACTED>.com` portfolio |
 | `sites/thegent-landing` | Astro + Bun | TheGent landing |
 | `sites/odin-landing` | Static HTML/CSS | Odin landing (no Astro build) |
 

@@ -13,7 +13,7 @@ Bootstrap template: [`templates/genesis/charter.md`](../../templates/genesis/cha
 | Field | Required | Notes |
 |-------|----------|-------|
 | Repository name | yes | Display title at H1 |
-| Org | yes | Typically `KooshaPari` |
+| Org | yes | Typically `<REDACTED>` |
 | Lifecycle | yes | `active` \| `archived` \| `genesis-template` |
 | One-line mission | yes | Single sentence, user-facing |
 | **Boundary class** | yes | See table below |
@@ -63,7 +63,7 @@ Bootstrap template: [`templates/genesis/charter.md`](../../templates/genesis/cha
 Also link to HexaKit spec when bootstrapped from genesis:
 
 ```markdown
-Specs: [HexaKit docs/genesis/STANDARD.md](https://github.com/KooshaPari/HexaKit/blob/main/docs/genesis/STANDARD.md)
+Specs: [HexaKit docs/genesis/STANDARD.md](https://github.com/<REDACTED>/HexaKit/blob/main/docs/genesis/STANDARD.md)
 ```
 
 ### 4. Decision rights

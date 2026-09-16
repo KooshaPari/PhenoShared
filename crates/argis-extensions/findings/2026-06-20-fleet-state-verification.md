@@ -1,9 +1,9 @@
 # Fleet State Verification — Eidolon-centric absorption cohort
 
 **Date:** 2026-06-20 (PDT)
-**Scope:** Read-only verification of 6 KooshaPari/* repos via `gh api` + `gh pr/issue list`.
+**Scope:** Read-only verification of 6 <REDACTED>/* repos via `gh api` + `gh pr/issue list`.
 **Dmouse92/* not touched** (token removed per AGENTS.md L5-104 kill-switch, 2026-06-17 22:30 PDT).
-**Auth verified:** `KooshaPari` (keyring), scopes include `delete_repo` + `repo` + `workflow`.
+**Auth verified:** `<REDACTED>` (keyring), scopes include `delete_repo` + `repo` + `workflow`.
 
 ---
 
@@ -11,18 +11,18 @@
 
 | Repo | HEAD | Archived | Last pushed | Open PRs | Open Issues | WIP Branches | Red Flags |
 |---|---|---|---|---|---|---|---|
-| `KooshaPari/Eidolon` | `47511e35b55b` | false | 2026-06-20 10:50 UTC | 0 (2 closed) | 6 (all `Welcome:` template) | **14** (all `wip/...-2026-06-17`) | **14 stale WIP branches** (preserve pattern per AGENTS.md) |
-| `KooshaPari/agent-platform` | `ff69bc300eaf` | false | 2026-06-20 12:05 UTC | 1 (#10) | 0 | 1 (`feat/example-intent-router-2026-06-20`, paired with PR #10) | none |
-| `KooshaPari/mobile-mcp` | `879c6280823d` | false | 2026-06-19 02:38 UTC | 0 | 0 (issues disabled) | 0 | none (last push 1d old, recent merge cadence) |
-| `KooshaPari/mobile-cli` | `d018ea301989` | false | 2026-06-20 10:34 UTC | 0 | 0 (issues disabled) | 0 | none |
-| `KooshaPari/pheno` | `313ed2c96125` | false | 2026-06-20 12:53 UTC | 2 (#245, #246) | 6 (all `Welcome:` template) | 3 (2 open PRs + 1 `wip/2026-06-18-pheno-local`) | none (but see phenoShared dep) |
-| `KooshaPari/phenoShared` | **N/A — HTTP 404** | **N/A** | **N/A** | **N/A** | **N/A** | **N/A (local)** | **CRITICAL — repo deleted on GitHub; local tombstone with new unpushed commit `14bb34c`; pheno#239-242 depend on this tombstone's workflows** |
+| `<REDACTED>/Eidolon` | `47511e35b55b` | false | 2026-06-20 10:50 UTC | 0 (2 closed) | 6 (all `Welcome:` template) | **14** (all `wip/...-2026-06-17`) | **14 stale WIP branches** (preserve pattern per AGENTS.md) |
+| `<REDACTED>/agent-platform` | `ff69bc300eaf` | false | 2026-06-20 12:05 UTC | 1 (#10) | 0 | 1 (`feat/example-intent-router-2026-06-20`, paired with PR #10) | none |
+| `<REDACTED>/mobile-mcp` | `879c6280823d` | false | 2026-06-19 02:38 UTC | 0 | 0 (issues disabled) | 0 | none (last push 1d old, recent merge cadence) |
+| `<REDACTED>/mobile-cli` | `d018ea301989` | false | 2026-06-20 10:34 UTC | 0 | 0 (issues disabled) | 0 | none |
+| `<REDACTED>/pheno` | `313ed2c96125` | false | 2026-06-20 12:53 UTC | 2 (#245, #246) | 6 (all `Welcome:` template) | 3 (2 open PRs + 1 `wip/2026-06-18-pheno-local`) | none (but see phenoShared dep) |
+| `<REDACTED>/phenoShared` | **N/A — HTTP 404** | **N/A** | **N/A** | **N/A** | **N/A** | **N/A (local)** | **CRITICAL — repo deleted on GitHub; local tombstone with new unpushed commit `14bb34c`; pheno#239-242 depend on this tombstone's workflows** |
 
 ---
 
 ## Per-repo detail
 
-### 1. KooshaPari/Eidolon — `47511e35b55b`
+### 1. <REDACTED>/Eidolon — `47511e35b55b`
 
 - **Default branch:** `main` (archived=false, size=329 KB, pushed 2026-06-20 10:50:03 UTC)
 - **HEAD:** `47511e35b55b`
@@ -81,7 +81,7 @@ refs/heads/wip/wip-on-feat-eidolon-core-pheno-error-serde-2026061-2026-06-17
 
 ---
 
-### 2. KooshaPari/agent-platform — `ff69bc300eaf`
+### 2. <REDACTED>/agent-platform — `ff69bc300eaf`
 
 - **Default branch:** `main` (archived=false, size=109 KB, pushed 2026-06-20 12:05:45 UTC)
 - **HEAD:** `ff69bc300eaf`
@@ -113,7 +113,7 @@ refs/heads/feat/example-intent-router-2026-06-20   # paired with open PR #10
 
 ---
 
-### 3. KooshaPari/mobile-mcp — `879c6280823d`
+### 3. <REDACTED>/mobile-mcp — `879c6280823d`
 
 - **Default branch:** `main` (archived=false, size=2423 KB, pushed 2026-06-19 02:38:42 UTC)
 - **HEAD:** `879c6280823d`
@@ -134,7 +134,7 @@ refs/heads/feat/example-intent-router-2026-06-20   # paired with open PR #10
 
 ---
 
-### 4. KooshaPari/mobile-cli — `d018ea301989`
+### 4. <REDACTED>/mobile-cli — `d018ea301989`
 
 - **Default branch:** `main` (archived=false, size=1012 KB, pushed 2026-06-20 10:34:56 UTC)
 - **HEAD:** `d018ea301989`
@@ -153,7 +153,7 @@ refs/heads/feat/example-intent-router-2026-06-20   # paired with open PR #10
 
 ---
 
-### 5. KooshaPari/pheno — `313ed2c96125`
+### 5. <REDACTED>/pheno — `313ed2c96125`
 
 - **Default branch:** `main` (archived=false, size=15013 KB, pushed 2026-06-20 12:53:41 UTC)
 - **HEAD:** `313ed2c96125`
@@ -165,10 +165,10 @@ refs/heads/feat/example-intent-router-2026-06-20   # paired with open PR #10
 #245 [OPEN]   merged=n/a         created=2026-06-20: feat(t22): wire pheno-tracing OTLP observability substrate
 #244 [MERGED] merged=2026-06-20  created=2026-06-20: chore(deps): bump the uv group across 2 directories with 1 update
 #243 [MERGED] merged=2026-06-20  created=2026-06-20: chore(deps): bump actions/setup-java from 5.2.0 to 5.3.0
-#242 [MERGED] merged=2026-06-20  created=2026-06-20: chore(deps): bump KooshaPari/phenoShared/.github/workflows/self-merge-gate.yml from 72b9c6cbdb24c49189b0e7c7395d874830d1ed87 to d1f40cb9482add27c57925be5085cabe2c20d8be
-#241 [MERGED] merged=2026-06-20  created=2026-06-20: chore(deps): bump KooshaPari/phenoShared/.github/workflows/vitepress-pages.yml from 72b9c6cbdb24c49189b0e7c7395d874830d1ed87 to d1f40cb9482add27c57925be5085cabe2c20d8be
-#240 [MERGED] merged=2026-06-20  created=2026-06-20: chore(deps): bump KooshaPari/phenoShared/.github/workflows/tag-automation.yml from 72b9c6cbdb24c49189b0e7c7395d874830d1ed87 to d1f40cb9482add27c57925be5085cabe2c20d8be
-#239 [MERGED] merged=2026-06-20  created=2026-06-19: chore(deps): bump KooshaPari/phenoShared/.github/workflows/reusable-release-drafter.yml from 72b9c6cbdb24c49189b0e7c7395d874830d1ed87 to 95d74795c77f7c554be2b5e42e8e3378cdab77bf
+#242 [MERGED] merged=2026-06-20  created=2026-06-20: chore(deps): bump <REDACTED>/phenoShared/.github/workflows/self-merge-gate.yml from 72b9c6cbdb24c49189b0e7c7395d874830d1ed87 to d1f40cb9482add27c57925be5085cabe2c20d8be
+#241 [MERGED] merged=2026-06-20  created=2026-06-20: chore(deps): bump <REDACTED>/phenoShared/.github/workflows/vitepress-pages.yml from 72b9c6cbdb24c49189b0e7c7395d874830d1ed87 to d1f40cb9482add27c57925be5085cabe2c20d8be
+#240 [MERGED] merged=2026-06-20  created=2026-06-20: chore(deps): bump <REDACTED>/phenoShared/.github/workflows/tag-automation.yml from 72b9c6cbdb24c49189b0e7c7395d874830d1ed87 to d1f40cb9482add27c57925be5085cabe2c20d8be
+#239 [MERGED] merged=2026-06-20  created=2026-06-19: chore(deps): bump <REDACTED>/phenoShared/.github/workflows/reusable-release-drafter.yml from 72b9c6cbdb24c49189b0e7c7395d874830d1ed87 to 95d74795c77f7c554be2b5e42e8e3378cdab77bf
 #238 [MERGED] merged=2026-06-19  created=2026-06-19: chore(pheno): re-point sub-crate CANONICAL.md markers to Configra (L5-110, ADR-031)
 #237 [MERGED] merged=2026-06-19  created=2026-06-19: chore(pheno): remove orphaned phenotype-event-bus tombstone (L5-111)
 #236 [CLOSED] merged=n/a         created=2026-06-18: wip: local snapshot 2026-06-18 (pheno)
@@ -203,24 +203,24 @@ refs/heads/feat/t22-observability-pheno-tracing-otlp-2026-06-20          # paire
 refs/heads/wip/2026-06-18-pheno-local                                   # stale local snapshot (paired with closed PR #236)
 ```
 
-**Red flag rationale:** None on this repo directly. **However**, PRs #239-#242 (4 merged deps bumps, 2026-06-19/20) each pin `KooshaPari/phenoShared/.github/workflows/<name>.yml` to specific SHAs from the (now 404) phenoShared. See phenoShared section below — these pins reference commit `d1f40cb` (tombstone) and `95d74795` (which existed in local refs pre-deletion). They will continue to resolve in GitHub Actions *as long as the deleted-repo SHAs remain cached* in the GA workflow cache, but new commits on phenoShared cannot be referenced.
+**Red flag rationale:** None on this repo directly. **However**, PRs #239-#242 (4 merged deps bumps, 2026-06-19/20) each pin `<REDACTED>/phenoShared/.github/workflows/<name>.yml` to specific SHAs from the (now 404) phenoShared. See phenoShared section below — these pins reference commit `d1f40cb` (tombstone) and `95d74795` (which existed in local refs pre-deletion). They will continue to resolve in GitHub Actions *as long as the deleted-repo SHAs remain cached* in the GA workflow cache, but new commits on phenoShared cannot be referenced.
 
 ---
 
-### 6. KooshaPari/phenoShared — **HTTP 404** ⚠️ CRITICAL
+### 6. <REDACTED>/phenoShared — **HTTP 404** ⚠️ CRITICAL
 
 - **Default branch:** N/A
 - **HEAD:** N/A
-- **Archived:** N/A (repo **does not exist on KooshaPari**)
+- **Archived:** N/A (repo **does not exist on <REDACTED>**)
 
 **Verification (2026-06-20 PDT):**
 
 ```
-$ gh api repos/KooshaPari/phenoShared -i
+$ gh api repos/<REDACTED>/phenoShared -i
 HTTP/2.0 404 Not Found
 {"message":"Not Found", ...}
 
-$ gh search repos "phenoShared" --owner KooshaPari
+$ gh search repos "phenoShared" --owner <REDACTED>
 []                                          # empty — no variants
 ```
 
@@ -228,8 +228,8 @@ $ gh search repos "phenoShared" --owner KooshaPari
 
 ```
 $ git -C phenoShared remote -v
-origin  git@github.com:KooshaPari/phenoShared.git (fetch)
-origin  git@github.com:KooshaPari/phenoShared.git (push)
+origin  git@github.com:<REDACTED>/phenoShared.git (fetch)
+origin  git@github.com:<REDACTED>/phenoShared.git (push)
 
 $ git -C phenoShared rev-parse HEAD
 14bb34cef4450d6d31da478ba463807d16645db3
@@ -261,11 +261,11 @@ $ head -3 phenoShared/TOMBSTONE.md
 
 **Red flag rationale — 3 distinct sub-issues:**
 
-1. **Repo deletion drift.** `KooshaPari/phenoShared` returns HTTP 404 as of 2026-06-20 verification window. The local clone still has `origin` pointing to `KooshaPari/phenoShared.git` with stale refs (`d1f40cb`, `72b9c6cbdb24c49189b0e7c7395d874830d1ed87`, `95d74795c77f7c554be2b5e42e8e3378cdab77bf`). Per local `TOMBSTONE.md`, the repo was gutted to tombstone on 2026-06-19 per `ADR-ECO-014`. The deletion appears to have been executed between 2026-06-19 19:45 PDT (tombstone commit) and 2026-06-20 verification window — possibly via UI (manual delete) since gh CLI lacked `delete_repo` scope before this turn (now granted, per `gh auth status`).
+1. **Repo deletion drift.** `<REDACTED>/phenoShared` returns HTTP 404 as of 2026-06-20 verification window. The local clone still has `origin` pointing to `<REDACTED>/phenoShared.git` with stale refs (`d1f40cb`, `72b9c6cbdb24c49189b0e7c7395d874830d1ed87`, `95d74795c77f7c554be2b5e42e8e3378cdab77bf`). Per local `TOMBSTONE.md`, the repo was gutted to tombstone on 2026-06-19 per `ADR-ECO-014`. The deletion appears to have been executed between 2026-06-19 19:45 PDT (tombstone commit) and 2026-06-20 verification window — possibly via UI (manual delete) since gh CLI lacked `delete_repo` scope before this turn (now granted, per `gh auth status`).
 
 2. **Unpushed resurrection commit.** Local commit `14bb34c` (2026-06-20 04:17 PDT, "feat(ci): add reusable drift-check workflow (L5-116 FU6) — absorbs pheno-ci-templates role into phenoShared substrate") is AHEAD of `origin/main` by 1 commit. Two untracked directories (`docs/boundary/`, `docs/intent/`) also exist. This work attempts to **revive** phenoShared as the substrate for `pheno-ci-templates` — contradicting the local `TOMBSTONE.md` policy ("Do not add new crates here").
 
-3. **Downstream dependency hazard.** `KooshaPari/pheno` PRs #239, #240, #241, #242 (all MERGED 2026-06-19/20) reference `KooshaPari/phenoShared/.github/workflows/{reusable-release-drafter,tag-automation,vitepress-pages,self-merge-gate}.yml` at SHAs from the now-deleted repo. GitHub Actions will continue to resolve these cached SHAs (Actions caches workflow content by SHA, not by repo existence) — but **future bumps to these workflows cannot be published** without re-creating the repo. This is a **transient silent-degradation hazard**: builds pass today, will silently fail at the next scheduled SHA bump once GitHub evicts the cache (no public GA retention SLA past ~90 days for unreachable workflows).
+3. **Downstream dependency hazard.** `<REDACTED>/pheno` PRs #239, #240, #241, #242 (all MERGED 2026-06-19/20) reference `<REDACTED>/phenoShared/.github/workflows/{reusable-release-drafter,tag-automation,vitepress-pages,self-merge-gate}.yml` at SHAs from the now-deleted repo. GitHub Actions will continue to resolve these cached SHAs (Actions caches workflow content by SHA, not by repo existence) — but **future bumps to these workflows cannot be published** without re-creating the repo. This is a **transient silent-degradation hazard**: builds pass today, will silently fail at the next scheduled SHA bump once GitHub evicts the cache (no public GA retention SLA past ~90 days for unreachable workflows).
 
 ---
 
@@ -273,10 +273,10 @@ $ head -3 phenoShared/TOMBSTONE.md
 
 | # | Repo | Flag | Severity | Action recommended |
 |---|---|---|---|---|
-| 1 | `KooshaPari/phenoShared` | Repo returns HTTP 404; local TOMBSTONE.md says decomposed per ADR-ECO-014 | **P0 — CRITICAL** | Decide: (a) recreate `KooshaPari/phenoShared` and push `14bb34c` + tracked `docs/boundary/`, `docs/intent/`, OR (b) re-target L5-116 FU6 to a different substrate (e.g. `pheno-ci-templates` resurrected standalone). Do **not** leave unpushed. |
-| 2 | `KooshaPari/phenoShared` | Local ahead by 1 commit (`14bb34c`); 2 untracked dirs (`docs/boundary/`, `docs/intent/`) | **P0 — CRITICAL** | Same as #1 — choose substrate target before pushing. The `TOMBSTONE.md` "do not add" policy contradicts this work. |
-| 3 | `KooshaPari/phenoShared` | `KooshaPari/pheno` PRs #239-#242 pin deleted-repo workflows at SHAs | **P1 — silent degradation hazard** | Schedule follow-up PR on `KooshaPari/pheno` to switch the 4 workflow pins to either: (a) inlined workflows, or (b) a re-created `KooshaPari/phenoShared`. Do this before the GA cache evicts the deleted-repo SHAs (~90 days). |
-| 4 | `KooshaPari/Eidolon` | 14 stale `wip/...-2026-06-17` branches | **P3 — informational** | Add `wip/preserve-2026-06-17/README.md` note on remote clarifying these are intentional pre-pause snapshots per AGENTS.md ADR-023 "PAUSED APP" pattern. No data loss, no action required. |
+| 1 | `<REDACTED>/phenoShared` | Repo returns HTTP 404; local TOMBSTONE.md says decomposed per ADR-ECO-014 | **P0 — CRITICAL** | Decide: (a) recreate `<REDACTED>/phenoShared` and push `14bb34c` + tracked `docs/boundary/`, `docs/intent/`, OR (b) re-target L5-116 FU6 to a different substrate (e.g. `pheno-ci-templates` resurrected standalone). Do **not** leave unpushed. |
+| 2 | `<REDACTED>/phenoShared` | Local ahead by 1 commit (`14bb34c`); 2 untracked dirs (`docs/boundary/`, `docs/intent/`) | **P0 — CRITICAL** | Same as #1 — choose substrate target before pushing. The `TOMBSTONE.md` "do not add" policy contradicts this work. |
+| 3 | `<REDACTED>/phenoShared` | `<REDACTED>/pheno` PRs #239-#242 pin deleted-repo workflows at SHAs | **P1 — silent degradation hazard** | Schedule follow-up PR on `<REDACTED>/pheno` to switch the 4 workflow pins to either: (a) inlined workflows, or (b) a re-created `<REDACTED>/phenoShared`. Do this before the GA cache evicts the deleted-repo SHAs (~90 days). |
+| 4 | `<REDACTED>/Eidolon` | 14 stale `wip/...-2026-06-17` branches | **P3 — informational** | Add `wip/preserve-2026-06-17/README.md` note on remote clarifying these are intentional pre-pause snapshots per AGENTS.md ADR-023 "PAUSED APP" pattern. No data loss, no action required. |
 
 No repos flagged for: `archived=true` (none) or `0 PRs in last 30 days` (all 5 existing repos had PR activity within the window — mobile-mcp's last push is 1d old but its 3 PRs were all merged 2026-06-18/19).
 
@@ -285,7 +285,7 @@ No repos flagged for: `archived=true` (none) or `0 PRs in last 30 days` (all 5 e
 ## Verification methodology
 
 - **Date/time:** 2026-06-20 PDT (between 14:15 and 14:30 local, per shell tool timestamps).
-- **Auth:** `gh auth status` confirmed `KooshaPari` (keyring), scopes `'delete_repo', 'gist', 'read:org', 'repo', 'workflow'`. Dmouse92 token absent (per L5-104 kill-switch 2026-06-17 22:30 PDT, AGENTS.md).
+- **Auth:** `gh auth status` confirmed `<REDACTED>` (keyring), scopes `'delete_repo', 'gist', 'read:org', 'repo', 'workflow'`. Dmouse92 token absent (per L5-104 kill-switch 2026-06-17 22:30 PDT, AGENTS.md).
 - **Read-only:** No `git push`, no `gh pr merge`, no file writes to repos under verification. Only write was the local `findings/2026-06-20-fleet-state-verification.md` itself (this file).
 - **Per-repo queries:** 5 steps × 5 existing repos = 25 `gh api` / `gh list` calls + 1 explicit 404 confirmation + 3 local `git` read-only inspections for `phenoShared`.
-- **Cross-checks:** `phenoShared` 404 cross-verified via `gh search repos "phenoShared" --owner KooshaPari` (returns empty array) and `gh api repos/KooshaPari/phenoShared -i` (HTTP/2.0 404 with `Access-Control-Allow-Origin: *`). Tombstone status verified by reading `phenoShared/TOMBSTONE.md` head locally.
+- **Cross-checks:** `phenoShared` 404 cross-verified via `gh search repos "phenoShared" --owner <REDACTED>` (returns empty array) and `gh api repos/<REDACTED>/phenoShared -i` (HTTP/2.0 404 with `Access-Control-Allow-Origin: *`). Tombstone status verified by reading `phenoShared/TOMBSTONE.md` head locally.

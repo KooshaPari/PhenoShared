@@ -26,7 +26,7 @@ The `sharecli` directory (a local shell-sharing CLI utility) does **not** depend
 |-------|--------|
 | sharecli dependency on clap-ext | No refs found |
 | clap-ext published on crates.io | v0.1.0 |
-| clap-ext in KooshaPari GitHub | Exists as `KooshaPari/clap-ext` |
+| clap-ext in <REDACTED> GitHub | Exists as `<REDACTED>/clap-ext` |
 | Integration status | Independent — no absorption needed |
 
 ## Conclusion

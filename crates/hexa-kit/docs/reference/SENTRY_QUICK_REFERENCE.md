@@ -8,9 +8,9 @@ Quick lookup for Sentry DSN tokens and GitHub secrets.
 
 | Project | Repository | Platform | GitHub Secret | Status |
 |---------|------------|----------|---------------|--------|
-| AgilePlus | `KooshaPari/AgilePlus` | Rust | `SENTRY_DSN_AGILEPLUS` | ⏳ |
-| phenotype-infrakit | `KooshaPari/phenotype-infrakit` | Rust | `SENTRY_DSN_INFRAKIT` | ⏳ |
-| heliosCLI | `KooshaPari/heliosCLI` | Rust | `SENTRY_DSN_HELIOSCLI` | ⏳ |
+| AgilePlus | `<REDACTED>/AgilePlus` | Rust | `SENTRY_DSN_AGILEPLUS` | ⏳ |
+| phenotype-infrakit | `<REDACTED>/phenotype-infrakit` | Rust | `SENTRY_DSN_INFRAKIT` | ⏳ |
+| heliosCLI | `<REDACTED>/heliosCLI` | Rust | `SENTRY_DSN_HELIOSCLI` | ⏳ |
 
 ---
 
@@ -40,19 +40,19 @@ SENTRY_DSN_HELIOSCLI
 |---------|-----|
 | Sentry Dashboard | https://sentry.io/ |
 | Create New Project | https://sentry.io/projects/new/ |
-| GitHub Org Secrets | https://github.com/organizations/KooshaPari/settings/secrets/actions |
-| AgilePlus Repo | https://github.com/KooshaPari/AgilePlus |
-| phenotype-infrakit Repo | https://github.com/KooshaPari/phenotype-infrakit |
-| heliosCLI Repo | https://github.com/KooshaPari/heliosCLI |
+| GitHub Org Secrets | https://github.com/organizations/<REDACTED>/settings/secrets/actions |
+| AgilePlus Repo | https://github.com/<REDACTED>/AgilePlus |
+| phenotype-infrakit Repo | https://github.com/<REDACTED>/phenotype-infrakit |
+| heliosCLI Repo | https://github.com/<REDACTED>/heliosCLI |
 
 ---
 
 ## Local `.env` Paths
 
 ```
-/Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus/.env
-/Users/kooshapari/CodeProjects/Phenotype/repos/phenotype-infrakit/.env
-/Users/kooshapari/CodeProjects/Phenotype/repos/heliosCLI/.env
+/Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus/.env
+/Users/<REDACTED>/CodeProjects/Phenotype/repos/phenotype-infrakit/.env
+/Users/<REDACTED>/CodeProjects/Phenotype/repos/heliosCLI/.env
 ```
 
 ---
@@ -83,7 +83,7 @@ SENTRY_ENVIRONMENT=development
 
 ## GitHub Secrets Setup Checklist
 
-- [ ] Go to: https://github.com/organizations/KooshaPari/settings/secrets/actions
+- [ ] Go to: https://github.com/organizations/<REDACTED>/settings/secrets/actions
 - [ ] Create secret: `SENTRY_DSN_AGILEPLUS` → assign to `AgilePlus`
 - [ ] Create secret: `SENTRY_DSN_INFRAKIT` → assign to `phenotype-infrakit`
 - [ ] Create secret: `SENTRY_DSN_HELIOSCLI` → assign to `heliosCLI`
@@ -142,7 +142,7 @@ Once setup is complete:
 1. **Go to:** https://sentry.io/
 2. **Create:** 3 projects (AgilePlus, phenotype-infrakit, heliosCLI)
 3. **Copy:** DSN for each project
-4. **Go to:** https://github.com/organizations/KooshaPari/settings/secrets/actions
+4. **Go to:** https://github.com/organizations/<REDACTED>/settings/secrets/actions
 5. **Create:** 3 secrets with DSN values
 6. **Update:** Local `.env` files
 7. **Done:** Ready for SDK integration
@@ -154,5 +154,5 @@ Once setup is complete:
 - Sentry Docs: https://docs.sentry.io/
 - Sentry Rust Guide: https://docs.sentry.io/platforms/rust/
 - GitHub Secrets: https://docs.github.com/en/actions/security-guides/encrypted-secrets
-- This Documentation: `/Users/kooshapari/CodeProjects/Phenotype/repos/docs/guides/`
+- This Documentation: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/docs/guides/`
 

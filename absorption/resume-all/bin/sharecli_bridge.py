@@ -9,7 +9,7 @@ JSON object terminated by ``\\n``; the server replies with one
 JSON object per request, also newline-terminated, on the same connection.
 
 Wire format (canonical, per
-``/Users/kooshapari/CodeProjects/Phenotype/repos/sharecli/crates/sharecli-ipc/src/main.rs:7-9``):
+``/Users/<REDACTED>/CodeProjects/Phenotype/repos/sharecli/crates/sharecli-ipc/src/main.rs:7-9``):
 
     Protocol: newline-delimited JSON (NDJSON).
     Request:  {"id": N, "method": "...", "params": {...}}

@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/KooshaPari/pheno-cli/internal/detect"
-	"github.com/KooshaPari/pheno-cli/internal/discover"
-	"github.com/KooshaPari/pheno-cli/internal/matrix"
+	"github.com/<REDACTED>/pheno-cli/internal/detect"
+	"github.com/<REDACTED>/pheno-cli/internal/discover"
+	"github.com/<REDACTED>/pheno-cli/internal/matrix"
 	"github.com/spf13/cobra"
 )
 

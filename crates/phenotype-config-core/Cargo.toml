@@ -4,7 +4,7 @@ version = "0.2.0"
 edition = "2021"
 license = "MIT"
 description = "Core configuration management for Phenotype"
-repository = "https://github.com/KooshaPari/phenotype-infrakit"
+repository = "https://github.com/<REDACTED>/phenotype-infrakit"
 
 [dependencies]
 serde = { workspace = true, features = ["derive"] }

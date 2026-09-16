@@ -4,7 +4,7 @@
 
 - **Name**: NanoVMS (Nano Virtual Machine Services)
 - **Description**: Nano Virtual Machine Services — headless VM abstraction for agents with support for Apple, Android, Smart TV, Gaming, IoT/Embedded, and AR/VR platforms
-- **Location**: `/Users/kooshapari/CodeProjects/Phenotype/repos/nanovms`
+- **Location**: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/nanovms`
 - **Language Stack**: Go 1.23+
 - **Published**: Private (Phenotype org)
 
@@ -12,7 +12,7 @@
 
 ```bash
 # Clone and setup
-git clone https://github.com/KooshaPari/nanovms.git
+git clone https://github.com/<REDACTED>/nanovms.git
 cd nanovms
 go mod download
 

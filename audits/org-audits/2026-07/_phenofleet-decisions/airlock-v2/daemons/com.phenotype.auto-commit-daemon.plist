@@ -3,7 +3,7 @@
 <!--
   com.phenotype.auto-commit-daemon.plist
   ----------------------------
-  Launches /Users/kooshapari/CodeProjects/Phenotype/repos/_phenofleet-decisions/airlock-v2/daemons/auto-commit-daemon.py
+  Launches /Users/<REDACTED>/CodeProjects/Phenotype/repos/_phenofleet-decisions/airlock-v2/daemons/auto-commit-daemon.py
   in --loop mode, sweeping ~/CodeProjects/Phenotype/repos/ for dirty git
   working trees every 15 minutes and committing them as wip/<date>-auto branches.
 
@@ -25,7 +25,7 @@
     <array>
         <string>/usr/bin/env</string>
         <string>python3</string>
-        <string>/Users/kooshapari/CodeProjects/Phenotype/repos/_phenofleet-decisions/airlock-v2/daemons/auto-commit-daemon.py</string>
+        <string>/Users/<REDACTED>/CodeProjects/Phenotype/repos/_phenofleet-decisions/airlock-v2/daemons/auto-commit-daemon.py</string>
         <string>--loop</string>
     </array>
 
@@ -45,26 +45,26 @@
     <integer>5</integer>
 
     <key>StandardOutPath</key>
-    <string>/Users/kooshapari/.airlock-v2/logs/auto-commit.stdout.log</string>
+    <string>/Users/<REDACTED>/.airlock-v2/logs/auto-commit.stdout.log</string>
 
     <key>StandardErrorPath</key>
-    <string>/Users/kooshapari/.airlock-v2/logs/auto-commit.stderr.log</string>
+    <string>/Users/<REDACTED>/.airlock-v2/logs/auto-commit.stderr.log</string>
 
     <key>WorkingDirectory</key>
-    <string>/Users/kooshapari</string>
+    <string>/Users/<REDACTED></string>
 
     <key>EnvironmentVariables</key>
     <dict>
         <key>PATH</key>
         <string>/usr/local/bin:/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
         <key>HOME</key>
-        <string>/Users/kooshapari</string>
+        <string>/Users/<REDACTED></string>
         <key>AIRLOCK_V2_INTERVAL</key>
         <string>900</string>
         <key>AIRLOCK_V2_ROOT</key>
-        <string>/Users/kooshapari/CodeProjects/Phenotype/repos</string>
+        <string>/Users/<REDACTED>/CodeProjects/Phenotype/repos</string>
         <key>AIRLOCK_V2_LOG_DIR</key>
-        <string>/Users/kooshapari/.airlock-v2/logs</string>
+        <string>/Users/<REDACTED>/.airlock-v2/logs</string>
         <key>AIRLOCK_V2_LOCK_PATH</key>
         <string>/tmp/airlock-v2.auto-commit.lock</string>
         <key>AIRLOCK_V2_DRY_RUN</key>

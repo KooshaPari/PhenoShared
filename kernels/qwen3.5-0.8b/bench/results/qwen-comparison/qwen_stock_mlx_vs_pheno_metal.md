@@ -26,7 +26,7 @@
 
 ## Pheno component-validation evidence (not an end-to-end comparison)
 
-- Report: `/Users/kooshapari/CodeProjects/Phenotype/pheno-harness-compare/kernels/qwen3.5-0.8b/bench/results/validate_latest.json` (loaded)
+- Report: `/Users/<REDACTED>/CodeProjects/Phenotype/pheno-harness-compare/kernels/qwen3.5-0.8b/bench/results/validate_latest.json` (loaded)
 - Metal available when report was written: `True`
 
 | Component | Passed | Metal available | MLX ms | Metal ms | Notes |

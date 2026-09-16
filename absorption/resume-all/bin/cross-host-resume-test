@@ -16,9 +16,9 @@
 
 set -uo pipefail  # No -e because we want to capture failures as ticks, not abort
 
-NDJSON="/Users/kooshapari/.local/share/resume-all/cross-host-resume-test.ndjson"
-RESUME_CROSS="/Users/kooshapari/bin/resume-cross.py"
-HOST="kooshapari-desk"
+NDJSON="/Users/<REDACTED>/.local/share/resume-all/cross-host-resume-test.ndjson"
+RESUME_CROSS="/Users/<REDACTED>/bin/resume-cross.py"
+HOST="<REDACTED>-desk"
 mkdir -p "$(dirname "$NDJSON")" 2>/dev/null || true
 
 emit_tick() {

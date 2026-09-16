@@ -120,5 +120,5 @@ After applying:
 - **Template version:** 1.0
 - **Author:** Phenotype Org holistic audit, 2026-06-16
 - **Audit that produced it:** `FLEET-AUDIT-30-PILLAR.md` (OB4 P1)
-- **Reference repo:** `KooshaPari/OmniRoute` (OB4=2)
+- **Reference repo:** `<REDACTED>/OmniRoute` (OB4=2)
 - **License:** Same as the parent repo

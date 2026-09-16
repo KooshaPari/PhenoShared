@@ -4,7 +4,7 @@
 
 - **Name**: phenotype-hub
 - **Type**: Next.js Monorepo with 3D Visualization
-- **Location**: `/Users/kooshapari/CodeProjects/Phenotype/repos/phenotype-hub`
+- **Location**: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/phenotype-hub`
 - **Stack**: React 19, Next.js 15, Three.js, Tailwind CSS
 
 ## Development Workflow

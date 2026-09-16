@@ -75,7 +75,7 @@ sentry-cli organizations list
 ### Step 5: Re-run Project Creation
 Once verified, run the automated project creation script:
 ```bash
-bash /Users/kooshapari/CodeProjects/Phenotype/repos/scripts/create-sentry-projects.sh
+bash /Users/<REDACTED>/CodeProjects/Phenotype/repos/scripts/create-sentry-projects.sh
 ```
 
 ---

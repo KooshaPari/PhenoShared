@@ -1,11 +1,11 @@
 # Registry Accuracy Sweep — T-SP.2
 
 **Date:** 2026-06-24
-**Scope:** All `KooshaPari/*` repositories on GitHub (128 total)
+**Scope:** All `<REDACTED>/*` repositories on GitHub (128 total)
 
 ## Method
 
-1. `gh repo list KooshaPari --limit 300 --json ...` → raw repo metadata
+1. `gh repo list <REDACTED> --limit 300 --json ...` → raw repo metadata
 2. Strip ANSI escape codes from gh CLI output
 3. Compare GitHub repo names against `phenotype-registry/ECOSYSTEM_MAP.md` mentions + known org aliases
 4. Diff = unknown repos (live on GitHub but not in the canonical ecosystem map)
@@ -14,7 +14,7 @@
 
 | Metric | Value |
 |---|---|
-| Total KooshaPari repos on GitHub | **128** |
+| Total <REDACTED> repos on GitHub | **128** |
 | Already mapped in ECOSYSTEM_MAP.md (direct + aliases) | **40** |
 | **Unknown / not yet classified** | **88** |
 

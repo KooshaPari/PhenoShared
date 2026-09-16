@@ -20,7 +20,7 @@
 
 ## PRs Touched
 
-- **`KooshaPari/phenotype-apps#147`** (OPEN) — T4+T5+T6+T7 stacked on `chore/v25-71-pillar-cycle-15-p1-2026-06-22`
+- **`<REDACTED>/phenotype-apps#147`** (OPEN) — T4+T5+T6+T7 stacked on `chore/v25-71-pillar-cycle-15-p1-2026-06-22`
 - T1, T2 pushed to separate branches/PRs from prior session
 
 ## Governance Artifacts Shipped
@@ -59,7 +59,7 @@
 
 ## Issues / PRs / Processes
 
-- **Issue #146 filed** on `KooshaPari/phenotype-apps` — forge: DB lock cascade when dispatching 2+ subagents in parallel
+- **Issue #146 filed** on `<REDACTED>/phenotype-apps` — forge: DB lock cascade when dispatching 2+ subagents in parallel
 - **PR #147 OPEN** — T4/T5/T6/T7 stacked
 - **PR #142 OPEN** — T1 SOC2 evidence
 - **PR #144 OPEN** — T7 (T2 SIEM ADR)

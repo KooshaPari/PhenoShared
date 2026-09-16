@@ -44,7 +44,7 @@ class EndpointRegistry:
             local="http://localhost:50012",
         ),
         MCPProject.SANDBOX: EndpointConfig(
-            production="https://mcp-sandbox.kooshapari.com",
+            production="https://mcp-sandbox.<REDACTED>.com",
             local="http://localhost:50100",
         ),
     }

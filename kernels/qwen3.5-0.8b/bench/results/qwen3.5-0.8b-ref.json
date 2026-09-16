@@ -1,6 +1,6 @@
 {
   "model_id": "Qwen3.5-0.8B",
-  "arch_yaml": "/Users/kooshapari/CodeProjects/Phenotype/pheno-harness-validation/kernels/qwen3.5-0.8b/arch.yaml",
+  "arch_yaml": "/Users/<REDACTED>/CodeProjects/Phenotype/pheno-harness-validation/kernels/qwen3.5-0.8b/arch.yaml",
   "system": {
     "platform": "macOS-27.0-arm64-arm-64bit-Mach-O",
     "machine": "arm64",

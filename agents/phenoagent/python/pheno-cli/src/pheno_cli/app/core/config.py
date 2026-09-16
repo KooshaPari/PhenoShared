@@ -136,7 +136,7 @@ class PhenoConfig(BaseModel):
     """
 
     # General settings
-    default_author: str = "Koosha Pari <kooshapari@gmail.com>"
+    default_author: str = "Koosha Pari <<REDACTED>@gmail.com>"
     default_license: str = "MIT"
     workspace_path: Path | None = None
 

@@ -81,11 +81,11 @@ export default defineConfig({
       ],
     },
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/KooshaPari/OmniRoute' },
+      { icon: 'github', link: 'https://github.com/<REDACTED>/OmniRoute' },
     ],
     footer: {
       message: 'Fork of diegosouzapw/OmniRoute — Phenotype governance applies.',
-      copyright: 'Copyright © KooshaPari/OmniRoute',
+      copyright: 'Copyright © <REDACTED>/OmniRoute',
     },
   },
   vite: {

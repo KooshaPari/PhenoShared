@@ -1,7 +1,7 @@
 # Worklog — phenotype monorepo (meta-repo)
 
 **Date:** 2026-06-20
-**Active plan:** `plans/2026-06-19-v11-dag-100task.md` (committed to `KooshaPari/phenotype-apps`)
+**Active plan:** `plans/2026-06-19-v11-dag-100task.md` (committed to `<REDACTED>/phenotype-apps`)
 **Status:** v11 closure batch — 23 PRs opened this session, 18 new findings written
 
 ---
@@ -9,15 +9,15 @@
 ## Session 2026-06-20: v11 Closure Batch — Completed Work
 
 ### Batch 1 — pheno-llms-txt absorption + pheno-errors fix
-- **TASK 1A** — `KooshaPari/phenotype-py-extras#6` verified MERGED at `a726a4e0` (2026-06-20T04:37:59Z)
+- **TASK 1A** — `<REDACTED>/phenotype-py-extras#6` verified MERGED at `a726a4e0` (2026-06-20T04:37:59Z)
 - Finding closure appended: `findings/2026-06-19-L5-114-pheno-llms-txt-absorption.md` (+48 lines)
-- Pushed to `KooshaPari/phenotype-apps` as `chore/L5-114-llms-txt-closure-2026-06-20` (commit `dd456e3c36`)
-- PR: `KooshaPari/phenotype-apps#35` (OPEN)
-- `KooshaPari/pheno-llms-txt` is already HTTP 404 (user-deleted pre-emptively)
+- Pushed to `<REDACTED>/phenotype-apps` as `chore/L5-114-llms-txt-closure-2026-06-20` (commit `dd456e3c36`)
+- PR: `<REDACTED>/phenotype-apps#35` (OPEN)
+- `<REDACTED>/pheno-llms-txt` is already HTTP 404 (user-deleted pre-emptively)
 - **TASK 1B** — Fixed real Rust syntax bug in `pheno-errors/src/lib.rs:338` (proptest inner attr → outer attr)
 - Branch: `chore/l5-110-substrate-quality-bar-2026-06-20`, commit `acecbee2f8`
-- Pushed to `KooshaPari/phenotype-apps` (canonical home; `KooshaPari/pheno-errors` is 404)
-- PR: `KooshaPari/phenotype-apps#36` (OPEN)
+- Pushed to `<REDACTED>/phenotype-apps` (canonical home; `<REDACTED>/pheno-errors` is 404)
+- PR: `<REDACTED>/phenotype-apps#36` (OPEN)
 
 ### Batch 2 — T74-T88 placeholder findings (12 files, 1,918 lines)
 - **T2A** 71-pillar scorecards (5 repos): Configra, Settly, clap-ext, py-utils, cheap-llm-mcp
@@ -27,7 +27,7 @@
 - 12 files: `findings/2026-06-20-T2{A,B,C}-*.md`
 
 ### Batch 3 — Fleet SSOT audit + bundle generation
-- Audited 30 top-active KooshaPari/* repos × 9 SSOT files = 270 checks
+- Audited 30 top-active <REDACTED>/* repos × 9 SSOT files = 270 checks
 - Coverage before: 142/270 (52.6%); projected after merge: 199/270 (73.7%)
 - 22 PRs opened (21 OPEN + 1 CLOSED); 71 files generated across 26 repos
 - Tier 1 files (dependabot, CHANGELOG) at 100% post-merge
@@ -108,10 +108,10 @@
 
 | Item | Status | Notes |
 |------|--------|-------|
-| pheno-errors Cargo.toml + lib.rs uncommitted changes | DONE | Real Rust bug fix, PR `KooshaPari/phenotype-apps#36` |
+| pheno-errors Cargo.toml + lib.rs uncommitted changes | DONE | Real Rust bug fix, PR `<REDACTED>/phenotype-apps#36` |
 | AGENTS.md v11 update | DONE | Already updated with all 54 ADRs in 2026-06-19 05:00 PDT version |
 | Meta-repo WORKLOG.md creation | DONE | This file |
-| Meta-repo push (origin = KooshaPari/FocalPoint archived) | DONE | Origin is now `KooshaPari/phenotype-apps` |
+| Meta-repo push (origin = <REDACTED>/FocalPoint archived) | DONE | Origin is now `<REDACTED>/phenotype-apps` |
 
 ---
 
@@ -119,30 +119,30 @@
 
 | # | PR | Title |
 |---|---|---|
-| 1 | `KooshaPari/phenotype-apps#35` | docs(findings): L5-114 pheno-llms-txt closure |
-| 2 | `KooshaPari/phenotype-apps#36` | fix(pheno-errors): proptest inner attr → outer attr |
-| 3 | `KooshaPari/phenotype-python-sdk#29` | docs(governance): SSOT bundle |
-| 4 | `KooshaPari/phenotype-go-sdk#22` | docs(governance): SSOT bundle |
-| 5 | `KooshaPari/argis-extensions#95` | docs(governance): SSOT bundle |
-| 6 | `KooshaPari/Tasken#54` | docs(governance): SSOT bundle |
-| 7 | `KooshaPari/phenotype-registry#279` | docs(governance): SSOT bundle |
-| 8 | `KooshaPari/kmobile#38` | docs(governance): SSOT bundle |
-| 9 | `KooshaPari/Civis#585` | docs(governance): SSOT bundle |
-| 10 | `KooshaPari/hwLedger#112` | docs(governance): SSOT bundle |
-| 11 | `KooshaPari/PhenoSpecs#94` | docs(governance): SSOT bundle |
-| 12 | `KooshaPari/foqos-private#32` | docs(governance): SSOT bundle |
-| 13 | `KooshaPari/phenoUtils#67` | docs(governance): SSOT bundle |
-| 14 | `KooshaPari/agent-user-status#45` | docs(governance): SSOT bundle |
-| 15 | `KooshaPari/HexaKit#293` | docs(governance): SSOT bundle |
-| 16 | `KooshaPari/PhenoObservability#175` | docs(governance): SSOT bundle |
-| 17 | `KooshaPari/phenodocs#191` | docs(governance): SSOT bundle |
-| 18 | `KooshaPari/phenotype-hub#43` | docs(governance): SSOT bundle |
-| 19 | `KooshaPari/phenoForge#17` | docs(governance): SSOT bundle |
-| 20 | `KooshaPari/KodeVibe#19` | docs(governance): SSOT bundle |
-| 21 | `KooshaPari/Eventra#29` | docs(governance): SSOT bundle |
-| 22 | `KooshaPari/PhenoContracts#12` | docs(governance): SSOT bundle |
-| 23 | `KooshaPari/apikit#2` | docs(governance): SSOT bundle |
-| 24 | `KooshaPari/phenoShared#199` (CLOSED) | docs(governance): SSOT bundle (repo archived mid-execution) |
+| 1 | `<REDACTED>/phenotype-apps#35` | docs(findings): L5-114 pheno-llms-txt closure |
+| 2 | `<REDACTED>/phenotype-apps#36` | fix(pheno-errors): proptest inner attr → outer attr |
+| 3 | `<REDACTED>/phenotype-python-sdk#29` | docs(governance): SSOT bundle |
+| 4 | `<REDACTED>/phenotype-go-sdk#22` | docs(governance): SSOT bundle |
+| 5 | `<REDACTED>/argis-extensions#95` | docs(governance): SSOT bundle |
+| 6 | `<REDACTED>/Tasken#54` | docs(governance): SSOT bundle |
+| 7 | `<REDACTED>/phenotype-registry#279` | docs(governance): SSOT bundle |
+| 8 | `<REDACTED>/kmobile#38` | docs(governance): SSOT bundle |
+| 9 | `<REDACTED>/Civis#585` | docs(governance): SSOT bundle |
+| 10 | `<REDACTED>/hwLedger#112` | docs(governance): SSOT bundle |
+| 11 | `<REDACTED>/PhenoSpecs#94` | docs(governance): SSOT bundle |
+| 12 | `<REDACTED>/foqos-private#32` | docs(governance): SSOT bundle |
+| 13 | `<REDACTED>/phenoUtils#67` | docs(governance): SSOT bundle |
+| 14 | `<REDACTED>/agent-user-status#45` | docs(governance): SSOT bundle |
+| 15 | `<REDACTED>/HexaKit#293` | docs(governance): SSOT bundle |
+| 16 | `<REDACTED>/PhenoObservability#175` | docs(governance): SSOT bundle |
+| 17 | `<REDACTED>/phenodocs#191` | docs(governance): SSOT bundle |
+| 18 | `<REDACTED>/phenotype-hub#43` | docs(governance): SSOT bundle |
+| 19 | `<REDACTED>/phenoForge#17` | docs(governance): SSOT bundle |
+| 20 | `<REDACTED>/KodeVibe#19` | docs(governance): SSOT bundle |
+| 21 | `<REDACTED>/Eventra#29` | docs(governance): SSOT bundle |
+| 22 | `<REDACTED>/PhenoContracts#12` | docs(governance): SSOT bundle |
+| 23 | `<REDACTED>/apikit#2` | docs(governance): SSOT bundle |
+| 24 | `<REDACTED>/phenoShared#199` (CLOSED) | docs(governance): SSOT bundle (repo archived mid-execution) |
 
 ---
 

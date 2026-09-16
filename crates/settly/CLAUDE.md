@@ -2,13 +2,13 @@
 
 ## Project Overview
 - **Name**: Settly
-- **Owner**: KooshaPari
+- **Owner**: <REDACTED>
 - **Stack**: See repo source
 
 ## AgilePlus Mandate
 All work MUST be tracked in AgilePlus:
-- Reference: /Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus
-- CLI: `cd /Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus && agileplus <command>`
+- Reference: /Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus
+- CLI: `cd /Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus && agileplus <command>`
 
 ## Branch Discipline
 - Feature branches: `worktrees/<topic>/`
@@ -16,4 +16,4 @@ All work MUST be tracked in AgilePlus:
 - Never commit directly to `main`
 
 ## References
-- Parent workspace: /Users/kooshapari/CodeProjects/Phenotype/repos/CLAUDE.md
+- Parent workspace: /Users/<REDACTED>/CodeProjects/Phenotype/repos/CLAUDE.md

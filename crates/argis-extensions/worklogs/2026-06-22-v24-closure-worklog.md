@@ -1,7 +1,7 @@
 # v24 Closure Worklog — Cycle 14 P1 Reduction (2026-06-22)
 
 **Branch:** `chore/v24-71-pillar-cycle-14-p1-2026-06-22`
-**Author:** KooshaPari
+**Author:** <REDACTED>
 **Date:** 2026-06-22 18:46 PDT
 
 ## Cycle 14 P1 Reduction — 6/6 Tracks Shipped

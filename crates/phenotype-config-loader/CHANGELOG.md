@@ -16,14 +16,14 @@ follows [SemVer 2.0.0](https://semver.org/spec/v2.0.0.html).
 
 ### Notes
 - Crate moved into the Configra workspace at this commit
-  (PR `KooshaPari/Configra#52` prior).
-- Source: `KooshaPari/phenotype-config/crates/phenotype-config-loader/`
+  (PR `<REDACTED>/Configra#52` prior).
+- Source: `<REDACTED>/phenotype-config/crates/phenotype-config-loader/`
   (commit `f86f8e9` on `main`, 2026-06-17).
 
 ## [0.1.0] — 2026-06-17
 
 ### Added
-- Initial release absorbed from `KooshaPari/phenotype-config`.
+- Initial release absorbed from `<REDACTED>/phenotype-config`.
 - `load_json<T: DeserializeOwned>(&Path) -> Result<T, ConfigLoadError>`
 - `load_toml<T: DeserializeOwned>(&Path) -> Result<T, ConfigLoadError>`
 - `ConfigLoadError` enum: `NotFound`, `Parse`, `Io`.

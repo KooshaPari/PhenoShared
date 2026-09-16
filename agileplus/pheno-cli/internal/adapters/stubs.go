@@ -7,7 +7,7 @@ import (
 
 	toml "github.com/pelletier/go-toml/v2"
 
-	"github.com/KooshaPari/pheno-cli/internal/version"
+	"github.com/<REDACTED>/pheno-cli/internal/version"
 )
 
 // HexAdapter is a pre-wired stub for Hex.pm (Elixir).

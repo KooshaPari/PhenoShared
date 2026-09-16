@@ -5,7 +5,7 @@
   "environment": {
     "host_os": "Windows 10 22H2 (build 28120) / PowerShell 7",
     "runtime": "WSL2 only (no docker); WSL distro reports Fedora-style linux; launcher runs under bash via wsl.exe",
-    "venv": "/home/kooshapari/.pheno-serve-venv",
+    "venv": "/home/<REDACTED>/.pheno-serve-venv",
     "python": "3.14.6",
     "sglang": "0.3.6.post2",
     "sgl_kernel": "0.1.0 (fixed wheel, pre-installed, NOT modified by this test)",
@@ -30,35 +30,35 @@
   },
   "model": {
     "id": "Qwen2.5-0.5B-Instruct",
-    "snapshot": "/home/kooshapari/.cache/huggingface/hub/models--Qwen--Qwen2.5-0.5B-Instruct/snapshots/7ae557604adf67be50417f59c2c2f167def9a775",
+    "snapshot": "/home/<REDACTED>/.cache/huggingface/hub/models--Qwen--Qwen2.5-0.5B-Instruct/snapshots/7ae557604adf67be50417f59c2c2f167def9a775",
     "size": "954 MB total (0.92 GiB checkpoint), smallest complete local model; Qwen3-0.6B rejected (no model.safetensors)"
   },
   "launch": {
-    "command": "/home/kooshapari/.pheno-serve-venv/bin/python -u /mnt/c/Users/koosh/AppData/Local/Temp/sgl_launcher.py --model-path /home/kooshapari/.cache/huggingface/hub/models--Qwen--Qwen2.5-0.5B-Instruct/snapshots/7ae557604adf67be50417f59c2c2f167def9a775 --port 19011 --device cuda --tp-size 1 --mem-fraction-static 0.06 --max-total-tokens 2048 --max-running-requests 2 --attention-backend triton --sampling-backend pytorch --disable-cuda-graph --log-level error",
+    "command": "/home/<REDACTED>/.pheno-serve-venv/bin/python -u /mnt/c/Users/koosh/AppData/Local/Temp/sgl_launcher.py --model-path /home/<REDACTED>/.cache/huggingface/hub/models--Qwen--Qwen2.5-0.5B-Instruct/snapshots/7ae557604adf67be50417f59c2c2f167def9a775 --port 19011 --device cuda --tp-size 1 --mem-fraction-static 0.06 --max-total-tokens 2048 --max-running-requests 2 --attention-backend triton --sampling-backend pytorch --disable-cuda-graph --log-level error",
     "pid": 1756,
     "started_wsl_local": "2026-08-08 19:30:52 (marker-02:30:52)",
     "startup_result": "HEALTHY - /health returned HTTP 200 at t=15s (first probe at t=5s=000, t=10s=000, t=15s=200). ~12 prior launches iterated through the crash chain (each fixed via in-memory shim, no file modified).",
-    "startup_log": "/home/kooshapari/sglang_smoke_server_2026-08-08.log"
+    "startup_log": "/home/<REDACTED>/sglang_smoke_server_2026-08-08.log"
   },
   "models_endpoint": {
     "http": 200,
     "body": {
-      "id": "/home/kooshapari/.cache/huggingface/hub/models--Qwen--Qwen2.5-0.5B-Instruct/snapshots/7ae557604adf67be50417f59c2c2f167def9a775",
+      "id": "/home/<REDACTED>/.cache/huggingface/hub/models--Qwen--Qwen2.5-0.5B-Instruct/snapshots/7ae557604adf67be50417f59c2c2f167def9a775",
       "object": "model",
       "created": 1786242691,
       "owned_by": "sglang",
-      "root": "/home/kooshapari/.cache/huggingface/hub/models--Qwen--Qwen2.5-0.5B-Instruct/snapshots/7ae557604adf67be50417f59c2c2f167def9a775"
+      "root": "/home/<REDACTED>/.cache/huggingface/hub/models--Qwen--Qwen2.5-0.5B-Instruct/snapshots/7ae557604adf67be50417f59c2c2f167def9a775"
     }
   },
   "completion": {
     "endpoint": "POST http://127.0.0.1:19011/v1/chat/completions",
-    "request": { "model": "/home/kooshapari/.cache/huggingface/hub/models--Qwen--Qwen2.5-0.5B-Instruct/snapshots/7ae557604adf67be50417f59c2c2f167def9a775", "messages": [ { "role": "user", "content": "Reply with exactly: hello" } ], "max_tokens": 8, "temperature": 0 },
+    "request": { "model": "/home/<REDACTED>/.cache/huggingface/hub/models--Qwen--Qwen2.5-0.5B-Instruct/snapshots/7ae557604adf67be50417f59c2c2f167def9a775", "messages": [ { "role": "user", "content": "Reply with exactly: hello" } ], "max_tokens": 8, "temperature": 0 },
     "http": 200,
     "response": {
       "id": "441b5d21a61948349d8cadb0f0861a7e",
       "object": "chat.completion",
       "created": 1786242683,
-      "model": "/home/kooshapari/.cache/huggingface/hub/models--Qwen--Qwen2.5-0.5B-Instruct/snapshots/7ae557604adf67be50417f59c2c2f167def9a775",
+      "model": "/home/<REDACTED>/.cache/huggingface/hub/models--Qwen--Qwen2.5-0.5B-Instruct/snapshots/7ae557604adf67be50417f59c2c2f167def9a775",
       "choices": [ { "index": 0, "message": { "role": "assistant", "content": "Hello! How can I assist you today" }, "logprobs": null, "finish_reason": "length", "matched_stop": null } ],
       "usage": { "prompt_tokens": 34, "total_tokens": 42, "completion_tokens": 8, "prompt_tokens_details": null }
     },
@@ -79,8 +79,8 @@
   },
   "files": {
     "launcher": "/mnt/c/Users/koosh/AppData/Local/Temp/sgl_launcher.py (Windows: C:\\Users\\koosh\\AppData\\Local\\Temp\\sgl_launcher.py)",
-    "server_log": "/home/kooshapari/sglang_smoke_server_2026-08-08.log",
-    "evidence_wsl": "/home/kooshapari/sgl_kernel_server_smoke_evidence_2026-08-08.json",
+    "server_log": "/home/<REDACTED>/sglang_smoke_server_2026-08-08.log",
+    "evidence_wsl": "/home/<REDACTED>/sgl_kernel_server_smoke_evidence_2026-08-08.json",
     "evidence_windows": "C:\\Users\\koosh\\pheno-harness\\state\\wheels\\sgl_kernel_server_smoke_evidence_2026-08-08.json"
   },
   "verdict": "SERVER_SMOKE_PASS",

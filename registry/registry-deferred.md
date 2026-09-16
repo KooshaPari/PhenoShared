@@ -4,10 +4,10 @@
 
 | Repo                    | Audit File                 | Score | Status                    |
 | ----------------------- | -------------------------- | ----- | ------------------------- |
-| `KooshaPari/Tracera`    | `Tracera-2026-06-25.md`    | 14/14 | **DONE** — pushed to main |
-| `KooshaPari/AuthKit`    | `AuthKit-2026-06-25.md`    | 14/14 | **DONE** — pushed to main |
-| `KooshaPari/PhenoSpecs` | `PhenoSpecs-2026-06-25.md` | 14/14 | **DONE** — pushed to main |
-| `KooshaPari/Eidolon`    | `Eidolon-2026-06-25.md`    | 14/14 | **DONE** — pushed to main |
+| `<REDACTED>/Tracera`    | `Tracera-2026-06-25.md`    | 14/14 | **DONE** — pushed to main |
+| `<REDACTED>/AuthKit`    | `AuthKit-2026-06-25.md`    | 14/14 | **DONE** — pushed to main |
+| `<REDACTED>/PhenoSpecs` | `PhenoSpecs-2026-06-25.md` | 14/14 | **DONE** — pushed to main |
+| `<REDACTED>/Eidolon`    | `Eidolon-2026-06-25.md`    | 14/14 | **DONE** — pushed to main |
 
 ## Why these were deferred (historical)
 
@@ -46,7 +46,7 @@ manually following the same pattern as the 8 audited repos.
 PhenoSpecs tombstoned. registry.yaml content migrated to:
   registry/specs/from-PhenoSpecs/registry.yaml
 
-Consumers referencing KooshaPari/PhenoSpecs/registry.yaml should update
+Consumers referencing <REDACTED>/PhenoSpecs/registry.yaml should update
 to phenotype-registry/registry/specs/from-PhenoSpecs/registry.yaml.
 
-Git history preserved on KooshaPari/zz-no-archive-PhenoSpecs (hist branch).
+Git history preserved on <REDACTED>/zz-no-archive-PhenoSpecs (hist branch).

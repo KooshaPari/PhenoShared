@@ -9,17 +9,17 @@
 
 ## 0. Path resolution — discrepancy disclosed
 
-The path in the task brief, `/Users/kooshapari/CodeProjects/Phenotype/repos/spikes/go/phenotype-router/`, **does not exist**.
+The path in the task brief, `/Users/<REDACTED>/CodeProjects/Phenotype/repos/spikes/go/phenotype-router/`, **does not exist**.
 
 ### What was searched
 
 ```
-ls  /Users/kooshapari/CodeProjects/Phenotype/repos/spikes/                    → ENOENT
-ls  /Users/kooshapari/CodeProjects/Phenotype/repos/spikes/go/phenotype-router/ → ENOENT
-ls  /Users/kooshapari/CodeProjects/Phenotype/repos/spikes/go/router/          → README.md only (9 lines, no Go code)
-ls  /Users/kooshapari/CodeProjects/Phenotype/repos/phenotype-gateway/spikes/go/{agentapi,argis,bifrost,cliproxy,router}/
+ls  /Users/<REDACTED>/CodeProjects/Phenotype/repos/spikes/                    → ENOENT
+ls  /Users/<REDACTED>/CodeProjects/Phenotype/repos/spikes/go/phenotype-router/ → ENOENT
+ls  /Users/<REDACTED>/CodeProjects/Phenotype/repos/spikes/go/router/          → README.md only (9 lines, no Go code)
+ls  /Users/<REDACTED>/CodeProjects/Phenotype/repos/phenotype-gateway/spikes/go/{agentapi,argis,bifrost,cliproxy,router}/
                                                                               → all README.md + smoke.sh stubs (no Go code)
-find /Users/kooshapari/CodeProjects/Phenotype/repos -name "phenotype-router"  → no matches
+find /Users/<REDACTED>/CodeProjects/Phenotype/repos -name "phenotype-router"  → no matches
 ```
 
 ### What actually exists (router-adjacent code in the monorepo)

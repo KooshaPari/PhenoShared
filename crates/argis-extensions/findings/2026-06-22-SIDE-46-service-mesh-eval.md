@@ -306,7 +306,7 @@ roadmap, Linkerd covers the requirements at lower cost.
 ## 9. Migration path (informational, not this turn)
 
 1. **Track 1 (1 wk, macbook):** `pheno-mesh` substrate bootstrap. Repo
-   `KooshaPari/pheno-mesh`, Charter.md + SPEC.md + AGENTS.md. Cargo lib for
+   `<REDACTED>/pheno-mesh`, Charter.md + SPEC.md + AGENTS.md. Cargo lib for
    mesh-policy intents (mirrors `pheno-port-adapter` patterns).
 2. **Track 2 (1 wk, heavy-runner):** Lima-based dev cluster + `linkerd install` +
    sample workload annotated.
@@ -345,7 +345,7 @@ Owner: orch-w1-a (proposed). Plan file:
 - Consul Connect: <https://developer.hashicorp.com/consul/docs/connect>
 - CNCF Service Mesh Landscape (2025-Q4): <https://landscape.cncf.io/service-mesh>
 - SPIFFE / SPIRE: <https://spiffe.io/docs/latest/spiffe-about/overview/>
-- pheno-tracing substrate: `KooshaPari/pheno-tracing` (canonical)
+- pheno-tracing substrate: `<REDACTED>/pheno-tracing` (canonical)
 
 ---
 

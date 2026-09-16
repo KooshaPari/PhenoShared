@@ -1,7 +1,7 @@
 # Site Infrastructure
 
 `projects-landing` is the public Phenotype project hub for
-`https://projects.kooshapari.com`.
+`https://projects.<REDACTED>.com`.
 
 ## Deployments
 

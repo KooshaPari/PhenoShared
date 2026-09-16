@@ -1,7 +1,7 @@
 # pheno-types (deprecated stub)
 
 **This package has moved.** Canonical types live in the
-**[KooshaPari/phenotype-types](https://github.com/KooshaPari/phenotype-types)** repository.
+**[<REDACTED>/phenotype-types](https://github.com/<REDACTED>/phenotype-types)** repository.
 
 HexaKit retains this directory only as a transitional pointer during the
 `python/pheno-*` disposition. Do not add or extend types here.
@@ -9,14 +9,14 @@ HexaKit retains this directory only as a transitional pointer during the
 ## Install from canonical repo
 
 ```bash
-pip install git+https://github.com/KooshaPari/phenotype-types.git
+pip install git+https://github.com/<REDACTED>/phenotype-types.git
 ```
 
 Or add to your project dependencies (package name remains `pheno-types`, import `pheno_types`):
 
 ```toml
 dependencies = [
-  "pheno-types @ git+https://github.com/KooshaPari/phenotype-types.git",
+  "pheno-types @ git+https://github.com/<REDACTED>/phenotype-types.git",
 ]
 ```
 

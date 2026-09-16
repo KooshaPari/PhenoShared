@@ -10,7 +10,7 @@ description = "AgilePlus CLI subcommands (platform, dashboard, events, sync)"
 documentation = "https://docs.rs/agileplus-subcmds"
 keywords = ["phenotype", "agileplus"]
 categories = ["development-tools", "command-line-utilities"]
-authors = ["kooshapari"]
+authors = ["<REDACTED>"]
 
 [features]
 default = ["platform"]

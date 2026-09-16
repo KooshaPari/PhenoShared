@@ -1,8 +1,8 @@
-# Default owners — @KooshaPari reviews all changes
-*       @KooshaPari
+# Default owners — @<REDACTED> reviews all changes
+*       @<REDACTED>
 
 # Per-language drill-down (add more owners as team grows)
-*.rs    @KooshaPari
-*.go    @KooshaPari
-*.ts    @KooshaPari
-*.svelte @KooshaPari
+*.rs    @<REDACTED>
+*.go    @<REDACTED>
+*.ts    @<REDACTED>
+*.svelte @<REDACTED>

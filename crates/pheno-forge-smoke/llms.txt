@@ -52,9 +52,9 @@ user -> pheno-forge-plugins (6 systemd sidecars)
 
 ## Companion repos
 
-- `KooshaPari/pheno-forge-plugins` — sidecar bundle (v0.1.0)
-- `KooshaPari/pheno-cdylib-bridge` — C-ABI shared lib (v0.1.0)
-- `KooshaPari/thegent#1144` — memory v2 polyglot facade
+- `<REDACTED>/pheno-forge-plugins` — sidecar bundle (v0.1.0)
+- `<REDACTED>/pheno-cdylib-bridge` — C-ABI shared lib (v0.1.0)
+- `<REDACTED>/thegent#1144` — memory v2 polyglot facade
 - `tailcallhq/forgecode#3559` — forge_pheno_memory workspace crate
 
 ## ADR refs

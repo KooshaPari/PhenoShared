@@ -62,5 +62,5 @@ alerts:
   frequency_hours: 24
 
 integration:
-  github_repo: KooshaPari/Apisync
-  codecov_repo: KooshaPari/Apisync
+  github_repo: <REDACTED>/Apisync
+  codecov_repo: <REDACTED>/Apisync

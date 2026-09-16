@@ -37,16 +37,16 @@
     "total_branches_remote": 3,
     "stash_count": 1,
     "last_10_commits": [
-      {"sha": "2718569", "author": "KooshaPari", "date": "2026-07-24T07:48:39Z", "subject": "Record push outcome for recovery/preserve-20260717-0301 (session 019f6249)"},
-      {"sha": "39c6989", "author": "KooshaPari", "date": "2026-07-24T07:48:39Z", "subject": "Snapshot Codex session resume + TB2 evidence + commit/push authorization packet (session 019f6249)"},
-      {"sha": "5c22f2b", "author": "KooshaPari", "date": "2026-07-23T23:25:42Z", "subject": "Enforce canonical stack first: no interim llama defaults."},
-      {"sha": "40839bf", "author": "KooshaPari", "date": "2026-07-23T23:04:00Z", "subject": "Launch local TB2 matrix tooling for LFM/Ornith and record 1080 absence."},
-      {"sha": "d26f84b", "author": "KooshaPari", "date": "2026-07-23T22:50:00Z", "subject": "Record final local qwen35-08b Terminal-Bench 2.0 scoreboard."},
-      {"sha": "82afa47", "author": "KooshaPari", "date": "2026-07-23T00:00:00Z", "subject": "Snapshot partial local qwen35 TB2 scoreboard mid-run."},
-      {"sha": "923de87", "author": "KooshaPari", "date": "2026-07-23T00:00:00Z", "subject": "Watchdog now restarts llama even while portage is alive."},
-      {"sha": "fc0a30b", "author": "KooshaPari", "date": "2026-07-23T00:00:00Z", "subject": "Add local qwen TB2 watchdog for auto-resume."},
-      {"sha": "ba3cfef", "author": "KooshaPari", "date": "2026-07-23T00:00:00Z", "subject": "Watch Nanbeige4.2 and DiffusionGemma for local admit."},
-      {"sha": "85f8710", "author": "KooshaPari", "date": "2026-07-23T00:00:00Z", "subject": "Raise local TB2 context to 16k and add llama swap helper."}
+      {"sha": "2718569", "author": "<REDACTED>", "date": "2026-07-24T07:48:39Z", "subject": "Record push outcome for recovery/preserve-20260717-0301 (session 019f6249)"},
+      {"sha": "39c6989", "author": "<REDACTED>", "date": "2026-07-24T07:48:39Z", "subject": "Snapshot Codex session resume + TB2 evidence + commit/push authorization packet (session 019f6249)"},
+      {"sha": "5c22f2b", "author": "<REDACTED>", "date": "2026-07-23T23:25:42Z", "subject": "Enforce canonical stack first: no interim llama defaults."},
+      {"sha": "40839bf", "author": "<REDACTED>", "date": "2026-07-23T23:04:00Z", "subject": "Launch local TB2 matrix tooling for LFM/Ornith and record 1080 absence."},
+      {"sha": "d26f84b", "author": "<REDACTED>", "date": "2026-07-23T22:50:00Z", "subject": "Record final local qwen35-08b Terminal-Bench 2.0 scoreboard."},
+      {"sha": "82afa47", "author": "<REDACTED>", "date": "2026-07-23T00:00:00Z", "subject": "Snapshot partial local qwen35 TB2 scoreboard mid-run."},
+      {"sha": "923de87", "author": "<REDACTED>", "date": "2026-07-23T00:00:00Z", "subject": "Watchdog now restarts llama even while portage is alive."},
+      {"sha": "fc0a30b", "author": "<REDACTED>", "date": "2026-07-23T00:00:00Z", "subject": "Add local qwen TB2 watchdog for auto-resume."},
+      {"sha": "ba3cfef", "author": "<REDACTED>", "date": "2026-07-23T00:00:00Z", "subject": "Watch Nanbeige4.2 and DiffusionGemma for local admit."},
+      {"sha": "85f8710", "author": "<REDACTED>", "date": "2026-07-23T00:00:00Z", "subject": "Raise local TB2 context to 16k and add llama swap helper."}
     ]
   },
   "active_goal_persisted": {

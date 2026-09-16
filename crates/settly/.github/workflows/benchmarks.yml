@@ -49,4 +49,4 @@ jobs:
           alert-threshold: '150%'
           comment-on-alert: true
           fail-on-alert: true
-          alert-comment-cc-users: '@kooshapari'
+          alert-comment-cc-users: '@<REDACTED>'

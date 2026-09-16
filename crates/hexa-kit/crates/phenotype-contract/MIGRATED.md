@@ -2,7 +2,7 @@
 
 **Date:** 2026-06-18  
 **Disposition row:** HexaKit DISPOSITION #10 — Wave B  
-**Canonical repo:** https://github.com/KooshaPari/TestingKit  
+**Canonical repo:** https://github.com/<REDACTED>/TestingKit  
 **Git pin:** `TestingKit` branch `main` (TestingKit#9)
 
 ## What changed
@@ -13,5 +13,5 @@
 ## For consumers
 
 ```toml
-phenotype-contract = { git = "https://github.com/KooshaPari/TestingKit", branch = "main", package = "phenotype-contract" }
+phenotype-contract = { git = "https://github.com/<REDACTED>/TestingKit", branch = "main", package = "phenotype-contract" }
 ```

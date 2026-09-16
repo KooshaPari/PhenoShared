@@ -1,10 +1,10 @@
 # byteport-landing
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![CI](https://img.shields.io/github/actions/workflow/status/KooshaPari/phenotype-landing/ci.yml?branch=main)](https://github.com/KooshaPari/phenotype-landing/actions)
+[![CI](https://img.shields.io/github/actions/workflow/status/<REDACTED>/phenotype-landing/ci.yml?branch=main)](https://github.com/<REDACTED>/phenotype-landing/actions)
 [![TypeScript](https://img.shields.io/badge/typescript-5%2B-3178C6?logo=typescript)](https://www.typescriptlang.org/)
 
-Production landing page at `byteport.kooshapari.com` for [KooshaPari/BytePort](https://github.com/KooshaPari/BytePort), a Rust-based project management and workflow orchestration platform. Part of the Phenotype org-pages architecture (Tier 2; Tier 1 is `projects.kooshapari.com`).
+Production landing page at `byteport.<REDACTED>.com` for [<REDACTED>/BytePort](https://github.com/<REDACTED>/BytePort), a Rust-based project management and workflow orchestration platform. Part of the Phenotype org-pages architecture (Tier 2; Tier 1 is `projects.<REDACTED>.com`).
 
 ## Purpose
 
@@ -15,7 +15,7 @@ Provide a cohesive entry point to Byteport documentation, dashboards, and QA rep
 - **Frontend:** Astro 5 (static HTML at build time, edge rendering)
 - **Styling:** Tailwind CSS 4 with impeccable design baseline
 - **Deployment:** Vercel (serverless functions for API routes)
-- **Domain:** `byteport.kooshapari.com` via Cloudflare CNAME
+- **Domain:** `byteport.<REDACTED>.com` via Cloudflare CNAME
 - **Data sources:** GitHub API (README, releases), OpenTelemetry backend (metrics), local database (QA reports)
 
 ## Stack Details
@@ -46,7 +46,7 @@ tokio = { version = "1.0", features = ["full"] }
 
 ```bash
 # Clone repository
-git clone https://github.com/KooshaPari/byteport-landing.git
+git clone https://github.com/<REDACTED>/byteport-landing.git
 cd byteport-landing
 
 # Install dependencies
@@ -76,7 +76,7 @@ bun run deploy
 
 ## Path Microfrontends
 
-Per Phenotype org-pages standing policy, `byteport.kooshapari.com` hosts multiple surfaces as path-based microfrontends:
+Per Phenotype org-pages standing policy, `byteport.<REDACTED>.com` hosts multiple surfaces as path-based microfrontends:
 
 | Path | Component | Status | Purpose |
 |------|-----------|--------|---------|
@@ -108,7 +108,7 @@ GITHUB_TOKEN=ghp_xxxx           # Increases rate limit to 5000 req/hr
 
 # Vercel deployment
 VERCEL_ENV=production|staging    # Set by Vercel automatically
-VERCEL_URL=byteport.kooshapari.com
+VERCEL_URL=byteport.<REDACTED>.com
 
 # OTEL backend (when microfrontend launches)
 OTEL_ENDPOINT=https://otel.internal/api/v1
@@ -124,7 +124,7 @@ Edit `src/components/Hero.astro`, `src/components/Features.astro`:
 ```astro
 ---
 // src/components/Hero.astro
-const githubData = await fetchGitHubRepo('KooshaPari/BytePort');
+const githubData = await fetchGitHubRepo('<REDACTED>/BytePort');
 ---
 
 <section class="hero">
@@ -156,8 +156,8 @@ export default {
 // src/pages/index.astro
 import { getGitHubREADME, getLatestRelease } from '../lib/github';
 
-const readme = await getGitHubREADME('KooshaPari/BytePort');
-const release = await getLatestRelease('KooshaPari/BytePort');
+const readme = await getGitHubREADME('<REDACTED>/BytePort');
+const release = await getLatestRelease('<REDACTED>/BytePort');
 ---
 
 <article set:html={readme.html} />
@@ -213,7 +213,7 @@ vercel --target staging
 CNAME agileplus → cname.vercel-dns.com
 
 # Verify
-nslookup byteport.kooshapari.com
+nslookup byteport.<REDACTED>.com
 # Should resolve to Vercel IP
 ```
 
@@ -227,7 +227,7 @@ nslookup byteport.kooshapari.com
 
 ## Related
 
-- [Byteport](https://github.com/KooshaPari/BytePort) — Main project repository
-- [projects.kooshapari.com](https://github.com/KooshaPari/portfolio) — Tier 1 landing (all projects)
+- [Byteport](https://github.com/<REDACTED>/BytePort) — Main project repository
+- [projects.<REDACTED>.com](https://github.com/<REDACTED>/portfolio) — Tier 1 landing (all projects)
 - [phenotype-design](../phenotype-design/) — Design system & components
-- [Org Pages Architecture](https://github.com/KooshaPari/phenotype-infrakit/docs/governance/org-pages-architecture.md)
+- [Org Pages Architecture](https://github.com/<REDACTED>/phenotype-infrakit/docs/governance/org-pages-architecture.md)

@@ -14,7 +14,7 @@
     ],
     "component": {
       "type": "library",
-      "bom-ref": "path+file:///Users/kooshapari/CodeProjects/Phenotype/repos/pheno/crates/phenotype-iter#0.2.0",
+      "bom-ref": "path+file:///Users/<REDACTED>/CodeProjects/Phenotype/repos/pheno/crates/phenotype-iter#0.2.0",
       "name": "phenotype-iter",
       "version": "0.2.0",
       "description": "Phenotype Infrastructure Kit",
@@ -28,7 +28,7 @@
       "components": [
         {
           "type": "library",
-          "bom-ref": "path+file:///Users/kooshapari/CodeProjects/Phenotype/repos/pheno/crates/phenotype-iter#0.2.0 bin-target-0",
+          "bom-ref": "path+file:///Users/<REDACTED>/CodeProjects/Phenotype/repos/pheno/crates/phenotype-iter#0.2.0 bin-target-0",
           "name": "phenotype_iter",
           "version": "0.2.0",
           "purl": "pkg:cargo/phenotype-iter@0.2.0?download_url=file://.#src/lib.rs"
@@ -1136,7 +1136,7 @@
   ],
   "dependencies": [
     {
-      "ref": "path+file:///Users/kooshapari/CodeProjects/Phenotype/repos/pheno/crates/phenotype-iter#0.2.0",
+      "ref": "path+file:///Users/<REDACTED>/CodeProjects/Phenotype/repos/pheno/crates/phenotype-iter#0.2.0",
       "dependsOn": [
         "registry+https://github.com/rust-lang/crates.io-index#async-trait@0.1.89",
         "registry+https://github.com/rust-lang/crates.io-index#futures@0.3.32",

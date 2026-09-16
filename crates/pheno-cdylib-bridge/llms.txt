@@ -12,7 +12,7 @@ The primary consumer is the upstream [`antinomyhq/forgecode`](https://github.com
 
 ## Why this exists
 
-Per ADR-096, the locked approach to improving forgecode is to keep forgecode as the agent CLI and add capability around it via sidecars (per-machine systemd units, see `KooshaPari/pheno-forge-plugins`) and via direct bindings (Rust crates linked into the Go binary). The bridge is the binding layer.
+Per ADR-096, the locked approach to improving forgecode is to keep forgecode as the agent CLI and add capability around it via sidecars (per-machine systemd units, see `<REDACTED>/pheno-forge-plugins`) and via direct bindings (Rust crates linked into the Go binary). The bridge is the binding layer.
 
 ## API
 
@@ -34,9 +34,9 @@ void        pheno_memory_free(void *handle);
 
 v0.1.0 (2026-06-23). PR 3 of the 3-PR forgecode improvement sequence.
 
-- PR 1 — `KooshaPari/pheno-forge-plugins` v0.1.0 (6 plugins + systemd target).
-- PR 2 — `KooshaPari/thegent#1144` (memory port + 4 adapters + composite router).
-- PR 3 — `KooshaPari/pheno-cdylib-bridge` v0.1.0 (this crate; C-ABI).
+- PR 1 — `<REDACTED>/pheno-forge-plugins` v0.1.0 (6 plugins + systemd target).
+- PR 2 — `<REDACTED>/thegent#1144` (memory port + 4 adapters + composite router).
+- PR 3 — `<REDACTED>/pheno-cdylib-bridge` v0.1.0 (this crate; C-ABI).
 
 ## Refs
 

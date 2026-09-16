@@ -79,8 +79,8 @@
 //!   Tests: [`SandboxClient::with_memory_audit`] / [`AuditingSandbox::wrap_memory`].
 //!
 //! Source satellites (do not unarchive routinely):
-//! [KDesktopVirt](https://github.com/KooshaPari/KDesktopVirt) (archived),
-//! [PlayCua](https://github.com/KooshaPari/PlayCua) (active).
+//! [KDesktopVirt](https://github.com/<REDACTED>/KDesktopVirt) (archived),
+//! [PlayCua](https://github.com/<REDACTED>/PlayCua) (active).
 //!
 //! # Input validation contract
 //!

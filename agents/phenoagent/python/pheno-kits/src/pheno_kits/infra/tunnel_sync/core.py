@@ -23,7 +23,7 @@ class TunnelManager:
     def __init__(
         self,
         registry: PortRegistry | None = None,
-        domain: str = "kooshapari.com",
+        domain: str = "<REDACTED>.com",
         cf_api_token: str | None = None,
         use_unified_tunnel: bool = True,
         cleanup_on_start: bool = True,

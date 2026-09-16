@@ -1,7 +1,7 @@
 # GitHub Actions Workflow Quality Audit
 
 **Date:** 2026-05-05
-**Scope:** `/Users/kooshapari/CodeProjects/Phenotype/repos`
+**Scope:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos`
 **Total workflow files scanned:** 7,013
 
 ---
@@ -37,16 +37,16 @@ This single action appears pinned to `@main` in 128+ repos. `trufflehog` does pu
 **Repos:**
 - `AgilePlus-wtrees/agile-main/`, `AgilePlus-wtrees/bdd-features/`, `AgilePlus-wtrees/cargo-deny-fix-tonic-2026-05-04/`, `AgilePlus-wtrees/security-gate-normalize/`, `AgilePlus-wtrees/task-77-contents-read/`
 
-### Pattern: `KooshaPari/phenotypeActions/actions/*@main`
+### Pattern: `<REDACTED>/phenotypeActions/actions/*@main`
 
 4 `agentapi-plusplus` worktrees and 1 `cliproxyapi-plusplus` worktree reference a private org action at `@main`.
 
 **Repos:**
-- `agentapi-plusplus/` (canonical + worktrees): `KooshaPari/phenotypeActions/actions/policy-gate@main`
-- `cliproxyapi-plusplus/` (canonical + worktrees): `KooshaPari/phenotypeActions/actions/lint-test@main`
-- `portage/` (canonical + worktrees): `KooshaPari/phenotypeActions/actions/lint-test@main`
+- `agentapi-plusplus/` (canonical + worktrees): `<REDACTED>/phenotypeActions/actions/policy-gate@main`
+- `cliproxyapi-plusplus/` (canonical + worktrees): `<REDACTED>/phenotypeActions/actions/lint-test@main`
+- `portage/` (canonical + worktrees): `<REDACTED>/phenotypeActions/actions/lint-test@main`
 
-**Recommendation:** Add SHA pins to `KooshaPari/phenotypeActions` releases. If releases are not yet tagged, tag them first before updating callers.
+**Recommendation:** Add SHA pins to `<REDACTED>/phenotypeActions` releases. If releases are not yet tagged, tag them first before updating callers.
 
 ---
 
@@ -166,6 +166,6 @@ This causes unnecessary network I/O and slower CI runs on every push. Common in 
 
 4. **[P1 — CI Performance]** Add caching to the org-level `ci.yml`, `deploy.yml`, and `gate-check.yml`.
 
-5. **[P2 — Private Actions]** SHA-pin `KooshaPari/phenotypeActions` releases and update all callers in `agentapi-plusplus`, `cliproxyapi-plusplus`, and `portage`.
+5. **[P2 — Private Actions]** SHA-pin `<REDACTED>/phenotypeActions` releases and update all callers in `agentapi-plusplus`, `cliproxyapi-plusplus`, and `portage`.
 
 6. **[P3 — Worktrees]** As worktrees are merged/retired, ensure new canonical workflows use SHA-pinned actions, explicit timeouts, and permission blocks.

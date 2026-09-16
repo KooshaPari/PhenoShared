@@ -108,14 +108,14 @@ Completed comprehensive consolidation and libification of the Phenotype ecosyste
 
 1. **phenotype-event-sourcing nested dup** (PREPARED)
    ```bash
-   mkdir -p /Users/kooshapari/CodeProjects/Phenotype/repos/crates/phenotype-event-sourcing/.archive
+   mkdir -p /Users/<REDACTED>/CodeProjects/Phenotype/repos/crates/phenotype-event-sourcing/.archive
    mv phenotype-event-sourcing/ .archive/nested-duplicate-2026-03-29/
    git add -A && git commit -m "chore: archive nested phenotype-event-sourcing duplication"
    ```
 
 2. **Build artifacts** (add/, docs/node_modules/) (PREPARED)
    ```bash
-   mkdir -p /Users/kooshapari/CodeProjects/Phenotype/repos/.archive
+   mkdir -p /Users/<REDACTED>/CodeProjects/Phenotype/repos/.archive
    mv add/ .archive/stale-add-2026-03-29/
    mv docs/node_modules/ .archive/docs-node-modules-2026-03-29/
    git add -A && git commit -m "chore: archive stale build artifacts"

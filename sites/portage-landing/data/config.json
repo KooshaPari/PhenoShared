@@ -6,7 +6,7 @@
   "color": "#6366f1",
   "description": "Harbor framework: agent evaluations and reinforcement learning environments.",
   "tier": 2,
-  "repo": "KooshaPari/Portage",
+  "repo": "<REDACTED>/Portage",
   "language": "Rust / Python",
   "license": "MIT",
   "status": "active",
@@ -17,8 +17,8 @@
     "Harbor pattern"
   ],
   "links": {
-    "github": "https://github.com/KooshaPari/Portage",
+    "github": "https://github.com/<REDACTED>/Portage",
     "docs": "https://portage.phenotype.space/docs",
-    "releases": "https://github.com/KooshaPari/Portage/releases"
+    "releases": "https://github.com/<REDACTED>/Portage/releases"
   }
 }

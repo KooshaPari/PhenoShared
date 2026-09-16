@@ -9,7 +9,7 @@
 
 ## Overview
 
-`phenotype-colab-extensions` is the Phenotype-specific extension layer on top of the `KooshaPari/colab` fork of `blackboardsh/colab`. The upstream `colab` is a hybrid browser + local code editor built with [Electrobun](https://github.com/blackboardsh/electrobun), providing Monaco-powered editing, Chromium/WebKit browser tabs, a PTY terminal, Git integration, and a plugin architecture. This extensions repo serves two purposes:
+`phenotype-colab-extensions` is the Phenotype-specific extension layer on top of the `<REDACTED>/colab` fork of `blackboardsh/colab`. The upstream `colab` is a hybrid browser + local code editor built with [Electrobun](https://github.com/blackboardsh/electrobun), providing Monaco-powered editing, Chromium/WebKit browser tabs, a PTY terminal, Git integration, and a plugin architecture. This extensions repo serves two purposes:
 
 1. **Specs and governance** — AgilePlus-aligned product specs, functional requirements, and architecture decision records for the Phenotype fork.
 2. **Extension code** — Phenotype-specific plugins (webflow-plugin), CI workflows, and integration tooling that are maintained separately to keep the fork close to upstream.
@@ -23,7 +23,7 @@ The extension model uses `colab`'s native plugin architecture: each extension is
 ### E1.1: Upstream Tracking
 
 **As** a Phenotype engineer,
-**I want** the `KooshaPari/colab` fork to stay synchronized with `blackboardsh/colab`,
+**I want** the `<REDACTED>/colab` fork to stay synchronized with `blackboardsh/colab`,
 **So that** Phenotype benefits from upstream improvements without losing local customizations.
 
 **Acceptance Criteria:**

@@ -9,7 +9,7 @@ Get your development environment running with Hot Module Reload in 5 minutes.
 ### Step 1: Start Backend Stack (Terminal 1)
 
 ```bash
-cd /Users/kooshapari/CodeProjects/Phenotype/repos
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos
 task up
 ```
 
@@ -18,7 +18,7 @@ task up
 ### Step 2: Start AgilePlus Dashboard (Terminal 2)
 
 ```bash
-cd /Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus/crates/agileplus-dashboard/web
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus/crates/agileplus-dashboard/web
 npm install  # First time only
 npm run dev
 ```
@@ -93,14 +93,14 @@ npm run dev  # Restart Vite
 ### heliosApp (Module Federation)
 
 ```bash
-cd /Users/kooshapari/CodeProjects/Phenotype/repos/heliosApp
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos/heliosApp
 npm run dev  # Port 3001
 ```
 
 ### AgilePlus Docs
 
 ```bash
-cd /Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus/docs
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus/docs
 npm run docs:dev  # Port 5175
 ```
 

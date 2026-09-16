@@ -27,7 +27,7 @@ Wave C (forward-looking governance ADR-046..049).
 - **Path:** `docs/adr/2026-06-18/ADR-036-pheno-capacity.md`
 - **Status:** **CLOSED 2026-06-19** (executed; pheno-capacity repo created)
 - **Owner:** orch-w1-a (L5-106)
-- **Outcome:** `KooshaPari/pheno-capacity#1` merged; `bucket_change HwLedger:
+- **Outcome:** `<REDACTED>/pheno-capacity#1` merged; `bucket_change HwLedger:
   from=CONDITIONAL to=STABLE reason=pheno-capacity extracted as canonical substrate`.
 
 ## ADR-036B — pheno-tracing substrate canonical (re-affirmed)
@@ -118,21 +118,21 @@ Wave C (forward-looking governance ADR-046..049).
 - **Path:** `docs/adr/2026-06-18/ADR-047-predictive-dry.md`
 - **Status:** ACTIVE (governing section in AGENTS.md § Predictive DRY)
 - **Owner:** orch-w1-a (L5-112)
-- **Tool:** `KooshaPari/pheno-predict` (L72)
+- **Tool:** `<REDACTED>/pheno-predict` (L72)
 
 ## ADR-048 — Substrate graduation path (4-tier gate table)
 
 - **Path:** `docs/adr/2026-06-18/ADR-048-substrate-graduation-path.md`
 - **Status:** ACTIVE (governing section in AGENTS.md § Substrate graduation path)
 - **Owner:** orch-w1-a (L5-113)
-- **Tool:** `KooshaPari/pheno-framework-lint` (L73)
+- **Tool:** `<REDACTED>/pheno-framework-lint` (L73)
 
 ## ADR-049 — App-substrate drift detector (3-pass algorithm)
 
 - **Path:** `docs/adr/2026-06-18/ADR-049-app-substrate-drift-detector.md`
 - **Status:** ACTIVE (governing section in AGENTS.md § App-substrate drift detector)
 - **Owner:** orch-w1-a (L5-114)
-- **Tool:** `KooshaPari/pheno-drift-detector` (L74)
+- **Tool:** `<REDACTED>/pheno-drift-detector` (L74)
 
 ---
 

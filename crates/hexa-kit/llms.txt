@@ -1,6 +1,6 @@
 # HexaKit
 
-> Phenotype-org hexagonal architecture toolkit. Part of the Phenotype-org fleet canonical substrate registry (see KooshaPari/phenotype-registry).
+> Phenotype-org hexagonal architecture toolkit. Part of the Phenotype-org fleet canonical substrate registry (see <REDACTED>/phenotype-registry).
 
 ## Docs
 - [README.md](README.md): entry point and project overview
@@ -16,5 +16,5 @@
 - Language/runtime: rust
 - Tier: 0
 - Test coverage: 78%
-- Registry entry: KooshaPari/phenotype-registry/registry/components.lock
-- Maintained by: KooshaPari
+- Registry entry: <REDACTED>/phenotype-registry/registry/components.lock
+- Maintained by: <REDACTED>

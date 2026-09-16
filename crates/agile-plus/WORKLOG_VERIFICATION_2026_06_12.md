@@ -6,10 +6,10 @@ clippy, and live binary execution.
 
 ## Scope
 
-- Repo: `/Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus`
+- Repo: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus`
 - Crate: `agileplus-cli` (`crates/agileplus-cli/src/commands/worklog.rs`,
   273 lines, 4 subcommands)
-- Binary: `/Users/kooshapari/.cargo/bin/agileplus-cli` (agileplus 0.1.0)
+- Binary: `/Users/<REDACTED>/.cargo/bin/agileplus-cli` (agileplus 0.1.0)
 - Focus repos (5): `AgilePlus`, `PhenoCompose`, `nanovms`, `PlayCua`,
   `BytePort`
 - Branch context: `feature/agileplus-sota-wraps-cleanup-2026-06-12` (not a

@@ -1,7 +1,7 @@
 # PhenoLang final deletion package
 
 Date: 2026-06-20
-Source repo: `KooshaPari/PhenoLang`
+Source repo: `<REDACTED>/PhenoLang`
 Decision: `DELETE`
 
 ## Evidence summary
@@ -19,4 +19,4 @@ Decision: `DELETE`
 
 ## Final recommendation
 
-The matrix supports deleting `KooshaPari/PhenoLang`. All meaningful source crate families are either preserved in target repos, preserved as registry patchsets/source copies where target repos are archived/read-only, or superseded by owner repositories.
+The matrix supports deleting `<REDACTED>/PhenoLang`. All meaningful source crate families are either preserved in target repos, preserved as registry patchsets/source copies where target repos are archived/read-only, or superseded by owner repositories.

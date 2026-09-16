@@ -16,7 +16,7 @@
 | eco-010 | eco-010-worklog-coverage | active | 2026-06-05T00:00:00Z | - | - | [eco-010-worklog-coverage](eco-010-worklog-coverage/spec.md) |
 | eco-011 | eco-011-action-hygiene | active | 2026-06-05T00:00:00Z | - | - | [eco-011-action-hygiene](eco-011-action-hygiene/spec.md) |
 | eco-012 | eco-012-clone-fill | active | 2026-06-05T00:00:00Z | - | - | [eco-012-clone-fill](eco-012-clone-fill/spec.md) |
-| eco-013 | eco-013-kooshapari-oldest-first | active | 2026-06-05T00:00:00Z | - | - | [eco-013-kooshapari-oldest-first](eco-013-kooshapari-oldest-first/spec.md) |
+| eco-013 | eco-013-<REDACTED>-oldest-first | active | 2026-06-05T00:00:00Z | - | - | [eco-013-<REDACTED>-oldest-first](eco-013-<REDACTED>-oldest-first/spec.md) |
 | eco-014 | eco-014-ux-dx-ax-richness | active | 2026-06-05T00:00:00Z | - | - | [eco-014-ux-dx-ax-richness](eco-014-ux-dx-ax-richness/spec.md) |
 | eco-015 | eco-015-deployment-verification | active | 2026-06-05T00:00:00Z | - | - | [eco-015-deployment-verification](eco-015-deployment-verification/spec.md) |
 | eco-016 | eco-016-lint-hygiene | active | 2026-06-05T00:00:00Z | - | - | [eco-016-lint-hygiene](eco-016-lint-hygiene/spec.md) |

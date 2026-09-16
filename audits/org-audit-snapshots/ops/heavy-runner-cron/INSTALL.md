@@ -16,7 +16,7 @@ mkdir -p "$TOOLS_ROOT"
 cd "$TOOLS_ROOT"
 
 for repo in pheno-predict pheno-framework-lint pheno-drift-detector; do
-  gh repo clone "KooshaPari/$repo" "$repo"
+  gh repo clone "<REDACTED>/$repo" "$repo"
   cd "$repo"
   chmod +x *.py
   # Symlink into /usr/local/bin (or your distro's equivalent).
@@ -33,7 +33,7 @@ echo "all 3 tools installed"
 
 ## 1. Clone this bundle (the staging repo)
 
-This bundle lives in `KooshaPari/phenotype-org-audits` (the staging repo
+This bundle lives in `<REDACTED>/phenotype-org-audits` (the staging repo
 per `AGENTS.md` ADR-028). If you already have a clone, `git pull`.
 Otherwise:
 
@@ -41,7 +41,7 @@ Otherwise:
 BUNDLE_PARENT="${BUNDLE_PARENT:-$HOME/.local/share}"
 mkdir -p "$BUNDLE_PARENT"
 cd "$BUNDLE_PARENT"
-gh repo clone KooshaPari/phenotype-org-audits
+gh repo clone <REDACTED>/phenotype-org-audits
 cd phenotype-org-audits
 git checkout chore/ops-heavy-runner-cron-2026-06-19
 ```
@@ -158,11 +158,11 @@ the `logs/*.out` files and files issues. That workflow keys off the
 following labels, which must exist on `phenotype-org-audits`:
 
 ```bash
-gh label list --repo KooshaPari/phenotype-org-audits \
+gh label list --repo <REDACTED>/phenotype-org-audits \
   | grep -E 'drift-detector|predictive-discipline|graduation-discipline'
 ```
 
-Expected output (created by this PR, [KooshaPari/phenotype-org-audits#XX](https://github.com/KooshaPari/phenotype-org-audits/pull/XX)):
+Expected output (created by this PR, [<REDACTED>/phenotype-org-audits#XX](https://github.com/<REDACTED>/phenotype-org-audits/pull/XX)):
 
 ```
 drift-detector         Issues created by the weekly heavy-runner cron (L74 pheno-drift-detector)
@@ -181,7 +181,7 @@ are still public, still on `main`, and still ship a working CLI:
 
 ```bash
 for repo in pheno-predict pheno-framework-lint pheno-drift-detector; do
-  gh repo view "KooshaPari/$repo" --json name,isArchived,defaultBranchRef
+  gh repo view "<REDACTED>/$repo" --json name,isArchived,defaultBranchRef
 done
 ```
 

@@ -30,8 +30,8 @@ import uuid
 from pathlib import Path
 
 FUZZ_SOCKET = "/tmp/fuzz-ipc.sock"
-DAEMON_BIN = "/Users/kooshapari/bin/sharecli-ipc-daemon"
-MCP_BIN = "/Users/kooshapari/bin/thegent-mcp"
+DAEMON_BIN = "/Users/<REDACTED>/bin/sharecli-ipc-daemon"
+MCP_BIN = "/Users/<REDACTED>/bin/thegent-mcp"
 RESULTS_FILE = Path.home() / ".local/share/resume-all/fuzz-results.jsonl"
 TIMEOUT_S = 2.0
 

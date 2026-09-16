@@ -6,7 +6,7 @@ Do not include secret values in the support request.
 ## Request
 
 Please purge cached views and unreachable objects for a secret-spill incident in
-`KooshaPari/phenotype-registry`.
+`<REDACTED>/phenotype-registry`.
 
 The repository was public when GitHub secret scanning reported exposed
 credentials. It has since been made private, repository Actions are disabled,
@@ -16,7 +16,7 @@ contained the exposed material.
 
 ## Repository
 
-- Owner/repo: `KooshaPari/phenotype-registry`
+- Owner/repo: `<REDACTED>/phenotype-registry`
 - Incident date: 2026-06-20
 - Initial reported commit: `94f8bb0530351f44665601e3110ac8a46dfb57cf`
 - Initial reported path:

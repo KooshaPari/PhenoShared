@@ -131,7 +131,7 @@ impl ProjectRegistry {
         let owner = self
             .detect_owner(path)
             .await
-            .unwrap_or_else(|| "KooshaPari".to_string());
+            .unwrap_or_else(|| "<REDACTED>".to_string());
 
         Some(ProjectMetadata {
             name: name.to_string(),

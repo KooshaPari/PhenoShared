@@ -89,9 +89,9 @@ Please follow the repository contribution guidelines, respect branch naming conv
 
 Files referenced
 
-- /Users/kooshapari/CodeProjects/Phenotype/repos/agileplus-agents/Cargo.toml
-- /Users/kooshapari/CodeProjects/Phenotype/repos/agileplus-agents/crates/agileplus-agent-dispatch
-- /Users/kooshapari/CodeProjects/Phenotype/repos/agileplus-agents/crates/agileplus-agent-review
-- /Users/kooshapari/CodeProjects/Phenotype/repos/agileplus-agents/crates/agileplus-agent-service
+- /Users/<REDACTED>/CodeProjects/Phenotype/repos/agileplus-agents/Cargo.toml
+- /Users/<REDACTED>/CodeProjects/Phenotype/repos/agileplus-agents/crates/agileplus-agent-dispatch
+- /Users/<REDACTED>/CodeProjects/Phenotype/repos/agileplus-agents/crates/agileplus-agent-review
+- /Users/<REDACTED>/CodeProjects/Phenotype/repos/agileplus-agents/crates/agileplus-agent-service
 
 If you want, I can also create an AgilePlus work package for adding or updating this README so the change is tracked according to project rules.

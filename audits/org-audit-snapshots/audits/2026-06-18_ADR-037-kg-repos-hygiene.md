@@ -16,12 +16,12 @@ The combined intent: migrate all 4 repos in one wave, ensure full integration of
 
 | # | Source | Target | PR | Migration |
 |---|---|---|---|---|
-| 1 | `KooshaPari/dagctl` (pre-archived) | `KooshaPari/phenodag` | `KooshaPari/phenodag#13` | `VERSION` v3.3.1, `CHANGELOG.md`, `docs/dagctl-absorption.md` |
-| 2 | `KooshaPari/kwality` | `KooshaPari/phenotype-tooling` | `KooshaPari/phenotype-tooling#158` | `docs/absorbed-from-kwality/` (engines, internal, scripts, cmd) |
-| 3 | `KooshaPari/phenotype-auth-ts` | `KooshaPari/AuthKit` | `KooshaPari/AuthKit#120` | `typescript/packages/auth-ts/` (hexagonal, DDD, vitest BDD/CDD) |
-| 4 | `KooshaPari/dinoforge-packs` | `KooshaPari/Dino` | `KooshaPari/Dino#297` | `packs/example-balance/` + `packs/community-contributions/dinoforge-packs-mirror/` |
+| 1 | `<REDACTED>/dagctl` (pre-archived) | `<REDACTED>/phenodag` | `<REDACTED>/phenodag#13` | `VERSION` v3.3.1, `CHANGELOG.md`, `docs/dagctl-absorption.md` |
+| 2 | `<REDACTED>/kwality` | `<REDACTED>/phenotype-tooling` | `<REDACTED>/phenotype-tooling#158` | `docs/absorbed-from-kwality/` (engines, internal, scripts, cmd) |
+| 3 | `<REDACTED>/phenotype-auth-ts` | `<REDACTED>/AuthKit` | `<REDACTED>/AuthKit#120` | `typescript/packages/auth-ts/` (hexagonal, DDD, vitest BDD/CDD) |
+| 4 | `<REDACTED>/dinoforge-packs` | `<REDACTED>/Dino` | `<REDACTED>/Dino#297` | `packs/example-balance/` + `packs/community-contributions/dinoforge-packs-mirror/` |
 
-All 4 source repos were set to **archived** (read-only marker). The `gh repo delete` step requires `delete_repo` scope on the active token, which the `KooshaPari` token does not have; the deletion step is therefore a **manual UI action** (Settings → General → Danger Zone → Delete this repository), with a 90-day GitHub retention tombstone.
+All 4 source repos were set to **archived** (read-only marker). The `gh repo delete` step requires `delete_repo` scope on the active token, which the `<REDACTED>` token does not have; the deletion step is therefore a **manual UI action** (Settings → General → Danger Zone → Delete this repository), with a 90-day GitHub retention tombstone.
 
 This was the first multi-repo retirement in the fleet's history. Codifying the process as a reusable template ensures the next retirement is faster and the audit trail is uniform.
 

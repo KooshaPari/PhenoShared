@@ -57,7 +57,7 @@ class ProjectInfraContext(ServiceHelpers, ProxyHelpers):
         self,
         project_name: str,
         *,
-        domain: str = "kooshapari.com",
+        domain: str = "<REDACTED>.com",
         config_dir: str | None = None,
         enable_proxy: bool = True,
         proxy_port: int = 9100,

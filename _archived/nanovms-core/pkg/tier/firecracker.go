@@ -8,7 +8,7 @@ import (
 	"os/exec"
 	"time"
 
-	"github.com/kooshapari/nanovms/internal/domain"
+	"github.com/<REDACTED>/nanovms/internal/domain"
 )
 
 // FirecrackerAdapter is the Tier3 Firecracker microVM adapter for untrusted workloads.

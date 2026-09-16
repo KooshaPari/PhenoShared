@@ -19,7 +19,7 @@ use agileplus_github::sync::{sync_repository, GhDataSource, SyncReport};
 /// Arguments for the `sync` subcommand.
 #[derive(Debug, Args)]
 pub struct SyncArgs {
-    /// GitHub repository in `owner/repo` format (e.g. `KooshaPari/AgilePlus`).
+    /// GitHub repository in `owner/repo` format (e.g. `<REDACTED>/AgilePlus`).
     pub repo: String,
 
     /// Domain project ID to associate synced stories with.
@@ -43,7 +43,7 @@ pub struct SyncArgs {
 fn split_repo(repo: &str) -> Result<(&str, &str)> {
     match repo.split_once('/') {
         Some((owner, name)) if !owner.is_empty() && !name.is_empty() => Ok((owner, name)),
-        _ => bail!("invalid repo format '{repo}': expected owner/repo (e.g. KooshaPari/AgilePlus)"),
+        _ => bail!("invalid repo format '{repo}': expected owner/repo (e.g. <REDACTED>/AgilePlus)"),
     }
 }
 
@@ -179,8 +179,8 @@ mod tests {
 
     #[test]
     fn split_repo_ok() {
-        let (owner, name) = split_repo("KooshaPari/AgilePlus").unwrap();
-        assert_eq!(owner, "KooshaPari");
+        let (owner, name) = split_repo("<REDACTED>/AgilePlus").unwrap();
+        assert_eq!(owner, "<REDACTED>");
         assert_eq!(name, "AgilePlus");
     }
 

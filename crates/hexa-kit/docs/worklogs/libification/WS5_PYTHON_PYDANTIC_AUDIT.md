@@ -409,8 +409,8 @@ Not needed - all projects are on v2.x.
 
 ## Examples
 
-- **Full settings pattern:** `/Users/kooshapari/CodeProjects/Phenotype/repos/platforms/thegent/src/thegent/config/settings.py`
-- **Sub-config (composite):** `/Users/kooshapari/CodeProjects/Phenotype/repos/platforms/thegent/src/thegent/config/runtime_config.py`
+- **Full settings pattern:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos/platforms/thegent/src/thegent/config/settings.py`
+- **Sub-config (composite):** `/Users/<REDACTED>/CodeProjects/Phenotype/repos/platforms/thegent/src/thegent/config/runtime_config.py`
 
 ## Version Matrix
 

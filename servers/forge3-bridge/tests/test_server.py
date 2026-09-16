@@ -227,7 +227,7 @@ def test_server_responds_to_initialize_and_tools_list():
 
 @pytest.mark.skipif(
     not os.path.exists(
-        os.environ.get("FORGE3_BIN", "/Users/kooshapari/.cargo/bin/forge3")
+        os.environ.get("FORGE3_BIN", "/Users/<REDACTED>/.cargo/bin/forge3")
     ),
     reason="forge3 binary not available",
 )

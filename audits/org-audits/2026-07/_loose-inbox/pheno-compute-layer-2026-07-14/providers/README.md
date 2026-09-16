@@ -114,6 +114,6 @@ REAP optimizes MoE models by improving router accuracy for expert selection. Var
 ```bash
 export OMNI_URL="http://100.96.135.160:8080/v1"
 export OMNI_BACKEND="vllm"
-export OMNI_MODELS="/home/kooshapari/llm-models"
+export OMNI_MODELS="/home/<REDACTED>/llm-models"
 ```
 

@@ -236,7 +236,7 @@ The 3 rule files provide:
 
 ## Deployment Execution Log
 
-**Script:** `/Users/kooshapari/CodeProjects/Phenotype/repos/scripts/deploy_sast.py`
+**Script:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos/scripts/deploy_sast.py`
 
 ```
 Total repos processed: 27

@@ -10,15 +10,15 @@ Completed final batch of stacked PR creation for remaining significant unmerged 
 
 | PR | Branch | Title | Commits | Status | Link |
 |----|---------|----- |---------|--------|------|
-| #249 | feat/wire-errors-event-sourcing-pr-248 | feat: wire errors, event-sourcing, and retry patterns | 17 | DRAFT | https://github.com/KooshaPari/phenotype-infrakit/pull/249 |
-| #250 | feat/phenosdk-sanitize-atoms-pr-250 | feat(phenosdk): sanitize atoms identifiers (WP01) | 1 | DRAFT | https://github.com/KooshaPari/phenotype-infrakit/pull/250 |
+| #249 | feat/wire-errors-event-sourcing-pr-248 | feat: wire errors, event-sourcing, and retry patterns | 17 | DRAFT | https://github.com/<REDACTED>/phenotype-infrakit/pull/249 |
+| #250 | feat/phenosdk-sanitize-atoms-pr-250 | feat(phenosdk): sanitize atoms identifiers (WP01) | 1 | DRAFT | https://github.com/<REDACTED>/phenotype-infrakit/pull/250 |
 
 ### Chore/Consolidation PRs
 
 | PR | Branch | Title | Commits | Status | Link |
 |----|---------|----- |---------|--------|------|
-| #251 | chore/consolidate-final-changes-pr-251 | chore: consolidate final workspace changes | 5 | DRAFT | https://github.com/KooshaPari/phenotype-infrakit/pull/251 |
-| #252 | chore/consolidate-nested-duplicates-pr-252 | chore: consolidate nested crate duplicates | 2 | DRAFT | https://github.com/KooshaPari/phenotype-infrakit/pull/252 |
+| #251 | chore/consolidate-final-changes-pr-251 | chore: consolidate final workspace changes | 5 | DRAFT | https://github.com/<REDACTED>/phenotype-infrakit/pull/251 |
+| #252 | chore/consolidate-nested-duplicates-pr-252 | chore: consolidate nested crate duplicates | 2 | DRAFT | https://github.com/<REDACTED>/phenotype-infrakit/pull/252 |
 
 ## Summary by Category
 

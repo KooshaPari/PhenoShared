@@ -2,8 +2,8 @@
 
 **Date:** 2026-06-20
 **Wave:** P5 (agent-runtime)
-**Sources:** `KooshaPari/phenoRouterMonitor` (archived), `KooshaPari/phenoAI` (active)
-**Target:** `KooshaPari/phenoAI`
+**Sources:** `<REDACTED>/phenoRouterMonitor` (archived), `<REDACTED>/phenoAI` (active)
+**Target:** `<REDACTED>/phenoAI`
 **Registry rows:** `gate-phenoroutermonitor`, `lib-llm-router` (implicit)
 
 ---
@@ -29,14 +29,14 @@ absorption:
 
 ## 2. Evidence (read from upstream)
 
-### `KooshaPari/phenoRouterMonitor` (archived, `isArchived: true`)
+### `<REDACTED>/phenoRouterMonitor` (archived, `isArchived: true`)
 
 - Root has 111 entries (mostly 0-byte placeholders for subprojects)
 - No Rust source (`Cargo.toml` absent at root)
 - Streamlit dashboard is the only concrete asset and lives outside this repo
-- Repo URL: https://github.com/KooshaPari/phenoRouterMonitor
+- Repo URL: https://github.com/<REDACTED>/phenoRouterMonitor
 
-### `KooshaPari/phenoAI` (active, `isArchived: false`)
+### `<REDACTED>/phenoAI` (active, `isArchived: false`)
 
 Canonical crate lives at `crates/llm-router/`:
 
@@ -82,13 +82,13 @@ Total diff budget: **≤ 4 files, ≤ 8 lines, 0 deletions.** Anti-wipe gate PAS
 ### 4.1 `disposition-index.json` (one-line flip + provenance)
 
 ```diff
-- {"id": "gate-phenoroutermonitor", "path": "KooshaPari/phenoRouterMonitor",
+- {"id": "gate-phenoroutermonitor", "path": "<REDACTED>/phenoRouterMonitor",
 -  "disposition": "ABSORB", "target": "phenoAI", "wave": "P5",
 -  "status": "deferred — repo archived; Streamlit dash retained"},
-+ {"id": "gate-phenoroutermonitor", "path": "KooshaPari/phenoRouterMonitor",
++ {"id": "gate-phenoroutermonitor", "path": "<REDACTED>/phenoRouterMonitor",
 +  "disposition": "ABSORB", "target": "phenoAI", "wave": "P5",
-+  "status": "done — canonical Rust router lives in KooshaPari/phenoAI/crates/llm-router/;
-+            Python ModelLoader port + adapters in KooshaPari/phenoAI/ports/"},
++  "status": "done — canonical Rust router lives in <REDACTED>/phenoAI/crates/llm-router/;
++            Python ModelLoader port + adapters in <REDACTED>/phenoAI/ports/"},
 ```
 
 ### 4.2 `Agentora/crates/ABSORPTION_MANIFEST.md` (append block)
@@ -99,7 +99,7 @@ Total diff budget: **≤ 4 files, ≤ 8 lines, 0 deletions.** Anti-wipe gate PAS
 Rust LLM router (`LlmProvider` trait, `OpenAiProvider`, `LlmRouter` with
 prefix routing + fallback) canonical in `phenoAI/crates/llm-router/`.
 Python `ModelLoader` port + HuggingFace / local-safetensors adapters in
-`phenoAI/ports/`. Source repo (`KooshaPari/phenoRouterMonitor`) archived;
+`phenoAI/ports/`. Source repo (`<REDACTED>/phenoRouterMonitor`) archived;
 absorption done without a Rust migration. Archive gate deferred (Streamlit
 dash retained on upstream).
 ```
@@ -139,11 +139,11 @@ Doing a manual `git mv` of placeholder files would **add** code without removing
 
 ## 6. Verification plan (post-apply)
 
-1. `gh search code 'org:KooshaPari phenoRouterMonitor filename:Cargo.toml'` → expect 0 hits (or self-hits only)
+1. `gh search code 'org:<REDACTED> phenoRouterMonitor filename:Cargo.toml'` → expect 0 hits (or self-hits only)
 2. `grep -R 'phenoRouterMonitor' Agentora/docs/ Agentora/registry/` → only matches in registry rows / ledger docs, no code
 3. `git diff main...HEAD` → ≤ 4 files, ≤ 8 lines, **0 deletions**
 4. `bun run docs:build` (or equivalent registry validator) → green
-5. Open PR against `KooshaPari/Agentora` → wait for Self-Merge Gate + Required Checks Bridge
+5. Open PR against `<REDACTED>/Agentora` → wait for Self-Merge Gate + Required Checks Bridge
 
 ---
 

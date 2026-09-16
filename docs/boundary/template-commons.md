@@ -1,18 +1,18 @@
 # Absorbed boundary — template-commons
 
-This document describes the absorbed boundary of `KooshaPari/template-commons`
+This document describes the absorbed boundary of `<REDACTED>/template-commons`
 after its absorption into `phenokits-commons/templates/` on 2026-07-17.
 
 ## Identity
 
 | Field | Value |
 |-------|-------|
-| Original repo | `KooshaPari/template-commons` |
-| Original URL | https://github.com/KooshaPari/template-commons |
+| Original repo | `<REDACTED>/template-commons` |
+| Original URL | https://github.com/<REDACTED>/template-commons |
 | Original description | "template-commons - shared template workflows and ADR sessions (deleted remote recovery)" |
 | Original default branch | `main` |
-| Canonical home | `KooshaPari/phenokits-commons/templates/` (selective subtree) |
-| Subset also absorbed | `KooshaPari/phenokits-commons/docs/template-kitty-specs/` |
+| Canonical home | `<REDACTED>/phenokits-commons/templates/` (selective subtree) |
+| Subset also absorbed | `<REDACTED>/phenokits-commons/docs/template-kitty-specs/` |
 | Absorption date | 2026-07-17 |
 | Final state | GitHub archived (terminal) |
 

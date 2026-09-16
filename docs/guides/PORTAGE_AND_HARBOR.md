@@ -4,7 +4,7 @@
 
 | Layer | Repo | What it is |
 |-------|------|------------|
-| **Harbor product** | [KooshaPari/portage-TEMP](https://github.com/KooshaPari/portage-TEMP) (local checkout often `repos/portage`) | Fork of the Harbor framework (eval sandboxes, datasets, RL rollouts, optional Rust LLM bridge) |
+| **Harbor product** | [<REDACTED>/portage-TEMP](https://github.com/<REDACTED>/portage-TEMP) (local checkout often `repos/portage`) | Fork of the Harbor framework (eval sandboxes, datasets, RL rollouts, optional Rust LLM bridge) |
 | **Upstream Harbor** | [laude-institute/harbor](https://github.com/laude-institute/harbor) / PyPI `harbor` | Published package; `pip install harbor` / `uv tool install harbor` |
 | **This repo** | `pheno-harness` | OmniRoute operator stack: configs, RLVR verifiers, bench skeleton, **wrapper scripts** that invoke Harbor CLI |
 

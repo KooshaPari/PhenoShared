@@ -3,14 +3,14 @@
   "schema_version": "v2",
   "generated_at": "2026-06-08T00:00:00Z",
   "repo": "pheno",
-  "repo_path": "/Users/kooshapari/CodeProjects/Phenotype/repos/pheno",
+  "repo_path": "/Users/<REDACTED>/CodeProjects/Phenotype/repos/pheno",
   "branch_audited": "main",
   "head_sha": "175afc87ba8b1b2d51442c599e30840d045ee9f6",
   "last_commit_date": "2026-06-08T18:19:49-07:00",
   "last_commit_subject": "chore: merge phenoData into pheno as crates/pheno-data-from-phenoData/",
   "last_commit_author": "pheno Decomposition",
   "remotes": {
-    "origin": "https://github.com/KooshaPari/pheno.git"
+    "origin": "https://github.com/<REDACTED>/pheno.git"
   },
   "language_stack": {
     "detected": ["rust", "python", "typescript", "go", "toml", "markdown", "yaml"],
@@ -57,10 +57,10 @@
     {"item": ".editorconfig", "present": true, "points": 10, "evidence": [".editorconfig (23 lines) with full rust/toml/py/go/md/yaml/yaml/json/html/css/scss coverage; ts/tsx/js override to 2-space; Makefile tab override"]},
     {"item": "CI", "present": true, "points": 10, "evidence": [".github/workflows/ contains 49 workflows (ci, quality-gate, cargo-audit, cargo-deny, cargo-machete, cargo-semver-checks, codeql, scorecard, sonarcloud, sbom, snyk-scan, trivy-scan, zap-dast, fuzzing, ai-testing-orchestration, etc.)"]},
     {"item": "dependabot", "present": true, "points": 9, "evidence": [".github/dependabot.yml covers cargo (/rust), pip (/python), github-actions (/) — all weekly, pr-limit 5; /rust and /python are valid tracked sub-templates so paths are correct"]},
-    {"item": "CODEOWNERS", "present": true, "points": 7, "evidence": ["CODEOWNERS (10 lines) — only @KooshaPari assigned globally; no per-crate or per-domain ownership for the 22 workspace members"]},
+    {"item": "CODEOWNERS", "present": true, "points": 7, "evidence": ["CODEOWNERS (10 lines) — only @<REDACTED> assigned globally; no per-crate or per-domain ownership for the 22 workspace members"]},
     {"item": "CONTRIBUTING", "present": true, "points": 10, "evidence": ["CONTRIBUTING.md (33 lines) with conventional commits, AgilePlus spec-first mandate, cargo fmt/clippy/test quality gates, PR review policy"]},
     {"item": "SECURITY", "present": true, "points": 10, "evidence": ["SECURITY.md (124 lines) with reporting email, 48h ack / 7d assessment SLA, cargo-audit / pip-audit / npm-audit / CodeQL / Dependabot toolchain matrix"]},
-    {"item": "FUNDING", "present": true, "points": 8, "evidence": [".github/FUNDING.yml (github: KooshaPari + buymeacoffee) — present in .github/ but NOT at repo root; org-convention is dual-location"]}
+    {"item": "FUNDING", "present": true, "points": 8, "evidence": [".github/FUNDING.yml (github: <REDACTED> + buymeacoffee) — present in .github/ but NOT at repo root; org-convention is dual-location"]}
   ],
   "hygiene_evidence": {
     "LICENSE": "LICENSE (1066B, MIT, 2026 Phenotype)",
@@ -69,7 +69,7 @@
     "EDITORCONFIG": ".editorconfig (23 lines, multi-language with 2-space override for ts/tsx/js)",
     "CI": ".github/workflows/ (49 workflows — among the most thorough in the fleet)",
     "DEPENDABOT": ".github/dependabot.yml (cargo, pip, github-actions — all weekly, pr-limit 5)",
-    "CODEOWNERS": "CODEOWNERS (10 lines, only @KooshaPari globally — no per-crate ownership)",
+    "CODEOWNERS": "CODEOWNERS (10 lines, only @<REDACTED> globally — no per-crate ownership)",
     "CONTRIBUTING": "CONTRIBUTING.md (33 lines, conventional commits + AgilePlus spec-first + quality gates)",
     "SECURITY": "SECURITY.md (124 lines, reporting flow + toolchain matrix + 48h SLA)",
     "FUNDING": ".github/FUNDING.yml (github + buymeacoffee — no root-level FUNDING.yml)"
@@ -143,7 +143,7 @@
     "audit_task": "DAG L1-8",
     "audit_date": "2026-06-08",
     "auditor": "forge (audit skill)",
-    "source_repo_path": "/Users/kooshapari/CodeProjects/Phenotype/repos/pheno",
+    "source_repo_path": "/Users/<REDACTED>/CodeProjects/Phenotype/repos/pheno",
     "source_branch_audited": "main",
     "head_sha_audited": "175afc87ba8b1b2d51442c599e30840d045ee9f6",
     "workspace_member_count": 22,

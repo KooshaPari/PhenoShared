@@ -20,7 +20,7 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument(
         "--repo-root",
-        default="/Users/kooshapari/CodeProjects/Phenotype/repos",
+        default="/Users/<REDACTED>/CodeProjects/Phenotype/repos",
         help="Workspace path containing repositories",
     )
     parser.add_argument(

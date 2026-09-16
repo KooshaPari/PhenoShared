@@ -12,7 +12,7 @@ Only one runtime dependency is declared:
 
 ```toml
 dependencies = [
-    "phenotype-py-utils @ git+https://github.com/KooshaPari/phenotype-py-utils.git@v0.1.0",
+    "phenotype-py-utils @ git+https://github.com/<REDACTED>/phenotype-py-utils.git@v0.1.0",
 ]
 ```
 

@@ -64,7 +64,7 @@ Cross-compilation matrix, reproducible builds, SBOM emission, container image, p
 
 ### Tracely (5 Rust crates: `tracely-core`, `helix-tracing`, `tracely-sentinel`, `zerokit`, `pheno-logging-zig`)
 
-- `Tracely/.github/workflows/ci.yml:1-50` — uses `KooshaPari/template-commons/.github/workflows/reusable-rust-ci.yml@main` — **status △** (refs `main` branch of an external repo — SHA not pinned — supply-chain risk ✗)
+- `Tracely/.github/workflows/ci.yml:1-50` — uses `<REDACTED>/template-commons/.github/workflows/reusable-rust-ci.yml@main` — **status △** (refs `main` branch of an external repo — SHA not pinned — supply-chain risk ✗)
 - `Tracely/.github/workflows/ci.yml:46-50` — `check-cliff-template` calls `scripts/check-cliff-template.sh` — **status ✓**
 - `Tracely/.github/workflows/audit.yml:1-50` — CodeQL Rust weekly + on push/PR — **status ✓**
 - `Tracely/.github/workflows/deny.yml:1-50` — `cargo deny --manifest-path Cargo.toml --locked check` weekly + on PR — **status ✓**
@@ -93,7 +93,7 @@ Cross-compilation matrix, reproducible builds, SBOM emission, container image, p
 - `Tracera/.github/workflows/scorecard.yml:1-50` — OSSF Scorecard weekly — **status ✓**
 - `Tracera/release-plz.toml` — workspace config — **status ✓**
 - `Tracera/deny.toml:1-50` — `[graph]`, `[advisories]`, `[licenses]`, `[bans]`, `[sources]` all configured — **status ✓**
-- `Tracera/go.mod:1-3` — `module github.com/kooshapari/tracera`, `go 1.23` — **status ✓**
+- `Tracera/go.mod:1-3` — `module github.com/<REDACTED>/tracera`, `go 1.23` — **status ✓**
 - `Tracera/Cargo.lock` — present — **status ✓**
 - `Tracera/frontend/apps`, `Tracera/frontend/packages` — has `docs/package-lock.json` — **status ✓**
 - **No `go test` workflow** — `go.mod` exists but no `go build` / `go test` step in any workflow — **status ✗**
@@ -113,7 +113,7 @@ Cross-compilation matrix, reproducible builds, SBOM emission, container image, p
 - AgilePlus + thegent: use `release-plz` (no `cargo dist`). Tracera: also `release-plz`. Tracely: **no release automation at all**
 - Lockfiles: AgilePlus `Cargo.lock` ✓, thegent `uv.lock` ✓, Tracely `Cargo.lock` ✓, Tracera `Cargo.lock` ✓ + `docs/package-lock.json` ✓
 - thegent Maturin version drift: thegent-router `>=0.14,<0.15` vs thegent-policy `>=1.0,<2.0` vs thegent-git `>=1.5,<2.0` — risk of maturin API drift across the workspace
-- Tracely uses `KooshaPari/template-commons/.github/workflows/...@main` (branch ref) and `KooshaPari/phenotypeActions/...@main` (branch ref) — not SHA-pinned, supply-chain risk
+- Tracely uses `<REDACTED>/template-commons/.github/workflows/...@main` (branch ref) and `<REDACTED>/phenotypeActions/...@main` (branch ref) — not SHA-pinned, supply-chain risk
 
 ## Gaps
 

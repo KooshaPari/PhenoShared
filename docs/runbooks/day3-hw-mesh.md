@@ -12,7 +12,7 @@ Scaffold the `hw-mesh-agent-bus` crate (ADR 0009) and wire a smoke-test RPC betw
 
 ## Step 1 — Create crate skeleton
 
-New repo: `phenotype-hw-mesh` (create separately via `gh repo create KooshaPari/phenotype-hw-mesh --public`). Layout:
+New repo: `phenotype-hw-mesh` (create separately via `gh repo create <REDACTED>/phenotype-hw-mesh --public`). Layout:
 
 ```
 crates/

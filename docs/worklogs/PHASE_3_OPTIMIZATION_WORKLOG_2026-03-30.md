@@ -353,7 +353,7 @@ grep "^regex" Cargo.toml  # Should show: regex = "1"
 **Workaround:** Review git2 docs, update method calls (WS4-001)
 
 ### Issue 4: CI/CD disabled
-**Problem:** GitHub Actions billing issue on KooshaPari account
+**Problem:** GitHub Actions billing issue on <REDACTED> account
 **Workaround:** Rely on local cargo check (not a blocker per CLAUDE.md)
 
 ---

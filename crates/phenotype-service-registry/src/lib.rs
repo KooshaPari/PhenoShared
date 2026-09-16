@@ -1,6 +1,6 @@
 //! `phenotype-service-registry` — service registration, discovery, and health.
 //!
-//! Migrated from KooshaPari/Servion (archived skeleton, `nexus` crate intent).
+//! Migrated from <REDACTED>/Servion (archived skeleton, `nexus` crate intent).
 //!
 //! # Architecture (Hexagonal)
 //!

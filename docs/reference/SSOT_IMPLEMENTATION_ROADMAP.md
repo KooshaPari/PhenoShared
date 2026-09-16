@@ -64,7 +64,7 @@ git push -u origin specs/main
 **Configuration** (GitHub):
 ```bash
 # Protect specs/main from force-push
-gh api repos/KooshaPari/phenotype-infrakit/branches/specs/main/protection \
+gh api repos/<REDACTED>/phenotype-infrakit/branches/specs/main/protection \
   --input - << EOF
 {
   "required_status_checks": null,

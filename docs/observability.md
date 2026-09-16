@@ -1,6 +1,6 @@
 # Observability (T22)
 
-This repo adopts [`pheno-tracing`](https://github.com/KooshaPari/pheno-tracing)
+This repo adopts [`pheno-tracing`](https://github.com/<REDACTED>/pheno-tracing)
 (the canonical pheno-* tracing substrate, ADR-036) for distributed-trace
 capture in the `iac/*` daemons (`oci-lottery`, `oci-post-acquire`,
 `tailscale-keygen`).

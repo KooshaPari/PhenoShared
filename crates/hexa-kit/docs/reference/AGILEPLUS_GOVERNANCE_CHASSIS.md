@@ -4,7 +4,7 @@
 
 The AgilePlus Governance Chassis is a specification-driven delivery framework that enables predictable, traceable product development across the Phenotype organization. It defines how requirements are captured, decomposed, implemented, tested, and verified at every phase of development.
 
-**Package**: AgilePlus (see `/Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus`)
+**Package**: AgilePlus (see `/Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus`)
 **CLI**: `agileplus` (see `AgilePlus/CLAUDE.md` for setup)
 **Current Version**: 0.3.0+
 **Stability**: Stable (backward compatible within major versions)

@@ -332,7 +332,7 @@ pheno-otel has the lowest parity + the most phantoms of the 3 Shape 9 audits, bu
 
 | # | Consumer | Use of pheno-otel | Status | Notes |
 |---|----------|-------------------|--------|-------|
-| 91 | pheno-tracing | OTLP exporter compat | LAST_RESORT_EXCEPTION | Per ADR-012, pheno-tracing SHOULD use pheno-otel's HTTP exporter, but it has not yet migrated (Dmouse92 → KooshaPari migration in progress). See §7. |
+| 91 | pheno-tracing | OTLP exporter compat | LAST_RESORT_EXCEPTION | Per ADR-012, pheno-tracing SHOULD use pheno-otel's HTTP exporter, but it has not yet migrated (Dmouse92 → <REDACTED> migration in progress). See §7. |
 | 92 | pheno-port-adapter | (no direct use) | NOT_COVERED | Adapter ports are OTel-agnostic by design; no integration needed |
 | 93 | pheno-mcp-router | (no direct use) | NOT_COVERED | MCP router uses LLM ports, not OTel ports |
 | 94 | observability (federated) | (planned) | NOT_COVERED | Federated observability service will use pheno-otel; not yet implemented |
@@ -382,7 +382,7 @@ pheno-otel has the lowest parity + the most phantoms of the 3 Shape 9 audits, bu
 
 | # | Item | Status | Notes |
 |---|------|--------|-------|
-| 121 | Dmouse92 → KooshaPari migration | SUPERSEDED_BETTER | pheno-otel is a KooshaPari-native crate (never on Dmouse92); no migration needed |
+| 121 | Dmouse92 → <REDACTED> migration | SUPERSEDED_BETTER | pheno-otel is a <REDACTED>-native crate (never on Dmouse92); no migration needed |
 | 122 | pheno-otel published to crates.io? | NOT_COVERED | Not published; substrate-only |
 | 123 | Adopted by pheno-tracing per ADR-012 | LAST_RESORT_EXCEPTION | Pending — see §7 |
 | 124 | Adopted by phenotype-otel (if exists) | NOT_COVERED | phenotype-otel does not exist; pheno-otel is the only one |
@@ -615,7 +615,7 @@ Per the prior 10 audit convention, the 9-shape taxonomy classifies the dispositi
 | 2 | pheno-flags | 2026-06-15 | PRESERVE | Shape 9 | 0 | ~800 | 2 | ADR-014 |
 | 3 | Settly + cheap-llm-mcp (config consolidation) | 2026-06-19 | DELETE | Shape 6 | 0 | ~600 | 0 | ADR-022 |
 | 4 | Profila → ObservabilityKit | 2026-06-19 | SUBSUME | Shape 4 | 0 | ~2,000 | 1 | ADR-022 |
-| 5 | Dmouse92 → KooshaPari (20 repos) | 2026-06-17 | STANDARDIZE | Shape 1 | 0 | ~10,000 | n/a | ADR-029 |
+| 5 | Dmouse92 → <REDACTED> (20 repos) | 2026-06-17 | STANDARDIZE | Shape 1 | 0 | ~10,000 | n/a | ADR-029 |
 | 6 | 4-repo retirement (dagctl, kwality, AuthKit, dinoforge-packs) | 2026-06-18 | DELETE | Shape 6 | 0 | ~30,000 | n/a | none (per-user-directive) |
 | 7 | Configra absorb | 2026-06-19 | SUPERSEDE | Shape 2 | 0 | ~3,000 | 5 | ADR-031 |
 | 8 | phenotype-monorepo-state deletion | 2026-06-19 | DELETE | Shape 6 | 0 | ~500 | 0 | ADR-033, ADR-034 |
@@ -629,7 +629,7 @@ Per the prior 10 audit convention, the 9-shape taxonomy classifies the dispositi
 - **3 Shape 6 examples** (Settly+cheap-llm-mcp, 4-repo retirement, monorepo-state) are all deletion-of-archive-grade repos. None are substrate crates.
 - **3 Shape 2 examples** (pheno-errors, Configra absorb, ...) are all migration-to-canonical. The canonical home is either Configra (the Rust config substrate) or phenotype-error-core.
 - **1 Shape 4 example** (Profila → ObservabilityKit) is the only subsume.
-- **1 Shape 1 example** (Dmouse92 → KooshaPari) is the only fleet-wide standardization.
+- **1 Shape 1 example** (Dmouse92 → <REDACTED>) is the only fleet-wide standardization.
 
 **pheno-otel compared to the 2 prior Shape 9 examples:**
 

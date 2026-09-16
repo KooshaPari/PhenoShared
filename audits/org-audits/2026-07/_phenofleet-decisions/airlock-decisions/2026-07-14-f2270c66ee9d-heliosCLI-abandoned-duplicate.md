@@ -2,9 +2,9 @@
 
 **airlock id:** `f2270c66ee9d`
 **canonical local folder:** `heliosCLI`
-**upstream URL:** `https://github.com/KooshaPari/helios-cli.git`
-**bare mirror:** `/Users/kooshapari/.airlock/repos/f2270c66ee9d.git/`
-**worktree:**    `/Users/kooshapari/.airlock/worktrees/f2270c66ee9d/`
+**upstream URL:** `https://github.com/<REDACTED>/helios-cli.git`
+**bare mirror:** `/Users/<REDACTED>/.airlock/repos/f2270c66ee9d.git/`
+**worktree:**    `/Users/<REDACTED>/.airlock/worktrees/f2270c66ee9d/`
 
 ---
 
@@ -20,7 +20,7 @@ The canonical home for this upstream is the airlock entry `fed12af11b16` (local 
 
 | signal | `fed12af11b16` (`helios-cli`) ← CANONICAL | `f2270c66ee9d` (`heliosCLI`) ← this one |
 |---|---|---|
-| upstream URL | `github.com/KooshaPari/helios-cli.git` | (same) |
+| upstream URL | `github.com/<REDACTED>/helios-cli.git` | (same) |
 | bare refs/heads count | 1300 (large upstream-synced fork) | 1293 |
 | local path on disk | **yes** — branch `chore/absorb-helioscli-final-2026-06-20` @ `ae2f311` | **NO** — never checked out |
 | runs (total / active) | 81 / 77 | 111 / 99 |
@@ -37,12 +37,12 @@ The canonical home for this upstream is the airlock entry `fed12af11b16` (local 
 2. ✅ Compute SHA256 of each tarball
 3. ✅ Verify each tarball roundtrips correctly (extract → `git for-each-ref` matches)
 4. ✅ Write SHA256 manifest to `_phenofleet-decisions/airlock-archived/SHA256SUMS.txt`
-5. ✅ Install `READY_TO_PRUNE.md` sentinel inside `/Users/kooshapari/.airlock/repos/f2270c66ee9d.git/` (does NOT delete)
+5. ✅ Install `READY_TO_PRUNE.md` sentinel inside `/Users/<REDACTED>/.airlock/repos/f2270c66ee9d.git/` (does NOT delete)
 6. ⏸ **DO NOT delete** — require explicit operator action
 
 ### Companion recovery decision
 
-The 1293 branches in this bare mirror are NOT pushed to `KooshaPari/helios-cli` (already-canonical fork with 1300 branches). They live only in the airlock. After archive, if the canonical local checkout (`fed12af11b16`) shows branch X missing, the operator can pull X from the tarball.
+The 1293 branches in this bare mirror are NOT pushed to `<REDACTED>/helios-cli` (already-canonical fork with 1300 branches). They live only in the airlock. After archive, if the canonical local checkout (`fed12af11b16`) shows branch X missing, the operator can pull X from the tarball.
 
 ---
 
@@ -52,11 +52,11 @@ The 1293 branches in this bare mirror are NOT pushed to `KooshaPari/helios-cli` 
 - Absorption probe JSON: `.airlock-absorption-probe-2026-07-14.json`
 - Companion decision (canonical): `_phenofleet-decisions/airlock-decisions/2026-07-14-fed12af11b16-helios-cli-canonical.md` (sibling note in INDEX.md)
 - Decision for absorbed mirror: `_phenofleet-decisions/airlock-decisions/2026-07-14-26ffbedabd25-heliosHarness-absorbed-into-helios-cli.md` (this is the absorbed→helios-cli decision, distinct from this duplicate-cleanup decision)
-- Remote backup gist: https://gist.github.com/KooshaPari/3e6038adbfc4fe4c38965d02d0fc867e
+- Remote backup gist: https://gist.github.com/<REDACTED>/3e6038adbfc4fe4c38965d02d0fc867e
 
 ## Rollback (if this decision is later reversed)
 
 1. Restore the tarball: `tar --zstd -xf _phenofleet-decisions/airlock-archived/f2270c66ee9d.git.tar.zst -C /tmp/restore/`
-2. Move it back: `mv /tmp/restore/f2270c66ee9d.git /Users/kooshapari/.airlock/repos/`
-3. Remove sentinel: `rm /Users/kooshapari/.airlock/repos/f2270c66ee9d.git/READY_TO_PRUNE.md`
+2. Move it back: `mv /tmp/restore/f2270c66ee9d.git /Users/<REDACTED>/.airlock/repos/`
+3. Remove sentinel: `rm /Users/<REDACTED>/.airlock/repos/f2270c66ee9d.git/READY_TO_PRUNE.md`
 4. Re-run the inventory probe to confirm state restoration.

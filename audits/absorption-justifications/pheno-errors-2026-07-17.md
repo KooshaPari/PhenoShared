@@ -7,8 +7,8 @@ Compliance standard: registry/audit-absorption-justification/schema.json (14/14 
 
 ## Source
 
-- **Repo:** `KooshaPari/pheno-errors`
-- **GitHub URL:** https://github.com/KooshaPari/pheno-errors
+- **Repo:** `<REDACTED>/pheno-errors`
+- **GitHub URL:** https://github.com/<REDACTED>/pheno-errors
 - **Archived at:** True
 - **Default branch at audit time:** `main`
 - **Last commit SHA on default branch:** `ba5c913`
@@ -20,7 +20,7 @@ Compliance standard: registry/audit-absorption-justification/schema.json (14/14 
 
 ## Target
 
-- **Receiving repo:** `KooshaPari/pheno`
+- **Receiving repo:** `<REDACTED>/pheno`
 - **Receiving path:** `crates/phenotype-error-core/`
 - **Local mirror path:** `repos/pheno-errors`
 - **Bundle file:** none (live repo; no bundle needed)
@@ -39,7 +39,7 @@ Compliance standard: registry/audit-absorption-justification/schema.json (14/14 
 - **Total branches (remote):** 1
 - **Open issues at audit time:** 0
 - **Bundle reference:** NONE — repo is live, no bundle required
-- **Source-tombstone posture:** `KooshaPari/pheno-errors` active on GitHub
+- **Source-tombstone posture:** `<REDACTED>/pheno-errors` active on GitHub
 
 ## BRANCH_INVENTORY
 
@@ -67,14 +67,14 @@ Compliance standard: registry/audit-absorption-justification/schema.json (14/14 
 
 | Source Item | Source Evidence | Category | Source State | Target Repo | Target Evidence | Status | Deletion Justification | Risk if Deleted | Required Action |
 |---|---|---|---|---|---|---|---|---|---|
-| `pheno-errors/code` | `gh api` | sdk-code | active | `KooshaPari/pheno` | `crates/phenotype-error-core/` | ARCHIVED | pheno-errors AppError design absorbed into phenotype-error-core. | Medium | Scanned and reviewed |
-| `pheno-errors/branches` | `gh api` | branch-coverage | active | `KooshaPari/pheno` | `crates/phenotype-error-core/` | ARCHIVED | Branch coverage reviewed | Low | Scanned and reviewed |
+| `pheno-errors/code` | `gh api` | sdk-code | active | `<REDACTED>/pheno` | `crates/phenotype-error-core/` | ARCHIVED | pheno-errors AppError design absorbed into phenotype-error-core. | Medium | Scanned and reviewed |
+| `pheno-errors/branches` | `gh api` | branch-coverage | active | `<REDACTED>/pheno` | `crates/phenotype-error-core/` | ARCHIVED | Branch coverage reviewed | Low | Scanned and reviewed |
 
 ## Last-Resort-Exceptions
 
 - **Rebuttal #1: "Delete pheno-errors now."** Rebutted: pheno-errors has active code history. We must verify parity or archive instead of deleting. The residual gap is managed by target absorption.
 - **Rebuttal #2: "Archive-not-deletion is insufficient."** Rebutted: Archival is the preferred path to preserve history on the remote while disabling write access, complying with BOUNDARY_OWNERS.
-- **Rebuttal #3: "pheno-errors cannot absorb exception."** Rebutted: The target `KooshaPari/pheno` can absorb the exception because it is the canonical repository for this boundary domain role.
+- **Rebuttal #3: "pheno-errors cannot absorb exception."** Rebutted: The target `<REDACTED>/pheno` can absorb the exception because it is the canonical repository for this boundary domain role.
 
 No exceptions to the ARCHIVED verdict are granted.
 
@@ -82,7 +82,7 @@ No exceptions to the ARCHIVED verdict are granted.
 
 ```bash
 # Disaster-recovery posture:
-git clone https://github.com/KooshaPari/pheno-errors.git /tmp/pheno-errors-restore
+git clone https://github.com/<REDACTED>/pheno-errors.git /tmp/pheno-errors-restore
 # Verify bundle sha-256 (re-clone path is clean)
 ```
 

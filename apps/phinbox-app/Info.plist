@@ -15,7 +15,7 @@
     <string>AppIcon</string>
 
     <key>CFBundleIdentifier</key>
-    <string>com.kooshapari.phinbox</string>
+    <string>com.<REDACTED>.phinbox</string>
 
     <key>CFBundleInfoDictionaryVersion</key>
     <string>6.0</string>

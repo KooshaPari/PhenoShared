@@ -77,7 +77,7 @@ gh secret list | grep SENTRY_DSN_PHENOTYPE_INFRAKIT
 
 ```bash
 # AgilePlus
-cd /Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus
 export SENTRY_DSN="$(gh secret get SENTRY_DSN_AGILEPLUS)"
 cargo test --lib sentry_config -- --nocapture
 ```
@@ -146,14 +146,14 @@ gh workflow run sentry-error-tracking.yml
 1. Go to: https://sentry.io/settings/phenotype/integrations/github/
 2. If not authorized:
    - Click "Authorize GitHub"
-   - Grant access to KooshaPari organization
+   - Grant access to <REDACTED> organization
 3. Verify status shows "Installed"
 ```
 
 **Verification**:
 - [ ] GitHub integration authorized
 - [ ] Status shows "Installed" (not "Pending")
-- [ ] KooshaPari org authorized
+- [ ] <REDACTED> org authorized
 - [ ] Can see available repositories
 
 ### Step 6: Alert Rule Creation (Recommended)
@@ -228,10 +228,10 @@ cargo test --lib sentry_config test_error_capture -- --nocapture
 ```bash
 # Health check runs daily at 6 AM UTC
 # Or trigger manually:
-gh workflow run sentry-error-tracking.yml -R KooshaPari/AgilePlus
+gh workflow run sentry-error-tracking.yml -R <REDACTED>/AgilePlus
 
 # Check results:
-gh workflow view sentry-error-tracking.yml -R KooshaPari/AgilePlus
+gh workflow view sentry-error-tracking.yml -R <REDACTED>/AgilePlus
 ```
 
 **Verification**:

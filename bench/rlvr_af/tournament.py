@@ -27,7 +27,7 @@ from bench.rlvr_af.optimize import (
 from bench.rlvr_af.trace import Artifact, JudgeVerdict, Trail, Transition
 from bench.rlvr_af.verify import BaseVerifier, HeuristicVerifier
 
-REPO_ROOT = "/Users/kooshapari/CodeProjects/Phenotype/pheno-harness"
+REPO_ROOT = "/Users/<REDACTED>/CodeProjects/Phenotype/pheno-harness"
 
 
 @dataclass

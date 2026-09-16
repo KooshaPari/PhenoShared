@@ -8,9 +8,9 @@
 
 | Repo | Current state | 100% migrated? | Delete-ready? | Absorb target |
 |------|---------------|----------------|---------------|---------------|
-| `KooshaPari/Pyron` | Private/inaccessible by current `gh` token; local clone exists with legacy workspace | **No, not proven** | **No: HOLD_ARCHIVE** | DOMAIN_ROLES owners by surface |
-| `KooshaPari/phenotype-bus` | GitHub API returns 404 as of 2026-06-22 | **Yes for runtime/dependency surfaces** | **DELETE-eligible / tombstone-ready** | Eventra + phenotype-python-sdk pheno-events |
-| `KooshaPari/PhenoContracts` | Public active repo, non-archived | **No** | **No: HOLD_DECOMPOSE** | PhenoSpecs/TestingKit or new verifier owner TBD + ADR-ECO-014 Rust owners |
+| `<REDACTED>/Pyron` | Private/inaccessible by current `gh` token; local clone exists with legacy workspace | **No, not proven** | **No: HOLD_ARCHIVE** | DOMAIN_ROLES owners by surface |
+| `<REDACTED>/phenotype-bus` | GitHub API returns 404 as of 2026-06-22 | **Yes for runtime/dependency surfaces** | **DELETE-eligible / tombstone-ready** | Eventra + phenotype-python-sdk pheno-events |
+| `<REDACTED>/PhenoContracts` | Public active repo, non-archived | **No** | **No: HOLD_DECOMPOSE** | PhenoSpecs/TestingKit or new verifier owner TBD + ADR-ECO-014 Rust owners |
 
 ## Pyron granular absorption
 
@@ -20,7 +20,7 @@ Migrated or repointed surfaces:
 
 | Surface | Absorb target | Evidence |
 |---------|---------------|----------|
-| Config / Settly dependency | `phenotype-config` / `Configra` | `registry/chokepoints.json` marks Pyron verified-clean; local `Cargo.toml` has `settly = { git = "https://github.com/KooshaPari/phenotype-config" }`. |
+| Config / Settly dependency | `phenotype-config` / `Configra` | `registry/chokepoints.json` marks Pyron verified-clean; local `Cargo.toml` has `settly = { git = "https://github.com/<REDACTED>/phenotype-config" }`. |
 | Observability / Traceon | `PhenoObservability` | Pyron chokepoint row repoints Traceon/observe class to PhenoObservability. |
 | Auth / policy / cipher contracts | `Authvault` / AuthKit lineage | `disposition-index.json` row #11 and `phenoshared-p4-checkpoint.md` list Authvault#88 for contracts slice 2. |
 | Event / bus contracts | `Eventra` | `phenoshared-p4-checkpoint.md` lists Eventra#19/#20; Eventra tree contains `rust/phenotype-event-bus` and `rust/phenotype-event-contracts`. |
@@ -34,7 +34,7 @@ Not proven migrated:
 |---------|------------------|---------------|
 | Local vendored Rust crates | Local Pyron still has workspace members `crates/phenotype-contracts`, `crates/phenotype-event-bus`, `crates/phenotype-config-core`, `crates/phenotype-mcp`, etc. | Confirm Pyron tombstone/gutted branch is pushed and archived, or migrate/delete those surfaces with PR evidence. |
 | Historical Python middleware/utilities | Local Pyron has `phenotype-middleware-py`, `hexagon-python`, `packages/pheno-core`, and many docs/worklogs. | Map Python middleware to `phenotype-python-sdk` or retire with explicit no-merit verdict. |
-| Hard delete claim | Current token sees `KooshaPari/Pyron` as 404, but local clone and components.lock say restored-archived after prior premature delete. | Do not hard-delete from registry evidence alone. Keep archive/hold until authoritative remote state plus tombstone content is verified. |
+| Hard delete claim | Current token sees `<REDACTED>/Pyron` as 404, but local clone and components.lock say restored-archived after prior premature delete. | Do not hard-delete from registry evidence alone. Keep archive/hold until authoritative remote state plus tombstone content is verified. |
 
 ## phenotype-bus granular absorption
 

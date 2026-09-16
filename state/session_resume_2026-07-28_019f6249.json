@@ -103,7 +103,7 @@
     "new_commits_detail": [
       {
         "sha": "6001170",
-        "author": "KooshaPari",
+        "author": "<REDACTED>",
         "date": "2026-07-28T16:17:38-07:00",
         "subject": "wip: capture 2026-07-28 pheno-harness (M+D, preserved 1026 untracked)",
         "scope": "massive deletions of stale bench/fixtures + bench/results artifacts; preserved 1026 untracked files",
@@ -175,7 +175,7 @@
   "gh_auth_verified": {
     "verified_at": "2026-07-28T05:21:24Z",
     "method": "gh auth status with GITHUB_TOKEN/GH_TOKEN unset (forces keyring)",
-    "result": "logged in as KooshaPari; keyring token gho_Pe5e...; HTTP 200 on api.github.com/user",
+    "result": "logged in as <REDACTED>; keyring token gho_Pe5e...; HTTP 200 on api.github.com/user",
     "scopes": "gist, read:org, repo",
     "ready_for_push": true
   },

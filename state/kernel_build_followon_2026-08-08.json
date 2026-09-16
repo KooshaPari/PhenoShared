@@ -34,7 +34,7 @@
     "runner_launched": false,
     "distro": "FedoraLinux-44",
     "distro_fs_intact": true,
-    "deps_preseeded_intact": "/home/kooshapari/sgl-kernel-deps",
+    "deps_preseeded_intact": "/home/<REDACTED>/sgl-kernel-deps",
     "resume_scripts": {
       "C:\\Users\\koosh\\AppData\\Local\\Temp\\kbuild_final_0802.sh": "3115B intact",
       "C:\\Users\\koosh\\AppData\\Local\\Temp\\kbuild_runner_final_0802.py": "2027B intact"
@@ -47,7 +47,7 @@
     "boot FedoraLinux-44",
     "push kbuild_final_0802.sh to /tmp and chmod +x",
     "launch kbuild_runner_final_0802.py foreground (holds VM alive, up to 1h)",
-    "poll /home/kooshapari/sgl_kernel_build.log, wheel target /home/kooshapari/sglang-src/sgl-kernel/dist/sgl_kernel-*.whl"
+    "poll /home/<REDACTED>/sgl_kernel_build.log, wheel target /home/<REDACTED>/sglang-src/sgl-kernel/dist/sgl_kernel-*.whl"
   ],
   "sibling_workstream_results": {
     "lane_health_2026-08-08": {

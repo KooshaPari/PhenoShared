@@ -50,7 +50,7 @@ import re
 import sys
 from pathlib import Path
 
-BIN = Path("/Users/kooshapari/bin")
+BIN = Path("/Users/<REDACTED>/bin")
 DATA = Path.home() / ".local/share/resume-all"
 SNAPSHOT = DATA / "snapshot.jsonl"
 

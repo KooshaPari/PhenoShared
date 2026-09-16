@@ -26,7 +26,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/kooshapari/bifrost-extensions/plugins/argis"
+	"github.com/<REDACTED>/bifrost-extensions/plugins/argis"
 	"github.com/maximhq/bifrost/core/schemas"
 )
 

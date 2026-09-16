@@ -1,6 +1,6 @@
 # qgate quality gate for HexaKit.
 #
-# Runs the reusable qgate workflow from KooshaPari/phenotype-tooling on a
+# Runs the reusable qgate workflow from <REDACTED>/phenotype-tooling on a
 # Linux standard runner. Non-blocking until per-module coverage reaches
 # the .qgate.toml threshold (per the "1 via 2" protocol).
 #
@@ -56,7 +56,7 @@ jobs:
 
       # qgate reusable workflow — runs the gate, emits JSON report.
       - name: qgate quality gate
-        uses: KooshaPari/phenotype-tooling/.github/workflows/reusable/quality-gate.yml@main
+        uses: <REDACTED>/phenotype-tooling/.github/workflows/reusable/quality-gate.yml@main
         with:
           coverage-report: coverage/lcov.info
           coverage-format: lcov

@@ -34,8 +34,8 @@ planify/
 
 ### CI/CD
 
-![CI](https://github.com/KooshaPari/Planify/actions/workflows/ci.yml/badge.svg)
-![License](https://img.shields.io/github/license/KooshaPari/Planify)
+![CI](https://github.com/<REDACTED>/Planify/actions/workflows/ci.yml/badge.svg)
+![License](https://img.shields.io/github/license/<REDACTED>/Planify)
 
 GitHub Actions CI runs on every push and pull request to `main`, with two
 parallel jobs:
@@ -49,7 +49,7 @@ updates.
 
 ## Deployment
 
-- Web: Vercel (planify.space or planify.kooshapari.com)
+- Web: Vercel (planify.space or planify.<REDACTED>.com)
 - Stack: Upstream Plane (apps/web, apps/space, apps/admin)
 - DB/cache: Postgres 16 + Dragonfly via infra/docker-compose.plane.yml
 
@@ -78,5 +78,5 @@ cd ../site && bun install && bun run dev
 ## Links
 
 - Upstream: https://github.com/makeplane/plane
-- AgilePlus: https://github.com/KooshaPari/AgilePlus
-- phenotype-landing: https://github.com/KooshaPari/phenotype-landing
+- AgilePlus: https://github.com/<REDACTED>/AgilePlus
+- phenotype-landing: https://github.com/<REDACTED>/phenotype-landing

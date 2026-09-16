@@ -4,21 +4,21 @@
 
 | Repo | URL | Contents |
 |------|-----|----------|
-| **pheno-harness** | https://github.com/KooshaPari/pheno-harness | Code, config, eval, scripts |
-| **pheno-specs** | https://github.com/KooshaPari/pheno-specs | AgilePlus SPEC-001–016, research digest |
+| **pheno-harness** | https://github.com/<REDACTED>/pheno-harness | Code, config, eval, scripts |
+| **pheno-specs** | https://github.com/<REDACTED>/pheno-specs | AgilePlus SPEC-001–016, research digest |
 
 Specs mount as git submodule at `agileplus-specs/`. Pin in `specs.lock`.
 
 ### Clone with specs
 
 ```bash
-git clone --recurse-submodules https://github.com/KooshaPari/pheno-harness.git
+git clone --recurse-submodules https://github.com/<REDACTED>/pheno-harness.git
 # or after plain clone:
 git submodule update --init --recursive
 ```
 
 ```powershell
-git clone --recurse-submodules https://github.com/KooshaPari/pheno-harness.git
+git clone --recurse-submodules https://github.com/<REDACTED>/pheno-harness.git
 # or after plain clone:
 git submodule update --init --recursive
 ```

@@ -58,7 +58,7 @@ time cargo build --release --workspace
 
 ### Current State
 
-File: `/Users/kooshapari/CodeProjects/Phenotype/repos/.cargo/config.toml`
+File: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/.cargo/config.toml`
 
 ```toml
 [build]

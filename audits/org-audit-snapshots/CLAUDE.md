@@ -4,7 +4,7 @@
 
 - **Name**: phenotype-org-audits
 - **Description**: Longitudinal audit-history repository for Phenotype organization
-- **Location**: `/Users/kooshapari/CodeProjects/Phenotype/repos/phenotype-org-audits`
+- **Location**: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/phenotype-org-audits`
 - **Purpose**: Archive quarterly scans, systemic issues, governance velocity metrics
 - **Language Stack**: Markdown (audit reports) + shell/Rust (aggregator tooling)
 
@@ -58,6 +58,6 @@ CHANGELOG.md                    # Audit release notes
 ## Governance Reference
 
 See parent-level governance:
-- Phenotype org: `/Users/kooshapari/CodeProjects/Phenotype/CLAUDE.md`
+- Phenotype org: `/Users/<REDACTED>/CodeProjects/Phenotype/CLAUDE.md`
 - Cross-repo reuse: Section "Phenotype Org Cross-Project Reuse Protocol"
 - Scripting policy: `repos/docs/governance/scripting_policy.md`

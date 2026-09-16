@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: MIT OR Apache-2.0
-# SPDX-FileCopyrightText: 2026 KooshaPari <kooshapari@gmail.com>
+# SPDX-FileCopyrightText: 2026 <REDACTED> <<REDACTED>@gmail.com>
 #
 # Dockerfile for the Phase 6.2 real-Unity-Editor shader-rendering tests.
 #
@@ -25,7 +25,7 @@ FROM unityci/editor:ubuntu-2022.3.20f1-focal-2
 
 LABEL org.opencontainers.image.title="phenotype-postfx-render" \
       org.opencontainers.image.description="Real-Unity-Editor test runner for the 7 phenotype-postfx passes (SSAO, SSGI, Bloom, ACES, Vignette, Chromatic, LUT)." \
-      org.opencontainers.image.source="https://github.com/KooshaPari/phenotype-gfx" \
+      org.opencontainers.image.source="https://github.com/<REDACTED>/phenotype-gfx" \
       org.opencontainers.image.licenses="MIT"
 
 USER root

@@ -104,7 +104,7 @@ Write-Log "Syncing repo to ${Mac}:${remoteDir}"
 set -e
 mkdir -p ~/work
 if [[ ! -d $remoteDir/.git ]]; then
-    git clone https://github.com/KooshaPari/pheno-harness.git $remoteDir
+    git clone https://github.com/<REDACTED>/pheno-harness.git $remoteDir
 fi
 cd $remoteDir
 git fetch --tags origin
@@ -136,5 +136,5 @@ foreach ($step in $Steps) {
 
 Write-Host ""
 Write-Log "All steps complete."
-Write-Log "View release: https://github.com/KooshaPari/pheno-harness/releases/tag/${Tag}-pheno-harness-summit"
-Write-Log "View package: https://github.com/KooshaPari/pheno-harness/pkgs/container/pheno-harness"
+Write-Log "View release: https://github.com/<REDACTED>/pheno-harness/releases/tag/${Tag}-pheno-harness-summit"
+Write-Log "View package: https://github.com/<REDACTED>/pheno-harness/pkgs/container/pheno-harness"

@@ -5,7 +5,7 @@ status: archived
 last_boundary_review: 2026-07-17
 review_cadence: dormant
 in_scope:
-  - "Historical snapshot of KooshaPari/Civis (Bevy 0.18 emergent civilization godgame) at archive date 2026-07-17"
+  - "Historical snapshot of <REDACTED>/Civis (Bevy 0.18 emergent civilization godgame) at archive date 2026-07-17"
   - "Reference for legacy FR traces (FR-CORE-001, FR-CIV-*, FR-GOV-*) and emergence-charter ADRs"
 out_of_scope:
   - "Active development — repo is archived on GitHub and read-only"
@@ -19,7 +19,7 @@ depended_on_by: []
 
 ## In Scope
 
-- Read-only GitHub archive of `KooshaPari/Civis` (Rust 2024 workspace, 28+ Bevy 0.18 crates + `clients/bevy-ref`).
+- Read-only GitHub archive of `<REDACTED>/Civis` (Rust 2024 workspace, 28+ Bevy 0.18 crates + `clients/bevy-ref`).
 - Reference corpus for the emergence-charter pattern (PRD.md, PLAN.md, FUNCTIONAL_REQUIREMENTS.md, ADR.md, COMPARISON.md, CIVIS_GAME_DAG.md).
 - 200+ session worklogs under `worklogs/` (heritage governance trail).
 - Historical evidence for the `civ-lab-engine` role in the registry (`projects/Civis.json`, `projects/Civis-2026-06-25.json`).
@@ -37,7 +37,7 @@ depended_on_by: []
 
 | Crossing | Direction | Surface | Status |
 | -------- | --------- | ------- | ------ |
-| Registry reference | registry → archived repo | `registry/disposition-index.json#repo-Civis` → `KooshaPari/Civis` (archived) | green |
+| Registry reference | registry → archived repo | `registry/disposition-index.json#repo-Civis` → `<REDACTED>/Civis` (archived) | green |
 | Historical FR traceability | phenodocs → archived repo | FR-CORE-001, FR-CIV-* cites | green (snapshot) |
 | Submodule pin | archived repo → phenodocs | `vendor/phenodocs @ 35e0e90a` | amber (submodule read-only; repo archived) |
 
@@ -49,7 +49,7 @@ depended_on_by: []
 **Decisions:**
 - Adopt **ARCHIVE_ONLY** disposition per task failsafe clause (cargo not on PATH on this host; 22 GB `target/` artifact dir; 28+ workspace members + Bevy 0.18 client + Godot/Unreal sub-projects; `vendor/phenodocs` submodule).
 - Update `repo-Civis` registry row: `disposition: AFFIRM → ARCHIVE_ONLY`, `target: phenotype-registry`, `boundary_doc: docs/boundary/Civis.md`.
-- Archive `KooshaPari/Civis` on GitHub via `gh repo archive KooshaPari/Civis -y`.
+- Archive `<REDACTED>/Civis` on GitHub via `gh repo archive <REDACTED>/Civis -y`.
 - Preserve read-only snapshot of source on disk under `repos/Civis/` (do not delete; per container policy).
 - The 2026-06-25 AFFIRM audit (`Civis-2026-06-25.md`) is superseded by this ARCHIVE_ONLY disposition but remains in the registry for historical traceability.
 

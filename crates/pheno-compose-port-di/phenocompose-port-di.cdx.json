@@ -14,13 +14,13 @@
     ],
     "authors": [
       {
-        "name": "kooshapari"
+        "name": "<REDACTED>"
       }
     ],
     "component": {
       "type": "library",
-      "bom-ref": "path+file:///Users/kooshapari/CodeProjects/Phenotype/repos/PhenoCompose/crates/port-di#phenocompose-port-di@0.1.0",
-      "author": "kooshapari",
+      "bom-ref": "path+file:///Users/<REDACTED>/CodeProjects/Phenotype/repos/PhenoCompose/crates/port-di#phenocompose-port-di@0.1.0",
+      "author": "<REDACTED>",
       "name": "phenocompose-port-di",
       "version": "0.1.0",
       "description": "Phenotype Compose DI container — wires the four port-trait adapters (Composer, Publisher, Runtime, SecretStore) into a single `Container` value that downstream pheno-* services can hold in one place. Defaults to in-memory / no-op adapters; production callers swap in concrete backends via the builder methods.",
@@ -38,13 +38,13 @@
         },
         {
           "type": "vcs",
-          "url": "https://github.com/KooshaPari/PhenoCompose"
+          "url": "https://github.com/<REDACTED>/PhenoCompose"
         }
       ],
       "components": [
         {
           "type": "library",
-          "bom-ref": "path+file:///Users/kooshapari/CodeProjects/Phenotype/repos/PhenoCompose/crates/port-di#phenocompose-port-di@0.1.0 bin-target-0",
+          "bom-ref": "path+file:///Users/<REDACTED>/CodeProjects/Phenotype/repos/PhenoCompose/crates/port-di#phenocompose-port-di@0.1.0 bin-target-0",
           "name": "phenocompose_port_di",
           "version": "0.1.0",
           "purl": "pkg:cargo/phenocompose-port-di@0.1.0?download_url=file://.#src/lib.rs"
@@ -61,8 +61,8 @@
   "components": [
     {
       "type": "library",
-      "bom-ref": "path+file:///Users/kooshapari/CodeProjects/Phenotype/repos/PhenoCompose/crates/port-composer#phenocompose-port-composer@0.1.0",
-      "author": "kooshapari",
+      "bom-ref": "path+file:///Users/<REDACTED>/CodeProjects/Phenotype/repos/PhenoCompose/crates/port-composer#phenocompose-port-composer@0.1.0",
+      "author": "<REDACTED>",
       "name": "phenocompose-port-composer",
       "version": "0.1.0",
       "description": "Phenotype Compose Composer port trait — the canonical hex-architecture port for converting a Manifest into a ComposedArtifact. Adapters implement Composer to bridge to local builders (cargo, npm, docker buildx, bazel, ...).",
@@ -72,7 +72,7 @@
           "expression": "MIT OR Apache-2.0"
         }
       ],
-      "purl": "pkg:cargo/phenocompose-port-composer@0.1.0?download_url=file:///Users/kooshapari/CodeProjects/Phenotype/repos/PhenoCompose/crates/port-composer",
+      "purl": "pkg:cargo/phenocompose-port-composer@0.1.0?download_url=file:///Users/<REDACTED>/CodeProjects/Phenotype/repos/PhenoCompose/crates/port-composer",
       "externalReferences": [
         {
           "type": "documentation",
@@ -80,14 +80,14 @@
         },
         {
           "type": "vcs",
-          "url": "https://github.com/KooshaPari/PhenoCompose"
+          "url": "https://github.com/<REDACTED>/PhenoCompose"
         }
       ]
     },
     {
       "type": "library",
-      "bom-ref": "path+file:///Users/kooshapari/CodeProjects/Phenotype/repos/PhenoCompose/crates/port-publisher#phenocompose-port-publisher@0.1.0",
-      "author": "kooshapari",
+      "bom-ref": "path+file:///Users/<REDACTED>/CodeProjects/Phenotype/repos/PhenoCompose/crates/port-publisher#phenocompose-port-publisher@0.1.0",
+      "author": "<REDACTED>",
       "name": "phenocompose-port-publisher",
       "version": "0.1.0",
       "description": "Phenotype Compose Publisher port trait — the canonical hex-architecture port for shipping a ComposedArtifact to a PublishTarget. Adapters implement Publisher to bridge to local sinks (docker registry, local file, kafka, S3, ...).",
@@ -97,7 +97,7 @@
           "expression": "MIT OR Apache-2.0"
         }
       ],
-      "purl": "pkg:cargo/phenocompose-port-publisher@0.1.0?download_url=file:///Users/kooshapari/CodeProjects/Phenotype/repos/PhenoCompose/crates/port-publisher",
+      "purl": "pkg:cargo/phenocompose-port-publisher@0.1.0?download_url=file:///Users/<REDACTED>/CodeProjects/Phenotype/repos/PhenoCompose/crates/port-publisher",
       "externalReferences": [
         {
           "type": "documentation",
@@ -105,14 +105,14 @@
         },
         {
           "type": "vcs",
-          "url": "https://github.com/KooshaPari/PhenoCompose"
+          "url": "https://github.com/<REDACTED>/PhenoCompose"
         }
       ]
     },
     {
       "type": "library",
-      "bom-ref": "path+file:///Users/kooshapari/CodeProjects/Phenotype/repos/PhenoCompose/crates/port-runtime#phenocompose-port-runtime@0.1.0",
-      "author": "kooshapari",
+      "bom-ref": "path+file:///Users/<REDACTED>/CodeProjects/Phenotype/repos/PhenoCompose/crates/port-runtime#phenocompose-port-runtime@0.1.0",
+      "author": "<REDACTED>",
       "name": "phenocompose-port-runtime",
       "version": "0.1.0",
       "description": "Phenotype Compose Runtime port trait — the canonical hex-architecture port for spawning/stopping/statusing containers from an ImageRef. Adapters implement Runtime to bridge to local container engines (docker, podman, systemd-nspawn, k8s, ...).",
@@ -122,7 +122,7 @@
           "expression": "MIT OR Apache-2.0"
         }
       ],
-      "purl": "pkg:cargo/phenocompose-port-runtime@0.1.0?download_url=file:///Users/kooshapari/CodeProjects/Phenotype/repos/PhenoCompose/crates/port-runtime",
+      "purl": "pkg:cargo/phenocompose-port-runtime@0.1.0?download_url=file:///Users/<REDACTED>/CodeProjects/Phenotype/repos/PhenoCompose/crates/port-runtime",
       "externalReferences": [
         {
           "type": "documentation",
@@ -130,14 +130,14 @@
         },
         {
           "type": "vcs",
-          "url": "https://github.com/KooshaPari/PhenoCompose"
+          "url": "https://github.com/<REDACTED>/PhenoCompose"
         }
       ]
     },
     {
       "type": "library",
-      "bom-ref": "path+file:///Users/kooshapari/CodeProjects/Phenotype/repos/PhenoCompose/crates/port-secret#phenocompose-port-secret@0.1.0",
-      "author": "kooshapari",
+      "bom-ref": "path+file:///Users/<REDACTED>/CodeProjects/Phenotype/repos/PhenoCompose/crates/port-secret#phenocompose-port-secret@0.1.0",
+      "author": "<REDACTED>",
       "name": "phenocompose-port-secret",
       "version": "0.1.0",
       "description": "Phenotype Compose SecretStore port trait — the canonical hex-architecture port for storing, retrieving, listing, and deleting versioned secrets. Adapters implement SecretStore to bridge to local secret backends (in-memory map, JSON file, vault, k8s secrets, ...).",
@@ -147,7 +147,7 @@
           "expression": "MIT OR Apache-2.0"
         }
       ],
-      "purl": "pkg:cargo/phenocompose-port-secret@0.1.0?download_url=file:///Users/kooshapari/CodeProjects/Phenotype/repos/PhenoCompose/crates/port-secret",
+      "purl": "pkg:cargo/phenocompose-port-secret@0.1.0?download_url=file:///Users/<REDACTED>/CodeProjects/Phenotype/repos/PhenoCompose/crates/port-secret",
       "externalReferences": [
         {
           "type": "documentation",
@@ -155,14 +155,14 @@
         },
         {
           "type": "vcs",
-          "url": "https://github.com/KooshaPari/PhenoCompose"
+          "url": "https://github.com/<REDACTED>/PhenoCompose"
         }
       ]
     },
     {
       "type": "library",
-      "bom-ref": "path+file:///Users/kooshapari/CodeProjects/Phenotype/repos/PhenoCompose/crates/port-types#phenocompose-port-types@0.1.0",
-      "author": "kooshapari",
+      "bom-ref": "path+file:///Users/<REDACTED>/CodeProjects/Phenotype/repos/PhenoCompose/crates/port-types#phenocompose-port-types@0.1.0",
+      "author": "<REDACTED>",
       "name": "phenocompose-port-types",
       "version": "0.1.0",
       "description": "Phenotype Compose port type definitions (Manifest, ComposedArtifact, PublishTarget, PublishReceipt, ImageRef, ContainerId, ContainerStatus) — the shared value types that flow across the Composer / Publisher / Runtime port traits.",
@@ -172,7 +172,7 @@
           "expression": "MIT OR Apache-2.0"
         }
       ],
-      "purl": "pkg:cargo/phenocompose-port-types@0.1.0?download_url=file:///Users/kooshapari/CodeProjects/Phenotype/repos/PhenoCompose/crates/port-types",
+      "purl": "pkg:cargo/phenocompose-port-types@0.1.0?download_url=file:///Users/<REDACTED>/CodeProjects/Phenotype/repos/PhenoCompose/crates/port-types",
       "externalReferences": [
         {
           "type": "documentation",
@@ -180,7 +180,7 @@
         },
         {
           "type": "vcs",
-          "url": "https://github.com/KooshaPari/PhenoCompose"
+          "url": "https://github.com/<REDACTED>/PhenoCompose"
         }
       ]
     },
@@ -369,45 +369,45 @@
   ],
   "dependencies": [
     {
-      "ref": "path+file:///Users/kooshapari/CodeProjects/Phenotype/repos/PhenoCompose/crates/port-composer#phenocompose-port-composer@0.1.0",
+      "ref": "path+file:///Users/<REDACTED>/CodeProjects/Phenotype/repos/PhenoCompose/crates/port-composer#phenocompose-port-composer@0.1.0",
       "dependsOn": [
-        "path+file:///Users/kooshapari/CodeProjects/Phenotype/repos/PhenoCompose/crates/port-types#phenocompose-port-types@0.1.0",
+        "path+file:///Users/<REDACTED>/CodeProjects/Phenotype/repos/PhenoCompose/crates/port-types#phenocompose-port-types@0.1.0",
         "registry+https://github.com/rust-lang/crates.io-index#thiserror@2.0.18"
       ]
     },
     {
-      "ref": "path+file:///Users/kooshapari/CodeProjects/Phenotype/repos/PhenoCompose/crates/port-di#phenocompose-port-di@0.1.0",
+      "ref": "path+file:///Users/<REDACTED>/CodeProjects/Phenotype/repos/PhenoCompose/crates/port-di#phenocompose-port-di@0.1.0",
       "dependsOn": [
-        "path+file:///Users/kooshapari/CodeProjects/Phenotype/repos/PhenoCompose/crates/port-composer#phenocompose-port-composer@0.1.0",
-        "path+file:///Users/kooshapari/CodeProjects/Phenotype/repos/PhenoCompose/crates/port-publisher#phenocompose-port-publisher@0.1.0",
-        "path+file:///Users/kooshapari/CodeProjects/Phenotype/repos/PhenoCompose/crates/port-runtime#phenocompose-port-runtime@0.1.0",
-        "path+file:///Users/kooshapari/CodeProjects/Phenotype/repos/PhenoCompose/crates/port-secret#phenocompose-port-secret@0.1.0",
-        "path+file:///Users/kooshapari/CodeProjects/Phenotype/repos/PhenoCompose/crates/port-types#phenocompose-port-types@0.1.0"
+        "path+file:///Users/<REDACTED>/CodeProjects/Phenotype/repos/PhenoCompose/crates/port-composer#phenocompose-port-composer@0.1.0",
+        "path+file:///Users/<REDACTED>/CodeProjects/Phenotype/repos/PhenoCompose/crates/port-publisher#phenocompose-port-publisher@0.1.0",
+        "path+file:///Users/<REDACTED>/CodeProjects/Phenotype/repos/PhenoCompose/crates/port-runtime#phenocompose-port-runtime@0.1.0",
+        "path+file:///Users/<REDACTED>/CodeProjects/Phenotype/repos/PhenoCompose/crates/port-secret#phenocompose-port-secret@0.1.0",
+        "path+file:///Users/<REDACTED>/CodeProjects/Phenotype/repos/PhenoCompose/crates/port-types#phenocompose-port-types@0.1.0"
       ]
     },
     {
-      "ref": "path+file:///Users/kooshapari/CodeProjects/Phenotype/repos/PhenoCompose/crates/port-publisher#phenocompose-port-publisher@0.1.0",
+      "ref": "path+file:///Users/<REDACTED>/CodeProjects/Phenotype/repos/PhenoCompose/crates/port-publisher#phenocompose-port-publisher@0.1.0",
       "dependsOn": [
-        "path+file:///Users/kooshapari/CodeProjects/Phenotype/repos/PhenoCompose/crates/port-types#phenocompose-port-types@0.1.0",
+        "path+file:///Users/<REDACTED>/CodeProjects/Phenotype/repos/PhenoCompose/crates/port-types#phenocompose-port-types@0.1.0",
         "registry+https://github.com/rust-lang/crates.io-index#thiserror@2.0.18"
       ]
     },
     {
-      "ref": "path+file:///Users/kooshapari/CodeProjects/Phenotype/repos/PhenoCompose/crates/port-runtime#phenocompose-port-runtime@0.1.0",
+      "ref": "path+file:///Users/<REDACTED>/CodeProjects/Phenotype/repos/PhenoCompose/crates/port-runtime#phenocompose-port-runtime@0.1.0",
       "dependsOn": [
-        "path+file:///Users/kooshapari/CodeProjects/Phenotype/repos/PhenoCompose/crates/port-types#phenocompose-port-types@0.1.0",
+        "path+file:///Users/<REDACTED>/CodeProjects/Phenotype/repos/PhenoCompose/crates/port-types#phenocompose-port-types@0.1.0",
         "registry+https://github.com/rust-lang/crates.io-index#thiserror@2.0.18"
       ]
     },
     {
-      "ref": "path+file:///Users/kooshapari/CodeProjects/Phenotype/repos/PhenoCompose/crates/port-secret#phenocompose-port-secret@0.1.0",
+      "ref": "path+file:///Users/<REDACTED>/CodeProjects/Phenotype/repos/PhenoCompose/crates/port-secret#phenocompose-port-secret@0.1.0",
       "dependsOn": [
-        "path+file:///Users/kooshapari/CodeProjects/Phenotype/repos/PhenoCompose/crates/port-types#phenocompose-port-types@0.1.0",
+        "path+file:///Users/<REDACTED>/CodeProjects/Phenotype/repos/PhenoCompose/crates/port-types#phenocompose-port-types@0.1.0",
         "registry+https://github.com/rust-lang/crates.io-index#thiserror@2.0.18"
       ]
     },
     {
-      "ref": "path+file:///Users/kooshapari/CodeProjects/Phenotype/repos/PhenoCompose/crates/port-types#phenocompose-port-types@0.1.0",
+      "ref": "path+file:///Users/<REDACTED>/CodeProjects/Phenotype/repos/PhenoCompose/crates/port-types#phenocompose-port-types@0.1.0",
       "dependsOn": [
         "registry+https://github.com/rust-lang/crates.io-index#thiserror@2.0.18"
       ]

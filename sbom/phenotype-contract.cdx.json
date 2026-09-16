@@ -19,7 +19,7 @@
     ],
     "component": {
       "type": "library",
-      "bom-ref": "path+file:///Users/kooshapari/CodeProjects/Phenotype/repos/pheno/crates/phenotype-contract#0.2.0",
+      "bom-ref": "path+file:///Users/<REDACTED>/CodeProjects/Phenotype/repos/pheno/crates/phenotype-contract#0.2.0",
       "author": "Phenotype Team",
       "name": "phenotype-contract",
       "version": "0.2.0",
@@ -33,7 +33,7 @@
       "components": [
         {
           "type": "library",
-          "bom-ref": "path+file:///Users/kooshapari/CodeProjects/Phenotype/repos/pheno/crates/phenotype-contract#0.2.0 bin-target-0",
+          "bom-ref": "path+file:///Users/<REDACTED>/CodeProjects/Phenotype/repos/pheno/crates/phenotype-contract#0.2.0 bin-target-0",
           "name": "phenotype_contract",
           "version": "0.2.0",
           "purl": "pkg:cargo/phenotype-contract@0.2.0?download_url=file://.#src/lib.rs"
@@ -338,7 +338,7 @@
   ],
   "dependencies": [
     {
-      "ref": "path+file:///Users/kooshapari/CodeProjects/Phenotype/repos/pheno/crates/phenotype-contract#0.2.0",
+      "ref": "path+file:///Users/<REDACTED>/CodeProjects/Phenotype/repos/pheno/crates/phenotype-contract#0.2.0",
       "dependsOn": [
         "registry+https://github.com/rust-lang/crates.io-index#serde@1.0.228",
         "registry+https://github.com/rust-lang/crates.io-index#thiserror@2.0.18"

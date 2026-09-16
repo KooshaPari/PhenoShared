@@ -30,7 +30,7 @@ the LLM host. Tailscale provides the secure tunnel.
 # On the WSL Fedora 44 distro (sudo required for dnf + /etc/cron.d):
 sudo bash scripts/install_wsl_pheno_serve.sh \
   --branch main \
-  --repo-url https://github.com/KooshaPari/pheno-harness.git
+  --repo-url https://github.com/<REDACTED>/pheno-harness.git
 ```
 
 The script is idempotent — re-run safely after a config change.

@@ -22,7 +22,7 @@ for repo in "${REPOS[@]}"; do
 
   # Try to get cache info from GitHub Actions API
   if [ -n "$GITHUB_TOKEN" ]; then
-    cache_data=$(gh api "repos/KooshaPari/${repo}/actions/caches" 2>/dev/null || echo '{"actions_caches":[]}')
+    cache_data=$(gh api "repos/<REDACTED>/${repo}/actions/caches" 2>/dev/null || echo '{"actions_caches":[]}')
     size=$(echo "$cache_data" | python3 -c "
 import sys, json
 d = json.load(sys.stdin)

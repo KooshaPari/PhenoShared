@@ -26,7 +26,7 @@ here wins.
 | **Agent readiness scoring (internal)** | 71-pillar framework (ADR-024) — `findings/71-pillar-2026-06-17-schema.md` (schema) + `findings/71-pillar-2026-06-17.md` (scorecard) + `findings/71-pillar-2026-06-17-mapping.md` (L30→L71 crosswalk) |
 | **Agent readiness scoring (external standard)** | Factory AI Agent Readiness Model (5 levels, 9 pillars, 80% threshold per level) — <https://docs.factory.ai/web/agent-readiness/overview> |
 | **Quality audit crosswalk (71-pillar ↔ Factory AI)** | `audit-71-pillar-2026-06-17-wrapup.md` § 10 (ADR-026, this turn) |
-| **Dmouse92 → KooshaPari migration audit** | `findings/2026-06-17-L5-104-dmouse92-to-kooshapari.md` (ADR-029, this turn) + sub-plans: dispatch-mcp (527 lines), pheno-ADR-012 (414 lines), bulk-rust-ts (999 lines), forgecode (305 lines) |
+| **Dmouse92 → <REDACTED> migration audit** | `findings/2026-06-17-L5-104-dmouse92-to-<REDACTED>.md` (ADR-029, this turn) + sub-plans: dispatch-mcp (527 lines), pheno-ADR-012 (414 lines), bulk-rust-ts (999 lines), forgecode (305 lines) |
 | **Substrate ownership** | `pheno-mcp-router` (ADR-013) owns all `pheno-mcp-*` server tier/cost/budget/quota/audit/llama_cpp/openai_compat; `phenotype-config` (ADR-022) owns Rust core + Conft TS edge; `phenotype-ops` (ADR-023) owns deployment; `phenotype-hub` / `phenotype-bus` (ADR-014) own IoC frameworks |
 
 ## Precedence order

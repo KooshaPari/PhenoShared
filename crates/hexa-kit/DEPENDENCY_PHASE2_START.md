@@ -2,7 +2,7 @@
 
 **Timeline:** 2026-04-01 to 2026-04-02 (1.5–2 days wall-clock, 20 hours effort)
 **Execution Model:** Parallel Tracks (Track A + Track B)
-**Canonical Repo:** `/Users/kooshapari/CodeProjects/Phenotype/repos`
+**Canonical Repo:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos`
 **Branch:** `main`
 
 ---
@@ -106,9 +106,9 @@ Last commit:      a67fff87b (2026-03-30)
 
 ## Reference Documents
 
-**Master Plan:** `/Users/kooshapari/CodeProjects/Phenotype/repos/DEPENDENCY_PHASE2_EXECUTION_PLAN.md`
+**Master Plan:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos/DEPENDENCY_PHASE2_EXECUTION_PLAN.md`
 
-**Validation:** `/Users/kooshapari/CodeProjects/Phenotype/repos/DEPENDENCY_PHASE2_VALIDATION.md`
+**Validation:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos/DEPENDENCY_PHASE2_VALIDATION.md`
 
 **WP Details:** See plan document for full specifications (20 pages)
 
@@ -118,7 +118,7 @@ Last commit:      a67fff87b (2026-03-30)
 
 ```bash
 # After each agent completes their WP
-cd /Users/kooshapari/CodeProjects/Phenotype/repos
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos
 
 # Build test
 cargo build --workspace

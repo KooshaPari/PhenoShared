@@ -42,7 +42,7 @@ The Sentry-GitHub integration enables:
 1. Go to [AgilePlus Project Settings](https://sentry.io/settings/phenotype/projects/agileplus/integrations/)
 2. Find **GitHub** in integrations list
 3. Click **Configure**
-4. Select repository: **KooshaPari/AgilePlus**
+4. Select repository: **<REDACTED>/AgilePlus**
 5. Enable:
    - ✅ Create issues
    - ✅ Link commits
@@ -54,7 +54,7 @@ The Sentry-GitHub integration enables:
 1. Go to [phenotype-infrakit Project Settings](https://sentry.io/settings/phenotype/projects/phenotype-infrakit/integrations/)
 2. Find **GitHub** in integrations list
 3. Click **Configure**
-4. Select repository: **KooshaPari/phenotype-infrakit**
+4. Select repository: **<REDACTED>/phenotype-infrakit**
 5. Enable:
    - ✅ Create issues
    - ✅ Link commits
@@ -66,7 +66,7 @@ The Sentry-GitHub integration enables:
 1. Go to [heliosCLI Project Settings](https://sentry.io/settings/phenotype/projects/helioscli/integrations/)
 2. Find **GitHub** in integrations list
 3. Click **Configure**
-4. Select repository: **KooshaPari/heliosCLI**
+4. Select repository: **<REDACTED>/heliosCLI**
 5. Enable:
    - ✅ Create issues
    - ✅ Link commits
@@ -91,7 +91,7 @@ When: An issue is first seen
 **Action**:
 ```
 Send a notification to: #agileplus-errors (Slack)
-AND Create an issue in: KooshaPari/AgilePlus
+AND Create an issue in: <REDACTED>/AgilePlus
    Title: [Sentry] {title}
    Description: {description}
    Labels: sentry, error, triage
@@ -114,7 +114,7 @@ When: An error event is received
 **Action**:
 ```
 Send a notification to: #infrastructure-errors (Slack)
-AND Create an issue in: KooshaPari/phenotype-infrakit
+AND Create an issue in: <REDACTED>/phenotype-infrakit
    Title: [Sentry] {title}
    Labels: sentry, infrastructure, critical
 ```
@@ -136,7 +136,7 @@ When: An error event is received
 **Action**:
 ```
 Send a notification to: #helioscli-errors (Slack)
-AND Create an issue in: KooshaPari/heliosCLI
+AND Create an issue in: <REDACTED>/heliosCLI
    Title: [Sentry {level}] {title}
    Labels: sentry, cli, bug
 ```
@@ -240,7 +240,7 @@ Environment: production
 Release: v1.2.3
 
 👁️ View in Sentry: https://sentry.io/organizations/phenotype/issues/...
-🐛 GitHub Issue: https://github.com/KooshaPari/AgilePlus/issues/123
+🐛 GitHub Issue: https://github.com/<REDACTED>/AgilePlus/issues/123
 
 [Resolve] [Ignore] [Archive]
 ```
@@ -253,7 +253,7 @@ To enable Sentry to show source code in error pages:
 
 1. Go to Project Settings → **Source Maps**
 2. Click **Link your repository**
-3. Select: **KooshaPari/AgilePlus** (or respective repo)
+3. Select: **<REDACTED>/AgilePlus** (or respective repo)
 4. Sentry will fetch source code directly from GitHub
 
 ### Source Code Display
@@ -309,7 +309,7 @@ If automatic detection doesn't work:
 ```bash
 sentry-cli releases create -p agileplus v1.2.3
 sentry-cli releases set-commits -p agileplus v1.2.3 \
-  --commit "KooshaPari/AgilePlus@HEAD"
+  --commit "<REDACTED>/AgilePlus@HEAD"
 ```
 
 ## Testing the Integration

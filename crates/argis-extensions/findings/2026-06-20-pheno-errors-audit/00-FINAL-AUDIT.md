@@ -1,11 +1,11 @@
-# FINAL AUDIT — `KooshaPari/pheno-errors` → `KooshaPari/pheno/crates/phenotype-error-core`
+# FINAL AUDIT — `<REDACTED>/pheno-errors` → `<REDACTED>/pheno/crates/phenotype-error-core`
 
 **Audit ID:** `2026-06-20-pheno-errors-audit`
 **Date:** 2026-06-20 15:00 PDT
 **Phase:** 2 of 4 — Synthesis (final)
 **Pattern reference:** [L5-114 pheno-llms-txt absorption](../../2026-06-19-L5-114-pheno-llms-txt-absorption.md), [L5-110/111/112 4-repo absorption](../../2026-06-19-L5-110-112-second-half-4-repo-absorption-audit.md), [phenoShared tombstone audit](../2026-06-20-phenoshared-tombstone-audit.md), [ADR-040 5-step deletion recipe](../../../phenotype-org-audits/audits/2026-06-18_ADR-040-deletion-recipe.md)
-**Source repo:** `KooshaPari/pheno-errors` (local: `/Users/kooshapari/CodeProjects/Phenotype/repos/pheno-errors/`)
-**Target repo:** `KooshaPari/pheno` → `pheno/crates/phenotype-error-core/`
+**Source repo:** `<REDACTED>/pheno-errors` (local: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/pheno-errors/`)
+**Target repo:** `<REDACTED>/pheno` → `pheno/crates/phenotype-error-core/`
 **Source classification (per ADR-022):** Rust primitive lib (`pheno-*-lib` / `pheno-*-core`)
 **Phase 1 inputs consumed:** `01-source-inventory.md` (MISSING — see §11.1), `02-docs-code.md` (44 KB, 439 lines), `03-target-parity.md` (36 KB, 538 lines)
 **Phase 1B working branch:** `chore/v12-71-pillar-p0-remediation-2026-06-20`
@@ -19,11 +19,11 @@
 |---|---|
 | **Verdict** | **`DELETE_AFTER_PATCHES`** (with archive step already complete) |
 | **Confidence** | **0.95** (HIGH) — same confidence as Phase 1C §5.1 |
-| **Rationale** | 15 source files (836 LOC tracked) on audit branch; **13/13 functional items have EXACT or SUPERSET parity** in `pheno/crates/phenotype-error-core/src/lib.rs`. **Zero external consumers** in the KooshaPari fleet (`gh search code "pheno-errors" --owner KooshaPari` returns 0 results; same for `AppError`, `phenotype-error-core`, `phenotype-errors`, `use pheno_errors`). Source repo already **archived 2026-06-20T12:22:39Z** (verified live via `gh api`). Absorption was performed at substrate-creation time (de-novo `phenotype-error-core` crate in `pheno/` workspace per ADR-022), not via PR — eliminating PR-merge failure modes. The only remaining action is **manual GitHub UI delete** (token lacks `delete_repo` scope). |
+| **Rationale** | 15 source files (836 LOC tracked) on audit branch; **13/13 functional items have EXACT or SUPERSET parity** in `pheno/crates/phenotype-error-core/src/lib.rs`. **Zero external consumers** in the <REDACTED> fleet (`gh search code "pheno-errors" --owner <REDACTED>` returns 0 results; same for `AppError`, `phenotype-error-core`, `phenotype-errors`, `use pheno_errors`). Source repo already **archived 2026-06-20T12:22:39Z** (verified live via `gh api`). Absorption was performed at substrate-creation time (de-novo `phenotype-error-core` crate in `pheno/` workspace per ADR-022), not via PR — eliminating PR-merge failure modes. The only remaining action is **manual GitHub UI delete** (token lacks `delete_repo` scope). |
 | **Decision type** | `DELETE_AFTER_PATCHES` (Phase 1C recommendation); absorption target exists, source archived; manual delete is the only outstanding step. **NOT** `ARCHIVE_ONLY` because Phase 1C explicitly recommends `DELETE` after absorption + archive; **NOT** `PRESERVE` because all content has a canonical home. |
 | **Supersession verdict** | **`SUPERSEDED_BETTER`** (not merely `SUPERSEDED_PARITY`) — `phenotype-error-core` is a strict superset (15-variant `ErrorKind` vs 5-variant `AppError`, plus OTLP/`ErrorContext`/`tracing`/`prelude` modules not present in source) |
 | **Source state** | **ARCHIVED** (verified live `2026-06-20 14:55 PDT`) |
-| **External consumers** | **0** in KooshaPari fleet |
+| **External consumers** | **0** in <REDACTED> fleet |
 | **Open absorb PRs** | **0** (absorption via de-novo crate creation, not PR) |
 | **Bug count in source** | **19** (4 HIGH, 7 MEDIUM, 3 LOW, 5 INFO — see §6 of Phase 1B) |
 
@@ -31,7 +31,7 @@
 
 ## 2. SOURCE_INVENTORY
 
-**Source repo:** `KooshaPari/pheno-errors` (sub-directory of `KooshaPari/argis-extensions` monorepo clone; not a standalone git repo — `git rev-parse --show-toplevel` returns the monorepo root)
+**Source repo:** `<REDACTED>/pheno-errors` (sub-directory of `<REDACTED>/argis-extensions` monorepo clone; not a standalone git repo — `git rev-parse --show-toplevel` returns the monorepo root)
 **Default branch:** `main`
 **Audit reference branch:** `chore/v12-71-pillar-p0-remediation-2026-06-20` (HEAD `7790368622`)
 **Working branch visible at audit time (head of v13 wave):** `chore/v13-71-pillar-cycle-2-p0-2026-06-20` (HEAD `3567810411`, contains 4 additional branch-only files)
@@ -53,7 +53,7 @@
 | `deny.toml` | 46 | yes | `aec7282070` | Standard 21-license allowlist |
 | `justfile` | 42 | yes | `aec7282070` | Standard justfile (no `coverage` recipe despite AGENTS.md claim) |
 | `src/lib.rs` | 379 | yes | `7790368622` | All code: 5-variant `AppError`, `AppResult<T>`, 8 methods, 4 From impls, 12 tests |
-| `.github/CODEOWNERS` | 5 | yes | `aec7282070` | Single-owner: `@KooshaPari` |
+| `.github/CODEOWNERS` | 5 | yes | `aec7282070` | Single-owner: `@<REDACTED>` |
 | `.github/workflows/cargo-audit.yml` | 26 | yes | `aec7282070` | Weekly `cargo audit` (1 floating ref) |
 | `.github/workflows/cargo-deny.yml` | 32 | yes | `aec7282070` | Weekly Monday `cargo deny` (ADR-041 cadence) |
 | `.github/workflows/ci.yml` | 82 | yes | `aec7282070` | Test + clippy + fmt + coverage (no 80% threshold) |
@@ -75,7 +75,7 @@
 | Path | Notes |
 |---|---|
 | `archive/PhenoLang-errors-2026-06-20/ORIGIN.md` | Snapshot provenance doc |
-| `archive/PhenoLang-errors-2026-06-20/phenotype-error-core/` | Archived `phenotype-error-core` from `KooshaPari/PhenoLang` |
+| `archive/PhenoLang-errors-2026-06-20/phenotype-error-core/` | Archived `phenotype-error-core` from `<REDACTED>/PhenoLang` |
 | `archive/PhenoLang-errors-2026-06-20/phenotype-error-macros/` | Archived `phenotype-error-macros` |
 | `archive/PhenoLang-errors-2026-06-20/phenotype-errors/` | Archived `phenotype-errors` |
 
@@ -204,7 +204,7 @@ The `pheno-errors/` sub-tree lives inside the `argis-extensions` monorepo clone,
 | # | Candidate | Type | Verdict | Evidence |
 |---|---|---|---|---|
 | 1 | `phenolang/pheno-errors` | NO upstream mirror | **N/A** | `gh api /repos/phenolang/pheno-errors` → HTTP 404 |
-| 2 | `KooshaPari/pheno-errors` | SOURCE (the repo itself) | **SOURCE — ARCHIVED 2026-06-20** | `gh api` → `archived: true`, `pushed_at: 2026-06-20T12:22:39Z` |
+| 2 | `<REDACTED>/pheno-errors` | SOURCE (the repo itself) | **SOURCE — ARCHIVED 2026-06-20** | `gh api` → `archived: true`, `pushed_at: 2026-06-20T12:22:39Z` |
 | 3 | `phenoShared/crates/pheno-errors` | DEPRECATED SOURCE | **TOMBSTONE** | `phenoShared/TOMBSTONE.md` present in sparse-checkout; per ADR-019 |
 | 4 | `pheno-otel` | DOWNSTREAM DEP | **N/A — wrong direction** | `pheno-errors` CONSUMES `pheno-otel`, not the other way around |
 | 5 | `pheno-tracing` | ADJACENT SIBLING | **N/A — different concern** | `pheno-tracing` owns OTLP/tracing substrate; `pheno-errors` owns error types |
@@ -215,14 +215,14 @@ The `pheno-errors/` sub-tree lives inside the `argis-extensions` monorepo clone,
 | 10 | `PhenoEvents` | event bus | **N/A — different concern** | pub/sub substrate; different concern |
 | 11 | `PhenoFastMCP` | MCP protocol | **N/A — protocol-bound** | MCP errors map to JSON-RPC codes, not Rust `Error` trait |
 | 12 | `Configra` | config substrate | **N/A — domain-specific** | config-specific errors (`ConfigInvalid`); not substrate-level |
-| 13 | **`KooshaPari/pheno` → `pheno/crates/phenotype-error-core`** ★ | **THE TARGET** | **✓ ACCEPT — SUPERSEDED_BETTER (0.95)** | `CANONICAL.md` + `README.md` ("Supersedes pheno-errors") + full parity on all 13 functional items + de-novo creation at substrate time |
+| 13 | **`<REDACTED>/pheno` → `pheno/crates/phenotype-error-core`** ★ | **THE TARGET** | **✓ ACCEPT — SUPERSEDED_BETTER (0.95)** | `CANONICAL.md` + `README.md` ("Supersedes pheno-errors") + full parity on all 13 functional items + de-novo creation at substrate time |
 | 14 | `PhenoCompose/packages/pheno-errors` (TS port) | polyglot port | **PARTIAL — PRE-V0.4** | 31-line TS file; only v0.1 `AppError` class; v0.4 OTLP/tracing additions NOT ported |
 
-**Top ACCEPT:** **`KooshaPari/pheno` → `pheno/crates/phenotype-error-core`** (verdict `SUPERSEDED_BETTER`, confidence 0.95)
+**Top ACCEPT:** **`<REDACTED>/pheno` → `pheno/crates/phenotype-error-core`** (verdict `SUPERSEDED_BETTER`, confidence 0.95)
 
 **Cross-reference search (Phase 1C §2.2, verified):**
 
-| Search query | Results in KooshaPari fleet |
+| Search query | Results in <REDACTED> fleet |
 |---|---:|
 | `pheno-errors` | 0 |
 | `AppError` | 0 |
@@ -236,14 +236,14 @@ The `pheno-errors/` sub-tree lives inside the `argis-extensions` monorepo clone,
 
 | Target repo | PRs found |
 |---|---:|
-| `KooshaPari/pheno-errors` | 0 |
-| `KooshaPari/pheno` | 0 |
-| `KooshaPari/pheno-otel` | 0 |
-| `KooshaPari/pheno-tracing` | 0 |
-| `KooshaPari/pheno-port-adapter` | 0 |
-| `KooshaPari/phenotype-hub` | 0 |
-| `KooshaPari/phenotype-registry` | 0 |
-| `KooshaPari/Configra` | 0 |
+| `<REDACTED>/pheno-errors` | 0 |
+| `<REDACTED>/pheno` | 0 |
+| `<REDACTED>/pheno-otel` | 0 |
+| `<REDACTED>/pheno-tracing` | 0 |
+| `<REDACTED>/pheno-port-adapter` | 0 |
+| `<REDACTED>/phenotype-hub` | 0 |
+| `<REDACTED>/phenotype-registry` | 0 |
+| `<REDACTED>/Configra` | 0 |
 
 **Interpretation:** absorption happened at substrate-creation time (de-novo `phenotype-error-core` crate in `pheno/` workspace per ADR-022), not via PR. This eliminates the "PR-merge failure mode" that affected the L5-110/111/112 audit (see Cross-Audit Insight §10).
 
@@ -297,7 +297,7 @@ The `pheno-errors/` sub-tree lives inside the `argis-extensions` monorepo clone,
 | 40 | `proptest = "1"` dev-dependency | `pheno-errors/Cargo.toml:18` | Dev dependency | implemented | `pheno` | Target also uses proptest | `SUPERSEDED_PARITY` | Same dep | none | none |
 | 41 | `tracing-test = "0.2"` dev-dependency (UNUSED) | `pheno-errors/Cargo.toml:19` | Dev dependency (unused) | implemented (vestigial) | `pheno` | Target's dev-deps for tracing tests | `SUPERSEDED_BETTER` | Target actually uses tracing-test; source declares but doesn't import | none | none |
 | 42 | `description = "Canonical AppError type..."` | `pheno-errors/Cargo.toml:7` | Manifest description | implemented | `pheno` | `pheno/crates/phenotype-error-core/Cargo.toml` description | `SUPERSEDED_BETTER` | Target description includes "Supersedes pheno-errors with extended error context, OTLP export, and structured tracing integration" | none | none |
-| 43 | `repository = "https://github.com/KooshaPari/pheno-errors"` | `pheno-errors/Cargo.toml:6` | Manifest field | implemented | `pheno` | Target's repo URL points to `KooshaPari/pheno` | `INTENTIONALLY_DEPRECATED` | Repointing to canonical home is the whole point of absorption | none | none |
+| 43 | `repository = "https://github.com/<REDACTED>/pheno-errors"` | `pheno-errors/Cargo.toml:6` | Manifest field | implemented | `pheno` | Target's repo URL points to `<REDACTED>/pheno` | `INTENTIONALLY_DEPRECATED` | Repointing to canonical home is the whole point of absorption | none | none |
 | 44 | `deny.toml` (21-license allowlist) | `pheno-errors/deny.toml:1-46` | Policy file | implemented | `pheno` | Target `pheno/deny.toml` (workspace-level) covers same policy | `INTENTIONALLY_DEPRECATED` | Workspace-level deny policy is authoritative per ADR-027 | none | none |
 | 45 | `justfile` (Phenotype-org standard) | `pheno-errors/justfile:1-42` | Build config | implemented | `pheno` | Monorepo `justfile` at workspace root | `INTENTIONALLY_DEPRECATED` | Monorepo coordinates `just` invocations; per-package justfile is folklore | none | none |
 | 46 | `justfile:30-32` `unused: cargo machete` | `pheno-errors/justfile:30-32` | Build config recipe | implemented | n/a | (none — recipe is orphan, references phantom `coverage` recipe in AGENTS.md) | `NO_MERIT` | AGENTS.md references `just coverage` recipe that doesn't exist; the `unused` recipe is unrelated to that claim (see Phase 1B Bug #7) | none | none |
@@ -364,7 +364,7 @@ The `pheno-errors/` sub-tree lives inside the `argis-extensions` monorepo clone,
 | 107 | `pheno-errors` cargo workspace dup audit row | `findings/2026-06-20-side-11-cargo-workspace-dup-audit.md` | Cross-reference | valid (leaf crate, no `[workspace]`) | n/a | (audit doc stays in monorepo) | `DONE` | Audit snapshot | none | none |
 | 108 | `pheno-errors` cargo audit baseline row | `findings/2026-06-20-v12-cargo-audit-baseline.md` | Cross-reference | valid (passes baseline) | n/a | (audit doc stays in monorepo) | `DONE` | Audit snapshot | none | none |
 | 109 | `pheno-errors` planned `devshell.nix` (v13 T2) | `plans/2026-06-20-v13-71-pillar-cycle-2-p0.md` T2 | Cross-reference | planned | n/a | (plan stays in monorepo; planned work is forward-looking) | `DONE` | Plan reference is not affected by source-repo deletion | none | none |
-| 110 | `phenotype-registry` `disposition-index.json` row `sr-pheno-errors` | `phenotype-registry/registry/disposition-index.json` | Registry data | TBD | `pheno` | Registry row should be updated post-deletion | `REQUIRED_ACTION` | Per Phase 1C §5.3 #5: set `target_repo: KooshaPari/pheno`, `target_path: crates/phenotype-error-core`, `relocated_date: 2026-06-20`, `fsm: done` | LOW (registry accuracy) | open registry PR |
+| 110 | `phenotype-registry` `disposition-index.json` row `sr-pheno-errors` | `phenotype-registry/registry/disposition-index.json` | Registry data | TBD | `pheno` | Registry row should be updated post-deletion | `REQUIRED_ACTION` | Per Phase 1C §5.3 #5: set `target_repo: <REDACTED>/pheno`, `target_path: crates/phenotype-error-core`, `relocated_date: 2026-06-20`, `fsm: done` | LOW (registry accuracy) | open registry PR |
 | 111 | Git history (all branches preserved) | `pheno-errors/` git history | History | preserved | git | git history preserved in archived clone | `DONE` | Archive preserves all branches; git history is unaffected by repo deletion | LOW (history is reference-only) | none |
 
 **Coverage:** 111 / 111 source items accounted for.
@@ -454,7 +454,7 @@ Every `NOT_COVERED`, `PARTIAL`, and `LAST_RESORT_EXCEPTION` row from §5:
 - Items 1-6: branch-only commits, retrievable from the archived GitHub repo's git history
 - Items 7-8: intermediate commits in main's history, retrievable via `git log --all --diff-filter=D`
 
-**Mitigation:** the `git clone` of the archived repo (any shallow or full clone) retains full git history indefinitely. Even after GitHub-side `gh repo delete`, the local sparse-checkout in `/Users/kooshapari/CodeProjects/Phenotype/repos/pheno-errors/` retains all commits and branches.
+**Mitigation:** the `git clone` of the archived repo (any shallow or full clone) retains full git history indefinitely. Even after GitHub-side `gh repo delete`, the local sparse-checkout in `/Users/<REDACTED>/CodeProjects/Phenotype/repos/pheno-errors/` retains all commits and branches.
 
 ---
 
@@ -462,7 +462,7 @@ Every `NOT_COVERED`, `PARTIAL`, and `LAST_RESORT_EXCEPTION` row from §5:
 
 ### 8.1 Executive decision prose
 
-The strategic-absorption audit of `KooshaPari/pheno-errors` concludes that the source repository has been **fully absorbed** into the canonical substrate location at `KooshaPari/pheno/crates/phenotype-error-core/`. The migration pattern is the same one used for the L5-500 config consolidation (2026-06-19) and the L5-114 pheno-llms-txt absorption (2026-06-19): create the substrate at its canonical home, port the source content at creation time (not via PR), archive the source repo, and delete it.
+The strategic-absorption audit of `<REDACTED>/pheno-errors` concludes that the source repository has been **fully absorbed** into the canonical substrate location at `<REDACTED>/pheno/crates/phenotype-error-core/`. The migration pattern is the same one used for the L5-500 config consolidation (2026-06-19) and the L5-114 pheno-llms-txt absorption (2026-06-19): create the substrate at its canonical home, port the source content at creation time (not via PR), archive the source repo, and delete it.
 
 **Three independent signals confirm the absorption is the right disposition:**
 
@@ -470,13 +470,13 @@ The strategic-absorption audit of `KooshaPari/pheno-errors` concludes that the s
 
 2. **Target substrate supersedes by design**: `pheno/crates/phenotype-error-core/` has an explicit `CANONICAL.md` marker and an explicit `README.md` statement ("Supersedes pheno-errors with extended error context, OTLP export, and structured tracing integration"). This is not a deletion-after-parity; it's a deletion-after-supersession (the target is a strict superset).
 
-3. **Zero external consumers** (Phase 1C §2.2): `gh search code "pheno-errors" --owner KooshaPari` returns 0 results across all repos; same for `AppError`, `phenotype-error-core`, `phenotype-errors`, `use pheno_errors`. The migration has no downstream breakage risk.
+3. **Zero external consumers** (Phase 1C §2.2): `gh search code "pheno-errors" --owner <REDACTED>` returns 0 results across all repos; same for `AppError`, `phenotype-error-core`, `phenotype-errors`, `use pheno_errors`. The migration has no downstream breakage risk.
 
 **The verdict is `DELETE_AFTER_PATCHES`** — the absorption patches (substrate creation, source archival) have already been applied; the only outstanding action is the manual GitHub UI delete (since the active `gh` token lacks `delete_repo` scope, per AGENTS.md § "Key Commands").
 
 ### 8.2 Absorption target mapping
 
-The owner of surviving responsibility is **`KooshaPari/pheno/crates/phenotype-error-core/`** — a subcrate of the canonical substrate monorepo (`pheno/`).
+The owner of surviving responsibility is **`<REDACTED>/pheno/crates/phenotype-error-core/`** — a subcrate of the canonical substrate monorepo (`pheno/`).
 
 **Why `phenotype-error-core` is better than `pheno-errors`:**
 
@@ -515,7 +515,7 @@ The owner of surviving responsibility is **`KooshaPari/pheno/crates/phenotype-er
 
 - **Branch-only `tests/tracing_test.rs`** — uses `#![cfg(feature = "tracing")]` (no such feature exists) and old API shape. **Merit: zero; already deleted from main history.**
 
-- **PhenoLang archive** (`archive/PhenoLang-errors-2026-06-20/*`) — 10 files preserving `phenotype-error-core`, `phenotype-error-macros`, `phenotype-errors` from `KooshaPari/PhenoLang`. **Merit: historical snapshot only; current substrate is the live canonical version.**
+- **PhenoLang archive** (`archive/PhenoLang-errors-2026-06-20/*`) — 10 files preserving `phenotype-error-core`, `phenotype-error-macros`, `phenotype-errors` from `<REDACTED>/PhenoLang`. **Merit: historical snapshot only; current substrate is the live canonical version.**
 
 - **5 missing required-files** (`SECURITY.md`, `dependabot.yml`, `scorecard.yml`, `.editorconfig`, `cliff.toml`) — referenced by governance workflow as required but not present. **Merit: zero (governance gap); workflow uses `::warning` so doesn't block; target's workspace has these files.**
 
@@ -542,14 +542,14 @@ The owner of surviving responsibility is **`KooshaPari/pheno/crates/phenotype-er
 
 **Critical path (P0):**
 
-1. **Manual delete `KooshaPari/pheno-errors` via GitHub UI**: <https://github.com/KooshaPari/pheno-errors/settings#dangerZone>
+1. **Manual delete `<REDACTED>/pheno-errors` via GitHub UI**: <https://github.com/<REDACTED>/pheno-errors/settings#dangerZone>
    - The active `gh` token has scopes `'gist', 'read:org', 'repo', 'workflow'` (per AGENTS.md § "Key Commands") — no `delete_repo` scope. Manual UI delete is the only available action.
    - 90-day GitHub retention tombstone applies after soft-delete.
    - Expected time: ~30 seconds.
    - Risk: LOW (no external consumers; git history preserved locally).
 
 2. **Update `phenotype-registry/registry/disposition-index.json` row `sr-pheno-errors`**:
-   - Set `target_repo: "KooshaPari/pheno"`, `target_path: "crates/phenotype-error-core"`, `relocated_date: "2026-06-20"`, `fsm: "done"`.
+   - Set `target_repo: "<REDACTED>/pheno"`, `target_path: "crates/phenotype-error-core"`, `relocated_date: "2026-06-20"`, `fsm: "done"`.
    - Open registry PR with this change.
    - Mirrors Phase 1C §5.3 #5 recommendation.
    - Expected time: ~5 minutes.
@@ -583,7 +583,7 @@ The owner of surviving responsibility is **`KooshaPari/pheno/crates/phenotype-er
 
 **P3 informational:**
 
-8. **Optional ADR-022 amendment** (per Phase 1C §6.3) — clarify that primitive lib canonicals live in `KooshaPari/pheno/crates/` (subcrate) not as standalone repos. The `pheno-errors` → `pheno/crates/phenotype-error-core` migration is a concrete case study; ADR-022 should codify this placement rule.
+8. **Optional ADR-022 amendment** (per Phase 1C §6.3) — clarify that primitive lib canonicals live in `<REDACTED>/pheno/crates/` (subcrate) not as standalone repos. The `pheno-errors` → `pheno/crates/phenotype-error-core` migration is a concrete case study; ADR-022 should codify this placement rule.
 
 9. **Document the supersession** in `pheno/crates/phenotype-error-core/README.md` — already done per Phase 1C §5.2 (explicit "Supersedes pheno-errors" statement); no further action needed.
 
@@ -625,11 +625,11 @@ Prior shapes 1-6 all involve **a target that pre-exists**. The new PR is the mig
 
 The next repo to apply this audit pattern to should be a similar **substrate-canonical migration**:
 
-1. **Identify**: a standalone Rust/Python/TypeScript repo on GitHub (e.g., `KooshaPari/<name>`) that has 0 external consumers.
-2. **Verify**: `gh search code "<name>" --owner KooshaPari` returns 0 results.
-3. **Locate target**: a canonical substrate crate in `KooshaPari/pheno/crates/` (or analogous monorepo).
+1. **Identify**: a standalone Rust/Python/TypeScript repo on GitHub (e.g., `<REDACTED>/<name>`) that has 0 external consumers.
+2. **Verify**: `gh search code "<name>" --owner <REDACTED>` returns 0 results.
+3. **Locate target**: a canonical substrate crate in `<REDACTED>/pheno/crates/` (or analogous monorepo).
 4. **Check target state**: does target have `CANONICAL.md` + README supersession statement + full surface parity?
-5. **Check source archive state**: `gh api /repos/KooshaPari/<name>` → `archived: true`.
+5. **Check source archive state**: `gh api /repos/<REDACTED>/<name>` → `archived: true`.
 6. **Audit branch inventory**: are there branches with unique content not yet ported?
 7. **Generate Phase 1A/B/C outputs** following the same template.
 8. **Apply shape 7 decision**: `DELETE_AFTER_PATCHES` (substrate already exists; source already archived).
@@ -667,7 +667,7 @@ The next repo to apply this audit pattern to should be a similar **substrate-can
 
 ### 11.1 Phase 1A input status
 
-`01-source-inventory.md` was **NOT FOUND** in the expected path `/Users/kooshapari/CodeProjects/Phenotype/repos/findings/2026-06-20-pheno-errors-audit/`. Phase 1B (44 KB, 439 lines) and Phase 1C (36 KB, 538 lines) together provided comprehensive source coverage; this audit synthesizes the FINAL document from those two inputs only. Branch inventory (§3) was supplemented with direct filesystem + git log inspection of `/Users/kooshapari/CodeProjects/Phenotype/repos/pheno-errors/`.
+`01-source-inventory.md` was **NOT FOUND** in the expected path `/Users/<REDACTED>/CodeProjects/Phenotype/repos/findings/2026-06-20-pheno-errors-audit/`. Phase 1B (44 KB, 439 lines) and Phase 1C (36 KB, 538 lines) together provided comprehensive source coverage; this audit synthesizes the FINAL document from those two inputs only. Branch inventory (§3) was supplemented with direct filesystem + git log inspection of `/Users/<REDACTED>/CodeProjects/Phenotype/repos/pheno-errors/`.
 
 **Recommended for the next audit:** ensure Phase 1A is written before Phase 2 synthesis begins. The missing 1A file may have been lost during a Phase 1A agent failure (vs. not yet written).
 
@@ -675,7 +675,7 @@ The next repo to apply this audit pattern to should be a similar **substrate-can
 
 ```bash
 # Source repo state (verified 2026-06-20 14:55 PDT)
-gh api /repos/KooshaPari/pheno-errors --jq '{archived:.archived,pushed_at:.pushed_at,description:.description,stars:.stargazers_count,size:.size,open_issues:.open_issues_count,default_branch:.default_branch,language:.language,disabled:.disabled}'
+gh api /repos/<REDACTED>/pheno-errors --jq '{archived:.archived,pushed_at:.pushed_at,description:.description,stars:.stargazers_count,size:.size,open_issues:.open_issues_count,default_branch:.default_branch,language:.language,disabled:.disabled}'
 # → archived: true, pushed_at: 2026-06-20T12:22:39Z
 
 # Target crate exists
@@ -683,10 +683,10 @@ ls pheno/crates/phenotype-error-core/
 # → Cargo.toml, CANONICAL.md, README.md, src/lib.rs, src/compat.rs (presumed), etc.
 
 # Cross-references (zero consumers in fleet)
-gh search code "pheno-errors" --owner KooshaPari --limit 30
-gh search code "AppError" --owner KooshaPari --limit 30
-gh search code "phenotype-error-core" --owner KooshaPari --limit 30
-gh search code "use pheno_errors" --owner KooshaPari --limit 30
+gh search code "pheno-errors" --owner <REDACTED> --limit 30
+gh search code "AppError" --owner <REDACTED> --limit 30
+gh search code "phenotype-error-core" --owner <REDACTED> --limit 30
+gh search code "use pheno_errors" --owner <REDACTED> --limit 30
 # → all 0 results
 
 # TypeScript polyglot port
@@ -695,10 +695,10 @@ cat PhenoCompose/packages/pheno-errors/src/index.ts | head -31
 
 # Registry row update (P0 action)
 # Update sr-pheno-errors row in phenotype-registry/registry/disposition-index.json
-# Open PR on KooshaPari/phenotype-registry
+# Open PR on <REDACTED>/phenotype-registry
 
 # Manual delete URL (P0 action)
-# https://github.com/KooshaPari/pheno-errors/settings#dangerZone
+# https://github.com/<REDACTED>/pheno-errors/settings#dangerZone
 ```
 
 ### 11.3 Key cross-references
@@ -734,8 +734,8 @@ cat PhenoCompose/packages/pheno-errors/src/index.ts | head -31
 | Audit agent | Phase 2 — Synthesis (final) |
 | Device | macbook |
 | Layer | L5 (substrate-level audit) |
-| Source repo | `KooshaPari/pheno-errors` (archived) |
-| Target repo | `KooshaPari/pheno/crates/phenotype-error-core/` |
+| Source repo | `<REDACTED>/pheno-errors` (archived) |
+| Target repo | `<REDACTED>/pheno/crates/phenotype-error-core/` |
 | Decision | `DELETE_AFTER_PATCHES` |
 | Verdict | `SUPERSEDED_BETTER` |
 | Confidence | 0.95 (HIGH) |
@@ -761,4 +761,4 @@ cat PhenoCompose/packages/pheno-errors/src/index.ts | head -31
 - **ADR-036B (pheno-tracing substrate canonical)**: `docs/adr/2026-06-18/ADR-036-pheno-tracing-substrate-canonical.md`
 - **ADR-037 (pheno-mcp-router substrate canonical)**: `docs/adr/2026-06-18/ADR-037-pheno-mcp-router-substrate-canonical.md`
 - **ADR-040 (test coverage gates per tier)**: `docs/adr/2026-06-18/ADR-040-test-coverage-gates-per-tier.md`
-- **AGENTS.md (v11 closure governance)**: `/Users/kooshapari/CodeProjects/Phenotype/repos/AGENTS.md`
+- **AGENTS.md (v11 closure governance)**: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/AGENTS.md`

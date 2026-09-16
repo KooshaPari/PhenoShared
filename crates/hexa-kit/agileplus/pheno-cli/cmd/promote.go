@@ -7,10 +7,10 @@ import (
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
-	"github.com/KooshaPari/pheno-cli/internal/adapters"
-	"github.com/KooshaPari/pheno-cli/internal/config"
-	"github.com/KooshaPari/pheno-cli/internal/detect"
-	"github.com/KooshaPari/pheno-cli/internal/publish"
+	"github.com/<REDACTED>/pheno-cli/internal/adapters"
+	"github.com/<REDACTED>/pheno-cli/internal/config"
+	"github.com/<REDACTED>/pheno-cli/internal/detect"
+	"github.com/<REDACTED>/pheno-cli/internal/publish"
 )
 
 func init() {

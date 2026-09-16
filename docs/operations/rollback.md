@@ -126,7 +126,7 @@ docker run -d --name psub-gateway \
   -v substrate-data:/var/lib/substrate \
   -v /etc/substrate/config.toml:/etc/substrate/config.toml:ro \
   --env-file /tmp/psub-gateway.env \
-  ghcr.io/kooshapari/substrate:vX.Y.Z
+  ghcr.io/<REDACTED>/substrate:vX.Y.Z
 ```
 
 #### Verify
@@ -140,13 +140,13 @@ curl -fsS http://127.0.0.1:8080/healthz
 #### Roll forward
 
 ```bash
-docker pull ghcr.io/kooshapari/substrate:vX.Y.Z-fixed
+docker pull ghcr.io/<REDACTED>/substrate:vX.Y.Z-fixed
 docker stop psub-gateway && docker rm psub-gateway
 docker run -d --name psub-gateway --restart unless-stopped \
   -p 8080:8080 -v substrate-data:/var/lib/substrate \
   -v /etc/substrate/config.toml:/etc/substrate/config.toml:ro \
   --env-file /tmp/psub-gateway.env \
-  ghcr.io/kooshapari/substrate:vX.Y.Z-fixed
+  ghcr.io/<REDACTED>/substrate:vX.Y.Z-fixed
 ```
 
 ### 1.3 Kubernetes
@@ -199,7 +199,7 @@ kubectl -n substrate exec deploy/psub-gateway -- curl -fsS http://127.0.0.1:8080
 ```bash
 kubectl -n substrate rollout restart deploy/psub-gateway
 # Or pin a new image and let the Deployment controller roll:
-kubectl -n substrate set image deploy/psub-gateway psub-gateway=ghcr.io/kooshapari/substrate:vX.Y.Z-fixed
+kubectl -n substrate set image deploy/psub-gateway psub-gateway=ghcr.io/<REDACTED>/substrate:vX.Y.Z-fixed
 ```
 
 ---
@@ -216,7 +216,7 @@ is local. The package version lives in `Cargo.toml` workspace `version = "X.Y.Z"
 
   ```bash
   cargo search psub --limit 20
-  # or: gh release list -R KooshaPari/substrate --limit 10
+  # or: gh release list -R <REDACTED>/substrate --limit 10
   ```
 
 ### Rollback
@@ -508,10 +508,10 @@ prior tag's binary and verifying its attestation.
 
 ```bash
 # Confirm the previous good tag exists.
-gh release list -R KooshaPari/substrate --limit 10
+gh release list -R <REDACTED>/substrate --limit 10
 
 # Locate the artifact + attestation.
-gh release view vX.Y.Z -R KooshaPari/substrate \
+gh release view vX.Y.Z -R <REDACTED>/substrate \
   --json assets --jq '.assets[] | select(.name|test("substrate-linux"))'
 ```
 
@@ -519,7 +519,7 @@ gh release view vX.Y.Z -R KooshaPari/substrate \
 
 ```bash
 # 1. Download the prior tag's binary.
-gh release download vX.Y.Z -R KooshaPari/substrate \
+gh release download vX.Y.Z -R <REDACTED>/substrate \
   -p "substrate-linux" -D /tmp/substrate-rollback
 chmod +x /tmp/substrate-rollback/substrate-linux
 
@@ -527,8 +527,8 @@ chmod +x /tmp/substrate-rollback/substrate-linux
 #    was built by the official GitHub Actions workflow from the tagged
 #    commit.
 gh attestation verify /tmp/substrate-rollback/substrate-linux \
-  --repo KooshaPari/substrate \
-  --signer-workflow KooshaPari/substrate/.github/workflows/release-binary.yml
+  --repo <REDACTED>/substrate \
+  --signer-workflow <REDACTED>/substrate/.github/workflows/release-binary.yml
 # Exit code 0 = provenance verified; non-zero = DO NOT deploy.
 
 # 3. Install.

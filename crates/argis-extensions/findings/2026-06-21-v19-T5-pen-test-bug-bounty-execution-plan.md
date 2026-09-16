@@ -21,7 +21,7 @@ This is the **execution plan** that operationalizes ADR-080 for the 2026 H2 pilo
 | **2026-09-01 → 2026-09-30** | **External pen test (Q3 2026)** | Trail of Bits (or Cure53) | Pen-test report; daily check-ins |
 | **2026-10-01** | Pen-test triage of findings begins | sec-eng-1 | Triaged findings in HackerOne / GitHub Security Advisories draft |
 | **2026-10-15** | Bug-bounty RFP issued (HackerOne) | security circle lead | Bounty program agreement |
-| **2026-10-31** | Bounty program page live; program config in HackerOne | sec-eng-1 | Live `https://hackerone.com/kooshapari` page |
+| **2026-10-31** | Bounty program page live; program config in HackerOne | sec-eng-1 | Live `https://hackerone.com/<REDACTED>` page |
 | **2026-11-01** | **Bug bounty launch** | security circle lead | Public launch post + Slack #fleet-security |
 | **2026-11-15** | Mid-pilot retro (Slack async) | security circle lead | Retro doc (`docs/security/pilot-2026-h2-retro-mid.md`) |
 | **2026-12-15** | Pilot closure; L53 71-pillar re-audit | orch-v19 | Updated scorecard |
@@ -72,7 +72,7 @@ The scope document is published 4 weeks pre-engagement. The checklist is owned b
 
 ### 3.1 HackerOne program config
 
-- [ ] **Program name:** `KooshaPari / phenotype` (public program; managed by HackerOne).
+- [ ] **Program name:** `<REDACTED> / phenotype` (public program; managed by HackerOne).
 - [ ] **Scope:** 47 active repos (per the registry); explicit PAUSED-app no-go.
 - [ ] **Bounty range:** Critical $25K–$100K, High $5K–$25K, Medium $500–$5K, Low $100–$500.
 - [ ] **Pool:** $20K / year minimum, refillable on overspend (per ADR-080 § 5).
@@ -81,7 +81,7 @@ The scope document is published 4 weeks pre-engagement. The checklist is owned b
 
 ### 3.2 Public surface
 
-- [ ] **GitHub Security Policy:** `KooshaPari/phenotype-apps/security/policy` (the canonical link target).
+- [ ] **GitHub Security Policy:** `<REDACTED>/phenotype-apps/security/policy` (the canonical link target).
 - [ ] **`.well-known/security.txt`:** at `phenotype.org/.well-known/security.txt` per RFC 9116, pointing to the HackerOne program page.
 - [ ] **Launch post:** `phenotype.org/blog/bug-bounty-launch` published 2026-11-01; cross-linked from HackerOne, GitHub Security tab, and `#fleet-security` Slack.
 - [ ] **Researcher onboarding doc:** `docs/security/bounty-researcher-guide.md` (HackerOne program description + scope + safe-harbor language).
@@ -140,7 +140,7 @@ Per ADR-080 § 11 and this execution plan:
 - [ ] `docs/security/pilot-2026-h2-closure.md` (published 2026-12-31)
 - [ ] `phenotype.org/.well-known/security.txt` (live 2026-11-01)
 - [ ] `phenotype.org/blog/bug-bounty-launch` (published 2026-11-01)
-- [ ] `KooshaPari/phenotype-apps/security/policy` (live 2026-10-31)
+- [ ] `<REDACTED>/phenotype-apps/security/policy` (live 2026-10-31)
 
 All 9 files are **MacBook-OK per ADR-023 Rule 1** (markdown / config, no cargo / network / sim). Total estimated ~600 LoC of new docs.
 

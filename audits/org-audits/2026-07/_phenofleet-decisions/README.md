@@ -1,6 +1,6 @@
 # `_phenofleet-decisions` — Absorbed Audit Archive
 
-This directory is the absorption target for the `KooshaPari/_phenofleet-decisions`
+This directory is the absorption target for the `<REDACTED>/_phenofleet-decisions`
 GitHub repository, which was archived on 2026-07-15.
 
 **Date merged:** 2026-08-08
@@ -22,7 +22,7 @@ the **phenofleet** (a phenotyped fleet of subagents that ran the `airlock` and
 - **airlock-v2** — Implementation of the second-generation airlock pipeline
   (smoke test, auto-commit daemon, cleanup daemon, LaunchAgent plists, hooks
   for claude/codex/cursor). Operational artifacts preserved as a snapshot;
-  the live airlock-v2 is now at `KooshaPari/phenotype-harness/airlock-v2/`.
+  the live airlock-v2 is now at `<REDACTED>/phenotype-harness/airlock-v2/`.
 - **unpushed-recovery-parkings** — 7 stashes/files recovered from local
   subagent working trees that were never pushed upstream during the cleanup
   wave. These contain work-in-progress that was resumed and landed in
@@ -37,7 +37,7 @@ the **phenofleet** (a phenotyped fleet of subagents that ran the `airlock` and
   the time; later pushed directly via `git push`.
 - **scripts/audit-misplaced-repos.py** — Tooling that audited repos whose
   content did not match their declared language/topics. The current
-  generation of this tool lives at `KooshaPari/phenotype-tooling/`.
+  generation of this tool lives at `<REDACTED>/phenotype-tooling/`.
 - **migration-2026-07-14.json** — Full machine-readable migration map for
   the 2026-07-14 → 2026-07-15 cleanup wave.
 - **2026-07-06-reactivation-decision.md** — Long-form rationale for
@@ -49,7 +49,7 @@ the **phenofleet** (a phenotyped fleet of subagents that ran the `airlock` and
 - **Created:** 2026-07-15 (auto-import by subagent-2 from local
   `~/CodeProjects/Phenotype/repos/_phenofleet-decisions/`)
 - **Classification:** `DATA_ONLY` — no live code, only operational records
-- **Original GitHub:** `KooshaPari/_phenofleet-decisions` (deleted 2026-08-08)
+- **Original GitHub:** `<REDACTED>/_phenofleet-decisions` (deleted 2026-08-08)
 - **Local source:** `~/CodeProjects/Phenotype/repos/_phenofleet-decisions/`
   still exists and was the source of truth for this merge
 

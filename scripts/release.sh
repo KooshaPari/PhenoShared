@@ -7,7 +7,7 @@ set -euo pipefail
 VERSION="${1:?Usage: $0 <version> (e.g., v0.2.0)}"
 VERSION="${VERSION#v}"  # strip leading v for filenames
 
-REPO="KooshaPari/zz-pheno"
+REPO="<REDACTED>/zz-pheno"
 BINS=(agileplus phenoctl configra-ops pheno-agents-md)
 TARGETS=(
   "x86_64-unknown-linux-gnu"
@@ -65,7 +65,7 @@ echo "--- Install scripts ---"
 cat > "${RELEASE_DIR}/install.sh" << 'INSTALL_SH'
 #!/usr/bin/env bash
 set -euo pipefail
-REPO="KooshaPari/zz-pheno"
+REPO="<REDACTED>/zz-pheno"
 VERSION="${PHENO_VERSION:-latest}"
 INSTALL_DIR="${PHENO_INSTALL_DIR:-$HOME/.pheno/bin}"
 detect_platform() {

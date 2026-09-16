@@ -36,7 +36,7 @@ These tests are deliberately self-contained: they only import the pure
 
 Run via::
 
-    cd /Users/kooshapari/CodeProjects/Phenotype/pheno-harness-validation
+    cd /Users/<REDACTED>/CodeProjects/Phenotype/pheno-harness-validation
     /opt/homebrew/bin/python3 -m pytest tests/ -v
     /opt/homebrew/bin/python3 tests/test_codegen.py        # bare-script fallback
 """

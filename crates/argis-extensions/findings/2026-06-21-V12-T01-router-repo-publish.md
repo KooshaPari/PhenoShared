@@ -1,6 +1,6 @@
 # V12-T01 Router Repo Publish — phenotype-router spike promotion
 
-**Task:** V12-T01 (Promote `spikes/go/phenotype-router` to production repo at `KooshaPari/phenotype-router`)
+**Task:** V12-T01 (Promote `spikes/go/phenotype-router` to production repo at `<REDACTED>/phenotype-router`)
 **Date:** 2026-06-21
 **Author:** Forge (orchestrator-level execution, no destructive ops performed)
 **Status:** **HOLD** — verification gate (`builds and tests pass`) FAILS. GitHub repo NOT created. No push performed.
@@ -11,9 +11,9 @@
 
 | Step | Status | Notes |
 |------|--------|-------|
-| (1) `cd repos/` | OK | cwd = `/Users/kooshapari/CodeProjects/Phenotype/repos` |
+| (1) `cd repos/` | OK | cwd = `/Users/<REDACTED>/CodeProjects/Phenotype/repos` |
 | (2) verify build + tests pass | **FAIL** | build exit 1; test exit 1; see § 2 / § 3 |
-| (3) `gh repo create KooshaPari/phenotype-router` | **NOT RUN** | gated on (2); skipped to avoid pushing broken code |
+| (3) `gh repo create <REDACTED>/phenotype-router` | **NOT RUN** | gated on (2); skipped to avoid pushing broken code |
 | (4) clone spike → `/tmp/pr-build` | **NOT RUN** | gated on (3) |
 | (5) `git init` + `git push -u origin main` | **NOT RUN** | gated on (3)+(4) |
 | (6) AGENTS.md + README.md + LICENSE-MIT + go.mod validation | **NOT RUN** | gated on (3)+(4) |
@@ -28,7 +28,7 @@
 ```
 spikes/go/phenotype-router/
 ├── README.md                                                    72 lines
-├── go.mod                                                        3 lines (module github.com/KooshaPari/phenotype-router; go 1.26)
+├── go.mod                                                        3 lines (module github.com/<REDACTED>/phenotype-router; go 1.26)
 ├── e2e/e2e_test.go                                             637 lines
 └── internal/
     ├── plugins/toolrouter/
@@ -58,7 +58,7 @@ spikes/go/phenotype-router/
 
 ```
 $ go build ./...
-# github.com/KooshaPari/phenotype-router/internal/router
+# github.com/<REDACTED>/phenotype-router/internal/router
 internal/router/router.go:33:6: Plugin redeclared in this block
 internal/router/plugin.go:124:6: other declaration of Plugin
 internal/router/router.go:77:18: replaced.Shutdown undefined (type Plugin has no field or method Shutdown)
@@ -82,17 +82,17 @@ $ echo $?
 
 ```
 $ go test ./... -count=1 -timeout 30s
-# github.com/KooshaPari/phenotype-router/internal/router
+# github.com/<REDACTED>/phenotype-router/internal/router
 internal/router/router.go:33:6: Plugin redeclared in this block
 ...
 --- FAIL: TestApplyProfile_ReordersByPreferred (0.00s)
     routing_test.go:38: applyProfile reorder = [a b c], want [b a c]
-FAIL  github.com/KooshaPari/phenotype-router/internal/plugins/toolrouter  0.260s
+FAIL  github.com/<REDACTED>/phenotype-router/internal/plugins/toolrouter  0.260s
 --- FAIL: TestE2E_RouterThroughMockOpenAI (0.00s)
     e2e_test.go:465: response.Model = "gpt-4o", want "gpt-4o-mock" (echo from mock)
-FAIL  github.com/KooshaPari/phenotype-router/e2e                          0.166s
-FAIL  github.com/KooshaPari/phenotype-router/internal/router            [build failed]
-?     github.com/KooshaPari/phenotype-router/internal/sdk               [no test files]
+FAIL  github.com/<REDACTED>/phenotype-router/e2e                          0.166s
+FAIL  github.com/<REDACTED>/phenotype-router/internal/router            [build failed]
+?     github.com/<REDACTED>/phenotype-router/internal/sdk               [no test files]
 $ echo $?
 1
 ```
@@ -116,7 +116,7 @@ The non-negotiable verification-before-completion gate is **"`builds and tests p
 - `go build ./...` exits 1 (`Plugin redeclared`, 6 undefined-method errors).
 - `go test ./... -count=1 -timeout 30s` exits 1 (2 test failures + the build failure).
 
-Creating `KooshaPari/phenotype-router` as a public repo with the description *"Phenotype router — Bifrost transport + Phenotype decision layer per ADR-050"* and pushing the broken code would:
+Creating `<REDACTED>/phenotype-router` as a public repo with the description *"Phenotype router — Bifrost transport + Phenotype decision layer per ADR-050"* and pushing the broken code would:
 
 1. Publish a non-compiling module under the user's GitHub org name (public, irreversible except via `gh repo delete`, which is itself a public action).
 2. Ship a module whose README claims test coverage that does not exist.
@@ -132,7 +132,7 @@ The token has `delete_repo` scope (verified via `gh auth status`), but the right
 ```
 $ gh auth status
 github.com
-  ✓ Logged in to github.com account KooshaPari (keyring)
+  ✓ Logged in to github.com account <REDACTED> (keyring)
   - Active account: true
   - Git operations protocol: https
   - Token: gho_************************************
@@ -142,11 +142,11 @@ github.com
 Auth is healthy and has the scopes needed for `gh repo create` (would have worked if the gate passed). No repo was created.
 
 ```
-$ gh api /repos/KooshaPari/phenotype-router
+$ gh api /repos/<REDACTED>/phenotype-router
 HTTP 404
 ```
 
-Repo `KooshaPari/phenotype-router` does not exist yet.
+Repo `<REDACTED>/phenotype-router` does not exist yet.
 
 ---
 

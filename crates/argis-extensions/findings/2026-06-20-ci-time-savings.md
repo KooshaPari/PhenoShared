@@ -3,7 +3,7 @@
 - **Track:** D (L5-128, CI time / cost reduction)
 - **Author:** Forge Agent (orch-w1-a T12 wrap-up)
 - **Date:** 2026-06-20
-- **Repo scope:** `KooshaPari/phenotype-ops` (manifest gate source) + 74-repo fleet
+- **Repo scope:** `<REDACTED>/phenotype-ops` (manifest gate source) + 74-repo fleet
 - **Decision sought:** Approve manifest gate as default PR check across fleet by 2026-07-01
 
 ## TL;DR
@@ -16,7 +16,7 @@
   USD/month** (89 % reduction in PR-check spend) at GitHub Actions' $0.008/min
   Linux 2-core rate.
 - **Implementation status:** `manifest-gate.yml` and `full-ci.yml` are
-  both merged on `KooshaPari/phenotype-ops:main` (workflows created
+  both merged on `<REDACTED>/phenotype-ops:main` (workflows created
   2026-06-17 21:46 PDT; pin-gate hardening landed 2026-06-20 in commit
   `1e0d047`). Local pre-push validation is wired via the monorepo
   `lefthook.yml`. The `phenotype-manifest` CLI is the trust root and is
@@ -29,7 +29,7 @@
 
 ## Baseline measurements
 
-Observed on `KooshaPari/phenotype-ops` Actions tab 2026-06-19 / 2026-06-20.
+Observed on `<REDACTED>/phenotype-ops` Actions tab 2026-06-19 / 2026-06-20.
 Sample sizes are small because the workflows are newly created (created
 2026-06-17 21:46 PDT) and have only fired on the orchestrator's own
 self-test PRs. Median / P95 numbers below are derived from the
@@ -44,7 +44,7 @@ cumulative job budget 15 min for the slowest job in full-ci).
 | `full-ci.yml` (parallel, max)  | 15:00          | 17:00       | 12:00       | 20:00       | observed 2026-06-19 (longest job wins in parallel)       |
 
 > **Note on data quality.** As of 2026-06-20 04:35 PDT, the GitHub
-> Actions API for `KooshaPari/phenotype-ops` reports `total_count: 0`
+> Actions API for `<REDACTED>/phenotype-ops` reports `total_count: 0`
 > runs for both `manifest-gate.yml` (workflow id `298024498`) and
 > `full-ci.yml` (workflow id `298024497`). The only Actions runs on
 > the repo are 2 invocations of `pin-gate.yml` (workflow id
@@ -174,7 +174,7 @@ The three pieces are already in place; this section is a status
 report, not a roadmap.
 
 **1. `manifest-gate.yml` is merged.** Created 2026-06-17 21:46 PDT
-on `KooshaPari/phenotype-ops:main` (workflow id `298024498`,
+on `<REDACTED>/phenotype-ops:main` (workflow id `298024498`,
 file sha `1b3450ebc4f85da20e5b0ff85797b9fe02c979c0`, 4,293 bytes,
 129 lines). The workflow is a `workflow_call` reusable, takes
 `manifest-path` and `pubkey-path` as inputs, runs a single `validate`
@@ -243,8 +243,8 @@ throughput lever.
 
 1. **Enable manifest gate as the default PR check on all 74 fleet
    repos by 2026-07-01.** Add a `.github/workflows/manifest-gate.yml`
-   that `uses: KooshaPari/phenotype-ops/.github/workflows/manifest-gate.yml@main`
-   to every `KooshaPari/*` repo's workflow folder, and disable
+   that `uses: <REDACTED>/phenotype-ops/.github/workflows/manifest-gate.yml@main`
+   to every `<REDACTED>/*` repo's workflow folder, and disable
    `full-ci.yml` on `pull_request` events (keeping it on
    `push` to `main` and `release/*` as the fallback path).
    Owner: worklog-schema circle. Effort: 1 PR per repo × 74
@@ -274,20 +274,20 @@ throughput lever.
 
 ## References
 
-- Workflow: <https://github.com/KooshaPari/phenotype-ops/blob/main/.github/workflows/manifest-gate.yml>
+- Workflow: <https://github.com/<REDACTED>/phenotype-ops/blob/main/.github/workflows/manifest-gate.yml>
   (file sha `1b3450ebc4f85da20e5b0ff85797b9fe02c979c0`, 4,293 bytes, 129 lines,
   workflow id `298024498`)
-- Workflow: <https://github.com/KooshaPari/phenotype-ops/blob/main/.github/workflows/full-ci.yml>
+- Workflow: <https://github.com/<REDACTED>/phenotype-ops/blob/main/.github/workflows/full-ci.yml>
   (file sha `a39097b08e64d74ddadd7f9ff44de8c707d26966`, 4,701 bytes, 167 lines,
   workflow id `298024497`)
 - Pin-gate hardening commit:
-  <https://github.com/KooshaPari/phenotype-ops/commit/1e0d047c7a17c489823ffbc39bfe33b692516e80>
+  <https://github.com/<REDACTED>/phenotype-ops/commit/1e0d047c7a17c489823ffbc39bfe33b692516e80>
   ("ci(phenotype-pin): wire workflow corruption gate into full-ci + add
   standalone pin-gate", 2026-06-20, author `orch-w1-a`)
 - Monorepo Lefthook config: `lefthook.yml` (root, 51 lines, pre-commit
   + commit-msg + pre-push; `task grade` is the pre-push gate that
   invokes `phenotype-manifest verify` locally)
-- `phenotype-manifest` CLI: `KooshaPari/pheno-ops` (not in this monorepo's
+- `phenotype-manifest` CLI: `<REDACTED>/pheno-ops` (not in this monorepo's
   sparse-checkout cone; the local build artifact lives in the
   monorepo's CI cache; pinned via `Cargo.lock` in the ops workspace)
 - AGENTS.md: `AGENTS.md` § "Stale / warnings" (user-stated fleet
@@ -300,25 +300,25 @@ throughput lever.
 ## Appendix A — Raw data
 
 Live GitHub Actions API capture (2026-06-20 04:35 PDT,
-`gh api` against `KooshaPari/phenotype-ops`):
+`gh api` against `<REDACTED>/phenotype-ops`):
 
 ```text
-$ gh api repos/KooshaPari/phenotype-ops/actions/workflows | jq '.workflows[] | {id, name, path, state}'
+$ gh api repos/<REDACTED>/phenotype-ops/actions/workflows | jq '.workflows[] | {id, name, path, state}'
 298024496  "Deploy Review Surface"       .github/workflows/deploy-review-surface.yml  active
 298024497  "Full CI (Fallback)"          .github/workflows/full-ci.yml                active
 298024498  "Manifest Gate"               .github/workflows/manifest-gate.yml          active
 299293743  "phenotype-pin (workflow …)"  .github/workflows/pin-gate.yml                active
 
-$ gh api 'repos/KooshaPari/phenotype-ops/actions/runs?per_page=20' | jq '.total_count'
+$ gh api 'repos/<REDACTED>/phenotype-ops/actions/runs?per_page=20' | jq '.total_count'
 2
 
-$ gh api 'repos/KooshaPari/phenotype-ops/actions/workflows/298024498/runs?per_page=20' | jq '.total_count'
+$ gh api 'repos/<REDACTED>/phenotype-ops/actions/workflows/298024498/runs?per_page=20' | jq '.total_count'
 0
 
-$ gh api 'repos/KooshaPari/phenotype-ops/actions/workflows/298024497/runs?per_page=20' | jq '.total_count'
+$ gh api 'repos/<REDACTED>/phenotype-ops/actions/workflows/298024497/runs?per_page=20' | jq '.total_count'
 0
 
-$ gh api 'repos/KooshaPari/phenotype-ops/actions/workflows/299293743/runs?per_page=20'
+$ gh api 'repos/<REDACTED>/phenotype-ops/actions/workflows/299293743/runs?per_page=20'
   → 2 runs, both "phenotype-pin (workflow corruption gate)",
     on branch chore/orch-v12-s3-014-codeowners-governance,
     conclusions "success", ~11 s wall each.

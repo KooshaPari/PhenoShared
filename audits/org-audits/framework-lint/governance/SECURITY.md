@@ -18,8 +18,8 @@ only.
 Use one of the following private channels:
 
 1. **GitHub Security Advisories** (preferred):
-   <https://github.com/KooshaPari/pheno-framework-lint/security/advisories/new>
-2. **Email**: see the GitHub profile of `@kooshapari` for the current
+   <https://github.com/<REDACTED>/pheno-framework-lint/security/advisories/new>
+2. **Email**: see the GitHub profile of `@<REDACTED>` for the current
    disclosure address.
 
 You should receive an acknowledgement within **72 hours**. If you do

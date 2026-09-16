@@ -9,4 +9,4 @@ from .core import get_version
 
 __version__ = get_version()
 __author__ = "Koosha Pari"
-__email__ = "kooshapari@gmail.com"
+__email__ = "<REDACTED>@gmail.com"

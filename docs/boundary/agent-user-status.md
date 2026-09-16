@@ -1,8 +1,8 @@
-# Boundary — KooshaPari/agent-user-status (ABSORBED 2026-07-17)
+# Boundary — <REDACTED>/agent-user-status (ABSORBED 2026-07-17)
 
 **Boundary status:** `absorbed`
-**Absorbing repo:** `KooshaPari/phenotype-tooling` (`crates/agent-user-status/`)
-**Source repo:** `KooshaPari/agent-user-status` (archived on GitHub 2026-07-17)
+**Absorbing repo:** `<REDACTED>/phenotype-tooling` (`crates/agent-user-status/`)
+**Source repo:** `<REDACTED>/agent-user-status` (archived on GitHub 2026-07-17)
 
 ## Role
 
@@ -25,7 +25,7 @@ handhold, or defer.
 
 ## Surface that the absorbing repo exposes
 
-`KooshaPari/phenotype-tooling/crates/agent-user-status/`:
+`<REDACTED>/phenotype-tooling/crates/agent-user-status/`:
 
 | Capability             | Entry point                                          |
 |------------------------|------------------------------------------------------|

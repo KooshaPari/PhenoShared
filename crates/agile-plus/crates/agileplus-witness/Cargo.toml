@@ -5,11 +5,11 @@ edition.workspace = true
 rust-version.workspace = true
 description = "Witness primitive: evidence-based verdict engine for MEOW"
 license = "MIT OR Apache-2.0"
-repository = "https://github.com/KooshaPari/AgilePlus"
+repository = "https://github.com/<REDACTED>/AgilePlus"
 documentation = "https://docs.rs/agileplus-witness"
 keywords = ["phenotype", "agileplus", "witness"]
 categories = ["development-tools::profiling"]
-authors = ["kooshapari"]
+authors = ["<REDACTED>"]
 
 [dependencies]
 agileplus-convoy = { path = "../agileplus-convoy" }

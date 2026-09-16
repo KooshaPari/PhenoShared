@@ -2,11 +2,11 @@
 
 ## Origin
 
-This crate was absorbed from **[zz-Tasken](https://github.com/KooshaPari/zz-Tasken)**.
+This crate was absorbed from **[zz-Tasken](https://github.com/<REDACTED>/zz-Tasken)**.
 
 ## Source Repository
 
-- **Repository:** https://github.com/KooshaPari/zz-Tasken
+- **Repository:** https://github.com/<REDACTED>/zz-Tasken
 - **Commit:** `d02adf6c2fc02dde1241251a751088351973e484`
 - **Commit message:** `chore(deps): bump thiserror from 2.0.18 to 2.0.19 (#99)`
 - **Date:** 2026-09-12

@@ -247,7 +247,7 @@ Before starting Phase 2, verify:
 
 All Phase 2 planning documents are in:
 ```
-/Users/kooshapari/CodeProjects/Phenotype/repos/docs/worklogs/
+/Users/<REDACTED>/CodeProjects/Phenotype/repos/docs/worklogs/
 ```
 
 **Planning Documents**:

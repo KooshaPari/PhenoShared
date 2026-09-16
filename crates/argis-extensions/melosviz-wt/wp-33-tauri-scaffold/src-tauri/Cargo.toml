@@ -2,7 +2,7 @@
 name = "melosviz"
 version = "0.1.0"
 description = "Tauri: scaffold (src-tauri/Cargo.toml + tauri.conf.json) (WP-33)"
-authors = ["KooshaPari"]
+authors = ["<REDACTED>"]
 edition = "2021"
 rust-version = "1.77"
 

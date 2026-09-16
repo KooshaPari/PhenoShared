@@ -2,11 +2,11 @@
 
 ## Status
 
-**ACTIVE** — Phenotype org portfolio site (projects.kooshapari.com)
+**ACTIVE** — Phenotype org portfolio site (projects.<REDACTED>.com)
 
 ## Repository
 
-- **Owner**: Phenotype org / KooshaPari
+- **Owner**: Phenotype org / <REDACTED>
 - **Stack**: Astro 6, Bun, TypeScript, Tailwind
 - **Data**: GitHub API (not `gh CLI`)
 - **CI**: GitHub Actions build + Vercel deploy

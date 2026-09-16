@@ -11,7 +11,7 @@ linter-settings:
   gofmt:
     simplify: true
   goimports:
-    local-prefixes: github.com/KooshaPari
+    local-prefixes: github.com/<REDACTED>
   gosec:
     excludes:
       - G104
@@ -44,7 +44,7 @@ linters-settings:
       - (*os.File).Close
       - io.ReadAll
   goimports:
-    local-prefixes: github.com/KooshaPari
+    local-prefixes: github.com/<REDACTED>
   staticcheck:
     checks:
       - all

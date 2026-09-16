@@ -47,4 +47,4 @@ class MyDomain(Domain):
 
 ## Links
 
-- [Repository](https://github.com/KooshaPari/hexapy)
+- [Repository](https://github.com/<REDACTED>/hexapy)

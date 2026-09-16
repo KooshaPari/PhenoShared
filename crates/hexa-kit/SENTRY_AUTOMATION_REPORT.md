@@ -106,7 +106,7 @@ The stored auth token (`sntrys_eyJpYXQiOjE3NzQ5MjY2OTYuNjI4MTA4LCJ1cmwiOiJodHRwc
 ### Run Automation (Once Token Verified)
 
 ```bash
-bash /Users/kooshapari/CodeProjects/Phenotype/repos/scripts/create-sentry-projects.sh
+bash /Users/<REDACTED>/CodeProjects/Phenotype/repos/scripts/create-sentry-projects.sh
 ```
 
 **Expected output:**
@@ -141,7 +141,7 @@ If API token cannot be regenerated, projects can be created manually via Sentry 
 ## Deliverables
 
 ### 1. Automation Script
-**File:** `/Users/kooshapari/CodeProjects/Phenotype/repos/scripts/create-sentry-projects.sh`
+**File:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos/scripts/create-sentry-projects.sh`
 
 **Features:**
 - ✅ Extracts token from `~/.sentryclirc`
@@ -155,11 +155,11 @@ If API token cannot be regenerated, projects can be created manually via Sentry 
 
 **Usage:**
 ```bash
-bash /Users/kooshapari/CodeProjects/Phenotype/repos/scripts/create-sentry-projects.sh
+bash /Users/<REDACTED>/CodeProjects/Phenotype/repos/scripts/create-sentry-projects.sh
 ```
 
 ### 2. Setup Guide
-**File:** `/Users/kooshapari/CodeProjects/Phenotype/repos/docs/guides/SENTRY_SETUP_GUIDE.md`
+**File:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos/docs/guides/SENTRY_SETUP_GUIDE.md`
 
 **Contents:**
 - Quick start with automated script
@@ -171,7 +171,7 @@ bash /Users/kooshapari/CodeProjects/Phenotype/repos/scripts/create-sentry-projec
 - References
 
 ### 3. Issue Documentation
-**File:** `/Users/kooshapari/CodeProjects/Phenotype/repos/SENTRY_AUTH_ISSUE.md`
+**File:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos/SENTRY_AUTH_ISSUE.md`
 
 **Contents:**
 - Issue summary

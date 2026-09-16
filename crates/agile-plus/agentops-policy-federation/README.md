@@ -30,10 +30,10 @@ Status
 - Early-stage / scaffold: wrappers are currently pass-through/no-op guards.
 - No CI or tests in this repo yet. Consider adding basic shellcheck / CI job in a future PR.
 - Files of interest (absolute paths):
-  - /Users/kooshapari/CodeProjects/Phenotype/repos/agentops-policy-federation/scripts/runtime/codex_runtime_manifest.json
-  - /Users/kooshapari/CodeProjects/Phenotype/repos/agentops-policy-federation/scripts/runtime/codex_exec_guard.sh
-  - /Users/kooshapari/CodeProjects/Phenotype/repos/agentops-policy-federation/scripts/runtime/codex_write_guard.sh
-  - /Users/kooshapari/CodeProjects/Phenotype/repos/agentops-policy-federation/scripts/runtime/codex_network_guard.sh
+  - /Users/<REDACTED>/CodeProjects/Phenotype/repos/agentops-policy-federation/scripts/runtime/codex_runtime_manifest.json
+  - /Users/<REDACTED>/CodeProjects/Phenotype/repos/agentops-policy-federation/scripts/runtime/codex_exec_guard.sh
+  - /Users/<REDACTED>/CodeProjects/Phenotype/repos/agentops-policy-federation/scripts/runtime/codex_write_guard.sh
+  - /Users/<REDACTED>/CodeProjects/Phenotype/repos/agentops-policy-federation/scripts/runtime/codex_network_guard.sh
 
 If you'd like, I can:
 - Add simple shellcheck-driven tests and a lightweight GitHub Actions workflow (note: Actions billing constraints may apply),

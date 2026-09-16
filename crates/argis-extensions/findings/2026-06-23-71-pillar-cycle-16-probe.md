@@ -1,6 +1,6 @@
 # 71-Pillar Cycle 16 Probe (2026-06-23)
 
-**Author:** KooshaPari
+**Author:** <REDACTED>
 **Source:** v25 cycle-15 closure (commit `d7e19af61c`, mean 2.86)
 **Date:** 2026-06-23
 
@@ -47,7 +47,7 @@ After v25 closure, the remaining P1 pillars (current < 3.0) are:
 ## Cross-cutting concerns (not pillar-scored but blocking)
 
 ### 🔴 Issue #146 — forge DB lock cascade (open)
-On `KooshaPari/phenotype-apps`. Parallel subagent dispatch can cause SQLite lock contention in the shared forge DB. Per ADR-094 the workaround is sequential dispatch with 5-10s spacing. **Upstream fix:** `PRAGMA busy_timeout = 30000` in the shared DB init. Coordinate with forge maintainer. **Severity:** P1 for fleet-wide work throughput.
+On `<REDACTED>/phenotype-apps`. Parallel subagent dispatch can cause SQLite lock contention in the shared forge DB. Per ADR-094 the workaround is sequential dispatch with 5-10s spacing. **Upstream fix:** `PRAGMA busy_timeout = 30000` in the shared DB init. Coordinate with forge maintainer. **Severity:** P1 for fleet-wide work throughput.
 
 ### 🟡 Orphan-process accumulation (separate bug, not yet filed)
 13+ zombie `forge` processes on the host (`d66eb2a9-...` ×3, `f134f76f-...` ×2, plus 3 parent daemons with no `--conversation-id`). Duplicates suggest `--conversation-id` is not a primary key when sessions are restarted. Affects memory + lock-contention headroom. **Workaround:** `scripts/clear-forge-locks.sh` (just shipped) doesn't reap processes but clears the locks; **proper fix:** upstream gh issue against `tailcallhq/forgecode` (filed this session, separate from #3551).

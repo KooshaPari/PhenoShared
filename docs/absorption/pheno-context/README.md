@@ -1,7 +1,7 @@
 # Absorption Record: pheno-context
 
-**Source:** `KooshaPari/pheno-context`
-**Target:** `KooshaPari/pheno` → `crates/pheno-context/`
+**Source:** `<REDACTED>/pheno-context`
+**Target:** `<REDACTED>/pheno` → `crates/pheno-context/`
 **Date:** 2026-07-17
 **Wave:** `2026-07-17-absorption`
 **Executed by:** forge agent (automated)

@@ -1,8 +1,8 @@
 # Runbook: Windows Desktop GitHub Actions Runner
 
-**Node:** `desktop-kooshapari-desk` (home Mac mini under Windows partition / Boot Camp; `[self-hosted, heavy, home]`)
+**Node:** `desktop-<REDACTED>-desk` (home Mac mini under Windows partition / Boot Camp; `[self-hosted, heavy, home]`)
 **Status:** Operational as of 2026-04-24
-**Service name:** `actions.runner.KooshaPari-phenotype-tooling.desktop-kooshapari-desk`
+**Service name:** `actions.runner.<REDACTED>-phenotype-tooling.desktop-<REDACTED>-desk`
 **Install script:** `iac/scripts/install-windows-runner.ps1`
 
 This runbook captures the procedure that was actually used to bring the Windows desktop runner online, and the gotchas that surfaced during the install. Use this when re-provisioning, replacing the host, or onboarding a similar Windows-class heavy runner.
@@ -13,7 +13,7 @@ This runbook captures the procedure that was actually used to bring the Windows 
 
 - Windows 10/11 host on the Phenotype Tailnet.
 - Local admin shell (PowerShell 5.1 or 7).
-- GitHub PAT with `repo` + `admin:org` scopes (for org-level runner registration), OR a runner registration token from `https://github.com/organizations/KooshaPari/settings/actions/runners/new`.
+- GitHub PAT with `repo` + `admin:org` scopes (for org-level runner registration), OR a runner registration token from `https://github.com/organizations/<REDACTED>/settings/actions/runners/new`.
 - ≥10 GB free on `C:\` for the `actions-runner` work directory.
 - (Optional) Parsec installed for remote desktop. Parsec gaming-mode and the runner coexist because the runner service starts in `Manual` start mode and only runs while a job is dispatched.
 
@@ -24,7 +24,7 @@ This runbook captures the procedure that was actually used to bring the Windows 
 ```powershell
 # From an elevated PowerShell session on the target Windows host:
 cd C:\
-iex (irm https://raw.githubusercontent.com/KooshaPari/phenotype-infra/main/iac/scripts/install-windows-runner.ps1)
+iex (irm https://raw.githubusercontent.com/<REDACTED>/phenotype-infra/main/iac/scripts/install-windows-runner.ps1)
 ```
 
 The script:
@@ -32,21 +32,21 @@ The script:
 1. Creates `C:\actions-runner\` and downloads the latest `actions-runner-win-x64-*.zip`.
 2. Verifies the SHA-256 against the published checksum.
 3. Creates the local service account `runneruser` with an alphanumeric password (see Gotcha §3.2).
-4. Registers the runner against `https://github.com/KooshaPari` (org-level, no quoting — see §3.4).
+4. Registers the runner against `https://github.com/<REDACTED>` (org-level, no quoting — see §3.4).
 5. Installs the runner as a Windows service in `Manual` start mode.
 6. Adds firewall rule for inbound port 22 on the **Private** profile only (see §3.5).
 
 After the script completes, verify:
 
 ```powershell
-Get-Service "actions.runner.KooshaPari-phenotype-tooling.desktop-kooshapari-desk"
+Get-Service "actions.runner.<REDACTED>-phenotype-tooling.desktop-<REDACTED>-desk"
 # Status should be: Stopped (Manual). It will be started by GH on dispatch.
 ```
 
 And from any controller host on the Tailnet:
 
 ```bash
-ssh runneruser@desktop-kooshapari-desk.tail-scale-name.ts.net "Get-Service actions.runner.* | Format-List"
+ssh runneruser@desktop-<REDACTED>-desk.tail-scale-name.ts.net "Get-Service actions.runner.* | Format-List"
 ```
 
 ---
@@ -63,19 +63,19 @@ PowerShell 5.1 (the default on Windows 10/11 LTSC) silently mangles the UTF-8 em
 
 The Windows local-account creation API (`New-LocalUser`) accepts special characters in the password parameter at the .NET layer but the underlying `NetUserAdd` call rejects passwords containing certain shell metacharacters when the password is forwarded to `sc.exe config <svc> obj=<acct> password=<pw>`. The failure is silent — the service is created with no credential and fails to start with `1069 (logon failure)`.
 
-**Fix:** the script now generates a 24-char alphanumeric password (`[A-Za-z0-9]{24}`) and stores it to Vaultwarden under `windows-runner/desktop-kooshapari-desk/runneruser`. Do not use `!@#$%^&*()` in this password.
+**Fix:** the script now generates a 24-char alphanumeric password (`[A-Za-z0-9]{24}`) and stores it to Vaultwarden under `windows-runner/desktop-<REDACTED>-desk/runneruser`. Do not use `!@#$%^&*()` in this password.
 
 ### 3.3 `Description` 48-char cap
 
 The Windows service `Description` field has an undocumented 48-character truncation when set via `sc.exe description`. Longer values are truncated silently and leave the description in an inconsistent state across `services.msc` vs `Get-CimInstance`.
 
-**Fix:** description is now exactly `"GH Actions runner - desktop-kooshapari-desk"` (43 chars).
+**Fix:** description is now exactly `"GH Actions runner - desktop-<REDACTED>-desk"` (43 chars).
 
 ### 3.4 `-OrgUrl` without quotes
 
-When `config.cmd` is invoked via PowerShell with a quoted URL (`-OrgUrl "https://github.com/KooshaPari"`), PS double-encodes the quotes when the script came in via `iex`, and `config.cmd` sees `"\"https://github.com/KooshaPari\""` as the org URL — registration fails with `Invalid configuration provided for runnerRegistrationUrl`.
+When `config.cmd` is invoked via PowerShell with a quoted URL (`-OrgUrl "https://github.com/<REDACTED>"`), PS double-encodes the quotes when the script came in via `iex`, and `config.cmd` sees `"\"https://github.com/<REDACTED>\""` as the org URL — registration fails with `Invalid configuration provided for runnerRegistrationUrl`.
 
-**Fix:** the script invokes `config.cmd` with the unquoted form: `--url https://github.com/KooshaPari`. The URL has no shell-special characters so unquoting is safe.
+**Fix:** the script invokes `config.cmd` with the unquoted form: `--url https://github.com/<REDACTED>`. The URL has no shell-special characters so unquoting is safe.
 
 ### 3.5 Firewall profile (Public → Private)
 
@@ -94,12 +94,12 @@ If a future job class needs GPU access (CUDA / MPS / DirectML), schedule those j
 ## 4. Verification Checklist
 
 - [ ] `Get-Service actions.runner.*` shows the runner service in `Stopped (Manual)` state.
-- [ ] GitHub org runners page lists `desktop-kooshapari-desk` as `Idle`.
+- [ ] GitHub org runners page lists `desktop-<REDACTED>-desk` as `Idle`.
 - [ ] Test workflow with `runs-on: [self-hosted, heavy, home]` dispatches and completes successfully.
 - [ ] After job completes, service returns to `Stopped`.
 - [ ] Parsec session uninterrupted during a runner job (smoke-test with a no-op workflow).
 - [ ] SSH from another Tailnet node reaches the host on port 22.
-- [ ] `runneruser` password retrievable from Vaultwarden under `windows-runner/desktop-kooshapari-desk/runneruser`.
+- [ ] `runneruser` password retrievable from Vaultwarden under `windows-runner/desktop-<REDACTED>-desk/runneruser`.
 
 ---
 
@@ -108,7 +108,7 @@ If a future job class needs GPU access (CUDA / MPS / DirectML), schedule those j
 ```powershell
 cd C:\actions-runner
 .\config.cmd remove --token <removal-token-from-gh>
-sc.exe delete "actions.runner.KooshaPari-phenotype-tooling.desktop-kooshapari-desk"
+sc.exe delete "actions.runner.<REDACTED>-phenotype-tooling.desktop-<REDACTED>-desk"
 Remove-LocalUser runneruser
 Remove-Item -Recurse -Force C:\actions-runner
 ```

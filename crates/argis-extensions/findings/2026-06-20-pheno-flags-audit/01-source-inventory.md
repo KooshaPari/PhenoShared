@@ -1,11 +1,11 @@
-# Phase 1A — Source Inventory: `KooshaPari/pheno-flags`
+# Phase 1A — Source Inventory: `<REDACTED>/pheno-flags`
 
 **Date:** 2026-06-20
 **Phase:** 1A (Inventory)
-**Target repo:** `KooshaPari/pheno-flags` (canonical)
+**Target repo:** `<REDACTED>/pheno-flags` (canonical)
 **Local source-of-truth paths investigated:**
-- (A) `/Users/kooshapari/CodeProjects/Phenotype/repos/pheno-flags/` — observed at session start, torn down mid-session
-- (B) `/Users/kooshapari/CodeProjects/Phenotype/repos/argis-extensions/pheno-flags/` — subtree of argis-extensions monorepo, **canonical local copy** at end of Phase 1A
+- (A) `/Users/<REDACTED>/CodeProjects/Phenotype/repos/pheno-flags/` — observed at session start, torn down mid-session
+- (B) `/Users/<REDACTED>/CodeProjects/Phenotype/repos/argis-extensions/pheno-flags/` — subtree of argis-extensions monorepo, **canonical local copy** at end of Phase 1A
 
 **Audit-by:** Phase 1A orchestrator session (single-shot inventory, no synthesis or decision).
 
@@ -13,9 +13,9 @@
 
 ## ⚠️ Working-path anomaly — read first
 
-The path `/Users/kooshapari/CodeProjects/Phenotype/repos/pheno-flags/` existed at session start (commit `bc58074e2c…` on `main`) and was successfully probed (see § 1–4 below for branch/tag state). **The directory was deleted mid-session** (between parallel shell batches). Subsequent `ls`, `cd`, and `readlink -f` against that path returned "No such file or directory".
+The path `/Users/<REDACTED>/CodeProjects/Phenotype/repos/pheno-flags/` existed at session start (commit `bc58074e2c…` on `main`) and was successfully probed (see § 1–4 below for branch/tag state). **The directory was deleted mid-session** (between parallel shell batches). Subsequent `ls`, `cd`, and `readlink -f` against that path returned "No such file or directory".
 
-The canonical pheno-flags source-of-truth for the audit is therefore the **subtree at `/Users/kooshapari/CodeProjects/Phenotype/repos/argis-extensions/pheno-flags/`** within the argis-extensions monorepo (HEAD `a19971b5f8…` on `chore/go-mod-tidy-vulnfix-2026-06-20`).
+The canonical pheno-flags source-of-truth for the audit is therefore the **subtree at `/Users/<REDACTED>/CodeProjects/Phenotype/repos/argis-extensions/pheno-flags/`** within the argis-extensions monorepo (HEAD `a19971b5f8…` on `chore/go-mod-tidy-vulnfix-2026-06-20`).
 
 The last commit touching the `pheno-flags/` subtree in argis-extensions is **`bc58074`** (`chore(governance): preserve v12 and Mission 3 artifacts`) — i.e. the SAME commit that was HEAD of the standalone worktree at session start. **Working-tree content is byte-identical** (confirmed via `diff -q` on `src/lib.rs` against FocalPoint mirror and via manual comparison of file sizes/LoC for the three copies).
 
@@ -50,7 +50,7 @@ tests/flag_test.rs
 
 **Count: 16 tracked files** (15 if `findings/71-pillar-2026-06-20-pheno-flags.md` is excluded as governance-only).
 
-Citation: `argis-extensions/pheno-flags$ git ls-files` (output captured at `/Users/kooshapari/CodeProjects/Phenotype/repos/argis-extensions/pheno-flags:1` of `git ls-files` invocation, 2026-06-20 ~14:45 PDT).
+Citation: `argis-extensions/pheno-flags$ git ls-files` (output captured at `/Users/<REDACTED>/CodeProjects/Phenotype/repos/argis-extensions/pheno-flags:1` of `git ls-files` invocation, 2026-06-20 ~14:45 PDT).
 
 ### 1.2 File sizes (working tree, both paths identical where they exist)
 
@@ -160,7 +160,7 @@ Citation: `argis-extensions$ git log --oneline -- pheno-flags/ | head -10` (5 co
 
 ```
 commit bc58074e2c2f39b0d92c89279d5577d1a62ec86a
-Author:     KooshaPari <42529354+KooshaPari@users.noreply.github.com>
+Author:     <REDACTED> <42529354+<REDACTED>@users.noreply.github.com>
 AuthorDate: Sat Jun 20 14:33:05 2026 -0700
 Commit:     GitHub <noreply@github.com>
 CommitDate: Sat Jun 20 14:33:05 2026 -0700
@@ -350,7 +350,7 @@ Citation: `argis-extensions/pheno-flags$ git tag -l` (2026-06-20 16:26 PDT).
 ### 5.1 Discovery: every `Cargo.toml` declaring `name = "pheno-flags"`
 
 ```
-$ find /Users/kooshapari/CodeProjects/Phenotype/repos -name 'Cargo.toml' \
+$ find /Users/<REDACTED>/CodeProjects/Phenotype/repos -name 'Cargo.toml' \
     -exec grep -l 'name = .pheno-flags' {} \;
 …/repos/FocalPoint/pheno-flags/Cargo.toml
 …/repos/pheno-flags/Cargo.toml                       ← standalone (torn down)
@@ -410,11 +410,11 @@ Citation: `repos$ diff -q … src/lib.rs` (2026-06-20 16:26 PDT).
 ### 5.5 Where is `phenotype-apps/pheno-flags/`?
 
 ```
-$ ls /Users/kooshapari/CodeProjects/Phenotype/repos/phenotype-apps/
+$ ls /Users/<REDACTED>/CodeProjects/Phenotype/repos/phenotype-apps/
 ls: …phenotype-apps/: No such file or directory
 ```
 
-**The `phenotype-apps/` directory does not exist locally** as of 2026-06-20 ~16:28 PDT — yet GitHub `gh search code 'use pheno_flags' --owner KooshaPari` returned 3 hits for `KooshaPari/phenotype-apps`. This implies a remote repo exists but is not checked out into this monorepo clone. See § 6.
+**The `phenotype-apps/` directory does not exist locally** as of 2026-06-20 ~16:28 PDT — yet GitHub `gh search code 'use pheno_flags' --owner <REDACTED>` returned 3 hits for `<REDACTED>/phenotype-apps`. This implies a remote repo exists but is not checked out into this monorepo clone. See § 6.
 
 ### 5.6 No pheno-flags in worktree `wp/N-` scaffolds
 
@@ -427,7 +427,7 @@ The standalone worktree carried ~24 `wp/N-<slug>` branches, all referring to mel
 ### 6.1 Direct repo query
 
 ```
-$ gh api /repos/KooshaPari/pheno-flags
+$ gh api /repos/<REDACTED>/pheno-flags
 {
   "message": "Not Found",
   "documentation_url": "https://docs.github.com/rest/repos/repos#get-a-repository",
@@ -436,59 +436,59 @@ $ gh api /repos/KooshaPari/pheno-flags
 gh: Not Found (HTTP 404)
 ```
 
-**Confirmed: `KooshaPari/pheno-flags` does NOT exist as a GitHub repo** (HTTP 404, as expected).
+**Confirmed: `<REDACTED>/pheno-flags` does NOT exist as a GitHub repo** (HTTP 404, as expected).
 
-Citation: `repos$ gh api /repos/KooshaPari/pheno-flags 2>&1 | head -20` (2026-06-20 16:28 PDT).
+Citation: `repos$ gh api /repos/<REDACTED>/pheno-flags 2>&1 | head -20` (2026-06-20 16:28 PDT).
 
 ### 6.2 Cross-check via repo search
 
 ```
-$ gh search repos 'pheno-flags' --owner KooshaPari --json fullName,description,url
+$ gh search repos 'pheno-flags' --owner <REDACTED> --json fullName,description,url
 []
 ```
 
-**Zero matches.** Confirms no `pheno-flags` repo exists under `KooshaPari/`.
+**Zero matches.** Confirms no `pheno-flags` repo exists under `<REDACTED>/`.
 
-Citation: `repos$ gh search repos 'pheno-flags' --owner KooshaPari --json fullName,description,url` (2026-06-20 16:28 PDT).
+Citation: `repos$ gh search repos 'pheno-flags' --owner <REDACTED> --json fullName,description,url` (2026-06-20 16:28 PDT).
 
 ### 6.3 Cross-fleet consumer search (`use pheno_flags`)
 
 ```
-$ gh search code 'use pheno_flags' --owner KooshaPari --limit 30 --json repository,path
+$ gh search code 'use pheno_flags' --owner <REDACTED> --limit 30 --json repository,path
 ```
 
 **15 matches across 5 repos** (deduplicated by repo):
 
 | Repo | Path | Subtree vs. canonical? |
 |---|---|---|
-| `KooshaPari/argis-extensions` | `pheno-flags/llms.txt` | same tree |
-| `KooshaPari/argis-extensions` | `pheno-flags/src/lib.rs` | same tree |
-| `KooshaPari/argis-extensions` | `pheno-flags/benches/flags_lookup.rs` | same tree |
-| `KooshaPari/argis-extensions` | `pheno-flags/benches/flags_stress.rs` | same tree |
-| `KooshaPari/argis-extensions` | `pheno-flags/examples/otel_quickstart.rs` | same tree |
-| `KooshaPari/argis-extensions` | `pheno-flags/examples/quickstart.rs` | same tree |
-| `KooshaPari/argis-extensions` | `pheno-flags/tests/flag_test.rs` | same tree |
-| `KooshaPari/AgilePlus` | `crates/pheno-flags/README.md` | API B subtree |
-| `KooshaPari/AgilePlus` | `crates/pheno-flags/src/lib.rs` | API B subtree |
-| `KooshaPari/AgilePlus` | `crates/pheno-flags/tests/flag_test.rs` | API B subtree |
-| `KooshaPari/PlayCua` | `native/src/main.rs` | **Real consumer — external!** |
-| `KooshaPari/PlayCua` | `native/src/app/mod.rs` | Real consumer |
-| `KooshaPari/PlayCua` | `native/tests/integration_smoke.rs` | Real consumer (test) |
-| `KooshaPari/FocalPoint` | `pheno-flags/src/lib.rs` | API A mirror |
-| `KooshaPari/FocalPoint` | `pheno-flags/tests/flag_test.rs` | API A mirror |
-| `KooshaPari/FocalPoint` | `worklogs/l3-56-pheno-flags-2026-06-11.json` | worklog-only |
-| `KooshaPari/phenotype-apps` | `worklogs/l3-56-pheno-flags-2026-06-11.json` | worklog-only (remote only, no local checkout) |
-| `KooshaPari/phenotype-apps` | `pheno-flags/src/lib.rs` | remote only |
-| `KooshaPari/phenotype-apps` | `pheno-flags/examples/quickstart.rs` | remote only |
-| `KooshaPari/phenotype-apps` | `pheno-flags/tests/flag_test.rs` | remote only |
+| `<REDACTED>/argis-extensions` | `pheno-flags/llms.txt` | same tree |
+| `<REDACTED>/argis-extensions` | `pheno-flags/src/lib.rs` | same tree |
+| `<REDACTED>/argis-extensions` | `pheno-flags/benches/flags_lookup.rs` | same tree |
+| `<REDACTED>/argis-extensions` | `pheno-flags/benches/flags_stress.rs` | same tree |
+| `<REDACTED>/argis-extensions` | `pheno-flags/examples/otel_quickstart.rs` | same tree |
+| `<REDACTED>/argis-extensions` | `pheno-flags/examples/quickstart.rs` | same tree |
+| `<REDACTED>/argis-extensions` | `pheno-flags/tests/flag_test.rs` | same tree |
+| `<REDACTED>/AgilePlus` | `crates/pheno-flags/README.md` | API B subtree |
+| `<REDACTED>/AgilePlus` | `crates/pheno-flags/src/lib.rs` | API B subtree |
+| `<REDACTED>/AgilePlus` | `crates/pheno-flags/tests/flag_test.rs` | API B subtree |
+| `<REDACTED>/PlayCua` | `native/src/main.rs` | **Real consumer — external!** |
+| `<REDACTED>/PlayCua` | `native/src/app/mod.rs` | Real consumer |
+| `<REDACTED>/PlayCua` | `native/tests/integration_smoke.rs` | Real consumer (test) |
+| `<REDACTED>/FocalPoint` | `pheno-flags/src/lib.rs` | API A mirror |
+| `<REDACTED>/FocalPoint` | `pheno-flags/tests/flag_test.rs` | API A mirror |
+| `<REDACTED>/FocalPoint` | `worklogs/l3-56-pheno-flags-2026-06-11.json` | worklog-only |
+| `<REDACTED>/phenotype-apps` | `worklogs/l3-56-pheno-flags-2026-06-11.json` | worklog-only (remote only, no local checkout) |
+| `<REDACTED>/phenotype-apps` | `pheno-flags/src/lib.rs` | remote only |
+| `<REDACTED>/phenotype-apps` | `pheno-flags/examples/quickstart.rs` | remote only |
+| `<REDACTED>/phenotype-apps` | `pheno-flags/tests/flag_test.rs` | remote only |
 
 **Cross-fleet real consumers (not self-references):**
 
-- **`KooshaPari/PlayCua`** — 3 hits (`native/src/main.rs`, `native/src/app/mod.rs`, `native/tests/integration_smoke.rs`). This is the only repo that **imports `pheno_flags` as an external crate dependency** rather than containing its own subtree.
+- **`<REDACTED>/PlayCua`** — 3 hits (`native/src/main.rs`, `native/src/app/mod.rs`, `native/tests/integration_smoke.rs`). This is the only repo that **imports `pheno_flags` as an external crate dependency** rather than containing its own subtree.
 
 All other hits are subtrees of the crate itself (argis-extensions/pheno-flags/, AgilePlus/crates/pheno-flags/, FocalPoint/pheno-flags/, phenotype-apps/pheno-flags/) or worklog JSON files referencing it.
 
-Citation: `repos$ gh search code 'use pheno_flags' --owner KooshaPari --limit 30 --json repository,path` (2026-06-20 16:28 PDT).
+Citation: `repos$ gh search code 'use pheno_flags' --owner <REDACTED> --limit 30 --json repository,path` (2026-06-20 16:28 PDT).
 
 ---
 
@@ -711,7 +711,7 @@ Citation: `pheno-flags/scripts/coverage.sh:1-15` (full read).
 ### 9.1 Local subtree findings
 
 ```
-$ ls /Users/kooshapari/CodeProjects/Phenotype/repos/pheno-flags/findings/
+$ ls /Users/<REDACTED>/CodeProjects/Phenotype/repos/pheno-flags/findings/
 ls: …pheno-flags/findings/: No such file or directory
 ```
 
@@ -723,7 +723,7 @@ Citation: `argis-extensions/pheno-flags/findings/71-pillar-2026-06-20-pheno-flag
 
 ### 9.2 Cross-repo findings inventory (top-level `repos/findings/`)
 
-30+ existing finding files under `/Users/kooshapari/CodeProjects/Phenotype/repos/findings/`, including:
+30+ existing finding files under `/Users/<REDACTED>/CodeProjects/Phenotype/repos/findings/`, including:
 
 - 71-pillar cycle files: `2026-06-17-*`, `2026-06-18-*`, `2026-06-19-*`
 - Absorption audits: `2026-06-19-L5-110-112-second-half-4-repo-absorption-audit.md`, `2026-06-19-L5-114-pheno-llms-txt-absorption.md`
@@ -733,7 +733,7 @@ Citation: `argis-extensions/pheno-flags/findings/71-pillar-2026-06-20-pheno-flag
 
 This Phase 1A file will be saved at:
 
-- `/Users/kooshapari/CodeProjects/Phenotype/repos/findings/2026-06-20-pheno-flags-audit/01-source-inventory.md`
+- `/Users/<REDACTED>/CodeProjects/Phenotype/repos/findings/2026-06-20-pheno-flags-audit/01-source-inventory.md`
 
 The audit directory also contains `02-docs-code.md` (from a prior step in this session).
 
@@ -772,13 +772,13 @@ Citation: `argis-extensions/pheno-flags/findings/71-pillar-2026-06-20-pheno-flag
 
 ```
 $ git remote -v
-origin      git@github.com:KooshaPari/argis-extensions.git (fetch)
-origin      git@github.com:KooshaPari/argis-extensions.git (push)
-origin-ssh  git@github.com:KooshaPari/argis-extensions.git (fetch)
-origin-ssh  git@github.com:KooshaPari/argis-extensions.git (push)
+origin      git@github.com:<REDACTED>/argis-extensions.git (fetch)
+origin      git@github.com:<REDACTED>/argis-extensions.git (push)
+origin-ssh  git@github.com:<REDACTED>/argis-extensions.git (fetch)
+origin-ssh  git@github.com:<REDACTED>/argis-extensions.git (push)
 ```
 
-**2 remotes**, both pointing to the SAME GitHub repo `KooshaPari/argis-extensions`. (Note: `origin-ssh` is a redundant alias.)
+**2 remotes**, both pointing to the SAME GitHub repo `<REDACTED>/argis-extensions`. (Note: `origin-ssh` is a redundant alias.)
 
 Citation: `argis-extensions/pheno-flags$ git remote -v` (2026-06-20 16:30 PDT).
 
@@ -788,11 +788,11 @@ Citation: `argis-extensions/pheno-flags$ git remote -v` (2026-06-20 16:30 PDT).
 
 | Remote name | URL |
 |---|---|
-| `argis` | `git@github.com:KooshaPari/argis-extensions.git` |
-| `argis-extensions` | `git@github.com:KooshaPari/argis-extensions.git` |
-| `argis-stale` | `git@github.com:KooshaPari/argis-extensions.git` |
-| `origin` | `git@github.com:KooshaPari/phenotype-apps.git` |
-| `phenotype-apps` | `git@github.com:KooshaPari/phenotype-apps.git` |
+| `argis` | `git@github.com:<REDACTED>/argis-extensions.git` |
+| `argis-extensions` | `git@github.com:<REDACTED>/argis-extensions.git` |
+| `argis-stale` | `git@github.com:<REDACTED>/argis-extensions.git` |
+| `origin` | `git@github.com:<REDACTED>/phenotype-apps.git` |
+| `phenotype-apps` | `git@github.com:<REDACTED>/phenotype-apps.git` |
 
 Citation: `repos/pheno-flags$ git remote -v` (captured before torn-down).
 
@@ -869,10 +869,10 @@ $ git ls-remote origin --heads --tags
 - They share the crate name but not the implementation or the API
 
 **GitHub state:**
-- `KooshaPari/pheno-flags` does NOT exist (HTTP 404)
+- `<REDACTED>/pheno-flags` does NOT exist (HTTP 404)
 - 0 repo-search matches
 - 15 `use pheno_flags` matches across 5 repos (mostly subtrees of the crate itself)
-- **Real cross-fleet consumer: `KooshaPari/PlayCua`** (3 hits: `native/src/main.rs`, `native/src/app/mod.rs`, `native/tests/integration_smoke.rs`)
+- **Real cross-fleet consumer: `<REDACTED>/PlayCua`** (3 hits: `native/src/main.rs`, `native/src/app/mod.rs`, `native/tests/integration_smoke.rs`)
 
 **Manifests:**
 - Cargo.toml at `0.1.0`, `publish = true`, single runtime dep `thiserror = "2"`, sibling path dep `pheno-otel` (ADR-037 OTLP), dev-deps `serde_json` + `tokio`

@@ -1,6 +1,6 @@
 # Paginary branch index — gw-paginary G19 triage (2026-06-19)
 
-**Source:** `KooshaPari/Paginary` remote heads (11 branches).  
+**Source:** `<REDACTED>/Paginary` remote heads (11 branches).  
 **Repo:** archived 2026-06-12; pagination/caching utility (TypeScript); no fleet runtime dependency.  
 **Disposition row:** `gw-paginary` — **RETIRE** out-of-fleet, `fsm: done`.
 

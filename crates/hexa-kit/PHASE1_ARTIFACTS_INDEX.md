@@ -24,7 +24,7 @@
 ### Root-Level Tracking Files
 
 #### 1. PHASE1_TRACKER.yml
-**Path:** `/Users/kooshapari/CodeProjects/Phenotype/repos/PHASE1_TRACKER.yml`
+**Path:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos/PHASE1_TRACKER.yml`
 **Size:** 16 KB
 **Format:** YAML (machine-readable)
 
@@ -56,7 +56,7 @@ yq eval '.risks[] | select(.severity=="high")' PHASE1_TRACKER.yml
 ---
 
 #### 2. PHASE1_TEAM_COMMS.md
-**Path:** `/Users/kooshapari/CodeProjects/Phenotype/repos/PHASE1_TEAM_COMMS.md`
+**Path:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos/PHASE1_TEAM_COMMS.md`
 **Size:** 28 KB
 **Format:** Markdown
 
@@ -84,7 +84,7 @@ yq eval '.risks[] | select(.severity=="high")' PHASE1_TRACKER.yml
 ### Reports Directory
 
 #### 3. docs/reports/PHASE1_STATUS_DASHBOARD.md
-**Path:** `/Users/kooshapari/CodeProjects/Phenotype/repos/docs/reports/PHASE1_STATUS_DASHBOARD.md`
+**Path:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos/docs/reports/PHASE1_STATUS_DASHBOARD.md`
 **Size:** 17 KB
 **Format:** Markdown (human-readable)
 
@@ -110,7 +110,7 @@ yq eval '.risks[] | select(.severity=="high")' PHASE1_TRACKER.yml
 ---
 
 #### 4. docs/reports/PHASE1_DEPLOYMENT_MATRIX.md
-**Path:** `/Users/kooshapari/CodeProjects/Phenotype/repos/docs/reports/PHASE1_DEPLOYMENT_MATRIX.md`
+**Path:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos/docs/reports/PHASE1_DEPLOYMENT_MATRIX.md`
 **Size:** 13 KB
 **Format:** Markdown (visual)
 
@@ -138,7 +138,7 @@ yq eval '.risks[] | select(.severity=="high")' PHASE1_TRACKER.yml
 ### Reference Directory
 
 #### 5. docs/reference/PHASE1_SUCCESS_METRICS.md
-**Path:** `/Users/kooshapari/CodeProjects/Phenotype/repos/docs/reference/PHASE1_SUCCESS_METRICS.md`
+**Path:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos/docs/reference/PHASE1_SUCCESS_METRICS.md`
 **Size:** 14 KB
 **Format:** Markdown
 
@@ -164,7 +164,7 @@ yq eval '.risks[] | select(.severity=="high")' PHASE1_TRACKER.yml
 ---
 
 #### 6. docs/reports/PHASE1_ROLLOUT_TIMELINE.md
-**Path:** `/Users/kooshapari/CodeProjects/Phenotype/repos/docs/reports/PHASE1_ROLLOUT_TIMELINE.md`
+**Path:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos/docs/reports/PHASE1_ROLLOUT_TIMELINE.md`
 **Size:** 19 KB
 **Format:** Markdown (detailed schedule)
 

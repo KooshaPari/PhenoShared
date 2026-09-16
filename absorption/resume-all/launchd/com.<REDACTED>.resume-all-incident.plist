@@ -3,24 +3,24 @@
 <plist version="1.0">
 <dict>
     <key>Label</key>
-    <string>com.kooshapari.resume-all-flag-tray-bridge</string>
+    <string>com.<REDACTED>.resume-all-incident</string>
     <key>ProgramArguments</key>
     <array>
         <string>/bin/zsh</string>
-        <string>/Users/kooshapari/bin/flag-tray-bridge-wrapper</string>
+        <string>/Users/<REDACTED>/bin/incident-respond-wrapper</string>
     </array>
     <key>StartInterval</key>
     <integer>30</integer>
     <key>StandardOutPath</key>
-    <string>/Users/kooshapari/Library/Logs/resume-all/flag-tray-bridge.log</string>
+    <string>/Users/<REDACTED>/Library/Logs/resume-all/incident.log</string>
     <key>StandardErrorPath</key>
-    <string>/Users/kooshapari/Library/Logs/resume-all/flag-tray-bridge.err.log</string>
+    <string>/Users/<REDACTED>/Library/Logs/resume-all/incident.err.log</string>
     <key>EnvironmentVariables</key>
     <dict>
         <key>PATH</key>
         <string>/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
         <key>HOME</key>
-        <string>/Users/kooshapari</string>
+        <string>/Users/<REDACTED></string>
     </dict>
     <key>ProcessType</key>
     <string>Background</string>

@@ -48,7 +48,7 @@ class TDDTestRunner:
         provider: str = "authkit",
     ):
         # Smart defaults from environment
-        self.endpoint = os.getenv("ZEN_MCP_ENDPOINT", "https://zen.kooshapari.com/mcp")
+        self.endpoint = os.getenv("ZEN_MCP_ENDPOINT", "https://zen.<REDACTED>.com/mcp")
         self.use_tui = use_tui and HAS_TUI
         self.provider = provider
 

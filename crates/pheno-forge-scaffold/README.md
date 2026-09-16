@@ -2,7 +2,7 @@
 
 > CLI Task Runner and Build Orchestrator — Scaffold Only
 
-[![AI slop inside](https://sladge.net/badge.svg)](https://sladge.net) [![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/KooshaPari/phenoForge/total)](https://github.com/KooshaPari/phenoForge/releases)
+[![AI slop inside](https://sladge.net/badge.svg)](https://sladge.net) [![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/<REDACTED>/phenoForge/total)](https://github.com/<REDACTED>/phenoForge/releases)
 
 > **Project status (2026-09-08):** This repository is a **scaffold-only documentation snapshot**.
 > The Rust binary in this checkout (`phenotype-forge`, ~12 lines of `clap`-based `main.rs`)

@@ -9,7 +9,7 @@ the rotation policy and the audit log.
 | Layer              | Path                                                                                  | Mode   |
 | :----------------- | :------------------------------------------------------------------------------------ | :----- |
 | Heavy-runner       | `/etc/phenotype-fleet.env` (env-var-only file, sourced by `~/.bashrc` / `~/.zshrc`)   | 0600   |
-| GitHub Actions     | Repo → Settings → Secrets → `SLACK_FLEET_WEBHOOK` (in `KooshaPari/phenotype-tooling`) | secret |
+| GitHub Actions     | Repo → Settings → Secrets → `SLACK_FLEET_WEBHOOK` (in `<REDACTED>/phenotype-tooling`) | secret |
 | Env-var name       | `SLACK_FLEET_WEBHOOK`                                                                  | n/a    |
 
 The webhook URL is **never** committed to git, never written to a `WORKLOG.md`,
@@ -40,7 +40,7 @@ orchestrator.
    sudo chmod 0600 /etc/phenotype-fleet.env
    cat /etc/phenotype-fleet.env   # verify
    ```
-4. **Update the GitHub Actions secret** in `KooshaPari/phenotype-tooling`:
+4. **Update the GitHub Actions secret** in `<REDACTED>/phenotype-tooling`:
    `Settings → Secrets and variables → Actions → SLACK_FLEET_WEBHOOK → Update`.
 5. **Force a re-run** of the workflow `fleet-substrate-tools-backup.yml`
    via `gh workflow run` to verify the new webhook posts.

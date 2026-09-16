@@ -388,7 +388,7 @@ impl ServerHandler for PlayCuaMcp {
             .with_server_info(
                 Implementation::new("playcua", env!("CARGO_PKG_VERSION"))
                     .with_title("playcua computer-use agent".to_string())
-                    .with_website_url("https://github.com/KooshaPari/PlayCua".to_string()),
+                    .with_website_url("https://github.com/<REDACTED>/PlayCua".to_string()),
             )
             .with_protocol_version(ProtocolVersion::V_2025_06_18)
             .with_instructions(

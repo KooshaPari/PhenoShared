@@ -1,6 +1,6 @@
 # PR423 Kilo review failure audit
 
-**Pull request:** `KooshaPari/phenotype-registry#423`  
+**Pull request:** `<REDACTED>/phenotype-registry#423`  
 **Head:** `54a4854e36252d4f59ff70abec70243483024493` (`audit: reconcile phenoResearchEngine absorption target`)  
 **Check:** `Kilo Code Review`  
 **Run:** `f3749c6b-e8d7-4c2b-be92-88b5faebfe8f`  

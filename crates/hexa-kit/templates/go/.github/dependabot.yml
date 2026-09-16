@@ -8,5 +8,5 @@ updates:
       - dependencies
       - github-actions
     assignees:
-      - KooshaPari
+      - <REDACTED>
     open-pull-requests-limit: 10

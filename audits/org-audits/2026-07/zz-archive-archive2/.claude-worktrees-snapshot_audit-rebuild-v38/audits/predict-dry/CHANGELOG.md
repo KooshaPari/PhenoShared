@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **Substrate quality bar (ADR-023 Rule 3.1)** — initial release with:
   - `AGENTS.md` — L72 predictive discipline context, 5 ADR cross-references
-  - `LICENSE-MIT` — MIT, Copyright (c) 2026 KooshaPari
+  - `LICENSE-MIT` — MIT, Copyright (c) 2026 <REDACTED>
   - `pyproject.toml` — v0.1.0, console_script `pheno-predict`
   - `deny.toml` + `.safety-policy.yml` — Python supply-chain policy stub
   - `SPEC.md` — 1-page L72 spec (token-shingle Jaccard, 4-criteria pre-check)
@@ -22,7 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **README fix** — `--format gh-issues` → `--format md` (code only supports
   `["json", "csv", "md"]`).
 - **README fix** — `phenotype-tooling/predictive-dry-check.yml` reference
-  retained; the workflow is added in `KooshaPari/phenotype-tooling`
+  retained; the workflow is added in `<REDACTED>/phenotype-tooling`
   PR `chore/l5-112-predictive-dry-check-workflow-2026-06-19`.
 
 ### Notes

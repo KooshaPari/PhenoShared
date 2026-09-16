@@ -2,7 +2,7 @@
 
 **Date:** 2026-06-20
 **ADR:** ADR-042 (Substrate Quality Bar)
-**Owner:** kooshapari
+**Owner:** <REDACTED>
 **Device:** macbook
 **Branch:** chore/orch-v11-016-tier0-2026-06-20
 

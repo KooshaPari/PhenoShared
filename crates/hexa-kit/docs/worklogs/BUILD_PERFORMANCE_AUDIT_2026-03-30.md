@@ -76,7 +76,7 @@ Cargo.lock              1290 lines (moderate)
 
 ### Current Release Profile
 
-**File**: `/Users/kooshapari/CodeProjects/Phenotype/repos/Cargo.toml` (lines 50-54)
+**File**: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/Cargo.toml` (lines 50-54)
 
 ```toml
 [profile.release]
@@ -310,7 +310,7 @@ jobs:
 **Effort**: 2 minutes
 **Risk**: Low (features only remove unused code, tests still pass)
 
-**Change**: `/Users/kooshapari/CodeProjects/Phenotype/repos/Cargo.toml` line 30
+**Change**: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/Cargo.toml` line 30
 
 ```diff
 - tokio = { version = "1", features = ["full"] }
@@ -331,7 +331,7 @@ time cargo build  # measure cold build
 **Effort**: 1 minute
 **Risk**: Minimal (panic = "abort" is standard practice for release builds)
 
-**Change**: `/Users/kooshapari/CodeProjects/Phenotype/repos/Cargo.toml` line 54
+**Change**: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/Cargo.toml` line 54
 
 ```diff
   [profile.release]
@@ -620,17 +620,17 @@ cargo clean
 
 ```
 AUDIT ARTIFACT LOCATION:
-/Users/kooshapari/CodeProjects/Phenotype/repos/docs/worklogs/BUILD_PERFORMANCE_AUDIT_2026-03-30.md
+/Users/<REDACTED>/CodeProjects/Phenotype/repos/docs/worklogs/BUILD_PERFORMANCE_AUDIT_2026-03-30.md
 
 RECOMMENDED CHANGES:
-1. /Users/kooshapari/CodeProjects/Phenotype/repos/Cargo.toml
+1. /Users/<REDACTED>/CodeProjects/Phenotype/repos/Cargo.toml
    - Line 30: Reduce tokio features
    - Line 54: Add panic = "abort"
 
-2. /Users/kooshapari/CodeProjects/Phenotype/repos/.cargo/config.toml (NEW)
+2. /Users/<REDACTED>/CodeProjects/Phenotype/repos/.cargo/config.toml (NEW)
    - Add incremental = true
 
-3. /Users/kooshapari/CodeProjects/Phenotype/repos/.github/workflows/ci.yml (if exists)
+3. /Users/<REDACTED>/CodeProjects/Phenotype/repos/.github/workflows/ci.yml (if exists)
    - Add sccache action
    - Add rust-cache action
 ```

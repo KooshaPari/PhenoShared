@@ -60,9 +60,9 @@ lane config.
 ```sh
 # On the Mac dev box:
 python3 scripts/provision_desktop_worktree.py \
-  --host kooshapari@100.x.x.x \
+  --host <REDACTED>@100.x.x.x \
   --branch fix/desktop-vllm-runtime \
-  --worktree-dir /home/kooshapari/pheno-harness
+  --worktree-dir /home/<REDACTED>/pheno-harness
 ```
 
 The script:
@@ -78,7 +78,7 @@ The script:
 # On the desktop rig (WSL2 distro or bare Linux):
 sudo bash scripts/install_wsl_pheno_serve.sh \
   --branch main \
-  --repo-url https://github.com/KooshaPari/pheno-harness.git
+  --repo-url https://github.com/<REDACTED>/pheno-harness.git
 ```
 
 Idempotent. The installer writes the lane config, pins CUDA runtimes,

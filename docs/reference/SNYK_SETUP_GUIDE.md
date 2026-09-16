@@ -25,7 +25,7 @@ Complete guide for deploying Snyk vulnerability scanning across the Phenotype ec
 export SNYK_TOKEN="your-token-here"
 
 # 2. Run deployment script for Tier 1 repos
-cd /Users/kooshapari/CodeProjects/Phenotype/repos
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos
 ./scripts/snyk-deploy.sh "$SNYK_TOKEN" AgilePlus phenotype-infrakit heliosCLI
 
 # 3. Review reports in .snyk-reports directory
@@ -89,7 +89,7 @@ source ~/.bashrc
 
 **Option B: GitHub Organization Secret**
 
-1. Go to: https://github.com/KooshaPari/repos/settings/secrets
+1. Go to: https://github.com/<REDACTED>/repos/settings/secrets
 2. Click "New repository secret" (or "New organization secret" for all repos)
 3. Name: `SNYK_TOKEN`
 4. Value: Paste your Snyk API token
@@ -99,7 +99,7 @@ source ~/.bashrc
 
 For individual repositories:
 
-1. Go to: https://github.com/KooshaPari/REPO/settings/secrets
+1. Go to: https://github.com/<REDACTED>/REPO/settings/secrets
 2. Click "New repository secret"
 3. Name: `SNYK_TOKEN`
 4. Value: Paste your token
@@ -191,12 +191,12 @@ Reports are generated in `.snyk-reports/`:
 ### Enable Snyk in GitHub Settings
 
 1. **For Organization** (all repos):
-   - Go: https://github.com/organizations/KooshaPari/settings/secrets
+   - Go: https://github.com/organizations/<REDACTED>/settings/secrets
    - Add `SNYK_TOKEN` secret
    - All repos inherit this secret
 
 2. **For Single Repository**:
-   - Go: https://github.com/KooshaPari/REPO/settings/secrets
+   - Go: https://github.com/<REDACTED>/REPO/settings/secrets
    - Add `SNYK_TOKEN` secret
    - Only this repo can access it
 
@@ -474,7 +474,7 @@ Workflow is pre-configured in `.github/workflows/snyk-scan.yml`.
 # For single repo
 cd /path/to/repo
 mkdir -p .github/workflows
-cp /Users/kooshapari/CodeProjects/Phenotype/repos/.github/workflows/snyk-scan.yml .github/workflows/
+cp /Users/<REDACTED>/CodeProjects/Phenotype/repos/.github/workflows/snyk-scan.yml .github/workflows/
 git add .github/workflows/snyk-scan.yml
 git commit -m "chore(ci): add Snyk security scan"
 git push

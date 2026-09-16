@@ -1,4 +1,4 @@
-<!-- Migrated from KooshaPari/Apisync (archived 2026-06-19) — original commit d981353 -->
+<!-- Migrated from <REDACTED>/Apisync (archived 2026-06-19) — original commit d981353 -->
 
 # ADR-004: Choice of tokio-tungstenite for WebSocket
 

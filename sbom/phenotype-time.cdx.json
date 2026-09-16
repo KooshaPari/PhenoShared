@@ -14,7 +14,7 @@
     ],
     "component": {
       "type": "library",
-      "bom-ref": "path+file:///Users/kooshapari/CodeProjects/Phenotype/repos/pheno/crates/phenotype-time#0.2.0",
+      "bom-ref": "path+file:///Users/<REDACTED>/CodeProjects/Phenotype/repos/pheno/crates/phenotype-time#0.2.0",
       "name": "phenotype-time",
       "version": "0.2.0",
       "scope": "required",
@@ -27,7 +27,7 @@
       "components": [
         {
           "type": "library",
-          "bom-ref": "path+file:///Users/kooshapari/CodeProjects/Phenotype/repos/pheno/crates/phenotype-time#0.2.0 bin-target-0",
+          "bom-ref": "path+file:///Users/<REDACTED>/CodeProjects/Phenotype/repos/pheno/crates/phenotype-time#0.2.0 bin-target-0",
           "name": "phenotype_time",
           "version": "0.2.0",
           "purl": "pkg:cargo/phenotype-time@0.2.0?download_url=file://.#src/lib.rs"
@@ -517,7 +517,7 @@
   ],
   "dependencies": [
     {
-      "ref": "path+file:///Users/kooshapari/CodeProjects/Phenotype/repos/pheno/crates/phenotype-time#0.2.0",
+      "ref": "path+file:///Users/<REDACTED>/CodeProjects/Phenotype/repos/pheno/crates/phenotype-time#0.2.0",
       "dependsOn": [
         "registry+https://github.com/rust-lang/crates.io-index#chrono@0.4.44",
         "registry+https://github.com/rust-lang/crates.io-index#serde@1.0.228",

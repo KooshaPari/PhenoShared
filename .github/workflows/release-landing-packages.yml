@@ -21,9 +21,9 @@ jobs:
       matrix:
         include:
           - package: packages/ui
-            name: "@kooshapari/phenotype-ui"
+            name: "@<REDACTED>/phenotype-ui"
           - package: packages/design-tokens
-            name: "@kooshapari/phenotype-design-tokens"
+            name: "@<REDACTED>/phenotype-design-tokens"
     steps:
       - uses: actions/checkout@v4
       - uses: oven-sh/setup-bun@v1

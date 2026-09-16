@@ -16,7 +16,7 @@ Archive of the prior phenotype-registry repo before origin deletion. Absorbed ba
 
 ## Origin
 
-KooshaPari/zz-archive-phenotype-registry (origin 'phenotype-registry-archived-local-work/docs/preserve-archived-local-work-2026-06-20'); bundles archived data-loss-incident-feb25-2026-07-17 and audit-reports-mar01-2026-07-17 branches.
+<REDACTED>/zz-archive-phenotype-registry (origin 'phenotype-registry-archived-local-work/docs/preserve-archived-local-work-2026-06-20'); bundles archived data-loss-incident-feb25-2026-07-17 and audit-reports-mar01-2026-07-17 branches.
 
 ## Contents
 

@@ -34,7 +34,7 @@ docslib/
 ## Installation
 
 ```bash
-go get github.com/kooshapari/docslib
+go get github.com/<REDACTED>/docslib
 ```
 
 ## Quick Start
@@ -43,7 +43,7 @@ go get github.com/kooshapari/docslib
 package main
 
 import (
-    "github.com/kooshapari/docslib"
+    "github.com/<REDACTED>/docslib"
 )
 
 func main() {
@@ -68,7 +68,7 @@ func main() {
 
 ## Documentation
 
-- [API Documentation](https://pkg.go.dev/github.com/kooshapari/docslib)
+- [API Documentation](https://pkg.go.dev/github.com/<REDACTED>/docslib)
 - [Examples](./examples/)
 
 ## Contributing

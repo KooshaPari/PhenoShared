@@ -8,7 +8,7 @@
   },
   "context": {
     "operating_system": "macos",
-    "container_policy": "/Users/kooshapari/CodeProjects/Phenotype/repos is a container, NOT a git working tree",
+    "container_policy": "/Users/<REDACTED>/CodeProjects/Phenotype/repos is a container, NOT a git working tree",
     "legacy_airlock_daemon": {
       "pid": 2508,
       "socket": "~/.airlock/socket",

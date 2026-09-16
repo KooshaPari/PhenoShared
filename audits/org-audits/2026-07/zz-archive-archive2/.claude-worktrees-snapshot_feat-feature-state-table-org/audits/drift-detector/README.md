@@ -1,6 +1,6 @@
-# Migrated from KooshaPari/pheno-drift-detector on 2026-06-19 prior to repo deletion
+# Migrated from <REDACTED>/pheno-drift-detector on 2026-06-19 prior to repo deletion
 
-> Original source: https://github.com/KooshaPari/pheno-drift-detector (archived 2026-06-19, L5-112)
+> Original source: https://github.com/<REDACTED>/pheno-drift-detector (archived 2026-06-19, L5-112)
 > See: [findings/2026-06-19-L5-112-drift-detector-absorption.md](../../findings/2026-06-19-L5-112-drift-detector-absorption.md) for the absorption matrix.
 > Note: governance files (deny.toml, .gitattributes) are preserved as snapshots in `governance/` subdir for fleet-history provenance. They are NOT authoritative for org-audits — which has its own.
 
@@ -84,7 +84,7 @@ Threshold: **1.5**. Hits above the threshold get:
     --root . --format gh-issues --out /tmp/drift-$(date +\%Y\%m\%d).md \
     && gh issue create --label drift-detector --body-file /tmp/drift-*.md \
        --title "Drift detection $(date +\%Y-\%m-\%d)" \
-       --repo KooshaPari/phenotype-org-audits
+       --repo <REDACTED>/phenotype-org-audits
 ```
 
 ## Exit codes

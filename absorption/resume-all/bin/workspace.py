@@ -492,30 +492,30 @@ def _run_inline_tests() -> int:
     failures: list[str] = []
 
     # (1) cwd_prefix match — single prefix.
-    row = {"cwd": "/Users/kooshapari/CodeProjects/Phenotype/repos", "harness": "codex"}
-    ws = {"cwd_prefixes": ["/Users/kooshapari/CodeProjects/Phenotype/"]}
+    row = {"cwd": "/Users/<REDACTED>/CodeProjects/Phenotype/repos", "harness": "codex"}
+    ws = {"cwd_prefixes": ["/Users/<REDACTED>/CodeProjects/Phenotype/"]}
     if not _workspace_match_pane(row, ws):
         failures.append("(1) cwd_prefix single match failed")
-    row_miss = {"cwd": "/Users/kooshapari/Downloads/x", "harness": "codex"}
+    row_miss = {"cwd": "/Users/<REDACTED>/Downloads/x", "harness": "codex"}
     if _workspace_match_pane(row_miss, ws):
         failures.append("(1) cwd_prefix single non-match leaked")
     print("  (1) cwd_prefix match OK")
 
     # (2) harness filter — must reject wrong harness.
-    ws2 = {"cwd_prefixes": ["/Users/kooshapari/thegent/"],
+    ws2 = {"cwd_prefixes": ["/Users/<REDACTED>/thegent/"],
             "harnesses": ["codex", "forge", "droid"]}
-    row2 = {"cwd": "/Users/kooshapari/thegent/crates", "harness": "codex"}
+    row2 = {"cwd": "/Users/<REDACTED>/thegent/crates", "harness": "codex"}
     if not _workspace_match_pane(row2, ws2):
         failures.append("(2) harness allow match failed")
-    row2_bad = {"cwd": "/Users/kooshapari/thegent/crates", "harness": "cursor"}
+    row2_bad = {"cwd": "/Users/<REDACTED>/thegent/crates", "harness": "cursor"}
     if _workspace_match_pane(row2_bad, ws2):
         failures.append("(2) harness allow leaked cursor")
     print("  (2) harness filter OK")
 
     # (3) AND across categories — cwd matches but harness doesn't.
-    ws3 = {"cwd_prefixes": ["/Users/kooshapari/CodeProjects/Phenotype/"],
+    ws3 = {"cwd_prefixes": ["/Users/<REDACTED>/CodeProjects/Phenotype/"],
             "harnesses": ["codex", "forge"]}
-    row3 = {"cwd": "/Users/kooshapari/CodeProjects/Phenotype/repos", "harness": "cursor"}
+    row3 = {"cwd": "/Users/<REDACTED>/CodeProjects/Phenotype/repos", "harness": "cursor"}
     if _workspace_match_pane(row3, ws3):
         failures.append("(3) AND-across failed (cursor slipped through phenotype)")
     print("  (3) AND across categories OK")
@@ -529,7 +529,7 @@ def _run_inline_tests() -> int:
         cfg.write_text(
             '[[workspace]]\n'
             'name = "thegent"\n'
-            'cwd_prefixes = ["/Users/kooshapari/thegent/"]\n'
+            'cwd_prefixes = ["/Users/<REDACTED>/thegent/"]\n'
         )
         wss = load_workspaces(cfg)
         if any(w.get("name") == "phenotype" for w in wss):
@@ -583,9 +583,9 @@ def _run_inline_tests() -> int:
 
         # (6) argv-wins: a pane with session_id_source='argv' must match
         # even when the workspace says otherwise.
-        ws6 = {"cwd_prefixes": ["/Users/kooshapari/thegent/"],
+        ws6 = {"cwd_prefixes": ["/Users/<REDACTED>/thegent/"],
                 "harnesses": ["codex"]}
-        argv_row = {"cwd": "/Users/kooshapari/Downloads/elsewhere",
+        argv_row = {"cwd": "/Users/<REDACTED>/Downloads/elsewhere",
                     "harness": "cursor",
                     "session_id_source": "argv"}
         if not _workspace_match_pane(argv_row, ws6):
@@ -598,7 +598,7 @@ def _run_inline_tests() -> int:
         cfg2.write_text(
             '[[workspace]]\n'
             'name = "phenotype"\n'
-            'cwd_prefixes = ["/Users/kooshapari/CodeProjects/Phenotype/"]\n'
+            'cwd_prefixes = ["/Users/<REDACTED>/CodeProjects/Phenotype/"]\n'
         )
         # Direct file edits using our writers (bypassing module-global path).
         ws_before = load_workspaces(cfg2)
@@ -607,7 +607,7 @@ def _run_inline_tests() -> int:
         # Append a new workspace section.
         new_block = _serialise_workspace({
             "name": "thegent",
-            "cwd_prefixes": ["/Users/kooshapari/thegent/"],
+            "cwd_prefixes": ["/Users/<REDACTED>/thegent/"],
             "harnesses": ["codex", "forge", "droid"],
             "description": "thegent crates workspace",
         })
@@ -617,7 +617,7 @@ def _run_inline_tests() -> int:
         if len(ws_after) != 2:
             failures.append(f"(7) after-add expected 2 workspaces, got {len(ws_after)}")
         gent = next((w for w in ws_after if w.get("name") == "thegent"), None)
-        if not gent or "/Users/kooshapari/thegent/" not in (gent.get("cwd_prefixes") or []):
+        if not gent or "/Users/<REDACTED>/thegent/" not in (gent.get("cwd_prefixes") or []):
             failures.append("(7) thegent not present after add")
         print("  (7) end-to-end add/remove OK")
 

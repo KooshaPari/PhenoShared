@@ -1,6 +1,6 @@
 # phenoForge
 
-**DELETED** — This repository has been deleted from the KooshaPari organization.
+**DELETED** — This repository has been deleted from the <REDACTED> organization.
 
 All content has been migrated or is no longer needed. See the disposition register for details.
 

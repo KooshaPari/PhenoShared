@@ -17,7 +17,7 @@ Comprehensive guide for integrating and using Sentry error tracking across Agile
 ### For AgilePlus
 
 ```bash
-cd /Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus
 
 # Copy environment template
 cp .env.example .env
@@ -35,7 +35,7 @@ cargo test --test sentry_integration_test -- --nocapture
 ### For phenotype-infrakit
 
 ```bash
-cd /Users/kooshapari/CodeProjects/Phenotype/repos/phenotype-infrakit
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos/phenotype-infrakit
 
 # Copy environment template
 cp .env.example .env
@@ -50,7 +50,7 @@ cargo test -p phenotype-sentry-config --test sentry_integration_test -- --nocapt
 ### For heliosCLI
 
 ```bash
-cd /Users/kooshapari/CodeProjects/Phenotype/repos/heliosCLI
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos/heliosCLI
 
 # Copy environment template
 cp .env.example .env
@@ -146,7 +146,7 @@ fn main() {
 1. **Link GitHub Organization to Sentry:**
    - Go to https://sentry.io/settings/integrations/github/
    - Click "Add Installation"
-   - Authorize KooshaPari GitHub account
+   - Authorize <REDACTED> GitHub account
    - Select repositories: AgilePlus, phenotype-infrakit, heliosCLI
 
 2. **Enable Auto-Issue Creation:**
@@ -428,15 +428,15 @@ All three repos include integration tests:
 
 ```bash
 # AgilePlus
-cd /Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus
 cargo test --test sentry_integration_test -- --nocapture
 
 # phenotype-infrakit
-cd /Users/kooshapari/CodeProjects/Phenotype/repos/phenotype-infrakit
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos/phenotype-infrakit
 cargo test -p phenotype-sentry-config --test sentry_integration_test -- --nocapture
 
 # heliosCLI
-cd /Users/kooshapari/CodeProjects/Phenotype/repos/heliosCLI
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos/heliosCLI
 cargo test -p harness_utils --test sentry_integration_test -- --nocapture
 ```
 

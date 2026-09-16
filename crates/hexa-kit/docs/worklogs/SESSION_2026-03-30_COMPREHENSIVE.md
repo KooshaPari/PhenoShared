@@ -31,7 +31,7 @@ Established baseline understanding of:
 
 **Commit**: `f0ba6b23b58b20b151bcbbe87eb6730984126696`
 **Merge Date**: 2026-03-30 16:20:19 UTC
-**Co-Authors**: Claude Code + KooshaPari
+**Co-Authors**: Claude Code + <REDACTED>
 
 ### Changes Made
 

@@ -6,7 +6,7 @@
   "records": [
     {
       "name": "Quillr",
-      "remote": "KooshaPari/Quillr",
+      "remote": "<REDACTED>/Quillr",
       "visibility": "public",
       "archived": false,
       "license": "MIT",
@@ -21,7 +21,7 @@
     },
     {
       "name": "Grapheon",
-      "remote": "KooshaPari/Grapheon",
+      "remote": "<REDACTED>/Grapheon",
       "visibility": "private",
       "archived": false,
       "license": "MIT",
@@ -36,7 +36,7 @@
     },
     {
       "name": "Agentora",
-      "remote": "KooshaPari/Agentora",
+      "remote": "<REDACTED>/Agentora",
       "visibility": "public",
       "archived": false,
       "license": "MIT",

@@ -56,7 +56,7 @@ The four phases are ordered to minimize blast radius: a single-cluster Vault dev
 
 **Scope:**
 - Enable Vault `auth/oidc` for GitHub Actions, Buildkite, Jenkins (per ADR-079 reference impl).
-- Bind OIDC claims to Vault policies: `repo:kooshapari/*:ref:refs/heads/main` → `policy/ci-main`; `repo:kooshapari/*:ref:refs/heads/chore/*` → `policy/ci-pr`.
+- Bind OIDC claims to Vault policies: `repo:<REDACTED>/*:ref:refs/heads/main` → `policy/ci-main`; `repo:<REDACTED>/*:ref:refs/heads/chore/*` → `policy/ci-pr`.
 - Map humans via Okta OIDC (existing IdP); MFA enforced on every login.
 - Remove 47 long-lived `secrets.*` entries from `.github/workflows/*.yml` across 12 repos.
 
@@ -158,7 +158,7 @@ ADR-046 (2026-06-18) establishes **federation mTLS + OIDC** as the cross-org ser
 | **R1** | Vault cluster becomes single point of failure; HA standby fails to take over | Medium | High | Raft integrated storage with 1 leader + 2 standby; quarterly `vault operator raft snapshot save`; chaos day in Phase 4 verifies HA failover in < 60s | FTE-1 |
 | **R2** | OIDC token replay across CI providers (GitHub token used to fetch from Buildkite) | Medium | High | `bound_audiences` set per provider; `bound_subject` pinned to provider's claim; `wrap_ttl = 300s` for any wrapped token; weekly audit query for cross-provider token use | FTE-2 |
 | **R3** | Migration PR breaks CI for > 4 hours | High | Medium | Each workflow migration PR includes a documented `git revert` path; CI monitored via pheno-otel; per-workflow rollback runs in < 5 min | FTE-2 |
-| **R4** | Archived repos (`phenotype-ops`, `pheno-tracing`) still hold live tokens | Low | High | Phase 1 Week 2 audit: `gh api repos/kooshapari/{phenotype-ops,pheno-tracing}/actions/secrets` and rotate every token found; document as `gh repo archive` prerequisite | FTE-3 |
+| **R4** | Archived repos (`phenotype-ops`, `pheno-tracing`) still hold live tokens | Low | High | Phase 1 Week 2 audit: `gh api repos/<REDACTED>/{phenotype-ops,pheno-tracing}/actions/secrets` and rotate every token found; document as `gh repo archive` prerequisite | FTE-3 |
 | **R5** | Dependabot vulnerabilities block the cutover (43 open) | Medium | Low | Dependabot queue is parallelized to L51 (`pheno-bot` sweep); cutover proceeds once Vault paths are wired, regardless of dependabot backlog; SLSA L3 provenance (ADR-080) handles binary provenance post-cutover | FTE-3 |
 
 **Risk budget:** All 5 risks are **accepted** with mitigations in place. No risk requires escalation to the security review board. R1 and R2 require explicit chaos-day verification before cutover.
@@ -247,10 +247,10 @@ path "auth/*" {
 
 | Provider | Claim | Bound value | Vault policy |
 |----------|-------|-------------|--------------|
-| GitHub Actions | `repository` | `kooshapari/*` | `policy/ci-main` (main), `policy/ci-pr` (other refs) |
+| GitHub Actions | `repository` | `<REDACTED>/*` | `policy/ci-main` (main), `policy/ci-pr` (other refs) |
 | GitHub Actions | `ref` | `refs/heads/main`, `refs/heads/chore/*` | as above |
 | GitHub Actions | `aud` | `vault.example.internal` | tighten in Phase 2 W5 |
-| Buildkite | `organization_slug` | `kooshapari` | `policy/ci-main` |
+| Buildkite | `organization_slug` | `<REDACTED>` | `policy/ci-main` |
 | Buildkite | `pipeline_slug` | `*` | as above |
 | Jenkins | `jenkins_url` | `https://ci.example.internal/` | `policy/ci-main` |
 | Okta (human) | `email` | `*@phenotype.dev` | `policy/human-admin` (with MFA) |

@@ -4,10 +4,10 @@
 
 This crate is **not** the Phenotype linter runtime. For static analysis, vibes, scoring, and MCP fix loops, use:
 
-- [KodeVibe](https://github.com/KooshaPari/KodeVibe) `engine/` (successor to archived KodeVibeGo)
-- [kwality](https://github.com/KooshaPari/kwality) for LLM output validation
+- [KodeVibe](https://github.com/<REDACTED>/KodeVibe) `engine/` (successor to archived KodeVibeGo)
+- [kwality](https://github.com/<REDACTED>/kwality) for LLM output validation
 
-See [KodeVibe quality platform architecture](https://github.com/KooshaPari/KodeVibe/blob/main/docs/architecture/quality-platform.md).
+See [KodeVibe quality platform architecture](https://github.com/<REDACTED>/KodeVibe/blob/main/docs/architecture/quality-platform.md).
 
 ## Scope
 

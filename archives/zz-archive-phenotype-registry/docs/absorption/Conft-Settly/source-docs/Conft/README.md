@@ -1,6 +1,6 @@
 > **Work-state:** ARCHIVED
 >
-> Conft has been drained into [KooshaPari/Configra](https://github.com/KooshaPari/Configra)
+> Conft has been drained into [<REDACTED>/Configra](https://github.com/<REDACTED>/Configra)
 > and is now archived. See ADR-031 / L5-111.
 >
 > All unique content has been absorbed:
@@ -17,16 +17,16 @@
 **Universal Configuration Management with Cross-Language Support**
 
 This repository is archived. All content has been migrated to
-[**KooshaPari/Configra**](https://github.com/KooshaPari/Configra).
+[**<REDACTED>/Configra**](https://github.com/<REDACTED>/Configra).
 
 ## Migration
 
 | Content | New home |
 |---------|----------|
-| Rust `pheno-config` crate | [`Configra/crates/pheno-config`](https://github.com/KooshaPari/Configra/tree/main/crates/pheno-config) |
-| Rust `config-schema` crate | [`Configra/crates/config-schema`](https://github.com/KooshaPari/Configra/tree/main/crates/config-schema) |
-| `@phenotype/config-ts` (TypeScript) | [`Configra/typescript/packages/conft`](https://github.com/KooshaPari/Configra/tree/main/typescript/packages/conft) |
-| Docs, ADRs, governance | [Configra](https://github.com/KooshaPari/Configra) |
+| Rust `pheno-config` crate | [`Configra/crates/pheno-config`](https://github.com/<REDACTED>/Configra/tree/main/crates/pheno-config) |
+| Rust `config-schema` crate | [`Configra/crates/config-schema`](https://github.com/<REDACTED>/Configra/tree/main/crates/config-schema) |
+| `@phenotype/config-ts` (TypeScript) | [`Configra/typescript/packages/conft`](https://github.com/<REDACTED>/Configra/tree/main/typescript/packages/conft) |
+| Docs, ADRs, governance | [Configra](https://github.com/<REDACTED>/Configra) |
 
 ## License
 

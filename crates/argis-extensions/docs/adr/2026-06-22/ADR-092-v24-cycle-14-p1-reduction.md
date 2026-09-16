@@ -2,7 +2,7 @@
 
 - **Status**: ACCEPTED
 - **Date**: 2026-06-22
-- **Deciders**: orchestrator (KooshaPari)
+- **Deciders**: orchestrator (<REDACTED>)
 - **Cycle**: 14 (71-pillar cycle 14, P1 reduction round 5)
 - **Wave**: v24
 - **Branch**: `chore/v24-71-pillar-cycle-14-p1-2026-06-22`

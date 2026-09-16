@@ -1,7 +1,7 @@
 id: mac.m1_pro
 host: kooshas-laptop
 tailscale_ip: 100.112.14.98
-ssh_user: kooshapari
+ssh_user: <REDACTED>
 roles:
   M:
     name: Apple Silicon (M1 Pro)

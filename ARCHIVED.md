@@ -3,10 +3,10 @@
 ## Current status (2026-07-20)
 
 - **State**: LIVE — **CREATIVITY / DESIGN / UX spine**
-- **GitHub**: `KooshaPari/phenoDesign` (unarchived 2026-07-20)
+- **GitHub**: `<REDACTED>/phenoDesign` (unarchived 2026-07-20)
 - **Package**: `@phenotype/design`
 - **Registry**: `phenotype-registry` → `DECLARE_SPINE` / `docs/spine/phenoDesign.md`
-- **Asset pipeline peer**: [`KooshaPari/asset-engine`](https://github.com/KooshaPari/asset-engine) (extracted from `engine/`)
+- **Asset pipeline peer**: [`<REDACTED>/asset-engine`](https://github.com/<REDACTED>/asset-engine) (extracted from `engine/`)
 
 ## History
 

@@ -3,12 +3,12 @@ name = "pheno-plugin-git"
 version = "0.1.0"
 edition = "2021"
 license = "MIT OR Apache-2.0"
-repository = "https://github.com/KooshaPari/PhenoPlugins"
+repository = "https://github.com/<REDACTED>/PhenoPlugins"
 description = "pheno plugin git — Phenotype infrastructure crate (PhenoPlugins)"
 documentation = "https://docs.rs/pheno-plugin-git"
 keywords = ["phenotype", "pheno-plugins", "git"]
 categories = ["development-tools::version-control", "development-tools"]
-authors = ["kooshapari"]
+authors = ["<REDACTED>"]
 
 [dependencies]
 pheno-plugin-core = { path = "../pheno-plugin-core" }

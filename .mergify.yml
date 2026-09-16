@@ -24,7 +24,7 @@ pull_request_rules:
   # Auto-merge owner PRs when CI passes (no self-review required)
   - name: Auto-merge owner PRs + CI green
     conditions:
-      - author=KooshaPari
+      - author=<REDACTED>
       - check-success=ci
       - check-success=lint
       - check-success=typecheck
@@ -81,11 +81,11 @@ pull_request_rules:
     conditions:
       - -closed
       - -draft
-      - author != KooshaPari
+      - author != <REDACTED>
     actions:
       request_reviews:
         users:
-          - KooshaPari
+          - <REDACTED>
 
   # Label PRs based on changed files
   - name: Label Python changes

@@ -11,7 +11,7 @@
 
 ### 1. Expanded `agileplus-error-core` Crate
 
-**Location:** `/Users/kooshapari/CodeProjects/Phenotype/repos/crates/agileplus-error-core/`
+**Location:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos/crates/agileplus-error-core/`
 
 **Structure:**
 ```

@@ -54,7 +54,7 @@ invoked by the launchd plists.
 ## Install location
 
 The launchd plists hard-code the install path as
-`/Users/kooshapari/.forge/bin/`. To install from a clean checkout:
+`/Users/<REDACTED>/.forge/bin/`. To install from a clean checkout:
 
 ```sh
 mkdir -p ~/.forge/bin

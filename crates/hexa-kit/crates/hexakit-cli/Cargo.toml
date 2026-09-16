@@ -3,10 +3,10 @@ name = "hexakit-cli"
 version.workspace = true
 edition.workspace = true
 description = "HexaKit CLI — fleet repo bootstrap (`hexakit init`)"
-repository = "https://github.com/KooshaPari/HexaKit"
+repository = "https://github.com/<REDACTED>/HexaKit"
 rust-version.workspace = true
 license = "MIT OR Apache-2.0"
-authors = ["kooshapari"]
+authors = ["<REDACTED>"]
 
 [[bin]]
 name = "hexakit"

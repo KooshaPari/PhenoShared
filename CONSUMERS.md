@@ -17,7 +17,7 @@ This document records **what currently consumes `@phenotype/design`** and **whic
 | `PLAN.md` | Active; 4-phase token → components → VitePress → quality plan | Phase 1–3 work landed |
 | `README.md` (banner) | "ARCHIVED 2026-07-29" | **STALE** — conflicts with the three documents above and with the live consumer base below |
 | `package.json` | `"name": "@phenotype/design"`, publishes `css/`, `dist/`, `tokens/`, `docs/guide/glass-recipe.md` | Real `npm publish` target |
-| `package.json` (workspace) | `@kooshapari/phenotype-design-tokens` workspace subpackage with its **own** Tailwind palette (`#0ea5e9` sky vs `#7ebab5` teal) | See §3 below — drift, not duplication |
+| `package.json` (workspace) | `@<REDACTED>/phenotype-design-tokens` workspace subpackage with its **own** Tailwind palette (`#0ea5e9` sky vs `#7ebab5` teal) | See §3 below — drift, not duplication |
 
 ### Open question for the owner (not resolved here)
 
@@ -31,8 +31,8 @@ The following consumers were identified by static search across the Phenotype wo
 
 | Consumer | Pin | Use | Evidence |
 |----------|-----|-----|----------|
-| `phenodocs/phenodocs` (root) | `"@phenotype/design": "github:KooshaPari/phenoDesign"` | VitePress root theme | `phenodocs/phenodocs/package.json:23` + `phenodocs/phenodocs/.vitepress/theme/custom.css` (imports `@phenotype/design/css/vitepress-theme.css`) |
-| `phenodocs/phenodocs/packages/docs` | `"@phenotype/design": "github:KooshaPari/phenoDesign"` | `@phenotype/docs` shared theme | `phenodocs/phenodocs/packages/docs/package.json:18` + `phenodocs/phenodocs/packages/docs/src/css/custom.css` (imports `@phenotype/design/css/vitepress-theme.css`) |
+| `phenodocs/phenodocs` (root) | `"@phenotype/design": "github:<REDACTED>/phenoDesign"` | VitePress root theme | `phenodocs/phenodocs/package.json:23` + `phenodocs/phenodocs/.vitepress/theme/custom.css` (imports `@phenotype/design/css/vitepress-theme.css`) |
+| `phenodocs/phenodocs/packages/docs` | `"@phenotype/design": "github:<REDACTED>/phenoDesign"` | `@phenotype/docs` shared theme | `phenodocs/phenodocs/packages/docs/package.json:18` + `phenodocs/phenodocs/packages/docs/src/css/custom.css` (imports `@phenotype/design/css/vitepress-theme.css`) |
 | `phenotype-registry/registry/disposition-index.json` | records `absorbed_package_identity: "@phenotype/design"` | Spine registry | Line 1939 |
 
 ### What those consumers actually import
@@ -67,17 +67,17 @@ The following workspaces ship `keycap-palette.css` / `vitepress-theme.css` refer
 
 ---
 
-## 3. Drift between `@phenotype/design` and `@kooshapari/phenotype-design-tokens`
+## 3. Drift between `@phenotype/design` and `@<REDACTED>/phenotype-design-tokens`
 
 The workspace subpackage `packages/design-tokens/` ships a Tailwind config that uses **a different palette** than the canonical keycap:
 
-| Token | `@phenotype/design` (canonical) | `@kooshapari/phenotype-design-tokens` (workspace) |
+| Token | `@phenotype/design` (canonical) | `@<REDACTED>/phenotype-design-tokens` (workspace) |
 |-------|---------------------------------|--------------------------------------------------|
 | Primary | `#7ebab5` (teal, keycap.accent) | `#0ea5e9` (sky-500) |
 | Dark | `#090a0c` (keycap.dark.bg) | `#0f172a` (slate-900) |
 | Surface | `#f8f9fa` (keycap.light.bg) | `#f8fafc` (slate-50) |
 
-The workspace package's `package.json` description says: "Shared CSS and Tailwind tokens for Phenotype landing pages (canonical home: phenoDesign)". That claim is **partially true**: the package re-exports `tokens.css` and a `tailwind.config.mjs`, but the Tailwind config defines **its own** palette that does not derive from the canonical keycap. It is currently not wired into any consumer's `package.json` (no direct `@kooshapari/phenotype-design-tokens` dependency was found).
+The workspace package's `package.json` description says: "Shared CSS and Tailwind tokens for Phenotype landing pages (canonical home: phenoDesign)". That claim is **partially true**: the package re-exports `tokens.css` and a `tailwind.config.mjs`, but the Tailwind config defines **its own** palette that does not derive from the canonical keycap. It is currently not wired into any consumer's `package.json` (no direct `@<REDACTED>/phenotype-design-tokens` dependency was found).
 
 **This is documented drift, not a regression.** A future cleanup task may unify the two palettes or formally retire the workspace subpackage; both are out of scope for this fix.
 
@@ -89,18 +89,18 @@ Re-running this audit at any later date:
 
 ```bash
 # 1. Find direct consumers (package.json declarations)
-grep -rn '"@phenotype/design"\|"@kooshapari/phenotype-design-tokens"' \
-  --include="*.json" /Users/kooshapari/CodeProjects/Phenotype/repos \
+grep -rn '"@phenotype/design"\|"@<REDACTED>/phenotype-design-tokens"' \
+  --include="*.json" /Users/<REDACTED>/CodeProjects/Phenotype/repos \
   | grep -v node_modules | grep -v "phenoDesign/source-checkouts"
 
 # 2. Find CSS asset consumers
 grep -rln "keycap-palette.css\|vitepress-theme.css\|glass.css\|components.css" \
   --include="*.css" --include="*.ts" --include="*.tsx" --include="*.vue" \
-  /Users/kooshapari/CodeProjects/Phenotype/repos \
+  /Users/<REDACTED>/CodeProjects/Phenotype/repos \
   | grep -v node_modules | grep -v "phenoDesign/source-checkouts"
 
 # 3. Verify the package builds and exports are intact
-cd /Users/kooshapari/Downloads/chat1-portfolio-audit-2026-09-05/source-checkouts/20260908T082020Z/phenoDesign
+cd /Users/<REDACTED>/Downloads/chat1-portfolio-audit-2026-09-05/source-checkouts/20260908T082020Z/phenoDesign
 bun run build && bun run test
 ```
 

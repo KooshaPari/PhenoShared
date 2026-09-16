@@ -24,7 +24,7 @@ impl IpcEnvelope {
             command: "project_lookup".to_string(),
             request_id: "bench-request-001".to_string(),
             payload: IpcPayload::ProjectLookup {
-                repository: "kooshapari/BytePort".to_string(),
+                repository: "<REDACTED>/BytePort".to_string(),
                 branch: "main".to_string(),
                 include_metadata: true,
             },

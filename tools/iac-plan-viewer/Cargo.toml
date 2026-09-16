@@ -6,7 +6,7 @@ version = "0.1.0"
 description = "WASM-based IaC plan viewer — parse Terraform/OpenTofu plan JSON and render interactive diff summaries in the browser"
 edition = "2021"
 license = "MIT OR Apache-2.0"
-repository = "https://github.com/KooshaPari/phenotype-infra"
+repository = "https://github.com/<REDACTED>/phenotype-infra"
 authors = ["Phenotype Infra <infra@phenotype.dev>"]
 publish = false
 

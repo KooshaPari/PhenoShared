@@ -38,7 +38,7 @@ from html.parser import HTMLParser
 from pathlib import Path
 from typing import Any
 
-REPO_ROOT = Path("/Users/kooshapari/CodeProjects/Phenotype/repos")
+REPO_ROOT = Path("/Users/<REDACTED>/CodeProjects/Phenotype/repos")
 BEADS_PATH = REPO_ROOT / "phenotype-dag" / "beads.jsonl"
 BEAD_SOURCES = (BEADS_PATH,)
 OUTPUT_PATH = REPO_ROOT / "cockpit" / "bead-cockpit-20260809-191131-f5ca38f7.html"

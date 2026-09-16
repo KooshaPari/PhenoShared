@@ -2,7 +2,7 @@
 
 Human navigation index for OKF chunks. The machine index lives in [../manifest.okf.yaml](../manifest.okf.yaml).
 
-Spec: [HexaKit docs/genesis/OKF.md](https://github.com/KooshaPari/HexaKit/blob/main/docs/genesis/OKF.md)
+Spec: [HexaKit docs/genesis/OKF.md](https://github.com/<REDACTED>/HexaKit/blob/main/docs/genesis/OKF.md)
 
 ## Purpose
 

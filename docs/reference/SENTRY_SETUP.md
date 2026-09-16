@@ -17,9 +17,9 @@ All projects use the Sentry Rust SDK v0.33+ for error capture, performance monit
 
 | Project | Type | Dashboard | DSN | GitHub Repo |
 |---------|------|-----------|-----|------------|
-| AgilePlus | Rust | `https://sentry.io/organizations/phenotype/projects/agileplus/` | `SENTRY_DSN_AGILEPLUS` | `KooshaPari/AgilePlus` |
-| phenotype-infrakit | Rust | `https://sentry.io/organizations/phenotype/projects/phenotype-infrakit/` | `SENTRY_DSN_INFRAKIT` | `KooshaPari/phenotype-infrakit` |
-| heliosCLI | Rust | `https://sentry.io/organizations/phenotype/projects/helioscli/` | `SENTRY_DSN_HELIOSCLI` | `KooshaPari/heliosCLI` |
+| AgilePlus | Rust | `https://sentry.io/organizations/phenotype/projects/agileplus/` | `SENTRY_DSN_AGILEPLUS` | `<REDACTED>/AgilePlus` |
+| phenotype-infrakit | Rust | `https://sentry.io/organizations/phenotype/projects/phenotype-infrakit/` | `SENTRY_DSN_INFRAKIT` | `<REDACTED>/phenotype-infrakit` |
+| heliosCLI | Rust | `https://sentry.io/organizations/phenotype/projects/helioscli/` | `SENTRY_DSN_HELIOSCLI` | `<REDACTED>/heliosCLI` |
 
 ### Accessing Sentry Dashboard
 
@@ -32,12 +32,12 @@ All projects use the Sentry Rust SDK v0.33+ for error capture, performance monit
 
 DSN tokens are stored as GitHub Secrets in each repository:
 
-**AgilePlus (`KooshaPari/AgilePlus`)**:
+**AgilePlus (`<REDACTED>/AgilePlus`)**:
 ```
 SENTRY_DSN_AGILEPLUS=https://[key]@o[org-id].ingest.us.sentry.io/[project-id]
 ```
 
-**phenotype-infrakit (`KooshaPari/phenotype-infrakit`)**:
+**phenotype-infrakit (`<REDACTED>/phenotype-infrakit`)**:
 ```
 SENTRY_DSN_INFRAKIT=https://[key]@o[org-id].ingest.us.sentry.io/[project-id]
 ```
@@ -232,7 +232,7 @@ Sentry's GitHub integration automatically creates issues and links commits/relea
 
 2. **Link Repository**:
    - For each project, go to Project Settings → Integrations
-   - Select the repository (e.g., `KooshaPari/AgilePlus`)
+   - Select the repository (e.g., `<REDACTED>/AgilePlus`)
    - Enable "Create issues" and "Link commits"
 
 3. **Configure Alert Rules**:

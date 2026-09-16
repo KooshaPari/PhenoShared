@@ -1,6 +1,6 @@
 {
   "audit_date": "2026-07-23",
-  "scope": "KooshaPari GitHub repositories <= 1000 KB compared with projects/*.json",
+  "scope": "<REDACTED> GitHub repositories <= 1000 KB compared with projects/*.json",
   "policy": "preserve-first; no deletion or branch pruning",
   "candidates": [
     {"repo": "4sgm-archive2", "disposition": "ARCHIVE", "canonical_source": "4sgm"},

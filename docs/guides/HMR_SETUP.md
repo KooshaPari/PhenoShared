@@ -49,25 +49,25 @@ cd docs && npm run docs:dev
 
 ```bash
 # AgilePlus Dashboard
-cd /Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus/crates/agileplus-dashboard/web
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus/crates/agileplus-dashboard/web
 npm run dev
 # Listens on http://localhost:5173
 # API proxy: http://localhost:3000
 
 # heliosApp (standalone)
-cd /Users/kooshapari/CodeProjects/Phenotype/repos/heliosApp
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos/heliosApp
 npm run dev
 # Listens on http://localhost:3001
 # As module federation remote: http://localhost:3001/remoteEntry.js
 
 # heliosApp (federated/remote mode)
-cd /Users/kooshapari/CodeProjects/Phenotype/repos/heliosApp
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos/heliosApp
 npm run dev:remote
 # Serves only the remote entry
 # Use from host app configured with remotes.heliosApp='heliosApp@http://localhost:3001/remoteEntry.js'
 
 # AgilePlus Docs
-cd /Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus/docs
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus/docs
 npm run docs:dev
 # Listens on http://localhost:5175
 ```
@@ -78,7 +78,7 @@ npm run docs:dev
 
 ### AgilePlus Dashboard (`agileplus-dashboard/web`)
 
-**Location**: `/Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus/crates/agileplus-dashboard/web/`
+**Location**: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus/crates/agileplus-dashboard/web/`
 
 **Vite Configuration**:
 ```typescript
@@ -107,7 +107,7 @@ export default defineConfig({
 
 **Start Development**:
 ```bash
-cd /Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus/crates/agileplus-dashboard/web
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus/crates/agileplus-dashboard/web
 npm install    # First time only
 npm run dev    # Start dev server with HMR
 ```
@@ -129,7 +129,7 @@ npm run dev    # Start dev server with HMR
 
 ### heliosApp (Module Federation Remote)
 
-**Location**: `/Users/kooshapari/CodeProjects/Phenotype/repos/heliosApp/`
+**Location**: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/heliosApp/`
 
 **Vite Configuration**:
 ```typescript
@@ -175,7 +175,7 @@ export default defineConfig({
 
 **Start Development**:
 ```bash
-cd /Users/kooshapari/CodeProjects/Phenotype/repos/heliosApp
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos/heliosApp
 
 # Standalone mode (full app with HMR)
 npm install    # First time only
@@ -201,7 +201,7 @@ npm run dev:remote # Serves remoteEntry.js on http://localhost:3001
 
 ### portage/viewer
 
-**Location**: `/Users/kooshapari/CodeProjects/Phenotype/repos/portage/viewer/`
+**Location**: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/portage/viewer/`
 
 **Vite Configuration**:
 ```typescript
@@ -214,7 +214,7 @@ export default defineConfig({
 
 **Start Development**:
 ```bash
-cd /Users/kooshapari/CodeProjects/Phenotype/repos/portage/viewer
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos/portage/viewer
 npm install
 npm run dev    # Default Vite dev server with HMR
 ```
@@ -223,11 +223,11 @@ npm run dev    # Default Vite dev server with HMR
 
 ### AgilePlus Docs (VitePress)
 
-**Location**: `/Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus/docs/`
+**Location**: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus/docs/`
 
 **Start Development**:
 ```bash
-cd /Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus/docs
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus/docs
 npm install
 npm run docs:dev   # VitePress dev server with HMR
 ```

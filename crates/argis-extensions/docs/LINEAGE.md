@@ -5,7 +5,7 @@
 
 ## TL;DR
 
-`KooshaPari/argis-extensions` is **not a fork** of `05dunski/argis-extensions`.
+`<REDACTED>/argis-extensions` is **not a fork** of `05dunski/argis-extensions`.
 GitHub's `parent.full_name` metadata for this repo is **incorrect** — a
 residual artifact of a prior backup/restore that lost the original lineage
 table. This repo was the source all along.
@@ -14,7 +14,7 @@ table. This repo was the source all along.
 
 | Probe | Result |
 |---|---|
-| This repo's creation date (`KooshaPari/argis-extensions`) | **2026-04-06** |
+| This repo's creation date (`<REDACTED>/argis-extensions`) | **2026-04-06** |
 | Parent's declared creation date (`05dunski/argis-extensions`) | 2026-05-04 — **~4 weeks AFTER ours**. A fork cannot be created before the upstream it forked from. |
 | `05dunski/argis-extensions` today | **404 — does not exist** |
 | `05dunski` user account | **404 — does not exist** |
@@ -31,12 +31,12 @@ no longer exist, and the declared parent's creation date postdates ours by
 several weeks, which is impossible for a genuine fork relationship.
 
 This is the same false-fork pattern previously corrected for
-`KooshaPari/Agentora` (condor lineage correction, PR #206) and identified in
+`<REDACTED>/Agentora` (condor lineage correction, PR #206) and identified in
 `Frostify`.
 
 ## Implications
 
-- All future PRs go to `KooshaPari/argis-extensions` only.
+- All future PRs go to `<REDACTED>/argis-extensions` only.
 - The `parent.full_name` field will remain stale until GitHub provides a way
   to clear it. This document exists to correct the public record.
 - No upstream to sync. Any fork-sync automation targeting `05dunski`

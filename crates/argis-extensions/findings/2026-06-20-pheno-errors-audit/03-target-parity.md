@@ -2,9 +2,9 @@
 
 **Date:** 2026-06-20 14:35 PDT
 **Agent:** Phase 1C — Target Parity
-**Source repo:** `KooshaPari/pheno-errors` (local: `/Users/kooshapari/CodeProjects/Phenotype/repos/pheno-errors`)
+**Source repo:** `<REDACTED>/pheno-errors` (local: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/pheno-errors`)
 **Source classification (per ADR-022):** Rust primitive lib (`pheno-*-lib` / `pheno-*-core`)
-**Audit directory:** `/Users/kooshapari/CodeProjects/Phenotype/repos/findings/2026-06-20-pheno-errors-audit/`
+**Audit directory:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos/findings/2026-06-20-pheno-errors-audit/`
 
 ---
 
@@ -101,13 +101,13 @@ Public surface that must be covered by the target:
 | Field | Value | Evidence |
 |---|---|---|
 | Exists | **NO** (message: "Not Found") | `gh api /repos/phenolang/pheno-errors` → HTTP 404 |
-| Verdict | **N/A — no upstream mirror** | No `phenolang` org on KooshaPari's fleet |
+| Verdict | **N/A — no upstream mirror** | No `phenolang` org on <REDACTED>'s fleet |
 
-### Candidate 2 — `KooshaPari/pheno-errors` (the source itself)
+### Candidate 2 — `<REDACTED>/pheno-errors` (the source itself)
 
 | Field | Value | Evidence |
 |---|---|---|
-| Exists | **YES** | `gh api /repos/KooshaPari/pheno-errors` |
+| Exists | **YES** | `gh api /repos/<REDACTED>/pheno-errors` |
 | Archived | **YES** (`archived: true`) | Same `gh api` call, JSON key `archived` |
 | `pushed_at` | `2026-06-20T12:22:39Z` (archived today, 2026-06-20) | Same call, JSON key `pushed_at` |
 | `default_branch` | `main` | Same call |
@@ -116,7 +116,7 @@ Public surface that must be covered by the target:
 | `description` | "Canonical AppError type for the pheno-* fleet." | Repo metadata |
 | `language` | Rust | Same call |
 | Source has 5-variant AppError + 15-variant ErrorKind + OTLP/tracing modules | YES (src/lib.rs) | See §0 above |
-| Prior absorb PRs (search "pheno-errors" in KooshaPari) | 0 results | `gh search prs "pheno-errors" --owner KooshaPari --limit 100` returns empty (all states) |
+| Prior absorb PRs (search "pheno-errors" in <REDACTED>) | 0 results | `gh search prs "pheno-errors" --owner <REDACTED> --limit 100` returns empty (all states) |
 | Verdict | **SOURCE — ARCHIVED, NOT ABSORBING** | Repo archived today; this is the source being evaluated, not an absorption target |
 
 **Key citation:**
@@ -203,11 +203,11 @@ Public surface that must be covered by the target:
 
 | Field | Value | Evidence |
 |---|---|---|
-| Exists | **YES** (`KooshaPari/Configra`) | Per AGENTS.md Decision A |
+| Exists | **YES** (`<REDACTED>/Configra`) | Per AGENTS.md Decision A |
 | Has errors module | **LIKELY PARTIAL** — Configra is the canonical config substrate (ADR-022, ADR-031, ADR-035); it likely has config-specific error variants (`ConfigInvalid`, `MissingKey`, `ParseError`) | |
 | Verdict | **N/A — domain-specific** | Configra errors are about configuration; pheno-errors is the substrate-level `Error` + `ErrorKind` + `ErrorContext` |
 
-### Candidate 13 — `KooshaPari/pheno` (workspace) → `pheno/crates/phenotype-error-core` ★ **THE ACTUAL TARGET**
+### Candidate 13 — `<REDACTED>/pheno` (workspace) → `pheno/crates/phenotype-error-core` ★ **THE ACTUAL TARGET**
 
 | Field | Value | Evidence |
 |---|---|---|
@@ -253,13 +253,13 @@ Command: `git grep "pheno-errors" -- ':!pheno-errors/'` from monorepo root
 
 | Search | Result | Evidence |
 |---|---|---|
-| `gh search code "pheno-errors" --owner KooshaPari --limit 30` | **0 results** (across all KooshaPari repos) | No in-repo cross-references in main branch |
-| `gh search code "AppError" --owner KooshaPari --limit 30` | **0 results** (across all KooshaPari repos) | No consumers of the AppError API at the surface level (AppError is internal to each repo's own use) |
-| `gh search code "phenotype-error-core" --owner KooshaPari --limit 30` | **0 results** | New crate, not yet referenced from other repos |
-| `gh search code "phenotype-errors" --owner KooshaPari --limit 30` | **0 results** | No consumer of any "phenotype-errors" crate exists in the fleet |
-| `gh search code "use pheno_errors" --owner KooshaPari --limit 30` | **0 results** | No `use pheno_errors::...` imports in any other KooshaPari repo |
+| `gh search code "pheno-errors" --owner <REDACTED> --limit 30` | **0 results** (across all <REDACTED> repos) | No in-repo cross-references in main branch |
+| `gh search code "AppError" --owner <REDACTED> --limit 30` | **0 results** (across all <REDACTED> repos) | No consumers of the AppError API at the surface level (AppError is internal to each repo's own use) |
+| `gh search code "phenotype-error-core" --owner <REDACTED> --limit 30` | **0 results** | New crate, not yet referenced from other repos |
+| `gh search code "phenotype-errors" --owner <REDACTED> --limit 30` | **0 results** | No consumer of any "phenotype-errors" crate exists in the fleet |
+| `gh search code "use pheno_errors" --owner <REDACTED> --limit 30` | **0 results** | No `use pheno_errors::...` imports in any other <REDACTED> repo |
 
-**Interpretation:** `pheno-errors` is a **standalone primitive lib with zero external consumers in the KooshaPari fleet**. This is consistent with its ADR-022 classification as a Rust primitive lib (low-coupling, opt-in substrate). The absence of consumers simplifies absorption: there are no downstream callers to break.
+**Interpretation:** `pheno-errors` is a **standalone primitive lib with zero external consumers in the <REDACTED> fleet**. This is consistent with its ADR-022 classification as a Rust primitive lib (low-coupling, opt-in substrate). The absence of consumers simplifies absorption: there are no downstream callers to break.
 
 ### 2.3 PhenoCompose TypeScript port reference
 
@@ -272,19 +272,19 @@ Command: `git grep "pheno-errors" -- ':!pheno-errors/'` from monorepo root
 
 ## 3. Prior absorb PR search
 
-Command: `gh pr list --repo KooshaPari/<target> --state all --search "pheno-errors"` for each candidate
+Command: `gh pr list --repo <REDACTED>/<target> --state all --search "pheno-errors"` for each candidate
 
 | Target | Search Result | Evidence |
 |---|---|---|
-| `KooshaPari/pheno-errors` | 0 PRs found with search query "pheno-errors" | `gh search prs "pheno-errors" --owner KooshaPari --limit 100 --state all` → empty list |
-| `KooshaPari/pheno` | No PRs found | `gh search prs "pheno-errors" --owner KooshaPari --limit 100 --state all` → empty list |
-| `KooshaPari/phenotype-error-core` (does not exist as standalone repo) | N/A — crate lives in `pheno` workspace | |
-| `KooshaPari/pheno-otel` | No PRs found | Same |
-| `KooshaPari/pheno-tracing` | No PRs found | Same |
-| `KooshaPari/pheno-port-adapter` | No PRs found | Same |
-| `KooshaPari/phenotype-hub` | No PRs found | Same |
-| `KooshaPari/phenotype-registry` | No PRs found | Same |
-| `KooshaPari/Configra` | No PRs found | Same |
+| `<REDACTED>/pheno-errors` | 0 PRs found with search query "pheno-errors" | `gh search prs "pheno-errors" --owner <REDACTED> --limit 100 --state all` → empty list |
+| `<REDACTED>/pheno` | No PRs found | `gh search prs "pheno-errors" --owner <REDACTED> --limit 100 --state all` → empty list |
+| `<REDACTED>/phenotype-error-core` (does not exist as standalone repo) | N/A — crate lives in `pheno` workspace | |
+| `<REDACTED>/pheno-otel` | No PRs found | Same |
+| `<REDACTED>/pheno-tracing` | No PRs found | Same |
+| `<REDACTED>/pheno-port-adapter` | No PRs found | Same |
+| `<REDACTED>/phenotype-hub` | No PRs found | Same |
+| `<REDACTED>/phenotype-registry` | No PRs found | Same |
+| `<REDACTED>/Configra` | No PRs found | Same |
 
 **Interpretation:** There are **zero open or merged PRs porting pheno-errors content to any other repo**. This is because:
 
@@ -337,7 +337,7 @@ For each meaningful source item in `pheno-errors` (§0), map to target repo with
 
 ## 5. Recommended target verdict
 
-### 5.1 Recommended target: `KooshaPari/pheno` → `pheno/crates/phenotype-error-core`
+### 5.1 Recommended target: `<REDACTED>/pheno` → `pheno/crates/phenotype-error-core`
 
 **Confidence:** **HIGH (0.95)**
 
@@ -347,7 +347,7 @@ For each meaningful source item in `pheno-errors` (§0), map to target repo with
 2. **README supersession statement** (`pheno/crates/phenotype-error-core/README.md:1-30`) — explicit "supersedes pheno-errors"
 3. **Full surface parity** (§4 above) — all 13 source items have EXACT EQUIVALENT or SUPERSET coverage
 4. **No external consumers** (§2.2) — zero breakage risk; absorption is a clean delete-after-patches
-5. **Source already archived** (§1 Candidate 2) — `KooshaPari/pheno-errors` is `archived: true`, `pushed_at: 2026-06-20T12:22:39Z` (archived today)
+5. **Source already archived** (§1 Candidate 2) — `<REDACTED>/pheno-errors` is `archived: true`, `pushed_at: 2026-06-20T12:22:39Z` (archived today)
 6. **ADR-022 alignment** — substrate canonicals live in `pheno/` workspace (the canonical substrate monorepo)
 7. **Prior art** — `findings/2026-06-19-L5-500-config-consolidation-closure.md` documents the same pattern for the 6-repo config consolidation (cheap-llm-mcp, Settly, Profila, clap-ext, phenotype-py-utils, etc.)
 8. **No absorb PRs needed** — content was ported at substrate-creation time, not via PR (consistent with the "delete-after-patches" pattern)
@@ -359,8 +359,8 @@ For each meaningful source item in `pheno-errors` (§0), map to target repo with
 | 1 | Re-pin `phenotype-error-core` version in `pheno/Cargo.toml` workspace to a 1.0.0 release (currently no version bump since creation) | pheno-error-core maintainer | Required for downstream consumption |
 | 2 | Publish `phenotype-error-core` to crates.io as `phenotype-error-core` | pheno-error-core maintainer | Required for non-path consumers |
 | 3 | Migrate PhenoCompose TS port from `packages/pheno-errors` to `@phenotype/error-core` (TS polyglot facade) — **OR** — extract TS port to `phenotype-error-core-ts` repo | PhenoCompose maintainer | Optional; v0.4 OTLP/tracing additions not yet ported to TS |
-| 4 | Document the migration in `pheno-errors/README.md` (one-liner: "Moved to KooshaPari/pheno/crates/phenotype-error-core; this repo is archived.") | pheno-errors maintainer | Optional; repo is archived so this is informational |
-| 5 | Update `phenotype-registry/disposition-index.json` row for `sr-pheno-errors` to reflect the migration (set `target_repo: KooshaPari/pheno`, `target_path: crates/phenotype-error-core`, `relocated_date: 2026-06-20`, `fsm: done`) | registry maintainer | Required for SSOT completeness |
+| 4 | Document the migration in `pheno-errors/README.md` (one-liner: "Moved to <REDACTED>/pheno/crates/phenotype-error-core; this repo is archived.") | pheno-errors maintainer | Optional; repo is archived so this is informational |
+| 5 | Update `phenotype-registry/disposition-index.json` row for `sr-pheno-errors` to reflect the migration (set `target_repo: <REDACTED>/pheno`, `target_path: crates/phenotype-error-core`, `relocated_date: 2026-06-20`, `fsm: done`) | registry maintainer | Required for SSOT completeness |
 
 ### 5.4 Distinguish SUPERSEDED_PARITY vs SUPERSEDED_BETTER
 
@@ -380,21 +380,21 @@ The verdict is **SUPERSEDED_BETTER** (not just SUPERSEDED_PARITY):
 
 ### 6.1 ADR-022 original placement
 
-ADR-022 (per AGENTS.md § "Active ADRs" 2026-06-15 wave) establishes: Rust primitive libs live as `pheno-*-lib` / `pheno-*-core` in the `pheno/` workspace. The `pheno-errors` repo was originally created as `KooshaPari/pheno-errors` (a standalone GitHub repo with a single crate).
+ADR-022 (per AGENTS.md § "Active ADRs" 2026-06-15 wave) establishes: Rust primitive libs live as `pheno-*-lib` / `pheno-*-core` in the `pheno/` workspace. The `pheno-errors` repo was originally created as `<REDACTED>/pheno-errors` (a standalone GitHub repo with a single crate).
 
 ### 6.2 What ADR-022 should be updated to say
 
-The current placement (`KooshaPari/pheno-errors` standalone repo) is **inconsistent with ADR-022** because ADR-022 specifies primitive libs live in the `pheno/` workspace as `pheno-*-core` subcrates.
+The current placement (`<REDACTED>/pheno-errors` standalone repo) is **inconsistent with ADR-022** because ADR-022 specifies primitive libs live in the `pheno/` workspace as `pheno-*-core` subcrates.
 
 ### 6.3 Recommended ADR-022 amendment (or new ADR-035-supplement)
 
-**Proposed ADR-035-Supplement or new ADR-052:** *"Primitive lib canonical locations are subcrates of `KooshaPari/pheno`, not standalone repos."*
+**Proposed ADR-035-Supplement or new ADR-052:** *"Primitive lib canonical locations are subcrates of `<REDACTED>/pheno`, not standalone repos."*
 
 | Pre-update placement | Post-update placement |
 |---|---|
-| `KooshaPari/pheno-errors` (standalone repo, archived today) | `KooshaPari/pheno/crates/phenotype-error-core` (subcrate of canonical substrate monorepo) |
-| `KooshaPari/pheno-config` (similar pattern, per ADR-022) | `KooshaPari/Configra` per ADR-031 (absorbs phenotype-config) — Configra is a special case because it was already a standalone repo with prior history |
-| `KooshaPari/pheno-tracing` (per ADR-036B) | Should also migrate to `KooshaPari/pheno/crates/pheno-tracing-core`? — **OUT OF SCOPE for this audit**, but worth a future ADR review |
+| `<REDACTED>/pheno-errors` (standalone repo, archived today) | `<REDACTED>/pheno/crates/phenotype-error-core` (subcrate of canonical substrate monorepo) |
+| `<REDACTED>/pheno-config` (similar pattern, per ADR-022) | `<REDACTED>/Configra` per ADR-031 (absorbs phenotype-config) — Configra is a special case because it was already a standalone repo with prior history |
+| `<REDACTED>/pheno-tracing` (per ADR-036B) | Should also migrate to `<REDACTED>/pheno/crates/pheno-tracing-core`? — **OUT OF SCOPE for this audit**, but worth a future ADR review |
 
 ### 6.4 What this audit does NOT change about ADR-022
 
@@ -414,7 +414,7 @@ The **substance** of ADR-022 (substrate canonicals live in `pheno-*-core` family
 
 ```bash
 # Source repo metadata (archived today, 2026-06-20)
-gh api /repos/KooshaPari/pheno-errors \
+gh api /repos/<REDACTED>/pheno-errors \
   | python3 -c "import json, sys; d=json.load(sys.stdin); print(json.dumps({k: d.get(k) for k in ['archived', 'disabled', 'pushed_at', 'updated_at', 'default_branch', 'description', 'language', 'size', 'fork']}, indent=2))"
 # Expected:
 # archived: true
@@ -424,7 +424,7 @@ gh api /repos/KooshaPari/pheno-errors \
 # language: Rust
 
 # Source repo local state
-cd /Users/kooshapari/CodeProjects/Phenotype/repos
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos
 git log --oneline -3 pheno-errors/
 # Expected (recent commits):
 # 7790368622 fix(pheno-errors): convert proptest! block to standalone #[test] using TestRunner.run
@@ -438,8 +438,8 @@ cat pheno-errors/Cargo.toml | grep -E "^version"
 ### 7.2 Target repo state
 
 ```bash
-# Target repo existence (KooshaPari/pheno — the substrate monorepo)
-gh api /repos/KooshaPari/pheno \
+# Target repo existence (<REDACTED>/pheno — the substrate monorepo)
+gh api /repos/<REDACTED>/pheno \
   | python3 -c "import json, sys; d=json.load(sys.stdin); print(json.dumps({k: d.get(k) for k in ['archived', 'pushed_at', 'language', 'size']}, indent=2))"
 # Expected: archived: false, language: Rust
 
@@ -459,14 +459,14 @@ head -1 pheno/crates/phenotype-error-core/README.md
 
 ```bash
 # In-monorepo cross-references
-cd /Users/kooshapari/CodeProjects/Phenotype/repos
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos
 git grep "pheno-errors" -- ':!pheno-errors/'
 # Expected: only in pheno/crates/phenotype-error-core/{CANONICAL.md,README.md,Cargo.toml,src/lib.rs}
 
 # GitHub-wide cross-references (zero consumers)
-gh search code "pheno-errors" --owner KooshaPari --limit 30
-gh search code "AppError" --owner KooshaPari --limit 30
-gh search code "phenotype-error-core" --owner KooshaPari --limit 30
+gh search code "pheno-errors" --owner <REDACTED> --limit 30
+gh search code "AppError" --owner <REDACTED> --limit 30
+gh search code "phenotype-error-core" --owner <REDACTED> --limit 30
 # Expected: all return 0 results (no consumers)
 
 # TypeScript polyglot port
@@ -478,7 +478,7 @@ cat PhenoCompose/packages/pheno-errors/src/index.ts | head -31
 
 ```bash
 # Search for any absorb PRs (none expected)
-gh search prs "pheno-errors" --owner KooshaPari --limit 100 --state all
+gh search prs "pheno-errors" --owner <REDACTED> --limit 100 --state all
 # Expected: empty list (absorption was done via de-novo crate creation, not PR)
 ```
 
@@ -495,7 +495,7 @@ ls phenoShared/crates/pheno-errors/ 2>&1
 
 ```bash
 # Confirm ADR-022 is referenced in AGENTS.md
-grep -A 3 "ADR-022" /Users/kooshapari/CodeProjects/Phenotype/repos/AGENTS.md | head -20
+grep -A 3 "ADR-022" /Users/<REDACTED>/CodeProjects/Phenotype/repos/AGENTS.md | head -20
 # Expected: ADR-022 entry in the 2026-06-15 evening wave section
 ```
 
@@ -503,11 +503,11 @@ grep -A 3 "ADR-022" /Users/kooshapari/CodeProjects/Phenotype/repos/AGENTS.md | h
 
 ```bash
 # Verify the same pattern was used for prior 6-repo config consolidation
-ls /Users/kooshapari/CodeProjects/Phenotype/repos/findings/ | grep -iE "L5-500|consolidation"
+ls /Users/<REDACTED>/CodeProjects/Phenotype/repos/findings/ | grep -iE "L5-500|consolidation"
 # Expected: findings/2026-06-19-L5-500-config-consolidation-closure.md
 
 # Verify the same pattern was used for prior phenotype-bus / pheno-worklog-schema / phenotype-config audits
-ls /Users/kooshapari/CodeProjects/Phenotype/repos/findings/ | grep -iE "pheno-worklog|phenotype-bus|phenotype-config" | head -10
+ls /Users/<REDACTED>/CodeProjects/Phenotype/repos/findings/ | grep -iE "pheno-worklog|phenotype-bus|phenotype-config" | head -10
 ```
 
 ---
@@ -520,7 +520,7 @@ ls /Users/kooshapari/CodeProjects/Phenotype/repos/findings/ | grep -iE "pheno-wo
 | Candidates with EXACT or SUPERSET parity | **1** (`pheno/crates/phenotype-error-core`) |
 | Candidates with PARTIAL parity | **1** (`PhenoCompose/packages/pheno-errors` TS port) |
 | Candidates with NO relevant content | **11** (phenoShared tombstone, phenolang no-exist, pheno-otel/pheno-tracing downstream, pheno-port-adapter/pheno-context/phenotype-hub/phenotype-registry/PhenoEvents/PhenoFastMCP/Configra out-of-concern) |
-| Recommended target | **`KooshaPari/pheno` → `pheno/crates/phenotype-error-core`** |
+| Recommended target | **`<REDACTED>/pheno` → `pheno/crates/phenotype-error-core`** |
 | Recommended-target confidence | **0.95** (HIGH) |
 | Source repo state | **ARCHIVED 2026-06-20 12:22:39Z** |
 | External consumers of source | **0** (in fleet) |
@@ -531,8 +531,8 @@ ls /Users/kooshapari/CodeProjects/Phenotype/repos/findings/ | grep -iE "pheno-wo
 
 ## 9. The 3 most interesting findings
 
-1. **`pheno-errors` was archived TODAY (2026-06-20 12:22:39Z)** — this audit is being performed at the moment the absorption is being finalized; the GitHub-side archive flag is the strongest possible evidence that the migration is the intended direction. The `phenotype-error-core` crate in `KooshaPari/pheno` is the canonical absorber and has been the canonical home for an extended period (per the "Supersedes pheno-errors" README statement, which is not a recent addition).
+1. **`pheno-errors` was archived TODAY (2026-06-20 12:22:39Z)** — this audit is being performed at the moment the absorption is being finalized; the GitHub-side archive flag is the strongest possible evidence that the migration is the intended direction. The `phenotype-error-core` crate in `<REDACTED>/pheno` is the canonical absorber and has been the canonical home for an extended period (per the "Supersedes pheno-errors" README statement, which is not a recent addition).
 
-2. **`pheno-errors` has ZERO external consumers in the KooshaPari fleet** — `gh search code "pheno-errors" --owner KooshaPari` returns 0 results across all repos; `gh search code "AppError" --owner KooshaPari` also returns 0 results; `gh search code "use pheno_errors" --owner KooshaPari` also returns 0. This is unusual for a primitive lib and means the absorption is a clean **delete-after-patches** with no downstream breakage risk.
+2. **`pheno-errors` has ZERO external consumers in the <REDACTED> fleet** — `gh search code "pheno-errors" --owner <REDACTED>` returns 0 results across all repos; `gh search code "AppError" --owner <REDACTED>` also returns 0 results; `gh search code "use pheno_errors" --owner <REDACTED>` also returns 0. This is unusual for a primitive lib and means the absorption is a clean **delete-after-patches** with no downstream breakage risk.
 
 3. **The PhenoCompose TypeScript port (`packages/pheno-errors/src/index.ts`) is FROZEN at the pre-v0.4 API** — only 31 lines, only the v0.1 AppError class (5 variants), none of the OTLP/tracing/ErrorContext additions from the v0.4 Rust surface. The TS port is effectively a "pre-OTLP snapshot" and would need its own polyglot substrate home (`@phenotype/error-core` or `phenotype-error-core-ts`) to be on-parity with the Rust substrate. This is a separate workstream from the Rust absorption and is intentionally out of scope for this audit.

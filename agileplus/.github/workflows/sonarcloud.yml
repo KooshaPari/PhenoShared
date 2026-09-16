@@ -25,5 +25,5 @@ jobs:
         run: |
           sonar-scanner \
             -Dsonar.projectKey=${{ github.repository }} \
-            -Dsonar.organization=kooshapari \
+            -Dsonar.organization=<REDACTED> \
             -Dsonar.login=${{ secrets.SONAR_TOKEN }}

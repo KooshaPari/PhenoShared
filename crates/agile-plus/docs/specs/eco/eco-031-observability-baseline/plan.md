@@ -1,7 +1,7 @@
 # Plan: Observability Baseline
 
 ## Objective
-Every active KooshaPari service emits structured logs, OpenTelemetry metrics, and traces; a unified dashboard exists; coverage is 100% and machine-verified.
+Every active <REDACTED> service emits structured logs, OpenTelemetry metrics, and traces; a unified dashboard exists; coverage is 100% and machine-verified.
 
 ## Scope
 - OpenTelemetry SDK adoption across all active services (Rust, Go, Swift, Python)

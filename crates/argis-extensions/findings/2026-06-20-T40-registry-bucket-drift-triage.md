@@ -2,7 +2,7 @@
 
 **Date:** 2026-06-20
 **ADR:** ADR-043 (Registry refresh cadence)
-**Owner:** kooshapari
+**Owner:** <REDACTED>
 **Device:** macbook
 
 ## Step 1: Registry Validation
@@ -18,7 +18,7 @@ phenotype-registry validate --index=registry/disposition-index.json
 | Top-level `rows` array exists | ✓ | 42 rows |
 | Each row has required fields (id, path, fsm) | ✓ | All 42 |
 | `id` uniqueness | ✓ | No duplicates |
-| `path` matches `KooshaPari/{name}` pattern | ✓ | All 42 |
+| `path` matches `<REDACTED>/{name}` pattern | ✓ | All 42 |
 | `fsm` ∈ {active, archived, done, planned, wip} | ✓ | All 42 |
 | `bucket` ∈ {ACTIVE, CONDITIONAL, PAUSED, REPO, ARCHIVED} | ✓ | All 42 |
 
@@ -44,10 +44,10 @@ phenotype-registry validate --index=registry/disposition-index.json
 
 | ID | Path | fsm | Bucket | Source |
 |----|------|-----|--------|--------|
-| `repo-promptadapter` | KooshaPari/promptadapter | archived | ARCHIVED | V11-016 (services retirement) |
-| `repo-researchintel` | KooshaPari/researchintel | archived | ARCHIVED | V11-016 (services retirement) |
-| `repo-flowra` | KooshaPari/Flowra | active | ACTIVE | V10 closure (scaffolded from 1476-line PLAN.md) |
-| `repo-seedloom` | KooshaPari/Seedloom | active | ACTIVE | V10 closure (scaffolded from 2788-line SPEC.md) |
+| `repo-promptadapter` | <REDACTED>/promptadapter | archived | ARCHIVED | V11-016 (services retirement) |
+| `repo-researchintel` | <REDACTED>/researchintel | archived | ARCHIVED | V11-016 (services retirement) |
+| `repo-flowra` | <REDACTED>/Flowra | active | ACTIVE | V10 closure (scaffolded from 1476-line PLAN.md) |
+| `repo-seedloom` | <REDACTED>/Seedloom | active | ACTIVE | V10 closure (scaffolded from 2788-line SPEC.md) |
 
 ## Step 3: Bucket Drift Triage (L6 Bucket-Drift Detector)
 
@@ -97,7 +97,7 @@ The L6 Bucket-Drift Detector cross-checks `bucket` declarations in the registry 
 ## References
 
 - ADR-043 (Registry refresh cadence — bi-weekly)
-- ADR-029 (Dmouse92 → KooshaPari migration; phenoPatch disposition)
+- ADR-029 (Dmouse92 → <REDACTED> migration; phenoPatch disposition)
 - ADR-035 (L5-105 HwLedger reclassification)
-- `KooshaPari/phenotype-registry` (PR #275 — registry flip)
+- `<REDACTED>/phenotype-registry` (PR #275 — registry flip)
 - L6 Bucket-Drift Detector: `pheno-drift-detector` v0.1.0 (ADR-049)

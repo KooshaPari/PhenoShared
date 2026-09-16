@@ -1,6 +1,6 @@
 //! Multi-provider argv construction for external coding-agent CLIs.
 //!
-//! Ported from `KooshaPari/thegent-dispatch` so substrate can own the surface.
+//! Ported from `<REDACTED>/thegent-dispatch` so substrate can own the surface.
 #![forbid(unsafe_code)]
 #![warn(missing_docs)]
 

@@ -4,12 +4,12 @@ version.workspace = true
 edition.workspace = true
 rust-version.workspace = true
 license = "MIT OR Apache-2.0"
-repository = "https://github.com/KooshaPari/AgilePlus"
+repository = "https://github.com/<REDACTED>/AgilePlus"
 description = "agileplus refinery — Phenotype infrastructure crate (AgilePlus)"
 documentation = "https://docs.rs/agileplus-refinery"
 keywords = ["phenotype", "agileplus", "refinery"]
 categories = ["data-structures"]
-authors = ["kooshapari"]
+authors = ["<REDACTED>"]
 
 [features]
 default = []

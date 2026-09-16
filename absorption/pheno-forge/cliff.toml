@@ -73,7 +73,7 @@ topo_order = false
 sort_commits = "oldest"
 
 [remote.github]
-owner = "KooshaPari"
+owner = "<REDACTED>"
 repo = "phenotype-forge"
 
 [bump]

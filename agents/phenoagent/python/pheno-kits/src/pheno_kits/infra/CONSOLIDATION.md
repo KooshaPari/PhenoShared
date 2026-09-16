@@ -89,7 +89,7 @@ from .kinfra import KInfra
 class SmartInfraManager:
     """Deprecated: Use ServiceOrchestrator instead."""
 
-    def __init__(self, project_name: str = "default", domain: str = "kooshapari.com"):
+    def __init__(self, project_name: str = "default", domain: str = "<REDACTED>.com"):
         import warnings
         warnings.warn(
             "SmartInfraManager is deprecated. Use ServiceOrchestrator + KInfra instead.",
@@ -117,7 +117,7 @@ manager = SmartInfraManager(project_name="zen")
 # After
 from kinfra import ServiceOrchestrator, OrchestratorConfig, KInfra
 config = OrchestratorConfig(project_name="zen")
-kinfra = KInfra(domain="zen.kooshapari.com")
+kinfra = KInfra(domain="zen.<REDACTED>.com")
 orchestrator = ServiceOrchestrator(config, kinfra)
 ```
 

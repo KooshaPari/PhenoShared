@@ -1,1 +1,1 @@
-/Users/kooshapari/Downloads/Xcode-beta.app/Contents/Developer/usr/bin/python3: can't open file '/Users/kooshapari/CodeProjects/Phenotype/repos/pheno-harness/scripts/lint_branches.py': [Errno 2] No such file or directory
+/Users/<REDACTED>/Downloads/Xcode-beta.app/Contents/Developer/usr/bin/python3: can't open file '/Users/<REDACTED>/CodeProjects/Phenotype/repos/pheno-harness/scripts/lint_branches.py': [Errno 2] No such file or directory

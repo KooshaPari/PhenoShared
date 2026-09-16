@@ -57,7 +57,7 @@ Telemetry is wired through OpenTelemetry (`opentelemetry-sdk`,
 Requires Python 3.12 (`.python-version` pins `3.12`) and [uv](https://docs.astral.sh/uv/).
 
 ```bash
-git clone https://github.com/KooshaPari/agileplus-mcp.git
+git clone https://github.com/<REDACTED>/agileplus-mcp.git
 cd agileplus-mcp
 uv sync
 ```

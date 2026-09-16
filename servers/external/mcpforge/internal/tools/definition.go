@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/KooshaPari/MCPForge/internal/lsp"
-	"github.com/KooshaPari/MCPForge/internal/protocol"
+	"github.com/<REDACTED>/MCPForge/internal/lsp"
+	"github.com/<REDACTED>/MCPForge/internal/protocol"
 )
 
 func ReadDefinition(ctx context.Context, client *lsp.Client, symbolName string) (string, error) {

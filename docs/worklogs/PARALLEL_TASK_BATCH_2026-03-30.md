@@ -10,7 +10,7 @@
 
 **Fix dirty working tree:**
 ```bash
-cd /Users/kooshapari/CodeProjects/Phenotype/repos
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos
 git status python/pheno-core/src/pheno_core/__init__.py
 # Option A: commit changes
 git add python/pheno-core/src/pheno_core/__init__.py
@@ -27,7 +27,7 @@ git checkout python/
 **Executor:** haiku-t1-1
 **Commands:**
 ```bash
-cd /Users/kooshapari/CodeProjects/Phenotype/repos
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos
 gh pr merge 250 --merge --delete-branch
 ```
 **Verify:** `gh pr view 250 --json state` returns MERGED
@@ -42,7 +42,7 @@ gh pr merge 250 --merge --delete-branch
 **Executor:** haiku-t1-2
 **Commands:**
 ```bash
-cd /Users/kooshapari/CodeProjects/Phenotype/repos
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos
 gh pr merge 252 --merge --delete-branch
 ```
 **Verify:** `git diff HEAD~1..HEAD -- crates/ | head -20`
@@ -57,7 +57,7 @@ gh pr merge 252 --merge --delete-branch
 **Executor:** haiku-t1-3
 **Commands:**
 ```bash
-cd /Users/kooshapari/CodeProjects/Phenotype/repos
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos
 gh pr merge 254 --merge --delete-branch
 ```
 **Verify:** `cargo build --lib 2>&1 | grep -i error | head -5`
@@ -72,7 +72,7 @@ gh pr merge 254 --merge --delete-branch
 **Executor:** haiku-t1-4
 **Commands:**
 ```bash
-cd /Users/kooshapari/CodeProjects/Phenotype/repos
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos
 gh pr merge 262 --merge --delete-branch
 ```
 **Verify:** `ls -la .archive/phenotype-state-machine/ | head -5`
@@ -89,7 +89,7 @@ gh pr merge 262 --merge --delete-branch
 **Executor:** haiku-t2-1
 **Commands:**
 ```bash
-cd /Users/kooshapari/CodeProjects/Phenotype/repos
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos
 git checkout feat/phenosdk-wave-a-contracts
 git push origin feat/phenosdk-wave-a-contracts
 gh pr create \
@@ -112,7 +112,7 @@ gh pr create \
 **Executor:** haiku-t2-2
 **Commands:**
 ```bash
-cd /Users/kooshapari/CodeProjects/Phenotype/repos
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos
 git checkout feat/phenosdk-decompose-mcp
 git push origin feat/phenosdk-decompose-mcp
 gh pr create \
@@ -135,7 +135,7 @@ gh pr create \
 **Executor:** haiku-t2-3
 **Commands:**
 ```bash
-cd /Users/kooshapari/CodeProjects/Phenotype/repos
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos
 git checkout chore/consolidate-nested-duplicates
 git push origin chore/consolidate-nested-duplicates
 gh pr create \
@@ -158,7 +158,7 @@ gh pr create \
 **Executor:** haiku-t2-4
 **Commands:**
 ```bash
-cd /Users/kooshapari/CodeProjects/Phenotype/repos
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos
 git fetch origin main
 git checkout feat/phenosdk-decompose-core
 git rebase origin/main
@@ -188,7 +188,7 @@ Spec: AgilePlus phenosdk-decompose-core"
 **Executor:** haiku-t2-5
 **Commands:**
 ```bash
-cd /Users/kooshapari/CodeProjects/Phenotype/repos
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos
 git fetch origin main
 git checkout chore/worklog-consolidation
 git rebase origin/main
@@ -222,7 +222,7 @@ Location: docs/worklogs/"
 **Depends On:** T1.1, T1.2, T1.3, T1.4 (all PR merges complete)
 **Commands:**
 ```bash
-cd /Users/kooshapari/CodeProjects/Phenotype/repos
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos
 git fetch origin
 git checkout main
 git merge docs/changelog-update --no-ff -m "merge(changelog): integrate full changelog history (1,017 commits)"
@@ -247,7 +247,7 @@ git commit --no-edit
 **Depends On:** T3.1
 **Commands:**
 ```bash
-cd /Users/kooshapari/CodeProjects/Phenotype/repos
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos
 # Syntax check
 python3 -c "import markdown; markdown.markdown(open('CHANGELOG.md').read())" && echo "✓ Markdown valid"
 # Count entries
@@ -269,7 +269,7 @@ head -50 CHANGELOG.md
 **Executor:** haiku-t4-1
 **Commands:**
 ```bash
-cd /Users/kooshapari/CodeProjects/Phenotype/repos
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos
 git branch -D chore/cleanup-stale-folders \
   chore/sbom-cyclonedx-pilot \
   chore/session-stacked-sbom-delivery \
@@ -287,7 +287,7 @@ git branch -D chore/cleanup-stale-folders \
 **Executor:** haiku-t4-2
 **Commands:**
 ```bash
-cd /Users/kooshapari/CodeProjects/Phenotype/repos
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos
 git branch -D feat/enhance-port-traits \
   feat/enhance-telemetry \
   feat/phase1-loc-reduction-launch \
@@ -304,7 +304,7 @@ git branch -D feat/enhance-port-traits \
 **Executor:** haiku-t4-3
 **Commands:**
 ```bash
-cd /Users/kooshapari/CodeProjects/Phenotype/repos
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos
 # Identify experiment branches
 git branch | grep -E "^  (test|workspace|recovery|local|scan)" > /tmp/exp_branches.txt
 # Delete one by one (safer than xargs)
@@ -322,7 +322,7 @@ git branch -D $(git branch | grep -E "^  (test|workspace|recovery|local)" | awk 
 **Depends On:** T4.1, T4.2, T4.3
 **Commands:**
 ```bash
-cd /Users/kooshapari/CodeProjects/Phenotype/repos
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos
 echo "=== Gone branches remaining ==="
 git branch -vv | grep "\[gone\]" | wc -l
 echo "=== Total branches ==="
@@ -344,7 +344,7 @@ git branch -vv | grep -E "ahead|behind" | wc -l
 **Executor:** haiku-t5-1
 **Commands:**
 ```bash
-cd /Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus
 agileplus list --filter 'phenosdk' 2>/dev/null || echo "AgilePlus not configured"
 # Fallback: check specs directly
 ls -la kitty-specs/ | grep phenosdk
@@ -363,7 +363,7 @@ ls -la kitty-specs/ | grep phenosdk
 **Executor:** haiku-t5-2
 **Commands:**
 ```bash
-cd /Users/kooshapari/CodeProjects/Phenotype/repos
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos
 # Check PR #267 was merged (error-core consolidation)
 git log main | grep -i "error-core" | head -3
 # Check crate compiles
@@ -382,7 +382,7 @@ cargo build -p phenotype-error-core 2>&1 | grep -i "error" | head -3
 **Depends On:** T1.*, T3.* (merges complete)
 **Commands:**
 ```bash
-cd /Users/kooshapari/CodeProjects/Phenotype/repos
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos
 cargo metadata --format-version 1 2>/dev/null | jq '.packages | length' || echo "Fallback..."
 # Count crates
 ls -d crates/*/ | wc -l
@@ -404,7 +404,7 @@ cargo build --all 2>&1 | grep -i "circular\|cycle" || echo "✓ No circular deps
 **Depends On:** T4.* (cleanup complete)
 **Commands:**
 ```bash
-cd /Users/kooshapari/CodeProjects/Phenotype/repos
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos
 cat > docs/reference/BRANCH_STATUS.md << 'EOF'
 # Branch Status Summary (2026-03-30)
 
@@ -449,7 +449,7 @@ git commit -m "docs: update branch status after cleanup (2026-03-30)"
 **Executor:** haiku-t6-2
 **Commands:**
 ```bash
-cd /Users/kooshapari/CodeProjects/Phenotype/repos
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos
 # File already created; just verify and commit
 ls -la docs/worklogs/SESSION_STATE_ANALYSIS_2026-03-30.md
 git add docs/worklogs/SESSION_STATE_ANALYSIS_2026-03-30.md
@@ -470,7 +470,7 @@ git commit -m "docs(session): archive parallel task analysis and results (2026-0
 **Depends On:** T1.*, T3.* (all major merges)
 **Commands:**
 ```bash
-cd /Users/kooshapari/CodeProjects/Phenotype/repos
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos
 echo "Starting full workspace build..."
 cargo build --all --release 2>&1 | tee /tmp/build_2026-03-30.log
 echo "Build complete. Summary:"
@@ -489,7 +489,7 @@ tail -20 /tmp/build_2026-03-30.log | grep -E "error|warning|Finished|Compiling" 
 **Depends On:** T7.1
 **Commands:**
 ```bash
-cd /Users/kooshapari/CodeProjects/Phenotype/repos
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos
 echo "Running library tests..."
 cargo test --lib --all 2>&1 | tee /tmp/test_2026-03-30.log
 echo "Tests complete. Summary:"
@@ -509,7 +509,7 @@ tail -30 /tmp/test_2026-03-30.log | grep -E "test result|passed|failed" | tail -
 **Executor:** haiku-t8-1
 **Commands:**
 ```bash
-cd /Users/kooshapari/CodeProjects/Phenotype/repos
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos
 echo "=== Files with TODO/FIXME/unimplemented ==="
 find crates python -name "*.rs" -o -name "*.py" | xargs grep -l "TODO\|FIXME\|unimplemented" 2>/dev/null | head -20
 echo "=== Count by type ==="
@@ -527,7 +527,7 @@ find crates python -name "*.rs" -o -name "*.py" | xargs grep -h "TODO\|FIXME\|un
 **Executor:** haiku-t8-2
 **Commands:**
 ```bash
-cd /Users/kooshapari/CodeProjects/Phenotype/repos
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos
 cat > docs/reference/MERGE_ORDER_PHASE2.md << 'EOF'
 # Phase 2 Merge Order (2026-03-30 results)
 

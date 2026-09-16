@@ -2,10 +2,10 @@
 
 **Status:** Active (re-issued 2026-06-18)
 **Date:** 2026-06-16 (original); 2026-06-18 (re-issued verdict)
-**Repo:** <https://github.com/KooshaPari/phenotype-voxel>
-**Tracker:** KooshaPari/phenotype-registry issue #75
-**SSOT:** KooshaPari/phenotype-registry `docs/rationalization/block-c-consolidation.md`
-**Long-term home:** <https://github.com/KooshaPari/phenotype-gfx> (PR #10)
+**Repo:** <https://github.com/<REDACTED>/phenotype-voxel>
+**Tracker:** <REDACTED>/phenotype-registry issue #75
+**SSOT:** <REDACTED>/phenotype-registry `docs/rationalization/block-c-consolidation.md`
+**Long-term home:** <https://github.com/<REDACTED>/phenotype-gfx> (PR #10)
 
 ---
 
@@ -16,14 +16,14 @@
 `phenotype-water` absorbed into a single `phenotype-gfx` (or similarly named)
 crate collection.
 
-**Re-issued verdict (2026-06-18, L5-113):** **SUPERSEDE → `KooshaPari/phenotype-gfx`
+**Re-issued verdict (2026-06-18, L5-113):** **SUPERSEDE → `<REDACTED>/phenotype-gfx`
 via PR #10 (commit `9a7c05a`).** The "umbrella-sister" pattern is replaced by the
 **single Rust core + thin FFI edges** pattern mandated by ADR-004. `phenotype-voxel`
 is **not** retained as a separate substrate crate; the voxel kernel (chunks, coords,
 mesher trait, RLE codec, sprite voxelizer, AO-aware greedy mesher) is **inlined
 into** `phenotype-gfx/src/voxel/` as one Rust module among several (alongside
 `src/terrain/`, `src/water/`, `src/postfx/`). The source repo
-`KooshaPari/phenotype-voxel` is **to be archived** once PR #10 merges (the
+`<REDACTED>/phenotype-voxel` is **to be archived** once PR #10 merges (the
 `phenotype-gfx` repo has no upstream consumers, so there is no downgrade path
 to preserve).
 
@@ -33,7 +33,7 @@ to preserve).
 - `docs/adr/ADR-031-configra-absorb.md` — sibling "absorb, do not coexist" ADR
   (same policy applied to `phenotype-config` → `Configra`; precedent for the
   voxel absorb).
-- PR: <https://github.com/KooshaPari/phenotype-gfx/pull/10>
+- PR: <https://github.com/<REDACTED>/phenotype-gfx/pull/10>
 - Commit: `9a7c05a` — `feat(gfx): inline voxel kernel from phenotype-voxel (L5-109, ADR-004)`
 
 **Migration summary:** 7,704 lines absorbed (Rust kernel + tests + benches);
@@ -314,7 +314,7 @@ working tree.
 
 ## Consolidation verdict
 
-Referencing KooshaPari/phenotype-registry `docs/rationalization/block-c-consolidation.md`,
+Referencing <REDACTED>/phenotype-registry `docs/rationalization/block-c-consolidation.md`,
 this repo is **merge source #1 of 3** in the strategic-merge plan:
 
 > **#1 GFX SDK** — phenotype-voxel + phenotype-terrain + phenotype-water

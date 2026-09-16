@@ -39,7 +39,7 @@ is made by the `pheno-otel` exporter config (per ADR-012).
 | `actor.id` | string | GitHub user ID | `12345` |
 | `actor.email` | string | GitHub email (when public) | `user@example.com` |
 | `source.ip` | string | request source | `203.0.113.42` |
-| `source.repo` | string | GitHub repo | `KooshaPari/phenotype-apps` |
+| `source.repo` | string | GitHub repo | `<REDACTED>/phenotype-apps` |
 | `http.request.method` | string | HTTP method | `POST` |
 | `url.path` | string | URL path | `/repos/.../security-advisories` |
 | `user_agent.original` | string | request UA | `gh-cli/2.x` |

@@ -1,7 +1,7 @@
-# Tasks — KooshaPari Oldest-First
+# Tasks — <REDACTED> Oldest-First
 
 ## WP-01 — Enumeration
-Run `gh repo list KooshaPari --limit 200 --json name,pushedAt,isArchived`; record output path and UTC timestamp in worklog header.
+Run `gh repo list <REDACTED> --limit 200 --json name,pushedAt,isArchived`; record output path and UTC timestamp in worklog header.
 
 ## WP-02 — Filter and Sort
 Drop `isArchived == true`; sort by `pushedAt` ascending; break ties by `name` ascending; declare N.

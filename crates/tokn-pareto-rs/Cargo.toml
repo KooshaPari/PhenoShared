@@ -1,11 +1,11 @@
 [package]
 name = "pareto-rs"
 description = "Pareto analysis helpers for tokenledger"
-repository = "https://github.com/KooshaPari/zz-Tokn"
+repository = "https://github.com/<REDACTED>/zz-Tokn"
 version = "0.1.5"
 edition = "2024"
 license = "MIT"
-authors = ["KooshaPari <kooshapari@kooshapari.com>"]
+authors = ["<REDACTED> <<REDACTED>@<REDACTED>.com>"]
 
 [dependencies]
 anyhow = "1.0"

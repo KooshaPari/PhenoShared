@@ -1,6 +1,6 @@
 # AgilePlus Branch Audit — 2026-05-05
 
-**Repo:** `/Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus`
+**Repo:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus`
 **Executed:** 2026-05-05
 **Tool:** `git branch -vv --no-color`, `git branch --merged main`, `git rev-list --count`
 
@@ -37,7 +37,7 @@ These branches have unique commits not yet merged into `main`. Do NOT delete.
 |---|---|---|---|
 | `fix/rust-supply-chain-agent-readiness` | 340 | 237 | Largest branch |
 | `fix/policy-gate-agileplus` | 307 | 237 | |
-| `kooshapari/commit-chain-2026-05-02` | 119 | 3 | |
+| `<REDACTED>/commit-chain-2026-05-02` | 119 | 3 | |
 | `wp-015-plugin-interface` | 117 | 3 | |
 | `feat/portage-eval-suite` | 110 | 3 | |
 | `chore/20260430-pin-actions-v2` | 76 | 237 | |

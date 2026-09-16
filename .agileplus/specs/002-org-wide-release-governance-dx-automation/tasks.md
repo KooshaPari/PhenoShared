@@ -27,7 +27,7 @@
 - [x] T006 Unit tests for version calculator (all 7 registries × 5 channels)
 
 ### Implementation Notes
-- Go 1.23+, use `go mod init github.com/KooshaPari/pheno-cli`
+- Go 1.23+, use `go mod init github.com/<REDACTED>/pheno-cli`
 - Adapter interface: `Detect()`, `Version()`, `Build()`, `Publish()`, `Verify()`
 - Version calculator is pure logic, no I/O — easy to test exhaustively
 
@@ -289,7 +289,7 @@
 - Templates use Go `text/template` with repo-specific variables (name, language, registry, risk profile)
 - Multi-language repos get merged configs (e.g., mise.toml with both Rust and Python tasks)
 - Private repos: skip publishing templates but include lint/test/hook infrastructure
-- Generated CI workflows reference `KooshaPari/phenotypeActions/.github/workflows/<name>.yml@v1`
+- Generated CI workflows reference `<REDACTED>/phenotypeActions/.github/workflows/<name>.yml@v1`
 
 ### Parallel Opportunities
 - T051-T055 are all parallel (independent template files)

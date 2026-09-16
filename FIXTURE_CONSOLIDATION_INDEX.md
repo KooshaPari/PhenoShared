@@ -155,7 +155,7 @@
 ### All Documents Located At
 
 ```
-/Users/kooshapari/CodeProjects/Phenotype/repos/
+/Users/<REDACTED>/CodeProjects/Phenotype/repos/
 ├── FIXTURE_CONSOLIDATION_AUDIT.md                    ✓ Created
 ├── FIXTURE_CONSOLIDATION_SUMMARY.md                  ✓ Created
 ├── FIXTURE_CONSOLIDATION_IMPLEMENTATION_PLAN.md      ✓ Created
@@ -167,7 +167,7 @@
 ### Crate to Be Created
 
 ```
-/Users/kooshapari/CodeProjects/Phenotype/repos/repos/worktrees/AgilePlus/phenotype-docs/crates/
+/Users/<REDACTED>/CodeProjects/Phenotype/repos/repos/worktrees/AgilePlus/phenotype-docs/crates/
 └── test-fixtures-shared/
     ├── Cargo.toml
     ├── src/

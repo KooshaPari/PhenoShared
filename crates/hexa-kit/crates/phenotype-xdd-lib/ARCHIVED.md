@@ -1,6 +1,6 @@
 # Archived: phenotype-xdd-lib
 
-This repository has been **archived**. The code has been moved to [gauge](https://github.com/KooshaPari/gauge).
+This repository has been **archived**. The code has been moved to [gauge](https://github.com/<REDACTED>/gauge).
 
 ## Why
 
@@ -21,6 +21,6 @@ phenotype-xdd-lib = { git = "..." }
 With:
 ```toml
 [dependencies]
-gauge = { git = "https://github.com/KooshaPari/gauge" }
+gauge = { git = "https://github.com/<REDACTED>/gauge" }
 ```
 

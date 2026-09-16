@@ -1,8 +1,8 @@
 # 2phenoEvents - Historical Alias Tombstone
 
 - status: `HISTORICAL_ALIAS_TOMBSTONE`
-- historical remote: `KooshaPari/2phenoEvents` (not found on 2026-08-05)
-- canonical owner: `KooshaPari/phenoEvents`
+- historical remote: `<REDACTED>/2phenoEvents` (not found on 2026-08-05)
+- canonical owner: `<REDACTED>/phenoEvents`
 - preserved source commit: `5bb0c894e44a50079035b3d5ab5d31946fc445c1`
 - evidence: `audits/absorption-justifications/2phenoEvents-reconciliation-20260805.md`
 
@@ -18,7 +18,7 @@ It authorizes no deletion, archive action, branch mutation, or source transfer.
 
 ## Relationship to pheno
 
-Earlier records claimed an absorption into `KooshaPari/pheno`. That claim is
+Earlier records claimed an absorption into `<REDACTED>/pheno`. That claim is
 historical and unverified: current pheno main does not contain the documented
 event-bus paths. `phenoEvents` remains the standalone canonical owner unless a
 future integration supplies commit-level source, target, and dependency proof.

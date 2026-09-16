@@ -487,7 +487,7 @@ verify-security-framework.sh
 To automate all checks above:
 
 ```bash
-cd /Users/kooshapari/CodeProjects/Phenotype/repos
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos
 
 # Run the comprehensive verification
 bash scripts/automation/verify-security-framework.sh

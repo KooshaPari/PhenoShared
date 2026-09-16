@@ -1,12 +1,12 @@
 # `_loose-inbox` — Absorbed Loose-Inbox Archive
 
-This directory preserves the contents of `KooshaPari/zz-archive-_loose-inbox`
+This directory preserves the contents of `<REDACTED>/zz-archive-_loose-inbox`
 (archived 2026-07-15), which was a staging area for subagent outputs from
 the 2026-07 cleanup wave that did not fit cleanly into any single
 canonical repo at the time.
 
 **Date merged:** 2026-08-08
-**Source commit:** `KooshaPari/zz-archive-_loose-inbox@main`
+**Source commit:** `<REDACTED>/zz-archive-_loose-inbox@main`
 **Merger:** forge-airlock (manual semantic integration)
 
 ## What this archive was
@@ -34,7 +34,7 @@ future audit work.
 ## Note on the original symlink
 
 The original `pheno-compute-layer-2026-07-14/skills/global` was a symlink
-to `/Users/kooshapari/CodeProjects/Phenotype/skills`. It was preserved as
+to `/Users/<REDACTED>/CodeProjects/Phenotype/skills`. It was preserved as
 a metadata file at `pheno-compute-layer-2026-07-14/skills/global.md` because
 absolute local paths don't transfer to GitHub.
 

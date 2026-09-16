@@ -4,8 +4,8 @@
 
 ## Source
 
-- **Repo:** `KooshaPari/phenotype-org-audits`
-- **GitHub URL:** https://github.com/KooshaPari/phenotype-org-audits
+- **Repo:** `<REDACTED>/phenotype-org-audits`
+- **GitHub URL:** https://github.com/<REDACTED>/phenotype-org-audits
 - **Archived at:** false
 - **Default branch at audit time:** `main`
 - **Visibility at audit time:** private
@@ -24,7 +24,7 @@
 
 ## Target
 
-- **Receiving repo:** `KooshaPari/phenotype-infra` (https://github.com/KooshaPari/phenotype-infra)
+- **Receiving repo:** `<REDACTED>/phenotype-infra` (https://github.com/<REDACTED>/phenotype-infra)
 - **Receiving path:** `docs/absorbed-from-phenotype-org-audits/`
 - **Local mirror path:** `C:\Users\koosh\phenotype-org-audits` (live local clone)
 - **Bundle file:** none (live repo; no bundle needed)
@@ -58,7 +58,7 @@
 - **Total branches (remote):** 19
 - **Open issues at audit time:** 0
 - **Bundle reference:** NONE — repo is live, no bundle required
-- **Source-tombstone posture:** `KooshaPari/phenotype-org-audits` returns 200 OK via `gh api`
+- **Source-tombstone posture:** `<REDACTED>/phenotype-org-audits` returns 200 OK via `gh api`
 
 | Category | Count | Notes |
 |---|---|---|
@@ -110,13 +110,13 @@ Parity: HIGH. The V3 scorecard is the canonical governance baseline for the 165-
 
 | Source Item | Source Evidence | Category | Source State | Target Repo | Target Evidence | Status | Deletion Justification | Risk if Deleted | Required Action |
 |---|---|---|---|---|---|---|---|---|---|
-| `phenotype-org-audits/inventory/AUTHORITATIVE_REPO_INVENTORY.md` | `gh api repos/KooshaPari/phenotype-org-audits/contents/inventory/AUTHORITATIVE_REPO_INVENTORY.md` | governance-inventory | active | `KooshaPari/phenotype-infra` | `docs/absorbed-from-phenotype-org-audits/` | AFFIRM | Unique 165-repo inventory; no other source | CRITICAL; org loses canonical repo catalog | Pattern-absorb into phenotype-infra governance docs |
-| `phenotype-org-audits/metrics/COVERAGE_V3.md` | `gh api repos/KooshaPari/phenotype-org-audits/contents/metrics/COVERAGE_V3.md` | governance-metrics | active | `KooshaPari/phenotype-infra` | `docs/absorbed-from-phenotype-org-audits/` | AFFIRM | Canonical V3 scorecard; 6-dimension governance baseline | HIGH; no longitudinal audit baseline | Preserve as archived snapshot |
-| `phenotype-org-audits/metrics/UPLIFT_REPORT.md` | `gh api repos/KooshaPari/phenotype-org-audits/contents/metrics/UPLIFT_REPORT.md` | governance-uplift | active | `KooshaPari/phenotype-infra` | `docs/absorbed-from-phenotype-org-audits/` | AFFIRM | Post-intervention uplift tracking | MEDIUM; intervention history lost | Pattern-absorb into phenotype-infra |
-| `phenotype-org-audits/audits/2026-04-24/` | `gh api repos/KooshaPari/phenotype-org-audits/contents/audits/2026-04-24` | audit-snapshot | active | `KooshaPari/phenotype-infra` | `docs/absorbed-from-phenotype-org-audits/` | AFFIRM | Historical quarterly audit snapshot | MEDIUM; longitudinal archive gap | Archive into phenotype-infra docs |
-| `phenotype-org-audits/worklog.md` | `gh api repos/KooshaPari/phenotype-org-audits/contents/worklog.md` | governance-worklog | active | `KooshaPari/phenotype-infra` | `docs/absorbed-from-phenotype-org-audits/` | AFFIRM | Org-wide governance worklog | LOW; worklog can be re-created | Mirror to phenotype-infra worklog |
-| `phenotype-org-audits/branches` (19) | `gh api repos/KooshaPari/phenotype-org-audits/branches` | branch-coverage | active | `KooshaPari/phenotype-infra` | `docs/absorbed-from-phenotype-org-audits/` | AFFIRM | Not yet absorbed; branch inventory enumerated | MEDIUM; WIP branches with unique CI work | see BRANCH_INVENTORY |
-| `phenotype-org-audits/.github/workflows/` | `gh api repos/KooshaPari/phenotype-org-audits/actions/workflows` | ci-workflow | active | `KooshaPari/phenotype-infra` | `docs/absorbed-from-phenotype-org-audits/` | AFFIRM | Not yet absorbed | LOW | scanned, not migrated |
+| `phenotype-org-audits/inventory/AUTHORITATIVE_REPO_INVENTORY.md` | `gh api repos/<REDACTED>/phenotype-org-audits/contents/inventory/AUTHORITATIVE_REPO_INVENTORY.md` | governance-inventory | active | `<REDACTED>/phenotype-infra` | `docs/absorbed-from-phenotype-org-audits/` | AFFIRM | Unique 165-repo inventory; no other source | CRITICAL; org loses canonical repo catalog | Pattern-absorb into phenotype-infra governance docs |
+| `phenotype-org-audits/metrics/COVERAGE_V3.md` | `gh api repos/<REDACTED>/phenotype-org-audits/contents/metrics/COVERAGE_V3.md` | governance-metrics | active | `<REDACTED>/phenotype-infra` | `docs/absorbed-from-phenotype-org-audits/` | AFFIRM | Canonical V3 scorecard; 6-dimension governance baseline | HIGH; no longitudinal audit baseline | Preserve as archived snapshot |
+| `phenotype-org-audits/metrics/UPLIFT_REPORT.md` | `gh api repos/<REDACTED>/phenotype-org-audits/contents/metrics/UPLIFT_REPORT.md` | governance-uplift | active | `<REDACTED>/phenotype-infra` | `docs/absorbed-from-phenotype-org-audits/` | AFFIRM | Post-intervention uplift tracking | MEDIUM; intervention history lost | Pattern-absorb into phenotype-infra |
+| `phenotype-org-audits/audits/2026-04-24/` | `gh api repos/<REDACTED>/phenotype-org-audits/contents/audits/2026-04-24` | audit-snapshot | active | `<REDACTED>/phenotype-infra` | `docs/absorbed-from-phenotype-org-audits/` | AFFIRM | Historical quarterly audit snapshot | MEDIUM; longitudinal archive gap | Archive into phenotype-infra docs |
+| `phenotype-org-audits/worklog.md` | `gh api repos/<REDACTED>/phenotype-org-audits/contents/worklog.md` | governance-worklog | active | `<REDACTED>/phenotype-infra` | `docs/absorbed-from-phenotype-org-audits/` | AFFIRM | Org-wide governance worklog | LOW; worklog can be re-created | Mirror to phenotype-infra worklog |
+| `phenotype-org-audits/branches` (19) | `gh api repos/<REDACTED>/phenotype-org-audits/branches` | branch-coverage | active | `<REDACTED>/phenotype-infra` | `docs/absorbed-from-phenotype-org-audits/` | AFFIRM | Not yet absorbed; branch inventory enumerated | MEDIUM; WIP branches with unique CI work | see BRANCH_INVENTORY |
+| `phenotype-org-audits/.github/workflows/` | `gh api repos/<REDACTED>/phenotype-org-audits/actions/workflows` | ci-workflow | active | `<REDACTED>/phenotype-infra` | `docs/absorbed-from-phenotype-org-audits/` | AFFIRM | Not yet absorbed | LOW | scanned, not migrated |
 
 ## Last-Resort-Exceptions
 
@@ -132,11 +132,11 @@ No exceptions to the AFFIRM verdict are granted.
 
 ```bash
 # Live repo (active source): restore by re-cloning the upstream.
-git clone --bare https://github.com/KooshaPari/phenotype-org-audits.git phenotype-org-audits.git
+git clone --bare https://github.com/<REDACTED>/phenotype-org-audits.git phenotype-org-audits.git
 
 # Disaster-recovery posture:
-gh api repos/KooshaPari/phenotype-org-audits            # confirm repo still exists (200 OK)
-gh repo clone KooshaPari/phenotype-org-audits /tmp/phenotype-org-audits-migration
+gh api repos/<REDACTED>/phenotype-org-audits            # confirm repo still exists (200 OK)
+gh repo clone <REDACTED>/phenotype-org-audits /tmp/phenotype-org-audits-migration
 
 # SHA-256 bundle backup for archive integrity:
 git -C C:\Users\koosh\phenotype-org-audits bundle create \
@@ -145,8 +145,8 @@ sha256sum /backup/phenotype-org-audits-*.bundle > \
   /backup/phenotype-org-audits-shas.txt
 ```
 
-**Restore prerequisites:** GitHub org read access for `KooshaPari/phenotype-org-audits`.
-**Documented restore path:** `git clone --bare https://github.com/KooshaPari/phenotype-org-audits.git`.
+**Restore prerequisites:** GitHub org read access for `<REDACTED>/phenotype-org-audits`.
+**Documented restore path:** `git clone --bare https://github.com/<REDACTED>/phenotype-org-audits.git`.
 **Bundle integrity:** SHA-256 checksum recorded at bundle time.
 
 ## Gate Tooling Reference

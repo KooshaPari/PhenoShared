@@ -145,7 +145,7 @@ package lsp
 import (
 	"context"
 
-  "github.com/KooshaPari/MCPForge/internal/protocol"
+  "github.com/<REDACTED>/MCPForge/internal/protocol"
 )
 `)
 

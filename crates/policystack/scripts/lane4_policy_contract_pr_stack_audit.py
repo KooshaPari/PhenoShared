@@ -58,7 +58,7 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument(
         "--repo",
-        default="KooshaPari/policy-contract",
+        default="<REDACTED>/policy-contract",
         help="Repository to inspect in OWNER/REPO form.",
     )
     parser.add_argument(

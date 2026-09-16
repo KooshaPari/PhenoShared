@@ -16,7 +16,7 @@ Pre-deletion worktree snapshot for thegent PR2 v2; the worktree is gone, only th
 
 ## Origin
 
-KooshaPari/thegent (worktree pruned 2026-07-14); re-bundled /tmp/gh-backup-2026-08-08-thegent-pr2-v2-uncommitted-2026-07-14.bundle (12K).
+<REDACTED>/thegent (worktree pruned 2026-07-14); re-bundled /tmp/gh-backup-2026-08-08-thegent-pr2-v2-uncommitted-2026-07-14.bundle (12K).
 
 ## Contents
 

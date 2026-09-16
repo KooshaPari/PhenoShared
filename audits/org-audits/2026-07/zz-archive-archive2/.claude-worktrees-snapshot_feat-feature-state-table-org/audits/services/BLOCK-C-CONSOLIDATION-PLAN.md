@@ -1,8 +1,8 @@
-# Block-C Consolidation Plan — KooshaPari/services
+# Block-C Consolidation Plan — <REDACTED>/services
 
 **Plan date:** 2026-06-16  
 **Source audit:** [`BLOCK-C-AUDIT.md`](./BLOCK-C-AUDIT.md) (2026-06-15)  
-**Repo:** https://github.com/KooshaPari/services  
+**Repo:** https://github.com/<REDACTED>/services  
 **Base branch:** `main` (promote to default — see W2.2)  
 **Scope:** SBOM registry hygiene and governance; no application source code exists in this repo.
 
@@ -51,7 +51,7 @@ Make `services` a trustworthy, CI-verified CycloneDX SBOM registry: valid Taskfi
 
 | ID | Task | Audit ref |
 |----|------|-----------|
-| W3.1 | Strip `/Users/kooshapari/...` prefixes from all `bom-ref` values in both `*.cdx.json` files | §4, rec #2 |
+| W3.1 | Strip `/Users/<REDACTED>/...` prefixes from all `bom-ref` values in both `*.cdx.json` files | §4, rec #2 |
 | W3.2 | Add CI step: fail if `path+file:///Users/` appears in any `*.cdx.json` | rec #2 |
 | W3.3 | Reconcile `AGENTS.md` CycloneDX version claim with actual `specVersion` in files | §5, rec #3 |
 | W3.4 | Either restore missing R3 spec or remove claim from `STATUS.md:18` | §5, rec #3 |
@@ -107,4 +107,4 @@ flowchart LR
 
 ---
 
-*Companion to Tokn Block-C plan. Fleet index: see `KooshaPari/Tokn` `docs/audit/BLOCK-C-CONSOLIDATION-PLAN.md` §Out of scope.*
+*Companion to Tokn Block-C plan. Fleet index: see `<REDACTED>/Tokn` `docs/audit/BLOCK-C-CONSOLIDATION-PLAN.md` §Out of scope.*

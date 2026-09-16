@@ -489,7 +489,7 @@ Timeout: 30m
       ==> (d) Pushing main + v0.0.13 to origin
         [skip] ref already up to date
       ==> (e) Creating GitHub release for v0.0.13
-        https://github.com/KooshaPari/phenotype-apps/releases/tag/v0.0.13
+        https://github.com/<REDACTED>/phenotype-apps/releases/tag/v0.0.13
       ==> Release v0.0.13 complete.
 [7/8] Build source tarball
       phenotype-0.0.13-source.tar.gz (XXX bytes)
@@ -502,7 +502,7 @@ Timeout: 30m
 
 Step summary:
   ## Release v0.0.13
-  URL: https://github.com/KooshaPari/phenotype-apps/releases/tag/v0.0.13
+  URL: https://github.com/<REDACTED>/phenotype-apps/releases/tag/v0.0.13
   Published: 2026-06-22T...
   Assets:
     - `phenotype-0.0.13-source.tar.gz` (XXX bytes)
@@ -629,7 +629,7 @@ The script intentionally does NOT touch `VERSION`:
 ## 8. Subprocess / environment notes (debugging log)
 
 During this turn, the main worktree at
-`/Users/kooshapari/CodeProjects/Phenotype/repos` was being shared by
+`/Users/<REDACTED>/CodeProjects/Phenotype/repos` was being shared by
 multiple concurrent orchestrator agents (visible in
 `git worktree list`: `feat/v21-T1-T2-L48-L51`, `feat/v22-l35-build-perf`,
 `feat/v22-l26-tracing`, `feat/v21-T5-L34-release-yml`, and the
@@ -640,7 +640,7 @@ current task `feat/v21-l26-release-2026-06-22`). This caused:
 - `.git/index.lock` contention (zero-byte lock files left by
   `git index-pack` from concurrent `git fetch` operations).
 - A `git status` failure mid-turn: `fatal: not a git repository:
-  /Users/kooshapari/CodeProjects/Phenotype/repos/phenotype-registry/.git/worktrees/phenotype-registry-curation-data`
+  /Users/<REDACTED>/CodeProjects/Phenotype/repos/phenotype-registry/.git/worktrees/phenotype-registry-curation-data`
   (a broken submodule worktree reference inherited from the shared
   state).
 

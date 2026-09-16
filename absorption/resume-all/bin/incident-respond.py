@@ -60,10 +60,10 @@ LAUNCHD_UID = os.getuid()
 LAUNCHD_GUI_DOMAIN = f"gui/{LAUNCHD_UID}"
 
 LAUNCHD_JOBS = {
-    "snapshot": "com.kooshapari.resume-all-snapshot",
-    "ipc":      "com.kooshapari.resume-all-ipc",
-    "watch":    "com.kooshapari.resume-all-watch",
-    "zmx":      "com.kooshapari.resume-all-zmx",
+    "snapshot": "com.<REDACTED>.resume-all-snapshot",
+    "ipc":      "com.<REDACTED>.resume-all-ipc",
+    "watch":    "com.<REDACTED>.resume-all-watch",
+    "zmx":      "com.<REDACTED>.resume-all-zmx",
 }
 LAUNCHD_PLISTS = {
     name: HOME / "Library" / "LaunchAgents" / f"{label}.plist"

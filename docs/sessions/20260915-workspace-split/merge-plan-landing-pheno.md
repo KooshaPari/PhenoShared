@@ -1,8 +1,8 @@
 # Merge Plan: PhenoLanding → Pheno
 
 **Date:** 2026-09-15
-**Source:** `KooshaPari/zz-merge-unk-PhenoLanding` (Astro/JS/TS monorepo)
-**Target:** `KooshaPari/pheno` (Rust Cargo workspace monorepo)
+**Source:** `<REDACTED>/zz-merge-unk-PhenoLanding` (Astro/JS/TS monorepo)
+**Target:** `<REDACTED>/pheno` (Rust Cargo workspace monorepo)
 **Status:** ANALYSIS ONLY — do not execute
 
 ---
@@ -11,7 +11,7 @@
 
 | Attribute | Value |
 |---|---|
-| **Repo** | `KooshaPari/zz-merge-unk-PhenoLanding` |
+| **Repo** | `<REDACTED>/zz-merge-unk-PhenoLanding` |
 | **Size** | 2.8 MB (source only, no node_modules) |
 | **Files** | 779 |
 | **Primary Language** | Astro (460 KB), JavaScript (60 KB), TypeScript (31 KB), CSS (27 KB) |
@@ -23,11 +23,11 @@
 
 | Site | Purpose | Domain Pattern |
 |---|---|---|
-| `agileplus-landing` | AgilePlus product page | `agileplus.kooshapari.com` |
+| `agileplus-landing` | AgilePlus product page | `agileplus.<REDACTED>.com` |
 | `benchora-landing` | Benchora product page | TBD |
 | `byteport-landing` | BytePort product page | TBD |
 | `hwledger-landing` | HWLedger product page | TBD |
-| `odin-landing` | Odin product page | `odin.kooshapari.com` |
+| `odin-landing` | Odin product page | `odin.<REDACTED>.com` |
 | `phenokits-landing` | PhenoKits product page | TBD |
 | `projects-landing` | Projects showcase | TBD |
 | `tasken-landing` | Tasken product page | TBD |
@@ -72,7 +72,7 @@ bun install → bun run build (per site) → Astro static output
 
 | Attribute | Value |
 |---|---|
-| **Repo** | `KooshaPari/pheno` |
+| **Repo** | `<REDACTED>/pheno` |
 | **Size** | ~4.4 GB (including `target/` build artifacts) |
 | **LOC** | 170K+ Rust |
 | **Workspace Members** | 80+ crates across 6 domains |

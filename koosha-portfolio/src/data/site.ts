@@ -24,8 +24,8 @@ export type Forward = {
 
 export const site = {
   name: "Koosha Paridehpour",
-  handle: "kooshapari",
-  url: "https://kooshapari.com",
+  handle: "<REDACTED>",
+  url: "https://<REDACTED>.com",
   location: "Santa Monica, California",
   headline: "Builder of Phenotype systems, developer tools, and product surfaces.",
   description:
@@ -33,10 +33,10 @@ export const site = {
 };
 
 export const socials: Link[] = [
-  { label: "GitHub", href: "https://github.com/KooshaPari", external: true },
-  { label: "LinkedIn", href: "https://www.linkedin.com/in/kooshapari", external: true },
-  { label: "Devpost", href: "https://devpost.com/kooshapari", external: true },
-  { label: "Email", href: "mailto:koosha@kooshapari.com", external: true },
+  { label: "GitHub", href: "https://github.com/<REDACTED>", external: true },
+  { label: "LinkedIn", href: "https://www.linkedin.com/in/<REDACTED>", external: true },
+  { label: "Devpost", href: "https://devpost.com/<REDACTED>", external: true },
+  { label: "Email", href: "mailto:koosha@<REDACTED>.com", external: true },
 ];
 
 export const profileFacts = [
@@ -73,8 +73,8 @@ export const projects: Project[] = [
     highlight: "Portfolio-aware deployment for shipped projects.",
     tags: ["MicroVM", "portfolio", "infrastructure", "LLM-assisted metadata"],
     links: [
-      { label: "Repo", href: "https://github.com/KooshaPari/BytePort", external: true },
-      { label: "Landing", href: "https://byteport.kooshapari.com", external: true },
+      { label: "Repo", href: "https://github.com/<REDACTED>/BytePort", external: true },
+      { label: "Landing", href: "https://byteport.<REDACTED>.com", external: true },
     ],
   },
   {
@@ -88,8 +88,8 @@ export const projects: Project[] = [
     highlight: "Agent-native runtime and workflow control.",
     tags: ["agents", "runtime", "tooling", "governance"],
     links: [
-      { label: "Repo", href: "https://github.com/KooshaPari/thegent", external: true },
-      { label: "Landing", href: "https://thegent.kooshapari.com", external: true },
+      { label: "Repo", href: "https://github.com/<REDACTED>/thegent", external: true },
+      { label: "Landing", href: "https://thegent.<REDACTED>.com", external: true },
     ],
   },
   {
@@ -103,7 +103,7 @@ export const projects: Project[] = [
     highlight: "Scale-out execution for code maintenance.",
     tags: ["parallelism", "CLI", "analysis", "automation"],
     links: [
-      { label: "Devpost", href: "https://devpost.com/kooshapari", external: true },
+      { label: "Devpost", href: "https://devpost.com/<REDACTED>", external: true },
     ],
   },
   {
@@ -117,7 +117,7 @@ export const projects: Project[] = [
     highlight: "A personal health layer with narrative summaries.",
     tags: ["Flutter", "Firebase", "GCP", "health"],
     links: [
-      { label: "Devpost", href: "https://devpost.com/kooshapari", external: true },
+      { label: "Devpost", href: "https://devpost.com/<REDACTED>", external: true },
     ],
   },
   {
@@ -131,7 +131,7 @@ export const projects: Project[] = [
     highlight: "Physical systems, control, and navigation.",
     tags: ["MATLAB", "EV3", "PID", "robotics"],
     links: [
-      { label: "Devpost", href: "https://devpost.com/kooshapari", external: true },
+      { label: "Devpost", href: "https://devpost.com/<REDACTED>", external: true },
     ],
   },
   {
@@ -145,7 +145,7 @@ export const projects: Project[] = [
     highlight: "A visual customization project that aged into archive.",
     tags: ["theming", "visual design", "desktop", "Spotify"],
     links: [
-      { label: "Devpost", href: "https://devpost.com/kooshapari", external: true },
+      { label: "Devpost", href: "https://devpost.com/<REDACTED>", external: true },
     ],
   },
 ];

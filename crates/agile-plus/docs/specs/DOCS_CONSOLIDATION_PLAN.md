@@ -301,7 +301,7 @@ fn validate_trace_required() { /* ... */ }
 
 ### Phase 7 — Downstream + ecosystem
 
-1. Grep KooshaPari org for `kitty-specs/` and `AgilePlus/traces/` string refs.
+1. Grep <REDACTED> org for `kitty-specs/` and `AgilePlus/traces/` string refs.
 2. Update agent prompts (`AGENTS.md`, `CLAUDE.md`, MCP resources).
 3. Remove redirect stubs only when external refs = 0 (or after one release cycle).
 

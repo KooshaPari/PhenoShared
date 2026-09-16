@@ -1,4 +1,4 @@
-# Tier 3: Path Microfrontends for `<project>.kooshapari.com`
+# Tier 3: Path Microfrontends for `<project>.<REDACTED>.com`
 
 **Status:** ACCEPTED · 2026-04-25
 **Tier:** 3 (path microfrontends within Tier-2 landing)
@@ -9,7 +9,7 @@
 
 ## TL;DR
 
-Every Tier-2 landing site (`<project>.kooshapari.com`) gets four standard
+Every Tier-2 landing site (`<project>.<REDACTED>.com`) gets four standard
 **path-based** microfrontends mounted within the same Vercel project:
 
 | Path             | Purpose                                                                  | Source of truth                              |
@@ -25,7 +25,7 @@ Auth: **none** — all surfaces are public.
 
 ## Why path-based, not subdomain
 
-The instinct is to mint `docs.<project>.kooshapari.com`, `otel.<project>...`,
+The instinct is to mint `docs.<project>.<REDACTED>.com`, `otel.<project>...`,
 etc. We rejected that:
 
 1. **DNS sprawl.** Each subdomain needs a Cloudflare CNAME, a Vercel project,
@@ -33,7 +33,7 @@ etc. We rejected that:
    manage. Cloudflare's free tier and the Tier-2 bootstrap script already
    strain at ~30 entries.
 2. **Cert overhead.** Vercel auto-issues per-host certs. Wildcards aren't
-   currently provisioned for `*.kooshapari.com`. Subdomain explosion = 4× cert
+   currently provisioned for `*.<REDACTED>.com`. Subdomain explosion = 4× cert
    issuance/renewal per project.
 3. **Single Vercel project.** Path microfrontends collapse to **one Vercel
    project per Tier-2 landing**, sharing a build, a deploy, and a custom
@@ -46,7 +46,7 @@ etc. We rejected that:
    microfrontends require **zero** new infrastructure entries.
 
 **Coexistence with `.dev`:** unchanged from Tier 2 — if `<product>.dev` exists,
-`<project>.kooshapari.com` 301-redirects to it (and Tier 3 never builds).
+`<project>.<REDACTED>.com` 301-redirects to it (and Tier 3 never builds).
 
 ---
 
@@ -181,12 +181,12 @@ default**. Pass `--minimal` to scaffold only the Tier-2 landing.
 ```
 phenotype-landing-bootstrap \
   --slug thegent \
-  --repo KooshaPari/thegent \
+  --repo <REDACTED>/thegent \
   # tier 3 included by default
 ```
 
 ```
-phenotype-landing-bootstrap --slug foo --repo KooshaPari/foo --minimal
+phenotype-landing-bootstrap --slug foo --repo <REDACTED>/foo --minimal
   # tier 2 only
 ```
 
@@ -213,10 +213,10 @@ No silent fallbacks. No spinners that never resolve. No empty iframes.
 
 ## Acceptance criteria
 
-- [x] Reference implementation lives in `KooshaPari/agileplus-landing`.
+- [x] Reference implementation lives in `<REDACTED>/agileplus-landing`.
 - [x] Bootstrap scaffolds Tier 3 by default; `--minimal` opt-out exists.
 - [x] All four paths return useful content even when data sources are absent.
-- [ ] At least one downstream Tier-2 site (e.g. `thegent.kooshapari.com`)
+- [ ] At least one downstream Tier-2 site (e.g. `thegent.<REDACTED>.com`)
       has been re-bootstrapped to pick up Tier 3.
 
 ---

@@ -3,9 +3,9 @@
 <!-- Slop issues are expected and intentionally present as part of an HITL-less -->
 <!-- /minimized AI-DD metaproject of learning, refining, and building brute-force -->
 <!-- training for both agents and the human operator. -->
-![Downloads](https://img.shields.io/github/downloads/KooshaPari/phenotype-postfx/total?style=flat-square&label=downloads&color=blue)
-![GitHub release](https://img.shields.io/github/v/release/KooshaPari/phenotype-postfx?style=flat-square&label=release)
-![License](https://img.shields.io/github/license/KooshaPari/phenotype-postfx?style=flat-square)
+![Downloads](https://img.shields.io/github/downloads/<REDACTED>/phenotype-postfx/total?style=flat-square&label=downloads&color=blue)
+![GitHub release](https://img.shields.io/github/v/release/<REDACTED>/phenotype-postfx?style=flat-square&label=release)
+![License](https://img.shields.io/github/license/<REDACTED>/phenotype-postfx?style=flat-square)
 ![AI-Slop](https://img.shields.io/badge/AI--DD-Slop%20Expected-orange?style=flat-square)
 ![AI-Only-Maintained](https://img.shields.io/badge/Planned%20%26%20Maintained%20by-AI%20Agents%20Only-red?style=flat-square)
 ![HITL-less](https://img.shields.io/badge/HITL--less%20AI--DD-metaproject-yellow?style=flat-square)
@@ -27,8 +27,8 @@ Progress: `[███████░░░] 70%` — post-FX stack extracted fro
 
 _Updated 2026-06-08 — audit pass._
 
-[![CI](https://github.com/KooshaPari/phenotype-postfx/actions/workflows/ci.yml/badge.svg)](https://github.com/KooshaPari/phenotype-postfx/actions)
-[![License](https://img.shields.io/github/license/KooshaPari/phenotype-postfx)](LICENSE)
+[![CI](https://github.com/<REDACTED>/phenotype-postfx/actions/workflows/ci.yml/badge.svg)](https://github.com/<REDACTED>/phenotype-postfx/actions)
+[![License](https://img.shields.io/github/license/<REDACTED>/phenotype-postfx)](LICENSE)
 
 Reusable BRP post-processing stack for Unity. Deterministic SSAO → SSGI → Bloom → ACES tonemap → LUT color grading chain via `OnRenderImage`.
 
@@ -82,7 +82,7 @@ magenta shader at runtime.
 
 ## Origin
 
-Extracted from [WorldSphereMod3D](https://github.com/KooshaPari/WorldSphereMod) WSM3DPostStack.
+Extracted from [WorldSphereMod3D](https://github.com/<REDACTED>/WorldSphereMod) WSM3DPostStack.
 
 ## Description
 

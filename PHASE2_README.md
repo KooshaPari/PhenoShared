@@ -166,7 +166,7 @@
 Run after each agent completes a WP or at daily sync:
 
 ```bash
-cd /Users/kooshapari/CodeProjects/Phenotype/repos
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos
 
 echo "🔨 Building..."
 cargo build --workspace && echo "✅ Build OK" || echo "❌ Build FAILED"

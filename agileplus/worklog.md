@@ -59,7 +59,7 @@
 
 ### Full Audit Report
 
-**Reference:** `/Users/kooshapari/CodeProjects/Phenotype/repos/docs/governance/ECOSYSTEM_AUDIT_COMPLETION_SUMMARY.md`
+**Reference:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos/docs/governance/ECOSYSTEM_AUDIT_COMPLETION_SUMMARY.md`
 
 ---
 
@@ -92,13 +92,13 @@ Prioritized cross-repo backlog covering AgilePlus, portage, heliosApp, and helio
 ## AgilePlus Tracking
 
 All feature work is tracked in AgilePlus:
-- Reference: /Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus
+- Reference: /Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus
 - CLI: agileplus (run from AgilePlus directory)
 
 ## Quick Commands
 
 ```bash
-cd /Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus
 
 # List all features
 agileplus list
@@ -113,12 +113,12 @@ agileplus status <feature-id> --wp <wp-id> --state <state>
 ## Current Work
 
 See AgilePlus database for current work status:
-- /Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus/.agileplus/agileplus.db
+- /Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus/.agileplus/agileplus.db
 
 ## Work History
 
 Historical work is documented in:
-- AgilePlus worklog: /Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus/.work-audit/worklog.md
+- AgilePlus worklog: /Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus/.work-audit/worklog.md
 - Git history for merged work
 
 

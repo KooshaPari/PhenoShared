@@ -14,7 +14,7 @@
     "declared_status": "planning_only"
   },
   "host": {
-    "hostname": "KOOSHAPARI-DESK",
+    "hostname": "<REDACTED>-DESK",
     "platform": "Windows host with WSL2",
     "wsl_distribution": "FedoraLinux-44",
     "nvidia_driver": "581.80",
@@ -32,7 +32,7 @@
     "quantization": "Q4_K_M"
   },
   "runtimes": {
-    "vllm": {"version": "0.26.0", "revision": "0.26.0", "binary_path": "/home/kooshapari/mambaforge/envs/vllm/bin/python", "binary_sha256": "3efe4f240ebea0fa136ba8a74d7eebc679a812f77c3024e0c6c720c4966bcab9", "torch": "2.11.0+cu130", "cuda_toolkit": "13.0 (torch build)", "cuda_visible_devices": "1", "logical_device": "cuda:0", "device": "rtx_3090_ti", "url": "http://127.0.0.1:8000"},
+    "vllm": {"version": "0.26.0", "revision": "0.26.0", "binary_path": "/home/<REDACTED>/mambaforge/envs/vllm/bin/python", "binary_sha256": "3efe4f240ebea0fa136ba8a74d7eebc679a812f77c3024e0c6c720c4966bcab9", "torch": "2.11.0+cu130", "cuda_toolkit": "13.0 (torch build)", "cuda_visible_devices": "1", "logical_device": "cuda:0", "device": "rtx_3090_ti", "url": "http://127.0.0.1:8000"},
     "llama_cpp": {"build": "b10012-c71854292", "binary_sha256": "CE876E81E0A25E5A036F8365561337C9032628678A86B3DE25DFFC76A60B6839", "cuda_toolkit": "12.4", "cuda_visible_devices": "1", "logical_device": "CUDA0", "device": "gtx_1080_ti", "url": "http://127.0.0.1:8082"}
   },
   "smokes": [

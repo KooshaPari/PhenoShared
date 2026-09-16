@@ -2,7 +2,7 @@
 
 **Date:** 2026-06-20
 **ADR:** ADR-048 (Substrate graduation path — 4-tier gate)
-**Owner:** kooshapari
+**Owner:** <REDACTED>
 **Device:** macbook
 
 ## 4-Tier Gate (per ADR-048)
@@ -81,5 +81,5 @@ Three substrates currently at Tier-1 are progressing toward Tier-2:
 - ADR-048 (Substrate graduation path — 4-tier gate)
 - ADR-040 (test coverage gates per tier)
 - ADR-042 (substrate quality bar)
-- `KooshaPari/pheno-framework-lint` (implementation)
+- `<REDACTED>/pheno-framework-lint` (implementation)
 - Tier-0: `pheno-tracing` (the canonical example, completed 2025)

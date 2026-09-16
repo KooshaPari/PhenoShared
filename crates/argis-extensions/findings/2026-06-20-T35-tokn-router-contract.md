@@ -2,8 +2,8 @@
 
 **Author:** forge-2 (research + draft contract, no code changes)
 **Date:** 2026-06-20
-**Repo:** `KooshaPari/Tokn`
-**Working dir reference:** `/Users/kooshapari/CodeProjects/Phenotype/repos/Tokn/`
+**Repo:** `<REDACTED>/Tokn`
+**Working dir reference:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos/Tokn/`
 **v11 context:** v11 closure branch `chore/orch-v11-016-tier0-2026-06-20` @ `7184fbb`. §8 ACCEPTED Option B (Bifrost as library; Phenotype-owned decision layer) anchors Tokn's role as the **fleet-wide Rust token routing / selection substrate** for the non-LLM half of Phenotype.
 
 ---
@@ -212,8 +212,8 @@ pub struct RouterEntry {
 
 ## 4. Cross-references and integration points
 
-- **Argis gateway** (`KooshaPari/argis-extensions`): the `intelligentrouter` plugin can populate `RoutingHints.preferred_signer_kid` after the LLM-side routing decision is made (e.g., route to GPT-4 → use `kid=2026-q2-gpt4`); see findings/2026-06-20-T34-bifrost-bump-prep.md §4.
-- **Phenotype registry** (`KooshaPari/phenotype-registry`): add a row for `KooshaPari/Tokn` once the Router contract lands; the registry row should declare the trait surface (`RateLimiter`, `TokenStore`, `Revocation`, `AuditLogger`, **+ `TokenRouter`**).
+- **Argis gateway** (`<REDACTED>/argis-extensions`): the `intelligentrouter` plugin can populate `RoutingHints.preferred_signer_kid` after the LLM-side routing decision is made (e.g., route to GPT-4 → use `kid=2026-q2-gpt4`); see findings/2026-06-20-T34-bifrost-bump-prep.md §4.
+- **Phenotype registry** (`<REDACTED>/phenotype-registry`): add a row for `<REDACTED>/Tokn` once the Router contract lands; the registry row should declare the trait surface (`RateLimiter`, `TokenStore`, `Revocation`, `AuditLogger`, **+ `TokenRouter`**).
 - **Worklog schema v2.1** (per ADR-025): every Tokn Router PR must carry `device:` field per the 11-column worklog schema; expected device is `heavy-runner` for trait work, `macbook` for spec/contract review.
 - **71-pillar audit** (ADR-024): Tokn Router trait maps to **L4 (interface stability)**, **L7 (third-party integration drift)**, **L26 (trait coverage)**, **L46 (authz at decision points)**. Current Tokn score (not measured this turn — out of scope for T35 research) is the baseline.
 
@@ -237,7 +237,7 @@ pub struct RouterEntry {
 2. **T35.1 — Skeleton implementation:** add `tokn/src/router/{mod.rs, table.rs, hint.rs, chain.rs}` + tests (8-12 unit tests for `HintRouter` + `ChainRouter`; 4-6 integration tests with Postgres+Redis testcontainers). (Estimated: 1 day on `device: heavy-runner`.)
 3. **T35.2 — Wire-in:** update `TokenService` (SPEC.md §4, lines 298–500) to invoke the router before each dispatch. Default-empty `RouterConfig` preserves current behavior. (Estimated: 4 hours on `device: heavy-runner`.)
 4. **T35.3 — Registry + ADRs:** update `phenotype-registry` to declare the new trait surface; author `ADR-035-Tokn-Router` (next number in the v11 wave per ADR-035..040 pattern) recording the decision.
-5. **T35.4 — Argis integration:** in `KooshaPari/argis-extensions`, have `intelligentrouter` populate `RoutingHints.preferred_signer_kid` based on the LLM-side routing decision. Verify end-to-end with a Postgres test fixture. (Estimated: 1 day on `device: heavy-runner`.)
+5. **T35.4 — Argis integration:** in `<REDACTED>/argis-extensions`, have `intelligentrouter` populate `RoutingHints.preferred_signer_kid` based on the LLM-side routing decision. Verify end-to-end with a Postgres test fixture. (Estimated: 1 day on `device: heavy-runner`.)
 6. **T35.5 — Audit re-score:** re-run the 71-pillar audit (ADR-024 / ADR-041 weekly cycle) on Tokn post-T35.1 land; verify L4, L7, L26, L46 go from 0/1 to 2/3.
 
 **Estimated total wall-clock:** ~3 days across two devices, ~2 days MacBook-spec-and-ADR and ~1 day heavy-runner-implementation. Agrees with ADR-023 device-fit gate.

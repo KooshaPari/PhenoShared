@@ -99,7 +99,7 @@ brew services start redis
 
 ```bash
 # Clone the repository
-cd /Users/kooshapari/CodeProjects/Phenotype/repos/phenotype-registry
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos/phenotype-registry
 
 # Install dependencies
 go mod download

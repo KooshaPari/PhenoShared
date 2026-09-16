@@ -2,8 +2,8 @@
 
 **Author:** forge-2 (research, no code changes)
 **Date:** 2026-06-20
-**Repo:** `github.com/KooshaPari/argis-extensions` (this checkout is **module** `github.com/kooshapari/bifrost-extensions`)
-**Working dir:** `/Users/kooshapari/CodeProjects/Phenotype/repos/argis-extensions`
+**Repo:** `github.com/<REDACTED>/argis-extensions` (this checkout is **module** `github.com/<REDACTED>/bifrost-extensions`)
+**Working dir:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos/argis-extensions`
 **v11 context:** v11 branch `chore/orch-v11-016-tier0-2026-06-20` @ `7184fbb`. Local `main` HEAD = `e417124` (per `git rev-parse HEAD`). `origin/main` = `beca432`. T34 branch `chore/t34-bifrost-bump-2026-06-20` already exists at `a1751bd` (on top of T34 commit `6bbbc2d`) — T34 was attempted in a prior session and **not merged into `main`**.
 
 ---
@@ -169,7 +169,7 @@ Severity legend: **GREEN** = trivially unaffected, **YELLOW** = code-migration n
 4. `task test:coverage` (per `Taskfile.yml`) → confirm no regression.
 5. `go mod tidy` clean run; `go.sum` updated.
 6. Push branch → open PR → CI green → self-merge per v11 closure norm (Track 8 self-merge is the fleet norm, see `findings/2026-06-18-track8-self-merge-postmortem.md`).
-7. Bump `phenotype-registry` row for `KooshaPari/argis-extensions` with the new Bifrost core dependency (BumpDetected signal).
+7. Bump `phenotype-registry` row for `<REDACTED>/argis-extensions` with the new Bifrost core dependency (BumpDetected signal).
 
 **Estimated wall-clock:** T34.0 ~45 min (mostly `go mod tidy` + cherry-pick); T34.1 ~90 min (real new functionality for smartfallback); T34.2 ~15 min. Total ~2.5 hours on a MacBook with `device: macbook` per ADR-023, or offload to `device: heavy-runner` if `go mod tidy` stalls.
 

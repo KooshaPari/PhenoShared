@@ -35,7 +35,7 @@ Commits diverged: 10 (local) + 3 (remote) = 13 total
 
 ## Governance Violation Analysis
 
-Per `/Users/kooshapari/CodeProjects/Phenotype/CLAUDE.md` (Worktree Rule):
+Per `/Users/<REDACTED>/CodeProjects/Phenotype/CLAUDE.md` (Worktree Rule):
 
 > **Violation**: Canonical repository has 10 local commits ahead of upstream
 > **Root cause**: Feature work committed directly to local main instead of feature branches + worktrees

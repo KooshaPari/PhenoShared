@@ -2,7 +2,7 @@
 # dr-drill.sh — Phase F hardening item F10.
 #
 # Disaster recovery drill for the resume-all toolkit. Simulates a crash by
-# booting out one launchd job (com.kooshapari.resume-all-snapshot) and
+# booting out one launchd job (com.<REDACTED>.resume-all-snapshot) and
 # verifying that:
 #   1. launchd KeepAlive brings the job back with a fresh PID
 #   2. the snapshot loop resumes writing within a configurable timeout
@@ -39,7 +39,7 @@ DR_TIMEOUT="${DR_TIMEOUT:-90}"
 DR_DRY_RUN="${DR_DRY_RUN:-0}"
 SNAPSHOT_PATH="$HOME/.local/share/resume-all/snapshot.jsonl"
 BACKUP_PATH="/tmp/dr-drill-before.jsonl"
-TARGET_JOB="com.kooshapari.resume-all-snapshot"
+TARGET_JOB="com.<REDACTED>.resume-all-snapshot"
 LAUNCHD_DOMAIN="gui/$(id -u)"
 IPC_SOCK="$HOME/Library/Application Support/sharecli/ipc.sock"
 LOG_PREFIX="[dr-drill]"

@@ -4,10 +4,10 @@
 
 **Agent Wave** is a TypeScript/Bun-based orchestration engine for coordinating waves of AI agents. Currently in governance-scaffolding phase (E1 complete, E2–E5 planned).
 
-**Location:** `/Users/kooshapari/Repos/agent-wave/`
+**Location:** `/Users/<REDACTED>/Repos/agent-wave/`
 **Language:** TypeScript / JavaScript
 **Package Manager:** Bun v1.2.0
-**Repository:** https://github.com/KooshaPari/agent-wave
+**Repository:** https://github.com/<REDACTED>/agent-wave
 **License:** MIT
 **Size:** 3.3 MB, 404 files
 

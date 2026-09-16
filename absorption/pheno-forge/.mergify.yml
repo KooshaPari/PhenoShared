@@ -62,7 +62,7 @@ pull_request_rules:
         teams:
           - phenotype/core
         github_accounts:
-          - KooshaPari
+          - <REDACTED>
 
   # Label PRs based on changed files
   - name: Label Python changes

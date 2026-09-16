@@ -2,16 +2,16 @@
 
 This file records **which McpKit branch / commit each archived artifact came from**, so future readers can reconstruct the source of every file in this archive.
 
-The source repo `KooshaPari/McpKit` is archived (read-only) on GitHub since 2026-06-17, so all branch-only content is now frozen locally. This provenance is the only way to recover the original lineage.
+The source repo `<REDACTED>/McpKit` is archived (read-only) on GitHub since 2026-06-17, so all branch-only content is now frozen locally. This provenance is the only way to recover the original lineage.
 
 ## Source branches (live query, 2026-06-18)
 
 | # | Ref | Type | Tip commit | Date | Origin |
 |---|---|---|---|---|---|
-| 1 | `origin/main` | remote | `c557c3c` | 2026-06-17 | `KooshaPari/McpKit` (archived) |
-| 2 | `origin/feat/journey-impl` | remote | `6b6156a` | 2026-05-01 | `KooshaPari/McpKit` |
-| 3 | `origin/chore/1st-hygiene-2026-06-08` | remote | `1363e07` | 2026-06-14 | `KooshaPari/McpKit` |
-| 4 | `origin/wip/2026-06-18-McpKit-l7-001-propagation` | remote | `28eef29` | 2026-06-18 | `KooshaPari/McpKit` |
+| 1 | `origin/main` | remote | `c557c3c` | 2026-06-17 | `<REDACTED>/McpKit` (archived) |
+| 2 | `origin/feat/journey-impl` | remote | `6b6156a` | 2026-05-01 | `<REDACTED>/McpKit` |
+| 3 | `origin/chore/1st-hygiene-2026-06-08` | remote | `1363e07` | 2026-06-14 | `<REDACTED>/McpKit` |
+| 4 | `origin/wip/2026-06-18-McpKit-l7-001-propagation` | remote | `28eef29` | 2026-06-18 | `<REDACTED>/McpKit` |
 | 5 | `docs/mcpkit-sladge-badge` | local | `971a6c7` | 2026-05-01 | worktree-only (no remote push) |
 | 6 | `docs/mcpkit-sladge-ci-refresh` | local | `f660fb0` | 2026-05-07 | worktree-only (no remote push) |
 | 7 | `chore/audit-safe-workflows-0605` | local | includes `430a882` | 2026-06-05 | worktree-only (no remote push) |
@@ -78,7 +78,7 @@ The `docs/mcpkit-sladge-ci-refresh` local branch (tip `f660fb0`, 2026-05-07 04:5
 ## Verification commands (re-runnable)
 
 ```bash
-cd /Users/kooshapari/CodeProjects/Phenotype/repos/McpKit
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos/McpKit
 
 # Verify SOTA doc provenance
 git show origin/feat/journey-impl:docs/research/MCP_TOOLKITS_SOTA.md | wc -l    # 3638

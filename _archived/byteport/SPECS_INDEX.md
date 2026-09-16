@@ -12,7 +12,7 @@
 | **Language** | Python + Go (dual) + Rust (Cargo workspace for Tauri desktop app) |
 | **Status** | Active |
 | **License** | MIT |
-| **Owner** | KooshaPari |
+| **Owner** | <REDACTED> |
 
 ## Components
 

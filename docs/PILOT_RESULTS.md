@@ -20,7 +20,7 @@ Build is clean, `--help` renders correctly.
 
 ## Step 2: Three Real Dispatches
 
-All dispatches run with `CODEX_BIN=/Users/kooshapari/.local/share/codex/standalone/bin/codex` (required — the default PATH `codex` is the old binary without bundled zsh fork).
+All dispatches run with `CODEX_BIN=/Users/<REDACTED>/.local/share/codex/standalone/bin/codex` (required — the default PATH `codex` is the old binary without bundled zsh fork).
 
 ### Dispatch 1 — worker tier
 

@@ -5,13 +5,13 @@
 **Size**: 201M
 **Pre-delete state**:
 - HEAD: `main` at `e9d8768` ("Production Draft")
-- Remotes: `origin` = `git@github.com:Dmouse92/TripleM.git` (fork parent); `upstream` = `git@github.com:KooshaPari/TripleM.git` (misconfigured alias — `KooshaPari/TripleM` does not exist as a KooshaPari native repo)
+- Remotes: `origin` = `git@github.com:Dmouse92/TripleM.git` (fork parent); `upstream` = `git@github.com:<REDACTED>/TripleM.git` (misconfigured alias — `<REDACTED>/TripleM` does not exist as a <REDACTED> native repo)
 - Dirty files: 910 (uncommitted working-tree changes)
 - Last 3 commits: `e9d8768` "Production Draft", `e7f11f6` "Production Draft", `26a4fc9` "Production Draft"
 
 **User directive (2026-07-17)**: *"skip\delete triplem on our end"*
 
-**Why no push**: The repo is a fork of `Dmouse92/TripleM`. The "upstream" remote was misconfigured to point at a non-existent `KooshaPari/TripleM`. The user explicitly chose deletion over tarballing or pushing anywhere.
+**Why no push**: The repo is a fork of `Dmouse92/TripleM`. The "upstream" remote was misconfigured to point at a non-existent `<REDACTED>/TripleM`. The user explicitly chose deletion over tarballing or pushing anywhere.
 
 **Why no tarball**: Per user override — explicit "rather than tarball properly create wip or other branches + PR \push all noted items od have remotes." TripleM has no remote the user wants work pushed to.
 

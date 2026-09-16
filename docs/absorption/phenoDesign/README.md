@@ -8,9 +8,9 @@
 
 ## Reversal (2026-07-20)
 
-This absorption is **reversed**. `KooshaPari/phenoDesign` is restored as the **CREATIVITY_DESIGN_UX spine** (GitHub unarchived). phenodocs copies, if any, are downstream mirrors only.
+This absorption is **reversed**. `<REDACTED>/phenoDesign` is restored as the **CREATIVITY_DESIGN_UX spine** (GitHub unarchived). phenodocs copies, if any, are downstream mirrors only.
 
-Asset pipeline extracted to `KooshaPari/asset-engine` from `engine/`.
+Asset pipeline extracted to `<REDACTED>/asset-engine` from `engine/`.
 
 See `docs/spine/phenoDesign.md` and `docs/boundary/PhenoDesign.md`.
 

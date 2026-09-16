@@ -10,7 +10,7 @@ Every repo deletion MUST follow a documented recipe: (1) pre-archive: author a `
 
 ## Context
 
-The 4-repo retirement on 2026-06-18 (per ADR-037) revealed a fleet policy gap: the `gh repo delete` CLI requires the `delete_repo` OAuth scope, which the active `KooshaPari` token does not have (scopes: `'gist', 'read:org', 'repo', 'workflow'`). The deletion step is therefore a **manual UI action** that lives outside the operator's normal automation surface.
+The 4-repo retirement on 2026-06-18 (per ADR-037) revealed a fleet policy gap: the `gh repo delete` CLI requires the `delete_repo` OAuth scope, which the active `<REDACTED>` token does not have (scopes: `'gist', 'read:org', 'repo', 'workflow'`). The deletion step is therefore a **manual UI action** that lives outside the operator's normal automation surface.
 
 Without a documented recipe, the next operator facing a deletion will:
 
@@ -49,10 +49,10 @@ Since the `gh repo delete` CLI is unavailable without the `delete_repo` scope, t
 
 The active `gh` token has scopes `'gist', 'read:org', 'repo', 'workflow'`. No `delete_repo`. To complete the migration to fully-deleted state, run via the GitHub UI (Settings → General → Danger Zone → Delete this repository):
 
-- https://github.com/KooshaPari/dagctl/settings#dangerZone
-- https://github.com/KooshaPari/kwality/settings#dangerZone
-- https://github.com/KooshaPari/phenotype-auth-ts/settings#dangerZone
-- https://github.com/KooshaPari/dinoforge-packs/settings#dangerZone
+- https://github.com/<REDACTED>/dagctl/settings#dangerZone
+- https://github.com/<REDACTED>/kwality/settings#dangerZone
+- https://github.com/<REDACTED>/phenotype-auth-ts/settings#dangerZone
+- https://github.com/<REDACTED>/dinoforge-packs/settings#dangerZone
 
 90-day GitHub retention applies to the soft-delete tombstone.
 ```
@@ -64,7 +64,7 @@ The 4 URLs are the operator's to-do list. They are stable (the `#dangerZone` anc
 After the migration PRs land and CI is green, archive each source:
 
 ```bash
-gh api -X PATCH repos/KooshaPari/<source> -f archived=true
+gh api -X PATCH repos/<REDACTED>/<source> -f archived=true
 ```
 
 Archive = read-only marker; the git history is preserved indefinitely. This is **not** deletion; this is the safety layer.

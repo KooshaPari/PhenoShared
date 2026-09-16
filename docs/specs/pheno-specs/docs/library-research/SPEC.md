@@ -418,7 +418,7 @@ FOR EACH link IN registry_a.links:
 
 **Purpose**: Central source of truth for design specifications
 
-**URL**: https://github.com/KooshaPari/PhenoSpecs
+**URL**: https://github.com/<REDACTED>/PhenoSpecs
 
 #### 5.1.1 Structure
 
@@ -458,7 +458,7 @@ PhenoSpecs/
 version: "1.0.0"
 registries:
   - name: PhenoSpecs
-    url: https://github.com/KooshaPari/PhenoSpecs
+    url: https://github.com/<REDACTED>/PhenoSpecs
     specs:
       - id: SPEC-AUTH-001
         title: OAuth2 Authorization Code Flow
@@ -477,7 +477,7 @@ registries:
 
 **Purpose**: Living documentation for how to build software
 
-**URL**: https://github.com/KooshaPari/PhenoHandbook
+**URL**: https://github.com/<REDACTED>/PhenoHandbook
 
 #### 5.2.1 Structure
 
@@ -543,7 +543,7 @@ templates:
 
 **Purpose**: Code templates and project scaffolding
 
-**URL**: https://github.com/KooshaPari/HexaKit
+**URL**: https://github.com/<REDACTED>/HexaKit
 
 #### 5.3.1 Structure
 
@@ -601,7 +601,7 @@ files:
 
 **Purpose**: Unified navigation and cross-registry coordination
 
-**URL**: https://github.com/KooshaPari/phenotype-registry
+**URL**: https://github.com/<REDACTED>/phenotype-registry
 
 #### 5.4.1 Structure
 
@@ -1320,7 +1320,7 @@ The phenotype-registry provides a read-only query API for discovering and naviga
 #### 8.1.1 Base URL
 
 ```
-https://raw.githubusercontent.com/KooshaPari/phenotype-registry/main/
+https://raw.githubusercontent.com/<REDACTED>/phenotype-registry/main/
 ```
 
 #### 8.1.2 Endpoints
@@ -1340,7 +1340,7 @@ https://raw.githubusercontent.com/KooshaPari/phenotype-registry/main/
   "registries": [
     {
       "name": "PhenoSpecs",
-      "url": "https://github.com/KooshaPari/PhenoSpecs",
+      "url": "https://github.com/<REDACTED>/PhenoSpecs",
       "description": "Specifications and ADRs",
       "stats": {
         "specs": 45,
@@ -1350,7 +1350,7 @@ https://raw.githubusercontent.com/KooshaPari/phenotype-registry/main/
     },
     {
       "name": "PhenoHandbook",
-      "url": "https://github.com/KooshaPari/PhenoHandbook",
+      "url": "https://github.com/<REDACTED>/PhenoHandbook",
       "description": "Patterns and guidelines",
       "stats": {
         "patterns": 62,
@@ -1360,7 +1360,7 @@ https://raw.githubusercontent.com/KooshaPari/phenotype-registry/main/
     },
     {
       "name": "HexaKit",
-      "url": "https://github.com/KooshaPari/HexaKit",
+      "url": "https://github.com/<REDACTED>/HexaKit",
       "description": "Templates and scaffolding",
       "stats": {
         "templates": 18
@@ -1417,7 +1417,7 @@ For real-time updates, registries MAY support webhooks.
   "data": {
     "id": "SPEC-NEW-001",
     "title": "New Feature Spec",
-    "url": "https://github.com/KooshaPari/PhenoSpecs/blob/main/specs/new.yaml"
+    "url": "https://github.com/<REDACTED>/PhenoSpecs/blob/main/specs/new.yaml"
   }
 }
 ```
@@ -1453,7 +1453,7 @@ GET /search?q=<query>&registry=<registry>&type=<type>
       "id": "SPEC-AUTH-001",
       "title": "OAuth2 Authorization Code Flow",
       "excerpt": "...OAuth2 implementation using the authorization code flow...",
-      "url": "https://github.com/KooshaPari/PhenoSpecs/blob/main/specs/auth/oauth.yaml"
+      "url": "https://github.com/<REDACTED>/PhenoSpecs/blob/main/specs/auth/oauth.yaml"
     }
   ]
 }
@@ -1581,19 +1581,19 @@ jobs:
       - name: Checkout PhenoSpecs
         uses: actions/checkout@v4
         with:
-          repository: KooshaPari/PhenoSpecs
+          repository: <REDACTED>/PhenoSpecs
           path: phenospecs
 
       - name: Checkout PhenoHandbook
         uses: actions/checkout@v4
         with:
-          repository: KooshaPari/PhenoHandbook
+          repository: <REDACTED>/PhenoHandbook
           path: phenohandbook
 
       - name: Checkout HexaKit
         uses: actions/checkout@v4
         with:
-          repository: KooshaPari/HexaKit
+          repository: <REDACTED>/HexaKit
           path: hexakit
 
       - name: Setup Python
@@ -2222,7 +2222,7 @@ import yaml
 from pathlib import Path
 
 class PhenotypeRegistryClient:
-    BASE_URL = "https://raw.githubusercontent.com/KooshaPari/phenotype-registry/main"
+    BASE_URL = "https://raw.githubusercontent.com/<REDACTED>/phenotype-registry/main"
 
     def __init__(self):
         self._index = None

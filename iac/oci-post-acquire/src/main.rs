@@ -37,10 +37,10 @@ struct Cli {
     instance_file: String,
 
     /// DNS name to register (A record).
-    #[arg(long, env = "OCI_DNS_NAME", default_value = "oci-1.kooshapari.com")]
+    #[arg(long, env = "OCI_DNS_NAME", default_value = "oci-1.<REDACTED>.com")]
     dns_name: String,
 
-    /// Cloudflare zone ID for kooshapari.com.
+    /// Cloudflare zone ID for <REDACTED>.com.
     #[arg(
         long,
         env = "CF_ZONE_ID",
@@ -376,7 +376,7 @@ async fn imessage_send(body: &str) -> Result<()> {
     let status = Command::new("agent-imessage")
         .arg("notify")
         .arg("--to")
-        .arg("kooshapari@gmail.com")
+        .arg("<REDACTED>@gmail.com")
         .arg("--title")
         .arg("OCI Acquired")
         .arg("--body")

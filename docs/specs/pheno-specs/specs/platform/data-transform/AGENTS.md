@@ -4,7 +4,7 @@
 
 - **Name**: Datamold (Data Platform & Transformation)
 - **Description**: Data transformation, validation, and pipeline orchestration platform for ETL/ELT workflows
-- **Location**: `/Users/kooshapari/CodeProjects/Phenotype/repos/Datamold`
+- **Location**: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/Datamold`
 - **Language Stack**: Python 3.12+, Apache Spark, dbt, SQL
 - **Published**: Private (Phenotype org)
 
@@ -12,7 +12,7 @@
 
 ```bash
 # Navigate to project
-cd /Users/kooshapari/CodeProjects/Phenotype/repos/Datamold
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos/Datamold
 
 # Install dependencies
 pip install -r requirements.txt
@@ -205,7 +205,7 @@ datamold lineage --model <name>
 - [dbt Documentation](https://docs.getdbt.com/)
 - [Apache Spark](https://spark.apache.org/docs/)
 - [Great Expectations](https://docs.greatexpectations.io/)
-- [Phenotype Registry](https://github.com/KooshaPari/phenotype-registry)
+- [Phenotype Registry](https://github.com/<REDACTED>/phenotype-registry)
 
 ## Agent Notes
 

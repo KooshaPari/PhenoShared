@@ -11,7 +11,7 @@
 ## TL;DR
 
 Scanned **10 fleet repos** for hardcoded secrets using gitleaks 8.30.0 with
-manual regex cross-check. **5 repos exist under KooshaPari/*; 5 return HTTP 404**
+manual regex cross-check. **5 repos exist under <REDACTED>/*; 5 return HTTP 404**
 (deprecated/deleted/absorbed per ADR-017, ADR-031, ADR-007, ADR-021).
 
 Of the 5 scannable repos, gitleaks reported **1 finding** (Profila) which is a
@@ -30,12 +30,12 @@ do this` — line 1649). Zero true positives. Zero leaked credentials.
 | 2 | `Settly` | **404** | — | ADR-017 (`settly-*` archive, V6 Track 5 closure) |
 | 3 | `clap-ext` | EXISTS | 200 | public, default=main |
 | 4 | `pheno-config` | **404** | — | ADR-031 (absorbed into Configra 2026-06-19) |
-| 5 | `phenotype-py-utils` | **404** | — | repo never existed under `KooshaPari/*` (404 across all 3 orgs) |
+| 5 | `phenotype-py-utils` | **404** | — | repo never existed under `<REDACTED>/*` (404 across all 3 orgs) |
 | 6 | `cheap-llm-mcp` | **404** | — | ADR-007 / ADR-008 (archived; provider work absorbed into `pheno-mcp-router`) |
 | 7 | `sharecli` | EXISTS | 200 | public, default=main |
 | 8 | `thegent-sharecli` | EXISTS | 200 | public, default=main |
 | 9 | `Profila` | EXISTS* | 200 → 404 | cloned successfully, then repo was deleted mid-audit (per ADR-021 → `pheno-profiling`); local clone retained |
-| 10 | `ObservabilityKit` | **404** | — | repo never existed under `KooshaPari/*` (404 across all 3 orgs) |
+| 10 | `ObservabilityKit` | **404** | — | repo never existed under `<REDACTED>/*` (404 across all 3 orgs) |
 
 **5/10 scannable. 5/10 not-scannable due to deprecation/archive.**
 
@@ -152,12 +152,12 @@ This is false-positive category #1 from prior scans (T21.1, 2026-06-20).
   ahead of 2026-07-15 schedule). The Configra scan covers its absorbed content.
 - **`Settly`**: archived per ADR-017 (V6 Track 5 closure). No content to scan.
 - **`cheap-llm-mcp`**: archived per ADR-007/ADR-008. Provider work migrated to
-  `KooshaPari/pheno-mcp-router` (PRs #1, #2, #3 closed 2026-06-17).
-- **`Profila`**: migrated to `KooshaPari/pheno-profiling` per ADR-021. The
+  `<REDACTED>/pheno-mcp-router` (PRs #1, #2, #3 closed 2026-06-17).
+- **`Profila`**: migrated to `<REDACTED>/pheno-profiling` per ADR-021. The
   source repo was deleted mid-audit (cloned snapshot retained at
   `/tmp/audit-5AB/clones/Profila/`).
 - **`phenotype-py-utils`** / **`ObservabilityKit`**: no record of these repos
-  under `KooshaPari/*`, `Dmouse92/*`, or `Phenotype/*`. Confirmed 404 across all
+  under `<REDACTED>/*`, `Dmouse92/*`, or `Phenotype/*`. Confirmed 404 across all
   3 orgs. Possibly never created, possibly under a different name. Out of scan
   scope.
 
@@ -180,10 +180,10 @@ This is false-positive category #1 from prior scans (T21.1, 2026-06-20).
 
 ```bash
 # 1. Existence check (10 repos)
-gh api "repos/KooshaPari/<repo>" --include  # → HTTP 200/404 + default_branch
+gh api "repos/<REDACTED>/<repo>" --include  # → HTTP 200/404 + default_branch
 
 # 2. Shallow clone (5 scannable repos)
-git clone --depth 1 --branch <default_branch> https://github.com/KooshaPari/<repo>.git
+git clone --depth 1 --branch <default_branch> https://github.com/<REDACTED>/<repo>.git
 
 # 3. gitleaks scan
 gitleaks detect --no-git \

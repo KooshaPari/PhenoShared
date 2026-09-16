@@ -33,7 +33,7 @@ codebase for structural compliance.
 
 ```bash
 # Clone the repo
-git clone https://github.com/KooshaPari/pheno-framework-lint.git
+git clone https://github.com/<REDACTED>/pheno-framework-lint.git
 cd pheno-framework-lint
 
 # Create a virtualenv (Python 3.10+)
@@ -101,7 +101,7 @@ Output is always JSON. Exit codes: `0` = clean, `2` = violations found.
 4. Run `just ci` (or the manual equivalent) locally and ensure all
    checks pass.
 5. Use the [PR template](.github/PULL_REQUEST_TEMPLATE.md).
-6. Wait for a CODEOWNERS review (`@kooshapari`).
+6. Wait for a CODEOWNERS review (`@<REDACTED>`).
 7. Squash-merge once CI is green and review is approved.
 
 ## Adding a New Rule

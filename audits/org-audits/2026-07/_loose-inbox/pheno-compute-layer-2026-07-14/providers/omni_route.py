@@ -18,7 +18,7 @@ from typing import Optional, Dict, List
 
 # Configuration
 DESKTOP_URL = os.environ.get("OMNI_URL", "http://100.96.135.160:8080/v1")
-MODELS_DIR = os.environ.get("OMNI_MODELS", "/home/kooshapari/llm-models")
+MODELS_DIR = os.environ.get("OMNI_MODELS", "/home/<REDACTED>/llm-models")
 SERVICE_BACKEND = os.environ.get("OMNI_BACKEND", "vllm")
 
 # Model registry with all verified variants

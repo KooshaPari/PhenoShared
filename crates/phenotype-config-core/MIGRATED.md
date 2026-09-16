@@ -2,7 +2,7 @@
 
 **Date:** 2026-06-17  
 **Disposition:** Agentora PhenoProc audit copy — **not canonical**  
-**Canonical:** https://github.com/KooshaPari/phenoShared  
+**Canonical:** https://github.com/<REDACTED>/phenoShared  
 **Authority:** `PHENOTYPE_HEXAKIT_REPOINT.md` wave 3
 
 ## For consumers
@@ -10,7 +10,7 @@
 Do not depend on this Agentora staging path. Use:
 
 ```toml
-`phenotype-config-core` = { git = "https://github.com/KooshaPari/phenoShared", branch = "main" }
+`phenotype-config-core` = { git = "https://github.com/<REDACTED>/phenoShared", branch = "main" }
 ```
 
 ## For Agentora maintainers

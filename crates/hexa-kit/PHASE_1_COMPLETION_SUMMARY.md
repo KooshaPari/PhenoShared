@@ -2,7 +2,7 @@
 
 **Status:** ✅ COMPLETE & SHIPPED
 **Date:** 2026-03-29
-**PR:** https://github.com/KooshaPari/phenotype-infrakit/pull/87
+**PR:** https://github.com/<REDACTED>/phenotype-infrakit/pull/87
 **Commits:** 3 core Phase 1 commits merged to feature branch (ready for review)
 
 ---
@@ -243,7 +243,7 @@ All Phase 2 dependencies are satisfied:
 
 ## PR Details
 
-**PR #87:** https://github.com/KooshaPari/phenotype-infrakit/pull/87
+**PR #87:** https://github.com/<REDACTED>/phenotype-infrakit/pull/87
 
 **Commits:**
 ```

@@ -4,11 +4,11 @@ version = "0.1.0"
 edition = "2021"
 description = "Container utilities"
 license = "MIT OR Apache-2.0"
-repository = "https://github.com/KooshaPari/PhenoPlugins"
+repository = "https://github.com/<REDACTED>/PhenoPlugins"
 documentation = "https://docs.rs/phenotype-vessel"
 keywords = ["phenotype", "pheno-plugins", "vessel"]
 categories = ["filesystem"]
-authors = ["kooshapari"]
+authors = ["<REDACTED>"]
 
 
 [dependencies]

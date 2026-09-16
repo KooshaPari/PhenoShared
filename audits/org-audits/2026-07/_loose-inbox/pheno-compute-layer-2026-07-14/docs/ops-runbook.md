@@ -34,7 +34,7 @@
                              │ Tailscale SSH → Windows → WSL
                              ▼
 ┌──────────────────────────────────────────────────────────────────┐
-│  Desktop (kooshapari-desk / 3090 Ti)                            │
+│  Desktop (<REDACTED>-desk / 3090 Ti)                            │
 │                                                                  │
 │  WSL Ubuntu-22.04                                               │
 │   ├── Tailscale IP: 100.96.135.160                             │
@@ -166,7 +166,7 @@ source providers/config.env
 # Or set individually
 export OMNI_URL="${DESKTOP_URL}"           # http://100.96.135.160:8080/v1
 export OMNI_BACKEND="vllm"
-export OMNI_MODELS="/home/kooshapari/llm-models"
+export OMNI_MODELS="/home/<REDACTED>/llm-models"
 export DESKTOP_HOST="desk"
 export COMPUTE_IP="100.96.135.160"
 ```
@@ -177,7 +177,7 @@ VLLM_BASE_URL="${DESKTOP_URL}"   # vLLM colocated endpoint
 OLLAMA_BASE_URL="${DESKTOP_URL}"  # Ollama endpoint (future)
 SERVICE_MODEL="granite_4_1_8b"
 SERVICE_CONTEXT="8192"
-LLAMA_SERVER="/home/kooshapari/llama.cpp/llama-b9010/llama-server"
+LLAMA_SERVER="/home/<REDACTED>/llama.cpp/llama-b9010/llama-server"
 ```
 
 ---
@@ -188,7 +188,7 @@ LLAMA_SERVER="/home/kooshapari/llama.cpp/llama-b9010/llama-server"
 
 ```bash
 # 1. Clone / ensure compute-layer is accessible
-cd /Users/kooshapari/CodeProjects/Phenotype/pheno-compute-layer
+cd /Users/<REDACTED>/CodeProjects/Phenotype/pheno-compute-layer
 
 # 2. Run the setup script (Mac side)
 ./scripts/setup.sh
@@ -346,11 +346,11 @@ For concurrent requests to different model sizes:
 from pheno_client import PhenoClient, PhenoMultiClient
 
 # Simple chat
-client = PhenoClient(host="kooshapari-desk", port=8000)
+client = PhenoClient(host="<REDACTED>-desk", port=8000)
 print(client.chat("What is 2+2?"))
 
 # Role-based multi-model
-multi = PhenoMultiClient(host="kooshapari-desk")
+multi = PhenoMultiClient(host="<REDACTED>-desk")
 print(multi.code("function to parse JSON"))     # → port 8002
 print(multi.reason("solve this problem"))       # → port 8003
 print(multi.plan("implement authentication"))   # → port 8002
@@ -490,7 +490,7 @@ bin/pheno-llm stop
 
 ```bash
 # 1. Enter the compute layer repo
-cd /Users/kooshapari/CodeProjects/Phenotype/pheno-compute-layer
+cd /Users/<REDACTED>/CodeProjects/Phenotype/pheno-compute-layer
 
 # 2. Run the installer (symlinks pheno → ~/bin, configures SSH)
 ./scripts/setup.sh
@@ -511,7 +511,7 @@ sleep 15 && bin/pheno-llm test
 ### Daily start-up (copy-paste block)
 
 ```bash
-cd /Users/kooshapari/CodeProjects/Phenotype/pheno-compute-layer
+cd /Users/<REDACTED>/CodeProjects/Phenotype/pheno-compute-layer
 
 # Verify connectivity
 pheno status
@@ -595,10 +595,10 @@ pheno gpu-proc  # Running compute processes only
 ```python
 from pheno_client import PhenoClient, PhenoMultiClient
 
-client = PhenoClient(host="kooshapari-desk", port=8000)
+client = PhenoClient(host="<REDACTED>-desk", port=8000)
 print(client.chat("What is 2+2?"))
 
-multi = PhenoMultiClient(host="kooshapari-desk")
+multi = PhenoMultiClient(host="<REDACTED>-desk")
 print(multi.code("function to parse JSON"))      # → port 8002
 print(multi.reason("solve this problem"))        # → port 8003
 print(multi.plan("implement authentication"))   # → port 8002

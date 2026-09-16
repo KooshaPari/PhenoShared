@@ -100,7 +100,7 @@ func parseAllowedOrigins() []string {
 			"http://localhost:3000",
 			"http://localhost:5173",
 			"http://localhost:8002",
-			"https://byte.kooshapari.com",
+			"https://byte.<REDACTED>.com",
 		}
 	}
 	return origins

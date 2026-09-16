@@ -5,8 +5,8 @@
 ## AgilePlus Mandate
 
 All work MUST be tracked in AgilePlus:
-- Reference: /Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus
-- CLI: cd /Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus && agileplus <command>
+- Reference: /Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus
+- CLI: cd /Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus && agileplus <command>
 
 ## Work Requirements
 
@@ -25,7 +25,7 @@ All work MUST be tracked in AgilePlus:
 
 All agents MUST write worklogs for research, decisions, and significant findings:
 
-- **Location:** `/Users/kooshapari/CodeProjects/Phenotype/repos/worklogs/`
+- **Location:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos/worklogs/`
 - **Index:** `worklogs/README.md`
 - **Aggregation:** `./worklogs/aggregate.sh [project|priority|category|all]`
 - **Onboarding:** `worklogs/AGENT_ONBOARDING.md`

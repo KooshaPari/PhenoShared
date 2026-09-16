@@ -2,7 +2,7 @@
 
 ## Summary
 
-Scanned 97 repos in `/Users/kooshapari/CodeProjects/Phenotype/repos`. The "97 repos have manual-only workflows" context refers to worktree directories and non-code directories — these are expected to have no workflows. The actual audit scope is code-bearing repos.
+Scanned 97 repos in `/Users/<REDACTED>/CodeProjects/Phenotype/repos`. The "97 repos have manual-only workflows" context refers to worktree directories and non-code directories — these are expected to have no workflows. The actual audit scope is code-bearing repos.
 
 ## Finding: Repos With Zero Workflows But Buildable Code
 

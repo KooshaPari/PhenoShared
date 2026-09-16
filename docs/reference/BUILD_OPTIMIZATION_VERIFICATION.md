@@ -22,7 +22,7 @@
 
 ### Current Status: ❌ NOT DEPLOYED
 
-**File**: `/Users/kooshapari/CodeProjects/Phenotype/repos/Cargo.toml` (line 33)
+**File**: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/Cargo.toml` (line 33)
 
 **Current Configuration**:
 ```toml
@@ -51,7 +51,7 @@ tokio = { version = "1", features = ["rt-multi-thread", "macros", "sync", "time"
 
 ### Current Status: ❌ NOT DEPLOYED
 
-**File**: `/Users/kooshapari/CodeProjects/Phenotype/repos/Cargo.toml` (lines 55-59)
+**File**: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/Cargo.toml` (lines 55-59)
 
 **Current Configuration**:
 ```toml
@@ -92,7 +92,7 @@ panic = "abort"
 
 ### Current Status: ⚠️ PARTIALLY DEPLOYED (SUBOPTIMAL)
 
-**CI Configuration**: `/Users/kooshapari/CodeProjects/Phenotype/repos/.github/workflows/ci.yml`
+**CI Configuration**: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/.github/workflows/ci.yml`
 
 **Current Setup**:
 ```yaml
@@ -361,7 +361,7 @@ saw_true: false,  // ✅ CORRECT
 
 ## Files Modified
 
-- `/Users/kooshapari/CodeProjects/Phenotype/repos/crates/phenotype-iter/src/lib.rs` — Fixed compilation error (was_matching → saw_true)
+- `/Users/<REDACTED>/CodeProjects/Phenotype/repos/crates/phenotype-iter/src/lib.rs` — Fixed compilation error (was_matching → saw_true)
 
 ## Testing Performed
 
@@ -375,5 +375,5 @@ saw_true: false,  // ✅ CORRECT
 ---
 
 **Report Generated**: 2026-03-30
-**Repository**: KooshaPari/phenotype-infrakit
+**Repository**: <REDACTED>/phenotype-infrakit
 **Branch**: refactor/phenotype-only-workspace

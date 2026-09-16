@@ -4,7 +4,7 @@
 
 | Field | Value |
 | ----- | ----- |
-| Source | `KooshaPari/localbase3` |
+| Source | `<REDACTED>/localbase3` |
 | Disposition | AFFIRM (canonical, NOT absorbed) |
 | Registry row | `repo-localbase3` |
 | Registry version | 1.6.30 |
@@ -29,7 +29,7 @@ topology.
 2. Repo metadata in registry `projects/localbase3.json` shows size_kb=256,
    remote_branch_count=32, last_push 2026-06-08.
 3. The 32 branches include 8 `chore/*` branches (CI/housekeeping) and
-   a single `KooshaPari-patch-1` branch (likely external PR).
+   a single `<REDACTED>-patch-1` branch (likely external PR).
 4. `main` HEAD is empty (deletion-equivalent commit at 3011bde).
 
 ## Cross-references

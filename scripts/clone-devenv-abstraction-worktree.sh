@@ -1,11 +1,11 @@
 #!/usr/bin/env sh
-# Clone KooshaPari/devenv-abstraction into the Phenotype worktree layout.
+# Clone <REDACTED>/devenv-abstraction into the Phenotype worktree layout.
 # Run from your machine (not assumed to run in agent sandboxes).
 set -eu
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 DEST="${DEVENV_WT:-$ROOT/worktrees/devenv-abstraction/main}"
-REPO="${DEVENV_REPO:-https://github.com/KooshaPari/devenv-abstraction.git}"
+REPO="${DEVENV_REPO:-https://github.com/<REDACTED>/devenv-abstraction.git}"
 
 if test -e "$DEST/.git"; then
   echo "already cloned: $DEST" >&2

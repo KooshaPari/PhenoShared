@@ -5,7 +5,7 @@
 
 set -euo pipefail
 
-SRC="/Users/kooshapari/CodeProjects/Phenotype/repos/phenotype-tooling"
+SRC="/Users/<REDACTED>/CodeProjects/Phenotype/repos/phenotype-tooling"
 BIN_DIR="$SRC/target/debug"
 
 # 1. Resolve the phinbox-mcp binary (prefer installed, fall back to cargo target)

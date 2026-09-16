@@ -118,7 +118,7 @@ V3 denominator of **71** is authoritative:
 
 1. **Backfill 22 missing worklogs** (69% → 100%)
    - Priority: high-velocity repos (heliosApp, phenotype-journeys, phenotype-ops-mcp, phenotype-tooling)
-   - Template: `/Users/kooshapari/CodeProjects/Phenotype/repos/worklogs/AGENT_ONBOARDING.md`
+   - Template: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/worklogs/AGENT_ONBOARDING.md`
 
 2. **Add quality-gate.yml to 5 artifact repos** (92% → 100%)
    - Can be minimal for reference/library repos (no-op gate acceptable)

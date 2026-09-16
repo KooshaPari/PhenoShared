@@ -14,18 +14,18 @@
 
 | Repo | LOC | State | Verdict |
 |------|-----|-------|---------|
-| `KooshaPari/pheno-framework-lint` | 473 + 303 tests + 239 docs | Real, working L73 governance tool | MERGE → pheno-scaffold-kit → ARCHIVE |
-| `KooshaPari/pheno-drift-detector` | 413 + 71 tests + 332 docs | Real, working L74 governance tool (with 2 gaps) | MERGE → pheno-scaffold-kit → ARCHIVE |
-| `KooshaPari/pheno-predict` | 376 + 339 tests + 285 docs | Real, working L72 governance tool | MERGE → pheno-scaffold-kit → ARCHIVE |
-| `KooshaPari/forge-runner-scripts` | 33 files / 16 scripts | Real, working operational scripts | SPLIT MERGE → phenodag (2 dag_*.py, already done L5-113) + phenotype-org-audits (31 files) → ARCHIVE |
+| `<REDACTED>/pheno-framework-lint` | 473 + 303 tests + 239 docs | Real, working L73 governance tool | MERGE → pheno-scaffold-kit → ARCHIVE |
+| `<REDACTED>/pheno-drift-detector` | 413 + 71 tests + 332 docs | Real, working L74 governance tool (with 2 gaps) | MERGE → pheno-scaffold-kit → ARCHIVE |
+| `<REDACTED>/pheno-predict` | 376 + 339 tests + 285 docs | Real, working L72 governance tool | MERGE → pheno-scaffold-kit → ARCHIVE |
+| `<REDACTED>/forge-runner-scripts` | 33 files / 16 scripts | Real, working operational scripts | SPLIT MERGE → phenodag (2 dag_*.py, already done L5-113) + phenotype-org-audits (31 files) → ARCHIVE |
 
 ## Absorption targets
 
 | Target repo | What absorbed | PR |
 |-------------|---------------|-----|
-| `KooshaPari/pheno-scaffold-kit` | 3 governance tools (L72/L73/L74) as `SUB_LIBRARIES` + Click subcommands | #2 (open) |
-| `KooshaPari/phenodag` | 2 dag_*.py files (dag_orchestrator.py, dag_dispatcher.py) as Go rewrites | (L5-113, 2026-06-18, already merged) |
-| `KooshaPari/phenotype-org-audits` | 31 forge-runner-scripts files (autoqueue, subagent launchers, macOS Ghostty helpers, process docs, specs, commands, install script) | #49 (open) |
+| `<REDACTED>/pheno-scaffold-kit` | 3 governance tools (L72/L73/L74) as `SUB_LIBRARIES` + Click subcommands | #2 (open) |
+| `<REDACTED>/phenodag` | 2 dag_*.py files (dag_orchestrator.py, dag_dispatcher.py) as Go rewrites | (L5-113, 2026-06-18, already merged) |
+| `<REDACTED>/phenotype-org-audits` | 31 forge-runner-scripts files (autoqueue, subagent launchers, macOS Ghostty helpers, process docs, specs, commands, install script) | #49 (open) |
 
 ## Migration actions taken (this session, 2026-06-19)
 
@@ -36,19 +36,19 @@
 5. **Created `pheno-scaffold-kit/tests/test_absorbed_tools.py`** (10 new tests)
 6. **Updated `pheno-scaffold-kit/README.md`** to document the 3 absorbed tools + ADR provenance
 7. **Verified all 24 tests pass** (`PYTHONPATH=src python3 -m pytest tests/` → 24 passed in 8.43s)
-8. **Committed + pushed** to `KooshaPari/pheno-scaffold-kit:chore/l5-110-112-merge-framework-lint-drift-detector-predict-2026-06-19`
-9. **Created PR #2** on `KooshaPari/pheno-scaffold-kit`
+8. **Committed + pushed** to `<REDACTED>/pheno-scaffold-kit:chore/l5-110-112-merge-framework-lint-drift-detector-predict-2026-06-19`
+9. **Created PR #2** on `<REDACTED>/pheno-scaffold-kit`
 10. **Copied 31 forge-runner-scripts files** into `phenotype-org-audits/forge-runner-scripts/`
 11. **Created `ABSORPTION.md`** in target with audit trail
-12. **Committed + pushed** to `KooshaPari/phenotype-org-audits:chore/l5-113-merge-forge-runner-scripts-process-2026-06-19`
-13. **Created PR #49** on `KooshaPari/phenotype-org-audits`
+12. **Committed + pushed** to `<REDACTED>/phenotype-org-audits:chore/l5-113-merge-forge-runner-scripts-process-2026-06-19`
+13. **Created PR #49** on `<REDACTED>/phenotype-org-audits`
 14. **Updated `phenotype-registry/registry/disposition-index.json`** with 4 new rows (84-87)
 15. **Updated `phenotype-registry/registry/components.lock`** marking all 4 as `archived`
 16. **Attempted to delete chore branches** — already absent remotely (404 expected)
 
 ## Competing parallel PRs discovered
 
-During verification, discovered 4 pre-existing PRs on `KooshaPari/phenotype-org-audits` that absorbed the same 3 governance tools into `audits/<tool>/` subdirectories:
+During verification, discovered 4 pre-existing PRs on `<REDACTED>/phenotype-org-audits` that absorbed the same 3 governance tools into `audits/<tool>/` subdirectories:
 
 - PR #45: chore(governance-tools): absorb pheno-predict as audits/predict-dry/
 - PR #46: chore(governance-tools): absorb pheno-framework-lint as audits/framework-lint/
@@ -78,16 +78,16 @@ Both strategies agree on **archiving the standalone repos** — that's the core 
 
 | Repo | Verdict | Status |
 |------|---------|--------|
-| `KooshaPari/pheno-framework-lint` | ARCHIVE | `isArchived: true` (2026-06-19) |
-| `KooshaPari/pheno-drift-detector` | ARCHIVE | `isArchived: true` (2026-06-19) |
-| `KooshaPari/pheno-predict` | ARCHIVE | `isArchived: true` (2026-06-19) |
-| `KooshaPari/forge-runner-scripts` | ARCHIVE | `isArchived: true` (2026-06-19) |
+| `<REDACTED>/pheno-framework-lint` | ARCHIVE | `isArchived: true` (2026-06-19) |
+| `<REDACTED>/pheno-drift-detector` | ARCHIVE | `isArchived: true` (2026-06-19) |
+| `<REDACTED>/pheno-predict` | ARCHIVE | `isArchived: true` (2026-06-19) |
+| `<REDACTED>/forge-runner-scripts` | ARCHIVE | `isArchived: true` (2026-06-19) |
 
 All 4 repos require GitHub UI to fully delete (token lacks `delete_repo` scope):
-- https://github.com/KooshaPari/pheno-framework-lint/settings#dangerZone
-- https://github.com/KooshaPari/pheno-drift-detector/settings#dangerZone
-- https://github.com/KooshaPari/pheno-predict/settings#dangerZone
-- https://github.com/KooshaPari/forge-runner-scripts/settings#dangerZone
+- https://github.com/<REDACTED>/pheno-framework-lint/settings#dangerZone
+- https://github.com/<REDACTED>/pheno-drift-detector/settings#dangerZone
+- https://github.com/<REDACTED>/pheno-predict/settings#dangerZone
+- https://github.com/<REDACTED>/forge-runner-scripts/settings#dangerZone
 
 90-day GitHub retention applies after soft-delete.
 
@@ -106,16 +106,16 @@ All 4 repos require GitHub UI to fully delete (token lacks `delete_repo` scope):
 
 - ADR-013 (PhenoMCP consolidation, dispatches in phenodag)
 - ADR-023 (App-effort governance, device + dogfood + app substrate)
-- ADR-029 (Dmouse92 → KooshaPari migration)
+- ADR-029 (Dmouse92 → <REDACTED> migration)
 - ADR-047 (Predictive DRY discipline, 4-criterion rule)
 - ADR-048 (Substrate graduation path, 4-tier gate table)
 - ADR-049 (App-substrate drift detector, 3-pass algorithm)
 
 ## Post-deletion status (2026-06-20)
 
-`KooshaPari/phenotype-org-audits` was deleted externally at **2026-06-20 T04:01 UTC** (the repo it was being absorbed into). PR #49 was orphaned before it could merge. The 32 files that had been committed to the local clone (31 source + 1 ABSORPTION.md) were relocated to **`/findings/forge-runner-scripts/`** in the monorepo as monorepo commit `62ac60cd77`.
+`<REDACTED>/phenotype-org-audits` was deleted externally at **2026-06-20 T04:01 UTC** (the repo it was being absorbed into). PR #49 was orphaned before it could merge. The 32 files that had been committed to the local clone (31 source + 1 ABSORPTION.md) were relocated to **`/findings/forge-runner-scripts/`** in the monorepo as monorepo commit `62ac60cd77`.
 
-Registry update: `l5-113-forge-runner-scripts` row's `target` and `pr` fields were updated in `phenotype-registry/registry/disposition-index.json` and `registry/components.lock` to point at the new absorption home (commit `39aa86bc` on `KooshaPari/phenotype-registry:chore/l5-110-112-second-half-4-repo-disposition-2026-06-19`).
+Registry update: `l5-113-forge-runner-scripts` row's `target` and `pr` fields were updated in `phenotype-registry/registry/disposition-index.json` and `registry/components.lock` to point at the new absorption home (commit `39aa86bc` on `<REDACTED>/phenotype-registry:chore/l5-110-112-second-half-4-repo-disposition-2026-06-19`).
 
 **Net result:** 0 last-resort exceptions, 0 net content loss. All 4 second-half repos archived on GitHub, all 33 source files preserved (31 in monorepo findings/ + 2 in phenodag Go rewrite).
 
@@ -125,20 +125,20 @@ Registry update: `l5-113-forge-runner-scripts` row's `target` and `pr` fields we
 
 ### What happened
 
-After the prior turn's analysis, `KooshaPari/pheno-scaffold-kit` was **deleted externally** (2026-06-20, T05:xx UTC) before PR #2 (the original absorption PR) could merge. The 3 governance tool source files (`_framework_lint.py`, `_drift_detector.py`, `_predict.py`) on PR #2's branch were lost on GitHub.
+After the prior turn's analysis, `<REDACTED>/pheno-scaffold-kit` was **deleted externally** (2026-06-20, T05:xx UTC) before PR #2 (the original absorption PR) could merge. The 3 governance tool source files (`_framework_lint.py`, `_drift_detector.py`, `_predict.py`) on PR #2's branch were lost on GitHub.
 
 ### Recovery actions (2026-06-20)
 
-1. **`KooshaPari/pheno-scaffold-kit` was unarchived** (HTTP PATCH archived=false on the surviving GitHub tombstone)
+1. **`<REDACTED>/pheno-scaffold-kit` was unarchived** (HTTP PATCH archived=false on the surviving GitHub tombstone)
 2. **PR #3 was opened** with the 3 source files re-copied verbatim from the archived source repos:
-   - `pheno_framework_lint.py` (473 LOC) from `KooshaPari/pheno-framework-lint`
-   - `pheno_drift_detector.py` (413 LOC) from `KooshaPari/pheno-drift-detector`
-   - `pheno_predict.py` (376 LOC) from `KooshaPari/pheno-predict`
+   - `pheno_framework_lint.py` (473 LOC) from `<REDACTED>/pheno-framework-lint`
+   - `pheno_drift_detector.py` (413 LOC) from `<REDACTED>/pheno-drift-detector`
+   - `pheno_predict.py` (376 LOC) from `<REDACTED>/pheno-predict`
 3. **3 source repos were fully DELETED** on GitHub (HTTP 404 confirmed):
-   - `KooshaPari/pheno-framework-lint`
-   - `KooshaPari/pheno-drift-detector`
-   - `KooshaPari/pheno-predict`
-4. **`KooshaPari/pheno-scaffold-kit` was re-archived** (umbrella mission complete)
+   - `<REDACTED>/pheno-framework-lint`
+   - `<REDACTED>/pheno-drift-detector`
+   - `<REDACTED>/pheno-predict`
+4. **`<REDACTED>/pheno-scaffold-kit` was re-archived** (umbrella mission complete)
 5. **`phenotype-registry` PR #274** opened to:
    - Update `l5-110/111/112` rows to reference PR #3 instead of PR #2
    - Add `pheno-scaffold-kit` to `_archive_notes`
@@ -175,7 +175,7 @@ Every meaningful source item from every repo has a documented migration path. Th
 
 ### What happened
 
-`KooshaPari/pheno-scaffold-kit#3` (the original absorption PR) was created 2026-06-19 but the **repo itself was deleted externally** on 2026-06-20 before the PR could merge. The 3 absorbed tool files (`_framework_lint.py`, `_drift_detector.py`, `_predict.py`) on that branch were lost on GitHub.
+`<REDACTED>/pheno-scaffold-kit#3` (the original absorption PR) was created 2026-06-19 but the **repo itself was deleted externally** on 2026-06-20 before the PR could merge. The 3 absorbed tool files (`_framework_lint.py`, `_drift_detector.py`, `_predict.py`) on that branch were lost on GitHub.
 
 ### Recovery: HexaKit as new target
 
@@ -190,7 +190,7 @@ The 3 governance tools absorb cleanly into `scripts/audit-tools/`, mirroring the
 ### Final HexaKit branch
 
 - **Branch**: `feat/audit-tools-predict-framework-lint-drift-detector-2026-06-20`
-- **PR**: `KooshaPari/HexaKit#292` (OPEN, MERGEABLE)
+- **PR**: `<REDACTED>/HexaKit#292` (OPEN, MERGEABLE)
 - **Files added (17)**:
   - `scripts/audit-tools/__init__.py` (registers 3 tools + dispatcher)
   - `scripts/audit-tools/pheno_{framework_lint,drift_detector,predict}.py` (verbatim, +SPDX headers)
@@ -224,7 +224,7 @@ predict:        24/26 pass (2 pre-existing pheno_predict.py bugs)
 
 ### Registry updates
 
-`KooshaPari/phenotype-registry#277` (OPEN, MERGEABLE) updates l5-110/111/112 rows + 3 `_archive_notes` entries to reference `HexaKit#292` instead of `pheno-scaffold-kit#3`.
+`<REDACTED>/phenotype-registry#277` (OPEN, MERGEABLE) updates l5-110/111/112 rows + 3 `_archive_notes` entries to reference `HexaKit#292` instead of `pheno-scaffold-kit#3`.
 
 ### Net content loss: ZERO
 

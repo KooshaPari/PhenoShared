@@ -29,9 +29,9 @@ classifiers = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/kooshapari/phenotype-registry"
-Repository = "https://github.com/kooshapari/phenotype-registry"
-Issues = "https://github.com/kooshapari/phenotype-registry/issues"
+Homepage = "https://github.com/<REDACTED>/phenotype-registry"
+Repository = "https://github.com/<REDACTED>/phenotype-registry"
+Issues = "https://github.com/<REDACTED>/phenotype-registry/issues"
 
 [tool.maturin]
 features = ["pyo3/extension-module"]

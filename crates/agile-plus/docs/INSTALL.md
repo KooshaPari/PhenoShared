@@ -5,7 +5,7 @@ AgilePlus ships three distribution channels plus an optional Windows Start Menu 
 | Channel | Best for | Command / location |
 |---------|----------|-------------------|
 | **cargo install** | Developers building from source | `cargo install --path crates/agileplus-cli --locked` |
-| **Prebuilt binaries** | Quick install without a Rust toolchain | [GitHub Releases](https://github.com/KooshaPari/AgilePlus/releases) |
+| **Prebuilt binaries** | Quick install without a Rust toolchain | [GitHub Releases](https://github.com/<REDACTED>/AgilePlus/releases) |
 | **crates.io** | Rust projects adding the CLI as a dependency | `cargo install agileplus-cli --locked` |
 | **Start Menu** (Windows) | Desktop launcher under Phenotype-Apps | `packaging/start-menu.ps1` |
 
@@ -20,7 +20,7 @@ AgilePlus ships three distribution channels plus an optional Windows Start Menu 
 From a clone of this repository:
 
 ```bash
-git clone https://github.com/KooshaPari/AgilePlus.git
+git clone https://github.com/<REDACTED>/AgilePlus.git
 cd AgilePlus
 cargo install --path crates/agileplus-cli --locked
 agileplus --version
@@ -32,7 +32,7 @@ The installed binary lands in `~/.cargo/bin/agileplus` (or `%USERPROFILE%\.cargo
 
 Tagged releases (`v*`) publish matrix-built archives for Linux, macOS (x86_64 + Apple Silicon), and Windows.
 
-1. Open [Releases](https://github.com/KooshaPari/AgilePlus/releases).
+1. Open [Releases](https://github.com/<REDACTED>/AgilePlus/releases).
 2. Download the archive for your platform, for example:
    - `agileplus-<version>-agileplus-linux-x86_64.tar.gz`
    - `agileplus-<version>-agileplus-macos-aarch64.tar.gz`

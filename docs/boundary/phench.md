@@ -6,8 +6,8 @@ reassigned — see absorption record for rationale.)
 
 ## Identity
 
-- **Source:** `KooshaPari/phench` (Python CLI, 1 branch, v0.1.0)
-- **Canonical home:** `KooshaPari/phenotype-tooling`
+- **Source:** `<REDACTED>/phench` (Python CLI, 1 branch, v0.1.0)
+- **Canonical home:** `<REDACTED>/phenotype-tooling`
   (`crates/phench/`)
 - **Python package:** `phench` (entry point: `phench = phench.cli:main`)
 - **Layout:** src-layout (`src/phench/*.py`, `tests/test_*.py`)

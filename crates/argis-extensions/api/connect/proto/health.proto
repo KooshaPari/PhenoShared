@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package bifrost.health.v1;
 
-option go_package = "github.com/kooshapari/bifrost-extensions/api/connect/gen/health/v1;healthv1";
+option go_package = "github.com/<REDACTED>/bifrost-extensions/api/connect/gen/health/v1;healthv1";
 
 import "google/protobuf/timestamp.proto";
 import "google/protobuf/duration.proto";

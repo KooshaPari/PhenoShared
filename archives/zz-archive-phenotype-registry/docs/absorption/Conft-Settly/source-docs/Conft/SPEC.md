@@ -19,7 +19,7 @@ absorbed into Configra.
 
 ## Migration
 
-All content migrated to `KooshaPari/Configra`:
+All content migrated to `<REDACTED>/Configra`:
 - `typescript/packages/conft/` → Configra `typescript/packages/conft/`
 - Zod schemas → Configra `crates/config-schema/` (adapted to Rust)
 - E2E suite → Configra test infrastructure

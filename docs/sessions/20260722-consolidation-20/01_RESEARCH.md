@@ -19,7 +19,7 @@
   reach READY and is now `ARCHIVED-PRESERVED / complete`.
 - `AgilePlus-recovery-evidence-20260714` remains HOLD as unique preservation evidence.
 - The authorized transaction completed for docket #1. The source is now
-  `KooshaPari/zz-archive-AgilePlus-recovery-20260714`, with `archived=true`, `private=true`,
+  `<REDACTED>/zz-archive-AgilePlus-recovery-20260714`, with `archived=true`, `private=true`,
   `fork=false`, default branch `recovery/isolated-20260714`, one branch, zero tags, and unchanged
   `pushed_at=2026-07-16T00:20:23Z`.
 - Postverification confirmed exact commit `0aafdf9692c11abb6e426f36857aeec7bb6cd942` and tree

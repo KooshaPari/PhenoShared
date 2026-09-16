@@ -2,7 +2,7 @@
 
 ## Why this archive exists
 
-The source repo `KooshaPari/McpKit` was archived (read-only marker) on GitHub on **2026-06-17**, the same day as the broader Dmouse92 → KooshaPari consolidation. Per ADR-003 (2026-06-14), `McpKit` is to be **merged into `PhenoMCP`**; per the broader ADR-029 Dmouse92 migration (2026-06-17), `KooshaPari/McpKit` is the canonical owner.
+The source repo `<REDACTED>/McpKit` was archived (read-only marker) on GitHub on **2026-06-17**, the same day as the broader Dmouse92 → <REDACTED> consolidation. Per ADR-003 (2026-06-14), `McpKit` is to be **merged into `PhenoMCP`**; per the broader ADR-029 Dmouse92 migration (2026-06-17), `<REDACTED>/McpKit` is the canonical owner.
 
 Because the remote is archived, **any content that lived only on non-`main` branches is now frozen locally**. If those local branches were to be garbage-collected, that content would be lost forever.
 
@@ -29,7 +29,7 @@ See `BRANCH_PROVENANCE.md` for the per-file commit hash, branch, and byte size.
 | Item | Reason for exclusion |
 |---|---|
 | `docs/journeys/manifests/README.md` | Single 1-page README on feat/journey-impl; not unique (generic journey manifests pattern from phenotype-infra). |
-| `python/agentmcp/*` on feat/journey-impl | The Python `agentmcp` package was merged INTO McpKit via commit `0a46183` ("chore: merge AgentMCP into McpKit as python/agentmcp/") and is now part of `KooshaPari/McpKit`'s permanent record on main. Not branch-only. |
+| `python/agentmcp/*` on feat/journey-impl | The Python `agentmcp` package was merged INTO McpKit via commit `0a46183` ("chore: merge AgentMCP into McpKit as python/agentmcp/") and is now part of `<REDACTED>/McpKit`'s permanent record on main. Not branch-only. |
 | `rust/phenotype-mcp-fast*` on feat/journey-impl | Crate was added in commit `fe4b79a` (2026-05-28) and is **not** branch-only — present on main. |
 | `python/pheno-mcp` symlink/file on feat/journey-impl + sladge branches | Single line; not substantive. |
 | `go/go.work` on sladge branches | Trivial Go workspace file. |
@@ -54,13 +54,13 @@ See `BRANCH_PROVENANCE.md` for the per-file commit hash, branch, and byte size.
 
 If a future engineer needs to consult what `MCP_TOOLKITS_SOTA.md` said about the (never-built) Python substrate, or how the sladge badge generator worked, they can read these files. No file in this archive should be merged, restored, or otherwise treated as a source of truth.
 
-**Maintenance contract:** if the `KooshaPari/McpKit` GitHub repo is ever permanently deleted (90-day retention expires 2026-09-15 if not extended), the local branches `feat/journey-impl`, `chore/audit-safe-workflows-0605*`, `fix/trufflehog-setup-pin-0605`, `docs/mcpkit-sladge-badge`, `docs/mcpkit-sladge-ci-refresh` should be backed up to a fresh git bundle (`git bundle create /backup/McpKit-2026-06-18.bundle --all`) and the bundle hash logged here. This archive is sufficient as-is for research; the bundle is insurance against local ref expiry.
+**Maintenance contract:** if the `<REDACTED>/McpKit` GitHub repo is ever permanently deleted (90-day retention expires 2026-09-15 if not extended), the local branches `feat/journey-impl`, `chore/audit-safe-workflows-0605*`, `fix/trufflehog-setup-pin-0605`, `docs/mcpkit-sladge-badge`, `docs/mcpkit-sladge-ci-refresh` should be backed up to a fresh git bundle (`git bundle create /backup/McpKit-2026-06-18.bundle --all`) and the bundle hash logged here. This archive is sufficient as-is for research; the bundle is insurance against local ref expiry.
 
 ## Provenance verification
 
 ```bash
 # Re-verify all line counts from this archive
-cd /Users/kooshapari/CodeProjects/Phenotype/repos/phenotype-org-audits
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos/phenotype-org-audits
 wc -l findings/2026-06-18-McpKit-branch-only/MCP_TOOLKITS_SOTA.md           # 3638
 wc -l findings/2026-06-18-McpKit-branch-only/journey-traceability-RICH.md   # 85 (79 + 6 metadata + final newline)
 ls -la findings/2026-06-18-McpKit-branch-only/sessions/20260428-taskfile-mcpkit/   # 7 files

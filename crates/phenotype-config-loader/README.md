@@ -5,7 +5,7 @@
 [![Tier](https://img.shields.io/badge/substrate--tier-2-blueviolet.svg)](#tier-2-substrate)
 
 Generic, type-safe JSON and TOML file loaders for the Phenotype ecosystem.
-Absorbed from `KooshaPari/phenotype-config` per ADR-031 (L5-110) and folded
+Absorbed from `<REDACTED>/phenotype-config` per ADR-031 (L5-110) and folded
 into the Configra workspace.
 
 ## What this crate does

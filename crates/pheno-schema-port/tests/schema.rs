@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT OR Apache-2.0
-// SPDX-FileCopyrightText: 2026 KooshaPari <kooshapari@gmail.com>
+// SPDX-FileCopyrightText: 2026 <REDACTED> <<REDACTED>@gmail.com>
 
 use pheno_schema_port::adapters::json_schema::JsonSchemaAdapter;
 use pheno_schema_port::adapters::zod::ZodAdapter;

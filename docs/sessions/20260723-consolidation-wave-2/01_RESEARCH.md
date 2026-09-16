@@ -8,7 +8,7 @@ be treated as empty.
 
 ## Local preservation search
 
-An exact-name search under `/Users/kooshapari/CodeProjects/Phenotype/repos`, Airlock v2 registry,
+An exact-name search under `/Users/<REDACTED>/CodeProjects/Phenotype/repos`, Airlock v2 registry,
 state database, bare repositories, and WIP preservation records found no present local path for any
 docket repository. Nineteen have no unresolved local payload signal. `omniroute-wtrees` is the
 exception: Airlock last observed `last_dirty_count=1` at `2026-07-17T20:08:12Z`, but the path is

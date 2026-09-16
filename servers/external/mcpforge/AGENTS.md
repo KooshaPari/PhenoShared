@@ -6,7 +6,7 @@ This file governs work inside the MCPForge repository.
 
 MCPForge is a [brief description of purpose and role in Phenotype ecosystem].
 
-Do not apply parent shelf instructions (`/Users/kooshapari/CodeProjects/Phenotype/repos/AGENTS.md`) unless explicitly referenced. Work from this directory and treat paths as local to MCPForge.
+Do not apply parent shelf instructions (`/Users/<REDACTED>/CodeProjects/Phenotype/repos/AGENTS.md`) unless explicitly referenced. Work from this directory and treat paths as local to MCPForge.
 
 ## Required Operating Loop
 
@@ -18,7 +18,7 @@ Do not apply parent shelf instructions (`/Users/kooshapari/CodeProjects/Phenotyp
 
 ## Canonical Surfaces
 
-- **Spec tracking:** AgilePlus at `/Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus`
+- **Spec tracking:** AgilePlus at `/Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus`
 - **Work audit:** `docs/worklogs/README.md`
 - **Quality gates:** See `Governance Reference` below
 - **Build/test:** See project-specific targets (Makefile, Cargo.toml, package.json, etc.)
@@ -68,4 +68,4 @@ When feature work is complete:
 
 ---
 
-**Parent contract:** See `AGENTS.md` at `/Users/kooshapari/CodeProjects/Phenotype/repos/AGENTS.md` for cross-project agent coordination and parent shelf governance.
+**Parent contract:** See `AGENTS.md` at `/Users/<REDACTED>/CodeProjects/Phenotype/repos/AGENTS.md` for cross-project agent coordination and parent shelf governance.

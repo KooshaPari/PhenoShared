@@ -8,7 +8,7 @@
 ## BLOCKING (Do First)
 
 ### [X] Critical: Fix plugin-registry exports
-- **File:** `/Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus/libs/plugin-registry/src/lib.rs`
+- **File:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus/libs/plugin-registry/src/lib.rs`
 - **Current Line 39:**
   ```rust
   pub use plugin_trait::Plugin;
@@ -21,7 +21,7 @@
 - **Effort:** 1 tool call, <1 minute
 - **Verification:**
   ```bash
-  cd /Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus
+  cd /Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus
   cargo build --workspace 2>&1 | grep -c "error"  # Should output: 0
   cargo test --lib --lib 2>&1 | tail -5           # Should show test counts
   ```
@@ -39,7 +39,7 @@
 ## HIGH PRIORITY (This Week)
 
 ### [ ] Clarify disabled crates status
-- **File:** `/Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus/Cargo.toml` (lines 3-45)
+- **File:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus/Cargo.toml` (lines 3-45)
 - **Issue:** 22 crates marked "TODO: missing src/lib.rs" but source files exist
 - **Action:** Choose one option:
 
@@ -50,7 +50,7 @@
    // "crates/agileplus-domain",  # Core domain model; enable in Wave 2
    // "crates/agileplus-cli",     # Depends on domain; defer until domain ready
    ```
-2. Create `/Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus/WORKSPACE_STATUS.md`:
+2. Create `/Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus/WORKSPACE_STATUS.md`:
    ```markdown
    # Workspace Status (2026-03-30)
 
@@ -118,7 +118,7 @@
 ## WEEK 1 (2026-03-30 → 2026-04-06)
 
 ### [ ] Decompose routes.rs (2,640 LOC → 250 LOC)
-- **File:** `/Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus/crates/agileplus-dashboard/src/routes.rs`
+- **File:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus/crates/agileplus-dashboard/src/routes.rs`
 - **Target:** Split into 6 focused modules (routes/dashboard.rs, api.rs, settings.rs, health.rs, middleware.rs, mod.rs)
 - **Effort:** 8-10 tool calls, ~25-30 minutes
 - **Acceptance:**
@@ -140,7 +140,7 @@
   ```
 
 ### [ ] Decompose sqlite/lib.rs (1,582 LOC → 250 LOC)
-- **File:** `/Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus/crates/agileplus-sqlite/src/lib.rs`
+- **File:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus/crates/agileplus-sqlite/src/lib.rs`
 - **Target:** Split into 5 modules (sync.rs, query.rs, migrations.rs, transaction.rs, error.rs)
 - **Effort:** 10-12 tool calls, ~40-50 minutes
 - **Acceptance:**
@@ -258,7 +258,7 @@ Relates-to: Phase 2.5 plugin integration
 2. **Detailed Roadmap:** `BUILD_FIX_ROADMAP_2026-03-30.md` (420 lines)
 3. **This Checklist:** `IMMEDIATE_ACTIONS_CHECKLIST.md` (this file)
 
-**Location:** `/Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus/docs/audits/`
+**Location:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus/docs/audits/`
 
 ---
 

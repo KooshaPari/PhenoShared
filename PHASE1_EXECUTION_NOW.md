@@ -234,7 +234,7 @@ Once both tokens are configured, follow this sequence:
 ### Step 1: Run Sentry Automation (5 minutes)
 
 ```bash
-cd /Users/kooshapari/CodeProjects/Phenotype/repos
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos
 
 # Set the token as an environment variable (optional but recommended)
 export SENTRY_AUTH_TOKEN=$(grep "token =" ~/.sentryclirc | awk '{print $NF}')
@@ -274,7 +274,7 @@ Target repos: 30
 ### Step 2: Run Snyk Deployment (5 minutes)
 
 ```bash
-cd /Users/kooshapari/CodeProjects/Phenotype/repos
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos
 
 # Verify authentication
 snyk whoami
@@ -312,7 +312,7 @@ Target repos: 30
 ### Step 3: Verify the Security Framework (3 minutes)
 
 ```bash
-cd /Users/kooshapari/CodeProjects/Phenotype/repos
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos
 
 bash scripts/automation/verify-security-framework.sh
 ```
@@ -360,7 +360,7 @@ sentry-cli projects list --org phenotype-org
 # Expected: 30 projects (phenotype-infrakit, heliosCLI, platforms-thegent, etc.)
 
 # Check that GitHub Secrets were set
-gh secret list -R KooshaPari/phenotype-infrakit | grep SENTRY_DSN
+gh secret list -R <REDACTED>/phenotype-infrakit | grep SENTRY_DSN
 
 # Expected: SENTRY_DSN_XXXXX (one for each repo)
 ```

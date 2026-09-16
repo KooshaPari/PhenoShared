@@ -2,12 +2,12 @@
 name = "phenotype-service-registry"
 version.workspace = true
 edition.workspace = true
-description = "Service registry and discovery with hexagonal port + in-memory adapter (migrated from KooshaPari/Servion)"
+description = "Service registry and discovery with hexagonal port + in-memory adapter (migrated from <REDACTED>/Servion)"
 
 readme = "README.md"
 license = "Apache-2.0 OR MIT"
-repository = "https://github.com/KooshaPari/phenotype-tooling"
-homepage = "https://github.com/KooshaPari/phenotype-tooling"
+repository = "https://github.com/<REDACTED>/phenotype-tooling"
+homepage = "https://github.com/<REDACTED>/phenotype-tooling"
 keywords = ["phenotype", "tooling", "cli"]
 categories = ["command-line-utilities"]
 [dependencies]

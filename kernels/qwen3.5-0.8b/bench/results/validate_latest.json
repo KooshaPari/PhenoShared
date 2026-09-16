@@ -1,9 +1,9 @@
 {
-  "arch_yaml": "/Users/kooshapari/CodeProjects/Phenotype/pheno-harness/kernels/qwen3.5-0.8b/arch.yaml",
+  "arch_yaml": "/Users/<REDACTED>/CodeProjects/Phenotype/pheno-harness/kernels/qwen3.5-0.8b/arch.yaml",
   "metal_available": true,
   "device": null,
-  "metallib_path": "/Users/kooshapari/CodeProjects/Phenotype/pheno-harness/kernels/qwen3.5-0.8b/build/kernels.metallib",
-  "dylib_path": "/Users/kooshapari/CodeProjects/Phenotype/pheno-harness/kernels/qwen3.5-0.8b/build/libpheno_qwen.dylib",
+  "metallib_path": "/Users/<REDACTED>/CodeProjects/Phenotype/pheno-harness/kernels/qwen3.5-0.8b/build/kernels.metallib",
+  "dylib_path": "/Users/<REDACTED>/CodeProjects/Phenotype/pheno-harness/kernels/qwen3.5-0.8b/build/libpheno_qwen.dylib",
   "tolerance_fp16": 0.1,
   "tolerance_fp32": 1e-05,
   "iters": 25,

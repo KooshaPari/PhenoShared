@@ -33,7 +33,7 @@
 
 #### `cargo tree -p pheno-otel`
 ```
-pheno-otel v0.1.0 (/Users/kooshapari/CodeProjects/Phenotype/repos/pheno-otel)
+pheno-otel v0.1.0 (/Users/<REDACTED>/CodeProjects/Phenotype/repos/pheno-otel)
 ├── serde v1.0.228
 ├── serde_json v1.0.150
 └── thiserror v2.0.18
@@ -42,9 +42,9 @@ pheno-otel v0.1.0 (/Users/kooshapari/CodeProjects/Phenotype/repos/pheno-otel)
 
 #### `cargo tree -p pheno-port-adapter` (top 8 lines)
 ```
-pheno-port-adapter v0.1.0 (/Users/kooshapari/CodeProjects/Phenotype/repos/pheno-port-adapter)
+pheno-port-adapter v0.1.0 (/Users/<REDACTED>/CodeProjects/Phenotype/repos/pheno-port-adapter)
 ├── async-trait v0.1.89
-├── pheno-otel v0.1.0 (/Users/kooshapari/CodeProjects/Phenotype/repos/pheno-otel)
+├── pheno-otel v0.1.0 (/Users/<REDACTED>/CodeProjects/Phenotype/repos/pheno-otel)
 │   ├── serde v1.0.228
 │   ├── serde_json v1.0.150
 │   └── thiserror v2.0.18
@@ -55,9 +55,9 @@ pheno-port-adapter v0.1.0 (/Users/kooshapari/CodeProjects/Phenotype/repos/pheno-
 
 #### `cargo tree -p pheno-errors` (top 8 lines)
 ```
-pheno-errors v0.1.0 (/Users/kooshapari/CodeProjects/Phenotype/repos/pheno-errors)
+pheno-errors v0.1.0 (/Users/<REDACTED>/CodeProjects/Phenotype/repos/pheno-errors)
 ├── anyhow v1.0.102
-├── pheno-otel v0.1.0 (/Users/kooshapari/CodeProjects/Phenotype/repos/pheno-otel)
+├── pheno-otel v0.1.0 (/Users/<REDACTED>/CodeProjects/Phenotype/repos/pheno-otel)
 │   ├── serde v1.0.228
 │   ├── serde_json v1.0.150
 │   └── thiserror v2.0.18
@@ -375,20 +375,20 @@ All three `Cargo.lock` files agree: `pheno-otel` is locked at `0.1.0`, with no r
 ```
 pheno-context/:
 total 0
-drwxr-xr-x@   4 kooshapari  staff   128 Jun 21 13:25 .
-drwxr-xr-x@ 250 kooshapari  staff  8000 Jun 21 13:30 ..
-drwxr-xr-x@   3 kooshapari  staff    96 Jun 21 13:13 docs
-drwxr-xr-x@   3 kooshapari  staff    96 Jun 21 13:25 src
+drwxr-xr-x@   4 <REDACTED>  staff   128 Jun 21 13:25 .
+drwxr-xr-x@ 250 <REDACTED>  staff  8000 Jun 21 13:30 ..
+drwxr-xr-x@   3 <REDACTED>  staff    96 Jun 21 13:13 docs
+drwxr-xr-x@   3 <REDACTED>  staff    96 Jun 21 13:25 src
 
 pheno-config/:
 total 8
-drwxr-xr-x@   7 kooshapari  staff   224 Jun 21 13:13 .
-drwxr-xr-x@ 250 kooshapari  staff  8000 Jun 21 13:30 ..
-drwxr-xr-x@   4 kooshapari  staff   128 Jun 21 13:13 docs
-drwxr-xr-x@   5 kooshapari  staff   160 Jun 21 13:13 i18n
--rw-r--r--@   1 kooshapari  staff  1584 Jun 21 02:39 llms.txt
-drwxr-xr-x@   4 kooshapari  staff   128 Jun 21 13:31 src
-drwxr-xr-x@   3 kooshapari  staff    96 Jun 21 02:39 tests
+drwxr-xr-x@   7 <REDACTED>  staff   224 Jun 21 13:13 .
+drwxr-xr-x@ 250 <REDACTED>  staff  8000 Jun 21 13:30 ..
+drwxr-xr-x@   4 <REDACTED>  staff   128 Jun 21 13:13 docs
+drwxr-xr-x@   5 <REDACTED>  staff   160 Jun 21 13:13 i18n
+-rw-r--r--@   1 <REDACTED>  staff  1584 Jun 21 02:39 llms.txt
+drwxr-xr-x@   4 <REDACTED>  staff   128 Jun 21 13:31 src
+drwxr-xr-x@   3 <REDACTED>  staff    96 Jun 21 02:39 tests
 ```
 
 `find pheno-context -name "Cargo.toml" -maxdepth 4` → no results.
@@ -413,5 +413,5 @@ This is **not a version-alignment mismatch** in the strict SIDE-04 sense (differ
 ---
 
 **Audit date:** 2026-06-21
-**Method reproducibility:** All evidence in this doc can be re-verified by re-running the `cargo tree -p <repo>` and `grep` commands listed above from `/Users/kooshapari/CodeProjects/Phenotype/repos/`. The `ls -la`/`find` commands under A.3 are also fully reproducible.
+**Method reproducibility:** All evidence in this doc can be re-verified by re-running the `cargo tree -p <repo>` and `grep` commands listed above from `/Users/<REDACTED>/CodeProjects/Phenotype/repos/`. The `ls -la`/`find` commands under A.3 are also fully reproducible.
 **Cross-references:** SIDE-01 (`findings/2026-06-21-SIDE-01-dep-audit.md`) covers the crates.io-publication dimension. This doc (SIDE-04) covers the internal dep version-alignment dimension. Both reach the same zero-drift conclusion via different routes.

@@ -70,18 +70,18 @@ AgilePlus (79 branches):
 
 ## `src-*` REMOTE AUDIT — 8 sub-repos fully absorbed
 
-The `AgilePlus` repo has **8 `src-*` remotes** that predate this consolidation. Each was a KooshaPari sub-repo that got absorbed and archived on 2026-07-14:
+The `AgilePlus` repo has **8 `src-*` remotes** that predate this consolidation. Each was a <REDACTED> sub-repo that got absorbed and archived on 2026-07-14:
 
 | src-* Remote | Resolved Repo | Default | Archived | Size | Unique Commits vs AgilePlus/main |
 |---|---|---|---|---|---|
-| `src-chatta` | `KooshaPari/zz-archive-chatta` | main | ✅ | 55107kb | 1 |
-| `src-eventra` | `KooshaPari/zz-archive-Eventra` | main | ✅ | 566kb | 1 |
-| `src-pheno-drift` | `KooshaPari/zz-archive-pheno-drift-detector` | main | ✅ | 8kb | 1 |
-| `src-pheno-predict` | `KooshaPari/zz-archive-pheno-predict` | main | ✅ | 11kb | 2 |
-| `src-phenotype-sdk` | `KooshaPari/zz-archive-phenotype-sdk` | main | ✅ | 4265kb | 7 |
-| `src-services` | `KooshaPari/zz-archive-services` | main | ✅ | 134kb | 12 |
-| `src-thegent-disp` | `KooshaPari/zz-archive-thegent-dispatch` | main | ✅ | 98kb | 58 |
-| `src-tracera-prwt` | `KooshaPari/zz-archive-tracera-pr-worktree-20260703-0014` | main | ✅ | 53kb | 1 |
+| `src-chatta` | `<REDACTED>/zz-archive-chatta` | main | ✅ | 55107kb | 1 |
+| `src-eventra` | `<REDACTED>/zz-archive-Eventra` | main | ✅ | 566kb | 1 |
+| `src-pheno-drift` | `<REDACTED>/zz-archive-pheno-drift-detector` | main | ✅ | 8kb | 1 |
+| `src-pheno-predict` | `<REDACTED>/zz-archive-pheno-predict` | main | ✅ | 11kb | 2 |
+| `src-phenotype-sdk` | `<REDACTED>/zz-archive-phenotype-sdk` | main | ✅ | 4265kb | 7 |
+| `src-services` | `<REDACTED>/zz-archive-services` | main | ✅ | 134kb | 12 |
+| `src-thegent-disp` | `<REDACTED>/zz-archive-thegent-dispatch` | main | ✅ | 98kb | 58 |
+| `src-tracera-prwt` | `<REDACTED>/zz-archive-tracera-pr-worktree-20260703-0014` | main | ✅ | 53kb | 1 |
 
 ### Verification result: **ALL 8 ABSORBED**
 

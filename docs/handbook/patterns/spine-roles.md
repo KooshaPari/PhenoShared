@@ -2,7 +2,7 @@
 
 **Status:** LIVE · **Purpose:** stop the spine repos from competing as overlapping "indexes."
 
-Canonical index: [phenotype-registry/ECOSYSTEM_MAP.md](https://github.com/KooshaPari/phenotype-registry/blob/main/ECOSYSTEM_MAP.md)
+Canonical index: [phenotype-registry/ECOSYSTEM_MAP.md](https://github.com/<REDACTED>/phenotype-registry/blob/main/ECOSYSTEM_MAP.md)
 
 The org's source-of-truth layer is **four repos, each with one role**. They reference each other; they do not duplicate each other.
 

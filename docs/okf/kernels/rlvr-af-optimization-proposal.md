@@ -27,7 +27,7 @@ RLVR-AF (Reinforcement Learning with Verifiable Rewards + Agentic Flow) kernels/
 ### 4. Sglang triton optimization (dual-harness path)
 
 - **[L]** When running on `tb2-30000-sglang.service` (RTX 3090 Ti), RLVR-AF uses triton `attention-backend` instead of CUDA graph; the watchdog unit already enforces this (`--attention-backend triton --disable-cuda-graph`).
-- **[L]** `mem-fraction-static 0.92` is fine for 9B (Qwen3.5-9B at `/home/kooshapari/models/Qwen3.5-9B`); above 0.93 leaves <50 MB headroom for `cpu_scheduler` overlap.
+- **[L]** `mem-fraction-static 0.92` is fine for 9B (Qwen3.5-9B at `/home/<REDACTED>/models/Qwen3.5-9B`); above 0.93 leaves <50 MB headroom for `cpu_scheduler` overlap.
 
 ### 5. Pheno-harness linkage
 

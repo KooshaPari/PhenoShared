@@ -130,7 +130,7 @@ pub fn main() -> ExitCode {
         Cmd::Version => {
             println!("phinbox {}", env!("CARGO_PKG_VERSION"));
             println!("license: MIT");
-            println!("repository: https://github.com/KooshaPari/phenotype-tooling");
+            println!("repository: https://github.com/<REDACTED>/phenotype-tooling");
             return ExitCode::SUCCESS;
         }
     };

@@ -4,8 +4,8 @@ version = "0.1.0"
 edition = "2021"
 description = "PhenoCompose centralized configuration — figment-backed, layered config (TOML + env + defaults)"
 license = "MIT OR Apache-2.0"
-repository = "https://github.com/KooshaPari/PhenoCompose"
-authors = ["kooshapari"]
+repository = "https://github.com/<REDACTED>/PhenoCompose"
+authors = ["<REDACTED>"]
 publish = false
 
 [dependencies]

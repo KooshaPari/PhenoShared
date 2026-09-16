@@ -41,7 +41,7 @@ pub mod error;
 ///
 /// The **canonical** home for these helpers in the Phenotype
 /// ecosystem is the **`phenotype-types`** crate
-/// (<https://github.com/kooshapari/phenotype-types>). Consumers
+/// (<https://github.com/<REDACTED>/phenotype-types>). Consumers
 /// SHOULD prefer that crate over this local module when it is
 /// available.
 pub mod oci;

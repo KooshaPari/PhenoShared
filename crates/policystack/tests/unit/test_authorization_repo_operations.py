@@ -19,7 +19,7 @@ class AuthorizationRepoOperationsTest(unittest.TestCase):
             resolved["policy"],
             action="exec",
             command="timeout 30 bun test apps/desktop/tests/unit 2>&1 | tail -10",
-            cwd="/Users/kooshapari/CodeProjects/Phenotype/repos/heliosApp-wtrees/tech-debt-wave",
+            cwd="/Users/<REDACTED>/CodeProjects/Phenotype/repos/heliosApp-wtrees/tech-debt-wave",
         )
         assert result["decision"] == "allow"
         assert result["winning_rule"]["id"] == "phenotype-allow-timeout-wrapped-tests"
@@ -35,7 +35,7 @@ class AuthorizationRepoOperationsTest(unittest.TestCase):
             resolved["policy"],
             action="exec",
             command="timeout 30 pytest --tb=short -q 2>&1 | tail -15",
-            cwd="/Users/kooshapari/CodeProjects/Phenotype/repos/portage-composite-actions",
+            cwd="/Users/<REDACTED>/CodeProjects/Phenotype/repos/portage-composite-actions",
         )
         assert result["decision"] == "allow"
         assert result["winning_rule"]["id"] == "phenotype-allow-timeout-wrapped-tests"
@@ -51,7 +51,7 @@ class AuthorizationRepoOperationsTest(unittest.TestCase):
             resolved["policy"],
             action="exec",
             command="bun add -d happy-dom",
-            cwd="/Users/kooshapari/CodeProjects/Phenotype/repos/heliosApp-wtrees/tech-debt-wave",
+            cwd="/Users/<REDACTED>/CodeProjects/Phenotype/repos/heliosApp-wtrees/tech-debt-wave",
         )
         assert result["decision"] == "allow"
         assert result["winning_rule"]["id"] == "phenotype-allow-worktree-package-adds"
@@ -71,9 +71,9 @@ class AuthorizationRepoOperationsTest(unittest.TestCase):
                 "from __future__ import annotations\\n\\nALIASES: dict[str, str] = {}\\n' "
                 "| tee src/tracertm/cli/aliases.py"
             ),
-            cwd="/Users/kooshapari/CodeProjects/Phenotype/repos/trace-wtrees/cli-stubs",
+            cwd="/Users/<REDACTED>/CodeProjects/Phenotype/repos/trace-wtrees/cli-stubs",
             target_paths=[
-                "/Users/kooshapari/CodeProjects/Phenotype/repos/trace-wtrees/cli-stubs/"
+                "/Users/<REDACTED>/CodeProjects/Phenotype/repos/trace-wtrees/cli-stubs/"
                 "src/tracertm/cli/aliases.py",
             ],
         )
@@ -95,9 +95,9 @@ class AuthorizationRepoOperationsTest(unittest.TestCase):
                 "from __future__ import annotations\\n\\n' "
                 "| tee src/tracertm/cli/storage_helper.py"
             ),
-            cwd="/Users/kooshapari/CodeProjects/Phenotype/repos/trace-wtrees/cli-stubs",
+            cwd="/Users/<REDACTED>/CodeProjects/Phenotype/repos/trace-wtrees/cli-stubs",
             target_paths=[
-                "/Users/kooshapari/CodeProjects/Phenotype/repos/trace-wtrees/cli-stubs/"
+                "/Users/<REDACTED>/CodeProjects/Phenotype/repos/trace-wtrees/cli-stubs/"
                 "src/tracertm/cli/storage_helper.py",
             ],
         )
@@ -115,7 +115,7 @@ class AuthorizationRepoOperationsTest(unittest.TestCase):
             resolved["policy"],
             action="exec",
             command="pwd",
-            cwd="/Users/kooshapari/CodeProjects/Phenotype/repos/bifrost-extensions-wtrees/fix-build-blockers",
+            cwd="/Users/<REDACTED>/CodeProjects/Phenotype/repos/bifrost-extensions-wtrees/fix-build-blockers",
         )
         assert result["decision"] == "allow"
 
@@ -130,7 +130,7 @@ class AuthorizationRepoOperationsTest(unittest.TestCase):
             resolved["policy"],
             action="network",
             command="WebSearch Plane.so REST API endpoints issues cycles modules documentation",
-            cwd="/Users/kooshapari/CodeProjects/Phenotype/repos",
+            cwd="/Users/<REDACTED>/CodeProjects/Phenotype/repos",
         )
         assert result["decision"] == "allow"
         assert result["winning_rule"]["id"] == "phenotype-allow-docs-web-search"
@@ -145,8 +145,8 @@ class AuthorizationRepoOperationsTest(unittest.TestCase):
         result = evaluate_authorization(
             resolved["policy"],
             action="exec",
-            command="rm -rf /Users/kooshapari/CodeProjects/Phenotype/repos/phenotype-go-kit",
-            cwd="/Users/kooshapari/CodeProjects/Phenotype/repos",
+            command="rm -rf /Users/<REDACTED>/CodeProjects/Phenotype/repos/phenotype-go-kit",
+            cwd="/Users/<REDACTED>/CodeProjects/Phenotype/repos",
         )
         assert result["decision"] == "deny"
         assert result["winning_rule"]["id"] == "phenotype-deny-destructive-repo-removal"
@@ -162,10 +162,10 @@ class AuthorizationRepoOperationsTest(unittest.TestCase):
             resolved["policy"],
             action="exec",
             command=(
-                "mv /Users/kooshapari/CodeProjects/Phenotype/repos/phenotype-go-kit "
-                "/Users/kooshapari/CodeProjects/Phenotype/repos/.archive/phenotype-go-kit"
+                "mv /Users/<REDACTED>/CodeProjects/Phenotype/repos/phenotype-go-kit "
+                "/Users/<REDACTED>/CodeProjects/Phenotype/repos/.archive/phenotype-go-kit"
             ),
-            cwd="/Users/kooshapari/CodeProjects/Phenotype/repos",
+            cwd="/Users/<REDACTED>/CodeProjects/Phenotype/repos",
         )
         assert result["decision"] == "allow"
         assert result["winning_rule"]["id"] == "phenotype-allow-archive-repo-moves"

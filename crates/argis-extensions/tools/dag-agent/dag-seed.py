@@ -11,7 +11,7 @@ import re
 import sys
 from pathlib import Path
 
-REPO_ROOT = Path("/Users/kooshapari/CodeProjects/Phenotype/repos")
+REPO_ROOT = Path("/Users/<REDACTED>/CodeProjects/Phenotype/repos")
 FINDINGS_DIR = REPO_ROOT / "findings"
 FINDING_RE = re.compile(r"^(?:Next|Side|Self|Follow):\s*(.+)$", re.MULTILINE | re.IGNORECASE)
 GOV_FILES = ["AGENTS.md","justfile","SSOT.md","llms.txt","deny.toml",".pre-commit-config.yaml",".github/workflows/ci.yml"]

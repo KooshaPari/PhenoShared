@@ -19,7 +19,7 @@
 |--------|-------|
 | **Current wave** | v53 (shipped) |
 | **Current branch** | `chore/v53-dag-wave-10-execution-2026-06-28` |
-| **Auth** | `KooshaPari` (active) |
+| **Auth** | `<REDACTED>` (active) |
 | **Working tree** | Clean |
 | **Open PRs** | 0 |
 | **Open issues** | 0 |

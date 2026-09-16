@@ -89,8 +89,8 @@ rules:
       - ".github/workflows/*.yml"
       - ".github/workflows/*.yaml"
     forbid:
-      - "repository: kooshapari/phenotype"
-      - "repository: KooshaPari/phenotype"
+      - "repository: <REDACTED>/phenotype"
+      - "repository: <REDACTED>/phenotype"
 
   # ─── Repo Hygiene ───────────────────────────────────────────────────────────
   - id: LT-020

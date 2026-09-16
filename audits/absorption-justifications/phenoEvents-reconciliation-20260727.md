@@ -2,7 +2,7 @@
 
 ## Decision
 
-Keep `KooshaPari/phenoEvents` as a live standalone event-bus library pending a
+Keep `<REDACTED>/phenoEvents` as a live standalone event-bus library pending a
 reproducible source-to-target integration proof. This is a metadata correction,
 not a deletion or rollback: the 2026-07-17 absorption claim remains preserved
 as historical evidence in the project record and the prior audit.
@@ -11,7 +11,7 @@ as historical evidence in the project record and the prior audit.
 
 | Field | Evidence |
 | --- | --- |
-| URL | <https://github.com/KooshaPari/phenoEvents> |
+| URL | <https://github.com/<REDACTED>/phenoEvents> |
 | Visibility | Public; `isArchived=false`; `archivedAt=null` |
 | Default branch | `main` |
 | Current main SHA | `3d6cc220e73bbc67652a1089bd801a12542e1f96` |
@@ -25,7 +25,7 @@ operation.
 
 ## Target verification
 
-The current `KooshaPari/pheno` `main` tree contains
+The current `<REDACTED>/pheno` `main` tree contains
 `crates/phenotype-event-sourcing/` and AgilePlus event crates, but no
 `crates/phenotype-event-bus/` path. Therefore the prior statement that the
 source was archived and that this exact target path was integrated cannot be
@@ -47,8 +47,8 @@ unit/property tests in the target checkout.
 
 ## 2026-08-05 revalidation
 
-`KooshaPari/phenoEvents` remains public and unarchived at main
-`be6573c68797cc611a99533bca6dc1c3dcdb0c88`. Current `KooshaPari/pheno` main is
+`<REDACTED>/phenoEvents` remains public and unarchived at main
+`be6573c68797cc611a99533bca6dc1c3dcdb0c88`. Current `<REDACTED>/pheno` main is
 `81d850837848800aa7a3e6a6f007b91b6555ef07`; its tree still has no
 `pheno-events`, `phenoevents-observability`, or `phenotype-event-bus` path.
 The target claim is therefore historical and unverified, not a pending source

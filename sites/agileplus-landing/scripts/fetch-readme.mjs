@@ -7,7 +7,7 @@ import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const REPO = "KooshaPari/AgilePlus";
+const REPO = "<REDACTED>/AgilePlus";
 const DATA_DIR = resolve(__dirname, "..", "src", "data");
 
 const token = process.env.GITHUB_TOKEN || process.env.GH_TOKEN;

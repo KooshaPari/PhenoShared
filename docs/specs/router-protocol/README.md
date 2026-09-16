@@ -41,7 +41,7 @@ It does NOT define:
 
 - The HTTP transport itself (substrate uses reqwest, but any transport works)
 - The agent CLI semantics (those are agent-specific — substrate has adapters)
-- The trace export format (use OTLP; see [`pheno-otel`](https://github.com/KooshaPari/PhenoObservability/tree/main/pheno-otel))
+- The trace export format (use OTLP; see [`pheno-otel`](https://github.com/<REDACTED>/PhenoObservability/tree/main/pheno-otel))
 
 ## Conformance
 
@@ -51,14 +51,14 @@ A router implementation is **conformant** if it:
 2. Consumes `RouterMailbox` events in order
 3. Emits `RouterTrace` for task lifecycle transitions
 4. Returns `RouterArtifact[]` on task completion
-5. Passes the [`engine-conformance`](https://github.com/KooshaPari/substrate/tree/main/crates/engine-conformance) suite in substrate
+5. Passes the [`engine-conformance`](https://github.com/<REDACTED>/substrate/tree/main/crates/engine-conformance) suite in substrate
 
 Reference implementations:
 
-- **HTTP gateway** → [`substrate::engine-agentapi`](https://github.com/KooshaPari/substrate/tree/main/crates/engine-agentapi) (over the `agentapi-plusplus` Go binary)
-- **OpenAI-compat** → [`substrate::cliproxy-adapter`](https://github.com/KooshaPari/substrate/tree/main/crates/cliproxy-adapter)
-- **Provider router** → [`substrate::omniroute-adapter`](https://github.com/KooshaPari/substrate/tree/main/crates/omniroute-adapter)
-- **Bifrost decisions** → [`substrate::routing-phenotype-router`](https://github.com/KooshaPari/substrate/tree/main/crates/routing-phenotype-router) (wraps `phenotype-router`)
+- **HTTP gateway** → [`substrate::engine-agentapi`](https://github.com/<REDACTED>/substrate/tree/main/crates/engine-agentapi) (over the `agentapi-plusplus` Go binary)
+- **OpenAI-compat** → [`substrate::cliproxy-adapter`](https://github.com/<REDACTED>/substrate/tree/main/crates/cliproxy-adapter)
+- **Provider router** → [`substrate::omniroute-adapter`](https://github.com/<REDACTED>/substrate/tree/main/crates/omniroute-adapter)
+- **Bifrost decisions** → [`substrate::routing-phenotype-router`](https://github.com/<REDACTED>/substrate/tree/main/crates/routing-phenotype-router) (wraps `phenotype-router`)
 
 ## Versioning
 
@@ -75,7 +75,7 @@ This protocol follows semver.
 ## Reference implementation
 
 The canonical Rust implementation lives at
-[`KooshaPari/substrate/crates/substrate-core`](https://github.com/KooshaPari/substrate/tree/main/crates/substrate-core).
+[`<REDACTED>/substrate/crates/substrate-core`](https://github.com/<REDACTED>/substrate/tree/main/crates/substrate-core).
 
 Specifically:
 - `domain.rs` — Task, Conversation, Session, Message, StructuredResult, RoutingDecision, EngineCapabilities, TaskState
@@ -83,7 +83,7 @@ Specifically:
 - `trace.rs` — TracePort + TraceEvent + TaskRegistered/TaskCompleted/TaskFailed variants
 
 The agent-facing **wire** is published separately at
-[`KooshaPari/substrate-adapters-bundle`](https://github.com/KooshaPari/substrate-adapters-bundle).
+[`<REDACTED>/substrate-adapters-bundle`](https://github.com/<REDACTED>/substrate-adapters-bundle).
 
 ## License
 
@@ -101,6 +101,6 @@ reporting issues, and validating schemas.
 
 ## Related repos
 
-- [`KooshaPari/substrate`](https://github.com/KooshaPari/substrate) — Rust hexagonal spine, reference implementations
-- [`KooshaPari/substrate-adapters-bundle`](https://github.com/KooshaPari/substrate-adapters-bundle) — meta-repo of standalone adapter crates
-- [`KooshaPari/phenotype-registry`](https://github.com/KooshaPari/phenotype-registry) — registry of phenotype-related projects
+- [`<REDACTED>/substrate`](https://github.com/<REDACTED>/substrate) — Rust hexagonal spine, reference implementations
+- [`<REDACTED>/substrate-adapters-bundle`](https://github.com/<REDACTED>/substrate-adapters-bundle) — meta-repo of standalone adapter crates
+- [`<REDACTED>/phenotype-registry`](https://github.com/<REDACTED>/phenotype-registry) — registry of phenotype-related projects

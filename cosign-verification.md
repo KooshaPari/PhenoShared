@@ -6,11 +6,11 @@ This directory contains release artifacts signed with [cosign](https://docs.sigs
 
 ```bash
 # Download the public key
-curl -sLO https://raw.githubusercontent.com/KooshaPari/pheno-harness/main/cosign.pub
+curl -sLO https://raw.githubusercontent.com/<REDACTED>/pheno-harness/main/cosign.pub
 
 # Download release artifacts
 TAG="v0.40-pheno-harness-summit"
-gh release -R KooshaPari/pheno-harness download "$TAG" \
+gh release -R <REDACTED>/pheno-harness download "$TAG" \
     --pattern "pheno-harness-${TAG}.tar.gz" \
     --pattern "pheno-harness-${TAG}.tar.gz.sig" \
     --pattern "pheno-harness-${TAG}.tar.gz.cert"

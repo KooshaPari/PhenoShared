@@ -2,7 +2,7 @@
 
 **Date:** 2026-06-21 (system date)
 **Phase:** 1C (target-parity / candidate survey only; matrix + decision deferred to Phase 2)
-**Source path:** `/Users/kooshapari/CodeProjects/Phenotype/repos/pheno-otel/`
+**Source path:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos/pheno-otel/`
 **Substrate tier (per ADR-023 Rule 3):** `pheno-*-lib` (pure reusable library, single concern, single crate)
 **Substrate role (per ADR-037):** canonical OTLP wire-format export substrate
 **Authoritative cross-references:**
@@ -233,12 +233,12 @@ Per ADR-036B inline comment in `pheno-tracing/Cargo.toml:31`: *"ADR-036B allows 
 
 | Language | Repo / path | Status | Verifies |
 |---|---|---|---|
-| Rust (canonical) | `KooshaPari/pheno-otel` (this crate) | ACTIVE, v0.1.0 un-tagged | ✅ the substrate |
-| TypeScript (polyglot) | `KooshaPari/phenotype-otel` (separate repo per side-38) | Per side-38: "the TS SDK; same posture" | Not in local sparse-checkout; exists on GitHub |
+| Rust (canonical) | `<REDACTED>/pheno-otel` (this crate) | ACTIVE, v0.1.0 un-tagged | ✅ the substrate |
+| TypeScript (polyglot) | `<REDACTED>/phenotype-otel` (separate repo per side-38) | Per side-38: "the TS SDK; same posture" | Not in local sparse-checkout; exists on GitHub |
 | Python (polyglot) | `phenotype-python-sdk/okf/` (per `ls phenotype-python-sdk/` showing `okf` subdir) | Polyglot facade within `phenotype-python-sdk` | Not directly verified — would require Phase 2 audit |
 | Go (polyglot) | None — `phenotype-go-sdk` does not appear to have an OTel module per `ls phenotype-go-sdk/` (not in sparse-checkout) | Not in fleet | N/A |
 
-**Single polyglot mirror exists** (TypeScript, at `KooshaPari/phenotype-otel`). It is **separate from `pheno-otel`** and is not under the substrate-canonical governance. There is no `phenotype-otel-core` to absorb into.
+**Single polyglot mirror exists** (TypeScript, at `<REDACTED>/phenotype-otel`). It is **separate from `pheno-otel`** and is not under the substrate-canonical governance. There is no `phenotype-otel-core` to absorb into.
 
 ---
 
@@ -283,7 +283,7 @@ ADR-037 is titled "pheno-mcp-router substrate canonical" (`docs/adr/2026-06-18/A
 **Implications for absorption:**
 
 - **No candidate could legitimately supersede pheno-otel** without invalidating ADR-037 (and the substrate-canonical pattern). Any absorption would require either (a) writing a new ADR that supersedes the canonical, OR (b) merging pheno-otel into a sibling canonical (pheno-tracing? — would violate ADR-036B's one-way dep rule).
-- **The recommended target is the crate itself, in place.** Per Phase 1A §0 "Substrate role: canonical OTLP wire-format export substrate (per ADR-037)", `pheno-otel` at `/Users/kooshapari/CodeProjects/Phenotype/repos/pheno-otel/` is the canonical home.
+- **The recommended target is the crate itself, in place.** Per Phase 1A §0 "Substrate role: canonical OTLP wire-format export substrate (per ADR-037)", `pheno-otel` at `/Users/<REDACTED>/CodeProjects/Phenotype/repos/pheno-otel/` is the canonical home.
 
 ---
 
@@ -371,27 +371,27 @@ The 16 candidates enumerated in the task directive are evaluated below. For each
 
 | Field | Value |
 |---|---|
-| **Repo / path** | `KooshaPari/pheno` → `crates/` (the canonical substrate workspace per prior pheno-errors/pheno-flags audits) |
+| **Repo / path** | `<REDACTED>/pheno` → `crates/` (the canonical substrate workspace per prior pheno-errors/pheno-flags audits) |
 | **Plausibility** | **LOW** — `pheno-otel` is already a leaf in the fleet; the `pheno/` workspace is the substrate-canonical home for `pheno-*-lib` crates per prior audits |
 | **Verdict** | **REJECT** |
-| **Evidence** | (a) Prior audit `findings/2026-06-20-pheno-errors-audit/03-target-parity.md:340` recommends `phenotype-error-core` in `pheno/` as the canonical absorber for `pheno-errors`; same pattern for `pheno-flags` → `phenotype-flags` (per `findings/2026-06-20-pheno-flags-audit/03-target-parity.md:24-36`). But (b) `pheno-otel` IS the canonical — there is no `phenotype-otel-core` to absorb into. The pattern is "pheno-*-* standalone repo → pheno-*/crates/phenotype-*-core subcrate"; pheno-otel has never been a standalone repo in this scheme (it has its own `KooshaPari/pheno-otel` GitHub repo, not `KooshaPari/pheno` workspace membership). |
+| **Evidence** | (a) Prior audit `findings/2026-06-20-pheno-errors-audit/03-target-parity.md:340` recommends `phenotype-error-core` in `pheno/` as the canonical absorber for `pheno-errors`; same pattern for `pheno-flags` → `phenotype-flags` (per `findings/2026-06-20-pheno-flags-audit/03-target-parity.md:24-36`). But (b) `pheno-otel` IS the canonical — there is no `phenotype-otel-core` to absorb into. The pattern is "pheno-*-* standalone repo → pheno-*/crates/phenotype-*-core subcrate"; pheno-otel has never been a standalone repo in this scheme (it has its own `<REDACTED>/pheno-otel` GitHub repo, not `<REDACTED>/pheno` workspace membership). |
 | **Primary rejection reason** | **No upstream absorber exists in `pheno/`.** Unlike `pheno-errors` (which has `phenotype-error-core` in `pheno/crates/`) and `pheno-flags` (which has `phenotype-flags` in `pheno/crates/`), there is no `phenotype-otel-core` crate. The pattern doesn't apply. |
 
 ### 9.2 Candidate 2 — `phenotype-apps` (source lives here per Phase 1A finding)
 
 | Field | Value |
 |---|---|
-| **Repo / path** | `KooshaPari/phenotype-apps` (per Phase 1A §0 "Caveat on remotes" — both `argis`/`argis-extensions` and `origin`/`phenotype-apps` point to monorepos that contain `pheno-otel/` as a sub-tree) |
+| **Repo / path** | `<REDACTED>/phenotype-apps` (per Phase 1A §0 "Caveat on remotes" — both `argis`/`argis-extensions` and `origin`/`phenotype-apps` point to monorepos that contain `pheno-otel/` as a sub-tree) |
 | **Plausibility** | **HIGH (mechanically)** — pheno-otel source IS at this path in the monorepo overlay |
 | **Verdict** | **REJECT (= preserve in place)** |
-| **Evidence** | Per Phase 1A §0: "This worktree has two remotes configured with the SAME upstream under different names — `argis`/`argis-extensions` (alias `argisgit`/`argis-extensionsgit`) and `origin`/`phenotype-apps` (alias `origingit`). Both point to `github.com/KooshaPari/phenotype-apps.git` and `github.com/KooshaPari/argis-extensions.git` respectively; both are monorepos." Per Phase 1A §0: "Where `git for-each-ref` shows the same commit reachable under multiple remote namespaces, we deduplicate by the `awk -F'/' '{print $NF}'` tail-of-refname and report the count of **unique branch names** (9 pheno-otel-named), not the inflated 19 raw ref count." |
-| **Primary rejection reason** | **The substrate IS already at the canonical monorepo-overlay path.** The "absorption into phenotype-apps" framing is misleading — pheno-otel is a sub-tree of phenotype-apps (and argis-extensions) as a multi-worktree overlay. It is not a candidate for absorption; it is the destination. The question is "should pheno-otel be a sub-tree of `phenotype-apps/` or a standalone repo `KooshaPari/pheno-otel`?" — and the answer is "both, by current convention; the sub-tree path is the governance meta-bundle, the standalone repo is the crates.io publish path." |
+| **Evidence** | Per Phase 1A §0: "This worktree has two remotes configured with the SAME upstream under different names — `argis`/`argis-extensions` (alias `argisgit`/`argis-extensionsgit`) and `origin`/`phenotype-apps` (alias `origingit`). Both point to `github.com/<REDACTED>/phenotype-apps.git` and `github.com/<REDACTED>/argis-extensions.git` respectively; both are monorepos." Per Phase 1A §0: "Where `git for-each-ref` shows the same commit reachable under multiple remote namespaces, we deduplicate by the `awk -F'/' '{print $NF}'` tail-of-refname and report the count of **unique branch names** (9 pheno-otel-named), not the inflated 19 raw ref count." |
+| **Primary rejection reason** | **The substrate IS already at the canonical monorepo-overlay path.** The "absorption into phenotype-apps" framing is misleading — pheno-otel is a sub-tree of phenotype-apps (and argis-extensions) as a multi-worktree overlay. It is not a candidate for absorption; it is the destination. The question is "should pheno-otel be a sub-tree of `phenotype-apps/` or a standalone repo `<REDACTED>/pheno-otel`?" — and the answer is "both, by current convention; the sub-tree path is the governance meta-bundle, the standalone repo is the crates.io publish path." |
 
 ### 9.3 Candidate 3 — `phenotype-router` (Go)
 
 | Field | Value |
 |---|---|
-| **Repo / path** | `KooshaPari/phenotype-router` (Go) per the §8 router-architecture decision in AGENTS.md (Option B: Bifrost-as-library + Phenotype-owned decision layer) |
+| **Repo / path** | `<REDACTED>/phenotype-router` (Go) per the §8 router-architecture decision in AGENTS.md (Option B: Bifrost-as-library + Phenotype-owned decision layer) |
 | **Plausibility** | **VERY LOW** — language mismatch (Go vs Rust), tier mismatch (router is framework-tier or federated-service-tier per ADR-023, pheno-otel is `pheno-*-lib`), concern mismatch (routing vs OTLP export) |
 | **Verdict** | **REJECT** |
 | **Evidence** | (a) `phenotype-router` is a Go module per AGENTS.md § "§8: Router architecture decision". (b) The router decision is about LLM request routing, not telemetry. (c) Per ADR-023, federated services and frameworks do NOT absorb `pheno-*-lib` substrates — the dep direction is `pheno-*-lib` → framework (the framework consumes the library, not the other way around). |
@@ -401,7 +401,7 @@ The 16 candidates enumerated in the task directive are evaluated below. For each
 
 | Field | Value |
 |---|---|
-| **Repo / path** | `KooshaPari/pheno-tracing` (Rust, `pheno-*-lib` tier per ADR-036B) |
+| **Repo / path** | `<REDACTED>/pheno-tracing` (Rust, `pheno-*-lib` tier per ADR-036B) |
 | **Plausibility** | **LOW** — sibling substrate (per ADR-036B); not an absorber |
 | **Verdict** | **REJECT** |
 | **Evidence** | (a) `pheno-tracing/Cargo.toml:29-31` declares a **one-way path-dep** on `pheno-otel` (i.e. `pheno-tracing` consumes `pheno-otel`, not the other way). The inline comment says: "ADR-036B allows a one-way substrate→substrate dep here; pheno-otel does NOT depend on pheno-tracing." (b) `pheno-tracing/src/lib.rs:30-34` declares `pub mod adapters; pub mod cardinality; pub mod compat; pub mod port; pub mod sampling;` — **NO `Layer` trait exists** (per `git grep -n 'Layer' -- 'pheno-tracing/src/'` returns 0 matches). The task directive's "Layer trait" reference is to a **hypothetical** or **planned** API that does not exist in the current source. (c) Per ADR-036B, the substrate-canonical for tracing is `pheno-tracing`; the substrate-canonical for OTLP wire-format export is `pheno-otel`. They are siblings, not parent/child. |
@@ -411,7 +411,7 @@ The 16 candidates enumerated in the task directive are evaluated below. For each
 
 | Field | Value |
 |---|---|
-| **Repo / path** | `KooshaPari/pheno-port-adapter` (Rust, `pheno-*-lib` tier per ADR-038 hexagonal L4 reference) |
+| **Repo / path** | `<REDACTED>/pheno-port-adapter` (Rust, `pheno-*-lib` tier per ADR-038 hexagonal L4 reference) |
 | **Plausibility** | **LOW** — sibling substrate (per ADR-038) |
 | **Verdict** | **REJECT** |
 | **Evidence** | (a) `pheno-port-adapter/Cargo.toml:25-26` declares a **path-dep** on `pheno-otel`. (b) Per the prior pheno-port-adapter audit (`findings/2026-06-21-pheno-port-adapter-audit/00-FINAL-AUDIT.md`, EXECUTIVE_DECISION = PRESERVE Shape 9 CANONICAL_SUBSTRATE_LOCAL_SUBTREE), the substrate is itself canonical and should not be absorbed. (c) `pheno-port-adapter` is the L4 hexagonal reference implementation; `pheno-otel` is the OTLP wire-format export substrate. Per ADR-038, the hexagonal Port+Adapter pattern is **orthogonal** to OTLP concerns — `pheno-port-adapter` defines the pattern, `pheno-otel` provides the OTLP wire-format types that pattern implementations may consume. |
@@ -421,7 +421,7 @@ The 16 candidates enumerated in the task directive are evaluated below. For each
 
 | Field | Value |
 |---|---|
-| **Repo / path** | `KooshaPari/pheno-flags` (Rust, `pheno-*-lib` tier per prior audit) |
+| **Repo / path** | `<REDACTED>/pheno-flags` (Rust, `pheno-*-lib` tier per prior audit) |
 | **Plausibility** | **VERY LOW** — concern mismatch (feature flags vs OTLP) |
 | **Verdict** | **REJECT** |
 | **Evidence** | (a) `pheno-flags/src/lib.rs:67-69` imports only `std::collections::{HashMap, BTreeMap}` and `thiserror` — no OTLP / OTel / observability primitives. (b) Per the prior pheno-flags audit (`findings/2026-06-20-pheno-flags-audit/02-docs-code.md:80`), the substrate has no observability hooks, no tracing integration, no OTLP awareness. (c) Per the prior pheno-flags target-parity audit §"b. pheno-config": flags and observability are distinct concerns that should not be merged. |
@@ -431,7 +431,7 @@ The 16 candidates enumerated in the task directive are evaluated below. For each
 
 | Field | Value |
 |---|---|
-| **Repo / path** | `KooshaPari/pheno-errors` (Rust, `pheno-*-lib` tier per prior audit) |
+| **Repo / path** | `<REDACTED>/pheno-errors` (Rust, `pheno-*-lib` tier per prior audit) |
 | **Plausibility** | **LOW** — consumer (not absorber) of `pheno-otel` per the in-fleet consumer inventory §3.1 |
 | **Verdict** | **REJECT** |
 | **Evidence** | (a) `pheno-errors/Cargo.toml:18` declares a **path-dep** on `pheno-otel`. (b) Per the prior pheno-errors audit (`findings/2026-06-20-pheno-errors-audit/00-FINAL-AUDIT.md`), pheno-errors has been **archived today (2026-06-20 12:22:39Z)** and is being absorbed INTO `pheno/crates/phenotype-error-core`. (c) `pheno-errors/src/lib.rs:1-141` exposes AppError / Error / ErrorKind / ErrorContext — no OTLP wire-format types. (d) `pheno-errors/examples/otel_quickstart.rs:16` references the phantom `pheno_otel::trace::{emit, span}` API (per §2.1 above) — this example would not compile. |
@@ -441,7 +441,7 @@ The 16 candidates enumerated in the task directive are evaluated below. For each
 
 | Field | Value |
 |---|---|
-| **Repo / path** | `KooshaPari/Configra` (Rust, config framework, absorbs `pheno-config` per ADR-031) |
+| **Repo / path** | `<REDACTED>/Configra` (Rust, config framework, absorbs `pheno-config` per ADR-031) |
 | **Plausibility** | **VERY LOW** — concern mismatch (config vs OTLP) |
 | **Verdict** | **REJECT** |
 | **Evidence** | (a) Per prior pheno-flags audit, Configra is the canonical config substrate per ADR-022 + ADR-031; it has `Config`, `feature_flags: Vec<String>`, cascade providers — no OTLP / OTel / observability primitives. (b) Per AGENTS.md § "Decision A" + "Stage1 Config Consolidation Closure", Configra is the canonical config home; pheno-otel is the canonical OTLP home. They are different substrate families. |
@@ -451,17 +451,17 @@ The 16 candidates enumerated in the task directive are evaluated below. For each
 
 | Field | Value |
 |---|---|
-| **Repo / path** | `KooshaPari/pheno-mcp-router` (Rust, `pheno-*-lib` tier per ADR-037 canonical) |
+| **Repo / path** | `<REDACTED>/pheno-mcp-router` (Rust, `pheno-*-lib` tier per ADR-037 canonical) |
 | **Plausibility** | **VERY LOW** — `pheno-mcp-router/` directory in the local sparse-checkout is empty except for a `pact` subdirectory (per `ls pheno-mcp-router/`); substrate is **decommissioned or migrated** |
 | **Verdict** | **REJECT** |
-| **Evidence** | (a) `ls pheno-mcp-router/` returns only `pact` — the substrate is not in this sparse-checkout cone. (b) Per ADR-037 (which is about pheno-mcp-router, by name), the canonical is reaffirmed but the local path is not present. (c) Per AGENTS.md "Dmouse92 → KooshaPari migration" (ADR-029), the `pheno-mcp-router` substrate was created de-novo on KooshaPari's fleet via the migration; the current state is unclear from this sparse-checkout. (d) Even if `pheno-mcp-router` were present, it is a **router substrate** (concern: model routing, cost budgets, quotas), not an OTLP wire-format export substrate. |
+| **Evidence** | (a) `ls pheno-mcp-router/` returns only `pact` — the substrate is not in this sparse-checkout cone. (b) Per ADR-037 (which is about pheno-mcp-router, by name), the canonical is reaffirmed but the local path is not present. (c) Per AGENTS.md "Dmouse92 → <REDACTED> migration" (ADR-029), the `pheno-mcp-router` substrate was created de-novo on <REDACTED>'s fleet via the migration; the current state is unclear from this sparse-checkout. (d) Even if `pheno-mcp-router` were present, it is a **router substrate** (concern: model routing, cost budgets, quotas), not an OTLP wire-format export substrate. |
 | **Primary rejection reason** | **Substrate decommissioned / not in sparse-checkout cone; concern mismatch (router vs OTLP).** pheno-mcp-router is a model-routing substrate per its ADR; pheno-otel is an OTLP wire-format export substrate. They share no domain overlap. |
 
 ### 9.10 Candidate 10 — `pheno-scaffold-kit`
 
 | Field | Value |
 |---|---|
-| **Repo / path** | `KooshaPari/pheno-scaffold-kit` (Python, per `ls pheno-scaffold-kit/` showing `pyproject.toml`, `src`, `tests`, `templates`) |
+| **Repo / path** | `<REDACTED>/pheno-scaffold-kit` (Python, per `ls pheno-scaffold-kit/` showing `pyproject.toml`, `src`, `tests`, `templates`) |
 | **Plausibility** | **VERY LOW** — language mismatch (Python vs Rust) |
 | **Verdict** | **REJECT** |
 | **Evidence** | (a) `pheno-scaffold-kit/pyproject.toml` (per `ls pheno-scaffold-kit/`) — Python project. (b) Per `pheno-scaffold-kit/AGENTS.md` (file exists per `ls`), this is a Python scaffolding toolkit for new pheno-* projects. It generates project skeletons; it does not implement OTLP wire-format export. (c) The polyglot mirror of pheno-otel would be a Python OTLP library (e.g. `phenotype-otel-py`), not a scaffold kit. |
@@ -471,7 +471,7 @@ The 16 candidates enumerated in the task directive are evaluated below. For each
 
 | Field | Value |
 |---|---|
-| **Repo / path** | `KooshaPari/phenotype-registry` (per `ls phenotype-registry/` showing `account`, `AGENTS.md`, `agileplus-spec-harmonizer-tool`, etc. — a multi-package repo) |
+| **Repo / path** | `<REDACTED>/phenotype-registry` (per `ls phenotype-registry/` showing `account`, `AGENTS.md`, `agileplus-spec-harmonizer-tool`, etc. — a multi-package repo) |
 | **Plausibility** | **VERY LOW** — registry is metadata, not substrate |
 | **Verdict** | **REJECT** |
 | **Evidence** | (a) `phenotype-registry` is a metadata + governance registry per its AGENTS.md (per the prior pheno-flags audit citing `phenotype-registry/registry/disposition-index.json`). It tracks which repos are active / archived / deprecated; it does not implement functionality. (b) `phenotype-registry/registry/disposition-index.json` would have a `sr-pheno-otel` row that records the substrate's status; this is metadata, not code. (c) Absorbing pheno-otel into the registry would invert the registry's role (it would go from tracking repos to hosting repos). |
@@ -481,7 +481,7 @@ The 16 candidates enumerated in the task directive are evaluated below. For each
 
 | Field | Value |
 |---|---|
-| **Repo / path** | `KooshaPari/phenotype-python-sdk` (Python polyglot SDK; per `ls phenotype-python-sdk/` showing `pyproject.toml`, `packages`, `mcp`, `okf`, `uv.lock`) |
+| **Repo / path** | `<REDACTED>/phenotype-python-sdk` (Python polyglot SDK; per `ls phenotype-python-sdk/` showing `pyproject.toml`, `packages`, `mcp`, `okf`, `uv.lock`) |
 | **Plausibility** | **LOW** — polyglot SDK, not substrate kernel |
 | **Verdict** | **REJECT** |
 | **Evidence** | (a) `phenotype-python-sdk/` is a Python polyglot facade per AGENTS.md § "pheno-* family" — it exposes Rust substrate types via Python FFI / pybind11 / polyglot facades. (b) The polyglot mirror of `pheno-otel` would be a Python `phenotype-otel` package (similar to the TypeScript `phenotype-otel` per side-38), not a fusion into the SDK's umbrella. (c) Per ADR-023, SDKs consume substrates, not the other way around. |
@@ -491,7 +491,7 @@ The 16 candidates enumerated in the task directive are evaluated below. For each
 
 | Field | Value |
 |---|---|
-| **Repo / path** | `KooshaPari/AgilePlus` (per the AGENTS.md family list; not in this sparse-checkout) |
+| **Repo / path** | `<REDACTED>/AgilePlus` (per the AGENTS.md family list; not in this sparse-checkout) |
 | **Plausibility** | **VERY LOW** — workflow management, not substrate kernel |
 | **Verdict** | **REJECT** |
 | **Evidence** | (a) `AgilePlus` is a task-tracking + spec-harmonization tool per AGENTS.md § "pheno-* family" (referenced in 71-pillar cycle-4 audit naming convention). (b) It is not in the local sparse-checkout cone (no `AgilePlus/` directory in the working tree; only referenced via `phenotype-registry/agileplus-spec-harmonizer-tool/`). (c) Even if present, AgilePlus is a workflow / spec tool, not a substrate kernel. |
@@ -501,7 +501,7 @@ The 16 candidates enumerated in the task directive are evaluated below. For each
 
 | Field | Value |
 |---|---|
-| **Repo / path** | `KooshaPari/HexaKit` (per `ls HexaKit/` showing `__pycache__`, `_typos.toml`, `ADR_REGISTRY.md`, `ADR-001.md`, `ADR-002.md` — appears to be a multi-crate or multi-language kit) |
+| **Repo / path** | `<REDACTED>/HexaKit` (per `ls HexaKit/` showing `__pycache__`, `_typos.toml`, `ADR_REGISTRY.md`, `ADR-001.md`, `ADR-002.md` — appears to be a multi-crate or multi-language kit) |
 | **Plausibility** | **LOW** — kit of hexagonal utilities, but multi-language / multi-purpose |
 | **Verdict** | **REJECT** |
 | **Evidence** | (a) `HexaKit/` contains `ADR-001.md`, `ADR-002.md` (per `ls`) — looks like a governance / ADR-collection kit, not a substrate kernel. (b) The name "HexaKit" suggests hexagonal-architecture utilities, which would overlap with `pheno-port-adapter`'s L4 hexagonal pattern (per ADR-038), not with OTLP wire-format export. (c) Per prior audits, `HexaKit` is referenced in the AGENTS.md "pheno-* family" as a **collection of utilities**, not a substrate kernel that absorbs other substrates. |
@@ -511,7 +511,7 @@ The 16 candidates enumerated in the task directive are evaluated below. For each
 
 | Field | Value |
 |---|---|
-| **Repo / path** | `KooshaPari/phenotype-hub` (per AGENTS.md § "pheno-* family" — `phenotype-*-framework` tier) |
+| **Repo / path** | `<REDACTED>/phenotype-hub` (per AGENTS.md § "pheno-* family" — `phenotype-*-framework` tier) |
 | **Plausibility** | **LOW** — framework tier, not substrate; would consume pheno-otel, not absorb it |
 | **Verdict** | **REJECT** |
 | **Evidence** | (a) `phenotype-hub` is a `phenotype-*-framework` tier substrate per ADR-023. Frameworks consume `pheno-*-lib` substrates; they do not absorb them. (b) Per AGENTS.md § "App substrate placement (no 'random phenoShared')", `phenotype-hub` and `phenotype-bus` are framework-tier IoC containers. (c) Even if `phenotype-hub` were the natural home for the OTLP types, doing so would invert the dependency direction (frameworks depend on libs, not libs on frameworks) and violate the IoC pattern. |
@@ -524,7 +524,7 @@ The 16 candidates enumerated in the task directive are evaluated below. For each
 | **Repo / path** | `crates.io/crates/pheno-otel` (the published crate, once `v0.1.0` is tagged) |
 | **Plausibility** | **HIGH (mechanically)** — pheno-otel is `publish = true` per `Cargo.toml:14`, ready for crates.io |
 | **Verdict** | **PRESERVE + TAG** |
-| **Evidence** | (a) `Cargo.toml:14` `publish = true`. (b) `Cargo.toml:3` `version = "0.1.0"`. (c) `Cargo.toml:8-9` `repository = "https://github.com/KooshaPari/pheno-otel"` + `documentation = "https://docs.rs/pheno-otel"`. (d) Per inventory §3, no `v0.1.0` tag exists locally (highest tag is `v0.0.12`); the crate is **published-ready but un-released**. (e) Per Phase 1B defect B9, `CHANGELOG.md` has no `## [0.1.0]` entry. |
+| **Evidence** | (a) `Cargo.toml:14` `publish = true`. (b) `Cargo.toml:3` `version = "0.1.0"`. (c) `Cargo.toml:8-9` `repository = "https://github.com/<REDACTED>/pheno-otel"` + `documentation = "https://docs.rs/pheno-otel"`. (d) Per inventory §3, no `v0.1.0` tag exists locally (highest tag is `v0.0.12`); the crate is **published-ready but un-released**. (e) Per Phase 1B defect B9, `CHANGELOG.md` has no `## [0.1.0]` entry. |
 | **Primary rejection reason** | **N/A — this is not an absorption candidate, it is a release-train candidate.** The "crates.io candidate" framing in the task directive is best interpreted as "should pheno-otel be published to crates.io, and if so, where should the published version go?" The answer is: **pheno-otel itself IS the crates.io crate name. The recommended action is to tag `v0.1.0` + add a `## [0.1.0]` CHANGELOG entry + cut the crates.io release per `release.yml`.** This is a release-train action, not an absorption action. |
 
 ### 9.17 16-candidate matrix summary
@@ -548,7 +548,7 @@ The 16 candidates enumerated in the task directive are evaluated below. For each
 | 15 | `phenotype-hub` | LOW | REJECT (tier mismatch: framework vs library; dep direction inversion) |
 | 16 | `crates.io` candidates | HIGH mechanically | **PRESERVE + TAG** (release-train action, not absorption) |
 
-**Verdict roll-up:** 15 REJECT + 1 PRESERVE (Candidate 2: already at canonical path) + 1 release-train (Candidate 16: tag v0.1.0). The recommended action is **NO ABSORPTION** — pheno-otel is self-canonical and should remain in place at `/Users/kooshapari/CodeProjects/Phenotype/repos/pheno-otel/` as the substrate-canonical local sub-tree.
+**Verdict roll-up:** 15 REJECT + 1 PRESERVE (Candidate 2: already at canonical path) + 1 release-train (Candidate 16: tag v0.1.0). The recommended action is **NO ABSORPTION** — pheno-otel is self-canonical and should remain in place at `/Users/<REDACTED>/CodeProjects/Phenotype/repos/pheno-otel/` as the substrate-canonical local sub-tree.
 
 ---
 
@@ -627,7 +627,7 @@ Following `findings/2026-06-21-pheno-port-adapter-audit/00-FINAL-AUDIT.md` EXECU
 | 38 | `Cargo.lock` (9,703 B, 40 packages) | lock | **in place** | **EXACT (with curiosity)** | `zmij 1.0.21` is unusual transitive of `serde_json` (per Phase 1B D1) |
 | 39 | `dependabot.yml` (59 lines) | config | **in place** (`.github/dependabot.yml:1-59`) | **EXACT** | Self-canonical; weekly Monday 09:00 PDT (per ADR-041) |
 | 40 | `llvm-cov.toml` (22 lines) | config | **in place** (`llvm-cov.toml:1-22`) | **EXACT** | Self-canonical; 80% lib gate (per ADR-040) |
-| 41 | `CODEOWNERS` (23 lines, symlink to root) | governance | **in place** (`.github/CODEOWNERS`) | **EXACT** | Self-canonical; default owner `@KooshaPari` |
+| 41 | `CODEOWNERS` (23 lines, symlink to root) | governance | **in place** (`.github/CODEOWNERS`) | **EXACT** | Self-canonical; default owner `@<REDACTED>` |
 
 **Summary of parity table:**
 - **41 items** total in the working tree
@@ -642,7 +642,7 @@ Following `findings/2026-06-21-pheno-port-adapter-audit/00-FINAL-AUDIT.md` EXECU
 
 ### 12.1 ADR-023 (substrate placement) — still holds
 
-ADR-023 places `pheno-*-lib` tier in standalone repos or workspace subcrates. The current placement (`KooshaPari/pheno-otel` standalone repo + monorepo-overlay path) is consistent with ADR-023. **No change needed.**
+ADR-023 places `pheno-*-lib` tier in standalone repos or workspace subcrates. The current placement (`<REDACTED>/pheno-otel` standalone repo + monorepo-overlay path) is consistent with ADR-023. **No change needed.**
 
 ### 12.2 ADR-037 (substrate-canonical) — by analogy, applies
 
@@ -675,7 +675,7 @@ ADR-046 is about cross-org service-to-service auth. pheno-otel does not provide 
 
 ### 12.7 ADR-048 (substrate graduation path) — applies
 
-ADR-048 establishes a 4-tier gate table (per `pheno-otel/AGENTS.md:33`). pheno-otel is at **Tier 1 (functional, hexagonal, governance-complete)** based on the 5-of-7 quality-bar elements above. **Tier 2 would require: 80% lib coverage published, 6 proptest tests compiling, MSRV reconciled, AGENTS.md source-location claim fixed.** Per the tool `KooshaPari/pheno-framework-lint` (L73), this audit can be re-run after the fixes are applied.
+ADR-048 establishes a 4-tier gate table (per `pheno-otel/AGENTS.md:33`). pheno-otel is at **Tier 1 (functional, hexagonal, governance-complete)** based on the 5-of-7 quality-bar elements above. **Tier 2 would require: 80% lib coverage published, 6 proptest tests compiling, MSRV reconciled, AGENTS.md source-location claim fixed.** Per the tool `<REDACTED>/pheno-framework-lint` (L73), this audit can be re-run after the fixes are applied.
 
 ### 12.8 ADR-049 (app-substrate drift detector) — applicable for cross-crate wiring
 
@@ -749,7 +749,7 @@ ls pheno*/ 2>&1 | grep -i 'phenotype-otel\|pheno-otel'
 | **In-fleet consumers broken at compile** | 2 (`pheno-port-adapter/examples/otel_quickstart.rs`, `pheno-errors/examples/otel_quickstart.rs`) |
 | **In-fleet consumers with misleading docs** | 1 (`pheno-tracing/Cargo.toml:29-31` comment) |
 | **pyo3 / napi-rs / FFI bindings** | 0 (Rust-only by design) |
-| **Polyglot mirrors** | 1 (TypeScript at `KooshaPari/phenotype-otel`, per side-38) |
+| **Polyglot mirrors** | 1 (TypeScript at `<REDACTED>/phenotype-otel`, per side-38) |
 | **ADR-023 federal service classification** | `pheno-*-lib` (NOT a federated service) |
 | **ADR-037 canonical OTel substrate** | **YES** (by `Cargo.toml:7` citation + `SPEC.md:6` + `STATUS.md:7`) |
 | **v23 cycle-13 implications** | 0 (orthogonal to absorption) |

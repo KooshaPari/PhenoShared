@@ -3,7 +3,7 @@
 Canonical private preservation repository for small, machine-local operational
 scripts that do not belong to an existing product repository.
 
-[![AI slop inside](https://sladge.net/badge.svg)](https://sladge.net) [![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/KooshaPari/local-ops/total)](https://github.com/KooshaPari/local-ops/releases)
+[![AI slop inside](https://sladge.net/badge.svg)](https://sladge.net) [![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/<REDACTED>/local-ops/total)](https://github.com/<REDACTED>/local-ops/releases)
 
 The initial capture includes browser-profile helpers, a fork watcher, shell
 cache refresh, SSH desktop helper, suspended-process recovery, and local

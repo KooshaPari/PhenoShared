@@ -25,5 +25,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release with version tracking.
 
-[Unreleased]: https://github.com/KooshaPari/BytePort/compare/0.1.0...HEAD
-[0.1.0]: https://github.com/KooshaPari/BytePort/releases/tag/0.1.0
+[Unreleased]: https://github.com/<REDACTED>/BytePort/compare/0.1.0...HEAD
+[0.1.0]: https://github.com/<REDACTED>/BytePort/releases/tag/0.1.0

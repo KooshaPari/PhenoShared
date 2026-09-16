@@ -14,10 +14,10 @@ not supersede the repository-wide `CODEOWNERS` or
 
 | Area | Owner |
 |------|-------|
-| Workflow definitions (`.github/workflows/`) | @KooshaPari |
-| Pre-commit hooks (`pre-commit-hooks.yaml`) | @KooshaPari |
-| Allowlist (`.trufflehog-allowlist.txt`) | @KooshaPari |
-| Policy files (`Justfile`, `deny.toml`) | @KooshaPari |
+| Workflow definitions (`.github/workflows/`) | @<REDACTED> |
+| Pre-commit hooks (`pre-commit-hooks.yaml`) | @<REDACTED> |
+| Allowlist (`.trufflehog-allowlist.txt`) | @<REDACTED> |
+| Policy files (`Justfile`, `deny.toml`) | @<REDACTED> |
 
 ## Review requirements
 

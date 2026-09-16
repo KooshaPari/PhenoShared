@@ -8,7 +8,7 @@ to the configured registry.
 Usage:
     python3 tools/sbom-oci/sbom_oci_push.py \\
         --sbom build/report.cdx.json \\
-        --repo ghcr.io/KooshaPari/phenotype-go-sdk \\
+        --repo ghcr.io/<REDACTED>/phenotype-go-sdk \\
         --tag v1.2.3
 """
 from __future__ import annotations
@@ -60,7 +60,7 @@ def _cosign_sign(sbom_path: Path, repo: str, tag: str) -> bool:
 def main() -> int:
     ap = argparse.ArgumentParser(description="SBOM-to-OCI artifact pusher")
     ap.add_argument("--sbom", required=True, type=Path, help="Path to CycloneDX JSON SBOM")
-    ap.add_argument("--repo", required=True, help="OCI repository (e.g., KooshaPari/phenotype-go-sdk)")
+    ap.add_argument("--repo", required=True, help="OCI repository (e.g., <REDACTED>/phenotype-go-sdk)")
     ap.add_argument("--tag", required=True, help="Release tag (e.g., v1.2.3)")
     ap.add_argument("--registry", default=DEFAULT_REGISTRY, help="OCI registry host (default: ghcr.io)")
     ap.add_argument("--dry-run", action="store_true", help="Validate only, do not push")

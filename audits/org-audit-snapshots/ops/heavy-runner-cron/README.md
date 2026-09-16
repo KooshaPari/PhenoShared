@@ -1,6 +1,6 @@
 # ops/heavy-runner-cron — fleet substrate tooling weekly cron bundle
 
-**Location:** `KooshaPari/phenotype-org-audits` (staging repo per ADR-028)
+**Location:** `<REDACTED>/phenotype-org-audits` (staging repo per ADR-028)
 **First scheduled run:** 2026-06-23 09:00 PDT
 **Schedule:** every Monday 09:00 local time
 **Device class:** `heavy-runner` (per `AGENTS.md` ADR-023 device-fit gate)
@@ -50,7 +50,7 @@ queueing — the next tick can retry.
 | Per-run summary | `logs/<UTCdate>.log` | text | 30 days (operator's responsibility; we do not auto-purge) |
 | Per-tool stdout | `logs/<UTCdate>.<tool>.out` | tool-native (md or json) | same |
 | Cron's own output | `logs/cron.log` | text (cron's stdout/stderr) | same |
-| GitHub issues | filed in `KooshaPari/phenotype-org-audits` with label `drift-detector` (and siblings for the other 2 tools) | issue body | n/a (permanent) |
+| GitHub issues | filed in `<REDACTED>/phenotype-org-audits` with label `drift-detector` (and siblings for the other 2 tools) | issue body | n/a (permanent) |
 
 The cron bundle does **not** create GitHub issues. The auto-issue workflow
 lives in `phenotype-org-audits/.github/workflows/auto-issue-from-cron.yml`

@@ -1,12 +1,12 @@
 # DevHex
 
-[![Build](https://img.shields.io/github/actions/workflow/status/KooshaPari/DevHex/quality-gate.yml?branch=main&label=build)](https://github.com/KooshaPari/DevHex/actions)
-[![Release](https://img.shields.io/github/v/release/KooshaPari/DevHex?include_prereleases&sort=semver)](https://github.com/KooshaPari/DevHex/releases)
-[![License](https://img.shields.io/github/license/KooshaPari/DevHex)](LICENSE)
-[![Phenotype](https://img.shields.io/badge/Phenotype-org-blueviolet)](https://github.com/KooshaPari)
+[![Build](https://img.shields.io/github/actions/workflow/status/<REDACTED>/DevHex/quality-gate.yml?branch=main&label=build)](https://github.com/<REDACTED>/DevHex/actions)
+[![Release](https://img.shields.io/github/v/release/<REDACTED>/DevHex?include_prereleases&sort=semver)](https://github.com/<REDACTED>/DevHex/releases)
+[![License](https://img.shields.io/github/license/<REDACTED>/DevHex)](LICENSE)
+[![Phenotype](https://img.shields.io/badge/Phenotype-org-blueviolet)](https://github.com/<REDACTED>)
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![CodeQL](https://github.com/KooshaPari/DevHex/actions/workflows/codeql.yml/badge.svg)](https://github.com/KooshaPari/DevHex/actions/workflows/codeql.yml)
+[![CodeQL](https://github.com/<REDACTED>/DevHex/actions/workflows/codeql.yml/badge.svg)](https://github.com/<REDACTED>/DevHex/actions/workflows/codeql.yml)
 [![Go](https://img.shields.io/badge/go-1.22+-00ADD8.svg?logo=go&logoColor=white)](go.mod)
 
 **Status:** maintenance
@@ -34,8 +34,8 @@ The `domain` package has zero external dependencies. Adapters import it and impl
 ```go
 import (
     "context"
-    "github.com/KooshaPari/devenv-abstraction/pkg/domain"
-    "github.com/KooshaPari/devenv-abstraction/pkg/adapters/docker"
+    "github.com/<REDACTED>/devenv-abstraction/pkg/domain"
+    "github.com/<REDACTED>/devenv-abstraction/pkg/adapters/docker"
 )
 
 func main() {

@@ -1,6 +1,6 @@
 # Deep Codebase Audit Report - Phenotype Ecosystem
 **Date:** 2025-03-29
-**Scope:** All repositories in `/Users/kooshapari/CodeProjects/Phenotype/repos/`
+**Scope:** All repositories in `/Users/<REDACTED>/CodeProjects/Phenotype/repos/`
 **Focus:** LOC reduction, complexity analysis, dead code, architectural issues, test coverage
 
 ---

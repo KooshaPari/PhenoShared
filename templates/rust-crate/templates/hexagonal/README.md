@@ -1,8 +1,8 @@
 # Hexagonal Rust Template
 
-<!-- Migrated from KooshaPari/Apisync (archived 2026-06-19) — original commit d981353 -->
+<!-- Migrated from <REDACTED>/Apisync (archived 2026-06-19) — original commit d981353 -->
 
-This template was extracted from [`KooshaPari/Apisync`](https://github.com/KooshaPari/Apisync)
+This template was extracted from [`<REDACTED>/Apisync`](https://github.com/<REDACTED>/Apisync)
 shortly before that repository was archived on 2026-06-19. It preserves the **hexagonal /
 ports-and-adapters** scaffold patterns that Apisync used: a thin `Taskfile`-driven quality
 gate, a tightly-pinned Rust toolchain, opinionated lint/format/audit configs, and a starter
@@ -12,7 +12,7 @@ Sentry module that integrates cleanly into an API service.
 
 | Field            | Value                                                             |
 | ---------------- | ----------------------------------------------------------------- |
-| Source repo      | `KooshaPari/Apisync` (archived 2026-06-19)                        |
+| Source repo      | `<REDACTED>/Apisync` (archived 2026-06-19)                        |
 | Source commit    | `d981353` — *"wip: pre-push snapshot 2026-06-18T02:00:13Z"*       |
 | Reason           | Apisync deprecated per ADR-017; template absorbed here for reuse  |
 | License          | Apache-2.0 (inherited from Apisync)                               |
@@ -112,6 +112,6 @@ mise run audit
 
 ## See also
 
-- [`KooshaPari/Apisync`](https://github.com/KooshaPari/Apisync) @ `d981353` — the source of truth
-- [`KooshaPari/pheno-cargo-template`](../..) — this repository's root
+- [`<REDACTED>/Apisync`](https://github.com/<REDACTED>/Apisync) @ `d981353` — the source of truth
+- [`<REDACTED>/pheno-cargo-template`](../..) — this repository's root
 - ADR-017 — *"Deprecate Apisync; absorb template patterns into pheno-cargo-template"*

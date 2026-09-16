@@ -6,7 +6,7 @@
 
 ## Verified source custody
 
-- `KooshaPari/zz-archive-grapheon` is private and archived; `main` is
+- `<REDACTED>/zz-archive-grapheon` is private and archived; `main` is
   `8b57aa380dd6d288f451be5ef0e4e766f606c7fb`.
 - Local Grapheon `git fsck --full --no-reflogs` passes. The preservation bundle
   `/tmp/grapheon-preservation-all-20260904-0757.bundle` is 431,515,603 bytes with

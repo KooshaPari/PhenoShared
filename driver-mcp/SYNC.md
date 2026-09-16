@@ -1,6 +1,6 @@
 # driver-mcp sync with PhenoMCPServers
 
-Canonical MCP server source: `KooshaPari/PhenoMCPServers` → `servers/substrate/`.
+Canonical MCP server source: `<REDACTED>/PhenoMCPServers` → `servers/substrate/`.
 
 This directory is a **dev convenience mirror**. Before release, run:
 

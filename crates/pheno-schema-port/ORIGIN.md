@@ -1,7 +1,7 @@
 # Origin: PhenoSchema
 
-Source repo: KooshaPari/PhenoSchema
-Absorbed into: KooshaPari/phenoUtils/crates/pheno-schema-port
+Source repo: <REDACTED>/PhenoSchema
+Absorbed into: <REDACTED>/phenoUtils/crates/pheno-schema-port
 Absorption date: 2026-06-20
 
 ## Preservation scope

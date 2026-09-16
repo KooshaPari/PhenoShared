@@ -1,8 +1,8 @@
 # phenoResearchEngine — Absorption Justification
 
 **Status:** ABSORBED 2026-07-17
-**Source:** `KooshaPari/phenoResearchEngine` (DEPRECATED upstream since 2026-06-20)
-**Target:** `KooshaPari/phenoAI` at `python/phenotype-research/`
+**Source:** `<REDACTED>/phenoResearchEngine` (DEPRECATED upstream since 2026-06-20)
+**Target:** `<REDACTED>/phenoAI` at `python/phenotype-research/`
 **Disposition:** ABSORBED (was DEPRECATED → AFFIRM)
 
 ## Confidence
@@ -45,22 +45,22 @@ See `docs/boundary/phenotype-research.md` in the registry spine.
 
 ```sh
 # 1. Un-archive the source repo
-gh repo unarchive KooshaPari/phenoResearchEngine
+gh repo unarchive <REDACTED>/phenoResearchEngine
 
 # 2. Remove the absorbed package
-cd /Users/kooshapari/CodeProjects/Phenotype/repos/phenoAI
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos/phenoAI
 git rm -r python/phenotype-research/
 git commit -m "revert: undo phenoResearchEngine absorption"
 
 # 3. In the registry spine
-cd /Users/kooshapari/CodeProjects/Phenotype/repos/phenotype-registry
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos/phenotype-registry
 # Edit registry/disposition-index.json: change fsm from "absorbed" back to "deprecated"
 # Restore projects/phenoResearchEngine.json from git history
 ```
 
 ## Cross-references
 
-- Disposition row in `registry/disposition-index.json`: search for `"path": "KooshaPari/phenoResearchEngine"`.
+- Disposition row in `registry/disposition-index.json`: search for `"path": "<REDACTED>/phenoResearchEngine"`.
 - Boundary doc: `docs/boundary/phenotype-research.md`.
-- Source deprecation: `https://github.com/KooshaPari/phenoResearchEngine/blob/main/DEPRECATED.md`.
+- Source deprecation: `https://github.com/<REDACTED>/phenoResearchEngine/blob/main/DEPRECATED.md`.
 - Registry ecosystem plan: `RATIONALIZATION_PLAN.md` § "Python research orchestration".

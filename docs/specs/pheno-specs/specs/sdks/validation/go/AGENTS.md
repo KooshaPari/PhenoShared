@@ -4,7 +4,7 @@
 
 - **Name**: phenotype-validation-go
 - **Description**: Go implementation of Phenotype validation framework
-- **Location**: `/Users/kooshapari/CodeProjects/Phenotype/repos/phenotype-validation-go`
+- **Location**: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/phenotype-validation-go`
 - **Language Stack**: Go
 - **Published**: Internal (Phenotype ecosystem)
 
@@ -12,7 +12,7 @@
 
 ```bash
 # Navigate to project
-cd /Users/kooshapari/CodeProjects/Phenotype/repos/phenotype-validation-go
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos/phenotype-validation-go
 
 # When go.mod present:
 go mod tidy

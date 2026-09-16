@@ -1,7 +1,7 @@
 # Repo Metadata Completeness Audit
 
 **Date:** 2026-05-05
-**Scope:** `/Users/kooshapari/CodeProjects/Phenotype/repos`
+**Scope:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos`
 **Audits:** CLAUDE.md, FUNDING.yml, CI/CD coverage, Governance references
 
 ---

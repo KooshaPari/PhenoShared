@@ -8,4 +8,4 @@
 
 set -e
 
-exec /opt/homebrew/bin/python3 /Users/kooshapari/bin/canary.py "$@"
+exec /opt/homebrew/bin/python3 /Users/<REDACTED>/bin/canary.py "$@"

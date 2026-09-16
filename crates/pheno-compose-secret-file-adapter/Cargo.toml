@@ -5,11 +5,11 @@ edition = "2021"
 license = "MIT OR Apache-2.0"
 description = "File-backed `SecretStore` adapter for the `phenocompose-port-secret` port. Persists secrets as JSON on local disk and supports optional atomic write + mtime-based concurrent-update detection."
 publish = false
-repository = "https://github.com/KooshaPari/PhenoCompose"
+repository = "https://github.com/<REDACTED>/PhenoCompose"
 documentation = "https://docs.rs/phenocompose-secret-file-adapter"
 keywords = ["phenotype", "pheno-compose", "adapter", "secret", "file"]
 categories = ["development-tools", "filesystem"]
-authors = ["kooshapari"]
+authors = ["<REDACTED>"]
 
 [lib]
 path = "src/lib.rs"

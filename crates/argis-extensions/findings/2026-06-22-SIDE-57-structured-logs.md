@@ -205,21 +205,21 @@ These are advisory; this audit is read-only and does not propose code changes.
 ```bash
 # Scanner script
 python3 /tmp/side57_audit.py \
-  /Users/kooshapari/CodeProjects/Phenotype/repos/pheno-cli-base \
-  /Users/kooshapari/CodeProjects/Phenotype/repos/pheno-config \
-  /Users/kooshapari/CodeProjects/Phenotype/repos/pheno-context \
-  /Users/kooshapari/CodeProjects/Phenotype/repos/pheno-errors \
-  /Users/kooshapari/CodeProjects/Phenotype/repos/pheno-flags \
-  /Users/kooshapari/CodeProjects/Phenotype/repos/pheno-otel \
-  /Users/kooshapari/CodeProjects/Phenotype/repos/pheno-port-adapter \
-  /Users/kooshapari/CodeProjects/Phenotype/repos/pheno-tracing
+  /Users/<REDACTED>/CodeProjects/Phenotype/repos/pheno-cli-base \
+  /Users/<REDACTED>/CodeProjects/Phenotype/repos/pheno-config \
+  /Users/<REDACTED>/CodeProjects/Phenotype/repos/pheno-context \
+  /Users/<REDACTED>/CodeProjects/Phenotype/repos/pheno-errors \
+  /Users/<REDACTED>/CodeProjects/Phenotype/repos/pheno-flags \
+  /Users/<REDACTED>/CodeProjects/Phenotype/repos/pheno-otel \
+  /Users/<REDACTED>/CodeProjects/Phenotype/repos/pheno-port-adapter \
+  /Users/<REDACTED>/CodeProjects/Phenotype/repos/pheno-tracing
 
 # Raw per-file grep cross-check
 for c in pheno-cli-base pheno-config pheno-context pheno-errors pheno-flags \
          pheno-otel pheno-port-adapter pheno-tracing; do
   echo "--- $c ---"
   grep -rE '\b(info|debug|warn|error|trace)!\s*\(' \
-    /Users/kooshapari/CodeProjects/Phenotype/repos/$c/{src,tests,examples,benches} \
+    /Users/<REDACTED>/CodeProjects/Phenotype/repos/$c/{src,tests,examples,benches} \
     --include='*.rs' 2>/dev/null | wc -l
 done
 ```

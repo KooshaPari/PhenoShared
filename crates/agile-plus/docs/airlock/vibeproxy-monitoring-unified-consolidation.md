@@ -100,7 +100,7 @@ The `manifests-pre-squash-2026-07-29/vibeproxy-monitoring-unified-branches-manif
 
 ### Alternative that the operator can invoke later
 If the operator later wants the 2 commits merged into main before any future squash:
-1. `git -C /Users/kooshapari/CodeProjects/Phenotype/repos/vibeproxy-monitoring-unified switch feat/exporter-v1-envelope`
+1. `git -C /Users/<REDACTED>/CodeProjects/Phenotype/repos/vibeproxy-monitoring-unified switch feat/exporter-v1-envelope`
 2. `git switch main && git merge --no-ff feat/exporter-v1-envelope -m 'merge: feat/exporter-v1-envelope (CI fix)'`
 3. Then a future squash to 1 commit would only flatten the resulting merge commit + its 2 parents, preserving all content.
 

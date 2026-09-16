@@ -74,7 +74,7 @@ ansible-playbook playbooks/install-woodpecker.yml --limit oci-primary
 2. Navigate to `http://localhost:3000` over an SSH tunnel: `ssh -L 3000:localhost:3000 ubuntu@oci-primary`.
 3. Complete the Forgejo install wizard; **skip** setting an admin account on the web — use CLI:
    ```
-   sudo -u git forgejo admin user create --admin --username koosha --email kooshapari@gmail.com --random-password
+   sudo -u git forgejo admin user create --admin --username koosha --email <REDACTED>@gmail.com --random-password
    ```
 4. Save the random password to Vaultwarden as `forgejo/admin`.
 5. Mirror repos: for each Phenotype repo, create a push mirror targeting GitHub. Token: `GH-01` from Vaultwarden.

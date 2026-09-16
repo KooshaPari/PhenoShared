@@ -3,7 +3,7 @@ name: Bug report
 about: Report a reproducible bug with version and release context
 title: "[bug] "
 labels: bug
-assignees: KooshaPari
+assignees: <REDACTED>
 ---
 
 ## Summary

@@ -1,10 +1,10 @@
 {
   "artifact": "dino-fork-lineage-20260726",
   "generated_at": "2026-07-26T04:24:00Z",
-  "scope": "KooshaPari/Dino-fork versus KooshaPari/Dino ancestry and boundary",
+  "scope": "<REDACTED>/Dino-fork versus <REDACTED>/Dino ancestry and boundary",
   "evidence": {
     "dino_fork": {
-      "url": "https://github.com/KooshaPari/Dino-fork",
+      "url": "https://github.com/<REDACTED>/Dino-fork",
       "is_fork": false,
       "parent": null,
       "default_branch": "wsm/agileplus-dag-20260610",
@@ -16,7 +16,7 @@
       "size_kb": 656472
     },
     "dino": {
-      "url": "https://github.com/KooshaPari/Dino",
+      "url": "https://github.com/<REDACTED>/Dino",
       "is_fork": false,
       "parent": null,
       "default_branch": "main",
@@ -39,7 +39,7 @@
       "dino_fork_checkout": null,
       "related_checkout": "AgilePlus/Dino",
       "related_checkout_head": "f282c0b194659ad94f982792a82edbcca913fd4a",
-      "related_checkout_origin": "git@github.com:KooshaPari/AgilePlus.git",
+      "related_checkout_origin": "git@github.com:<REDACTED>/AgilePlus.git",
       "interpretation": "AgilePlus/Dino is not a Dino-fork checkout and must not be treated as local preservation evidence for Dino-fork."
     }
   },

@@ -97,7 +97,7 @@ git rev-list --count upstream/main ^main    # unique upstream commits
 git rev-list --count main ^upstream/main    # unique local commits
 ```
 
-For each fork, this verifies whether local is ahead/behind upstream. The user's stance is "Plus" forks carry KooshaPari patches on top of upstream.
+For each fork, this verifies whether local is ahead/behind upstream. The user's stance is "Plus" forks carry <REDACTED> patches on top of upstream.
 
 ## LOCAL CHECKOUT COVERAGE
 

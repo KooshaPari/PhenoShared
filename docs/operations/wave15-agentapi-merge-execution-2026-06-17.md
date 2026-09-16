@@ -1,8 +1,8 @@
 # Wave 15 — agentapi-plusplus merge execution — 2026-06-17
 
 **Predecessor:** [wave14-gateway-ssot-2026-06-17.md](./wave14-gateway-ssot-2026-06-17.md)  
-**Canonical owner:** `KooshaPari/agentapi-plusplus`  
-**Supersedes:** archived `KooshaPari/agentapi`
+**Canonical owner:** `<REDACTED>/agentapi-plusplus`  
+**Supersedes:** archived `<REDACTED>/agentapi`
 
 ## Branch taxonomy (34 branches)
 

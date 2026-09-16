@@ -1,10 +1,10 @@
 # Consolidation Memo — 2026-06-08
 
-Sources: 183 KooshaPari remote repos (`/tmp/kooshapari_repos.json`); 84 archived / 99 active. Local inventory = 26 private/unmapped. Subagent final summaries (a07c11fa784760d90, af42b80b52800828e, aef0db3108fce5969, a6594d3bf05b04960, a118b2eec5a1cfeee, a6de5053d6d624824, ac224231df1a13f83, a42d2b660e617d400, a3cdf65138b9ba727, aa8a7f23bd65bfda3, ab63751cf1cf7203a, a46c3a16fd14fdd60, ac4182a91ddd4b9ca).
+Sources: 183 <REDACTED> remote repos (`/tmp/<REDACTED>_repos.json`); 84 archived / 99 active. Local inventory = 26 private/unmapped. Subagent final summaries (a07c11fa784760d90, af42b80b52800828e, aef0db3108fce5969, a6594d3bf05b04960, a118b2eec5a1cfeee, a6de5053d6d624824, ac224231df1a13f83, a42d2b660e617d400, a3cdf65138b9ba727, aa8a7f23bd65bfda3, ab63751cf1cf7203a, a46c3a16fd14fdd60, ac4182a91ddd4b9ca).
 
 ## 1. Top 5 cross-repo libifications
-1. **Workflow-hygiene reusable workflow** -> `KooshaPari/phenoShared/.github/workflows/reusable/workflow-hygiene.yml` (target repo). 1861 `*.yml` files across `repos/*/.github/`; only 96 delegate to `phenoShared`. Centralize SHA-pin audit, runner-pin audit, `permissions:` audit, actionlint. Replace 1764 inline copies.
-2. **Electron cross-platform release** -> `KooshaPari/phenotypeActions/electron-release` (new reusable). OmniRoute's `electron-release.yml` and VibeProxy's `release.yml` share tag dispatch, checkout, version extraction, softprops `gh-release` fan-in. Keep macOS Swift flow (codesign/notarytool/Sparkle) separate.
+1. **Workflow-hygiene reusable workflow** -> `<REDACTED>/phenoShared/.github/workflows/reusable/workflow-hygiene.yml` (target repo). 1861 `*.yml` files across `repos/*/.github/`; only 96 delegate to `phenoShared`. Centralize SHA-pin audit, runner-pin audit, `permissions:` audit, actionlint. Replace 1764 inline copies.
+2. **Electron cross-platform release** -> `<REDACTED>/phenotypeActions/electron-release` (new reusable). OmniRoute's `electron-release.yml` and VibeProxy's `release.yml` share tag dispatch, checkout, version extraction, softprops `gh-release` fan-in. Keep macOS Swift flow (codesign/notarytool/Sparkle) separate.
 3. **Phenotype caching** -> merge `Stashly` (TTL/multi-tier/singleflight) into `phenoUtils` (or new `pheno-cache` crate in `phenoUtils`). Already flagged as overlap with `pheno-utils` cache layer.
 4. **Phenotype xDD** -> `FocalPoint/tooling/xdd-lib` (or new `pheno-xdd` crate). Unify `phenoXddLib` (property/contract/mutation crates) + `phenoXdd` (150+ patterns repo) into one Rust crate consumed by `AgilePlus`, `FocalPoint`, and `phenotype-tooling`.
 5. **MCP framework** -> fork `McpKit` (archived, Phenotype MCP framework SDK) into a new `phenotype-mcp` crate, and wrap the official `modelcontextprotocol/python-sdk` (MIT) for Python. Single `phenotype-mcp` namespace replaces `AgentMCP`, `MCPForge`, `PhenoMCP`, `phenotype-ops-mcp`.
@@ -18,7 +18,7 @@ Sources: 183 KooshaPari remote repos (`/tmp/kooshapari_repos.json`); 84 archived
 
 ## 3. Top 5 repos to delete
 1. **`projects-landing`** — Astro auto-gen portfolio, archived, superseded by `phenotype-landing`.
-2. **`thegent-landing`** — Astro thegent.kooshapari.com page, archived, folded into `phenotype-landing`.
+2. **`thegent-landing`** — Astro thegent.<REDACTED>.com page, archived, folded into `phenotype-landing`.
 3. **`helios-cli-backup`** — self-marked DEPRECATED; canonical is `helios-cli` in `HexaKit/`.
 4. **`phenotype-colab-extensions`** — archived, no callers.
 5. **`forge`** (archived 2026-03) — CLI task runner subsumed by `phenoForge`.

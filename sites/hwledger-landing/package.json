@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "Hwledger landing page (hwledger.kooshapari.com)",
+  "description": "Hwledger landing page (hwledger.<REDACTED>.com)",
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",

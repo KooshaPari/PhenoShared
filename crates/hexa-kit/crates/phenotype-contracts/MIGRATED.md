@@ -5,7 +5,7 @@
 
 ## Canonical
 
-- Traits: https://github.com/KooshaPari/phenoShared/tree/main/crates/phenotype-contracts
+- Traits: https://github.com/<REDACTED>/phenoShared/tree/main/crates/phenotype-contracts
 - Adapters (scaffold): `crates/phenotype-contract-adapters` in HexaKit workspace
 
 ## Consumers

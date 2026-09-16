@@ -5,7 +5,7 @@
 # Gates:
 #   - advisories:  known vulnerabilities (RUSTSEC)
 #   - bans:        disallowed crates (forbidden APIs, banned deps)
-#   - sources:     allowed registries (crates.io + KooshaPari mirror)
+#   - sources:     allowed registries (crates.io + <REDACTED> mirror)
 #   - licenses:    allowed licenses (MIT / Apache-2.0 / BSD / etc.)
 
 # ─── Global ─────────────────────────────────────────────────────────────────
@@ -51,8 +51,8 @@ allow-registry = [
     "https://github.com/rust-lang/crates.io-index",
 ]
 allow-git = [
-    # Add KooshaPari mirror URLs here when in use
-    # "https://github.com/KooshaPari/pheno-*",
+    # Add <REDACTED> mirror URLs here when in use
+    # "https://github.com/<REDACTED>/pheno-*",
 ]
 
 # ─── Licenses ───────────────────────────────────────────────────────────────

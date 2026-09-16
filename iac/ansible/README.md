@@ -9,17 +9,17 @@ exposed via Cloudflare Tunnel.
 1. OCI Ampere VM provisioned (blocked on capacity availability) — ensure
    `~/.ssh/oci_ampere_phenotype` can reach it as `opc`.
 2. Tailscale ephemeral auth key: https://login.tailscale.com/admin/settings/keys
-3. Cloudflare API token, scope `Zone:DNS:Edit` on `kooshapari.com`.
+3. Cloudflare API token, scope `Zone:DNS:Edit` on `<REDACTED>.com`.
 4. Cloudflare Tunnel pre-created locally:
 
    ```
    cloudflared tunnel login
    cloudflared tunnel create phenotype-oci-primary
    # Note the UUID and capture the ~/.cloudflared/<UUID>.json contents.
-   cloudflared tunnel route dns phenotype-oci-primary forgejo.kooshapari.com
-   cloudflared tunnel route dns phenotype-oci-primary ci.kooshapari.com
-   cloudflared tunnel route dns phenotype-oci-primary vault.kooshapari.com
-   cloudflared tunnel route dns phenotype-oci-primary grafana.kooshapari.com
+   cloudflared tunnel route dns phenotype-oci-primary forgejo.<REDACTED>.com
+   cloudflared tunnel route dns phenotype-oci-primary ci.<REDACTED>.com
+   cloudflared tunnel route dns phenotype-oci-primary vault.<REDACTED>.com
+   cloudflared tunnel route dns phenotype-oci-primary grafana.<REDACTED>.com
    ```
 
 5. `cp inventory.yml.example inventory.yml` and set the OCI public IP (first
@@ -47,11 +47,11 @@ ansible-playbook -i inventory.yml playbooks/install-caddy.yml
 After the initial `site.yml`:
 
 1. `ssh opc@oci-primary sudo cat /root/.forgejo-admin-password` — admin bootstrap password.
-2. Log in to `https://forgejo.kooshapari.com`, change password, register an
-   OAuth2 application for Woodpecker (redirect URI: `https://ci.kooshapari.com/authorize`).
+2. Log in to `https://forgejo.<REDACTED>.com`, change password, register an
+   OAuth2 application for Woodpecker (redirect URI: `https://ci.<REDACTED>.com/authorize`).
 3. Put the client id/secret into `group_vars/oci_primary.yml` and re-run
    `install-woodpecker.yml` to pick them up.
-4. Visit `https://vault.kooshapari.com/admin` with the token from
+4. Visit `https://vault.<REDACTED>.com/admin` with the token from
    `/etc/vaultwarden/.admin_token` to create the first user invitation.
 
 ## Playbook order (enforced by `site.yml`)

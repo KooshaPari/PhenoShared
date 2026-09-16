@@ -10,7 +10,7 @@
   ],
   "commit": "e0d73d6600",
   "branch": "main",
-  "repository": "KooshaPari/phenotype-apps",
+  "repository": "<REDACTED>/phenotype-apps",
   "findings": {
     "root_cause": "SHA-pin tool appended API error responses to action version fields and corrupted Go template expressions",
     "corruption_pattern": "actions/checkout@SHA@{\"message\":\"Not Found\"}... and $123var125 instead of ${{ var }}",

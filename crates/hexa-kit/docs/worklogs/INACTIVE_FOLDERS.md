@@ -13,16 +13,16 @@
 
 | Dir | Remote | Branch | Dirty | Stashes | Unpushed | Action |
 |-----|--------|--------|-------|---------|----------|--------|
-| `agent-wave-monorepo-temp` | `KooshaPari/agent-wave` | `main` | 5 untracked docs/ | 0 | 0 | Commit or discard untracked docs files |
+| `agent-wave-monorepo-temp` | `<REDACTED>/agent-wave` | `main` | 5 untracked docs/ | 0 | 0 | Commit or discard untracked docs files |
 | `heliosCLI-monorepo-temp` | — | — | — | — | — | **DELETED** |
-| `phenotype-gauge-temp` | `KooshaPari/phenotype-gauge` | `chore/rescue-temp-dir-20260329` | 5 untracked docs/ | 1 | 1 commit | Push commit + pop stash + commit/discard untracked |
-| `phenotype-go-kit-temp` | `KooshaPari/phenotype-go-kit` | `chore/rescue-temp-dir-20260329` | clean | 1 | 2 commits | Push 2 commits + pop/drop stash → open PR |
-| `phenotype-nexus-temp` | `KooshaPari/phenotype-nexus` | `chore/rescue-temp-dir-20260329` | clean | 1 | 3 commits | Push 3 commits + pop/drop stash → open PR |
-| `phenotype-shared-temp` | `KooshaPari/phenotype-shared` | `chore/sync-test-artifacts-20260329` | clean | 0 | 0 | **SAFE** — no action needed |
-| `template-commons-temp` | `KooshaPari/template-commons` | `main` | `AGENTS.md`, `CLAUDE.md`, `worklog.md` | 0 | 0 | Commit or discard 3 tracked modified files |
-| `tokenledger-temp` | `KooshaPari/tokenledger` | `main` | clean | 0 | 0 | **SAFE** — no action needed |
-| `consolidate-libraries` | `KooshaPari/phenotype-infrakit` | `chore/decomposition-audit-v2` | clean | 0 | 0 | **PRUNABLE** (Already in HEAD) |
-| `expand-test-coverage` | `KooshaPari/phenotype-infrakit` | `chore/ci-cd-workflows-clean` | clean | 0 | 0 | **PRUNABLE** |
+| `phenotype-gauge-temp` | `<REDACTED>/phenotype-gauge` | `chore/rescue-temp-dir-20260329` | 5 untracked docs/ | 1 | 1 commit | Push commit + pop stash + commit/discard untracked |
+| `phenotype-go-kit-temp` | `<REDACTED>/phenotype-go-kit` | `chore/rescue-temp-dir-20260329` | clean | 1 | 2 commits | Push 2 commits + pop/drop stash → open PR |
+| `phenotype-nexus-temp` | `<REDACTED>/phenotype-nexus` | `chore/rescue-temp-dir-20260329` | clean | 1 | 3 commits | Push 3 commits + pop/drop stash → open PR |
+| `phenotype-shared-temp` | `<REDACTED>/phenotype-shared` | `chore/sync-test-artifacts-20260329` | clean | 0 | 0 | **SAFE** — no action needed |
+| `template-commons-temp` | `<REDACTED>/template-commons` | `main` | `AGENTS.md`, `CLAUDE.md`, `worklog.md` | 0 | 0 | Commit or discard 3 tracked modified files |
+| `tokenledger-temp` | `<REDACTED>/tokenledger` | `main` | clean | 0 | 0 | **SAFE** — no action needed |
+| `consolidate-libraries` | `<REDACTED>/phenotype-infrakit` | `chore/decomposition-audit-v2` | clean | 0 | 0 | **PRUNABLE** (Already in HEAD) |
+| `expand-test-coverage` | `<REDACTED>/phenotype-infrakit` | `chore/ci-cd-workflows-clean` | clean | 0 | 0 | **PRUNABLE** |
 
 ### Worktrees
 
@@ -30,9 +30,9 @@
 |-----|--------|--------|-------|----------|--------|
 | `repos/.worktrees/gh-pages-deploy` | none | none | — | 0 | **DELETED** |
 | `repos/.worktrees/phench-fix` | none | none | — | 0 | **DELETED** |
-| `repos/.worktrees/thegent` | `KooshaPari/phenotype-infrakit` | `chore/cost-tracking-modules` | 1 modified + 1 untracked | 1 commit | Push commit → open PR → delete after merge |
+| `repos/.worktrees/thegent` | `<REDACTED>/phenotype-infrakit` | `chore/cost-tracking-modules` | 1 modified + 1 untracked | 1 commit | Push commit → open PR → delete after merge |
 | `worktrees/phenotypeActions` | none | none | — | 0 | **DELETED** |
-| `worktrees/portage` | `KooshaPari/portage` | `main` | clean | 0 | **SAFE** — clean canonical worktree |
+| `worktrees/portage` | `<REDACTED>/portage` | `main` | clean | 0 | **SAFE** — clean canonical worktree |
 | `worktrees/chore-docs-sbom-stack` | origin | `chore/tag-automation-release-split` | clean | 0 | **ACTIVE** |
 | `worktrees/chore-sbom-cyclonedx` | origin | `chore/sbom-cyclonedx-pilot` | clean | 0 | **ACTIVE** |
 | `worktrees/chore-session-sbom-stack` | origin | `chore/session-stacked-sbom-delivery` | clean | 0 | **ACTIVE** |
@@ -58,8 +58,8 @@
 ### Registered Git Worktrees (in `repos/`)
 
 ```
-/Users/kooshapari/CodeProjects/Phenotype/repos              [main]
-/Users/kooshapari/CodeProjects/Phenotype/repos/repos/worktrees/phenotype-infrakit/chore/merge-worklogs  [chore/merge-worklogs]
+/Users/<REDACTED>/CodeProjects/Phenotype/repos              [main]
+/Users/<REDACTED>/CodeProjects/Phenotype/repos/repos/worktrees/phenotype-infrakit/chore/merge-worklogs  [chore/merge-worklogs]
 ```
 
 The `chore/merge-worklogs` worktree is registered but should be confirmed merged/deleted.
@@ -111,7 +111,7 @@ These are legitimate worktrees that need verification but contain active or rece
 
 | Directory | Remote | Branch | Unpushed | Status | Action |
 |-----------|--------|--------|----------|--------|--------|
-| `worktrees/portage/` | `KooshaPari/portage` | `main` | 0 | **SAFE** | No action needed |
+| `worktrees/portage/` | `<REDACTED>/portage` | `main` | 0 | **SAFE** | No action needed |
 | `.worktrees/merge-spec-docs/` | origin | `docs/merge-spec-docs` | 57 | **ACTIVE** | Push + PR review |
 | `worktrees/chore-docs-sbom-stack/` | origin | `chore/tag-automation-release-split` | 0 | **ACTIVE** | No action needed |
 | `worktrees/chore-sbom-cyclonedx/` | origin | `chore/sbom-cyclonedx-pilot` | 0 | **ACTIVE** | No action needed |
@@ -125,14 +125,14 @@ These are legitimate worktrees that need verification but contain active or rece
 
 | Directory | Remote | Branch | Dirty | Stashes | Unpushed | Cleanup Action |
 |-----------|--------|--------|-------|---------|----------|----------------|
-| `agent-wave-monorepo-temp/` | `KooshaPari/agent-wave` | `main` | 5 untracked docs/ | 0 | 0 | **DELETE** — discard untracked docs |
+| `agent-wave-monorepo-temp/` | `<REDACTED>/agent-wave` | `main` | 5 untracked docs/ | 0 | 0 | **DELETE** — discard untracked docs |
 | `heliosCLI-monorepo-temp/` | — | — | — | — | — | **DELETED** (2026-03-29) |
-| `phenotype-gauge-temp/` | `KooshaPari/phenotype-gauge` | `chore/rescue-temp-dir-20260329` | 5 untracked docs/ | 1 | 1 | **DELETE** — push commit first |
-| `phenotype-go-kit-temp/` | `KooshaPari/phenotype-go-kit` | `chore/rescue-temp-dir-20260329` | clean | 1 | 2 | **DELETE** — push 2 commits, drop stash |
-| `phenotype-nexus-temp/` | `KooshaPari/phenotype-nexus` | `chore/rescue-temp-dir-20260329` | clean | 1 | 3 | **DELETE** — push 3 commits, drop stash |
-| `phenotype-shared-temp/` | `KooshaPari/phenotype-shared` | `chore/sync-test-artifacts-20260329` | clean | 0 | 0 | **SAFE** |
-| `template-commons-temp/` | `KooshaPari/template-commons` | `main` | 3 modified files | 0 | 0 | **DELETE** — discard or commit changes |
-| `tokenledger-temp/` | `KooshaPari/tokenledger` | `main` | clean | 0 | 0 | **SAFE** |
+| `phenotype-gauge-temp/` | `<REDACTED>/phenotype-gauge` | `chore/rescue-temp-dir-20260329` | 5 untracked docs/ | 1 | 1 | **DELETE** — push commit first |
+| `phenotype-go-kit-temp/` | `<REDACTED>/phenotype-go-kit` | `chore/rescue-temp-dir-20260329` | clean | 1 | 2 | **DELETE** — push 2 commits, drop stash |
+| `phenotype-nexus-temp/` | `<REDACTED>/phenotype-nexus` | `chore/rescue-temp-dir-20260329` | clean | 1 | 3 | **DELETE** — push 3 commits, drop stash |
+| `phenotype-shared-temp/` | `<REDACTED>/phenotype-shared` | `chore/sync-test-artifacts-20260329` | clean | 0 | 0 | **SAFE** |
+| `template-commons-temp/` | `<REDACTED>/template-commons` | `main` | 3 modified files | 0 | 0 | **DELETE** — discard or commit changes |
+| `tokenledger-temp/` | `<REDACTED>/tokenledger` | `main` | clean | 0 | 0 | **SAFE** |
 
 #### B. `*-wtrees` Directories
 
@@ -271,8 +271,8 @@ _End of Wave 94_
 
 | PR # | Title | Branch | URL |
 |------|-------|--------|-----|
-| #95 | feat(ci): add SBOM generation workflow | `feat/add-sbom-workflow` | https://github.com/KooshaPari/phenotype-infrakit/pull/95 |
-| #96 | feat(event-sourcing): LOC reduction | `feat/event-sourcing-loc-reduction` | https://github.com/KooshaPari/phenotype-infrakit/pull/96 |
+| #95 | feat(ci): add SBOM generation workflow | `feat/add-sbom-workflow` | https://github.com/<REDACTED>/phenotype-infrakit/pull/95 |
+| #96 | feat(event-sourcing): LOC reduction | `feat/event-sourcing-loc-reduction` | https://github.com/<REDACTED>/phenotype-infrakit/pull/96 |
 
 ### LOC Reduction Achievement
 - **-406 LOC net** in phenotype-event-sourcing (5 files: -494 deleted, +88 added)
@@ -361,7 +361,7 @@ _End of Wave 95_
 git status  # clean
 
 # phenotype-docs - check for staged changes
-cd /Users/kooshapari/CodeProjects/Phenotype/repos/docs
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos/docs
 git status --short
 ```
 
@@ -628,7 +628,7 @@ These create clutter and confusion in `git worktree list` output.
 
 **Solution:**
 ```bash
-cd /Users/kooshapari/CodeProjects/Phenotype/repos
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos
 git worktree prune --verbose
 git worktree list  # Verify clean output
 ```
@@ -712,26 +712,26 @@ All archive subdirectories contain 0-3 files. Candidates for complete removal af
 #### PHASE 1: Immediate Safe Deletions (~95 MB saved)
 ```bash
 # These are safe; no unpushed commits or referenced content
-rm -rf /Users/kooshapari/CodeProjects/Phenotype/repos/-C
-rm -rf /Users/kooshapari/CodeProjects/Phenotype/repos/worktree
-rm -rf /Users/kooshapari/CodeProjects/Phenotype/repos/add
-rm -rf /Users/kooshapari/CodeProjects/Phenotype/repos/plans
+rm -rf /Users/<REDACTED>/CodeProjects/Phenotype/repos/-C
+rm -rf /Users/<REDACTED>/CodeProjects/Phenotype/repos/worktree
+rm -rf /Users/<REDACTED>/CodeProjects/Phenotype/repos/add
+rm -rf /Users/<REDACTED>/CodeProjects/Phenotype/repos/plans
 git worktree prune --verbose
-rm -rf /Users/kooshapari/CodeProjects/Phenotype/repos/.worktrees/gh-pages-deploy
-rm -rf /Users/kooshapari/CodeProjects/Phenotype/repos/.worktrees/phench-fix
-rm -rf /Users/kooshapari/CodeProjects/Phenotype/repos/.worktrees/thegent
+rm -rf /Users/<REDACTED>/CodeProjects/Phenotype/repos/.worktrees/gh-pages-deploy
+rm -rf /Users/<REDACTED>/CodeProjects/Phenotype/repos/.worktrees/phench-fix
+rm -rf /Users/<REDACTED>/CodeProjects/Phenotype/repos/.worktrees/thegent
 ```
 
 #### PHASE 2: Conditional (Requires Action)
 ```bash
 # Must complete BEFORE deletion of parents
-cd /Users/kooshapari/CodeProjects/Phenotype/repos/worktrees/thegent/chore/sync-docs-security-deps
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos/worktrees/thegent/chore/sync-docs-security-deps
 git log origin/main..HEAD --oneline  # Verify 7 commits
 git push origin chore/sync-docs-security-deps
 # Then create PR via GitHub
 
 # Verify duplicate checkout status
-cd /Users/kooshapari/CodeProjects/Phenotype/repos/platforms/thegent
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos/platforms/thegent
 git status
 git log origin/main..HEAD --oneline
 ```
@@ -871,13 +871,13 @@ _Next audit due: 2026-04-29 (monthly check)_
 ### Git Worktrees (Current)
 
 ```
-/Users/kooshapari/CodeProjects/Phenotype/repos                                                          [chore/decomposition-audit-v2]
-/Users/kooshapari/CodeProjects/Phenotype/repos/.worktrees/merge-spec-docs                               [docs/merge-spec-docs]
-/Users/kooshapari/CodeProjects/Phenotype/repos/platforms/worktrees/thegent/consolidate-dotfiles         [chore/consolidate-dotfiles]
-/Users/kooshapari/CodeProjects/Phenotype/repos/repos/worktrees/AgilePlus/phenotype-docs                 [chore/integrate-phenotype-docs]
-/Users/kooshapari/CodeProjects/Phenotype/repos/repos/worktrees/consolidate-libraries/main               [chore/doc-sync-phase2] prunable
-/Users/kooshapari/CodeProjects/Phenotype/repos/repos/worktrees/expand-test-coverage                     [chore/ci-cd-workflows-clean] prunable
-/Users/kooshapari/CodeProjects/Phenotype/repos/repos/worktrees/phenotype-infrakit/chore/merge-worklogs  [chore/merge-worklogs]
+/Users/<REDACTED>/CodeProjects/Phenotype/repos                                                          [chore/decomposition-audit-v2]
+/Users/<REDACTED>/CodeProjects/Phenotype/repos/.worktrees/merge-spec-docs                               [docs/merge-spec-docs]
+/Users/<REDACTED>/CodeProjects/Phenotype/repos/platforms/worktrees/thegent/consolidate-dotfiles         [chore/consolidate-dotfiles]
+/Users/<REDACTED>/CodeProjects/Phenotype/repos/repos/worktrees/AgilePlus/phenotype-docs                 [chore/integrate-phenotype-docs]
+/Users/<REDACTED>/CodeProjects/Phenotype/repos/repos/worktrees/consolidate-libraries/main               [chore/doc-sync-phase2] prunable
+/Users/<REDACTED>/CodeProjects/Phenotype/repos/repos/worktrees/expand-test-coverage                     [chore/ci-cd-workflows-clean] prunable
+/Users/<REDACTED>/CodeProjects/Phenotype/repos/repos/worktrees/phenotype-infrakit/chore/merge-worklogs  [chore/merge-worklogs]
 ```
 
 ### Canonical Crates (20 phenotype-* crates)

@@ -3,8 +3,8 @@
 **Date:** 2026-06-18  
 **Disposition step:** Wave F — `python/pheno-mcp` stub redirect  
 **Canonical repos:**
-- Python library: https://github.com/KooshaPari/PhenoMCP
-- Rust MCP runtime: https://github.com/KooshaPari/substrate (`crates/phenotype-mcp`)
+- Python library: https://github.com/<REDACTED>/PhenoMCP
+- Rust MCP runtime: https://github.com/<REDACTED>/substrate (`crates/phenotype-mcp`)
 
 ## What changed
 

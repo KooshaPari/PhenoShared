@@ -18,14 +18,14 @@ class ZenMCPEntryPoint(MCPEntryPoint):
 
     Provides Zen-specific defaults and configuration:
     - Default port: 8000
-    - Default domain: zen.kooshapari.com
+    - Default domain: zen.<REDACTED>.com
     - Zen-specific service configuration
     - Integration with FastMCP and pheno-sdk packages
     """
 
     # Zen-specific defaults
     DEFAULT_PORT = 8000
-    DEFAULT_DOMAIN = "zen.kooshapari.com"
+    DEFAULT_DOMAIN = "zen.<REDACTED>.com"
     PROJECT_NAME = "zen_mcp"
 
     def __init__(
@@ -41,7 +41,7 @@ class ZenMCPEntryPoint(MCPEntryPoint):
 
         Args:
             port: Port to run on (default: 8000)
-            domain: Domain for tunnel (default: zen.kooshapari.com)
+            domain: Domain for tunnel (default: zen.<REDACTED>.com)
             dev_mode: Enable development mode
             no_auth: Disable authentication
             skip_validation: Skip startup validation

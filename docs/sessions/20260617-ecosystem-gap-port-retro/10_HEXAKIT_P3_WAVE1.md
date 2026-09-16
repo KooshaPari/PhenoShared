@@ -13,4 +13,4 @@ Full-batch phenoShared git pin **fails** `phenotype-core` compile — API surfac
 
 ## pheno archive gate (spot check)
 
-External `Cargo.toml` refs to `KooshaPari/pheno` still in: Agentora, AgilePlus, Tracera, PhenoPlugins, phenotype-gfx, PhenoCompose, Civis, phenotype-teamcomm, phenotype-go-sdk, TestingKit, etc. **Archive blocked.**
+External `Cargo.toml` refs to `<REDACTED>/pheno` still in: Agentora, AgilePlus, Tracera, PhenoPlugins, phenotype-gfx, PhenoCompose, Civis, phenotype-teamcomm, phenotype-go-sdk, TestingKit, etc. **Archive blocked.**

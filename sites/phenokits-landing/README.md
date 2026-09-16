@@ -1,10 +1,10 @@
 # phenokits-landing
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![CI](https://img.shields.io/github/actions/workflow/status/KooshaPari/phenotype-landing/ci.yml?branch=main)](https://github.com/KooshaPari/phenotype-landing/actions)
+[![CI](https://img.shields.io/github/actions/workflow/status/<REDACTED>/phenotype-landing/ci.yml?branch=main)](https://github.com/<REDACTED>/phenotype-landing/actions)
 [![TypeScript](https://img.shields.io/badge/typescript-5%2B-3178C6?logo=typescript)](https://www.typescriptlang.org/)
 
-Production landing page at `phenokits.kooshapari.com` for [KooshaPari/PhenoKits](https://github.com/KooshaPari/PhenoKits), the reusable kit catalog for Phenotype templates, libraries, governance assets, and integration adapters.
+Production landing page at `phenokits.<REDACTED>.com` for [<REDACTED>/PhenoKits](https://github.com/<REDACTED>/PhenoKits), the reusable kit catalog for Phenotype templates, libraries, governance assets, and integration adapters.
 
 ## Purpose
 
@@ -15,7 +15,7 @@ PhenoKits is a Tier-2 Phenotype brand surface. It gives the kit catalog a stable
 - **Frontend:** Astro 6 static site
 - **Styling:** Tailwind CSS 4 with Phenotype CSS tokens
 - **Deployment:** Vercel plus a GitHub Pages mirror
-- **Domain:** `phenokits.kooshapari.com` via Cloudflare CNAME
+- **Domain:** `phenokits.<REDACTED>.com` via Cloudflare CNAME
 - **Data sources:** GitHub API, committed QA snapshots, PhenoObservability UI
 
 ## Local Development
@@ -48,7 +48,7 @@ For the GitHub Pages mirror, build with `GITHUB_PAGES=true bun run build`.
 
 ## Path Microfrontends
 
-Per Phenotype org-pages policy, `phenokits.kooshapari.com` hosts these surfaces:
+Per Phenotype org-pages policy, `phenokits.<REDACTED>.com` hosts these surfaces:
 
 | Path | Status | Purpose |
 |------|--------|---------|
@@ -98,6 +98,6 @@ CNAME phenokits -> cname.vercel-dns.com
 
 ## Related
 
-- [PhenoKits](https://github.com/KooshaPari/PhenoKits)
-- [projects.kooshapari.com](https://github.com/KooshaPari/portfolio)
-- [Org Pages Architecture](https://github.com/KooshaPari/phenotype-infrakit/docs/governance/org-pages-architecture.md)
+- [PhenoKits](https://github.com/<REDACTED>/PhenoKits)
+- [projects.<REDACTED>.com](https://github.com/<REDACTED>/portfolio)
+- [Org Pages Architecture](https://github.com/<REDACTED>/phenotype-infrakit/docs/governance/org-pages-architecture.md)

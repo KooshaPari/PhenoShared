@@ -157,7 +157,7 @@ If worktrees have accumulated and you need to clean up:
 # WARNING: Destructive - removes ALL worktrees except main
 # Use only in extreme situations
 
-cd /Users/kooshapari/CodeProjects/Phenotype/repos
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos
 
 # 1. List all worktrees except main
 git worktree list | grep -v "$(pwd) " | awk '{print $1}'

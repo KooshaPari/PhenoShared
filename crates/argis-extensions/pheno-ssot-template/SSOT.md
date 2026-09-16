@@ -2,7 +2,7 @@
 
 ## Identity
 - **Repo:** pheno-ssot-template
-- **Owner:** KooshaPari
+- **Owner:** <REDACTED>
 - **Added to fleet:** 2026-06-28 (v55 SSOT gap-fill wave)
 
 ## Scope

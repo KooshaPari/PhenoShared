@@ -7,7 +7,7 @@ Complete guide to deploying Snyk GitHub Actions workflows for automated security
 **Prerequisites:**
 - Snyk token acquired and verified
 - Admin access to GitHub organization
-- GitHub organization: KooshaPari
+- GitHub organization: <REDACTED>
 
 ---
 
@@ -27,7 +27,7 @@ This guide covers:
 ### 1.1: Prerequisites
 
 Verify you have:
-- Admin access to KooshaPari GitHub organization
+- Admin access to <REDACTED> GitHub organization
 - Snyk API token (from SNYK_TOKEN_ACQUISITION_GUIDE.md)
 - GitHub CLI (`gh`) installed locally
 
@@ -38,7 +38,7 @@ gh --version
 
 # Verify authentication
 gh auth status
-# Output: Logged in to github.com as KooshaPari (...)
+# Output: Logged in to github.com as <REDACTED> (...)
 ```
 
 ### 1.2: Add SNYK_TOKEN to Organization Secrets
@@ -47,11 +47,11 @@ gh auth status
 
 ```bash
 # Set the secret
-gh secret set SNYK_TOKEN --org KooshaPari
+gh secret set SNYK_TOKEN --org <REDACTED>
 # When prompted, paste your token and press Enter
 
 # Verify it was set
-gh secret list --org KooshaPari | grep SNYK_TOKEN
+gh secret list --org <REDACTED> | grep SNYK_TOKEN
 # Output: SNYK_TOKEN    Updated 2026-03-30
 ```
 
@@ -59,7 +59,7 @@ gh secret list --org KooshaPari | grep SNYK_TOKEN
 
 If you prefer the GitHub UI:
 
-1. Go to: https://github.com/organizations/KooshaPari/settings/secrets/actions
+1. Go to: https://github.com/organizations/<REDACTED>/settings/secrets/actions
 2. Click **"New organization secret"**
 3. Name: `SNYK_TOKEN`
 4. Value: Paste your Snyk token
@@ -81,13 +81,13 @@ The secret is now available to all repositories. You don't need to verify at org
 The workflow file should already exist in the repository:
 
 ```bash
-ls -la /Users/kooshapari/CodeProjects/Phenotype/repos/.github/workflows/snyk-scan.yml
+ls -la /Users/<REDACTED>/CodeProjects/Phenotype/repos/.github/workflows/snyk-scan.yml
 ```
 
 If not, create it:
 
 ```bash
-mkdir -p /Users/kooshapari/CodeProjects/Phenotype/repos/.github/workflows
+mkdir -p /Users/<REDACTED>/CodeProjects/Phenotype/repos/.github/workflows
 ```
 
 ### 2.2: Workflow File Content
@@ -180,22 +180,22 @@ jobs:
 Tier 1 repos require immediate workflow deployment:
 
 1. **AgilePlus**
-   - Path: `/Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus`
-   - Remote: `https://github.com/KooshaPari/AgilePlus`
+   - Path: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus`
+   - Remote: `https://github.com/<REDACTED>/AgilePlus`
 
 2. **heliosCLI**
-   - Path: `/Users/kooshapari/CodeProjects/Phenotype/repos/heliosCLI`
-   - Remote: `https://github.com/KooshaPari/heliosCLI`
+   - Path: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/heliosCLI`
+   - Remote: `https://github.com/<REDACTED>/heliosCLI`
 
 3. **phenotype-infrakit**
-   - Path: `/Users/kooshapari/CodeProjects/Phenotype/repos/phenotype-infrakit`
-   - Remote: `https://github.com/KooshaPari/phenotype-infrakit`
+   - Path: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/phenotype-infrakit`
+   - Remote: `https://github.com/<REDACTED>/phenotype-infrakit`
 
 ### 3.2: Deploy to AgilePlus
 
 ```bash
 # Navigate to repo
-cd /Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus
 
 # Create workflow directory if needed
 mkdir -p .github/workflows
@@ -265,7 +265,7 @@ git push origin main
 ### 3.3: Deploy to heliosCLI
 
 ```bash
-cd /Users/kooshapari/CodeProjects/Phenotype/repos/heliosCLI
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos/heliosCLI
 
 mkdir -p .github/workflows
 
@@ -321,7 +321,7 @@ git push origin main
 ### 3.4: Deploy to phenotype-infrakit
 
 ```bash
-cd /Users/kooshapari/CodeProjects/Phenotype/repos/phenotype-infrakit
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos/phenotype-infrakit
 
 mkdir -p .github/workflows
 
@@ -381,7 +381,7 @@ git push origin main
 
 For each Tier 1 repo:
 
-1. Go to: https://github.com/KooshaPari/AgilePlus/actions
+1. Go to: https://github.com/<REDACTED>/AgilePlus/actions
 2. You should see **"Snyk Security Scan"** workflow listed
 3. Refresh page if not visible (may take a few seconds)
 
@@ -391,7 +391,7 @@ To test immediately without waiting for push/schedule:
 
 ```bash
 # Navigate to repo
-cd /Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus
 
 # Create a minor change to trigger workflow
 echo "# Test trigger" >> README.md
@@ -406,7 +406,7 @@ Then check Actions tab — workflow should start within 30 seconds.
 
 After first workflow run:
 
-1. Go to: https://github.com/KooshaPari/AgilePlus/actions
+1. Go to: https://github.com/<REDACTED>/AgilePlus/actions
 2. Click on the latest **"Snyk Security Scan"** run
 3. Expand **"Snyk test"** step
 4. Look for output:
@@ -452,14 +452,14 @@ on:
 To verify scheduled jobs are configured:
 
 ```bash
-cd /Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus
 git log --oneline -5 .github/workflows/snyk-scan.yml
 ```
 
 ### 5.2: Viewing Scheduled Runs
 
 In GitHub Actions UI:
-1. Go to: https://github.com/KooshaPari/AgilePlus/actions
+1. Go to: https://github.com/<REDACTED>/AgilePlus/actions
 2. Filter by: "Snyk Security Scan"
 3. Look for runs with source: **"Scheduled"**
 
@@ -483,7 +483,7 @@ To require Snyk scans pass before merging:
 
 ```bash
 # For AgilePlus repo
-gh api repos/KooshaPari/AgilePlus/branches/main/protection/required_status_checks \
+gh api repos/<REDACTED>/AgilePlus/branches/main/protection/required_status_checks \
   -X POST \
   -f contexts='["Snyk Security Scan"]'
 ```
@@ -504,7 +504,7 @@ repos=("AgilePlus" "heliosCLI" "phenotype-infrakit")
 
 for repo in "${repos[@]}"; do
   echo "=== $repo ==="
-  gh run list -R KooshaPari/$repo -w "Snyk Security Scan" --limit 1 --json status,updatedAt,conclusion
+  gh run list -R <REDACTED>/$repo -w "Snyk Security Scan" --limit 1 --json status,updatedAt,conclusion
 done
 EOF
 
@@ -562,7 +562,7 @@ When vulnerabilities are found:
 
 Scan reports are saved as artifacts:
 
-1. Go to: https://github.com/KooshaPari/AgilePlus/actions/runs/XXXXX
+1. Go to: https://github.com/<REDACTED>/AgilePlus/actions/runs/XXXXX
 2. Scroll to: **"Artifacts"** section
 3. Download: `snyk-report.zip`
 4. Contains: `snyk-report.json`
@@ -580,10 +580,10 @@ You can download and review the full report locally.
 **Solution:**
 ```bash
 # Set secret again
-gh secret set SNYK_TOKEN --org KooshaPari
+gh secret set SNYK_TOKEN --org <REDACTED>
 
 # Verify
-gh secret list --org KooshaPari
+gh secret list --org <REDACTED>
 ```
 
 ### Issue: Workflow Not Triggering
@@ -593,7 +593,7 @@ gh secret list --org KooshaPari
 **Solution:**
 ```bash
 # Verify workflow file exists and is valid
-cd /Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus
 ls -la .github/workflows/snyk-scan.yml
 
 # Validate YAML syntax

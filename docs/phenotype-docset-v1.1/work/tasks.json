@@ -8583,8 +8583,8 @@
   },
   {
     "id": "WP-S07",
-    "title": "KooshaPari capability/consumer contract",
-    "owner_role": "KooshaPari pooled owner",
+    "title": "<REDACTED> capability/consumer contract",
+    "owner_role": "<REDACTED> pooled owner",
     "depends_on": [
       "WP-G01",
       "WP-G02"
@@ -8592,7 +8592,7 @@
     "kind": "discovery",
     "status": "PLANNED_NOT_CLAIMED",
     "product_id": null,
-    "logical_write_scope": "KooshaPari resolved accepted package/consumer scope",
+    "logical_write_scope": "<REDACTED> resolved accepted package/consumer scope",
     "resolved_paths": null,
     "lease_id": null,
     "source_revision": null,

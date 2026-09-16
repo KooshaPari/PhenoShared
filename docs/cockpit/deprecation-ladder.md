@@ -51,8 +51,8 @@ can serve the same data.
 .venv/bin/python scripts/cockpit_migrator.py --verify
 
 # 4. Optional: archive beads.jsonl to .archive/ before deletion
-mv /Users/kooshapari/CodeProjects/Phenotype/repos/phenotype-dag/beads.jsonl \
-   /Users/kooshapari/CodeProjects/Phenotype/repos/phenotype-dag/beads.jsonl.archive.$(date +%Y%m%d)
+mv /Users/<REDACTED>/CodeProjects/Phenotype/repos/phenotype-dag/beads.jsonl \
+   /Users/<REDACTED>/CodeProjects/Phenotype/repos/phenotype-dag/beads.jsonl.archive.$(date +%Y%m%d)
 ```
 
 ## Mapping: cockpit event → AgilePlus + Tracera

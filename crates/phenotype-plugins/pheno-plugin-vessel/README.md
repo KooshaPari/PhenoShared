@@ -13,7 +13,7 @@ Container utilities for Rust. Docker, Podman, and containerd abstractions.
 
 ```toml
 [dependencies]
-vessel = { git = "https://github.com/KooshaPari/vessel" }
+vessel = { git = "https://github.com/<REDACTED>/vessel" }
 ```
 
 ## Usage

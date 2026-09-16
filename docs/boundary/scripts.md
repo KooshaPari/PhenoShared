@@ -9,7 +9,7 @@ Future cleanup may relocate individual scripts out of `legacy-scripts/` as neede
 
 ## Provenance
 
-- Source: `KooshaPari/scripts` (archived 2026-07-17)
-- Target: `KooshaPari/phenotype-tooling` (bin/legacy-scripts/)
+- Source: `<REDACTED>/scripts` (archived 2026-07-17)
+- Target: `<REDACTED>/phenotype-tooling` (bin/legacy-scripts/)
 - Wave: `2026-07-17-queue-refresh-2`
 - Disposition: `ABSORB`

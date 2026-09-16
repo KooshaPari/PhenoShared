@@ -1,23 +1,23 @@
 # L5-104.1 — Dispatch-MCP W2-1 Migration Plan to pheno-mcp-router (ADR-013)
 
-**Task ID:** L5-104.1 (sub-id of L5-104 Dmouse92→KooshaPari audit)
+**Task ID:** L5-104.1 (sub-id of L5-104 Dmouse92→<REDACTED> audit)
 **Date:** 2026-06-17
-**Status:** PLAN — DO NOT EXECUTE (reviewer: KooshaPari)
-**Auth context:** `gh` is **KooshaPari** (active). Dmouse92 is read-only-collaborator (must NOT push).
-**Parent audit doc:** `findings/2026-06-17-L5-104-dmouse92-to-kooshapari.md` (do not modify)
+**Status:** PLAN — DO NOT EXECUTE (reviewer: <REDACTED>)
+**Auth context:** `gh` is **<REDACTED>** (active). Dmouse92 is read-only-collaborator (must NOT push).
+**Parent audit doc:** `findings/2026-06-17-L5-104-dmouse92-to-<REDACTED>.md` (do not modify)
 **Substrate ADR:** `docs/adr/2026-06-15/ADR-013-pheno-mcp-router-substrate.md`
-**User directive (2026-06-17):** *"dispatch-mcp should be deleted as it needs to have all remaining work fully absorbed to substrate. The ver on kooshapari had this done yesterday, repeat for any dmouse additions worthwhile to migrate."*
+**User directive (2026-06-17):** *"dispatch-mcp should be deleted as it needs to have all remaining work fully absorbed to substrate. The ver on <REDACTED> had this done yesterday, repeat for any dmouse additions worthwhile to migrate."*
 
 ---
 
 ## ⚠ Critical correction vs parent audit doc
 
-The parent audit doc (`findings/2026-06-17-L5-104-dmouse92-to-kooshapari.md:17`) states:
+The parent audit doc (`findings/2026-06-17-L5-104-dmouse92-to-<REDACTED>.md:17`) states:
 > `dispatch-mcp` — KP HEAD: 2026-06-18, unmerged branch `chore/w2-1-dispatch-mcp-2026-06-15`
 
 **Verified 2026-06-17 against `gh api`:**
-- `KooshaPari/dispatch-mcp@main` HEAD is `a050e06` dated **2026-06-15T07:58:15Z** — *not* 2026-06-18.
-  Source: `gh api "repos/KooshaPari/dispatch-mcp/commits?sha=main&per_page=1"` first row.
+- `<REDACTED>/dispatch-mcp@main` HEAD is `a050e06` dated **2026-06-15T07:58:15Z** — *not* 2026-06-18.
+  Source: `gh api "repos/<REDACTED>/dispatch-mcp/commits?sha=main&per_page=1"` first row.
 - The 6 unique Dmouse92 W2-1 commits are **NOT on KP main** as of 2026-06-17 19:00 PDT.
 - They live in 6 in-progress KP branches (5 local + 5 remote), none merged.
 
@@ -56,15 +56,15 @@ Local (`repos/dispatch-mcp`) and remote (verified via `git branch -a`):
 | `feat/w1-2-mcp-protocol-compliance-2026-06-15` | YES | NO | `a050e06` | Empty branch (no commits ahead of main) |
 | `wip/migrate-from-dmouse-w2-1-2026-06-17` | YES | YES (`origin/`) | `a1aaef2` | **Exact Dmouse92 mirror** — same SHA, same content |
 
-**No GitHub PRs** on `KooshaPari/dispatch-mcp` (`gh pr list --repo KooshaPari/dispatch-mcp --state all --limit 30` returns `[]`); all absorption is via direct branch push.
+**No GitHub PRs** on `<REDACTED>/dispatch-mcp` (`gh pr list --repo <REDACTED>/dispatch-mcp --state all --limit 30` returns `[]`); all absorption is via direct branch push.
 
 ### 1.3 `pheno-mcp-router` substrate state (substrate per ADR-013)
 
 | Property | Value | Source |
 |---|---|---|
-| Repo path | `KooshaPari/pheno-mcp-router` | `gh api repos/KooshaPari/pheno-mcp-router` |
-| Exists on GitHub? | **NO** — `gh api repos/KooshaPari/pheno-mcp-router` → 404 Not Found | verified 2026-06-17 |
-| Local clone | `/Users/kooshapari/CodeProjects/Phenotype/repos/pheno-mcp-router/` (no `origin` remote) | `git remote -v` returns empty |
+| Repo path | `<REDACTED>/pheno-mcp-router` | `gh api repos/<REDACTED>/pheno-mcp-router` |
+| Exists on GitHub? | **NO** — `gh api repos/<REDACTED>/pheno-mcp-router` → 404 Not Found | verified 2026-06-17 |
+| Local clone | `/Users/<REDACTED>/CodeProjects/Phenotype/repos/pheno-mcp-router/` (no `origin` remote) | `git remote -v` returns empty |
 | Total commits | 8 (`git log --all --oneline`) | `c49a20e` … `5a1f2e2` |
 | Last meaningful commit | `50edeaf feat(pheno-mcp-router): L4 hexagonal ports + 6 concrete adapters + 8/8 tests (V21 O1 substrate)` | `git log -1 50edeaf` |
 | Protocols defined | `LlmPort`, `StoragePort`, `ToolPort` | `src/pheno_mcp_router/ports.py:32-90` |
@@ -166,29 +166,29 @@ Action key: **CHERRY** = cherry-pick to KP dispatch-mcp; **PORT** = port to phen
 
 | Dmouse92 file / content | Action | Target repo / path | Rationale |
 |---|---|---|---|
-| `src/dispatch_mcp/core/tiers.py` | **PORT** | `KooshaPari/pheno-mcp-router` (post-publish) → `src/pheno_mcp_router/tiers.py` | Substrate-level tier registry |
-| `src/dispatch_mcp/core/cost.py` | **PORT** | `KooshaPari/pheno-mcp-router` → `src/pheno_mcp_router/cost.py` | Substrate-level cost calc |
-| `src/dispatch_mcp/core/budget.py` | **PORT** | `KooshaPari/pheno-mcp-router` → `src/pheno_mcp_router/budget.py` | Substrate-level budget enforcement |
-| `src/dispatch_mcp/core/quota.py` | **PORT** | `KooshaPari/pheno-mcp-router` → `src/pheno_mcp_router/quota.py` | Substrate-level quota enforcement |
-| `src/dispatch_mcp/core/audit.py` | **PORT** | `KooshaPari/pheno-mcp-router` → `src/pheno_mcp_router/audit.py` | Substrate-level audit log |
-| `src/dispatch_mcp/core/cost_middleware.py` | **PORT** | `KooshaPari/pheno-mcp-router` → `src/pheno_mcp_router/cost_middleware.py` | Substrate-level composition |
-| `src/dispatch_mcp/core/port.py` | **CHERRY** | `KooshaPari/dispatch-mcp@main` via `wip/migrate-from-dmouse-w2-1-2026-06-17` | dispatch-mcp-internal protocol |
+| `src/dispatch_mcp/core/tiers.py` | **PORT** | `<REDACTED>/pheno-mcp-router` (post-publish) → `src/pheno_mcp_router/tiers.py` | Substrate-level tier registry |
+| `src/dispatch_mcp/core/cost.py` | **PORT** | `<REDACTED>/pheno-mcp-router` → `src/pheno_mcp_router/cost.py` | Substrate-level cost calc |
+| `src/dispatch_mcp/core/budget.py` | **PORT** | `<REDACTED>/pheno-mcp-router` → `src/pheno_mcp_router/budget.py` | Substrate-level budget enforcement |
+| `src/dispatch_mcp/core/quota.py` | **PORT** | `<REDACTED>/pheno-mcp-router` → `src/pheno_mcp_router/quota.py` | Substrate-level quota enforcement |
+| `src/dispatch_mcp/core/audit.py` | **PORT** | `<REDACTED>/pheno-mcp-router` → `src/pheno_mcp_router/audit.py` | Substrate-level audit log |
+| `src/dispatch_mcp/core/cost_middleware.py` | **PORT** | `<REDACTED>/pheno-mcp-router` → `src/pheno_mcp_router/cost_middleware.py` | Substrate-level composition |
+| `src/dispatch_mcp/core/port.py` | **CHERRY** | `<REDACTED>/dispatch-mcp@main` via `wip/migrate-from-dmouse-w2-1-2026-06-17` | dispatch-mcp-internal protocol |
 | `src/dispatch_mcp/core/protocol.py` | **CHERRY** | same | dispatch-mcp-internal protocol |
 | `src/dispatch_mcp/core/types.py` | **CHERRY** | same | dispatch-mcp-internal types |
 | `src/dispatch_mcp/adapters/omni_http.py` (+268) | **CHERRY** | same | OmniRoute-specific extension |
 | `src/dispatch_mcp/server.py` (+196) | **CHERRY** | same | dispatch-mcp-internal composition |
 | `src/dispatch_mcp/providers/base.py` | **DISCARD** | n/a | Provider protocol shape diverges from substrate LlmPort; dispatch-mcp keeps its own Provider base internally |
-| `src/dispatch_mcp/providers/llama_cpp.py` | **PORT** (with adapter wrapper) | `KooshaPari/pheno-mcp-router` → `src/pheno_mcp_router/adapters.py` (new `LlamaAdapter` class) or `src/pheno_mcp_router/llama_adapter.py` | The 5-method Provider surface maps to LlmPort.chat via wrapper. Server-mode (LLAMA_CPP_SERVER_URL) + direct-mode (LLAMA_CPP_MODEL_PATH) both supported. |
-| `src/dispatch_mcp/providers/openai_compat.py` (KP-authored) | **PORT** | `KooshaPari/pheno-mcp-router` → `src/pheno_mcp_router/adapters.py` (new `OpenAICompatAdapter` class) or `src/pheno_mcp_router/openai_compat_adapter.py` | KP-authored 450 LOC + 17 tests. Maps cleanly to LlmPort.chat. |
+| `src/dispatch_mcp/providers/llama_cpp.py` | **PORT** (with adapter wrapper) | `<REDACTED>/pheno-mcp-router` → `src/pheno_mcp_router/adapters.py` (new `LlamaAdapter` class) or `src/pheno_mcp_router/llama_adapter.py` | The 5-method Provider surface maps to LlmPort.chat via wrapper. Server-mode (LLAMA_CPP_SERVER_URL) + direct-mode (LLAMA_CPP_MODEL_PATH) both supported. |
+| `src/dispatch_mcp/providers/openai_compat.py` (KP-authored) | **PORT** | `<REDACTED>/pheno-mcp-router` → `src/pheno_mcp_router/adapters.py` (new `OpenAICompatAdapter` class) or `src/pheno_mcp_router/openai_compat_adapter.py` | KP-authored 450 LOC + 17 tests. Maps cleanly to LlmPort.chat. |
 | `docs/CHEAP_LLM_MCP_DEPRECATION.md` | **DONE** | already cherry-picked to `chore/w1-1-cheap-llm-mcp-deprecation-note-2026-06-15` (verified via `git diff --stat a050e06..chore/w1-1-cheap-llm-mcp-deprecation-note-2026-06-15`: 1 file, +22). Land via merge of that branch. |
-| `docs/PROVIDER_GUIDE.md` | **PORT** | `KooshaPari/pheno-mcp-router` → `docs/PROVIDER_GUIDE.md` | Substrate-level provider docs |
-| `docker/Dockerfile.llama` | **PORT-OPS** | `KooshaPari/phenotype-ops` → `agent-devops-setups/llama-cpp/Dockerfile` | Deployment concern |
-| `docker/llama-compose.yml` | **PORT-OPS** | `KooshaPari/phenotype-ops` → `agent-devops-setups/llama-cpp/docker-compose.yml` | Deployment concern |
+| `docs/PROVIDER_GUIDE.md` | **PORT** | `<REDACTED>/pheno-mcp-router` → `docs/PROVIDER_GUIDE.md` | Substrate-level provider docs |
+| `docker/Dockerfile.llama` | **PORT-OPS** | `<REDACTED>/phenotype-ops` → `agent-devops-setups/llama-cpp/Dockerfile` | Deployment concern |
+| `docker/llama-compose.yml` | **PORT-OPS** | `<REDACTED>/phenotype-ops` → `agent-devops-setups/llama-cpp/docker-compose.yml` | Deployment concern |
 | `tests/unit/test_core_{tiers,cost,budget,quota,audit,cost_middleware}.py` | **PORT** | alongside their source modules in substrate | Tests follow code |
 | `tests/test_providers_llama_cpp.py` + `_direct.py` | **PORT** | `pheno-mcp-router/tests/test_llama_cpp_adapter.py` | Adapter tests |
-| `tests/test_mock_backend.py` | **CHERRY** | `KooshaPari/dispatch-mcp@main` via `wip/migrate-from-dmouse-w2-1-2026-06-17` | dispatch-mcp test infra |
+| `tests/test_mock_backend.py` | **CHERRY** | `<REDACTED>/dispatch-mcp@main` via `wip/migrate-from-dmouse-w2-1-2026-06-17` | dispatch-mcp test infra |
 | `tests/test_openai_compat.py` (KP-authored) | **PORT** | `pheno-mcp-router/tests/test_openai_compat_adapter.py` | Adapter tests |
-| `tests/unit/test_core_{port,protocol}.py` | **CHERRY** | `KooshaPari/dispatch-mcp@main` via `wip/migrate-from-dmouse-w2-1-2026-06-17` | dispatch-mcp-internal tests |
+| `tests/unit/test_core_{port,protocol}.py` | **CHERRY** | `<REDACTED>/dispatch-mcp@main` via `wip/migrate-from-dmouse-w2-1-2026-06-17` | dispatch-mcp-internal tests |
 | `tests/unit/test_adapters_omni_http.py` | **CHERRY** | same | OmniRoute adapter test |
 | `tests/unit/test_server_dispatch.py` | **CHERRY** | same | dispatch-mcp server test |
 | Dmouse92 commits #2/#3 (`9486edb` + `f46e356`) | **DISCARD `9486edb`** | n/a | Duplicate of `f46e356` per timing and file content; cherry-pick only `f46e356` |
@@ -202,15 +202,15 @@ Each step: **target repo → branch → commit message**. Steps MUST execute in 
 
 ### Step 1 — Publish `pheno-mcp-router` to GitHub
 
-**Target:** `gh repo create KooshaPari/pheno-mcp-router --public --description "Phenotype MCP substrate: hexagonal L4 ports (LlmPort/StoragePort/ToolPort) + 6 concrete adapters (V21 O1 per ADR-013)" --homepage "https://github.com/KooshaPari/phenotype-handbook/blob/main/docs/adr/2026-06-15/ADR-013-pheno-mcp-router-substrate.md"`
+**Target:** `gh repo create <REDACTED>/pheno-mcp-router --public --description "Phenotype MCP substrate: hexagonal L4 ports (LlmPort/StoragePort/ToolPort) + 6 concrete adapters (V21 O1 per ADR-013)" --homepage "https://github.com/<REDACTED>/phenotype-handbook/blob/main/docs/adr/2026-06-15/ADR-013-pheno-mcp-router-substrate.md"`
 **Branch:** `main` (initial push of local HEAD `c49a20e`)
 **Commit message:** n/a (initial repo creation)
-**Gate:** `gh api repos/KooshaPari/pheno-mcp-router` returns 200.
-**Source for working-tree contents:** `/Users/kooshapari/CodeProjects/Phenotype/repos/pheno-mcp-router/` (must `git add . && git commit` the uncommitted `ci.yml`, `justfile`, `pyproject.toml` modifications + untracked `audit_scorecard.json`, `pyrightconfig.json` BEFORE the publish push).
+**Gate:** `gh api repos/<REDACTED>/pheno-mcp-router` returns 200.
+**Source for working-tree contents:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos/pheno-mcp-router/` (must `git add . && git commit` the uncommitted `ci.yml`, `justfile`, `pyproject.toml` modifications + untracked `audit_scorecard.json`, `pyrightconfig.json` BEFORE the publish push).
 
 ### Step 2 — Cherry-pick Dmouse92 #1 (`dc4f1a3`) to dispatch-mcp main
 
-**Target:** `KooshaPari/dispatch-mcp`
+**Target:** `<REDACTED>/dispatch-mcp`
 **Branch:** `merge-w1-1-cheap-llm-mcp-deprecation-2026-06-17` (cut from `main`)
 **Action:** `git cherry-pick dc4f1a3` from `chore/w1-1-cheap-llm-mcp-deprecation-note-2026-06-15`
 **Commit message:** `feat(docs): cherry-pick cheap-llm-mcp deprecation notice (W1.1, ADR-008)`
@@ -220,7 +220,7 @@ Each step: **target repo → branch → commit message**. Steps MUST execute in 
 
 ### Step 3 — Port cost/budget/quota/audit/tiers/cost_middleware to substrate
 
-**Target:** `KooshaPari/pheno-mcp-router`
+**Target:** `<REDACTED>/pheno-mcp-router`
 **Branch:** `feat/port-cost-budget-quota-audit-tiers-2026-06-17` (cut from `main`)
 **Source:** cherry-pick from `/tmp/dmouse92-migration/dispatch-mcp` commit `6aad7fa` (the 5-module cost stack: `tiers.py`, `cost.py`, `budget.py`, `quota.py`, `audit.py`, `cost_middleware.py`)
 **Adaptation required:**
@@ -250,7 +250,7 @@ Per-module commit split (recommended for review):
 
 ### Step 4 — Port PROVIDER_GUIDE.md to substrate docs
 
-**Target:** `KooshaPari/pheno-mcp-router`
+**Target:** `<REDACTED>/pheno-mcp-router`
 **Branch:** same as Step 3 (squash into it, or separate commit)
 **Source:** cherry-pick `docs/PROVIDER_GUIDE.md` from `/tmp/dmouse92-migration/dispatch-mcp` commit `a1aaef2` (Dmouse92 #6)
 **Adaptation:** Update the guide to reflect substrate-level adapter names (`LlamaAdapter` not `LlamaCppProvider`, `OpenAIAdapter` already exists). Update MCP tool-call examples to use the substrate's `ToolPort.invoke`.
@@ -259,7 +259,7 @@ Per-module commit split (recommended for review):
 
 ### Step 5 — Port LlamaAdapter to substrate
 
-**Target:** `KooshaPari/pheno-mcp-router`
+**Target:** `<REDACTED>/pheno-mcp-router`
 **Branch:** `feat/llama-adapter-2026-06-17` (cut from `main`)
 **Source:** cherry-pick `src/dispatch_mcp/providers/llama_cpp.py` + `tests/test_providers_llama_cpp.py` + `tests/test_providers_llama_cpp_direct.py` from `/tmp/dmouse92-migration/dispatch-mcp` commit `a1aaef2`
 **Adaptation:**
@@ -276,9 +276,9 @@ Per-module commit split (recommended for review):
 
 ### Step 6 — Port OpenAICompatAdapter to substrate
 
-**Target:** `KooshaPari/pheno-mcp-router`
+**Target:** `<REDACTED>/pheno-mcp-router`
 **Branch:** `feat/openai-compat-adapter-2026-06-17` (cut from `main`)
-**Source:** cherry-pick `src/dispatch_mcp/providers/openai_compat.py` + `tests/test_openai_compat.py` from `KooshaPari/dispatch-mcp@feat/openai-compat-2026-06-15` (commit `977cd43`, KP-authored)
+**Source:** cherry-pick `src/dispatch_mcp/providers/openai_compat.py` + `tests/test_openai_compat.py` from `<REDACTED>/dispatch-mcp@feat/openai-compat-2026-06-15` (commit `977cd43`, KP-authored)
 **Adaptation:**
 - Wrap `OpenAICompatProvider` to satisfy `LlmPort.chat(messages, model) -> str`.
 - 87 % coverage target per source commit (`git show 977cd43`).
@@ -289,7 +289,7 @@ Per-module commit split (recommended for review):
 
 ### Step 7 — Port Docker files to phenotype-ops
 
-**Target:** `KooshaPari/phenotype-ops`
+**Target:** `<REDACTED>/phenotype-ops`
 **Branch:** `feat/llama-cpp-devops-2026-06-17` (cut from `main`)
 **Source:** cherry-pick `docker/Dockerfile.llama` + `docker/llama-compose.yml` from `/tmp/dmouse92-migration/dispatch-mcp` commit `a1aaef2`
 **Adaptation:**
@@ -300,7 +300,7 @@ Per-module commit split (recommended for review):
 
 ### Step 8 — Land W2-1 work on KP dispatch-mcp main (the cherry-pick side)
 
-**Target:** `KooshaPari/dispatch-mcp`
+**Target:** `<REDACTED>/dispatch-mcp`
 **Branch:** `wip/migrate-from-dmouse-w2-1-2026-06-17` (already exists at `a1aaef2`)
 **Action:** Land via PR from existing WIP branch to main. **Skip** the modules ported in Steps 3, 4, 5, 6 (already in substrate). **Keep** the cherry-pick set per Section 3:
 - `core/port.py`, `core/protocol.py`, `core/types.py`
@@ -338,10 +338,10 @@ Per-module commit split (recommended for review):
 
 ### Step 10 — Document migration in AGENTS.md / SSOT.md / STATUS.md
 
-**Target:** `KooshaPari/repos` (this monorepo)
+**Target:** `<REDACTED>/repos` (this monorepo)
 **Branch:** `chore/l5-104-dispatch-mcp-migration-2026-06-17` (cut from current branch `chore/w5-adrs-sota-2026-06-15`)
 **Files to touch (read-only cross-references — per non-negotiable rule "ALWAYS prefer editing an existing file"):**
-- `findings/2026-06-17-L5-104-dmouse92-to-kooshapari.md` — append "Section 2.1 dispatch-mcp: COMPLETE" with link to this plan file (the reviewer said "I'll integrate your findings" — leave this for the reviewer; if the reviewer accepts the plan, the parent audit doc gets one new bullet).
+- `findings/2026-06-17-L5-104-dmouse92-to-<REDACTED>.md` — append "Section 2.1 dispatch-mcp: COMPLETE" with link to this plan file (the reviewer said "I'll integrate your findings" — leave this for the reviewer; if the reviewer accepts the plan, the parent audit doc gets one new bullet).
 - `AGENTS.md` — under "Sub-repos at a Glance → pheno-* family → Python", note that `pheno-mcp-router` now owns cost/budget/quota/audit per ADR-013 (one-line update).
 - `SSOT.md` — note substrate split: dispatch-mcp is a consumer of pheno-mcp-router for tier/cost/budget/quota/audit/llama_cpp.
 - `STATUS.md` — note Dmouse92 dispatch-mcp archive complete.
@@ -356,14 +356,14 @@ Run all checks after Step 9 (before `gh repo archive`).
 
 ### 5.1 Per-commit semantic equivalence
 
-For each of the 6 Dmouse92 commits, the **semantic content** must be reachable from `KooshaPari/pheno-mcp-router@main` OR `KooshaPari/dispatch-mcp@main`:
+For each of the 6 Dmouse92 commits, the **semantic content** must be reachable from `<REDACTED>/pheno-mcp-router@main` OR `<REDACTED>/dispatch-mcp@main`:
 
 | Dmouse92 SHA | Reachability check | Pass criterion |
 |---|---|---|
-| `dc4f1a3` | `gh api repos/KooshaPari/dispatch-mcp/contents/docs/CHEAP_LLM_MCP_DEPRECATION.md --jq '.sha'` | File exists with content matching Dmouse92 (same 22 lines). |
+| `dc4f1a3` | `gh api repos/<REDACTED>/dispatch-mcp/contents/docs/CHEAP_LLM_MCP_DEPRECATION.md --jq '.sha'` | File exists with content matching Dmouse92 (same 22 lines). |
 | `9486edb` | **discarded** (duplicate of `f46e356`) | n/a |
-| `f46e356` | `gh api repos/KooshaPari/dispatch-mcp/contents/tests/test_mock_backend.py --jq '.sha'` | File exists with content matching Dmouse92. |
-| `6aad7fa` | `gh api "repos/KooshaPari/pheno-mcp-router/git/trees/main?recursive=1" --jq '.tree[].path' \| grep -E '(tiers|cost|budget|quota|audit|cost_middleware)\.py'` | All 6 module paths present in substrate `src/pheno_mcp_router/`. |
+| `f46e356` | `gh api repos/<REDACTED>/dispatch-mcp/contents/tests/test_mock_backend.py --jq '.sha'` | File exists with content matching Dmouse92. |
+| `6aad7fa` | `gh api "repos/<REDACTED>/pheno-mcp-router/git/trees/main?recursive=1" --jq '.tree[].path' \| grep -E '(tiers|cost|budget|quota|audit|cost_middleware)\.py'` | All 6 module paths present in substrate `src/pheno_mcp_router/`. |
 | `874a023` | (empty marker) | n/a |
 | `a1aaef2` | (compound: docker + providers + PROVIDER_GUIDE) | See below. |
 
@@ -372,9 +372,9 @@ For each of the 6 Dmouse92 commits, the **semantic content** must be reachable f
 For each file in Dmouse92 `a1aaef2`:
 | File | Reachability check |
 |---|---|
-| `docker/Dockerfile.llama` | `gh api repos/KooshaPari/phenotype-ops/contents/agent-devops-setups/llama-cpp/Dockerfile --jq '.sha'` returns 200; visual diff via `curl -sL <raw-url> \| diff - <(curl -sL https://raw.githubusercontent.com/Dmouse92/dispatch-mcp/chore/w2-1-dispatch-mcp-2026-06-15/docker/Dockerfile.llama)` empty |
+| `docker/Dockerfile.llama` | `gh api repos/<REDACTED>/phenotype-ops/contents/agent-devops-setups/llama-cpp/Dockerfile --jq '.sha'` returns 200; visual diff via `curl -sL <raw-url> \| diff - <(curl -sL https://raw.githubusercontent.com/Dmouse92/dispatch-mcp/chore/w2-1-dispatch-mcp-2026-06-15/docker/Dockerfile.llama)` empty |
 | `docker/llama-compose.yml` | same pattern under `agent-devops-setups/llama-cpp/docker-compose.yml` |
-| `docs/PROVIDER_GUIDE.md` | `gh api repos/KooshaPari/pheno-mcp-router/contents/docs/PROVIDER_GUIDE.md --jq '.sha'` returns 200; visual diff |
+| `docs/PROVIDER_GUIDE.md` | `gh api repos/<REDACTED>/pheno-mcp-router/contents/docs/PROVIDER_GUIDE.md --jq '.sha'` returns 200; visual diff |
 | `src/dispatch_mcp/providers/__init__.py` | In dispatch-mcp, exports `pheno_mcp_router.LlamaAdapter` shim. `grep "from pheno_mcp_router" src/dispatch_mcp/providers/__init__.py` |
 | `src/dispatch_mcp/providers/base.py` | **deleted** from dispatch-mcp (DISCARD per §3); `git ls-files src/dispatch_mcp/providers/base.py` returns empty |
 | `src/dispatch_mcp/providers/llama_cpp.py` | **deleted** from dispatch-mcp (now in substrate); shim only |
@@ -383,47 +383,47 @@ For each file in Dmouse92 `a1aaef2`:
 ### 5.3 Automated verification command (single-shot)
 
 ```bash
-# Run from /Users/kooshapari/CodeProjects/Phenotype/repos
+# Run from /Users/<REDACTED>/CodeProjects/Phenotype/repos
 
 set -e
 
 # 5.1: substrate has all 6 cost modules
-gh api "repos/KooshaPari/pheno-mcp-router/contents/src/pheno_mcp_router?ref=main" \
+gh api "repos/<REDACTED>/pheno-mcp-router/contents/src/pheno_mcp_router?ref=main" \
   --jq '.[] | .name' | grep -E '^(tiers|cost|budget|quota|audit|cost_middleware)\.py$' | sort | uniq | wc -l
 # Expected: 6
 
 # 5.2: substrate has LlamaAdapter and OpenAICompatAdapter
-gh api "repos/KooshaPari/pheno-mcp-router/contents/src/pheno_mcp_router?ref=main" \
+gh api "repos/<REDACTED>/pheno-mcp-router/contents/src/pheno_mcp_router?ref=main" \
   --jq '.[] | .name' | grep -E '(llama_adapter|openai_compat_adapter)\.py$' | sort
 # Expected: llama_adapter.py, openai_compat_adapter.py
 
 # 5.3: substrate has PROVIDER_GUIDE.md
-gh api "repos/KooshaPari/pheno-mcp-router/contents/docs/PROVIDER_GUIDE.md?ref=main" \
+gh api "repos/<REDACTED>/pheno-mcp-router/contents/docs/PROVIDER_GUIDE.md?ref=main" \
   --jq '.name'
 # Expected: PROVIDER_GUIDE.md
 
 # 5.4: dispatch-mcp has cheap-llm-mcp deprecation doc
-gh api "repos/KooshaPari/dispatch-mcp/contents/docs/CHEAP_LLM_MCP_DEPRECATION.md?ref=main" \
+gh api "repos/<REDACTED>/dispatch-mcp/contents/docs/CHEAP_LLM_MCP_DEPRECATION.md?ref=main" \
   --jq '.name'
 # Expected: CHEAP_LLM_MCP_DEPRECATION.md
 
 # 5.5: dispatch-mcp has mock backend test
-gh api "repos/KooshaPari/dispatch-mcp/contents/tests/test_mock_backend.py?ref=main" \
+gh api "repos/<REDACTED>/dispatch-mcp/contents/tests/test_mock_backend.py?ref=main" \
   --jq '.name'
 # Expected: test_mock_backend.py
 
 # 5.6: dispatch-mcp has cost module shim (or removed entirely)
-gh api "repos/KooshaPari/dispatch-mcp/contents/src/dispatch_mcp/core?ref=main" \
+gh api "repos/<REDACTED>/dispatch-mcp/contents/src/dispatch_mcp/core?ref=main" \
   --jq '.[] | .name' | grep -E '(cost|budget|quota|audit|tiers)\.py$'
 # Expected: empty (modules moved to substrate)
 
 # 5.7: dispatch-mcp server.py consumes substrate
-curl -sL "https://raw.githubusercontent.com/KooshaPari/dispatch-mcp/main/src/dispatch_mcp/server.py" \
+curl -sL "https://raw.githubusercontent.com/<REDACTED>/dispatch-mcp/main/src/dispatch_mcp/server.py" \
   | grep -c "from pheno_mcp_router"
 # Expected: >= 3 (cost, budget, quota, audit imports minimum)
 
 # 5.8: phenotype-ops has llama-cpp devops setup
-gh api "repos/KooshaPari/phenotype-ops/contents/agent-devops-setups/llama-cpp?ref=main" \
+gh api "repos/<REDACTED>/phenotype-ops/contents/agent-devops-setups/llama-cpp?ref=main" \
   --jq '.[] | .name' | grep -E '^(Dockerfile|docker-compose\.yml)$'
 # Expected: Dockerfile, docker-compose.yml
 ```
@@ -440,22 +440,22 @@ gh repo archive Dmouse92/dispatch-mcp --confirm
 
 ```bash
 # Verify no consumers depend on dispatch-mcp
-grep -ri "from dispatch_mcp\|import dispatch_mcp" /Users/kooshapari/CodeProjects/Phenotype/repos \
+grep -ri "from dispatch_mcp\|import dispatch_mcp" /Users/<REDACTED>/CodeProjects/Phenotype/repos \
   --include='*.py' --include='*.toml' --include='*.lock' 2>/dev/null | head -20
 # Expected: only the dispatch-mcp repo itself (self-references) and possibly PhenoMCP consumer
 # If consumers exist: create migration PRs first
 
 # Then archive
-gh repo archive KooshaPari/dispatch-mcp --confirm
+gh repo archive <REDACTED>/dispatch-mcp --confirm
 ```
 
-(Per parent audit doc `findings/2026-06-17-L5-104-dmouse92-to-kooshapari.md:76`, user explicitly said: *"dispatch-mcp should be deleted"*.)
+(Per parent audit doc `findings/2026-06-17-L5-104-dmouse92-to-<REDACTED>.md:76`, user explicitly said: *"dispatch-mcp should be deleted"*.)
 
 ---
 
 ## Section 6 — Worklog entry
 
-Worklog file path: `/Users/kooshapari/CodeProjects/Phenotype/repos/worklogs/L5-104-dispatch-mcp-migration-2026-06-17.json`
+Worklog file path: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/worklogs/L5-104-dispatch-mcp-migration-2026-06-17.json`
 Schema: worklog v2.1 (per ADR-015 v2.0 → v2.1 bump; ADR-023 device field).
 
 ```json
@@ -466,7 +466,7 @@ Schema: worklog v2.1 (per ADR-015 v2.0 → v2.1 bump; ADR-023 device field).
   "branch": "chore/l5-104-dispatch-mcp-migration-2026-06-17",
   "device": "macbook",
   "source_decision_doc": "findings/2026-06-17-L5-104-dispatch-mcp-migration-plan.md",
-  "parent_audit": "findings/2026-06-17-L5-104-dmouse92-to-kooshapari.md",
+  "parent_audit": "findings/2026-06-17-L5-104-dmouse92-to-<REDACTED>.md",
   "substrate_adr": "docs/adr/2026-06-15/ADR-013-pheno-mcp-router-substrate.md",
   "summary": {
     "plan_written": "findings/2026-06-17-L5-104-dispatch-mcp-migration-plan.md",
@@ -498,23 +498,23 @@ Schema: worklog v2.1 (per ADR-015 v2.0 → v2.1 bump; ADR-023 device field).
   ],
   "verification": {
     "commands": [
-      "gh api \"repos/KooshaPari/dispatch-mcp/commits?sha=main&per_page=1\"",
-      "gh api \"repos/KooshaPari/pheno-mcp-router\"",
+      "gh api \"repos/<REDACTED>/dispatch-mcp/commits?sha=main&per_page=1\"",
+      "gh api \"repos/<REDACTED>/pheno-mcp-router\"",
       "git log a1aaef2 --not a050e06 --oneline",
       "git diff --stat a050e06..chore/w1-1-cheap-llm-mcp-deprecation-note-2026-06-15",
-      "grep -ri 'cost\\|budget\\|quota\\|audit' /Users/kooshapari/CodeProjects/Phenotype/repos/pheno-mcp-router/src"
+      "grep -ri 'cost\\|budget\\|quota\\|audit' /Users/<REDACTED>/CodeProjects/Phenotype/repos/pheno-mcp-router/src"
     ],
     "results": "all 8 verification commands returned expected results (see plan §1 and §2)"
   },
   "blocked_on": [
-    "Reviewer (KooshaPari) approval of this plan",
+    "Reviewer (<REDACTED>) approval of this plan",
     "Step 1 prerequisite: clean pheno-mcp-router working tree (3 modified + 2 untracked files)"
   ],
   "notes": [
     "The 9486edb / f46e356 commits in Dmouse92 are duplicates (same message, same files, 2 minutes apart); 9486edb should be discarded during cherry-pick.",
     "The OpenAICompatProvider (4508d6f / 977cd43) is KP-authored, NOT Dmouse92-unique — but should be ported to substrate alongside the Dmouse92 work for substrate parity.",
     "The provider/llama_cpp.py + provider/openai_compat.py files use a Provider protocol (5 methods) that diverges from substrate LlmPort (single chat method); adapter wrappers required at port time.",
-    "After full migration, BOTH Dmouse92 dispatch-mcp and KooshaPari dispatch-mcp should be archived per user directive ('dispatch-mcp should be deleted').",
+    "After full migration, BOTH Dmouse92 dispatch-mcp and <REDACTED> dispatch-mcp should be archived per user directive ('dispatch-mcp should be deleted').",
     "This plan only ports SUBSTRATE-WORTHY content. The dispatch-mcp-internal provider base, port, protocol, types, adapters/omni_http, server.py, and the test_mock_backend harness all stay in dispatch-mcp — they are NOT substrate concerns per ADR-013 scope (substrate owns JSON-RPC envelope, sanitiser, size limit, structured log; NOT application-specific dispatch logic)."
   ]
 }
@@ -524,4 +524,4 @@ Schema: worklog v2.1 (per ADR-015 v2.0 → v2.1 bump; ADR-023 device field).
 
 ## Executive summary
 
-The parent audit doc (`findings/2026-06-17-L5-104-dmouse92-to-kooshapari.md`) reports `KooshaPari/dispatch-mcp@main` at 2026-06-18 with W2-1 absorption "yesterday", but `gh api` and local-branch inventory on 2026-06-17 19:00 PDT show main is **still at `a050e06` (2026-06-15)** and the 6 unique Dmouse92 commits sit in 6 unmerged branches. The `pheno-mcp-router` substrate is also **not on GitHub yet** (`404 Not Found`) — it exists as a local-only clone with 8 commits and a dirty working tree. Of the 6 Dmouse92 commits, 6 modules (`tiers/cost/budget/quota/audit/cost_middleware.py`, ~2,000 LOC) belong in the substrate per ADR-013's "all pheno-mcp-* servers are built on `pheno-mcp-router`" mandate, 5 files (`core/port.py`, `core/protocol.py`, `core/types.py`, `adapters/omni_http.py`, `server.py` extensions + the mock-backend test) stay in dispatch-mcp, the `LlamaAdapter` and `OpenAICompatAdapter` (the latter KP-authored on `feat/openai-compat-2026-06-15`) port to the substrate as new concrete adapters, the `PROVIDER_GUIDE.md` ports to substrate docs, the `Dockerfile.llama` + `llama-compose.yml` port to `phenotype-ops/agent-devops-setups/llama-cpp/`, and one cherry-pick (`dc4f1a3` CHEAP_LLM_MCP_DEPRECATION.md) is already done on `chore/w1-1-cheap-llm-mcp-deprecation-note-2026-06-15` — needs merge to main. The 10-step execution sequence (publish substrate → cherry-pick deprecation doc → port 6 substrate modules → port docs → port 2 adapters → port Docker files → land dispatch-mcp W2-1 with substrate coupling → archive Dmouse92 dispatch-mcp → archive KooshaPari dispatch-mcp → update AGENTS.md/SSOT.md/STATUS.md) gates on 8 verification commands in §5.3 before either archive can fire. Total estimate: ~2,400 LOC added to substrate, ~2,000 LOC deleted from dispatch-mcp, 0 net change to fleet functionality.
+The parent audit doc (`findings/2026-06-17-L5-104-dmouse92-to-<REDACTED>.md`) reports `<REDACTED>/dispatch-mcp@main` at 2026-06-18 with W2-1 absorption "yesterday", but `gh api` and local-branch inventory on 2026-06-17 19:00 PDT show main is **still at `a050e06` (2026-06-15)** and the 6 unique Dmouse92 commits sit in 6 unmerged branches. The `pheno-mcp-router` substrate is also **not on GitHub yet** (`404 Not Found`) — it exists as a local-only clone with 8 commits and a dirty working tree. Of the 6 Dmouse92 commits, 6 modules (`tiers/cost/budget/quota/audit/cost_middleware.py`, ~2,000 LOC) belong in the substrate per ADR-013's "all pheno-mcp-* servers are built on `pheno-mcp-router`" mandate, 5 files (`core/port.py`, `core/protocol.py`, `core/types.py`, `adapters/omni_http.py`, `server.py` extensions + the mock-backend test) stay in dispatch-mcp, the `LlamaAdapter` and `OpenAICompatAdapter` (the latter KP-authored on `feat/openai-compat-2026-06-15`) port to the substrate as new concrete adapters, the `PROVIDER_GUIDE.md` ports to substrate docs, the `Dockerfile.llama` + `llama-compose.yml` port to `phenotype-ops/agent-devops-setups/llama-cpp/`, and one cherry-pick (`dc4f1a3` CHEAP_LLM_MCP_DEPRECATION.md) is already done on `chore/w1-1-cheap-llm-mcp-deprecation-note-2026-06-15` — needs merge to main. The 10-step execution sequence (publish substrate → cherry-pick deprecation doc → port 6 substrate modules → port docs → port 2 adapters → port Docker files → land dispatch-mcp W2-1 with substrate coupling → archive Dmouse92 dispatch-mcp → archive <REDACTED> dispatch-mcp → update AGENTS.md/SSOT.md/STATUS.md) gates on 8 verification commands in §5.3 before either archive can fire. Total estimate: ~2,400 LOC added to substrate, ~2,000 LOC deleted from dispatch-mcp, 0 net change to fleet functionality.

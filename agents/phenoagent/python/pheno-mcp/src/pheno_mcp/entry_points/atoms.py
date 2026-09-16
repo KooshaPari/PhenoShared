@@ -17,14 +17,14 @@ class AtomsMCPEntryPoint(MCPEntryPoint):
 
     Provides Atoms-specific defaults and configuration:
     - Default port: 50002
-    - Default domain: atomcp.kooshapari.com
+    - Default domain: atomcp.<REDACTED>.com
     - Atoms-specific service configuration
     - Integration with pheno-sdk packages
     """
 
     # Atoms-specific defaults
     DEFAULT_PORT = 50002
-    DEFAULT_DOMAIN = "atomcp.kooshapari.com"
+    DEFAULT_DOMAIN = "atomcp.<REDACTED>.com"
     PROJECT_NAME = "atoms_mcp"
 
     def __init__(
@@ -39,7 +39,7 @@ class AtomsMCPEntryPoint(MCPEntryPoint):
 
         Args:
             port: Port to run on (default: 50002)
-            domain: Domain for tunnel (default: atomcp.kooshapari.com)
+            domain: Domain for tunnel (default: atomcp.<REDACTED>.com)
             verbose: Enable verbose logging
             no_tunnel: Disable CloudFlare tunnel
             logger: Optional logger instance

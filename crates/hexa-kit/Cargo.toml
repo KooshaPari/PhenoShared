@@ -3,16 +3,16 @@ version = "0.2.0"
 edition = "2021"
 license = "MIT OR Apache-2.0"
 rust-version = "1.94"
-repository = "https://github.com/KooshaPari/HexaKit"
+repository = "https://github.com/<REDACTED>/HexaKit"
 description = "Phenotype Infrastructure Kit"
-authors = ["kooshapari"]
+authors = ["<REDACTED>"]
 
 [workspace]
 resolver = "2"
 exclude = [
   "crates/focalpoint",  # 867MB repo with vendor dir; fetch too large for subtree-add; pending manual absorption
   "Metron",             # archived → PhenoObservability crates/metrickit (2026-06-17)
-  "agileplus",          # canonical → KooshaPari/AgilePlus (2026-06-17)
+  "agileplus",          # canonical → <REDACTED>/AgilePlus (2026-06-17)
   "Traceon",            # archived → PhenoObservability crates/tracingkit (2026-06-17)
   "crates/stashly",     # canonical → phenoShared / phenotype-types per v2 charter
   "crates/settly",      # canonical → phenotype-config (Wave 8 stub prune)
@@ -129,22 +129,22 @@ ulid = { version = "1", features = ["serde"] }
 arc-swap = "1"
 # phenoShared interim pins drained wave 5b (ADR-ECO-014) — terminal DOMAIN_ROLES owners
 # Canonical event runtime; Eventra was archived after this migration.
-phenotype-error-core = { git = "https://github.com/KooshaPari/phenotype-types", branch = "main" }
-phenotype-errors = { git = "https://github.com/KooshaPari/phenotype-types", branch = "main" }
-pheno-events = { git = "https://github.com/KooshaPari/phenoEvents", tag = "v0.1.0" }
+phenotype-error-core = { git = "https://github.com/<REDACTED>/phenotype-types", branch = "main" }
+phenotype-errors = { git = "https://github.com/<REDACTED>/phenotype-types", branch = "main" }
+pheno-events = { git = "https://github.com/<REDACTED>/phenoEvents", tag = "v0.1.0" }
 phenotype-event-sourcing = { path = "crates/phenotype-event-sourcing" }
 # ResilienceKit = phenotype-resilience DOMAIN_ROLES owner
-phenotype-http-client-core = { git = "https://github.com/KooshaPari/ResilienceKit", branch = "main" }
-phenotype-state-machine = { git = "https://github.com/KooshaPari/ResilienceKit", branch = "main" }
+phenotype-http-client-core = { git = "https://github.com/<REDACTED>/ResilienceKit", branch = "main" }
+phenotype-state-machine = { git = "https://github.com/<REDACTED>/ResilienceKit", branch = "main" }
 phenotype-policy-engine = { workspace = true }
-phenotype-logging = { git = "https://github.com/KooshaPari/PhenoObservability", branch = "main", package = "phenotype-logging" }
+phenotype-logging = { git = "https://github.com/<REDACTED>/PhenoObservability", branch = "main", package = "phenotype-logging" }
 phenotype-time = { path = "crates/phenotype-time" }
 phenotype-rate-limit = { path = "crates/phenotype-rate-limit" }
 phenotype-retry = { path = "crates/phenotype-retry" }
 # phenotype-rust-sdk thin facade (ADR-ECO-014)
-phenotype-async-traits = { git = "https://github.com/KooshaPari/phenotype-rust-sdk", branch = "main" }
-phenotype-macros = { git = "https://github.com/KooshaPari/phenotype-rust-sdk", branch = "main" }
-phenotype-config-loader = { git = "https://github.com/KooshaPari/phenotype-config", branch = "main" }
+phenotype-async-traits = { git = "https://github.com/<REDACTED>/phenotype-rust-sdk", branch = "main" }
+phenotype-macros = { git = "https://github.com/<REDACTED>/phenotype-rust-sdk", branch = "main" }
+phenotype-config-loader = { git = "https://github.com/<REDACTED>/phenotype-config", branch = "main" }
 phenotype-mcp = { workspace = true }
 # ResilienceKit traits crate (HealthChecker API — PO runtime differs)
 phenotype-health = { workspace = true }
@@ -152,23 +152,23 @@ phenotype-health = { workspace = true }
 phenotype-cache-adapter = { path = "crates/phenotype-cache-adapter" }
 phenotype-contract-adapters = { path = "crates/phenotype-contract-adapters" }
 # Contracts decompose: slice crates on role owners; generic Contract → phenotype-rust-sdk
-phenotype-auth-contracts = { git = "https://github.com/KooshaPari/Authvault", branch = "main", package = "phenotype-auth-contracts" }
-phenotype-agent-contracts = { git = "https://github.com/KooshaPari/Agentora", branch = "main", package = "phenotype-agent-contracts" }
-phenotype-contracts = { git = "https://github.com/KooshaPari/phenotype-rust-sdk", branch = "main" }
-phenotype-security-aggregator = { git = "https://github.com/KooshaPari/Authvault", branch = "main", package = "phenotype-security-aggregator" }
-phenotype-test-infra = { git = "https://github.com/KooshaPari/TestingKit", branch = "main" }
-phenotype-cipher = { git = "https://github.com/KooshaPari/Authvault", branch = "main", package = "phenotype-cipher" }
+phenotype-auth-contracts = { git = "https://github.com/<REDACTED>/Authvault", branch = "main", package = "phenotype-auth-contracts" }
+phenotype-agent-contracts = { git = "https://github.com/<REDACTED>/Agentora", branch = "main", package = "phenotype-agent-contracts" }
+phenotype-contracts = { git = "https://github.com/<REDACTED>/phenotype-rust-sdk", branch = "main" }
+phenotype-security-aggregator = { git = "https://github.com/<REDACTED>/Authvault", branch = "main", package = "phenotype-security-aggregator" }
+phenotype-test-infra = { git = "https://github.com/<REDACTED>/TestingKit", branch = "main" }
+phenotype-cipher = { git = "https://github.com/<REDACTED>/Authvault", branch = "main", package = "phenotype-cipher" }
 phenotype-crypto = { workspace = true }
-phenotype-casbin-wrapper = { git = "https://github.com/KooshaPari/Authvault", branch = "main", package = "phenotype-casbin-wrapper" }
-phenotype-iter = { git = "https://github.com/KooshaPari/phenotype-types", branch = "main", package = "phenotype-iter" }
-phenotype-string = { git = "https://github.com/KooshaPari/phenotype-types", branch = "main", package = "phenotype-string" }
-phenotype-validation = { git = "https://github.com/KooshaPari/phenotype-types", branch = "main", package = "phenotype-validation" }
-phenotype-sentry-config = { git = "https://github.com/KooshaPari/PhenoObservability", branch = "main", package = "phenotype-sentry-config" }
-phenotype-telemetry = { git = "https://github.com/KooshaPari/PhenoObservability", branch = "main", package = "phenotype-telemetry" }
-phenotype-contract = { git = "https://github.com/KooshaPari/TestingKit", branch = "main", package = "phenotype-contract" }
-phenotype-test-fixtures = { git = "https://github.com/KooshaPari/TestingKit", branch = "main", package = "phenotype-test-fixtures", default-features = false }
+phenotype-casbin-wrapper = { git = "https://github.com/<REDACTED>/Authvault", branch = "main", package = "phenotype-casbin-wrapper" }
+phenotype-iter = { git = "https://github.com/<REDACTED>/phenotype-types", branch = "main", package = "phenotype-iter" }
+phenotype-string = { git = "https://github.com/<REDACTED>/phenotype-types", branch = "main", package = "phenotype-string" }
+phenotype-validation = { git = "https://github.com/<REDACTED>/phenotype-types", branch = "main", package = "phenotype-validation" }
+phenotype-sentry-config = { git = "https://github.com/<REDACTED>/PhenoObservability", branch = "main", package = "phenotype-sentry-config" }
+phenotype-telemetry = { git = "https://github.com/<REDACTED>/PhenoObservability", branch = "main", package = "phenotype-telemetry" }
+phenotype-contract = { git = "https://github.com/<REDACTED>/TestingKit", branch = "main", package = "phenotype-contract" }
+phenotype-test-fixtures = { git = "https://github.com/<REDACTED>/TestingKit", branch = "main", package = "phenotype-test-fixtures", default-features = false }
 phenotype-compliance-scanner = { path = "crates/phenotype-compliance-scanner" }
-phenotype-config-core = { git = "https://github.com/KooshaPari/phenotype-config", branch = "main", package = "phenotype-config-core" }
+phenotype-config-core = { git = "https://github.com/<REDACTED>/phenotype-config", branch = "main", package = "phenotype-config-core" }
 phenotype-core = { path = "crates/phenotype-core" }
 phenotype-cost-core = { path = "crates/phenotype-cost-core" }
 phenotype-error-macros = { path = "crates/phenotype-error-macros" }
@@ -210,14 +210,14 @@ edition = "2021"
 license = "MIT OR Apache-2.0"
 license-file = "LICENSE"
 description = "HexaKit — Phenotype Infrastructure Kit: shared Rust crates powering the Phenotype platform (config, errors, logging, contracts, MCP, policy, compliance, analytics, etc.)"
-homepage = "https://github.com/KooshaPari/HexaKit"
+homepage = "https://github.com/<REDACTED>/HexaKit"
 documentation = "https://docs.rs/hexakit"
-repository = "https://github.com/KooshaPari/HexaKit"
+repository = "https://github.com/<REDACTED>/HexaKit"
 readme = "README.md"
 publish = false
 keywords = ["phenotype", "hexa"]
 categories = ["development-tools"]
-authors = ["kooshapari"]
+authors = ["<REDACTED>"]
 [dependencies]
 sha2 = { workspace = true }
 blake3 = { workspace = true }

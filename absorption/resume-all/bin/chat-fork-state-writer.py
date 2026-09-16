@@ -43,7 +43,7 @@ import os
 import sys
 from pathlib import Path
 
-OUT_DIR = Path(os.environ.get("RESUME_ALL_DIR", "/Users/kooshapari/.local/share/resume-all"))
+OUT_DIR = Path(os.environ.get("RESUME_ALL_DIR", "/Users/<REDACTED>/.local/share/resume-all"))
 SNAPSHOT_FILE = OUT_DIR / "chat-fork-state.json"
 POLL_FILE = OUT_DIR / "chat-fork-state-poll.json"
 

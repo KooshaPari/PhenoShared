@@ -7,7 +7,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/KooshaPari/MCPForge/internal/protocol"
+	"github.com/<REDACTED>/MCPForge/internal/protocol"
 )
 
 func ExtractTextFromLocation(loc protocol.Location) (string, error) {

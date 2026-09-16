@@ -7,8 +7,8 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/kooshapari/nanovms/internal/domain"
-	"github.com/kooshapari/nanovms/pkg/tier"
+	"github.com/<REDACTED>/nanovms/internal/domain"
+	"github.com/<REDACTED>/nanovms/pkg/tier"
 )
 
 // Runtime is the interface for all tier runtimes.

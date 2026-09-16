@@ -10,7 +10,7 @@ readme = "README.md"
 requires-python = ">=3.10"
 license = {text = "MIT"}
 authors = [
-    {name = "Phenotype Team", email = "team@kooshapari.com"}
+    {name = "Phenotype Team", email = "team@<REDACTED>.com"}
 ]
 keywords = [
     "mcp",
@@ -60,10 +60,10 @@ fastmcp = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/KooshaPari/pheno"
+Homepage = "https://github.com/<REDACTED>/pheno"
 Documentation = "https://phenotype-infrakit.readthedocs.io"
-Repository = "https://github.com/KooshaPari/pheno.git"
-Issues = "https://github.com/KooshaPari/pheno/issues"
+Repository = "https://github.com/<REDACTED>/pheno.git"
+Issues = "https://github.com/<REDACTED>/pheno/issues"
 
 [tool.setuptools]
 package-dir = {"" = "src"}

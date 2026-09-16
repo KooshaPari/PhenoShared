@@ -15,7 +15,7 @@ Per `BOUNDARY_OWNERS.md` 5-check gate. **Never delete TestingKit.**
 | X-09 | AuthKit | **ARCHIVED** | BOUNDARY_OWNERS 5/5; AuthKit#118 fold merged; Tracera/thegent verified-clean; `gh repo archive` 2026-06-18 |
 | X-10 | phenoShared | **TOMBSTONE** | P4 decompose done; wave 5b fleet drain — 0 production git deps; repo 404 post-absorption (2026-06-19) |
 
-> **Correction 2026-06-19:** X-10 status above is **premature / false**. The "0 production git deps" claim was true at **HexaKit #278** merge, but **#279** reverted the `phenotype-cache-adapter` pin back to `KooshaPari/phenoShared` because the `libs/phenotype-cache-adapter` path stub was never pushed to remote. After `KooshaPari/phenoShared` was hard-deleted, HexaKit `main` was left pointing at a 404 repo. **HexaKit #285** ("drain last phenoShared pin via cache-adapter inline stub") added an in-tree path stub at `crates/phenotype-cache-adapter-stub` and dropped the phenoShared pin. **Pyron #62** gutted the rest. Both `phenoShared` and `Pyron` are now restored as archived; fleet-wide rescan confirms zero live git deps. Gate state: `hold` for both — awaiting explicit user sign-off before any further delete action per BOUNDARY_OWNERS / ADR-ECO-014.
+> **Correction 2026-06-19:** X-10 status above is **premature / false**. The "0 production git deps" claim was true at **HexaKit #278** merge, but **#279** reverted the `phenotype-cache-adapter` pin back to `<REDACTED>/phenoShared` because the `libs/phenotype-cache-adapter` path stub was never pushed to remote. After `<REDACTED>/phenoShared` was hard-deleted, HexaKit `main` was left pointing at a 404 repo. **HexaKit #285** ("drain last phenoShared pin via cache-adapter inline stub") added an in-tree path stub at `crates/phenotype-cache-adapter-stub` and dropped the phenoShared pin. **Pyron #62** gutted the rest. Both `phenoShared` and `Pyron` are now restored as archived; fleet-wide rescan confirms zero live git deps. Gate state: `hold` for both — awaiting explicit user sign-off before any further delete action per BOUNDARY_OWNERS / ADR-ECO-014.
 
 ## Surface reduction batch 1+2 closeout (Phase 4 tasks 71–80, 2026-06-19)
 
@@ -34,22 +34,22 @@ Per `BOUNDARY_OWNERS.md` 5-check gate.
 
 - AuthKit archived 2026-06-18 (X-09 gate pass); Metron tombstoned 2026-06-19 (repo 404 post-absorption; `gh repo archive` N/A)
 - Registry rows updated in disposition-index batch PR
-- **KooshaPari/pheno archived 2026-06-19** — W18b fleet manifest scan: 0 external `KooshaPari/pheno` git deps in consumer Cargo.toml/go.mod (gh search + fleet pull verify); chokepoints all `repointed` or `verified-clean`; registry closeout PR
+- **<REDACTED>/pheno archived 2026-06-19** — W18b fleet manifest scan: 0 external `<REDACTED>/pheno` git deps in consumer Cargo.toml/go.mod (gh search + fleet pull verify); chokepoints all `repointed` or `verified-clean`; registry closeout PR
 
 ## pheno archive gate (W18b-G)
 
 | Check | Result |
 |-------|--------|
 | Fleet chokepoints closed | phenotype-gfx, Civis, phenotype-teamcomm, phenotype-go-sdk → verified-clean; TestingKit#8 merged |
-| Org manifest scan | No external `github.com/KooshaPari/pheno.git` deps outside pheno self + audit docs |
+| Org manifest scan | No external `github.com/<REDACTED>/pheno.git` deps outside pheno self + audit docs |
 | PhenoCompose | verified-clean (in-repo path deps) |
-| Archive action | `gh repo archive KooshaPari/pheno` 2026-06-19 |
+| Archive action | `gh repo archive <REDACTED>/pheno` 2026-06-19 |
 
 ## Phase 3 stale-tail closeout (2026-06-18)
 
 | ID | Item | Verdict | Evidence |
 |----|------|---------|----------|
-| ST-01 | BytePort #201 | **UNCLOSABLE** | Repo `KooshaPari/BytePort` archived read-only (2026-06-18); canonical → `phenotype-tooling` `crates/byteport`. PR [#201](https://github.com/KooshaPari/BytePort/pull/201) remains OPEN stale — **cannot close or merge**: GitHub GraphQL `closePullRequest` returns locked-issue / read-only archive error. **Action:** leave open; track as absorbed stale tail; do not block archive gates. See [local-clone-hygiene](../operations/local-clone-hygiene-2026-06-18.md). |
+| ST-01 | BytePort #201 | **UNCLOSABLE** | Repo `<REDACTED>/BytePort` archived read-only (2026-06-18); canonical → `phenotype-tooling` `crates/byteport`. PR [#201](https://github.com/<REDACTED>/BytePort/pull/201) remains OPEN stale — **cannot close or merge**: GitHub GraphQL `closePullRequest` returns locked-issue / read-only archive error. **Action:** leave open; track as absorbed stale tail; do not block archive gates. See [local-clone-hygiene](../operations/local-clone-hygiene-2026-06-18.md). |
 | ST-02 | phenotype-omlx #22 | **CLOSE BLOCKED** | Repo archived read-only; ADR-ECO-008 triage: scope exceeds docs/benchmark-only; CI blocked |
 | ST-03 | gw-phenolang | **DONE** | phenoUtils#66 index canonical; [gw-phenolang-branch-index.md](../disposition/gw-phenolang-branch-index.md); full branch sweep 2026-06-19 (main-only) |
 | ST-04 | AuthKit X-09 | **ARCHIVED** | 5-check pass; Tracera/thegent repointed; archived 2026-06-18 |
@@ -61,7 +61,7 @@ Per `BOUNDARY_OWNERS.md` 5-check gate.
 |-------|--------|
 | 1. Canonical owners named | DOMAIN_ROLES repoint targets (Configra, PhenoObservability, Authvault, Eventra, Agentora, TestingKit) |
 | 2. Inbound absorptions | pheno shelf lockstep waves 2–7 + contracts decompose slices 2–4 |
-| 3. Outbound consumers | 0 external `KooshaPari/Pyron` git deps in production manifests (gh org search) |
+| 3. Outbound consumers | 0 external `<REDACTED>/Pyron` git deps in production manifests (gh org search) |
 | 4. Scaffold hooks | Role owners carry templates/SDK edges per BOUNDARY_OWNERS |
 | 5. Unique slice | None — vendored contracts + pheno-mcp dropped; MIGRATED.md stubs retained |
 | cargo check | green post Pyron PR merge |
@@ -75,11 +75,11 @@ Per `BOUNDARY_OWNERS.md` 5-check gate.
 |-------|--------|
 | 1. Canonical owners named | DOMAIN_ROLES owners per ADR-ECO-014 (`phenotype-types`, `phenotype-config`, `PhenoObservability`, `Eventra`, `Authvault`, `Agentora`, `ResilienceKit`, `phenotype-rust-sdk`) |
 | 2. Inbound absorptions | P4 decompose complete — `repo-phenoshared` `fsm: done`; contracts slices 2–4 on role owners |
-| 3. Outbound consumers | **PASS** — 0 production git deps on `KooshaPari/phenoShared` (gh org Cargo.toml/go.mod scan 2026-06-19); 0 go.mod deps |
+| 3. Outbound consumers | **PASS** — 0 production git deps on `<REDACTED>/phenoShared` (gh org Cargo.toml/go.mod scan 2026-06-19); 0 go.mod deps |
 | 4. Scaffold hooks | **PASS** — terminal owners carry slice crates; generic `Contract` → phenotype-rust-sdk @ `cbf1ccf` |
 | 5. Unique slice | **PASS** — no fleet interim pins remain |
-| HexaKit wave 5b | **Done** — [HexaKit#278](https://github.com/KooshaPari/HexaKit/pull/278) @ `d83d1ca`; fleet drain PRs PO#173, ResilienceKit#4, python-sdk#27 |
-| Delete action | Repo **deleted** (404) — P4 gate pass; `gate-phenoshared` `fsm: done` 2026-06-19; `gh repo delete KooshaPari/phenoShared` |
+| HexaKit wave 5b | **Done** — [HexaKit#278](https://github.com/<REDACTED>/HexaKit/pull/278) @ `d83d1ca`; fleet drain PRs PO#173, ResilienceKit#4, python-sdk#27 |
+| Delete action | Repo **deleted** (404) — P4 gate pass; `gate-phenoshared` `fsm: done` 2026-06-19; `gh repo delete <REDACTED>/phenoShared` |
 
 ---
 
@@ -88,12 +88,12 @@ Per `BOUNDARY_OWNERS.md` 5-check gate.
 The X-10 row above claiming `phenoShared` was **TOMBSTONE / 404-deleted** and the corresponding rows in the `phenoShared archive gate` and `Pyron archive gate` sections below claiming `gate-phenoshared`/`gate-pyron` `fsm: done` and `Repo deleted (404)` are **false**. The actual sequence was:
 
 1. **HexaKit #278** at `d83d1ca` drained 11 phenoShared pins. "0 production git deps" became *temporarily true*.
-2. **HexaKit #279** reverted `phenotype-cache-adapter` to `KooshaPari/phenoShared` because `libs/phenotype-cache-adapter` path stub was never pushed to remote. The claim became **false** again.
-3. `KooshaPari/phenoShared` was hard-deleted at this point. HexaKit `main` was left pointing at a 404 repo.
+2. **HexaKit #279** reverted `phenotype-cache-adapter` to `<REDACTED>/phenoShared` because `libs/phenotype-cache-adapter` path stub was never pushed to remote. The claim became **false** again.
+3. `<REDACTED>/phenoShared` was hard-deleted at this point. HexaKit `main` was left pointing at a 404 repo.
 4. **HexaKit #285** ("drain last phenoShared pin via cache-adapter inline stub") added an in-tree path stub at `crates/phenotype-cache-adapter-stub` and dropped the phenoShared pin.
 5. **Pyron #62** gutted Pyron to tombstone-prep. The `phenotype-contracts` pin from Pyron #61 was already drained by **ResilienceKit #4**.
 
-**Both `KooshaPari/phenoShared` and `KooshaPari/Pyron` are restored as archived** — not deleted. Fleet-wide rescan (`gh search code` for `KooshaPari/phenoShared` and `KooshaPari/Pyron` in `Cargo.toml` / `go.mod` across the org) confirms zero live cargo git deps as of 2026-06-19.
+**Both `<REDACTED>/phenoShared` and `<REDACTED>/Pyron` are restored as archived** — not deleted. Fleet-wide rescan (`gh search code` for `<REDACTED>/phenoShared` and `<REDACTED>/Pyron` in `Cargo.toml` / `go.mod` across the org) confirms zero live cargo git deps as of 2026-06-19.
 
 ### Corrected gate states
 
@@ -117,8 +117,8 @@ The "2026-06-20 audit correction" section below claimed phenoShared was "active 
 based on a `gh repo view` result that cached stale local data.
 
 **Verified state via GitHub API (2026-06-20, post-merge verification):**
-- `gh api repos/KooshaPari/phenoShared` → **HTTP 404 Not Found**
-- `gh search repos phenoShared org:KooshaPari` → **0 results**
+- `gh api repos/<REDACTED>/phenoShared` → **HTTP 404 Not Found**
+- `gh search repos phenoShared org:<REDACTED>` → **0 results**
 - The repo does not exist on GitHub — it was hard-deleted.
 
 The decompose is complete; repo 404 confirmed; gate is effectively done.
@@ -141,7 +141,7 @@ The decompose is complete; repo 404 confirmed; gate is effectively done.
 The "Post-delete audit correction" section above claimed phenoShared was "restored as archived" (`isArchived: true`). This was also **false**.
 
 **Verified state (2026-06-20):**
-- `gh repo view KooshaPari/phenoShared --json isArchived` → `{"isArchived": false}`
+- `gh repo view <REDACTED>/phenoShared --json isArchived` → `{"isArchived": false}`
 - Last updated: `2026-06-20T08:23:53Z` (today)
 - Remote branches: 70 (active development, including `feat/l5-116-fu6-drift-check-reusable-2026-06-20` created today)
 - The repo was **never successfully archived** — the hard-delete was rolled back, and the `gh repo archive` step was never re-executed

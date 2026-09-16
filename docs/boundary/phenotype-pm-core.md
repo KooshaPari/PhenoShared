@@ -43,5 +43,5 @@ Also added missing workspace deps (`indexmap`, `uuid v5` feature). Build verifie
 
 ## Outcome
 
-Source repo `KooshaPari/phenotype-pm-core` archived on GitHub.
+Source repo `<REDACTED>/phenotype-pm-core` archived on GitHub.
 Registry disposition-index updated: disposition=ABSORB, target=phenotype-tooling.

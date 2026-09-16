@@ -2,7 +2,7 @@
 
 **Date:** 2026-03-31
 **Status:** ✅ DEPLOYED TO origin/main
-**PR:** [#511](https://github.com/KooshaPari/phenotype-infrakit/pull/511)
+**PR:** [#511](https://github.com/<REDACTED>/phenotype-infrakit/pull/511)
 
 ---
 
@@ -79,7 +79,7 @@ The following commits are now live on origin/main (in chronological order):
 #### 1. CI Build Failure (`ci.yml`)
 **Status:** ❌ EXPECTED (GitHub Actions Billing Constraint)
 
-**Root Cause:** GitHub Actions billing spending limit exhausted (per `/Users/kooshapari/CodeProjects/CLAUDE.md` GitHub Actions Billing Constraint policy)
+**Root Cause:** GitHub Actions billing spending limit exhausted (per `/Users/<REDACTED>/CodeProjects/CLAUDE.md` GitHub Actions Billing Constraint policy)
 
 **Governance Rule:**
 > "GitHub Actions billing is a hard constraint. No additional funds will be added. If CI fails on billed runners (macOS/Windows) due to 'spending limit reached' or 'billing error', do NOT treat it as a blocking bug."
@@ -187,7 +187,7 @@ All Phase 2 work packages are unblocked and ready for execution.
 
 ## References
 
-- **Governance:** `/Users/kooshapari/CodeProjects/CLAUDE.md` (GitHub Actions Billing Constraint section)
+- **Governance:** `/Users/<REDACTED>/CodeProjects/CLAUDE.md` (GitHub Actions Billing Constraint section)
 - **Quick Wins Audit:** `docs/reference/BUILD_OPTIMIZATION_VERIFICATION.md`
 - **Phase 2 Specs:** `AgilePlus/kitty-specs/eco-00X/` (all specs created)
 - **Session Summary:** `docs/reference/WAVE_93_EXECUTION_SUMMARY.md`

@@ -1,19 +1,19 @@
 # PhenoMCPServers → ARCHIVE_ONLY (absorption failsafe) — 2026-07-17
 
-**Source repo:** `KooshaPari/PhenoMCPServers`
+**Source repo:** `<REDACTED>/PhenoMCPServers`
 **Planned target (this task):** `phenodocs/registry/mcp-servers/` (per task spec: "if docs: mkdir -p .../phenodocs/registry/mcp-servers && cp -r PhenoMCPServers/* .../phenodocs/registry/mcp-servers/")
 **Planned target (earlier audit, 2026-07-17T04:55Z):** `PhenoMCPServers (self, fleet aggregator)` — `disposition: DECLARE_SPINE`, `absorbed_target_path: docs/spine/PhenoMCPServers.md`
 **Final disposition:** **ARCHIVE_ONLY** — source is runnable code, not pure registry docs; multiple target-conflicts match the Stashly/eyetracker/focalpoint/configra/kmobile/pine/civis/phenotype-omlx/phenotype-harness failsafe pattern.
 
 ## Audit summary
 
-PhenoMCPServers is a **30-file Python monorepo** plus runnable MCP server packages. The preflight audit confirms (sizes via `du -sh` + `gh api repos/KooshaPari/PhenoMCPServers --jq '.size'`):
+PhenoMCPServers is a **30-file Python monorepo** plus runnable MCP server packages. The preflight audit confirms (sizes via `du -sh` + `gh api repos/<REDACTED>/PhenoMCPServers --jq '.size'`):
 
 | Subtree | Size | Kind | Notes |
 | --- | --- | --- | --- |
 | `servers/` | 5.5 MB | runnable Python | `substrate/` (18 entries), `pheno-org/` (7 entries), `forge3-bridge/` (11 entries), `external/` (4 entries) — MCP server packages |
 | `docs/` | 132 KB | markdown | wiring guides, ADR shards, retire/ subtree, MCP-CATALOG, LANGUAGE-TIERS-AND-ROLES, etc. |
-| `uv.lock` | 72 KB | lockfile | pins `phenofastmcp @ git+https://github.com/KooshaPari/PhenoFastMCP.git@v3.4.2` and 30+ transitive deps |
+| `uv.lock` | 72 KB | lockfile | pins `phenofastmcp @ git+https://github.com/<REDACTED>/PhenoFastMCP.git@v3.4.2` and 30+ transitive deps |
 | `skills/` | 68 KB | markdown + yaml | 8 skill bundles (`SKILL.md` + `skill.yaml`) — `catalog-wiring`, `forge3-bridge`, `github-fork-policy`, `language-tier-picker`, `mcp-boundary-guard`, `phenodag-claim`, `substrate-dispatch`, `substrate-vs-servers` |
 | `templates/` | 64 KB | scaffold | `mcp-server/` (Python scaffold) + `mcp-server-ts7/` (TypeScript scaffold) for HexaKit `hexakit init mcp-server --catalog phenomcp` |
 | `catalog/registry.yaml` | 13 KB | YAML | **SSOT** for servers, skills, plugins, agents — 12,926 bytes |
@@ -61,16 +61,16 @@ The current task's plan (`disposition: absorbed`, `target: phenodocs (registry/m
 
 ### Conflict #4 — The "kept live" recommendation
 
-The earlier audit's spine document (`phenotype-registry/docs/spine/PhenoMCPServers.md`) states: *"Source repo (`KooshaPari/PhenoMCPServers`): kept live"*. Archiving the source breaks the spine-member recommendation (a spine member should have a live canonical home). The current task's `gh repo archive` step overrides this — accepted because the task's failsafe is explicit ("ARCHIVE_ONLY if conflicts") and a sealed read-only archive preserves the source as a forensic anchor for any future reactivation.
+The earlier audit's spine document (`phenotype-registry/docs/spine/PhenoMCPServers.md`) states: *"Source repo (`<REDACTED>/PhenoMCPServers`): kept live"*. Archiving the source breaks the spine-member recommendation (a spine member should have a live canonical home). The current task's `gh repo archive` step overrides this — accepted because the task's failsafe is explicit ("ARCHIVE_ONLY if conflicts") and a sealed read-only archive preserves the source as a forensic anchor for any future reactivation.
 
 ## Fails-condition path executed
 
 Per the task spec: *"Failsafe: ARCHIVE_ONLY if conflicts."* The fails-condition was met on all four axes above. Executed:
 
-1. **Preflight audit complete.** Read `README.md` (69 lines), `ls -la` of root, `du -sh` of every subdirectory, `ls -la` of every subdirectory, `gh api repos/KooshaPari/PhenoMCPServers --jq` for size + last-push + default-branch. Confirmed: 5.5 MB+ runnable Python source, 2,594 KB on GitHub, last push today, `isArchived: false` at audit time.
+1. **Preflight audit complete.** Read `README.md` (69 lines), `ls -la` of root, `du -sh` of every subdirectory, `ls -la` of every subdirectory, `gh api repos/<REDACTED>/PhenoMCPServers --jq` for size + last-push + default-branch. Confirmed: 5.5 MB+ runnable Python source, 2,594 KB on GitHub, last push today, `isArchived: false` at audit time.
 2. **No code copied.** `phenodocs/registry/mcp-servers/` was not created. The `if docs: cp -r` branch was skipped because the `if docs` predicate evaluated to `false` (code, not docs).
 3. **No commit on `phenodocs`.** The current `phenodocs` branch (`absorb/parpoura-2026-07-17`) is untouched — it carries an earlier `feat(packages): absorb StealthStartup + design-tokens from prior batch` (71ec15e) and was not modified by this task.
-4. **GitHub archive** — `gh repo archive KooshaPari/PhenoMCPServers -y` (exit 0). Verified post-archive with `gh repo view KooshaPari/PhenoMCPServers --json isArchived` → `isArchived: true`.
+4. **GitHub archive** — `gh repo archive <REDACTED>/PhenoMCPServers -y` (exit 0). Verified post-archive with `gh repo view <REDACTED>/PhenoMCPServers --json isArchived` → `isArchived: true`.
 5. **Registry updated (preserved DECLARE_SPINE, appended failsafe rationale)** — `phenotype-registry/registry/disposition-index.json` row DSPI-13: `disposition: DECLARE_SPINE` **unchanged** (the structural decision stands); `archive_reason` extended from `"self-declared-spine-member"` to `"self-declared-spine-member + github-sealed-via-failsafe-2026-07-17"`; `note` field appended (using `|` separator, mirroring the `repo-hwledger` 2026-07-17 failsafe pattern) with the full failsafe rationale and restore procedure. The append preserves the original audit text verbatim and adds ~1,600 characters of failsafe context.
 6. **Audit artifact retained.** This file (replacing the earlier 30-line QUEUED stub) records the failsafe action in full.
 7. **Spine document retained.** `phenotype-registry/docs/spine/PhenoMCPServers.md` is unchanged; the 5th-spine role (IMPLEMENTATIONS) proposal remains in force. Archive is orthogonal to spine membership — a sealed read-only archive can still serve as a forensic anchor for the spine role, and a future `gh repo unarchive` would restore the live source.
@@ -79,7 +79,7 @@ Per the task spec: *"Failsafe: ARCHIVE_ONLY if conflicts."* The fails-condition 
 
 If a future agent wishes to re-attempt absorption (e.g. to a NEW target that doesn't collide with phenodocs or the spine role):
 
-1. **Unarchive on GitHub:** `gh repo unarchive KooshaPari/PhenoMCPServers` (reverses the seal; the repo is sealed read-only, not deleted, so all 30 files + git history are intact).
+1. **Unarchive on GitHub:** `gh repo unarchive <REDACTED>/PhenoMCPServers` (reverses the seal; the repo is sealed read-only, not deleted, so all 30 files + git history are intact).
 2. **Re-evaluate the target.** Candidate targets that wouldn't trigger the failsafe:
    - **Standalone reactivation** (recommended): keep `PhenoMCPServers` as a self-hosted implementations registry (the original 2026-07-17 audit's recommendation). This honors the `disposition: DECLARE_SPINE` decision and the 5th-spine role proposal.
    - **`phenotype-tooling`** (if PhenoMCPServers is genuinely tooling-shaped): would need a full audit of `phenotype-tooling/crates/` + workspace member collision check, plus resolution of the `phenofastmcp` git-dependency.
@@ -103,7 +103,7 @@ If a future agent wishes to re-attempt absorption (e.g. to a NEW target that doe
 
 | Artifact | State |
 | --- | --- |
-| `KooshaPari/PhenoMCPServers` GitHub repo | **archived** via `gh repo archive KooshaPari/PhenoMCPServers -y` (verified `isArchived: true` 2026-07-17; size 2594 KB; last push 2026-07-17T12:25:12Z) |
+| `<REDACTED>/PhenoMCPServers` GitHub repo | **archived** via `gh repo archive <REDACTED>/PhenoMCPServers -y` (verified `isArchived: true` 2026-07-17; size 2594 KB; last push 2026-07-17T12:25:12Z) |
 | `phenotype-registry/registry/disposition-index.json` `DSPI-13` row | `disposition: DECLARE_SPINE` (preserved); `archive_reason: "self-declared-spine-member + github-sealed-via-failsafe-2026-07-17"`; `note` appended with `|` separator (preserves original audit text + ~1,600 chars of failsafe rationale + restore procedure) |
 | `phenotype-registry/docs/spine/PhenoMCPServers.md` | unchanged (5th-spine role proposal remains in force) |
 | `phenodocs/registry/` | not created |

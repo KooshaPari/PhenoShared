@@ -47,7 +47,7 @@ Verify that each bloc repo has (1) coverage tooling wired into CI, (2) a coverag
 
 ### Tracely (`Tracely/crates/*/Cargo.toml`, `Tracely/justfile`, `Tracely/.github/workflows/ci.yml`)
 
-- **Coverage tooling:** △ `Tracely/justfile:15-17` `coverage: cargo tarpaulin --workspace` (local only). `Tracely/.github/workflows/ci.yml:23` passes `enable-coverage: true` to the reusable `KooshaPari/template-commons/.github/workflows/reusable-rust-ci.yml@main` — but the upstream is tag-pinned, so the actual coverage tool used is opaque.
+- **Coverage tooling:** △ `Tracely/justfile:15-17` `coverage: cargo tarpaulin --workspace` (local only). `Tracely/.github/workflows/ci.yml:23` passes `enable-coverage: true` to the reusable `<REDACTED>/template-commons/.github/workflows/reusable-rust-ci.yml@main` — but the upstream is tag-pinned, so the actual coverage tool used is opaque.
 - **Coverage gate:** ✗ **No Codecov config** (`Tracely/codecov.yml` and `Tracely/.codecov.yml` do not exist). The `enable-coverage: true` flag is unverified.
 - **Property-based:** ✗ **absent.** No `proptest` / `quickcheck` in any `Tracely/crates/*/Cargo.toml`.
 - **Fuzz:** △ **Half-wired.** `Tracely/crates/tracely-sentinel/fuzz/Cargo.toml` exists with `libfuzzer-sys = "0.4"`, but `Tracely/crates/tracely-sentinel/fuzz/fuzz_targets/` is empty — no `*.rs` fuzz targets committed. No CI job runs `cargo fuzz run all`.
@@ -86,7 +86,7 @@ Verify that each bloc repo has (1) coverage tooling wired into CI, (2) a coverag
 | 7 | `thegent/test_mutation_perf_pilot.py` | Pilot file exists; not wired as a CI gate. Wire `mutmut` (Python) into a `mutation` workflow. | M |
 | 8 | `Tracely/codecov.yml` | Does not exist. Add one with `project.default.target: 80%` and `patch.default.target: 80%`. | S |
 | 9 | `Tracely/crates/tracely-sentinel/fuzz/fuzz_targets/` | Empty. Add fuzz targets for `bulkhead`, `circuit_breaker`, `rate_limiter`, `validation` modules (4 files in `src/`). | M |
-| 10 | `Tracely/.github/workflows/ci.yml` | `enable-coverage: true` is unverified because the upstream `KooshaPari/template-commons` reusable is tag-pinned (`@main`). Either verify the coverage tool used and add a Codecov config, or fork the workflow. | M |
+| 10 | `Tracely/.github/workflows/ci.yml` | `enable-coverage: true` is unverified because the upstream `<REDACTED>/template-commons` reusable is tag-pinned (`@main`). Either verify the coverage tool used and add a Codecov config, or fork the workflow. | M |
 | 11 | `Tracely/` bloc-wide | No `proptest` / `quickcheck` / `cargo-mutants` / `insta`. **0/4 SOTA test categories present.** | L |
 | 12 | `Tracera/.github/workflows/rust-tests.yml:35` | Runs `cargo hack test --each-feature` but does **not** invoke `cargo llvm-cov` despite `justfile:73` declaring `--fail-under-lines 85`. Wire the justfile target into CI. | S |
 | 13 | `Tracera/.github/workflows/python-ci.yml` | No pytest invocation, no `--cov-fail-under`. Add `uv run pytest --cov --cov-fail-under=85`. | S |

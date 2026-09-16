@@ -1,7 +1,7 @@
 # DASHBOARD_RECON — AgilePlus Rust Dashboard Inventory
 
 **Date:** 2026-06-15  
-**Scope:** Rust-based dashboard within `KooshaPari/AgilePlus`  
+**Scope:** Rust-based dashboard within `<REDACTED>/AgilePlus`  
 **Branch examined (local):** `feat/agileplus-on-shared-core` (commit `19c5a551` — `wip: pre-consolidation checkpoint`)  
 **Remote reference:** `main` branch (for template structure comparison)
 

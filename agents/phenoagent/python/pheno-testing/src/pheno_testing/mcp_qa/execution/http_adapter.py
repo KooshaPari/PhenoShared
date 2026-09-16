@@ -42,7 +42,7 @@ class HTTPToolAdapter:
 
         Args:
             broker: OAuth session broker with auth credentials
-            api_base_url: Base URL for API (e.g., "https://zen.kooshapari.com/api")
+            api_base_url: Base URL for API (e.g., "https://zen.<REDACTED>.com/api")
             retry_config: Custom retry configuration (uses defaults if None)
         """
         self.broker = broker

@@ -15,7 +15,7 @@ absorbing_repo: phenotype-registry (boundary record only)
 
 **ARCHIVED** on GitHub 2026-07-17 (verified `isArchived=true` via `gh repo view`).
 
-`KooshaPari/KDesktopVirt` is a **non-Phenotype** project — an AI agent desktop
+`<REDACTED>/KDesktopVirt` is a **non-Phenotype** project — an AI agent desktop
 automation platform built around KDE / Kubuntu / X11 / Wayland containerized
 desktops with Docker + Kubernetes orchestration. It targets a Playwright-style
 API for full Linux desktop sessions and is unrelated to the Phenotype substrate,
@@ -45,7 +45,7 @@ why the repo was retired. No source was migrated into the phenotype monorepo.
   the eco-011 device-automation initiative's contracts-first port surface.
 - The repo was largely dormant (last push ~12 months before archival).
 - Companion repos named in the README (`KVirtualStage`, `kmobile`) are separate
-  KooshaPari entities; they are out of scope for this disposition.
+  <REDACTED> entities; they are out of scope for this disposition.
 - AGENTS.md extends Phenotype-org governance structurally, but the **content**
   (KDE desktop virt) is non-Phenotype, so the structural wrapper does not
   justify keeping the project active.
@@ -60,7 +60,7 @@ why the repo was retired. No source was migrated into the phenotype monorepo.
 
 ## Outcome
 
-- Source repo `KooshaPari/KDesktopVirt` archived on GitHub (read-only tombstone).
+- Source repo `<REDACTED>/KDesktopVirt` archived on GitHub (read-only tombstone).
 - Registry row `repo-KDesktopVirt`: disposition `AFFIRM` → `ARCHIVE_ONLY`,
   fsm `active` → `absorbed`, target pinned to this boundary doc.
 - No PR, no fork, no physical transfer. Registry disposition-index.json carries

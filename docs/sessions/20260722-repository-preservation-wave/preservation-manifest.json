@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "wave": "20260722-repository-preservation-wave",
-  "owner": "KooshaPari",
+  "owner": "<REDACTED>",
   "policy": {"archive": false, "delete": false, "rename": false, "force_push": false},
   "candidates": [
     {"source":"AgilePlus-recovery-20260714","target":"AgilePlus","disposition":"parent_reachable","refs":{"branches":1,"tags":0,"releases":0},"gate":"record reachable source head","w1":"not_required","w2":"pending"},

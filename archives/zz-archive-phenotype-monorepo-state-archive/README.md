@@ -12,11 +12,11 @@ zz-archive-phenotype-monorepo-state-archive — pre-deletion monorepo state arch
 
 ## Intent
 
-Archive of KooshaPari/phenotype-monorepo-state (deleted 2026-07). All truly-missing files are already present in the live phenotype-registry tree; this directory is kept as a tombstone pointer.
+Archive of <REDACTED>/phenotype-monorepo-state (deleted 2026-07). All truly-missing files are already present in the live phenotype-registry tree; this directory is kept as a tombstone pointer.
 
 ## Origin
 
-KooshaPari/zz-archive-phenotype-monorepo-state-archive; bundles main + archive/2026-06-18-v8-batch-*- branches.
+<REDACTED>/zz-archive-phenotype-monorepo-state-archive; bundles main + archive/2026-06-18-v8-batch-*- branches.
 
 ## Contents
 

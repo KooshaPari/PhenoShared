@@ -16,9 +16,9 @@ import (
 	"github.com/99designs/gqlgen/graphql/playground"
 	"github.com/go-chi/chi/v5"
 	"github.com/gorilla/websocket"
-	"github.com/kooshapari/bifrost-extensions/api/graphql/gen"
-	"github.com/kooshapari/bifrost-extensions/api/graphql/resolvers"
-	"github.com/kooshapari/bifrost-extensions/db"
+	"github.com/<REDACTED>/bifrost-extensions/api/graphql/gen"
+	"github.com/<REDACTED>/bifrost-extensions/api/graphql/resolvers"
+	"github.com/<REDACTED>/bifrost-extensions/db"
 	"github.com/vektah/gqlparser/v2/ast"
 )
 

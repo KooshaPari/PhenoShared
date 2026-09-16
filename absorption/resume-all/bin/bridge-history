@@ -11,9 +11,9 @@
 
 set -euo pipefail
 
-NDJSON="/Users/kooshapari/.local/share/resume-all/bridge-history.ndjson"
-SNAP_DIR="/Users/kooshapari/.local/share/resume-all"
-BRIDGE_HEALTH="/Users/kooshapari/.local/share/resume-all/bridge-health.ndjson"
+NDJSON="/Users/<REDACTED>/.local/share/resume-all/bridge-history.ndjson"
+SNAP_DIR="/Users/<REDACTED>/.local/share/resume-all"
+BRIDGE_HEALTH="/Users/<REDACTED>/.local/share/resume-all/bridge-health.ndjson"
 RETENTION_LINES=288  # 24h at 5min intervals
 
 mkdir -p "$(dirname "$NDJSON")" 2>/dev/null || true

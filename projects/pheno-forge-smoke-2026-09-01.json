@@ -11,7 +11,7 @@
   "boundary": "composite-routing-smoke",
   "stack": "rust",
   "v0": "0.1.0",
-  "gh_url": "https://github.com/KooshaPari/pheno-forge-smoke",
+  "gh_url": "https://github.com/<REDACTED>/pheno-forge-smoke",
   "default_branch": "main",
   "remote_default_sha_at_audit": "c3f47016",
   "wave": "J-13source-audit",

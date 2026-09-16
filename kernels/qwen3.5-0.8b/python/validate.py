@@ -1174,7 +1174,7 @@ def _find_hf_weights_dir() -> Path:
     """
     candidates = [
         Path(
-            "/Users/kooshapari/CodeProjects/Phenotype/pheno-harness-weights/kernels/qwen3.5-0.8b/weights/build/hf-cache/models--Qwen--Qwen3.5-0.8B/snapshots"
+            "/Users/<REDACTED>/CodeProjects/Phenotype/pheno-harness-weights/kernels/qwen3.5-0.8b/weights/build/hf-cache/models--Qwen--Qwen3.5-0.8B/snapshots"
         )
         / d
         for d in ("2fc06364715b967f1860aea9cf38778875588b17",)

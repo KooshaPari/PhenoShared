@@ -6,7 +6,7 @@ Shipped initial `/koosha` route.
 
 ## Requirement
 
-`projects.kooshapari.com` should expose a personal-level KooshaPari landing layer in
+`projects.<REDACTED>.com` should expose a personal-level <REDACTED> landing layer in
 addition to the Phenotype organization catalog. The page should reuse the project graph
 instead of becoming a separate, stale portfolio.
 
@@ -21,6 +21,6 @@ instead of becoming a separate, stale portfolio.
 
 ## Follow-Up Work
 
-- Promote canonical personal-domain routing if `kooshapari.com` moves to this site.
+- Promote canonical personal-domain routing if `<REDACTED>.com` moves to this site.
 - Add generated Open Graph imagery once the brand asset pipeline is centralized.
 - Add visual regression coverage for `/koosha` alongside the public catalog route.

@@ -105,7 +105,7 @@ All numbers verified 2026-06-18.
 
 ### 2.3 File propagation
 
-Verified live (2026-06-18) via `find /Users/kooshapari/CodeProjects/Phenotype/repos -path "*/docs/intent/*.md" -not -path "*phenotype-registry*" ...` (and equivalent for boundary).
+Verified live (2026-06-18) via `find /Users/<REDACTED>/CodeProjects/Phenotype/repos -path "*/docs/intent/*.md" -not -path "*phenotype-registry*" ...` (and equivalent for boundary).
 
 | Location                                       | Intent | Boundary |
 | :--------------------------------------------- | -----: | -------: |
@@ -127,7 +127,7 @@ Verified live (2026-06-18) via `find /Users/kooshapari/CodeProjects/Phenotype/re
 
 ## 3. Live Remote SHAs
 
-Verified via `https://api.github.com/repos/KooshaPari/phenotype-registry/branches/<branch>` (2026-06-18).
+Verified via `https://api.github.com/repos/<REDACTED>/phenotype-registry/branches/<branch>` (2026-06-18).
 
 ### 3.1 Orphan branch — `chore/l7-001-contract-only-orphan-2026-06-17`
 
@@ -235,8 +235,8 @@ In priority order. Each item is sized for the macbook (`device: macbook` per wor
   3. Apply `.gitattributes` LFS ruleset per ADR-027 tier 2 (on-demand) for `docs/curated-*/**/*.md`
   4. `git add docs/curated-* && git commit -m "feat(registry): ship 3.2GB curated corpus (45,091 records × {prompts,plans,responses})"`
   5. `git config lfs.allowincompletepush=true && git push origin main --no-verify` (per ADR-027 tier 2 strategy)
-  6. Verify: `gh api repos/KooshaPari/phenotype-registry | jq .size` should report ~3.4 GB (3.2 GB corpus + ~0.2 GB existing)
-- **Verification:** `gh release list --repo KooshaPari/phenotype-registry` shows a `v0.7.0-curated-corpus-3.2gb` tag with the corpus attached
+  6. Verify: `gh api repos/<REDACTED>/phenotype-registry | jq .size` should report ~3.4 GB (3.2 GB corpus + ~0.2 GB existing)
+- **Verification:** `gh release list --repo <REDACTED>/phenotype-registry` shows a `v0.7.0-curated-corpus-3.2gb` tag with the corpus attached
 - **Risk:** High if LFS is not configured (3.2 GB will balloon the git pack to ~10-15 GB). Medium with LFS. Low with LFS + LFS tier 2 allow-incomplete-push.
 
 ---

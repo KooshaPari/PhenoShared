@@ -20,7 +20,7 @@ set -euo pipefail
 
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 TAG="${TAG:-v0.37}"
-IMAGE_NAME="ghcr.io/kooshapari/pheno-harness"
+IMAGE_NAME="ghcr.io/<REDACTED>/pheno-harness"
 PLATFORMS="${PLATFORMS:-linux/amd64,linux/arm64}"
 
 log()  { printf '\033[1;34m[%s]\033[0m %s\n' "$(date +%H:%M:%S)" "$*"; }
@@ -33,7 +33,7 @@ docker info >/dev/null 2>&1 || fail "Docker daemon not running"
 cd "$REPO_ROOT"
 
 log "Step 1/5: Verify GHCR auth"
-docker pull ghcr.io/kooshapari/pheno-harness:latest 2>&1 | head -3 || \
+docker pull ghcr.io/<REDACTED>/pheno-harness:latest 2>&1 | head -3 || \
     warn "Not authenticated to GHCR. Run: echo \$GITHUB_TOKEN | docker login ghcr.io -u USERNAME --password-stdin"
 
 log "Step 2/5: Build + push multi-arch image"
@@ -48,7 +48,7 @@ if [[ "${BUILDX:-1}" == "1" ]]; then
         --sbom=true \
         --label "org.opencontainers.image.title=pheno-harness" \
         --label "org.opencontainers.image.description=Local routing, compression stack, RLVR eval, and Harbor terminal-bench wrappers for OmniRoute Main" \
-        --label "org.opencontainers.image.source=https://github.com/KooshaPari/pheno-harness" \
+        --label "org.opencontainers.image.source=https://github.com/<REDACTED>/pheno-harness" \
         --label "org.opencontainers.image.licenses=MIT" \
         --label "org.opencontainers.image.version=${TAG}" \
         --push \
@@ -59,7 +59,7 @@ else
         --tag "${IMAGE_NAME}:${TAG}" \
         --tag "${IMAGE_NAME}:latest" \
         --label "org.opencontainers.image.title=pheno-harness" \
-        --label "org.opencontainers.image.source=https://github.com/KooshaPari/pheno-harness" \
+        --label "org.opencontainers.image.source=https://github.com/<REDACTED>/pheno-harness" \
         --label "org.opencontainers.image.licenses=MIT" \
         --label "org.opencontainers.image.version=${TAG}" \
         .
@@ -79,4 +79,4 @@ docker buildx imagetools inspect "${IMAGE_NAME}:${TAG}" 2>&1 | head -10
 
 log "DONE."
 log "  Image: $IMAGE_NAME:$TAG"
-log "  GHCR : https://github.com/KooshaPari/pheno-harness/pkgs/container/pheno-harness"
+log "  GHCR : https://github.com/<REDACTED>/pheno-harness/pkgs/container/pheno-harness"

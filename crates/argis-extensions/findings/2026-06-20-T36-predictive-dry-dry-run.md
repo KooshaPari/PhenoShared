@@ -2,7 +2,7 @@
 
 **Date:** 2026-06-20
 **ADR:** ADR-047 (Predictive DRY discipline — 4-criterion rule)
-**Owner:** kooshapari
+**Owner:** <REDACTED>
 **Device:** macbook
 
 ## 4-Criterion Rule (per ADR-047)
@@ -48,7 +48,7 @@ Only **1 abstraction** is recommended for extraction this cycle:
 - **`ConfigBuilder` trait** in `pheno-config` substrate, absorbing the 12 call sites across 6 repos
 - Estimated LOC reduction: ~340 lines (12 × ~28 line builder)
 - Coupling cost: low (Config is already a substrate)
-- PR target: `KooshaPari/pheno-config#45`
+- PR target: `<REDACTED>/pheno-config#45`
 
 ## "Near-DRY" List (for future re-evaluation)
 
@@ -77,5 +77,5 @@ For the 1 DRY-verdict pattern:
 
 - ADR-047 (Predictive DRY discipline — 4-criterion rule)
 - ADR-040 (test coverage gates per tier)
-- `KooshaPari/pheno-predict` (implementation)
+- `<REDACTED>/pheno-predict` (implementation)
 - `pheno-config` substrate (the 1 confirmed DRY target)

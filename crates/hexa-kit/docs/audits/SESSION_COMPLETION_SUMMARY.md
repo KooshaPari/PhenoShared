@@ -36,7 +36,7 @@ Comprehensive ecosystem audit completed. 17 audit reports generated across 10 do
 - **VIBEPROXY_ROUTING_AUDIT_2026-03-30.md** — Routing configuration
 - **TASKS_3_4_5_COMPLETION_REPORT.md** — Task completion metrics
 
-**Location**: `/Users/kooshapari/CodeProjects/Phenotype/repos/docs/audits/`
+**Location**: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/docs/audits/`
 
 ---
 
@@ -220,7 +220,7 @@ Comprehensive ecosystem audit completed. 17 audit reports generated across 10 do
 
 ---
 
-**Archive Location**: `/Users/kooshapari/CodeProjects/Phenotype/repos/docs/audits/`
+**Archive Location**: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/docs/audits/`
 
 Generated: 2026-03-30  
 Last Updated: 2026-03-30 (Session completion)

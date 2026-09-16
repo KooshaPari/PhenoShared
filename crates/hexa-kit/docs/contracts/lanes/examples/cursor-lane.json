@@ -2,7 +2,7 @@
   "lane_id": "wave-b-wp01-scaffold",
   "disposition_ids": [12],
   "fsm_state": "ready",
-  "repo": "KooshaPari/HexaKit",
+  "repo": "<REDACTED>/HexaKit",
   "worktree": "HexaKit-wtrees/scaffold-spec",
   "branch": "feat/hexakit-scaffold-init",
   "owns": ["docs/contracts/**", "templates/**"],

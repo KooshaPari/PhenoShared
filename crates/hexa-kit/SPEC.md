@@ -32,5 +32,5 @@ See `README.md` for the user-facing API. Internal modules are documented via rus
 - Maturity: stable
 - Coverage: see `llms.txt`
 - Security: see `SECURITY.md` and `.github/workflows/security.yml`
-- Registry entry: KooshaPari/phenotype-registry/registry/components.lock
-- Maintainer: @KooshaPari
+- Registry entry: <REDACTED>/phenotype-registry/registry/components.lock
+- Maintainer: @<REDACTED>

@@ -100,11 +100,11 @@ def main() -> int:
         )
         require(
             errors,
-            alias_rows[0].get("canonical_owner") == "KooshaPari/phenoEvents",
+            alias_rows[0].get("canonical_owner") == "<REDACTED>/phenoEvents",
             "index alias row must name canonical owner",
         )
 
-    pheno_rows = [row for row in rows if row.get("path") == "KooshaPari/phenoEvents"]
+    pheno_rows = [row for row in rows if row.get("path") == "<REDACTED>/phenoEvents"]
     require(errors, bool(pheno_rows), "index must retain phenoEvents rows")
     for row in pheno_rows:
         require(

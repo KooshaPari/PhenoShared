@@ -6,7 +6,7 @@
   "color": "#3b82f6",
   "description": "Declarative Go/AWS deployment platform: GitHub repo to running service.",
   "tier": 2,
-  "repo": "KooshaPari/BytePort",
+  "repo": "<REDACTED>/BytePort",
   "language": "Go / Svelte / Rust",
   "license": "MIT",
   "status": "active",
@@ -17,8 +17,8 @@
     "Declarative infra config"
   ],
   "links": {
-    "github": "https://github.com/KooshaPari/BytePort",
+    "github": "https://github.com/<REDACTED>/BytePort",
     "docs": "https://byteport.phenotype.space/docs",
-    "releases": "https://github.com/KooshaPari/BytePort/releases"
+    "releases": "https://github.com/<REDACTED>/BytePort/releases"
   }
 }

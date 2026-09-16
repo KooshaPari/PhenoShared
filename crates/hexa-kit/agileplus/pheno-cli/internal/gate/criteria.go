@@ -1,7 +1,7 @@
 package gate
 
 import (
-	"github.com/KooshaPari/pheno-cli/internal/adapters"
+	"github.com/<REDACTED>/pheno-cli/internal/adapters"
 )
 
 // GateCriterion defines a single gate that must be passed for promotion.

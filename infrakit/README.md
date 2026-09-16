@@ -2,7 +2,7 @@
 
 Rust infrastructure toolkit extracted from the Phenotype ecosystem. Generic, domain-agnostic crates for event sourcing, caching, policy evaluation, and state machine management.
 
-[![AI slop inside](https://sladge.net/badge.svg)](https://sladge.net) [![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/KooshaPari/phenotype-infrakit/total)](https://github.com/KooshaPari/phenotype-infrakit/releases)
+[![AI slop inside](https://sladge.net/badge.svg)](https://sladge.net) [![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/<REDACTED>/phenotype-infrakit/total)](https://github.com/<REDACTED>/phenotype-infrakit/releases)
 
 ## Crates
 
@@ -19,10 +19,10 @@ Add any crate as a git dependency:
 
 ```toml
 [dependencies]
-phenotype-event-sourcing = { git = "https://github.com/KooshaPari/phenotype-infrakit" }
-phenotype-cache-adapter = { git = "https://github.com/KooshaPari/phenotype-infrakit" }
-phenotype-policy-engine = { git = "https://github.com/KooshaPari/phenotype-infrakit" }
-phenotype-state-machine = { git = "https://github.com/KooshaPari/phenotype-infrakit" }
+phenotype-event-sourcing = { git = "https://github.com/<REDACTED>/phenotype-infrakit" }
+phenotype-cache-adapter = { git = "https://github.com/<REDACTED>/phenotype-infrakit" }
+phenotype-policy-engine = { git = "https://github.com/<REDACTED>/phenotype-infrakit" }
+phenotype-state-machine = { git = "https://github.com/<REDACTED>/phenotype-infrakit" }
 ```
 
 ## Usage Examples

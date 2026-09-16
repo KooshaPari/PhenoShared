@@ -157,7 +157,7 @@ Phenotype uses a **multi-layered routing architecture:**
 
 ### Routing Implementation (43 Routers)
 
-**File:** `/Users/kooshapari/CodeProjects/Phenotype/repos/platforms/thegent/src/thegent/utils/routing_impl/`
+**File:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos/platforms/thegent/src/thegent/utils/routing_impl/`
 
 **Router Breakdown by Category:**
 
@@ -222,7 +222,7 @@ Phenotype uses a **multi-layered routing architecture:**
 
 ### Cliproxy Adapter Analysis
 
-**File:** `/Users/kooshapari/CodeProjects/Phenotype/repos/platforms/thegent/src/thegent/cliproxy_adapter.py` (1,268 LOC)
+**File:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos/platforms/thegent/src/thegent/cliproxy_adapter.py` (1,268 LOC)
 
 **Purpose:** HTTP/WebSocket gateway layer for LLM API requests with transformation, caching, and observability.
 
@@ -303,7 +303,7 @@ Phenotype uses a **multi-layered routing architecture:**
 **Audit Result:** No evidence of a local VibeProxy fork in workspace.
 
 **Evidence:**
-- Searched: `find /Users/kooshapari -name "vibeproxy*"` → No active repos
+- Searched: `find /Users/<REDACTED> -name "vibeproxy*"` → No active repos
 - Checked: `.git/config` across all projects → No `automazeio/vibeproxy` remotes
 - Archived refs: `spec-dumps/merged.md` contains 20+ FR citations to VibeProxy, all as **aspirational Phase 3+ work** (not started)
 - Mentions in specs: "vibeproxy Rust Core Phase", "Multi-Platform vibeproxy", but no implementation branches
@@ -382,7 +382,7 @@ Phenotype uses a **multi-layered routing architecture:**
 - **Relationship:** VibeProxy could use LiteLLM as backend instead of custom CLIProxyAPIPlus
 
 ### 2. **cliproxyapi-plusplus** (Go, external)
-- **Status:** External dependency (forked by KooshaPari, known as cliproxy)
+- **Status:** External dependency (forked by <REDACTED>, known as cliproxy)
 - **Purpose:** Proxy backend for VibeProxy; used by Phenotype for fallback
 - **Integration:** Phenotype has `cliproxy_adapter.py` that proxies to cliproxyapi-plusplus backend
 - **Concern:** Embedded in local setup; possible consolidation with Phenotype's LiteLLM layer
@@ -440,7 +440,7 @@ Phenotype uses a **multi-layered routing architecture:**
 
 ## Archival Status: Vibeproxy in Specs
 
-**File:** `/Users/kooshapari/CodeProjects/Phenotype/repos/platforms/thegent/.archive/spec-dumps/merged.md`
+**File:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos/platforms/thegent/.archive/spec-dumps/merged.md`
 
 **Vibeproxy References (all aspirational, not implemented):**
 
@@ -555,7 +555,7 @@ Phenotype uses a **multi-layered routing architecture:**
 
 ### Phenotype Routing Core (43 routers, 11.7K LOC)
 
-**Location:** `/Users/kooshapari/CodeProjects/Phenotype/repos/platforms/thegent/src/thegent/utils/routing_impl/`
+**Location:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos/platforms/thegent/src/thegent/utils/routing_impl/`
 
 ```
 routing_impl/
@@ -610,7 +610,7 @@ routing_impl/
 
 ### Cliproxy Adapter
 
-**Location:** `/Users/kooshapari/CodeProjects/Phenotype/repos/platforms/thegent/src/thegent/cliproxy_adapter.py` (1,268 LOC)
+**Location:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos/platforms/thegent/src/thegent/cliproxy_adapter.py` (1,268 LOC)
 
 **Responsibilities:**
 - HTTP/WebSocket gateway

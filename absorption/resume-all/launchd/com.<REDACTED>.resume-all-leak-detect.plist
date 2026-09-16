@@ -3,31 +3,26 @@
 <plist version="1.0">
 <dict>
   <key>Label</key>
-  <string>com.kooshapari.resume-all-dr-monthly</string>
+  <string>com.<REDACTED>.resume-all-leak-detect</string>
   <key>ProgramArguments</key>
   <array>
     <string>/bin/zsh</string>
-    <string>/Users/kooshapari/bin/dr-drill-monthly</string>
+    <string>/Users/<REDACTED>/bin/leak-detect-wrapper</string>
   </array>
   <key>RunAtLoad</key>
-  <false/>
-  <key>StartCalendarInterval</key>
-  <dict>
-    <key>Day</key>
-    <integer>1</integer>
-    <key>Hour</key>
-    <integer>3</integer>
-    <key>Minute</key>
-    <integer>0</integer>
-  </dict>
+  <true/>
+  <key>StartInterval</key>
+  <integer>30</integer>
   <key>WorkingDirectory</key>
-  <string>/Users/kooshapari</string>
+  <string>/Users/<REDACTED></string>
   <key>EnvironmentVariables</key>
   <dict>
     <key>HOME</key>
-    <string>/Users/kooshapari</string>
+    <string>/Users/<REDACTED></string>
     <key>PATH</key>
-    <string>/opt/homebrew/bin:/Users/kooshapari/.cargo/bin:/Users/kooshapari/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+    <string>/opt/homebrew/bin:/Users/<REDACTED>/.cargo/bin:/Users/<REDACTED>/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+    <key>PYTHONUNBUFFERED</key>
+    <string>1</string>
     <key>TMPDIR</key>
     <string>/tmp</string>
     <key>LANG</key>
@@ -36,10 +31,12 @@
     <string>C</string>
   </dict>
   <key>StandardOutPath</key>
-  <string>/Users/kooshapari/Library/Logs/resume-all/dr-monthly.out.log</string>
+  <string>/Users/<REDACTED>/Library/Logs/resume-all/leak-detect.out.log</string>
   <key>StandardErrorPath</key>
-  <string>/Users/kooshapari/Library/Logs/resume-all/dr-monthly.err.log</string>
+  <string>/Users/<REDACTED>/Library/Logs/resume-all/leak-detect.err.log</string>
   <key>ProcessType</key>
   <string>Background</string>
+  <key>ThrottleInterval</key>
+  <integer>10</integer>
 </dict>
 </plist>

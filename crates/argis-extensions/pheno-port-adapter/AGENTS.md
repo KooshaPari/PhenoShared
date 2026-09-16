@@ -80,7 +80,7 @@ cargo fmt --all -- --check
 - Pattern contract: `docs/adr/2026-06-18/ADR-038-hexagonal-port-adapter-l4-policy.md`.
 - Quality bar: `docs/adr/2026-06-18/ADR-042-substrate-quality-bar.md`.
 - Coverage gates: `docs/adr/2026-06-18/ADR-040-test-coverage-gates-per-tier.md`.
-- CI templates: `KooshaPari/pheno-ci-templates`.
+- CI templates: `<REDACTED>/pheno-ci-templates`.
 
 ## See also
 

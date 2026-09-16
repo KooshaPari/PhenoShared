@@ -7,7 +7,7 @@
 **Total FRs:** 38
 
 Requirements trace to PRD epics using the format `Traces to: E{n}.{m}`.
-Source references point to files in this repo or the upstream `KooshaPari/colab` fork.
+Source references point to files in this repo or the upstream `<REDACTED>/colab` fork.
 
 ---
 
@@ -19,7 +19,7 @@ Source references point to files in this repo or the upstream `KooshaPari/colab`
 **Source:** `UPSTREAM_SYNC.md`
 
 ### FR-SYNC-002: Extension Directory Isolation
-**SHALL** place all Phenotype-specific source code exclusively under `src/` and never modify upstream files in `app/`, `src/main/`, `src/renderers/`, or `src/pty/` of the `KooshaPari/colab` fork.
+**SHALL** place all Phenotype-specific source code exclusively under `src/` and never modify upstream files in `app/`, `src/main/`, `src/renderers/`, or `src/pty/` of the `<REDACTED>/colab` fork.
 **Traces to:** E1.2
 **Source:** `src/` directory structure
 

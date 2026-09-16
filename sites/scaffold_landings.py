@@ -17,7 +17,7 @@ import sys
 SITES_DIR = os.path.dirname(os.path.abspath(__file__))
 TEMPLATE_ASTRO = os.path.join(SITES_DIR, "..", "templates", "landing", "index.astro")
 
-# All active public repos on KooshaPari account
+# All active public repos on <REDACTED> account
 # Format: (slug, name, domain, description, tier, language, features, color)
 REPOS = [
     # --- Primary repos (active development) ---
@@ -164,15 +164,15 @@ def generate_landing(slug, name, domain, description, tier, language, features, 
         "color": color,
         "description": description,
         "tier": tier,
-        "repo": f"KooshaPari/{name}",
+        "repo": f"<REDACTED>/{name}",
         "language": language,
         "license": "MIT",
         "status": "active",
         "features": features,
         "links": {
-            "github": f"https://github.com/KooshaPari/{name}",
+            "github": f"https://github.com/<REDACTED>/{name}",
             "docs": f"https://{domain}/docs",
-            "releases": f"https://github.com/KooshaPari/{name}/releases"
+            "releases": f"https://github.com/<REDACTED>/{name}/releases"
         }
     }
     with open(os.path.join(data_dir, "config.json"), "w") as f:

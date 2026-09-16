@@ -1,11 +1,11 @@
 # forge3-bridge MCP server
 
-Bridge to the [Forge Agent SDK](https://github.com/KooshaPari/forge3) (the local `forge3`
+Bridge to the [Forge Agent SDK](https://github.com/<REDACTED>/forge3) (the local `forge3`
 binary). Wraps the forge3 JSON-RPC 2.0 surface (over stdio or `ws://127.0.0.1:9753`)
 as MCP tools so any MCP-aware client (Codex, Claude Desktop, Cursor, etc.) can call into
 the Forge Agent SDK without spawning their own copy.
 
-Framework: [PhenoFastMCP](https://github.com/KooshaPari/PhenoFastMCP) / fastmcp 3.4.2+.
+Framework: [PhenoFastMCP](https://github.com/<REDACTED>/PhenoFastMCP) / fastmcp 3.4.2+.
 
 ## Tools exposed (15 total)
 
@@ -59,7 +59,7 @@ Add to `~/.config/claude-desktop/config.json` (or equivalent MCP config):
         "/abs/path/to/PhenoMCPServers/servers/forge3-bridge/forge3_bridge_server.py"
       ],
       "env": {
-        "FORGE3_BIN": "/Users/kooshapari/.cargo/bin/forge3",
+        "FORGE3_BIN": "/Users/<REDACTED>/.cargo/bin/forge3",
         "FORGE3_WS": "ws://127.0.0.1:9753"
       }
     }

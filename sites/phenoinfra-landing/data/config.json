@@ -6,7 +6,7 @@
   "color": "#8b5cf6",
   "description": "Compute mesh infrastructure-as-code: OCI + Cloudflare + GCP + AWS + Vercel with ADRs, specs, and runbooks.",
   "tier": 1,
-  "repo": "KooshaPari/PhenoInfra",
+  "repo": "<REDACTED>/PhenoInfra",
   "language": "Rust / TOML / YAML",
   "license": "MIT",
   "status": "active",
@@ -17,8 +17,8 @@
     "Vercel auto-deploy"
   ],
   "links": {
-    "github": "https://github.com/KooshaPari/PhenoInfra",
+    "github": "https://github.com/<REDACTED>/PhenoInfra",
     "docs": "https://phenoinfra.phenotype.space/docs",
-    "releases": "https://github.com/KooshaPari/PhenoInfra/releases"
+    "releases": "https://github.com/<REDACTED>/PhenoInfra/releases"
   }
 }

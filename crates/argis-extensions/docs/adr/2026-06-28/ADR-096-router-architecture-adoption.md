@@ -13,7 +13,7 @@ Phenotype-owned decision layer (`phenotype-router`).
 
 Since then:
 - `phenotype-router` has been bootstrapped as a Rust crate on
-  `KooshaPari/phenotype-router` with full governance envelope:
+  `<REDACTED>/phenotype-router` with full governance envelope:
   - `src/` — core router, types, selector/plugin/fallback interfaces
   - `tests/` — unit + integration test suites
   - `benches/` — Go benchmark harness
@@ -51,5 +51,5 @@ Adopt Option B as the canonical router architecture:
 - ADR-050: Router rebuild (2026-06-20)
 - ADR-051: Bifrost as library (Proposed)
 - ADR-052: Plugin SDK spec (Proposed)
-- `KooshaPari/phenotype-router` — canonical crate
+- `<REDACTED>/phenotype-router` — canonical crate
 - `plans/2026-06-28-v53-execution.md` — v53 plan

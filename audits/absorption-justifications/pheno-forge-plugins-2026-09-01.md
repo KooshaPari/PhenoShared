@@ -72,4 +72,4 @@ Estimated effort: 3 hours (6 plugins × ~30 min each for layout adaptation).
 - target row: `repo-pheno-forge-plugins` (registry v1.6.83, target CORRECTED)
 - planned target: `phenotype-tooling/.forgecode/plugins/pheno-{supermemory,tracing,letta,mem0,config,cognee}/`
 - existing sibling: `phenotype-tooling/.forgecode/plugins/elicitate/`
-- source repo: `KooshaPari/pheno-forge-plugins` (archived)
+- source repo: `<REDACTED>/pheno-forge-plugins` (archived)

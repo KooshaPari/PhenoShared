@@ -12,7 +12,7 @@ Phenotype required customisations to `blackboardsh/colab` (workflow specs, Agile
 extension hooks) but needed to stay close to upstream to receive bug fixes and features.
 
 ### Decision
-Fork `blackboardsh/colab` as `KooshaPari/colab`. Store all Phenotype-specific customisations in
+Fork `blackboardsh/colab` as `<REDACTED>/colab`. Store all Phenotype-specific customisations in
 `phenotype-colab-extensions` as a separate repo. Customisations are applied via a documented
 sync process rather than direct commits to the fork's feature branches.
 

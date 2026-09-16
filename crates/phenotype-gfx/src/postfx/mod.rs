@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT OR Apache-2.0
-// SPDX-FileCopyrightText: 2026 KooshaPari <kooshapari@gmail.com>
+// SPDX-FileCopyrightText: 2026 <REDACTED> <<REDACTED>@gmail.com>
 
 //! Post-processing pipeline: SSAO, SSGI, Bloom, ACES, Vignette, CA, LUT.
 //!
@@ -25,7 +25,7 @@
 //!
 //! ## Reference
 //!
-//! Upstream: <https://github.com/KooshaPari/phenotype-postfx>.
+//! Upstream: <https://github.com/<REDACTED>/phenotype-postfx>.
 
 pub mod bloom_pass;
 pub mod error;

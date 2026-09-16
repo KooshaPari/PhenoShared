@@ -4,13 +4,13 @@ role: absorbed
 status: archived
 last_boundary_review: 2026-07-17
 review_cadence: 30d
-absorbed_into: KooshaPari/pheno
+absorbed_into: <REDACTED>/pheno
 absorbed_on: 2026-07-17
 ---
 
 # Boundary — PhenoPlugins (absorbed)
 
-PhenoPlugins has been absorbed into `KooshaPari/pheno` as
+PhenoPlugins has been absorbed into `<REDACTED>/pheno` as
 `crates/pheno-plugins-{core,git,sqlite,vessel,examples}/`.
 
 The plugin system is now exposed as workspace members of the

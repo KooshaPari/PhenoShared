@@ -11,7 +11,7 @@
   "boundary": "research-experimentation",
   "stack": "mixed",
   "v0": "0.1.0",
-  "gh_url": "https://github.com/KooshaPari/pheno-research",
+  "gh_url": "https://github.com/<REDACTED>/pheno-research",
   "default_branch": "main",
   "remote_default_sha_at_audit": "be5da947",
   "wave": "J-13source-audit",

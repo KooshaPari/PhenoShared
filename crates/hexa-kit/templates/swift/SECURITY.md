@@ -4,7 +4,7 @@
 
 **Please do not report security vulnerabilities through public GitHub issues.**
 
-Instead, email security concerns to: **security@kooshapari.com**
+Instead, email security concerns to: **security@<REDACTED>.com**
 
 We will acknowledge receipt within 48 hours and provide a more detailed response within 7 days indicating next steps.
 

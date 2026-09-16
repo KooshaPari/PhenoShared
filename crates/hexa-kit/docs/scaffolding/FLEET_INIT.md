@@ -4,7 +4,7 @@
 **Date:** 2026-06-16  
 **Command:** `hexakit init`  
 **Owner:** HexaKit (scaffolding layer)  
-**Related:** [DISPOSITION.md](../boundary/DISPOSITION.md), [SCAFFOLDING_JOURNEYS.md](../SCAFFOLDING_JOURNEYS.md), [STACK_POLICY](https://github.com/KooshaPari/phenotype-registry/blob/main/docs/rationalization/STACK_POLICY.md), [DOMAIN_ROLES](https://github.com/KooshaPari/phenotype-registry/blob/main/docs/rationalization/DOMAIN_ROLES.md)
+**Related:** [DISPOSITION.md](../boundary/DISPOSITION.md), [SCAFFOLDING_JOURNEYS.md](../SCAFFOLDING_JOURNEYS.md), [STACK_POLICY](https://github.com/<REDACTED>/phenotype-registry/blob/main/docs/rationalization/STACK_POLICY.md), [DOMAIN_ROLES](https://github.com/<REDACTED>/phenotype-registry/blob/main/docs/rationalization/DOMAIN_ROLES.md)
 
 ---
 
@@ -22,10 +22,10 @@ The generator **stamps scaffolding only**. It wires imports, boundaries, CI, hoo
 
 | Artifact | Source SSOT | Notes |
 | --- | --- | --- |
-| **Git hooks** (`.githooks/`) | [TestingKit](https://github.com/KooshaPari/TestingKit) | Pre-commit / pre-push / spec-validator hooks; installed via `git config core.hooksPath .githooks` |
-| **CI workflows** (`.github/workflows/`) | [KooshaPari/.github](https://github.com/KooshaPari/.github) | Reusable-workflow references or workflow-template starters from `workflow-templates/` |
-| **Community defaults** | KooshaPari/.github | `CONTRIBUTING.md`, `CODE_OF_CONDUCT.md`, `pull_request_template.md`, `ISSUE_TEMPLATE/` when absent locally |
-| **`BOUNDARY.md`** | Domain role picker | Generated from [DOMAIN_ROLES](https://github.com/KooshaPari/phenotype-registry/blob/main/docs/rationalization/DOMAIN_ROLES.md) row + stack choice |
+| **Git hooks** (`.githooks/`) | [TestingKit](https://github.com/<REDACTED>/TestingKit) | Pre-commit / pre-push / spec-validator hooks; installed via `git config core.hooksPath .githooks` |
+| **CI workflows** (`.github/workflows/`) | [<REDACTED>/.github](https://github.com/<REDACTED>/.github) | Reusable-workflow references or workflow-template starters from `workflow-templates/` |
+| **Community defaults** | <REDACTED>/.github | `CONTRIBUTING.md`, `CODE_OF_CONDUCT.md`, `pull_request_template.md`, `ISSUE_TEMPLATE/` when absent locally |
+| **`BOUNDARY.md`** | Domain role picker | Generated from [DOMAIN_ROLES](https://github.com/<REDACTED>/phenotype-registry/blob/main/docs/rationalization/DOMAIN_ROLES.md) row + stack choice |
 | **Infra-generic config** | HexaKit templates | `.template.*` sources → `.editorconfig`, `.pre-commit-config.yaml`, `Taskfile.yml`, `.mise.toml`, `Brewfile`, `.devcontainer/` |
 | **Language scaffold** | HexaKit `templates/<lang>/` | Core-tier default; edge tier requires `--justify` (see below) |
 | **phenoSDK extras** | phenoSDK manifest | Opt-in domain packages listed in `phenosdk.manifest.toml` — not a monolithic lang SDK |
@@ -75,7 +75,7 @@ The picker reads a cached copy of `DOMAIN_ROLES.md` (bundled in HexaKit, refresh
 
 ## Language template selection (STACK_POLICY)
 
-Template choice follows [STACK_POLICY](https://github.com/KooshaPari/phenotype-registry/blob/main/docs/rationalization/STACK_POLICY.md).
+Template choice follows [STACK_POLICY](https://github.com/<REDACTED>/phenotype-registry/blob/main/docs/rationalization/STACK_POLICY.md).
 
 ### Core tier (default, no extra flags)
 
@@ -102,7 +102,7 @@ When `--lang` is omitted, `init` defaults to **Rust** for domain repos unless th
 $ hexakit init --lang go --domain sharecli
 Error: Go is edge-tier per STACK_POLICY.
 Provide --justify with scope, reason, exit criteria, and optional ADR link.
-See: https://github.com/KooshaPari/phenotype-registry/blob/main/docs/rationalization/STACK_POLICY.md
+See: https://github.com/<REDACTED>/phenotype-registry/blob/main/docs/rationalization/STACK_POLICY.md
 ```
 
 When `--justify` is supplied, `init` embeds the justification block in `BOUNDARY.md` using the STACK_POLICY template:
@@ -129,18 +129,18 @@ domain_role = "my-service"
 
 [[extras]]
 package = "pheno-mcp"
-repo = "KooshaPari/McpKit"
+repo = "<REDACTED>/McpKit"
 install = "cargo add mcp-kit"  # or uv/pnpm per edge binding
 
 [[extras]]
 package = "pheno-observability"
-repo = "KooshaPari/PhenoObservability"
+repo = "<REDACTED>/PhenoObservability"
 install = "cargo add pheno-observability"
 ```
 
 **Rules:**
 
-- phenoSDK is a **dynamic extras manifest** — it lists opt-in packages; it does not own domain boundaries ([STACK_POLICY §phenoSDK](https://github.com/KooshaPari/phenotype-registry/blob/main/docs/rationalization/STACK_POLICY.md)).
+- phenoSDK is a **dynamic extras manifest** — it lists opt-in packages; it does not own domain boundaries ([STACK_POLICY §phenoSDK](https://github.com/<REDACTED>/phenotype-registry/blob/main/docs/rationalization/STACK_POLICY.md)).
 - `init` writes the manifest skeleton and dependency install hints; it does **not** copy package source.
 - Language-specific bindings at the edge are recorded as `install` hints, not as vendored trees.
 
@@ -155,7 +155,7 @@ flowchart TD
   C --> D[Language template render]
   B --> E[BOUNDARY.md generate]
   A --> F[TestingKit hooks stamp]
-  A --> G[KooshaPari/.github CI stamp]
+  A --> G[<REDACTED>/.github CI stamp]
   B --> H{phenoSDK extras?}
   H -->|yes| I[phenosdk.manifest.toml]
   H -->|no| J[skip manifest]
@@ -186,7 +186,7 @@ Flags:
   --adr string          Link to PhenoSpecs ADR (optional)
   --extras strings      Comma-separated phenoSDK extra package ids
   --no-hooks            Skip TestingKit hook stamp
-  --no-ci               Skip KooshaPari/.github workflow stamp
+  --no-ci               Skip <REDACTED>/.github workflow stamp
   --dry-run             Print planned files without writing
   --force               Overwrite existing stamped files
 
@@ -224,7 +224,7 @@ Examples:
 | --- | --- |
 | **P0 (this doc)** | Spec + CLI stub in docs |
 | **P1** | Domain role picker + `BOUNDARY.md` generator |
-| **P2** | TestingKit hook + KooshaPari/.github workflow stamper |
+| **P2** | TestingKit hook + <REDACTED>/.github workflow stamper |
 | **P3** | STACK_POLICY lang gate + `--justify` enforcement |
 | **P4** | `phenosdk.manifest.toml` generator + registry sync |
 
@@ -235,7 +235,7 @@ Examples:
 1. `init` output tree contains no files copied from HexaKit `crates/` or `python/pheno-*`.
 2. Edge-tier language without `--justify` exits non-zero with STACK_POLICY link.
 3. Generated `BOUNDARY.md` matches selected DOMAIN_ROLES row and records edge justification when applicable.
-4. CI workflows reference `KooshaPari/.github` reusable workflows, not inlined copies of org workflows.
+4. CI workflows reference `<REDACTED>/.github` reusable workflows, not inlined copies of org workflows.
 5. phenoSDK extras appear only as manifest entries + install hints, never as vendored SDK trees.
 
 ---
@@ -245,6 +245,6 @@ Examples:
 - [DISPOSITION.md](../boundary/DISPOSITION.md) — HexaKit module disposition; scaffolding-only end-state
 - [BOUNDARY.md](../../BOUNDARY.md) — HexaKit's own boundary lock
 - [SCAFFOLDING_JOURNEYS.md](../SCAFFOLDING_JOURNEYS.md) — template usage journeys (`hexakit new`)
-- [STACK_POLICY](https://github.com/KooshaPari/phenotype-registry/blob/main/docs/rationalization/STACK_POLICY.md) — core vs edge language tiers
-- [DOMAIN_ROLES](https://github.com/KooshaPari/phenotype-registry/blob/main/docs/rationalization/DOMAIN_ROLES.md) — domain role picker SSOT
-- [KooshaPari/.github](https://github.com/KooshaPari/.github) — org workflow and community file SSOT
+- [STACK_POLICY](https://github.com/<REDACTED>/phenotype-registry/blob/main/docs/rationalization/STACK_POLICY.md) — core vs edge language tiers
+- [DOMAIN_ROLES](https://github.com/<REDACTED>/phenotype-registry/blob/main/docs/rationalization/DOMAIN_ROLES.md) — domain role picker SSOT
+- [<REDACTED>/.github](https://github.com/<REDACTED>/.github) — org workflow and community file SSOT

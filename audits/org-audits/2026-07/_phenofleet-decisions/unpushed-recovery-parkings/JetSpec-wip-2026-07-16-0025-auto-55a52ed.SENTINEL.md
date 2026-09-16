@@ -9,14 +9,14 @@
 
 ## Why this was parked
 The remote repository is archived (read-only) or is a 3rd-party fork without write
-permission for KooshaPari. Pushing to the original remote would have failed and
+permission for <REDACTED>. Pushing to the original remote would have failed and
 possibly corrupted local refs, so the commit content was preserved here as a
 Git bundle.
 
 ## Restore commands
 
 ```bash
-# From inside /Users/kooshapari/CodeProjects/Phenotype/repos/JetSpec
+# From inside /Users/<REDACTED>/CodeProjects/Phenotype/repos/JetSpec
 # Verify the bundle first:
 git bundle verify _phenofleet-decisions/unpushed-recovery-parkings/JetSpec-wip-2026-07-16-0025-auto-55a52ed.bundle
 

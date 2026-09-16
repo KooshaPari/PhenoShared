@@ -1,7 +1,7 @@
 # PhenoRuntime — Absorption Justification
 
 **Status:** QUEUED 2026-07-17 (batch3 refresh)
-**Source:** `KooshaPari/PhenoRuntime` (Rust)
+**Source:** `<REDACTED>/PhenoRuntime` (Rust)
 **Target:** phenotype-legacy-collection at `docs/boundary/placeholder-repos.md`
 **Disposition:** ABSORB
 
@@ -18,13 +18,13 @@
 ## Restore procedure
 
 ```sh
-gh repo unarchive KooshaPari/PhenoRuntime
-cd /Users/kooshapari/CodeProjects/Phenotype/repos/phenotype-registry
+gh repo unarchive <REDACTED>/PhenoRuntime
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos/phenotype-registry
 # Edit registry/disposition-index.json: change fsm from "absorbed" back to "active"
 # Restore projects/PhenoRuntime.json from git history (revert to queued status)
 ```
 
 ## Cross-references
 
-- Disposition row: search `"KooshaPari/PhenoRuntime"` in `registry/disposition-index.json`
+- Disposition row: search `"<REDACTED>/PhenoRuntime"` in `registry/disposition-index.json`
 - Target repo path: `docs/boundary/placeholder-repos.md`

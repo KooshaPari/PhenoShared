@@ -1,7 +1,7 @@
 # ADR-032 — Worklog Schema: Both Stay (2026-06-18)
 
 **Status:** Accepted
-**Deciders:** @KooshaPari (orchestrator)
+**Deciders:** @<REDACTED> (orchestrator)
 **Date:** 2026-06-18
 **Replaces:** T11 worklog-schema decision (open since 2026-06-17)
 

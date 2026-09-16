@@ -31,7 +31,7 @@ generate(
     summary="Generate the llms.txt index file for any Python project.",
     sections=[
         Section("Docs",    [("README",  "https://example.com/README.md")]),
-        Section("Source",  [("Repo",    "https://github.com/KooshaPari/phenotype-apps")]),
+        Section("Source",  [("Repo",    "https://github.com/<REDACTED>/phenotype-apps")]),
     ],
     out_path="llms.txt",
 )

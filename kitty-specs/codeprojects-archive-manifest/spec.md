@@ -1,7 +1,7 @@
 # CodeProjects/archive manifest
 
 ## Goal
-Reduce orphan friction under `/Users/kooshapari/CodeProjects/archive`: README or MANIFEST for each top-level tree; document zip blobs.
+Reduce orphan friction under `/Users/<REDACTED>/CodeProjects/archive`: README or MANIFEST for each top-level tree; document zip blobs.
 
 ## Acceptance
 - `archive/MANIFEST.md` at CodeProjects root or `archive/README.md` listing directories, size tier, git yes/no, suggested disposition.

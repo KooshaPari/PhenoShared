@@ -1,7 +1,7 @@
 # MANIFEST — pheno-drift-detector absorbed content
 
 **Absorption date:** 2026-06-19
-**Source repo:** KooshaPari/pheno-drift-detector (archived 2026-06-19 08:37:56 UTC, L5-112)
+**Source repo:** <REDACTED>/pheno-drift-detector (archived 2026-06-19 08:37:56 UTC, L5-112)
 **Source branch:** chore/l5-111-community-tooling-2026-06-19 @ 3b23892
 
 All files in `audits/drift-detector/` (excluding MANIFEST.md and the README's 5-line migration header) are byte-identical copies of the source.

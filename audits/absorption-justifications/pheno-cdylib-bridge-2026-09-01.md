@@ -23,9 +23,9 @@
 ## Why not merge elsewhere
 
 We deliberately did NOT target:
-- `KooshaPari/phenotype-go-sdk` — Go SDK is a consumer, not the FFI host.
-- `KooshaPari/phenotype-python-sdk` — same.
-- `KooshaPari/pheno/runtime-config` — config layer, not the FFI layer.
+- `<REDACTED>/phenotype-go-sdk` — Go SDK is a consumer, not the FFI host.
+- `<REDACTED>/phenotype-python-sdk` — same.
+- `<REDACTED>/pheno/runtime-config` — config layer, not the FFI layer.
 
 ## State captured
 
@@ -42,7 +42,7 @@ We deliberately did NOT target:
 - Squash (PR #282) — full file content present, source SHA preserved in merge
   commit body but not in tree
 - Verified on remote HEAD via
-  `gh api repos/KooshaPari/pheno/contents/crates/pheno-cdylib-bridge`
+  `gh api repos/<REDACTED>/pheno/contents/crates/pheno-cdylib-bridge`
 
 ## Forward-looking note
 

@@ -60,7 +60,7 @@ promotion-eligible.
 Pytest invocation (exact, reproducible):
 
 ```sh
-cd /Users/kooshapari/CodeProjects/Phenotype/repos/pheno-harness \
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos/pheno-harness \
   && source .venv/bin/activate \
   && python -m pytest \
        tests/test_desktop_lane_config.py \

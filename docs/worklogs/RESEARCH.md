@@ -2565,7 +2565,7 @@ tracing_subscriber::registry()
 
 ### DEPRECATED `src/` Directory — **CRITICAL (DELETE)**
 
-**Path:** `/Users/kooshapari/CodeProjects/Phenotype/repos/src/`
+**Path:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos/src/`
 
 | File | Lines | Status |
 |------|-------|--------|
@@ -2585,7 +2585,7 @@ tracing_subscriber::registry()
 
 ### Empty `repos/` Directory — **CRITICAL (DELETE)**
 
-**Path:** `/Users/kooshapari/CodeProjects/Phenotype/repos/repos/`
+**Path:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos/repos/`
 
 | Metric | Value |
 |--------|-------|

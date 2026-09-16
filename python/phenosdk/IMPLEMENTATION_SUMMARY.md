@@ -11,7 +11,7 @@ Successfully completed sanitization of ATOMS-specific identifiers from phenoSDK 
 ## Changes Made
 
 ### 1. pyproject.toml
-- **Changed**: Author from `ATOMS-PHENO Team <atoms@atoms.tech>` to `Phenotype Team <info@kooshapari.com>`
+- **Changed**: Author from `ATOMS-PHENO Team <atoms@atoms.tech>` to `Phenotype Team <info@<REDACTED>.com>`
 - **Changed**: Description from `ATOMS-PHENO SDK for infrastructure migration and operations` to `Phenotype SDK for infrastructure and operations`
 - **Status**: ✅ Sanitized
 
@@ -149,7 +149,7 @@ tests/test_entry_points.py::TestFunctionalityPreserved::test_configuration_opera
 **After (Generic):**
 - Class names: `MCPEntryPoint`, `MCPCLI`, `MCPConfiguration`
 - Configurable endpoints via `set_endpoint_url()` and `add_endpoint()`
-- Author: `Phenotype Team <info@kooshapari.com>`
+- Author: `Phenotype Team <info@<REDACTED>.com>`
 - Description: `Phenotype SDK for infrastructure and operations`
 - Risk assessment doc removed (project-specific)
 

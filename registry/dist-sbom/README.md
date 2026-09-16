@@ -1,16 +1,16 @@
-# dist-sbom/ — SBOM Artifacts Cache (KooshaPari/dist absorbed)
+# dist-sbom/ — SBOM Artifacts Cache (<REDACTED>/dist absorbed)
 
 This directory houses SBOM artifacts that were absorbed from the
-now-archived KooshaPari/dist repository (47 KB of SBOM cache).
+now-archived <REDACTED>/dist repository (47 KB of SBOM cache).
 
 ## Source
 
 | Field | Value |
 | --- | --- |
-| Source repo | KooshaPari/dist |
+| Source repo | <REDACTED>/dist |
 | Source size | 47 KB |
 | Source archived on | 2026-07-17 |
-| Absorption target | KooshaPari/phenotype-registry (this repo) |
+| Absorption target | <REDACTED>/phenotype-registry (this repo) |
 | Registry row | repo-dist-sbom |
 | Registry version | 1.6.29 (2026-07-17) |
 

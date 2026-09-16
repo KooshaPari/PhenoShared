@@ -2,23 +2,23 @@
 
 **Audit date:** 2026-06-18 (created from scratch, this is the first Block-C pass)
 **Auditor:** L5-113 (audit-sync mission)
-**Tracker:** [phenotype-registry#75 (SSOT)](https://github.com/KooshaPari/phenotype-registry/pull/75) — strategic merge #1 (GFX SDK)
-**Source repo:** `KooshaPari/phenotype-postfx`
-**Target repo:** `KooshaPari/phenotype-gfx` (PR #10, commit `d68d42c`)
-**Verdict at a glance:** **SUPERSEDE → `KooshaPari/phenotype-gfx` via PR #10 (commit `d68d42c`).** This is a Unity URP / BRP post-processing stack (Bloom, SSAO, ACES, Color Grading LUT, Chromatic Aberration, Vignette, Screen-Space AO/GI) shipped as a C# package with 9 HLSL/.shader files and 6 hexagonal ports. C# core is ported to Rust and absorbed into `phenotype-gfx/src/postfx/` (per ADR-004, single Rust core + thin FFI edges). Source repo `KooshaPari/phenotype-postfx` is **to be archived** once PR #10 merges; no downgrade path to preserve.
+**Tracker:** [phenotype-registry#75 (SSOT)](https://github.com/<REDACTED>/phenotype-registry/pull/75) — strategic merge #1 (GFX SDK)
+**Source repo:** `<REDACTED>/phenotype-postfx`
+**Target repo:** `<REDACTED>/phenotype-gfx` (PR #10, commit `d68d42c`)
+**Verdict at a glance:** **SUPERSEDE → `<REDACTED>/phenotype-gfx` via PR #10 (commit `d68d42c`).** This is a Unity URP / BRP post-processing stack (Bloom, SSAO, ACES, Color Grading LUT, Chromatic Aberration, Vignette, Screen-Space AO/GI) shipped as a C# package with 9 HLSL/.shader files and 6 hexagonal ports. C# core is ported to Rust and absorbed into `phenotype-gfx/src/postfx/` (per ADR-004, single Rust core + thin FFI edges). Source repo `<REDACTED>/phenotype-postfx` is **to be archived** once PR #10 merges; no downgrade path to preserve.
 
-**Long-term home:** <https://github.com/KooshaPari/phenotype-gfx> (PR #10)
+**Long-term home:** <https://github.com/<REDACTED>/phenotype-gfx> (PR #10)
 
 ---
 
 ## Re-issued verdict (2026-06-18, ADR-004 + ADR-031)
 
-This is the **first** Block-C audit for `phenotype-postfx`; no prior verdict exists. The verdict is **SUPERSEDE → `KooshaPari/phenotype-gfx` via PR #10 (commit `d68d42c`)**. ADR-004 (single Rust core + thin FFI edges) and ADR-031 (absorb, do not coexist) govern.
+This is the **first** Block-C audit for `phenotype-postfx`; no prior verdict exists. The verdict is **SUPERSEDE → `<REDACTED>/phenotype-gfx` via PR #10 (commit `d68d42c`)**. ADR-004 (single Rust core + thin FFI edges) and ADR-031 (absorb, do not coexist) govern.
 
 **References:**
 - `docs/adr/ADR-004-single-core-ffi-edges.md` — single Rust core + thin FFI edges.
 - `docs/adr/ADR-031-configra-absorb.md` — sibling "absorb, do not coexist" ADR.
-- PR: <https://github.com/KooshaPari/phenotype-gfx/pull/10>
+- PR: <https://github.com/<REDACTED>/phenotype-gfx/pull/10>
 - Commit: `d68d42c` — `feat(gfx): port postfx C# + 8 HLSL shaders to Rust (L5-112, ADR-004)`
 
 **Migration summary:** 5,426 lines absorbed (3,498 in `Runtime/` C# + shaders + 1,928 in `tests/` including stubs). Of that, ~3,498 of source (11 .cs + 9 .shader files) maps directly to `phenotype-gfx/src/postfx/*.rs` and `phenotype-gfx/unity/postfx-shaders/*.shader`. Test files ported to the Rust test harness.
@@ -234,7 +234,7 @@ domain.
 | `CODE_OF_CONDUCT.md` | Present | Standard. |
 | `SECURITY.md` | Present | Standard. |
 | `STATUS.md` | Present | Stale (see finding #22). |
-| `CODEOWNERS` | Present (14 lines) | `@KooshaPari`. |
+| `CODEOWNERS` | Present (14 lines) | `@<REDACTED>`. |
 | `LICENSE` | MIT | Added 2026-06-08. |
 | `.github/dependabot.yml` | Present | github-actions + nuget (CI blocked). |
 | `.github/workflows/ci.yml` | Present | dotnet build + test; billing-blocked. |
@@ -274,7 +274,7 @@ PR #10; 5 remain open** (F6, F7, F14) or are deferred to the source archive
 
 ## 8. Decision
 
-**SUPERSEDE → `KooshaPari/phenotype-gfx` via PR #10 (commit `d68d42c`).**
+**SUPERSEDE → `<REDACTED>/phenotype-gfx` via PR #10 (commit `d68d42c`).**
 
 The umbrella-sister layout is replaced by the single Rust core + thin FFI
 edges pattern (ADR-004). The C# + 9 HLSL/.shader files are ported to Rust
@@ -283,7 +283,7 @@ post_stack.rs, rendering.rs, shaders.rs, ssao_pass.rs, ports/urp_render_graph.rs
 and `phenotype-gfx/unity/postfx-shaders/*.shader` (9 shader files preserved
 verbatim — they are HLSL, not language-specific).
 
-The source repo `KooshaPari/phenotype-postfx` is **to be archived** once
+The source repo `<REDACTED>/phenotype-postfx` is **to be archived** once
 PR #10 merges. There is no production consumer; the migration is
 unilateral.
 
@@ -294,10 +294,10 @@ unilateral.
 2. **Verify:** `cargo test -p phenotype-gfx` runs all 311 unit tests green
    (the postfx port tests are part of the 311).
 3. **Merge:** `feat/port-sister-repos-2026-06-18` → `main` on
-   `KooshaPari/phenotype-gfx`.
-4. **Archive source:** `gh repo archive KooshaPari/phenotype-postfx --confirm`
+   `<REDACTED>/phenotype-gfx`.
+4. **Archive source:** `gh repo archive <REDACTED>/phenotype-postfx --confirm`
    (requires `archive` scope on the `gh` token; Dmouse92 token does not have
-   it, but KooshaPari token does).
+   it, but <REDACTED> token does).
 5. **Manual delete (optional):** GitHub UI → Settings → General → Danger Zone
    → Delete this repository. 90-day GitHub retention applies.
 
@@ -318,16 +318,16 @@ unilateral.
 ## 11. Sign-off
 
 - **Auditor:** L5-113 (audit-sync mission, 2026-06-18)
-- **Source repo:** `KooshaPari/phenotype-postfx` (to be archived)
-- **Target repo:** `KooshaPari/phenotype-gfx` (PR #10)
-- **Verdict:** **SUPERSEDE → `KooshaPari/phenotype-gfx` via PR #10 (commit `d68d42c`)**
+- **Source repo:** `<REDACTED>/phenotype-postfx` (to be archived)
+- **Target repo:** `<REDACTED>/phenotype-gfx` (PR #10)
+- **Verdict:** **SUPERSEDE → `<REDACTED>/phenotype-gfx` via PR #10 (commit `d68d42c`)**
 - **Findings:** 15 total (7 P0-P1, 5 P2, 3 P3); 10 fixed by PR #10, 5 open
   (F6, F7, F14 deferred to source archive; 2 test-coverage consolidations
   deferred).
-- **Audit doc:** `KooshaPari/phenotype-gfx/findings/2026-06-18-postfx-block-c.md`
+- **Audit doc:** `<REDACTED>/phenotype-gfx/findings/2026-06-18-postfx-block-c.md`
   (this file).
 
 **Durability:** This file lives on the
-`feat/block-c-audit-sync-2026-06-18` branch in `KooshaPari/phenotype-gfx`;
+`feat/block-c-audit-sync-2026-06-18` branch in `<REDACTED>/phenotype-gfx`;
 the merged audit lands on `main` once the PR is merged. The original
 audit (this version) is the durable record per the Block-C durability rule.

@@ -6,12 +6,12 @@ This file governs work inside the `phenotype-water` repository.
 
 `phenotype-water` is a shared Unity water package for Phenotype-org mods targeting Unity / WorldBox. It provides a Gerstner-wave water system with `GerstnerWaveBank`, `FluidMesh`, and `WaterLod` for camera-distance LOD. Designed for net48 Unity builds.
 
-Do not apply parent shelf instructions (e.g. `/Users/kooshapari/CodeProjects/Phenotype/repos/AGENTS.md` or `~/.claude/AGENTS.md`) unless explicitly referenced. Work from this directory and treat paths as local to `phenotype-water`.
+Do not apply parent shelf instructions (e.g. `/Users/<REDACTED>/CodeProjects/Phenotype/repos/AGENTS.md` or `~/.claude/AGENTS.md`) unless explicitly referenced. Work from this directory and treat paths as local to `phenotype-water`.
 
 ## Quick Links
 
 - **Local CLAUDE.md:** Present (`./CLAUDE.md`); this AGENTS.md is the source of truth for cross-cutting rules, CLAUDE.md is the Claude-specific entry point mirroring the McpKit stack template.
-- **Phenotype org governance:** `/Users/kooshapari/CodeProjects/Phenotype/repos/CLAUDE.md` (consult when touching cross-repo contracts).
+- **Phenotype org governance:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos/CLAUDE.md` (consult when touching cross-repo contracts).
 - **Global agent guidance:** `~/.claude/AGENTS.md` (consult for global defaults).
 - **AgilePlus work tracking:** `cd /repos/AgilePlus && agileplus <command>` — required for non-trivial work per the CONTRIBUTING mandate.
 - **Sibling shared packages:** `phenotype-terrain` (in-repo sibling — water is layered on top of the terrain mesh interface); downstream consumers are end-user Phenotype water mods.

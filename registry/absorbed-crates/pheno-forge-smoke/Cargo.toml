@@ -4,7 +4,7 @@ version = "0.1.0"
 edition = "2021"
 license = "Apache-2.0"
 description = "End-to-end smoke test for the 4-PR forgecode improvement stack (ADR-096)"
-repository = "https://github.com/KooshaPari/pheno-forge-smoke"
+repository = "https://github.com/<REDACTED>/pheno-forge-smoke"
 keywords = ["forgecode", "memory", "smoke-test", "phenotype", "cdylib"]
 categories = ["command-line-utilities", "development-tools::testing"]
 

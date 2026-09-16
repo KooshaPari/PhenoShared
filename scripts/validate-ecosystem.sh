@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # validate-ecosystem.sh — Phenotype ecosystem health check
 #
-# For each of the 13 canonical KooshaPari repos, this script:
+# For each of the 13 canonical <REDACTED> repos, this script:
 #   (a) prints the repo name
 #   (b) checks that it is reachable on GitHub via `gh repo view`
 #   (c) checks that the standard meta files exist on the default branch:
@@ -72,7 +72,7 @@ fi
 #   + phenotype-registry itself
 #                                Total: 5 + 5 + 2 + 1 = 13
 
-ORG="KooshaPari"
+ORG="<REDACTED>"
 
 # Format: "DisplayName|repo-slug|role"
 REPOS=(

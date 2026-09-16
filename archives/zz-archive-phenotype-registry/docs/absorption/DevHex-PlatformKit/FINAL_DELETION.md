@@ -21,7 +21,7 @@ DevHex and PlatformKit can be deleted after preservation because their surviving
 | PlatformKit nested devhex module | PlatformKit/go/devhex/pkg/*, tests | Public Go package | implemented | phenotype-go-sdk | packages/platformkit/devhex/* in PR #24 | DONE | Nested module preserved as source evidence and package code | low | none |
 | PlatformKit root product docs | PlatformKit/PRD.md, PLAN.md, CHARTER.md, ADR.md, docs/adr/*, docs/research/* | Docs/spec/ADR | docs-only | phenotype-registry | source-docs/PlatformKit/* | DONE | Source claims preserved in registry; runtime owner is SDK | low-medium; loss of rationale | none |
 | PlatformKit local-only commits | PlatformKit chore/tick26-lift-ahead-20260611 ahead origin/main | Historical commits | branch-only/local-only | phenotype-registry | patches/PlatformKit/local-ahead.patch | DONE | Patchset preserves WIP/governance/ahead state before deletion | medium; loss of local work context | none |
-| Archived remote repo state | gh repo view KooshaPari/DevHex and KooshaPari/PlatformKit archived true | Governance | deprecated | phenotype-registry | this deletion package | INTENTIONALLY_DEPRECATED | Remote was already archived and is now fully covered by SDK/registry evidence | low | delete remote |
+| Archived remote repo state | gh repo view <REDACTED>/DevHex and <REDACTED>/PlatformKit archived true | Governance | deprecated | phenotype-registry | this deletion package | INTENTIONALLY_DEPRECATED | Remote was already archived and is now fully covered by SDK/registry evidence | low | delete remote |
 
 ## Gaps and exceptions
 
@@ -33,4 +33,4 @@ DevHex rebase metadata has no product merit, but the commits reachable from HEAD
 
 ## Final deletion recommendation
 
-DELETE after this registry PR merges. Delete KooshaPari/DevHex and KooshaPari/PlatformKit remotes and remove local clones, including duplicate local Settly handling in a later package if needed.
+DELETE after this registry PR merges. Delete <REDACTED>/DevHex and <REDACTED>/PlatformKit remotes and remove local clones, including duplicate local Settly handling in a later package if needed.

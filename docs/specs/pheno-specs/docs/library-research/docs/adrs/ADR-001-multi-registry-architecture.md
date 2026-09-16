@@ -167,9 +167,9 @@ The hub-and-spoke model provides the best balance of separation and coordination
 
 - Related ADR: ADR-002 (Traceability-First Documentation)
 - Related ADR: ADR-003 (Automated Validation Strategy)
-- PhenoSpecs: https://github.com/KooshaPari/PhenoSpecs
-- PhenoHandbook: https://github.com/KooshaPari/PhenoHandbook
-- HexaKit: https://github.com/KooshaPari/HexaKit
+- PhenoSpecs: https://github.com/<REDACTED>/PhenoSpecs
+- PhenoHandbook: https://github.com/<REDACTED>/PhenoHandbook
+- HexaKit: https://github.com/<REDACTED>/HexaKit
 
 ---
 

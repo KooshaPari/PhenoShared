@@ -8,7 +8,7 @@
 
 ## WP-02: Per-repo fan-out
 **Effort:** M
-- [ ] T004 — Apply to the 8 cloned KooshaPari repos (eco-025) that lack LICENSE.
+- [ ] T004 — Apply to the 8 cloned <REDACTED> repos (eco-025) that lack LICENSE.
 - [ ] T005 — Apply to all active repos that lack SECURITY.md (backfill pass).
 
 ## WP-03: CI gates

@@ -4,7 +4,7 @@ import (
 	"context"
 	"testing"
 
-	"github.com/kooshapari/nanovms/internal/domain"
+	"github.com/<REDACTED>/nanovms/internal/domain"
 )
 
 func TestGenerateID(t *testing.T) {

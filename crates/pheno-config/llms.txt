@@ -5,7 +5,7 @@
 
 ## Location
 
-Source-of-truth repo: `KooshaPari/Configra` (workspace member
+Source-of-truth repo: `<REDACTED>/Configra` (workspace member
 `crates/pheno-config/`). Absorbed 2026-06-18 (ADR-031 follow-up,
 L5-104.7).
 

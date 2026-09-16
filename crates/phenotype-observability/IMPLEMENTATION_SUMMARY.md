@@ -7,7 +7,7 @@ Successfully extracted standardized header types and telemetry structures from b
 ## Deliverables
 
 ### Crate Statistics
-- **Location**: `/Users/kooshapari/Repos/phenotype-infrakit/crates/phenotype-observability/`
+- **Location**: `/Users/<REDACTED>/Repos/phenotype-infrakit/crates/phenotype-observability/`
 - **Total Lines of Code**: 1,362 (excluding tests and documentation)
 - **Modules**: 3 (error, headers, telemetry)
 - **Tests**: 42 unit/integration tests with 100% passing
@@ -291,7 +291,7 @@ The crate is designed for future expansion:
 ## Build Confirmation
 
 ```bash
-cd /Users/kooshapari/Repos/phenotype-infrakit
+cd /Users/<REDACTED>/Repos/phenotype-infrakit
 
 # Build
 cargo build --all

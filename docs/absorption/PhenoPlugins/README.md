@@ -1,7 +1,7 @@
 # PhenoPlugins Absorption Record
 
-**Source repo**: `KooshaPari/PhenoPlugins` (archived 2026-07-17)
-**Target**: `KooshaPari/pheno` monorepo
+**Source repo**: `<REDACTED>/PhenoPlugins` (archived 2026-07-17)
+**Target**: `<REDACTED>/pheno` monorepo
 **Path**: `crates/pheno-plugins-{core,git,sqlite,vessel,examples}/`
 **Branch**: `absorb/pheno-plugins-2026-07-17`
 **Wave**: `2026-07-17-queue-refresh-2`

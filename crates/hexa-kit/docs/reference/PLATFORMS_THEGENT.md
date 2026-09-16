@@ -2,7 +2,7 @@
 
 ## Purpose
 
-`platforms/thegent/` is a **full checkout of [thegent](https://github.com/KooshaPari/thegent)** (dotfiles manager, polyglot dev hub, templates, governance). It is **not** a member of the parent Rust workspace.
+`platforms/thegent/` is a **full checkout of [thegent](https://github.com/<REDACTED>/thegent)** (dotfiles manager, polyglot dev hub, templates, governance). It is **not** a member of the parent Rust workspace.
 
 ## What it is not
 

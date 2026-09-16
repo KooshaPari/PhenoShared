@@ -32,7 +32,7 @@ index 0000000000..b0c1b06efc
 @@ -0,0 +1,3 @@
 +# PhenoLang crate preservation
 +
-+Preserved from `KooshaPari/PhenoLang` on 2026-06-20 for deletion-readiness traceability. These copies are archival inputs for the owning target repo and do not replace active target implementations.
++Preserved from `<REDACTED>/PhenoLang` on 2026-06-20 for deletion-readiness traceability. These copies are archival inputs for the owning target repo and do not replace active target implementations.
 diff --git a/pheno-errors/archive/PhenoLang-errors-2026-06-20/crates/phenotype-error-core/CLAUDE.md b/pheno-errors/archive/PhenoLang-errors-2026-06-20/crates/phenotype-error-core/CLAUDE.md
 new file mode 100644
 index 0000000000..6f1b8d35d6
@@ -596,7 +596,7 @@ index 0000000000..b5cf8708f9
 +edition = "2021"
 +license = "MIT OR Apache-2.0"
 +rust-version = "1.75"
-+repository = "https://github.com/KooshaPari/phenotype-infrakit"
++repository = "https://github.com/<REDACTED>/phenotype-infrakit"
 +authors = ["Phenotype Team"]
 +description = "Unified error handling macros for Phenotype ecosystem (result conversion, context enrichment, error propagation)"
 +

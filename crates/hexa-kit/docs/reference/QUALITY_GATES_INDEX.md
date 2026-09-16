@@ -130,7 +130,7 @@ This index organizes all linting, code quality, and quality gate documentation f
 
 ### Documentation
 ```
-/Users/kooshapari/CodeProjects/Phenotype/repos/docs/reference/
+/Users/<REDACTED>/CodeProjects/Phenotype/repos/docs/reference/
 ├── QUALITY_GATES_INDEX.md                       ← You are here
 ├── QUALITY_GATE_QUICKSTART.md                   ← Start here (5 min)
 ├── LINTING_AND_QUALITY_SETUP.md                 ← Full guide (30 min)
@@ -140,13 +140,13 @@ This index organizes all linting, code quality, and quality gate documentation f
 
 ### Executable Scripts
 ```
-/Users/kooshapari/CodeProjects/Phenotype/repos/scripts/
+/Users/<REDACTED>/CodeProjects/Phenotype/repos/scripts/
 └── quality-gate.sh                              ← Universal quality gate (auto-detects)
 ```
 
 ### Configuration Files (Samples/Deployed)
 ```
-/Users/kooshapari/CodeProjects/Phenotype/repos/
+/Users/<REDACTED>/CodeProjects/Phenotype/repos/
 ├── .pre-commit-config.yaml                      ← repos root (Monorepo CI)
 ├── heliosCLI/
 │   ├── .pre-commit-config.yaml                  ← UPDATED with Rust hooks

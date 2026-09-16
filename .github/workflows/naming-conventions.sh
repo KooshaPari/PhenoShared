@@ -12,7 +12,7 @@
 # are ignored entirely.
 set -euo pipefail
 
-ORG="${ORG:-KooshaPari}"
+ORG="${ORG:-<REDACTED>}"
 APPROVED_PATTERNS=(
   '^pheno-[a-z][a-z0-9-]*$'           # pheno-short:  pheno-harness, pheno-tracing
   '^Pheno[A-Z][a-zA-Z0-9]*$'          # PhenoPascal:  PhenoCompose, PhenoContracts

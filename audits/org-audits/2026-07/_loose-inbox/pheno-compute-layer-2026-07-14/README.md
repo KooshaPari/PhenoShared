@@ -6,7 +6,7 @@ Global compute layer for accessing your 3090 Ti desktop via Tailscale SSH.
 
 ```bash
 # Clone and setup
-git clone https://github.com/kooshapari/pheno-compute-layer.git
+git clone https://github.com/<REDACTED>/pheno-compute-layer.git
 cd pheno-compute-layer
 ./scripts/setup.sh
 
@@ -123,7 +123,7 @@ pheno-compute-layer/
 
 ## Hardware
 
-- **Host**: kooshapari-desk (Tailscale: kooshapari-desk.tail2b570.ts.net)
+- **Host**: <REDACTED>-desk (Tailscale: <REDACTED>-desk.tail2b570.ts.net)
 - **GPU**: NVIDIA GeForce RTX 3090 Ti (24GB)
 - **IP**: 100.96.135.160
 - **CUDA**: 13.1

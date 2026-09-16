@@ -13,9 +13,9 @@
 
 | # | Source repo | Lang | LOC | Target repo | Absorption path | Migration PR (planned) |
 |---|---|---|---|---|---|---|
-| 1 | `KooshaPari/KommandLineAutomation` (KLA) | Rust | ~2,357 | `KooshaPari/helios-cli` | `crates/harness_recorder/` (new crate in existing CLI workspace) | `KooshaPari/helios-cli#<n>` |
-| 2 | `KooshaPari/KVirtualStage` (KVS) | Rust + Go | ~16,000 | `KooshaPari/phenotype-tooling` | `absorption/kvirtualstage/` (collection under existing kwality pattern) | `KooshaPari/phenotype-tooling#<n>` |
-| 3 | `KooshaPari/KWatch` | Go | ~18,289 | `KooshaPari/phenotype-ops` | `agent-devops-setups/kwatch/` (federated service) | `KooshaPari/phenotype-ops#<n>` |
+| 1 | `<REDACTED>/KommandLineAutomation` (KLA) | Rust | ~2,357 | `<REDACTED>/helios-cli` | `crates/harness_recorder/` (new crate in existing CLI workspace) | `<REDACTED>/helios-cli#<n>` |
+| 2 | `<REDACTED>/KVirtualStage` (KVS) | Rust + Go | ~16,000 | `<REDACTED>/phenotype-tooling` | `absorption/kvirtualstage/` (collection under existing kwality pattern) | `<REDACTED>/phenotype-tooling#<n>` |
+| 3 | `<REDACTED>/KWatch` | Go | ~18,289 | `<REDACTED>/phenotype-ops` | `agent-devops-setups/kwatch/` (federated service) | `<REDACTED>/phenotype-ops#<n>` |
 
 **No new repos.** Per user directive (no new repos) + ADR-023 Rule 3 (reusable capabilities go into existing substrate, not a new "phenoShared").
 
@@ -28,7 +28,7 @@
 
 ## 2. Source inventory
 
-### 2.1 KLA — `KooshaPari/KommandLineAutomation`
+### 2.1 KLA — `<REDACTED>/KommandLineAutomation`
 
 **Description:** Rust PTY CLI recorder (Playwright-for-CLI). Records terminal sessions to screenshots / GIFs / scripted demos.
 
@@ -52,7 +52,7 @@
 | `examples/*.kla.yaml` (5 files) | (examples) | Demo scripts (git-workflow, simple-demo, recursive-demo, meta-demo, kla-showcase) |
 | `demos/*.png` (10 PNGs) | (media) | Demo screenshots |
 
-**Existing org wiring:** Already depends on `KooshaPari/rich-cli-kit` (rck-core) — i.e., the recorder is **already integrated with the org's CLI substrate**. This is the strongest signal that KLA belongs in the helios-cli workspace, not in a new repo.
+**Existing org wiring:** Already depends on `<REDACTED>/rich-cli-kit` (rck-core) — i.e., the recorder is **already integrated with the org's CLI substrate**. This is the strongest signal that KLA belongs in the helios-cli workspace, not in a new repo.
 
 **Dependencies:** `portable-pty`, `crossterm`, `clap`, `tokio`, `serde`, `image`, `gif`, `vt100`, `rck-core` (git), `anyhow`, `thiserror`. All crate.io or already-org-vendored.
 
@@ -60,7 +60,7 @@
 
 **Drop:** `demos/*.png` (regenerable from example scripts on first build). `.github/workflows/ci.yml` (target repo will have its own CI).
 
-### 2.2 KVirtualStage — `KooshaPari/KVirtualStage`
+### 2.2 KVirtualStage — `<REDACTED>/KVirtualStage`
 
 **Description:** Multi-crate desktop automation platform + agent-computer interface. "STRICTLY DO NOT DELETE NOR UNARCHIVE" in repo description — **user override applies**.
 
@@ -120,7 +120,7 @@
 
 **Per "no new repos" rule**: All 5 sub-crates go into `phenotype-tooling/absorption/kvirtualstage/` as a **collection** (mirrors `phenotype-tooling/docs/absorbed-from-kwality/` from L5-109). This preserves the full multi-crate structure without scattering pieces across multiple substrates.
 
-### 2.3 KWatch — `KooshaPari/KWatch`
+### 2.3 KWatch — `<REDACTED>/KWatch`
 
 **Description:** Go-only process watchdog + CLI. Monitors TypeScript/JavaScript project build status with TUI, HTTP API, MCP server, and security policy engine. Local clone at `repos/KWatch/`.
 
@@ -156,7 +156,7 @@
 | `examples/` | YES (as `agent-devops-setups/kwatch/examples/`) | Example configs |
 | `.pre-commit-config.yaml` | YES (inherited) | Pre-commit hooks |
 
-**Existing org wiring:** Already standalone, no KooshaPari deps. Module path: `kwatch`.
+**Existing org wiring:** Already standalone, no <REDACTED> deps. Module path: `kwatch`.
 
 **Dependencies (per `go.mod`):** `bubbletea v1.3.10`, `lipgloss v1.1.0`, `fsnotify v1.10.1`, `cobra v1.10.2`, `golang.org/x/term v0.44.0`, `yaml.v2`. All vanilla.
 
@@ -166,11 +166,11 @@
 
 ## 3. Absorption targets — why these repos
 
-### 3.1 KLA → `KooshaPari/helios-cli`
+### 3.1 KLA → `<REDACTED>/helios-cli`
 
 **Why helios-cli:**
 1. **Already a Rust CLI workspace** with `crates/harness_*` convention (harness_queue, harness_runner, harness_spec, harness_verify, etc.). Adding `harness_recorder` follows the existing crate naming.
-2. **Already wired to `rich-cli-kit` (rck-core)** — KLA's `Cargo.toml` already imports rck-core from `KooshaPari/rich-cli-kit`. helios-cli is the workspace that owns rck-core usage; KLA becoming a workspace member means it shares the same dependency resolution.
+2. **Already wired to `rich-cli-kit` (rck-core)** — KLA's `Cargo.toml` already imports rck-core from `<REDACTED>/rich-cli-kit`. helios-cli is the workspace that owns rck-core usage; KLA becoming a workspace member means it shares the same dependency resolution.
 3. **KLA is a "Playwright-for-CLI"** — a recorder belongs with CLI tooling, not in a separate substrate.
 4. **`pheno-cli-base`** would be an alternative, but it's a more abstract base crate (per `pheno-cli-base` naming pattern). A recorder is concrete + standalone, fits `harness_recorder` better.
 
@@ -178,7 +178,7 @@
 
 **Drop:** `demos/*.png`, `.github/workflows/ci.yml` (use helios-cli's CI).
 
-### 3.2 KVirtualStage → `KooshaPari/phenotype-tooling`
+### 3.2 KVirtualStage → `<REDACTED>/phenotype-tooling`
 
 **Why phenotype-tooling:**
 1. **kwality precedent (L5-109)**: `phenotype-tooling/docs/absorbed-from-kwality/` absorbed 29,422 LOC of kwality source in a single PR. The pattern is proven.
@@ -203,7 +203,7 @@ phenotype-tooling/absorption/kvirtualstage/
 
 **Drop:** Validation logs, research output, enterprise strategy docs, claude-flow scripts, target-owned meta files (AGENTS.md, CLAUDE.md, .gitignore), Cargo.toml.bak.
 
-### 3.3 KWatch → `KooshaPari/phenotype-ops`
+### 3.3 KWatch → `<REDACTED>/phenotype-ops`
 
 **Why phenotype-ops:**
 1. **Existing federated service** for ops/devops tooling. Has `tools/{phenotype-manifest,phenotype-pin}` (Go devops tools) and `agent-devops-setups/llama-cpp/` (one-off agent setups).
@@ -262,7 +262,7 @@ For each PR, the migration sequence is:
 1. **Pre-flight**: Confirm target repo branch protection allows force-push-free merge (these are additive PRs).
 2. **Cut branch** on the **target** repo from `main`.
 3. **Copy source files** preserving git history (use `git subtree add` or `git remote add` + `git fetch` + `git merge --allow-unrelated-histories`):
-   - `git remote add <src-slug> https://github.com/KooshaPari/<src>.git`
+   - `git remote add <src-slug> https://github.com/<REDACTED>/<src>.git`
    - `git fetch <src-slug> main`
    - `git merge --allow-unrelated-histories <src-slug>/main --no-commit`
    - Resolve conflicts (likely none for additive paths), commit.
@@ -277,15 +277,15 @@ For each PR, the migration sequence is:
    - KVS: `cargo check` per Rust sub-crate, `go build ./...` in `kvirtualstage-go/`
 7. **Open PR** with description linking this audit doc.
 8. **Self-merge** per user directive (Track 8 pattern, bot merges with no HITL gate).
-9. **Archive source repo** via `gh repo archive KooshaPari/<src> -y` (Dmouse92 token has `repo` scope for archive; archive-only since `delete_repo` scope is absent).
+9. **Archive source repo** via `gh repo archive <REDACTED>/<src> -y` (Dmouse92 token has `repo` scope for archive; archive-only since `delete_repo` scope is absent).
 
 ### 4.3 Post-archive (manual user step)
 
 Once 3 PRs are merged and 3 source repos are archived, user completes deletion via GitHub UI (per L5-109 precedent — `delete_repo` scope is absent on the active token):
 
-- https://github.com/KooshaPari/KommandLineAutomation/settings#dangerZone
-- https://github.com/KooshaPari/KVirtualStage/settings#dangerZone
-- https://github.com/KooshaPari/KWatch/settings#dangerZone
+- https://github.com/<REDACTED>/KommandLineAutomation/settings#dangerZone
+- https://github.com/<REDACTED>/KVirtualStage/settings#dangerZone
+- https://github.com/<REDACTED>/KWatch/settings#dangerZone
 
 90-day GitHub retention applies to soft-delete tombstones.
 
@@ -295,27 +295,27 @@ Add 3 disposition rows to `phenotype-registry/registry/disposition-index.json` (
 
 ```json
 {
-  "KooshaPari/KommandLineAutomation": {
+  "<REDACTED>/KommandLineAutomation": {
     "fsm": "archived",
-    "absorbed_to": "KooshaPari/helios-cli",
+    "absorbed_to": "<REDACTED>/helios-cli",
     "absorbed_path": "crates/harness_recorder/",
-    "pr": "KooshaPari/helios-cli#<n>",
+    "pr": "<REDACTED>/helios-cli#<n>",
     "relocated_date": "2026-06-22",
     "note": "KLA → harness_recorder (per L5-200 audit)"
   },
-  "KooshaPari/KVirtualStage": {
+  "<REDACTED>/KVirtualStage": {
     "fsm": "archived",
-    "absorbed_to": "KooshaPari/phenotype-tooling",
+    "absorbed_to": "<REDACTED>/phenotype-tooling",
     "absorbed_path": "absorption/kvirtualstage/",
-    "pr": "KooshaPari/phenotype-tooling#<n>",
+    "pr": "<REDACTED>/phenotype-tooling#<n>",
     "relocated_date": "2026-06-22",
     "note": "KVS → tooling collection (per L5-200 audit; README STRICTLY DO NOT DELETE overridden by user directive; mirrors L5-109 kwality precedent)"
   },
-  "KooshaPari/KWatch": {
+  "<REDACTED>/KWatch": {
     "fsm": "archived",
-    "absorbed_to": "KooshaPari/phenotype-ops",
+    "absorbed_to": "<REDACTED>/phenotype-ops",
     "absorbed_path": "agent-devops-setups/kwatch/",
-    "pr": "KooshaPari/phenotype-ops#<n>",
+    "pr": "<REDACTED>/phenotype-ops#<n>",
     "relocated_date": "2026-06-22",
     "note": "KWatch → agent-devops-setups (per L5-200 audit)"
   }
@@ -344,7 +344,7 @@ For each of the 3 source repos, all 6 of these must be `done` before the user-in
 
 - [ ] Migration PR merged on target repo
 - [ ] Smoke tests pass on target repo (build + lint + unit tests for the absorbed code)
-- [ ] Source repo archived (`gh repo archive KooshaPari/<src> -y`)
+- [ ] Source repo archived (`gh repo archive <REDACTED>/<src> -y`)
 - [ ] Registry disposition row added
 - [ ] This audit doc cross-referenced from `AGENTS.md` § "PAUSED APPs" (or new "RETIRED" section)
 - [ ] User has manually deleted via GitHub UI (Settings → Danger Zone → Delete this repository)
@@ -381,5 +381,5 @@ After approval, execute 4.1 → 4.5 sequentially (or in parallel if user prefers
 
 - `findings/2026-06-18-L5-109-4-repo-retirement.md` — kwality + 3 others retirement (pattern reference)
 - `docs/adr/2026-06-15/ADR-023-agent-effort-governance.md` — substrate placement rules
-- `docs/adr/2026-06-17/ADR-029-dmouse92-to-kooshapari.md` — migration discipline (zero net content loss)
+- `docs/adr/2026-06-17/ADR-029-dmouse92-to-<REDACTED>.md` — migration discipline (zero net content loss)
 - `AGENTS.md` § "4-repo retirement (2026-06-18)" — pattern summary

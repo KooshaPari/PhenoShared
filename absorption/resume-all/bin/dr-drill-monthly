@@ -11,9 +11,9 @@
 #     health-check.py so the post-drill snapshot state is visible immediately
 #
 # Usage:
-#   /Users/kooshapari/bin/dr-drill-monthly           # run the drill
-#   DR_DRY_RUN=1 /Users/kooshapari/bin/dr-drill-monthly   # show plan only
-#   DR_TIMEOUT=30 /Users/kooshapari/bin/dr-drill-monthly   # override timeout
+#   /Users/<REDACTED>/bin/dr-drill-monthly           # run the drill
+#   DR_DRY_RUN=1 /Users/<REDACTED>/bin/dr-drill-monthly   # show plan only
+#   DR_TIMEOUT=30 /Users/<REDACTED>/bin/dr-drill-monthly   # override timeout
 #
 # Exit codes:
 #   0 = drill PASS (or DRY-RUN completed)
@@ -27,12 +27,12 @@ DR_DRY_RUN="${DR_DRY_RUN:-0}"
 DR_TIMEOUT="${DR_TIMEOUT:-90}"
 DR_NOTIFY="${DR_NOTIFY:-0}"
 
-DR_SCRIPT="/Users/kooshapari/bin/dr-drill.sh"
-LOG_DIR="/Users/kooshapari/Library/Logs/resume-all"
-DATA_DIR="/Users/kooshapari/.local/share/resume-all"
+DR_SCRIPT="/Users/<REDACTED>/bin/dr-drill.sh"
+LOG_DIR="/Users/<REDACTED>/Library/Logs/resume-all"
+DATA_DIR="/Users/<REDACTED>/.local/share/resume-all"
 HISTORY_JSONL="$DATA_DIR/dr-drill-history.jsonl"
 SLA_ALERTS_LOG="$DATA_DIR/sla-alerts.log"
-HEALTH_SCRIPT="/Users/kooshapari/bin/health-check.py"
+HEALTH_SCRIPT="/Users/<REDACTED>/bin/health-check.py"
 
 TS="$(date +%Y-%m-%d-%H%M%S)"
 TS_ISO="$(date +%Y-%m-%dT%H:%M:%S%z)"

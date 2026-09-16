@@ -4,7 +4,7 @@ description: Pause the agent and ask the human user a structured question via a 
 version: 0.1.0
 license: MIT
 author: Phenotype Contributors
-homepage: https://github.com/KooshaPari/phenotype-tooling/tree/main/crates/phinbox
+homepage: https://github.com/<REDACTED>/phenotype-tooling/tree/main/crates/phinbox
 ---
 
 # phinbox

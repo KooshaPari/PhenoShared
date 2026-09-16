@@ -1,17 +1,17 @@
 # smart-mcp-go — Absorption Justification
 
 **Date:** 2026-06-23
-**Repository:** `KooshaPari/smart-mcp-go`
-**Owner:** kooshapari
+**Repository:** `<REDACTED>/smart-mcp-go`
+**Owner:** <REDACTED>
 **Source Evidence:** filesystem check 2026-06-23 (no local dir) + GitHub API 404 (no remote)
 **Local Path:** not present on disk (no clone at `C:\Users\koosh\smart-mcp-go`)
-**Remote State:** GitHub API returns 404 — repository either never existed publicly under `KooshaPari/smart-mcp-go` or was deleted before this audit cycle.
+**Remote State:** GitHub API returns 404 — repository either never existed publicly under `<REDACTED>/smart-mcp-go` or was deleted before this audit cycle.
 **Default Branch:** unknown (no API evidence)
 **Verdict:** **NO_MERIT_WITH_INTENT**
 **Confidence:** HIGH
 **Rubric Target:** P1 = 3, P2 = 3, P3 = 2, P4 = 2, P5 = 1
 **Audit Cycle:** 2026-06-23 (phenotype-org-audits consolidation sweep)
-**ADRs Invoked:** ADR-029 (Dmouse92 → KooshaPari canonical-owner migration), ADR-038 (intent-preservation rubric for repos with deferred value)
+**ADRs Invoked:** ADR-029 (Dmouse92 → <REDACTED> canonical-owner migration), ADR-038 (intent-preservation rubric for repos with deferred value)
 
 ---
 
@@ -21,11 +21,11 @@
 |---|---|---|
 | (none) | no live ADR — empty 0-LOC scaffold repo | registry/disposition-index.json (row `repo-smart-mcp-go-no-merit`) |
 
-Retroactive ABSORPTION.md: `KooshaPari/phenotype-tooling/docs/absorbed-from-smart-mcp-go/ABSORPTION.md` on origin (commit `e23873c`).
+Retroactive ABSORPTION.md: `<REDACTED>/phenotype-tooling/docs/absorbed-from-smart-mcp-go/ABSORPTION.md` on origin (commit `e23873c`).
 
 ## Source
 
-The source repository `KooshaPari/smart-mcp-go` cannot be located in this audit cycle. The filesystem check on 2026-06-23 confirms there is no local clone at `C:\Users\koosh\smart-mcp-go`. A GitHub API probe for the canonical remote `https://api.github.com/repos/KooshaPari/smart-mcp-go` returns a 404 — the repository either was never created publicly under that path, or was deleted before the audit window opened. There is no archived snapshot in the `_arch_*.json` evidence files for any audit cycle covering smart-mcp-go, which means there is no JSON snapshot to anchor source metadata against. The only evidence available is the absence of evidence itself: the audit cannot absorb what it cannot see. This is precisely the situation the `NO_MERIT_WITH_INTENT` verdict was designed for — there is no present merit (because there is no present source), but the owner has registered an intent that the repo (or its successor) might be revived, and the verdict preserves that intent without committing to absorption.
+The source repository `<REDACTED>/smart-mcp-go` cannot be located in this audit cycle. The filesystem check on 2026-06-23 confirms there is no local clone at `C:\Users\koosh\smart-mcp-go`. A GitHub API probe for the canonical remote `https://api.github.com/repos/<REDACTED>/smart-mcp-go` returns a 404 — the repository either was never created publicly under that path, or was deleted before the audit window opened. There is no archived snapshot in the `_arch_*.json` evidence files for any audit cycle covering smart-mcp-go, which means there is no JSON snapshot to anchor source metadata against. The only evidence available is the absence of evidence itself: the audit cannot absorb what it cannot see. This is precisely the situation the `NO_MERIT_WITH_INTENT` verdict was designed for — there is no present merit (because there is no present source), but the owner has registered an intent that the repo (or its successor) might be revived, and the verdict preserves that intent without committing to absorption.
 
 | Attribute | Value | Source |
 |---|---|---|
@@ -103,7 +103,7 @@ Because no local clone and no live remote exist, there is no branch inventory to
 
 | # | Branch | Type | Tip Commit | Last Push | Origin | Status | Decision |
 |---|---|---|---|---|---|---|---|
-| 1 | `main` (if revived) | remote (default) | (none — never created) | n/a | KooshaPari/smart-mcp-go | not-yet-created | hold-posture |
+| 1 | `main` (if revived) | remote (default) | (none — never created) | n/a | <REDACTED>/smart-mcp-go | not-yet-created | hold-posture |
 | 2 | (no remote branches observed) | n/a | n/a | n/a | n/a | absent | none-required |
 | 3 | (no local clones) | local | n/a | n/a | n/a | absent on disk | none-required |
 
@@ -160,11 +160,11 @@ Restore posture for `NO_MERIT_WITH_INTENT` is non-trivial because the source doe
 
 # (Optional) Future re-push procedure if the owner recovers a local backup:
 #   cd /path/to/owner/local/smart-mcp-go
-#   git remote add origin https://github.com/KooshaPari/smart-mcp-go.git
+#   git remote add origin https://github.com/<REDACTED>/smart-mcp-go.git
 #   git push -u origin main
 #
 # (Optional) Future audit capture if the source reappears:
-#   gh repo view KooshaPari/smart-mcp-go --json name,id,archived,size,defaultBranchRef \
+#   gh repo view <REDACTED>/smart-mcp-go --json name,id,archived,size,defaultBranchRef \
 #     > _arch_smart-mcp-go.json
 #   sha256sum _arch_smart-mcp-go.json
 #
@@ -189,7 +189,7 @@ Concrete posture: **Source currently 404; no live remote to restore from. No bun
 | SHA-256 (tombstone) | not yet computed — no source to bundle |
 | Real backup? | no — source is 404 |
 | Restore window | none — owner-driven recovery only |
-| Concrete re-clone path | `git clone https://github.com/KooshaPari/smart-mcp-go.git` if remote is revived |
+| Concrete re-clone path | `git clone https://github.com/<REDACTED>/smart-mcp-go.git` if remote is revived |
 | Intent register | ADR-038 carries the deferred-value flag |
 
 ## Final Recommendation
@@ -200,7 +200,7 @@ Concrete posture: **Source currently 404; no live remote to restore from. No bun
 
 | Source Item | Source Evidence | Category | Source State | Target Repo | Target Evidence | Status | Deletion Justification | Risk if Deleted | Required Action |
 |---|---|---|---|---|---|---|---|---|---|
-| Repository record `KooshaPari/smart-mcp-go` | API probe 2026-06-23 (404) | repository-meta | 404-not-found | N/A | `docs/adrs/ADR-038.md:12` | NO_MERIT_WITH_INTENT | no live source — deletion not authorized | none — no source to delete | hold-posture |
+| Repository record `<REDACTED>/smart-mcp-go` | API probe 2026-06-23 (404) | repository-meta | 404-not-found | N/A | `docs/adrs/ADR-038.md:12` | NO_MERIT_WITH_INTENT | no live source — deletion not authorized | none — no source to delete | hold-posture |
 | Local clone | filesystem check 2026-06-23 (absent) | local-mirror | absent | N/A | `filesystem` | NO_MERIT_WITH_INTENT | no local mirror — nothing to delete | none | none |
 | `_arch_smart-mcp-go.json` | not produced | snapshot | absent | N/A | `_arch_*.json` | NO_MERIT_WITH_INTENT | no snapshot — produce on revival | none | produce-on-revival |
 | Branch `main` (if revived) | expected-but-absent | branch | not-yet-created | phenotype-go-sdk (if revived) | substrate charter | NO_MERIT_WITH_INTENT | no source branch to delete | none | hold-posture |

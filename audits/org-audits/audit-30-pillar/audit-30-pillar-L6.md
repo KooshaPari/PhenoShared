@@ -24,7 +24,7 @@ Benchmark harnesses, profiler integration, perf budgets in CI, N+1 query detecti
 - `crates/agileplus-benchmarks/benches/` (5 files, 927 LOC total) — all `harness = false` and registered in manifest — **✓**
 - `crates/agileplus-sqlite/src/lib/adapter.rs` — uses `PRAGMA journal_mode=WAL` to enable concurrent reads while serialising writes — **✓** (implicit perf design)
 - `.github/workflows/ci.yml` — has `rust-check` (build/clippy/test) and `rust-build` matrix (ubuntu/macos), but **no `cargo bench --workspace` job** — **△** (bench harness exists, not in CI)
-- `.github/CODEOWNERS:/crates/agileplus-benchmarks/ @KooshaPari` — bench crate owned by author — **✓**
+- `.github/CODEOWNERS:/crates/agileplus-benchmarks/ @<REDACTED>` — bench crate owned by author — **✓**
 - Hot path documentation: `crates/agileplus-nats/src/bus.rs` — "Spawn the reply asynchronously to avoid deadlock" — implicit hot-path reasoning — **△** (no formal hot-path doc)
 - **N+1 detection:** no N+1 lint or grep guard. SQL is hand-written via `agileplus-sqlite/repository/`. No `dataloader` pattern. — **✗**
 - **Profiler integration (`cargo flamegraph`, `perf`, `py-spy`):** absent from CI. No `RUSTFLAGS` for profiling build. — **✗**

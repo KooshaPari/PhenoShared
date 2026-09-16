@@ -129,10 +129,10 @@ silence from the cron (no file at all) is the alert condition.
    ending with `duration  Ns` and `end  <tool>`.
 2. `git -C ~/CodeProjects/Phenotype/repos log --since='1 hour ago' --oneline`
    — expect 3 commits (one per tool), each adding 1 file under `findings/`.
-3. `gh issue list --repo KooshaPari/phenotype-org-audits --label drift-detector --state all --limit 5`
+3. `gh issue list --repo <REDACTED>/phenotype-org-audits --label drift-detector --state all --limit 5`
    — expect 0 or 1 issue (0 if no drift hits; 1 issue aggregating all
    hits if any).
-4. `gh actions runs list --repo KooshaPari/phenotype-tooling --workflow=reusable/python-ci.yml --limit 5`
+4. `gh actions runs list --repo <REDACTED>/phenotype-tooling --workflow=reusable/python-ci.yml --limit 5`
    — expect 0 runs (the Actions backup only fires when the heavy-runner
    is unavailable; on a healthy first run, no backup is needed).
 5. No `#phenotype-fleet` Slack alert — expect 0 messages from the cron

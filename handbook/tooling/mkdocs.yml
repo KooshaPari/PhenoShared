@@ -7,8 +7,8 @@ site_author: Phenotype Team
 site_url: https://phenotype.dev/handbook
 
 # Repository
-repo_name: KooshaPari/PhenoHandbook
-repo_url: https://github.com/KooshaPari/PhenoHandbook
+repo_name: <REDACTED>/PhenoHandbook
+repo_url: https://github.com/<REDACTED>/PhenoHandbook
 
 # Theme
 theme:
@@ -133,7 +133,7 @@ nav:
 extra:
   social:
     - icon: fontawesome/brands/github
-      link: https://github.com/KooshaPari
+      link: https://github.com/<REDACTED>
   version:
     provider: mike
 

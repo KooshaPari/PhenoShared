@@ -1,1 +1,1 @@
-wsl: Failed to start the systemd user session for 'kooshapari'. See journalctl for more details.
+wsl: Failed to start the systemd user session for '<REDACTED>'. See journalctl for more details.

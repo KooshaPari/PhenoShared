@@ -6,7 +6,7 @@
   "color": "#22d3ee",
   "description": "Multi-provider LLM gateway: OpenAI-compatible endpoint with smart routing across 300+ models.",
   "tier": 2,
-  "repo": "KooshaPari/OmniRoute",
+  "repo": "<REDACTED>/OmniRoute",
   "language": "TypeScript",
   "license": "MIT",
   "status": "active",
@@ -17,8 +17,8 @@
     "Failover"
   ],
   "links": {
-    "github": "https://github.com/KooshaPari/OmniRoute",
+    "github": "https://github.com/<REDACTED>/OmniRoute",
     "docs": "https://omniroute.phenotype.space/docs",
-    "releases": "https://github.com/KooshaPari/OmniRoute/releases"
+    "releases": "https://github.com/<REDACTED>/OmniRoute/releases"
   }
 }

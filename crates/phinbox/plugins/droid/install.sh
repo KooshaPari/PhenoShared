@@ -5,7 +5,7 @@
 
 set -euo pipefail
 
-SRC="/Users/kooshapari/CodeProjects/Phenotype/repos/phenotype-tooling"
+SRC="/Users/<REDACTED>/CodeProjects/Phenotype/repos/phenotype-tooling"
 
 # 1. Resolve the phinbox-mcp binary
 if ! command -v phinbox-mcp >/dev/null 2>&1; then

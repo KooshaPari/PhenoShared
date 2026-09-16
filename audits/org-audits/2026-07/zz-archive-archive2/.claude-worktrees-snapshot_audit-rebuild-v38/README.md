@@ -3,9 +3,9 @@
 <!-- Slop issues are expected and intentionally present as part of an HITL-less -->
 <!-- /minimized AI-DD metaproject of learning, refining, and building brute-force -->
 <!-- training for both agents and the human operator. -->
-![Downloads](https://img.shields.io/github/downloads/KooshaPari/phenotype-org-audits/total?style=flat-square&label=downloads&color=blue)
-![GitHub release](https://img.shields.io/github/v/release/KooshaPari/phenotype-org-audits?style=flat-square&label=release)
-![License](https://img.shields.io/github/license/KooshaPari/phenotype-org-audits?style=flat-square)
+![Downloads](https://img.shields.io/github/downloads/<REDACTED>/phenotype-org-audits/total?style=flat-square&label=downloads&color=blue)
+![GitHub release](https://img.shields.io/github/v/release/<REDACTED>/phenotype-org-audits?style=flat-square&label=release)
+![License](https://img.shields.io/github/license/<REDACTED>/phenotype-org-audits?style=flat-square)
 ![AI-Slop](https://img.shields.io/badge/AI--DD-Slop%20Expected-orange?style=flat-square)
 ![AI-Only-Maintained](https://img.shields.io/badge/Planned%20%26%20Maintained%20by-AI%20Agents%20Only-red?style=flat-square)
 ![HITL-less](https://img.shields.io/badge/HITL--less%20AI--DD-metaproject-yellow?style=flat-square)
@@ -132,7 +132,7 @@ Where to find each metric:
 To re-run the authoritative inventory scan:
 
 ```bash
-cd /Users/kooshapari/CodeProjects/Phenotype/repos/phenotype-org-audits
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos/phenotype-org-audits
 ./tooling/inventory-refresh.sh
 ```
 
@@ -142,9 +142,9 @@ This triggers the inventory agent to rescan GitHub + local repos and update:
 
 ## Related
 
-- **Worklog aggregation**: `/Users/kooshapari/CodeProjects/Phenotype/repos/worklogs/`
-- **Aggregator tooling**: `/Users/kooshapari/CodeProjects/Phenotype/repos/phenotype-tooling/`
-- **Organization docs**: `/Users/kooshapari/CodeProjects/Phenotype/repos/docs/governance/`
+- **Worklog aggregation**: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/worklogs/`
+- **Aggregator tooling**: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/phenotype-tooling/`
+- **Organization docs**: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/docs/governance/`
 
 ## License
 

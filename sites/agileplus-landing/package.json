@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "AgilePlus landing page (agileplus.kooshapari.com)",
+  "description": "AgilePlus landing page (agileplus.<REDACTED>.com)",
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",

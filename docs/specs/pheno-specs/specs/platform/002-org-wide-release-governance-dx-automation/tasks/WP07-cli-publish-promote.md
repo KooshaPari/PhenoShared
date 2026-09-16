@@ -86,7 +86,7 @@ This work package exposes the core publication and promotion workflows through t
   4. Success output: "✓ Published package@version to npm"
   5. Handle registry auto-detection priority: npm → pypi → crates → go (based on manifest files present)
 
-- **Files**: `/Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus/cmd/publish.go`
+- **Files**: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus/cmd/publish.go`
 - **Parallel?**: No (prerequisite for integration tests in T043)
 - **Notes**: Reuse adapter interface from WP02; handle case where multiple manifests exist in same dir (warn and use priority); ensure dry-run still performs all validation and build steps
 
@@ -128,7 +128,7 @@ This work package exposes the core publication and promotion workflows through t
      - Success: "✓ Promoted to beta (5 gates passed in 3.2s)"
   5. Dry-run behavior: skip actual publish but show what would happen
 
-- **Files**: `/Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus/cmd/promote.go`
+- **Files**: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus/cmd/promote.go`
 - **Parallel?**: Yes (after T038, but can run concurrently with T040)
 - **Notes**: Reuse gate evaluator from WP06; handle channel detection (ask user if ambiguous); ensure dry-run still validates gates fully
 
@@ -186,7 +186,7 @@ This work package exposes the core publication and promotion workflows through t
      - Return error with details on which packages form cycle
   6. Add progress tracking: show current phase number, total phases, packages per phase
 
-- **Files**: `/Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus/internal/publish/orchestrator.go`
+- **Files**: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus/internal/publish/orchestrator.go`
 - **Parallel?**: Yes (after T038/T039)
 - **Notes**: Use Go's `sync.WaitGroup` for parallel publishing; ensure context cancellation propagates to all goroutines; handle partial phase failure gracefully
 
@@ -238,7 +238,7 @@ This work package exposes the core publication and promotion workflows through t
   6. Ensure all output is ANSI color-safe and readable in both light/dark terminals
   7. Add quiet mode (only success/error, no spinners)
 
-- **Files**: `/Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus/internal/ui/progress.go`
+- **Files**: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus/internal/ui/progress.go`
 - **Parallel?**: Yes (after T038/T039)
 - **Notes**: Use Lipgloss color palette consistently (green=#2d7d4d, red=#d74242, yellow=#c9ab47); test output on different terminal widths; ensure spinner doesn't break in CI/non-TTY environments
 
@@ -289,7 +289,7 @@ This work package exposes the core publication and promotion workflows through t
   7. Add `pheno config show` command to display current effective config
   8. Document config file format in README with example
 
-- **Files**: `/Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus/internal/config/config.go`, `internal/config/defaults.go`
+- **Files**: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus/internal/config/config.go`, `internal/config/defaults.go`
 - **Parallel?**: Yes (after T038/T039)
 - **Notes**: Don't log sensitive values; use Viper's feature to read from env with SetEnvKeyReplacer; test config loading from both global and local files; ensure TOML format is valid and human-readable
 
@@ -369,7 +369,7 @@ This work package exposes the core publication and promotion workflows through t
      - Capture Lipgloss output and verify formatting
   5. Ensure tests run in <5 seconds by mocking all external I/O
 
-- **Files**: `/Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus/cmd/publish_test.go`, `/Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus/cmd/promote_test.go`, `/Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus/internal/publish/orchestrator_test.go`
+- **Files**: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus/cmd/publish_test.go`, `/Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus/cmd/promote_test.go`, `/Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus/internal/publish/orchestrator_test.go`
 - **Parallel?**: Yes (after all other T038–T042 subtasks)
 - **Notes**: Use `testutil` package for common test fixtures; mock `exec.CommandContext` to avoid actual command execution; stub Viper config loading; verify output formatting without requiring real terminal
 

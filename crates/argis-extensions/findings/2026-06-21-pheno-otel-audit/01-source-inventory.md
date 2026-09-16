@@ -1,6 +1,6 @@
 # Phase 1A — Source Inventory: `pheno-otel`
 
-**Scope:** `/Users/kooshapari/CodeProjects/Phenotype/repos/pheno-otel/`
+**Scope:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos/pheno-otel/`
 **Date:** 2026-06-21 (system date)
 **Branch (current):** `chore/v22-71-pillar-cycle-12-p1-2026-06-22` (per `git branch --show-current`; tip `18a5adfb67` documents v23 cycle-13 closure per HEAD commit message)
 **Head commit (resolved):** `18a5adfb67d62fae9c3b2fa748f3b8e365c87647` — `docs(worklog): L5-155 — v23 cycle-13 closure (5 tracks shipped: chaos, nix flake, display, diagnostic, proc-macros)`
@@ -8,7 +8,7 @@
 **Audit series:** `findings/2026-06-21-pheno-otel-audit/` — Phase 1A (source inventory)
 **Authority:** ADR-023 (substrate placement), ADR-037 (pheno-mcp-router substrate canonical; analogous for pheno-otel), ADR-038 (hexagonal L4 Port/Adapter policy), ADR-040 (test coverage gates per tier), ADR-042B (substrate quality bar)
 
-> **Caveat on remotes:** This worktree has **two remotes configured with the SAME upstream** under different names — `argis`/`argis-extensions` (alias `argisgit`/`argis-extensionsgit`) and `origin`/`phenotype-apps` (alias `origingit`). Both point to `github.com/KooshaPari/phenotype-apps.git` and `github.com/KooshaPari/argis-extensions.git` respectively; both are monorepos. Per the user directive this audit treats the working tree as a **substrate-canonical path inside the multi-monorepo overlay**. Where `git for-each-ref` shows the same commit reachable under multiple remote namespaces, we deduplicate by the `awk -F'/' '{print $NF}'` tail-of-refname and report the count of **unique branch names** (9 pheno-otel-named), not the inflated 19 raw ref count.
+> **Caveat on remotes:** This worktree has **two remotes configured with the SAME upstream** under different names — `argis`/`argis-extensions` (alias `argisgit`/`argis-extensionsgit`) and `origin`/`phenotype-apps` (alias `origingit`). Both point to `github.com/<REDACTED>/phenotype-apps.git` and `github.com/<REDACTED>/argis-extensions.git` respectively; both are monorepos. Per the user directive this audit treats the working tree as a **substrate-canonical path inside the multi-monorepo overlay**. Where `git for-each-ref` shows the same commit reachable under multiple remote namespaces, we deduplicate by the `awk -F'/' '{print $NF}'` tail-of-refname and report the count of **unique branch names** (9 pheno-otel-named), not the inflated 19 raw ref count.
 >
 > **Caveat on rate-limit:** GitHub API access is currently rate-limited (HTTP 403). All claims in this document are derived from local `git` commands only — `git remote -v`, `git log`, `git branch`, `git ls-files`, `git tag`, `git submodule status`, `git rev-list`, `git diff`. No `gh api` calls were attempted.
 
@@ -23,7 +23,7 @@
 | Edition | `2021` | `Cargo.toml:4` |
 | Rust-version (MSRV) | `1.75` (lib) / `1.82` (CI matrix) | `Cargo.toml:5`; `.github/workflows/ci.yml:30,82,93` |
 | License | `MIT OR Apache-2.0` | `Cargo.toml:6`; `LICENSE-MIT`, `LICENSE-APACHE` |
-| Repository | `https://github.com/KooshaPari/pheno-otel` | `Cargo.toml:8` |
+| Repository | `https://github.com/<REDACTED>/pheno-otel` | `Cargo.toml:8` |
 | Documentation | `https://docs.rs/pheno-otel` | `Cargo.toml:9` |
 | Keywords | `phenotype opentelemetry otlp otel observability substrate tracing` | `Cargo.toml:10` |
 | Categories | `development-tools api-bindings asynchronous` | `Cargo.toml:11` |
@@ -111,7 +111,7 @@ Source: `git ls-files` over the worktree, 44 paths under `pheno-otel/`. Grouped 
 | `.github/workflows/release.yml` | 59 | Tag-triggered release on `v[0-9]+.[0-9]+.[0-9]+*`. Verifies tag matches `Cargo.toml` version; `cargo build --release --locked --all-features` + `cargo test --release --locked --all-features`; generates `RELEASE_NOTES.md`; creates GitHub Release via `softprops/action-gh-release`. |
 | `.github/workflows/scorecard.yml` | 42 | OpenSSF Scorecard weekly Sunday 02:00 UTC + on push to main. `ossf/scorecard-action@05b1f9e58bc98e5e7acc9e9c1eda5dc3a7dad7a9` (v2.4.3). Publishes SARIF to security tab. |
 | `.github/dependabot.yml` | 59 | Weekly Monday 09:00 PDT cargo updates (groups: `opentelemetry` + `minor-and-patch`) + weekly GitHub Actions updates. `directory: "/FocalPoint/pheno-otel/"` (per `dependabot.yml:13` — the dep-update target is the source repo, not this governance path; comment at lines 58-59 confirms this path is "governance meta-bundle only"). |
-| `.github/CODEOWNERS` | (symlink to root CODEOWNERS, see §7) | Default owner @KooshaPari for `*`, `.github/`, `/AGENTS.md`, `/CHANGELOG.md`, `/CONTRIBUTING.md`, `/SECURITY.md`, `/CODE_OF_CONDUCT.md`, `/deny.toml`, `/FocalPoint/`. |
+| `.github/CODEOWNERS` | (symlink to root CODEOWNERS, see §7) | Default owner @<REDACTED> for `*`, `.github/`, `/AGENTS.md`, `/CHANGELOG.md`, `/CONTRIBUTING.md`, `/SECURITY.md`, `/CODE_OF_CONDUCT.md`, `/deny.toml`, `/FocalPoint/`. |
 | `.github/PULL_REQUEST_TEMPLATE.md` | 72 | Sections: Summary / Related / Type of change / Changes / Testing / Worklog (v2.1 row) / Checklist / Reviewer notes. |
 | `.github/ISSUE_TEMPLATE/bug.yml` | 97 | Bug report: version, rust-version, OS, repro, expected, actual, env, checklist (3 required). |
 | `.github/ISSUE_TEMPLATE/feature.yml` | 71 | Feature request: use-case, proposal, alternatives, compat, ADR, checklist. |
@@ -314,7 +314,7 @@ env:
 | `LICENSE-MIT` | (1098 B) | MIT license text, Copyright Koosha Pari 2026. |
 | `LICENSE-APACHE` | (10,355 B) | Apache 2.0 license text. |
 | `llms.txt` | 92 | LLM-friendly content discovery index (`llmstxt.org` format). Lists 12 docs + 10 source files + 11 ADR cross-refs. |
-| `CODEOWNERS` | 23 | Default owner `@KooshaPari`; 9 path-specific rules for CI/governance. |
+| `CODEOWNERS` | 23 | Default owner `@<REDACTED>`; 9 path-specific rules for CI/governance. |
 | `dependabot.yml` | 59 | Weekly Monday 09:00 PDT cargo updates (groups: `opentelemetry` + `minor-and-patch`) + weekly GitHub Actions updates. |
 | `deny.toml` | 88 | cargo-deny: advisories (db at `~/.cargo/advisory-db`, yanked=warn) + bans (`multiple-versions=warn`, `wildcards=deny`; deny: `openssl <0.10.70`, `chrono <0.4.31`) + sources (crates.io only) + licenses (MIT, Apache-2.0, BSD-2/3, ISC, Zlib, Unicode, CC0, MPL-2.0, OpenSSL) + SPDX v3 + output `feature-depth=1`. |
 | `llvm-cov.toml` | 22 | cargo-llvm-cov config: 80% lines / 75% branches / 80% functions (ADR-040 lib tier); output `lcov.info` for codecov. |
@@ -326,7 +326,7 @@ env:
 
 ## 8. Cargo.toml full content
 
-`/Users/kooshapari/CodeProjects/Phenotype/repos/pheno-otel/Cargo.toml` (34 lines, verbatim):
+`/Users/<REDACTED>/CodeProjects/Phenotype/repos/pheno-otel/Cargo.toml` (34 lines, verbatim):
 
 ```toml
 [package]
@@ -336,7 +336,7 @@ edition = "2021"
 rust-version = "1.75"
 license = "MIT OR Apache-2.0"
 description = "OpenTelemetry OTLP exporter substrate for the pheno-* fleet (ADR-037). Provides OtlpPort + Stdout/HttpExporter adapters; consumers depend on this for OTLP wire-format export of traces, metrics, and logs."
-repository = "https://github.com/KooshaPari/pheno-otel"
+repository = "https://github.com/<REDACTED>/pheno-otel"
 documentation = "https://docs.rs/pheno-otel"
 keywords = ["phenotype", "opentelemetry", "otlp", "otel", "observability", "substrate", "tracing"]
 categories = ["development-tools", "api-bindings", "asynchronous"]
@@ -602,7 +602,7 @@ Task runner. Recipes: `default`, `info`, `build`, `build-release`, `fmt-check`, 
 
 ### 9.9 `AGENTS.md` (98 lines)
 
-Header: `> Status: ACTIVE (governance meta-bundle for the pheno-otel substrate canonical in the Phenotype monorepo). Date: 2026-06-20. Owner: KooshaPari (orch-v11-044). Substrate role: Rust library (per ADR-012 + ADR-036B substrate canonicals).`
+Header: `> Status: ACTIVE (governance meta-bundle for the pheno-otel substrate canonical in the Phenotype monorepo). Date: 2026-06-20. Owner: <REDACTED> (orch-v11-044). Substrate role: Rust library (per ADR-012 + ADR-036B substrate canonicals).`
 
 Sections: `What this path is` (notes that executable Rust source lives in `FocalPoint/pheno-otel/`; this path is **governance + meta-bundle home only**); `Quickstart (governance-first)` (6 steps); `Substrate invariants (per ADR-023 Rule 3.1)` (7 invariants: Spec, Docs, Tests, Observability, Coverage gate, CI gate, Worklog v2.1); `Branch naming` (4 prefixes); `Commit message format` (Conventional Commits with examples); `PR labels` (4 labels); `SOTA artifacts` (4 dirs); `Related ADRs` (8 ADRs); `Tier-0 hygiene (this batch, v11-044)` (full file inventory of the meta-bundle); `Contact`.
 
@@ -665,9 +665,9 @@ The following **open items** discovered during this Phase 1A inventory and defer
 4. **`Cargo.toml:5` declares `rust-version = "1.75"`** but `ci.yml:30,82,93` enforces `1.82.0` as MSRV. **P3 version-mismatch nit.**
 5. **`v16-L22-build-perf-pheno-otel-2026-06-21` shows 19,818 ahead / +1.1M lines divergence from main** (per §2.1) — this includes the entire `.agileplus/` database subtree. **Crate-local diff (`git diff main..branch -- pheno-otel/`)** not run in Phase 1A; deferred to Phase 2.
 6. **31 pheno-otel commits** in `git log --all` is the inflated count; **~12 unique-commit count** after namespace-dedup. **Phase 2: per-commit uniqueness audit.**
-7. **`target/` directory is tracked in the working tree** (`ls -la` shows `drwxr-xr-x@   7 kooshapari  staff     224 Jun 21 16:13 target`). This violates Rust `.gitignore` convention; the `.gitignore` should ignore `target/` but the directory is checked in. **P3 hygiene gap.**
+7. **`target/` directory is tracked in the working tree** (`ls -la` shows `drwxr-xr-x@   7 <REDACTED>  staff     224 Jun 21 16:13 target`). This violates Rust `.gitignore` convention; the `.gitignore` should ignore `target/` but the directory is checked in. **P3 hygiene gap.**
 8. **`Cargo.lock` is tracked** (`Cargo.lock` size 9,703 B) — appropriate for binary crates but unconventional for a library. Per `Cargo.toml:13` `publish = true`, this is acceptable. No gap.
-9. **Two remote aliases (`origin`/`origingit`)** point at `phenotype-apps`; **two more (`argis`/`argis-extensions`)** point at `argis-extensions`. All four remotes share a common upstream `github.com/KooshaPari/phenotype-apps.git` or `argis-extensions.git`. Phase 2 should determine which remote is the **canonical push target** for this substrate.
+9. **Two remote aliases (`origin`/`origingit`)** point at `phenotype-apps`; **two more (`argis`/`argis-extensions`)** point at `argis-extensions`. All four remotes share a common upstream `github.com/<REDACTED>/phenotype-apps.git` or `argis-extensions.git`. Phase 2 should determine which remote is the **canonical push target** for this substrate.
 10. **Three branches diverge 19,818+ commits from main** (`v16-L22-build-perf-pheno-otel-2026-06-21`). This is suspicious — `main` is at commit `4c1a32b18c` (a relatively recent v21 cycle-11 P1 commit) but this single branch has 19,818 ahead. **Phase 2: investigate branch-base mismatch (likely local-main drift).**
 
 ---
@@ -675,7 +675,7 @@ The following **open items** discovered during this Phase 1A inventory and defer
 ## 11. Verification (per task directive)
 
 ```
-$ wc -l /Users/kooshapari/CodeProjects/Phenotype/repos/findings/2026-06-21-pheno-otel-audit/01-source-inventory.md
+$ wc -l /Users/<REDACTED>/CodeProjects/Phenotype/repos/findings/2026-06-21-pheno-otel-audit/01-source-inventory.md
 ```
 
 To be run after file write; expected output in the 800-1100 range per the user directive.

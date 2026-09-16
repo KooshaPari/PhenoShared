@@ -1,7 +1,7 @@
 # Absorption: backend → phenotype-python-sdk/packages/melosviz
 
-**Source**: `KooshaPari/backend` (MelosViz scoring engine, 48KB)
-**Target**: `KooshaPari/phenotype-python-sdk` as `packages/melosviz/`
+**Source**: `<REDACTED>/backend` (MelosViz scoring engine, 48KB)
+**Target**: `<REDACTED>/phenotype-python-sdk` as `packages/melosviz/`
 **Wave**: 2026-07-17-queue-refresh-2
 **Branch**: `wip/2026-07-16-0030-auto` (commit `bbeedd5`)
 **Disposition row**: `repo-backend-melosviz`
@@ -9,7 +9,7 @@
 
 ## Source identity
 
-`KooshaPari/backend` is the MelosViz scoring engine: a Python package
+`<REDACTED>/backend` is the MelosViz scoring engine: a Python package
 that takes audio (or any artifact) and produces a renderable score
 spec plus an FFmpeg-backed video exporter. It bundles analysis
 models, a conductor/router, preset definitions, a CLI, and a
@@ -101,7 +101,7 @@ All 107 tests pass clean.
 
 ## Files
 
-- Source: https://github.com/KooshaPari/backend (archived 2026-07-17)
+- Source: https://github.com/<REDACTED>/backend (archived 2026-07-17)
 - Target commit: `bbeedd5` on `phenotype-python-sdk#wip/2026-07-16-0030-auto`
 - Registry: `phenotype-registry/disposition-index.json` row `repo-backend-melosviz`
   (fsm=absorbed, archived=true)

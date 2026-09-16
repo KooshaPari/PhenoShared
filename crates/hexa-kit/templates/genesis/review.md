@@ -38,7 +38,7 @@
 ## Org blocklist (always Block)
 
 - Force-push to `main` / `master`
-- Push to remotes outside `KooshaPari/*` without explicit user approval
+- Push to remotes outside `<REDACTED>/*` without explicit user approval
 - `git commit --amend` on pushed commits without user request
 - Domain SDK code added to HexaKit genesis trees (use SDK workspaces)
 

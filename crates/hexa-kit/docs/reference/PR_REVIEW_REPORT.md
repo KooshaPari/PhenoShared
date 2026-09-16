@@ -60,10 +60,10 @@ Total Open PRs: 0
 ### Command Output
 
 ```bash
-$ gh pr list --state open --repo KooshaPari/phenotype-infrakit
+$ gh pr list --state open --repo <REDACTED>/phenotype-infrakit
 # (empty)
 
-$ gh pr list --state open --repo KooshaPari/AgilePlus
+$ gh pr list --state open --repo <REDACTED>/AgilePlus
 # (empty)
 ```
 
@@ -242,8 +242,8 @@ b1692d8ef chore(phenotype-infrakit): stabilize workspace + fix clippy warnings (
 
 ### Repository Configuration
 
-- **Origin:** `git@github.com:KooshaPari/phenotype-infrakit.git`
-- **Secondary Remote:** `git@github.com:KooshaPari/AgilePlus.git` (agileplus alias)
+- **Origin:** `git@github.com:<REDACTED>/phenotype-infrakit.git`
+- **Secondary Remote:** `git@github.com:<REDACTED>/AgilePlus.git` (agileplus alias)
 - **Default Branch:** main
 - **Current HEAD:** 8249d9a5f (ahead of origin/main)
 

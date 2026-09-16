@@ -127,7 +127,7 @@ Per the worktree-isolation pattern proven in v11 (5 waves, 102/102 WPs drained):
 ## 8. T0 Pre-Launch (T0.0)
 
 - Verify T0.0 retro: subagent dispatch healthy? Fleet processes alive? (Yes, 23 orch processes)
-- Verify `gh auth status` (KooshaPari with `delete_repo` scope)
+- Verify `gh auth status` (<REDACTED> with `delete_repo` scope)
 - Verify push target (`argis-extensions` per v11)
 - Verify pre-commit hook working
 - Verify no merge-blocker in 71-pillar cycle 1 PR chain

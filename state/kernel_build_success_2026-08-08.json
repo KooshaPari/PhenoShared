@@ -11,7 +11,7 @@
     "ptxas_sigsegv": "ELIMINATED - zero sm90 TUs compiled"
   },
   "wheel": {
-    "wsl_path": "/home/kooshapari/sglang-src/sgl-kernel/dist/sgl_kernel-0.1.0-cp39-abi3-linux_x86_64.whl",
+    "wsl_path": "/home/<REDACTED>/sglang-src/sgl-kernel/dist/sgl_kernel-0.1.0-cp39-abi3-linux_x86_64.whl",
     "windows_path": "state/wheels/sgl_kernel-0.1.0-cp39-abi3-linux_x86_64.whl",
     "size_bytes": 15874110,
     "sha256": "099f8dcdc59f06ce644a2b045e8129ecc5e66afef36e959885106223ee8e494e",

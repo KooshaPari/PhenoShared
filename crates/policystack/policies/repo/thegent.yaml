@@ -27,8 +27,8 @@ policy:
         actions: ["write"]
         match:
           cwd_patterns:
-            - "/Users/kooshapari/CodeProjects/Phenotype/repos/thegent"
-            - "/Users/kooshapari/CodeProjects/Phenotype/repos/thegent/*"
+            - "/Users/<REDACTED>/CodeProjects/Phenotype/repos/thegent"
+            - "/Users/<REDACTED>/CodeProjects/Phenotype/repos/thegent/*"
           target_path_patterns:
             - "*"
       - id: "thegent-allow-write-in-worktrees"
@@ -38,7 +38,7 @@ policy:
         actions: ["write"]
         match:
           target_path_patterns:
-            - "/Users/kooshapari/CodeProjects/Phenotype/repos/thegent-wtrees/*"
+            - "/Users/<REDACTED>/CodeProjects/Phenotype/repos/thegent-wtrees/*"
       - id: "thegent-allow-git-write-in-worktrees"
         description: "Approved thegent worktrees may perform commit and push operations."
         priority: 100
@@ -49,4 +49,4 @@ policy:
             - "git commit*"
             - "git push*"
           cwd_patterns:
-            - "/Users/kooshapari/CodeProjects/Phenotype/repos/thegent-wtrees/*"
+            - "/Users/<REDACTED>/CodeProjects/Phenotype/repos/thegent-wtrees/*"

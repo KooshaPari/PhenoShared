@@ -13,7 +13,7 @@ model:
   package: model
 
 autobind:
-  - "github.com/kooshapari/bifrost-extensions/api/graphql/model"
+  - "github.com/<REDACTED>/bifrost-extensions/api/graphql/model"
 
 models:
   ID:

@@ -6,7 +6,7 @@ not a suite itself, just helpers). Concrete suites import from here.
 .. deprecated::
     The bespoke ``pheno-harness/bench/suites/*`` modules are deprecated as of
     2026-07-21. The canonical eval harness is the **Harbor Framework fork at**
-    ``/Users/kooshapari/CodeProjects/Phenotype/repos/portage/`` with 50+ mature
+    ``/Users/<REDACTED>/CodeProjects/Phenotype/repos/portage/`` with 50+ mature
     benchmark adapters under ``portage/adapters/``. Migration target:
 
         - ``_stub.py`` (placeholder)       → ``portage/adapters/{aime,gpqa-diamond,...}``

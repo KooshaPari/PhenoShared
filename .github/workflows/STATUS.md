@@ -6,7 +6,7 @@ This directory contains 49 real GitHub Actions workflows. **5 obsolete placehold
 
 | Removed workflow | Deprecation reason |
 |---|---|
-| `alert-sync-issues.yml` | Was a placeholder for `KooshaPari/phenoShared/.github/workflows/alert-sync-issues.yml@72b9c6cb` (deleted repo). Replaced in O27 with this stub; now removed since the original PhenoShared feature was an artefact of an earlier consolidation wave. |
+| `alert-sync-issues.yml` | Was a placeholder for `<REDACTED>/phenoShared/.github/workflows/alert-sync-issues.yml@72b9c6cb` (deleted repo). Replaced in O27 with this stub; now removed since the original PhenoShared feature was an artefact of an earlier consolidation wave. |
 | `release-drafter.yml` | Same history. The release-drafter pattern is already provided by `release-plz.yml` (active) and `release.yml` (active). |
 | `security-guard-hook-audit.yml` | Same history. The hook-audit pattern is subsumed by `security-scan.yml` and `trunk-check.yml` (active). |
 | `self-merge-gate.yml` | Same history. Merge policy is enforced by `policy-gate.yml` (active, `stack/layer/release/*` prefix enforcement). |

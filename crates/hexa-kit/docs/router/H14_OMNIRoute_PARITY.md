@@ -7,7 +7,7 @@ Refs: ADR-ECO-014, phenotype-gateway#16, HexaKit#291
 ## Scope
 
 `crates/phenotype-router` (H11) ships **6 auto-combo variants** (Auto, Coding,
-Fast, Cheap, Offline, Smart). OmniRoute ([`KooshaPari/OmniRoute`]) defines
+Fast, Cheap, Offline, Smart). OmniRoute ([`<REDACTED>/OmniRoute`]) defines
 **18** total routing behaviors. This doc is the gap analysis and roadmap for
 reaching feature parity in HexaKit.
 

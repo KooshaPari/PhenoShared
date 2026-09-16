@@ -14,7 +14,7 @@
   "role": "application-parent",
   "domain_role": "apps",
   "boundary": "application-collection",
-  "gh_url": "https://github.com/KooshaPari/phenotype-apps",
+  "gh_url": "https://github.com/<REDACTED>/phenotype-apps",
   "default_branch": "apps-extract",
   "local_preservation_sha": "5a0672024b798f852b6a36eaa83820c424d0b5aa",
   "local_preservation_ref": "recovery/phenotype-apps-local-20260726",

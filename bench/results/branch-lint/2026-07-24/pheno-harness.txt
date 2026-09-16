@@ -1,4 +1,4 @@
-# branch-lint: /Users/kooshapari/CodeProjects/Phenotype/repos/pheno-harness
+# branch-lint: /Users/<REDACTED>/CodeProjects/Phenotype/repos/pheno-harness
 # scanned=50 allowed=46 grandfathered=1 violations=3
 # VIOLATIONS:
   feat-eval-assignment-export  reason=no_allowed_prefix -> feat/eval-assignment-export

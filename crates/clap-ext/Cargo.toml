@@ -5,7 +5,7 @@ edition.workspace = true
 rust-version.workspace = true
 license.workspace = true
 repository.workspace = true
-description = "Shared Rust CLI extension library: Verbosity, tracing setup, common clap args (vendored; upstream KooshaPari/clap-ext retired)"
+description = "Shared Rust CLI extension library: Verbosity, tracing setup, common clap args (vendored; upstream <REDACTED>/clap-ext retired)"
 publish = false
 
 [dependencies]

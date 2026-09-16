@@ -8,23 +8,23 @@
 //!   3. Scaffolds a fresh `<slug>-landing/` directory from the
 //!      `agileplus-landing` template, swapping in the slug-specific
 //!      title/description/REPO constant.
-//!   4. `git init`, commits, creates `KooshaPari/<slug>-landing` on GitHub, pushes.
+//!   4. `git init`, commits, creates `<REDACTED>/<slug>-landing` on GitHub, pushes.
 //!   5. `vercel link --yes` and `vercel deploy --prod --yes` against the new
 //!      project.
-//!   6. Attaches `<slug>.kooshapari.com` as a custom domain.
+//!   6. Attaches `<slug>.<REDACTED>.com` as a custom domain.
 //!
 //! Idempotent: each step is a no-op if already done (404 → create, 4xx existing → skip).
 //!
 //! Usage:
 //!   phenotype-landing-bootstrap \
 //!     --slug thegent \
-//!     --repo KooshaPari/thegent \
+//!     --repo <REDACTED>/thegent \
 //!     --title "thegent" \
 //!     --tagline "Python agent runtime with tool registry"
 //!
 //! Env required:
 //!   - CF_API_TOKEN (or --cf-token-file ~/.cloudflare-token)
-//!   - CF_ZONE_ID (default: 6c9edab581e9c7b8fdb6a83adc6878ea = kooshapari.com)
+//!   - CF_ZONE_ID (default: 6c9edab581e9c7b8fdb6a83adc6878ea = <REDACTED>.com)
 //!   - GITHUB_TOKEN (via `gh auth token`)
 //!
 //! Wraps: `gh` CLI + `vercel` CLI + Cloudflare REST API.
@@ -40,11 +40,11 @@ const ZONE_ID_DEFAULT: &str = "6c9edab581e9c7b8fdb6a83adc6878ea";
 #[derive(Parser, Debug)]
 #[command(version, about)]
 struct Args {
-    /// DNS slug (e.g. "thegent" → thegent.kooshapari.com).
+    /// DNS slug (e.g. "thegent" → thegent.<REDACTED>.com).
     #[arg(long)]
     slug: String,
 
-    /// Source repo, e.g. "KooshaPari/thegent".
+    /// Source repo, e.g. "<REDACTED>/thegent".
     #[arg(long)]
     repo: String,
 
@@ -147,7 +147,7 @@ struct CfCnameBody<'a> {
 fn main() -> Result<()> {
     let args = Args::parse();
     let slug = args.slug.as_str();
-    let domain = format!("{slug}.kooshapari.com");
+    let domain = format!("{slug}.<REDACTED>.com");
     let title = args.title.clone().unwrap_or_else(|| capitalize(slug));
     let out_dir = args
         .out
@@ -214,7 +214,7 @@ fn main() -> Result<()> {
 
     // Step 4: GitHub.
     if !args.skip_github {
-        let gh_repo = format!("KooshaPari/{slug}-landing");
+        let gh_repo = format!("<REDACTED>/{slug}-landing");
         git_init_commit_push(&out_dir, &gh_repo, &domain, &args.dry_run)?;
         if !args.skip_topics {
             apply_repo_topics(&gh_repo, DEFAULT_REPO_TOPICS, &args.dry_run)?;
@@ -371,15 +371,15 @@ fn scaffold_full(
             // hardcodes like `VERCEL_PROJECT = "agileplus"`, the
             // `agileplus-landing-build` GitHub User-Agent, and breadcrumb labels.
             // Earlier specific replacements (`agileplus-landing`,
-            // `agileplus.kooshapari.com`) must run first so they aren't broken
+            // `agileplus.<REDACTED>.com`) must run first so they aren't broken
             // by the broad lowercase pass.
             let replaced = s
                 .replace("agileplus-landing", &format!("{slug}-landing"))
                 .replace(
-                    "agileplus.kooshapari.com",
-                    &format!("{slug}.kooshapari.com"),
+                    "agileplus.<REDACTED>.com",
+                    &format!("{slug}.<REDACTED>.com"),
                 )
-                .replace("KooshaPari/AgilePlus", repo)
+                .replace("<REDACTED>/AgilePlus", repo)
                 .replace(
                     "AgilePlus — Spec-driven development engine",
                     &format!("{title} — {tagline}"),
@@ -415,7 +415,7 @@ fn scaffold_redirect(out: &Path, slug: &str, canonical: &str, dry: &bool) -> Res
     std::fs::write(
         out.join("README.md"),
         format!(
-            "# {slug}-landing\n\n301 redirect from {slug}.kooshapari.com → {canonical} (canonical .dev domain).\n"
+            "# {slug}-landing\n\n301 redirect from {slug}.<REDACTED>.com → {canonical} (canonical .dev domain).\n"
         ),
     )?;
     std::fs::write(
@@ -551,7 +551,7 @@ fn scaffold_governance(out: &Path, license: &str, dry: &bool) -> Result<()> {
 }
 
 /// Apply default GitHub topics (`org-page`, `astro`, `landing-page`) so the
-/// repo shows up in `projects.kooshapari.com` portfolio aggregation
+/// repo shows up in `projects.<REDACTED>.com` portfolio aggregation
 /// (`topic:org-page` query). Idempotent: `--add-topic` is a no-op if the
 /// topic already exists.
 fn apply_repo_topics(gh_repo: &str, topics: &[&str], dry: &bool) -> Result<()> {

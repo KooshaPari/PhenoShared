@@ -20,5 +20,5 @@ this handles hot-swappable runtime values (different lifecycle, different
 uses: benchmark config, feature flags, rate limits, experimental params).
 
 ## See also
-- ADR-095: https://github.com/KooshaPari/pheno-docs/adr/095
-- Configra (static config): https://github.com/KooshaPari/Configra
+- ADR-095: https://github.com/<REDACTED>/pheno-docs/adr/095
+- Configra (static config): https://github.com/<REDACTED>/Configra

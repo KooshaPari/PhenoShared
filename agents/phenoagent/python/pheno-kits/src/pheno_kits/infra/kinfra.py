@@ -36,11 +36,11 @@ class KInfra:
         print(f"Service available at: {tunnel_info.hostname}")
     """
 
-    def __init__(self, domain: str = "kooshapari.com", config_dir: str | None = None):
+    def __init__(self, domain: str = "<REDACTED>.com", config_dir: str | None = None):
         """Initialize KInfra.
 
         Args:
-            domain: Base domain for tunnels (default: kooshapari.com)
+            domain: Base domain for tunnels (default: <REDACTED>.com)
             config_dir: Configuration directory (default: ~/.kinfra)
         """
         self.domain = domain

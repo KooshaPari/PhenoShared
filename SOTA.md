@@ -272,13 +272,13 @@ The `.llms.txt` file (proposed by Anthropic, adopted by Vercel, Stripe, and othe
 
 ## Docs
 
-- [Getting Started](https://kooshapari.com/docs/getting-started): Installation and first steps
-- [Architecture](https://kooshapari.com/docs/architecture): System design and principles
+- [Getting Started](https://<REDACTED>.com/docs/getting-started): Installation and first steps
+- [Architecture](https://<REDACTED>.com/docs/architecture): System design and principles
 
 ## Optional
 
-- [API Reference](https://kooshapari.com/reference/api): Complete API documentation
-- [ADRs](https://kooshapari.com/planning/adrs): Architecture decision records
+- [API Reference](https://<REDACTED>.com/reference/api): Complete API documentation
+- [ADRs](https://<REDACTED>.com/planning/adrs): Architecture decision records
 ```
 
 Benefits:

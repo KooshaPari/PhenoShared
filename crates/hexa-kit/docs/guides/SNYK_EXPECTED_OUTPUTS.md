@@ -132,7 +132,7 @@ echo $SNYK_TOKEN
 
 **Command:**
 ```bash
-cd /Users/kooshapari/CodeProjects/Phenotype/repos
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos
 ./scripts/snyk-deploy.sh
 ```
 
@@ -141,7 +141,7 @@ cd /Users/kooshapari/CodeProjects/Phenotype/repos
 ============================================================
 Snyk Security Deployment Script
 ============================================================
-Repository Root: /Users/kooshapari/CodeProjects/Phenotype/repos
+Repository Root: /Users/<REDACTED>/CodeProjects/Phenotype/repos
 Report Directory: .snyk-reports
 Timestamp: 2026-03-30 14:32:15
 
@@ -168,7 +168,7 @@ Starting Snyk security scans...
 **Expected Output (1-2 minutes into deployment):**
 ```
 Scanning: AgilePlus
-  Repository: /Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus
+  Repository: /Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus
   Type: Rust + JavaScript
   Status: In progress...
 
@@ -184,7 +184,7 @@ Scanning: AgilePlus
     Saving to: .snyk-reports/AgilePlus.json
 
 Scanning: heliosCLI
-  Repository: /Users/kooshapari/CodeProjects/Phenotype/repos/heliosCLI
+  Repository: /Users/<REDACTED>/CodeProjects/Phenotype/repos/heliosCLI
   Type: Rust
   Status: In progress...
 
@@ -204,7 +204,7 @@ Scanning: heliosCLI
 **Expected Output (Progress through ~50% of repos):**
 ```
 Scanning: phenotype-infrakit
-  Repository: /Users/kooshapari/CodeProjects/Phenotype/repos/phenotype-infrakit
+  Repository: /Users/<REDACTED>/CodeProjects/Phenotype/repos/phenotype-infrakit
   Type: Rust
   Status: In progress...
 
@@ -220,7 +220,7 @@ Scanning: phenotype-infrakit
   Saving to: .snyk-reports/phenotype-infrakit.json
 
 Scanning: pheno-cli
-  Repository: /Users/kooshapari/CodeProjects/Phenotype/repos/pheno-cli
+  Repository: /Users/<REDACTED>/CodeProjects/Phenotype/repos/pheno-cli
   Type: Go
   Status: In progress...
 
@@ -240,7 +240,7 @@ Scanning: pheno-cli
 **Expected Output (After 7-10 minutes total):**
 ```
 Scanning: zen
-  Repository: /Users/kooshapari/CodeProjects/Phenotype/repos/zen
+  Repository: /Users/<REDACTED>/CodeProjects/Phenotype/repos/zen
   Type: Rust + Python
   Status: In progress...
 
@@ -264,7 +264,7 @@ Total Vulnerabilities Found: 45
   Low:       17
 
 Report Files Generated: 30
-  Location: /Users/kooshapari/CodeProjects/Phenotype/repos/.snyk-reports/
+  Location: /Users/<REDACTED>/CodeProjects/Phenotype/repos/.snyk-reports/
   Summary: .snyk-reports/report.txt
   Detailed: .snyk-reports/*.json (30 files)
 
@@ -285,7 +285,7 @@ Next Steps: Review .snyk-reports/report.txt
 
 **Command:**
 ```bash
-ls -lh /Users/kooshapari/CodeProjects/Phenotype/repos/.snyk-reports/
+ls -lh /Users/<REDACTED>/CodeProjects/Phenotype/repos/.snyk-reports/
 ```
 
 **Expected Output:**
@@ -311,7 +311,7 @@ total 520K
 
 **Command:**
 ```bash
-cat /Users/kooshapari/CodeProjects/Phenotype/repos/.snyk-reports/report.txt
+cat /Users/<REDACTED>/CodeProjects/Phenotype/repos/.snyk-reports/report.txt
 ```
 
 **Expected Output (First 50 lines):**
@@ -319,7 +319,7 @@ cat /Users/kooshapari/CodeProjects/Phenotype/repos/.snyk-reports/report.txt
 =================================================================
 Snyk Security Scan Report
 Generated: 2026-03-30 14:40:47
-Repository Root: /Users/kooshapari/CodeProjects/Phenotype/repos
+Repository Root: /Users/<REDACTED>/CodeProjects/Phenotype/repos
 =================================================================
 
 SUMMARY
@@ -418,7 +418,7 @@ NEXT STEPS
 
 **Command:**
 ```bash
-cat /Users/kooshapari/CodeProjects/Phenotype/repos/.snyk-reports/AgilePlus.json | jq '.vulnerabilities[0]'
+cat /Users/<REDACTED>/CodeProjects/Phenotype/repos/.snyk-reports/AgilePlus.json | jq '.vulnerabilities[0]'
 ```
 
 **Expected Output (Single Vulnerability Example):**
@@ -483,7 +483,7 @@ cat /Users/kooshapari/CodeProjects/Phenotype/repos/.snyk-reports/AgilePlus.json 
 
 **Command:**
 ```bash
-cat > /Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus/.snyk << 'EOF'
+cat > /Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus/.snyk << 'EOF'
 version: v1.19.0
 allow-licenses:
   - MIT
@@ -508,7 +508,7 @@ EOF
 
 **Verify it was created:**
 ```bash
-cat /Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus/.snyk
+cat /Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus/.snyk
 ```
 
 **Expected Output:**
@@ -537,7 +537,7 @@ patch: {}
 
 **Command:**
 ```bash
-gh secret set SNYK_TOKEN --org KooshaPari
+gh secret set SNYK_TOKEN --org <REDACTED>
 ```
 
 **Expected Output (Interactive Prompt):**
@@ -547,19 +547,19 @@ gh secret set SNYK_TOKEN --org KooshaPari
 
 **After Pasting Token and Pressing Enter:**
 ```
-✓ Set organization secret SNYK_TOKEN for KooshaPari
+✓ Set organization secret SNYK_TOKEN for <REDACTED>
 ```
 
 **If Already Exists:**
 ```
-✓ Set organization secret SNYK_TOKEN for KooshaPari (updated)
+✓ Set organization secret SNYK_TOKEN for <REDACTED> (updated)
 ```
 
 ### 4.2: Verifying Secret is Set
 
 **Command:**
 ```bash
-gh secret list --org KooshaPari
+gh secret list --org <REDACTED>
 ```
 
 **Expected Output:**
@@ -572,7 +572,7 @@ SNYK_TOKEN        2026-03-30 14:42:13 +0000 UTC
 
 **Command:**
 ```bash
-cd /Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus
 ls -la .github/workflows/snyk-scan.yml
 ```
 
@@ -603,14 +603,14 @@ Compressing objects: 100% (2/2), done.
 Writing objects to 100% (3/3), 346 bytes | 346.00 KiB/s, done.
 Total 3 (delta 2), reused 0 (delta 0), writing 2 (delta 2)
 remote: Resolving deltas: 100% (2/2), completed with 2 remote deltas.
-To https://github.com/KooshaPari/AgilePlus.git
+To https://github.com/<REDACTED>/AgilePlus.git
    a3b4c5d..8a7c4b2  main -> main
 ```
 
 ### 4.5: Workflow Triggering
 
 **Expected Output (Check GitHub Actions UI):**
-1. Go to: https://github.com/KooshaPari/AgilePlus/actions
+1. Go to: https://github.com/<REDACTED>/AgilePlus/actions
 2. Look for: **"Snyk Security Scan"** workflow
 3. Status should show: **"In Progress"** or **"Completed"**
 
@@ -656,7 +656,7 @@ JSON report saved to snyk-report.json
 ### 4.7: Downloading Artifacts
 
 **From GitHub Actions UI:**
-1. Go to: https://github.com/KooshaPari/AgilePlus/actions/runs/[run-id]
+1. Go to: https://github.com/<REDACTED>/AgilePlus/actions/runs/[run-id]
 2. Scroll to: **"Artifacts"** section
 3. Download: `snyk-report` (.zip file)
 4. Contains: `snyk-report.json`
@@ -745,10 +745,10 @@ Please check your SNYK_TOKEN
 **How to Fix:**
 ```bash
 # Verify secret is set
-gh secret list --org KooshaPari | grep SNYK_TOKEN
+gh secret list --org <REDACTED> | grep SNYK_TOKEN
 
 # If missing, set it
-gh secret set SNYK_TOKEN --org KooshaPari
+gh secret set SNYK_TOKEN --org <REDACTED>
 
 # Re-run workflow (make a small commit or trigger manually)
 ```

@@ -31,8 +31,8 @@
 [[workspace]]
 name = "phenotype"
 cwd_prefixes = [
-    "/Users/kooshapari/CodeProjects/Phenotype/",
-    "/Users/kooshapari/CodeProjects/Phenotype-seed/",
+    "/Users/<REDACTED>/CodeProjects/Phenotype/",
+    "/Users/<REDACTED>/CodeProjects/Phenotype-seed/",
 ]
 harnesses = ["codex", "forge", "cursor", "kilo", "droid", "opencode"]
 description = "Phenotype monorepo + seed bridge"
@@ -42,7 +42,7 @@ description = "Phenotype monorepo + seed bridge"
 # ---------------------------------------------------------------------------
 [[workspace]]
 name = "thegent"
-cwd_prefixes = ["/Users/kooshapari/thegent/"]
+cwd_prefixes = ["/Users/<REDACTED>/thegent/"]
 harnesses = ["codex", "forge", "droid"]
 description = "thegent crates workspace"
 
@@ -52,8 +52,8 @@ description = "thegent crates workspace"
 [[workspace]]
 name = "personal"
 cwd_prefixes = [
-    "/Users/kooshapari/personal/",
-    "/Users/kooshapari/notes/",
+    "/Users/<REDACTED>/personal/",
+    "/Users/<REDACTED>/notes/",
 ]
 # no harnesses filter = match all
 description = "Personal projects"
@@ -64,8 +64,8 @@ description = "Personal projects"
 [[workspace]]
 name = "harness-infra"
 cwd_prefixes = [
-    "/Users/kooshapari/CodeProjects/Phenotype/repos/",
-    "/Users/kooshapari/handoff/",
-    "/Users/kooshapari/bin/",
+    "/Users/<REDACTED>/CodeProjects/Phenotype/repos/",
+    "/Users/<REDACTED>/handoff/",
+    "/Users/<REDACTED>/bin/",
 ]
 description = "Resume-all / sharecli development"

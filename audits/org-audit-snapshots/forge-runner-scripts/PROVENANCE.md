@@ -1,7 +1,7 @@
 # PROVENANCE — origin of every script
 
 Every file in this repo originated in `~/.forge/` (a single-machine local
-config directory on KooshaPari's MacBook). This document is the trace matrix
+config directory on <REDACTED>'s MacBook). This document is the trace matrix
 back to the origin so future maintainers can verify content.
 
 ## `bin/subagents-orchestration/`

@@ -2,7 +2,7 @@
 
 ## Mission
 
-Close the **43 open Dependabot alerts** on the default branch of `KooshaPari/phenotype-apps` by opening one PR per fix cluster (group of CVEs closed by a single package version bump).
+Close the **43 open Dependabot alerts** on the default branch of `<REDACTED>/phenotype-apps` by opening one PR per fix cluster (group of CVEs closed by a single package version bump).
 
 ## Result summary
 
@@ -30,23 +30,23 @@ Close the **43 open Dependabot alerts** on the default branch of `KooshaPari/phe
 
 | PR | Title | Cluster | CVEs closed | Files |
 |----|-------|---------|------------:|-------|
-| [#71](https://github.com/KooshaPari/phenotype-apps/pull/71) | `fix(deps): bump next to 16.1.7 (closes 26 CVEs)` | next 14.2.0 → 16.1.7 | **26** | `unified-review/package.json`, `package-lock.json` |
-| [#72](https://github.com/KooshaPari/phenotype-apps/pull/72) | `fix(deps): bump uuid to 12.0.1 (closes 1 CVE)` | uuid ^9.0.0 → ^12.0.1 | **1** | `unified-review/package.json`, `package-lock.json` |
-| [#73](https://github.com/KooshaPari/phenotype-apps/pull/73) | `fix(deps): override postcss to ^8.5.10 (closes 1 CVE)` | postcss override | **1** | `unified-review/package.json`, `package-lock.json` |
-| [#74](https://github.com/KooshaPari/phenotype-apps/pull/74) | `fix(deps): override vite to ^8.0.16 (closes 3 CVEs)` | vite ^5.4.21 → ^8.0.16 | **3** | `Parpoura-5th/package.json`, `package-lock.json` |
-| [#75](https://github.com/KooshaPari/phenotype-apps/pull/75) | `fix(deps): override esbuild to ^0.28.1 (closes 1 CVE)` | esbuild ^0.21.5 → ^0.28.1 | **1** | `Parpoura-5th/package.json`, `package-lock.json` |
-| [#76](https://github.com/KooshaPari/phenotype-apps/pull/76) | `fix(deps): bump mako to 1.3.12 (closes 1 CVE)` | mako 1.3.11 → 1.3.12 | **1** | `Parpoura-5th/uv.lock` |
-| [#78](https://github.com/KooshaPari/phenotype-apps/pull/78) | `fix(deps): bump git2 to 0.20.4 (closes 1 CVE)` | git2 0.18 → 0.20.4 | **1** | `phenotype-ops/tools/phenotype-manifest/Cargo.toml` |
-| [#79](https://github.com/KooshaPari/phenotype-apps/pull/79) | `fix(deps): bump gix to 0.83.0 (closes 5 CVEs)` | gix 0.68 → 0.83.0 (pulls gix-features +0.41.0, gitoxide +0.52.1) | **5** | `phenotype-ops/tools/phenotype-manifest/Cargo.toml` |
-| [#80](https://github.com/KooshaPari/phenotype-apps/pull/80) | `fix(deps): bump python-jose to 3.4.0 (closes 2 CVEs incl. 1 critical)` | python-jose 3.3.0 → 3.4.0 | **2** | `phenotype-ops/review-surface/requirements.txt` |
-| [#81](https://github.com/KooshaPari/phenotype-apps/pull/81) | `fix(deps): bump js-yaml to ^4.2.0 (closes 1 CVE)` | js-yaml ^4.1.0 → ^4.2.0 (lockfile already at 4.2.0; constraint bump only) | **1** | `unified-review/package.json` |
+| [#71](https://github.com/<REDACTED>/phenotype-apps/pull/71) | `fix(deps): bump next to 16.1.7 (closes 26 CVEs)` | next 14.2.0 → 16.1.7 | **26** | `unified-review/package.json`, `package-lock.json` |
+| [#72](https://github.com/<REDACTED>/phenotype-apps/pull/72) | `fix(deps): bump uuid to 12.0.1 (closes 1 CVE)` | uuid ^9.0.0 → ^12.0.1 | **1** | `unified-review/package.json`, `package-lock.json` |
+| [#73](https://github.com/<REDACTED>/phenotype-apps/pull/73) | `fix(deps): override postcss to ^8.5.10 (closes 1 CVE)` | postcss override | **1** | `unified-review/package.json`, `package-lock.json` |
+| [#74](https://github.com/<REDACTED>/phenotype-apps/pull/74) | `fix(deps): override vite to ^8.0.16 (closes 3 CVEs)` | vite ^5.4.21 → ^8.0.16 | **3** | `Parpoura-5th/package.json`, `package-lock.json` |
+| [#75](https://github.com/<REDACTED>/phenotype-apps/pull/75) | `fix(deps): override esbuild to ^0.28.1 (closes 1 CVE)` | esbuild ^0.21.5 → ^0.28.1 | **1** | `Parpoura-5th/package.json`, `package-lock.json` |
+| [#76](https://github.com/<REDACTED>/phenotype-apps/pull/76) | `fix(deps): bump mako to 1.3.12 (closes 1 CVE)` | mako 1.3.11 → 1.3.12 | **1** | `Parpoura-5th/uv.lock` |
+| [#78](https://github.com/<REDACTED>/phenotype-apps/pull/78) | `fix(deps): bump git2 to 0.20.4 (closes 1 CVE)` | git2 0.18 → 0.20.4 | **1** | `phenotype-ops/tools/phenotype-manifest/Cargo.toml` |
+| [#79](https://github.com/<REDACTED>/phenotype-apps/pull/79) | `fix(deps): bump gix to 0.83.0 (closes 5 CVEs)` | gix 0.68 → 0.83.0 (pulls gix-features +0.41.0, gitoxide +0.52.1) | **5** | `phenotype-ops/tools/phenotype-manifest/Cargo.toml` |
+| [#80](https://github.com/<REDACTED>/phenotype-apps/pull/80) | `fix(deps): bump python-jose to 3.4.0 (closes 2 CVEs incl. 1 critical)` | python-jose 3.3.0 → 3.4.0 | **2** | `phenotype-ops/review-surface/requirements.txt` |
+| [#81](https://github.com/<REDACTED>/phenotype-apps/pull/81) | `fix(deps): bump js-yaml to ^4.2.0 (closes 1 CVE)` | js-yaml ^4.1.0 → ^4.2.0 (lockfile already at 4.2.0; constraint bump only) | **1** | `unified-review/package.json` |
 | | | **Total** | **42** | |
 
 ## Issue opened (1)
 
 | Issue | Title | CVE |
 |-------|-------|-----|
-| [#77](https://github.com/KooshaPari/phenotype-apps/issues/77) | Unfixable Dependabot alert #5: ecdsa (CVE-2024-23342 / GHSA-wj6h-64fc-37mp) — Minerva timing attack, no patch available | CVE-2024-23342 |
+| [#77](https://github.com/<REDACTED>/phenotype-apps/issues/77) | Unfixable Dependabot alert #5: ecdsa (CVE-2024-23342 / GHSA-wj6h-64fc-37mp) — Minerva timing attack, no patch available | CVE-2024-23342 |
 
 **Why no PR for #5:** python-ecdsa maintainers explicitly consider the Minerva P-256 timing attack out of scope; `first_patched_version` is `null`. Recommended remediation: replace `python-jose` with `pyjwt[crypto]` (drops the unmaintained `python-ecdsa` transitive entirely).
 
@@ -108,16 +108,16 @@ Stale alert: the lockfile already resolves `js-yaml` to 4.2.0 (verified via `jq`
 
 ```bash
 # Re-fetch alert list and confirm all 42 fixable CVEs have matching PR branches:
-gh api "repos/KooshaPari/phenotype-apps/dependabot/alerts?state=open&per_page=100" \
+gh api "repos/<REDACTED>/phenotype-apps/dependabot/alerts?state=open&per_page=100" \
   | jq '.[] | {number, package: .security_advisory.vulnerabilities[0].package.name, fix: .security_advisory.vulnerabilities[0].first_patched_version.identifier}'
 
 # List all opened dependabot PRs:
-gh pr list --repo KooshaPari/phenotype-apps --state open \
+gh pr list --repo <REDACTED>/phenotype-apps --state open \
   --json number,headRefName,title \
   | jq '.[] | select(.headRefName | startswith("fix/dependabot-"))'
 
 # Verify PR #74 (vite override) closed alert #4:
-gh pr view 74 --repo KooshaPari/phenotype-apps --json files,title,body
+gh pr view 74 --repo <REDACTED>/phenotype-apps --json files,title,body
 ```
 
 ## Constraint compliance

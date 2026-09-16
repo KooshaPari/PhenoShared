@@ -55,7 +55,7 @@ done
 
 # (b) GitHub Actions backup health (last 5 runs)
 gh actions runs list \
-  --repo KooshaPari/phenotype-tooling \
+  --repo <REDACTED>/phenotype-tooling \
   --workflow=fleet-substrate-tools-backup.yml \
   --limit 5 \
   --json status,conclusion,createdAt,headBranch \
@@ -63,7 +63,7 @@ gh actions runs list \
 
 # (c) Auto-filed GitHub issues from the drift detector (last 4 weeks)
 gh issue list \
-  --repo KooshaPari/phenotype-org-audits \
+  --repo <REDACTED>/phenotype-org-audits \
   --label drift-detector \
   --state all \
   --limit 20 \
@@ -106,7 +106,7 @@ acceptable, false negatives are not.
 | :----------------------------------------------------- | :--------------------------- | :------------------------------------------------------------------------------ |
 | No `~/.fleet-cron/*.log` for 7+ days                   | **Critical** (cron is dead)  | Check `crontab -l`; check host is up; check `flock` installed                   |
 | No `findings/*-<date>.md` for 7+ days                  | **Critical** (output missing) | Check wrapper logs for `EXIT=1`; check `$REPOS_ROOT`; check `git push` creds    |
-| No `phenotype-tooling` Actions runs for 7+ days      | **Warning** (backup is dead) | Check workflow file present; check `KooshaPari/phenotype-tooling` not archived  |
+| No `phenotype-tooling` Actions runs for 7+ days      | **Warning** (backup is dead) | Check workflow file present; check `<REDACTED>/phenotype-tooling` not archived  |
 | Drift detector hasn't filed any issues in 4+ weeks     | **Warning** (threshold drift) | Threshold may be too high; review `pheno-drift-detector` `--score-min` default  |
 | Output file is empty / only header                    | **Info** (clean run)          | This is success — no candidates / hits / violations above the threshold        |
 | Wrapper exits 2 (candidates / hits / violations found) | **Info** (expected)           | Triage the output; auto-filed issue (drift) or weekly review (predict / lint)  |

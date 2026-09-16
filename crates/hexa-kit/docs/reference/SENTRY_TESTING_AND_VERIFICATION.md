@@ -127,7 +127,7 @@ mod sentry_tests {
 
 **Run the test**:
 ```bash
-cd /Users/kooshapari/CodeProjects/Phenotype/repos/phenotype-infrakit
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos/phenotype-infrakit
 export SENTRY_DSN="https://[key]@o[org-id].ingest.us.sentry.io/[project-id]"
 cargo test test_error_capture --lib
 ```
@@ -176,7 +176,7 @@ mod sentry_tests {
 
 **Run the test**:
 ```bash
-cd /Users/kooshapari/CodeProjects/Phenotype/repos/heliosCLI
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos/heliosCLI
 export SENTRY_DSN="https://[key]@o[org-id].ingest.us.sentry.io/[project-id]"
 cargo test test_async_error_capture --lib
 ```
@@ -411,7 +411,7 @@ done
 1. Go to Sentry Dashboard → AgilePlus → **Issues**
 2. Find the test error
 3. Check if it has a **GitHub Issue** indicator
-4. Go to [GitHub Issues](https://github.com/KooshaPari/AgilePlus/issues)
+4. Go to [GitHub Issues](https://github.com/<REDACTED>/AgilePlus/issues)
 5. Look for issue: "[Sentry] panicked at 'assertion failed'"
 6. Verify it:
    - ✅ Links to Sentry issue
@@ -448,15 +448,15 @@ sentry-cli releases list -p agileplus | grep 1.0.0-test
 
 ```bash
 # Terminal 1: AgilePlus
-cd /Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus
 SENTRY_DSN="$AGILEPLUS_DSN" cargo test test_panic_capture --lib -- --ignored
 
 # Terminal 2: phenotype-infrakit
-cd /Users/kooshapari/CodeProjects/Phenotype/repos/phenotype-infrakit
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos/phenotype-infrakit
 SENTRY_DSN="$INFRAKIT_DSN" cargo test test_error_capture --lib
 
 # Terminal 3: heliosCLI
-cd /Users/kooshapari/CodeProjects/Phenotype/repos/heliosCLI
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos/heliosCLI
 SENTRY_DSN="$HELIOSCLI_DSN" cargo test test_async_error_capture --lib
 ```
 

@@ -14,7 +14,7 @@
     ],
     "component": {
       "type": "library",
-      "bom-ref": "path+file:///Users/kooshapari/CodeProjects/Phenotype/repos/pheno/crates/phenotype-event-sourcing#0.2.0",
+      "bom-ref": "path+file:///Users/<REDACTED>/CodeProjects/Phenotype/repos/pheno/crates/phenotype-event-sourcing#0.2.0",
       "name": "phenotype-event-sourcing",
       "version": "0.2.0",
       "scope": "required",
@@ -27,7 +27,7 @@
       "components": [
         {
           "type": "library",
-          "bom-ref": "path+file:///Users/kooshapari/CodeProjects/Phenotype/repos/pheno/crates/phenotype-event-sourcing#0.2.0 bin-target-0",
+          "bom-ref": "path+file:///Users/<REDACTED>/CodeProjects/Phenotype/repos/pheno/crates/phenotype-event-sourcing#0.2.0 bin-target-0",
           "name": "phenotype_event_sourcing",
           "version": "0.2.0",
           "purl": "pkg:cargo/phenotype-event-sourcing@0.2.0?download_url=file://.#src/lib.rs"
@@ -1464,7 +1464,7 @@
   ],
   "dependencies": [
     {
-      "ref": "path+file:///Users/kooshapari/CodeProjects/Phenotype/repos/pheno/crates/phenotype-event-sourcing#0.2.0",
+      "ref": "path+file:///Users/<REDACTED>/CodeProjects/Phenotype/repos/pheno/crates/phenotype-event-sourcing#0.2.0",
       "dependsOn": [
         "registry+https://github.com/rust-lang/crates.io-index#async-trait@0.1.89",
         "registry+https://github.com/rust-lang/crates.io-index#blake3@1.8.4",

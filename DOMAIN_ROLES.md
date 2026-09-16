@@ -2,7 +2,7 @@
 
 > **Authority:** `phenotype-registry`  
 > **Supersedes:** language-monorepo absorption (e.g. “phenotype-rust-sdk absorbs everything”)  
-> **Genesis standard:** [HexaKit docs/genesis/STANDARD.md](https://github.com/KooshaPari/HexaKit/blob/main/docs/genesis/STANDARD.md) (PR #234+)
+> **Genesis standard:** [HexaKit docs/genesis/STANDARD.md](https://github.com/<REDACTED>/HexaKit/blob/main/docs/genesis/STANDARD.md) (PR #234+)
 
 Organize the fleet by **what boundary you own**, not by primary programming language.
 
@@ -13,7 +13,7 @@ Organize the fleet by **what boundary you own**, not by primary programming lang
 | `genesis` | Repo bootstrap, templates, charter/review/OKF | **HexaKit** | template smoke, compliance schema | all lang scaffolds in `templates/` |
 | `config` | Layered config, validation, env | **phenotype-config** (workspace; `settly` crate) | Rust `settly` | **Conft** (TS), **phenotype-config** (Py 3.14/uv) |
 | `observe` | Metrics, tracing, OTLP, exporters | **PhenoObservability**, **phenotype-otel** | tracing/metrics crates (Traceon domain) | Py observability-kit, dashboards |
-| `connect` | MCP, auth, identity | **[PhenoFastMCP](https://github.com/KooshaPari/PhenoFastMCP)***, **[PhenoMCPServers](https://github.com/KooshaPari/PhenoMCPServers)**, **[substrate](https://github.com/KooshaPari/substrate)**, **Authvault** | Rust/Go/Python per ADR-017 | Py `[connect]` via phenotype-python-sdk; Go HTTP/SSE edges (MCPForge, ops-mcp) |
+| `connect` | MCP, auth, identity | **[PhenoFastMCP](https://github.com/<REDACTED>/PhenoFastMCP)***, **[PhenoMCPServers](https://github.com/<REDACTED>/PhenoMCPServers)**, **[substrate](https://github.com/<REDACTED>/substrate)**, **Authvault** | Rust/Go/Python per ADR-017 | Py `[connect]` via phenotype-python-sdk; Go HTTP/SSE edges (MCPForge, ops-mcp) |
 | `resilience` | Breakers, retry, bulkhead | **phenotype-resilience** | Rust sentinel/resilience | Py resilience-kit |
 | `test` | Test SDK, journeys, fixtures | **phenotype-test** | **phenotype-journeys** (Rust CLI) | Py testing-kit, phenotype-testing (uv) |
 | `quality` | Static analysis, LLM validation | **KodeVibe**, **kwality** | — | Go engine (justified), shell UX |

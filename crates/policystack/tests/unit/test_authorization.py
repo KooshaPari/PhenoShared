@@ -19,7 +19,7 @@ class AuthorizationDecisionTest(unittest.TestCase):
             resolved["policy"],
             action="exec",
             command="ps aux | grep -i claude | grep -v grep | head -20",
-            cwd="/Users/kooshapari/CodeProjects/Phenotype/repos/trace",
+            cwd="/Users/<REDACTED>/CodeProjects/Phenotype/repos/trace",
         )
         assert result["decision"] == "allow"
         assert result["winning_rule"]["effect"] == "allow"
@@ -36,10 +36,10 @@ class AuthorizationDecisionTest(unittest.TestCase):
             action="exec",
             command=(
                 "mkdir -p "
-                "/Users/kooshapari/CodeProjects/Phenotype/repos/trace/"
+                "/Users/<REDACTED>/CodeProjects/Phenotype/repos/trace/"
                 "src/tracertm/cli/commands/test"
             ),
-            cwd="/Users/kooshapari/CodeProjects/Phenotype/repos",
+            cwd="/Users/<REDACTED>/CodeProjects/Phenotype/repos",
         )
         assert result["decision"] == "allow"
         assert result["winning_rule"]["effect"] == "allow"
@@ -59,7 +59,7 @@ class AuthorizationDecisionTest(unittest.TestCase):
                 'echo "=== $repo ===" && '
                 '[ -d "$repo/.github/workflows" ] && ls "$repo/.github/workflows/"'
             ),
-            cwd="/Users/kooshapari/CodeProjects/Phenotype/repos",
+            cwd="/Users/<REDACTED>/CodeProjects/Phenotype/repos",
         )
         assert result["decision"] == "allow"
         assert result["winning_rule"]["effect"] == "allow"
@@ -75,7 +75,7 @@ class AuthorizationDecisionTest(unittest.TestCase):
             resolved["policy"],
             action="exec",
             command="go clean -cache",
-            cwd="/Users/kooshapari/CodeProjects/Phenotype/repos/trace",
+            cwd="/Users/<REDACTED>/CodeProjects/Phenotype/repos/trace",
         )
         assert result["decision"] == "allow"
         assert result["winning_rule"]["effect"] == "allow"
@@ -91,7 +91,7 @@ class AuthorizationDecisionTest(unittest.TestCase):
             resolved["policy"],
             action="exec",
             command="rm -rf ~/Library/Caches/Homebrew/downloads/*",
-            cwd="/Users/kooshapari",
+            cwd="/Users/<REDACTED>",
         )
         assert result["decision"] == "allow"
         assert result["winning_rule"]["effect"] == "allow"
@@ -107,7 +107,7 @@ class AuthorizationDecisionTest(unittest.TestCase):
             resolved["policy"],
             action="exec",
             command="git symbolic-ref refs/remotes/origin/HEAD",
-            cwd="/Users/kooshapari/CodeProjects/Phenotype/repos/trace",
+            cwd="/Users/<REDACTED>/CodeProjects/Phenotype/repos/trace",
         )
         assert result["decision"] == "allow"
         assert result["winning_rule"]["effect"] == "allow"
@@ -123,7 +123,7 @@ class AuthorizationDecisionTest(unittest.TestCase):
             resolved["policy"],
             action="exec",
             command="git worktree list",
-            cwd="/Users/kooshapari/CodeProjects/Phenotype/repos",
+            cwd="/Users/<REDACTED>/CodeProjects/Phenotype/repos",
         )
         assert result["decision"] == "allow"
         assert result["winning_rule"]["effect"] == "allow"
@@ -139,7 +139,7 @@ class AuthorizationDecisionTest(unittest.TestCase):
             resolved["policy"],
             action="exec",
             command="pwd",
-            cwd="/Users/kooshapari/CodeProjects/Phenotype/repos",
+            cwd="/Users/<REDACTED>/CodeProjects/Phenotype/repos",
         )
         assert result["decision"] == "allow"
         assert result["winning_rule"]["effect"] == "allow"
@@ -156,12 +156,12 @@ class AuthorizationDecisionTest(unittest.TestCase):
             action="exec",
             command=(
                 "readlink -f "
-                "/Users/kooshapari/CodeProjects/Phenotype/repos/worktrees/heliosApp/"
+                "/Users/<REDACTED>/CodeProjects/Phenotype/repos/worktrees/heliosApp/"
                 "claude-md-standardize 2>/dev/null || realpath "
-                "/Users/kooshapari/CodeProjects/Phenotype/repos/worktrees/heliosApp/"
+                "/Users/<REDACTED>/CodeProjects/Phenotype/repos/worktrees/heliosApp/"
                 "claude-md-standardize"
             ),
-            cwd="/Users/kooshapari/CodeProjects/Phenotype/repos",
+            cwd="/Users/<REDACTED>/CodeProjects/Phenotype/repos",
         )
         assert result["decision"] == "allow"
         assert result["winning_rule"]["effect"] == "allow"
@@ -177,12 +177,12 @@ class AuthorizationDecisionTest(unittest.TestCase):
             resolved["policy"],
             action="exec",
             command=(
-                "diff /Users/kooshapari/CodeProjects/Phenotype/repos/worktrees/heliosApp/"
+                "diff /Users/<REDACTED>/CodeProjects/Phenotype/repos/worktrees/heliosApp/"
                 "claude-md-standardize/biome.json "
-                "/Users/kooshapari/CodeProjects/Phenotype/repos/heliosApp-wtrees/"
+                "/Users/<REDACTED>/CodeProjects/Phenotype/repos/heliosApp-wtrees/"
                 'claude-md-standardize/biome.json 2>/dev/null || echo "DIFFERENT or one missing"'
             ),
-            cwd="/Users/kooshapari/CodeProjects/Phenotype/repos",
+            cwd="/Users/<REDACTED>/CodeProjects/Phenotype/repos",
         )
         assert result["decision"] == "allow"
         assert result["winning_rule"]["effect"] == "allow"
@@ -204,7 +204,7 @@ class AuthorizationDecisionTest(unittest.TestCase):
                 'echo "=== $repo ==="; if [ -d "$repo" ]; then [ -d "$repo/.github" ] && '
                 'echo "Has .github:" && ls "$repo/.github/"'
             ),
-            cwd="/Users/kooshapari/CodeProjects/Phenotype/repos",
+            cwd="/Users/<REDACTED>/CodeProjects/Phenotype/repos",
         )
         assert result["decision"] == "allow"
         assert result["winning_rule"]["effect"] == "allow"
@@ -228,7 +228,7 @@ class AuthorizationDecisionTest(unittest.TestCase):
                 'echo "Workflows: 0"; [ -f "$repo/.pre-commit-config.yaml" ] && '
                 'echo "Pre-commit: YES" || echo "Pre-commit: NO"; echo ""; done'
             ),
-            cwd="/Users/kooshapari/CodeProjects/Phenotype/repos",
+            cwd="/Users/<REDACTED>/CodeProjects/Phenotype/repos",
         )
         assert result["decision"] == "allow"
         assert result["winning_rule"]["effect"] == "allow"
@@ -244,7 +244,7 @@ class AuthorizationDecisionTest(unittest.TestCase):
             resolved["policy"],
             action="exec",
             command="git commit -m test",
-            cwd="/Users/kooshapari/CodeProjects/Phenotype/repos/thegent-wtrees/demo",
+            cwd="/Users/<REDACTED>/CodeProjects/Phenotype/repos/thegent-wtrees/demo",
         )
         assert result["decision"] == "allow"
         assert result["winning_rule"]["id"] in {"thegent-allow-git-write-in-worktrees", "phenotype-allow-worktree-git-ops"}
@@ -276,7 +276,7 @@ class AuthorizationDecisionTest(unittest.TestCase):
             resolved["policy"],
             action="exec",
             command="git commit --no-verify -m test",
-            cwd="/Users/kooshapari/CodeProjects/Phenotype/repos/thegent-wtrees/demo",
+            cwd="/Users/<REDACTED>/CodeProjects/Phenotype/repos/thegent-wtrees/demo",
         )
         assert result["decision"] == "deny"
         assert result["winning_rule"]["id"] == "user-deny-no-verify-bypass"
@@ -292,7 +292,7 @@ class AuthorizationDecisionTest(unittest.TestCase):
             resolved["policy"],
             action="exec",
             command="curl https://example.com",
-            cwd="/Users/kooshapari/CodeProjects/Phenotype/repos/trace",
+            cwd="/Users/<REDACTED>/CodeProjects/Phenotype/repos/trace",
         )
         assert result["decision"] == "ask"
         assert result["winning_rule"] is None

@@ -8,10 +8,10 @@
 
 Two sibling repos exist for spec-format ingestion:
 
-- `KooshaPari/agileplus-spec-harmonizer` (Public, Rust) — "Harmonizer for GSD,
+- `<REDACTED>/agileplus-spec-harmonizer` (Public, Rust) — "Harmonizer for GSD,
   OpenSpec, BMAD-Method, and Spec-Kitty spec formats → unified WorkPackage shape.
   12/12 tests pass. Pure Rust, no async, no cgo."
-- `KooshaPari/agileplus-spec-harmonizer-tool` (Public, Rust) — "Preserved local WIP
+- `<REDACTED>/agileplus-spec-harmonizer-tool` (Public, Rust) — "Preserved local WIP
   from agileplus-spec-harmonizer-tool."
 
 User directive: absorb both repos into `AgilePlus` + `agent-platform`.
@@ -81,9 +81,9 @@ ingestion code is the `AgilePlus` Rust workspace.
 
 ## References
 
-- Source repo: `KooshaPari/agileplus-spec-harmonizer` (archived 2026-06-18)
-- Source repo: `KooshaPari/agileplus-spec-harmonizer-tool` (archived 2026-06-18)
-- Target repo: `KooshaPari/AgilePlus` (`agileplus/crates/agileplus-spec-harmonizer/`)
+- Source repo: `<REDACTED>/agileplus-spec-harmonizer` (archived 2026-06-18)
+- Source repo: `<REDACTED>/agileplus-spec-harmonizer-tool` (archived 2026-06-18)
+- Target repo: `<REDACTED>/AgilePlus` (`agileplus/crates/agileplus-spec-harmonizer/`)
 - Test count: 12/12 passing (`cargo test -p agileplus-spec-harmonizer`)
 - Design constraint: "no async, no cgo" preserved (no `tokio` dep added)
 - License: MIT OR Apache-2.0 (compatible with source MIT)

@@ -130,7 +130,7 @@ Zerokit, Httpora, Apisync, Hexacore, HexaGo, HexaPy, HexaType, phenotype-cipher,
 ### Track F: GH Pages + phenoSDK ✅
 
 **phenoSDK mkdocs.yml:** FIXED
-- Changed `site_url` from `https://example.com` → `https://kooshapari.github.io/phenoSDK/`
+- Changed `site_url` from `https://example.com` → `https://<REDACTED>.github.io/phenoSDK/`
 
 **GH Pages Workflows Pushed:**
 | Repo | Commit | Status |

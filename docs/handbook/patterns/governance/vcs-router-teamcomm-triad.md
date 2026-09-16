@@ -12,11 +12,11 @@ Three repositories form a *team-coordination-over-git* stack. They are intention
 
 | Repo | Language | Default surface | Purpose (verbatim where possible) | Status |
 |---|---|---|---|---|
-| [`KooshaPari/PhenoVCS`](https://github.com/KooshaPari/PhenoVCS) | Rust | CLI + library | Phenotype-version-control layer — worktrees, branch topology, deterministic commit identities over the Git object model. Substrate of the other two. | active (last push 2026-09-10) |
-| [`KooshaPari/phenotype-router`](https://github.com/KooshaPari/phenotype-router) | Rust | library | Routes messages across git workspaces; depends on PhenoVCS for identity. | active (last push 2026-09-09) |
-| [`KooshaPari/phenotype-teamcomm`](https://github.com/KooshaPari/phenotype-teamcomm) | Rust | library | Human-team communication patterns on top of PhenoVCS and phenotype-router. | active (last push 2026-09-10) |
+| [`<REDACTED>/PhenoVCS`](https://github.com/<REDACTED>/PhenoVCS) | Rust | CLI + library | Phenotype-version-control layer — worktrees, branch topology, deterministic commit identities over the Git object model. Substrate of the other two. | active (last push 2026-09-10) |
+| [`<REDACTED>/phenotype-router`](https://github.com/<REDACTED>/phenotype-router) | Rust | library | Routes messages across git workspaces; depends on PhenoVCS for identity. | active (last push 2026-09-09) |
+| [`<REDACTED>/phenotype-teamcomm`](https://github.com/<REDACTED>/phenotype-teamcomm) | Rust | library | Human-team communication patterns on top of PhenoVCS and phenotype-router. | active (last push 2026-09-10) |
 
-All three live on the KooshaPari GitHub account under the Phenotype-org umbrella. None is archived. None is private.
+All three live on the <REDACTED> GitHub account under the Phenotype-org umbrella. None is archived. None is private.
 
 ## Dependency graph
 
@@ -88,10 +88,10 @@ Consolidate the three into one repo *only* if at least two of these become true:
 
 ## File locations
 
-- `KooshaPari/PhenoVCS` — primary
-- `KooshaPari/phenotype-router` — primary
-- `KooshaPari/phenotype-teamcomm` — primary
-- `KooshaPari/phenodocs` — this document and `mcp-fork-selection.md` are siblings under `docs/handbook/patterns/governance/`
+- `<REDACTED>/PhenoVCS` — primary
+- `<REDACTED>/phenotype-router` — primary
+- `<REDACTED>/phenotype-teamcomm` — primary
+- `<REDACTED>/phenodocs` — this document and `mcp-fork-selection.md` are siblings under `docs/handbook/patterns/governance/`
 
 ## Out-of-scope (separate batches)
 

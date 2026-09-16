@@ -9,13 +9,13 @@
 
 Per ADR-022 (config consolidation — two-crate canonical split) and ADR-031 (Configra absorb), the seven repos converging on a single canonical config surface are:
 
-1. **`KooshaPari/Configra`** — canonical home (Rust workspace; absorbs everything below). Created 2026-03-25.
-2. **`KooshaPari/phenotype-config`** — Rust crate. Two-crate split per ADR-022: `phenotype-config-loader` (parsing) + `phenotype-shared-config` (types). Targeted by Configra absorb (ADR-031) with archive date 2026-07-15 (executed early 2026-06-19 per AGENTS.md).
-3. **`KooshaPari/pheno-config`** — pure reusable library (ADR-023 substrate placement). Light dep; mostly delegates to Configra today.
-4. **`KooshaPari/Conft`** — earlier-stage Rust config prototype, archived pre-2026-06.
-5. **`KooshaPari/Configra-conft-settly-check`** — worktree container used during the absorb PR cycle.
-6. **`KooshaPari/Settly`** (the Go SDK components — `phenotype-go-sdk/pkg/config`) — original Go config loader, since ported to Rust in Configra per `findings/2026-06-19-dup-matrix.md`.
-7. **`KooshaPari/settly-check`** — config-validation sidecar, folded into Configra per ADR-017 (full deprecation).
+1. **`<REDACTED>/Configra`** — canonical home (Rust workspace; absorbs everything below). Created 2026-03-25.
+2. **`<REDACTED>/phenotype-config`** — Rust crate. Two-crate split per ADR-022: `phenotype-config-loader` (parsing) + `phenotype-shared-config` (types). Targeted by Configra absorb (ADR-031) with archive date 2026-07-15 (executed early 2026-06-19 per AGENTS.md).
+3. **`<REDACTED>/pheno-config`** — pure reusable library (ADR-023 substrate placement). Light dep; mostly delegates to Configra today.
+4. **`<REDACTED>/Conft`** — earlier-stage Rust config prototype, archived pre-2026-06.
+5. **`<REDACTED>/Configra-conft-settly-check`** — worktree container used during the absorb PR cycle.
+6. **`<REDACTED>/Settly`** (the Go SDK components — `phenotype-go-sdk/pkg/config`) — original Go config loader, since ported to Rust in Configra per `findings/2026-06-19-dup-matrix.md`.
+7. **`<REDACTED>/settly-check`** — config-validation sidecar, folded into Configra per ADR-017 (full deprecation).
 
 The "convergence" is the migration of all seven onto a single canonical surface in `Configra`, with the others either archived or reduced to thin re-export shims.
 
@@ -55,9 +55,9 @@ For each of the seven repos, helper functions in the config-loading path were en
 
 ## Concrete recommendations
 
-1. **Open PR `KooshaPari/Configra#<next>`**: add `cascade_v2` as a Cargo feature flag mirroring `pheno-config`'s legacy cascade. Migrate `phenotype-sdk` integration tests off the legacy feature. Estimated 200 LOC removed from `pheno-config`, 50 LOC added to Configra.
-2. **Open PR `KooshaPari/Configra#<next+1>`**: export `ConfigError::Conflict`, `Stale`, `Watcher` variants through `phenotype-config`'s re-export module so consumers get a single type surface. Add a `#[deprecated]` alias on the older 4-variant form for 1 release, then drop.
-3. **Open PR `KooshaPari/Configra#<next+2>`**: deprecate `phenotype-config/src/watcher.rs::debounced_reload`. Re-export the Configra implementation behind a `#[deprecated]` attribute. Update `phenotype-sdk` callsites to use the canonical implementation. Estimated 40 LOC removed; behavior consistency restored.
+1. **Open PR `<REDACTED>/Configra#<next>`**: add `cascade_v2` as a Cargo feature flag mirroring `pheno-config`'s legacy cascade. Migrate `phenotype-sdk` integration tests off the legacy feature. Estimated 200 LOC removed from `pheno-config`, 50 LOC added to Configra.
+2. **Open PR `<REDACTED>/Configra#<next+1>`**: export `ConfigError::Conflict`, `Stale`, `Watcher` variants through `phenotype-config`'s re-export module so consumers get a single type surface. Add a `#[deprecated]` alias on the older 4-variant form for 1 release, then drop.
+3. **Open PR `<REDACTED>/Configra#<next+2>`**: deprecate `phenotype-config/src/watcher.rs::debounced_reload`. Re-export the Configra implementation behind a `#[deprecated]` attribute. Update `phenotype-sdk` callsites to use the canonical implementation. Estimated 40 LOC removed; behavior consistency restored.
 4. **Once the three PRs land**, the `pheno-config` repo shrinks to <200 LOC of pure re-exports and can be flagged for the ADR-023 substrate graduation (canonical lib → read-only stub). Estimated 6-month deprecation cycle after the three PRs ship.
 5. **Document the canonical helpers in `Configra/docs/helpers.md`** — a one-page table mapping each of the seven repos' helper categories to the canonical Configra implementation, so future contributors don't reintroduce duplicates.
 

@@ -1,7 +1,7 @@
 # PhenoSpecs — Absorption Justification
 
 **Status:** QUEUED 2026-07-17 (batch3 refresh)
-**Source:** `KooshaPari/PhenoSpecs` (Python)
+**Source:** `<REDACTED>/PhenoSpecs` (Python)
 **Target:** phenotype-registry at `docs/specs/phenotype-specs/`
 **Disposition:** ABSORB
 
@@ -18,13 +18,13 @@
 ## Restore procedure
 
 ```sh
-gh repo unarchive KooshaPari/PhenoSpecs
-cd /Users/kooshapari/CodeProjects/Phenotype/repos/phenotype-registry
+gh repo unarchive <REDACTED>/PhenoSpecs
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos/phenotype-registry
 # Edit registry/disposition-index.json: change fsm from "absorbed" back to "active"
 # Restore projects/PhenoSpecs.json from git history (revert to queued status)
 ```
 
 ## Cross-references
 
-- Disposition row: search `"KooshaPari/PhenoSpecs"` in `registry/disposition-index.json`
+- Disposition row: search `"<REDACTED>/PhenoSpecs"` in `registry/disposition-index.json`
 - Target repo path: `docs/specs/phenotype-specs/`

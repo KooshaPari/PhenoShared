@@ -7,11 +7,11 @@
     "size_bytes": 15871901,
     "build_torch": "2.11.0+cu130",
     "moe_fix_note": "Wheel v3 includes a moe_align_block_size 6-arg compatibility wrapper (see moe_fix_evidence); both the 6-arg call (installed sglang 0.3.6.post2) and the 8-arg C++ schema now work.",
-    "installed_venv": "/home/kooshapari/.pheno-serve-venv",
-    "wsl_path": "/home/kooshapari/sglang-src/sgl-kernel/dist/sgl_kernel-0.1.0-cp39-abi3-linux_x86_64.whl"
+    "installed_venv": "/home/<REDACTED>/.pheno-serve-venv",
+    "wsl_path": "/home/<REDACTED>/sglang-src/sgl-kernel/dist/sgl_kernel-0.1.0-cp39-abi3-linux_x86_64.whl"
   },
   "install": {
-    "venv": "/home/kooshapari/.pheno-serve-venv",
+    "venv": "/home/<REDACTED>/.pheno-serve-venv",
     "python_version": "3.14.6",
     "sglang_version": "0.3.6.post2",
     "torch_version": "2.11.0+cu130",

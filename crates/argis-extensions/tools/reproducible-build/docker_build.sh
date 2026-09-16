@@ -5,7 +5,7 @@ set -euo pipefail
 # Usage: docker_build.sh [--push]
 
 DIGEST_FILE=".build.reproducible"
-CACHE_IMAGE="${CACHE_IMAGE:-ghcr.io/kooshapari/cache-build:latest}"
+CACHE_IMAGE="${CACHE_IMAGE:-ghcr.io/<REDACTED>/cache-build:latest}"
 
 docker build --iidfile=image.id \
   --cache-from "$CACHE_IMAGE" \

@@ -20,7 +20,7 @@ is too small and too divergent in domain to justify extraction.
 
 ## Verification (2026-04-25)
 
-Find commands run from `/Users/kooshapari/CodeProjects/Phenotype/repos/`,
+Find commands run from `/Users/<REDACTED>/CodeProjects/Phenotype/repos/`,
 excluding `target/`, `.git/`, `node_modules/`, `.next/`.
 
 ### Pattern 1: `test_phench_runtime.py` (2,111 LOC each)

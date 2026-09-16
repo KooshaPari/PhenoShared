@@ -1,8 +1,8 @@
 # phenocompose — Absorption Justification
 
 **Date:** 2026-06-23
-**Repository:** `KooshaPari/phenocompose`
-**Owner:** kooshapari
+**Repository:** `<REDACTED>/phenocompose`
+**Owner:** <REDACTED>
 **Source Evidence:** filesystem check 2026-06-23 (local clone present at `C:\Users\koosh\phenocompose`)
 **Local Path:** `C:\Users\koosh\phenocompose` (present on disk)
 **Default Branch:** `main`
@@ -10,7 +10,7 @@
 **Confidence:** HIGH
 **Rubric Target:** P1 = 3, P2 = 3, P3 = 2, P4 = 2, P5 = 1
 **Audit Cycle:** 2026-06-23 (phenotype-org-audits consolidation sweep)
-**ADRs Invoked:** ADR-029 (Dmouse92 → KooshaPari canonical-owner migration)
+**ADRs Invoked:** ADR-029 (Dmouse92 → <REDACTED> canonical-owner migration)
 
 ---
 
@@ -18,18 +18,18 @@
 
 | ADR | Title | Authority |
 |---|---|---|
-| ECO-021 | PhenoCompose dead-cuda feature | [origin/main:docs/adrs/ADR-ECO-021-phenocompose-dead-cuda-feature.md](https://github.com/KooshaPari/phenotype-registry/blob/main/docs/adrs/ADR-ECO-021-phenocompose-dead-cuda-feature.md) — 2026-06-23 |
-| ECO-022 | Compute/infra subtree registry correction | [origin/main:docs/adrs/ADR-ECO-022-compute-infra-subtree-registry-correction.md](https://github.com/KooshaPari/phenotype-registry/blob/main/docs/adrs/ADR-ECO-022-compute-infra-subtree-registry-correction.md) — 2026-06-23 |
+| ECO-021 | PhenoCompose dead-cuda feature | [origin/main:docs/adrs/ADR-ECO-021-phenocompose-dead-cuda-feature.md](https://github.com/<REDACTED>/phenotype-registry/blob/main/docs/adrs/ADR-ECO-021-phenocompose-dead-cuda-feature.md) — 2026-06-23 |
+| ECO-022 | Compute/infra subtree registry correction | [origin/main:docs/adrs/ADR-ECO-022-compute-infra-subtree-registry-correction.md](https://github.com/<REDACTED>/phenotype-registry/blob/main/docs/adrs/ADR-ECO-022-compute-infra-subtree-registry-correction.md) — 2026-06-23 |
 
 Cluster spine: `docs/compute-infra-subtree.md` on origin/main.
 
 ## Source
 
-The source repository `KooshaPari/phenocompose` is a Go composition-utility codebase with a local clone present at `C:\Users\koosh\phenocompose` (filesystem check 2026-06-23). The initial assessment classified the source as `DELETABLE` because the composition surface is fully subsumed by the consolidation target family — but on closer review, the safer posture is `ARCHIVE` rather than `HARD_DELETE`. The composition utilities carried by phenocompose are not load-bearing for any production consumer (no dependents found in the dependent scan), but they may still be of historical/research interest, and the audit prefers the conservative archival posture over deletion whenever the deletion gain is zero or marginal. The downgrade from `DELETABLE` to `ARCHIVE` is therefore the correct procedural call.
+The source repository `<REDACTED>/phenocompose` is a Go composition-utility codebase with a local clone present at `C:\Users\koosh\phenocompose` (filesystem check 2026-06-23). The initial assessment classified the source as `DELETABLE` because the composition surface is fully subsumed by the consolidation target family — but on closer review, the safer posture is `ARCHIVE` rather than `HARD_DELETE`. The composition utilities carried by phenocompose are not load-bearing for any production consumer (no dependents found in the dependent scan), but they may still be of historical/research interest, and the audit prefers the conservative archival posture over deletion whenever the deletion gain is zero or marginal. The downgrade from `DELETABLE` to `ARCHIVE` is therefore the correct procedural call.
 
 | Attribute | Value | Source |
 |---|---|---|
-| Canonical remote | KooshaPari/phenocompose | filesystem + ADR-029 |
+| Canonical remote | <REDACTED>/phenocompose | filesystem + ADR-029 |
 | Local clone | present at `C:\Users\koosh\phenocompose` | filesystem check 2026-06-23 |
 | Default branch | main | inferred from Go repo conventions |
 | Visibility | public (assumed) | inferred |
@@ -100,7 +100,7 @@ The branch inventory below enumerates the **expected** branches for a Go repo of
 
 | # | Branch | Type | Tip Commit | Last Push | Origin | Status | Decision |
 |---|---|---|---|---|---|---|---|
-| 1 | `main` | remote (default) | unknown | unknown | KooshaPari/phenocompose | live-assumed | retain-archived |
+| 1 | `main` | remote (default) | unknown | unknown | <REDACTED>/phenocompose | live-assumed | retain-archived |
 | 2 | (no other remote branches observed) | n/a | n/a | n/a | n/a | unknown | hold-posture |
 | 3 | (local clone at `C:\Users\koosh\phenocompose`) | local | unknown | n/a | filesystem | present-on-disk | retain-as-frozen-snapshot |
 
@@ -155,12 +155,12 @@ Restore posture for `DELETABLE->ARCHIVE` is documented because the local clone i
 # Future absorption target: thegent (verify exists) OR nanovms/sdk/rust/phenocompose-*.
 
 # (Step 1) Capture JSON snapshot of canonical remote (run at archival time):
-#   gh repo view KooshaPari/phenocompose --json name,id,archived,size,defaultBranchRef \
+#   gh repo view <REDACTED>/phenocompose --json name,id,archived,size,defaultBranchRef \
 #     > _arch_phenocompose.json
 #   sha256sum _arch_phenocompose.json
 
 # (Step 2) Archive the canonical remote (run at archival time):
-#   gh repo archive KooshaPari/phenocompose --confirm
+#   gh repo archive <REDACTED>/phenocompose --confirm
 
 # (Step 3) `mv .archive/` (local discipline, run at archival time):
 #   mv C:\Users\koosh\phenocompose C:\Users\koosh\.archive\phenocompose-2026-06-23\
@@ -202,13 +202,13 @@ Concrete posture: **Source local clone is present at `C:\Users\koosh\phenocompos
 
 ## Final Recommendation
 
-**DELETABLE->ARCHIVE.** The composition surface carried by `KooshaPari/phenocompose` is fully subsumed by the consolidation target family. The initial `DELETABLE` classification was overly aggressive; the conservative `ARCHIVE` posture is preferred when the deletion gain is zero. The canonical remote is archived; the local clone at `C:\Users\koosh\phenocompose` is preserved as the authoritative snapshot; absorption into `thegent` (verify exists) OR `nanovms/sdk/rust/phenocompose-*` is deferred until the target is verified live. The `mv .archive/` move is the local-discipline step; the `git bundle` is the insurance backup; SHA-256 verification is required at archival time and at any future restore. No exceptions invoked.
+**DELETABLE->ARCHIVE.** The composition surface carried by `<REDACTED>/phenocompose` is fully subsumed by the consolidation target family. The initial `DELETABLE` classification was overly aggressive; the conservative `ARCHIVE` posture is preferred when the deletion gain is zero. The canonical remote is archived; the local clone at `C:\Users\koosh\phenocompose` is preserved as the authoritative snapshot; absorption into `thegent` (verify exists) OR `nanovms/sdk/rust/phenocompose-*` is deferred until the target is verified live. The `mv .archive/` move is the local-discipline step; the `git bundle` is the insurance backup; SHA-256 verification is required at archival time and at any future restore. No exceptions invoked.
 
 ## ABSORPTION_MATRIX
 
 | Source Item | Source Evidence | Category | Source State | Target Repo | Target Evidence | Status | Deletion Justification | Risk if Deleted | Required Action |
 |---|---|---|---|---|---|---|---|---|---|
-| Repository record `KooshaPari/phenocompose` | filesystem check 2026-06-23 | repository-meta | live (local clone present) | thegent (verify) / nanovms/sdk/rust/phenocompose-* | filesystem + ADR-029 | DELETABLE->ARCHIVE | conservative downgrade from delete; archival preferred | low — composition surface subsumed by target family | archive-remote-preserve-local |
+| Repository record `<REDACTED>/phenocompose` | filesystem check 2026-06-23 | repository-meta | live (local clone present) | thegent (verify) / nanovms/sdk/rust/phenocompose-* | filesystem + ADR-029 | DELETABLE->ARCHIVE | conservative downgrade from delete; archival preferred | low — composition surface subsumed by target family | archive-remote-preserve-local |
 | Local clone at `C:\Users\koosh\phenocompose` | filesystem check 2026-06-23 | local-mirror | present | thegent (verify) / nanovms/sdk/rust/phenocompose-* | filesystem | DELETABLE->ARCHIVE | retain local clone as authoritative snapshot | low — local clone is frozen snapshot | mv-to-.archive-on-archival |
 | Composition utilities | inferred from name | go-code | assumed-present | thegent (verify) / nanovms/sdk/rust/phenocompose-* | inferred | DELETABLE->ARCHIVE | subsumed by target family | low — no dependents | defer-absorption |
 | Go modules | inferred | go-modules | standard | n/a | inferred | DELETABLE->ARCHIVE | n/a | n/a | retain |

@@ -1,7 +1,7 @@
 # Python Test Infrastructure Audit
 
 **Date:** 2026-05-05
-**Scope:** Canonical repos at `/Users/kooshapari/CodeProjects/Phenotype/repos`
+**Scope:** Canonical repos at `/Users/<REDACTED>/CodeProjects/Phenotype/repos`
 
 ---
 

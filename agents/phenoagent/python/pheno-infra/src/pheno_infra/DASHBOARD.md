@@ -5,7 +5,7 @@ The `/kinfra` path always returns a real-time monitoring dashboard.
 ## Access
 
 ```
-https://byte.kooshapari.com/kinfra
+https://byte.<REDACTED>.com/kinfra
 http://localhost:9100/kinfra  (via proxy)
 http://localhost:9000/kinfra  (direct to fallback server)
 ```
@@ -235,7 +235,7 @@ Live • Updates every 2s                    🔄 Refresh All
 ### BytePort
 ```python
 # Access dashboard at:
-https://byte.kooshapari.com/kinfra
+https://byte.<REDACTED>.com/kinfra
 
 # Shows:
 - API service status
@@ -247,7 +247,7 @@ https://byte.kooshapari.com/kinfra
 ### zen-mcp-server
 ```python
 # Access dashboard at:
-https://zen.kooshapari.com/kinfra
+https://zen.<REDACTED>.com/kinfra
 
 # Shows:
 - zen-mcp service

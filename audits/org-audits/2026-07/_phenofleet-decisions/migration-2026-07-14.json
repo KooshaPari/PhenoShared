@@ -1,14 +1,14 @@
 {
   "audit_date": "2026-07-14",
   "audit_type": "read-only-misplaced-repo-survey",
-  "home": "/Users/kooshapari",
-  "codeprojects_root": "/Users/kooshapari/CodeProjects",
+  "home": "/Users/<REDACTED>",
+  "codeprojects_root": "/Users/<REDACTED>/CodeProjects",
   "candidates_total": 18,
   "repos_total": 18,
   "results": [
     {
       "label": "CLIProxyAPI",
-      "path": "/Users/kooshapari/CLIProxyAPI",
+      "path": "/Users/<REDACTED>/CLIProxyAPI",
       "category": "A-live-~",
       "exists": true,
       "size": "42M",
@@ -29,7 +29,7 @@
         "fix/path-injection (ahead 2 of main)",
         "main (ahead 1 of origin/main)"
       ],
-      "remotes_raw": "origin\tgit@github.com:KooshaPari/cliproxyapi-plusplus.git (fetch)\norigin\tgit@github.com:KooshaPari/cliproxyapi-plusplus.git (push)",
+      "remotes_raw": "origin\tgit@github.com:<REDACTED>/cliproxyapi-plusplus.git (fetch)\norigin\tgit@github.com:<REDACTED>/cliproxyapi-plusplus.git (push)",
       "duplicate_hints": [
         "CodeProjects/cliproxyapi-plusplus"
       ],
@@ -39,7 +39,7 @@
     },
     {
       "label": "router-rb-2c",
-      "path": "/Users/kooshapari/router-rb-2c",
+      "path": "/Users/<REDACTED>/router-rb-2c",
       "category": "A-live-~",
       "exists": true,
       "size": "532K",
@@ -56,13 +56,13 @@
       "stash_sample": "",
       "unpushed_branches_count": 0,
       "unpushed_branches_sample": [],
-      "remotes_raw": "origin\tgit@github.com:KooshaPari/phenotype-router.git (fetch)\norigin\tgit@github.com:KooshaPari/phenotype-router.git (push)",
+      "remotes_raw": "origin\tgit@github.com:<REDACTED>/phenotype-router.git (fetch)\norigin\tgit@github.com:<REDACTED>/phenotype-router.git (push)",
       "duplicate_hints": [],
       "duplicate_paths_exist": []
     },
     {
       "label": "forge/AgilePlus",
-      "path": "/Users/kooshapari/forge/AgilePlus",
+      "path": "/Users/<REDACTED>/forge/AgilePlus",
       "category": "A-live-~",
       "exists": true,
       "size": "15G",
@@ -91,7 +91,7 @@
     },
     {
       "label": "work/forgecode-koosha",
-      "path": "/Users/kooshapari/work/forgecode-koosha",
+      "path": "/Users/<REDACTED>/work/forgecode-koosha",
       "category": "A-live-~",
       "exists": true,
       "size": "3.8G",
@@ -108,13 +108,13 @@
       "stash_sample": "",
       "unpushed_branches_count": 0,
       "unpushed_branches_sample": [],
-      "remotes_raw": "origin\tgit@github.com:KooshaPari/forgecode.git (fetch)\norigin\tgit@github.com:KooshaPari/forgecode.git (push)\nupstream\tgit@github.com:tailcallhq/forgecode.git (fetch)\nupstream\tgit@github.com:tailcallhq/forgecode.git (push)",
+      "remotes_raw": "origin\tgit@github.com:<REDACTED>/forgecode.git (fetch)\norigin\tgit@github.com:<REDACTED>/forgecode.git (push)\nupstream\tgit@github.com:tailcallhq/forgecode.git (fetch)\nupstream\tgit@github.com:tailcallhq/forgecode.git (push)",
       "duplicate_hints": [],
       "duplicate_paths_exist": []
     },
     {
       "label": "work/forgecode-upstream",
-      "path": "/Users/kooshapari/work/forgecode-upstream",
+      "path": "/Users/<REDACTED>/work/forgecode-upstream",
       "category": "A-live-~",
       "exists": true,
       "size": "30M",
@@ -137,7 +137,7 @@
     },
     {
       "label": "Repos/civ",
-      "path": "/Users/kooshapari/Repos/civ",
+      "path": "/Users/<REDACTED>/Repos/civ",
       "category": "B-repos-orphan",
       "exists": true,
       "size": "2.8G",
@@ -156,7 +156,7 @@
       "unpushed_branches_sample": [
         "chore/fix-shellcheck-yaml-devscripts (ahead 1 of main)"
       ],
-      "remotes_raw": "origin\tgit@github.com:KooshaPari/Civis.git (fetch)\norigin\tgit@github.com:KooshaPari/Civis.git (push)",
+      "remotes_raw": "origin\tgit@github.com:<REDACTED>/Civis.git (fetch)\norigin\tgit@github.com:<REDACTED>/Civis.git (push)",
       "duplicate_hints": [
         "CodeProjects/Phenotype/repos/Civis"
       ],
@@ -166,7 +166,7 @@
     },
     {
       "label": "Repos/heliosCLI",
-      "path": "/Users/kooshapari/Repos/heliosCLI",
+      "path": "/Users/<REDACTED>/Repos/heliosCLI",
       "category": "B-repos-orphan",
       "exists": true,
       "size": "976M",
@@ -186,13 +186,13 @@
         "fix/pr98-spelling-format (ahead 1 of origin/refactor/decompose-text-manipulation)",
         "main (ahead 1 of origin/main)"
       ],
-      "remotes_raw": "origin\tgit@github.com:KooshaPari/heliosCLI.git (fetch)\norigin\tgit@github.com:KooshaPari/heliosCLI.git (push)",
+      "remotes_raw": "origin\tgit@github.com:<REDACTED>/heliosCLI.git (fetch)\norigin\tgit@github.com:<REDACTED>/heliosCLI.git (push)",
       "duplicate_hints": [],
       "duplicate_paths_exist": []
     },
     {
       "label": "Repos/phench",
-      "path": "/Users/kooshapari/Repos/phench",
+      "path": "/Users/<REDACTED>/Repos/phench",
       "category": "B-repos-orphan",
       "exists": true,
       "size": "600K",
@@ -209,7 +209,7 @@
       "stash_sample": "",
       "unpushed_branches_count": 0,
       "unpushed_branches_sample": [],
-      "remotes_raw": "origin\tgit@github.com:KooshaPari/phench.git (fetch)\norigin\tgit@github.com:KooshaPari/phench.git (push)",
+      "remotes_raw": "origin\tgit@github.com:<REDACTED>/phench.git (fetch)\norigin\tgit@github.com:<REDACTED>/phench.git (push)",
       "duplicate_hints": [
         "CodeProjects/Phenotype/repos/phench"
       ],
@@ -217,7 +217,7 @@
     },
     {
       "label": "Repos/phenodocs",
-      "path": "/Users/kooshapari/Repos/phenodocs",
+      "path": "/Users/<REDACTED>/Repos/phenodocs",
       "category": "B-repos-orphan",
       "exists": true,
       "size": "2.6M",
@@ -234,13 +234,13 @@
       "stash_sample": "",
       "unpushed_branches_count": 0,
       "unpushed_branches_sample": [],
-      "remotes_raw": "origin\tgit@github.com:KooshaPari/phenodocs.git (fetch)\norigin\tgit@github.com:KooshaPari/phenodocs.git (push)",
+      "remotes_raw": "origin\tgit@github.com:<REDACTED>/phenodocs.git (fetch)\norigin\tgit@github.com:<REDACTED>/phenodocs.git (push)",
       "duplicate_hints": [],
       "duplicate_paths_exist": []
     },
     {
       "label": "Repos/phenotype-design",
-      "path": "/Users/kooshapari/Repos/phenotype-design",
+      "path": "/Users/<REDACTED>/Repos/phenotype-design",
       "category": "B-repos-orphan",
       "exists": true,
       "size": "3.8M",
@@ -257,13 +257,13 @@
       "stash_sample": "",
       "unpushed_branches_count": 0,
       "unpushed_branches_sample": [],
-      "remotes_raw": "origin\tgit@github.com:KooshaPari/phenotype-design.git (fetch)\norigin\tgit@github.com:KooshaPari/phenotype-design.git (push)",
+      "remotes_raw": "origin\tgit@github.com:<REDACTED>/phenotype-design.git (fetch)\norigin\tgit@github.com:<REDACTED>/phenotype-design.git (push)",
       "duplicate_hints": [],
       "duplicate_paths_exist": []
     },
     {
       "label": "Repos/phenotype-go-kit",
-      "path": "/Users/kooshapari/Repos/phenotype-go-kit",
+      "path": "/Users/<REDACTED>/Repos/phenotype-go-kit",
       "category": "B-repos-orphan",
       "exists": true,
       "size": "2.6M",
@@ -282,13 +282,13 @@
       "unpushed_branches_sample": [
         "pr-58 (NO-UPSTREAM)"
       ],
-      "remotes_raw": "origin\tgit@github.com:KooshaPari/phenotype-go-kit.git (fetch)\norigin\tgit@github.com:KooshaPari/phenotype-go-kit.git (push)",
+      "remotes_raw": "origin\tgit@github.com:<REDACTED>/phenotype-go-kit.git (fetch)\norigin\tgit@github.com:<REDACTED>/phenotype-go-kit.git (push)",
       "duplicate_hints": [],
       "duplicate_paths_exist": []
     },
     {
       "label": "Repos/phenotype-infrakit",
-      "path": "/Users/kooshapari/Repos/phenotype-infrakit",
+      "path": "/Users/<REDACTED>/Repos/phenotype-infrakit",
       "category": "B-repos-orphan",
       "exists": true,
       "size": "748M",
@@ -305,13 +305,13 @@
       "stash_sample": "",
       "unpushed_branches_count": 0,
       "unpushed_branches_sample": [],
-      "remotes_raw": "origin\tgit@github.com:KooshaPari/phenotype-infrakit.git (fetch)\norigin\tgit@github.com:KooshaPari/phenotype-infrakit.git (push)",
+      "remotes_raw": "origin\tgit@github.com:<REDACTED>/phenotype-infrakit.git (fetch)\norigin\tgit@github.com:<REDACTED>/phenotype-infrakit.git (push)",
       "duplicate_hints": [],
       "duplicate_paths_exist": []
     },
     {
       "label": "Repos/phenotype-shared",
-      "path": "/Users/kooshapari/Repos/phenotype-shared",
+      "path": "/Users/<REDACTED>/Repos/phenotype-shared",
       "category": "B-repos-orphan",
       "exists": true,
       "size": "94M",
@@ -328,13 +328,13 @@
       "stash_sample": "",
       "unpushed_branches_count": 0,
       "unpushed_branches_sample": [],
-      "remotes_raw": "origin\tgit@github.com:KooshaPari/phenotype-shared.git (fetch)\norigin\tgit@github.com:KooshaPari/phenotype-shared.git (push)",
+      "remotes_raw": "origin\tgit@github.com:<REDACTED>/phenotype-shared.git (fetch)\norigin\tgit@github.com:<REDACTED>/phenotype-shared.git (push)",
       "duplicate_hints": [],
       "duplicate_paths_exist": []
     },
     {
       "label": "Repos/phenotypeActions",
-      "path": "/Users/kooshapari/Repos/phenotypeActions",
+      "path": "/Users/<REDACTED>/Repos/phenotypeActions",
       "category": "B-repos-orphan",
       "exists": true,
       "size": "992K",
@@ -351,13 +351,13 @@
       "stash_sample": "",
       "unpushed_branches_count": 0,
       "unpushed_branches_sample": [],
-      "remotes_raw": "origin\tgit@github.com:KooshaPari/phenotypeActions.git (fetch)\norigin\tgit@github.com:KooshaPari/phenotypeActions.git (push)",
+      "remotes_raw": "origin\tgit@github.com:<REDACTED>/phenotypeActions.git (fetch)\norigin\tgit@github.com:<REDACTED>/phenotypeActions.git (push)",
       "duplicate_hints": [],
       "duplicate_paths_exist": []
     },
     {
       "label": "Repos/template-commons",
-      "path": "/Users/kooshapari/Repos/template-commons",
+      "path": "/Users/<REDACTED>/Repos/template-commons",
       "category": "B-repos-orphan",
       "exists": true,
       "size": "2.1M",
@@ -378,13 +378,13 @@
         "main (ahead 1 of origin/main)",
         "merge-fix (ahead 5 of feat/xdd-workflows-v2)"
       ],
-      "remotes_raw": "origin\tgit@github.com:KooshaPari/template-commons.git (fetch)\norigin\tgit@github.com:KooshaPari/template-commons.git (push)",
+      "remotes_raw": "origin\tgit@github.com:<REDACTED>/template-commons.git (fetch)\norigin\tgit@github.com:<REDACTED>/template-commons.git (push)",
       "duplicate_hints": [],
       "duplicate_paths_exist": []
     },
     {
       "label": "Repos/znap",
-      "path": "/Users/kooshapari/Repos/znap",
+      "path": "/Users/<REDACTED>/Repos/znap",
       "category": "B-repos-orphan",
       "exists": true,
       "size": "424K",
@@ -407,7 +407,7 @@
     },
     {
       "label": "Documents/netweave-3",
-      "path": "/Users/kooshapari/Documents/netweave-3",
+      "path": "/Users/<REDACTED>/Documents/netweave-3",
       "category": "E-documents-repo",
       "exists": true,
       "size": "64K",
@@ -430,7 +430,7 @@
     },
     {
       "label": "Documents/Project-Spyn",
-      "path": "/Users/kooshapari/Documents/Project-Spyn",
+      "path": "/Users/<REDACTED>/Documents/Project-Spyn",
       "category": "E-documents-repo",
       "exists": true,
       "size": "0B",
@@ -447,7 +447,7 @@
       "stash_sample": "",
       "unpushed_branches_count": 0,
       "unpushed_branches_sample": [],
-      "remotes_raw": "origin\tgit@github.com:KooshaPari/Project-Spyn.git (fetch)\norigin\tgit@github.com:KooshaPari/Project-Spyn.git (push)",
+      "remotes_raw": "origin\tgit@github.com:<REDACTED>/Project-Spyn.git (fetch)\norigin\tgit@github.com:<REDACTED>/Project-Spyn.git (push)",
       "duplicate_hints": [],
       "duplicate_paths_exist": []
     }

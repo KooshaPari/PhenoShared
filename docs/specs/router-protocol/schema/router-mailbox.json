@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://github.com/KooshaPari/phenotype-router-spec/schema/router-mailbox.json",
+  "$id": "https://github.com/<REDACTED>/phenotype-router-spec/schema/router-mailbox.json",
   "title": "RouterMailbox",
   "description": "An event envelope emitted by an engine during dispatch. Carries status updates, message chunks, errors, and cancellation signals. Delivered to consumers in order; consumers may subscribe to a stream of these via the substrate wire_mailbox API.",
   "type": "object",

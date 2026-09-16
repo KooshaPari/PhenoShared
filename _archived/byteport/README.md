@@ -3,9 +3,9 @@
 <!-- Slop issues are expected and intentionally present as part of an HITL-less -->
 <!-- /minimized AI-DD metaproject of learning, refining, and building brute-force -->
 <!-- training for both agents and the human operator. -->
-![Downloads](https://img.shields.io/github/downloads/KooshaPari/BytePort/total?style=flat-square&label=downloads&color=blue)
-![GitHub release](https://img.shields.io/github/v/release/KooshaPari/BytePort?style=flat-square&label=release)
-![License](https://img.shields.io/github/license/KooshaPari/BytePort?style=flat-square)
+![Downloads](https://img.shields.io/github/downloads/<REDACTED>/BytePort/total?style=flat-square&label=downloads&color=blue)
+![GitHub release](https://img.shields.io/github/v/release/<REDACTED>/BytePort?style=flat-square&label=release)
+![License](https://img.shields.io/github/license/<REDACTED>/BytePort?style=flat-square)
 ![AI-Slop](https://img.shields.io/badge/AI--DD-Slop%20Expected-orange?style=flat-square)
 ![AI-Only-Maintained](https://img.shields.io/badge/Planned%20%26%20Maintained%20by-AI%20Agents%20Only-red?style=flat-square)
 ![HITL-less](https://img.shields.io/badge/HITL--less%20AI--DD-metaproject-yellow?style=flat-square)
@@ -28,17 +28,17 @@
 
 # BytePort
 
-[![CI](https://github.com/KooshaPari/BytePort/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/KooshaPari/BytePort/actions/workflows/ci.yml)
+[![CI](https://github.com/<REDACTED>/BytePort/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/<REDACTED>/BytePort/actions/workflows/ci.yml)
 [![crates.io](https://img.shields.io/crates/v/byteport.svg)](https://crates.io/crates/byteport)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Phenotype](https://img.shields.io/badge/Phenotype-org-blueviolet)](https://github.com/KooshaPari)
+[![Phenotype](https://img.shields.io/badge/Phenotype-org-blueviolet)](https://github.com/<REDACTED>)
 
 ## Badges
 
-[![Build](https://img.shields.io/github/actions/workflow/status/KooshaPari/BytePort/ci.yml?branch=main&label=build)](https://github.com/KooshaPari/BytePort/actions/workflows/ci.yml)
-[![Release](https://img.shields.io/github/v/release/KooshaPari/BytePort?include_prereleases&sort=semver)](https://github.com/KooshaPari/BytePort/releases)
-[![License](https://img.shields.io/github/license/KooshaPari/BytePort)](LICENSE)
-[![Phenotype](https://img.shields.io/badge/Phenotype-org-blueviolet)](https://github.com/KooshaPari)
+[![Build](https://img.shields.io/github/actions/workflow/status/<REDACTED>/BytePort/ci.yml?branch=main&label=build)](https://github.com/<REDACTED>/BytePort/actions/workflows/ci.yml)
+[![Release](https://img.shields.io/github/v/release/<REDACTED>/BytePort?include_prereleases&sort=semver)](https://github.com/<REDACTED>/BytePort/releases)
+[![License](https://img.shields.io/github/license/<REDACTED>/BytePort)](LICENSE)
+[![Phenotype](https://img.shields.io/badge/Phenotype-org-blueviolet)](https://github.com/<REDACTED>)
 [![AI Slop Inside](https://sladge.net/badge.svg)](https://sladge.net)
 
 > **Architecture:** See [ARCHITECTURE.md](ARCHITECTURE.md) for component architecture.
@@ -78,7 +78,7 @@ Demo portfolio integration (Slickport) expects credentials you set yourself. **D
 ## An IAC Deployment + UX Generation platform for Software Developer Portfolios
 ## With One IAC File Defining your Application Structured and related infra, Byteport deploys your project from your github repository onto your aws cloud platform, then utilizing chatgpt(soon llama) to then send object templates for additions to demonstration/portfolio sites to display and provide interaction access to these projects (and show them off automagically!)
 ### [Example](https://drive.google.com/file/d/1ZJeQOPHCNY1aHjXprNrmxMNi9hZaYSPW/view?usp=sharing)
-### Refer to [Fixit-Go](https://github.com/kooshapari/fixit-go) [Chatta](https://github.com/kooshapari/chatta) For Project Examples, [Slickport](https://github.com/kooshapari/slickport) for Portfolio integration example
+### Refer to [Fixit-Go](https://github.com/<REDACTED>/fixit-go) [Chatta](https://github.com/<REDACTED>/chatta) For Project Examples, [Slickport](https://github.com/<REDACTED>/slickport) for Portfolio integration example
 ## Quickstart
 ### Prepwork:
 - Install SpinCLI, golang etc
@@ -162,7 +162,7 @@ This manifesto outlines the development of **BytePort**, a cloud-based platform 
 
 **Description:**
 
-BytePort is a cloud solution for deploying web applications and other projects directly from Git repositories. It creates and deploys pre-configured MicroVMs based on user specifications using the custom-developed **NanoVMS** technology. Upon successful deployment, BytePort integrates the project into the user's portfolio (e.g., `kooshapari.com`), adding project pages and linking the frontend of each web app to its respective project. Non-web app projects can also be deployed with custom configurations. Clients can view, debug, clone, and rebuild these instances as needed.
+BytePort is a cloud solution for deploying web applications and other projects directly from Git repositories. It creates and deploys pre-configured MicroVMs based on user specifications using the custom-developed **NanoVMS** technology. Upon successful deployment, BytePort integrates the project into the user's portfolio (e.g., `<REDACTED>.com`), adding project pages and linking the frontend of each web app to its respective project. Non-web app projects can also be deployed with custom configurations. Clients can view, debug, clone, and rebuild these instances as needed.
 
 ## Objectives
 

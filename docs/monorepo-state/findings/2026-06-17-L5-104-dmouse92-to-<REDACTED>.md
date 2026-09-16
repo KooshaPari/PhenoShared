@@ -1,11 +1,11 @@
-# L5-104 — Dmouse92 → KooshaPari Migration Audit (2026-06-17)
+# L5-104 — Dmouse92 → <REDACTED> Migration Audit (2026-06-17)
 
 **Status:** EXECUTION COMPLETE (2026-06-17 20:55 PDT)
 **Branch:** `chore/w5-adrs-sota-2026-06-15` (this repo)
-**Auth:** `gh` is **KooshaPari** (active) for KP pushes; Dmouse92 (via `gh auth switch`) for Dmouse92 archives.
+**Auth:** `gh` is **<REDACTED>** (active) for KP pushes; Dmouse92 (via `gh auth switch`) for Dmouse92 archives.
 **Repo matrix:** 26 Dmouse92 repos total; 20 Phenotype-related; 6 personal (skip).
-**Strategy:** (a) merge Dmouse92 → KooshaPari; (b) reconcile/absorb to proper substrate per ADR-013/023; (c) archive emptied Dmouse92 repos.
-**Final:** 6 PRs opened on KooshaPari, 18 Dmouse92 repos archived, 0 net content loss.
+**Strategy:** (a) merge Dmouse92 → <REDACTED>; (b) reconcile/absorb to proper substrate per ADR-013/023; (c) archive emptied Dmouse92 repos.
+**Final:** 6 PRs opened on <REDACTED>, 18 Dmouse92 repos archived, 0 net content loss.
 
 ---
 
@@ -67,7 +67,7 @@
 | `874a023` | W2.1 (empty marker commit) | 0 | every W2-1 branch |
 | `a1aaef2` | feat(W2-1): dispatch-mcp protocol compliance + provider guides | +866 / -6 | identical tree in `feat/openai-compat-2026-06-15`, `wip/migrate-from-dmouse-w2-1-2026-06-17` |
 
-**Substrate state (CRITICAL):** `KooshaPari/pheno-mcp-router` does NOT exist on GitHub (404). Substrate is local-only at `repos/pheno-mcp-router/`, no `origin` remote, 8 commits, uncommitted working tree (3 modified + 2 untracked). **Step 1 of migration plan = publish substrate first.**
+**Substrate state (CRITICAL):** `<REDACTED>/pheno-mcp-router` does NOT exist on GitHub (404). Substrate is local-only at `repos/pheno-mcp-router/`, no `origin` remote, 8 commits, uncommitted working tree (3 modified + 2 untracked). **Step 1 of migration plan = publish substrate first.**
 
 **Per-file migration action (from sub-agent plan):**
 - 6 modules → substrate (`tiers.py`, `cost.py`, `budget.py`, `quota.py`, `audit.py`, `cost_middleware.py`) — ~2,000 LOC + ~2,400 LOC tests
@@ -122,9 +122,9 @@
 **Status:** DRAFTED (no subagent needed)
 
 - Dmouse92 main is 4 months stale (2026-02-26)
-- KooshaPari has 10+ recent commits (SLSA, attestations, SLOs, coverage ratchet, decision records, AI-DD metadata, etc.)
+- <REDACTED> has 10+ recent commits (SLSA, attestations, SLOs, coverage ratchet, decision records, AI-DD metadata, etc.)
 - `chore/stacked-prs-governance` branch is also stale (2026-02-26)
-- **Verdict:** Fully absorbed on KooshaPari. **Action: archive Dmouse92 phenodocs.**
+- **Verdict:** Fully absorbed on <REDACTED>. **Action: archive Dmouse92 phenodocs.**
 
 ### 2.4 AgilePlus
 
@@ -133,8 +133,8 @@
 - Dmouse92 main has 2 unique commits:
   - `f868d18 fix(audit): apply W4 SOTA findings across 12 crates` — duplicate of KP `ad01a98` (same subject, divergent SHA)
   - `2a8cb6d feat(domain+hook): add FeatureState::is_shippable() + chrono dev-dep` — possibly unique
-- KooshaPari is significantly ahead (W4 governance rollout, shared-core traceability spine, consolidate all branches)
-- **Action:** Cherry-pick `2a8cb6d` if not present on KooshaPari (verify with `gh api repos/KooshaPari/AgilePlus/commits?path=crates/agileplus/domain&per_page=5`), then archive Dmouse92 AgilePlus.
+- <REDACTED> is significantly ahead (W4 governance rollout, shared-core traceability spine, consolidate all branches)
+- **Action:** Cherry-pick `2a8cb6d` if not present on <REDACTED> (verify with `gh api repos/<REDACTED>/AgilePlus/commits?path=crates/agileplus/domain&per_page=5`), then archive Dmouse92 AgilePlus.
 
 ### 2.5 forgecode
 
@@ -154,7 +154,7 @@
 | **C** Only on DM92 — auto-generated (Dependabot, Renovate, PR bots) | 13 | Ignore |
 | **C** Only on DM92 — unique Phenotype work | **0** | **None** |
 
-**Verdict:** 0 of 378 Dmouse92/forgecode branches need migration to KooshaPari/forgecode. **Action: archive `Dmouse92/forgecode` entirely.**
+**Verdict:** 0 of 378 Dmouse92/forgecode branches need migration to <REDACTED>/forgecode. **Action: archive `Dmouse92/forgecode` entirely.**
 
 ### 2.6 PhenoCompose
 
@@ -270,9 +270,9 @@
 
 | Time | Step | Result |
 |---|---|---|
-| 19:00 | `gh auth status` → KooshaPari active | OK |
+| 19:00 | `gh auth status` → <REDACTED> active | OK |
 | 19:05 | `gh repo list Dmouse92` → 26 repos | OK |
-| 19:08 | `gh repo list KooshaPari` → 138 repos | OK |
+| 19:08 | `gh repo list <REDACTED>` → 138 repos | OK |
 | 19:12 | Cross-reference matrix — 20 Phenotype-related DM92 repos | OK |
 | 19:18 | Subagent A: dispatch-mcp migration plan (527 lines) | OK |
 | 19:18 | Subagent B: pheno ADR-012 migration plan (414 lines) | OK |
@@ -288,16 +288,16 @@
 | 20:36 | Archive `Dmouse92/dispatch-mcp` | OK | (Dmouse92 W2-1 absorbed in 3 substrate PRs) |
 | 20:36 | Archive `Dmouse92/pheno` | OK | (Dmouse92 ADR-012 absorbed in 1 phenotype-config PR) |
 | 20:36 | Archive `Dmouse92/AgilePlus` + 16 others (PhenoCompose, PhenoPlugins, PhenoProc, HeliosCLI, Pyron, HexaKit, Tracera, Civis, OmniRoute, KWatch, phenotype-ops, phenotype-otel, Nanovms, PhenoContracts, phenotype-teamcomm, forgecode, phenodocs) | OK | (all empty/bit-identical/KP-archived) |
-| 20:37 | `gh auth switch --user KooshaPari` | OK | (back to KP for PR work) |
-| 20:40 | Push `feat/port-cost-budget-quota-audit-tiers-2026-06-17` to `pheno-mcp-router` | OK | PR #1: https://github.com/KooshaPari/pheno-mcp-router/pull/1 |
-| 20:40 | Push `feat/llama-adapter-2026-06-17` to `pheno-mcp-router` | OK | PR #2: https://github.com/KooshaPari/pheno-mcp-router/pull/2 |
-| 20:40 | Push `feat/openai-compat-adapter-2026-06-17` to `pheno-mcp-router` | OK | PR #3: https://github.com/KooshaPari/pheno-mcp-router/pull/3 |
-| 20:41 | Push `feat/l5-104-canonical-markers-2026-06-17` to `phenotype-config` | OK | PR #1: https://github.com/KooshaPari/phenotype-config/pull/1 |
-| 20:41 | Push `feat/llama-cpp-devops-2026-06-17` to `phenotype-ops` | OK | PR #2: https://github.com/KooshaPari/phenotype-ops/pull/2 |
-| 20:45 | Push `chore/w1-1-cheap-llm-mcp-deprecation-note-2026-06-15` to `dispatch-mcp` | OK | PR #1: https://github.com/KooshaPari/dispatch-mcp/pull/1 |
+| 20:37 | `gh auth switch --user <REDACTED>` | OK | (back to KP for PR work) |
+| 20:40 | Push `feat/port-cost-budget-quota-audit-tiers-2026-06-17` to `pheno-mcp-router` | OK | PR #1: https://github.com/<REDACTED>/pheno-mcp-router/pull/1 |
+| 20:40 | Push `feat/llama-adapter-2026-06-17` to `pheno-mcp-router` | OK | PR #2: https://github.com/<REDACTED>/pheno-mcp-router/pull/2 |
+| 20:40 | Push `feat/openai-compat-adapter-2026-06-17` to `pheno-mcp-router` | OK | PR #3: https://github.com/<REDACTED>/pheno-mcp-router/pull/3 |
+| 20:41 | Push `feat/l5-104-canonical-markers-2026-06-17` to `phenotype-config` | OK | PR #1: https://github.com/<REDACTED>/phenotype-config/pull/1 |
+| 20:41 | Push `feat/llama-cpp-devops-2026-06-17` to `phenotype-ops` | OK | PR #2: https://github.com/<REDACTED>/phenotype-ops/pull/2 |
+| 20:45 | Push `chore/w1-1-cheap-llm-mcp-deprecation-note-2026-06-15` to `dispatch-mcp` | OK | PR #1: https://github.com/<REDACTED>/dispatch-mcp/pull/1 |
 | 20:50 | Verify all 6 PRs created + branches on origin | OK | 6/6 PRs OPEN, 6/6 branches on `origin` |
 | 20:55 | Commit audit doc + governance refresh | OK | This commit |
-| TBD | Repoint `phenotype-config-core/CANONICAL.md` from `phenoShared` to `phenotype-config` on KP/pheno | TODO | separate PR to `KooshaPari/pheno` |
+| TBD | Repoint `phenotype-config-core/CANONICAL.md` from `phenoShared` to `phenotype-config` on KP/pheno | TODO | separate PR to `<REDACTED>/pheno` |
 | TBD | Update AGENTS.md / STATUS.md / SSOT.md (governance refresh) | TODO | this commit batch |
 | TBD | v7 DAG stable | TODO | `plans/2026-06-17-v7-dag-stable.md` |
 
@@ -309,8 +309,8 @@
 
 | # | Repo | Cat | Action | Target | Owner | PR |
 |---|---|---|---|---|---|---|
-| 1 | dispatch-mcp | B (unique W2-1) | Port 6 modules + 2 adapters + 1 doc + 2 docker to substrate | `pheno-mcp-router` + `phenotype-ops` | subagent E | [dispatch-mcp#1](https://github.com/KooshaPari/dispatch-mcp/pull/1) (deprecation doc) + [pheno-mcp-router#1-3](https://github.com/KooshaPari/pheno-mcp-router/pulls) + [phenotype-ops#2](https://github.com/KooshaPari/phenotype-ops/pull/2) |
-| 2 | pheno | B (unique ADR-012) | Cherry-pick 2 commits + port `docs/slsa.md` + re-point markers | `phenotype-config` + `Conft` | subagent F | [phenotype-config#1](https://github.com/KooshaPari/phenotype-config/pull/1) + pending repoint PR to `pheno` |
+| 1 | dispatch-mcp | B (unique W2-1) | Port 6 modules + 2 adapters + 1 doc + 2 docker to substrate | `pheno-mcp-router` + `phenotype-ops` | subagent E | [dispatch-mcp#1](https://github.com/<REDACTED>/dispatch-mcp/pull/1) (deprecation doc) + [pheno-mcp-router#1-3](https://github.com/<REDACTED>/pheno-mcp-router/pulls) + [phenotype-ops#2](https://github.com/<REDACTED>/phenotype-ops/pull/2) |
+| 2 | pheno | B (unique ADR-012) | Cherry-pick 2 commits + port `docs/slsa.md` + re-point markers | `phenotype-config` + `Conft` | subagent F | [phenotype-config#1](https://github.com/<REDACTED>/phenotype-config/pull/1) + pending repoint PR to `pheno` |
 | 3 | AgilePlus | B (1 unique) | Verify `2a8cb6d` cherry-pick | `AgilePlus` | self | (deferred — see §5) |
 | 4 | phenodocs | A (stale) | Archive DM92 | — | self | archived |
 | 5 | forgecode | C (mirror) | Archive DM92 | — | self | archived |
@@ -330,7 +330,7 @@
 | 19 | PhenoContracts | A | Archive DM92 | — | self | archived |
 | 20 | phenotype-teamcomm | E (identical) | Archive DM92 | — | self | archived |
 
-**Totals:** 2 substantive migrations (dispatch-mcp → substrate, pheno → substrate), 18 archives, 1 verification (AgilePlus). 6 PRs opened on KooshaPari; 0 net content loss; all Dmouse92 work fully absorbed or discarded.
+**Totals:** 2 substantive migrations (dispatch-mcp → substrate, pheno → substrate), 18 archives, 1 verification (AgilePlus). 6 PRs opened on <REDACTED>; 0 net content loss; all Dmouse92 work fully absorbed or discarded.
 
 ---
 
@@ -346,12 +346,12 @@ After user's request to "guarantee 100% migr" via per-repo codex exec, codex exe
 
 | Commit | Subject | Absorbed into | Branch | +commits vs base |
 |---|---|---|---|---|
-| `dc4f1a3` | deprecate cheap-llm-mcp (W1.1) | `KooshaPari/dispatch-mcp` | `chore/w1-1-cheap-llm-mcp-deprecation-note-2026-06-15` | +1 |
-| `874a023` | W2.1 marker | `KooshaPari/dispatch-mcp` | `wip/close-out-w2-1-from-dmouse-2026-06-17` (subagent-cherry-picked) | +7 |
-| `6aad7fa` | cost/budget/quota/audit/tiers core | `KooshaPari/pheno-mcp-router` | `feat/port-cost-budget-quota-audit-tiers-2026-06-17` | +13 |
-| `9486edb`, `f46e356` | protocol compliance mock backend harness | `KooshaPari/pheno-mcp-router` | `feat/openai-compat-adapter-2026-06-17` (KP-authored test adapter) | +15 |
-| `a1aaef2` | protocol compliance + provider guides | `KooshaPari/pheno-mcp-router` | `feat/llama-adapter-2026-06-17` (LlamaAdapter port) | +15 |
-| `a1aaef2` part | docker/Dockerfile.llama + docker/llama-compose.yml | `KooshaPari/phenotype-ops` | `feat/llama-cpp-devops-2026-06-17` | +3 |
+| `dc4f1a3` | deprecate cheap-llm-mcp (W1.1) | `<REDACTED>/dispatch-mcp` | `chore/w1-1-cheap-llm-mcp-deprecation-note-2026-06-15` | +1 |
+| `874a023` | W2.1 marker | `<REDACTED>/dispatch-mcp` | `wip/close-out-w2-1-from-dmouse-2026-06-17` (subagent-cherry-picked) | +7 |
+| `6aad7fa` | cost/budget/quota/audit/tiers core | `<REDACTED>/pheno-mcp-router` | `feat/port-cost-budget-quota-audit-tiers-2026-06-17` | +13 |
+| `9486edb`, `f46e356` | protocol compliance mock backend harness | `<REDACTED>/pheno-mcp-router` | `feat/openai-compat-adapter-2026-06-17` (KP-authored test adapter) | +15 |
+| `a1aaef2` | protocol compliance + provider guides | `<REDACTED>/pheno-mcp-router` | `feat/llama-adapter-2026-06-17` (LlamaAdapter port) | +15 |
+| `a1aaef2` part | docker/Dockerfile.llama + docker/llama-compose.yml | `<REDACTED>/phenotype-ops` | `feat/llama-cpp-devops-2026-06-17` | +3 |
 
 **File-level absorption check (DM92 6aad7fa vs KP PR branch):**
 - DM92 file structure: `src/pheno_mcp_router/core/{audit,budget,cost,cost_middleware,port,protocol,quota,tiers,types}.py`
@@ -368,8 +368,8 @@ After user's request to "guarantee 100% migr" via per-repo codex exec, codex exe
 
 | Commit | Subject | Decision | Absorbed into |
 |---|---|---|---|
-| `7a803dd` | remove phenotype-config-core | ✓ cherry-pick | `KooshaPari/phenotype-config` via `feat/l5-104-canonical-markers-2026-06-17` (commit `2e94458`) |
-| `af0d5d5` | pin workflow actions to SHAs + SLSA + CANONICAL markers | ✓ cherry-pick | `KooshaPari/phenotype-config` via `feat/l5-104-canonical-markers-2026-06-17` (commits `d9bb720`, `eab64bd`) |
+| `7a803dd` | remove phenotype-config-core | ✓ cherry-pick | `<REDACTED>/phenotype-config` via `feat/l5-104-canonical-markers-2026-06-17` (commit `2e94458`) |
+| `af0d5d5` | pin workflow actions to SHAs + SLSA + CANONICAL markers | ✓ cherry-pick | `<REDACTED>/phenotype-config` via `feat/l5-104-canonical-markers-2026-06-17` (commits `d9bb720`, `eab64bd`) |
 | `9bf8816`, `f83e362`, `f6398a6`, `fa19377`, `e71a4fd` | 5 workflow/consolidation commits | ✗ discard | Already obsolete or divergent on KP/main per plan §2.2 (correct decision) |
 
 **Net result: 2 of 7 commits cherry-picked (the substrate-worthy ones); 5 of 7 explicitly discarded per plan (correct decision). 100% decision coverage.**
@@ -398,12 +398,12 @@ DM92 forgecode is a stale 1:1 mirror of upstream `tailcallhq/forgecode` (NOT `aa
 ## 5. Stale / warnings
 
 - **Archive ≠ delete** — initial action is archive (read-only marker). Delete only after 90-day archive retention (GitHub policy). 18 Dmouse92 repos are archived 2026-06-17 20:36 PDT.
-- **Dmouse92 auth switch required** — `gh` is currently KooshaPari. Archive commands against Dmouse92 repos require `gh auth switch --user Dmouse92`. KP push target remains KooshaPari.
-- **pheno-mcp-router substrate publication done** — substrate was local-only at start of session; subagent E created `KooshaPari/pheno-mcp-router` and pushed initial commit. Default branch = `chore/l3-57-pheno-plugin-registry-2026-06-11`. 3 substrate PRs (#1-#3) base on this default.
+- **Dmouse92 auth switch required** — `gh` is currently <REDACTED>. Archive commands against Dmouse92 repos require `gh auth switch --user Dmouse92`. KP push target remains <REDACTED>.
+- **pheno-mcp-router substrate publication done** — substrate was local-only at start of session; subagent E created `<REDACTED>/pheno-mcp-router` and pushed initial commit. Default branch = `chore/l3-57-pheno-plugin-registry-2026-06-11`. 3 substrate PRs (#1-#3) base on this default.
 - **Bulk archive required care** — 18 repos archived in a single batch via `gh auth switch --user Dmouse92` + per-repo `gh repo archive`; safe because Dmouse92 is the owner of those repos.
 - **Civis full fetch timed out** — KP/Civis main is too large to clone within 90s; used `--depth=1` for verdict; full clone deferred.
 - **AgilePlus 2a8cb6d verification deferred** — 1 unique Dmouse92 AgilePlus commit needs review by AgilePlus team before cherry-pick; not in L5-104 scope.
-- **phenotype-config-core/CANONICAL.md repoint** — needs a separate PR to `KooshaPari/pheno` (out of scope for L5-104; deferred to v7).
+- **phenotype-config-core/CANONICAL.md repoint** — needs a separate PR to `<REDACTED>/pheno` (out of scope for L5-104; deferred to v7).
 - **pheno ADR-012 commits #1-5 discard** — 5 of 7 Dmouse92 commits are workflow consolidation, agileplus scaffolding, or version skew; verified KP/main already has the canonical version. Discard is correct per plan §2.2.
 
 ---

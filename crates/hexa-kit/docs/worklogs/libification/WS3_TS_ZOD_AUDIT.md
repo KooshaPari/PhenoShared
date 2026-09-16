@@ -43,7 +43,7 @@ Audit of all TypeScript projects in the Phenotype ecosystem for validation libra
 
 ### 1. heliosCLI
 
-**Location:** `/Users/kooshapari/CodeProjects/Phenotype/repos/heliosCLI/`
+**Location:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos/heliosCLI/`
 
 #### Sub-Projects:
 
@@ -82,7 +82,7 @@ Audit of all TypeScript projects in the Phenotype ecosystem for validation libra
 
 ### 2. platforms/thegent
 
-**Location:** `/Users/kooshapari/CodeProjects/Phenotype/repos/platforms/thegent/`
+**Location:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos/platforms/thegent/`
 
 #### Sub-Projects:
 
@@ -313,16 +313,16 @@ export const validateDeploymentName = (name: string) => {
 
 ### Files to Update
 
-1. **`/Users/kooshapari/CodeProjects/Phenotype/repos/platforms/thegent/CLAUDE.md`**
+1. **`/Users/<REDACTED>/CodeProjects/Phenotype/repos/platforms/thegent/CLAUDE.md`**
    - Add Validation Library standard
    - Add schema location pattern
    - Document @hookform/resolvers requirement for React projects
 
-2. **`/Users/kooshapari/CodeProjects/Phenotype/repos/heliosCLI/CLAUDE.md`**
+2. **`/Users/<REDACTED>/CodeProjects/Phenotype/repos/heliosCLI/CLAUDE.md`**
    - Add Validation Library standard
    - Document zod-to-json-schema for SDK schemas
 
-3. **`/Users/kooshapari/CodeProjects/Phenotype/repos/CLAUDE.md`** (root)
+3. **`/Users/<REDACTED>/CodeProjects/Phenotype/repos/CLAUDE.md`** (root)
    - Add Validation Library standard across Phenotype
    - Document schema location conventions
 

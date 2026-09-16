@@ -134,18 +134,18 @@ Top bugs already fixed in our fork. Remaining interesting:
 
 ```bash
 # agentapi-plusplus: delete merged branches
-gh api -X DELETE repos/KooshaPari/agentapi-plusplus/git/refs/heads/garden/pre-commit-config
-gh api -X DELETE repos/KooshaPari/agentapi-plusplus/git/refs/heads/codex/coderabbit-rate-limit-bridge
-gh api -X DELETE repos/KooshaPari/agentapi-plusplus/git/refs/heads/stack/httpapi-fix-v2-13
+gh api -X DELETE repos/<REDACTED>/agentapi-plusplus/git/refs/heads/garden/pre-commit-config
+gh api -X DELETE repos/<REDACTED>/agentapi-plusplus/git/refs/heads/codex/coderabbit-rate-limit-bridge
+gh api -X DELETE repos/<REDACTED>/agentapi-plusplus/git/refs/heads/stack/httpapi-fix-v2-13
 
 # CLIProxyAPI: delete stale branches
-gh api -X DELETE repos/KooshaPari/CLIProxyAPI/git/refs/heads/dev
-gh api -X DELETE repos/KooshaPari/CLIProxyAPI/git/refs/heads/legacy
+gh api -X DELETE repos/<REDACTED>/CLIProxyAPI/git/refs/heads/dev
+gh api -X DELETE repos/<REDACTED>/CLIProxyAPI/git/refs/heads/legacy
 
 # colab: delete merged phase branches
-gh api -X DELETE repos/KooshaPari/colab/git/refs/heads/helios-integration
-gh api -X DELETE repos/KooshaPari/colab/git/refs/heads/helios-phase3
-gh api -X DELETE repos/KooshaPari/colab/git/refs/heads/helios-phase4
+gh api -X DELETE repos/<REDACTED>/colab/git/refs/heads/helios-integration
+gh api -X DELETE repos/<REDACTED>/colab/git/refs/heads/helios-phase3
+gh api -X DELETE repos/<REDACTED>/colab/git/refs/heads/helios-phase4
 ```
 
 ---

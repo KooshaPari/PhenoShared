@@ -703,8 +703,8 @@ index 0000000..5a3d28f
 +
 +## References
 +
-+- [DOMAIN_ROLES — secrets](https://github.com/KooshaPari/phenotype-registry/blob/main/docs/rationalization/DOMAIN_ROLES.md)
-+- [disposition-index id 2, 15](https://github.com/KooshaPari/phenotype-registry/blob/main/registry/disposition-index.json)
++- [DOMAIN_ROLES — secrets](https://github.com/<REDACTED>/phenotype-registry/blob/main/docs/rationalization/DOMAIN_ROLES.md)
++- [disposition-index id 2, 15](https://github.com/<REDACTED>/phenotype-registry/blob/main/registry/disposition-index.json)
 diff --git a/docs/disposition/wave-c-cipher-reloc.md b/docs/disposition/wave-c-cipher-reloc.md
 new file mode 100644
 index 0000000..67cb4bd
@@ -1835,8 +1835,8 @@ index 0000000..cf6eee5
 +
 +## References
 +
-+- [DOMAIN_ROLES.md](https://github.com/KooshaPari/phenotype-registry/blob/main/DOMAIN_ROLES.md)
-+- [LANGUAGE_PLACEMENT.md](https://github.com/KooshaPari/phenotype-registry/blob/main/LANGUAGE_PLACEMENT.md)
++- [DOMAIN_ROLES.md](https://github.com/<REDACTED>/phenotype-registry/blob/main/DOMAIN_ROLES.md)
++- [LANGUAGE_PLACEMENT.md](https://github.com/<REDACTED>/phenotype-registry/blob/main/LANGUAGE_PLACEMENT.md)
 diff --git a/docs/stories/hello-world.md b/docs/stories/hello-world.md
 new file mode 100644
 index 0000000..fb7dca2
@@ -2003,7 +2003,7 @@ index 0000000..6e1409e
 +edition = "2021"
 +description = "Auth framework: OAuth2, JWT, RBAC/ABAC, multi-tenancy, sessions, rate limiting, audit logging"
 +license = "MIT OR Apache-2.0"
-+repository = "https://github.com/KooshaPari/AuthKit"
++repository = "https://github.com/<REDACTED>/AuthKit"
 +keywords = ["auth", "authentication", "authorization", "jwt", "oauth"]
 +categories = ["authentication", "web-programming"]
 +

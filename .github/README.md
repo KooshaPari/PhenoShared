@@ -2,7 +2,7 @@
 
 > Reusable workflows and shared GitHub configurations
 
-[![AI slop inside](https://sladge.net/badge.svg)](https://sladge.net) [![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/KooshaPari/pheno/total)](https://github.com/KooshaPari/pheno/releases)
+[![AI slop inside](https://sladge.net/badge.svg)](https://sladge.net) [![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/<REDACTED>/pheno/total)](https://github.com/<REDACTED>/pheno/releases)
 
 ## Overview
 

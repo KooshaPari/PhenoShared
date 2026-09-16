@@ -6,7 +6,7 @@
   "color": "#ef4444",
   "description": "Rust agent workspace: router, sidekick, Eidolon runtime, and inference orchestration.",
   "tier": 2,
-  "repo": "KooshaPari/PhenoAI",
+  "repo": "<REDACTED>/PhenoAI",
   "language": "Rust",
   "license": "MIT",
   "status": "active",
@@ -17,8 +17,8 @@
     "Multi-provider support"
   ],
   "links": {
-    "github": "https://github.com/KooshaPari/PhenoAI",
+    "github": "https://github.com/<REDACTED>/PhenoAI",
     "docs": "https://phenoai.phenotype.space/docs",
-    "releases": "https://github.com/KooshaPari/PhenoAI/releases"
+    "releases": "https://github.com/<REDACTED>/PhenoAI/releases"
   }
 }

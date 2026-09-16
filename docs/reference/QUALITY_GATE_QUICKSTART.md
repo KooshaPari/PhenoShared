@@ -50,7 +50,7 @@ pre-commit install --hook-type pre-push
 ### heliosCLI (Rust + Python)
 
 ```bash
-cd /Users/kooshapari/CodeProjects/Phenotype/repos/heliosCLI
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos/heliosCLI
 
 # Install hooks
 pre-commit install
@@ -71,7 +71,7 @@ pre-commit install --hook-type pre-push
 ### platforms/thegent (Go + Python + Rust)
 
 ```bash
-cd /Users/kooshapari/CodeProjects/Phenotype/repos/platforms/thegent
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos/platforms/thegent
 
 # Install hooks (if not already done)
 pre-commit install
@@ -88,7 +88,7 @@ pre-commit install --hook-type pre-push
 Currently a scaffold (README only). When crates are added:
 
 ```bash
-cd /Users/kooshapari/CodeProjects/Phenotype/repos/phenotype-infrakit
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos/phenotype-infrakit
 
 # Copy .pre-commit-config.yaml template from guide
 cp <path-to-template> .pre-commit-config.yaml

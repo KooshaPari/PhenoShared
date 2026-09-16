@@ -4,7 +4,7 @@
 
 | Control | State | Exact evidence |
 |---|---|---|
-| Repository | GREEN | `KooshaPari/PhenoHandbook`, writable (`ADMIN`), not archived |
+| Repository | GREEN | `<REDACTED>/PhenoHandbook`, writable (`ADMIN`), not archived |
 | Isolation | GREEN | `chore/aplus-quality-loop-20260717`, based on `origin/main` at `d50448f` |
 | Deterministic install | GREEN | `bun install --frozen-lockfile`: 164 installs / 214 packages, 0 changes |
 | Static analysis | GREEN | `tsc --noEmit`: 1/1 command passed with `strict: true` |

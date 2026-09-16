@@ -8,7 +8,7 @@
 tailscale_authkey: "<PLACEHOLDER_TAILSCALE_AUTH_KEY>"
 
 # --- Cloudflare (DNS-01 + Tunnel) ---
-# Scoped API token with Zone:DNS:Edit on kooshapari.com
+# Scoped API token with Zone:DNS:Edit on <REDACTED>.com
 cf_api_token: "<PLACEHOLDER_CF_API_TOKEN>"
 
 # Pre-provisioned tunnel. Create once locally with
@@ -19,11 +19,11 @@ cloudflared_credentials_json: |
   <PLACEHOLDER_TUNNEL_CREDENTIALS_JSON_CONTENTS>
 
 # --- Caddy ---
-caddy_admin_email: kooshapari@gmail.com
+caddy_admin_email: <REDACTED>@gmail.com
 
 # --- Woodpecker OAuth against Forgejo ---
 # Register a new OAuth2 application in Forgejo UI at
-#   https://forgejo.kooshapari.com/-/admin/applications
+#   https://forgejo.<REDACTED>.com/-/admin/applications
 # after Forgejo is up, then fill in. Leave as placeholder for first run;
 # Woodpecker server will fail to authenticate until populated (rerun playbook).
 woodpecker_gitea_client: "<PLACEHOLDER_REGISTER_IN_FORGEJO>"

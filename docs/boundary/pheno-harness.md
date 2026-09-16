@@ -35,7 +35,7 @@ Three failsafe conditions from the absorption runbook were met:
 
 ### 1. The task's premise (Rust crate, single-session absorbable) does not match reality
 
-The queued task said: *"Absorb KooshaPari/pheno-harness (Rust, integration testing harness per registry) into phenotype-tooling as crates/pheno-harness/."*
+The queued task said: *"Absorb <REDACTED>/pheno-harness (Rust, integration testing harness per registry) into phenotype-tooling as crates/pheno-harness/."*
 
 Live verification of the source repo:
 
@@ -86,24 +86,24 @@ cannot be collapsed into a single `phenotype-tooling/crates/pheno-harness/`
 Rust crate without losing the cross-repo invariant. The canonical homes
 remain:
 
-- `KooshaPari/phenodag` — eval/bench coordination (absorbs the
+- `<REDACTED>/phenodag` — eval/bench coordination (absorbs the
   `datasets/ref-pr-diff/registry.json` fixture set)
-- `KooshaPari/BytePort` — hygiene bundle (P22 + P25)
-- `KooshaPari/nanovms` — mod-hygiene (P25)
-- `KooshaPari/PhenoCompose` — cargo-hygiene (P22 + P25)
-- `KooshaPari/portage` — Harbor task schema (canonical source)
-- `KooshaPari/PhenoMCPServers` + `KooshaPari/substrate` — cross-repo test
+- `<REDACTED>/BytePort` — hygiene bundle (P22 + P25)
+- `<REDACTED>/nanovms` — mod-hygiene (P25)
+- `<REDACTED>/PhenoCompose` — cargo-hygiene (P22 + P25)
+- `<REDACTED>/portage` — Harbor task schema (canonical source)
+- `<REDACTED>/PhenoMCPServers` + `<REDACTED>/substrate` — cross-repo test
   runtime
 
 ## What lives where now
 
 | pheno-harness capability | Canonical home | Status |
 | --- | --- | --- |
-| Cross-repo adapter (P20) — `adapters/portage_adapter.py` | `KooshaPari/phenodag` (presets) + `KooshaPari/BytePort` (hygiene) | SUPERSEDED_PARITY |
-| CI hygiene (P22+P25) — `.github/workflows/ci.yml` | `KooshaPari/BytePort` + `KooshaPari/nanovms` + `KooshaPari/PhenoCompose` | SUPERSEDED_BETTER |
-| Eval dataset registry — `datasets/ref-pr-diff/registry.json` | `KooshaPari/phenodag/presets/v3-180.yaml` (120-core + 60-side tasks) | SUPERSEDED_PARITY |
-| Harbor task schema — `HARBOR.md` | `KooshaPari/portage/src/harbor/tasks/client.py` (canonical) | SUPERSEDED_BETTER |
-| Cross-repo test runtime | `KooshaPari/PhenoMCPServers` + `KooshaPari/substrate` | DYNAMIC-KEEP |
+| Cross-repo adapter (P20) — `adapters/portage_adapter.py` | `<REDACTED>/phenodag` (presets) + `<REDACTED>/BytePort` (hygiene) | SUPERSEDED_PARITY |
+| CI hygiene (P22+P25) — `.github/workflows/ci.yml` | `<REDACTED>/BytePort` + `<REDACTED>/nanovms` + `<REDACTED>/PhenoCompose` | SUPERSEDED_BETTER |
+| Eval dataset registry — `datasets/ref-pr-diff/registry.json` | `<REDACTED>/phenodag/presets/v3-180.yaml` (120-core + 60-side tasks) | SUPERSEDED_PARITY |
+| Harbor task schema — `HARBOR.md` | `<REDACTED>/portage/src/harbor/tasks/client.py` (canonical) | SUPERSEDED_BETTER |
+| Cross-repo test runtime | `<REDACTED>/PhenoMCPServers` + `<REDACTED>/substrate` | DYNAMIC-KEEP |
 | `dyn-rlvr` runtime metrics | (not absorbed — requires Cloud GPU + runtime secrets) | OUT_OF_FLEET |
 | Local-only commit `a38a6fa` | `repos/pheno-harness/` (local checkout, forensic retention only) | STRANDED (source repo now archived) |
 | Rust FFI for Qwen3.5-0.8B kernels | `pheno-harness/kernels/qwen3.5-0.8b/rust/` | OUT_OF_SCOPE (Apple Silicon only; codegen from `arch.yaml`) |
@@ -151,7 +151,7 @@ the local-only checkout at `repos/pheno-harness/` for forensic retention.
 - Did not push a commit to `phenotype-tooling` on
   `salvage/phenotype-tooling-workspace-2026-07-15`; its working tree is
   unchanged.
-- Executed `gh repo archive KooshaPari/pheno-harness -y` to seal the
+- Executed `gh repo archive <REDACTED>/pheno-harness -y` to seal the
   source repo read-only.
 
 **Source of truth for the rejected absorption:**

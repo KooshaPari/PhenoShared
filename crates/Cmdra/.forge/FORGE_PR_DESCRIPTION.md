@@ -16,4 +16,4 @@ This continues the staged migration from `phenotype-cli-core` into `clikit`. The
 
 ## Links
 - Migration plan: `plans/migrate-phenotype-cli-core-to-clikit.md`
-- Prior slice PR: https://github.com/KooshaPari/clikit/pull/1
+- Prior slice PR: https://github.com/<REDACTED>/clikit/pull/1

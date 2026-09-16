@@ -13,8 +13,8 @@
 |---|---|---|---|
 | **pheno-llms-txt** | T0 | 20% | **REPO DELETED** (HTTP 404, L5-114 closure 2026-06-20). Functionally migrated to `phenotype-py-extras` PR #6 merged `a726a4e0`. Audit is informational only; remediation lives in target repo. |
 | **pheno-scaffold-kit** | T0 | 23% | **REPO DELETED 2026-06-20** (post-archive, token lacked `delete_repo`; user deleted externally). 3 governance tools (L72/L73/L74) recovered in `pheno-scaffold-kit#3` per L5-110/111/112-second-half audit. |
-| **pheno-vibecoding-guard** | T0 | 31% | **HTTP 404** (not on KooshaPari). Functionality inlined as `.pre-commit-hooks.yaml` consumers (see `pheno-llms-txt`, `pheno-agents-md`, `pheno-tracing`). Audit is informational only. |
-| **pheno-worklog-schema** | T0 | 31% | **HTTP 404**. Per ADR-032, the lib is canonical at `pheno-worklog-schema` (v2.1, PR `KooshaPari/pheno-worklog-schema#1`); current sources not on GitHub via KooshaPari org. Audit informational; target = monorepo `pheno-worklog-schema` consumption. |
+| **pheno-vibecoding-guard** | T0 | 31% | **HTTP 404** (not on <REDACTED>). Functionality inlined as `.pre-commit-hooks.yaml` consumers (see `pheno-llms-txt`, `pheno-agents-md`, `pheno-tracing`). Audit is informational only. |
+| **pheno-worklog-schema** | T0 | 31% | **HTTP 404**. Per ADR-032, the lib is canonical at `pheno-worklog-schema` (v2.1, PR `<REDACTED>/pheno-worklog-schema#1`); current sources not on GitHub via <REDACTED> org. Audit informational; target = monorepo `pheno-worklog-schema` consumption. |
 | **pheno-ssot-template** | T0 | 32% | **HTTP 404** (404 from API). Content present in monorepo git tree (last-known-good). Migrate to `phenotype-apps` per ADR-023 substrate placement. |
 
 > **No repo scored < 20% on the canonical pillar mean scale**, but 5 of 8 are in DELETED/404 status, which is the practical "remediate-first" condition: their functional content has migrated and the *audit score* is a *historical snapshot* only — remediation lives in the canonical target repo.
@@ -42,7 +42,7 @@
 
 ### 2.1 pheno-llms-txt (~178 LoC, 6 tests in 2 files) — DELETED
 
-**Score: 14/71 (20%) — Tier 0.** Audit per `findings/2026-06-18-T13-9-audit-pheno-llms-txt.md`. Source repo `KooshaPari/pheno-llms-txt` returns HTTP 404 (deleted pre-emptively between L5-114 audit and this turn).
+**Score: 14/71 (20%) — Tier 0.** Audit per `findings/2026-06-18-T13-9-audit-pheno-llms-txt.md`. Source repo `<REDACTED>/pheno-llms-txt` returns HTTP 404 (deleted pre-emptively between L5-114 audit and this turn).
 
 | Pillar cluster | Score | Evidence |
 |---|---|---|
@@ -99,7 +99,7 @@
 
 ### 2.4 pheno-vibecoding-guard (~978 LoC, 12 tests in 4 files) — HTTP 404
 
-**Score: 22/71 (31%) — Tier 0.** Audit per `findings/2026-06-18-T13-12-audit-pheno-vibecoding-guard.md`. Source repo `KooshaPari/pheno-vibecoding-guard` returns HTTP 404.
+**Score: 22/71 (31%) — Tier 0.** Audit per `findings/2026-06-18-T13-12-audit-pheno-vibecoding-guard.md`. Source repo `<REDACTED>/pheno-vibecoding-guard` returns HTTP 404.
 
 | Pillar cluster | Score | Evidence |
 |---|---|---|
@@ -114,11 +114,11 @@
 | L64-L68 | 2/3 | llms.txt + AGENTS.md + audit_scorecard.json; no SPEC.md; no glossary |
 | L69-L71 | 1/3 | CODE_OF_CONDUCT + CONTRIBUTING + SECURITY.md; no CODEOWNERS; no SUPPORT |
 
-**Closure status:** HTTP 404 from `gh api repos/KooshaPari/pheno-vibecoding-guard`. Functionality inlined as `.pre-commit-hooks.yaml` consumers per `findings/2026-06-19-L5-114-pheno-llms-txt-absorption.md:60` (adopted at L21 §100). Re-author at `phenotype-ops` federated service per ADR-023.
+**Closure status:** HTTP 404 from `gh api repos/<REDACTED>/pheno-vibecoding-guard`. Functionality inlined as `.pre-commit-hooks.yaml` consumers per `findings/2026-06-19-L5-114-pheno-llms-txt-absorption.md:60` (adopted at L21 §100). Re-author at `phenotype-ops` federated service per ADR-023.
 
 ### 2.5 pheno-worklog-schema (~1,129 LoC, 18 tests in 4 files) — HTTP 404
 
-**Score: 22/71 (31%) — Tier 0.** Audit per `findings/2026-06-18-T13-13-audit-pheno-worklog-schema.md`. Source repo `KooshaPari/pheno-worklog-schema` returns HTTP 404. Per ADR-032 the lib is canonical at the monorepo git path (single-source-of-truth).
+**Score: 22/71 (31%) — Tier 0.** Audit per `findings/2026-06-18-T13-13-audit-pheno-worklog-schema.md`. Source repo `<REDACTED>/pheno-worklog-schema` returns HTTP 404. Per ADR-032 the lib is canonical at the monorepo git path (single-source-of-truth).
 
 | Pillar cluster | Score | Evidence |
 |---|---|---|
@@ -137,7 +137,7 @@
 
 ### 2.6 pheno-profiling (~1,287 LoC, 0 tests) — ARCHIVED
 
-**Score: 19/71 (27%) — Tier 0.** New audit (no prior 71-pillar scorecard). Repo `KooshaPari/pheno-profiling` exists; archived per `gh api repos/KooshaPari/pheno-profiling --jq '.archived'` = `true`.
+**Score: 19/71 (27%) — Tier 0.** New audit (no prior 71-pillar scorecard). Repo `<REDACTED>/pheno-profiling` exists; archived per `gh api repos/<REDACTED>/pheno-profiling --jq '.archived'` = `true`.
 
 | Pillar cluster | Score | Evidence |
 |---|---|---|
@@ -156,7 +156,7 @@
 
 ### 2.7 pheno-secret-scan (11 files, config-only) — ACTIVE
 
-**Score: 30/71 (42%) — Tier 0 (strongest in this batch).** New audit. Repo `KooshaPari/pheno-secret-scan` exists; default branch `orch-v12-s3-011`; size 0 KB (telemetry hidden). Configuration-only repo (no compiled artifact).
+**Score: 30/71 (42%) — Tier 0 (strongest in this batch).** New audit. Repo `<REDACTED>/pheno-secret-scan` exists; default branch `orch-v12-s3-011`; size 0 KB (telemetry hidden). Configuration-only repo (no compiled artifact).
 
 | Pillar cluster | Score | Evidence |
 |---|---|---|
@@ -175,7 +175,7 @@
 
 ### 2.8 pheno-ssot-template (8 files, 274 LoC) — HTTP 404 (content in monorepo)
 
-**Score: 23/71 (32%) — Tier 0.** New audit. Source repo `KooshaPari/pheno-ssot-template` returns HTTP 404. Content lives in monorepo git tree (`pheno-ssot-template/` directory, 8 files, last commit 2026-06-20).
+**Score: 23/71 (32%) — Tier 0.** New audit. Source repo `<REDACTED>/pheno-ssot-template` returns HTTP 404. Content lives in monorepo git tree (`pheno-ssot-template/` directory, 8 files, last commit 2026-06-20).
 
 | Pillar cluster | Score | Evidence |
 |---|---|---|
@@ -188,7 +188,7 @@
 | L46-L55 | 3/3 | LICENSE + deny.toml (canonical fleet baseline per SECURITY.md:33-39); 4 workflows including scorecard; CODEOWNERS; conventional commits enforced via CONTRIBUTING.md:34-47 |
 | L56-L63 | 0/3 | no tracing; no metrics; no OTLP; no health endpoint |
 | L64-L68 | 5/3 | **BEST IN BATCH for SSOT**. README.md 274 LOC + template.yaml + SSOT invariants diagram + ADR references + 4 linter scripts; **strongest documentation in batch** |
-| L69-L71 | 2/3 | CODEOWNERS (1-line default @KooshaPari) + CONTRIBUTING.md (governance + release process + conventional commits); **no SUPPORT.md**; **no release-policy file (defined in CONTRIBUTING.md though)** |
+| L69-L71 | 2/3 | CODEOWNERS (1-line default @<REDACTED>) + CONTRIBUTING.md (governance + release process + conventional commits); **no SUPPORT.md**; **no release-policy file (defined in CONTRIBUTING.md though)** |
 
 **Top 5 gaps:** L21 tests (0 for the template itself); L13 perf; L22 proptest (template substitution edge cases); L56 tracing; L74 pheno-drift-detector.
 

@@ -1,5 +1,5 @@
 From 6d42361097f779f0238cc57ed7a4d4c670b8a93d Mon Sep 17 00:00:00 2001
-From: KooshaPari <koosha@example.com>
+From: <REDACTED> <koosha@example.com>
 Date: Sat, 20 Jun 2026 01:22:59 -0700
 Subject: [PATCH 1/4] docs: deprecate Settly in favour of Configra mono-repo
 MIME-Version: 1.0
@@ -7,7 +7,7 @@ Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
 Settly has been absorbed into the Configra workspace at
-KooshaPari/Configra/crates/settly/. This standalone repo is now
+<REDACTED>/Configra/crates/settly/. This standalone repo is now
 deprecated — all future development will happen in Configra.
 ---
  DEPRECATED.md | 20 ++++++++++++++++++++
@@ -24,15 +24,15 @@ index 0000000..862fd25
 +
 +**This repository is no longer maintained.**
 +
-+Settly has been absorbed into the [Configra](https://github.com/KooshaPari/Configra) monorepo as a workspace member crate at `crates/settly/`.
++Settly has been absorbed into the [Configra](https://github.com/<REDACTED>/Configra) monorepo as a workspace member crate at `crates/settly/`.
 +
 +## Migration
 +
 +All future development, issue tracking, and releases happen in Configra:
 +
-+- **Repo:** https://github.com/KooshaPari/Configra
++- **Repo:** https://github.com/<REDACTED>/Configra
 +- **Crate path:** `crates/settly/`
-+- **Cargo dependency:** `settly = { git = "https://github.com/KooshaPari/Configra" }` (once published)
++- **Cargo dependency:** `settly = { git = "https://github.com/<REDACTED>/Configra" }` (once published)
 +
 +## History
 +
@@ -45,7 +45,7 @@ index 0000000..862fd25
 
 
 From 5a151eba1a144be077eb59bea8d49d5a774f5a1d Mon Sep 17 00:00:00 2001
-From: KooshaPari <koosha@example.com>
+From: <REDACTED> <koosha@example.com>
 Date: Sat, 20 Jun 2026 01:56:56 -0700
 Subject: [PATCH 2/4] chore(orch-v11-016): full governance + tier-0 hygiene for
  Settly
@@ -156,66 +156,66 @@ index 09e65d6..4256727 100644
  
 -# Default owners for everything
 +# Default owners — every file requires review from at least one
- * @KooshaPari
+ * @<REDACTED>
  
 -# Libraries
--/libs/* @KooshaPari
--/crates/* @KooshaPari
--/packages/* @KooshaPari
+-/libs/* @<REDACTED>
+-/crates/* @<REDACTED>
+-/packages/* @<REDACTED>
 +# Rust source
-+/src/                    @KooshaPari
-+/tests/                  @KooshaPari
-+/benches/                @KooshaPari
-+/fuzz/                   @KooshaPari
-+/Cargo.toml              @KooshaPari
-+/Cargo.lock              @KooshaPari
++/src/                    @<REDACTED>
++/tests/                  @<REDACTED>
++/benches/                @<REDACTED>
++/fuzz/                   @<REDACTED>
++/Cargo.toml              @<REDACTED>
++/Cargo.lock              @<REDACTED>
  
 -# Infrastructure
--/infra/* @KooshaPari
--/.github/workflows/* @KooshaPari
+-/infra/* @<REDACTED>
+-/.github/workflows/* @<REDACTED>
 +# Domain layer — strict review
-+/src/domain/             @KooshaPari
-+/src/application/        @KooshaPari
++/src/domain/             @<REDACTED>
++/src/application/        @<REDACTED>
 +
 +# Adapter layer — broader review
-+/src/adapters/           @KooshaPari
-+/src/infrastructure/     @KooshaPari
++/src/adapters/           @<REDACTED>
++/src/infrastructure/     @<REDACTED>
 +
 +# API surface
-+/src/api/                @KooshaPari
++/src/api/                @<REDACTED>
 +
 +# Configuration
-+/config/                 @KooshaPari
-+/deny.toml               @KooshaPari
-+/mise.toml               @KooshaPari
-+/rust-toolchain.toml     @KooshaPari
++/config/                 @<REDACTED>
++/deny.toml               @<REDACTED>
++/mise.toml               @<REDACTED>
++/rust-toolchain.toml     @<REDACTED>
 +
 +# Governance
-+/CODE_OF_CONDUCT.md      @KooshaPari
-+/CONTRIBUTING.md         @KooshaPari
-+/SECURITY.md             @KooshaPari
-+/CHANGELOG.md            @KooshaPari
-+/LICENSE                 @KooshaPari
-+/README.md               @KooshaPari
++/CODE_OF_CONDUCT.md      @<REDACTED>
++/CONTRIBUTING.md         @<REDACTED>
++/SECURITY.md             @<REDACTED>
++/CHANGELOG.md            @<REDACTED>
++/LICENSE                 @<REDACTED>
++/README.md               @<REDACTED>
 +
 +# CI / governance files — highest review bar
-+/.github/workflows/      @KooshaPari
-+/.github/CODEOWNERS      @KooshaPari
-+/.github/dependabot.yml  @KooshaPari
-+/.github/ISSUE_TEMPLATE/ @KooshaPari
-+/.github/pull_request_template.md @KooshaPari
++/.github/workflows/      @<REDACTED>
++/.github/CODEOWNERS      @<REDACTED>
++/.github/dependabot.yml  @<REDACTED>
++/.github/ISSUE_TEMPLATE/ @<REDACTED>
++/.github/pull_request_template.md @<REDACTED>
 +
 +# Documentation
-+/docs/                   @KooshaPari
-+/SPEC.md                 @KooshaPari
-+/PRD.md                  @KooshaPari
-+/PLAN.md                 @KooshaPari
-+/ADR.md                  @KooshaPari
-+/AGENTS.md               @KooshaPari
-+/CLAUDE.md               @KooshaPari
++/docs/                   @<REDACTED>
++/SPEC.md                 @<REDACTED>
++/PRD.md                  @<REDACTED>
++/PLAN.md                 @<REDACTED>
++/ADR.md                  @<REDACTED>
++/AGENTS.md               @<REDACTED>
++/CLAUDE.md               @<REDACTED>
 +
 +# Dependabot auto-PRs require explicit approval (helps prevent supply-chain footguns)
-+/Cargo.lock              @KooshaPari
++/Cargo.lock              @<REDACTED>
 \ No newline at end of file
 diff --git a/.github/ISSUE_TEMPLATE/security.yml b/.github/ISSUE_TEMPLATE/security.yml
 new file mode 100644
@@ -707,7 +707,7 @@ index 71f8d68..196bfd2 100644
 +        uses: actions/checkout@v6
  
        - name: Promote to staging
-         uses: KooshaPari/phenotypeActions/promote@main
+         uses: <REDACTED>/phenotypeActions/promote@main
          with:
 -          version: $123needs.release.outputs.version125
 +          version: ${{ needs.release.outputs.version }}
@@ -818,7 +818,7 @@ index d25c8db..15aaa0a 100644
  
 -## [0.1.0] - YYYY-MM-DD
 +> **Status**: Settly has been absorbed into the
-+> [Configra](https://github.com/KooshaPari/Configra) mono-repo at
++> [Configra](https://github.com/<REDACTED>/Configra) mono-repo at
 +> `crates/settly/`. This standalone repository is preserved for historical
 +> reference. New releases will be cut from the Configra workspace.
 +
@@ -871,8 +871,8 @@ index d25c8db..15aaa0a 100644
  
  ### Security
 +
-+[Unreleased]: https://github.com/KooshaPari/Settly/compare/v0.1.0...HEAD
-+[0.1.0]: https://github.com/KooshaPari/Settly/releases/tag/v0.1.0
++[Unreleased]: https://github.com/<REDACTED>/Settly/compare/v0.1.0...HEAD
++[0.1.0]: https://github.com/<REDACTED>/Settly/releases/tag/v0.1.0
 \ No newline at end of file
 diff --git a/CODE_OF_CONDUCT.md b/CODE_OF_CONDUCT.md
 new file mode 100644
@@ -1031,7 +1031,7 @@ index 31d37ee..2f5e63b 100644
 -3. Ensure all tests pass
 -4. Submit a Pull Request
 +> **Note**: Settly is now maintained as a crate within the
-+> [Configra](https://github.com/KooshaPari/Configra) mono-repo at
++> [Configra](https://github.com/<REDACTED>/Configra) mono-repo at
 +> `crates/settly/`. This standalone repository is preserved for historical
 +> reference. New contributions should target the Configra workspace.
 +
@@ -1066,7 +1066,7 @@ index 31d37ee..2f5e63b 100644
 +### Clone and Build
 +
 +```bash
-+git clone https://github.com/KooshaPari/Settly.git
++git clone https://github.com/<REDACTED>/Settly.git
 +cd Settly
 +cargo build
 +cargo test
@@ -1198,7 +1198,7 @@ index 9015d1c..ecec314 100644
 +## Supported Versions
 +
 +Settly is now maintained as a crate within the
-+[Configra](https://github.com/KooshaPari/Configra) mono-repo. The versions of
++[Configra](https://github.com/<REDACTED>/Configra) mono-repo. The versions of
 +this standalone repo listed below are receiving security updates:
 +
 +| Version | Supported          |
@@ -1493,7 +1493,7 @@ index 0000000..bb10346
 
 
 From 1e69dce58847d4ec5edbdea00fbc6aa46afafc92 Mon Sep 17 00:00:00 2001
-From: KooshaPari <koosha@example.com>
+From: <REDACTED> <koosha@example.com>
 Date: Sat, 20 Jun 2026 02:02:22 -0700
 Subject: [PATCH 3/4] chore: governance tier-0 pass and config module addition
 
@@ -1962,7 +1962,7 @@ index 0000000..4c79731
 
 
 From 0d01bb9bae1d15526691c67547a4bb2003718346 Mon Sep 17 00:00:00 2001
-From: KooshaPari <koosha@example.com>
+From: <REDACTED> <koosha@example.com>
 Date: Sat, 20 Jun 2026 03:54:18 -0700
 Subject: [PATCH 4/4] chore: tier-0 hygiene snapshot 2026-06-20
 
@@ -2000,102 +2000,102 @@ index 4256727..296a3da 100644
  # https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
  #
 +# GitHub usernames are case-insensitive in CODEOWNERS matching, but we
-+# normalize to lowercase (@kooshapari) for grep-ability and tooling
++# normalize to lowercase (@<REDACTED>) for grep-ability and tooling
 +# consistency. Add additional owners here as the project grows.
 +#
  # Order matters: later entries override earlier ones.
  # The last matching pattern wins.
  
  # Default owners — every file requires review from at least one
--* @KooshaPari
-+* @kooshapari
+-* @<REDACTED>
++* @<REDACTED>
  
  # Rust source
--/src/                    @KooshaPari
--/tests/                  @KooshaPari
--/benches/                @KooshaPari
--/fuzz/                   @KooshaPari
--/Cargo.toml              @KooshaPari
--/Cargo.lock              @KooshaPari
-+/src/                    @kooshapari
-+/tests/                  @kooshapari
-+/benches/                @kooshapari
-+/fuzz/                   @kooshapari
-+/Cargo.toml              @kooshapari
-+/Cargo.lock              @kooshapari
+-/src/                    @<REDACTED>
+-/tests/                  @<REDACTED>
+-/benches/                @<REDACTED>
+-/fuzz/                   @<REDACTED>
+-/Cargo.toml              @<REDACTED>
+-/Cargo.lock              @<REDACTED>
++/src/                    @<REDACTED>
++/tests/                  @<REDACTED>
++/benches/                @<REDACTED>
++/fuzz/                   @<REDACTED>
++/Cargo.toml              @<REDACTED>
++/Cargo.lock              @<REDACTED>
  
  # Domain layer — strict review
--/src/domain/             @KooshaPari
--/src/application/        @KooshaPari
-+/src/domain/             @kooshapari
-+/src/application/        @kooshapari
+-/src/domain/             @<REDACTED>
+-/src/application/        @<REDACTED>
++/src/domain/             @<REDACTED>
++/src/application/        @<REDACTED>
  
  # Adapter layer — broader review
--/src/adapters/           @KooshaPari
--/src/infrastructure/     @KooshaPari
-+/src/adapters/           @kooshapari
-+/src/infrastructure/     @kooshapari
+-/src/adapters/           @<REDACTED>
+-/src/infrastructure/     @<REDACTED>
++/src/adapters/           @<REDACTED>
++/src/infrastructure/     @<REDACTED>
  
  # API surface
--/src/api/                @KooshaPari
-+/src/api/                @kooshapari
+-/src/api/                @<REDACTED>
++/src/api/                @<REDACTED>
  
  # Configuration
--/config/                 @KooshaPari
--/deny.toml               @KooshaPari
--/mise.toml               @KooshaPari
--/rust-toolchain.toml     @KooshaPari
-+/config/                 @kooshapari
-+/deny.toml               @kooshapari
-+/mise.toml               @kooshapari
-+/rust-toolchain.toml     @kooshapari
+-/config/                 @<REDACTED>
+-/deny.toml               @<REDACTED>
+-/mise.toml               @<REDACTED>
+-/rust-toolchain.toml     @<REDACTED>
++/config/                 @<REDACTED>
++/deny.toml               @<REDACTED>
++/mise.toml               @<REDACTED>
++/rust-toolchain.toml     @<REDACTED>
  
  # Governance
--/CODE_OF_CONDUCT.md      @KooshaPari
--/CONTRIBUTING.md         @KooshaPari
--/SECURITY.md             @KooshaPari
--/CHANGELOG.md            @KooshaPari
--/LICENSE                 @KooshaPari
--/README.md               @KooshaPari
-+/CODE_OF_CONDUCT.md      @kooshapari
-+/CONTRIBUTING.md         @kooshapari
-+/SECURITY.md             @kooshapari
-+/CHANGELOG.md            @kooshapari
-+/LICENSE                 @kooshapari
-+/README.md               @kooshapari
+-/CODE_OF_CONDUCT.md      @<REDACTED>
+-/CONTRIBUTING.md         @<REDACTED>
+-/SECURITY.md             @<REDACTED>
+-/CHANGELOG.md            @<REDACTED>
+-/LICENSE                 @<REDACTED>
+-/README.md               @<REDACTED>
++/CODE_OF_CONDUCT.md      @<REDACTED>
++/CONTRIBUTING.md         @<REDACTED>
++/SECURITY.md             @<REDACTED>
++/CHANGELOG.md            @<REDACTED>
++/LICENSE                 @<REDACTED>
++/README.md               @<REDACTED>
  
  # CI / governance files — highest review bar
--/.github/workflows/      @KooshaPari
--/.github/CODEOWNERS      @KooshaPari
--/.github/dependabot.yml  @KooshaPari
--/.github/ISSUE_TEMPLATE/ @KooshaPari
--/.github/pull_request_template.md @KooshaPari
-+/.github/workflows/      @kooshapari
-+/.github/CODEOWNERS      @kooshapari
-+/.github/dependabot.yml  @kooshapari
-+/.github/ISSUE_TEMPLATE/ @kooshapari
-+/.github/pull_request_template.md @kooshapari
+-/.github/workflows/      @<REDACTED>
+-/.github/CODEOWNERS      @<REDACTED>
+-/.github/dependabot.yml  @<REDACTED>
+-/.github/ISSUE_TEMPLATE/ @<REDACTED>
+-/.github/pull_request_template.md @<REDACTED>
++/.github/workflows/      @<REDACTED>
++/.github/CODEOWNERS      @<REDACTED>
++/.github/dependabot.yml  @<REDACTED>
++/.github/ISSUE_TEMPLATE/ @<REDACTED>
++/.github/pull_request_template.md @<REDACTED>
  
  # Documentation
--/docs/                   @KooshaPari
--/SPEC.md                 @KooshaPari
--/PRD.md                  @KooshaPari
--/PLAN.md                 @KooshaPari
--/ADR.md                  @KooshaPari
--/AGENTS.md               @KooshaPari
--/CLAUDE.md               @KooshaPari
-+/docs/                   @kooshapari
-+/SPEC.md                 @kooshapari
-+/PRD.md                  @kooshapari
-+/PLAN.md                 @kooshapari
-+/ADR.md                  @kooshapari
-+/AGENTS.md               @kooshapari
-+/CLAUDE.md               @kooshapari
+-/docs/                   @<REDACTED>
+-/SPEC.md                 @<REDACTED>
+-/PRD.md                  @<REDACTED>
+-/PLAN.md                 @<REDACTED>
+-/ADR.md                  @<REDACTED>
+-/AGENTS.md               @<REDACTED>
+-/CLAUDE.md               @<REDACTED>
++/docs/                   @<REDACTED>
++/SPEC.md                 @<REDACTED>
++/PRD.md                  @<REDACTED>
++/PLAN.md                 @<REDACTED>
++/ADR.md                  @<REDACTED>
++/AGENTS.md               @<REDACTED>
++/CLAUDE.md               @<REDACTED>
  
  # Dependabot auto-PRs require explicit approval (helps prevent supply-chain footguns)
--/Cargo.lock              @KooshaPari
+-/Cargo.lock              @<REDACTED>
 \ No newline at end of file
-+/Cargo.lock              @kooshapari
++/Cargo.lock              @<REDACTED>
 \ No newline at end of file
 diff --git a/.github/ISSUE_TEMPLATE/bug.yml b/.github/ISSUE_TEMPLATE/bug.yml
 deleted file mode 100644
@@ -2193,14 +2193,14 @@ index 0000000..20b38a9
 +
 +contact_links:
 +  - name: Security disclosure (private)
-+    url: /KooshaPari/Settly/security/advisories/new
++    url: /<REDACTED>/Settly/security/advisories/new
 +    about: |
 +      **Do not report security vulnerabilities on GitHub Issues.** Use
 +      GitHub's private vulnerability reporting or follow SECURITY.md
 +      to email the maintainer directly.
 +
 +  - name: Discussions / questions
-+    url: /KooshaPari/Settly/discussions
++    url: /<REDACTED>/Settly/discussions
 +    about: |
 +      For usage questions, design discussion, or general Q&A — please
 +      use Discussions instead of opening an Issue.
@@ -2341,16 +2341,16 @@ index 1f8f2dc..cebda91 100644
  jobs:
    ci:
      name: Rust CI
--    uses: KooshaPari/template-commons/.github/workflows/reusable-rust-ci.yml@main
-+    uses: KooshaPari/template-commons/.github/workflows/reusable-rust-ci.yml@v1.2.0
+-    uses: <REDACTED>/template-commons/.github/workflows/reusable-rust-ci.yml@main
++    uses: <REDACTED>/template-commons/.github/workflows/reusable-rust-ci.yml@v1.2.0
      with:
        rust-version: stable
        enable-coverage: true
  
    security:
      name: Security Audit
--    uses: KooshaPari/template-commons/.github/workflows/reusable-security-scan.yml@main
-+    uses: KooshaPari/template-commons/.github/workflows/reusable-security-scan.yml@v1.2.0
+-    uses: <REDACTED>/template-commons/.github/workflows/reusable-security-scan.yml@main
++    uses: <REDACTED>/template-commons/.github/workflows/reusable-security-scan.yml@v1.2.0
      with:
        language: rust
      secrets:
@@ -2358,8 +2358,8 @@ index 1f8f2dc..cebda91 100644
  
    phenotype-validate:
      name: Governance Validation
--    uses: KooshaPari/phenotypeActions/.github/workflows/validate-governance.yml@main
-+    uses: KooshaPari/phenotypeActions/.github/workflows/validate-governance.yml@v1.0.0
+-    uses: <REDACTED>/phenotypeActions/.github/workflows/validate-governance.yml@main
++    uses: <REDACTED>/phenotypeActions/.github/workflows/validate-governance.yml@v1.0.0
 diff --git a/.github/workflows/deny.yml b/.github/workflows/deny.yml
 new file mode 100644
 index 0000000..8e4c061

@@ -1,7 +1,7 @@
 # phenoStandards Boundary Correction (2026-07-27)
 
 **Audit ID:** ABS-JUS-phenoStandards-2026-07-27  
-**Source:** `https://github.com/KooshaPari/phenoStandards`  
+**Source:** `https://github.com/<REDACTED>/phenoStandards`  
 **Audited remote SHA:** `23c0dda23bfd7bd060f53a608032102287498f85` (`main`)  
 **Verdict:** `KEEP_STANDALONE_PENDING_BOUNDARY_REVIEW`  
 **Confidence:** HIGH for liveness/content; MEDIUM for final owner
@@ -20,7 +20,7 @@
 - CI invokes `task install`, `task lint`, and `task test`, but no Taskfile is present
   in the audited tree. The CI contract is therefore currently unverified.
 - The remote description says `DEPRECATED: Empty skeleton - standards in
-  KooshaPari/HexaKit/governance/`. The audited HexaKit tree did not expose a
+  <REDACTED>/HexaKit/governance/`. The audited HexaKit tree did not expose a
   `governance/` path or equivalent content proof. The prior registry row's 404 and
   "empty skeleton absorbed" claim is stale and contradicted by the current remote.
 

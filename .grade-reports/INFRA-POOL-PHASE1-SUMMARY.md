@@ -1,7 +1,7 @@
 # Infra-Pool Phase 1 Execution Summary
 
 **Date:** 2026-06-24
-**Repo:** phenotype-infra-ci-fix (clone of KooshaPari/phenotype-infra)
+**Repo:** phenotype-infra-ci-fix (clone of <REDACTED>/phenotype-infra)
 **Pool:** infra-pool
 **Phase:** 1
 

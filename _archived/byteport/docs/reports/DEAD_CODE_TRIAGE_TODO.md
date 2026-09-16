@@ -1,7 +1,7 @@
 # BytePort: Dead Code Triage — `todo!()` Markers
 
 **Audited:** 2026-05-06
-**Scope:** BytePort repository (`/Users/kooshapari/CodeProjects/Phenotype/repos/BytePort/`)
+**Scope:** BytePort repository (`/Users/<REDACTED>/CodeProjects/Phenotype/repos/BytePort/`)
 **Note:** BytePort is a Go/Rust hybrid. The Rust layer (`backend/nvms.rs`, `backend/byteport/tests/`) is a YAML parser and test harness. The Go layer has no `todo!()` markers.
 
 ---

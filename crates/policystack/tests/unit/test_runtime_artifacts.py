@@ -80,8 +80,8 @@ class BuildRunSidecarTest(unittest.TestCase):
     def test_sidecar_with_source_files(self) -> None:
         """Should include source_files list in sidecar."""
         source_files = [
-            "/Users/kooshapari/CodeProjects/Phenotype/repos/agentops-policy-federation-wtrees/resolver-multi-repo/policies/global.yaml",
-            "/Users/kooshapari/CodeProjects/Phenotype/repos/agentops-policy-federation-wtrees/resolver-multi-repo/policies/repo.yaml",
+            "/Users/<REDACTED>/CodeProjects/Phenotype/repos/agentops-policy-federation-wtrees/resolver-multi-repo/policies/global.yaml",
+            "/Users/<REDACTED>/CodeProjects/Phenotype/repos/agentops-policy-federation-wtrees/resolver-multi-repo/policies/repo.yaml",
         ]
         sidecar = build_run_sidecar(
             harness="codex",

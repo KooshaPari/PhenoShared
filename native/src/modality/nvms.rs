@@ -1,6 +1,6 @@
 //! `nvms` modality — drive an `nvms`-orchestrated container (nanovms).
 //!
-//! The canonical home for nvms is `KooshaPari/nanovms`. This modality probes
+//! The canonical home for nvms is `<REDACTED>/nanovms`. This modality probes
 //! for the `nvms` CLI on `$PATH` and, if present, reports availability.
 //!
 //! ## What it does in this slice
@@ -61,7 +61,7 @@ impl Modality for NvmsModality {
     }
 
     fn describe(&self) -> &'static str {
-        "nvms-orchestrated container (KooshaPari/nanovms)"
+        "nvms-orchestrated container (<REDACTED>/nanovms)"
     }
 
     fn is_available(&self) -> bool {
@@ -150,7 +150,7 @@ mod tests {
 //   The *driver* answers "spawn `nvms run <config>`, tunnel capture/input
 //   through the resulting container, and shut it down on App drop".
 //
-//   nvms is the orchestrator from `KooshaPari/nanovms` — different from
+//   nvms is the orchestrator from `<REDACTED>/nanovms` — different from
 //   the container CLI in `container.rs`. While the Container modality
 //   shells out to docker/podman, the nvms modality speaks nvms's native
 //   RPC protocol and can share a runtime across multiple PlayCua sessions.

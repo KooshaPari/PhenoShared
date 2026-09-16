@@ -2,7 +2,7 @@
 
 - **Status:** Accepted — 2026-06-15
 - **Date:** 2026-06-15
-- **Decision:** @KooshaPari
+- **Decision:** @<REDACTED>
 - **Worklog:** [`worklogs/L5-101-app-governance-2026-06-15.json`](../../../worklogs/L5-101-app-governance-2026-06-15.json)
 - **Finding:** [`findings/2026-06-15-L5-101-app-governance.md`](../../../findings/2026-06-15-L5-101-app-governance.md)
 

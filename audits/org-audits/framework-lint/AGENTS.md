@@ -3,7 +3,7 @@
 **Date:** 2026-06-19
 **Status:** ACTIVE
 **Substrate tier:** `pheno-*-lib` (single-concern Python linter, stdlib-only)
-**Owner:** KooshaPari
+**Owner:** <REDACTED>
 
 ---
 
@@ -32,8 +32,8 @@ Python package.
 - **L73 forward-looking ADR**: ADR-048 (L73 = graduation discipline per the v1.1
   plan). The current v1.0 ADR-042 is `docs/adr/2026-06-18/ADR-042-security-audit-cadence.md`
   (different subject — a doc-numbering collision the L5-110 audit flagged).
-- **Sibling tools**: L72 (predictive) is `KooshaPari/pheno-predict`; L74 (drift)
-  is `KooshaPari/pheno-drift-detector`. All three were created 2026-06-18 as the
+- **Sibling tools**: L72 (predictive) is `<REDACTED>/pheno-predict`; L74 (drift)
+  is `<REDACTED>/pheno-drift-detector`. All three were created 2026-06-18 as the
   v8 sweep's PAX-domain governance additions.
 
 ---

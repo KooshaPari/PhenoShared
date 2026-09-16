@@ -38,7 +38,7 @@ This document expands the DUPLICATION.md audit with 5 detailed case studies per 
 ### Case Study 1: GraphHealth vs CacheHealth vs BusHealth Consolidation
 
 **Current Implementation Pattern (GraphHealth):**
-- File: `/Users/kooshapari/CodeProjects/Phenotype/repos/crates/agileplus-graph/src/health.rs` (45 LOC)
+- File: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/crates/agileplus-graph/src/health.rs` (45 LOC)
 - Contains enum + async check method
 - Type-specific implementation
 
@@ -79,7 +79,7 @@ impl HealthCheck for GraphBackend {
 
 ### Case Study 2: Missing Health Check Method Implementations (12-20 LOC Gap)
 
-**File:** `/Users/kooshapari/CodeProjects/Phenotype/repos/crates/agileplus-cache/src/health.rs` (28 LOC)
+**File:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos/crates/agileplus-cache/src/health.rs` (28 LOC)
 
 **Issue:** Only defines `CacheHealth` enum, NO async check method
 
@@ -146,9 +146,9 @@ impl CacheHealth {
 
 ### Case Study 1: Duplicate HashMap Implementation (266 LOC + 114 LOC Nested)
 
-**Primary Location:** `/Users/kooshapari/CodeProjects/Phenotype/repos/crates/phenotype-event-sourcing/src/memory.rs` (266 LOC)
+**Primary Location:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos/crates/phenotype-event-sourcing/src/memory.rs` (266 LOC)
 
-**Nested Duplicate:** `/Users/kooshapari/CodeProjects/Phenotype/repos/crates/phenotype-event-sourcing/phenotype-event-sourcing/src/memory.rs` (266 LOC - IDENTICAL)
+**Nested Duplicate:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos/crates/phenotype-event-sourcing/phenotype-event-sourcing/src/memory.rs` (266 LOC - IDENTICAL)
 
 **Total Nested Duplication:** 266 LOC
 
@@ -189,7 +189,7 @@ impl<K: Eq + Hash, V: Clone> InMemoryStore<K, V> {
 
 ### Case Study 2: Incomplete Sync Adapter (87 LOC, Missing 45 LOC)
 
-**Location:** `/Users/kooshapari/CodeProjects/Phenotype/repos/crates/agileplus-sync/src/store.rs:47-110` (87 LOC)
+**Location:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos/crates/agileplus-sync/src/store.rs:47-110` (87 LOC)
 
 **Current Implementation:**
 - Implements SyncMappingStore trait
@@ -208,7 +208,7 @@ impl<K: Eq + Hash, V: Clone> InMemoryStore<K, V> {
 
 ### Case Study 3: Redis Adapter Edition Mismatch (150 LOC Unused)
 
-**Location:** `/Users/kooshapari/CodeProjects/Phenotype/repos/libs/phenotype-redis-adapter/`
+**Location:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos/libs/phenotype-redis-adapter/`
 
 **Issue:** Edition 2021, workspace 2024 → Cannot be used without migration
 
@@ -264,9 +264,9 @@ libs/event-core/
 ### Case Study 1: Configuration Builders - Identical Structure (61 LOC)
 
 **Files:**
-1. `/Users/kooshapari/CodeProjects/Phenotype/repos/crates/agileplus-cache/src/config.rs:13-35` (18 LOC)
-2. `/Users/kooshapari/CodeProjects/Phenotype/repos/crates/agileplus-graph/src/config.rs:8-22` (18 LOC)
-3. `/Users/kooshapari/CodeProjects/Phenotype/repos/crates/agileplus-nats/src/config.rs:10-40` (25 LOC)
+1. `/Users/<REDACTED>/CodeProjects/Phenotype/repos/crates/agileplus-cache/src/config.rs:13-35` (18 LOC)
+2. `/Users/<REDACTED>/CodeProjects/Phenotype/repos/crates/agileplus-graph/src/config.rs:8-22` (18 LOC)
+3. `/Users/<REDACTED>/CodeProjects/Phenotype/repos/crates/agileplus-nats/src/config.rs:10-40` (25 LOC)
 
 **Boilerplate Percentage:** ~60% (new/build methods)
 
@@ -336,7 +336,7 @@ impl EventQueryBuilder {
 
 ### Case Study 3: PolicyBuilder - Complex State & Merge Logic (52 LOC)
 
-**File:** `/Users/kooshapari/CodeProjects/Phenotype/repos/platforms/thegent/crates/thegent-policy/src/builder.rs:1-52`
+**File:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos/platforms/thegent/crates/thegent-policy/src/builder.rs:1-52`
 
 **Methods:** 8 builder methods + complex merge logic
 
@@ -401,8 +401,8 @@ pub struct CacheConfig {
 ### Case Study 1: Event Serialization Nested Duplicate (98 LOC × 2)
 
 **Files:**
-1. `/Users/kooshapari/CodeProjects/Phenotype/repos/crates/phenotype-event-sourcing/src/event.rs` (98 LOC)
-2. `/Users/kooshapari/CodeProjects/Phenotype/repos/crates/phenotype-event-sourcing/phenotype-event-sourcing/src/event.rs` (99 LOC - IDENTICAL)
+1. `/Users/<REDACTED>/CodeProjects/Phenotype/repos/crates/phenotype-event-sourcing/src/event.rs` (98 LOC)
+2. `/Users/<REDACTED>/CodeProjects/Phenotype/repos/crates/phenotype-event-sourcing/phenotype-event-sourcing/src/event.rs` (99 LOC - IDENTICAL)
 
 **Duplication:** 98 LOC (one of the copies)
 
@@ -535,7 +535,7 @@ libs/serde-adapters/
 
 ### Case Study 1: Auth Fixture Duplication (68 LOC + 65 Estimated)
 
-**File:** `/Users/kooshapari/CodeProjects/Phenotype/repos/heliosCLI/codex-rs/app-server/tests/common/auth_fixtures.rs` (68 LOC)
+**File:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos/heliosCLI/codex-rs/app-server/tests/common/auth_fixtures.rs` (68 LOC)
 
 **Contains:**
 ```rust
@@ -570,7 +570,7 @@ impl AuthFixtureBuilder {
 
 ### Case Study 2: Mock Server Implementation (85 LOC + 70 Estimated)
 
-**File:** `/Users/kooshapari/CodeProjects/Phenotype/repos/heliosCLI/codex-rs/mcp-server/tests/common/mock_model_server.rs` (85 LOC)
+**File:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos/heliosCLI/codex-rs/mcp-server/tests/common/mock_model_server.rs` (85 LOC)
 
 **Purpose:** Mock OpenAI-compatible API for testing model interactions
 
@@ -589,7 +589,7 @@ impl AuthFixtureBuilder {
 
 ### Case Study 3: Schema Fixture Duplication (52 LOC + 50)
 
-**File:** `/Users/kooshapari/CodeProjects/Phenotype/repos/heliosCLI/codex-rs/app-server-protocol/tests/schema_fixtures.rs` (52 LOC)
+**File:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos/heliosCLI/codex-rs/app-server-protocol/tests/schema_fixtures.rs` (52 LOC)
 
 **Contains:**
 - Protocol message definitions

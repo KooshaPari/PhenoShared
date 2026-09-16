@@ -1,11 +1,11 @@
-# CII Best Practices — Draft for apisync (KooshaPari/Apisync)
+# CII Best Practices — Draft for apisync (<REDACTED>/Apisync)
 
 This draft maps the current repo state to https://www.bestpractices.dev/ criteria.
 Submit at https://www.bestpractices.dev/en/projects/new — copy answers below.
 
 ## Basics
 
-- **Project URL:** https://github.com/KooshaPari/Apisync
+- **Project URL:** https://github.com/<REDACTED>/Apisync
 - **Description:** Universal API toolkit with REST, GraphQL, and WebSocket support (Rust, tokio, hyper, async-graphql, tokio-tungstenite)
 - **License:** MIT OR Apache-2.0 — `LICENSE` contains both texts, `Cargo.toml` declares `license = "MIT OR Apache-2.0"` — meets OSI.
 - **Versioning:** SemVer, `Cargo.toml` + git tags `v*` (`v0.2.0`, `v0.2.1`, `v0.2.2`, `v0.2.3`), CHANGELOG.md Keep a Changelog.
@@ -13,7 +13,7 @@ Submit at https://www.bestpractices.dev/en/projects/new — copy answers below.
 ## Change Control
 
 - **Repo:** GitHub public, `main` protected (required_status_checks strict [ci / lint, ci / test], 1 review, dismiss_stale, linear_history, allow_force false, allow_deletions false, enforce_admins true, conversation_resolution true).
-- **Contribution:** `CONTRIBUTING.md` (if missing, create — currently `.github/CODEOWNERS` with `* @KooshaPari`), PR template `.github/PULL_REQUEST_TEMPLATE.md`, `CODEOWNERS` canonical at `.github/CODEOWNERS`.
+- **Contribution:** `CONTRIBUTING.md` (if missing, create — currently `.github/CODEOWNERS` with `* @<REDACTED>`), PR template `.github/PULL_REQUEST_TEMPLATE.md`, `CODEOWNERS` canonical at `.github/CODEOWNERS`.
 - **Code review:** All PRs require 1 approving review (branch protection) + auto-approve for dependabot via `.github/workflows/auto-approve-dependabot.yml` (still counts as approved changeset for Scorecard Code-Review, now 2/10 and climbing).
 
 ## Reporting
@@ -44,7 +44,7 @@ Submit at https://www.bestpractices.dev/en/projects/new — copy answers below.
 
 1. Replace `[TODO: maintainer email]` in `SECURITY.md` with a real security contact (e.g., `security@phenotype.dev` or your email).
 2. Ensure `CONTRIBUTING.md` exists at repo root or `.github/CONTRIBUTING.md` (copy from `AGENTS.md` + `CLAUDE.md` quality gates).
-3. Go to https://www.bestpractices.dev/en/projects/new → enter `https://github.com/KooshaPari/Apisync` → answer using this draft (most will auto-pass via repo scan).
+3. Go to https://www.bestpractices.dev/en/projects/new → enter `https://github.com/<REDACTED>/Apisync` → answer using this draft (most will auto-pass via repo scan).
 4. For any `?` → set to `Met` if file exists, else create file and re-scan.
 5. After badge awarded, Scorecard CII-Best-Practices 0→10 flips automatically.
 
@@ -54,7 +54,7 @@ Submit at https://www.bestpractices.dev/en/projects/new — copy answers below.
 - Security policy: `SECURITY.md:1`
 - Contributing: `.github/CODEOWNERS`, `.github/PULL_REQUEST_TEMPLATE.md`
 - CI: `.github/workflows/ci.yml`, `.github/workflows/security-deep-scan.yml`, `.github/workflows/scorecard.yml`
-- Release provenance: `https://github.com/KooshaPari/Apisync/releases/tag/v0.2.3` (sbom.json + attestation)
+- Release provenance: `https://github.com/<REDACTED>/Apisync/releases/tag/v0.2.3` (sbom.json + attestation)
 - Fuzzing: `fuzz/fuzz_targets/router_dispatch.rs:3` (`libfuzzer_sys`)
 
 <!-- code-review signal 2 -->

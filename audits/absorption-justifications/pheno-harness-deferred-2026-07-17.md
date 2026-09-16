@@ -1,10 +1,10 @@
 # pheno-harness — Absorption Justification (deferred → ARCHIVE_ONLY)
 
 **Status:** DEFERRED-W2 → ARCHIVE_ONLY 2026-07-17 (failsafe path)
-**Source:** `KooshaPari/pheno-harness` (1,910 KB, 1 branch, last push 2026-07-17T05:27:00Z)
+**Source:** `<REDACTED>/pheno-harness` (1,910 KB, 1 branch, last push 2026-07-17T05:27:00Z)
 **Disposition:** ARCHIVE_ONLY (no physical transfer into `phenotype-tooling/crates/pheno-harness/`)
 **Original queued target:** `phenotype-tooling (crates/pheno-harness/)` — Python tooling pattern
-**Canonical sources for already-absorbed patterns:** `KooshaPari/phenodag` (P21/P23/P25), `KooshaPari/BytePort` (P22/P25), `KooshaPari/nanovms` (P25), `KooshaPari/PhenoCompose` (P22/P25), `KooshaPari/portage` (Harbor task schema), `KooshaPari/PhenotypeMCPServers` + `KooshaPari/substrate` (cross-repo test runtime)
+**Canonical sources for already-absorbed patterns:** `<REDACTED>/phenodag` (P21/P23/P25), `<REDACTED>/BytePort` (P22/P25), `<REDACTED>/nanovms` (P25), `<REDACTED>/PhenoCompose` (P22/P25), `<REDACTED>/portage` (Harbor task schema), `<REDACTED>/PhenotypeMCPServers` + `<REDACTED>/substrate` (cross-repo test runtime)
 
 ## Confidence
 
@@ -17,7 +17,7 @@ ARCHIVE_ONLY disposition was chosen:
 
 ### 1. Source repo is not a Rust crate as the task assumed
 
-The queued task said: *"Absorb KooshaPari/pheno-harness (Rust, integration testing harness per registry) into phenotype-tooling as crates/pheno-harness/"*. The actual repo state:
+The queued task said: *"Absorb <REDACTED>/pheno-harness (Rust, integration testing harness per registry) into phenotype-tooling as crates/pheno-harness/"*. The actual repo state:
 
 | Check | Task assumption | Reality | Conflict? |
 | --- | --- | --- | --- |
@@ -30,7 +30,7 @@ The queued task said: *"Absorb KooshaPari/pheno-harness (Rust, integration testi
 Verified live:
 
 ```sh
-$ gh repo view KooshaPari/pheno-harness --json isArchived,primaryLanguage,languages
+$ gh repo view <REDACTED>/pheno-harness --json isArchived,primaryLanguage,languages
 {
   "isArchived": false,
   "primaryLanguage": { "name": "Python" },
@@ -108,11 +108,11 @@ checkout predates the 2026-07-17 push activity.
 
 | pheno-harness capability | Canonical home | Status |
 | --- | --- | --- |
-| Cross-repo adapter (P20) — `adapters/portage_adapter.py` | `KooshaPari/phenodag` (presets) + `KooshaPari/BytePort` (hygiene) | SUPERSEDED_PARITY (per 2026-06-25 audit) |
-| CI hygiene (P22+P25) — `.github/workflows/ci.yml` | `KooshaPari/BytePort` (Taskfile.yml) + `KooshaPari/nanovms` + `KooshaPari/PhenoCompose` | SUPERSEDED_BETTER |
-| Eval dataset registry — `datasets/ref-pr-diff/registry.json` | `KooshaPari/phenodag/presets/v3-180.yaml` | SUPERSEDED_PARITY |
-| Harbor task schema — `HARBOR.md` | `KooshaPari/portage/src/harbor/tasks/client.py` | SUPERSEDED_BETTER (canonical source) |
-| Cross-repo test runtime | `KooshaPari/PhenoMCPServers` (Python servers) + `KooshaPari/substrate` (Rust runtime) | DYNAMIC-KEEP (per 2026-06-25 audit) |
+| Cross-repo adapter (P20) — `adapters/portage_adapter.py` | `<REDACTED>/phenodag` (presets) + `<REDACTED>/BytePort` (hygiene) | SUPERSEDED_PARITY (per 2026-06-25 audit) |
+| CI hygiene (P22+P25) — `.github/workflows/ci.yml` | `<REDACTED>/BytePort` (Taskfile.yml) + `<REDACTED>/nanovms` + `<REDACTED>/PhenoCompose` | SUPERSEDED_BETTER |
+| Eval dataset registry — `datasets/ref-pr-diff/registry.json` | `<REDACTED>/phenodag/presets/v3-180.yaml` | SUPERSEDED_PARITY |
+| Harbor task schema — `HARBOR.md` | `<REDACTED>/portage/src/harbor/tasks/client.py` | SUPERSEDED_BETTER (canonical source) |
+| Cross-repo test runtime | `<REDACTED>/PhenoMCPServers` (Python servers) + `<REDACTED>/substrate` (Rust runtime) | DYNAMIC-KEEP (per 2026-06-25 audit) |
 | `dyn-rlvr` runtime metrics | (not absorbed — requires Cloud GPU + runtime secrets) | OUT_OF_FLEET (per 2026-06-25 audit) |
 | Local-only commit `a38a6fa` (portage adapter + tracera_semantic_pillar) | Local checkout at `repos/pheno-harness/` | STRANDED (archived source repo would block push; 2026-07-17 push pre-empts) |
 | Rust FFI for Qwen3.5-0.8B kernels | `pheno-harness/kernels/qwen3.5-0.8b/rust/` | OUT_OF_SCOPE (Apple Silicon only; codegen from `arch.yaml`) |
@@ -147,9 +147,9 @@ retention.
 - No source code was copied.
 - No new boundary or test fixtures were created in `phenotype-tooling`.
 - `phenotype-tooling` was not committed to; its working tree is unchanged.
-- `gh repo archive KooshaPari/pheno-harness -y` was executed (the source
+- `gh repo archive <REDACTED>/pheno-harness -y` was executed (the source
   repo is sealed read-only; restoration requires
-  `gh repo restore KooshaPari/pheno-harness` with org-owner privileges).
+  `gh repo restore <REDACTED>/pheno-harness` with org-owner privileges).
 
 ## Verification
 
@@ -157,9 +157,9 @@ retention.
 | --- | --- |
 | `find pheno-harness -name "Cargo.toml"` returns nothing | ✅ No Rust crate at root or any subdir (only `Cargo.toml`-named files are codegen outputs in `kernels/qwen3.5-0.8b/iso/` which are different). |
 | `find pheno-harness -name "*.rs" \| wc -l` → 7 files | ✅ All 7 `.rs` files are inside `kernels/qwen3.5-0.8b/rust/` (one specific Qwen3.5-0.8B kernel FFI crate); not the pheno-harness crate. |
-| `gh repo view KooshaPari/pheno-harness --json primaryLanguage` | ✅ `"Python"` (not Rust). |
+| `gh repo view <REDACTED>/pheno-harness --json primaryLanguage` | ✅ `"Python"` (not Rust). |
 | `cd phenotype-tooling && cargo check -p pheno-harness` | ❌ `error: package ID specification 'pheno-harness' did not match any packages` (workspace has no such member). |
-| `gh repo view KooshaPari/pheno-harness --json isArchived` (pre-archive) | ✅ `false` — repo was still active at audit time. |
+| `gh repo view <REDACTED>/pheno-harness --json isArchived` (pre-archive) | ✅ `false` — repo was still active at audit time. |
 | `registry/disposition-index.json` row `repo-pheno-harness` (pre-edit) | ✅ `disposition: ABSORB`, `note: [...DEFERRED-W2: too large or structurally wrong for single-session absorption; needs dedicated audit phase]` |
 | `projects/pheno-harness.json` (pre-edit) | ✅ Status `archived` (stale claim that repo was archived 2026-06-24 — actual repo remained active until this audit). |
 | `catalog/registry.yaml` (pre-edit) | ✅ No pheno-harness substrate entry exists. |
@@ -169,10 +169,10 @@ retention.
 
 ```sh
 # 1. Unarchive source
-gh repo unarchive KooshaPari/pheno-harness
+gh repo unarchive <REDACTED>/pheno-harness
 
 # 2. In registry spine:
-cd /Users/kooshapari/CodeProjects/Phenotype/repos/phenotype-registry
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos/phenotype-registry
 # Edit registry/disposition-index.json: change disposition back to "ABSORB",
 # fsm back to "active", drop archived_at / boundary_doc fields.
 # Edit projects/pheno-harness.json: change status back to "active".
@@ -194,7 +194,7 @@ revert because no physical transfer occurred.
 - **Boundary doc:** `docs/boundary/pheno-harness.md`
 - **Disposition row:** `registry/disposition-index.json` → `repo-pheno-harness`
 - **Project entry:** `projects/pheno-harness.json` (updated 2026-07-17 to reflect actual archive state)
-- **Source repo (now archived):** https://github.com/KooshaPari/pheno-harness
+- **Source repo (now archived):** https://github.com/<REDACTED>/pheno-harness
 
 ## Last Boundary Review
 
@@ -217,7 +217,7 @@ revert because no physical transfer occurred.
 - Did not push a commit to `phenotype-tooling` on
   `salvage/phenotype-tooling-workspace-2026-07-15`; its working tree is
   unchanged.
-- Executed `gh repo archive KooshaPari/pheno-harness -y` to seal the
+- Executed `gh repo archive <REDACTED>/pheno-harness -y` to seal the
   source repo read-only.
 
 **Next review:** none — repo is archived. If a future need for a

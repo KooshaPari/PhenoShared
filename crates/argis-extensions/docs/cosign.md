@@ -27,7 +27,7 @@ The flow is:
 
 1. **OIDC token issuance.** GitHub Actions, with `id-token: write`, mints a
    short-lived OIDC token (~10 min) bound to the workflow run:
-   `repo:KooshaPari/phenotype-apps:ref:refs/tags/v14.0.0:workflow:.github/workflows/supply-chain-signing.yml`
+   `repo:<REDACTED>/phenotype-apps:ref:refs/tags/v14.0.0:workflow:.github/workflows/supply-chain-signing.yml`
 2. **Cert issuance by Fulcio.** cosign exchanges the OIDC token at Fulcio
    for an X.509 cert. The OIDC subject becomes the cert's SAN.
 3. **Ephemeral ECDSA key.** cosign generates an in-memory ECDSA-P256 key,
@@ -60,7 +60,7 @@ GitHub Release, verify with:
 cosign verify-blob \
   --signature      release.sig \
   --certificate   release.pub \
-  --certificate-identity-regexp 'https://github.com/KooshaPari/.*@refs/tags/.*' \
+  --certificate-identity-regexp 'https://github.com/<REDACTED>/.*@refs/tags/.*' \
   --certificate-oidc-issuer     'https://token.actions.githubusercontent.com' \
   release.tar.gz
 ```
@@ -76,8 +76,8 @@ The two `--certificate-*` flags pin which workflow identity is acceptable:
 - `--certificate-oidc-issuer` — must be GitHub's OIDC issuer. Constant and
   not impersonable by other CI systems.
 - `--certificate-identity-regexp` — restricts to workflows under
-  `KooshaPari/*` that fired on a tag ref. Tighten further for a specific
-  repo: `'https://github.com/KooshaPari/phenotype-apps/.*@refs/tags/v.*'`.
+  `<REDACTED>/*` that fired on a tag ref. Tighten further for a specific
+  repo: `'https://github.com/<REDACTED>/phenotype-apps/.*@refs/tags/v.*'`.
 
 ## How is this wired in CI?
 

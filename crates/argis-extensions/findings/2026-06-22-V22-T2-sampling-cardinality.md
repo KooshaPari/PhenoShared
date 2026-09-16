@@ -4,7 +4,7 @@
 **Cycle:** 12 (P1 reduction round 3, per `plans/2026-06-22-v22-71-pillar-cycle-12-p1.md`)
 **Pillar:** L26 (Sampling + Cardinality)
 **Branch:** `feat/v22-l26-tracing-2026-06-22` (commit `7a531fa`, **NOT PUSHED**)
-**Repo:** `KooshaPari/pheno-tracing`
+**Repo:** `<REDACTED>/pheno-tracing`
 **Diff:** `+1749 / -2` across 5 files (`src/sampling.rs`, `src/cardinality.rs`, `src/lib.rs`, `tests/sampling_cardinality_test.rs`, `README.md`)
 
 ---

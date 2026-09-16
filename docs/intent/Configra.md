@@ -1,6 +1,6 @@
 ---
 id: configra
-repo: KooshaPari/Configra
+repo: <REDACTED>/Configra
 name: Configra
 status: active
 tier: pheno-lib

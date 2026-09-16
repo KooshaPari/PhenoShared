@@ -1,6 +1,6 @@
 # phenoDesign PEP 1.0 Assessment Scorecard
 
-**Subject:** KooshaPari/zz-pheno @ `4c3772d` (main)
+**Subject:** <REDACTED>/zz-pheno @ `4c3772d` (main)
 **Profile:** library (11 domains, 66 pillars, 660 criteria)
 **Date:** 2026-09-15T06:20Z
 **Epoch:** E-PHENO-1

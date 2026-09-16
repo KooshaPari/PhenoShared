@@ -3,9 +3,9 @@
 Python MCP servers for substrate inbound adapters.
 
 > **Canonical SSOT:** Deployable MCP server packages live in
-> [PhenoMCPServers](https://github.com/KooshaPari/PhenoMCPServers) (`servers/substrate/`).
+> [PhenoMCPServers](https://github.com/<REDACTED>/PhenoMCPServers) (`servers/substrate/`).
 > This tree is a **runtime convenience copy** for substrate development.
-> Per [ADR-019](https://github.com/KooshaPari/PhenoSpecs/blob/main/adrs/019-mcp-runtime-implementation-deps.md),
+> Per [ADR-019](https://github.com/<REDACTED>/PhenoSpecs/blob/main/adrs/019-mcp-runtime-implementation-deps.md),
 > long-term wiring imports from PhenoMCPServers — do not fork tool definitions here.
 
 ## Servers
@@ -18,7 +18,7 @@ Python MCP servers for substrate inbound adapters.
 
 ## Dispatch MCP (OmniRoute tiers)
 
-Absorbs `KooshaPari/dispatch-mcp`. Exposes per-tier tools (`dispatch_worker`, `dispatch_main`, …), `dispatch_custom`, `dispatch_health`, and `dispatch_liveness`.
+Absorbs `<REDACTED>/dispatch-mcp`. Exposes per-tier tools (`dispatch_worker`, `dispatch_main`, …), `dispatch_custom`, `dispatch_health`, and `dispatch_liveness`.
 
 ### Tools
 

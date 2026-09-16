@@ -76,7 +76,7 @@ This means any website on the internet can make authenticated cross-origin reque
 
 **Exploitability:** MEDIUM-HIGH. Combined with the lack of auth on dashboard routes (C-1), any malicious website can call all dashboard APIs. For the protected `/api/v1/*` routes, exploitation requires the API key to be sent (typically via header, not cookies), which limits but does not eliminate risk.
 
-**Recommendation:** Restrict CORS to the specific origins that host the dashboard (e.g., `http://localhost:5173`, `https://agileplus.kooshapari.dev`).
+**Recommendation:** Restrict CORS to the specific origins that host the dashboard (e.g., `http://localhost:5173`, `https://agileplus.<REDACTED>.dev`).
 
 ---
 
@@ -275,7 +275,7 @@ The renderer uses `innerHTML` to populate lists, but all values are passed throu
 | Finding | Detail |
 |---------|--------|
 | Worker not implemented | `main = "src/worker.ts"` is configured but the file **does not exist**. The edge worker is a placeholder. |
-| API origin exposed | `AGILEPLUS_API = "https://agileplus.kooshapari.dev"` — the production API hostname is hardcoded. |
+| API origin exposed | `AGILEPLUS_API = "https://agileplus.<REDACTED>.dev"` — the production API hostname is hardcoded. |
 | KV/R2 bindings | KV namespace `AGILEPLUS_KV` and R2 bucket `agileplus-builds` are configured but with placeholder IDs. |
 
 **Risk:** No actual edge worker code exists, so there are no edge-specific vulnerabilities. However, when implemented, the worker must enforce auth on proxied requests to prevent the pattern where an edge proxy strips or bypasses auth headers.

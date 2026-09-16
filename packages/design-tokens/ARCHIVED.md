@@ -1,11 +1,11 @@
 # Moved: `@phenotype/design-tokens`
 
-Canonical source: [`KooshaPari/phenoDesign`](https://github.com/KooshaPari/phenoDesign) → `packages/design-tokens/`
+Canonical source: [`<REDACTED>/phenoDesign`](https://github.com/<REDACTED>/phenoDesign) → `packages/design-tokens/`
 
 ```json
 {
   "dependencies": {
-    "@phenotype/design-tokens": "github:KooshaPari/phenoDesign"
+    "@phenotype/design-tokens": "github:<REDACTED>/phenoDesign"
   }
 }
 ```

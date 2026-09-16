@@ -8,7 +8,7 @@
 ## 1. Scope
 
 Reconcile the local `repos/` clone's `main` branch with `argis-extensions:main`
-(KooshaPari/argis-extensions) so the v10 governance wave captured by the parent
+(<REDACTED>/argis-extensions) so the v10 governance wave captured by the parent
 repo is mirrored on the public extension fork.
 
 ## 2. State at execution start (2026-06-19, this turn)
@@ -29,14 +29,14 @@ absorptions). No code changes, no merge conflicts expected.
 2. Branched `v10-t27-argis-push-2026-06-19` off main.
 3. Authored this `findings/2026-06-19-T27-parent-push-cleanup.md` file.
 4. Committed on top of the 5 ahead-of-argis commits.
-5. Pushed branch to `argis` (KooshaPari/argis-extensions) — this PR.
-6. Opened PR via `gh pr create --repo KooshaPari/argis-extensions`.
+5. Pushed branch to `argis` (<REDACTED>/argis-extensions) — this PR.
+6. Opened PR via `gh pr create --repo <REDACTED>/argis-extensions`.
 
 ## 4. Tests / verification
 
 - `git rev-list --left-right --count argis/main...main` → `0 5` before push (5 ahead).
 - `git push argis v10-t27-argis-push-2026-06-19` → succeeded.
-- `gh pr create --repo KooshaPari/argis-extensions` → PR opened.
+- `gh pr create --repo <REDACTED>/argis-extensions` → PR opened.
 - No CI run triggered (docs-only delta — findings/ markdown file).
 
 ## 5. Outcome

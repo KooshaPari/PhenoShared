@@ -38,7 +38,7 @@ This work package implements reusable GitHub Actions workflows in the `phenotype
 
 ## Context & Constraints
 
-- Operates in `KooshaPari/phenotypeActions` repository, separate from pheno-cli
+- Operates in `<REDACTED>/phenotypeActions` repository, separate from pheno-cli
 - Must support all languages: Go, Rust, Python, TypeScript (via mise tasks)
 - Reusable workflows use `workflow_call` trigger
 - All language-specific logic is delegated to mise tasks (no language detection in workflows)
@@ -148,7 +148,7 @@ This work package implements reusable GitHub Actions workflows in the `phenotype
   4. Support custom registry via env var override
   5. Output structured result (JSON) for consumption by other workflows
 
-- **Files**: `KooshaPari/phenotypeActions/.github/workflows/publish.yml`
+- **Files**: `<REDACTED>/phenotypeActions/.github/workflows/publish.yml`
 - **Parallel?**: No (baseline workflow)
 - **Notes**: Use mise tasks to abstract language-specific build/publish logic; handle registry-specific credentials; ensure idempotent operation
 
@@ -261,7 +261,7 @@ This work package implements reusable GitHub Actions workflows in the `phenotype
   4. Output structured JSON result for downstream workflows
   5. Use GitHub Actions annotations to show results inline
 
-- **Files**: `KooshaPari/phenotypeActions/.github/workflows/gate-check.yml`
+- **Files**: `<REDACTED>/phenotypeActions/.github/workflows/gate-check.yml`
 - **Parallel?**: Yes (after T057)
 - **Notes**: Delegate gate execution to mise tasks; output results as JSON for machine consumption; use GitHub workflow annotations for visibility
 
@@ -310,7 +310,7 @@ This work package implements reusable GitHub Actions workflows in the `phenotype
      jobs:
        gate-check:
          name: Check Gates
-         uses: KooshaPari/phenotypeActions/.github/workflows/gate-check.yml@v1
+         uses: <REDACTED>/phenotypeActions/.github/workflows/gate-check.yml@v1
          with:
            language: $&#123;&#123; inputs.language &#125;&#125;
            channel: $&#123;&#123; inputs.to_channel &#125;&#125;
@@ -320,7 +320,7 @@ This work package implements reusable GitHub Actions workflows in the `phenotype
          name: Publish
          needs: gate-check
          if: $&#123;&#123; needs.gate-check.outputs.passed == 'true' &#125;&#125;
-         uses: KooshaPari/phenotypeActions/.github/workflows/publish.yml@v1
+         uses: <REDACTED>/phenotypeActions/.github/workflows/publish.yml@v1
          with:
            language: $&#123;&#123; inputs.language &#125;&#125;
            registry: $&#123;&#123; inputs.registry &#125;&#125;
@@ -348,7 +348,7 @@ This work package implements reusable GitHub Actions workflows in the `phenotype
   4. Include final notification step with summary
   5. Support manual re-runs with `--force` flag (skip gates)
 
-- **Files**: `KooshaPari/phenotypeActions/.github/workflows/promote.yml`
+- **Files**: `<REDACTED>/phenotypeActions/.github/workflows/promote.yml`
 - **Parallel?**: Yes (after T058)
 - **Notes**: Use `needs` and `if` to implement conditional execution; inherit secrets for publish; provide clear output on success/failure
 
@@ -413,7 +413,7 @@ This work package implements reusable GitHub Actions workflows in the `phenotype
   6. Create GitHub release with changelog as body
   7. Support both commit-and-push and release-only modes
 
-- **Files**: `KooshaPari/phenotypeActions/.github/workflows/changelog.yml`
+- **Files**: `<REDACTED>/phenotypeActions/.github/workflows/changelog.yml`
 - **Parallel?**: Yes (after T057)
 - **Notes**: Use git-cliff for conventional commit parsing; set bot credentials for commits; handle case where changelog already exists (append)
 
@@ -441,7 +441,7 @@ This work package implements reusable GitHub Actions workflows in the `phenotype
              run: |
                # Build or download pheno CLI
                # (assumes pheno-cli is built and available)
-               go install github.com/KooshaPari/pheno-cli@latest
+               go install github.com/<REDACTED>/pheno-cli@latest
 
            - name: Run audit
              run: |
@@ -484,7 +484,7 @@ This work package implements reusable GitHub Actions workflows in the `phenotype
   6. Upload results as artifact for inspection
   7. Support Slack/email notifications (future enhancement)
 
-- **Files**: `KooshaPari/phenotypeActions/.github/workflows/audit.yml`
+- **Files**: `<REDACTED>/phenotypeActions/.github/workflows/audit.yml`
 - **Parallel?**: Yes (after implementation of pheno-cli audit command)
 - **Notes**: Schedule is UTC; configurable via cron expression; use GitHub API to create issues; support optional notifications
 
@@ -515,7 +515,7 @@ This work package implements reusable GitHub Actions workflows in the `phenotype
 
      **Example:**
      ```yaml
-     - uses: KooshaPari/phenotypeActions/.github/workflows/publish.yml@v1
+     - uses: <REDACTED>/phenotypeActions/.github/workflows/publish.yml@v1
        with:
          language: rust
          registry: crates
@@ -538,7 +538,7 @@ This work package implements reusable GitHub Actions workflows in the `phenotype
 
      **Example:**
      ```yaml
-     - uses: KooshaPari/phenotypeActions/.github/workflows/gate-check.yml@v1
+     - uses: <REDACTED>/phenotypeActions/.github/workflows/gate-check.yml@v1
        with:
          language: python
          channel: beta
@@ -571,7 +571,7 @@ This work package implements reusable GitHub Actions workflows in the `phenotype
   5. Add version pinning guidance (v1, v1.2.3, @main)
   6. Include migration guide for teams moving from custom workflows
 
-- **Files**: `KooshaPari/phenotypeActions/README.md`, `.github/WORKFLOW_SCHEMA.md`
+- **Files**: `<REDACTED>/phenotypeActions/README.md`, `.github/WORKFLOW_SCHEMA.md`
 - **Parallel?**: Yes (after T057–T061)
 - **Notes**: Use consistent schema format for all workflows; include example usage for each; document input validation rules
 
@@ -615,7 +615,7 @@ This work package implements reusable GitHub Actions workflows in the `phenotype
      - Invalid input → workflow fails early
   7. Document test procedures in TESTING.md
 
-- **Files**: `KooshaPari/phenotypeActions/tests/workflows_test.sh`, `TESTING.md`
+- **Files**: `<REDACTED>/phenotypeActions/tests/workflows_test.sh`, `TESTING.md`
 - **Parallel?**: Yes (after T057–T061)
 - **Notes**: Use `act` for fast local testing; set up test repos for end-to-end validation; verify secrets are masked in logs; test both success and failure paths
 

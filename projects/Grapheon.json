@@ -8,7 +8,7 @@
   "has_license": true,
   "type": "application-and-library-monorepo",
   "path": "repos/Grapheon",
-  "gh_url": "https://github.com/KooshaPari/zz-archive-grapheon",
+  "gh_url": "https://github.com/<REDACTED>/zz-archive-grapheon",
   "remote_default_branch": "main",
   "remote_head_sha": "8b57aa380dd6d288f451be5ef0e4e766f606c7fb",
   "local_head_sha": "8b57aa380dd6d288f451be5ef0e4e766f606c7fb",
@@ -27,7 +27,7 @@
   "rationale": "Private, archived MIT repository with 80,534 tracked paths and a 417 MiB .git object store at the 2026-09-05 audit. The source is materially larger than a single crate and its current workspace package metadata points to Tracera, so absorption into pheno would destroy boundary and provenance clarity; the 80,510/722 MB figures in the original 2026-07-27 rationale are historical.",
   "audit_date": "2026-09-05",
   "audit_evidence": [
-    "gh repo view confirms private archived KooshaPari/zz-archive-grapheon with default branch main and HEAD 8b57aa380dd6d288f451be5ef0e4e766f606c7fb (2026-09-05)",
+    "gh repo view confirms private archived <REDACTED>/zz-archive-grapheon with default branch main and HEAD 8b57aa380dd6d288f451be5ef0e4e766f606c7fb (2026-09-05)",
     "cargo metadata --no-deps lists only tracera-server, tracertm-mcp, and tracera-edge",
     "git ls-tree -r --name-only HEAD reports 80,534 tracked paths; git fsck --full --no-reflogs passes",
     "pheno main exposes agileplus-graph but no grapheon crate or Tracera workspace",

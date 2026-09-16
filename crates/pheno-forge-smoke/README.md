@@ -6,7 +6,7 @@ through each of the 4 memory scopes.
 
 ## Status: ABSORBED into `pheno` workspace
 
-This crate was absorbed from https://github.com/KooshaPari/pheno-forge-smoke
+This crate was absorbed from https://github.com/<REDACTED>/pheno-forge-smoke
 on **2026-08-14** per docket `plans/dockets/N15-pheno-substrate-family.md`.
 
 ## Usage

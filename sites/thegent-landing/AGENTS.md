@@ -1,7 +1,7 @@
 # thegent-landing ẀAGENTS.MD
 
 Project Overview
-Landing page for thegent.kooshapari.com ⺀ static Astro site.
+Landing page for thegent.<REDACTED>.com ⺀ static Astro site.
 
 ## Stack
 - Framework : Astro

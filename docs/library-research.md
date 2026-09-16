@@ -15,7 +15,7 @@ decisions across the Phenotype ecosystem.
 Before introducing a new core dependency:
 
 1. Check whether the dependency or category already appears in
-   [`LIBRARY_RESEARCH_REGISTRY.md`](https://github.com/KooshaPari/phenotype-registry/blob/main/LIBRARY_RESEARCH_REGISTRY.md).
+   [`LIBRARY_RESEARCH_REGISTRY.md`](https://github.com/<REDACTED>/phenotype-registry/blob/main/LIBRARY_RESEARCH_REGISTRY.md).
 2. Prefer wrapping existing mature libraries when the registry already has a
    vetted choice.
 3. Handroll only when the registry captures a concrete gap in available tools.
@@ -24,5 +24,5 @@ Before introducing a new core dependency:
 ## Canonical File
 
 The full evidence ledger remains in
-[`LIBRARY_RESEARCH_REGISTRY.md`](https://github.com/KooshaPari/phenotype-registry/blob/main/LIBRARY_RESEARCH_REGISTRY.md).
+[`LIBRARY_RESEARCH_REGISTRY.md`](https://github.com/<REDACTED>/phenotype-registry/blob/main/LIBRARY_RESEARCH_REGISTRY.md).
 This page is the published guide for how to use it.

@@ -3,12 +3,12 @@ name = "agileplus-benchmarks"
 version = "0.1.0"
 edition = "2021"
 license = "MIT OR Apache-2.0"
-repository = "https://github.com/KooshaPari/HexaKit"
+repository = "https://github.com/<REDACTED>/HexaKit"
 description = "agileplus benchmarks — Criterion performance benchmarks for AgilePlus subsystems (event append/replay, graph queries, sync round-trips, API latency) (HexaKit)"
 documentation = "https://docs.rs/agileplus-benchmarks"
 keywords = ["phenotype", "hexa", "benchmark", "criterion", "performance"]
 categories = ["development-tools", "benchmarking"]
-authors = ["kooshapari"]
+authors = ["<REDACTED>"]
 publish = false
 # Bench targets are disabled at the package level because the bench files
 # (in `benches/*.rs`) depend on `agileplus-sqlite`, which is currently

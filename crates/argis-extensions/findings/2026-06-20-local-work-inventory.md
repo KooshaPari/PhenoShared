@@ -1,7 +1,7 @@
 # Local Work Inventory — repos/ — 2026-06-20
 
 _Read-only inventory. No files were pushed, merged, deleted, or modified._
-_Generated from 186 git repos under `/Users/kooshapari/CodeProjects/Phenotype/repos`_
+_Generated from 186 git repos under `/Users/<REDACTED>/CodeProjects/Phenotype/repos`_
 
 ## Summary
 
@@ -238,32 +238,32 @@ _Generated from 186 git repos under `/Users/kooshapari/CodeProjects/Phenotype/re
 
 | Repo | # Worktrees | Paths |
 |---|---:|---|
-| `PhenoMCP` | 5 | `/Users/kooshapari/CodeProjects/Phenotype/repos/PhenoMCP` (refs/heads/chore/deps-audit-2026-06-20)<br>`/Users/kooshapari/CodeProjects/Phenotype/repos/PhenoMCP-wt-fix-cve-bumps-2026-06-08` (refs/heads/fix/cve-bumps-2026-06-08)<br>`/Users/kooshapari/CodeProjects/Phenotype/repos/PhenoMCP-wt-fix-cve-bumps-2026-06-14` (refs/heads/fix/cve-bumps-2026-06-14)<br>`/Users/kooshapari/CodeProjects/Phenotype/repos/PhenoMCP-wt-fix-surrealdb-3.1.4-audit` (refs/heads/fix/surrealdb-3.1.4-audit)<br>`/Users/kooshapari/CodeProjects/Phenotype/repos/PhenoMCP-wt-fix-surrealdb-3.1.4-audit-2026-06-14` (refs/heads/fix/surrealdb-3.1.4-audit-2026-06-14) |
-| `phenotype-ops` | 4 | `/Users/kooshapari/CodeProjects/Phenotype/repos/phenotype-ops` (refs/heads/t12-devcontainer-ci)<br>`/private/tmp/track-A-review-surface` (refs/heads/feat/l5-125-review-surface-config-tests-2026-06-20)<br>`/private/tmp/track-B-rainbow` (refs/heads/feat/l5-126-rainbow-model-2026-06-20)<br>`/private/tmp/track-C-lefthook` (refs/heads/feat/l5-127-pre-push-manifest-doc-2026-06-20) |
-| `phenotype-registry` | 4 | `/Users/kooshapari/CodeProjects/Phenotype/repos/phenotype-registry` (refs/heads/fix/registry-restore-lost-rows-2026-06-20)<br>`/private/tmp/forge-t23-registry` (refs/heads/chore/t23-registry-refresh-2026-06-20)<br>`/private/tmp/registry-t23-base` (detached)<br>`/Users/kooshapari/CodeProjects/Phenotype/repos/phenotype-registry-curation-data` (refs/heads/chore/l7-007-archived-marker-2026-06-20) |
-| `phenotype-tooling` | 4 | `/Users/kooshapari/CodeProjects/Phenotype/repos/phenotype-tooling` (refs/heads/main)<br>`/private/tmp/wt-t22-phenotype-tooling` (refs/heads/feat/t22-observability-pheno-tracing-otlp-2026-06-20)<br>`/Users/kooshapari/CodeProjects/Phenotype/repos/phenotype-tooling-wtrees/orch-v12-s4-008-deny-audit` (refs/heads/chore/orch-v12-s4-008-deny-audit)<br>`/Users/kooshapari/CodeProjects/Phenotype/repos/phenotype-tooling-wtrees/tier-0-hygiene-2026-06-19` (refs/heads/chore/tier-0-hygiene-2026-06-19) |
-| `AgilePlus` | 3 | `/Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus` (refs/heads/feat/agents-adr-crossref-2026-06-20)<br>`/Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus/AgilePlus-wtrees/orch-v12-s2-001` (refs/heads/chore/orch-v12-s2-001)<br>`/Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus/AgilePlus-wtrees/orch-v12-s4-018-cargo-deny` (refs/heads/chore/orch-v12-s4-018-cargo-deny) |
-| `PhenoContracts` | 3 | `/Users/kooshapari/CodeProjects/Phenotype/repos/PhenoContracts` (refs/heads/fix/l5-119-quality-p0-2026-06-20)<br>`/Users/kooshapari/CodeProjects/Phenotype/repos/PhenoContracts-wt-fix-orch-v10-005-rebase` (refs/heads/fix/orch-v10-005-rebase)<br>`/Users/kooshapari/CodeProjects/Phenotype/repos/PhenoContracts-wt-fix-orch-v10-005-rebase-2026-06-14` (refs/heads/fix/orch-v10-005-rebase-2026-06-14) |
-| `cliproxyapi-plusplus` | 2 | `/Users/kooshapari/CodeProjects/Phenotype/repos/cliproxyapi-plusplus` (refs/heads/main)<br>`/Users/kooshapari/CodeProjects/Phenotype/repos/cliproxyapi-plusplus/.worktrees/tier-0-hygiene` (refs/heads/chore/tier-0-hygiene) |
-| `Configra` | 2 | `/Users/kooshapari/CodeProjects/Phenotype/repos/Configra` (refs/heads/main)<br>`/private/tmp/forge-t16-configra` (refs/heads/chore/t16-substrate-audit-gap-closure-2026-06-20) |
-| `GDK` | 2 | `/Users/kooshapari/CodeProjects/Phenotype/repos/GDK` (refs/heads/rebase/fix-workflow-ci-fixes)<br>`/private/tmp/wt-t22-GDK` (refs/heads/feat/t22-observability-pheno-tracing-otlp-2026-06-20) |
-| `helios-cli` | 2 | `/Users/kooshapari/CodeProjects/Phenotype/repos/helios-cli` (refs/heads/chore/absorb-helioscli-final-2026-06-20)<br>`/Users/kooshapari/CodeProjects/Phenotype/repos/.worktrees/repo/helios-cli` (refs/heads/chore/l5-104-ratatui-fork-verification-2026-06-19) |
-| `HexaKit` | 2 | `/Users/kooshapari/CodeProjects/Phenotype/repos/HexaKit` (refs/heads/main)<br>`/private/tmp/hexakit-merge` (detached) |
-| `KlipDot` | 2 | `/Users/kooshapari/CodeProjects/Phenotype/repos/KlipDot` (refs/heads/chore/orch-v12-s1-015-tier0-hygiene)<br>`/private/tmp/wt-t22-KlipDot` (refs/heads/feat/t22-observability-pheno-tracing-otlp-2026-06-20) |
-| `nanovms` | 2 | `/Users/kooshapari/CodeProjects/Phenotype/repos/nanovms` (refs/heads/chore/orch-v12-s4-006-deny-audit)<br>`/Users/kooshapari/CodeProjects/Phenotype/repos/.worktrees/repo/nanovms` (refs/heads/chore/l5-104-nanovms-tokio-thiserror-bump-2026-06-19) |
-| `OmniRoute` | 2 | `/Users/kooshapari/CodeProjects/Phenotype/repos/OmniRoute` (refs/heads/chore/l5-121-bifrost-kill-switch-wiring-2026-06-20)<br>`/Users/kooshapari/CodeProjects/Phenotype/repos/OmniRoute-combos-split` (refs/heads/feat/perf-combos-split-2026-06-20-v2) |
-| `pheno` | 2 | `/Users/kooshapari/CodeProjects/Phenotype/repos/pheno` (refs/heads/chore/l5-110-adr-031-configra-canonical-markers-2026-06-18)<br>`/private/tmp/wt-t22-pheno` (refs/heads/feat/t22-observability-pheno-tracing-otlp-2026-06-20) |
-| `PhenoEvents` | 2 | `/Users/kooshapari/CodeProjects/Phenotype/repos/PhenoEvents` (refs/heads/feat/l7-103-bus-substrate-lift-2026-06-18)<br>`/private/tmp/wt-t22-phenoEvents` (refs/heads/feat/t22-observability-pheno-tracing-otlp-2026-06-20) |
-| `PhenoFastMCP` | 2 | `/Users/kooshapari/CodeProjects/Phenotype/repos/PhenoFastMCP` (refs/heads/main)<br>`/private/tmp/wt-PhenoFastMCP-lre1` (refs/heads/lre1-agentmcp-migration) |
-| `PhenoHandbook` | 2 | `/Users/kooshapari/CodeProjects/Phenotype/repos/PhenoHandbook` (refs/heads/main)<br>`/private/tmp/pheno-handbook-meta-B` (refs/heads/chore/handbook-meta-2026-06-19) |
-| `PhenoSpecs` | 2 | `/Users/kooshapari/CodeProjects/Phenotype/repos/PhenoSpecs` (refs/heads/main)<br>`/private/tmp/pheno-specs-meta-C` (refs/heads/chore/specs-meta-2026-06-19) |
-| `phenotype-infra` | 2 | `/Users/kooshapari/CodeProjects/Phenotype/repos/phenotype-infra` (refs/heads/main)<br>`/private/tmp/wt-t22-phenotype-infra` (refs/heads/feat/t22-observability-pheno-tracing-otlp-2026-06-20) |
-| `phenotype-journeys` | 2 | `/Users/kooshapari/CodeProjects/Phenotype/repos/phenotype-journeys` (refs/heads/chore/orch-v12-s3-020-codeowners-governance)<br>`/private/tmp/wt-t22-phenotype-journeys` (refs/heads/feat/t22-observability-pheno-tracing-otlp-2026-06-20) |
-| `PhenoVCS` | 2 | `/Users/kooshapari/CodeProjects/Phenotype/repos/PhenoVCS` (refs/heads/wip/2026-06-17-PhenoVCS-stash-1)<br>`/private/tmp/wt-t22-PhenoVCS` (refs/heads/feat/t22-observability-pheno-tracing-otlp-2026-06-20) |
-| `PlayCua` | 2 | `/Users/kooshapari/CodeProjects/Phenotype/repos/PlayCua` (refs/heads/chore/migrate-configra-2026-06-20)<br>`/Users/kooshapari/CodeProjects/Phenotype/repos/PlayCua-wtrees/orch-v12-s2-010` (refs/heads/chore/orch-v12-s2-010-tier0-71pillar) |
-| `ResilienceKit` | 2 | `/Users/kooshapari/CodeProjects/Phenotype/repos/ResilienceKit` (refs/heads/chore/absorb-httpora-rate-limiter-2026-06-20)<br>`/private/tmp/wt-t22-ResilienceKit` (refs/heads/feat/t22-observability-pheno-tracing-otlp-2026-06-20) |
-| `Tokn` | 2 | `/Users/kooshapari/CodeProjects/Phenotype/repos/Tokn` (refs/heads/main)<br>`/Users/kooshapari/CodeProjects/Phenotype/repos/Tokn-wt-feat-clap-ext-adopt-rebased-2026-06-14` (refs/heads/feat/clap-ext-adopt-rebased-2026-06-14) |
-| `Tracera` | 2 | `/Users/kooshapari/CodeProjects/Phenotype/repos/Tracera` (refs/heads/chore/tier-0-hygiene-batch)<br>`/private/tmp/Tracera-pr635` (detached) |
+| `PhenoMCP` | 5 | `/Users/<REDACTED>/CodeProjects/Phenotype/repos/PhenoMCP` (refs/heads/chore/deps-audit-2026-06-20)<br>`/Users/<REDACTED>/CodeProjects/Phenotype/repos/PhenoMCP-wt-fix-cve-bumps-2026-06-08` (refs/heads/fix/cve-bumps-2026-06-08)<br>`/Users/<REDACTED>/CodeProjects/Phenotype/repos/PhenoMCP-wt-fix-cve-bumps-2026-06-14` (refs/heads/fix/cve-bumps-2026-06-14)<br>`/Users/<REDACTED>/CodeProjects/Phenotype/repos/PhenoMCP-wt-fix-surrealdb-3.1.4-audit` (refs/heads/fix/surrealdb-3.1.4-audit)<br>`/Users/<REDACTED>/CodeProjects/Phenotype/repos/PhenoMCP-wt-fix-surrealdb-3.1.4-audit-2026-06-14` (refs/heads/fix/surrealdb-3.1.4-audit-2026-06-14) |
+| `phenotype-ops` | 4 | `/Users/<REDACTED>/CodeProjects/Phenotype/repos/phenotype-ops` (refs/heads/t12-devcontainer-ci)<br>`/private/tmp/track-A-review-surface` (refs/heads/feat/l5-125-review-surface-config-tests-2026-06-20)<br>`/private/tmp/track-B-rainbow` (refs/heads/feat/l5-126-rainbow-model-2026-06-20)<br>`/private/tmp/track-C-lefthook` (refs/heads/feat/l5-127-pre-push-manifest-doc-2026-06-20) |
+| `phenotype-registry` | 4 | `/Users/<REDACTED>/CodeProjects/Phenotype/repos/phenotype-registry` (refs/heads/fix/registry-restore-lost-rows-2026-06-20)<br>`/private/tmp/forge-t23-registry` (refs/heads/chore/t23-registry-refresh-2026-06-20)<br>`/private/tmp/registry-t23-base` (detached)<br>`/Users/<REDACTED>/CodeProjects/Phenotype/repos/phenotype-registry-curation-data` (refs/heads/chore/l7-007-archived-marker-2026-06-20) |
+| `phenotype-tooling` | 4 | `/Users/<REDACTED>/CodeProjects/Phenotype/repos/phenotype-tooling` (refs/heads/main)<br>`/private/tmp/wt-t22-phenotype-tooling` (refs/heads/feat/t22-observability-pheno-tracing-otlp-2026-06-20)<br>`/Users/<REDACTED>/CodeProjects/Phenotype/repos/phenotype-tooling-wtrees/orch-v12-s4-008-deny-audit` (refs/heads/chore/orch-v12-s4-008-deny-audit)<br>`/Users/<REDACTED>/CodeProjects/Phenotype/repos/phenotype-tooling-wtrees/tier-0-hygiene-2026-06-19` (refs/heads/chore/tier-0-hygiene-2026-06-19) |
+| `AgilePlus` | 3 | `/Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus` (refs/heads/feat/agents-adr-crossref-2026-06-20)<br>`/Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus/AgilePlus-wtrees/orch-v12-s2-001` (refs/heads/chore/orch-v12-s2-001)<br>`/Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus/AgilePlus-wtrees/orch-v12-s4-018-cargo-deny` (refs/heads/chore/orch-v12-s4-018-cargo-deny) |
+| `PhenoContracts` | 3 | `/Users/<REDACTED>/CodeProjects/Phenotype/repos/PhenoContracts` (refs/heads/fix/l5-119-quality-p0-2026-06-20)<br>`/Users/<REDACTED>/CodeProjects/Phenotype/repos/PhenoContracts-wt-fix-orch-v10-005-rebase` (refs/heads/fix/orch-v10-005-rebase)<br>`/Users/<REDACTED>/CodeProjects/Phenotype/repos/PhenoContracts-wt-fix-orch-v10-005-rebase-2026-06-14` (refs/heads/fix/orch-v10-005-rebase-2026-06-14) |
+| `cliproxyapi-plusplus` | 2 | `/Users/<REDACTED>/CodeProjects/Phenotype/repos/cliproxyapi-plusplus` (refs/heads/main)<br>`/Users/<REDACTED>/CodeProjects/Phenotype/repos/cliproxyapi-plusplus/.worktrees/tier-0-hygiene` (refs/heads/chore/tier-0-hygiene) |
+| `Configra` | 2 | `/Users/<REDACTED>/CodeProjects/Phenotype/repos/Configra` (refs/heads/main)<br>`/private/tmp/forge-t16-configra` (refs/heads/chore/t16-substrate-audit-gap-closure-2026-06-20) |
+| `GDK` | 2 | `/Users/<REDACTED>/CodeProjects/Phenotype/repos/GDK` (refs/heads/rebase/fix-workflow-ci-fixes)<br>`/private/tmp/wt-t22-GDK` (refs/heads/feat/t22-observability-pheno-tracing-otlp-2026-06-20) |
+| `helios-cli` | 2 | `/Users/<REDACTED>/CodeProjects/Phenotype/repos/helios-cli` (refs/heads/chore/absorb-helioscli-final-2026-06-20)<br>`/Users/<REDACTED>/CodeProjects/Phenotype/repos/.worktrees/repo/helios-cli` (refs/heads/chore/l5-104-ratatui-fork-verification-2026-06-19) |
+| `HexaKit` | 2 | `/Users/<REDACTED>/CodeProjects/Phenotype/repos/HexaKit` (refs/heads/main)<br>`/private/tmp/hexakit-merge` (detached) |
+| `KlipDot` | 2 | `/Users/<REDACTED>/CodeProjects/Phenotype/repos/KlipDot` (refs/heads/chore/orch-v12-s1-015-tier0-hygiene)<br>`/private/tmp/wt-t22-KlipDot` (refs/heads/feat/t22-observability-pheno-tracing-otlp-2026-06-20) |
+| `nanovms` | 2 | `/Users/<REDACTED>/CodeProjects/Phenotype/repos/nanovms` (refs/heads/chore/orch-v12-s4-006-deny-audit)<br>`/Users/<REDACTED>/CodeProjects/Phenotype/repos/.worktrees/repo/nanovms` (refs/heads/chore/l5-104-nanovms-tokio-thiserror-bump-2026-06-19) |
+| `OmniRoute` | 2 | `/Users/<REDACTED>/CodeProjects/Phenotype/repos/OmniRoute` (refs/heads/chore/l5-121-bifrost-kill-switch-wiring-2026-06-20)<br>`/Users/<REDACTED>/CodeProjects/Phenotype/repos/OmniRoute-combos-split` (refs/heads/feat/perf-combos-split-2026-06-20-v2) |
+| `pheno` | 2 | `/Users/<REDACTED>/CodeProjects/Phenotype/repos/pheno` (refs/heads/chore/l5-110-adr-031-configra-canonical-markers-2026-06-18)<br>`/private/tmp/wt-t22-pheno` (refs/heads/feat/t22-observability-pheno-tracing-otlp-2026-06-20) |
+| `PhenoEvents` | 2 | `/Users/<REDACTED>/CodeProjects/Phenotype/repos/PhenoEvents` (refs/heads/feat/l7-103-bus-substrate-lift-2026-06-18)<br>`/private/tmp/wt-t22-phenoEvents` (refs/heads/feat/t22-observability-pheno-tracing-otlp-2026-06-20) |
+| `PhenoFastMCP` | 2 | `/Users/<REDACTED>/CodeProjects/Phenotype/repos/PhenoFastMCP` (refs/heads/main)<br>`/private/tmp/wt-PhenoFastMCP-lre1` (refs/heads/lre1-agentmcp-migration) |
+| `PhenoHandbook` | 2 | `/Users/<REDACTED>/CodeProjects/Phenotype/repos/PhenoHandbook` (refs/heads/main)<br>`/private/tmp/pheno-handbook-meta-B` (refs/heads/chore/handbook-meta-2026-06-19) |
+| `PhenoSpecs` | 2 | `/Users/<REDACTED>/CodeProjects/Phenotype/repos/PhenoSpecs` (refs/heads/main)<br>`/private/tmp/pheno-specs-meta-C` (refs/heads/chore/specs-meta-2026-06-19) |
+| `phenotype-infra` | 2 | `/Users/<REDACTED>/CodeProjects/Phenotype/repos/phenotype-infra` (refs/heads/main)<br>`/private/tmp/wt-t22-phenotype-infra` (refs/heads/feat/t22-observability-pheno-tracing-otlp-2026-06-20) |
+| `phenotype-journeys` | 2 | `/Users/<REDACTED>/CodeProjects/Phenotype/repos/phenotype-journeys` (refs/heads/chore/orch-v12-s3-020-codeowners-governance)<br>`/private/tmp/wt-t22-phenotype-journeys` (refs/heads/feat/t22-observability-pheno-tracing-otlp-2026-06-20) |
+| `PhenoVCS` | 2 | `/Users/<REDACTED>/CodeProjects/Phenotype/repos/PhenoVCS` (refs/heads/wip/2026-06-17-PhenoVCS-stash-1)<br>`/private/tmp/wt-t22-PhenoVCS` (refs/heads/feat/t22-observability-pheno-tracing-otlp-2026-06-20) |
+| `PlayCua` | 2 | `/Users/<REDACTED>/CodeProjects/Phenotype/repos/PlayCua` (refs/heads/chore/migrate-configra-2026-06-20)<br>`/Users/<REDACTED>/CodeProjects/Phenotype/repos/PlayCua-wtrees/orch-v12-s2-010` (refs/heads/chore/orch-v12-s2-010-tier0-71pillar) |
+| `ResilienceKit` | 2 | `/Users/<REDACTED>/CodeProjects/Phenotype/repos/ResilienceKit` (refs/heads/chore/absorb-httpora-rate-limiter-2026-06-20)<br>`/private/tmp/wt-t22-ResilienceKit` (refs/heads/feat/t22-observability-pheno-tracing-otlp-2026-06-20) |
+| `Tokn` | 2 | `/Users/<REDACTED>/CodeProjects/Phenotype/repos/Tokn` (refs/heads/main)<br>`/Users/<REDACTED>/CodeProjects/Phenotype/repos/Tokn-wt-feat-clap-ext-adopt-rebased-2026-06-14` (refs/heads/feat/clap-ext-adopt-rebased-2026-06-14) |
+| `Tracera` | 2 | `/Users/<REDACTED>/CodeProjects/Phenotype/repos/Tracera` (refs/heads/chore/tier-0-hygiene-batch)<br>`/private/tmp/Tracera-pr635` (detached) |
 
 ## BLOCKER — Default branch diverged by >5 commits in either direction (45 repos)
 
@@ -319,15 +319,15 @@ _Generated from 186 git repos under `/Users/kooshapari/CodeProjects/Phenotype/re
 
 | Repo | Count | First stash |
 |---|---:|---|
-| `HexaKit` | 2 | (run `git -C /Users/kooshapari/CodeProjects/Phenotype/repos/HexaKit stash list` for detail) |
-| `phenotype-registry` | 2 | (run `git -C /Users/kooshapari/CodeProjects/Phenotype/repos/phenotype-registry stash list` for detail) |
-| `AuthKit/go` | 1 | (run `git -C /Users/kooshapari/CodeProjects/Phenotype/repos/AuthKit/go stash list` for detail) |
-| `Configra` | 1 | (run `git -C /Users/kooshapari/CodeProjects/Phenotype/repos/Configra stash list` for detail) |
-| `FocalPoint` | 1 | (run `git -C /Users/kooshapari/CodeProjects/Phenotype/repos/FocalPoint stash list` for detail) |
-| `pheno-secret-scan` | 1 | (run `git -C /Users/kooshapari/CodeProjects/Phenotype/repos/pheno-secret-scan stash list` for detail) |
-| `PhenoContracts` | 1 | (run `git -C /Users/kooshapari/CodeProjects/Phenotype/repos/PhenoContracts stash list` for detail) |
-| `phenoResearchEngine` | 1 | (run `git -C /Users/kooshapari/CodeProjects/Phenotype/repos/phenoResearchEngine stash list` for detail) |
-| `TestingKit/python/pheno-quality` | 1 | (run `git -C /Users/kooshapari/CodeProjects/Phenotype/repos/TestingKit/python/pheno-quality stash list` for detail) |
+| `HexaKit` | 2 | (run `git -C /Users/<REDACTED>/CodeProjects/Phenotype/repos/HexaKit stash list` for detail) |
+| `phenotype-registry` | 2 | (run `git -C /Users/<REDACTED>/CodeProjects/Phenotype/repos/phenotype-registry stash list` for detail) |
+| `AuthKit/go` | 1 | (run `git -C /Users/<REDACTED>/CodeProjects/Phenotype/repos/AuthKit/go stash list` for detail) |
+| `Configra` | 1 | (run `git -C /Users/<REDACTED>/CodeProjects/Phenotype/repos/Configra stash list` for detail) |
+| `FocalPoint` | 1 | (run `git -C /Users/<REDACTED>/CodeProjects/Phenotype/repos/FocalPoint stash list` for detail) |
+| `pheno-secret-scan` | 1 | (run `git -C /Users/<REDACTED>/CodeProjects/Phenotype/repos/pheno-secret-scan stash list` for detail) |
+| `PhenoContracts` | 1 | (run `git -C /Users/<REDACTED>/CodeProjects/Phenotype/repos/PhenoContracts stash list` for detail) |
+| `phenoResearchEngine` | 1 | (run `git -C /Users/<REDACTED>/CodeProjects/Phenotype/repos/phenoResearchEngine stash list` for detail) |
+| `TestingKit/python/pheno-quality` | 1 | (run `git -C /Users/<REDACTED>/CodeProjects/Phenotype/repos/TestingKit/python/pheno-quality stash list` for detail) |
 
 ## Methodology & Notes
 
@@ -338,4 +338,4 @@ _Generated from 186 git repos under `/Users/kooshapari/CodeProjects/Phenotype/re
 - 1 binary file skipped, 5 missing-path entries (deleted from disk but still in index).
 - Some `phenotype-registry-*-final` repos are local-only mirrors (no origin); these show empty Default and unpushed counts are local-only.
 - `Planify` shows 7,019 unpushed commits: this is a legacy bulk-mirror artifact from pre-pause snapshot — flagged but not actionable in this turn's inventory scope.
-- All listed repos are under the `KooshaPari` GitHub org unless otherwise indicated.
+- All listed repos are under the `<REDACTED>` GitHub org unless otherwise indicated.

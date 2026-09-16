@@ -4,8 +4,8 @@
   "id": "S-PHENO-4c3772d",
   "record_status": "OBSERVED",
   "subject": {
-    "repository": "KooshaPari/zz-pheno",
-    "local_path": "/Users/kooshapari/CodeProjects/Phenotype/repos/pheno",
+    "repository": "<REDACTED>/zz-pheno",
+    "local_path": "/Users/<REDACTED>/CodeProjects/Phenotype/repos/pheno",
     "primary_language": "Rust",
     "description": "Phenotype Shared Crates — Rust monorepo with 73 workspace members, 240 crate directories, 447K LOC"
   },

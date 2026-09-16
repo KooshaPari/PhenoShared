@@ -8,7 +8,7 @@
 ## Current State: Isolated Repos with Fork Strategy
 
 **Today's Architecture**:
-- 20+ independent repositories under KooshaPari GitHub org
+- 20+ independent repositories under <REDACTED> GitHub org
 - Fork strategy: hyper-modify/extend upstream (aizen, vibeproxy, zen, etc.)
 - Worktree-based development: `repos/<project>-wtrees/<topic>`
 - Canonical repos on `main` only; feature work in worktrees

@@ -139,7 +139,7 @@ snyk auth $SNYK_TOKEN
 ```bash
 # Read: SNYK_LOCAL_DEPLOYMENT_GUIDE.md
 
-cd /Users/kooshapari/CodeProjects/Phenotype/repos
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos
 export SNYK_TOKEN="your-token-here"
 ./scripts/snyk-deploy.sh
 
@@ -166,7 +166,7 @@ git push origin main
 ```bash
 # Read: GITHUB_WORKFLOW_DEPLOYMENT_GUIDE.md
 
-gh secret set SNYK_TOKEN --org KooshaPari
+gh secret set SNYK_TOKEN --org <REDACTED>
 # Paste your token
 
 # Deploy to 3 Tier 1 repos:
@@ -182,7 +182,7 @@ gh secret set SNYK_TOKEN --org KooshaPari
 
 ```bash
 # Check GitHub Actions status
-gh run list -R KooshaPari/AgilePlus -w "Snyk Security Scan" --limit 1
+gh run list -R <REDACTED>/AgilePlus -w "Snyk Security Scan" --limit 1
 
 # Scheduled scans run daily at 2 AM UTC
 # Monitor via GitHub Actions tab
@@ -286,27 +286,27 @@ These three repos get workflow deployment first:
 ## Files & Locations
 
 ### Guide Files (Read These)
-- `/Users/kooshapari/CodeProjects/Phenotype/repos/docs/guides/SNYK_TOKEN_ACQUISITION_GUIDE.md`
-- `/Users/kooshapari/CodeProjects/Phenotype/repos/docs/guides/SNYK_LOCAL_DEPLOYMENT_GUIDE.md`
-- `/Users/kooshapari/CodeProjects/Phenotype/repos/docs/guides/SNYK_RESULTS_REVIEW_GUIDE.md`
-- `/Users/kooshapari/CodeProjects/Phenotype/repos/docs/guides/GITHUB_WORKFLOW_DEPLOYMENT_GUIDE.md`
-- `/Users/kooshapari/CodeProjects/Phenotype/repos/docs/guides/SNYK_EXPECTED_OUTPUTS.md`
-- `/Users/kooshapari/CodeProjects/Phenotype/repos/docs/guides/SNYK_DEPLOYMENT_CHECKLIST.md`
+- `/Users/<REDACTED>/CodeProjects/Phenotype/repos/docs/guides/SNYK_TOKEN_ACQUISITION_GUIDE.md`
+- `/Users/<REDACTED>/CodeProjects/Phenotype/repos/docs/guides/SNYK_LOCAL_DEPLOYMENT_GUIDE.md`
+- `/Users/<REDACTED>/CodeProjects/Phenotype/repos/docs/guides/SNYK_RESULTS_REVIEW_GUIDE.md`
+- `/Users/<REDACTED>/CodeProjects/Phenotype/repos/docs/guides/GITHUB_WORKFLOW_DEPLOYMENT_GUIDE.md`
+- `/Users/<REDACTED>/CodeProjects/Phenotype/repos/docs/guides/SNYK_EXPECTED_OUTPUTS.md`
+- `/Users/<REDACTED>/CodeProjects/Phenotype/repos/docs/guides/SNYK_DEPLOYMENT_CHECKLIST.md`
 
 ### Deployment Script
-- `/Users/kooshapari/CodeProjects/Phenotype/repos/scripts/snyk-deploy.sh`
+- `/Users/<REDACTED>/CodeProjects/Phenotype/repos/scripts/snyk-deploy.sh`
 
 ### Reports (Generated)
-- `/Users/kooshapari/CodeProjects/Phenotype/repos/.snyk-reports/report.txt` (summary)
-- `/Users/kooshapari/CodeProjects/Phenotype/repos/.snyk-reports/*.json` (per-repo details)
+- `/Users/<REDACTED>/CodeProjects/Phenotype/repos/.snyk-reports/report.txt` (summary)
+- `/Users/<REDACTED>/CodeProjects/Phenotype/repos/.snyk-reports/*.json` (per-repo details)
 
 ### Policy Files (Created)
 - `**/path/to/repo/.snyk` (one per repo with suppressions)
 
 ### GitHub Integration
-- Organization Secrets: https://github.com/organizations/KooshaPari/settings/secrets/actions
+- Organization Secrets: https://github.com/organizations/<REDACTED>/settings/secrets/actions
 - Workflows: `.github/workflows/snyk-scan.yml` (in each repo)
-- Actions Results: https://github.com/KooshaPari/[repo]/actions
+- Actions Results: https://github.com/<REDACTED>/[repo]/actions
 
 ---
 
@@ -365,7 +365,7 @@ These three repos get workflow deployment first:
 
 Then update:
 1. Local environment: `export SNYK_TOKEN="new-token"`
-2. GitHub secret: `gh secret set SNYK_TOKEN --org KooshaPari`
+2. GitHub secret: `gh secret set SNYK_TOKEN --org <REDACTED>`
 
 ### Q: What do I do with the reports after review?
 
@@ -396,7 +396,7 @@ gh --version         # GitHub CLI installed
 git --version        # Git installed
 
 # Verify access
-gh auth status       # Logged into GitHub as KooshaPari
+gh auth status       # Logged into GitHub as <REDACTED>
 # (Snyk login happens during token acquisition)
 ```
 
@@ -413,9 +413,9 @@ gh auth status       # Logged into GitHub as KooshaPari
 
 Before you start, verify:
 
-- [ ] You have admin access to KooshaPari GitHub organization
+- [ ] You have admin access to <REDACTED> GitHub organization
 - [ ] You have a Snyk account (free tier is fine)
-- [ ] All repos are cloned locally at `/Users/kooshapari/CodeProjects/Phenotype/repos/`
+- [ ] All repos are cloned locally at `/Users/<REDACTED>/CodeProjects/Phenotype/repos/`
 - [ ] You're comfortable with command-line tools
 - [ ] You have 30 minutes of uninterrupted time
 - [ ] You have access to paste token securely (not in public chat)
@@ -467,10 +467,10 @@ You'll know you've succeeded when:
 | Need | Link |
 |------|------|
 | Snyk App | https://app.snyk.io |
-| GitHub Org Secrets | https://github.com/organizations/KooshaPari/settings/secrets/actions |
-| AgilePlus Actions | https://github.com/KooshaPari/AgilePlus/actions |
-| heliosCLI Actions | https://github.com/KooshaPari/heliosCLI/actions |
-| phenotype-infrakit Actions | https://github.com/KooshaPari/phenotype-infrakit/actions |
+| GitHub Org Secrets | https://github.com/organizations/<REDACTED>/settings/secrets/actions |
+| AgilePlus Actions | https://github.com/<REDACTED>/AgilePlus/actions |
+| heliosCLI Actions | https://github.com/<REDACTED>/heliosCLI/actions |
+| phenotype-infrakit Actions | https://github.com/<REDACTED>/phenotype-infrakit/actions |
 
 ---
 

@@ -135,7 +135,7 @@ git commit -m "chore: remove stale placeholder crates (all 1-LOC stubs)"
 
 **Root worktree** (canonical):
 ```
-/Users/kooshapari/CodeProjects/Phenotype/repos [main] — 47 files modified (DIRTY)
+/Users/<REDACTED>/CodeProjects/Phenotype/repos [main] — 47 files modified (DIRTY)
 ```
 
 **Active worktrees** (under `.worktrees/`):
@@ -163,7 +163,7 @@ git commit -m "chore: remove stale placeholder crates (all 1-LOC stubs)"
 
 | Path | Branch | Status | Notes |
 |------|--------|--------|-------|
-| `/Users/kooshapari/CodeProjects/.worktrees/decompose-sqlite-adapter` | `refactor/decompose-sqlite-adapter` | Stale | 3 files modified, outside repos/ |
+| `/Users/<REDACTED>/CodeProjects/.worktrees/decompose-sqlite-adapter` | `refactor/decompose-sqlite-adapter` | Stale | 3 files modified, outside repos/ |
 
 ### Stale Worktree Breakdown
 
@@ -173,7 +173,7 @@ git commit -m "chore: remove stale placeholder crates (all 1-LOC stubs)"
 - **Dirty (uncommitted work)** (4): feat/cache-adapter-impl, phenotype-crypto-complete, phase2-routes-dashboard, infrastructure/phase1-routing-aggregation
 - **Detached HEAD** (1): feat/cache-adapter-impl
 - **Out of sync (>4 commits)** (2): /tmp/phenotype-pr-workspace (88 behind), /tmp/pr-236-resolution
-- **External location** (1): /Users/kooshapari/CodeProjects/.worktrees/decompose-sqlite-adapter
+- **External location** (1): /Users/<REDACTED>/CodeProjects/.worktrees/decompose-sqlite-adapter
 
 ### Worktree Cleanup Action Items
 
@@ -453,7 +453,7 @@ git commit -m "chore: archive 13 orphaned stub crates (all 1-LOC stubs) — 2026
 
 ### Check workspace health
 ```bash
-cd /Users/kooshapari/CodeProjects/Phenotype/repos
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos
 cargo check --workspace 2>&1 | head -20  # Build health
 git worktree list                         # Worktree status
 find ./crates -name "Cargo.toml" | wc -l  # Crate count

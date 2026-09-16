@@ -25,10 +25,10 @@
 ## Why not merge elsewhere
 
 We deliberately did NOT target:
-- `KooshaPari/Configra` — Configra is for static config (TOML/JSON), not
+- `<REDACTED>/Configra` — Configra is for static config (TOML/JSON), not
   hot-reloadable runtime state.
-- `KooshaPari/PhenoObservability` — observability is a consumer.
-- `KooshaPari/Authvault` — secrets/credentials layer.
+- `<REDACTED>/PhenoObservability` — observability is a consumer.
+- `<REDACTED>/Authvault` — secrets/credentials layer.
 
 ## State captured
 
@@ -45,7 +45,7 @@ We deliberately did NOT target:
 
 - Squash (PR #282) — 1/4 of the substrate family
 - Verified on remote HEAD via
-  `gh api repos/KooshaPari/pheno/contents/crates/pheno-runtime-config`
+  `gh api repos/<REDACTED>/pheno/contents/crates/pheno-runtime-config`
 
 ## Forward-looking note
 

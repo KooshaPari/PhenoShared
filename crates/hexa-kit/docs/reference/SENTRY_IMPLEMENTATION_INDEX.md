@@ -422,7 +422,7 @@ This index provides a roadmap through all Sentry documentation and configuration
 ## File Structure
 
 ```
-/Users/kooshapari/CodeProjects/Phenotype/repos/
+/Users/<REDACTED>/CodeProjects/Phenotype/repos/
 ├── docs/
 │   ├── reference/
 │   │   ├── SENTRY_SETUP.md                      (476 lines)

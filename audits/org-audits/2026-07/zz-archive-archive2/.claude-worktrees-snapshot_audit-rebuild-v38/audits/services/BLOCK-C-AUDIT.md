@@ -1,7 +1,7 @@
-# Block-C Audit — KooshaPari/services
+# Block-C Audit — <REDACTED>/services
 
 **Audit date:** 2026-06-15
-**Repo:** https://github.com/KooshaPari/services
+**Repo:** https://github.com/<REDACTED>/services
 **Clone target:** `E:\bc-audit-blockc\services`
 **Default branch (remote):** `chore/dependabot-2026-06-08`
 **HEAD at audit:** `0d7262cd605638a18cc5a000e8c42858d1bbc6fc`
@@ -130,10 +130,10 @@ Equivalent issues found in the data plane:
 - **14 absolute-path leaks in `bom-ref` fields** (9 in `graphql-gateway`,
   5 in `templates-registry`). Each leak exposes the developer's macOS home
   directory and the layout of an unrelated monorepo
-  (`/Users/kooshapari/CodeProjects/Phenotype/repos/FocalPoint/...`). This
+  (`/Users/<REDACTED>/CodeProjects/Phenotype/repos/FocalPoint/...`). This
   is privacy-leaking PII baked into a published SBOM. Examples:
-  - `path+file:///Users/kooshapari/CodeProjects/Phenotype/repos/FocalPoint/crates/focus-audit#0.0.12`
-  - `path+file:///Users/kooshapari/CodeProjects/Phenotype/repos/PhenoObservability/crates/phenotype-observably-macros#0.1.1`
+  - `path+file:///Users/<REDACTED>/CodeProjects/Phenotype/repos/FocalPoint/crates/focus-audit#0.0.12`
+  - `path+file:///Users/<REDACTED>/CodeProjects/Phenotype/repos/PhenoObservability/crates/phenotype-observably-macros#0.1.1`
 - **1 component missing a license** in `graphql-gateway`:
   `phenotype-observably-macros@0.1.1` (same one whose `bom-ref` leaks the
   path).
@@ -261,7 +261,7 @@ recording the structural risks of the layout:
 | # | Severity | Issue | Evidence |
 |---|----------|-------|----------|
 | 1 | **High** | `Taskfile.yml` does not parse on `task` v3.51.x — every advertised task (`validate`, `verify`, `clean`, `quality`) is unrunnable. The repo's stated quality gate is dead. | `task --list` → `yaml: line 17: mapping values are not allowed in this context` (exit 109) |
-| 2 | **High** | 14 SBOM `bom-ref` fields leak developer's absolute macOS path (`/Users/kooshapari/CodeProjects/...`) — privacy PII in a published artifact. | `python` walk over `*.cdx.json`, grep for `kooshapari` |
+| 2 | **High** | 14 SBOM `bom-ref` fields leak developer's absolute macOS path (`/Users/<REDACTED>/CodeProjects/...`) — privacy PII in a published artifact. | `python` walk over `*.cdx.json`, grep for `<REDACTED>` |
 | 3 | **High** | Doc ↔ data mismatch on CycloneDX spec version (AGENTS.md says 1.5, files say 1.3). | `AGENTS.md:10` vs `*.cdx.json` `"specVersion": "1.3"` |
 | 4 | Med | R3 spec committed (`436ca7f`) but not present on default branch; `STATUS.md` still lists it as backlog. | `find . -name "R3*"` → empty |
 | 5 | Med | `dependabot.yml` declares 4 ecosystems (`cargo`, `pip`, `npm`, `gomod`) that have no manifest in the repo → noise PRs. | `.github/dependabot.yml:3-77` vs `find` for manifests |
@@ -287,7 +287,7 @@ recording the structural risks of the layout:
    works, but the local developer experience promised by the Taskfile
    is broken.
 2. **Privacy leak: 14 `bom-ref` entries hard-code the maintainer's
-   `/Users/kooshapari/CodeProjects/...` macOS path** across both
+   `/Users/<REDACTED>/CodeProjects/...` macOS path** across both
    published SBOMs (9 in `graphql-gateway`, 5 in
    `templates-registry`). SBOMs are meant to be portable; these are
    not. `cargo-cyclonedx` should be configured with `--override-prefix`
@@ -346,7 +346,7 @@ coverage tooling (no `tarpaulin`, no `nyc`, no `coverage.py`).
 
 1. Fix `Taskfile.yml:16-17` — convert the `for: { var: SERVICES }` block
    to the syntax accepted by `task` v3.x, or pin the runtime.
-2. Strip the `/Users/kooshapari/...` prefix from all `bom-ref` values
+2. Strip the `/Users/<REDACTED>/...` prefix from all `bom-ref` values
    in both SBOMs; add a CI step that fails the build on
    `path+file:///Users/` in any `*.cdx.json`.
 3. Reconcile `AGENTS.md:10` with the actual `specVersion` in the
@@ -370,7 +370,7 @@ coverage tooling (no `tarpaulin`, no `nyc`, no `coverage.py`).
 
 ## 12. Audit metadata
 
-- Cloned with: `git clone https://github.com/KooshaPari/services.git services`
+- Cloned with: `git clone https://github.com/<REDACTED>/services.git services`
 - Default branch tip: `0d7262cd605638a18cc5a000e8c42858d1bbc6fc`
 - Audit commit: this document is added on branch `audit/block-c`
   (see companion commit).

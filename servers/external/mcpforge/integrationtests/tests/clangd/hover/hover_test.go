@@ -7,9 +7,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/KooshaPari/MCPForge/integrationtests/tests/clangd/internal"
-	"github.com/KooshaPari/MCPForge/integrationtests/tests/common"
-	"github.com/KooshaPari/MCPForge/internal/tools"
+	"github.com/<REDACTED>/MCPForge/integrationtests/tests/clangd/internal"
+	"github.com/<REDACTED>/MCPForge/integrationtests/tests/common"
+	"github.com/<REDACTED>/MCPForge/internal/tools"
 )
 
 // TestHover tests hover functionality with the Clangd language server

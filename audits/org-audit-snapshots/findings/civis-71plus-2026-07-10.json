@@ -1,7 +1,7 @@
 {
   "$schema": "https://phenotype-org.dev/schemas/pillar-scorecard/v1.json",
   "schema": "71+-scorecard-v1",
-  "repo": "KooshaPari/Civis",
+  "repo": "<REDACTED>/Civis",
   "local_path": "C:\\Users\\koosh\\Civis",
   "date": "2026-07-10",
   "branch_scored": "feat/civis-completion-71plus-2026-07-08",

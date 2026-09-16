@@ -13,10 +13,10 @@
 
 set -uo pipefail
 
-STATE_FILE="/Users/kooshapari/.local/share/resume-all/bridge-health-watch.state"
-NDJSON="/Users/kooshapari/.local/share/resume-all/bridge-health-watch.ndjson"
-BEAD="/Users/kooshapari/CodeProjects/Phenotype/repos/beads/bead-ctl.sh"
-BRIDGE_HEALTH="/Users/kooshapari/bin/bridge-health"
+STATE_FILE="/Users/<REDACTED>/.local/share/resume-all/bridge-health-watch.state"
+NDJSON="/Users/<REDACTED>/.local/share/resume-all/bridge-health-watch.ndjson"
+BEAD="/Users/<REDACTED>/CodeProjects/Phenotype/repos/beads/bead-ctl.sh"
+BRIDGE_HEALTH="/Users/<REDACTED>/bin/bridge-health"
 
 mkdir -p "$(dirname "$NDJSON")" 2>/dev/null || true
 

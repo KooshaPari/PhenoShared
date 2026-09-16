@@ -37,4 +37,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - WORKLOG.md (v2.1 schema — 7 columns including new `device:` field per ADR-015/025/030)
 - CHANGELOG.md (Keep-a-Changelog)
 - LICENSE-MIT (standard MIT, copyright Koosha Pari 2026)
-- `.github/workflows/ci.yml` (from `KooshaPari/pheno-ci-templates`; test + clippy + fmt + 80% coverage gate)
+- `.github/workflows/ci.yml` (from `<REDACTED>/pheno-ci-templates`; test + clippy + fmt + 80% coverage gate)

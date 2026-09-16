@@ -241,7 +241,7 @@ Recommended for CI/CD integration: YES / NO
 **Time**: 10 minutes
 **Description**: Verify mold rustflags are present and correct
 
-**File**: `/Users/kooshapari/CodeProjects/Phenotype/repos/.cargo/config.toml`
+**File**: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/.cargo/config.toml`
 
 Expected current state:
 ```toml
@@ -395,7 +395,7 @@ RUSTFLAGS="" cargo build --release
 **Time**: 10 minutes
 **Description**: Review the newly added mold-benchmark job
 
-**File**: `/Users/kooshapari/CodeProjects/Phenotype/repos/.github/workflows/benchmark.yml`
+**File**: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/.github/workflows/benchmark.yml`
 
 **Verification**:
 ```bash
@@ -585,7 +585,7 @@ Add comment block above job definition:
 # Click "Run workflow"
 
 # Wait for job to complete (10-15 minutes)
-# Monitor at: https://github.com/KooshaPari/phenotype-infrakit/actions
+# Monitor at: https://github.com/<REDACTED>/phenotype-infrakit/actions
 
 # Record run ID: ________________
 ```

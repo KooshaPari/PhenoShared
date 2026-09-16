@@ -41,7 +41,7 @@ use serde_json::{json, Value};
 )]
 struct Cli {
     /// Path to the forge3 binary.
-    #[arg(long, default_value = "/Users/kooshapari/.cargo/bin/forge3")]
+    #[arg(long, default_value = "/Users/<REDACTED>/.cargo/bin/forge3")]
     bin: PathBuf,
 
     /// WebSocket URL for the running daemon.

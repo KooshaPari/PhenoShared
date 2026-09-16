@@ -93,7 +93,7 @@ This system contains **6 comprehensive guides + 1 overview + this README**:
 
 ### On Your Local Machine
 ```
-Repository Root: /Users/kooshapari/CodeProjects/Phenotype/repos/
+Repository Root: /Users/<REDACTED>/CodeProjects/Phenotype/repos/
 
 Generated during deployment:
   .snyk-reports/
@@ -112,7 +112,7 @@ Created per-repo:
 
 ### On GitHub
 ```
-Organization: KooshaPari
+Organization: <REDACTED>
 
 Secrets:
   SNYK_TOKEN                 (at org level, available to all repos)
@@ -140,7 +140,7 @@ Verify you have everything before starting:
 - [ ] Snyk CLI installed: `snyk --version`
 - [ ] GitHub CLI installed: `gh --version`
 - [ ] Git installed: `git --version`
-- [ ] Admin access to KooshaPari GitHub organization
+- [ ] Admin access to <REDACTED> GitHub organization
 - [ ] All 30 repos cloned locally
 - [ ] Snyk account (sign up at https://app.snyk.io if needed)
 - [ ] 30 minutes of uninterrupted time
@@ -172,7 +172,7 @@ snyk auth $SNYK_TOKEN
 **Guide:** SNYK_LOCAL_DEPLOYMENT_GUIDE.md
 
 ```bash
-cd /Users/kooshapari/CodeProjects/Phenotype/repos
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos
 ./scripts/snyk-deploy.sh
 
 # Watch for: "Deployment Complete"
@@ -208,7 +208,7 @@ git push origin main
 
 ```bash
 # Set organization secret
-gh secret set SNYK_TOKEN --org KooshaPari
+gh secret set SNYK_TOKEN --org <REDACTED>
 
 # Deploy workflows to Tier 1 repos
 # Verify first run in GitHub Actions tab
@@ -245,13 +245,13 @@ Tier 1 Status:
 ## 🔗 Key Resources
 
 ### Documentation
-- All guides: `/Users/kooshapari/CodeProjects/Phenotype/repos/docs/guides/SNYK_*.md`
-- Checklist: `/Users/kooshapari/CodeProjects/Phenotype/repos/docs/guides/SNYK_DEPLOYMENT_CHECKLIST.md`
+- All guides: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/docs/guides/SNYK_*.md`
+- Checklist: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/docs/guides/SNYK_DEPLOYMENT_CHECKLIST.md`
 
 ### External Links
 - Snyk App: https://app.snyk.io
 - Snyk CLI Docs: https://docs.snyk.io/cli
-- GitHub Org Secrets: https://github.com/organizations/KooshaPari/settings/secrets/actions
+- GitHub Org Secrets: https://github.com/organizations/<REDACTED>/settings/secrets/actions
 
 ### Generated Content
 - Reports (after phase 2): `.snyk-reports/`
@@ -304,7 +304,7 @@ Tier 1 Status:
 
 **Implementing for Another Org:**
 1. Copy all markdown files to your repo
-2. Adapt paths in guides (from `/Users/kooshapari/...` to your paths)
+2. Adapt paths in guides (from `/Users/<REDACTED>/...` to your paths)
 3. Follow the same 4-phase structure
 
 ---

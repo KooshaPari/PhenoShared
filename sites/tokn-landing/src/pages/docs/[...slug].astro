@@ -6,7 +6,7 @@ import "../../styles/globals.css";
 
 const PROJECT_NAME = "Tokn";
 const REPO_SLUG = "tokn";
-const REPO_OWNER = "KooshaPari";
+const REPO_OWNER = "<REDACTED>";
 const REPO_NAME = "Tokn";
 const REPO = `${REPO_OWNER}/${REPO_NAME}`;
 const GITHUB_TOKEN = import.meta.env.GITHUB_TOKEN;
@@ -68,7 +68,7 @@ export async function getStaticPaths() {
   // Recursively walk docs/ via the GitHub Trees API.
   async function walk(): Promise<string[]> {
     const tree = await fetch(
-      "https://api.github.com/repos/KooshaPari/Tokn/git/trees/main?recursive=1",
+      "https://api.github.com/repos/<REDACTED>/Tokn/git/trees/main?recursive=1",
       {
         headers: {
           Accept: "application/vnd.github+json",

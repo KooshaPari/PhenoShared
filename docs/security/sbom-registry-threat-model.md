@@ -21,7 +21,7 @@ lastUpdated: 2026-06-16
 
 | Category | Threat | Likelihood | Impact | Mitigation |
 |---|---|---|---|---|
-| **Spoofing** | An adversary publishes a CycloneDX SBOM under the `KooshaPari/services` namespace that is indistinguishable from a legitimate one. | Medium | High | Sign all SBOMs with cosign using a Sigstore keyless flow (OIDC + GitHub Actions identity). Include the registry commit SHA in the SBOM provenance predicate. |
+| **Spoofing** | An adversary publishes a CycloneDX SBOM under the `<REDACTED>/services` namespace that is indistinguishable from a legitimate one. | Medium | High | Sign all SBOMs with cosign using a Sigstore keyless flow (OIDC + GitHub Actions identity). Include the registry commit SHA in the SBOM provenance predicate. |
 | **Tampering** | A SBOM stored in the registry is modified in-flight (cache, mirror, CDN) before being fetched by a downstream consumer. | Medium | High | All SBOMs are content-addressed by SHA-256. Registry API rejects any fetch whose hash doesn't match the registered hash. Consumers verify the hash before parsing. |
 | **Repudiation** | A registry contributor publishes a SBOM and later denies doing so. | Low | Medium | All SBOM PRs are signed by the contributor's GitHub identity (gitsign). The PR commit is part of the audit trail in the GitHub UI. |
 | **Information Disclosure** | SBOMs may contain PURLs that leak internal infrastructure (e.g., a `pkg:oci/registry.internal.example.com/*` for a private service). | Medium | Medium | Registry has a `redact-purls` field per service. Public-facing SBOMs use redacted PURLs (`pkg:generic/[redacted]`); private mirrors retain full PURLs. |

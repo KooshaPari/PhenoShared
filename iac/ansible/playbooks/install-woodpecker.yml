@@ -1,6 +1,6 @@
 ---
 # install-woodpecker.yml — Woodpecker CI server + local agent on oci_primary.
-# Server binds 127.0.0.1:8000 (Caddy fronts ci.kooshapari.com).
+# Server binds 127.0.0.1:8000 (Caddy fronts ci.<REDACTED>.com).
 # OAuth against Forgejo — client id/secret must be registered post-bringup.
 
 - name: Install Woodpecker server + agent
@@ -86,7 +86,7 @@
         mode: "0640"
         content: |
           WOODPECKER_OPEN=false
-          WOODPECKER_HOST=https://ci.kooshapari.com
+          WOODPECKER_HOST=https://ci.<REDACTED>.com
           WOODPECKER_SERVER_ADDR=127.0.0.1:8000
           WOODPECKER_GRPC_ADDR=127.0.0.1:9000
           WOODPECKER_AGENT_SECRET={{ agent_secret_slurp.content | b64decode | trim }}

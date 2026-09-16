@@ -8,10 +8,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/KooshaPari/MCPForge/integrationtests/tests/common"
-	"github.com/KooshaPari/MCPForge/integrationtests/tests/typescript/internal"
-	"github.com/KooshaPari/MCPForge/internal/protocol"
-	"github.com/KooshaPari/MCPForge/internal/tools"
+	"github.com/<REDACTED>/MCPForge/integrationtests/tests/common"
+	"github.com/<REDACTED>/MCPForge/integrationtests/tests/typescript/internal"
+	"github.com/<REDACTED>/MCPForge/internal/protocol"
+	"github.com/<REDACTED>/MCPForge/internal/tools"
 )
 
 // TestDiagnostics tests diagnostics functionality with the TypeScript language server

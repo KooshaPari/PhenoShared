@@ -10,7 +10,7 @@
   "path": "repos/phenoResearchEngine",
   "disposition": "REVIEW_TARGET_CONFLICT",
   "wave": "2026-07-17-prototype-batch-2",
-  "remote": "https://github.com/KooshaPari/phenoResearchEngine",
+  "remote": "https://github.com/<REDACTED>/phenoResearchEngine",
   "remote_default_branch": "main",
   "remote_default_sha": "ae736233e612dd1f744b1619e374d22771def3b1",
   "remote_private": true,

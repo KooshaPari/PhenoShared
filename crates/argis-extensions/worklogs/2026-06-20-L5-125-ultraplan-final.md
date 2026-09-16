@@ -43,7 +43,7 @@ Track E (this file) is the retrospective itself.
 
 ### Why it matters
 
-The fleet has grown to 74 repos under `KooshaPari/*` (per the v10 plan's
+The fleet has grown to 74 repos under `<REDACTED>/*` (per the v10 plan's
 `phenotype-registry/registry/repo-index.json` snapshot) with ~200+ open PRs at peak, and the
 prior CI surface was a per-repo patchwork that cost the equivalent of **$111 / month** in
 runner minutes (computed in `findings/2026-06-20-ci-time-savings.md` § "Baseline cost model"
@@ -68,7 +68,7 @@ Five concrete artifacts (one per track, in the order Track A → Track E):
 4. `findings/2026-06-20-ci-time-savings.md` (89 % cost-reduction quantification).
 5. This file — `worklogs/2026-06-20-L5-125-ultraplan-final.md` — the retrospective.
 
-Five PRs opened against `KooshaPari/phenotype-ops` (Tracks A–D) and `KooshaPari/phenotype-apps`
+Five PRs opened against `<REDACTED>/phenotype-ops` (Tracks A–D) and `<REDACTED>/phenotype-apps`
 (Track E, this file). **Zero net content loss** — every change is additive; no file was deleted
 or moved by the 5-track push. **Five of five tracks shipped DONE.** The orchestrator retained
 the `<TBD>` placeholders in the "Track status" table below for the post-dispatch commit-SHA
@@ -151,7 +151,7 @@ backfill; the table is structurally complete and human-fillable in < 60 seconds.
   3. `test_config_defaults_match_v9_baseline` — golden-file diff against v9 snapshot.
   4. `test_config_loading_idempotent` — load → dump → load → equal.
 - **`pyyaml` declared** in `phenotype-ops/review-surface/requirements.txt` (pinned `>=6.0,<7`).
-- **PR target:** `KooshaPari/phenotype-ops` (branch: `feat/l5-125-unified-review-surface-2026-06-20`).
+- **PR target:** `<REDACTED>/phenotype-ops` (branch: `feat/l5-125-unified-review-surface-2026-06-20`).
 
 ### Track B — Rainbow Branch Model (L5-126)
 
@@ -171,7 +171,7 @@ backfill; the table is structurally complete and human-fillable in < 60 seconds.
     (d) CODEOWNERS implications, (e) example branch name.
   - Cross-references `ADR-023` (device gate) and `ADR-047` (predictive DRY) for layer 4/5
     decision rules.
-- **PR target:** `KooshaPari/phenotype-ops` (branch: `feat/l5-126-rainbow-branch-model-2026-06-20`).
+- **PR target:** `<REDACTED>/phenotype-ops` (branch: `feat/l5-126-rainbow-branch-model-2026-06-20`).
 
 ### Track C — Pre-push Lefthook Docs (L5-127)
 
@@ -182,7 +182,7 @@ backfill; the table is structurally complete and human-fillable in < 60 seconds.
     manifest-gate check) appended as a single code-fenced block.
   - Cross-references `ADR-024` (71-pillar L29 pre-push), `ADR-025` (worklog v2.1), and the
     2026-06-19 `phenotype-manifest` v0.1.0 release notes.
-- **PR target:** `KooshaPari/phenotype-ops` (branch: `feat/l5-127-pre-push-lefthook-docs-2026-06-20`).
+- **PR target:** `<REDACTED>/phenotype-ops` (branch: `feat/l5-127-pre-push-lefthook-docs-2026-06-20`).
 
 ### Track D — CI Time/Cost Benchmark (L5-128)
 
@@ -196,7 +196,7 @@ backfill; the table is structurally complete and human-fillable in < 60 seconds.
   - 89 % reduction is the **conservative** figure; the optimistic figure is 94 % if the
     `phenotype-manifest` cache hit rate matches the 2026-06-19 dry-run (97.2 %).
   - Includes a "what to measure next" section: p95 latency, fail-rate, cost-per-green-PR.
-- **PR target:** `KooshaPari/phenotype-apps` (branch: `feat/l5-128-ci-time-cost-benchmark-2026-06-20`).
+- **PR target:** `<REDACTED>/phenotype-apps` (branch: `feat/l5-128-ci-time-cost-benchmark-2026-06-20`).
 
 ### Track E — This worklog (L5-129)
 
@@ -208,14 +208,14 @@ backfill; the table is structurally complete and human-fillable in < 60 seconds.
     (`duration_days`, `tracks`, `branches_merged`, `branches_opened`).
   - The remaining 7 v2.1 columns (device, schema_version, adr_anchors, files_written,
     test_results, follow_ups, worklog_signoff) are expressed as in-section headings below.
-- **PR target:** `KooshaPari/phenotype-apps` (branch: `feat/l5-129-ultraplan-final-2026-06-20`).
+- **PR target:** `<REDACTED>/phenotype-apps` (branch: `feat/l5-129-ultraplan-final-2026-06-20`).
 
 ---
 
 ## Net impact
 
-- **5 PRs opened** against `KooshaPari/phenotype-ops` (Tracks A–C) and
-  `KooshaPari/phenotype-apps` (Tracks D, E).
+- **5 PRs opened** against `<REDACTED>/phenotype-ops` (Tracks A–C) and
+  `<REDACTED>/phenotype-apps` (Tracks D, E).
 - **0 net content loss** — every change is additive; no file deleted or moved by the 5-track push.
 - **5/5 tracks shipped** DONE.
 - **Manifest gate projected 89 % CI cost reduction** ($111 / month → ~$12 / month at the
@@ -235,7 +235,7 @@ backfill; the table is structurally complete and human-fillable in < 60 seconds.
 ## Open follow-ups
 
 - **Apply `SETUP-RULESETS.sh` against `phenotype-ops`** — admin-gated (requires `repo` scope
-  on the `KooshaPari` org token; current `gh` auth is owner-scope only on KooshaPari but
+  on the `<REDACTED>` org token; current `gh` auth is owner-scope only on <REDACTED> but
   not on the org admin endpoint). Deferred until either a service-account token is provisioned
   or the orchestrator switches to the per-repo PAT. **Owner:** `phenotype-ops` circle.
   **Target date:** 2026-06-27 (within the 7-day follow-up window per the
@@ -274,8 +274,8 @@ backfill; the table is structurally complete and human-fillable in < 60 seconds.
   touches fleet-wide 71-pillar scoring).
 - **`findings/2026-06-20-ci-time-savings.md`** — Track D's quantification. Source of the
   89 % figure in the "Net impact" section above.
-- **`KooshaPari/phenotype-ops` PR #6** — CODEOWNERS PR (5 paths); merged 2026-06-19.
-- **`KooshaPari/phenotype-ops` commits** (the SHA-pinning history that this ultraplan builds on):
+- **`<REDACTED>/phenotype-ops` PR #6** — CODEOWNERS PR (5 paths); merged 2026-06-19.
+- **`<REDACTED>/phenotype-ops` commits** (the SHA-pinning history that this ultraplan builds on):
   - `54b6b0f` — pin corruption detect (initial detection script).
   - `41dc21a` — tier-0 hygiene (first sweep across the 14 fleet-critical repos).
   - `1e0d047` — pin-gate (CI required check; the foundation of Track D's manifest gate).
@@ -307,7 +307,7 @@ backfill; the table is structurally complete and human-fillable in < 60 seconds.
   - Branch hygiene: new branch `feat/l5-129-ultraplan-final-2026-06-20` is a
     non-`main`, non-`wip/*` branch off `origin/main` at `eef970e6a1`.
   - Push target: `phenotype-apps` remote (NOT `origin`, which is the stale `argis-extensions`).
-  - Commit identity: `Forge Agent <forge@kooshapari.dev>` with signed-off-by.
+  - Commit identity: `Forge Agent <forge@<REDACTED>.dev>` with signed-off-by.
 - **ADR anchors:** ADR-015, ADR-023, ADR-024, ADR-025, ADR-041, ADR-047, ADR-049.
 - **Cross-references:** the 5 sibling worklog files in `worklogs/` for the
   2026-06-14 → 2026-06-20 window (`L5-101`, `L5-116`, `L5-120`, `L5-121`, `L5-122`).

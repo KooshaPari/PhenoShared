@@ -3,24 +3,24 @@
 <plist version="1.0">
 <dict>
   <key>Label</key>
-  <string>com.kooshapari.resume-all-sla</string>
+  <string>com.<REDACTED>.resume-all-sla</string>
   <key>ProgramArguments</key>
   <array>
     <string>/bin/zsh</string>
-    <string>/Users/kooshapari/bin/sla-monitor-wrapper</string>
+    <string>/Users/<REDACTED>/bin/sla-monitor-wrapper</string>
   </array>
   <key>RunAtLoad</key>
   <true/>
   <key>StartInterval</key>
   <integer>30</integer>
   <key>WorkingDirectory</key>
-  <string>/Users/kooshapari</string>
+  <string>/Users/<REDACTED></string>
   <key>EnvironmentVariables</key>
   <dict>
     <key>HOME</key>
-    <string>/Users/kooshapari</string>
+    <string>/Users/<REDACTED></string>
     <key>PATH</key>
-    <string>/opt/homebrew/bin:/Users/kooshapari/.cargo/bin:/Users/kooshapari/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+    <string>/opt/homebrew/bin:/Users/<REDACTED>/.cargo/bin:/Users/<REDACTED>/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
     <key>PYTHONUNBUFFERED</key>
     <string>1</string>
     <key>TMPDIR</key>
@@ -31,9 +31,9 @@
     <string>C</string>
   </dict>
   <key>StandardOutPath</key>
-  <string>/Users/kooshapari/Library/Logs/resume-all/sla.out.log</string>
+  <string>/Users/<REDACTED>/Library/Logs/resume-all/sla.out.log</string>
   <key>StandardErrorPath</key>
-  <string>/Users/kooshapari/Library/Logs/resume-all/sla.err.log</string>
+  <string>/Users/<REDACTED>/Library/Logs/resume-all/sla.err.log</string>
   <key>ProcessType</key>
   <string>Background</string>
   <key>ThrottleInterval</key>

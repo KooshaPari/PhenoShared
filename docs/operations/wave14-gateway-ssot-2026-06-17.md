@@ -58,7 +58,7 @@ These are the highest-confidence next tasks across registry, HexaKit, and gatewa
 |---|------|-------|------------|
 | 1 | Merge Pyron branch mapping for `Apisync` submodule and unbreak `phenotype-core` workspace checks | Pyron + phenotype-registry | **superseded** — validation/string pin to `phenotype-types` (HexaKit#271); Pyron repo 404 |
 | 2 | Re-run `cargo check -p phenotype-core` in HexaKit after Apisync unblock and record result in ledger | HexaKit | **done** — `cargo check -p phenotype-core` pass @ HexaKit main 2026-06-19 |
-| 3 | Finalize `phenotype-core` next pins for `phenotype-validation` and `phenotype-string` | HexaKit + phenotype-registry | **done** — git pin `KooshaPari/phenotype-types` main (HexaKit#271) |
+| 3 | Finalize `phenotype-core` next pins for `phenotype-validation` and `phenotype-string` | HexaKit + phenotype-registry | **done** — git pin `<REDACTED>/phenotype-types` main (HexaKit#271) |
 | 4 | Resolve `gw-cliproxy` and `gw-bifrost` dispositions to `done` with PR refs | phenotype-registry | disposition updates + disposition-index audit |
 | 5 | Pin `phenotype-gateway` submodule SHAs under `third_party/*` and `packages/*` bootstrap | phenotype-gateway | Git pin commits with lockfile/build verification |
 | 6 | Implement gateway spike build/smoke matrix in `phenotype-gateway/spikes/<lang>` for promoted components | phenotype-gateway | docs + CI result proof for each spike |

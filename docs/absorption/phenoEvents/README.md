@@ -2,8 +2,8 @@
 
 **Status:** Historical and unverified provenance
 
-The 2026-07-17 record claimed a transfer from `KooshaPari/phenoEvents` to a
-`KooshaPari/pheno` event-bus crate. The record is preserved because it captures
+The 2026-07-17 record claimed a transfer from `<REDACTED>/phenoEvents` to a
+`<REDACTED>/pheno` event-bus crate. The record is preserved because it captures
 the asserted source/target relationship and prior verification narrative.
 
 It is not current ownership evidence. The 2026-08-05 reconciliation found the

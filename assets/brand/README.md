@@ -56,7 +56,7 @@ goes on that crate's manifest:
 ```toml
 [package.metadata.bundle]
 name = "substrate"
-identifier = "ai.kooshapari.substrate"
+identifier = "ai.<REDACTED>.substrate"
 icon = ["../../assets/icons/substrate.iconset"]
 resources = []
 category = "DeveloperTool"

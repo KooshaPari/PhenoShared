@@ -6,7 +6,7 @@
   "color": "#16a34a",
   "description": "Civilization simulation engine: deterministic godgame with multi-client protocol.",
   "tier": 2,
-  "repo": "KooshaPari/Civis",
+  "repo": "<REDACTED>/Civis",
   "language": "Rust",
   "license": "MIT",
   "status": "active",
@@ -17,8 +17,8 @@
     "Replay system"
   ],
   "links": {
-    "github": "https://github.com/KooshaPari/Civis",
+    "github": "https://github.com/<REDACTED>/Civis",
     "docs": "https://civis.phenotype.space/docs",
-    "releases": "https://github.com/KooshaPari/Civis/releases"
+    "releases": "https://github.com/<REDACTED>/Civis/releases"
   }
 }

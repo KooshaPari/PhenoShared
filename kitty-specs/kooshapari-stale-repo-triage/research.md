@@ -1,4 +1,4 @@
-# Research: kooshapari-stale-repo-triage (Post-Specify)
+# Research: <REDACTED>-stale-repo-triage (Post-Specify)
 **Date**: 2026-03-29 | **Mode**: feasibility
 
 ## Spec Summary

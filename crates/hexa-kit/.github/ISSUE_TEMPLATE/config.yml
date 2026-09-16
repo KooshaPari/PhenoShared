@@ -1,11 +1,11 @@
 blank_issues_enabled: false
 contact_links:
   - name: Documentation
-    url: https://github.com/KooshaPari/HexaKit/tree/main/docs
+    url: https://github.com/<REDACTED>/HexaKit/tree/main/docs
     about: Review the docs before filing an issue.
   - name: Security advisories
-    url: https://github.com/KooshaPari/HexaKit/security/advisories/new
+    url: https://github.com/<REDACTED>/HexaKit/security/advisories/new
     about: Privately report security vulnerabilities.
   - name: Discussions
-    url: https://github.com/KooshaPari/HexaKit/discussions
+    url: https://github.com/<REDACTED>/HexaKit/discussions
     about: Ask questions and discuss ideas.

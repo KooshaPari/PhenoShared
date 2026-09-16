@@ -1,4 +1,4 @@
-# branch-lint: /Users/kooshapari/CodeProjects/Phenotype/repos/OmniRoute
+# branch-lint: /Users/<REDACTED>/CodeProjects/Phenotype/repos/OmniRoute
 # scanned=79 allowed=25 grandfathered=0 violations=54
 # VIOLATIONS:
   airlock-archive/wave10/omniroute-wt/5218-mcp-auth  reason=no_allowed_prefix

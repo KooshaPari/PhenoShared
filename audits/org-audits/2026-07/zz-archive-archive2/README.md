@@ -1,11 +1,11 @@
 # `zz-archive-phenotype-org-audits-archive2` — Preserved Snapshot
 
-This directory preserves unique content from the `KooshaPari/zz-archive-phenotype-org-audits-archive2`
-GitHub repository (archived 2026-07-15, after `KooshaPari/phenotype-org-audits`
+This directory preserves unique content from the `<REDACTED>/zz-archive-phenotype-org-audits-archive2`
+GitHub repository (archived 2026-07-15, after `<REDACTED>/phenotype-org-audits`
 was deleted 2026-07-14 and recreated 2026-07-17 following Sentry PAT rotation).
 
 **Date merged:** 2026-08-08
-**Source commit:** `KooshaPari/zz-archive-phenotype-org-audits-archive2@main`
+**Source commit:** `<REDACTED>/zz-archive-phenotype-org-audits-archive2@main`
 **Merger:** forge-airlock (manual semantic integration)
 
 ## What this archive was

@@ -11,7 +11,7 @@ concurrency:
 
 
 # Delegates to phenoShared reusable workflow.
-# See: https://github.com/KooshaPari/phenoShared/blob/main/.github/workflows/tag-automation.yml
+# See: https://github.com/<REDACTED>/phenoShared/blob/main/.github/workflows/tag-automation.yml
 
 
 
@@ -20,6 +20,6 @@ permissions:
 
 jobs:
   tag:
-    uses: KooshaPari/phenoShared/.github/workflows/tag-automation.yml@72b9c6cbdb24c49189b0e7c7395d874830d1ed87
+    uses: <REDACTED>/phenoShared/.github/workflows/tag-automation.yml@72b9c6cbdb24c49189b0e7c7395d874830d1ed87
     permissions:
       contents: write

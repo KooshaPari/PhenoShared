@@ -1,8 +1,8 @@
 # KWatch — Absorption Boundary
 
 **Status**: `ABSORBED` (2026-07-17)  
-**Source**: `github.com/KooshaPari/KWatch`  
-**Target**: `github.com/KooshaPari/phenotype-tooling` → `tools/kwatch/`  
+**Source**: `github.com/<REDACTED>/KWatch`  
+**Target**: `github.com/<REDACTED>/phenotype-tooling` → `tools/kwatch/`  
 **Type**: Go tool absorption  
 
 ## Description

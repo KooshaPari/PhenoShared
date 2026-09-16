@@ -1,7 +1,7 @@
 # Pheno-org MCP server
 
 Native PhenoMCPServers FastMCP server for the six org tool groups. The surface
-was originally migrated from [PhenoMCP](https://github.com/KooshaPari/PhenoMCP)
+was originally migrated from [PhenoMCP](https://github.com/<REDACTED>/PhenoMCP)
 (`python/src/pheno_mcp/tools/`):
 
 | Group | Tools |
@@ -15,7 +15,7 @@ was originally migrated from [PhenoMCP](https://github.com/KooshaPari/PhenoMCP)
 
 All tools proxy to a Parpoura HTTP backend via `httpx.AsyncClient`.
 
-Framework: [PhenoFastMCP](https://github.com/KooshaPari/PhenoFastMCP) / fastmcp 3.4.2.
+Framework: [PhenoFastMCP](https://github.com/<REDACTED>/PhenoFastMCP) / fastmcp 3.4.2.
 
 ```bash
 cd servers/pheno-org

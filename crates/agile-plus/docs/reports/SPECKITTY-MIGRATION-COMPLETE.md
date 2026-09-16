@@ -4,7 +4,7 @@
 | ---------------- | ----------------------------------------------------------- |
 | Status           | ✅ **CLOSED — 2026-07-05**                                  |
 | Scope            | SpecKitty cursor commands + scoring engine + cockpit handoff |
-| Owner            | KooshaPari / AgilePlus (Rust workspace)                     |
+| Owner            | <REDACTED> / AgilePlus (Rust workspace)                     |
 | Successor        | `ap` (agileplus-cli) — `crates/agileplus-cli/`              |
 | Supersedes       | `.cursor/commands/spec-kitty.*.md` (14 commands)            |
 | Supersedes-doc   | `docs/design/SPECKITTY-MIGRATION.md` §8 still tracks Provenance Tier 1 |
@@ -69,7 +69,7 @@ cargo run -p agileplus-cli --bin agileplus -- cockpit publish \
 ```
 
 Wired-GitHub CI is **billed-out** (per the persistent
-`KooshaPari/AgilePlus` Actions spending-limit failure visible in
+`<REDACTED>/AgilePlus` Actions spending-limit failure visible in
 PR #901's statusCheckRollup). Local verification is the contract.
 
 ## 3. Cursor-side decommissioning

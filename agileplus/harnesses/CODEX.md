@@ -36,12 +36,12 @@ For all feature development, follow this workflow:
 
 ```bash
 export PATH="$HOME/bin:$PATH"
-export AGILEPLUS_HOME="/Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus"
+export AGILEPLUS_HOME="/Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus"
 ```
 
 ### xDD Methodologies
 
-Reference: `/Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus/docs/governance/xdd-methodologies-encyclopedia.md`
+Reference: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus/docs/governance/xdd-methodologies-encyclopedia.md`
 
 Follow these methodologies:
 - TDD: Test before implementation
@@ -62,7 +62,7 @@ name = "AgilePlus Agent"
 description = "Spec-driven development with xDD methodologies"
 command = "agileplus"
 args = ["--agent"]
-env = { AGILEPLUS_HOME = "/Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus" }
+env = { AGILEPLUS_HOME = "/Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus" }
 ```
 
 ## Codex RC File
@@ -72,7 +72,7 @@ Add to `~/.codexrc`:
 ```bash
 # AgilePlus integration
 export PATH="$HOME/bin:$PATH"
-export AGILEPLUS_HOME="/Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus"
+export AGILEPLUS_HOME="/Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus"
 
 # Aliases
 alias ap="agileplus"

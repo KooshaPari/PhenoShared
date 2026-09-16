@@ -56,7 +56,7 @@ class PhenoControlCenter:
         self.multi_tenant_manager = MultiTenantManager(
             base_fallback_port=config.base_fallback_port,
             base_proxy_port=config.base_proxy_port,
-            tunnel_domain="kooshapari.com",  # Could be made configurable
+            tunnel_domain="<REDACTED>.com",  # Could be made configurable
         )
 
         # Enhanced monitor

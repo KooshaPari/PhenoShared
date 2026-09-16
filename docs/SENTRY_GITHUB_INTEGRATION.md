@@ -5,7 +5,7 @@ Complete walkthrough for integrating Sentry with GitHub for automatic issue crea
 ## Prerequisites
 
 - Sentry account with projects created for AgilePlus, phenotype-infrakit, and heliosCLI
-- Admin access to KooshaPari GitHub organization
+- Admin access to <REDACTED> GitHub organization
 - Admin access to Sentry organization
 
 ## Step-by-Step Setup
@@ -65,12 +65,12 @@ Complete walkthrough for integrating Sentry with GitHub for automatic issue crea
 
 3. **Enable Issue Creation:**
    - Toggle "Create GitHub issues"
-   - Select repository: `KooshaPari/AgilePlus`
+   - Select repository: `<REDACTED>/AgilePlus`
    - Click "Save"
 
 4. **Repeat for:**
-   - phenotype-infrakit project → `KooshaPari/phenotype-infrakit`
-   - heliosCLI project → `KooshaPari/heliosCLI`
+   - phenotype-infrakit project → `<REDACTED>/phenotype-infrakit`
+   - heliosCLI project → `<REDACTED>/heliosCLI`
 
 ### Phase 3: Configure Alert Rules
 
@@ -111,7 +111,7 @@ Actions:
 
 1. **In AgilePlus:**
    ```bash
-   cd /Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus
+   cd /Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus
    SENTRY_DSN="your-dsn-here" cargo test --lib sentry_config -- --nocapture
    ```
 
@@ -121,7 +121,7 @@ Actions:
    - Should see new issue appear within 30 seconds
 
 3. **Verify GitHub Issue Created:**
-   - Go to GitHub: https://github.com/KooshaPari/AgilePlus/issues
+   - Go to GitHub: https://github.com/<REDACTED>/AgilePlus/issues
    - Should see new issue with title like:
      ```
      [AgilePlus] Test error for Sentry capture
@@ -138,7 +138,7 @@ Actions:
 #### Add Repository Secrets
 
 1. **Go to AgilePlus Repository Settings:**
-   - https://github.com/KooshaPari/AgilePlus/settings/secrets/actions
+   - https://github.com/<REDACTED>/AgilePlus/settings/secrets/actions
 
 2. **New Repository Secret:**
    - Name: `SENTRY_DSN`
@@ -355,9 +355,9 @@ Action: Slack notification only
 | AgilePlus Project | https://sentry.io/organizations/*/issues/?project=ID |
 | GitHub Integration | https://sentry.io/settings/integrations/github/ |
 | Alert Rules | https://sentry.io/alerts/ |
-| AgilePlus Repo | https://github.com/KooshaPari/AgilePlus |
-| phenotype-infrakit Repo | https://github.com/KooshaPari/phenotype-infrakit |
-| heliosCLI Repo | https://github.com/KooshaPari/heliosCLI |
+| AgilePlus Repo | https://github.com/<REDACTED>/AgilePlus |
+| phenotype-infrakit Repo | https://github.com/<REDACTED>/phenotype-infrakit |
+| heliosCLI Repo | https://github.com/<REDACTED>/heliosCLI |
 
 ## Support
 

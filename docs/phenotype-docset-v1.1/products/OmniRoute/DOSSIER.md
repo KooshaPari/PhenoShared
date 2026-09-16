@@ -24,4 +24,4 @@
 | G6 Deploy | BLOCKED (pending merge) |
 
 ## Repository
-- **GitHub:** https://github.com/KooshaPari/OmniRoute
+- **GitHub:** https://github.com/<REDACTED>/OmniRoute

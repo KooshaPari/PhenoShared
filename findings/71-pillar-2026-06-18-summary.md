@@ -2,7 +2,7 @@
 
 **Date:** 2026-06-18
 **Author:** parent-claude (Track T3 weekly refresh, v8 DAG)
-**Focal repo:** `KooshaPari/phenotype-gfx` (post-L5-114 absorption)
+**Focal repo:** `<REDACTED>/phenotype-gfx` (post-L5-114 absorption)
 **Source repos:** 4 SUPERSEDED (phenotype-voxel, phenotype-terrain, phenotype-water, phenotype-postfx)
 
 ---

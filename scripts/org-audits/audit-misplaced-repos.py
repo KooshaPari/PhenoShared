@@ -23,8 +23,8 @@ import sys
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 
-HOME = Path("/Users/kooshapari")
-CODEPROJECTS = Path("/Users/kooshapari/CodeProjects")
+HOME = Path("/Users/<REDACTED>")
+CODEPROJECTS = Path("/Users/<REDACTED>/CodeProjects")
 
 # (label, absolute path, category)
 CANDIDATES: list[tuple[str, str, str]] = [
@@ -205,7 +205,7 @@ def audit_one(label: str, path: str, category: str) -> dict:
     info["duplicate_hints"] = DUPLICATE_HINTS.get(label, [])
     info["duplicate_paths_exist"] = [
         p for p in info["duplicate_hints"]
-        if Path(f"/Users/kooshapari/{p}").exists()
+        if Path(f"/Users/<REDACTED>/{p}").exists()
     ]
 
     return info

@@ -2,7 +2,7 @@
 ## Testing, Measurement & Verification Protocols
 
 **Date Created:** 2026-03-31
-**Repository:** KooshaPari/phenotype-infrakit
+**Repository:** <REDACTED>/phenotype-infrakit
 **Scope:** Validation procedures for Phase 2 consolidation work
 **Status:** 🟡 READY FOR EXECUTION
 
@@ -84,7 +84,7 @@ echo ""
 # Build metrics
 echo "=== Build Metrics ==="
 echo "Cold build (release):"
-cd /Users/kooshapari/CodeProjects/Phenotype/repos
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos
 cargo clean
 time cargo build --release --workspace 2>&1 | grep "real"
 
@@ -133,7 +133,7 @@ Create `/docs/reports/PHASE2_BASELINE.md`:
 
 **Captured:** 2026-03-31 00:00 UTC
 **Git Commit:** &lt;&lt;commit-hash&gt;&gt;
-**Repository:** KooshaPari/phenotype-infrakit
+**Repository:** <REDACTED>/phenotype-infrakit
 
 ## Summary
 
@@ -218,7 +218,7 @@ cargo test --workspace
 #!/usr/bin/env bash
 # Verify anyhow removal
 
-cd /Users/kooshapari/CodeProjects/Phenotype/repos
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos
 
 echo "=== Checking for remaining anyhow imports ==="
 ANYHOW_IMPORTS=$(grep -r "use anyhow::" crates/ --include="*.rs" | wc -l)
@@ -321,7 +321,7 @@ All tests pass.
 #!/usr/bin/env bash
 # Verify feature flag standardization
 
-cd /Users/kooshapari/CodeProjects/Phenotype/repos
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos
 
 echo "=== Extracting all features from Cargo.toml files ==="
 FEATURE_FILE="/tmp/all-features.txt"
@@ -409,7 +409,7 @@ cat /tmp/feature-matrix.csv
 #!/usr/bin/env bash
 # Verify error type consolidation
 
-cd /Users/kooshapari/CodeProjects/Phenotype/repos
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos
 
 echo "=== Checking for orphaned error definitions ==="
 ORPHAN_ERRORS=$(grep -r "enum.*Error" crates/ --include="*.rs" | \
@@ -522,7 +522,7 @@ Total: 28 LOC (consolidated from 150+ LOC scattered across 12 crates)
 #!/usr/bin/env bash
 # Verify lazy regex initialization
 
-cd /Users/kooshapari/CodeProjects/Phenotype/repos
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos
 
 echo "=== Checking for lazy_static/once_cell usage ==="
 LAZY_PATTERNS=$(grep -r "Lazy::new" crates/ --include="*.rs" | wc -l)
@@ -591,7 +591,7 @@ echo "✓ All WP5 validation checks passed"
 #!/usr/bin/env bash
 # Verify dead code removal
 
-cd /Users/kooshapari/CodeProjects/Phenotype/repos
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos
 
 echo "=== Checking for dead_code suppressions ==="
 SUPPRESSIONS=$(grep -r "#\[allow(dead_code)\]" crates/ --include="*.rs" | wc -l)
@@ -698,7 +698,7 @@ Create `docs/reports/WP6_DEAD_CODE_AUDIT.md`:
 #!/usr/bin/env bash
 # Verify unsafe code audit
 
-cd /Users/kooshapari/CodeProjects/Phenotype/repos
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos
 
 echo "=== Locating unsafe blocks ==="
 UNSAFE_COUNT=$(grep -r "unsafe {" crates/ --include="*.rs" | wc -l)
@@ -743,7 +743,7 @@ echo "✓ All WP7 validation checks passed"
 #!/usr/bin/env bash
 # Verify all crate dependencies are consistent
 
-cd /Users/kooshapari/CodeProjects/Phenotype/repos
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos
 
 echo "=== Building in dependency order ==="
 
@@ -787,7 +787,7 @@ echo "✓ Integration tests complete"
 #!/usr/bin/env bash
 # Test all feature flag combinations
 
-cd /Users/kooshapari/CodeProjects/Phenotype/repos
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos
 
 echo "=== Testing feature combinations ==="
 
@@ -826,7 +826,7 @@ echo "✓ All feature combinations build successfully"
 #!/usr/bin/env bash
 # Comprehensive build time benchmarking
 
-cd /Users/kooshapari/CodeProjects/Phenotype/repos
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos
 
 RESULTS_FILE="/tmp/build-benchmarks-$(date +%s).json"
 
@@ -900,7 +900,7 @@ echo "  Full features build:  ${FULL_TIME}ms"
 #!/usr/bin/env bash
 # Binary size analysis
 
-cd /Users/kooshapari/CodeProjects/Phenotype/repos
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos
 
 echo "=== Binary Size Analysis ==="
 
@@ -933,7 +933,7 @@ du -sh target/release/deps/ | awk '{print "Dependencies: " $0}'
 #!/usr/bin/env bash
 # Test execution time analysis
 
-cd /Users/kooshapari/CodeProjects/Phenotype/repos
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos
 
 echo "=== Test Execution Benchmarking ==="
 

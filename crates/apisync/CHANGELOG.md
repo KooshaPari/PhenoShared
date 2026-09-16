@@ -115,4 +115,4 @@ stories, ADRs).
 - `AGENTS.md`: add a one-line backlog pointer so autonomous agents know where
   to look for the next round of audit findings (audit finding L30/L38).
 
-[0.2.0]: https://github.com/KooshaPari/Apisync/compare/v0.1.0...v0.2.0
+[0.2.0]: https://github.com/<REDACTED>/Apisync/compare/v0.1.0...v0.2.0

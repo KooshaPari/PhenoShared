@@ -7,7 +7,7 @@
 |---|---|
 | `name` | `pheno-harness` |
 | `status` | `archived` |
-| `repo_path` | `KooshaPari/pheno-harness` |
+| `repo_path` | `<REDACTED>/pheno-harness` |
 | `audit_artifact` | `audits/absorption-justifications/pheno-harness-2026-06-25.md` |
 | `role` | `eval/bench` |
 | `absorption_target` | `PhenoMCPServers+substrate` |
@@ -33,7 +33,7 @@
 
 ## Target
 
-- **Receiving repo:** `KooshaPari/phenodag` (https://github.com/KooshaPari/phenodag)
+- **Receiving repo:** `<REDACTED>/phenodag` (https://github.com/<REDACTED>/phenodag)
 - **Also absorbed by:** `BytePort` (via cross-toolchain hygiene), `phenotype-registry` (absorption-justification audit trail)
 - **Absorption rationale:** pheno-harness was archived by a previous maintainer action. The local commit `a38a6fa` (feat(eval): cross-repo adapter consumer — portage_adapter + tracera_semantic_pillar) and the modularization work (HARBOR.md, portage schema bridge) are stranded. phenodag, BytePort, and this registry absorbed the patterns (hygiene bundle P22/P25, externalized preset YAML P21, cross-repo adapter P20). The eval dataset benchmark registry (`datasets/ref-pr-diff/registry.json`) was already absorbed into the phenodag v3-180 preset. The Harbor task schema lives on in portage.
 
@@ -85,9 +85,9 @@ There remains a risk that CI workflows in downstream repos reference pheno-harne
 ### Exception 1: Archived repository — push blocked remotely
 
 - **Exception type:** absorbing-archived-repository
-- **Scope:** Repository `KooshaPari/pheno-harness` is archived on GitHub. Push returns HTTP 403. Fork is blocked by GitHub policy (cannot fork archived repos). The local commit `a38a6fa` and the 4 untracked directories (`adapters/`, `eval/pillars/`, `mentor/`, `harbor/`) cannot land remotely.
+- **Scope:** Repository `<REDACTED>/pheno-harness` is archived on GitHub. Push returns HTTP 403. Fork is blocked by GitHub policy (cannot fork archived repos). The local commit `a38a6fa` and the 4 untracked directories (`adapters/`, `eval/pillars/`, `mentor/`, `harbor/`) cannot land remotely.
 - **Rationale:** The local work was not pushed before the archive. After the archive was applied by a separate maintainer action, the remote state became read-only.
-- **Rebuttal:** The absorption saves the patterns, not the bits. The SOTA pillars (P20 cross-repo adapter, P22 cargo-deny hardening, P25 hygiene bundle) were already earned in the repos that absorbed them: phenodag (P21, P23, P25), BytePort (P22, P25), nanovms (P25), PhenoCompose (P22, P25). The specific `portage_adapter.py` and `tracera_semantic_pillar.py` files live in the local checkout and are registered in this document. If the repository is ever unarchived (`gh repo restore KooshaPari/pheno-harness`), the local commit can be force-pushed.
+- **Rebuttal:** The absorption saves the patterns, not the bits. The SOTA pillars (P20 cross-repo adapter, P22 cargo-deny hardening, P25 hygiene bundle) were already earned in the repos that absorbed them: phenodag (P21, P23, P25), BytePort (P22, P25), nanovms (P25), PhenoCompose (P22, P25). The specific `portage_adapter.py` and `tracera_semantic_pillar.py` files live in the local checkout and are registered in this document. If the repository is ever unarchived (`gh repo restore <REDACTED>/pheno-harness`), the local commit can be force-pushed.
 - **Rebut another viewpoint:** Some may argue the adaptation layer should live in the absorbing repo, not the source. However, the adapters are designed as standalone imports that any repo can consume — moving them changes nothing.
 
 - **Last-Resort-Exception process:** Accepted
@@ -119,8 +119,8 @@ There remains a risk that CI workflows in downstream repos reference pheno-harne
 # If origin is 404, reconstruct from the audit documents at:
 #   phenotype-registry/audits/absorption-justifications/
 # Or clone the canonical PhenoFastMCP repos:
-git clone https://github.com/KooshaPari/PhenoMCPServers.git
-git clone https://github.com/KooshaPari/substrate.git
+git clone https://github.com/<REDACTED>/PhenoMCPServers.git
+git clone https://github.com/<REDACTED>/substrate.git
 ```
 
 ### Rebuttal
@@ -135,7 +135,7 @@ Nevertheless, the absorption-justification audit serves as the permanent record 
 
 The test infrastructure cannot absorb into a single repo — it spanned multiple Phenotype repos. This is a deliberate exception.
 
-- **Restore command:** `gh repo restore KooshaPari/pheno-harness` (requires org-owner privileges)
+- **Restore command:** `gh repo restore <REDACTED>/pheno-harness` (requires org-owner privileges)
 - **Delete-gate status:** already 404 (archived) — the repo is already deleted from the active namespace. No `repo-delete-gate` could have prevented this because the gate is triggered on delete, not on archive. The delete-gate was not required because the repo was archived, not deleted.
 - **Local checkout path:** `C:\Users\koosh\pheno-harness` (contains `a38a6fa` commit + untracked adapter/pillar/mentor/harbor work)
 - **Post-restore push:** `cd C:\Users\koosh\pheno-harness && git push --force origin main` (restored repos accept pushes again)
@@ -148,7 +148,7 @@ The test infrastructure cannot absorb into a single repo — it spanned multiple
 
 | Field | Value |
 |---|---|
-| Repo | KooshaPari/pheno-harness |
+| Repo | <REDACTED>/pheno-harness |
 | Status | archived (2026-06-24) |
 | Subdomain | eval/bench |
 | Visibility | public |
@@ -157,7 +157,7 @@ The test infrastructure cannot absorb into a single repo — it spanned multiple
 | Pillars earned (P1-P7) | P1, P2, P3, P4, P5, P6, P7 |
 | Pillars earned (SOTA P20-P25) | P20 (cross-repo adapter) |
 | Scorecard entry | findings/2026-06-24-eval-bench-qa-v2.json |
-| Restore command | gh repo restore KooshaPari/pheno-harness |
+| Restore command | gh repo restore <REDACTED>/pheno-harness |
 | Fork path | **BLOCKED**: archived repos cannot be forked on GitHub |
 | Stranded commit | `a38a6fa` — feat(eval): cross-repo adapter consumer |
 
@@ -177,7 +177,7 @@ The test infrastructure cannot absorb into a single repo — it spanned multiple
 
 ## Source Inventory Summary
 
-Single source — `KooshaPari/pheno-harness` on GitHub, archived. Local checkout at `C:\Users\koosh\pheno-harness` has 1 commit (`a38a6fa`) and 4 untracked directories that are stranded.
+Single source — `<REDACTED>/pheno-harness` on GitHub, archived. Local checkout at `C:\Users\koosh\pheno-harness` has 1 commit (`a38a6fa`) and 4 untracked directories that are stranded.
 
 ## Target Parity Summary
 

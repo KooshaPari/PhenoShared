@@ -90,13 +90,13 @@ These specs accurately reflect their in-progress state with no completion claim 
 
 - `codeprojects-archive-manifest`
 - `feature-specification-template-platform-completion`
-- `kooshapari-stale-repo-triage`
+- `<REDACTED>-stale-repo-triage`
 - `phenosdk-decompose-core`
 - `phenosdk-decompose-mcp`
 - `phenosdk-fix-notimplemented`
 - `phenosdk-sanitize-atoms`
 - `phenosdk-wave-a-contracts`
-- `portfolio-audit-kooshapari-2026`
+- `portfolio-audit-<REDACTED>-2026`
 
 ### Kitty Specs With Only spec.md (no plan, no tasks, no impl)
 

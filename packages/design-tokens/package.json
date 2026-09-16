@@ -1,5 +1,5 @@
 {
-  "name": "@kooshapari/phenotype-design-tokens",
+  "name": "@<REDACTED>/phenotype-design-tokens",
   "version": "0.1.0",
   "publishConfig": {
     "access": "public"
@@ -8,7 +8,7 @@
   "type": "module",
   "repository": {
     "type": "git",
-    "url": "https://github.com/KooshaPari/phenoDesign",
+    "url": "https://github.com/<REDACTED>/phenoDesign",
     "directory": "packages/design-tokens"
   },
   "exports": {

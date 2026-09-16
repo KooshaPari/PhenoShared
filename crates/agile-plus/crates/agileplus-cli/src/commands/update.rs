@@ -2,7 +2,7 @@
 //! `agileplus update` — self-update mechanism.
 //!
 //! Checks for new releases on GitHub and performs binary updates.
-//! Uses the GitHub Releases API for `KooshaPari/AgilePlus`.
+//! Uses the GitHub Releases API for `<REDACTED>/AgilePlus`.
 
 use std::path::PathBuf;
 
@@ -12,7 +12,7 @@ use serde::Deserialize;
 
 // ── GitHub API types ─────────────────────────────────────────────────────────
 
-const GH_REPO: &str = "KooshaPari/AgilePlus";
+const GH_REPO: &str = "<REDACTED>/AgilePlus";
 const GH_API_BASE: &str = "https://api.github.com";
 
 #[derive(Debug, Deserialize)]

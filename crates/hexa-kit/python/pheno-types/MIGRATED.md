@@ -2,7 +2,7 @@
 
 **Date:** 2026-06-16  
 **Disposition step:** HexaKit DISPOSITION #4 — `python/pheno-types` stub redirect  
-**Canonical repo:** https://github.com/KooshaPari/phenotype-types
+**Canonical repo:** https://github.com/<REDACTED>/phenotype-types
 
 ## What changed
 

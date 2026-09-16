@@ -5,7 +5,7 @@ concurrency:
 
 
 # Thin caller — delegates to the shared reusable workflow in phenoShared.
-# See KooshaPari/phenoShared#85 / audit #182 for rationale (14-repo dedup).
+# See <REDACTED>/phenoShared#85 / audit #182 for rationale (14-repo dedup).
 
 on:
   push:
@@ -19,7 +19,7 @@ permissions:
 
 jobs:
   legacy-tooling-scan:
-    uses: KooshaPari/phenoShared/.github/workflows/legacy-tooling-gate.yml@95d94d5d77015368ee802130bf4feaae0b3566db
+    uses: <REDACTED>/phenoShared/.github/workflows/legacy-tooling-gate.yml@95d94d5d77015368ee802130bf4feaae0b3566db
     permissions:
       contents: read
       security-events: write

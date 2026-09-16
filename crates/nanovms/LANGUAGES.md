@@ -8,7 +8,7 @@
 | **Title** | Language Selection Policy - Unified NVMS Stack |
 | **Created** | 2026-04-06 |
 | **Status** | approved |
-| **Scope** | KooshaPari/nvms, PhenoCompose, all Phenotype polyglot infra |
+| **Scope** | <REDACTED>/nvms, PhenoCompose, all Phenotype polyglot infra |
 
 ---
 

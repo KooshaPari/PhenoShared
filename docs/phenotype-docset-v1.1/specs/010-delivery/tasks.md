@@ -30,7 +30,7 @@
 - **WP-S04** — PhenoGfx capability/consumer contract; owner PhenoGfx pooled owner; prerequisites WP-G01, WP-G02; unclaimed.
 - **WP-S05** — PhenoRegistry capability/consumer contract; owner PhenoRegistry pooled owner; prerequisites WP-G01, WP-G02; unclaimed.
 - **WP-S06** — PhenoDesign capability/consumer contract; owner PhenoDesign pooled owner; prerequisites WP-G01, WP-G02; unclaimed.
-- **WP-S07** — KooshaPari capability/consumer contract; owner KooshaPari pooled owner; prerequisites WP-G01, WP-G02; unclaimed.
+- **WP-S07** — <REDACTED> capability/consumer contract; owner <REDACTED> pooled owner; prerequisites WP-G01, WP-G02; unclaimed.
 - **WP-S08** — PhenoApps capability/consumer contract; owner PhenoApps pooled owner; prerequisites WP-G01, WP-G02; unclaimed.
 - **WP-S09** — Agentora-capability capability/consumer contract; owner Agentora-capability pooled owner; prerequisites WP-G01, WP-G02; unclaimed.
 

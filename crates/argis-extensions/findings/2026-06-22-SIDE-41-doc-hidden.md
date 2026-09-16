@@ -29,7 +29,7 @@
 
 ## `pheno-errors` (clean)
 
-`/Users/kooshapari/CodeProjects/Phenotype/repos/pheno-errors/src/lib.rs`
+`/Users/<REDACTED>/CodeProjects/Phenotype/repos/pheno-errors/src/lib.rs`
 
 Re-exports `thiserror` and `anyhow`; defines zero new `pub` items. No leaks.
 
@@ -37,7 +37,7 @@ Re-exports `thiserror` and `anyhow`; defines zero new `pub` items. No leaks.
 
 ## `pheno-flags` (clean)
 
-`/Users/kooshapari/CodeProjects/Phenotype/repos/pheno-flags/src/lib.rs`
+`/Users/<REDACTED>/CodeProjects/Phenotype/repos/pheno-flags/src/lib.rs`
 
 Single `pub trait Flags` plus a couple of impls. No leaked internals.
 
@@ -45,7 +45,7 @@ Single `pub trait Flags` plus a couple of impls. No leaked internals.
 
 ## `pheno-context` (1 leak, P3)
 
-`/Users/kooshapari/CodeProjects/Phenotype/repos/pheno-context/src/lib.rs`
+`/Users/<REDACTED>/CodeProjects/Phenotype/repos/pheno-context/src/lib.rs`
 
 | Item | Location | Issue |
 |---|---|---|
@@ -57,7 +57,7 @@ Single `pub trait Flags` plus a couple of impls. No leaked internals.
 
 ## `pheno-cli-base` (clean)
 
-`/Users/kooshapari/CodeProjects/Phenotype/repos/pheno-cli-base/src/lib.rs`
+`/Users/<REDACTED>/CodeProjects/Phenotype/repos/pheno-cli-base/src/lib.rs`
 
 All `pub` items are intentional: `pub use` re-exports, `pub trait ConfigArg`, `pub fn init_tracing`, `pub enum Verbosity`. No leaks.
 
@@ -113,7 +113,7 @@ The worst offender. `pub` items include both intended adapters and internal pars
 
 ## `pheno-config` (0 leaks)
 
-`/Users/kooshapari/CodeProjects/Phenotype/repos/pheno-config/src/lib.rs`, `cascade.rs`, `secrets.rs`, `hot_reload.rs`
+`/Users/<REDACTED>/CodeProjects/Phenotype/repos/pheno-config/src/lib.rs`, `cascade.rs`, `secrets.rs`, `hot_reload.rs`
 
 All public items are intentional. Internal helpers (`cascade::merge_layer`, `secrets::redact`, `hot_reload::reload_from_disk`) are properly `fn` (private) or `pub(crate) fn`. No `#[doc(hidden)]` is needed.
 
@@ -123,7 +123,7 @@ All public items are intentional. Internal helpers (`cascade::merge_layer`, `sec
 
 ## `pheno-events` (0 leaks)
 
-`/Users/kooshapari/CodeProjects/Phenotype/repos/pheno-events/src/lib.rs`, `core/mod.rs`
+`/Users/<REDACTED>/CodeProjects/Phenotype/repos/pheno-events/src/lib.rs`, `core/mod.rs`
 
 All public items are intentional: `pub use core::*` re-exports the `EventBus`, `Event`, `EventSink` types. No internal helpers exposed.
 
@@ -131,7 +131,7 @@ All public items are intentional: `pub use core::*` re-exports the `EventBus`, `
 
 ## `pheno-chaos` (0 leaks)
 
-`/Users/kooshapari/CodeProjects/Phenotype/repos/pheno-chaos/crates/pheno-chaos/src/lib.rs`, `runtime.rs`, `connection.rs`, `fault.rs`, `network.rs`
+`/Users/<REDACTED>/CodeProjects/Phenotype/repos/pheno-chaos/crates/pheno-chaos/src/lib.rs`, `runtime.rs`, `connection.rs`, `fault.rs`, `network.rs`
 
 All public items are intentional: `pub mod`, `pub fn chaos_*` (test entrypoints), `pub struct NetworkFault`, `pub enum FaultKind`. No internal helpers exposed. The `chaos_*` test functions are intentionally `pub` so they can be called from the test target.
 

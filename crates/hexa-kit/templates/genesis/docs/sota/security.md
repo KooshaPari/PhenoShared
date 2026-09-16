@@ -21,7 +21,7 @@
 
 ## Controls (chosen)
 
-- [review.md](../../../review.md) org blocklist (non-`KooshaPari/*` remotes, force-push, amend-without-request)
+- [review.md](../../../review.md) org blocklist (non-`<REDACTED>/*` remotes, force-push, amend-without-request)
 - `trufflehog` / secret scan in template `.github/workflows/`
 - Charter blocks out-of-scope crates or services without review
 - {{ADDITIONAL_CONTROLS — e.g. cargo-deny, CodeQL}}

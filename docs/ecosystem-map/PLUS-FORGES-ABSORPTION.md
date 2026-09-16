@@ -4,7 +4,7 @@
 
 | Field | Value |
 | --- | --- |
-| Source repo | KooshaPari/PlusForges |
+| Source repo | <REDACTED>/PlusForges |
 | Source size | 76 LOC (README-only) |
 | Source branches | 1 |
 | Absorbed on | 2026-07-17 |
@@ -12,7 +12,7 @@
 
 ## Why absorbed
 
-PlusForges is a README-only meta-repo cataloging every `KooshaPari/*` "Plus"
+PlusForges is a README-only meta-repo cataloging every `<REDACTED>/*` "Plus"
 fork of router/agent/gateway upstreams (cliproxyapi++, context-mode++,
 OmniRoute, agentapi++, substrate, phenoAI, PhenoFastMCP, PhenoMCPServers,
 phenotype-router-spec, substrate-adapters-bundle). It is a curated discovery

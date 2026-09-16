@@ -5,10 +5,10 @@ metadata:
   title: PhenoSpecs
   description: Unified specification registry for the Phenotype ecosystem
   annotations:
-    github.com/project-slug: KooshaPari/PhenoSpecs
+    github.com/project-slug: <REDACTED>/PhenoSpecs
     backstage.io/techdocs-ref: dir:./
-    kooshapari.com/registry-type: spec
-    kooshapari.com/language: markdown
+    <REDACTED>.com/registry-type: spec
+    <REDACTED>.com/language: markdown
   tags:
     - specs
     - requirements

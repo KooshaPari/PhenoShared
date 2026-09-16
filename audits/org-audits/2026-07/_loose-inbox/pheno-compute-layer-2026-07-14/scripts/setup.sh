@@ -67,10 +67,10 @@ if grep -q "^Host desk" "$SSH_CONFIG" 2>/dev/null; then
 else
     cat >> "$SSH_CONFIG" << 'EOF'
 
-# pheno-compute-layer: kooshapari-desk (3090 Ti)
-Host desk kooshapari-desk
-    HostName kooshapari-desk.tail2b570.ts.net
-    User kooshapari
+# pheno-compute-layer: <REDACTED>-desk (3090 Ti)
+Host desk <REDACTED>-desk
+    HostName <REDACTED>-desk.tail2b570.ts.net
+    User <REDACTED>
     ForwardAgent yes
     IdentityFile ~/.ssh/id-git
     AddKeysToAgent yes

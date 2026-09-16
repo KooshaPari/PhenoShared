@@ -4,8 +4,8 @@
 
 | Field | Value |
 |-------|-------|
-| Source repo | `KooshaPari/phenoResearchEngine` |
-| Target repo | `KooshaPari/pheno` |
+| Source repo | `<REDACTED>/phenoResearchEngine` |
+| Target repo | `<REDACTED>/pheno` |
 | Target path | `phenotype-research-engine/` |
 | Absorbed date | 2026-07-17 |
 | Absorbed by | forge agent (batch absorption) |

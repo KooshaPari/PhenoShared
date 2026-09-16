@@ -51,7 +51,7 @@ gh release view v0.1.0 --json assets --jq '.assets[].name'
 gh release download v0.1.0 --pattern 'phenorepos.*'
 
 # Preferred: use the GitHub Attestations API (verifies sigstore issuer)
-gh attestation download phenorepos.tar.gz --repo KooshaPari/phenotype-apps
+gh attestation download phenorepos.tar.gz --repo <REDACTED>/phenotype-apps
 ```
 
 ## Verification commands
@@ -61,19 +61,19 @@ gh attestation download phenorepos.tar.gz --repo KooshaPari/phenotype-apps
 cosign verify-blob \
   --signature=.sigstore/<commit-sha>.sig \
   --certificate=.sigstore/<commit-sha>.pem \
-  --certificate-identity-regexp='https://github.com/KooshaPari/.*@refs/heads/main' \
+  --certificate-identity-regexp='https://github.com/<REDACTED>/.*@refs/heads/main' \
   --certificate-oidc-issuer='https://token.actions.githubusercontent.com' \
   <commit-sha>
 
 # CI / third-party verify (preferred path, v2.0.0+)
 slsa-verifier verify-artifact \
   --provenance-path  phenorepos.intoto.jsonl \
-  --source-uri       github.com/KooshaPari/phenotype-apps \
+  --source-uri       github.com/<REDACTED>/phenotype-apps \
   --source-tag       v0.1.0 \
   phenorepos.tar.gz
 
 # GitHub-native attestation verify (no local tooling required)
-gh attestation verify phenorepos.tar.gz --repo KooshaPari/phenotype-apps
+gh attestation verify phenorepos.tar.gz --repo <REDACTED>/phenotype-apps
 ```
 
 ## Adoption status (L52 score per repo)

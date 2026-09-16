@@ -4,7 +4,7 @@
 
 - **Name**: phenotype-vessel
 - **Description**: Rust container utilities library (Docker, Podman, containerd)
-- **Location**: `/Users/kooshapari/CodeProjects/Phenotype/repos/phenotype-vessel`
+- **Location**: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/phenotype-vessel`
 - **Language Stack**: Rust (edition 2021)
 - **Type**: Library/Infrastructure
 

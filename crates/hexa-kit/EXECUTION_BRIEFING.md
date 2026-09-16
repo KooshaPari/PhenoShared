@@ -269,7 +269,7 @@ echo "✅ Checkpoint validation complete!"
 ## Repository State (Snapshot 2026-03-31)
 
 ```
-Working directory:  /Users/kooshapari/CodeProjects/Phenotype/repos
+Working directory:  /Users/<REDACTED>/CodeProjects/Phenotype/repos
 Current branch:     main
 Last commit:        a67fff87b (2026-03-30 18:42)
 Synced with:        origin/main

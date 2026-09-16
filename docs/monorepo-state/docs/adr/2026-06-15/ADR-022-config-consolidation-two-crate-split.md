@@ -40,7 +40,7 @@ The cross-language contract (common field names: `url`, `port`, `db_path`, `log_
    - 12-factor cascade via `settings_customise_sources` (init > env > .env > defaults).
    - Tests: 14 in `tests/test_v020_parity.py` (v0.1.0 regression + v0.2.0 parity + cache semantics).
 4. **DELETE**: `pheno/crates/phenotype-config-core`, `pheno/crates/phenotype-config-loader`, `pheno/libs/phenotype-config-core`, `crates/phenotype-config` (Settly fork). All have `CANONICAL.md` / `ARCHIVED.md` redirects; zero consumers found.
-5. **DEPRECATE** (not delete) `pheno-config` Settly fork via GitHub `archived` flag (blocked on `Dmouse92 ≠ KooshaPari` auth gap).
+5. **DEPRECATE** (not delete) `pheno-config` Settly fork via GitHub `archived` flag (blocked on `Dmouse92 ≠ <REDACTED>` auth gap).
 6. **PUBLISH** `pheno-config` to crates.io as the canonical Rust service-config crate.
 
 ## Consequences

@@ -142,9 +142,9 @@ async def oauth_session(
         """
         import os
 
-        email = os.getenv("ZEN_TEST_EMAIL", "kooshapari@gmail.com")
+        email = os.getenv("ZEN_TEST_EMAIL", "<REDACTED>@gmail.com")
         password = os.getenv("ZEN_TEST_PASSWORD")
-        endpoint_url = endpoint or os.getenv("ZEN_MCP_ENDPOINT", "https://zen.kooshapari.com/mcp")
+        endpoint_url = endpoint or os.getenv("ZEN_MCP_ENDPOINT", "https://zen.<REDACTED>.com/mcp")
 
         if not password:
             raise RuntimeError("ZEN_TEST_PASSWORD required for OAuth")
@@ -178,9 +178,9 @@ async def oauth_session(
 
         import os
 
-        email = os.getenv("ZEN_TEST_EMAIL", "kooshapari@gmail.com")
+        email = os.getenv("ZEN_TEST_EMAIL", "<REDACTED>@gmail.com")
         password = os.getenv("ZEN_TEST_PASSWORD")
-        endpoint_url = endpoint or os.getenv("ZEN_MCP_ENDPOINT", "https://zen.kooshapari.com/mcp")
+        endpoint_url = endpoint or os.getenv("ZEN_MCP_ENDPOINT", "https://zen.<REDACTED>.com/mcp")
 
         oauth_adapter = PlaywrightOAuthAdapter(email, password)
         client, auth_task = oauth_adapter.create_oauth_client(endpoint_url)

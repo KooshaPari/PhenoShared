@@ -24,7 +24,7 @@
 
 ## 1. Executive Summary
 
-**v7 is the post-wrap-up engineering backlog for 2026-06-17.** It converts the 5 WIP branches pushed during the wrap-up session (`work-dag-2026-06-17-wrapup.md` T7, T11) into reviewed PRs; recovers the 4 stranded worktrees flagged in the wrap-up audit (P41, P43); delivers the 9-domain, 71-pillar industry-standard audit framework ratified in ADR-024; bumps the worklog schema from v2.0 to v2.1 (ADR-025, due 2026-06-22) adding the `device:` field per ADR-023's device-fit gate; reclassifies the `HwLedger` app-level repo per ADR-023 Rule 3 (app substrate placement); rebases the cleaned branch onto main and pushes; maintains the work DAG and findings live; and executes the **Dmouse92 → KooshaPari migration** (Track 8, L5-104) per user directive 2026-06-17 — substrate-absorbing 20 Dmouse92 Phenotype repos into 6 KooshaPari substrate PRs. The plan is owned by the **forge orchestrator** with **parallel `forge` subagent dispatch** (proven working 2026-06-15 18:40 PDT per AGENTS.md § "Key Commands") for the PR-review, pillar-probe, and migration tracks. Total scope: **8 tracks, 38 PRs (operationally meaningful; 40 in the matrix per § 5), ~2 hours wall clock with 4-way parallelism, ~5 hours sequential.** It supersedes v6 (5 tracks, 21 PRs) which is closed.
+**v7 is the post-wrap-up engineering backlog for 2026-06-17.** It converts the 5 WIP branches pushed during the wrap-up session (`work-dag-2026-06-17-wrapup.md` T7, T11) into reviewed PRs; recovers the 4 stranded worktrees flagged in the wrap-up audit (P41, P43); delivers the 9-domain, 71-pillar industry-standard audit framework ratified in ADR-024; bumps the worklog schema from v2.0 to v2.1 (ADR-025, due 2026-06-22) adding the `device:` field per ADR-023's device-fit gate; reclassifies the `HwLedger` app-level repo per ADR-023 Rule 3 (app substrate placement); rebases the cleaned branch onto main and pushes; maintains the work DAG and findings live; and executes the **Dmouse92 → <REDACTED> migration** (Track 8, L5-104) per user directive 2026-06-17 — substrate-absorbing 20 Dmouse92 Phenotype repos into 6 <REDACTED> substrate PRs. The plan is owned by the **forge orchestrator** with **parallel `forge` subagent dispatch** (proven working 2026-06-15 18:40 PDT per AGENTS.md § "Key Commands") for the PR-review, pillar-probe, and migration tracks. Total scope: **8 tracks, 38 PRs (operationally meaningful; 40 in the matrix per § 5), ~2 hours wall clock with 4-way parallelism, ~5 hours sequential.** It supersedes v6 (5 tracks, 21 PRs) which is closed.
 
 ---
 
@@ -39,10 +39,10 @@
 | **T5** | HwLedger Reclassification | P0 | Execute ADR-023 Rule 3 for HwLedger: reclassify app → substrate (or PAUSED+archival), move underlying libs to canonical substrate | 1 ADR-023 update PR, 1 new substrate PR, 1 HwLedger archival PR, 1 migration plan PR | 4 | ~30 min | orchestrator + 1 parallel forge subagent (substrate extract) | T3 done (L25 monorepo decision informs this) |
 | **T6** | Rebase + Push | P0 | Rebase cleaned branch onto main, run pre-push checks, push to origin | 1 rebase + 1 push (no PR; 0 PR count) | 0 | ~5 min | orchestrator | T1-T5 all done |
 | **T7** | Work DAG Maintenance | ongoing | Keep `findings/71-pillar-2026-06-17*.md` and `plans/2026-06-17-v7-dag-stable.md` live; update on any track-state change | 0 PRs (live doc maintenance) | 0 | ongoing | orchestrator | none (parallel to all) |
-| **T8** | Dmouse92 → KooshaPari Migration | P0 | Substrate-absorption of 20 Dmouse92 Phenotype repos: 4-cluster analysis → 6 substantive code PRs → archive 18 Dmouse92 repos | 6 PRs (pheno-mcp-router#1-3, phenotype-config#1, phenotype-ops#2, dispatch-mcp#1) | 6 | ~30 min parallel (4 subagents) | orchestrator + 4 parallel forge subagents | none (independent) |
+| **T8** | Dmouse92 → <REDACTED> Migration | P0 | Substrate-absorption of 20 Dmouse92 Phenotype repos: 4-cluster analysis → 6 substantive code PRs → archive 18 Dmouse92 repos | 6 PRs (pheno-mcp-router#1-3, phenotype-config#1, phenotype-ops#2, dispatch-mcp#1) | 6 | ~30 min parallel (4 subagents) | orchestrator + 4 parallel forge subagents | none (independent) |
 | | | | | **Total** | **38** | **~2h parallel / ~5h sequential** | | |
 
-**Track 7** is ongoing maintenance, not a discrete deliverable. Tracks T1-T6 are core work; **Track 8 is the new Dmouse92 → KooshaPari migration track** added 2026-06-17 20:55 PDT per user directive. Total: 8 tracks, 38 PRs.
+**Track 7** is ongoing maintenance, not a discrete deliverable. Tracks T1-T6 are core work; **Track 8 is the new Dmouse92 → <REDACTED> migration track** added 2026-06-17 20:55 PDT per user directive. Total: 8 tracks, 38 PRs.
 
 **Parallelism summary:** Tracks T1, T2, T3, T4, T7, **T8** can all run in parallel from t=0. T5 depends on T3 (L25 monorepo decision from C2 of `work-dag-2026-06-17-v7-extended.md`). T6 is the final serial step that requires all of T1-T5 to be done. **T8 is independent and was added post-hoc on 2026-06-17 per user directive; it has already been executed in parallel with the other tracks and is recorded as DONE.**
 
@@ -60,7 +60,7 @@
 | **T1.4** | Refresh governance docs: AGENTS.md (already updated 2026-06-17 12:00 PDT; verify), STATUS.md (refresh with W5 batch + 4 stranded worktree status), SSOT.md (add HOOKS_SKIP=1 env-var spec per P47) | P0 | orchestrator | T1.3 | `git diff main -- AGENTS.md STATUS.md SSOT.md` shows the refresh; `grep -c HOOKS_SKIP SSOT.md` returns ≥ 1 |
 | **T1.5** | Open PR for governance-doc refresh on `repos` meta (or `phenotype-org-audits` per ADR-028 staging-repo decision) | P0 | orchestrator | T1.4 | PR opened with title `chore(governance): refresh AGENTS.md + STATUS.md + SSOT.md (v7 triage)`; CI green |
 | **T1.6** | Open PR for `pheno-*` meta-bundle on each of 5 repos (1 PR per repo) | P0 | orchestrator | T1.3 | 5 PRs opened, one per repo, all with title prefix `chore(meta): add AGENTS.md + llms.txt + WORKLOG.md + CHANGELOG.md + LICENSE-MIT` |
-| **T1.7** | Open PR for HOOKS_SKIP=1 env-var spec in `pheno-ci-templates` | P0 | orchestrator | T1.4 | 1 PR opened in `KooshaPari/pheno-ci-templates` documenting `HOOKS_SKIP=1` and `SKIP=pre-push,pre-commit` env vars; links to AGENTS.md |
+| **T1.7** | Open PR for HOOKS_SKIP=1 env-var spec in `pheno-ci-templates` | P0 | orchestrator | T1.4 | 1 PR opened in `<REDACTED>/pheno-ci-templates` documenting `HOOKS_SKIP=1` and `SKIP=pre-push,pre-commit` env vars; links to AGENTS.md |
 
 **Track 1 PR count: 3** (T1.5 + T1.6 [5 PRs across 5 repos] + T1.7 = 7; counting T1.6 as 5 separate PRs, total = 7. The PR matrix § 5 reports this as 7. Tracking summary at § 2 above rounds to 3 for the headline by counting T1.6 as one batch operation. The authoritative PR matrix is § 5.)
 
@@ -70,15 +70,15 @@ The 5 WIP branches from `work-dag-2026-06-17-wrapup.md` T7/T11 plus the 4 strand
 
 | Task | Branch / Strand | Repo | Subagent | P-level | Dependencies | Acceptance criteria |
 |---|---|---|---|---|---|---|
-| **T2.1** | `wip/stash-2026-06-14-spdx-license-headers-2026-06-17` | `KooshaPari/AgilePlus` | forge-1 | P1 | T1.1 (stash dropped) | PR #129 opened: "chore(license): add SPDX-License-Identifier to 541 source files"; `git diff main..HEAD --stat` shows 541 files; no semantic change; CI green |
-| **T2.2** | `wip/stash-2026-05-02-pheno-cli-adapter-refactor-2026-06-17` | `KooshaPari/pheno` | forge-2 | P1 | T1.1 | PR #130 opened: "chore(pheno-cli): refactor GetAdapter signature and add error variants"; `cargo test --workspace` green; `go test ./...` green |
-| **T2.3** | `wip/migrate-from-dmouse-chore-adr-012-2026-06-17` | `KooshaPari/pheno` | forge-3 | P1 | T1.1 | PR #131 opened: "chore(pheno): import adr-012 from Dmouse92 fork (historical preservation)"; local `chore/adr-012` is a strict superset (Dmouse92 tip is ancestor); CI green |
-| **T2.4** | `wip/migrate-from-dmouse-w2-1-2026-06-17` | `KooshaPari/dispatch-mcp` | forge-4 | P1 | T1.1 | PR #132 opened: "feat(dispatch-mcp): W2-1 protocol compliance (imported from Dmouse92 fork)"; `pytest tests/test_protocol_compliance.py` green; review confirms SHA matches Dmouse92 tip `a1aaef2` |
-| **T2.5** | `wip/preserve-agileplus-brand-rename-20260605` | `KooshaPari/AgilePlus` | orchestrator | P1 | T1.1 | Decision: leave as-is (pre-existing, owner-decides per `work-dag-2026-06-17-v7-extended.md` A5); document in PR #133 description with `do-not-merge` label; branch is **not** in v7 scope but is tracked in the PR matrix for completeness |
-| **T2.6** | **Strand B1**: monorepo `chore/w5-adrs-sota` 3 commits (d83900c4a7 etc.) | `KooshaPari/phenotype-org-audits` | orchestrator | P1 | T5 substrate placement (per ADR-023) decided | PR opened: "docs(phenotype-org-audits): cherry-pick monorepo w5-adrs-sota commits (d83900c4a7)"; 3 commits squashed to 1; landing path per ADR-028 staging repo |
-| **T2.7** | **Strand B2**: l4-80-wt worklog commit `69fe8cddee` | `KooshaPari/phenotype-otel` | orchestrator | P1 | none | PR opened: "docs(phenotype-otel): re-commit L4-080 worklog (recovered from /private/tmp/l4-80-wt)"; content matches `69fe8cddee`; pushed to `phenotype-otel/docs/worklog-L4-080.md` |
-| **T2.8** | **Strand B3**: l4-68 pheno-context crate (286 lines) | `KooshaPari/phenoShared` (per ADR-023 default) | orchestrator | P1 | T5 substrate decision (L10 placement) | PR opened: "feat(phenoShared): add pheno-context crate (recovered from .worktrees/l4-68-pheno-context-2026-06-11)"; 286 lines; `cargo build -p pheno-context` green |
-| **T2.9** | **Strand B4**: audit-30pillar (484 commits) | `KooshaPari/phenotype-org-audits` | orchestrator | P1 | T2.6 (both target same repo; batch) | PR opened: "chore(phenotype-org-audits): import 30-pillar fleet audit (484 commits, 30 files)"; 30 files at `audit-30-pillar-L<N>.md`; squashed to 1 commit |
+| **T2.1** | `wip/stash-2026-06-14-spdx-license-headers-2026-06-17` | `<REDACTED>/AgilePlus` | forge-1 | P1 | T1.1 (stash dropped) | PR #129 opened: "chore(license): add SPDX-License-Identifier to 541 source files"; `git diff main..HEAD --stat` shows 541 files; no semantic change; CI green |
+| **T2.2** | `wip/stash-2026-05-02-pheno-cli-adapter-refactor-2026-06-17` | `<REDACTED>/pheno` | forge-2 | P1 | T1.1 | PR #130 opened: "chore(pheno-cli): refactor GetAdapter signature and add error variants"; `cargo test --workspace` green; `go test ./...` green |
+| **T2.3** | `wip/migrate-from-dmouse-chore-adr-012-2026-06-17` | `<REDACTED>/pheno` | forge-3 | P1 | T1.1 | PR #131 opened: "chore(pheno): import adr-012 from Dmouse92 fork (historical preservation)"; local `chore/adr-012` is a strict superset (Dmouse92 tip is ancestor); CI green |
+| **T2.4** | `wip/migrate-from-dmouse-w2-1-2026-06-17` | `<REDACTED>/dispatch-mcp` | forge-4 | P1 | T1.1 | PR #132 opened: "feat(dispatch-mcp): W2-1 protocol compliance (imported from Dmouse92 fork)"; `pytest tests/test_protocol_compliance.py` green; review confirms SHA matches Dmouse92 tip `a1aaef2` |
+| **T2.5** | `wip/preserve-agileplus-brand-rename-20260605` | `<REDACTED>/AgilePlus` | orchestrator | P1 | T1.1 | Decision: leave as-is (pre-existing, owner-decides per `work-dag-2026-06-17-v7-extended.md` A5); document in PR #133 description with `do-not-merge` label; branch is **not** in v7 scope but is tracked in the PR matrix for completeness |
+| **T2.6** | **Strand B1**: monorepo `chore/w5-adrs-sota` 3 commits (d83900c4a7 etc.) | `<REDACTED>/phenotype-org-audits` | orchestrator | P1 | T5 substrate placement (per ADR-023) decided | PR opened: "docs(phenotype-org-audits): cherry-pick monorepo w5-adrs-sota commits (d83900c4a7)"; 3 commits squashed to 1; landing path per ADR-028 staging repo |
+| **T2.7** | **Strand B2**: l4-80-wt worklog commit `69fe8cddee` | `<REDACTED>/phenotype-otel` | orchestrator | P1 | none | PR opened: "docs(phenotype-otel): re-commit L4-080 worklog (recovered from /private/tmp/l4-80-wt)"; content matches `69fe8cddee`; pushed to `phenotype-otel/docs/worklog-L4-080.md` |
+| **T2.8** | **Strand B3**: l4-68 pheno-context crate (286 lines) | `<REDACTED>/phenoShared` (per ADR-023 default) | orchestrator | P1 | T5 substrate decision (L10 placement) | PR opened: "feat(phenoShared): add pheno-context crate (recovered from .worktrees/l4-68-pheno-context-2026-06-11)"; 286 lines; `cargo build -p pheno-context` green |
+| **T2.9** | **Strand B4**: audit-30pillar (484 commits) | `<REDACTED>/phenotype-org-audits` | orchestrator | P1 | T2.6 (both target same repo; batch) | PR opened: "chore(phenotype-org-audits): import 30-pillar fleet audit (484 commits, 30 files)"; 30 files at `audit-30-pillar-L<N>.md`; squashed to 1 commit |
 
 **Track 2 PR count: 9** (5 WIP landing + 4 strand recovery)
 
@@ -114,7 +114,7 @@ ADR-025 bumps the worklog schema from v2.0 (10 columns per ADR-015) to v2.1 (11 
 | **T4.1** | Update `pheno-worklog-schema` Python package: add `device: Literal["macbook", "heavy-runner", "ci"]` field to the schema dataclass; bump version to 0.3.0 | P0 | orchestrator | ADR-025 (T3.7) | `pip install -e pheno-worklog-schema` exits 0; `python -c "from pheno_worklog_schema import Worklog; w = Worklog(...device='macbook')"` exits 0; `pyproject.toml` version = 0.3.0 |
 | **T4.2** | Update `pheno-worklog-schema` validator: enforce v2.1 (reject worklogs missing `device:` field); warn on legacy v2.0 worklogs | P0 | orchestrator | T4.1 | `pheno-worklog-schema validate worklog.md` returns 0 on v2.1 worklog, 2 (warn) on v2.0; `pheno-worklog-schema migrate worklog.md` produces v2.1 |
 | **T4.3** | Migrate 2 exemplar worklogs as reference: `pheno/worklogs/L5-101-app-governance-2026-06-15.json` and `pheno/worklogs/L5-102-71-pillar-audit-2026-06-17.json` (already in v2.0, add `device: macbook`) | P0 | orchestrator | T4.2 | Both files have `device: macbook` field; `pheno-worklog-schema validate` returns 0 on both |
-| **T4.4** | Open PR in `KooshaPari/pheno-worklog-schema`: "feat(worklog-schema): bump v2.0 → v2.1 (add device: field per ADR-025)"; reference ADR-025 in PR body | P0 | orchestrator | T4.1-T4.3 | PR opened; CI green (pytest); review confirms backward-compat migration path documented |
+| **T4.4** | Open PR in `<REDACTED>/pheno-worklog-schema`: "feat(worklog-schema): bump v2.0 → v2.1 (add device: field per ADR-025)"; reference ADR-025 in PR body | P0 | orchestrator | T4.1-T4.3 | PR opened; CI green (pytest); review confirms backward-compat migration path documented |
 
 **Track 4 PR count: 4** (T4.1-T4.4 are 1 PR — they all land together. Wait, re-count: T4.1 is the package change, T4.2 is the validator change, T4.3 is exemplar migration, T4.4 is the PR. T4.1-T4.3 are **commits in 1 PR** (T4.4). The PR matrix reports 1 PR for Track 4 plus 1 separate PR for the worklog v2.1 spec doc and 1 PR for the decision log. Total: 4 PRs — T4-PR1 (worklog-schema package), T4-PR2 (validator standalone, if split), T4-PR3 (exemplar migration in 2 separate repos, 2 PRs).
 
@@ -134,8 +134,8 @@ The 4-task reclassification sequence:
 |---|---|---|---|---|---|
 | **T5.1** | Author `docs/adr/2026-06-17/ADR-029-hwledger-reclassification.md` — formalize HwLedger disposition: PAUSED+archival (the L1 Architecture 0 + L2 Dev Loop 10 scores make substrate extraction uneconomical); document bucket change in AGENTS.md | P0 | orchestrator | T3.6 (ADR-024), T3.10 (ADR-028 monorepo decision) | ADR exists; AGENTS.md § "Active / Paused app-level repos" updated: HwLedger → PAUSED + `archived: true`; rationale cited (audit scores) |
 | **T5.2** | Substrate placement decision: confirm HwLedger has **no** reusable underlying capability worth extracting to a new `pheno-*-lib` / `phenotype-*-sdk` (per L1=0, L2=10, L7=25 audit scores — no public API surface, no tests, no source files in audit) | P0 | orchestrator | T5.1 | Decision doc: "no substrate extraction"; archival is the correct disposition |
-| **T5.3** | Archive `KooshaPari/HwLedger` (no `delete_repo` scope per P34, use `gh repo archive`); add a final README note pointing to ADR-029 for context | P0 | orchestrator + 1 forge subagent (subagent handles the multi-step repo edit) | T5.2 | `gh api repos/KooshaPari/HwLedger` → `"archived": true`; `README.md` has ADR-029 link; PR opened: "chore(HwLedger): archive repo (ADR-029)" |
-| **T5.4** | Open PR in `KooshaPari/phenotype-org-audits`: "docs(phenotype-org-audits): add HwLedger reclassification record"; the reclassification record is part of the audit (P52-style entry) so future audits see the disposition | P0 | orchestrator | T5.1-T5.3 | PR opened; record at `phenotype-org-audits/audits/hwledger-reclassification-2026-06-17.md`; index updated |
+| **T5.3** | Archive `<REDACTED>/HwLedger` (no `delete_repo` scope per P34, use `gh repo archive`); add a final README note pointing to ADR-029 for context | P0 | orchestrator + 1 forge subagent (subagent handles the multi-step repo edit) | T5.2 | `gh api repos/<REDACTED>/HwLedger` → `"archived": true`; `README.md` has ADR-029 link; PR opened: "chore(HwLedger): archive repo (ADR-029)" |
+| **T5.4** | Open PR in `<REDACTED>/phenotype-org-audits`: "docs(phenotype-org-audits): add HwLedger reclassification record"; the reclassification record is part of the audit (P52-style entry) so future audits see the disposition | P0 | orchestrator | T5.1-T5.3 | PR opened; record at `phenotype-org-audits/audits/hwledger-reclassification-2026-06-17.md`; index updated |
 
 **Track 5 PR count: 4** (ADR-029 + HwLedger archive PR + `phenotype-org-audits` reclassification record + AGENTS.md bucket-change PR — wait, AGENTS.md PR is part of T1.5, not separate. Re-count: T5.1 is 1 ADR (governance-doc PR), T5.3 is 1 HwLedger PR, T5.4 is 1 phenotype-org-audits PR, plus a decision doc PR for T5.2 = 4 PRs.)
 
@@ -168,22 +168,22 @@ The 4-task reclassification sequence:
 
 **Parallelism within Track 7:** All 6 sub-tasks are independent and can run at any time during v7.
 
-### 3.8 Track 8 — Dmouse92 → KooshaPari Migration (P0, DONE 2026-06-17 20:55 PDT, L5-104/ADR-029)
+### 3.8 Track 8 — Dmouse92 → <REDACTED> Migration (P0, DONE 2026-06-17 20:55 PDT, L5-104/ADR-029)
 
-**User directive (2026-06-17):** *"focus solely on the dmouse92 aspects of work — merge all over to kooshapari → then reconcile/absorb to proper repos. e.g. dispatch-mcp should be deleted as it needs to have all remaining work fully absorbed to substrate (The ver on kooshapari had this done yesterday, repeat for any dmouse additions worthwhile to migrate)."*
+**User directive (2026-06-17):** *"focus solely on the dmouse92 aspects of work — merge all over to <REDACTED> → then reconcile/absorb to proper repos. e.g. dispatch-mcp should be deleted as it needs to have all remaining work fully absorbed to substrate (The ver on <REDACTED> had this done yesterday, repeat for any dmouse additions worthwhile to migrate)."*
 
-**Approach:** Substrate-absorption (per ADR-013/022/023) — port the substrate-worthy content of each Dmouse92 repo to the canonical KooshaPari substrate, archive the Dmouse92 repo.
+**Approach:** Substrate-absorption (per ADR-013/022/023) — port the substrate-worthy content of each Dmouse92 repo to the canonical <REDACTED> substrate, archive the Dmouse92 repo.
 
 | Task | Description | P-level | Owner | Dependencies | Acceptance criteria |
 |---|---|---|---|---|---|
-| **T8.1** | Discovery: list all 26 Dmouse92 repos; cross-reference with KooshaPari to find 20 Phenotype-related | P0 | orchestrator | none | `gh repo list Dmouse92 --limit 200` returns 26; cross-ref matrix built |
+| **T8.1** | Discovery: list all 26 Dmouse92 repos; cross-reference with <REDACTED> to find 20 Phenotype-related | P0 | orchestrator | none | `gh repo list Dmouse92 --limit 200` returns 26; cross-ref matrix built |
 | **T8.2** | Per-cluster analysis: 4 parallel forge subagents (dispatch-mcp / pheno ADR-012 / 14 bulk / forgecode) | P0 | 4 forge subagents | T8.1 | 4 sub-plans written: dispatch-mcp (527 lines), pheno-ADR-012 (414 lines), bulk-rust-ts (999 lines), forgecode (305 lines) |
-| **T8.3** | Substrate publication: `pheno-mcp-router` (local-only) → `KooshaPari/pheno-mcp-router` (public) | P0 | subagent E | T8.2 | `gh api repos/KooshaPari/pheno-mcp-router` returns 200; default branch = `chore/l3-57-pheno-plugin-registry-2026-06-11` |
-| **T8.4** | Substrate ports: 6 modules (`tiers/cost/budget/quota/audit/cost_middleware.py`) → `pheno-mcp-router/src/pheno_mcp_router/` | P0 | subagent E | T8.3 | PR [pheno-mcp-router#1](https://github.com/KooshaPari/pheno-mcp-router/pull/1) opened; 187/187 tests pass |
-| **T8.5** | Substrate adapters: `LlamaAdapter` (LlmPort) + `OpenAICompatAdapter` (LlmPort) | P0 | subagent E | T8.3 | PR [pheno-mcp-router#2](https://github.com/KooshaPari/pheno-mcp-router/pull/2) + PR [#3](https://github.com/KooshaPari/pheno-mcp-router/pull/3) opened |
-| **T8.6** | Cherry-pick w1-1 deprecation doc to dispatch-mcp | P0 | subagent E | none | PR [dispatch-mcp#1](https://github.com/KooshaPari/dispatch-mcp/pull/1) opened; 1 file +22 |
-| **T8.7** | Port CANONICAL.md markers + SLSA doc to phenotype-config substrate | P0 | subagent F | none | PR [phenotype-config#1](https://github.com/KooshaPari/phenotype-config/pull/1) opened; 2 CANONICAL.md + docs/slsa.md |
-| **T8.8** | Port docker files to phenotype-ops (federated service per ADR-023) | P0 | subagent E | none | PR [phenotype-ops#2](https://github.com/KooshaPari/phenotype-ops/pull/2) opened; Dockerfile + compose + README |
+| **T8.3** | Substrate publication: `pheno-mcp-router` (local-only) → `<REDACTED>/pheno-mcp-router` (public) | P0 | subagent E | T8.2 | `gh api repos/<REDACTED>/pheno-mcp-router` returns 200; default branch = `chore/l3-57-pheno-plugin-registry-2026-06-11` |
+| **T8.4** | Substrate ports: 6 modules (`tiers/cost/budget/quota/audit/cost_middleware.py`) → `pheno-mcp-router/src/pheno_mcp_router/` | P0 | subagent E | T8.3 | PR [pheno-mcp-router#1](https://github.com/<REDACTED>/pheno-mcp-router/pull/1) opened; 187/187 tests pass |
+| **T8.5** | Substrate adapters: `LlamaAdapter` (LlmPort) + `OpenAICompatAdapter` (LlmPort) | P0 | subagent E | T8.3 | PR [pheno-mcp-router#2](https://github.com/<REDACTED>/pheno-mcp-router/pull/2) + PR [#3](https://github.com/<REDACTED>/pheno-mcp-router/pull/3) opened |
+| **T8.6** | Cherry-pick w1-1 deprecation doc to dispatch-mcp | P0 | subagent E | none | PR [dispatch-mcp#1](https://github.com/<REDACTED>/dispatch-mcp/pull/1) opened; 1 file +22 |
+| **T8.7** | Port CANONICAL.md markers + SLSA doc to phenotype-config substrate | P0 | subagent F | none | PR [phenotype-config#1](https://github.com/<REDACTED>/phenotype-config/pull/1) opened; 2 CANONICAL.md + docs/slsa.md |
+| **T8.8** | Port docker files to phenotype-ops (federated service per ADR-023) | P0 | subagent E | none | PR [phenotype-ops#2](https://github.com/<REDACTED>/phenotype-ops/pull/2) opened; Dockerfile + compose + README |
 | **T8.9** | Archive 18 Dmouse92 repos via Dmouse92 auth | P0 | orchestrator | T8.4-T8.8 | `gh auth switch --user Dmouse92`; `gh repo archive` for all 20 Phenotype-related Dmouse92 repos (2 already archived: PhenoProc, Nanovms on KP) |
 | **T8.10** | Update governance docs (AGENTS.md + STATUS.md + SSOT.md) with ADR-029 + migration section | P0 | orchestrator | T8.9 | All 3 docs updated; ADR count 28 → 29 |
 
@@ -191,9 +191,9 @@ The 4-task reclassification sequence:
 
 **Parallelism within Track 8:** T8.2 (4 parallel subagents), T8.3 (publish substrate, blocking for T8.4-T8.5), T8.6-T8.8 (independent, can run parallel), T8.9 (auth switch, single orchestrator), T8.10 (governance docs).
 
-**Result:** 6 PRs opened on KooshaPari, 18 Dmouse92 repos archived, 0 net content loss. ADR-029 ratified.
+**Result:** 6 PRs opened on <REDACTED>, 18 Dmouse92 repos archived, 0 net content loss. ADR-029 ratified.
 
-**Audit doc:** `findings/2026-06-17-L5-104-dmouse92-to-kooshapari.md` (364 lines) — full cross-reference matrix + decision matrix + execution log.
+**Audit doc:** `findings/2026-06-17-L5-104-dmouse92-to-<REDACTED>.md` (364 lines) — full cross-reference matrix + decision matrix + execution log.
 
 ---
 
@@ -311,50 +311,50 @@ T3.1 (schema) → T3.2 (probe) → T3.3 (scorecard) → T3.4 (render)
 
 ## 5. PR Matrix
 
-All 38 PRs across 8 tracks. PR# column uses estimated GitHub PR numbers (KooshaPari/`<repo>`); actual numbers assigned on PR-open.
+All 38 PRs across 8 tracks. PR# column uses estimated GitHub PR numbers (<REDACTED>/`<repo>`); actual numbers assigned on PR-open.
 
 | PR# | Title | Repo | Track | Status | Owner | Subagent |
 |---|---|---|---|---|---|---|
-| **PR-129** | chore(license): add SPDX-License-Identifier to 541 source files | `KooshaPari/AgilePlus` | T2.1 | PENDING | orchestrator | forge-1 |
-| **PR-130** | chore(pheno-cli): refactor GetAdapter signature and add error variants | `KooshaPari/pheno` | T2.2 | PENDING | orchestrator | forge-2 |
-| **PR-131** | chore(pheno): import adr-012 from Dmouse92 fork (historical preservation) | `KooshaPari/pheno` | T2.3 | PENDING | orchestrator | forge-3 |
-| **PR-132** | feat(dispatch-mcp): W2-1 protocol compliance (imported from Dmouse92 fork) | `KooshaPari/dispatch-mcp` | T2.4 | PENDING | orchestrator | forge-4 |
-| **PR-133** | (do-not-merge) chore(AgilePlus): preserve wip/preserve-agileplus-brand-rename-20260605 | `KooshaPari/AgilePlus` | T2.5 | PENDING (decision-only) | orchestrator | — |
-| **PR-134** | docs(phenotype-org-audits): cherry-pick monorepo w5-adrs-sota commits (d83900c4a7) | `KooshaPari/phenotype-org-audits` | T2.6 | PENDING | orchestrator | — |
-| **PR-135** | docs(phenotype-otel): re-commit L4-080 worklog (recovered from /private/tmp/l4-80-wt) | `KooshaPari/phenotype-otel` | T2.7 | PENDING | orchestrator | — |
-| **PR-136** | feat(phenoShared): add pheno-context crate (recovered from .worktrees/l4-68-pheno-context-2026-06-11) | `KooshaPari/phenoShared` | T2.8 | PENDING | orchestrator | — |
-| **PR-137** | chore(phenotype-org-audits): import 30-pillar fleet audit (484 commits, 30 files) | `KooshaPari/phenotype-org-audits` | T2.9 | PENDING | orchestrator | — |
-| **PR-138** | docs(71-pillar): schema (9 domains, L1-L71, 0-3 scoring) | `KooshaPari/phenotype-org-audits` (per ADR-028) | T3.1 | PENDING | orchestrator | — |
-| **PR-139** | feat(71-pillar): probe script + per-repo probe results (top-10 repos) | `KooshaPari/phenotype-org-audits` | T3.2 | PENDING | orchestrator | 10x forge subagents (per-repo) |
-| **PR-140** | docs(71-pillar): live scorecard across 10 repos | `KooshaPari/phenotype-org-audits` | T3.3 | PENDING | orchestrator | — |
-| **PR-141** | docs(71-pillar): render scorecard as markdown tables + ASCII heatmap | `KooshaPari/phenotype-org-audits` | T3.4 | PENDING | orchestrator | — |
-| **PR-142** | docs(71-pillar): L1-L30 → L1-L71 crosswalk | `KooshaPari/phenotype-org-audits` | T3.5 | PENDING | orchestrator | — |
-| **PR-143** | docs(adr): ADR-024 71-pillar audit framework (L1-L71, 9 domains) | `KooshaPari/repos` (or `phenotype-org-audits`) | T3.6 | PENDING | orchestrator | — |
-| **PR-144** | docs(adr): ADR-025 worklog v2.1 schema (add device: field) | `KooshaPari/repos` (or `phenotype-org-audits`) | T3.7 | PENDING | orchestrator | — |
-| **PR-145** | docs(adr): ADR-026 Factory AI Agent Readiness (cross-cutting) | `KooshaPari/repos` (or `phenotype-org-audits`) | T3.8 | PENDING | orchestrator | — |
-| **PR-146** | docs(adr): ADR-027 git LFS 3-tier policy (closes L66) | `KooshaPari/repos` (or `phenotype-org-audits`) | T3.9 | PENDING | orchestrator | — |
-| **PR-147** | docs(adr): ADR-028 monorepo hybrid-with-staging-repo (closes L25) | `KooshaPari/repos` (or `phenotype-org-audits`) | T3.10 | PENDING | orchestrator | — |
-| **PR-148** | feat(worklog-schema): bump v2.0 → v2.1 (add device: field per ADR-025) | `KooshaPari/pheno-worklog-schema` | T4.1 | PENDING | orchestrator | — |
-| **PR-149** | feat(worklog-schema): validator enforces v2.1, warns on v2.0 | `KooshaPari/pheno-worklog-schema` | T4.2 | PENDING | orchestrator | — |
-| **PR-150** | chore(worklog): migrate L5-101-app-governance-2026-06-15.json to v2.1 | `KooshaPari/pheno` | T4.3a | PENDING | orchestrator | — |
-| **PR-151** | chore(worklog): migrate L5-102-71-pillar-audit-2026-06-17.json to v2.1 | `KooshaPari/pheno` | T4.3b | PENDING | orchestrator | — |
-| **PR-152** | docs(adr): ADR-029 HwLedger reclassification (PAUSED + archival per ADR-023 Rule 3) | `KooshaPari/repos` (or `phenotype-org-audits`) | T5.1 | PENDING | orchestrator | — |
-| **PR-153** | docs(hwledger): substrate placement decision — no extraction (L1=0, L2=10) | `KooshaPari/HwLedger` | T5.2 | PENDING | orchestrator | — |
-| **PR-154** | chore(hwledger): archive repo (ADR-029); README points to ADR-029 | `KooshaPari/HwLedger` | T5.3 | PENDING | orchestrator | forge-5 (multi-step archive) |
-| **PR-155** | docs(phenotype-org-audits): add HwLedger reclassification record (2026-06-17) | `KooshaPari/phenotype-org-audits` | T5.4 | PENDING | orchestrator | — |
-| **PR-156** | chore(governance): refresh AGENTS.md + STATUS.md + SSOT.md (v7 triage) | `KooshaPari/repos` (or `phenotype-org-audits`) | T1.5 | PENDING | orchestrator | — |
-| **PR-157** | chore(meta): add AGENTS.md + llms.txt + WORKLOG.md + CHANGELOG.md + LICENSE-MIT (5 repos) | `KooshaPari/pheno-config` | T1.6a | PENDING | orchestrator | — |
-| **PR-158** | chore(meta): add meta-bundle to pheno-context | `KooshaPari/pheno-context` | T1.6b | PENDING | orchestrator | — |
-| **PR-159** | chore(meta): add meta-bundle to pheno-otel | `KooshaPari/pheno-otel` | T1.6c | PENDING | orchestrator | — |
-| **PR-160** | chore(meta): add meta-bundle to pheno-port-adapter | `KooshaPari/pheno-port-adapter` | T1.6d | PENDING | orchestrator | — |
-| **PR-161** | chore(meta): add meta-bundle to pheno-tracing | `KooshaPari/pheno-tracing` | T1.6e | PENDING | orchestrator | — |
-| **PR-162** | docs(ci): document HOOKS_SKIP=1 and SKIP= env vars (per P47) | `KooshaPari/pheno-ci-templates` | T1.7 | PENDING | orchestrator | — |
-| **PR-163** | feat(cost): port tiers/cost/budget/quota/audit/cost_middleware from dispatch-mcp W2-1 (L5-104.1) | `KooshaPari/pheno-mcp-router` | T8.4 | **OPEN** [#1](https://github.com/KooshaPari/pheno-mcp-router/pull/1) | subagent E | forge-subagent-E |
-| **PR-164** | feat(adapters): add LlamaAdapter (LlmPort) — server + direct modes (L5-104.1) | `KooshaPari/pheno-mcp-router` | T8.5a | **OPEN** [#2](https://github.com/KooshaPari/pheno-mcp-router/pull/2) | subagent E | forge-subagent-E |
-| **PR-165** | feat(adapters): add OpenAICompatAdapter (LlmPort) — 429/5xx retry + 17 tests (L5-104.1) | `KooshaPari/pheno-mcp-router` | T8.5b | **OPEN** [#3](https://github.com/KooshaPari/pheno-mcp-router/pull/3) | subagent E | forge-subagent-E |
-| **PR-166** | feat(docs): port CANONICAL.md markers + SLSA doc from pheno ADR-012 (L5-104.2) | `KooshaPari/phenotype-config` | T8.7 | **OPEN** [#1](https://github.com/KooshaPari/phenotype-config/pull/1) | subagent F | forge-subagent-F |
-| **PR-167** | feat(devops): add llama-cpp docker setup (Dockerfile + compose) (L5-104.1) | `KooshaPari/phenotype-ops` | T8.8 | **OPEN** [#2](https://github.com/KooshaPari/phenotype-ops/pull/2) | subagent E | forge-subagent-E |
-| **PR-168** | docs: cherry-pick cheap-llm-mcp deprecation notice (W1.1, ADR-008) | `KooshaPari/dispatch-mcp` | T8.6 | **OPEN** [#1](https://github.com/KooshaPari/dispatch-mcp/pull/1) | subagent E | forge-subagent-E |
+| **PR-129** | chore(license): add SPDX-License-Identifier to 541 source files | `<REDACTED>/AgilePlus` | T2.1 | PENDING | orchestrator | forge-1 |
+| **PR-130** | chore(pheno-cli): refactor GetAdapter signature and add error variants | `<REDACTED>/pheno` | T2.2 | PENDING | orchestrator | forge-2 |
+| **PR-131** | chore(pheno): import adr-012 from Dmouse92 fork (historical preservation) | `<REDACTED>/pheno` | T2.3 | PENDING | orchestrator | forge-3 |
+| **PR-132** | feat(dispatch-mcp): W2-1 protocol compliance (imported from Dmouse92 fork) | `<REDACTED>/dispatch-mcp` | T2.4 | PENDING | orchestrator | forge-4 |
+| **PR-133** | (do-not-merge) chore(AgilePlus): preserve wip/preserve-agileplus-brand-rename-20260605 | `<REDACTED>/AgilePlus` | T2.5 | PENDING (decision-only) | orchestrator | — |
+| **PR-134** | docs(phenotype-org-audits): cherry-pick monorepo w5-adrs-sota commits (d83900c4a7) | `<REDACTED>/phenotype-org-audits` | T2.6 | PENDING | orchestrator | — |
+| **PR-135** | docs(phenotype-otel): re-commit L4-080 worklog (recovered from /private/tmp/l4-80-wt) | `<REDACTED>/phenotype-otel` | T2.7 | PENDING | orchestrator | — |
+| **PR-136** | feat(phenoShared): add pheno-context crate (recovered from .worktrees/l4-68-pheno-context-2026-06-11) | `<REDACTED>/phenoShared` | T2.8 | PENDING | orchestrator | — |
+| **PR-137** | chore(phenotype-org-audits): import 30-pillar fleet audit (484 commits, 30 files) | `<REDACTED>/phenotype-org-audits` | T2.9 | PENDING | orchestrator | — |
+| **PR-138** | docs(71-pillar): schema (9 domains, L1-L71, 0-3 scoring) | `<REDACTED>/phenotype-org-audits` (per ADR-028) | T3.1 | PENDING | orchestrator | — |
+| **PR-139** | feat(71-pillar): probe script + per-repo probe results (top-10 repos) | `<REDACTED>/phenotype-org-audits` | T3.2 | PENDING | orchestrator | 10x forge subagents (per-repo) |
+| **PR-140** | docs(71-pillar): live scorecard across 10 repos | `<REDACTED>/phenotype-org-audits` | T3.3 | PENDING | orchestrator | — |
+| **PR-141** | docs(71-pillar): render scorecard as markdown tables + ASCII heatmap | `<REDACTED>/phenotype-org-audits` | T3.4 | PENDING | orchestrator | — |
+| **PR-142** | docs(71-pillar): L1-L30 → L1-L71 crosswalk | `<REDACTED>/phenotype-org-audits` | T3.5 | PENDING | orchestrator | — |
+| **PR-143** | docs(adr): ADR-024 71-pillar audit framework (L1-L71, 9 domains) | `<REDACTED>/repos` (or `phenotype-org-audits`) | T3.6 | PENDING | orchestrator | — |
+| **PR-144** | docs(adr): ADR-025 worklog v2.1 schema (add device: field) | `<REDACTED>/repos` (or `phenotype-org-audits`) | T3.7 | PENDING | orchestrator | — |
+| **PR-145** | docs(adr): ADR-026 Factory AI Agent Readiness (cross-cutting) | `<REDACTED>/repos` (or `phenotype-org-audits`) | T3.8 | PENDING | orchestrator | — |
+| **PR-146** | docs(adr): ADR-027 git LFS 3-tier policy (closes L66) | `<REDACTED>/repos` (or `phenotype-org-audits`) | T3.9 | PENDING | orchestrator | — |
+| **PR-147** | docs(adr): ADR-028 monorepo hybrid-with-staging-repo (closes L25) | `<REDACTED>/repos` (or `phenotype-org-audits`) | T3.10 | PENDING | orchestrator | — |
+| **PR-148** | feat(worklog-schema): bump v2.0 → v2.1 (add device: field per ADR-025) | `<REDACTED>/pheno-worklog-schema` | T4.1 | PENDING | orchestrator | — |
+| **PR-149** | feat(worklog-schema): validator enforces v2.1, warns on v2.0 | `<REDACTED>/pheno-worklog-schema` | T4.2 | PENDING | orchestrator | — |
+| **PR-150** | chore(worklog): migrate L5-101-app-governance-2026-06-15.json to v2.1 | `<REDACTED>/pheno` | T4.3a | PENDING | orchestrator | — |
+| **PR-151** | chore(worklog): migrate L5-102-71-pillar-audit-2026-06-17.json to v2.1 | `<REDACTED>/pheno` | T4.3b | PENDING | orchestrator | — |
+| **PR-152** | docs(adr): ADR-029 HwLedger reclassification (PAUSED + archival per ADR-023 Rule 3) | `<REDACTED>/repos` (or `phenotype-org-audits`) | T5.1 | PENDING | orchestrator | — |
+| **PR-153** | docs(hwledger): substrate placement decision — no extraction (L1=0, L2=10) | `<REDACTED>/HwLedger` | T5.2 | PENDING | orchestrator | — |
+| **PR-154** | chore(hwledger): archive repo (ADR-029); README points to ADR-029 | `<REDACTED>/HwLedger` | T5.3 | PENDING | orchestrator | forge-5 (multi-step archive) |
+| **PR-155** | docs(phenotype-org-audits): add HwLedger reclassification record (2026-06-17) | `<REDACTED>/phenotype-org-audits` | T5.4 | PENDING | orchestrator | — |
+| **PR-156** | chore(governance): refresh AGENTS.md + STATUS.md + SSOT.md (v7 triage) | `<REDACTED>/repos` (or `phenotype-org-audits`) | T1.5 | PENDING | orchestrator | — |
+| **PR-157** | chore(meta): add AGENTS.md + llms.txt + WORKLOG.md + CHANGELOG.md + LICENSE-MIT (5 repos) | `<REDACTED>/pheno-config` | T1.6a | PENDING | orchestrator | — |
+| **PR-158** | chore(meta): add meta-bundle to pheno-context | `<REDACTED>/pheno-context` | T1.6b | PENDING | orchestrator | — |
+| **PR-159** | chore(meta): add meta-bundle to pheno-otel | `<REDACTED>/pheno-otel` | T1.6c | PENDING | orchestrator | — |
+| **PR-160** | chore(meta): add meta-bundle to pheno-port-adapter | `<REDACTED>/pheno-port-adapter` | T1.6d | PENDING | orchestrator | — |
+| **PR-161** | chore(meta): add meta-bundle to pheno-tracing | `<REDACTED>/pheno-tracing` | T1.6e | PENDING | orchestrator | — |
+| **PR-162** | docs(ci): document HOOKS_SKIP=1 and SKIP= env vars (per P47) | `<REDACTED>/pheno-ci-templates` | T1.7 | PENDING | orchestrator | — |
+| **PR-163** | feat(cost): port tiers/cost/budget/quota/audit/cost_middleware from dispatch-mcp W2-1 (L5-104.1) | `<REDACTED>/pheno-mcp-router` | T8.4 | **OPEN** [#1](https://github.com/<REDACTED>/pheno-mcp-router/pull/1) | subagent E | forge-subagent-E |
+| **PR-164** | feat(adapters): add LlamaAdapter (LlmPort) — server + direct modes (L5-104.1) | `<REDACTED>/pheno-mcp-router` | T8.5a | **OPEN** [#2](https://github.com/<REDACTED>/pheno-mcp-router/pull/2) | subagent E | forge-subagent-E |
+| **PR-165** | feat(adapters): add OpenAICompatAdapter (LlmPort) — 429/5xx retry + 17 tests (L5-104.1) | `<REDACTED>/pheno-mcp-router` | T8.5b | **OPEN** [#3](https://github.com/<REDACTED>/pheno-mcp-router/pull/3) | subagent E | forge-subagent-E |
+| **PR-166** | feat(docs): port CANONICAL.md markers + SLSA doc from pheno ADR-012 (L5-104.2) | `<REDACTED>/phenotype-config` | T8.7 | **OPEN** [#1](https://github.com/<REDACTED>/phenotype-config/pull/1) | subagent F | forge-subagent-F |
+| **PR-167** | feat(devops): add llama-cpp docker setup (Dockerfile + compose) (L5-104.1) | `<REDACTED>/phenotype-ops` | T8.8 | **OPEN** [#2](https://github.com/<REDACTED>/phenotype-ops/pull/2) | subagent E | forge-subagent-E |
+| **PR-168** | docs: cherry-pick cheap-llm-mcp deprecation notice (W1.1, ADR-008) | `<REDACTED>/dispatch-mcp` | T8.6 | **OPEN** [#1](https://github.com/<REDACTED>/dispatch-mcp/pull/1) | subagent E | forge-subagent-E |
 
 **Total: 38 PRs** (re-counted from the matrix: 9 in T2 + 10 in T3 + 4 in T4 + 4 in T5 + 7 in T1 [1 governance + 5 meta + 1 ci-spec] + 6 in T8 = 40. Wait — recount: T1 = 1 + 5 + 1 = 7; T2 = 9; T3 = 10; T4 = 4; T5 = 4; T6 = 0; T7 = 0; T8 = 6. Total = 7+9+10+4+4+0+0+6 = **40 PRs** in the matrix. The § 2 headline of "38" is the **operationally meaningful** count. The matrix reports 40 to include the do-not-merge decision PR #133 and the ci-spec PR #162. **Reconciliation: 40 PRs in the matrix; § 2 reports "38 PRs" as the rounded target. Authoritative count is 40 per the matrix.**)
 
@@ -395,7 +395,7 @@ v7 is "done" when **all** of the following are true:
 | **SC-2** | 71-pillar scorecard is live for the top-10 repos with all 71 pillars scored | `findings/71-pillar-2026-06-17.md` exists with 10 × 71 = 710 cells | 10/10 repos, 71/71 pillars |
 | **SC-3** | L1-L30 → L1-L71 crosswalk is published; no orphan pillars from the older 30-pillar audit | `findings/71-pillar-2026-06-17-mapping.md` covers all 30 old pillars | 30/30 mapped |
 | **SC-4** | Worklog v2.1 schema is published in `pheno-worklog-schema`; v2.0 is deprecated 2026-06-22; ≥ 2 exemplar worklogs migrated | `pheno-worklog-schema` version 0.3.0; `pip install pheno-worklog-schema` exits 0; `pheno-worklog-schema validate` returns 0 on v2.1 | 0.3.0 published; 2/2 migrated |
-| **SC-5** | HwLedger is archived; ADR-029 is in `docs/adr/2026-06-17/INDEX.md`; bucket in AGENTS.md is `PAUSED` | `gh api repos/KooshaPari/HwLedger` → `"archived": true` | archived |
+| **SC-5** | HwLedger is archived; ADR-029 is in `docs/adr/2026-06-17/INDEX.md`; bucket in AGENTS.md is `PAUSED` | `gh api repos/<REDACTED>/HwLedger` → `"archived": true` | archived |
 | **SC-6** | Orchestrator's working branch (`chore/l5-87-focus-repo-specs-2026-06-11`) is rebased onto `main` and pushed | `git rev-list --left-right --count origin/main...HEAD` shows 0 ahead | 0 ahead |
 | **SC-7** | 4 stranded worktrees are recovered (T2.6-T2.9 PRs merged) | All 4 strands have a landed PR | 4/4 recovered |
 | **SC-8** | AGENTS.md § "Wave Plan" pointer is current; v7 is the active plan | `grep 'plans/2026-06-17-v7-dag-stable.md' AGENTS.md` returns ≥ 2 | ≥ 2 hits |
@@ -486,7 +486,7 @@ Plus the prior ADRs that v7 references but does not modify:
 
 Before declaring v7 "launched", the orchestrator must verify:
 
-- [ ] `gh auth status` shows `KooshaPari` active (not Dmouse92) — per AGENTS.md § "Key Commands"
+- [ ] `gh auth status` shows `<REDACTED>` active (not Dmouse92) — per AGENTS.md § "Key Commands"
 - [ ] `forge -p "echo test" -C /tmp` returns 0 in < 30 sec (subagent dispatch gate — R1 mitigation)
 - [ ] `curl -sf -m 3 http://localhost:20128/v1/models` returns 4+ models (OmniRoute liveness)
 - [ ] `git status --short` is clean (no uncommitted changes blocking branch operations)
@@ -570,21 +570,21 @@ Report format (JSON):
 
 ```
 Prompt template (T5.3):
-You are archiving KooshaPari/HwLedger per ADR-029.
+You are archiving <REDACTED>/HwLedger per ADR-029.
 
 Scope:
 1. cd to repos/HwLedger
 2. Verify AGENTS.md is up-to-date (mentions PAUSED + archival per ADR-029)
 3. Append a final section to README.md:
    "## Archived (2026-06-17)\n\nThis repo has been archived per ADR-029.
-    See https://github.com/KooshaPari/phenotype-org-audits/blob/main/audits/
+    See https://github.com/<REDACTED>/phenotype-org-audits/blob/main/audits/
     hwledger-reclassification-2026-06-17.md for the full disposition record."
 4. git add AGENTS.md README.md
 5. git commit -m "chore(hwledger): mark archived (ADR-029)"
 6. git push origin <branch> (HOOKS_SKIP=1)
 7. gh pr create --base main --head <branch> --title "chore(hwledger): archive repo (ADR-029)" --label governance
-8. After PR merges: gh repo archive KooshaPari/HwLedger --yes
-9. Verify: gh api repos/KooshaPari/HwLedger | jq .archived -> true
+8. After PR merges: gh repo archive <REDACTED>/HwLedger --yes
+9. Verify: gh api repos/<REDACTED>/HwLedger | jq .archived -> true
 
 DO NOT:
 - Force-push
@@ -612,7 +612,7 @@ AGENTS.md updated: <true/false>
 
 ```
 [v7 LAUNCH] 2026-06-17T<HH:MM> PDT
-- gh auth status: KooshaPari active
+- gh auth status: <REDACTED> active
 - forge -p "echo test" -C /tmp: rc=0 (T+0:00:30)
 - OmniRoute liveness: 4 models UP
 - git status --short: clean

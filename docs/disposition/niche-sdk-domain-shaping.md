@@ -2,7 +2,7 @@
 
 **Date:** 2026-06-19  
 **Authority:** phenotype-registry  
-**Exemplar:** [ResilienceKit](https://github.com/KooshaPari/ResilienceKit) — domain-first Rust workspace  
+**Exemplar:** [ResilienceKit](https://github.com/<REDACTED>/ResilienceKit) — domain-first Rust workspace  
 **ADR:** [ADR-ECO-014](../adrs/ADR-ECO-014-phenoshared-decompose.md)
 
 ## Three layers

@@ -22,7 +22,7 @@ git worktree list --porcelain
 git stash list
 git for-each-ref --format='%(refname:short)' refs/heads/
 ls /tmp /private/tmp for stray worktree directories
-gh repo view KooshaPari/phenotype-{terrain,water,voxel} --json isArchived
+gh repo view <REDACTED>/phenotype-{terrain,water,voxel} --json isArchived
 ```
 
 ## 3. State at execution start (2026-06-19, this turn)
@@ -31,7 +31,7 @@ gh repo view KooshaPari/phenotype-{terrain,water,voxel} --json isArchived
 
 | # | Path | Branch | Purpose |
 |---|---|---|---|
-| 1 | `/Users/kooshapari/CodeProjects/Phenotype/repos` | `main` | Parent checkout |
+| 1 | `/Users/<REDACTED>/CodeProjects/Phenotype/repos` | `main` | Parent checkout |
 | 2 | `/private/tmp/v10-closure-marks` | `docs/v10-t30-t28-closure-marks-2026-06-19` | Parallel session (T28/T30 closure marks) |
 | 3 | `/private/tmp/v10-wktr-2` | `v10-t28-worktree-audit-2026-06-19` | This turn's T28 audit worktree (removed at end) |
 
@@ -54,11 +54,11 @@ the 2026-06-18 L5-114 wave and the source repos are now 404 (see §3.4).
 ### 3.4 Orphan source-repo check (via gh API)
 
 ```
-$ gh repo view KooshaPari/phenotype-terrain
+$ gh repo view <REDACTED>/phenotype-terrain
 GraphQL: Could not resolve to a Repository
-$ gh repo view KooshaPari/phenotype-water
+$ gh repo view <REDACTED>/phenotype-water
 GraphQL: Could not resolve to a Repository
-$ gh repo view KooshaPari/phenotype-voxel
+$ gh repo view <REDACTED>/phenotype-voxel
 GraphQL: Could not resolve to a Repository
 ```
 
@@ -83,16 +83,16 @@ directories from prior sessions.
    legitimately in use), 0 orphan source repos (all deleted).
 3. Authored this `findings/2026-06-19-T28-worktree-audit.md` file.
 4. Committed on a new branch `v10-t28-worktree-audit-2026-06-19`.
-5. Pushed branch to `argis` (KooshaPari/argis-extensions) — this PR.
-6. Opened PR via `gh pr create --repo KooshaPari/argis-extensions`.
+5. Pushed branch to `argis` (<REDACTED>/argis-extensions) — this PR.
+6. Opened PR via `gh pr create --repo <REDACTED>/argis-extensions`.
 
 ## 5. Tests / verification
 
 - `git worktree list --porcelain` → 3 entries (parent + 2 active worktrees).
 - `git stash list` → empty.
-- `gh repo view KooshaPari/phenotype-{terrain,water,voxel}` → all 404.
+- `gh repo view <REDACTED>/phenotype-{terrain,water,voxel}` → all 404.
 - `git push argis v10-t28-worktree-audit-2026-06-19` → succeeded.
-- `gh pr create --repo KooshaPari/argis-extensions` → PR opened.
+- `gh pr create --repo <REDACTED>/argis-extensions` → PR opened.
 
 ## 6. Outcome
 

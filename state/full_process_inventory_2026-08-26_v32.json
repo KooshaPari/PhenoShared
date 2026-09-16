@@ -1,7 +1,7 @@
 {
   "schema_version": "pheno.process-inventory.v3",
   "as_of_utc": "2026-08-26T07:19:42Z",
-  "hostname": "kooshapari-desk",
+  "hostname": "<REDACTED>-desk",
   "git_head": "0215a92eb2635faca6a0566f9129f49001d1452c",
   "git_branch": "main",
   "session_under_resume": {
@@ -3925,7 +3925,7 @@
     "COMMONPROGRAMFILES": "C:\\Program Files\\Common Files",
     "COMMONPROGRAMFILES(X86)": "C:\\Program Files (x86)\\Common Files",
     "COMMONPROGRAMW6432": "C:\\Program Files\\Common Files",
-    "COMPUTERNAME": "KOOSHAPARI-DESK",
+    "COMPUTERNAME": "<REDACTED>-DESK",
     "COMSPEC": "C:\\WINDOWS\\system32\\cmd.exe",
     "COPILOT": "C:\\Program Files\\copilot.exe",
     "CSII_ENTITIESVERSION": "1.3.10",
@@ -3974,7 +3974,7 @@
     "INTEL_DEV_REDIST": "C:\\Program Files (x86)\\Common Files\\Intel\\Shared Libraries\\",
     "JAVA_HOME": "C:\\Program Files\\Microsoft\\jdk-21.0.11.10-hotspot\\",
     "LOCALAPPDATA": "C:\\Users\\koosh\\AppData\\Local",
-    "LOGONSERVER": "\\\\KOOSHAPARI-DESK",
+    "LOGONSERVER": "\\\\<REDACTED>-DESK",
     "MIC_LD_LIBRARY_PATH": "C:\\Program Files (x86)\\Common Files\\Intel\\Shared Libraries\\compiler\\lib\\mic",
     "NDK_HOME": "C:\\Users\\koosh\\AppData\\Local\\Android\\Sdk\\ndk\\28.0.12674087",
     "NODE_EXTRA_CA_CERTS": "C:\\Users\\koosh\\.factory\\cache\\certs\\factory-cli-child-certs.pem",
@@ -4023,8 +4023,8 @@
     "TEMP": "C:\\Users\\koosh\\AppData\\Local\\Temp",
     "TMP": "C:\\Users\\koosh\\AppData\\Local\\Temp",
     "TORCHINDUCTOR_CACHE_DIR": "C:\\Users\\koosh\\.unsloth\\studio\\TORCHINDUCTOR_CACHE_DIR",
-    "USERDOMAIN": "KOOSHAPARI-DESK",
-    "USERDOMAIN_ROAMINGPROFILE": "KOOSHAPARI-DESK",
+    "USERDOMAIN": "<REDACTED>-DESK",
+    "USERDOMAIN_ROAMINGPROFILE": "<REDACTED>-DESK",
     "USERNAME": "koosh",
     "USERPROFILE": "C:\\Users\\koosh",
     "VIVETOOL": "C:\\Users\\koosh\\ViVeTool.exe",
@@ -4034,9 +4034,9 @@
     "WT_SESSION": "9d601864-cb57-4c16-9d4b-dd8ba281d606",
     "_python_version": "3.14.5",
     "_platform": "Windows-11-10.0.28120-SP0",
-    "_hostname": "kooshapari-desk"
+    "_hostname": "<REDACTED>-desk"
   },
   "capture_method": "stdlib: powershell Get-Process + netstat + nvidia-smi + wsl --status + docker ps",
   "scope": "windows_hosts",
-  "notes": "as_of=2026-08-26T07:19:42Z; hostname=kooshapari-desk; git=main@0215a92; wsl=WSL RUNNING; gpu=NVIDIA GeForce RTX 3090 Ti used=5589/24564MiB util=26%; gpus=1 (single-GPU; 1080 Ti absent from nvidia-smi, RTX 3090 Ti only); Cities2.exe=absent; Paradox Launcher.exe=absent; 3090Ti-VRAM-vs-v22: +3021 MiB (v22=2568) vs-v21: +2767 MiB (v21=2822) vs-v20: -3693 MiB (v20=9282); docker_containers=0 docker_procs_alive=1; anomalies: droid.exe=37 llama-server.exe=0 python.exe=1 special-ports[19000/19095/21080]: none; v32=capture 2026-08-26 (proc v32; v31 was 452/50/4707); capture_method=stdlib: powershell Get-Process + netstat + nvidia-smi + wsl --status + docker ps"
+  "notes": "as_of=2026-08-26T07:19:42Z; hostname=<REDACTED>-desk; git=main@0215a92; wsl=WSL RUNNING; gpu=NVIDIA GeForce RTX 3090 Ti used=5589/24564MiB util=26%; gpus=1 (single-GPU; 1080 Ti absent from nvidia-smi, RTX 3090 Ti only); Cities2.exe=absent; Paradox Launcher.exe=absent; 3090Ti-VRAM-vs-v22: +3021 MiB (v22=2568) vs-v21: +2767 MiB (v21=2822) vs-v20: -3693 MiB (v20=9282); docker_containers=0 docker_procs_alive=1; anomalies: droid.exe=37 llama-server.exe=0 python.exe=1 special-ports[19000/19095/21080]: none; v32=capture 2026-08-26 (proc v32; v31 was 452/50/4707); capture_method=stdlib: powershell Get-Process + netstat + nvidia-smi + wsl --status + docker ps"
 }

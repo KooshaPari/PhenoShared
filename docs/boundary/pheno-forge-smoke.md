@@ -17,8 +17,8 @@ tags: [rust, smoke-test, forgecode, ffi, cdylib, dlopen]
 
 ## Identity
 
-- **Source:** `KooshaPari/pheno-forge-smoke` (Rust single-purpose CLI; lib + bin; 1 branch; v0.1.0)
-- **Canonical home:** `KooshaPari/pheno` (`crates/pheno-forge-smoke/`)
+- **Source:** `<REDACTED>/pheno-forge-smoke` (Rust single-purpose CLI; lib + bin; 1 branch; v0.1.0)
+- **Canonical home:** `<REDACTED>/pheno` (`crates/pheno-forge-smoke/`)
 - **Crate name:** `pheno-forge-smoke`
 - **Library output:** `libpheno_forge_smoke.rlib` (thin Rust facade over the bridge)
 - **Binary output:** `pheno-forge-smoke` (CLI smoke binary)
@@ -116,4 +116,4 @@ Exit codes:
 - ADR: **ADR-096** (forgecode improvement — the locked stack this smoke tests)
 - Related: **ADR-097** (eval harness, consumes this smoke), **ADR-098** (additional adapters)
 - Sibling crate: `crates/pheno-cdylib-bridge` (the cdylib this binary dlopens)
-- Upstream: `KooshaPari/pheno-forge-smoke` (now archived)
+- Upstream: `<REDACTED>/pheno-forge-smoke` (now archived)

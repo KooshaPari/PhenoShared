@@ -1,3 +1,3 @@
 # Getting Started
 
-See the project [README](https://github.com/KooshaPari/policy-contract) for setup and usage instructions.
+See the project [README](https://github.com/<REDACTED>/policy-contract) for setup and usage instructions.

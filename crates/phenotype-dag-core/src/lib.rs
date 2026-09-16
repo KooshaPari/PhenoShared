@@ -9,7 +9,7 @@
 //! hooks), and YAML/JSON serialization.
 //!
 //! Renamed 2026-09-01 from `pheno-dag` to `phenotype-dag-core` to break
-//! the name collision with the absorbed Go source `KooshaPari/phenodag`
+//! the name collision with the absorbed Go source `<REDACTED>/phenodag`
 //! (now deleted; absorbed into Tracera spec 008 + 11 queue files +
 //! AgilePlus mirror).
 //!

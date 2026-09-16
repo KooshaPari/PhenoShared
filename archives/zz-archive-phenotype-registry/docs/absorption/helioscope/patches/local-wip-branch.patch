@@ -37,7 +37,7 @@ index 00000000..80d2093b
 +++ b/docs/boundary/helioscope.md
 @@ -0,0 +1,46 @@
 +<!--
-+propagated-from: KooshaPari/phenotype-registry @ chore/l7-001-curation-snapshot
++propagated-from: <REDACTED>/phenotype-registry @ chore/l7-001-curation-snapshot
 +date: 2026-06-17
 +source-commit: a1aa44660
 +do-not-edit-locally: regenerate via scripts/propagate-intent-to-repos.py
@@ -89,7 +89,7 @@ index 00000000..fc523413
 +++ b/docs/intent/helioscope.md
 @@ -0,0 +1,109 @@
 +<!--
-+propagated-from: KooshaPari/phenotype-registry @ chore/l7-001-curation-snapshot
++propagated-from: <REDACTED>/phenotype-registry @ chore/l7-001-curation-snapshot
 +date: 2026-06-17
 +source-commit: a1aa44660
 +do-not-edit-locally: regenerate via scripts/propagate-intent-to-repos.py
@@ -1442,32 +1442,32 @@ index 68956337..b14556ed 100644
 +# SPDX-License-Identifier: MIT OR Apache-2.0
 +# CODEOWNERS — helioscope
  # Default fallback owner
--* @KooshaPari
-+* @kooshapari
+-* @<REDACTED>
++* @<REDACTED>
  
  # Code areas
--/src/ @KooshaPari
--/tests/ @KooshaPari
--/docs/ @KooshaPari
-+/src/ @kooshapari
-+/tests/ @kooshapari
-+/docs/ @kooshapari
+-/src/ @<REDACTED>
+-/tests/ @<REDACTED>
+-/docs/ @<REDACTED>
++/src/ @<REDACTED>
++/tests/ @<REDACTED>
++/docs/ @<REDACTED>
  
  # Configuration
--/.github/ @KooshaPari
--/Cargo.toml @KooshaPari
--/package.json @KooshaPari
--/go.mod @KooshaPari
-+/.github/ @kooshapari
-+/Cargo.toml @kooshapari
-+/package.json @kooshapari
-+/go.mod @kooshapari
+-/.github/ @<REDACTED>
+-/Cargo.toml @<REDACTED>
+-/package.json @<REDACTED>
+-/go.mod @<REDACTED>
++/.github/ @<REDACTED>
++/Cargo.toml @<REDACTED>
++/package.json @<REDACTED>
++/go.mod @<REDACTED>
  
  # Sensitive
--/SECURITY.md @KooshaPari
--/.github/workflows/ @KooshaPari
-+/SECURITY.md @kooshapari
-+/.github/workflows/ @kooshapari
+-/SECURITY.md @<REDACTED>
+-/.github/workflows/ @<REDACTED>
++/SECURITY.md @<REDACTED>
++/.github/workflows/ @<REDACTED>
 diff --git a/.github/ISSUE_TEMPLATE/bug_report.md b/.github/ISSUE_TEMPLATE/bug_report.md
 new file mode 100644
 index 00000000..e090a1d2

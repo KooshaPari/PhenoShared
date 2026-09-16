@@ -83,10 +83,10 @@ ALERT_DEDUP_POLLS = 3  # require 3 consecutive breaches before logging
 
 # Launchd jobs to monitor (the canonical 4 from the resume-all plist set)
 LAUNCHD_JOBS: tuple[str, ...] = (
-    "com.kooshapari.resume-all-snapshot",
-    "com.kooshapari.resume-all-ipc",
-    "com.kooshapari.resume-all-watch",
-    "com.kooshapari.resume-all-zmx",
+    "com.<REDACTED>.resume-all-snapshot",
+    "com.<REDACTED>.resume-all-ipc",
+    "com.<REDACTED>.resume-all-watch",
+    "com.<REDACTED>.resume-all-zmx",
 )
 
 # Verdict levels

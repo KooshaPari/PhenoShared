@@ -8,17 +8,17 @@ the wave completed)
 ## What was absorbed
 
 **Quillr v1.0.1** (the merged identity that subsumes Httpora)
-absorbed from `KooshaPari/Quillr` into two spine targets:
+absorbed from `<REDACTED>/Quillr` into two spine targets:
 
 | Half | Language | Target | Path | Status |
 |------|----------|--------|------|--------|
 | `crates/httpora-core` | Rust | `pheno` monorepo | `crates/httpora-core/` | ✅ absorbed (commit `absorb/httpora-core-2026-07-17`) |
-| `src/` (`@kooshapari/quillts`) | TypeScript | `phenodocs` | `packages/quillts/` | ✅ absorbed (commit `absorb/quillts-2026-07-17`) |
+| `src/` (`@<REDACTED>/quillts`) | TypeScript | `phenodocs` | `packages/quillts/` | ✅ absorbed (commit `absorb/quillts-2026-07-17`) |
 
 ## Identity reconciliation
 
 `Httpora` was already SUPERSEDED by `Quillr` per disposition-index
-row `history` (2026-06-20). The `KooshaPari/Httpora` repo no longer
+row `history` (2026-06-20). The `<REDACTED>/Httpora` repo no longer
 exists — its content was merged into Quillr as `crates/httpora-core`.
 The "Quillr + Httpora reconcile identity/name" decision in
 `RATIONALIZATION_PLAN.md` is therefore resolved by absorbing Quillr
@@ -29,7 +29,7 @@ Final naming:
 - **Rust crate**: `httpora-core` (kept name; descriptive of the HTTP
   middleware responsibilities it implements)
 - **TypeScript package**: `@phenotype/quillts` (renamed from
-  `@kooshapari/quillts` for the Phenotype org; "quill" hints at the
+  `@<REDACTED>/quillts` for the Phenotype org; "quill" hints at the
   'trace/quill' branding)
 
 ## Content
@@ -68,7 +68,7 @@ Final naming:
 
 ## Source repo
 
-`KooshaPari/Quillr` archived on GitHub 2026-07-17.
+`<REDACTED>/Quillr` archived on GitHub 2026-07-17.
 
 ## Disposition
 

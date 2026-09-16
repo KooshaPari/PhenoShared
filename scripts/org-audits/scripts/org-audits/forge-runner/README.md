@@ -51,7 +51,7 @@ forge-runner-scripts/
 ## Install
 
 ```bash
-git clone https://github.com/KooshaPari/forge-runner-scripts.git ~/CodeProjects/Phenotype/repos/forge-runner-scripts
+git clone https://github.com/<REDACTED>/forge-runner-scripts.git ~/CodeProjects/Phenotype/repos/forge-runner-scripts
 cd forge-runner-scripts
 ./install.sh          # copies bin/* to ~/bin/forge-runner-*/
 ```
@@ -80,6 +80,6 @@ MIT (TBD — see LICENSE-MIT).
 
 ## Related
 
-- `KooshaPari/PhenoMCPServers` — MCP servers + skills (orthogonal: this is CLI orchestration, not MCP)
-- `KooshaPari/phenotype-tooling` — `Tools/` and `Tools-Enhancement/` (Svelte UI builders, different scope)
-- `KooshaPari/phenodag` — canonical DAG (the `dag_*.py` scripts in this repo are the operational shim around phenodag)
+- `<REDACTED>/PhenoMCPServers` — MCP servers + skills (orthogonal: this is CLI orchestration, not MCP)
+- `<REDACTED>/phenotype-tooling` — `Tools/` and `Tools-Enhancement/` (Svelte UI builders, different scope)
+- `<REDACTED>/phenodag` — canonical DAG (the `dag_*.py` scripts in this repo are the operational shim around phenodag)

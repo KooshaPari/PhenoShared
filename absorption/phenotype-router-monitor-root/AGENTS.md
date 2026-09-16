@@ -4,7 +4,7 @@
 
 - **Name**: phenotype-router-monitor
 - **Type**: Rust Library (Router Monitoring)
-- **Location**: `/Users/kooshapari/CodeProjects/Phenotype/repos/phenotype-router-monitor`
+- **Location**: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/phenotype-router-monitor`
 - **Stack**: Rust, Tokio, Reqwest
 
 ## Development Workflow

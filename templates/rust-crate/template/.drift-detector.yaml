@@ -8,5 +8,5 @@ overrides: []
 # overrides:
 #   - path: src/legacy_thing.rs
 #     reason: "tied to app-specific state in apps/web; would lose context if extracted"
-#     set_by: kooshapari
+#     set_by: <REDACTED>
 #     set_date: 2026-06-18

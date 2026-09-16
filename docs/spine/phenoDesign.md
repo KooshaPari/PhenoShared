@@ -1,7 +1,7 @@
 # PhenoDesign — CREATIVITY / DESIGN / UX Spine
 
 **Status**: LIVE spine member (2026-07-20)  
-**GitHub**: `KooshaPari/phenoDesign`  
+**GitHub**: `<REDACTED>/phenoDesign`  
 **Registry row**: `projects/phenoDesign.json`, disposition-index `repo-phenoDesign`
 
 ## Spine role
@@ -19,7 +19,7 @@
 phenoDesign/
 ├── tokens / package root     # @phenotype/design
 ├── docs/                     # UX + style guide
-├── engine/                   # compatibility pointer → KooshaPari/asset-engine
+├── engine/                   # compatibility pointer → <REDACTED>/asset-engine
 └── .github/                  # CI for design package
 ```
 

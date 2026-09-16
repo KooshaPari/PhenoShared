@@ -49,6 +49,6 @@ DORA-style insight: 69% orchestrator-direct, 18% automated, 12% subagent,
 python3 scripts/migrate-worklog-v20-to-v21.py WORKLOG.md
 
 # Migrate all fleet WORKLOG.md
-find /Users/kooshapari/CodeProjects/Phenotype/repos -name "WORKLOG.md" \
-  -exec python3 /Users/kooshapari/CodeProjects/Phenotype/repos/scripts/migrate-worklog-v20-to-v21.py {} \;
+find /Users/<REDACTED>/CodeProjects/Phenotype/repos -name "WORKLOG.md" \
+  -exec python3 /Users/<REDACTED>/CodeProjects/Phenotype/repos/scripts/migrate-worklog-v20-to-v21.py {} \;
 ```

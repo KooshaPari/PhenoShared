@@ -21,8 +21,8 @@ Tarballs preserved at `_phenofleet-decisions/airlock-phase-b-archived/`:
 
 Restore:
 ```bash
-cd /Users/kooshapari/.airlock/repos
-tar --zstd -xf /Users/kooshapari/CodeProjects/Phenotype/repos/_phenofleet-decisions/airlock-phase-b-archived/8711057fb661_heliosApp.git.tar.zst
+cd /Users/<REDACTED>/.airlock/repos
+tar --zstd -xf /Users/<REDACTED>/CodeProjects/Phenotype/repos/_phenofleet-decisions/airlock-phase-b-archived/8711057fb661_heliosApp.git.tar.zst
 ```
 
 ## GitHub-side recovery branches

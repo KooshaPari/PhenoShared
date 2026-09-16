@@ -1,8 +1,8 @@
 # phenoEvents — Absorption Justification
 
 **Status:** Historical and unverified absorption claim (recorded 2026-07-17)
-**Source:** `KooshaPari/phenoEvents` (664 KB, 17 branches, last push 2026-07-14)
-**Target:** `KooshaPari/pheno` at `crates/phenotype-event-bus/`
+**Source:** `<REDACTED>/phenoEvents` (664 KB, 17 branches, last push 2026-07-14)
+**Target:** `<REDACTED>/pheno` at `crates/phenotype-event-bus/`
 **Historical disposition:** ABSORB
 
 > 2026-08-05 reconciliation: this record is not current ownership evidence.
@@ -79,24 +79,24 @@ See `docs/boundary/phenotype-event-bus.md` in the registry spine.
 
 ```sh
 # 1. Un-archive the source repo
-gh repo unarchive KooshaPari/phenoEvents
+gh repo unarchive <REDACTED>/phenoEvents
 
 # 2. Remove the absorbed crate from the workspace
-cd /Users/kooshapari/CodeProjects/Phenotype/repos/pheno
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos/pheno
 git rm -r crates/phenotype-event-bus/
 # Edit Cargo.toml: remove the workspace member entry and the workspace.dependencies path entry
 git commit -m "revert: undo phenoEvents absorption"
 
 # 3. In the registry spine
-cd /Users/kooshapari/CodeProjects/Phenotype/repos/phenotype-registry
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos/phenotype-registry
 # Edit registry/disposition-index.json: change fsm from "absorbed" back to "active"
 # Restore projects/phenoEvents.json from git history (revert to queued status)
 ```
 
 ## Cross-references
 
-- Disposition row: `registry/disposition-index.json` → `"KooshaPari/phenoEvents"`
+- Disposition row: `registry/disposition-index.json` → `"<REDACTED>/phenoEvents"`
 - Boundary doc: `docs/boundary/phenotype-event-bus.md`
-- Target repo: https://github.com/KooshaPari/pheno
-- Source repo: https://github.com/KooshaPari/phenoEvents
+- Target repo: https://github.com/<REDACTED>/pheno
+- Source repo: https://github.com/<REDACTED>/phenoEvents
 - Workspace phantom-dep resolved: `pheno/Cargo.toml` `phenotype-event-bus = { path = "crates/phenotype-event-bus" }`

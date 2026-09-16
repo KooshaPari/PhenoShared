@@ -5,7 +5,7 @@ metadata:
   title: PhenoHandbook
   description: Patterns, anti-patterns, guidelines, and best practices for the Phenotype ecosystem
   annotations:
-    github.com/project-slug: KooshaPari/PhenoHandbook
+    github.com/project-slug: <REDACTED>/PhenoHandbook
     backstage.io/techdocs-ref: dir:./
     phenotype.dev/registry-type: handbook
     phenotype.dev/documentation: mkdocs

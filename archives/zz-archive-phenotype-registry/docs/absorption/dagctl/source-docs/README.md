@@ -3,7 +3,7 @@
 DAG control CLI binary for the Phenotype fleet.
 
 **Version:** 3.3.1
-**Source:** [KooshaPari/phenodag](https://github.com/KooshaPari/phenodag)
+**Source:** [<REDACTED>/phenodag](https://github.com/<REDACTED>/phenodag)
 
 ## Usage
 
@@ -15,7 +15,7 @@ chmod +x dagctl
 ## Build from Source
 
 ```bash
-git clone git@github.com:KooshaPari/phenodag.git
+git clone git@github.com:<REDACTED>/phenodag.git
 cd phenodag
 go build -o dagctl .
 ```

@@ -47,7 +47,7 @@ The `standard_id` must remain `kilo-code-stand@1` across the fleet. Repo-specifi
 - Missing tests per test policy below
 - `delete_repo` or destructive git without absorption proof
 - Force-push to protected default branch
-- Push to remotes outside `KooshaPari/*` without explicit user approval
+- Push to remotes outside `<REDACTED>/*` without explicit user approval
 - `git commit --amend` on already-pushed commits without explicit user request
 
 #### Warn tier (recommended)

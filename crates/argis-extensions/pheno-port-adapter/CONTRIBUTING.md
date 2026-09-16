@@ -8,7 +8,7 @@
 ## 1. Quickstart (5 lines)
 
 ```bash
-gh repo fork KooshaPari/phenotype-apps   # monorepo (this crate lives in pheno-port-adapter/)
+gh repo fork <REDACTED>/phenotype-apps   # monorepo (this crate lives in pheno-port-adapter/)
 cd phenotype-apps
 git checkout -b feat/<req-id>-<slug>-$(date +%Y-%m-%d)   # or chore/<req-id>-...
 git commit -m "feat(scope): description"                 # Conventional Commits
@@ -68,7 +68,7 @@ A PR is mergeable only when **all** of the following pass:
 - [ ] Tests + coverage: `cargo test --workspace --all-features` green, ≥ 80% on touched paths (lib/SDK 80% per ADR-023 Rule 3.1 + ADR-040).
 - [ ] Lint: `cargo clippy --all-targets -- -D warnings` + `cargo fmt --all -- --check`.
 - [ ] `cargo deny check` advisories clear (when `deny.toml` lands on main; T19.4 target).
-- [ ] `WORKLOG.md` updated per [ADR-025 v2.1](https://github.com/KooshaPari/phenotype-apps/blob/main/findings/2026-06-17-L5-103-worklog-v2-1.md) — 11-column schema including `device:` field.
+- [ ] `WORKLOG.md` updated per [ADR-025 v2.1](https://github.com/<REDACTED>/phenotype-apps/blob/main/findings/2026-06-17-L5-103-worklog-v2-1.md) — 11-column schema including `device:` field.
 - [ ] No new `unwrap()` / `panic!` in lib crates (allowed in tests + bin).
 - [ ] Pattern contract preserved (ADR-038): no ad-hoc free functions, no global singletons, no I/O outside trait methods, errors are typed via `AdapterError`.
 - [ ] New transport adapters implement the full `PortAdapter` trait (4 methods) — no `unsafe impl` shortcuts.
@@ -82,8 +82,8 @@ A PR is mergeable only when **all** of the following pass:
 
 ## 8. Support
 
-- **Questions:** open a [Discussion](https://github.com/KooshaPari/phenotype-apps/discussions) — not an issue.
-- **Bugs:** open an [Issue](https://github.com/KooshaPari/phenotype-apps/issues) with the PR template above; tag `area:port-adapter`.
+- **Questions:** open a [Discussion](https://github.com/<REDACTED>/phenotype-apps/discussions) — not an issue.
+- **Bugs:** open an [Issue](https://github.com/<REDACTED>/phenotype-apps/issues) with the PR template above; tag `area:port-adapter`.
 - **Security:** see `SECURITY.md` — do NOT file public issues for vulns.
 
 ## 9. Pattern conformance (ADR-038, reference impl role)

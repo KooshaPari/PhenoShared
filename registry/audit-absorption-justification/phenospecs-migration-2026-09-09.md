@@ -19,21 +19,21 @@ The 2026-07-26 audit concluded KEEP_CANONICAL because PhenoSpecs was the only st
 
 ## What was migrated
 
-- Source: `KooshaPari/zz-no-archive-PhenoSpecs` `hist` branch, file `registry.yaml`
+- Source: `<REDACTED>/zz-no-archive-PhenoSpecs` `hist` branch, file `registry.yaml`
 - Content: 366-line spec↔impl traceability index (3 sections: spec entries, ADR entries, integrations)
 - Destination: `phenotype-registry/registry/specs/from-PhenoSpecs/registry.yaml`
-- History preserved: `KooshaPari/zz-no-archive-PhenoSpecs` `hist` branch keeps the full git history (223 commits)
+- History preserved: `<REDACTED>/zz-no-archive-PhenoSpecs` `hist` branch keeps the full git history (223 commits)
 
 ## Consumer migration plan
 
-Consumers (repos that referenced `KooshaPari/PhenoSpecs/registry.yaml`):
+Consumers (repos that referenced `<REDACTED>/PhenoSpecs/registry.yaml`):
 - Update references to `phenotype-registry/registry/specs/from-PhenoSpecs/registry.yaml`
 - Track this migration in `phenotype-registry/registry/registry-deferred.md` until all consumers migrate
 
 ## Agent11 evidence
 
-- `/Users/kooshapari/Downloads/chat1-portfolio-audit-2026-09-05/agent11-evidence/phenospecs-registry-tracera-reference-fix.md`
-- `/Users/kooshapari/Downloads/chat1-portfolio-audit-2026-09-05/agent11-evidence/directive-A-pre-existing-ci-triage.md`
-- `/Users/kooshapari/Downloads/chat1-portfolio-audit-2026-09-05/agent11-evidence/directive-A-followup-pins.md`
-- `/Users/kooshapari/Downloads/chat1-portfolio-audit-2026-09-05/agent11-evidence/directive-A-followup-pins-2.md`
-- `/Users/kooshapari/Downloads/chat1-portfolio-audit-2026-09-05/agent11-evidence/portfolio-ledger-reconciliation.md`
+- `/Users/<REDACTED>/Downloads/chat1-portfolio-audit-2026-09-05/agent11-evidence/phenospecs-registry-tracera-reference-fix.md`
+- `/Users/<REDACTED>/Downloads/chat1-portfolio-audit-2026-09-05/agent11-evidence/directive-A-pre-existing-ci-triage.md`
+- `/Users/<REDACTED>/Downloads/chat1-portfolio-audit-2026-09-05/agent11-evidence/directive-A-followup-pins.md`
+- `/Users/<REDACTED>/Downloads/chat1-portfolio-audit-2026-09-05/agent11-evidence/directive-A-followup-pins-2.md`
+- `/Users/<REDACTED>/Downloads/chat1-portfolio-audit-2026-09-05/agent11-evidence/portfolio-ledger-reconciliation.md`

@@ -8,7 +8,7 @@ helix-logging — the curated-traces oracle complements those crates with real-t
 
 ## Provenance
 
-- Source: `KooshaPari/curated-traces` (archived 2026-07-17)
-- Target: `KooshaPari/PhenoObservability` (curated-traces/)
+- Source: `<REDACTED>/curated-traces` (archived 2026-07-17)
+- Target: `<REDACTED>/PhenoObservability` (curated-traces/)
 - Wave: `2026-07-17-queue-refresh-2`
 - Disposition: `ABSORB`

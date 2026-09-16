@@ -39,14 +39,14 @@ and the Configra absorb / monorepo-state deletion closure decisions.
 - **Path:** `docs/adr/2026-06-17/ADR-028-monorepo-architecture-eval.md`
 - **Status:** ACTIVE
 - **Owner:** platform (L5-106)
-- **Staging repo:** `KooshaPari/phenotype-org-audits`
+- **Staging repo:** `<REDACTED>/phenotype-org-audits`
 
-## ADR-029 — Dmouse92 → KooshaPari migration
+## ADR-029 — Dmouse92 → <REDACTED> migration
 
-- **Path:** `docs/adr/2026-06-17/ADR-029-dmouse92-kooshapari-migration.md`
+- **Path:** `docs/adr/2026-06-17/ADR-029-dmouse92-<REDACTED>-migration.md`
 - **Status:** ACTIVE (migration COMPLETE 2026-06-17 22:15 PDT)
 - **Owner:** orch-w1-a (L5-108)
-- **Cross-refs:** `findings/2026-06-17-L5-104-dmouse92-to-kooshapari.md`
+- **Cross-refs:** `findings/2026-06-17-L5-104-dmouse92-to-<REDACTED>.md`
 
 ## ADR-030 — pheno-worklog-schema v2.1 (add 11th `device:` column)
 
@@ -60,7 +60,7 @@ and the Configra absorb / monorepo-state deletion closure decisions.
 - **Path:** `docs/adr/2026-06-17/ADR-031-configra-absorb.md`
 - **Status:** **CLOSED 2026-06-19** (executed ahead of 2026-07-15 archive date)
 - **Owner:** orch-w1-a (L5-104.7)
-- **Outcome:** `KooshaPari/pheno#238` merge `3f12e254`; sub-crate CANONICAL.md markers
+- **Outcome:** `<REDACTED>/pheno#238` merge `3f12e254`; sub-crate CANONICAL.md markers
   re-pointed; phenotype-config deprecation continues on 2026-07-15 schedule.
 
 ## ADR-032 — pheno-worklog-schema is a primitive lib (NOT AgilePlus duplicate)
@@ -69,7 +69,7 @@ and the Configra absorb / monorepo-state deletion closure decisions.
 - **Status:** ACTIVE (deferred decision on merge; both formats coexist)
 - **Owner:** orch-w1-a (L5-104.8)
 
-## ADR-033 — Delete KooshaPari/phenotype-monorepo-state
+## ADR-033 — Delete <REDACTED>/phenotype-monorepo-state
 
 - **Path:** `docs/adr/2026-06-17/ADR-033-phenotype-monorepo-state-deletion.md`
 - **Status:** **CLOSED 2026-06-19** (user-deleted 2026-06-18, 18 days ahead of schedule)
@@ -77,7 +77,7 @@ and the Configra absorb / monorepo-state deletion closure decisions.
 - **Outcome:** HTTP 404 verified 2026-06-19 04:46 UTC; registry row `sr-monorepo-state`
   `fsm: done`.
 
-## ADR-034 — KooshaPari/phenotype-monorepo-state deletion schedule (2026-07-17)
+## ADR-034 — <REDACTED>/phenotype-monorepo-state deletion schedule (2026-07-17)
 
 - **Path:** `docs/adr/2026-06-17/ADR-034-monorepo-state-deletion-schedule.md`
 - **Status:** **CLOSED 2026-06-19** (schedule superseded by 2026-06-18 user action)

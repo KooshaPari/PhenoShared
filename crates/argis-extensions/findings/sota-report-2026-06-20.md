@@ -2,7 +2,7 @@
 
 **Date:** 2026-06-20
 **Sub-task:** sd-sota-05 (report)
-**Repo:** `KooshaPari/phenoResearchEngine` @ `main` (47254ca)
+**Repo:** `<REDACTED>/phenoResearchEngine` @ `main` (47254ca)
 **Author:** orch-v11-w2-zeta (v11 side-DAG filler wave)
 
 ---
@@ -44,10 +44,10 @@
 
 | Pattern | Source-of-truth repo | Effort | Impact |
 |---------|---------------------|--------|--------|
-| `pheno-tracing` OTLP spans (ADR-012/036B) | `KooshaPari/pheno-tracing` | S | Plumb APScheduler + crawler → OTLP |
-| `pheno-errors` machine codes (ADR-035B) | `KooshaPari/pheno-errors` | S | Replace bare `RuntimeError` raises |
-| `pheno-port-adapter` LlmPort (ADR-014/038) | `KooshaPari/pheno-port-adapter` | M | Wrap crawler adapters behind `Port` trait |
-| `pheno-worklog-schema` v2.1 (ADR-015/025) | `KooshaPari/pheno-worklog-schema` | S | Add `device:` field to WORKLOG.md |
+| `pheno-tracing` OTLP spans (ADR-012/036B) | `<REDACTED>/pheno-tracing` | S | Plumb APScheduler + crawler → OTLP |
+| `pheno-errors` machine codes (ADR-035B) | `<REDACTED>/pheno-errors` | S | Replace bare `RuntimeError` raises |
+| `pheno-port-adapter` LlmPort (ADR-014/038) | `<REDACTED>/pheno-port-adapter` | M | Wrap crawler adapters behind `Port` trait |
+| `pheno-worklog-schema` v2.1 (ADR-015/025) | `<REDACTED>/pheno-worklog-schema` | S | Add `device:` field to WORKLOG.md |
 | Coverage gate 80% (ADR-040) | fleet policy | M | Add `pytest --cov` with 80% lib threshold |
 | FastMCP SDK version pin | upstream | S | Pin to current SOTA FastMCP version |
 

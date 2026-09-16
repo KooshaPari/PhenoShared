@@ -261,7 +261,7 @@ These files appear to be:
 
 ## Files Analyzed
 
-**Repository**: `/Users/kooshapari/CodeProjects/Phenotype/repos/platforms/thegent`
+**Repository**: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/platforms/thegent`
 
 **Test file count**: 5,207 total files (excluding .gomodcache, vendor, .git)  
 **Actual project test LOC**: 27,972 LOC (excluding module cache)  

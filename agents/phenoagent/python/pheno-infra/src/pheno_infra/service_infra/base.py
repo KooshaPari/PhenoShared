@@ -27,7 +27,7 @@ class BaseServiceInfra:
     Core wiring and lifecycle primitives for ServiceInfra.
     """
 
-    def __init__(self, domain: str = "kooshapari.com", config_dir: str | None = None) -> None:
+    def __init__(self, domain: str = "<REDACTED>.com", config_dir: str | None = None) -> None:
         self.domain = domain
         self.config_dir = config_dir
 

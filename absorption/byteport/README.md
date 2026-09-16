@@ -1,8 +1,8 @@
 # BytePort — absorption stub
 
-> **Status:** MIGRATED (stub) — unblocks future archive of [`KooshaPari/BytePort`](https://github.com/KooshaPari/BytePort)
+> **Status:** MIGRATED (stub) — unblocks future archive of [`<REDACTED>/BytePort`](https://github.com/<REDACTED>/BytePort)
 
-**Source:** `KooshaPari/BytePort`  
+**Source:** `<REDACTED>/BytePort`  
 **Date:** 2026-06-17  
 **Target owner:** `phenotype-tooling` (byteport CLI / landing boundary)
 
@@ -22,4 +22,4 @@ DELETE/archive gate for Batch 3 rationalization.
 ## References
 
 - [`docs/absorption/BYTEPORT_PORT.md`](../../docs/absorption/BYTEPORT_PORT.md)
-- [`phenotype-tooling` PR #155](https://github.com/KooshaPari/phenotype-tooling/pull/155) — router-monitor absorption pattern
+- [`phenotype-tooling` PR #155](https://github.com/<REDACTED>/phenotype-tooling/pull/155) — router-monitor absorption pattern

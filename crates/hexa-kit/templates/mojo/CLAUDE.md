@@ -23,4 +23,4 @@ Mojo language layer templates composed on top of template-commons
 
 ## Spec Tracking
 
-Spec work is tracked via AgilePlus: `cd /Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus && agileplus <command>`
+Spec work is tracked via AgilePlus: `cd /Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus && agileplus <command>`

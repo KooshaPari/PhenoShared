@@ -14,7 +14,7 @@
     ],
     "component": {
       "type": "application",
-      "bom-ref": "path+file:///Users/kooshapari/CodeProjects/Phenotype/repos/FocalPoint/services/graphql-gateway#focus-graphql-gateway@0.0.12",
+      "bom-ref": "path+file:///Users/<REDACTED>/CodeProjects/Phenotype/repos/FocalPoint/services/graphql-gateway#focus-graphql-gateway@0.0.12",
       "name": "focus-graphql-gateway",
       "version": "0.0.12",
       "scope": "required",
@@ -27,14 +27,14 @@
       "components": [
         {
           "type": "library",
-          "bom-ref": "path+file:///Users/kooshapari/CodeProjects/Phenotype/repos/FocalPoint/services/graphql-gateway#focus-graphql-gateway@0.0.12 bin-target-0",
+          "bom-ref": "path+file:///Users/<REDACTED>/CodeProjects/Phenotype/repos/FocalPoint/services/graphql-gateway#focus-graphql-gateway@0.0.12 bin-target-0",
           "name": "focus_graphql_gateway",
           "version": "0.0.12",
           "purl": "pkg:cargo/focus-graphql-gateway@0.0.12?download_url=file://.#src/lib.rs"
         },
         {
           "type": "application",
-          "bom-ref": "path+file:///Users/kooshapari/CodeProjects/Phenotype/repos/FocalPoint/services/graphql-gateway#focus-graphql-gateway@0.0.12 bin-target-1",
+          "bom-ref": "path+file:///Users/<REDACTED>/CodeProjects/Phenotype/repos/FocalPoint/services/graphql-gateway#focus-graphql-gateway@0.0.12 bin-target-1",
           "name": "focus-graphql-gateway",
           "version": "0.0.12",
           "purl": "pkg:cargo/focus-graphql-gateway@0.0.12?download_url=file://.#src/main.rs"
@@ -51,7 +51,7 @@
   "components": [
     {
       "type": "library",
-      "bom-ref": "path+file:///Users/kooshapari/CodeProjects/Phenotype/repos/FocalPoint/crates/focus-audit#0.0.12",
+      "bom-ref": "path+file:///Users/<REDACTED>/CodeProjects/Phenotype/repos/FocalPoint/crates/focus-audit#0.0.12",
       "name": "focus-audit",
       "version": "0.0.12",
       "scope": "required",
@@ -64,7 +64,7 @@
     },
     {
       "type": "library",
-      "bom-ref": "path+file:///Users/kooshapari/CodeProjects/Phenotype/repos/FocalPoint/crates/focus-coaching#0.0.12",
+      "bom-ref": "path+file:///Users/<REDACTED>/CodeProjects/Phenotype/repos/FocalPoint/crates/focus-coaching#0.0.12",
       "name": "focus-coaching",
       "version": "0.0.12",
       "scope": "required",
@@ -77,7 +77,7 @@
     },
     {
       "type": "library",
-      "bom-ref": "path+file:///Users/kooshapari/CodeProjects/Phenotype/repos/FocalPoint/crates/focus-connectors#0.0.12",
+      "bom-ref": "path+file:///Users/<REDACTED>/CodeProjects/Phenotype/repos/FocalPoint/crates/focus-connectors#0.0.12",
       "name": "focus-connectors",
       "version": "0.0.12",
       "scope": "required",
@@ -90,7 +90,7 @@
     },
     {
       "type": "library",
-      "bom-ref": "path+file:///Users/kooshapari/CodeProjects/Phenotype/repos/FocalPoint/crates/focus-domain#0.0.12",
+      "bom-ref": "path+file:///Users/<REDACTED>/CodeProjects/Phenotype/repos/FocalPoint/crates/focus-domain#0.0.12",
       "name": "focus-domain",
       "version": "0.0.12",
       "scope": "required",
@@ -103,7 +103,7 @@
     },
     {
       "type": "library",
-      "bom-ref": "path+file:///Users/kooshapari/CodeProjects/Phenotype/repos/FocalPoint/crates/focus-events#0.0.12",
+      "bom-ref": "path+file:///Users/<REDACTED>/CodeProjects/Phenotype/repos/FocalPoint/crates/focus-events#0.0.12",
       "name": "focus-events",
       "version": "0.0.12",
       "scope": "required",
@@ -116,7 +116,7 @@
     },
     {
       "type": "library",
-      "bom-ref": "path+file:///Users/kooshapari/CodeProjects/Phenotype/repos/FocalPoint/crates/focus-observability#0.0.1",
+      "bom-ref": "path+file:///Users/<REDACTED>/CodeProjects/Phenotype/repos/FocalPoint/crates/focus-observability#0.0.1",
       "name": "focus-observability",
       "version": "0.0.1",
       "scope": "required",
@@ -129,7 +129,7 @@
     },
     {
       "type": "library",
-      "bom-ref": "path+file:///Users/kooshapari/CodeProjects/Phenotype/repos/FocalPoint/crates/focus-rewards#0.0.12",
+      "bom-ref": "path+file:///Users/<REDACTED>/CodeProjects/Phenotype/repos/FocalPoint/crates/focus-rewards#0.0.12",
       "name": "focus-rewards",
       "version": "0.0.12",
       "scope": "required",
@@ -142,7 +142,7 @@
     },
     {
       "type": "library",
-      "bom-ref": "path+file:///Users/kooshapari/CodeProjects/Phenotype/repos/FocalPoint/crates/focus-rules#0.0.12",
+      "bom-ref": "path+file:///Users/<REDACTED>/CodeProjects/Phenotype/repos/FocalPoint/crates/focus-rules#0.0.12",
       "name": "focus-rules",
       "version": "0.0.12",
       "scope": "required",
@@ -155,12 +155,12 @@
     },
     {
       "type": "library",
-      "bom-ref": "path+file:///Users/kooshapari/CodeProjects/Phenotype/repos/PhenoObservability/crates/phenotype-observably-macros#0.1.1",
+      "bom-ref": "path+file:///Users/<REDACTED>/CodeProjects/Phenotype/repos/PhenoObservability/crates/phenotype-observably-macros#0.1.1",
       "name": "phenotype-observably-macros",
       "version": "0.1.1",
       "description": "Procedural macros for PhenoObservability instrumentation patterns",
       "scope": "required",
-      "purl": "pkg:cargo/phenotype-observably-macros@0.1.1?download_url=file:///Users/kooshapari/CodeProjects/Phenotype/repos/PhenoObservability/crates/phenotype-observably-macros"
+      "purl": "pkg:cargo/phenotype-observably-macros@0.1.1?download_url=file:///Users/<REDACTED>/CodeProjects/Phenotype/repos/PhenoObservability/crates/phenotype-observably-macros"
     },
     {
       "type": "library",
@@ -8854,11 +8854,11 @@
   ],
   "dependencies": [
     {
-      "ref": "path+file:///Users/kooshapari/CodeProjects/Phenotype/repos/FocalPoint/crates/focus-audit#0.0.12",
+      "ref": "path+file:///Users/<REDACTED>/CodeProjects/Phenotype/repos/FocalPoint/crates/focus-audit#0.0.12",
       "dependsOn": [
         "registry+https://github.com/rust-lang/crates.io-index#anyhow@1.0.102",
         "registry+https://github.com/rust-lang/crates.io-index#chrono@0.4.44",
-        "path+file:///Users/kooshapari/CodeProjects/Phenotype/repos/FocalPoint/crates/focus-observability#0.0.1",
+        "path+file:///Users/<REDACTED>/CodeProjects/Phenotype/repos/FocalPoint/crates/focus-observability#0.0.1",
         "registry+https://github.com/rust-lang/crates.io-index#hex@0.4.3",
         "registry+https://github.com/rust-lang/crates.io-index#serde@1.0.228",
         "registry+https://github.com/rust-lang/crates.io-index#serde_json@1.0.149",
@@ -8869,7 +8869,7 @@
       ]
     },
     {
-      "ref": "path+file:///Users/kooshapari/CodeProjects/Phenotype/repos/FocalPoint/crates/focus-coaching#0.0.12",
+      "ref": "path+file:///Users/<REDACTED>/CodeProjects/Phenotype/repos/FocalPoint/crates/focus-coaching#0.0.12",
       "dependsOn": [
         "registry+https://github.com/rust-lang/crates.io-index#anyhow@1.0.102",
         "registry+https://github.com/rust-lang/crates.io-index#async-trait@0.1.89",
@@ -8884,18 +8884,18 @@
       ]
     },
     {
-      "ref": "path+file:///Users/kooshapari/CodeProjects/Phenotype/repos/FocalPoint/crates/focus-connectors#0.0.12",
+      "ref": "path+file:///Users/<REDACTED>/CodeProjects/Phenotype/repos/FocalPoint/crates/focus-connectors#0.0.12",
       "dependsOn": [
         "registry+https://github.com/rust-lang/crates.io-index#anyhow@1.0.102",
         "registry+https://github.com/rust-lang/crates.io-index#async-trait@0.1.89",
         "registry+https://github.com/rust-lang/crates.io-index#base64@0.22.1",
         "registry+https://github.com/rust-lang/crates.io-index#chrono@0.4.44",
-        "path+file:///Users/kooshapari/CodeProjects/Phenotype/repos/FocalPoint/crates/focus-domain#0.0.12",
-        "path+file:///Users/kooshapari/CodeProjects/Phenotype/repos/FocalPoint/crates/focus-events#0.0.12",
+        "path+file:///Users/<REDACTED>/CodeProjects/Phenotype/repos/FocalPoint/crates/focus-domain#0.0.12",
+        "path+file:///Users/<REDACTED>/CodeProjects/Phenotype/repos/FocalPoint/crates/focus-events#0.0.12",
         "registry+https://github.com/rust-lang/crates.io-index#hex@0.4.3",
         "registry+https://github.com/rust-lang/crates.io-index#hmac@0.12.1",
         "registry+https://github.com/rust-lang/crates.io-index#jsonwebtoken@9.3.1",
-        "path+file:///Users/kooshapari/CodeProjects/Phenotype/repos/PhenoObservability/crates/phenotype-observably-macros#0.1.1",
+        "path+file:///Users/<REDACTED>/CodeProjects/Phenotype/repos/PhenoObservability/crates/phenotype-observably-macros#0.1.1",
         "registry+https://github.com/rust-lang/crates.io-index#reqwest@0.12.28",
         "registry+https://github.com/rust-lang/crates.io-index#secrecy@0.10.3",
         "registry+https://github.com/rust-lang/crates.io-index#serde@1.0.228",
@@ -8909,7 +8909,7 @@
       ]
     },
     {
-      "ref": "path+file:///Users/kooshapari/CodeProjects/Phenotype/repos/FocalPoint/crates/focus-domain#0.0.12",
+      "ref": "path+file:///Users/<REDACTED>/CodeProjects/Phenotype/repos/FocalPoint/crates/focus-domain#0.0.12",
       "dependsOn": [
         "registry+https://github.com/rust-lang/crates.io-index#chrono@0.4.44",
         "registry+https://github.com/rust-lang/crates.io-index#serde@1.0.228",
@@ -8918,11 +8918,11 @@
       ]
     },
     {
-      "ref": "path+file:///Users/kooshapari/CodeProjects/Phenotype/repos/FocalPoint/crates/focus-events#0.0.12",
+      "ref": "path+file:///Users/<REDACTED>/CodeProjects/Phenotype/repos/FocalPoint/crates/focus-events#0.0.12",
       "dependsOn": [
         "registry+https://github.com/rust-lang/crates.io-index#async-trait@0.1.89",
         "registry+https://github.com/rust-lang/crates.io-index#chrono@0.4.44",
-        "path+file:///Users/kooshapari/CodeProjects/Phenotype/repos/FocalPoint/crates/focus-domain#0.0.12",
+        "path+file:///Users/<REDACTED>/CodeProjects/Phenotype/repos/FocalPoint/crates/focus-domain#0.0.12",
         "registry+https://github.com/rust-lang/crates.io-index#hex@0.4.3",
         "registry+https://github.com/rust-lang/crates.io-index#parking_lot@0.12.5",
         "registry+https://github.com/rust-lang/crates.io-index#serde@1.0.228",
@@ -8934,7 +8934,7 @@
       ]
     },
     {
-      "ref": "path+file:///Users/kooshapari/CodeProjects/Phenotype/repos/FocalPoint/crates/focus-observability#0.0.1",
+      "ref": "path+file:///Users/<REDACTED>/CodeProjects/Phenotype/repos/FocalPoint/crates/focus-observability#0.0.1",
       "dependsOn": [
         "registry+https://github.com/rust-lang/crates.io-index#anyhow@1.0.102",
         "registry+https://github.com/rust-lang/crates.io-index#chrono@0.4.44",
@@ -8954,10 +8954,10 @@
       ]
     },
     {
-      "ref": "path+file:///Users/kooshapari/CodeProjects/Phenotype/repos/FocalPoint/crates/focus-rewards#0.0.12",
+      "ref": "path+file:///Users/<REDACTED>/CodeProjects/Phenotype/repos/FocalPoint/crates/focus-rewards#0.0.12",
       "dependsOn": [
         "registry+https://github.com/rust-lang/crates.io-index#chrono@0.4.44",
-        "path+file:///Users/kooshapari/CodeProjects/Phenotype/repos/FocalPoint/crates/focus-audit#0.0.12",
+        "path+file:///Users/<REDACTED>/CodeProjects/Phenotype/repos/FocalPoint/crates/focus-audit#0.0.12",
         "registry+https://github.com/rust-lang/crates.io-index#serde@1.0.228",
         "registry+https://github.com/rust-lang/crates.io-index#serde_json@1.0.149",
         "registry+https://github.com/rust-lang/crates.io-index#thiserror@2.0.18",
@@ -8965,15 +8965,15 @@
       ]
     },
     {
-      "ref": "path+file:///Users/kooshapari/CodeProjects/Phenotype/repos/FocalPoint/crates/focus-rules#0.0.12",
+      "ref": "path+file:///Users/<REDACTED>/CodeProjects/Phenotype/repos/FocalPoint/crates/focus-rules#0.0.12",
       "dependsOn": [
         "registry+https://github.com/rust-lang/crates.io-index#anyhow@1.0.102",
         "registry+https://github.com/rust-lang/crates.io-index#async-trait@0.1.89",
         "registry+https://github.com/rust-lang/crates.io-index#chrono@0.4.44",
         "registry+https://github.com/rust-lang/crates.io-index#cron@0.16.0",
-        "path+file:///Users/kooshapari/CodeProjects/Phenotype/repos/FocalPoint/crates/focus-coaching#0.0.12",
-        "path+file:///Users/kooshapari/CodeProjects/Phenotype/repos/FocalPoint/crates/focus-domain#0.0.12",
-        "path+file:///Users/kooshapari/CodeProjects/Phenotype/repos/FocalPoint/crates/focus-events#0.0.12",
+        "path+file:///Users/<REDACTED>/CodeProjects/Phenotype/repos/FocalPoint/crates/focus-coaching#0.0.12",
+        "path+file:///Users/<REDACTED>/CodeProjects/Phenotype/repos/FocalPoint/crates/focus-domain#0.0.12",
+        "path+file:///Users/<REDACTED>/CodeProjects/Phenotype/repos/FocalPoint/crates/focus-events#0.0.12",
         "registry+https://github.com/rust-lang/crates.io-index#regex@1.12.3",
         "registry+https://github.com/rust-lang/crates.io-index#serde@1.0.228",
         "registry+https://github.com/rust-lang/crates.io-index#serde_json@1.0.149",
@@ -8982,7 +8982,7 @@
       ]
     },
     {
-      "ref": "path+file:///Users/kooshapari/CodeProjects/Phenotype/repos/FocalPoint/services/graphql-gateway#focus-graphql-gateway@0.0.12",
+      "ref": "path+file:///Users/<REDACTED>/CodeProjects/Phenotype/repos/FocalPoint/services/graphql-gateway#focus-graphql-gateway@0.0.12",
       "dependsOn": [
         "registry+https://github.com/rust-lang/crates.io-index#anyhow@1.0.102",
         "registry+https://github.com/rust-lang/crates.io-index#async-graphql@7.2.1",
@@ -8990,11 +8990,11 @@
         "registry+https://github.com/rust-lang/crates.io-index#async-trait@0.1.89",
         "registry+https://github.com/rust-lang/crates.io-index#axum@0.8.9",
         "registry+https://github.com/rust-lang/crates.io-index#chrono@0.4.44",
-        "path+file:///Users/kooshapari/CodeProjects/Phenotype/repos/FocalPoint/crates/focus-audit#0.0.12",
-        "path+file:///Users/kooshapari/CodeProjects/Phenotype/repos/FocalPoint/crates/focus-connectors#0.0.12",
-        "path+file:///Users/kooshapari/CodeProjects/Phenotype/repos/FocalPoint/crates/focus-domain#0.0.12",
-        "path+file:///Users/kooshapari/CodeProjects/Phenotype/repos/FocalPoint/crates/focus-rewards#0.0.12",
-        "path+file:///Users/kooshapari/CodeProjects/Phenotype/repos/FocalPoint/crates/focus-rules#0.0.12",
+        "path+file:///Users/<REDACTED>/CodeProjects/Phenotype/repos/FocalPoint/crates/focus-audit#0.0.12",
+        "path+file:///Users/<REDACTED>/CodeProjects/Phenotype/repos/FocalPoint/crates/focus-connectors#0.0.12",
+        "path+file:///Users/<REDACTED>/CodeProjects/Phenotype/repos/FocalPoint/crates/focus-domain#0.0.12",
+        "path+file:///Users/<REDACTED>/CodeProjects/Phenotype/repos/FocalPoint/crates/focus-rewards#0.0.12",
+        "path+file:///Users/<REDACTED>/CodeProjects/Phenotype/repos/FocalPoint/crates/focus-rules#0.0.12",
         "registry+https://github.com/rust-lang/crates.io-index#futures@0.3.32",
         "registry+https://github.com/rust-lang/crates.io-index#reqwest@0.12.28",
         "registry+https://github.com/rust-lang/crates.io-index#secrecy@0.10.3",
@@ -9010,7 +9010,7 @@
       ]
     },
     {
-      "ref": "path+file:///Users/kooshapari/CodeProjects/Phenotype/repos/PhenoObservability/crates/phenotype-observably-macros#0.1.1",
+      "ref": "path+file:///Users/<REDACTED>/CodeProjects/Phenotype/repos/PhenoObservability/crates/phenotype-observably-macros#0.1.1",
       "dependsOn": [
         "registry+https://github.com/rust-lang/crates.io-index#proc-macro2@1.0.106",
         "registry+https://github.com/rust-lang/crates.io-index#quote@1.0.45",

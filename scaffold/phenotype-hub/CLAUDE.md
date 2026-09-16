@@ -2,8 +2,8 @@
 
 Extends parent governance. See the following for canonical definitions:
 - **Global baseline:** `~/.claude/CLAUDE.md`
-- **Phenotype root:** `/Users/kooshapari/CodeProjects/Phenotype/repos/CLAUDE.md`
-- **AgilePlus mandate:** `/Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus`
+- **Phenotype root:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos/CLAUDE.md`
+- **AgilePlus mandate:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus`
 - **Governance reference:** `AGENTS.md` (local, this repository)
 
 ## Project Overview
@@ -11,7 +11,7 @@ Extends parent governance. See the following for canonical definitions:
 - **Name:** phenotype-hub
 - **Description:** Phenotype org hub scaffold for governance, repository
   discovery, and future service-routing decisions
-- **Location:** `/Users/kooshapari/CodeProjects/Phenotype/repos/phenotype-hub`
+- **Location:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos/phenotype-hub`
 - **Language Stack:** Governance/docs scaffold; implementation stack not yet
   populated
 - **Status:** Active scaffold
@@ -19,7 +19,7 @@ Extends parent governance. See the following for canonical definitions:
 ## AgilePlus Mandate
 
 All work MUST be tracked in AgilePlus:
-- CLI: `cd /Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus && agileplus <command>`
+- CLI: `cd /Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus && agileplus <command>`
 - Check for existing specs before implementing
 - Create spec for new work: `agileplus specify --title "<feature>" --description "<desc>"`
 - No code without corresponding AgilePlus spec

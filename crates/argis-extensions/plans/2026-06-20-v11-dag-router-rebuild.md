@@ -12,7 +12,7 @@
 
 | Check | Status |
 |-------|--------|
-| Auth (`KooshaPari` via `gh` CLI + SSH `push_key`) | ✅ |
+| Auth (`<REDACTED>` via `gh` CLI + SSH `push_key`) | ✅ |
 | `argis-extensions` → `argis-stale` synced | ✅ at `9b48fe8` |
 | All 12 active repos synced | ✅ (12/12) |
 | Worktrees pruned | ✅ (1 active) |
@@ -129,8 +129,8 @@ L5 (0.5w) ─┘            ├──> L3 (3w) ──> L4 (1w) ──> v11 closu
 
 | Blocker | Owner | Unblock by |
 |---------|-------|------------|
-| User approval of Option B | kooshapari | EOD 2026-06-20 |
-| 5 open questions in research §8 answered | kooshapari | Before L2 starts |
+| User approval of Option B | <REDACTED> | EOD 2026-06-20 |
+| 5 open questions in research §8 answered | <REDACTED> | Before L2 starts |
 | Bifrost v1.5.21 team responsiveness on SDK break clarifications | external | T1.1 |
 
 ---

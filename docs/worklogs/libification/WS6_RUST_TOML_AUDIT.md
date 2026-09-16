@@ -24,7 +24,7 @@ This audit examined TOML configuration handling across all Rust projects in the 
 ## Projects Audited
 
 ### 1. phenotype (Main Workspace Root)
-**Location:** `/Users/kooshapari/CodeProjects/Phenotype/repos`
+**Location:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos`
 
 | Metric | Value |
 |--------|-------|
@@ -65,7 +65,7 @@ Pattern: File-based loader with format detection
 ---
 
 ### 2. heliosCLI (Large Multi-Crate Workspace)
-**Location:** `/Users/kooshapari/CodeProjects/Phenotype/repos/heliosCLI`
+**Location:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos/heliosCLI`
 
 #### 2a. codex-rs Workspace
 **Cargo.toml:** 70+ member crates
@@ -148,7 +148,7 @@ Edit:       toml_edit for mutations
 ---
 
 ### 3. platforms/thegent (Policy & Agent Framework)
-**Location:** `/Users/kooshapari/CodeProjects/Phenotype/repos/platforms/thegent`
+**Location:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos/platforms/thegent`
 
 | Metric | Value |
 |--------|-------|
@@ -544,13 +544,13 @@ phenotype-config-layers (NEW, OPTIONAL)
 ### Tier 1: Quick Wins (1 hour total)
 
 **T1.1: Unify TOML Versions**
-- File: `/Users/kooshapari/CodeProjects/Phenotype/repos/Cargo.toml`
+- File: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/Cargo.toml`
 - Change: `toml = "0.8"` → `toml = "0.9.5"`
 - Effort: 10 min
 - Risk: LOW (minor version bump, backward compatible)
 
 **T1.2: Workspace Dependency Pinning**
-- File: `/Users/kooshapari/CodeProjects/Phenotype/repos/Cargo.toml`
+- File: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/Cargo.toml`
 - Add to [workspace.dependencies]:
   ```toml
   toml = "0.9.5"
@@ -954,35 +954,35 @@ However, **fragmentation and duplication** create technical debt:
 ### Analyzed Files
 
 **phenotype-config-core:**
-- `/Users/kooshapari/CodeProjects/Phenotype/repos/crates/phenotype-config-core/Cargo.toml`
-- `/Users/kooshapari/CodeProjects/Phenotype/repos/crates/phenotype-config-core/src/lib.rs`
-- `/Users/kooshapari/CodeProjects/Phenotype/repos/crates/phenotype-config-core/src/loader.rs`
-- `/Users/kooshapari/CodeProjects/Phenotype/repos/crates/phenotype-config-core/src/format.rs`
-- `/Users/kooshapari/CodeProjects/Phenotype/repos/crates/phenotype-config-core/src/error.rs`
-- `/Users/kooshapari/CodeProjects/Phenotype/repos/crates/phenotype-config-core/src/dirs_helper.rs`
+- `/Users/<REDACTED>/CodeProjects/Phenotype/repos/crates/phenotype-config-core/Cargo.toml`
+- `/Users/<REDACTED>/CodeProjects/Phenotype/repos/crates/phenotype-config-core/src/lib.rs`
+- `/Users/<REDACTED>/CodeProjects/Phenotype/repos/crates/phenotype-config-core/src/loader.rs`
+- `/Users/<REDACTED>/CodeProjects/Phenotype/repos/crates/phenotype-config-core/src/format.rs`
+- `/Users/<REDACTED>/CodeProjects/Phenotype/repos/crates/phenotype-config-core/src/error.rs`
+- `/Users/<REDACTED>/CodeProjects/Phenotype/repos/crates/phenotype-config-core/src/dirs_helper.rs`
 
 **heliosCLI/codex-rs config system:**
-- `/Users/kooshapari/CodeProjects/Phenotype/repos/heliosCLI/codex-rs/Cargo.toml`
-- `/Users/kooshapari/CodeProjects/Phenotype/repos/heliosCLI/codex-rs/core/src/config/mod.rs`
-- `/Users/kooshapari/CodeProjects/Phenotype/repos/heliosCLI/codex-rs/core/src/config/edit.rs`
-- `/Users/kooshapari/CodeProjects/Phenotype/repos/heliosCLI/codex-rs/core/src/config/types.rs`
-- `/Users/kooshapari/CodeProjects/Phenotype/repos/heliosCLI/codex-rs/core/src/config/service.rs`
-- `/Users/kooshapari/CodeProjects/Phenotype/repos/heliosCLI/codex-rs/core/src/config_loader/mod.rs`
-- `/Users/kooshapari/CodeProjects/Phenotype/repos/heliosCLI/codex-rs/core/src/config_loader/macos.rs`
+- `/Users/<REDACTED>/CodeProjects/Phenotype/repos/heliosCLI/codex-rs/Cargo.toml`
+- `/Users/<REDACTED>/CodeProjects/Phenotype/repos/heliosCLI/codex-rs/core/src/config/mod.rs`
+- `/Users/<REDACTED>/CodeProjects/Phenotype/repos/heliosCLI/codex-rs/core/src/config/edit.rs`
+- `/Users/<REDACTED>/CodeProjects/Phenotype/repos/heliosCLI/codex-rs/core/src/config/types.rs`
+- `/Users/<REDACTED>/CodeProjects/Phenotype/repos/heliosCLI/codex-rs/core/src/config/service.rs`
+- `/Users/<REDACTED>/CodeProjects/Phenotype/repos/heliosCLI/codex-rs/core/src/config_loader/mod.rs`
+- `/Users/<REDACTED>/CodeProjects/Phenotype/repos/heliosCLI/codex-rs/core/src/config_loader/macos.rs`
 
 **heliosCLI/helios-rs:**
-- `/Users/kooshapari/CodeProjects/Phenotype/repos/heliosCLI/helios-rs/Cargo.toml`
+- `/Users/<REDACTED>/CodeProjects/Phenotype/repos/heliosCLI/helios-rs/Cargo.toml`
 
 **platforms/thegent:**
-- `/Users/kooshapari/CodeProjects/Phenotype/repos/platforms/thegent/Cargo.toml`
-- `/Users/kooshapari/CodeProjects/Phenotype/repos/platforms/thegent/crates/thegent-policy/src/policy.rs`
-- `/Users/kooshapari/CodeProjects/Phenotype/repos/platforms/thegent/crates/thegent-policy/src/engine.rs`
+- `/Users/<REDACTED>/CodeProjects/Phenotype/repos/platforms/thegent/Cargo.toml`
+- `/Users/<REDACTED>/CodeProjects/Phenotype/repos/platforms/thegent/crates/thegent-policy/src/policy.rs`
+- `/Users/<REDACTED>/CodeProjects/Phenotype/repos/platforms/thegent/crates/thegent-policy/src/engine.rs`
 
 ### To Be Created
 
-- `/Users/kooshapari/CodeProjects/Phenotype/repos/crates/phenotype-toml-edit/Cargo.toml`
-- `/Users/kooshapari/CodeProjects/Phenotype/repos/crates/phenotype-toml-edit/src/lib.rs`
-- `/Users/kooshapari/CodeProjects/Phenotype/repos/docs/CONFIG_GOVERNANCE.md`
+- `/Users/<REDACTED>/CodeProjects/Phenotype/repos/crates/phenotype-toml-edit/Cargo.toml`
+- `/Users/<REDACTED>/CodeProjects/Phenotype/repos/crates/phenotype-toml-edit/src/lib.rs`
+- `/Users/<REDACTED>/CodeProjects/Phenotype/repos/docs/CONFIG_GOVERNANCE.md`
 
 ---
 

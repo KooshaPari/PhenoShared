@@ -39,7 +39,7 @@ If any of these repos need to be recovered from deletion:
 
 ```bash
 # Restore via git reflog (within 30 days of deletion)
-gh repo restore KooshaPari/<name>
+gh repo restore <REDACTED>/<name>
 
 # Or contact GitHub support for hard-deleted repos (>30 days)
 ```
@@ -47,7 +47,7 @@ gh repo restore KooshaPari/<name>
 ## Executed
 
 - [ ] Batch 13 reviewed and approved by Koosha
-- [ ] `gh repo delete KooshaPari/<name> -y` for each repo
+- [ ] `gh repo delete <REDACTED>/<name> -y` for each repo
 - [ ] Update `registry/disposition-index.json` with deletion timestamp
 - [ ] Update `docs/audits/depletion-progress-2026-07-17.md`
 

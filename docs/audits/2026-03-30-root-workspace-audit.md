@@ -12,7 +12,7 @@
 
 ## Configuration
 
-**File**: `/Users/kooshapari/CodeProjects/Phenotype/repos/Cargo.toml`
+**File**: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/Cargo.toml`
 
 **Package Metadata**: version 0.2.0, edition 2021, rust-version 1.75
 

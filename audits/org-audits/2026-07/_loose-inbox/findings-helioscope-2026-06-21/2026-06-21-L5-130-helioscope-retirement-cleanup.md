@@ -9,7 +9,7 @@
 
 ## Summary
 
-The Helioscope project (`KooshaPari/helioscope`) was retired 2026-06-21 per the
+The Helioscope project (`<REDACTED>/helioscope`) was retired 2026-06-21 per the
 v12-20 closure rationale. This audit scans the Phenotype monorepo for remaining
 `helioscope` / `Helioscope` references and opens minimum-scope PRs to retire
 STALE ones. **13 total references found; 11 STALE → ACTIVE or TOMBSTONE; 2
@@ -18,8 +18,8 @@ DOC-HISTORICAL.** Two cleanup PRs opened:
 
 | Repo | PR | Branch | Files | Lines changed |
 | --- | --- | --- | --- | --- |
-| helios-cli | [#599](https://github.com/KooshaPari/helios-cli/pull/599) | `chore/l5-130-helioscope-stale-docs-2026-06-21` | `README.md`, `CLAUDE.md`, `AGENTS.md` | +8 / -4 |
-| phenotype-registry | [#340](https://github.com/KooshaPari/phenotype-registry/pull/340) | `chore/l5-130-helioscope-stale-registry-2026-06-21` | `docs/intent/helioscope.md`, `docs/boundary/helioscope.md`, `scripts/resolve-collision.py` | +38 / -19 |
+| helios-cli | [#599](https://github.com/<REDACTED>/helios-cli/pull/599) | `chore/l5-130-helioscope-stale-docs-2026-06-21` | `README.md`, `CLAUDE.md`, `AGENTS.md` | +8 / -4 |
+| phenotype-registry | [#340](https://github.com/<REDACTED>/phenotype-registry/pull/340) | `chore/l5-130-helioscope-stale-registry-2026-06-21` | `docs/intent/helioscope.md`, `docs/boundary/helioscope.md`, `scripts/resolve-collision.py` | +38 / -19 |
 
 ## Classification methodology
 
@@ -69,7 +69,7 @@ Each reference was classified using four buckets, in order of disposition:
 - **`phenotype-registry-helioscope-final`** as a whole is the intentional
   retirement archive. Only the two entries above were touched (by leaving
   them as tombstones); no edits made.
-- **`/Users/kooshapari/CodeProjects/Phenotype/repos/Civis`** and
+- **`/Users/<REDACTED>/CodeProjects/Phenotype/repos/Civis`** and
   **`/tmp/civis-*`** were excluded per task constraint.
 - The **parallel-agent owner branch set** was not touched:
   `chore/l5-105-*`, `chore/l5-110-*`, `ci/v12-gates-*`, `chore/orch-v12-*`,
@@ -86,7 +86,7 @@ Each reference was classified using four buckets, in order of disposition:
   the canonical repo working trees.
 - Each branch is a single commit on top of `main`. No rebases, no force
   pushes.
-- `git remote -v` for both repos points at `git@github.com:KooshaPari/...`
+- `git remote -v` for both repos points at `git@github.com:<REDACTED>/...`
   (the public phenofleet); pushes went via SSH without incident.
 - The orchestrator (or a human reviewer) can verify the diffs on GitHub
   via the PR links above.
@@ -94,9 +94,9 @@ Each reference was classified using four buckets, in order of disposition:
 ## Verification
 
 - `gh pr list --head chore/l5-130-helioscope-stale-docs-2026-06-21` →
-  `{"number": 599, "state": "OPEN", "title": "chore(L5-130): replace stale 'Helioscope' references in helios-cli docs", "url": "https://github.com/KooshaPari/helios-cli/pull/599"}`
+  `{"number": 599, "state": "OPEN", "title": "chore(L5-130): replace stale 'Helioscope' references in helios-cli docs", "url": "https://github.com/<REDACTED>/helios-cli/pull/599"}`
 - `gh pr list --head chore/l5-130-helioscope-stale-registry-2026-06-21` →
-  `{"number": 340, "state": "OPEN", "title": "chore(L5-130): retire helioscope registry entries; fold to HeliosCLI", "url": "https://github.com/KooshaPari/phenotype-registry/pull/340"}`
+  `{"number": 340, "state": "OPEN", "title": "chore(L5-130): retire helioscope registry entries; fold to HeliosCLI", "url": "https://github.com/<REDACTED>/phenotype-registry/pull/340"}`
 - `git diff main --stat` for both worktrees matches the diffstat in the
   table above.
 - TOMBSTONE-classified references in `phenotype-registry-helioscope-final/`
@@ -118,9 +118,9 @@ ends. Recommend the following, in order:
      `RATIONALIZATION_PLAN.md`.
    This is the "officially archived" signal for downstream consumers.
 3. **Schedule a 7-day grace period (2026-07-12 → 2026-07-19) before
-   deleting the legacy `KooshaPari/helioscope` upstream.** During the grace
+   deleting the legacy `<REDACTED>/helioscope` upstream.** During the grace
    period, the GitHub repo's About / archive notice should point at
-   `KooshaPari/helios-cli` and the v12-20 closure rationale. After 2026-07-19,
+   `<REDACTED>/helios-cli` and the v12-20 closure rationale. After 2026-07-19,
    archive (do not delete) the repo via GitHub's archive feature so the
    commit history remains queryable.
 
@@ -133,9 +133,9 @@ TOMBSTONE → leave intact.
 
 - **Worklog:** `worklogs/L5-130-helioscope-cleanup-2026-06-21.json` (v2.1 schema
   per ADR-025; `device: macbook`)
-- **PR #1:** [helios-cli#599](https://github.com/KooshaPari/helios-cli/pull/599)
+- **PR #1:** [helios-cli#599](https://github.com/<REDACTED>/helios-cli/pull/599)
   — commit `a0520cee34a0531579fe86c8793ae8a84c78e805`
-- **PR #2:** [phenotype-registry#340](https://github.com/KooshaPari/phenotype-registry/pull/340)
+- **PR #2:** [phenotype-registry#340](https://github.com/<REDACTED>/phenotype-registry/pull/340)
   — commit `e667c24b23b78afc4b59781d062fb5e281c770b7`
 - **Retirement rationale:** `findings/2026-06-21-helioscope-cancellation-rationale.md`
 - **Tombstone records (intentionally untouched):**

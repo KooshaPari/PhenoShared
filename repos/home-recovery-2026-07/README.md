@@ -16,7 +16,7 @@ Recovery script that materialised $HOME entry shards; absorbed into phenotype-re
 
 ## Origin
 
-KooshaPari/home-recovery-2026-07 (deleted 2026-07); re-bundled /tmp/gh-backup-2026-08-08-home-recovery-2026-07.bundle (45K).
+<REDACTED>/home-recovery-2026-07 (deleted 2026-07); re-bundled /tmp/gh-backup-2026-08-08-home-recovery-2026-07.bundle (45K).
 
 ## Contents
 

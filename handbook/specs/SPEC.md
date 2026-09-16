@@ -1140,9 +1140,9 @@ Change Request (RFC) Process:
 1. [SOTA.md](./SOTA.md) — State of the Art research
 2. [PLAN.md](./PLAN.md) — Implementation plan
 3. [README.md](./README.md) — Quick start guide
-4. [PhenoSpecs](https://github.com/KooshaPari/PhenoSpecs) — Specification registry
-5. [HexaKit](https://github.com/KooshaPari/HexaKit) — Template registry
-6. [AgilePlus](https://github.com/KooshaPari/AgilePlus) — Spec-driven development
+4. [PhenoSpecs](https://github.com/<REDACTED>/PhenoSpecs) — Specification registry
+5. [HexaKit](https://github.com/<REDACTED>/HexaKit) — Template registry
+6. [AgilePlus](https://github.com/<REDACTED>/AgilePlus) — Spec-driven development
 
 ### External
 

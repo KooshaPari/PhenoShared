@@ -1,4 +1,4 @@
-<div id="readme" class="md" data-path="README.md"><article class="markdown-body entry-content container-lg" itemprop="text"><p dir="auto"><a target="_blank" rel="noopener noreferrer" href="https://github.com/KooshaPari/thegent/actions/workflows/ci.yml/badge.svg"><img src="https://github.com/KooshaPari/thegent/actions/workflows/ci.yml/badge.svg" alt="CI" style="max-width: 100%;"></a>
+<div id="readme" class="md" data-path="README.md"><article class="markdown-body entry-content container-lg" itemprop="text"><p dir="auto"><a target="_blank" rel="noopener noreferrer" href="https://github.com/<REDACTED>/thegent/actions/workflows/ci.yml/badge.svg"><img src="https://github.com/<REDACTED>/thegent/actions/workflows/ci.yml/badge.svg" alt="CI" style="max-width: 100%;"></a>
 <a href="https://opensource.org/licenses/MIT" rel="nofollow"><img src="https://camo.githubusercontent.com/fdf2982b9f5d7489dcf44570e714e3a15fce6253e0cc6b5aa61a075aac2ff71b/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f4c6963656e73652d4d49542d79656c6c6f772e737667" alt="License: MIT" data-canonical-src="https://img.shields.io/badge/License-MIT-yellow.svg" style="max-width: 100%;"></a>
 <a href="https://www.rust-lang.org/" rel="nofollow"><img src="https://camo.githubusercontent.com/d1f39f0193d0c6a6bc9e5201b663a65a89905fdc81af1658df84aa29c6980f0d/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f6275696c74253230776974682d527573742d6f72616e67652e737667" alt="Rust" data-canonical-src="https://img.shields.io/badge/built%20with-Rust-orange.svg" style="max-width: 100%;"></a>
 <a href="https://www.python.org/" rel="nofollow"><img src="https://camo.githubusercontent.com/faacbc9df0706b66a95e9550a776676c0bf7a1d0fac7e35f5c83e1402c71b2a9/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f707974686f6e2d332e31332532422d626c75652e737667" alt="Python 3.13+" data-canonical-src="https://img.shields.io/badge/python-3.13%2B-blue.svg" style="max-width: 100%;"></a></p>
@@ -179,13 +179,13 @@ templates for 10+ language stacks.</p>
 <tr>
 <td><strong><code>thegent</code> CLI</strong></td>
 <td>Python (Typer)</td>
-<td>this repo (<code>KooshaPari/thegent</code>)</td>
+<td>this repo (<code><REDACTED>/thegent</code>)</td>
 <td>Dotfiles manager, platform bootstrap, session orchestration, governance, multi-provider routing</td>
 </tr>
 <tr>
 <td><strong><code>thegent-dispatch</code></strong></td>
 <td>Rust (clap)</td>
-<td><a href="https://github.com/KooshaPari/thegent-dispatch"><code>KooshaPari/thegent-dispatch</code></a></td>
+<td><a href="https://github.com/<REDACTED>/thegent-dispatch"><code><REDACTED>/thegent-dispatch</code></a></td>
 <td>Provider-agnostic CLI dispatcher — translates a unified prompt schema into native argv for Forge, Codex, Gemini, Copilot, Cursor, Droid, Minimax, Kimi, Claude. Also exposed as a Claude Code skill (<code>thegent</code>).</td>
 </tr>
 </tbody>
@@ -197,7 +197,7 @@ templates for 10+ language stacks.</p>
 </ul>
 <div class="markdown-heading" dir="auto"><h3 class="heading-element" dir="auto">Hello world: dispatch a task to a provider CLI</h3><a id="user-content-hello-world-dispatch-a-task-to-a-provider-cli" class="anchor" aria-label="Permalink: Hello world: dispatch a task to a provider CLI" href="#hello-world-dispatch-a-task-to-a-provider-cli"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a></div>
 <div class="highlight highlight-source-shell notranslate position-relative overflow-auto" dir="auto" data-snippet-clipboard-copy-content="# Install thegent-dispatch
-git clone https://github.com/KooshaPari/thegent-dispatch
+git clone https://github.com/<REDACTED>/thegent-dispatch
 cd thegent-dispatch &amp;&amp; cargo build --release
 
 # Dispatch a prompt to Forge (primary provider)
@@ -210,7 +210,7 @@ cd thegent-dispatch &amp;&amp; cargo build --release
   --provider codex \
   --prompt &quot;What is 2+2?&quot; \
   --dry-run"><pre><span class="pl-c"><span class="pl-c">#</span> Install thegent-dispatch</span>
-git clone https://github.com/KooshaPari/thegent-dispatch
+git clone https://github.com/<REDACTED>/thegent-dispatch
 <span class="pl-c1">cd</span> thegent-dispatch <span class="pl-k">&amp;&amp;</span> cargo build --release
 
 <span class="pl-c"><span class="pl-c">#</span> Dispatch a prompt to Forge (primary provider)</span>
@@ -223,11 +223,11 @@ git clone https://github.com/KooshaPari/thegent-dispatch
   --provider codex \
   --prompt <span class="pl-s"><span class="pl-pds">"</span>What is 2+2?<span class="pl-pds">"</span></span> \
   --dry-run</pre></div>
-<p dir="auto">From inside Claude Code, the same dispatch is available via the bundled <code>thegent</code> skill — see <a href="https://github.com/KooshaPari/thegent-dispatch"><code>KooshaPari/thegent-dispatch</code></a> for the full provider matrix and options.</p>
+<p dir="auto">From inside Claude Code, the same dispatch is available via the bundled <code>thegent</code> skill — see <a href="https://github.com/<REDACTED>/thegent-dispatch"><code><REDACTED>/thegent-dispatch</code></a> for the full provider matrix and options.</p>
 <hr>
 <div class="markdown-heading" dir="auto"><h2 class="heading-element" dir="auto">Quick Start</h2><a id="user-content-quick-start" class="anchor" aria-label="Permalink: Quick Start" href="#quick-start"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a></div>
 <div class="highlight highlight-source-shell notranslate position-relative overflow-auto" dir="auto" data-snippet-clipboard-copy-content="# Clone and install
-git clone https://github.com/KooshaPari/thegent
+git clone https://github.com/<REDACTED>/thegent
 cd thegent
 uv sync --all-extras
 
@@ -237,7 +237,7 @@ thegent doctor
 
 # Run your first agent
 thegent run free &quot;Analyze the current directory structure&quot;"><pre><span class="pl-c"><span class="pl-c">#</span> Clone and install</span>
-git clone https://github.com/KooshaPari/thegent
+git clone https://github.com/<REDACTED>/thegent
 <span class="pl-c1">cd</span> thegent
 uv sync --all-extras
 
@@ -248,7 +248,7 @@ thegent doctor
 <span class="pl-c"><span class="pl-c">#</span> Run your first agent</span>
 thegent run free <span class="pl-s"><span class="pl-pds">"</span>Analyze the current directory structure<span class="pl-pds">"</span></span></pre></div>
 <p dir="auto">For Windows:</p>
-<div class="highlight highlight-source-powershell notranslate position-relative overflow-auto" dir="auto" data-snippet-clipboard-copy-content="irm https://raw.githubusercontent.com/KooshaPari/thegent/main/scripts/install.ps1 | iex"><pre>irm https:<span class="pl-k">//</span><span class="pl-c1">raw.githubusercontent.com</span><span class="pl-k">/</span>KooshaPari<span class="pl-k">/</span>thegent<span class="pl-k">/</span>main<span class="pl-k">/</span>scripts<span class="pl-k">/</span>install.ps1 <span class="pl-k">|</span> iex</pre></div>
+<div class="highlight highlight-source-powershell notranslate position-relative overflow-auto" dir="auto" data-snippet-clipboard-copy-content="irm https://raw.githubusercontent.com/<REDACTED>/thegent/main/scripts/install.ps1 | iex"><pre>irm https:<span class="pl-k">//</span><span class="pl-c1">raw.githubusercontent.com</span><span class="pl-k">/</span><REDACTED><span class="pl-k">/</span>thegent<span class="pl-k">/</span>main<span class="pl-k">/</span>scripts<span class="pl-k">/</span>install.ps1 <span class="pl-k">|</span> iex</pre></div>
 <hr>
 <div class="markdown-heading" dir="auto"><h2 class="heading-element" dir="auto">Directory Structure</h2><a id="user-content-directory-structure" class="anchor" aria-label="Permalink: Directory Structure" href="#directory-structure"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a></div>
 <markdown-accessiblity-table><table>
@@ -537,14 +537,14 @@ thegent run free <span class="pl-s"><span class="pl-pds">"</span>Analyze the cur
 </ul>
 <p dir="auto">Bootstrap a fresh system:</p>
 <div class="highlight highlight-source-shell notranslate position-relative overflow-auto" dir="auto" data-snippet-clipboard-copy-content="# Install thegent
-curl -fsSL https://raw.githubusercontent.com/KooshaPari/thegent/main/scripts/bootstrap.sh | sh -s -- install
+curl -fsSL https://raw.githubusercontent.com/<REDACTED>/thegent/main/scripts/bootstrap.sh | sh -s -- install
 
 # Full system bootstrap (shell, git, tools, project templates)
 thegent install -t all --scope both --full
 
 # Verify everything
 thegent doctor"><pre><span class="pl-c"><span class="pl-c">#</span> Install thegent</span>
-curl -fsSL https://raw.githubusercontent.com/KooshaPari/thegent/main/scripts/bootstrap.sh <span class="pl-k">|</span> sh -s -- install
+curl -fsSL https://raw.githubusercontent.com/<REDACTED>/thegent/main/scripts/bootstrap.sh <span class="pl-k">|</span> sh -s -- install
 
 <span class="pl-c"><span class="pl-c">#</span> Full system bootstrap (shell, git, tools, project templates)</span>
 thegent install -t all --scope both --full

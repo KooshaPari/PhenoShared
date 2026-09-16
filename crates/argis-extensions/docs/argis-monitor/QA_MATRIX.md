@@ -71,7 +71,7 @@
 
 - Test names above are real functions callable via `cargo test --test contract <name>`
 - Source paths are repo-relative; clickable from any markdown viewer
-- PR IDs are clickable links to github.com/KooshaPari/argis-extensions/pull/{N}
+- PR IDs are clickable links to github.com/<REDACTED>/argis-extensions/pull/{N}
 - Commit SHAs are 8-char prefixes; full SHAs available via `git rev-parse {short}`
 - Status columns are derivable: re-run `cargo test` and compare to this matrix
 - When test names change, this matrix MUST be updated in the same commit

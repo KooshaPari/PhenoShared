@@ -548,17 +548,17 @@ def generate_llms_txt(config: HubConfig) -> None:
 
 Critical documentation for understanding and using PhenoDocs:
 
-- [Getting Started](https://kooshapari.com/docs/getting-started): Installation, quick start, and basic concepts
-- [Architecture](https://kooshapari.com/docs/architecture): System design, federation model, and content layers
-- [Hub Generator](https://kooshapari.com/docs/hub-generator): CLI tool for documentation aggregation
+- [Getting Started](https://<REDACTED>.com/docs/getting-started): Installation, quick start, and basic concepts
+- [Architecture](https://<REDACTED>.com/docs/architecture): System design, federation model, and content layers
+- [Hub Generator](https://<REDACTED>.com/docs/hub-generator): CLI tool for documentation aggregation
 
 ## Optional
 
 Additional reference material:
 
-- [API Reference](https://kooshapari.com/reference/api): Complete API documentation
-- [ADRs](https://kooshapari.com/planning/adrs): Architecture decision records
-- [Changelog](https://kooshapari.com/audit/changelog): Version history and migration guides
+- [API Reference](https://<REDACTED>.com/reference/api): Complete API documentation
+- [ADRs](https://<REDACTED>.com/planning/adrs): Architecture decision records
+- [Changelog](https://<REDACTED>.com/audit/changelog): Version history and migration guides
 
 ## MCP Tools
 

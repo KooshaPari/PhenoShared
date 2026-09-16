@@ -6,7 +6,7 @@
   "color": "#0d9488",
   "description": "AI execution substrate: provider routing across HTTP, CLI, MCP, and A2A interfaces.",
   "tier": 2,
-  "repo": "KooshaPari/Substrate",
+  "repo": "<REDACTED>/Substrate",
   "language": "Rust",
   "license": "MIT",
   "status": "active",
@@ -17,8 +17,8 @@
     "Multi-interface"
   ],
   "links": {
-    "github": "https://github.com/KooshaPari/Substrate",
+    "github": "https://github.com/<REDACTED>/Substrate",
     "docs": "https://substrate.phenotype.space/docs",
-    "releases": "https://github.com/KooshaPari/Substrate/releases"
+    "releases": "https://github.com/<REDACTED>/Substrate/releases"
   }
 }

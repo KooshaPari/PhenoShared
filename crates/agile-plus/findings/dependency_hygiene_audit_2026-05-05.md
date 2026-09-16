@@ -78,7 +78,7 @@ All workflow files scanned use SHA-pinned or `@latest`/`@main` references, which
 | Repo | Replace Directive |
 |------|------------------|
 | argis-extensions | `replace github.com/maximhq/bifrost/core => ./bifrost/core` |
-| cliproxyapi-plusplus | `replace github.com/KooshaPari/phenotype-go-auth => ./third_party/phenotype-go-auth` |
+| cliproxyapi-plusplus | `replace github.com/<REDACTED>/phenotype-go-auth => ./third_party/phenotype-go-auth` |
 
 ### Assessment: ACCEPTABLE
 
@@ -103,6 +103,6 @@ These are NOT masking stale dependency issues.
 
 ## Repository
 
-- Location: `/Users/kooshapari/CodeProjects/Phenotype/repos/findings/dependency_hygiene_audit_2026-05-05.md`
+- Location: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/findings/dependency_hygiene_audit_2026-05-05.md`
 - Audit Date: 2026-05-05
 - Repos Audited: 5 (thegent, helios-cli, AtomsBot, PolicyStack, phenoShared)

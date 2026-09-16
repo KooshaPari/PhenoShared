@@ -11,9 +11,9 @@
 
 The task brief specified two paths that did not match the actual V12 scaffold:
 
-- Brief: `/Users/kooshapari/CodeProjects/Phenotype/repos/spikes/go/phenotype-router/internal/router/plugin.go`
+- Brief: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/spikes/go/phenotype-router/internal/router/plugin.go`
   (target SDK file)
-- Actual: `/Users/kooshapari/CodeProjects/Phenotype/repos/spikes/go/phenotype-router/internal/sdk/sdk.go`
+- Actual: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/spikes/go/phenotype-router/internal/sdk/sdk.go`
   (target SDK file — established by V12-T12)
 
 The V12-T15 finding from the same day already disclosed this discrepancy
@@ -129,7 +129,7 @@ with a non-nil `Error`); only the type names changed.
 - `github.com/maximhq/bifrost/core/schemas` (source's plugin SDK)
 
 **Added:**
-- `github.com/KooshaPari/phenotype-router/internal/sdk` (the V12-T12 SDK)
+- `github.com/<REDACTED>/phenotype-router/internal/sdk` (the V12-T12 SDK)
 - Stdlib-only HTTP (`net/http`, `bytes`, `encoding/json`) — same as source
 
 **Unchanged:**
@@ -175,7 +175,7 @@ against any Bifrost version.
 === RUN   TestAnalysisFromRequest_NilCases                       --- PASS
 === RUN   TestAnalysisFromRequest_RoundTrip                      --- PASS
 PASS
-ok  github.com/KooshaPari/phenotype-router/internal/plugins/contentsafety  0.213s
+ok  github.com/<REDACTED>/phenotype-router/internal/plugins/contentsafety  0.213s
 ```
 
 ### 5.1 Guard proofs (the `failingTransport` tests)
@@ -296,10 +296,10 @@ $ go test -v -race ./internal/plugins/contentsafety/...
 === RUN   TestNew_ConfigRespected                                --- PASS (0.00s)
 ... (25 tests, all PASS) ...
 PASS
-ok  github.com/KooshaPari/phenotype-router/internal/plugins/contentsafety  0.213s
+ok  github.com/<REDACTED>/phenotype-router/internal/plugins/contentsafety  0.213s
 
 $ go test ./internal/plugins/contentsafety/... 2>&1 | tail -1
-ok  github.com/KooshaPari/phenotype-router/internal/plugins/contentsafety  0.173s
+ok  github.com/<REDACTED>/phenotype-router/internal/plugins/contentsafety  0.173s
 ```
 
 **Pre-existing issues (not in scope, not introduced by this port):**

@@ -1,4 +1,4 @@
-# v14 CI Rot Diagnosis — KooshaPari/phenotype-apps
+# v14 CI Rot Diagnosis — <REDACTED>/phenotype-apps
 
 **Date:** 2026-06-21
 **Investigator:** Forge (post-conversation handoff)
@@ -90,7 +90,7 @@ chaos-flags-stress:
 ##[error]An error occurred trying to start process '/usr/bin/bash' with working directory
 '/home/runner/work/phenotype-apps/phenotype-apps/pheno-flags'. No such file or directory
 ```
-**Reality check:** `ls pheno-port-adapter pheno-errors pheno-otel` succeed on `main`; **`pheno-flags` does not exist** anywhere on `main` (verified by `pheno-port-adapter/src/lib.rs` lookup). The `pheno-flags` substrate lives in a different repo (`pheno-flags` is a separate `KooshaPari/pheno-flags` not vendored into phenotype-apps).
+**Reality check:** `ls pheno-port-adapter pheno-errors pheno-otel` succeed on `main`; **`pheno-flags` does not exist** anywhere on `main` (verified by `pheno-port-adapter/src/lib.rs` lookup). The `pheno-flags` substrate lives in a different repo (`pheno-flags` is a separate `<REDACTED>/pheno-flags` not vendored into phenotype-apps).
 **Fix (≥2 LoC):** Either (a) delete the `chaos-flags-stress` job (it's a no-op for this repo), or (b) change `working-directory` to `pheno-port-adapter` (matching the L11 perf benchmark which exists there).
 
 #### A4. `sbom` (×2 in branch protection) ❌ → Cargo.toml missing at root
@@ -287,22 +287,22 @@ This is consistent with the v12 closure report (`findings/2026-06-20-v12-closure
 
 ```bash
 # Workflow definitions (read from main branch, NOT apps-extract default)
-gh api /repos/KooshaPari/phenotype-apps/contents/.github/workflows/chaos.yml?ref=main -q .content | base64 -d
-gh api /repos/KooshaPari/phenotype-apps/contents/.github/workflows/perf-gate.yml?ref=main -q .content | base64 -d
-gh api /repos/KooshaPari/phenotype-apps/contents/.github/workflows/ssot-inject.yml?ref=main -q .content | base64 -d
-gh api /repos/KooshaPari/phenotype-apps/contents/.github/workflows/sbom.yml?ref=main -q .content | base64 -d
-gh api /repos/KooshaPari/phenotype-apps/contents/.github/workflows/deny.yml?ref=main -q .content | base64 -d
-gh api /repos/KooshaPari/phenotype-apps/contents/.github/workflows/fuzz.yml?ref=main -q .content | base64 -d
+gh api /repos/<REDACTED>/phenotype-apps/contents/.github/workflows/chaos.yml?ref=main -q .content | base64 -d
+gh api /repos/<REDACTED>/phenotype-apps/contents/.github/workflows/perf-gate.yml?ref=main -q .content | base64 -d
+gh api /repos/<REDACTED>/phenotype-apps/contents/.github/workflows/ssot-inject.yml?ref=main -q .content | base64 -d
+gh api /repos/<REDACTED>/phenotype-apps/contents/.github/workflows/sbom.yml?ref=main -q .content | base64 -d
+gh api /repos/<REDACTED>/phenotype-apps/contents/.github/workflows/deny.yml?ref=main -q .content | base64 -d
+gh api /repos/<REDACTED>/phenotype-apps/contents/.github/workflows/fuzz.yml?ref=main -q .content | base64 -d
 
 # Failure logs (latest failed runs, all on main push event)
-gh run view 27898873547 --repo KooshaPari/phenotype-apps --log-failed  # chaos + pheno-flags stress
-gh run view 27900989300 --repo KooshaPari/phenotype-apps --log-failed  # ssot-inject
-gh run view 27900989633 --repo KooshaPari/phenotype-apps --log-failed  # perf-gate
-gh run view 27900916528 --repo KooshaPari/phenotype-apps --log-failed  # sbom
-gh run view 27900989653 --repo KooshaPari/phenotype-apps --log-failed  # deny + govulncheck
+gh run view 27898873547 --repo <REDACTED>/phenotype-apps --log-failed  # chaos + pheno-flags stress
+gh run view 27900989300 --repo <REDACTED>/phenotype-apps --log-failed  # ssot-inject
+gh run view 27900989633 --repo <REDACTED>/phenotype-apps --log-failed  # perf-gate
+gh run view 27900916528 --repo <REDACTED>/phenotype-apps --log-failed  # sbom
+gh run view 27900989653 --repo <REDACTED>/phenotype-apps --log-failed  # deny + govulncheck
 
 # PR fingerprint (25 open, 13 with v14 fails)
-gh pr list --repo KooshaPari/phenotype-apps --state open --json number,title,headRefName,mergeable,statusCheckRollup --limit 30
+gh pr list --repo <REDACTED>/phenotype-apps --state open --json number,title,headRefName,mergeable,statusCheckRollup --limit 30
 ```
 
 ---

@@ -1,7 +1,7 @@
 # Wave 9 P3 phenoShared wave 2 — HexaKit
 
 **Date:** 2026-06-17  
-**Predecessor:** P3 wave 1 ([#252](https://github.com/KooshaPari/HexaKit/pull/252) — error crates)
+**Predecessor:** P3 wave 1 ([#252](https://github.com/<REDACTED>/HexaKit/pull/252) — error crates)
 
 ## Workspace exclude + git pin
 

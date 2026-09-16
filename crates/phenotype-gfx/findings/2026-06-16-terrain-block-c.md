@@ -2,9 +2,9 @@
 
 **Audit date:** 2026-06-16 (original); 2026-06-18 (re-issued verdict)
 **Auditor:** Block-C chat (per-repo audit pass)
-**Tracker:** [phenotype-registry#75 (SSOT)](https://github.com/KooshaPari/phenotype-registry/pull/75) — strategic merge #1 (GFX SDK)
-**Verdict at a glance:** **SUPERSEDE → `KooshaPari/phenotype-gfx` via PR #10 (commit `61c1617`).** This repo is a net-donor of design ideas (hexagonal ports, `net48`/`$(WorldBoxManaged)` contract) but a net-sink of speculative surface area (mock ports, docstring bloat, hand-rolled Unity stub). The C# `terrain` core is ported to Rust and absorbed into `phenotype-gfx/src/terrain/` (per ADR-004, single Rust core + thin FFI edges). The source repo `KooshaPari/phenotype-terrain` is **to be archived** once PR #10 merges; no downgrade path to preserve.
-**Long-term home:** <https://github.com/KooshaPari/phenotype-gfx> (PR #10)
+**Tracker:** [phenotype-registry#75 (SSOT)](https://github.com/<REDACTED>/phenotype-registry/pull/75) — strategic merge #1 (GFX SDK)
+**Verdict at a glance:** **SUPERSEDE → `<REDACTED>/phenotype-gfx` via PR #10 (commit `61c1617`).** This repo is a net-donor of design ideas (hexagonal ports, `net48`/`$(WorldBoxManaged)` contract) but a net-sink of speculative surface area (mock ports, docstring bloat, hand-rolled Unity stub). The C# `terrain` core is ported to Rust and absorbed into `phenotype-gfx/src/terrain/` (per ADR-004, single Rust core + thin FFI edges). The source repo `<REDACTED>/phenotype-terrain` is **to be archived** once PR #10 merges; no downgrade path to preserve.
+**Long-term home:** <https://github.com/<REDACTED>/phenotype-gfx> (PR #10)
 
 ---
 
@@ -15,7 +15,7 @@
 crate collection, preserving the C#-only Unity-consumer path documented in
 the README.
 
-**Re-issued verdict (2026-06-18, L5-113):** **SUPERSEDE → `KooshaPari/phenotype-gfx`
+**Re-issued verdict (2026-06-18, L5-113):** **SUPERSEDE → `<REDACTED>/phenotype-gfx`
 via PR #10 (commit `61c1617`).** The umbrella-sister layout is **replaced** by
 the **single Rust core + thin FFI edges** pattern mandated by ADR-004. The C#
 implementation is **ported to Rust** and absorbed into
@@ -38,7 +38,7 @@ the SDK's engine bindings are thin FFI edges per ADR-004, not C# projects.
 **References:**
 - `docs/adr/ADR-004-single-core-ffi-edges.md` — single Rust core + thin FFI edges.
 - `docs/adr/ADR-031-configra-absorb.md` — sibling "absorb, do not coexist" ADR.
-- PR: <https://github.com/KooshaPari/phenotype-gfx/pull/10>
+- PR: <https://github.com/<REDACTED>/phenotype-gfx/pull/10>
 - Commit: `61c1617` — `feat(gfx): port terrain + water C# to Rust (L5-110..111, ADR-004)`
 
 **Migration summary:** 2,682 lines absorbed (Rust terrain core + ports); 7 test

@@ -1,11 +1,11 @@
 > [!WARNING]
 > **SUPERSEDED 2026-06-19 — ARCHIVED**
-> This repository has been superseded by the **`apikit` Rust crate lineage**, whose entire surface (REST, GraphQL, WebSocket adapters, application router, domain middleware, infrastructure logging, governance, ADRs, CI, tooling, and operational docs) has in turn been absorbed into [`KooshaPari/phenotype-tooling/docs/absorbed-from-apikit/`](https://github.com/KooshaPari/phenotype-tooling/tree/main/docs/absorbed-from-apikit).
+> This repository has been superseded by the **`apikit` Rust crate lineage**, whose entire surface (REST, GraphQL, WebSocket adapters, application router, domain middleware, infrastructure logging, governance, ADRs, CI, tooling, and operational docs) has in turn been absorbed into [`<REDACTED>/phenotype-tooling/docs/absorbed-from-apikit/`](https://github.com/<REDACTED>/phenotype-tooling/tree/main/docs/absorbed-from-apikit).
 >
 > **Do not open new work, PRs, or clones here.** Read-only history is preserved; the canonical home of every artifact that ever lived in this repo is downstream of `apikit`.
-> See [`UPSTREAM.md`](./UPSTREAM.md) for the full migration trail, and the [`CHANGELOG`](https://github.com/KooshaPari/phenotype-tooling/blob/main/docs/absorbed-from-apikit/CHANGELOG.md) of the absorbing collection for the dated absorption entry (2026-06-20).
+> See [`UPSTREAM.md`](./UPSTREAM.md) for the full migration trail, and the [`CHANGELOG`](https://github.com/<REDACTED>/phenotype-tooling/blob/main/docs/absorbed-from-apikit/CHANGELOG.md) of the absorbing collection for the dated absorption entry (2026-06-20).
 >
-> Per the Phenotype org-wide [GitHub archive policy](https://github.com/KooshaPari/phenotype-omlx/blob/main/docs/guides/GITHUB_ARCHIVE_POLICY.md), this remote is archived (read-only) and named in its original form (`Apisync`, not `zz-archive-Apisync`) only because the org-wide rename sweep is held until the central registry ticket closes; the repo is **not** an active development target.
+> Per the Phenotype org-wide [GitHub archive policy](https://github.com/<REDACTED>/phenotype-omlx/blob/main/docs/guides/GITHUB_ARCHIVE_POLICY.md), this remote is archived (read-only) and named in its original form (`Apisync`, not `zz-archive-Apisync`) only because the org-wide rename sweep is held until the central registry ticket closes; the repo is **not** an active development target.
 
 # Apisync
 
@@ -23,15 +23,15 @@
 The Apisync surface has migrated downstream along this chain:
 
 ```
-KooshaPari/Apisync        ← you are here (archived, read-only)
+<REDACTED>/Apisync        ← you are here (archived, read-only)
         │
         │  extracted as v0.1.0 foundation → became `apikit`
         ▼
-KooshaPari/apikit         (successor; also archived 2026-06-21)
+<REDACTED>/apikit         (successor; also archived 2026-06-21)
         │
         │  governance + Rust source + CI + docs + ADRs absorbed
         ▼
-KooshaPari/phenotype-tooling
+<REDACTED>/phenotype-tooling
   └─ docs/absorbed-from-apikit/
        ├─ README.md                                          (apikit entry point, "Migrated from Apisync")
        ├─ ABSORPTION.md                                      (deletion / absorption provenance)
@@ -51,14 +51,14 @@ If you came here looking for:
 
 | You wanted | Go to |
 | --- | --- |
-| Live canonical source | [`phenotype-tooling/docs/absorbed-from-apikit/src/`](https://github.com/KooshaPari/phenotype-tooling/tree/main/docs/absorbed-from-apikit/src) |
-| Original Apisync README (preserved verbatim) | [`phenotype-tooling/docs/absorbed-from-apikit/docs/governance/README.apisync.md`](https://github.com/KooshaPari/phenotype-tooling/blob/main/docs/absorbed-from-apikit/docs/governance/README.apisync.md) |
-| Architecture decisions (ADRs 001–005) | [`phenotype-tooling/docs/absorbed-from-apikit/docs/governance/adr/`](https://github.com/KooshaPari/phenotype-tooling/tree/main/docs/absorbed-from-apikit/docs/governance/adr) |
+| Live canonical source | [`phenotype-tooling/docs/absorbed-from-apikit/src/`](https://github.com/<REDACTED>/phenotype-tooling/tree/main/docs/absorbed-from-apikit/src) |
+| Original Apisync README (preserved verbatim) | [`phenotype-tooling/docs/absorbed-from-apikit/docs/governance/README.apisync.md`](https://github.com/<REDACTED>/phenotype-tooling/blob/main/docs/absorbed-from-apikit/docs/governance/README.apisync.md) |
+| Architecture decisions (ADRs 001–005) | [`phenotype-tooling/docs/absorbed-from-apikit/docs/governance/adr/`](https://github.com/<REDACTED>/phenotype-tooling/tree/main/docs/absorbed-from-apikit/docs/governance/adr) |
 | Spec / functional requirements / test matrix | `phenotype-tooling/docs/absorbed-from-apikit/docs/governance/{SPEC,FUNCTIONAL_REQUIREMENTS,TEST_COVERAGE_MATRIX}.apisync.md` |
 | Plan / status / PRD / changelog | `phenotype-tooling/docs/absorbed-from-apikit/docs/governance/{PLAN,STATUS,PRD,CHANGELOG}.apisync.md` |
 | SOTA research, journeys, stories | `phenotype-tooling/docs/absorbed-from-apikit/docs/{research,SOTA.md,sessions/{journeys,stories,traceability}}/` |
-| HexaKit pattern lineage (uses Apisync ADRs as origin) | [`pheno/crates/hexa-kit/docs/adr/origin/`](https://github.com/KooshaPari/pheno/tree/main/crates/hexa-kit/docs/adr/origin) |
-| Phenotype consumer (e.g. `phenotype-core` / `phenotype-gateway` workspaces) | pin to `KooshaPari/phenotype-types` main — see HexaKit #271 |
+| HexaKit pattern lineage (uses Apisync ADRs as origin) | [`pheno/crates/hexa-kit/docs/adr/origin/`](https://github.com/<REDACTED>/pheno/tree/main/crates/hexa-kit/docs/adr/origin) |
+| Phenotype consumer (e.g. `phenotype-core` / `phenotype-gateway` workspaces) | pin to `<REDACTED>/phenotype-types` main — see HexaKit #271 |
 
 ## Why this repo is archived
 
@@ -74,7 +74,7 @@ into the `apikit` crate, which was in turn a feeder into
 3. Description set to `SUPERSEDED 2026-06-19 — migrated into apikit (absorbed into phenotype-tooling). Do not push here.`
 4. This `README.md` was written to point at upstream.
 
-A future org-wide rename will move this to `KooshaPari/zz-archive-Apisync`
+A future org-wide rename will move this to `<REDACTED>/zz-archive-Apisync`
 to keep active-development repos sorted to the top of the org landing page;
 until then, the remote URL stays unchanged for traceability with the
 existing `phenotype-registry` introspections.
@@ -131,14 +131,14 @@ src/
 
 ## Migrating off this repo
 
-If your crate still pulls from `KooshaPari/Apisync` (e.g. as a `git`/`cargo`
+If your crate still pulls from `<REDACTED>/Apisync` (e.g. as a `git`/`cargo`
 dependency, or a `pheno` submodule — `pheno/.gitmodules` lists `Apisync`
-alongside 80+ other KooshaPari submodules), repoint to:
+alongside 80+ other <REDACTED> submodules), repoint to:
 
-- **Cargo**: `apikit = { git = "https://github.com/KooshaPari/phenotype-tooling" }`
+- **Cargo**: `apikit = { git = "https://github.com/<REDACTED>/phenotype-tooling" }`
   *(cargo sees the absorbed manifest; see `Cargo.toml.apisync-legacy` for the
   pre-absorption shape)*
-- **Submodule**: replace `path = Apisync` / `url = https://github.com/KooshaPari/Apisync.git`
+- **Submodule**: replace `path = Apisync` / `url = https://github.com/<REDACTED>/Apisync.git`
   with the consumer repo that should own the HTTP toolkit today (typically
   `phenotype-gateway` or a `pheno` workspace member; see Wave 14 task #1 of
   `docs/operations/wave14-gateway-ssot-2026-06-17.md` for the unblock that
@@ -146,7 +146,7 @@ alongside 80+ other KooshaPari submodules), repoint to:
 
 If you need a CLI / quickstart that matches the **original** Apisync README,
 the verbatim text is in
-[`docs/governance/README.apisync.md`](https://github.com/KooshaPari/phenotype-tooling/blob/main/docs/absorbed-from-apikit/docs/governance/README.apisync.md).
+[`docs/governance/README.apisync.md`](https://github.com/<REDACTED>/phenotype-tooling/blob/main/docs/absorbed-from-apikit/docs/governance/README.apisync.md).
 
 ## License
 

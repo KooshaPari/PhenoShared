@@ -184,7 +184,7 @@ Repeated 3 times (runs 1, 2, 3)
 
 ```bash
 # Check YAML syntax
-github api repos/KooshaPari/phenotype-infrakit/actions/workflows
+github api repos/<REDACTED>/phenotype-infrakit/actions/workflows
 ```
 
 **Expected**: Workflow appears in the list without errors.
@@ -293,7 +293,7 @@ Job completed in: ~15 minutes (4 × full builds + overhead)
    ```
 
 2. Monitor workflow in GitHub Actions tab:
-   - Go to: https://github.com/KooshaPari/phenotype-infrakit/actions
+   - Go to: https://github.com/<REDACTED>/phenotype-infrakit/actions
    - Find: "Mold Linker Benchmark" job
    - Verify: All steps pass
 

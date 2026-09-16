@@ -2,7 +2,7 @@
 """
 sharecli-ipc.py — minimal Python client for the sharecli-ipc UNIX socket.
 
-Wire format (per /Users/kooshapari/CodeProjects/Phenotype/repos/sharecli/crates/
+Wire format (per /Users/<REDACTED>/CodeProjects/Phenotype/repos/sharecli/crates/
 sharecli-ipc/src/main.rs:7-9):
 
     Protocol: newline-delimited JSON (NDJSON).
@@ -35,7 +35,7 @@ Method names exposed by the daemon (handler.rs:336-470):
 There is no `health.notify` method in the source. The "notify" pathway
 implemented below is best-effort: it first tries `sharecli cast send` to
 inject text into a registered tray pane (the cross-machine text injection
-path registered in /Users/kooshapari/Library/Application
+path registered in /Users/<REDACTED>/Library/Application
 Support/sharecli/cast/pane-map.toml), and falls back to a benign
 `health.status` IPC probe so the tray's poll loop can observe resume-all
 activity through the IPC socket.

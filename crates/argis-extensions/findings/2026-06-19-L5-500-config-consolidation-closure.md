@@ -6,13 +6,13 @@
 ## Six-Repo Consolidation Assessment
 
 ### 1. Settly → Configra Workspace (ABSORBED)
-- **Settly standalone** (`KooshaPari/Settly`): 2 crates (`settly`, `config-schema`)
-- **Configra workspace** (`KooshaPari/Configra`): 3 crates (`settly`, `pheno-config`, `config-schema`)
-- Configra already absorbed Settly's logic into its workspace. Both share same author (KooshaPari).
+- **Settly standalone** (`<REDACTED>/Settly`): 2 crates (`settly`, `config-schema`)
+- **Configra workspace** (`<REDACTED>/Configra`): 3 crates (`settly`, `pheno-config`, `config-schema`)
+- Configra already absorbed Settly's logic into its workspace. Both share same author (<REDACTED>).
 - **Action**: Settly standalone → archive on GitHub. Configra is canonical.
 
 ### 2. cheap-llm-mcp (ARCHIVED)
-- GitHub shows `KooshaPari/cheap-llm-mcp` exists (not found locally)
+- GitHub shows `<REDACTED>/cheap-llm-mcp` exists (not found locally)
 - W1-2 archive work completed earlier: 43/43 tests pass, lib-side refactor pushed
 - No outstanding references from active repos
 - **Action**: Finalize archive on GitHub. No merge needed.
@@ -51,6 +51,6 @@ All L5-500 follow-ups verified via `gh api`:
 
 | Step | Action | Result | Evidence |
 |---|---|---|---|
-| 1 | Archive Settly on GitHub | **DONE** | `gh api repos/KooshaPari/Settly` → `archived: true` (pushed 2026-06-19) |
-| 2 | Verify cheap-llm-mcp archive status | **DONE** | `gh api repos/KooshaPari/cheap-llm-mcp` → `404 Not Found` (already removed) |
+| 1 | Archive Settly on GitHub | **DONE** | `gh api repos/<REDACTED>/Settly` → `archived: true` (pushed 2026-06-19) |
+| 2 | Verify cheap-llm-mcp archive status | **DONE** | `gh api repos/<REDACTED>/cheap-llm-mcp` → `404 Not Found` (already removed) |
 | 3 | v11 findings need real research | **DEFERRED** | 150 placeholder files exist in `findings/`; deferred to separate v11 tracks (T74-T88) |

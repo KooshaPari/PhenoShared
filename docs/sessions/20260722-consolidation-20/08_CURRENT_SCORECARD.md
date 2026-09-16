@@ -4,14 +4,14 @@ Date: 2026-08-02
 
 Evidence window: `2026-08-01 08:32:46Z-08:35:27Z`
 
-Evidence source: [PR #450](https://github.com/KooshaPari/phenotype-registry/pull/450), head
+Evidence source: [PR #450](https://github.com/<REDACTED>/phenotype-registry/pull/450), head
 `b31203dd4b72afd81fb608e7c1b91b5438931a7c`
 
-Live promotion source: GitHub API snapshots of [PR #453](https://github.com/KooshaPari/phenotype-registry/pull/453),
-[PR #454](https://github.com/KooshaPari/phenotype-registry/pull/454),
-[PR #455](https://github.com/KooshaPari/phenotype-registry/pull/455),
-[PR #456](https://github.com/KooshaPari/phenotype-registry/pull/456),
-[PR #448](https://github.com/KooshaPari/phenotype-registry/pull/448), `main`, and branch protection at
+Live promotion source: GitHub API snapshots of [PR #453](https://github.com/<REDACTED>/phenotype-registry/pull/453),
+[PR #454](https://github.com/<REDACTED>/phenotype-registry/pull/454),
+[PR #455](https://github.com/<REDACTED>/phenotype-registry/pull/455),
+[PR #456](https://github.com/<REDACTED>/phenotype-registry/pull/456),
+[PR #448](https://github.com/<REDACTED>/phenotype-registry/pull/448), `main`, and branch protection at
 2026-08-02 08:01:40Z.
 
 Baseline: `phenotype-registry/main` at `834c721f409b00294c6117a6b7e84f0c1be51e66`

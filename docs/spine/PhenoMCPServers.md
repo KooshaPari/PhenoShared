@@ -38,7 +38,7 @@ PhenoMCPServers/
 
 ## Status
 
-- Source repo (`KooshaPari/PhenoMCPServers`): kept live
+- Source repo (`<REDACTED>/PhenoMCPServers`): kept live
 - Registry row: `fsm=archived disposition=DECLARE_SPINE` (this row formally
   records the spine role; do NOT mark `fsm=absorbed` because it isn't
   absorbed)

@@ -1,14 +1,14 @@
 <#
 .SYNOPSIS
   Install a GitHub Actions self-hosted runner on Windows 11 (AMD64) as a
-  dedicated service, registered at the KooshaPari organization scope.
+  dedicated service, registered at the <REDACTED> organization scope.
 
 .DESCRIPTION
   Provisions a `gh-runner` local user, downloads the latest actions/runner
   release from github.com, and installs it as a Windows service running
   under the dedicated service account. Registers the runner at the
-  organization scope (https://github.com/KooshaPari) with labels
-  "self-hosted,Windows,X64,desktop-kooshapari-desk" so workflows can
+  organization scope (https://github.com/<REDACTED>) with labels
+  "self-hosted,Windows,X64,desktop-<REDACTED>-desk" so workflows can
   target this GPU/desktop box directly.
 
   Forgejo deployment is blocked on OCI capacity; this runner stands in
@@ -24,7 +24,7 @@
 
 .PARAMETER RegToken
   GitHub Actions registration token. If omitted, the script will try to
-  fetch one via `gh api -X POST orgs/KooshaPari/actions/runners/registration-token`.
+  fetch one via `gh api -X POST orgs/<REDACTED>/actions/runners/registration-token`.
   The invoking user must have `gh` CLI authenticated with an org-admin
   scope (`admin:org`) for that fetch to succeed.
 
@@ -32,16 +32,16 @@
   Install root. Default: C:\actions-runner
 
 .PARAMETER OrgUrl
-  Organization URL to register against. Default: https://github.com/KooshaPari
+  Organization URL to register against. Default: https://github.com/<REDACTED>
 
 .PARAMETER Labels
-  Runner labels. Default: self-hosted,Windows,X64,desktop-kooshapari-desk
+  Runner labels. Default: self-hosted,Windows,X64,desktop-<REDACTED>-desk
 
 .PARAMETER RunnerName
-  Runner name shown in GitHub. Default: desktop-kooshapari-desk
+  Runner name shown in GitHub. Default: desktop-<REDACTED>-desk
 
 .NOTES
-  Run in an ELEVATED PowerShell session on kooshapari-desk.tail2b570.ts.net.
+  Run in an ELEVATED PowerShell session on <REDACTED>-desk.tail2b570.ts.net.
   Requires: Tailscale installed + connected, Windows 11 AMD64, admin rights,
   and either `gh auth login` with org-admin scope OR a pre-fetched -RegToken.
 
@@ -52,7 +52,7 @@
 
 .EXAMPLE
   # Option B — paste a pre-fetched token
-  PS> $t = gh api -X POST orgs/KooshaPari/actions/runners/registration-token --jq .token
+  PS> $t = gh api -X POST orgs/<REDACTED>/actions/runners/registration-token --jq .token
   PS> .\install-windows-runner.ps1 -RegToken $t
 #>
 
@@ -60,9 +60,9 @@
 param(
   [string]$RegToken    = $null,
   [string]$InstallDir  = 'C:\actions-runner',
-  [string]$OrgUrl      = 'https://github.com/KooshaPari',
-  [string]$Labels      = 'self-hosted,Windows,X64,desktop-kooshapari-desk',
-  [string]$RunnerName  = 'desktop-kooshapari-desk',
+  [string]$OrgUrl      = 'https://github.com/<REDACTED>',
+  [string]$Labels      = 'self-hosted,Windows,X64,desktop-<REDACTED>-desk',
+  [string]$RunnerName  = 'desktop-<REDACTED>-desk',
   [string]$RunnerUser  = 'gh-runner',
   [string]$ServiceName = 'GitHubActionsRunner'
 )
@@ -122,7 +122,7 @@ if ([string]::IsNullOrWhiteSpace($RegToken)) {
     Fail 'gh CLI not found. Install GitHub CLI and run `gh auth login` with admin:org scope, or pass -RegToken <token>.'
   }
   try {
-    $RegToken = & gh api -X POST 'orgs/KooshaPari/actions/runners/registration-token' --jq .token
+    $RegToken = & gh api -X POST 'orgs/<REDACTED>/actions/runners/registration-token' --jq .token
   } catch {
     Fail "gh api call failed: $_. Ensure `gh auth login` completed with admin:org scope."
   }
@@ -276,7 +276,7 @@ Write-Ok "Runner registered + service installed by config.cmd"
 
 # config.cmd installs the service with its own canonical name; detect it so we
 # can tune crash-recovery + link the pause task to the real name.
-$actualService = Get-Service | Where-Object { $_.Name -match '^actions\.runner\..*KooshaPari.*' -or $_.DisplayName -match $RunnerName } |
+$actualService = Get-Service | Where-Object { $_.Name -match '^actions\.runner\..*<REDACTED>.*' -or $_.DisplayName -match $RunnerName } |
   Select-Object -First 1
 if (-not $actualService) {
   Write-Warn2 "Could not detect the installed actions.runner.* service automatically. Assuming name '$ServiceName'; verify with Get-Service."
@@ -359,10 +359,10 @@ if ($generatedPassword) {
 
 Write-Host 'Verify:' -ForegroundColor Cyan
 Write-Host "  Get-Service '$resolvedServiceName'           # expect Running"
-Write-Host "  gh api orgs/KooshaPari/actions/runners --jq '.runners[] | select(.name == \"$RunnerName\") | {name, status, busy, labels: [.labels[].name]}'"
+Write-Host "  gh api orgs/<REDACTED>/actions/runners --jq '.runners[] | select(.name == \"$RunnerName\") | {name, status, busy, labels: [.labels[].name]}'"
 Write-Host ''
 Write-Host 'Target this runner from a workflow:' -ForegroundColor Cyan
-Write-Host "  runs-on: [self-hosted, Windows, X64, desktop-kooshapari-desk]"
+Write-Host "  runs-on: [self-hosted, Windows, X64, desktop-<REDACTED>-desk]"
 Write-Host ''
 Write-Host "Install dir : $InstallDir" -ForegroundColor DarkGray
 Write-Host "Logs        : $logDir + $InstallDir\_diag" -ForegroundColor DarkGray

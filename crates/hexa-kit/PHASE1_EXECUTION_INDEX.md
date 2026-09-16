@@ -121,7 +121,7 @@ Once both tokens are set:
 
 ### Command 1: Create Sentry Projects
 ```bash
-cd /Users/kooshapari/CodeProjects/Phenotype/repos
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos
 bash scripts/automation/sentry-automation.sh
 ```
 **Expected output:** 30 Sentry projects created
@@ -129,7 +129,7 @@ bash scripts/automation/sentry-automation.sh
 
 ### Command 2: Enroll in Snyk
 ```bash
-cd /Users/kooshapari/CodeProjects/Phenotype/repos
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos
 bash scripts/automation/snyk-deployment.sh
 ```
 **Expected output:** 30 repos enrolled in Snyk
@@ -137,7 +137,7 @@ bash scripts/automation/snyk-deployment.sh
 
 ### Command 3: Verify Everything
 ```bash
-cd /Users/kooshapari/CodeProjects/Phenotype/repos
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos
 bash scripts/automation/verify-security-framework.sh
 ```
 **Expected output:** All 25 items verified ✅

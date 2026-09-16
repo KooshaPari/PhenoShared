@@ -589,7 +589,7 @@ implements:
 
 ### 4.1 Registry Query API
 
-**Base URL:** `https://raw.githubusercontent.com/KooshaPari/phenotype-registry/main/`
+**Base URL:** `https://raw.githubusercontent.com/<REDACTED>/phenotype-registry/main/`
 
 **Endpoints:**
 
@@ -608,7 +608,7 @@ implements:
   "registries": [
     {
       "name": "PhenoSpecs",
-      "url": "https://github.com/KooshaPari/PhenoSpecs",
+      "url": "https://github.com/<REDACTED>/PhenoSpecs",
       "description": "Specifications and ADRs",
       "stats": {
         "specs": 45,
@@ -618,7 +618,7 @@ implements:
     },
     {
       "name": "PhenoHandbook",
-      "url": "https://github.com/KooshaPari/PhenoHandbook",
+      "url": "https://github.com/<REDACTED>/PhenoHandbook",
       "description": "Patterns and guidelines",
       "stats": {
         "patterns": 62,
@@ -628,7 +628,7 @@ implements:
     },
     {
       "name": "HexaKit",
-      "url": "https://github.com/KooshaPari/HexaKit",
+      "url": "https://github.com/<REDACTED>/HexaKit",
       "description": "Templates and scaffolding",
       "stats": {
         "templates": 18
@@ -806,9 +806,9 @@ python scripts/validate_links.py --coverage
 
 ## 9. References
 
-- [PhenoSpecs Repository](https://github.com/KooshaPari/PhenoSpecs)
-- [PhenoHandbook Repository](https://github.com/KooshaPari/PhenoHandbook)
-- [HexaKit Repository](https://github.com/KooshaPari/HexaKit)
+- [PhenoSpecs Repository](https://github.com/<REDACTED>/PhenoSpecs)
+- [PhenoHandbook Repository](https://github.com/<REDACTED>/PhenoHandbook)
+- [HexaKit Repository](https://github.com/<REDACTED>/HexaKit)
 - [ADR-001: Multi-Registry Architecture](./docs/adrs/ADR-001-multi-registry-architecture.md)
 - [ADR-002: Traceability-First Documentation](./docs/adrs/ADR-002-traceability-first-documentation.md)
 - [ADR-003: Automated Validation Strategy](./docs/adrs/ADR-003-automated-validation-strategy.md)

@@ -32,14 +32,14 @@ Complete checklist for deploying Snyk security scanning across the Phenotype eco
 
 - [ ] **All Phenotype repos cloned locally**
   ```bash
-  ls /Users/kooshapari/CodeProjects/Phenotype/repos | wc -l
+  ls /Users/<REDACTED>/CodeProjects/Phenotype/repos | wc -l
   # Expected: 30 directories
   ```
 
 - [ ] **GitHub authentication verified**
   ```bash
   gh auth status
-  # Expected: Logged in to github.com as KooshaPari
+  # Expected: Logged in to github.com as <REDACTED>
   ```
 
 ### Token Acquisition
@@ -109,8 +109,8 @@ Follow: **SNYK_LOCAL_DEPLOYMENT_GUIDE.md**
 
 - [ ] **Repository root navigated**
   ```bash
-  cd /Users/kooshapari/CodeProjects/Phenotype/repos
-  pwd  # Should be /Users/kooshapari/CodeProjects/Phenotype/repos
+  cd /Users/<REDACTED>/CodeProjects/Phenotype/repos
+  pwd  # Should be /Users/<REDACTED>/CodeProjects/Phenotype/repos
   ```
 
 - [ ] **Deployment script exists and is executable**
@@ -290,13 +290,13 @@ Follow: **GITHUB_WORKFLOW_DEPLOYMENT_GUIDE.md**
 
 - [ ] **SNYK_TOKEN added to GitHub organization secrets**
   ```bash
-  gh secret set SNYK_TOKEN --org KooshaPari
+  gh secret set SNYK_TOKEN --org <REDACTED>
   # Paste token when prompted
   ```
 
 - [ ] **Secret verified**
   ```bash
-  gh secret list --org KooshaPari | grep SNYK_TOKEN
+  gh secret list --org <REDACTED> | grep SNYK_TOKEN
   # Expected: SNYK_TOKEN    Updated [timestamp]
   ```
 
@@ -306,7 +306,7 @@ Follow: **GITHUB_WORKFLOW_DEPLOYMENT_GUIDE.md**
 
 - [ ] **Workflow file created**
   ```bash
-  cd /Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus
+  cd /Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus
   mkdir -p .github/workflows
   cat > .github/workflows/snyk-scan.yml << 'EOF'
   [see GITHUB_WORKFLOW_DEPLOYMENT_GUIDE.md for full content]
@@ -321,14 +321,14 @@ Follow: **GITHUB_WORKFLOW_DEPLOYMENT_GUIDE.md**
   ```
 
 - [ ] **Workflow visible on GitHub**
-  - Visited: https://github.com/KooshaPari/AgilePlus/actions
+  - Visited: https://github.com/<REDACTED>/AgilePlus/actions
   - Confirmed: "Snyk Security Scan" workflow listed
 
 #### heliosCLI
 
 - [ ] **Workflow file created**
   ```bash
-  cd /Users/kooshapari/CodeProjects/Phenotype/repos/heliosCLI
+  cd /Users/<REDACTED>/CodeProjects/Phenotype/repos/heliosCLI
   mkdir -p .github/workflows
   cat > .github/workflows/snyk-scan.yml << 'EOF'
   [same as AgilePlus]
@@ -343,14 +343,14 @@ Follow: **GITHUB_WORKFLOW_DEPLOYMENT_GUIDE.md**
   ```
 
 - [ ] **Workflow visible on GitHub**
-  - Visited: https://github.com/KooshaPari/heliosCLI/actions
+  - Visited: https://github.com/<REDACTED>/heliosCLI/actions
   - Confirmed: "Snyk Security Scan" workflow listed
 
 #### phenotype-infrakit
 
 - [ ] **Workflow file created**
   ```bash
-  cd /Users/kooshapari/CodeProjects/Phenotype/repos/phenotype-infrakit
+  cd /Users/<REDACTED>/CodeProjects/Phenotype/repos/phenotype-infrakit
   mkdir -p .github/workflows
   cat > .github/workflows/snyk-scan.yml << 'EOF'
   [same as AgilePlus]
@@ -365,7 +365,7 @@ Follow: **GITHUB_WORKFLOW_DEPLOYMENT_GUIDE.md**
   ```
 
 - [ ] **Workflow visible on GitHub**
-  - Visited: https://github.com/KooshaPari/phenotype-infrakit/actions
+  - Visited: https://github.com/<REDACTED>/phenotype-infrakit/actions
   - Confirmed: "Snyk Security Scan" workflow listed
 
 ### Workflow Verification
@@ -399,7 +399,7 @@ Follow: **GITHUB_WORKFLOW_DEPLOYMENT_GUIDE.md**
 - [ ] **Temporary token storage cleaned up**
   ```bash
   # If using .env file:
-  rm -f /Users/kooshapari/CodeProjects/Phenotype/repos/.env
+  rm -f /Users/<REDACTED>/CodeProjects/Phenotype/repos/.env
 
   # Clear shell history (optional):
   history -c
@@ -425,13 +425,13 @@ Follow: **GITHUB_WORKFLOW_DEPLOYMENT_GUIDE.md**
   ```bash
   for repo in AgilePlus heliosCLI phenotype-infrakit; do
     echo "=== $repo ==="
-    gh run list -R KooshaPari/$repo -w "Snyk Security Scan" --limit 1
+    gh run list -R <REDACTED>/$repo -w "Snyk Security Scan" --limit 1
   done
   ```
 
 - [ ] **Organization secret is set**
   ```bash
-  gh secret list --org KooshaPari | grep SNYK_TOKEN
+  gh secret list --org <REDACTED> | grep SNYK_TOKEN
   ```
 
 - [ ] **No security issues introduced**
@@ -509,7 +509,7 @@ snyk test --dry-run
 
 ### Local Deployment
 ```bash
-cd /Users/kooshapari/CodeProjects/Phenotype/repos
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos
 export SNYK_TOKEN="your-token-here"
 ./scripts/snyk-deploy.sh
 cat .snyk-reports/report.txt
@@ -526,8 +526,8 @@ git commit -m "security: deploy Snyk scanning"
 
 ### GitHub Integration
 ```bash
-gh secret set SNYK_TOKEN --org KooshaPari
-cd /Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus
+gh secret set SNYK_TOKEN --org <REDACTED>
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus
 cat > .github/workflows/snyk-scan.yml << 'EOF'
 [workflow content]
 EOF
@@ -549,7 +549,7 @@ git push origin main
    - Solution: `brew install snyk`
 
 3. **Workflow shows "Unauthorized"**
-   - Solution: Re-run `gh secret set SNYK_TOKEN --org KooshaPari`
+   - Solution: Re-run `gh secret set SNYK_TOKEN --org <REDACTED>`
 
 4. **Workflow not triggering**
    - Solution: Check `.github/workflows/snyk-scan.yml` is committed

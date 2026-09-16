@@ -45,10 +45,10 @@ dig +short git.phenotype.io
 
 ## Step 4 — Access controls (Cloudflare Access)
 
-For `vault.phenotype.io` and `ci.phenotype.io`, require Cloudflare Access (OTP to kooshapari@gmail.com):
+For `vault.phenotype.io` and `ci.phenotype.io`, require Cloudflare Access (OTP to <REDACTED>@gmail.com):
 
 - Zero Trust → Access → Applications → Add application (self-hosted).
-- Policy: `email` in `[kooshapari@gmail.com]`.
+- Policy: `email` in `[<REDACTED>@gmail.com]`.
 - Session duration: 24h.
 
 Forgejo (`git.phenotype.io`) stays open to the public (mirror target) with rate limiting via Cloudflare rules.

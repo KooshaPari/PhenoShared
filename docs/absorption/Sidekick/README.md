@@ -1,7 +1,7 @@
 # Absorption Record: Sidekick
 
 **Date**: 2026-07-17
-**Source**: `KooshaPari/Sidekick`
+**Source**: `<REDACTED>/Sidekick`
 **Target**: `PhenoObservability/crates/{sidekick-messaging,sidekick-obs-core,sidekick-observability}/`
 **Wave**: `2026-07-17-queue-refresh-2`
 **Disposition**: `ABSORB`
@@ -31,4 +31,4 @@ logkit, helix-logging, tracingkit).
 
 - Branch: `PhenoObservability:overlay/logify-2026-07-17` (commit `8347113`)
 - Source compiles cleanly: `Finished in 0.51s`
-- Source `KooshaPari/Sidekick` archived 2026-07-17
+- Source `<REDACTED>/Sidekick` archived 2026-07-17

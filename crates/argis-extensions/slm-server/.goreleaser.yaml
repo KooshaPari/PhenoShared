@@ -62,7 +62,7 @@ changelog:
 
 release:
   github:
-    owner: kooshapari
+    owner: <REDACTED>
     name: bifrost-extensions
   prerelease: auto
   name_template: "SLM Server v{{.Version}}"
@@ -76,7 +76,7 @@ release:
     **Windows (Homebox):**
     ```powershell
     # Download and extract
-    Invoke-WebRequest -Uri "https://github.com/kooshapari/bifrost-extensions/releases/download/v{{.Version}}/slm-server_{{.Version}}_windows_amd64.zip" -OutFile slm-server.zip
+    Invoke-WebRequest -Uri "https://github.com/<REDACTED>/bifrost-extensions/releases/download/v{{.Version}}/slm-server_{{.Version}}_windows_amd64.zip" -OutFile slm-server.zip
     Expand-Archive slm-server.zip -DestinationPath .
     
     # Run (connects to vLLM in WSL2)
@@ -85,14 +85,14 @@ release:
     
     **macOS (MLX):**
     ```bash
-    curl -LO https://github.com/kooshapari/bifrost-extensions/releases/download/v{{.Version}}/slm-server_{{.Version}}_darwin_arm64.tar.gz
+    curl -LO https://github.com/<REDACTED>/bifrost-extensions/releases/download/v{{.Version}}/slm-server_{{.Version}}_darwin_arm64.tar.gz
     tar xzf slm-server_{{.Version}}_darwin_arm64.tar.gz
     ./slm-server -backend mlx
     ```
     
     **Linux:**
     ```bash
-    curl -LO https://github.com/kooshapari/bifrost-extensions/releases/download/v{{.Version}}/slm-server_{{.Version}}_linux_amd64.tar.gz
+    curl -LO https://github.com/<REDACTED>/bifrost-extensions/releases/download/v{{.Version}}/slm-server_{{.Version}}_linux_amd64.tar.gz
     tar xzf slm-server_{{.Version}}_linux_amd64.tar.gz
     ./slm-server -vllm-url http://localhost:8000
     ```

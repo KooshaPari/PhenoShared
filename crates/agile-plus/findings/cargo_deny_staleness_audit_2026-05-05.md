@@ -1,7 +1,7 @@
 # cargo-deny Staleness Audit
 
 **Audit date:** 2026-05-05
-**Scope:** `/Users/kooshapari/CodeProjects/Phenotype/repos/*/deny.toml` + `repos/deny.toml`
+**Scope:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos/*/deny.toml` + `repos/deny.toml`
 **Total deny.toml files scanned:** 51 (verified with `[advisories]` section)
 **Auditor:** automated parser (Python 3 + tomli)
 
@@ -27,7 +27,7 @@
 
 ### 1. hwLedger -- 24 ignores (HIGHEST RISK)
 
-**File:** `/Users/kooshapari/CodeProjects/Phenotype/repos/hwLedger/deny.toml`
+**File:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos/hwLedger/deny.toml`
 
 All 24 ignores have no rationale and no date.
 
@@ -62,7 +62,7 @@ Notable: `RUSTSEC-2017-0008` (9 years old, no rationale) and `RUSTSEC-2023-0071`
 
 ### 2. BytePort -- 17 ignores
 
-**File:** `/Users/kooshapari/CodeProjects/Phenotype/repos/BytePort/deny.toml`
+**File:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos/BytePort/deny.toml`
 
 All 17 ignores have no rationale and no date.
 
@@ -90,7 +90,7 @@ Shares the same 10-advisory batch (RUSTSEC-2024-0411 through -0420) with hwLedge
 
 ### 3. forgecode -- 9 ignores
 
-**File:** `/Users/kooshapari/CodeProjects/Phenotype/repos/forgecode/deny.toml`
+**File:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos/forgecode/deny.toml`
 
 All 9 ignores have no rationale and no date.
 
@@ -110,7 +110,7 @@ Note: RUSTSEC-2024-0320 appears twice in the same file (copy-paste error).
 
 ### 4. FocalPoint -- 4 ignores
 
-**File:** `/Users/kooshapari/CodeProjects/Phenotype/repos/FocalPoint/deny.toml`
+**File:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos/FocalPoint/deny.toml`
 
 | Advisory ID | Has Rationale | Date |
 |---|---|---|
@@ -121,7 +121,7 @@ Note: RUSTSEC-2024-0320 appears twice in the same file (copy-paste error).
 
 ### 5. rust -- 4 ignores
 
-**File:** `/Users/kooshapari/CodeProjects/Phenotype/repos/rust/deny.toml`
+**File:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos/rust/deny.toml`
 
 | Advisory ID | Has Rationale | Date |
 |---|---|---|
@@ -132,7 +132,7 @@ Note: RUSTSEC-2024-0320 appears twice in the same file (copy-paste error).
 
 ### 6. helioscope -- 3 ignores
 
-**File:** `/Users/kooshapari/CodeProjects/Phenotype/repos/helioscope/deny.toml`
+**File:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos/helioscope/deny.toml`
 
 | Advisory ID | Has Rationale | Date |
 |---|---|---|
@@ -142,7 +142,7 @@ Note: RUSTSEC-2024-0320 appears twice in the same file (copy-paste error).
 
 ### 7. HeliosLab -- 1 ignore
 
-**File:** `/Users/kooshapari/CodeProjects/Phenotype/repos/HeliosLab/deny.toml`
+**File:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos/HeliosLab/deny.toml`
 
 | Advisory ID | Has Rationale | Date |
 |---|---|---|
@@ -150,7 +150,7 @@ Note: RUSTSEC-2024-0320 appears twice in the same file (copy-paste error).
 
 ### 8. helios-cli -- 1 ignore
 
-**File:** `/Users/kooshapari/CodeProjects/Phenotype/repos/helios-cli/deny.toml`
+**File:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos/helios-cli/deny.toml`
 
 | Advisory ID | Has Rationale | Date |
 |---|---|---|
@@ -158,7 +158,7 @@ Note: RUSTSEC-2024-0320 appears twice in the same file (copy-paste error).
 
 ### 9. phenoData -- 1 ignore
 
-**File:** `/Users/kooshapari/CodeProjects/Phenotype/repos/phenoData/deny.toml`
+**File:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos/phenoData/deny.toml`
 
 | Advisory ID | Has Rationale | Date | Notes |
 |---|---|---|---|
@@ -166,7 +166,7 @@ Note: RUSTSEC-2024-0320 appears twice in the same file (copy-paste error).
 
 ### 10. phenoUtils -- 1 ignore
 
-**File:** `/Users/kooshapari/CodeProjects/Phenotype/repos/phenoUtils/deny.toml`
+**File:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos/phenoUtils/deny.toml`
 
 | Advisory ID | Has Rationale | Date |
 |---|---|---|
@@ -178,7 +178,7 @@ Note: RUSTSEC-2024-0320 appears twice in the same file (copy-paste error).
 
 ### 11. AtomsBot -- parse error (cargo-deny will fail)
 
-**File:** `/Users/kooshapari/CodeProjects/Phenotype/repos/AtomsBot/deny.toml`
+**File:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos/AtomsBot/deny.toml`
 **Error:** `Cannot overwrite a value (at line 24, column 66)`
 
 Root cause: duplicate `allow-registry` key in `[sources]` section.
@@ -194,7 +194,7 @@ cargo-deny will refuse to parse this file entirely. Note: this file has no advis
 
 ### 12. PhenoControl -- parse error (cargo-deny will fail)
 
-**File:** `/Users/kooshapari/CodeProjects/Phenotype/repos/PhenoControl/deny.toml`
+**File:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos/PhenoControl/deny.toml`
 **Error:** `Cannot overwrite a value (at line 21, column 66)`
 
 Root cause: same duplicate `allow-registry` issue in `[sources]` section.
@@ -212,7 +212,7 @@ cargo-deny expects `{ id = "...", rationale = "..." }` but this file uses `{ cra
 
 ### 13. PhenoObservability -- malformed ignores (silent failure)
 
-**File:** `/Users/kooshapari/CodeProjects/Phenotype/repos/PhenoObservability/deny.toml`
+**File:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos/PhenoObservability/deny.toml`
 **Status:** Parses successfully but ignore entries use wrong field names -- silently ineffective.
 
 ```toml
@@ -291,7 +291,7 @@ cargo-deny expects `{ id, rationale, date }` but this file uses `{ crate, adviso
 
 ## Methodology
 
-- File discovery: `find /Users/kooshapari/CodeProjects/Phenotype/repos -maxdepth 2 -name "deny.toml" -not -path "*/target/*" | sort`
+- File discovery: `find /Users/<REDACTED>/CodeProjects/Phenotype/repos -maxdepth 2 -name "deny.toml" -not -path "*/target/*" | sort`
 - Filter: only files containing `[advisories]` section (verified with grep)
 - Parse: Python 3 with `tomli` (TOML 1.0 compliant)
 - Staleness threshold: >365 days since ignore date

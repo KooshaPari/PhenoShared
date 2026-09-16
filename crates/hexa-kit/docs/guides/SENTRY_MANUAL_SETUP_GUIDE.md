@@ -150,11 +150,11 @@ GitHub Secrets are encrypted environment variables available to all workflows in
 ### Prerequisites
 
 - Must have **Organization admin** or **Maintain** role
-- Organization: `KooshaPari` (verify this is correct)
+- Organization: `<REDACTED>` (verify this is correct)
 
 ### Step 1: Navigate to Organization Settings
 
-1. Go to your GitHub Organization: https://github.com/organizations/KooshaPari/settings/
+1. Go to your GitHub Organization: https://github.com/organizations/<REDACTED>/settings/
 2. Click **Settings** (left sidebar)
 3. Click **Secrets and variables** (left sidebar, under "Security")
 4. Click **Actions** (you should see three tabs: Secrets, Variables, Dependabot)
@@ -205,21 +205,21 @@ For each repository, verify that CI workflows can access the secret:
 
 #### For AgilePlus:
 
-1. Go to https://github.com/KooshaPari/AgilePlus
+1. Go to https://github.com/<REDACTED>/AgilePlus
 2. Click **Settings** (top nav)
 3. Click **Secrets and variables → Actions** (left sidebar)
 4. You should see **SENTRY_DSN_AGILEPLUS** in the organization secrets list
 
 #### For phenotype-infrakit:
 
-1. Go to https://github.com/KooshaPari/phenotype-infrakit
+1. Go to https://github.com/<REDACTED>/phenotype-infrakit
 2. Click **Settings** (top nav)
 3. Click **Secrets and variables → Actions** (left sidebar)
 4. You should see **SENTRY_DSN_INFRAKIT** in the organization secrets list
 
 #### For heliosCLI:
 
-1. Go to https://github.com/KooshaPari/heliosCLI
+1. Go to https://github.com/<REDACTED>/heliosCLI
 2. Click **Settings** (top nav)
 3. Click **Secrets and variables → Actions** (left sidebar)
 4. You should see **SENTRY_DSN_HELIOSCLI** in the organization secrets list
@@ -233,7 +233,7 @@ Each repository already has a `.env.example` file. Now update your local `.env`:
 ### For AgilePlus
 
 ```bash
-cd /Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus
 cp .env.example .env
 ```
 
@@ -246,7 +246,7 @@ SENTRY_ENVIRONMENT=development
 ### For phenotype-infrakit
 
 ```bash
-cd /Users/kooshapari/CodeProjects/Phenotype/repos/phenotype-infrakit
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos/phenotype-infrakit
 cp .env.example .env
 ```
 
@@ -259,7 +259,7 @@ SENTRY_ENVIRONMENT=development
 ### For heliosCLI
 
 ```bash
-cd /Users/kooshapari/CodeProjects/Phenotype/repos/heliosCLI
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos/heliosCLI
 cp .env.example .env
 ```
 

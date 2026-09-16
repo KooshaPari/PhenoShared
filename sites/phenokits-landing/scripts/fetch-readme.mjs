@@ -9,7 +9,7 @@ import { fileURLToPath } from "node:url";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const __filename = fileURLToPath(import.meta.url);
 const __isMain = resolve(process.argv[1] || "") === __filename;
-const REPO = "KooshaPari/Phenokits";
+const REPO = "<REDACTED>/Phenokits";
 const DATA_DIR = resolve(__dirname, "..", "src", "data");
 
 // Retry constants

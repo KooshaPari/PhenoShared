@@ -7,7 +7,7 @@ use clap::Args;
 use crate::registry::{validate_domain_flag, DomainRolesRegistry};
 use crate::{boundary, lang, manifest};
 
-const GITHUB_ORG_REPO: &str = "KooshaPari/.github";
+const GITHUB_ORG_REPO: &str = "<REDACTED>/.github";
 
 #[derive(Args, Debug, Clone)]
 pub struct InitArgs {
@@ -122,7 +122,7 @@ fn render_readme(repo_name: &str, domain_id: &str) -> String {
     format!(
         r#"# {repo_name}
 
-Fleet repository bootstrapped with [`hexakit init`](https://github.com/KooshaPari/HexaKit) (domain: `{domain_id}`).
+Fleet repository bootstrapped with [`hexakit init`](https://github.com/<REDACTED>/HexaKit) (domain: `{domain_id}`).
 
 See [`BOUNDARY.md`](./BOUNDARY.md) for domain ownership and stack policy.
 
@@ -134,7 +134,7 @@ Hooks live under [`.githooks/`](./.githooks/). Install with:
 git config core.hooksPath .githooks
 ```
 
-Canonical hook bundles are published from [TestingKit](https://github.com/KooshaPari/TestingKit). Replace placeholder scripts when wiring a production hook set.
+Canonical hook bundles are published from [TestingKit](https://github.com/<REDACTED>/TestingKit). Replace placeholder scripts when wiring a production hook set.
 
 ## CI workflows
 
@@ -208,7 +208,7 @@ mod tests {
         assert!(dir.path().join(".githooks/pre-commit").exists());
         assert!(dir.path().join("README.md").exists());
         let readme = fs::read_to_string(dir.path().join("README.md")).unwrap();
-        assert!(readme.contains("KooshaPari/.github"));
+        assert!(readme.contains("<REDACTED>/.github"));
         assert!(readme.contains("workflow-templates/rust-ci.yml"));
     }
 

@@ -1014,7 +1014,7 @@ resolver = "2"
 [workspace.package]
 version = "0.1.0"
 edition = "2021"
-authors = ["KooshaPari"]
+authors = ["<REDACTED>"]
 ```
 
 ---

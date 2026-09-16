@@ -11,7 +11,7 @@ import sys
 def main():
     src_tag = "v0.40-pheno-harness-summit"
     dst_tag = "v0.41-pheno-harness-summit"
-    repo = "KooshaPari/pheno-harness"
+    repo = "<REDACTED>/pheno-harness"
     asset_suffixes = ["tar.gz", "tar.gz.sig", "tar.gz.cert", "tar.gz.sha256"]
 
     # 1. Just list expected files (gh release view fails in this env)

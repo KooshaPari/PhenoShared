@@ -290,7 +290,7 @@ Phase 3 roadmap includes:
 
 ## See Also
 
-- `/Users/kooshapari/CodeProjects/Phenotype/repos/Cargo.toml` - Workspace dependencies
-- `/Users/kooshapari/CodeProjects/Phenotype/repos/crates/*/Cargo.toml` - Per-crate features
+- `/Users/<REDACTED>/CodeProjects/Phenotype/repos/Cargo.toml` - Workspace dependencies
+- `/Users/<REDACTED>/CodeProjects/Phenotype/repos/crates/*/Cargo.toml` - Per-crate features
 - `docs/adr/` - Architecture Decision Records
 - `docs/reference/SOFTWARE_ARCHITECTURE_REFERENCE.md` - Architecture patterns

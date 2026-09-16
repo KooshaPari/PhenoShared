@@ -121,7 +121,7 @@ All entries are proposed and unclaimed. Logical scope must resolve to real curre
 | WP-S04 | PhenoGfx capability/consumer contract | PhenoGfx pooled owner | WP-G01, WP-G02 |
 | WP-S05 | PhenoRegistry capability/consumer contract | PhenoRegistry pooled owner | WP-G01, WP-G02 |
 | WP-S06 | PhenoDesign capability/consumer contract | PhenoDesign pooled owner | WP-G01, WP-G02 |
-| WP-S07 | KooshaPari capability/consumer contract | KooshaPari pooled owner | WP-G01, WP-G02 |
+| WP-S07 | <REDACTED> capability/consumer contract | <REDACTED> pooled owner | WP-G01, WP-G02 |
 | WP-S08 | PhenoApps capability/consumer contract | PhenoApps pooled owner | WP-G01, WP-G02 |
 | WP-S09 | Agentora-capability capability/consumer contract | Agentora-capability pooled owner | WP-G01, WP-G02 |
 

@@ -135,8 +135,8 @@ class HeuristicOptimizer(BaseOptimizer):
 # ---------------------------------------------------------------------------
 
 
-FORGE_BIN = "/Users/kooshapari/.local/bin/forge"
-REPO_ROOT = "/Users/kooshapari/CodeProjects/Phenotype/pheno-harness"
+FORGE_BIN = "/Users/<REDACTED>/.local/bin/forge"
+REPO_ROOT = "/Users/<REDACTED>/CodeProjects/Phenotype/pheno-harness"
 
 
 class ForgeOptimizer(BaseOptimizer):
@@ -169,7 +169,7 @@ class ForgeOptimizer(BaseOptimizer):
                 timeout=90,
                 env={
                     **os.environ,
-                    "PATH": "/usr/bin:/bin:/usr/local/bin:/Users/kooshapari/.local/bin",
+                    "PATH": "/usr/bin:/bin:/usr/local/bin:/Users/<REDACTED>/.local/bin",
                 },
             )
             reply = proc.stdout or ""
@@ -252,7 +252,7 @@ class WorktreeOptimizer(BaseOptimizer):
 
     def __init__(
         self,
-        worktree_base: str = "/Users/kooshapari/CodeProjects/Phenotype",
+        worktree_base: str = "/Users/<REDACTED>/CodeProjects/Phenotype",
     ):
         """Initialize with the base path under which worktrees will be created."""
         self.worktree_base = worktree_base

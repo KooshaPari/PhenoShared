@@ -2,7 +2,7 @@ REPO: C:/Users/koosh/Dev/AgilePlus
 TASK: Find and fix ALL remaining clippy -D warnings lints across the workspace.
 
 phenoShared sibling required:
-git clone --depth 1 https://github.com/KooshaPari/phenoShared.git ../phenoShared 2>/dev/null || echo "already exists"
+git clone --depth 1 https://github.com/<REDACTED>/phenoShared.git ../phenoShared 2>/dev/null || echo "already exists"
 
 Then:
 1. Run: cd rust && cargo clippy --workspace --all-targets -- -D warnings 2>&1 | grep "^error" | head -30

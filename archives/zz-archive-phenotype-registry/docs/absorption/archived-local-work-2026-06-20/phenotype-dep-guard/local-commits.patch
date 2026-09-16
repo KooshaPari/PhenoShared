@@ -5,9 +5,9 @@ index 0000000..3175448
 +++ b/.github/CODEOWNERS
 @@ -0,0 +1,4 @@
 +# CODEOWNERS for phenotype-dep-guard
-+# All changes require review from @kooshapari.
++# All changes require review from @<REDACTED>.
 +
-+* @kooshapari
++* @<REDACTED>
 diff --git a/.github/ISSUE_TEMPLATE/bug_report.md b/.github/ISSUE_TEMPLATE/bug_report.md
 new file mode 100644
 index 0000000..62cb9ac
@@ -19,7 +19,7 @@ index 0000000..62cb9ac
 +about: Report a defect in phenotype-dep-guard
 +title: "[bug] "
 +labels: bug
-+assignees: kooshapari
++assignees: <REDACTED>
 +---
 +
 +## Describe the bug
@@ -63,7 +63,7 @@ index 0000000..279139a
 +about: Suggest a new capability for phenotype-dep-guard
 +title: "[feat] "
 +labels: enhancement
-+assignees: kooshapari
++assignees: <REDACTED>
 +---
 +
 +## Problem
@@ -96,7 +96,7 @@ index 0000000..b954b5f
 +about: Ask a question about phenotype-dep-guard
 +title: "[q] "
 +labels: question
-+assignees: kooshapari
++assignees: <REDACTED>
 +---
 +
 +## Question
@@ -161,7 +161,7 @@ index 0000000..33f9bab
 +## [Unreleased]
 +
 +### Added
-+- `CODEOWNERS` — `@kooshapari` owns all paths.
++- `CODEOWNERS` — `@<REDACTED>` owns all paths.
 +- `justfile` — common dev tasks (`fmt`, `lint`, `check`, `test`, `ci`, `audit`).
 +- Pull request template (`.github/PULL_REQUEST_TEMPLATE.md`).
 +- Issue templates (`bug_report`, `feature_request`, `question`).
@@ -171,8 +171,8 @@ index 0000000..33f9bab
 +### Added
 +- Initial governance scaffolding for the `phenotype-dep-guard` repository.
 +
-+[Unreleased]: https://github.com/KooshaPari/phenotype-dep-guard/compare/HEAD
-+[0.0.0]: https://github.com/KooshaPari/phenotype-dep-guard/releases/tag/v0.0.0
++[Unreleased]: https://github.com/<REDACTED>/phenotype-dep-guard/compare/HEAD
++[0.0.0]: https://github.com/<REDACTED>/phenotype-dep-guard/releases/tag/v0.0.0
 diff --git a/justfile b/justfile
 new file mode 100644
 index 0000000..3f79412

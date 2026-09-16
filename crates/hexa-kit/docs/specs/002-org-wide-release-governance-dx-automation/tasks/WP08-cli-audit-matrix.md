@@ -82,7 +82,7 @@ This work package implements discovery, visibility, and reporting tools for mult
   4. Output success: show table or JSON depending on format flag
   5. Support progress indicator for long scans (spinner per repo being scanned)
 
-- **Files**: `/Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus/cmd/audit.go`
+- **Files**: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus/cmd/audit.go`
 - **Parallel?**: No (prerequisite for T045)
 - **Notes**: Reuse config system from WP07; handle missing repos gracefully; ensure registry queries use caching (see T048)
 
@@ -146,7 +146,7 @@ This work package implements discovery, visibility, and reporting tools for mult
      - Published (prod): N, Staged (beta/rc): N, Alpha (alpha/canary): N, Unpublished: N
      - Scan duration
 
-- **Files**: `/Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus/internal/audit/formatter.go`
+- **Files**: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus/internal/audit/formatter.go`
 - **Parallel?**: Yes (after T044)
 - **Notes**: Use consistent color palette from WP07; ensure CSV escaping is RFC 4180 compliant; truncate long URLs with ellipsis in table view
 
@@ -194,7 +194,7 @@ This work package implements discovery, visibility, and reporting tools for mult
      - Status: from audit (published/pending)
   5. Support manual overrides via config file (allow editing matrix before final render)
 
-- **Files**: `/Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus/cmd/matrix.go`, `/Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus/internal/matrix/generator.go`
+- **Files**: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus/cmd/matrix.go`, `/Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus/internal/matrix/generator.go`
 - **Parallel?**: Yes (after T044)
 - **Notes**: Auto-detect spec file by scanning cwd and parent dirs; support both `.md` and `.json` spec formats; document template column meanings in inline comments
 
@@ -230,7 +230,7 @@ This work package implements discovery, visibility, and reporting tools for mult
   5. Handle symlinks: follow them (configurable)
   6. Caching: memoize results per session to avoid re-scanning
 
-- **Files**: `/Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus/internal/discover/repos.go`
+- **Files**: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus/internal/discover/repos.go`
 - **Parallel?**: No (prerequisite for T044)
 - **Notes**: Use `filepath.WalkDir` for efficient directory traversal; respect `.gitignore` patterns if available; ensure symlink handling is safe (prevent infinite loops)
 
@@ -306,7 +306,7 @@ This work package implements discovery, visibility, and reporting tools for mult
   5. Test caching behavior: verify cache hits and misses
   6. Ensure tests run in <10 seconds (mock all registry calls)
 
-- **Files**: `/Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus/internal/discover/repos_test.go`, `/Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus/internal/audit/formatter_test.go`, `/Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus/cmd/audit_test.go`
+- **Files**: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus/internal/discover/repos_test.go`, `/Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus/internal/audit/formatter_test.go`, `/Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus/cmd/audit_test.go`
 - **Parallel?**: Yes (after T044–T046)
 - **Notes**: Use testutil package for common fixtures; mock `registry.Adapter` to return predictable results; isolate cache between tests; test both hit and miss paths
 

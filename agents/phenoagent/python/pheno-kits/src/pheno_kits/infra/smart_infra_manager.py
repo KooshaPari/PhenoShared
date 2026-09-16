@@ -62,7 +62,7 @@ class SmartInfraManager:
         orchestrator = ServiceOrchestrator(config, KInfra())
     """
 
-    def __init__(self, project_name: str = "default", domain: str = "kooshapari.com"):
+    def __init__(self, project_name: str = "default", domain: str = "<REDACTED>.com"):
         """Initialize Smart Infrastructure Manager.
 
         ⚠️ DEPRECATED: This class will be removed in v2.0.
@@ -705,7 +705,7 @@ class SmartInfraManager:
 
 
 def get_smart_infra_manager(
-    project_name: str = "default", domain: str = "kooshapari.com",
+    project_name: str = "default", domain: str = "<REDACTED>.com",
 ) -> SmartInfraManager:
     """Get a SmartInfraManager instance.
 

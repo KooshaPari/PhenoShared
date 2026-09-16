@@ -21,5 +21,5 @@ phenotype-router-spec.
 
 ## Outcome
 
-Source repo `KooshaPari/PhenoSpecs` archived on GitHub.
+Source repo `<REDACTED>/PhenoSpecs` archived on GitHub.
 Registry disposition-index updated: disposition=ABSORB, target=phenotype-registry.

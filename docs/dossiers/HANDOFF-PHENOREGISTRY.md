@@ -1,7 +1,7 @@
 # PhenoRegistry Absorption Handoff
 
 **Date:** 2026-09-16 (Pacific)
-**Source:** KooshaPari/PhenoRegistry (absorbed commit `f7ab4cdb`)
+**Source:** <REDACTED>/PhenoRegistry (absorbed commit `f7ab4cdb`)
 **Agent:** horse session (`session_horse_1789548992881`)
 
 ## What Was Done

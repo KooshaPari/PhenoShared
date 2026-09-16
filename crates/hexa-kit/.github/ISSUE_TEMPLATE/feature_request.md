@@ -3,7 +3,7 @@ name: Feature request
 about: Propose a new feature with clear scope and release context
 title: "[feature] "
 labels: enhancement
-assignees: KooshaPari
+assignees: <REDACTED>
 ---
 
 ## Problem statement

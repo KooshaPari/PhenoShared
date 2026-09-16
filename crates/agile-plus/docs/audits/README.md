@@ -53,7 +53,7 @@ This directory contains the comprehensive audit of the AgilePlus workspace, cond
 
 | Metric | Value |
 |--------|-------|
-| **Repository** | `git@github.com:KooshaPari/AgilePlus.git` (standalone) |
+| **Repository** | `git@github.com:<REDACTED>/AgilePlus.git` (standalone) |
 | **Branch** | `main` (ahead of origin by 3 commits) |
 | **Size** | 563 MB, 71 KLOC |
 | **Crates** | 23 total (7 active, 16 disabled) |

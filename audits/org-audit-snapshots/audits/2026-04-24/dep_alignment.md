@@ -50,19 +50,19 @@ tracing     = 0.1       (Observability)
 ## Repos Bumped (Phase 1)
 
 ### 1. AgilePlus: rusqlite 0.32 → 0.33
-- **File:** `/Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus/Cargo.toml`
+- **File:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus/Cargo.toml`
 - **Change:** workspace.dependencies.rusqlite = "0.33"
 - **Test:** cargo check -p agileplus-sqlite ✓
 - **Commit:** `chore(deps): align rusqlite to v0.33 per org baseline`
 
 ### 2. PhenoObservability: thiserror 1.x → 2.0
-- **File:** `/Users/kooshapari/CodeProjects/Phenotype/repos/PhenoObservability/Cargo.toml`
+- **File:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos/PhenoObservability/Cargo.toml`
 - **Change:** thiserror = "2.0"
 - **Test:** cargo check ✓
 - **Commit:** `chore(deps): align thiserror to v2.0 per org baseline`
 
 ### 3. bare-cua: thiserror 1.x → 2.0
-- **File:** `/Users/kooshapari/CodeProjects/Phenotype/repos/bare-cua/Cargo.toml`
+- **File:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos/bare-cua/Cargo.toml`
 - **Change:** thiserror = "2.0"
 - **Test:** cargo check FAILED (preexisting xcap v0.2 type annotation issue)
 - **Status:** BLOCKED — xcap dependency has unrelated compilation error; thiserror bump is clean but cannot verify in context
@@ -85,12 +85,12 @@ tracing     = 0.1       (Observability)
 for repo in AgilePlus FocalPoint PhenoObservability bare-cua thegent-dispatch; do
   echo "=== $repo ==="
   grep -E "rusqlite|tokio|axum|thiserror" \
-    /Users/kooshapari/CodeProjects/Phenotype/repos/$repo/Cargo.toml 2>/dev/null | \
+    /Users/<REDACTED>/CodeProjects/Phenotype/repos/$repo/Cargo.toml 2>/dev/null | \
     head -10
 done
 
 # Check for workspace resolution issues
-cd /Users/kooshapari/CodeProjects/Phenotype/repos
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos
 for repo in */Cargo.toml; do
   dir=$(dirname "$repo")
   if ! cargo check -p $(basename "$dir" | tr '[:upper:]' '[:lower:]') 2>&1 | grep -q "error"; then

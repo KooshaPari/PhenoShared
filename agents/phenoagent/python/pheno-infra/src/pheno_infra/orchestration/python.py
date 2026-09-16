@@ -85,7 +85,7 @@ def build_python_service(options: PythonServiceOptions) -> ServiceConfig:
         ...     module="server",
         ...     port=50002,
         ...     enable_tunnel=True,
-        ...     tunnel_domain="atomcp.kooshapari.com",
+        ...     tunnel_domain="atomcp.<REDACTED>.com",
         ... )
         >>> service = build_python_service(options)
     """

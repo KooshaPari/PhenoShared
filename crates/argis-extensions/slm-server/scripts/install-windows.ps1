@@ -18,7 +18,7 @@ Write-Host "=== SLM Server Windows Installer ===" -ForegroundColor Cyan
 Write-Host ""
 
 # Get latest release from GitHub
-$repo = "kooshapari/bifrost-extensions"
+$repo = "<REDACTED>/bifrost-extensions"
 $apiUrl = "https://api.github.com/repos/$repo/releases/latest"
 
 Write-Host "Fetching latest release..."

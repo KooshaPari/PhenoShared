@@ -35,7 +35,7 @@ export function createPhenotypeConfig(options: ConfigOptions) {
     description,
     base = '/',
     srcDir = 'docs',
-    githubOrg = 'KooshaPari',
+    githubOrg = '<REDACTED>',
     githubRepo,
     nav = [],
     sidebar = {},

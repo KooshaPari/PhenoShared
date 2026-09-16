@@ -24,7 +24,7 @@ This guide covers:
 ### 1.1: Open Summary Report
 
 ```bash
-cd /Users/kooshapari/CodeProjects/Phenotype/repos
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos
 cat .snyk-reports/report.txt
 ```
 
@@ -281,7 +281,7 @@ Create a `.snyk` policy file when you:
 Create `.snyk` in the repository root:
 
 ```bash
-cat > /Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus/.snyk << 'EOF'
+cat > /Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus/.snyk << 'EOF'
 # Snyk Policy as Code
 # This file is used to manage Snyk suppressions and policy
 
@@ -532,7 +532,7 @@ gh pr view
 # 2. Create urgent AgilePlus work item
 # 3. Schedule for immediate release
 
-cd /Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus
 
 # Update Cargo.toml
 # Find: openssl = "1.0.1"
@@ -566,7 +566,7 @@ Fixes SNYK-RUST-OPENSSL-HEARTBLEED critical vulnerability"
 # 2. Create .snyk policy file
 # 3. Document in PR
 
-cat > /Users/kooshapari/CodeProjects/Phenotype/repos/agileplus-agents/.snyk << 'EOF'
+cat > /Users/<REDACTED>/CodeProjects/Phenotype/repos/agileplus-agents/.snyk << 'EOF'
 version: v1.19.0
 
 ignore:
@@ -599,7 +599,7 @@ git add agileplus-agents/.snyk
 # 2. Create suppression with expiry
 # 3. Schedule upgrade for next sprint
 
-cat > /Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus/.snyk << 'EOF'
+cat > /Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus/.snyk << 'EOF'
 version: v1.19.0
 
 ignore:
@@ -632,7 +632,7 @@ gh pr merge --squash --delete-branch
 For each high/critical finding:
 
 ```bash
-cd /Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus
 
 agileplus specify \
   --title "security: upgrade lodash to fix prototype pollution" \

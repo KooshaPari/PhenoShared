@@ -7,10 +7,10 @@
 #
 # Runs daily (and on push to any compute-infra subtree branch) and fans
 # out to the four owned repos:
-#   - KooshaPari/phenotype-infra
-#   - KooshaPari/PhenoCompose
-#   - KooshaPari/BytePort
-#   - KooshaPari/nanovms
+#   - <REDACTED>/phenotype-infra
+#   - <REDACTED>/PhenoCompose
+#   - <REDACTED>/BytePort
+#   - <REDACTED>/nanovms
 #
 # Each auditor produces a JSON report uploaded as a workflow artifact.
 # Findings are summarised in a single PR-friendly comment and (if any
@@ -79,7 +79,7 @@ jobs:
           REPO: ${{ matrix.repo.name }}
         run: |
           echo "::group::workflows in $REPO"
-          gh api repos/KooshaPari/$REPO/contents/.github/workflows --jq '.[].name' | tee workflows.txt
+          gh api repos/<REDACTED>/$REPO/contents/.github/workflows --jq '.[].name' | tee workflows.txt
           echo "::endgroup::"
 
       - name: cargo-deny (Rust repos only)
@@ -141,7 +141,7 @@ jobs:
           RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
         run: |
           gh issue create \
-            --repo KooshaPari/$REPO \
+            --repo <REDACTED>/$REPO \
             --title "compute-infra-auditors: ${{ matrix.repo.name }} audit failed (${{ github.run_id }})" \
             --label compute-infra,audit,automated \
             --body "Daily audit failed. See run: $RUN_URL

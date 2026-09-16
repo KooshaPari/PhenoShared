@@ -1,6 +1,6 @@
 # pheno-sdk → phenotype-python-sdk package map
 
-**Source:** `KooshaPari/pheno-sdk` (private archived, 2 branches, minimal tree: `.github`, `CHANGELOG.md`, `SECURITY.md`)
+**Source:** `<REDACTED>/pheno-sdk` (private archived, 2 branches, minimal tree: `.github`, `CHANGELOG.md`, `SECURITY.md`)
 
 ## Audit (Wave H7)
 
@@ -16,4 +16,4 @@ The private `pheno-sdk` repo held the **ATOMS-PHENO** package index metadata onl
 
 - Do **not** unarchive `pheno-sdk`
 - Mark disposition `REDIRECT` → `phenotype-python-sdk` when no orphan references remain
-- Run `rg 'pheno-sdk|atoms-pheno' KooshaPari/` before delete eligibility
+- Run `rg 'pheno-sdk|atoms-pheno' <REDACTED>/` before delete eligibility

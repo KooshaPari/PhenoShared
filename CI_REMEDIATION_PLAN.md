@@ -17,12 +17,12 @@ All PR merges are blocked by a single root cause: **outdated `gix` dependency (v
 
 ### 1a. Verify Current Version
 ```bash
-cd /Users/kooshapari/CodeProjects/Phenotype/repos
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos
 grep "^gix = " Cargo.toml  # Should show: gix = "0.62"
 ```
 
 ### 1b. Update Cargo.toml
-**File:** `/Users/kooshapari/CodeProjects/Phenotype/repos/Cargo.toml`
+**File:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos/Cargo.toml`
 
 **Find (around line 50):**
 ```toml
@@ -60,7 +60,7 @@ cargo deny check advisories 2>&1 | grep -E "FAILED|PASSED"
 ## Step 2: Fix CodeQL Configuration (3 minutes)
 
 ### 2a. Edit Security Workflow
-**File:** `/Users/kooshapari/CodeProjects/Phenotype/repos/.github/workflows/security.yml`
+**File:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos/.github/workflows/security.yml`
 
 **Find (lines 56-71):**
 ```yaml
@@ -108,7 +108,7 @@ codeql:
 ## Step 3: Commit & Push (2 minutes)
 
 ```bash
-cd /Users/kooshapari/CodeProjects/Phenotype/repos
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos
 
 # Stage changes
 git add Cargo.toml Cargo.lock
@@ -143,7 +143,7 @@ After push, GitHub Actions will run automatically:
 gh run list --workflow security.yml --limit 1 -s in_progress
 
 # Or open directly:
-# https://github.com/KooshaPari/phenotype-infrakit/actions/workflows/security.yml
+# https://github.com/<REDACTED>/phenotype-infrakit/actions/workflows/security.yml
 ```
 
 ### 4b. Expected Results

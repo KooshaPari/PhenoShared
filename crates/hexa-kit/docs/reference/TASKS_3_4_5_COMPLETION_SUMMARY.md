@@ -22,7 +22,7 @@ Three critical Phase 2 initialization tasks completed successfully:
 
 # TASK 3: Audit agent-wave — COMPLETE ✅
 
-**Location:** `/Users/kooshapari/Repos/agent-wave`
+**Location:** `/Users/<REDACTED>/Repos/agent-wave`
 **Report:** `docs/audits/2026-03-30-agent-wave-audit.md` (340 lines)
 
 ## Findings
@@ -42,7 +42,7 @@ Agent-wave is well-specified, actively developed, with comprehensive governance.
 
 # TASK 4: Audit root Cargo.toml — COMPLETE ✅
 
-**Location:** `/Users/kooshapari/CodeProjects/Phenotype/repos/Cargo.toml`
+**Location:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos/Cargo.toml`
 **Report:** `docs/audits/2026-03-30-root-workspace-audit.md` (520 lines)
 
 ## Critical Findings

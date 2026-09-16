@@ -54,7 +54,7 @@ If you don't have a Snyk account:
 - Click **"Sign up with GitHub"**
 - Authorize Snyk to access your GitHub account
 - Review permissions (Snyk needs read access to repos)
-- Click **"Authorize KooshaPari"**
+- Click **"Authorize <REDACTED>"**
 - You'll be redirected to Snyk dashboard
 
 **Alternative:** Sign up with email:
@@ -204,16 +204,16 @@ If running the script multiple times:
 
 ```bash
 # Create .env file in deployment directory
-cat > /Users/kooshapari/CodeProjects/Phenotype/repos/.env << EOF
+cat > /Users/<REDACTED>/CodeProjects/Phenotype/repos/.env << EOF
 SNYK_TOKEN="your-token-here"
 EOF
 
 # Verify .env is ignored by git
-echo ".env" >> /Users/kooshapari/CodeProjects/Phenotype/repos/.gitignore
+echo ".env" >> /Users/<REDACTED>/CodeProjects/Phenotype/repos/.gitignore
 
 # Load it in your terminal
 set -a
-source /Users/kooshapari/CodeProjects/Phenotype/repos/.env
+source /Users/<REDACTED>/CodeProjects/Phenotype/repos/.env
 set +a
 ```
 
@@ -315,7 +315,7 @@ Usage
 Or run a quick test:
 
 ```bash
-cd /Users/kooshapari/CodeProjects/Phenotype/repos
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos
 snyk test --dry-run
 ```
 

@@ -69,7 +69,7 @@ Justification template (required fields):
 
 ## phenoSDK (not a language bucket)
 
-[phenoSDK](https://github.com/KooshaPari/phenoSDK) is a **dynamic extras manifest**: optional domain packages consumers opt into. It does **not** define ecosystem boundaries by language. Domain ownership remains in [DOMAIN_ROLES.md](./DOMAIN_ROLES.md).
+[phenoSDK](https://github.com/<REDACTED>/phenoSDK) is a **dynamic extras manifest**: optional domain packages consumers opt into. It does **not** define ecosystem boundaries by language. Domain ownership remains in [DOMAIN_ROLES.md](./DOMAIN_ROLES.md).
 
 ---
 

@@ -1,6 +1,6 @@
 # phinbox — Research Document
 > **Date:** 2026-07-22 (updated for v0.5.0 — terminal inbox viewer)
-> **Owner:** @KooshaPari
+> **Owner:** @<REDACTED>
 > **Status:** SHIPPED (v0.5.0 — 129 / 129 tests green)
 > **Crate path:** `phenotype-tooling/crates/phinbox/`
 > **Binary name:** `phinbox` (long-form `phinbox-mcp` for the MCP server mode)

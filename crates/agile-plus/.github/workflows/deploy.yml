@@ -27,7 +27,7 @@ jobs:
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
       - name: Clone phenodocs
         run: |
-          git clone --depth 1 https://github.com/KooshaPari/phenodocs.git /tmp/phenodocs
+          git clone --depth 1 https://github.com/<REDACTED>/phenodocs.git /tmp/phenodocs
 
       - name: Setup Bun
         uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6

@@ -7,7 +7,7 @@
   "has_license": false,
   "type": "tooling",
   "path": "repos/cockpit-source",
-  "gh_url": "https://github.com/KooshaPari/cockpit",
+  "gh_url": "https://github.com/<REDACTED>/cockpit",
   "remote_default_branch": "main",
   "visibility": "private",
   "disposition": "KEEP",

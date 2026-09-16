@@ -7,8 +7,8 @@ import (
 	"os"
 	"strings"
 
-	"github.com/KooshaPari/MCPForge/internal/lsp"
-	"github.com/KooshaPari/MCPForge/internal/protocol"
+	"github.com/<REDACTED>/MCPForge/internal/lsp"
+	"github.com/<REDACTED>/MCPForge/internal/protocol"
 )
 
 // Gets the full code block surrounding the start of the input location

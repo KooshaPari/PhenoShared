@@ -1,7 +1,7 @@
 <!-- Project meta start -->
-![Downloads](https://img.shields.io/github/downloads/KooshaPari/AppGen/total?style=flat-square&label=downloads&color=blue)
-![GitHub release](https://img.shields.io/github/v/release/KooshaPari/AppGen?style=flat-square&label=release)
-![License](https://img.shields.io/github/license/KooshaPari/AppGen?style=flat-square)
+![Downloads](https://img.shields.io/github/downloads/<REDACTED>/AppGen/total?style=flat-square&label=downloads&color=blue)
+![GitHub release](https://img.shields.io/github/v/release/<REDACTED>/AppGen?style=flat-square&label=release)
+![License](https://img.shields.io/github/license/<REDACTED>/AppGen?style=flat-square)
 
 > **Work state:** ARCHIVED-CANDIDATE · **Progress:** `██░░░░░░░░ 15%`
 > Legacy React Native / Expo boilerplate, preserved as historical reference (owner mandate: DO NOT delete or unarchive). Not production-grade; 6 open Dependabot PRs are churn on a dead repo — consider closing them. · updated 2026-06-02

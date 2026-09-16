@@ -149,7 +149,7 @@ phenotype-infrakit/crates/phenotype-sentry-config/src/lib.rs
                              ▼
                     ┌──────────────────┐
                     │ GitHub Issues    │
-                    │ (KooshaPari org) │
+                    │ (<REDACTED> org) │
                     │                  │
                     │ Auto-created:   │
                     │ - Issue per error│
@@ -204,7 +204,7 @@ GitHub Integration:
 
 1. Go to: https://sentry.io/settings/phenotype/integrations/github/
 2. Click "Authorize GitHub" (one-time)
-3. Grant access to KooshaPari org
+3. Grant access to <REDACTED> org
 4. Done!
 
 ### Phase 3: Create Alert Rules (5 minutes)

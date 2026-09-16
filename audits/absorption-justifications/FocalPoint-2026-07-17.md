@@ -7,8 +7,8 @@ Compliance standard: registry/audit-absorption-justification/schema.json (14/14 
 
 ## Source
 
-- **Repo:** `KooshaPari/FocalPoint`
-- **GitHub URL:** https://github.com/KooshaPari/FocalPoint
+- **Repo:** `<REDACTED>/FocalPoint`
+- **GitHub URL:** https://github.com/<REDACTED>/FocalPoint
 - **Archived at:** False
 - **Default branch at audit time:** `main`
 - **Last commit SHA on default branch:** `3d8236c`
@@ -20,7 +20,7 @@ Compliance standard: registry/audit-absorption-justification/schema.json (14/14 
 
 ## Target
 
-- **Receiving repo:** `KooshaPari/HexaKit` *(planned, not executed)*
+- **Receiving repo:** `<REDACTED>/HexaKit` *(planned, not executed)*
 - **Receiving path:** `docs/absorbed-from-FocalPoint/` *(planned, not executed)*
 - **Local mirror path:** `repos/FocalPoint`
 - **Bundle file:** none (live repo; no bundle needed)
@@ -44,8 +44,8 @@ absorption slot for Svelte focus-app). Per task failsafe
 **"ARCHIVE_ONLY if conflicts"**, the disposition was pivoted to
 ARCHIVE_ONLY:
 
-- Source repo `KooshaPari/FocalPoint` set to read-only via
-  `gh repo archive KooshaPari/FocalPoint -y` on 2026-07-17.
+- Source repo `<REDACTED>/FocalPoint` set to read-only via
+  `gh repo archive <REDACTED>/FocalPoint -y` on 2026-07-17.
 - This manifest retained as the authoritative pre-archive artifact
   (auto-generated branch inventory, source posture, sha inventory
   preserved).
@@ -69,7 +69,7 @@ phenotype-omlx-2026-07-17.
 - **Total branches (remote):** 57
 - **Open issues at audit time:** 1
 - **Bundle reference:** NONE — repo is live, no bundle required
-- **Source-tombstone posture:** `KooshaPari/FocalPoint` active on GitHub
+- **Source-tombstone posture:** `<REDACTED>/FocalPoint` active on GitHub
 
 ## BRANCH_INVENTORY
 
@@ -210,14 +210,14 @@ phenotype-omlx-2026-07-17.
 
 | Source Item | Source Evidence | Category | Source State | Target Repo | Target Evidence | Status | Deletion Justification | Risk if Deleted | Required Action |
 |---|---|---|---|---|---|---|---|---|---|
-| `FocalPoint/code` | `gh api` | sdk-code | active | `KooshaPari/HexaKit` | `docs/absorbed-from-FocalPoint/` | ABSORB | 867MB vendor iOS app repository. Archived after Xcode build files and caches pruned, and core logic reviewed/absorbed. | Medium | Scanned and reviewed |
-| `FocalPoint/branches` | `gh api` | branch-coverage | active | `KooshaPari/HexaKit` | `docs/absorbed-from-FocalPoint/` | ABSORB | Branch coverage reviewed | Low | Scanned and reviewed |
+| `FocalPoint/code` | `gh api` | sdk-code | active | `<REDACTED>/HexaKit` | `docs/absorbed-from-FocalPoint/` | ABSORB | 867MB vendor iOS app repository. Archived after Xcode build files and caches pruned, and core logic reviewed/absorbed. | Medium | Scanned and reviewed |
+| `FocalPoint/branches` | `gh api` | branch-coverage | active | `<REDACTED>/HexaKit` | `docs/absorbed-from-FocalPoint/` | ABSORB | Branch coverage reviewed | Low | Scanned and reviewed |
 
 ## Last-Resort-Exceptions
 
 - **Rebuttal #1: "Delete FocalPoint now."** Rebutted: FocalPoint has active code history. We must verify parity or archive instead of deleting. The residual gap is managed by target absorption.
 - **Rebuttal #2: "Archive-not-deletion is insufficient."** Rebutted: Archival is the preferred path to preserve history on the remote while disabling write access, complying with BOUNDARY_OWNERS.
-- **Rebuttal #3: "FocalPoint cannot absorb exception."** Rebutted: The target `KooshaPari/HexaKit` can absorb the exception because it is the canonical repository for this boundary domain role.
+- **Rebuttal #3: "FocalPoint cannot absorb exception."** Rebutted: The target `<REDACTED>/HexaKit` can absorb the exception because it is the canonical repository for this boundary domain role.
 
 No exceptions to the ABSORB verdict are granted.
 
@@ -225,7 +225,7 @@ No exceptions to the ABSORB verdict are granted.
 
 ```bash
 # Disaster-recovery posture:
-git clone https://github.com/KooshaPari/FocalPoint.git /tmp/FocalPoint-restore
+git clone https://github.com/<REDACTED>/FocalPoint.git /tmp/FocalPoint-restore
 # Verify bundle sha-256 (re-clone path is clean)
 ```
 

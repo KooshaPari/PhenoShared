@@ -5,7 +5,7 @@ secret values.
 
 ## Why This Exists
 
-GitHub secret scanning is unavailable while `KooshaPari/phenotype-registry` is
+GitHub secret scanning is unavailable while `<REDACTED>/phenotype-registry` is
 private. During the incident, retained refs were rewritten and scanned with a
 local mirror. This repository now includes `scripts/retained-history-secret-scan.py`
 so the check can be repeated before reopening the repository or re-enabling
@@ -35,7 +35,7 @@ Luhn-valid card numbers.
 From a fresh mirror clone:
 
 ```bash
-git clone --mirror https://github.com/KooshaPari/phenotype-registry.git phenotype-registry.git
+git clone --mirror https://github.com/<REDACTED>/phenotype-registry.git phenotype-registry.git
 python scripts/retained-history-secret-scan.py phenotype-registry.git --fail-on-findings
 ```
 

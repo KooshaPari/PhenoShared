@@ -90,5 +90,5 @@ jq empty registry/disposition-index.json
 ## Related
 
 - [016-agent-framework-expansion](../016-agent-framework-expansion/SPEC.md)
-- [GATEWAY_FEATURE_PARITY](https://github.com/KooshaPari/phenotype-registry/blob/main/docs/rationalization/GATEWAY_FEATURE_PARITY.md)
+- [GATEWAY_FEATURE_PARITY](https://github.com/<REDACTED>/phenotype-registry/blob/main/docs/rationalization/GATEWAY_FEATURE_PARITY.md)
 - [018-mcp-server-alignment](../018-mcp-server-alignment/SPEC.md)

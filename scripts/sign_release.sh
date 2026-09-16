@@ -25,7 +25,7 @@ set -euo pipefail
 
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 TAG="${1:-${TAG:-v0.37}}"
-GITHUB_REPO="${GITHUB_REPO:-KooshaPari/pheno-harness}"
+GITHUB_REPO="${GITHUB_REPO:-<REDACTED>/pheno-harness}"
 UPLOAD=1
 
 # Parse flags

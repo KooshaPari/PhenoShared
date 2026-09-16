@@ -68,7 +68,7 @@ async function fetchConfig(owner, repo) {
 
 async function generateSite(project) {
   const { repo, site } = project;
-  const config = await fetchConfig("KooshaPari", repo);
+  const config = await fetchConfig("<REDACTED>", repo);
 
   if (!config) {
     console.warn(`No landing config found for ${repo} — skipping generation`);
@@ -145,8 +145,8 @@ const { brand, hero, features, cta, footer, header } = config;
       },
       dependencies: {
         astro: "^6.1.9",
-        "@phenotype/landing-ui": "github:KooshaPari/phenoDesign",
-        "@phenotype/design-tokens": "github:KooshaPari/phenoDesign",
+        "@phenotype/landing-ui": "github:<REDACTED>/phenoDesign",
+        "@phenotype/design-tokens": "github:<REDACTED>/phenoDesign",
       },
       devDependencies: {
         "@types/node": "^25.6.0",

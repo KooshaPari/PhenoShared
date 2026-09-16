@@ -29,7 +29,7 @@ pub use plugin_trait::{PluginConfig, PluginMetadata};
 
 ### Fix (1 Tool Call)
 
-**File:** `/Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus/libs/plugin-registry/src/lib.rs`
+**File:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus/libs/plugin-registry/src/lib.rs`
 
 **Change:**
 ```diff
@@ -43,7 +43,7 @@ pub use plugin_trait::{PluginConfig, PluginMetadata};
 
 **Verification:**
 ```bash
-cd /Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus
 cargo build --workspace 2>&1 | grep -c "error"  # Should be 0
 cargo test --lib 2>&1 | tail -5               # Should show test summary
 ```

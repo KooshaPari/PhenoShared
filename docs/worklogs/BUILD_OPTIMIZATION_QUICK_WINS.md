@@ -21,7 +21,7 @@
 
 ### Current State
 
-**File**: `/Users/kooshapari/CodeProjects/Phenotype/repos/Cargo.toml`
+**File**: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/Cargo.toml`
 
 **Line 30**:
 ```toml
@@ -63,7 +63,7 @@ Dropped (unused in workspace):
 
 ```bash
 # Before optimization
-cd /Users/kooshapari/CodeProjects/Phenotype/repos
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos
 cargo clean
 time cargo build  # Measure: ~81s
 
@@ -86,7 +86,7 @@ tokio = { version = "1", features = ["full"] }
 
 ### Current State
 
-**File**: `/Users/kooshapari/CodeProjects/Phenotype/repos/Cargo.toml`
+**File**: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/Cargo.toml`
 
 **Lines 50-54**:
 ```toml
@@ -166,7 +166,7 @@ CI builds are slow because they recompile from scratch every time. `sccache` cac
 
 ### The Fix
 
-Create new file: `/Users/kooshapari/CodeProjects/Phenotype/repos/.cargo/config.toml`
+Create new file: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/.cargo/config.toml`
 
 ```toml
 [build]
@@ -311,7 +311,7 @@ AFTER:
 ### Step 1: Reduce tokio Features
 
 ```bash
-cd /Users/kooshapari/CodeProjects/Phenotype/repos
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos
 
 # Open Cargo.toml in your editor
 nano Cargo.toml
@@ -386,7 +386,7 @@ git commit -m "perf: add panic=abort to release profile"
 **Create new file**: `.cargo/config.toml` (in repo root)
 
 ```bash
-cd /Users/kooshapari/CodeProjects/Phenotype/repos
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos
 
 # Create file
 cat > .cargo/config.toml << 'EOF'
@@ -515,7 +515,7 @@ A: No, the `.cargo/config.toml` alone helps. The sccache CI actions are optional
 
 ## References
 
-- Full audit: `/Users/kooshapari/CodeProjects/Phenotype/repos/docs/worklogs/BUILD_PERFORMANCE_AUDIT_2026-03-30.md`
+- Full audit: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/docs/worklogs/BUILD_PERFORMANCE_AUDIT_2026-03-30.md`
 - Cargo book: https://doc.rust-lang.org/cargo/
 - Profile reference: https://doc.rust-lang.org/cargo/reference/profiles.html
 - sccache: https://github.com/mozilla/sccache

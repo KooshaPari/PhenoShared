@@ -7,8 +7,8 @@ import (
 	"os"
 	"strings"
 
-	"github.com/kooshapari/hfscope/internal/config"
-	"github.com/kooshapari/hfscope/internal/views"
+	"github.com/<REDACTED>/hfscope/internal/config"
+	"github.com/<REDACTED>/hfscope/internal/views"
 )
 
 //go:embed static

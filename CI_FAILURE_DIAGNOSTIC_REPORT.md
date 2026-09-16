@@ -78,7 +78,7 @@ The `gix` crate is a monorepo housing 20+ sub-crates (gix-date, gix-index, gix-w
 **Advisories Check:**
 - Uses RustSec advisory database (identical to `cargo audit`)
 - 9 vulnerabilities detected, matching the Cargo Audit report above
-- Configuration: `/Users/kooshapari/CodeProjects/Phenotype/repos/deny.toml`
+- Configuration: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/deny.toml`
 
 **License & Bans Checks:** PASS
 - No license violations (all deps use approved licenses)

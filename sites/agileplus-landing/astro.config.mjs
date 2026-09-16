@@ -4,7 +4,7 @@ import vercel from '@astrojs/vercel';
 import tailwindcss from '@tailwindcss/vite';
 
 export default defineConfig({
-  site: 'https://agileplus.kooshapari.com',
+  site: 'https://agileplus.<REDACTED>.com',
   output: 'server',
   adapter: vercel(),
   vite: {

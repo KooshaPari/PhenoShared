@@ -96,7 +96,7 @@ jobs:
                 || { echo "ERROR: phenotype-journey install failed"; exit 1; }
             else
               # Download latest release binary (adjust URL as needed)
-              curl -fsSL https://github.com/KooshaPari/phenotype-journeys/releases/latest/download/phenotype-journey-x86_64-unknown-linux-gnu \
+              curl -fsSL https://github.com/<REDACTED>/phenotype-journeys/releases/latest/download/phenotype-journey-x86_64-unknown-linux-gnu \
                 -o /usr/local/bin/phenotype-journey \
                 && chmod +x /usr/local/bin/phenotype-journey \
                 || { echo "ERROR: phenotype-journey download failed"; exit 1; }

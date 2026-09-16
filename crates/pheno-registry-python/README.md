@@ -1,6 +1,6 @@
 # phenotype-registry Python SDK
 
-Python bindings for [phenotype-registry](https://github.com/kooshapari/phenotype-registry), built with [PyO3](https://pyo3.rs) and [maturin](https://github.com/PyO3/maturin).
+Python bindings for [phenotype-registry](https://github.com/<REDACTED>/phenotype-registry), built with [PyO3](https://pyo3.rs) and [maturin](https://github.com/PyO3/maturin).
 
 ## Installation
 
@@ -14,7 +14,7 @@ Or install directly from source (requires a Rust toolchain):
 
 ```bash
 pip install maturin
-git clone https://github.com/kooshapari/phenotype-registry.git
+git clone https://github.com/<REDACTED>/phenotype-registry.git
 cd phenotype-registry/crates/pheno-registry-python
 maturin develop
 ```

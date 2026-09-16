@@ -4,7 +4,7 @@ Hot-reloadable runtime configuration for the pheno-* fleet (L37).
 
 ## Status: ABSORBED into `pheno` workspace
 
-This crate was absorbed from <https://github.com/KooshaPari/pheno-runtime-config>
+This crate was absorbed from <https://github.com/<REDACTED>/pheno-runtime-config>
 on **2026-08-14** per docket `plans/dockets/N15-pheno-substrate-family.md`.
 
 Original repo will be soft-tombstoned (archived + replaced with skeleton pointing here).

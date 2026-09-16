@@ -29,7 +29,7 @@ fn dump_with_pr_extracts_url_and_artifact() {
 
     assert_eq!(
         result.pr_urls,
-        vec!["https://github.com/KooshaPari/substrate/pull/1".to_string()]
+        vec!["https://github.com/<REDACTED>/substrate/pull/1".to_string()]
     );
     assert_eq!(result.status, TaskState::Completed);
     assert_eq!(result.artifacts.len(), 1);
@@ -44,7 +44,7 @@ fn dump_with_max_steps_marks_failed_even_with_pr() {
     assert_eq!(result.status, TaskState::Failed);
     assert_eq!(
         result.pr_urls,
-        vec!["https://github.com/KooshaPari/substrate/pull/2".to_string()]
+        vec!["https://github.com/<REDACTED>/substrate/pull/2".to_string()]
     );
 }
 

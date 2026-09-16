@@ -65,21 +65,21 @@ Using GitHub CLI for future enforcement:
 
 ```bash
 # Set branch protection on phenotype-infrakit
-gh api repos/KooshaPari/phenotype-infrakit/branches/specs/main/protection \
+gh api repos/<REDACTED>/phenotype-infrakit/branches/specs/main/protection \
   -X PUT \
   -f required_pull_request_reviews.dismiss_stale_reviews=true \
   -f required_status_checks.strict=true \
   -f required_status_checks.contexts='["ci-ssot-validation"]'
 
 # Apply same rules to AgilePlus
-gh api repos/KooshaPari/AgilePlus/branches/specs/main/protection \
+gh api repos/<REDACTED>/AgilePlus/branches/specs/main/protection \
   -X PUT \
   -f required_pull_request_reviews.dismiss_stale_reviews=true \
   -f required_status_checks.strict=true \
   -f required_status_checks.contexts='["ci-ssot-validation"]'
 
 # Apply same rules to platforms/thegent
-gh api repos/KooshaPari/thegent/branches/specs/main/protection \
+gh api repos/<REDACTED>/thegent/branches/specs/main/protection \
   -X PUT \
   -f required_pull_request_reviews.dismiss_stale_reviews=true \
   -f required_status_checks.strict=true \

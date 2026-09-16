@@ -9,7 +9,7 @@ export const SITE_CONFIG = {
   primaryColor: '#3B82F6',
   accentColor: '#8B5CF6',
   baseUrl: import.meta.env.BASE_URL || '/',
-  repo: 'KooshaPari/hwLedger',
+  repo: '<REDACTED>/hwLedger',
 } as const;
 
 export type SiteConfig = typeof SITE_CONFIG;

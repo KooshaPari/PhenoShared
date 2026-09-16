@@ -32,11 +32,11 @@ rows = d['rows']
 print("=== Querying remote for ground truth ===")
 ALL_PHENO_NAMES = set()
 # pull all archived + pheno from remote
-for kind in ['gh_api(/repos/KooshaPari/phenotype-org-audits)'.split('(')[0]]:
+for kind in ['gh_api(/repos/<REDACTED>/phenotype-org-audits)'.split('(')[0]]:
     pass
 
 # Use git remote to query
-r = subprocess.run(['gh', 'repo', 'list', 'KooshaPari', '--limit', '400', '--json', 'name,isArchived'],
+r = subprocess.run(['gh', 'repo', 'list', '<REDACTED>', '--limit', '400', '--json', 'name,isArchived'],
                    capture_output=True, text=True, timeout=20)
 out = ANSI.sub('', r.stdout).strip()
 gh_repos = json.loads(out)
@@ -96,7 +96,7 @@ for r in rows:
         new_name = RENAMES[name]
         if gh_by_name.get(new_name):
             # Verify renamed repo exists & is archived
-            r['path'] = f'KooshaPari/{new_name}'
+            r['path'] = f'<REDACTED>/{new_name}'
             r['name'] = new_name
             r['archived'] = True
             r['fsm'] = 'archived'
@@ -108,7 +108,7 @@ for r in rows:
 # (B) Add missing orphans (deletion cohort + renamed repos not yet in index)
 all_paths = {r.get('path') for r in rows}
 for old_name, new_name in RENAMES.items():
-    full_path = f'KooshaPari/{new_name}'
+    full_path = f'<REDACTED>/{new_name}'
     if full_path not in all_paths and new_name in gh_by_name:
         rows.append({
             'name': new_name,
@@ -116,7 +116,7 @@ for old_name, new_name in RENAMES.items():
             'fsm': 'archived',
             'archived': True,
             'disposition': 'ZZ_ARCHIVE_RENAMED',
-            'target': f'formerly KooshaPari/{old_name}',
+            'target': f'formerly <REDACTED>/{old_name}',
             'reconciled_at': NOW_ISO,
             'note': f'2026-09-01: renamed from {old_name}, archived.',
         })
@@ -124,7 +124,7 @@ for old_name, new_name in RENAMES.items():
 
 # (C) Fix PhenoPlugins (TOO_LARGE_RETIRE → B:WORKING; absorption never shipped)
 for r in rows:
-    if r.get('path') == 'KooshaPari/PhenoPlugins':
+    if r.get('path') == '<REDACTED>/PhenoPlugins':
         old = r.get('disposition')
         if old == 'TOO_LARGE_RETIRE':
             r['disposition'] = 'B:WORKING'
@@ -136,7 +136,7 @@ for r in rows:
 # (D) Fix phenotype-contracts rows: repoint phenotype-shared → PhenoContracts
 fixed_pc = 0
 for r in rows:
-    if r.get('path') == 'KooshaPari/phenotype-contracts':
+    if r.get('path') == '<REDACTED>/phenotype-contracts':
         tgt = r.get('target') or ''
         if 'phenotype-shared' in tgt:
             r['target'] = 'PhenoContracts (canonical home, byte-identical schemas)'
@@ -147,7 +147,7 @@ if fixed_pc:
 
 # (E) phenoEvents: was KEEP_CANONICAL_STANDALONE, but actually deleted
 for r in rows:
-    if r.get('path') == 'KooshaPari/phenoEvents':
+    if r.get('path') == '<REDACTED>/phenoEvents':
         old = r.get('disposition')
         if old != 'DEAD_WEIGHT_DELETED':
             r['disposition'] = 'DEAD_WEIGHT_DELETED'

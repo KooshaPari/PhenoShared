@@ -8,7 +8,7 @@
 
 | Item | Status | Evidence |
 |------|--------|----------|
-| Event/bus contract traits landed in Eventra | **done** | [Eventra#19](https://github.com/KooshaPari/Eventra/pull/19) — `rust/phenotype-event-contracts` |
+| Event/bus contract traits landed in Eventra | **done** | [Eventra#19](https://github.com/<REDACTED>/Eventra/pull/19) — `rust/phenotype-event-contracts` |
 | Disposition doc | **done** | Eventra `docs/disposition/p4-contracts-slice3-event-bus.md` |
 | Consumer repoint: HexaKit `EventBus` outbound port | **pending** | Git-pin `phenotype-event-contracts` from Eventra |
 | phenoShared interim generic traits | **unchanged** | Slice 1 — `MetricsHook` remain interim SSOT |

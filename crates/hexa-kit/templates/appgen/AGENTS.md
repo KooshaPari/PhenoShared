@@ -5,7 +5,7 @@ Phenotype repository
 ## Quick Links
 
 - **Local CLAUDE.md:** See `CLAUDE.md` in this repository for project-specific guidance
-- **Phenotype org governance:** `/Users/kooshapari/CodeProjects/Phenotype/repos/CLAUDE.md`
+- **Phenotype org governance:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos/CLAUDE.md`
 - **Global agent guidance:** `~/.claude/AGENTS.md`
 - **AgilePlus work tracking:** `cd /repos/AgilePlus && agileplus <command>`
 

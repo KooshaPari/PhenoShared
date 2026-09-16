@@ -3,7 +3,7 @@
 // check-ecosystem.ts — Validate ECOSYSTEM_MAP.md + GitHub fleet state
 // =============================================================================
 //
-// Two-stage validator for the KooshaPari / phenotype-registry:
+// Two-stage validator for the <REDACTED> / phenotype-registry:
 //
 //   Stage 1 (always runs, no network):
 //     • Required sections are present in ECOSYSTEM_MAP.md
@@ -67,9 +67,9 @@ const execFileP = promisify(execFile);
 const TOOL_VERSION = "0.1.0";
 const TOOL_NAME = "check-ecosystem";
 
-const ORG = "KooshaPari";
+const ORG = "<REDACTED>";
 
-/** 13 canonical KooshaPari repos. MUST stay in sync with
+/** 13 canonical <REDACTED> repos. MUST stay in sync with
  *  scripts/validate-ecosystem.sh REPOS array. */
 const CANONICAL_REPOS: ReadonlyArray<{ display: string; slug: string; role: string }> = [
   { display: "phenotype-registry", slug: "phenotype-registry", role: "index (this repo)" },

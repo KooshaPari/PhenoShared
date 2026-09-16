@@ -188,7 +188,7 @@ for any of the 6 patterns that could leak via the scanner's own code.
 ## Reproduce this scan
 
 ```bash
-cd /Users/kooshapari/CodeProjects/Phenotype/repos
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos
 
 CRATES="pheno-config pheno-context pheno-drift-detector pheno-errors \
         pheno-flags pheno-framework-lint pheno-llms-txt pheno-mcp-router \

@@ -18,9 +18,9 @@
       "cost_if_not_skipped": "~60 sm90 instantiation TUs at ~20 min each at -j1 = ~20h"
     },
     "resume_state": {
-      "build_dir": "/home/kooshapari/sglang-src/sgl-kernel/build intact; 38/38 common_ops + 4 flash_ops .o; no ninja running; build.ninja current (sm_86 + threads=4)",
+      "build_dir": "/home/<REDACTED>/sglang-src/sgl-kernel/build intact; 38/38 common_ops + 4 flash_ops .o; no ninja running; build.ninja current (sm_86 + threads=4)",
       "remaining": "flash_ops sm90 TUs (skip/disable) + link common_ops.abi3.so + uv build wheel",
-      "wheel_target": "/home/kooshapari/sglang-src/sgl-kernel/dist/sgl_kernel-*.whl"
+      "wheel_target": "/home/<REDACTED>/sglang-src/sgl-kernel/dist/sgl_kernel-*.whl"
     }
   },
   "decision_for_attempt_19": {

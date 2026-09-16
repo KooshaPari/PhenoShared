@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 set -uo pipefail
 
-HARNESS="/Users/kooshapari/CodeProjects/Phenotype/pheno-harness"
-OMLX="/Users/kooshapari/CodeProjects/Phenotype/repos/phenotype-omlx"
-PORTAGE="/Users/kooshapari/CodeProjects/Phenotype/repos/portage"
-EIDOLON="/Users/kooshapari/CodeProjects/Phenotype/repos/Eidolon"
-BENCHORA="/Users/kooshapari/CodeProjects/Phenotype/repos/Benchora"
+HARNESS="/Users/<REDACTED>/CodeProjects/Phenotype/pheno-harness"
+OMLX="/Users/<REDACTED>/CodeProjects/Phenotype/repos/phenotype-omlx"
+PORTAGE="/Users/<REDACTED>/CodeProjects/Phenotype/repos/portage"
+EIDOLON="/Users/<REDACTED>/CodeProjects/Phenotype/repos/Eidolon"
+BENCHORA="/Users/<REDACTED>/CodeProjects/Phenotype/repos/Benchora"
 
 PASS=0
 FAIL=0

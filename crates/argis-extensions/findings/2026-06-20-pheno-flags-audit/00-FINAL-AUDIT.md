@@ -2,7 +2,7 @@
 
 **Date:** 2026-06-20
 **Phase:** 2 (synthesis — matrix + decision + closure)
-**Source path:** `/Users/kooshapari/CodeProjects/Phenotype/repos/pheno-flags/` (subtree; **NO standalone GitHub repo**)
+**Source path:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos/pheno-flags/` (subtree; **NO standalone GitHub repo**)
 **Recommended target:** `pheno/crates/phenotype-flags/` (byte-equivalent, already-merged substrate)
 **Phase 1 inputs (executed by prior agents):**
 - Phase 1A — `findings/2026-06-20-pheno-flags-audit/01-source-inventory.md` (cited via Phase 1C and verified locally)
@@ -22,7 +22,7 @@
 | **Rationale** | The source `pheno-flags/` is a byte-equivalent fork of the canonical substrate at `pheno/crates/phenotype-flags/` (verified by unified diff at Phase 1C §2.3 — only 9 doc-block renames and 138 lines of in-file test suite differ). The registry has **already recorded the absorb** (`phenotype-registry/registry/disposition-index.json:1141-1150` row `gw-pheno-flags` with `disposition: ARCHIVED, target: pheno/crates/phenotype-flags, fsm: done, relocated_date: 2026-06-20`); the only gap is the empty `adr: ""` field. The only real external consumer (`PlayCua/native/Cargo.toml:91`) **is currently broken anyway** (`cargo metadata` fails at workspace-dep resolution), so the absorb cannot regress a live build. The 5 source-only artifacts (AGENTS.md, llms.txt, justfile, deny.toml, llvm-cov.toml, scripts/, .github/, examples/, benches/, findings/71-pillar) are **drop-in replaceable** by pheno-monorepo-root governance or are **broken** (otel_quickstart, both benches, fabricated AGENTS.md quickstart, false-positive 71-pillar audit). 1,160 LoC of redundant code, zero live consumers, zero divergence to reconcile. |
 | **Decision type** | SUBSTRATE_EXISTS_SOURCE_HAS_NO_UPSTREAM (new shape — 8th in cross-audit taxonomy; see §10) |
 | **Supersession verdict** | **SUPERSEDED_PARITY** — substrate is byte-equivalent API A (modulo `pheno_flags` → `phenotype_flags` rename + 12 in-file test suite migration); source adds zero new behavior |
-| **Source state** | **no-upstream** (standalone worktree at `repos/pheno-flags/`; git subtree at `argis-extensions/pheno-flags/`; no `KooshaPari/pheno-flags` GitHub repo — `gh repo view` returns HTTP 404 per Phase 1A §6.1) |
+| **Source state** | **no-upstream** (standalone worktree at `repos/pheno-flags/`; git subtree at `argis-extensions/pheno-flags/`; no `<REDACTED>/pheno-flags` GitHub repo — `gh repo view` returns HTTP 404 per Phase 1A §6.1) |
 | **External consumers** | **1 real** (`PlayCua`, currently broken — cannot build) + 4 self-references (argis-extensions, AgilePlus, FocalPoint, phenotype-apps remote) per Phase 1C §3.1 |
 | **Open absorb PRs** | **0** — registry row already records absorb as `fsm: done`; no PRs to merge or close |
 | **Bug count** | **22** (from Phase 1B: P-1B-01..P-1B-22; 3 critical broken artifacts, 5 fabricated quickstart/snippet, 1 missing LICENSE, 1 unused dep, 1 dead dev-dep, 2 missing coverage tests, plus 9 docblock/manifest drift items — see §11.3 tally) |
@@ -33,16 +33,16 @@
 
 | Item | Value | Citation |
 |---|---|---|
-| Top-level tracked files | **16** (14 in `repos/pheno-flags/` + 1 in `argis-extensions/pheno-flags/` as subtree + 1 worktree-state file; the 14 are: `AGENTS.md`, `Cargo.toml`, `deny.toml`, `devshell.nix`, `justfile`, `llms.txt`, `llvm-cov.toml`, `src/lib.rs`, `tests/flag_test.rs`, `examples/quickstart.rs`, `examples/otel_quickstart.rs`, `benches/Cargo.toml`, `benches/flags_lookup.rs`, `benches/flags_stress.rs`, `scripts/coverage.sh`, `.github/workflows/ci.yml`, `findings/71-pillar-2026-06-20-pheno-flags.md`) | Phase 1A §1.1; `ls -la /Users/kooshapari/CodeProjects/Phenotype/repos/pheno-flags/` 2026-06-20 19:39 PDT (16 visible entries) |
+| Top-level tracked files | **16** (14 in `repos/pheno-flags/` + 1 in `argis-extensions/pheno-flags/` as subtree + 1 worktree-state file; the 14 are: `AGENTS.md`, `Cargo.toml`, `deny.toml`, `devshell.nix`, `justfile`, `llms.txt`, `llvm-cov.toml`, `src/lib.rs`, `tests/flag_test.rs`, `examples/quickstart.rs`, `examples/otel_quickstart.rs`, `benches/Cargo.toml`, `benches/flags_lookup.rs`, `benches/flags_stress.rs`, `scripts/coverage.sh`, `.github/workflows/ci.yml`, `findings/71-pillar-2026-06-20-pheno-flags.md`) | Phase 1A §1.1; `ls -la /Users/<REDACTED>/CodeProjects/Phenotype/repos/pheno-flags/` 2026-06-20 19:39 PDT (16 visible entries) |
 | Rust LoC | **534** (src/lib.rs body 67-220 = 154 lines of API code + 380 lines of integration tests in `tests/flag_test.rs` = 534) | `pheno-flags/src/lib.rs:67-220` (154 LOC API), `pheno-flags/tests/flag_test.rs:1-380` (380 LOC integration) |
 | Non-Rust LoC | **626** (AGENTS.md 104 + llms.txt 57 + justfile 93 + deny.toml 39 + llvm-cov.toml 22 + devshell.nix 9 + scripts/coverage.sh 15 + .github/workflows/ci.yml 31 + examples/quickstart.rs 35 + examples/otel_quickstart.rs 51 + benches/Cargo.toml 17 + benches/flags_lookup.rs 53 + benches/flags_stress.rs 42 + findings/71-pillar 219 + Cargo.toml 29) | Phase 1A §1.3 |
 | **Total LoC** | **1,160** | sum |
 | Public API | `pub struct FlagSet` + `pub enum FlagError` + 5 methods (`new`, `with`, `from_env`, `is_enabled`, `snapshot`) | `pheno-flags/src/lib.rs:72-110,127-130,146-190,196-198,205-207` |
 | `#[test]` count | **8** integration tests in `tests/flag_test.rs` | `pheno-flags/tests/flag_test.rs:1-380` |
 | doc-tests | **~7** (3 `run` + 1 `no_run` + 1 `ignore` + 2 minor in module docs at `src/lib.rs:14-24,37-45,54-65,102-107,119-126`) | `pheno-flags/src/lib.rs:1-65,102-126` |
-| Subtrees in monorepo | **5** (`repos/pheno-flags/`, `argis-extensions/pheno-flags/`, `FocalPoint/pheno-flags/`, `AgilePlus/crates/pheno-flags/`, plus 2 `AgilePlus-wtrees/orch-v12-*/crates/pheno-flags/` worktree copies) | `find /Users/kooshapari/CodeProjects/Phenotype -name "pheno-flags" -type d` 2026-06-20 19:39 PDT |
+| Subtrees in monorepo | **5** (`repos/pheno-flags/`, `argis-extensions/pheno-flags/`, `FocalPoint/pheno-flags/`, `AgilePlus/crates/pheno-flags/`, plus 2 `AgilePlus-wtrees/orch-v12-*/crates/pheno-flags/` worktree copies) | `find /Users/<REDACTED>/CodeProjects/Phenotype -name "pheno-flags" -type d` 2026-06-20 19:39 PDT |
 | Real Cargo-workspace consumers | **1** (`PlayCua/native/Cargo.toml:91` declares `pheno-flags = { workspace = true }`) | `PlayCua/native/Cargo.toml:87,91` |
-| GitHub source repo | **NONE** (HTTP 404) | `gh repo view KooshaPari/pheno-flags` |
+| GitHub source repo | **NONE** (HTTP 404) | `gh repo view <REDACTED>/pheno-flags` |
 | Manifest format | Cargo (single-crate) | `pheno-flags/Cargo.toml:1-29` |
 | Substrate location | `pheno/crates/phenotype-flags/` (member of `pheno` workspace) | `pheno/Cargo.toml` workspace member list |
 
@@ -54,15 +54,15 @@ From Phase 1A §3 (7 pheno-flags-targeted branches across the fleet):
 
 | Branch | Repo | Base | Last-touched commit | Status | Notes |
 |---|---|---|---|---|---|
-| `chore/absorb-pheno-flags` | `KooshaPari/argis-extensions` | (main) | `bc58074` (subtree-pull anchor) | **OPEN** | The most relevant — the planned absorb branch. Phase 2 recommends closing it as SUPERSEDED_PARITY (the absorb already happened in `pheno` monorepo per the registry `fsm: done`). |
-| `chore/2026-06-20-pheno-flags-audit` | `KooshaPari/argis-extensions` | (main) | (this audit) | OPEN | The 71-pillar audit + this Phase 2 doc; close after Phase 2 PR lands. |
-| `chore/2026-06-19-sparse-checkout-rebuild` | `KooshaPari/argis-extensions` | (main) | (prior turn) | OPEN | Contains the `repos/pheno-flags/` worktree re-creation (per Phase 1A §1.2). |
-| `chore/w1-1-archive-5-repos` | `KooshaPari/phenotype-registry` | (main) | (closed) | CLOSED | Wave 1 archive PR; landed the `gw-pheno-flags` registry row. |
-| `chore/w2-2-phenotype-flags-anchor` | `KooshaPari/pheno` | (main) | (closed) | CLOSED | The PR that created `pheno/crates/phenotype-flags/` (substrate). |
-| `feat/playcua-pheno-flags-workspace-dep` | `KooshaPari/PlayCua` | (main) | (planned) | NEVER OPENED | Recommended next action — fixes PlayCua's broken workspace-dep entries. |
-| `chore/agileplus-pheno-flags-resolver-rename` | `KooshaPari/AgilePlus` | (main) | (planned) | NEVER OPENED | Recommended next action — separate audit case (API B fork). |
+| `chore/absorb-pheno-flags` | `<REDACTED>/argis-extensions` | (main) | `bc58074` (subtree-pull anchor) | **OPEN** | The most relevant — the planned absorb branch. Phase 2 recommends closing it as SUPERSEDED_PARITY (the absorb already happened in `pheno` monorepo per the registry `fsm: done`). |
+| `chore/2026-06-20-pheno-flags-audit` | `<REDACTED>/argis-extensions` | (main) | (this audit) | OPEN | The 71-pillar audit + this Phase 2 doc; close after Phase 2 PR lands. |
+| `chore/2026-06-19-sparse-checkout-rebuild` | `<REDACTED>/argis-extensions` | (main) | (prior turn) | OPEN | Contains the `repos/pheno-flags/` worktree re-creation (per Phase 1A §1.2). |
+| `chore/w1-1-archive-5-repos` | `<REDACTED>/phenotype-registry` | (main) | (closed) | CLOSED | Wave 1 archive PR; landed the `gw-pheno-flags` registry row. |
+| `chore/w2-2-phenotype-flags-anchor` | `<REDACTED>/pheno` | (main) | (closed) | CLOSED | The PR that created `pheno/crates/phenotype-flags/` (substrate). |
+| `feat/playcua-pheno-flags-workspace-dep` | `<REDACTED>/PlayCua` | (main) | (planned) | NEVER OPENED | Recommended next action — fixes PlayCua's broken workspace-dep entries. |
+| `chore/agileplus-pheno-flags-resolver-rename` | `<REDACTED>/AgilePlus` | (main) | (planned) | NEVER OPENED | Recommended next action — separate audit case (API B fork). |
 
-Citation: Phase 1A §3 (branch inventory). Substrate/registry branches verified via `gh pr list --state all --search 'pheno-flags' --owner KooshaPari` at 2026-06-20 19:39 PDT (network errors truncated results; local `git -C argis-extensions log --all --oneline | grep -i 'pheno-flags'` returned 7 distinct touchpoints).
+Citation: Phase 1A §3 (branch inventory). Substrate/registry branches verified via `gh pr list --state all --search 'pheno-flags' --owner <REDACTED>` at 2026-06-20 19:39 PDT (network errors truncated results; local `git -C argis-extensions log --all --oneline | grep -i 'pheno-flags'` returned 7 distinct touchpoints).
 
 ---
 
@@ -294,7 +294,7 @@ Citation: Phase 1A §1.2, §2.2; `argis-extensions/pheno-flags/` directory listi
 
 ### GAP-5: 5 subtrees in monorepo + 2 worktree copies need coordinated cleanup
 
-There are **5 pheno-flags-shaped subtrees** in the local monorepo (verified via `find /Users/kooshapari/CodeProjects/Phenotype -name "pheno-flags" -type d` 2026-06-20 19:39 PDT):
+There are **5 pheno-flags-shaped subtrees** in the local monorepo (verified via `find /Users/<REDACTED>/CodeProjects/Phenotype -name "pheno-flags" -type d` 2026-06-20 19:39 PDT):
 
 1. `repos/pheno-flags/` — standalone worktree (the audit's source)
 2. `repos/argis-extensions/pheno-flags/` — git subtree
@@ -305,7 +305,7 @@ There are **5 pheno-flags-shaped subtrees** in the local monorepo (verified via 
 
 The 4 AgilePlus/AgilePlus-wtrees copies are all API B (divergent from the source's API A). Phase 2 recommends: delete the standalone worktree (1) immediately; keep subtree (2) for git history; defer mirrors (3) and (4-6) to their owning repos' cleanup. Risk: low; this is bookkeeping, not code.
 
-Citation: `find /Users/kooshapari/CodeProjects/Phenotype -name "pheno-flags" -type d` 2026-06-20 19:39 PDT (6 results).
+Citation: `find /Users/<REDACTED>/CodeProjects/Phenotype -name "pheno-flags" -type d` 2026-06-20 19:39 PDT (6 results).
 
 ---
 
@@ -323,7 +323,7 @@ Citation: `pheno/crates/phenotype-flags/Cargo.toml:1-14` (no `publish` field, in
 
 ### LRE-2: Future PRCP migration requires a non-pheno substrate
 
-Per ADR-018 (PRCP — Polyglot Reuse via Canonical Ports), the long-term plan is to make substrates **portable** across polyglot consumers (Python, TypeScript, Go, Rust). If the PRCP migration requires a non-`pheno`-monorepo substrate (e.g., a standalone `KooshaPari/phenotype-flags` repo with `Cargo.toml` + `src/lib.rs` + LICENSE + CI), the absorb verdict should be **RETAIN_AS_STANDALONE_REPO** — re-create the standalone repo with proper LICENSE files (which the source is missing per P-1B-10), publish to crates.io, and let PlayCua consume it via `phenotype-flags = "0.1.0"`.
+Per ADR-018 (PRCP — Polyglot Reuse via Canonical Ports), the long-term plan is to make substrates **portable** across polyglot consumers (Python, TypeScript, Go, Rust). If the PRCP migration requires a non-`pheno`-monorepo substrate (e.g., a standalone `<REDACTED>/phenotype-flags` repo with `Cargo.toml` + `src/lib.rs` + LICENSE + CI), the absorb verdict should be **RETAIN_AS_STANDALONE_REPO** — re-create the standalone repo with proper LICENSE files (which the source is missing per P-1B-10), publish to crates.io, and let PlayCua consume it via `phenotype-flags = "0.1.0"`.
 
 **Trigger condition:** ADR-018 PRCP migration is opened and `phenotype-flags` is in the first PRCP cohort. Currently: ADR-018 exists as governance, but the first PRCP cohort is undecided. Risk: low; no immediate trigger.
 
@@ -473,8 +473,8 @@ The cost of executing the absorb is **near-zero** (one PR to delete a worktree, 
 | # | Action | Owner | Effort | Status |
 |---|---|---|---|---|
 | **P1-1** | **Update the `pheno` monorepo root `WORKLOG.md`** with a 1-line entry: `2026-06-20 | absorb-pheno-flags | pheno-*-lib | migrated | pheno/crates/phenotype-flags | absorb from local subtree, registry fsm=done, PlayCua fix pending` (per ADR-015 v2.1 schema; `device: macbook`). | orchestrator | 5 min | RECOMMENDED |
-| **P1-2** | **Open issue on `KooshaPari/phenotype-registry`** to add a row for the `AgilePlus/crates/pheno-flags` API B fork (currently absent — see Phase 1C §5.5), flagged as a separate decision scope. | orchestrator | 5 min | RECOMMENDED |
-| **P1-3** | **Open issue on `KooshaPari/AgilePlus`** to rename `crates/pheno-flags` → `crates/pheno-flags-resolver` (or merge into substrate as API B extension). Tracked under a new audit (audit #8: agileplus-pheno-flags-api-divergence). | orchestrator | 5 min | RECOMMENDED |
+| **P1-2** | **Open issue on `<REDACTED>/phenotype-registry`** to add a row for the `AgilePlus/crates/pheno-flags` API B fork (currently absent — see Phase 1C §5.5), flagged as a separate decision scope. | orchestrator | 5 min | RECOMMENDED |
+| **P1-3** | **Open issue on `<REDACTED>/AgilePlus`** to rename `crates/pheno-flags` → `crates/pheno-flags-resolver` (or merge into substrate as API B extension). Tracked under a new audit (audit #8: agileplus-pheno-flags-api-divergence). | orchestrator | 5 min | RECOMMENDED |
 | **P1-4** | **Open follow-up PR on `pheno` monorepo** to add a per-crate `README.md`, `AGENTS.md`, and `llms.txt` to `pheno/crates/phenotype-flags/` (the substrate is bare-crate; per ADR-023 Rule 3.1 every new substrate should ship spec + docs + tests + coverage + observability + CI gate; the substrate currently has tests but lacks per-crate governance docs). | orchestrator | 30 min | RECOMMENDED |
 
 ### P2 (next 2 weeks, 2026-06-21..2026-07-04)
@@ -534,12 +534,12 @@ This shape differs from the 7 prior shapes in **3 key ways**:
 
 | # | Audit | Date | Decision shape | Source repo | Target | Verdict | LoC migrated | Consumers affected | LoC deleted | PRs opened | Registry rows added |
 |---|---|---|---|---|---|---|---|---|---|---|---|
-| 1 | `kwality` (2026-06-18) | 2026-06-18 | `SUBSTRATE_REPLACES_SOURCE` | `KooshaPari/kwality` | `KooshaPari/phenotype-tooling` | `ABSORB` | 29,422 | 0 | 0 (source archived) | 1 (`phenotype-tooling#158`) | 1 (`sr-kwality`) |
-| 2 | `dagctl` (2026-06-18) | 2026-06-18 | `SUBSTRATE_REPLACES_SOURCE` | `KooshaPari/dagctl` | `KooshaPari/phenodag` | `ABSORB` | 93 | 0 | 0 (source archived) | 1 (`phenodag#13`) | 1 (`sr-dagctl`) |
-| 3 | `phenotype-auth-ts` (2026-06-18) | 2026-06-18 | `SUBSTRATE_REPLACES_SOURCE` | `KooshaPari/phenotype-auth-ts` | `KooshaPari/AuthKit` | `ABSORB` | 1,901 | 0 | 0 (source archived) | 1 (`AuthKit#120`) | 1 (`sr-phenotype-auth-ts`) |
-| 4 | `dinoforge-packs` (2026-06-18) | 2026-06-18 | `SUBSTRATE_REPLACES_SOURCE` | `KooshaPari/dinoforge-packs` | `KooshaPari/Dino` | `ABSORB` | 2,329 | 0 | 0 (source archived) | 1 (`Dino#297`) | 1 (`sr-dinoforge-packs`) |
-| 5 | `phenotype-voxel/terrain/water/postfx` (2026-06-18) | 2026-06-18 | `SUBSTRATE_REPLACES_SOURCE` | 4 repos | `KooshaPari/phenotype-gfx` | `ABSORB` | varies | 0 | 0 (sources archived+deleted) | 2 (`phenotype-gfx#10,#11`) | 2 (`sr-phenotype-voxel`, `sr-phenotype-terrain`, `sr-phenotype-water`, `sr-phenotype-postfx`) |
-| 6 | `dmouse92 → kooshapari` (2026-06-17) | 2026-06-17 | `FLEET_ABSORPTION` (cross-org) | 20 Dmouse92 repos | 6 KP repos (per ADR-029) | `MIGRATE_THEN_ARCHIVE` | varies | 0 (net content loss = 0) | 0 (sources archived) | 6 (across pheno-mcp-router, dispatch-mcp, phenotype-config, phenotype-ops) | 0 (registry updated in-place) |
+| 1 | `kwality` (2026-06-18) | 2026-06-18 | `SUBSTRATE_REPLACES_SOURCE` | `<REDACTED>/kwality` | `<REDACTED>/phenotype-tooling` | `ABSORB` | 29,422 | 0 | 0 (source archived) | 1 (`phenotype-tooling#158`) | 1 (`sr-kwality`) |
+| 2 | `dagctl` (2026-06-18) | 2026-06-18 | `SUBSTRATE_REPLACES_SOURCE` | `<REDACTED>/dagctl` | `<REDACTED>/phenodag` | `ABSORB` | 93 | 0 | 0 (source archived) | 1 (`phenodag#13`) | 1 (`sr-dagctl`) |
+| 3 | `phenotype-auth-ts` (2026-06-18) | 2026-06-18 | `SUBSTRATE_REPLACES_SOURCE` | `<REDACTED>/phenotype-auth-ts` | `<REDACTED>/AuthKit` | `ABSORB` | 1,901 | 0 | 0 (source archived) | 1 (`AuthKit#120`) | 1 (`sr-phenotype-auth-ts`) |
+| 4 | `dinoforge-packs` (2026-06-18) | 2026-06-18 | `SUBSTRATE_REPLACES_SOURCE` | `<REDACTED>/dinoforge-packs` | `<REDACTED>/Dino` | `ABSORB` | 2,329 | 0 | 0 (source archived) | 1 (`Dino#297`) | 1 (`sr-dinoforge-packs`) |
+| 5 | `phenotype-voxel/terrain/water/postfx` (2026-06-18) | 2026-06-18 | `SUBSTRATE_REPLACES_SOURCE` | 4 repos | `<REDACTED>/phenotype-gfx` | `ABSORB` | varies | 0 | 0 (sources archived+deleted) | 2 (`phenotype-gfx#10,#11`) | 2 (`sr-phenotype-voxel`, `sr-phenotype-terrain`, `sr-phenotype-water`, `sr-phenotype-postfx`) |
+| 6 | `dmouse92 → <REDACTED>` (2026-06-17) | 2026-06-17 | `FLEET_ABSORPTION` (cross-org) | 20 Dmouse92 repos | 6 KP repos (per ADR-029) | `MIGRATE_THEN_ARCHIVE` | varies | 0 (net content loss = 0) | 0 (sources archived) | 6 (across pheno-mcp-router, dispatch-mcp, phenotype-config, phenotype-ops) | 0 (registry updated in-place) |
 | 7 | `phenotype-error-core` (2026-06-19, parallel) | 2026-06-19 | `PHENOTYPE_ERROR_CORE_PARALLEL` | local subtree | `pheno/crates/phenotype-error-core` | `DELETE_AFTER_PATCHES` | unknown | 0 | ~1,200 (subtree dissolved) | 0 (substrate already in pheno) | 1 (registry row already exists) |
 | **8** | **`pheno-flags` (2026-06-20, this audit)** | **2026-06-20** | **`SUBSTRATE_EXISTS_SOURCE_HAS_NO_UPSTREAM`** | **local subtree + git subtree (NO GitHub repo)** | **`pheno/crates/phenotype-flags`** | **`DELETE_AFTER_PATCHES`** | **1,160** | **1 (PlayCua, currently broken)** | **~1,160 (subtree dissolved; 5 broken artifacts cleaned up)** | **0 (substrate already in pheno; 1 back-fill PR for registry `adr` field)** | **0 (registry row already exists with `fsm: done`)** |
 
@@ -555,42 +555,42 @@ The 7 prior shapes assumed either (a) a source with an upstream repo to delete (
 
 ```bash
 # Source state
-ls -la /Users/kooshapari/CodeProjects/Phenotype/repos/pheno-flags/
+ls -la /Users/<REDACTED>/CodeProjects/Phenotype/repos/pheno-flags/
 # → 16 entries (14 visible: .github/, AGENTS.md, benches/, Cargo.toml, deny.toml,
 #   devshell.nix, examples/, findings/, justfile, llms.txt, llvm-cov.toml,
 #   scripts/, src/, tests/, + dotfiles Cargo.lock etc)
 
 # Substrate state
-ls -la /Users/kooshapari/CodeProjects/Phenotype/repos/pheno/crates/phenotype-flags/
+ls -la /Users/<REDACTED>/CodeProjects/Phenotype/repos/pheno/crates/phenotype-flags/
 # → 2 files: Cargo.toml (360 bytes), src/ (lib.rs, 7803 bytes)
 
 # API B fork (AgilePlus)
-ls /Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus/crates/pheno-flags/
+ls /Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus/crates/pheno-flags/
 # → Cargo.toml, README.md, src/lib.rs, tests/flag_test.rs (4 files)
 
 # Subtree enumeration
-find /Users/kooshapari/CodeProjects/Phenotype -name "pheno-flags" -type d
+find /Users/<REDACTED>/CodeProjects/Phenotype -name "pheno-flags" -type d
 # → 6 results (1 standalone, 1 argis-extensions, 1 FocalPoint, 3 AgilePlus incl. 2 wtrees)
 
 # PlayCua consumer verification
-find /Users/kooshapari/CodeProjects/Phenotype/repos/PlayCua -type f \( -name Cargo.toml -o -name "*.rs" \) \
+find /Users/<REDACTED>/CodeProjects/Phenotype/repos/PlayCua -type f \( -name Cargo.toml -o -name "*.rs" \) \
   | xargs grep -l "pheno.flags\|pheno_flags" 2>/dev/null
 # → 4 files: native/Cargo.toml, native/src/main.rs, native/src/app/mod.rs,
 #   native/tests/integration_smoke.rs
 
 # File line counts
-wc -l /Users/kooshapari/CodeProjects/Phenotype/repos/pheno-flags/src/lib.rs \
-      /Users/kooshapari/CodeProjects/Phenotype/repos/pheno-flags/Cargo.toml \
-      /Users/kooshapari/CodeProjects/Phenotype/repos/pheno/crates/phenotype-flags/src/lib.rs \
-      /Users/kooshapari/CodeProjects/Phenotype/repos/pheno/crates/phenotype-flags/Cargo.toml
+wc -l /Users/<REDACTED>/CodeProjects/Phenotype/repos/pheno-flags/src/lib.rs \
+      /Users/<REDACTED>/CodeProjects/Phenotype/repos/pheno-flags/Cargo.toml \
+      /Users/<REDACTED>/CodeProjects/Phenotype/repos/pheno/crates/phenotype-flags/src/lib.rs \
+      /Users/<REDACTED>/CodeProjects/Phenotype/repos/pheno/crates/phenotype-flags/Cargo.toml
 # → 220 + 29 + 360 + 14 = 623 lines
 
 # GitHub source repo (HTTP 404 expected)
-gh repo view KooshaPari/pheno-flags
+gh repo view <REDACTED>/pheno-flags
 # → HTTP 404 (per Phase 1A §6.1)
 
 # Registry row
-cat /Users/kooshapari/CodeProjects/Phenotype/repos/phenotype-registry/registry/disposition-index.json \
+cat /Users/<REDACTED>/CodeProjects/Phenotype/repos/phenotype-registry/registry/disposition-index.json \
   | grep -A 10 'gw-pheno-flags'
 # → row at line 1141-1150 with disposition: ARCHIVED, fsm: done
 ```
@@ -602,7 +602,7 @@ cat /Users/kooshapari/CodeProjects/Phenotype/repos/phenotype-registry/registry/d
   - `findings/2026-06-20-pheno-flags-audit/02-docs-code.md` (cited via Phase 1C; 497 lines; bug IDs P-1B-01..P-1B-22; verified not on disk)
   - `findings/2026-06-20-pheno-flags-audit/03-target-parity.md` (641 lines; full file read 2026-06-20 19:39 PDT)
 - **Cross-fleet governance:**
-  - AGENTS.md (current: 2026-06-20 18:45 PDT, v11 closed; §"4-repo retirement" 2026-06-18; §"ADR-023" substrate placement; §"Dmouse92 → KooshaPari migration" ADR-029)
+  - AGENTS.md (current: 2026-06-20 18:45 PDT, v11 closed; §"4-repo retirement" 2026-06-18; §"ADR-023" substrate placement; §"Dmouse92 → <REDACTED> migration" ADR-029)
   - ADR-015 v2.1 worklog schema (11th `device:` column)
   - ADR-022 (config consolidation: `pheno-*-lib` family for Rust libs)
   - ADR-023 (agent-effort governance: substrate placement rules; Rule 3.1 quality bar)

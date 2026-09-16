@@ -43,7 +43,7 @@ sentry-cli organizations list
 # Expected: List of organizations (no 403 error)
 
 # Run automation
-bash /Users/kooshapari/CodeProjects/Phenotype/repos/scripts/create-sentry-projects.sh
+bash /Users/<REDACTED>/CodeProjects/Phenotype/repos/scripts/create-sentry-projects.sh
 
 # Expected: All 3 projects created + GitHub Secrets configured
 ```

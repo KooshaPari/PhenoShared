@@ -9,7 +9,7 @@
   "role": "multi-crate-parent",
   "domain_role": "runtime-and-domain-monorepo",
   "boundary": "canonical-rust-workspace-parent",
-  "gh_url": "https://github.com/KooshaPari/pheno",
+  "gh_url": "https://github.com/<REDACTED>/pheno",
   "default_branch": "main",
   "remote_default_sha_at_audit": "9047e9dc36a586994976f1b4a8574039623d3475",
   "disposition": "KEEP_CANONICAL_PARENT",

@@ -9,7 +9,7 @@ description = "Universal deployment toolkit with NVMS format for modern platform
 readme = "README.md"
 requires-python = ">=3.10"
 license = {text = "MIT"}
-authors = [{name = "Koosha Pari", email = "kooshapari@gmail.com"}]
+authors = [{name = "Koosha Pari", email = "<REDACTED>@gmail.com"}]
 dependencies = [
     "httpx>=0.27.0",
     "pydantic>=2.0.0",

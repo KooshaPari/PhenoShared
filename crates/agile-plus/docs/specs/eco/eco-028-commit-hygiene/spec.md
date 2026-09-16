@@ -14,7 +14,7 @@ type: operational
 # Specification: Commit / Branch Hygiene
 
 ## Problem Statement
-`worklogs/worktree-hygiene-20260605.json` reports 130 stale worktrees (>14d, clean) and 14 merged-branch candidates. `worklogs/oldest-kooshapari-20260605.json` shows 17 local/remote divergences, some with dirty working trees ahead of remote. The fleet drifts silently.
+`worklogs/worktree-hygiene-20260605.json` reports 130 stale worktrees (>14d, clean) and 14 merged-branch candidates. `worklogs/oldest-<REDACTED>-20260605.json` shows 17 local/remote divergences, some with dirty working trees ahead of remote. The fleet drifts silently.
 
 ## Target Users
 - **Repo stewards** who need a clean baseline.

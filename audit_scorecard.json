@@ -1,7 +1,7 @@
 {
   "$schema": "https://phenotype.dev/schemas/scorecard-v2.json",
   "version": "v3.0",
-  "repo": "kooshapari/substrate",
+  "repo": "<REDACTED>/substrate",
   "audit_date": "2026-09-02",
   "auditor": "pheno-audit-ratchet v3 (autonomous)",
   "last_remediation": "2026-09-02 \u2014 5 quick-win pillars cleared (SEC-02 SECURITY.md, CQ-04 rustfmt.toml, DX-03 rust-cache, CI-08 pr-lint workflow + commitlint, CI-09 branch protection). Scorecard: A+ 90.0% \u2192 A+ 93.6%.",
@@ -512,7 +512,7 @@
       "domain": "security",
       "title": "private vuln disclosure email",
       "status": "satisfied",
-      "evidence": "SECURITY.md text not yet read in detail; needs contact section | 2026-09-02: Satisfied: SECURITY.md with security@kooshapari.com disclosure contact (committed 2026-09-02)."
+      "evidence": "SECURITY.md text not yet read in detail; needs contact section | 2026-09-02: Satisfied: SECURITY.md with security@<REDACTED>.com disclosure contact (committed 2026-09-02)."
     },
     {
       "id": "SEC-03",

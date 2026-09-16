@@ -44,7 +44,7 @@ Create **phenotype-config** as the `config` role owner. Two acceptable shapes (p
 
 | Option | Shape | When to choose |
 |--------|-------|----------------|
-| **A — New repo** | `KooshaPari/phenotype-config` git repo with Rust workspace + `packages/` for Py | Clean boundary, independent CI |
+| **A — New repo** | `<REDACTED>/phenotype-config` git repo with Rust workspace + `packages/` for Py | Clean boundary, independent CI |
 | **B — Virtual workspace** | Rust root in new repo; Conft + Py packages linked via manifest docs and shared versioning | Minimize repo count; accept multi-repo edges |
 
 Edges stay in their publish targets:
@@ -121,7 +121,7 @@ Conft/
 - [ ] Remove `crates/settly` from HexaKit workspace.
 - [ ] Remove `phenotype-config-core` if fully absorbed.
 - [ ] Update HexaKit charter transitional note; CI green.
-- [ ] Archive `KooshaPari/Settly` source repo when zero external deps confirmed.
+- [ ] Archive `<REDACTED>/Settly` source repo when zero external deps confirmed.
 
 ### Phase 5 — Registry & governance
 

@@ -6,7 +6,7 @@ Confidence: medium-high
 
 ## Executive decision
 
-helioscope can be deleted after preservation. The GitHub repo description explicitly marks it SUPERSEDED and points to KooshaPari/helios-cli as the canonical Phenotype Helios CLI fork. The active target helios-cli has the final HeliosCLI artifacts on main; the local target branch chore/absorb-helioscli-final-2026-06-20 was pushed and has zero divergence from origin/main. Residual helioscope local work is preserved here as patchsets.
+helioscope can be deleted after preservation. The GitHub repo description explicitly marks it SUPERSEDED and points to <REDACTED>/helios-cli as the canonical Phenotype Helios CLI fork. The active target helios-cli has the final HeliosCLI artifacts on main; the local target branch chore/absorb-helioscli-final-2026-06-20 was pushed and has zero divergence from origin/main. Residual helioscope local work is preserved here as patchsets.
 
 ## Absorption matrix
 

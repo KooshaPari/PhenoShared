@@ -4,7 +4,7 @@
 
 On 2026-07-17, the airlock daemon executed waves 2-11, performing a local filesystem
 sweep that removed ~170 local clone directories (~124.6 GiB freed). **No GitHub
-repositories were deleted.** All 239 repos on KooshaPari/ remain intact on GitHub
+repositories were deleted.** All 239 repos on <REDACTED>/ remain intact on GitHub
 (82 active, 157 archived, 5 forks).
 
 ## Timeline
@@ -64,7 +64,7 @@ scope creep from "portage federation" to "local disk cleanup" was not explicitly
 | phenosql | archived | Own fork |
 | phenosql-go | archived | Own fork |
 
-**No GH Support email needed** — all forks are under KooshaPari/ account, none deleted.
+**No GH Support email needed** — all forks are under <REDACTED>/ account, none deleted.
 
 ## Lessons Learned
 

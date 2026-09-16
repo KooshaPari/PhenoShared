@@ -3,7 +3,7 @@ name: forge3-bridge
 id: forge3-bridge
 version: 0.1.0
 language: markdown
-author: KooshaPari
+author: <REDACTED>
 requires_servers:
   - forge3-bridge
 requires_binaries:
@@ -188,6 +188,6 @@ The recommended layout (after `forge3-ctl install`):
 ~/bin/forge3-ctl                  ← daemon manager (Rust)
 ```
 
-The skill source-of-truth lives in `KooshaPari/PhenoMCPServers/skills/forge3-bridge/`.
+The skill source-of-truth lives in `<REDACTED>/PhenoMCPServers/skills/forge3-bridge/`.
 `forge3-ctl install` is the symlinker/installer that copies into the dotfile
 locations — exactly like `holman/dotfiles` clone + `install.sh` pattern.

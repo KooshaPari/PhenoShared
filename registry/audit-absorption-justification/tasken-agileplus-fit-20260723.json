@@ -1,7 +1,7 @@
 {
   "audit_date": "2026-07-23",
-  "source": "KooshaPari/Tasken",
-  "candidate_parent": "KooshaPari/AgilePlus",
+  "source": "<REDACTED>/Tasken",
+  "candidate_parent": "<REDACTED>/AgilePlus",
   "tasken_package": "taskkit",
   "tasken_surface": [
     "domain/scheduler.rs",

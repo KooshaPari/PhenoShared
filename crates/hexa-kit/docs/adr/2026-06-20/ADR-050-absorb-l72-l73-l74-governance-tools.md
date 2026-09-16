@@ -7,7 +7,7 @@
 
 ## Context
 
-The 3 standalone repos `KooshaPari/pheno-predict` (L72), `KooshaPari/pheno-framework-lint` (L73), and `KooshaPari/pheno-drift-detector` (L74) were single-file Python CLIs implementing:
+The 3 standalone repos `<REDACTED>/pheno-predict` (L72), `<REDACTED>/pheno-framework-lint` (L73), and `<REDACTED>/pheno-drift-detector` (L74) were single-file Python CLIs implementing:
 
 - **L72 predict** (ADR-047): fleet-wide similar-code scanner using token-shingle Jaccard similarity
 - **L73 framework_lint** (ADR-048): substrate graduation & tier-convention linter (4-tier gate table)

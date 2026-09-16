@@ -347,5 +347,5 @@ Minimal performance impact:
 ## Questions?
 
 Refer to:
-- `/Users/kooshapari/Repos/phenotype-infrakit/crates/phenotype-observability/README.md`
-- `/Users/kooshapari/Repos/phenotype-infrakit/crates/phenotype-observability/IMPLEMENTATION_SUMMARY.md`
+- `/Users/<REDACTED>/Repos/phenotype-infrakit/crates/phenotype-observability/README.md`
+- `/Users/<REDACTED>/Repos/phenotype-infrakit/crates/phenotype-observability/IMPLEMENTATION_SUMMARY.md`

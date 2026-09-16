@@ -17,9 +17,9 @@ import (
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 
-	"github.com/kooshapari/hfscope/internal/config"
-	"github.com/kooshapari/hfscope/internal/hfapi"
-	"github.com/kooshapari/hfscope/internal/views"
+	"github.com/<REDACTED>/hfscope/internal/config"
+	"github.com/<REDACTED>/hfscope/internal/hfapi"
+	"github.com/<REDACTED>/hfscope/internal/views"
 )
 
 // Server is the HTTP application.

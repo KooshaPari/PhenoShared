@@ -1,6 +1,6 @@
 # AgilePlus Workspace Audit Index
 **Generated:** 2026-03-30
-**Audit Files Location:** `/Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus/docs/audits/`
+**Audit Files Location:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus/docs/audits/`
 
 ---
 
@@ -84,7 +84,7 @@
 
 | Metric | Value |
 |--------|-------|
-| **Remote** | `git@github.com:KooshaPari/AgilePlus.git` |
+| **Remote** | `git@github.com:<REDACTED>/AgilePlus.git` |
 | **Branch** | `main` (ahead of origin by 3) |
 | **Latest Commit** | c150756 (phase2.5 integration tests) |
 | **Workspace Size** | 563 MB |
@@ -226,7 +226,7 @@
 
 All audit documents:
 ```
-/Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus/docs/audits/
+/Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus/docs/audits/
 ├── README.md
 ├── AGILEPLUS_WORKSPACE_DEEP_AUDIT_2026-03-30.md
 ├── BUILD_FIX_ROADMAP_2026-03-30.md

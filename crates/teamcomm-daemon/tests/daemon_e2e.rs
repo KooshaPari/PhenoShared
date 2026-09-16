@@ -240,7 +240,7 @@ async fn state_set_get_round_trip() {
             "status": "working",
             "focus_file": "/repos/pheno/crates/pheno-context/src/lib.rs",
             "focus_branch": "absorb/pheno-context-2026-07-17",
-            "worktree": "/Users/kooshapari/.worktrees/pheno-context",
+            "worktree": "/Users/<REDACTED>/.worktrees/pheno-context",
         }),
     )
     .await

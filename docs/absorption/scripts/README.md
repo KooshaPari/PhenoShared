@@ -1,7 +1,7 @@
 # Absorption Record: scripts
 
 **Date**: 2026-07-17
-**Source**: `KooshaPari/scripts`
+**Source**: `<REDACTED>/scripts`
 **Target**: `phenotype-tooling/bin/legacy-scripts/`
 **Wave**: `2026-07-17-queue-refresh-2`
 **Disposition**: `ABSORB`
@@ -29,7 +29,7 @@
 ## Verification
 
 - `git push` succeeded: branch `salvage/phenotype-tooling-workspace-2026-07-15` on `phenotype-tooling`
-- Source repo `KooshaPari/scripts` archived 2026-07-17
+- Source repo `<REDACTED>/scripts` archived 2026-07-17
 
 ## Branch
 

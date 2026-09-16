@@ -6,5 +6,5 @@ source = "getsentry/dotagents"
 
 [[skills]]
 name = "agileplus-shard-lock-dag"
-source = "kooshapari/AgilePlus"
+source = "<REDACTED>/AgilePlus"
 description = "Shard-lock DAG protocol for parallel agent dispatch with disjoint file allow-lists per ADR-0001."

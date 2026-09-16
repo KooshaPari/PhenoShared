@@ -118,7 +118,7 @@ Documentation & Deployment:
 BASELINE STATE (2026-03-31)
 ================================================================================
 
-Repository:  /Users/kooshapari/CodeProjects/Phenotype/repos
+Repository:  /Users/<REDACTED>/CodeProjects/Phenotype/repos
 Branch:      main (synced with origin/main)
 Last commit: 97d1434d0 (framework docs prepared)
 Rust:        1.93.1 (Homebrew)
@@ -180,7 +180,7 @@ HOW TO START (2026-04-01 Morning)
    - Track Sync: Benchmarking (WP8-9)
 
 4. Verify baseline:
-   $ cd /Users/kooshapari/CodeProjects/Phenotype/repos
+   $ cd /Users/<REDACTED>/CodeProjects/Phenotype/repos
    $ cargo build --workspace && cargo test --workspace
    $ cargo clippy --workspace -- -D warnings
 
@@ -234,7 +234,7 @@ VALIDATION COMMANDS (Copy & Paste)
 ================================================================================
 
 # Run after each WP or daily:
-cd /Users/kooshapari/CodeProjects/Phenotype/repos
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos
 
 echo "🔨 Building..."
 cargo build --workspace && echo "✅ Build OK" || echo "❌ Build FAILED"

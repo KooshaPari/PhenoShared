@@ -26,10 +26,10 @@
 ## Why not merge elsewhere
 
 We deliberately did NOT target:
-- `KooshaPari/Benchora` — Benchora is the Rust suite/eval *anchor*; heliosBench
+- `<REDACTED>/Benchora` — Benchora is the Rust suite/eval *anchor*; heliosBench
   is the Python *measurement* runtime. Different layers.
-- `KooshaPari/phenotype-tooling/crates/benchora` — same as above.
-- `KooshaPari/portage` — portage is the Harbor env substrate, not a benchmark.
+- `<REDACTED>/phenotype-tooling/crates/benchora` — same as above.
+- `<REDACTED>/portage` — portage is the Harbor env substrate, not a benchmark.
 
 ## State captured
 
@@ -45,7 +45,7 @@ We deliberately did NOT target:
 
 - Subtree split (PR #78) preserving source SHA `5f85de67` in merge commit
 - Squashed follow-up commits for tests + Cargo wiring
-- Verified on remote HEAD via `gh api repos/KooshaPari/phenotype-tooling/contents/crates/heliosbench`
+- Verified on remote HEAD via `gh api repos/<REDACTED>/phenotype-tooling/contents/crates/heliosbench`
 
 ## Forward-looking note
 

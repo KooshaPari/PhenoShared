@@ -52,7 +52,7 @@ history:
 
 ```bash
 # Start work in the designated worktree for this package
-cd /Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus-wtrees/wp21-cli-triage-queue
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus-wtrees/wp21-cli-triage-queue
 cargo build --workspace 2>&1 | head -40
 cargo test --workspace 2>&1 | tail -20
 ```

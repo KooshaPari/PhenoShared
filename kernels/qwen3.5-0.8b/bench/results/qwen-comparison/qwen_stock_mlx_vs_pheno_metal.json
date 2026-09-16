@@ -156,7 +156,7 @@
     }
   ],
   "pheno_validation_evidence": {
-    "report_path": "/Users/kooshapari/CodeProjects/Phenotype/pheno-harness-compare/kernels/qwen3.5-0.8b/bench/results/validate_latest.json",
+    "report_path": "/Users/<REDACTED>/CodeProjects/Phenotype/pheno-harness-compare/kernels/qwen3.5-0.8b/bench/results/validate_latest.json",
     "comparison_caveat": "Pheno Metal is not an end-to-end Qwen comparator: the available real-weights decode runs RMSNorm only; attention, MLP, and projection kernels are not wired into that decode path.",
     "component_results": [
       {

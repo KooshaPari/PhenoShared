@@ -146,7 +146,7 @@ export function createSiteMeta({ base, repoName }) {
     repoName,
     title: `${repoName} Documentation`,
     description: `Documentation for ${repoName}`,
-    socialImage: `https://raw.githubusercontent.com/KooshaPari/${repoName}/main/docs-meta.png`
+    socialImage: `https://raw.githubusercontent.com/<REDACTED>/${repoName}/main/docs-meta.png`
   }
 }
 ```

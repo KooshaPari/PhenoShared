@@ -2,20 +2,20 @@
 
 [![AI Slop Inside](https://sladge.net/badge.svg)](https://sladge.net)
 
-Production landing page at `thegent.kooshapari.com` for [KooshaPari/thegent](https://github.com/KooshaPari/thegent), the Python agent runtime and orchestration system in the Phenotype ecosystem.
+Production landing page at `thegent.<REDACTED>.com` for [<REDACTED>/thegent](https://github.com/<REDACTED>/thegent), the Python agent runtime and orchestration system in the Phenotype ecosystem.
 
 ## Purpose
 
 `thegent-landing` is the Tier-2 brand surface for theGent. It gives the runtime a stable domain, pulls public project metadata at build time, and exposes path-based microfrontends for landing-site docs, QA, observability, and pull-request previews.
 
-The site is also mirrored to GitHub Pages at `https://kooshapari.github.io/thegent-landing/`; links are generated through `src/lib/site.ts` so the Vercel custom-domain build and Pages base-path build both work.
+The site is also mirrored to GitHub Pages at `https://<REDACTED>.github.io/thegent-landing/`; links are generated through `src/lib/site.ts` so the Vercel custom-domain build and Pages base-path build both work.
 
 ## Architecture
 
 - **Frontend:** Astro 6 static site
 - **Styling:** Tailwind CSS 4 with Phenotype CSS tokens
 - **Deployment:** Vercel plus GitHub Pages mirror
-- **Domain:** `thegent.kooshapari.com` via Cloudflare CNAME
+- **Domain:** `thegent.<REDACTED>.com` via Cloudflare CNAME
 - **Data sources:** GitHub API, committed QA snapshots, PhenoObservability UI
 
 ## Local Development
@@ -46,7 +46,7 @@ bun run preview
 
 ## Path Microfrontends
 
-Per Phenotype org-pages policy, `thegent.kooshapari.com` hosts these surfaces:
+Per Phenotype org-pages policy, `thegent.<REDACTED>.com` hosts these surfaces:
 
 | Path | Status | Purpose |
 |------|--------|---------|
@@ -99,6 +99,6 @@ The GitHub Pages mirror is built by `.github/workflows/pages.yml` with `GITHUB_P
 
 ## Related
 
-- [theGent](https://github.com/KooshaPari/thegent)
-- [projects.kooshapari.com](https://github.com/KooshaPari/portfolio)
+- [theGent](https://github.com/<REDACTED>/thegent)
+- [projects.<REDACTED>.com](https://github.com/<REDACTED>/portfolio)
 - [Site infrastructure](docs/governance/site-infrastructure.md)

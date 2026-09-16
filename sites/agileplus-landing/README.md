@@ -1,13 +1,13 @@
 > **Work state:** ACTIVE · **Progress:** `██████░░░░ 60%`
-> Astro 5 + Tailwind 4 + Vercel live at agileplus.kooshapari.com; build-time GitHub README fetch wired; QA dashboard in progress. · updated 2026-06-08
+> Astro 5 + Tailwind 4 + Vercel live at agileplus.<REDACTED>.com; build-time GitHub README fetch wired; QA dashboard in progress. · updated 2026-06-08
 
 <!-- work-state: agileplus-landing -->
 
 # agileplus-landing
 
-Landing page at `agileplus.kooshapari.com` for [KooshaPari/AgilePlus](https://github.com/KooshaPari/AgilePlus).
+Landing page at `agileplus.<REDACTED>.com` for [<REDACTED>/AgilePlus](https://github.com/<REDACTED>/AgilePlus).
 
-Pulls README at build time from GitHub. Tier 2 of the org-pages tree (Tier 1 is `projects.kooshapari.com`).
+Pulls README at build time from GitHub. Tier 2 of the org-pages tree (Tier 1 is `projects.<REDACTED>.com`).
 
 ## Stack
 

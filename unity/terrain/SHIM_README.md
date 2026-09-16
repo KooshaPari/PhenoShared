@@ -20,5 +20,5 @@ Do not re-implement the port logic in C#.
 
 ## Source repos
 
-- Upstream C#: <https://github.com/KooshaPari/phenotype-terrain> (now archived)
+- Upstream C#: <https://github.com/<REDACTED>/phenotype-terrain> (now archived)
 - Rust port: [`/src/terrain/`](../src/terrain/) in this crate

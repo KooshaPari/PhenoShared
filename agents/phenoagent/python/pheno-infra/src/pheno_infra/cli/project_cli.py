@@ -44,7 +44,7 @@ class ProjectCLI:
 
     def init(
         self,
-        domain: str = "kooshapari.com",
+        domain: str = "<REDACTED>.com",
         config_dir: str | None = None,
         proxy_port: int = 9100,
         fallback_port: int = 9000,
@@ -469,7 +469,7 @@ def project_cli(ctx: click.Context, project_name: str):
 
 
 @project_cli.command()
-@click.option("--domain", default="kooshapari.com", help="Base domain for tunnels")
+@click.option("--domain", default="<REDACTED>.com", help="Base domain for tunnels")
 @click.option("--config-dir", help="Configuration directory")
 @click.option("--proxy-port", default=9100, help="Port for reverse proxy server")
 @click.option("--fallback-port", default=9000, help="Port for fallback server")

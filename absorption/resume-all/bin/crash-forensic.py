@@ -80,10 +80,10 @@ LAUNCHD_LOG_SOURCE: tuple[str, Path, str] = ("launchd", LAUNCHD_SYSTEM_LOG, "iso
 
 # Patient labels for the keepalive-restart pattern detect.
 RESUME_ALL_LABELS = (
-    "com.kooshapari.resume-all-snapshot",
-    "com.kooshapari.resume-all-ipc",
-    "com.kooshapari.resume-all-watch",
-    "com.kooshapari.resume-all-zmx",
+    "com.<REDACTED>.resume-all-snapshot",
+    "com.<REDACTED>.resume-all-ipc",
+    "com.<REDACTED>.resume-all-watch",
+    "com.<REDACTED>.resume-all-zmx",
 )
 
 # ---------------------------------------------------------------------------

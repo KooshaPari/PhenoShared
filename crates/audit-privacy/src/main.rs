@@ -6,7 +6,7 @@ use walkdir::WalkDir;
 
 fn main() -> Result<()> {
     let root =
-        Path::new("/Users/kooshapari/CodeProjects/Phenotype/repos/FocalPoint/apps/ios/FocalPoint");
+        Path::new("/Users/<REDACTED>/CodeProjects/Phenotype/repos/FocalPoint/apps/ios/FocalPoint");
 
     let privacy_manifest = root.join("Resources/PrivacyInfo.xcprivacy");
     let info_plist = root.join("Sources/FocalPointApp/Info.plist");

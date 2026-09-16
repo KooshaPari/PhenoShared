@@ -12,7 +12,7 @@
 ## TL;DR
 
 Audited **10 fleet repos** for key rotation posture over the last 90 days. Of
-the 10, **5 exist** under `KooshaPari/*`; 5 return HTTP 404 (deprecated /
+the 10, **5 exist** under `<REDACTED>/*`; 5 return HTTP 404 (deprecated /
 deleted / never existed — see T5A report for full list).
 
 Of the 5 scannable repos:
@@ -92,7 +92,7 @@ ADR-031 absorbed `pheno-config` into `Configra` 2026-06-19. Audit moved to
 
 ### 5. `phenotype-py-utils` — **404 NOT FOUND**
 
-Confirmed 404 across `KooshaPari/*`, `Dmouse92/*`, and `Phenotype/*` orgs.
+Confirmed 404 across `<REDACTED>/*`, `Dmouse92/*`, and `Phenotype/*` orgs.
 Repo never existed under any of these namespaces. Out of scope.
 
 ---
@@ -100,7 +100,7 @@ Repo never existed under any of these namespaces. Out of scope.
 ### 6. `cheap-llm-mcp` — **404 NOT FOUND**
 
 ADR-007 / ADR-008 archived the repo. The provider work was absorbed into
-`KooshaPari/pheno-mcp-router` via PRs #1, #2, #3 (closed 2026-06-17). Audit
+`<REDACTED>/pheno-mcp-router` via PRs #1, #2, #3 (closed 2026-06-17). Audit
 moved to pheno-mcp-router (not in this batch).
 
 ---
@@ -150,7 +150,7 @@ with low runtime dependency churn, so impact is minor.
 
 **Rotation status:** ✅ **WITHIN WINDOW** (file modified today).
 **Suspicious-looking keys:** **0** (only `APP_NAME`, `NODE_ENV`, `API_BASE_URL`, `DEBUG_ENABLED` — no credential variables at all).
-**Repo status:** Per ADR-021, Profila is being migrated to `KooshaPari/pheno-profiling`
+**Repo status:** Per ADR-021, Profila is being migrated to `<REDACTED>/pheno-profiling`
 (verified: `pheno-profiling` exists, archived=true, last pushed 2026-06-18).
 The Profila source repo was deleted during this audit; the `.env.example`
 content was captured before deletion in `/tmp/audit-5AB/clones/Profila/`.
@@ -159,7 +159,7 @@ content was captured before deletion in `/tmp/audit-5AB/clones/Profila/`.
 
 ### 10. `ObservabilityKit` — **404 NOT FOUND**
 
-Confirmed 404 across `KooshaPari/*`, `Dmouse92/*`, and `Phenotype/*` orgs.
+Confirmed 404 across `<REDACTED>/*`, `Dmouse92/*`, and `Phenotype/*` orgs.
 Repo never existed under any of these namespaces. Out of scope.
 
 ---

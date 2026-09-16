@@ -1,10 +1,10 @@
-# ARCHIVED — `KooshaPari/zen`
+# ARCHIVED — `<REDACTED>/zen`
 
 ## Tombstone (user absolute-path allowed)
 
 | field | value |
 |-------|-------|
-| source | `KooshaPari/zen` (Public, deprecated minimal template, 2025-04-03) |
+| source | `<REDACTED>/zen` (Public, deprecated minimal template, 2025-04-03) |
 | absorbed into | `HexaKit/` (governance + bifrost + 46 crates supersede the zen template) |
 | absorbed date | 2026-04-03 (per `projects/zen.json`: 'functionality in HexaKit') |
 | docket | `phenotype-registry/docs/absorption/zen/SUPERSEDES.md` |
@@ -23,6 +23,6 @@
 Source-side: GH-archived (per registry). Cloned in this session for audit verification.
 
 Target-side: HexaKit is the documented replacement per `projects/zen.json`. zen described
-itself as "DEPRECATED: Minimal template — functionality in KooshaPari/HexaKit."
+itself as "DEPRECATED: Minimal template — functionality in <REDACTED>/HexaKit."
 
 User approved on 2026-07-28: *"zen Y"* + *"proc w\ all nxt"* (apply all pending).

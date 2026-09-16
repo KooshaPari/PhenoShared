@@ -4,7 +4,7 @@
 **Auditor:** Forge (autonomous governance audit)
 **Date:** 2026-07-17
 **Phase:** Queue Refresh — `2026-07-17-queue-refresh-2`
-**Source Repo:** `gh api repos/KooshaPari/phenotype-landing` (remote)
+**Source Repo:** `gh api repos/<REDACTED>/phenotype-landing` (remote)
 **Initial Disposition:** ABSORB with target `phenodocs (packages/landing/)`
 **Final Disposition:** **ARCHIVE_ONLY** (failsafe triggered)
 **Target (final):** `phenodocs (packages/landing/ — deferred absorption stub; no code copied)`
@@ -15,7 +15,7 @@
 ## Source
 
 `phenotype-landing` is the **multi-tenant landing site factory** owned by
-`kooshapari`.
+`<REDACTED>`.
 
 - Default branch: `main`
 - Languages: `astro` (primary) + bun
@@ -101,7 +101,7 @@ and `PhenoVCS → ARCHIVE_ONLY` (5-crate Rust workspace vs pheno/crates).
 - `target`: `phenodocs (packages/landing/ — deferred absorption stub; no code copied)`
 - `fsm`: `active` → `absorbed`
 - `archived_at`: `2026-07-17T15:50:00.000000Z`
-- Source repo `KooshaPari/phenotype-landing` archived on GitHub via `gh repo archive`.
+- Source repo `<REDACTED>/phenotype-landing` archived on GitHub via `gh repo archive`.
 - No code copied into `phenodocs/packages/landing/` (only a forward-pointer README).
 
 ## Confidence
@@ -109,7 +109,7 @@ and `PhenoVCS → ARCHIVE_ONLY` (5-crate Rust workspace vs pheno/crates).
 **Confidence:** 0.85 (HIGH).
 
 **Confidence drivers:**
-- **+0.35** — Repo is real, non-archived (pre-audit), on `kooshapari` remote.
+- **+0.35** — Repo is real, non-archived (pre-audit), on `<REDACTED>` remote.
 - **+0.25** — Concrete structural verification (`git ls-files`, `du -sh`,
   per-site `ls`) confirms the 7-site factory layout matches `SPEC.md`.
 - **+0.15** — Failsafe conditions (build heavy + architectural conflict) are
@@ -130,7 +130,7 @@ audit required for the archive action.
 
 ```bash
 # Source repo was archived (not deleted); restore from local clone + GitHub archive
-git clone https://github.com/KooshaPari/phenotype-landing.git /tmp/phenotype-landing-restore
+git clone https://github.com/<REDACTED>/phenotype-landing.git /tmp/phenotype-landing-restore
 # Forensic: see git log for the airlock-v2 auto-commit + subtree merges
 ```
 

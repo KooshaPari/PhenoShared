@@ -31,11 +31,11 @@ elif [ "$1" = "dev" ]; then
 
     # In the first pane (pane 0), start the frontend
     tmux select-pane -t 0
-    tmux send-keys 'cd /Users/kooshapari/temp-PRODVERCEL/Rust/webApp/byte_port/frontend && npm run dev -- --port 5173' C-m
+    tmux send-keys 'cd /Users/<REDACTED>/temp-PRODVERCEL/Rust/webApp/byte_port/frontend && npm run dev -- --port 5173' C-m
 
     # In the second pane (pane 1), start the backend
     tmux select-pane -t 1
-    tmux send-keys 'cd /Users/kooshapari/temp-PRODVERCEL/Rust/webApp/byte_port/backend/byteport && air' C-m
+    tmux send-keys 'cd /Users/<REDACTED>/temp-PRODVERCEL/Rust/webApp/byte_port/backend/byteport && air' C-m
 
     # Attach to the tmux session
     tmux attach-session -t devsession

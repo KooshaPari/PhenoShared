@@ -17,7 +17,7 @@ created_at: 2026-03-29T00:00:00Z
 - Implement the feature as specified.
 
 ## File Scope
-- `/Users/kooshapari/CodeProjects/archive`
+- `/Users/<REDACTED>/CodeProjects/archive`
 - `CodeProjects/archive`
 - `archive/MANIFEST.md`
 - `archive/README.md`

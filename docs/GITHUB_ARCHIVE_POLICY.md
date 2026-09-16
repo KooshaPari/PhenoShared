@@ -27,6 +27,6 @@ If something was deleted by mistake: use GitHub Support restore, then re-apply t
 
 | Role | Repo |
 |------|------|
-| Active | `KooshaPari/phenotype-omlx` |
-| Stand-in (hidden) | `KooshaPari/zz-archive-phenotype-omlx-tmp` |
-| Stand-in (hidden) | `KooshaPari/zz-archive-phenotype-omlx-temp` |
+| Active | `<REDACTED>/phenotype-omlx` |
+| Stand-in (hidden) | `<REDACTED>/zz-archive-phenotype-omlx-tmp` |
+| Stand-in (hidden) | `<REDACTED>/zz-archive-phenotype-omlx-temp` |

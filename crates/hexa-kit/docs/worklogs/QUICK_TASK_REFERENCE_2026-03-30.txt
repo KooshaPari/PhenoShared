@@ -4,7 +4,7 @@ QUICK TASK REFERENCE: 20 Parallel Tasks for phenotype-infrakit (2026-03-30)
 
 PRE-FLIGHT (DO FIRST):
 ================================================================================
-cd /Users/kooshapari/CodeProjects/Phenotype/repos
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos
 git checkout python/  # Fix dirty file
 # Verify: git status should show "clean"
 
@@ -285,7 +285,7 @@ Verify spec alignment:
 NOTES
 ================================================================================
 
-- All commands assume cwd = /Users/kooshapari/CodeProjects/Phenotype/repos
+- All commands assume cwd = /Users/<REDACTED>/CodeProjects/Phenotype/repos
 - Pre-flight (git checkout python/) is BLOCKING; do before launching swarm
 - T3.1 (changelog merge) will have conflicts; use --theirs strategy shown
 - CI billing exhausted; merge after local verification (skip CI checks)

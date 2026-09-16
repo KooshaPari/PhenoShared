@@ -1,7 +1,7 @@
 # localbase3 boundary / disposition
 
 **Status**: AFFIRMED (canonical, NOT absorbed)
-**Source**: `KooshaPari/localbase3`
+**Source**: `<REDACTED>/localbase3`
 **Air-record**: 2026-07-17, registry v1.6.30
 **Disposition**: AFFIRM (canonical full-stack project)
 

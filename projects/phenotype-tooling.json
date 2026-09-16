@@ -9,7 +9,7 @@
   "role": "developer-tooling-and-plugin-spine",
   "domain_role": "tooling",
   "boundary": "developer-tooling",
-  "gh_url": "https://github.com/KooshaPari/phenotype-tooling",
+  "gh_url": "https://github.com/<REDACTED>/phenotype-tooling",
   "disposition": "KEEP_CANONICAL",
   "canonical_routing": true,
   "recovery_ref": "recovery/phenotype-tooling-plugins-20260726",

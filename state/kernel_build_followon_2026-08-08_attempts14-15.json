@@ -18,8 +18,8 @@
     "failure_mode": "cutlass_mla_kernel.cu TU (--threads=32 on 16-core VM) pegged VM 100% CPU -> WSL connection channel starved -> system terminated VM mid-compile at 02:04:03 (journalctl boot -1 unclean)",
     "exit_code": "BUILD_EXIT=2 (script set +e captured; CMake install failed: file INSTALL cannot find common_ops.abi3.so - never linked because VM died before ninja link step)",
     "compile_progress": "3 .o files; [4/104] cutlass_mla_kernel.cu in progress at death; vertical_slash_index.cu.o ABSENT",
-    "durable_log": "SOLVED - nohup + tee to /home/kooshapari/sgl_kernel_build_aug08.log (207 lines) survived both Windows-side and VM death",
-    "crlf_finding": "Windows build script is CRLF; in-WSL /tmp copy broke with 'set: - invalid option' / $'\\r' errors; LF copy /home/kooshapari/kbuild_final_0802_lf.sh (3041B, sha256 67e25295...) worked. Original kbuild_final_0802.sh untouched.",
+    "durable_log": "SOLVED - nohup + tee to /home/<REDACTED>/sgl_kernel_build_aug08.log (207 lines) survived both Windows-side and VM death",
+    "crlf_finding": "Windows build script is CRLF; in-WSL /tmp copy broke with 'set: - invalid option' / $'\\r' errors; LF copy /home/<REDACTED>/kbuild_final_0802_lf.sh (3041B, sha256 67e25295...) worked. Original kbuild_final_0802.sh untouched.",
     "wsl_observations": "WslService stayed RUNNING throughout; wedge signature = distro Running but Wsl/Service/WSATIMEDOUT; VM restarted at 02:04:36"
   },
   "root_cause_analysis": {
@@ -33,7 +33,7 @@
       "CMakeLists.txt: reduce gencode list to sm_86 only (target 3090 Ti) - remove compute_75/80/89/90 gencode lines and disable SM90A/SM100A/SM100 options to honor the intended sm_86-only build",
       "keep idempotent patches (grep-guard before sed)"
     ],
-    "launch": "LF script nohup + tee pattern (attempt 15 validated), durable log /home/kooshapari/sgl_kernel_build_aug08b.log",
+    "launch": "LF script nohup + tee pattern (attempt 15 validated), durable log /home/<REDACTED>/sgl_kernel_build_aug08b.log",
     "constraints": "no docker, no sudo, no repo edits outside sgl-kernel build repo (it is the build target, already patched 8x in mission), no wheel install"
   },
   "gpu_state": "1080 Ti ~3.8GB/7.3 free; 3090 Ti ~23GB/1.2 free (workstream busy) - build CPU-bound, no VRAM contention"

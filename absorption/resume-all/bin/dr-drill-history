@@ -30,7 +30,7 @@ import sys
 from pathlib import Path
 
 HISTORY_PATH = Path.home() / ".local" / "share" / "resume-all" / "dr-drill-history.jsonl"
-WRAPPER_PATH = Path("/Users/kooshapari/bin/dr-drill-monthly")
+WRAPPER_PATH = Path("/Users/<REDACTED>/bin/dr-drill-monthly")
 LOG_DIR = Path.home() / "Library" / "Logs" / "resume-all"
 
 

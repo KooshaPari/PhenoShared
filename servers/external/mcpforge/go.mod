@@ -1,4 +1,4 @@
-module github.com/KooshaPari/MCPForge
+module github.com/<REDACTED>/MCPForge
 
 go 1.24.0
 

@@ -2,7 +2,7 @@
 
 - **Status**: ACCEPTED
 - **Date**: 2026-06-22
-- **Deciders**: orchestrator (KooshaPari)
+- **Deciders**: orchestrator (<REDACTED>)
 - **Cycle**: 11 (71-pillar cycle 11, P1 reduction round 2)
 - **Wave**: v21
 - **Branch**: `chore/v21-cycle-11-governance-2026-06-22`

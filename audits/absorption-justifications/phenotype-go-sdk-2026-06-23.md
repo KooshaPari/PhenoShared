@@ -1,8 +1,8 @@
 # phenotype-go-sdk — Absorption Justification
 
 **Date:** 2026-06-23
-**Repository:** `KooshaPari/phenotype-go-sdk`
-**Owner:** kooshapari
+**Repository:** `<REDACTED>/phenotype-go-sdk`
+**Owner:** <REDACTED>
 **Source Evidence:** filesystem check 2026-06-23 (no local clone at `C:\Users\koosh\phenotype-go-sdk`)
 **Local Path:** not present on disk (no clone at `C:\Users\koosh\phenotype-go-sdk`); canonical evidence is the `_tmp_phenotype_go_sdk` workspace at `C:\Users\koosh\_tmp_phenotype_go_sdk`
 **Default Branch:** `main`
@@ -10,7 +10,7 @@
 **Confidence:** MEDIUM
 **Rubric Target:** P1 = 3, P2 = 3, P3 = 2, P4 = 2, P5 = 1
 **Audit Cycle:** 2026-06-23 (phenotype-org-audits consolidation sweep)
-**ADRs Invoked:** ADR-011 (HexKit devhex pattern absorption), ADR-029 (Dmouse92 → KooshaPari canonical-owner migration)
+**ADRs Invoked:** ADR-011 (HexKit devhex pattern absorption), ADR-029 (Dmouse92 → <REDACTED> canonical-owner migration)
 
 ---
 
@@ -25,11 +25,11 @@ Cluster spine: `docs/compute-infra-subtree.md` on origin/main (phenotype-go-sdk 
 
 ## Source
 
-The source repository `KooshaPari/phenotype-go-sdk` is the canonical Go SDK workspace for the phenotype ecosystem. The local disk does not currently have a clone at `C:\Users\koosh\phenotype-go-sdk` (filesystem check 2026-06-23), but the audit has access to a temporary staging area at `C:\Users\koosh\_tmp_phenotype_go_sdk` which holds the source tree. The repository is the consolidation target for Go SDK work across multiple absorbed repos per ADR-011: `go-nippon` (devhex pattern), `PhenoFastMCP-go` (MCP substrate), and `phenotype-ops-mcp` (ops MCP server) are all candidates for absorption into this workspace. The two secondary absorption candidates — `PhenoFastMCP-go` and `phenotype-ops-mcp` — currently return 404 on the canonical GitHub remotes per the audit's secondary-source check; their absence is itself a blocker because the absorption plan was predicated on those sources existing and being ready for migration.
+The source repository `<REDACTED>/phenotype-go-sdk` is the canonical Go SDK workspace for the phenotype ecosystem. The local disk does not currently have a clone at `C:\Users\koosh\phenotype-go-sdk` (filesystem check 2026-06-23), but the audit has access to a temporary staging area at `C:\Users\koosh\_tmp_phenotype_go_sdk` which holds the source tree. The repository is the consolidation target for Go SDK work across multiple absorbed repos per ADR-011: `go-nippon` (devhex pattern), `PhenoFastMCP-go` (MCP substrate), and `phenotype-ops-mcp` (ops MCP server) are all candidates for absorption into this workspace. The two secondary absorption candidates — `PhenoFastMCP-go` and `phenotype-ops-mcp` — currently return 404 on the canonical GitHub remotes per the audit's secondary-source check; their absence is itself a blocker because the absorption plan was predicated on those sources existing and being ready for migration.
 
 | Attribute | Value | Source |
 |---|---|---|
-| Canonical remote | KooshaPari/phenotype-go-sdk | ADR-011 |
+| Canonical remote | <REDACTED>/phenotype-go-sdk | ADR-011 |
 | Local clone at `C:\Users\koosh\phenotype-go-sdk` | absent | filesystem check 2026-06-23 |
 | Temporary staging area | `C:\Users\koosh\_tmp_phenotype_go_sdk` | filesystem listing |
 | Default branch | main | inferred from SDK conventions |
@@ -88,7 +88,7 @@ MEDIUM. The verdict is correctly `ARCHIVE/DELETE_BLOCKED` because the audit cann
 
 ## Source Inventory Summary
 
-The source inventory is partial: the canonical remote (`KooshaPari/phenotype-go-sdk`) is the Go SDK workspace, and the temporary staging area at `C:\Users\koosh\_tmp_phenotype_go_sdk` holds the source tree. The inventory cannot be exhaustively enumerated from the audit's available evidence because no `_arch_phenotype-go-sdk.json` snapshot was produced in this cycle; the staging area is the canonical local evidence. The two secondary absorption sources (PhenoFastMCP-go, phenotype-ops-mcp) are 404 and therefore contribute zero to the source inventory.
+The source inventory is partial: the canonical remote (`<REDACTED>/phenotype-go-sdk`) is the Go SDK workspace, and the temporary staging area at `C:\Users\koosh\_tmp_phenotype_go_sdk` holds the source tree. The inventory cannot be exhaustively enumerated from the audit's available evidence because no `_arch_phenotype-go-sdk.json` snapshot was produced in this cycle; the staging area is the canonical local evidence. The two secondary absorption sources (PhenoFastMCP-go, phenotype-ops-mcp) are 404 and therefore contribute zero to the source inventory.
 
 | Item | State | Evidence |
 |---|---|---|
@@ -108,7 +108,7 @@ The branch inventory below enumerates the **expected** branches for a Go SDK wor
 
 | # | Branch | Type | Tip Commit | Last Push | Origin | Status | Decision |
 |---|---|---|---|---|---|---|---|
-| 1 | `main` | remote (default) | unknown (staging area) | unknown | KooshaPari/phenotype-go-sdk | live-assumed | retain-live |
+| 1 | `main` | remote (default) | unknown (staging area) | unknown | <REDACTED>/phenotype-go-sdk | live-assumed | retain-live |
 | 2 | (no other remote branches observed) | n/a | n/a | n/a | n/a | unknown | hold-posture |
 | 3 | (no local clone at canonical path) | local | n/a | n/a | n/a | absent-on-disk | produce-canonical-clone-on-re-audit |
 
@@ -165,19 +165,19 @@ Restore posture for `ARCHIVE/DELETE_BLOCKED` is non-trivial because no archival 
 # Documented restore path: re-audit when secondary sources are revived.
 
 # (Step 1) Re-clone canonical remote for fresh audit (run on re-audit):
-#   git clone https://github.com/KooshaPari/phenotype-go-sdk.git C:\Users\koosh\phenotype-go-sdk
+#   git clone https://github.com/<REDACTED>/phenotype-go-sdk.git C:\Users\koosh\phenotype-go-sdk
 #   cd C:\Users\koosh\phenotype-go-sdk
 #   git log --all --oneline > /backup/phenotype-go-sdk-log-2026-06-23.txt
 #   sha256sum /backup/phenotype-go-sdk-log-2026-06-23.txt
 
 # (Step 2) Capture JSON snapshot (run on re-audit):
-#   gh repo view KooshaPari/phenotype-go-sdk --json name,id,archived,size,defaultBranchRef \
+#   gh repo view <REDACTED>/phenotype-go-sdk --json name,id,archived,size,defaultBranchRef \
 #     > _arch_phenotype-go-sdk.json
 #   sha256sum _arch_phenotype-go-sdk.json
 #   # expected SHA-256: <hash printed at creation time, logged here>
 
 # (Step 3) Insurance bundle (run only if archival is later authorized):
-#   git clone https://github.com/KooshaPari/phenotype-go-sdk.git /tmp/phenotype-go-sdk-final-clone
+#   git clone https://github.com/<REDACTED>/phenotype-go-sdk.git /tmp/phenotype-go-sdk-final-clone
 #   cd /tmp/phenotype-go-sdk-final-clone
 #   git bundle create /backup/phenotype-go-sdk-2026-06-23.bundle --all
 #   sha256sum /backup/phenotype-go-sdk-2026-06-23.bundle | tee /backup/phenotype-go-sdk-2026-06-23.bundle.sha256
@@ -203,18 +203,18 @@ Concrete posture: **Source canonical remote remains live; no archival or deletio
 | SHA-256 (tombstone) | not yet computed — no archival in this cycle |
 | Real backup? | no — no archival performed |
 | Restore window | n/a — repo remains live |
-| Concrete re-clone path | `git clone https://github.com/KooshaPari/phenotype-go-sdk.git` if remote is removed |
+| Concrete re-clone path | `git clone https://github.com/<REDACTED>/phenotype-go-sdk.git` if remote is removed |
 | Re-audit trigger | secondary sources live (PhenoFastMCP-go, phenotype-ops-mcp) AND absorption plan ready |
 
 ## Final Recommendation
 
-**ARCHIVE/DELETE_BLOCKED.** The audit cannot authorize archival or deletion of `KooshaPari/phenotype-go-sdk` because secondary absorption sources (`PhenoFastMCP-go`, `phenotype-ops-mcp`) return 404. The canonical workspace remains live and operational; no archival or deletion is performed in this cycle. The local disk does not have a clone at the canonical path; the temporary staging area at `C:\Users\koosh\_tmp_phenotype_go_sdk` is the local evidence. The audit must hold the verdict and re-run when the secondary sources are revived. The medium confidence reflects the dynamic state of those secondary sources: they could be revived at any time, unblocking the verdict. No exceptions invoked.
+**ARCHIVE/DELETE_BLOCKED.** The audit cannot authorize archival or deletion of `<REDACTED>/phenotype-go-sdk` because secondary absorption sources (`PhenoFastMCP-go`, `phenotype-ops-mcp`) return 404. The canonical workspace remains live and operational; no archival or deletion is performed in this cycle. The local disk does not have a clone at the canonical path; the temporary staging area at `C:\Users\koosh\_tmp_phenotype_go_sdk` is the local evidence. The audit must hold the verdict and re-run when the secondary sources are revived. The medium confidence reflects the dynamic state of those secondary sources: they could be revived at any time, unblocking the verdict. No exceptions invoked.
 
 ## ABSORPTION_MATRIX
 
 | Source Item | Source Evidence | Category | Source State | Target Repo | Target Evidence | Status | Deletion Justification | Risk if Deleted | Required Action |
 |---|---|---|---|---|---|---|---|---|---|
-| Repository record `KooshaPari/phenotype-go-sdk` | filesystem check 2026-06-23 | repository-meta | live (canonical workspace) | self | ADR-011 charter | ARCHIVE/DELETE_BLOCKED | secondary sources 404 — cannot authorize | high — would strand pending absorption plan | hold-resolve-blockers |
+| Repository record `<REDACTED>/phenotype-go-sdk` | filesystem check 2026-06-23 | repository-meta | live (canonical workspace) | self | ADR-011 charter | ARCHIVE/DELETE_BLOCKED | secondary sources 404 — cannot authorize | high — would strand pending absorption plan | hold-resolve-blockers |
 | Local clone at `C:\Users\koosh\phenotype-go-sdk` | filesystem check 2026-06-23 (absent) | local-mirror | absent | self | filesystem | ARCHIVE/DELETE_BLOCKED | n/a — no archival | n/a | re-clone-on-re-audit |
 | Temporary staging area `C:\Users\koosh\_tmp_phenotype_go_sdk` | filesystem listing | staging-area | present | self | filesystem | ARCHIVE/DELETE_BLOCKED | n/a — staging only | n/a | full-audit-on-re-audit |
 | Secondary source: PhenoFastMCP-go | API probe 2026-06-23 (404) | absorption-source | 404 | phenotype-go-sdk | ADR-011 (pending) | ARCHIVE/DELETE_BLOCKED | cannot absorb 404 source | n/a | revive-source-or-update-ADR |

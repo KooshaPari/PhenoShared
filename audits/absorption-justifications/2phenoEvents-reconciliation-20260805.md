@@ -10,10 +10,10 @@ repository, branch, worktree, or target tree is changed.
 
 | Subject | Result |
 | --- | --- |
-| `gh api repos/KooshaPari/2phenoEvents` | not found (404) |
-| `git ls-remote https://github.com/KooshaPari/2phenoEvents.git refs/heads/main` | repository not found |
+| `gh api repos/<REDACTED>/2phenoEvents` | not found (404) |
+| `git ls-remote https://github.com/<REDACTED>/2phenoEvents.git refs/heads/main` | repository not found |
 | Historical source commit | `5bb0c894e44a50079035b3d5ab5d31946fc445c1` |
-| Canonical repository | `KooshaPari/phenoEvents`, public and unarchived |
+| Canonical repository | `<REDACTED>/phenoEvents`, public and unarchived |
 | Canonical source provenance | `5bb0c894...` is reachable in `phenoEvents` as its root restore commit |
 | Current canonical main | `be6573c68797cc611a99533bca6dc1c3dcdb0c88` |
 | Current pheno main | `81d850837848800aa7a3e6a6f007b91b6555ef07`; no claimed event-bus path |

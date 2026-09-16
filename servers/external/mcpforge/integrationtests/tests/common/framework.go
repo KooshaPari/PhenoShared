@@ -11,9 +11,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/KooshaPari/MCPForge/internal/logging"
-	"github.com/KooshaPari/MCPForge/internal/lsp"
-	"github.com/KooshaPari/MCPForge/internal/watcher"
+	"github.com/<REDACTED>/MCPForge/internal/logging"
+	"github.com/<REDACTED>/MCPForge/internal/lsp"
+	"github.com/<REDACTED>/MCPForge/internal/watcher"
 )
 
 // LSPTestConfig defines configuration for a language server test

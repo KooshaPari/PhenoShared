@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
   # Federation entrypoint: the org-wide reusable-workflow federation can invoke
   # the quarterly audit on demand (e.g. an ad-hoc audit wave) via:
-  #   uses: KooshaPari/phenotype-org-audits/.github/workflows/quarterly-audit.yml@main
+  #   uses: <REDACTED>/phenotype-org-audits/.github/workflows/quarterly-audit.yml@main
   workflow_call:
 
 concurrency:
@@ -28,7 +28,7 @@ jobs:
       - name: Checkout phenotype-tooling (aggregator)
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
-          repository: KooshaPari/phenotype-tooling
+          repository: <REDACTED>/phenotype-tooling
           path: ./phenotype-tooling
 
       - name: Setup Rust

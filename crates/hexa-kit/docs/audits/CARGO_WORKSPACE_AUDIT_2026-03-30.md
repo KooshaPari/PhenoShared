@@ -22,7 +22,7 @@ edition = "2021"
 rust-version = "1.75"
 license = "MIT"
 authors = ["Phenotype Team"]
-repository = "https://github.com/KooshaPari/phenotype-infrakit"
+repository = "https://github.com/<REDACTED>/phenotype-infrakit"
 description = "Phenotype Infrastructure Kit"
 ```
 
@@ -450,4 +450,4 @@ The **7-member core workspace is healthy**: consistent versioning, no circular d
 
 **Audit Date**: 2026-03-30
 **Auditor**: Claude Code (automated analysis)
-**Repository**: https://github.com/KooshaPari/phenotype-infrakit
+**Repository**: https://github.com/<REDACTED>/phenotype-infrakit

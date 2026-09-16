@@ -155,7 +155,7 @@ This work package implements the core gate evaluation engine that enforces quali
      }
      ```
 
-- **Files**: `/Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus/internal/gate/criteria.go`
+- **Files**: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus/internal/gate/criteria.go`
 - **Parallel?**: No (prerequisite for T033–T036)
 - **Notes**: Ensure Channel ordering is meaningful for gate filtering; GateCriterion struct must be serializable for config files (use struct tags for YAML/JSON)
 
@@ -207,7 +207,7 @@ This work package implements the core gate evaluation engine that enforces quali
   6. Aggregate results into `PromotionReport` with overall `Passed` flag (true only if all required gates pass)
   7. Add helper function to retrieve a single gate result by criterion ID for error reporting
 
-- **Files**: `/Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus/internal/gate/evaluator.go`
+- **Files**: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus/internal/gate/evaluator.go`
 - **Parallel?**: No (builds on T032; T034 refines logic)
 - **Notes**: Use context with timeout to prevent hanging gates; log each criterion execution; return error if Package is nil or channels invalid; consider stderr as non-fatal (only fail if command exits non-zero)
 
@@ -260,7 +260,7 @@ This work package implements the core gate evaluation engine that enforces quali
   5. Document the rules in code comments with examples
   6. Add integration points with `Evaluate` to check risk before running gates
 
-- **Files**: `/Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus/internal/gate/evaluator.go` (additions)
+- **Files**: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus/internal/gate/evaluator.go` (additions)
 - **Parallel?**: No (part of T033 flow)
 - **Notes**: Reject invalid transitions early to fail fast; include helpful error messages; consider that "skip" means moving more than one tier; validate that risk profile is not empty string
 
@@ -300,7 +300,7 @@ This work package implements the core gate evaluation engine that enforces quali
   5. Handle very long output (cap at 100 chars or ellipsize)
   6. Ensure both formats are valid, parseable, and machine-consumable
 
-- **Files**: `/Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus/internal/gate/reporter.go`
+- **Files**: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus/internal/gate/reporter.go`
 - **Parallel?**: Yes (after T033 completes)
 - **Notes**: Use Lipgloss `table.New()` with style chain for borders and colors; JSON must be valid and escape special chars; ensure timestamps are RFC3339 format
 
@@ -328,7 +328,7 @@ This work package implements the core gate evaluation engine that enforces quali
   5. In `Evaluate`, call special handler for rollback_plan and monitoring_dashboards instead of exec
   6. Document the special handling in code comments
 
-- **Files**: `/Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus/internal/gate/criteria.go` or `internal/gate/builtin.go`
+- **Files**: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus/internal/gate/criteria.go` or `internal/gate/builtin.go`
 - **Parallel?**: Yes (after T033)
 - **Notes**: Ensure rollback and monitoring checks are robust to different file locations; use package root as base directory; if a mise task doesn't exist, exec will fail naturally and that's acceptable
 
@@ -358,7 +358,7 @@ This work package implements the core gate evaluation engine that enforces quali
      - Gate command stderr (should not fail if exit code is 0)
   8. Add benchmarks for gate evaluation with varying numbers of gates
 
-- **Files**: `/Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus/internal/gate/evaluator_test.go`, `/Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus/internal/gate/reporter_test.go`
+- **Files**: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus/internal/gate/evaluator_test.go`, `/Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus/internal/gate/reporter_test.go`
 - **Parallel?**: Yes (after T033–T036)
 - **Notes**: Use `testing.T` and `testify/assert` for assertions; isolate mocks to avoid cross-test contamination; test both success and failure paths for each gate type
 

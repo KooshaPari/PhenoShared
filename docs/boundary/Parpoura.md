@@ -6,15 +6,15 @@ last_boundary_review: 2026-07-17
 review_cadence: never (archived)
 archive_reason: absorbed-into-phenodocs
 canonical_source: phenodocs/docs/specs/parpoura/
-absorbing_repo: KooshaPari/phenodocs
+absorbing_repo: <REDACTED>/phenodocs
 ---
 
 # Boundary — Parpoura (ABSORBED → phenodocs)
 
 ## Disposition
 
-**ABSORB** on 2026-07-17. Source repo `KooshaPari/Parpoura` subsequently
-**archived** on GitHub via `gh repo archive KooshaPari/Parpoura -y` and verified
+**ABSORB** on 2026-07-17. Source repo `<REDACTED>/Parpoura` subsequently
+**archived** on GitHub via `gh repo archive <REDACTED>/Parpoura -y` and verified
 `isArchived=true` via `gh repo view`.
 
 Parpoura is a **spec-first planning/architecture** repository that served as a
@@ -89,20 +89,20 @@ spine is `phenodocs`, the canonical documentation hub.
 | Capability | Lives in |
 |------------|----------|
 | Spec-first planning/architecture documentation | `phenodocs/docs/specs/parpoura/` (canonical) |
-| Parpoura runtime Python stubs (auth, database, eventbus, ledger, api) | `KooshaPari/Parpoura` (archived) — recoverable for forensic reference |
-| Parpoura pytest stubs | `KooshaPari/Parpoura` (archived) — recoverable for forensic reference |
-| Shared spec library (canonical specs across Phenotype) | `KooshaPari/PhenoSpecs` (separate spine member) |
-| Doc hub / pattern handbook / research | `KooshaPari/phenodocs` (other subtrees) |
+| Parpoura runtime Python stubs (auth, database, eventbus, ledger, api) | `<REDACTED>/Parpoura` (archived) — recoverable for forensic reference |
+| Parpoura pytest stubs | `<REDACTED>/Parpoura` (archived) — recoverable for forensic reference |
+| Shared spec library (canonical specs across Phenotype) | `<REDACTED>/PhenoSpecs` (separate spine member) |
+| Doc hub / pattern handbook / research | `<REDACTED>/phenodocs` (other subtrees) |
 
 ## Outcome
 
 - 80 files / 2.7MB absorbed into `phenodocs/docs/specs/parpoura/`.
-- Source repo `KooshaPari/Parpoura` archived on GitHub (read-only tombstone).
+- Source repo `<REDACTED>/Parpoura` archived on GitHub (read-only tombstone).
 - Registry row `repo-Parpoura`: disposition `AFFIRM` → `ABSORB`,
   fsm `active` → `absorbed`, target `phenodocs (docs/specs/parpoura/)`.
 - Audit artifact: `phenotype-registry/audits/absorption-justifications/Parpoura-2026-07-17.md`.
 - Provenance: `phenodocs/docs/specs/parpoura/ABSORPTION.md`.
 - Branch: `absorb/parpoura-2026-07-17` at commit `8901287` on
-  `KooshaPari/phenodocs`.
+  `<REDACTED>/phenodocs`.
 
 **Next review:** never (archived; tombstone state).

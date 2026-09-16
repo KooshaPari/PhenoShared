@@ -1,6 +1,6 @@
 # Phase 1A — Source Inventory: `pheno-port-adapter`
 
-**Scope:** `/Users/kooshapari/CodeProjects/Phenotype/repos/pheno-port-adapter/`
+**Scope:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos/pheno-port-adapter/`
 **Date:** 2026-06-21 (system date)
 **Branch (current):** `chore/v21-71-pillar-cycle-9-p0-2026-06-21` (per AGENTS.md "Wave Plan v19" supersedes header)
 **Head commit (resolved):** resolved via `git rev-parse HEAD` (per worklog context, this branch is the cycle-9 v21 P0 reduction track)
@@ -20,7 +20,7 @@
 | Edition | `2021` | `pheno-port-adapter/Cargo.toml:6` |
 | Rust-version | `1.83` (msrv) | `pheno-port-adapter/Cargo.toml:8` |
 | License | `MIT OR Apache-2.0` | `pheno-port-adapter/Cargo.toml:9-10` |
-| Repository | `https://github.com/KooshaPari/pheno-port-adapter` | `pheno-port-adapter/Cargo.toml:11` |
+| Repository | `https://github.com/<REDACTED>/pheno-port-adapter` | `pheno-port-adapter/Cargo.toml:11` |
 | Tracked files in this crate (working tree) | 47 | `git ls-files` over the worktree |
 | Tracked files (crate-only, sparse-checkout cone) | 47 | see §1 |
 | Branches (local + remote) | ≥ 215 (sparse, dev branch + superset of stale refs) | see §2 |
@@ -127,7 +127,7 @@ Tracked-file listing is from `git ls-files` (all 47 paths under `pheno-port-adap
 
 | Path | Role |
 |---|---|
-| `.github/CODEOWNERS` | Single owner `@KooshaPari`; default + `/.github/workflows/*` |
+| `.github/CODEOWNERS` | Single owner `@<REDACTED>`; default + `/.github/workflows/*` |
 | `.github/workflows/ci.yml` | CI: build, test, lint, coverage |
 | `.github/workflows/audit.yml` | Security audit: `cargo audit` + `cargo deny` (RUSTSEC + license) |
 | `.github/workflows/lint.yml` | Lint: `cargo fmt --check` + `cargo clippy --all-targets -- -D warnings` |
@@ -323,7 +323,7 @@ authors = ["Phenotype <[email protected]>"]
 edition = "2021"
 rust-version = "1.83"
 license = "MIT OR Apache-2.0"
-repository = "https://github.com/KooshaPari/pheno-port-adapter"
+repository = "https://github.com/<REDACTED>/pheno-port-adapter"
 keywords = ["hexagonal", "ports", "adapters", "pheno", "phenotype"]
 categories = ["architecture", "api-bindings"]
 readme = "README.md"
@@ -529,9 +529,9 @@ release VERSION:
 //! Hexagonal port-adapter substrate for the pheno-* fleet.
 //!
 //! This crate codifies the L4 hexagonal policy from
-//! [ADR-014](https://github.com/KooshaPari/pheno/blob/main/docs/adr/2026-06-15/ADR-014-hexagonal-l4-ports.md)
+//! [ADR-014](https://github.com/<REDACTED>/pheno/blob/main/docs/adr/2026-06-15/ADR-014-hexagonal-l4-ports.md)
 //! (re-affirmed as
-//! [ADR-038](https://github.com/KooshaPari/pheno/blob/main/docs/adr/2026-06-18/ADR-038-hexagonal-port-adapter-l4-policy.md)).
+//! [ADR-038](https://github.com/<REDACTED>/pheno/blob/main/docs/adr/2026-06-18/ADR-038-hexagonal-port-adapter-l4-policy.md)).
 //! Every downstream consumer of the fleet that needs a swappable boundary
 //! (cache, clock, transport, …) is expected to define its ports here and
 //! ship its adapters under `adapters/`.
@@ -802,6 +802,6 @@ All claims in this inventory are sourced from:
 - `pheno-port-adapter/.devcontainer/devcontainer.json`, `.devcontainer/.gitignore` (read in this turn)
 - `pheno-port-adapter/scripts/coverage.sh`, `scripts/sbom-diff.py` (read in this turn)
 - `pheno-port-adapter/docs/architecture.md`, `docs/perf/flamegraph-howto.md` (read in this turn)
-- `/Users/kooshapari/CodeProjects/Phenotype/repos/AGENTS.md` (read in this session, many lines referenced)
+- `/Users/<REDACTED>/CodeProjects/Phenotype/repos/AGENTS.md` (read in this session, many lines referenced)
 
 — end of Phase 1A inventory —

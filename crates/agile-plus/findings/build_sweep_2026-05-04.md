@@ -15,7 +15,7 @@ Detailed Results
 | helios-cli | cargo check | PASS | - |
 | helios-router | cargo check | PASS | - |
 | BytePort | cargo check | PASS | - |
-| thegent | npx vitest run | FAIL | npm error code EOVERRIDE<br>npm error Override for esbuild@^0.28.0 conflicts with direct dependency<br>npm error A complete log of this run can be found in: /Users/kooshapari/.npm/_logs/2026-05-05T07_47_50_499Z-debug-0.log |
+| thegent | npx vitest run | FAIL | npm error code EOVERRIDE<br>npm error Override for esbuild@^0.28.0 conflicts with direct dependency<br>npm error A complete log of this run can be found in: /Users/<REDACTED>/.npm/_logs/2026-05-05T07_47_50_499Z-debug-0.log |
 | thegent-dispatch | cargo check | PASS | - |
 | HexaKit | cargo check | PASS | - |
 | phenoShared | cargo check | PASS | - |

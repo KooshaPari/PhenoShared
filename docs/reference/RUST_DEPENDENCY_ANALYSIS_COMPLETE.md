@@ -1,7 +1,7 @@
 # Rust Workspace Dependency Graph Analysis — Complete Report
 
 **Generated:** 2026-03-30
-**Repository:** KooshaPari/phenotype-infrakit
+**Repository:** <REDACTED>/phenotype-infrakit
 **Scope:** 28 Rust crates
 **Status:** ✅ READY FOR PHASE 2 EXECUTION
 
@@ -312,7 +312,7 @@ full = ["config", "errors", "events", "policy", "health", ...]
 
 ### Analysis Location
 ```
-/Users/kooshapari/CodeProjects/Phenotype/repos/docs/reference/
+/Users/<REDACTED>/CodeProjects/Phenotype/repos/docs/reference/
 ```
 
 ### Related Documents

@@ -108,7 +108,7 @@ def parse_canons_from_ecosystem(ecosystem_md: Path) -> dict[str, str]:
 
 
 def on_disk(repos: list[str]) -> dict[str, bool]:
-    parent = ROOT.parent  # /Users/kooshapari/CodeProjects/Phenotype/repos
+    parent = ROOT.parent  # /Users/<REDACTED>/CodeProjects/Phenotype/repos
     return {r: (parent / r).is_dir() for r in repos}
 
 
@@ -190,7 +190,7 @@ def main() -> int:
 
     ec = ROOT.parent.parent / "phenotype-registry" / "ECOSYSTEM_MAP.md"
     if not ec.exists():
-        ec = Path("/Users/kooshapari/CodeProjects/Phenotype/repos/phenotype-registry/ECOSYSTEM_MAP.md")
+        ec = Path("/Users/<REDACTED>/CodeProjects/Phenotype/repos/phenotype-registry/ECOSYSTEM_MAP.md")
     if not ec.exists():
         print(f"ERROR: ECOSYSTEM_MAP.md not found at {ec}", file=sys.stderr)
         return 1

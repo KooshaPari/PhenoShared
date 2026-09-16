@@ -4,7 +4,7 @@ version = "0.2.0"
 edition = "2021"
 license = "MIT"
 description = "Configuration loading utilities for the Phenotype ecosystem. Absorbed from phenotype-config per ADR-031 (L5-110)."
-repository = "https://github.com/KooshaPari/pheno"
+repository = "https://github.com/<REDACTED>/pheno"
 
 [lib]
 path = "src/lib.rs"

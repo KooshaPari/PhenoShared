@@ -32,7 +32,7 @@ Chokepoint status: [registry/chokepoints.json](registry/chokepoints.json). Execu
 
 For each of the 25 source repos being absorbed, the canonical package/crate/module identifier was
 resolved from its manifest, then GitHub code search (`gh api search/code`, manifest files only:
-`Cargo.toml`/`package.json`/`go.mod`/`pyproject.toml`) was run org-wide (`org:KooshaPari`, includes the
+`Cargo.toml`/`package.json`/`go.mod`/`pyproject.toml`) was run org-wide (`org:<REDACTED>`, includes the
 63 private repos) to find **external dependents** — repos OTHER than the source itself, its absorber,
 or another repo also being absorbed/archived in this same wave.
 
@@ -44,7 +44,7 @@ Identifiers resolved: `phenotype-core` (pheno workspace), `metrickit`, `tracingk
 `settly`, `focalpoint`, `phenotype-xdd-lib`, `authkit`, `datakit`, `mcpkit`, `observabilitykit`,
 `resiliencekit`, `testingkit`, `phenokits`, `worktree-manager`, `heliosapp`, `helios-bench`,
 `byteport`, `nanovms`, `policy-federation` (PolicyStack), `devenv`/`devhex` (PlatformKit),
-`pheno-agent`, `phenoproc`, `@kooshapari/design` (phenoDesign), `@phenotype/shared-utils` (phenoShared).
+`pheno-agent`, `phenoproc`, `@<REDACTED>/design` (phenoDesign), `@phenotype/shared-utils` (phenoShared).
 
 ---
 
@@ -113,7 +113,7 @@ Legend: ✅ = safe to archive once its merge PR is green · 🔶 = blocked, must
 
 | Source | External dependents | Verdict |
 |--------|--------------------|---------|
-| phenoDesign | (none — `@kooshapari/design`) | ✅ safe → **ARCHIVED** 2026-06-17 |
+| phenoDesign | (none — `@<REDACTED>/design`) | ✅ safe → **ARCHIVED** 2026-06-17 |
 | phenoShared | none via real npm name `@phenotype/shared-utils`; legacy textual refs in DataKit/ObservabilityKit/TestingKit/PhenoObservability (all either absorbed this wave or repointed under ObsKit row) — **verify no live import before archiving** | ✅ safe (verify) |
 
 ### Must stay standalone (per plan, NOT archived)
@@ -126,18 +126,18 @@ phenotype-auth-ts, HeliosLab, Conft, PhenoMCP, PhenoSpecs — not part of this w
 
 | Repo | Action | Evidence |
 |------|--------|----------|
-| `KooshaPari/PhenoProc` | archived | pre-existing; absorption PR #79 merged |
-| `KooshaPari/PhenoKits` | archived | pre-existing; phenokits-commons #3 merged |
-| `KooshaPari/Metron` | archived | post PhenoObservability #157 (metrickit) |
+| `<REDACTED>/PhenoProc` | archived | pre-existing; absorption PR #79 merged |
+| `<REDACTED>/PhenoKits` | archived | pre-existing; phenokits-commons #3 merged |
+| `<REDACTED>/Metron` | archived | post PhenoObservability #157 (metrickit) |
 | ObservabilityKit | N/A (package only) | canonical: `phenotype-python-sdk` + PO cleanup |
-| `KooshaPari/nanovms` | pre-archived | Batch 3; subtree in `phenotype-tooling/crates/nanovms` |
-| `KooshaPari/phenoDesign` | pre-archived | Batch 3; absorbed into phenodocs (`@kooshapari/design`) |
-| `KooshaPari/phenoXddLib` | pre-archived | Batch 3; safe per HexaKit shortlist |
-| `KooshaPari/portage` | pre-archived | Batch 3; upstream Gentoo fork, no DOMAIN_ROLES entry |
-| `KooshaPari/heliosApp` | **archived** | phenotype-tooling absorption #156; 0 external manifest deps |
-| `KooshaPari/PolicyStack` | **archived** | phenotype-tooling `crates/policystack`; 0 external Cargo.toml deps |
-| `KooshaPari/BytePort` | **archived** | phenotype-tooling `crates/byteport` + absorption stub; thegent chokepoint verified-clean |
-| `KooshaPari/heliosBench` | **archived** | phenotype-tooling `crates/heliosbench`; helios-router/cli 0 manifest refs |
+| `<REDACTED>/nanovms` | pre-archived | Batch 3; subtree in `phenotype-tooling/crates/nanovms` |
+| `<REDACTED>/phenoDesign` | pre-archived | Batch 3; absorbed into phenodocs (`@<REDACTED>/design`) |
+| `<REDACTED>/phenoXddLib` | pre-archived | Batch 3; safe per HexaKit shortlist |
+| `<REDACTED>/portage` | pre-archived | Batch 3; upstream Gentoo fork, no DOMAIN_ROLES entry |
+| `<REDACTED>/heliosApp` | **archived** | phenotype-tooling absorption #156; 0 external manifest deps |
+| `<REDACTED>/PolicyStack` | **archived** | phenotype-tooling `crates/policystack`; 0 external Cargo.toml deps |
+| `<REDACTED>/BytePort` | **archived** | phenotype-tooling `crates/byteport` + absorption stub; thegent chokepoint verified-clean |
+| `<REDACTED>/heliosBench` | **archived** | phenotype-tooling `crates/heliosbench`; helios-router/cli 0 manifest refs |
 
 ---
 

@@ -3,7 +3,7 @@ id: ADR-019
 title: MCP Runtime and Implementation Dependency Graph
 status: accepted
 date: 2026-06-17
-author: KooshaPari
+author: <REDACTED>
 tags: [mcp, substrate, architecture]
 ---
 

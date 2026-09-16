@@ -33,6 +33,6 @@ This is the prior response's 30-item planning cohort, not 30 certified active pr
 | PhenoGfx | pooled-foundation | 0 | [plan](../products/PhenoGfx/DOSSIER.md) |
 | PhenoRegistry | supporting-surface | 0 | [plan](../products/PhenoRegistry/DOSSIER.md) |
 | PhenoDesign | supporting-surface | 0 | [plan](../products/PhenoDesign/DOSSIER.md) |
-| KooshaPari | supporting-surface | 0 | [plan](../products/KooshaPari/DOSSIER.md) |
+| <REDACTED> | supporting-surface | 0 | [plan](../products/<REDACTED>/DOSSIER.md) |
 | PhenoApps | conditional-target | 0 | [plan](../products/PhenoApps/DOSSIER.md) |
 | Agentora-capability | absorbed-capability | 0 | [plan](../products/Agentora-capability/DOSSIER.md) |

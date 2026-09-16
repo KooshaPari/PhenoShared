@@ -1,5 +1,5 @@
 From 3c335413c248fffb6b559e7f302718a74d4b9097 Mon Sep 17 00:00:00 2001
-From: KooshaPari <42529354+KooshaPari@users.noreply.github.com>
+From: <REDACTED> <42529354+<REDACTED>@users.noreply.github.com>
 Date: Wed, 17 Jun 2026 23:23:34 -0700
 Subject: [PATCH 3/4] docs(authkit): point to Authvault umbrella (#119)
 
@@ -12,8 +12,8 @@ index 6b0eedd..7cb6247 100644
 --- a/README.md
 +++ b/README.md
 @@ -37,7 +37,7 @@ # AuthKit
- [![License](https://img.shields.io/github/license/KooshaPari/AuthKit)](LICENSE)
- [![Phenotype](https://img.shields.io/badge/Phenotype-org-blueviolet)](https://github.com/KooshaPari)
+ [![License](https://img.shields.io/github/license/<REDACTED>/AuthKit)](LICENSE)
+ [![Phenotype](https://img.shields.io/badge/Phenotype-org-blueviolet)](https://github.com/<REDACTED>)
  
 -> **Status:** Pre-extraction staging repo. Not a published SDK.
 +> **Status:** Pre-extraction staging repo. Not a published SDK. Canonical auth umbrella: `Authvault`.

@@ -22,7 +22,7 @@ jobs:
       - name: Checkout phenotype/repos for shared tools
         uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
         with:
-          repository: kooshapari/phenotype
+          repository: <REDACTED>/phenotype
           path: phenotype-repos
           sparse-checkout: tooling/legacy-enforcement
 

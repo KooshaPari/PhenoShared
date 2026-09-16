@@ -9,7 +9,7 @@ When a fact conflicts across docs, the source listed here wins.
 |---|---|
 | Agent-effort governance | `docs/adr/2026-06-15/ADR-023-agent-effort-governance.md` |
 | Worklog schema | `pheno-worklog-schema` v2.1 — 11-column `device:` enum |
-| Config (Rust) | `KooshaPari/Configra` |
+| Config (Rust) | `<REDACTED>/Configra` |
 | Config (Python) | `pheno-config/` |
 | Repo registry + disposition | `phenotype-registry/registry/disposition-index.json` |
 | ADR index (2026-06-15) | `docs/adr/2026-06-15/INDEX.md` |

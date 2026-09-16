@@ -50,7 +50,7 @@ git checkout specs/main
 git log --oneline | head -5  # Should show linear history
 
 # Protect via GitHub API
-gh api repos/KooshaPari/phenotype-infrakit/branches/specs/main/protection \
+gh api repos/<REDACTED>/phenotype-infrakit/branches/specs/main/protection \
   -X PUT -f required_pull_request_reviews.dismiss_stale_reviews=true
 ```
 

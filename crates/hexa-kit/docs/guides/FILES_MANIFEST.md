@@ -14,7 +14,7 @@ Complete inventory of all documentation files created for Sentry manual setup.
 ### MAIN ENTRY POINT
 
 **START_HERE_SENTRY_SETUP.md** (285 lines, 9.5 KB)
-- Location: `/Users/kooshapari/CodeProjects/Phenotype/repos/docs/guides/START_HERE_SENTRY_SETUP.md`
+- Location: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/docs/guides/START_HERE_SENTRY_SETUP.md`
 - Purpose: Main entry point for all users
 - Quick start guide with multiple learning paths
 - Links to all other documents
@@ -22,13 +22,13 @@ Complete inventory of all documentation files created for Sentry manual setup.
 ### SETUP GUIDES (Detailed Walkthroughs)
 
 1. **SENTRY_SETUP_README.md** (343 lines, 10 KB)
-   - Location: `/Users/kooshapari/CodeProjects/Phenotype/repos/docs/guides/SENTRY_SETUP_README.md`
+   - Location: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/docs/guides/SENTRY_SETUP_README.md`
    - Purpose: High-level overview and quick start
    - Covers the 3-phase process at a glance
    - FAQ section with common questions
 
 2. **SENTRY_MANUAL_SETUP_GUIDE.md** (372 lines, 12 KB)
-   - Location: `/Users/kooshapari/CodeProjects/Phenotype/repos/docs/guides/SENTRY_MANUAL_SETUP_GUIDE.md`
+   - Location: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/docs/guides/SENTRY_MANUAL_SETUP_GUIDE.md`
    - Purpose: Complete Sentry project creation guide
    - Part 1: Account setup (one-time)
    - Part 2-4: Create 3 projects (AgilePlus, phenotype-infrakit, heliosCLI)
@@ -36,7 +36,7 @@ Complete inventory of all documentation files created for Sentry manual setup.
    - Includes verification checklist and troubleshooting
 
 3. **GITHUB_SECRETS_SETUP_GUIDE.md** (369 lines, 13 KB)
-   - Location: `/Users/kooshapari/CodeProjects/Phenotype/repos/docs/guides/GITHUB_SECRETS_SETUP_GUIDE.md`
+   - Location: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/docs/guides/GITHUB_SECRETS_SETUP_GUIDE.md`
    - Purpose: Complete GitHub organization secrets guide
    - Prerequisites and navigation checklist
    - Step-by-step: Add 3 secrets
@@ -47,7 +47,7 @@ Complete inventory of all documentation files created for Sentry manual setup.
 ### TEMPLATES & TRACKING
 
 **SENTRY_PROJECTS_TEMPLATE.md** (164 lines, 4 KB)
-- Location: `/Users/kooshapari/CodeProjects/Phenotype/repos/docs/guides/SENTRY_PROJECTS_TEMPLATE.md`
+- Location: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/docs/guides/SENTRY_PROJECTS_TEMPLATE.md`
 - Purpose: Tracking template for recording project details
 - Summary table for all 3 projects
 - Per-project detailed checklists
@@ -57,7 +57,7 @@ Complete inventory of all documentation files created for Sentry manual setup.
 ### INDEXES & NAVIGATION
 
 1. **SENTRY_SETUP_INDEX.md** (385 lines, 14 KB)
-   - Location: `/Users/kooshapari/CodeProjects/Phenotype/repos/docs/guides/SENTRY_SETUP_INDEX.md`
+   - Location: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/docs/guides/SENTRY_SETUP_INDEX.md`
    - Purpose: Complete documentation index and navigation
    - Quick navigation links
    - Multiple learning paths (3 types of users)
@@ -66,7 +66,7 @@ Complete inventory of all documentation files created for Sentry manual setup.
    - Document dependency graph (DAG)
 
 2. **SENTRY_DELIVERABLES_SUMMARY.md** (426 lines, 15 KB)
-   - Location: `/Users/kooshapari/CodeProjects/Phenotype/repos/docs/guides/SENTRY_DELIVERABLES_SUMMARY.md`
+   - Location: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/docs/guides/SENTRY_DELIVERABLES_SUMMARY.md`
    - Purpose: Summary of created deliverables
    - Detailed descriptions of each file
    - File organization and structure
@@ -77,7 +77,7 @@ Complete inventory of all documentation files created for Sentry manual setup.
 ### REFERENCE & VERIFICATION
 
 1. **SENTRY_SETUP_READY_CHECKLIST.md** (213 lines, 8 KB)
-   - Location: `/Users/kooshapari/CodeProjects/Phenotype/repos/docs/reference/SENTRY_SETUP_READY_CHECKLIST.md`
+   - Location: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/docs/reference/SENTRY_SETUP_READY_CHECKLIST.md`
    - Purpose: Final verification checklist
    - Sentry account setup verification
    - All 3 projects verification
@@ -88,7 +88,7 @@ Complete inventory of all documentation files created for Sentry manual setup.
    - Next phase instructions
 
 2. **SENTRY_QUICK_REFERENCE.md** (158 lines, 5 KB)
-   - Location: `/Users/kooshapari/CodeProjects/Phenotype/repos/docs/reference/SENTRY_QUICK_REFERENCE.md`
+   - Location: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/docs/reference/SENTRY_QUICK_REFERENCE.md`
    - Purpose: Quick lookup guide
    - Sentry projects summary table
    - GitHub secret names (exact, case-sensitive)
@@ -120,7 +120,7 @@ Complete inventory of all documentation files created for Sentry manual setup.
 ## Directory Structure
 
 ```
-/Users/kooshapari/CodeProjects/Phenotype/repos/docs/
+/Users/<REDACTED>/CodeProjects/Phenotype/repos/docs/
 ├── guides/
 │   ├── START_HERE_SENTRY_SETUP.md              (285 lines)
 │   ├── SENTRY_SETUP_README.md                  (343 lines)

@@ -54,15 +54,15 @@ an ADR override.
 
 | Member | Canonical path | Mirror (if any) | Notes |
 |---|---|---|---|
-| `phenotype-registry` | `github.com/KooshaPari/phenotype-registry` | n/a | Self-referential |
-| `PhenoSpecs` | `github.com/KooshaPari/PhenoSpecs` | `phenotype-registry/docs/specs/pheno-specs/` | **DELEGATED MIRROR** pending decision |
-| `PhenoHandbook` | `github.com/KooshaPari/PhenoHandbook` | `phenodocs/docs/handbook/` | **DELEGATED MIRROR** pending decision |
-| `phenotype-org-governance` | `github.com/KooshaPari/phenotype-org-governance` | n/a | — |
-| `PhenoMCPServers` | `github.com/KooshaPari/PhenoMCPServers` | n/a | — |
-| `phenotype-journeys` | `github.com/KooshaPari/phenotype-journeys` | n/a | — |
-| `phenotype-shared` | `github.com/KooshaPari/phenotype-shared` | n/a | — |
-| `phenotype-contracts` | `github.com/KooshaPari/phenotype-contracts` | n/a | — |
-| `phenoDesign` | `github.com/KooshaPari/phenoDesign` | n/a | Asset pipeline peer: `github.com/KooshaPari/asset-engine` (extracted from `engine/`) |
+| `phenotype-registry` | `github.com/<REDACTED>/phenotype-registry` | n/a | Self-referential |
+| `PhenoSpecs` | `github.com/<REDACTED>/PhenoSpecs` | `phenotype-registry/docs/specs/pheno-specs/` | **DELEGATED MIRROR** pending decision |
+| `PhenoHandbook` | `github.com/<REDACTED>/PhenoHandbook` | `phenodocs/docs/handbook/` | **DELEGATED MIRROR** pending decision |
+| `phenotype-org-governance` | `github.com/<REDACTED>/phenotype-org-governance` | n/a | — |
+| `PhenoMCPServers` | `github.com/<REDACTED>/PhenoMCPServers` | n/a | — |
+| `phenotype-journeys` | `github.com/<REDACTED>/phenotype-journeys` | n/a | — |
+| `phenotype-shared` | `github.com/<REDACTED>/phenotype-shared` | n/a | — |
+| `phenotype-contracts` | `github.com/<REDACTED>/phenotype-contracts` | n/a | — |
+| `phenoDesign` | `github.com/<REDACTED>/phenoDesign` | n/a | Asset pipeline peer: `github.com/<REDACTED>/asset-engine` (extracted from `engine/`) |
 
 ## Outstanding Issues
 

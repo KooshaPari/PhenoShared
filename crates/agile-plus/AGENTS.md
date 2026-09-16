@@ -35,7 +35,7 @@ AgilePlus is the Phenotype-org spec-driven development framework. Rust CLI + wor
 
 ## Repo Structure
 - `agileplus/` — **primary tracked workspace** (lowercase; all actual source lives here)
-- `AgilePlus/` — bare git repo (remote: KooshaPari/AgilePlus; commits only via PR merge)
+- `AgilePlus/` — bare git repo (remote: <REDACTED>/AgilePlus; commits only via PR merge)
 - `*-wtrees/` — feature worktrees; safe to work in directly
 - `kitty-specs/` — root-level spec archive (legacy, read-only)
 - Individual repos: `Agentora/`, `pheno/`, etc.

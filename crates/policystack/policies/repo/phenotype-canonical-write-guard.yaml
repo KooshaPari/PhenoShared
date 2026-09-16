@@ -16,10 +16,10 @@ policy:
           command_patterns:
             - "git commit*"
           cwd_patterns:
-            - "/Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus"
-            - "/Users/kooshapari/CodeProjects/Phenotype/repos/agentops-policy-federation"
-            - "/Users/kooshapari/CodeProjects/Phenotype/repos/spec-kitty"
-            - "/Users/kooshapari/CodeProjects/Phenotype/repos/Phenotype"
+            - "/Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus"
+            - "/Users/<REDACTED>/CodeProjects/Phenotype/repos/agentops-policy-federation"
+            - "/Users/<REDACTED>/CodeProjects/Phenotype/repos/spec-kitty"
+            - "/Users/<REDACTED>/CodeProjects/Phenotype/repos/Phenotype"
 
       - id: "phenotype-deny-canonical-git-add"
         description: "Deny git add operations in canonical repos."
@@ -30,10 +30,10 @@ policy:
           command_patterns:
             - "git add*"
           cwd_patterns:
-            - "/Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus"
-            - "/Users/kooshapari/CodeProjects/Phenotype/repos/agentops-policy-federation"
-            - "/Users/kooshapari/CodeProjects/Phenotype/repos/spec-kitty"
-            - "/Users/kooshapari/CodeProjects/Phenotype/repos/Phenotype"
+            - "/Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus"
+            - "/Users/<REDACTED>/CodeProjects/Phenotype/repos/agentops-policy-federation"
+            - "/Users/<REDACTED>/CodeProjects/Phenotype/repos/spec-kitty"
+            - "/Users/<REDACTED>/CodeProjects/Phenotype/repos/Phenotype"
 
       - id: "phenotype-deny-canonical-git-merge"
         description: "Deny git merge operations in canonical repos (use main repo only for final integration)."
@@ -45,10 +45,10 @@ policy:
             - "git merge*"
             - "git pull*"
           cwd_patterns:
-            - "/Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus"
-            - "/Users/kooshapari/CodeProjects/Phenotype/repos/agentops-policy-federation"
-            - "/Users/kooshapari/CodeProjects/Phenotype/repos/spec-kitty"
-            - "/Users/kooshapari/CodeProjects/Phenotype/repos/Phenotype"
+            - "/Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus"
+            - "/Users/<REDACTED>/CodeProjects/Phenotype/repos/agentops-policy-federation"
+            - "/Users/<REDACTED>/CodeProjects/Phenotype/repos/spec-kitty"
+            - "/Users/<REDACTED>/CodeProjects/Phenotype/repos/Phenotype"
           exclude_patterns:
             - "*origin/main*"
 
@@ -61,10 +61,10 @@ policy:
           command_patterns:
             - "git reset*"
           cwd_patterns:
-            - "/Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus"
-            - "/Users/kooshapari/CodeProjects/Phenotype/repos/agentops-policy-federation"
-            - "/Users/kooshapari/CodeProjects/Phenotype/repos/spec-kitty"
-            - "/Users/kooshapari/CodeProjects/Phenotype/repos/Phenotype"
+            - "/Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus"
+            - "/Users/<REDACTED>/CodeProjects/Phenotype/repos/agentops-policy-federation"
+            - "/Users/<REDACTED>/CodeProjects/Phenotype/repos/spec-kitty"
+            - "/Users/<REDACTED>/CodeProjects/Phenotype/repos/Phenotype"
 
       - id: "phenotype-deny-canonical-file-writes"
         description: "Deny file writes in canonical repos (all editing must happen in worktrees)."
@@ -73,10 +73,10 @@ policy:
         actions: ["write"]
         match:
           target_path_patterns:
-            - "/Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus/*"
-            - "/Users/kooshapari/CodeProjects/Phenotype/repos/agentops-policy-federation/*"
-            - "/Users/kooshapari/CodeProjects/Phenotype/repos/spec-kitty/*"
-            - "/Users/kooshapari/CodeProjects/Phenotype/repos/Phenotype/*"
+            - "/Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus/*"
+            - "/Users/<REDACTED>/CodeProjects/Phenotype/repos/agentops-policy-federation/*"
+            - "/Users/<REDACTED>/CodeProjects/Phenotype/repos/spec-kitty/*"
+            - "/Users/<REDACTED>/CodeProjects/Phenotype/repos/Phenotype/*"
           exclude_patterns:
             - "*-wtrees*"
             - "*.worktrees*"

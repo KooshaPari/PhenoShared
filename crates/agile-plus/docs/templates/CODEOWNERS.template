@@ -6,7 +6,7 @@
 # GitHub auto-detects CODEOWNERS at `.github/CODEOWNERS` and `./CODEOWNERS`.
 #
 # Last reviewed in: docs/audit/batch2-governance-findings.md
-# Reference baseline: KooshaPari/AgilePlus `CODEOWNERS` (19 lines, single-owner).
+# Reference baseline: <REDACTED>/AgilePlus `CODEOWNERS` (19 lines, single-owner).
 
 # ---- Single-owner baseline (Phenotype org) ----
 # Replace @<owner-handle> before copying into a new repo.
@@ -27,14 +27,14 @@
 # ---- Optional multi-owner variant (delete the block above if you use this) ----
 # Uncomment + adapt when team grows beyond a single owner:
 #
-# /crates/agileplus-domain/   @KooshaPari @domain-maintainer
-# /crates/agileplus-ports/    @KooshaPari @ports-maintainer
-# /crates/agileplus-adapters/ @KooshaPari @adapters-maintainer
-# /apps/                       @KooshaPari @apps-maintainer
-# /tools/                      @KooshaPari @tools-maintainer
-# /docs/                       @KooshaPari @docs-maintainer
-# /specs/                      @KooshaPari @spec-maintainer
-# *.md                         @KooshaPari @docs-maintainer
-# *.yml                        @KooshaPari @platform-maintainer
-# *.yaml                       @KooshaPari @platform-maintainer
-# *                            @KooshaPari
+# /crates/agileplus-domain/   @<REDACTED> @domain-maintainer
+# /crates/agileplus-ports/    @<REDACTED> @ports-maintainer
+# /crates/agileplus-adapters/ @<REDACTED> @adapters-maintainer
+# /apps/                       @<REDACTED> @apps-maintainer
+# /tools/                      @<REDACTED> @tools-maintainer
+# /docs/                       @<REDACTED> @docs-maintainer
+# /specs/                      @<REDACTED> @spec-maintainer
+# *.md                         @<REDACTED> @docs-maintainer
+# *.yml                        @<REDACTED> @platform-maintainer
+# *.yaml                       @<REDACTED> @platform-maintainer
+# *                            @<REDACTED>

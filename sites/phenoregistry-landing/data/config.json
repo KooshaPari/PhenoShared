@@ -6,7 +6,7 @@
   "color": "#84cc16",
   "description": "Organization registry: master index connecting specs, patterns, and templates across the Phenotype ecosystem.",
   "tier": 1,
-  "repo": "KooshaPari/PhenoRegistry",
+  "repo": "<REDACTED>/PhenoRegistry",
   "language": "TOML / Markdown",
   "license": "MIT",
   "status": "active",
@@ -17,8 +17,8 @@
     "Cross-repo links"
   ],
   "links": {
-    "github": "https://github.com/KooshaPari/PhenoRegistry",
+    "github": "https://github.com/<REDACTED>/PhenoRegistry",
     "docs": "https://phenoregistry.phenotype.space/docs",
-    "releases": "https://github.com/KooshaPari/PhenoRegistry/releases"
+    "releases": "https://github.com/<REDACTED>/PhenoRegistry/releases"
   }
 }

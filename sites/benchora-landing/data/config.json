@@ -6,7 +6,7 @@
   "description": "Rust-native benchmarking and performance testing. Statistical rigor, regression detection, CI integration.",
   "color": "#7ebab5",
   "tier": 2,
-  "repo": "KooshaPari/Benchora",
+  "repo": "<REDACTED>/Benchora",
   "language": "Rust",
   "license": "MIT",
   "status": "active",
@@ -18,8 +18,8 @@
     "Custom Reporters"
   ],
   "links": {
-    "github": "https://github.com/KooshaPari/Benchora",
+    "github": "https://github.com/<REDACTED>/Benchora",
     "docs": "https://benchora.phenotype.space/docs",
-    "releases": "https://github.com/KooshaPari/Benchora/releases"
+    "releases": "https://github.com/<REDACTED>/Benchora/releases"
   }
 }

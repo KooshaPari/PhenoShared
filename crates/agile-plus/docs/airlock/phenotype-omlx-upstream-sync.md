@@ -11,7 +11,7 @@
 `phenotype-omlx` is a fork of `jundot/omlx` with **NO common history**. Verification:
 
 ```
-$ cd /Users/kooshapari/CodeProjects/Phenotype/repos/phenotype-omlx
+$ cd /Users/<REDACTED>/CodeProjects/Phenotype/repos/phenotype-omlx
 $ git merge-base HEAD jundot-omlx/main
 (exit code 1 — empty)
 
@@ -99,7 +99,7 @@ The fork has been so heavily customized that re-forking upstream clean and carry
 
 ### Phase 2: re-fork strategy (Option A)
 1. Drop local `jundot-omlx` remote (no longer needed).
-2. Re-fork `jundot/omlx` to `KooshaPari/phenotype-omlx-v2` (or rename after coop).
+2. Re-fork `jundot/omlx` to `<REDACTED>/phenotype-omlx-v2` (or rename after coop).
 3. Cherry-pick the 330 local-unique commits onto the new fork.
 4. Push as fresh repo.
 5. Old `phenotype-omlx` archived with `archived: true`, retained as receipt.

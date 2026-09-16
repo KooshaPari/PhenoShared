@@ -76,7 +76,7 @@ def push_artifact(data: dict, tag: str) -> int:
     """Sign and push as OCI artifact via cosign."""
     cosign = os.environ.get("COSIGN_BINARY", "cosign")
     registry = os.environ.get("OCI_REGISTRY", "ghcr.io")
-    repo = os.environ.get("OCI_REPO", "KooshaPari/argis-extensions")
+    repo = os.environ.get("OCI_REPO", "<REDACTED>/argis-extensions")
     ref = f"{registry}/{repo}:{tag}"
     # Check cosign availability
     try:

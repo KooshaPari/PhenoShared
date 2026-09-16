@@ -14,7 +14,7 @@ TASK: Identify test gaps and write missing unit tests for agileplus-triage and a
 
 RULES:
 - No git stash. No force-push. No push to main. No worktrees.
-- phenoShared sibling: git clone --depth 1 https://github.com/KooshaPari/phenoShared.git ../phenoShared (if needed for build)
+- phenoShared sibling: git clone --depth 1 https://github.com/<REDACTED>/phenoShared.git ../phenoShared (if needed for build)
 - Actually write the tests. Report real test names added.
 - Working dir: C:/Users/koosh/Dev/AgilePlus
 - Branch: integration/consolidate (already checked out)

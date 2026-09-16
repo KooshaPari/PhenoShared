@@ -2,7 +2,7 @@
 5ccf346 chore(governance): complete SSOT tier-0 for PhenoSchema
 1fb0697 (origin/chore/dependabot-2026-06-08) chore(tier-0): orch-v10-007 hygiene
 ba515a6 ci: add OSSF Scorecard supply-chain security workflow
-e964dec chore(governance): add CODEOWNERS with @kooshapari as default owner
+e964dec chore(governance): add CODEOWNERS with @<REDACTED> as default owner
 a96de4d docs(changelog): add CHANGELOG.md with [Unreleased] section
 a756fdb chore(governance): add CODE_OF_CONDUCT.md,CONTRIBUTING.md,SECURITY.md,LICENSE
 d104825 Add ISSUE_TEMPLATE: bug, feature, security, question + chooser config

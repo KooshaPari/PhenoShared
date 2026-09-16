@@ -3,7 +3,7 @@ package contextfolding
 import (
 	"context"
 
-	"github.com/kooshapari/bifrost-extensions/slm"
+	"github.com/<REDACTED>/bifrost-extensions/slm"
 	"github.com/maximhq/bifrost/core/schemas"
 )
 

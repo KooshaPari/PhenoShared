@@ -9,7 +9,7 @@
   "role": "agent-sharing-and-observability",
   "domain_role": "desktop-agent-tooling",
   "boundary": "desktop-share-and-health",
-  "gh_url": "https://github.com/KooshaPari/sharecli",
+  "gh_url": "https://github.com/<REDACTED>/sharecli",
   "disposition": "KEEP_STANDALONE_PENDING_BOUNDARY_REVIEW",
   "canonical_routing": true,
   "recovery_ref": "recovery/sharecli-local-20260726",

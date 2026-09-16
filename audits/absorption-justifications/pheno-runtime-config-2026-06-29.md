@@ -4,7 +4,7 @@
 
 | Field | Value |
 |---|---|
-| Repo | `KooshaPari/pheno-runtime-config` |
+| Repo | `<REDACTED>/pheno-runtime-config` |
 | Description | Hot-reloadable runtime configuration loader for the pheno-* fleet |
 | Default branch | `main` |
 | Language | Rust |
@@ -12,14 +12,14 @@
 | Created | 2026-04-15 |
 | Last push | 2026-06-28 |
 | Stars / Issues | 0 / 0 |
-| html_url | https://github.com/KooshaPari/pheno-runtime-config |
+| html_url | https://github.com/<REDACTED>/pheno-runtime-config |
 | Verdict (canonical) | `ARCHIVE_ONLY` |
 
 ## Target
 
 | Target | Role | Why |
 |---|---|---|
-| `KooshaPari/phenotype-infra` (federation-service) | runtime config schema host | Smallest, cleanest separation: pheno-runtime-config is the dedicated hot-reload lib; phenotype-infra integrates it. |
+| `<REDACTED>/phenotype-infra` (federation-service) | runtime config schema host | Smallest, cleanest separation: pheno-runtime-config is the dedicated hot-reload lib; phenotype-infra integrates it. |
 | `pheno-*` runtime context layer | shared types | The pheno-* crates all consume the config schema through this crate. |
 
 This is an `ARCHIVE_ONLY` disposition: the source remains the canonical home; the federated `phenotype-infra` references the crate. No content migration needed; the codebase is a single 10-KB Rust library with tests and CI.
@@ -30,7 +30,7 @@ This is an `ARCHIVE_ONLY` disposition: the source remains the canonical home; th
 |---|---|
 | Disposition | `ARCHIVE_ONLY` |
 | Action class | **none** (canonical home) |
-| Absorbed into | `KooshaPari/phenotype-infra` (federation-service per ADR-049) |
+| Absorbed into | `<REDACTED>/phenotype-infra` (federation-service per ADR-049) |
 | Last verified | 2026-06-29 |
 | Gate tooling reference | `bin/repo-delete-gate.sh` (N/A — not deleting) |
 
@@ -73,7 +73,7 @@ None. The crate is canonical and federated.
 The pheno-runtime-config crate is the dedicated hot-reloadable runtime config library for the pheno-* fleet (capacity, tracing, drift-detector, predict, otel-wt, scaffold-kit). It is small (10 KB) and tested, with a clear separation of concerns: phenotype-infra handles federation-service infrastructure, pheno-runtime-config handles runtime config schema + hot-reload. Deleting the repo would force every pheno-* crate to vendor the same code. However, the gap between deletion and federation is real — there is no current way to absorb (cannot absorb a crate that is still the canonical home; federation is a runtime dependency, not a code absorption). Outstanding trade-off: this is a runtime-config library, not an application service, so ARCHIVE_ONLY is the correct disposition. The remaining residual is the need to maintain a separate release pipeline for one small library.
 
 ### Rebuttal 2: What is the re-clone mechanism?
-A full `git clone --recurse-submodules https://github.com/KooshaPari/pheno-runtime-config.git` followed by `cargo build --release` reproduces the crate. The clone includes the federation submodules and the build output is deterministic on Rust 1.74+. We need a sha-256 verification step at federation time: the `phenotype-infra` orchestrator should verify the downloaded crate's `Cargo.lock` against the published SHA-256. We do not absorb (cannot absorb because pheno-runtime-config is the canonical home). The gap between the source-of-truth and the federation target is a residual: the published sha-256 must be kept in sync with the crate's `Cargo.lock` content.
+A full `git clone --recurse-submodules https://github.com/<REDACTED>/pheno-runtime-config.git` followed by `cargo build --release` reproduces the crate. The clone includes the federation submodules and the build output is deterministic on Rust 1.74+. We need a sha-256 verification step at federation time: the `phenotype-infra` orchestrator should verify the downloaded crate's `Cargo.lock` against the published SHA-256. We do not absorb (cannot absorb because pheno-runtime-config is the canonical home). The gap between the source-of-truth and the federation target is a residual: the published sha-256 must be kept in sync with the crate's `Cargo.lock` content.
 
 ### Rebuttal 3: Is the package still in use?
 Yes. The pheno-* fleet (capacity, tracing, drift-detector, predict, otel-wt, scaffold-kit) all depend on pheno-runtime-config for hot-reloadable configuration. We do not absorb (cannot absorb a live dependency). The trade-off: the crate is the canonical home, and bundling it into phenotype-infra would force every pheno-* consumer to vendor the same code. The outstanding residual is a re-clone policy: phenotype-infra's orchestrator should verify the SHA-256 of the federation target before consuming it.
@@ -94,7 +94,7 @@ Yes. The pheno-* fleet (capacity, tracing, drift-detector, predict, otel-wt, sca
    ```
 2. Re-clone the original repo into a workspace:
    ```bash
-   git clone https://github.com/KooshaPari/pheno-runtime-config.git
+   git clone https://github.com/<REDACTED>/pheno-runtime-config.git
    ```
 3. Restore the canonical snapshot into the workspace, but **do not** absorb into the federation (runtime configs are recomposed, not merged):
    ```bash
@@ -120,7 +120,7 @@ The repo is the canonical home — restore = re-clone. Use the federation gate, 
 
 ```bash
 # 1. Re-clone the canonical source
-git clone --recurse-submodules https://github.com/KooshaPari/pheno-runtime-config.git
+git clone --recurse-submodules https://github.com/<REDACTED>/pheno-runtime-config.git
 cd pheno-runtime-config
 
 # 2. Verify sha-256 of federation target
@@ -150,9 +150,9 @@ The Restore-Command is followed by a federation smoke test to verify the re-clon
 
 | Tool | Path | Status |
 |---|---|---|
-| `bin/repo-delete-gate.sh` | `KooshaPari/phenotype-tooling/bin/repo-delete-gate.sh` | N/A (not deleting) |
-| `bin/repo-archive-gate.sh` | `KooshaPari/phenotype-tooling/bin/repo-archive-gate.sh` | N/A (not archiving) |
-| `bin/repo-status-scan.py` | `KooshaPari/phenotype-tooling/bin/repo-status-scan.py` | N/A (not deleting) |
-| `bin/absorption-justification.py` | `KooshaPari/phenotype-tooling/bin/absorption-justification.py` | N/A (already federated, not new audit) |
+| `bin/repo-delete-gate.sh` | `<REDACTED>/phenotype-tooling/bin/repo-delete-gate.sh` | N/A (not deleting) |
+| `bin/repo-archive-gate.sh` | `<REDACTED>/phenotype-tooling/bin/repo-archive-gate.sh` | N/A (not archiving) |
+| `bin/repo-status-scan.py` | `<REDACTED>/phenotype-tooling/bin/repo-status-scan.py` | N/A (not deleting) |
+| `bin/absorption-justification.py` | `<REDACTED>/phenotype-tooling/bin/absorption-justification.py` | N/A (already federated, not new audit) |
 
 This audit was produced by hand from the auto-generated 8/14 grade; the audit-template-based 14/14 was re-applied retroactively to bring pheno-runtime-config to the same quality bar as the rest of the fleet.

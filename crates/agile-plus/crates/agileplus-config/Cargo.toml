@@ -5,11 +5,11 @@ edition.workspace = true
 rust-version.workspace = true
 description = "Shared config-builder macro for AgilePlus crates"
 license = "MIT OR Apache-2.0"
-repository = "https://github.com/KooshaPari/AgilePlus"
+repository = "https://github.com/<REDACTED>/AgilePlus"
 documentation = "https://docs.rs/agileplus-config"
 keywords = ["phenotype", "agileplus", "config"]
 categories = ["config"]
-authors = ["kooshapari"]
+authors = ["<REDACTED>"]
 
 [dependencies]
 paste = "1"

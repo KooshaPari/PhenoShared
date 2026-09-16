@@ -5,4 +5,4 @@
 === phenoAI ===
 
 repos_with_violations=5 / 5
-logs: /Users/kooshapari/CodeProjects/Phenotype/repos/pheno-harness/bench/results/branch-lint/2026-08-02
+logs: /Users/<REDACTED>/CodeProjects/Phenotype/repos/pheno-harness/bench/results/branch-lint/2026-08-02

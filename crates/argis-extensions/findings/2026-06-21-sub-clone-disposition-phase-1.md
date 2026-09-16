@@ -22,10 +22,10 @@ Phase 1 did **not** execute. The task's Step 1 safety rule ("If ANY of the 5 has
 | `.gitmodules` (submodule pointers) | **Does not exist** at monorepo root. `cat .gitmodules` returns "No such file or directory". |
 | `.git/modules/<name>/` (submodule gitdirs) | **None of the 5 exist** in `.git/modules/`. |
 | Working branch | `ci/v12-gates-2026-06-21` (a CI gate branch, not main) |
-| Working tree remote | `origin = github.com/KooshaPari/phenotype-apps.git` (the previously-reported `argis` remote is the second remote on this checkout) |
+| Working tree remote | `origin = github.com/<REDACTED>/phenotype-apps.git` (the previously-reported `argis` remote is the second remote on this checkout) |
 | Sparse-checkout state | **Disabled** (`core.sparseCheckout=false`, `core.sparseCheckoutCone=false`) — contradicts AGENTS.md claim of cone-mode sparse-checkout |
 
-**Implication:** The 5 directories are **independent git clones** (each with its own `origin` pointing to `github.com/KooshaPari/<name>.git`), not git submodules. The Step 2 commands (`git submodule deinit`, `git rm $repo` against the monorepo index) would not work as written and would be inappropriate without a `.gitmodules` entry.
+**Implication:** The 5 directories are **independent git clones** (each with its own `origin` pointing to `github.com/<REDACTED>/<name>.git`), not git submodules. The Step 2 commands (`git submodule deinit`, `git rm $repo` against the monorepo index) would not work as written and would be inappropriate without a `.gitmodules` entry.
 
 ---
 
@@ -59,7 +59,7 @@ git ls-tree HEAD | grep Pyron: (empty)
 
 ```
 branch: chore/L62-hexakit-adopt-2026-06-21   ← NOT trunk
-remote:  git@github.com:KooshaPari/HexaKit.git
+remote:  git@github.com:<REDACTED>/HexaKit.git
 HEAD:    6f82788 chore(obs): L62 adopt pheno-otel::ErrorCounter for HexaKit  ← Jun 21
 prev:    33e49ad chore: rebase marker (#300)
 prev:    c658479 feat(rust): H14.3 alias resolver for model-id routing (#302)
@@ -83,7 +83,7 @@ Unmerged: 0
 
 ```
 branch: chore/tier-0-hygiene-batch   ← NOT trunk
-remote:  git@github.com:KooshaPari/Tracera.git
+remote:  git@github.com:<REDACTED>/Tracera.git
 HEAD:    b6c4ef85b chore: tier-0 hygiene snapshot 2026-06-20
 prev:    b7fd88b57 chore(tracera): recover stash@{0} (L7-001 hygiene batch …)
 prev:    3423caf27 chore(tier-0): orch-v10-015 hygiene
@@ -106,7 +106,7 @@ Unmerged: 0
 
 ```
 branch: fix/l5-119-quality-p0-2026-06-20   ← NOT trunk
-remote:  git@github.com:KooshaPari/PhenoContracts.git
+remote:  git@github.com:<REDACTED>/PhenoContracts.git
 HEAD:    f9defc7 fix(ci): switch TruffleHog to filesystem mode; ignore coverage/ dir
 prev:    2d37994 fix(ci): switch TruffleHog to filesystem mode (handles first commit)
 prev:    66b6270 chore: tier-0 hygiene snapshot 2026-06-20
@@ -150,7 +150,7 @@ Per the task's own instruction: "If ANY of the 5 has dirty state or non-main loc
 2. **Confirm the working branch.** `ci/v12-gates-2026-06-21` is a CI gate branch; submodule-pointer changes here may belong on `main` / `master` / a `chore/<req-id>-sub-clone-disposition-<date>` branch instead.
 3. **Trunk-only verification must be per-checkout.** Each developer / CI runner may have a different working-tree state. The audit must be re-run at the moment of deletion, not relied on from another machine.
 4. **HexaKit/Tracera/PhenoContracts have live L-number work** (L7-001 hygiene, L62 obs adopt, L5-119 quality P0). Even if trunk-only is later confirmed, the v14 wave in progress is touching these repos; coordinate with active owners.
-5. **HeliosCLI / Pyron absence** may already be the result of prior cleanup (consistent with the 2026-06-18 4-repo retirement documented in AGENTS.md) — verify with `gh repo view` against `KooshaPari/HeliosCLI` and `KooshaPari/Pyron` before assuming they're missing.
+5. **HeliosCLI / Pyron absence** may already be the result of prior cleanup (consistent with the 2026-06-18 4-repo retirement documented in AGENTS.md) — verify with `gh repo view` against `<REDACTED>/HeliosCLI` and `<REDACTED>/Pyron` before assuming they're missing.
 
 ---
 

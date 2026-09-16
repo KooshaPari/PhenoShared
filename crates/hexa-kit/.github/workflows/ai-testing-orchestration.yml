@@ -34,7 +34,7 @@ jobs:
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
-          repository: KooshaPari/nanovms
+          repository: <REDACTED>/nanovms
           path: nanovms
 
       - name: Setup Bun
@@ -58,7 +58,7 @@ jobs:
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
-          repository: KooshaPari/AgilePlus
+          repository: <REDACTED>/AgilePlus
           path: AgilePlus
 
       - name: Setup Bun
@@ -81,7 +81,7 @@ jobs:
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
-          repository: KooshaPari/thegent
+          repository: <REDACTED>/thegent
           path: thegent
 
       - name: Setup Bun

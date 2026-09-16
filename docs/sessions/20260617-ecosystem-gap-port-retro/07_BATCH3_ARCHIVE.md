@@ -1,7 +1,7 @@
 # Batch 3 archive — evidence
 
 **Date:** 2026-06-17  
-**Authorization:** user sign-off (KooshaPari ecosystem batch 3)
+**Authorization:** user sign-off (<REDACTED> ecosystem batch 3)
 
 ## Archive results
 

@@ -1,14 +1,14 @@
 # Eidolon Absorption
 
 Eidolon (the Phenotype-org agentic runtime substrate, 6094 LOC Rust
-across 5 crates) was absorbed from `KooshaPari/Eidolon` into the pheno
+across 5 crates) was absorbed from `<REDACTED>/Eidolon` into the pheno
 monorepo as `crates/eidolon-{core,desktop,mobile,sandbox,phenotype-error-core}/`.
 
 ## Source
 
 | Field | Value |
 | --- | --- |
-| Source repo | `KooshaPari/Eidolon` |
+| Source repo | `<REDACTED>/Eidolon` |
 | Source size | 6094 LOC Rust |
 | Source branches | 92 |
 | Absorbed on | 2026-07-18 |

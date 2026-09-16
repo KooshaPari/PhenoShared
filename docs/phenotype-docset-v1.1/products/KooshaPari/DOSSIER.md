@@ -1,4 +1,4 @@
-# KooshaPari
+# <REDACTED>
 
 **Role:** Public portfolio and landing/publication consumer
 **Class:** supporting-surface | **GitHub ID:** 1349458262

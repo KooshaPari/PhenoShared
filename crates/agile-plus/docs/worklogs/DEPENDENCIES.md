@@ -303,18 +303,18 @@ Audit of GitHub-hosted external dependencies beyond crates.io.
 | Dependency | Type | Usage | Assessment |
 |------------|------|-------|------------|
 | `AgilePlus/agileplus` | Self | Workspace reference | OK |
-| `KooshaPari/agileplus-plugin-core` | Plugin | Optional dependency | Review |
-| `KooshaPari/agileplus-plugin-git` | Plugin | Optional dependency | Review |
-| `KooshaPari/agileplus-plugin-sqlite` | Plugin | Optional dependency | Review |
+| `<REDACTED>/agileplus-plugin-core` | Plugin | Optional dependency | Review |
+| `<REDACTED>/agileplus-plugin-git` | Plugin | Optional dependency | Review |
+| `<REDACTED>/agileplus-plugin-sqlite` | Plugin | Optional dependency | Review |
 | `phenotype/agileplus-proto` | Proto | Go package path | OK |
 
 ### Plugin Dependencies
 
 ```toml
 # Cargo.toml
-agileplus-plugin-core = { git = "https://github.com/KooshaPari/agileplus-plugin-core", optional = true }
-agileplus-plugin-git = { git = "https://github.com/KooshaPari/agileplus-plugin-git", optional = true }
-agileplus-plugin-sqlite = { git = "https://github.com/KooshaPari/agileplus-plugin-sqlite", optional = true }
+agileplus-plugin-core = { git = "https://github.com/<REDACTED>/agileplus-plugin-core", optional = true }
+agileplus-plugin-git = { git = "https://github.com/<REDACTED>/agileplus-plugin-git", optional = true }
+agileplus-plugin-sqlite = { git = "https://github.com/<REDACTED>/agileplus-plugin-sqlite", optional = true }
 ```
 
 ### Recommendations

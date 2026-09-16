@@ -32,4 +32,4 @@ task build
 
 - [Install and run guide](./guide.md)
 - [Benchmark task catalog](./tasks.md)
-- [Source repository](https://github.com/KooshaPari/heliosBench)
+- [Source repository](https://github.com/<REDACTED>/heliosBench)

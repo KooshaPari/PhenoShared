@@ -12,7 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Foundation: `AGENTS.md` (local agent governance, do/don't rules, sibling package consumers).
 - Foundation: `CLAUDE.md` (Claude-specific entry point mirroring the McpKit stack template).
 - Foundation: `SECURITY.md` (private disclosure via GitHub Security Advisories, response targets).
-- Foundation: `CODEOWNERS` (default reviewer: `@KooshaPari`).
+- Foundation: `CODEOWNERS` (default reviewer: `@<REDACTED>`).
 - Foundation: `.github/workflows/dotnet-build.yml` (Ubuntu, .NET 8, `dotnet build -c Release`, with a no-op stub for the Unity reference under `$(WorldBoxManaged)`).
 - Foundation: `.github/dependabot.yml` (weekly updates for `github-actions`, 5-PR limit; `nuget` intentionally not enabled — see the YAML comment for the rationale and re-enable condition).
 - Foundation: `.github/ISSUE_TEMPLATE/bug_report.md` and `feature_request.md`.
@@ -23,7 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Docs: `AGENTS.md` "Quick Links" no longer claims "Local CLAUDE.md: Not present". A `CLAUDE.md` is in fact at the repo root (foundation governance stack). The stale claim would have routed an agent away from `CLAUDE.md` and into `AGENTS.md` as a stand-in, which defeats the layered-governance design.
 - Docs: removed phantom `phenotype-voxel` references from `README.md`, `AGENTS.md`, `CLAUDE.md`, `CONTRIBUTING.md`, `.github/pull_request_template.md`, and `.github/ISSUE_TEMPLATE/bug_report.md`. `https://github.com/Phenotype-org/phenotype-voxel` returns HTTP 404 — the package does not exist. The reference was aspirational leftover from a draft. Replaced with the actual in-repo sibling `phenotype-water` and an honest "end-user Unity mods" framing in every reference.
 - Docs: fix `CLAUDE.md` "Key Files" entry that listed `src/LodManager.cs` — the actual file in `src/` is `src/TerrainLod.cs`.
-- Foundation: `CODE_OF_CONDUCT.md` (full Contributor Covenant v2.1 mirroring the org root; the org's "Reporting" section points to KooshaPari on GitHub).
+- Foundation: `CODE_OF_CONDUCT.md` (full Contributor Covenant v2.1 mirroring the org root; the org's "Reporting" section points to <REDACTED> on GitHub).
 - Foundation: `.github/ISSUE_TEMPLATE/config.yml` (disables blank issues, adds contact links for Security advisories, AgilePlus specs, and the Phenotype org so the private disclosure path is discoverable from the new-issue chooser).
 - CI: `.github/workflows/dotnet-build.yml` Unity stub now produces a real PE-format .NET 8.0 assembly with `Vector3`/`Vector2` in the `UnityEngine` namespace, instead of a placeholder text file. The previous stub would have failed the moment a future PR added a Unity type to `src/ChunkMeshBuilder.cs` (the C# compiler opens HintPath as PE metadata). Build is fully offline (uses the dotnet SDK already on the runner).
 - CI: `.github/workflows/dotnet-build.yml` build job now has `timeout-minutes: 10` (was: default 360). Bounds the blast radius of a hang — e.g. a flaky NuGet restore, a `dotnet build` deadlock, or a stub-assembly build that hangs on a transient SDK download. Clean runs finish in well under 2 minutes on a warm cache.

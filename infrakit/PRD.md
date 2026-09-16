@@ -7,7 +7,7 @@
 **Stack**: Rust 2021 edition, Cargo workspace resolver v2.
 **Key dependencies**: `serde`, `serde_json`, `thiserror`, `chrono`, `sha2`, `hex`, `dashmap`, `lru`, `moka`, `toml`, `regex`, `uuid`.
 **Consumers**: Any Phenotype service or library implementing hexagonal architecture ports.
-**Repository**: `KooshaPari/phenotype-infrakit`
+**Repository**: `<REDACTED>/phenotype-infrakit`
 
 ---
 

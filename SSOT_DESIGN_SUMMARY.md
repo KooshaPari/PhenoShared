@@ -386,7 +386,7 @@ The result: 50+ agents working in parallel without blocking, with an immutable a
 
 ---
 
-**Document Location**: `/Users/kooshapari/CodeProjects/Phenotype/repos/docs/reference/`
+**Document Location**: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/docs/reference/`
 
 **Questions?** Check SSOT_ARCHITECTURE_INDEX.md FAQ or reference relevant section in main architecture doc.
 

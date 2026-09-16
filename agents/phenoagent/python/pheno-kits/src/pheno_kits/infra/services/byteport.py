@@ -100,7 +100,7 @@ def get_api_service(config: BytePortConfig) -> ServiceConfig:
         env=env,
         preferred_port=config.api_preferred_port,
         enable_tunnel=True,
-        tunnel_domain="byte.kooshapari.com",
+        tunnel_domain="byte.<REDACTED>.com",
         restart_on_failure=True,
         health_check_url=(
             f"http://localhost:{config.api_preferred_port}/health" if config.local_mode else None
@@ -118,7 +118,7 @@ def get_frontend_service(config: BytePortConfig) -> ServiceConfig:
     """
     Get frontend Next.js service configuration.
     """
-    frontend_dir = Path("/Users/kooshapari/temp-PRODVERCEL/Rust/webApp/byte_port/frontend/web-next")
+    frontend_dir = Path("/Users/<REDACTED>/temp-PRODVERCEL/Rust/webApp/byte_port/frontend/web-next")
     env_file = frontend_dir / ".env.local"
 
     # Determine command based on mode
@@ -143,7 +143,7 @@ def get_frontend_service(config: BytePortConfig) -> ServiceConfig:
         env=env,
         preferred_port=config.frontend_preferred_port,
         enable_tunnel=True,
-        tunnel_domain="byte.kooshapari.com",
+        tunnel_domain="byte.<REDACTED>.com",
         restart_on_failure=True,
         watch_paths=(
             [frontend_dir / "app", frontend_dir / "components", frontend_dir / "lib"]
@@ -194,7 +194,7 @@ def get_byteport_services(
     services.append(api_service)
 
     # Add frontend service if directory exists
-    frontend_dir = Path("/Users/kooshapari/temp-PRODVERCEL/Rust/webApp/byte_port/frontend/web-next")
+    frontend_dir = Path("/Users/<REDACTED>/temp-PRODVERCEL/Rust/webApp/byte_port/frontend/web-next")
     if frontend_dir.exists():
         frontend_service = get_frontend_service(config)
         services.append(frontend_service)

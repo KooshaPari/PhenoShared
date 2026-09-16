@@ -81,10 +81,10 @@ The 4 strands are documented in audit Section 6.1-6.4. Each needs an explicit de
 
 | Task | Strand | Recovery path | PR target | Effort | Risk |
 |---|---|---|---|---|---|
-| **B1** | monorepo `chore/w5-adrs-sota` (3 commits incl. ADR-024/025 + 71-pillar reference) | **RECOMMENDED**: Cherry-pick `d83900c4a7` to `KooshaPari/phenotype-org-audits` `docs/2026-06-17/AGENTS-refresh.md` | `phenotype-org-audits` | 1h | LOW (doc-only) |
-| **B2** | l4-80-wt worklog commit `69fe8cddee` | Re-commit as `KooshaPari/phenotype-otel` `docs/worklog-L4-080.md` (the worklog content only) | `phenotype-otel` | 15m | LOW (doc-only) |
-| **B3** | l4-68 pheno-context crate (286 lines, L4 #68) | **DECISION**: Either (a) restore LFS cache and push, OR (b) copy `pheno-context/` to `KooshaPari/phenoShared` and submit a PR there | `phenoShared` | 2h | MEDIUM (new crate placement) |
-| **B4** | audit-30pillar (484 commits, 30 files at `audit-30-pillar-L*.md`) | **RECOMMENDED**: `cp audit-30-pillar-L*.md KooshaPari/phenotype-org-audits/audit-30-pillar/` and submit a single PR | `phenotype-org-audits` | 30m | LOW (audit files only, no code) |
+| **B1** | monorepo `chore/w5-adrs-sota` (3 commits incl. ADR-024/025 + 71-pillar reference) | **RECOMMENDED**: Cherry-pick `d83900c4a7` to `<REDACTED>/phenotype-org-audits` `docs/2026-06-17/AGENTS-refresh.md` | `phenotype-org-audits` | 1h | LOW (doc-only) |
+| **B2** | l4-80-wt worklog commit `69fe8cddee` | Re-commit as `<REDACTED>/phenotype-otel` `docs/worklog-L4-080.md` (the worklog content only) | `phenotype-otel` | 15m | LOW (doc-only) |
+| **B3** | l4-68 pheno-context crate (286 lines, L4 #68) | **DECISION**: Either (a) restore LFS cache and push, OR (b) copy `pheno-context/` to `<REDACTED>/phenoShared` and submit a PR there | `phenoShared` | 2h | MEDIUM (new crate placement) |
+| **B4** | audit-30pillar (484 commits, 30 files at `audit-30-pillar-L*.md`) | **RECOMMENDED**: `cp audit-30-pillar-L*.md <REDACTED>/phenotype-org-audits/audit-30-pillar/` and submit a single PR | `phenotype-org-audits` | 30m | LOW (audit files only, no code) |
 
 **B3 is the only one needing user decision** (new crate placement affects L10 substrate policy per ADR-023). Suggested default: copy to `phenoShared/crates/pheno-context/` to align with existing `pheno-tracing`, `pheno-config`, etc.
 
@@ -99,7 +99,7 @@ The 2 ⚠ blocked pillars are infrastructure-level work.
 | Task | Pillar | What to build | Effort | Risk |
 |---|---|---|---|---|
 | **C1** | **L66 (git LFS guidance)** | Add a `docs/git-lfs.md` to root monorepo: (a) required LFS objects for monorepo, (b) `git lfs install --local` setup, (c) `git lfs fetch --all` recovery command, (d) `git lfs push origin <ref>` for stranded monorepo branches, (e) submodule LFS pitfalls. Also add `lfs = "true"` to worktree `.gitconfig`. This unblocks monorepo pushes for all 3 strands. | 3h | LOW |
-| **C2** | **L25 (Monorepo polyrepo trade-off)** | Author ADR-026 evaluating the "monorepo with 170+ submodules" architecture decision. Key questions: (a) what % of submodules are actually built? (b) what % have changed in 6 months? (c) is the dispatch cost worth the consistency benefit? (d) is "create KooshaPari/repos" the right path? Outcomes may be KEEP / DECOMPOSE / EXTRACT. | 4-6h | HIGH (governance-level) |
+| **C2** | **L25 (Monorepo polyrepo trade-off)** | Author ADR-026 evaluating the "monorepo with 170+ submodules" architecture decision. Key questions: (a) what % of submodules are actually built? (b) what % have changed in 6 months? (c) is the dispatch cost worth the consistency benefit? (d) is "create <REDACTED>/repos" the right path? Outcomes may be KEEP / DECOMPOSE / EXTRACT. | 4-6h | HIGH (governance-level) |
 
 **C1 dependency:** None (doc work). Lands first to enable B1-B3 push.
 **C2 dependency:** None (ADR work). Lands in parallel; outcome may unblock B3 or change the strand-recovery plan.
@@ -246,7 +246,7 @@ Co-Authored-By: Claude Opus 4.7 <noreply@anthropic.com>
 | Stranded branches | 4 (3 monorepo + 1 FocalPoint) | 0 | -4 |
 | WIP branches unlanded | 5 | 0 (or 1 pre-existing) | -4 |
 | ADRs | 23 | 27 (+4) | +4 |
-| Repos on KooshaPari | 4/4 active | 4/4 active + 2-3 stranded recovered | +2-3 |
+| Repos on <REDACTED> | 4/4 active | 4/4 active + 2-3 stranded recovered | +2-3 |
 
 ---
 

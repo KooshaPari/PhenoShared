@@ -3,31 +3,31 @@
 <plist version="1.0">
 <dict>
   <key>Label</key>
-  <string>com.kooshapari.resume-all-watch</string>
+  <string>com.<REDACTED>.resume-all-watch</string>
   <key>ProgramArguments</key>
   <array>
     <string>/opt/homebrew/bin/python3</string>
-    <string>/Users/kooshapari/bin/resume-watch.py</string>
+    <string>/Users/<REDACTED>/bin/resume-watch.py</string>
   </array>
   <key>RunAtLoad</key>
   <true/>
   <key>KeepAlive</key>
   <true/>
   <key>WorkingDirectory</key>
-  <string>/Users/kooshapari</string>
+  <string>/Users/<REDACTED></string>
   <key>EnvironmentVariables</key>
   <dict>
     <key>HOME</key>
-    <string>/Users/kooshapari</string>
+    <string>/Users/<REDACTED></string>
     <key>PATH</key>
-    <string>/opt/homebrew/bin:/Users/kooshapari/.cargo/bin:/Users/kooshapari/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+    <string>/opt/homebrew/bin:/Users/<REDACTED>/.cargo/bin:/Users/<REDACTED>/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
     <key>PYTHONUNBUFFERED</key>
     <string>1</string>
   </dict>
   <key>StandardOutPath</key>
-  <string>/Users/kooshapari/Library/Logs/resume-all/watch.out.log</string>
+  <string>/Users/<REDACTED>/Library/Logs/resume-all/watch.out.log</string>
   <key>StandardErrorPath</key>
-  <string>/Users/kooshapari/Library/Logs/resume-all/watch.err.log</string>
+  <string>/Users/<REDACTED>/Library/Logs/resume-all/watch.err.log</string>
   <key>ProcessType</key>
   <string>Background</string>
 </dict>

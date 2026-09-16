@@ -2,7 +2,7 @@
 
 **Date:** 2026-06-17  
 **Disposition step:** HexaKit DISPOSITION #3 — Wave E absorption stub  
-**Canonical repo:** https://github.com/KooshaPari/phenoShared
+**Canonical repo:** https://github.com/<REDACTED>/phenoShared
 
 ## What changed
 

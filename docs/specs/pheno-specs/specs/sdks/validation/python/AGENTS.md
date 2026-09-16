@@ -4,7 +4,7 @@
 
 - **Name**: phenotype-validation-python
 - **Description**: Python implementation of Phenotype validation framework
-- **Location**: `/Users/kooshapari/CodeProjects/Phenotype/repos/phenotype-validation-python`
+- **Location**: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/phenotype-validation-python`
 - **Language Stack**: Python
 - **Published**: Internal (Phenotype ecosystem)
 
@@ -12,7 +12,7 @@
 
 ```bash
 # Navigate to project
-cd /Users/kooshapari/CodeProjects/Phenotype/repos/phenotype-validation-python
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos/phenotype-validation-python
 
 # When implemented:
 pip install -e ".[dev]"

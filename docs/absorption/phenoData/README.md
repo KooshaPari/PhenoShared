@@ -2,7 +2,7 @@
 
 | Property | Value |
 |----------|-------|
-| Source | `KooshaPari/phenoData` |
+| Source | `<REDACTED>/phenoData` |
 | Target | `pheno/crates/pheno-data-*` (5 crates) |
 | Branch | `absorb/pheno-data-2026-07-17` |
 | Status | absorbed (2026-07-17) |
@@ -10,7 +10,7 @@
 
 ## What was absorbed
 
-The full 5-crate workspace contents of `KooshaPari/phenoData`:
+The full 5-crate workspace contents of `<REDACTED>/phenoData`:
 
 | Source crate | Target crate | Notes |
 |---|---|---|
@@ -53,7 +53,7 @@ Total: 16 files added, ~1,174 lines.
 | Source `cargo check` (original repo) | ✅ — passed through `Checking pg-bridge` |
 | Pheno workspace `cargo check` (deferred) | 🟡 Heavy deps (surrealdb + kv-rocksdb, tokio-postgres-rustls) cause >5min build; deferred to CI |
 
-The historical archival statement is stale: `KooshaPari/phenoData` currently
+The historical archival statement is stale: `<REDACTED>/phenoData` currently
 reports `archived=false` and has active maintenance refs. See
 [`ACTIVE_SOURCE_REVALIDATION_20260807.md`](ACTIVE_SOURCE_REVALIDATION_20260807.md)
 for exact current refs and the unresolved target decision. This evidence update

@@ -12,7 +12,7 @@ This guide covers everything needed to build, test, and extend `pheno-cli`.
 
 ```bash
 # Clone the repository
-git clone https://github.com/KooshaPari/pheno-cli.git
+git clone https://github.com/<REDACTED>/pheno-cli.git
 cd pheno-cli/pheno-cli
 
 # Install dependencies

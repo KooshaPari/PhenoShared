@@ -1,8 +1,8 @@
 # Logify — Absorption Boundary
 
 **Status**: `ABSORBED` (2026-07-17)  
-**Source**: `github.com/KooshaPari/Logify`  
-**Target**: `github.com/KooshaPari/pheno` → `crates/logkit/`  
+**Source**: `github.com/<REDACTED>/Logify`  
+**Target**: `github.com/<REDACTED>/pheno` → `crates/logkit/`  
 **Type**: Rust crate absorption  
 
 ## Description

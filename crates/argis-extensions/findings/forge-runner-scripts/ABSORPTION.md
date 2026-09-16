@@ -1,8 +1,8 @@
 # forge-runner-scripts (absorbed 2026-06-19)
 
 **Date:** 2026-06-19
-**Source:** `KooshaPari/forge-runner-scripts` (33 files, 5,597 LOC, archived 2026-06-19)
-**Target:** `KooshaPari/phenotype-org-audits` (this directory) + `KooshaPari/phenodag` (dag_*.py Go rewrite per ADR-013)
+**Source:** `<REDACTED>/forge-runner-scripts` (33 files, 5,597 LOC, archived 2026-06-19)
+**Target:** `<REDACTED>/phenotype-org-audits` (this directory) + `<REDACTED>/phenodag` (dag_*.py Go rewrite per ADR-013)
 **L5 ID:** L5-113 (follow-up to 2026-06-18 phenodag absorption of dag_*.py)
 **Audit:** `findings/2026-06-19-L5-110-112-second-half-4-repo-absorption-audit.md`
 
@@ -26,7 +26,7 @@
 
 ## Status
 
-- Source repo `KooshaPari/forge-runner-scripts` archived 2026-06-19.
+- Source repo `<REDACTED>/forge-runner-scripts` archived 2026-06-19.
 - 31 files absorbed into this directory.
 - 2 dag_*.py files previously absorbed into phenodag (L5-113, 2026-06-18).
 - 0 last-resort exceptions.

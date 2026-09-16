@@ -15,7 +15,7 @@ flowchart TD
     S1 --> S2[2. Wait for SSH (nc :22, 90s)]
     S2 --> S3[3. Tailscale enroll<br/>POST /api/v2/.../keys]
     S3 --> S4[4. Ansible baseline<br/>iac/ansible/playbooks/oci-baseline.yml]
-    S4 --> S5[5. Cloudflare A record<br/>oci-1.kooshapari.com]
+    S4 --> S5[5. Cloudflare A record<br/>oci-1.<REDACTED>.com]
     S5 --> S6[6. Mesh-state commit<br/>compute-mesh-state.md]
     S6 --> S7[7. Notify<br/>iMessage + worklog]
     S7 --> S8[8. Drop-in hooks<br/>~/.config/phenotype/oci-acquire-hooks.d/*]
@@ -61,8 +61,8 @@ flowchart TD
 | Flag / env | Default | Purpose |
 |------------|---------|---------|
 | `--instance-file` / `OCI_INSTANCE_FILE` | `~/.cloudprovider/oci-instance.json` | input from lottery daemon |
-| `--dns-name` / `OCI_DNS_NAME` | `oci-1.kooshapari.com` | DNS A record |
-| `--cf-zone-id` / `CF_ZONE_ID` | `6c9edab581e9c7b8fdb6a83adc6878ea` | kooshapari.com zone |
+| `--dns-name` / `OCI_DNS_NAME` | `oci-1.<REDACTED>.com` | DNS A record |
+| `--cf-zone-id` / `CF_ZONE_ID` | `6c9edab581e9c7b8fdb6a83adc6878ea` | <REDACTED>.com zone |
 | `--cf-token-file` / `CF_TOKEN_FILE` | `~/.cloudflare-token` | Cloudflare API token |
 | `--repo` / `PHENOTYPE_INFRA_REPO` | `~/CodeProjects/Phenotype/repos/phenotype-infra` | target repo for mesh commit |
 | `--playbook` | `iac/ansible/playbooks/oci-baseline.yml` | ansible playbook (relative to repo) |

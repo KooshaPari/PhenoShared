@@ -4,7 +4,7 @@
 > **Scope:** Operational issues for the `substrate` Cargo workspace, the `psub-gateway` HTTP service, the `psub` CLI, and `driver-http`.
 > **Sister docs:** [`docs/operations/runbook.md`](../operations/runbook.md) · [`docs/adr/`](../adr/) · [`docs/friction-log.md`](../friction-log.md)
 
-Every entry points at a real GitHub issue, a real file/ADR in this repo, or a hypothetical "If you see X, try Y" pattern. **No issue numbers are fabricated.** To open or claim an issue: <https://github.com/KooshaPari/substrate/issues>.
+Every entry points at a real GitHub issue, a real file/ADR in this repo, or a hypothetical "If you see X, try Y" pattern. **No issue numbers are fabricated.** To open or claim an issue: <https://github.com/<REDACTED>/substrate/issues>.
 
 ---
 
@@ -79,5 +79,5 @@ PLACEHOLDER_CONTAINER_SECTION
 - [`docs/operations/runbook.md`](../operations/runbook.md) — top-level operator runbook.
 - [`docs/adr/0004-atomic-claim-lease.md`](../adr/0004-atomic-claim-lease.md) — design rationale for ISSUE-303.
 - [`docs/adr/0005-sqlite-default-store.md`](../adr/0005-sqlite-default-store.md) — design rationale for ISSUE-201.
-- GitHub issues: <https://github.com/KooshaPari/substrate/issues> — currently **#58 OPEN** (Meta: OmniRoute fork PR realignment to release/v3.8.37) and **#69 CLOSED** (build(runtime): OsString::to_string() fails on Rust 1.95).
+- GitHub issues: <https://github.com/<REDACTED>/substrate/issues> — currently **#58 OPEN** (Meta: OmniRoute fork PR realignment to release/v3.8.37) and **#69 CLOSED** (build(runtime): OsString::to_string() fails on Rust 1.95).
 - [`docs/friction-log.md`](../friction-log.md) — rolling log of operator friction.

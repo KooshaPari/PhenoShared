@@ -1,4 +1,4 @@
-# KooshaPari: role-specific atlas and qualification
+# <REDACTED>: role-specific atlas and qualification
 
 **Role:** Public portfolio and landing/publication consumer. **Class:** supporting-surface. **Repository ID:** 1349458262.
 

@@ -1,11 +1,11 @@
 # Block-C Audit — phenotype-water
 
-**Repo:** `KooshaPari/phenotype-water`
+**Repo:** `<REDACTED>/phenotype-water`
 **Branch (source):** `docs/block-c-audit-2026-06-16`
 **Date:** 2026-06-16 (original); 2026-06-18 (re-issued verdict)
 **Tracker:** `phenotype-registry#75`
 **SSOT:** `phenotype-registry/docs/rationalization/block-c-consolidation.md`
-**Long-term home:** <https://github.com/KooshaPari/phenotype-gfx> (PR #10)
+**Long-term home:** <https://github.com/<REDACTED>/phenotype-gfx> (PR #10)
 
 ---
 
@@ -16,7 +16,7 @@ strategic merge #1; `LodBase`/`WaterLod` relationship is the cleanest
 cross-package dependency in the trio and is the proof of concept for the SDK
 layout.
 
-**Re-issued verdict (2026-06-18, L5-113):** **SUPERSEDE → `KooshaPari/phenotype-gfx`
+**Re-issued verdict (2026-06-18, L5-113):** **SUPERSEDE → `<REDACTED>/phenotype-gfx`
 via PR #10 (commit `61c1617`).** The umbrella-sister layout is **replaced** by
 the **single Rust core + thin FFI edges** pattern mandated by ADR-004. The C#
 water surface (`GerstnerWaveBank` + `FluidMesh` + `WaterLod`) is **ported to
@@ -25,7 +25,7 @@ Rust** and absorbed into `phenotype-gfx/src/water/` as one Rust module. The
 (the "derive WaterLod from shared LodBase" pattern from the C# CHANGELOG is
 kept as a `trait LodBase: ...` declaration). The `UnityEngineStubs.cs` 458-LOC
 stub and the hexagonal `Ports/` mock surface are dropped during the port
-(per the yagni findings below). The source repo `KooshaPari/phenotype-water`
+(per the yagni findings below). The source repo `<REDACTED>/phenotype-water`
 is **to be archived** once PR #10 merges; no downgrade path to preserve.
 
 **What was left behind (per PR #10, dropped on source archive):**
@@ -41,7 +41,7 @@ is **to be archived** once PR #10 merges; no downgrade path to preserve.
 **References:**
 - `docs/adr/ADR-004-single-core-ffi-edges.md` — single Rust core + thin FFI edges.
 - `docs/adr/ADR-031-configra-absorb.md` — sibling "absorb, do not coexist" ADR.
-- PR: <https://github.com/KooshaPari/phenotype-gfx/pull/10>
+- PR: <https://github.com/<REDACTED>/phenotype-gfx/pull/10>
 - Commit: `61c1617` — `feat(gfx): port terrain + water C# to Rust (L5-110..111, ADR-004)`
 
 **Migration summary:** 3,145 lines absorbed (Rust water core + ports); 9 test

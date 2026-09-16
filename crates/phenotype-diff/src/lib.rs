@@ -1,6 +1,6 @@
 //! `phenotype-diff` — line-level unified diff and patch apply.
 //!
-//! Migrated from KooshaPari/Diffuse (archived skeleton, `patch` crate intent).
+//! Migrated from <REDACTED>/Diffuse (archived skeleton, `patch` crate intent).
 //!
 //! Wraps the [`similar`] crate for diffing rather than hand-rolling.
 //!

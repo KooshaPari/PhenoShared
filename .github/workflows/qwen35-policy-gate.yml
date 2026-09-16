@@ -88,7 +88,7 @@ jobs:
         run: |
           if [ ! -d "$PORTAGE_ROOT" ]; then
             git clone --depth=1 --branch fork-clean \
-              https://github.com/KooshaPari/portage.git "$PORTAGE_ROOT"
+              https://github.com/<REDACTED>/portage.git "$PORTAGE_ROOT"
           fi
           cd "$PORTAGE_ROOT"
           uv sync --all-extras --dev

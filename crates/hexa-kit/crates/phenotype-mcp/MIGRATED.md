@@ -2,7 +2,7 @@
 
 **Date:** 2026-06-17  
 **Disposition step:** HexaKit DISPOSITION #28 — Wave D absorption stub  
-**Canonical repo:** https://github.com/KooshaPari/substrate
+**Canonical repo:** https://github.com/<REDACTED>/substrate
 
 ## What changed
 
@@ -15,7 +15,7 @@
 1. Depend on `phenotype-mcp` from substrate, not HexaKit:
 
 ```toml
-phenotype-mcp = { git = "https://github.com/KooshaPari/substrate", branch = "main" }
+phenotype-mcp = { git = "https://github.com/<REDACTED>/substrate", branch = "main" }
 ```
 
 2. See DOMAIN_ROLES and disposition-index row id **28**.

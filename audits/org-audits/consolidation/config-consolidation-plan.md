@@ -11,7 +11,7 @@
 
 Of the 3 repos analyzed, **1 pair involves real duplication** (Configra/settly's `HotReloader<T>` overlaps with `pheno-runtime-config`'s `FileConfig<T>` + `ArcReloadable<T>`). The third repo, **Conft**, was already absorbed into Configra per prior ADR-031 and sits in a maintenance-only holding pattern as the TypeScript edge layer.
 
-**Canonical SSOT recommendation:** `KooshaPari/Configra` — the Rust workspace that already absorbed 8 source repos (Conft, Settly, pheno-config, phenotype-config, phenotype-config-loader, phenotype-shared-config, phenotype-config-core, pheno-config-local). It has the broadest scope, the strongest governance (ADRs 022/023/031/040), and subsumes both Conft's TS layer and pheno-runtime-config's hot-reload concern.
+**Canonical SSOT recommendation:** `<REDACTED>/Configra` — the Rust workspace that already absorbed 8 source repos (Conft, Settly, pheno-config, phenotype-config, phenotype-config-loader, phenotype-shared-config, phenotype-config-core, pheno-config-local). It has the broadest scope, the strongest governance (ADRs 022/023/031/040), and subsumes both Conft's TS layer and pheno-runtime-config's hot-reload concern.
 
 ### Key finding
 
@@ -205,7 +205,7 @@ These two are **intentionally complementary** per the Configra workspace design:
 
 ## 5. Recommended Canonical + What Migrates
 
-### Canonical: `KooshaPari/Configra`
+### Canonical: `<REDACTED>/Configra`
 
 **Why Configra:**
 1. **Already the established SSOT** — 8 prior config repos absorbed, with preservation manifests (`ABSORBED-FROM/`) and per-source migration docs (`docs/migrations/`).

@@ -427,7 +427,7 @@ Compute (Expensive):
 
 ## Appendix: File Locations
 
-All documents located in: `/Users/kooshapari/CodeProjects/Phenotype/repos/docs/reference/`
+All documents located in: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/docs/reference/`
 
 ```
 docs/reference/

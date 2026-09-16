@@ -7,7 +7,7 @@ This repository is a **Tier 2 operational spine member** in the Phenotype ecosys
 | **Spine role** | `CREATIVITY_DESIGN_UX` |
 | **Registry SSOT** | `phenotype-registry/docs/spine/phenoDesign.md` |
 | **Boundary doc** | `phenotype-registry/docs/boundary/PhenoDesign.md` |
-| **Peer repo** | `KooshaPari/asset-engine` (asset render pipeline) |
+| **Peer repo** | `<REDACTED>/asset-engine` (asset render pipeline) |
 
 ## Owns
 

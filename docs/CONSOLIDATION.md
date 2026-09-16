@@ -3,12 +3,12 @@
 ## What was removed (2026-06-08)
 
 The PhenoCompose Go tree was a 91% verbatim fork of
-[`KooshaPari/nanovms`](https://github.com/KooshaPari/nanovms) with ~256 LOC of
+[`<REDACTED>/nanovms`](https://github.com/<REDACTED>/nanovms) with ~256 LOC of
 features dropped (journalctl log streaming, nsenter exec, real landlock
 detection, metrics) and 100% of the test coverage dropped (500 LOC of
 `*_test.go`). The module was also mis-named: the Go module declared
-`github.com/kooshapari/phenocompose` but every Go file imported
-`github.com/kooshapari/nanovms/internal/...`, so the tree could not build
+`github.com/<REDACTED>/phenocompose` but every Go file imported
+`github.com/<REDACTED>/nanovms/internal/...`, so the tree could not build
 standalone.
 
 Removed in this commit:

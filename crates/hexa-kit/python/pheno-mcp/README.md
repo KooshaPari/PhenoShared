@@ -4,8 +4,8 @@
 
 | Surface | Canonical owner |
 |---------|-----------------|
-| Python MCP library | **[PhenoMCP](https://github.com/KooshaPari/PhenoMCP)** |
-| Rust MCP runtime | **[substrate](https://github.com/KooshaPari/substrate)** (`crates/phenotype-mcp`) |
+| Python MCP library | **[PhenoMCP](https://github.com/<REDACTED>/PhenoMCP)** |
+| Rust MCP runtime | **[substrate](https://github.com/<REDACTED>/substrate)** (`crates/phenotype-mcp`) |
 
 HexaKit retains this directory only as a transitional pointer during Wave F
 `python/pheno-*` disposition. Do not add or extend MCP tooling here.
@@ -14,10 +14,10 @@ HexaKit retains this directory only as a transitional pointer during Wave F
 
 ```bash
 # Python library (preferred)
-pip install git+https://github.com/KooshaPari/PhenoMCP.git
+pip install git+https://github.com/<REDACTED>/PhenoMCP.git
 
 # Or via phenotype-python-sdk mcp-kit submodule path
-pip install git+https://github.com/KooshaPari/phenotype-python-sdk.git#subdirectory=packages/mcp-kit/python/pheno-mcp
+pip install git+https://github.com/<REDACTED>/phenotype-python-sdk.git#subdirectory=packages/mcp-kit/python/pheno-mcp
 ```
 
 Rust consumers should depend on `phenotype-mcp` from the substrate workspace, not HexaKit.

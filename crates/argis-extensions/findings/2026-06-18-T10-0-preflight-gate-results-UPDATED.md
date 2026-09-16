@@ -23,4 +23,4 @@
 
 Configra is now **approved as canonical** config substrate per ADR-031. T10.1 closes.
 
-Next step: open PR on `KooshaPari/Configra:wip-2026-06-19-configra-gate-remediation` → merge.
+Next step: open PR on `<REDACTED>/Configra:wip-2026-06-19-configra-gate-remediation` → merge.

@@ -5,7 +5,7 @@ description = "Phenotype SDK for infrastructure and operations"
 readme = "README.md"
 requires-python = ">=3.9"
 authors = [
-    {name = "Phenotype Team", email = "info@kooshapari.com"}
+    {name = "Phenotype Team", email = "info@<REDACTED>.com"}
 ]
 license = {text = "MIT"}
 

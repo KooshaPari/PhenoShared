@@ -17,4 +17,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - 9 unit tests covering builder, header extraction, display, and clone/eq.
 - Workspace `Cargo.toml` with shared `thiserror` + `http` deps.
 
-[0.1.0]: https://github.com/KooshaPari/pheno-context/releases/tag/v0.1.0
+[0.1.0]: https://github.com/<REDACTED>/pheno-context/releases/tag/v0.1.0

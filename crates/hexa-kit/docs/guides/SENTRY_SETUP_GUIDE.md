@@ -32,7 +32,7 @@ Each project will generate a DSN token, configured as GitHub Secrets for CI/CD i
 
 2. **Run the automated script:**
    ```bash
-   bash /Users/kooshapari/CodeProjects/Phenotype/repos/scripts/create-sentry-projects.sh
+   bash /Users/<REDACTED>/CodeProjects/Phenotype/repos/scripts/create-sentry-projects.sh
    ```
 
 3. **Verify GitHub Secrets:**

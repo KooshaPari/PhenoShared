@@ -15,7 +15,7 @@
     "vitepress": "^1.0.0"
   },
   "dependencies": {
-    "@phenotype/design": "github:KooshaPari/phenoDesign",
+    "@phenotype/design": "github:<REDACTED>/phenoDesign",
     "vue": "^3.5.0"
   },
   "keywords": [
@@ -27,7 +27,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/KooshaPari/phenodocs.git",
+    "url": "https://github.com/<REDACTED>/phenodocs.git",
     "directory": "packages/docs"
   },
   "publishConfig": {

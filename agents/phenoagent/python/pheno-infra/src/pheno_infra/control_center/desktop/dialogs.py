@@ -143,7 +143,7 @@ if HAS_PYQT:
 
             # Tunnel domain
             self.tunnel_domain_edit = QLineEdit()
-            self.tunnel_domain_edit.setText("kooshapari.com")
+            self.tunnel_domain_edit.setText("<REDACTED>.com")
             layout.addRow("Tunnel Domain:", self.tunnel_domain_edit)
 
         def _add_checkbox_fields(self, layout: QFormLayout):

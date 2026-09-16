@@ -298,7 +298,7 @@ was shape `[1024]` while the Metal kernel reads V=248 320. This commit:
 ## 8. Links
 
 - HF model: <https://huggingface.co/Qwen/Qwen3.5-0.8B>
-- Repo: <https://github.com/kooshapari/pheno-harness>
+- Repo: <https://github.com/<REDACTED>/pheno-harness>
 - Roadmap: `docs/roadmap.md` in the parent repo
 - Phenotype platform: <https://phenotype.ai>
 

@@ -121,7 +121,7 @@ async def ensure_named_tunnel_route(port: int, logger: Logger | None = None) -> 
     if logger is None:
         logger = DefaultLogger()
 
-    domain_env = os.getenv("TUNNEL_DOMAIN", "kooshapari.com").lower()
+    domain_env = os.getenv("TUNNEL_DOMAIN", "<REDACTED>.com").lower()
     raw_srvc = (
         os.getenv("SRVC") or os.getenv("SERVICE_SLUG") or os.getenv("SERVICE_NAME") or "local"
     )
@@ -223,7 +223,7 @@ async def create_kinfra_tunnel_if_enabled(
         if not TunnelManager:
             raise ImportError("TunnelManager not found in KInfra module")
 
-        domain_env = os.getenv("TUNNEL_DOMAIN", "kooshapari.com")
+        domain_env = os.getenv("TUNNEL_DOMAIN", "<REDACTED>.com")
         srvc = (
             os.getenv("SRVC") or os.getenv("SERVICE_SLUG") or os.getenv("SERVICE_NAME") or "local"
         )

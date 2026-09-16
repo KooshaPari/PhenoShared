@@ -349,7 +349,7 @@ validator.validate("active")?;
 
 ```bash
 # Clone and setup
-cd /Users/kooshapari/CodeProjects/Phenotype/repos
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos
 
 # Phase 1: Create traits
 mkdir -p crates/phenotype-validation/src/traits

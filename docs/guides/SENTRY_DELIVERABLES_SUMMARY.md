@@ -12,7 +12,7 @@ Complete list of documentation created for manual Sentry setup and GitHub secret
 ## Files Created
 
 ### 1. SENTRY_SETUP_README.md
-**Path:** `/Users/kooshapari/CodeProjects/Phenotype/repos/docs/guides/SENTRY_SETUP_README.md`
+**Path:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos/docs/guides/SENTRY_SETUP_README.md`
 
 **Purpose:** High-level overview and quick start guide
 
@@ -32,7 +32,7 @@ Complete list of documentation created for manual Sentry setup and GitHub secret
 ---
 
 ### 2. SENTRY_MANUAL_SETUP_GUIDE.md
-**Path:** `/Users/kooshapari/CodeProjects/Phenotype/repos/docs/guides/SENTRY_MANUAL_SETUP_GUIDE.md`
+**Path:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos/docs/guides/SENTRY_MANUAL_SETUP_GUIDE.md`
 
 **Purpose:** Complete step-by-step guide for creating 3 Sentry projects
 
@@ -64,7 +64,7 @@ Complete list of documentation created for manual Sentry setup and GitHub secret
 ---
 
 ### 3. GITHUB_SECRETS_SETUP_GUIDE.md
-**Path:** `/Users/kooshapari/CodeProjects/Phenotype/repos/docs/guides/GITHUB_SECRETS_SETUP_GUIDE.md`
+**Path:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos/docs/guides/GITHUB_SECRETS_SETUP_GUIDE.md`
 
 **Purpose:** Step-by-step guide for configuring GitHub organization secrets
 
@@ -94,7 +94,7 @@ Complete list of documentation created for manual Sentry setup and GitHub secret
 ---
 
 ### 4. SENTRY_PROJECTS_TEMPLATE.md
-**Path:** `/Users/kooshapari/CodeProjects/Phenotype/repos/docs/guides/SENTRY_PROJECTS_TEMPLATE.md`
+**Path:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos/docs/guides/SENTRY_PROJECTS_TEMPLATE.md`
 
 **Purpose:** Tracking template for recording Sentry project details
 
@@ -119,7 +119,7 @@ Complete list of documentation created for manual Sentry setup and GitHub secret
 ---
 
 ### 5. SENTRY_SETUP_READY_CHECKLIST.md
-**Path:** `/Users/kooshapari/CodeProjects/Phenotype/repos/docs/reference/SENTRY_SETUP_READY_CHECKLIST.md`
+**Path:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos/docs/reference/SENTRY_SETUP_READY_CHECKLIST.md`
 
 **Purpose:** Final verification checklist before SDK integration
 
@@ -149,7 +149,7 @@ Complete list of documentation created for manual Sentry setup and GitHub secret
 ---
 
 ### 6. SENTRY_QUICK_REFERENCE.md
-**Path:** `/Users/kooshapari/CodeProjects/Phenotype/repos/docs/reference/SENTRY_QUICK_REFERENCE.md`
+**Path:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos/docs/reference/SENTRY_QUICK_REFERENCE.md`
 
 **Purpose:** Quick lookup guide for key information
 
@@ -179,7 +179,7 @@ Complete list of documentation created for manual Sentry setup and GitHub secret
 ---
 
 ### 7. SENTRY_SETUP_INDEX.md
-**Path:** `/Users/kooshapari/CodeProjects/Phenotype/repos/docs/guides/SENTRY_SETUP_INDEX.md`
+**Path:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos/docs/guides/SENTRY_SETUP_INDEX.md`
 
 **Purpose:** Complete documentation index and navigation guide
 
@@ -388,7 +388,7 @@ These documents should be reviewed when:
 - Feedback suggests improvements
 - New versions of tools are released
 
-**Location:** `/Users/kooshapari/CodeProjects/Phenotype/repos/docs/guides/`
+**Location:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos/docs/guides/`
 
 ---
 

@@ -3,9 +3,9 @@
 **Date:** 2026-06-19
 **ADR:** [ADR-040](../../../phenotype-org-audits/audits/2026-06-18_ADR-040-deletion-recipe.md) (5-step deletion recipe)
 **Pattern reference:** [L5-112 predict-dry](../../../phenotype-org-audits/audits/2026-06-18_ADR-040-deletion-recipe.md), [L5-112 drift-detector](../../2026-06-19-L5-112-drift-detector-absorption.md), [L5-112 framework-lint](../../2026-06-19-L5-112-framework-lint-absorption.md)
-**Source repo:** `KooshaPari/pheno-llms-txt`
-**Target repo:** `KooshaPari/phenotype-py-extras` → `src/phenotype_py_extras/llms_txt/` (Python package absorption)
-**PR:** https://github.com/KooshaPari/phenotype-py-extras/pull/6
+**Source repo:** `<REDACTED>/pheno-llms-txt`
+**Target repo:** `<REDACTED>/phenotype-py-extras` → `src/phenotype_py_extras/llms_txt/` (Python package absorption)
+**PR:** https://github.com/<REDACTED>/phenotype-py-extras/pull/6
 
 ---
 
@@ -19,7 +19,7 @@
 
 ## 2. SOURCE_INVENTORY
 
-**Source repo:** `KooshaPari/pheno-llms-txt` (cloned at `/Users/kooshapari/CodeProjects/Phenotype/repos/pheno-llms-txt/`)
+**Source repo:** `<REDACTED>/pheno-llms-txt` (cloned at `/Users/<REDACTED>/CodeProjects/Phenotype/repos/pheno-llms-txt/`)
 **Default branch:** `main`
 **Local working branch seen during audit:** `chore/v8-batch-9B-meta-bundle` (HEAD = `6077ef8`, not the absorption source branch — `feat/absorb-pheno-llms-txt-2026-06-18` is on target side)
 **Commits (10 total on origin/main + branches):**
@@ -30,7 +30,7 @@
 | `b0e5ef4` | wip/stash-w5-3-vibecoding-adoption-2026-06-17 | wip: restore stash w5-3-vibecoding-adoption [auto] |
 | `5a7f892` | main | feat(llms-txt): add init_llms scaffold-kit entrypoint (V6 PR-3) |
 | `e534181` | main | chore: adopt pheno-vibecoding-guard pre-commit hook (V11 §70.3 L16 AX acceptance) |
-| `ae0e774` | main | chore(governance): add CODEOWNERS with @kooshapari as default owner |
+| `ae0e774` | main | chore(governance): add CODEOWNERS with @<REDACTED> as default owner |
 | `ac95852` | main | chore(governance): add CODE_OF_CONDUCT.md,CONTRIBUTING.md,SECURITY.md,LICENSE |
 | `b4686da` | main | Add ISSUE_TEMPLATE: bug, feature, security, question + chooser config |
 | `b9a61c5` | main | ci: add comprehensive PULL_REQUEST_TEMPLATE.md |
@@ -183,7 +183,7 @@ None. Every meaningful source item has a target mapping with file+commit evidenc
 
 ### 8.1 Absorption target mapping
 
-- **Owner of surviving responsibility:** `KooshaPari/phenotype-py-extras` (path: `src/phenotype_py_extras/llms_txt/`).
+- **Owner of surviving responsibility:** `<REDACTED>/phenotype-py-extras` (path: `src/phenotype_py_extras/llms_txt/`).
 - **Why target is better than source:** (a) **PyPI-distributable** — `phenotype-py-extras` is a `hatchling`-built, installable package; consolidating `pheno-llms-txt` inside it gives every Python repo in the fleet automatic llms.txt generation on `pip install phenotype-py-extras` (no separate install step). (b) **CI inheritance** — target's existing pytest+coverage workflow recursively covers `tests/llms_txt/`. (c) **Versioning alignment** — single release cadence (phenotype-py-extras v0.1.0 released 2026-06-14) instead of two parallel release streams. (d) **Spec consolidation** — `docs/llms-txt-spec.md` lives next to other phenotype-py-extras docs (`docs/slsa.md`, `docs/intent/*`, `docs/boundary/*`), making discoverability easier.
 - **Intentionally retired:** (a) `deny.toml` (vestigial); (b) `pyproject.toml` (single-package absorption); (c) separate `LICENSE-{MIT,APACHE}` (target LICENSE is authoritative, with the Apache option silently dropped — see §6); (d) separate governance files (`CODE_OF_CONDUCT`, `CONTRIBUTING`, `SECURITY`, `ISSUE_TEMPLATE`, `PULL_REQUEST_TEMPLATE`, `WORKLOG.md`, `CHANGELOG.md`, `AGENTS.md`) — all `INTENTIONALLY_DEPRECATED` per repo-colocation rules.
 - **Branch class decision:** `pheno-llms-txt` was a "one-file or one-feature package" without external users (the fleet uses llms.txt informally; no published pip version existed). It does not meet `phenotype-*-lib` durability criteria, and the functional content is fully captured in `phenotype-py-extras/llms_txt/`. Archive + no new release is the right disposition.
@@ -210,15 +210,15 @@ None.
 
 **`DELETE_AFTER_PATCHES`**. Steps completed / to be completed:
 
-1. ✅ Source content absorbed into `phenotype-py-extras` (commit `c89580e`, PR #6 OPEN at <https://github.com/KooshaPari/phenotype-py-extras/pull/6>, 545 LOC added across 10 files).
-2. ⏭ Archive source repo via `gh api -X PATCH repos/KooshaPari/pheno-llms-txt -f archived=true` (this turn).
+1. ✅ Source content absorbed into `phenotype-py-extras` (commit `c89580e`, PR #6 OPEN at <https://github.com/<REDACTED>/phenotype-py-extras/pull/6>, 545 LOC added across 10 files).
+2. ⏭ Archive source repo via `gh api -X PATCH repos/<REDACTED>/pheno-llms-txt -f archived=true` (this turn).
 3. ⏭ Soft-delete via GitHub UI (Settings → Danger Zone → Delete this repository), exposing the manual URL for the user.
 4. ⏭ Optional: append `Added` line to target `CHANGELOG.md` under `[Unreleased]` once a release PR is in flight (not part of this turn's PR to avoid force-push on a merged commit).
 
 ## 9. RECOMMENDED_NEXT_ACTIONS
 
-1. **Archive `pheno-llms-txt`** via `gh api -X PATCH repos/KooshaPari/pheno-llms-txt -f archived=true` (this turn, step 2 of recipe).
-2. **Manual delete URL** for user: <https://github.com/KooshaPari/pheno-llms-txt/settings#dangerZone> (90-day window: 2026-06-19 → 2026-09-17).
+1. **Archive `pheno-llms-txt`** via `gh api -X PATCH repos/<REDACTED>/pheno-llms-txt -f archived=true` (this turn, step 2 of recipe).
+2. **Manual delete URL** for user: <https://github.com/<REDACTED>/pheno-llms-txt/settings#dangerZone> (90-day window: 2026-06-19 → 2026-09-17).
 3. **No AGENTS.md change needed** at monorepo root — `pheno-llms-txt/` is not in the listed active focus repos.
 4. **Optional follow-up**: append `### Added` line to `phenotype-py-extras/CHANGELOG.md` `[Unreleased]`:
    ```
@@ -239,16 +239,16 @@ None.
 
 | Step | Status | Evidence |
 |---|---|---|
-| 1. Source content absorbed | ✅ DONE | PR #6 merged into `KooshaPari/phenotype-py-extras:main` |
-| 2. Source repo archived | ⏭ N/A | Source repo `KooshaPari/pheno-llms-txt` returns HTTP 404 from `gh api repos/KooshaPari/pheno-llms-txt` as of 2026-06-20 — already deleted from GitHub ahead of the audit's archive step. The 90-day GitHub retention tombstone still applies. No action possible via the standard `gh api -X PATCH /repos/{owner}/{repo} -f archived=true` endpoint (HTTP 404). |
-| 3. Manual delete | ⏭ ALREADY_DELETED | User-deleted pre-emptively (per HTTP 404 evidence). User-facing URL no longer reachable: <https://github.com/KooshaPari/pheno-llms-txt/settings#dangerZone> |
+| 1. Source content absorbed | ✅ DONE | PR #6 merged into `<REDACTED>/phenotype-py-extras:main` |
+| 2. Source repo archived | ⏭ N/A | Source repo `<REDACTED>/pheno-llms-txt` returns HTTP 404 from `gh api repos/<REDACTED>/pheno-llms-txt` as of 2026-06-20 — already deleted from GitHub ahead of the audit's archive step. The 90-day GitHub retention tombstone still applies. No action possible via the standard `gh api -X PATCH /repos/{owner}/{repo} -f archived=true` endpoint (HTTP 404). |
+| 3. Manual delete | ⏭ ALREADY_DELETED | User-deleted pre-emptively (per HTTP 404 evidence). User-facing URL no longer reachable: <https://github.com/<REDACTED>/pheno-llms-txt/settings#dangerZone> |
 | 4. CHANGELOG follow-up | ⏭ DEFERRED | Append `### Added` line to `phenotype-py-extras/CHANGELOG.md` `[Unreleased]` on next release PR (release-time task, not closure-time task). |
 
 ### PR #6 merge evidence (2026-06-20 04:37:59 UTC)
 
 | Field | Value |
 |---|---|
-| PR | <https://github.com/KooshaPari/phenotype-py-extras/pull/6> |
+| PR | <https://github.com/<REDACTED>/phenotype-py-extras/pull/6> |
 | State | **MERGED** |
 | Title | `feat(llms-txt): absorb pheno-llms-txt into phenotype-py-extras` |
 | Head | `feat/absorb-pheno-llms-txt-2026-06-18` |
@@ -262,7 +262,7 @@ None.
 ### Archive step outcome
 
 ```
-$ gh api repos/KooshaPari/pheno-llms-txt
+$ gh api repos/<REDACTED>/pheno-llms-txt
 {
   "message": "Not Found",
   "documentation_url": "https://docs.github.com/rest/repos/repos#get-a-repository",
@@ -270,7 +270,7 @@ $ gh api repos/KooshaPari/pheno-llms-txt
 }
 ```
 
-The source repo `KooshaPari/pheno-llms-txt` was user-deleted between the audit (2026-06-19) and this closure turn (2026-06-20). The audit-recommended archive action (`gh api -X PATCH repos/KooshaPari/pheno-llms-txt -f archived=true`) is moot because the repo no longer exists at the GitHub API surface. All absorbed content survives in `KooshaPari/phenotype-py-extras:main` @ `a726a4e063d59f049fa9723b171a7219aa4bd7c5`.
+The source repo `<REDACTED>/pheno-llms-txt` was user-deleted between the audit (2026-06-19) and this closure turn (2026-06-20). The audit-recommended archive action (`gh api -X PATCH repos/<REDACTED>/pheno-llms-txt -f archived=true`) is moot because the repo no longer exists at the GitHub API surface. All absorbed content survives in `<REDACTED>/phenotype-py-extras:main` @ `a726a4e063d59f049fa9723b171a7219aa4bd7c5`.
 
 ### Closure verdict
 
@@ -280,7 +280,7 @@ The source repo `KooshaPari/pheno-llms-txt` was user-deleted between the audit (
 
 ## REFERENCES
 
-- **PR #6**: <https://github.com/KooshaPari/phenotype-py-extras/pull/6>
+- **PR #6**: <https://github.com/<REDACTED>/phenotype-py-extras/pull/6>
 - **Target branch**: `feat/absorb-pheno-llms-txt-2026-06-18` @ `c89580e5cb6bcc4c7afe65a57acf68d062388b7a`
 - **Absorption recipe (ADR-040)**: `phenotype-org-audits/audits/2026-06-18_ADR-040-deletion-recipe.md` (5-step deletion recipe)
 - **L5-112 predict-dry template**: `findings/2026-06-19-L5-112-predict-dry-absorption.md`
@@ -290,4 +290,4 @@ The source repo `KooshaPari/pheno-llms-txt` was user-deleted between the audit (
 - **ADR-022 (config consolidation)**: 2-crate canonical split
 - **ADR-032 (pheno-worklog-schema is a primitive lib, NOT a re-implementation)**: `docs/adr/2026-06-17/ADR-032-pheno-worklog-schema-decision.md`
 - **71-pillar ADR-024**: `findings/71-pillar-2026-06-17-schema.md`
-- **AGENTS.md (governance)**: `/Users/kooshapari/CodeProjects/Phenotype/repos/AGENTS.md`
+- **AGENTS.md (governance)**: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/AGENTS.md`

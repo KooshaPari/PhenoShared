@@ -294,7 +294,7 @@ export function SettingsView() {
               size="sm"
               onClick={() =>
                 window.open(
-                  'https://github.com/KooshaPari/AgilePlus',
+                  'https://github.com/<REDACTED>/AgilePlus',
                   '_blank',
                   'noopener',
                 )

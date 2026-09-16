@@ -63,10 +63,10 @@ Establish three-layer doctrine (governance / platform / engine) and unblocks lan
 | G17 | bifrost | bifrost | **done** — #7 merged; tag `phenotype/vendor-2026-06`; 1 remote (`main`) |
 | G18 | omlx | phenotype-registry ADR-ECO-016 | **done** — DROP; stay archived; engine jundot/omlx |
 | G19 | stubs | phenotype-infra + registry | **done** — phenotype-infra#79 merged; hub ABSORB + monitoring stub RETIRE |
-| H14 | phenoShared | phenotype-config + phenotype-types + HexaKit | **done** — [phenotype-config#2](https://github.com/KooshaPari/phenotype-config/pull/2), [phenotype-types#1](https://github.com/KooshaPari/phenotype-types/pull/1), [HexaKit#267](https://github.com/KooshaPari/HexaKit/pull/267) merged 2026-06-18 |
-| W18b | pheno fleet | all chokepoint consumers | **done** — fleet tail verified-clean 2026-06-19; `KooshaPari/pheno` archived |
-| SR-1 | surface-reduction-1 | phenotype-registry | **done** — [#170](https://github.com/KooshaPari/phenotype-registry/pull/170); Planify, portage, phenotype-ops-mcp, McpKit |
-| SR-2 | surface-reduction-2 | phenotype-registry | **done** — [#172](https://github.com/KooshaPari/phenotype-registry/pull/172) ledger + [#194](https://github.com/KooshaPari/phenotype-registry/pull/194) monorepo-state DROP |
+| H14 | phenoShared | phenotype-config + phenotype-types + HexaKit | **done** — [phenotype-config#2](https://github.com/<REDACTED>/phenotype-config/pull/2), [phenotype-types#1](https://github.com/<REDACTED>/phenotype-types/pull/1), [HexaKit#267](https://github.com/<REDACTED>/HexaKit/pull/267) merged 2026-06-18 |
+| W18b | pheno fleet | all chokepoint consumers | **done** — fleet tail verified-clean 2026-06-19; `<REDACTED>/pheno` archived |
+| SR-1 | surface-reduction-1 | phenotype-registry | **done** — [#170](https://github.com/<REDACTED>/phenotype-registry/pull/170); Planify, portage, phenotype-ops-mcp, McpKit |
+| SR-2 | surface-reduction-2 | phenotype-registry | **done** — [#172](https://github.com/<REDACTED>/phenotype-registry/pull/172) ledger + [#194](https://github.com/<REDACTED>/phenotype-registry/pull/194) monorepo-state DROP |
 
 ## PR tracker
 
@@ -78,21 +78,21 @@ Establish three-layer doctrine (governance / platform / engine) and unblocks lan
 | G16 vibeproxy redirect | vibeproxy | merged (#14) |
 | G16 go-sdk pin | phenotype-go-sdk | merged (#17) |
 | Gateway UPSTREAM SSOT | phenotype-gateway | merged (#4) — OmniRoute canonical peer |
-| H14 config-loader | phenotype-config | merged ([#2](https://github.com/KooshaPari/phenotype-config/pull/2)) |
-| H14 phenotype-errors | phenotype-types | merged ([#1](https://github.com/KooshaPari/phenotype-types/pull/1)) |
-| H14 HexaKit pin repoint | HexaKit | merged ([#267](https://github.com/KooshaPari/HexaKit/pull/267)) |
-| W18b AgilePlus repoint | AgilePlus | merged ([#763](https://github.com/KooshaPari/AgilePlus/pull/763)) |
-| W18b PhenoPlugins repoint | PhenoPlugins | merged ([#104](https://github.com/KooshaPari/PhenoPlugins/pull/104)) |
-| W18b Tracera fleet gate | Tracera | merged ([#632](https://github.com/KooshaPari/Tracera/pull/632)) |
-| W18b Agentora stub repoint | Agentora | merged ([#90](https://github.com/KooshaPari/Agentora/pull/90)) — phenotype-errors/error-macros → phenotype-types; phenotype-config-loader → phenotype-config |
+| H14 config-loader | phenotype-config | merged ([#2](https://github.com/<REDACTED>/phenotype-config/pull/2)) |
+| H14 phenotype-errors | phenotype-types | merged ([#1](https://github.com/<REDACTED>/phenotype-types/pull/1)) |
+| H14 HexaKit pin repoint | HexaKit | merged ([#267](https://github.com/<REDACTED>/HexaKit/pull/267)) |
+| W18b AgilePlus repoint | AgilePlus | merged ([#763](https://github.com/<REDACTED>/AgilePlus/pull/763)) |
+| W18b PhenoPlugins repoint | PhenoPlugins | merged ([#104](https://github.com/<REDACTED>/PhenoPlugins/pull/104)) |
+| W18b Tracera fleet gate | Tracera | merged ([#632](https://github.com/<REDACTED>/Tracera/pull/632)) |
+| W18b Agentora stub repoint | Agentora | merged ([#90](https://github.com/<REDACTED>/Agentora/pull/90)) — phenotype-errors/error-macros → phenotype-types; phenotype-config-loader → phenotype-config |
 | G17 bifrost vendor pin | bifrost | merged (#7); tag `phenotype/vendor-2026-06`; 1 remote |
 | G18 omlx ADR | phenotype-registry | merged — [ADR-ECO-016](../adrs/ADR-ECO-016-omlx-inference-split.md) DROP |
-| G19 stub absorption | phenotype-infra | merged ([#79](https://github.com/KooshaPari/phenotype-infra/pull/79)) |
-| W18b TestingKit health repoint | TestingKit | merged ([#8](https://github.com/KooshaPari/TestingKit/pull/8)) — phenotype-health → PhenoObservability |
-| Surface reduction batch 2 | phenotype-registry | merged [#197](https://github.com/KooshaPari/phenotype-registry/pull/197) |
-| Desktop Electrobun spike | OmniRoute | merged ([#74](https://github.com/KooshaPari/OmniRoute/pull/74)) — ADR-ECO-015 |
-| agentapi root SPEC | agentapi-plusplus | merged ([#536](https://github.com/KooshaPari/agentapi-plusplus/pull/536)) — G15 follow-up |
-| pheno archive gate | KooshaPari/pheno | **archived** 2026-06-19 — W18b org manifest scan pass |
+| G19 stub absorption | phenotype-infra | merged ([#79](https://github.com/<REDACTED>/phenotype-infra/pull/79)) |
+| W18b TestingKit health repoint | TestingKit | merged ([#8](https://github.com/<REDACTED>/TestingKit/pull/8)) — phenotype-health → PhenoObservability |
+| Surface reduction batch 2 | phenotype-registry | merged [#197](https://github.com/<REDACTED>/phenotype-registry/pull/197) |
+| Desktop Electrobun spike | OmniRoute | merged ([#74](https://github.com/<REDACTED>/OmniRoute/pull/74)) — ADR-ECO-015 |
+| agentapi root SPEC | agentapi-plusplus | merged ([#536](https://github.com/<REDACTED>/agentapi-plusplus/pull/536)) — G15 follow-up |
+| pheno archive gate | <REDACTED>/pheno | **archived** 2026-06-19 — W18b org manifest scan pass |
 
 ## G15–G17 closeout (2026-06-18)
 
@@ -103,7 +103,7 @@ Gateway fork lanes **G15–G17 complete** (other agent). Registry disposition-in
 | Repo | Verdict | Blocker |
 |------|---------|---------|
 | agentapi | KEEP_ARCHIVED | Tombstone only |
-| agentapi-plusplus | **AFFIRM** | G15 done (#535); root SPEC [#536](https://github.com/KooshaPari/agentapi-plusplus/pull/536) merged |
+| agentapi-plusplus | **AFFIRM** | G15 done (#535); root SPEC [#536](https://github.com/<REDACTED>/agentapi-plusplus/pull/536) merged |
 | cliproxyapi-plusplus | **AFFIRM** | G16 done (#1026); go-sdk pin merged |
 | bifrost | KEEP vendor fork | No merge into OmniRoute |
 | phenotype-omlx | **DROP** — stay archived | ADR-ECO-016; engine jundot/omlx; FINISH = staffing gate |
@@ -114,18 +114,18 @@ Gateway fork lanes **G15–G17 complete** (other agent). Registry disposition-in
 1. ~~**G18**~~ — done (ADR-ECO-016 DROP; phenotype-omlx stay archived; engine jundot/omlx)
 2. ~~**G19**~~ — done (phenotype-hub → phenotype-infra; vibeproxy-monitoring-unified retired)
 3. ~~**H14**~~ — done (phenotype-config#2 + phenotype-types#1 + HexaKit#267 merged; terminal-owner git pins on HexaKit main)
-4. ~~**SR-2**~~ — done ([#172](https://github.com/KooshaPari/phenotype-registry/pull/172) ledger + [#194](https://github.com/KooshaPari/phenotype-registry/pull/194) monorepo-state DROP)
-5. ~~**Desktop**~~ — done ([OmniRoute#74](https://github.com/KooshaPari/OmniRoute/pull/74) merged)
-6. ~~**W18b**~~ — done (fleet tail verified-clean; `KooshaPari/pheno` archived 2026-06-19)
-7. ~~**agentapi-spec**~~ — done ([agentapi-plusplus#536](https://github.com/KooshaPari/agentapi-plusplus/pull/536) merged)
+4. ~~**SR-2**~~ — done ([#172](https://github.com/<REDACTED>/phenotype-registry/pull/172) ledger + [#194](https://github.com/<REDACTED>/phenotype-registry/pull/194) monorepo-state DROP)
+5. ~~**Desktop**~~ — done ([OmniRoute#74](https://github.com/<REDACTED>/OmniRoute/pull/74) merged)
+6. ~~**W18b**~~ — done (fleet tail verified-clean; `<REDACTED>/pheno` archived 2026-06-19)
+7. ~~**agentapi-spec**~~ — done ([agentapi-plusplus#536](https://github.com/<REDACTED>/agentapi-plusplus/pull/536) merged)
 8. ~~**Metron X-02**~~ — done (repo 404 tombstone; `metrickit` canonical in PhenoObservability #157; HexaKit #244/#251)
-9. ~~**BytePort ST-01**~~ — done (UNCLOSABLE [#201](https://github.com/KooshaPari/BytePort/pull/201); archive-gate ST-01)
-10. ~~**HexaKit CI**~~ — done ([#274](https://github.com/KooshaPari/HexaKit/pull/274) + [#275](https://github.com/KooshaPari/HexaKit/pull/275))
+9. ~~**BytePort ST-01**~~ — done (UNCLOSABLE [#201](https://github.com/<REDACTED>/BytePort/pull/201); archive-gate ST-01)
+10. ~~**HexaKit CI**~~ — done ([#274](https://github.com/<REDACTED>/HexaKit/pull/274) + [#275](https://github.com/<REDACTED>/HexaKit/pull/275))
 11. ~~**Paginary G19**~~ — done ([gw-paginary-branch-index.md](../disposition/gw-paginary-branch-index.md); RETIRE out-of-fleet)
-12. ~~**phenoShared P4 gate**~~ — done (wave 5b drain HexaKit#278; `KooshaPari/phenoShared` archived)
+12. ~~**phenoShared P4 gate**~~ — done (wave 5b drain HexaKit#278; `<REDACTED>/phenoShared` archived)
 13. ~~**AgilePlus Lane J**~~ — done (`agileplus-domain` + `agileplus-events` on AgilePlus; Agentora staging removed)
-14. ~~**Registry L7**~~ — done ([#244](https://github.com/KooshaPari/phenotype-registry/pull/244) intent/boundary + [#245](https://github.com/KooshaPari/phenotype-registry/pull/245) pheno-tracing)
-15. ~~**Phase 4 closeout**~~ — done (backlog #100; `docs:build` [#255](https://github.com/KooshaPari/phenotype-registry/pull/255))
+14. ~~**Registry L7**~~ — done ([#244](https://github.com/<REDACTED>/phenotype-registry/pull/244) intent/boundary + [#245](https://github.com/<REDACTED>/phenotype-registry/pull/245) pheno-tracing)
+15. ~~**Phase 4 closeout**~~ — done (backlog #100; `docs:build` [#255](https://github.com/<REDACTED>/phenotype-registry/pull/255))
 
 
 ## 2026-06-20 archive/delete readiness addendum
@@ -139,7 +139,7 @@ Gateway fork lanes **G15–G17 complete** (other agent). Registry disposition-in
 
 See [p5-agent-runtime-absorption-2026-06-19.md](./p5-agent-runtime-absorption-2026-06-19.md).
 
-1. ~~**P5-1**~~ — done ([Agentora#91](https://github.com/KooshaPari/Agentora/pull/91); PhenoAgent archived 2026-06-19)
+1. ~~**P5-1**~~ — done ([Agentora#91](https://github.com/<REDACTED>/Agentora/pull/91); PhenoAgent archived 2026-06-19)
 2. ~~**P5-2**~~ — done (PhenoAgent archive gate)
 3. ~~**P5-3**~~ — done (PhenoProc archive gate)
 4. **P5-4** — phenoRouterMonitor → phenoAI (deferred; repo archived)

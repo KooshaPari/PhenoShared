@@ -17,7 +17,7 @@ device: macbook
 > **Retired:** This repository was retired 2026-06-21 per
 > `findings/2026-06-21-helioscope-cancellation-rationale.md`. The
 > canonical codex fork in the Phenotype fleet is now
-> `helios-cli` (KooshaPari/helios-cli). This file is preserved as a
+> `helios-cli` (<REDACTED>/helios-cli). This file is preserved as a
 > tombstone for historical prompt/plan binding traceability.
 
 ## Intent Statement

@@ -34,7 +34,7 @@ See `docs/adr/2026-06-17/INDEX.md`.
 
 11 ADRs in this wave: ADR-024 (71-pillar framework), ADR-025 (worklog v2.1), ADR-026
 (Factory AI readiness), ADR-027 (LFS policy), ADR-028 (monorepo architecture), ADR-029
-(Dmouse92 → KooshaPari), ADR-030 (worklog v2.1 fields), **ADR-031 (Configra absorb)
+(Dmouse92 → <REDACTED>), ADR-030 (worklog v2.1 fields), **ADR-031 (Configra absorb)
 [CLOSED 2026-06-19]**, ADR-032 (pheno-worklog-schema decision), **ADR-033
 (monorepo-state deletion) [CLOSED 2026-06-19]**, **ADR-034 (monorepo-state deletion
 schedule) [CLOSED 2026-06-19]**.
@@ -71,4 +71,4 @@ See `docs/adr/2026-06-20/`. Router-rebuild wave ADRs (ADR-050/051/052) authored
 | ADR-031 | 2026-06-19 | Configra absorb executed (phenotype-config → Configra canonical) |
 | ADR-033 | 2026-06-18 | phenotype-monorepo-state user-deleted; HTTP 404 verified 2026-06-19 |
 | ADR-034 | 2026-06-19 | Deletion schedule superseded by 2026-06-18 user action |
-| ADR-036 | 2026-06-19 | pheno-capacity extracted to KooshaPari/pheno-capacity; HwLedger reclassified |
+| ADR-036 | 2026-06-19 | pheno-capacity extracted to <REDACTED>/pheno-capacity; HwLedger reclassified |

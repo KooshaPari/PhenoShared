@@ -27,7 +27,7 @@ The prior T34 file refers to "v11 closure merged" as a pre-condition. Per the cu
 
 ### A2.2 Companion finding: T35 Tokn Router Contract
 
-This session also produced `findings/2026-06-20-T35-tokn-router-contract.md` (262 lines), which drafts a `TokenRouter` trait for `KooshaPari/Tokn` (Rust). Cross-reference material for T34 §6.5:
+This session also produced `findings/2026-06-20-T35-tokn-router-contract.md` (262 lines), which drafts a `TokenRouter` trait for `<REDACTED>/Tokn` (Rust). Cross-reference material for T34 §6.5:
 
 - T35 §6: "Argis gateway... the `intelligentrouter` plugin can populate `RoutingHints.preferred_signer_kid` after the LLM-side routing decision is made" — **depends on T34.4 (intelligentrouter migration) landing first**. T34 is therefore a **pre-condition for T35.4**.
 - The decision to put the decision layer in Phenotype space (v11 §8 Option B) means T34's `intelligentrouter` migration must expose a clean interface for T35's hints — verify in T34.4 review that `intelligentrouter`'s decision data is accessible to the host process (not just inside the plugin).

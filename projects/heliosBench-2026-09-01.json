@@ -11,7 +11,7 @@
   "boundary": "benchmark-runtime",
   "stack": "python-3.12-hatchling",
   "v0": "0.1.0",
-  "gh_url": "https://github.com/KooshaPari/heliosBench",
+  "gh_url": "https://github.com/<REDACTED>/heliosBench",
   "default_branch": "main",
   "remote_default_sha_at_audit": "5f85de67",
   "wave": "J-13source-audit",

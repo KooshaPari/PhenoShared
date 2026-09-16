@@ -50,8 +50,8 @@
 
 ## 4. URLs & References
 
-- `https://github.com/KooshaPari/cliproxyapi-plusplus` — 101 open PRs snapshot
-- `https://github.com/KooshaPari/thegent` — 8 open PRs, 2 CodeRabbit failures
-- `https://github.com/KooshaPari/agentapi-plusplus` — no open PRs
-- `https://github.com/KooshaPari/cliproxyapi++` — no open PRs
-- `https://github.com/KooshaPari/phenodocs/blob/main/docs/governance/stacked-prs/05-pr-reconciliation.md` — canonical governance doc
+- `https://github.com/<REDACTED>/cliproxyapi-plusplus` — 101 open PRs snapshot
+- `https://github.com/<REDACTED>/thegent` — 8 open PRs, 2 CodeRabbit failures
+- `https://github.com/<REDACTED>/agentapi-plusplus` — no open PRs
+- `https://github.com/<REDACTED>/cliproxyapi++` — no open PRs
+- `https://github.com/<REDACTED>/phenodocs/blob/main/docs/governance/stacked-prs/05-pr-reconciliation.md` — canonical governance doc

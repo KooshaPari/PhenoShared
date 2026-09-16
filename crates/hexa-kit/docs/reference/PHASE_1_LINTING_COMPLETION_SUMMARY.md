@@ -309,7 +309,7 @@ All templates are copy-paste ready in LINTING_AND_QUALITY_SETUP.md:
 | QUALITY_GATE_QUICKSTART.md | Quick reference (TL;DR) |
 | scripts/quality-gate.sh | Universal quality gate runner |
 
-**Location**: `/Users/kooshapari/CodeProjects/Phenotype/repos/docs/reference/`
+**Location**: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/docs/reference/`
 
 ---
 

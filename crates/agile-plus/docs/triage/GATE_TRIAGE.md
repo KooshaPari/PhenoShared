@@ -6,7 +6,7 @@ Generated: 2026-06-25. Diagnosis based on workflow source + PR #805 (`gh pr chec
 
 | Gate | Blocks merge? | Root cause | Fix class | Workflow fix applied? |
 |------|---------------|------------|-----------|----------------------|
-| Autograder | Advisory* | Clones missing private repo `KooshaPari/phenoShared` before any Rust work | **(a) broken** | Yes — removed stale phenoShared checkout |
+| Autograder | Advisory* | Clones missing private repo `<REDACTED>/phenoShared` before any Rust work | **(a) broken** | Yes — removed stale phenoShared checkout |
 | Conventional Commits | Advisory* | Commitlint `subject-case` rejects Title-Case subjects (e.g. `AgilePlus`) | **(b) comply** | No — authors must use lowercase subjects |
 | gitleaks scan | Advisory* | Invalid action pin `gitleaks/gitleaks-action@1c4d3b6…` (placeholder SHA); config path `.gitleaks.toml` vs `gitleaks.toml` | **(a) broken** | Yes — pin `@v2`, fix config path |
 | governance-index | Advisory* | `kitty-specs/INDEX.md` drifts from generator on every PR even when specs unchanged | **(a) broken** | Yes — PR path filter + skip verify when index unchanged |
@@ -25,7 +25,7 @@ Generated: 2026-06-25. Diagnosis based on workflow source + PR #805 (`gh pr chec
 ### Autograder (`autograder.yml`)
 
 - **Required vs advisory:** Advisory for ruleset baseline; fails on every PR today.
-- **Why it fails:** Step `Checkout phenoShared sibling` clones `https://github.com/KooshaPari/phenoShared.git`, which returns *Repository not found* for `GITHUB_TOKEN`. Workspace `Cargo.toml` only lists member `rust` — no phenoShared path dependency.
+- **Why it fails:** Step `Checkout phenoShared sibling` clones `https://github.com/<REDACTED>/phenoShared.git`, which returns *Repository not found* for `GITHUB_TOKEN`. Workspace `Cargo.toml` only lists member `rust` — no phenoShared path dependency.
 - **Fix class:** **(a) broken** — stale clone from pre–workspace-cleanup layout.
 - **Repair:** Remove phenoShared checkout step.
 
@@ -76,14 +76,14 @@ Generated: 2026-06-25. Diagnosis based on workflow source + PR #805 (`gh pr chec
 - **Required vs advisory:** Advisory (`continue-on-error: true` on job, but still reports failure).
 - **Why it fails:** `sonar-project.properties` is empty → scanner error: missing `sonar.projectKey`, `sonar.organization`.
 - **Fix class:** **(a) broken** for config; **(c) user-gated** for `SONAR_TOKEN`.
-- **Repair:** Pass `-Dsonar.projectKey=KooshaPari_AgilePlus -Dsonar.organization=kooshapari` in workflow.
+- **Repair:** Pass `-Dsonar.projectKey=<REDACTED>_AgilePlus -Dsonar.organization=<REDACTED>` in workflow.
 
 ### SonarCloud (GitHub App check)
 
 - **Required vs advisory:** Advisory.
 - **Why it fails:** SonarCloud GitHub App + workflow need org secret `SONAR_TOKEN` and valid project binding.
 - **Fix class:** **(c) user-gated**
-- **How to pass:** Repo Settings → Secrets → `SONAR_TOKEN` from SonarCloud; confirm project `KooshaPari_AgilePlus` under org `kooshapari`.
+- **How to pass:** Repo Settings → Secrets → `SONAR_TOKEN` from SonarCloud; confirm project `<REDACTED>_AgilePlus` under org `<REDACTED>`.
 
 ### spec-first (`spec-first.yml`)
 

@@ -1,7 +1,7 @@
 # phenotype-landing-bootstrap
 
 Tier 2 org-pages bootstrap automation. Given a slug + repo, scaffolds a
-`<slug>.kooshapari.com` landing page end-to-end:
+`<slug>.<REDACTED>.com` landing page end-to-end:
 
 1. CF DNS CNAME via API
 2. Astro template scaffold (or 301 stub if `.dev` exists)
@@ -27,12 +27,12 @@ application with `--skip-topics`.
 ```bash
 cargo run -p phenotype-landing-bootstrap -- \
   --slug thegent \
-  --repo KooshaPari/thegent
+  --repo <REDACTED>/thegent
 
 # Or with explicit metadata:
 cargo run -p phenotype-landing-bootstrap -- \
   --slug hwledger \
-  --repo KooshaPari/hwLedger \
+  --repo <REDACTED>/hwLedger \
   --title hwLedger \
   --tagline "LLM capacity planner, fleet ledger, and desktop inference runtime"
 ```
@@ -40,7 +40,7 @@ cargo run -p phenotype-landing-bootstrap -- \
 ## Env
 
 - `CF_API_TOKEN` (or `--cf-token-file ~/.cloudflare-token`)
-- `CF_ZONE_ID` (default: kooshapari.com zone)
+- `CF_ZONE_ID` (default: <REDACTED>.com zone)
 - `GITHUB_TOKEN` (via `gh auth token`)
 
 ## Idempotency
@@ -51,5 +51,5 @@ Each step is a no-op if already complete. Re-running re-deploys to Vercel.
 
 If the source repo's `homepageUrl` contains `.dev`, the tool skips the full
 landing scaffold and instead emits a redirect-only `vercel.json` that 301s
-`<slug>.kooshapari.com/*` → `<canonical-.dev>/*`. Per
+`<slug>.<REDACTED>.com/*` → `<canonical-.dev>/*`. Per
 [org-pages-default-pattern.md](../../../docs/governance/org-pages-default-pattern.md).

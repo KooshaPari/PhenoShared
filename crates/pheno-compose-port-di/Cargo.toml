@@ -5,11 +5,11 @@ edition = "2021"
 license = "MIT OR Apache-2.0"
 description = "Phenotype Compose DI container — wires the four port-trait adapters (Composer, Publisher, Runtime, SecretStore) into a single `Container` value that downstream pheno-* services can hold in one place. Defaults to in-memory / no-op adapters; production callers swap in concrete backends via the builder methods."
 publish = false
-repository = "https://github.com/KooshaPari/PhenoCompose"
+repository = "https://github.com/<REDACTED>/PhenoCompose"
 documentation = "https://docs.rs/phenocompose-port-di"
 keywords = ["phenotype", "pheno-compose", "di", "container"]
 categories = ["development-tools"]
-authors = ["kooshapari"]
+authors = ["<REDACTED>"]
 
 [lib]
 path = "src/lib.rs"

@@ -4,8 +4,8 @@
 
 | Field | Value |
 |-------|-------|
-| Source repo | `KooshaPari/PhenoSpecs` |
-| Target repo | `KooshaPari/phenotype-registry` |
+| Source repo | `<REDACTED>/PhenoSpecs` |
+| Target repo | `<REDACTED>/phenotype-registry` |
 | Target path | `docs/specs/pheno-specs/` |
 | Absorbed date | 2026-07-17 |
 | Absorbed by | forge agent (batch absorption) |

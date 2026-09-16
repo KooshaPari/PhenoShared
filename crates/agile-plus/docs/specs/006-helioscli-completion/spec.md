@@ -6,7 +6,7 @@
 - **Title**: heliosCLI Multi-Runtime Agent CLI Completion
 - **Created**: 2026-03-25
 - **State**: specified
-- **Repo**: /Users/kooshapari/CodeProjects/Phenotype/repos/heliosCLI
+- **Repo**: /Users/<REDACTED>/CodeProjects/Phenotype/repos/heliosCLI
 
 ## Overview
 

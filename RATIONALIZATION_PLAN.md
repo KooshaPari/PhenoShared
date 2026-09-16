@@ -1,6 +1,6 @@
 # Phenotype Ecosystem Rationalization Plan
 
-> **SUPERSEDED (execution):** Monorepo absorption into HexaKit is **retired** per [ADR-ECO-006](docs/adrs/ADR-ECO-006.md). Authoritative: [boundary-shaping.md](docs/rationalization/boundary-shaping.md) + [HexaKit DISPOSITION](https://github.com/KooshaPari/HexaKit/blob/main/docs/boundary/DISPOSITION.md). Below is historical inventory.
+> **SUPERSEDED (execution):** Monorepo absorption into HexaKit is **retired** per [ADR-ECO-006](docs/adrs/ADR-ECO-006.md). Authoritative: [boundary-shaping.md](docs/rationalization/boundary-shaping.md) + [HexaKit DISPOSITION](https://github.com/<REDACTED>/HexaKit/blob/main/docs/boundary/DISPOSITION.md). Below is historical inventory.
 
 > Derived from ECOSYSTEM_MAP.md (2026-05-30 audit: 111 repos → aggressive target: **38 canonical repos**)
 > Bias: monorepos / synthetic-monorepo-collections over thin standalone repos.
@@ -10,7 +10,7 @@
 > Do **not** create `phenotype-rust-sdk` as a crate dump. HexaKit = **genesis** only.
 > See [LANGUAGE_PLACEMENT.md](LANGUAGE_PLACEMENT.md).
 >
-> **2026-06-18 update (post-archive, L5-114):** **phenotype-gfx is the replacement for the 4 sister repos** (phenotype-voxel, phenotype-terrain, phenotype-water, phenotype-postfx) per ADR-004 + ADR-031. The 4 source repos are **ARCHIVED + DELETED** 2026-06-18 after [phenotype-gfx#10](https://github.com/KooshaPari/phenotype-gfx/pull/10) merged (sha 5380b2bd, 311 tests pass, 18,957 lines migrated). See the [Active Consolidation](#active-consolidation-2026-06-18-phenotype-gfx-absorbs-the-4-sister-repos) section below for the migration matrix and [§ GAME / 3D](#game--3d) for the post-consolidation target shape.
+> **2026-06-18 update (post-archive, L5-114):** **phenotype-gfx is the replacement for the 4 sister repos** (phenotype-voxel, phenotype-terrain, phenotype-water, phenotype-postfx) per ADR-004 + ADR-031. The 4 source repos are **ARCHIVED + DELETED** 2026-06-18 after [phenotype-gfx#10](https://github.com/<REDACTED>/phenotype-gfx/pull/10) merged (sha 5380b2bd, 311 tests pass, 18,957 lines migrated). See the [Active Consolidation](#active-consolidation-2026-06-18-phenotype-gfx-absorbs-the-4-sister-repos) section below for the migration matrix and [§ GAME / 3D](#game--3d) for the post-consolidation target shape.
 >
 > **2026-06-17 gateway fork correction (wave 15):** Steps below that archive **OmniRoute**, **agentapi-plusplus**, **cliproxyapi-plusplus**, or **phenotype-omlx** are **STALE**. Authoritative: [ADR-ECO-007](docs/adrs/ADR-ECO-007-gateway-merge-superset.md), [wave15-execution](docs/operations/wave15-execution-2026-06-17.md), [ECOSYSTEM_MAP Cluster M](ECOSYSTEM_MAP.md). **OmniRoute** = canonical router (never archive). **agentapi++** / **cliproxy++** = platform superset merge (G15–G16). **bifrost** = vendor engine only.
 
@@ -22,7 +22,7 @@
 > retired. phenotype-gfx is now the single canonical graphics/visual substrate (Rust core
 > + Zig/Mojo hot-path ports + C#/other edges, per ADR-004 single-core-ffi-edges). The 4
 > sister repos (phenotype-voxel, phenotype-terrain, phenotype-water, phenotype-postfx) are
-> SUPERSEDED, not archived-after-extract. Absorbing PR: [phenotype-gfx#10](https://github.com/KooshaPari/phenotype-gfx/pull/10)
+> SUPERSEDED, not archived-after-extract. Absorbing PR: [phenotype-gfx#10](https://github.com/<REDACTED>/phenotype-gfx/pull/10)
 > (open as of 2026-06-18, awaiting merge). Once merged, source repos flip `fsm=awaiting-pr-merge`
 > → `fsm=archived` and the `gh repo archive` flow runs (Stream D, out of scope here).
 
@@ -30,10 +30,10 @@
 
 | Source repo | Target path in phenotype-gfx | PR | Lines migrated (approx) | Disposition pre → post |
 |-------------|------------------------------|-----|-------------------------|--------------------------|
-| `KooshaPari/phenotype-voxel` | `phenotype-gfx/crates/voxel` | [phenotype-gfx#10](https://github.com/KooshaPari/phenotype-gfx/pull/10) (merged) | voxel substrate (adaptive voxel) | AFFIRM → **SUPERSEDE → ARCHIVED** |
-| `KooshaPari/phenotype-terrain` | `phenotype-gfx/crates/unity-terrain-shim` | [phenotype-gfx#10](https://github.com/KooshaPari/phenotype-gfx/pull/10) (merged) | Unity terrain bridge | AFFIRM → **SUPERSEDE → ARCHIVED** |
-| `KooshaPari/phenotype-water` | `phenotype-gfx/crates/unity-water-shim` | [phenotype-gfx#10](https://github.com/KooshaPari/phenotype-gfx/pull/10) (merged) | Unity water bridge | AFFIRM → **SUPERSEDE → ARCHIVED** |
-| `KooshaPari/phenotype-postfx` | `phenotype-gfx/crates/unity-postfx-shim` | [phenotype-gfx#10](https://github.com/KooshaPari/phenotype-gfx/pull/10) (merged) | Unity BRP post-FX | (new entry) → **SUPERSEDE → ARCHIVED** |
+| `<REDACTED>/phenotype-voxel` | `phenotype-gfx/crates/voxel` | [phenotype-gfx#10](https://github.com/<REDACTED>/phenotype-gfx/pull/10) (merged) | voxel substrate (adaptive voxel) | AFFIRM → **SUPERSEDE → ARCHIVED** |
+| `<REDACTED>/phenotype-terrain` | `phenotype-gfx/crates/unity-terrain-shim` | [phenotype-gfx#10](https://github.com/<REDACTED>/phenotype-gfx/pull/10) (merged) | Unity terrain bridge | AFFIRM → **SUPERSEDE → ARCHIVED** |
+| `<REDACTED>/phenotype-water` | `phenotype-gfx/crates/unity-water-shim` | [phenotype-gfx#10](https://github.com/<REDACTED>/phenotype-gfx/pull/10) (merged) | Unity water bridge | AFFIRM → **SUPERSEDE → ARCHIVED** |
+| `<REDACTED>/phenotype-postfx` | `phenotype-gfx/crates/unity-postfx-shim` | [phenotype-gfx#10](https://github.com/<REDACTED>/phenotype-gfx/pull/10) (merged) | Unity BRP post-FX | (new entry) → **SUPERSEDE → ARCHIVED** |
 
 ### Policy (ADR-004 + ADR-031)
 
@@ -41,7 +41,7 @@
   paths, Mojo for compute, C#/other for engine bindings). The "sister repos under a mono
   umbrella" pattern (`phenotype-voxel` + `phenotype-terrain` + `phenotype-water` +
   `phenotype-postfx` as peers under the gfx umbrella) is retired.
-- **Source repos archived 2026-06-18.** All 4 sister repos (phenotype-voxel, phenotype-terrain, phenotype-water, phenotype-postfx) archived + deleted (delete_repo scope) 2026-06-18 after [phenotype-gfx#10](https://github.com/KooshaPari/phenotype-gfx/pull/10) merged (sha 5380b2bd). Registry rows now terminal `fsm=archived`. Stream D COMPLETE.
+- **Source repos archived 2026-06-18.** All 4 sister repos (phenotype-voxel, phenotype-terrain, phenotype-water, phenotype-postfx) archived + deleted (delete_repo scope) 2026-06-18 after [phenotype-gfx#10](https://github.com/<REDACTED>/phenotype-gfx/pull/10) merged (sha 5380b2bd). Registry rows now terminal `fsm=archived`. Stream D COMPLETE.
 - **Wave I Tier 2 row 13 (phenotype-water + phenotype-terrain "archive-after-extract") is
   REWRITTEN below** to reflect the SUPERSEDE pattern.
 
@@ -160,7 +160,7 @@
 
 ### GAME / 3D (3)
 
-> **2026-06-18 update (post-archive, L5-114):** The 4-repo layout below is **retired** per ADR-004 + ADR-031. The 4 sister repos (phenotype-voxel, phenotype-terrain, phenotype-water, phenotype-postfx) have been absorbed into `phenotype-gfx` via [PR #10](https://github.com/KooshaPari/phenotype-gfx/pull/10) (merged 2026-06-18, sha 5380b2bd, 311 tests pass, 18,957 lines migrated). Source repos **archived + deleted** 2026-06-18. phenotype-gfx uses a Rust core + Zig/Mojo ports for hot paths, with C#/other edges — single core, multiple language edges. See the [Active Consolidation](#active-consolidation-2026-06-18-phenotype-gfx-absorbs-the-4-sister-repos) section below for the migration matrix.
+> **2026-06-18 update (post-archive, L5-114):** The 4-repo layout below is **retired** per ADR-004 + ADR-031. The 4 sister repos (phenotype-voxel, phenotype-terrain, phenotype-water, phenotype-postfx) have been absorbed into `phenotype-gfx` via [PR #10](https://github.com/<REDACTED>/phenotype-gfx/pull/10) (merged 2026-06-18, sha 5380b2bd, 311 tests pass, 18,957 lines migrated). Source repos **archived + deleted** 2026-06-18. phenotype-gfx uses a Rust core + Zig/Mojo ports for hot paths, with C#/other edges — single core, multiple language edges. See the [Active Consolidation](#active-consolidation-2026-06-18-phenotype-gfx-absorbs-the-4-sister-repos) section below for the migration matrix.
 
 | Repo | Status |
 |------|--------|
@@ -388,7 +388,7 @@ Priority order: highest ROI first, dependency-safe (no step breaks a downstream 
 | 10 | **PhenoFastMCP + PhenoFastMCP-go + PhenoFastMCP-rust** | 3 upstream MCP forks vs tracked McpKit/PhenoRMCP/MCPForge | one canonical per language; extract SUPERSET.md deltas first |
 | 11 | **phenotype-otel + Profila** ↔ PhenoObservability | PO already has `tracing/` + `profiling/` dirs | fold both into PhenoObservability |
 | 12 | **agileplus-spec-harmonizer** ↔ AgilePlus | 13 KB format-bridge (Rust, 12/12 tests) | merge into AgilePlus; keep spec-kitty only if plugin actively distributed |
-| 13 | **phenotype-water + phenotype-terrain** | (supersession pattern — see [Active Consolidation](#active-consolidation-2026-06-18-phenotype-gfx-absorbs-the-4-sister-repos)) absorbed into KooshaPari/phenotype-gfx via [phenotype-gfx#10](https://github.com/KooshaPari/phenotype-gfx/pull/10) per ADR-004 + ADR-031. Disposition: SUPERSEDE (target=phenotype-gfx, fsm=archived). All 4 source repos archived + deleted 2026-06-18 (delete_repo scope). phenotype-voxel + phenotype-postfx absorbed in the same PR. |
+| 13 | **phenotype-water + phenotype-terrain** | (supersession pattern — see [Active Consolidation](#active-consolidation-2026-06-18-phenotype-gfx-absorbs-the-4-sister-repos)) absorbed into <REDACTED>/phenotype-gfx via [phenotype-gfx#10](https://github.com/<REDACTED>/phenotype-gfx/pull/10) per ADR-004 + ADR-031. Disposition: SUPERSEDE (target=phenotype-gfx, fsm=archived). All 4 source repos archived + deleted 2026-06-18 (delete_repo scope). phenotype-voxel + phenotype-postfx absorbed in the same PR. |
 | 14 | **Httpora + Quillr** | half-baked HTTP repos with self-acknowledged naming drift (Quillr README: _"repo 'Quillr'/README 'quill'…to reconcile"_) | reconcile identity/name first |
 
 ### Tier 3 — lower confidence (worth a look)
@@ -397,12 +397,12 @@ Priority order: highest ROI first, dependency-safe (no step breaks a downstream 
 |---|------|------|--------|
 | 15 | **phenotype-monorepo-state** | 22 KB governance snapshots (no README) | fold into phenotype-registry |
 | 16 | **pheno-context** | 6 KB crate, no README | fold into phenoShared/pheno |
-| 17 | **TripleM** | **156 MB, 2-yr stale (2024-08), no README, `GET /repos/KooshaPari/TripleM` returns 404 even with auth — anomaly** | investigate via clone; if empty/corrupt/abandoned, delete |
+| 17 | **TripleM** | **156 MB, 2-yr stale (2024-08), no README, `GET /repos/<REDACTED>/TripleM` returns 404 even with auth — anomaly** | investigate via clone; if empty/corrupt/abandoned, delete |
 | 18 | **Zerokit** | "Restored: Zerokit" scaffold, no `src/` | confirm intent; archive if not built out |
 
 ### Anomalies / hygiene flags (separate concerns, noted)
 
-- **TripleM 404 anomaly** — listed in `/users/KooshaPari/repos` but root GET 404s
+- **TripleM 404 anomaly** — listed in `/users/<REDACTED>/repos` but root GET 404s
   with auth. Could be a renamed/deleted/private-visibility quirk or corruption.
   Worth a direct investigation before any registry entry is written.
 - **Secrets hygiene (out of scope here, flag for security pass):** `phenokits-commons`

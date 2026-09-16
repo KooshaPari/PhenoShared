@@ -6,11 +6,11 @@
 
 ---
 
-## Receipt: 17 repos confirmed deleted (HTTP 404 via `gh api repos/KooshaPari/<name>`)
+## Receipt: 17 repos confirmed deleted (HTTP 404 via `gh api repos/<REDACTED>/<name>`)
 
 | # | Repo | Reason | Verification |
 |---|---|---|---|
-| 1 | `.dot-prefix-test-x` | dot-prefix test, expired | `gh api repos/KooshaPari/.dot-prefix-test-x` → HTTP 404 |
+| 1 | `.dot-prefix-test-x` | dot-prefix test, expired | `gh api repos/<REDACTED>/.dot-prefix-test-x` → HTTP 404 |
 | 2 | `.test-dot-prefix` | dot-prefix test, expired | 404 |
 | 3 | `test-plain-aaa1` | naming test, expired | 404 |
 | 4 | `test-dot-prefix` | naming test, expired | 404 |
@@ -33,10 +33,10 @@
 Each repo above returns HTTP 404 via:
 
 ```bash
-gh api repos/KooshaPari/<name>
+gh api repos/<REDACTED>/<name>
 ```
 
-No local clones of these repos exist (verified against `/Users/kooshapari/CodeProjects/Phenotype/repos/<name>`).
+No local clones of these repos exist (verified against `/Users/<REDACTED>/CodeProjects/Phenotype/repos/<name>`).
 
 ## SUPERSEDES — receipts preserved
 
@@ -50,7 +50,7 @@ This docket **is the receipt**. It records the 17 deletions with verification co
 
 ## Side Note: Empty Stub Detection Heuristics
 
-Repos are flagged as "empty stub" by the following criteria (verified against `gh api` + `gh api repos/KooshaPari/<name>/branches`):
+Repos are flagged as "empty stub" by the following criteria (verified against `gh api` + `gh api repos/<REDACTED>/<name>/branches`):
 
 1. HTTP 404 → deleted.
 2. HTTP 200 + `default_branch == null` → never initialized.

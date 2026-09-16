@@ -1,6 +1,6 @@
 # Secrets and PII Incident Command Sheet - 2026-06-20
 
-Repository: `KooshaPari/phenotype-registry`
+Repository: `<REDACTED>/phenotype-registry`
 
 This document is intentionally sanitized. Do not add secret values, token
 prefixes beyond provider type names, raw alert payloads, personal data, or
@@ -146,7 +146,7 @@ python scripts\incident-purge-readiness.py --retained-history-git-dir C:\path\to
 Run this before enabling Actions or making the repository public:
 
 ```powershell
-python scripts\incident-reopen-readiness.py --verify-live-controls --verify-incident-issue --verify-scans --repository KooshaPari/phenotype-registry --incident-issue 320 --retained-history-git-dir C:\path\to\phenotype-registry.git
+python scripts\incident-reopen-readiness.py --verify-live-controls --verify-incident-issue --verify-scans --repository <REDACTED>/phenotype-registry --incident-issue 320 --retained-history-git-dir C:\path\to\phenotype-registry.git
 ```
 
 The gate is sanitized and must not print token values. With
@@ -160,7 +160,7 @@ fail while the incident is still open. Use this mode to verify the current
 blocked posture:
 
 ```powershell
-python scripts\incident-reopen-readiness.py --verify-live-controls --verify-incident-issue --verify-scans --repository KooshaPari/phenotype-registry --incident-issue 320 --retained-history-git-dir C:\path\to\phenotype-registry.git --expect-open
+python scripts\incident-reopen-readiness.py --verify-live-controls --verify-incident-issue --verify-scans --repository <REDACTED>/phenotype-registry --incident-issue 320 --retained-history-git-dir C:\path\to\phenotype-registry.git --expect-open
 ```
 
 - [ ] Provider rotation evidence recorded for every alert inventory row

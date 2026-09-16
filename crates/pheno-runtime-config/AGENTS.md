@@ -22,4 +22,4 @@ cargo run --example hot_reload
 - `just deny` — `cargo deny check`
 
 ## Canonical source
-https://github.com/KooshaPari/pheno-runtime-config
+https://github.com/<REDACTED>/pheno-runtime-config

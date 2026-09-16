@@ -115,7 +115,7 @@ This research document analyzes the architecture and implementation of **pheno-c
                             │
                             ▼
 ┌─────────────────────────────────────────────────────────────┐
-│                 kooshapari-desk (Desktop)                  │
+│                 <REDACTED>-desk (Desktop)                  │
 │  ┌──────────────────────────────────────────────────────┐  │
 │  │  WSL2 + Tailscale SSH Daemon (Port 2222)            │  │
 │  └──────────────────────────────────────────────────────┘  │
@@ -140,15 +140,15 @@ This research document analyzes the architecture and implementation of **pheno-c
 │                  ~/.ssh/config (Unified)                     │
 ├─────────────────────────────────────────────────────────────┤
 │  Host desk                                                  │
-│      HostName kooshapari-desk.tail2b570.ts.net              │
-│      User kooshapari                                        │
+│      HostName <REDACTED>-desk.tail2b570.ts.net              │
+│      User <REDACTED>                                        │
 │      Port 2222                                              │
 │      IdentityFile ~/.ssh/id-git                             │
 │      ProxyCommand tailscale --exit-server %h                │
 │                                                              │
 │  Host desk-wsl                                              │
 │      HostName 100.84.189.31                                 │
-│      User kooshapari                                        │
+│      User <REDACTED>                                        │
 │      Port 2222                                              │
 │      IdentityFile ~/.ssh/id-git                             │
 └─────────────────────────────────────────────────────────────┘
@@ -358,8 +358,8 @@ pheno deploy      # Model deployment
 ```bash
 # ~/.ssh/config
 Host desk
-    HostName kooshapari-desk.tail2b570.ts.net
-    User kooshapari
+    HostName <REDACTED>-desk.tail2b570.ts.net
+    User <REDACTED>
     Port 2222
     IdentityFile ~/.ssh/id-git
 

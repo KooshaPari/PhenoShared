@@ -1,6 +1,6 @@
 # ADR-038: Registry versioning — minor-bump per server/skill, major on schema change, patch on typo
 
-`KooshaPari/PhenoMCPServers/catalog/registry.yaml` (per ADR-035) carries a `registry_version` field. Bump policy: **minor** (e.g. 1.4.0 → 1.5.0) per server or skill add/change; **major** (e.g. 1.4.0 → 2.0.0) on schema change; **patch** (e.g. 1.4.0 → 1.4.1) on typo fix or doc-only.
+`<REDACTED>/PhenoMCPServers/catalog/registry.yaml` (per ADR-035) carries a `registry_version` field. Bump policy: **minor** (e.g. 1.4.0 → 1.5.0) per server or skill add/change; **major** (e.g. 1.4.0 → 2.0.0) on schema change; **patch** (e.g. 1.4.0 → 1.4.1) on typo fix or doc-only.
 
 **Status:** Accepted
 **Date:** 2026-06-18
@@ -10,7 +10,7 @@
 
 ## Context
 
-`KooshaPari/PhenoMCPServers` (the canonical MCP registry per ADR-035) has a `catalog/registry.yaml` index. As of 2026-06-17 the catalog is at `registry_version: 1.4.0`. The catalog grew organically in 2026 Q1–Q2: servers, skills, clients, and tools were added without a consistent version-bump policy. Consumers that pin to a specific catalog version have no signal for "is this catalog still valid for my code?"
+`<REDACTED>/PhenoMCPServers` (the canonical MCP registry per ADR-035) has a `catalog/registry.yaml` index. As of 2026-06-17 the catalog is at `registry_version: 1.4.0`. The catalog grew organically in 2026 Q1–Q2: servers, skills, clients, and tools were added without a consistent version-bump policy. Consumers that pin to a specific catalog version have no signal for "is this catalog still valid for my code?"
 
 The pre-existing `phenotype-registry` (per AGENTS.md **Decision D** — read-only spine) has no version field at all; it is treated as a static mirror.
 
@@ -64,5 +64,5 @@ This policy bumps the **catalog version**, not the **artifact version**. Each ar
 
 - ADR-035 (PhenoMCPServers canonical home — defines the catalog location)
 - ADR-013 (pheno-mcp-router substrate — the consumer that reads the catalog version)
-- `KooshaPari/PhenoMCPServers/catalog/registry.yaml` (the file this ADR governs)
+- `<REDACTED>/PhenoMCPServers/catalog/registry.yaml` (the file this ADR governs)
 - v8 plan § 3.6 Track T14 (ADR backlog)

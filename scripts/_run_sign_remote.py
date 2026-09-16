@@ -12,7 +12,7 @@ if sys.platform == "win32":
     sys.stdout.reconfigure(encoding="utf-8")
     sys.stderr.reconfigure(encoding="utf-8")
 
-MAC = "kooshapari@100.112.14.98"
+MAC = "<REDACTED>@100.112.14.98"
 WORK_DIR = "~/CodeProjects/Phenotype/repos/pheno-harness"
 
 def transfer_token():

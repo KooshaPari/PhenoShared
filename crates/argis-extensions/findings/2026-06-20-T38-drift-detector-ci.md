@@ -2,7 +2,7 @@
 
 **Date:** 2026-06-20
 **ADR:** ADR-049 (App-substrate drift detector — 3-pass algorithm)
-**Owner:** kooshapari
+**Owner:** <REDACTED>
 **Device:** macbook
 
 ## Workflow
@@ -102,7 +102,7 @@ jobs:
   },
   "drifts": [
     {
-      "app": "KooshaPari/Dino",
+      "app": "<REDACTED>/Dino",
       "substrate": "pheno-port-adapter",
       "pass": "api",
       "severity": "critical",
@@ -142,5 +142,5 @@ The fixture is exercised in `pheno-drift-detector/tests/ci_fixture_test.rs` to v
 - ADR-040 (test coverage gates per tier)
 - ADR-041 (71-pillar Monday refresh cadence — weekly Monday cron)
 - ADR-048 (substrate graduation path — 4-tier gate)
-- `KooshaPari/pheno-drift-detector` (implementation)
+- `<REDACTED>/pheno-drift-detector` (implementation)
 - `pheno-ci-templates` (CI template definitions)

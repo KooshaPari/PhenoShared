@@ -47,7 +47,7 @@ Example:
 ## AgilePlus Mandate (if using AgilePlus)
 
 All work MUST be tracked in AgilePlus:
-- Reference: /Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus
+- Reference: /Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus
 - CLI: `agileplus specify --title "..."` and `agileplus status <id> --wp <wp> --state <state>`
 - Specs: `AgilePlus/kitty-specs/<feature-id>/`
 - Worklog: `AgilePlus/.work-audit/worklog.md`
@@ -223,7 +223,7 @@ describe("FR-{PROJECT}-NNN: feature description", () => {
 Impeccable provides design automation and enforcement:
 - **Skills**: `frontend-design`, `audit`, `critique`, `polish`, `normalize`, `animate`, etc.
 - **Setup**: Run `/teach-impeccable` in this project to establish persistent design context
-- **Global Context**: `/Users/kooshapari/CodeProjects/Phenotype/repos/.impeccable.md`
+- **Global Context**: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/.impeccable.md`
 - **CSS Baseline**: Add to all VitePress `custom.css` and app `globals.css`:
 
 ```css
@@ -247,7 +247,7 @@ p, h1, h2, h3, h4, h5, h6 { overflow-wrap: break-word; }
 
 All markdown files must use UTF-8. Validate with:
 ```bash
-cd /Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus
 agileplus validate-encoding --all --fix
 ```
 ```

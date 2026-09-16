@@ -12,7 +12,7 @@
   "device_profile": null,
   "subject": {
     "branch": "recovery/preserve-20260717-0301",
-    "repo": "KooshaPari/pheno-harness",
+    "repo": "<REDACTED>/pheno-harness",
     "commits_in_scope": [
       {"sha": "d26f84b4837b24fdb206e78242b2fcc52108a80d", "subject": "Record final local qwen35-08b Terminal-Bench 2.0 scoreboard.", "files_added_or_changed": 1, "files_count": 1},
       {"sha": "40839bffa0b6bd54d70b0d131d0c52edb8a5d71c", "subject": "Launch local TB2 matrix tooling for LFM/Ornith and record 1080 absence.", "files_added_or_changed": 3, "files_count": 3},

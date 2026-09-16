@@ -116,7 +116,7 @@ the primary web frontend; Rust (Tauri) is the desktop/mobile shell.
   `feat/L2-015-sota-2026-06-11`,
   `chore/SD4-2026-06-12` (this worktree).
 - **Worklog schema** — V2 10-column JSON schema. Canonical reference:
-  [`pheno-worklog-schema`](https://github.com/KooshaPari/pheno-worklog-schema)
+  [`pheno-worklog-schema`](https://github.com/<REDACTED>/pheno-worklog-schema)
   (or local `pheno-worklog-schema/` if vendored). Each task produces
   one worklog JSON at the repo root: `worklog-<TID>-<topic>.json`.
 - **PR policy** — `main` is protected (1 reviewer required, no force-push).

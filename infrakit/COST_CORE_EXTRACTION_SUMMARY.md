@@ -12,7 +12,7 @@ Successfully extracted cost calculation, pricing, and budget enforcement logic f
 
 ### 1. New Crate: phenotype-cost-core
 
-**Location:** `/Users/kooshapari/Repos/phenotype-infrakit/crates/phenotype-cost-core/`
+**Location:** `/Users/<REDACTED>/Repos/phenotype-infrakit/crates/phenotype-cost-core/`
 
 **Structure:**
 ```

@@ -22,7 +22,7 @@ Phase 2 consolidates the fragmented Phenotype ecosystem into a unified, buildabl
 **Title:** Consolidate Scattered Projects into Unified Structure
 
 **Description:**
-Phenotype ecosystem projects are scattered across `/Users/kooshapari/Repos/` (agent-wave, civ, heliosCLI, phenodocs, phenotype-design, phenotype-go-kit, phenotype-shared) and need consolidation into a unified workspace structure. This spec covers project discovery, classification, and strategic moves to achieve organizational coherence.
+Phenotype ecosystem projects are scattered across `/Users/<REDACTED>/Repos/` (agent-wave, civ, heliosCLI, phenodocs, phenotype-design, phenotype-go-kit, phenotype-shared) and need consolidation into a unified workspace structure. This spec covers project discovery, classification, and strategic moves to achieve organizational coherence.
 
 **Owner:** Phase 2 Coordinator
 **Priority:** CRITICAL (blocks phase2b and phase2c)
@@ -33,13 +33,13 @@ Phenotype ecosystem projects are scattered across `/Users/kooshapari/Repos/` (ag
 ## phase2a Requirements (FR-PHASE2A-001 through FR-PHASE2A-008)
 
 ### FR-PHASE2A-001: Discovery & Classification
-**Description:** Audit all projects in `/Users/kooshapari/Repos/` and classify by type (infrastructure, documentation, tools, libraries, applications).
+**Description:** Audit all projects in `/Users/<REDACTED>/Repos/` and classify by type (infrastructure, documentation, tools, libraries, applications).
 
 **Acceptance Criteria:**
 - [ ] All 25+ projects classified (infrastructure, documentation, tooling, libraries, applications)
 - [ ] Dependency map created (what depends on what)
 - [ ] Archival candidates identified (stale, redundant projects)
-- [ ] Report: `/Users/kooshapari/CodeProjects/Phenotype/repos/docs/audits/2026-03-30-ecosystem-discovery.md`
+- [ ] Report: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/docs/audits/2026-03-30-ecosystem-discovery.md`
 
 **Traces to:** UJ-PHASE2A-001 (Coordinator discovers ecosystem topology)
 
@@ -99,7 +99,7 @@ Phenotype ecosystem projects are scattered across `/Users/kooshapari/Repos/` (ag
   - `/repos/phench/` — Benchmarking harness
   - `/repos/template-commons/` — Project templates
   - `/repos/phenotypeActions/` — GitHub Actions suite
-- [ ] Document: `/Users/kooshapari/CodeProjects/Phenotype/repos/WORKSPACE_STRUCTURE.md`
+- [ ] Document: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/WORKSPACE_STRUCTURE.md`
 - [ ] Enforce: Add to .gitignore any scattered projects not in canonical location
 
 **Traces to:** UJ-PHASE2A-004 (Establish organizational structure)
@@ -134,7 +134,7 @@ Phenotype ecosystem projects are scattered across `/Users/kooshapari/Repos/` (ag
 - [ ] All 35 physical crates classified (members vs excluded)
 - [ ] Duplicates removed (phenotype-config-core in crates/ and libs/)
 - [ ] AgilePlus crates decision made (separate workspace vs exclude)
-- [ ] Updated Cargo.toml: `/Users/kooshapari/CodeProjects/Phenotype/repos/Cargo.toml`
+- [ ] Updated Cargo.toml: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/Cargo.toml`
 - [ ] Verification: `cargo check --workspace` passes
 - [ ] Report: `docs/audits/2026-03-30-root-workspace-audit.md` (already created, needs action items tracked)
 
@@ -745,7 +745,7 @@ These three specs (phase2a, phase2b, phase2c) are designed to integrate with Agi
 
 **AgilePlus Commands (when available):**
 ```bash
-cd /Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus
 
 # Create phase2a spec
 agileplus specify --title "Phase 2A: Consolidate Scattered Projects" \
@@ -765,7 +765,7 @@ agileplus task add phase2a-consolidation --id "WP02" \
 
 **For now (manual tracking):**
 - Use `docs/reference/PHASE2_SPECS_CONSOLIDATION.md` (this document) as source of truth
-- Track progress in `/Users/kooshapari/CodeProjects/Phenotype/repos/docs/worklogs/PHASE2_PROGRESS.md`
+- Track progress in `/Users/<REDACTED>/CodeProjects/Phenotype/repos/docs/worklogs/PHASE2_PROGRESS.md`
 - Update spec status after each WP completion
 
 ---

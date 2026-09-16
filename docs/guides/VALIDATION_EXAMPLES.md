@@ -464,7 +464,7 @@ To run these examples:
 
 ```bash
 # From the phenotype repo root
-cd /Users/kooshapari/CodeProjects/Phenotype/repos
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos
 
 # Add example code to crates/phenotype-validation/examples/
 cat > crates/phenotype-validation/examples/basic_usage.rs << 'EOF'

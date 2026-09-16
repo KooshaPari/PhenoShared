@@ -16,7 +16,7 @@ let x = thing::new();
 ## Documentation
 
 - [API docs (docs.rs)](https://docs.rs/pheno-config)
-- [Phenotype architecture (ADR-024 cross-cutting)](https://github.com/KooshaPari/phenotype-apps/blob/main/docs/adr/2026-06-14/ADR-024-71-pillar-audit.md)
+- [Phenotype architecture (ADR-024 cross-cutting)](https://github.com/<REDACTED>/phenotype-apps/blob/main/docs/adr/2026-06-14/ADR-024-71-pillar-audit.md)
 
 ## License
 

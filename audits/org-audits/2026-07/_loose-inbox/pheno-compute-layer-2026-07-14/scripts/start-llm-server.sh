@@ -13,17 +13,17 @@ PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
 DESKTOP_HOST="${DESKTOP_HOST:-desk}"
 TAILSCALE_HOST="${TAILSCALE_HOST:-100.96.135.160}"
 PORT="${PORT:-8080}"
-WSL_USER="${WSL_USER:-kooshapari}"
+WSL_USER="${WSL_USER:-<REDACTED>}"
 
 # Model defaults
 DEFAULT_MODEL_KEY="granite_4_1_8b"
 DEFAULT_QUANT="${DEFAULT_QUANT:-Q4_K_M}"
-MODELS_DIR="${MODELS_DIR:-/home/kooshapari/llm-models}"
+MODELS_DIR="${MODELS_DIR:-/home/<REDACTED>/llm-models}"
 LOG_DIR="${LOG_DIR:-$HOME/llm-server}"
 
 # Backend selection
 SERVICE_BACKEND="${SERVICE_BACKEND:-vllm}"
-LLAMA_SERVER="${LLAMA_SERVER:-/home/kooshapari/llama.cpp/llama-b9010/llama-server}"
+LLAMA_SERVER="${LLAMA_SERVER:-/home/<REDACTED>/llama.cpp/llama-b9010/llama-server}"
 
 # Colors
 RED='\033[0;31m'

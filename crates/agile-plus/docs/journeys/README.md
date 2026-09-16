@@ -191,5 +191,5 @@ When adding a new journey:
 - [`../../kitty-specs/eco-022-rich-journey-embeds/spec.md`](../../kitty-specs/eco-022-rich-journey-embeds/spec.md) —
   source spec for this directory's contract.
 - hwLedger exemplar:
-  `KooshaPari/hwLedger@codex/add-rich-journey-embeds-to-docs-v10` →
+  `<REDACTED>/hwLedger@codex/add-rich-journey-embeds-to-docs-v10` →
   `docs/journeys/manifests/README.md`.

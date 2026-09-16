@@ -159,9 +159,9 @@ Re-applied `/tmp/governance-snapshot.patch` (10 commits, `1fa5350939..f615c33c5f
 | # | Original | Subject | Disposition |
 |---|----------|---------|-------------|
 | 1 | `d83900c4a7` | refresh AGENTS.md, STATUS.md, SSOT.md — 2026-06-17 | absorbed (no change) |
-| 2 | `eebdeca758` | L5-104 Dmouse92→KooshaPari migration audit (consolidated 2026-06-17) | absorbed (no change) |
-| 3 | `7f52bd9486` | L5-104 Dmouse92→KooshaPari migration complete (ADR-029) | absorbed (no change) |
-| 4 | `b9ec4322e4` | v7 DAG — add Track 8 (Dmouse92→KooshaPari migration, L5-104) | absorbed (auto, "Patch already applied") |
+| 2 | `eebdeca758` | L5-104 Dmouse92→<REDACTED> migration audit (consolidated 2026-06-17) | absorbed (no change) |
+| 3 | `7f52bd9486` | L5-104 Dmouse92→<REDACTED> migration complete (ADR-029) | absorbed (no change) |
+| 4 | `b9ec4322e4` | v7 DAG — add Track 8 (Dmouse92→<REDACTED> migration, L5-104) | absorbed (auto, "Patch already applied") |
 | 5 | `5c044ae3c2` | flag rebase/push block + dispatch-mcp delete-vs-archive (L5-104) | absorbed (no change) |
 | 6 | `6e1bfdf7f7` | L5-104 migration guarantee verification — 100% absorbed (orchestrator-level) | **applied** as `4f7625ae` |
 | 7 | `2a1d1442b5` | L5-104 migration guarantee verified 100% (orchestrator-level) | absorbed (no change) |
@@ -171,11 +171,11 @@ Re-applied `/tmp/governance-snapshot.patch` (10 commits, `1fa5350939..f615c33c5f
 
 ### Conflict-resolution log (this attempt)
 - **patch 1/10** (`AGENTS.md` content conflict + `SSOT.md`/`STATUS.md` modify/delete): resolved with `git checkout --ours AGENTS.md && git rm -f SSOT.md STATUS.md`; `am --continue` reported "No changes"; `am --skip`.
-- **patch 2/10** (add/add on `findings/2026-06-17-L5-104-dmouse92-to-kooshapari.md`; ours has "kill-switch EXECUTED", theirs has "kill-switch→executing"): resolved with `git checkout --ours` + `git add`; "No changes"; `am --skip`.
+- **patch 2/10** (add/add on `findings/2026-06-17-L5-104-dmouse92-to-<REDACTED>.md`; ours has "kill-switch EXECUTED", theirs has "kill-switch→executing"): resolved with `git checkout --ours` + `git add`; "No changes"; `am --skip`.
 - **patch 3/10** (content conflict on `AGENTS.md`, modify/delete on `SSOT.md`/`STATUS.md`, add/add on the L5-104 finding file): kept ours on both files, `git rm` the deleted-here files; "No changes"; `am --skip`.
 - **patch 4/10**: applied auto, "No changes -- Patch already applied".
 - **patch 5/10** (content conflict on `AGENTS.md`): `git checkout --ours AGENTS.md`; "No changes"; `am --skip`.
-- **patch 6/10**: applied cleanly as `4f7625ae` (+61 lines in `findings/2026-06-17-L5-104-dmouse92-to-kooshapari.md`).
+- **patch 6/10**: applied cleanly as `4f7625ae` (+61 lines in `findings/2026-06-17-L5-104-dmouse92-to-<REDACTED>.md`).
 - **patch 7/10** (content conflict on `AGENTS.md`): `git checkout --ours AGENTS.md`; "No changes"; `am --skip`.
 - **patch 8/10** (add/add on `findings/2026-06-17-L5-104-e2e-dag.md`; ours has "kill-switch EXECUTED"): `git checkout --ours` + `git add`; "No changes"; `am --skip`.
 - **patch 9/10**: applied auto, "No changes -- Patch already applied".
@@ -209,7 +209,7 @@ ls -la work-dag-2026-06-17-v7-extended.md work-dag-2026-06-17-wrapup.md  # both 
 70707fee docs(governance): cherry-pick work-dag-2026-06-17-{v7-extended,wrapup}.md from monorepo/archive/2026-06-15-30-pillar-fleet
 32a1890f docs(audit): L5-104 migration guarantee verification — 100% absorbed (orchestrator-level)
 fa190a60 docs(audit): L5-104 migration guarantee verification — 100% absorbed (orchestrator-level)
-5c967b06 docs(plan): v7 DAG — add Track 8 (Dmouse92 → KooshaPari migration, L5-104)
-80bc11fe docs(governance): L5-104 Dmouse92 → KooshaPari migration complete (ADR-029)
-0fadede6 docs(audit): L5-104 Dmouse92 → KooshaPari migration audit (consolidated 2026-06-17)
+5c967b06 docs(plan): v7 DAG — add Track 8 (Dmouse92 → <REDACTED> migration, L5-104)
+80bc11fe docs(governance): L5-104 Dmouse92 → <REDACTED> migration complete (ADR-029)
+0fadede6 docs(audit): L5-104 Dmouse92 → <REDACTED> migration audit (consolidated 2026-06-17)
 ```

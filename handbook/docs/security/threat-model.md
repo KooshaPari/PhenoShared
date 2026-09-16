@@ -93,7 +93,7 @@ CI pipeline (with mixed SHA/tag pinning), and the build pipeline.
 
 | Threat | Rating | Specific attack vector | Mitigation | Owner | Last reviewed |
 |--------|--------|------------------------|------------|-------|---------------|
-| **S — Spoofing** | low | Phishing sub-domain mimicking `/handbook/` on github.io | Reserved `KooshaPari/PhenoHandbook` org + no custom domain configured | infra | 2026-06-16 |
+| **S — Spoofing** | low | Phishing sub-domain mimicking `/handbook/` on github.io | Reserved `<REDACTED>/PhenoHandbook` org + no custom domain configured | infra | 2026-06-16 |
 | **T — Tampering** | med | Malicious PR that injects content via the VitePress build (e.g. inline scripts in markdown) | CODEOWNERS gate; PR review required; markdownlint in `conventions.yml` | docs | 2026-06-16 |
 | **R — Repudiation** | low | Authorship of doc changes | Git commit log; Co-Authored-By trailers | docs | 2026-06-16 |
 | **I — Info disclosure** | low | Leaked secrets in doc content | `trufflehog.yml` CI workflow + `.pre-commit-config.yaml` local hook + `trufflehog.yml` config | security | 2026-06-16 |

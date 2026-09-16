@@ -6,7 +6,7 @@
 
 ## Repo facts
 
-- **Repo path:** `repos/cockpit-source` (mirror); `KooshaPari/cockpit` (canonical GitHub).
+- **Repo path:** `repos/cockpit-source` (mirror); `<REDACTED>/cockpit` (canonical GitHub).
 - **Default branch:** `main` | **Last commit:** 2026-08-20 (provenance review).
 - **Active branches:** `main`, `fix/cockpit-provenance-review-20260816` (provenance ledger work).
 - **Subdirs:** `dashboard/` (LaunchAgent dashboard producer), `launchd/` (plist installer),

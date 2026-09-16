@@ -45,7 +45,7 @@ Go to: https://app.snyk.io/account/settings
 ## After You Get Tokens: 3 Commands
 
 ```bash
-cd /Users/kooshapari/CodeProjects/Phenotype/repos
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos
 
 # Command 1: Create 30 Sentry projects (5 min)
 bash scripts/automation/sentry-automation.sh

@@ -1,15 +1,15 @@
 # PhenoSpecs
 
-> Part of the Phenotype fleet. See https://github.com/KooshaPari/phenotype-apps for fleet-wide context.
+> Part of the Phenotype fleet. See https://github.com/<REDACTED>/phenotype-apps for fleet-wide context.
 
 ## What this repo is
 
-`PhenoSpecs` is a repo in the KooshaPari/Phenotype fleet.
+`PhenoSpecs` is a repo in the <REDACTED>/Phenotype fleet.
 
 ## Build & run
 
 ```bash
-git clone https://github.com/KooshaPari/PhenoSpecs.git
+git clone https://github.com/<REDACTED>/PhenoSpecs.git
 cd PhenoSpecs
 # see SPEC.md for repo-specific instructions
 ```
@@ -27,6 +27,6 @@ cd PhenoSpecs
 
 ## See also
 
-- [phenotype-apps meta-repo](https://github.com/KooshaPari/phenotype-apps)
-- [phenotype-registry](https://github.com/KooshaPari/phenotype-registry)
+- [phenotype-apps meta-repo](https://github.com/<REDACTED>/phenotype-apps)
+- [phenotype-registry](https://github.com/<REDACTED>/phenotype-registry)
 - 71-pillar audit: `findings/71-pillar-*.md` in the meta-repo

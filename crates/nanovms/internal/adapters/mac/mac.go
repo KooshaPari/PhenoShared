@@ -15,8 +15,8 @@ import (
 	"os/exec"
 	"strings"
 
-	"github.com/kooshapari/nanovms/internal/domain"
-	"github.com/kooshapari/nanovms/internal/ports"
+	"github.com/<REDACTED>/nanovms/internal/domain"
+	"github.com/<REDACTED>/nanovms/internal/ports"
 )
 
 // Adapter implements RuntimePort for macOS with 3-tier VM support.

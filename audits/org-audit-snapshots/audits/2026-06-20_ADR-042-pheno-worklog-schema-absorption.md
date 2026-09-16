@@ -1,7 +1,7 @@
 # ADR-042 — pheno-worklog-schema absorbed into phenotype-org-audits (2026-06-20)
 
 **Status:** Accepted
-**Deciders:** @KooshaPari (orchestrator)
+**Deciders:** @<REDACTED> (orchestrator)
 **Date:** 2026-06-20
 
 ## Context
@@ -22,7 +22,7 @@ That makes this repository the correct long-term home for the package.
 
 ## Decision
 
-Absorb `KooshaPari/pheno-worklog-schema` into
+Absorb `<REDACTED>/pheno-worklog-schema` into
 `phenotype-org-audits/audits/worklog-schema/` and treat the source repository as
 delete-ready after merge.
 

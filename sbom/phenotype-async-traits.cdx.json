@@ -14,7 +14,7 @@
     ],
     "component": {
       "type": "library",
-      "bom-ref": "path+file:///Users/kooshapari/CodeProjects/Phenotype/repos/pheno/crates/phenotype-async-traits#0.2.0",
+      "bom-ref": "path+file:///Users/<REDACTED>/CodeProjects/Phenotype/repos/pheno/crates/phenotype-async-traits#0.2.0",
       "name": "phenotype-async-traits",
       "version": "0.2.0",
       "scope": "required",
@@ -27,7 +27,7 @@
       "components": [
         {
           "type": "library",
-          "bom-ref": "path+file:///Users/kooshapari/CodeProjects/Phenotype/repos/pheno/crates/phenotype-async-traits#0.2.0 bin-target-0",
+          "bom-ref": "path+file:///Users/<REDACTED>/CodeProjects/Phenotype/repos/pheno/crates/phenotype-async-traits#0.2.0 bin-target-0",
           "name": "phenotype_async_traits",
           "version": "0.2.0",
           "purl": "pkg:cargo/phenotype-async-traits@0.2.0?download_url=file://.#src/lib.rs"
@@ -221,7 +221,7 @@
   ],
   "dependencies": [
     {
-      "ref": "path+file:///Users/kooshapari/CodeProjects/Phenotype/repos/pheno/crates/phenotype-async-traits#0.2.0",
+      "ref": "path+file:///Users/<REDACTED>/CodeProjects/Phenotype/repos/pheno/crates/phenotype-async-traits#0.2.0",
       "dependsOn": [
         "registry+https://github.com/rust-lang/crates.io-index#pin-project@1.1.11"
       ]

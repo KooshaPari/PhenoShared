@@ -3,8 +3,8 @@ package server
 import (
 	"net/http"
 
-	"github.com/kooshapari/hfscope/internal/server/templ"
-	"github.com/kooshapari/hfscope/internal/views"
+	"github.com/<REDACTED>/hfscope/internal/server/templ"
+	"github.com/<REDACTED>/hfscope/internal/views"
 )
 
 func renderEmbedResults(w http.ResponseWriter, r *http.Request, data views.PageData) error {

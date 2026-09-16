@@ -1,4 +1,4 @@
-module github.com/kooshapari/bifrost-extensions
+module github.com/<REDACTED>/bifrost-extensions
 
 go 1.26
 

@@ -4,7 +4,7 @@
 A fleet where every commit is conventionally named, every branch is freshly named, and no worktree is stale or dirty-ahead.
 
 ## Scope
-- All Phenotype / KooshaPari repos.
+- All Phenotype / <REDACTED> repos.
 - Their worktrees.
 
 ## Implementation Steps

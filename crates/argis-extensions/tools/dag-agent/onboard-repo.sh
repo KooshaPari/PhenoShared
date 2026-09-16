@@ -6,7 +6,7 @@
 set -euo pipefail
 
 REPO="${1:?missing repo name}"
-REPO_DIR="/Users/kooshapari/CodeProjects/Phenotype/repos/$REPO"
+REPO_DIR="/Users/<REDACTED>/CodeProjects/Phenotype/repos/$REPO"
 
 if [[ ! -d "$REPO_DIR" ]]; then
     echo "[$REPO] ERROR: directory not found" >&2
@@ -49,7 +49,7 @@ if [[ ! -f AGENTS.md ]]; then
 - See \`llms.txt\` for LLM-friendly context
 
 ## Links
-- Fleet SSOT: \`/Users/kooshapari/CodeProjects/Phenotype/repos/SSOT.md\`
+- Fleet SSOT: \`/Users/<REDACTED>/CodeProjects/Phenotype/repos/SSOT.md\`
 - Pillar scorecard: \`tools/pillar-fleet/scorecard.sh\`
 EOF
     echo "[$REPO] +AGENTS.md"
@@ -99,7 +99,7 @@ if [[ ! -f SSOT.md ]]; then
 
 ## Identity
 - **Repo:** ${REPO}
-- **Owner:** KooshaPari
+- **Owner:** <REDACTED>
 - **Added to fleet:** 2026-06-26 (DAG wave-1 envelope expansion)
 - **Onboarding branch:** chore/v38-dag-wave-1-2026-06-26
 

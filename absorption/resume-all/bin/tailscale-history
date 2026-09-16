@@ -10,8 +10,8 @@
 
 set -euo pipefail
 
-NDJSON="/Users/kooshapari/.local/share/resume-all/tailscale-history.ndjson"
-SOURCE="/Users/kooshapari/.local/share/resume-all/tailscale-watch.ndjson"
+NDJSON="/Users/<REDACTED>/.local/share/resume-all/tailscale-history.ndjson"
+SOURCE="/Users/<REDACTED>/.local/share/resume-all/tailscale-watch.ndjson"
 RETENTION_LINES=288  # 24h at 5min intervals
 
 mkdir -p "$(dirname "$NDJSON")" 2>/dev/null || true

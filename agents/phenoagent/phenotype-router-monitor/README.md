@@ -32,7 +32,7 @@ Rust library for distributed HTTP request routing with real-time health checks, 
 
 ```bash
 # Navigate to sub-crate
-cd /Users/kooshapari/CodeProjects/Phenotype/repos/PhenoProc/phenotype-router-monitor
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos/PhenoProc/phenotype-router-monitor
 
 # Build and test
 cargo build --release

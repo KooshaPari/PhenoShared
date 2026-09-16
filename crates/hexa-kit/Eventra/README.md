@@ -8,7 +8,7 @@ This directory previously contained a git submodule. The actual implementation h
 
 ## Migration
 
-- Source: KooshaPari/Eventra (archived)
+- Source: <REDACTED>/Eventra (archived)
 - Target: PhenoEvents/pheno-events/
 - Crate: eventkit
 

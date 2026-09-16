@@ -4,7 +4,7 @@ import "../../styles/globals.css";
 // Tier-3 microfrontend: /docs/* — renders source repo's docs/ tree.
 // Spec: phenotype-infra/docs/governance/path-microfrontends-tier3.md
 
-const REPO = "KooshaPari/AgilePlus";
+const REPO = "<REDACTED>/AgilePlus";
 const { slug } = Astro.params;
 const path = slug ? `docs/${slug}` : "docs";
 
@@ -62,7 +62,7 @@ export async function getStaticPaths() {
   // Recursively walk docs/ via the GitHub Trees API.
   async function walk(): Promise<string[]> {
     const tree = await fetch(
-      `https://api.github.com/repos/KooshaPari/AgilePlus/git/trees/main?recursive=1`,
+      `https://api.github.com/repos/<REDACTED>/AgilePlus/git/trees/main?recursive=1`,
       {
         headers: {
           Accept: "application/vnd.github+json",

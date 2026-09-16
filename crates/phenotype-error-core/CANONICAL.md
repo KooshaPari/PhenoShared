@@ -4,8 +4,8 @@
 
 The canonical source for `phenotype-error-core` now lives at:
 
-- Repository: https://github.com/KooshaPari/phenoShared
-- Path: https://github.com/KooshaPari/phenoShared/tree/main/crates/phenotype-error-core
+- Repository: https://github.com/<REDACTED>/phenoShared
+- Path: https://github.com/<REDACTED>/phenoShared/tree/main/crates/phenotype-error-core
 
 ## Status
 
@@ -13,7 +13,7 @@ The copy in this repository (`pheno/crates/phenotype-error-core/`) is **deprecat
 
 ## Supersession Notice
 
-The standalone `pheno-errors` crate (`KooshaPari/pheno-errors`) — which defined a 5-variant `AppError` enum (`Domain`, `NotFound`, `Conflict`, `Validation`, `Storage`) with convenience constructors, `kind()` tags, and `log_warn`/`log_error` helpers — is **superseded** by this crate. All semantic error patterns from `pheno-errors` map directly to variants in `phenotype-error-core`:
+The standalone `pheno-errors` crate (`<REDACTED>/pheno-errors`) — which defined a 5-variant `AppError` enum (`Domain`, `NotFound`, `Conflict`, `Validation`, `Storage`) with convenience constructors, `kind()` tags, and `log_warn`/`log_error` helpers — is **superseded** by this crate. All semantic error patterns from `pheno-errors` map directly to variants in `phenotype-error-core`:
 
 | `pheno-errors` variant | `phenotype-error-core` equivalent |
 |---|---|

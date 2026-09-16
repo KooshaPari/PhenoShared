@@ -21,7 +21,7 @@
     "head_sha": "39c6989276f886c1dca83a3a5703139a9f7eea6a",
     "head_short": "39c6989",
     "head_subject": "Snapshot Codex session resume + TB2 evidence + commit/push authorization packet (session 019f6249)",
-    "head_author": "KooshaPari",
+    "head_author": "<REDACTED>",
     "head_authored_at_local": "2026-07-24T00:48:39-07:00",
     "origin_branch_sha": "39c6989276f886c1dca83a3a5703139a9f7eea6a",
     "origin_branch_short": "39c6989",
@@ -57,7 +57,7 @@
     {
       "sha": "5c22f2b",
       "authored_at_local": "2026-07-23T16:25:42-07:00",
-      "author": "KooshaPari",
+      "author": "<REDACTED>",
       "co_author": "Cursor <cursoragent@cursor.com>",
       "subject": "Enforce canonical stack first: no interim llama defaults.",
       "files": 4,
@@ -68,7 +68,7 @@
     {
       "sha": "40839bf",
       "authored_at_local": "2026-07-23T16:04:35-07:00",
-      "author": "KooshaPari",
+      "author": "<REDACTED>",
       "co_author": "Cursor <cursoragent@cursor.com>",
       "subject": "Launch local TB2 matrix tooling for LFM/Ornith and record 1080 absence.",
       "files": 3,
@@ -79,7 +79,7 @@
     {
       "sha": "d26f84b",
       "authored_at_local": "2026-07-23T15:50:58-07:00",
-      "author": "KooshaPari",
+      "author": "<REDACTED>",
       "co_author": "Cursor <cursoragent@cursor.com>",
       "subject": "Record final local qwen35-08b Terminal-Bench 2.0 scoreboard.",
       "files": 1,
@@ -93,7 +93,7 @@
     "snapshot_utc": "2026-07-24T07:35:00Z",
     "elapsed_hours": 15.55,
     "new_commits": 3,
-    "new_commits_all_by": "KooshaPari (with Cursor co-author)",
+    "new_commits_all_by": "<REDACTED> (with Cursor co-author)",
     "new_commits_pushed": true,
     "new_commits_pushed_count": 1,
     "new_commits_pushed_sha": "39c6989276f886c1dca83a3a5703139a9f7eea6a",
@@ -107,7 +107,7 @@
   },
   "external_state_unchanged": {
     "github_repo_archived": false,
-    "github_repo_unarchive_command_last": "gh api --method PATCH repos/KooshaPari/pheno-harness -f archived=false",
+    "github_repo_unarchive_command_last": "gh api --method PATCH repos/<REDACTED>/pheno-harness -f archived=false",
     "pheno_serve_writers": "none (no python/node processes visible in tasklist)",
     "listening_ports_in_pheno_range": "none at 20128/28128/38128/48128",
     "mac_workstream_touched": false,

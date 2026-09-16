@@ -1,7 +1,7 @@
 # Boundary: melosviz (absorbed)
 
-**Source repo**: `KooshaPari/backend` (MelosViz scoring engine)
-**Absorbed into**: `KooshaPari/phenotype-python-sdk` as `packages/melosviz/`
+**Source repo**: `<REDACTED>/backend` (MelosViz scoring engine)
+**Absorbed into**: `<REDACTED>/phenotype-python-sdk` as `packages/melosviz/`
 **Absorption commit**: `bbeedd5` on `wip/2026-07-16-0030-auto`
 **Disposition**: ABSORBED (fsm=absorbed, archived=true)
 
@@ -51,4 +51,4 @@ melosviz render <input> --preset cinematic --out video.mp4
 ## History
 
 - 2026-07-17: absorbed into `phenotype-python-sdk` packages/melosviz/
-  from `KooshaPari/backend` source repo
+  from `<REDACTED>/backend` source repo

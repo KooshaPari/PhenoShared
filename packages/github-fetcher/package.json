@@ -1,5 +1,5 @@
 {
-  "name": "@kooshapari/phenotype-github-fetcher",
+  "name": "@<REDACTED>/phenotype-github-fetcher",
   "version": "0.1.0",
   "description": "Shared GitHub API client for Phenotype landing pages",
   "type": "module",

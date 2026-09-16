@@ -3,12 +3,12 @@ name = "agileplus-domain"
 version = "0.1.0"
 edition = "2024"
 license = "MIT OR Apache-2.0"
-repository = "https://github.com/KooshaPari/HexaKit"
+repository = "https://github.com/<REDACTED>/HexaKit"
 description = "agileplus domain — Phenotype infrastructure crate (HexaKit)"
 documentation = "https://docs.rs/agileplus-domain"
 keywords = ["phenotype", "hexa", "domain"]
 categories = ["data-structures"]
-authors = ["kooshapari"]
+authors = ["<REDACTED>"]
 
 [dependencies]
 serde = { version = "1", features = ["derive"] }

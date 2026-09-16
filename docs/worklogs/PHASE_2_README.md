@@ -205,7 +205,7 @@ Stop execution if:
 
 ## File Locations
 
-All files are in: `/Users/kooshapari/CodeProjects/Phenotype/repos/docs/worklogs/`
+All files are in: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/docs/worklogs/`
 
 **New Files**:
 - PHASE_2_EXECUTION_DASHBOARD.md

@@ -14,7 +14,7 @@ import (
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/graphql/introspection"
-	"github.com/kooshapari/bifrost-extensions/api/graphql/model"
+	"github.com/<REDACTED>/bifrost-extensions/api/graphql/model"
 	gqlparser "github.com/vektah/gqlparser/v2"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -4090,7 +4090,7 @@ func (ec *executionContext) field_Mutation_createBenchmark_args(ctx context.Cont
 	args := map[string]any{}
 	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input",
 		func(ctx context.Context, v any) (model.BenchmarkInput, error) {
-			return ec.unmarshalNBenchmarkInput2githubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐBenchmarkInput(ctx, v)
+			return ec.unmarshalNBenchmarkInput2githubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐBenchmarkInput(ctx, v)
 		})
 	if err != nil {
 		return nil, err
@@ -4104,7 +4104,7 @@ func (ec *executionContext) field_Mutation_createPolicy_args(ctx context.Context
 	args := map[string]any{}
 	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input",
 		func(ctx context.Context, v any) (model.PolicyInput, error) {
-			return ec.unmarshalNPolicyInput2githubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐPolicyInput(ctx, v)
+			return ec.unmarshalNPolicyInput2githubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐPolicyInput(ctx, v)
 		})
 	if err != nil {
 		return nil, err
@@ -4184,7 +4184,7 @@ func (ec *executionContext) field_Mutation_updatePolicy_args(ctx context.Context
 	args["id"] = arg0
 	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input",
 		func(ctx context.Context, v any) (model.PolicyInput, error) {
-			return ec.unmarshalNPolicyInput2githubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐPolicyInput(ctx, v)
+			return ec.unmarshalNPolicyInput2githubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐPolicyInput(ctx, v)
 		})
 	if err != nil {
 		return nil, err
@@ -4240,7 +4240,7 @@ func (ec *executionContext) field_Query_benchmarks_args(ctx context.Context, raw
 	args := map[string]any{}
 	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "filter",
 		func(ctx context.Context, v any) (*model.BenchmarkFilter, error) {
-			return ec.unmarshalOBenchmarkFilter2ᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐBenchmarkFilter(ctx, v)
+			return ec.unmarshalOBenchmarkFilter2ᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐBenchmarkFilter(ctx, v)
 		})
 	if err != nil {
 		return nil, err
@@ -4276,7 +4276,7 @@ func (ec *executionContext) field_Query_models_args(ctx context.Context, rawArgs
 	args["provider"] = arg0
 	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "capabilities",
 		func(ctx context.Context, v any) ([]model.Capability, error) {
-			return ec.unmarshalOCapability2ᚕgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐCapabilityᚄ(ctx, v)
+			return ec.unmarshalOCapability2ᚕgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐCapabilityᚄ(ctx, v)
 		})
 	if err != nil {
 		return nil, err
@@ -4314,7 +4314,7 @@ func (ec *executionContext) field_Query_policies_args(ctx context.Context, rawAr
 	args := map[string]any{}
 	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "type",
 		func(ctx context.Context, v any) (*model.PolicyType, error) {
-			return ec.unmarshalOPolicyType2ᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐPolicyType(ctx, v)
+			return ec.unmarshalOPolicyType2ᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐPolicyType(ctx, v)
 		})
 	if err != nil {
 		return nil, err
@@ -4430,7 +4430,7 @@ func (ec *executionContext) field_Query_usage_args(ctx context.Context, rawArgs 
 	args := map[string]any{}
 	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "timeframe",
 		func(ctx context.Context, v any) (model.Timeframe, error) {
-			return ec.unmarshalNTimeframe2githubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐTimeframe(ctx, v)
+			return ec.unmarshalNTimeframe2githubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐTimeframe(ctx, v)
 		})
 	if err != nil {
 		return nil, err
@@ -4438,7 +4438,7 @@ func (ec *executionContext) field_Query_usage_args(ctx context.Context, rawArgs 
 	args["timeframe"] = arg0
 	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "groupBy",
 		func(ctx context.Context, v any) ([]model.GroupByField, error) {
-			return ec.unmarshalOGroupByField2ᚕgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐGroupByFieldᚄ(ctx, v)
+			return ec.unmarshalOGroupByField2ᚕgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐGroupByFieldᚄ(ctx, v)
 		})
 	if err != nil {
 		return nil, err
@@ -4446,7 +4446,7 @@ func (ec *executionContext) field_Query_usage_args(ctx context.Context, rawArgs 
 	args["groupBy"] = arg1
 	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "filters",
 		func(ctx context.Context, v any) (*model.UsageFilters, error) {
-			return ec.unmarshalOUsageFilters2ᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐUsageFilters(ctx, v)
+			return ec.unmarshalOUsageFilters2ᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐUsageFilters(ctx, v)
 		})
 	if err != nil {
 		return nil, err
@@ -4671,7 +4671,7 @@ func (ec *executionContext) _Account_providers(ctx context.Context, field graphq
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v []*model.Provider) graphql.Marshaler {
-			return ec.marshalNProvider2ᚕᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐProviderᚄ(ctx, selections, v)
+			return ec.marshalNProvider2ᚕᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐProviderᚄ(ctx, selections, v)
 		},
 		true,
 		true,
@@ -4703,7 +4703,7 @@ func (ec *executionContext) _Account_keys(ctx context.Context, field graphql.Col
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v []*model.Key) graphql.Marshaler {
-			return ec.marshalNKey2ᚕᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐKeyᚄ(ctx, selections, v)
+			return ec.marshalNKey2ᚕᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐKeyᚄ(ctx, selections, v)
 		},
 		true,
 		true,
@@ -4827,7 +4827,7 @@ func (ec *executionContext) _Benchmark_status(ctx context.Context, field graphql
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v model.BenchmarkStatus) graphql.Marshaler {
-			return ec.marshalNBenchmarkStatus2githubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐBenchmarkStatus(ctx, selections, v)
+			return ec.marshalNBenchmarkStatus2githubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐBenchmarkStatus(ctx, selections, v)
 		},
 		true,
 		true,
@@ -4850,7 +4850,7 @@ func (ec *executionContext) _Benchmark_results(ctx context.Context, field graphq
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v []*model.BenchmarkResult) graphql.Marshaler {
-			return ec.marshalNBenchmarkResult2ᚕᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐBenchmarkResultᚄ(ctx, selections, v)
+			return ec.marshalNBenchmarkResult2ᚕᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐBenchmarkResultᚄ(ctx, selections, v)
 		},
 		true,
 		true,
@@ -4928,7 +4928,7 @@ func (ec *executionContext) _BenchmarkConnection_edges(ctx context.Context, fiel
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v []*model.BenchmarkEdge) graphql.Marshaler {
-			return ec.marshalNBenchmarkEdge2ᚕᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐBenchmarkEdgeᚄ(ctx, selections, v)
+			return ec.marshalNBenchmarkEdge2ᚕᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐBenchmarkEdgeᚄ(ctx, selections, v)
 		},
 		true,
 		true,
@@ -4960,7 +4960,7 @@ func (ec *executionContext) _BenchmarkConnection_pageInfo(ctx context.Context, f
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *model.PageInfo) graphql.Marshaler {
-			return ec.marshalNPageInfo2ᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐPageInfo(ctx, selections, v)
+			return ec.marshalNPageInfo2ᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐPageInfo(ctx, selections, v)
 		},
 		true,
 		true,
@@ -5015,7 +5015,7 @@ func (ec *executionContext) _BenchmarkEdge_node(ctx context.Context, field graph
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *model.Benchmark) graphql.Marshaler {
-			return ec.marshalNBenchmark2ᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐBenchmark(ctx, selections, v)
+			return ec.marshalNBenchmark2ᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐBenchmark(ctx, selections, v)
 		},
 		true,
 		true,
@@ -5116,7 +5116,7 @@ func (ec *executionContext) _BenchmarkResult_model(ctx context.Context, field gr
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *model.Model) graphql.Marshaler {
-			return ec.marshalNModel2ᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐModel(ctx, selections, v)
+			return ec.marshalNModel2ᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐModel(ctx, selections, v)
 		},
 		true,
 		true,
@@ -5148,7 +5148,7 @@ func (ec *executionContext) _BenchmarkResult_metrics(ctx context.Context, field 
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v []*model.Metric) graphql.Marshaler {
-			return ec.marshalNMetric2ᚕᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐMetricᚄ(ctx, selections, v)
+			return ec.marshalNMetric2ᚕᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐMetricᚄ(ctx, selections, v)
 		},
 		true,
 		true,
@@ -5272,7 +5272,7 @@ func (ec *executionContext) _BenchmarkRun_status(ctx context.Context, field grap
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v model.BenchmarkStatus) graphql.Marshaler {
-			return ec.marshalNBenchmarkStatus2githubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐBenchmarkStatus(ctx, selections, v)
+			return ec.marshalNBenchmarkStatus2githubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐBenchmarkStatus(ctx, selections, v)
 		},
 		true,
 		true,
@@ -5295,7 +5295,7 @@ func (ec *executionContext) _BenchmarkRun_results(ctx context.Context, field gra
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v []*model.BenchmarkResult) graphql.Marshaler {
-			return ec.marshalNBenchmarkResult2ᚕᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐBenchmarkResultᚄ(ctx, selections, v)
+			return ec.marshalNBenchmarkResult2ᚕᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐBenchmarkResultᚄ(ctx, selections, v)
 		},
 		true,
 		true,
@@ -5511,7 +5511,7 @@ func (ec *executionContext) _Key_provider(ctx context.Context, field graphql.Col
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *model.Provider) graphql.Marshaler {
-			return ec.marshalNProvider2ᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐProvider(ctx, selections, v)
+			return ec.marshalNProvider2ᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐProvider(ctx, selections, v)
 		},
 		true,
 		true,
@@ -5750,7 +5750,7 @@ func (ec *executionContext) _Model_provider(ctx context.Context, field graphql.C
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *model.Provider) graphql.Marshaler {
-			return ec.marshalNProvider2ᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐProvider(ctx, selections, v)
+			return ec.marshalNProvider2ᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐProvider(ctx, selections, v)
 		},
 		true,
 		true,
@@ -5828,7 +5828,7 @@ func (ec *executionContext) _Model_capabilities(ctx context.Context, field graph
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v []model.Capability) graphql.Marshaler {
-			return ec.marshalNCapability2ᚕgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐCapabilityᚄ(ctx, selections, v)
+			return ec.marshalNCapability2ᚕgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐCapabilityᚄ(ctx, selections, v)
 		},
 		true,
 		true,
@@ -6012,7 +6012,7 @@ func (ec *executionContext) _Model_metrics(ctx context.Context, field graphql.Co
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *model.ModelMetrics) graphql.Marshaler {
-			return ec.marshalOModelMetrics2ᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐModelMetrics(ctx, selections, v)
+			return ec.marshalOModelMetrics2ᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐModelMetrics(ctx, selections, v)
 		},
 		true,
 		false,
@@ -6044,7 +6044,7 @@ func (ec *executionContext) _Model_usageStats(ctx context.Context, field graphql
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *model.ModelUsageStats) graphql.Marshaler {
-			return ec.marshalOModelUsageStats2ᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐModelUsageStats(ctx, selections, v)
+			return ec.marshalOModelUsageStats2ᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐModelUsageStats(ctx, selections, v)
 		},
 		true,
 		false,
@@ -6076,7 +6076,7 @@ func (ec *executionContext) _Model_relatedModels(ctx context.Context, field grap
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v []*model.Model) graphql.Marshaler {
-			return ec.marshalNModel2ᚕᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐModelᚄ(ctx, selections, v)
+			return ec.marshalNModel2ᚕᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐModelᚄ(ctx, selections, v)
 		},
 		true,
 		true,
@@ -6223,7 +6223,7 @@ func (ec *executionContext) _ModelAvailabilityEvent_model(ctx context.Context, f
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *model.Model) graphql.Marshaler {
-			return ec.marshalNModel2ᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐModel(ctx, selections, v)
+			return ec.marshalNModel2ᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐModel(ctx, selections, v)
 		},
 		true,
 		true,
@@ -6324,7 +6324,7 @@ func (ec *executionContext) _ModelComparison_models(ctx context.Context, field g
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v []*model.Model) graphql.Marshaler {
-			return ec.marshalNModel2ᚕᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐModelᚄ(ctx, selections, v)
+			return ec.marshalNModel2ᚕᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐModelᚄ(ctx, selections, v)
 		},
 		true,
 		true,
@@ -6356,7 +6356,7 @@ func (ec *executionContext) _ModelComparison_metric(ctx context.Context, field g
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v model.MetricType) graphql.Marshaler {
-			return ec.marshalNMetricType2githubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐMetricType(ctx, selections, v)
+			return ec.marshalNMetricType2githubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐMetricType(ctx, selections, v)
 		},
 		true,
 		true,
@@ -6402,7 +6402,7 @@ func (ec *executionContext) _ModelComparison_winner(ctx context.Context, field g
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *model.Model) graphql.Marshaler {
-			return ec.marshalOModel2ᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐModel(ctx, selections, v)
+			return ec.marshalOModel2ᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐModel(ctx, selections, v)
 		},
 		true,
 		false,
@@ -6457,7 +6457,7 @@ func (ec *executionContext) _ModelConnection_nodes(ctx context.Context, field gr
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v []*model.Model) graphql.Marshaler {
-			return ec.marshalNModel2ᚕᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐModelᚄ(ctx, selections, v)
+			return ec.marshalNModel2ᚕᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐModelᚄ(ctx, selections, v)
 		},
 		true,
 		true,
@@ -6489,7 +6489,7 @@ func (ec *executionContext) _ModelConnection_pageInfo(ctx context.Context, field
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *model.PageInfo) graphql.Marshaler {
-			return ec.marshalNPageInfo2ᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐPageInfo(ctx, selections, v)
+			return ec.marshalNPageInfo2ᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐPageInfo(ctx, selections, v)
 		},
 		true,
 		true,
@@ -6751,7 +6751,7 @@ func (ec *executionContext) _ModelUsage_model(ctx context.Context, field graphql
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *model.Model) graphql.Marshaler {
-			return ec.marshalNModel2ᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐModel(ctx, selections, v)
+			return ec.marshalNModel2ᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐModel(ctx, selections, v)
 		},
 		true,
 		true,
@@ -6990,7 +6990,7 @@ func (ec *executionContext) _ModelUsageStats_byTaskType(ctx context.Context, fie
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v []*model.TaskTypeUsage) graphql.Marshaler {
-			return ec.marshalNTaskTypeUsage2ᚕᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐTaskTypeUsageᚄ(ctx, selections, v)
+			return ec.marshalNTaskTypeUsage2ᚕᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐTaskTypeUsageᚄ(ctx, selections, v)
 		},
 		true,
 		true,
@@ -7022,7 +7022,7 @@ func (ec *executionContext) _ModelUsageStats_byDomain(ctx context.Context, field
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v []*model.DomainUsage) graphql.Marshaler {
-			return ec.marshalNDomainUsage2ᚕᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐDomainUsageᚄ(ctx, selections, v)
+			return ec.marshalNDomainUsage2ᚕᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐDomainUsageᚄ(ctx, selections, v)
 		},
 		true,
 		true,
@@ -7055,7 +7055,7 @@ func (ec *executionContext) _Mutation_updateModelStatus(ctx context.Context, fie
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *model.Model) graphql.Marshaler {
-			return ec.marshalNModel2ᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐModel(ctx, selections, v)
+			return ec.marshalNModel2ᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐModel(ctx, selections, v)
 		},
 		true,
 		true,
@@ -7099,7 +7099,7 @@ func (ec *executionContext) _Mutation_createPolicy(ctx context.Context, field gr
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *model.Policy) graphql.Marshaler {
-			return ec.marshalNPolicy2ᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐPolicy(ctx, selections, v)
+			return ec.marshalNPolicy2ᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐPolicy(ctx, selections, v)
 		},
 		true,
 		true,
@@ -7143,7 +7143,7 @@ func (ec *executionContext) _Mutation_updatePolicy(ctx context.Context, field gr
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *model.Policy) graphql.Marshaler {
-			return ec.marshalNPolicy2ᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐPolicy(ctx, selections, v)
+			return ec.marshalNPolicy2ᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐPolicy(ctx, selections, v)
 		},
 		true,
 		true,
@@ -7187,7 +7187,7 @@ func (ec *executionContext) _Mutation_activatePolicy(ctx context.Context, field 
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *model.Policy) graphql.Marshaler {
-			return ec.marshalNPolicy2ᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐPolicy(ctx, selections, v)
+			return ec.marshalNPolicy2ᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐPolicy(ctx, selections, v)
 		},
 		true,
 		true,
@@ -7231,7 +7231,7 @@ func (ec *executionContext) _Mutation_deactivatePolicy(ctx context.Context, fiel
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *model.Policy) graphql.Marshaler {
-			return ec.marshalNPolicy2ᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐPolicy(ctx, selections, v)
+			return ec.marshalNPolicy2ᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐPolicy(ctx, selections, v)
 		},
 		true,
 		true,
@@ -7275,7 +7275,7 @@ func (ec *executionContext) _Mutation_createBenchmark(ctx context.Context, field
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *model.Benchmark) graphql.Marshaler {
-			return ec.marshalNBenchmark2ᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐBenchmark(ctx, selections, v)
+			return ec.marshalNBenchmark2ᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐBenchmark(ctx, selections, v)
 		},
 		true,
 		true,
@@ -7319,7 +7319,7 @@ func (ec *executionContext) _Mutation_refreshProviderToken(ctx context.Context, 
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *model.Account) graphql.Marshaler {
-			return ec.marshalNAccount2ᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐAccount(ctx, selections, v)
+			return ec.marshalNAccount2ᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐAccount(ctx, selections, v)
 		},
 		true,
 		true,
@@ -7523,7 +7523,7 @@ func (ec *executionContext) _Policy_type(ctx context.Context, field graphql.Coll
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v model.PolicyType) graphql.Marshaler {
-			return ec.marshalNPolicyType2githubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐPolicyType(ctx, selections, v)
+			return ec.marshalNPolicyType2githubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐPolicyType(ctx, selections, v)
 		},
 		true,
 		true,
@@ -7592,7 +7592,7 @@ func (ec *executionContext) _Policy_conditions(ctx context.Context, field graphq
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v []*model.PolicyCondition) graphql.Marshaler {
-			return ec.marshalNPolicyCondition2ᚕᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐPolicyConditionᚄ(ctx, selections, v)
+			return ec.marshalNPolicyCondition2ᚕᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐPolicyConditionᚄ(ctx, selections, v)
 		},
 		true,
 		true,
@@ -7624,7 +7624,7 @@ func (ec *executionContext) _Policy_actions(ctx context.Context, field graphql.C
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v []*model.PolicyAction) graphql.Marshaler {
-			return ec.marshalNPolicyAction2ᚕᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐPolicyActionᚄ(ctx, selections, v)
+			return ec.marshalNPolicyAction2ᚕᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐPolicyActionᚄ(ctx, selections, v)
 		},
 		true,
 		true,
@@ -7656,7 +7656,7 @@ func (ec *executionContext) _Policy_scope(ctx context.Context, field graphql.Col
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *model.PolicyScope) graphql.Marshaler {
-			return ec.marshalNPolicyScope2ᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐPolicyScope(ctx, selections, v)
+			return ec.marshalNPolicyScope2ᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐPolicyScope(ctx, selections, v)
 		},
 		true,
 		true,
@@ -8148,7 +8148,7 @@ func (ec *executionContext) _Provider_type(ctx context.Context, field graphql.Co
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v model.ProviderType) graphql.Marshaler {
-			return ec.marshalNProviderType2githubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐProviderType(ctx, selections, v)
+			return ec.marshalNProviderType2githubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐProviderType(ctx, selections, v)
 		},
 		true,
 		true,
@@ -8171,7 +8171,7 @@ func (ec *executionContext) _Provider_status(ctx context.Context, field graphql.
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v model.ProviderStatus) graphql.Marshaler {
-			return ec.marshalNProviderStatus2githubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐProviderStatus(ctx, selections, v)
+			return ec.marshalNProviderStatus2githubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐProviderStatus(ctx, selections, v)
 		},
 		true,
 		true,
@@ -8194,7 +8194,7 @@ func (ec *executionContext) _Provider_accounts(ctx context.Context, field graphq
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v []*model.ProviderAccount) graphql.Marshaler {
-			return ec.marshalNProviderAccount2ᚕᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐProviderAccountᚄ(ctx, selections, v)
+			return ec.marshalNProviderAccount2ᚕᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐProviderAccountᚄ(ctx, selections, v)
 		},
 		true,
 		true,
@@ -8226,7 +8226,7 @@ func (ec *executionContext) _Provider_models(ctx context.Context, field graphql.
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v []*model.Model) graphql.Marshaler {
-			return ec.marshalNModel2ᚕᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐModelᚄ(ctx, selections, v)
+			return ec.marshalNModel2ᚕᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐModelᚄ(ctx, selections, v)
 		},
 		true,
 		true,
@@ -8373,7 +8373,7 @@ func (ec *executionContext) _ProviderAccount_provider(ctx context.Context, field
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *model.Provider) graphql.Marshaler {
-			return ec.marshalNProvider2ᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐProvider(ctx, selections, v)
+			return ec.marshalNProvider2ᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐProvider(ctx, selections, v)
 		},
 		true,
 		true,
@@ -8428,7 +8428,7 @@ func (ec *executionContext) _ProviderAccount_status(ctx context.Context, field g
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v model.AccountStatus) graphql.Marshaler {
-			return ec.marshalNAccountStatus2githubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐAccountStatus(ctx, selections, v)
+			return ec.marshalNAccountStatus2githubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐAccountStatus(ctx, selections, v)
 		},
 		true,
 		true,
@@ -8497,7 +8497,7 @@ func (ec *executionContext) _ProviderAccount_models(ctx context.Context, field g
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v []*model.Model) graphql.Marshaler {
-			return ec.marshalNModel2ᚕᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐModelᚄ(ctx, selections, v)
+			return ec.marshalNModel2ᚕᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐModelᚄ(ctx, selections, v)
 		},
 		true,
 		true,
@@ -8621,7 +8621,7 @@ func (ec *executionContext) _ProviderHealthEvent_status(ctx context.Context, fie
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v model.ProviderStatus) graphql.Marshaler {
-			return ec.marshalNProviderStatus2githubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐProviderStatus(ctx, selections, v)
+			return ec.marshalNProviderStatus2githubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐProviderStatus(ctx, selections, v)
 		},
 		true,
 		true,
@@ -8713,7 +8713,7 @@ func (ec *executionContext) _ProviderUsage_provider(ctx context.Context, field g
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *model.Provider) graphql.Marshaler {
-			return ec.marshalNProvider2ᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐProvider(ctx, selections, v)
+			return ec.marshalNProvider2ᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐProvider(ctx, selections, v)
 		},
 		true,
 		true,
@@ -8861,7 +8861,7 @@ func (ec *executionContext) _Query_models(ctx context.Context, field graphql.Col
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *model.ModelConnection) graphql.Marshaler {
-			return ec.marshalNModelConnection2ᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐModelConnection(ctx, selections, v)
+			return ec.marshalNModelConnection2ᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐModelConnection(ctx, selections, v)
 		},
 		true,
 		true,
@@ -8905,7 +8905,7 @@ func (ec *executionContext) _Query_model(ctx context.Context, field graphql.Coll
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *model.Model) graphql.Marshaler {
-			return ec.marshalOModel2ᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐModel(ctx, selections, v)
+			return ec.marshalOModel2ᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐModel(ctx, selections, v)
 		},
 		true,
 		false,
@@ -8949,7 +8949,7 @@ func (ec *executionContext) _Query_usage(ctx context.Context, field graphql.Coll
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *model.UsageReport) graphql.Marshaler {
-			return ec.marshalNUsageReport2ᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐUsageReport(ctx, selections, v)
+			return ec.marshalNUsageReport2ᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐUsageReport(ctx, selections, v)
 		},
 		true,
 		true,
@@ -8993,7 +8993,7 @@ func (ec *executionContext) _Query_routingHistory(ctx context.Context, field gra
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *model.RoutingHistoryConnection) graphql.Marshaler {
-			return ec.marshalNRoutingHistoryConnection2ᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐRoutingHistoryConnection(ctx, selections, v)
+			return ec.marshalNRoutingHistoryConnection2ᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐRoutingHistoryConnection(ctx, selections, v)
 		},
 		true,
 		true,
@@ -9037,7 +9037,7 @@ func (ec *executionContext) _Query_policies(ctx context.Context, field graphql.C
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v []*model.Policy) graphql.Marshaler {
-			return ec.marshalNPolicy2ᚕᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐPolicyᚄ(ctx, selections, v)
+			return ec.marshalNPolicy2ᚕᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐPolicyᚄ(ctx, selections, v)
 		},
 		true,
 		true,
@@ -9081,7 +9081,7 @@ func (ec *executionContext) _Query_policy(ctx context.Context, field graphql.Col
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *model.Policy) graphql.Marshaler {
-			return ec.marshalOPolicy2ᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐPolicy(ctx, selections, v)
+			return ec.marshalOPolicy2ᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐPolicy(ctx, selections, v)
 		},
 		true,
 		false,
@@ -9125,7 +9125,7 @@ func (ec *executionContext) _Query_benchmarks(ctx context.Context, field graphql
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v []*model.BenchmarkResult) graphql.Marshaler {
-			return ec.marshalNBenchmarkResult2ᚕᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐBenchmarkResultᚄ(ctx, selections, v)
+			return ec.marshalNBenchmarkResult2ᚕᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐBenchmarkResultᚄ(ctx, selections, v)
 		},
 		true,
 		true,
@@ -9169,7 +9169,7 @@ func (ec *executionContext) _Query_benchmark(ctx context.Context, field graphql.
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *model.BenchmarkResult) graphql.Marshaler {
-			return ec.marshalOBenchmarkResult2ᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐBenchmarkResult(ctx, selections, v)
+			return ec.marshalOBenchmarkResult2ᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐBenchmarkResult(ctx, selections, v)
 		},
 		true,
 		false,
@@ -9213,7 +9213,7 @@ func (ec *executionContext) _Query_benchmarkRuns(ctx context.Context, field grap
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v []*model.BenchmarkRun) graphql.Marshaler {
-			return ec.marshalNBenchmarkRun2ᚕᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐBenchmarkRunᚄ(ctx, selections, v)
+			return ec.marshalNBenchmarkRun2ᚕᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐBenchmarkRunᚄ(ctx, selections, v)
 		},
 		true,
 		true,
@@ -9256,7 +9256,7 @@ func (ec *executionContext) _Query_providers(ctx context.Context, field graphql.
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v []*model.Provider) graphql.Marshaler {
-			return ec.marshalNProvider2ᚕᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐProviderᚄ(ctx, selections, v)
+			return ec.marshalNProvider2ᚕᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐProviderᚄ(ctx, selections, v)
 		},
 		true,
 		true,
@@ -9289,7 +9289,7 @@ func (ec *executionContext) _Query_provider(ctx context.Context, field graphql.C
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *model.Provider) graphql.Marshaler {
-			return ec.marshalOProvider2ᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐProvider(ctx, selections, v)
+			return ec.marshalOProvider2ᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐProvider(ctx, selections, v)
 		},
 		true,
 		false,
@@ -9333,7 +9333,7 @@ func (ec *executionContext) _Query_providerAccounts(ctx context.Context, field g
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v []*model.ProviderAccount) graphql.Marshaler {
-			return ec.marshalNProviderAccount2ᚕᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐProviderAccountᚄ(ctx, selections, v)
+			return ec.marshalNProviderAccount2ᚕᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐProviderAccountᚄ(ctx, selections, v)
 		},
 		true,
 		true,
@@ -9377,7 +9377,7 @@ func (ec *executionContext) _Query_providerAccount(ctx context.Context, field gr
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *model.ProviderAccount) graphql.Marshaler {
-			return ec.marshalOProviderAccount2ᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐProviderAccount(ctx, selections, v)
+			return ec.marshalOProviderAccount2ᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐProviderAccount(ctx, selections, v)
 		},
 		true,
 		false,
@@ -9496,7 +9496,7 @@ func (ec *executionContext) _RoutingAlternative_model(ctx context.Context, field
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *model.Model) graphql.Marshaler {
-			return ec.marshalNModel2ᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐModel(ctx, selections, v)
+			return ec.marshalNModel2ᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐModel(ctx, selections, v)
 		},
 		true,
 		true,
@@ -9574,7 +9574,7 @@ func (ec *executionContext) _RoutingDecision_model(ctx context.Context, field gr
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *model.Model) graphql.Marshaler {
-			return ec.marshalNModel2ᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐModel(ctx, selections, v)
+			return ec.marshalNModel2ᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐModel(ctx, selections, v)
 		},
 		true,
 		true,
@@ -9767,7 +9767,7 @@ func (ec *executionContext) _RoutingEvent_type(ctx context.Context, field graphq
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v model.RoutingEventType) graphql.Marshaler {
-			return ec.marshalNRoutingEventType2githubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐRoutingEventType(ctx, selections, v)
+			return ec.marshalNRoutingEventType2githubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐRoutingEventType(ctx, selections, v)
 		},
 		true,
 		true,
@@ -9790,7 +9790,7 @@ func (ec *executionContext) _RoutingEvent_decision(ctx context.Context, field gr
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *model.RoutingDecision) graphql.Marshaler {
-			return ec.marshalORoutingDecision2ᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐRoutingDecision(ctx, selections, v)
+			return ec.marshalORoutingDecision2ᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐRoutingDecision(ctx, selections, v)
 		},
 		true,
 		false,
@@ -9822,7 +9822,7 @@ func (ec *executionContext) _RoutingEvent_feedback(ctx context.Context, field gr
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *model.RoutingFeedback) graphql.Marshaler {
-			return ec.marshalORoutingFeedback2ᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐRoutingFeedback(ctx, selections, v)
+			return ec.marshalORoutingFeedback2ᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐRoutingFeedback(ctx, selections, v)
 		},
 		true,
 		false,
@@ -9900,7 +9900,7 @@ func (ec *executionContext) _RoutingFeedback_preferredModel(ctx context.Context,
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *model.Model) graphql.Marshaler {
-			return ec.marshalOModel2ᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐModel(ctx, selections, v)
+			return ec.marshalOModel2ᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐModel(ctx, selections, v)
 		},
 		true,
 		false,
@@ -10139,7 +10139,7 @@ func (ec *executionContext) _RoutingHistory_capabilities(ctx context.Context, fi
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v []model.Capability) graphql.Marshaler {
-			return ec.marshalNCapability2ᚕgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐCapabilityᚄ(ctx, selections, v)
+			return ec.marshalNCapability2ᚕgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐCapabilityᚄ(ctx, selections, v)
 		},
 		true,
 		true,
@@ -10162,7 +10162,7 @@ func (ec *executionContext) _RoutingHistory_selectedModel(ctx context.Context, f
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *model.Model) graphql.Marshaler {
-			return ec.marshalNModel2ᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐModel(ctx, selections, v)
+			return ec.marshalNModel2ᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐModel(ctx, selections, v)
 		},
 		true,
 		true,
@@ -10194,7 +10194,7 @@ func (ec *executionContext) _RoutingHistory_alternatives(ctx context.Context, fi
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v []*model.RoutingAlternative) graphql.Marshaler {
-			return ec.marshalNRoutingAlternative2ᚕᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐRoutingAlternativeᚄ(ctx, selections, v)
+			return ec.marshalNRoutingAlternative2ᚕᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐRoutingAlternativeᚄ(ctx, selections, v)
 		},
 		true,
 		true,
@@ -10433,7 +10433,7 @@ func (ec *executionContext) _RoutingHistory_feedback(ctx context.Context, field 
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *model.RoutingFeedback) graphql.Marshaler {
-			return ec.marshalORoutingFeedback2ᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐRoutingFeedback(ctx, selections, v)
+			return ec.marshalORoutingFeedback2ᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐRoutingFeedback(ctx, selections, v)
 		},
 		true,
 		false,
@@ -10465,7 +10465,7 @@ func (ec *executionContext) _RoutingHistoryConnection_nodes(ctx context.Context,
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v []*model.RoutingHistory) graphql.Marshaler {
-			return ec.marshalNRoutingHistory2ᚕᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐRoutingHistoryᚄ(ctx, selections, v)
+			return ec.marshalNRoutingHistory2ᚕᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐRoutingHistoryᚄ(ctx, selections, v)
 		},
 		true,
 		true,
@@ -10497,7 +10497,7 @@ func (ec *executionContext) _RoutingHistoryConnection_pageInfo(ctx context.Conte
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *model.PageInfo) graphql.Marshaler {
-			return ec.marshalNPageInfo2ᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐPageInfo(ctx, selections, v)
+			return ec.marshalNPageInfo2ᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐPageInfo(ctx, selections, v)
 		},
 		true,
 		true,
@@ -10553,7 +10553,7 @@ func (ec *executionContext) _Subscription_modelAvailability(ctx context.Context,
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *model.ModelAvailabilityEvent) graphql.Marshaler {
-			return ec.marshalNModelAvailabilityEvent2ᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐModelAvailabilityEvent(ctx, selections, v)
+			return ec.marshalNModelAvailabilityEvent2ᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐModelAvailabilityEvent(ctx, selections, v)
 		},
 		true,
 		true,
@@ -10597,7 +10597,7 @@ func (ec *executionContext) _Subscription_routingEvents(ctx context.Context, fie
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *model.RoutingEvent) graphql.Marshaler {
-			return ec.marshalNRoutingEvent2ᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐRoutingEvent(ctx, selections, v)
+			return ec.marshalNRoutingEvent2ᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐRoutingEvent(ctx, selections, v)
 		},
 		true,
 		true,
@@ -10641,7 +10641,7 @@ func (ec *executionContext) _Subscription_usageUpdates(ctx context.Context, fiel
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *model.UsageUpdate) graphql.Marshaler {
-			return ec.marshalNUsageUpdate2ᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐUsageUpdate(ctx, selections, v)
+			return ec.marshalNUsageUpdate2ᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐUsageUpdate(ctx, selections, v)
 		},
 		true,
 		true,
@@ -10685,7 +10685,7 @@ func (ec *executionContext) _Subscription_benchmarkProgress(ctx context.Context,
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *model.BenchmarkRun) graphql.Marshaler {
-			return ec.marshalNBenchmarkRun2ᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐBenchmarkRun(ctx, selections, v)
+			return ec.marshalNBenchmarkRun2ᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐBenchmarkRun(ctx, selections, v)
 		},
 		true,
 		true,
@@ -10729,7 +10729,7 @@ func (ec *executionContext) _Subscription_providerHealth(ctx context.Context, fi
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *model.ProviderHealthEvent) graphql.Marshaler {
-			return ec.marshalNProviderHealthEvent2ᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐProviderHealthEvent(ctx, selections, v)
+			return ec.marshalNProviderHealthEvent2ᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐProviderHealthEvent(ctx, selections, v)
 		},
 		true,
 		true,
@@ -10979,7 +10979,7 @@ func (ec *executionContext) _UsageAlert_type(ctx context.Context, field graphql.
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v model.AlertType) graphql.Marshaler {
-			return ec.marshalNAlertType2githubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐAlertType(ctx, selections, v)
+			return ec.marshalNAlertType2githubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐAlertType(ctx, selections, v)
 		},
 		true,
 		true,
@@ -11002,7 +11002,7 @@ func (ec *executionContext) _UsageAlert_severity(ctx context.Context, field grap
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v model.AlertSeverity) graphql.Marshaler {
-			return ec.marshalNAlertSeverity2githubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐAlertSeverity(ctx, selections, v)
+			return ec.marshalNAlertSeverity2githubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐAlertSeverity(ctx, selections, v)
 		},
 		true,
 		true,
@@ -11255,7 +11255,7 @@ func (ec *executionContext) _UsageReport_timeframe(ctx context.Context, field gr
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v model.Timeframe) graphql.Marshaler {
-			return ec.marshalNTimeframe2githubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐTimeframe(ctx, selections, v)
+			return ec.marshalNTimeframe2githubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐTimeframe(ctx, selections, v)
 		},
 		true,
 		true,
@@ -11393,7 +11393,7 @@ func (ec *executionContext) _UsageReport_byProvider(ctx context.Context, field g
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v []*model.ProviderUsage) graphql.Marshaler {
-			return ec.marshalNProviderUsage2ᚕᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐProviderUsageᚄ(ctx, selections, v)
+			return ec.marshalNProviderUsage2ᚕᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐProviderUsageᚄ(ctx, selections, v)
 		},
 		true,
 		true,
@@ -11425,7 +11425,7 @@ func (ec *executionContext) _UsageReport_byModel(ctx context.Context, field grap
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v []*model.ModelUsage) graphql.Marshaler {
-			return ec.marshalNModelUsage2ᚕᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐModelUsageᚄ(ctx, selections, v)
+			return ec.marshalNModelUsage2ᚕᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐModelUsageᚄ(ctx, selections, v)
 		},
 		true,
 		true,
@@ -11457,7 +11457,7 @@ func (ec *executionContext) _UsageReport_byUser(ctx context.Context, field graph
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v []*model.UserUsage) graphql.Marshaler {
-			return ec.marshalOUserUsage2ᚕᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐUserUsageᚄ(ctx, selections, v)
+			return ec.marshalOUserUsage2ᚕᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐUserUsageᚄ(ctx, selections, v)
 		},
 		true,
 		false,
@@ -11489,7 +11489,7 @@ func (ec *executionContext) _UsageReport_byProject(ctx context.Context, field gr
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v []*model.ProjectUsage) graphql.Marshaler {
-			return ec.marshalOProjectUsage2ᚕᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐProjectUsageᚄ(ctx, selections, v)
+			return ec.marshalOProjectUsage2ᚕᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐProjectUsageᚄ(ctx, selections, v)
 		},
 		true,
 		false,
@@ -11521,7 +11521,7 @@ func (ec *executionContext) _UsageReport_byTaskType(ctx context.Context, field g
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v []*model.TaskTypeBreakdown) graphql.Marshaler {
-			return ec.marshalNTaskTypeBreakdown2ᚕᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐTaskTypeBreakdownᚄ(ctx, selections, v)
+			return ec.marshalNTaskTypeBreakdown2ᚕᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐTaskTypeBreakdownᚄ(ctx, selections, v)
 		},
 		true,
 		true,
@@ -11553,7 +11553,7 @@ func (ec *executionContext) _UsageReport_timeSeries(ctx context.Context, field g
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v []*model.UsageDataPoint) graphql.Marshaler {
-			return ec.marshalNUsageDataPoint2ᚕᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐUsageDataPointᚄ(ctx, selections, v)
+			return ec.marshalNUsageDataPoint2ᚕᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐUsageDataPointᚄ(ctx, selections, v)
 		},
 		true,
 		true,
@@ -11585,7 +11585,7 @@ func (ec *executionContext) _UsageReport_trends(ctx context.Context, field graph
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *model.UsageTrends) graphql.Marshaler {
-			return ec.marshalOUsageTrends2ᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐUsageTrends(ctx, selections, v)
+			return ec.marshalOUsageTrends2ᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐUsageTrends(ctx, selections, v)
 		},
 		true,
 		false,
@@ -11824,7 +11824,7 @@ func (ec *executionContext) _UsageUpdate_topModels(ctx context.Context, field gr
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v []*model.ModelUsage) graphql.Marshaler {
-			return ec.marshalNModelUsage2ᚕᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐModelUsageᚄ(ctx, selections, v)
+			return ec.marshalNModelUsage2ᚕᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐModelUsageᚄ(ctx, selections, v)
 		},
 		true,
 		true,
@@ -11856,7 +11856,7 @@ func (ec *executionContext) _UsageUpdate_alerts(ctx context.Context, field graph
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v []*model.UsageAlert) graphql.Marshaler {
-			return ec.marshalNUsageAlert2ᚕᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐUsageAlertᚄ(ctx, selections, v)
+			return ec.marshalNUsageAlert2ᚕᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐUsageAlertᚄ(ctx, selections, v)
 		},
 		true,
 		true,
@@ -13085,7 +13085,7 @@ func (ec *executionContext) unmarshalInputBenchmarkFilter(ctx context.Context, o
 			}
 		case "dateRange":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("dateRange"))
-			data, err := ec.unmarshalODateRange2ᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐDateRange(ctx, v)
+			data, err := ec.unmarshalODateRange2ᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐDateRange(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -13094,7 +13094,7 @@ func (ec *executionContext) unmarshalInputBenchmarkFilter(ctx context.Context, o
 			}
 		case "status":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("status"))
-			data, err := ec.unmarshalOBenchmarkStatus2ᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐBenchmarkStatus(ctx, v)
+			data, err := ec.unmarshalOBenchmarkStatus2ᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐBenchmarkStatus(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -13344,7 +13344,7 @@ func (ec *executionContext) unmarshalInputPolicyInput(ctx context.Context, obj a
 			it.Description = data
 		case "type":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("type"))
-			data, err := ec.unmarshalNPolicyType2githubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐPolicyType(ctx, v)
+			data, err := ec.unmarshalNPolicyType2githubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐPolicyType(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -13358,21 +13358,21 @@ func (ec *executionContext) unmarshalInputPolicyInput(ctx context.Context, obj a
 			it.Priority = data
 		case "conditions":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("conditions"))
-			data, err := ec.unmarshalNPolicyConditionInput2ᚕᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐPolicyConditionInputᚄ(ctx, v)
+			data, err := ec.unmarshalNPolicyConditionInput2ᚕᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐPolicyConditionInputᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
 			it.Conditions = data
 		case "actions":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("actions"))
-			data, err := ec.unmarshalNPolicyActionInput2ᚕᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐPolicyActionInputᚄ(ctx, v)
+			data, err := ec.unmarshalNPolicyActionInput2ᚕᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐPolicyActionInputᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
 			it.Actions = data
 		case "scope":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("scope"))
-			data, err := ec.unmarshalNPolicyScopeInput2githubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐPolicyScopeInput(ctx, v)
+			data, err := ec.unmarshalNPolicyScopeInput2githubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐPolicyScopeInput(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -17246,11 +17246,11 @@ func (ec *executionContext) ___Type(ctx context.Context, sel ast.SelectionSet, o
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) marshalNAccount2githubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐAccount(ctx context.Context, sel ast.SelectionSet, v model.Account) graphql.Marshaler {
+func (ec *executionContext) marshalNAccount2githubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐAccount(ctx context.Context, sel ast.SelectionSet, v model.Account) graphql.Marshaler {
 	return ec._Account(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNAccount2ᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐAccount(ctx context.Context, sel ast.SelectionSet, v *model.Account) graphql.Marshaler {
+func (ec *executionContext) marshalNAccount2ᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐAccount(ctx context.Context, sel ast.SelectionSet, v *model.Account) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -17260,23 +17260,23 @@ func (ec *executionContext) marshalNAccount2ᚖgithubᚗcomᚋkooshapariᚋbifro
 	return ec._Account(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalNAccountStatus2githubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐAccountStatus(ctx context.Context, v any) (model.AccountStatus, error) {
+func (ec *executionContext) unmarshalNAccountStatus2githubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐAccountStatus(ctx context.Context, v any) (model.AccountStatus, error) {
 	var res model.AccountStatus
 	err := res.UnmarshalGQL(v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNAccountStatus2githubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐAccountStatus(ctx context.Context, sel ast.SelectionSet, v model.AccountStatus) graphql.Marshaler {
+func (ec *executionContext) marshalNAccountStatus2githubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐAccountStatus(ctx context.Context, sel ast.SelectionSet, v model.AccountStatus) graphql.Marshaler {
 	return v
 }
 
-func (ec *executionContext) unmarshalNAlertSeverity2githubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐAlertSeverity(ctx context.Context, v any) (model.AlertSeverity, error) {
+func (ec *executionContext) unmarshalNAlertSeverity2githubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐAlertSeverity(ctx context.Context, v any) (model.AlertSeverity, error) {
 	tmp, err := graphql.UnmarshalString(v)
 	res := model.AlertSeverity(tmp)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNAlertSeverity2githubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐAlertSeverity(ctx context.Context, sel ast.SelectionSet, v model.AlertSeverity) graphql.Marshaler {
+func (ec *executionContext) marshalNAlertSeverity2githubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐAlertSeverity(ctx context.Context, sel ast.SelectionSet, v model.AlertSeverity) graphql.Marshaler {
 	_ = sel
 	res := graphql.MarshalString(string(v))
 	if res == graphql.Null {
@@ -17287,13 +17287,13 @@ func (ec *executionContext) marshalNAlertSeverity2githubᚗcomᚋkooshapariᚋbi
 	return res
 }
 
-func (ec *executionContext) unmarshalNAlertType2githubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐAlertType(ctx context.Context, v any) (model.AlertType, error) {
+func (ec *executionContext) unmarshalNAlertType2githubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐAlertType(ctx context.Context, v any) (model.AlertType, error) {
 	tmp, err := graphql.UnmarshalString(v)
 	res := model.AlertType(tmp)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNAlertType2githubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐAlertType(ctx context.Context, sel ast.SelectionSet, v model.AlertType) graphql.Marshaler {
+func (ec *executionContext) marshalNAlertType2githubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐAlertType(ctx context.Context, sel ast.SelectionSet, v model.AlertType) graphql.Marshaler {
 	_ = sel
 	res := graphql.MarshalString(string(v))
 	if res == graphql.Null {
@@ -17304,11 +17304,11 @@ func (ec *executionContext) marshalNAlertType2githubᚗcomᚋkooshapariᚋbifros
 	return res
 }
 
-func (ec *executionContext) marshalNBenchmark2githubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐBenchmark(ctx context.Context, sel ast.SelectionSet, v model.Benchmark) graphql.Marshaler {
+func (ec *executionContext) marshalNBenchmark2githubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐBenchmark(ctx context.Context, sel ast.SelectionSet, v model.Benchmark) graphql.Marshaler {
 	return ec._Benchmark(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNBenchmark2ᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐBenchmark(ctx context.Context, sel ast.SelectionSet, v *model.Benchmark) graphql.Marshaler {
+func (ec *executionContext) marshalNBenchmark2ᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐBenchmark(ctx context.Context, sel ast.SelectionSet, v *model.Benchmark) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -17318,11 +17318,11 @@ func (ec *executionContext) marshalNBenchmark2ᚖgithubᚗcomᚋkooshapariᚋbif
 	return ec._Benchmark(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNBenchmarkEdge2ᚕᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐBenchmarkEdgeᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.BenchmarkEdge) graphql.Marshaler {
+func (ec *executionContext) marshalNBenchmarkEdge2ᚕᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐBenchmarkEdgeᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.BenchmarkEdge) graphql.Marshaler {
 	ret := graphql.MarshalSliceConcurrently(ctx, len(v), 0, false, func(ctx context.Context, i int) graphql.Marshaler {
 		fc := graphql.GetFieldContext(ctx)
 		fc.Result = &v[i]
-		return ec.marshalNBenchmarkEdge2ᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐBenchmarkEdge(ctx, sel, v[i])
+		return ec.marshalNBenchmarkEdge2ᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐBenchmarkEdge(ctx, sel, v[i])
 	})
 
 	for _, e := range ret {
@@ -17334,7 +17334,7 @@ func (ec *executionContext) marshalNBenchmarkEdge2ᚕᚖgithubᚗcomᚋkooshapar
 	return ret
 }
 
-func (ec *executionContext) marshalNBenchmarkEdge2ᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐBenchmarkEdge(ctx context.Context, sel ast.SelectionSet, v *model.BenchmarkEdge) graphql.Marshaler {
+func (ec *executionContext) marshalNBenchmarkEdge2ᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐBenchmarkEdge(ctx context.Context, sel ast.SelectionSet, v *model.BenchmarkEdge) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -17344,16 +17344,16 @@ func (ec *executionContext) marshalNBenchmarkEdge2ᚖgithubᚗcomᚋkooshapari�
 	return ec._BenchmarkEdge(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalNBenchmarkInput2githubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐBenchmarkInput(ctx context.Context, v any) (model.BenchmarkInput, error) {
+func (ec *executionContext) unmarshalNBenchmarkInput2githubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐBenchmarkInput(ctx context.Context, v any) (model.BenchmarkInput, error) {
 	res, err := ec.unmarshalInputBenchmarkInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNBenchmarkResult2ᚕᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐBenchmarkResultᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.BenchmarkResult) graphql.Marshaler {
+func (ec *executionContext) marshalNBenchmarkResult2ᚕᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐBenchmarkResultᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.BenchmarkResult) graphql.Marshaler {
 	ret := graphql.MarshalSliceConcurrently(ctx, len(v), 0, false, func(ctx context.Context, i int) graphql.Marshaler {
 		fc := graphql.GetFieldContext(ctx)
 		fc.Result = &v[i]
-		return ec.marshalNBenchmarkResult2ᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐBenchmarkResult(ctx, sel, v[i])
+		return ec.marshalNBenchmarkResult2ᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐBenchmarkResult(ctx, sel, v[i])
 	})
 
 	for _, e := range ret {
@@ -17365,7 +17365,7 @@ func (ec *executionContext) marshalNBenchmarkResult2ᚕᚖgithubᚗcomᚋkooshap
 	return ret
 }
 
-func (ec *executionContext) marshalNBenchmarkResult2ᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐBenchmarkResult(ctx context.Context, sel ast.SelectionSet, v *model.BenchmarkResult) graphql.Marshaler {
+func (ec *executionContext) marshalNBenchmarkResult2ᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐBenchmarkResult(ctx context.Context, sel ast.SelectionSet, v *model.BenchmarkResult) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -17375,15 +17375,15 @@ func (ec *executionContext) marshalNBenchmarkResult2ᚖgithubᚗcomᚋkooshapari
 	return ec._BenchmarkResult(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNBenchmarkRun2githubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐBenchmarkRun(ctx context.Context, sel ast.SelectionSet, v model.BenchmarkRun) graphql.Marshaler {
+func (ec *executionContext) marshalNBenchmarkRun2githubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐBenchmarkRun(ctx context.Context, sel ast.SelectionSet, v model.BenchmarkRun) graphql.Marshaler {
 	return ec._BenchmarkRun(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNBenchmarkRun2ᚕᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐBenchmarkRunᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.BenchmarkRun) graphql.Marshaler {
+func (ec *executionContext) marshalNBenchmarkRun2ᚕᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐBenchmarkRunᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.BenchmarkRun) graphql.Marshaler {
 	ret := graphql.MarshalSliceConcurrently(ctx, len(v), 0, false, func(ctx context.Context, i int) graphql.Marshaler {
 		fc := graphql.GetFieldContext(ctx)
 		fc.Result = &v[i]
-		return ec.marshalNBenchmarkRun2ᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐBenchmarkRun(ctx, sel, v[i])
+		return ec.marshalNBenchmarkRun2ᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐBenchmarkRun(ctx, sel, v[i])
 	})
 
 	for _, e := range ret {
@@ -17395,7 +17395,7 @@ func (ec *executionContext) marshalNBenchmarkRun2ᚕᚖgithubᚗcomᚋkooshapari
 	return ret
 }
 
-func (ec *executionContext) marshalNBenchmarkRun2ᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐBenchmarkRun(ctx context.Context, sel ast.SelectionSet, v *model.BenchmarkRun) graphql.Marshaler {
+func (ec *executionContext) marshalNBenchmarkRun2ᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐBenchmarkRun(ctx context.Context, sel ast.SelectionSet, v *model.BenchmarkRun) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -17405,13 +17405,13 @@ func (ec *executionContext) marshalNBenchmarkRun2ᚖgithubᚗcomᚋkooshapariᚋ
 	return ec._BenchmarkRun(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalNBenchmarkStatus2githubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐBenchmarkStatus(ctx context.Context, v any) (model.BenchmarkStatus, error) {
+func (ec *executionContext) unmarshalNBenchmarkStatus2githubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐBenchmarkStatus(ctx context.Context, v any) (model.BenchmarkStatus, error) {
 	tmp, err := graphql.UnmarshalString(v)
 	res := model.BenchmarkStatus(tmp)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNBenchmarkStatus2githubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐBenchmarkStatus(ctx context.Context, sel ast.SelectionSet, v model.BenchmarkStatus) graphql.Marshaler {
+func (ec *executionContext) marshalNBenchmarkStatus2githubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐBenchmarkStatus(ctx context.Context, sel ast.SelectionSet, v model.BenchmarkStatus) graphql.Marshaler {
 	_ = sel
 	res := graphql.MarshalString(string(v))
 	if res == graphql.Null {
@@ -17438,13 +17438,13 @@ func (ec *executionContext) marshalNBoolean2bool(ctx context.Context, sel ast.Se
 	return res
 }
 
-func (ec *executionContext) unmarshalNCapability2githubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐCapability(ctx context.Context, v any) (model.Capability, error) {
+func (ec *executionContext) unmarshalNCapability2githubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐCapability(ctx context.Context, v any) (model.Capability, error) {
 	tmp, err := graphql.UnmarshalString(v)
 	res := model.Capability(tmp)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNCapability2githubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐCapability(ctx context.Context, sel ast.SelectionSet, v model.Capability) graphql.Marshaler {
+func (ec *executionContext) marshalNCapability2githubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐCapability(ctx context.Context, sel ast.SelectionSet, v model.Capability) graphql.Marshaler {
 	_ = sel
 	res := graphql.MarshalString(string(v))
 	if res == graphql.Null {
@@ -17455,14 +17455,14 @@ func (ec *executionContext) marshalNCapability2githubᚗcomᚋkooshapariᚋbifro
 	return res
 }
 
-func (ec *executionContext) unmarshalNCapability2ᚕgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐCapabilityᚄ(ctx context.Context, v any) ([]model.Capability, error) {
+func (ec *executionContext) unmarshalNCapability2ᚕgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐCapabilityᚄ(ctx context.Context, v any) ([]model.Capability, error) {
 	var vSlice []any
 	vSlice = graphql.CoerceList(v)
 	var err error
 	res := make([]model.Capability, len(vSlice))
 	for i := range vSlice {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
-		res[i], err = ec.unmarshalNCapability2githubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐCapability(ctx, vSlice[i])
+		res[i], err = ec.unmarshalNCapability2githubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐCapability(ctx, vSlice[i])
 		if err != nil {
 			return nil, err
 		}
@@ -17470,11 +17470,11 @@ func (ec *executionContext) unmarshalNCapability2ᚕgithubᚗcomᚋkooshapariᚋ
 	return res, nil
 }
 
-func (ec *executionContext) marshalNCapability2ᚕgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐCapabilityᚄ(ctx context.Context, sel ast.SelectionSet, v []model.Capability) graphql.Marshaler {
+func (ec *executionContext) marshalNCapability2ᚕgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐCapabilityᚄ(ctx context.Context, sel ast.SelectionSet, v []model.Capability) graphql.Marshaler {
 	ret := graphql.MarshalSliceConcurrently(ctx, len(v), 0, false, func(ctx context.Context, i int) graphql.Marshaler {
 		fc := graphql.GetFieldContext(ctx)
 		fc.Result = &v[i]
-		return ec.marshalNCapability2githubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐCapability(ctx, sel, v[i])
+		return ec.marshalNCapability2githubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐCapability(ctx, sel, v[i])
 	})
 
 	for _, e := range ret {
@@ -17486,11 +17486,11 @@ func (ec *executionContext) marshalNCapability2ᚕgithubᚗcomᚋkooshapariᚋbi
 	return ret
 }
 
-func (ec *executionContext) marshalNDomainUsage2ᚕᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐDomainUsageᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.DomainUsage) graphql.Marshaler {
+func (ec *executionContext) marshalNDomainUsage2ᚕᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐDomainUsageᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.DomainUsage) graphql.Marshaler {
 	ret := graphql.MarshalSliceConcurrently(ctx, len(v), 0, false, func(ctx context.Context, i int) graphql.Marshaler {
 		fc := graphql.GetFieldContext(ctx)
 		fc.Result = &v[i]
-		return ec.marshalNDomainUsage2ᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐDomainUsage(ctx, sel, v[i])
+		return ec.marshalNDomainUsage2ᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐDomainUsage(ctx, sel, v[i])
 	})
 
 	for _, e := range ret {
@@ -17502,7 +17502,7 @@ func (ec *executionContext) marshalNDomainUsage2ᚕᚖgithubᚗcomᚋkooshapari�
 	return ret
 }
 
-func (ec *executionContext) marshalNDomainUsage2ᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐDomainUsage(ctx context.Context, sel ast.SelectionSet, v *model.DomainUsage) graphql.Marshaler {
+func (ec *executionContext) marshalNDomainUsage2ᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐDomainUsage(ctx context.Context, sel ast.SelectionSet, v *model.DomainUsage) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -17574,13 +17574,13 @@ func (ec *executionContext) marshalNFloat642ᚕfloat64ᚄ(ctx context.Context, s
 	return ret
 }
 
-func (ec *executionContext) unmarshalNGroupByField2githubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐGroupByField(ctx context.Context, v any) (model.GroupByField, error) {
+func (ec *executionContext) unmarshalNGroupByField2githubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐGroupByField(ctx context.Context, v any) (model.GroupByField, error) {
 	tmp, err := graphql.UnmarshalString(v)
 	res := model.GroupByField(tmp)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNGroupByField2githubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐGroupByField(ctx context.Context, sel ast.SelectionSet, v model.GroupByField) graphql.Marshaler {
+func (ec *executionContext) marshalNGroupByField2githubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐGroupByField(ctx context.Context, sel ast.SelectionSet, v model.GroupByField) graphql.Marshaler {
 	_ = sel
 	res := graphql.MarshalString(string(v))
 	if res == graphql.Null {
@@ -17645,11 +17645,11 @@ func (ec *executionContext) marshalNJSON2map(ctx context.Context, sel ast.Select
 	return res
 }
 
-func (ec *executionContext) marshalNKey2ᚕᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐKeyᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Key) graphql.Marshaler {
+func (ec *executionContext) marshalNKey2ᚕᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐKeyᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Key) graphql.Marshaler {
 	ret := graphql.MarshalSliceConcurrently(ctx, len(v), 0, false, func(ctx context.Context, i int) graphql.Marshaler {
 		fc := graphql.GetFieldContext(ctx)
 		fc.Result = &v[i]
-		return ec.marshalNKey2ᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐKey(ctx, sel, v[i])
+		return ec.marshalNKey2ᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐKey(ctx, sel, v[i])
 	})
 
 	for _, e := range ret {
@@ -17661,7 +17661,7 @@ func (ec *executionContext) marshalNKey2ᚕᚖgithubᚗcomᚋkooshapariᚋbifros
 	return ret
 }
 
-func (ec *executionContext) marshalNKey2ᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐKey(ctx context.Context, sel ast.SelectionSet, v *model.Key) graphql.Marshaler {
+func (ec *executionContext) marshalNKey2ᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐKey(ctx context.Context, sel ast.SelectionSet, v *model.Key) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -17671,11 +17671,11 @@ func (ec *executionContext) marshalNKey2ᚖgithubᚗcomᚋkooshapariᚋbifrost�
 	return ec._Key(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNMetric2ᚕᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐMetricᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Metric) graphql.Marshaler {
+func (ec *executionContext) marshalNMetric2ᚕᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐMetricᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Metric) graphql.Marshaler {
 	ret := graphql.MarshalSliceConcurrently(ctx, len(v), 0, false, func(ctx context.Context, i int) graphql.Marshaler {
 		fc := graphql.GetFieldContext(ctx)
 		fc.Result = &v[i]
-		return ec.marshalNMetric2ᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐMetric(ctx, sel, v[i])
+		return ec.marshalNMetric2ᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐMetric(ctx, sel, v[i])
 	})
 
 	for _, e := range ret {
@@ -17687,7 +17687,7 @@ func (ec *executionContext) marshalNMetric2ᚕᚖgithubᚗcomᚋkooshapariᚋbif
 	return ret
 }
 
-func (ec *executionContext) marshalNMetric2ᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐMetric(ctx context.Context, sel ast.SelectionSet, v *model.Metric) graphql.Marshaler {
+func (ec *executionContext) marshalNMetric2ᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐMetric(ctx context.Context, sel ast.SelectionSet, v *model.Metric) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -17697,13 +17697,13 @@ func (ec *executionContext) marshalNMetric2ᚖgithubᚗcomᚋkooshapariᚋbifros
 	return ec._Metric(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalNMetricType2githubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐMetricType(ctx context.Context, v any) (model.MetricType, error) {
+func (ec *executionContext) unmarshalNMetricType2githubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐMetricType(ctx context.Context, v any) (model.MetricType, error) {
 	tmp, err := graphql.UnmarshalString(v)
 	res := model.MetricType(tmp)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNMetricType2githubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐMetricType(ctx context.Context, sel ast.SelectionSet, v model.MetricType) graphql.Marshaler {
+func (ec *executionContext) marshalNMetricType2githubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐMetricType(ctx context.Context, sel ast.SelectionSet, v model.MetricType) graphql.Marshaler {
 	_ = sel
 	res := graphql.MarshalString(string(v))
 	if res == graphql.Null {
@@ -17714,15 +17714,15 @@ func (ec *executionContext) marshalNMetricType2githubᚗcomᚋkooshapariᚋbifro
 	return res
 }
 
-func (ec *executionContext) marshalNModel2githubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐModel(ctx context.Context, sel ast.SelectionSet, v model.Model) graphql.Marshaler {
+func (ec *executionContext) marshalNModel2githubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐModel(ctx context.Context, sel ast.SelectionSet, v model.Model) graphql.Marshaler {
 	return ec._Model(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNModel2ᚕᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐModelᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Model) graphql.Marshaler {
+func (ec *executionContext) marshalNModel2ᚕᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐModelᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Model) graphql.Marshaler {
 	ret := graphql.MarshalSliceConcurrently(ctx, len(v), 0, false, func(ctx context.Context, i int) graphql.Marshaler {
 		fc := graphql.GetFieldContext(ctx)
 		fc.Result = &v[i]
-		return ec.marshalNModel2ᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐModel(ctx, sel, v[i])
+		return ec.marshalNModel2ᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐModel(ctx, sel, v[i])
 	})
 
 	for _, e := range ret {
@@ -17734,7 +17734,7 @@ func (ec *executionContext) marshalNModel2ᚕᚖgithubᚗcomᚋkooshapariᚋbifr
 	return ret
 }
 
-func (ec *executionContext) marshalNModel2ᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐModel(ctx context.Context, sel ast.SelectionSet, v *model.Model) graphql.Marshaler {
+func (ec *executionContext) marshalNModel2ᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐModel(ctx context.Context, sel ast.SelectionSet, v *model.Model) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -17744,11 +17744,11 @@ func (ec *executionContext) marshalNModel2ᚖgithubᚗcomᚋkooshapariᚋbifrost
 	return ec._Model(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNModelAvailabilityEvent2githubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐModelAvailabilityEvent(ctx context.Context, sel ast.SelectionSet, v model.ModelAvailabilityEvent) graphql.Marshaler {
+func (ec *executionContext) marshalNModelAvailabilityEvent2githubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐModelAvailabilityEvent(ctx context.Context, sel ast.SelectionSet, v model.ModelAvailabilityEvent) graphql.Marshaler {
 	return ec._ModelAvailabilityEvent(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNModelAvailabilityEvent2ᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐModelAvailabilityEvent(ctx context.Context, sel ast.SelectionSet, v *model.ModelAvailabilityEvent) graphql.Marshaler {
+func (ec *executionContext) marshalNModelAvailabilityEvent2ᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐModelAvailabilityEvent(ctx context.Context, sel ast.SelectionSet, v *model.ModelAvailabilityEvent) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -17758,11 +17758,11 @@ func (ec *executionContext) marshalNModelAvailabilityEvent2ᚖgithubᚗcomᚋkoo
 	return ec._ModelAvailabilityEvent(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNModelConnection2githubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐModelConnection(ctx context.Context, sel ast.SelectionSet, v model.ModelConnection) graphql.Marshaler {
+func (ec *executionContext) marshalNModelConnection2githubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐModelConnection(ctx context.Context, sel ast.SelectionSet, v model.ModelConnection) graphql.Marshaler {
 	return ec._ModelConnection(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNModelConnection2ᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐModelConnection(ctx context.Context, sel ast.SelectionSet, v *model.ModelConnection) graphql.Marshaler {
+func (ec *executionContext) marshalNModelConnection2ᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐModelConnection(ctx context.Context, sel ast.SelectionSet, v *model.ModelConnection) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -17772,11 +17772,11 @@ func (ec *executionContext) marshalNModelConnection2ᚖgithubᚗcomᚋkooshapari
 	return ec._ModelConnection(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNModelUsage2ᚕᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐModelUsageᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.ModelUsage) graphql.Marshaler {
+func (ec *executionContext) marshalNModelUsage2ᚕᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐModelUsageᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.ModelUsage) graphql.Marshaler {
 	ret := graphql.MarshalSliceConcurrently(ctx, len(v), 0, false, func(ctx context.Context, i int) graphql.Marshaler {
 		fc := graphql.GetFieldContext(ctx)
 		fc.Result = &v[i]
-		return ec.marshalNModelUsage2ᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐModelUsage(ctx, sel, v[i])
+		return ec.marshalNModelUsage2ᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐModelUsage(ctx, sel, v[i])
 	})
 
 	for _, e := range ret {
@@ -17788,7 +17788,7 @@ func (ec *executionContext) marshalNModelUsage2ᚕᚖgithubᚗcomᚋkooshapari�
 	return ret
 }
 
-func (ec *executionContext) marshalNModelUsage2ᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐModelUsage(ctx context.Context, sel ast.SelectionSet, v *model.ModelUsage) graphql.Marshaler {
+func (ec *executionContext) marshalNModelUsage2ᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐModelUsage(ctx context.Context, sel ast.SelectionSet, v *model.ModelUsage) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -17798,7 +17798,7 @@ func (ec *executionContext) marshalNModelUsage2ᚖgithubᚗcomᚋkooshapariᚋbi
 	return ec._ModelUsage(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNPageInfo2ᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐPageInfo(ctx context.Context, sel ast.SelectionSet, v *model.PageInfo) graphql.Marshaler {
+func (ec *executionContext) marshalNPageInfo2ᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐPageInfo(ctx context.Context, sel ast.SelectionSet, v *model.PageInfo) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -17808,15 +17808,15 @@ func (ec *executionContext) marshalNPageInfo2ᚖgithubᚗcomᚋkooshapariᚋbifr
 	return ec._PageInfo(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNPolicy2githubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐPolicy(ctx context.Context, sel ast.SelectionSet, v model.Policy) graphql.Marshaler {
+func (ec *executionContext) marshalNPolicy2githubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐPolicy(ctx context.Context, sel ast.SelectionSet, v model.Policy) graphql.Marshaler {
 	return ec._Policy(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNPolicy2ᚕᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐPolicyᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Policy) graphql.Marshaler {
+func (ec *executionContext) marshalNPolicy2ᚕᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐPolicyᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Policy) graphql.Marshaler {
 	ret := graphql.MarshalSliceConcurrently(ctx, len(v), 0, false, func(ctx context.Context, i int) graphql.Marshaler {
 		fc := graphql.GetFieldContext(ctx)
 		fc.Result = &v[i]
-		return ec.marshalNPolicy2ᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐPolicy(ctx, sel, v[i])
+		return ec.marshalNPolicy2ᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐPolicy(ctx, sel, v[i])
 	})
 
 	for _, e := range ret {
@@ -17828,7 +17828,7 @@ func (ec *executionContext) marshalNPolicy2ᚕᚖgithubᚗcomᚋkooshapariᚋbif
 	return ret
 }
 
-func (ec *executionContext) marshalNPolicy2ᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐPolicy(ctx context.Context, sel ast.SelectionSet, v *model.Policy) graphql.Marshaler {
+func (ec *executionContext) marshalNPolicy2ᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐPolicy(ctx context.Context, sel ast.SelectionSet, v *model.Policy) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -17838,11 +17838,11 @@ func (ec *executionContext) marshalNPolicy2ᚖgithubᚗcomᚋkooshapariᚋbifros
 	return ec._Policy(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNPolicyAction2ᚕᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐPolicyActionᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.PolicyAction) graphql.Marshaler {
+func (ec *executionContext) marshalNPolicyAction2ᚕᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐPolicyActionᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.PolicyAction) graphql.Marshaler {
 	ret := graphql.MarshalSliceConcurrently(ctx, len(v), 0, false, func(ctx context.Context, i int) graphql.Marshaler {
 		fc := graphql.GetFieldContext(ctx)
 		fc.Result = &v[i]
-		return ec.marshalNPolicyAction2ᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐPolicyAction(ctx, sel, v[i])
+		return ec.marshalNPolicyAction2ᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐPolicyAction(ctx, sel, v[i])
 	})
 
 	for _, e := range ret {
@@ -17854,7 +17854,7 @@ func (ec *executionContext) marshalNPolicyAction2ᚕᚖgithubᚗcomᚋkooshapari
 	return ret
 }
 
-func (ec *executionContext) marshalNPolicyAction2ᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐPolicyAction(ctx context.Context, sel ast.SelectionSet, v *model.PolicyAction) graphql.Marshaler {
+func (ec *executionContext) marshalNPolicyAction2ᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐPolicyAction(ctx context.Context, sel ast.SelectionSet, v *model.PolicyAction) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -17864,14 +17864,14 @@ func (ec *executionContext) marshalNPolicyAction2ᚖgithubᚗcomᚋkooshapariᚋ
 	return ec._PolicyAction(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalNPolicyActionInput2ᚕᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐPolicyActionInputᚄ(ctx context.Context, v any) ([]*model.PolicyActionInput, error) {
+func (ec *executionContext) unmarshalNPolicyActionInput2ᚕᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐPolicyActionInputᚄ(ctx context.Context, v any) ([]*model.PolicyActionInput, error) {
 	var vSlice []any
 	vSlice = graphql.CoerceList(v)
 	var err error
 	res := make([]*model.PolicyActionInput, len(vSlice))
 	for i := range vSlice {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
-		res[i], err = ec.unmarshalNPolicyActionInput2ᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐPolicyActionInput(ctx, vSlice[i])
+		res[i], err = ec.unmarshalNPolicyActionInput2ᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐPolicyActionInput(ctx, vSlice[i])
 		if err != nil {
 			return nil, err
 		}
@@ -17879,16 +17879,16 @@ func (ec *executionContext) unmarshalNPolicyActionInput2ᚕᚖgithubᚗcomᚋkoo
 	return res, nil
 }
 
-func (ec *executionContext) unmarshalNPolicyActionInput2ᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐPolicyActionInput(ctx context.Context, v any) (*model.PolicyActionInput, error) {
+func (ec *executionContext) unmarshalNPolicyActionInput2ᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐPolicyActionInput(ctx context.Context, v any) (*model.PolicyActionInput, error) {
 	res, err := ec.unmarshalInputPolicyActionInput(ctx, v)
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNPolicyCondition2ᚕᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐPolicyConditionᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.PolicyCondition) graphql.Marshaler {
+func (ec *executionContext) marshalNPolicyCondition2ᚕᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐPolicyConditionᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.PolicyCondition) graphql.Marshaler {
 	ret := graphql.MarshalSliceConcurrently(ctx, len(v), 0, false, func(ctx context.Context, i int) graphql.Marshaler {
 		fc := graphql.GetFieldContext(ctx)
 		fc.Result = &v[i]
-		return ec.marshalNPolicyCondition2ᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐPolicyCondition(ctx, sel, v[i])
+		return ec.marshalNPolicyCondition2ᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐPolicyCondition(ctx, sel, v[i])
 	})
 
 	for _, e := range ret {
@@ -17900,7 +17900,7 @@ func (ec *executionContext) marshalNPolicyCondition2ᚕᚖgithubᚗcomᚋkooshap
 	return ret
 }
 
-func (ec *executionContext) marshalNPolicyCondition2ᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐPolicyCondition(ctx context.Context, sel ast.SelectionSet, v *model.PolicyCondition) graphql.Marshaler {
+func (ec *executionContext) marshalNPolicyCondition2ᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐPolicyCondition(ctx context.Context, sel ast.SelectionSet, v *model.PolicyCondition) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -17910,14 +17910,14 @@ func (ec *executionContext) marshalNPolicyCondition2ᚖgithubᚗcomᚋkooshapari
 	return ec._PolicyCondition(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalNPolicyConditionInput2ᚕᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐPolicyConditionInputᚄ(ctx context.Context, v any) ([]*model.PolicyConditionInput, error) {
+func (ec *executionContext) unmarshalNPolicyConditionInput2ᚕᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐPolicyConditionInputᚄ(ctx context.Context, v any) ([]*model.PolicyConditionInput, error) {
 	var vSlice []any
 	vSlice = graphql.CoerceList(v)
 	var err error
 	res := make([]*model.PolicyConditionInput, len(vSlice))
 	for i := range vSlice {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
-		res[i], err = ec.unmarshalNPolicyConditionInput2ᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐPolicyConditionInput(ctx, vSlice[i])
+		res[i], err = ec.unmarshalNPolicyConditionInput2ᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐPolicyConditionInput(ctx, vSlice[i])
 		if err != nil {
 			return nil, err
 		}
@@ -17925,17 +17925,17 @@ func (ec *executionContext) unmarshalNPolicyConditionInput2ᚕᚖgithubᚗcomᚋ
 	return res, nil
 }
 
-func (ec *executionContext) unmarshalNPolicyConditionInput2ᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐPolicyConditionInput(ctx context.Context, v any) (*model.PolicyConditionInput, error) {
+func (ec *executionContext) unmarshalNPolicyConditionInput2ᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐPolicyConditionInput(ctx context.Context, v any) (*model.PolicyConditionInput, error) {
 	res, err := ec.unmarshalInputPolicyConditionInput(ctx, v)
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) unmarshalNPolicyInput2githubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐPolicyInput(ctx context.Context, v any) (model.PolicyInput, error) {
+func (ec *executionContext) unmarshalNPolicyInput2githubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐPolicyInput(ctx context.Context, v any) (model.PolicyInput, error) {
 	res, err := ec.unmarshalInputPolicyInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNPolicyScope2ᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐPolicyScope(ctx context.Context, sel ast.SelectionSet, v *model.PolicyScope) graphql.Marshaler {
+func (ec *executionContext) marshalNPolicyScope2ᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐPolicyScope(ctx context.Context, sel ast.SelectionSet, v *model.PolicyScope) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -17945,18 +17945,18 @@ func (ec *executionContext) marshalNPolicyScope2ᚖgithubᚗcomᚋkooshapariᚋb
 	return ec._PolicyScope(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalNPolicyScopeInput2githubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐPolicyScopeInput(ctx context.Context, v any) (model.PolicyScopeInput, error) {
+func (ec *executionContext) unmarshalNPolicyScopeInput2githubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐPolicyScopeInput(ctx context.Context, v any) (model.PolicyScopeInput, error) {
 	res, err := ec.unmarshalInputPolicyScopeInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) unmarshalNPolicyType2githubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐPolicyType(ctx context.Context, v any) (model.PolicyType, error) {
+func (ec *executionContext) unmarshalNPolicyType2githubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐPolicyType(ctx context.Context, v any) (model.PolicyType, error) {
 	tmp, err := graphql.UnmarshalString(v)
 	res := model.PolicyType(tmp)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNPolicyType2githubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐPolicyType(ctx context.Context, sel ast.SelectionSet, v model.PolicyType) graphql.Marshaler {
+func (ec *executionContext) marshalNPolicyType2githubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐPolicyType(ctx context.Context, sel ast.SelectionSet, v model.PolicyType) graphql.Marshaler {
 	_ = sel
 	res := graphql.MarshalString(string(v))
 	if res == graphql.Null {
@@ -17967,7 +17967,7 @@ func (ec *executionContext) marshalNPolicyType2githubᚗcomᚋkooshapariᚋbifro
 	return res
 }
 
-func (ec *executionContext) marshalNProjectUsage2ᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐProjectUsage(ctx context.Context, sel ast.SelectionSet, v *model.ProjectUsage) graphql.Marshaler {
+func (ec *executionContext) marshalNProjectUsage2ᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐProjectUsage(ctx context.Context, sel ast.SelectionSet, v *model.ProjectUsage) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -17977,11 +17977,11 @@ func (ec *executionContext) marshalNProjectUsage2ᚖgithubᚗcomᚋkooshapariᚋ
 	return ec._ProjectUsage(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNProvider2ᚕᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐProviderᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Provider) graphql.Marshaler {
+func (ec *executionContext) marshalNProvider2ᚕᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐProviderᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Provider) graphql.Marshaler {
 	ret := graphql.MarshalSliceConcurrently(ctx, len(v), 0, false, func(ctx context.Context, i int) graphql.Marshaler {
 		fc := graphql.GetFieldContext(ctx)
 		fc.Result = &v[i]
-		return ec.marshalNProvider2ᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐProvider(ctx, sel, v[i])
+		return ec.marshalNProvider2ᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐProvider(ctx, sel, v[i])
 	})
 
 	for _, e := range ret {
@@ -17993,7 +17993,7 @@ func (ec *executionContext) marshalNProvider2ᚕᚖgithubᚗcomᚋkooshapariᚋb
 	return ret
 }
 
-func (ec *executionContext) marshalNProvider2ᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐProvider(ctx context.Context, sel ast.SelectionSet, v *model.Provider) graphql.Marshaler {
+func (ec *executionContext) marshalNProvider2ᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐProvider(ctx context.Context, sel ast.SelectionSet, v *model.Provider) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -18003,11 +18003,11 @@ func (ec *executionContext) marshalNProvider2ᚖgithubᚗcomᚋkooshapariᚋbifr
 	return ec._Provider(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNProviderAccount2ᚕᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐProviderAccountᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.ProviderAccount) graphql.Marshaler {
+func (ec *executionContext) marshalNProviderAccount2ᚕᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐProviderAccountᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.ProviderAccount) graphql.Marshaler {
 	ret := graphql.MarshalSliceConcurrently(ctx, len(v), 0, false, func(ctx context.Context, i int) graphql.Marshaler {
 		fc := graphql.GetFieldContext(ctx)
 		fc.Result = &v[i]
-		return ec.marshalNProviderAccount2ᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐProviderAccount(ctx, sel, v[i])
+		return ec.marshalNProviderAccount2ᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐProviderAccount(ctx, sel, v[i])
 	})
 
 	for _, e := range ret {
@@ -18019,7 +18019,7 @@ func (ec *executionContext) marshalNProviderAccount2ᚕᚖgithubᚗcomᚋkooshap
 	return ret
 }
 
-func (ec *executionContext) marshalNProviderAccount2ᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐProviderAccount(ctx context.Context, sel ast.SelectionSet, v *model.ProviderAccount) graphql.Marshaler {
+func (ec *executionContext) marshalNProviderAccount2ᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐProviderAccount(ctx context.Context, sel ast.SelectionSet, v *model.ProviderAccount) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -18029,11 +18029,11 @@ func (ec *executionContext) marshalNProviderAccount2ᚖgithubᚗcomᚋkooshapari
 	return ec._ProviderAccount(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNProviderHealthEvent2githubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐProviderHealthEvent(ctx context.Context, sel ast.SelectionSet, v model.ProviderHealthEvent) graphql.Marshaler {
+func (ec *executionContext) marshalNProviderHealthEvent2githubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐProviderHealthEvent(ctx context.Context, sel ast.SelectionSet, v model.ProviderHealthEvent) graphql.Marshaler {
 	return ec._ProviderHealthEvent(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNProviderHealthEvent2ᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐProviderHealthEvent(ctx context.Context, sel ast.SelectionSet, v *model.ProviderHealthEvent) graphql.Marshaler {
+func (ec *executionContext) marshalNProviderHealthEvent2ᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐProviderHealthEvent(ctx context.Context, sel ast.SelectionSet, v *model.ProviderHealthEvent) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -18043,13 +18043,13 @@ func (ec *executionContext) marshalNProviderHealthEvent2ᚖgithubᚗcomᚋkoosha
 	return ec._ProviderHealthEvent(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalNProviderStatus2githubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐProviderStatus(ctx context.Context, v any) (model.ProviderStatus, error) {
+func (ec *executionContext) unmarshalNProviderStatus2githubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐProviderStatus(ctx context.Context, v any) (model.ProviderStatus, error) {
 	tmp, err := graphql.UnmarshalString(v)
 	res := model.ProviderStatus(tmp)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNProviderStatus2githubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐProviderStatus(ctx context.Context, sel ast.SelectionSet, v model.ProviderStatus) graphql.Marshaler {
+func (ec *executionContext) marshalNProviderStatus2githubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐProviderStatus(ctx context.Context, sel ast.SelectionSet, v model.ProviderStatus) graphql.Marshaler {
 	_ = sel
 	res := graphql.MarshalString(string(v))
 	if res == graphql.Null {
@@ -18060,21 +18060,21 @@ func (ec *executionContext) marshalNProviderStatus2githubᚗcomᚋkooshapariᚋb
 	return res
 }
 
-func (ec *executionContext) unmarshalNProviderType2githubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐProviderType(ctx context.Context, v any) (model.ProviderType, error) {
+func (ec *executionContext) unmarshalNProviderType2githubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐProviderType(ctx context.Context, v any) (model.ProviderType, error) {
 	var res model.ProviderType
 	err := res.UnmarshalGQL(v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNProviderType2githubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐProviderType(ctx context.Context, sel ast.SelectionSet, v model.ProviderType) graphql.Marshaler {
+func (ec *executionContext) marshalNProviderType2githubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐProviderType(ctx context.Context, sel ast.SelectionSet, v model.ProviderType) graphql.Marshaler {
 	return v
 }
 
-func (ec *executionContext) marshalNProviderUsage2ᚕᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐProviderUsageᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.ProviderUsage) graphql.Marshaler {
+func (ec *executionContext) marshalNProviderUsage2ᚕᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐProviderUsageᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.ProviderUsage) graphql.Marshaler {
 	ret := graphql.MarshalSliceConcurrently(ctx, len(v), 0, false, func(ctx context.Context, i int) graphql.Marshaler {
 		fc := graphql.GetFieldContext(ctx)
 		fc.Result = &v[i]
-		return ec.marshalNProviderUsage2ᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐProviderUsage(ctx, sel, v[i])
+		return ec.marshalNProviderUsage2ᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐProviderUsage(ctx, sel, v[i])
 	})
 
 	for _, e := range ret {
@@ -18086,7 +18086,7 @@ func (ec *executionContext) marshalNProviderUsage2ᚕᚖgithubᚗcomᚋkooshapar
 	return ret
 }
 
-func (ec *executionContext) marshalNProviderUsage2ᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐProviderUsage(ctx context.Context, sel ast.SelectionSet, v *model.ProviderUsage) graphql.Marshaler {
+func (ec *executionContext) marshalNProviderUsage2ᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐProviderUsage(ctx context.Context, sel ast.SelectionSet, v *model.ProviderUsage) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -18096,11 +18096,11 @@ func (ec *executionContext) marshalNProviderUsage2ᚖgithubᚗcomᚋkooshapari�
 	return ec._ProviderUsage(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNRoutingAlternative2ᚕᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐRoutingAlternativeᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.RoutingAlternative) graphql.Marshaler {
+func (ec *executionContext) marshalNRoutingAlternative2ᚕᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐRoutingAlternativeᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.RoutingAlternative) graphql.Marshaler {
 	ret := graphql.MarshalSliceConcurrently(ctx, len(v), 0, false, func(ctx context.Context, i int) graphql.Marshaler {
 		fc := graphql.GetFieldContext(ctx)
 		fc.Result = &v[i]
-		return ec.marshalNRoutingAlternative2ᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐRoutingAlternative(ctx, sel, v[i])
+		return ec.marshalNRoutingAlternative2ᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐRoutingAlternative(ctx, sel, v[i])
 	})
 
 	for _, e := range ret {
@@ -18112,7 +18112,7 @@ func (ec *executionContext) marshalNRoutingAlternative2ᚕᚖgithubᚗcomᚋkoos
 	return ret
 }
 
-func (ec *executionContext) marshalNRoutingAlternative2ᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐRoutingAlternative(ctx context.Context, sel ast.SelectionSet, v *model.RoutingAlternative) graphql.Marshaler {
+func (ec *executionContext) marshalNRoutingAlternative2ᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐRoutingAlternative(ctx context.Context, sel ast.SelectionSet, v *model.RoutingAlternative) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -18122,11 +18122,11 @@ func (ec *executionContext) marshalNRoutingAlternative2ᚖgithubᚗcomᚋkooshap
 	return ec._RoutingAlternative(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNRoutingEvent2githubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐRoutingEvent(ctx context.Context, sel ast.SelectionSet, v model.RoutingEvent) graphql.Marshaler {
+func (ec *executionContext) marshalNRoutingEvent2githubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐRoutingEvent(ctx context.Context, sel ast.SelectionSet, v model.RoutingEvent) graphql.Marshaler {
 	return ec._RoutingEvent(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNRoutingEvent2ᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐRoutingEvent(ctx context.Context, sel ast.SelectionSet, v *model.RoutingEvent) graphql.Marshaler {
+func (ec *executionContext) marshalNRoutingEvent2ᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐRoutingEvent(ctx context.Context, sel ast.SelectionSet, v *model.RoutingEvent) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -18136,13 +18136,13 @@ func (ec *executionContext) marshalNRoutingEvent2ᚖgithubᚗcomᚋkooshapariᚋ
 	return ec._RoutingEvent(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalNRoutingEventType2githubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐRoutingEventType(ctx context.Context, v any) (model.RoutingEventType, error) {
+func (ec *executionContext) unmarshalNRoutingEventType2githubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐRoutingEventType(ctx context.Context, v any) (model.RoutingEventType, error) {
 	tmp, err := graphql.UnmarshalString(v)
 	res := model.RoutingEventType(tmp)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNRoutingEventType2githubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐRoutingEventType(ctx context.Context, sel ast.SelectionSet, v model.RoutingEventType) graphql.Marshaler {
+func (ec *executionContext) marshalNRoutingEventType2githubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐRoutingEventType(ctx context.Context, sel ast.SelectionSet, v model.RoutingEventType) graphql.Marshaler {
 	_ = sel
 	res := graphql.MarshalString(string(v))
 	if res == graphql.Null {
@@ -18153,11 +18153,11 @@ func (ec *executionContext) marshalNRoutingEventType2githubᚗcomᚋkooshapari�
 	return res
 }
 
-func (ec *executionContext) marshalNRoutingHistory2ᚕᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐRoutingHistoryᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.RoutingHistory) graphql.Marshaler {
+func (ec *executionContext) marshalNRoutingHistory2ᚕᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐRoutingHistoryᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.RoutingHistory) graphql.Marshaler {
 	ret := graphql.MarshalSliceConcurrently(ctx, len(v), 0, false, func(ctx context.Context, i int) graphql.Marshaler {
 		fc := graphql.GetFieldContext(ctx)
 		fc.Result = &v[i]
-		return ec.marshalNRoutingHistory2ᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐRoutingHistory(ctx, sel, v[i])
+		return ec.marshalNRoutingHistory2ᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐRoutingHistory(ctx, sel, v[i])
 	})
 
 	for _, e := range ret {
@@ -18169,7 +18169,7 @@ func (ec *executionContext) marshalNRoutingHistory2ᚕᚖgithubᚗcomᚋkooshapa
 	return ret
 }
 
-func (ec *executionContext) marshalNRoutingHistory2ᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐRoutingHistory(ctx context.Context, sel ast.SelectionSet, v *model.RoutingHistory) graphql.Marshaler {
+func (ec *executionContext) marshalNRoutingHistory2ᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐRoutingHistory(ctx context.Context, sel ast.SelectionSet, v *model.RoutingHistory) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -18179,11 +18179,11 @@ func (ec *executionContext) marshalNRoutingHistory2ᚖgithubᚗcomᚋkooshapari�
 	return ec._RoutingHistory(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNRoutingHistoryConnection2githubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐRoutingHistoryConnection(ctx context.Context, sel ast.SelectionSet, v model.RoutingHistoryConnection) graphql.Marshaler {
+func (ec *executionContext) marshalNRoutingHistoryConnection2githubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐRoutingHistoryConnection(ctx context.Context, sel ast.SelectionSet, v model.RoutingHistoryConnection) graphql.Marshaler {
 	return ec._RoutingHistoryConnection(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNRoutingHistoryConnection2ᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐRoutingHistoryConnection(ctx context.Context, sel ast.SelectionSet, v *model.RoutingHistoryConnection) graphql.Marshaler {
+func (ec *executionContext) marshalNRoutingHistoryConnection2ᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐRoutingHistoryConnection(ctx context.Context, sel ast.SelectionSet, v *model.RoutingHistoryConnection) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -18239,11 +18239,11 @@ func (ec *executionContext) marshalNString2ᚕstringᚄ(ctx context.Context, sel
 	return ret
 }
 
-func (ec *executionContext) marshalNTaskTypeBreakdown2ᚕᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐTaskTypeBreakdownᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.TaskTypeBreakdown) graphql.Marshaler {
+func (ec *executionContext) marshalNTaskTypeBreakdown2ᚕᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐTaskTypeBreakdownᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.TaskTypeBreakdown) graphql.Marshaler {
 	ret := graphql.MarshalSliceConcurrently(ctx, len(v), 0, false, func(ctx context.Context, i int) graphql.Marshaler {
 		fc := graphql.GetFieldContext(ctx)
 		fc.Result = &v[i]
-		return ec.marshalNTaskTypeBreakdown2ᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐTaskTypeBreakdown(ctx, sel, v[i])
+		return ec.marshalNTaskTypeBreakdown2ᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐTaskTypeBreakdown(ctx, sel, v[i])
 	})
 
 	for _, e := range ret {
@@ -18255,7 +18255,7 @@ func (ec *executionContext) marshalNTaskTypeBreakdown2ᚕᚖgithubᚗcomᚋkoosh
 	return ret
 }
 
-func (ec *executionContext) marshalNTaskTypeBreakdown2ᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐTaskTypeBreakdown(ctx context.Context, sel ast.SelectionSet, v *model.TaskTypeBreakdown) graphql.Marshaler {
+func (ec *executionContext) marshalNTaskTypeBreakdown2ᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐTaskTypeBreakdown(ctx context.Context, sel ast.SelectionSet, v *model.TaskTypeBreakdown) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -18265,11 +18265,11 @@ func (ec *executionContext) marshalNTaskTypeBreakdown2ᚖgithubᚗcomᚋkooshapa
 	return ec._TaskTypeBreakdown(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNTaskTypeUsage2ᚕᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐTaskTypeUsageᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.TaskTypeUsage) graphql.Marshaler {
+func (ec *executionContext) marshalNTaskTypeUsage2ᚕᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐTaskTypeUsageᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.TaskTypeUsage) graphql.Marshaler {
 	ret := graphql.MarshalSliceConcurrently(ctx, len(v), 0, false, func(ctx context.Context, i int) graphql.Marshaler {
 		fc := graphql.GetFieldContext(ctx)
 		fc.Result = &v[i]
-		return ec.marshalNTaskTypeUsage2ᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐTaskTypeUsage(ctx, sel, v[i])
+		return ec.marshalNTaskTypeUsage2ᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐTaskTypeUsage(ctx, sel, v[i])
 	})
 
 	for _, e := range ret {
@@ -18281,7 +18281,7 @@ func (ec *executionContext) marshalNTaskTypeUsage2ᚕᚖgithubᚗcomᚋkooshapar
 	return ret
 }
 
-func (ec *executionContext) marshalNTaskTypeUsage2ᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐTaskTypeUsage(ctx context.Context, sel ast.SelectionSet, v *model.TaskTypeUsage) graphql.Marshaler {
+func (ec *executionContext) marshalNTaskTypeUsage2ᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐTaskTypeUsage(ctx context.Context, sel ast.SelectionSet, v *model.TaskTypeUsage) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -18329,13 +18329,13 @@ func (ec *executionContext) marshalNTime2ᚖtimeᚐTime(ctx context.Context, sel
 	return res
 }
 
-func (ec *executionContext) unmarshalNTimeframe2githubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐTimeframe(ctx context.Context, v any) (model.Timeframe, error) {
+func (ec *executionContext) unmarshalNTimeframe2githubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐTimeframe(ctx context.Context, v any) (model.Timeframe, error) {
 	tmp, err := graphql.UnmarshalString(v)
 	res := model.Timeframe(tmp)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNTimeframe2githubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐTimeframe(ctx context.Context, sel ast.SelectionSet, v model.Timeframe) graphql.Marshaler {
+func (ec *executionContext) marshalNTimeframe2githubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐTimeframe(ctx context.Context, sel ast.SelectionSet, v model.Timeframe) graphql.Marshaler {
 	_ = sel
 	res := graphql.MarshalString(string(v))
 	if res == graphql.Null {
@@ -18346,11 +18346,11 @@ func (ec *executionContext) marshalNTimeframe2githubᚗcomᚋkooshapariᚋbifros
 	return res
 }
 
-func (ec *executionContext) marshalNUsageAlert2ᚕᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐUsageAlertᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.UsageAlert) graphql.Marshaler {
+func (ec *executionContext) marshalNUsageAlert2ᚕᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐUsageAlertᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.UsageAlert) graphql.Marshaler {
 	ret := graphql.MarshalSliceConcurrently(ctx, len(v), 0, false, func(ctx context.Context, i int) graphql.Marshaler {
 		fc := graphql.GetFieldContext(ctx)
 		fc.Result = &v[i]
-		return ec.marshalNUsageAlert2ᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐUsageAlert(ctx, sel, v[i])
+		return ec.marshalNUsageAlert2ᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐUsageAlert(ctx, sel, v[i])
 	})
 
 	for _, e := range ret {
@@ -18362,7 +18362,7 @@ func (ec *executionContext) marshalNUsageAlert2ᚕᚖgithubᚗcomᚋkooshapari�
 	return ret
 }
 
-func (ec *executionContext) marshalNUsageAlert2ᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐUsageAlert(ctx context.Context, sel ast.SelectionSet, v *model.UsageAlert) graphql.Marshaler {
+func (ec *executionContext) marshalNUsageAlert2ᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐUsageAlert(ctx context.Context, sel ast.SelectionSet, v *model.UsageAlert) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -18372,11 +18372,11 @@ func (ec *executionContext) marshalNUsageAlert2ᚖgithubᚗcomᚋkooshapariᚋbi
 	return ec._UsageAlert(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNUsageDataPoint2ᚕᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐUsageDataPointᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.UsageDataPoint) graphql.Marshaler {
+func (ec *executionContext) marshalNUsageDataPoint2ᚕᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐUsageDataPointᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.UsageDataPoint) graphql.Marshaler {
 	ret := graphql.MarshalSliceConcurrently(ctx, len(v), 0, false, func(ctx context.Context, i int) graphql.Marshaler {
 		fc := graphql.GetFieldContext(ctx)
 		fc.Result = &v[i]
-		return ec.marshalNUsageDataPoint2ᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐUsageDataPoint(ctx, sel, v[i])
+		return ec.marshalNUsageDataPoint2ᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐUsageDataPoint(ctx, sel, v[i])
 	})
 
 	for _, e := range ret {
@@ -18388,7 +18388,7 @@ func (ec *executionContext) marshalNUsageDataPoint2ᚕᚖgithubᚗcomᚋkooshapa
 	return ret
 }
 
-func (ec *executionContext) marshalNUsageDataPoint2ᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐUsageDataPoint(ctx context.Context, sel ast.SelectionSet, v *model.UsageDataPoint) graphql.Marshaler {
+func (ec *executionContext) marshalNUsageDataPoint2ᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐUsageDataPoint(ctx context.Context, sel ast.SelectionSet, v *model.UsageDataPoint) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -18398,11 +18398,11 @@ func (ec *executionContext) marshalNUsageDataPoint2ᚖgithubᚗcomᚋkooshapari�
 	return ec._UsageDataPoint(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNUsageReport2githubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐUsageReport(ctx context.Context, sel ast.SelectionSet, v model.UsageReport) graphql.Marshaler {
+func (ec *executionContext) marshalNUsageReport2githubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐUsageReport(ctx context.Context, sel ast.SelectionSet, v model.UsageReport) graphql.Marshaler {
 	return ec._UsageReport(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNUsageReport2ᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐUsageReport(ctx context.Context, sel ast.SelectionSet, v *model.UsageReport) graphql.Marshaler {
+func (ec *executionContext) marshalNUsageReport2ᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐUsageReport(ctx context.Context, sel ast.SelectionSet, v *model.UsageReport) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -18412,11 +18412,11 @@ func (ec *executionContext) marshalNUsageReport2ᚖgithubᚗcomᚋkooshapariᚋb
 	return ec._UsageReport(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNUsageUpdate2githubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐUsageUpdate(ctx context.Context, sel ast.SelectionSet, v model.UsageUpdate) graphql.Marshaler {
+func (ec *executionContext) marshalNUsageUpdate2githubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐUsageUpdate(ctx context.Context, sel ast.SelectionSet, v model.UsageUpdate) graphql.Marshaler {
 	return ec._UsageUpdate(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNUsageUpdate2ᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐUsageUpdate(ctx context.Context, sel ast.SelectionSet, v *model.UsageUpdate) graphql.Marshaler {
+func (ec *executionContext) marshalNUsageUpdate2ᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐUsageUpdate(ctx context.Context, sel ast.SelectionSet, v *model.UsageUpdate) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -18426,7 +18426,7 @@ func (ec *executionContext) marshalNUsageUpdate2ᚖgithubᚗcomᚋkooshapariᚋb
 	return ec._UsageUpdate(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNUserUsage2ᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐUserUsage(ctx context.Context, sel ast.SelectionSet, v *model.UserUsage) graphql.Marshaler {
+func (ec *executionContext) marshalNUserUsage2ᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐUserUsage(ctx context.Context, sel ast.SelectionSet, v *model.UserUsage) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -18577,7 +18577,7 @@ func (ec *executionContext) marshalN__TypeKind2string(ctx context.Context, sel a
 	return res
 }
 
-func (ec *executionContext) unmarshalOBenchmarkFilter2ᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐBenchmarkFilter(ctx context.Context, v any) (*model.BenchmarkFilter, error) {
+func (ec *executionContext) unmarshalOBenchmarkFilter2ᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐBenchmarkFilter(ctx context.Context, v any) (*model.BenchmarkFilter, error) {
 	if v == nil {
 		return nil, nil
 	}
@@ -18585,14 +18585,14 @@ func (ec *executionContext) unmarshalOBenchmarkFilter2ᚖgithubᚗcomᚋkooshapa
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalOBenchmarkResult2ᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐBenchmarkResult(ctx context.Context, sel ast.SelectionSet, v *model.BenchmarkResult) graphql.Marshaler {
+func (ec *executionContext) marshalOBenchmarkResult2ᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐBenchmarkResult(ctx context.Context, sel ast.SelectionSet, v *model.BenchmarkResult) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._BenchmarkResult(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalOBenchmarkStatus2ᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐBenchmarkStatus(ctx context.Context, v any) (*model.BenchmarkStatus, error) {
+func (ec *executionContext) unmarshalOBenchmarkStatus2ᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐBenchmarkStatus(ctx context.Context, v any) (*model.BenchmarkStatus, error) {
 	if v == nil {
 		return nil, nil
 	}
@@ -18601,7 +18601,7 @@ func (ec *executionContext) unmarshalOBenchmarkStatus2ᚖgithubᚗcomᚋkooshapa
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalOBenchmarkStatus2ᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐBenchmarkStatus(ctx context.Context, sel ast.SelectionSet, v *model.BenchmarkStatus) graphql.Marshaler {
+func (ec *executionContext) marshalOBenchmarkStatus2ᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐBenchmarkStatus(ctx context.Context, sel ast.SelectionSet, v *model.BenchmarkStatus) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -18641,7 +18641,7 @@ func (ec *executionContext) marshalOBoolean2ᚖbool(ctx context.Context, sel ast
 	return res
 }
 
-func (ec *executionContext) unmarshalOCapability2ᚕgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐCapabilityᚄ(ctx context.Context, v any) ([]model.Capability, error) {
+func (ec *executionContext) unmarshalOCapability2ᚕgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐCapabilityᚄ(ctx context.Context, v any) ([]model.Capability, error) {
 	if v == nil {
 		return nil, nil
 	}
@@ -18651,7 +18651,7 @@ func (ec *executionContext) unmarshalOCapability2ᚕgithubᚗcomᚋkooshapariᚋ
 	res := make([]model.Capability, len(vSlice))
 	for i := range vSlice {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
-		res[i], err = ec.unmarshalNCapability2githubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐCapability(ctx, vSlice[i])
+		res[i], err = ec.unmarshalNCapability2githubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐCapability(ctx, vSlice[i])
 		if err != nil {
 			return nil, err
 		}
@@ -18659,14 +18659,14 @@ func (ec *executionContext) unmarshalOCapability2ᚕgithubᚗcomᚋkooshapariᚋ
 	return res, nil
 }
 
-func (ec *executionContext) marshalOCapability2ᚕgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐCapabilityᚄ(ctx context.Context, sel ast.SelectionSet, v []model.Capability) graphql.Marshaler {
+func (ec *executionContext) marshalOCapability2ᚕgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐCapabilityᚄ(ctx context.Context, sel ast.SelectionSet, v []model.Capability) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	ret := graphql.MarshalSliceConcurrently(ctx, len(v), 0, false, func(ctx context.Context, i int) graphql.Marshaler {
 		fc := graphql.GetFieldContext(ctx)
 		fc.Result = &v[i]
-		return ec.marshalNCapability2githubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐCapability(ctx, sel, v[i])
+		return ec.marshalNCapability2githubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐCapability(ctx, sel, v[i])
 	})
 
 	for _, e := range ret {
@@ -18678,7 +18678,7 @@ func (ec *executionContext) marshalOCapability2ᚕgithubᚗcomᚋkooshapariᚋbi
 	return ret
 }
 
-func (ec *executionContext) unmarshalODateRange2ᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐDateRange(ctx context.Context, v any) (*model.DateRange, error) {
+func (ec *executionContext) unmarshalODateRange2ᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐDateRange(ctx context.Context, v any) (*model.DateRange, error) {
 	if v == nil {
 		return nil, nil
 	}
@@ -18739,7 +18739,7 @@ func (ec *executionContext) marshalOFloat642ᚖfloat64(ctx context.Context, sel 
 	return res
 }
 
-func (ec *executionContext) unmarshalOGroupByField2ᚕgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐGroupByFieldᚄ(ctx context.Context, v any) ([]model.GroupByField, error) {
+func (ec *executionContext) unmarshalOGroupByField2ᚕgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐGroupByFieldᚄ(ctx context.Context, v any) ([]model.GroupByField, error) {
 	if v == nil {
 		return nil, nil
 	}
@@ -18749,7 +18749,7 @@ func (ec *executionContext) unmarshalOGroupByField2ᚕgithubᚗcomᚋkooshapari�
 	res := make([]model.GroupByField, len(vSlice))
 	for i := range vSlice {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
-		res[i], err = ec.unmarshalNGroupByField2githubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐGroupByField(ctx, vSlice[i])
+		res[i], err = ec.unmarshalNGroupByField2githubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐGroupByField(ctx, vSlice[i])
 		if err != nil {
 			return nil, err
 		}
@@ -18757,14 +18757,14 @@ func (ec *executionContext) unmarshalOGroupByField2ᚕgithubᚗcomᚋkooshapari�
 	return res, nil
 }
 
-func (ec *executionContext) marshalOGroupByField2ᚕgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐGroupByFieldᚄ(ctx context.Context, sel ast.SelectionSet, v []model.GroupByField) graphql.Marshaler {
+func (ec *executionContext) marshalOGroupByField2ᚕgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐGroupByFieldᚄ(ctx context.Context, sel ast.SelectionSet, v []model.GroupByField) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	ret := graphql.MarshalSliceConcurrently(ctx, len(v), 0, false, func(ctx context.Context, i int) graphql.Marshaler {
 		fc := graphql.GetFieldContext(ctx)
 		fc.Result = &v[i]
-		return ec.marshalNGroupByField2githubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐGroupByField(ctx, sel, v[i])
+		return ec.marshalNGroupByField2githubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐGroupByField(ctx, sel, v[i])
 	})
 
 	for _, e := range ret {
@@ -18866,35 +18866,35 @@ func (ec *executionContext) marshalOMap2map(ctx context.Context, sel ast.Selecti
 	return res
 }
 
-func (ec *executionContext) marshalOModel2ᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐModel(ctx context.Context, sel ast.SelectionSet, v *model.Model) graphql.Marshaler {
+func (ec *executionContext) marshalOModel2ᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐModel(ctx context.Context, sel ast.SelectionSet, v *model.Model) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._Model(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalOModelMetrics2ᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐModelMetrics(ctx context.Context, sel ast.SelectionSet, v *model.ModelMetrics) graphql.Marshaler {
+func (ec *executionContext) marshalOModelMetrics2ᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐModelMetrics(ctx context.Context, sel ast.SelectionSet, v *model.ModelMetrics) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._ModelMetrics(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalOModelUsageStats2ᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐModelUsageStats(ctx context.Context, sel ast.SelectionSet, v *model.ModelUsageStats) graphql.Marshaler {
+func (ec *executionContext) marshalOModelUsageStats2ᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐModelUsageStats(ctx context.Context, sel ast.SelectionSet, v *model.ModelUsageStats) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._ModelUsageStats(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalOPolicy2ᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐPolicy(ctx context.Context, sel ast.SelectionSet, v *model.Policy) graphql.Marshaler {
+func (ec *executionContext) marshalOPolicy2ᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐPolicy(ctx context.Context, sel ast.SelectionSet, v *model.Policy) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._Policy(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalOPolicyType2ᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐPolicyType(ctx context.Context, v any) (*model.PolicyType, error) {
+func (ec *executionContext) unmarshalOPolicyType2ᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐPolicyType(ctx context.Context, v any) (*model.PolicyType, error) {
 	if v == nil {
 		return nil, nil
 	}
@@ -18903,7 +18903,7 @@ func (ec *executionContext) unmarshalOPolicyType2ᚖgithubᚗcomᚋkooshapariᚋ
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalOPolicyType2ᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐPolicyType(ctx context.Context, sel ast.SelectionSet, v *model.PolicyType) graphql.Marshaler {
+func (ec *executionContext) marshalOPolicyType2ᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐPolicyType(ctx context.Context, sel ast.SelectionSet, v *model.PolicyType) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -18913,14 +18913,14 @@ func (ec *executionContext) marshalOPolicyType2ᚖgithubᚗcomᚋkooshapariᚋbi
 	return res
 }
 
-func (ec *executionContext) marshalOProjectUsage2ᚕᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐProjectUsageᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.ProjectUsage) graphql.Marshaler {
+func (ec *executionContext) marshalOProjectUsage2ᚕᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐProjectUsageᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.ProjectUsage) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	ret := graphql.MarshalSliceConcurrently(ctx, len(v), 0, false, func(ctx context.Context, i int) graphql.Marshaler {
 		fc := graphql.GetFieldContext(ctx)
 		fc.Result = &v[i]
-		return ec.marshalNProjectUsage2ᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐProjectUsage(ctx, sel, v[i])
+		return ec.marshalNProjectUsage2ᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐProjectUsage(ctx, sel, v[i])
 	})
 
 	for _, e := range ret {
@@ -18932,28 +18932,28 @@ func (ec *executionContext) marshalOProjectUsage2ᚕᚖgithubᚗcomᚋkooshapari
 	return ret
 }
 
-func (ec *executionContext) marshalOProvider2ᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐProvider(ctx context.Context, sel ast.SelectionSet, v *model.Provider) graphql.Marshaler {
+func (ec *executionContext) marshalOProvider2ᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐProvider(ctx context.Context, sel ast.SelectionSet, v *model.Provider) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._Provider(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalOProviderAccount2ᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐProviderAccount(ctx context.Context, sel ast.SelectionSet, v *model.ProviderAccount) graphql.Marshaler {
+func (ec *executionContext) marshalOProviderAccount2ᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐProviderAccount(ctx context.Context, sel ast.SelectionSet, v *model.ProviderAccount) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._ProviderAccount(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalORoutingDecision2ᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐRoutingDecision(ctx context.Context, sel ast.SelectionSet, v *model.RoutingDecision) graphql.Marshaler {
+func (ec *executionContext) marshalORoutingDecision2ᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐRoutingDecision(ctx context.Context, sel ast.SelectionSet, v *model.RoutingDecision) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._RoutingDecision(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalORoutingFeedback2ᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐRoutingFeedback(ctx context.Context, sel ast.SelectionSet, v *model.RoutingFeedback) graphql.Marshaler {
+func (ec *executionContext) marshalORoutingFeedback2ᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐRoutingFeedback(ctx context.Context, sel ast.SelectionSet, v *model.RoutingFeedback) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -19032,7 +19032,7 @@ func (ec *executionContext) marshalOTime2ᚖtimeᚐTime(ctx context.Context, sel
 	return res
 }
 
-func (ec *executionContext) unmarshalOUsageFilters2ᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐUsageFilters(ctx context.Context, v any) (*model.UsageFilters, error) {
+func (ec *executionContext) unmarshalOUsageFilters2ᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐUsageFilters(ctx context.Context, v any) (*model.UsageFilters, error) {
 	if v == nil {
 		return nil, nil
 	}
@@ -19040,21 +19040,21 @@ func (ec *executionContext) unmarshalOUsageFilters2ᚖgithubᚗcomᚋkooshapari�
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalOUsageTrends2ᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐUsageTrends(ctx context.Context, sel ast.SelectionSet, v *model.UsageTrends) graphql.Marshaler {
+func (ec *executionContext) marshalOUsageTrends2ᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐUsageTrends(ctx context.Context, sel ast.SelectionSet, v *model.UsageTrends) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._UsageTrends(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalOUserUsage2ᚕᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐUserUsageᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.UserUsage) graphql.Marshaler {
+func (ec *executionContext) marshalOUserUsage2ᚕᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐUserUsageᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.UserUsage) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	ret := graphql.MarshalSliceConcurrently(ctx, len(v), 0, false, func(ctx context.Context, i int) graphql.Marshaler {
 		fc := graphql.GetFieldContext(ctx)
 		fc.Result = &v[i]
-		return ec.marshalNUserUsage2ᚖgithubᚗcomᚋkooshapariᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐUserUsage(ctx, sel, v[i])
+		return ec.marshalNUserUsage2ᚖgithubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensionsᚋapiᚋgraphqlᚋmodelᚐUserUsage(ctx, sel, v[i])
 	})
 
 	for _, e := range ret {

@@ -24,4 +24,4 @@
 - Gitleaks: repository config reproducibly panics on pre-existing allowlist path `*.lock`; rerunning
   with `/dev/null` configuration scanned 15.88 MB and found no leaks.
 - `scripts/validate-ecosystem.sh`: repository-wide pre-existing drift remains, including unreachable
-  `KooshaPari/dispatch-mcp`; this packet introduces no ecosystem metadata changes.
+  `<REDACTED>/dispatch-mcp`; this packet introduces no ecosystem metadata changes.

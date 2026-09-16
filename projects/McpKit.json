@@ -15,5 +15,5 @@
   "audit_artifact": "audits/absorption-justifications/McpKit-2026-06-23.md",
   "grade": "L4",
   "grade_score": 13.5,
-  "note": "Archived 2026-06-18 per ADR-017; absorption complete registry#157 merged; DELETE-eligible per BOUNDARY_OWNERS 5/5; hard delete deferred. Audit 2026-06-23 confirms HARD_DELETE_READY status; substrate#28, HexaKit#270 stub, py SDK#21 merged, new KooshaPari/phenotype-mcp-asset repo created 2026-06-18 12:17 UTC, Agentora#89 merged. Repo now 404 on GitHub (90-day archive retention expired 2026-09-15 without un-archive)."
+  "note": "Archived 2026-06-18 per ADR-017; absorption complete registry#157 merged; DELETE-eligible per BOUNDARY_OWNERS 5/5; hard delete deferred. Audit 2026-06-23 confirms HARD_DELETE_READY status; substrate#28, HexaKit#270 stub, py SDK#21 merged, new <REDACTED>/phenotype-mcp-asset repo created 2026-06-18 12:17 UTC, Agentora#89 merged. Repo now 404 on GitHub (90-day archive retention expired 2026-09-15 without un-archive)."
 }

@@ -19,7 +19,7 @@ class ClaudeHooksTest(unittest.TestCase):
         payload = {
             "tool_name": "Bash",
             "tool_input": {"command": "git commit --no-verify -m test"},
-            "cwd": "/Users/kooshapari/CodeProjects/Phenotype/repos/thegent-wtrees/demo",
+            "cwd": "/Users/<REDACTED>/CodeProjects/Phenotype/repos/thegent-wtrees/demo",
             "session_id": "session-1",
         }
         result = evaluate_claude_pretool_payload(payload, repo_root=REPO_ROOT)
@@ -31,7 +31,7 @@ class ClaudeHooksTest(unittest.TestCase):
         payload = {
             "tool_name": "Bash",
             "tool_input": {"command": "curl https://example.com"},
-            "cwd": "/Users/kooshapari/CodeProjects/Phenotype/repos/thegent-wtrees/demo",
+            "cwd": "/Users/<REDACTED>/CodeProjects/Phenotype/repos/thegent-wtrees/demo",
             "session_id": "session-ask",
         }
         with patch("policy_federation.claude_hooks.intercept_command") as intercept:
@@ -61,7 +61,7 @@ class ClaudeHooksTest(unittest.TestCase):
             "tool_input": {
                 "command": "ps aux | grep -i claude | grep -v grep | head -20",
             },
-            "cwd": "/Users/kooshapari/CodeProjects/Phenotype/repos/trace",
+            "cwd": "/Users/<REDACTED>/CodeProjects/Phenotype/repos/trace",
             "session_id": "session-2",
         }
         result = evaluate_claude_pretool_payload(payload, repo_root=REPO_ROOT)
@@ -72,7 +72,7 @@ class ClaudeHooksTest(unittest.TestCase):
             "tool_name": "Bash",
             "tool_input": {
                 "command": (
-                    "cd /Users/kooshapari/CodeProjects/Phenotype/repos && "
+                    "cd /Users/<REDACTED>/CodeProjects/Phenotype/repos && "
                     "for repo in agentapi-plusplus-composite-actions "
                     "bifrost-extensions-composite-actions cliproxyapi++-composite-actions "
                     "agentapi-plusplus-governance bifrost-extensions-governance; do "
@@ -81,7 +81,7 @@ class ClaudeHooksTest(unittest.TestCase):
                     "done"
                 ),
             },
-            "cwd": "/Users/kooshapari/CodeProjects/Phenotype/repos",
+            "cwd": "/Users/<REDACTED>/CodeProjects/Phenotype/repos",
             "session_id": "session-3",
         }
         with patch.dict(
@@ -95,12 +95,12 @@ class ClaudeHooksTest(unittest.TestCase):
             "tool_name": "Bash",
             "tool_input": {
                 "command": (
-                    "cd /Users/kooshapari/CodeProjects/Phenotype/repos/"
+                    "cd /Users/<REDACTED>/CodeProjects/Phenotype/repos/"
                     "bifrost-extensions-wtrees/fix-build-blockers && "
                     "pwd && git status --short --branch"
                 ),
             },
-            "cwd": "/Users/kooshapari/CodeProjects/Phenotype/repos/bifrost-extensions-wtrees/fix-build-blockers",
+            "cwd": "/Users/<REDACTED>/CodeProjects/Phenotype/repos/bifrost-extensions-wtrees/fix-build-blockers",
             "session_id": "session-7",
         }
         with patch.dict(
@@ -115,12 +115,12 @@ class ClaudeHooksTest(unittest.TestCase):
             "tool_name": "Bash",
             "tool_input": {
                 "command": (
-                    "cd /Users/kooshapari/CodeProjects/Phenotype/repos/"
+                    "cd /Users/<REDACTED>/CodeProjects/Phenotype/repos/"
                     "heliosApp-wtrees/tech-debt-wave && "
                     "bun add -d happy-dom 2>&1 | tail -5"
                 ),
             },
-            "cwd": "/Users/kooshapari/CodeProjects/Phenotype/repos/heliosApp-wtrees/tech-debt-wave",
+            "cwd": "/Users/<REDACTED>/CodeProjects/Phenotype/repos/heliosApp-wtrees/tech-debt-wave",
             "session_id": "session-6",
         }
         with patch.dict(
@@ -135,7 +135,7 @@ class ClaudeHooksTest(unittest.TestCase):
             "tool_input": {
                 "query": "OpenSpec agentic software engineering documentation management 2025 2026",
             },
-            "cwd": "/Users/kooshapari/CodeProjects/Phenotype/repos",
+            "cwd": "/Users/<REDACTED>/CodeProjects/Phenotype/repos",
             "session_id": "session-8",
         }
         with patch.dict(
@@ -150,7 +150,7 @@ class ClaudeHooksTest(unittest.TestCase):
             "tool_input": {
                 "query": "Plane.so REST API endpoints issues cycles modules documentation",
             },
-            "cwd": "/Users/kooshapari/CodeProjects/Phenotype/repos",
+            "cwd": "/Users/<REDACTED>/CodeProjects/Phenotype/repos",
             "session_id": "session-9",
         }
         with patch.dict(
@@ -166,7 +166,7 @@ class ClaudeHooksTest(unittest.TestCase):
             "tool_input": {
                 "command": "ps aux | grep -i claude | grep -v grep | head -20",
             },
-            "cwd": "/Users/kooshapari/CodeProjects/Phenotype/repos/trace",
+            "cwd": "/Users/<REDACTED>/CodeProjects/Phenotype/repos/trace",
             "session_id": "session-audit",
         }
         with patch.dict(
@@ -185,14 +185,14 @@ class ClaudeHooksTest(unittest.TestCase):
             "tool_name": "Bash",
             "tool_input": {
                 "command": (
-                    "cd /Users/kooshapari/CodeProjects/Phenotype/repos/"
+                    "cd /Users/<REDACTED>/CodeProjects/Phenotype/repos/"
                     "heliosApp-wtrees/tech-debt-wave && "
                     "sed -i '' 's/if (redactionSet.has(key.toLowerCase())) {/if "
                     "(redactionSet.has(key.toLowerCase()) || isSensitiveKey(key)) {/' "
                     "apps/runtime/src/audit/sink.ts"
                 ),
             },
-            "cwd": "/Users/kooshapari/CodeProjects/Phenotype/repos/heliosApp-wtrees/tech-debt-wave",
+            "cwd": "/Users/<REDACTED>/CodeProjects/Phenotype/repos/heliosApp-wtrees/tech-debt-wave",
             "session_id": "session-5",
         }
         with patch.dict(
@@ -206,7 +206,7 @@ class ClaudeHooksTest(unittest.TestCase):
             "tool_name": "Bash",
             "tool_input": {
                 "command": (
-                    "cd /Users/kooshapari/CodeProjects/Phenotype/repos/"
+                    "cd /Users/<REDACTED>/CodeProjects/Phenotype/repos/"
                     "trace-wtrees/cli-stubs && "
                     'printf \'"""Performance utilities for TraceRTM CLI."""\\n'
                     "from __future__ import annotations\\n\\n' | "
@@ -214,7 +214,7 @@ class ClaudeHooksTest(unittest.TestCase):
                     'echo "performance.py ok"'
                 ),
             },
-            "cwd": "/Users/kooshapari/CodeProjects/Phenotype/repos/trace-wtrees/cli-stubs",
+            "cwd": "/Users/<REDACTED>/CodeProjects/Phenotype/repos/trace-wtrees/cli-stubs",
             "session_id": "session-trace-stub",
         }
         with patch.dict(
@@ -228,13 +228,13 @@ class ClaudeHooksTest(unittest.TestCase):
             "tool_name": "Bash",
             "tool_input": {
                 "command": (
-                    "diff /Users/kooshapari/CodeProjects/Phenotype/repos/worktrees/heliosApp/"
+                    "diff /Users/<REDACTED>/CodeProjects/Phenotype/repos/worktrees/heliosApp/"
                     "claude-md-standardize/biome.json "
-                    "/Users/kooshapari/CodeProjects/Phenotype/repos/heliosApp-wtrees/"
+                    "/Users/<REDACTED>/CodeProjects/Phenotype/repos/heliosApp-wtrees/"
                     'claude-md-standardize/biome.json 2>/dev/null || echo "DIFFERENT or one missing"'
                 ),
             },
-            "cwd": "/Users/kooshapari/CodeProjects/Phenotype/repos",
+            "cwd": "/Users/<REDACTED>/CodeProjects/Phenotype/repos",
             "session_id": "session-4",
         }
         with patch.dict(
@@ -273,7 +273,7 @@ class ClaudeHooksTest(unittest.TestCase):
         payload = {
             "tool_name": "Bash",
             "tool_input": {"command": "curl https://example.com"},
-            "cwd": "/Users/kooshapari/CodeProjects/Phenotype/repos/thegent-wtrees/demo",
+            "cwd": "/Users/<REDACTED>/CodeProjects/Phenotype/repos/thegent-wtrees/demo",
             "session_id": "session-guardian-allow",
         }
         with patch("policy_federation.claude_hooks.intercept_command") as intercept:
@@ -306,7 +306,7 @@ class ClaudeHooksTest(unittest.TestCase):
         payload = {
             "tool_name": "Bash",
             "tool_input": {"command": "ls"},
-            "cwd": "/Users/kooshapari/CodeProjects/Phenotype/repos/thegent-wtrees/demo",
+            "cwd": "/Users/<REDACTED>/CodeProjects/Phenotype/repos/thegent-wtrees/demo",
             "session_id": "session-direct-allow",
         }
         with patch("policy_federation.claude_hooks.intercept_command") as intercept:

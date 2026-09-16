@@ -5,7 +5,7 @@ import { sitePath } from "../../lib/site";
 // Tier-3 microfrontend: /docs/* — renders source repo's docs/ tree.
 // Spec: phenotype-infra/docs/governance/path-microfrontends-tier3.md
 
-const REPO = "KooshaPari/thegent-landing";
+const REPO = "<REDACTED>/thegent-landing";
 const PROJECT_NAME = "theGent";
 const REPO_SLUG = "thegent";
 const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
@@ -77,7 +77,7 @@ export async function getStaticPaths() {
     const token = process.env.GITHUB_TOKEN;
     try {
       const tree = await fetch(
-        `https://api.github.com/repos/KooshaPari/thegent-landing/git/trees/main?recursive=1`,
+        `https://api.github.com/repos/<REDACTED>/thegent-landing/git/trees/main?recursive=1`,
         {
           headers: {
             Accept: "application/vnd.github+json",

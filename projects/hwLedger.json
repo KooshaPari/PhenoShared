@@ -37,11 +37,11 @@
   "tier": "federated-service",
   "architecture": "layered-workspace",
   "language": "rust",
-  "home": "KooshaPari/hwLedger",
+  "home": "<REDACTED>/hwLedger",
   "supersedes": [],
   "superseded_by": [],
   "substrate_consumer_of": [
-    "KooshaPari/pheno-capacity (math substrate, ADR-035A)"
+    "<REDACTED>/pheno-capacity (math substrate, ADR-035A)"
   ],
   "note": "Audited 2026-07-17; n/a primary language (markdown/yaml likely). Hardware ledger with org-wide scope. Boundary doc captured at docs/boundary/hwLedger.md — declares hwLedger as the canonical Phenotype-org hardware ledger; no absorption target; fsm advanced from active to verified (CANON declaration, not active record)."
 }

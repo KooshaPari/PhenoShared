@@ -2,7 +2,7 @@
   "name": "Benchora",
   "audit_date": "2026-07-27",
   "source": {
-    "repository": "https://github.com/KooshaPari/Benchora",
+    "repository": "https://github.com/<REDACTED>/Benchora",
     "default_branch": "main",
     "remote_sha": "66120c1211d7f5bb2c7f5f440e582d5c059f79ce",
     "local_branch": "feat/cross-repo-audit-fixes",

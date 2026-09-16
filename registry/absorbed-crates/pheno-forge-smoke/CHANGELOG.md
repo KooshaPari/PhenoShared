@@ -24,7 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - ADR-096 — forgecode improvement (the locked stack)
 - ADR-097 — eval harness (next wave)
 - ADR-098 — additional adapters (next wave)
-- `KooshaPari/pheno-forge-plugins` v0.1.0
-- `KooshaPari/pheno-cdylib-bridge` v0.1.0
-- `KooshaPari/thegent#1144` (thegent-memory v2)
+- `<REDACTED>/pheno-forge-plugins` v0.1.0
+- `<REDACTED>/pheno-cdylib-bridge` v0.1.0
+- `<REDACTED>/thegent#1144` (thegent-memory v2)
 - `tailcallhq/forgecode#3559` (forge_pheno_memory)

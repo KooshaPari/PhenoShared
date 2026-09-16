@@ -13,6 +13,6 @@
 ## Absorption into phenotype-tooling
 
 - Absorbed: 2026-09-14
-- Source repo: [KooshaPari/zz-merge-unk-local-ops](https://github.com/KooshaPari/zz-merge-unk-local-ops)
-- Destination: `crates/local-ops/` in [KooshaPari/PhenoTooling](https://github.com/KooshaPari/PhenoTooling)
+- Source repo: [<REDACTED>/zz-merge-unk-local-ops](https://github.com/<REDACTED>/zz-merge-unk-local-ops)
+- Destination: `crates/local-ops/` in [<REDACTED>/PhenoTooling](https://github.com/<REDACTED>/PhenoTooling)
 - Source repo preserved as-is; no further development expected there.

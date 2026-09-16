@@ -35,4 +35,4 @@
 
 ---
 
-[phenotype-gfx on GitHub](https://github.com/KooshaPari/phenotype-gfx)
+[phenotype-gfx on GitHub](https://github.com/<REDACTED>/phenotype-gfx)

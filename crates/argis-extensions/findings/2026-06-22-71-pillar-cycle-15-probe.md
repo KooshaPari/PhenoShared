@@ -1,6 +1,6 @@
 # 71-Pillar Cycle 15 Probe (2026-06-22)
 
-**Author:** KooshaPari
+**Author:** <REDACTED>
 **Source:** Cycle 14 closure + v24 P1 reduction results
 
 ## Fleet Mean Lift Trajectory

@@ -13,7 +13,7 @@ Service registry and discovery for microservices.
 
 ```toml
 [dependencies]
-nexus = { git = "https://github.com/KooshaPari/nexus" }
+nexus = { git = "https://github.com/<REDACTED>/nexus" }
 ```
 
 ## Usage

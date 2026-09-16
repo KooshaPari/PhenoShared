@@ -6,7 +6,7 @@
 
 ## Why this exists
 
-The Phenotype fleet ships ~50+ repositories under `KooshaPari/*` and a
+The Phenotype fleet ships ~50+ repositories under `<REDACTED>/*` and a
 top-level monorepo. SOC2 Type II audits require evidence that controls
 operated effectively over the audit period (typically 6-12 months). Manual
 evidence collection across this fleet is impossible at audit cadence. This
@@ -52,13 +52,13 @@ check is **SKIPPED** because `--repo` was not given; everything else runs.
 ```bash
 gh auth login --scopes repo,read:org
 python3 scripts/soc2-evidence.py \
-    --repo KooshaPari/phenotype-monorepo \
+    --repo <REDACTED>/phenotype-monorepo \
     --since "12 months ago" \
     --out-dir findings/soc2/$(date +%Y%m)
 ```
 
 This includes the GitHub branch-protection check (CC6) for the specified
-repo. Adjust `--repo` for each `KooshaPari/*` repo in scope.
+repo. Adjust `--repo` for each `<REDACTED>/*` repo in scope.
 
 ## Reading the output
 
@@ -67,7 +67,7 @@ The `evidence.json` schema (top-level):
 ```json
 {
   "generated_at": "2026-06-22T19:30:00Z",
-  "repo": "KooshaPari/phenotype-monorepo",
+  "repo": "<REDACTED>/phenotype-monorepo",
   "since": "12 months ago",
   "summary": {"pass": 6, "partial": 3, "fail": 0, "skipped": 0, "total": 9},
   "evidence": [

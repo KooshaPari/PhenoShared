@@ -6,7 +6,7 @@ In progress.
 
 ## Requirement
 
-When `projects.kooshapari.com` is opened from a device on the Phenotype org network,
+When `projects.<REDACTED>.com` is opened from a device on the Phenotype org network,
 Tailscale, MagicDNS, or a local development host, the hub should reveal additional
 internal options for local development portals and operational views. The public
 internet view should not expose those links by default.
@@ -20,7 +20,7 @@ internet view should not expose those links by default.
 - A local operator can force the internal panel for testing with
   `?internal=1` or `localStorage.setItem("phenotype_internal", "1")`.
 - Links must point only to local or tailnet destinations and must not embed secrets.
-- Vercel remains the canonical production deployment for `projects.kooshapari.com`.
+- Vercel remains the canonical production deployment for `projects.<REDACTED>.com`.
 - GitHub Pages has a complete build and deploy workflow as a governance mirror.
 
 ## Follow-Up Work

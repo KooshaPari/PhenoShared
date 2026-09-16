@@ -7,8 +7,8 @@ Compliance standard: registry/audit-absorption-justification/schema.json (14/14 
 
 ## Source
 
-- **Repo:** `KooshaPari/heliosCLI`
-- **GitHub URL:** https://github.com/KooshaPari/heliosCLI
+- **Repo:** `<REDACTED>/heliosCLI`
+- **GitHub URL:** https://github.com/<REDACTED>/heliosCLI
 - **Archived at:** True
 - **Default branch at audit time:** `main`
 - **Last commit SHA on default branch:** `d63844f`
@@ -20,7 +20,7 @@ Compliance standard: registry/audit-absorption-justification/schema.json (14/14 
 
 ## Target
 
-- **Receiving repo:** `KooshaPari/helios-cli`
+- **Receiving repo:** `<REDACTED>/helios-cli`
 - **Receiving path:** `n/a`
 - **Local mirror path:** `repos/heliosCLI`
 - **Bundle file:** none (live repo; no bundle needed)
@@ -39,7 +39,7 @@ Compliance standard: registry/audit-absorption-justification/schema.json (14/14 
 - **Total branches (remote):** 1
 - **Open issues at audit time:** 0
 - **Bundle reference:** NONE — repo is live, no bundle required
-- **Source-tombstone posture:** `KooshaPari/heliosCLI` active on GitHub
+- **Source-tombstone posture:** `<REDACTED>/heliosCLI` active on GitHub
 
 ## BRANCH_INVENTORY
 
@@ -66,14 +66,14 @@ Compliance standard: registry/audit-absorption-justification/schema.json (14/14 
 
 | Source Item | Source Evidence | Category | Source State | Target Repo | Target Evidence | Status | Deletion Justification | Risk if Deleted | Required Action |
 |---|---|---|---|---|---|---|---|---|---|
-| `heliosCLI/code` | `gh api` | sdk-code | active | `KooshaPari/helios-cli` | `n/a` | ARCHIVED | Legacy heliosCLI repository archived and absorbed into active helios-cli workspace. | Medium | Scanned and reviewed |
-| `heliosCLI/branches` | `gh api` | branch-coverage | active | `KooshaPari/helios-cli` | `n/a` | ARCHIVED | Branch coverage reviewed | Low | Scanned and reviewed |
+| `heliosCLI/code` | `gh api` | sdk-code | active | `<REDACTED>/helios-cli` | `n/a` | ARCHIVED | Legacy heliosCLI repository archived and absorbed into active helios-cli workspace. | Medium | Scanned and reviewed |
+| `heliosCLI/branches` | `gh api` | branch-coverage | active | `<REDACTED>/helios-cli` | `n/a` | ARCHIVED | Branch coverage reviewed | Low | Scanned and reviewed |
 
 ## Last-Resort-Exceptions
 
 - **Rebuttal #1: "Delete heliosCLI now."** Rebutted: heliosCLI has active code history. We must verify parity or archive instead of deleting. The residual gap is managed by target absorption.
 - **Rebuttal #2: "Archive-not-deletion is insufficient."** Rebutted: Archival is the preferred path to preserve history on the remote while disabling write access, complying with BOUNDARY_OWNERS.
-- **Rebuttal #3: "heliosCLI cannot absorb exception."** Rebutted: The target `KooshaPari/helios-cli` can absorb the exception because it is the canonical repository for this boundary domain role.
+- **Rebuttal #3: "heliosCLI cannot absorb exception."** Rebutted: The target `<REDACTED>/helios-cli` can absorb the exception because it is the canonical repository for this boundary domain role.
 
 No exceptions to the ARCHIVED verdict are granted.
 
@@ -81,7 +81,7 @@ No exceptions to the ARCHIVED verdict are granted.
 
 ```bash
 # Disaster-recovery posture:
-git clone https://github.com/KooshaPari/heliosCLI.git /tmp/heliosCLI-restore
+git clone https://github.com/<REDACTED>/heliosCLI.git /tmp/heliosCLI-restore
 # Verify bundle sha-256 (re-clone path is clean)
 ```
 

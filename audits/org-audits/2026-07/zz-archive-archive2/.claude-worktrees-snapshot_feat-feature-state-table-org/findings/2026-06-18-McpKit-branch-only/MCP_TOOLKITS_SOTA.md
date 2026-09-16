@@ -3620,13 +3620,13 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 ### 23.5 Phenotype Ecosystem
 
 15. **PhenoSpecs**
-    - GitHub: https://github.com/KooshaPari/PhenoSpecs
+    - GitHub: https://github.com/<REDACTED>/PhenoSpecs
 
 16. **PhenoHandbook**
-    - GitHub: https://github.com/KooshaPari/PhenoHandbook
+    - GitHub: https://github.com/<REDACTED>/PhenoHandbook
 
 17. **HexaKit**
-    - GitHub: https://github.com/KooshaPari/HexaKit
+    - GitHub: https://github.com/<REDACTED>/HexaKit
 
 18. **AgilePlus**
     - Path: `/repos/AgilePlus`

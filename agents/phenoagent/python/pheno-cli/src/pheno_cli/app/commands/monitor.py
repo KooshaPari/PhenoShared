@@ -157,19 +157,19 @@ def list_projects():
             "name": "atoms",
             "description": "Atoms MCP Server",
             "default_port": 50002,
-            "tunnel_domain": "atomcp.kooshapari.com",
+            "tunnel_domain": "atomcp.<REDACTED>.com",
         },
         "zen": {
             "name": "zen",
             "description": "Zen MCP Server",
             "default_port": 50001,
-            "tunnel_domain": "zen.kooshapari.com",
+            "tunnel_domain": "zen.<REDACTED>.com",
         },
         "byteport": {
             "name": "byteport",
             "description": "Byteport Service",
             "default_port": 50003,
-            "tunnel_domain": "byteport.kooshapari.com",
+            "tunnel_domain": "byteport.<REDACTED>.com",
         },
     }
 

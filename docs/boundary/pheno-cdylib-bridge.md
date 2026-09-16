@@ -4,8 +4,8 @@
 
 ## Identity
 
-- **Source:** `KooshaPari/pheno-cdylib-bridge` (Rust cdylib, 3 branches, v0.1.0)
-- **Canonical home:** `KooshaPari/pheno` (`crates/pheno-cdylib-bridge/`)
+- **Source:** `<REDACTED>/pheno-cdylib-bridge` (Rust cdylib, 3 branches, v0.1.0)
+- **Canonical home:** `<REDACTED>/pheno` (`crates/pheno-cdylib-bridge/`)
 - **Crate name:** `pheno-cdylib-bridge`
 - **Library output:** `libpheno_bridge.{so,dylib,dll}` (cdylib) + `libpheno_bridge.a` (staticlib)
 - **Workspace member:** yes (Rust monorepo `pheno`)

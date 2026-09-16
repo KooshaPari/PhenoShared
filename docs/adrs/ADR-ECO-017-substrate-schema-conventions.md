@@ -43,7 +43,7 @@ requirements** rather than prose conventions.
    | Field | Required when | Allowed values |
    |---|---|---|
    | `id` | always | `^[a-z0-9-]+$` (unique slug) |
-   | `repo` | always | `^KooshaPari/<name>$` |
+   | `repo` | always | `^<REDACTED>/<name>$` |
    | `name` | always | human-readable repo name |
    | `status` | always | `active`, `archived`, `deprecated`, `absorbed` |
    | `tier` | always | `pheno-lib`, `phenotype-sdk`, `phenotype-framework`, `federated-service` |

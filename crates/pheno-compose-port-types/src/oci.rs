@@ -12,7 +12,7 @@
 //! across the PhenoCompose port crates. The **canonical** home for
 //! OCI helpers in the Phenotype ecosystem is the
 //! **`phenotype-types`** crate (hosted at
-//! `https://github.com/kooshapari/phenotype-types`). When that crate
+//! `https://github.com/<REDACTED>/phenotype-types`). When that crate
 //! is available as a dependency, consumers SHOULD prefer it over
 //! this local module. This module exists as a transitional shim so
 //! that existing port crates can migrate incrementally.

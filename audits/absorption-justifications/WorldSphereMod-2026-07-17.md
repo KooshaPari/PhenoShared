@@ -1,8 +1,8 @@
 # WorldSphereMod — Absorption Justification
 
 **Status:** QUEUED 2026-07-17 (batch2 refresh)
-**Source:** `KooshaPari/WorldSphereMod` (204 MB, 15 branches, last push 2026-07-03)
-**Target:** `KooshaPari/phenotype-legacy-collection`
+**Source:** `<REDACTED>/WorldSphereMod` (204 MB, 15 branches, last push 2026-07-03)
+**Target:** `<REDACTED>/phenotype-legacy-collection`
 **Disposition:** ABSORB
 
 ## Confidence
@@ -19,7 +19,7 @@
 ## Restore procedure
 
 ```sh
-gh repo unarchive KooshaPari/WorldSphereMod
+gh repo unarchive <REDACTED>/WorldSphereMod
 # In legacy-collection spine:
 git rm -r games/worldspheremod/
 git commit -m "revert: undo WorldSphereMod absorption"
@@ -27,4 +27,4 @@ git commit -m "revert: undo WorldSphereMod absorption"
 
 ## Cross-references
 
-- Disposition row: search `"KooshaPari/WorldSphereMod"` in `registry/disposition-index.json`
+- Disposition row: search `"<REDACTED>/WorldSphereMod"` in `registry/disposition-index.json`

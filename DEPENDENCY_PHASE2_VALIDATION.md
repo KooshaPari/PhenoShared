@@ -11,7 +11,7 @@
 ```
 Total Crates: 24 production + multi-dependency workspace
 Cargo.toml files: 60 (across crates, workspace, examples)
-Working directory: /Users/kooshapari/CodeProjects/Phenotype/repos
+Working directory: /Users/<REDACTED>/CodeProjects/Phenotype/repos
 Canonical branch: main
 Current commit: a67fff87b (as of 2026-03-31 morning)
 Rust version: 1.93.1 (Homebrew)

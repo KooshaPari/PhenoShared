@@ -25,7 +25,7 @@ Documented at `thegent/docs/reference/api/harness_api.md`.
 
 ## HarnessProfile
 
-Each dispatch carries a [HarnessProfile](https://github.com/KooshaPari/thegent/blob/main/contracts/provider-bridge/schema/harness-profile.schema.json) validated against the upstream schema. HexaKit maps lane-level `harness: "thegent"` at dispatch time; `policy_overrides` and `tool_policy` inherit from the session AACP bundle when present.
+Each dispatch carries a [HarnessProfile](https://github.com/<REDACTED>/thegent/blob/main/contracts/provider-bridge/schema/harness-profile.schema.json) validated against the upstream schema. HexaKit maps lane-level `harness: "thegent"` at dispatch time; `policy_overrides` and `tool_policy` inherit from the session AACP bundle when present.
 
 ## Capabilities (v0)
 

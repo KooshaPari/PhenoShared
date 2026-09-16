@@ -196,7 +196,7 @@ def gen_self_signed_cert(days: int = 365) -> tuple[Path, Path]:
     ca_file = _as_path(CA_FILE)
     _ensure_directory(cert_dir)
 
-    subj = "/CN=resume-all-ipc-tls/O=kooshapari"
+    subj = "/CN=resume-all-ipc-tls/O=<REDACTED>"
     with tempfile.TemporaryDirectory(
         prefix=".ipc-tls-cert-", dir=str(cert_dir)
     ) as temporary_dir:

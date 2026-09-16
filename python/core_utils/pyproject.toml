@@ -38,8 +38,8 @@ dev = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/KooshaPari/PhenoKit"
-Repository = "https://github.com/KooshaPari/PhenoKit"
+Homepage = "https://github.com/<REDACTED>/PhenoKit"
+Repository = "https://github.com/<REDACTED>/PhenoKit"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/pheno_core_utils"]

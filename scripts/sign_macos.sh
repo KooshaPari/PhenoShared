@@ -29,7 +29,7 @@ KERNEL_DIR="${REPO_ROOT}/kernels/qwen3.5-0.8b"
 KERNEL_BIN="${KERNEL_DIR}/pony/qwen3_5_kernel"
 ARTIFACT_NAME="pheno-harness-v0.37"
 TARBALL="${REPO_ROOT}/${ARTIFACT_NAME}.tar.gz"
-GITHUB_REPO="${GITHUB_REPO:-KooshaPari/pheno-harness}"
+GITHUB_REPO="${GITHUB_REPO:-<REDACTED>/pheno-harness}"
 
 # Signing mode: 1 = ad-hoc (free), 0 = Developer ID (requires $99/yr cert)
 ADHOC="${ADHOC:-1}"

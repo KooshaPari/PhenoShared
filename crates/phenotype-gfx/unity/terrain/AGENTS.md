@@ -6,12 +6,12 @@ This file governs work inside the `phenotype-terrain` repository.
 
 `phenotype-terrain` is a shared Unity terrain mesh infrastructure package for Phenotype-org mods targeting Unity / WorldBox. It provides height-field storage, chunk mesh generation, and LOD management. The in-repo sibling that consumes this package is `phenotype-water`; downstream consumers are end-user Phenotype Unity mods (no other repo package depends on this one at the time of writing).
 
-Do not apply parent shelf instructions (e.g. `/Users/kooshapari/CodeProjects/Phenotype/repos/AGENTS.md` or `~/.claude/AGENTS.md`) unless explicitly referenced. Work from this directory and treat paths as local to `phenotype-terrain`.
+Do not apply parent shelf instructions (e.g. `/Users/<REDACTED>/CodeProjects/Phenotype/repos/AGENTS.md` or `~/.claude/AGENTS.md`) unless explicitly referenced. Work from this directory and treat paths as local to `phenotype-terrain`.
 
 ## Quick Links
 
 - **Local CLAUDE.md:** Present (`./CLAUDE.md`); this AGENTS.md is the source of truth for cross-cutting rules, CLAUDE.md is the Claude-specific entry point mirroring the McpKit stack template.
-- **Phenotype org governance:** `/Users/kooshapari/CodeProjects/Phenotype/repos/CLAUDE.md` (consult when touching cross-repo contracts).
+- **Phenotype org governance:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos/CLAUDE.md` (consult when touching cross-repo contracts).
 - **Global agent guidance:** `~/.claude/AGENTS.md` (consult for global defaults).
 - **AgilePlus work tracking:** `cd /repos/AgilePlus && agileplus <command>` — required for non-trivial work per the CONTRIBUTING mandate.
 - **Sibling shared package:** `phenotype-water` is the only in-repo sibling that consumes this package. No other repo package depends on it.

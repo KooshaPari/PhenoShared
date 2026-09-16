@@ -7,7 +7,7 @@
 
 This is a living document. If you do something during an incident that isn't
 here, add it to this file as part of your post-incident review. Edits to this
-file route to `@KooshaPari/devops` per
+file route to `@<REDACTED>/devops` per
 [`.github/CODEOWNERS`](../../.github/CODEOWNERS).
 
 ---
@@ -438,7 +438,7 @@ kubectl -n substrate rollout status  deploy/psub-gateway --timeout=120s
 
 # Bump image to a new tag
 kubectl -n substrate set image deploy/psub-gateway \
-  psub-gateway=ghcr.io/kooshapari/psub-gateway:vX.Y.Z
+  psub-gateway=ghcr.io/<REDACTED>/psub-gateway:vX.Y.Z
 kubectl -n substrate rollout status deploy/psub-gateway --timeout=120s
 
 # Rollback if the rollout is bad
@@ -505,10 +505,10 @@ inside one of these steps.
 ## 10. Code ownership
 
 Ops-lane edits to this file and the rest of `docs/operations/` route to
-`@KooshaPari/devops` per
+`@<REDACTED>/devops` per
 [`.github/CODEOWNERS:81`](../../.github/CODEOWNERS#L81). Changes to
 `/crates/psub-gateway/`, `/crates/driver-http/`, and the rest of the
-inbound-adapter tree route to `@KooshaPari/gateway` (see
+inbound-adapter tree route to `@<REDACTED>/gateway` (see
 [`.github/CODEOWNERS:40-50`](../../.github/CODEOWNERS#L40-L50)). When a
 playbook change crosses both boundaries (e.g. a new endpoint), request
 reviewers from both teams in the PR template.

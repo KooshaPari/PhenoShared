@@ -6,7 +6,7 @@
   "color": "#7c3aed",
   "description": "Multi-runtime AI CLI: unified interface for agent orchestration and model interaction.",
   "tier": 2,
-  "repo": "KooshaPari/HeliosCLI",
+  "repo": "<REDACTED>/HeliosCLI",
   "language": "Rust",
   "license": "MIT",
   "status": "active",
@@ -17,8 +17,8 @@
     "Plugin system"
   ],
   "links": {
-    "github": "https://github.com/KooshaPari/HeliosCLI",
+    "github": "https://github.com/<REDACTED>/HeliosCLI",
     "docs": "https://helioscli.phenotype.space/docs",
-    "releases": "https://github.com/KooshaPari/HeliosCLI/releases"
+    "releases": "https://github.com/<REDACTED>/HeliosCLI/releases"
   }
 }

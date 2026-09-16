@@ -14,7 +14,7 @@ Step-by-step walkthrough for configuring organization-level GitHub secrets for S
 ## Prerequisites
 
 - **GitHub Account:** With organization admin or "Maintain" role
-- **Organization:** `KooshaPari`
+- **Organization:** `<REDACTED>`
 - **Sentry DSN Tokens:** You should have obtained these from the previous setup phase
   - `SENTRY_DSN_AGILEPLUS`
   - `SENTRY_DSN_INFRAKIT`
@@ -45,7 +45,7 @@ Each secret is assigned to specific repositories:
 Before starting, verify you're in the right place:
 
 1. **Organization Level** (NOT repository level)
-   - URL: `https://github.com/organizations/KooshaPari/settings/`
+   - URL: `https://github.com/organizations/<REDACTED>/settings/`
 2. **Left Sidebar:** Look for "Security" section
 3. **Under Security:** Click **"Secrets and variables"**
 4. **Tabs:** You should see: **Secrets | Variables | Dependabot**
@@ -59,7 +59,7 @@ Before starting, verify you're in the right place:
 
 #### Step 1: Click "New organization secret"
 
-1. Go to: https://github.com/organizations/KooshaPari/settings/secrets/actions
+1. Go to: https://github.com/organizations/<REDACTED>/settings/secrets/actions
 2. Click **"New organization secret"** (green button, top right)
 
 #### Step 2: Fill in Secret Details
@@ -91,7 +91,7 @@ Then click **"Add repositories"** and search for:
 AgilePlus
 ```
 
-Select `KooshaPari/AgilePlus` from the dropdown.
+Select `<REDACTED>/AgilePlus` from the dropdown.
 
 #### Step 3: Save Secret
 
@@ -137,7 +137,7 @@ Click **"Add repositories"** and search for:
 phenotype-infrakit
 ```
 
-Select `KooshaPari/phenotype-infrakit` from the dropdown.
+Select `<REDACTED>/phenotype-infrakit` from the dropdown.
 
 #### Step 3: Save Secret
 
@@ -183,7 +183,7 @@ Click **"Add repositories"** and search for:
 heliosCLI
 ```
 
-Select `KooshaPari/heliosCLI` from the dropdown.
+Select `<REDACTED>/heliosCLI` from the dropdown.
 
 #### Step 3: Save Secret
 
@@ -202,7 +202,7 @@ After creating all 3 secrets, verify they're accessible from each repository.
 
 ### Verify from AgilePlus Repository
 
-1. Go to: https://github.com/KooshaPari/AgilePlus
+1. Go to: https://github.com/<REDACTED>/AgilePlus
 2. Click **Settings** (top navigation)
 3. Click **Secrets and variables** → **Actions** (left sidebar)
 4. Under **"Organization secrets"** section, you should see:
@@ -217,7 +217,7 @@ If not visible:
 
 ### Verify from phenotype-infrakit Repository
 
-1. Go to: https://github.com/KooshaPari/phenotype-infrakit
+1. Go to: https://github.com/<REDACTED>/phenotype-infrakit
 2. Click **Settings** (top navigation)
 3. Click **Secrets and variables** → **Actions** (left sidebar)
 4. Under **"Organization secrets"** section, you should see:
@@ -231,7 +231,7 @@ If not visible:
 
 ### Verify from heliosCLI Repository
 
-1. Go to: https://github.com/KooshaPari/heliosCLI
+1. Go to: https://github.com/<REDACTED>/heliosCLI
 2. Click **Settings** (top navigation)
 3. Click **Secrets and variables** → **Actions** (left sidebar)
 4. Under **"Organization secrets"** section, you should see:
@@ -287,7 +287,7 @@ The `$&#123;&#123; secrets.SENTRY_DSN_AGILEPLUS }}` will be replaced with the ac
 **Solution:**
 1. Double-check the repository name in the GitHub URL
 2. Make sure you're logged in with an account that has admin access
-3. Verify the repository exists at `https://github.com/KooshaPari/{repo-name}`
+3. Verify the repository exists at `https://github.com/<REDACTED>/{repo-name}`
 
 ### Problem: Secret not visible in repository settings
 

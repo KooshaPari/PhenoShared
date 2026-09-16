@@ -30,7 +30,7 @@ All files must be UTF-8. No BOM.
 - ✅ `deny.toml` — cargo-deny advisories config
 - ✅ `gitleaks.toml` — gitleaks config
 - ✅ `rust-toolchain.toml` — nightly channel (MSRV enforcement added to CI)
-- ✅ Branch protection — configured on KooshaPari/AgilePlus
+- ✅ Branch protection — configured on <REDACTED>/AgilePlus
 - ❌ SBOM — not yet generated
 
 ## CI/CD Security (2026-05-05 Audit)
@@ -52,7 +52,7 @@ How to apply: prefer concurrent agents for discovery/ranking across repos, while
 ## Repo Audit Findings (2026-05-05)
 
 ### Workspace Structure
-- `agileplus/` and `AgilePlus/` are the **same directory** (case-insensitive macOS filesystem, same inode). The canonical remote is `KooshaPari/AgilePlus`.
+- `agileplus/` and `AgilePlus/` are the **same directory** (case-insensitive macOS filesystem, same inode). The canonical remote is `<REDACTED>/AgilePlus`.
 - The bare-repo pattern means direct commits to `main` are blocked; all changes flow through PRs.
 - Worktrees: `AgilePlus-wtrees/<topic>/` (note: `AgilePlus-wtr/` exists with inconsistent naming — should be consolidated).
 

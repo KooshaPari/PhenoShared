@@ -40,9 +40,9 @@ Verify that every GitHub Actions workflow in the bloc is SHA-pinned (not tag-pin
 ### Tracely (5 workflows, `Tracely/.github/workflows/`)
 
 - `ci.yml:1-43` — **✗ CRITICAL.** Calls 3 reusable workflows at lines 20/27/35 with **tag-pinned `@main`** references:
-  - `KooshaPari/template-commons/.github/workflows/reusable-rust-ci.yml@main` — supply-chain risk; the upstream template can change without review.
-  - `KooshaPari/template-commons/.github/workflows/reusable-security-scan.yml@main` — same risk; security audits should be SHA-pinned.
-  - `KooshaPari/phenotypeActions/.github/workflows/validate-governance.yml@main` — governance validation mutating with `@main` is the worst of the three.
+  - `<REDACTED>/template-commons/.github/workflows/reusable-rust-ci.yml@main` — supply-chain risk; the upstream template can change without review.
+  - `<REDACTED>/template-commons/.github/workflows/reusable-security-scan.yml@main` — same risk; security audits should be SHA-pinned.
+  - `<REDACTED>/phenotypeActions/.github/workflows/validate-governance.yml@main` — governance validation mutating with `@main` is the worst of the three.
   - Inlined `actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd:41` is SHA-pinned. `runs-on: ubuntu-latest:39` (forbidden). `permissions:11`, `concurrency:14` are well-formed.
 - `audit.yml:1-37` — **✗ BROKEN SYNTAX.** Line 27: `uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd@11bd71901bbe5b1630ceea73d27597364c9af683` — the SHA is appended *after* the tag-style `@de0fac...` fragment, producing an unparseable ref. This will fail YAML parse or be interpreted as a corrupt git ref. `runs-on: ubuntu-latest:19` (forbidden).
 - `deny.yml:1-36` — **✗ BROKEN SYNTAX.** Line 28: `uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10@de0fac2e4500dabe0009e67214ff5f5447ce83dd` — same double-SHA pattern, broken ref. `dtolnay/rust-toolchain@stable:31` and `EmbarkStudios/cargo-deny-action@91bf2b620e09e18d6eb78b92e7861937469acedb:34` are tag-pinned. `runs-on: ubuntu-latest:25`. No `permissions:` block. `concurrency:20`.
@@ -78,7 +78,7 @@ Verify that every GitHub Actions workflow in the bloc is SHA-pinned (not tag-pin
 | 13 | `thegent/.github/workflows/python-ci.yml:16` | `ubuntu-latest`. Replace with `ubuntu-24.04`. | S |
 | 14 | `thegent/.github/workflows/release.yml:28` | Comment `# v-latest` is misleading (the SHA is a real commit, not a rolling tag). Update comment to the resolved version or remove it. | S |
 | 15 | `thegent/.github/workflows/backup/*.yml` | Archived workflows dormant. Either delete or wire up to `workflow_call:` so they can be invoked. | S |
-| 16 | All 4 repos | Branch protection not verifiable from local — defer to `gh api repos/KooshaPari/<repo>/branches/main/protection/required_status_checks` to confirm required status checks align with the workflows above. | M |
+| 16 | All 4 repos | Branch protection not verifiable from local — defer to `gh api repos/<REDACTED>/<repo>/branches/main/protection/required_status_checks` to confirm required status checks align with the workflows above. | M |
 
 ## Summary
 

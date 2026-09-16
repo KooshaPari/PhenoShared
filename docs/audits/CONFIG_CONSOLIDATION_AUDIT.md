@@ -319,11 +319,11 @@ pub trait ConfigValidator: Send + Sync + 'static {
 ## References
 
 - File locations analyzed:
-  - /Users/kooshapari/CodeProjects/Phenotype/repos/crates/phenotype-config-loader/src/lib.rs
-  - /Users/kooshapari/CodeProjects/Phenotype/repos/crates/phenotype-policy-engine/src/loader.rs
-  - /Users/kooshapari/CodeProjects/Phenotype/repos/crates/phenotype-config-core/src/lib.rs
-  - /Users/kooshapari/CodeProjects/Phenotype/repos/crates/phenotype-telemetry/src/registry.rs
-  - /Users/kooshapari/CodeProjects/Phenotype/repos/crates/phenotype-contracts/src/outbound.rs
+  - /Users/<REDACTED>/CodeProjects/Phenotype/repos/crates/phenotype-config-loader/src/lib.rs
+  - /Users/<REDACTED>/CodeProjects/Phenotype/repos/crates/phenotype-policy-engine/src/loader.rs
+  - /Users/<REDACTED>/CodeProjects/Phenotype/repos/crates/phenotype-config-core/src/lib.rs
+  - /Users/<REDACTED>/CodeProjects/Phenotype/repos/crates/phenotype-telemetry/src/registry.rs
+  - /Users/<REDACTED>/CodeProjects/Phenotype/repos/crates/phenotype-contracts/src/outbound.rs
 
 **Document Version:** 1.0
 **Status:** Ready for Implementation

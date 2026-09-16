@@ -38,5 +38,5 @@ canonical ecosystem INDEX (phenotype-registry).
 
 ## Outcome
 
-Source repo `KooshaPari/phenotype-router-spec` archived on GitHub.
+Source repo `<REDACTED>/phenotype-router-spec` archived on GitHub.
 Registry disposition-index updated: disposition=ABSORB, target=phenotype-registry.

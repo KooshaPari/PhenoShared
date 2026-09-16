@@ -30,7 +30,7 @@ For each flagship: PM-level user/market/competitor research + technical/"researc
 ## Operating rules
 - Parent = coordinator; delegate substantive work to subagents; ground-truth verify every "green" claim with real build/test.
 - Correct-repo worktrees (`cd <repo>; git worktree add /tmp/<x> -b <branch> origin/main`); sanity-gate; NEVER push to main directly / reset --hard / force-push.
-- PR base ALWAYS `--repo KooshaPari/<repo>` (gh defaults to upstream forks — verify + reopen strays).
+- PR base ALWAYS `--repo <REDACTED>/<repo>` (gh defaults to upstream forks — verify + reopen strays).
 - Admin-merge (CI billing-blocked). Checkpoint-push long multi-step lanes (API flakiness).
 - Surface (don't auto-decide) genuine new sponsor decisions (new repos, destructive ops, cross-owner work).
 

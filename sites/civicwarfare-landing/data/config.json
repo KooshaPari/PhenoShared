@@ -6,7 +6,7 @@
   "color": "#facc15",
   "description": "Cities: Skylines II infrastructure survival mod: docs and changelog.",
   "tier": 3,
-  "repo": "KooshaPari/CivicWarfare",
+  "repo": "<REDACTED>/CivicWarfare",
   "language": "C# / Unity",
   "license": "MIT",
   "status": "active",
@@ -17,8 +17,8 @@
     "Mod docs"
   ],
   "links": {
-    "github": "https://github.com/KooshaPari/CivicWarfare",
+    "github": "https://github.com/<REDACTED>/CivicWarfare",
     "docs": "https://civicwarfare.phenotype.space/docs",
-    "releases": "https://github.com/KooshaPari/CivicWarfare/releases"
+    "releases": "https://github.com/<REDACTED>/CivicWarfare/releases"
   }
 }

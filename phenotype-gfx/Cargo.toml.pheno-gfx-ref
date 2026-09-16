@@ -10,7 +10,7 @@ rust-version = "1.75.0"
 description = "Unified graphics kernel: voxel, LOD, streaming, postfx, water, voxelizer, terrain. Single Rust core per ADR-004."
 license = "MIT OR Apache-2.0"
 readme = "README.md"
-repository = "https://github.com/KooshaPari/phenotype-gfx"
+repository = "https://github.com/<REDACTED>/phenotype-gfx"
 keywords = ["graphics", "voxel", "terrain", "water", "postfx"]
 categories = ["game-engines", "graphics", "data-structures"]
 

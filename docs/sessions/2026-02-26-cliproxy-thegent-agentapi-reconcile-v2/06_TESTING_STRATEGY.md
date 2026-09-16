@@ -18,8 +18,8 @@
 | Test | Command | Expected |
 |------|---------|----------|
 | Auth alive | `gh auth status -h github.com` | `Logged in` |
-| Repo reachable | `gh repo view KooshaPari/cliproxyapi-plusplus` | No error |
-| PR accessible | `gh pr view 1 -R KooshaPari/thegent` | Returns PR data |
+| Repo reachable | `gh repo view <REDACTED>/cliproxyapi-plusplus` | No error |
+| PR accessible | `gh pr view 1 -R <REDACTED>/thegent` | Returns PR data |
 | Branch list | `git branch -a` | Lists all remotes |
 
 ## 2. Test Data Strategies
@@ -54,7 +54,7 @@ For offline testing:
 **Setup**: `gh auth` valid, PR #494 on `thegent`.
 **Action**: Post `@coderabbitai full review`.
 **Expected**: Comment appears on PR; within 5min, CodeRabbit check re-runs.
-**Verification**: `gh pr checks 494 -R KooshaPari/thegent --json name,state` shows updated `CodeRabbit` status.
+**Verification**: `gh pr checks 494 -R <REDACTED>/thegent --json name,state` shows updated `CodeRabbit` status.
 
 ### Scenario 2: Batch CodeRabbit Re-Review
 

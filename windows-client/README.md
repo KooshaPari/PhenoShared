@@ -27,7 +27,7 @@ is finalized (see `perf-core/fleet-proto/src/lib.rs`).
 ```powershell
 wsl --install -d Ubuntu
 # inside WSL2:
-git clone https://github.com/KooshaPari/phenotype-omlx.git
+git clone https://github.com/<REDACTED>/phenotype-omlx.git
 cd phenotype-omlx
 ./cli/bin/omlx-research doctor
 ```

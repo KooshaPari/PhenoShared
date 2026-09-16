@@ -40,7 +40,7 @@ docs/org-audit-2026-04/
 ### 1. Execute Lanes (FocalPoint agent-orchestrator)
 
 ```bash
-cd /Users/kooshapari/CodeProjects/Phenotype/repos/FocalPoint
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos/FocalPoint
 # Configure orchestrator with lanes.toml, dispatch 43 agents in parallel
 ```
 
@@ -49,7 +49,7 @@ Each agent writes a report to `docs/org-audit-2026-04/<repo>.md`.
 ### 2. Generate INDEX
 
 ```bash
-cd /Users/kooshapari/CodeProjects/Phenotype/repos/docs/org-audit-2026-04
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos/docs/org-audit-2026-04
 
 # Build aggregator
 cargo build --manifest-path aggregator/Cargo.toml --release
@@ -115,7 +115,7 @@ Example patterns detected across multiple repos:
 ### Check lanes.toml
 
 ```bash
-cd /Users/kooshapari/CodeProjects/Phenotype/repos
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos
 taplo check docs/org-audit-2026-04/lanes.toml
 # or: toml-cli check docs/org-audit-2026-04/lanes.toml
 ```

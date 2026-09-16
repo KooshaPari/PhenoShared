@@ -45,7 +45,7 @@
 ## Output artifacts
 
 - matrix CSV:
-[/Users/kooshapari/CodeProjects/Phenotype/repos/phenodocs/docs/sessions/2026-02-26-cliproxy-thegent-agentapi-cleanup-pass/cleanup_matrix.csv]
+[/Users/<REDACTED>/CodeProjects/Phenotype/repos/phenodocs/docs/sessions/2026-02-26-cliproxy-thegent-agentapi-cleanup-pass/cleanup_matrix.csv]
 
 ## Next step
 

@@ -1,6 +1,6 @@
 # koosha-portfolio
 
-Personal landing page for `kooshapari.com`.
+Personal landing page for `<REDACTED>.com`.
 
 This repo replaces the old Adobe Portfolio surface with a cleaner, route-based
 site that keeps the legacy entry points alive while presenting current work

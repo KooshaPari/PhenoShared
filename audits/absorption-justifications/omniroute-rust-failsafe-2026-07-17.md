@@ -2,7 +2,7 @@
 
 ## Decision
 
-`KooshaPari/omniroute-rust` is **archived** without code being absorbed into
+`<REDACTED>/omniroute-rust` is **archived** without code being absorbed into
 `HexaKit/crates/omniroute/`. The task's failsafe clause
 ("ARCHIVE_ONLY + boundary doc if HexaKit doesn't exist or build fails")
 applies because the literal task steps cannot succeed.
@@ -21,7 +21,7 @@ The prescribed steps were:
 4. Add `"crates/omniroute"` to HexaKit workspace `members`.
 5. `cargo check -p omniroute` from HexaKit.
 6. Commit + push HexaKit.
-7. `gh repo archive KooshaPari/omniroute-rust -y`.
+7. `gh repo archive <REDACTED>/omniroute-rust -y`.
 8. Update registry row.
 
 ## Where it failed
@@ -50,7 +50,7 @@ The prescribed steps were:
 
 ## HexaKit state
 
-- Exists at `/Users/kooshapari/CodeProjects/Phenotype/repos/HexaKit/`.
+- Exists at `/Users/<REDACTED>/CodeProjects/Phenotype/repos/HexaKit/`.
 - Branch `wip/2026-07-16-0025-auto`. Dirty `.github/PULL_REQUEST_TEMPLATE.md`
   (unrelated).
 - Workspace uses `resolver = "2"`, has `exclude` for ~30 absorbed stubs,
@@ -60,9 +60,9 @@ The prescribed steps were:
 ## What was done
 
 - ✅ Boundary doc written at `omniroute-rust/BOUNDARY.md`, committed and
-   pushed to `KooshaPari/omniroute-rust` (commit `348101a`) before archive.
-- ✅ `gh repo archive KooshaPari/omniroute-rust -y` executed.
-   Verified `isArchived: true` on `KooshaPari/omniroute-rust`.
+   pushed to `<REDACTED>/omniroute-rust` (commit `348101a`) before archive.
+- ✅ `gh repo archive <REDACTED>/omniroute-rust -y` executed.
+   Verified `isArchived: true` on `<REDACTED>/omniroute-rust`.
 - ✅ Registry row `repo-omniroute-rust` updated: `disposition` and `target`
    retained per task instruction; `note` appended with this rationale;
    `audit_artifact` repointed to this doc.
@@ -106,6 +106,6 @@ viable decomposition plan. In short:
 - Source repo HEAD at audit: `471a095 chore: establish independent omniroute-rust baseline`.
 - Final committed HEAD: `348101a docs(boundary): record ARCHIVE_ONLY failsafe ...`.
 - Archive command exit: 0. `isArchived: true` confirmed via
-  `gh repo view KooshaPari/omniroute-rust --json isArchived`.
+  `gh repo view <REDACTED>/omniroute-rust --json isArchived`.
 - HexaKit HEAD at decision: branch `wip/2026-07-16-0025-auto`.
 - Registry HEAD at decision: branch `registry-main`, version `1.6.18`.

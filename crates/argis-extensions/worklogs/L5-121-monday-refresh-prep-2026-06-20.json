@@ -7,7 +7,7 @@
   "device": "macbook",
   "device_rationale": "one 170-line template, one 24-line finding, one 38-line worklog — stdlib only, no cargo/dind/sim",
   "status": "complete",
-  "author": "KooshaPari",
+  "author": "<REDACTED>",
   "files_written": [
     "findings/71-pillar-refresh-template.md",
     "findings/2026-06-20-L5-121-monday-refresh-prep.md",

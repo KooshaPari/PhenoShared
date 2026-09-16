@@ -8,7 +8,7 @@ Wrapper config; telemetry; auth shim; version pinning
 
 ## Out of Scope
 
-The upstream Forge CLI itself (lives at https://github.com/kooshapari/forge); model weights; API endpoints
+The upstream Forge CLI itself (lives at https://github.com/<REDACTED>/forge); model weights; API endpoints
 
 ## Crossings
 

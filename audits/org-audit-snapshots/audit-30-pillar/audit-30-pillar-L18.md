@@ -24,7 +24,7 @@ How the bloc detects, stores, distributes, and rotates secrets — across source
 - `AgilePlus/.pre-commit-config.yaml:67-72` — `trufflehog filesystem --only-verified --fail` (manual stage). — **status △** (manual stage only, not auto-run on commit)
 - `AgilePlus/deny.toml` (whole file) — cargo-deny with `[advisories]` + `[licenses]` allowlist. — **status ✓** (advisories, not secrets)
 - `AgilePlus/.github/workflows/deny.yml:1-50` — `cargo-deny` weekly + on PR/push. — **status ✓**
-- `phenotype-dep-guard/.github/workflows/trufflehog.yml:1-14` — `reusable-trufflehog.yml` from `KooshaPari/phenotype-tooling` on push/PR. — **status ✓** (federated secret-scan)
+- `phenotype-dep-guard/.github/workflows/trufflehog.yml:1-14` — `reusable-trufflehog.yml` from `<REDACTED>/phenotype-tooling` on push/PR. — **status ✓** (federated secret-scan)
 - `phenotype-dep-guard/.github/dependabot.yml:1-12` — Dependabot for `github-actions` + `pip` weekly. — **status ✓**
 - `phenotype-tooling/.github/workflows/deny.yml`, `audit.yml`, `scorecard.yml` — federated security workflows reused across the bloc. — **status ✓**
 - `phenotype-tooling/trufflehog.yml`, `lefthook.yml`, `Taskfile.yml` — federation root for secret-scan config. — **status ✓**

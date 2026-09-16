@@ -1,6 +1,6 @@
 # agileplus-spec-harmonizer
 
-> Migrated from `KooshaPari/agileplus-spec-harmonizer` v0.1.0 on 2026-06-18.
+> Migrated from `<REDACTED>/agileplus-spec-harmonizer` v0.1.0 on 2026-06-18.
 > See `docs/adr/2026-06-18/ADR-NNN-spec-harmonizer-absorption.md` for the
 > absorption decision matrix.
 

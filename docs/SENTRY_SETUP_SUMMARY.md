@@ -44,9 +44,9 @@ All three repos now have:
   - `SENTRY_RELEASE` — Auto-detected from Cargo.toml
 
 **Files Created:**
-- `/Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus/.env.example`
-- `/Users/kooshapari/CodeProjects/Phenotype/repos/phenotype-infrakit/.env.example`
-- `/Users/kooshapari/CodeProjects/Phenotype/repos/heliosCLI/.env.example`
+- `/Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus/.env.example`
+- `/Users/<REDACTED>/CodeProjects/Phenotype/repos/phenotype-infrakit/.env.example`
+- `/Users/<REDACTED>/CodeProjects/Phenotype/repos/heliosCLI/.env.example`
 
 ### 3. Error Capture Tests
 
@@ -57,7 +57,7 @@ All three repos now have:
 
 **Run tests:**
 ```bash
-cd /Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus
 cargo test --test sentry_integration_test -- --nocapture
 ```
 
@@ -68,7 +68,7 @@ cargo test --test sentry_integration_test -- --nocapture
 
 **Run tests:**
 ```bash
-cd /Users/kooshapari/CodeProjects/Phenotype/repos/phenotype-infrakit
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos/phenotype-infrakit
 cargo test -p phenotype-sentry-config --test sentry_integration_test -- --nocapture
 ```
 
@@ -78,14 +78,14 @@ cargo test -p phenotype-sentry-config --test sentry_integration_test -- --nocapt
 
 **Run tests:**
 ```bash
-cd /Users/kooshapari/CodeProjects/Phenotype/repos/heliosCLI/crates/harness_utils
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos/heliosCLI/crates/harness_utils
 cargo test --test sentry_integration_test -- --nocapture
 ```
 
 ### 4. Documentation
 
 #### SENTRY_INSTRUMENTATION.md
-- ✅ **Location:** `/Users/kooshapari/CodeProjects/Phenotype/repos/docs/SENTRY_INSTRUMENTATION.md`
+- ✅ **Location:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos/docs/SENTRY_INSTRUMENTATION.md`
 - ✅ **Content:** 600+ lines
 - ✅ Includes:
   - Quick Start for all 3 repos
@@ -100,7 +100,7 @@ cargo test --test sentry_integration_test -- --nocapture
   - Success Criteria Checklist
 
 #### SENTRY_GITHUB_INTEGRATION.md
-- ✅ **Location:** `/Users/kooshapari/CodeProjects/Phenotype/repos/docs/SENTRY_GITHUB_INTEGRATION.md`
+- ✅ **Location:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos/docs/SENTRY_GITHUB_INTEGRATION.md`
 - ✅ **Content:** 700+ lines
 - ✅ Includes:
   - Step-by-Step Setup (5 phases)

@@ -18,7 +18,7 @@
 
 set -euo pipefail
 
-NDJSON="/Users/kooshapari/.local/share/resume-all/zmx-resume-test.ndjson"
+NDJSON="/Users/<REDACTED>/.local/share/resume-all/zmx-resume-test.ndjson"
 TEST_SESSION="resume-test-$$-$(date +%s)"
 mkdir -p "$(dirname "$NDJSON")" 2>/dev/null || true
 

@@ -3,7 +3,7 @@ id: ADR-018
 title: Agent Session Zero-Loop SSOT for MCP Fleet Work
 status: accepted
 date: 2026-06-17
-author: KooshaPari
+author: <REDACTED>
 tags: [agents, mcp, governance, dogfood]
 ---
 

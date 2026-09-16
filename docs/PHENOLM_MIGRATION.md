@@ -44,7 +44,7 @@ reward, and self-improvement layer owned by this repo.
    - Keep an archive pointer in `docs/phenolm/ARCHIVE.md`.
 
 6. Remote cleanup.
-   - Preferred: rename `KooshaPari/pheno-specs` to `KooshaPari/PhenoLM` if the
+   - Preferred: rename `<REDACTED>/pheno-specs` to `<REDACTED>/PhenoLM` if the
      repo remains useful as a standalone spec layer.
    - Otherwise archive `pheno-specs` after this repo becomes authoritative.
 

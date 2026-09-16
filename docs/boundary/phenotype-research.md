@@ -1,7 +1,7 @@
 # Boundary — phenotype-research
 
-**Absorbed from:** `KooshaPari/phenoResearchEngine`
-**Absorbed into:** `KooshaPari/phenoAI` at `python/phenotype-research/`
+**Absorbed from:** `<REDACTED>/phenoResearchEngine`
+**Absorbed into:** `<REDACTED>/phenoAI` at `python/phenotype-research/`
 **Absorption date:** 2026-07-17
 **Disposition:** ABSORBED (was DEPRECATED upstream since 2026-06-20)
 
@@ -23,7 +23,7 @@ After that date, downstream consumers must use the new path.
 
 ## Where it lives
 
-- **Repository**: `KooshaPari/phenoAI`
+- **Repository**: `<REDACTED>/phenoAI`
 - **Path**: `python/phenotype-research/`
 - **Import**: `from phenotype_research import ...`
 - **PyPI name** (inherited, not republished): `phenotype-research`
@@ -44,7 +44,7 @@ After that date, downstream consumers must use the new path.
 ## Restore command
 
 ```sh
-gh repo unarchive KooshaPari/phenoResearchEngine
+gh repo unarchive <REDACTED>/phenoResearchEngine
 ```
 
 (requires repo to be un-archived first; restore is a snapshot retrieval — see `audits/absorption-justifications/phenoResearchEngine-2026-07-17.md` for the canonical restore procedure.)

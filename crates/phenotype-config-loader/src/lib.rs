@@ -1,6 +1,6 @@
 //! Configuration loading utilities for the Phenotype ecosystem.
 //!
-//! Absorbed from `KooshaPari/phenotype-config` per ADR-031 (L5-110).
+//! Absorbed from `<REDACTED>/phenotype-config` per ADR-031 (L5-110).
 //! This crate provides generic, type-safe JSON and TOML file loaders
 //! that downstream consumers can use without depending on a heavier
 //! configuration framework.

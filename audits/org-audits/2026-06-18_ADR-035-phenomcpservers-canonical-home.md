@@ -1,6 +1,6 @@
 # ADR-035: PhenoMCPServers is the canonical home for MCP server, skill, client, and tool registries
 
-`KooshaPari/PhenoMCPServers` is the canonical registry for all Phenotype MCP implementations: servers, skills, clients, tools, and the `catalog/registry.yaml` index. House style: `from fastmcp import FastMCP`, flat module layout, `pyproject.toml` + `README.md` + `requirements.txt` + `tests/` per artifact.
+`<REDACTED>/PhenoMCPServers` is the canonical registry for all Phenotype MCP implementations: servers, skills, clients, tools, and the `catalog/registry.yaml` index. House style: `from fastmcp import FastMCP`, flat module layout, `pyproject.toml` + `README.md` + `requirements.txt` + `tests/` per artifact.
 
 **Status:** Accepted
 **Date:** 2026-06-18
@@ -21,7 +21,7 @@ Until 2026-06-17 there was no canonical registry; consumers had to grep across 5
 
 ## Decision
 
-**`KooshaPari/PhenoMCPServers` is the canonical registry for all Phenotype MCP implementations.**
+**`<REDACTED>/PhenoMCPServers` is the canonical registry for all Phenotype MCP implementations.**
 
 - **Repo description:** "Phenotype MCP implementations registry — servers, skills, plugins, and agent artifacts"
 - **Visibility:** public
@@ -30,7 +30,7 @@ Until 2026-06-17 there was no canonical registry; consumers had to grep across 5
 ### Layout
 
 ```
-KooshaPari/PhenoMCPServers/
+<REDACTED>/PhenoMCPServers/
 ├── servers/<id>/          # one directory per MCP server
 ├── skills/<id>/           # one directory per skill
 ├── clients/<id>/          # one directory per client
@@ -102,5 +102,5 @@ The catalog is the authoritative discovery surface; the `phenotype-registry` (re
 - ADR-030 (PR template 71-pillar delta)
 - ADR-038 (registry versioning — minor-bump per server/skill)
 - AGENTS.md § "Decision D — Spine repos are LIGHTLY USED" (PhenoMCPServers is **not** a spine; it is an active canonical repo)
-- `KooshaPari/PhenoMCPServers` repo (canonical home)
+- `<REDACTED>/PhenoMCPServers` repo (canonical home)
 - v8 plan § 3.6 Track T14 (ADR backlog)

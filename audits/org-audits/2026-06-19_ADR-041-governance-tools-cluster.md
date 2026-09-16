@@ -1,6 +1,6 @@
 # ADR-041: Governance tools cluster (L72/L73/L74) — colocate in `phenotype-org-audits/audits/`
 
-Three of the four v8-sweep governance tools (ADR-047/L72, ADR-048/L73, ADR-049/L74) were each spun up as separate single-file Python repos (`pheno-predict`, `pheno-framework-lint`, `pheno-drift-detector`) on 2026-06-18. On 2026-06-19, all three were absorbed into `KooshaPari/phenotype-org-audits` under `audits/<tool-slug>/` and the source repos archived. This ADR formalizes the colocation policy: the L72/L73/L74 trio lives under `phenotype-org-audits`, not as separate repos.
+Three of the four v8-sweep governance tools (ADR-047/L72, ADR-048/L73, ADR-049/L74) were each spun up as separate single-file Python repos (`pheno-predict`, `pheno-framework-lint`, `pheno-drift-detector`) on 2026-06-18. On 2026-06-19, all three were absorbed into `<REDACTED>/phenotype-org-audits` under `audits/<tool-slug>/` and the source repos archived. This ADR formalizes the colocation policy: the L72/L73/L74 trio lives under `phenotype-org-audits`, not as separate repos.
 
 **Status:** Accepted
 **Date:** 2026-06-19
@@ -14,13 +14,13 @@ The 3 governance tools were created on 2026-06-18 as part of the v8 sweep:
 
 | Tool | Repo | ADR | Layer | Purpose |
 |---|---|---|---|---|
-| `pheno_predict.py` | `KooshaPari/pheno-predict` | ADR-047 | L72 (Predictive DRY) | Fleet-wide Jaccard shingle scanner |
-| `pheno_framework_lint.py` | `KooshaPari/pheno-framework-lint` | ADR-048 | L73 (Substrate graduation) | Tier-convention linter |
-| `pheno_drift_detector.py` | `KooshaPari/pheno-drift-detector` | ADR-049 | L74 (App-substrate drift) | 3-pass drift detector |
+| `pheno_predict.py` | `<REDACTED>/pheno-predict` | ADR-047 | L72 (Predictive DRY) | Fleet-wide Jaccard shingle scanner |
+| `pheno_framework_lint.py` | `<REDACTED>/pheno-framework-lint` | ADR-048 | L73 (Substrate graduation) | Tier-convention linter |
+| `pheno_drift_detector.py` | `<REDACTED>/pheno-drift-detector` | ADR-049 | L74 (App-substrate drift) | 3-pass drift detector |
 
 Each was a single-file stdlib-Python tool with a `README.md` + `SPEC.md` + `AGENTS.md` + `CHANGELOG.md` + `tests/test_smoke.py` + governance boilerplate. They were standalone repos for ~24 hours before being absorbed on 2026-06-19.
 
-The natural home for all 3 tools is `KooshaPari/phenotype-org-audits` because:
+The natural home for all 3 tools is `<REDACTED>/phenotype-org-audits` because:
 
 1. **Existing repo structure** — `audits/<topic>/` is the established pattern (e.g., `audits/docs-site/`, `audits/2026-06-18_ADR-040-deletion-recipe.md`).
 2. **Cron integration** — the weekly Monday 09:00 PDT cron that runs the L72/L73/L74 scanners is hosted in `phenotype-org-audits/audits/cron/` (per ADR-041B substrate-audit-cadence). The scanner scripts and the cron that drives them should be in the same repo.
@@ -30,7 +30,7 @@ The natural home for all 3 tools is `KooshaPari/phenotype-org-audits` because:
 
 ## Decision
 
-**The L72/L73/L74 governance-tools trio is canonical in `KooshaPari/phenotype-org-audits/audits/<tool-slug>/`.** The 3 source repos (`pheno-predict`, `pheno-framework-lint`, `pheno-drift-detector`) are archived and will be deleted via GitHub UI after the 90-day window (2026-09-17).
+**The L72/L73/L74 governance-tools trio is canonical in `<REDACTED>/phenotype-org-audits/audits/<tool-slug>/`.** The 3 source repos (`pheno-predict`, `pheno-framework-lint`, `pheno-drift-detector`) are archived and will be deleted via GitHub UI after the 90-day window (2026-09-17).
 
 ### The colocation pattern
 
@@ -69,17 +69,17 @@ phenotype-org-audits/audits/<tool-slug>/
 
 | Tool | Source | Target | Verdict | Confidence | Audit |
 |---|---|---|---|---|---|
-| `pheno-predict` | `KooshaPari/pheno-predict` (13 files) | `audits/predict-dry/` | `DELETE_AFTER_PATCHES` | 9/10 | [findings/2026-06-19-L5-112-predict-dry-absorption.md](../../findings/2026-06-19-L5-112-predict-dry-absorption.md) |
-| `pheno-framework-lint` | `KooshaPari/pheno-framework-lint` (26 files) | `audits/framework-lint/` | `DELETE_AFTER_PATCHES` | 9/10 | [findings/2026-06-19-L5-112-framework-lint-absorption.md](../../findings/2026-06-19-L5-112-framework-lint-absorption.md) |
-| `pheno-drift-detector` | `KooshaPari/pheno-drift-detector` (21 files) | `audits/drift-detector/` | `DELETE_AFTER_PATCHES` | 9/10 | [findings/2026-06-19-L5-112-drift-detector-absorption.md](../../findings/2026-06-19-L5-112-drift-detector-absorption.md) |
+| `pheno-predict` | `<REDACTED>/pheno-predict` (13 files) | `audits/predict-dry/` | `DELETE_AFTER_PATCHES` | 9/10 | [findings/2026-06-19-L5-112-predict-dry-absorption.md](../../findings/2026-06-19-L5-112-predict-dry-absorption.md) |
+| `pheno-framework-lint` | `<REDACTED>/pheno-framework-lint` (26 files) | `audits/framework-lint/` | `DELETE_AFTER_PATCHES` | 9/10 | [findings/2026-06-19-L5-112-framework-lint-absorption.md](../../findings/2026-06-19-L5-112-framework-lint-absorption.md) |
+| `pheno-drift-detector` | `<REDACTED>/pheno-drift-detector` (21 files) | `audits/drift-detector/` | `DELETE_AFTER_PATCHES` | 9/10 | [findings/2026-06-19-L5-112-drift-detector-absorption.md](../../findings/2026-06-19-L5-112-drift-detector-absorption.md) |
 
 All 3 PRs are open:
 
 | PR | Source repo | Status |
 |---|---|---|
-| [#45](https://github.com/KooshaPari/phenotype-org-audits/pull/45) | `pheno-predict` → `audits/predict-dry/` | OPEN |
-| [#46](https://github.com/KooshaPari/phenotype-org-audits/pull/46) | `pheno-framework-lint` → `audits/framework-lint/` | OPEN |
-| [#47](https://github.com/KooshaPari/phenotype-org-audits/pull/47) | `pheno-drift-detector` → `audits/drift-detector/` | OPEN |
+| [#45](https://github.com/<REDACTED>/phenotype-org-audits/pull/45) | `pheno-predict` → `audits/predict-dry/` | OPEN |
+| [#46](https://github.com/<REDACTED>/phenotype-org-audits/pull/46) | `pheno-framework-lint` → `audits/framework-lint/` | OPEN |
+| [#47](https://github.com/<REDACTED>/phenotype-org-audits/pull/47) | `pheno-drift-detector` → `audits/drift-detector/` | OPEN |
 
 All 3 source repos are already `archived: true` (2026-06-19 08:37:56 UTC, automated process — pre-empted the explicit `gh api -X PATCH` archive step in the recipe).
 

@@ -2,7 +2,7 @@
 
 **Date:** 2026-06-18  
 **Disposition:** Agentora PhenoProc audit copy — **not canonical**  
-**Canonical:** https://github.com/KooshaPari/phenotype-types  
+**Canonical:** https://github.com/<REDACTED>/phenotype-types  
 **Authority:** `PHENOTYPE_HEXAKIT_REPOINT.md` wave 1 (W18b repoint)
 
 ## For consumers
@@ -10,7 +10,7 @@
 Do not depend on this Agentora staging path. Use:
 
 ```toml
-phenotype-errors = { git = "https://github.com/KooshaPari/phenotype-types", branch = "main" }
+phenotype-errors = { git = "https://github.com/<REDACTED>/phenotype-types", branch = "main" }
 ```
 
 ## For Agentora maintainers

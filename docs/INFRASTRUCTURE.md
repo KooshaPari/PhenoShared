@@ -5,7 +5,7 @@
 Multi-stage build with `uv` for deterministic dependency resolution:
 
 ```bash
-docker build -t ghcr.io/kooshapari/pheno-harness:latest .
+docker build -t ghcr.io/<REDACTED>/pheno-harness:latest .
 ```
 
 Layer order is tuned for cache hits:

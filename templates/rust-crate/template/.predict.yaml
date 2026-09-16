@@ -4,7 +4,7 @@
 # Current consumer: minimum 1 required for a predictive extract (per ADR-041)
 current_consumer:
   - path: src/lib.rs  # the public surface used by the current consumer
-    consumer: <name>  # e.g., "KooshaPari/dispatch-mcp"
+    consumer: <name>  # e.g., "<REDACTED>/dispatch-mcp"
     since: <YYYY-MM-DD>  # when this consumer first imported the surface
 
 # Predicted consumers: required for predictive DRY (per ADR-041)

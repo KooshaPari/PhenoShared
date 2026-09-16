@@ -1,5 +1,5 @@
 {
-  email {{ caddy_admin_email | default('kooshapari@gmail.com') }}
+  email {{ caddy_admin_email | default('<REDACTED>@gmail.com') }}
   # All sites use Cloudflare DNS-01 via caddy-dns/cloudflare plugin.
 }
 
@@ -9,22 +9,22 @@
   }
 }
 
-forgejo.kooshapari.com {
+forgejo.<REDACTED>.com {
   import cf_tls
   reverse_proxy 127.0.0.1:3000
 }
 
-ci.kooshapari.com {
+ci.<REDACTED>.com {
   import cf_tls
   reverse_proxy 127.0.0.1:8000
 }
 
-vault.kooshapari.com {
+vault.<REDACTED>.com {
   import cf_tls
   reverse_proxy 127.0.0.1:8080
 }
 
-grafana.kooshapari.com {
+grafana.<REDACTED>.com {
   import cf_tls
   reverse_proxy 127.0.0.1:3001
 }

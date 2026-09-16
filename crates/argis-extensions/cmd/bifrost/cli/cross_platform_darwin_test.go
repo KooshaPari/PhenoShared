@@ -11,7 +11,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/kooshapari/bifrost-extensions/cmd/bifrost/cli/testutil"
+	"github.com/<REDACTED>/bifrost-extensions/cmd/bifrost/cli/testutil"
 )
 
 func TestDarwinSpecific(t *testing.T) {

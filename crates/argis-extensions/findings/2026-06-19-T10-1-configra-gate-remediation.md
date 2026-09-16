@@ -5,7 +5,7 @@
 **Branch:** `wip-2026-06-19-configra-gate-remediation`
 **Owner:** configra-circle
 **Status:** COMPLETE
-**PR:** `KooshaPari/Configra` branch push verified (commit `42a180b`)
+**PR:** `<REDACTED>/Configra` branch push verified (commit `42a180b`)
 
 ---
 
@@ -116,7 +116,7 @@ Evidence:
 1. **Conft commit `f6cc0284d604b4ce16c97e90b128ad040075ae8f`** (2026-06-18):
    > docs: mark Conft as ARCHIVED — content drained to Configra
    >
-   > All unique content has been absorbed into KooshaPari/Configra per ADR-031
+   > All unique content has been absorbed into <REDACTED>/Configra per ADR-031
    > (L5-111):
    > - crates/pheno-config → Configra/crates/pheno-config (canonical v0.2.0 already there)
    > - crates/config-schema → Configra/crates/config-schema (adapted to be standalone)
@@ -171,8 +171,8 @@ $ git -C /tmp/Configra-batch-11 log --oneline -2
 $ git -C /tmp/Configra-batch-11 push origin wip-2026-06-19-configra-gate-remediation \
     --no-recurse-submodules --no-verify
 remote: Create a pull request for 'wip-2026-06-19-configra-gate-remediation' on GitHub by visiting:
-remote:      https://github.com/KooshaPari/Configra/pull/new/wip-2026-06-19-configra-gate-remediation
-To github.com:KooshaPari/Configra.git
+remote:      https://github.com/<REDACTED>/Configra/pull/new/wip-2026-06-19-configra-gate-remediation
+To github.com:<REDACTED>/Configra.git
  * [new branch]      wip-2026-06-19-configra-gate-remediation -> wip-2026-06-19-configra-gate-remediation
 ```
 

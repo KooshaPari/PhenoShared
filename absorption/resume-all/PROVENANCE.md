@@ -2,7 +2,7 @@
 
 - Captured: 2026-08-14
 - Scope: executable text sources whose declared implementation references the
-  `resume-all` system, plus its current `com.kooshapari.resume-all-*`
+  `resume-all` system, plus its current `com.<REDACTED>.resume-all-*`
   LaunchAgents and `~/.config/resume-all` configuration files.
 - Excluded: binaries, package-managed artifacts, backups, volatile state,
   logs, rendered output, and any value identified as a literal secret.

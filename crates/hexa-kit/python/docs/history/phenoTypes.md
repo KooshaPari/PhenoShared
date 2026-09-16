@@ -1,13 +1,13 @@
 # phenoTypes archive absorption
 
 This note documents the migration of the archived
-[KooshaPari/phenoTypes](https://github.com/KooshaPari/phenoTypes) repository into HexaKit.
+[<REDACTED>/phenoTypes](https://github.com/<REDACTED>/phenoTypes) repository into HexaKit.
 
 ## Absorption
 
 | Field | Value |
 |-------|-------|
-| Source repo | `KooshaPari/phenoTypes` (archived) |
+| Source repo | `<REDACTED>/phenoTypes` (archived) |
 | Target | `HexaKit/python/pheno-types` |
 | Package name | `pheno-types` (import: `pheno_types`) |
 | Migration date | 2026-06-16 |

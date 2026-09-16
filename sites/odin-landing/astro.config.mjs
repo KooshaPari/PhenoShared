@@ -2,5 +2,5 @@
 import { defineConfig } from 'astro/config';
 
 export default defineConfig({
-  site: 'https://odin.kooshapari.com',
+  site: 'https://odin.<REDACTED>.com',
 });

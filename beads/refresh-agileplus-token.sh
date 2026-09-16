@@ -28,7 +28,7 @@
 
 set -e
 
-PHENO_HARNESS_ROOT="${PHENO_HARNESS_ROOT:-/Users/kooshapari/CodeProjects/Phenotype/repos/pheno-harness}"
+PHENO_HARNESS_ROOT="${PHENO_HARNESS_ROOT:-/Users/<REDACTED>/CodeProjects/Phenotype/repos/pheno-harness}"
 
 CONFIG_PATH="${AGILEPLUS_CONFIG:-$HOME/.agileplus/config.json}"
 DRY_RUN=0

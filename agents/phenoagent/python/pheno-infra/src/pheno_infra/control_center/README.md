@@ -55,7 +55,7 @@ The Pheno Control Center extends KInfra to provide a unified interface for manag
 - **Dynamic Port Allocation**: Each project gets unique ports for fallback (9000+n) and proxy (9100+n)
 - **Shared Infrastructure**: Multiple projects can share the same fallback/proxy servers
 - **Isolated Cleanup**: Stopping one project doesn't affect others using the same infrastructure
-- **Tunnel Namespacing**: Project-specific subdomains (e.g., `service.project.kooshapari.com`)
+- **Tunnel Namespacing**: Project-specific subdomains (e.g., `service.project.<REDACTED>.com`)
 
 ### Monitoring Features
 
@@ -107,7 +107,7 @@ projects:
     fallback_port_offset: 1
     proxy_port_offset: 1
     health_endpoint: /health
-    tunnel_domain: kooshapari.com
+    tunnel_domain: <REDACTED>.com
     auto_start: false
     dependencies: []
 
@@ -118,7 +118,7 @@ projects:
     fallback_port_offset: 2
     proxy_port_offset: 2
     health_endpoint: /health
-    tunnel_domain: kooshapari.com
+    tunnel_domain: <REDACTED>.com
     auto_start: false
     dependencies: []
 ```

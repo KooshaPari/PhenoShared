@@ -18,7 +18,7 @@ updates:
       timezone: "America/Los_Angeles"
     open-pull-requests-limit: 5
     reviewers:
-      - "KooshaPari"
+      - "<REDACTED>"
     labels:
       - "dependencies"
       - "cargo"
@@ -47,7 +47,7 @@ updates:
       timezone: "America/Los_Angeles"
     open-pull-requests-limit: 3
     reviewers:
-      - "KooshaPari"
+      - "<REDACTED>"
     labels:
       - "dependencies"
       - "github-actions"

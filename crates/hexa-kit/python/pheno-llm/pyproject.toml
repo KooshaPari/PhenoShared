@@ -9,7 +9,7 @@ description = "LLM integration and model selection for Phenotype SDK"
 readme = "README.md"
 requires-python = ">=3.10"
 authors = [
-    {name = "Phenotype Team", email = "info@kooshapari.com"}
+    {name = "Phenotype Team", email = "info@<REDACTED>.com"}
 ]
 license = {text = "MIT"}
 keywords = [
@@ -48,9 +48,9 @@ dev = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/KooshaPari/phenotype-infrakit"
-Repository = "https://github.com/KooshaPari/phenotype-infrakit.git"
-Issues = "https://github.com/KooshaPari/phenotype-infrakit/issues"
+Homepage = "https://github.com/<REDACTED>/phenotype-infrakit"
+Repository = "https://github.com/<REDACTED>/phenotype-infrakit.git"
+Issues = "https://github.com/<REDACTED>/phenotype-infrakit/issues"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/pheno_llm"]

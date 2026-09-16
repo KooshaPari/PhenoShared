@@ -4,7 +4,7 @@
   "evidence_label": "live_verified",
   "reported": true,
   "synthetic": false,
-  "model": "/Users/kooshapari/.cache/huggingface/hub/models--mlx-community--Qwen2.5-0.5B-Instruct-4bit/snapshots/a5339a4131f135d0fdc6a5c8b5bbed2753bbe0f3",
+  "model": "/Users/<REDACTED>/.cache/huggingface/hub/models--mlx-community--Qwen2.5-0.5B-Instruct-4bit/snapshots/a5339a4131f135d0fdc6a5c8b5bbed2753bbe0f3",
   "backend": "mlx_lm_inprocess",
   "architecture_caveat": null,
   "seed": 42,

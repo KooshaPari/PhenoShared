@@ -29,7 +29,7 @@
 | Repo | Canonical owner | Evidence |
 |------|-----------------|----------|
 | **nanovms** | `phenotype-tooling/crates/nanovms` | Subtree present in tooling |
-| **phenoDesign** | phenodocs | 0 external deps (`@kooshapari/design`) |
+| **phenoDesign** | phenodocs | 0 external deps (`@<REDACTED>/design`) |
 | **phenoXddLib** | phenoXddLib boundary / future rust-sdk | ✅ safe per execution shortlist |
 | **portage** | upstream-maintained | Research fork; no DOMAIN_ROLES entry |
 | **PlatformKit** | phenotype-go-sdk + nanovms devenv | Already archived |

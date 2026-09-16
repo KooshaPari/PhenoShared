@@ -4,7 +4,7 @@
 
 - **Name**: phenotype-infrakit
 - **Type**: Rust Workspace (Infrastructure Crates)
-- **Location**: `/Users/kooshapari/CodeProjects/Phenotype/repos/phenotype-infrakit`
+- **Location**: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/phenotype-infrakit`
 - **Stack**: Rust 2021, Tokio
 
 ## Development Workflow

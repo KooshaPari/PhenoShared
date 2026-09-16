@@ -5,7 +5,7 @@ import "../../styles/globals.css";
 // Spec: phenotype-infra/docs/governance/path-microfrontends-tier3.md
 //
 // Strategy:
-//   1. Enumerate open PRs on KooshaPari/projects-landing at build time.
+//   1. Enumerate open PRs on <REDACTED>/projects-landing at build time.
 //   2. For each PR, attempt to discover its Vercel preview URL via
 //      check-runs (vercel-bot) or the deployments API. Fall back to the
 //      deterministic Vercel branch-alias pattern.
@@ -15,7 +15,7 @@ import "../../styles/globals.css";
 // Optionality rule: if a PR# was never built, we render a loud 404 page
 // (still static) explaining exactly what happened, not a silent redirect.
 
-const REPO_OWNER = "KooshaPari";
+const REPO_OWNER = "<REDACTED>";
 const REPO_NAME = "projects-landing";
 const REPO = `${REPO_OWNER}/${REPO_NAME}`;
 const basePath = import.meta.env.BASE_URL === "/" ? "" : import.meta.env.BASE_URL.replace(/\/$/, "");
@@ -33,7 +33,7 @@ interface PrInfo {
 export async function getStaticPaths() {
   // NOTE: helpers are inlined here because Astro hoists getStaticPaths and
   // does not give it access to module-scoped declarations.
-  const REPO_INNER = `KooshaPari/projects-landing`;
+  const REPO_INNER = `<REDACTED>/projects-landing`;
   const VERCEL_PROJECT = "{{VERCEL_PROJECT_SLUG}}";
   const VERCEL_TEAM = "{{VERCEL_TEAM_SLUG}}";
 

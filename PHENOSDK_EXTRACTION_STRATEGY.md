@@ -20,7 +20,7 @@ This document outlines the strategy to extract core functionality from phenotype
 
 ### Phenotype-Infrakit Rust Workspace
 
-**Location**: `/Users/kooshapari/CodeProjects/Phenotype/repos/repos/worktrees/phenotype-infrakit/`
+**Location**: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/repos/worktrees/phenotype-infrakit/`
 
 **Five Rust Crates**:
 

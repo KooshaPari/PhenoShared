@@ -1,8 +1,8 @@
-# Dependabot triage — `KooshaPari/phenotype-apps` (default branch)
+# Dependabot triage — `<REDACTED>/phenotype-apps` (default branch)
 
 **Date:** 2026-06-21 PDT
-**Repo:** `KooshaPari/phenotype-apps` (default branch)
-**Source:** `gh api repos/KooshaPari/phenotype-apps/dependabot/alerts` (paginated)
+**Repo:** `<REDACTED>/phenotype-apps` (default branch)
+**Source:** `gh api repos/<REDACTED>/phenotype-apps/dependabot/alerts` (paginated)
 **Cadence:** Per ADR-042 monthly security audit (2026-06-21 is in-window for the June 2026 sweep)
 **Device:** `macbook` (read-only audit, no auto-merge, no code changes)
 
@@ -97,7 +97,7 @@ A single bump in each of the 3 manifests closes 9 of 10 alerts.
   1. Wait for upstream `python-ecdsa` fix (no ETA).
   2. Pin away from `ecdsa` to a maintained alternative (e.g., `cryptography`, `pynacl`) — this is a code change in `Parpoura-5th`, not a dep bump; out of scope for dependabot triage.
   3. Accept risk with documented justification (timing attack on P-256 ECDSA is local/network-adjacent, requires many signatures; impact depends on use of ecdsa in Parpoura-5th).
-- **TODO (filed below):** open tracking issue for #5 in `KooshaPari/phenotype-apps` documenting the no-fix state and recommending either upstream-pinning or migration to `cryptography`.
+- **TODO (filed below):** open tracking issue for #5 in `<REDACTED>/phenotype-apps` documenting the no-fix state and recommending either upstream-pinning or migration to `cryptography`.
 
 ---
 
@@ -170,7 +170,7 @@ A single bump in each of the 3 manifests closes 9 of 10 alerts.
 
 ### Alert #5 (HIGH, no fix) — TODO
 
-File a tracking issue on `KooshaPari/phenotype-apps` documenting:
+File a tracking issue on `<REDACTED>/phenotype-apps` documenting:
 - CVE-2024-23342 (Minerva timing attack on P-256 in `python-ecdsa`)
 - No upstream patched version exists
 - Three options: (a) wait for upstream fix, (b) migrate Parpoura-5th off `ecdsa` to `cryptography` or `pynacl`, (c) document acceptance with risk rationale
@@ -191,7 +191,7 @@ File a tracking issue on `KooshaPari/phenotype-apps` documenting:
 
 ```bash
 # Open alerts (paginated)
-gh api repos/KooshaPari/phenotype-apps/dependabot/alerts --paginate --jq '
+gh api repos/<REDACTED>/phenotype-apps/dependabot/alerts --paginate --jq '
   .[]
   | select(.state == "open")
   | {
@@ -208,18 +208,18 @@ gh api repos/KooshaPari/phenotype-apps/dependabot/alerts --paginate --jq '
     }'
 
 # Counts (verify 10 = 6 HIGH + 4 MODERATE)
-gh api repos/KooshaPari/phenotype-apps/dependabot/alerts --paginate --jq '
+gh api repos/<REDACTED>/phenotype-apps/dependabot/alerts --paginate --jq '
   [ .[]
     | select(.state == "open")
     | .security_advisory.severity
   ] | group_by(.) | map({severity: .[0], count: length})'
 
 # Branch check (empty result)
-gh api repos/KooshaPari/phenotype-apps/branches --paginate --jq '
+gh api repos/<REDACTED>/phenotype-apps/branches --paginate --jq '
   .[] | select(.name | startswith("dependabot/")) | .name'
 
 # PR check (empty result)
-gh api repos/KooshaPari/phenotype-apps/pulls --paginate --jq '
+gh api repos/<REDACTED>/phenotype-apps/pulls --paginate --jq '
   .[] | select(.head.ref | startswith("dependabot/")) | {number, state, head: .head.ref, title}'
 ```
 

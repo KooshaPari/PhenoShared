@@ -19,10 +19,10 @@ All files reside in the active worktree:
 
 ```
 Canonical Location (main branch):
-/Users/kooshapari/CodeProjects/Phenotype/repos/crates/agileplus-dashboard/src/routes/
+/Users/<REDACTED>/CodeProjects/Phenotype/repos/crates/agileplus-dashboard/src/routes/
 
 Worktree Location (active development):
-/Users/kooshapari/CodeProjects/Phenotype/repos/.worktrees/phase2-routes-dashboard/
+/Users/<REDACTED>/CodeProjects/Phenotype/repos/.worktrees/phase2-routes-dashboard/
   └── crates/agileplus-dashboard/src/routes/
 ```
 

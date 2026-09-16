@@ -4,7 +4,7 @@
 
 - **Name**: phenotype-validation-ts
 - **Description**: TypeScript implementation of Phenotype validation framework
-- **Location**: `/Users/kooshapari/CodeProjects/Phenotype/repos/phenotype-validation-ts`
+- **Location**: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/phenotype-validation-ts`
 - **Language Stack**: TypeScript
 - **Published**: Internal (Phenotype ecosystem)
 
@@ -12,7 +12,7 @@
 
 ```bash
 # Navigate to project
-cd /Users/kooshapari/CodeProjects/Phenotype/repos/phenotype-validation-ts
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos/phenotype-validation-ts
 
 # When implemented:
 npm install

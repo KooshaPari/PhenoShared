@@ -16,7 +16,7 @@ Draft (stub) — **defer implementation** until rmcp superset gate clears.
 
 ## Context
 
-[PhenoMCPServers issue #8](https://github.com/KooshaPari/PhenoMCPServers/issues/8) reserves parallel tier-0 framework lanes for Zig and Mojo. Registry v1.1.0+ stubs `framework.zig` and `framework.mojo` at `status: future`. Spike: [zig-mojo-mcp.md](https://github.com/KooshaPari/PhenoMCPServers/blob/main/docs/spikes/zig-mojo-mcp.md).
+[PhenoMCPServers issue #8](https://github.com/<REDACTED>/PhenoMCPServers/issues/8) reserves parallel tier-0 framework lanes for Zig and Mojo. Registry v1.1.0+ stubs `framework.zig` and `framework.mojo` at `status: future`. Spike: [zig-mojo-mcp.md](https://github.com/<REDACTED>/PhenoMCPServers/blob/main/docs/spikes/zig-mojo-mcp.md).
 
 ## Decision
 
@@ -25,7 +25,7 @@ Draft (stub) — **defer implementation** until rmcp superset gate clears.
    - Zig: `muhammad-fiaz/mcp.zig`
    - Mojo: `nowex35/mojo_mcp`
 3. **Reject** `Dicklesworthstone/fastmcp_rust` as Zig/Mojo parent (wrong layer per ADR-017).
-4. **Fork procedure** follows [github-fork-policy](https://github.com/KooshaPari/PhenoMCPServers/blob/main/skills/github-fork-policy/SKILL.md); update `fork_parent` in catalog before `status: active`.
+4. **Fork procedure** follows [github-fork-policy](https://github.com/<REDACTED>/PhenoMCPServers/blob/main/skills/github-fork-policy/SKILL.md); update `fork_parent` in catalog before `status: active`.
 
 ## Gates (summary)
 
@@ -40,7 +40,7 @@ Draft (stub) — **defer implementation** until rmcp superset gate clears.
 
 ## Consequences
 
-- No `KooshaPari/PhenoFastMCP-zig` or `-mojo` repos until gates clear.
+- No `<REDACTED>/PhenoFastMCP-zig` or `-mojo` repos until gates clear.
 - `validate_fork_parents.py` continues to skip zig/mojo future entries.
 
 ## References

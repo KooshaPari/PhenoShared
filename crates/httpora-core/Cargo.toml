@@ -4,7 +4,7 @@ version = "0.1.0"
 description = "Ergonomic HTTP middleware — rate limiting, retries, circuit breaker, CORS — for Tower-based services"
 edition = "2021"
 license = "MIT OR Apache-2.0"
-repository = "https://github.com/KooshaPari/Quillr"
+repository = "https://github.com/<REDACTED>/Quillr"
 documentation = "https://docs.rs/httpora-core"
 
 [dependencies]

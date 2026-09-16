@@ -20,7 +20,7 @@ serde_json = "1"
 //! into the ruleset. Additive only — never removes rules.
 //!
 //! Usage:
-//!   ./restore-rulesets.rs --data ../data/billing-blocked-rules.json [--dry-run] [--owner KooshaPari]
+//!   ./restore-rulesets.rs --data ../data/billing-blocked-rules.json [--dry-run] [--owner <REDACTED>]
 //!
 //! Scripting-policy justification: Rust per repos/docs/governance/scripting_policy.md
 //! (default tier; uses clap + anyhow + serde + std::process::Command for `gh`).
@@ -39,7 +39,7 @@ struct Cli {
     data: PathBuf,
 
     /// GitHub owner (org or user) that owns the repos
-    #[arg(long, default_value = "KooshaPari")]
+    #[arg(long, default_value = "<REDACTED>")]
     owner: String,
 
     /// Show what would change without calling the GitHub API

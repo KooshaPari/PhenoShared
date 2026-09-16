@@ -2,12 +2,12 @@
 
 ## Objective
 
-Restore canonical-fleet baseline parity for the KooshaPari org by cloning the 9 oldest non-archived repos that currently have no local checkout, using a shallow (`--depth 50`) `gh repo clone` into the standard repos path.
+Restore canonical-fleet baseline parity for the <REDACTED> org by cloning the 9 oldest non-archived repos that currently have no local checkout, using a shallow (`--depth 50`) `gh repo clone` into the standard repos path.
 
 ## Scope
 
 **In scope**
-- 9 repos from `worklogs/oldest-kooshapari-20260605.json`: kmobile, KWatch, phenotype-postfx, Eventra, phenotype-water, phenotype-terrain, KaskMan, Apisync, Pyron.
+- 9 repos from `worklogs/oldest-<REDACTED>-20260605.json`: kmobile, KWatch, phenotype-postfx, Eventra, phenotype-water, phenotype-terrain, KaskMan, Apisync, Pyron.
 - Per-repo outcome recording in `clone-results.md`.
 - Free-space guard against the disk-budget policy floor (20 GB).
 
@@ -21,13 +21,13 @@ Restore canonical-fleet baseline parity for the KooshaPari org by cloning the 9 
 
 1. **Preflight (1 tool call)**
    - Verify `gh auth status` reports a valid token.
-   - Verify `df -k /Users/kooshapari/CodeProjects/Phenotype/repos` shows ≥ 20 GB free; abort with a documented reason if not.
-   - Read `worklogs/oldest-kooshapari-20260605.json` to confirm the 9-repo list (in case the snapshot has shifted since spec authoring).
+   - Verify `df -k /Users/<REDACTED>/CodeProjects/Phenotype/repos` shows ≥ 20 GB free; abort with a documented reason if not.
+   - Read `worklogs/oldest-<REDACTED>-20260605.json` to confirm the 9-repo list (in case the snapshot has shifted since spec authoring).
 
 2. **Sequential clone loop (9 tool calls, 1 per repo)**
    - For each name in the list:
-     a. If `/Users/kooshapari/CodeProjects/Phenotype/repos/<name>` exists and contains `.git/`, record `present`.
-     b. Else run `gh repo clone KooshaPari/<name> /Users/kooshapari/CodeProjects/Phenotype/repos/<name> -- --depth 50`.
+     a. If `/Users/<REDACTED>/CodeProjects/Phenotype/repos/<name>` exists and contains `.git/`, record `present`.
+     b. Else run `gh repo clone <REDACTED>/<name> /Users/<REDACTED>/CodeProjects/Phenotype/repos/<name> -- --depth 50`.
      c. Capture exit status; on success record `cloned`, on failure record `skipped: <stderr reason>`.
 
 3. **Verify (1 tool call)**

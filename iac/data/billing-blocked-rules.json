@@ -1,8 +1,8 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "description": "Tracks ruleset rules dropped from KooshaPari repos due to GitHub Actions billing exhaustion. Consumed by iac/scripts/restore-rulesets.rs to re-add rules when billing is restored.",
+  "description": "Tracks ruleset rules dropped from <REDACTED> repos due to GitHub Actions billing exhaustion. Consumed by iac/scripts/restore-rulesets.rs to re-add rules when billing is restored.",
   "policy_doc": "repos/docs/governance/billing-blocked-rule-compensating-controls.md",
-  "owner": "KooshaPari",
+  "owner": "<REDACTED>",
   "entries": [
     {
       "repo": "heliosBench",

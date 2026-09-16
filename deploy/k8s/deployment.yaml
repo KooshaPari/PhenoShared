@@ -32,14 +32,14 @@ spec:
                 topologyKey: kubernetes.io/hostname
       initContainers:
         - name: migrations
-          image: ghcr.io/kooshapari/pheno-harness:latest
+          image: ghcr.io/<REDACTED>/pheno-harness:latest
           command: ["python", "-m", "bench.migrations", "apply"]
           volumeMounts:
             - name: data
               mountPath: /var/lib/pheno-harness
       containers:
         - name: bench
-          image: ghcr.io/kooshapari/pheno-harness:latest
+          image: ghcr.io/<REDACTED>/pheno-harness:latest
           args: ["serve", "--bind", "0.0.0.0:8000"]
           ports:
             - name: http

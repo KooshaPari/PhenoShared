@@ -1,7 +1,7 @@
 # MANIFEST — pheno-predict absorbed content
 
 **Absorption date:** 2026-06-19
-**Source repo:** KooshaPari/pheno-predict (archived 2026-06-19, L5-112)
+**Source repo:** <REDACTED>/pheno-predict (archived 2026-06-19, L5-112)
 **Source branch:** chore/l5-112-substrate-quality-bar-2026-06-19 @ 58690fd
 
 All files below are byte-identical copies of the source (excluding the README which has a 3-line migration header prepended).
