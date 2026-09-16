@@ -1,0 +1,145 @@
+# Evaluation matrix for model x engine x route comparisons.
+# Use this for deterministic perf/eval cells; OmniRoute policy experiments live
+# separately in combo_main.json and harbor_tbench_routes.yaml.
+
+hardware_profiles:
+  win_3090ti:
+    os: windows
+    gpu: rtx_3090_ti
+    vram_gb: 24
+    ram_gb: 64
+    dense_local_target_max_b: 12
+    moe_above_dense_max_preferred: true
+    notes:
+      - "No FP8 tensor cores; prefer AWQ/GPTQ/GGUF/INT8/INT4 where supported."
+      - "Treat KV cache as live-token budget, not user-count budget."
+
+  mac_m1pro_16gb:
+    os: macos
+    gpu: apple_m1_pro
+    ram_gb: 16
+    role: secondary_worker
+    notes:
+      - "Use MLX/llama.cpp for small draft, monitoring, and cache-warm tasks."
+
+engines:
+  llama_cpp:
+    layer: pheno_serve_dev
+    current: true
+    best_for: [gguf, compatibility, small_draft]
+  sglang:
+    layer: pheno_serve_dev
+    current: planned
+    best_for: [low_latency, shared_prefix, multi_turn_agents]
+  vllm:
+    layer: pheno_serve_dev
+    current: planned
+    best_for: [moe, awq_gptq, prefix_cache, speculative_decode]
+  tensorrt_llm:
+    layer: pheno_serve_dev
+    current: planned_compile_once
+    best_for: [stable_release_candidate, compiled_profile]
+  mlx:
+    layer: pheno_serve_dev
+    current: planned_remote_worker
+    best_for: [m1pro_small_models]
+  openrouter:
+    layer: omniroute_dev_or_direct_provider
+    current: metadata_only_until_cost_gate
+    best_for: [cheap_cloud_reference]
+    eval_gate:
+      dataset: terminal-bench@2.1
+      max_projected_full_run_usd_per_model: 1.00
+      projection_required_before_eval: true
+
+optimization_axes:
+  weight_quant:
+    allowed: [q2, q3, q4, q5, q6, q8]
+    max: q8
+    nvfp4_type: experimental
+  kv_cache_quant:
+    allowed: [q4_0, q5_0, q8_0, tq_plus]
+    tq_plus: experimental
+  compression:
+    reap_variants: allowed
+    local_reap_experiments: allowed
+  decode:
+    - baseline
+    - mtp_probe
+    - dflash_dspark_probe
+    - jetspec_probe
+    - ddtree_probe
+    - speculative_speculative_probe
+
+cells:
+  - id: local_qwen35_08b_llamacpp_baseline
+    hardware: win_3090ti
+    route_kind: pheno_serve
+    model_alias: local/qwen35-08b
+    engine: llama_cpp
+    decode: baseline
+    priority: 0
+
+  - id: local_lfm25_8b_a1b_sglang_baseline
+    hardware: win_3090ti
+    route_kind: pheno_serve
+    model_alias: local/lfm25-8b-a1b
+    engine: sglang
+    decode: baseline
+    priority: 1
+
+  - id: local_ornith_8b_sglang_baseline
+    hardware: win_3090ti
+    route_kind: pheno_serve
+    model_alias: local/ornith-8b
+    engine: sglang
+    decode: baseline
+    priority: 2
+
+  - id: local_lfm25_8b_a1b_vllm_baseline
+    hardware: win_3090ti
+    route_kind: pheno_serve
+    model_alias: local/lfm25-8b-a1b
+    engine: vllm
+    decode: baseline
+    priority: 3
+
+  - id: local_lfm25_8b_a1b_trtllm_compile_once
+    hardware: win_3090ti
+    route_kind: pheno_serve
+    model_alias: local/lfm25-8b-a1b
+    engine: tensorrt_llm
+    decode: baseline
+    priority: 4
+
+  - id: openrouter_ling26_flash_direct
+    hardware: remote
+    route_kind: direct_provider
+    model_alias: inclusionai/ling-2.6-flash
+    engine: openrouter
+    decode: provider_default
+    priority: 0
+    enabled: false
+    enable_when: "projected full Terminal-Bench 2.1 cost <= $1.00"
+
+metrics_required:
+  semantic:
+    - pass_rate
+    - accepted_verified_steps_per_s
+    - cost_per_success
+    - turns_per_success
+    - tool_calls_per_success
+  serving:
+    - ttft_ms_p50
+    - ttft_ms_p95
+    - itl_ms_p50
+    - itl_ms_p95
+    - aggregate_tokens_per_s
+    - queue_wait_ms_p95
+    - prefix_cache_hit_rate
+    - crash_count
+  harness:
+    - overhead_ms
+    - retry_count
+    - timeout_count
+    - orphan_tool_calls

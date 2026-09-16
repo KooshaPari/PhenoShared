@@ -1,0 +1,152 @@
+{
+  "date": "2026-07-04",
+  "token_present": true,
+  "probes": [
+    {
+      "label": "deepreinforce-ai/Ornith-1.0-9B",
+      "attempts": [],
+      "ok": false,
+      "err": "BadRequestError: (Request ID: Root=1-6a48cee7-3d83c0485cf84209486fa944;e46ba445-222f-4f61-aee5-302a7641b36b)\n\nBad request:\n\"expand[2]\" must be one of [author, baseModels, cardData, config, createdAt, disabled, downloads, downloadsAllTime, evalResults, gated, inference, inferenceProviderMapping, lastModified, library_name, likes, mask_token, model-index, pipeline_tag, private, safetensors, sha, siblings, spaces, tags, transformersInfo, trendingScore, widgetData, gguf, resourceGroup, xetEnabled, childrenModelCount, usedStorage]"
+    },
+    {
+      "label": "deepreinforce-ai/Ornith-1.0",
+      "attempts": [],
+      "ok": false,
+      "err": "404 RepositoryNotFoundError"
+    },
+    {
+      "label": "OrnithAI/Ornith-1.0",
+      "attempts": [],
+      "ok": false,
+      "err": "404 RepositoryNotFoundError"
+    },
+    {
+      "label": "protoLabsAI/Ornith-1.0-9B-MTP-GGUF",
+      "attempts": [],
+      "ok": false,
+      "err": "BadRequestError: (Request ID: Root=1-6a48cee7-6cc39a97289b9a0678e26152;49ebbc37-a18c-4faa-a0e8-c5fb6110526b)\n\nBad request:\n\"expand[2]\" must be one of [author, baseModels, cardData, config, createdAt, disabled, downloads, downloadsAllTime, evalResults, gated, inference, inferenceProviderMapping, lastModified, library_name, likes, mask_token, model-index, pipeline_tag, private, safetensors, sha, siblings, spaces, tags, transformersInfo, trendingScore, widgetData, gguf, resourceGroup, xetEnabled, childrenModelCount, usedStorage]"
+    },
+    {
+      "label": "LiquidAI/LFM2-8B-A1B",
+      "attempts": [],
+      "ok": false,
+      "err": "BadRequestError: (Request ID: Root=1-6a48cee7-6a8983dd7155c99c3f130f3a;389fe470-fc20-4829-87ac-9e47a3d441a2)\n\nBad request:\n\"expand[2]\" must be one of [author, baseModels, cardData, config, createdAt, disabled, downloads, downloadsAllTime, evalResults, gated, inference, inferenceProviderMapping, lastModified, library_name, likes, mask_token, model-index, pipeline_tag, private, safetensors, sha, siblings, spaces, tags, transformersInfo, trendingScore, widgetData, gguf, resourceGroup, xetEnabled, childrenModelCount, usedStorage]"
+    },
+    {
+      "label": "LiquidAI/LFM2-MoE",
+      "attempts": [],
+      "ok": false,
+      "err": "404 RepositoryNotFoundError"
+    },
+    {
+      "label": "LiquidAI/LFM2.5-8B-A1B-Instruct",
+      "attempts": [],
+      "ok": false,
+      "err": "404 RepositoryNotFoundError"
+    },
+    {
+      "label": "Qwen/Qwen3.5-0.8B-Instruct",
+      "attempts": [],
+      "ok": false,
+      "err": "404 RepositoryNotFoundError"
+    },
+    {
+      "label": "Qwen/Qwen3.5-0.8B-Base",
+      "attempts": [],
+      "ok": false,
+      "err": "BadRequestError: (Request ID: Root=1-6a48cee8-597c34654828ecc021ad34df;2dd33137-2e9c-490d-aa42-94cc86a2f974)\n\nBad request:\n\"expand[2]\" must be one of [author, baseModels, cardData, config, createdAt, disabled, downloads, downloadsAllTime, evalResults, gated, inference, inferenceProviderMapping, lastModified, library_name, likes, mask_token, model-index, pipeline_tag, private, safetensors, sha, siblings, spaces, tags, transformersInfo, trendingScore, widgetData, gguf, resourceGroup, xetEnabled, childrenModelCount, usedStorage]"
+    }
+  ],
+  "ornith_search_top_downloads": [
+    {
+      "id": "deepreinforce-ai/Ornith-1.0-35B-GGUF",
+      "downloads": 359659,
+      "last_modified": null,
+      "pipeline_tag": "text-generation"
+    },
+    {
+      "id": "deepreinforce-ai/Ornith-1.0-9B-GGUF",
+      "downloads": 320660,
+      "last_modified": null,
+      "pipeline_tag": "text-generation"
+    },
+    {
+      "id": "deepreinforce-ai/Ornith-1.0-35B",
+      "downloads": 218657,
+      "last_modified": null,
+      "pipeline_tag": "text-generation"
+    },
+    {
+      "id": "deepreinforce-ai/Ornith-1.0-9B",
+      "downloads": 69837,
+      "last_modified": null,
+      "pipeline_tag": "text-generation"
+    },
+    {
+      "id": "deepreinforce-ai/Ornith-1.0-397B-FP8",
+      "downloads": 68593,
+      "last_modified": null,
+      "pipeline_tag": "text-generation"
+    },
+    {
+      "id": "deepreinforce-ai/Ornith-1.0-35B-FP8",
+      "downloads": 61646,
+      "last_modified": null,
+      "pipeline_tag": "text-generation"
+    },
+    {
+      "id": "rcmorano/ornith-1.0-35B-ROCMFPX",
+      "downloads": 56996,
+      "last_modified": null,
+      "pipeline_tag": null
+    },
+    {
+      "id": "deepreinforce-ai/Ornith-1.0-397B",
+      "downloads": 33268,
+      "last_modified": null,
+      "pipeline_tag": "text-generation"
+    },
+    {
+      "id": "s-batman/Ornith-1.0-35B-NVFP4-MTP-GGUF",
+      "downloads": 31403,
+      "last_modified": null,
+      "pipeline_tag": "text-generation"
+    },
+    {
+      "id": "paragon-of-brah/Ornith-1.0-397B-DFLASH-GGUF",
+      "downloads": 27871,
+      "last_modified": null,
+      "pipeline_tag": null
+    },
+    {
+      "id": "SC117/Ornith-1.0-35B-MTP-APEX-GGUF",
+      "downloads": 26558,
+      "last_modified": null,
+      "pipeline_tag": "text-generation"
+    },
+    {
+      "id": "protoLabsAI/Ornith-1.0-9B-MTP-GGUF",
+      "downloads": 24464,
+      "last_modified": null,
+      "pipeline_tag": "text-generation"
+    },
+    {
+      "id": "cyankiwi/Ornith-1.0-9B-AWQ-FP8",
+      "downloads": 17649,
+      "last_modified": null,
+      "pipeline_tag": "text-generation"
+    },
+    {
+      "id": "LordNeel/Ornith-1.0-35B-GGUF-llamacpp-tp1",
+      "downloads": 17487,
+      "last_modified": null,
+      "pipeline_tag": "text-generation"
+    },
+    {
+      "id": "mudler/Ornith-1.0-35B-APEX-GGUF",
+      "downloads": 11954,
+      "last_modified": null,
+      "pipeline_tag": null
+    }
+  ]
+}

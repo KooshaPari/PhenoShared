@@ -1,0 +1,58 @@
+{
+  "schema_version": "ATIF-v1.7",
+  "trajectory_id": "duplicate-child-parent",
+  "agent": {
+    "name": "pheno-parent",
+    "version": "0.1"
+  },
+  "steps": [
+    {
+      "step_id": 1,
+      "source": "system",
+      "message": "Two delegations completed.",
+      "observation": {
+        "results": [
+          {
+            "subagent_trajectory_ref": [
+              {
+                "trajectory_id": "child-duplicate"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "subagent_trajectories": [
+    {
+      "schema_version": "ATIF-v1.7",
+      "trajectory_id": "child-duplicate",
+      "agent": {
+        "name": "worker-a",
+        "version": "0.1"
+      },
+      "steps": [
+        {
+          "step_id": 1,
+          "source": "agent",
+          "message": "A"
+        }
+      ]
+    },
+    {
+      "schema_version": "ATIF-v1.7",
+      "trajectory_id": "child-duplicate",
+      "agent": {
+        "name": "worker-b",
+        "version": "0.1"
+      },
+      "steps": [
+        {
+          "step_id": 1,
+          "source": "agent",
+          "message": "B"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,137 @@
+{
+  "timestamp": "2026-06-14T22:41:45.542499+00:00",
+  "models": {
+    "kc/minimax/minimax-m3": {
+      "label": "minimax-m3",
+      "route_kind": "omniroute_cloud",
+      "routing_policy": "cloud_escalate",
+      "probe": {
+        "ok": false,
+        "status": null,
+        "error": "<urlopen error [WinError 10061] No connection could be made because the target machine actively refused it>"
+      },
+      "route": null,
+      "harbor_model": "openai/kc/minimax/minimax-m3"
+    },
+    "kc/qwen/qwen3.5-9b": {
+      "label": "qwen3.5-9b-cloud",
+      "route_kind": "omniroute_cloud",
+      "routing_policy": "cloud_escalate",
+      "probe": {
+        "ok": false,
+        "status": null,
+        "error": "<urlopen error [WinError 10061] No connection could be made because the target machine actively refused it>"
+      },
+      "route": null,
+      "harbor_model": "openai/kc/qwen/qwen3.5-9b"
+    },
+    "fireworks/kimi-k2p6": {
+      "label": "kimi-k2p6-fw",
+      "route_kind": "omniroute_cloud",
+      "routing_policy": "cloud_escalate",
+      "probe": {
+        "ok": false,
+        "status": null,
+        "error": "<urlopen error [WinError 10061] No connection could be made because the target machine actively refused it>"
+      },
+      "route": null,
+      "harbor_model": "openai/fireworks/kimi-k2p6"
+    },
+    "fireworks/kimi-k2p5": {
+      "label": "kimi-k2p5-fw",
+      "route_kind": "omniroute_cloud",
+      "routing_policy": "cloud_escalate",
+      "probe": {
+        "ok": false,
+        "status": null,
+        "error": "<urlopen error [WinError 10061] No connection could be made because the target machine actively refused it>"
+      },
+      "route": null,
+      "harbor_model": "openai/fireworks/kimi-k2p5"
+    },
+    "kc/moonshotai/kimi-k2.6": {
+      "label": "kimi-k2.6-kc",
+      "route_kind": "omniroute_cloud",
+      "routing_policy": "cloud_escalate",
+      "probe": {
+        "ok": false,
+        "status": null,
+        "error": "<urlopen error [WinError 10061] No connection could be made because the target machine actively refused it>"
+      },
+      "route": null,
+      "harbor_model": "openai/kc/moonshotai/kimi-k2.6"
+    },
+    "local/qwen4b": {
+      "label": "qwen4b-local",
+      "route_kind": "local_direct",
+      "routing_policy": "local_first",
+      "probe": {
+        "ok": false,
+        "status": null,
+        "error": "[WinError 10054] An existing connection was forcibly closed by the remote host"
+      },
+      "route": null,
+      "harbor_model": "openai/qwen3.5-4b"
+    },
+    "local/granite8": {
+      "label": "granite8-local",
+      "route_kind": "local_direct",
+      "routing_policy": "local_first",
+      "probe": {
+        "ok": false,
+        "status": null,
+        "error": "<urlopen error [WinError 10061] No connection could be made because the target machine actively refused it>"
+      },
+      "route": null,
+      "harbor_model": "openai/granite-4.1-8b"
+    },
+    "local/zaya8": {
+      "label": "zaya8-local",
+      "route_kind": "local_direct",
+      "routing_policy": "local_first",
+      "probe": {
+        "ok": false,
+        "status": null,
+        "error": "<urlopen error [WinError 10061] No connection could be made because the target machine actively refused it>"
+      },
+      "route": null,
+      "harbor_model": "openai/zaya1-8b"
+    },
+    "local/dense12": {
+      "label": "dense12-local",
+      "route_kind": "local_direct",
+      "routing_policy": "local_first",
+      "probe": {
+        "ok": false,
+        "status": null,
+        "error": "<urlopen error [WinError 10061] No connection could be made because the target machine actively refused it>"
+      },
+      "route": null,
+      "harbor_model": "openai/pheno-dense-12b"
+    },
+    "local/moe30": {
+      "label": "moe30-local",
+      "route_kind": "local_direct",
+      "routing_policy": "local_first",
+      "probe": {
+        "ok": false,
+        "status": null,
+        "error": "<urlopen error [WinError 10061] No connection could be made because the target machine actively refused it>"
+      },
+      "route": null,
+      "harbor_model": "openai/qwen3-30b-a3b"
+    },
+    "Main": {
+      "label": "omniroute-main-router",
+      "route_kind": "omniroute_combo",
+      "routing_policy": "balanced_router",
+      "probe": {
+        "ok": false,
+        "status": null,
+        "error": "<urlopen error [WinError 10061] No connection could be made because the target machine actively refused it>"
+      },
+      "route": null,
+      "harbor_model": "openai/Main"
+    }
+  }
+}

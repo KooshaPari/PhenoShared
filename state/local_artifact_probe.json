@@ -1,0 +1,315 @@
+{
+  "schema_version": "phenolm.local_artifact_probe.v1",
+  "created_at": "2026-07-14T10:10:01.719459+00:00",
+  "authenticated": false,
+  "download_performed": false,
+  "models": [
+    {
+      "alias": "local/lfm25-8b-a1b",
+      "repo": "LiquidAI/LFM2.5-8B-A1B",
+      "status": "ok",
+      "sha": "5673e0de372b64331504de73bbbc33b0dde71903",
+      "last_modified": "2026-07-02T14:28:28+00:00",
+      "pipeline_tag": "text-generation",
+      "files": [
+        {
+          "path": ".eval_results",
+          "size_bytes": null,
+          "formats": [],
+          "quant_markers": []
+        },
+        {
+          "path": ".eval_results/aime_2026.yaml",
+          "size_bytes": 193,
+          "formats": [],
+          "quant_markers": []
+        },
+        {
+          "path": ".gitattributes",
+          "size_bytes": 1570,
+          "formats": [],
+          "quant_markers": []
+        },
+        {
+          "path": "LICENSE",
+          "size_bytes": 10574,
+          "formats": [],
+          "quant_markers": []
+        },
+        {
+          "path": "README.md",
+          "size_bytes": 15716,
+          "formats": [],
+          "quant_markers": []
+        },
+        {
+          "path": "chat_template.jinja",
+          "size_bytes": 4621,
+          "formats": [],
+          "quant_markers": []
+        },
+        {
+          "path": "config.json",
+          "size_bytes": 1205,
+          "formats": [],
+          "quant_markers": []
+        },
+        {
+          "path": "generation_config.json",
+          "size_bytes": 318,
+          "formats": [],
+          "quant_markers": []
+        },
+        {
+          "path": "model.safetensors",
+          "size_bytes": 16936006912,
+          "formats": [
+            "safetensors"
+          ],
+          "quant_markers": []
+        },
+        {
+          "path": "tokenizer.json",
+          "size_bytes": 17905598,
+          "formats": [],
+          "quant_markers": []
+        },
+        {
+          "path": "tokenizer_config.json",
+          "size_bytes": 315,
+          "formats": [],
+          "quant_markers": []
+        }
+      ],
+      "download_allowed_by_probe": false
+    },
+    {
+      "alias": "local/ornith-8b",
+      "repo": "deepreinforce-ai/Ornith-1.0-9B",
+      "status": "ok",
+      "sha": "83dc1f5e24ef8527af019a6b3bf66ac0f1c2c999",
+      "last_modified": "2026-06-25T14:08:32+00:00",
+      "pipeline_tag": "text-generation",
+      "files": [
+        {
+          "path": "assets",
+          "size_bytes": null,
+          "formats": [],
+          "quant_markers": []
+        },
+        {
+          "path": ".gitattributes",
+          "size_bytes": 1755,
+          "formats": [],
+          "quant_markers": []
+        },
+        {
+          "path": "README.md",
+          "size_bytes": 21685,
+          "formats": [],
+          "quant_markers": []
+        },
+        {
+          "path": "assets/ornith_9b_eval.png",
+          "size_bytes": 606543,
+          "formats": [],
+          "quant_markers": []
+        },
+        {
+          "path": "assets/ornith_logo.png",
+          "size_bytes": 962441,
+          "formats": [],
+          "quant_markers": []
+        },
+        {
+          "path": "chat_template.jinja",
+          "size_bytes": 7594,
+          "formats": [],
+          "quant_markers": []
+        },
+        {
+          "path": "config.json",
+          "size_bytes": 2931,
+          "formats": [],
+          "quant_markers": []
+        },
+        {
+          "path": "generation_config.json",
+          "size_bytes": 137,
+          "formats": [],
+          "quant_markers": []
+        },
+        {
+          "path": "model-00001-of-00004.safetensors",
+          "size_bytes": 4942706120,
+          "formats": [
+            "safetensors"
+          ],
+          "quant_markers": []
+        },
+        {
+          "path": "model-00002-of-00004.safetensors",
+          "size_bytes": 4987757928,
+          "formats": [
+            "safetensors"
+          ],
+          "quant_markers": []
+        },
+        {
+          "path": "model-00003-of-00004.safetensors",
+          "size_bytes": 4954810240,
+          "formats": [
+            "safetensors"
+          ],
+          "quant_markers": []
+        },
+        {
+          "path": "model-00004-of-00004.safetensors",
+          "size_bytes": 3934446832,
+          "formats": [
+            "safetensors"
+          ],
+          "quant_markers": []
+        },
+        {
+          "path": "model.safetensors.index.json",
+          "size_bytes": 69250,
+          "formats": [
+            "safetensors"
+          ],
+          "quant_markers": []
+        },
+        {
+          "path": "preprocessor_config.json",
+          "size_bytes": 390,
+          "formats": [],
+          "quant_markers": []
+        },
+        {
+          "path": "processor_config.json",
+          "size_bytes": 1191,
+          "formats": [],
+          "quant_markers": []
+        },
+        {
+          "path": "tokenizer.json",
+          "size_bytes": 19989325,
+          "formats": [],
+          "quant_markers": []
+        },
+        {
+          "path": "tokenizer_config.json",
+          "size_bytes": 1165,
+          "formats": [],
+          "quant_markers": []
+        },
+        {
+          "path": "video_preprocessor_config.json",
+          "size_bytes": 385,
+          "formats": [],
+          "quant_markers": []
+        },
+        {
+          "path": "vocab.json",
+          "size_bytes": 6722759,
+          "formats": [],
+          "quant_markers": []
+        }
+      ],
+      "download_allowed_by_probe": false
+    },
+    {
+      "alias": "local/qwen35-08b",
+      "repo": "Qwen/Qwen3.5-0.8B",
+      "status": "ok",
+      "sha": "2fc06364715b967f1860aea9cf38778875588b17",
+      "last_modified": "2026-03-02T11:26:58+00:00",
+      "pipeline_tag": "image-text-to-text",
+      "files": [
+        {
+          "path": ".gitattributes",
+          "size_bytes": 1570,
+          "formats": [],
+          "quant_markers": []
+        },
+        {
+          "path": "LICENSE",
+          "size_bytes": 11544,
+          "formats": [],
+          "quant_markers": []
+        },
+        {
+          "path": "README.md",
+          "size_bytes": 61705,
+          "formats": [],
+          "quant_markers": []
+        },
+        {
+          "path": "chat_template.jinja",
+          "size_bytes": 7755,
+          "formats": [],
+          "quant_markers": []
+        },
+        {
+          "path": "config.json",
+          "size_bytes": 2907,
+          "formats": [],
+          "quant_markers": []
+        },
+        {
+          "path": "merges.txt",
+          "size_bytes": 3353259,
+          "formats": [],
+          "quant_markers": []
+        },
+        {
+          "path": "model.safetensors-00001-of-00001.safetensors",
+          "size_bytes": 1746942600,
+          "formats": [
+            "safetensors"
+          ],
+          "quant_markers": []
+        },
+        {
+          "path": "model.safetensors.index.json",
+          "size_bytes": 50900,
+          "formats": [
+            "safetensors"
+          ],
+          "quant_markers": []
+        },
+        {
+          "path": "preprocessor_config.json",
+          "size_bytes": 390,
+          "formats": [],
+          "quant_markers": []
+        },
+        {
+          "path": "tokenizer.json",
+          "size_bytes": 12807982,
+          "formats": [],
+          "quant_markers": []
+        },
+        {
+          "path": "tokenizer_config.json",
+          "size_bytes": 16709,
+          "formats": [],
+          "quant_markers": []
+        },
+        {
+          "path": "video_preprocessor_config.json",
+          "size_bytes": 385,
+          "formats": [],
+          "quant_markers": []
+        },
+        {
+          "path": "vocab.json",
+          "size_bytes": 6722759,
+          "formats": [],
+          "quant_markers": []
+        }
+      ],
+      "download_allowed_by_probe": false
+    }
+  ]
+}

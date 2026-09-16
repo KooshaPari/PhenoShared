@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>pheno-harness — Eval Harness</title>
+  <meta name="description" content="pheno-harness is a deterministic eval harness with RLVR / Harbor operator wrappers for benchmark suites.">
+  <link rel="stylesheet" href="static/style.css">
+</head>
+<body>
+  <header>
+    <h1><a href="index.html">pheno-harness</a></h1>
+    <nav>
+      <ul>
+        <li><a href="index.html">Overview</a></li>
+        <li><a href="dashboard.html">Bench Dashboard</a></li>
+        <li><a href="suites.html">Suites</a></li>
+        <li><a href="https://github.com/KooshaPari/pheno-harness" target="_blank" rel="noopener">GitHub</a></li>
+      </ul>
+    </nav>
+  </header>
+  <main>
+    <section class="hero">
+      <h2>Deterministic eval, pluggable everything</h2>
+      <p>pheno-harness provides RLVR/Harbor operator wrappers, a plugin system, and a typed registry for benchmark suites, tasks, and metrics.</p>
+    </section>
+
+    <section class="features">
+      <article>
+        <h3>Bench plugin system</h3>
+        <p>Custom judges, contracts, and adapters register as Python plugins with hook handlers.</p>
+        <pre><code>from bench.plugin import Plugin, default_registry
+
+class TimingPlugin(Plugin):
+    name = "timing"
+    @self.hook("post_metric")
+    def record(task, metrics): ...</code></pre>
+      </article>
+      <article>
+        <h3>Suite registry</h3>
+        <p>Suites auto-register via <code>__init_subclass__</code>. Task specs persist class-level metadata for the runner.</p>
+      </article>
+      <article>
+        <h3>Adapters for Anthropic / OpenAI / MLX</h3>
+        <p>Common interface with feature flags for MLX on Apple Silicon and mock fixtures for CI.</p>
+      </article>
+      <article>
+        <h3>Replay contract</h3>
+        <p>Record and rehydrate <code>Envelope</code> bundles. Streamlit UI for diff and replay.</p>
+      </article>
+    </section>
+
+    <section class="metrics">
+      <h2>At a glance</h2>
+      <dl>
+        <dt>Suites registered</dt><dd>14</dd>
+        <dt>Tasks</dt><dd>2,184</dd>
+        <dt>Adapters</dt><dd>4 (anthropic, openai, mlx, mock)</dd>
+        <dt>Tests</dt><dd>128</dd>
+        <dt>Plugin hooks</dt><dd>6</dd>
+      </dl>
+    </section>
+  </main>
+  <footer>
+    <p>© 2026 ParetoOptimal. MIT.</p>
+  </footer>
+</body>
+</html>

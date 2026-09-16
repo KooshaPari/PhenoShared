@@ -1,0 +1,2152 @@
+{
+  "date": "2026-07-04",
+  "method": "list_models(author=..., search=..., sort=last_modified)",
+  "orgs": {
+    "google": {
+      "gemma-4": [
+        {
+          "id": "google/gemma-4-26B-A4B-it-qat-q4_0-unquantized-assistant",
+          "last_modified": "2026-06-19 11:22:55+00:00",
+          "downloads": 2840
+        },
+        {
+          "id": "google/gemma-4-31B-it-qat-q4_0-unquantized-assistant",
+          "last_modified": "2026-06-18 12:30:50+00:00",
+          "downloads": 143266
+        },
+        {
+          "id": "google/gemma-4-12B-it-qat-w4a16-ct",
+          "last_modified": "2026-06-12 17:06:06+00:00",
+          "downloads": 2115092
+        },
+        {
+          "id": "google/gemma-4-E4B-it-qat-q4_0-gguf",
+          "last_modified": "2026-06-06 15:57:01+00:00",
+          "downloads": 294145
+        },
+        {
+          "id": "google/gemma-4-E4B-it-qat-mobile-ct",
+          "last_modified": "2026-06-05 20:34:27+00:00",
+          "downloads": 11437
+        },
+        {
+          "id": "google/gemma-4-E2B-it-qat-mobile-ct",
+          "last_modified": "2026-06-05 20:33:30+00:00",
+          "downloads": 6265
+        },
+        {
+          "id": "google/gemma-4-E4B-it-qat-mobile-transformers",
+          "last_modified": "2026-06-05 20:32:13+00:00",
+          "downloads": 3149
+        },
+        {
+          "id": "google/gemma-4-E2B-it-qat-mobile-transformers",
+          "last_modified": "2026-06-05 20:31:18+00:00",
+          "downloads": 22152
+        },
+        {
+          "id": "google/gemma-4-E4B-it-qat-w4a16-ct",
+          "last_modified": "2026-06-05 15:48:54+00:00",
+          "downloads": 249687
+        },
+        {
+          "id": "google/gemma-4-E2B-it-qat-w4a16-ct",
+          "last_modified": "2026-06-05 15:48:54+00:00",
+          "downloads": 348443
+        },
+        {
+          "id": "google/gemma-4-31B-it-qat-w4a16-ct",
+          "last_modified": "2026-06-05 15:48:54+00:00",
+          "downloads": 939032
+        },
+        {
+          "id": "google/gemma-4-12B-it-qat-q4_0-unquantized-assistant",
+          "last_modified": "2026-06-05 15:48:53+00:00",
+          "downloads": 36081
+        },
+        {
+          "id": "google/gemma-4-31B-it-qat-q4_0-unquantized",
+          "last_modified": "2026-06-05 15:48:52+00:00",
+          "downloads": 18044
+        },
+        {
+          "id": "google/gemma-4-E2B-it-qat-q4_0-unquantized-assistant",
+          "last_modified": "2026-06-05 15:48:52+00:00",
+          "downloads": 754
+        },
+        {
+          "id": "google/gemma-4-E4B-it-qat-q4_0-unquantized-assistant",
+          "last_modified": "2026-06-05 15:48:52+00:00",
+          "downloads": 2854
+        },
+        {
+          "id": "google/gemma-4-26B-A4B-it-qat-q4_0-unquantized",
+          "last_modified": "2026-06-05 15:48:51+00:00",
+          "downloads": 40653
+        },
+        {
+          "id": "google/gemma-4-E4B-it-qat-q4_0-unquantized",
+          "last_modified": "2026-06-05 15:48:51+00:00",
+          "downloads": 12570
+        },
+        {
+          "id": "google/gemma-4-12B-it-qat-q4_0-unquantized",
+          "last_modified": "2026-06-05 15:48:51+00:00",
+          "downloads": 169454
+        },
+        {
+          "id": "google/gemma-4-E2B-it-qat-q4_0-unquantized",
+          "last_modified": "2026-06-05 15:48:50+00:00",
+          "downloads": 13159
+        },
+        {
+          "id": "google/gemma-4-26B-A4B-it-qat-q4_0-gguf",
+          "last_modified": "2026-06-05 15:48:50+00:00",
+          "downloads": 335438
+        },
+        {
+          "id": "google/gemma-4-31B-it-qat-q4_0-gguf",
+          "last_modified": "2026-06-05 15:48:50+00:00",
+          "downloads": 281106
+        },
+        {
+          "id": "google/gemma-4-E2B-it-qat-q4_0-gguf",
+          "last_modified": "2026-06-05 15:48:49+00:00",
+          "downloads": 338401
+        },
+        {
+          "id": "google/gemma-4-12B-it-qat-q4_0-gguf",
+          "last_modified": "2026-06-05 15:48:49+00:00",
+          "downloads": 559710
+        },
+        {
+          "id": "google/gemma-4-12B-it-assistant",
+          "last_modified": "2026-06-04 11:58:14+00:00",
+          "downloads": 80085
+        },
+        {
+          "id": "google/gemma-4-12B",
+          "last_modified": "2026-06-04 11:58:12+00:00",
+          "downloads": 443526
+        }
+      ],
+      "gemma-3": [
+        {
+          "id": "google/gemma-4-31B-it-qat-q4_0-unquantized-assistant",
+          "last_modified": "2026-06-18 12:30:50+00:00",
+          "downloads": 143266
+        },
+        {
+          "id": "google/gemma-4-31B-it-qat-w4a16-ct",
+          "last_modified": "2026-06-05 15:48:54+00:00",
+          "downloads": 939032
+        },
+        {
+          "id": "google/gemma-4-31B-it-qat-q4_0-unquantized",
+          "last_modified": "2026-06-05 15:48:52+00:00",
+          "downloads": 18044
+        },
+        {
+          "id": "google/gemma-4-31B-it-qat-q4_0-gguf",
+          "last_modified": "2026-06-05 15:48:50+00:00",
+          "downloads": 281106
+        },
+        {
+          "id": "google/gemma-4-31B-it",
+          "last_modified": "2026-06-03 08:50:40+00:00",
+          "downloads": 11203982
+        },
+        {
+          "id": "google/gemma-4-31B",
+          "last_modified": "2026-06-03 08:50:11+00:00",
+          "downloads": 624037
+        },
+        {
+          "id": "google/gemma-4-31B-it-assistant",
+          "last_modified": "2026-06-03 08:41:56+00:00",
+          "downloads": 770458
+        },
+        {
+          "id": "google/gemma-3n-E2B-it-litert-lm",
+          "last_modified": "2025-12-08 04:55:43+00:00",
+          "downloads": 5526
+        },
+        {
+          "id": "google/gemma-3n-E4B-it-litert-lm",
+          "last_modified": "2025-11-25 21:33:07+00:00",
+          "downloads": 2765
+        },
+        {
+          "id": "google/gemma-3-270m-it-qat-q4_0-unquantized",
+          "last_modified": "2025-08-14 07:35:20+00:00",
+          "downloads": 442
+        },
+        {
+          "id": "google/gemma-3-270m-qat-q4_0-unquantized",
+          "last_modified": "2025-08-14 07:35:14+00:00",
+          "downloads": 91
+        },
+        {
+          "id": "google/gemma-3-270m-it",
+          "last_modified": "2025-08-14 07:35:07+00:00",
+          "downloads": 1035190
+        },
+        {
+          "id": "google/gemma-3-270m",
+          "last_modified": "2025-08-14 07:35:01+00:00",
+          "downloads": 4754228
+        },
+        {
+          "id": "google/gemma-3n-E4B",
+          "last_modified": "2025-07-14 13:57:07+00:00",
+          "downloads": 3449
+        },
+        {
+          "id": "google/gemma-3n-E4B-it",
+          "last_modified": "2025-07-14 13:56:17+00:00",
+          "downloads": 20070
+        },
+        {
+          "id": "google/gemma-3n-E2B-it",
+          "last_modified": "2025-07-14 13:55:52+00:00",
+          "downloads": 406639
+        },
+        {
+          "id": "google/gemma-3n-E2B",
+          "last_modified": "2025-07-14 13:55:22+00:00",
+          "downloads": 3590
+        },
+        {
+          "id": "google/gemma-3n-E4B-it-litert-preview",
+          "last_modified": "2025-05-26 11:06:28+00:00",
+          "downloads": 0
+        },
+        {
+          "id": "google/gemma-3n-E2B-it-litert-preview",
+          "last_modified": "2025-05-20 20:11:35+00:00",
+          "downloads": 0
+        },
+        {
+          "id": "google/gemma-3-12b-it-qat-int4-unquantized",
+          "last_modified": "2025-04-15 21:09:51+00:00",
+          "downloads": 797
+        },
+        {
+          "id": "google/gemma-3-4b-it-qat-int4-unquantized",
+          "last_modified": "2025-04-15 21:09:31+00:00",
+          "downloads": 49
+        },
+        {
+          "id": "google/gemma-3-1b-it-qat-int4-unquantized",
+          "last_modified": "2025-04-15 21:08:51+00:00",
+          "downloads": 88
+        },
+        {
+          "id": "google/gemma-3-27b-it-qat-q4_0-unquantized",
+          "last_modified": "2025-04-15 21:07:29+00:00",
+          "downloads": 232
+        },
+        {
+          "id": "google/gemma-3-12b-it-qat-q4_0-unquantized",
+          "last_modified": "2025-04-15 21:07:07+00:00",
+          "downloads": 78710
+        },
+        {
+          "id": "google/gemma-3-1b-it-qat-q4_0-unquantized",
+          "last_modified": "2025-04-15 21:06:17+00:00",
+          "downloads": 50
+        }
+      ],
+      "codegemma": [
+        {
+          "id": "google/codegemma-7b-it-keras",
+          "last_modified": "2024-11-15 19:52:50+00:00",
+          "downloads": 2
+        },
+        {
+          "id": "google/codegemma-7b-keras",
+          "last_modified": "2024-11-15 19:52:46+00:00",
+          "downloads": 2
+        },
+        {
+          "id": "google/codegemma-2b-keras",
+          "last_modified": "2024-11-15 19:52:41+00:00",
+          "downloads": 2
+        },
+        {
+          "id": "google/codegemma-1.1-7b-it-keras",
+          "last_modified": "2024-10-28 21:51:27+00:00",
+          "downloads": 0
+        },
+        {
+          "id": "google/codegemma-1.1-2b-keras",
+          "last_modified": "2024-10-28 17:05:43+00:00",
+          "downloads": 0
+        },
+        {
+          "id": "google/codegemma-2b",
+          "last_modified": "2024-08-07 18:27:30+00:00",
+          "downloads": 31380
+        },
+        {
+          "id": "google/codegemma-7b-it",
+          "last_modified": "2024-08-07 18:27:26+00:00",
+          "downloads": 1234
+        },
+        {
+          "id": "google/codegemma-1.1-7b-it",
+          "last_modified": "2024-08-07 18:27:19+00:00",
+          "downloads": 45
+        },
+        {
+          "id": "google/codegemma-1.1-2b",
+          "last_modified": "2024-08-07 18:27:14+00:00",
+          "downloads": 17
+        },
+        {
+          "id": "google/codegemma-7b",
+          "last_modified": "2024-08-07 18:27:09+00:00",
+          "downloads": 2805
+        },
+        {
+          "id": "google/codegemma-1.1-7b-it-GGUF",
+          "last_modified": "2024-06-27 14:10:05+00:00",
+          "downloads": 14
+        },
+        {
+          "id": "google/codegemma-1.1-7b-it-pytorch",
+          "last_modified": "2024-06-27 14:10:05+00:00",
+          "downloads": 0
+        },
+        {
+          "id": "google/codegemma-1.1-2b-GGUF",
+          "last_modified": "2024-06-27 14:10:04+00:00",
+          "downloads": 9
+        },
+        {
+          "id": "google/codegemma-1.1-2b-pytorch",
+          "last_modified": "2024-06-27 14:10:03+00:00",
+          "downloads": 0
+        },
+        {
+          "id": "google/codegemma-7b-it-GGUF",
+          "last_modified": "2024-06-27 14:09:59+00:00",
+          "downloads": 167
+        },
+        {
+          "id": "google/codegemma-7b-it-pytorch",
+          "last_modified": "2024-06-27 14:09:58+00:00",
+          "downloads": 0
+        },
+        {
+          "id": "google/codegemma-7b-GGUF",
+          "last_modified": "2024-06-27 14:09:57+00:00",
+          "downloads": 53
+        },
+        {
+          "id": "google/codegemma-7b-pytorch",
+          "last_modified": "2024-06-27 14:09:57+00:00",
+          "downloads": 0
+        },
+        {
+          "id": "google/codegemma-2b-GGUF",
+          "last_modified": "2024-06-27 14:09:56+00:00",
+          "downloads": 94
+        },
+        {
+          "id": "google/codegemma-2b-pytorch",
+          "last_modified": "2024-06-27 14:09:55+00:00",
+          "downloads": 0
+        }
+      ]
+    },
+    "Qwen": {
+      "Qwen3": [
+        {
+          "id": "Qwen/Qwen3-ForcedAligner-0.6B-hf",
+          "last_modified": "2026-06-26 08:42:38+00:00",
+          "downloads": 1625
+        },
+        {
+          "id": "Qwen/Qwen3-ASR-0.6B-hf",
+          "last_modified": "2026-06-26 08:39:37+00:00",
+          "downloads": 15008
+        },
+        {
+          "id": "Qwen/Qwen3-ASR-1.7B-hf",
+          "last_modified": "2026-06-26 08:36:05+00:00",
+          "downloads": 5125
+        },
+        {
+          "id": "Qwen/SAE-Res-Qwen3-8B-Base-W64K-L0_50",
+          "last_modified": "2026-05-13 12:19:26+00:00",
+          "downloads": 179
+        },
+        {
+          "id": "Qwen/SAE-Res-Qwen3-8B-Base-W64K-L0_100",
+          "last_modified": "2026-05-13 12:19:23+00:00",
+          "downloads": 81
+        },
+        {
+          "id": "Qwen/SAE-Res-Qwen3.5-9B-Base-W64K-L0_50",
+          "last_modified": "2026-05-13 12:19:20+00:00",
+          "downloads": 90
+        },
+        {
+          "id": "Qwen/SAE-Res-Qwen3.5-9B-Base-W64K-L0_100",
+          "last_modified": "2026-05-13 12:19:17+00:00",
+          "downloads": 99
+        },
+        {
+          "id": "Qwen/SAE-Res-Qwen3.5-35B-A3B-Base-W32K-L0_50",
+          "last_modified": "2026-05-13 12:19:14+00:00",
+          "downloads": 67
+        },
+        {
+          "id": "Qwen/SAE-Res-Qwen3.5-2B-Base-W32K-L0_50",
+          "last_modified": "2026-05-13 12:19:08+00:00",
+          "downloads": 129
+        },
+        {
+          "id": "Qwen/SAE-Res-Qwen3.5-2B-Base-W32K-L0_100",
+          "last_modified": "2026-05-13 12:19:05+00:00",
+          "downloads": 96
+        },
+        {
+          "id": "Qwen/SAE-Res-Qwen3.5-27B-W80K-L0_50",
+          "last_modified": "2026-05-13 12:19:02+00:00",
+          "downloads": 572
+        },
+        {
+          "id": "Qwen/SAE-Res-Qwen3-30B-A3B-Base-W32K-L0_50",
+          "last_modified": "2026-05-13 12:18:56+00:00",
+          "downloads": 49
+        },
+        {
+          "id": "Qwen/SAE-Res-Qwen3-30B-A3B-Base-W128K-L0_100",
+          "last_modified": "2026-05-13 12:18:52+00:00",
+          "downloads": 40
+        },
+        {
+          "id": "Qwen/SAE-Res-Qwen3-1.7B-Base-W32K-L0_50",
+          "last_modified": "2026-05-13 12:18:50+00:00",
+          "downloads": 81
+        },
+        {
+          "id": "Qwen/SAE-Res-Qwen3-1.7B-Base-W32K-L0_100",
+          "last_modified": "2026-05-13 12:18:47+00:00",
+          "downloads": 53
+        },
+        {
+          "id": "Qwen/SAE-Res-Qwen3.5-27B-W80K-L0_100",
+          "last_modified": "2026-05-13 09:44:26+00:00",
+          "downloads": 33
+        },
+        {
+          "id": "Qwen/SAE-Res-Qwen3.5-35B-A3B-Base-W128K-L0_100",
+          "last_modified": "2026-05-13 09:43:12+00:00",
+          "downloads": 31
+        },
+        {
+          "id": "Qwen/Qwen3.5-122B-A10B-GPTQ-Int4",
+          "last_modified": "2026-04-24 05:56:30+00:00",
+          "downloads": 322851
+        },
+        {
+          "id": "Qwen/Qwen3.5-122B-A10B-FP8",
+          "last_modified": "2026-04-24 05:56:01+00:00",
+          "downloads": 1198698
+        },
+        {
+          "id": "Qwen/Qwen3.5-397B-A17B-GPTQ-Int4",
+          "last_modified": "2026-04-24 05:52:53+00:00",
+          "downloads": 25023
+        },
+        {
+          "id": "Qwen/Qwen3.5-397B-A17B",
+          "last_modified": "2026-04-24 05:51:23+00:00",
+          "downloads": 446795
+        },
+        {
+          "id": "Qwen/Qwen3.5-397B-A17B-FP8",
+          "last_modified": "2026-04-24 05:50:39+00:00",
+          "downloads": 838580
+        },
+        {
+          "id": "Qwen/Qwen3.5-122B-A10B",
+          "last_modified": "2026-04-24 03:55:23+00:00",
+          "downloads": 786339
+        },
+        {
+          "id": "Qwen/Qwen3.5-27B",
+          "last_modified": "2026-04-24 02:54:49+00:00",
+          "downloads": 2525974
+        },
+        {
+          "id": "Qwen/Qwen3.6-35B-A3B",
+          "last_modified": "2026-04-24 02:53:42+00:00",
+          "downloads": 5669998
+        }
+      ],
+      "Qwen3-Coder": [
+        {
+          "id": "Qwen/Qwen3-Coder-Next-GGUF",
+          "last_modified": "2026-02-04 04:26:16+00:00",
+          "downloads": 20058
+        },
+        {
+          "id": "Qwen/Qwen3-Coder-Next",
+          "last_modified": "2026-02-03 16:16:38+00:00",
+          "downloads": 1281890
+        },
+        {
+          "id": "Qwen/Qwen3-Coder-Next-Base",
+          "last_modified": "2026-02-03 14:14:04+00:00",
+          "downloads": 693
+        },
+        {
+          "id": "Qwen/Qwen3-Coder-Next-FP8",
+          "last_modified": "2026-02-03 14:13:28+00:00",
+          "downloads": 2173239
+        },
+        {
+          "id": "Qwen/Qwen3-Coder-30B-A3B-Instruct-FP8",
+          "last_modified": "2025-12-03 08:20:23+00:00",
+          "downloads": 1400046
+        },
+        {
+          "id": "Qwen/Qwen3-Coder-30B-A3B-Instruct",
+          "last_modified": "2025-12-03 08:05:17+00:00",
+          "downloads": 1685097
+        },
+        {
+          "id": "Qwen/Qwen3-Coder-480B-A35B-Instruct-FP8",
+          "last_modified": "2025-08-21 10:40:35+00:00",
+          "downloads": 535780
+        },
+        {
+          "id": "Qwen/Qwen3-Coder-480B-A35B-Instruct",
+          "last_modified": "2025-08-21 10:18:07+00:00",
+          "downloads": 41493
+        }
+      ],
+      "Qwen2.5-Coder": [
+        {
+          "id": "Qwen/Qwen2.5-Coder-14B-Instruct-GPTQ-Int8",
+          "last_modified": "2025-01-12 02:22:45+00:00",
+          "downloads": 52320
+        },
+        {
+          "id": "Qwen/Qwen2.5-Coder-14B-Instruct-AWQ",
+          "last_modified": "2025-01-12 02:15:55+00:00",
+          "downloads": 1055838
+        },
+        {
+          "id": "Qwen/Qwen2.5-Coder-32B-Instruct-GGUF",
+          "last_modified": "2025-01-12 02:08:48+00:00",
+          "downloads": 132287
+        },
+        {
+          "id": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+          "last_modified": "2025-01-12 02:05:01+00:00",
+          "downloads": 805428
+        },
+        {
+          "id": "Qwen/Qwen2.5-Coder-3B-Instruct",
+          "last_modified": "2025-01-12 02:04:23+00:00",
+          "downloads": 240327
+        },
+        {
+          "id": "Qwen/Qwen2.5-Coder-7B-Instruct",
+          "last_modified": "2025-01-12 02:03:41+00:00",
+          "downloads": 1970772
+        },
+        {
+          "id": "Qwen/Qwen2.5-Coder-14B-Instruct",
+          "last_modified": "2025-01-12 02:02:59+00:00",
+          "downloads": 3856585
+        },
+        {
+          "id": "Qwen/Qwen2.5-Coder-32B-Instruct",
+          "last_modified": "2025-01-12 02:02:22+00:00",
+          "downloads": 1368825
+        },
+        {
+          "id": "Qwen/Qwen2.5-Coder-14B-Instruct-GPTQ-Int4",
+          "last_modified": "2024-11-18 13:04:27+00:00",
+          "downloads": 29006
+        },
+        {
+          "id": "Qwen/Qwen2.5-Coder-32B-Instruct-AWQ",
+          "last_modified": "2024-11-18 12:55:21+00:00",
+          "downloads": 1728691
+        },
+        {
+          "id": "Qwen/Qwen2.5-Coder-32B-Instruct-GPTQ-Int8",
+          "last_modified": "2024-11-18 12:55:16+00:00",
+          "downloads": 1081
+        },
+        {
+          "id": "Qwen/Qwen2.5-Coder-32B-Instruct-GPTQ-Int4",
+          "last_modified": "2024-11-18 12:55:09+00:00",
+          "downloads": 167727
+        },
+        {
+          "id": "Qwen/Qwen2.5-Coder-32B",
+          "last_modified": "2024-11-18 12:54:58+00:00",
+          "downloads": 7193
+        },
+        {
+          "id": "Qwen/Qwen2.5-Coder-14B",
+          "last_modified": "2024-11-18 12:54:29+00:00",
+          "downloads": 3484
+        },
+        {
+          "id": "Qwen/Qwen2.5-Coder-7B-Instruct-AWQ",
+          "last_modified": "2024-11-18 12:54:24+00:00",
+          "downloads": 253395
+        },
+        {
+          "id": "Qwen/Qwen2.5-Coder-7B-Instruct-GPTQ-Int8",
+          "last_modified": "2024-11-18 12:54:18+00:00",
+          "downloads": 1455
+        },
+        {
+          "id": "Qwen/Qwen2.5-Coder-7B-Instruct-GPTQ-Int4",
+          "last_modified": "2024-11-18 12:54:13+00:00",
+          "downloads": 527068
+        },
+        {
+          "id": "Qwen/Qwen2.5-Coder-7B",
+          "last_modified": "2024-11-18 12:54:02+00:00",
+          "downloads": 433318
+        },
+        {
+          "id": "Qwen/Qwen2.5-Coder-3B-Instruct-AWQ",
+          "last_modified": "2024-11-18 12:53:55+00:00",
+          "downloads": 39516
+        },
+        {
+          "id": "Qwen/Qwen2.5-Coder-3B-Instruct-GPTQ-Int8",
+          "last_modified": "2024-11-18 12:53:49+00:00",
+          "downloads": 36
+        },
+        {
+          "id": "Qwen/Qwen2.5-Coder-3B-Instruct-GPTQ-Int4",
+          "last_modified": "2024-11-18 12:53:44+00:00",
+          "downloads": 6295
+        },
+        {
+          "id": "Qwen/Qwen2.5-Coder-3B",
+          "last_modified": "2024-11-18 12:53:33+00:00",
+          "downloads": 86362
+        },
+        {
+          "id": "Qwen/Qwen2.5-Coder-1.5B-Instruct-AWQ",
+          "last_modified": "2024-11-18 12:53:27+00:00",
+          "downloads": 5010
+        },
+        {
+          "id": "Qwen/Qwen2.5-Coder-1.5B-Instruct-GPTQ-Int8",
+          "last_modified": "2024-11-18 12:53:21+00:00",
+          "downloads": 48
+        },
+        {
+          "id": "Qwen/Qwen2.5-Coder-1.5B-Instruct-GPTQ-Int4",
+          "last_modified": "2024-11-18 12:53:16+00:00",
+          "downloads": 2550
+        }
+      ],
+      "Qwen3-Next": [
+        {
+          "id": "Qwen/Qwen3-Coder-Next-GGUF",
+          "last_modified": "2026-02-04 04:26:16+00:00",
+          "downloads": 20058
+        },
+        {
+          "id": "Qwen/Qwen3-Coder-Next",
+          "last_modified": "2026-02-03 16:16:38+00:00",
+          "downloads": 1281890
+        },
+        {
+          "id": "Qwen/Qwen3-Coder-Next-Base",
+          "last_modified": "2026-02-03 14:14:04+00:00",
+          "downloads": 693
+        },
+        {
+          "id": "Qwen/Qwen3-Coder-Next-FP8",
+          "last_modified": "2026-02-03 14:13:28+00:00",
+          "downloads": 2173239
+        },
+        {
+          "id": "Qwen/Qwen3-Next-80B-A3B-Instruct-GGUF",
+          "last_modified": "2025-12-03 08:26:07+00:00",
+          "downloads": 1927
+        },
+        {
+          "id": "Qwen/Qwen3-Next-80B-A3B-Thinking-GGUF",
+          "last_modified": "2025-12-03 08:24:52+00:00",
+          "downloads": 1625
+        },
+        {
+          "id": "Qwen/Qwen3-Next-80B-A3B-Thinking-FP8",
+          "last_modified": "2025-09-22 05:39:57+00:00",
+          "downloads": 15475
+        },
+        {
+          "id": "Qwen/Qwen3-Next-80B-A3B-Instruct-FP8",
+          "last_modified": "2025-09-22 05:38:44+00:00",
+          "downloads": 470022
+        },
+        {
+          "id": "Qwen/Qwen3-Next-80B-A3B-Instruct",
+          "last_modified": "2025-09-17 06:57:40+00:00",
+          "downloads": 247196
+        },
+        {
+          "id": "Qwen/Qwen3-Next-80B-A3B-Thinking",
+          "last_modified": "2025-09-15 09:12:48+00:00",
+          "downloads": 26785
+        }
+      ]
+    },
+    "mistralai": {
+      "Ministral": [
+        {
+          "id": "mistralai/Ministral-3-14B-Instruct-2512-BF16",
+          "last_modified": "2026-06-30 15:23:03+00:00",
+          "downloads": 18924
+        },
+        {
+          "id": "mistralai/Ministral-3-8B-Instruct-2512-BF16",
+          "last_modified": "2026-06-30 15:22:49+00:00",
+          "downloads": 25456
+        },
+        {
+          "id": "mistralai/Ministral-3-3B-Instruct-2512-BF16",
+          "last_modified": "2026-06-30 15:22:18+00:00",
+          "downloads": 179177
+        },
+        {
+          "id": "mistralai/Ministral-3-14B-Instruct-2512",
+          "last_modified": "2026-06-30 15:21:39+00:00",
+          "downloads": 132907
+        },
+        {
+          "id": "mistralai/Ministral-3-3B-Instruct-2512",
+          "last_modified": "2026-06-30 15:21:31+00:00",
+          "downloads": 1221260
+        },
+        {
+          "id": "mistralai/Ministral-3-8B-Instruct-2512",
+          "last_modified": "2026-06-30 15:20:14+00:00",
+          "downloads": 101725
+        },
+        {
+          "id": "mistralai/Ministral-3-3B-Instruct-2512-ONNX",
+          "last_modified": "2026-01-15 11:19:37+00:00",
+          "downloads": 377
+        },
+        {
+          "id": "mistralai/Ministral-3-3B-Reasoning-2512-GGUF",
+          "last_modified": "2026-01-15 11:19:18+00:00",
+          "downloads": 2135
+        },
+        {
+          "id": "mistralai/Ministral-3-8B-Reasoning-2512-GGUF",
+          "last_modified": "2026-01-15 11:19:00+00:00",
+          "downloads": 2685
+        },
+        {
+          "id": "mistralai/Ministral-3-14B-Reasoning-2512-GGUF",
+          "last_modified": "2026-01-15 11:18:42+00:00",
+          "downloads": 2848
+        },
+        {
+          "id": "mistralai/Ministral-3-3B-Instruct-2512-GGUF",
+          "last_modified": "2026-01-15 11:18:21+00:00",
+          "downloads": 23824
+        },
+        {
+          "id": "mistralai/Ministral-3-8B-Instruct-2512-GGUF",
+          "last_modified": "2026-01-15 11:18:05+00:00",
+          "downloads": 10077
+        },
+        {
+          "id": "mistralai/Ministral-3-14B-Instruct-2512-GGUF",
+          "last_modified": "2026-01-15 11:17:42+00:00",
+          "downloads": 4210
+        },
+        {
+          "id": "mistralai/Ministral-3-3B-Base-2512",
+          "last_modified": "2026-01-15 11:17:21+00:00",
+          "downloads": 21715
+        },
+        {
+          "id": "mistralai/Ministral-3-8B-Base-2512",
+          "last_modified": "2026-01-15 11:17:01+00:00",
+          "downloads": 12096
+        },
+        {
+          "id": "mistralai/Ministral-3-14B-Base-2512",
+          "last_modified": "2026-01-15 11:16:43+00:00",
+          "downloads": 10136
+        },
+        {
+          "id": "mistralai/Ministral-3-3B-Reasoning-2512",
+          "last_modified": "2026-01-15 11:16:24+00:00",
+          "downloads": 27056
+        },
+        {
+          "id": "mistralai/Ministral-3-8B-Reasoning-2512",
+          "last_modified": "2026-01-15 11:16:07+00:00",
+          "downloads": 79467
+        },
+        {
+          "id": "mistralai/Ministral-3-14B-Reasoning-2512",
+          "last_modified": "2026-01-15 11:15:42+00:00",
+          "downloads": 11547
+        },
+        {
+          "id": "mistralai/Ministral-8B-Instruct-2410",
+          "last_modified": "2025-07-31 10:39:07+00:00",
+          "downloads": 317236
+        }
+      ],
+      "Mistral-Small": [
+        {
+          "id": "mistralai/Devstral-Small-2-24B-Instruct-2512",
+          "last_modified": "2026-06-30 15:21:03+00:00",
+          "downloads": 347932
+        },
+        {
+          "id": "mistralai/Mistral-Small-4-119B-2603-NVFP4",
+          "last_modified": "2026-05-31 13:58:33+00:00",
+          "downloads": 1469
+        },
+        {
+          "id": "mistralai/Mistral-Small-4-119B-2603",
+          "last_modified": "2026-05-31 13:57:57+00:00",
+          "downloads": 143766
+        },
+        {
+          "id": "mistralai/Mistral-Small-4-119B-2603-eagle",
+          "last_modified": "2026-04-27 15:33:15+00:00",
+          "downloads": 518
+        },
+        {
+          "id": "mistralai/Magistral-Small-2509",
+          "last_modified": "2026-02-23 18:04:17+00:00",
+          "downloads": 11281
+        },
+        {
+          "id": "mistralai/Magistral-Small-2507",
+          "last_modified": "2025-12-22 10:24:16+00:00",
+          "downloads": 683
+        },
+        {
+          "id": "mistralai/Mistral-Small-3.2-24B-Instruct-2506",
+          "last_modified": "2025-12-22 10:16:55+00:00",
+          "downloads": 639141
+        },
+        {
+          "id": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+          "last_modified": "2025-12-22 10:15:41+00:00",
+          "downloads": 158691
+        },
+        {
+          "id": "mistralai/Voxtral-Small-24B-2507",
+          "last_modified": "2025-12-20 23:34:49+00:00",
+          "downloads": 117355
+        },
+        {
+          "id": "mistralai/Magistral-Small-2509-GGUF",
+          "last_modified": "2025-09-18 15:21:05+00:00",
+          "downloads": 1036
+        },
+        {
+          "id": "mistralai/Devstral-Small-2505",
+          "last_modified": "2025-08-18 08:17:15+00:00",
+          "downloads": 6066
+        },
+        {
+          "id": "mistralai/Devstral-Small-2507",
+          "last_modified": "2025-08-18 08:14:29+00:00",
+          "downloads": 3838
+        },
+        {
+          "id": "mistralai/Magistral-Small-2506",
+          "last_modified": "2025-07-28 17:28:05+00:00",
+          "downloads": 18109
+        },
+        {
+          "id": "mistralai/Mistral-Small-24B-Instruct-2501",
+          "last_modified": "2025-07-28 17:26:22+00:00",
+          "downloads": 53897
+        },
+        {
+          "id": "mistralai/Mistral-Small-3.1-24B-Base-2503",
+          "last_modified": "2025-07-28 17:25:54+00:00",
+          "downloads": 1059
+        },
+        {
+          "id": "mistralai/Mistral-Small-24B-Base-2501",
+          "last_modified": "2025-07-28 17:24:54+00:00",
+          "downloads": 3922
+        },
+        {
+          "id": "mistralai/Mistral-Small-Instruct-2409",
+          "last_modified": "2025-07-28 17:21:40+00:00",
+          "downloads": 104529
+        },
+        {
+          "id": "mistralai/Magistral-Small-2507-GGUF",
+          "last_modified": "2025-07-25 15:44:31+00:00",
+          "downloads": 166
+        },
+        {
+          "id": "mistralai/Magistral-Small-2506_gguf",
+          "last_modified": "2025-07-24 16:54:23+00:00",
+          "downloads": 165
+        },
+        {
+          "id": "mistralai/Devstral-Small-2505_gguf",
+          "last_modified": "2025-07-24 16:53:45+00:00",
+          "downloads": 589
+        }
+      ],
+      "Devstral": [
+        {
+          "id": "mistralai/Devstral-Small-2-24B-Instruct-2512",
+          "last_modified": "2026-06-30 15:21:03+00:00",
+          "downloads": 347932
+        },
+        {
+          "id": "mistralai/Devstral-2-123B-Instruct-2512",
+          "last_modified": "2026-06-30 15:20:41+00:00",
+          "downloads": 26255
+        },
+        {
+          "id": "mistralai/Devstral-Small-2505",
+          "last_modified": "2025-08-18 08:17:15+00:00",
+          "downloads": 6066
+        },
+        {
+          "id": "mistralai/Devstral-Small-2507",
+          "last_modified": "2025-08-18 08:14:29+00:00",
+          "downloads": 3838
+        },
+        {
+          "id": "mistralai/Devstral-Small-2505_gguf",
+          "last_modified": "2025-07-24 16:53:45+00:00",
+          "downloads": 589
+        },
+        {
+          "id": "mistralai/Devstral-Small-2507_gguf",
+          "last_modified": "2025-07-23 12:30:18+00:00",
+          "downloads": 2542
+        }
+      ],
+      "Codestral": [
+        {
+          "id": "mistralai/Mamba-Codestral-7B-v0.1",
+          "last_modified": "2025-07-24 16:47:01+00:00",
+          "downloads": 41324
+        },
+        {
+          "id": "mistralai/Codestral-22B-v0.1",
+          "last_modified": "2025-07-24 16:43:37+00:00",
+          "downloads": 12240
+        }
+      ],
+      "Mistral": [
+        {
+          "id": "mistralai/Leanstral-1.5-119B-A6B",
+          "last_modified": "2026-07-03 14:04:05+00:00",
+          "downloads": 4
+        },
+        {
+          "id": "mistralai/Ministral-3-14B-Instruct-2512-BF16",
+          "last_modified": "2026-06-30 15:23:03+00:00",
+          "downloads": 18924
+        },
+        {
+          "id": "mistralai/Ministral-3-8B-Instruct-2512-BF16",
+          "last_modified": "2026-06-30 15:22:49+00:00",
+          "downloads": 25456
+        },
+        {
+          "id": "mistralai/Ministral-3-3B-Instruct-2512-BF16",
+          "last_modified": "2026-06-30 15:22:18+00:00",
+          "downloads": 179177
+        },
+        {
+          "id": "mistralai/Ministral-3-14B-Instruct-2512",
+          "last_modified": "2026-06-30 15:21:39+00:00",
+          "downloads": 132907
+        },
+        {
+          "id": "mistralai/Ministral-3-3B-Instruct-2512",
+          "last_modified": "2026-06-30 15:21:31+00:00",
+          "downloads": 1221260
+        },
+        {
+          "id": "mistralai/Devstral-Small-2-24B-Instruct-2512",
+          "last_modified": "2026-06-30 15:21:03+00:00",
+          "downloads": 347932
+        },
+        {
+          "id": "mistralai/Devstral-2-123B-Instruct-2512",
+          "last_modified": "2026-06-30 15:20:41+00:00",
+          "downloads": 26255
+        },
+        {
+          "id": "mistralai/Ministral-3-8B-Instruct-2512",
+          "last_modified": "2026-06-30 15:20:14+00:00",
+          "downloads": 101725
+        },
+        {
+          "id": "mistralai/Pixtral-Large-Instruct-2411",
+          "last_modified": "2026-06-02 04:46:39+00:00",
+          "downloads": 80
+        },
+        {
+          "id": "mistralai/Pixtral-12B-2409",
+          "last_modified": "2026-06-02 04:44:58+00:00",
+          "downloads": 5762
+        },
+        {
+          "id": "mistralai/Mistral-Small-4-119B-2603-NVFP4",
+          "last_modified": "2026-05-31 13:58:33+00:00",
+          "downloads": 1469
+        },
+        {
+          "id": "mistralai/Mistral-Small-4-119B-2603",
+          "last_modified": "2026-05-31 13:57:57+00:00",
+          "downloads": 143766
+        },
+        {
+          "id": "mistralai/Mistral-Medium-3.5-128B",
+          "last_modified": "2026-05-04 14:16:22+00:00",
+          "downloads": 320057
+        },
+        {
+          "id": "mistralai/Mistral-Medium-3.5-128B-EAGLE",
+          "last_modified": "2026-04-30 06:32:10+00:00",
+          "downloads": 306
+        }
+      ]
+    },
+    "LiquidAI": {
+      "LFM2": [
+        {
+          "id": "LiquidAI/LFM2.5-8B-A1B",
+          "last_modified": "2026-07-02 14:28:28+00:00",
+          "downloads": 153459
+        },
+        {
+          "id": "LiquidAI/LFM2.5-350M",
+          "last_modified": "2026-07-02 09:40:18+00:00",
+          "downloads": 79670
+        },
+        {
+          "id": "LiquidAI/LFM2-Audio-1.5B-GGUF",
+          "last_modified": "2026-06-29 13:16:34+00:00",
+          "downloads": 1218
+        },
+        {
+          "id": "LiquidAI/LFM2-8B-A1B-ONNX",
+          "last_modified": "2026-06-29 13:16:15+00:00",
+          "downloads": 190
+        },
+        {
+          "id": "LiquidAI/LFM2-8B-A1B-GGUF",
+          "last_modified": "2026-06-29 13:16:03+00:00",
+          "downloads": 3537
+        },
+        {
+          "id": "LiquidAI/LFM2-350M-GGUF",
+          "last_modified": "2026-06-29 13:15:48+00:00",
+          "downloads": 5023
+        },
+        {
+          "id": "LiquidAI/LFM2-ColBERT-350M-GGUF",
+          "last_modified": "2026-06-29 13:15:26+00:00",
+          "downloads": 469
+        },
+        {
+          "id": "LiquidAI/LFM2-ColBERT-350M",
+          "last_modified": "2026-06-29 13:15:12+00:00",
+          "downloads": 63940
+        },
+        {
+          "id": "LiquidAI/LFM2-VL-1.6B-GGUF",
+          "last_modified": "2026-06-29 08:53:11+00:00",
+          "downloads": 2469
+        },
+        {
+          "id": "LiquidAI/LFM2-VL-450M-GGUF",
+          "last_modified": "2026-06-29 08:52:38+00:00",
+          "downloads": 4935
+        },
+        {
+          "id": "LiquidAI/LFM2-VL-450M",
+          "last_modified": "2026-06-29 08:51:28+00:00",
+          "downloads": 126898
+        },
+        {
+          "id": "LiquidAI/LFM2.5-230M",
+          "last_modified": "2026-06-26 10:25:40+00:00",
+          "downloads": 29645
+        },
+        {
+          "id": "LiquidAI/LFM2.5-230M-GGUF",
+          "last_modified": "2026-06-24 10:20:49+00:00",
+          "downloads": 18934
+        },
+        {
+          "id": "LiquidAI/LFM2.5-230M-ONNX",
+          "last_modified": "2026-06-24 10:20:49+00:00",
+          "downloads": 182
+        },
+        {
+          "id": "LiquidAI/LFM2.5-ColBERT-350M-GGUF",
+          "last_modified": "2026-06-22 17:56:58+00:00",
+          "downloads": 3693
+        },
+        {
+          "id": "LiquidAI/LFM2.5-Embedding-350M-GGUF",
+          "last_modified": "2026-06-22 17:55:00+00:00",
+          "downloads": 4720
+        },
+        {
+          "id": "LiquidAI/LFM2.5-Embedding-350M",
+          "last_modified": "2026-06-20 14:00:58+00:00",
+          "downloads": 26255
+        },
+        {
+          "id": "LiquidAI/LFM2.5-ColBERT-350M",
+          "last_modified": "2026-06-19 10:49:22+00:00",
+          "downloads": 6571
+        },
+        {
+          "id": "LiquidAI/LFM2.5-230M-Base",
+          "last_modified": "2026-06-16 13:45:58+00:00",
+          "downloads": 3476
+        },
+        {
+          "id": "LiquidAI/LFM2.5-1.2B-Instruct",
+          "last_modified": "2026-06-16 09:16:58+00:00",
+          "downloads": 147818
+        }
+      ],
+      "LFM2.5": [
+        {
+          "id": "LiquidAI/LFM2.5-8B-A1B",
+          "last_modified": "2026-07-02 14:28:28+00:00",
+          "downloads": 153459
+        },
+        {
+          "id": "LiquidAI/LFM2.5-350M",
+          "last_modified": "2026-07-02 09:40:18+00:00",
+          "downloads": 79670
+        },
+        {
+          "id": "LiquidAI/LFM2.5-230M",
+          "last_modified": "2026-06-26 10:25:40+00:00",
+          "downloads": 29645
+        },
+        {
+          "id": "LiquidAI/LFM2.5-230M-GGUF",
+          "last_modified": "2026-06-24 10:20:49+00:00",
+          "downloads": 18934
+        },
+        {
+          "id": "LiquidAI/LFM2.5-230M-ONNX",
+          "last_modified": "2026-06-24 10:20:49+00:00",
+          "downloads": 182
+        },
+        {
+          "id": "LiquidAI/LFM2.5-ColBERT-350M-GGUF",
+          "last_modified": "2026-06-22 17:56:58+00:00",
+          "downloads": 3693
+        },
+        {
+          "id": "LiquidAI/LFM2.5-Embedding-350M-GGUF",
+          "last_modified": "2026-06-22 17:55:00+00:00",
+          "downloads": 4720
+        },
+        {
+          "id": "LiquidAI/LFM2.5-Embedding-350M",
+          "last_modified": "2026-06-20 14:00:58+00:00",
+          "downloads": 26255
+        },
+        {
+          "id": "LiquidAI/LFM2.5-ColBERT-350M",
+          "last_modified": "2026-06-19 10:49:22+00:00",
+          "downloads": 6571
+        },
+        {
+          "id": "LiquidAI/LFM2.5-230M-Base",
+          "last_modified": "2026-06-16 13:45:58+00:00",
+          "downloads": 3476
+        },
+        {
+          "id": "LiquidAI/LFM2.5-1.2B-Instruct",
+          "last_modified": "2026-06-16 09:16:58+00:00",
+          "downloads": 147818
+        },
+        {
+          "id": "LiquidAI/LFM2.5-230M-MLX-4bit",
+          "last_modified": "2026-06-15 16:00:10+00:00",
+          "downloads": 191
+        },
+        {
+          "id": "LiquidAI/LFM2.5-230M-MLX-5bit",
+          "last_modified": "2026-06-15 16:00:01+00:00",
+          "downloads": 53
+        },
+        {
+          "id": "LiquidAI/LFM2.5-230M-MLX-6bit",
+          "last_modified": "2026-06-15 15:59:54+00:00",
+          "downloads": 78
+        },
+        {
+          "id": "LiquidAI/LFM2.5-230M-MLX-8bit",
+          "last_modified": "2026-06-15 15:59:41+00:00",
+          "downloads": 470
+        },
+        {
+          "id": "LiquidAI/LFM2.5-230M-MLX-bf16",
+          "last_modified": "2026-06-15 15:59:25+00:00",
+          "downloads": 345
+        },
+        {
+          "id": "LiquidAI/LFM2.5-1.2B-JP",
+          "last_modified": "2026-06-13 08:04:27+00:00",
+          "downloads": 2255
+        },
+        {
+          "id": "LiquidAI/LFM2.5-VL-450M-GGUF",
+          "last_modified": "2026-06-11 13:29:28+00:00",
+          "downloads": 7824
+        },
+        {
+          "id": "LiquidAI/LFM2.5-Audio-1.5B-JP",
+          "last_modified": "2026-06-11 02:56:58+00:00",
+          "downloads": 1172
+        },
+        {
+          "id": "LiquidAI/LFM2.5-Audio-1.5B-JP-GGUF",
+          "last_modified": "2026-06-07 00:19:21+00:00",
+          "downloads": 5637
+        }
+      ]
+    },
+    "ibm-granite": {
+      "granite": [
+        {
+          "id": "ibm-granite/granite-speech-4.1-2b-plus-GGUF",
+          "last_modified": "2026-06-30 22:40:17+00:00",
+          "downloads": 176
+        },
+        {
+          "id": "ibm-granite/granite-vision-4.1-4b-GGUF",
+          "last_modified": "2026-06-24 17:40:40+00:00",
+          "downloads": 765
+        },
+        {
+          "id": "ibm-granite/granite-speech-4.1-2b-nar",
+          "last_modified": "2026-06-18 07:27:08+00:00",
+          "downloads": 178917
+        },
+        {
+          "id": "ibm-granite/granite-speech-4.1-2b-plus",
+          "last_modified": "2026-06-16 18:20:43+00:00",
+          "downloads": 22194
+        },
+        {
+          "id": "ibm-granite/granite-4.0-1b-base",
+          "last_modified": "2026-06-12 21:23:25+00:00",
+          "downloads": 4407
+        },
+        {
+          "id": "ibm-granite/granite-4.0-h-1b-base",
+          "last_modified": "2026-06-12 21:01:16+00:00",
+          "downloads": 340
+        },
+        {
+          "id": "ibm-granite/granite-speech-4.1-2b",
+          "last_modified": "2026-06-12 17:45:27+00:00",
+          "downloads": 429848
+        },
+        {
+          "id": "ibm-granite/granitelib-guardian-r1.0",
+          "last_modified": "2026-06-11 15:12:07+00:00",
+          "downloads": 968
+        },
+        {
+          "id": "ibm-granite/granite-guardian-4.1-8b-GGUF",
+          "last_modified": "2026-05-26 18:36:10+00:00",
+          "downloads": 1275
+        },
+        {
+          "id": "ibm-granite/granite-switch-4.1-3b-preview",
+          "last_modified": "2026-05-24 09:23:06+00:00",
+          "downloads": 4328
+        },
+        {
+          "id": "ibm-granite/granite-switch-4.1-30b-preview",
+          "last_modified": "2026-05-24 08:33:36+00:00",
+          "downloads": 531
+        },
+        {
+          "id": "ibm-granite/granite-switch-4.1-8b-preview",
+          "last_modified": "2026-05-24 08:17:30+00:00",
+          "downloads": 836
+        },
+        {
+          "id": "ibm-granite/granitelib-core-r1.0",
+          "last_modified": "2026-05-20 19:48:19+00:00",
+          "downloads": 6568
+        },
+        {
+          "id": "ibm-granite/granitelib-rag-r1.0",
+          "last_modified": "2026-05-20 18:46:28+00:00",
+          "downloads": 12833
+        },
+        {
+          "id": "ibm-granite/granite-embedding-97m-multilingual-r2",
+          "last_modified": "2026-05-18 20:17:17+00:00",
+          "downloads": 200273
+        },
+        {
+          "id": "ibm-granite/granite-embedding-311m-multilingual-r2",
+          "last_modified": "2026-05-18 20:15:41+00:00",
+          "downloads": 272287
+        },
+        {
+          "id": "ibm-granite/granite-vision-4.1-4b",
+          "last_modified": "2026-05-17 07:16:43+00:00",
+          "downloads": 101909
+        },
+        {
+          "id": "ibm-granite/granite-4.0-1b-speech-GGUF",
+          "last_modified": "2026-05-11 22:00:04+00:00",
+          "downloads": 114
+        },
+        {
+          "id": "ibm-granite/granite-speech-4.1-2b-GGUF",
+          "last_modified": "2026-05-11 21:59:45+00:00",
+          "downloads": 1384
+        },
+        {
+          "id": "ibm-granite/granite-4.1-8b",
+          "last_modified": "2026-05-04 17:36:29+00:00",
+          "downloads": 474685
+        },
+        {
+          "id": "ibm-granite/granite-4.1-3b",
+          "last_modified": "2026-05-04 17:36:00+00:00",
+          "downloads": 330656
+        },
+        {
+          "id": "ibm-granite/granite-4.1-30b",
+          "last_modified": "2026-05-04 17:31:52+00:00",
+          "downloads": 78052
+        },
+        {
+          "id": "ibm-granite/granitelib-rag-gpt-oss-r1.0",
+          "last_modified": "2026-05-01 17:11:17+00:00",
+          "downloads": 10
+        },
+        {
+          "id": "ibm-granite/granite-4.0-3b-vision",
+          "last_modified": "2026-04-30 14:47:51+00:00",
+          "downloads": 48768
+        },
+        {
+          "id": "ibm-granite/granite-4.1-8b-fp8",
+          "last_modified": "2026-04-29 18:38:30+00:00",
+          "downloads": 7695
+        },
+        {
+          "id": "ibm-granite/granite-guardian-4.1-8b",
+          "last_modified": "2026-04-29 14:48:23+00:00",
+          "downloads": 52069
+        },
+        {
+          "id": "ibm-granite/granite-timeseries-flowstate-r1",
+          "last_modified": "2026-04-29 14:31:21+00:00",
+          "downloads": 35603
+        },
+        {
+          "id": "ibm-granite/granite-4.1-8b-base",
+          "last_modified": "2026-04-28 23:26:29+00:00",
+          "downloads": 20181
+        },
+        {
+          "id": "ibm-granite/granite-4.1-30b-base",
+          "last_modified": "2026-04-28 23:23:32+00:00",
+          "downloads": 4440
+        },
+        {
+          "id": "ibm-granite/granite-4.1-3b-base",
+          "last_modified": "2026-04-28 23:22:20+00:00",
+          "downloads": 8772
+        }
+      ]
+    },
+    "allenai": {
+      "OLMo-3": [
+        {
+          "id": "allenai/Olmo-3-32B-Think",
+          "last_modified": "2026-06-25 21:43:26+00:00",
+          "downloads": 9515
+        },
+        {
+          "id": "allenai/Olmo-3-32B-Think-DPO",
+          "last_modified": "2026-06-25 21:43:19+00:00",
+          "downloads": 4331
+        },
+        {
+          "id": "allenai/Olmo-3.1-7B-RL-Zero-Math",
+          "last_modified": "2026-06-25 21:43:12+00:00",
+          "downloads": 397
+        },
+        {
+          "id": "allenai/Olmo-3.1-7B-RL-Zero-Code",
+          "last_modified": "2026-06-25 21:43:05+00:00",
+          "downloads": 1325
+        },
+        {
+          "id": "allenai/Olmo-3-7B-Think-DPO",
+          "last_modified": "2026-06-25 21:42:31+00:00",
+          "downloads": 25014
+        },
+        {
+          "id": "allenai/Olmo-3-7B-RL-Zero-Mix",
+          "last_modified": "2026-06-25 21:42:23+00:00",
+          "downloads": 532
+        },
+        {
+          "id": "allenai/Olmo-3-7B-RL-Zero-Math",
+          "last_modified": "2026-06-25 21:42:10+00:00",
+          "downloads": 750
+        },
+        {
+          "id": "allenai/Olmo-3-7B-RL-Zero-IF",
+          "last_modified": "2026-06-25 21:42:01+00:00",
+          "downloads": 202
+        },
+        {
+          "id": "allenai/Olmo-3-7B-RL-Zero-General",
+          "last_modified": "2026-06-25 21:41:55+00:00",
+          "downloads": 516
+        },
+        {
+          "id": "allenai/Olmo-3-7B-RL-Zero-Code",
+          "last_modified": "2026-06-25 21:41:48+00:00",
+          "downloads": 4212
+        },
+        {
+          "id": "allenai/Olmo-3-7B-Instruct-DPO",
+          "last_modified": "2026-06-25 21:41:43+00:00",
+          "downloads": 8577
+        },
+        {
+          "id": "allenai/Olmo-3-7B-Instruct",
+          "last_modified": "2026-06-25 21:41:37+00:00",
+          "downloads": 129061
+        },
+        {
+          "id": "allenai/Olmo-3-7B-Think",
+          "last_modified": "2026-06-25 21:41:28+00:00",
+          "downloads": 41316
+        },
+        {
+          "id": "allenai/Olmo-3-1025-7B",
+          "last_modified": "2026-04-21 17:21:02+00:00",
+          "downloads": 93956
+        },
+        {
+          "id": "allenai/olmo-3.2-tokenizer-think-release",
+          "last_modified": "2026-02-28 01:22:52+00:00",
+          "downloads": 0
+        }
+      ],
+      "OLMoE": [
+        {
+          "id": "allenai/OlmoEarth-v1_2-Nano",
+          "last_modified": "2026-07-02 18:00:34+00:00",
+          "downloads": 291
+        },
+        {
+          "id": "allenai/OlmoEarth-v1_2-Base",
+          "last_modified": "2026-07-02 11:04:08+00:00",
+          "downloads": 1131
+        },
+        {
+          "id": "allenai/OlmoEarth-v1_2-Small",
+          "last_modified": "2026-07-02 11:03:40+00:00",
+          "downloads": 38
+        },
+        {
+          "id": "allenai/OlmoEarth-v1_2-Tiny",
+          "last_modified": "2026-07-02 11:02:58+00:00",
+          "downloads": 61
+        },
+        {
+          "id": "allenai/OlmoEarth-v1_1-Nano",
+          "last_modified": "2026-06-24 15:13:59+00:00",
+          "downloads": 1090
+        },
+        {
+          "id": "allenai/OlmoEarth-v1_1-Tiny",
+          "last_modified": "2026-05-15 15:58:26+00:00",
+          "downloads": 186
+        },
+        {
+          "id": "allenai/OlmoEarth-v1_1-Base",
+          "last_modified": "2026-05-15 15:53:18+00:00",
+          "downloads": 3877
+        },
+        {
+          "id": "allenai/OlmoEarth-v1-FT-AWF-Base",
+          "last_modified": "2025-11-05 23:44:05+00:00",
+          "downloads": 0
+        },
+        {
+          "id": "allenai/OlmoEarth-v1-Large",
+          "last_modified": "2025-11-04 05:52:38+00:00",
+          "downloads": 7291
+        },
+        {
+          "id": "allenai/OlmoEarth-v1-Tiny",
+          "last_modified": "2025-11-04 05:52:30+00:00",
+          "downloads": 884
+        },
+        {
+          "id": "allenai/OlmoEarth-v1-Nano",
+          "last_modified": "2025-11-04 05:52:21+00:00",
+          "downloads": 5234
+        },
+        {
+          "id": "allenai/OlmoEarth-v1-Base",
+          "last_modified": "2025-11-04 05:52:11+00:00",
+          "downloads": 16607
+        },
+        {
+          "id": "allenai/OlmoEarth-v1-FT-EcosystemTypeMapping-Base",
+          "last_modified": "2025-11-03 22:34:36+00:00",
+          "downloads": 0
+        },
+        {
+          "id": "allenai/OlmoEarth-v1-FT-ForestLossDriver-Base",
+          "last_modified": "2025-11-03 22:34:30+00:00",
+          "downloads": 0
+        },
+        {
+          "id": "allenai/OlmoEarth-v1-FT-Mangrove-Base",
+          "last_modified": "2025-11-03 22:34:20+00:00",
+          "downloads": 0
+        }
+      ]
+    },
+    "moonshotai": {
+      "Kimi-Linear": [
+        {
+          "id": "moonshotai/Kimi-Linear-48B-A3B-Base",
+          "last_modified": "2026-01-30 04:50:42+00:00",
+          "downloads": 356
+        },
+        {
+          "id": "moonshotai/Kimi-Linear-48B-A3B-Instruct",
+          "last_modified": "2025-12-16 14:50:08+00:00",
+          "downloads": 70751
+        }
+      ],
+      "Kimi-K2": [
+        {
+          "id": "moonshotai/Kimi-K2.7-Code",
+          "last_modified": "2026-06-15 07:49:29+00:00",
+          "downloads": 844352
+        },
+        {
+          "id": "moonshotai/Kimi-K2.6",
+          "last_modified": "2026-05-19 09:01:54+00:00",
+          "downloads": 2194146
+        },
+        {
+          "id": "moonshotai/Kimi-K2.5",
+          "last_modified": "2026-04-30 03:56:40+00:00",
+          "downloads": 1417605
+        },
+        {
+          "id": "moonshotai/Kimi-K2-Instruct",
+          "last_modified": "2026-04-23 02:08:36+00:00",
+          "downloads": 379918
+        },
+        {
+          "id": "moonshotai/Kimi-K2-Base",
+          "last_modified": "2026-01-30 04:52:05+00:00",
+          "downloads": 12300
+        },
+        {
+          "id": "moonshotai/Kimi-K2-Instruct-0905",
+          "last_modified": "2026-01-30 04:50:25+00:00",
+          "downloads": 1439236
+        },
+        {
+          "id": "moonshotai/Kimi-K2-Thinking",
+          "last_modified": "2026-01-30 04:49:39+00:00",
+          "downloads": 132811
+        }
+      ]
+    },
+    "microsoft": {
+      "Phi-4": [
+        {
+          "id": "microsoft/Phi-4-reasoning-vision-15B",
+          "last_modified": "2026-03-18 16:38:24+00:00",
+          "downloads": 3655
+        },
+        {
+          "id": "microsoft/Phi-4-mini-reasoning-onnx",
+          "last_modified": "2026-02-11 00:11:11+00:00",
+          "downloads": 45
+        },
+        {
+          "id": "microsoft/Phi-4-reasoning-onnx",
+          "last_modified": "2026-02-11 00:10:53+00:00",
+          "downloads": 29
+        },
+        {
+          "id": "microsoft/Phi-4-reasoning-plus-onnx",
+          "last_modified": "2026-02-11 00:10:36+00:00",
+          "downloads": 100
+        },
+        {
+          "id": "microsoft/Phi-4-multimodal-instruct-onnx",
+          "last_modified": "2026-02-11 00:10:08+00:00",
+          "downloads": 67
+        },
+        {
+          "id": "microsoft/Phi-4-mini-instruct-onnx",
+          "last_modified": "2026-02-11 00:09:48+00:00",
+          "downloads": 502
+        },
+        {
+          "id": "microsoft/phi-4-onnx",
+          "last_modified": "2026-02-11 00:09:27+00:00",
+          "downloads": 37
+        },
+        {
+          "id": "microsoft/paza-Phi-4-multimodal-instruct",
+          "last_modified": "2026-02-04 12:49:38+00:00",
+          "downloads": 100
+        },
+        {
+          "id": "microsoft/Phi-3-medium-4k-instruct-onnx-directml",
+          "last_modified": "2026-01-23 02:25:09+00:00",
+          "downloads": 35
+        },
+        {
+          "id": "microsoft/Phi-3-medium-4k-instruct-onnx-cuda",
+          "last_modified": "2026-01-23 02:24:48+00:00",
+          "downloads": 38
+        },
+        {
+          "id": "microsoft/Phi-3-medium-4k-instruct-onnx-cpu",
+          "last_modified": "2026-01-23 02:24:24+00:00",
+          "downloads": 38
+        },
+        {
+          "id": "microsoft/Phi-3-mini-4k-instruct-onnx",
+          "last_modified": "2025-12-10 21:04:48+00:00",
+          "downloads": 508
+        },
+        {
+          "id": "microsoft/Phi-4-mini-flash-reasoning",
+          "last_modified": "2025-12-10 20:24:55+00:00",
+          "downloads": 831
+        },
+        {
+          "id": "microsoft/Phi-4-mini-instruct",
+          "last_modified": "2025-12-10 20:24:40+00:00",
+          "downloads": 513426
+        },
+        {
+          "id": "microsoft/Phi-4-mini-reasoning",
+          "last_modified": "2025-12-10 20:24:22+00:00",
+          "downloads": 38123
+        }
+      ],
+      "Phi": [
+        {
+          "id": "microsoft/Phi-Ground-Any",
+          "last_modified": "2026-05-13 04:00:19+00:00",
+          "downloads": 1326
+        },
+        {
+          "id": "microsoft/Phi-4-reasoning-vision-15B",
+          "last_modified": "2026-03-18 16:38:24+00:00",
+          "downloads": 3655
+        },
+        {
+          "id": "microsoft/Phi-4-mini-reasoning-onnx",
+          "last_modified": "2026-02-11 00:11:11+00:00",
+          "downloads": 45
+        },
+        {
+          "id": "microsoft/Phi-4-reasoning-onnx",
+          "last_modified": "2026-02-11 00:10:53+00:00",
+          "downloads": 29
+        },
+        {
+          "id": "microsoft/Phi-4-reasoning-plus-onnx",
+          "last_modified": "2026-02-11 00:10:36+00:00",
+          "downloads": 100
+        },
+        {
+          "id": "microsoft/Phi-4-multimodal-instruct-onnx",
+          "last_modified": "2026-02-11 00:10:08+00:00",
+          "downloads": 67
+        },
+        {
+          "id": "microsoft/Phi-4-mini-instruct-onnx",
+          "last_modified": "2026-02-11 00:09:48+00:00",
+          "downloads": 502
+        },
+        {
+          "id": "microsoft/phi-4-onnx",
+          "last_modified": "2026-02-11 00:09:27+00:00",
+          "downloads": 37
+        },
+        {
+          "id": "microsoft/Phi-3.5-mini-instruct-onnx",
+          "last_modified": "2026-02-06 12:38:39+00:00",
+          "downloads": 142
+        },
+        {
+          "id": "microsoft/paza-Phi-4-multimodal-instruct",
+          "last_modified": "2026-02-04 12:49:38+00:00",
+          "downloads": 100
+        },
+        {
+          "id": "microsoft/Phi-3-medium-128k-instruct-onnx-directml",
+          "last_modified": "2026-01-23 02:26:05+00:00",
+          "downloads": 43
+        },
+        {
+          "id": "microsoft/Phi-3-medium-128k-instruct-onnx-cuda",
+          "last_modified": "2026-01-23 02:25:49+00:00",
+          "downloads": 40
+        },
+        {
+          "id": "microsoft/Phi-3-medium-128k-instruct-onnx-cpu",
+          "last_modified": "2026-01-23 02:25:29+00:00",
+          "downloads": 55
+        },
+        {
+          "id": "microsoft/Phi-3-medium-4k-instruct-onnx-directml",
+          "last_modified": "2026-01-23 02:25:09+00:00",
+          "downloads": 35
+        },
+        {
+          "id": "microsoft/Phi-3-medium-4k-instruct-onnx-cuda",
+          "last_modified": "2026-01-23 02:24:48+00:00",
+          "downloads": 38
+        }
+      ]
+    },
+    "deepseek-ai": {
+      "DeepSeek": [
+        {
+          "id": "deepseek-ai/DeepSeek-V4-Flash-DSpark",
+          "last_modified": "2026-07-04 03:15:12+00:00",
+          "downloads": 32675
+        },
+        {
+          "id": "deepseek-ai/DeepSeek-V4-Pro-DSpark",
+          "last_modified": "2026-07-04 03:14:46+00:00",
+          "downloads": 9388
+        },
+        {
+          "id": "deepseek-ai/eagle3_gemma4_12b_ttt7",
+          "last_modified": "2026-06-28 12:38:12+00:00",
+          "downloads": 318
+        },
+        {
+          "id": "deepseek-ai/eagle3_qwen3_14b_ttt7",
+          "last_modified": "2026-06-28 12:37:15+00:00",
+          "downloads": 272
+        },
+        {
+          "id": "deepseek-ai/eagle3_qwen3_8b_ttt7",
+          "last_modified": "2026-06-28 12:36:18+00:00",
+          "downloads": 341
+        },
+        {
+          "id": "deepseek-ai/eagle3_qwen3_4b_ttt7",
+          "last_modified": "2026-06-28 12:35:27+00:00",
+          "downloads": 349
+        },
+        {
+          "id": "deepseek-ai/dflash_gemma4_12b_block7",
+          "last_modified": "2026-06-28 12:34:57+00:00",
+          "downloads": 538
+        },
+        {
+          "id": "deepseek-ai/dflash_qwen3_14b_block7",
+          "last_modified": "2026-06-28 12:33:22+00:00",
+          "downloads": 300
+        },
+        {
+          "id": "deepseek-ai/dflash_qwen3_8b_block7",
+          "last_modified": "2026-06-28 12:31:28+00:00",
+          "downloads": 559
+        },
+        {
+          "id": "deepseek-ai/dflash_qwen3_4b_block7",
+          "last_modified": "2026-06-28 12:30:04+00:00",
+          "downloads": 359
+        },
+        {
+          "id": "deepseek-ai/dspark_gemma4_12b_block7",
+          "last_modified": "2026-06-28 12:29:10+00:00",
+          "downloads": 521
+        },
+        {
+          "id": "deepseek-ai/dspark_qwen3_14b_block7",
+          "last_modified": "2026-06-28 12:27:34+00:00",
+          "downloads": 757
+        },
+        {
+          "id": "deepseek-ai/dspark_qwen3_8b_block7",
+          "last_modified": "2026-06-28 12:25:30+00:00",
+          "downloads": 991
+        },
+        {
+          "id": "deepseek-ai/dspark_qwen3_4b_block7",
+          "last_modified": "2026-06-28 12:24:05+00:00",
+          "downloads": 1399
+        },
+        {
+          "id": "deepseek-ai/DeepSeek-V4-Pro",
+          "last_modified": "2026-06-22 12:12:50+00:00",
+          "downloads": 1182658
+        },
+        {
+          "id": "deepseek-ai/DeepSeek-V4-Flash",
+          "last_modified": "2026-06-22 12:12:13+00:00",
+          "downloads": 2060951
+        },
+        {
+          "id": "deepseek-ai/DeepSeek-V4-Flash-Base",
+          "last_modified": "2026-04-27 06:51:43+00:00",
+          "downloads": 64982
+        },
+        {
+          "id": "deepseek-ai/DeepSeek-V4-Pro-Base",
+          "last_modified": "2026-04-27 06:51:19+00:00",
+          "downloads": 27990
+        },
+        {
+          "id": "deepseek-ai/DeepSeek-OCR-2",
+          "last_modified": "2026-02-03 00:33:19+00:00",
+          "downloads": 3289538
+        },
+        {
+          "id": "deepseek-ai/DeepSeek-V3.2-Speciale",
+          "last_modified": "2025-12-01 11:06:03+00:00",
+          "downloads": 1756
+        },
+        {
+          "id": "deepseek-ai/DeepSeek-V3.2",
+          "last_modified": "2025-12-01 11:04:59+00:00",
+          "downloads": 2123089
+        },
+        {
+          "id": "deepseek-ai/DeepSeek-Math-V2",
+          "last_modified": "2025-11-27 10:35:52+00:00",
+          "downloads": 593
+        },
+        {
+          "id": "deepseek-ai/DeepSeek-V3.2-Exp",
+          "last_modified": "2025-11-18 02:39:54+00:00",
+          "downloads": 232893
+        },
+        {
+          "id": "deepseek-ai/DeepSeek-OCR",
+          "last_modified": "2025-11-04 02:36:12+00:00",
+          "downloads": 2331405
+        },
+        {
+          "id": "deepseek-ai/DeepSeek-V3.2-Exp-Base",
+          "last_modified": "2025-10-09 02:09:46+00:00",
+          "downloads": 257
+        }
+      ]
+    },
+    "inclusionAI": {
+      "inclusionAI": [
+        {
+          "id": "inclusionAI/DR-Venus-4B-RL",
+          "last_modified": "2026-06-30 03:26:59+00:00",
+          "downloads": 100
+        },
+        {
+          "id": "inclusionAI/Sing-Guard-0.8b-GGUF",
+          "last_modified": "2026-06-26 06:21:11+00:00",
+          "downloads": 166
+        },
+        {
+          "id": "inclusionAI/Sing-Guard-0.8b",
+          "last_modified": "2026-06-24 15:00:48+00:00",
+          "downloads": 307
+        },
+        {
+          "id": "inclusionAI/Sing-Guard-8b-GGUF",
+          "last_modified": "2026-06-23 04:35:35+00:00",
+          "downloads": 672
+        },
+        {
+          "id": "inclusionAI/Sing-Guard-4b-GGUF",
+          "last_modified": "2026-06-23 04:35:26+00:00",
+          "downloads": 420
+        },
+        {
+          "id": "inclusionAI/Sing-Guard-2b-GGUF",
+          "last_modified": "2026-06-23 04:35:17+00:00",
+          "downloads": 363
+        },
+        {
+          "id": "inclusionAI/Sing-Guard-8b",
+          "last_modified": "2026-06-23 04:34:40+00:00",
+          "downloads": 78
+        },
+        {
+          "id": "inclusionAI/Sing-Guard-4b",
+          "last_modified": "2026-06-23 04:34:31+00:00",
+          "downloads": 69
+        },
+        {
+          "id": "inclusionAI/Sing-Guard-2b",
+          "last_modified": "2026-06-23 04:34:23+00:00",
+          "downloads": 94
+        },
+        {
+          "id": "inclusionAI/Ling-2.6-flash-base",
+          "last_modified": "2026-06-22 08:30:45+00:00",
+          "downloads": 179
+        },
+        {
+          "id": "inclusionAI/Ling-2.6-1T-base",
+          "last_modified": "2026-06-22 08:30:17+00:00",
+          "downloads": 263
+        },
+        {
+          "id": "inclusionAI/Ling-2.6-flash",
+          "last_modified": "2026-06-17 05:07:54+00:00",
+          "downloads": 2967
+        },
+        {
+          "id": "inclusionAI/Ring-2.6-1T",
+          "last_modified": "2026-06-17 05:07:33+00:00",
+          "downloads": 819
+        },
+        {
+          "id": "inclusionAI/Ling-2.6-1T",
+          "last_modified": "2026-06-17 05:06:41+00:00",
+          "downloads": 375
+        },
+        {
+          "id": "inclusionAI/Ming-omni-tts-16.8B-A3B",
+          "last_modified": "2026-06-15 11:49:55+00:00",
+          "downloads": 1007
+        },
+        {
+          "id": "inclusionAI/VISTA-4B",
+          "last_modified": "2026-06-15 01:26:24+00:00",
+          "downloads": 243
+        },
+        {
+          "id": "inclusionAI/VISTA-9B",
+          "last_modified": "2026-06-15 01:25:04+00:00",
+          "downloads": 443
+        },
+        {
+          "id": "inclusionAI/LLaDA2.0-Uni-FP8",
+          "last_modified": "2026-05-27 02:20:04+00:00",
+          "downloads": 4850
+        },
+        {
+          "id": "inclusionAI/LLaDA2.0-Uni",
+          "last_modified": "2026-05-27 02:19:43+00:00",
+          "downloads": 7686
+        },
+        {
+          "id": "inclusionAI/ARGenSeg-8B",
+          "last_modified": "2026-05-15 02:36:20+00:00",
+          "downloads": 34
+        },
+        {
+          "id": "inclusionAI/Ling-2.6-flash-fp8",
+          "last_modified": "2026-04-28 13:08:51+00:00",
+          "downloads": 329
+        },
+        {
+          "id": "inclusionAI/Ling-2.6-flash-int4",
+          "last_modified": "2026-04-28 13:08:03+00:00",
+          "downloads": 124
+        },
+        {
+          "id": "inclusionAI/DR-Venus-4B-SFT-GGUF",
+          "last_modified": "2026-04-28 02:35:04+00:00",
+          "downloads": 49
+        },
+        {
+          "id": "inclusionAI/DR-Venus-4B-RL-GGUF",
+          "last_modified": "2026-04-28 02:34:16+00:00",
+          "downloads": 127
+        },
+        {
+          "id": "inclusionAI/DR-Venus-4B-SFT",
+          "last_modified": "2026-04-28 02:33:21+00:00",
+          "downloads": 27
+        },
+        {
+          "id": "inclusionAI/LLaDA2.1-mini",
+          "last_modified": "2026-04-13 11:51:50+00:00",
+          "downloads": 13557
+        },
+        {
+          "id": "inclusionAI/LLaDA2.1-flash",
+          "last_modified": "2026-04-13 11:45:54+00:00",
+          "downloads": 89962
+        },
+        {
+          "id": "inclusionAI/Ling-1T",
+          "last_modified": "2026-04-13 11:45:13+00:00",
+          "downloads": 4784
+        },
+        {
+          "id": "inclusionAI/ZwZ-8B",
+          "last_modified": "2026-04-13 11:43:50+00:00",
+          "downloads": 446
+        },
+        {
+          "id": "inclusionAI/Ling-mini-2.0",
+          "last_modified": "2026-04-13 11:40:51+00:00",
+          "downloads": 35890
+        }
+      ],
+      "LLaDA": [
+        {
+          "id": "inclusionAI/LLaDA2.0-Uni-FP8",
+          "last_modified": "2026-05-27 02:20:04+00:00",
+          "downloads": 4850
+        },
+        {
+          "id": "inclusionAI/LLaDA2.0-Uni",
+          "last_modified": "2026-05-27 02:19:43+00:00",
+          "downloads": 7686
+        },
+        {
+          "id": "inclusionAI/LLaDA2.1-mini",
+          "last_modified": "2026-04-13 11:51:50+00:00",
+          "downloads": 13557
+        },
+        {
+          "id": "inclusionAI/LLaDA2.1-flash",
+          "last_modified": "2026-04-13 11:45:54+00:00",
+          "downloads": 89962
+        },
+        {
+          "id": "inclusionAI/LLaDA2.0-mini",
+          "last_modified": "2026-04-13 11:29:35+00:00",
+          "downloads": 148716
+        },
+        {
+          "id": "inclusionAI/LLaDA2.0-flash-CAP",
+          "last_modified": "2025-12-27 05:13:49+00:00",
+          "downloads": 39
+        },
+        {
+          "id": "inclusionAI/LLaDA2.0-mini-CAP",
+          "last_modified": "2025-12-19 05:45:32+00:00",
+          "downloads": 24
+        },
+        {
+          "id": "inclusionAI/LLaDA2.0-mini-preview",
+          "last_modified": "2025-12-19 05:45:03+00:00",
+          "downloads": 1351
+        },
+        {
+          "id": "inclusionAI/LLaDA2.0-flash-preview",
+          "last_modified": "2025-12-19 05:44:39+00:00",
+          "downloads": 28
+        },
+        {
+          "id": "inclusionAI/LLaDA2.0-flash",
+          "last_modified": "2025-12-19 05:44:05+00:00",
+          "downloads": 143
+        },
+        {
+          "id": "inclusionAI/LLaDA-MoE-7B-A1B-Base",
+          "last_modified": "2025-10-28 09:30:38+00:00",
+          "downloads": 1131
+        },
+        {
+          "id": "inclusionAI/LLaDA-MoE-7B-A1B-Instruct",
+          "last_modified": "2025-10-28 09:28:31+00:00",
+          "downloads": 1182
+        },
+        {
+          "id": "inclusionAI/LLaDA-MoE-7B-A1B-Instruct-TD",
+          "last_modified": "2025-10-28 09:21:19+00:00",
+          "downloads": 68
+        }
+      ]
+    },
+    "Zaya": {
+      "Zaya": []
+    },
+    "Nanbeige": {
+      "Nanbeige": [
+        {
+          "id": "Nanbeige/Nanbeige4.1-3B",
+          "last_modified": "2026-03-25 01:56:21+00:00",
+          "downloads": 7265
+        },
+        {
+          "id": "Nanbeige/ToolMind-Web-3B",
+          "last_modified": "2026-02-12 09:59:26+00:00",
+          "downloads": 288
+        },
+        {
+          "id": "Nanbeige/Nanbeige4-3B-Thinking-2511",
+          "last_modified": "2025-12-17 13:57:42+00:00",
+          "downloads": 340
+        },
+        {
+          "id": "Nanbeige/Nanbeige4-3B-Base",
+          "last_modified": "2025-12-13 06:18:03+00:00",
+          "downloads": 461
+        },
+        {
+          "id": "Nanbeige/CoSineVerifier-Tool-4B",
+          "last_modified": "2025-12-04 02:32:34+00:00",
+          "downloads": 1040
+        },
+        {
+          "id": "Nanbeige/Nanbeige4-3B-Thinking-2510",
+          "last_modified": "2025-10-23 09:20:20+00:00",
+          "downloads": 170
+        }
+      ]
+    }
+  },
+  "elapsed_sec": 4.57
+}

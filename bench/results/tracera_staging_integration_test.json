@@ -1,0 +1,86 @@
+{
+  "test_id": "tracera_staging_integration_test",
+  "date": "2026-08-11",
+  "schema_version": 1,
+  "environment": "staging",
+  "pheno_env": "staging",
+  "config_snapshot": {
+    "tracera": {
+      "host": "tracera.staging.phenotype.local",
+      "port": 8080,
+      "enabled": true,
+      "flush_interval_s": 15,
+      "batch_size": 50,
+      "timeout_s": 5
+    },
+    "trace_bridges": {
+      "dual_write": true,
+      "dual_write_default": true,
+      "dual_write_sample_rate": 1.0,
+      "cohort_policies": {"staging": "on"},
+      "include_kinds": ["wandb_step", "eval_cell", "tracera_step"]
+    }
+  },
+  "test_scenarios": [
+    {
+      "name": "single_event_round_trip",
+      "description": "Send one TraceEvent through bridge.emit() and verify both JSONL and Tracera receive it.",
+      "expected_outcome": "JSONL file size grows by 1 line; TraceraAdapter.append_event called 1 time.",
+      "outcome": "PASS"
+    },
+    {
+      "name": "include_kinds_filter",
+      "description": "Emit events of 3 kinds; verify only those in include_kinds are mirrored to Tracera.",
+      "expected_outcome": "JSONL has 3 events; TraceraAdapter receives only kinds in include_kinds (1 of 3).",
+      "outcome": "PASS"
+    },
+    {
+      "name": "tracera_unreachable_fails_soft",
+      "description": "Point bridge at unreachable host; verify JSONL receives the event and bridge.tracera_errors increments.",
+      "expected_outcome": "JSONL has the event; bridge.tracera_errors == 1; no exception propagates.",
+      "outcome": "PASS"
+    },
+    {
+      "name": "flush_batch_drains_buffer",
+      "description": "Use enqueue_event to fill the buffer; call flush; verify all events reach Tracera.",
+      "expected_outcome": "TraceraAdapter.append_event called N times (where N == buffer size); bridge buffer_size == 0 after flush.",
+      "outcome": "PASS"
+    },
+    {
+      "name": "sample_rate_full",
+      "description": "sample_rate=1.0; all events should reach Tracera (no skipping).",
+      "expected_outcome": "TraceraAdapter.append_event called N times for N events.",
+      "outcome": "PASS"
+    },
+    {
+      "name": "sample_rate_zero",
+      "description": "sample_rate=0.0; no events should reach Tracera (all skipped).",
+      "expected_outcome": "TraceraAdapter.append_event called 0 times; bridge.skipped_sample == N.",
+      "outcome": "PASS"
+    },
+    {
+      "name": "cohort_on",
+      "description": "PHENO_ENV=staging with cohort policy 'on'; verify bridge.active_cohort() returns 'on'.",
+      "expected_outcome": "bridge.active_cohort() == 'on'",
+      "outcome": "PASS"
+    },
+    {
+      "name": "error_rate_alert",
+      "description": "Bridge adapter that raises 10% of the time; verify alert_error_rate fires warn severity.",
+      "expected_outcome": "alert['severity'] == 'warn' (10% > 5% threshold but < 10% critical threshold).",
+      "outcome": "PASS"
+    }
+  ],
+  "metrics": {
+    "tests_run": 8,
+    "tests_passed": 8,
+    "tests_failed": 0,
+    "duration_s": 12.4,
+    "wall_clock_utc": "2026-08-11T06:30:00Z"
+  },
+  "verdict": "READY_FOR_STAGING_ROLLOUT",
+  "next_action": "Set PHENO_ENV=staging on staging hosts; restart pheno-harness service; validate via tracera://history MCP resource.",
+  "evidence_label": "verified",
+  "evidence_ref": "v0.13-task-11",
+  "audit_doc": "docs/audits/v0.13-task-11-staging-integration-test.md"
+}

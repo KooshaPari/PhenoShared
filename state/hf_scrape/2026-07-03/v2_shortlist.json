@@ -1,0 +1,170 @@
+{
+  "date": "2026-07-04",
+  "source_method": "live HF API 2026-07-04 via list_models(sort=last_modified); top-1 per family per author",
+  "needs_sign_off": true,
+  "picks": [
+    {
+      "tier": "T0 drafter",
+      "vram_gb_max": 4,
+      "family": "Gemma-4 E2B (Efficient)",
+      "author_owner": "google",
+      "pick": "google/gemma-4-E2B-it-qat-q4_0-gguf",
+      "params_total_b": 2.0,
+      "params_active_b": 2.0,
+      "context": 8192,
+      "license_guess": "gemma-terms",
+      "rationale": "Newest GGUF-efficient Gemma-4 (June 2026), 348K downloads in 1 month. QAT-quantized for size. Perfect always-on drafter; speculative-decode path well-supported.",
+      "candidates_8gb": [
+        "LiquidAI/LFM2.5-1.2B-Instruct",
+        "google/gemma-4-E2B-it-qat-w4a16-ct"
+      ]
+    },
+    {
+      "tier": "T1 default (~4B)",
+      "vram_gb_max": 12,
+      "family": "Gemma-4 12B QAT",
+      "author_owner": "google",
+      "pick": "google/gemma-4-12B-it-qat-q4_0-gguf",
+      "params_total_b": 12.0,
+      "params_active_b": 12.0,
+      "context": 32768,
+      "license_guess": "gemma-terms",
+      "rationale": "Headline 12B Gemma-4 release (June 2026), 2.1M downloads of CT W4A16 alone + 559K GGUF Q4_0. Best-docked training tokens at this tier per Google model card.",
+      "candidates_8gb": [
+        "mistralai/Ministral-3-8B-Instruct-2512-BF16",
+        "LiquidAI/LFM2.5-8B-A1B"
+      ]
+    },
+    {
+      "tier": "T2 workhorse (~8-12B)",
+      "vram_gb_max": 16,
+      "family": "Qwen3-Coder Next FP8",
+      "author_owner": "Qwen",
+      "pick": "Qwen/Qwen3-Coder-Next-FP8",
+      "params_total_b": null,
+      "params_active_b": null,
+      "context": 262144,
+      "license_guess": "apache-2.0",
+      "rationale": "February 2026 release, 2.17M downloads (most-downloaded Qwen3-Coder). FP8 = ~16GB on 3090 Ti; coding-specialized; 262K context. Exact param count needs safetensors probe before download.",
+      "candidates_8gb": [
+        "ibm-granite/granite-4.1-8b",
+        "mistralai/Leanstral-1.5-119B-A6B"
+      ]
+    },
+    {
+      "tier": "T3 MoE mid",
+      "vram_gb_max": 22,
+      "family": "Kimi-Linear 48B-A3B",
+      "author_owner": "moonshotai",
+      "pick": "moonshotai/Kimi-Linear-48B-A3B-Instruct",
+      "params_total_b": 48.0,
+      "params_active_b": 3.0,
+      "context": 65536,
+      "license_guess": "apache-2.0",
+      "rationale": "MoE with 48B-total / 3B-active = best-per-GB at ceiling. Linear attention (Moonshot paper) reduces KV pressure. 70K downloads. **Doesn't fit 24GB at FP16** -> needs AWQ-INT4 (~12GB, fits T3 22GB budget with KV).",
+      "candidates_8gb": [
+        "Qwen/Qwen3-Coder-30B-A3B-Instruct-FP8",
+        "zai-org/GLM-4.7-Flash"
+      ]
+    },
+    {
+      "tier": "T4 ceiling dense (24-35B)",
+      "vram_gb_max": 24,
+      "family": "Mistral-Small 24B (Devstral-2)",
+      "author_owner": "mistralai",
+      "pick": "mistralai/Devstral-Small-2-24B-Instruct-2512",
+      "params_total_b": 24.0,
+      "params_active_b": 24.0,
+      "context": 32768,
+      "license_guess": "apache-2.0",
+      "rationale": "Released 2026-06-30 (3 days old). 348K downloads. Coding-specialized. 24B dense fits 24GB at BF16 (24*2 ≈ 48GB! - DOES NOT FIT BF16). **Requires AWQ-INT4 (~12GB) or 4-bit GGUF (~13GB) to fit on 3090 Ti.** Honest fit-report.",
+      "candidates_8gb": [
+        "Qwen/Qwen2.5-Coder-32B-Instruct-AWQ",
+        "google/gemma-4-31B-it-qat-q4_0-gguf",
+        "mistralai/Mistral-Small-3.2-24B-Instruct-2506"
+      ]
+    },
+    {
+      "tier": "T5 alpha (own-fork fine-tune path)",
+      "vram_gb_max": 22,
+      "family": "Qwen3.5-27B",
+      "author_owner": "Qwen",
+      "pick": "Qwen/Qwen3.5-27B",
+      "params_total_b": 27.0,
+      "params_active_b": 27.0,
+      "context": 131072,
+      "license_guess": "apache-2.0",
+      "rationale": "April 2026 release, 2.5M downloads (top downloaded Qwen3.x). 27B dense -- does NOT fit BF16 on 24GB; AWQ-INT4 (~15GB) does. Best quality-per-GB on 3090 Ti at the ceiling.",
+      "candidates_8gb": [
+        "Qwen/Qwen3.5-35B-A3B",
+        "Qwen/Qwen3-Next-80B-A3B-Instruct-FP8"
+      ]
+    },
+    {
+      "tier": "Cloud baseline A (cost-effective)",
+      "vram_gb_max": 999,
+      "family": "Ling-2.6-flash (InclusionAI)",
+      "author_owner": "inclusionAI",
+      "pick": "inclusionAI/Ling-2.6-flash",
+      "params_total_b": 104.0,
+      "params_active_b": 7.4,
+      "context": 262144,
+      "license_guess": "proprietary",
+      "rationale": "OpenRouter, $0.01/$0.03 per 1M tokens (90% promo). 262K context. Owner ship matches user's brief. **Cloud-only baseline for cost-per-task arithmetic**.",
+      "candidates_8gb": [
+        "MiniMax-M3 (cloud)"
+      ]
+    },
+    {
+      "tier": "Cloud baseline B (frontier)",
+      "vram_gb_max": 999,
+      "family": "DeepSeek-V4-Flash",
+      "author_owner": "deepseek-ai",
+      "pick": "deepseek-ai/DeepSeek-V4-Flash-DSpark",
+      "params_total_b": null,
+      "params_active_b": null,
+      "context": 131072,
+      "license_guess": "deepseek-license",
+      "rationale": "Released 2026-07-04 (today). DSpark variant - speculative-decoding trained by DeepSeek. Best frontier-on-cloud for coding agents; pairs with pheno's spec-decoding pass.",
+      "candidates_8gb": [
+        "moonshotai/Kimi-K2.7-Code",
+        "deepseek-ai/DeepSeek-V4-Flash"
+      ]
+    }
+  ],
+  "principles": [
+    "Owner-only canonical flagship (not derivatives/exl2/fine-tunes) unless noted.",
+    "All 'context' are nominal from each model's HF card; real world KV pressure depends on engine prefix-caching and quantization.",
+    "vRAM fit honest-report: BF16 dense weights ≠ usable on 3090 Ti at >12B; AWQ-INT4 / 4-bit GGUF only.",
+    "MoE params_total only saves compute, not VRAM.",
+    "Qwen3-Coder-Next-FP8 params need a one-call safetensors probe before any download."
+  ],
+  "candidates_excluded_due_to_brevity": [
+    "LiquidAI/LFM2.5-8B-A1B",
+    "Nanbeige/Nanbeige4.1-3B",
+    "inclusionAI/Ming-omni-tts-16.8B-A3B",
+    "inclusionAI/VISTA-4B / 9B",
+    "moonshotai/Kimi-K2.6",
+    "Ornith/Ornith-1.0-35B-NVFP4"
+  ],
+  "rejected_pre_mature": [
+    {
+      "name": "Qwen3-Coder-Next-FP8",
+      "reason": "param count + active ratio missing from listing; needs one HfApi.model_info(safetensors) call before download decision."
+    },
+    {
+      "name": "DeepSeek-V4-Flash-DSpark",
+      "reason": "DSpark variant is speculative-decode-trained; verify DSpark spec-decode engine compatibility before using as cloud baseline."
+    },
+    {
+      "name": "Kimi-Linear-48B-A3B-Instruct",
+      "reason": "Linear attention may not be natively supported by SGLang/vLLM at the time of eval; verify before slotting as T3."
+    }
+  ],
+  "open_for_user_input": [
+    "Pick the T2 workhorse: 'Qwen/Qwen3-Coder-Next-FP8' (current pick) vs 'ibm-granite/granite-4.1-8b' (better enterprise grounding, lower downloads), vs 'LiquidAI/LFM2.5-8B-A1B' (Liquid AI alt arch).",
+    "Cloud baseline B: 'DeepSeek-V4-Flash-DSpark' vs 'MiniMax-M3' vs a higher-cost frontier (Claude Opus 4.6/4.7/4.8).",
+    "Acceptance: fit-rejected reality that 24GB RTX 3090 Ti cannot run ANY 24B+ model in BF16; AWQ/GGUF only at this tier. Document as constraint in evaluation manifest.",
+    "HF_TOKEN: provide one to enable gated-family coverage (Meta-Llama-3.x, Mistral-Small-4, Yi-34B, etc)."
+  ]
+}

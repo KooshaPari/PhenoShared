@@ -1,0 +1,29 @@
+# config/staging.yaml — per-environment overrides for the staging cohort.
+#
+# Loaded when PHENO_ENV=staging. Staging runs dual-write ON by default
+# with sample-rate cohort controls enabled. Use this file to fine-tune
+# staging-specific runtime behavior without touching pheno_runtime.yaml.
+
+# Tracera staging defaults — connection to the staging Grapheon Tracera
+tracera:
+  host: "tracera.staging.phenotype.local"
+  port: 8080
+  base_url: null
+  enabled: true
+  flush_interval_s: 15
+  batch_size: 50
+  retry_max: 5
+  health_check_on_init: true
+  timeout_s: 5
+
+# Trace bridges — staging cohort = "on" with sampling enabled
+trace_bridges:
+  dual_write: true
+  dual_write_default: true
+  dual_write_sample_rate: 1.0
+  cohort_policies:
+    staging: "on"
+  include_kinds: ["wandb_step", "eval_cell", "tracera_step"]
+
+# Schema version — must match the loader's supported set.
+schema_version: 2

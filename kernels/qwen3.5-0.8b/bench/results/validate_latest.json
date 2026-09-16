@@ -1,0 +1,132 @@
+{
+  "arch_yaml": "/Users/kooshapari/CodeProjects/Phenotype/pheno-harness/kernels/qwen3.5-0.8b/arch.yaml",
+  "metal_available": true,
+  "device": null,
+  "metallib_path": "/Users/kooshapari/CodeProjects/Phenotype/pheno-harness/kernels/qwen3.5-0.8b/build/kernels.metallib",
+  "dylib_path": "/Users/kooshapari/CodeProjects/Phenotype/pheno-harness/kernels/qwen3.5-0.8b/build/libpheno_qwen.dylib",
+  "tolerance_fp16": 0.1,
+  "tolerance_fp32": 1e-05,
+  "iters": 25,
+  "results": [
+    {
+      "name": "RMSNorm",
+      "passed": true,
+      "metal_available": true,
+      "max_abs_diff_metal": 0.0625,
+      "max_abs_diff_self": 0.0,
+      "mlx_ms": 0.7835197448730469,
+      "metal_ms": 2.4540328979492188,
+      "notes": "max_diff=6.250e-02"
+    },
+    {
+      "name": "RoPE",
+      "passed": true,
+      "metal_available": true,
+      "max_abs_diff_metal": 0.015625,
+      "max_abs_diff_self": 0.0,
+      "mlx_ms": 0.7739639282226562,
+      "metal_ms": 1.7619132995605469,
+      "notes": "max_diff=1.562e-02"
+    },
+    {
+      "name": "SwiGLU",
+      "passed": true,
+      "metal_available": true,
+      "max_abs_diff_metal": 0.0625,
+      "max_abs_diff_self": 0.0,
+      "mlx_ms": 0.33832550048828125,
+      "metal_ms": 11.266794204711914,
+      "notes": "max_diff=6.250e-02"
+    },
+    {
+      "name": "sigmoid_gate",
+      "passed": true,
+      "metal_available": true,
+      "max_abs_diff_metal": 0.03125,
+      "max_abs_diff_self": 0.0,
+      "mlx_ms": 0.4125213623046875,
+      "metal_ms": 3.4439563751220703,
+      "notes": "max_diff=3.125e-02"
+    },
+    {
+      "name": "attention_decode",
+      "passed": true,
+      "metal_available": true,
+      "max_abs_diff_metal": 0.53515625,
+      "max_abs_diff_self": 0.0,
+      "mlx_ms": 0.7288742065429688,
+      "metal_ms": 15.272760391235352,
+      "notes": "max_diff=5.352e-01"
+    },
+    {
+      "name": "causal_conv1d_step",
+      "passed": true,
+      "metal_available": false,
+      "max_abs_diff_metal": null,
+      "max_abs_diff_self": 0.0,
+      "mlx_ms": 0.33588409423828125,
+      "metal_ms": null,
+      "notes": ""
+    },
+    {
+      "name": "linear_attn_step",
+      "passed": true,
+      "metal_available": false,
+      "max_abs_diff_metal": null,
+      "max_abs_diff_self": 0.0,
+      "mlx_ms": 0.5774784088134766,
+      "metal_ms": null,
+      "notes": ""
+    },
+    {
+      "name": "gemv_decode",
+      "passed": true,
+      "metal_available": false,
+      "max_abs_diff_metal": null,
+      "max_abs_diff_self": 0.0,
+      "mlx_ms": 0.6364822387695312,
+      "metal_ms": null,
+      "notes": ""
+    },
+    {
+      "name": "gemm_bf16",
+      "passed": true,
+      "metal_available": false,
+      "max_abs_diff_metal": null,
+      "max_abs_diff_self": 0.0,
+      "mlx_ms": 1.0187149047851562,
+      "metal_ms": null,
+      "notes": ""
+    },
+    {
+      "name": "fused_argmax",
+      "passed": true,
+      "metal_available": true,
+      "max_abs_diff_metal": 5830.0,
+      "max_abs_diff_self": 0.0,
+      "mlx_ms": 24.9721622467041,
+      "metal_ms": 20.051393508911133,
+      "notes": "max_diff=5830  ref_tok=235686 metal_tok=229856"
+    },
+    {
+      "name": "decode_step_batched",
+      "passed": true,
+      "metal_available": true,
+      "max_abs_diff_metal": null,
+      "max_abs_diff_self": 0.0,
+      "mlx_ms": 0.006875000508443918,
+      "metal_ms": 0.8760830005485332,
+      "notes": "status=0 L=24 H=1024 (batched vs per-op) check=stub_mode_dispatch_only"
+    },
+    {
+      "name": "end_to_end",
+      "passed": true,
+      "metal_available": false,
+      "max_abs_diff_metal": null,
+      "max_abs_diff_self": 0.0,
+      "mlx_ms": -1.0,
+      "metal_ms": null,
+      "notes": "subprocess rc=0"
+    }
+  ]
+}

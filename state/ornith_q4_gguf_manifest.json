@@ -1,0 +1,64 @@
+{
+  "schema_version": "phenolm.gguf_conversion.v1",
+  "created_at": "2026-07-15T01:46:43.830539-07:00",
+  "model_alias": "local/ornith-8b",
+  "source": "D:\\WSL\\model-cache\\ornith-8b",
+  "output": "D:\\WSL\\model-cache\\ornith-8b-q4\\ornith-8b.Q4_K_M.gguf",
+  "quantization": "Q4_K_M",
+  "intermediate": "D:\\WSL\\model-cache\\ornith-8b-q4\\ornith-8b.f16.gguf",
+  "source_config_sha256": "350e12e79ef582bdf6a2ff093930433b182e8736412ff227a4318826921565a5",
+  "conversion_performed": true,
+  "eval_artifact": false,
+  "command": [
+    "D:\\WSL\\tools\\llama.cpp-b10012-src\\convert_hf_to_gguf.py",
+    "D:\\WSL\\model-cache\\ornith-8b",
+    "--outfile",
+    "D:\\WSL\\model-cache\\ornith-8b-q4\\ornith-8b.f16.gguf",
+    "--outtype",
+    "f16"
+  ],
+  "quantize_command": [
+    "D:\\WSL\\tools\\llama.cpp-b10012\\llama-quantize.exe",
+    "D:\\WSL\\model-cache\\ornith-8b-q4\\ornith-8b.f16.gguf",
+    "D:\\WSL\\model-cache\\ornith-8b-q4\\ornith-8b.Q4_K_M.gguf",
+    "Q4_K_M"
+  ],
+  "source_revision": "83dc1f5e24ef8527af019a6b3bf66ac0f1c2c999",
+  "source_tree_sha256": "ec6592ec1576b63f733d8a7942db00d834672a2ac68049a673d3f9b006b60d58",
+  "source_manifest": "C:\\Users\\koosh\\pheno-harness\\state\\ornith_source_acquisition.json",
+  "converter_sha256": "8f1bed9466221e57e434caa7ee720abe1569deb6bc2fe5a65da950ea66c8e737",
+  "quantizer_sha256": "447ba29f846174bf66bd9bf771e9b21216f610cac8c5f4cd9e601a2de752e202",
+  "toolchain_manifest": "D:\\WSL\\tools\\llama.cpp-b10012\\acquisition.json",
+  "toolchain": {
+    "schema": "pheno.llama_cpp_binary.v1",
+    "tag": "b10012",
+    "target": "D:\\WSL\\tools\\llama.cpp-b10012",
+    "platform": "windows-x64-cuda-13.3",
+    "release": "https://github.com/ggml-org/llama.cpp/releases/tag/b10012",
+    "assets": [
+      {
+        "url": "https://github.com/ggml-org/llama.cpp/releases/download/b10012/llama-b10012-bin-win-cuda-13.3-x64.zip",
+        "sha256": "9573c446e8cea590e4d0825adafe97d518032ac8f0f786c267e45607e38e801b",
+        "name": "llama-b10012-bin-win-cuda-13.3-x64.zip",
+        "archive": "D:\\WSL\\tools\\llama.cpp-b10012\\archives\\llama-b10012-bin-win-cuda-13.3-x64.zip"
+      },
+      {
+        "url": "https://github.com/ggml-org/llama.cpp/releases/download/b10012/cudart-llama-bin-win-cuda-13.3-x64.zip",
+        "sha256": "1462a050eb4c684921ba51dcc4cc488a036674c3e73e9945ee705b854808d03e",
+        "name": "cudart-llama-bin-win-cuda-13.3-x64.zip",
+        "archive": "D:\\WSL\\tools\\llama.cpp-b10012\\archives\\cudart-llama-bin-win-cuda-13.3-x64.zip"
+      }
+    ],
+    "downloaded": true,
+    "extracted": true,
+    "generated_at": "2026-07-14T23:52:31.012518Z"
+  },
+  "output_bytes": 5629108672,
+  "output_sha256": "d22dfc5692ddf36eda10ac6b8efde5c88a9aaf6c3152788b48181e802f7c1cc4",
+  "runtime_validation": {
+    "status": "failed",
+    "reason": "llama.cpp b10012 rejected the generated GGUF: missing blk.32.attn_norm.weight and subsequent bounds failures",
+    "checked_at": "2026-07-16T01:56:42.2348868Z",
+    "canonical_output_removed": true
+  }
+}

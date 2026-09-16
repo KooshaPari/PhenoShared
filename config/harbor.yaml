@@ -1,0 +1,26 @@
+# Local Terminal Bench via Harbor — Podman-only, single concurrent trial.
+# `type: docker` is Portage's compatibility schema token for Podman's API.
+# Schema: harbor.models.job.config.JobConfig
+# Usage: harbor run -c config/harbor.yaml [-y] [--n-tasks 1 for sanity]
+
+# Trajectories can be large; keep mutable Harbor runs on the spacious eval disk.
+# Source-controlled manifests and summaries remain under this repository.
+jobs_dir: "D:/WSL/eval-cache/pheno-harbor-jobs"
+n_attempts: 1
+n_concurrent_trials: 1
+quiet: false
+debug: false
+
+environment:
+  type: docker
+  force_build: false
+  delete: true
+
+agents:
+  - name: oracle
+
+datasets:
+  # Harbor registry (2026-06-13): terminal-bench@2.1 is not published yet.
+  # Latest Terminal Bench in registry is 2.0 (89 tasks).
+  - name: terminal-bench
+    version: "2.0"

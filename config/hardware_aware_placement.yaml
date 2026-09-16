@@ -1,0 +1,208 @@
+# Measured placement policy for the heterogeneous local host.
+# This is a policy and experiment matrix, not permission to launch a server.
+schema_version: pheno.hardware_placement.v1
+measured_at: "2026-07-15"
+policy:
+  local_only: true
+  default_mode: independent_workers
+  mixed_gpu_tensor_parallel: blocked_until_link_probe
+  placement_objective:
+    - quality_per_second
+    - completed_tasks_per_watt
+    - p95_latency
+    - stable_memory_headroom
+  reserve_vram_fraction: 0.12
+  reserve_host_ram_gb: 8
+  nvme_is_cold_tier: true
+  no_implicit_model_migration: true
+  scheduler:
+    strategy: capacity_weighted_least_normalized_load
+    capacity_weights_are: measured_single_request_generation_throughput_ratio
+    fallback_weight: 1.0
+    quality_routing: separate_from_capacity_scheduler
+
+capacity_priors:
+  # Qwen Q4 llama-bench generation: 188.64 / 80.63. Per-model values below
+  # are preferred when present; Ornith remains unweighted until comparable.
+  rtx_3090_ti: 2.34
+  gtx_1080_ti: 1.0
+  per_model:
+    local/qwen35-08b: {rtx_3090_ti: 2.339, gtx_1080_ti: 1.0, status: measured}
+    local/lfm25-8b-a1b: {rtx_3090_ti: 2.369, gtx_1080_ti: 1.0, status: measured}
+    local/ornith-8b: {rtx_3090_ti: null, gtx_1080_ti: null, status: blocked_missing_comparable_measurement}
+
+workload_classes:
+  manager_long_context:
+    preferred_tier: latency_primary
+    fallback_tier: host_spill
+    constraints: [low_p95_latency, large_kv_headroom]
+  coding_agent:
+    preferred_tier: latency_primary
+    fallback_tier: legacy_helper
+    constraints: [quality_first, tool_turn_latency]
+  short_draft:
+    preferred_tier: legacy_helper
+    fallback_tier: host_spill
+    constraints: [low_cost, short_context, low_concurrency]
+  router_classifier:
+    preferred_tier: legacy_helper
+    fallback_tier: cpu
+    constraints: [small_context, high_request_rate]
+  verifier_reranker:
+    preferred_tier: host_spill
+    fallback_tier: latency_primary
+    constraints: [non_generation, transfer_cost_bounded]
+  cold_worker:
+    preferred_tier: cold_storage
+    fallback_tier: host_spill
+    constraints: [throughput_over_latency]
+
+tiers:
+  latency_primary:
+    resources: [rtx_3090_ti]
+    work: [manager, coding_agent, long_context, decode_verifier, high_batch]
+    default_quantization: [Q4_K_M, Q5_K_M, Q6_K, Q8_0]
+    notes: "Ampere CUDA path; retain for latency-sensitive and bandwidth-sensitive work."
+  legacy_helper:
+    resources: [gtx_1080_ti]
+    work: [draft, router, classifier, short_reviewer, low_concurrency_worker]
+    default_quantization: [Q4_K_M, Q5_K_M, Q8_0]
+    runtime_gate: cuda12_legacy_probe
+    notes: "Pascal is not a member of the CUDA 13/TensorRT-LLM group."
+  host_spill:
+    resources: [cpu, ddr4]
+    work: [tokenizer, reranker, verifier, kv_spill_probe, cold_worker]
+    default_quantization: [Q2_K, Q3_K_S, Q4_K_M]
+    notes: "Use only when end-to-end throughput or capacity improves after transfer cost; Qwen CPU generation probe exceeded 90s before four tokens, so CPU is not a generation fallback for this artifact."
+  cold_storage:
+    resources: [nvme]
+    work: [artifact_staging, model_swap, trace_cache, benchmark_corpus]
+    runtime_gate: explicit_offload_measurement
+
+devices:
+  rtx_3090_ti:
+    index: 1
+    llama_cpp_device: CUDA0
+    uuid: GPU-8d337a84-43de-158d-7526-7175288a6064
+    vram_mib: 24564
+    architecture: sm_86
+    observed:
+      temperature_c: 50
+      power_w: 65
+      utilization_pct: 36
+    allowed_runtimes: [llama_cpp, sglang, vllm, tensorrt_llm]
+    role: primary
+  gtx_1080_ti:
+    index: 0
+    llama_cpp_device: CUDA1
+    uuid: GPU-e1e28703-34bd-e46b-6dc1-d7c39fa5612c
+    vram_mib: 11264
+    architecture: sm_61
+    observed:
+      temperature_c: 36
+      power_w: 14
+      utilization_pct: 11
+    allowed_runtimes: [llama_cpp_cuda12_probe]
+    role: helper
+    tensor_parallel: forbidden
+    current_runtime: llama_cpp_cuda12_verified
+  host:
+    ddr4_gb: 64
+    nvme_mounts: [D:/WSL, C:/Users/koosh]
+    role: spill_and_staging
+
+models:
+  local/qwen35-08b:
+    artifact_q4_gb: 0.53
+    preferred: [latency_primary, legacy_helper]
+    helper_fit: true
+    offload_probe: optional
+    measured_tuning:
+      weight_quantization:
+        rtx_3090_ti: {throughput_winner: Q2_K, conservative_default: Q4_K_M}
+        gtx_1080_ti: {throughput_winner: Q8_0, conservative_default: Q4_K_M}
+      kv_cache:
+        rtx_3090_ti: {throughput_winner: f16}
+        gtx_1080_ti: {throughput_winner: q8_0}
+      quality_gate: deterministic_coding_tool_fixture_and_reference_loss_required
+      evidence: [state/qwen35_quantization_bakeoff.json, state/qwen35_kv_cache_bakeoff.json]
+  local/lfm25-8b-a1b:
+    artifact_q4_gb: 5.15
+    preferred: [latency_primary, legacy_helper]
+    helper_fit: true
+    offload_probe: optional
+  local/ornith-8b:
+    artifact_q4_gb: 5.38
+    preferred: [latency_primary, legacy_helper]
+    helper_fit: true
+    artifact_status: published_mtp_q4_runtime_validated_on_1080
+    artifact_path: D:/WSL/model-cache/ornith-mtp-q4/Ornith-1.0-9B-MTP-Q4_K_M.gguf
+    offload_probe: optional
+
+published_artifacts:
+  local/ornith-8b:
+    repository: protoLabsAI/Ornith-1.0-9B-MTP-GGUF
+    filename: Ornith-1.0-9B-MTP-Q4_K_M.gguf
+    sha256: 93c47a7e76c62706be71052cf2cc407c0e5ce7f6789263464f6b6bad8d55b297
+    bytes: 5780090240
+    runtime: llama.cpp-b10012-cuda12.4
+    smoke_gpu: gtx_1080_ti
+    smoke_generation_tok_s: 25.3
+    evidence: state/ornith_mtp_1080_smoke.stdout.log
+
+helper_evidence:
+  toolchain: D:/WSL/tools/llama.cpp-b10012-cuda12.4
+  manifest: D:/WSL/tools/llama.cpp-b10012-cuda12.4/acquisition.json
+  engine_bench_evidence:
+    artifact: state/qwen35_llamabench_dual_gpu_manifest.json
+    model: local/qwen35-08b
+    quantization: Q4_K_M
+    workload: "llama-bench n_prompt=128 n_gen=64 repetitions=2 flash_attn=on"
+    rtx_3090_ti_generation_tok_s: 188.639935
+    gtx_1080_ti_generation_tok_s: 80.632758
+    rtx_3090_ti_speedup: 2.339
+    placement_conclusion: "3090 Ti is the primary generation tier; 1080 Ti is an independent helper tier."
+    tensor_parallel_conclusion: "No tensor-parallel benefit is established; mixed-SM sharding remains blocked pending a dedicated link and quality probe."
+  gpu: gtx_1080_ti
+  verified_models:
+    local/qwen35-08b:
+      status: smoke_pass
+      interactive_smoke_tok_s: 111.5
+      evidence: state/qwen1080_cuda12_smoke.stdout.log
+      perf_evidence: state/qwen1080_perf_real.json
+      metric_scope: "single interactive smoke response; not engine-bench or agent throughput"
+      aggregate_tok_s_by_concurrency: {"1": 23.24, "2": 26.62, "4": 30.34}
+    local/lfm25-8b-a1b:
+      status: smoke_pass
+      interactive_smoke_tok_s: 98.3
+      evidence: state/lfm1080_cuda12_smoke.stdout.log
+      perf_evidence: state/lfm1080_perf_real.json
+      metric_scope: "single interactive smoke response; not engine-bench or agent throughput"
+      aggregate_tok_s_by_concurrency: {"1": 143.95, "2": 158.78, "4": 206.44}
+
+  cpu_spill_probe:
+    model: local/qwen35-08b
+    quantization: Q4_K_M
+    status: failed_timeout
+    command_class: llama_cpp_cpu_n_gpu_layers_0
+    timeout_seconds: 90
+    observed: "No four-token completion before timeout; process was terminated after the bounded probe."
+    evidence: state/cpu_qwen35_spill_probe.timeout
+
+experiments:
+  - id: helper_replica_vs_cpu_spill
+    compare: [gtx_1080_ti, ddr4, nvme]
+    workload: short_draft_256_tokens
+    metrics: [ttft_ms, decode_tok_s, p95_ms, watts, completed_tasks_per_joule]
+  - id: heterogeneous_independent_queue
+    topology: [rtx_3090_ti_primary, gtx_1080_ti_helper, cpu_router]
+    workload: mixed_role_trace
+    metrics: [quality, throughput, queue_wait_ms, gpu_utilization, vram_peak]
+  - id: split_layer_offload
+    topology: [rtx_3090_ti, gtx_1080_ti, ddr4]
+    status: research_only
+    gate: measure_pcie_transfer_and_decode_regression
+  - id: kv_spill_threshold
+    topology: [rtx_3090_ti, ddr4, nvme]
+    status: research_only
+    gate: p95_latency_under_context_sweep

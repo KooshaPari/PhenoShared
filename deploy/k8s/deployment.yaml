@@ -1,0 +1,117 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pheno-harness
+  labels:
+    app: pheno-harness
+    component: bench
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: pheno-harness
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  template:
+    metadata:
+      labels:
+        app: pheno-harness
+        component: bench
+    spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    app: pheno-harness
+                topologyKey: kubernetes.io/hostname
+      initContainers:
+        - name: migrations
+          image: ghcr.io/kooshapari/pheno-harness:latest
+          command: ["python", "-m", "bench.migrations", "apply"]
+          volumeMounts:
+            - name: data
+              mountPath: /var/lib/pheno-harness
+      containers:
+        - name: bench
+          image: ghcr.io/kooshapari/pheno-harness:latest
+          args: ["serve", "--bind", "0.0.0.0:8000"]
+          ports:
+            - name: http
+              containerPort: 8000
+          env:
+            - name: PHENO_DATA_DIR
+              value: /var/lib/pheno-harness
+            - name: PHENO_LOG_LEVEL
+              value: info
+          resources:
+            requests:
+              cpu: "500m"
+              memory: "1Gi"
+            limits:
+              cpu: "4"
+              memory: "8Gi"
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 8000
+            initialDelaySeconds: 30
+            periodSeconds: 30
+          readinessProbe:
+            httpGet:
+              path: /readyz
+              port: 8000
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          volumeMounts:
+            - name: data
+              mountPath: /var/lib/pheno-harness
+            - name: cache
+              mountPath: /var/lib/pheno-harness/cache
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: pheno-data
+        - name: cache
+          emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: pheno-harness
+spec:
+  type: ClusterIP
+  selector:
+    app: pheno-harness
+  ports:
+    - name: http
+      port: 8000
+      targetPort: http
+      protocol: TCP
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: pheno-harness
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app: pheno-harness
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pheno-data
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 100Gi
+  storageClassName: standard

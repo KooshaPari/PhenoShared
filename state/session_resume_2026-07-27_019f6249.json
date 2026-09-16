@@ -1,0 +1,84 @@
+{
+  "schema_version": "pheno.session-resume.v1",
+  "as_of": "2026-07-27T23:30:00Z",
+  "session_under_resume": {
+    "codex_thread_id": "019f6249-d74c-7540-885f-588c3d51ac3a",
+    "original_created_at": "2026-07-14T20:20:34Z",
+    "last_agent_turn_at": "2026-07-24T07:35:00Z",
+    "model": "gpt-5.6-luna",
+    "cli_version": "0.144.3"
+  },
+  "resume_context": {
+    "resumed_at": "2026-07-27T23:30:00Z",
+    "gap_days": 3,
+    "gap_events": [
+      "Cursor continued parallel work (3 new local branches: chore/refresh-pins-post-restore, feat/hwledger-forge-gpu-pin, feat/pheno-phenocompose-dogfood, wip/restore-2026-07-26-recover)",
+      "Massive working tree delta: 156 tracked files changed (+2816/-121125) + 1023 untracked new files",
+      "Tracked deletions: 76 files mostly bench/ cleanup (old benchmark artifacts)",
+      "Tracked modifications: 80 files across config/scripts/tests/pheno/eval/plans/docs/state",
+      "Untracked additions: tests(212), state(204), pheno(182), scripts(168), docs(166), config(23), plans(22), logs(17), eval(11), root(13)",
+      "Stash on main: stash@{0}: On main: proc-stash-kernels"
+    ]
+  },
+  "git_state_now": {
+    "branch": "recovery/preserve-20260717-0301",
+    "head_sha": "2718569a835c7c8e206bcc4f487acc491c37d85f",
+    "head_short": "2718569",
+    "origin_branch_short": "39c6989",
+    "origin_branch_exists": true,
+    "local_ahead_of_origin": 1,
+    "local_behind_origin": 0,
+    "main_vs_origin_main": "0 0 (diverged)",
+    "dirty_tracked_files": 156,
+    "dirty_insertions": 2816,
+    "dirty_deletions": 121125,
+    "untracked_files": 1023,
+    "total_branches_local": 7,
+    "total_branches_remote": 3,
+    "stash_count": 1,
+    "last_10_commits": [
+      {"sha": "2718569", "author": "KooshaPari", "date": "2026-07-24T07:48:39Z", "subject": "Record push outcome for recovery/preserve-20260717-0301 (session 019f6249)"},
+      {"sha": "39c6989", "author": "KooshaPari", "date": "2026-07-24T07:48:39Z", "subject": "Snapshot Codex session resume + TB2 evidence + commit/push authorization packet (session 019f6249)"},
+      {"sha": "5c22f2b", "author": "KooshaPari", "date": "2026-07-23T23:25:42Z", "subject": "Enforce canonical stack first: no interim llama defaults."},
+      {"sha": "40839bf", "author": "KooshaPari", "date": "2026-07-23T23:04:00Z", "subject": "Launch local TB2 matrix tooling for LFM/Ornith and record 1080 absence."},
+      {"sha": "d26f84b", "author": "KooshaPari", "date": "2026-07-23T22:50:00Z", "subject": "Record final local qwen35-08b Terminal-Bench 2.0 scoreboard."},
+      {"sha": "82afa47", "author": "KooshaPari", "date": "2026-07-23T00:00:00Z", "subject": "Snapshot partial local qwen35 TB2 scoreboard mid-run."},
+      {"sha": "923de87", "author": "KooshaPari", "date": "2026-07-23T00:00:00Z", "subject": "Watchdog now restarts llama even while portage is alive."},
+      {"sha": "fc0a30b", "author": "KooshaPari", "date": "2026-07-23T00:00:00Z", "subject": "Add local qwen TB2 watchdog for auto-resume."},
+      {"sha": "ba3cfef", "author": "KooshaPari", "date": "2026-07-23T00:00:00Z", "subject": "Watch Nanbeige4.2 and DiffusionGemma for local admit."},
+      {"sha": "85f8710", "author": "KooshaPari", "date": "2026-07-23T00:00:00Z", "subject": "Raise local TB2 context to 16k and add llama swap helper."}
+    ]
+  },
+  "active_goal_persisted": {
+    "objective_verbatim": "Over the next week, safely establish pheno-harness as the durable home for the heterogeneous local-agent inference program: preserve and reconcile the diverged repository without losing active work; maintain a July-2026 evidence registry across Hugging Face, ModelScope, GitHub, arXiv, Reddit/anecdotal sources, and local ChatGPT exports; benchmark and select model/runtime/device combinations for RTX 3090 Ti, M1 Pro 16 GB (without conflicting with its current owner), Galaxy S21 Ultra, iPhone 17 Pro Max, and only-if-justified GTX 1080 Ti; evaluate quality, latency, drift, tool-call stability, cache behavior, concurrency, thermals, and accepted verified steps/s/GB/$ using replay, Terminal-Bench 2.1, and DeepSWE gates; then validate and document the resulting roadmap, configs, experiments, and next implementation decisions.",
+    "blocked": true,
+    "block_reasons": [
+      "No Mac-workstream owner handoff (M1 Pro Tailscale connection owned by another agent)",
+      "No 1080 Ti install authorization (hardware not detected in nvidia-smi)",
+      "No risky Git reconciliation authorization (diverged branches + 1023 untracked files need safe merge plan)",
+      "GitHub PAT refresh was needed (resolved 2026-07-24 but may have expired again)"
+    ],
+    "gates_remaining": [
+      "Mac workstream owner handoff",
+      "1080 Ti driver recovery / hardware detection",
+      "Git reconciliation plan for 1023 untracked + 156 tracked-dirty files",
+      "Push authorization for working-delta commit (if owner approves)"
+    ]
+  },
+  "session_to_now_delta": {
+    "prior_snapshot": "state/session_resume_2026-07-24_019f6249.json",
+    "prior_commit": "2718569 (step-5 follow-on, 2026-07-24)",
+    "new_commits_since_prior": 0,
+    "new_commits_pushed": "N/A (no commits since 2718569)",
+    "working_tree_delta": "156 tracked changed (+2816/-121125), 1023 untracked",
+    "branch_delta": "+4 local branches, +1 remote branch",
+    "stash_delta": "+1 (proc-stash-kernels on main)"
+  },
+  "crlf_warning_count": 63,
+  "verification": {
+    "snapshot_json_valid": true,
+    "no_remote_calls_made": true,
+    "no_source_files_modified": true,
+    "temp_helper_scripts_deleted": true
+  }
+}

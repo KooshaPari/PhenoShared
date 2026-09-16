@@ -1,0 +1,38 @@
+{
+  "suite": "swe-bench-verified",
+  "n": 3,
+  "passed": 0,
+  "pass_at_1": 0.0,
+  "wall_clock_s_total": 360.06,
+  "wall_clock_s_mean": 120.02,
+  "wall_clock_s_p95": 120.03,
+  "task_results": [
+    {
+      "task_id": "django__django-55798",
+      "ok": false,
+      "wall_clock_s": 120.017,
+      "reply_bytes": 0,
+      "reply_preview": "",
+      "error": "timeout",
+      "exit_code": -1
+    },
+    {
+      "task_id": "scikit-learn__scikit-learn-41643",
+      "ok": false,
+      "wall_clock_s": 120.028,
+      "reply_bytes": 0,
+      "reply_preview": "",
+      "error": "timeout",
+      "exit_code": -1
+    },
+    {
+      "task_id": "matplotlib__matplotlib-23836",
+      "ok": false,
+      "wall_clock_s": 120.017,
+      "reply_bytes": 0,
+      "reply_preview": "",
+      "error": "timeout",
+      "exit_code": -1
+    }
+  ]
+}

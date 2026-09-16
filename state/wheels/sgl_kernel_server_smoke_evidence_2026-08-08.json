@@ -1,0 +1,88 @@
+{
+  "timestamp": "2026-08-09T02:32:57Z",
+  "session": "codex-thread-019f6249-d74c-7540-885f-588c3d51ac3a",
+  "task": "SGLang server smoke test (final gate for sgl-kernel wheel fix) - launch real SGLang server on port 19011 in WSL (no docker) with the pre-installed fixed sgl-kernel wheel, prove /health + /v1/models + one tiny chat completion, teardown, record evidence.",
+  "environment": {
+    "host_os": "Windows 10 22H2 (build 28120) / PowerShell 7",
+    "runtime": "WSL2 only (no docker); WSL distro reports Fedora-style linux; launcher runs under bash via wsl.exe",
+    "venv": "/home/kooshapari/.pheno-serve-venv",
+    "python": "3.14.6",
+    "sglang": "0.3.6.post2",
+    "sgl_kernel": "0.1.0 (fixed wheel, pre-installed, NOT modified by this test)",
+    "torch": "2.11.0+cu130",
+    "triton": "3.6.0",
+    "numpy": "2.4.6",
+    "vllm": "0.26 (site-packages vllm modules)",
+    "transformers": "new (encode/apply_chat_template return Encoding/BatchEncoding; batch-level BatchEncoding __getitem__ semantics)",
+    "compat_shims": "14 in-memory monkey-patches in ephemeral launcher (no wheel/repo/lane file modified): 1=triton 2.x cache API, 2=numpy.lib.function_base alias, 3=pyairports stub, 4=flashinfer grouped-size capability stub, 5=vllm model_loader.loader alias, 6=11 vllm quantization module stubs, 7=vllm custom_all_reduce_utils stub, 8=vllm config-context for initialize_model_parallel, 9=ModelConfig tokenizer_mode/tokenizer fix, 10=LinearBase old-style positional remap (bias param), 11=get_rope kwargs->rope_parameters translation, 12=global default vllm config, 13=profile_max_num_token floor >=512, 14=tokenizer encode + apply_chat_template -> list-of-ints wrap at tokenizer creation (patched hf_transformers_utils AND tokenizer_manager module bindings)"
+  },
+  "gpu": {
+    "target": "NVIDIA GeForce RTX 3090 Ti (24 GB)",
+    "torch_device_index_wsl": 0,
+    "capability": [8, 6],
+    "note": "Windows nvidia-smi order: index 0 = GTX 1080 Ti (sm_61, unsupported by torch), index 1 = RTX 3090 Ti (sm_86). WSL/torch order REVERSED: RTX 3090 Ti = torch device 0. Smoke server ran on torch device 0. GTX 1080 Ti not used."
+  },
+  "gpu_memory": {
+    "host_nvidia_smi_at_launch_recheck_mib": { "gpu0_gtx1080ti_used_free": [8906, 2201], "gpu1_rtx3090ti_used_free": [18738, 3934] },
+    "wsl_torch_rtx3090ti_avail_gb_profile_debug": [21.47, 12.88, 18.67, 21.22, 18.81],
+    "host_nvidia_smi_after_teardown_mib": { "gpu0_gtx1080ti_used_free": [8906, 2201], "gpu1_rtx3090ti_used_free": [23846, 468] },
+    "note": "WSL GPU-PV reports far more free memory than host nvidia-smi because lane vLLM services (granite 19002, LFM2.5 19600, proxy 21080) run in a separate VM/host partition; host nvidia-smi is authoritative for the shared-GPU constraint. Server footprint ~0.95 GiB (0.92 GiB checkpoint + kv cache capped at 512 tokens via mem-fraction-static 0.06 / max-total-tokens 2048 + profile floor shim)."
+  },
+  "model": {
+    "id": "Qwen2.5-0.5B-Instruct",
+    "snapshot": "/home/kooshapari/.cache/huggingface/hub/models--Qwen--Qwen2.5-0.5B-Instruct/snapshots/7ae557604adf67be50417f59c2c2f167def9a775",
+    "size": "954 MB total (0.92 GiB checkpoint), smallest complete local model; Qwen3-0.6B rejected (no model.safetensors)"
+  },
+  "launch": {
+    "command": "/home/kooshapari/.pheno-serve-venv/bin/python -u /mnt/c/Users/koosh/AppData/Local/Temp/sgl_launcher.py --model-path /home/kooshapari/.cache/huggingface/hub/models--Qwen--Qwen2.5-0.5B-Instruct/snapshots/7ae557604adf67be50417f59c2c2f167def9a775 --port 19011 --device cuda --tp-size 1 --mem-fraction-static 0.06 --max-total-tokens 2048 --max-running-requests 2 --attention-backend triton --sampling-backend pytorch --disable-cuda-graph --log-level error",
+    "pid": 1756,
+    "started_wsl_local": "2026-08-08 19:30:52 (marker-02:30:52)",
+    "startup_result": "HEALTHY - /health returned HTTP 200 at t=15s (first probe at t=5s=000, t=10s=000, t=15s=200). ~12 prior launches iterated through the crash chain (each fixed via in-memory shim, no file modified).",
+    "startup_log": "/home/kooshapari/sglang_smoke_server_2026-08-08.log"
+  },
+  "models_endpoint": {
+    "http": 200,
+    "body": {
+      "id": "/home/kooshapari/.cache/huggingface/hub/models--Qwen--Qwen2.5-0.5B-Instruct/snapshots/7ae557604adf67be50417f59c2c2f167def9a775",
+      "object": "model",
+      "created": 1786242691,
+      "owned_by": "sglang",
+      "root": "/home/kooshapari/.cache/huggingface/hub/models--Qwen--Qwen2.5-0.5B-Instruct/snapshots/7ae557604adf67be50417f59c2c2f167def9a775"
+    }
+  },
+  "completion": {
+    "endpoint": "POST http://127.0.0.1:19011/v1/chat/completions",
+    "request": { "model": "/home/kooshapari/.cache/huggingface/hub/models--Qwen--Qwen2.5-0.5B-Instruct/snapshots/7ae557604adf67be50417f59c2c2f167def9a775", "messages": [ { "role": "user", "content": "Reply with exactly: hello" } ], "max_tokens": 8, "temperature": 0 },
+    "http": 200,
+    "response": {
+      "id": "441b5d21a61948349d8cadb0f0861a7e",
+      "object": "chat.completion",
+      "created": 1786242683,
+      "model": "/home/kooshapari/.cache/huggingface/hub/models--Qwen--Qwen2.5-0.5B-Instruct/snapshots/7ae557604adf67be50417f59c2c2f167def9a775",
+      "choices": [ { "index": 0, "message": { "role": "assistant", "content": "Hello! How can I assist you today" }, "logprobs": null, "finish_reason": "length", "matched_stop": null } ],
+      "usage": { "prompt_tokens": 34, "total_tokens": 42, "completion_tokens": 8, "prompt_tokens_details": null }
+    },
+    "result": "PASS - real model-generated completion text returned"
+  },
+  "completion_debug_note": "The chat adapter tokenizes via tokenizer.apply_chat_template(..., tokenize=True) and tokenizer.encode(), both of which return tokenizers.Encoding / transformers BatchEncoding instead of a list of ints in the installed library; sglang 0.3.6 expects lists (slicing via GenerateReqInput.__getitem__ -> self.input_ids[i]). Fixed by shim 14 wrapping both methods on the tokenizer instance at creation (patched hf_transformers_utils.get_tokenizer AND sglang.srt.managers.tokenizer_manager.get_tokenizer module binding - the manager imports the function by name, so patching only the origin module did not take effect).",
+  "teardown": {
+    "killed_pid": 1756,
+    "method": "kill -TERM 1756 then kill -9 (process survived SIGTERM); launcher entry-point finally: kill_child_process() also armed",
+    "wsl_proc_check": "no sgl_launcher processes remain",
+    "wsl_port_19011": "free (ss -tln no listener)",
+    "windows_port_19011": "closed (Test-NetConnection TcpTestSucceeded=False)",
+    "lane_services_untouched": {
+      "19002_granite_vllm": "HTTP 200 after teardown; listener present",
+      "19600_lfm25_vllm": "HTTP 200 after teardown; listener present",
+      "21080_pheno_serve_proxy": "TCP open; GET /v1/models HTTP 200 (/health 404 is its normal route set); untouched"
+    }
+  },
+  "files": {
+    "launcher": "/mnt/c/Users/koosh/AppData/Local/Temp/sgl_launcher.py (Windows: C:\\Users\\koosh\\AppData\\Local\\Temp\\sgl_launcher.py)",
+    "server_log": "/home/kooshapari/sglang_smoke_server_2026-08-08.log",
+    "evidence_wsl": "/home/kooshapari/sgl_kernel_server_smoke_evidence_2026-08-08.json",
+    "evidence_windows": "C:\\Users\\koosh\\pheno-harness\\state\\wheels\\sgl_kernel_server_smoke_evidence_2026-08-08.json"
+  },
+  "verdict": "SERVER_SMOKE_PASS",
+  "verdict_reason": "Real SGLang server (0.3.6.post2) launched in WSL-only on port 19011 using the pre-installed fixed sgl-kernel 0.1.0 wheel and the lane venv; /health returned 200 at t=15s; /v1/models returned the model id; one tiny chat completion returned HTTP 200 with generated text 'Hello! How can I assist you today' (34 prompt tokens, 8 completion tokens, finish_reason=length); server torn down cleanly (port 19011 free, no leftover processes) and all lane services (19002, 19600, 21080) remained healthy and untouched. No wheel, repo, or lane file was modified; all 14 environment-compat fixes were applied in-memory by an ephemeral launcher."
+}

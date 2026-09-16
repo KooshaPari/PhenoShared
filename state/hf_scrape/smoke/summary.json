@@ -1,0 +1,64 @@
+{
+  "date": "2026-07-03",
+  "token_set": false,
+  "include_private": false,
+  "authors_queried": [
+    "meta-llama",
+    "mistralai",
+    "google",
+    "microsoft",
+    "allenai",
+    "cohere",
+    "Qwen",
+    "deepseek-ai",
+    "inclusionAI",
+    "moonshotai",
+    "zai-org",
+    "THUDM",
+    "01-ai",
+    "baichuan-inc",
+    "bigcode",
+    "WizardLM",
+    "NousResearch"
+  ],
+  "counts": {
+    "seen": 28,
+    "kept": 19,
+    "rejected": 9,
+    "fetch_fail": 0
+  },
+  "by_author": {
+    "meta-llama": 2,
+    "mistralai": 2,
+    "google": 1,
+    "microsoft": 2,
+    "allenai": 2,
+    "cohere": 0,
+    "Qwen": 1,
+    "deepseek-ai": 0,
+    "inclusionAI": 1,
+    "moonshotai": 0,
+    "zai-org": 1,
+    "THUDM": 0,
+    "01-ai": 2,
+    "baichuan-inc": 2,
+    "bigcode": 1,
+    "WizardLM": 0,
+    "NousResearch": 2
+  },
+  "phase1_errors": [],
+  "elapsed_s_phase1": 12.0,
+  "filters": {
+    "min_params_b": 0.8,
+    "max_params_b": 35.0,
+    "tags_keep": [
+      "text-generation",
+      "text2text-generation"
+    ]
+  },
+  "outputs": {
+    "models_jsonl": "C:\\Users\\koosh\\pheno-harness\\state\\hf_scrape\\smoke\\models.jsonl",
+    "rejects_jsonl": "C:\\Users\\koosh\\pheno-harness\\state\\hf_scrape\\smoke\\rejects.jsonl"
+  },
+  "elapsed_s": 12.0
+}

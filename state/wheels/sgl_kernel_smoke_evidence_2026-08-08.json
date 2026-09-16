@@ -1,0 +1,81 @@
+{
+  "timestamp": "2026-08-08T23:50:55Z",
+  "session": "codex-thread-019f6249-d74c-7540-885f-588c3d51ac3a",
+  "wheel": {
+    "path": "/home/kooshapari/sglang-src/sgl-kernel/dist/sgl_kernel-0.1.0-cp39-abi3-linux_x86_64.whl",
+    "size_bytes": 15871510,
+    "sha256": "e462074c3c8c58f96f0562f78086494114c2123114ae81abbfc2b737361e2763"
+  },
+  "pip_install": {
+    "rc": 0,
+    "command": "/home/kooshapari/.pheno-serve-venv/bin/python -m pip install --force-reinstall --no-deps /home/kooshapari/sglang-src/sgl-kernel/dist/sgl_kernel-0.1.0-cp39-abi3-linux_x86_64.whl",
+    "output_last_8_lines": [
+      "  Attempting uninstall: sgl-kernel",
+      "    Found existing installation: sgl-kernel 0.1.0",
+      "    Uninstalling sgl-kernel-0.1.0:",
+      "      Successfully uninstalled sgl-kernel-0.1.0",
+      "Successfully installed sgl-kernel-0.1.0",
+      "",
+      "[notice] A new release of pip is available: 26.0.1 -> 26.2.1",
+      "[notice] To update, run: /home/kooshapari/.pheno-serve-venv/bin/python -m pip install --upgrade pip"
+    ]
+  },
+  "import_verify": {
+    "status": "PASS",
+    "output": "IMPORT_OK 0.1.0\nPACKAGE_FILE /home/kooshapari/.pheno-serve-venv/lib64/python3.14/site-packages/sgl_kernel/__init__.py\nCOMMON_OPS_FILE /home/kooshapari/.pheno-serve-venv/lib64/python3.14/site-packages/sgl_kernel/common_ops.abi3.so\nSO_EXISTS True"
+  },
+  "so_sha256": {
+    "installed_path": "/home/kooshapari/.pheno-serve-venv/lib64/python3.14/site-packages/sgl_kernel/common_ops.abi3.so",
+    "installed": "dc94a9032f6327f66d8ec519fb35d89cd46c8f95f0a3d8fd3653be71201ebd29",
+    "wheel_inner": "dc94a9032f6327f66d8ec519fb35d89cd46c8f95f0a3d8fd3653be71201ebd29",
+    "match": true,
+    "size_bytes": 71667088
+  },
+  "embedded_arch": {
+    "note": "cuobjdump --list-elf on installed common_ops.abi3.so",
+    "targets": ["sm_86", "sm_90", "sm_100"]
+  },
+  "gpu": {
+    "target": "NVIDIA GeForce RTX 3090 Ti",
+    "capability": [8, 6],
+    "torch_device_index_wsl": 0,
+    "device_enumeration_note": "Windows nvidia-smi order: index 0=GTX 1080 Ti (sm_61), index 1=RTX 3090 Ti (sm_86). WSL/torch order is REVERSED: RTX 3090 Ti = torch device 0, GTX 1080 Ti = torch device 1. Smoke test ran on torch device 0 (3090 Ti, capability (8,6)). GTX 1080 Ti (sm_61) was NOT used."
+  },
+  "smoke_ops": {
+    "moe_align_block_size": { "status": "PASS", "error": null, "gpu_kernel": true, "note": "CUDA kernel (moe_align_kernel.cu) with tiny int32 tensors on cuda:0" },
+    "rmsnorm": { "status": "PASS", "error": null, "gpu_kernel": true, "note": "128x128 fp16 on cuda:0, finite output verified" },
+    "gelu_and_mul": { "status": "PASS", "error": null, "gpu_kernel": true, "note": "64x256 fp16 on cuda:0" },
+    "apply_rope_with_cos_sin_cache_inplace": { "status": "PASS", "error": null, "gpu_kernel": true, "note": "head_size=64 fp16 + fp32 cos/sin cache on cuda:0; first attempt with head_size=32 failed with flashinfer 'Unsupported head_dim: 32' (shape constraint, supported dims 64/128/256), PASS after head_size=64" },
+    "topk_softmax": { "status": "PASS", "error": null, "gpu_kernel": true, "note": "64x4 fp32 topk_weights, gating_output 64x8 fp32 on cuda:0" },
+    "top_k_top_p_sampling_from_probs": { "status": "PASS", "error": null, "gpu_kernel": true, "note": "8x256 fp32 probs, top_k=8 top_p=0.9, int32 samples returned" }
+  },
+  "smoke_summary": {
+    "ops_passed": 6,
+    "ops_total": 6,
+    "peak_allocated_mib": 0.141
+  },
+  "gpu_memory": {
+    "host_nvidia_smi_before_mib": { "gpu0_gtx1080ti_used_free": [2722, 8385], "gpu1_rtx3090ti_used_free": [22553, 1761] },
+    "host_nvidia_smi_after_mib": { "gpu0_gtx1080ti_used_free": [2722, 8385], "gpu1_rtx3090ti_used_free": [22568, 1746] },
+    "wsl_torch_rtx3090ti_free_before_mib": 22451.2,
+    "wsl_torch_rtx3090ti_free_after_mib": 22359.2,
+    "note": "WSL GPU-PV reports ~22.4 GB free on the 3090 Ti because the lane vLLM services run in a separate VM/host partition; host nvidia-smi (authoritative for the shared-GPU constraint) shows ~1.7 GB free."
+  },
+  "sglang_server_test": {
+    "status": "SKIPPED",
+    "reason": "Host nvidia-smi shows RTX 3090 Ti free = 1746 MiB (< 2 GB, and below the >= 3 GB gate for the server test); lane vLLM services are resident (~21.5 GB used). Local small models ARE available (Qwen3-0.6B, Qwen2.5-0.5B-Instruct, Qwen3.5-0.8B, LFM2.5-1.2B-Instruct) but launching a server on the shared GPU with 1.7 GB physical free risks disturbing the live lane services, so it was skipped by design per instructions."
+  },
+  "lane_services_status": {
+    "19000_LFM2.5-8B-A1B": "HTTP 000 from both Windows and this WSL distro; NO listener found in Windows netstat or WSL ss - not currently listening (no process was killed by this worker; pip install into the venv and a short-lived python smoke process cannot stop a listener).",
+    "19002_granite": "HTTP 200; listening 127.0.0.1:19002 (Windows) / 0.0.0.0:19002 (WSL) - healthy, untouched.",
+    "21080": "HTTP 200; listening 0.0.0.0:21080 on Windows host - healthy, untouched."
+  },
+  "verdict": "SMOKE_PASS",
+  "verdict_reason": "Wheel installed into lane venv (pip rc=0, sgl-kernel 0.1.0 force-reinstalled); real site-packages import verify PASS (version 0.1.0); installed common_ops.abi3.so sha256 matches the wheel's inner copy exactly; RTX 3090 Ti (capability (8,6) = sm_86) confirmed via torch.get_device_capability and cuobjdump (sm_86 cubins embedded); all 6 direct kernel smoke ops PASS on the 3090 Ti with 0.141 MiB peak allocation and no errors; sglang server test SKIPPED (documented memory constraint, not a failure).",
+  "files": {
+    "smoke_script": "/tmp/sglk_smoke_2026-08-08.py",
+    "smoke_results_json": "/tmp/sglk_smoke_results_2026-08-08.json",
+    "evidence_wsl": "/home/kooshapari/sgl_kernel_smoke_evidence_2026-08-08.json",
+    "evidence_windows": "C:\\Users\\koosh\\pheno-harness\\state\\wheels\\sgl_kernel_smoke_evidence_2026-08-08.json"
+  }
+}

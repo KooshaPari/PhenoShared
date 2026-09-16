@@ -1,0 +1,40 @@
+{
+  "schema_version": "pheno.runtime-constraint.v1",
+  "as_of_utc": "2026-08-06T11:28:17Z",
+  "constraint_change": {
+    "from": "docker desktop + wsl",
+    "to": "no docker; podman + wslc only",
+    "recorded_at": "2026-08-06T18:50:00Z",
+    "reason": "docker-desktop WSL subsystem was the primary WSL VM instability culprit that killed 11+ kernel builds"
+  },
+  "env_state": {
+    "docker_desktop_exe_killed": true,
+    "docker_desktop_exe_kill_rc": 0,
+    "com_docker_service_pid_8996_still_alive": true,
+    "vmmemWSL_pid_46236_still_alive": true,
+    "docker_protected_status": "SYSTEM-protected, need elevation to fully kill",
+    "docker_where_output": "c:\\program files\\Docker\\Docker\\resources\\bin\\docker\nc:\\program files\\Docker\\Docker\\resources\\bin\\docker.exe",
+    "podman_where": "C:\\Python313\\podman.bat",
+    "podman_machine_provisioned": true
+  },
+  "wsl_state": {
+    "distros": "\u0000 \u0000N\u0000A\u0000M\u0000E\u0000 \u0000 \u0000 \u0000 \u0000 \u0000 \u0000 \u0000 \u0000 \u0000 \u0000 \u0000 \u0000 \u0000 \u0000 \u0000 \u0000 \u0000 \u0000 \u0000 \u0000 \u0000 \u0000S\u0000T\u0000A\u0000T\u0000E\u0000 \u0000 \u0000 \u0000 \u0000 \u0000 \u0000 \u0000 \u0000 \u0000 \u0000 \u0000V\u0000E\u0000R\u0000S\u0000I\u0000O\u0000N\u0000\n\u0000\n\u0000*\u0000 \u0000F\u0000e\u0000d\u0000o\u0000r\u0000a\u0000L\u0000i\u0000n\u0000u\u0000x\u0000-\u00004\u00004\u0000 \u0000 \u0000 \u0000 \u0000 \u0000 \u0000 \u0000 \u0000 \u0000 \u0000 \u0000 \u0000S\u0000t\u0000o\u0000p\u0000p\u0000e\u0000d\u0000 \u0000 \u0000 \u0000 \u0000 \u0000 \u0000 \u0000 \u0000 \u00002\u0000\n\u0000\n\u0000 \u0000 \u0000d\u0000o\u0000c\u0000k\u0000e\u0000r\u0000-\u0000d\u0000e\u0000s\u0000k\u0000t\u0000o\u0000p\u0000 \u0000 \u0000 \u0000 \u0000 \u0000 \u0000 \u0000 \u0000 \u0000 \u0000 \u0000 \u0000S\u0000t\u0000o\u0000p\u0000p\u0000e\u0000d\u0000 \u0000 \u0000 \u0000 \u0000 \u0000 \u0000 \u0000 \u0000 \u00002\u0000\n\u0000\n\u0000 \u0000 \u0000p\u0000o\u0000d\u0000m\u0000a\u0000n\u0000-\u0000m\u0000a\u0000c\u0000h\u0000i\u0000n\u0000e\u0000-\u0000d\u0000e\u0000f\u0000a\u0000u\u0000l\u0000t\u0000 \u0000 \u0000 \u0000 \u0000S\u0000t\u0000o\u0000p\u0000p\u0000e\u0000d\u0000 \u0000 \u0000 \u0000 \u0000 \u0000 \u0000 \u0000 \u0000 \u00002\u0000\n\u0000\n\u0000"
+  },
+  "gpu_state": "0, 764 MiB, 10343 MiB, 0 %\n1, 2140 MiB, 22174 MiB, 13 %",
+  "kernel_build_state": {
+    "previous_attempts": 12,
+    "last_attempt_outcome": "rc=1, killed at vertical_slash_index.cu / merge_attn_states.cu, zero compile errors",
+    "root_cause_now_identified": "docker-desktop WSL subsystem destabilizing the Fedora VM (MEMORY.md:211)",
+    "resume_command": "kbuild_runner_final_0802.py",
+    "scripts_intact": true
+  },
+  "next_actions": [
+    "docker-desktop service + vmmemWSL fully stopped (requires elevated shell or Task Manager end-task)",
+    "one more kernel build attempt with cleaner WSL env",
+    "install resulting wheel into .pheno-serve-venv",
+    "final verification"
+  ],
+  "commit_local_only": true,
+  "push_to_origin": false,
+  "reason_no_push": "parallel workstream ~160 commits ahead; pushing would sweep in-flight work"
+}

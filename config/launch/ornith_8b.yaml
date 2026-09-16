@@ -1,0 +1,13 @@
+# Ornith 8B alias — on-demand local coding-agent comparison
+model: local.ornith_8b
+args:
+  - "{binary}"
+  - "-m"
+  - "{path}"
+  - "--port"
+  - "{port}"
+  - "-c"
+  - "{kv_ctx}"
+  - "-ngl"
+  - "99"
+  - "{ik_flags}"

@@ -1,0 +1,128 @@
+{
+  "schema_version": "phenolm.source_acquisition.v1",
+  "created_at": "2026-07-15T06:21:46.614721+00:00",
+  "model_alias": "local/lfm25-8b-a1b",
+  "repo": "LiquidAI/LFM2.5-8B-A1B",
+  "revision": "5673e0de372b64331504de73bbbc33b0dde71903",
+  "target": "D:\\WSL\\model-cache\\lfm25-8b-a1b",
+  "authenticated": false,
+  "execute": true,
+  "download_performed": true,
+  "eval_artifact": false,
+  "disk_admission": "pass",
+  "free_bytes": 601494556672,
+  "minimum_free_bytes": 53687091200,
+  "files": [
+    {
+      "path": ".cache/huggingface/.gitignore",
+      "bytes": 1,
+      "sha256": "684888c0ebb17f374298b65ee2807526c066094c701bcc7ebbe1c1095f494fc1"
+    },
+    {
+      "path": ".cache/huggingface/CACHEDIR.TAG",
+      "bytes": 195,
+      "sha256": "e8893e2dcb3f4545ef67a0a5b7b769113d38eef1aa61c7c7ba14659b02af955f"
+    },
+    {
+      "path": ".cache/huggingface/download/.eval_results/aime_2026.yaml.metadata",
+      "bytes": 104,
+      "sha256": "315df402981f54c750ba8157ba7679fb5f91e252e0bd7c1d5c8c06b3d6a47efd"
+    },
+    {
+      "path": ".cache/huggingface/download/.gitattributes.metadata",
+      "bytes": 103,
+      "sha256": "1ea0b339308e35fdd515a566472aa5d871cb99e1355d5835daf801a2ee3e11ac"
+    },
+    {
+      "path": ".cache/huggingface/download/chat_template.jinja.metadata",
+      "bytes": 103,
+      "sha256": "52740fa829ccec4215c2f5b738081267220a877f6e5b7ebf09f96cb335d91df0"
+    },
+    {
+      "path": ".cache/huggingface/download/config.json.metadata",
+      "bytes": 104,
+      "sha256": "03c4d31cebf650c1e90246f2b56cbcb384b69d66a4cc953cdea4fef695061a08"
+    },
+    {
+      "path": ".cache/huggingface/download/generation_config.json.metadata",
+      "bytes": 103,
+      "sha256": "7f668f7344007445b92841b0a9fb3256b16be696aa61ee108fba8817e84b1ae9"
+    },
+    {
+      "path": ".cache/huggingface/download/LICENSE.metadata",
+      "bytes": 104,
+      "sha256": "9a1b1c39cdbabecd019a9a5fb7570fb2538b00f54d2254a7194d87097a582054"
+    },
+    {
+      "path": ".cache/huggingface/download/README.md.metadata",
+      "bytes": 104,
+      "sha256": "6612f7f69f27937556d438fb617bb90d0a7279587f28b861484434405f512fa1"
+    },
+    {
+      "path": ".cache/huggingface/download/tokenizer.json.metadata",
+      "bytes": 127,
+      "sha256": "739e713a8b898c41bc21613769927f43f546e5a1e5bb5ab3e9d02065b53ca02d"
+    },
+    {
+      "path": ".cache/huggingface/download/tokenizer_config.json.metadata",
+      "bytes": 103,
+      "sha256": "e2ee8009081cb74ffd715c4fc7c805ac4fda4924dbaf725e8f94c12efd29f9c0"
+    },
+    {
+      "path": ".cache/huggingface/download/xGOKKLRSlIhH692hSVvI1-gpoa8=.c9b9e3c4b3be50b576e6da8c02de1b4223614ffe131d812abf92bb84421f6217.9eb3597b.incomplete",
+      "bytes": 3932160000,
+      "sha256": "3c3265ac7b06e4314332b0b08aa44993996bfb793164ea7af4480ba86da7e21d"
+    },
+    {
+      "path": ".eval_results/aime_2026.yaml",
+      "bytes": 193,
+      "sha256": "796f71ad04a69b321024f70005eace160ada7b89c00664004aeec06ed0b72caf"
+    },
+    {
+      "path": ".gitattributes",
+      "bytes": 1570,
+      "sha256": "34448b82c17d60fec9b65b1f093c115ddbaadc04beb1b0140b6bfed2e012a930"
+    },
+    {
+      "path": "chat_template.jinja",
+      "bytes": 4621,
+      "sha256": "6d65c8804847ad74eea912dd7eca3dc1cf7a457b53a77f47d841a14121910963"
+    },
+    {
+      "path": "config.json",
+      "bytes": 1205,
+      "sha256": "9c0255c2d5c744c99b760a12edca2572935348dae340e79e2e6625af975d2d68"
+    },
+    {
+      "path": "generation_config.json",
+      "bytes": 318,
+      "sha256": "11ddb22e01d6d45f5bc88baf7e9c897a0497f9f468b32f862cff709db4c931d9"
+    },
+    {
+      "path": "LICENSE",
+      "bytes": 10574,
+      "sha256": "4d28ca14dedc0b3d0fcc2b3339f0e79931faa33874f3d24f522183a8fc70068c"
+    },
+    {
+      "path": "model.safetensors",
+      "bytes": 16936006912,
+      "sha256": "c9b9e3c4b3be50b576e6da8c02de1b4223614ffe131d812abf92bb84421f6217"
+    },
+    {
+      "path": "README.md",
+      "bytes": 15716,
+      "sha256": "3d9fea725cfc5c2b15ae375671822e17ba4cf070c20e04db2b4a3d9e78875e02"
+    },
+    {
+      "path": "tokenizer.json",
+      "bytes": 17905598,
+      "sha256": "695be7802a0e4b8a81048f0ff5ebb7fc811a0ba5a6be63dbb24deb5a81096f41"
+    },
+    {
+      "path": "tokenizer_config.json",
+      "bytes": 315,
+      "sha256": "b53c3caceb7fa0de424e1aa67b3cc5008cd2f8b8d2426a8fa221ef3cf1a949d5"
+    }
+  ],
+  "source_tree_sha256": "0c4d2fbf383be85e78627e9dc922c83f967e5b75781817eed1058bc9e1f56327"
+}

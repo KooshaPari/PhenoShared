@@ -1,0 +1,89 @@
+# Canonical component identities for the Pheno stack.
+# Paths are intentionally conservative: they record intended identities without
+# forcing repo renames before the content migration is audited.
+
+components:
+  forge_dev:
+    display_name: forge-dev
+    kind: agent_cli
+    owned_fork: true
+    current_local_path: "${USERPROFILE}\\forge"
+    intended_bin: forge-dev
+    default_upstream:
+      component: omniroute_dev
+      protocol: openai_compatible
+      base_url: "http://127.0.0.1:20128/v1"
+      model: Main
+    direct_call_allowed_for:
+      - harness_overhead_isolation
+      - local_engine_parity
+      - provider_baseline
+
+  omniroute_dev:
+    display_name: omniroute-dev
+    kind: outer_router
+    owned_fork: true
+    current_local_path: "${USERPROFILE}\\omniroute-dev"
+    intended_bin: omniroute-dev
+    responsibilities:
+      - openai_compatible_endpoint
+      - provider_blending
+      - subscription_quota_routing
+      - direct_provider_fallback
+      - request_accounting
+    downstream_policy_component: phenolm
+    downstream_serving_component: pheno_serve_dev
+
+  phenolm:
+    display_name: PhenoLM
+    kind: llm_policy_eval_layer
+    owned_fork: true
+    current_local_path: "${USERPROFILE}\\pheno-harness"
+    replaces:
+      - pheno-specs
+      - agileplus-specs
+    responsibilities:
+      - trace_ingest
+      - role_evalsets
+      - rlvr_af_scoring
+      - garden_gates
+      - model_lane_policy
+      - eval_reporting
+      - prompt_canonicalization
+      - deterministic_user_cache_policy
+
+  pheno_serve_dev:
+    display_name: pheno-serve-dev
+    kind: inference_server_layer
+    owned_fork: true
+    current_local_path: null
+    intended_local_path: "${USERPROFILE}\\pheno-serve-dev"
+    intended_bin: pheno-serve-dev
+    responsibilities:
+      - engine_lifecycle
+      - openai_compatible_local_endpoints
+      - engine_metrics
+      - prefix_cache_metrics
+      - speculative_decode_metrics
+      - queue_metrics
+      - crash_restart_events
+    engines:
+      - sglang
+      - vllm
+      - tensorrt_llm
+      - llama_cpp
+      - mlx
+      - bifrost
+
+default_call_path:
+  - forge_dev
+  - omniroute_dev
+  - phenolm
+  - pheno_serve_dev
+  - engine_layer
+
+direct_call_policy:
+  require_reason: true
+  require_bypassed_layer: true
+  require_run_manifest: true
+  forbidden_to_log_secret_values: true

@@ -1,0 +1,93 @@
+{
+  "schema_version": "pheno.bench.manifest.v1",
+  "as_of": "2026-07-24T07:35:30Z",
+  "generated_by": "session 019f6249-d74c-7540-885f-588c3d51ac3a (resume, slice B)",
+  "scope": "TB2 (Terminal-Bench 2.0/2.1) evidence produced during the user's parallel Cursor workstream after this Codex session hit its usage limit on 2026-07-23T16:02Z; indexed read-only from disk, no remote calls, no edits.",
+  "sources": {
+    "local_scoreboard": {
+      "path": "eval/results/tbench_local_qwen35_final_20260723.json",
+      "sha": null,
+      "size_bytes": null,
+      "committed_in": "d26f84b",
+      "as_of": "2026-07-23T22:50:38.383282+00:00",
+      "model": "openai/local/qwen35-08b",
+      "job_dir": "D:\\WSL\\eval-cache\\pheno-harbor-jobs\\2026-07-22__20-17-38",
+      "finished_at": "2026-07-23T06:35:44.466595+00:00",
+      "stats": {
+        "n_trials_with_result": 89,
+        "n_reward_1": 0,
+        "n_reward_0": 21,
+        "mean_reward_scored": 0.0,
+        "n_completed_trials": 89,
+        "n_errored_trials": 68,
+        "n_input_tokens": 548585,
+        "n_cache_tokens": 411802,
+        "n_output_tokens": 53929,
+        "cost_usd": null
+      },
+      "err_types": {
+        "OSError": 25,
+        "RuntimeError": 14,
+        "OutputLengthExceededError": 12,
+        "EnvironmentStartTimeoutError": 7,
+        "ContextLengthExceededError": 5,
+        "InternalServerError": 3,
+        "AgentSetupTimeoutError": 1,
+        "AddTestsDirError": 1
+      },
+      "notes": [
+        "21 'blank-error' trials counted separately (err_types does not include empty string).",
+        "User verdict on the commit message: 'Full 89-trial job finished with mean reward 0.0; infra errors dominated over model failures.'",
+        "No n_reward_1 implies the local/qwen35-08b route is not yet a usable Terminal-Bench baseline on the RTX 3090 Ti — the gate is infra, not the model."
+      ]
+    },
+    "local_dry_run_trials_20260724": {
+      "directory_pattern": "bench/results/tbench/{20,21}/20260724T073137Z_*.json",
+      "count": 6,
+      "all_run_mode": "dry_run",
+      "all_route": "local_pheno_serve",
+      "all_base_url": "http://127.0.0.1:21080/v1",
+      "all_integrity_flags": ["local_only=true", "cloud_evals_disabled=true", "no_training_on_eval_tasks=true", "single_attempt_only=true"],
+      "created_at": "2026-07-24T07:31:37Z",
+      "trials": [
+        {"dir": "bench/results/tbench/20", "file": "20260724T073137Z_afa6c727.json", "suite": "terminal-bench@2.0", "suite_status": "dataset_acquired_verifier_unverified", "model_alias": "local/ornith-8b",      "task_count": 6, "subset": "representative-6", "subset_manifest": "config/tbench20_representative_subset.json", "task_artifact_manifest": "state/harbor_terminal_bench_2_0_artifacts.json"},
+        {"dir": "bench/results/tbench/20", "file": "20260724T073137Z_b94ee37d.json", "suite": "terminal-bench@2.0", "suite_status": "dataset_acquired_verifier_unverified", "model_alias": "local/lfm25-8b-a1b",  "task_count": 6, "subset": "representative-6", "subset_manifest": "config/tbench20_representative_subset.json", "task_artifact_manifest": "state/harbor_terminal_bench_2_0_artifacts.json"},
+        {"dir": "bench/results/tbench/20", "file": "20260724T073137Z_cf40ae80.json", "suite": "terminal-bench@2.0", "suite_status": "dataset_acquired_verifier_unverified", "model_alias": "local/qwen35-08b",    "task_count": 6, "subset": "representative-6", "subset_manifest": "config/tbench20_representative_subset.json", "task_artifact_manifest": "state/harbor_terminal_bench_2_0_artifacts.json"},
+        {"dir": "bench/results/tbench/21", "file": "20260724T073137Z_2c41e8ca.json", "suite": "terminal-bench@2.1", "suite_status": "availability_unverified",            "model_alias": "local/qwen35-08b",    "task_count": null, "subset": "representative-6", "subset_manifest": null, "task_artifact_manifest": null},
+        {"dir": "bench/results/tbench/21", "file": "20260724T073137Z_50e8307d.json", "suite": "terminal-bench@2.1", "suite_status": "availability_unverified",            "model_alias": "local/ornith-8b",   "task_count": null, "subset": "representative-6", "subset_manifest": null, "task_artifact_manifest": null},
+        {"dir": "bench/results/tbench/21", "file": "20260724T073137Z_d7237fa7.json", "suite": "terminal-bench@2.1", "suite_status": "availability_unverified",            "model_alias": "local/lfm25-8b-a1b", "task_count": null, "subset": "representative-6", "subset_manifest": null, "task_artifact_manifest": null}
+      ],
+      "notes": [
+        "All three 2.0 trial files share sha256 subset_manifest and task_artifact_manifest, indicating a single Harbor launch with the same representative-6 subset across the three local routes.",
+        "All three 2.1 trials are dry_run probes with availability_unverified; TB2.1 is still pending dataset acquisition in the parallel Cursor workstream.",
+        "None of these trials have produced scored reward output yet; the committed scoreboard (d26f84b) covers the earlier 89-trial local/qwen35-08b 2.0 run only."
+      ]
+    }
+  },
+  "interpretation": {
+    "what_this_evidence_says": [
+      "Terminal-Bench 2.0 local execution is wired end-to-end on the RTX 3090 Ti for at least three model routes (qwen35-08b, ornith-8b, lfm25-8b-a1b); the qwen35-08b route finished a 89-trial run but scored 0.0 with 68/89 infra errors.",
+      "Terminal-Bench 2.1 is in dry-run only (dataset availability not yet verified) for the same three routes.",
+      "There is no LFM/Ornith TB2 scoreboard yet — the 2026-07-23 16:04 commit ('Launch local TB2 matrix tooling for LFM/Ornith') only raised timeouts and pinned -np 1; trials are queued, not scored.",
+      "GTX 1080 Ti is still absent from nvidia-smi per state/gtx1080_visibility_2026-07-23.json — no progress on that gate."
+    ],
+    "what_this_evidence_does_not_say": [
+      "It does not authorize any 1080 Ti install, Mac workstream mutation, or remote state change.",
+      "It does not justify resuming weight downloads, server launches, or risky Git reconciliation."
+    ]
+  },
+  "verification": {
+    "files_read": [
+      "eval/results/tbench_local_qwen35_final_20260723.json",
+      "bench/results/tbench/20/20260724T073137Z_afa6c727.json",
+      "bench/results/tbench/20/20260724T073137Z_b94ee37d.json",
+      "bench/results/tbench/20/20260724T073137Z_cf40ae80.json",
+      "bench/results/tbench/21/20260724T073137Z_2c41e8ca.json",
+      "bench/results/tbench/21/20260724T073137Z_50e8307d.json",
+      "bench/results/tbench/21/20260724T073137Z_d7237fa7.json"
+    ],
+    "files_written": ["state/tb2_evidence_manifest_2026-07-24.json"],
+    "remote_calls_made": 0,
+    "mutations": "none (this manifest file is new; no source files were modified)"
+  }
+}

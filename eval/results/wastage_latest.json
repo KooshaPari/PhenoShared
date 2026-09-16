@@ -1,0 +1,102 @@
+{
+  "wastage": {
+    "generated_at": "2026-06-14T03:31:47.148085+00:00",
+    "total_events": 10777,
+    "total_tokens_in": 423879755,
+    "total_tokens_out": 2543018,
+    "total_cache_read": 140634545,
+    "giant_calls_32k_plus": 3491,
+    "duplicate_context_clusters": 50,
+    "overlap_waste_rate": 0.01,
+    "motion": {
+      "forward": 0.902,
+      "stagnate": 0.0028,
+      "regress": 0.0942,
+      "unknown": 0.001,
+      "avg_roi": 0.1233,
+      "total_events": 5000
+    },
+    "by_source": {
+      "omniroute": 5000,
+      "forge": 33,
+      "codex": 756,
+      "claude_code": 4895,
+      "factory_droid": 93
+    },
+    "by_provider": {
+      "codex": 380217237,
+      "minimax": 35812617,
+      "kilocode": 10351319,
+      "gemini": 35353,
+      "nvidia": 6247,
+      "unknown": 0,
+      "openai": 0
+    },
+    "top_waste_patterns": [
+      {
+        "pattern": "giant_context_calls",
+        "count": 3491,
+        "pct": 32.39
+      }
+    ],
+    "recommendations": [
+      "Enable Needle context compiler before cloud escalation (>32k avg input)."
+    ]
+  },
+  "pillars": {
+    "token_burn": 0.0,
+    "accuracy": 0.0,
+    "speed": 0.0,
+    "cost": 0.0,
+    "motion": 0.8091999999999999,
+    "quality": 0.8330347035353067,
+    "composite": 0.2047,
+    "weights": {
+      "token_burn": 0.15,
+      "accuracy": 0.25,
+      "speed": 0.15,
+      "cost": 0.2,
+      "motion": 0.15,
+      "quality": 0.1
+    },
+    "details": {
+      "avg_input_tokens": 39331.9,
+      "motion": {
+        "forward": 0.902,
+        "stagnate": 0.0028,
+        "regress": 0.0942,
+        "unknown": 0.001,
+        "avg_roi": 0.1233,
+        "total_events": 5000
+      },
+      "giant_context_pct": 32.39,
+      "monthly_usd": 1527.39
+    }
+  },
+  "budget": {
+    "generated_at": "2026-06-14T03:31:47.252656+00:00",
+    "estimated_monthly_usd": 1527.39,
+    "tokens_in_month": 649101214,
+    "tokens_out_month": 3862761,
+    "by_provider_usd": {
+      "openai": 1457.38,
+      "fireworks": 0.0,
+      "gemini": 0.05,
+      "kilocode": 15.89,
+      "minimax": 54.06,
+      "mistral": 0.0,
+      "nanobanana": 0.0,
+      "nvidia": 0.01,
+      "opencode-go": 0.0,
+      "openrouter": 0.0,
+      "t42-imagen3": 0.0
+    },
+    "targets": {
+      "ideal_monthly_usd": 200,
+      "max_monthly_usd": 400,
+      "token_monthly": 30000000000
+    },
+    "alert_level": "blackout",
+    "codex_cut_progress": 0.0
+  }
+}

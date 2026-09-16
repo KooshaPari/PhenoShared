@@ -1,0 +1,100 @@
+# Qwen3.5-4B-Coder benchmark launch config — MLX backend, 25-task V5 matrix subset.
+# Next size up from 0.8B drafter; targets workhorse + coding_subagent roles.
+# Usage: python -m bench.cli run-dry --suite <suite> --model Qwen3.5-4B-Coder \
+#        --energy-source powermetrics --judge-mode deterministic
+
+model:
+  id: Qwen/Qwen3.5-4B-Coder
+  alias: local/qwen35-4b
+  backend: mlx
+  context_length: 32768
+  quant: q4
+  estimated_vram_gb: 3
+
+energy:
+  source: powermetrics
+  sample_interval_ms: 100
+
+judge:
+  mode: deterministic
+
+run:
+  n: 5
+  seed: 42
+  output_dir: bench/results/qwen35_4b
+
+# 25 representative tasks from the V5 matrix — one trial each, no promotion authority.
+tasks:
+  # agent_coding tier (P0) — terminal_bench representative-6 core
+  - suite: terminal-bench
+    task_id: headless-terminal
+  - suite: terminal-bench
+    task_id: log-summary-date-ranges
+  - suite: terminal-bench
+    task_id: fix-code-vulnerability
+  - suite: terminal-bench
+    task_id: build-cython-ext
+  - suite: terminal-bench
+    task_id: sqlite-db-truncate
+  - suite: terminal-bench
+    task_id: query-optimize
+
+  # agent_coding tier (P0) — deepswe pilot subset
+  - suite: deepswe
+    subset: 16
+    note: "long-horizon SWE pilot"
+
+  # agent_coding tier (P1) — swe_bench_verified regression anchor
+  - suite: swe-bench-verified
+    subset: regression-anchor
+    note: "regression anchor only — not a primary ranking signal"
+
+  # knowledge tier (P0) — mmlu_pro
+  - suite: mmlu-pro
+    subset: 100
+    note: "knowledge QA — 100-question pilot"
+
+  # knowledge tier — gpqa_diamond
+  - suite: gpqa-diamond
+    subset: full
+    note: "expert-level reasoning"
+
+  # knowledge tier — hle (Humanity's Last Exam)
+  - suite: hle
+    subset: full
+    note: "expert reasoning — highest difficulty"
+
+  # knowledge tier — arc_agi_2
+  - suite: arc-agi-2
+    subset: full
+    note: "abstract reasoning"
+
+  # knowledge tier — perplexity
+  - suite: perplexity
+    subset: full
+    note: "knowledge retrieval quality"
+
+  # custom_pheno tier (P0) — trace replay
+  - suite: custom-pheno-trace
+    subset: smoke
+    note: "pheno trace-replay smoke"
+
+  # coding quality — mt_bench
+  - suite: mt-bench
+    subset: full
+    note: "multi-turn coding quality"
+
+  # coding quality — ifeval
+  - suite: ifeval
+    subset: full
+    note: "instruction following"
+
+  # tool calling — bfcl_v4
+  - suite: bfcl-v4
+    subset: full
+    note: "function calling accuracy"
+
+  # kernel_gpu tier (P1) — kernelbench
+  - suite: kernelbench
+    subset: L1
+    note: "CUDA kernel synthesis — L1 only for 4B"

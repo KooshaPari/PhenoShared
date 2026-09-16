@@ -1,0 +1,26 @@
+{
+  "schema_version": "pheno.eval.aggregate-fixture.v1",
+  "expected_task_ids": ["task-a", "task-b"],
+  "attempts_per_task": 4,
+  "treatment": {
+    "task-a": ["passed", "passed", "passed", "passed"],
+    "task-b": ["passed", "passed", "model_failure", "passed"]
+  },
+  "baseline": {
+    "task-a": ["passed", "passed", "passed", "model_failure"],
+    "task-b": ["passed", "model_failure", "model_failure", "passed"]
+  },
+  "expected": {
+    "treatment_pass_at_1": 0.875,
+    "treatment_pass_at_4": 1.0,
+    "treatment_pass_all_4": 0.5,
+    "treatment_accepted_weight": 7.0,
+    "paired_pass_at_1_delta": 0.25,
+    "paired_delta_ci95_lower": 0.25,
+    "paired_delta_ci95_upper": 0.25,
+    "avs_per_second": 0.7,
+    "avs_per_second_per_gb": 0.35,
+    "avs_per_dollar": 3.5,
+    "combined_avs_per_second_gb_dollar": 0.175
+  }
+}

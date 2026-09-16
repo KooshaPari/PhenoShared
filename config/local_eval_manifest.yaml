@@ -1,0 +1,36 @@
+# Local-only eval manifest source.
+
+suite:
+  id: tbench_20_local_dryrun
+  dataset: terminal-bench@2.0
+  n_tasks: 89
+  run_mode: manifest_only
+  cost_usd: 0.0
+
+hardware_profile: win_3090ti
+
+models:
+  - alias: local/qwen35-08b
+    model_ref: Qwen/Qwen3.5-0.8B
+    engines: [sglang, llama_cpp, mlx]
+    roles: [draft, tiny_worker]
+  - alias: local/lfm25-8b-a1b
+    model_ref: LiquidAI/LFM2.5-8B-A1B
+    engines: [sglang, vllm, llama_cpp, tensorrt_llm]
+    roles: [workhorse, coding_subagent]
+  - alias: local/ornith-8b
+    model_ref: deepreinforce-ai/Ornith-1.0-9B
+    engines: [sglang, vllm, llama_cpp]
+    roles: [workhorse, reviewer]
+
+defaults:
+  weight_quant: [q2, q3, q4, q5, q6, q8, nvfp4_type]
+  kv_quant: [q4_0, q5_0, q8_0, tq_plus]
+  decode:
+    - baseline
+    - mtp_probe
+    - dflash_dspark_probe
+    - jetspec_probe
+    - ddtree_probe
+    - speculative_speculative_probe
+  compression: [baseline, reap, reap_local]

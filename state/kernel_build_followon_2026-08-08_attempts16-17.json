@@ -1,0 +1,39 @@
+{
+  "schema_version": "pheno.kernel-build-followon.v1",
+  "as_of_utc": "2026-08-08T10:10:00Z",
+  "session": {"codex_thread_id": "019f6249-d74c-7540-885f-588c3d51ac3a", "continuation_session": true},
+  "attempt_16": {
+    "outcome": "FAILED - external VM poweroff, NOT build error",
+    "patch_effect": "COMPLETE SUCCESS - --threads=32->4 + sm_86-only gencode eliminated WSL wedge entirely; ran 24 min zero starvation; passed both killers (cutlass_mla_kernel.cu, vertical_slash_index.cu)",
+    "progress_at_death": "11/104 .o (entire attention dir done)",
+    "death_cause": "lane infra orderly systemctl poweroff 09:39:37 UTC (journal boot -1), then restarted lane vLLM services (19000 LFM2.5, 19002 granite) at 09:45-09:47"
+  },
+  "attempt_17": {
+    "outcome": "FAILED - external VM poweroff 3.5 min after launch",
+    "progress_at_death": "1/104 .o (custom_all_reduce only)",
+    "death_cause": "lane infra systemctl poweroff 09:55:50 UTC (journal: pheno-granite.service Stopped 02:55:50 PDT, then InitTerminateInstanceInternal -> reboot(RB_POWER_OFF)); identical pattern to attempt 16",
+    "vm_recovery": "auto-recovered boot 0 at 09:56:17, WslService RUNNING, no build procs remain"
+  },
+  "established_facts": [
+    "Post-patch build is healthy: no wedge, no compile errors (warnings-only), ninja -j1 + nvcc --threads 4 coexists with lane vLLM",
+    "ONLY remaining blocker: lane infrastructure periodically powers off the WSL VM (observed 09:39, 09:55 UTC, ~16 min apart)",
+    "Build dir /home/kooshapari/sglang-src/sgl-kernel/build persists on vhdx across VM restarts (attempt 16's 11 .o survived)",
+    "Full script run does rm -rf build + re-seed each time - loses accumulated progress; full build needs ~35-45 min uninterrupted",
+    "Build script is CRLF; LF copy kbuild_final_0802_lf.sh is the working entry"
+  ],
+  "next_attempt_18_strategy": {
+    "name": "incremental ninja resume across poweroffs",
+    "rationale": "lane infra poweroffs are unavoidable from our side (no elevation, no touching lane procs, podman/wslc only). Each poweroff only kills the in-flight TU. A bare ninja -j1 resume in the persisted build dir accumulates progress across restarts until the .so links.",
+    "steps": [
+      "fresh configure+initial build via LF script (or cmake --build) on a live boot",
+      "on each VM restart: cd build dir && ninja -j1 (no rm -rf, no re-seed) -> resumes from existing .o",
+      "when ninja completes: .so exists -> assemble wheel (uv build --no-build-isolation with existing build dir or pip wheel)",
+      "verify wheel, do NOT install"
+    ],
+    "risks": [
+      "scikit-build-core may regenerate/clean build dir on uv build - use bare cmake/ninja in build dir for accumulation, wheel assembly at end",
+      "poweroff mid-write could corrupt a .o - ninja recompiles corrupt TUs",
+      "lane infra may not leave VM idle long enough even for ninja resume steps"
+    ]
+  }
+}

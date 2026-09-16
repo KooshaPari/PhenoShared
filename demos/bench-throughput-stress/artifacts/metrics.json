@@ -1,0 +1,61 @@
+{
+  "completed_runs": 189,
+  "throughput_per_s": 189.0,
+  "lat_ms": {
+    "avg": 90,
+    "p50": 90,
+    "p99": 110,
+    "max": 113,
+    "min": 84
+  },
+  "exit_codes": {
+    "ok": 189,
+    "fail": 0,
+    "fail_rate": 0.0
+  },
+  "by_suite": {
+    "gpqa-diamond": {
+      "runs": 42,
+      "avg_lat_ms": 89.43,
+      "fail": 0,
+      "fail_rate": 0.0
+    },
+    "deep-swe": {
+      "runs": 51,
+      "avg_lat_ms": 89.76,
+      "fail": 0,
+      "fail_rate": 0.0
+    },
+    "bfcl": {
+      "runs": 45,
+      "avg_lat_ms": 91.0,
+      "fail": 0,
+      "fail_rate": 0.0
+    },
+    "hle": {
+      "runs": 51,
+      "avg_lat_ms": 90.59,
+      "fail": 0,
+      "fail_rate": 0.0
+    }
+  },
+  "by_worker": {
+    "0": {
+      "runs": 47,
+      "avg_lat_ms": 90.23
+    },
+    "2": {
+      "runs": 47,
+      "avg_lat_ms": 90.13
+    },
+    "3": {
+      "runs": 47,
+      "avg_lat_ms": 90.3
+    },
+    "1": {
+      "runs": 48,
+      "avg_lat_ms": 90.17
+    }
+  },
+  "ts_ms": 1788419498084
+}

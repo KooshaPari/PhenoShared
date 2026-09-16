@@ -1,0 +1,245 @@
+{
+  "date": "2026-07-04",
+  "probes": [
+    {
+      "hf_repo": "deepreinforce-ai/Ornith-1.0-9B",
+      "ok": true,
+      "last_modified": null,
+      "created_at": null,
+      "downloads": null,
+      "likes": null,
+      "gated": null,
+      "pipeline_tag": null,
+      "siblings_count": 0,
+      "params_b": 9.4098,
+      "dtype_breakdown": {
+        "BF16": 9409813744
+      },
+      "top_files": []
+    },
+    {
+      "hf_repo": "Qwen/Qwen3.5-0.8B",
+      "ok": true,
+      "last_modified": null,
+      "created_at": null,
+      "downloads": null,
+      "likes": null,
+      "gated": null,
+      "pipeline_tag": null,
+      "siblings_count": 0,
+      "params_b": 0.8734,
+      "dtype_breakdown": {
+        "F32": 2592,
+        "BF16": 873436192
+      },
+      "top_files": []
+    },
+    {
+      "hf_repo": "LiquidAI/LFM2.5-8B-A1B",
+      "ok": true,
+      "last_modified": null,
+      "created_at": null,
+      "downloads": null,
+      "likes": null,
+      "gated": null,
+      "pipeline_tag": null,
+      "siblings_count": 0,
+      "params_b": 8.4679,
+      "dtype_breakdown": {
+        "F32": 704,
+        "BF16": 8467856128
+      },
+      "top_files": []
+    },
+    {
+      "hf_repo": "protoLabsAI/Ornith-1.0-9B-MTP-GGUF",
+      "ok": true,
+      "last_modified": null,
+      "created_at": null,
+      "downloads": null,
+      "likes": null,
+      "gated": null,
+      "pipeline_tag": null,
+      "siblings_count": 0,
+      "params_b": null,
+      "dtype_breakdown": {},
+      "top_files": []
+    },
+    {
+      "hf_repo": "ibm-granite/granite-4.0-h-micro",
+      "ok": true,
+      "last_modified": null,
+      "created_at": null,
+      "downloads": null,
+      "likes": null,
+      "gated": null,
+      "pipeline_tag": null,
+      "siblings_count": 0,
+      "params_b": 3.1914,
+      "dtype_breakdown": {
+        "BF16": 3191396096
+      },
+      "top_files": []
+    },
+    {
+      "hf_repo": "ibm-granite/granite-4.1-8b",
+      "ok": true,
+      "last_modified": null,
+      "created_at": null,
+      "downloads": null,
+      "likes": null,
+      "gated": null,
+      "pipeline_tag": null,
+      "siblings_count": 0,
+      "params_b": 8.7916,
+      "dtype_breakdown": {
+        "BF16": 8791592960
+      },
+      "top_files": []
+    },
+    {
+      "hf_repo": "LiquidAI/LFM2-24B-A2B",
+      "ok": true,
+      "last_modified": null,
+      "created_at": null,
+      "downloads": null,
+      "likes": null,
+      "gated": null,
+      "pipeline_tag": null,
+      "siblings_count": 0,
+      "params_b": 23.8437,
+      "dtype_breakdown": {
+        "F32": 2432,
+        "BF16": 23843659008
+      },
+      "top_files": []
+    },
+    {
+      "hf_repo": "arcee-ai/Trinity-Mini",
+      "ok": true,
+      "last_modified": null,
+      "created_at": null,
+      "downloads": null,
+      "likes": null,
+      "gated": null,
+      "pipeline_tag": null,
+      "siblings_count": 0,
+      "params_b": 26.124,
+      "dtype_breakdown": {
+        "BF16": 26123974400
+      },
+      "top_files": []
+    },
+    {
+      "hf_repo": "poolside/Laguna-XS-2.1",
+      "ok": true,
+      "last_modified": null,
+      "created_at": null,
+      "downloads": null,
+      "likes": null,
+      "gated": null,
+      "pipeline_tag": null,
+      "siblings_count": 0,
+      "params_b": 33.4426,
+      "dtype_breakdown": {
+        "BF16": 33442617088
+      },
+      "top_files": []
+    },
+    {
+      "hf_repo": "tencent/HY3-Preview",
+      "ok": true,
+      "last_modified": null,
+      "created_at": null,
+      "downloads": null,
+      "likes": null,
+      "gated": null,
+      "pipeline_tag": null,
+      "siblings_count": 0,
+      "params_b": 298.7862,
+      "dtype_breakdown": {
+        "BF16": 298786140416,
+        "F32": 15360
+      },
+      "top_files": []
+    }
+  ],
+  "ornith_top_dl": [
+    {
+      "id": "deepreinforce-ai/Ornith-1.0-9B-GGUF",
+      "downloads": 320660,
+      "lm": null
+    },
+    {
+      "id": "deepreinforce-ai/Ornith-1.0-9B",
+      "downloads": 69837,
+      "lm": null
+    },
+    {
+      "id": "bartowski/deepreinforce-ai_Ornith-1.0-9B-GGUF",
+      "downloads": 32318,
+      "lm": null
+    },
+    {
+      "id": "protoLabsAI/Ornith-1.0-9B-MTP-GGUF",
+      "downloads": 24464,
+      "lm": null
+    },
+    {
+      "id": "cyankiwi/Ornith-1.0-9B-AWQ-FP8",
+      "downloads": 17649,
+      "lm": null
+    },
+    {
+      "id": "SC117/Ornith-1.0-9B-heretic-MTP-GGUF",
+      "downloads": 9354,
+      "lm": null
+    },
+    {
+      "id": "zaakirio/Ornith-1.0-9B-uncensored-GGUF",
+      "downloads": 9336,
+      "lm": null
+    },
+    {
+      "id": "s-batman/Ornith-1.0-9B-NVFP4-MTP-GGUF",
+      "downloads": 6973,
+      "lm": null
+    },
+    {
+      "id": "pavantippannagari/Ornith-1.0-9B-mlx-4Bit",
+      "downloads": 6612,
+      "lm": null
+    },
+    {
+      "id": "cyankiwi/Ornith-1.0-9B-AWQ-INT4",
+      "downloads": 6004,
+      "lm": null
+    },
+    {
+      "id": "mlx-community/Ornith-1.0-9B-4bit",
+      "downloads": 5890,
+      "lm": null
+    },
+    {
+      "id": "samuelchristlie/Ornith-1.0-9B-gguf",
+      "downloads": 5488,
+      "lm": null
+    },
+    {
+      "id": "Luni/Ornith-1.0-9B-NVFP4-AWQ",
+      "downloads": 2929,
+      "lm": null
+    },
+    {
+      "id": "huihui-ai/Ornith-1.0-9B-abliterated-MTP-GGUF",
+      "downloads": 2308,
+      "lm": null
+    },
+    {
+      "id": "alvarolizama/Ornith-1.0-9B-oQ4-fp16",
+      "downloads": 2058,
+      "lm": null
+    }
+  ],
+  "qwen3.5_0.8b_carddata_err": "AttributeError: 'ModelCardData' object has no attribute 'keys'"
+}

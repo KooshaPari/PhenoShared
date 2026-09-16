@@ -1,0 +1,14 @@
+# branch-lint: /Users/kooshapari/CodeProjects/Phenotype/repos/phenoAI
+# scanned=27 allowed=16 grandfathered=0 violations=11
+# VIOLATIONS:
+  build-triage-phenoAI  reason=no_allowed_prefix
+  chore/worklog-seed-phenoAI  reason=bad_segment_chars -> chore/worklog-seed-phenoai
+  ci/add-push-pr-workflow  reason=no_allowed_prefix
+  ci/add-release-workflow  reason=no_allowed_prefix
+  cursor/deny-toml-license-incompatibility-d5f8  reason=no_allowed_prefix
+  cursor/release-workflow-issues-9781  reason=no_allowed_prefix
+  fix/p3-rem-phenoAI-6  reason=bad_segment_chars -> fix/p3-rem-phenoai-6
+  fix/p3-rem-phenoAI-8  reason=bad_segment_chars -> fix/p3-rem-phenoai-8
+  hygiene/preserved-changes  reason=no_allowed_prefix
+  wip/2026-06-18-phenoAI-l7-001-propagation  reason=no_allowed_prefix
+  wip/2026-07-16-0029-auto  reason=no_allowed_prefix

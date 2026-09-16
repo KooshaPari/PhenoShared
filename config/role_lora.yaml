@@ -1,0 +1,47 @@
+# Locked local role LoRA adapters (Phase 3)
+base_model:
+  tier: local.lfm25_8b_a1b
+  id: LiquidAI/LFM2.5-8B-A1B
+  path: "${PHENO_LFM25_8B_A1B:-}"
+  quant: Q4_K_M
+
+training:
+  method: qlora
+  rank: 16
+  alpha: 32
+  dropout: 0.05
+  lr: 2.0e-4
+  epochs: 2
+  batch_size: 4
+  max_seq_len: 4096
+  output_dir: "${PHENO_ROLE_LORAS:-state/role_loras}"
+
+roles:
+  retrieve:
+    description: "Context slice selection and retrieval formatting"
+    dataset_glob: "traces_retrieve_*.jsonl"
+    target_pass_rate: 0.85
+    max_output: 256
+
+  plan:
+    description: "Architecture and task decomposition"
+    dataset_glob: "traces_plan_*.jsonl"
+    target_pass_rate: 0.80
+    max_output: 512
+
+  code:
+    description: "Routine patch and implementation"
+    dataset_glob: "traces_patch_*.jsonl"
+    target_pass_rate: 0.75
+    max_output: 1200
+
+  debug_lite:
+    description: "Lightweight debug and triage"
+    dataset_glob: "traces_debug_*.jsonl"
+    target_pass_rate: 0.75
+    max_output: 768
+
+nightly:
+  export_since_hours: 24
+  min_pairs_per_role: 32
+  dpo_beta: 0.1

@@ -1,0 +1,56 @@
+{
+  "suite": "ifeval",
+  "n": 5,
+  "passed": 4,
+  "pass_at_1": 0.8,
+  "wall_clock_s_total": 53.76,
+  "wall_clock_s_mean": 10.75,
+  "wall_clock_s_p95": 25.98,
+  "task_results": [
+    {
+      "task_id": "synth-if-42-0000",
+      "ok": false,
+      "wall_clock_s": 6.384,
+      "reply_bytes": 1349,
+      "reply_preview": "0",
+      "error": null,
+      "exit_code": 0
+    },
+    {
+      "task_id": "synth-if-42-0001",
+      "ok": true,
+      "wall_clock_s": 6.86,
+      "reply_bytes": 1715,
+      "reply_preview": "Fun fact: if the Moon were shaped like a banana, its reflected sunlight would create a dramatically different set of pha",
+      "error": null,
+      "exit_code": 0
+    },
+    {
+      "task_id": "synth-if-42-0002",
+      "ok": true,
+      "wall_clock_s": 8.254,
+      "reply_bytes": 4295,
+      "reply_preview": "A fun way to visualize it: imagine a banana held at arm's length under a single overhead light \u2014 as you slowly turn in p",
+      "error": null,
+      "exit_code": 0
+    },
+    {
+      "task_id": "synth-if-42-0003",
+      "ok": true,
+      "wall_clock_s": 6.287,
+      "reply_bytes": 1587,
+      "reply_preview": "So the phases are simply the result of the moon's changing position in orbit around Earth and our changing view of its s",
+      "error": null,
+      "exit_code": 0
+    },
+    {
+      "task_id": "synth-if-42-0004",
+      "ok": true,
+      "wall_clock_s": 25.979,
+      "reply_bytes": 2383,
+      "reply_preview": "So in short: the Moon's phases are a geometric effect of its orbit around Earth, not a change in the Moon itself. The sa",
+      "error": null,
+      "exit_code": 0
+    }
+  ]
+}

@@ -1,0 +1,68 @@
+{
+  "id": "liquid/lfm-2-24b-a2b",
+  "scraped_at": "2026-07-04T09:59:18.591788+00:00",
+  "api_found": true,
+  "page_found": true,
+  "api": {
+    "id": "liquid/lfm-2-24b-a2b",
+    "canonical_slug": "liquid/lfm-2-24b-a2b-20260224",
+    "hugging_face_id": "LiquidAI/LFM2-24B-A2B",
+    "name": "LiquidAI: LFM2-24B-A2B",
+    "created": 1772048711,
+    "description": "LFM2-24B-A2B is the largest model in the LFM2 family of hybrid architectures designed for efficient on-device deployment. Built as a 24B parameter Mixture-of-Experts model with only 2B active parameters per...",
+    "context_length": 128000,
+    "architecture": {
+      "modality": "text->text",
+      "input_modalities": [
+        "text"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "tokenizer": "Other",
+      "instruct_type": null
+    },
+    "pricing": {
+      "prompt": "0.00000003",
+      "completion": "0.00000012"
+    },
+    "top_provider": {
+      "context_length": 32768,
+      "max_completion_tokens": null,
+      "is_moderated": false
+    },
+    "per_request_limits": null,
+    "supported_parameters": [
+      "frequency_penalty",
+      "logit_bias",
+      "max_tokens",
+      "min_p",
+      "presence_penalty",
+      "repetition_penalty",
+      "response_format",
+      "stop",
+      "temperature",
+      "top_k",
+      "top_p"
+    ],
+    "default_parameters": {
+      "temperature": 0.1,
+      "top_p": null,
+      "top_k": 50,
+      "frequency_penalty": null,
+      "presence_penalty": null,
+      "repetition_penalty": 1.05
+    },
+    "supported_voices": null,
+    "knowledge_cutoff": null,
+    "expiration_date": null,
+    "links": {
+      "details": "/api/v1/models/liquid/lfm-2-24b-a2b-20260224/endpoints"
+    }
+  },
+  "page_url": "https://openrouter.ai/liquid/lfm-2-24b-a2b",
+  "page": {
+    "title": "LFM2-24B-A2B - API Pricing &amp; Benchmarks | OpenRouter",
+    "visible_text_sample": "LFM2-24B-A2B - API Pricing &amp; Benchmarks | OpenRouter Skip to content OpenRouter Search \u2318 K Models Fusion Chat Rankings Apps Enterprise Pricing Docs OpenRouter \u00a9 2026 OpenRouter, Inc Product Chat Rankings Apps Models Providers Pricing Enterprise Labs Company About Blog Careers Hiring Privacy Terms of Service Support State of AI Works With OR Data Developer Documentation API Reference SDK Status Connect Discord GitHub LinkedIn X YouTube LiquidAI: LFM2-24B-A2B liquid / lfm-2-24b-a2b Model weights Compare Playground Quick Start LFM2-24B-A2B is the largest model in the LFM2 family of hybrid architectures designed for efficient on-device deployment. Built as a 24B parameter Mixture-of-Experts model with only 2B active parameters per token, it delivers high-quality generation while maintaining low inference costs. The model fits within 32 GB of RAM, making it practical to run on consumer laptops and desktops without sacrificing capability. Modalities In / Out Price $0.03 / $0.12 per 1M Context 128K Released Feb 25, 2026 LiquidAI: LFM2-24B-A2B Compare Playground Quick Start Providers Effective Pricing Performance Uptime Benchmarks Apps Activity Providers Providers This model is hosted by one provider. OpenRouter forwards every request to it directly \u2014 no routing decisions to make. Effective Pricing The chart below shows the average price customers are actually paying after prompt caching. Depending on the amount of repeated context you send, this can be 60\u201380% cheaper than the provider list price. Shown are rolling averages from the past 30 days. Performance Throughput is how fast the model writes (tokens per second \u2014 higher is better). Latency is total round-trip time (lower is better). TTFT is time-to-first-token \u2014 how long before you see anything appear (lower is better). Uptime Percent of requests that succeeded over the last 30 days. OpenRouter monitors every provider continuously and automatically retries on the next-best provider when one returns an error. Benchmarks Scores on standardized evaluations. Higher percentages are better \u2014 and rank percentile shows where this model lands among all models on OpenRouter. Apps Public apps that send the most traffic to this model. Good signal for what real production workloads look like \u2014 and a hint at which use cases this model is best suited for. Activity Token volume and request traffic to this model over time. Quick Start Drop-in code to call this model. OpenRouter&#x27;s API is OpenAI-compatible \u2014 most SDKs work by just swapping the base URL. The only thing that changes between models is the model slug below."
+  }
+}

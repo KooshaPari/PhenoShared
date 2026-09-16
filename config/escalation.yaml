@@ -1,0 +1,55 @@
+# Escalation policy for OmniRoute combo Main.
+# Local model choices locked by ADR 0005.
+
+combo_id: Main
+
+steps:
+  - id: needle_compile
+    action: context_compiler
+    on_success: qwen35_08b
+    on_fail: qwen35_08b
+
+  - id: qwen35_08b
+    model: local/qwen35-08b
+    local: true
+    max_retries: 1
+    on_fail: lfm25_8b_a1b
+
+  - id: lfm25_8b_a1b
+    model: local/lfm25-8b-a1b
+    local: true
+    max_retries: 1
+    on_fail: ornith_8b
+
+  - id: ornith_8b
+    model: local/ornith-8b
+    local: true
+    max_retries: 1
+    on_fail: ling_flash
+
+  - id: ling_flash
+    provider: openrouter
+    model: inclusionai/ling-2.6-flash
+    budget_gate: true
+    on_fail: granite_41_8b
+
+  - id: granite_41_8b
+    provider: openrouter
+    model: ibm-granite/granite-4.1-8b
+    budget_gate: true
+    on_fail: qwen35_flash
+
+  - id: qwen35_flash
+    provider: openrouter
+    model: qwen/qwen3.5-flash-02-23
+    budget_gate: true
+    on_fail: arcee_trinity_mini
+
+  - id: arcee_trinity_mini
+    provider: openrouter
+    model: arcee-ai/trinity-mini
+    role: fallback
+
+targets:
+  routine_on_qwen35_08b_pct: 0.50
+  p95_routine_latency_s: 5

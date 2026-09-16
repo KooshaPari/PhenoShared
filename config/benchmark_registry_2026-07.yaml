@@ -1,0 +1,494 @@
+# July 2026 benchmark registry — canonical suite catalog for pheno-harness.
+# Dry-run planners read this file; execution remains gated by eval_locks and local-only policy.
+
+schema_version: pheno.benchmark.registry.v1
+registry_id: benchmark_registry_2026-07
+effective_date: "2026-07-17"
+
+policy:
+  local_only: true
+  cloud_eval_enabled: false
+  cloud_cost_gate_usd: 1.00
+  require_verifier_artifact: true
+  holdout_config: training/eval_holdout.yaml
+
+tiers:
+  agent_coding:
+    description: Terminal and long-horizon software-engineering agent benchmarks.
+    cadence: weekly
+  computer_use:
+    description: Browser, desktop, and OS automation agent benchmarks.
+    cadence: monthly
+  knowledge:
+    description: Knowledge, reasoning, and multi-hop QA benchmarks.
+    cadence: monthly
+  kernel_gpu:
+    description: CUDA/Triton kernel synthesis and GPU perf benchmarks (3090 Ti primary).
+    cadence: weekly
+  custom_pheno:
+    description: Pheno-tailored trace replay, dual-GPU perf, role, and forge loops.
+    cadence: weekly
+
+suites:
+  terminal_bench_2_0:
+    tier: agent_coding
+    domain: terminal_agent
+    label: Terminal-Bench 2.0
+    upstream:
+      owner: laude-institute
+      repository_url: https://github.com/laude-institute/terminal-bench-2.git
+      dataset: terminal-bench@2.0
+    pins:
+      lock_file: config/eval_locks/terminal_bench_2_0.candidate.yaml
+      revision_sha: 69671fbaac6d67a7ef0dfec016cc38a64ef7a77c
+      task_count: 89
+    pin_status: candidate
+    scoreable: false
+    local_runnable: true
+    harness:
+      runner: harbor
+      agent: terminus-2
+      version: "0.6.1"
+    gates:
+      - local_pheno_serve
+      - podman_docker_api
+      - suite_lock_verified
+    pheno_priority: P0
+    driver:
+      script: scripts/run_tbench_v21.py
+      route_config: config/harbor_tbench_routes.yaml
+      default_subset: representative-6
+    results_dir: bench/results/tbench/20
+
+  terminal_bench_2_1:
+    tier: agent_coding
+    domain: terminal_agent
+    label: Terminal-Bench 2.1
+    upstream:
+      owner: laude-institute
+      repository_url: https://github.com/laude-institute/terminal-bench-2.git
+      dataset: terminal-bench@2.1
+    pins:
+      lock_file: null
+      revision_sha: null
+      task_count: null
+    pin_status: unpinned
+    scoreable: false
+    local_runnable: true
+    harness:
+      runner: harbor
+      agent: terminus-2
+      version: "0.6.1"
+    gates:
+      - local_pheno_serve
+      - podman_docker_api
+      - dataset_acquired
+    pheno_priority: P0
+    driver:
+      script: scripts/run_tbench_v21.py
+      route_config: config/harbor_tbench_routes.yaml
+      default_subset: representative-6
+      suite_flag: terminal-bench@2.1
+    results_dir: bench/results/tbench/21
+
+  deepswe:
+    tier: agent_coding
+    domain: long_horizon_swe
+    label: DeepSWE v1.1
+    upstream:
+      owner: datacurve-ai
+      repository_url: https://github.com/datacurve-ai/deep-swe
+      dataset: deepswe-v1.1
+    pins:
+      lock_file: config/eval_locks/deepswe_v1_1.candidate.yaml
+      revision_sha: 6db64a40f3318d8659238ff34a8cc4b491c49205
+      task_count: 113
+      runner_min_version: "0.3.0"
+    pin_status: candidate
+    scoreable: false
+    local_runnable: true
+    harness:
+      runner: pier
+      agent: mini-swe-agent
+    gates:
+      - local_pheno_serve
+      - docker_only
+      - suite_lock_verified
+    pheno_priority: P0
+    driver:
+      script: scripts/run_deepswe.py
+      config: config/deepswe.yaml
+      default_subset: 16
+    results_dir: bench/results/deepswe
+
+  kernelbench_rtx3090:
+    tier: kernel_gpu
+    domain: kernel_synthesis
+    label: KernelBench RTX3090Bench
+    upstream:
+      owner: Infatoshi
+      repository_url: https://github.com/Infatoshi/KernelBench-v3
+      subset: RTX3090Bench
+      levels: [L1, L2, L3, L4]
+    pins:
+      lock_file: null
+      revision_sha: null
+      task_count: 43
+    pin_status: unpinned
+    scoreable: false
+    local_runnable: true
+    harness:
+      runner: forgecode_gpu_lane
+      lane: Primary3090
+      metric: speedup_vs_pytorch_baseline
+    gates:
+      - cuda_toolkit
+      - torch_installed
+      - rtx_3090_ti
+    pheno_priority: P1
+    driver:
+      script: scripts/kernelbench_smoke_plan.py
+      config: config/kernelbench_rtx3090.yaml
+    results_dir: bench/results/kernelbench
+
+  gdpval:
+    tier: knowledge
+    domain: economic_reasoning
+    label: GDPval
+    upstream:
+      owner: openai
+      repository_url: https://github.com/openai/gdpval
+      dataset: gdpval
+    pins:
+      lock_file: null
+      revision_sha: null
+      task_count: null
+    pin_status: unpinned
+    scoreable: false
+    local_runnable: false
+    harness:
+      runner: harness_eval
+      agent: null
+    gates:
+      - dataset_acquired
+      - cloud_cost_gate
+    pheno_priority: P2
+    driver:
+      script: null
+    results_dir: bench/results/gdpval
+
+  gdpval_aa:
+    tier: agent_coding
+    domain: agentic_economic_tasks
+    label: GDPval-AA (agentic/autonomous)
+    upstream:
+      owner: openai
+      repository_url: https://github.com/openai/gdpval
+      dataset: gdpval-aa
+    pins:
+      lock_file: null
+      revision_sha: null
+      task_count: null
+    pin_status: unpinned
+    scoreable: false
+    local_runnable: false
+    harness:
+      runner: harness_eval
+      agent: terminus-2
+    gates:
+      - dataset_acquired
+      - cloud_cost_gate
+    pheno_priority: P2
+    driver:
+      script: null
+    results_dir: bench/results/gdpval_aa
+
+  mmlu_pro:
+    tier: knowledge
+    domain: knowledge_qa
+    label: MMLU-Pro
+    upstream:
+      owner: TIGER-AI-Lab
+      repository_url: https://github.com/TIGER-AI-Lab/MMLU-Pro
+      dataset: mmlu-pro
+    pins:
+      lock_file: null
+      revision_sha: null
+      task_count: null
+    pin_status: unpinned
+    scoreable: false
+    local_runnable: true
+    harness:
+      runner: lm_eval_harness
+      agent: null
+    gates:
+      - local_pheno_serve
+      - dataset_acquired
+    pheno_priority: P2
+    driver:
+      script: null
+    results_dir: bench/results/mmlu_pro
+
+  browsecomp:
+    tier: computer_use
+    domain: web_browsing
+    label: BrowseComp
+    upstream:
+      owner: openai
+      repository_url: https://github.com/openai/simple-evals
+      dataset: browsecomp
+    pins:
+      lock_file: null
+      revision_sha: null
+      task_count: null
+    pin_status: unpinned
+    scoreable: false
+    local_runnable: false
+    harness:
+      runner: browser_agent
+      agent: computer_use
+    gates:
+      - browser_sandbox
+      - cloud_cost_gate
+    pheno_priority: P2
+    driver:
+      script: null
+    results_dir: bench/results/browsecomp
+
+  osworld_verified:
+    tier: computer_use
+    domain: desktop_automation
+    label: OSWorld Verified
+    upstream:
+      owner: xlang-ai
+      repository_url: https://github.com/xlang-ai/OSWorld
+      dataset: osworld-verified
+    pins:
+      lock_file: null
+      revision_sha: null
+      task_count: null
+    pin_status: unpinned
+    scoreable: false
+    local_runnable: false
+    harness:
+      runner: osworld
+      agent: computer_use
+    gates:
+      - vm_sandbox
+      - display_stack
+    pheno_priority: P2
+    driver:
+      script: null
+    results_dir: bench/results/osworld
+
+  pinchbench:
+    tier: computer_use
+    domain: startup_agent
+    label: PinchBench
+    upstream:
+      owner: openclaw
+      repository_url: https://github.com/openclaw/pinchbench
+      dataset: pinchbench
+    pins:
+      lock_file: null
+      revision_sha: null
+      task_count: null
+    pin_status: unpinned
+    scoreable: false
+    local_runnable: false
+    harness:
+      runner: agent_startup
+      agent: multi_agent
+    gates:
+      - dataset_acquired
+      - cloud_cost_gate
+    pheno_priority: P3
+    driver:
+      script: null
+    results_dir: bench/results/pinchbench
+
+  vending_bench_2:
+    tier: computer_use
+    domain: long_horizon_startup
+    label: Vending-Bench 2
+    upstream:
+      owner: andonlabs
+      repository_url: https://github.com/andonlabs/vending-bench
+      dataset: vending-bench-2
+    pins:
+      lock_file: null
+      revision_sha: null
+      task_count: null
+    pin_status: unpinned
+    scoreable: false
+    local_runnable: false
+    harness:
+      runner: agent_startup
+      agent: long_horizon
+    gates:
+      - dataset_acquired
+      - cloud_cost_gate
+    pheno_priority: P3
+    driver:
+      script: null
+    results_dir: bench/results/vending_bench_2
+
+  arc_agi_2:
+    tier: knowledge
+    domain: abstract_reasoning
+    label: ARC-AGI-2
+    upstream:
+      owner: arc-prize
+      repository_url: https://github.com/arcprize/ARC-AGI-2
+      dataset: arc-agi-2
+    pins:
+      lock_file: null
+      revision_sha: null
+      task_count: null
+    pin_status: unpinned
+    scoreable: false
+    local_runnable: true
+    harness:
+      runner: arc_eval
+      agent: null
+    gates:
+      - local_pheno_serve
+      - dataset_acquired
+    pheno_priority: P3
+    driver:
+      script: null
+    results_dir: bench/results/arc_agi_2
+
+  hle:
+    tier: knowledge
+    domain: expert_reasoning
+    label: Humanity's Last Exam
+    upstream:
+      owner: center-for-ai-safety
+      repository_url: https://github.com/centerforaisafety/hle
+      dataset: hle
+    pins:
+      lock_file: null
+      revision_sha: null
+      task_count: null
+    pin_status: unpinned
+    scoreable: false
+    local_runnable: false
+    harness:
+      runner: lm_eval_harness
+      agent: null
+    gates:
+      - dataset_acquired
+      - cloud_cost_gate
+    pheno_priority: P3
+    driver:
+      script: null
+    results_dir: bench/results/hle
+
+  gaia:
+    tier: knowledge
+    domain: general_assistant
+    label: GAIA
+    upstream:
+      owner: gaia-benchmark
+      repository_url: https://github.com/gaia-benchmark/GAIA
+      dataset: gaia
+    pins:
+      lock_file: null
+      revision_sha: null
+      task_count: null
+    pin_status: unpinned
+    scoreable: false
+    local_runnable: false
+    harness:
+      runner: gaia_eval
+      agent: tool_use
+    gates:
+      - tool_sandbox
+      - cloud_cost_gate
+    pheno_priority: P2
+    driver:
+      script: null
+    results_dir: bench/results/gaia
+
+  swe_bench_pro:
+    tier: agent_coding
+    domain: patch_repair
+    label: SWE-bench Pro
+    upstream:
+      owner: SWE-bench
+      repository_url: https://github.com/SWE-bench/SWE-bench
+      dataset: swe-bench-pro
+    pins:
+      lock_file: null
+      revision_sha: null
+      task_count: null
+    pin_status: unpinned
+    scoreable: false
+    local_runnable: false
+    harness:
+      runner: swebench
+      agent: mini-swe-agent
+    gates:
+      - docker_only
+      - regression_anchor_only
+    pheno_priority: P1
+    driver:
+      script: null
+    results_dir: bench/results/swe_bench_pro
+    notes: Regression anchor only — not a primary ranking signal per eval architecture.
+
+  custom_pheno_trace:
+    tier: custom_pheno
+    domain: trace_replay
+    label: Pheno trace-replay suite
+    upstream:
+      owner: pheno-harness
+      repository_url: local
+      dataset: bench/custom/trace-replay
+    pins:
+      lock_file: null
+      revision_sha: null
+      task_count: null
+    pin_status: unpinned
+    scoreable: false
+    local_runnable: true
+    harness:
+      runner: pheno
+      agent: intent_graph
+    gates:
+      - trace_specs_reviewed
+      - local_pheno_serve
+    pheno_priority: P0
+    driver:
+      script: scripts/run_long_horizon.py
+      spec_root: bench/custom/trace-replay
+    results_dir: bench/results/long_horizon
+
+  custom_pheno_dual_gpu:
+    tier: custom_pheno
+    domain: dual_gpu_serving
+    label: Pheno dual-GPU perf suite
+    upstream:
+      owner: pheno-harness
+      repository_url: local
+      dataset: bench/custom/dual-gpu-perf
+    pins:
+      lock_file: null
+      revision_sha: null
+      task_count: null
+    pin_status: unpinned
+    scoreable: true
+    local_runnable: true
+    harness:
+      runner: pheno
+      agent: null
+    gates:
+      - dual_gpu_stack
+      - pheno_serve_proxy
+    pheno_priority: P1
+    driver:
+      script: scripts/run_heterogeneous_perf.py
+      smoke_script: scripts/run_dual_gpu_smoke.ps1
+      stack_script: scripts/start_dual_gpu_stack.ps1
+    results_dir: bench/results/perf

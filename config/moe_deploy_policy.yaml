@@ -1,0 +1,158 @@
+# MoE deployment policy — REAP + PTQ + quant ladder (3090 Ti primary)
+# Rule: if no published REAP checkpoint exists, you MUST REAP-it-Yourself (RIY)
+# before PTQ (AWQ/GPTQ INT4, etc.). NVFP4 only on Blackwell (SM100+).
+
+hardware_profiles:
+  rtx_3090_ti:
+    sm: 86
+    vram_gb: 24
+    quant_allowed: [int4_awq, int4_gptq, int4_marlin, q4_k_m_gguf, fp8_kv, q8_kv]
+    quant_forbidden: [nvfp4]  # requires SM100+ Blackwell tensor cores
+  dgx_spark_gb10:
+    sm: 121
+    vram_gb: 128
+    quant_allowed: [nvfp4, int4_awq, fp8, fp8_kv]
+
+# MoE compression stack order (from spec-001 compression ladder)
+stack_order:
+  - step: reap_or_riy
+    description: "Reduce expert population / active path FIRST"
+  - step: ptq_weights
+    description: "Expert weight quant — INT4 AWQ/GPTQ (3090) or NVFP4 (Blackwell)"
+  - step: kv_quant
+    description: "KV cache quant (fp8/q8) after weights stable"
+  - step: kv_eviction
+    description: "Optional — only after above gates pass"
+  - step: activation_edit_optional
+    description: "Abliteration / AIRD / steering — see activation_edit_policy.yaml; gate mandatory"
+  - step: decode_acceleration_optional
+    description: "DFlash / AR speculative on F_d — see decode_acceleration_matrix.yaml"
+
+reap_policy:
+  rule: |
+    For every MoE candidate in local_model_bench_matrix.yaml:
+    1. If a REAP (or REAP+quant) checkpoint exists on HF → prefer it; record URL.
+    2. Else → MUST run REAP-it-Yourself (RIY) on YOUR traffic before TB2 micro-eval.
+    3. Never deploy raw full-expert MoE on 24GB if a REAP/quant path exists.
+
+  prebuilt_reap_ok:
+    description: "Use published REAP weights; skip offline expert deletion"
+    examples:
+      - cerebras/MiniMax-M2.5-REAP-172B-A10B
+      - "HF search: *REAP* *MoE*"
+
+  riy_required_when:
+    - no_reap_checkpoint_on_hf
+    - reap_checkpoint_wrong_workload
+    - expert_count_exceeds_vram_after_int4
+
+  riy_workflow:
+    tool: vllm-riy  # vLLM MoE expert profiling hook
+    reference: https://forums.developer.nvidia.com/t/why-you-should-reap-it-yourself-live-moe-expert-pruning-in-vllm/364098
+    steps:
+      - "Load MoE in bf16 (or best available) with --enforce-eager"
+      - "Serve representative traffic (OmniRoute traces / TB2 pilot prompts)"
+      - "Collect per-(layer,expert) activation + routing weight stats"
+      - "Export JSON profile; apply reversible expert mask (start 5-20% prune)"
+      - "Re-profile after mask; lock profile before PTQ"
+    notes:
+      - "Profile on bf16; apply same expert mask on INT4/NVFP4 export"
+      - "RIY is reversible until checkpoint export — prefer RIY over static Cerebras REAP for YOUR workload"
+
+ptq_policy:
+  # User "TQ" = post-training quant pipeline (llm-compressor / AWQ / GPTQ)
+  alias: [PTQ, TQ]
+  tool_primary: llm-compressor
+  tool_docs: https://docs.vllm.ai/projects/llm-compressor/
+
+  schemes_by_hardware:
+    rtx_3090_ti:
+      recommended:
+        - id: int4_awq
+          vllm_flag: "--quantization awq"
+          notes: "MoE: use moe_wna16 where required"
+        - id: int4_gptq
+          notes: "Fallback if AWQ kernels missing for arch"
+        - id: q4_k_m_gguf
+          runner: llama_server
+          notes: "ik_llama expert CPU offload — current moe30 path"
+      kv:
+        - fp8_e5m2
+        - q8_0  # llama.cpp ctk/ctv
+
+    blackwell_sm100_plus:
+      recommended:
+        - id: nvfp4
+          recipe: "QuantizationModifier(scheme=NVFP4)"
+          env:
+            LLMCOMPRESSOR_MOE_CALIBRATE_ALL_EXPERTS: "1"
+          vllm_env:
+            VLLM_NVFP4_GEMM_BACKEND: marlin
+          notes: "Calibrate 64+ samples; moe_calibrate_all_experts=true"
+
+  moe_ptq_requirements:
+    - "Calibrate ALL experts (LLMCOMPRESSOR_MOE_CALIBRATE_ALL_EXPERTS=1)"
+    - "Apply REAP/RIY mask BEFORE final quant export"
+    - "Ignore lm_head + router gates per model card"
+    - "Record: disk GB, VRAM peak, tok/s, TB2 1-task score"
+
+# Per-model deploy recipes (extend as weights sourced)
+models:
+  qwen3-30b-a3b:
+    hf: Qwen/Qwen3-30B-A3B
+    reap_checkpoint: null
+    policy: riy_then_ptq
+    ptq_3090: q4_k_m_gguf  # current — expert offload via ik_llama
+    ptq_upgrade: int4_awq_moe_wna16
+    vram_gb_est: {bf16: 60, int4_reap_20pct: 18, q4_offload: 12}
+
+  zaya1-8b:
+    hf: Zyphra/ZAYA1-8B
+    reap_checkpoint: null
+    policy: ptq_if_needed  # 760M active — may fit bf16 on 24GB; quant optional
+    ptq_3090: int4_awq
+    notes: "Zyphra MoE++ — vLLM fork required; REAP only if VRAM tight"
+
+  gemma-4-a4b-moe:
+    hf: null  # verify HF id at pull
+    reap_checkpoint: null
+    policy: riy_then_ptq
+    notes: "26B total weights in VRAM for routing — REAP almost mandatory on 3090"
+
+  nemotron-3-nano-30b-a3b:
+    hf: nvidia/Nemotron-3-Nano-30B-A3B
+    reap_checkpoint: null
+    policy: riy_then_ptq
+    ptq_3090: int4_awq
+
+  qwen3.5-35b-a3b:
+    hf: Qwen/Qwen3.5-35B-A3B
+    reap_checkpoint: null
+    policy: riy_then_ptq
+    ptq_3090: int4_awq
+
+  minimax-m2.5-reap:
+    hf: cerebras/MiniMax-M2.5-REAP-172B-A10B
+    reap_checkpoint: cerebras/MiniMax-M2.5-REAP-172B-A10B
+    policy: prebuilt_reap_then_nvfp4
+    nvfp4_example: saricles/MiniMax-M2.5-REAP-172B-A10B-NVFP4-GB10
+    notes: "Cloud/burst only — not 3090 local"
+
+gates:
+  before_tb2_micro_eval:
+    - reap_or_prebuilt_reap_resolved
+    - ptq_scheme_matches_hardware
+    - probe_tok_s_min: 20
+  before_full_tb2:
+    - micro_eval_composite_min: 0.15
+    - agent_timeout_rate_max: 0.8
+
+commands:
+  check_reap_on_hf: |
+    python scripts/moe_prepare.py check --model {model_id}
+  riy_profile: |
+    python scripts/moe_prepare.py riy-profile --model {model_id} --traffic traces
+  ptq_int4: |
+    python scripts/moe_prepare.py ptq --model {model_id} --scheme int4_awq
+  verify: |
+    python scripts/moe_prepare.py verify --model {model_id}

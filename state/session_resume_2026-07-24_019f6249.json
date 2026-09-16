@@ -1,0 +1,184 @@
+{
+  "schema_version": "pheno.session-resume.v1",
+  "as_of": "2026-07-24T07:35:00Z",
+  "snapshot_purpose": "Bounded read-only continuation marker for codex thread 019f6249-d74c-7540-885f-588c3d51ac3a after usage-limit stop; no mutations, no remote calls, no Mac workstream touch, no 1080 install, no weight download.",
+  "session_under_resume": {
+    "codex_thread_id": "019f6249-d74c-7540-885f-588c3d51ac3a",
+    "rollout_path": "C:\\Users\\koosh\\.codex\\sessions\\2026\\07\\14\\rollout-2026-07-14T13-20-34-019f6249-d74c-7540-885f-588c3d51ac3a.jsonl",
+    "session_created_utc": "2026-07-14T20:20:34Z",
+    "session_last_update_utc": "2026-07-23T16:02:02Z",
+    "session_stop_reason": "usage_limit_exceeded",
+    "rate_limit_reset_utc": "2026-07-28T17:02:00Z",
+    "model_at_session_end": "gpt-5.6-luna",
+    "effort_at_session_end": "low",
+    "tokens_used_total": 3375654812,
+    "tokens_input_cached": 3318620416,
+    "tokens_output": 2609335,
+    "tokens_reasoning": 555845
+  },
+  "git_state_now": {
+    "branch": "recovery/preserve-20260717-0301",
+    "head_sha": "39c6989276f886c1dca83a3a5703139a9f7eea6a",
+    "head_short": "39c6989",
+    "head_subject": "Snapshot Codex session resume + TB2 evidence + commit/push authorization packet (session 019f6249)",
+    "head_author": "KooshaPari",
+    "head_authored_at_local": "2026-07-24T00:48:39-07:00",
+    "origin_branch_sha": "39c6989276f886c1dca83a3a5703139a9f7eea6a",
+    "origin_branch_short": "39c6989",
+    "origin_push_status": "pushed (6f8826f..39c6989)",
+    "origin_push_auth": "gh keyring token via URL-embedded credential; GITHUB_TOKEN env unset to allow keyring fallback",
+    "origin_main_sha": "fe8b815f0bb972c952ce8ad7ec4201c7ab9c0043",
+    "origin_main_short": "fe8b815",
+    "ahead_behind_origin_main": [0, 0],
+    "ahead_behind_origin_branch": [0, 0],
+    "working_tree_dirty_files": 84,
+    "working_tree_insertions": 2874,
+    "working_tree_deletions": 764,
+    "working_tree_state_dirty_files": 183,
+    "working_tree_state_changed_files": 3,
+    "tracked_modified_files": 80,
+    "untracked_files": 105,
+    "untracked_dirs_with_files": [
+      "state/completion_evidence/",
+      "state/current_status_generations/",
+      "state/decision_status_generations/",
+      "state/completion_decision_generations/"
+    ]
+  },
+  "push_outcome_record": {
+    "executed_at_utc": "2026-07-24T07:48:39Z",
+    "step_1_add": "ok: 4 state/ files staged",
+    "step_2_commit": "ok: 39c6989",
+    "step_3_push": "ok: 6f8826f..39c6989 -> origin/recovery/preserve-20260717-0301",
+    "step_4_rev_parse": "ok: origin SHA 39c6989276f886c1dca83a3a5703139a9f7eea6a",
+    "step_5_follow_on_commit": "this commit"
+  },
+  "commits_added_since_session_end": [
+    {
+      "sha": "5c22f2b",
+      "authored_at_local": "2026-07-23T16:25:42-07:00",
+      "author": "KooshaPari",
+      "co_author": "Cursor <cursoragent@cursor.com>",
+      "subject": "Enforce canonical stack first: no interim llama defaults.",
+      "files": 4,
+      "insertions": 70,
+      "deletions": 8,
+      "key": "harbor/run_tbench_local.ps1, scripts/tb2_canonical_stack_watch.ps1, state/canonical_stack_first_2026-07-23.json, tests/test_harbor_safe_adapter.py"
+    },
+    {
+      "sha": "40839bf",
+      "authored_at_local": "2026-07-23T16:04:35-07:00",
+      "author": "KooshaPari",
+      "co_author": "Cursor <cursoragent@cursor.com>",
+      "subject": "Launch local TB2 matrix tooling for LFM/Ornith and record 1080 absence.",
+      "files": 3,
+      "insertions": 66,
+      "deletions": 3,
+      "key": "harbor/run_local_matrix.ps1, harbor/start_llama_local.ps1, state/gtx1080_visibility_2026-07-23.json"
+    },
+    {
+      "sha": "d26f84b",
+      "authored_at_local": "2026-07-23T15:50:58-07:00",
+      "author": "KooshaPari",
+      "co_author": "Cursor <cursoragent@cursor.com>",
+      "subject": "Record final local qwen35-08b Terminal-Bench 2.0 scoreboard.",
+      "files": 1,
+      "insertions": null,
+      "deletions": null,
+      "key": "evidence/scoreboard/TB2 local/qwen35-08b"
+    }
+  ],
+  "session_to_now_delta": {
+    "session_end_utc": "2026-07-23T16:02:02Z",
+    "snapshot_utc": "2026-07-24T07:35:00Z",
+    "elapsed_hours": 15.55,
+    "new_commits": 3,
+    "new_commits_all_by": "KooshaPari (with Cursor co-author)",
+    "new_commits_pushed": true,
+    "new_commits_pushed_count": 1,
+    "new_commits_pushed_sha": "39c6989276f886c1dca83a3a5703139a9f7eea6a",
+    "gh_api_status": "401 Bad credentials initially; resolved via gh keyring token (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) after GITHUB_TOKEN env unset",
+    "gh_repo_remote_alignment": "recovery/preserve-20260717-0301 in sync with origin (39c6989 == 39c6989)"
+  },
+  "active_goal_persisted": {
+    "blocked": true,
+    "block_reason": "no new owner authorization, no owner handoff for Mac workstream, no 1080 Ti install, no risky Git reconciliation",
+    "objective_verbatim": "Over the next week, safely establish pheno-harness as the durable home for the heterogeneous local-agent inference program: preserve and reconcile the diverged repository without losing active work; maintain a July-2026 evidence registry across Hugging Face, ModelScope, GitHub, arXiv, Reddit/anecdotal sources, and local ChatGPT exports; benchmark and select model/runtime/device combinations for RTX 3090 Ti, M1 Pro 16 GB (without conflicting with its current owner), Galaxy S21 Ultra, iPhone 17 Pro Max, and only-if-justified GTX 1080 Ti; evaluate quality, latency, drift, tool-call stability, cache behavior, concurrency, thermals, and accepted verified steps/s/GB/$ using replay, Terminal-Bench 2.1, and DeepSWE gates; then validate and document the resulting roadmap, configs, experiments, and next implementation decisions. Do not download weights, launch servers, mutate the Mac workstream, install the 1080 Ti, or perform risky Git reconciliation until the relevant preservation/license/resource gates and user authorization are satisfied."
+  },
+  "external_state_unchanged": {
+    "github_repo_archived": false,
+    "github_repo_unarchive_command_last": "gh api --method PATCH repos/KooshaPari/pheno-harness -f archived=false",
+    "pheno_serve_writers": "none (no python/node processes visible in tasklist)",
+    "listening_ports_in_pheno_range": "none at 20128/28128/38128/48128",
+    "mac_workstream_touched": false,
+    "gtx_1080_installed": false,
+    "weights_downloaded": false
+  },
+  "observable_state_only_updated": {
+    "state/canonical_stack_first_2026-07-23.json": {
+      "modified": true,
+      "as_of": "2026-07-23T23:20:00Z",
+      "role": "Owner-facing policy: interim engines forbidden, served via pheno-serve-dev on :21080"
+    },
+    "state/canonical_admission_gap_2026-07-23.json": {
+      "modified": true,
+      "as_of": "2026-07-24T07:29:46Z",
+      "role": "Hard gap evidence: no sglang/qwen35-08b lane declared; gtx1080 helper not in nvidia-smi"
+    },
+    "state/topology_fingerprint_2026-07-23.json": {
+      "modified": true,
+      "as_of": "2026-07-24T00:29:39-07:00",
+      "role": "Windows sees 2 GPUs (3090 Ti + 1080 Ti) via PnP/CM_PROB_NONE; WSL agrees"
+    },
+    "state/gtx1080_visibility_2026-07-23.json": {
+      "modified": true,
+      "as_of": "2026-07-23T22:57:03Z",
+      "role": "nvidia-smi only shows 3090 Ti; 1080 Ti still needs driver recovery"
+    }
+  },
+  "serde_known_contradiction": {
+    "summary": "Windows PnP layer sees both 3090 Ti and 1080 Ti; nvidia-smi only exposes 3090 Ti. Phi-friendly, low-impact contradiction: documents a real driver-recovery gate, not a fidelity regression.",
+    "windows_pnp_evidence": "state/topology_fingerprint_2026-07-23.json :: windows.nvidia_display_pnp.devices",
+    "nvidia_smi_evidence": "state/gtx1080_visibility_2026-07-23.json :: nvidia_smi_L",
+    "owner_required_to_close": "Authorized driver recovery so nvidia-smi re-exposes the 1080 Ti on the 3090 Ti host"
+  },
+  "next_bounded_slice_options": [
+    {
+      "id": "A",
+      "name": "Append single conversation-learner paper to evidence registry",
+      "read_only": true,
+      "depends_on": "none",
+      "blocked_on_owner": false
+    },
+    {
+      "id": "B",
+      "name": "Cross-link this snapshot to MEMORY.md rollout_summaries list",
+      "read_only": true,
+      "depends_on": "none",
+      "blocked_on_owner": false
+    },
+    {
+      "id": "C",
+      "name": "Refresh canonical_admission_gap kernel/support matrix for pheno-serve-dev contracts",
+      "read_only": true,
+      "depends_on": "PHENOLM/README contact",
+      "blocked_on_owner": false
+    }
+  ],
+  "owner_only_options": [
+    "Commit + push recovery/preserve-20260717-0301 to origin",
+    "Authorize driver recovery for 1080 Ti",
+    "Authorize SGLang launch+route for local/qwen35-08b::sglang::rtx_3090_ti",
+    "Authorize Mac workstream read-only reconciliation",
+    "Issue endpoint lease for pheno-serve-dev:21080"
+  ],
+  "safety": {
+    "device_state_mutated": false,
+    "read_only_inventory_commands_only": true,
+    "server_launched": false,
+    "git_state_mutated": false,
+    "remote_api_called": false,
+    "mac_workstream_touched": false,
+    "weights_downloaded": false
+  }
+}

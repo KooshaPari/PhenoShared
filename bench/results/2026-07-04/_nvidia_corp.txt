@@ -1,0 +1,16 @@
+FrameView
+FrameViewSDK
+Installer2
+NvBackend
+NvBroadcast.NvContainer
+NvContainer
+NvDriverUpdateCheck
+NVIDIA app
+NVIDIA Broadcast
+NVIDIA Canvas
+NVIDIA GeForce Experience
+NvTelemetry
+ShadowPlay
+SHIELD Wireless Controller
+vGPU Licensing
+grid-third-party-licenses.txt

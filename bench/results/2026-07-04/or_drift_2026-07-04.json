@@ -1,0 +1,96 @@
+{
+  "date": "2026-07-04",
+  "scrape_ts_unix": 1783160196,
+  "endpoint": "https://openrouter.ai/api/v1/models",
+  "picks": {
+    "inclusionai/ling-2.6-flash": {
+      "present": true,
+      "name": "inclusionAI: Ling-2.6-flash",
+      "context_length": 262144,
+      "created_unix": 1776795886,
+      "created_iso": "2026-04-21",
+      "pricing_prompt_per_m": "0.00000001",
+      "pricing_completion_per_m": "0.00000003",
+      "hugging_face_id": "",
+      "top_provider": null
+    },
+    "ibm-granite/granite-4.0-h-micro": {
+      "present": true,
+      "name": "IBM: Granite 4.0 Micro",
+      "context_length": 131000,
+      "created_unix": 1760927695,
+      "created_iso": "2025-10-20",
+      "pricing_prompt_per_m": "0.000000017",
+      "pricing_completion_per_m": "0.000000112",
+      "hugging_face_id": "ibm-granite/granite-4.0-h-micro",
+      "top_provider": null
+    },
+    "liquid/lfm-2-24b-a2b": {
+      "present": true,
+      "name": "LiquidAI: LFM2-24B-A2B",
+      "context_length": 128000,
+      "created_unix": 1772048711,
+      "created_iso": "2026-02-25",
+      "pricing_prompt_per_m": "0.00000003",
+      "pricing_completion_per_m": "0.00000012",
+      "hugging_face_id": "LiquidAI/LFM2-24B-A2B",
+      "top_provider": null
+    },
+    "arcee-ai/trinity-mini": {
+      "present": true,
+      "name": "Arcee AI: Trinity Mini",
+      "context_length": 131072,
+      "created_unix": 1764601720,
+      "created_iso": "2025-12-01",
+      "pricing_prompt_per_m": "0.000000045",
+      "pricing_completion_per_m": "0.00000015",
+      "hugging_face_id": "arcee-ai/Trinity-Mini",
+      "top_provider": null
+    },
+    "ibm-granite/granite-4.1-8b": {
+      "present": true,
+      "name": "IBM: Granite 4.1 8B",
+      "context_length": 131072,
+      "created_unix": 1777577071,
+      "created_iso": "2026-04-30",
+      "pricing_prompt_per_m": "0.00000005",
+      "pricing_completion_per_m": "0.0000001",
+      "hugging_face_id": "ibm-granite/granite-4.1-8b",
+      "top_provider": null
+    },
+    "poolside/laguna-xs-2.1": {
+      "present": true,
+      "name": "Poolside: Laguna XS 2.1",
+      "context_length": 262144,
+      "created_unix": 1783002429,
+      "created_iso": "2026-07-02",
+      "pricing_prompt_per_m": "0.00000006",
+      "pricing_completion_per_m": "0.00000012",
+      "hugging_face_id": "poolside/Laguna-XS-2.1",
+      "top_provider": null
+    },
+    "tencent/hy3-preview": {
+      "present": true,
+      "name": "Tencent: Hy3 preview",
+      "context_length": 262144,
+      "created_unix": 1776878150,
+      "created_iso": "2026-04-22",
+      "pricing_prompt_per_m": "0.000000063",
+      "pricing_completion_per_m": "0.00000021",
+      "hugging_face_id": "tencent/Hy3-preview",
+      "top_provider": null
+    },
+    "qwen/qwen3.5-flash-02-23": {
+      "present": true,
+      "name": "Qwen: Qwen3.5-Flash",
+      "context_length": 1000000,
+      "created_unix": 1772053776,
+      "created_iso": "2026-02-25",
+      "pricing_prompt_per_m": "0.000000065",
+      "pricing_completion_per_m": "0.00000026",
+      "hugging_face_id": null,
+      "top_provider": null
+    }
+  },
+  "drift_vs_round4": {}
+}

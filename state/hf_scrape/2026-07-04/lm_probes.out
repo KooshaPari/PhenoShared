@@ -1,0 +1,12 @@
+OK wrote last_modified_probes.json  probes=11  dlq=1
+  ok       Qwen/Qwen3.5-0.8B                                  lm=2026-03-02 dl=   2485925 lk= 605 sib=13
+  ok       LiquidAI/LFM2.5-8B-A1B                             lm=2026-07-02 dl=    145281 lk= 656 sib=10
+  ok       deepreinforce-ai/Ornith-1.0-9B                     lm=2026-06-25 dl=     69837 lk= 370 sib=18
+  ok       deepreinforce-ai/Ornith-1.0-9B-GGUF                lm=2026-06-25 dl=    320660 lk= 417 sib=9
+  ok       protoLabsAI/Ornith-1.0-9B-MTP-GGUF                 lm=2026-07-04 dl=     24464 lk=  52 sib=12
+  ok       ibm-granite/granite-4.1-8b                         lm=2026-05-04 dl=    537989 lk= 203 sib=16
+  pre_march_2026 ibm-granite/granite-4.0-h-micro                    lm=2025-11-03 dl=      8001 lk= 147 sib=14
+  ok       LiquidAI/LFM2-24B-A2B                              lm=2026-03-30 dl=     24344 lk= 340 sib=9
+  ok       arcee-ai/Trinity-Mini                              lm=2026-05-28 dl=     25754 lk= 193 sib=23
+  ok       poolside/Laguna-XS-2.1                             lm=2026-07-02 dl=      1075 lk=  47 sib=29
+  ok       tencent/HY3-Preview                                lm=2026-04-23 dl=     85365 lk= 285 sib=153

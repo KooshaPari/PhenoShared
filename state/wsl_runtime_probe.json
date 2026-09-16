@@ -1,0 +1,36 @@
+{
+  "schema_version": "phenolm.wsl_runtime_probe.v1",
+  "captured_at": "2026-07-16T08:00:00Z",
+  "wsl": {
+    "version": "2.9.3.0",
+    "kernel": "6.1.18.3-1",
+    "working_distro": "Ubuntu20.04LTS",
+    "working_distro_python": "3.11.15 via uv",
+    "working_distro_glibc": "2.31",
+    "sglang_wheel_platform_requirement": "manylinux_2_34_x86_64",
+    "broken_distro": "Ubuntu-22.04",
+    "broken_distro_observation": "trivial command exceeds bounded startup timeout"
+  },
+  "host": {
+    "nvidia_driver": "560.94",
+    "cuda_driver_api": "12.6",
+    "gpus": [
+      {"index": 0, "name": "NVIDIA GeForce RTX 3090 Ti", "compute_capability": "8.6"},
+      {"index": 1, "name": "NVIDIA GeForce GTX 1080 Ti", "compute_capability": "6.1"}
+    ]
+  },
+  "torch": {
+    "environment": "~/.pheno-serve-venv311",
+    "version": "2.11.0+cu126",
+    "cuda_available": true,
+    "device_count": 2
+  },
+  "engines": {
+    "llama_cpp_windows_cuda12": "runtime_validated",
+    "sglang": "blocked_working_distro_glibc_2_31",
+    "vllm": "blocked_latest_requires_cuda13_cutlass_and_humming_kernels",
+    "tensorrt_llm": "not_installed",
+    "docker_linux_engine": "unresponsive"
+  },
+  "compatibility_note": "vLLM 0.25.1 requires torch 2.11 plus nvidia-cutlass-dsl[cu13] and humming-kernels[cu13]; do not claim readiness on driver 560.94 without a driver upgrade or an explicitly compatible cu12 build."
+}

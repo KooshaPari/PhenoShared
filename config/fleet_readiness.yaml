@@ -1,0 +1,81 @@
+schema_version: pheno.fleet-readiness-policy.v1
+
+# This first slice validates observations and simulations only. Nothing in this
+# file authorizes a probe, mutation, installation, download, or server.
+policy:
+  allow_local_mutation: false
+  allow_remote_mutation: false
+  allow_remote_probe: false
+  allow_ssh: false
+  allow_install: false
+  allow_download: false
+  allow_server_launch: false
+  allow_phone_mutation: false
+  allow_mac_mutation: false
+  allow_1080ti_install: false
+
+device_profiles:
+  rtx_3090_ti:
+    device_class: desktop_cuda
+    remote: false
+    mobile: false
+    owner_handoff_required: false
+    min_memory_headroom_fraction: 0.15
+    allowed_runtimes: [sglang, vllm, tensorrt_llm, tensorrt_llm_dflash, llama_cpp]
+    allowed_backends: [cuda]
+    required_lifecycle_states: [active, idle]
+    required_thermal_stop_states: [critical]
+
+  m1_pro_16gb:
+    device_class: mac_unified_memory
+    remote: true
+    mobile: false
+    owner_handoff_required: true
+    min_memory_headroom_fraction: 0.30
+    allowed_runtimes: [omlx, mlx_lm, llama_cpp, cactus]
+    allowed_backends: [cpu, metal]
+    required_lifecycle_states: [active, idle]
+    required_thermal_stop_states: [serious, critical]
+
+  galaxy_s21_ultra:
+    device_class: android_phone
+    remote: true
+    mobile: true
+    owner_handoff_required: true
+    min_memory_headroom_fraction: 0.30
+    allowed_runtimes: [cactus, mnn, llama_cpp, mlc_llm, executorch]
+    allowed_backends: [cpu, opencl, vulkan, qnn, xnnpack]
+    required_lifecycle_states: [foreground]
+    required_thermal_stop_states: [serious, critical]
+
+  iphone_17_pro_max:
+    device_class: ios_phone
+    remote: true
+    mobile: true
+    owner_handoff_required: true
+    min_memory_headroom_fraction: 0.30
+    allowed_runtimes: [cactus, mlx_swift_lm, mnn, llama_cpp, mlc_llm, executorch]
+    allowed_backends: [cpu, metal, coreml]
+    required_lifecycle_states: [foreground]
+    required_thermal_stop_states: [serious, critical]
+
+  gtx_1080_ti:
+    device_class: optional_cuda_helper
+    remote: false
+    mobile: false
+    owner_handoff_required: true
+    min_memory_headroom_fraction: 0.30
+    allowed_runtimes: [llama_cpp]
+    allowed_backends: [cuda_12_legacy]
+    required_lifecycle_states: [unavailable]
+    required_thermal_stop_states: [critical]
+
+helper_simulation:
+  method: conservative_interval_v1
+  physical_gate_fields:
+    - psu_capacity
+    - slot_available
+    - power_connector_available
+    - case_clearance
+    - thermal_budget
+  positive_epsilon: 0.0

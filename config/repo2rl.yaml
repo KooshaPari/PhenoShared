@@ -1,0 +1,63 @@
+# Repo2RLEnv — Harbor-compatible RL environments from real repos
+# https://github.com/huggingface/Repo2RLEnv
+
+pipelines:
+  # Stable, no bootstrap — good for first local eval
+  pr_diff:
+    stable: true
+    sandbox: thin
+    reward: diff_similarity
+    reference_dataset: AdithyaSK/repo2rlenv-pr-diff
+    reference_tasks: 100
+
+  pr_runtime:
+    stable: true
+    sandbox: docker_bootstrap
+    reward: test_execution
+    reference_dataset: AdithyaSK/repo2rlenv-pr-runtime
+    reference_tasks: 100
+    bootstrap_llm: null  # set via --llm when generating locally
+
+# Local generation targets (your repos — use pr_diff first, no bootstrap)
+generate_targets:
+  - repo: koosha/pheno-harness  # adjust owner if private
+    pipeline: pr_diff
+    pipeline_opts:
+      limit: 10
+    out_dir: "${PHENO_ROOT}/datasets/pheno-harness-pr-diff"
+
+  - repo: koosha/pheno-harness
+    pipeline: pr_runtime
+    pipeline_opts:
+      limit: 3
+    out_dir: "${PHENO_ROOT}/datasets/pheno-harness-pr-runtime"
+    note: "Requires bootstrap + LLM API — defer until pr_diff baseline green"
+
+# Pulled reference datasets (no API cost)
+reference_pull:
+  - hf_id: AdithyaSK/repo2rlenv-pr-diff
+    local_dir: "${PHENO_ROOT}/datasets/ref-pr-diff"
+  - hf_id: AdithyaSK/repo2rlenv-pr-runtime
+    local_dir: "${PHENO_ROOT}/datasets/ref-pr-runtime"
+
+harbor_eval:
+  env: docker  # Portage compatibility token; runtime deployment is Podman.
+  n_concurrent: 1
+  agents:
+    oracle:
+      description: "Sanity — gold solution passes"
+    terminus-2:
+      description: "OpenAI-compatible via OmniRoute for local model eval"
+      model: openai/Main
+      api_base: "http://127.0.0.1:20128/v1"
+    codex:
+      description: "Codex CLI harness"
+      requires: OPENAI_API_KEY
+    claude-code:
+      description: "Claude Code harness"
+      requires: ANTHROPIC_API_KEY
+
+integration:
+  reward_export: "${PHENO_ROOT}/eval/results/repo2rl_rewards.jsonl"
+  link_to_playground: true
+  link_to_nested_rlvr: true

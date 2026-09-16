@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>pheno-harness — Suites</title>
+  <link rel="stylesheet" href="static/style.css">
+</head>
+<body>
+  <header>
+    <h1><a href="index.html">pheno-harness</a></h1>
+    <nav>
+      <ul>
+        <li><a href="index.html">Overview</a></li>
+        <li><a href="dashboard.html">Bench Dashboard</a></li>
+        <li><a href="suites.html">Suites</a></li>
+      </ul>
+    </nav>
+  </header>
+  <main>
+    <section class="hero">
+      <h2>Registered suites</h2>
+      <p>All suites auto-registered via <code>__init_subclass__</code>.</p>
+    </section>
+
+    <section>
+      <table class="data">
+        <thead>
+          <tr>
+            <th>Suite</th>
+            <th>Source</th>
+            <th>Format</th>
+            <th>Subset</th>
+            <th>Judge</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>swe-bench-lite</td><td>HF</td><td>jsonl</td><td>n=300</td><td>remote</td></tr>
+          <tr><td>cybench-easy</td><td>HF</td><td>jsonl</td><td>n=200</td><td>remote</td></tr>
+          <tr><td>intercode-sql</td><td>GitHub</td><td>jsonl</td><td>n=100</td><td>local</td></tr>
+          <tr><td>apex-agents</td><td>HF</td><td>jsonl</td><td>n=50</td><td>deterministic</td></tr>
+          <tr><td>dsbench</td><td>HF</td><td>jsonl</td><td>n=80</td><td>deterministic</td></tr>
+          <tr><td>ml-dev-bench</td><td>local</td><td>jsonl</td><td>n=30</td><td>remote</td></tr>
+          <tr><td>swebench-verified-mini</td><td>HF</td><td>jsonl</td><td>n=50</td><td>remote</td></tr>
+          <tr><td>tau-bench-airline</td><td>GitHub</td><td>jsonl</td><td>n=50</td><td>remote</td></tr>
+          <tr><td>swebench-verified</td><td>HF</td><td>jsonl</td><td>n=500</td><td>remote</td></tr>
+          <tr><td>terminal-bench</td><td>GitHub</td><td>jsonl</td><td>n=80</td><td>remote</td></tr>
+          <tr><td>arc-agi-2</td><td>HF</td><td>jsonl</td><td>n=100</td><td>deterministic</td></tr>
+          <tr><td>mswe-bench</td><td>HF</td><td>jsonl</td><td>n=200</td><td>remote</td></tr>
+          <tr><td>anthropic-ml</td><td>GitHub</td><td>jsonl</td><td>n=24</td><td>local</td></tr>
+          <tr><td>forge-stack-bench</td><td>local</td><td>jsonl</td><td>n=120</td><td>remote</td></tr>
+        </tbody>
+      </table>
+    </section>
+  </main>
+  <footer>
+    <p>© 2026 ParetoOptimal. MIT.</p>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,29 @@
+# Conservative local cache policy for the 2 TB NVMe, which is mostly full.
+# This file describes admission and reporting; it never deletes user data.
+schema_version: 1
+filesystem:
+  cache_root_env: PHENO_MODEL_CACHE_ROOT
+  default_cache_root: "D:/WSL/model-cache"
+  results_root: "${PHENO_ROOT}/bench/results"
+  minimum_free_gb: 100
+  hard_stop_free_gb: 50
+  max_projected_download_gb: 20
+  allowed_cache_roots:
+    - "D:/WSL/model-cache"
+    - "E:/WSL/model-cache"
+  refuse_if_cache_root_is_outside_allowed_roots: true
+artifacts:
+  retain_best_quant_per_model: 2
+  retain_engine_build_logs_days: 30
+  require_sha256_before_admission: true
+  require_manifest_before_promotion: true
+policy:
+  allow_automatic_delete: false
+  allow_network_download: false
+  allowed_weight_quantizations: [q2, q3, q4, q5, q6, q8, nvfp4_type]
+  forbid_weight_quantizations: [bf16, fp16, fp32]
+  local_models:
+    - local/qwen35-08b
+    - local/qwen35-4b
+    - local/lfm25-8b-a1b
+    - local/ornith-8b

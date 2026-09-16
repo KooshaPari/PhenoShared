@@ -1,0 +1,318 @@
+{
+  "schema_version": "pheno.session-resume.v1",
+  "as_of": "2026-07-29T00:27:02Z",
+  "session_under_resume": {
+    "codex_thread_id": "019f6249-d74c-7540-885f-588c3d51ac3a",
+    "original_created_at": "2026-07-14T20:20:34Z",
+    "last_agent_turn_at": "2026-07-24T07:35:00Z",
+    "model": "gpt-5.6-luna",
+    "cli_version": "0.144.3",
+    "forge_intervening_sessions": [
+      {
+        "session_started": "2026-07-27T23:30:00Z (forge temporary session)",
+        "artifacts_written": [
+          "state/session_resume_2026-07-27_019f6249.json",
+          "state/working_delta_manifest_2026-07-27.json",
+          "state/owner_authorization_requests/commit_push_working_delta_2026-07-27.json"
+        ]
+      }
+    ],
+    "current_shell_resumed_at": "2026-07-28T05:21:24Z"
+  },
+  "resume_context": {
+    "resumed_at": "2026-07-28T02:06:10Z",
+    "gap_from_codex_session_days": 4,
+    "gap_from_last_forge_session_hours": 24
+  },
+  "git_state_now": {
+    "branch": "recovery/preserve-20260717-0301",
+    "head_sha": "78ca4986f92dde61a6fa0fd5a49f9533aaeff137",
+    "head_short": "78ca498",
+    "origin_branch_short": "78ca498",
+    "local_ahead_of_origin": 0,
+    "main_vs_origin_main": "0 0 (no divergence on main)",
+    "working_tree": {
+      "total": 1188,
+      "modified": 80,
+      "deleted": 76,
+      "untracked": 1031,
+      "insertions": 2816,
+      "deletions": 121125,
+      "untracked_1080_related": [
+        "docs/GTX1080TI_PASCAL_KERNEL_SUPPORT_2026.md",
+        "docs/GTX1080_HELPER_CROSS_PLAN_READINESS.md",
+        "docs/GTX1080_HELPER_INSTALL_REVIEW.md",
+        "docs/GTX1080_RECOVERY_DECISION_PACKET.md",
+        "pheno/gtx1080_recovery_packet.py",
+        "plans/2026-07-14-usch-heterogeneous-inference-v1/GTX1080TI_DRIVER_RECOVERY_2026-07-18.md",
+        "scripts/plan_1080_helper_selection.py",
+        "scripts/plan_1080_recovery_packet.py",
+        "state/gtx1080_helper_cross_plan_readiness_2026-07-19.json",
+        "state/gtx1080_recovery_decision_packet_2026-07-19.json",
+        "state/perf_qwen35_1080_batch1.json",
+        "state/perf_qwen35_1080_batch2.json",
+        "state/priority_selection_1080_lfm25_12b_2026-07-28.json",
+        "state/priority_selection_gtx1080_helper_2026-07-19.json",
+        "tests/test_gtx1080_recovery_packet.py"
+      ]
+    },
+    "origin_branch_sha": "8941b10035b92dcbc3fb095ebad6b9690ebb76fe",
+    "local_equals_origin": true,
+    "branch_current": "wip/2026-07-28-pheno-harness-m80-d76",
+    "synced_with_origin": true
+  },
+  "active_goal_persisted": {
+    "objective_verbatim": "Over the next week, safely establish pheno-harness as the durable home for the heterogeneous local-agent inference program: preserve and reconcile the diverged repository without losing active work; maintain a July-2026 evidence registry across Hugging Face, ModelScope, GitHub, arXiv, Reddit/anecdotal sources, and local ChatGPT exports; benchmark and select model/runtime/device combinations for RTX 3090 Ti, M1 Pro 16 GB (without conflicting with its current owner), Galaxy S21 Ultra, iPhone 17 Pro Max, and only-if-justified GTX 1080 Ti; evaluate quality, latency, drift, tool-call stability, cache behavior, concurrency, thermals, and accepted verified steps/s/GB/$ using replay, Terminal-Bench 2.1, and DeepSWE gates; then validate and document the resulting roadmap, configs, experiments, and next implementation decisions.",
+    "blocked": true,
+    "block_reasons": [
+      "no Mac-workstream owner handoff",
+      "no risky reconciliation authorization"
+    ],
+    "gates_remaining": [
+      "owner_acknowledgement",
+      "voluntary_writer_stop",
+      "complete_descendant_handle_census",
+      "two_fresh_v5_reports",
+      "handoff",
+      "owner_decision",
+      "acceptance",
+      "capture_authorization"
+    ],
+    "gates_cleared_this_session": [
+      "1080_ti_install (cleared via user '1080ti is On system' on 2026-07-28)",
+      "llama_cpp_cuda_sm61_build (cleared via existing D:\\WSL\\tools\\llama.cpp-b10012-cuda12.4)"
+    ]
+  },
+  "session_to_now_delta": {
+    "prior_snapshot": "state/session_resume_2026-07-27_019f6249.json",
+    "prior_commit": "2718569 (step-5 follow-on from 2026-07-24)",
+    "new_commits": 1,
+    "working_tree_delta": "unchanged since last commit; 1188 dirty files",
+    "new_commit_sha": "8941b10035b92dcbc3fb095ebad6b9690ebb76fe",
+    "new_commit_msg": "Session resume snapshots + delta manifests (forge sessions 2026-07-27/28, Codex thread 019f6249)",
+    "pushed_to_origin": true,
+    "push_verified": true,
+    "this_session_actions": [
+      "1080 Ti GPU validation: 4 benchmarks ran on CUDA 12.4 build",
+      "gtx1080_validation_2026-07-28.json written (4119 bytes)",
+      "sweet spot: lfm25-8b-a1b Q4_K_M at 89.22 t/s on 1080 Ti",
+      "CUDA 13.3 build does NOT see sm_61; must use cuda12.4 variant",
+      "persistent goal gate 1080_ti_install: CLEARED",
+      "snapshot block_reasons updated: 1080 Ti gate removed"
+    ],
+    "new_commits_detail": [
+      {
+        "sha": "6001170",
+        "author": "KooshaPari",
+        "date": "2026-07-28T16:17:38-07:00",
+        "subject": "wip: capture 2026-07-28 pheno-harness (M+D, preserved 1026 untracked)",
+        "scope": "massive deletions of stale bench/fixtures + bench/results artifacts; preserved 1026 untracked files",
+        "on_origin": false
+      }
+    ],
+    "origin_advances": [
+      {
+        "sha": "3a76252",
+        "subject": "Update snapshot: clear 1080 Ti gate from block_reasons after validation",
+        "on_origin": true,
+        "interpretation": "Origin advanced past my earlier push (8941b10); user pushed 60926d0 and 3a76252 between sessions"
+      }
+    ]
+  },
+  "open_authorization_packets": [
+    {
+      "id": "commit_push_working_delta_2026-07-27",
+      "status": "prepared, awaiting APPROVE token",
+      "expires_at_local": "n/a (not yet executed)"
+    },
+    {
+      "id": "ledger_decision_action_order_re_rebuild_2026-07-26",
+      "status": "expired_at_2026-07-28T03:00:00Z",
+      "expires_at_field_value": "2026-07-27T20:00:00Z",
+      "expires_at_interpretation_uncertain": true,
+      "expires_at_pt_equivalent_utc": "2026-07-28T03:00:00Z",
+      "current_utc_at_check": "2026-07-28T05:21:24Z",
+      "preflight_gate_b_now": "FAIL (3 python PIDs <5 min)",
+      "blocking_pids": {
+        "222840_run_tbench_matrix_age_min": 2.6,
+        "239188_harbor_age_min": 2.6,
+        "240376_pytest_age_min": 0.2,
+        "226892_pheno_serve_age_min": 208.8
+      },
+      "decision": "skip; pytest/harbor PIDs <5 min would fail gate b; packet also likely expired",
+      "note": "packet expired ~4h41m before this session resumed; gate b moot"
+    }
+  ],
+  "live_process_state": {
+    "checked_at": "2026-07-28T05:21:24Z",
+    "pheno_serve_pid_226892_age_min": 208.8,
+    "pheno_serve_status": "exempt (>5 min, allowed under TOLERANCE-MODE-2)",
+    "new_writers_pids": {
+      "222840_run_tbench_model_matrix_age_min": 2.6,
+      "239188_harbor_age_min": 2.6,
+      "240376_pytest_age_min": 0.2
+    },
+    "new_writers_decision": "fail gate b; do not execute ledger rebuild until they age out (next 3-5 min)",
+    "note": "active writer pressure is from user's parallel TB2 matrix tooling run (run_tbench_model_matrix --execute-cell local_ornith_8b)"
+  },
+  "preservation_readiness": {
+    "ready": false,
+    "blockers": [
+      "acceptance_missing",
+      "handoff_missing",
+      "owner_decision_missing"
+    ],
+    "next_gate": "owner_declarations_and_voluntary_stops_then_two_fresh_independent_v5_quiescence_reports_then_fresh_materialized_request_and_detached_owner_attestation"
+  },
+  "verification": {
+    "tier1_smoke_test_observed_t_per_s_gen": 123.5,
+    "tier1_smoke_test_observed_t_per_s_prompt": 16.9,
+    "no_destructive_mutation": true,
+    "evidence_registry_local_only": true,
+    "remote_calls_made": 2,
+    "remote_calls_push_status": "success 263fac7..fb90e49"
+  },
+  "gh_auth_verified": {
+    "verified_at": "2026-07-28T05:21:24Z",
+    "method": "gh auth status with GITHUB_TOKEN/GH_TOKEN unset (forces keyring)",
+    "result": "logged in as KooshaPari; keyring token gho_Pe5e...; HTTP 200 on api.github.com/user",
+    "scopes": "gist, read:org, repo",
+    "ready_for_push": true
+  },
+  "new_artifacts_this_session": [
+    "state/session_resume_2026-07-28_019f6249.json",
+    "state/working_delta_manifest_2026-07-28.json"
+  ],
+  "push_outcome": {
+    "commit": "8941b10",
+    "pushed_at_utc": "2026-07-28T07:49:37Z",
+    "remote_ref": "refs/heads/recovery/preserve-20260717-0301",
+    "token_used": "keyring (gho_Pe5e...)",
+    "origin_sha_post_push": "8941b10035b92dcbc3fb095ebad6b9690ebb76fe",
+    "local_equals_origin": true,
+    "files_pushed": [
+      "state/session_resume_2026-07-27_019f6249.json",
+      "state/session_resume_2026-07-28_019f6249.json",
+      "state/working_delta_manifest_2026-07-27.json",
+      "state/working_delta_manifest_2026-07-28.json"
+    ]
+  },
+  "hardware_state": {
+    "gpu_0": {
+      "name": "GTX 1080 Ti",
+      "vram_mib": 11263,
+      "validated": true,
+      "role": "legacy_helper"
+    },
+    "gpu_1": {
+      "name": "RTX 3090 Ti",
+      "vram_mib": 24563,
+      "validated": true,
+      "role": "primary_inference"
+    },
+    "recommended_1080ti_model": "lfm25-8b-a1b.Q4_K_M.gguf (4.79 GB, 89.22 t/s)",
+    "llama_cpp_build_for_1080ti": "D:\\WSL\\tools\\llama.cpp-b10012-cuda12.4"
+  },
+  "tier1_smoke_test": {
+    "executed": true,
+    "gpu": "GTX 1080 Ti (GPU 0, sm_61)",
+    "build": "llama.cpp b10012-cuda12.4 (D:\\WSL\\tools\\llama.cpp-b10012-cuda12.4)",
+    "model": "lfm25-8b-a1b.Q4_K_M.gguf (4.79 GiB)",
+    "benchmark_line": "[ Prompt: 16.9 t/s | Generation: 123.5 t/s ]",
+    "prompt_eval_t_per_s": 16.9,
+    "generation_t_per_s": 123.5,
+    "outcome": "SUCCESS",
+    "artifact": "state/gtx1080_smoke_2026-07-28.json",
+    "thinking_mode_invoked": true
+  },
+  "tier1_4_6_commit_push_status": "COMPLETE \u2014 wip/2026-07-28-pheno-harness-m80-d76 pushed to origin (78ca498)",
+  "tier1_4_6_follow_on_commit": {
+    "sha": "78ca498",
+    "subject": "1080 Ti smoke test: lfm25-8b-a1b Q4_K_M -> 123.5 t/s generation on CUDA12.4 b10012",
+    "files": [
+      "state/gtx1080_smoke_2026-07-28.json (created)",
+      "state/session_resume_2026-07-28_019f6249.json (updated)"
+    ],
+    "branch": "wip/2026-07-28-pheno-harness-m80-d76",
+    "on_origin": true,
+    "divergence_ahead": 0,
+    "divergence_behind": 0
+  },
+  "tier1_complete": {
+    "4_3_locate_gguf": "D:\\WSL\\model-cache\\lfm25-8b-a1b-q4\\lfm25-8b-a1b.Q4_K_M.gguf (4.79 GiB)",
+    "4_4_smoke_test": "123.5 t/s generation, 16.9 t/s prompt eval, sm_61 path verified",
+    "4_5_state_artifact": "state/gtx1080_smoke_2026-07-28.json (4,150 B, schema pheno.hw-smoke.v1)",
+    "4_6_commit_push": "78ca498 pushed to wip/2026-07-28-pheno-harness-m80-d76 on origin"
+  },
+  "tier2_status": "IN_PROGRESS",
+  "tier2_subtasks": [
+    {
+      "id": "5_1",
+      "name": "run_tbench_model_matrix on 1080 Ti",
+      "status": "queued"
+    },
+    {
+      "id": "5_2",
+      "name": "quality bench verifier rerank on 1080 Ti",
+      "status": "queued"
+    },
+    {
+      "id": "5_3",
+      "name": "build SGLang from source (GCC 14 + sm_86 patch)",
+      "status": "queued"
+    },
+    {
+      "id": "5_4",
+      "name": "add Granite 4.1 3B (IBM) to evidence registry",
+      "status": "queued"
+    },
+    {
+      "id": "5_5",
+      "name": "add gemma-4-E4B-it (Google) to evidence registry",
+      "status": "queued"
+    }
+  ],
+  "tier1_executed": {
+    "t1_4_3_locate_gguf": "done",
+    "t1_4_4_smoke_test": "done",
+    "t1_4_5_state_artifact": "done (state/gtx1080_smoke_2026-07-28.json 4150 B)",
+    "t1_4_6_commit_push": "done (commit 78ca498 on wip branch)"
+  },
+  "tier2_executed": {
+    "t2_5_1_tb2_matrix": "spec_written (state/tb2_matrix_1080_2026-07-28.json, 3716 B)",
+    "t2_5_2_qual_bench": "plan_written (state/qual_bench_1080_2026-07-28.json, 1392 B)",
+    "t2_5_3_sglang_build": "plan_written (state/sglang_build_plan_2026-07-28.json, 1544 B)",
+    "t2_5_4_granite_41_3b": "trial_spec_written (state/trial_specs/1080_helper_wave_v1/029_granite41-3b_vllm_terminal-bench-2.1.json, 1143 B)",
+    "t2_5_5_gemma_4_E4B_it": "trial_spec_written (state/trial_specs/1080_helper_wave_v1/030_gemma4-E4B-it_sglang_terminal-bench-2.1.json, 1213 B)",
+    "commit_push": "done (commit fb90e49 on wip branch, 5 files / 214 insertions; state/evidence_registry/ excluded by nested .gitignore by project design)"
+  },
+  "tier3_status": "NOT EXECUTED - requires owner authorization (Mac/S21/iPhone/reconciliation/weight downloads)",
+  "git_state_final": {
+    "branch": "wip/2026-07-28-pheno-harness-m80-d76",
+    "head_sha_local": "fb90e49",
+    "head_sha_origin": "fb90e49",
+    "local_ahead_of_origin": 0,
+    "all_commits_session": [
+      "6001170 (pre-session WIP)",
+      "78ca498 (1080 smoke evidence)",
+      "263fac7 (snapshot with smoke outcome)",
+      "fb90e49 (tier2 deliverables)"
+    ]
+  },
+  "persistent_goal": {
+    "blocked_gates_remaining": [
+      "G1 owner_acknowledgement",
+      "G2 voluntary_writer_stop",
+      "G3 complete_descendant_handle_census",
+      "G4 two_fresh_v5_quiescence_reports",
+      "G5 handoff",
+      "G6 owner_decision",
+      "G7 acceptance",
+      "G8 capture_authorization"
+    ],
+    "cleared_gates": [
+      "G9 1080_ti_install",
+      "G10 llama_cpp_cuda_sm61_build"
+    ]
+  }
+}

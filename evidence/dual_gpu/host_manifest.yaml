@@ -1,0 +1,18 @@
+# DAG-92: evidence/dual_gpu/host_manifest.yaml
+#
+# Synthetic initial manifest — no live nvidia-smi run yet.
+# The check.sh writer (DAG-38) appends a new entry on each successful run;
+# this file is a placeholder so consumers see a non-empty manifest until the
+# first live run lands. Each capture entry records the host, GPU count, and
+# per-device identifiers captured at that run time. See:
+#   - evidence/dual_gpu/check.sh (writer; lines 50-66)
+#   - config/desktop_nvidia_qwen35_lane.yaml (lane contract; device shape)
+captures:
+  - captured_at: "2026-08-07T05:02:33Z"
+    host: initial
+    gpus: 0
+    nvidia_smi_index: []
+    cuda_visible_devices: []
+    cuda_arch: []
+    vram_mib: []
+    notes: synthetic initial manifest — no live nvidia-smi run yet

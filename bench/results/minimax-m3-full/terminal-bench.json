@@ -1,0 +1,38 @@
+{
+  "suite": "terminal-bench",
+  "n": 3,
+  "passed": 0,
+  "pass_at_1": 0.0,
+  "wall_clock_s_total": 46.86,
+  "wall_clock_s_mean": 15.62,
+  "wall_clock_s_p95": 30.88,
+  "task_results": [
+    {
+      "task_id": "cli/tb-6370",
+      "ok": false,
+      "wall_clock_s": 3.573,
+      "reply_bytes": 1080,
+      "reply_preview": "\u2026along with the median and (if useful) the consistency constant \u00d7 1.4826 to estimate \u03c3 for a normal distribution.",
+      "error": null,
+      "exit_code": 0
+    },
+    {
+      "task_id": "filesystem/tb-1373",
+      "ok": false,
+      "wall_clock_s": 30.882,
+      "reply_bytes": 8481,
+      "reply_preview": "Which of these is it?",
+      "error": null,
+      "exit_code": 0
+    },
+    {
+      "task_id": "git/tb-2348",
+      "ok": false,
+      "wall_clock_s": 12.403,
+      "reply_bytes": 6188,
+      "reply_preview": "Let me know if you want either of those follow-ups \u2014 otherwise, the task as stated has no actionable code change.",
+      "error": null,
+      "exit_code": 0
+    }
+  ]
+}

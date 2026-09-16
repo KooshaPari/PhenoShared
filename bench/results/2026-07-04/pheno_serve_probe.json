@@ -1,0 +1,94 @@
+{
+  "server": {
+    "host": "127.0.0.1",
+    "port": 21080,
+    "base_url": "http://127.0.0.1:21080/v1",
+    "upstream_timeout_s": 60,
+    "metrics_path": "/metrics",
+    "events_path": "logs/pheno_serve/events.jsonl",
+    "state_path": "state/pheno_serve.json"
+  },
+  "profiles": [
+    {
+      "alias": "local/qwen35-08b",
+      "engine": "llama_cpp",
+      "status": "active",
+      "base_url": "http://127.0.0.1:8080/v1",
+      "tcp": {
+        "ok": true,
+        "host": "127.0.0.1",
+        "port": 8080
+      }
+    },
+    {
+      "alias": "local/lfm25-8b-a1b",
+      "engine": "sglang",
+      "status": "planned",
+      "base_url": "http://127.0.0.1:8000/v1",
+      "tcp": {
+        "ok": false,
+        "host": "127.0.0.1",
+        "port": 8000,
+        "error": "timed out"
+      }
+    },
+    {
+      "alias": "local/ornith-8b",
+      "engine": "sglang",
+      "status": "planned",
+      "base_url": "http://127.0.0.1:8000/v1",
+      "tcp": {
+        "ok": false,
+        "host": "127.0.0.1",
+        "port": 8000,
+        "error": "timed out"
+      }
+    },
+    {
+      "alias": "local/lfm25-8b-a1b-vllm",
+      "engine": "vllm",
+      "status": "planned",
+      "base_url": "http://127.0.0.1:8001/v1",
+      "tcp": {
+        "ok": false,
+        "host": "127.0.0.1",
+        "port": 8001,
+        "error": "timed out"
+      }
+    },
+    {
+      "alias": "local/ornith-8b-vllm",
+      "engine": "vllm",
+      "status": "planned",
+      "base_url": "http://127.0.0.1:8001/v1",
+      "tcp": {
+        "ok": false,
+        "host": "127.0.0.1",
+        "port": 8001,
+        "error": "timed out"
+      }
+    },
+    {
+      "alias": "local/lfm25-8b-a1b-trtllm",
+      "engine": "tensorrt_llm",
+      "status": "planned_compile_once",
+      "base_url": "http://127.0.0.1:8002/v1",
+      "tcp": {
+        "ok": false,
+        "host": "127.0.0.1",
+        "port": 8002,
+        "error": "timed out"
+      }
+    },
+    {
+      "alias": "mac/mlx-small",
+      "engine": "mlx",
+      "status": "planned_remote_worker",
+      "base_url": null,
+      "tcp": {
+        "ok": false,
+        "reason": "no base_url"
+      }
+    }
+  ]
+}

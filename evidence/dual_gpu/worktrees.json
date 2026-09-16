@@ -1,0 +1,13 @@
+{
+  "version": 1,
+  "worktrees": [
+    {
+      "branch": "test/dag-33-dry-run",
+      "dry_run": true,
+      "host": "test@100.0.0.1",
+      "recorded_at": "2026-08-09T07:22:31.329788+00:00",
+      "ssh_ok": false,
+      "worktree_dir": "/tmp/dag-33-dry-run-worktree"
+    }
+  ]
+}
