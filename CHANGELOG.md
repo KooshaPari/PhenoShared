@@ -1,10 +1,5 @@
 # Changelog
 
-All notable changes to this project will be documented in this file.
-
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
-and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
-
 ## [Unreleased]
 
 ### Added
@@ -19,10 +14,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
-## 2026-04-29
+## [0.0.1] — 2026-04-30
 
-- Cleaned the project root docs and worklog surfaces.
-- Removed stale shelf-catalog references from the active docs.
-- Rewrote the local `agileplus` project docs into clean project-root guides.
-
-[Unreleased]: https://github.com/KooshaPari/pheno/compare/HEAD
+### Added
+- Initial project bootstrap
+- README with competitor analysis
+- CLAUDE.md governance
+- docs/ARCHITECTURE.md draft layer design
+[Unreleased]: https://github.com/KooshaPari/Pine/compare/HEAD

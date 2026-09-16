@@ -1,33 +1,43 @@
-# Contributing to pheno
+# Contributing
 
-Thank you for your interest in contributing! This repository is part of the [Phenotype](https://github.com/KooshaPari) ecosystem.
+Thank you for your interest in contributing!
 
-## Prerequisites
+## Getting Started
 
-- Rust toolchain (stable, see `rust-toolchain.toml` if present).
-- Git and a GitHub account with access to push branches.
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Make your changes
+4. Run tests and quality checks
+5. Commit your changes (`git commit -m 'feat: add amazing feature'`)
+6. Push to your fork (`git push origin feature/amazing-feature`)
+7. Open a Pull Request
 
-## Development Workflow
+## Commit Message Format
 
-1. **Spec first.** All non-trivial work must be tracked in [AgilePlus](https://github.com/KooshaPari/AgilePlus). Check for an existing spec under `kitty-specs/` before implementing; otherwise create one with `agileplus specify --title "<feature>"`.
-2. **Branch.** Cut feature branches from `main` using the form `<category>/<short-slug>` (e.g. `feat/auth-rotation`, `fix/null-deref`).
-3. **Implement.** Follow the existing module layout. Match prevailing code style — do not reformat unrelated files.
-4. **Test.** Run `cargo test --all`. Add unit tests next to the code under test and integration tests under `tests/`.
-5. **Quality gates.** Run `cargo fmt --check` and `cargo clippy --all-targets -- -D warnings` before pushing.
-6. **Commit.** Use conventional-commit style (`feat:`, `fix:`, `docs:`, `chore:`, `refactor:`, `test:`). Keep commits scoped — one logical change per commit.
-7. **Pull request.** Open a PR against `main`. Reference the AgilePlus spec ID in the description. Fill the PR template if present.
+We follow conventional commits:
+- `feat:` New feature
+- `fix:` Bug fix
+- `docs:` Documentation
+- `style:` Formatting
+- `refactor:` Code restructuring
+- `test:` Tests
+- `chore:` Maintenance
 
 ## Code Review
 
-- All PRs require at least one approving review.
-- CI must pass on Linux runners (macOS/Windows runners may be skipped due to org billing constraints).
-- Do not introduce new lint suppressions without inline justification.
+All submissions require review. Please ensure:
+- CI checks pass
+- Code is documented
+- Tests cover new functionality
 
-## Reporting Issues
+## Governance
 
-- **Bugs and feature requests:** open a GitHub issue with reproduction steps or motivation.
-- **Security vulnerabilities:** see [`SECURITY.md`](./SECURITY.md) — do **not** file public issues for security reports.
+Project-wide rules live under `docs/governance/`. The canonical
+background-agent policy that this repository and sibling repos
+(such as `thegent` and `thegent-clean`) point at is:
 
-## License
+- [`docs/governance/background_agent_policy.md`](./docs/governance/background_agent_policy.md)
 
-By contributing you agree that your contributions will be licensed under this repository's license (see `LICENSE`).
+When changing fleet composition, dispatch patterns, or
+failure-handling expectations, update that file in the same PR and
+reference the governance worklog entry.

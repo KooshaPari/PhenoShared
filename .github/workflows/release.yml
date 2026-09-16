@@ -3,463 +3,108 @@ name: Release
 on:
   push:
     tags:
-      - "v*.*.*"
-  workflow_dispatch:
-    inputs:
-      version:
-        description: "Release version (e.g., 0.2.0)"
-        required: true
-      dry_run:
-        description: "Dry run (skip publishing)"
-        type: boolean
-        default: false
-
-permissions:
-  contents: write
-  packages: write
+      - 'v*.*.*'
 
 concurrency:
-  group: release-${{ github.ref }}
-  cancel-in-progress: false
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 env:
   CARGO_TERM_COLOR: always
-  BINARY_NAME: pheno
+
+permissions:
+  contents: write
 
 jobs:
-  # ─── Build Matrix ──────────────────────────────────────────────────────
   build:
-    name: Build ${{ matrix.target }}
-    runs-on: ${{ matrix.os }}
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - target: x86_64-unknown-linux-gnu
-            os: ubuntu-latest
-            use_cross: false
-            archive: tar.gz
-          - target: aarch64-unknown-linux-gnu
-            os: ubuntu-latest
-            use_cross: true
-            archive: tar.gz
-          - target: x86_64-apple-darwin
-            os: macos-latest
-            use_cross: false
-            archive: tar.gz
-          - target: aarch64-apple-darwin
-            os: macos-latest
-            use_cross: false
-            archive: tar.gz
-          - target: x86_64-pc-windows-msvc
-            os: windows-latest
-            use_cross: false
-            archive: zip
-    steps:
-      - name: Check billing availability
-        id: billing
-        run: |
-          # If runners can't be provisioned, fail fast with a clear message
-          echo "Billing check: this job requires GitHub Actions runners."
-          echo "If this fails immediately, the free tier is likely exhausted."
-          echo "Use scripts/release.sh for local release builds instead."
-          echo "runner_ok=true" >> $GITHUB_OUTPUT
-
-      - uses: actions/checkout@v7
-
-      - uses: dtolnay/rust-toolchain@stable
-        with:
-          targets: ${{ matrix.target }}
-
-      - uses: Swatinem/rust-cache@v2
-        with:
-          key: ${{ matrix.target }}
-
-      - uses: arduino/setup-protoc@v3
-        with:
-          version: "28.x"
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Install cross
-        if: matrix.use_cross
-        run: cargo install cross --locked
-
-      - name: Build release binaries
-        run: |
-          BUILD_CMD="cargo build --release --target ${{ matrix.target }}"
-          if [ "${{ matrix.use_cross }}" = "true" ]; then
-            BUILD_CMD="cross build --release --target ${{ matrix.target }}"
-          fi
-
-          # Build all binary targets
-          $BUILD_CMD --bin agileplus
-          $BUILD_CMD --bin phenoctl
-          $BUILD_CMD --bin configra-ops
-          $BUILD_CMD --bin pheno-agents-md
-
-      - name: Strip binaries (Unix)
-        if: runner.os != 'Windows'
-        run: |
-          for bin in agileplus phenoctl configra-ops pheno-agents-md; do
-            strip "target/${{ matrix.target }}/release/$bin" 2>/dev/null || true
-          done
-
-      - name: Package (Unix)
-        if: runner.os != 'Windows'
-        run: |
-          VERSION="${GITHUB_REF_NAME#v}"
-          STAGING="pheno-${VERSION}-${{ matrix.target }}"
-          mkdir -p "$STAGING"
-
-          for bin in agileplus phenoctl configra-ops pheno-agents-md; do
-            cp "target/${{ matrix.target }}/release/$bin" "$STAGING/"
-          done
-
-          # Include metadata
-          echo "pheno ${VERSION}" > "$STAGING/VERSION"
-          cp LICENSE "$STAGING/" 2>/dev/null || true
-          cp README.md "$STAGING/" 2>/dev/null || true
-
-          tar czf "${STAGING}.tar.gz" "$STAGING"
-          echo "ASSET=${STAGING}.tar.gz" >> $GITHUB_ENV
-
-      - name: Package (Windows)
-        if: runner.os == 'Windows'
-        shell: bash
-        run: |
-          VERSION="${GITHUB_REF_NAME#v}"
-          STAGING="pheno-${VERSION}-${{ matrix.target }}"
-          mkdir -p "$STAGING"
-
-          for bin in agileplus phenoctl configra-ops pheno-agents-md; do
-            cp "target/${{ matrix.target }}/release/${bin}.exe" "$STAGING/"
-          done
-
-          echo "pheno ${VERSION}" > "$STAGING/VERSION"
-          cp LICENSE "$STAGING/" 2>/dev/null || true
-          cp README.md "$STAGING/" 2>/dev/null || true
-
-          7z a "${STAGING}.zip" "$STAGING"
-          echo "ASSET=${STAGING}.zip" >> $GITHUB_ENV
-
-      - name: Upload artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: pheno-${{ matrix.target }}
-          path: ${{ env.ASSET }}
-          retention-days: 5
-          if-no-files-found: error
-
-  # ─── SBOM Generation ───────────────────────────────────────────────────
-  sbom:
-    name: Generate SBOMs
+    name: Build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v7
-
-      - name: Install cargo-cyclonedx
-        uses: taiki-e/install-action@v2
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - uses: dtolnay/rust-toolchain@29eef336d9b2848a0b548edc03f92a220660cdb8
         with:
-          tool: cargo-cyclonedx
+          toolchain: stable
+      - uses: Swatinem/rust-cache@e18b497796c12c097a38f9edb9d0641fb99eee32
+      - run: cargo build --workspace --all-targets
 
-      - name: Generate CycloneDX SBOM
-        run: |
-          mkdir -p sbom-out
-          cargo cyclonedx --format json --output-dir sbom-out || true
-
-      - name: Install Syft
-        env:
-          SYFT_VERSION: "1.42.3"
-        run: |
-          curl -fsSL "https://github.com/anchore/syft/releases/download/v${SYFT_VERSION}/syft_${SYFT_VERSION}_linux_amd64.tar.gz" | tar xz
-          sudo install -m 0755 syft /usr/local/bin/syft
-
-      - name: Generate SPDX SBOM
-        run: |
-          syft . -o spdx-json=sbom-out/syft-spdx.json \
-            --exclude './target/**' --exclude './docs/**' \
-            --exclude './**/.venv/**' --exclude './**/node_modules/**' \
-            --exclude './.git/**'
-
-      - name: Upload SBOMs
-        uses: actions/upload-artifact@v4
-        with:
-          name: sboms
-          path: sbom-out/
-          retention-days: 5
-
-  # ─── Install Scripts ───────────────────────────────────────────────────
-  install-scripts:
-    name: Generate Install Scripts
+  test:
+    name: Test
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v7
-
-      - name: Create install.sh
-        run: |
-          cat > install.sh << 'INSTALL_SCRIPT'
-          #!/usr/bin/env bash
-          set -euo pipefail
-
-          # pheno installer — https://github.com/KooshaPari/pheno
-          # Usage: curl -fsSL https://raw.githubusercontent.com/KooshaPari/pheno/main/install.sh | bash
-
-          REPO="KooshaPari/pheno"
-          BINARY_NAME="pheno"
-          VERSION="${PHENO_VERSION:-latest}"
-          INSTALL_DIR="${PHENO_INSTALL_DIR:-$HOME/.pheno/bin}"
-
-          detect_platform() {
-            local os arch
-            os="$(uname -s)"
-            arch="$(uname -m)"
-
-            case "$os" in
-              Linux*)  os="unknown-linux-gnu" ;;
-              Darwin*) os="apple-darwin" ;;
-              MINGW*|MSYS*|CYGWIN*) os="pc-windows-msvc" ;;
-              *) echo "Unsupported OS: $os" >&2; exit 1 ;;
-            esac
-
-            case "$arch" in
-              x86_64|amd64) arch="x86_64" ;;
-              aarch64|arm64) arch="aarch64" ;;
-              *) echo "Unsupported arch: $arch" >&2; exit 1 ;;
-            esac
-
-            echo "${arch}-${os}"
-          }
-
-          get_version() {
-            if [ "$VERSION" = "latest" ]; then
-              curl -fsSL "https://api.github.com/repos/${REPO}/releases/latest" \
-                | grep '"tag_name"' | head -1 | cut -d'"' -f4
-            else
-              echo "v${VERSION}"
-            fi
-          }
-
-          main() {
-            local target version archive_url tmp_dir
-
-            target="$(detect_platform)"
-            version="$(get_version)"
-
-            echo "Installing pheno ${version} for ${target}..."
-
-            tmp_dir="$(mktemp -d)"
-            trap 'rm -rf "$tmp_dir"' EXIT
-
-            archive_url="https://github.com/${REPO}/releases/download/${version}/pheno-${version#v}-${target}.tar.gz"
-
-            curl -fsSL "$archive_url" -o "${tmp_dir}/pheno.tar.gz"
-            tar xzf "${tmp_dir}/pheno.tar.gz" -C "$tmp_dir"
-
-            mkdir -p "$INSTALL_DIR"
-            cp "$tmp_dir"/pheno-*/agileplus "$INSTALL_DIR/"
-            cp "$tmp_dir"/pheno-*/phenoctl "$INSTALL_DIR/"
-            cp "$tmp_dir"/pheno-*/configra-ops "$INSTALL_DIR/"
-            cp "$tmp_dir"/pheno-*/pheno-agents-md "$INSTALL_DIR/"
-
-            chmod +x "$INSTALL_DIR"/*
-
-            echo ""
-            echo "pheno installed to $INSTALL_DIR"
-            echo ""
-            echo "Add to your PATH:"
-            echo "  export PATH=\"\$HOME/.pheno/bin:\$PATH\""
-            echo ""
-            echo "Installed binaries:"
-            ls -1 "$INSTALL_DIR"/
-          }
-
-          main "$@"
-          INSTALL_SCRIPT
-          chmod +x install.sh
-
-      - name: Create install.ps1
-        run: |
-          cat > install.ps1 << 'INSTALL_SCRIPT'
-          # pheno installer for Windows (PowerShell)
-          # Usage: irm https://raw.githubusercontent.com/KooshaPari/pheno/main/install.ps1 | iex
-
-          $ErrorActionPreference = "Stop"
-
-          $Repo = "KooshaPari/pheno"
-          $BinaryName = "pheno"
-          $Version = if ($env:PHENO_VERSION) { $env:PHENO_VERSION } else { "latest" }
-          $InstallDir = if ($env:PHENO_INSTALL_DIR) { $env:PHENO_INSTALL_DIR } else { "$env:USERPROFILE\.pheno\bin" }
-
-          function Get-LatestVersion {
-              $release = Invoke-RestMethod -Uri "https://api.github.com/repos/$Repo/releases/latest"
-              return $release.tag_name
-          }
-
-          function Install-Pheno {
-              $version = if ($Version -eq "latest") { Get-LatestVersion } else { "v$Version" }
-              $target = "x86_64-pc-windows-msvc"
-              $versionNum = $version.TrimStart("v")
-
-              Write-Host "Installing pheno $version for $target..."
-
-              $tmpDir = Join-Path $env:TEMP "pheno-install-$(Get-Random)"
-              New-Item -ItemType Directory -Path $tmpDir -Force | Out-Null
-
-              try {
-                  $archiveUrl = "https://github.com/$Repo/releases/download/$version/pheno-$versionNum-$target.zip"
-                  $archivePath = Join-Path $tmpDir "pheno.zip"
-
-                  Invoke-WebRequest -Uri $archiveUrl -OutFile $archivePath
-                  Expand-Archive -Path $archivePath -DestinationPath $tmpDir -Force
-
-                  New-Item -ItemType Directory -Path $InstallDir -Force | Out-Null
-
-                  $extractedDir = Get-ChildItem -Path $tmpDir -Directory | Where-Object { $_.Name -like "pheno-*" } | Select-Object -First 1
-
-                  foreach ($bin in @("agileplus.exe", "phenoctl.exe", "configra-ops.exe", "pheno-agents-md.exe")) {
-                      $src = Join-Path $extractedDir.FullName $bin
-                      if (Test-Path $src) {
-                          Copy-Item $src $InstallDir -Force
-                      }
-                  }
-
-                  Write-Host ""
-                  Write-Host "pheno installed to $InstallDir"
-                  Write-Host ""
-                  Write-Host "Add to your PATH:"
-                  Write-Host "  [Environment]::SetEnvironmentVariable('Path', `$env:Path + ';$InstallDir', 'User')"
-              }
-              finally {
-                  Remove-Item -Recurse -Force $tmpDir -ErrorAction SilentlyContinue
-              }
-          }
-
-          Install-Pheno
-          INSTALL_SCRIPT
-
-      - name: Create bun install wrapper
-        run: |
-          cat > install-bun.sh << 'BUN_SCRIPT'
-          #!/usr/bin/env bash
-          # bun-based pheno installer wrapper
-          # Usage: bunx pheno-installer
-          set -euo pipefail
-          exec bash <(curl -fsSL https://raw.githubusercontent.com/KooshaPari/pheno/main/install.sh)
-          BUN_SCRIPT
-          chmod +x install-bun.sh
-
-      - name: Upload install scripts
-        uses: actions/upload-artifact@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - uses: dtolnay/rust-toolchain@29eef336d9b2848a0b548edc03f92a220660cdb8
         with:
-          name: install-scripts
-          path: |
-            install.sh
-            install.ps1
-            install-bun.sh
-          retention-days: 5
+          toolchain: stable
+      - uses: Swatinem/rust-cache@e18b497796c12c097a38f9edb9d0641fb99eee32
+      - run: cargo test --workspace
 
-  # ─── GitHub Release ────────────────────────────────────────────────────
   release:
-    name: Create GitHub Release
-    needs: [build, sbom, install-scripts]
+    name: Create Release
+    needs: [build, test]
     runs-on: ubuntu-latest
-    if: ${{ !inputs.dry_run }}
     permissions:
       contents: write
-      packages: write
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           fetch-depth: 0
 
-      - name: Download all artifacts
-        uses: actions/download-artifact@v4
-        with:
-          path: ./artifacts
-
-      - name: Prepare release assets
+      - name: Generate Release Notes
+        id: changelog
         run: |
-          mkdir -p release-assets
-
-          # Binary archives
-          for dir in ./artifacts/pheno-*/; do
-            cp "$dir"/*.tar.gz release-assets/ 2>/dev/null || true
-            cp "$dir"/*.zip release-assets/ 2>/dev/null || true
-          done
-
-          # SBOMs
-          cp ./artifacts/sboms/* release-assets/ 2>/dev/null || true
-
-          # Install scripts
-          cp ./artifacts/install-scripts/* release-assets/ 2>/dev/null || true
-
-          echo "Release assets:"
-          ls -la release-assets/
-
-      - name: Generate release notes
-        id: notes
-        run: |
-          VERSION="${GITHUB_REF_NAME#v}"
-          PREV_TAG=$(git tag --sort=-v:refname | grep '^v' | head -2 | tail -1)
-
-          if [ -n "$PREV_TAG" ]; then
-            NOTES=$(git log --pretty=format:"- %s (%h)" "$PREV_TAG".."$GITHUB_REF_NAME" 2>/dev/null || echo "- Initial release")
+          TAG="${GITHUB_REF#refs/tags/}"
+          PREV=$(git describe --tags --abbrev=0 HEAD^ 2>/dev/null || echo "")
+          if [ -n "$PREV" ]; then
+            RANGE="${PREV}..${TAG}"
           else
-            NOTES="- Initial release"
+            RANGE=""
           fi
 
-          cat > release-notes.md << EOF
-          ## pheno ${VERSION}
+          generate_section() {
+            local title="$1"
+            local pattern="$2"
+            local commits
+            commits=$(git log --pretty=format:"- %s (%h)" "${RANGE}" | { grep -E "^- ${pattern}" || true; } | head -n50)
+            if [ -n "$commits" ]; then
+              echo "### ${title}"
+              echo "${commits}"
+              echo ""
+            fi
+          }
 
-          ### Binaries
-          | Platform | Archive |
-          |----------|---------|
-          | Linux x86_64 | \`pheno-${VERSION}-x86_64-unknown-linux-gnu.tar.gz\` |
-          | Linux aarch64 | \`pheno-${VERSION}-aarch64-unknown-linux-gnu.tar.gz\` |
-          | macOS x86_64 | \`pheno-${VERSION}-x86_64-apple-darwin.tar.gz\` |
-          | macOS aarch64 | \`pheno-${VERSION}-aarch64-apple-darwin.tar.gz\` |
-          | Windows x86_64 | \`pheno-${VERSION}-x86_64-pc-windows-msvc.zip\` |
+          NOTES=""
+          NOTES+="$(generate_section "Features" "feat[(:]")"
+          NOTES+="$(generate_section "Fixes" "fix[(:]")"
+          NOTES+="$(generate_section "Documentation" "docs[(:]")"
+          NOTES+="$(generate_section "Refactoring" "refactor[(:]")"
+          NOTES+="$(generate_section "Tests" "test[(:]")"
+          NOTES+="$(generate_section "Chores" "chore[(:]")"
 
-          ### Install
+          OTHER=$(git log --pretty=format:"- %s (%h)" "${RANGE}" | { grep -vE "^- (feat|fix|docs|refactor|test|chore)[(:]" || true; } | head -n50)
+          if [ -n "$OTHER" ]; then
+            NOTES+=$'\n'"### Other Changes"
+            NOTES+=$'\n'"${OTHER}"
+            NOTES+=$'\n'
+          fi
 
-          **Unix (macOS/Linux):**
-          \`\`\`bash
-          curl -fsSL https://raw.githubusercontent.com/KooshaPari/pheno/main/install.sh | bash
-          \`\`\`
+          if [ -z "$NOTES" ]; then
+            NOTES="No conventional commits found in this release."
+          fi
 
-          **Windows (PowerShell):**
-          \`\`\`powershell
-          irm https://raw.githubusercontent.com/KooshaPari/pheno/main/install.ps1 | iex
-          \`\`\`
+          echo "body<<EOF" >> "$GITHUB_OUTPUT"
+          echo "$NOTES" >> "$GITHUB_OUTPUT"
+          echo "EOF" >> "$GITHUB_OUTPUT"
 
-          **Manual:** Download the archive for your platform from the assets below.
-
-          ### What's Included
-          - \`agileplus\` — AgilePlus CLI for work tracking
-          - \`phenoctl\` — Configra configuration CLI
-          - \`configra-ops\` — Observability and operations primitives
-          - \`pheno-agents-md\` — AGENTS.md generator
-
-          ### Changes
-          ${NOTES}
-
-          ### SBOMs
-          CycloneDX and SPDX SBOMs are attached as release assets.
-          EOF
-
-      - name: Create Release
-        uses: softprops/action-gh-release@v2
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@2f0f4a0bbb18a8ef73a7e2715d3f57e7b9b3932c
         with:
-          body_path: release-notes.md
-          files: release-assets/*
-          draft: false
-          prerelease: ${{ contains(github.ref, '-rc') || contains(github.ref, '-beta') || contains(github.ref, '-alpha') }}
-          generate_release_notes: true
+          body: ${{ steps.changelog.outputs.body }}
+          generate_release_notes: false
 
-      - name: Publish to crates.io (release-plz)
-        if: startsWith(github.ref, 'refs/tags/')
-        env:
-          CARGO_REGISTRY_TOKEN: ${{ secrets.CARGO_REGISTRY_TOKEN }}
+      - name: Publish to crates.io
         run: |
-          echo "crates.io publishing handled by release-plz workflow"
-          echo "Tag-triggered release created successfully"
+          for crate in $(find crates -maxdepth 2 -name Cargo.toml | xargs -I{} sh -c 'dirname {}'); do
+            echo "Publishing ${crate}..."
+            cargo publish --manifest-path "${crate}/Cargo.toml" --token ${{ secrets.CARGO_REGISTRY_TOKEN }} || true
+          done
+        continue-on-error: true

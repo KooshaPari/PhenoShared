@@ -1,124 +1,55 @@
-import { withMermaid } from 'vitepress-plugin-mermaid'
-import type { DefaultTheme } from 'vitepress'
+import { defineConfig } from 'vitepress'
 
-const referenceSidebar: DefaultTheme.SidebarItem[] = [
-  {
-    text: 'Reference',
-    items: [
-      { text: 'AgilePlus WP quick reference', link: '/reference/AGILEPLUS_WP_QUICK_REFERENCE_2026-03-30' },
-      { text: 'Code ↔ entity map', link: '/reference/CODE_ENTITY_MAP' },
-      { text: 'Configuration standards', link: '/reference/CONFIGURATION_STANDARDS' },
-      { text: 'FR tracker', link: '/reference/FR_TRACKER' },
-      { text: 'Phase 1 execution plan', link: '/reference/PHASE_1_EXECUTION_PLAN' },
-      { text: 'Traceability map', link: '/reference/TRACEABILITY_MAP' },
-      { text: 'Validation standards', link: '/reference/VALIDATION_STANDARDS' },
-    ],
-  },
-]
-
-const adoptionSidebar: DefaultTheme.SidebarItem[] = [
-  {
-    text: 'Crate adoption',
-    items: [
-      { text: 'Overview', link: '/adoption/' },
-      { text: 'phenotype-config-core', link: '/adoption/phenotype-config-core' },
-      { text: 'phenotype-crypto', link: '/adoption/phenotype-crypto' },
-      { text: 'phenotype-error-core', link: '/adoption/phenotype-error-core' },
-      { text: 'phenotype-health', link: '/adoption/phenotype-health' },
-      { text: 'phenotype-iter', link: '/adoption/phenotype-iter' },
-      { text: 'phenotype-logging', link: '/adoption/phenotype-logging' },
-      { text: 'phenotype-port-traits', link: '/adoption/phenotype-port-traits' },
-      { text: 'phenotype-retry', link: '/adoption/phenotype-retry' },
-      { text: 'phenotype-string', link: '/adoption/phenotype-string' },
-      { text: 'phenotype-time', link: '/adoption/phenotype-time' },
-    ],
-  },
-]
-
-const overviewSidebar: DefaultTheme.SidebarItem[] = [
-  {
-    text: 'Overview',
-    items: [
-      { text: 'Home', link: '/' },
-      { text: 'Architecture', link: '/architecture' },
-      { text: 'Defensive patterns', link: '/DEFENSIVE_PATTERNS' },
-      { text: 'LOC reduction opportunities', link: '/LOC_REDUCTION_OPPORTUNITIES' },
-      { text: 'Work log', link: '/WORKLOG' },
-    ],
-  },
-  {
-    text: 'Sections',
-    items: [
-      { text: 'Guide', link: '/guide/' },
-      { text: 'Reference', link: '/reference/TRACEABILITY_MAP' },
-      { text: 'Governance', link: '/governance/ADR-001-external-package-adoption' },
-      { text: 'Adoption', link: '/adoption/' },
-    ],
-  },
-  {
-    text: 'Languages',
-    collapsed: true,
-    items: [
-      { text: 'فارسی', link: '/fa/' },
-      { text: 'فارسی (لاتین)', link: '/fa-Latn/' },
-      { text: '简体中文', link: '/zh-CN/' },
-      { text: '繁體中文', link: '/zh-TW/' },
-    ],
-  },
-]
-
-export default withMermaid({
-  title: 'phenotype-infrakit',
-  description: 'Rust infrastructure toolkit: event sourcing, caching, policy evaluation, and state machine crates.',
-  appearance: 'dark',
-  ignoreDeadLinks: true,
+// Pine documentation site (VitePress).
+// Content lives under `docs/src/` so we don't clobber the auto-generated
+// `docs/index.md` (the mdbook-style cross-reference index) at the top of
+// `docs/`. VitePress builds the Markdown site from this `srcDir`.
+export default defineConfig({
+  srcDir: 'src',
+  cleanUrls: true,
+  title: 'Pine',
+  titleTemplate: ':title — Pine',
+  description:
+    'Pine is a Wine-equivalent runtime compatibility layer that translates Windows, macOS, and Linux applications into Phenotype-native execution environments.',
   lastUpdated: true,
-  srcExclude: [
-    'worklogs/**',
-    'research/**',
-    'reports/**',
-    'sessions/**',
-    'audits/**',
-    'specs/**',
-    'reference/**',
+  ignoreDeadLinks: true,
+  head: [
+    ['meta', { name: 'theme-color', content: '#0b3d2e' }],
+    ['meta', { property: 'og:title', content: 'Pine' }],
+    [
+      'meta',
+      {
+        property: 'og:description',
+        content:
+          'Wine-equivalent compatibility layer for Phenotype — translate Windows, macOS, and Linux apps into Phenotype execution environments.'
+      }
+    ]
   ],
   themeConfig: {
+    siteTitle: 'Pine',
     nav: [
       { text: 'Home', link: '/' },
-      { text: 'Guide', link: '/guide/' },
-      { text: 'Reference', link: '/reference/TRACEABILITY_MAP' },
-      { text: 'Governance', link: '/governance/ADR-001-external-package-adoption' },
-      { text: 'Adoption', link: '/adoption/' },
-      { text: 'Architecture', link: '/architecture' },
+      { text: 'Getting Started', link: '/getting-started' },
+      {
+        text: 'Repository',
+        link: 'https://github.com/KooshaPari/Pine'
+      }
     ],
-    sidebar: {
-      '/reference/': referenceSidebar,
-      '/guide/': [
-        {
-          text: 'Guide',
-          items: [{ text: 'Getting started', link: '/guide/' }],
-        },
-      ],
-      '/governance/': [
-        {
-          text: 'Governance',
-          items: [
-            {
-              text: 'ADR-001 external package adoption',
-              link: '/governance/ADR-001-external-package-adoption',
-            },
-          ],
-        },
-      ],
-      '/adoption/': adoptionSidebar,
-      '/fa/': overviewSidebar,
-      '/fa-Latn/': overviewSidebar,
-      '/zh-CN/': overviewSidebar,
-      '/zh-TW/': overviewSidebar,
-      '/': overviewSidebar,
-    },
-    search: { provider: 'local' },
-  },
-  markdown: { html: false },
-  mermaid: { theme: 'dark' },
+    sidebar: [
+      {
+        text: 'Introduction',
+        items: [
+          { text: 'Overview', link: '/' },
+          { text: 'Getting Started', link: '/getting-started' }
+        ]
+      }
+    ],
+    socialLinks: [
+      { icon: 'github', link: 'https://github.com/KooshaPari/Pine' }
+    ],
+    footer: {
+      message: 'Released under the MIT OR Apache-2.0 license.',
+      copyright: 'Copyright (c) 2026 Phenotype contributors'
+    }
+  }
 })

@@ -5,9 +5,6 @@
 # https://docs.trunk.io/check/reference
 # =============================================================================
 
-# Trunk config schema version (required; format is `<major>.<minor>`)
-version: 0.1
-
 plugins:
   sources:
     - id: trunk

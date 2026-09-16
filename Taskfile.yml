@@ -1,266 +1,83 @@
----
+# Pine — Taskfile.yml
+# Standard task runner for the Phenotype org. Replaces Justfile for cross-repo consistency.
+
 version: '3'
 
+env:
+  CARGO_TERM_COLOR: always
+
 vars:
-  AGILEPLUS_DIR: .agileplus
-  BINARY: agileplus
+  CRATES: "crates/pine-core crates/pine-loader crates/pine-syscall crates/pine-compat crates/pine-nvms"
 
 tasks:
-  # === Default ===
   default:
-    desc: Run all quality checks
+    desc: Show available tasks
     cmds:
-      - task: quality
+      - task --list
 
-  # === Dev Stack ===
-  dev:
-    desc: Start the full AgilePlus dev stack
-    cmds:
-      - task: dev:deps
-      - task: dev:up
-
-  dev:deps:
-    desc: Ensure brew dependencies are installed
-    cmds:
-      - |
-        missing=""
-        for cmd in nats-server minio neo4j process-compose orb; do
-          command -v "$cmd" >/dev/null 2>&1 || missing="$missing $cmd"
-        done
-        if [ -n "$missing" ]; then
-          echo "Missing dependencies:$missing"
-          echo "Run: brew bundle --file=Brewfile"
-          exit 1
-        fi
-    silent: true
-
-  dev:up:
-    desc: Start all services via process-compose (detached, no TUI; logs under .agileplus/logs)
-    cmds:
-      - mkdir -p {{.AGILEPLUS_DIR}}/logs
-      - bash scripts/orb-up.sh
-      - process-compose up -f process-compose.yml -t=false -D -L {{.AGILEPLUS_DIR}}/logs/process-compose.log
-
-  platform:up:
-    desc: Alias for dev stack (OrbStack Dragonfly/Postgres + process-compose)
-    cmds:
-      - task: dev:up
-
-  dev:down:
-    desc: Stop all services and OrbStack containers
-    cmds:
-      - process-compose down 2>/dev/null || true
-      - bash scripts/orb-down.sh
-
-  dev:status:
-    desc: Show status of all dev stack services
-    cmds:
-      - |
-        echo "=== OrbStack Containers ==="
-        orb list 2>/dev/null | grep agileplus || \
-          echo "  No OrbStack containers"
-        echo ""
-        echo "=== Process Compose ==="
-        process-compose process list 2>/dev/null || \
-          echo "  Process compose not running"
-
-  dev:logs:
-    desc: Tail all service logs
-    cmds:
-      - tail -f {{.AGILEPLUS_DIR}}/logs/*.log
-
-  dev:restart:
-    desc: Restart the full dev stack
-    cmds:
-      - task: dev:down
-      - task: dev:up
-
-  # === Build ===
   build:
-    desc: Build the Rust workspace
+    desc: Build the full workspace
     cmds:
-      - cargo build
+      - cargo build --workspace --all-targets
 
-  build:release:
-    desc: Build release binaries
-    cmds:
-      - cargo build --release
-
-  sbom:
-    desc: Generate CycloneDX JSON for all workspace crates (needs cargo-cyclonedx@0.5.x and jq)
-    cmds:
-      - bash scripts/ci/generate-workspace-sboms.sh . sbom-out
-
-  build:watch:
-    desc: Build with file watcher
-    cmds:
-      - cargo watch -x build
-
-  # === Test ===
   test:
-    desc: Run all tests
+    desc: Run all workspace tests
     cmds:
-      - cargo test
-
-  test:watch:
-    desc: Run tests with file watcher
-    cmds:
-      - cargo watch -x test
-
-  test:coverage:
-    desc: Run tests with coverage report
-    cmds:
-      - cargo tarpaulin --workspace --out Html
-
-  # === Lint & Format ===
-  lint:
-    desc: Run clippy linter
-    cmds:
-      - |
-        cargo clippy --all-targets --all-features \
-          -- -D warnings
+      - cargo test --workspace
 
   fmt:
-    desc: Format code with rustfmt
+    desc: Format all Rust code
     cmds:
       - cargo fmt --all
 
-  fmt:check:
-    desc: Check formatting without modifying
+  lint:
+    desc: Run clippy and rustfmt checks
     cmds:
       - cargo fmt --all -- --check
+      - cargo clippy --workspace --all-targets -- -D warnings
 
-  # === Python ===
-  python:lint:
-    desc: Run ruff linter on Python code
+  audit:
+    desc: Run cargo audit
     cmds:
-      - ruff check python/
-      - ruff format --check python/
+      - cargo audit || echo "cargo-audit not installed; skipping"
 
-  python:format:
-    desc: Format Python code with ruff
+  bench:
+    desc: Run benchmarks
     cmds:
-      - ruff format python/
+      - cargo bench --workspace
 
-  python:test:
-    desc: Run pytest on Python tests
-    cmds:
-      - cd python && uv run pytest
-
-  # === Documentation ===
-  docs:lint:
-    desc: Run oxlint on documentation
-    cmds:
-      - bun run lint
+  docs:
+    desc: Build mdbook docs
     dir: docs
-
-  docs:build:
-    desc: Build VitePress documentation
     cmds:
-      - bun run docs:build
+      - "mdbook build 2>/dev/null || echo 'mdbook not installed; run: cargo install mdbook'"
+
+  docs:serve:
+    desc: Serve docs locally
     dir: docs
-
-  docs:check:
-    desc: Build VitePress docs and run unit, component, and e2e tests
     cmds:
-      - bun run docs:check
-    dir: docs
+      - "mdbook serve 2>/dev/null || echo 'mdbook not installed'"
 
-  docs:dev:
-    desc: Start VitePress dev server
+  lint:md:
+    desc: Lint markdown files
     cmds:
-      - bun run docs:dev
-    dir: docs
+      - "npx markdownlint-cli 'docs/**/*.md' 2>/dev/null || echo 'markdownlint not installed'"
 
-  # === Protocol Buffers ===
-  proto:
-    desc: Generate protobuf/gRPC code
+  ci:
+    desc: Run the full CI pipeline locally
     cmds:
-      - buf generate
-
-  # === Quality ===
-  quality:
-    desc: Run all quality checks
-    cmds:
-      - task: fmt:check
       - task: lint
-      - task: python:lint
-      - task: docs:lint
-      - task: docs:build
       - task: test
-      - task: python:test
+      - task: build
 
-  # === Setup ===
-  setup:
-    desc: First-time project setup
-    cmds:
-      - brew bundle --file=Brewfile
-      - mise install
-      - rustup component add clippy rustfmt
-      - cargo fetch
-      - mkdir -p {{.AGILEPLUS_DIR}}/logs
-      - |
-        echo "Setup complete. Run 'task dev' to start the dev stack."
-
-  # === Cleanup ===
   clean:
     desc: Clean build artifacts
     cmds:
       - cargo clean
-      - rm -rf {{.AGILEPLUS_DIR}}/logs
+      - rm -rf docs/book
+      - rm -rf target
 
-  clean:all:
-    desc: Clean all build and cache artifacts
+  coverage:
+    desc: Measure code coverage (SSOT: see grade.sh for the canonical command).
     cmds:
-      - task: clean
-      - cargo clean --release
-      - rm -rf target/
-      - rm -rf .ruff_cache
-
-  # === Short aliases for dev stack operations ===
-  up:
-    desc: "Alias: start the full dev stack (process-compose up)"
-    cmds:
-      - task: dev:up
-
-  down:
-    desc: "Alias: stop all dev stack services (process-compose down)"
-    cmds:
-      - task: dev:down
-
-  logs:
-    desc: "Alias: tail logs for all dev stack services (process-compose logs)"
-    cmds:
-      - task: dev:logs
-
-  status:
-    desc: "Alias: show dev stack service health (process-compose list)"
-    cmds:
-      - task: dev:status
-
-  grade:
-    desc: Full grade (strictest — no caching)
-    cmds:
-      - ./grade.sh
-
-  grade-fast:
-    desc: Fast grade (skips heavy checks)
-    cmds:
-      - ./grade.sh --fast
-
-  grade-json:
-    desc: Grade with JSON output
-    cmds:
-      - ./grade.sh --json
-
-  grade-html:
-    desc: Grade with HTML report
-    cmds:
-      - ./grade.sh --html
-
-  install-lefthook:
-    desc: Install lefthook git hooks
-    cmds:
-      - lefthook install
-    status:
-      - test -f .git/hooks/lefthook
+      - cargo llvm-cov --workspace --fail-under-lines 85

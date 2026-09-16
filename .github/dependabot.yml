@@ -1,28 +1,23 @@
 version: 2
 updates:
-  - package-ecosystem: cargo
-    directory: /rust
+  - package-ecosystem: "github-actions"
+    directory: "/"
     schedule:
-      interval: weekly
-    open-pull-requests-limit: 5
-    labels:
-      - dependencies
-      - rust
+      interval: "weekly"
 
-  - package-ecosystem: pip
-    directory: /python
+  - package-ecosystem: "npm"
+    directory: "/docs"
     schedule:
-      interval: weekly
-    open-pull-requests-limit: 5
-    labels:
-      - dependencies
-      - python
-
-  - package-ecosystem: github-actions
-    directory: /
-    schedule:
-      interval: weekly
-    open-pull-requests-limit: 5
-    labels:
-      - dependencies
-      - ci
+      interval: "weekly"
+    ignore:
+      # GHSA-67mh-4wv8-2f99 (esbuild, dev-server-only request forwarding) and
+      # GHSA-859w-5945-r5v3 / GHSA-jqfx-vfvm-9x3v (vite fs.deny bypass / path
+      # traversal in dev server & optimized deps). No fix is available: the
+      # patched releases require vite 6.x, but vitepress's latest stable
+      # (1.6.3/1.6.4) only supports vite ^5, and vitepress 2.x (which adds
+      # vite 6 support) is alpha-only. These affect `vitepress dev` (local
+      # dev server) only, not the built static docs site. Revisit when
+      # vitepress ships a stable release on vite 6+.
+      - dependency-name: "esbuild"
+      - dependency-name: "vite"
+      - dependency-name: "launch-editor"

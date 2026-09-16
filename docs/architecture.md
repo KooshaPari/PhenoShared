@@ -1,112 +1,248 @@
-# phenotype-infrakit Architecture
+# Pine Architecture — Draft 2026-04-30
 
 ## Overview
 
-phenotype-infrakit is a Rust workspace of four independent infrastructure crates extracted from
-the Phenotype ecosystem. Each crate is domain-agnostic, has no inter-crate dependencies, and can
-be consumed individually.
+Pine provides application compatibility through:
+1. **Binary parsing** (PE/ELF/Mach-O loaders)
+2. **Syscall translation** (Windows/macOS/Linux → Phenotype)
+3. **API emulation** (Win32, Cocoa, POSIX compatibility)
+4. **Isolation** (nvms microVMs for untrusted code)
+5. **Performance** (native where possible, emulation where needed)
 
-## Workspace Structure
-
-```
-phenotype-infrakit/
-  Cargo.toml                         # Workspace root (resolver = "2")
-  crates/
-    phenotype-event-sourcing/        # Append-only event log with hash chains
-    phenotype-cache-adapter/         # Two-tier LRU + DashMap cache with TTL
-    phenotype-policy-engine/         # Rule-based policy evaluator with TOML config
-    phenotype-state-machine/         # Generic FSM with transition guards
-```
-
-## Crate Responsibilities
-
-### phenotype-event-sourcing
-
-Provides an append-only event store backed by a SHA-256 hash chain for integrity verification.
-
-Key types:
-- `EventEnvelope<T>` -- wraps any serializable event with metadata (seq, timestamp, hash)
-- `EventStore` -- trait for pluggable storage backends
-- `InMemoryEventStore` -- reference implementation (in-memory, hash-verified)
-- `SnapshotStore` -- optional snapshot support for aggregate rebuilding
-
-Design decisions:
-- Hash chain: each event's hash covers `sha256(prev_hash || payload_json)`.
-  An empty store uses a zero-hash genesis value.
-- Snapshots are stored separately and do not affect the event hash chain.
-
-### phenotype-cache-adapter
-
-A generic two-tier cache combining an LRU L1 layer (bounded, fast eviction) and a DashMap L2
-layer (unbounded, concurrent). Entries carry per-key TTL tracked via `Instant`.
-
-Key types:
-- `TieredCache<K, V>` -- main cache handle, clone-cheap (Arc-backed)
-- `MetricsHook` -- trait for plugging in hit/miss/eviction counters
-- `CacheEntry<V>` -- internal value wrapper with expiry timestamp
-
-Design decisions:
-- L1 uses `lru::LruCache` under a `parking_lot::Mutex` for bounded eviction.
-- L2 uses `DashMap` for concurrent reads without a global lock.
-- Writes go to both tiers. Reads check L1 first; on miss, promote from L2 to L1.
-- TTL is checked lazily on read; expired entries return `None` and are evicted.
-
-### phenotype-policy-engine
-
-A rule-based policy engine that evaluates a `PolicyContext` (key-value map) against a set of
-`Rule` objects. Rules support allow, deny, and require semantics with optional severity levels.
-
-Key types:
-- `PolicyEngine` -- holds the rule set; evaluates contexts
-- `PolicyContext` -- key-value bag passed to `evaluate`
-- `Rule` -- allow/deny/require rule with field matchers and optional regex
-- `PolicyResult` -- outcome: passed, list of violations
-- TOML loader -- `engine.load_toml_str(&str)` for declarative rule files
-
-Design decisions:
-- Rules are evaluated in declaration order; first matching deny wins.
-- Require rules fail if the specified field is absent or empty.
-- TOML config uses `[[rules]]` arrays for human-editable policy files.
-
-### phenotype-state-machine
-
-A generic finite state machine (FSM) parameterized over a user-defined state enum implementing
-the `State` trait. Supports transition guards, forward-only enforcement (via `ordinal()`), skip
-states, and full history tracking.
-
-Key types:
-- `State` -- trait requiring `ordinal() -> u32`, `Debug`, `Clone`, `PartialEq`, `Eq`, `Hash`
-- `StateMachine<S>` -- FSM handle; holds current state and history
-- `TransitionGuard` -- closure-based guard attached to specific transitions
-- `TransitionError` -- typed error for invalid transitions, guard failures, etc.
-
-Design decisions:
-- `ordinal()` enforces forward-only progression; transitions to lower ordinals are rejected
-  unless the transition is explicitly configured as a skip or the guard overrides it.
-- History is stored as `Vec<S>` in insertion order (oldest first).
-- Guards are keyed by `(from, to)` state pairs and receive a `&PolicyContext`-style bag.
-
-## Dependency Graph
+## Layer Architecture
 
 ```
-phenotype-event-sourcing   --depends-on-->  serde, serde_json, chrono, sha2, thiserror, hex, uuid
-phenotype-cache-adapter    --depends-on-->  serde, dashmap, lru, parking_lot, moka
-phenotype-policy-engine    --depends-on-->  serde, serde_json, thiserror, dashmap, toml, regex
-phenotype-state-machine    --depends-on-->  serde, serde_json, chrono, thiserror
-
-Inter-crate dependencies: NONE
+┌──────────────────────────────────────┐
+│  Application Layer                   │
+│  (Windows .exe / macOS .app / Linux)│
+├──────────────────────────────────────┤
+│  Binary Loader                       │
+│  (PE / ELF / Mach-O parser)         │
+├──────────────────────────────────────┤
+│  Syscall Emulation Layer            │
+│  (Win32 → Phenotype / POSIX → Phenotype)│
+├──────────────────────────────────────┤
+│  Compatibility Libraries            │
+│  (winelib equivalents)              │
+├──────────────────────────────────────┤
+│  nvms Isolation Layer               │
+│  (Firecracker microVMs)            │
+├──────────────────────────────────────┤
+│  Phenotype Native Runtime           │
+│  (Rust core + Go orchestration)    │
+└──────────────────────────────────────┘
 ```
 
-## CI
+## nvms Integration Strategy
 
-The repository uses a single GitHub Actions workflow (`.github/workflows/ci.yml`) that runs on
-every push to `main` and on every pull request targeting `main`.
+Pine builds on `nvms` (nanovms repo) as the isolation layer. The `nvms` CLI is a
+Go binary (`github.com/kooshapari/nanovms`) that exposes VM lifecycle via
+subcommands. It is used as a subprocess from Pine's Rust core.
 
-Steps in order:
-1. `cargo fmt --all -- --check` -- format gate (no diff allowed)
-2. `cargo clippy --workspace --all-targets --all-features -- -D warnings` -- lint gate
-3. `cargo build --workspace --all-targets` -- build gate
-4. `cargo test --workspace --all-targets` -- test gate (all 76 tests must pass)
+### nvms CLI Command Reference
 
-Toolchain: stable Rust via `dtolnay/rust-toolchain@stable`.
-Caching: cargo registry and `target/` keyed on `Cargo.lock` hash.
+nvms is the unified NanoVMs CLI. It is invoked as `nvms <subcommand> [flags]`.
+
+| Command | Description |
+|---------|-------------|
+| `nvms run` | Start a new microVM instance |
+| `nvms stop` | Stop a running instance (optionally delete) |
+| `nvms exec` | Run a command inside a running instance |
+| `nvms cp` | Copy files between host and instance |
+| `nvms list` | List all running instances (`--format json`) |
+| `nvms version` | Print nvms version (used for pre-flight check) |
+
+#### `nvms run` — Core launch command
+
+```
+nvms run --id <instance-id>
+         --tier <wasm|gvisor|firecracker>
+         --image <oci-image>
+         --memory <MB>
+         --cpus <N>
+         [--no-network]
+         [--gpu 1]
+```
+
+| Flag | Type | Description |
+|------|------|-------------|
+| `--id` | string | Unique instance identifier (Pine uses `pine__<session>`) |
+| `--tier` | string | Isolation tier: `wasm`, `gvisor`, or `firecracker` |
+| `--image` | string | OCI image (e.g. `ubuntu:22.04`, `python:3.12`) |
+| `--memory` | int | RAM in megabytes |
+| `--cpus` | int | vCPU count |
+| `--no-network` | flag | Disable networking (required for internet-isolated workloads) |
+| `--gpu` | int | GPU count (Firecracker vGPU pass-through only) |
+
+**Tier selection guidance for Pine:**
+
+| Pine trust level | nvms tier | Cold start | Use case |
+|-----------------|-----------|------------|----------|
+| Trusted (native code) | `wasm` | ~1 ms | Parsers, formatters, hot-path utilities |
+| Semi-trusted (Wine syscalls) | `gvisor` | ~90 ms | Most Windows application compatibility |
+| Untrusted (arbitrary binaries) | `firecracker` | ~125 ms | Unknown/unsigned executables |
+
+#### `nvms exec` — Command execution inside VM
+
+```
+nvms exec <instance-id> -- bash -lc "<command>"
+nvms exec <instance-id> -- bash        # interactive shell
+```
+
+#### `nvms cp` — File transfer
+
+```
+nvms cp <instance-id> -- <host-src>  <vm-dst>   # upload
+nvms cp <instance-id> -- <vm-src>    <host-dst>  # download
+# For directories: append "/." to src to copy contents
+```
+
+### Firecracker MicroVM Configuration for Pine
+
+Firecracker is used for Tier 3 (untrusted) workloads. Pine configures each
+Firecracker VM as follows:
+
+```
+Kernel:   /var/lib/nvms/vmlinux        # provided by nvms installation
+Initrd:   /var/lib/nvms/initrd
+Memory:   512 MB (default) / 2048 MB (GPU workloads)
+vCPUs:    2 (default) / 4 (heavy compute)
+Network:  TAP device via nvms bridge (disabled via --no-network)
+Drives:   Boot image via 9p virtio-fs (mapped by nvms)
+```
+
+The Firecracker JSON configuration is generated by nvms based on the `--tier firecracker`
+flags; Pine does not need to construct the JSON directly.
+
+### Binary Loader ↔ nvms Lifecycle Interface
+
+The Pine binary loader uses nvms in three phases:
+
+**1. Phase 1 — Image resolution:**
+```rust
+// Choose tier based on binary provenance / signature
+let tier = match binary_provenance {
+    Provenance::SignedWindows => "gvisor",   // trusted win32 syscalls
+    Provenance::UnsignedELF   => "firecracker", // unknown Linux binary
+    Provenance::WASM         => "wasm",       // native WASM
+};
+```
+
+**2. Phase 2 — VM launch:**
+```rust
+let instance_id = format!("pine__{}", session_id);
+let mut cmd = Command::new("nvms");
+cmd.arg("run")
+   .arg("--id").arg(&instance_id)
+   .arg("--tier").arg(tier)
+   .arg("--image").arg("phenotype/pine-base:win64")
+   .arg("--memory").arg("1024")
+   .arg("--cpus").arg("2")
+   .arg("--no-network");  // internet blocked for untrusted binaries
+
+let status = cmd.status()?;
+let instance_id = /* parse from stdout / use pre-agreed ID */;
+```
+
+**3. Phase 3 — Binary injection and execution:**
+```rust
+// Upload binary into VM
+Command::new("nvms")
+    .arg("cp").arg(&instance_id)
+    .arg("--")
+    .arg("/path/to/binary.exe")
+    .arg("/tmp/target/binary.exe")
+    .status()?;
+
+// Execute inside VM
+Command::new("nvms")
+    .arg("exec").arg(&instance_id)
+    .arg("--")
+    .arg("bash").arg("-lc")
+    .arg("/tmp/target/binary.exe --option value")
+    .status()?;
+```
+
+### Syscall Mapping (Windows → Phenotype)
+
+Pine's syscall emulator translates Windows (Win32/NT) calls to Phenotype-native
+equivalents. When running inside an nvms microVM, the translation layer operates
+at the boundary between the emulated Windows kernel and the VM's Linux kernel:
+
+```
+┌─────────────────────────────────────────────────────┐
+│  Windows application (PE binary)                     │
+│                                                     │
+│  Win32 API (kernel32.dll, ntdll.dll emulation)     │
+│    ↓  NtCreateFile, NtReadFile, NtWriteFile        │
+│    ↓  NtWaitForSingleObject, NtAllocateVirtualMem  │
+├─────────────────────────────────────────────────┤
+│  Pine syscall translation layer                    │
+│    Windows NT syscall → Phenotype syscall ABI       │
+│                                                     │
+│    Win32 File I/O  →  POSIX open/read/write       │
+│    Win32 Sockets   →  POSIX sockets (WS2_32→libc)  │
+│    Win32 Registry   →  SQLite / JSON key-value     │
+│    Win32 Threads   →  POSIX threads                │
+│    Win32 Memory    →  mmap / munmap               │
+│    Win32 IPC       →  Unix domain sockets / pipes  │
+│    Win32 Events    →  eventfd / self-pipe          │
+├─────────────────────────────────────────────────┤
+│  nvms microVM boundary (Linux kernel)              │
+│    ↑  POSIX syscalls land here                    │
+│    ↓  Firecracker passes through to host           │
+└─────────────────────────────────────────────────────┘
+```
+
+The nvms microVM is the **enforcement boundary**: the VM provides physical
+isolation (separate kernel, separate address space), while Pine's translation
+layer provides **semantic isolation** (Win32 semantics → safe POSIX equivalents).
+No Windows kernel code executes inside the VM; the VM runs a standard Linux
+kernel that receives translated POSIX calls.
+
+| Windows subsystem | Translated to | nvms tier |
+|-------------------|---------------|-----------|
+| kernel32.dll (file/process) | POSIX libc | any |
+| ws2_32.dll (networking) | POSIX sockets | any |
+| ntdll.dll (kernel bridging) | direct syscall mapping | gvisor / firecracker |
+| gdi32.dll (graphics) | Wayland/X11 forwarding | gvisor |
+| win32u.dll (windowing) | X11 or headless rendering | firecracker |
+
+### Platform-Specific Notes
+
+| Platform | VM backend | Notes |
+|----------|-----------|-------|
+| macOS | Virtualization.framework (vz) | `--tier firecracker` uses Apple's VZ wrapper |
+| Linux | KVM | `--tier firecracker` maps to Firecracker directly |
+| Windows | WSL2 | `--tier firecracker` runs inside WSL2's Linux VM |
+
+nvms auto-detects the host platform and selects the appropriate backend. Pine
+does not need to detect the platform; it passes `--tier` and nvms handles the
+rest.
+
+## Phase 1: Foundation
+
+1. Binary parsing: PE/ELF/Mach-O via `goblin` crate
+2. Basic syscall: filesystem + process (Rust)
+3. nvms integration: microVM-based isolation
+4. Test harness: benchmark suite
+
+## Phase 2: Windows Compatibility
+
+1. Win32 API: kernel32, user32, gdi32, ws2_32 core
+2. DXVK integration: DirectX→Vulkan translation
+3. Wine testsuite: Pass Windows AppCompat tests
+4. Performance target: <15% overhead
+
+## Phase 3: Cross-Platform
+
+1. macOS: Darling-inspired Cocoa→Phenotype
+2. Linux: Enhanced POSIX compatibility
+3. Android: Mobile application compatibility
+
+## Key Dependencies
+
+- `goblin`: Binary parsing (PE/ELF/Mach-O)
+- `nvms`: MicroVM isolation layer
+- Rust stable toolchain (MSRV TBD)
+<!-- ci-refresh: 2026-06-10T07:21:50Z -->

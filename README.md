@@ -1,17 +1,13 @@
-# zz-tbd
-
-Determining merge target. Code preserved.
-
----
+Work-state: absorbed — canonical location: `KooshaPari/PhenoTooling/crates/pine-*`
 
 <!-- AI-DD-META:START -->
 <!-- This repository is planned, maintained, and managed by AI Agents only. -->
 <!-- Slop issues are expected and intentionally present as part of an HITL-less -->
 <!-- /minimized AI-DD metaproject of learning, refining, and building brute-force -->
 <!-- training for both agents and the human operator. -->
-![Downloads](https://img.shields.io/github/downloads/KooshaPari/pheno/total?style=flat-square&label=downloads&color=blue)
-![GitHub release](https://img.shields.io/github/v/release/KooshaPari/pheno?style=flat-square&label=release)
-![License](https://img.shields.io/github/license/KooshaPari/pheno?style=flat-square)
+![Downloads](https://img.shields.io/github/downloads/KooshaPari/Pine/total?style=flat-square&label=downloads&color=blue) [![AI slop inside](https://sladge.net/badge.svg)](https://sladge.net)
+![GitHub release](https://img.shields.io/github/v/release/KooshaPari/Pine?style=flat-square&label=release)
+![License](https://img.shields.io/github/license/KooshaPari/Pine?style=flat-square)
 ![AI-Slop](https://img.shields.io/badge/AI--DD-Slop%20Expected-orange?style=flat-square)
 ![AI-Only-Maintained](https://img.shields.io/badge/Planned%20%26%20Maintained%20by-AI%20Agents%20Only-red?style=flat-square)
 ![HITL-less](https://img.shields.io/badge/HITL--less%20AI--DD-metaproject-yellow?style=flat-square)
@@ -25,129 +21,77 @@ Determining merge target. Code preserved.
 > human operator. Bug reports and contributions are still welcome, but please
 > expect AI-generated code, comments, and documentation throughout.
 <!-- AI-DD-META:END -->
-> **Pinned references (Phenotype-org)**
-> - MSRV: see rust-toolchain.toml
-> - cargo-deny config: see deny.toml
-> - cargo-audit: rustsec/audit-check@v2 weekly
-> - Branch protection: 1 reviewer required, no force-push
-> - Authority: phenotype-org-governance/SUPERSEDED.md
-> - Release process: release-plz opens release PRs on main, updates CHANGELOG via cliff.toml, and publishes merged release PRs to crates.io.
 
-[![OpenSSF Scorecard](https://img.shields.io/ossf-scorecard/github.com/KooshaPari/pheno?label=OpenSSF%20Scorecard)](https://securityscorecards.dev/viewer/?uri=github.com/KooshaPari/pheno)
+> **Work-state:** pre-alpha — `[###-------] 25%`
+>
+> Wine-equivalent compatibility layer for Phenotype; foundation bootstrapped 2026-04-30. Research + architecture phase. Pending: Windows syscall translation layer, macOS/Linux adapter scaffolding, nanovms integration.
 
-# repos — CodeProjects/Phenotype organizational shelf
+# Pine — Wine-Equivalent for Phenotype
 
-This is the **repos shelf**: a polyrepo containing ~30 independent projects
-organized under `CodeProjects/Phenotype/organizational-shelf/repos`.
+**Pine** is a compatibility layer enabling Windows, macOS, and Linux applications to run on Phenotype-native infrastructure. Like Wine translates Windows syscalls to POSIX, Pine translates applications into Phenotype execution environments.
 
-## What is a shelf?
+## Quickstart
 
-A shelf is an organizational layer above individual projects. Think of it like
-`~/code/` or `/opt/` — a directory containing related but independent repositories.
-Each project is a standalone git repo; the shelf is their shared home.
-
-## Quick Start
-
-### Finding a project
 ```bash
-find . -maxdepth 1 -mindepth 1 -type d | sort
-cat README.md          # Read the target project README first
+git clone https://github.com/KooshaPari/Pine.git
+cd Pine
+cargo build --workspace --all-targets
+cargo test  --workspace --all-features --no-fail-fast
 ```
 
-### Working on a project
-```bash
-cd <project-name>      # e.g., cd heliosCLI
-git status             # Verify you're in the right place
-```
+The workspace builds five crates (`pine-core`, `pine-loader`, `pine-syscall`,
+`pine-compat`, `pine-nvms`) on stable Rust (2021 edition). For the full
+prerequisites, layout walkthrough, and docs-site workflow, see
+[`docs/src/getting-started.md`](docs/src/getting-started.md) and
+[`CONTRIBUTING.md`](CONTRIBUTING.md).
 
-### License inventory
-```bash
-cargo deny list --layout crate --format json > cargo-deny-license-inventory.json
-```
+## PINE where PINE is an enhancemnt over WINE similar to Proton and Re-eng of Crossover  + Adaptation to Phenotype OS targets
+## Status
 
-### Rust coverage
-```bash
-rustup component add llvm-tools-preview
-cargo install cargo-llvm-cov --locked
-./scripts/rust-coverage.sh
-# LCOV output: coverage/lcov.info
-```
-
-### Creating a worktree
-```bash
-git worktree add .worktrees/my-feature -b my-feature
-cd .worktrees/my-feature
-```
-
-## Project Categories
-
-Projects are organized into functional categories at the top level:
-
-| Category | Contents |
-|----------|----------|
-| `apps/` | User-facing applications |
-| `tooling/` | Developer tools, CLIs, scripts |
-| `infra/` | Infrastructure, deployment, devops |
-| `libs/` | Shared libraries and packages |
-| `platforms/` | Platform-as-product projects |
-
-Note: Not all projects are yet in these categories — the reorganization is ongoing.
-Use the target project's `README.md` and `CLAUDE.md` for the authoritative list.
-
-## Key Files
-
-| File | Purpose |
-|------|---------|
-| `README.md` | Shelf overview and project pointers |
-| `AGENTS.md` | Agent interaction rules |
-| `GOVERNANCE.md` | Shelf governance |
-| `CLAUDE.md` | Claude Code settings |
+**PRE-ALPHA** — Foundation bootstrapped 2026-04-30.
 
 ## Architecture
 
-```
-repos/                          # ← Shelf root (YOU ARE HERE)
-├── .worktrees/                 # Worktree staging area
-├── .archive/                    # Archived projects
-├── .claude/                     # Shelf-level Claude settings
-├── .cursor/                     # Shelf-level Cursor settings
-├── projects/                    # Project metadata & catalog
-├── docs/                        # Cross-project documentation
-│   ├── adr/                   # Architecture Decision Records
-│   └── guides/                # How-to guides
-├── scripts/                     # Cross-project scripts
-├── governance/                  # Governance tooling
-├── plans/                       # Work plans
-└── [projects]                   # ~30 independent git repos
-```
+See `docs/ARCHITECTURE.md` for layer design.
 
-## Agent Workflow
+## Competitor Analysis
 
-1. **Identify the project** — Check the target project `README.md` or ask the user
-2. **Navigate to project** — `cd <project-name>`
-3. **Read project rules** — Check for `CLAUDE.md` or `AGENTS.md` in project
-4. **Do the work** — Follow shelf rules in `AGENTS.md`
-5. **Commit & push** — Use conventional commits, open PR if needed
+| Project | What it does | Pine relevance |
+|---------|-------------|----------------|
+| **Wine** | Windows→Linux syscall translation | Canonical reference |
+| **Proton** | Wine + DXVK/GE-Proton for Steam | DirectX→Vulkan translation |
+| **Box86/Box64** | x86/ARM binary translation | Interpreter-level emulation |
+| **Darling** | macOS apps on Linux | Cocoa→GTK translation |
+| **QEMU** | Full hardware emulation | Emulation reference |
+| **OrbStack** | Docker Desktop replacement | Docker-less containerization |
+| **nvms/nanovms** | Phenotype microVM runtime | Isolation layer to build on |
+| **Firecracker** | Lightweight microVMs | MicroVM isolation reference |
+| **Docker Desktop** | Container runtime | Docker API compatibility |
 
-## NOT AgilePlus
+## Why Pine
 
-This shelf contains **many projects**, of which AgilePlus is one.
-AgilePlus-specific documentation lives inside the `AgilePlus/` project directory,
-not at shelf level.
+Phenotype needs application compatibility. Users will want to run Windows apps (legacy LOB, games), macOS apps (native tooling), Linux GUI apps, Android apps, and other cross-platform binaries. Pine is the translation and compatibility layer.
 
-The files that were previously here describing AgilePlus have been moved to
-their correct locations:
-- AgilePlus governance → `AgilePlus/GOVERNANCE.md`
-- AgilePlus agent rules → `AgilePlus/AGENTS.md`
-- AgilePlus README → `AgilePlus/README.md`
+## Key Research Questions
 
-## Getting Help
+1. **Translation scope**: Syscall-only (Wine) vs. binary translation (Box86)?
+2. **Isolation**: Use nvms microVMs for untrusted code, native execution for trusted?
+3. **Performance target**: Wine ~5-15% overhead vs QEMU 10-1000%?
+4. **Win32 surface**: Which APIs first? Start with filesystem + process + networking?
+5. **DXVK**: Can we leverage Proton's DXVK/vkd3d-proton?
+6. **nvms integration**: Build isolation layer on existing Firecracker runtime?
 
-- Shelf-level issues: Ask here
-- Project-specific issues: `cd <project>` and check that project's docs
-- Architecture decisions: `cat docs/adr/INDEX.md`
-- General questions: Check the target project `README.md` first
+## Stack
 
-## License
+- Core: Rust (translation layer, syscall emulation)
+- Runtime: Go (orchestration, lifecycle management)
+- Agents: Python/TypeScript (testing harness)
+<!-- ci-refresh: 2026-06-10T09:24:35Z -->
 
-MIT — see [LICENSE](./LICENSE).
+## Documentation
+
+This repository includes the following cross-cutting documents:
+
+- [`AGENTS.md`](AGENTS.md) — operating instructions for AI agents and human contributors
+- [`docs/`](docs/) — design notes, ADRs, and supporting documentation (see [`docs/index.md`](docs/index.md))
+

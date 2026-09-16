@@ -1,10 +1,16 @@
-# Docs
+# Pine — Documentation Index
 
-Cross-repo documentation and architectural decisions.
+This index lists the design notes, ADRs, and supporting documentation maintained alongside this repository.
 
-## Structure
+## Top-level documents
 
-- `adr/` - Architecture Decision Records
-- `guides/` - How-to guides
-- `reference/` - Reference documentation
+- [`ARCHITECTURE.md`](ARCHITECTURE.md) — Architecture
+- [`SSOT.md`](SSOT.md) — Ssot
 
+## Subdirectories
+
+- [`operations/`](operations/) — Operations (2 documents)
+
+---
+
+_This index is auto-generated. To add new documents, place `.md` files in `docs/` and re-run the documentation indexer._
