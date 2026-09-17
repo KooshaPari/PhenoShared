@@ -1,5 +1,70 @@
 version: 2
 updates:
+  # --- Root Rust workspace (advisories: jsonwebtoken, protobuf, glib, lru, otel) ---
+  - package-ecosystem: "cargo"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 10
+    groups:
+      cargo-workspace:
+        patterns:
+          - "*"
+
+  # --- Root JS workspace (bun) ---
+  - package-ecosystem: "bun"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 10
+
+  # --- Go module with the critical/high advisories ---
+  - package-ecosystem: "gomod"
+    directory: "/crates/argis-extensions"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 10
+
+  # --- Python (uv) lockfiles ---
+  - package-ecosystem: "uv"
+    directory: "/python"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 10
+  - package-ecosystem: "uv"
+    directory: "/agileplus-mcp"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 10
+
+  # --- Standalone npm/pnpm leaf projects (vite/postcss/esbuild alerts) ---
+  - package-ecosystem: "npm"
+    directory: "/docs"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 10
+  - package-ecosystem: "npm"
+    directory: "/crates/policystack"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 10
+  - package-ecosystem: "npm"
+    directory: "/crates/logify/docs"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 10
+  - package-ecosystem: "npm"
+    directory: "/crates/hexa-kit/templates/typescript"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 10
+  - package-ecosystem: "npm"
+    directory: "/crates/hexa-kit/templates/hexagon/typescript"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 10
+
+  # --- IaC / actions (pre-existing) ---
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
@@ -9,22 +74,18 @@ updates:
     directory: "/iac/terraform"
     schedule:
       interval: "weekly"
-
   - package-ecosystem: "terraform"
     directory: "/iac/terraform/oci"
     schedule:
       interval: "weekly"
-
   - package-ecosystem: "terraform"
     directory: "/iac/terraform/gcp"
     schedule:
       interval: "weekly"
-
   - package-ecosystem: "terraform"
     directory: "/iac/terraform/aws"
     schedule:
       interval: "weekly"
-
   - package-ecosystem: "terraform"
     directory: "/iac/terraform/cloudflare"
     schedule:
