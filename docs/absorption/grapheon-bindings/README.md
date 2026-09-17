@@ -23,7 +23,7 @@ current client path).
 
 ## Workspace changes
 
-- New module: `github.com/<REDACTED>/phenotype-go-sdk/packages/graphclient`
+- New module: `github.com/KooshaPari/phenotype-go-sdk/packages/graphclient`
   (Go 1.22, no external deps)
 - `go.work` updated to register the new package as a workspace member
   alongside `packages/devhex`

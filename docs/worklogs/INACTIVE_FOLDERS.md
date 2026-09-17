@@ -271,8 +271,8 @@ _End of Wave 94_
 
 | PR # | Title | Branch | URL |
 |------|-------|--------|-----|
-| #95 | feat(ci): add SBOM generation workflow | `feat/add-sbom-workflow` | https://github.com/<REDACTED>/phenotype-infrakit/pull/95 |
-| #96 | feat(event-sourcing): LOC reduction | `feat/event-sourcing-loc-reduction` | https://github.com/<REDACTED>/phenotype-infrakit/pull/96 |
+| #95 | feat(ci): add SBOM generation workflow | `feat/add-sbom-workflow` | https://github.com/KooshaPari/phenotype-infrakit/pull/95 |
+| #96 | feat(event-sourcing): LOC reduction | `feat/event-sourcing-loc-reduction` | https://github.com/KooshaPari/phenotype-infrakit/pull/96 |
 
 ### LOC Reduction Achievement
 - **-406 LOC net** in phenotype-event-sourcing (5 files: -494 deleted, +88 added)

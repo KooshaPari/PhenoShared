@@ -2,7 +2,7 @@
 
 | Field | Value |
 |-------|-------|
-| **Source repo** | https://github.com/<REDACTED>/phenotype-hub |
+| **Source repo** | https://github.com/KooshaPari/phenotype-hub |
 | **Absorption date** | 2026-06-18 |
 | **Registry wave** | G19 (wave15 stub absorption) |
 | **Disposition** | ABSORB |

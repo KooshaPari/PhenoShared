@@ -17,8 +17,8 @@
     "CI/CD pipelines"
   ],
   "links": {
-    "github": "https://github.com/<REDACTED>/PhenoTooling",
+    "github": "https://github.com/KooshaPari/PhenoTooling",
     "docs": "https://phenotooling.phenotype.space/docs",
-    "releases": "https://github.com/<REDACTED>/PhenoTooling/releases"
+    "releases": "https://github.com/KooshaPari/PhenoTooling/releases"
   }
 }

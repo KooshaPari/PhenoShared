@@ -321,7 +321,7 @@ Follow: **GITHUB_WORKFLOW_DEPLOYMENT_GUIDE.md**
   ```
 
 - [ ] **Workflow visible on GitHub**
-  - Visited: https://github.com/<REDACTED>/AgilePlus/actions
+  - Visited: https://github.com/KooshaPari/AgilePlus/actions
   - Confirmed: "Snyk Security Scan" workflow listed
 
 #### heliosCLI
@@ -343,7 +343,7 @@ Follow: **GITHUB_WORKFLOW_DEPLOYMENT_GUIDE.md**
   ```
 
 - [ ] **Workflow visible on GitHub**
-  - Visited: https://github.com/<REDACTED>/heliosCLI/actions
+  - Visited: https://github.com/KooshaPari/heliosCLI/actions
   - Confirmed: "Snyk Security Scan" workflow listed
 
 #### phenotype-infrakit
@@ -365,7 +365,7 @@ Follow: **GITHUB_WORKFLOW_DEPLOYMENT_GUIDE.md**
   ```
 
 - [ ] **Workflow visible on GitHub**
-  - Visited: https://github.com/<REDACTED>/phenotype-infrakit/actions
+  - Visited: https://github.com/KooshaPari/phenotype-infrakit/actions
   - Confirmed: "Snyk Security Scan" workflow listed
 
 ### Workflow Verification

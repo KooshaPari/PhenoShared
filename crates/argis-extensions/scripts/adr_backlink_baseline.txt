@@ -714,13 +714,13 @@ Date:   Sun Jun 21 15:46:15 2026 -0700
 [32m+[m
 [32m+[m[32m**Pen-test scope doc (per engagement):** `docs/security/pen-test-{YYYY-Qn}-scope.md` is published 4 weeks before engagement start, with the full asset list, threat model summary, rules of engagement, and out-of-scope items.[m
 [32m+[m
-[32m+[m[32m**Bounty program page:** `https://github.com/<REDACTED>/phenotype-apps/security/policy` (GitHub Security Policy) cross-linked from `phenotype.org/.well-known/security.txt` per RFC 9116.[m
+[32m+[m[32m**Bounty program page:** `https://github.com/KooshaPari/phenotype-apps/security/policy` (GitHub Security Policy) cross-linked from `phenotype.org/.well-known/security.txt` per RFC 9116.[m
 [32m+[m
 [32m+[m[32m## 3. Scope[m
 [32m+[m
 [32m+[m[32m**In scope (every engagement, 2027+):**[m
 [32m+[m
-[32m+[m[32m- **47 active repos** under `github.com/<REDACTED>/*` (per the registry's `fsm: active` rows in `phenotype-registry/registry/disposition-index.json`).[m
+[32m+[m[32m- **47 active repos** under `github.com/KooshaPari/*` (per the registry's `fsm: active` rows in `phenotype-registry/registry/disposition-index.json`).[m
 [32m+[m[32m- **9 substrate crates** (`pheno-config`, `pheno-context`, `pheno-errors`, `pheno-flags`, `pheno-otel`, `pheno-port-adapter`, `pheno-tracing`, `pheno-mcp-router`, `pheno-capacity`) plus their dependents in the workspace.[m
 [32m+[m[32m- **All public APIs** — REST endpoints exposed by `phenotype-router`, gRPC services in `phenotype-hub`, and the 6 federated services (`phenoMCP`, `phenoObservability`, `phenoEvents`).[m
 [32m+[m[32m- **Federation endpoints** — OIDC discovery, JWKS, mTLS handshake paths (per ADR-046 + ADR-079).[m
@@ -988,23 +988,23 @@ Date:   Sun Jun 21 15:46:15 2026 -0700
 [32m+[m
 [32m+[m[32m| PR | Title | Cluster | CVEs closed | Files |[m
 [32m+[m[32m|----|-------|---------|------------:|-------|[m
-[32m+[m[32m| [#71](https://github.com/<REDACTED>/phenotype-apps/pull/71) | `fix(deps): bump next to 16.1.7 (closes 26 CVEs)` | next 14.2.0 → 16.1.7 | **26** | `unified-review/package.json`, `package-lock.json` |[m
-[32m+[m[32m| [#72](https://github.com/<REDACTED>/phenotype-apps/pull/72) | `fix(deps): bump uuid to 12.0.1 (closes 1 CVE)` | uuid ^9.0.0 → ^12.0.1 | **1** | `unified-review/package.json`, `package-lock.json` |[m
-[32m+[m[32m| [#73](https://github.com/<REDACTED>/phenotype-apps/pull/73) | `fix(deps): override postcss to ^8.5.10 (closes 1 CVE)` | postcss override | **1** | `unified-review/package.json`, `package-lock.json` |[m
-[32m+[m[32m| [#74](https://github.com/<REDACTED>/phenotype-apps/pull/74) | `fix(deps): override vite to ^8.0.16 (closes 3 CVEs)` | vite ^5.4.21 → ^8.0.16 | **3** | `Parpoura-5th/package.json`, `package-lock.json` |[m
-[32m+[m[32m| [#75](https://github.com/<REDACTED>/phenotype-apps/pull/75) | `fix(deps): override esbuild to ^0.28.1 (closes 1 CVE)` | esbuild ^0.21.5 → ^0.28.1 | **1** | `Parpoura-5th/package.json`, `package-lock.json` |[m
-[32m+[m[32m| [#76](https://github.com/<REDACTED>/phenotype-apps/pull/76) | `fix(deps): bump mako to 1.3.12 (closes 1 CVE)` | mako 1.3.11 → 1.3.12 | **1** | `Parpoura-5th/uv.lock` |[m
-[32m+[m[32m| [#78](https://github.com/<REDACTED>/phenotype-apps/pull/78) | `fix(deps): bump git2 to 0.20.4 (closes 1 CVE)` | git2 0.18 → 0.20.4 | **1** | `phenotype-ops/tools/phenotype-manifest/Cargo.toml` |[m
-[32m+[m[32m| [#79](https://github.com/<REDACTED>/phenotype-apps/pull/79) | `fix(deps): bump gix to 0.83.0 (closes 5 CVEs)` | gix 0.68 → 0.83.0 (pulls gix-features +0.41.0, gitoxide +0.52.1) | **5** | `phenotype-ops/tools/phenotype-manifest/Cargo.toml` |[m
-[32m+[m[32m| [#80](https://github.com/<REDACTED>/phenotype-apps/pull/80) | `fix(deps): bump python-jose to 3.4.0 (closes 2 CVEs incl. 1 critical)` | python-jose 3.3.0 → 3.4.0 | **2** | `phenotype-ops/review-surface/requirements.txt` |[m
-[32m+[m[32m| [#81](https://github.com/<REDACTED>/phenotype-apps/pull/81) | `fix(deps): bump js-yaml to ^4.2.0 (closes 1 CVE)` | js-yaml ^4.1.0 → ^4.2.0 (lockfile already at 4.2.0; constraint bump only) | **1** | `unified-review/package.json` |[m
+[32m+[m[32m| [#71](https://github.com/KooshaPari/phenotype-apps/pull/71) | `fix(deps): bump next to 16.1.7 (closes 26 CVEs)` | next 14.2.0 → 16.1.7 | **26** | `unified-review/package.json`, `package-lock.json` |[m
+[32m+[m[32m| [#72](https://github.com/KooshaPari/phenotype-apps/pull/72) | `fix(deps): bump uuid to 12.0.1 (closes 1 CVE)` | uuid ^9.0.0 → ^12.0.1 | **1** | `unified-review/package.json`, `package-lock.json` |[m
+[32m+[m[32m| [#73](https://github.com/KooshaPari/phenotype-apps/pull/73) | `fix(deps): override postcss to ^8.5.10 (closes 1 CVE)` | postcss override | **1** | `unified-review/package.json`, `package-lock.json` |[m
+[32m+[m[32m| [#74](https://github.com/KooshaPari/phenotype-apps/pull/74) | `fix(deps): override vite to ^8.0.16 (closes 3 CVEs)` | vite ^5.4.21 → ^8.0.16 | **3** | `Parpoura-5th/package.json`, `package-lock.json` |[m
+[32m+[m[32m| [#75](https://github.com/KooshaPari/phenotype-apps/pull/75) | `fix(deps): override esbuild to ^0.28.1 (closes 1 CVE)` | esbuild ^0.21.5 → ^0.28.1 | **1** | `Parpoura-5th/package.json`, `package-lock.json` |[m
+[32m+[m[32m| [#76](https://github.com/KooshaPari/phenotype-apps/pull/76) | `fix(deps): bump mako to 1.3.12 (closes 1 CVE)` | mako 1.3.11 → 1.3.12 | **1** | `Parpoura-5th/uv.lock` |[m
+[32m+[m[32m| [#78](https://github.com/KooshaPari/phenotype-apps/pull/78) | `fix(deps): bump git2 to 0.20.4 (closes 1 CVE)` | git2 0.18 → 0.20.4 | **1** | `phenotype-ops/tools/phenotype-manifest/Cargo.toml` |[m
+[32m+[m[32m| [#79](https://github.com/KooshaPari/phenotype-apps/pull/79) | `fix(deps): bump gix to 0.83.0 (closes 5 CVEs)` | gix 0.68 → 0.83.0 (pulls gix-features +0.41.0, gitoxide +0.52.1) | **5** | `phenotype-ops/tools/phenotype-manifest/Cargo.toml` |[m
+[32m+[m[32m| [#80](https://github.com/KooshaPari/phenotype-apps/pull/80) | `fix(deps): bump python-jose to 3.4.0 (closes 2 CVEs incl. 1 critical)` | python-jose 3.3.0 → 3.4.0 | **2** | `phenotype-ops/review-surface/requirements.txt` |[m
+[32m+[m[32m| [#81](https://github.com/KooshaPari/phenotype-apps/pull/81) | `fix(deps): bump js-yaml to ^4.2.0 (closes 1 CVE)` | js-yaml ^4.1.0 → ^4.2.0 (lockfile already at 4.2.0; constraint bump only) | **1** | `unified-review/package.json` |[m
 [32m+[m[32m| | | **Total** | **42** | |[m
 [32m+[m
 [32m+[m[32m## Issue opened (1)[m
 [32m+[m
 [32m+[m[32m| Issue | Title | CVE |[m
 [32m+[m[32m|-------|-------|-----|[m
-[32m+[m[32m| [#77](https://github.com/<REDACTED>/phenotype-apps/issues/77) | Unfixable Dependabot alert #5: ecdsa (CVE-2024-23342 / GHSA-wj6h-64fc-37mp) — Minerva timing attack, no patch available | CVE-2024-23342 |[m
+[32m+[m[32m| [#77](https://github.com/KooshaPari/phenotype-apps/issues/77) | Unfixable Dependabot alert #5: ecdsa (CVE-2024-23342 / GHSA-wj6h-64fc-37mp) — Minerva timing attack, no patch available | CVE-2024-23342 |[m
 [32m+[m
 [32m+[m[32m**Why no PR for #5:** python-ecdsa maintainers explicitly consider the Minerva P-256 timing attack out of scope; `first_patched_version` is `null`. Recommended remediation: replace `python-jose` with `pyjwt[crypto]` (drops the unmaintained `python-ecdsa` transitive entirely).[m
 [32m+[m
@@ -1234,7 +1234,7 @@ Date:   Sun Jun 21 15:46:15 2026 -0700
 [32m+[m
 [32m+[m[32m3. **No "outdated dep" condition exists.** The audit's stated goal (list crates where current < latest) returns 0 actionable items, because there is no `latest` to compare against. This is consistent with the project's monorepo substrate design (ADR-013 / ADR-022 / ADR-023): reusable capabilities are vendored as sibling crates, not consumed from a registry.[m
 [32m+[m
-[32m+[m[32m4. **Reproducibility gap (out of scope but worth noting).** Path-only deps break air-gapped builds and create submodule-drift risk. If reproducibility matters, switch to `git = "https://github.com/<REDACTED>/<repo>", tag = "v0.1.0"` for the 3 publishable crates. This is a separate hardening track, not an "outdated dep" issue.[m
+[32m+[m[32m4. **Reproducibility gap (out of scope but worth noting).** Path-only deps break air-gapped builds and create submodule-drift risk. If reproducibility matters, switch to `git = "https://github.com/KooshaPari/<repo>", tag = "v0.1.0"` for the 3 publishable crates. This is a separate hardening track, not an "outdated dep" issue.[m
 [32m+[m
 [32m+[m[32m5. **Mirror-source drift (also out of scope).** `pheno-otel`, `pheno-port-adapter`, `pheno-errors`, `pheno-context` each exist at multiple paths. Mirrors declare identical versions (0.1.0) and identical core metadata, but a deeper diff (e.g. `[dependencies]` divergence, README drift) was not part of this audit. Recommend a follow-up mirror-vs-canonical diff if drift becomes a concern.[m
 [32m+[m
@@ -3566,7 +3566,7 @@ Date:   Sun Jun 21 15:46:15 2026 -0700
 [32m+[m
 [32m+[m[32m- **The Rust production crate** `phenotype-router` (audited separately at `findings/2026-06-21-phenotype-router-security-audit.md`, 2026-06-21, 276 lines, by Forge).[m
 [32m+[m[32m- **Bifrost v1.5.21** upstream (out of scope per ADR-050/051; consumers via `bifrost_adapter.rs`).[m
-[32m+[m[32m- **`internal/sdk`** — the package referenced by `e2e_test.go:39` (`github.com/<REDACTED>/phenotype-router/internal/sdk`) does not exist on any tracked branch. This is the "11 undefined-type errors" referenced in the package doc. Resolving this is V12-T17 per `findings/2026-06-21-V12-T16-e2e-harness.md` §9.[m
+[32m+[m[32m- **`internal/sdk`** — the package referenced by `e2e_test.go:39` (`github.com/KooshaPari/phenotype-router/internal/sdk`) does not exist on any tracked branch. This is the "11 undefined-type errors" referenced in the package doc. Resolving this is V12-T17 per `findings/2026-06-21-V12-T16-e2e-harness.md` §9.[m
 [32m+[m[32m- **Pen-test / bug bounty** — separate V19-T5 deliverable per ADR-080 (`docs/adr/2026-06-21/ADR-080-pen-test-bug-bounty-roadmap.md`).[m
 [32m+[m
 [32m+[m[32m---[m
@@ -3791,7 +3791,7 @@ Date:   Sun Jun 21 15:46:15 2026 -0700
 [32m+[m[32m  "issues_opened": [[m
 [32m+[m[32m    {[m
 [32m+[m[32m      "number": 5,[m
-[32m+[m[32m      "url": "https://github.com/<REDACTED>/phenotype-router/issues/5",[m
+[32m+[m[32m      "url": "https://github.com/KooshaPari/phenotype-router/issues/5",[m
 [32m+[m[32m      "severity": "MEDIUM",[m
 [32m+[m[32m      "finding_id": "F-1",[m
 [32m+[m[32m      "title": "[security] cargo audit + cargo deny not wired into CI (F-1, MEDIUM)",[m
@@ -3821,7 +3821,7 @@ Date:   Sun Jun 21 15:46:15 2026 -0700
 [32m+[m
 [32m+[m[32m**HIGH/CRITICAL count: 0.** Per the strict criterion ("Open GitHub issues for any HIGH/CRITICAL findings"), no issues would be opened by that rule alone. However, the highest-impact actionable finding (F-1) was filed as a `security`-labeled tracking issue to establish the baseline remediation backlog:[m
 [32m+[m
-[32m+[m[32m- **Issue #5** (MEDIUM, F-1): <https://github.com/<REDACTED>/phenotype-router/issues/5> — "cargo audit + cargo deny not wired into CI (F-1, MEDIUM)" — `security` label applied.[m
+[32m+[m[32m- **Issue #5** (MEDIUM, F-1): <https://github.com/KooshaPari/phenotype-router/issues/5> — "cargo audit + cargo deny not wired into CI (F-1, MEDIUM)" — `security` label applied.[m
 [32m+[m[32m- `security` label created on the repo (color `#b60205`, description "Security finding or vulnerability report"). It did not exist prior to this audit.[m
 [32m+[m
 [32m+[m[32m---[m
@@ -3895,10 +3895,10 @@ Date:   Sun Jun 21 15:46:15 2026 -0700
 [32m+[m[32m| `.gitmodules` (submodule pointers) | **Does not exist** at monorepo root. `cat .gitmodules` returns "No such file or directory". |[m
 [32m+[m[32m| `.git/modules/<name>/` (submodule gitdirs) | **None of the 5 exist** in `.git/modules/`. |[m
 [32m+[m[32m| Working branch | `ci/v12-gates-2026-06-21` (a CI gate branch, not main) |[m
-[32m+[m[32m| Working tree remote | `origin = github.com/<REDACTED>/phenotype-apps.git` (the previously-reported `argis` remote is the second remote on this checkout) |[m
+[32m+[m[32m| Working tree remote | `origin = github.com/KooshaPari/phenotype-apps.git` (the previously-reported `argis` remote is the second remote on this checkout) |[m
 [32m+[m[32m| Sparse-checkout state | **Disabled** (`core.sparseCheckout=false`, `core.sparseCheckoutCone=false`) — contradicts AGENTS.md claim of cone-mode sparse-checkout |[m
 [32m+[m
-[32m+[m[32m**Implication:** The 5 directories are **independent git clones** (each with its own `origin` pointing to `github.com/<REDACTED>/<name>.git`), not git submodules. The Step 2 commands (`git submodule deinit`, `git rm $repo` against the monorepo index) would not work as written and would be inappropriate without a `.gitmodules` entry.[m
+[32m+[m[32m**Implication:** The 5 directories are **independent git clones** (each with its own `origin` pointing to `github.com/KooshaPari/<name>.git`), not git submodules. The Step 2 commands (`git submodule deinit`, `git rm $repo` against the monorepo index) would not work as written and would be inappropriate without a `.gitmodules` entry.[m
 [32m+[m
 [32m+[m[32m---[m
 [32m+[m

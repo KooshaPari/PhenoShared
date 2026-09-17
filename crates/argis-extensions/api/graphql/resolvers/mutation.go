@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/<REDACTED>/bifrost-extensions/api/graphql/model"
+	"github.com/KooshaPari/bifrost-extensions/api/graphql/model"
 )
 
 // mutationResolver handles mutation operations

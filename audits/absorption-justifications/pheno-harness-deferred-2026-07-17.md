@@ -194,7 +194,7 @@ revert because no physical transfer occurred.
 - **Boundary doc:** `docs/boundary/pheno-harness.md`
 - **Disposition row:** `registry/disposition-index.json` → `repo-pheno-harness`
 - **Project entry:** `projects/pheno-harness.json` (updated 2026-07-17 to reflect actual archive state)
-- **Source repo (now archived):** https://github.com/<REDACTED>/pheno-harness
+- **Source repo (now archived):** https://github.com/KooshaPari/pheno-harness
 
 ## Last Boundary Review
 

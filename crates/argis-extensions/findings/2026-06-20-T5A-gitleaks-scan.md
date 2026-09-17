@@ -183,7 +183,7 @@ This is false-positive category #1 from prior scans (T21.1, 2026-06-20).
 gh api "repos/<REDACTED>/<repo>" --include  # → HTTP 200/404 + default_branch
 
 # 2. Shallow clone (5 scannable repos)
-git clone --depth 1 --branch <default_branch> https://github.com/<REDACTED>/<repo>.git
+git clone --depth 1 --branch <default_branch> https://github.com/KooshaPari/<repo>.git
 
 # 3. gitleaks scan
 gitleaks detect --no-git \

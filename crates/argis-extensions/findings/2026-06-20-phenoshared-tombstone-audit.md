@@ -14,7 +14,7 @@ Source: `repos/phenoShared/TOMBSTONE.md` (41 lines)
 
 **Status:** DECOMPOSED / INTERIM STAGING RETIRED
 **Date:** 2026-06-19
-**Policy:** [ADR-ECO-014](https://github.com/<REDACTED>/phenotype-registry/blob/main/docs/adr/ADR-ECO-014-phenoshared-decompose.md)
+**Policy:** [ADR-ECO-014](https://github.com/KooshaPari/phenotype-registry/blob/main/docs/adr/ADR-ECO-014-phenoshared-decompose.md)
 
 `phenoShared` was an interim dynamic-install monorepo for cross-cutting Phenotype
 Rust crates. All crate source has been relocated to **DOMAIN_ROLES terminal owners**
@@ -31,14 +31,14 @@ disposition pointers only — no publishable workspace remains.
 
 | Crate(s) | Terminal owner |
 |----------|----------------|
-| `phenotype-error-core`, `phenotype-errors`, `phenotype-iter`, `phenotype-string`, `phenotype-validation`, `phenotype-time`, `phenotype-content-hash` | [phenotype-types](https://github.com/<REDACTED>/phenotype-types) |
-| `phenotype-config-core`, `phenotype-config-loader` | [phenotype-config](https://github.com/<REDACTED>/phenotype-config) |
-| `phenotype-http-client-core`, `phenotype-state-machine`, `phenotype-policy-engine`, `phenotype-health`, `stashly`, `phenotype-retry` | [phenotype-resilience](https://github.com/<REDACTED>/ResilienceKit) |
-| `phenotype-event-bus`, `phenotype-event-sourcing` | [Eventra](https://github.com/<REDACTED>/Eventra) |
-| `phenotype-logging` | [PhenoObservability](https://github.com/<REDACTED>/PhenoObservability) |
-| `phenotype-async-traits`, `phenotype-macros`, `phenotype-contracts` | [phenotype-rust-sdk](https://github.com/<REDACTED>/phenotype-rust-sdk) |
-| `phenotype-security-aggregator`, `phenotype-secret` | [Authvault](https://github.com/<REDACTED>/Authvault) |
-| `phenotype-cache-adapter` | [HexaKit](https://github.com/<REDACTED>/HexaKit) inline stub (`crates/phenotype-cache-adapter-stub`) — archive-if-unused |
+| `phenotype-error-core`, `phenotype-errors`, `phenotype-iter`, `phenotype-string`, `phenotype-validation`, `phenotype-time`, `phenotype-content-hash` | [phenotype-types](https://github.com/KooshaPari/phenotype-types) |
+| `phenotype-config-core`, `phenotype-config-loader` | [phenotype-config](https://github.com/KooshaPari/phenotype-config) |
+| `phenotype-http-client-core`, `phenotype-state-machine`, `phenotype-policy-engine`, `phenotype-health`, `stashly`, `phenotype-retry` | [phenotype-resilience](https://github.com/KooshaPari/ResilienceKit) |
+| `phenotype-event-bus`, `phenotype-event-sourcing` | [Eventra](https://github.com/KooshaPari/Eventra) |
+| `phenotype-logging` | [PhenoObservability](https://github.com/KooshaPari/PhenoObservability) |
+| `phenotype-async-traits`, `phenotype-macros`, `phenotype-contracts` | [phenotype-rust-sdk](https://github.com/KooshaPari/phenotype-rust-sdk) |
+| `phenotype-security-aggregator`, `phenotype-secret` | [Authvault](https://github.com/KooshaPari/Authvault) |
+| `phenotype-cache-adapter` | [HexaKit](https://github.com/KooshaPari/HexaKit) inline stub (`crates/phenotype-cache-adapter-stub`) — archive-if-unused |
 | `phenotype-domain`, `phenotype-application`, `phenotype-port-interfaces` | Distributed to domain SDKs per bounded context |
 | `phenotype-postgres-adapter`, `phenotype-redis-adapter`, `phenotype-http-adapter` | Infrastructure adapters — owner TBD per service repo |
 | `phenotype-nanovms-client`, `phenotype-bid`, `phenotype-build-info`, `phenotype-context`, `phenotype-rate-limit`, `ffi_utils` | Orphan / evaluate per registry backlog |
@@ -192,7 +192,7 @@ These items still need attention per the TOMBSTONE policy and surrounding govern
 These exist locally but are not mirrored to the registry `docs/adr/` directory referenced by the TOMBSTONE policy link.
 
 ### 6.3 Policy / governance gaps
-8. **TOMBSTONE policy link points to GitHub**: `https://github.com/<REDACTED>/phenotype-registry/blob/main/docs/adr/ADR-ECO-014-phenoshared-decompose.md` — needs local mirror or annotation that ADR-ECO-014 lives on `phenotype-registry` (not `repos/`).
+8. **TOMBSTONE policy link points to GitHub**: `https://github.com/KooshaPari/phenotype-registry/blob/main/docs/adr/ADR-ECO-014-phenoshared-decompose.md` — needs local mirror or annotation that ADR-ECO-014 lives on `phenotype-registry` (not `repos/`).
 9. **Optional rename** — TOMBSTONE.md suggests renaming to `phenoShared-tombstone` after "fleet pin drain completes"; no completion date or pin-drain tracker exists.
 10. **`docs/disposition/` not git-tracked elsewhere** — if the local `repos/phenoShared/` clone is the only copy of the disposition records, it is at risk of being lost when the worktree is cleaned up. Recommend mirroring to `phenotype-registry/docs/disposition/phenoShared/`.
 11. **Local-only `Cargo.lock`** at `phenoShared/Cargo.lock` (top-level only; no `Cargo.toml`) — vestigial from pre-decompose builds; can be removed in a cleanup commit.

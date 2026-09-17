@@ -13,9 +13,9 @@ Inspect each path's git remote + HEAD reference.
 
 | Path | Remote | HEAD | Status |
 |---|---|---|---|
-| `C:\Users\koosh\Dev\Quillr` | `https://github.com/<REDACTED>/Quillr.git` | `fix/ci-reds-pyproject-template` (local-only) | **Canonical clone** |
-| `C:\Users\koosh\pheno\Quillr` | `https://github.com/<REDACTED>/pheno.git` (NOT Quillr) | `main` | **Sub-tree of `pheno` monorepo** |
-| `C:\Users\koosh\pheno-absorb\Quillr` | `https://github.com/<REDACTED>/pheno.git` (NOT Quillr) | `main` | **Sub-tree of `pheno` monorepo** |
+| `C:\Users\koosh\Dev\Quillr` | `https://github.com/KooshaPari/Quillr.git` | `fix/ci-reds-pyproject-template` (local-only) | **Canonical clone** |
+| `C:\Users\koosh\pheno\Quillr` | `https://github.com/KooshaPari/pheno.git` (NOT Quillr) | `main` | **Sub-tree of `pheno` monorepo** |
+| `C:\Users\koosh\pheno-absorb\Quillr` | `https://github.com/KooshaPari/pheno.git` (NOT Quillr) | `main` | **Sub-tree of `pheno` monorepo** |
 
 `pheno/Quillr` and `pheno-absorb/Quillr` are sparse-checkout views of
 the `pheno` monorepo's `Quillr/` subdirectory. They share `.git/`
@@ -37,7 +37,7 @@ absorbed/imported snapshot of Quillr from a prior absorption phase).
 
 ## Action
 
-- Add `// DEPRECATED: see https://github.com/<REDACTED>/Quillr`
+- Add `// DEPRECATED: see https://github.com/KooshaPari/Quillr`
   header to `pheno/Quillr/README.md` (already present per audit)
 - Add same header to `pheno-absorb/Quillr/README.md`
 - Document the relationship in `phenotype-registry/registry/domain-roles.json`

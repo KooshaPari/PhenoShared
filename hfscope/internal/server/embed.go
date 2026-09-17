@@ -10,8 +10,8 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/<REDACTED>/hfscope/internal/hfapi"
-	"github.com/<REDACTED>/hfscope/internal/views"
+	"github.com/KooshaPari/hfscope/internal/hfapi"
+	"github.com/KooshaPari/hfscope/internal/views"
 )
 
 // corsHeaders sets permissive CORS on every embed response.

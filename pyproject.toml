@@ -50,9 +50,9 @@ all = [
 bench = "bench.cli:main"
 
 [project.urls]
-Documentation = "https://github.com/<REDACTED>/pheno-harness/blob/main/docs/guides/INSTALL.md"
+Documentation = "https://github.com/KooshaPari/pheno-harness/blob/main/docs/guides/INSTALL.md"
 Harbor-upstream = "https://github.com/laude-institute/harbor"
-Portage-TEMP = "https://github.com/<REDACTED>/portage-TEMP"
+Portage-TEMP = "https://github.com/KooshaPari/portage-TEMP"
 
 [tool.setuptools.packages.find]
 include = [

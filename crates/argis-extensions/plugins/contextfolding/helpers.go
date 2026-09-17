@@ -4,7 +4,7 @@ import (
 	"context"
 	"strings"
 
-	"github.com/<REDACTED>/bifrost-extensions/slm"
+	"github.com/KooshaPari/bifrost-extensions/slm"
 	"github.com/maximhq/bifrost/core/schemas"
 )
 

@@ -1,7 +1,7 @@
 {
   "audit_date": "2026-07-26",
   "repository": "phenoForge",
-  "remote": "https://github.com/<REDACTED>/phenoForge",
+  "remote": "https://github.com/KooshaPari/phenoForge",
   "remote_default_branch": "main",
   "remote_default_sha": "5a1a2cdf0425bf2c20f2f6ed0a5027dbb582a004",
   "evidence": {

@@ -11,8 +11,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/<REDACTED>/nanovms/internal/domain"
-	"github.com/<REDACTED>/nanovms/internal/ports"
+	"github.com/KooshaPari/nanovms/internal/domain"
+	"github.com/KooshaPari/nanovms/internal/ports"
 )
 
 // runscPath is the path to the runsc binary (gVisor runtime).

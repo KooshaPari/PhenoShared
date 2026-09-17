@@ -1,6 +1,6 @@
 # Migrated from <REDACTED>/pheno-worklog-schema on 2026-06-20 prior to repo deletion
 
-> Original source: https://github.com/<REDACTED>/pheno-worklog-schema (main @ 02e2ba32b95369bc7b65e7f5bfe407f624bc9c36)
+> Original source: https://github.com/KooshaPari/pheno-worklog-schema (main @ 02e2ba32b95369bc7b65e7f5bfe407f624bc9c36)
 > Absorbed into `phenotype-org-audits/audits/worklog-schema/` per ADR-042.
 
 # pheno-worklog-schema

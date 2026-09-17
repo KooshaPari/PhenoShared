@@ -28,5 +28,5 @@ cargo test -p phenotype-gfx
 
 ## Related
 
-- [phenotype-gfx#10](https://github.com/<REDACTED>/phenotype-gfx/pull/10) — sister-repo absorption
+- [phenotype-gfx#10](https://github.com/KooshaPari/phenotype-gfx/pull/10) — sister-repo absorption
 - [phenotype-registry chokepoints](../../phenotype-registry/registry/chokepoints.json) — `phenotype-gfx` W18b row

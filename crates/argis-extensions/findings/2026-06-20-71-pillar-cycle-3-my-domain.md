@@ -89,7 +89,7 @@ Per the task spec, all test claims were verified by running the actual test comm
 ## 1. Eidolon (Rust workspace × 4 crates) — **mean 2.18 / 3, PASS (Tier 2 graduated)**
 
 **Local path:** `Eidolon/`
-**Git remote:** `git@github.com:<REDACTED>/Eidolon.git` (per `Eidolon/CLAUDE.md:1-10`; the Cargo workspace `repository = "https://github.com/<REDACTED>/phenotype-infrakit"` is the umbrella).
+**Git remote:** `git@github.com:<REDACTED>/Eidolon.git` (per `Eidolon/CLAUDE.md:1-10`; the Cargo workspace `repository = "https://github.com/KooshaPari/phenotype-infrakit"` is the umbrella).
 **Workspace members (`Eidolon/Cargo.toml:3-7`):** `eidolon-core`, `eidolon-desktop`, `eidolon-mobile`, `eidolon-sandbox`.
 **Test baseline:** `cargo test --workspace` → 135 / 0 passed.
 

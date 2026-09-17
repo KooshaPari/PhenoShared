@@ -60,7 +60,7 @@ GitHub Release, verify with:
 cosign verify-blob \
   --signature      release.sig \
   --certificate   release.pub \
-  --certificate-identity-regexp 'https://github.com/<REDACTED>/.*@refs/tags/.*' \
+  --certificate-identity-regexp 'https://github.com/KooshaPari/.*@refs/tags/.*' \
   --certificate-oidc-issuer     'https://token.actions.githubusercontent.com' \
   release.tar.gz
 ```
@@ -77,7 +77,7 @@ The two `--certificate-*` flags pin which workflow identity is acceptable:
   not impersonable by other CI systems.
 - `--certificate-identity-regexp` — restricts to workflows under
   `<REDACTED>/*` that fired on a tag ref. Tighten further for a specific
-  repo: `'https://github.com/<REDACTED>/phenotype-apps/.*@refs/tags/v.*'`.
+  repo: `'https://github.com/KooshaPari/phenotype-apps/.*@refs/tags/v.*'`.
 
 ## How is this wired in CI?
 

@@ -181,15 +181,15 @@ Tier 1 repos require immediate workflow deployment:
 
 1. **AgilePlus**
    - Path: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus`
-   - Remote: `https://github.com/<REDACTED>/AgilePlus`
+   - Remote: `https://github.com/KooshaPari/AgilePlus`
 
 2. **heliosCLI**
    - Path: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/heliosCLI`
-   - Remote: `https://github.com/<REDACTED>/heliosCLI`
+   - Remote: `https://github.com/KooshaPari/heliosCLI`
 
 3. **phenotype-infrakit**
    - Path: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/phenotype-infrakit`
-   - Remote: `https://github.com/<REDACTED>/phenotype-infrakit`
+   - Remote: `https://github.com/KooshaPari/phenotype-infrakit`
 
 ### 3.2: Deploy to AgilePlus
 
@@ -381,7 +381,7 @@ git push origin main
 
 For each Tier 1 repo:
 
-1. Go to: https://github.com/<REDACTED>/AgilePlus/actions
+1. Go to: https://github.com/KooshaPari/AgilePlus/actions
 2. You should see **"Snyk Security Scan"** workflow listed
 3. Refresh page if not visible (may take a few seconds)
 
@@ -406,7 +406,7 @@ Then check Actions tab — workflow should start within 30 seconds.
 
 After first workflow run:
 
-1. Go to: https://github.com/<REDACTED>/AgilePlus/actions
+1. Go to: https://github.com/KooshaPari/AgilePlus/actions
 2. Click on the latest **"Snyk Security Scan"** run
 3. Expand **"Snyk test"** step
 4. Look for output:
@@ -459,7 +459,7 @@ git log --oneline -5 .github/workflows/snyk-scan.yml
 ### 5.2: Viewing Scheduled Runs
 
 In GitHub Actions UI:
-1. Go to: https://github.com/<REDACTED>/AgilePlus/actions
+1. Go to: https://github.com/KooshaPari/AgilePlus/actions
 2. Filter by: "Snyk Security Scan"
 3. Look for runs with source: **"Scheduled"**
 
@@ -562,7 +562,7 @@ When vulnerabilities are found:
 
 Scan reports are saved as artifacts:
 
-1. Go to: https://github.com/<REDACTED>/AgilePlus/actions/runs/XXXXX
+1. Go to: https://github.com/KooshaPari/AgilePlus/actions/runs/XXXXX
 2. Scroll to: **"Artifacts"** section
 3. Download: `snyk-report.zip`
 4. Contains: `snyk-report.json`

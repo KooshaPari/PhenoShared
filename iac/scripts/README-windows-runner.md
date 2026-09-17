@@ -2,7 +2,7 @@
 
 Installs a **self-hosted GitHub Actions runner** on the Windows 11 desktop
 (`<REDACTED>-desk.tail2b570.ts.net`), registered at the
-[`<REDACTED>`](https://github.com/<REDACTED>) organization scope.
+[`<REDACTED>`](https://github.com/KooshaPari) organization scope.
 
 Forgejo was the original target for this script; it is blocked waiting on
 OCI capacity, so GitHub Actions is standing in. The dedicated-user +
@@ -15,7 +15,7 @@ unchanged — only the registration target differs.
   generated password, never expires).
 - `actions/runner` latest release (Windows x64) unpacked to
   `C:\actions-runner` by default.
-- Runner registered at **org scope** (`https://github.com/<REDACTED>`)
+- Runner registered at **org scope** (`https://github.com/KooshaPari`)
   with labels `self-hosted, Windows, X64, desktop-<REDACTED>-desk` and
   name `desktop-<REDACTED>-desk`.
 - Windows service installed by `config.cmd --runasservice` running as
@@ -56,7 +56,7 @@ Optional parameters:
 | Param | Default | Notes |
 |-------|---------|-------|
 | `-InstallDir` | `C:\actions-runner` | Extraction + service working dir |
-| `-OrgUrl` | `https://github.com/<REDACTED>` | Org-scope registration URL |
+| `-OrgUrl` | `https://github.com/KooshaPari` | Org-scope registration URL |
 | `-Labels` | `self-hosted,Windows,X64,desktop-<REDACTED>-desk` | Workflow targeting |
 | `-RunnerName` | `desktop-<REDACTED>-desk` | Name shown in GitHub UI |
 | `-RunnerUser` | `gh-runner` | Local service account |

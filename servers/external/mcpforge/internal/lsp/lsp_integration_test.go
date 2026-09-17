@@ -7,7 +7,7 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/<REDACTED>/MCPForge/internal/protocol"
+	"github.com/KooshaPari/MCPForge/internal/protocol"
 )
 
 // TestLSPMessageFlow_FullRequestResponseCycle exercises the complete

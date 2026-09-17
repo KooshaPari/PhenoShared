@@ -3,7 +3,7 @@
 ## Source Repository
 
 - **Repository**: `<REDACTED>/zz-merge-unk-ArgisExtensions`
-- **URL**: https://github.com/<REDACTED>/zz-merge-unk-ArgisExtensions
+- **URL**: https://github.com/KooshaPari/zz-merge-unk-ArgisExtensions
 - **Branch**: `main`
 - **Commit**: `52abbd5` — "Tombstone: mark for deletion"
 - **Absorbed**: 2026-09-15

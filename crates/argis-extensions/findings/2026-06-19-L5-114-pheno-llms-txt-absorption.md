@@ -5,7 +5,7 @@
 **Pattern reference:** [L5-112 predict-dry](../../../phenotype-org-audits/audits/2026-06-18_ADR-040-deletion-recipe.md), [L5-112 drift-detector](../../2026-06-19-L5-112-drift-detector-absorption.md), [L5-112 framework-lint](../../2026-06-19-L5-112-framework-lint-absorption.md)
 **Source repo:** `<REDACTED>/pheno-llms-txt`
 **Target repo:** `<REDACTED>/phenotype-py-extras` → `src/phenotype_py_extras/llms_txt/` (Python package absorption)
-**PR:** https://github.com/<REDACTED>/phenotype-py-extras/pull/6
+**PR:** https://github.com/KooshaPari/phenotype-py-extras/pull/6
 
 ---
 
@@ -210,7 +210,7 @@ None.
 
 **`DELETE_AFTER_PATCHES`**. Steps completed / to be completed:
 
-1. ✅ Source content absorbed into `phenotype-py-extras` (commit `c89580e`, PR #6 OPEN at <https://github.com/<REDACTED>/phenotype-py-extras/pull/6>, 545 LOC added across 10 files).
+1. ✅ Source content absorbed into `phenotype-py-extras` (commit `c89580e`, PR #6 OPEN at <https://github.com/KooshaPari/phenotype-py-extras/pull/6>, 545 LOC added across 10 files).
 2. ⏭ Archive source repo via `gh api -X PATCH repos/<REDACTED>/pheno-llms-txt -f archived=true` (this turn).
 3. ⏭ Soft-delete via GitHub UI (Settings → Danger Zone → Delete this repository), exposing the manual URL for the user.
 4. ⏭ Optional: append `Added` line to target `CHANGELOG.md` under `[Unreleased]` once a release PR is in flight (not part of this turn's PR to avoid force-push on a merged commit).
@@ -218,7 +218,7 @@ None.
 ## 9. RECOMMENDED_NEXT_ACTIONS
 
 1. **Archive `pheno-llms-txt`** via `gh api -X PATCH repos/<REDACTED>/pheno-llms-txt -f archived=true` (this turn, step 2 of recipe).
-2. **Manual delete URL** for user: <https://github.com/<REDACTED>/pheno-llms-txt/settings#dangerZone> (90-day window: 2026-06-19 → 2026-09-17).
+2. **Manual delete URL** for user: <https://github.com/KooshaPari/pheno-llms-txt/settings#dangerZone> (90-day window: 2026-06-19 → 2026-09-17).
 3. **No AGENTS.md change needed** at monorepo root — `pheno-llms-txt/` is not in the listed active focus repos.
 4. **Optional follow-up**: append `### Added` line to `phenotype-py-extras/CHANGELOG.md` `[Unreleased]`:
    ```
@@ -241,14 +241,14 @@ None.
 |---|---|---|
 | 1. Source content absorbed | ✅ DONE | PR #6 merged into `<REDACTED>/phenotype-py-extras:main` |
 | 2. Source repo archived | ⏭ N/A | Source repo `<REDACTED>/pheno-llms-txt` returns HTTP 404 from `gh api repos/<REDACTED>/pheno-llms-txt` as of 2026-06-20 — already deleted from GitHub ahead of the audit's archive step. The 90-day GitHub retention tombstone still applies. No action possible via the standard `gh api -X PATCH /repos/{owner}/{repo} -f archived=true` endpoint (HTTP 404). |
-| 3. Manual delete | ⏭ ALREADY_DELETED | User-deleted pre-emptively (per HTTP 404 evidence). User-facing URL no longer reachable: <https://github.com/<REDACTED>/pheno-llms-txt/settings#dangerZone> |
+| 3. Manual delete | ⏭ ALREADY_DELETED | User-deleted pre-emptively (per HTTP 404 evidence). User-facing URL no longer reachable: <https://github.com/KooshaPari/pheno-llms-txt/settings#dangerZone> |
 | 4. CHANGELOG follow-up | ⏭ DEFERRED | Append `### Added` line to `phenotype-py-extras/CHANGELOG.md` `[Unreleased]` on next release PR (release-time task, not closure-time task). |
 
 ### PR #6 merge evidence (2026-06-20 04:37:59 UTC)
 
 | Field | Value |
 |---|---|
-| PR | <https://github.com/<REDACTED>/phenotype-py-extras/pull/6> |
+| PR | <https://github.com/KooshaPari/phenotype-py-extras/pull/6> |
 | State | **MERGED** |
 | Title | `feat(llms-txt): absorb pheno-llms-txt into phenotype-py-extras` |
 | Head | `feat/absorb-pheno-llms-txt-2026-06-18` |
@@ -280,7 +280,7 @@ The source repo `<REDACTED>/pheno-llms-txt` was user-deleted between the audit (
 
 ## REFERENCES
 
-- **PR #6**: <https://github.com/<REDACTED>/phenotype-py-extras/pull/6>
+- **PR #6**: <https://github.com/KooshaPari/phenotype-py-extras/pull/6>
 - **Target branch**: `feat/absorb-pheno-llms-txt-2026-06-18` @ `c89580e5cb6bcc4c7afe65a57acf68d062388b7a`
 - **Absorption recipe (ADR-040)**: `phenotype-org-audits/audits/2026-06-18_ADR-040-deletion-recipe.md` (5-step deletion recipe)
 - **L5-112 predict-dry template**: `findings/2026-06-19-L5-112-predict-dry-absorption.md`

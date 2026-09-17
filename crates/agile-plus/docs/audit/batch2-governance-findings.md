@@ -15,7 +15,7 @@ After investigation, all three resolve to the **same git repository**:
 
 | Logical name | Workspace path | Git remote | Status |
 |--------------|---------------|------------|--------|
-| AgilePlus    | `C:/Users/koosh/Dev/AgilePlus` | `https://github.com/<REDACTED>/AgilePlus.git` | **canonical** working tree |
+| AgilePlus    | `C:/Users/koosh/Dev/AgilePlus` | `https://github.com/KooshaPari/AgilePlus.git` | **canonical** working tree |
 | Tracera      | `Tracera/`, `Tracera-wtrees/` | same remote (shared `.git`) | **stub** at root + feature worktrees |
 | Tracely      | `Tracely/`, `Tracely-wtrees/` | same remote (shared `.git`) | **stub** at root + feature worktrees |
 

@@ -22,7 +22,7 @@
 ## Why a pointer entry
 
 Per
-[`phenotype-omlx/docs/guides/GITHUB_ARCHIVE_POLICY.md`](https://github.com/<REDACTED>/phenotype-omlx/blob/main/docs/guides/GITHUB_ARCHIVE_POLICY.md),
+[`phenotype-omlx/docs/guides/GITHUB_ARCHIVE_POLICY.md`](https://github.com/KooshaPari/phenotype-omlx/blob/main/docs/guides/GITHUB_ARCHIVE_POLICY.md),
 archived repos on this org MUST NOT be deleted. The required cutover shape is:
 
 1. Mirror needed history/branches into the canonical home.

@@ -27,7 +27,7 @@ Progress: `[███████░░░] 70%` — post-FX stack extracted fro
 
 _Updated 2026-06-08 — audit pass._
 
-[![CI](https://github.com/<REDACTED>/phenotype-postfx/actions/workflows/ci.yml/badge.svg)](https://github.com/<REDACTED>/phenotype-postfx/actions)
+[![CI](https://github.com/KooshaPari/phenotype-postfx/actions/workflows/ci.yml/badge.svg)](https://github.com/KooshaPari/phenotype-postfx/actions)
 [![License](https://img.shields.io/github/license/<REDACTED>/phenotype-postfx)](LICENSE)
 
 Reusable BRP post-processing stack for Unity. Deterministic SSAO → SSGI → Bloom → ACES tonemap → LUT color grading chain via `OnRenderImage`.
@@ -82,7 +82,7 @@ magenta shader at runtime.
 
 ## Origin
 
-Extracted from [WorldSphereMod3D](https://github.com/<REDACTED>/WorldSphereMod) WSM3DPostStack.
+Extracted from [WorldSphereMod3D](https://github.com/KooshaPari/WorldSphereMod) WSM3DPostStack.
 
 ## Description
 

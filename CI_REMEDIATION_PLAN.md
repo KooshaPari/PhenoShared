@@ -143,7 +143,7 @@ After push, GitHub Actions will run automatically:
 gh run list --workflow security.yml --limit 1 -s in_progress
 
 # Or open directly:
-# https://github.com/<REDACTED>/phenotype-infrakit/actions/workflows/security.yml
+# https://github.com/KooshaPari/phenotype-infrakit/actions/workflows/security.yml
 ```
 
 ### 4b. Expected Results

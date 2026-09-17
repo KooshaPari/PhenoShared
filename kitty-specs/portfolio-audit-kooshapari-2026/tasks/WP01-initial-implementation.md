@@ -25,7 +25,7 @@ created_at: 2026-03-29T00:00:00Z
 - `PyO3/Rust/Zig`
 - `docs/governance/23_ARCHITECTURAL_GOVERNANCE.md`
 - `docs/reports/`
-- `github.com/<REDACTED>/phenoSDK`).`
+- `github.com/KooshaPari/phenoSDK`).`
 - `libs/`
 - `libs/python/phenotype-sdk`
 - `test/lint`

@@ -7,7 +7,7 @@ import (
 	"time"
 
 	"github.com/jackc/pgx/v5/pgxpool"
-	"github.com/<REDACTED>/bifrost-extensions/db/sqlc"
+	"github.com/KooshaPari/bifrost-extensions/db/sqlc"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )

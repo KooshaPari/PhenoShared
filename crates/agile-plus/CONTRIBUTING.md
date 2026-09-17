@@ -1,6 +1,6 @@
 # Contributing to AgilePlus
 
-Thank you for your interest in contributing! This repository is part of the [Phenotype](https://github.com/<REDACTED>) ecosystem.
+Thank you for your interest in contributing! This repository is part of the [Phenotype](https://github.com/KooshaPari) ecosystem.
 
 ## Table of Contents
 
@@ -76,7 +76,7 @@ task test                    # unit + integration tests pass
 
 ## Development Workflow
 
-1. **Spec first.** All non-trivial work must be tracked in [AgilePlus](https://github.com/<REDACTED>/AgilePlus). Check for an existing spec under `kitty-specs/` before implementing; otherwise create one with `agileplus specify --title "<feature>"`.
+1. **Spec first.** All non-trivial work must be tracked in [AgilePlus](https://github.com/KooshaPari/AgilePlus). Check for an existing spec under `kitty-specs/` before implementing; otherwise create one with `agileplus specify --title "<feature>"`.
 2. **Branch.** Cut feature branches from `main` using the form `<category>/<short-slug>` (e.g. `feat/auth-rotation`, `fix/null-deref`).
 3. **Implement.** Follow the existing module layout. Match prevailing code style — do not reformat unrelated files.
 4. **Test.** Run `cargo test --all` (or `cargo test -p <crate>` for a single crate). Add unit tests next to the code under test and integration tests under `tests/`. For frontend changes, also run `npm test` in `crates/agileplus-dashboard/web/`.

@@ -8,7 +8,7 @@
   "has_license": true,
   "type": "application-and-library-monorepo",
   "path": "repos/Grapheon",
-  "gh_url": "https://github.com/<REDACTED>/zz-archive-grapheon",
+  "gh_url": "https://github.com/KooshaPari/zz-archive-grapheon",
   "remote_default_branch": "main",
   "remote_head_sha": "8b57aa380dd6d288f451be5ef0e4e766f606c7fb",
   "local_head_sha": "8b57aa380dd6d288f451be5ef0e4e766f606c7fb",

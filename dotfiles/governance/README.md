@@ -176,7 +176,7 @@ cp path/to/thegent/dotfiles/governance/CLAUDE.base.md my-project/CLAUDE.md
 
 **Option 2: Git Submodule** (for coordinated updates)
 ```bash
-git submodule add https://github.com/<REDACTED>/thegent.git shared/thegent
+git submodule add https://github.com/KooshaPari/thegent.git shared/thegent
 # Reference in CI: cp shared/thegent/dotfiles/governance/CLAUDE.base.md ./CLAUDE.md
 ```
 

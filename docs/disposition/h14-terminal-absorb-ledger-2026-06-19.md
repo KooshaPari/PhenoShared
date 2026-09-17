@@ -8,11 +8,11 @@
 
 | Item | Status | Evidence |
 |------|--------|----------|
-| phenotype-config-loader → phenotype-config | **done** | [phenotype-config#2](https://github.com/<REDACTED>/phenotype-config/pull/2) merged 2026-06-18 — `crates/phenotype-config-loader` |
-| phenotype-errors + error-core → phenotype-types | **done** | [phenotype-types#1](https://github.com/<REDACTED>/phenotype-types/pull/1) merged 2026-06-18 — `crates/phenotype-errors`, `crates/phenotype-error-core` |
-| HexaKit git pin repoint | **done** | [HexaKit#267](https://github.com/<REDACTED>/HexaKit/pull/267) merged 2026-06-18 |
+| phenotype-config-loader → phenotype-config | **done** | [phenotype-config#2](https://github.com/KooshaPari/phenotype-config/pull/2) merged 2026-06-18 — `crates/phenotype-config-loader` |
+| phenotype-errors + error-core → phenotype-types | **done** | [phenotype-types#1](https://github.com/KooshaPari/phenotype-types/pull/1) merged 2026-06-18 — `crates/phenotype-errors`, `crates/phenotype-error-core` |
+| HexaKit git pin repoint | **done** | [HexaKit#267](https://github.com/KooshaPari/HexaKit/pull/267) merged 2026-06-18 |
 | `components.lock` phenotype-types SHA | **done** | `dd14f735` on main |
-| Agentora W18b unblock | **done** | [Agentora#90](https://github.com/<REDACTED>/Agentora/pull/90) merged 2026-06-18 |
+| Agentora W18b unblock | **done** | [Agentora#90](https://github.com/KooshaPari/Agentora/pull/90) merged 2026-06-18 |
 
 ## Terminal owner crate inventory
 

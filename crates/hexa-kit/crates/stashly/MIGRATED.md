@@ -2,7 +2,7 @@
 
 **Date:** 2026-06-17  
 **Disposition row:** HexaKit DISPOSITION #46 — `crates/stashly`  
-**Canonical repos:** https://github.com/<REDACTED>/phenoShared (Rust cache infra) · https://github.com/<REDACTED>/phenotype-types (shared types)  
+**Canonical repos:** https://github.com/KooshaPari/phenoShared (Rust cache infra) · https://github.com/KooshaPari/phenotype-types (shared types)  
 **Charter:** v2 boundary-shaping — cache role → phenoShared / phenotype-types
 
 ## What changed
@@ -17,10 +17,10 @@
 2. Git dependency (fleet default):
 
 ```toml
-stashly = { git = "https://github.com/<REDACTED>/phenoShared", branch = "main" }
+stashly = { git = "https://github.com/KooshaPari/phenoShared", branch = "main" }
 ```
 
-3. TypeScript/Python shared types → **phenotype-types** — see [phenotype-types](https://github.com/<REDACTED>/phenotype-types).
+3. TypeScript/Python shared types → **phenotype-types** — see [phenotype-types](https://github.com/KooshaPari/phenotype-types).
 
 ## For HexaKit maintainers
 

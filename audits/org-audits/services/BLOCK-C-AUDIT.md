@@ -1,7 +1,7 @@
 # Block-C Audit — <REDACTED>/services
 
 **Audit date:** 2026-06-15
-**Repo:** https://github.com/<REDACTED>/services
+**Repo:** https://github.com/KooshaPari/services
 **Clone target:** `E:\bc-audit-blockc\services`
 **Default branch (remote):** `chore/dependabot-2026-06-08`
 **HEAD at audit:** `0d7262cd605638a18cc5a000e8c42858d1bbc6fc`
@@ -370,7 +370,7 @@ coverage tooling (no `tarpaulin`, no `nyc`, no `coverage.py`).
 
 ## 12. Audit metadata
 
-- Cloned with: `git clone https://github.com/<REDACTED>/services.git services`
+- Cloned with: `git clone https://github.com/KooshaPari/services.git services`
 - Default branch tip: `0d7262cd605638a18cc5a000e8c42858d1bbc6fc`
 - Audit commit: this document is added on branch `audit/block-c`
   (see companion commit).

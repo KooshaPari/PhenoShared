@@ -7,9 +7,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/<REDACTED>/MCPForge/internal/logging"
-	"github.com/<REDACTED>/MCPForge/internal/protocol"
-	"github.com/<REDACTED>/MCPForge/internal/watcher"
+	"github.com/KooshaPari/MCPForge/internal/logging"
+	"github.com/KooshaPari/MCPForge/internal/protocol"
+	"github.com/KooshaPari/MCPForge/internal/watcher"
 )
 
 func init() {

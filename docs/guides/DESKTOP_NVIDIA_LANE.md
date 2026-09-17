@@ -78,7 +78,7 @@ The script:
 # On the desktop rig (WSL2 distro or bare Linux):
 sudo bash scripts/install_wsl_pheno_serve.sh \
   --branch main \
-  --repo-url https://github.com/<REDACTED>/pheno-harness.git
+  --repo-url https://github.com/KooshaPari/pheno-harness.git
 ```
 
 Idempotent. The installer writes the lane config, pins CUDA runtimes,

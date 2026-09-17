@@ -48,7 +48,7 @@ if [[ "${BUILDX:-1}" == "1" ]]; then
         --sbom=true \
         --label "org.opencontainers.image.title=pheno-harness" \
         --label "org.opencontainers.image.description=Local routing, compression stack, RLVR eval, and Harbor terminal-bench wrappers for OmniRoute Main" \
-        --label "org.opencontainers.image.source=https://github.com/<REDACTED>/pheno-harness" \
+        --label "org.opencontainers.image.source=https://github.com/KooshaPari/pheno-harness" \
         --label "org.opencontainers.image.licenses=MIT" \
         --label "org.opencontainers.image.version=${TAG}" \
         --push \
@@ -59,7 +59,7 @@ else
         --tag "${IMAGE_NAME}:${TAG}" \
         --tag "${IMAGE_NAME}:latest" \
         --label "org.opencontainers.image.title=pheno-harness" \
-        --label "org.opencontainers.image.source=https://github.com/<REDACTED>/pheno-harness" \
+        --label "org.opencontainers.image.source=https://github.com/KooshaPari/pheno-harness" \
         --label "org.opencontainers.image.licenses=MIT" \
         --label "org.opencontainers.image.version=${TAG}" \
         .
@@ -79,4 +79,4 @@ docker buildx imagetools inspect "${IMAGE_NAME}:${TAG}" 2>&1 | head -10
 
 log "DONE."
 log "  Image: $IMAGE_NAME:$TAG"
-log "  GHCR : https://github.com/<REDACTED>/pheno-harness/pkgs/container/pheno-harness"
+log "  GHCR : https://github.com/KooshaPari/pheno-harness/pkgs/container/pheno-harness"

@@ -1,6 +1,6 @@
 # Airlock Decision: bifrost-extensions → <REDACTED>/bifrost
 
-**Decision:** Superseded by [`<REDACTED>/bifrost`](https://github.com/<REDACTED>/bifrost) (primary) or [`<REDACTED>/argis-extensions`](https://github.com/<REDACTED>/argis-extensions) (alt). No recreation needed.
+**Decision:** Superseded by [`<REDACTED>/bifrost`](https://github.com/KooshaPari/bifrost) (primary) or [`<REDACTED>/argis-extensions`](https://github.com/KooshaPari/argis-extensions) (alt). No recreation needed.
 **Decision date:** 2026-07-14
 **Decision author:** Forge (automated inventory + absorption probe)
 
@@ -11,7 +11,7 @@
 | field | value |
 |---|---|
 | airlock id | `724f57c187ac` |
-| original upstream | `github.com/<REDACTED>/bifrost-extensions.git` (now MISSING on GitHub) |
+| original upstream | `github.com/KooshaPari/bifrost-extensions.git` (now MISSING on GitHub) |
 | bare mirror | `/Users/<REDACTED>/.airlock/repos/724f57c187ac.git/` |
 | worktree | `/Users/<REDACTED>/.airlock/worktrees/724f57c187ac/` |
 | canonical working_path | `bifrost-extensions/` |
@@ -28,9 +28,9 @@
 
 ## Absorption target
 
-**Primary target:** [`<REDACTED>/bifrost`](https://github.com/<REDACTED>/bifrost) — your fork, created 2026-05-01, 50×-LiteLLM perf claims, Go, 1300+ branches.
+**Primary target:** [`<REDACTED>/bifrost`](https://github.com/KooshaPari/bifrost) — your fork, created 2026-05-01, 50×-LiteLLM perf claims, Go, 1300+ branches.
 
-**Alt target:** [`<REDACTED>/argis-extensions`](https://github.com/<REDACTED>/argis-extensions) — *"Argis gateway extensions - routing, SLM, embeddings, plugin architecture"* — same name pattern, sibling for the renamed gateway.
+**Alt target:** [`<REDACTED>/argis-extensions`](https://github.com/KooshaPari/argis-extensions) — *"Argis gateway extensions - routing, SLM, embeddings, plugin architecture"* — same name pattern, sibling for the renamed gateway.
 
 **Recommendation:** **Primary target = `bifrost`** because the airlock mirror was downstream of `github.com/maximhq/bifrost/core` (the upstream Bifrost LLM gateway), and `<REDACTED>/bifrost` is the canonical home for the forked gateway. The extension layer's job (custom routing / SLM / embeddings plugins) is now subsumed by the fork's native capabilities and/or `argis-extensions`.
 
@@ -76,8 +76,8 @@ done
 | airlock worktree | `/Users/<REDACTED>/.airlock/worktrees/724f57c187ac/` (detached HEAD) |
 | full airlock inventory | `~/CodeProjects/Phenotype/repos/.airlock-inventory-2026-07-14.json` |
 | absorption probe | `~/CodeProjects/Phenotype/repos/.airlock-absorption-probe-2026-07-14.json` |
-| remote backup | https://gist.github.com/<REDACTED>/3e6038adbfc4fe4c38965d02d0fc867e |
+| remote backup | https://gist.github.com/KooshaPari/3e6038adbfc4fe4c38965d02d0fc867e |
 | probe scripts (re-runnable) | `~/CodeProjects/Phenotype/repos/_airlock-inventory-probe.py`, `~/CodeProjects/Phenotype/repos/_airlock-absorption-probe.py` |
-| upstream URL (gone) | https://github.com/<REDACTED>/bifrost-extensions |
-| absorption target (primary) | https://github.com/<REDACTED>/bifrost |
-| absorption target (alt) | https://github.com/<REDACTED>/argis-extensions |
+| upstream URL (gone) | https://github.com/KooshaPari/bifrost-extensions |
+| absorption target (primary) | https://github.com/KooshaPari/bifrost |
+| absorption target (alt) | https://github.com/KooshaPari/argis-extensions |

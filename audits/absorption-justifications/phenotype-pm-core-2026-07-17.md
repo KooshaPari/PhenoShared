@@ -67,7 +67,7 @@ required before transfer:
 ```bash
 # Pre-absorption snapshot
 gh repo archive <REDACTED>/phenotype-pm-core  # archive after absorption PR merges
-git clone https://github.com/<REDACTED>/phenotype-pm-core.git /tmp/phenotype-pm-core-pre-absorption
+git clone https://github.com/KooshaPari/phenotype-pm-core.git /tmp/phenotype-pm-core-pre-absorption
 ```
 
 **Restore posture:** Source repo will be archived after the absorption PR merges.

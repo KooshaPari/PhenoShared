@@ -12,7 +12,7 @@
   "boundary": "agent-runtime",
   "stack": "rust",
   "v0": "0.1.0",
-  "gh_url": "https://github.com/<REDACTED>/phenotype-infra/tree/master/crates/thegent-utils",
+  "gh_url": "https://github.com/KooshaPari/phenotype-infra/tree/master/crates/thegent-utils",
   "wave": "L1-INF",
   "branch_count": 0,
   "canonical_routing": true,

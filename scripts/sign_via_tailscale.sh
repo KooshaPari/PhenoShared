@@ -137,7 +137,7 @@ ssh "${SSH_OPTS[@]}" "$MAC" "bash -s" -- <<EOF
 set -e
 mkdir -p ~/work
 if [[ ! -d "$REMOTE_DIR/.git" ]]; then
-    git clone https://github.com/<REDACTED>/pheno-harness.git "$REMOTE_DIR"
+    git clone https://github.com/KooshaPari/pheno-harness.git "$REMOTE_DIR"
 fi
 cd "$REMOTE_DIR"
 git fetch --tags origin
@@ -175,5 +175,5 @@ for step in $STEPS; do
 done
 
 log "All steps complete."
-log "View release: https://github.com/<REDACTED>/pheno-harness/releases/tag/${TAG}-pheno-harness-summit"
-log "View package: https://github.com/<REDACTED>/pheno-harness/pkgs/container/pheno-harness"
+log "View release: https://github.com/KooshaPari/pheno-harness/releases/tag/${TAG}-pheno-harness-summit"
+log "View package: https://github.com/KooshaPari/pheno-harness/pkgs/container/pheno-harness"

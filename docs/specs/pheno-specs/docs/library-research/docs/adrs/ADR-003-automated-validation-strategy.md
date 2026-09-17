@@ -328,9 +328,9 @@ jobs:
 ```yaml
       - name: Checkout Spokes
         run: |
-          git clone https://github.com/<REDACTED>/PhenoSpecs.git /tmp/phenospecs
-          git clone https://github.com/<REDACTED>/PhenoHandbook.git /tmp/phenohandbook
-          git clone https://github.com/<REDACTED>/HexaKit.git /tmp/hexakit
+          git clone https://github.com/KooshaPari/PhenoSpecs.git /tmp/phenospecs
+          git clone https://github.com/KooshaPari/PhenoHandbook.git /tmp/phenohandbook
+          git clone https://github.com/KooshaPari/HexaKit.git /tmp/hexakit
       
       - name: Validate Cross-Links
         run: |

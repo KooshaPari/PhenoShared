@@ -2,7 +2,7 @@
 
 [Harbor](https://github.com/laude-institute/harbor) runs agent benchmarks (including Terminal Bench) in isolated containers. This repo wires a **local-only** setup with one concurrent trial by default, using the Docker-compatible Podman API and the pinned local task export when available.
 
-**Relationship:** `pheno-harness` is a **consumer/wrapper** of Harbor. The Phenotype Harbor product fork is **[portage-TEMP](https://github.com/<REDACTED>/portage-TEMP)** (`repos/portage`). Do not duplicate that product here — see [docs/guides/PORTAGE_AND_HARBOR.md](../docs/guides/PORTAGE_AND_HARBOR.md). Default install uses **PyPI** `harbor>=0.6`; use the fork only when you need fork-only features.
+**Relationship:** `pheno-harness` is a **consumer/wrapper** of Harbor. The Phenotype Harbor product fork is **[portage-TEMP](https://github.com/KooshaPari/portage-TEMP)** (`repos/portage`). Do not duplicate that product here — see [docs/guides/PORTAGE_AND_HARBOR.md](../docs/guides/PORTAGE_AND_HARBOR.md). Default install uses **PyPI** `harbor>=0.6`; use the fork only when you need fork-only features.
 
 ## Prerequisites
 

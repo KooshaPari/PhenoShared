@@ -254,9 +254,9 @@ SENTRY_ENVIRONMENT=development
 ```
 Sentry: https://sentry.io/
 GitHub Secrets: https://github.com/organizations/<REDACTED>/settings/secrets/actions
-AgilePlus: https://github.com/<REDACTED>/AgilePlus
-phenotype-infrakit: https://github.com/<REDACTED>/phenotype-infrakit
-heliosCLI: https://github.com/<REDACTED>/heliosCLI
+AgilePlus: https://github.com/KooshaPari/AgilePlus
+phenotype-infrakit: https://github.com/KooshaPari/phenotype-infrakit
+heliosCLI: https://github.com/KooshaPari/heliosCLI
 ```
 
 ---

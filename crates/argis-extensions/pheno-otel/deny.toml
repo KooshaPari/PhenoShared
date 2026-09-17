@@ -52,7 +52,7 @@ allow-registry = [
 ]
 allow-git = [
     # Add <REDACTED> mirror URLs here when in use
-    # "https://github.com/<REDACTED>/pheno-*",
+    # "https://github.com/KooshaPari/pheno-*",
 ]
 
 # ─── Licenses ───────────────────────────────────────────────────────────────

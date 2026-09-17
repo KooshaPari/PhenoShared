@@ -5,7 +5,7 @@ import (
 	"time"
 
 	"github.com/google/uuid"
-	"github.com/<REDACTED>/bifrost-extensions/api/graphql/model"
+	"github.com/KooshaPari/bifrost-extensions/api/graphql/model"
 )
 
 type subscriptionResolver struct{ *Resolver }

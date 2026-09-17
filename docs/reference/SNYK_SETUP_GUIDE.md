@@ -89,7 +89,7 @@ source ~/.bashrc
 
 **Option B: GitHub Organization Secret**
 
-1. Go to: https://github.com/<REDACTED>/repos/settings/secrets
+1. Go to: https://github.com/KooshaPari/repos/settings/secrets
 2. Click "New repository secret" (or "New organization secret" for all repos)
 3. Name: `SNYK_TOKEN`
 4. Value: Paste your Snyk API token
@@ -99,7 +99,7 @@ source ~/.bashrc
 
 For individual repositories:
 
-1. Go to: https://github.com/<REDACTED>/REPO/settings/secrets
+1. Go to: https://github.com/KooshaPari/REPO/settings/secrets
 2. Click "New repository secret"
 3. Name: `SNYK_TOKEN`
 4. Value: Paste your token
@@ -196,7 +196,7 @@ Reports are generated in `.snyk-reports/`:
    - All repos inherit this secret
 
 2. **For Single Repository**:
-   - Go: https://github.com/<REDACTED>/REPO/settings/secrets
+   - Go: https://github.com/KooshaPari/REPO/settings/secrets
    - Add `SNYK_TOKEN` secret
    - Only this repo can access it
 

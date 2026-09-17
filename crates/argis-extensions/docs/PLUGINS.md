@@ -29,4 +29,4 @@ Wave H14 — plugin plane for phenotype-gateway `packages/argis`.
 
 ## Smoke (2026-06-18)
 
-`go build ./...` **fail** — missing internal module `github.com/<REDACTED>/bifrost-extensions` (no longer published).
+`go build ./...` **fail** — missing internal module `github.com/KooshaPari/bifrost-extensions` (no longer published).

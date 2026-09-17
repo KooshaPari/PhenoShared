@@ -62,5 +62,5 @@ cd /Users/<REDACTED>/CodeProjects/Phenotype/repos/phenotype-registry
 
 - Disposition row in `registry/disposition-index.json`: search for `"path": "<REDACTED>/phenoResearchEngine"`.
 - Boundary doc: `docs/boundary/phenotype-research.md`.
-- Source deprecation: `https://github.com/<REDACTED>/phenoResearchEngine/blob/main/DEPRECATED.md`.
+- Source deprecation: `https://github.com/KooshaPari/phenoResearchEngine/blob/main/DEPRECATED.md`.
 - Registry ecosystem plan: `RATIONALIZATION_PLAN.md` § "Python research orchestration".

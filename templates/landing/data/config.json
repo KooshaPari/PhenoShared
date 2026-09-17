@@ -7,7 +7,7 @@
   "header": {
     "links": [
       { "text": "Docs", "href": "#docs" },
-      { "text": "GitHub", "href": "https://github.com/<REDACTED>/BytePort" }
+      { "text": "GitHub", "href": "https://github.com/KooshaPari/BytePort" }
     ]
   },
   "hero": {
@@ -40,7 +40,7 @@
   },
   "cta": {
     "text": "Deploy Now",
-    "href": "https://github.com/<REDACTED>/BytePort",
+    "href": "https://github.com/KooshaPari/BytePort",
     "secondary": {
       "text": "Read Docs",
       "href": "#docs"
@@ -48,7 +48,7 @@
   },
   "footer": {
     "links": [
-      { "text": "GitHub", "href": "https://github.com/<REDACTED>/BytePort" },
+      { "text": "GitHub", "href": "https://github.com/KooshaPari/BytePort" },
       { "text": "License", "href": "#license" }
     ]
   }

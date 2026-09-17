@@ -349,7 +349,7 @@ mod tests {
     #[test]
     fn parse_github_release_download_url_ok() {
         let m = parse_github_release_download_url(
-            "https://github.com/<REDACTED>/Eidolon/releases/download/rootfs-v0.1.0/\
+            "https://github.com/KooshaPari/Eidolon/releases/download/rootfs-v0.1.0/\
              eidolon-canned-rootfs-0.1.0-x86_64.ext4.img",
         )
         .expect("parse");

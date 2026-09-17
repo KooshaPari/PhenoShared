@@ -25,9 +25,9 @@
 
 | URL | Reachable |
 |-----|-----------|
-| https://github.com/<REDACTED>/PhenoFastMCP | yes |
-| https://github.com/<REDACTED>/PhenoMCPServers | yes |
-| https://github.com/<REDACTED>/substrate | yes |
+| https://github.com/KooshaPari/PhenoFastMCP | yes |
+| https://github.com/KooshaPari/PhenoMCPServers | yes |
+| https://github.com/KooshaPari/substrate | yes |
 
 ## Validation
 

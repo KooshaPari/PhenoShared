@@ -32,7 +32,7 @@ modification.
 ## Build (inside Configra)
 
 ```bash
-git clone https://github.com/<REDACTED>/Configra
+git clone https://github.com/KooshaPari/Configra
 cd Configra
 cargo build -p pheno-config --release
 cargo test  -p pheno-config

@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/<REDACTED>/bifrost-extensions/plugins/learning"
+	"github.com/KooshaPari/bifrost-extensions/plugins/learning"
 	"github.com/maximhq/bifrost/core/schemas"
 )
 

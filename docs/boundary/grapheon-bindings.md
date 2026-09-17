@@ -6,7 +6,7 @@
 
 - **Source:** `<REDACTED>/grapheon-bindings` (Go client stub, 1 branch, 117 LOC)
 - **Canonical home:** `<REDACTED>/phenotype-go-sdk` (`packages/graphclient/`)
-- **Module path:** `github.com/<REDACTED>/phenotype-go-sdk/packages/graphclient`
+- **Module path:** `github.com/KooshaPari/phenotype-go-sdk/packages/graphclient`
 - **Package path:** `pkg/client/` (Go 1.22)
 - **Workspace:** `phenotype-go-sdk/go.work` member (alongside `packages/devhex`)
 

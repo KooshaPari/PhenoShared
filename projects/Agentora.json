@@ -8,7 +8,7 @@
   "has_readme": true,
   "type": "agent-framework",
   "path": "repos/Agentora",
-  "gh_url": "https://github.com/<REDACTED>/Agentora",
+  "gh_url": "https://github.com/KooshaPari/Agentora",
   "default_branch": "main",
   "remote_head": "c7edae858b264e075210a7b5fc574b3d0da4fe4d",
   "remote_size_kb": 9382,

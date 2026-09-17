@@ -2,10 +2,10 @@
 
 **Status:** Active (re-issued 2026-06-18)
 **Date:** 2026-06-16 (original); 2026-06-18 (re-issued verdict)
-**Repo:** <https://github.com/<REDACTED>/phenotype-voxel>
+**Repo:** <https://github.com/KooshaPari/phenotype-voxel>
 **Tracker:** <REDACTED>/phenotype-registry issue #75
 **SSOT:** <REDACTED>/phenotype-registry `docs/rationalization/block-c-consolidation.md`
-**Long-term home:** <https://github.com/<REDACTED>/phenotype-gfx> (PR #10)
+**Long-term home:** <https://github.com/KooshaPari/phenotype-gfx> (PR #10)
 
 ---
 
@@ -33,7 +33,7 @@ to preserve).
 - `docs/adr/ADR-031-configra-absorb.md` — sibling "absorb, do not coexist" ADR
   (same policy applied to `phenotype-config` → `Configra`; precedent for the
   voxel absorb).
-- PR: <https://github.com/<REDACTED>/phenotype-gfx/pull/10>
+- PR: <https://github.com/KooshaPari/phenotype-gfx/pull/10>
 - Commit: `9a7c05a` — `feat(gfx): inline voxel kernel from phenotype-voxel (L5-109, ADR-004)`
 
 **Migration summary:** 7,704 lines absorbed (Rust kernel + tests + benches);

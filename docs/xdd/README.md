@@ -1,8 +1,8 @@
 # xDD Methodologies Compendium
 
-[![Release](https://img.shields.io/github/v/release/<REDACTED>/phenoXdd?include_prereleases&sort=semver)](https://github.com/<REDACTED>/phenoXdd/releases)
+[![Release](https://img.shields.io/github/v/release/<REDACTED>/phenoXdd?include_prereleases&sort=semver)](https://github.com/KooshaPari/phenoXdd/releases)
 [![License](https://img.shields.io/github/license/<REDACTED>/phenoXdd)](LICENSE)
-[![Phenotype](https://img.shields.io/badge/Phenotype-org-blueviolet)](https://github.com/<REDACTED>)
+[![Phenotype](https://img.shields.io/badge/Phenotype-org-blueviolet)](https://github.com/KooshaPari)
 
 
 **See also (org hub):** [`docs/engineering/100-PRACTICES.md`](../docs/engineering/100-PRACTICES.md) (180+ numbered practices), [`WRAP_AND_ROLL_GOVERNANCE.md`](../docs/engineering/WRAP_AND_ROLL_GOVERNANCE.md), [`TOP_LEVEL_REPO_LAYOUT.md`](../docs/engineering/TOP_LEVEL_REPO_LAYOUT.md), and [`plans/xdd-hexagonal-reference-architecture.md`](../plans/xdd-hexagonal-reference-architecture.md).

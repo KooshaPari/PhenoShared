@@ -7,8 +7,8 @@
 
 | Surface | Owner | Module |
 |---------|-------|--------|
-| devenv abstraction library | [phenotype-go-sdk](https://github.com/<REDACTED>/phenotype-go-sdk) | `github.com/<REDACTED>/devenv-abstraction` (`packages/devhex/`) |
-| DevHex CLI / adapters | This repo | `github.com/<REDACTED>/DevHex` |
+| devenv abstraction library | [phenotype-go-sdk](https://github.com/KooshaPari/phenotype-go-sdk) | `github.com/KooshaPari/devenv-abstraction` (`packages/devhex/`) |
+| DevHex CLI / adapters | This repo | `github.com/KooshaPari/DevHex` |
 
 DevHex ships product-specific adapters (docker, nix, native) on top of the hexagonal port pattern. The **canonical reusable library** for new consumers is `phenotype-go-sdk/packages/devhex`, not archived PlatformKit paths.
 
@@ -16,8 +16,8 @@ DevHex ships product-specific adapters (docker, nix, native) on top of the hexag
 
 ```go
 import (
-    "github.com/<REDACTED>/devenv-abstraction/pkg/domain"
-    "github.com/<REDACTED>/devenv-abstraction/pkg/adapters/docker"
+    "github.com/KooshaPari/devenv-abstraction/pkg/domain"
+    "github.com/KooshaPari/devenv-abstraction/pkg/adapters/docker"
 )
 ```
 

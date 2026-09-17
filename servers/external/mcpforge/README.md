@@ -4,10 +4,10 @@
 
 # MCPForge
 
-[![Go Tests](https://github.com/<REDACTED>/MCPForge/actions/workflows/go.yml/badge.svg)](https://github.com/<REDACTED>/MCPForge/actions/workflows/go.yml)
-[![Go Report Card](https://goreportcard.com/badge/github.com/<REDACTED>/MCPForge)](https://goreportcard.com/report/github.com/<REDACTED>/MCPForge)
+[![Go Tests](https://github.com/KooshaPari/MCPForge/actions/workflows/go.yml/badge.svg)](https://github.com/KooshaPari/MCPForge/actions/workflows/go.yml)
+[![Go Report Card](https://goreportcard.com/badge/github.com/KooshaPari/MCPForge)](https://goreportcard.com/report/github.com/KooshaPari/MCPForge)
 [![GoDoc](https://pkg.go.dev/badge/github.com/isaacphi/mcp-language-server)](https://pkg.go.dev/github.com/isaacphi/mcp-language-server)
-[![Go Version](https://img.shields.io/github/go-mod/go-version/github.com/<REDACTED>/MCPForge)](https://github.com/<REDACTED>/MCPForge/blob/main/go.mod)
+[![Go Version](https://img.shields.io/github/go-mod/go-version/github.com/KooshaPari/MCPForge)](https://github.com/KooshaPari/MCPForge/blob/main/go.mod)
 [![AI Slop Inside](https://sladge.net/badge.svg)](https://sladge.net)
 
 This is an [MCP](https://modelcontextprotocol.io/introduction) server that runs and exposes a [language server](https://microsoft.github.io/language-server-protocol/) to LLMs. Not a language server for MCP, whatever that would be.
@@ -21,7 +21,7 @@ This is an [MCP](https://modelcontextprotocol.io/introduction) server that runs 
 ## Setup
 
 1. **Install Go**: Follow instructions at <https://golang.org/doc/install>
-2. **Install or update this server**: `go install github.com/<REDACTED>/MCPForge@latest`
+2. **Install or update this server**: `go install github.com/KooshaPari/MCPForge@latest`
 3. **Install a language server**: _follow one of the guides below_
 4. **Configure your MCP client**: _follow one of the guides below_
 

@@ -57,7 +57,7 @@ All 42 PhenoTooling crates have been absorbed into pheno workspace:
 
 ## Former Repository
 
-- **GitHub:** https://github.com/<REDACTED>/PhenoTooling (now absorbed)
+- **GitHub:** https://github.com/KooshaPari/PhenoTooling (now absorbed)
 - **Local:** ~/CodeProjects/Phenotype/repos/PhenoTooling
 
 ## Notes

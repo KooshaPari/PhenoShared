@@ -7,8 +7,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/<REDACTED>/MCPForge/internal/protocol"
-	"github.com/<REDACTED>/MCPForge/internal/watcher"
+	"github.com/KooshaPari/MCPForge/internal/protocol"
+	"github.com/KooshaPari/MCPForge/internal/watcher"
 )
 
 // TestGitignorePatterns specifically tests the gitignore pattern integration

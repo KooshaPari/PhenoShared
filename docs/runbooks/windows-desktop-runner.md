@@ -32,7 +32,7 @@ The script:
 1. Creates `C:\actions-runner\` and downloads the latest `actions-runner-win-x64-*.zip`.
 2. Verifies the SHA-256 against the published checksum.
 3. Creates the local service account `runneruser` with an alphanumeric password (see Gotcha §3.2).
-4. Registers the runner against `https://github.com/<REDACTED>` (org-level, no quoting — see §3.4).
+4. Registers the runner against `https://github.com/KooshaPari` (org-level, no quoting — see §3.4).
 5. Installs the runner as a Windows service in `Manual` start mode.
 6. Adds firewall rule for inbound port 22 on the **Private** profile only (see §3.5).
 
@@ -73,9 +73,9 @@ The Windows service `Description` field has an undocumented 48-character truncat
 
 ### 3.4 `-OrgUrl` without quotes
 
-When `config.cmd` is invoked via PowerShell with a quoted URL (`-OrgUrl "https://github.com/<REDACTED>"`), PS double-encodes the quotes when the script came in via `iex`, and `config.cmd` sees `"\"https://github.com/<REDACTED>\""` as the org URL — registration fails with `Invalid configuration provided for runnerRegistrationUrl`.
+When `config.cmd` is invoked via PowerShell with a quoted URL (`-OrgUrl "https://github.com/KooshaPari"`), PS double-encodes the quotes when the script came in via `iex`, and `config.cmd` sees `"\"https://github.com/KooshaPari\""` as the org URL — registration fails with `Invalid configuration provided for runnerRegistrationUrl`.
 
-**Fix:** the script invokes `config.cmd` with the unquoted form: `--url https://github.com/<REDACTED>`. The URL has no shell-special characters so unquoting is safe.
+**Fix:** the script invokes `config.cmd` with the unquoted form: `--url https://github.com/KooshaPari`. The URL has no shell-special characters so unquoting is safe.
 
 ### 3.5 Firewall profile (Public → Private)
 

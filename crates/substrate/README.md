@@ -1,12 +1,12 @@
 # substrate
 
-Rust SDK facade for the [substrate](https://github.com/<REDACTED>/substrate) hexagonal dispatch spine.
+Rust SDK facade for the [substrate](https://github.com/KooshaPari/substrate) hexagonal dispatch spine.
 
 Add one dependency instead of wiring `substrate-core`, `substrate-app`, and adapters yourself:
 
 ```toml
 [dependencies]
-substrate = { git = "https://github.com/<REDACTED>/substrate", package = "substrate" }
+substrate = { git = "https://github.com/KooshaPari/substrate", package = "substrate" }
 # or, once published: substrate = "0.1"
 ```
 

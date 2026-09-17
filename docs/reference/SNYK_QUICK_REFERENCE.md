@@ -53,11 +53,11 @@ done
 ## Add GitHub Secret (3 minutes)
 
 **Organization Secret** (recommended):
-1. Go: https://github.com/<REDACTED>/settings/secrets
+1. Go: https://github.com/KooshaPari/settings/secrets
 2. New secret: Name=`SNYK_TOKEN`, Value=your-token
 
 **Or per-repo**:
-1. Go: https://github.com/<REDACTED>/REPO/settings/secrets
+1. Go: https://github.com/KooshaPari/REPO/settings/secrets
 2. New secret: Name=`SNYK_TOKEN`, Value=your-token
 
 ## Common Commands
@@ -95,7 +95,7 @@ done
 ## View Results
 
 1. **Local**: `cat .snyk-reports/snyk-deployment-*.txt`
-2. **GitHub Code Scanning**: https://github.com/<REDACTED>/REPO/security/code-scanning
+2. **GitHub Code Scanning**: https://github.com/KooshaPari/REPO/security/code-scanning
 3. **Snyk Dashboard**: https://app.snyk.io/dashboard
 
 ## Severity Levels

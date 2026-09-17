@@ -9,7 +9,7 @@
   "role": "music-to-visual-generation",
   "domain_role": "application",
   "boundary": "multiruntime-media-app",
-  "gh_url": "https://github.com/<REDACTED>/Melosviz",
+  "gh_url": "https://github.com/KooshaPari/Melosviz",
   "disposition": "KEEP_STANDALONE_RECONCILED",
   "canonical_routing": false,
   "recovery_ref": "recovery/melosviz-local-20260726",

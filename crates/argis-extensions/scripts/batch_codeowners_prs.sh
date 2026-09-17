@@ -153,5 +153,5 @@ done
 
 echo ""
 echo "=== ALL DONE ==="
-echo "FocalPoint PR #140: https://github.com/<REDACTED>/FocalPoint/pull/140"
+echo "FocalPoint PR #140: https://github.com/KooshaPari/FocalPoint/pull/140"
 echo "Other 4 repos already terminal (archived or 404)"

@@ -41,9 +41,9 @@ SENTRY_DSN_HELIOSCLI
 | Sentry Dashboard | https://sentry.io/ |
 | Create New Project | https://sentry.io/projects/new/ |
 | GitHub Org Secrets | https://github.com/organizations/<REDACTED>/settings/secrets/actions |
-| AgilePlus Repo | https://github.com/<REDACTED>/AgilePlus |
-| phenotype-infrakit Repo | https://github.com/<REDACTED>/phenotype-infrakit |
-| heliosCLI Repo | https://github.com/<REDACTED>/heliosCLI |
+| AgilePlus Repo | https://github.com/KooshaPari/AgilePlus |
+| phenotype-infrakit Repo | https://github.com/KooshaPari/phenotype-infrakit |
+| heliosCLI Repo | https://github.com/KooshaPari/heliosCLI |
 
 ---
 

@@ -11,7 +11,7 @@
   "candidates": [
     {
       "repo": "Apisync",
-      "remote": "https://github.com/<REDACTED>/Apisync.git",
+      "remote": "https://github.com/KooshaPari/Apisync.git",
       "github_state": "archived (read-only)",
       "archived_on": "2026-06-19",
       "disposition": "POINTER_README_ADDED",
@@ -35,7 +35,7 @@
       ],
       "verification": {
         "github_is_archived": true,
-        "github_homepage_field_target": "https://github.com/<REDACTED>/phenotype-tooling/tree/main/docs/absorbed-from-apikit",
+        "github_homepage_field_target": "https://github.com/KooshaPari/phenotype-tooling/tree/main/docs/absorbed-from-apikit",
         "github_description_target": "SUPERSEDED 2026-06-19 — migrated into apikit, absorbed into phenotype-tooling/docs/absorbed-from-apikit. Do not push here.",
         "registry_intent_records_preserved": true,
         "pheno_submodule_pin_status": "removed in phenotype-core workspace (HexaKit #271); submodule entry remains in pheno/.gitmodules pending sweep"

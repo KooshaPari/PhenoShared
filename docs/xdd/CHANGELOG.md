@@ -21,4 +21,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
-[Unreleased]: https://github.com/<REDACTED>/phenoXdd/compare/HEAD...HEAD
+[Unreleased]: https://github.com/KooshaPari/phenoXdd/compare/HEAD...HEAD

@@ -2,7 +2,7 @@
 
 [![AI Slop Inside](https://sladge.net/badge.svg)](https://sladge.net)
 
-Production landing page at `thegent.<REDACTED>.com` for [<REDACTED>/thegent](https://github.com/<REDACTED>/thegent), the Python agent runtime and orchestration system in the Phenotype ecosystem.
+Production landing page at `thegent.<REDACTED>.com` for [<REDACTED>/thegent](https://github.com/KooshaPari/thegent), the Python agent runtime and orchestration system in the Phenotype ecosystem.
 
 ## Purpose
 
@@ -99,6 +99,6 @@ The GitHub Pages mirror is built by `.github/workflows/pages.yml` with `GITHUB_P
 
 ## Related
 
-- [theGent](https://github.com/<REDACTED>/thegent)
-- [projects.<REDACTED>.com](https://github.com/<REDACTED>/portfolio)
+- [theGent](https://github.com/KooshaPari/thegent)
+- [projects.<REDACTED>.com](https://github.com/KooshaPari/portfolio)
 - [Site infrastructure](docs/governance/site-infrastructure.md)

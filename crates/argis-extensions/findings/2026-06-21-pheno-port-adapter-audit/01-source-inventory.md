@@ -20,7 +20,7 @@
 | Edition | `2021` | `pheno-port-adapter/Cargo.toml:6` |
 | Rust-version | `1.83` (msrv) | `pheno-port-adapter/Cargo.toml:8` |
 | License | `MIT OR Apache-2.0` | `pheno-port-adapter/Cargo.toml:9-10` |
-| Repository | `https://github.com/<REDACTED>/pheno-port-adapter` | `pheno-port-adapter/Cargo.toml:11` |
+| Repository | `https://github.com/KooshaPari/pheno-port-adapter` | `pheno-port-adapter/Cargo.toml:11` |
 | Tracked files in this crate (working tree) | 47 | `git ls-files` over the worktree |
 | Tracked files (crate-only, sparse-checkout cone) | 47 | see §1 |
 | Branches (local + remote) | ≥ 215 (sparse, dev branch + superset of stale refs) | see §2 |
@@ -323,7 +323,7 @@ authors = ["Phenotype <[email protected]>"]
 edition = "2021"
 rust-version = "1.83"
 license = "MIT OR Apache-2.0"
-repository = "https://github.com/<REDACTED>/pheno-port-adapter"
+repository = "https://github.com/KooshaPari/pheno-port-adapter"
 keywords = ["hexagonal", "ports", "adapters", "pheno", "phenotype"]
 categories = ["architecture", "api-bindings"]
 readme = "README.md"
@@ -529,9 +529,9 @@ release VERSION:
 //! Hexagonal port-adapter substrate for the pheno-* fleet.
 //!
 //! This crate codifies the L4 hexagonal policy from
-//! [ADR-014](https://github.com/<REDACTED>/pheno/blob/main/docs/adr/2026-06-15/ADR-014-hexagonal-l4-ports.md)
+//! [ADR-014](https://github.com/KooshaPari/pheno/blob/main/docs/adr/2026-06-15/ADR-014-hexagonal-l4-ports.md)
 //! (re-affirmed as
-//! [ADR-038](https://github.com/<REDACTED>/pheno/blob/main/docs/adr/2026-06-18/ADR-038-hexagonal-port-adapter-l4-policy.md)).
+//! [ADR-038](https://github.com/KooshaPari/pheno/blob/main/docs/adr/2026-06-18/ADR-038-hexagonal-port-adapter-l4-policy.md)).
 //! Every downstream consumer of the fleet that needs a swappable boundary
 //! (cache, clock, transport, …) is expected to define its ports here and
 //! ship its adapters under `adapters/`.

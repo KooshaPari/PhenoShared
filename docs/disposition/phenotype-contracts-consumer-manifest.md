@@ -1,7 +1,7 @@
 # phenotype-contracts consumer manifest (D-01 slice 1)
 
 **Source:** HexaKit `crates/phenotype-contracts`  
-**Interim canonical:** phenoShared `crates/phenotype-contracts` (git pin [HexaKit#264](https://github.com/<REDACTED>/HexaKit/pull/264))  
+**Interim canonical:** phenoShared `crates/phenotype-contracts` (git pin [HexaKit#264](https://github.com/KooshaPari/HexaKit/pull/264))  
 **Plan:** [contracts-decompose-plan.md](./contracts-decompose-plan.md)  
 **Scan date:** 2026-06-18  
 **Method:** `migration-work` workspace `Cargo.toml` grep; GitHub code search attempted (TLS timeout — local scan authoritative)

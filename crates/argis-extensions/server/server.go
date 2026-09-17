@@ -14,7 +14,7 @@ import (
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/go-chi/cors"
 
-	"github.com/<REDACTED>/bifrost-extensions/config"
+	"github.com/KooshaPari/bifrost-extensions/config"
 	schemas "github.com/maximhq/bifrost/core/schemas"
 	bifrost "github.com/maximhq/bifrost/core/schemas"
 )

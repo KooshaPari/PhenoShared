@@ -1,6 +1,6 @@
 package main
 
-import "github.com/<REDACTED>/pheno-cli/cmd"
+import "github.com/KooshaPari/pheno-cli/cmd"
 
 func main() {
 	cmd.Execute()

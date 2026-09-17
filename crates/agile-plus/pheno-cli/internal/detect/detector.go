@@ -4,7 +4,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/<REDACTED>/pheno-cli/internal/adapters"
+	"github.com/KooshaPari/pheno-cli/internal/adapters"
 )
 
 // manifestMap maps manifest filenames to their language and registry.

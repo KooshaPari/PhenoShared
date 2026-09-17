@@ -131,7 +131,7 @@ Read each crate's primary `Cargo.toml` `[package]` table. All 6 declare `version
 
 3. **No "outdated dep" condition exists.** The audit's stated goal (list crates where current < latest) returns 0 actionable items, because there is no `latest` to compare against. This is consistent with the project's monorepo substrate design (ADR-013 / ADR-022 / ADR-023): reusable capabilities are vendored as sibling crates, not consumed from a registry.
 
-4. **Reproducibility gap (out of scope but worth noting).** Path-only deps break air-gapped builds and create submodule-drift risk. If reproducibility matters, switch to `git = "https://github.com/<REDACTED>/<repo>", tag = "v0.1.0"` for the 3 publishable crates. This is a separate hardening track, not an "outdated dep" issue.
+4. **Reproducibility gap (out of scope but worth noting).** Path-only deps break air-gapped builds and create submodule-drift risk. If reproducibility matters, switch to `git = "https://github.com/KooshaPari/<repo>", tag = "v0.1.0"` for the 3 publishable crates. This is a separate hardening track, not an "outdated dep" issue.
 
 5. **Mirror-source drift (also out of scope).** `pheno-otel`, `pheno-port-adapter`, `pheno-errors`, `pheno-context` each exist at multiple paths. Mirrors declare identical versions (0.1.0) and identical core metadata, but a deeper diff (e.g. `[dependencies]` divergence, README drift) was not part of this audit. Recommend a follow-up mirror-vs-canonical diff if drift becomes a concern.
 

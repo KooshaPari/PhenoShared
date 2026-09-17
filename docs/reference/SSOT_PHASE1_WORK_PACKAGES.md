@@ -247,7 +247,7 @@ cargo build --release --package phenotype-batch-merger
 
 # Integration test: Real repo
 cd /tmp/test-repo
-git clone https://github.com/<REDACTED>/phenotype-infrakit.git test
+git clone https://github.com/KooshaPari/phenotype-infrakit.git test
 cd test
 git checkout specs/main
 

@@ -54,4 +54,4 @@ Signed-off-by: dependabot[bot] <support@github.com> (`d5f8b09`)
 - . (`0bb6570`)
 - Adding in first command for local image listing (`d01bd21`)
 - Initial commit (`ee4fe65`)
-[Unreleased]: https://github.com/<REDACTED>/phenotype-ops-mcp/compare/HEAD
+[Unreleased]: https://github.com/KooshaPari/phenotype-ops-mcp/compare/HEAD

@@ -8,7 +8,7 @@ Compliance standard: registry/audit-absorption-justification/schema.json (14/14 
 ## Source
 
 - **Repo:** `<REDACTED>/phenotype-omlx`
-- **GitHub URL:** https://github.com/<REDACTED>/phenotype-omlx
+- **GitHub URL:** https://github.com/KooshaPari/phenotype-omlx
 - **Archived at:** False
 - **Default branch at audit time:** `main`
 - **Last commit SHA on default branch:** `37af3d5`
@@ -90,7 +90,7 @@ No exceptions to the ARCHIVED verdict are granted.
 
 ```bash
 # Disaster-recovery posture:
-git clone https://github.com/<REDACTED>/phenotype-omlx.git /tmp/phenotype-omlx-restore
+git clone https://github.com/KooshaPari/phenotype-omlx.git /tmp/phenotype-omlx-restore
 # Verify bundle sha-256 (re-clone path is clean)
 ```
 

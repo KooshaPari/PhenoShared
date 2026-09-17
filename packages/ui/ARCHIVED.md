@@ -1,6 +1,6 @@
 # Moved: `@phenotype/landing-ui`
 
-Canonical source: [`<REDACTED>/phenoDesign`](https://github.com/<REDACTED>/phenoDesign) → `packages/ui/`
+Canonical source: [`<REDACTED>/phenoDesign`](https://github.com/KooshaPari/phenoDesign) → `packages/ui/`
 
 ```json
 {

@@ -30,7 +30,7 @@ Draft → Auto-Validation → Review → Approval → Publish
 Journey docs are part of governance, not optional extras.
 
 - [Journey Traceability](/governance/journeys.md)
-- [Phenotype standard](https://github.com/<REDACTED>/phenotype-infra/blob/main/docs/governance/journey-traceability-standard.md)
+- [Phenotype standard](https://github.com/KooshaPari/phenotype-infra/blob/main/docs/governance/journey-traceability-standard.md)
 - hwLedger remains the reference implementation for `ShotGallery` and
   `RecordingEmbed`
 

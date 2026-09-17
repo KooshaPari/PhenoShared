@@ -8,19 +8,19 @@ ecosystem depends on, plus the architecture spec they all share.
 
 | | Repo | Tier | What |
 |---|---|---|---|
-| Spec | [<REDACTED>/phenotype-router-spec](https://github.com/<REDACTED>/phenotype-router-spec) | B | Router A2A protocol spec (v0.1.0) |
-| Bundle | [<REDACTED>/substrate-adapters-bundle](https://github.com/<REDACTED>/substrate-adapters-bundle) | B | Standalone adapter crate workspace (8 shim crates) |
-| Spoke | [<REDACTED>/cliproxyapi-plusplus](https://github.com/<REDACTED>/cliproxyapi-plusplus) | A | Fork of [router-for-me/CLIProxyAPI](https://github.com/router-for-me/CLIProxyAPI) (38k★) with phenotype hooks (OpenAPI 3.1, journey-traceability, phenoShared CI) |
-| Spoke | [<REDACTED>/context-mode-plusplus](https://github.com/<REDACTED>/context-mode-plusplus) | B | Fork of [mksglu/context-mode](https://github.com/mksglu/context-mode) (18.1k★) + /phenotype/ adapter specs |
-| Spoke | [<REDACTED>/OmniRoute](https://github.com/<REDACTED>/OmniRoute) | A | Fork of [diegosouzapw/OmniRoute](https://github.com/diegosouzapw/OmniRoute) (6.7k★) — Next.js 50+ provider gateway |
-| Spoke | [<REDACTED>/agentapi-plusplus](https://github.com/<REDACTED>/agentapi-plusplus) | A | **Folded** into [<REDACTED>/substrate](https://github.com/<REDACTED>/substrate) as `crates/engine-agentapi` (commit 5f67a09) |
-| Spoke | [<REDACTED>/substrate](https://github.com/<REDACTED>/substrate) | C | Hexagonal Rust spine (28 crates, 150+ tests) — the ecosystem host |
-| Spoke | [<REDACTED>/phenoAI](https://github.com/<REDACTED>/phenoAI) | C | Python+Rust monorepo (17 crates) — substrate-crate consumer |
-| Spoke | [<REDACTED>/PhenoFastMCP-rust](https://github.com/<REDACTED>/PhenoFastMCP-rust) | A | Rust fastmcp realization (the substrate `driver-mcp` consumes it) |
-| Spoke | [<REDACTED>/PhenoMCPServers](https://github.com/<REDACTED>/PhenoMCPServers) | A | MCP server catalog + skills/plugins/templates |
-| Spoke | [<REDACTED>/PhenoObservability](https://github.com/<REDACTED>/PhenoObservability) | A | 17-crate observability substrate (pheno-otel, dashboards, alerting) |
-| Spoke | [<REDACTED>/phenotype-router](https://github.com/<REDACTED>/phenotype-router) | C | **The bifrost** — substrate `routing-phenotype-router` wraps it via `BifrostAdapter` (ADR-050/051) |
-| Spoke | [<REDACTED>/phenotype-registry](https://github.com/<REDACTED>/phenotype-registry) | meta | Canonical registry of all phenotype projects with status / disposition / cross-links |
+| Spec | [<REDACTED>/phenotype-router-spec](https://github.com/KooshaPari/phenotype-router-spec) | B | Router A2A protocol spec (v0.1.0) |
+| Bundle | [<REDACTED>/substrate-adapters-bundle](https://github.com/KooshaPari/substrate-adapters-bundle) | B | Standalone adapter crate workspace (8 shim crates) |
+| Spoke | [<REDACTED>/cliproxyapi-plusplus](https://github.com/KooshaPari/cliproxyapi-plusplus) | A | Fork of [router-for-me/CLIProxyAPI](https://github.com/router-for-me/CLIProxyAPI) (38k★) with phenotype hooks (OpenAPI 3.1, journey-traceability, phenoShared CI) |
+| Spoke | [<REDACTED>/context-mode-plusplus](https://github.com/KooshaPari/context-mode-plusplus) | B | Fork of [mksglu/context-mode](https://github.com/mksglu/context-mode) (18.1k★) + /phenotype/ adapter specs |
+| Spoke | [<REDACTED>/OmniRoute](https://github.com/KooshaPari/OmniRoute) | A | Fork of [diegosouzapw/OmniRoute](https://github.com/diegosouzapw/OmniRoute) (6.7k★) — Next.js 50+ provider gateway |
+| Spoke | [<REDACTED>/agentapi-plusplus](https://github.com/KooshaPari/agentapi-plusplus) | A | **Folded** into [<REDACTED>/substrate](https://github.com/KooshaPari/substrate) as `crates/engine-agentapi` (commit 5f67a09) |
+| Spoke | [<REDACTED>/substrate](https://github.com/KooshaPari/substrate) | C | Hexagonal Rust spine (28 crates, 150+ tests) — the ecosystem host |
+| Spoke | [<REDACTED>/phenoAI](https://github.com/KooshaPari/phenoAI) | C | Python+Rust monorepo (17 crates) — substrate-crate consumer |
+| Spoke | [<REDACTED>/PhenoFastMCP-rust](https://github.com/KooshaPari/PhenoFastMCP-rust) | A | Rust fastmcp realization (the substrate `driver-mcp` consumes it) |
+| Spoke | [<REDACTED>/PhenoMCPServers](https://github.com/KooshaPari/PhenoMCPServers) | A | MCP server catalog + skills/plugins/templates |
+| Spoke | [<REDACTED>/PhenoObservability](https://github.com/KooshaPari/PhenoObservability) | A | 17-crate observability substrate (pheno-otel, dashboards, alerting) |
+| Spoke | [<REDACTED>/phenotype-router](https://github.com/KooshaPari/phenotype-router) | C | **The bifrost** — substrate `routing-phenotype-router` wraps it via `BifrostAdapter` (ADR-050/051) |
+| Spoke | [<REDACTED>/phenotype-registry](https://github.com/KooshaPari/phenotype-registry) | meta | Canonical registry of all phenotype projects with status / disposition / cross-links |
 
 ## Architecture
 
@@ -68,8 +68,8 @@ ecosystem depends on, plus the architecture spec they all share.
 
 ## Related
 
-- Architecture plan: [`plans/2026-06-22-phenotype-ecosystem-router-architecture-v1.md`](https://github.com/<REDACTED>/substrate/blob/main/plans/2026-06-22-phenotype-ecosystem-router-architecture-v1.md)
-- Registry: [`<REDACTED>/phenotype-registry`](https://github.com/<REDACTED>/phenotype-registry)
+- Architecture plan: [`plans/2026-06-22-phenotype-ecosystem-router-architecture-v1.md`](https://github.com/KooshaPari/substrate/blob/main/plans/2026-06-22-phenotype-ecosystem-router-architecture-v1.md)
+- Registry: [`<REDACTED>/phenotype-registry`](https://github.com/KooshaPari/phenotype-registry)
 
 ## License
 

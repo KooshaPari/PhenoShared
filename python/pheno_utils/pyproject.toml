@@ -46,9 +46,9 @@ toml = [
 pheno-utils = "pheno_utils.cli:main"
 
 [project.urls]
-Homepage = "https://github.com/<REDACTED>/PhenoKit"
-Repository = "https://github.com/<REDACTED>/PhenoKit"
-Documentation = "https://github.com/<REDACTED>/PhenoKit/tree/main/python/pheno-utils"
+Homepage = "https://github.com/KooshaPari/PhenoKit"
+Repository = "https://github.com/KooshaPari/PhenoKit"
+Documentation = "https://github.com/KooshaPari/PhenoKit/tree/main/python/pheno-utils"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/pheno_utils"]

@@ -5,8 +5,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/<REDACTED>/pheno-cli/internal/adapters"
-	phenoerrors "github.com/<REDACTED>/pheno-cli/internal/errors"
+	"github.com/KooshaPari/pheno-cli/internal/adapters"
+	phenoerrors "github.com/KooshaPari/pheno-cli/internal/errors"
 )
 
 func TestFormatError_NilReturnsEmpty(t *testing.T) {

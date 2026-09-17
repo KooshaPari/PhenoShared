@@ -3,7 +3,7 @@
   "captured_at": "2026-07-26T10:42:00Z",
   "scope": "<REDACTED>/PhenoVCS remote boundary revalidation and registry stale-state correction",
   "remote": {
-    "url": "https://github.com/<REDACTED>/PhenoVCS",
+    "url": "https://github.com/KooshaPari/PhenoVCS",
     "visibility": "public",
     "is_archived": false,
     "default_branch": "main",
@@ -34,7 +34,7 @@
   },
   "validation": [
     {
-      "command": "git clone https://github.com/<REDACTED>/PhenoVCS",
+      "command": "git clone https://github.com/KooshaPari/PhenoVCS",
       "result": "pass",
       "evidence": "main resolved at 509928e52325614a693c59ff45d41fbb7357805b"
     },

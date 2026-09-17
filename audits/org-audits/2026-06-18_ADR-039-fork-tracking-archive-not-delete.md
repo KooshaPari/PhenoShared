@@ -59,7 +59,7 @@ This policy is ratified in the "Stale / warnings" section of AGENTS.md (under th
 
 A user directive to delete a fork is valid only if it:
 
-1. Names the fork by full path (`github.com/<REDACTED>/Planify` or similar).
+1. Names the fork by full path (`github.com/KooshaPari/Planify` or similar).
 2. Is in a session message (not a stale note in AGENTS.md or a comment in a PR).
 3. Is followed by an audit artifact per ADR-040 (deletion recipe).
 

@@ -16,8 +16,8 @@
     "Spot-price-aware dispatch planner"
   ],
   "links": {
-    "github": "https://github.com/<REDACTED>/hwLedger",
+    "github": "https://github.com/KooshaPari/hwLedger",
     "docs": "https://hwledger.<REDACTED>.com/docs",
-    "releases": "https://github.com/<REDACTED>/hwLedger/releases"
+    "releases": "https://github.com/KooshaPari/hwLedger/releases"
   }
 }

@@ -93,7 +93,7 @@ Cross-compilation matrix, reproducible builds, SBOM emission, container image, p
 - `Tracera/.github/workflows/scorecard.yml:1-50` — OSSF Scorecard weekly — **status ✓**
 - `Tracera/release-plz.toml` — workspace config — **status ✓**
 - `Tracera/deny.toml:1-50` — `[graph]`, `[advisories]`, `[licenses]`, `[bans]`, `[sources]` all configured — **status ✓**
-- `Tracera/go.mod:1-3` — `module github.com/<REDACTED>/tracera`, `go 1.23` — **status ✓**
+- `Tracera/go.mod:1-3` — `module github.com/KooshaPari/tracera`, `go 1.23` — **status ✓**
 - `Tracera/Cargo.lock` — present — **status ✓**
 - `Tracera/frontend/apps`, `Tracera/frontend/packages` — has `docs/package-lock.json` — **status ✓**
 - **No `go test` workflow** — `go.mod` exists but no `go build` / `go test` step in any workflow — **status ✗**

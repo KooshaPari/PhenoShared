@@ -1,3 +1,3 @@
-module github.com/<REDACTED>/nanovms
+module github.com/KooshaPari/nanovms
 
 go 1.23

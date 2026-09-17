@@ -9,7 +9,7 @@ Lifted from `substrate/driver-mcp` (integration branch). Implements:
 | `lead_server.py` | (mailbox variant) |
 | `team_mailbox_server.py` | (worker mailbox) |
 
-Framework: [PhenoFastMCP](https://github.com/<REDACTED>/PhenoFastMCP) / fastmcp 3.4.2.
+Framework: [PhenoFastMCP](https://github.com/KooshaPari/PhenoFastMCP) / fastmcp 3.4.2.
 
 ```bash
 cd servers/substrate
@@ -23,7 +23,7 @@ Substrate runtime (HTTP, argv, cheap-llm CLI) remains in the **substrate** repo.
 ## driver-mcp mirror sync (ADR-019)
 
 Canonical source is this directory (`servers/substrate/`). The **substrate** repo keeps a dev mirror at
-[`driver-mcp/`](https://github.com/<REDACTED>/substrate/tree/main/driver-mcp) — see
-[`driver-mcp/SYNC.md`](https://github.com/<REDACTED>/substrate/blob/main/driver-mcp/SYNC.md).
+[`driver-mcp/`](https://github.com/KooshaPari/substrate/tree/main/driver-mcp) — see
+[`driver-mcp/SYNC.md`](https://github.com/KooshaPari/substrate/blob/main/driver-mcp/SYNC.md).
 
 CI runs `substrate/scripts/check_driver_mcp_sync.py` on every catalog workflow (substrate checked out as sibling).

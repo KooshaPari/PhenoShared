@@ -50,5 +50,5 @@ We will adopt **Spec-Driven Development (SDD)** using the **AgilePlus** methodol
 ## Related
 
 - Enables: ADR-004 (Unified Specification Registry)
-- Tool: [AgilePlus](https://github.com/<REDACTED>/AgilePlus)
-- Format: [kitty-spec](https://github.com/<REDACTED>/AgilePlus/tree/main/kitty-specs)
+- Tool: [AgilePlus](https://github.com/KooshaPari/AgilePlus)
+- Format: [kitty-spec](https://github.com/KooshaPari/AgilePlus/tree/main/kitty-specs)

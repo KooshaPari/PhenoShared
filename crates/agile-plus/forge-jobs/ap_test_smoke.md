@@ -11,7 +11,7 @@ git checkout integration/consolidate
 git pull origin integration/consolidate
 # Clone phenoShared sibling (required for workspace build)
 cd ..
-git clone --depth 1 https://github.com/<REDACTED>/phenoShared.git phenoShared 2>/dev/null || true
+git clone --depth 1 https://github.com/KooshaPari/phenoShared.git phenoShared 2>/dev/null || true
 cd AgilePlus
 ```
 

@@ -130,7 +130,7 @@ PO `phenotype-health-axum` / `phenotype-health-cli` remain PO-only runtime layer
 
 ### Phase 4 wave 5 (2026-06-19) — config-core + stub prune tail — **complete**
 
-Wave 5a (#277) drained 7 interim phenoShared git pins; wave 5b (#278 @ `d83d1ca`) drained remaining 11 pins — **zero** `<REDACTED>/phenoShared` workspace git deps on HexaKit main. Backlog tasks #56–#64, #68–#70 closed; registry ledger [#235](https://github.com/<REDACTED>/phenotype-registry/pull/235), [#242](https://github.com/<REDACTED>/phenotype-registry/pull/242).
+Wave 5a (#277) drained 7 interim phenoShared git pins; wave 5b (#278 @ `d83d1ca`) drained remaining 11 pins — **zero** `<REDACTED>/phenoShared` workspace git deps on HexaKit main. Backlog tasks #56–#64, #68–#70 closed; registry ledger [#235](https://github.com/KooshaPari/phenotype-registry/pull/235), [#242](https://github.com/KooshaPari/phenotype-registry/pull/242).
 
 | Crate / action | Action | PR |
 |----------------|--------|-----|

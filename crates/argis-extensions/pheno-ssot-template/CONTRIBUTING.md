@@ -65,7 +65,7 @@ monorepo. The canonical background-agent policy that this template
 and its sibling templates (`pheno-cargo-template`, `pheno-fastapi-base`,
 `pheno-go-ctxkit`) point at is:
 
-- [`docs/governance/background_agent_policy.md`](https://github.com/<REDACTED>/phenotype/blob/main/docs/governance/background_agent_policy.md)
+- [`docs/governance/background_agent_policy.md`](https://github.com/KooshaPari/phenotype/blob/main/docs/governance/background_agent_policy.md)
 
 When changing fleet composition, dispatch patterns, or
 failure-handling expectations, update that file in the same PR and
@@ -78,6 +78,6 @@ notes are auto-generated from Conventional Commits via `release-please`.
 
 ## Getting Help
 
-- Open a [Discussion](https://github.com/<REDACTED>/phenotype/discussions)
-- File an [Issue](https://github.com/<REDACTED>/phenotype/issues)
+- Open a [Discussion](https://github.com/KooshaPari/phenotype/discussions)
+- File an [Issue](https://github.com/KooshaPari/phenotype/issues)
 - Contact the maintainer directly for security issues (see `SECURITY.md`)

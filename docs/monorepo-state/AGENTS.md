@@ -38,7 +38,7 @@ git config core.sparseCheckoutCone                    # true = cone mode
 # Dispatch
 gh --version && gh auth status                        # GitHub CLI (<REDACTED> active as of 2026-06-15 18:40 PDT)
                                                       # Dmouse92 account still in keyring (read-only collaborator) — DO NOT push as Dmouse92.
-                                                      # Owner account is <REDACTED> — push target for ALL repos under github.com/<REDACTED>/*
+                                                      # Owner account is <REDACTED> — push target for ALL repos under github.com/KooshaPari/*
                                                       # If gh auth status shows Dmouse92 active, run: gh auth switch --user <REDACTED>
 curl -sf -m 3 http://localhost:20128/v1/models        # OmniRoute liveness
 forge -p "<prompt>" -C /path/to/repo                  # Subagent dispatch (proven working 2026-06-15)
@@ -264,12 +264,12 @@ Two complementary quality frameworks govern the fleet. See `audit-71-pillar-2026
 
 | # | Repo | Branch → base | Title | What |
 |---|---|---|---|---|
-| [pheno-mcp-router#1](https://github.com/<REDACTED>/pheno-mcp-router/pull/1) | pheno-mcp-router | `feat/port-cost-budget-quota-audit-tiers-2026-06-17` → `chore/l3-57-pheno-plugin-registry-2026-06-11` | feat(cost): port tiers/cost/budget/quota/audit/cost_middleware from dispatch-mcp W2-1 (L5-104.1) | 6 modules + 6 test files + PROVIDER_GUIDE.md |
-| [pheno-mcp-router#2](https://github.com/<REDACTED>/pheno-mcp-router/pull/2) | pheno-mcp-router | `feat/llama-adapter-2026-06-17` → same | feat(adapters): add LlamaAdapter (LlmPort) | Server + direct modes; 11 tests |
-| [pheno-mcp-router#3](https://github.com/<REDACTED>/pheno-mcp-router/pull/3) | pheno-mcp-router | `feat/openai-compat-adapter-2026-06-17` → same | feat(adapters): add OpenAICompatAdapter (LlmPort) | 429/5xx retry; 17 tests, 87% coverage |
-| [phenotype-config#1](https://github.com/<REDACTED>/phenotype-config/pull/1) | phenotype-config | `feat/l5-104-canonical-markers-2026-06-17` → `main` | feat(docs): port CANONICAL.md markers + SLSA doc from pheno ADR-012 (L5-104.2) | 2 CANONICAL.md markers + docs/slsa.md |
-| [phenotype-ops#2](https://github.com/<REDACTED>/phenotype-ops/pull/2) | phenotype-ops | `feat/llama-cpp-devops-2026-06-17` → `main` | feat(devops): add llama-cpp docker setup (L5-104.1) | Dockerfile + compose + README |
-| [dispatch-mcp#1](https://github.com/<REDACTED>/dispatch-mcp/pull/1) | dispatch-mcp | `chore/w1-1-cheap-llm-mcp-deprecation-note-2026-06-15` → `main` | docs: cherry-pick cheap-llm-mcp deprecation notice (W1.1, ADR-008) | docs/CHEAP_LLM_MCP_DEPRECATION.md (22 lines) |
+| [pheno-mcp-router#1](https://github.com/KooshaPari/pheno-mcp-router/pull/1) | pheno-mcp-router | `feat/port-cost-budget-quota-audit-tiers-2026-06-17` → `chore/l3-57-pheno-plugin-registry-2026-06-11` | feat(cost): port tiers/cost/budget/quota/audit/cost_middleware from dispatch-mcp W2-1 (L5-104.1) | 6 modules + 6 test files + PROVIDER_GUIDE.md |
+| [pheno-mcp-router#2](https://github.com/KooshaPari/pheno-mcp-router/pull/2) | pheno-mcp-router | `feat/llama-adapter-2026-06-17` → same | feat(adapters): add LlamaAdapter (LlmPort) | Server + direct modes; 11 tests |
+| [pheno-mcp-router#3](https://github.com/KooshaPari/pheno-mcp-router/pull/3) | pheno-mcp-router | `feat/openai-compat-adapter-2026-06-17` → same | feat(adapters): add OpenAICompatAdapter (LlmPort) | 429/5xx retry; 17 tests, 87% coverage |
+| [phenotype-config#1](https://github.com/KooshaPari/phenotype-config/pull/1) | phenotype-config | `feat/l5-104-canonical-markers-2026-06-17` → `main` | feat(docs): port CANONICAL.md markers + SLSA doc from pheno ADR-012 (L5-104.2) | 2 CANONICAL.md markers + docs/slsa.md |
+| [phenotype-ops#2](https://github.com/KooshaPari/phenotype-ops/pull/2) | phenotype-ops | `feat/llama-cpp-devops-2026-06-17` → `main` | feat(devops): add llama-cpp docker setup (L5-104.1) | Dockerfile + compose + README |
+| [dispatch-mcp#1](https://github.com/KooshaPari/dispatch-mcp/pull/1) | dispatch-mcp | `chore/w1-1-cheap-llm-mcp-deprecation-note-2026-06-15` → `main` | docs: cherry-pick cheap-llm-mcp deprecation notice (W1.1, ADR-008) | docs/CHEAP_LLM_MCP_DEPRECATION.md (22 lines) |
 
 ### 18 Dmouse92 repos archived (2026-06-17 20:36 PDT, via Dmouse92 auth)
 
@@ -279,14 +279,14 @@ Two complementary quality frameworks govern the fleet. See `audit-71-pillar-2026
 
 | Dmouse92 content | Absorbed to | PR |
 |---|---|---|
-| `dispatch-mcp` W2-1 cost/budget/quota/audit/tiers (6 modules, ~2,000 LOC) | `pheno-mcp-router` substrate (ADR-013) | [pheno-mcp-router#1](https://github.com/<REDACTED>/pheno-mcp-router/pull/1) |
-| `dispatch-mcp` W2-1 `llama_cpp.py` provider | `pheno-mcp-router` `LlamaAdapter` (LlmPort) | [pheno-mcp-router#2](https://github.com/<REDACTED>/pheno-mcp-router/pull/2) |
-| `dispatch-mcp` W2-1 `openai_compat.py` provider (KP-authored) | `pheno-mcp-router` `OpenAICompatAdapter` (LlmPort) | [pheno-mcp-router#3](https://github.com/<REDACTED>/pheno-mcp-router/pull/3) |
-| `dispatch-mcp` W2-1 `PROVIDER_GUIDE.md` | `pheno-mcp-router/docs/PROVIDER_GUIDE.md` | [pheno-mcp-router#1](https://github.com/<REDACTED>/pheno-mcp-router/pull/1) (squashed) |
-| `dispatch-mcp` W2-1 `docker/Dockerfile.llama` + `llama-compose.yml` | `phenotype-ops/agent-devops-setups/llama-cpp/` (ADR-023 federated service) | [phenotype-ops#2](https://github.com/<REDACTED>/phenotype-ops/pull/2) |
-| `dispatch-mcp` W1-1 `docs/CHEAP_LLM_MCP_DEPRECATION.md` (cherry-pick) | `dispatch-mcp` (consumer-side notice) | [dispatch-mcp#1](https://github.com/<REDACTED>/dispatch-mcp/pull/1) |
-| `pheno` ADR-012 `crates/phenotype-config-{loader,shared-config}/CANONICAL.md` (re-pointed) | `phenotype-config` substrate (ADR-022) | [phenotype-config#1](https://github.com/<REDACTED>/phenotype-config/pull/1) |
-| `pheno` ADR-012 `docs/slsa.md` | `phenotype-config/docs/slsa.md` | [phenotype-config#1](https://github.com/<REDACTED>/phenotype-config/pull/1) |
+| `dispatch-mcp` W2-1 cost/budget/quota/audit/tiers (6 modules, ~2,000 LOC) | `pheno-mcp-router` substrate (ADR-013) | [pheno-mcp-router#1](https://github.com/KooshaPari/pheno-mcp-router/pull/1) |
+| `dispatch-mcp` W2-1 `llama_cpp.py` provider | `pheno-mcp-router` `LlamaAdapter` (LlmPort) | [pheno-mcp-router#2](https://github.com/KooshaPari/pheno-mcp-router/pull/2) |
+| `dispatch-mcp` W2-1 `openai_compat.py` provider (KP-authored) | `pheno-mcp-router` `OpenAICompatAdapter` (LlmPort) | [pheno-mcp-router#3](https://github.com/KooshaPari/pheno-mcp-router/pull/3) |
+| `dispatch-mcp` W2-1 `PROVIDER_GUIDE.md` | `pheno-mcp-router/docs/PROVIDER_GUIDE.md` | [pheno-mcp-router#1](https://github.com/KooshaPari/pheno-mcp-router/pull/1) (squashed) |
+| `dispatch-mcp` W2-1 `docker/Dockerfile.llama` + `llama-compose.yml` | `phenotype-ops/agent-devops-setups/llama-cpp/` (ADR-023 federated service) | [phenotype-ops#2](https://github.com/KooshaPari/phenotype-ops/pull/2) |
+| `dispatch-mcp` W1-1 `docs/CHEAP_LLM_MCP_DEPRECATION.md` (cherry-pick) | `dispatch-mcp` (consumer-side notice) | [dispatch-mcp#1](https://github.com/KooshaPari/dispatch-mcp/pull/1) |
+| `pheno` ADR-012 `crates/phenotype-config-{loader,shared-config}/CANONICAL.md` (re-pointed) | `phenotype-config` substrate (ADR-022) | [phenotype-config#1](https://github.com/KooshaPari/phenotype-config/pull/1) |
+| `pheno` ADR-012 `docs/slsa.md` | `phenotype-config/docs/slsa.md` | [phenotype-config#1](https://github.com/KooshaPari/phenotype-config/pull/1) |
 
 **Discarded (per plan §2.2):** 5 of 7 Dmouse92 pheno ADR-012 commits (workflow consolidation, agileplus scaffolding, Cargo.lock skew) — verified KP/main already has the canonical version. 1 Dmouse92 dispatch-mcp commit (`9486edb` mock backend duplicate). 1 Dmouse92 dispatch-mcp file (`providers/base.py` — provider protocol shape diverges from substrate LlmPort).
 
@@ -312,10 +312,10 @@ Combined intent: migrate all 4 repos in one wave, ensure full integration of spe
 
 | # | Source repo | Target repo | PR | What migrated |
 |---|---|---|---|---|
-| 1 | `<REDACTED>/dagctl` (archived pre-existing) | `<REDACTED>/phenodag` | [phenodag#13](https://github.com/<REDACTED>/phenodag/pull/13) (+93) | `VERSION` v3.3.1, `CHANGELOG.md`, `docs/dagctl-absorption.md` (11-file merge log) |
-| 2 | `<REDACTED>/kwality` (archived this turn) | `<REDACTED>/phenotype-tooling` | [phenotype-tooling#158](https://github.com/<REDACTED>/phenotype-tooling/pull/158) (+29,422 / 93 files) | `docs/absorbed-from-kwality/`: full source (engines, internal, scripts, cmd), tests, examples, database, governance, demos |
-| 3 | `<REDACTED>/phenotype-auth-ts` (archived this turn) | `<REDACTED>/AuthKit` | [AuthKit#120](https://github.com/<REDACTED>/AuthKit/pull/120) (+1,901) | `typescript/packages/auth-ts/` (805 LOC, hexagonal, DDD, vitest BDD/CDD) |
-| 4 | `<REDACTED>/dinoforge-packs` (archived this turn) | `<REDACTED>/Dino` | [Dino#297](https://github.com/<REDACTED>/Dino/pull/297) (+2,329) | `packs/example-balance/` (NEW) + `packs/community-contributions/dinoforge-packs-mirror/` (snapshot) |
+| 1 | `<REDACTED>/dagctl` (archived pre-existing) | `<REDACTED>/phenodag` | [phenodag#13](https://github.com/KooshaPari/phenodag/pull/13) (+93) | `VERSION` v3.3.1, `CHANGELOG.md`, `docs/dagctl-absorption.md` (11-file merge log) |
+| 2 | `<REDACTED>/kwality` (archived this turn) | `<REDACTED>/phenotype-tooling` | [phenotype-tooling#158](https://github.com/KooshaPari/phenotype-tooling/pull/158) (+29,422 / 93 files) | `docs/absorbed-from-kwality/`: full source (engines, internal, scripts, cmd), tests, examples, database, governance, demos |
+| 3 | `<REDACTED>/phenotype-auth-ts` (archived this turn) | `<REDACTED>/AuthKit` | [AuthKit#120](https://github.com/KooshaPari/AuthKit/pull/120) (+1,901) | `typescript/packages/auth-ts/` (805 LOC, hexagonal, DDD, vitest BDD/CDD) |
+| 4 | `<REDACTED>/dinoforge-packs` (archived this turn) | `<REDACTED>/Dino` | [Dino#297](https://github.com/KooshaPari/Dino/pull/297) (+2,329) | `packs/example-balance/` (NEW) + `packs/community-contributions/dinoforge-packs-mirror/` (snapshot) |
 
 ### Source archive status (verified 2026-06-18)
 

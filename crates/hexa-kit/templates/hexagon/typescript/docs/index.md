@@ -36,4 +36,4 @@ TypeScript/JavaScript Hexagonal Architecture Kit.
 
 ## Links
 
-- [Repository](https://github.com/<REDACTED>/hexatype)
+- [Repository](https://github.com/KooshaPari/hexatype)

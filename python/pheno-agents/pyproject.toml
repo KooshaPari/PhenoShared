@@ -46,9 +46,9 @@ dev = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/<REDACTED>/pheno"
-Repository = "https://github.com/<REDACTED>/pheno.git"
-Issues = "https://github.com/<REDACTED>/pheno/issues"
+Homepage = "https://github.com/KooshaPari/pheno"
+Repository = "https://github.com/KooshaPari/pheno.git"
+Issues = "https://github.com/KooshaPari/pheno/issues"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/pheno_agents"]

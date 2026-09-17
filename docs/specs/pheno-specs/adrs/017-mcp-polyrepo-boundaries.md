@@ -46,7 +46,7 @@ We need a **domain-first** boundary that agents can read once and execute withou
 
 ### Language tiers
 
-Normative detail: [PhenoMCPServers/docs/LANGUAGE-TIERS-AND-ROLES.md](https://github.com/<REDACTED>/PhenoMCPServers/blob/main/docs/LANGUAGE-TIERS-AND-ROLES.md)
+Normative detail: [PhenoMCPServers/docs/LANGUAGE-TIERS-AND-ROLES.md](https://github.com/KooshaPari/PhenoMCPServers/blob/main/docs/LANGUAGE-TIERS-AND-ROLES.md)
 
 - **Tier 0:** Rust, Zig, Mojo — protocol core, hot paths
 - **Tier 1:** Go — HTTP/SSE MCP edges only (written justification required)

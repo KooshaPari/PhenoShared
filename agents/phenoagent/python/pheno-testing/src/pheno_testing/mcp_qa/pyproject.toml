@@ -44,8 +44,8 @@ dev = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/<REDACTED>/mcp-qa"
-Repository = "https://github.com/<REDACTED>/mcp-qa"
+Homepage = "https://github.com/KooshaPari/mcp-qa"
+Repository = "https://github.com/KooshaPari/mcp-qa"
 Documentation = "https://mcp-qa.readthedocs.io"
 
 [tool.setuptools.packages.find]

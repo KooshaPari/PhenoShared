@@ -5,9 +5,9 @@ import (
 	"os"
 
 	"github.com/spf13/cobra"
-	"github.com/<REDACTED>/pheno-cli/internal/detect"
-	"github.com/<REDACTED>/pheno-cli/internal/discover"
-	"github.com/<REDACTED>/pheno-cli/internal/matrix"
+	"github.com/KooshaPari/pheno-cli/internal/detect"
+	"github.com/KooshaPari/pheno-cli/internal/discover"
+	"github.com/KooshaPari/pheno-cli/internal/matrix"
 )
 
 var matrixCmd = &cobra.Command{

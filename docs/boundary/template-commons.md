@@ -8,7 +8,7 @@ after its absorption into `phenokits-commons/templates/` on 2026-07-17.
 | Field | Value |
 |-------|-------|
 | Original repo | `<REDACTED>/template-commons` |
-| Original URL | https://github.com/<REDACTED>/template-commons |
+| Original URL | https://github.com/KooshaPari/template-commons |
 | Original description | "template-commons - shared template workflows and ADR sessions (deleted remote recovery)" |
 | Original default branch | `main` |
 | Canonical home | `<REDACTED>/phenokits-commons/templates/` (selective subtree) |

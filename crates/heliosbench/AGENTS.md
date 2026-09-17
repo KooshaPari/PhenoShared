@@ -1,6 +1,6 @@
 # Agent Instructions for heliosBench
 
-This repository is part of the [Phenotype](https://github.com/<REDACTED>) ecosystem.
+This repository is part of the [Phenotype](https://github.com/KooshaPari) ecosystem.
 
 ## Stack
 

@@ -131,7 +131,7 @@ mod tests {
     fn filename_from_url_uses_last_segment() {
         assert_eq!(
             filename_from_asset_url(
-                "https://github.com/<REDACTED>/Eidolon/releases/download/rootfs-v0.1.0/\
+                "https://github.com/KooshaPari/Eidolon/releases/download/rootfs-v0.1.0/\
                  eidolon-canned-rootfs-0.1.0-x86_64.ext4.img"
             ),
             "eidolon-canned-rootfs-0.1.0-x86_64.ext4.img"

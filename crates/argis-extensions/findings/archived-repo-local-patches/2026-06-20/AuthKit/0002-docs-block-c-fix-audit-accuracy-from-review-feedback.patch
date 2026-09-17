@@ -19,7 +19,7 @@ index 2d0f206..d39bd75 100644
  **Audit date:** 2026-06-16
  **Auditor:** Block-C consolidation (#2)
 -**Tracker:** [`phenotype-registry/docs/rationalization/block-c-consolidation.md`](../..) — row 2 of the strategic-merges table
-+**Tracker:** [phenotype-registry block-c-consolidation](https://github.com/<REDACTED>/phenotype-registry/blob/main/docs/rationalization/block-c-consolidation.md) — row 2 of the strategic-merges table
++**Tracker:** [phenotype-registry block-c-consolidation](https://github.com/KooshaPari/phenotype-registry/blob/main/docs/rationalization/block-c-consolidation.md) — row 2 of the strategic-merges table
  **Verdict:** **Fold. AuthKit is a true duplicate (self-admitted) of canonical Authvault. Archive after fold.**
 -**Companion PR on Authvault:** `<REDACTED>/Authvault#<TBD>` (this PR is on AuthKit, the source side)
 +**Companion PR on Authvault:** none required (delete-only fold; see §5)
@@ -35,7 +35,7 @@ index 2d0f206..d39bd75 100644
  | Tests           | `#[cfg(test)]` inline only; **no** `tests/` integration suite                     | `tests/unit_tests.rs`, `tests/integration_tests.rs`, `benches/{auth,perf,…}`, `fuzz` |
  | Build artifacts | No `Cargo.lock` at workspace root                                                | `Cargo.lock` committed                                                               |
 -| Other languages | `python/` (empty stubs `pheno-auth/`, `pheno-security/`), `typescript/package.json`, `go/` does not exist | None (Rust-only; TS sibling is `phenotype-auth-ts` — separate polyglot project) |
-+| Other languages | `python/` (empty stubs `pheno-auth/`, `pheno-security/`), `typescript/package.json`, `go/` does not exist | None (Rust-only; TS sibling is [`<REDACTED>/phenotype-auth-ts`](https://github.com/<REDACTED>/phenotype-auth-ts) — separate polyglot project) |
++| Other languages | `python/` (empty stubs `pheno-auth/`, `pheno-security/`), `typescript/package.json`, `go/` does not exist | None (Rust-only; TS sibling is [`<REDACTED>/phenotype-auth-ts`](https://github.com/KooshaPari/phenotype-auth-ts) — separate polyglot project) |
  | CI / quality    | `.github/workflows/{ci,cargo-deny,codeql,trufflehog,release-drafter,…}.yml`      | `.github/workflows/{ci,security,coverage,benchmarks,sast,pages-deploy,…}.yml`        |
  | Docs            | 1,194-line aspirational `PLAN.md` + 3 ADRs + `SOTA.md` research notes            | `SPEC.md` + `FR-AUTH-001..010` + `TEST_COVERAGE_MATRIX.md` + `SECURITY_AUDIT.md` + `SESSION_MANAGEMENT_AUDIT.md` + `TOKEN_STORAGE_AUDIT.md` + `.agileplus/specs/001-authvault-core` |
  | Requirements    | `FUNCTIONAL_REQUIREMENTS.md` describes features that don't exist in the code    | Every FR has implementation + test trace                                             |
@@ -90,7 +90,7 @@ index 2d0f206..d39bd75 100644
  | `MockSecuritySource` / `GitHubSecuritySource` / `CargoAuditSource` / `OsvSource` / `SnykSource` (`phenotype-security-aggregator/src/sources.rs`) | **No** | Org-level CI tooling (consolidate with the existing `cargo-deny.yml` / `codeql.yml` / `trufflehog.yml` pipelines across the org) | Security *finding aggregation* is a CI/ops concern, not an auth-library concern. Authvault emits *security* events (audit), not consumes them. |
  | `SecurityHealthCheck` / `security_health_score` (`phenotype-security-aggregator/src/health_integration.rs`) | **No** | Org-level health-check crate (e.g., move to a future `phenotype-health` repo if it materializes) | The `phenotype_health` import in this file is already broken (not in workspace). Health probes are infrastructure-level. |
 -| Empty Python/TS stubs (`python/pheno-auth`, `python/pheno-security`, `typescript/package.json`) | **No** | n/a — **drop** | Empty. Authvault's Python/TS sibling is `phenotype-auth-ts` (TS OIDC/OAuth2) and is out of Block-C scope (see tracker row 2: "phenotype-auth-ts stays separate"). |
-+| Empty Python/TS stubs (`python/pheno-auth`, `python/pheno-security`, `typescript/package.json`) | **No** | n/a — **drop** | Empty. Authvault's Python/TS sibling is [`<REDACTED>/phenotype-auth-ts`](https://github.com/<REDACTED>/phenotype-auth-ts) (TS OIDC/OAuth2) and is out of Block-C scope (see tracker row 2: "phenotype-auth-ts stays separate"). |
++| Empty Python/TS stubs (`python/pheno-auth`, `python/pheno-security`, `typescript/package.json`) | **No** | n/a — **drop** | Empty. Authvault's Python/TS sibling is [`<REDACTED>/phenotype-auth-ts`](https://github.com/KooshaPari/phenotype-auth-ts) (TS OIDC/OAuth2) and is out of Block-C scope (see tracker row 2: "phenotype-auth-ts stays separate"). |
  | Aspirational docs (`PLAN.md`, `SOTA.md`, ADRs, `AUTH_TOOLKITS_SOTA.md`)  | **No**              | `phenotype-registry/docs/historical/authkit-aspirational.md` if any reader needs context | No code backs them. Not authvault material. |
  | AuthKit's `AuthError` symbol mentioned in `phenotype-contracts`           | **No**              | n/a — the `phenotype-contracts` crate has no `AuthError` symbol; it is a phantom-types crate only. | Authvault's `AuthError` (`src/domain/errors.rs`) is the real one. |
  

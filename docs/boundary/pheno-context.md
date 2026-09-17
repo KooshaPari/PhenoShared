@@ -5,7 +5,7 @@
 **Source:** `<REDACTED>/pheno-context`
 **Target:** `<REDACTED>/pheno` → `crates/pheno-context/`
 **Wave:** `2026-07-17-absorption`
-**Archive:** https://github.com/<REDACTED>/pheno-context (archived)
+**Archive:** https://github.com/KooshaPari/pheno-context (archived)
 
 ## Rationale
 

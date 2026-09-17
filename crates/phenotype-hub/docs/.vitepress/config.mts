@@ -209,7 +209,7 @@ const baseConfig = defineConfig({
       { text: 'Home', link: '/' },
       { text: 'Guide', link: '/guide/' },
       { text: 'API', link: '/api/' },
-      { text: 'GitHub', link: 'https://github.com/KooshaPari/phenodocs' }
+      { text: 'GitHub', link: 'https://github.com/<REDACTED>/phenodocs' }
     ],
 
     sidebar: {
@@ -234,7 +234,7 @@ const baseConfig = defineConfig({
     },
 
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/KooshaPari/phenodocs' }
+      { icon: 'github', link: 'https://github.com/<REDACTED>/phenodocs' }
     ],
 
     search: {

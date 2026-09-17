@@ -2,12 +2,12 @@
 
 **Audit date:** 2026-06-18 (created from scratch, this is the first Block-C pass)
 **Auditor:** L5-113 (audit-sync mission)
-**Tracker:** [phenotype-registry#75 (SSOT)](https://github.com/<REDACTED>/phenotype-registry/pull/75) — strategic merge #1 (GFX SDK)
+**Tracker:** [phenotype-registry#75 (SSOT)](https://github.com/KooshaPari/phenotype-registry/pull/75) — strategic merge #1 (GFX SDK)
 **Source repo:** `<REDACTED>/phenotype-postfx`
 **Target repo:** `<REDACTED>/phenotype-gfx` (PR #10, commit `d68d42c`)
 **Verdict at a glance:** **SUPERSEDE → `<REDACTED>/phenotype-gfx` via PR #10 (commit `d68d42c`).** This is a Unity URP / BRP post-processing stack (Bloom, SSAO, ACES, Color Grading LUT, Chromatic Aberration, Vignette, Screen-Space AO/GI) shipped as a C# package with 9 HLSL/.shader files and 6 hexagonal ports. C# core is ported to Rust and absorbed into `phenotype-gfx/src/postfx/` (per ADR-004, single Rust core + thin FFI edges). Source repo `<REDACTED>/phenotype-postfx` is **to be archived** once PR #10 merges; no downgrade path to preserve.
 
-**Long-term home:** <https://github.com/<REDACTED>/phenotype-gfx> (PR #10)
+**Long-term home:** <https://github.com/KooshaPari/phenotype-gfx> (PR #10)
 
 ---
 
@@ -18,7 +18,7 @@ This is the **first** Block-C audit for `phenotype-postfx`; no prior verdict exi
 **References:**
 - `docs/adr/ADR-004-single-core-ffi-edges.md` — single Rust core + thin FFI edges.
 - `docs/adr/ADR-031-configra-absorb.md` — sibling "absorb, do not coexist" ADR.
-- PR: <https://github.com/<REDACTED>/phenotype-gfx/pull/10>
+- PR: <https://github.com/KooshaPari/phenotype-gfx/pull/10>
 - Commit: `d68d42c` — `feat(gfx): port postfx C# + 8 HLSL shaders to Rust (L5-112, ADR-004)`
 
 **Migration summary:** 5,426 lines absorbed (3,498 in `Runtime/` C# + shaders + 1,928 in `tests/` including stubs). Of that, ~3,498 of source (11 .cs + 9 .shader files) maps directly to `phenotype-gfx/src/postfx/*.rs` and `phenotype-gfx/unity/postfx-shaders/*.shader`. Test files ported to the Rust test harness.

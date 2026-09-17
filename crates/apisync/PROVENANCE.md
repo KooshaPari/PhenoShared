@@ -2,7 +2,7 @@
 
 ## Source Repository
 - **Name**: Apisync
-- **URL**: https://github.com/<REDACTED>/Apisync
+- **URL**: https://github.com/KooshaPari/Apisync
 - **Version at absorption**: 0.2.10
 - **License**: MIT OR Apache-2.0
 

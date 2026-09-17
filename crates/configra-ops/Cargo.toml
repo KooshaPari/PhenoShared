@@ -6,7 +6,7 @@ rust-version = "1.86"
 license = "MIT"
 authors = ["Phenotype Team"]
 description = "Observability and operations primitives for Configra services"
-repository = "https://github.com/<REDACTED>/pheno"
+repository = "https://github.com/KooshaPari/pheno"
 keywords = ["observability", "health", "metrics", "tracing", "configra"]
 categories = ["development-tools", "config"]
 

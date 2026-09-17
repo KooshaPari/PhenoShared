@@ -77,12 +77,12 @@ flowchart TD
 
 ### W18b-G (pheno fleet)
 
-- [x] Tracera W18b fleet gate — [#632](https://github.com/<REDACTED>/Tracera/pull/632) merged
-- [x] AgilePlus manifest repoint — [#763](https://github.com/<REDACTED>/AgilePlus/pull/763) merged
-- [x] PhenoPlugins manifest repoint — [#104](https://github.com/<REDACTED>/PhenoPlugins/pull/104) merged
-- [x] HexaKit H14 pin repoint — [#267](https://github.com/<REDACTED>/HexaKit/pull/267) merged
-- [x] Agentora consumer repoint — [#90](https://github.com/<REDACTED>/Agentora/pull/90) merged; stub crates → phenotype-types/phenotype-config
-- [x] TestingKit phenotype-health repoint — [#8](https://github.com/<REDACTED>/TestingKit/pull/8) merged → PhenoObservability
+- [x] Tracera W18b fleet gate — [#632](https://github.com/KooshaPari/Tracera/pull/632) merged
+- [x] AgilePlus manifest repoint — [#763](https://github.com/KooshaPari/AgilePlus/pull/763) merged
+- [x] PhenoPlugins manifest repoint — [#104](https://github.com/KooshaPari/PhenoPlugins/pull/104) merged
+- [x] HexaKit H14 pin repoint — [#267](https://github.com/KooshaPari/HexaKit/pull/267) merged
+- [x] Agentora consumer repoint — [#90](https://github.com/KooshaPari/Agentora/pull/90) merged; stub crates → phenotype-types/phenotype-config
+- [x] TestingKit phenotype-health repoint — [#8](https://github.com/KooshaPari/TestingKit/pull/8) merged → PhenoObservability
 - [x] Fleet tail verified-clean — phenotype-gfx, Civis, phenotype-teamcomm, phenotype-go-sdk (manifest scan 2026-06-19)
 - [x] Org scan: 0 external `<REDACTED>/pheno` git manifest refs (gh search + fleet Cargo.toml/go.mod scan; excl. pheno self + audit docs)
 - [x] PhenoCompose verified-clean — in-repo path deps only (chokepoints 2026-06-18)

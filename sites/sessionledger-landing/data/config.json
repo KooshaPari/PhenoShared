@@ -17,8 +17,8 @@
     "Viewer gate"
   ],
   "links": {
-    "github": "https://github.com/<REDACTED>/SessionLedger",
+    "github": "https://github.com/KooshaPari/SessionLedger",
     "docs": "https://sessionledger.phenotype.space/docs",
-    "releases": "https://github.com/<REDACTED>/SessionLedger/releases"
+    "releases": "https://github.com/KooshaPari/SessionLedger/releases"
   }
 }

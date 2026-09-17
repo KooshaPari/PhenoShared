@@ -8,7 +8,7 @@
 **Audit series:** `findings/2026-06-21-pheno-otel-audit/` — Phase 1A (source inventory)
 **Authority:** ADR-023 (substrate placement), ADR-037 (pheno-mcp-router substrate canonical; analogous for pheno-otel), ADR-038 (hexagonal L4 Port/Adapter policy), ADR-040 (test coverage gates per tier), ADR-042B (substrate quality bar)
 
-> **Caveat on remotes:** This worktree has **two remotes configured with the SAME upstream** under different names — `argis`/`argis-extensions` (alias `argisgit`/`argis-extensionsgit`) and `origin`/`phenotype-apps` (alias `origingit`). Both point to `github.com/<REDACTED>/phenotype-apps.git` and `github.com/<REDACTED>/argis-extensions.git` respectively; both are monorepos. Per the user directive this audit treats the working tree as a **substrate-canonical path inside the multi-monorepo overlay**. Where `git for-each-ref` shows the same commit reachable under multiple remote namespaces, we deduplicate by the `awk -F'/' '{print $NF}'` tail-of-refname and report the count of **unique branch names** (9 pheno-otel-named), not the inflated 19 raw ref count.
+> **Caveat on remotes:** This worktree has **two remotes configured with the SAME upstream** under different names — `argis`/`argis-extensions` (alias `argisgit`/`argis-extensionsgit`) and `origin`/`phenotype-apps` (alias `origingit`). Both point to `github.com/KooshaPari/phenotype-apps.git` and `github.com/KooshaPari/argis-extensions.git` respectively; both are monorepos. Per the user directive this audit treats the working tree as a **substrate-canonical path inside the multi-monorepo overlay**. Where `git for-each-ref` shows the same commit reachable under multiple remote namespaces, we deduplicate by the `awk -F'/' '{print $NF}'` tail-of-refname and report the count of **unique branch names** (9 pheno-otel-named), not the inflated 19 raw ref count.
 >
 > **Caveat on rate-limit:** GitHub API access is currently rate-limited (HTTP 403). All claims in this document are derived from local `git` commands only — `git remote -v`, `git log`, `git branch`, `git ls-files`, `git tag`, `git submodule status`, `git rev-list`, `git diff`. No `gh api` calls were attempted.
 
@@ -23,7 +23,7 @@
 | Edition | `2021` | `Cargo.toml:4` |
 | Rust-version (MSRV) | `1.75` (lib) / `1.82` (CI matrix) | `Cargo.toml:5`; `.github/workflows/ci.yml:30,82,93` |
 | License | `MIT OR Apache-2.0` | `Cargo.toml:6`; `LICENSE-MIT`, `LICENSE-APACHE` |
-| Repository | `https://github.com/<REDACTED>/pheno-otel` | `Cargo.toml:8` |
+| Repository | `https://github.com/KooshaPari/pheno-otel` | `Cargo.toml:8` |
 | Documentation | `https://docs.rs/pheno-otel` | `Cargo.toml:9` |
 | Keywords | `phenotype opentelemetry otlp otel observability substrate tracing` | `Cargo.toml:10` |
 | Categories | `development-tools api-bindings asynchronous` | `Cargo.toml:11` |
@@ -336,7 +336,7 @@ edition = "2021"
 rust-version = "1.75"
 license = "MIT OR Apache-2.0"
 description = "OpenTelemetry OTLP exporter substrate for the pheno-* fleet (ADR-037). Provides OtlpPort + Stdout/HttpExporter adapters; consumers depend on this for OTLP wire-format export of traces, metrics, and logs."
-repository = "https://github.com/<REDACTED>/pheno-otel"
+repository = "https://github.com/KooshaPari/pheno-otel"
 documentation = "https://docs.rs/pheno-otel"
 keywords = ["phenotype", "opentelemetry", "otlp", "otel", "observability", "substrate", "tracing"]
 categories = ["development-tools", "api-bindings", "asynchronous"]
@@ -667,7 +667,7 @@ The following **open items** discovered during this Phase 1A inventory and defer
 6. **31 pheno-otel commits** in `git log --all` is the inflated count; **~12 unique-commit count** after namespace-dedup. **Phase 2: per-commit uniqueness audit.**
 7. **`target/` directory is tracked in the working tree** (`ls -la` shows `drwxr-xr-x@   7 <REDACTED>  staff     224 Jun 21 16:13 target`). This violates Rust `.gitignore` convention; the `.gitignore` should ignore `target/` but the directory is checked in. **P3 hygiene gap.**
 8. **`Cargo.lock` is tracked** (`Cargo.lock` size 9,703 B) — appropriate for binary crates but unconventional for a library. Per `Cargo.toml:13` `publish = true`, this is acceptable. No gap.
-9. **Two remote aliases (`origin`/`origingit`)** point at `phenotype-apps`; **two more (`argis`/`argis-extensions`)** point at `argis-extensions`. All four remotes share a common upstream `github.com/<REDACTED>/phenotype-apps.git` or `argis-extensions.git`. Phase 2 should determine which remote is the **canonical push target** for this substrate.
+9. **Two remote aliases (`origin`/`origingit`)** point at `phenotype-apps`; **two more (`argis`/`argis-extensions`)** point at `argis-extensions`. All four remotes share a common upstream `github.com/KooshaPari/phenotype-apps.git` or `argis-extensions.git`. Phase 2 should determine which remote is the **canonical push target** for this substrate.
 10. **Three branches diverge 19,818+ commits from main** (`v16-L22-build-perf-pheno-otel-2026-06-21`). This is suspicious — `main` is at commit `4c1a32b18c` (a relatively recent v21 cycle-11 P1 commit) but this single branch has 19,818 ahead. **Phase 2: investigate branch-base mismatch (likely local-main drift).**
 
 ---

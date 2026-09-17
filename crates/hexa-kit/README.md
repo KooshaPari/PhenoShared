@@ -5,7 +5,7 @@ HexaKit is a Rust workspace for reusable infrastructure primitives and hexagonal
 ## Usage / Quickstart
 
 ```bash
-git clone https://github.com/<REDACTED>/HexaKit.git
+git clone https://github.com/KooshaPari/HexaKit.git
 cd HexaKit
 cargo metadata --format-version 1
 cargo test
@@ -63,7 +63,7 @@ Progress: ████████░░ 80%
 
 ```bash
 # Clone, build, test
-git clone https://github.com/<REDACTED>/HexaKit.git
+git clone https://github.com/KooshaPari/HexaKit.git
 cd HexaKit
 ```
 

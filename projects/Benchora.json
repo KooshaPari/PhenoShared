@@ -14,7 +14,7 @@
   "boundary": "perf-harness",
   "stack": "rust",
   "v0": "0.2.0",
-  "gh_url": "https://github.com/<REDACTED>/Benchora",
+  "gh_url": "https://github.com/KooshaPari/Benchora",
   "owner_knowledge_cutoff": "2026-07-27T01:00:00Z",
   "default_branch": "main",
   "remote_default_sha_at_audit": "66120c1211d7f5bb2c7f5f440e582d5c059f79ce",

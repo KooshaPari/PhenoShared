@@ -5,9 +5,9 @@ import (
 	"time"
 
 	"github.com/spf13/cobra"
-	"github.com/<REDACTED>/pheno-cli/internal/audit"
-	"github.com/<REDACTED>/pheno-cli/internal/detect"
-	"github.com/<REDACTED>/pheno-cli/internal/discover"
+	"github.com/KooshaPari/pheno-cli/internal/audit"
+	"github.com/KooshaPari/pheno-cli/internal/detect"
+	"github.com/KooshaPari/pheno-cli/internal/discover"
 )
 
 var auditCmd = &cobra.Command{

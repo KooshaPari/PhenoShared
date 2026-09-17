@@ -23,7 +23,7 @@ export default defineConfig({
       }
     ],
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/KooshaPari/Logify' }
+      { icon: 'github', link: 'https://github.com/<REDACTED>/Logify' }
     ],
     footer: {
       message: 'Released under the MIT OR Apache-2.0 license.',

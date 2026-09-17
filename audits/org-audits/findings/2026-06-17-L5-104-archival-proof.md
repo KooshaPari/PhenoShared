@@ -37,8 +37,8 @@ $(gh auth status 2>&1 | head -10)
 
 | Dmouse92 repo | Absorbed into | PR | Substrate |
 |---|---|---|---|
-| dispatch-mcp | <REDACTED>/pheno-mcp-router (3 PRs) + <REDACTED>/dispatch-mcp (1 cherry-pick) + <REDACTED>/phenotype-ops (1 docker) | [PR#1](https://github.com/<REDACTED>/dispatch-mcp/pull/1) + [pheno-mcp-router#1](https://github.com/<REDACTED>/pheno-mcp-router/pull/1) + [pheno-mcp-router#2](https://github.com/<REDACTED>/pheno-mcp-router/pull/2) + [pheno-mcp-router#3](https://github.com/<REDACTED>/pheno-mcp-router/pull/3) + [phenotype-ops#2](https://github.com/<REDACTED>/phenotype-ops/pull/2) | pheno-mcp-router (ADR-013) |
-| pheno | <REDACTED>/phenotype-config | [phenotype-config#1](https://github.com/<REDACTED>/phenotype-config/pull/1) | phenotype-config (ADR-022) |
+| dispatch-mcp | <REDACTED>/pheno-mcp-router (3 PRs) + <REDACTED>/dispatch-mcp (1 cherry-pick) + <REDACTED>/phenotype-ops (1 docker) | [PR#1](https://github.com/KooshaPari/dispatch-mcp/pull/1) + [pheno-mcp-router#1](https://github.com/KooshaPari/pheno-mcp-router/pull/1) + [pheno-mcp-router#2](https://github.com/KooshaPari/pheno-mcp-router/pull/2) + [pheno-mcp-router#3](https://github.com/KooshaPari/pheno-mcp-router/pull/3) + [phenotype-ops#2](https://github.com/KooshaPari/phenotype-ops/pull/2) | pheno-mcp-router (ADR-013) |
+| pheno | <REDACTED>/phenotype-config | [phenotype-config#1](https://github.com/KooshaPari/phenotype-config/pull/1) | phenotype-config (ADR-022) |
 | AgilePlus | (1 commit verification deferred) | TBD | AgilePlus |
 | 14 bulk mirrors | archive only (0 unique content) | n/a | n/a |
 | forgecode | archive only (0/378 unique Phenotype branches) | n/a | n/a |

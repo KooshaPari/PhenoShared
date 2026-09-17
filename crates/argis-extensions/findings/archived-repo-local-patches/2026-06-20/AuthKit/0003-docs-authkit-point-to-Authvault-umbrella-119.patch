@@ -13,7 +13,7 @@ index 6b0eedd..7cb6247 100644
 +++ b/README.md
 @@ -37,7 +37,7 @@ # AuthKit
  [![License](https://img.shields.io/github/license/<REDACTED>/AuthKit)](LICENSE)
- [![Phenotype](https://img.shields.io/badge/Phenotype-org-blueviolet)](https://github.com/<REDACTED>)
+ [![Phenotype](https://img.shields.io/badge/Phenotype-org-blueviolet)](https://github.com/KooshaPari)
  
 -> **Status:** Pre-extraction staging repo. Not a published SDK.
 +> **Status:** Pre-extraction staging repo. Not a published SDK. Canonical auth umbrella: `Authvault`.

@@ -130,7 +130,7 @@ audit required for the archive action.
 
 ```bash
 # Source repo was archived (not deleted); restore from local clone + GitHub archive
-git clone https://github.com/<REDACTED>/phenotype-landing.git /tmp/phenotype-landing-restore
+git clone https://github.com/KooshaPari/phenotype-landing.git /tmp/phenotype-landing-restore
 # Forensic: see git log for the airlock-v2 auto-commit + subtree merges
 ```
 

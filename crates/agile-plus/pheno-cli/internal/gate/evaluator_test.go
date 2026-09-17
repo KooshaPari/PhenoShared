@@ -4,7 +4,7 @@ import (
 	"context"
 	"testing"
 
-	"github.com/<REDACTED>/pheno-cli/internal/adapters"
+	"github.com/KooshaPari/pheno-cli/internal/adapters"
 )
 
 func TestValidateChannelTransition(t *testing.T) {

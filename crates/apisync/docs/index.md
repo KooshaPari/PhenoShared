@@ -55,7 +55,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
 
 ## Links
 
-- [Repository](https://github.com/<REDACTED>/Apisync)
+- [Repository](https://github.com/KooshaPari/Apisync)
 - [Installation](./installation) · [Quick Start](./quickstart)
 - [API Reference](./api) · [Architecture](./architecture)
 - [User Journeys](./journeys/) · [User Stories](./stories/)

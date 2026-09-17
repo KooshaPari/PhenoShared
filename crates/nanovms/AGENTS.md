@@ -12,7 +12,7 @@
 
 ```bash
 # Clone and setup
-git clone https://github.com/<REDACTED>/nanovms.git
+git clone https://github.com/KooshaPari/nanovms.git
 cd nanovms
 go mod download
 

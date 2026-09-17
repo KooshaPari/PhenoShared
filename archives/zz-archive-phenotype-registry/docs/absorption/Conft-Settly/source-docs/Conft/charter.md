@@ -32,7 +32,7 @@ TypeScript configuration edge for the config role (settly companion).
 | SOTA | [SOTA.md](SOTA.md) |
 | OKF | [okf/manifest.okf.yaml](okf/manifest.okf.yaml) |
 
-Authority: [phenotype-registry DOMAIN_ROLES](https://github.com/<REDACTED>/phenotype-registry/blob/main/DOMAIN_ROLES.md)
+Authority: [phenotype-registry DOMAIN_ROLES](https://github.com/KooshaPari/phenotype-registry/blob/main/DOMAIN_ROLES.md)
 
 ## Decision rights
 

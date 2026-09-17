@@ -1,4 +1,4 @@
-//! Parse the [`ECOSYSTEM_MAP.md`](https://github.com/<REDACTED>/phenotype-registry/blob/main/ECOSYSTEM_MAP.md)
+//! Parse the [`ECOSYSTEM_MAP.md`](https://github.com/KooshaPari/phenotype-registry/blob/main/ECOSYSTEM_MAP.md)
 //! markdown format into structured [`RepoEntry`] records.
 //!
 //! The ecosystem map contains several parseable table formats:

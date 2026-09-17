@@ -6,7 +6,7 @@
   "active_sources": [
     {
       "name": "Melosviz",
-      "remote": "https://github.com/<REDACTED>/Melosviz",
+      "remote": "https://github.com/KooshaPari/Melosviz",
       "visibility": "public",
       "archived": false,
       "default_branch": "main",
@@ -19,7 +19,7 @@
     },
     {
       "name": "backend (melosviz package)",
-      "remote": "https://github.com/<REDACTED>/backend",
+      "remote": "https://github.com/KooshaPari/backend",
       "visibility": "private",
       "archived": false,
       "default_branch": "main",

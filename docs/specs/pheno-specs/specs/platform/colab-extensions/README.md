@@ -3,7 +3,7 @@
 Migrated from archived `<REDACTED>/phenotype-colab-extensions` (2026-06-16).
 
 ## Runtime home
-- [HeliosLab](https://github.com/<REDACTED>/HeliosLab) — `webflow-plugin/`, `agileplus-specs/`
+- [HeliosLab](https://github.com/KooshaPari/HeliosLab) — `webflow-plugin/`, `agileplus-specs/`
 
 ## FR reconciliation notes
 HeliosLab implementation diverges from original FR paths:

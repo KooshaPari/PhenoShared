@@ -4,7 +4,7 @@ version = "0.1.0"
 edition = "2021"
 description = "Terminal utilities: clipboard, interception, image processing, shell hooks"
 license = "MIT OR Apache-2.0"
-repository = "https://github.com/<REDACTED>/phenoUtils"
+repository = "https://github.com/KooshaPari/phenoUtils"
 
 [dependencies]
 tokio = { workspace = true }

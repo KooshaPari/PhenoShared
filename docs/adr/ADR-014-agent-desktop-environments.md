@@ -79,9 +79,9 @@ import (
     "image"
     "time"
 
-    "github.com/<REDACTED>/nanovms/pkg/vm"
-    "github.com/<REDACTED>/nanovms/pkg/display"
-    "github.com/<REDACTED>/nanovms/pkg/input"
+    "github.com/KooshaPari/nanovms/pkg/vm"
+    "github.com/KooshaPari/nanovms/pkg/display"
+    "github.com/KooshaPari/nanovms/pkg/input"
 )
 
 // DesktopVM is a VM configured for AI agent use
@@ -197,7 +197,7 @@ import (
     "image"
     "time"
 
-    "github.com/<REDACTED>/nanovms/pkg/agent/desktop"
+    "github.com/KooshaPari/nanovms/pkg/agent/desktop"
 )
 
 // ComputerUse implements the computer use API for AI agents
@@ -306,7 +306,7 @@ import (
     "regexp"
     "strings"
 
-    "github.com/<REDACTED>/nanovms/pkg/vm"
+    "github.com/KooshaPari/nanovms/pkg/vm"
 )
 
 type BrowserAgent struct {
@@ -391,7 +391,7 @@ import (
     "sync"
     "time"
 
-    "github.com/<REDACTED>/nanovms/pkg/agent/desktop"
+    "github.com/KooshaPari/nanovms/pkg/agent/desktop"
 )
 
 type Agent struct {
@@ -568,7 +568,7 @@ import (
     "sync"
     "time"
 
-    "github.com/<REDACTED>/nanovms/pkg/vm"
+    "github.com/KooshaPari/nanovms/pkg/vm"
 )
 
 // VNCBridge provides VNC access to desktop VM
@@ -666,7 +666,7 @@ import (
     "context"
     "fmt"
 
-    "github.com/<REDACTED>/nanovms/pkg/vm"
+    "github.com/KooshaPari/nanovms/pkg/vm"
 )
 
 type Key uint

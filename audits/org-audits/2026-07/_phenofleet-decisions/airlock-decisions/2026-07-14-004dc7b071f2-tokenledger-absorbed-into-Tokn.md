@@ -1,6 +1,6 @@
 # Airlock Decision: tokenledger → <REDACTED>/Tokn
 
-**Decision:** Absorbed into [`<REDACTED>/Tokn`](https://github.com/<REDACTED>/Tokn) as a workspace crate. No recreation needed.
+**Decision:** Absorbed into [`<REDACTED>/Tokn`](https://github.com/KooshaPari/Tokn) as a workspace crate. No recreation needed.
 **Decision date:** 2026-07-14
 **Decision author:** Forge (automated inventory + absorption probe)
 
@@ -11,7 +11,7 @@
 | field | value |
 |---|---|
 | airlock id | `004dc7b071f2` |
-| original upstream | `github.com/<REDACTED>/tokenledger.git` (now MISSING on GitHub) |
+| original upstream | `github.com/KooshaPari/tokenledger.git` (now MISSING on GitHub) |
 | bare mirror | `/Users/<REDACTED>/.airlock/repos/004dc7b071f2.git/` |
 | worktree | `/Users/<REDACTED>/.airlock/worktrees/004dc7b071f2/` |
 | canonical working_path | `tokenledger/` |
@@ -28,7 +28,7 @@
 
 ## Absorption target
 
-**Primary target:** [`<REDACTED>/Tokn`](https://github.com/<REDACTED>/Tokn) (active, last push 2026-07-02)
+**Primary target:** [`<REDACTED>/Tokn`](https://github.com/KooshaPari/Tokn) (active, last push 2026-07-02)
 
 ---
 
@@ -76,7 +76,7 @@ done
 | airlock worktree | `/Users/<REDACTED>/.airlock/worktrees/004dc7b071f2/` (detached HEAD — scratch) |
 | full airlock inventory | `~/CodeProjects/Phenotype/repos/.airlock-inventory-2026-07-14.json` |
 | absorption probe | `~/CodeProjects/Phenotype/repos/.airlock-absorption-probe-2026-07-14.json` |
-| remote backup | https://gist.github.com/<REDACTED>/3e6038adbfc4fe4c38965d02d0fc867e |
+| remote backup | https://gist.github.com/KooshaPari/3e6038adbfc4fe4c38965d02d0fc867e |
 | probe scripts (re-runnable) | `~/CodeProjects/Phenotype/repos/_airlock-inventory-probe.py`, `~/CodeProjects/Phenotype/repos/_airlock-absorption-probe.py` |
-| upstream URL (gone) | https://github.com/<REDACTED>/tokenledger |
-| absorption target | https://github.com/<REDACTED>/Tokn |
+| upstream URL (gone) | https://github.com/KooshaPari/tokenledger |
+| absorption target | https://github.com/KooshaPari/Tokn |

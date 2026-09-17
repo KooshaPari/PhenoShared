@@ -2,7 +2,7 @@
 
 **Author:** forge-2 (research, no code changes)
 **Date:** 2026-06-20
-**Repo:** `github.com/<REDACTED>/argis-extensions` (this checkout is **module** `github.com/<REDACTED>/bifrost-extensions`)
+**Repo:** `github.com/KooshaPari/argis-extensions` (this checkout is **module** `github.com/KooshaPari/bifrost-extensions`)
 **Working dir:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos/argis-extensions`
 **v11 context:** v11 branch `chore/orch-v11-016-tier0-2026-06-20` @ `7184fbb`. Local `main` HEAD = `e417124` (per `git rev-parse HEAD`). `origin/main` = `beca432`. T34 branch `chore/t34-bifrost-bump-2026-06-20` already exists at `a1751bd` (on top of T34 commit `6bbbc2d`) — T34 was attempted in a prior session and **not merged into `main`**.
 

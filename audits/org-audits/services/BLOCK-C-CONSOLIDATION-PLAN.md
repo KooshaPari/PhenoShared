@@ -2,7 +2,7 @@
 
 **Plan date:** 2026-06-16  
 **Source audit:** [`BLOCK-C-AUDIT.md`](./BLOCK-C-AUDIT.md) (2026-06-15)  
-**Repo:** https://github.com/<REDACTED>/services  
+**Repo:** https://github.com/KooshaPari/services  
 **Base branch:** `main` (promote to default — see W2.2)  
 **Scope:** SBOM registry hygiene and governance; no application source code exists in this repo.
 

@@ -61,7 +61,7 @@ States stored in `registry/disposition-index.json` per `disposition_id`.
 
 AgilePlus owns plan/DAG/merge. Adapters: **forge** (primary), cursor-agent, thegent, codex-fork (downstream).
 
-See [HexaKit harness-api](https://github.com/<REDACTED>/HexaKit/blob/main/docs/contracts/harness-api.md).
+See [HexaKit harness-api](https://github.com/KooshaPari/HexaKit/blob/main/docs/contracts/harness-api.md).
 
 ---
 

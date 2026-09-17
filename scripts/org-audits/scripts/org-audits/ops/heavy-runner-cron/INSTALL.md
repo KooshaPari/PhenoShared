@@ -162,7 +162,7 @@ gh label list --repo <REDACTED>/phenotype-org-audits \
   | grep -E 'drift-detector|predictive-discipline|graduation-discipline'
 ```
 
-Expected output (created by this PR, [<REDACTED>/phenotype-org-audits#XX](https://github.com/<REDACTED>/phenotype-org-audits/pull/XX)):
+Expected output (created by this PR, [<REDACTED>/phenotype-org-audits#XX](https://github.com/KooshaPari/phenotype-org-audits/pull/XX)):
 
 ```
 drift-detector         Issues created by the weekly heavy-runner cron (L74 pheno-drift-detector)

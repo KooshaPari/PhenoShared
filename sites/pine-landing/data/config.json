@@ -17,8 +17,8 @@
     "CI + cargo-deny"
   ],
   "links": {
-    "github": "https://github.com/<REDACTED>/Pine",
+    "github": "https://github.com/KooshaPari/Pine",
     "docs": "https://pine.phenotype.space/docs",
-    "releases": "https://github.com/<REDACTED>/Pine/releases"
+    "releases": "https://github.com/KooshaPari/Pine/releases"
   }
 }

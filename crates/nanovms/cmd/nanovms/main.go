@@ -7,7 +7,7 @@ import (
 	"log"
 	"runtime"
 
-	"github.com/<REDACTED>/nanovms/internal/domain"
+	"github.com/KooshaPari/nanovms/internal/domain"
 )
 
 // Deunan provides multi-platform VM and sandbox orchestration.

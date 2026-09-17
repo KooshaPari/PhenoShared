@@ -6,7 +6,7 @@ We take security seriously. **Please do not file public issues for security vuln
 
 To report a vulnerability, use GitHub's private vulnerability reporting:
 
-  https://github.com/<REDACTED>/MCPForge/security/advisories/new
+  https://github.com/KooshaPari/MCPForge/security/advisories/new
 
 Provide:
 - Affected version(s) and component(s)

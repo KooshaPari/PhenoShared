@@ -8,9 +8,9 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/<REDACTED>/MCPForge/internal/lsp"
-	"github.com/<REDACTED>/MCPForge/internal/protocol"
-	"github.com/<REDACTED>/MCPForge/internal/utilities"
+	"github.com/KooshaPari/MCPForge/internal/lsp"
+	"github.com/KooshaPari/MCPForge/internal/protocol"
+	"github.com/KooshaPari/MCPForge/internal/utilities"
 )
 
 type TextEdit struct {

@@ -122,7 +122,7 @@ fn render_readme(repo_name: &str, domain_id: &str) -> String {
     format!(
         r#"# {repo_name}
 
-Fleet repository bootstrapped with [`hexakit init`](https://github.com/<REDACTED>/HexaKit) (domain: `{domain_id}`).
+Fleet repository bootstrapped with [`hexakit init`](https://github.com/KooshaPari/HexaKit) (domain: `{domain_id}`).
 
 See [`BOUNDARY.md`](./BOUNDARY.md) for domain ownership and stack policy.
 
@@ -134,7 +134,7 @@ Hooks live under [`.githooks/`](./.githooks/). Install with:
 git config core.hooksPath .githooks
 ```
 
-Canonical hook bundles are published from [TestingKit](https://github.com/<REDACTED>/TestingKit). Replace placeholder scripts when wiring a production hook set.
+Canonical hook bundles are published from [TestingKit](https://github.com/KooshaPari/TestingKit). Replace placeholder scripts when wiring a production hook set.
 
 ## CI workflows
 

@@ -10,7 +10,7 @@
   "role": "agentic-coding-provider",
   "domain_role": "agent-runtime-provider",
   "boundary": "coding-agent-cli-and-provider-adapter",
-  "gh_url": "https://github.com/<REDACTED>/forgecode",
+  "gh_url": "https://github.com/KooshaPari/forgecode",
   "default_branch": "main",
   "remote_default_sha_at_audit": "b7007fff1c9c58c3bd4d7f45ac8cb1748dc08f19",
   "upstream": "https://github.com/tailcallhq/forgecode",

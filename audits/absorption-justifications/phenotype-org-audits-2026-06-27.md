@@ -5,7 +5,7 @@
 ## Source
 
 - **Repo:** `<REDACTED>/phenotype-org-audits`
-- **GitHub URL:** https://github.com/<REDACTED>/phenotype-org-audits
+- **GitHub URL:** https://github.com/KooshaPari/phenotype-org-audits
 - **Archived at:** false
 - **Default branch at audit time:** `main`
 - **Visibility at audit time:** private
@@ -24,7 +24,7 @@
 
 ## Target
 
-- **Receiving repo:** `<REDACTED>/phenotype-infra` (https://github.com/<REDACTED>/phenotype-infra)
+- **Receiving repo:** `<REDACTED>/phenotype-infra` (https://github.com/KooshaPari/phenotype-infra)
 - **Receiving path:** `docs/absorbed-from-phenotype-org-audits/`
 - **Local mirror path:** `C:\Users\koosh\phenotype-org-audits` (live local clone)
 - **Bundle file:** none (live repo; no bundle needed)
@@ -132,7 +132,7 @@ No exceptions to the AFFIRM verdict are granted.
 
 ```bash
 # Live repo (active source): restore by re-cloning the upstream.
-git clone --bare https://github.com/<REDACTED>/phenotype-org-audits.git phenotype-org-audits.git
+git clone --bare https://github.com/KooshaPari/phenotype-org-audits.git phenotype-org-audits.git
 
 # Disaster-recovery posture:
 gh api repos/<REDACTED>/phenotype-org-audits            # confirm repo still exists (200 OK)
@@ -146,7 +146,7 @@ sha256sum /backup/phenotype-org-audits-*.bundle > \
 ```
 
 **Restore prerequisites:** GitHub org read access for `<REDACTED>/phenotype-org-audits`.
-**Documented restore path:** `git clone --bare https://github.com/<REDACTED>/phenotype-org-audits.git`.
+**Documented restore path:** `git clone --bare https://github.com/KooshaPari/phenotype-org-audits.git`.
 **Bundle integrity:** SHA-256 checksum recorded at bundle time.
 
 ## Gate Tooling Reference

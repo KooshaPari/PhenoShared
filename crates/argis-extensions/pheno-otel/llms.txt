@@ -79,7 +79,7 @@
 - [findings/71-pillar-2026-06-17-schema.md](../../findings/71-pillar-2026-06-17-schema.md): 71-pillar framework schema (ADR-024).
 - [findings/71-pillar-2026-06-17-mapping.md](../../findings/71-pillar-2026-06-17-mapping.md): L1-L30 → L1-L71 crosswalk.
 - [pheno-worklog-schema v2.1](../../pheno-worklog-schema/SPEC-v2.1.md): worklog validator CLI.
-- [pheno-ci-templates](https://github.com/<REDACTED>/pheno-ci-templates): CI gate templates (per ADR-042 element 6).
+- [pheno-ci-templates](https://github.com/KooshaPari/pheno-ci-templates): CI gate templates (per ADR-042 element 6).
 - [OpenTelemetry specification](https://opentelemetry.io/docs/specs/otlp/): the wire format this crate exports.
 
 <!--

@@ -2,8 +2,8 @@
 
 **Date:** 2026-06-17  
 **Disposition row:** HexaKit DISPOSITION #49 — `Traceon/`  
-**Canonical repo:** https://github.com/<REDACTED>/PhenoObservability  
-**Absorption map:** [wave-a-absorption.md](https://github.com/<REDACTED>/PhenoObservability/blob/main/docs/disposition/wave-a-absorption.md)
+**Canonical repo:** https://github.com/KooshaPari/PhenoObservability  
+**Absorption map:** [wave-a-absorption.md](https://github.com/KooshaPari/PhenoObservability/blob/main/docs/disposition/wave-a-absorption.md)
 
 ## What changed
 

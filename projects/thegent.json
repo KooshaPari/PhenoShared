@@ -9,7 +9,7 @@
   "role": "agent-orchestration-runtime",
   "domain_role": "agent-runtime",
   "boundary": "agent-execution-and-governance",
-  "gh_url": "https://github.com/<REDACTED>/thegent",
+  "gh_url": "https://github.com/KooshaPari/thegent",
   "remote_default_sha_at_audit": "6a142313cdc1e68812a49d6932fe334828808b83",
   "remote_pushed_at": "2026-07-26T04:21:59Z",
   "disposition": "KEEP_CANONICAL",

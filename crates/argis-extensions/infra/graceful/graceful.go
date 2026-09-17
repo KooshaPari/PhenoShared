@@ -8,7 +8,7 @@ import (
 
 	"github.com/maximhq/bifrost/core/schemas"
 
-	"github.com/<REDACTED>/bifrost-extensions/infra/circuitbreaker"
+	"github.com/KooshaPari/bifrost-extensions/infra/circuitbreaker"
 )
 
 // PluginManager manages plugins with graceful degradation

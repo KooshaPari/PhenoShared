@@ -6,7 +6,7 @@
 
 ## Reason
 
-Profila's profiling and observability functionality has been superseded by [ObservabilityKit](https://github.com/<REDACTED>/ObservabilityKit) — a multi-language SDK workspace providing OpenTelemetry-native traces, metrics, structured logging, and health probes across Rust, Python, Go, and TypeScript.
+Profila's profiling and observability functionality has been superseded by [ObservabilityKit](https://github.com/KooshaPari/ObservabilityKit) — a multi-language SDK workspace providing OpenTelemetry-native traces, metrics, structured logging, and health probes across Rust, Python, Go, and TypeScript.
 
 See [`MOVED_TO_OBSERVABILITYKIT.md`](./MOVED_TO_OBSERVABILITYKIT.md) for the full script mapping.
 
@@ -14,7 +14,7 @@ See [`MOVED_TO_OBSERVABILITYKIT.md`](./MOVED_TO_OBSERVABILITYKIT.md) for the ful
 
 | Capability | Replacement |
 |---|---|
-| System profiling & metrics | [ObservabilityKit](https://github.com/<REDACTED>/ObservabilityKit) — `phenotype-metrics`, `phenotype-health-runtime`, `phenotype-observability-client` |
+| System profiling & metrics | [ObservabilityKit](https://github.com/KooshaPari/ObservabilityKit) — `phenotype-metrics`, `phenotype-health-runtime`, `phenotype-observability-client` |
 | Code complexity analysis | ObservabilityKit `python/performance_kit/scripts/analyze_complexity.py` |
 | Continuous monitoring | ObservabilityKit `python/performance_kit/scripts/profiler.py` |
 | Performance benchmarking | ObservabilityKit `python/performance_kit/scripts/benchmark.py` |

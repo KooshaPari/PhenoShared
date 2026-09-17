@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/<REDACTED>/pheno-cli/internal/audit"
-	"github.com/<REDACTED>/pheno-cli/internal/detect"
-	"github.com/<REDACTED>/pheno-cli/internal/discover"
+	"github.com/KooshaPari/pheno-cli/internal/audit"
+	"github.com/KooshaPari/pheno-cli/internal/detect"
+	"github.com/KooshaPari/pheno-cli/internal/discover"
 	"github.com/spf13/cobra"
 )
 

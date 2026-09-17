@@ -58,4 +58,4 @@ There is no `pheno/` change to revert because no physical transfer occurred.
 - Absorption record: `audits/absorption-justifications/substrate-adapters-bundle-2026-07-17.md`
 - Disposition row: `registry/disposition-index.json` → `"<REDACTED>/substrate-adapters-bundle"`
 - Canonical source: `<REDACTED>/substrate` (AFFIRM)
-- Source repo (now archived): https://github.com/<REDACTED>/substrate-adapters-bundle
+- Source repo (now archived): https://github.com/KooshaPari/substrate-adapters-bundle

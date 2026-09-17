@@ -6,7 +6,7 @@ Global compute layer for accessing your 3090 Ti desktop via Tailscale SSH.
 
 ```bash
 # Clone and setup
-git clone https://github.com/<REDACTED>/pheno-compute-layer.git
+git clone https://github.com/KooshaPari/pheno-compute-layer.git
 cd pheno-compute-layer
 ./scripts/setup.sh
 

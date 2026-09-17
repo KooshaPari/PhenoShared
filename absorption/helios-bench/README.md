@@ -1,6 +1,6 @@
 # HeliosBench — absorption stub
 
-> **Status:** MIGRATED (stub) — unblocks future archive of [`<REDACTED>/heliosBench`](https://github.com/<REDACTED>/heliosBench)
+> **Status:** MIGRATED (stub) — unblocks future archive of [`<REDACTED>/heliosBench`](https://github.com/KooshaPari/heliosBench)
 
 **Source:** `<REDACTED>/heliosBench`  
 **Date:** 2026-06-17  
@@ -23,4 +23,4 @@ tooling bench path after full absorption.
 ## References
 
 - [`docs/absorption/HELIOS_BENCH_PORT.md`](../../docs/absorption/HELIOS_BENCH_PORT.md)
-- [`phenotype-tooling` PR #155](https://github.com/<REDACTED>/phenotype-tooling/pull/155) — router-monitor absorption pattern
+- [`phenotype-tooling` PR #155](https://github.com/KooshaPari/phenotype-tooling/pull/155) — router-monitor absorption pattern

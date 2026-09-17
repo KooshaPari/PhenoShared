@@ -1,6 +1,6 @@
 # Migrated from <REDACTED>/pheno-drift-detector on 2026-06-19 prior to repo deletion
 
-> Original source: https://github.com/<REDACTED>/pheno-drift-detector (archived 2026-06-19, L5-112)
+> Original source: https://github.com/KooshaPari/pheno-drift-detector (archived 2026-06-19, L5-112)
 > See: [findings/2026-06-19-L5-112-drift-detector-absorption.md](../../findings/2026-06-19-L5-112-drift-detector-absorption.md) for the absorption matrix.
 > Note: governance files (deny.toml, .gitattributes) are preserved as snapshots in `governance/` subdir for fleet-history provenance. They are NOT authoritative for org-audits — which has its own.
 

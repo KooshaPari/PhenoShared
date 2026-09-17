@@ -24,15 +24,15 @@ index 0000000..862fd25
 +
 +**This repository is no longer maintained.**
 +
-+Settly has been absorbed into the [Configra](https://github.com/<REDACTED>/Configra) monorepo as a workspace member crate at `crates/settly/`.
++Settly has been absorbed into the [Configra](https://github.com/KooshaPari/Configra) monorepo as a workspace member crate at `crates/settly/`.
 +
 +## Migration
 +
 +All future development, issue tracking, and releases happen in Configra:
 +
-+- **Repo:** https://github.com/<REDACTED>/Configra
++- **Repo:** https://github.com/KooshaPari/Configra
 +- **Crate path:** `crates/settly/`
-+- **Cargo dependency:** `settly = { git = "https://github.com/<REDACTED>/Configra" }` (once published)
++- **Cargo dependency:** `settly = { git = "https://github.com/KooshaPari/Configra" }` (once published)
 +
 +## History
 +
@@ -818,7 +818,7 @@ index d25c8db..15aaa0a 100644
  
 -## [0.1.0] - YYYY-MM-DD
 +> **Status**: Settly has been absorbed into the
-+> [Configra](https://github.com/<REDACTED>/Configra) mono-repo at
++> [Configra](https://github.com/KooshaPari/Configra) mono-repo at
 +> `crates/settly/`. This standalone repository is preserved for historical
 +> reference. New releases will be cut from the Configra workspace.
 +
@@ -871,8 +871,8 @@ index d25c8db..15aaa0a 100644
  
  ### Security
 +
-+[Unreleased]: https://github.com/<REDACTED>/Settly/compare/v0.1.0...HEAD
-+[0.1.0]: https://github.com/<REDACTED>/Settly/releases/tag/v0.1.0
++[Unreleased]: https://github.com/KooshaPari/Settly/compare/v0.1.0...HEAD
++[0.1.0]: https://github.com/KooshaPari/Settly/releases/tag/v0.1.0
 \ No newline at end of file
 diff --git a/CODE_OF_CONDUCT.md b/CODE_OF_CONDUCT.md
 new file mode 100644
@@ -1031,7 +1031,7 @@ index 31d37ee..2f5e63b 100644
 -3. Ensure all tests pass
 -4. Submit a Pull Request
 +> **Note**: Settly is now maintained as a crate within the
-+> [Configra](https://github.com/<REDACTED>/Configra) mono-repo at
++> [Configra](https://github.com/KooshaPari/Configra) mono-repo at
 +> `crates/settly/`. This standalone repository is preserved for historical
 +> reference. New contributions should target the Configra workspace.
 +
@@ -1066,7 +1066,7 @@ index 31d37ee..2f5e63b 100644
 +### Clone and Build
 +
 +```bash
-+git clone https://github.com/<REDACTED>/Settly.git
++git clone https://github.com/KooshaPari/Settly.git
 +cd Settly
 +cargo build
 +cargo test
@@ -1198,7 +1198,7 @@ index 9015d1c..ecec314 100644
 +## Supported Versions
 +
 +Settly is now maintained as a crate within the
-+[Configra](https://github.com/<REDACTED>/Configra) mono-repo. The versions of
++[Configra](https://github.com/KooshaPari/Configra) mono-repo. The versions of
 +this standalone repo listed below are receiving security updates:
 +
 +| Version | Supported          |

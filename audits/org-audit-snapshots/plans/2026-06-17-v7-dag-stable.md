@@ -179,11 +179,11 @@ The 4-task reclassification sequence:
 | **T8.1** | Discovery: list all 26 Dmouse92 repos; cross-reference with <REDACTED> to find 20 Phenotype-related | P0 | orchestrator | none | `gh repo list Dmouse92 --limit 200` returns 26; cross-ref matrix built |
 | **T8.2** | Per-cluster analysis: 4 parallel forge subagents (dispatch-mcp / pheno ADR-012 / 14 bulk / forgecode) | P0 | 4 forge subagents | T8.1 | 4 sub-plans written: dispatch-mcp (527 lines), pheno-ADR-012 (414 lines), bulk-rust-ts (999 lines), forgecode (305 lines) |
 | **T8.3** | Substrate publication: `pheno-mcp-router` (local-only) → `<REDACTED>/pheno-mcp-router` (public) | P0 | subagent E | T8.2 | `gh api repos/<REDACTED>/pheno-mcp-router` returns 200; default branch = `chore/l3-57-pheno-plugin-registry-2026-06-11` |
-| **T8.4** | Substrate ports: 6 modules (`tiers/cost/budget/quota/audit/cost_middleware.py`) → `pheno-mcp-router/src/pheno_mcp_router/` | P0 | subagent E | T8.3 | PR [pheno-mcp-router#1](https://github.com/<REDACTED>/pheno-mcp-router/pull/1) opened; 187/187 tests pass |
-| **T8.5** | Substrate adapters: `LlamaAdapter` (LlmPort) + `OpenAICompatAdapter` (LlmPort) | P0 | subagent E | T8.3 | PR [pheno-mcp-router#2](https://github.com/<REDACTED>/pheno-mcp-router/pull/2) + PR [#3](https://github.com/<REDACTED>/pheno-mcp-router/pull/3) opened |
-| **T8.6** | Cherry-pick w1-1 deprecation doc to dispatch-mcp | P0 | subagent E | none | PR [dispatch-mcp#1](https://github.com/<REDACTED>/dispatch-mcp/pull/1) opened; 1 file +22 |
-| **T8.7** | Port CANONICAL.md markers + SLSA doc to phenotype-config substrate | P0 | subagent F | none | PR [phenotype-config#1](https://github.com/<REDACTED>/phenotype-config/pull/1) opened; 2 CANONICAL.md + docs/slsa.md |
-| **T8.8** | Port docker files to phenotype-ops (federated service per ADR-023) | P0 | subagent E | none | PR [phenotype-ops#2](https://github.com/<REDACTED>/phenotype-ops/pull/2) opened; Dockerfile + compose + README |
+| **T8.4** | Substrate ports: 6 modules (`tiers/cost/budget/quota/audit/cost_middleware.py`) → `pheno-mcp-router/src/pheno_mcp_router/` | P0 | subagent E | T8.3 | PR [pheno-mcp-router#1](https://github.com/KooshaPari/pheno-mcp-router/pull/1) opened; 187/187 tests pass |
+| **T8.5** | Substrate adapters: `LlamaAdapter` (LlmPort) + `OpenAICompatAdapter` (LlmPort) | P0 | subagent E | T8.3 | PR [pheno-mcp-router#2](https://github.com/KooshaPari/pheno-mcp-router/pull/2) + PR [#3](https://github.com/KooshaPari/pheno-mcp-router/pull/3) opened |
+| **T8.6** | Cherry-pick w1-1 deprecation doc to dispatch-mcp | P0 | subagent E | none | PR [dispatch-mcp#1](https://github.com/KooshaPari/dispatch-mcp/pull/1) opened; 1 file +22 |
+| **T8.7** | Port CANONICAL.md markers + SLSA doc to phenotype-config substrate | P0 | subagent F | none | PR [phenotype-config#1](https://github.com/KooshaPari/phenotype-config/pull/1) opened; 2 CANONICAL.md + docs/slsa.md |
+| **T8.8** | Port docker files to phenotype-ops (federated service per ADR-023) | P0 | subagent E | none | PR [phenotype-ops#2](https://github.com/KooshaPari/phenotype-ops/pull/2) opened; Dockerfile + compose + README |
 | **T8.9** | Archive 18 Dmouse92 repos via Dmouse92 auth | P0 | orchestrator | T8.4-T8.8 | `gh auth switch --user Dmouse92`; `gh repo archive` for all 20 Phenotype-related Dmouse92 repos (2 already archived: PhenoProc, Nanovms on KP) |
 | **T8.10** | Update governance docs (AGENTS.md + STATUS.md + SSOT.md) with ADR-029 + migration section | P0 | orchestrator | T8.9 | All 3 docs updated; ADR count 28 → 29 |
 
@@ -349,12 +349,12 @@ All 38 PRs across 8 tracks. PR# column uses estimated GitHub PR numbers (<REDACT
 | **PR-160** | chore(meta): add meta-bundle to pheno-port-adapter | `<REDACTED>/pheno-port-adapter` | T1.6d | PENDING | orchestrator | — |
 | **PR-161** | chore(meta): add meta-bundle to pheno-tracing | `<REDACTED>/pheno-tracing` | T1.6e | PENDING | orchestrator | — |
 | **PR-162** | docs(ci): document HOOKS_SKIP=1 and SKIP= env vars (per P47) | `<REDACTED>/phenotype-tooling` | T1.7 | PENDING | orchestrator | — |
-| **PR-163** | feat(cost): port tiers/cost/budget/quota/audit/cost_middleware from dispatch-mcp W2-1 (L5-104.1) | `<REDACTED>/pheno-mcp-router` | T8.4 | **OPEN** [#1](https://github.com/<REDACTED>/pheno-mcp-router/pull/1) | subagent E | forge-subagent-E |
-| **PR-164** | feat(adapters): add LlamaAdapter (LlmPort) — server + direct modes (L5-104.1) | `<REDACTED>/pheno-mcp-router` | T8.5a | **OPEN** [#2](https://github.com/<REDACTED>/pheno-mcp-router/pull/2) | subagent E | forge-subagent-E |
-| **PR-165** | feat(adapters): add OpenAICompatAdapter (LlmPort) — 429/5xx retry + 17 tests (L5-104.1) | `<REDACTED>/pheno-mcp-router` | T8.5b | **OPEN** [#3](https://github.com/<REDACTED>/pheno-mcp-router/pull/3) | subagent E | forge-subagent-E |
-| **PR-166** | feat(docs): port CANONICAL.md markers + SLSA doc from pheno ADR-012 (L5-104.2) | `<REDACTED>/phenotype-config` | T8.7 | **OPEN** [#1](https://github.com/<REDACTED>/phenotype-config/pull/1) | subagent F | forge-subagent-F |
-| **PR-167** | feat(devops): add llama-cpp docker setup (Dockerfile + compose) (L5-104.1) | `<REDACTED>/phenotype-ops` | T8.8 | **OPEN** [#2](https://github.com/<REDACTED>/phenotype-ops/pull/2) | subagent E | forge-subagent-E |
-| **PR-168** | docs: cherry-pick cheap-llm-mcp deprecation notice (W1.1, ADR-008) | `<REDACTED>/dispatch-mcp` | T8.6 | **OPEN** [#1](https://github.com/<REDACTED>/dispatch-mcp/pull/1) | subagent E | forge-subagent-E |
+| **PR-163** | feat(cost): port tiers/cost/budget/quota/audit/cost_middleware from dispatch-mcp W2-1 (L5-104.1) | `<REDACTED>/pheno-mcp-router` | T8.4 | **OPEN** [#1](https://github.com/KooshaPari/pheno-mcp-router/pull/1) | subagent E | forge-subagent-E |
+| **PR-164** | feat(adapters): add LlamaAdapter (LlmPort) — server + direct modes (L5-104.1) | `<REDACTED>/pheno-mcp-router` | T8.5a | **OPEN** [#2](https://github.com/KooshaPari/pheno-mcp-router/pull/2) | subagent E | forge-subagent-E |
+| **PR-165** | feat(adapters): add OpenAICompatAdapter (LlmPort) — 429/5xx retry + 17 tests (L5-104.1) | `<REDACTED>/pheno-mcp-router` | T8.5b | **OPEN** [#3](https://github.com/KooshaPari/pheno-mcp-router/pull/3) | subagent E | forge-subagent-E |
+| **PR-166** | feat(docs): port CANONICAL.md markers + SLSA doc from pheno ADR-012 (L5-104.2) | `<REDACTED>/phenotype-config` | T8.7 | **OPEN** [#1](https://github.com/KooshaPari/phenotype-config/pull/1) | subagent F | forge-subagent-F |
+| **PR-167** | feat(devops): add llama-cpp docker setup (Dockerfile + compose) (L5-104.1) | `<REDACTED>/phenotype-ops` | T8.8 | **OPEN** [#2](https://github.com/KooshaPari/phenotype-ops/pull/2) | subagent E | forge-subagent-E |
+| **PR-168** | docs: cherry-pick cheap-llm-mcp deprecation notice (W1.1, ADR-008) | `<REDACTED>/dispatch-mcp` | T8.6 | **OPEN** [#1](https://github.com/KooshaPari/dispatch-mcp/pull/1) | subagent E | forge-subagent-E |
 
 **Total: 38 PRs** (re-counted from the matrix: 9 in T2 + 10 in T3 + 4 in T4 + 4 in T5 + 7 in T1 [1 governance + 5 meta + 1 ci-spec] + 6 in T8 = 40. Wait — recount: T1 = 1 + 5 + 1 = 7; T2 = 9; T3 = 10; T4 = 4; T5 = 4; T6 = 0; T7 = 0; T8 = 6. Total = 7+9+10+4+4+0+0+6 = **40 PRs** in the matrix. The § 2 headline of "38" is the **operationally meaningful** count. The matrix reports 40 to include the do-not-merge decision PR #133 and the ci-spec PR #162. **Reconciliation: 40 PRs in the matrix; § 2 reports "38 PRs" as the rounded target. Authoritative count is 40 per the matrix.**)
 
@@ -577,7 +577,7 @@ Scope:
 2. Verify AGENTS.md is up-to-date (mentions PAUSED + archival per ADR-029)
 3. Append a final section to README.md:
    "## Archived (2026-06-17)\n\nThis repo has been archived per ADR-029.
-    See https://github.com/<REDACTED>/phenotype-org-audits/blob/main/audits/
+    See https://github.com/KooshaPari/phenotype-org-audits/blob/main/audits/
     hwledger-reclassification-2026-06-17.md for the full disposition record."
 4. git add AGENTS.md README.md
 5. git commit -m "chore(hwledger): mark archived (ADR-029)"

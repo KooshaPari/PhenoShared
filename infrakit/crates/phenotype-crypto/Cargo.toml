@@ -4,7 +4,7 @@ version = "0.2.0"
 edition = "2021"
 license = "MIT"
 authors = ["Phenotype Team"]
-repository = "https://github.com/<REDACTED>/phenotype-infrakit"
+repository = "https://github.com/KooshaPari/phenotype-infrakit"
 description = "Cryptographic utilities for Phenotype — hashing, symmetric encryption, key derivation, and HMAC signatures"
 
 [dependencies]

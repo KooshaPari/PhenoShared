@@ -165,7 +165,7 @@ Restore posture for `ARCHIVE/DELETE_BLOCKED` is non-trivial because no archival 
 # Documented restore path: re-audit when secondary sources are revived.
 
 # (Step 1) Re-clone canonical remote for fresh audit (run on re-audit):
-#   git clone https://github.com/<REDACTED>/phenotype-go-sdk.git C:\Users\koosh\phenotype-go-sdk
+#   git clone https://github.com/KooshaPari/phenotype-go-sdk.git C:\Users\koosh\phenotype-go-sdk
 #   cd C:\Users\koosh\phenotype-go-sdk
 #   git log --all --oneline > /backup/phenotype-go-sdk-log-2026-06-23.txt
 #   sha256sum /backup/phenotype-go-sdk-log-2026-06-23.txt
@@ -177,7 +177,7 @@ Restore posture for `ARCHIVE/DELETE_BLOCKED` is non-trivial because no archival 
 #   # expected SHA-256: <hash printed at creation time, logged here>
 
 # (Step 3) Insurance bundle (run only if archival is later authorized):
-#   git clone https://github.com/<REDACTED>/phenotype-go-sdk.git /tmp/phenotype-go-sdk-final-clone
+#   git clone https://github.com/KooshaPari/phenotype-go-sdk.git /tmp/phenotype-go-sdk-final-clone
 #   cd /tmp/phenotype-go-sdk-final-clone
 #   git bundle create /backup/phenotype-go-sdk-2026-06-23.bundle --all
 #   sha256sum /backup/phenotype-go-sdk-2026-06-23.bundle | tee /backup/phenotype-go-sdk-2026-06-23.bundle.sha256
@@ -203,7 +203,7 @@ Concrete posture: **Source canonical remote remains live; no archival or deletio
 | SHA-256 (tombstone) | not yet computed — no archival in this cycle |
 | Real backup? | no — no archival performed |
 | Restore window | n/a — repo remains live |
-| Concrete re-clone path | `git clone https://github.com/<REDACTED>/phenotype-go-sdk.git` if remote is removed |
+| Concrete re-clone path | `git clone https://github.com/KooshaPari/phenotype-go-sdk.git` if remote is removed |
 | Re-audit trigger | secondary sources live (PhenoFastMCP-go, phenotype-ops-mcp) AND absorption plan ready |
 
 ## Final Recommendation

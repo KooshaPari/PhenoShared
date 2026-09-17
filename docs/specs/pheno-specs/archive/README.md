@@ -12,7 +12,7 @@ Documentation from `<REDACTED>/agent-wave` - an AI-powered agentic workflow syst
 
 ### Flowra
 Documentation from `<REDACTED>/Flowra` - a workflow automation platform concept.
-- **Status**: ✅ **MOVED** to [HexaKit/Flowra/](https://github.com/<REDACTED>/HexaKit/tree/main/Flowra)
+- **Status**: ✅ **MOVED** to [HexaKit/Flowra/](https://github.com/KooshaPari/HexaKit/tree/main/Flowra)
 - **Content**: SPEC.md (96KB), PLAN.md (45KB), CHARTER.md, ADR.md, PRD.md
 - **Integrated**: 2026-04-05 (removed from archive, now in HexaKit proper)
 

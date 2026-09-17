@@ -1,4 +1,4 @@
-module github.com/<REDACTED>/phenotype-omlx-tmp/apps/bench-cockpit/server
+module github.com/KooshaPari/phenotype-omlx-tmp/apps/bench-cockpit/server
 
 go 1.22.0
 

@@ -160,7 +160,7 @@ Restore posture for `NO_MERIT_WITH_INTENT` is non-trivial because the source doe
 
 # (Optional) Future re-push procedure if the owner recovers a local backup:
 #   cd /path/to/owner/local/smart-mcp-go
-#   git remote add origin https://github.com/<REDACTED>/smart-mcp-go.git
+#   git remote add origin https://github.com/KooshaPari/smart-mcp-go.git
 #   git push -u origin main
 #
 # (Optional) Future audit capture if the source reappears:
@@ -189,7 +189,7 @@ Concrete posture: **Source currently 404; no live remote to restore from. No bun
 | SHA-256 (tombstone) | not yet computed — no source to bundle |
 | Real backup? | no — source is 404 |
 | Restore window | none — owner-driven recovery only |
-| Concrete re-clone path | `git clone https://github.com/<REDACTED>/smart-mcp-go.git` if remote is revived |
+| Concrete re-clone path | `git clone https://github.com/KooshaPari/smart-mcp-go.git` if remote is revived |
 | Intent register | ADR-038 carries the deferred-value flag |
 
 ## Final Recommendation

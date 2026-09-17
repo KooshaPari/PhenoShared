@@ -2,8 +2,8 @@
 
 ## Source Repository
 
-- **Original**: [<REDACTED>/zz-Tokn](https://github.com/<REDACTED>/zz-Tokn)
-- **Absorbed into**: [<REDACTED>/phenotype-tooling](https://github.com/<REDACTED>/phenotype-tooling)
+- **Original**: [<REDACTED>/zz-Tokn](https://github.com/KooshaPari/zz-Tokn)
+- **Absorbed into**: [<REDACTED>/phenotype-tooling](https://github.com/KooshaPari/phenotype-tooling)
 - **Date absorbed**: 2026-09-14
 - **Original workspace version**: 0.1.5
 - **License**: MIT
@@ -122,6 +122,6 @@ Archived root-level source from zz-Tokn (original binary entry points). These fi
 ## Git History
 
 The original git history is preserved in the source repository:
-https://github.com/<REDACTED>/zz-Tokn
+https://github.com/KooshaPari/zz-Tokn
 
 This absorption copies the source code snapshot as of 2026-09-14.

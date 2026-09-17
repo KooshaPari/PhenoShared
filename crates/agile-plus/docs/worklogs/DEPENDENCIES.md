@@ -312,9 +312,9 @@ Audit of GitHub-hosted external dependencies beyond crates.io.
 
 ```toml
 # Cargo.toml
-agileplus-plugin-core = { git = "https://github.com/<REDACTED>/agileplus-plugin-core", optional = true }
-agileplus-plugin-git = { git = "https://github.com/<REDACTED>/agileplus-plugin-git", optional = true }
-agileplus-plugin-sqlite = { git = "https://github.com/<REDACTED>/agileplus-plugin-sqlite", optional = true }
+agileplus-plugin-core = { git = "https://github.com/KooshaPari/agileplus-plugin-core", optional = true }
+agileplus-plugin-git = { git = "https://github.com/KooshaPari/agileplus-plugin-git", optional = true }
+agileplus-plugin-sqlite = { git = "https://github.com/KooshaPari/agileplus-plugin-sqlite", optional = true }
 ```
 
 ### Recommendations

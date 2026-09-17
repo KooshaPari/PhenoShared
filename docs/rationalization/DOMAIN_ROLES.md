@@ -13,11 +13,11 @@ Single source of truth mapping **domain concerns** to **canonical repositories**
 
 | Domain | Canonical repo | Preferred core lang | Edge langs (justification examples) |
 | --- | --- | --- | --- |
-| **Scaffolding / templates** | [HexaKit](https://github.com/<REDACTED>/HexaKit) | Rust (CLI + generators) | Bun/TS (VitePress docs shell); Go/Python templates as **scaffold outputs only**, not domain homes |
+| **Scaffolding / templates** | [HexaKit](https://github.com/KooshaPari/HexaKit) | Rust (CLI + generators) | Bun/TS (VitePress docs shell); Go/Python templates as **scaffold outputs only**, not domain homes |
 | **Schemas / shared types** | phenotype-types | Rust (core schemas, codegen) | Python (agent/ML bindings: “Py consumers need generated stubs until Rust-only pipeline”) |
 | **Testing** | TestingKit | Rust | — |
 | **Observability** (OTel, health, profiling) | PhenoObservability | Rust | — |
-| **MCP** | [PhenoFastMCP](https://github.com/<REDACTED>/PhenoFastMCP) (py), [PhenoFastMCP-go](https://github.com/<REDACTED>/PhenoFastMCP-go), [PhenoFastMCP-rust](https://github.com/<REDACTED>/PhenoFastMCP-rust), [PhenoRMCP](https://github.com/<REDACTED>/PhenoRMCP) (spec SDK), [PhenoMCPServers](https://github.com/<REDACTED>/PhenoMCPServers) (implementations), [substrate](https://github.com/<REDACTED>/substrate) (runtime) | Rust / Go / Python per ADR-017 | Python (agent MCP host); Go (HTTP/SSE edges: MCPForge, ops-mcp) |
+| **MCP** | [PhenoFastMCP](https://github.com/KooshaPari/PhenoFastMCP) (py), [PhenoFastMCP-go](https://github.com/KooshaPari/PhenoFastMCP-go), [PhenoFastMCP-rust](https://github.com/KooshaPari/PhenoFastMCP-rust), [PhenoRMCP](https://github.com/KooshaPari/PhenoRMCP) (spec SDK), [PhenoMCPServers](https://github.com/KooshaPari/PhenoMCPServers) (implementations), [substrate](https://github.com/KooshaPari/substrate) (runtime) | Rust / Go / Python per ADR-017 | Python (agent MCP host); Go (HTTP/SSE edges: MCPForge, ops-mcp) |
 | **Secrets / auth** | Authvault | Rust | — |
 | **HTTP / resilience** | ResilienceKit | Rust | TS (browser/client edge: “fetch wrapper in dashboard package”) |
 | **Tooling crates** (diff, registry, resilience-adjacent shared) | phenotype-tooling | Rust | — |
@@ -33,7 +33,7 @@ Single source of truth mapping **domain concerns** to **canonical repositories**
 
 ### HexaKit
 
-Scaffolding only — templates, generators, reference hexagonal ports. Not a lib collection. See [boundary-shaping.md](./boundary-shaping.md) and HexaKit [`DISPOSITION.md`](https://github.com/<REDACTED>/HexaKit/blob/main/docs/boundary/DISPOSITION.md).
+Scaffolding only — templates, generators, reference hexagonal ports. Not a lib collection. See [boundary-shaping.md](./boundary-shaping.md) and HexaKit [`DISPOSITION.md`](https://github.com/KooshaPari/HexaKit/blob/main/docs/boundary/DISPOSITION.md).
 
 ### phenotype-types
 

@@ -4,7 +4,7 @@ version = "0.2.10"
 edition = "2021"
 description = "Universal API toolkit with REST, GraphQL, and WebSocket support"
 license = "MIT OR Apache-2.0"
-repository = "https://github.com/<REDACTED>/Apisync"
+repository = "https://github.com/KooshaPari/Apisync"
 
 [lib]
 name = "apisync"

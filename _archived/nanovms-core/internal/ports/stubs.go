@@ -1,6 +1,6 @@
 package ports
 
-import "github.com/<REDACTED>/nanovms/internal/domain"
+import "github.com/KooshaPari/nanovms/internal/domain"
 
 // VMTier represents the VM tier level.
 type VMTier = domain.VMFlavor

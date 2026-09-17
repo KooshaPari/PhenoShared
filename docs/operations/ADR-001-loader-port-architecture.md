@@ -126,7 +126,7 @@ is out of scope for the bug fix.
 
 ## Implementation
 
-Implemented in Pine PR #17: https://github.com/<REDACTED>/Pine/pull/17
+Implemented in Pine PR #17: https://github.com/KooshaPari/Pine/pull/17
 
 - `crates/pine-loader/src/lib.rs` 432 → 500 LOC (+68, -20)
 - 1 file changed, 5 unit tests (was 4), 3 doc tests (was 2), 4

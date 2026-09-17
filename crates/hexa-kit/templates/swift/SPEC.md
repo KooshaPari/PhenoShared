@@ -22,7 +22,7 @@ copier copy gh:<REDACTED>/template-lang-swift ./my-project
 
 # Or
 mkdir my-project && cd my-project
-curl -sL https://github.com/<REDACTED>/template-lang-swift/archive/main.tar.gz | tar xz --strip-components=1
+curl -sL https://github.com/KooshaPari/template-lang-swift/archive/main.tar.gz | tar xz --strip-components=1
 ```
 
 ## Structure

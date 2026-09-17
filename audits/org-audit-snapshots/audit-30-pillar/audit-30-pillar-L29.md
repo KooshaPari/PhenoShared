@@ -32,7 +32,7 @@ Repo-level governance primitives that make a repo production-grade at the projec
 - `AgilePlus/.github/scorecard.yml` — OpenSSF Scorecard config. — **status ✓**
 - `AgilePlus/.github/workflows/ci.yml` + `deny.yml` + `release.yml` + `release-attestation.yml` + `scorecard.yml` + `audit.yml` (all present). — **status ✓** (6 CI workflows, decent coverage)
 - `AgilePlus/.github/rulesets/` — **absent**. — **status △** (Gap 4: only CODEOWNERS + branch protection in GH UI, no JSON ruleset artifact)
-- `AgilePlus/Cargo.toml:14-18` — `license = "MIT OR Apache-2.0"` + `repository = "https://github.com/<REDACTED>/AgilePlus"` + `authors = ["<REDACTED>"]`. — **status ✓** (SPDX declared)
+- `AgilePlus/Cargo.toml:14-18` — `license = "MIT OR Apache-2.0"` + `repository = "https://github.com/KooshaPari/AgilePlus"` + `authors = ["<REDACTED>"]`. — **status ✓** (SPDX declared)
 - `thegent/LICENSE:1-21` — MIT, `Copyright (c) 2026 Koosha Paridehpour`. — **status ✓**
 - `thegent/LICENSE-MIT` (1,068 bytes) + `thegent/LICENSE-APACHE` (104 bytes — header only, **incomplete**; see Gap 3). — **status ✗** for LICENSE-APACHE
 - `thegent/CODEOWNERS:1-50` — root file, 30+ rules (per-CLI-component drill-down: `/src/thegent/cli/`, `/src/thegent/orchestration/`, `/src/thegent/agents/`, `/src/thegent/governance/`, `/src/thegent/storage/`, `/src/thegent/tui/`, `/src/thegent/integrations/`, `/src/thegent/cliproxy_adapter.py`, etc.). — **status ✓** (the most granular in the bloc)
@@ -63,7 +63,7 @@ Repo-level governance primitives that make a repo production-grade at the projec
 - `Tracely/GOVERNANCE.md` (root) — **absent**. — **status △** (no federated governance anchor)
 - `Tracely/CONSTITUTION.yaml` — **absent**. — **status △**
 - `Tracely/.github/workflows/ci.yml` + `deny.yml` + `audit.yml` + `release-attestation.yml` + `scorecard.yml` (5 workflows). — **status ✓**
-- `Tracely/Cargo.toml:1-10` — `license = "MIT"` + `repository = "https://github.com/<REDACTED>/Tracely"`. — **status ✓** (SPDX matches LICENSE)
+- `Tracely/Cargo.toml:1-10` — `license = "MIT"` + `repository = "https://github.com/KooshaPari/Tracely"`. — **status ✓** (SPDX matches LICENSE)
 - `Tracera/LICENSE:1-21` — MIT, `Copyright (c) 2026 Koosha Pari`. — **status ✓** (1,068 bytes)
 - `Tracera/LICENSE-MIT` + `Tracera/LICENSE-APACHE` — **absent** (Tracera is dual but companion files missing). — **status ✗** (Gap 2: declared `MIT OR Apache-2.0` but only one LICENSE file at root)
 - `Tracera/.github/CODEOWNERS:1-6` — `* @<REDACTED>` (single default rule). — **status △** (Gap 1: no drill-down despite `crates/tracera-core/` subcrate)

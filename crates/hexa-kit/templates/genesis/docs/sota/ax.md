@@ -45,7 +45,7 @@ See [../intent/prompts/README.md](../intent/prompts/README.md).
 
 ## Chosen strategy
 
-- Copy [`templates/genesis/`](https://github.com/<REDACTED>/HexaKit/tree/main/templates/genesis) at bootstrap
+- Copy [`templates/genesis/`](https://github.com/KooshaPari/HexaKit/tree/main/templates/genesis) at bootstrap
 - Run `scripts/extract-intent-prompts.py` after significant sessions
 - Manager pattern: Cursor subagent → `forge -p` workers for parallel lanes (forge-fanout skill)
 - Kilo Code Stand enforces scope on every PR

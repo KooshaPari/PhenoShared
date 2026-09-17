@@ -1,7 +1,7 @@
 use anyhow::{bail, Result};
 
 pub const STACK_POLICY_URL: &str =
-    "https://github.com/<REDACTED>/phenotype-registry/blob/main/docs/rationalization/STACK_POLICY.md";
+    "https://github.com/KooshaPari/phenotype-registry/blob/main/docs/rationalization/STACK_POLICY.md";
 
 const CORE_LANGS: &[&str] = &["rust", "zig", "mojo"];
 const EDGE_LANGS: &[&str] = &[

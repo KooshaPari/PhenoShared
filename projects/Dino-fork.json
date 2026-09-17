@@ -9,7 +9,7 @@
   "role": "DINOForge-development-lineage",
   "domain_role": "legacy-game-mod-platform",
   "boundary": "dino-fork-lineage",
-  "gh_url": "https://github.com/<REDACTED>/Dino-fork",
+  "gh_url": "https://github.com/KooshaPari/Dino-fork",
   "disposition": "KEEP_STANDALONE_PENDING_LINEAGE_DECISION",
   "canonical_routing": false,
   "recovery_ref": null,

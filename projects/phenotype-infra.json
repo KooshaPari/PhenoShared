@@ -12,7 +12,7 @@
   "boundary": "compute-infra-runtime",
   "stack": "rust-workspace",
   "v0": "0.1.0",
-  "gh_url": "https://github.com/<REDACTED>/phenotype-infra",
+  "gh_url": "https://github.com/KooshaPari/phenotype-infra",
   "owner_knowledge_cutoff": "2026-06-23T23:30:00Z",
   "wave": "L1-INF",
   "branch_count": 4,

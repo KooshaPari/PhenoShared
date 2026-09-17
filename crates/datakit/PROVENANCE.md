@@ -2,7 +2,7 @@
 
 ## Source Repository
 
-- **Repository**: [<REDACTED>/zz-merge-unk-DataKit](https://github.com/<REDACTED>/zz-merge-unk-DataKit)
+- **Repository**: [<REDACTED>/zz-merge-unk-DataKit](https://github.com/KooshaPari/zz-merge-unk-DataKit)
 - **Absorbed into**: `crates/datakit/`
 - **Date**: 2026-09-14
 - **Description**: Data transformation and ETL framework for the Phenotype ecosystem

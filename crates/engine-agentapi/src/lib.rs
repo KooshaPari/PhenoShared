@@ -1111,7 +1111,7 @@ mod tests {
 
     #[test]
     fn extract_pr_urls_pulls_github_pr_links() {
-        let text = "Opened https://github.com/<REDACTED>/substrate/pull/7 and https://github.com/anthropics/claude-code/pull/99 for review.";
+        let text = "Opened https://github.com/KooshaPari/substrate/pull/7 and https://github.com/anthropics/claude-code/pull/99 for review.";
         let urls = extract_pr_urls(text);
         assert_eq!(urls.len(), 2);
         assert!(urls[0].contains("/pull/7"));
@@ -1120,7 +1120,7 @@ mod tests {
 
     #[test]
     fn extract_pr_urls_ignores_non_pr_links() {
-        let text = "see https://github.com/<REDACTED>/substrate and https://example.com";
+        let text = "see https://github.com/KooshaPari/substrate and https://example.com";
         let urls = extract_pr_urls(text);
         assert!(urls.is_empty());
     }

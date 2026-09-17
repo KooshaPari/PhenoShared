@@ -1,7 +1,7 @@
 # ADR-023: SDK Consolidation Decision
 
 **Status:** Accepted (proposed 2026-06-25)
-**Deciders:** forge session (issue triage for [#134](https://github.com/<REDACTED>/phenotype-registry/issues/134) + [#135](https://github.com/<REDACTED>/phenotype-registry/issues/135))
+**Deciders:** forge session (issue triage for [#134](https://github.com/KooshaPari/phenotype-registry/issues/134) + [#135](https://github.com/KooshaPari/phenotype-registry/issues/135))
 **Refs:** [ADR-ECO-017](./ADR-ECO-017-substrate-schema-conventions.md)
 (substrate schema conventions — `tier: phenotype-sdk` + `tier: federated-service`
 definitions), [ADR-ECO-007-gateway-merge-superset](./ADR-ECO-007-gateway-merge-superset.md)
@@ -33,7 +33,7 @@ boundary between them:
 Two issues were opened against this registry that need a canonical
 answer:
 
-### Issue [#134](https://github.com/<REDACTED>/phenotype-registry/issues/134) — dispatch-mcp ADR-008 claim vs PhenoMCPServers catalog SSOT
+### Issue [#134](https://github.com/KooshaPari/phenotype-registry/issues/134) — dispatch-mcp ADR-008 claim vs PhenoMCPServers catalog SSOT
 
 `<REDACTED>/dispatch-mcp`'s README/description historically claimed
 **"Phenotype dispatch MCP — provider routing & cost tracking. Sole
@@ -45,7 +45,7 @@ became a documentation shim rather than a runtime. The ADR-008
 historical consolidation decision is from the pre-PhenoMCPServers
 era, and its "sole MCP server" wording is now an over-broad claim.
 
-### Issue [#135](https://github.com/<REDACTED>/phenotype-registry/issues/135) — phenotype-python-sdk + phenotype-go-sdk overlap with PhenoMCPServers
+### Issue [#135](https://github.com/KooshaPari/phenotype-registry/issues/135) — phenotype-python-sdk + phenotype-go-sdk overlap with PhenoMCPServers
 
 Both SDKs claim to **consolidate McpKit** (the MCP framework SDK that
 was archived 2026-06-17). PhenoMCPServers also holds MCP server
@@ -131,7 +131,7 @@ amended to:
    `<REDACTED>/PhenoMCPServers/catalog.json` with full schema,
    lifecycle status, and cross-refs to its framework substrate
    (PhenoFastMCP) and runtime substrate (substrate / dispatch-mcp).
-2. **Then** — the `phenotype-dag-core` engine (PR [#370](https://github.com/<REDACTED>/phenotype-registry/pull/370))
+2. **Then** — the `phenotype-dag-core` engine (PR [#370](https://github.com/KooshaPari/phenotype-registry/pull/370))
    auto-emits a typed client stub into **both**
    `phenotype-python-sdk` and `phenotype-go-sdk` from the catalog
    entry. No hand-written SDK wrappers.
@@ -176,10 +176,10 @@ amended to:
   `PhenoMCPServers/catalog.json` at build time → typed clients are
   auto-emitted. Reduces hand-written SDK surface area; eliminates
   drift between SDK wrappers and the actual server schema.
-- `phenotype-dag-core` (PR [#370](https://github.com/<REDACTED>/phenotype-registry/pull/370))
+- `phenotype-dag-core` (PR [#370](https://github.com/KooshaPari/phenotype-registry/pull/370))
   gets a concrete consumer: codegen from catalog to SDK. This was
   its missing first use case.
-- The auditor fleet (PR [#366](https://github.com/<REDACTED>/phenotype-registry/pull/366))
+- The auditor fleet (PR [#366](https://github.com/KooshaPari/phenotype-registry/pull/366))
   gets a new audit to add: "every `tools/mcp/` entry must appear in
   `PhenoMCPServers/catalog.json`" (and vice-versa: every catalog
   entry with `lifecycle: active` must have at least one SDK
@@ -231,15 +231,15 @@ amended to:
 
 ## Related
 
-- **Closes** [#134](https://github.com/<REDACTED>/phenotype-registry/issues/134) —
+- **Closes** [#134](https://github.com/KooshaPari/phenotype-registry/issues/134) —
   dispatch-mcp ADR-008 claim vs PhenoMCPServers catalog SSOT
   reconciliation
-- **Closes** [#135](https://github.com/<REDACTED>/phenotype-registry/issues/135) —
+- **Closes** [#135](https://github.com/KooshaPari/phenotype-registry/issues/135) —
   phenotype-python-sdk + phenotype-go-sdk vs PhenoMCPServers
   consolidation
-- **Builds on** [#370](https://github.com/<REDACTED>/phenotype-registry/pull/370) —
+- **Builds on** [#370](https://github.com/KooshaPari/phenotype-registry/pull/370) —
   `phenotype-dag-core` execution engine (provides the codegen substrate)
-- **Builds on** [#366](https://github.com/<REDACTED>/phenotype-registry/pull/366) —
+- **Builds on** [#366](https://github.com/KooshaPari/phenotype-registry/pull/366) —
   continuous auditor fleet (will gain the catalog↔SDK consistency
   rule `T-AUD-MCP-1`)
 - **Amends** monorepo ADR-008 ("dispatch-mcp as sole MCP server")

@@ -9,7 +9,7 @@
   "type": "standards-governance",
   "role": "shared-configuration-and-repository-standards",
   "path": "repos/phenoStandards",
-  "gh_url": "https://github.com/<REDACTED>/phenoStandards",
+  "gh_url": "https://github.com/KooshaPari/phenoStandards",
   "default_branch": "main",
   "remote_sha": "23c0dda23bfd7bd060f53a608032102287498f85",
   "disposition": "KEEP_STANDALONE_PENDING_BOUNDARY_REVIEW",

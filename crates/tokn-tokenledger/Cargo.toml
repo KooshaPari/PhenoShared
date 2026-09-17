@@ -5,7 +5,7 @@ edition = "2024"
 license = "MIT"
 authors = ["<REDACTED> <<REDACTED>@<REDACTED>.com>"]
 description = "Token management and pricing governance CLI for AI coding agents"
-repository = "https://github.com/<REDACTED>/zz-Tokn"
+repository = "https://github.com/KooshaPari/zz-Tokn"
 keywords = ["tokens", "llm", "cost", "analytics", "cli"]
 categories = ["command-line-utilities"]
 

@@ -175,7 +175,7 @@ env:
 
 ### AgilePlus Secrets
 
-**URL**: https://github.com/<REDACTED>/AgilePlus/settings/secrets/actions
+**URL**: https://github.com/KooshaPari/AgilePlus/settings/secrets/actions
 
 Add the following secrets:
 
@@ -189,7 +189,7 @@ SENTRY_AUTH_TOKEN_AGILEPLUS
 
 ### phenotype-infrakit Secrets
 
-**URL**: https://github.com/<REDACTED>/phenotype-infrakit/settings/secrets/actions
+**URL**: https://github.com/KooshaPari/phenotype-infrakit/settings/secrets/actions
 
 ```
 SENTRY_DSN_INFRAKIT
@@ -201,7 +201,7 @@ SENTRY_AUTH_TOKEN_INFRAKIT
 
 ### heliosCLI Secrets
 
-**URL**: https://github.com/<REDACTED>/heliosCLI/settings/secrets/actions
+**URL**: https://github.com/KooshaPari/heliosCLI/settings/secrets/actions
 
 ```
 SENTRY_DSN_HELIOSCLI

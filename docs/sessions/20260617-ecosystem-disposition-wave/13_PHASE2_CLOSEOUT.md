@@ -14,7 +14,7 @@ Close Phase 2 disposition rows after HexaKit wave AB prune and phenoShared utils
 
 | Lane | Repo | PR / branch | Outcome |
 |------|------|-------------|---------|
-| HexaKit AB prune | <REDACTED>/HexaKit | [HexaKit#266](https://github.com/<REDACTED>/HexaKit/pull/266) merged to `main` | Exclude `phenotype-iter`, `phenotype-string`, `phenotype-validation` from workspace members; git-pin to phenoShared `feat/wave-e2a-utils-reloc`; restore `phenotype-telemetry` path dep; `cargo check -p phenotype-core` green |
+| HexaKit AB prune | <REDACTED>/HexaKit | [HexaKit#266](https://github.com/KooshaPari/HexaKit/pull/266) merged to `main` | Exclude `phenotype-iter`, `phenotype-string`, `phenotype-validation` from workspace members; git-pin to phenoShared `feat/wave-e2a-utils-reloc`; restore `phenotype-telemetry` path dep; `cargo check -p phenotype-core` green |
 | Utils relocation | <REDACTED>/phenoShared | `feat/wave-e2a-utils-reloc` | Canonical homes for iter/string/validation crates |
 | Crypto / casbin | <REDACTED>/Authvault | `main` | `phenotype-crypto` and `phenotype-casbin-wrapper` pins repointed to Authvault main (Wave C) |
 | MCP edge | <REDACTED>/substrate | substrate#28 | Rust MCP canonical; Python `py-pheno-mcp` redirect closed |
@@ -80,10 +80,10 @@ jq empty registry/disposition-index.json registry/components.lock
 
 | Item | Status | PR / action |
 |------|--------|-------------|
-| agentapi-plusplus `docs/BOUNDARY.md` | PR open | [#538](https://github.com/<REDACTED>/agentapi-plusplus/pull/538) |
-| cliproxyapi-plusplus `docs/BOUNDARY.md` | PR open | [#1029](https://github.com/<REDACTED>/cliproxyapi-plusplus/pull/1029) |
-| bifrost `docs/DISPOSITION.md` | PR open | [#8](https://github.com/<REDACTED>/bifrost/pull/8) |
-| PhenoSpecs `018-agent-platform` | PR open | [#91](https://github.com/<REDACTED>/PhenoSpecs/pull/91) |
+| agentapi-plusplus `docs/BOUNDARY.md` | PR open | [#538](https://github.com/KooshaPari/agentapi-plusplus/pull/538) |
+| cliproxyapi-plusplus `docs/BOUNDARY.md` | PR open | [#1029](https://github.com/KooshaPari/cliproxyapi-plusplus/pull/1029) |
+| bifrost `docs/DISPOSITION.md` | PR open | [#8](https://github.com/KooshaPari/bifrost/pull/8) |
+| PhenoSpecs `018-agent-platform` | PR open | [#91](https://github.com/KooshaPari/PhenoSpecs/pull/91) |
 | Agentora PhenoProc gap-port | **merged** | #78 workspace, #79 gap port, #80 substrate SDK-ify; `cargo check --workspace` green |
 | vibeproxy archive | **done** | `gh repo archive` 2026-06-18 |
 | helioscope archive | **done** | `gh repo archive` 2026-06-18 → helios-cli redirect |

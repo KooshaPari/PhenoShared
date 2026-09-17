@@ -25,7 +25,7 @@
 //!
 //! ## Reference
 //!
-//! Upstream: <https://github.com/<REDACTED>/phenotype-postfx>.
+//! Upstream: <https://github.com/KooshaPari/phenotype-postfx>.
 
 pub mod aces_pass;
 pub mod bloom_pass;

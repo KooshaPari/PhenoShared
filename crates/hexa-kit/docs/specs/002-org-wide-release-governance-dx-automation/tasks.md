@@ -27,7 +27,7 @@
 - [x] T006 Unit tests for version calculator (all 7 registries × 5 channels)
 
 ### Implementation Notes
-- Go 1.23+, use `go mod init github.com/<REDACTED>/pheno-cli`
+- Go 1.23+, use `go mod init github.com/KooshaPari/pheno-cli`
 - Adapter interface: `Detect()`, `Version()`, `Build()`, `Publish()`, `Verify()`
 - Version calculator is pure logic, no I/O — easy to test exhaustively
 

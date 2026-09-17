@@ -6,7 +6,7 @@
 
 ```bash
 # Clone, build, test
-git clone https://github.com/<REDACTED>/nexus.git
+git clone https://github.com/KooshaPari/nexus.git
 cd nexus
 ```
 
@@ -31,7 +31,7 @@ Service registry and discovery for microservices.
 
 ```toml
 [dependencies]
-nexus = { git = "https://github.com/<REDACTED>/nexus" }
+nexus = { git = "https://github.com/KooshaPari/nexus" }
 ```
 
 ## Usage

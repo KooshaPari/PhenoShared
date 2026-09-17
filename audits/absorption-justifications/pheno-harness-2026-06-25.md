@@ -33,7 +33,7 @@
 
 ## Target
 
-- **Receiving repo:** `<REDACTED>/phenodag` (https://github.com/<REDACTED>/phenodag)
+- **Receiving repo:** `<REDACTED>/phenodag` (https://github.com/KooshaPari/phenodag)
 - **Also absorbed by:** `BytePort` (via cross-toolchain hygiene), `phenotype-registry` (absorption-justification audit trail)
 - **Absorption rationale:** pheno-harness was archived by a previous maintainer action. The local commit `a38a6fa` (feat(eval): cross-repo adapter consumer — portage_adapter + tracera_semantic_pillar) and the modularization work (HARBOR.md, portage schema bridge) are stranded. phenodag, BytePort, and this registry absorbed the patterns (hygiene bundle P22/P25, externalized preset YAML P21, cross-repo adapter P20). The eval dataset benchmark registry (`datasets/ref-pr-diff/registry.json`) was already absorbed into the phenodag v3-180 preset. The Harbor task schema lives on in portage.
 
@@ -119,8 +119,8 @@ There remains a risk that CI workflows in downstream repos reference pheno-harne
 # If origin is 404, reconstruct from the audit documents at:
 #   phenotype-registry/audits/absorption-justifications/
 # Or clone the canonical PhenoFastMCP repos:
-git clone https://github.com/<REDACTED>/PhenoMCPServers.git
-git clone https://github.com/<REDACTED>/substrate.git
+git clone https://github.com/KooshaPari/PhenoMCPServers.git
+git clone https://github.com/KooshaPari/substrate.git
 ```
 
 ### Rebuttal

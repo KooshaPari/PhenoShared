@@ -25,7 +25,7 @@ Generated: 2026-06-25. Diagnosis based on workflow source + PR #805 (`gh pr chec
 ### Autograder (`autograder.yml`)
 
 - **Required vs advisory:** Advisory for ruleset baseline; fails on every PR today.
-- **Why it fails:** Step `Checkout phenoShared sibling` clones `https://github.com/<REDACTED>/phenoShared.git`, which returns *Repository not found* for `GITHUB_TOKEN`. Workspace `Cargo.toml` only lists member `rust` — no phenoShared path dependency.
+- **Why it fails:** Step `Checkout phenoShared sibling` clones `https://github.com/KooshaPari/phenoShared.git`, which returns *Repository not found* for `GITHUB_TOKEN`. Workspace `Cargo.toml` only lists member `rust` — no phenoShared path dependency.
 - **Fix class:** **(a) broken** — stale clone from pre–workspace-cleanup layout.
 - **Repair:** Remove phenoShared checkout step.
 

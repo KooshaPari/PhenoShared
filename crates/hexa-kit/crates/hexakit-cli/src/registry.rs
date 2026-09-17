@@ -170,7 +170,7 @@ pub fn adjacent_domains<'a>(
 }
 
 pub fn repo_url(repo: &str) -> String {
-    format!("https://github.com/<REDACTED>/{repo}")
+    format!("https://github.com/KooshaPari/{repo}")
 }
 
 #[allow(dead_code)]

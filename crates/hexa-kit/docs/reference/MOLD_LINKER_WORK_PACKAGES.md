@@ -585,7 +585,7 @@ Add comment block above job definition:
 # Click "Run workflow"
 
 # Wait for job to complete (10-15 minutes)
-# Monitor at: https://github.com/<REDACTED>/phenotype-infrakit/actions
+# Monitor at: https://github.com/KooshaPari/phenotype-infrakit/actions
 
 # Record run ID: ________________
 ```

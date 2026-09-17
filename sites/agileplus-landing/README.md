@@ -5,7 +5,7 @@
 
 # agileplus-landing
 
-Landing page at `agileplus.<REDACTED>.com` for [<REDACTED>/AgilePlus](https://github.com/<REDACTED>/AgilePlus).
+Landing page at `agileplus.<REDACTED>.com` for [<REDACTED>/AgilePlus](https://github.com/KooshaPari/AgilePlus).
 
 Pulls README at build time from GitHub. Tier 2 of the org-pages tree (Tier 1 is `projects.<REDACTED>.com`).
 

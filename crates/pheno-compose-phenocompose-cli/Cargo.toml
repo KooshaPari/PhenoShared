@@ -4,7 +4,7 @@ version = "0.1.0"
 edition = "2021"
 rust-version = "1.75"
 license = "MIT OR Apache-2.0"
-repository = "https://github.com/<REDACTED>/PhenoCompose"
+repository = "https://github.com/KooshaPari/PhenoCompose"
 description = "Truthful composition planner and Podman runtime CLI"
 publish = false
 

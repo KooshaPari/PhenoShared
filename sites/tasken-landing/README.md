@@ -5,7 +5,7 @@
 
 # tasken-landing
 
-Landing page at `tasken.phenotype.space` for [<REDACTED>/Tasken](https://github.com/<REDACTED>/Tasken).
+Landing page at `tasken.phenotype.space` for [<REDACTED>/Tasken](https://github.com/KooshaPari/Tasken).
 
 Pulls README at build time from GitHub. Tier 2 of the org-pages tree (Tier 1 is `projects.<REDACTED>.com`).
 

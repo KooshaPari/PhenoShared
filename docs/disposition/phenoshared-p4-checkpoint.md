@@ -156,7 +156,7 @@ Gate state corrected in `registry/disposition-index.json`:
 The `phenoShared-niche` archive verdict above (TOMBSTONE → ARCHIVED, never deleted) was correct and remains in effect.
 
 **References for the regression sequence:**
-- HexaKit #278 — `https://github.com/<REDACTED>/HexaKit/pull/278` @ `d83d1ca`
+- HexaKit #278 — `https://github.com/KooshaPari/HexaKit/pull/278` @ `d83d1ca`
 - HexaKit #279 — reverted cache-adapter pin (reason: path stub not pushed)
 - HexaKit #285 — drained last phenoShared pin via in-tree stub
 - Pyron #62 — gutted to tombstone-prep

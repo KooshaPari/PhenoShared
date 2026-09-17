@@ -17,9 +17,9 @@
     "Cloudflare edge worker deploy"
   ],
   "links": {
-    "github": "https://github.com/<REDACTED>/Tracera",
+    "github": "https://github.com/KooshaPari/Tracera",
     "docs": "https://phenotype.space/tracera/docs",
-    "releases": "https://github.com/<REDACTED>/Tracera/releases"
+    "releases": "https://github.com/KooshaPari/Tracera/releases"
   },
   "badges": [
     "https://img.shields.io/github/actions/workflow/status/<REDACTED>/Tracera/ci.yml?branch=main&label=build",

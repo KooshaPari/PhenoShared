@@ -16,9 +16,9 @@
     "SQLite persistence"
   ],
   "links": {
-    "github": "https://github.com/<REDACTED>/BytePort",
+    "github": "https://github.com/KooshaPari/BytePort",
     "docs": "https://byteport.<REDACTED>.com/docs",
-    "releases": "https://github.com/<REDACTED>/BytePort/releases"
+    "releases": "https://github.com/KooshaPari/BytePort/releases"
   },
   "badges": [
     "https://img.shields.io/github/actions/workflow/status/<REDACTED>/BytePort/ci.yml?branch=main&label=build",

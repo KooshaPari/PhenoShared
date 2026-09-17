@@ -1,5 +1,5 @@
 # Phenotype-org standard .gitignore — Rust
-# Source: https://github.com/KooshaPari/phenotype-tooling/blob/main/templates/gitignore-rust
+# Source: https://github.com/<REDACTED>/phenotype-tooling/blob/main/templates/gitignore-rust
 
 # Build artifacts
 /target/

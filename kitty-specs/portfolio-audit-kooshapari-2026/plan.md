@@ -18,7 +18,7 @@
   - `PyO3/Rust/Zig`
   - `docs/governance/23_ARCHITECTURAL_GOVERNANCE.md`
   - `docs/reports/`
-  - `github.com/<REDACTED>/phenoSDK`).`
+  - `github.com/KooshaPari/phenoSDK`).`
   - `libs/`
   - `libs/python/phenotype-sdk`
   - `test/lint`

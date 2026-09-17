@@ -2,8 +2,8 @@
 
 **Date:** 2026-06-18
 **ADRs:**
-- [ADR-031](https://github.com/<REDACTED>/repos/blob/main/docs/adr/2026-06-17/ADR-031-configra-absorb.md) (Configra absorb)
-- [ADR-022](https://github.com/<REDACTED>/repos/blob/main/docs/adr/2026-06-15/ADR-022-config-consolidation-two-crate-split.md) (superseded by ADR-031, preserved for history)
+- [ADR-031](https://github.com/KooshaPari/repos/blob/main/docs/adr/2026-06-17/ADR-031-configra-absorb.md) (Configra absorb)
+- [ADR-022](https://github.com/KooshaPari/repos/blob/main/docs/adr/2026-06-15/ADR-022-config-consolidation-two-crate-split.md) (superseded by ADR-031, preserved for history)
 - L5-104 §4 Step 3 (re-point the embedded sub-crate markers)
 
 ---
@@ -24,10 +24,10 @@ are now superseded by the canonical config substrate.
 
 | Concern | Old location | New canonical location |
 |---|---|---|
-| Type-gated `Config` struct (URL, PORT, LOG_LEVEL, DB_PATH, FEATURE_FLAGS) + `load_from_env` / `load_from_file` / `load_from_toml_file` / `combine` / `ConfigBuilder` / `Config::merge` | `pheno-config` crate (local-only) | [`<REDACTED>/Configra:crates/pheno-config/`](https://github.com/<REDACTED>/Configra/tree/main/crates/pheno-config) |
+| Type-gated `Config` struct (URL, PORT, LOG_LEVEL, DB_PATH, FEATURE_FLAGS) + `load_from_env` / `load_from_file` / `load_from_toml_file` / `combine` / `ConfigBuilder` / `Config::merge` | `pheno-config` crate (local-only) | [`<REDACTED>/Configra:crates/pheno-config/`](https://github.com/KooshaPari/Configra/tree/main/crates/pheno-config) |
 | Generic SDK helpers (`ConfigSource`, `ConfigValue`, `SourcePriority`, `ConfigFormat`, `FormatDetect`, `ConfigMeta`, `ConfigError`, `search_config_dirs`, `AppDirs`, `ConfigDir`) | `pheno/crates/phenotype-shared-config/` (this crate) | **No direct replacement** — these are intentionally NOT absorbed; the `pheno*` fleet has no current consumer of this API after the Configra migration. Open a `Configra` PR to upstream a specific helper if a need arises. |
-| TS edge bindings | `<REDACTED>/Conft` (archived) | [`<REDACTED>/Configra:typescript/`](https://github.com/<REDACTED>/Configra/tree/main/typescript) |
-| Hexagonal config (`settly` domain/application/adapters/infrastructure) | `<REDACTED>/phenotype-config` (DEPRECATED 2026-06-17, archive 2026-07-15) | [`<REDACTED>/Configra:crates/settly/`](https://github.com/<REDACTED>/Configra/tree/main/crates/settly) (absorbed via [Configra PR #44](https://github.com/<REDACTED>/Configra/pull/44) 2026-06-18) |
+| TS edge bindings | `<REDACTED>/Conft` (archived) | [`<REDACTED>/Configra:typescript/`](https://github.com/KooshaPari/Configra/tree/main/typescript) |
+| Hexagonal config (`settly` domain/application/adapters/infrastructure) | `<REDACTED>/phenotype-config` (DEPRECATED 2026-06-17, archive 2026-07-15) | [`<REDACTED>/Configra:crates/settly/`](https://github.com/KooshaPari/Configra/tree/main/crates/settly) (absorbed via [Configra PR #44](https://github.com/KooshaPari/Configra/pull/44) 2026-06-18) |
 
 ## Why this marker
 
@@ -54,8 +54,8 @@ historical artifact, not a substrate.
 
 ## See also
 
-- [ADR-031](https://github.com/<REDACTED>/repos/blob/main/docs/adr/2026-06-17/ADR-031-configra-absorb.md) — Configra absorb (canonical home)
-- [ADR-022](https://github.com/<REDACTED>/repos/blob/main/docs/adr/2026-06-15/ADR-022-config-consolidation-two-crate-split.md) — superseded two-crate split
-- [`<REDACTED>/Configra`](https://github.com/<REDACTED>/Configra) — canonical Rust config substrate
-- [`<REDACTED>/phenotype-config`](https://github.com/<REDACTED>/phenotype-config) — deprecated; archive 2026-07-15
+- [ADR-031](https://github.com/KooshaPari/repos/blob/main/docs/adr/2026-06-17/ADR-031-configra-absorb.md) — Configra absorb (canonical home)
+- [ADR-022](https://github.com/KooshaPari/repos/blob/main/docs/adr/2026-06-15/ADR-022-config-consolidation-two-crate-split.md) — superseded two-crate split
+- [`<REDACTED>/Configra`](https://github.com/KooshaPari/Configra) — canonical Rust config substrate
+- [`<REDACTED>/phenotype-config`](https://github.com/KooshaPari/phenotype-config) — deprecated; archive 2026-07-15
 - `findings/2026-06-18-L5-110-adr-035-impl.md` (this turn) — L5-110 implementation log

@@ -10,7 +10,7 @@
 **Status:** maintenance
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![CI](https://github.com/<REDACTED>/PhenoProc/actions/workflows/ci.yml/badge.svg)](https://github.com/<REDACTED>/PhenoProc/actions/workflows/ci.yml)
+[![CI](https://github.com/KooshaPari/PhenoProc/actions/workflows/ci.yml/badge.svg)](https://github.com/KooshaPari/PhenoProc/actions/workflows/ci.yml)
 [![Rust](https://img.shields.io/badge/rust-1.75%2B-orange.svg)](https://www.rust-lang.org)
 
 High-performance process orchestration and lifecycle management library for Rust. Provides unified APIs for process pooling, task queuing, shared memory coordination, and inter-process communication (IPC) via Unix domain sockets.

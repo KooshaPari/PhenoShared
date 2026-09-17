@@ -10,7 +10,7 @@ This repo has been archived/absorbed. Code preserved for reference. See target r
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![71-pillar: L9](https://img.shields.io/badge/71--pillar-L9-blue.svg)](https://phenotype.dev/pillars)
 
-[![AI slop inside](https://sladge.net/badge.svg)](https://sladge.net) [![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/<REDACTED>/phenotype-router/total)](https://github.com/<REDACTED>/phenotype-router/releases)
+[![AI slop inside](https://sladge.net/badge.svg)](https://sladge.net) [![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/<REDACTED>/phenotype-router/total)](https://github.com/KooshaPari/phenotype-router/releases)
 
 Phenotype-owned router decision layer (ADR-050 / ADR-051, §8 router-architecture
 ACCEPTED 2026-06-20). This crate owns the **decision layer** of the router architecture —
@@ -191,7 +191,7 @@ Validation failures (missing `id`, malformed payload) are surfaced as RFC 7807
 ## Conventions
 
 This crate follows the
-[Phenotype REST API conventions](https://github.com/<REDACTED>/phenotype-apps/blob/apps-extract/docs/conventions/rest-api.md):
+[Phenotype REST API conventions](https://github.com/KooshaPari/phenotype-apps/blob/apps-extract/docs/conventions/rest-api.md):
 
 - L9 — RFC 7807 Problem Details error envelope.
 - L9.5 — `/openapi.json` published by HTTP wrappers.
@@ -287,7 +287,7 @@ X-RateLimit-Reset: 1719005460
 ```
 
 [RFC 7807 problem+json]: https://www.rfc-editor.org/rfc/rfc7807
-[convention]: https://github.com/<REDACTED>/phenotype-apps/blob/main/docs/conventions/rest-api.md
+[convention]: https://github.com/KooshaPari/phenotype-apps/blob/main/docs/conventions/rest-api.md
 
 ## License
 

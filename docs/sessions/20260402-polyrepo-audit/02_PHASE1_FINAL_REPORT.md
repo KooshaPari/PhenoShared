@@ -187,14 +187,14 @@ Security alerts are not regular review comments and require UI dismissal.
 
 ### Immediate (You)
 
-1. Go to https://github.com/<REDACTED>/phenotype-infrakit/pull/589
+1. Go to https://github.com/KooshaPari/phenotype-infrakit/pull/589
 2. Click "Resolve conversation" on all security alert threads (10 total)
 3. Click "Merge pull request"
 4. Repeat for #560, #561, #563
 
 ### Or
 
-1. Go to https://github.com/<REDACTED>/phenotype-infrakit/settings/branches
+1. Go to https://github.com/KooshaPari/phenotype-infrakit/settings/branches
 2. Edit "Main Governance Baseline" ruleset
 3. Disable "Require resolved conversations before merging"
 4. Merge all PRs

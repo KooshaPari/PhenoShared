@@ -19,11 +19,11 @@ basis.
 Instead, please report them via one of the following channels:
 
 1. **GitHub private vulnerability reporting:** Use the
-   [Security Advisories](https://github.com/<REDACTED>/pheno-otel/security/advisories/new)
+   [Security Advisories](https://github.com/KooshaPari/pheno-otel/security/advisories/new)
    page to file a private report. This is the preferred channel.
 
 2. **Email:** Send a detailed report to the maintainers (see the GitHub
-   profile of [@<REDACTED>](https://github.com/<REDACTED>) for the current
+   profile of [@<REDACTED>](https://github.com/KooshaPari) for the current
    contact address).
 
 You should receive a response within **48 hours**. If you do not, please follow

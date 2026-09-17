@@ -8,13 +8,13 @@ Accepted
 
 AgilePlus duplicated lifecycle, governance, and intent-graph vocabulary in
 `crates/agileplus-domain` while the Phenotype org extracted a shared PM spine into
-[`phenotype-pm-core`](https://github.com/<REDACTED>/phenotype-pm-core). A vendored
+[`phenotype-pm-core`](https://github.com/KooshaPari/phenotype-pm-core). A vendored
 `crates/traceability-core` copy would drift from Tracera and other consumers.
 
 ## Decision
 
 1. Depend on `traceability-core` via **git**, not a workspace path:
-   `traceability-core = { git = "https://github.com/<REDACTED>/phenotype-pm-core", branch = "master" }`.
+   `traceability-core = { git = "https://github.com/KooshaPari/phenotype-pm-core", branch = "master" }`.
 2. Remove any local `crates/traceability-core` workspace member if present.
 3. Re-export `IntentGraph`, `lifecycle` (`FeatureState`), and `governance` types from
    `agileplus-domain` so existing import paths remain stable.

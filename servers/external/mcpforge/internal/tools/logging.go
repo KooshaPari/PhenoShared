@@ -1,7 +1,7 @@
 package tools
 
 import (
-	"github.com/<REDACTED>/MCPForge/internal/logging"
+	"github.com/KooshaPari/MCPForge/internal/logging"
 )
 
 // Create a logger for the tools component

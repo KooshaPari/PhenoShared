@@ -7,7 +7,7 @@
   Provisions a `gh-runner` local user, downloads the latest actions/runner
   release from github.com, and installs it as a Windows service running
   under the dedicated service account. Registers the runner at the
-  organization scope (https://github.com/<REDACTED>) with labels
+  organization scope (https://github.com/KooshaPari) with labels
   "self-hosted,Windows,X64,desktop-<REDACTED>-desk" so workflows can
   target this GPU/desktop box directly.
 
@@ -32,7 +32,7 @@
   Install root. Default: C:\actions-runner
 
 .PARAMETER OrgUrl
-  Organization URL to register against. Default: https://github.com/<REDACTED>
+  Organization URL to register against. Default: https://github.com/KooshaPari
 
 .PARAMETER Labels
   Runner labels. Default: self-hosted,Windows,X64,desktop-<REDACTED>-desk
@@ -60,7 +60,7 @@
 param(
   [string]$RegToken    = $null,
   [string]$InstallDir  = 'C:\actions-runner',
-  [string]$OrgUrl      = 'https://github.com/<REDACTED>',
+  [string]$OrgUrl      = 'https://github.com/KooshaPari',
   [string]$Labels      = 'self-hosted,Windows,X64,desktop-<REDACTED>-desk',
   [string]$RunnerName  = 'desktop-<REDACTED>-desk',
   [string]$RunnerUser  = 'gh-runner',

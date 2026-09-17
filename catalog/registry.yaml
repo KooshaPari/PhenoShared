@@ -61,7 +61,7 @@ retired_anti_patterns:
 # Deprecated Go repos remain in server wiring as deprecated entries below.
 go_tier1_inventory:
   - id: phenofastmcp-go
-    repo: https://github.com/<REDACTED>/PhenoFastMCP-go
+    repo: https://github.com/KooshaPari/PhenoFastMCP-go
     role: mcp-framework
     tier: 1
     justification: "Fork of mark3labs/mcp-go; upstream is Go-native. Provides HTTP/SSE MCP edge servers."
@@ -73,7 +73,7 @@ go_tier1_inventory:
 
 framework:
   rust:
-    repo: https://github.com/<REDACTED>/PhenoFastMCP-rust
+    repo: https://github.com/KooshaPari/PhenoFastMCP-rust
     upstream: https://github.com/Dicklesworthstone/fastmcp_rust
     fork_parent: Dicklesworthstone/fastmcp_rust
     tier: 0
@@ -81,14 +81,14 @@ framework:
     parallel_lane: phenofastmcp-rust
     note: fastmcp-equivalent Rust framework; spec SDK is PhenoRMCP
   rmcp:
-    repo: https://github.com/<REDACTED>/PhenoRMCP
+    repo: https://github.com/KooshaPari/PhenoRMCP
     upstream: https://github.com/modelcontextprotocol/rust-sdk
     fork_parent: modelcontextprotocol/rust-sdk
     tier: 0
     role: mcp-spec-sdk
     note: official rmcp — not PhenoFastMCP branding
   go:
-    repo: https://github.com/<REDACTED>/PhenoFastMCP-go
+    repo: https://github.com/KooshaPari/PhenoFastMCP-go
     upstream: https://github.com/mark3labs/mcp-go
     fork_parent: mark3labs/mcp-go
     tier: 1
@@ -96,7 +96,7 @@ framework:
     parallel_lane: phenofastmcp-go
     justification: HTTP/SSE MCP edge servers; upstream is Go-native (MCPForge)
   python:
-    repo: https://github.com/<REDACTED>/PhenoFastMCP
+    repo: https://github.com/KooshaPari/PhenoFastMCP
     upstream: https://github.com/PrefectHQ/fastmcp
     fork_parent: PrefectHQ/fastmcp
     baseline_tag: v3.4.2
@@ -106,7 +106,7 @@ framework:
     toolchain: "py3.14; uv"
     note: fastmcp binding tier — not protocol core long-term
   zig:
-    repo: https://github.com/<REDACTED>/PhenoFastMCP-zig
+    repo: https://github.com/KooshaPari/PhenoFastMCP-zig
     upstream: https://github.com/modelcontextprotocol/rust-sdk
     fork_parent: modelcontextprotocol/rust-sdk
     tier: 0
@@ -116,7 +116,7 @@ framework:
     start_trigger: rmcp superset stabilizes (see issue #8)
     note: tier-0 parallel lane; same fork-parent rules as rust; NOT in phenotype-rust-sdk bucket
   mojo:
-    repo: https://github.com/<REDACTED>/PhenoFastMCP-mojo
+    repo: https://github.com/KooshaPari/PhenoFastMCP-mojo
     upstream: https://github.com/modelcontextprotocol/rust-sdk
     fork_parent: modelcontextprotocol/rust-sdk
     tier: 0
@@ -126,7 +126,7 @@ framework:
     start_trigger: rmcp superset stabilizes (see issue #8)
     note: tier-0 parallel lane; same fork-parent rules as rust; NOT in phenotype-rust-sdk bucket
   typescript:
-    repo: https://github.com/<REDACTED>/PhenoFastMCP-ts
+    repo: https://github.com/KooshaPari/PhenoFastMCP-ts
     upstream: https://github.com/modelcontextprotocol/typescript-sdk
     fork_parent: modelcontextprotocol/typescript-sdk
     tier: 2
@@ -189,7 +189,7 @@ servers:
     title: MCPForge LSP server
     description: Semantic code tools via language servers
     package: servers/external/mcpforge
-    repo: https://github.com/<REDACTED>/MCPForge
+    repo: https://github.com/KooshaPari/MCPForge
     language: go
     transport: stdio
     entry:
@@ -202,7 +202,7 @@ servers:
     title: NanoVM ops MCP
     description: Unikernel instance and image lifecycle
     package: servers/external/ops-mcp
-    repo: https://github.com/<REDACTED>/phenotype-ops-mcp
+    repo: https://github.com/KooshaPari/phenotype-ops-mcp
     language: go
     transport: stdio
     entry:
@@ -258,7 +258,7 @@ servers:
   - id: agileplus-mcp-intent
     title: AgilePlus intent graph MCP
     description: Rule-based prompt-to-intent-graph MCP tool and HTTP API (Rust)
-    repo: https://github.com/<REDACTED>/AgilePlus
+    repo: https://github.com/KooshaPari/AgilePlus
     package: crates/agileplus-mcp-intent
     language: rust
     framework: rmcp
@@ -274,7 +274,7 @@ servers:
   - id: agileplus-mcp
     title: AgilePlus FastMCP bridge
     description: Python FastMCP bridge from LLM tools to AgilePlus gRPC/API (planned)
-    repo: https://github.com/<REDACTED>/AgilePlus
+    repo: https://github.com/KooshaPari/AgilePlus
     package: agileplus-mcp
     language: python
     framework: fastmcp

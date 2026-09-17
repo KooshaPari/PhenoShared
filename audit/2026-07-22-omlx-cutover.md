@@ -1,6 +1,6 @@
 # phenotype-omlx cutover — 2026-07-22
 
-Canonical home: **https://github.com/<REDACTED>/phenotype-omlx**
+Canonical home: **https://github.com/KooshaPari/phenotype-omlx**
 
 ## Stand-ins (NOT deleted)
 

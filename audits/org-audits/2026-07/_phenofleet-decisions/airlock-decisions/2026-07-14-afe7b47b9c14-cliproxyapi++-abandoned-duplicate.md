@@ -2,7 +2,7 @@
 
 **airlock id:** `afe7b47b9c14`
 **canonical local folder:** `cliproxyapi++`
-**upstream URL:** `https://github.com/<REDACTED>/cliproxyapi-plusplus.git`
+**upstream URL:** `https://github.com/KooshaPari/cliproxyapi-plusplus.git`
 **bare mirror:** `/Users/<REDACTED>/.airlock/repos/afe7b47b9c14.git/`
 **worktree:**    `/Users/<REDACTED>/.airlock/worktrees/afe7b47b9c14/`
 
@@ -20,7 +20,7 @@ The canonical home for this upstream is the airlock entry `1a5895a56a55` (local 
 
 | signal | `1a5895a56a55` (`cliproxyapi-plusplus`) ← CANONICAL | `afe7b47b9c14` (`cliproxyapi++`) ← this one |
 |---|---|---|
-| upstream URL | `github.com/<REDACTED>/cliproxyapi-plusplus.git` | (same) |
+| upstream URL | `github.com/KooshaPari/cliproxyapi-plusplus.git` | (same) |
 | bare refs/heads count | 264 | 255 |
 | local path on disk | **yes** — branch `main` @ `e72503ad2` ("feat: upstream port") | **NO** — never checked out |
 | runs (total / active) | 110 / 93 | 74 / 71 |
@@ -53,7 +53,7 @@ The 255 branches in this bare mirror are NOT pushed to `<REDACTED>/cliproxyapi-p
 - Inventory probe JSON: `_phenofleet-decisions/airlock-decisions/.airlock-inventory-2026-07-14.json` (cross-ref table)
 - Absorption evidence JSON: `.airlock-absorption-probe-2026-07-14.json`
 - Companion decision (canonical): `_phenofleet-decisions/airlock-decisions/2026-07-14-1a5895a56a55-cliproxyapi-plusplus-canonical.md` (sibling note in INDEX.md)
-- Remote backup gist: https://gist.github.com/<REDACTED>/3e6038adbfc4fe4c38965d02d0fc867e
+- Remote backup gist: https://gist.github.com/KooshaPari/3e6038adbfc4fe4c38965d02d0fc867e
 
 ## Rollback (if this decision is later reversed)
 

@@ -22,5 +22,5 @@ Add to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-phenotype-infrakit = { git = "https://github.com/<REDACTED>/phenotype-infrakit" }
+phenotype-infrakit = { git = "https://github.com/KooshaPari/phenotype-infrakit" }
 ```

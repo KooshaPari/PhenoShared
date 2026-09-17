@@ -11,12 +11,12 @@
 # PhenoData — Data Layer Workspace
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![CI](https://github.com/<REDACTED>/phenoData/actions/workflows/ci.yml/badge.svg)](https://github.com/<REDACTED>/phenoData/actions/workflows/ci.yml)
-[![Coverage](https://github.com/<REDACTED>/phenoData/actions/workflows/coverage.yml/badge.svg)](https://github.com/<REDACTED>/phenoData/actions/workflows/coverage.yml)
-[![Quality Gate](https://github.com/<REDACTED>/phenoData/actions/workflows/quality-gate.yml/badge.svg)](https://github.com/<REDACTED>/phenoData/actions/workflows/quality-gate.yml)
-[![Gitleaks](https://github.com/<REDACTED>/phenoData/actions/workflows/gitleaks.yml/badge.svg)](https://github.com/<REDACTED>/phenoData/actions/workflows/gitleaks.yml)
-[![CodeQL (Rust)](https://github.com/<REDACTED>/phenoData/actions/workflows/codeql-rust.yml/badge.svg)](https://github.com/<REDACTED>/phenoData/actions/workflows/codeql-rust.yml)
-[![Docs](https://github.com/<REDACTED>/phenoData/actions/workflows/pages.yml/badge.svg)](https://github.com/<REDACTED>/phenoData/actions/workflows/pages.yml)
+[![CI](https://github.com/KooshaPari/phenoData/actions/workflows/ci.yml/badge.svg)](https://github.com/KooshaPari/phenoData/actions/workflows/ci.yml)
+[![Coverage](https://github.com/KooshaPari/phenoData/actions/workflows/coverage.yml/badge.svg)](https://github.com/KooshaPari/phenoData/actions/workflows/coverage.yml)
+[![Quality Gate](https://github.com/KooshaPari/phenoData/actions/workflows/quality-gate.yml/badge.svg)](https://github.com/KooshaPari/phenoData/actions/workflows/quality-gate.yml)
+[![Gitleaks](https://github.com/KooshaPari/phenoData/actions/workflows/gitleaks.yml/badge.svg)](https://github.com/KooshaPari/phenoData/actions/workflows/gitleaks.yml)
+[![CodeQL (Rust)](https://github.com/KooshaPari/phenoData/actions/workflows/codeql-rust.yml/badge.svg)](https://github.com/KooshaPari/phenoData/actions/workflows/codeql-rust.yml)
+[![Docs](https://github.com/KooshaPari/phenoData/actions/workflows/pages.yml/badge.svg)](https://github.com/KooshaPari/phenoData/actions/workflows/pages.yml)
 [![codecov](https://codecov.io/gh/<REDACTED>/phenoData/branch/main/graph/badge.svg)](https://codecov.io/gh/<REDACTED>/phenoData)
 [![Rust](https://img.shields.io/badge/rust-1.84%2B-orange.svg)](https://www.rust-lang.org)
 

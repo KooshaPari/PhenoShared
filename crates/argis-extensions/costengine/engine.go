@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"sort"
 
-	"github.com/<REDACTED>/bifrost-extensions/db/sqlc"
+	"github.com/KooshaPari/bifrost-extensions/db/sqlc"
 )
 
 // Engine handles cost calculation and quota management

@@ -20,7 +20,7 @@ Migrated or repointed surfaces:
 
 | Surface | Absorb target | Evidence |
 |---------|---------------|----------|
-| Config / Settly dependency | `phenotype-config` / `Configra` | `registry/chokepoints.json` marks Pyron verified-clean; local `Cargo.toml` has `settly = { git = "https://github.com/<REDACTED>/phenotype-config" }`. |
+| Config / Settly dependency | `phenotype-config` / `Configra` | `registry/chokepoints.json` marks Pyron verified-clean; local `Cargo.toml` has `settly = { git = "https://github.com/KooshaPari/phenotype-config" }`. |
 | Observability / Traceon | `PhenoObservability` | Pyron chokepoint row repoints Traceon/observe class to PhenoObservability. |
 | Auth / policy / cipher contracts | `Authvault` / AuthKit lineage | `disposition-index.json` row #11 and `phenoshared-p4-checkpoint.md` list Authvault#88 for contracts slice 2. |
 | Event / bus contracts | `Eventra` | `phenoshared-p4-checkpoint.md` lists Eventra#19/#20; Eventra tree contains `rust/phenotype-event-bus` and `rust/phenotype-event-contracts`. |

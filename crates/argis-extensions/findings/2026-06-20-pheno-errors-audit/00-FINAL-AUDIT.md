@@ -297,7 +297,7 @@ The `pheno-errors/` sub-tree lives inside the `argis-extensions` monorepo clone,
 | 40 | `proptest = "1"` dev-dependency | `pheno-errors/Cargo.toml:18` | Dev dependency | implemented | `pheno` | Target also uses proptest | `SUPERSEDED_PARITY` | Same dep | none | none |
 | 41 | `tracing-test = "0.2"` dev-dependency (UNUSED) | `pheno-errors/Cargo.toml:19` | Dev dependency (unused) | implemented (vestigial) | `pheno` | Target's dev-deps for tracing tests | `SUPERSEDED_BETTER` | Target actually uses tracing-test; source declares but doesn't import | none | none |
 | 42 | `description = "Canonical AppError type..."` | `pheno-errors/Cargo.toml:7` | Manifest description | implemented | `pheno` | `pheno/crates/phenotype-error-core/Cargo.toml` description | `SUPERSEDED_BETTER` | Target description includes "Supersedes pheno-errors with extended error context, OTLP export, and structured tracing integration" | none | none |
-| 43 | `repository = "https://github.com/<REDACTED>/pheno-errors"` | `pheno-errors/Cargo.toml:6` | Manifest field | implemented | `pheno` | Target's repo URL points to `<REDACTED>/pheno` | `INTENTIONALLY_DEPRECATED` | Repointing to canonical home is the whole point of absorption | none | none |
+| 43 | `repository = "https://github.com/KooshaPari/pheno-errors"` | `pheno-errors/Cargo.toml:6` | Manifest field | implemented | `pheno` | Target's repo URL points to `<REDACTED>/pheno` | `INTENTIONALLY_DEPRECATED` | Repointing to canonical home is the whole point of absorption | none | none |
 | 44 | `deny.toml` (21-license allowlist) | `pheno-errors/deny.toml:1-46` | Policy file | implemented | `pheno` | Target `pheno/deny.toml` (workspace-level) covers same policy | `INTENTIONALLY_DEPRECATED` | Workspace-level deny policy is authoritative per ADR-027 | none | none |
 | 45 | `justfile` (Phenotype-org standard) | `pheno-errors/justfile:1-42` | Build config | implemented | `pheno` | Monorepo `justfile` at workspace root | `INTENTIONALLY_DEPRECATED` | Monorepo coordinates `just` invocations; per-package justfile is folklore | none | none |
 | 46 | `justfile:30-32` `unused: cargo machete` | `pheno-errors/justfile:30-32` | Build config recipe | implemented | n/a | (none — recipe is orphan, references phantom `coverage` recipe in AGENTS.md) | `NO_MERIT` | AGENTS.md references `just coverage` recipe that doesn't exist; the `unused` recipe is unrelated to that claim (see Phase 1B Bug #7) | none | none |
@@ -542,7 +542,7 @@ The owner of surviving responsibility is **`<REDACTED>/pheno/crates/phenotype-er
 
 **Critical path (P0):**
 
-1. **Manual delete `<REDACTED>/pheno-errors` via GitHub UI**: <https://github.com/<REDACTED>/pheno-errors/settings#dangerZone>
+1. **Manual delete `<REDACTED>/pheno-errors` via GitHub UI**: <https://github.com/KooshaPari/pheno-errors/settings#dangerZone>
    - The active `gh` token has scopes `'gist', 'read:org', 'repo', 'workflow'` (per AGENTS.md § "Key Commands") — no `delete_repo` scope. Manual UI delete is the only available action.
    - 90-day GitHub retention tombstone applies after soft-delete.
    - Expected time: ~30 seconds.
@@ -698,7 +698,7 @@ cat PhenoCompose/packages/pheno-errors/src/index.ts | head -31
 # Open PR on <REDACTED>/phenotype-registry
 
 # Manual delete URL (P0 action)
-# https://github.com/<REDACTED>/pheno-errors/settings#dangerZone
+# https://github.com/KooshaPari/pheno-errors/settings#dangerZone
 ```
 
 ### 11.3 Key cross-references

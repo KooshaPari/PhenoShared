@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://github.com/<REDACTED>/phenotype-router-spec/schema/router-trace.json",
+  "$id": "https://github.com/KooshaPari/phenotype-router-spec/schema/router-trace.json",
   "title": "RouterTrace",
   "description": "A trace event describing a task lifecycle transition. Routers MUST emit these for state changes; consumers MAY use them to drive OTLP/HTTP export, audit logs, or UI updates.",
   "type": "object",

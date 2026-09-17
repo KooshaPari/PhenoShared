@@ -1,4 +1,4 @@
-# Source: https://github.com/<REDACTED>/phenotype-tooling/blob/main/templates/cliff.toml
+# Source: https://github.com/KooshaPari/phenotype-tooling/blob/main/templates/cliff.toml
 # git-cliff configuration for phenotype-infrakit (AgilePlus monorepo)
 # https://git-cliff.org/docs/configuration
 
@@ -41,7 +41,7 @@ conventional_commits = true
 filter_unconventional = false
 split_commits = false
 commit_preprocessors = [
-  { pattern = '\(#(\d+)\)', replace = "([#${1}](https://github.com/<REDACTED>/agileplus/issues/${1}))" },
+  { pattern = '\(#(\d+)\)', replace = "([#${1}](https://github.com/KooshaPari/agileplus/issues/${1}))" },
 ]
 commit_parsers = [
   { message = "^feat", group = "Features" },

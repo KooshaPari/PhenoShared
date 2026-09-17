@@ -67,7 +67,7 @@ required before transfer:
 ```bash
 # Pre-absorption snapshot
 gh repo archive <REDACTED>/template-commons  # archive after absorption PR merges
-git clone https://github.com/<REDACTED>/template-commons.git /tmp/template-commons-pre-absorption
+git clone https://github.com/KooshaPari/template-commons.git /tmp/template-commons-pre-absorption
 ```
 
 **Restore posture:** Source repo will be archived after the absorption PR merges.

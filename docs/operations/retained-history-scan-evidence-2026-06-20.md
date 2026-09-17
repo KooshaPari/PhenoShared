@@ -35,7 +35,7 @@ Luhn-valid card numbers.
 From a fresh mirror clone:
 
 ```bash
-git clone --mirror https://github.com/<REDACTED>/phenotype-registry.git phenotype-registry.git
+git clone --mirror https://github.com/KooshaPari/phenotype-registry.git phenotype-registry.git
 python scripts/retained-history-secret-scan.py phenotype-registry.git --fail-on-findings
 ```
 

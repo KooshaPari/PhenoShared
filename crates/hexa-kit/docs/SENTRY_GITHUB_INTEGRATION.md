@@ -121,7 +121,7 @@ Actions:
    - Should see new issue appear within 30 seconds
 
 3. **Verify GitHub Issue Created:**
-   - Go to GitHub: https://github.com/<REDACTED>/AgilePlus/issues
+   - Go to GitHub: https://github.com/KooshaPari/AgilePlus/issues
    - Should see new issue with title like:
      ```
      [AgilePlus] Test error for Sentry capture
@@ -138,7 +138,7 @@ Actions:
 #### Add Repository Secrets
 
 1. **Go to AgilePlus Repository Settings:**
-   - https://github.com/<REDACTED>/AgilePlus/settings/secrets/actions
+   - https://github.com/KooshaPari/AgilePlus/settings/secrets/actions
 
 2. **New Repository Secret:**
    - Name: `SENTRY_DSN`
@@ -355,9 +355,9 @@ Action: Slack notification only
 | AgilePlus Project | https://sentry.io/organizations/*/issues/?project=ID |
 | GitHub Integration | https://sentry.io/settings/integrations/github/ |
 | Alert Rules | https://sentry.io/alerts/ |
-| AgilePlus Repo | https://github.com/<REDACTED>/AgilePlus |
-| phenotype-infrakit Repo | https://github.com/<REDACTED>/phenotype-infrakit |
-| heliosCLI Repo | https://github.com/<REDACTED>/heliosCLI |
+| AgilePlus Repo | https://github.com/KooshaPari/AgilePlus |
+| phenotype-infrakit Repo | https://github.com/KooshaPari/phenotype-infrakit |
+| heliosCLI Repo | https://github.com/KooshaPari/heliosCLI |
 
 ## Support
 

@@ -139,7 +139,7 @@ class TestIsPlaceholderUrl:
             ("https://example.com/page", True),
             ("https://example.org/path/to/page", True),
             ("https://vendor.com/docs", True),
-            ("https://github.com/<REDACTED>/repo", False),
+            ("https://github.com/KooshaPari/repo", False),
             ("https://docs.example.com", False),
             ("https://example.computer.com", False),  # Not a placeholder
         ],

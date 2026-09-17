@@ -1,7 +1,7 @@
 //! # pheno-forge-scaffold
 //!
 //! Documented scaffold-only task-runner shape, ported from
-//! [`<REDACTED>/phenoForge`](https://github.com/<REDACTED>/phenoForge) on
+//! [`<REDACTED>/phenoForge`](https://github.com/KooshaPari/phenoForge) on
 //! 2026-09-10. The original phenoForge repo's bounded target (Recovery hold
 //! / G2 sentinel + negative invocation) was satisfied by explicit
 //! classification of the unimplemented state, not by re-implementation;

@@ -8,7 +8,7 @@ Compliance standard: registry/audit-absorption-justification/schema.json (14/14 
 ## Source
 
 - **Repo:** `<REDACTED>/PhenoCompose`
-- **GitHub URL:** https://github.com/<REDACTED>/PhenoCompose
+- **GitHub URL:** https://github.com/KooshaPari/PhenoCompose
 - **Archived at:** False
 - **Default branch at audit time:** `main`
 - **Last commit SHA on default branch:** `bc9df2c`
@@ -191,7 +191,7 @@ No exceptions to the ARCHIVE_ONLY verdict are granted.
 
 ```bash
 # Disaster-recovery posture:
-git clone https://github.com/<REDACTED>/PhenoCompose.git /tmp/PhenoCompose-restore
+git clone https://github.com/KooshaPari/PhenoCompose.git /tmp/PhenoCompose-restore
 # Verify bundle sha-256 (re-clone path is clean)
 ```
 

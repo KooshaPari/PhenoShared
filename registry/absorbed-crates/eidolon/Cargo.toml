@@ -14,7 +14,7 @@ rust-version = "1.75"
 version = "0.0.1"
 edition = "2021"
 authors = ["Phenotype Team"]
-repository = "https://github.com/<REDACTED>/Eidolon"
+repository = "https://github.com/KooshaPari/Eidolon"
 license = "MIT OR Apache-2.0"
 
 [workspace.dependencies]

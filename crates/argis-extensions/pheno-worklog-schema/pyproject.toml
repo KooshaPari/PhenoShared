@@ -41,8 +41,8 @@ dev = [
 pheno-worklog-schema = "pheno_worklog_schema.__main__:main"
 
 [project.urls]
-Homepage = "https://github.com/<REDACTED>/phenotype-apps"
-Issues = "https://github.com/<REDACTED>/phenotype-apps/issues"
+Homepage = "https://github.com/KooshaPari/phenotype-apps"
+Issues = "https://github.com/KooshaPari/phenotype-apps/issues"
 
 [tool.setuptools.packages.find]
 where = ["src"]

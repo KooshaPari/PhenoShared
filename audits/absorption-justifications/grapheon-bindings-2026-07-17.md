@@ -67,7 +67,7 @@ required before transfer:
 ```bash
 # Pre-absorption snapshot
 gh repo archive <REDACTED>/grapheon-bindings  # archive after absorption PR merges
-git clone https://github.com/<REDACTED>/grapheon-bindings.git /tmp/grapheon-bindings-pre-absorption
+git clone https://github.com/KooshaPari/grapheon-bindings.git /tmp/grapheon-bindings-pre-absorption
 ```
 
 **Restore posture:** Source repo will be archived after the absorption PR merges.

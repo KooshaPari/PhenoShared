@@ -441,7 +441,7 @@ This work package implements reusable GitHub Actions workflows in the `phenotype
              run: |
                # Build or download pheno CLI
                # (assumes pheno-cli is built and available)
-               go install github.com/<REDACTED>/pheno-cli@latest
+               go install github.com/KooshaPari/pheno-cli@latest
 
            - name: Run audit
              run: |

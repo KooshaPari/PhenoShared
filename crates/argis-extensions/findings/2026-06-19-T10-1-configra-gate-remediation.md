@@ -171,7 +171,7 @@ $ git -C /tmp/Configra-batch-11 log --oneline -2
 $ git -C /tmp/Configra-batch-11 push origin wip-2026-06-19-configra-gate-remediation \
     --no-recurse-submodules --no-verify
 remote: Create a pull request for 'wip-2026-06-19-configra-gate-remediation' on GitHub by visiting:
-remote:      https://github.com/<REDACTED>/Configra/pull/new/wip-2026-06-19-configra-gate-remediation
+remote:      https://github.com/KooshaPari/Configra/pull/new/wip-2026-06-19-configra-gate-remediation
 To github.com:<REDACTED>/Configra.git
  * [new branch]      wip-2026-06-19-configra-gate-remediation -> wip-2026-06-19-configra-gate-remediation
 ```

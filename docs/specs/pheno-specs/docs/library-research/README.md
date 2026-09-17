@@ -4,9 +4,9 @@
 ## Registry Files
 
 ### Core Registries
-- [PhenoSpecs Registry](https://github.com/<REDACTED>/PhenoSpecs/blob/main/registry.yaml) - Specifications
-- [HexaKit Registry](https://github.com/<REDACTED>/HexaKit/blob/main/registry.yaml) - Templates
-- [PhenoHandbook Config](https://github.com/<REDACTED>/PhenoHandbook/blob/main/docs/.vitepress/config.mts) - Patterns
+- [PhenoSpecs Registry](https://github.com/KooshaPari/PhenoSpecs/blob/main/registry.yaml) - Specifications
+- [HexaKit Registry](https://github.com/KooshaPari/HexaKit/blob/main/registry.yaml) - Templates
+- [PhenoHandbook Config](https://github.com/KooshaPari/PhenoHandbook/blob/main/docs/.vitepress/config.mts) - Patterns
 
 ### 📚 Library & Research Registry
 **[LIBRARY_RESEARCH_REGISTRY.md](./LIBRARY_RESEARCH_REGISTRY.md)** - Comprehensive catalog of:
@@ -24,13 +24,13 @@ This registry enables informed decisions about when to wrap existing libraries v
 
 | I want to... | Go to... |
 |--------------|----------|
-| Find a spec for a feature | [PhenoSpecs/specs/](https://github.com/<REDACTED>/PhenoSpecs/tree/main/specs) |
-| Learn a design pattern | [PhenoHandbook/patterns/](https://github.com/<REDACTED>/PhenoHandbook/tree/main/patterns) |
-| See what NOT to do | [PhenoHandbook/anti-patterns/](https://github.com/<REDACTED>/PhenoHandbook/tree/main/anti-patterns) |
-| Get coding standards | [PhenoHandbook/guidelines/](https://github.com/<REDACTED>/PhenoHandbook/tree/main/guidelines) |
-| Use a methodology (TDD/BDD/DDD) | [PhenoHandbook/methodologies/](https://github.com/<REDACTED>/PhenoHandbook/tree/main/methodologies) |
-| Find a code template | [HexaKit/by-language/](https://github.com/<REDACTED>/HexaKit/tree/main/by-language) |
-| Scaffold a new project | [HexaKit/by-project/](https://github.com/<REDACTED>/HexaKit/tree/main/by-project) |
+| Find a spec for a feature | [PhenoSpecs/specs/](https://github.com/KooshaPari/PhenoSpecs/tree/main/specs) |
+| Learn a design pattern | [PhenoHandbook/patterns/](https://github.com/KooshaPari/PhenoHandbook/tree/main/patterns) |
+| See what NOT to do | [PhenoHandbook/anti-patterns/](https://github.com/KooshaPari/PhenoHandbook/tree/main/anti-patterns) |
+| Get coding standards | [PhenoHandbook/guidelines/](https://github.com/KooshaPari/PhenoHandbook/tree/main/guidelines) |
+| Use a methodology (TDD/BDD/DDD) | [PhenoHandbook/methodologies/](https://github.com/KooshaPari/PhenoHandbook/tree/main/methodologies) |
+| Find a code template | [HexaKit/by-language/](https://github.com/KooshaPari/HexaKit/tree/main/by-language) |
+| Scaffold a new project | [HexaKit/by-project/](https://github.com/KooshaPari/HexaKit/tree/main/by-project) |
 
 ---
 
@@ -177,7 +177,7 @@ All registries have:
 
 ## Links
 
-- [PhenoSpecs](https://github.com/<REDACTED>/PhenoSpecs)
-- [PhenoHandbook](https://github.com/<REDACTED>/PhenoHandbook)
-- [HexaKit](https://github.com/<REDACTED>/HexaKit)
-- [AgilePlus](https://github.com/<REDACTED>/AgilePlus) - Spec-driven development
+- [PhenoSpecs](https://github.com/KooshaPari/PhenoSpecs)
+- [PhenoHandbook](https://github.com/KooshaPari/PhenoHandbook)
+- [HexaKit](https://github.com/KooshaPari/HexaKit)
+- [AgilePlus](https://github.com/KooshaPari/AgilePlus) - Spec-driven development

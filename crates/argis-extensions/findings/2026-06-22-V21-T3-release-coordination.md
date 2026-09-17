@@ -489,7 +489,7 @@ Timeout: 30m
       ==> (d) Pushing main + v0.0.13 to origin
         [skip] ref already up to date
       ==> (e) Creating GitHub release for v0.0.13
-        https://github.com/<REDACTED>/phenotype-apps/releases/tag/v0.0.13
+        https://github.com/KooshaPari/phenotype-apps/releases/tag/v0.0.13
       ==> Release v0.0.13 complete.
 [7/8] Build source tarball
       phenotype-0.0.13-source.tar.gz (XXX bytes)
@@ -502,7 +502,7 @@ Timeout: 30m
 
 Step summary:
   ## Release v0.0.13
-  URL: https://github.com/<REDACTED>/phenotype-apps/releases/tag/v0.0.13
+  URL: https://github.com/KooshaPari/phenotype-apps/releases/tag/v0.0.13
   Published: 2026-06-22T...
   Assets:
     - `phenotype-0.0.13-source.tar.gz` (XXX bytes)

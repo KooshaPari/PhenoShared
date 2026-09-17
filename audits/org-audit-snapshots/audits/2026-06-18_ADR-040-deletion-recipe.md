@@ -49,10 +49,10 @@ Since the `gh repo delete` CLI is unavailable without the `delete_repo` scope, t
 
 The active `gh` token has scopes `'gist', 'read:org', 'repo', 'workflow'`. No `delete_repo`. To complete the migration to fully-deleted state, run via the GitHub UI (Settings → General → Danger Zone → Delete this repository):
 
-- https://github.com/<REDACTED>/dagctl/settings#dangerZone
-- https://github.com/<REDACTED>/kwality/settings#dangerZone
-- https://github.com/<REDACTED>/phenotype-auth-ts/settings#dangerZone
-- https://github.com/<REDACTED>/dinoforge-packs/settings#dangerZone
+- https://github.com/KooshaPari/dagctl/settings#dangerZone
+- https://github.com/KooshaPari/kwality/settings#dangerZone
+- https://github.com/KooshaPari/phenotype-auth-ts/settings#dangerZone
+- https://github.com/KooshaPari/dinoforge-packs/settings#dangerZone
 
 90-day GitHub retention applies to the soft-delete tombstone.
 ```

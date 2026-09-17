@@ -16,7 +16,7 @@ crate-type = ["cdylib", "staticlib", "rlib"]
 [dependencies]
 # Memory facade (v2) — bridge IS the C-ABI wrapper for thegent-memory.
 # Both crates must evolve together; intentional cross-repo path-dep.
-thegent-memory = { git = "https://github.com/<REDACTED>/thegent", path = "crates/thegent-memory" }
+thegent-memory = { git = "https://github.com/KooshaPari/thegent", path = "crates/thegent-memory" }
 tokio = { workspace = true }
 serde_json = { workspace = true }
 thiserror = { workspace = true }

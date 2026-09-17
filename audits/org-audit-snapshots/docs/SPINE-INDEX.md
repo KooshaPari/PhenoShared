@@ -6,13 +6,13 @@
 
 | Spine | Role | Repo |
 |---|---|---|
-| `phenotype-org-audits` | audit / inventory spine (this repo) | github.com/<REDACTED>/phenotype-org-audits |
-| `phenotype-apps` | apps catalog spine (meta-portfolio, 324+ entries) | github.com/<REDACTED>/phenotype-apps |
-| `substrate` | dispatch spine (3 drivers x 6 engines) | github.com/<REDACTED>/substrate |
-| `AgilePlus` | control plane spine (cockpit) | github.com/<REDACTED>/AgilePlus |
-| `Tracera` | trace spine | github.com/<REDACTED>/Tracera |
-| `pheno` | workspace umbrella | github.com/<REDACTED>/pheno |
-| `phenotype-infra` | infra workspace | github.com/<REDACTED>/phenotype-infra |
+| `phenotype-org-audits` | audit / inventory spine (this repo) | github.com/KooshaPari/phenotype-org-audits |
+| `phenotype-apps` | apps catalog spine (meta-portfolio, 324+ entries) | github.com/KooshaPari/phenotype-apps |
+| `substrate` | dispatch spine (3 drivers x 6 engines) | github.com/KooshaPari/substrate |
+| `AgilePlus` | control plane spine (cockpit) | github.com/KooshaPari/AgilePlus |
+| `Tracera` | trace spine | github.com/KooshaPari/Tracera |
+| `pheno` | workspace umbrella | github.com/KooshaPari/pheno |
+| `phenotype-infra` | infra workspace | github.com/KooshaPari/phenotype-infra |
 
 ## Recent pillars (active, in audit cycle)
 

@@ -7,9 +7,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/<REDACTED>/MCPForge/integrationtests/tests/clangd/internal"
-	"github.com/<REDACTED>/MCPForge/integrationtests/tests/common"
-	"github.com/<REDACTED>/MCPForge/internal/tools"
+	"github.com/KooshaPari/MCPForge/integrationtests/tests/clangd/internal"
+	"github.com/KooshaPari/MCPForge/integrationtests/tests/common"
+	"github.com/KooshaPari/MCPForge/internal/tools"
 )
 
 // TestReadDefinition tests the ReadDefinition tool with various C++ type definitions

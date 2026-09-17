@@ -6,9 +6,9 @@ import (
 	"log/slog"
 	"sync"
 
-	"github.com/<REDACTED>/bifrost-extensions/api/graphql/gen"
-	"github.com/<REDACTED>/bifrost-extensions/api/graphql/model"
-	"github.com/<REDACTED>/bifrost-extensions/db"
+	"github.com/KooshaPari/bifrost-extensions/api/graphql/gen"
+	"github.com/KooshaPari/bifrost-extensions/api/graphql/model"
+	"github.com/KooshaPari/bifrost-extensions/db"
 )
 
 // Resolver is the root resolver that provides access to all sub-resolvers.

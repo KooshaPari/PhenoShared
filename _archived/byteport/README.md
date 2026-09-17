@@ -28,17 +28,17 @@
 
 # BytePort
 
-[![CI](https://github.com/<REDACTED>/BytePort/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/<REDACTED>/BytePort/actions/workflows/ci.yml)
+[![CI](https://github.com/KooshaPari/BytePort/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/KooshaPari/BytePort/actions/workflows/ci.yml)
 [![crates.io](https://img.shields.io/crates/v/byteport.svg)](https://crates.io/crates/byteport)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Phenotype](https://img.shields.io/badge/Phenotype-org-blueviolet)](https://github.com/<REDACTED>)
+[![Phenotype](https://img.shields.io/badge/Phenotype-org-blueviolet)](https://github.com/KooshaPari)
 
 ## Badges
 
-[![Build](https://img.shields.io/github/actions/workflow/status/<REDACTED>/BytePort/ci.yml?branch=main&label=build)](https://github.com/<REDACTED>/BytePort/actions/workflows/ci.yml)
-[![Release](https://img.shields.io/github/v/release/<REDACTED>/BytePort?include_prereleases&sort=semver)](https://github.com/<REDACTED>/BytePort/releases)
+[![Build](https://img.shields.io/github/actions/workflow/status/<REDACTED>/BytePort/ci.yml?branch=main&label=build)](https://github.com/KooshaPari/BytePort/actions/workflows/ci.yml)
+[![Release](https://img.shields.io/github/v/release/<REDACTED>/BytePort?include_prereleases&sort=semver)](https://github.com/KooshaPari/BytePort/releases)
 [![License](https://img.shields.io/github/license/<REDACTED>/BytePort)](LICENSE)
-[![Phenotype](https://img.shields.io/badge/Phenotype-org-blueviolet)](https://github.com/<REDACTED>)
+[![Phenotype](https://img.shields.io/badge/Phenotype-org-blueviolet)](https://github.com/KooshaPari)
 [![AI Slop Inside](https://sladge.net/badge.svg)](https://sladge.net)
 
 > **Architecture:** See [ARCHITECTURE.md](ARCHITECTURE.md) for component architecture.
@@ -78,7 +78,7 @@ Demo portfolio integration (Slickport) expects credentials you set yourself. **D
 ## An IAC Deployment + UX Generation platform for Software Developer Portfolios
 ## With One IAC File Defining your Application Structured and related infra, Byteport deploys your project from your github repository onto your aws cloud platform, then utilizing chatgpt(soon llama) to then send object templates for additions to demonstration/portfolio sites to display and provide interaction access to these projects (and show them off automagically!)
 ### [Example](https://drive.google.com/file/d/1ZJeQOPHCNY1aHjXprNrmxMNi9hZaYSPW/view?usp=sharing)
-### Refer to [Fixit-Go](https://github.com/<REDACTED>/fixit-go) [Chatta](https://github.com/<REDACTED>/chatta) For Project Examples, [Slickport](https://github.com/<REDACTED>/slickport) for Portfolio integration example
+### Refer to [Fixit-Go](https://github.com/KooshaPari/fixit-go) [Chatta](https://github.com/KooshaPari/chatta) For Project Examples, [Slickport](https://github.com/KooshaPari/slickport) for Portfolio integration example
 ## Quickstart
 ### Prepwork:
 - Install SpinCLI, golang etc

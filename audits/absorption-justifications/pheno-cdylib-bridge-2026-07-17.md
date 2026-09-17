@@ -67,7 +67,7 @@ required before transfer:
 ```bash
 # Pre-absorption snapshot
 gh repo archive <REDACTED>/pheno-cdylib-bridge  # archive after absorption PR merges
-git clone https://github.com/<REDACTED>/pheno-cdylib-bridge.git /tmp/pheno-cdylib-bridge-pre-absorption
+git clone https://github.com/KooshaPari/pheno-cdylib-bridge.git /tmp/pheno-cdylib-bridge-pre-absorption
 ```
 
 **Restore posture:** Source repo will be archived after the absorption PR merges.

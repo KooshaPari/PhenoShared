@@ -4,7 +4,7 @@
   "scope": "<REDACTED>/Dino-fork versus <REDACTED>/Dino ancestry and boundary",
   "evidence": {
     "dino_fork": {
-      "url": "https://github.com/<REDACTED>/Dino-fork",
+      "url": "https://github.com/KooshaPari/Dino-fork",
       "is_fork": false,
       "parent": null,
       "default_branch": "wsm/agileplus-dag-20260610",
@@ -16,7 +16,7 @@
       "size_kb": 656472
     },
     "dino": {
-      "url": "https://github.com/<REDACTED>/Dino",
+      "url": "https://github.com/KooshaPari/Dino",
       "is_fork": false,
       "parent": null,
       "default_branch": "main",

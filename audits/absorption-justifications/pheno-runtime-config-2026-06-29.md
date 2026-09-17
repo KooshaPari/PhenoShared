@@ -12,7 +12,7 @@
 | Created | 2026-04-15 |
 | Last push | 2026-06-28 |
 | Stars / Issues | 0 / 0 |
-| html_url | https://github.com/<REDACTED>/pheno-runtime-config |
+| html_url | https://github.com/KooshaPari/pheno-runtime-config |
 | Verdict (canonical) | `ARCHIVE_ONLY` |
 
 ## Target
@@ -73,7 +73,7 @@ None. The crate is canonical and federated.
 The pheno-runtime-config crate is the dedicated hot-reloadable runtime config library for the pheno-* fleet (capacity, tracing, drift-detector, predict, otel-wt, scaffold-kit). It is small (10 KB) and tested, with a clear separation of concerns: phenotype-infra handles federation-service infrastructure, pheno-runtime-config handles runtime config schema + hot-reload. Deleting the repo would force every pheno-* crate to vendor the same code. However, the gap between deletion and federation is real — there is no current way to absorb (cannot absorb a crate that is still the canonical home; federation is a runtime dependency, not a code absorption). Outstanding trade-off: this is a runtime-config library, not an application service, so ARCHIVE_ONLY is the correct disposition. The remaining residual is the need to maintain a separate release pipeline for one small library.
 
 ### Rebuttal 2: What is the re-clone mechanism?
-A full `git clone --recurse-submodules https://github.com/<REDACTED>/pheno-runtime-config.git` followed by `cargo build --release` reproduces the crate. The clone includes the federation submodules and the build output is deterministic on Rust 1.74+. We need a sha-256 verification step at federation time: the `phenotype-infra` orchestrator should verify the downloaded crate's `Cargo.lock` against the published SHA-256. We do not absorb (cannot absorb because pheno-runtime-config is the canonical home). The gap between the source-of-truth and the federation target is a residual: the published sha-256 must be kept in sync with the crate's `Cargo.lock` content.
+A full `git clone --recurse-submodules https://github.com/KooshaPari/pheno-runtime-config.git` followed by `cargo build --release` reproduces the crate. The clone includes the federation submodules and the build output is deterministic on Rust 1.74+. We need a sha-256 verification step at federation time: the `phenotype-infra` orchestrator should verify the downloaded crate's `Cargo.lock` against the published SHA-256. We do not absorb (cannot absorb because pheno-runtime-config is the canonical home). The gap between the source-of-truth and the federation target is a residual: the published sha-256 must be kept in sync with the crate's `Cargo.lock` content.
 
 ### Rebuttal 3: Is the package still in use?
 Yes. The pheno-* fleet (capacity, tracing, drift-detector, predict, otel-wt, scaffold-kit) all depend on pheno-runtime-config for hot-reloadable configuration. We do not absorb (cannot absorb a live dependency). The trade-off: the crate is the canonical home, and bundling it into phenotype-infra would force every pheno-* consumer to vendor the same code. The outstanding residual is a re-clone policy: phenotype-infra's orchestrator should verify the SHA-256 of the federation target before consuming it.
@@ -94,7 +94,7 @@ Yes. The pheno-* fleet (capacity, tracing, drift-detector, predict, otel-wt, sca
    ```
 2. Re-clone the original repo into a workspace:
    ```bash
-   git clone https://github.com/<REDACTED>/pheno-runtime-config.git
+   git clone https://github.com/KooshaPari/pheno-runtime-config.git
    ```
 3. Restore the canonical snapshot into the workspace, but **do not** absorb into the federation (runtime configs are recomposed, not merged):
    ```bash
@@ -120,7 +120,7 @@ The repo is the canonical home — restore = re-clone. Use the federation gate, 
 
 ```bash
 # 1. Re-clone the canonical source
-git clone --recurse-submodules https://github.com/<REDACTED>/pheno-runtime-config.git
+git clone --recurse-submodules https://github.com/KooshaPari/pheno-runtime-config.git
 cd pheno-runtime-config
 
 # 2. Verify sha-256 of federation target

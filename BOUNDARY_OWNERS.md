@@ -226,7 +226,7 @@ DELETE archived repo  IFF:
 - `docs/adr/ADR-005-agileplus-governance-boundary.md`
 - `docs/adr/ADR-006-zero-loop-agent-session.md`
 - `RATIONALIZATION_EXECUTION.md` — absorption wave (§1 partially superseded here for obs libs)
-- Open gap ports: [registry#76](https://github.com/<REDACTED>/phenotype-registry/pull/76), [phenokits-commons#3](https://github.com/<REDACTED>/phenokits-commons/pull/3), [Agentora#79](https://github.com/<REDACTED>/Agentora/pull/79), [phenotype-tooling#155](https://github.com/<REDACTED>/phenotype-tooling/pull/155), [PhenoObservability#157](https://github.com/<REDACTED>/PhenoObservability/pull/157)
+- Open gap ports: [registry#76](https://github.com/KooshaPari/phenotype-registry/pull/76), [phenokits-commons#3](https://github.com/KooshaPari/phenokits-commons/pull/3), [Agentora#79](https://github.com/KooshaPari/Agentora/pull/79), [phenotype-tooling#155](https://github.com/KooshaPari/phenotype-tooling/pull/155), [PhenoObservability#157](https://github.com/KooshaPari/PhenoObservability/pull/157)
 
 
 ### Interaction (added 2026-06-23)
@@ -240,7 +240,7 @@ DELETE archived repo  IFF:
 - **Recommendation:** **KEEP_ACTIVE** — establish per-platform SOTA gap closure roadmap
 
 ### Event-bus Runtime (updated 2026-07-14)
-- **Canonical owner:** `<REDACTED>/phenoEvents` ([v0.1.0](https://github.com/<REDACTED>/phenoEvents/releases/tag/v0.1.0))
+- **Canonical owner:** `<REDACTED>/phenoEvents` ([v0.1.0](https://github.com/KooshaPari/phenoEvents/releases/tag/v0.1.0))
 - **Stack:** Rust (SQLite durable outbox + OTLP)
 - **Boundary:** Reusable runtime event bus, envelope handling, retries, DLQ, idempotency, projections, and tracing.
 - **Status:** active; Eventra archived after the Eventra #65 migration landed in phenoEvents #30.

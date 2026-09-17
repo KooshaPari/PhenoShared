@@ -5,7 +5,7 @@
 
 # benchora-landing
 
-Landing page at `benchora.phenotype.space` for [<REDACTED>/Benchora](https://github.com/<REDACTED>/Benchora).
+Landing page at `benchora.phenotype.space` for [<REDACTED>/Benchora](https://github.com/KooshaPari/Benchora).
 
 Pulls README at build time from GitHub. Tier 2 of the org-pages tree (Tier 1 is `projects.<REDACTED>.com`).
 

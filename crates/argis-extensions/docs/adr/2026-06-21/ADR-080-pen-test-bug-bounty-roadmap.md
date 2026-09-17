@@ -39,13 +39,13 @@ The fleet runs **2 external pen tests + 1 bug bounty per calendar year**, on a f
 
 **Pen-test scope doc (per engagement):** `docs/security/pen-test-{YYYY-Qn}-scope.md` is published 4 weeks before engagement start, with the full asset list, threat model summary, rules of engagement, and out-of-scope items.
 
-**Bounty program page:** `https://github.com/<REDACTED>/phenotype-apps/security/policy` (GitHub Security Policy) cross-linked from `phenotype.org/.well-known/security.txt` per RFC 9116.
+**Bounty program page:** `https://github.com/KooshaPari/phenotype-apps/security/policy` (GitHub Security Policy) cross-linked from `phenotype.org/.well-known/security.txt` per RFC 9116.
 
 ## 3. Scope
 
 **In scope (every engagement, 2027+):**
 
-- **47 active repos** under `github.com/<REDACTED>/*` (per the registry's `fsm: active` rows in `phenotype-registry/registry/disposition-index.json`).
+- **47 active repos** under `github.com/KooshaPari/*` (per the registry's `fsm: active` rows in `phenotype-registry/registry/disposition-index.json`).
 - **9 substrate crates** (`pheno-config`, `pheno-context`, `pheno-errors`, `pheno-flags`, `pheno-otel`, `pheno-port-adapter`, `pheno-tracing`, `pheno-mcp-router`, `pheno-capacity`) plus their dependents in the workspace.
 - **All public APIs** — REST endpoints exposed by `phenotype-router`, gRPC services in `phenotype-hub`, and the 6 federated services (`phenoMCP`, `phenoObservability`, `phenoEvents`).
 - **Federation endpoints** — OIDC discovery, JWKS, mTLS handshake paths (per ADR-046 + ADR-079).

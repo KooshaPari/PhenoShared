@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/<REDACTED>/MCPForge/internal/lsp"
-	"github.com/<REDACTED>/MCPForge/internal/protocol"
+	"github.com/KooshaPari/MCPForge/internal/lsp"
+	"github.com/KooshaPari/MCPForge/internal/protocol"
 )
 
 // ExecuteCodeLens executes a specific code lens command from a file.

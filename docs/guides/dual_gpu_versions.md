@@ -41,7 +41,7 @@ Idempotent bootstrap (installs both engines per the lane):
 ```bash
 sudo bash scripts/install_wsl_pheno_serve.sh \
   --branch wip/2026-08-20-v0.12 \
-  --repo-url https://github.com/<REDACTED>/pheno-harness.git
+  --repo-url https://github.com/KooshaPari/pheno-harness.git
 ```
 
 Manual pip pins (inside the host venv, e.g. `~/.pheno-serve-venv`):

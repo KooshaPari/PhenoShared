@@ -61,4 +61,4 @@ Date: 2026-03-29
 | helix-logging archived | DONE | GitHub archived |
 | helix-tracing archived | DONE | GitHub archived |
 | thegent-cache archived | DONE | GitHub archived |
-| helix-logging + helix-tracing absorbed into tracely | DONE | PR #3 opened: https://github.com/<REDACTED>/tracely/pull/3 |
+| helix-logging + helix-tracing absorbed into tracely | DONE | PR #3 opened: https://github.com/KooshaPari/tracely/pull/3 |

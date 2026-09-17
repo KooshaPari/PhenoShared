@@ -14,7 +14,7 @@
 //!   - CratesIo   — `cargo install sharecli --force`
 //!   - Binstall   — `cargo binstall sharecli`
 //!   - Brew       — `brew upgrade sharecli` / `brew install --HEAD sharecli`
-//!   - GhReleases — `curl -L https://github.com/<REDACTED>/sharecli/releases/latest`
+//!   - GhReleases — `curl -L https://github.com/KooshaPari/sharecli/releases/latest`
 
 // All public functions in this module are dispatched via the CLI subcommand
 // enum, so the compiler sees them as unused. Suppress the warning.
@@ -47,7 +47,7 @@ impl UpgradeChannel {
             UpgradeChannel::Binstall => "cargo binstall sharecli",
             UpgradeChannel::Brew => "brew upgrade sharecli",
             UpgradeChannel::GhReleases => {
-                "curl -fsSL https://github.com/<REDACTED>/sharecli/releases/latest"
+                "curl -fsSL https://github.com/KooshaPari/sharecli/releases/latest"
             }
         }
     }

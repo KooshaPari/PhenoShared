@@ -7,9 +7,9 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/<REDACTED>/nanovms/internal/domain"
-	"github.com/<REDACTED>/nanovms/pkg/config"
-	"github.com/<REDACTED>/nanovms/pkg/tier"
+	"github.com/KooshaPari/nanovms/internal/domain"
+	"github.com/KooshaPari/nanovms/pkg/config"
+	"github.com/KooshaPari/nanovms/pkg/tier"
 )
 
 // Engine is the orchestration engine that routes workloads to the appropriate tier.

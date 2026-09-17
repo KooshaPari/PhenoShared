@@ -1,6 +1,6 @@
 # argis-monitor
 
-Observable Integration substrate for [bifrost-extensions](https://github.com/<REDACTED>/argis-extensions) (Tenet 4 of the [charter](../CHARTER.md)).
+Observable Integration substrate for [bifrost-extensions](https://github.com/KooshaPari/argis-extensions) (Tenet 4 of the [charter](../CHARTER.md)).
 
 Polls the Bifrost gateway at a configurable interval, computes the current SLO burn rate, and exposes the result as Prometheus metrics on a local HTTP endpoint.
 

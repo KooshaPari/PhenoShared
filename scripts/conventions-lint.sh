@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # conventions-lint — checks a repo against the Phenotype org conventions
 # (PhenoHandbook patterns/). Local enforcement copy derived from:
-#   https://github.com/<REDACTED>/phenotype-org-governance/blob/main/scripts/conventions-lint.sh
+#   https://github.com/KooshaPari/phenotype-org-governance/blob/main/scripts/conventions-lint.sh
 #
 # Usage: conventions-lint.sh [REPO_DIR]
 #   REPO_DIR defaults to the current directory.

@@ -1123,7 +1123,7 @@
         "date": "2026-06-20",
         "l_level": "L5-110",
         "migrated_by": "mission-3b",
-        "pr": "https://github.com/<REDACTED>/phenotype-ops/pull/4",
+        "pr": "https://github.com/KooshaPari/phenotype-ops/pull/4",
         "status": "migrated-to-configra"
       },
       "core_lang": "rust",
@@ -14490,7 +14490,7 @@
       "fsm": "archived",
       "id": "repo-pheno-rt-spec-probe",
       "name": "pheno-rt-spec-probe",
-      "note": "Local clone of already-absorbed repo (https://github.com/<REDACTED>/phenotype-router-spec.git). No separate GH source to archive. Local probe/clone of already-absorbed phenotype-router-spec. Points to same origin.",
+      "note": "Local clone of already-absorbed repo (https://github.com/KooshaPari/phenotype-router-spec.git). No separate GH source to archive. Local probe/clone of already-absorbed phenotype-router-spec. Points to same origin.",
       "source": "local-clone-detection"
     },
     {

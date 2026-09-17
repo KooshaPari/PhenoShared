@@ -11,7 +11,7 @@
   "role": "shared-http-toolkit",
   "domain_role": "http-middleware-and-typescript-client",
   "boundary": "cross-language-http-primitives",
-  "gh_url": "https://github.com/<REDACTED>/Quillr",
+  "gh_url": "https://github.com/KooshaPari/Quillr",
   "default_branch": "main",
   "remote_head": "e2501987af10f661d35a89848cb877c6198030fb",
   "license": "MIT",

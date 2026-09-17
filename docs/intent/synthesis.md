@@ -16,9 +16,9 @@
 
 ## Confirmed goals
 
-1. **Domain role SSOT** — `DOMAIN_ROLES.md` + `LANGUAGE_PLACEMENT.md` per [#77](https://github.com/<REDACTED>/phenotype-registry/pull/77)
+1. **Domain role SSOT** — `DOMAIN_ROLES.md` + `LANGUAGE_PLACEMENT.md` per [#77](https://github.com/KooshaPari/phenotype-registry/pull/77)
 2. **Kit reconcile then delete** — TestingKit/ResilienceKit/ObservabilityKit absorbed into python-sdk; registry #81 retired
-3. **RFC migrations** — Traceon→observe, Settly→phenotype-config per [#82](https://github.com/<REDACTED>/phenotype-registry/pull/82)
+3. **RFC migrations** — Traceon→observe, Settly→phenotype-config per [#82](https://github.com/KooshaPari/phenotype-registry/pull/82)
 
 ## Inferred goals
 

@@ -9,12 +9,12 @@ are now reachable from `<REDACTED>`'s account.
 | Remote | URL | Pre-auth | Post-auth | Reach from <REDACTED> |
 |---|---|---|---|---|
 | `argis` | `git@github.com:<REDACTED>/argis-extensions.git` | ✅ | ✅ | ✅ (wrong repo) |
-| `pheno` | `https://github.com/<REDACTED>/phenoShared.git` | ✅ | ✅ | ✅ (wrong repo) |
+| `pheno` | `https://github.com/KooshaPari/phenoShared.git` | ✅ | ✅ | ✅ (wrong repo) |
 | `voxel` | `git@github.com:<REDACTED>/phenotype-voxel.git` | ✅ | ✅ | ✅ (wrong repo) |
 | `dmouse` | `https://github.com/Dmouse92/AgilePlus.git` | ❌ 404 | ❌ 404 | ❌ (Dmouse92 is a CLIENT account; never push there) |
 | `github` | `https://github.com/Phenotype/Phenotype.git` | ❌ 404 | ❌ 404 | ❌ (org doesn't exist) |
-| `origin` | `https://github.com/<REDACTED>/FocalPoint.git` | ❌ 404 | ❌ 404 | ❌ (iOS app, wrong repo for monorepo changes) |
-| `worklogs` | `https://github.com/<REDACTED>/worklogs.git` | ❌ 404 | ❌ 404 | ❌ (separate worklogs repo, not the monorepo) |
+| `origin` | `https://github.com/KooshaPari/FocalPoint.git` | ❌ 404 | ❌ 404 | ❌ (iOS app, wrong repo for monorepo changes) |
+| `worklogs` | `https://github.com/KooshaPari/worklogs.git` | ❌ 404 | ❌ 404 | ❌ (separate worklogs repo, not the monorepo) |
 
 ## Structural finding: the `repos/` directory has NO upstream remote
 

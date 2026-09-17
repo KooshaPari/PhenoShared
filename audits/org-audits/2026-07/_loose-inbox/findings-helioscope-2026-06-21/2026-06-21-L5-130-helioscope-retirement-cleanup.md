@@ -18,8 +18,8 @@ DOC-HISTORICAL.** Two cleanup PRs opened:
 
 | Repo | PR | Branch | Files | Lines changed |
 | --- | --- | --- | --- | --- |
-| helios-cli | [#599](https://github.com/<REDACTED>/helios-cli/pull/599) | `chore/l5-130-helioscope-stale-docs-2026-06-21` | `README.md`, `CLAUDE.md`, `AGENTS.md` | +8 / -4 |
-| phenotype-registry | [#340](https://github.com/<REDACTED>/phenotype-registry/pull/340) | `chore/l5-130-helioscope-stale-registry-2026-06-21` | `docs/intent/helioscope.md`, `docs/boundary/helioscope.md`, `scripts/resolve-collision.py` | +38 / -19 |
+| helios-cli | [#599](https://github.com/KooshaPari/helios-cli/pull/599) | `chore/l5-130-helioscope-stale-docs-2026-06-21` | `README.md`, `CLAUDE.md`, `AGENTS.md` | +8 / -4 |
+| phenotype-registry | [#340](https://github.com/KooshaPari/phenotype-registry/pull/340) | `chore/l5-130-helioscope-stale-registry-2026-06-21` | `docs/intent/helioscope.md`, `docs/boundary/helioscope.md`, `scripts/resolve-collision.py` | +38 / -19 |
 
 ## Classification methodology
 
@@ -94,9 +94,9 @@ Each reference was classified using four buckets, in order of disposition:
 ## Verification
 
 - `gh pr list --head chore/l5-130-helioscope-stale-docs-2026-06-21` →
-  `{"number": 599, "state": "OPEN", "title": "chore(L5-130): replace stale 'Helioscope' references in helios-cli docs", "url": "https://github.com/<REDACTED>/helios-cli/pull/599"}`
+  `{"number": 599, "state": "OPEN", "title": "chore(L5-130): replace stale 'Helioscope' references in helios-cli docs", "url": "https://github.com/KooshaPari/helios-cli/pull/599"}`
 - `gh pr list --head chore/l5-130-helioscope-stale-registry-2026-06-21` →
-  `{"number": 340, "state": "OPEN", "title": "chore(L5-130): retire helioscope registry entries; fold to HeliosCLI", "url": "https://github.com/<REDACTED>/phenotype-registry/pull/340"}`
+  `{"number": 340, "state": "OPEN", "title": "chore(L5-130): retire helioscope registry entries; fold to HeliosCLI", "url": "https://github.com/KooshaPari/phenotype-registry/pull/340"}`
 - `git diff main --stat` for both worktrees matches the diffstat in the
   table above.
 - TOMBSTONE-classified references in `phenotype-registry-helioscope-final/`
@@ -133,9 +133,9 @@ TOMBSTONE → leave intact.
 
 - **Worklog:** `worklogs/L5-130-helioscope-cleanup-2026-06-21.json` (v2.1 schema
   per ADR-025; `device: macbook`)
-- **PR #1:** [helios-cli#599](https://github.com/<REDACTED>/helios-cli/pull/599)
+- **PR #1:** [helios-cli#599](https://github.com/KooshaPari/helios-cli/pull/599)
   — commit `a0520cee34a0531579fe86c8793ae8a84c78e805`
-- **PR #2:** [phenotype-registry#340](https://github.com/<REDACTED>/phenotype-registry/pull/340)
+- **PR #2:** [phenotype-registry#340](https://github.com/KooshaPari/phenotype-registry/pull/340)
   — commit `e667c24b23b78afc4b59781d062fb5e281c770b7`
 - **Retirement rationale:** `findings/2026-06-21-helioscope-cancellation-rationale.md`
 - **Tombstone records (intentionally untouched):**

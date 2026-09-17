@@ -158,12 +158,12 @@ User directive 2026-06-17: *"focus solely on the dmouse92 aspects of work — me
 
 | PR | Repo | Title |
 |---|---|---|
-| [pheno-mcp-router#1](https://github.com/<REDACTED>/pheno-mcp-router/pull/1) | pheno-mcp-router | feat(cost): port tiers/cost/budget/quota/audit/cost_middleware from dispatch-mcp W2-1 |
-| [pheno-mcp-router#2](https://github.com/<REDACTED>/pheno-mcp-router/pull/2) | pheno-mcp-router | feat(adapters): add LlamaAdapter (LlmPort) |
-| [pheno-mcp-router#3](https://github.com/<REDACTED>/pheno-mcp-router/pull/3) | pheno-mcp-router | feat(adapters): add OpenAICompatAdapter (LlmPort) |
-| [phenotype-config#1](https://github.com/<REDACTED>/phenotype-config/pull/1) | phenotype-config | feat(docs): port CANONICAL.md markers + SLSA doc from pheno ADR-012 |
-| [phenotype-ops#2](https://github.com/<REDACTED>/phenotype-ops/pull/2) | phenotype-ops | feat(devops): add llama-cpp docker setup |
-| [dispatch-mcp#1](https://github.com/<REDACTED>/dispatch-mcp/pull/1) | dispatch-mcp | docs: cherry-pick cheap-llm-mcp deprecation notice (W1.1) |
+| [pheno-mcp-router#1](https://github.com/KooshaPari/pheno-mcp-router/pull/1) | pheno-mcp-router | feat(cost): port tiers/cost/budget/quota/audit/cost_middleware from dispatch-mcp W2-1 |
+| [pheno-mcp-router#2](https://github.com/KooshaPari/pheno-mcp-router/pull/2) | pheno-mcp-router | feat(adapters): add LlamaAdapter (LlmPort) |
+| [pheno-mcp-router#3](https://github.com/KooshaPari/pheno-mcp-router/pull/3) | pheno-mcp-router | feat(adapters): add OpenAICompatAdapter (LlmPort) |
+| [phenotype-config#1](https://github.com/KooshaPari/phenotype-config/pull/1) | phenotype-config | feat(docs): port CANONICAL.md markers + SLSA doc from pheno ADR-012 |
+| [phenotype-ops#2](https://github.com/KooshaPari/phenotype-ops/pull/2) | phenotype-ops | feat(devops): add llama-cpp docker setup |
+| [dispatch-mcp#1](https://github.com/KooshaPari/dispatch-mcp/pull/1) | dispatch-mcp | docs: cherry-pick cheap-llm-mcp deprecation notice (W1.1) |
 
 **Archived Dmouse92 repos** (2026-06-17 20:36 PDT, via Dmouse92 auth): `AgilePlus`, `dispatch-mcp`, `pheno`, `phenodocs`, `forgecode`, `PhenoCompose`, `PhenoPlugins`, `PhenoProc`, `HeliosCLI`, `Pyron`, `HexaKit`, `Tracera`, `Civis`, `OmniRoute`, `KWatch`, `phenotype-ops`, `phenotype-otel`, `Nanovms`, `PhenoContracts`, `phenotype-teamcomm`.
 

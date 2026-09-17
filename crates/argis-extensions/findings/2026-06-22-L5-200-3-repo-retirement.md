@@ -262,7 +262,7 @@ For each PR, the migration sequence is:
 1. **Pre-flight**: Confirm target repo branch protection allows force-push-free merge (these are additive PRs).
 2. **Cut branch** on the **target** repo from `main`.
 3. **Copy source files** preserving git history (use `git subtree add` or `git remote add` + `git fetch` + `git merge --allow-unrelated-histories`):
-   - `git remote add <src-slug> https://github.com/<REDACTED>/<src>.git`
+   - `git remote add <src-slug> https://github.com/KooshaPari/<src>.git`
    - `git fetch <src-slug> main`
    - `git merge --allow-unrelated-histories <src-slug>/main --no-commit`
    - Resolve conflicts (likely none for additive paths), commit.
@@ -283,9 +283,9 @@ For each PR, the migration sequence is:
 
 Once 3 PRs are merged and 3 source repos are archived, user completes deletion via GitHub UI (per L5-109 precedent — `delete_repo` scope is absent on the active token):
 
-- https://github.com/<REDACTED>/KommandLineAutomation/settings#dangerZone
-- https://github.com/<REDACTED>/KVirtualStage/settings#dangerZone
-- https://github.com/<REDACTED>/KWatch/settings#dangerZone
+- https://github.com/KooshaPari/KommandLineAutomation/settings#dangerZone
+- https://github.com/KooshaPari/KVirtualStage/settings#dangerZone
+- https://github.com/KooshaPari/KWatch/settings#dangerZone
 
 90-day GitHub retention applies to soft-delete tombstones.
 

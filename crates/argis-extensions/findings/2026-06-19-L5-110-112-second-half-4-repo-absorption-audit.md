@@ -84,10 +84,10 @@ Both strategies agree on **archiving the standalone repos** — that's the core 
 | `<REDACTED>/forge-runner-scripts` | ARCHIVE | `isArchived: true` (2026-06-19) |
 
 All 4 repos require GitHub UI to fully delete (token lacks `delete_repo` scope):
-- https://github.com/<REDACTED>/pheno-framework-lint/settings#dangerZone
-- https://github.com/<REDACTED>/pheno-drift-detector/settings#dangerZone
-- https://github.com/<REDACTED>/pheno-predict/settings#dangerZone
-- https://github.com/<REDACTED>/forge-runner-scripts/settings#dangerZone
+- https://github.com/KooshaPari/pheno-framework-lint/settings#dangerZone
+- https://github.com/KooshaPari/pheno-drift-detector/settings#dangerZone
+- https://github.com/KooshaPari/pheno-predict/settings#dangerZone
+- https://github.com/KooshaPari/forge-runner-scripts/settings#dangerZone
 
 90-day GitHub retention applies after soft-delete.
 

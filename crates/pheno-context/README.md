@@ -5,7 +5,7 @@ user/org metadata, extensible key-value bag.
 
 ## Status: ABSORBED into `pheno` workspace
 
-This crate was absorbed from <https://github.com/<REDACTED>/pheno-context>
+This crate was absorbed from <https://github.com/KooshaPari/pheno-context>
 on **2026-08-14** per docket `plans/dockets/N15-pheno-substrate-family.md`.
 
 ## Usage

@@ -5,7 +5,7 @@
 ## Source
 
 - **Repo:** `<REDACTED>/PhenoSpecs`
-- **GitHub URL:** https://github.com/<REDACTED>/PhenoSpecs
+- **GitHub URL:** https://github.com/KooshaPari/PhenoSpecs
 - **Archived at:** false
 - **Default branch at audit time:** `main`
 - **Visibility at audit time:** public
@@ -24,7 +24,7 @@
 
 ## Target
 
-- **Receiving repo:** `<REDACTED>/phenotype-infra` (https://github.com/<REDACTED>/phenotype-infra)
+- **Receiving repo:** `<REDACTED>/phenotype-infra` (https://github.com/KooshaPari/phenotype-infra)
 - **Receiving path:** `docs/absorbed-from-PhenoSpecs/`
 - **Local mirror path:** none
 - **Bundle file:** none (live repo; no bundle needed)
@@ -117,7 +117,7 @@ No exceptions to the AFFIRM verdict are granted.
 
 ```bash
 # Live repo (active source): restore by re-cloning the upstream.
-git clone --bare https://github.com/<REDACTED>/PhenoSpecs.git PhenoSpecs.git
+git clone --bare https://github.com/KooshaPari/PhenoSpecs.git PhenoSpecs.git
 
 # Disaster-recovery posture:
 gh api repos/<REDACTED>/PhenoSpecs           # confirm repo still exists (200 OK)
@@ -125,7 +125,7 @@ gh repo clone <REDACTED>/PhenoSpecs /tmp/PhenoSpecs-migration
 ```
 
 **Restore prerequisites:** GitHub org read access for `<REDACTED>/PhenoSpecs`.
-**Documented restore path:** `git clone --bare https://github.com/<REDACTED>/PhenoSpecs.git`.
+**Documented restore path:** `git clone --bare https://github.com/KooshaPari/PhenoSpecs.git`.
 
 ## Gate Tooling Reference
 

@@ -4,7 +4,7 @@ version = "0.1.0"
 edition = "2021"
 description = "Synchronous CLI / install helper for the Forge Agent SDK (forge3). Subprocess-only WebSocket client — no async runtime pulled into Rust consumers."
 license = "MIT OR Apache-2.0"
-repository = "https://github.com/<REDACTED>/phenotype-forge3-bridge"
+repository = "https://github.com/KooshaPari/phenotype-forge3-bridge"
 
 [[bin]]
 name = "forge3-ctl"

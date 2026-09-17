@@ -7,7 +7,7 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/<REDACTED>/hfscope/internal/server/templ"
+	"github.com/KooshaPari/hfscope/internal/server/templ"
 )
 
 func renderHome(w http.ResponseWriter, r *http.Request, d PageData) {

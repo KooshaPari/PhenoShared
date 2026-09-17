@@ -33,7 +33,7 @@
 | SOTA | [SOTA.md](SOTA.md) |
 | OKF manifest | [okf/manifest.okf.yaml](okf/manifest.okf.yaml) |
 
-Specs: [HexaKit docs/genesis/STANDARD.md](https://github.com/<REDACTED>/HexaKit/blob/main/docs/genesis/STANDARD.md)
+Specs: [HexaKit docs/genesis/STANDARD.md](https://github.com/KooshaPari/HexaKit/blob/main/docs/genesis/STANDARD.md)
 
 ## Decision rights
 

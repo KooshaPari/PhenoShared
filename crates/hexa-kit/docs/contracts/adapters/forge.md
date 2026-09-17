@@ -25,7 +25,7 @@ See [ADR-ECO-007 lane routing](../harness-api.md#lane-routing-adr-eco-007) in th
 
 ## HarnessProfile mapping
 
-At dispatch, HexaKit maps lane `harness: "forge"` to a [HarnessProfile](https://github.com/<REDACTED>/thegent/blob/main/contracts/provider-bridge/schema/harness-profile.schema.json) with `defaults.intent_capability: tool_execution` and `defaults.latency_tier: interactive`. Policy overrides inherit from the lane AACP bundle when present.
+At dispatch, HexaKit maps lane `harness: "forge"` to a [HarnessProfile](https://github.com/KooshaPari/thegent/blob/main/contracts/provider-bridge/schema/harness-profile.schema.json) with `defaults.intent_capability: tool_execution` and `defaults.latency_tier: interactive`. Policy overrides inherit from the lane AACP bundle when present.
 
 ## Session pattern
 

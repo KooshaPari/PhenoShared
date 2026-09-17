@@ -34,7 +34,7 @@ absorption:
 - Root has 111 entries (mostly 0-byte placeholders for subprojects)
 - No Rust source (`Cargo.toml` absent at root)
 - Streamlit dashboard is the only concrete asset and lives outside this repo
-- Repo URL: https://github.com/<REDACTED>/phenoRouterMonitor
+- Repo URL: https://github.com/KooshaPari/phenoRouterMonitor
 
 ### `<REDACTED>/phenoAI` (active, `isArchived: false`)
 
