@@ -1,181 +1,133 @@
-# PhenoMLX\n\nActive Phenotype project. MLX inference with Rust performance cores.\n\n---\n\n# phenotype-omlx
+# PhenoShared
 
-MLX-native, multi-backend OMLX research stack for local inference and evaluation.
+The Phenotype ecosystem container repository. Houses product dossiers, shared infrastructure crates, cross-repo governance, and absorbed project sources.
 
-[![AI slop inside](https://sladge.net/badge.svg)](https://sladge.net) [![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/<REDACTED>/phenotype-omlx/total)](https://github.com/KooshaPari/phenotype-omlx/releases)
+[![CI](https://github.com/KooshaPari/PhenoShared/actions/workflows/ci.yml/badge.svg)](https://github.com/KooshaPari/PhenoShared/actions)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE-MIT)
 
-> **Fork attribution:** `phenotype-omlx` is <REDACTED>'s fork of [jundot/omlx](https://github.com/jundot/omlx). Upstream OMLX remains its own project; this repository documents only the extensions maintained in this fork.
+---
 
-## What this fork does
+## What It Is
 
-This fork extends the upstream OMLX application with a local research stack for multi-backend inference, policy-driven dispatch, model evaluation, and Rust performance experiments across MLX, Metal, vLLM, TensorRT, SGLang, and llama.cpp.
+PhenoShared is the umbrella monorepo for the [Phenotype](https://github.com/KooshaPari) ecosystem. It consolidates infrastructure, tooling, governance, and product dossiers that previously lived across dozens of standalone repositories.
 
-## Meaningful extensions in this fork
+**Key facts:**
+- Rust workspace with 76 members and 365+ crate directories
+- Absorbed repos: PhenoDesign, PhenoFabric, PhenoInfra, PhenoLab, PhenoGfx, PhenoRegistry, PhenoMLX, PhenoAI
+- 27 product dossiers in `docs/dossiers/`
+- Part of the [docs-3](../../Downloads/docs-3/) Atlas quality-gate program
+- Compiles clean: `cargo check --workspace` passes
 
-- Rust performance-core workspace for speculative decoding, concurrent execution, TurboQuant, tree attention, and fleet protocol work.
-- Python FFI and research launchers that connect local backends, evaluation surfaces, and agent experiments.
-- Multi-platform client and administration experiments around the upstream application.
+## Ecosystem Map
 
-## Major capabilities
+### Absorbed Repositories (now part of this monorepo)
 
-- Local inference and evaluation across supported backends.
-- Speculative decoding, quantization, concurrent execution, and model-research workflows.
-- Apple-Silicon and Metal kernel experimentation alongside portable Rust/Python integration.
+| Repo | Absorbed As | Key Content |
+|------|-------------|-------------|
+| **PhenoDesign** | Early absorption | Design system, shared components |
+| **PhenoFabric** | `crates/fabric-*` (21 crates) | Fabric routing, transport, runtime |
+| **PhenoInfra** | `crates/phenotype-infrakit` | Compute mesh IaC (OCI/CF/GCP/AWS/Vercel) |
+| **PhenoLab** | `crates/*` + `python/` | Compression stack, RLVR harness, 1,553 files |
+| **PhenoGfx** | `crates/phenotype-gfx` + `phenotype-gfx/` | GFX SDK (Rust voxel + C# terrain/water) |
+| **PhenoRegistry** | `crates/phenotype-*` + `registry/` | Org registry, master index, 3,848 files |
+| **PhenoMLX** | `crates/omlx-*` + `python/omlx_research/` | MLX inference engine, perf-core, Rust FFI |
 
-## Quick start
+### Standalone Repos (still separate)
+
+| Repo | Role |
+|------|------|
+| [HeliosLab](https://github.com/KooshaPari/HeliosLab) | Helios compute lab, GPU orchestration |
+| [Portage](https://github.com/KooshaPari/portage) | Portage CLI and SDK |
+| [pheno](https://github.com/KooshaPari/pheno) | Phenotype Infrastructure Kit (85 Rust crates) |
+| [phenotooling](https://github.com/KooshaPari/phenotooling) | Org internal tooling + Benchora |
+
+## Product Dossiers
+
+Each product in the Phenotype ecosystem has a dossier answering the docs-3 Atlas questions with concrete source evidence.
+
+**Location:** `docs/dossiers/`
+
+| File | Purpose |
+|------|---------|
+| `HANDOFF-PHENOSHARED.md` | This repo's absorption history and current state |
+| `HANDOFF-PHENOREGISTRY.md` | Registry handoff context |
+
+**Atlas program:** `~/Downloads/docs-3/` defines quality gates (85% coverage floors, independent negative controls, assurance matrix) that all products must satisfy.
+
+## Repository Structure
+
+```
+PhenoShared/
+  crates/                  # 365+ Rust crate directories (76 workspace members)
+  docs/
+    dossiers/              # Product dossiers (docs-3 Atlas)
+    absorption/            # Absorption history and tracking
+    architecture/          # Architecture decision records
+  absorption/              # Absorbed repo snapshots (byteport, pheno-forge, etc.)
+  _archived/               # Archived content (byteport, nanovms-core, nvms-ffi)
+  governance/              # Cross-repo governance contracts
+  python/                  # Python packages (omlx_research, research tools)
+  scripts/                 # Automation and CI scripts
+  tests/                   # Integration and E2E tests
+  Cargo.toml               # Rust workspace root
+  pyproject.toml           # Python workspace root
+  GOVERNANCE.md            # Decision authority and specification lifecycle
+  ECOSYSTEM_MAP.md         # Full ecosystem index
+```
+
+## Getting Started
 
 ```bash
-./scripts/phenotype-omlx-ready
-./cli/bin/omlx-research doctor
-./cli/bin/omlx-research inference --prompt "Hello" --policy auto
-```
-## What's in this repo
+# Clone
+git clone https://github.com/KooshaPari/PhenoShared.git
+cd PhenoShared
 
-| Tier | Path | Purpose |
-| --- | --- | --- |
-| **MLX framework** | `/Applications/oMLX.app/.../framework-mlx-base/lib/python3.11/site-packages` | Upstream OMLX Python 3.11 + TurboQuant+ injected into `mlx.nn.layers.turbo_kv_cache` |
-| **CLI proxy** | `cli/bin/omlx-cli` | Pass-through to the upstream CLI with `PYTHONPATH` pre-set so the CLI sees the same TurboQuant+ as the GUI |
-| **CLI research launcher** | `cli/bin/omlx-research` | Unified entry point: `repl`, `cli`, `gui`, `web`, `doctor`, `status`, `inference`, `spec-decode`, `latentmas`, `tidar`, `bench`, `fleet` |
-| **Web admin** | `python/omlx_research/web.py` | Local HTTP server (`omlx-research web`) serving the research panel + REST endpoints |
-| **GUI admin extensions** | `gui/admin-extensions/` | Drop-in extensions that mount inside the oMLX.app web admin (templates + static + API) |
-| **Python surface** | `python/omlx_research/` | `backends/` (vLLM, TensorRT, SGLang, llama.cpp, MLX, Metal), `engines/` (spec-decode, tree-attn, par-batch, hybrid-dispatch), `agents/` (LatentMAS, TiDAR, SSD, JetSpec schedulers), `cli/` (subcommand CLI) |
-| **Rust perf-core** | `perf-core/` | 5-crate workspace: `spec-decode`, `concurrent-exec`, `turbo-quant`, `tree-attention`, `fleet-proto`. The CPU/Metal hot path is in Rust; Metal kernels are loaded at runtime. |
-| **Python FFI** | `python/ffi/src/lib.rs` | pyo3 bindings so Python can call into the Rust perf-core (compiled as `_phenotype_omlx_core`) |
-| **Reference research repos** | `../turboquant_plus`, `../JetSpec`, `../ssd`, `../LatentMAS`, `../TiDAR` | Original third-party code, surfaced read-only via `phenotype-omlx-env.sh` |
-| **Windows client** | `windows-client/` | PowerShell launcher + planned Tauri GUI |
-| **Linux client** | `linux-client/` | bash launcher + planned Tauri GUI |
-| **macOS desktop** | upstream `/Applications/oMLX.app` | The upstream OMLX app, with our admin-extensions mounted via `OMLX_ADMIN_EXTRA` |
+# Rust workspace
+cargo check --workspace
 
-## Why Rust + Python?
+# Python environment
+python -m venv .venv
+source .venv/bin/activate
+pip install -e .
 
-Three reasons:
-
-1. **Latency on the hot path.** Speculative decoding, tree attention, and
-   TurboQuant pack/unpack all run per-token. Rust is ~2-5× faster than
-   Python on these CPU-bound inner loops, and Metal shader dispatch is
-   significantly cleaner from Rust than from Python.
-2. **Cross-platform FFI.** The same `perf-core` workspace compiles to a
-   native `.so` / `.dylib` / `.dll` that pyo3 wraps for Python. The Rust
-   surface is also the natural place for the `fleet-proto` JSON-RPC peer
-   protocol used by the Windows / Linux clients.
-3. **Optional Metal kernels.** MLX handles its own Metal dispatch, so the
-   Rust side stays CPU-only for now. If we later want direct Metal calls
-   (e.g., for the speculative tree attention kernel), the same workspace
-   already has `metal` placeholder files in `spec-decode/src/metal.rs`.
-
-## Quick start
-
-```bash
-# 1) Verify the stack (idempotent — compiles perf-core on first run)
-./scripts/phenotype-omlx-ready
-
-# 2) Interactive REPL with the full stack
-./cli/bin/omlx-research
-
-# 3) Doctor + status
-./cli/bin/omlx-research doctor
-./cli/bin/omlx-research status
-
-# 4) Inference via the policy dispatcher
-./cli/bin/omlx-research inference --prompt "Hello" --policy auto
-
-# 5) Speculative decoding demo
-./cli/bin/omlx-research spec-decode --mode ssd --gamma 5
-
-# 6) LatentMAS fan-out demo
-./cli/bin/omlx-research latentmas --prompt "Plan a 3-day trip" --n-agents 4
-
-# 7) Web admin (research panel + REST)
-./cli/bin/omlx-research web --port 8080
-
-# 8) Launch the oMLX.app GUI with admin-extensions mounted
-./cli/bin/omlx-research gui
+# Run tests
+cargo test --workspace
 ```
 
-## Architecture
+## How to Contribute
 
-See [`ARCHITECTURE.md`](ARCHITECTURE.md) for the full diagram and tier
-breakdown. Top-level decisions live in [`docs/adr/`](docs/adr/).
+1. Read `GOVERNANCE.md` for decision authority and evidence rules
+2. Check `docs/dossiers/` for the relevant product dossier
+3. Follow the specification lifecycle: Captured -> Synthesized -> Specified -> Planned -> Implemented -> Validated -> Shipped
+4. All claims require reproducible evidence (see the [Evidence Rule](GOVERNANCE.md#evidence-rule))
+5. Open a PR against `main`; CI must pass before merge
 
-## Repository map (merge target for the upstream OMLX fork)
+**Cross-repo work:** When changes span PhenoShared and a standalone repo (HeliosLab, Portage, etc.), coordinate via issues in both repos and reference the shared AGENTS.md contract.
 
-| OMLX tier | phenotype-omlx path | What changed |
-| --- | --- | --- |
-| MLX framework | `perf-core/turbo-quant/` + `/Applications/oMLX.app/.../turbo_kv_cache.py` | TurboQuant+ inject |
-| CLI | `cli/bin/omlx-cli` + `cli/bin/omlx-research` | Pass-through proxy + unified launcher |
-| GUI / web | `gui/admin-extensions/` | Research panel, REST API, static assets |
-| Server | `python/omlx_research/web.py` | Local web admin |
-| Engines | `python/omlx_research/engines/` + `perf-core/spec-decode/` | New engines with Rust perf-core |
-| Backends | `python/omlx_research/backends/` | vLLM / TensorRT / SGLang / llama.cpp / MLX / Metal adapters |
-| Agents | `python/omlx_research/agents/` | LatentMAS, TiDAR, SSD, JetSpec concurrent schedulers |
-| Fleet | `perf-core/fleet-proto/` | JSON-RPC peer protocol + in-memory registry |
+## Governance
 
-## Multi-platform
+Decisions follow a structured authority model defined in `GOVERNANCE.md`:
 
-| Platform | Status | Entry point |
-| --- | --- | --- |
-| macOS (Apple Silicon) | ✅ Production | `/Applications/oMLX.app` + `cli/bin/omlx-research` |
-| Linux | 🟡 Stub | `linux-client/omlx-research` (PyTorch + CUDA / ROCm fallback) |
-| Windows | 🟡 Stub | `windows-client/omlx-research.ps1` (Tauri GUI planned) |
+| Decision | Owner |
+|----------|-------|
+| Product intent | Human sponsor |
+| Requirements and acceptance | AgilePlus |
+| Agent/labor dispatch | thegent |
+| Runtime placement | Phenotype Fabric |
+| Operational history | SessionLedger |
+| Cross-artifact traces | Tracera |
 
-## Multi-engine
+## Related Repos
 
-| Engine | Tier | Use case |
-| --- | --- | --- |
-| **MLX** (primary) | Apple Silicon | Lowest latency on M-series; required for TurboQuant+ |
-| **Metal** | Apple Silicon | Direct Metal kernel dispatch (advanced) |
-| **vLLM** | Linux / cloud | High-throughput serving on NVIDIA / ROCm |
-| **TensorRT-LLM** | Linux / cloud | Max-throughput inference on NVIDIA |
-| **SGLang** (planned) | Linux / cloud | RadixAttention + structured generation |
-| **llama.cpp** | Any | CPU + GGUF quantization, broadest model support |
-
-The `HybridDispatch` engine picks a backend per-request based on a policy
-(`auto`, `mlx`, `metal`, `vllm`, `tensorrt`, `sglang`, `llamacpp`, `lowest-latency`,
-`highest-throughput`).
-
-## Performance cores (Rust)
-
-```
-perf-core/
-├── Cargo.toml                      # workspace
-├── spec-decode/                    # speculative decoding engine
-│   ├── src/lib.rs
-│   ├── src/backend.rs              # backend trait
-│   ├── src/engine.rs               # draft + verify loop
-│   ├── src/verify.rs               # target verification + acceptance
-│   └── src/metal.rs                # Metal kernel placeholders
-├── concurrent-exec/                # concurrent agent scheduler
-│   ├── src/lib.rs
-│   ├── src/plan.rs                 # execution plan / DAG
-│   ├── src/latentmas.rs            # LatentMAS adapter
-│   ├── src/tidar.rs                # TiDAR adapter
-│   ├── src/ssd.rs                  # SSD adapter
-│   └── src/jetspec.rs              # JetSpec adapter
-├── turbo-quant/                    # CPU SIMD TurboQuant pack/unpack
-│   └── src/lib.rs
-├── tree-attention/                 # tree causal mask + verification
-│   └── src/lib.rs
-└── fleet-proto/                    # JSON-RPC peer protocol
-    └── src/lib.rs
-```
-
-Test status: **5 / 5 Rust crates compile. 5 / 5 unit tests pass.**
-
-## Repo merge history (hwLedger → phenotype-omlx)
-
-The `hwLedger` research project (chore-overhaul-2026-06-30 worktree) is
-**fully merged** into this repo as documentation only. See:
-
-- `docs/adr/2026-06-18/ADR-035A-hwledger-reclassification.md`
-- `docs/boundary/phenotype-omlx.md`
-- `docs/intent/phenotype-omlx.md`
-
-The hwLedger Rust core itself was not merged — it served a different
-purpose (hardware capability ledger) and is now archived at
-`docs/research/architectures/hwledger-archive/`.
+- [KooshaPari](https://github.com/KooshaPari) -- GitHub org (all repos)
+- [PhenoMLX](https://github.com/KooshaPari/phenotype-omlx) -- MLX inference (standalone mirror)
+- [HeliosLab](https://github.com/KooshaPari/HeliosLab) -- Compute lab
+- [Portage](https://github.com/KooshaPari/portage) -- CLI and SDK
+- [pheno](https://github.com/KooshaPari/pheno) -- Infrastructure Kit
+- [phenotooling](https://github.com/KooshaPari/phenotooling) -- Internal tooling
 
 ## License
 
-See upstream OMLX license for the framework files we proxy. The
-phenotype-omlx additions (perf-core, omlx_research, admin extensions,
-research panel) are MIT-licensed.
+MIT -- see [LICENSE-MIT](LICENSE-MIT) for details.
+
+Copyright (c) 2026 Koosha Pari
