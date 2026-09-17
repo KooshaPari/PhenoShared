@@ -24,7 +24,7 @@ chrono = { version = "0.4", features = ["serde"] }
 sha2 = "0.10"
 hex = "0.4"
 dashmap = "6.1"
-lru = "0.12"
+lru = "0.16"
 parking_lot = "0.12"
 moka = { version = "0.12", features = ["sync", "future"] }
 toml = "0.8"
