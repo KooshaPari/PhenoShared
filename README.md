@@ -1,181 +1,321 @@
-# PhenoMLX\n\nActive Phenotype project. MLX inference with Rust performance cores.\n\n---\n\n# phenotype-omlx
+# PhenoShared
 
-MLX-native, multi-backend OMLX research stack for local inference and evaluation.
+**Phenotype shared workspace — the main monorepo coordinating the Phenotype ecosystem across Rust, Swift, TypeScript, and Python.**
 
-[![AI slop inside](https://sladge.net/badge.svg)](https://sladge.net) [![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/<REDACTED>/phenotype-omlx/total)](https://github.com/KooshaPari/phenotype-omlx/releases)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![License: Apache-2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+[![Rust](https://img.shields.io/badge/rust-1.81%2B-orange.svg)](https://www.rust-lang.org/)
+[![Workspace: Cargo](https://img.shields.io/badge/workspace-cargo-blueviolet.svg)](https://doc.rust-lang.org/cargo/)
+[![Crates: 365+](https://img.shields.io/badge/crates-365%2B-success.svg)](./crates/)
 
-> **Fork attribution:** `phenotype-omlx` is <REDACTED>'s fork of [jundot/omlx](https://github.com/jundot/omlx). Upstream OMLX remains its own project; this repository documents only the extensions maintained in this fork.
+---
 
-## What this fork does
+## What is this?
 
-This fork extends the upstream OMLX application with a local research stack for multi-backend inference, policy-driven dispatch, model evaluation, and Rust performance experiments across MLX, Metal, vLLM, TensorRT, SGLang, and llama.cpp.
+`phenoAI` is the **shared Phenotype workspace** at `KooshaPari/PhenoShared`. It hosts **365+ crates**, several standalone apps, and the documentation/contracts that bind the Phenotype ecosystem together. It is *not* a single product — it is the substrate, engines, fabric, integrations, tooling, and apps that specialized products (PhenoMLX, HeliosLab, Portage, …) are built on top of.
 
-## Meaningful extensions in this fork
+Distinct from PhenoMLX, which focuses on MLX-native multi-backend inference, this repository owns:
 
-- Rust performance-core workspace for speculative decoding, concurrent execution, TurboQuant, tree attention, and fleet protocol work.
-- Python FFI and research launchers that connect local backends, evaluation surfaces, and agent experiments.
-- Multi-platform client and administration experiments around the upstream application.
+- the **Rust core** (substrate, engines, fabric, agileplus, phenotype-*, store-*, wave, supervisor, …)
+- the **agent dispatch surface** (Claude / Codex / Forge / A2A / AgentAPI engines, OmniRoute adapters, cloud bridges)
+- the **client applications** (phinbox-app, bench-cockpit, byteport, tooling, desktop shells)
+- the **contracts and docs** that keep all of the above consistent (ARCHITECTURE.md, ADR/, docs/, AGENTS.md)
 
-## Major capabilities
+If a change extends Fabric into governed-intent, agent dispatch, economic allocation, evidence-graph, session-ledger, or process-supervision domains, an ADR is required first (see `CONTRIBUTING.md`).
 
-- Local inference and evaluation across supported backends.
-- Speculative decoding, quantization, concurrent execution, and model-research workflows.
-- Apple-Silicon and Metal kernel experimentation alongside portable Rust/Python integration.
+## Highlights
 
-## Quick start
+- **Polyglot by default, Rust-first where it wins.** No language is forbidden; the choice is driven by measured performance and fit.
+- **Capability-based runtime.** Substrate layer exposes typed ports and adapters; engines compose on top.
+- **Multi-agent orchestration.** `engine-claude`, `engine-codex`, `engine-forge`, `engine-a2a`, `engine-agentapi` and the `agileplus-*` intent plane.
+- **Fabric layer.** Distributed topology, capability inventory, route plans, leases, and surface isolation (absorbed 2026-09-16).
+- **Production-grade quality gates.** Workspace `cargo clippy --workspace -- -D warnings`, `unsafe_code = "forbid"`, and dedicated CI.
+
+## Key Crates (Sampled)
+
+The workspace contains **365+ crates**; this is a representative sample, grouped by family. Package names match each crate's `Cargo.toml` `[package].name`.
+
+### Substrate (core runtime)
+
+| Crate | Package | Purpose |
+|-------|---------|---------|
+| `crates/substrate` | `substrate` | Rust SDK facade: hexagonal ports, domain types, dispatch planner, optional adapters |
+| `crates/substrate-core` | `substrate-core` | Inner core types and traits |
+| `crates/substrate-app` | `substrate-app` | Application runtime on top of substrate-core |
+| `crates/substrate-trace` | `substrate-trace` | Distributed tracing primitives |
+| `crates/substrate-schedule` | `substrate-schedule` | Scheduling primitives |
+| `crates/substrate-dag` | `substrate-dag` | Workflow DAG execution |
+| `crates/substrate-skills` | `substrate-skills` | Skill system for agents |
+| `crates/substrate-memory` | `substrate-memory` | Agent memory layer |
+| `crates/substrate-serve-lock` | `substrate-serve-lock` | Worktree locking mechanism |
+| `crates/substrate-tui` | `substrate-tui` | Terminal UI primitives |
+
+### Engines (agent execution)
+
+| Crate | Package | Purpose |
+|-------|---------|---------|
+| `crates/engine-spec` | `engine-spec` | Engine contract and conformance specification |
+| `crates/engine-forge` | `engine-forge` | Plugin execution engine |
+| `crates/engine-claude` | `engine-claude` | Claude agent integration |
+| `crates/engine-codex` | `engine-codex` | Codex agent integration |
+| `crates/engine-a2a` | `engine-a2a` | Agent-to-agent communication |
+| `crates/engine-agentapi` | `engine-agentapi` | Generic agent API integration |
+| `crates/engine-conformance` | `engine-conformance` | Engine conformance test suite |
+
+### AgilePlus (intent / planning)
+
+| Crate | Package | Purpose |
+|-------|---------|---------|
+| `crates/agileplus-api` | `agileplus-api` | Public API surface |
+| `crates/agileplus-cli` | `agileplus-cli` | Command-line interface |
+| `crates/agileplus-domain` | `agileplus-domain` | Domain types |
+| `crates/agileplus-events` | `agileplus-events` | Event sourcing |
+| `crates/agileplus-graph` | `agileplus-graph` | Intent graph |
+| `crates/agileplus-git` | `agileplus-git` | Git-backed intent store |
+| `crates/agileplus-github` | `agileplus-github` | GitHub adapter |
+| `crates/agileplus-nats` | `agileplus-nats` | NATS event bus |
+| `crates/agileplus-sqlite` | `agileplus-sqlite` | SQLite store |
+| `crates/agileplus-cache` | `agileplus-cache` | Cache layer |
+| `crates/agileplus-telemetry` | `agileplus-telemetry` | Telemetry hooks |
+| `crates/agileplus-triage` | `agileplus-triage` | Triage workflows |
+
+### Phenotype (core integrations)
+
+| Crate | Package | Purpose |
+|-------|---------|---------|
+| `crates/phenotype-cli` | `phenotype-cli` | Phenotype command-line |
+| `crates/phenotype-mcp` | `phenotype-mcp` | MCP server infrastructure |
+| `crates/phenotype-hub` | `phenotype-hub` | Hub/orchestration facade |
+| `crates/phenotype-core` | `phenotype-core` | Shared core types |
+| `crates/phenotype-contracts` | `phenotype-contracts` | Cross-crate contracts |
+| `crates/phenotype-shared` | `phenotype-shared` | Shared utilities |
+| `crates/phenotype-config` | `phenotype-config` | Configuration types and loader |
+| `crates/phenotype-event-bus` | `phenotype-event-bus` | Event bus |
+| `crates/phenotype-policy-engine` | `phenotype-policy-engine` | Policy engine |
+| `crates/phenotype-routing` | `phenotype-router` | Routing helpers |
+
+### Fabric (distributed fabric layer)
+
+| Crate | Package | Purpose |
+|-------|---------|---------|
+| `crates/fabric-capability` | `fabric-capability` | Capability inventory |
+| `crates/fabric-capability-ffi` | `fabric-capability-ffi` | C ABI for capability layer |
+| `crates/fabric-graph` | `fabric-graph` | Topology and routing graph |
+| `crates/fabric-checker` | `fabric-checker` | Capability/lease checks |
+| `crates/fabric-cli` | `fabric-cli` | Fabric CLI |
+| `crates/fabric-gui` | `fabric-gui` | GUI shell (Tauri) |
+| `crates/fabric-daemon` | `fabric-daemon` | Long-running fabric daemon |
+| `crates/fabric-frame-transport` | `fabric-frame-transport` | Frame-based transport |
+| `crates/fabric-surface-mojo` | `fabric-surface-mojo` | Mojo surface adapter |
+
+### Storage, transport, drivers
+
+| Crate | Package | Purpose |
+|-------|---------|---------|
+| `crates/store-file` | `store-file` | File-based storage |
+| `crates/store-sqlite` | `store-sqlite` | SQLite storage |
+| `crates/transport-file` | `transport-file` | File transport |
+| `crates/runtime-process` | `runtime-process` | Process isolation and sandboxing |
+| `crates/supervisor` | `supervisor` | Process supervision tree |
+| `crates/file-watcher` | `file-watcher` | Cross-platform file watching |
+| `crates/wave` | `wave` | 3-lane reliability protocol |
+| `crates/wave-3lane-tests` | `wave-3lane-tests` | Wave conformance suite |
+| `crates/driver-cli` | `driver-cli` | CLI driver |
+| `crates/driver-http` | `driver-http` | HTTP driver |
+| `crates/driver-argv` | `driver-argv` | Argv driver |
+| `crates/driver-mcp` | `driver-mcp` | MCP driver |
+
+### Integrations and adapters
+
+| Crate | Package | Purpose |
+|-------|---------|---------|
+| `crates/omniroute-adapter` | `omniroute-adapter` | OmniRoute integration adapter |
+| `crates/dispatch-bridge` | `dispatch-bridge` | Cross-engine dispatch bridge |
+| `crates/cliproxy-adapter` | `cliproxy-adapter` | CLI proxy adapter |
+| `crates/context-budget` | `context-budget` | Token/context budget management |
+| `crates/cloud-codex` | `cloud-codex` | Codex cloud integration |
+| `crates/cloud-cursor` | `cloud-cursor` | Cursor cloud integration |
+| `crates/cloud-kilo` | `cloud-kilo` | Kilo cloud integration |
+| `crates/cloud-dispatch-conformance` | `cloud-dispatch-conformance` | Cloud dispatch conformance |
+| `crates/a2a` | `a2a` | Agent-to-agent primitives |
+| `crates/cli-wrapper` | `playcua-cli-wrapper` | CLI wrapper (PlayCUA) |
+
+## Repository Structure
+
+```
+phenoAI/
+├── apps/                  # User-facing applications (mixed languages)
+│   ├── bench-cockpit/     # Bun + TypeScript benchmark cockpit
+│   ├── byteport/          # Data transfer utility
+│   ├── desktop/           # Desktop shell resources (macOS)
+│   ├── phinbox-app/       # Phinbox notification app (Swift)
+│   └── tooling/           # Tauri-based developer tooling
+│
+├── crates/                # 365+ Rust crates (workspace members)
+│   ├── substrate*/        # Core runtime substrate
+│   ├── engine-*/          # Agent execution engines
+│   ├── agileplus-*/       # Intent and planning system
+│   ├── phenotype-*/       # Core integrations and shared types
+│   ├── fabric-*/          # Distributed fabric layer
+│   ├── store-*/           # Storage backends
+│   ├── driver-*/          # Driver surfaces (cli/http/argv/mcp)
+│   ├── cloud-*/           # Cloud integrations
+│   └── ...                # ~300 more domain crates
+│
+├── tools/                 # Standalone tooling executables (workspace members)
+│   ├── fake-forge/        # Forge agent simulator
+│   ├── fake-codex-cloud/  # Codex cloud simulator
+│   ├── iac-plan-viewer/   # Infrastructure-as-code visualizer
+│   ├── org-audits/        # Organizational audit tooling
+│   └── check-ecosystem.ts # Ecosystem linting entrypoint
+│
+├── docs/                  # Documentation
+│   ├── architecture/      # Architecture overviews (overview, ports, domain-model)
+│   ├── adr/               # Architecture Decision Records (0001-…)
+│   ├── api/               # API reference
+│   ├── guides/            # User and developer guides
+│   ├── contributing/      # Contributing playbooks
+│   └── atlas/             # Cross-repo atlas and assessments
+│
+├── scripts/               # Workspace utility scripts (CI helpers, harnesses)
+├── configs/               # Configuration templates
+├── benches/               # Performance benchmarks
+│
+├── ARCHITECTURE.md        # Top-level architecture (read first)
+├── CONTRIBUTING.md        # Contribution rules (read first)
+├── AGENTS.md              # Agent contract (worktree, language policy)
+├── CLAUDE.md              # Claude-specific guide
+├── CHARTER.md             # Project charter
+├── ADR.md / ADRS.md       # ADR index
+├── Cargo.toml             # Workspace manifest (365+ members)
+└── Cargo.lock             # Workspace lockfile
+```
+
+## Quick Start
+
+### Prerequisites
+
+- **Rust** 1.81+ via [rustup](https://rustup.rs/) (workspace lints are pinned in `Cargo.toml`'s `[workspace.lints.rust]` and `[workspace.package]`)
+- **Git** 2.0+
+- Optional:
+  - `cargo-deny` — `cargo install cargo-deny`
+  - `mdBook` — `cargo install mdbook` (for `docs/book.toml`)
+  - **Bun** (for `apps/bench-cockpit`)
+  - **Xcode / Swift toolchain** (for `apps/phinbox-app`)
+  - **Tauri prerequisites** (for `apps/tooling`, `crates/fabric-gui`)
+
+### Clone and build
 
 ```bash
-./scripts/phenotype-omlx-ready
-./cli/bin/omlx-research doctor
-./cli/bin/omlx-research inference --prompt "Hello" --policy auto
+git clone https://github.com/KooshaPari/PhenoShared.git
+cd PhenoShared
+
+# Build the workspace (may take a while on a cold cache)
+cargo build --workspace
+
+# Run the test suite
+cargo test --workspace
+
+# Lint (CI policy: deny warnings)
+cargo clippy --workspace -- -D warnings
+
+# Format
+cargo fmt --all
+
+# Generate crate docs locally
+cargo doc --workspace --no-deps --open
 ```
-## What's in this repo
 
-| Tier | Path | Purpose |
-| --- | --- | --- |
-| **MLX framework** | `/Applications/oMLX.app/.../framework-mlx-base/lib/python3.11/site-packages` | Upstream OMLX Python 3.11 + TurboQuant+ injected into `mlx.nn.layers.turbo_kv_cache` |
-| **CLI proxy** | `cli/bin/omlx-cli` | Pass-through to the upstream CLI with `PYTHONPATH` pre-set so the CLI sees the same TurboQuant+ as the GUI |
-| **CLI research launcher** | `cli/bin/omlx-research` | Unified entry point: `repl`, `cli`, `gui`, `web`, `doctor`, `status`, `inference`, `spec-decode`, `latentmas`, `tidar`, `bench`, `fleet` |
-| **Web admin** | `python/omlx_research/web.py` | Local HTTP server (`omlx-research web`) serving the research panel + REST endpoints |
-| **GUI admin extensions** | `gui/admin-extensions/` | Drop-in extensions that mount inside the oMLX.app web admin (templates + static + API) |
-| **Python surface** | `python/omlx_research/` | `backends/` (vLLM, TensorRT, SGLang, llama.cpp, MLX, Metal), `engines/` (spec-decode, tree-attn, par-batch, hybrid-dispatch), `agents/` (LatentMAS, TiDAR, SSD, JetSpec schedulers), `cli/` (subcommand CLI) |
-| **Rust perf-core** | `perf-core/` | 5-crate workspace: `spec-decode`, `concurrent-exec`, `turbo-quant`, `tree-attention`, `fleet-proto`. The CPU/Metal hot path is in Rust; Metal kernels are loaded at runtime. |
-| **Python FFI** | `python/ffi/src/lib.rs` | pyo3 bindings so Python can call into the Rust perf-core (compiled as `_phenotype_omlx_core`) |
-| **Reference research repos** | `../turboquant_plus`, `../JetSpec`, `../ssd`, `../LatentMAS`, `../TiDAR` | Original third-party code, surfaced read-only via `phenotype-omlx-env.sh` |
-| **Windows client** | `windows-client/` | PowerShell launcher + planned Tauri GUI |
-| **Linux client** | `linux-client/` | bash launcher + planned Tauri GUI |
-| **macOS desktop** | upstream `/Applications/oMLX.app` | The upstream OMLX app, with our admin-extensions mounted via `OMLX_ADMIN_EXTRA` |
-
-## Why Rust + Python?
-
-Three reasons:
-
-1. **Latency on the hot path.** Speculative decoding, tree attention, and
-   TurboQuant pack/unpack all run per-token. Rust is ~2-5× faster than
-   Python on these CPU-bound inner loops, and Metal shader dispatch is
-   significantly cleaner from Rust than from Python.
-2. **Cross-platform FFI.** The same `perf-core` workspace compiles to a
-   native `.so` / `.dylib` / `.dll` that pyo3 wraps for Python. The Rust
-   surface is also the natural place for the `fleet-proto` JSON-RPC peer
-   protocol used by the Windows / Linux clients.
-3. **Optional Metal kernels.** MLX handles its own Metal dispatch, so the
-   Rust side stays CPU-only for now. If we later want direct Metal calls
-   (e.g., for the speculative tree attention kernel), the same workspace
-   already has `metal` placeholder files in `spec-decode/src/metal.rs`.
-
-## Quick start
+### Run a representative subset
 
 ```bash
-# 1) Verify the stack (idempotent — compiles perf-core on first run)
-./scripts/phenotype-omlx-ready
+# Phenotype command-line
+cargo run -p phenotype-cli -- --help
 
-# 2) Interactive REPL with the full stack
-./cli/bin/omlx-research
+# AgilePlus CLI
+cargo run -p agileplus-cli -- --help
 
-# 3) Doctor + status
-./cli/bin/omlx-research doctor
-./cli/bin/omlx-research status
+# Phenotype MCP server
+cargo run -p phenotype-mcp -- --help
 
-# 4) Inference via the policy dispatcher
-./cli/bin/omlx-research inference --prompt "Hello" --policy auto
+# Fabric CLI
+cargo run -p fabric-cli -- --help
 
-# 5) Speculative decoding demo
-./cli/bin/omlx-research spec-decode --mode ssd --gamma 5
-
-# 6) LatentMAS fan-out demo
-./cli/bin/omlx-research latentmas --prompt "Plan a 3-day trip" --n-agents 4
-
-# 7) Web admin (research panel + REST)
-./cli/bin/omlx-research web --port 8080
-
-# 8) Launch the oMLX.app GUI with admin-extensions mounted
-./cli/bin/omlx-research gui
+# Substrate binary
+cargo run -p substrate -- --help
 ```
+
+> **Tip:** the workspace excludes `crates/forge_daemon`, `crates/fabric-frame-transport/fuzz`, and `crates/fabric-gui/src-tauri` from the default members (see `[workspace] exclude` in `Cargo.toml`). Pass `--workspace` to include them explicitly when needed.
 
 ## Architecture
 
-See [`ARCHITECTURE.md`](ARCHITECTURE.md) for the full diagram and tier
-breakdown. Top-level decisions live in [`docs/adr/`](docs/adr/).
+Start with **[ARCHITECTURE.md](./ARCHITECTURE.md)** for the high-level picture, then read:
 
-## Repository map (merge target for the upstream OMLX fork)
+- [`docs/architecture/overview.md`](./docs/architecture/overview.md) — system overview
+- [`docs/architecture/domain-model.md`](./docs/architecture/domain-model.md) — domain model
+- [`docs/architecture/ports.md`](./docs/architecture/ports.md) — hexagonal ports & adapters
+- [`docs/architecture/development-container.md`](./docs/architecture/development-container.md) — dev environment
+- [`docs/architecture/rust-analyzer.md`](./docs/architecture/rust-analyzer.md) — IDE wiring
 
-| OMLX tier | phenotype-omlx path | What changed |
-| --- | --- | --- |
-| MLX framework | `perf-core/turbo-quant/` + `/Applications/oMLX.app/.../turbo_kv_cache.py` | TurboQuant+ inject |
-| CLI | `cli/bin/omlx-cli` + `cli/bin/omlx-research` | Pass-through proxy + unified launcher |
-| GUI / web | `gui/admin-extensions/` | Research panel, REST API, static assets |
-| Server | `python/omlx_research/web.py` | Local web admin |
-| Engines | `python/omlx_research/engines/` + `perf-core/spec-decode/` | New engines with Rust perf-core |
-| Backends | `python/omlx_research/backends/` | vLLM / TensorRT / SGLang / llama.cpp / MLX / Metal adapters |
-| Agents | `python/omlx_research/agents/` | LatentMAS, TiDAR, SSD, JetSpec concurrent schedulers |
-| Fleet | `perf-core/fleet-proto/` | JSON-RPC peer protocol + in-memory registry |
+For decisions and trade-offs, browse **[`docs/adr/`](./docs/adr/)** (e.g. `0001-record-architecture-decisions.md`, `0002-hexagonal-ports-adapters.md`, `0003-universal-typed-graph.md`).
 
-## Multi-platform
+Layered architecture (top → bottom):
 
-| Platform | Status | Entry point |
-| --- | --- | --- |
-| macOS (Apple Silicon) | ✅ Production | `/Applications/oMLX.app` + `cli/bin/omlx-research` |
-| Linux | 🟡 Stub | `linux-client/omlx-research` (PyTorch + CUDA / ROCm fallback) |
-| Windows | 🟡 Stub | `windows-client/omlx-research.ps1` (Tauri GUI planned) |
+1. **Applications** — `apps/` (phinbox-app, bench-cockpit, byteport, tooling, desktop)
+2. **Adapters / drivers** — `crates/driver-*`, MCP surfaces, CLI wrappers
+3. **Engines** — `crates/engine-*` (claude, codex, forge, a2a, agentapi, conformance)
+4. **AgilePlus** — intent / planning / events (`crates/agileplus-*`)
+5. **Substrate** — hexagonal ports, dispatch planner, tracing, DAG, skills, memory
+6. **Fabric** — distributed topology, capabilities, leases, transport
+7. **Storage** — `crates/store-file`, `crates/store-sqlite`
 
-## Multi-engine
+## Workspace Conventions
 
-| Engine | Tier | Use case |
-| --- | --- | --- |
-| **MLX** (primary) | Apple Silicon | Lowest latency on M-series; required for TurboQuant+ |
-| **Metal** | Apple Silicon | Direct Metal kernel dispatch (advanced) |
-| **vLLM** | Linux / cloud | High-throughput serving on NVIDIA / ROCm |
-| **TensorRT-LLM** | Linux / cloud | Max-throughput inference on NVIDIA |
-| **SGLang** (planned) | Linux / cloud | RadixAttention + structured generation |
-| **llama.cpp** | Any | CPU + GGUF quantization, broadest model support |
+- **Edition:** Rust 2021 (see `[workspace.package] edition`)
+- **Safety:** `unsafe_code = "forbid"` is the default
+- **Lint policy:** `[workspace.lints.rust]` is the source of truth; CI runs `cargo clippy --workspace -- -D warnings`
+- **Members:** declared in `Cargo.toml` `members = [ … ]`; exclusions are explicit
+- **Commits:** every agent commit carries `tx-agent:` and `tx-validated:` trailers (immutable transaction ledger — see `AGENTS.md` §"Immutable Transaction Ledger")
+- **Worktrees:** feature work happens in `repos/worktrees/phenoAI/<topic>` (see `AGENTS.md`)
+- **ADR-first:** any change that extends this repo into governed intent, agent dispatch, economic allocation, evidence graph, session ledger, or process supervision requires an ADR before code
 
-The `HybridDispatch` engine picks a backend per-request based on a policy
-(`auto`, `mlx`, `metal`, `vllm`, `tensorrt`, `sglang`, `llamacpp`, `lowest-latency`,
-`highest-throughput`).
+## Contributing
 
-## Performance cores (Rust)
+1. Read **[`CONTRIBUTING.md`](./CONTRIBUTING.md)** and **[`AGENTS.md`](./AGENTS.md)** in full.
+2. Read **[`CHARTER.md`](./CHARTER.md)** and the relevant ADR in **[`docs/adr/`](./docs/adr/)**.
+3. Fork or use a worktree:
+   ```bash
+   git -C ~/CodeProjects/Phenotype/repos/phenoAI \
+       worktree add ../worktrees/phenoAI/<topic> -b <topic>
+   ```
+4. Make changes; run `cargo fmt`, `cargo clippy --workspace -- -D warnings`, and `cargo test --workspace`.
+5. Commit with the ledger trailers (see `~/.gitmessage` template).
+6. Open a PR referencing the relevant ADR / issue.
 
-```
-perf-core/
-├── Cargo.toml                      # workspace
-├── spec-decode/                    # speculative decoding engine
-│   ├── src/lib.rs
-│   ├── src/backend.rs              # backend trait
-│   ├── src/engine.rs               # draft + verify loop
-│   ├── src/verify.rs               # target verification + acceptance
-│   └── src/metal.rs                # Metal kernel placeholders
-├── concurrent-exec/                # concurrent agent scheduler
-│   ├── src/lib.rs
-│   ├── src/plan.rs                 # execution plan / DAG
-│   ├── src/latentmas.rs            # LatentMAS adapter
-│   ├── src/tidar.rs                # TiDAR adapter
-│   ├── src/ssd.rs                  # SSD adapter
-│   └── src/jetspec.rs              # JetSpec adapter
-├── turbo-quant/                    # CPU SIMD TurboQuant pack/unpack
-│   └── src/lib.rs
-├── tree-attention/                 # tree causal mask + verification
-│   └── src/lib.rs
-└── fleet-proto/                    # JSON-RPC peer protocol
-    └── src/lib.rs
-```
+Bug reports and security disclosures: see `CODE_OF_CONDUCT.md` and `SECURITY.md`.
 
-Test status: **5 / 5 Rust crates compile. 5 / 5 unit tests pass.**
+## Related Repositories
 
-## Repo merge history (hwLedger → phenotype-omlx)
-
-The `hwLedger` research project (chore-overhaul-2026-06-30 worktree) is
-**fully merged** into this repo as documentation only. See:
-
-- `docs/adr/2026-06-18/ADR-035A-hwledger-reclassification.md`
-- `docs/boundary/phenotype-omlx.md`
-- `docs/intent/phenotype-omlx.md`
-
-The hwLedger Rust core itself was not merged — it served a different
-purpose (hardware capability ledger) and is now archived at
-`docs/research/architectures/hwledger-archive/`.
+| Repository | Role |
+|---|---|
+| **[KooshaPari/PhenoShared](https://github.com/KooshaPari/PhenoShared)** | This workspace (main monorepo) |
+| **[KooshaPari/phenotype-omlx](https://github.com/KooshaPari/phenotype-omlx)** | PhenoMLX — MLX-native inference stack built on top of Phenotype engines |
+| **[KooshaPari/HeliosLab](https://github.com/KooshaPari/HeliosLab)** | Experimental hardware-integration lab |
+| **[KooshaPari/portage](https://github.com/KooshaPari/portage)** | Deployment and release engineering |
 
 ## License
 
-See upstream OMLX license for the framework files we proxy. The
-phenotype-omlx additions (perf-core, omlx_research, admin extensions,
-research panel) are MIT-licensed.
+Dual-licensed under your choice of:
+
+- **[MIT](./LICENSE-MIT)**
+- **[Apache 2.0](./LICENSE-APACHE)**
+
+Unless you explicitly state otherwise, any contribution intentionally submitted for inclusion is licensed under the same terms.
+
+## Acknowledgements
+
+Built by the Phenotype open-source community. Special thanks to all contributors who have helped shape this workspace.
+
+---
+
+*Last refreshed: September 2026. For canonical product state, see [`docs/atlas/`](./docs/atlas/) and [`docs/architecture/overview.md`](./docs/architecture/overview.md).*
