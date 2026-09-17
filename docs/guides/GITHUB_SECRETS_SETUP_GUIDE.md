@@ -202,7 +202,7 @@ After creating all 3 secrets, verify they're accessible from each repository.
 
 ### Verify from AgilePlus Repository
 
-1. Go to: https://github.com/<REDACTED>/AgilePlus
+1. Go to: https://github.com/KooshaPari/AgilePlus
 2. Click **Settings** (top navigation)
 3. Click **Secrets and variables** → **Actions** (left sidebar)
 4. Under **"Organization secrets"** section, you should see:
@@ -217,7 +217,7 @@ If not visible:
 
 ### Verify from phenotype-infrakit Repository
 
-1. Go to: https://github.com/<REDACTED>/phenotype-infrakit
+1. Go to: https://github.com/KooshaPari/phenotype-infrakit
 2. Click **Settings** (top navigation)
 3. Click **Secrets and variables** → **Actions** (left sidebar)
 4. Under **"Organization secrets"** section, you should see:
@@ -231,7 +231,7 @@ If not visible:
 
 ### Verify from heliosCLI Repository
 
-1. Go to: https://github.com/<REDACTED>/heliosCLI
+1. Go to: https://github.com/KooshaPari/heliosCLI
 2. Click **Settings** (top navigation)
 3. Click **Secrets and variables** → **Actions** (left sidebar)
 4. Under **"Organization secrets"** section, you should see:
@@ -287,7 +287,7 @@ The `$&#123;&#123; secrets.SENTRY_DSN_AGILEPLUS &#125;&#125;` will be replaced w
 **Solution:**
 1. Double-check the repository name in the GitHub URL
 2. Make sure you're logged in with an account that has admin access
-3. Verify the repository exists at `https://github.com/<REDACTED>/{repo-name}`
+3. Verify the repository exists at `https://github.com/KooshaPari/{repo-name}`
 
 ### Problem: Secret not visible in repository settings
 

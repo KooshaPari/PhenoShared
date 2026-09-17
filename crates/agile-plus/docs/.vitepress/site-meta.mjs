@@ -110,7 +110,7 @@ export function createSiteMeta({ base = '/' } = {}) {
         ...buildSectionNav(),
       ],
       socialLinks: [
-        { icon: 'github', link: 'https://github.com/KooshaPari/AgilePlus' },
+        { icon: 'github', link: 'https://github.com/<REDACTED>/AgilePlus' },
       ],
     },
     head: [

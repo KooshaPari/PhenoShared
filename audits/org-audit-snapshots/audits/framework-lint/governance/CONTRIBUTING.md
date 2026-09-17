@@ -33,7 +33,7 @@ codebase for structural compliance.
 
 ```bash
 # Clone the repo
-git clone https://github.com/<REDACTED>/pheno-framework-lint.git
+git clone https://github.com/KooshaPari/pheno-framework-lint.git
 cd pheno-framework-lint
 
 # Create a virtualenv (Python 3.10+)

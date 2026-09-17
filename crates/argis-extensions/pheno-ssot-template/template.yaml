@@ -19,8 +19,8 @@ description: >-
 version: 0.2.0
 owner: <REDACTED>
 license: MIT
-repository: https://github.com/<REDACTED>/phenotype
-homepage: https://github.com/<REDACTED>/phenotype/tree/main/pheno-ssot-template
+repository: https://github.com/KooshaPari/phenotype
+homepage: https://github.com/KooshaPari/phenotype/tree/main/pheno-ssot-template
 
 variables:
   - name: project_name

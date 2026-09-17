@@ -101,7 +101,7 @@
 1. **Review last 7 CI runs**
    ```bash
    # Check GitHub Actions tab:
-   # https://github.com/<REDACTED>/phenotype-infrakit/actions/workflows/benchmark.yml
+   # https://github.com/KooshaPari/phenotype-infrakit/actions/workflows/benchmark.yml
 
    # Look for:
    # - Any failed jobs

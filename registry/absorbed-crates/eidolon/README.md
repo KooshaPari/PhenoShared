@@ -363,11 +363,11 @@ X-RateLimit-Reset: 1719005460
 ```
 
 [rfc7807]: https://www.rfc-editor.org/rfc/rfc7807
-[convention]: https://github.com/<REDACTED>/phenotype-apps/blob/main/docs/conventions/rest-api.md
+[convention]: https://github.com/KooshaPari/phenotype-apps/blob/main/docs/conventions/rest-api.md
 
 ## See Also
 
-Explore Eidolon and other Phenotype collections in the [Phenotype GitHub org](https://github.com/<REDACTED>).
+Explore Eidolon and other Phenotype collections in the [Phenotype GitHub org](https://github.com/KooshaPari).
 
 **Sibling Collections:**
 - **[Sidekick](../Sidekick)** — AI-powered agent framework & dispatch routing

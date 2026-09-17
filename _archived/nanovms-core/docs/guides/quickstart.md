@@ -39,7 +39,7 @@ ls -la /dev/kvm
 
 ```bash
 # Download latest release
-curl -L https://github.com/<REDACTED>/nanovms/releases/latest/download/nanovms-linux-amd64.tar.gz \
+curl -L https://github.com/KooshaPari/nanovms/releases/latest/download/nanovms-linux-amd64.tar.gz \
   -o nanovms.tar.gz
 
 # Extract
@@ -56,7 +56,7 @@ nanovms version
 
 ```bash
 # Clone repository
-git clone https://github.com/<REDACTED>/nanovms.git
+git clone https://github.com/KooshaPari/nanovms.git
 cd nanovms
 
 # Build
@@ -95,10 +95,10 @@ podman run -it --rm \
 ```bash
 # Add to your Cargo.toml
 [dependencies]
-nvms-sdk = { git = "https://github.com/<REDACTED>/nanovms", subdir = "sdk/rust" }
+nvms-sdk = { git = "https://github.com/KooshaPari/nanovms", subdir = "sdk/rust" }
 
 # Or clone and build locally
-git clone https://github.com/<REDACTED>/nanovms.git
+git clone https://github.com/KooshaPari/nanovms.git
 cd nanovms/sdk/rust
 cargo build
 ```
@@ -443,6 +443,6 @@ sudo iptables -L -n | grep nanovms
 
 ### Community
 
-- [GitHub Discussions](https://github.com/<REDACTED>/nanovms/discussions)
+- [GitHub Discussions](https://github.com/KooshaPari/nanovms/discussions)
 - [Discord](https://discord.gg/nanovms)
 - [Matrix](https://matrix.to/#/#nanovms:matrix.org)

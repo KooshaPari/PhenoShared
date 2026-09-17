@@ -1,6 +1,6 @@
 # Contributing to phenotype-org-audits
 
-Thanks for your interest. This project is part of the [Phenotype](https://github.com/<REDACTED>) ecosystem.
+Thanks for your interest. This project is part of the [Phenotype](https://github.com/KooshaPari) ecosystem.
 
 ## Workflow
 

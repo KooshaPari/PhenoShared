@@ -51,7 +51,7 @@ forge-runner-scripts/
 ## Install
 
 ```bash
-git clone https://github.com/<REDACTED>/forge-runner-scripts.git ~/CodeProjects/Phenotype/repos/forge-runner-scripts
+git clone https://github.com/KooshaPari/forge-runner-scripts.git ~/CodeProjects/Phenotype/repos/forge-runner-scripts
 cd forge-runner-scripts
 ./install.sh          # copies bin/* to ~/bin/forge-runner-*/
 ```

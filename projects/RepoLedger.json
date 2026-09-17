@@ -9,7 +9,7 @@
   "role": "repository-ecosystem-governance-console",
   "domain_role": "repository-governance",
   "boundary": "ecosystem-inventory-and-boundary-review",
-  "gh_url": "https://github.com/<REDACTED>/RepoLedger",
+  "gh_url": "https://github.com/KooshaPari/RepoLedger",
   "default_branch": "main",
   "remote_default_sha_at_audit": "b664b757215df00a49536a861372cf864cb98bf1",
   "remote_size_kb_at_audit": 52,

@@ -2,7 +2,7 @@
 
 **airlock id:** `fed12af11b16`
 **canonical local folder:** `helios-cli`
-**upstream URL:** `https://github.com/<REDACTED>/helios-cli.git`
+**upstream URL:** `https://github.com/KooshaPari/helios-cli.git`
 **bare mirror:** `/Users/<REDACTED>/.airlock/repos/fed12af11b16.git/`
 **worktree:**    `/Users/<REDACTED>/.airlock/worktrees/fed12af11b16/`
 
@@ -37,4 +37,4 @@ See: `_phenofleet-decisions/airlock-decisions/2026-07-14-f2270c66ee9d-heliosCLI-
 
 - Inventory probe JSON: `_phenofleet-decisions/airlock-decisions/.airlock-inventory-2026-07-14.json`
 - Companion absorbed decision: `_phenofleet-decisions/airlock-decisions/2026-07-14-26ffbedabd25-heliosHarness-absorbed-into-helios-cli.md` (different decision — `heliosHarness` was a separate repo absorbed into this one)
-- Remote backup gist: https://gist.github.com/<REDACTED>/3e6038adbfc4fe4c38965d02d0fc867e
+- Remote backup gist: https://gist.github.com/KooshaPari/3e6038adbfc4fe4c38965d02d0fc867e

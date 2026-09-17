@@ -63,10 +63,10 @@ all = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/<REDACTED>/kinfra"
+Homepage = "https://github.com/KooshaPari/kinfra"
 Documentation = "https://kinfra.dev/docs"
-"Bug Tracker" = "https://github.com/<REDACTED>/kinfra/issues"
-Source = "https://github.com/<REDACTED>/kinfra"
+"Bug Tracker" = "https://github.com/KooshaPari/kinfra/issues"
+Source = "https://github.com/KooshaPari/kinfra"
 
 [project.scripts]
 kinfra = "kinfra.cli:main"

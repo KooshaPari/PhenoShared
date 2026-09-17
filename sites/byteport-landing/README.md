@@ -1,10 +1,10 @@
 # byteport-landing
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![CI](https://img.shields.io/github/actions/workflow/status/<REDACTED>/phenotype-landing/ci.yml?branch=main)](https://github.com/<REDACTED>/phenotype-landing/actions)
+[![CI](https://img.shields.io/github/actions/workflow/status/<REDACTED>/phenotype-landing/ci.yml?branch=main)](https://github.com/KooshaPari/phenotype-landing/actions)
 [![TypeScript](https://img.shields.io/badge/typescript-5%2B-3178C6?logo=typescript)](https://www.typescriptlang.org/)
 
-Production landing page at `byteport.<REDACTED>.com` for [<REDACTED>/BytePort](https://github.com/<REDACTED>/BytePort), a Rust-based project management and workflow orchestration platform. Part of the Phenotype org-pages architecture (Tier 2; Tier 1 is `projects.<REDACTED>.com`).
+Production landing page at `byteport.<REDACTED>.com` for [<REDACTED>/BytePort](https://github.com/KooshaPari/BytePort), a Rust-based project management and workflow orchestration platform. Part of the Phenotype org-pages architecture (Tier 2; Tier 1 is `projects.<REDACTED>.com`).
 
 ## Purpose
 
@@ -46,7 +46,7 @@ tokio = { version = "1.0", features = ["full"] }
 
 ```bash
 # Clone repository
-git clone https://github.com/<REDACTED>/byteport-landing.git
+git clone https://github.com/KooshaPari/byteport-landing.git
 cd byteport-landing
 
 # Install dependencies
@@ -227,7 +227,7 @@ nslookup byteport.<REDACTED>.com
 
 ## Related
 
-- [Byteport](https://github.com/<REDACTED>/BytePort) — Main project repository
-- [projects.<REDACTED>.com](https://github.com/<REDACTED>/portfolio) — Tier 1 landing (all projects)
+- [Byteport](https://github.com/KooshaPari/BytePort) — Main project repository
+- [projects.<REDACTED>.com](https://github.com/KooshaPari/portfolio) — Tier 1 landing (all projects)
 - [phenotype-design](../phenotype-design/) — Design system & components
-- [Org Pages Architecture](https://github.com/<REDACTED>/phenotype-infrakit/docs/governance/org-pages-architecture.md)
+- [Org Pages Architecture](https://github.com/KooshaPari/phenotype-infrakit/docs/governance/org-pages-architecture.md)

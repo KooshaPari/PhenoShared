@@ -9,8 +9,8 @@ import (
 	"github.com/google/uuid"
 	"github.com/maximhq/bifrost/core/schemas"
 
-	"github.com/<REDACTED>/bifrost-extensions/db/sqlc"
-	"github.com/<REDACTED>/bifrost-extensions/slm"
+	"github.com/KooshaPari/bifrost-extensions/db/sqlc"
+	"github.com/KooshaPari/bifrost-extensions/slm"
 )
 
 // ContextStrategy defines how context should be managed

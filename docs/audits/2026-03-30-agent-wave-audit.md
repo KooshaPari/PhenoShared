@@ -7,7 +7,7 @@
 **Location:** `/Users/<REDACTED>/Repos/agent-wave/`
 **Language:** TypeScript / JavaScript
 **Package Manager:** Bun v1.2.0
-**Repository:** https://github.com/<REDACTED>/agent-wave
+**Repository:** https://github.com/KooshaPari/agent-wave
 **License:** MIT
 **Size:** 3.3 MB, 404 files
 

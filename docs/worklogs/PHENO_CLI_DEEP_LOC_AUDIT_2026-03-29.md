@@ -508,7 +508,7 @@ internal/logging/
 └── middleware.go     (request/error logging)
 ```
 
-**Note**: Slog migration is dependency-level decision; blocked until https://github.com/<REDACTED>/pheno-cli/issues/XXX resolved
+**Note**: Slog migration is dependency-level decision; blocked until https://github.com/KooshaPari/pheno-cli/issues/XXX resolved
 
 ---
 
@@ -516,7 +516,7 @@ internal/logging/
 
 ### Already Library-Ready
 
-1. **internal/version/** → `github.com/<REDACTED>/semver-go`
+1. **internal/version/** → `github.com/KooshaPari/semver-go`
    - 146 LOC, zero dependencies
    - Used by all adapters
    - Could serve other projects

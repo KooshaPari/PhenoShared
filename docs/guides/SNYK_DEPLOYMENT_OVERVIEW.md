@@ -306,7 +306,7 @@ These three repos get workflow deployment first:
 ### GitHub Integration
 - Organization Secrets: https://github.com/organizations/<REDACTED>/settings/secrets/actions
 - Workflows: `.github/workflows/snyk-scan.yml` (in each repo)
-- Actions Results: https://github.com/<REDACTED>/[repo]/actions
+- Actions Results: https://github.com/KooshaPari/[repo]/actions
 
 ---
 
@@ -468,9 +468,9 @@ You'll know you've succeeded when:
 |------|------|
 | Snyk App | https://app.snyk.io |
 | GitHub Org Secrets | https://github.com/organizations/<REDACTED>/settings/secrets/actions |
-| AgilePlus Actions | https://github.com/<REDACTED>/AgilePlus/actions |
-| heliosCLI Actions | https://github.com/<REDACTED>/heliosCLI/actions |
-| phenotype-infrakit Actions | https://github.com/<REDACTED>/phenotype-infrakit/actions |
+| AgilePlus Actions | https://github.com/KooshaPari/AgilePlus/actions |
+| heliosCLI Actions | https://github.com/KooshaPari/heliosCLI/actions |
+| phenotype-infrakit Actions | https://github.com/KooshaPari/phenotype-infrakit/actions |
 
 ---
 

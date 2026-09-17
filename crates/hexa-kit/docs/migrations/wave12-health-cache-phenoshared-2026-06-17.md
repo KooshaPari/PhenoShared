@@ -1,7 +1,7 @@
 # Wave 12 — phenotype-health + cache-adapter — HexaKit
 
 **Date:** 2026-06-17  
-**Predecessor:** P3 wave 4 ([#260](https://github.com/<REDACTED>/HexaKit/pull/260))
+**Predecessor:** P3 wave 4 ([#260](https://github.com/KooshaPari/HexaKit/pull/260))
 
 ## Workspace exclude + git pin (phenoShared)
 

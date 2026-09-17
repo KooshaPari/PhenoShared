@@ -4,7 +4,7 @@
 
 If you discover a security vulnerability in **PhenoAgent**, please report it privately via GitHub's security advisories:
 
-- https://github.com/<REDACTED>/PhenoAgent/security/advisories/new
+- https://github.com/KooshaPari/PhenoAgent/security/advisories/new
 
 Please do **not** open a public issue for security reports. We will acknowledge receipt within 72 hours and provide a remediation timeline based on severity.
 

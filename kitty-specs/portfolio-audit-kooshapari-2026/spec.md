@@ -6,7 +6,7 @@ Establish a single tracked program to inventory, assess, and modernize <REDACTED
 ## Scope
 - GitHub org `<REDACTED>` (249 repos): triage by last push, archive status, overlap with `Phenotype/repos`.
 - Local `CodeProjects/*` (<REDACTED>/Dino, archive, orphans, Dev, learning): shallow health + link to remote if any.
-- Canonical SDK tree: `Phenotype/repos/worktrees/phenoSDK/main` (clone of `github.com/<REDACTED>/phenoSDK`). Legacy `pheno-sdk` remote is empty; do not block on it.
+- Canonical SDK tree: `Phenotype/repos/worktrees/phenoSDK/main` (clone of `github.com/KooshaPari/phenoSDK`). Legacy `pheno-sdk` remote is empty; do not block on it.
 
 ## Acceptance criteria
 1. Inventory artifacts committed or referenced from `docs/reports/` in Phenotype repos.

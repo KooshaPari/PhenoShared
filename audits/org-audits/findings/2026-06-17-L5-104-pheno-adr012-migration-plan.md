@@ -252,7 +252,7 @@ The plan is **6 PRs over 4 substrate targets**, sequenced to minimize merge conf
 | **Target repo** | `<REDACTED>/phenotype-config` |
 | **Branch** | `feat/canonical-marker-for-pheno-crates-2026-06-17` |
 | **New files** | `crates/settly/CANONICAL.md` (was `pheno/crates/phenotype-config-loader/CANONICAL.md`); `crates/settly/CANONICAL_FROM_PHENO_SHARED_CONFIG.md` (was `pheno/crates/phenotype-shared-config/CANONICAL.md`; renamed because substrate crate name is `settly`, not `phenotype-shared-config`) |
-| **Content** | Adapted from Dmouse92 source, but re-pointing from `phenoShared` to `phenotype-config`:<br>`# Canonical Source Notice`<br>`This crate has been promoted to the phenotype-config substrate.`<br>`Repository: https://github.com/<REDACTED>/phenotype-config`<br>`Path: https://github.com/<REDACTED>/phenotype-config/tree/main/crates/settly`<br>`Status: deprecated copy in pheno/crates/phenotype-config-{loader,shared-config}/ retained for backward compatibility only.` |
+| **Content** | Adapted from Dmouse92 source, but re-pointing from `phenoShared` to `phenotype-config`:<br>`# Canonical Source Notice`<br>`This crate has been promoted to the phenotype-config substrate.`<br>`Repository: https://github.com/KooshaPari/phenotype-config`<br>`Path: https://github.com/KooshaPari/phenotype-config/tree/main/crates/settly`<br>`Status: deprecated copy in pheno/crates/phenotype-config-{loader,shared-config}/ retained for backward compatibility only.` |
 | **Commit msg** | `feat(docs): add CANONICAL.md markers for pheno/crates/phenotype-config-* deprecation redirects to substrate (L5-104)` |
 | **Verification** | `git ls-tree -r <REDACTED>/phenotype-config --name-only | grep CANONICAL.md` lists 2 new files; text content mentions `phenotype-config` (not `phenoShared`) |
 | **Estimated LoC** | ~40 |
@@ -398,7 +398,7 @@ Create `worklogs/L5-104-pheno-adr012-migration-2026-06-17.json` with the followi
 
 ## Evidence trail
 
-All commands cited in this plan are reproducible from `/tmp/dmouse92-migration/pheno/` (a `git clone` of `https://github.com/Dmouse92/pheno.git` with `git remote add kp https://github.com/<REDACTED>/pheno.git && git fetch kp main --depth=200`). Auth: `gh` is `<REDACTED>` (verified 2026-06-17 18:43 PDT). Dmouse92 is read-only collaborator — NO push operations performed.
+All commands cited in this plan are reproducible from `/tmp/dmouse92-migration/pheno/` (a `git clone` of `https://github.com/Dmouse92/pheno.git` with `git remote add kp https://github.com/KooshaPari/pheno.git && git fetch kp main --depth=200`). Auth: `gh` is `<REDACTED>` (verified 2026-06-17 18:43 PDT). Dmouse92 is read-only collaborator — NO push operations performed.
 
 **Citations:**
 - W5 PR #130: `gh pr view 130 --repo <REDACTED>/pheno --json title,state,headRefName,baseRefName,additions,deletions,changedFiles` (retrieved 2026-06-17; MERGED 2026-04-30)

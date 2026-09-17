@@ -5,7 +5,7 @@
 **Date:** 2026-06-16 (original); 2026-06-18 (re-issued verdict)
 **Tracker:** `phenotype-registry#75`
 **SSOT:** `phenotype-registry/docs/rationalization/block-c-consolidation.md`
-**Long-term home:** <https://github.com/<REDACTED>/phenotype-gfx> (PR #10)
+**Long-term home:** <https://github.com/KooshaPari/phenotype-gfx> (PR #10)
 
 ---
 
@@ -41,7 +41,7 @@ is **to be archived** once PR #10 merges; no downgrade path to preserve.
 **References:**
 - `docs/adr/ADR-004-single-core-ffi-edges.md` — single Rust core + thin FFI edges.
 - `docs/adr/ADR-031-configra-absorb.md` — sibling "absorb, do not coexist" ADR.
-- PR: <https://github.com/<REDACTED>/phenotype-gfx/pull/10>
+- PR: <https://github.com/KooshaPari/phenotype-gfx/pull/10>
 - Commit: `61c1617` — `feat(gfx): port terrain + water C# to Rust (L5-110..111, ADR-004)`
 
 **Migration summary:** 3,145 lines absorbed (Rust water core + ports); 9 test

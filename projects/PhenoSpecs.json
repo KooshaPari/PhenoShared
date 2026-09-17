@@ -21,7 +21,7 @@
   "role": "adrs-contracts-and-spec-traceability (historical)",
   "domain_role": "governance-spine (historical)",
   "boundary": "specifications-and-contracts (historical)",
-  "gh_url": "https://github.com/<REDACTED>/zz-no-archive-PhenoSpecs",
+  "gh_url": "https://github.com/KooshaPari/zz-no-archive-PhenoSpecs",
   "default_branch": "main",
   "remote_default_sha": "c7df3ae",
   "license": "MIT OR Apache-2.0",

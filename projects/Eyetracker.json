@@ -17,7 +17,7 @@
   "boundary": "interaction",
   "stack": "rust+uniffi",
   "v0": "0.1.0-alpha",
-  "gh_url": "https://github.com/<REDACTED>/eyetracker",
+  "gh_url": "https://github.com/KooshaPari/eyetracker",
   "owner_knowledge_cutoff": "2026-06-23",
   "wave": "L7-010",
   "branch_count": 30,

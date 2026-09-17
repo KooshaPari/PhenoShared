@@ -60,10 +60,10 @@ fastmcp = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/<REDACTED>/pheno"
+Homepage = "https://github.com/KooshaPari/pheno"
 Documentation = "https://phenotype-infrakit.readthedocs.io"
-Repository = "https://github.com/<REDACTED>/pheno.git"
-Issues = "https://github.com/<REDACTED>/pheno/issues"
+Repository = "https://github.com/KooshaPari/pheno.git"
+Issues = "https://github.com/KooshaPari/pheno/issues"
 
 [tool.setuptools]
 package-dir = {"" = "src"}

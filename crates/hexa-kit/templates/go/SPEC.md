@@ -22,7 +22,7 @@ copier copy gh:<REDACTED>/template-lang-go ./my-project
 
 # Or
 mkdir my-project && cd my-project
-curl -sL https://github.com/<REDACTED>/template-lang-go/archive/main.tar.gz | tar xz --strip-components=1
+curl -sL https://github.com/KooshaPari/template-lang-go/archive/main.tar.gz | tar xz --strip-components=1
 ```
 
 ## Structure

@@ -5,7 +5,7 @@ Use when adding MCP code and choosing a language or repo layer.
 ## Pre-flight
 
 1. [LANGUAGE-TIERS-AND-ROLES.md](../../docs/LANGUAGE-TIERS-AND-ROLES.md)
-2. [ADR-017](https://github.com/<REDACTED>/PhenoSpecs/blob/main/adrs/017-mcp-polyrepo-boundaries.md)
+2. [ADR-017](https://github.com/KooshaPari/PhenoSpecs/blob/main/adrs/017-mcp-polyrepo-boundaries.md)
 3. [catalog/registry.yaml](../../catalog/registry.yaml) `language_policy`
 
 ## Tier rules

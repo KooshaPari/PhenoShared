@@ -202,7 +202,7 @@ Each step: **target repo → branch → commit message**. Steps MUST execute in 
 
 ### Step 1 — Publish `pheno-mcp-router` to GitHub
 
-**Target:** `gh repo create <REDACTED>/pheno-mcp-router --public --description "Phenotype MCP substrate: hexagonal L4 ports (LlmPort/StoragePort/ToolPort) + 6 concrete adapters (V21 O1 per ADR-013)" --homepage "https://github.com/<REDACTED>/phenotype-handbook/blob/main/docs/adr/2026-06-15/ADR-013-pheno-mcp-router-substrate.md"`
+**Target:** `gh repo create <REDACTED>/pheno-mcp-router --public --description "Phenotype MCP substrate: hexagonal L4 ports (LlmPort/StoragePort/ToolPort) + 6 concrete adapters (V21 O1 per ADR-013)" --homepage "https://github.com/KooshaPari/phenotype-handbook/blob/main/docs/adr/2026-06-15/ADR-013-pheno-mcp-router-substrate.md"`
 **Branch:** `main` (initial push of local HEAD `c49a20e`)
 **Commit message:** n/a (initial repo creation)
 **Gate:** `gh api repos/<REDACTED>/pheno-mcp-router` returns 200.

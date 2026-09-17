@@ -10,7 +10,7 @@
   "last_commit_subject": "chore: merge phenoData into pheno as crates/pheno-data-from-phenoData/",
   "last_commit_author": "pheno Decomposition",
   "remotes": {
-    "origin": "https://github.com/<REDACTED>/pheno.git"
+    "origin": "https://github.com/KooshaPari/pheno.git"
   },
   "language_stack": {
     "detected": ["rust", "python", "typescript", "go", "toml", "markdown", "yaml"],

@@ -71,7 +71,7 @@ pheno-compose deploy --runtime nvms --config nvms.yaml
 curl -fsSL https://get.nvms.dev | sh
 
 # Or build from source
-git clone https://github.com/<REDACTED>/nvms.git
+git clone https://github.com/KooshaPari/nvms.git
 cd nvms && go build ./cmd/nvms
 
 # Install PhenoCompose driver

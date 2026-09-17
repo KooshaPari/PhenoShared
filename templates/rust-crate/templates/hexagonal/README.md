@@ -2,7 +2,7 @@
 
 <!-- Migrated from <REDACTED>/Apisync (archived 2026-06-19) — original commit d981353 -->
 
-This template was extracted from [`<REDACTED>/Apisync`](https://github.com/<REDACTED>/Apisync)
+This template was extracted from [`<REDACTED>/Apisync`](https://github.com/KooshaPari/Apisync)
 shortly before that repository was archived on 2026-06-19. It preserves the **hexagonal /
 ports-and-adapters** scaffold patterns that Apisync used: a thin `Taskfile`-driven quality
 gate, a tightly-pinned Rust toolchain, opinionated lint/format/audit configs, and a starter
@@ -112,6 +112,6 @@ mise run audit
 
 ## See also
 
-- [`<REDACTED>/Apisync`](https://github.com/<REDACTED>/Apisync) @ `d981353` — the source of truth
+- [`<REDACTED>/Apisync`](https://github.com/KooshaPari/Apisync) @ `d981353` — the source of truth
 - [`<REDACTED>/pheno-cargo-template`](../..) — this repository's root
 - ADR-017 — *"Deprecate Apisync; absorb template patterns into pheno-cargo-template"*

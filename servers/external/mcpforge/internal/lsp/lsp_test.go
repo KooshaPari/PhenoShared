@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/<REDACTED>/MCPForge/internal/protocol"
+	"github.com/KooshaPari/MCPForge/internal/protocol"
 )
 
 func TestDetectLanguageID(t *testing.T) {

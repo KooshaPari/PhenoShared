@@ -11,9 +11,9 @@
     "locked_default_config": "C:\\Users\\koosh\\.ssh\\config (ACL denied; User defaults to koosh)"
   },
   "repos": {
-    "phenotype-omlx": "https://github.com/<REDACTED>/phenotype-omlx",
-    "pheno-research": "https://github.com/<REDACTED>/pheno-research",
-    "pheno-control-plane": "https://github.com/<REDACTED>/pheno-control-plane",
+    "phenotype-omlx": "https://github.com/KooshaPari/phenotype-omlx",
+    "pheno-research": "https://github.com/KooshaPari/pheno-research",
+    "pheno-control-plane": "https://github.com/KooshaPari/pheno-control-plane",
     "pheno-harness_win": "C:\\Users\\koosh\\pheno-harness",
     "fleet-bench": "D:\\koosh\\fleet-bench",
     "omlx_mac_path": "~/CodeProjects/Phenotype/repos/phenotype-omlx"

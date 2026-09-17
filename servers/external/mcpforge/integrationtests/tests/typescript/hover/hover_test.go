@@ -7,9 +7,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/<REDACTED>/MCPForge/integrationtests/tests/common"
-	"github.com/<REDACTED>/MCPForge/integrationtests/tests/typescript/internal"
-	"github.com/<REDACTED>/MCPForge/internal/tools"
+	"github.com/KooshaPari/MCPForge/integrationtests/tests/common"
+	"github.com/KooshaPari/MCPForge/integrationtests/tests/typescript/internal"
+	"github.com/KooshaPari/MCPForge/internal/tools"
 )
 
 // TestHover tests hover functionality with the TypeScript language server

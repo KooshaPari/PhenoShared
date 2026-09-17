@@ -26,4 +26,4 @@ reconstructed from the initial repository creation.
 - Basic pipeline transformation test.
 - CI workflow for build and test.
 
-[v0.1.0]: https://github.com/<REDACTED>/DataKit/releases/tag/v0.1.0
+[v0.1.0]: https://github.com/KooshaPari/DataKit/releases/tag/v0.1.0

@@ -1,7 +1,7 @@
 # PhenoAgent
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Quality Gate](https://github.com/<REDACTED>/PhenoAgent/actions/workflows/quality-gate.yml/badge.svg)](https://github.com/<REDACTED>/PhenoAgent/actions/workflows/quality-gate.yml)
+[![Quality Gate](https://github.com/KooshaPari/PhenoAgent/actions/workflows/quality-gate.yml/badge.svg)](https://github.com/KooshaPari/PhenoAgent/actions/workflows/quality-gate.yml)
 [![Rust](https://img.shields.io/badge/rust-1.75%2B-orange.svg)](https://www.rust-lang.org)
 [![AI Slop Inside](https://sladge.net/badge.svg)](https://sladge.net)
 
@@ -35,7 +35,7 @@ PhenoAgent provides a unified framework for building autonomous agents with comp
 
 ```bash
 # Clone the repository
-git clone https://github.com/<REDACTED>/PhenoAgent.git
+git clone https://github.com/KooshaPari/PhenoAgent.git
 cd PhenoAgent
 
 # Review governance and project spec

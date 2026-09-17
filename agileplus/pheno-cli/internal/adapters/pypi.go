@@ -12,7 +12,7 @@ import (
 
 	toml "github.com/pelletier/go-toml/v2"
 
-	"github.com/<REDACTED>/pheno-cli/internal/version"
+	"github.com/KooshaPari/pheno-cli/internal/version"
 )
 
 type pyprojectToml struct {

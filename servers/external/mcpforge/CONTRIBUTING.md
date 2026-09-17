@@ -11,7 +11,7 @@ MCPForge is the Phenotype fork of [`isaacphi/mcp-language-server`](https://githu
 ## Getting Started
 
 ```bash
-git clone https://github.com/<REDACTED>/MCPForge.git
+git clone https://github.com/KooshaPari/MCPForge.git
 cd MCPForge
 go mod download
 go build ./...

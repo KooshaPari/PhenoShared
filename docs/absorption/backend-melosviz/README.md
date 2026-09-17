@@ -101,7 +101,7 @@ All 107 tests pass clean.
 
 ## Files
 
-- Source: https://github.com/<REDACTED>/backend (archived 2026-07-17)
+- Source: https://github.com/KooshaPari/backend (archived 2026-07-17)
 - Target commit: `bbeedd5` on `phenotype-python-sdk#wip/2026-07-16-0030-auto`
 - Registry: `phenotype-registry/disposition-index.json` row `repo-backend-melosviz`
   (fsm=absorbed, archived=true)

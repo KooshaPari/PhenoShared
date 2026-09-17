@@ -156,7 +156,7 @@ in addition to, the workflow, add a snippet to the consumer's
 
 ```yaml
 repos:
-  - repo: https://github.com/<REDACTED>/pheno-secret-scan
+  - repo: https://github.com/KooshaPari/pheno-secret-scan
     rev: v0.1.0
     hooks:
       - id: trufflehog

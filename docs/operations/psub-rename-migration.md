@@ -93,12 +93,12 @@ Git patch — change only the table key, and advance the tag to `v0.3.0`:
 
 ```toml
 # before
-[patch."https://github.com/<REDACTED>/substrate"]
-gateway = { git = "https://github.com/<REDACTED>/substrate", tag = "v0.2.0" }
+[patch."https://github.com/KooshaPari/substrate"]
+gateway = { git = "https://github.com/KooshaPari/substrate", tag = "v0.2.0" }
 
 # after
-[patch."https://github.com/<REDACTED>/substrate"]
-psub-gateway = { git = "https://github.com/<REDACTED>/substrate", tag = "v0.3.0" }
+[patch."https://github.com/KooshaPari/substrate"]
+psub-gateway = { git = "https://github.com/KooshaPari/substrate", tag = "v0.3.0" }
 ```
 
 Pre-rename tags still resolve the old names; use `v0.3.0` for the new

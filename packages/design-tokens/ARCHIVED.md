@@ -1,6 +1,6 @@
 # Moved: `@phenotype/design-tokens`
 
-Canonical source: [`<REDACTED>/phenoDesign`](https://github.com/<REDACTED>/phenoDesign) → `packages/design-tokens/`
+Canonical source: [`<REDACTED>/phenoDesign`](https://github.com/KooshaPari/phenoDesign) → `packages/design-tokens/`
 
 ```json
 {

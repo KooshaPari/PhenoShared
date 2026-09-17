@@ -240,7 +240,7 @@ Environment: production
 Release: v1.2.3
 
 👁️ View in Sentry: https://sentry.io/organizations/phenotype/issues/...
-🐛 GitHub Issue: https://github.com/<REDACTED>/AgilePlus/issues/123
+🐛 GitHub Issue: https://github.com/KooshaPari/AgilePlus/issues/123
 
 [Resolve] [Ignore] [Archive]
 ```

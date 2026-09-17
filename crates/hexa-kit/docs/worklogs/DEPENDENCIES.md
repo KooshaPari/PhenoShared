@@ -523,9 +523,9 @@ Audit of GitHub-hosted external dependencies beyond crates.io.
 
 ```toml
 # Cargo.toml
-agileplus-plugin-core = { git = "https://github.com/<REDACTED>/agileplus-plugin-core", optional = true }
-agileplus-plugin-git = { git = "https://github.com/<REDACTED>/agileplus-plugin-git", optional = true }
-agileplus-plugin-sqlite = { git = "https://github.com/<REDACTED>/agileplus-plugin-sqlite", optional = true }
+agileplus-plugin-core = { git = "https://github.com/KooshaPari/agileplus-plugin-core", optional = true }
+agileplus-plugin-git = { git = "https://github.com/KooshaPari/agileplus-plugin-git", optional = true }
+agileplus-plugin-sqlite = { git = "https://github.com/KooshaPari/agileplus-plugin-sqlite", optional = true }
 ```
 
 ### Recommendations
@@ -2103,7 +2103,7 @@ Earlier stacked PRs (#99–#101) were closed without merge; workflow initially l
 
 | Directory | Branch | Status | Action |
 |-----------|--------|--------|--------|
-| chore-docs-sbom-stack | (historical) | Merged | Landed on `main` via [#139](https://github.com/<REDACTED>/phenotype-infrakit/pull/139), [#160](https://github.com/<REDACTED>/phenotype-infrakit/pull/160), [#191](https://github.com/<REDACTED>/phenotype-infrakit/pull/191), [#225](https://github.com/<REDACTED>/phenotype-infrakit/pull/225); delete local dir when idle |
+| chore-docs-sbom-stack | (historical) | Merged | Landed on `main` via [#139](https://github.com/KooshaPari/phenotype-infrakit/pull/139), [#160](https://github.com/KooshaPari/phenotype-infrakit/pull/160), [#191](https://github.com/KooshaPari/phenotype-infrakit/pull/191), [#225](https://github.com/KooshaPari/phenotype-infrakit/pull/225); delete local dir when idle |
 | chore-sbom-cyclonedx | (historical) | Merged | SBOM workflow superseded on `main`; safe to delete local worktree |
 | chore-session-sbom-stack | (historical) | Merged | Session doc on `main` under `docs/sessions/20260330-stacked-pr-sbom/`; safe to delete local worktree |
 | devenv-abstraction | main | Synced | OK |
@@ -2143,7 +2143,7 @@ Earlier stacked PRs (#99–#101) were closed without merge; workflow initially l
 
 ### phenotype-infrakit draft batch (2026-03-30)
 
-PRs [#249](https://github.com/<REDACTED>/phenotype-infrakit/pull/249)–[#252](https://github.com/<REDACTED>/phenotype-infrakit/pull/252) were **closed without merge** (`mergedAt` null). Notes: [`.archive/PR_CREATION_BATCH_2026-03-30.md`](./.archive/PR_CREATION_BATCH_2026-03-30.md).
+PRs [#249](https://github.com/KooshaPari/phenotype-infrakit/pull/249)–[#252](https://github.com/KooshaPari/phenotype-infrakit/pull/252) were **closed without merge** (`mergedAt` null). Notes: [`.archive/PR_CREATION_BATCH_2026-03-30.md`](./.archive/PR_CREATION_BATCH_2026-03-30.md).
 
 | PR | State |
 |----|--------|

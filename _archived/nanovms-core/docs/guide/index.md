@@ -14,7 +14,7 @@ Lightweight, headless VM abstraction for agents — supports desktop, mobile sim
 
 ```bash
 # Clone the repository
-git clone https://github.com/<REDACTED>/nanovms.git
+git clone https://github.com/KooshaPari/nanovms.git
 cd nanovms
 
 # Build

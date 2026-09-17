@@ -2,7 +2,7 @@
 
 **Date:** 2026-06-18  
 **Disposition row:** HexaKit DISPOSITION #41 — Wave B  
-**Canonical repo:** https://github.com/<REDACTED>/TestingKit  
+**Canonical repo:** https://github.com/KooshaPari/TestingKit  
 **Git pin:** `TestingKit` branch `main`
 
 ## What changed
@@ -13,5 +13,5 @@
 ## For consumers
 
 ```toml
-phenotype-test-fixtures = { git = "https://github.com/<REDACTED>/TestingKit", branch = "main", package = "phenotype-test-fixtures" }
+phenotype-test-fixtures = { git = "https://github.com/KooshaPari/TestingKit", branch = "main", package = "phenotype-test-fixtures" }
 ```

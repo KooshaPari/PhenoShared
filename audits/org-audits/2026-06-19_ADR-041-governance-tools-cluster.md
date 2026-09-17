@@ -77,9 +77,9 @@ All 3 PRs are open:
 
 | PR | Source repo | Status |
 |---|---|---|
-| [#45](https://github.com/<REDACTED>/phenotype-org-audits/pull/45) | `pheno-predict` → `audits/predict-dry/` | OPEN |
-| [#46](https://github.com/<REDACTED>/phenotype-org-audits/pull/46) | `pheno-framework-lint` → `audits/framework-lint/` | OPEN |
-| [#47](https://github.com/<REDACTED>/phenotype-org-audits/pull/47) | `pheno-drift-detector` → `audits/drift-detector/` | OPEN |
+| [#45](https://github.com/KooshaPari/phenotype-org-audits/pull/45) | `pheno-predict` → `audits/predict-dry/` | OPEN |
+| [#46](https://github.com/KooshaPari/phenotype-org-audits/pull/46) | `pheno-framework-lint` → `audits/framework-lint/` | OPEN |
+| [#47](https://github.com/KooshaPari/phenotype-org-audits/pull/47) | `pheno-drift-detector` → `audits/drift-detector/` | OPEN |
 
 All 3 source repos are already `archived: true` (2026-06-19 08:37:56 UTC, automated process — pre-empted the explicit `gh api -X PATCH` archive step in the recipe).
 

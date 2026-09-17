@@ -10,7 +10,7 @@ export default defineConfig({
     nav: [
       { text: "Guide", link: "/guide" },
       { text: "Tasks", link: "/tasks" },
-      { text: "GitHub", link: "https://github.com/KooshaPari/heliosBench" },
+      { text: "GitHub", link: "https://github.com/<REDACTED>/heliosBench" },
     ],
     sidebar: [
       {
@@ -22,6 +22,6 @@ export default defineConfig({
         ],
       },
     ],
-    socialLinks: [{ icon: "github", link: "https://github.com/KooshaPari/heliosBench" }],
+    socialLinks: [{ icon: "github", link: "https://github.com/<REDACTED>/heliosBench" }],
   },
 });

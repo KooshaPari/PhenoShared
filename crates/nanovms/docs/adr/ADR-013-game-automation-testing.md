@@ -92,8 +92,8 @@ import (
     "sync"
     "time"
 
-    "github.com/<REDACTED>/nanovms/pkg/vm"
-    "github.com/<REDACTED>/nanovms/pkg/game"
+    "github.com/KooshaPari/nanovms/pkg/vm"
+    "github.com/KooshaPari/nanovms/pkg/game"
 )
 
 // GameTester manages parallel game test execution
@@ -184,8 +184,8 @@ import (
     "path/filepath"
     "time"
 
-    "github.com/<REDACTED>/nanovms/pkg/vm"
-    "github.com/<REDACTED>/nanovms/pkg/storage"
+    "github.com/KooshaPari/nanovms/pkg/vm"
+    "github.com/KooshaPari/nanovms/pkg/storage"
 )
 
 type SnapshotManager struct {
@@ -300,7 +300,7 @@ import (
     "regexp"
     "time"
 
-    "github.com/<REDACTED>/nanovms/pkg/vm"
+    "github.com/KooshaPari/nanovms/pkg/vm"
 )
 
 type SteamConfig struct {
@@ -412,7 +412,7 @@ import (
     "fmt"
     "path/filepath"
 
-    "github.com/<REDACTED>/nanovms/pkg/vm"
+    "github.com/KooshaPari/nanovms/pkg/vm"
 )
 
 type ModConfig struct {
@@ -488,7 +488,7 @@ import (
     "encoding/binary"
     "fmt"
 
-    "github.com/<REDACTED>/nanovms/pkg/vm"
+    "github.com/KooshaPari/nanovms/pkg/vm"
 )
 
 type MemoryScanner struct {

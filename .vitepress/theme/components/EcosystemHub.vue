@@ -21,7 +21,7 @@ const projects: Project[] = [
     description: 'AI-native PM platform with CLI, API, gRPC, and Tauri desktop dashboard. Tracks all Phenotype work.',
     stack: [{ label: 'Rust', color: '#ce422b' }, { label: 'Tauri', color: '#24c8db' }, { label: 'gRPC', color: '#244c5a' }],
     port: 4101,
-    github: 'https://github.com/KooshaPari/AgilePlus',
+    github: 'https://github.com/<REDACTED>/AgilePlus',
     category: 'app',
     primary: true,
   },
@@ -32,7 +32,7 @@ const projects: Project[] = [
     description: 'Full-stack web + Tauri desktop app. Hot-reload Vite frontend, Bun runtime, Vitest + Playwright.',
     stack: [{ label: 'TypeScript', color: '#3178c6' }, { label: 'Bun', color: '#fbf0df' }, { label: 'Tauri', color: '#24c8db' }],
     port: 4102,
-    github: 'https://github.com/KooshaPari/heliosApp',
+    github: 'https://github.com/<REDACTED>/heliosApp',
     category: 'app',
   },
   {
@@ -42,7 +42,7 @@ const projects: Project[] = [
     description: 'Full-stack RTM with Python FastAPI backend, Go service layer, and Vite frontend. process-compose orchestrated.',
     stack: [{ label: 'Python', color: '#3572A5' }, { label: 'Go', color: '#00ADD8' }, { label: 'TypeScript', color: '#3178c6' }],
     port: 4110,
-    github: 'https://github.com/KooshaPari/trace',
+    github: 'https://github.com/<REDACTED>/trace',
     category: 'app',
   },
   {
@@ -52,7 +52,7 @@ const projects: Project[] = [
     description: 'Go HTTP API for agent orchestration. Chat service, command routing, internal packages.',
     stack: [{ label: 'Go', color: '#00ADD8' }],
     port: null,
-    github: 'https://github.com/KooshaPari/agentapi-plusplus',
+    github: 'https://github.com/<REDACTED>/agentapi-plusplus',
     category: 'api',
   },
   {
@@ -62,7 +62,7 @@ const projects: Project[] = [
     description: 'Go proxy supporting Claude, OpenAI, Gemini. OAuth2/PKCE, rate limiting, structured auth.',
     stack: [{ label: 'Go', color: '#00ADD8' }],
     port: null,
-    github: 'https://github.com/KooshaPari/cliproxyapi-plusplus',
+    github: 'https://github.com/<REDACTED>/cliproxyapi-plusplus',
     category: 'api',
   },
   {
@@ -72,7 +72,7 @@ const projects: Project[] = [
     description: 'Go extension library for the Bifrost LLM gateway. Plugin architecture, guard timeout handling.',
     stack: [{ label: 'Go', color: '#00ADD8' }],
     port: 4104,
-    github: 'https://github.com/KooshaPari/bifrost-extensions',
+    github: 'https://github.com/<REDACTED>/bifrost-extensions',
     category: 'lib',
   },
   {
@@ -82,7 +82,7 @@ const projects: Project[] = [
     description: 'Unified agent orchestration, dotfiles management, templates, governance. The system backbone.',
     stack: [{ label: 'TypeScript', color: '#3178c6' }, { label: 'Python', color: '#3572A5' }],
     port: 4103,
-    github: 'https://github.com/KooshaPari/thegent',
+    github: 'https://github.com/<REDACTED>/thegent',
     category: 'lib',
   },
   {
@@ -92,7 +92,7 @@ const projects: Project[] = [
     description: 'CI validation framework and doc site. Quality gate orchestration, compliance checks.',
     stack: [{ label: 'TypeScript', color: '#3178c6' }],
     port: 4105,
-    github: 'https://github.com/KooshaPari/civ',
+    github: 'https://github.com/<REDACTED>/civ',
     category: 'docs',
   },
   {
@@ -102,7 +102,7 @@ const projects: Project[] = [
     description: '@phenotype/design package — shared CSS tokens, VitePress theme, glass recipes. Canonical design SSOT.',
     stack: [{ label: 'TypeScript', color: '#3178c6' }, { label: 'CSS', color: '#7ebab5' }],
     port: null,
-    github: 'https://github.com/KooshaPari/phenoDesign',
+    github: 'https://github.com/<REDACTED>/phenoDesign',
     category: 'lib',
   },
   {
@@ -112,7 +112,7 @@ const projects: Project[] = [
     description: 'Canonical live ecosystem map — ECOSYSTEM_MAP.md, repo roles, dependency graph. Spine authority for what exists.',
     stack: [{ label: 'YAML', color: '#cb171e' }, { label: 'Markdown', color: '#646cff' }],
     port: null,
-    github: 'https://github.com/KooshaPari/phenotype-registry/blob/main/ECOSYSTEM_MAP.md',
+    github: 'https://github.com/<REDACTED>/phenotype-registry/blob/main/ECOSYSTEM_MAP.md',
     category: 'docs',
     primary: true,
   },
@@ -123,7 +123,7 @@ const projects: Project[] = [
     description: 'Shared VitePress theme + @phenotype/docs package. Single source of truth for all Phenotype docs.',
     stack: [{ label: 'TypeScript', color: '#3178c6' }, { label: 'Vue', color: '#41b883' }, { label: 'VitePress', color: '#646cff' }],
     port: 4100,
-    github: 'https://github.com/KooshaPari/phenodocs',
+    github: 'https://github.com/<REDACTED>/phenodocs',
     category: 'docs',
     primary: true,
   },
@@ -165,13 +165,13 @@ const categories = ['app', 'api', 'docs', 'lib'] as const
         <p class="hub-sub">All services, docs, and APIs — live navigation and status.</p>
       </div>
       <div class="hub-meta">
-        <a href="https://github.com/KooshaPari/phenotype-registry/blob/main/ECOSYSTEM_MAP.md" class="hub-meta-link" target="_blank">
+        <a href="https://github.com/<REDACTED>/phenotype-registry/blob/main/ECOSYSTEM_MAP.md" class="hub-meta-link" target="_blank">
           ECOSYSTEM_MAP
         </a>
         <span class="hub-dot">·</span>
-        <a href="https://github.com/KooshaPari" class="hub-meta-link" target="_blank">
+        <a href="https://github.com/<REDACTED>" class="hub-meta-link" target="_blank">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
-          KooshaPari
+          <REDACTED>
         </a>
         <span class="hub-dot">·</span>
         <span class="hub-count">{{ projects.length }} projects</span>

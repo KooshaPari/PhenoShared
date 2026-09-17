@@ -411,7 +411,7 @@ done
 1. Go to Sentry Dashboard → AgilePlus → **Issues**
 2. Find the test error
 3. Check if it has a **GitHub Issue** indicator
-4. Go to [GitHub Issues](https://github.com/<REDACTED>/AgilePlus/issues)
+4. Go to [GitHub Issues](https://github.com/KooshaPari/AgilePlus/issues)
 5. Look for issue: "[Sentry] panicked at 'assertion failed'"
 6. Verify it:
    - ✅ Links to Sentry issue

@@ -125,7 +125,7 @@ INDEX.md                                 (This file)
 ## Audit Metadata
 
 - **Date**: 2026-03-30
-- **Repository**: phenotype-infrakit (https://github.com/<REDACTED>/phenotype-infrakit)
+- **Repository**: phenotype-infrakit (https://github.com/KooshaPari/phenotype-infrakit)
 - **Scope**: Root Cargo.toml workspace configuration
 - **Analysis Method**: Static file analysis, grep patterns, direct inspection
 - **Confidence Level**: High

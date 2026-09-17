@@ -74,5 +74,5 @@ Document intended use or remove:
 ---
 
 **Audit Date**: 2026-03-30
-**Repository**: phenotype-infrakit (https://github.com/<REDACTED>/phenotype-infrakit)
+**Repository**: phenotype-infrakit (https://github.com/KooshaPari/phenotype-infrakit)
 **Status**: COMPLETED — Immediate action required on 2 critical issues

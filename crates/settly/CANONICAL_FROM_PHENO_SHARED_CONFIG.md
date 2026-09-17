@@ -6,8 +6,8 @@ The legacy `phenotype-shared-config` crate (originally Dmouse92-style
 shared-config schema in `pheno/crates/phenotype-shared-config/`) has been
 absorbed into the substrate at:
 
-- Repository: https://github.com/<REDACTED>/phenotype-config
-- Substrate crate: https://github.com/<REDACTED>/phenotype-config/tree/main/crates/settly
+- Repository: https://github.com/KooshaPari/phenotype-config
+- Substrate crate: https://github.com/KooshaPari/phenotype-config/tree/main/crates/settly
 
 ## Why a second marker
 

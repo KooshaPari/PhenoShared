@@ -2,7 +2,7 @@
 
 **Date:** 2026-06-17  
 **Disposition step:** HexaKit DISPOSITION #12 — Wave B testing lane stub  
-**Canonical repo:** https://github.com/<REDACTED>/TestingKit
+**Canonical repo:** https://github.com/KooshaPari/TestingKit
 
 ## What changed
 
@@ -13,7 +13,7 @@
 ## For consumers
 
 1. Depend on `phenotype-contract-tests` from TestingKit when the crate lands there.
-2. See [TestingKit wave-b absorption doc](https://github.com/<REDACTED>/TestingKit/blob/main/docs/disposition/wave-b-absorption.md).
+2. See [TestingKit wave-b absorption doc](https://github.com/KooshaPari/TestingKit/blob/main/docs/disposition/wave-b-absorption.md).
 
 ## For HexaKit maintainers
 

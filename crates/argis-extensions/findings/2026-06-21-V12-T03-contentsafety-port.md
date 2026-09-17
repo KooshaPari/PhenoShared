@@ -129,7 +129,7 @@ with a non-nil `Error`); only the type names changed.
 - `github.com/maximhq/bifrost/core/schemas` (source's plugin SDK)
 
 **Added:**
-- `github.com/<REDACTED>/phenotype-router/internal/sdk` (the V12-T12 SDK)
+- `github.com/KooshaPari/phenotype-router/internal/sdk` (the V12-T12 SDK)
 - Stdlib-only HTTP (`net/http`, `bytes`, `encoding/json`) — same as source
 
 **Unchanged:**
@@ -175,7 +175,7 @@ against any Bifrost version.
 === RUN   TestAnalysisFromRequest_NilCases                       --- PASS
 === RUN   TestAnalysisFromRequest_RoundTrip                      --- PASS
 PASS
-ok  github.com/<REDACTED>/phenotype-router/internal/plugins/contentsafety  0.213s
+ok  github.com/KooshaPari/phenotype-router/internal/plugins/contentsafety  0.213s
 ```
 
 ### 5.1 Guard proofs (the `failingTransport` tests)
@@ -296,10 +296,10 @@ $ go test -v -race ./internal/plugins/contentsafety/...
 === RUN   TestNew_ConfigRespected                                --- PASS (0.00s)
 ... (25 tests, all PASS) ...
 PASS
-ok  github.com/<REDACTED>/phenotype-router/internal/plugins/contentsafety  0.213s
+ok  github.com/KooshaPari/phenotype-router/internal/plugins/contentsafety  0.213s
 
 $ go test ./internal/plugins/contentsafety/... 2>&1 | tail -1
-ok  github.com/<REDACTED>/phenotype-router/internal/plugins/contentsafety  0.173s
+ok  github.com/KooshaPari/phenotype-router/internal/plugins/contentsafety  0.173s
 ```
 
 **Pre-existing issues (not in scope, not introduced by this port):**

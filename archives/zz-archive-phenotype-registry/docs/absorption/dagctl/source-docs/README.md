@@ -3,7 +3,7 @@
 DAG control CLI binary for the Phenotype fleet.
 
 **Version:** 3.3.1
-**Source:** [<REDACTED>/phenodag](https://github.com/<REDACTED>/phenodag)
+**Source:** [<REDACTED>/phenodag](https://github.com/KooshaPari/phenodag)
 
 ## Usage
 

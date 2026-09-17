@@ -2,7 +2,7 @@
 
 **Date:** 2026-06-17
 **Disposition:** Wave F python redirect stub
-**Canonical repo:** https://github.com/<REDACTED>/Pyron
+**Canonical repo:** https://github.com/KooshaPari/Pyron
 
 ## What changed
 

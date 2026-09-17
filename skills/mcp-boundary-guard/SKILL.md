@@ -4,8 +4,8 @@ Use before forking, renaming, or placing MCP-related code.
 
 ## Pre-flight (required)
 
-1. [ADR-017](https://github.com/<REDACTED>/PhenoSpecs/blob/main/adrs/017-mcp-polyrepo-boundaries.md)
-2. [catalog/registry.yaml](https://github.com/<REDACTED>/PhenoMCPServers/blob/main/catalog/registry.yaml)
+1. [ADR-017](https://github.com/KooshaPari/PhenoSpecs/blob/main/adrs/017-mcp-polyrepo-boundaries.md)
+2. [catalog/registry.yaml](https://github.com/KooshaPari/PhenoMCPServers/blob/main/catalog/registry.yaml)
 3. Target repo `PHENO.md` + `FORK-NOTES.md`
 
 ## Decision tree

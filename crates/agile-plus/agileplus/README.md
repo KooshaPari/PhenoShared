@@ -1,6 +1,6 @@
 # AgilePlus
 
-[![GitHub Actions](https://github.com/<REDACTED>/AgilePlus/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/<REDACTED>/AgilePlus/actions)
+[![GitHub Actions](https://github.com/KooshaPari/AgilePlus/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/KooshaPari/AgilePlus/actions)
 
 AgilePlus is a polyglot monorepo implementing a next-generation project management platform with hexagonal architecture, event sourcing, multi-VCS support, and an MCP-native agent surface.
 

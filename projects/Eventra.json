@@ -14,7 +14,7 @@
   "boundary": "event-bus-runtime",
   "stack": "rust",
   "v0": "active",
-  "gh_url": "https://github.com/<REDACTED>/Eventra",
+  "gh_url": "https://github.com/KooshaPari/Eventra",
   "owner_knowledge_cutoff": "2026-06-24T00:47:17.101008Z",
   "wave": "L5-120",
   "branch_count": 21,

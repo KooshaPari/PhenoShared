@@ -63,7 +63,7 @@ Bootstrap template: [`templates/genesis/charter.md`](../../templates/genesis/cha
 Also link to HexaKit spec when bootstrapped from genesis:
 
 ```markdown
-Specs: [HexaKit docs/genesis/STANDARD.md](https://github.com/<REDACTED>/HexaKit/blob/main/docs/genesis/STANDARD.md)
+Specs: [HexaKit docs/genesis/STANDARD.md](https://github.com/KooshaPari/HexaKit/blob/main/docs/genesis/STANDARD.md)
 ```
 
 ### 4. Decision rights

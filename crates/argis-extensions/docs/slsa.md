@@ -61,14 +61,14 @@ gh attestation download phenorepos.tar.gz --repo <REDACTED>/phenotype-apps
 cosign verify-blob \
   --signature=.sigstore/<commit-sha>.sig \
   --certificate=.sigstore/<commit-sha>.pem \
-  --certificate-identity-regexp='https://github.com/<REDACTED>/.*@refs/heads/main' \
+  --certificate-identity-regexp='https://github.com/KooshaPari/.*@refs/heads/main' \
   --certificate-oidc-issuer='https://token.actions.githubusercontent.com' \
   <commit-sha>
 
 # CI / third-party verify (preferred path, v2.0.0+)
 slsa-verifier verify-artifact \
   --provenance-path  phenorepos.intoto.jsonl \
-  --source-uri       github.com/<REDACTED>/phenotype-apps \
+  --source-uri       github.com/KooshaPari/phenotype-apps \
   --source-tag       v0.1.0 \
   phenorepos.tar.gz
 

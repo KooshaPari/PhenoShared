@@ -11,7 +11,7 @@ repository, branch, worktree, or target tree is changed.
 | Subject | Result |
 | --- | --- |
 | `gh api repos/<REDACTED>/2phenoEvents` | not found (404) |
-| `git ls-remote https://github.com/<REDACTED>/2phenoEvents.git refs/heads/main` | repository not found |
+| `git ls-remote https://github.com/KooshaPari/2phenoEvents.git refs/heads/main` | repository not found |
 | Historical source commit | `5bb0c894e44a50079035b3d5ab5d31946fc445c1` |
 | Canonical repository | `<REDACTED>/phenoEvents`, public and unarchived |
 | Canonical source provenance | `5bb0c894...` is reachable in `phenoEvents` as its root restore commit |

@@ -28,7 +28,7 @@ export default defineConfig({
       prev: 'Previous page',
       next: 'Next page'
     },
-    socialLinks: [{ icon: 'github', link: `https://github.com/KooshaPari/${repoName}` }],
+    socialLinks: [{ icon: 'github', link: `https://github.com/<REDACTED>/${repoName}` }],
     search: { provider: 'local' }
   },
   markdown: {

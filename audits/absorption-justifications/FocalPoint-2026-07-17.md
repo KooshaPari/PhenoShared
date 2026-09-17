@@ -8,7 +8,7 @@ Compliance standard: registry/audit-absorption-justification/schema.json (14/14 
 ## Source
 
 - **Repo:** `<REDACTED>/FocalPoint`
-- **GitHub URL:** https://github.com/<REDACTED>/FocalPoint
+- **GitHub URL:** https://github.com/KooshaPari/FocalPoint
 - **Archived at:** False
 - **Default branch at audit time:** `main`
 - **Last commit SHA on default branch:** `3d8236c`
@@ -225,7 +225,7 @@ No exceptions to the ABSORB verdict are granted.
 
 ```bash
 # Disaster-recovery posture:
-git clone https://github.com/<REDACTED>/FocalPoint.git /tmp/FocalPoint-restore
+git clone https://github.com/KooshaPari/FocalPoint.git /tmp/FocalPoint-restore
 # Verify bundle sha-256 (re-clone path is clean)
 ```
 

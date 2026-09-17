@@ -135,7 +135,7 @@ flowchart TB
 
 | WP | AgilePlus spec slug | Deliverable |
 |----|---------------------|-------------|
-| 0.1 | `merge-boundary-owners-ssot` | Merge [registry #76](https://github.com/<REDACTED>/phenotype-registry/pull/76) |
+| 0.1 | `merge-boundary-owners-ssot` | Merge [registry #76](https://github.com/KooshaPari/phenotype-registry/pull/76) |
 | 0.2 | `absorption-pr-merge-wave` | Merge #157, #3, #155, #79 |
 | 0.3 | `consumer-manifest-scan` | `gh api search/code` per `RATIONALIZATION_EXECUTION.md`; update verdict table |
 
@@ -201,11 +201,11 @@ Then **HexaKit P0:** evict domain workspace members; `templates/hexagon/**` only
 
 | PR | Repo | Role in DAG |
 |----|------|-------------|
-| [#76](https://github.com/<REDACTED>/phenotype-registry/pull/76) | phenotype-registry | L0 SSOT — **merge first** |
-| [#157](https://github.com/<REDACTED>/PhenoObservability/pull/157) | PhenoObservability | Metron → metrickit |
-| [#3](https://github.com/<REDACTED>/phenokits-commons/pull/3) | phenokits-commons | PhenoKits + governance port |
-| [#155](https://github.com/<REDACTED>/phenotype-tooling/pull/155) | phenotype-tooling | router-monitor absorption |
-| [#79](https://github.com/<REDACTED>/Agentora/pull/79) | Agentora | PhenoProc waves 1–6 (~98%) |
+| [#76](https://github.com/KooshaPari/phenotype-registry/pull/76) | phenotype-registry | L0 SSOT — **merge first** |
+| [#157](https://github.com/KooshaPari/PhenoObservability/pull/157) | PhenoObservability | Metron → metrickit |
+| [#3](https://github.com/KooshaPari/phenokits-commons/pull/3) | phenokits-commons | PhenoKits + governance port |
+| [#155](https://github.com/KooshaPari/phenotype-tooling/pull/155) | phenotype-tooling | router-monitor absorption |
+| [#79](https://github.com/KooshaPari/Agentora/pull/79) | Agentora | PhenoProc waves 1–6 (~98%) |
 
 ---
 

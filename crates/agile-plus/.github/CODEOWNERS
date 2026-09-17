@@ -1,20 +1,20 @@
 # CODEOWNERS
-* @KooshaPari
+* @<REDACTED>
 
 # Rust workspace
-/crates/ @KooshaPari
-/rust/ @KooshaPari
-/Cargo.toml @KooshaPari
-/Cargo.lock @KooshaPari
+/crates/ @<REDACTED>
+/rust/ @<REDACTED>
+/Cargo.toml @<REDACTED>
+/Cargo.lock @<REDACTED>
 
 # Python
-/python/ @KooshaPari
+/python/ @<REDACTED>
 
 # Docs and config
-/docs/ @KooshaPari
-/.github/ @KooshaPari
-/Justfile @KooshaPari
+/docs/ @<REDACTED>
+/.github/ @<REDACTED>
+/Justfile @<REDACTED>
 
 # Sensitive
-/SECURITY.md @KooshaPari
-/.github/workflows/ @KooshaPari
+/SECURITY.md @<REDACTED>
+/.github/workflows/ @<REDACTED>

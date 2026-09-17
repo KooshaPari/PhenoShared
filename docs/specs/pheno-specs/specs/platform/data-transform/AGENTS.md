@@ -205,7 +205,7 @@ datamold lineage --model <name>
 - [dbt Documentation](https://docs.getdbt.com/)
 - [Apache Spark](https://spark.apache.org/docs/)
 - [Great Expectations](https://docs.greatexpectations.io/)
-- [Phenotype Registry](https://github.com/<REDACTED>/phenotype-registry)
+- [Phenotype Registry](https://github.com/KooshaPari/phenotype-registry)
 
 ## Agent Notes
 

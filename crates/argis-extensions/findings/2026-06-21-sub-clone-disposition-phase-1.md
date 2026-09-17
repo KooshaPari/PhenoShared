@@ -22,10 +22,10 @@ Phase 1 did **not** execute. The task's Step 1 safety rule ("If ANY of the 5 has
 | `.gitmodules` (submodule pointers) | **Does not exist** at monorepo root. `cat .gitmodules` returns "No such file or directory". |
 | `.git/modules/<name>/` (submodule gitdirs) | **None of the 5 exist** in `.git/modules/`. |
 | Working branch | `ci/v12-gates-2026-06-21` (a CI gate branch, not main) |
-| Working tree remote | `origin = github.com/<REDACTED>/phenotype-apps.git` (the previously-reported `argis` remote is the second remote on this checkout) |
+| Working tree remote | `origin = github.com/KooshaPari/phenotype-apps.git` (the previously-reported `argis` remote is the second remote on this checkout) |
 | Sparse-checkout state | **Disabled** (`core.sparseCheckout=false`, `core.sparseCheckoutCone=false`) — contradicts AGENTS.md claim of cone-mode sparse-checkout |
 
-**Implication:** The 5 directories are **independent git clones** (each with its own `origin` pointing to `github.com/<REDACTED>/<name>.git`), not git submodules. The Step 2 commands (`git submodule deinit`, `git rm $repo` against the monorepo index) would not work as written and would be inappropriate without a `.gitmodules` entry.
+**Implication:** The 5 directories are **independent git clones** (each with its own `origin` pointing to `github.com/KooshaPari/<name>.git`), not git submodules. The Step 2 commands (`git submodule deinit`, `git rm $repo` against the monorepo index) would not work as written and would be inappropriate without a `.gitmodules` entry.
 
 ---
 

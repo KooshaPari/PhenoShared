@@ -13,7 +13,7 @@ This repo is on permanent pause. Code preserved for reference. No active develop
 Canonical source for the local `resume-all` crash-recovery, cross-host
 session, telemetry, and operational-response toolkit.
 
-[![AI slop inside](https://sladge.net/badge.svg)](https://sladge.net) [![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/<REDACTED>/resume-all/total)](https://github.com/<REDACTED>/resume-all/releases)
+[![AI slop inside](https://sladge.net/badge.svg)](https://sladge.net) [![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/<REDACTED>/resume-all/total)](https://github.com/KooshaPari/resume-all/releases)
 
 The initial preservation commit imports only executable text sources plus the
 matching LaunchAgent and non-secret configuration inputs. Runtime snapshots,

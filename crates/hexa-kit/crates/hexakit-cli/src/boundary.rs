@@ -5,9 +5,9 @@ use crate::registry::{
 };
 
 const STACK_POLICY_URL: &str =
-    "https://github.com/<REDACTED>/phenotype-registry/blob/main/docs/rationalization/STACK_POLICY.md";
+    "https://github.com/KooshaPari/phenotype-registry/blob/main/docs/rationalization/STACK_POLICY.md";
 const DOMAIN_ROLES_URL: &str =
-    "https://github.com/<REDACTED>/phenotype-registry/blob/main/docs/rationalization/DOMAIN_ROLES.md";
+    "https://github.com/KooshaPari/phenotype-registry/blob/main/docs/rationalization/DOMAIN_ROLES.md";
 
 pub fn render_boundary(
     domain: &DomainRole,

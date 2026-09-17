@@ -5,7 +5,7 @@ This repo follows the **dotfile-install pattern** (à la `holman/dotfiles`): the
 ## Quick install
 
 ```bash
-git clone https://github.com/<REDACTED>/forge-runner-scripts ~/repos/forge-runner-scripts
+git clone https://github.com/KooshaPari/forge-runner-scripts ~/repos/forge-runner-scripts
 cd ~/repos/forge-runner-scripts
 ./install.sh
 ```

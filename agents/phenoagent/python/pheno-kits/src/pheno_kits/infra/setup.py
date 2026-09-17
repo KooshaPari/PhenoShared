@@ -34,11 +34,11 @@ setup(
     description="Cross-platform infrastructure library for dynamic port allocation and secure tunneling",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/<REDACTED>/kinfra",
+    url="https://github.com/KooshaPari/kinfra",
     project_urls={
-        "Bug Tracker": "https://github.com/<REDACTED>/kinfra/issues",
+        "Bug Tracker": "https://github.com/KooshaPari/kinfra/issues",
         "Documentation": "https://kinfra.dev/docs",
-        "Source": "https://github.com/<REDACTED>/kinfra",
+        "Source": "https://github.com/KooshaPari/kinfra",
     },
     packages=find_packages(),
     classifiers=[

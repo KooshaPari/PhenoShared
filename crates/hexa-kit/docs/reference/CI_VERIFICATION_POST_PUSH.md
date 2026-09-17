@@ -2,7 +2,7 @@
 
 **Date:** 2026-03-31
 **Status:** ✅ DEPLOYED TO origin/main
-**PR:** [#511](https://github.com/<REDACTED>/phenotype-infrakit/pull/511)
+**PR:** [#511](https://github.com/KooshaPari/phenotype-infrakit/pull/511)
 
 ---
 

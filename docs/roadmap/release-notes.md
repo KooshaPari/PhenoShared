@@ -225,7 +225,7 @@ AgilePlus uses [semantic versioning](https://semver.org/):
 
 ### Reporting Bugs
 
-Found a bug? Report it at: https://github.com/<REDACTED>/AgilePlus/issues
+Found a bug? Report it at: https://github.com/KooshaPari/AgilePlus/issues
 
 Include:
 - AgilePlus version (`agileplus --version`)

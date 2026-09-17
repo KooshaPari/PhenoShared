@@ -4,7 +4,7 @@
 **Date:** 2026-06-17
 **Status:** ANALYSIS COMPLETE — pending reviewer (<REDACTED>) approval to execute archives
 **Auth context:** `gh` is **<REDACTED>** (active per `gh auth status`). Dmouse92 is read-only collaborator. NO pushes performed in this analysis.
-**Working dir:** `/tmp/dmouse92-migration/<repo>/` (14 fresh clones, `kp-main` branch populated from `https://github.com/<REDACTED>/<repo>.git`)
+**Working dir:** `/tmp/dmouse92-migration/<repo>/` (14 fresh clones, `kp-main` branch populated from `https://github.com/KooshaPari/<repo>.git`)
 **Parent audit doc:** `findings/2026-06-17-L5-104-dmouse92-to-<REDACTED>.md` (this plan covers §2.6–2.20 in that doc)
 **Related:** `findings/2026-06-17-L5-104-dispatch-mcp-migration-plan.md` (subagent A, separate), `findings/2026-06-17-L5-104-pheno-adr012-migration-plan.md` (subagent B, separate)
 

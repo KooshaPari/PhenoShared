@@ -9,7 +9,7 @@
   "role": "melosviz-scoring-engine",
   "domain_role": "library",
   "boundary": "python-package",
-  "gh_url": "https://github.com/<REDACTED>/backend",
+  "gh_url": "https://github.com/KooshaPari/backend",
   "default_branch": "main",
   "remote_default_sha_at_audit": "7105f6d0a6cabaf6669412a8ebe33aed30b01861",
   "remote_archived_at_audit": false,

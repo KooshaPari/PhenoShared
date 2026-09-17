@@ -2,7 +2,7 @@
 
 **airlock id:** `1a5895a56a55`
 **canonical local folder:** `cliproxyapi-plusplus`
-**upstream URL:** `https://github.com/<REDACTED>/cliproxyapi-plusplus.git`
+**upstream URL:** `https://github.com/KooshaPari/cliproxyapi-plusplus.git`
 **bare mirror:** `/Users/<REDACTED>/.airlock/repos/1a5895a56a55.git/`
 **worktree:**    `/Users/<REDACTED>/.airlock/worktrees/1a5895a56a55/`
 
@@ -36,4 +36,4 @@ See: `_phenofleet-decisions/airlock-decisions/2026-07-14-afe7b47b9c14-cliproxyap
 ## Cross-references
 
 - Inventory probe JSON: `_phenofleet-decisions/airlock-decisions/.airlock-inventory-2026-07-14.json`
-- Remote backup gist: https://gist.github.com/<REDACTED>/3e6038adbfc4fe4c38965d02d0fc867e
+- Remote backup gist: https://gist.github.com/KooshaPari/3e6038adbfc4fe4c38965d02d0fc867e

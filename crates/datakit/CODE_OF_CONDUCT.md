@@ -36,7 +36,7 @@ This Code of Conduct applies within all community spaces and when an individual 
 
 ## Enforcement
 
-Instances of abusive, harassing, or otherwise unacceptable behavior may be reported privately to the repository maintainers through [GitHub profile contact](https://github.com/<REDACTED>). All complaints will be reviewed and investigated promptly and fairly.
+Instances of abusive, harassing, or otherwise unacceptable behavior may be reported privately to the repository maintainers through [GitHub profile contact](https://github.com/KooshaPari). All complaints will be reviewed and investigated promptly and fairly.
 
 Community leaders are obligated to respect the privacy and security of the reporter of any incident.
 

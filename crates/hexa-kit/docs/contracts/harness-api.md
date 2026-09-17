@@ -86,7 +86,7 @@ A lane descriptor is the unit of work for one bounded disposition relocation or 
 
 Each adapter invocation carries a **HarnessProfile** validated against the upstream schema:
 
-**Source:** [`thegent/contracts/provider-bridge/schema/harness-profile.schema.json`](https://github.com/<REDACTED>/thegent/blob/main/contracts/provider-bridge/schema/harness-profile.schema.json)
+**Source:** [`thegent/contracts/provider-bridge/schema/harness-profile.schema.json`](https://github.com/KooshaPari/thegent/blob/main/contracts/provider-bridge/schema/harness-profile.schema.json)
 
 Local reference copy (research): `archive-migration/thegent-fresh/contracts/provider-bridge/schema/harness-profile.schema.json`
 
@@ -205,5 +205,5 @@ Stored in `phenotype-registry/registry/disposition-index.json` per row.
 - [Lane descriptor schema](./lanes/schema.json)
 - [Crate relocation runbook](../operations/crate-relocation-runbook.md)
 - [DISPOSITION.md](../boundary/DISPOSITION.md)
-- thegent [`harness-profile.schema.json`](https://github.com/<REDACTED>/thegent/blob/main/contracts/provider-bridge/schema/harness-profile.schema.json)
+- thegent [`harness-profile.schema.json`](https://github.com/KooshaPari/thegent/blob/main/contracts/provider-bridge/schema/harness-profile.schema.json)
 - `.cursor/skills/forge-fanout/SKILL.md` (session fan-out pattern)

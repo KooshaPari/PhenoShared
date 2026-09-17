@@ -603,14 +603,14 @@ Compressing objects: 100% (2/2), done.
 Writing objects to 100% (3/3), 346 bytes | 346.00 KiB/s, done.
 Total 3 (delta 2), reused 0 (delta 0), writing 2 (delta 2)
 remote: Resolving deltas: 100% (2/2), completed with 2 remote deltas.
-To https://github.com/<REDACTED>/AgilePlus.git
+To https://github.com/KooshaPari/AgilePlus.git
    a3b4c5d..8a7c4b2  main -> main
 ```
 
 ### 4.5: Workflow Triggering
 
 **Expected Output (Check GitHub Actions UI):**
-1. Go to: https://github.com/<REDACTED>/AgilePlus/actions
+1. Go to: https://github.com/KooshaPari/AgilePlus/actions
 2. Look for: **"Snyk Security Scan"** workflow
 3. Status should show: **"In Progress"** or **"Completed"**
 
@@ -656,7 +656,7 @@ JSON report saved to snyk-report.json
 ### 4.7: Downloading Artifacts
 
 **From GitHub Actions UI:**
-1. Go to: https://github.com/<REDACTED>/AgilePlus/actions/runs/[run-id]
+1. Go to: https://github.com/KooshaPari/AgilePlus/actions/runs/[run-id]
 2. Scroll to: **"Artifacts"** section
 3. Download: `snyk-report` (.zip file)
 4. Contains: `snyk-report.json`

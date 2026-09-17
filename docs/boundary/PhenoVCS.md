@@ -67,7 +67,7 @@ assumption does not hold:
   and `phenovcs-observability = { path = "../phenovcs-observability" }`, but
   `pheno-tracing` is **not** declared in `PhenoVCS/[workspace.dependencies]`,
   so the workspace cannot resolve.
-- `PhenoVCS/[workspace.dependencies]` pins `clap-ext = { git = "https://github.com/<REDACTED>/clap-ext", tag = "v0.1.0" }`,
+- `PhenoVCS/[workspace.dependencies]` pins `clap-ext = { git = "https://github.com/KooshaPari/clap-ext", tag = "v0.1.0" }`,
   a vendored git dep with no path-replacement story in pheno.
 
 Net effect: a literal `cargo check -p pheno-vcs` would fail because there is

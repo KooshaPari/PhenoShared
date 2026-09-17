@@ -9,7 +9,7 @@
   "role": "native-sandbox-vmm",
   "boundary": "docs/boundary/nanovms.md",
   "stack": "go-cli-rust-ffi",
-  "gh_url": "https://github.com/<REDACTED>/nanovms",
+  "gh_url": "https://github.com/KooshaPari/nanovms",
   "remote_default_branch": "main",
   "remote_head": "9a0e286",
   "remote_is_archived": false,
@@ -20,7 +20,7 @@
   "absorption_note": "2026-07-27 reconciliation: prior ARCHIVE_ONLY/absorbed state was stale. The live public repo is a Go NVMS CLI and Rust FFI workspace with its own native sandbox/VMM boundary. phenotype-infra remains an integration consumer and owns complementary Rust substrate crates; no source deletion or copy is authorized.",
   "adr": "ADR-049",
   "intent": "docs/intent/nanovms.md",
-  "note": "Remote and local evidence show an active, unarchived canonical runtime. README documents WASM/gVisor/Firecracker tiers; go.mod is github.com/<REDACTED>/nanovms; Cargo.toml contains a separate mobile/FFI workspace.",
+  "note": "Remote and local evidence show an active, unarchived canonical runtime. README documents WASM/gVisor/Firecracker tiers; go.mod is github.com/KooshaPari/nanovms; Cargo.toml contains a separate mobile/FFI workspace.",
   "audit_artifact": "audits/boundary-reconciliation/nanovms-2026-07-27.md",
   "audited_at": "2026-07-27T01:07:00Z"
 }

@@ -133,7 +133,7 @@ apt-get install snyk
 
 **Option A: Organization Secret** (all repos inherit)
 
-1. Go: https://github.com/<REDACTED>/organizations/settings/secrets
+1. Go: https://github.com/KooshaPari/organizations/settings/secrets
 2. Click "New organization secret"
 3. Name: `SNYK_TOKEN`
 4. Value: Paste token
@@ -141,7 +141,7 @@ apt-get install snyk
 
 **Option B: Per-Repo Secret**
 
-1. Go: https://github.com/<REDACTED>/REPO/settings/secrets
+1. Go: https://github.com/KooshaPari/REPO/settings/secrets
 2. Click "New repository secret"
 3. Name: `SNYK_TOKEN`
 4. Value: Paste token

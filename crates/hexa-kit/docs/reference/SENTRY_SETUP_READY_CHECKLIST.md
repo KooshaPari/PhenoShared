@@ -70,17 +70,17 @@ Use this checklist to verify that all Sentry projects and GitHub secrets are con
 ### Repository Access Verified
 
 **AgilePlus Repository**
-- [ ] `https://github.com/<REDACTED>/AgilePlus/settings/secrets/actions` opened
+- [ ] `https://github.com/KooshaPari/AgilePlus/settings/secrets/actions` opened
 - [ ] `SENTRY_DSN_AGILEPLUS` visible in organization secrets
 - [ ] Status shows: "Available"
 
 **phenotype-infrakit Repository**
-- [ ] `https://github.com/<REDACTED>/phenotype-infrakit/settings/secrets/actions` opened
+- [ ] `https://github.com/KooshaPari/phenotype-infrakit/settings/secrets/actions` opened
 - [ ] `SENTRY_DSN_INFRAKIT` visible in organization secrets
 - [ ] Status shows: "Available"
 
 **heliosCLI Repository**
-- [ ] `https://github.com/<REDACTED>/heliosCLI/settings/secrets/actions` opened
+- [ ] `https://github.com/KooshaPari/heliosCLI/settings/secrets/actions` opened
 - [ ] `SENTRY_DSN_HELIOSCLI` visible in organization secrets
 - [ ] Status shows: "Available"
 

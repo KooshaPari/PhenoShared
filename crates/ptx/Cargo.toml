@@ -7,8 +7,8 @@ description = "Phenotype Tool eXtensions — Phase 3 governance gate wrapper"
 license = "MIT OR Apache-2.0"
 
 readme = "README.md"
-repository = "https://github.com/<REDACTED>/phenotype-tooling"
-homepage = "https://github.com/<REDACTED>/phenotype-tooling"
+repository = "https://github.com/KooshaPari/phenotype-tooling"
+homepage = "https://github.com/KooshaPari/phenotype-tooling"
 keywords = ["phenotype", "tooling", "cli"]
 categories = ["command-line-utilities"]
 [lib]

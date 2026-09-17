@@ -6,7 +6,7 @@ Only one Plane fork exists in the <REDACTED> portfolio:
 
 | Repo | Status | Description |
 |------|--------|-------------|
-| [<REDACTED>/Planify](https://github.com/<REDACTED>/Planify) | Active | Canonical Plane fork — consolidated from `main` + `master` branches. React Router v7 + Vite, full Plane monorepo (apps/web, admin, api, live, space, proxy). |
+| [<REDACTED>/Planify](https://github.com/KooshaPari/Planify) | Active | Canonical Plane fork — consolidated from `main` + `master` branches. React Router v7 + Vite, full Plane monorepo (apps/web, admin, api, live, space, proxy). |
 
 **Canonical pick:** `<REDACTED>/Planify` (only fork; already consolidates upstream Plane branches).
 
@@ -14,7 +14,7 @@ Only one Plane fork exists in the <REDACTED> portfolio:
 
 ```bash
 # Clone
-git clone https://github.com/<REDACTED>/Planify.git E:/scratch/Planify
+git clone https://github.com/KooshaPari/Planify.git E:/scratch/Planify
 
 # Install (pnpm 10.x required)
 cd E:/scratch/Planify

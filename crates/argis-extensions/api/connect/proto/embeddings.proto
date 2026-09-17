@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package bifrost.embeddings.v1;
 
-option go_package = "github.com/<REDACTED>/bifrost-extensions/api/connect/gen/embeddings/v1;embeddingsv1";
+option go_package = "github.com/KooshaPari/bifrost-extensions/api/connect/gen/embeddings/v1;embeddingsv1";
 
 // EmbeddingService provides text embedding generation
 service EmbeddingService {

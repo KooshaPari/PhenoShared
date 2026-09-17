@@ -3,6 +3,6 @@
   "exit_code": 0,
   "messages": [
     { "role": "user", "content": "open a PR" },
-    { "role": "assistant", "content": "Opened https://github.com/<REDACTED>/substrate/pull/1 for review." }
+    { "role": "assistant", "content": "Opened https://github.com/KooshaPari/substrate/pull/1 for review." }
   ]
 }

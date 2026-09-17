@@ -11,5 +11,5 @@ fn main() {
     println!();
     println!("To generate your own crate from this template:");
     println!("  cargo install cargo-generate");
-    println!("  cargo generate --git https://github.com/<REDACTED>/pheno-cargo-template");
+    println!("  cargo generate --git https://github.com/KooshaPari/pheno-cargo-template");
 }

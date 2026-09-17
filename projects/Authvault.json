@@ -14,7 +14,7 @@
   "boundary": "auth-runtime",
   "stack": "rust",
   "v0": "0.1.0",
-  "gh_url": "https://github.com/<REDACTED>/Authvault",
+  "gh_url": "https://github.com/KooshaPari/Authvault",
   "owner_knowledge_cutoff": "2026-06-23T00:00:00Z",
   "wave": "FR-AUTHV-*",
   "branch_count": 12,

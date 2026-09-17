@@ -67,7 +67,7 @@ required before transfer:
 ```bash
 # Pre-absorption snapshot
 gh repo archive <REDACTED>/PolicyStack  # archive after absorption PR merges
-git clone https://github.com/<REDACTED>/PolicyStack.git /tmp/PolicyStack-pre-absorption
+git clone https://github.com/KooshaPari/PolicyStack.git /tmp/PolicyStack-pre-absorption
 ```
 
 **Restore posture:** Source repo will be archived after the absorption PR merges.

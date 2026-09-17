@@ -147,7 +147,7 @@ index 0000000..bea70b7
 +++ b/typescript/packages/auth-ts/.gitignore
 @@ -0,0 +1,44 @@
 +# Phenotype-org standard .gitignore — Node
-+# Source: https://github.com/<REDACTED>/phenotype-tooling/blob/main/templates/gitignore-node
++# Source: https://github.com/KooshaPari/phenotype-tooling/blob/main/templates/gitignore-node
 +
 +node_modules/
 +dist/
@@ -372,7 +372,7 @@ index 0000000..5482b23
 +  - family-names: "Pari"
 +    given-names: "Koosha"
 +    affiliation: "Phenotype"
-+repository-code: "https://github.com/<REDACTED>/phenotype-auth-ts"
++repository-code: "https://github.com/KooshaPari/phenotype-auth-ts"
 +url: "https://phenotype.space"
 +license: "MIT OR Apache-2.0"
 diff --git a/typescript/packages/auth-ts/CODEOWNERS b/typescript/packages/auth-ts/CODEOWNERS
@@ -1057,7 +1057,7 @@ index 0000000..e82e267
 @@ -0,0 +1,6 @@
 +# Iconography Standard
 +
-+Implements the [phenotype-infra iconography standard](https://github.com/<REDACTED>/phenotype-infra/blob/main/docs/governance/iconography-standard.md).
++Implements the [phenotype-infra iconography standard](https://github.com/KooshaPari/phenotype-infra/blob/main/docs/governance/iconography-standard.md).
 +
 +Three styles: Fluent (stroke), Material (filled+outlined), Liquid Glass (blur).
 +All icons: 24×24 SVG, `currentColor`, `role="img"`, `aria-label`.
@@ -1752,7 +1752,7 @@ index 0000000..0aa6972
 + * the real value is in (a) the dep-resolves-cleanly guarantee and
 + * (b) showing other repos that the integration is straightforward.
 + *
-+ * See https://github.com/<REDACTED>/phenotype-ts-utils/releases/tag/v0.1.0
++ * See https://github.com/KooshaPari/phenotype-ts-utils/releases/tag/v0.1.0
 + */
 +import { describe, expect, it } from 'vitest';
 +import {

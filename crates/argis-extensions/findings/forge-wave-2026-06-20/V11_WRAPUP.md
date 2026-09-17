@@ -95,7 +95,7 @@ Multiple rebase operations can collide on `.git/index.lock`. Always `rm -f .git/
 
 ## PR #39 Status
 
-- URL: https://github.com/<REDACTED>/phenotype-apps/pull/39
+- URL: https://github.com/KooshaPari/phenotype-apps/pull/39
 - State: OPEN, MERGEABLE
 - +36786/-4732 across 367 files
 - All 23 of this session's commits included

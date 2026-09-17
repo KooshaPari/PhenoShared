@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/<REDACTED>/bifrost-extensions/cmd/bifrost/cli"
+	"github.com/KooshaPari/bifrost-extensions/cmd/bifrost/cli"
 )
 
 func main() {

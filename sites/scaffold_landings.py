@@ -170,9 +170,9 @@ def generate_landing(slug, name, domain, description, tier, language, features, 
         "status": "active",
         "features": features,
         "links": {
-            "github": f"https://github.com/<REDACTED>/{name}",
+            "github": f"https://github.com/KooshaPari/{name}",
             "docs": f"https://{domain}/docs",
-            "releases": f"https://github.com/<REDACTED>/{name}/releases"
+            "releases": f"https://github.com/KooshaPari/{name}/releases"
         }
     }
     with open(os.path.join(data_dir, "config.json"), "w") as f:

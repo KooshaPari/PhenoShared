@@ -135,7 +135,7 @@ Expanding integrations, improving developer experience, and adding team capabili
 
 ### Submit Issues
 
-Have an idea? [Open a GitHub Issue](https://github.com/<REDACTED>/AgilePlus/issues):
+Have an idea? [Open a GitHub Issue](https://github.com/KooshaPari/AgilePlus/issues):
 
 ```
 Title: [Feature] Short description
@@ -214,6 +214,6 @@ After v1.0:
 
 Questions about the roadmap?
 
-- **Discussions**: Ask in [GitHub Discussions](https://github.com/<REDACTED>/AgilePlus/discussions)
-- **Roadmap**: Comment on [roadmap issues](https://github.com/<REDACTED>/AgilePlus/issues?q=label%3Aroadmap)
-- **Feature requests**: [Open an issue](https://github.com/<REDACTED>/AgilePlus/issues/new)
+- **Discussions**: Ask in [GitHub Discussions](https://github.com/KooshaPari/AgilePlus/discussions)
+- **Roadmap**: Comment on [roadmap issues](https://github.com/KooshaPari/AgilePlus/issues?q=label%3Aroadmap)
+- **Feature requests**: [Open an issue](https://github.com/KooshaPari/AgilePlus/issues/new)

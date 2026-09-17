@@ -1,7 +1,7 @@
 # phenoTypes archive absorption
 
 This note documents the migration of the archived
-[<REDACTED>/phenoTypes](https://github.com/<REDACTED>/phenoTypes) repository into HexaKit.
+[<REDACTED>/phenoTypes](https://github.com/KooshaPari/phenoTypes) repository into HexaKit.
 
 ## Absorption
 

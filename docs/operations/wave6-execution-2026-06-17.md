@@ -6,8 +6,8 @@
 
 | Source | Canonical | Status |
 |--------|-----------|--------|
-| HexaKit `Metron/` (repo root, not `crates/metron/`) | PhenoObservability `crates/metrickit` | **Closed** — HexaKit [#244](https://github.com/<REDACTED>/HexaKit/pull/244) exclude + [#251](https://github.com/<REDACTED>/HexaKit/pull/251) stub prune |
-| Pyron `Metron/` submodule | `metrickit` git dep → PhenoObservability | Closed Wave 5 [#53](https://github.com/<REDACTED>/Pyron/pull/53) |
+| HexaKit `Metron/` (repo root, not `crates/metron/`) | PhenoObservability `crates/metrickit` | **Closed** — HexaKit [#244](https://github.com/KooshaPari/HexaKit/pull/244) exclude + [#251](https://github.com/KooshaPari/HexaKit/pull/251) stub prune |
+| Pyron `Metron/` submodule | `metrickit` git dep → PhenoObservability | Closed Wave 5 [#53](https://github.com/KooshaPari/Pyron/pull/53) |
 
 Mapping: `Metron/` → `metrickit` package (crate name unchanged during absorption).
 

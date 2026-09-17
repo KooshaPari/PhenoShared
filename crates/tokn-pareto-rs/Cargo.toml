@@ -1,7 +1,7 @@
 [package]
 name = "pareto-rs"
 description = "Pareto analysis helpers for tokenledger"
-repository = "https://github.com/<REDACTED>/zz-Tokn"
+repository = "https://github.com/KooshaPari/zz-Tokn"
 version = "0.1.5"
 edition = "2024"
 license = "MIT"

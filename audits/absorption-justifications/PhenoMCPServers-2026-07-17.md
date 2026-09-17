@@ -13,7 +13,7 @@ PhenoMCPServers is a **30-file Python monorepo** plus runnable MCP server packag
 | --- | --- | --- | --- |
 | `servers/` | 5.5 MB | runnable Python | `substrate/` (18 entries), `pheno-org/` (7 entries), `forge3-bridge/` (11 entries), `external/` (4 entries) — MCP server packages |
 | `docs/` | 132 KB | markdown | wiring guides, ADR shards, retire/ subtree, MCP-CATALOG, LANGUAGE-TIERS-AND-ROLES, etc. |
-| `uv.lock` | 72 KB | lockfile | pins `phenofastmcp @ git+https://github.com/<REDACTED>/PhenoFastMCP.git@v3.4.2` and 30+ transitive deps |
+| `uv.lock` | 72 KB | lockfile | pins `phenofastmcp @ git+https://github.com/KooshaPari/PhenoFastMCP.git@v3.4.2` and 30+ transitive deps |
 | `skills/` | 68 KB | markdown + yaml | 8 skill bundles (`SKILL.md` + `skill.yaml`) — `catalog-wiring`, `forge3-bridge`, `github-fork-policy`, `language-tier-picker`, `mcp-boundary-guard`, `phenodag-claim`, `substrate-dispatch`, `substrate-vs-servers` |
 | `templates/` | 64 KB | scaffold | `mcp-server/` (Python scaffold) + `mcp-server-ts7/` (TypeScript scaffold) for HexaKit `hexakit init mcp-server --catalog phenomcp` |
 | `catalog/registry.yaml` | 13 KB | YAML | **SSOT** for servers, skills, plugins, agents — 12,926 bytes |

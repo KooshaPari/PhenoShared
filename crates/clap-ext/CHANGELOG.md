@@ -75,4 +75,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   in 5 sample repos are filed under
   `feat/clap-ext-adopt-2026-06-11` branches.
 - MSRV is **1.82** (matches the org-wide `clippy.toml` MSRV policy).
-[Unreleased]: https://github.com/<REDACTED>/clap-ext/compare/HEAD
+[Unreleased]: https://github.com/KooshaPari/clap-ext/compare/HEAD

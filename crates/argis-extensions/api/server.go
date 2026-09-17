@@ -11,10 +11,10 @@ import (
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/go-chi/cors"
-	"github.com/<REDACTED>/bifrost-extensions/api/connect"
-	"github.com/<REDACTED>/bifrost-extensions/api/graphql"
-	"github.com/<REDACTED>/bifrost-extensions/api/graphql/resolvers"
-	"github.com/<REDACTED>/bifrost-extensions/db"
+	"github.com/KooshaPari/bifrost-extensions/api/connect"
+	"github.com/KooshaPari/bifrost-extensions/api/graphql"
+	"github.com/KooshaPari/bifrost-extensions/api/graphql/resolvers"
+	"github.com/KooshaPari/bifrost-extensions/db"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 

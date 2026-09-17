@@ -7,7 +7,7 @@
     "name": "tracera-server",
     "version": "0.1.0",
     "commit": "e1f905693",
-    "url": "https://github.com/<REDACTED>/Grapheon",
+    "url": "https://github.com/KooshaPari/Grapheon",
     "branch": "feat/tracera-persistent-trace-repository"
   },
   "adapter": {

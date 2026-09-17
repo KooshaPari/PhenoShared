@@ -1,12 +1,12 @@
 # Contributing to phenotype-water
 
-Thanks for your interest in contributing to **phenotype-water**, part of the [Phenotype](https://github.com/<REDACTED>) ecosystem of shared packages for Unity/WorldBox mods.
+Thanks for your interest in contributing to **phenotype-water**, part of the [Phenotype](https://github.com/KooshaPari) ecosystem of shared packages for Unity/WorldBox mods.
 
 ## AgilePlus spec mandate
 
 All non-trivial work in this organization is tracked in **AgilePlus**. Before opening a PR for a feature or substantive change:
 
-1. Check the [AgilePlus](https://github.com/<REDACTED>/AgilePlus) spec registry for an existing spec.
+1. Check the [AgilePlus](https://github.com/KooshaPari/AgilePlus) spec registry for an existing spec.
 2. If none exists, open one (`agileplus specify --title "<feature>" --description "<desc>"`) and link it from your PR description.
 3. Trivial fixes (typos, dependency bumps, doc tweaks) do not require a spec.
 

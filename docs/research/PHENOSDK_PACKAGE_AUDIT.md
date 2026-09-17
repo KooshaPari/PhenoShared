@@ -1046,7 +1046,7 @@ export function estimateTokens(text: string, model?: string): number;
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/<REDACTED>/phenotype-infrakit.git",
+    "url": "https://github.com/KooshaPari/phenotype-infrakit.git",
     "directory": "packages/pheno-core"
   },
   "keywords": ["hexagonal-architecture", "ports-adapters", "ddd"],

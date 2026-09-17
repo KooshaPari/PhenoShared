@@ -172,7 +172,7 @@ export default defineConfig({
     },
 
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/KooshaPari/nanovms' }
+      { icon: 'github', link: 'https://github.com/<REDACTED>/nanovms' }
     ]
   }
 })

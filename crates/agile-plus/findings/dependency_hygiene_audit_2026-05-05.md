@@ -78,7 +78,7 @@ All workflow files scanned use SHA-pinned or `@latest`/`@main` references, which
 | Repo | Replace Directive |
 |------|------------------|
 | argis-extensions | `replace github.com/maximhq/bifrost/core => ./bifrost/core` |
-| cliproxyapi-plusplus | `replace github.com/<REDACTED>/phenotype-go-auth => ./third_party/phenotype-go-auth` |
+| cliproxyapi-plusplus | `replace github.com/KooshaPari/phenotype-go-auth => ./third_party/phenotype-go-auth` |
 
 ### Assessment: ACCEPTABLE
 

@@ -381,7 +381,7 @@ name = "pheno-errors"
 version = "0.1.0"
 edition = "2021"
 license = "MIT"
-repository = "https://github.com/<REDACTED>/pheno-errors"
+repository = "https://github.com/KooshaPari/pheno-errors"
 description = "Canonical AppError type for the pheno-* fleet. Consolidates the 5 most-common error patterns into a single, dependency-light crate."
 
 [dependencies]

@@ -13,7 +13,7 @@ system or venv Python is used).
 ## Quick start
 
 ```bash
-git clone https://github.com/<REDACTED>/phenotype-omlx.git
+git clone https://github.com/KooshaPari/phenotype-omlx.git
 cd phenotype-omlx
 ./cli/bin/omlx-research doctor
 ./cli/bin/omlx-research status

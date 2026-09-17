@@ -11,7 +11,7 @@
 
 registry_version: "2.0.0"
 last_updated: "2026-09-08"
-ecosystem_index: "https://github.com/<REDACTED>/phenotype-registry/blob/main/ECOSYSTEM_MAP.md"
+ecosystem_index: "https://github.com/KooshaPari/phenotype-registry/blob/main/ECOSYSTEM_MAP.md"
 
 # PhenoSpecs System Entry
 system:

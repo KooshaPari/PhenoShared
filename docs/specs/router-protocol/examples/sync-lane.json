@@ -2,10 +2,10 @@
   "schema_version": "0.1.0",
   "comment": "Example of a complete RouterDispatch with sync lane. The router returns a RouterMailbox subscription; the consumer follows it for engine events; the trace stream carries the task lifecycle.",
   "request": {
-    "$ref": "https://github.com/<REDACTED>/phenotype-router-spec/schema/router-dispatch.json#/examples/0"
+    "$ref": "https://github.com/KooshaPari/phenotype-router-spec/schema/router-dispatch.json#/examples/0"
   },
   "mailbox": {
-    "$ref": "https://github.com/<REDACTED>/phenotype-router-spec/schema/router-mailbox.json#/examples/0"
+    "$ref": "https://github.com/KooshaPari/phenotype-router-spec/schema/router-mailbox.json#/examples/0"
   },
   "trace_events": [
     {
@@ -54,6 +54,6 @@
     }
   ],
   "artifact": {
-    "$ref": "https://github.com/<REDACTED>/phenotype-router-spec/schema/router-artifact.json#/examples/0"
+    "$ref": "https://github.com/KooshaPari/phenotype-router-spec/schema/router-artifact.json#/examples/0"
   }
 }

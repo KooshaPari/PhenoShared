@@ -97,6 +97,6 @@ cd /Users/<REDACTED>/CodeProjects/Phenotype/repos/phenotype-registry
 
 - Disposition row: `registry/disposition-index.json` → `"<REDACTED>/phenoEvents"`
 - Boundary doc: `docs/boundary/phenotype-event-bus.md`
-- Target repo: https://github.com/<REDACTED>/pheno
-- Source repo: https://github.com/<REDACTED>/phenoEvents
+- Target repo: https://github.com/KooshaPari/pheno
+- Source repo: https://github.com/KooshaPari/phenoEvents
 - Workspace phantom-dep resolved: `pheno/Cargo.toml` `phenotype-event-bus = { path = "crates/phenotype-event-bus" }`

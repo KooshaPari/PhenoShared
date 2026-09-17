@@ -1,52 +1,59 @@
-# Phenotype GitHub Actions
+# Phenotype Shared GitHub Actions
 
-> Reusable workflows and shared GitHub configurations
+> Reusable workflows and shared GitHub configurations for the Phenotype ecosystem
 
-[![AI slop inside](https://sladge.net/badge.svg)](https://sladge.net) [![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/<REDACTED>/pheno/total)](https://github.com/<REDACTED>/pheno/releases)
+These workflows live in the [KooshaPari/PhenoShared](https://github.com/KooshaPari/PhenoShared) monorepo alongside shared crates and documentation.
+
+[![CI](https://github.com/KooshaPari/PhenoShared/actions/workflows/ci.yml/badge.svg)](https://github.com/KooshaPari/PhenoShared/actions)
 
 ## Overview
 
-This repository contains reusable GitHub Actions workflows used across the entire Phenotype ecosystem. By centralizing CI/CD configurations, we reduce duplication and ensure consistent quality standards.
+This directory contains reusable GitHub Actions workflows used across the entire Phenotype ecosystem. By centralizing CI/CD configurations, we reduce duplication and ensure consistent quality standards.
+
+See the root [README](../README.md) for the full inventory. Below are representative examples.
 
 ## Reusable Workflows
 
-### Rust CI
+### CI Pipeline
 ```yaml
-uses: phenotype-dev/.github/.github/workflows/rust-ci.yml@main
+uses: KooshaPari/PhenoShared/.github/workflows/ci.yml@main
 with:
-  rust-version: '1.75'
+  rust-version: '1.82'
   test-flags: '--all-features'
 ```
 
-### Python CI
+### Security Scan
 ```yaml
-uses: phenotype-dev/.github/.github/workflows/python-ci.yml@main
+uses: KooshaPari/PhenoShared/.github/workflows/security-scan.yml@main
 with:
-  python-version: '3.11'
-  test-runner: 'pytest'
+  languages: rust,python
 ```
 
-### TypeScript CI
+### Release Crates
 ```yaml
-uses: phenotype-dev/.github/.github/workflows/typescript-ci.yml@main
-with:
-  node-version: '20'
+uses: KooshaPari/PhenoShared/.github/workflows/release-crates.yml@main
+secrets:
+  CARGO_REGISTRY_TOKEN: ${{ secrets.CARGO_REGISTRY_TOKEN }}
 ```
 
-### Go CI
+### Terraform Plan
 ```yaml
-uses: phenotype-dev/.github/.github/workflows/go-ci.yml@main
+uses: KooshaPari/PhenoShared/.github/workflows/terraform-plan.yml@main
 with:
-  go-version: '1.22'
+  working-directory: infra/
 ```
 
-## Shared Configurations
+## Local Shared Configurations
 
 - `.github/CODEOWNERS` - Default code ownership
 - `.github/dependabot.yml` - Dependency update automation
 - `.github/pull_request_template.md` - PR template
 - `.editorconfig` - Editor configuration
 - `.pre-commit-config.yaml` - Pre-commit hooks
+
+## Full Workflow Inventory
+
+Browse the complete set of 83 workflows in the [`.github/workflows/` directory](workflows/).
 
 ## License
 

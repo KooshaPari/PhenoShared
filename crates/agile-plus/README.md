@@ -125,6 +125,6 @@ the recovery notes with the code, and avoid broad deletion or pruning.
 
 This repo's `WORKLOG.md` uses the **AgilePlus team-sprint schema** (`L#-#` req_ids, device/topic/branch/scope/owner/eta + per-sprint entries). It coexists with the **pheno-worklog-schema v2.0/v2.1** (`L5-###` req_ids, 10/11 columns) used by the fleet-substrate layer.
 
-Per [ADR-032](https://github.com/<REDACTED>/phenotype-org-audits/blob/main/audits/2026-06-18_ADR-032-worklog-schema-both-stay.md), **both schemas stay** — they track different metadata (team-sprint vs. fleet-level), have non-colliding `req_id` prefixes, and the cost of forcing convergence is higher than the cost of divergence. The `req_id` is the join key if cross-schema audit is ever needed.
+Per [ADR-032](https://github.com/KooshaPari/phenotype-org-audits/blob/main/audits/2026-06-18_ADR-032-worklog-schema-both-stay.md), **both schemas stay** — they track different metadata (team-sprint vs. fleet-level), have non-colliding `req_id` prefixes, and the cost of forcing convergence is higher than the cost of divergence. The `req_id` is the join key if cross-schema audit is ever needed.
 
 To query across both schemas, use the `req_id` prefix as a discriminator: `L#-#` (this repo) vs. `L5-###` (fleet substrate).

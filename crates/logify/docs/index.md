@@ -7,7 +7,7 @@ zero-cost, structured-logging framework written in Rust, organised around
 hexagonal architecture (ports & adapters) so every consumer picks the sink,
 format, and runtime that fit their stack.
 
-- **Repository:** [<REDACTED>/Logify](https://github.com/<REDACTED>/Logify)
+- **Repository:** [<REDACTED>/Logify](https://github.com/KooshaPari/Logify)
 - **Crate name:** `logkit`
 - **Edition:** Rust 2021
 - **License:** MIT OR Apache-2.0

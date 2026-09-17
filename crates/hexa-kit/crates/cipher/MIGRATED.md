@@ -2,7 +2,7 @@
 
 **Date:** 2026-06-17  
 **Disposition step:** HexaKit DISPOSITION #2 — Wave C absorption  
-**Canonical repo:** https://github.com/<REDACTED>/Authvault
+**Canonical repo:** https://github.com/KooshaPari/Authvault
 
 ## What changed
 
@@ -12,7 +12,7 @@
 ## For consumers
 
 ```toml
-phenotype-cipher = { git = "https://github.com/<REDACTED>/Authvault", branch = "main" }
+phenotype-cipher = { git = "https://github.com/KooshaPari/Authvault", branch = "main" }
 ```
 
 ## For HexaKit maintainers

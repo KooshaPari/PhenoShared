@@ -19,8 +19,8 @@ ECO_BLOCKS = {
 
 | ADR | Title | Authority |
 |---|---|---|
-| ECO-020 | BytePort hygiene + security | [origin/main:docs/adrs/ADR-ECO-020-byteport-hygiene-security.md](https://github.com/<REDACTED>/phenotype-registry/blob/main/docs/adrs/ADR-ECO-020-byteport-hygiene-security.md) — 2026-06-23 |
-| ECO-022 | Compute/infra subtree registry correction | [origin/main:docs/adrs/ADR-ECO-022-compute-infra-subtree-registry-correction.md](https://github.com/<REDACTED>/phenotype-registry/blob/main/docs/adrs/ADR-ECO-022-compute-infra-subtree-registry-correction.md) — 2026-06-23 |
+| ECO-020 | BytePort hygiene + security | [origin/main:docs/adrs/ADR-ECO-020-byteport-hygiene-security.md](https://github.com/KooshaPari/phenotype-registry/blob/main/docs/adrs/ADR-ECO-020-byteport-hygiene-security.md) — 2026-06-23 |
+| ECO-022 | Compute/infra subtree registry correction | [origin/main:docs/adrs/ADR-ECO-022-compute-infra-subtree-registry-correction.md](https://github.com/KooshaPari/phenotype-registry/blob/main/docs/adrs/ADR-ECO-022-compute-infra-subtree-registry-correction.md) — 2026-06-23 |
 
 Cluster spine: `docs/compute-infra-subtree.md` on origin/main (9.1 KB, authoritative).
 """,
@@ -44,8 +44,8 @@ Retroactive ABSORPTION.md: `<REDACTED>/phenotype-tooling/docs/absorbed-from-go-n
 
 | ADR | Title | Authority |
 |---|---|---|
-| ECO-019 | nanovms sandbox hardening | [origin/main:docs/adrs/ADR-ECO-019-nanovms-sandbox-hardening.md](https://github.com/<REDACTED>/phenotype-registry/blob/main/docs/adrs/ADR-ECO-019-nanovms-sandbox-hardening.md) — 2026-06-23 |
-| ECO-022 | Compute/infra subtree registry correction | [origin/main:docs/adrs/ADR-ECO-022-compute-infra-subtree-registry-correction.md](https://github.com/<REDACTED>/phenotype-registry/blob/main/docs/adrs/ADR-ECO-022-compute-infra-subtree-registry-correction.md) — 2026-06-23 |
+| ECO-019 | nanovms sandbox hardening | [origin/main:docs/adrs/ADR-ECO-019-nanovms-sandbox-hardening.md](https://github.com/KooshaPari/phenotype-registry/blob/main/docs/adrs/ADR-ECO-019-nanovms-sandbox-hardening.md) — 2026-06-23 |
+| ECO-022 | Compute/infra subtree registry correction | [origin/main:docs/adrs/ADR-ECO-022-compute-infra-subtree-registry-correction.md](https://github.com/KooshaPari/phenotype-registry/blob/main/docs/adrs/ADR-ECO-022-compute-infra-subtree-registry-correction.md) — 2026-06-23 |
 
 Cluster spine: `docs/compute-infra-subtree.md` on origin/main.
 """,
@@ -53,8 +53,8 @@ Cluster spine: `docs/compute-infra-subtree.md` on origin/main.
 
 | ADR | Title | Authority |
 |---|---|---|
-| ECO-021 | PhenoCompose dead-cuda feature | [origin/main:docs/adrs/ADR-ECO-021-phenocompose-dead-cuda-feature.md](https://github.com/<REDACTED>/phenotype-registry/blob/main/docs/adrs/ADR-ECO-021-phenocompose-dead-cuda-feature.md) — 2026-06-23 |
-| ECO-022 | Compute/infra subtree registry correction | [origin/main:docs/adrs/ADR-ECO-022-compute-infra-subtree-registry-correction.md](https://github.com/<REDACTED>/phenotype-registry/blob/main/docs/adrs/ADR-ECO-022-compute-infra-subtree-registry-correction.md) — 2026-06-23 |
+| ECO-021 | PhenoCompose dead-cuda feature | [origin/main:docs/adrs/ADR-ECO-021-phenocompose-dead-cuda-feature.md](https://github.com/KooshaPari/phenotype-registry/blob/main/docs/adrs/ADR-ECO-021-phenocompose-dead-cuda-feature.md) — 2026-06-23 |
+| ECO-022 | Compute/infra subtree registry correction | [origin/main:docs/adrs/ADR-ECO-022-compute-infra-subtree-registry-correction.md](https://github.com/KooshaPari/phenotype-registry/blob/main/docs/adrs/ADR-ECO-022-compute-infra-subtree-registry-correction.md) — 2026-06-23 |
 
 Cluster spine: `docs/compute-infra-subtree.md` on origin/main.
 """,
@@ -71,8 +71,8 @@ Cluster spine: `docs/compute-infra-subtree.md` on origin/main (phenotype-go-sdk 
 
 | ADR | Title | Authority |
 |---|---|---|
-| ECO-018 | phenotype-infra path-dep hygiene | [origin/main:docs/adrs/ADR-ECO-018-phenotype-infra-path-dep-hygiene.md](https://github.com/<REDACTED>/phenotype-registry/blob/main/docs/adrs/ADR-ECO-018-phenotype-infra-path-dep-hygiene.md) — 2026-06-23 |
-| ECO-022 | Compute/infra subtree registry correction | [origin/main:docs/adrs/ADR-ECO-022-compute-infra-subtree-registry-correction.md](https://github.com/<REDACTED>/phenotype-registry/blob/main/docs/adrs/ADR-ECO-022-compute-infra-subtree-registry-correction.md) — 2026-06-23 |
+| ECO-018 | phenotype-infra path-dep hygiene | [origin/main:docs/adrs/ADR-ECO-018-phenotype-infra-path-dep-hygiene.md](https://github.com/KooshaPari/phenotype-registry/blob/main/docs/adrs/ADR-ECO-018-phenotype-infra-path-dep-hygiene.md) — 2026-06-23 |
+| ECO-022 | Compute/infra subtree registry correction | [origin/main:docs/adrs/ADR-ECO-022-compute-infra-subtree-registry-correction.md](https://github.com/KooshaPari/phenotype-registry/blob/main/docs/adrs/ADR-ECO-022-compute-infra-subtree-registry-correction.md) — 2026-06-23 |
 
 Cluster spine: `docs/compute-infra-subtree.md` on origin/main (9.1 KB, authoritative).
 """,

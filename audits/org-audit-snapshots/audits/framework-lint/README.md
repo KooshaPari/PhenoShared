@@ -1,6 +1,6 @@
 # Migrated from <REDACTED>/pheno-framework-lint on 2026-06-19 prior to repo deletion
 
-> Original source: https://github.com/<REDACTED>/pheno-framework-lint (archived 2026-06-19, L5-112)
+> Original source: https://github.com/KooshaPari/pheno-framework-lint (archived 2026-06-19, L5-112)
 > See: [findings/2026-06-19-L5-112-framework-lint-absorption.md](../../findings/2026-06-19-L5-112-framework-lint-absorption.md) for the absorption matrix.
 > Note: governance files (CODE_OF_CONDUCT, CONTRIBUTING, SECURITY, etc.) are preserved as snapshots in `governance/` subdir for fleet-history provenance. They are NOT authoritative for org-audits — which has its own.
 

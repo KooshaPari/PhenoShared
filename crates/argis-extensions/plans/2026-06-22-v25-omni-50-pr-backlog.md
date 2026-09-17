@@ -109,8 +109,8 @@
 
 | PR | Status | Notes |
 |---|---|---|
-| **#19** (providers page indexed stats) | **DONE (merged via <REDACTED>/OmniRoute#105)** | Implemented as `appendProviderNode` dedup helper + defensive `Set<string>` dedup in `buildCompatibleProviderGroups` + 2 unit tests. Branch `fix/l5-502-providers-page-entry-dedup-2026-06-23`. [PR #105](https://github.com/<REDACTED>/OmniRoute/pull/105) |
-| **#13** (relay usage write batching) | **DONE (partial, via <REDACTED>/OmniRoute#104)** | `ServiceSupervisor` MaxListeners cap raised to 50; companion to leak family. Branch `fix/l5-501-svc-supervisor-max-listeners-cap-2026-06-23`. [PR #104](https://github.com/<REDACTED>/OmniRoute/pull/104) |
+| **#19** (providers page indexed stats) | **DONE (merged via <REDACTED>/OmniRoute#105)** | Implemented as `appendProviderNode` dedup helper + defensive `Set<string>` dedup in `buildCompatibleProviderGroups` + 2 unit tests. Branch `fix/l5-502-providers-page-entry-dedup-2026-06-23`. [PR #105](https://github.com/KooshaPari/OmniRoute/pull/105) |
+| **#13** (relay usage write batching) | **DONE (partial, via <REDACTED>/OmniRoute#104)** | `ServiceSupervisor` MaxListeners cap raised to 50; companion to leak family. Branch `fix/l5-501-svc-supervisor-max-listeners-cap-2026-06-23`. [PR #104](https://github.com/KooshaPari/OmniRoute/pull/104) |
 | **#20** (memoize all static entry groups) | **DONE (via diegosouzapw/OmniRoute#4613)** | Earlier session PR; 3 `useMemo`s collapsed to 1 in `providerPageUtils.ts`. |
 | **#15** (relay rate-limit DB contention) | **DONE (via diegosouzapw/OmniRoute#4612)** | Earlier session PR; Bifrost SSE lifecycle + rate-limit handling. |
 | Other 46 PRs | **NOT STARTED** | Subagents `omni_50_backend_audit` / `omni_50_frontend_audit` / `omni_50_infra_data_audit` stalled without returning (2026-06-22 session). Audit data not produced; backlog synthesized from local evidence only. |

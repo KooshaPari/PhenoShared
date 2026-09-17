@@ -30,6 +30,6 @@ verification:
   nanovms_orchestrate: "go test ./pkg/orchestrate/... -count=1"
   phenocompose_cli: "cargo test (56 tests)"
 pull_requests:
-  phenocompose: https://github.com/<REDACTED>/PhenoCompose/pull/108
-  nanovms: https://github.com/<REDACTED>/nanovms/pull/1
-  harness: https://github.com/<REDACTED>/pheno-harness/pull/6
+  phenocompose: https://github.com/KooshaPari/PhenoCompose/pull/108
+  nanovms: https://github.com/KooshaPari/nanovms/pull/1
+  harness: https://github.com/KooshaPari/pheno-harness/pull/6

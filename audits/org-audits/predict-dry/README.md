@@ -1,6 +1,6 @@
 # Migrated from <REDACTED>/pheno-predict on 2026-06-19 prior to repo deletion
 
-> Original source: https://github.com/<REDACTED>/pheno-predict (archived 2026-06-19, L5-112)
+> Original source: https://github.com/KooshaPari/pheno-predict (archived 2026-06-19, L5-112)
 > See: [findings/2026-06-19-L5-112-predict-dry-absorption.md](../../findings/2026-06-19-L5-112-predict-dry-absorption.md) for the absorption matrix.
 
 # pheno-predict

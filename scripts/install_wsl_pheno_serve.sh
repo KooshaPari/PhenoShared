@@ -16,7 +16,7 @@
 # Usage (on the WSL host):
 #   sudo bash scripts/install_wsl_pheno_serve.sh \\
 #     --branch main \\
-#     --repo-url https://github.com/<REDACTED>/pheno-harness.git
+#     --repo-url https://github.com/KooshaPari/pheno-harness.git
 #
 # The script is safe to re-run (idempotent at every step).
 
@@ -25,7 +25,7 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_DIR="${REPO_DIR:-/opt/pheno-harness}"
 BRANCH="${BRANCH:-main}"
-REPO_URL="${REPO_URL:-https://github.com/<REDACTED>/pheno-harness.git}"
+REPO_URL="${REPO_URL:-https://github.com/KooshaPari/pheno-harness.git}"
 LOG="/var/log/pheno-harness-install.log"
 
 log() { echo "[$(date -u +%Y-%m-%dT%H:%M:%SZ)] $*" | tee -a "$LOG"; }

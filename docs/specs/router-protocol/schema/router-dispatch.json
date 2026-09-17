@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://github.com/<REDACTED>/phenotype-router-spec/schema/router-dispatch.json",
+  "$id": "https://github.com/KooshaPari/phenotype-router-spec/schema/router-dispatch.json",
   "title": "RouterDispatch",
   "description": "A routing decision emitted by a substrate-compatible router in response to a RouterRequest. The decision selects which engine + model to use and is consumed by an EnginePort to begin work.",
   "type": "object",

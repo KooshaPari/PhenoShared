@@ -4,7 +4,7 @@
   "scope": "canonical-boundary refresh for <REDACTED>/phenoUtils",
   "source": {
     "repo": "<REDACTED>/phenoUtils",
-    "url": "https://github.com/<REDACTED>/phenoUtils",
+    "url": "https://github.com/KooshaPari/phenoUtils",
     "visibility": "public",
     "archived": false,
     "default_branch": "main",
@@ -43,7 +43,7 @@
   "branch_coverage": {
     "remote_branch_count": 24,
     "policy": "Preserve all remote branches; no branch deletion or force-push authorized",
-    "restore_command": "git clone https://github.com/<REDACTED>/phenoUtils.git"
+    "restore_command": "git clone https://github.com/KooshaPari/phenoUtils.git"
   },
   "last_resort_exceptions": [
     {

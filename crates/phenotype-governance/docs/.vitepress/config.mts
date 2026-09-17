@@ -12,7 +12,7 @@ export default createPhenotypeConfig({
   srcDir: 'docs',
   base: docsBase,
   srcDir: 'docs',
-  githubOrg: 'KooshaPari',
+  githubOrg: '<REDACTED>',
   githubRepo: repoName,
 
   nav: [
@@ -104,7 +104,7 @@ export default createPhenotypeConfig({
     },
 
     socialLinks: [
-      { icon: 'github', link: `https://github.com/kooshapari/${repoName}` }
+      { icon: 'github', link: `https://github.com/<REDACTED>/${repoName}` }
     ],
 
     footer: {
@@ -117,7 +117,7 @@ export default createPhenotypeConfig({
     },
 
     editLink: {
-      pattern: `https://github.com/kooshapari/${repoName}/edit/main/docs/:path`,
+      pattern: `https://github.com/<REDACTED>/${repoName}/edit/main/docs/:path`,
       text: 'Edit this page on GitHub'
     },
 

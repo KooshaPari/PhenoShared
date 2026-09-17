@@ -1,7 +1,7 @@
 # PR #477 Merge Consolidation Worklog
 **Timestamp:** 2026-03-30 16:20:19 UTC-7
 **Merge Commit:** `f0ba6b23b58b20b151bcbbe87eb6730984126696`
-**PR:** [#477 - chore: commit dirty files](https://github.com/<REDACTED>/phenotype-infrakit/pull/477)
+**PR:** [#477 - chore: commit dirty files](https://github.com/KooshaPari/phenotype-infrakit/pull/477)
 **Author:** <REDACTED> (Claude Code co-authored)
 **Status:** MERGED ✅
 
@@ -75,7 +75,7 @@ PR #477 consolidated significant workspace restructuring by moving root-level in
   - `rust-version = "1.75"` (MSRV)
   - `description = "Phenotype Infrastructure Kit"`
   - `authors = ["Phenotype Team"]`
-  - `repository = "https://github.com/<REDACTED>/phenotype-infrakit"`
+  - `repository = "https://github.com/KooshaPari/phenotype-infrakit"`
 
 **Workspace Resolver:**
 - Changed from `resolver = "3"` → `resolver = "2"` (improved compatibility)
@@ -306,7 +306,7 @@ The workspace membership list now clearly documents:
 | **Committer** | GitHub <noreply@github.com> (squash merge) |
 | **PR** | #477 |
 | **Branch** | main |
-| **Repository** | https://github.com/<REDACTED>/phenotype-infrakit |
+| **Repository** | https://github.com/KooshaPari/phenotype-infrakit |
 
 ---
 

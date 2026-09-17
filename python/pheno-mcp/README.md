@@ -22,7 +22,7 @@ pip install --index-url https://npm.pkg.github.com/ pheno-mcp
 ### From source (development)
 
 ```bash
-git clone https://github.com/<REDACTED>/phenotype-infrakit.git
+git clone https://github.com/KooshaPari/phenotype-infrakit.git
 cd phenotype-infrakit/python/pheno-mcp
 pip install -e ".[dev]"
 ```
@@ -290,8 +290,8 @@ MIT License - See LICENSE file for details
 - [Model Context Protocol Spec](https://spec.modelcontextprotocol.io)
 - [FastMCP Documentation](https://github.com/jmorganca/fastmcp)
 - [CrewAI Documentation](https://github.com/joaomdmoura/crewai)
-- [Phenotype Infrakit](https://github.com/<REDACTED>/phenotype-infrakit)
+- [Phenotype Infrakit](https://github.com/KooshaPari/phenotype-infrakit)
 
 ## Support
 
-For issues, questions, or contributions, please open an issue on the [GitHub repository](https://github.com/<REDACTED>/phenotype-infrakit).
+For issues, questions, or contributions, please open an issue on the [GitHub repository](https://github.com/KooshaPari/phenotype-infrakit).

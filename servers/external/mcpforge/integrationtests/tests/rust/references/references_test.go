@@ -7,9 +7,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/<REDACTED>/MCPForge/integrationtests/tests/common"
-	"github.com/<REDACTED>/MCPForge/integrationtests/tests/rust/internal"
-	"github.com/<REDACTED>/MCPForge/internal/tools"
+	"github.com/KooshaPari/MCPForge/integrationtests/tests/common"
+	"github.com/KooshaPari/MCPForge/integrationtests/tests/rust/internal"
+	"github.com/KooshaPari/MCPForge/internal/tools"
 )
 
 // TestFindReferences tests the FindReferences tool with Rust symbols

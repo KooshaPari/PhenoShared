@@ -2,7 +2,7 @@
 
 This directory follows the Phenotype org iconography standard.
 
-**Canonical reference:** [phenotype-infra/docs/governance/iconography-standard.md](https://github.com/<REDACTED>/phenotype-infra/blob/main/docs/governance/iconography-standard.md)
+**Canonical reference:** [phenotype-infra/docs/governance/iconography-standard.md](https://github.com/KooshaPari/phenotype-infra/blob/main/docs/governance/iconography-standard.md)
 
 All icons in this project must conform to that standard. Key points:
 

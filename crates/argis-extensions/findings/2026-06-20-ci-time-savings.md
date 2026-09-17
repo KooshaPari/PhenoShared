@@ -274,14 +274,14 @@ throughput lever.
 
 ## References
 
-- Workflow: <https://github.com/<REDACTED>/phenotype-ops/blob/main/.github/workflows/manifest-gate.yml>
+- Workflow: <https://github.com/KooshaPari/phenotype-ops/blob/main/.github/workflows/manifest-gate.yml>
   (file sha `1b3450ebc4f85da20e5b0ff85797b9fe02c979c0`, 4,293 bytes, 129 lines,
   workflow id `298024498`)
-- Workflow: <https://github.com/<REDACTED>/phenotype-ops/blob/main/.github/workflows/full-ci.yml>
+- Workflow: <https://github.com/KooshaPari/phenotype-ops/blob/main/.github/workflows/full-ci.yml>
   (file sha `a39097b08e64d74ddadd7f9ff44de8c707d26966`, 4,701 bytes, 167 lines,
   workflow id `298024497`)
 - Pin-gate hardening commit:
-  <https://github.com/<REDACTED>/phenotype-ops/commit/1e0d047c7a17c489823ffbc39bfe33b692516e80>
+  <https://github.com/KooshaPari/phenotype-ops/commit/1e0d047c7a17c489823ffbc39bfe33b692516e80>
   ("ci(phenotype-pin): wire workflow corruption gate into full-ci + add
   standalone pin-gate", 2026-06-20, author `orch-w1-a`)
 - Monorepo Lefthook config: `lefthook.yml` (root, 51 lines, pre-commit

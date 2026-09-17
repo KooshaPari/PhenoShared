@@ -93,6 +93,6 @@ See `CHANGELOG.md` for the full list.
 
 ## Contact
 
-- Owner: <REDACTED> (<https://github.com/<REDACTED>>)
+- Owner: <REDACTED> (<https://github.com/KooshaPari>)
 - Issues: use `.github/ISSUE_TEMPLATE/`
 - Security: see `SECURITY.md`

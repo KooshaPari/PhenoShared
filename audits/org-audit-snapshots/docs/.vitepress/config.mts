@@ -11,7 +11,7 @@ export default defineConfig({
       { text: "Overview", link: "/" },
       { text: "Audit Map", link: "/audit-map" },
       { text: "Redaction", link: "/redaction" },
-      { text: "GitHub", link: "https://github.com/KooshaPari/phenotype-org-audits" },
+      { text: "GitHub", link: "https://github.com/<REDACTED>/phenotype-org-audits" },
     ],
     sidebar: [
       {
@@ -24,7 +24,7 @@ export default defineConfig({
       },
     ],
     socialLinks: [
-      { icon: "github", link: "https://github.com/KooshaPari/phenotype-org-audits" },
+      { icon: "github", link: "https://github.com/<REDACTED>/phenotype-org-audits" },
     ],
     search: {
       provider: "local",

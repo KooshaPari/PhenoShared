@@ -1,7 +1,7 @@
 # Git hooks (placeholder)
 
 This directory was stamped by `hexakit init`. Canonical Phenotype hook bundles live in
-[TestingKit](https://github.com/<REDACTED>/TestingKit).
+[TestingKit](https://github.com/KooshaPari/TestingKit).
 
 ## Install
 

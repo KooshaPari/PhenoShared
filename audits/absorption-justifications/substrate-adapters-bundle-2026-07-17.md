@@ -64,6 +64,6 @@ Note: there's no `pheno/crates/` change to revert because no physical transfer o
 
 - Disposition row: `registry/disposition-index.json` → `"<REDACTED>/substrate-adapters-bundle"`
 - Boundary doc: `docs/boundary/substrate-adapters-bundle.md`
-- Canonical source: https://github.com/<REDACTED>/substrate
-- Source repo (now archived): https://github.com/<REDACTED>/substrate-adapters-bundle
+- Canonical source: https://github.com/KooshaPari/substrate
+- Source repo (now archived): https://github.com/KooshaPari/substrate-adapters-bundle
 - Related registry row: `<REDACTED>/substrate` (AFFIRM, active)

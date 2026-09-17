@@ -30,7 +30,7 @@ PlatformKit abstracts away platform-specific details (Linux, macOS, Windows, Kub
 
 ```bash
 # Clone the repository
-git clone https://github.com/<REDACTED>/PlatformKit.git
+git clone https://github.com/KooshaPari/PlatformKit.git
 cd PlatformKit
 
 # Review governance and workspace setup

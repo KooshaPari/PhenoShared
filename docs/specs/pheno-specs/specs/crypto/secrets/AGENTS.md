@@ -182,7 +182,7 @@ opa eval -i input.json -d policies/ 'data.security.violations'
 
 - [Open Policy Agent](https://www.openpolicyagent.org/)
 - [SARIF Specification](https://sarifweb.azurewebsites.net/)
-- [Phenotype Registry](https://github.com/<REDACTED>/phenotype-registry)
+- [Phenotype Registry](https://github.com/KooshaPari/phenotype-registry)
 
 ## Agent Notes
 

@@ -32,7 +32,7 @@
   "branch_tip": "162acdb",
   "merge_commit": null,
   "merged_at": null,
-  "pr_url": "https://github.com/<REDACTED>/argis-extensions/pull/124",
+  "pr_url": "https://github.com/KooshaPari/argis-extensions/pull/124",
   "pr_number": 124,
   "pr_state": "OPEN",
   "repository": "<REDACTED>/argis-extensions",
@@ -149,7 +149,7 @@
     "plan": "plans/2026-06-21-v15-71-pillar-cycle-4-p0.md",
     "plan_repo_path": "argis-extensions/plans/2026-06-21-v15-71-pillar-cycle-4-p0.md",
     "branch_tip_sha": "162acdb",
-    "pr_url": "https://github.com/<REDACTED>/argis-extensions/pull/124",
+    "pr_url": "https://github.com/KooshaPari/argis-extensions/pull/124",
     "pr_number": 124
   },
   "status": "complete"

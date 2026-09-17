@@ -8,7 +8,7 @@ Compliance standard: registry/audit-absorption-justification/schema.json (14/14 
 ## Source
 
 - **Repo:** `<REDACTED>/heliosCLI`
-- **GitHub URL:** https://github.com/<REDACTED>/heliosCLI
+- **GitHub URL:** https://github.com/KooshaPari/heliosCLI
 - **Archived at:** True
 - **Default branch at audit time:** `main`
 - **Last commit SHA on default branch:** `d63844f`
@@ -81,7 +81,7 @@ No exceptions to the ARCHIVED verdict are granted.
 
 ```bash
 # Disaster-recovery posture:
-git clone https://github.com/<REDACTED>/heliosCLI.git /tmp/heliosCLI-restore
+git clone https://github.com/KooshaPari/heliosCLI.git /tmp/heliosCLI-restore
 # Verify bundle sha-256 (re-clone path is clean)
 ```
 

@@ -1,7 +1,7 @@
 # Audit Report: heliosCLI
 
 **Date:** 2026-03-30  
-**Repository:** github.com/<REDACTED>/helios-cli (fork of openai/codex)  
+**Repository:** github.com/KooshaPari/helios-cli (fork of openai/codex)  
 **Location:** ~/Repos/heliosCLI/  
 **Auditor:** Phase 2 Consolidation Task 2
 

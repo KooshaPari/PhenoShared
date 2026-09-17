@@ -4,8 +4,8 @@
 
 The canonical source for `phenotype-config-loader` now lives at:
 
-- Repository: https://github.com/<REDACTED>/phenotype-config
-- Substrate crate: https://github.com/<REDACTED>/phenotype-config/tree/main/crates/settly
+- Repository: https://github.com/KooshaPari/phenotype-config
+- Substrate crate: https://github.com/KooshaPari/phenotype-config/tree/main/crates/settly
 
 ## Origin
 

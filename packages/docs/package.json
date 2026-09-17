@@ -27,7 +27,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/<REDACTED>/phenodocs.git",
+    "url": "https://github.com/KooshaPari/phenodocs.git",
     "directory": "packages/docs"
   },
   "publishConfig": {

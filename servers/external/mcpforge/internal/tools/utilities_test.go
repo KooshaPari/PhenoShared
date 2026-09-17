@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/<REDACTED>/MCPForge/internal/protocol"
+	"github.com/KooshaPari/MCPForge/internal/protocol"
 	"github.com/stretchr/testify/assert"
 )
 

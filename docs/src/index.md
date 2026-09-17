@@ -11,7 +11,7 @@ hero:
       link: /getting-started
     - theme: alt
       text: View on GitHub
-      link: https://github.com/<REDACTED>/Pine
+      link: https://github.com/KooshaPari/Pine
 features:
   - icon: 🪟
     title: Windows compatibility
@@ -50,7 +50,7 @@ Pine is in **pre-alpha** (`[###-------] 25%`). The Rust workspace, ELF/PE
 loaders, syscall translation tables (Linux + Windows), and nvms integration
 scaffolding are in place. The current focus is the Windows syscall translation
 layer and macOS/Linux adapter work — see
-[ARCHITECTURE.md](https://github.com/<REDACTED>/Pine/blob/main/docs/ARCHITECTURE.md)
+[ARCHITECTURE.md](https://github.com/KooshaPari/Pine/blob/main/docs/ARCHITECTURE.md)
 for the full design.
 
 ## Architecture at a glance
@@ -75,6 +75,6 @@ for the full design.
 ## Where to next?
 
 - [Getting Started](/getting-started) — build the workspace and run the tests.
-- [Architecture (raw)](https://github.com/<REDACTED>/Pine/blob/main/docs/ARCHITECTURE.md)
+- [Architecture (raw)](https://github.com/KooshaPari/Pine/blob/main/docs/ARCHITECTURE.md)
   — full layer design and nvms integration strategy.
-- [Repository](https://github.com/<REDACTED>/Pine) — source code and issues.
+- [Repository](https://github.com/KooshaPari/Pine) — source code and issues.

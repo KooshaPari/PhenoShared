@@ -33,7 +33,7 @@ export const site = {
 };
 
 export const socials: Link[] = [
-  { label: "GitHub", href: "https://github.com/<REDACTED>", external: true },
+  { label: "GitHub", href: "https://github.com/KooshaPari", external: true },
   { label: "LinkedIn", href: "https://www.linkedin.com/in/<REDACTED>", external: true },
   { label: "Devpost", href: "https://devpost.com/<REDACTED>", external: true },
   { label: "Email", href: "mailto:<REDACTED>@<REDACTED>.com", external: true },
@@ -73,7 +73,7 @@ export const projects: Project[] = [
     highlight: "Portfolio-aware deployment for shipped projects.",
     tags: ["MicroVM", "portfolio", "infrastructure", "LLM-assisted metadata"],
     links: [
-      { label: "Repo", href: "https://github.com/<REDACTED>/BytePort", external: true },
+      { label: "Repo", href: "https://github.com/KooshaPari/BytePort", external: true },
       { label: "Landing", href: "https://byteport.<REDACTED>.com", external: true },
     ],
   },
@@ -88,7 +88,7 @@ export const projects: Project[] = [
     highlight: "Agent-native runtime and workflow control.",
     tags: ["agents", "runtime", "tooling", "governance"],
     links: [
-      { label: "Repo", href: "https://github.com/<REDACTED>/thegent", external: true },
+      { label: "Repo", href: "https://github.com/KooshaPari/thegent", external: true },
       { label: "Landing", href: "https://thegent.<REDACTED>.com", external: true },
     ],
   },

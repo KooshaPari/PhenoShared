@@ -26,5 +26,5 @@ Use when placing dispatch, cheap-llm, or MCP tool logic.
 
 ## References
 
-- [ADR-019](https://github.com/<REDACTED>/PhenoSpecs/blob/main/adrs/019-mcp-runtime-dependency-graph.md)
+- [ADR-019](https://github.com/KooshaPari/PhenoSpecs/blob/main/adrs/019-mcp-runtime-dependency-graph.md)
 - [servers/substrate/README.md](../../servers/substrate/README.md)

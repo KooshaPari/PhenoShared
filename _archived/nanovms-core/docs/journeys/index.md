@@ -101,4 +101,4 @@ For power users:
 - [API Reference](../reference/api)
 - [Configuration](../reference/configuration)
 - [Troubleshooting](../guide/troubleshooting)
-- [GitHub Issues](https://github.com/<REDACTED>/nanovms/issues)
+- [GitHub Issues](https://github.com/KooshaPari/nanovms/issues)

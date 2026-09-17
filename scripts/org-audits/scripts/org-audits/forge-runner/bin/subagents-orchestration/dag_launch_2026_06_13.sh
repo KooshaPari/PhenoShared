@@ -140,7 +140,7 @@ forge --conversation-id 6408030d-cd38-4cb2-85ff-ef0ce0b66545 -p "Continue: [SUBA
 forge --conversation-id 8d8c1c11-c5f6-452f-a531-26aea6adba27 -p "Continue: [SUBAGENT] You are one of 5 subagents dispatched in parallel by a real-world manager. You are the **..." -C /Users/<REDACTED>/CodeProjects/Phenotype/repos
 forge --conversation-id 50b4120a-7955-46be-a483-3a99cf977c26 -p "Continue: [SUBAGENT] In /Users/<REDACTED>/CodeProjects/Phenotype/repos/HeliosLab, add `From<std::env::VarError..." -C /Users/<REDACTED>/CodeProjects/Phenotype/repos
 forge --conversation-id 172453cb-9ef0-4999-aa91-0295bad192be -p "Continue: [SUBAGENT] Implement WP sequence=9: \"Backend: MIDI input parser (mido-based)\" in /Users/<REDACTED>..." -C /Users/<REDACTED>/CodeProjects/Phenotype/repos
-forge --conversation-id 71e2920b-f439-44af-91f6-1eafb153879b -p "Continue: [SUBAGENT] Clone the real thegent-sharecli repo from https://github.com/<REDACTED>/thegent-sharecli...." -C /Users/<REDACTED>/CodeProjects/Phenotype/repos
+forge --conversation-id 71e2920b-f439-44af-91f6-1eafb153879b -p "Continue: [SUBAGENT] Clone the real thegent-sharecli repo from https://github.com/KooshaPari/thegent-sharecli...." -C /Users/<REDACTED>/CodeProjects/Phenotype/repos
 forge --conversation-id 01474acb-e7db-4e94-9085-b9a851ab4883 -p "Continue: [SUBAGENT] **Task:** Execute 4 parallel adoption waves for the libraries shipped this session: (1) c..." -C /Users/<REDACTED>/CodeProjects/Phenotype/repos
 forge --conversation-id ed1f0f22-bc00-4d23-b5c3-ba4c7454c2dc -p "Continue: [SUBAGENT] TASK ID: arc-2-08 / PL-10 CARGO-CHECK-BASELINE
 
@@ -197,7 +197,7 @@ forge --conversation-id bcf0468c-4fd1-473d-9717-e5c80092de5e -p "Continue: [SUBA
 
 OBJECTIVE: Identify which crates HeliosCL..." -C /Users/<REDACTED>/CodeProjects/Phenotype/repos
 forge --conversation-id 36cb4984-5921-483b-91e9-4c90e7125b39 -p "Continue: [SUBAGENT] Task side-206: dispatch-mcp production hardening + CHANGELOG. Repo: /Users/<REDACTED>/Cod..." -C /Users/<REDACTED>/CodeProjects/Phenotype/repos
-forge --conversation-id 95fbbf84-f48b-4c8f-9730-57486f041c64 -p "Continue: [SUBAGENT] Clone the real sharecli repo from https://github.com/<REDACTED>/sharecli.git to /tmp/shar..." -C /Users/<REDACTED>/CodeProjects/Phenotype/repos
+forge --conversation-id 95fbbf84-f48b-4c8f-9730-57486f041c64 -p "Continue: [SUBAGENT] Clone the real sharecli repo from https://github.com/KooshaPari/sharecli.git to /tmp/shar..." -C /Users/<REDACTED>/CodeProjects/Phenotype/repos
 forge --conversation-id ab592f87-4426-4459-bf1a-1f3c97091e38 -p "Continue: [SUBAGENT] Add concrete adapter implementations in `kmobile-cli/src/`:..." -C /Users/<REDACTED>/CodeProjects/Phenotype/repos
 forge --conversation-id a9f1fe1f-048e-49a1-9f9c-d325a7582923 -p "Continue: [SUBAGENT] V3 DAG L5 task #85: AgilePlus full integration. Create branch `chore/l5-85-agileplus-inte..." -C /Users/<REDACTED>/CodeProjects/Phenotype/repos
 forge --conversation-id 6554bc6c-cbdc-4739-b9cf-5753a68a2ffd -p "Continue: [SUBAGENT] Task side-221: Agentora + Tracely + PhenoMCP L1.4 governance. Repos: Agentora, Tracely, P..." -C /Users/<REDACTED>/CodeProjects/Phenotype/repos

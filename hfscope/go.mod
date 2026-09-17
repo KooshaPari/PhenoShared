@@ -1,4 +1,4 @@
-module github.com/<REDACTED>/hfscope
+module github.com/KooshaPari/hfscope
 
 go 1.26.5
 

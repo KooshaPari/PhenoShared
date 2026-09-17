@@ -4,7 +4,7 @@ managed:
   enabled: true
   override:
     - file_option: go_package_prefix
-      value: github.com/<REDACTED>/bifrost-extensions/api/connect/gen
+      value: github.com/KooshaPari/bifrost-extensions/api/connect/gen
 plugins:
   # Generate Go protobuf code
   - remote: buf.build/protocolbuffers/go

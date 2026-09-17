@@ -133,7 +133,7 @@ go test ./...
 
 ### Update CLIProxy (fork-only, internal module)
 ```bash
-# github.com/<REDACTED>/CLIProxyAPI/v7 is a private fork module
+# github.com/KooshaPari/CLIProxyAPI/v7 is a private fork module
 go mod tidy
 go test ./...
 ```

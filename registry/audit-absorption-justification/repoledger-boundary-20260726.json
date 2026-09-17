@@ -3,7 +3,7 @@
   "captured_at": "2026-07-26T04:24:00Z",
   "scope": "<REDACTED>/RepoLedger local checkout and public remote boundary",
   "remote": {
-    "url": "https://github.com/<REDACTED>/RepoLedger",
+    "url": "https://github.com/KooshaPari/RepoLedger",
     "visibility": "public",
     "default_branch": "main",
     "default_sha": "b664b757215df00a49536a861372cf864cb98bf1",

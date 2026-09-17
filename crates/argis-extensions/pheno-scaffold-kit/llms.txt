@@ -21,7 +21,7 @@
 
 ## Source
 
-- [Repo](https://github.com/<REDACTED>/phenotype-apps/tree/main/pheno-scaffold-kit): governance + meta-bundle path in the monorepo
+- [Repo](https://github.com/KooshaPari/phenotype-apps/tree/main/pheno-scaffold-kit): governance + meta-bundle path in the monorepo
 - [src/](src/pheno_scaffold_kit/): executable Python source
 - [templates/](templates/cookiecutter/): Cookiecutter template
 

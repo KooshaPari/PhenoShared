@@ -21,7 +21,7 @@
 ## Key Findings
 
 **Critical Blockers:**
-- `go.mod` references `github.com/<REDACTED>/CLIProxyAPI/v7` but imports from `router-for-me/CLIProxyAPI/v6` (internal auth/logging/config)
+- `go.mod` references `github.com/KooshaPari/CLIProxyAPI/v7` but imports from `router-for-me/CLIProxyAPI/v6` (internal auth/logging/config)
 - Multiple packages fail to resolve: `internal/config`, `internal/auth/cursor`, `internal/access/config_access`
 - Local replace paths (`phenotype-go-auth`, `phenotype-go-kit`) missing in CI context
 

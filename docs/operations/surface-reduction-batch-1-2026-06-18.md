@@ -1,6 +1,6 @@
 # Surface reduction batch 1 — upstream forks + McpKit gate — 2026-06-18
 
-**Status:** registry merged [#170](https://github.com/<REDACTED>/phenotype-registry/pull/170) (2026-06-18) — `projects/*.json` stubs + disposition-index `sr-*` rows. **`gh repo archive` ×3 verified 2026-06-19** (Planify, portage, phenotype-ops-mcp already archived).
+**Status:** registry merged [#170](https://github.com/KooshaPari/phenotype-registry/pull/170) (2026-06-18) — `projects/*.json` stubs + disposition-index `sr-*` rows. **`gh repo archive` ×3 verified 2026-06-19** (Planify, portage, phenotype-ops-mcp already archived).
 
 **Successor:** [surface-reduction-batch-2-2026-06-18.md](./surface-reduction-batch-2-2026-06-18.md) (stub).
 
@@ -31,9 +31,9 @@
 
 | Consumer | Status | PR |
 |----------|--------|-----|
-| AgilePlus | **repointed** | [#763](https://github.com/<REDACTED>/AgilePlus/pull/763) merged |
-| PhenoPlugins | **repointed** | [#104](https://github.com/<REDACTED>/PhenoPlugins/pull/104) merged |
-| phenotype-gfx | **repointed** | [#13](https://github.com/<REDACTED>/phenotype-gfx/pull/13) |
-| Civis | **repointed** | [#581](https://github.com/<REDACTED>/Civis/pull/581) |
-| phenotype-teamcomm | **verified-clean** | [#2](https://github.com/<REDACTED>/phenotype-teamcomm/pull/2) manifest doc |
-| phenotype-go-sdk | **verified-clean** | manifest scan 2026-06-19; [GATEWAY_VENDOR_PINS.md](https://github.com/<REDACTED>/phenotype-go-sdk/blob/main/docs/GATEWAY_VENDOR_PINS.md) H10 |
+| AgilePlus | **repointed** | [#763](https://github.com/KooshaPari/AgilePlus/pull/763) merged |
+| PhenoPlugins | **repointed** | [#104](https://github.com/KooshaPari/PhenoPlugins/pull/104) merged |
+| phenotype-gfx | **repointed** | [#13](https://github.com/KooshaPari/phenotype-gfx/pull/13) |
+| Civis | **repointed** | [#581](https://github.com/KooshaPari/Civis/pull/581) |
+| phenotype-teamcomm | **verified-clean** | [#2](https://github.com/KooshaPari/phenotype-teamcomm/pull/2) manifest doc |
+| phenotype-go-sdk | **verified-clean** | manifest scan 2026-06-19; [GATEWAY_VENDOR_PINS.md](https://github.com/KooshaPari/phenotype-go-sdk/blob/main/docs/GATEWAY_VENDOR_PINS.md) H10 |

@@ -85,7 +85,7 @@ version = "0.3.10"
 edition = "2021"
 authors = ["<REDACTED> <<REDACTED>@phenotype.space>"]
 license = "MIT OR Apache-2.0"
-repository = "https://github.com/KooshaPari/substrate"
+repository = "https://github.com/KooshaPari/PhenoShared"
 rust-version = "1.80"
 
 [workspace.dependencies]

@@ -48,9 +48,9 @@ dev = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/<REDACTED>/phenotype-infrakit"
-Repository = "https://github.com/<REDACTED>/phenotype-infrakit.git"
-Issues = "https://github.com/<REDACTED>/phenotype-infrakit/issues"
+Homepage = "https://github.com/KooshaPari/phenotype-infrakit"
+Repository = "https://github.com/KooshaPari/phenotype-infrakit.git"
+Issues = "https://github.com/KooshaPari/phenotype-infrakit/issues"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/pheno_llm"]

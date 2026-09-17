@@ -1,8 +1,8 @@
 # Threat Model — BytePort (STRIDE-per-component)
 
-> **Repository:** [`<REDACTED>/BytePort`](https://github.com/<REDACTED>/BytePort)
+> **Repository:** [`<REDACTED>/BytePort`](https://github.com/KooshaPari/BytePort)
 > **Source audit:** [`FLEET-AUDIT-REPORT.md`](../../audits/FLEET-AUDIT-REPORT.md) — S7 (Threat model) was the #1 P0 gap (priority 42; BytePort at score 0).
-> **Source template:** [`THREAT-MODEL-TEMPLATE.md`](https://github.com/<REDACTED>/phenotype/blob/main/audits/THREAT-MODEL-TEMPLATE.md) v1.0.
+> **Source template:** [`THREAT-MODEL-TEMPLATE.md`](https://github.com/KooshaPari/phenotype/blob/main/audits/THREAT-MODEL-TEMPLATE.md) v1.0.
 > **Method:** STRIDE per-component. Each component in this system gets a row; each STRIDE category is a column.
 > **Last reviewed:** 2026-06-16 — initial instantiation (lifts S7 from 0 → 2, "wired").
 > **Owner:** BytePort security / platform maintainers (see CODEOWNERS once added).

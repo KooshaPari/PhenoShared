@@ -2,7 +2,7 @@
 
 **Date:** 2026-06-17  
 **Disposition step:** HexaKit DISPOSITION #23 — Wave D reroute (ResilienceKit KEEP_ARCHIVED)  
-**Canonical repo:** https://github.com/<REDACTED>/phenoShared
+**Canonical repo:** https://github.com/KooshaPari/phenoShared
 
 ## What changed
 
@@ -15,7 +15,7 @@
 1. Depend on `phenotype-http-client-core` from phenoShared, not HexaKit or ResilienceKit:
 
 ```toml
-phenotype-http-client-core = { git = "https://github.com/<REDACTED>/phenoShared", branch = "main" }
+phenotype-http-client-core = { git = "https://github.com/KooshaPari/phenoShared", branch = "main" }
 ```
 
 2. See DOMAIN_ROLES and disposition-index row id **23**.

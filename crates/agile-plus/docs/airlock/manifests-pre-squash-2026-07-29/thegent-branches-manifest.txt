@@ -478,7 +478,7 @@ Format: <branch> | <unique_commit_count> | <tip_oid> | <tip_date> | <tip_subject
   NOVEL(874) | origin/airlock-recovery/refactor/monolith-removal | a9839f1e2bb684d533805be3a21da5ef4610708a | 2026-03-01 | refactor: remove migrated monolith source dirs, add sys.modules shim aliases
   NOVEL(875) | origin/airlock-recovery/refactor/perf-robustness | d2dfd58caff7068f6e16cda0ed926a088c37b807 | 2026-03-01 | robustness: replace bare except blocks with typed exception wrapping
   NOVEL(880) | origin/airlock-recovery/refactor/uv-workspace | 891980d44e4934cec5d294e30b263fdb89c9c9ce | 2026-03-01 | fix: correct malformed requires-python in thegent-cli pyproject.toml
-  NOVEL(867) | origin/airlock-recovery/sync/local-main-push | fd33e0eb0ad978d69dd25b802946fb7f74b09f4e | 2026-03-01 | Merge branch 'main' of https://github.com/<REDACTED>/thegent
+  NOVEL(867) | origin/airlock-recovery/sync/local-main-push | fd33e0eb0ad978d69dd25b802946fb7f74b09f4e | 2026-03-01 | Merge branch 'main' of https://github.com/KooshaPari/thegent
   NOVEL(26) | origin/archive/thegent-sharecli/chore/s7-threat-model-tick22c | 00b4fc5eec9c7f1ff51d73c7e79011a52c6455ec | 2026-06-20 | chore: tier-0 hygiene snapshot 2026-06-20
   NOVEL(8) | origin/archive/thegent-sharecli/convoy/agileplus-kilo-specs-thegent-sharecli/6893f09f/gt/coral/fd9cc38a | 9a5971d89dcd9acad649891752e47a05ca054b83 | 2026-03-31 | docs: add AgilePlus methodology spec
   NOVEL(9) | origin/archive/thegent-sharecli/convoy/agileplus-kilo-specs-thegent-sharecli/6893f09f/gt/polecat-34/d5322733 | 41f0f1f498c1869e36c6f5835d84424688febcd4 | 2026-03-31 | docs: add Kilo Gastown methodology spec

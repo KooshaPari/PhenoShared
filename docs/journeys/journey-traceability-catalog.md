@@ -2,7 +2,7 @@
 
 **Snapshot date:** 2026-06-05
 **Canonical standard:** [phenotype-infra `journey-traceability-standard.md`](https://raw.githubusercontent.com/<REDACTED>/phenotype-infra/main/docs/governance/journey-traceability-standard.md)
-**Originating PR:** [phenodocs#168](https://github.com/<REDACTED>/phenodocs/pull/168)
+**Originating PR:** [phenodocs#168](https://github.com/KooshaPari/phenodocs/pull/168)
 
 This page tracks, repo-by-repo, which Phenotype-org repositories have adopted the
 **spec → code → test → journey → gate** traceability pattern. The columns are:
@@ -64,5 +64,5 @@ A repo is considered **fully adopted** when all four columns are `yes` (or a pos
 ## Related Standards
 
 - **Standard:** https://raw.githubusercontent.com/<REDACTED>/phenotype-infra/main/docs/governance/journey-traceability-standard.md
-- **Reference PR:** https://github.com/<REDACTED>/phenodocs/pull/168
+- **Reference PR:** https://github.com/KooshaPari/phenodocs/pull/168
 - **Internal pointer:** `docs/operations/journey-traceability.md` (PhenoHandbook's own copy of the standard)

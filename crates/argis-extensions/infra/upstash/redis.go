@@ -10,7 +10,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/<REDACTED>/bifrost-extensions/infra/redis"
+	"github.com/KooshaPari/bifrost-extensions/infra/redis"
 )
 
 // RedisConfig configures the Upstash Redis client

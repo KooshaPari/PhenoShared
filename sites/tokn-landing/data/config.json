@@ -16,9 +16,9 @@
     "Native Rust binary, no runtime"
   ],
   "links": {
-    "github": "https://github.com/<REDACTED>/Tokn",
+    "github": "https://github.com/KooshaPari/Tokn",
     "docs": "https://phenotype.space/tokn/docs",
-    "releases": "https://github.com/<REDACTED>/Tokn/releases"
+    "releases": "https://github.com/KooshaPari/Tokn/releases"
   },
   "badges": [
     "https://img.shields.io/github/actions/workflow/status/<REDACTED>/Tokn/ci.yml?branch=main&label=build",

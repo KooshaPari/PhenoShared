@@ -39,14 +39,14 @@
   "prs": {
     "helios-cli": {
       "number": 599,
-      "url": "https://github.com/<REDACTED>/helios-cli/pull/599",
+      "url": "https://github.com/KooshaPari/helios-cli/pull/599",
       "branch": "chore/l5-130-helioscope-stale-docs-2026-06-21",
       "commit": "a0520cee34a0531579fe86c8793ae8a84c78e805",
       "diffstat": "AGENTS.md | 2 +- | CLAUDE.md | 4 ++-- | README.md | 6 +++++- | 3 files changed, 8 insertions(+), 4 deletions(-)"
     },
     "phenotype-registry": {
       "number": 340,
-      "url": "https://github.com/<REDACTED>/phenotype-registry/pull/340",
+      "url": "https://github.com/KooshaPari/phenotype-registry/pull/340",
       "branch": "chore/l5-130-helioscope-stale-registry-2026-06-21",
       "commit": "e667c24b23b78afc4b59781d062fb5e281c770b7",
       "diffstat": "docs/boundary/helioscope.md | 34 +++++++++++++++++++++------------- | docs/intent/helioscope.md | 17 +++++++++++++---- | scripts/resolve-collision.py | 6 ++++-- | 3 files changed, 38 insertions(+), 19 deletions(-)"

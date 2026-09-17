@@ -7,10 +7,10 @@ This directory holds governance and policy documents specific to the
 
 The canonical fleet governance is maintained in the Phenotype monorepo:
 
-- [`docs/governance/background_agent_policy.md`](https://github.com/<REDACTED>/phenotype/blob/main/docs/governance/background_agent_policy.md) —
+- [`docs/governance/background_agent_policy.md`](https://github.com/KooshaPari/phenotype/blob/main/docs/governance/background_agent_policy.md) —
   Background-agent dispatch policy, failure-handling expectations, and
   fleet composition rules.
-- [`docs/governance/`](https://github.com/<REDACTED>/phenotype/tree/main/docs/governance) —
+- [`docs/governance/`](https://github.com/KooshaPari/phenotype/tree/main/docs/governance) —
   Full governance directory (SSOT for all cross-repo policies).
 
 ## Template-specific governance

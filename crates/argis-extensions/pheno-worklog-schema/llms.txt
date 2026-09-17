@@ -22,7 +22,7 @@
 
 ## Source
 
-- [Repo](https://github.com/<REDACTED>/phenotype-apps/tree/main/pheno-worklog-schema): governance + meta-bundle path in the monorepo
+- [Repo](https://github.com/KooshaPari/phenotype-apps/tree/main/pheno-worklog-schema): governance + meta-bundle path in the monorepo
 - [src/](src/pheno_worklog_schema/): executable Python source
 
 ## Examples

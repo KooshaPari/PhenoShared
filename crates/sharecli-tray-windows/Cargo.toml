@@ -5,7 +5,7 @@ edition = "2021"
 description = "Native system-tray client for sharecli (FR-007 AC-007.51/AC-007.52/AC-007.54): tray-icon NotificationIcon + IPC sidecar spawn + dashboard link"
 license = "MIT"
 authors = ["Phenotype"]
-repository = "https://github.com/<REDACTED>/sharecli"
+repository = "https://github.com/KooshaPari/sharecli"
 
 [lib]
 name = "sharecli_tray_windows"

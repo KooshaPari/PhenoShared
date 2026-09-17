@@ -20,10 +20,10 @@ info:
     Source: `crates/psub-gateway/src/lib.rs` (router built at lines 257–298).
   contact:
     name: substrate maintainers
-    url: https://github.com/<REDACTED>/substrate
+    url: https://github.com/KooshaPari/substrate
   license:
     name: Apache-2.0 OR MIT
-    url: https://github.com/<REDACTED>/substrate/blob/main/LICENSE-APACHE
+    url: https://github.com/KooshaPari/substrate/blob/main/LICENSE-APACHE
 
 servers:
   - url: http://127.0.0.1:8080

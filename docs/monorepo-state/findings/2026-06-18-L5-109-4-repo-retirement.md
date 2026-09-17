@@ -14,10 +14,10 @@ Combined intent: **migrate all 4 in a single wave, ensure full integration, arch
 
 | # | Source repo (size) | Target repo | Target path | PR | Status |
 |---|---|---|---|---|---|
-| 1 | `<REDACTED>/dagctl` (62 KB, archived) | `<REDACTED>/phenodag` | (already merged in earlier waves) + `VERSION` + `CHANGELOG` + `docs/dagctl-absorption.md` | [phenodag#13](https://github.com/<REDACTED>/phenodag/pull/13) | OPEN (+93) |
-| 2 | `<REDACTED>/kwality` (6.6 MB, archived) | `<REDACTED>/phenotype-tooling` | `docs/absorbed-from-kwality/` (extends PR #157) | [phenotype-tooling#158](https://github.com/<REDACTED>/phenotype-tooling/pull/158) | OPEN (+29,422, 93 files) |
-| 3 | `<REDACTED>/phenotype-auth-ts` (16 KB, archived) | `<REDACTED>/AuthKit` | `typescript/packages/auth-ts/` (polyglot SDK, npm workspace) | [AuthKit#120](https://github.com/<REDACTED>/AuthKit/pull/120) | OPEN (+1,901) |
-| 4 | `<REDACTED>/dinoforge-packs` (744 KB, archived) | `<REDACTED>/Dino` | `packs/community-contributions/dinoforge-packs-mirror/` + `packs/example-balance/` | [Dino#297](https://github.com/<REDACTED>/Dino/pull/297) | OPEN (+2,329) |
+| 1 | `<REDACTED>/dagctl` (62 KB, archived) | `<REDACTED>/phenodag` | (already merged in earlier waves) + `VERSION` + `CHANGELOG` + `docs/dagctl-absorption.md` | [phenodag#13](https://github.com/KooshaPari/phenodag/pull/13) | OPEN (+93) |
+| 2 | `<REDACTED>/kwality` (6.6 MB, archived) | `<REDACTED>/phenotype-tooling` | `docs/absorbed-from-kwality/` (extends PR #157) | [phenotype-tooling#158](https://github.com/KooshaPari/phenotype-tooling/pull/158) | OPEN (+29,422, 93 files) |
+| 3 | `<REDACTED>/phenotype-auth-ts` (16 KB, archived) | `<REDACTED>/AuthKit` | `typescript/packages/auth-ts/` (polyglot SDK, npm workspace) | [AuthKit#120](https://github.com/KooshaPari/AuthKit/pull/120) | OPEN (+1,901) |
+| 4 | `<REDACTED>/dinoforge-packs` (744 KB, archived) | `<REDACTED>/Dino` | `packs/community-contributions/dinoforge-packs-mirror/` + `packs/example-balance/` | [Dino#297](https://github.com/KooshaPari/Dino/pull/297) | OPEN (+2,329) |
 
 ## Source archive status (verified 2026-06-18)
 
@@ -32,10 +32,10 @@ The active `gh` token has scopes `'gist', 'read:org', 'repo', 'workflow'` — **
 
 | Repo | URL |
 |---|---|
-| `<REDACTED>/dagctl` | <https://github.com/<REDACTED>/dagctl/settings#dangerZone> |
-| `<REDACTED>/kwality` | <https://github.com/<REDACTED>/kwality/settings#dangerZone> |
-| `<REDACTED>/phenotype-auth-ts` | <https://github.com/<REDACTED>/phenotype-auth-ts/settings#dangerZone> |
-| `<REDACTED>/dinoforge-packs` | <https://github.com/<REDACTED>/dinoforge-packs/settings#dangerZone> |
+| `<REDACTED>/dagctl` | <https://github.com/KooshaPari/dagctl/settings#dangerZone> |
+| `<REDACTED>/kwality` | <https://github.com/KooshaPari/kwality/settings#dangerZone> |
+| `<REDACTED>/phenotype-auth-ts` | <https://github.com/KooshaPari/phenotype-auth-ts/settings#dangerZone> |
+| `<REDACTED>/dinoforge-packs` | <https://github.com/KooshaPari/dinoforge-packs/settings#dangerZone> |
 
 Steps: Settings → General → "Danger Zone" → "Delete this repository" → type the repo name to confirm.
 

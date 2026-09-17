@@ -30,7 +30,7 @@ brew install <REDACTED>/tap/guardis
 curl -sSL https://install.guardis.io | sh
 
 # Via Go (latest stable)
-go install github.com/<REDACTED>/guardis/cmd/guardis@latest
+go install github.com/KooshaPari/guardis/cmd/guardis@latest
 
 # Verify installation
 guardis version

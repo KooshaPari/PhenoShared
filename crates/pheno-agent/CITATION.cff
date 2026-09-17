@@ -5,6 +5,6 @@ authors:
   - family-names: "Pari"
     given-names: "Koosha"
     affiliation: "Phenotype"
-repository-code: "https://github.com/<REDACTED>/PhenoAgent"
+repository-code: "https://github.com/KooshaPari/PhenoAgent"
 url: "https://phenotype.space"
 license: "MIT OR Apache-2.0"

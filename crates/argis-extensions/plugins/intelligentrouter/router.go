@@ -10,10 +10,10 @@ import (
 	"github.com/google/uuid"
 	"github.com/maximhq/bifrost/core/schemas"
 
-	"github.com/<REDACTED>/bifrost-extensions/costengine"
-	"github.com/<REDACTED>/bifrost-extensions/db/sqlc"
-	"github.com/<REDACTED>/bifrost-extensions/plugins/learning"
-	"github.com/<REDACTED>/bifrost-extensions/slm"
+	"github.com/KooshaPari/bifrost-extensions/costengine"
+	"github.com/KooshaPari/bifrost-extensions/db/sqlc"
+	"github.com/KooshaPari/bifrost-extensions/plugins/learning"
+	"github.com/KooshaPari/bifrost-extensions/slm"
 )
 
 // TaskType represents the type of task being routed

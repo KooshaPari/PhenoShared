@@ -289,12 +289,12 @@
 | 20:36 | Archive `Dmouse92/pheno` | OK | (Dmouse92 ADR-012 absorbed in 1 phenotype-config PR) |
 | 20:36 | Archive `Dmouse92/AgilePlus` + 16 others (PhenoCompose, PhenoPlugins, PhenoProc, HeliosCLI, Pyron, HexaKit, Tracera, Civis, OmniRoute, KWatch, phenotype-ops, phenotype-otel, Nanovms, PhenoContracts, phenotype-teamcomm, forgecode, phenodocs) | OK | (all empty/bit-identical/KP-archived) |
 | 20:37 | `gh auth switch --user <REDACTED>` | OK | (back to KP for PR work) |
-| 20:40 | Push `feat/port-cost-budget-quota-audit-tiers-2026-06-17` to `pheno-mcp-router` | OK | PR #1: https://github.com/<REDACTED>/pheno-mcp-router/pull/1 |
-| 20:40 | Push `feat/llama-adapter-2026-06-17` to `pheno-mcp-router` | OK | PR #2: https://github.com/<REDACTED>/pheno-mcp-router/pull/2 |
-| 20:40 | Push `feat/openai-compat-adapter-2026-06-17` to `pheno-mcp-router` | OK | PR #3: https://github.com/<REDACTED>/pheno-mcp-router/pull/3 |
-| 20:41 | Push `feat/l5-104-canonical-markers-2026-06-17` to `phenotype-config` | OK | PR #1: https://github.com/<REDACTED>/phenotype-config/pull/1 |
-| 20:41 | Push `feat/llama-cpp-devops-2026-06-17` to `phenotype-ops` | OK | PR #2: https://github.com/<REDACTED>/phenotype-ops/pull/2 |
-| 20:45 | Push `chore/w1-1-cheap-llm-mcp-deprecation-note-2026-06-15` to `dispatch-mcp` | OK | PR #1: https://github.com/<REDACTED>/dispatch-mcp/pull/1 |
+| 20:40 | Push `feat/port-cost-budget-quota-audit-tiers-2026-06-17` to `pheno-mcp-router` | OK | PR #1: https://github.com/KooshaPari/pheno-mcp-router/pull/1 |
+| 20:40 | Push `feat/llama-adapter-2026-06-17` to `pheno-mcp-router` | OK | PR #2: https://github.com/KooshaPari/pheno-mcp-router/pull/2 |
+| 20:40 | Push `feat/openai-compat-adapter-2026-06-17` to `pheno-mcp-router` | OK | PR #3: https://github.com/KooshaPari/pheno-mcp-router/pull/3 |
+| 20:41 | Push `feat/l5-104-canonical-markers-2026-06-17` to `phenotype-config` | OK | PR #1: https://github.com/KooshaPari/phenotype-config/pull/1 |
+| 20:41 | Push `feat/llama-cpp-devops-2026-06-17` to `phenotype-ops` | OK | PR #2: https://github.com/KooshaPari/phenotype-ops/pull/2 |
+| 20:45 | Push `chore/w1-1-cheap-llm-mcp-deprecation-note-2026-06-15` to `dispatch-mcp` | OK | PR #1: https://github.com/KooshaPari/dispatch-mcp/pull/1 |
 | 20:50 | Verify all 6 PRs created + branches on origin | OK | 6/6 PRs OPEN, 6/6 branches on `origin` |
 | 20:55 | Commit audit doc + governance refresh | OK | This commit |
 | TBD | Repoint `phenotype-config-core/CANONICAL.md` from `phenoShared` to `phenotype-config` on KP/pheno | TODO | separate PR to `<REDACTED>/pheno` |
@@ -309,8 +309,8 @@
 
 | # | Repo | Cat | Action | Target | Owner | PR |
 |---|---|---|---|---|---|---|
-| 1 | dispatch-mcp | B (unique W2-1) | Port 6 modules + 2 adapters + 1 doc + 2 docker to substrate | `pheno-mcp-router` + `phenotype-ops` | subagent E | [dispatch-mcp#1](https://github.com/<REDACTED>/dispatch-mcp/pull/1) (deprecation doc) + [pheno-mcp-router#1-3](https://github.com/<REDACTED>/pheno-mcp-router/pulls) + [phenotype-ops#2](https://github.com/<REDACTED>/phenotype-ops/pull/2) |
-| 2 | pheno | B (unique ADR-012) | Cherry-pick 2 commits + port `docs/slsa.md` + re-point markers | `phenotype-config` + `Conft` | subagent F | [phenotype-config#1](https://github.com/<REDACTED>/phenotype-config/pull/1) + pending repoint PR to `pheno` |
+| 1 | dispatch-mcp | B (unique W2-1) | Port 6 modules + 2 adapters + 1 doc + 2 docker to substrate | `pheno-mcp-router` + `phenotype-ops` | subagent E | [dispatch-mcp#1](https://github.com/KooshaPari/dispatch-mcp/pull/1) (deprecation doc) + [pheno-mcp-router#1-3](https://github.com/KooshaPari/pheno-mcp-router/pulls) + [phenotype-ops#2](https://github.com/KooshaPari/phenotype-ops/pull/2) |
+| 2 | pheno | B (unique ADR-012) | Cherry-pick 2 commits + port `docs/slsa.md` + re-point markers | `phenotype-config` + `Conft` | subagent F | [phenotype-config#1](https://github.com/KooshaPari/phenotype-config/pull/1) + pending repoint PR to `pheno` |
 | 3 | AgilePlus | B (1 unique) | Verify `2a8cb6d` cherry-pick | `AgilePlus` | self | (deferred — see §5) |
 | 4 | phenodocs | A (stale) | Archive DM92 | — | self | archived |
 | 5 | forgecode | C (mirror) | Archive DM92 | — | self | archived |

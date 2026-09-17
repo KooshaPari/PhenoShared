@@ -70,7 +70,7 @@ title: Full-turn Next 50 (DAG)
 | T17 | B | Research **changesets** vs **git-cliff**; one-paragraph recommendation in planning note. | T12 |
 | T18 | C | **`docs/views/commits`:** sketch **CI job** to refresh `commit-log.json` (issue or session artifact). | T13 |
 | T19 | D | **Lint:** run `bun run lint` on PR when only `docs/**/*.md` touched (workflow or doc). | T14 |
-| T20 | E | **Cross-link** [AgilePlus](https://github.com/<REDACTED>/AgilePlus) `full-turn-delivery` one sentence (org norm). | T15 |
+| T20 | E | **Cross-link** [AgilePlus](https://github.com/KooshaPari/AgilePlus) `full-turn-delivery` one sentence (org norm). | T15 |
 
 ## W5 — Automation + federation
 

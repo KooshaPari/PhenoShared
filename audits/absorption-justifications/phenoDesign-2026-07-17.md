@@ -67,7 +67,7 @@ required before transfer:
 ```bash
 # Pre-absorption snapshot
 gh repo archive <REDACTED>/phenoDesign  # archive after absorption PR merges
-git clone https://github.com/<REDACTED>/phenoDesign.git /tmp/phenoDesign-pre-absorption
+git clone https://github.com/KooshaPari/phenoDesign.git /tmp/phenoDesign-pre-absorption
 ```
 
 **Restore posture:** Source repo will be archived after the absorption PR merges.

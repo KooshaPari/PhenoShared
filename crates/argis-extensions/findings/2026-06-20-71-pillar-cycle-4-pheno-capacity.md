@@ -140,7 +140,7 @@
 | Pillar | Score | Evidence |
 |---|---:|---|
 | L64 README quality | 3 | `README.md` (7,295 bytes — substantial); badges, scope, why, when to use, when NOT to use, examples. |
-| L65 ADR tracking | 3 | `Cargo.toml:14-15` `repository = "https://github.com/<REDACTED>/pheno-capacity"`; ADR-035A + L5-105 cited in `AGENTS.md` and `docs/SPEC.md`. |
+| L65 ADR tracking | 3 | `Cargo.toml:14-15` `repository = "https://github.com/KooshaPari/pheno-capacity"`; ADR-035A + L5-105 cited in `AGENTS.md` and `docs/SPEC.md`. |
 | L66 SSOT conventions | 3 | This IS the SSOT for LLM VRAM math per ADR-035A + L5-105; HwLedger's Streamlit consumes it. |
 | L67 API reference docs | 3 | `docs/SPEC.md` is the formal API contract; `docs/methodology.md` is the formula/citation reference; `llms.txt` is LLM-indexable; module docstrings are exhaustive. |
 | L68 Code-level documentation | 3 | Module-level `//!` on all 5 files; `///` on all public items; inline citations to papers in `src/math.rs:1-10` and `src/attention.rs:1-16`. |

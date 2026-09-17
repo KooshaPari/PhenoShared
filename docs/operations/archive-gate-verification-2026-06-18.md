@@ -41,7 +41,7 @@ Per `BOUNDARY_OWNERS.md` 5-check gate.
 | Check | Result |
 |-------|--------|
 | Fleet chokepoints closed | phenotype-gfx, Civis, phenotype-teamcomm, phenotype-go-sdk → verified-clean; TestingKit#8 merged |
-| Org manifest scan | No external `github.com/<REDACTED>/pheno.git` deps outside pheno self + audit docs |
+| Org manifest scan | No external `github.com/KooshaPari/pheno.git` deps outside pheno self + audit docs |
 | PhenoCompose | verified-clean (in-repo path deps) |
 | Archive action | `gh repo archive <REDACTED>/pheno` 2026-06-19 |
 
@@ -49,7 +49,7 @@ Per `BOUNDARY_OWNERS.md` 5-check gate.
 
 | ID | Item | Verdict | Evidence |
 |----|------|---------|----------|
-| ST-01 | BytePort #201 | **UNCLOSABLE** | Repo `<REDACTED>/BytePort` archived read-only (2026-06-18); canonical → `phenotype-tooling` `crates/byteport`. PR [#201](https://github.com/<REDACTED>/BytePort/pull/201) remains OPEN stale — **cannot close or merge**: GitHub GraphQL `closePullRequest` returns locked-issue / read-only archive error. **Action:** leave open; track as absorbed stale tail; do not block archive gates. See [local-clone-hygiene](../operations/local-clone-hygiene-2026-06-18.md). |
+| ST-01 | BytePort #201 | **UNCLOSABLE** | Repo `<REDACTED>/BytePort` archived read-only (2026-06-18); canonical → `phenotype-tooling` `crates/byteport`. PR [#201](https://github.com/KooshaPari/BytePort/pull/201) remains OPEN stale — **cannot close or merge**: GitHub GraphQL `closePullRequest` returns locked-issue / read-only archive error. **Action:** leave open; track as absorbed stale tail; do not block archive gates. See [local-clone-hygiene](../operations/local-clone-hygiene-2026-06-18.md). |
 | ST-02 | phenotype-omlx #22 | **CLOSE BLOCKED** | Repo archived read-only; ADR-ECO-008 triage: scope exceeds docs/benchmark-only; CI blocked |
 | ST-03 | gw-phenolang | **DONE** | phenoUtils#66 index canonical; [gw-phenolang-branch-index.md](../disposition/gw-phenolang-branch-index.md); full branch sweep 2026-06-19 (main-only) |
 | ST-04 | AuthKit X-09 | **ARCHIVED** | 5-check pass; Tracera/thegent repointed; archived 2026-06-18 |
@@ -78,7 +78,7 @@ Per `BOUNDARY_OWNERS.md` 5-check gate.
 | 3. Outbound consumers | **PASS** — 0 production git deps on `<REDACTED>/phenoShared` (gh org Cargo.toml/go.mod scan 2026-06-19); 0 go.mod deps |
 | 4. Scaffold hooks | **PASS** — terminal owners carry slice crates; generic `Contract` → phenotype-rust-sdk @ `cbf1ccf` |
 | 5. Unique slice | **PASS** — no fleet interim pins remain |
-| HexaKit wave 5b | **Done** — [HexaKit#278](https://github.com/<REDACTED>/HexaKit/pull/278) @ `d83d1ca`; fleet drain PRs PO#173, ResilienceKit#4, python-sdk#27 |
+| HexaKit wave 5b | **Done** — [HexaKit#278](https://github.com/KooshaPari/HexaKit/pull/278) @ `d83d1ca`; fleet drain PRs PO#173, ResilienceKit#4, python-sdk#27 |
 | Delete action | Repo **deleted** (404) — P4 gate pass; `gate-phenoshared` `fsm: done` 2026-06-19; `gh repo delete <REDACTED>/phenoShared` |
 
 ---

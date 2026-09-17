@@ -1,6 +1,6 @@
 # phenotype-voxel
 
-Compatibility crate for fleet consumers migrating off the archived [`<REDACTED>/phenotype-voxel`](https://github.com/<REDACTED>/phenotype-voxel) repository.
+Compatibility crate for fleet consumers migrating off the archived [`<REDACTED>/phenotype-voxel`](https://github.com/KooshaPari/phenotype-voxel) repository.
 
 The canonical implementation now lives in [`phenotype_gfx::voxel`] within the parent project, following [ADR-004](./docs/ADR-004-voxel-migration.md).
 

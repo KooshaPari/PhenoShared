@@ -20,76 +20,76 @@
 
 | Local Repo | Remote URL | Status | Archived | Visibility |
 |-----------|-----------|--------|----------|-----------|
-| agent-user-status | https://github.com/<REDACTED>/agent-user-status | ✅ Synced | False | 🔒 Private |
-| agentapi-plusplus | https://github.com/<REDACTED>/agentapi-plusplus | ✅ Synced | False | 🌐 Public |
-| AgentMCP | https://github.com/<REDACTED>/AgentMCP.git | ⏳ Unverified | N/A | N/A |
-| AgilePlus | https://github.com/<REDACTED>/AgilePlus | ✅ Synced | False | 🌐 Public |
-| agslag-docs | https://github.com/<REDACTED>/agslag-docs | ❌ Archived | True | 🌐 Public |
-| AppGen | https://github.com/<REDACTED>/AppGen | ❌ Archived | True | 🌐 Public |
-| argis-extensions | https://github.com/<REDACTED>/argis-extensions | ✅ Synced | False | 🌐 Public |
+| agent-user-status | https://github.com/KooshaPari/agent-user-status | ✅ Synced | False | 🔒 Private |
+| agentapi-plusplus | https://github.com/KooshaPari/agentapi-plusplus | ✅ Synced | False | 🌐 Public |
+| AgentMCP | https://github.com/KooshaPari/AgentMCP.git | ⏳ Unverified | N/A | N/A |
+| AgilePlus | https://github.com/KooshaPari/AgilePlus | ✅ Synced | False | 🌐 Public |
+| agslag-docs | https://github.com/KooshaPari/agslag-docs | ❌ Archived | True | 🌐 Public |
+| AppGen | https://github.com/KooshaPari/AppGen | ❌ Archived | True | 🌐 Public |
+| argis-extensions | https://github.com/KooshaPari/argis-extensions | ✅ Synced | False | 🌐 Public |
 | artifacts | git@github.com:<REDACTED>/PhenoKits.git | ⏳ Unverified | N/A | N/A |
-| atoms.tech | https://github.com/<REDACTED>/atoms.tech | ❌ Archived | True | 🔒 Private |
-| AtomsBot | https://github.com/<REDACTED>/AtomsBot | ❌ Archived | True | 🔒 Private |
-| AuthKit | https://github.com/<REDACTED>/AuthKit | ✅ Synced | False | 🌐 Public |
-| bare-cua | https://github.com/<REDACTED>/bare-cua.git | ⏳ Unverified | N/A | N/A |
-| BytePort | https://github.com/<REDACTED>/BytePort | ✅ Synced | False | 🌐 Public |
-| chatta | https://github.com/<REDACTED>/chatta | ❌ Archived | True | 🌐 Public |
+| atoms.tech | https://github.com/KooshaPari/atoms.tech | ❌ Archived | True | 🔒 Private |
+| AtomsBot | https://github.com/KooshaPari/AtomsBot | ❌ Archived | True | 🔒 Private |
+| AuthKit | https://github.com/KooshaPari/AuthKit | ✅ Synced | False | 🌐 Public |
+| bare-cua | https://github.com/KooshaPari/bare-cua.git | ⏳ Unverified | N/A | N/A |
+| BytePort | https://github.com/KooshaPari/BytePort | ✅ Synced | False | 🌐 Public |
+| chatta | https://github.com/KooshaPari/chatta | ❌ Archived | True | 🌐 Public |
 | cheap-llm-mcp | (not on GitHub) | ⚠️ No Remote | N/A | N/A |
-| Civis | https://github.com/<REDACTED>/Civis | ✅ Synced | False | 🔒 Private |
-| cliproxyapi-plusplus | https://github.com/<REDACTED>/cliproxyapi-plusplus | ✅ Synced | False | 🌐 Public |
+| Civis | https://github.com/KooshaPari/Civis | ✅ Synced | False | 🔒 Private |
+| cliproxyapi-plusplus | https://github.com/KooshaPari/cliproxyapi-plusplus | ✅ Synced | False | 🌐 Public |
 | cloud | git@github.com:<REDACTED>/cloud.git | ⏳ Unverified | N/A | N/A |
-| Conft | https://github.com/<REDACTED>/Conft | ✅ Synced | False | 🌐 Public |
-| DataKit | https://github.com/<REDACTED>/DataKit | ✅ Synced | False | 🌐 Public |
-| Dino | https://github.com/<REDACTED>/Dino | ✅ Synced | False | 🌐 Public |
+| Conft | https://github.com/KooshaPari/Conft | ✅ Synced | False | 🌐 Public |
+| DataKit | https://github.com/KooshaPari/DataKit | ✅ Synced | False | 🌐 Public |
+| Dino | https://github.com/KooshaPari/Dino | ✅ Synced | False | 🌐 Public |
 | Eidolon | (not on GitHub) | ⚠️ No Remote | N/A | N/A |
-| FocalPoint | https://github.com/<REDACTED>/FocalPoint.git | ⏳ Unverified | N/A | N/A |
-| heliosApp | https://github.com/<REDACTED>/heliosApp | ✅ Synced | False | 🌐 Public |
-| HeliosLab | https://github.com/<REDACTED>/HeliosLab | ✅ Synced | False | 🌐 Public |
-| hwLedger | https://github.com/<REDACTED>/hwLedger | ✅ Synced | False | 🌐 Public |
-| KDesktopVirt | https://github.com/<REDACTED>/KDesktopVirt | ✅ Synced | False | 🔒 Private |
-| KlipDot | https://github.com/<REDACTED>/KlipDot | ❌ Archived | True | 🌐 Public |
-| kmobile | https://github.com/<REDACTED>/kmobile | ❌ Archived | True | 🌐 Public |
-| kwality | https://github.com/<REDACTED>/kwality | ❌ Archived | True | 🌐 Public |
-| localbase3 | https://github.com/<REDACTED>/localbase3 | ❌ Archived | True | 🌐 Public |
-| McpKit | https://github.com/<REDACTED>/McpKit | ✅ Synced | False | 🌐 Public |
-| netweave-final2 | https://github.com/<REDACTED>/netweave-final2.git | ⏳ Unverified | N/A | N/A |
+| FocalPoint | https://github.com/KooshaPari/FocalPoint.git | ⏳ Unverified | N/A | N/A |
+| heliosApp | https://github.com/KooshaPari/heliosApp | ✅ Synced | False | 🌐 Public |
+| HeliosLab | https://github.com/KooshaPari/HeliosLab | ✅ Synced | False | 🌐 Public |
+| hwLedger | https://github.com/KooshaPari/hwLedger | ✅ Synced | False | 🌐 Public |
+| KDesktopVirt | https://github.com/KooshaPari/KDesktopVirt | ✅ Synced | False | 🔒 Private |
+| KlipDot | https://github.com/KooshaPari/KlipDot | ❌ Archived | True | 🌐 Public |
+| kmobile | https://github.com/KooshaPari/kmobile | ❌ Archived | True | 🌐 Public |
+| kwality | https://github.com/KooshaPari/kwality | ❌ Archived | True | 🌐 Public |
+| localbase3 | https://github.com/KooshaPari/localbase3 | ❌ Archived | True | 🌐 Public |
+| McpKit | https://github.com/KooshaPari/McpKit | ✅ Synced | False | 🌐 Public |
+| netweave-final2 | https://github.com/KooshaPari/netweave-final2.git | ⏳ Unverified | N/A | N/A |
 | org-github | git@github.com:<REDACTED>/.github.git | ⏳ Unverified | N/A | N/A |
 | Paginary | (not on GitHub) | ⚠️ No Remote | N/A | N/A |
 | phench | git@github.com:<REDACTED>/PhenoKits.git | ⏳ Unverified | N/A | N/A |
-| phenoDesign | https://github.com/<REDACTED>/phenoDesign | ✅ Synced | False | 🌐 Public |
-| PhenoDevOps | https://github.com/<REDACTED>/PhenoDevOps | ✅ Synced | False | 🌐 Public |
-| PhenoHandbook | https://github.com/<REDACTED>/PhenoHandbook | ✅ Synced | False | 🌐 Public |
-| PhenoKits | https://github.com/<REDACTED>/PhenoKits | ✅ Synced | False | 🌐 Public |
-| PhenoLibs | https://github.com/<REDACTED>/PhenoKit.git | ⏳ Unverified | N/A | N/A |
-| PhenoMCP | https://github.com/<REDACTED>/PhenoMCP | ✅ Synced | False | 🌐 Public |
-| PhenoObservability | https://github.com/<REDACTED>/PhenoObservability | ✅ Synced | False | 🌐 Public |
-| PhenoPlugins | https://github.com/<REDACTED>/PhenoPlugins | ✅ Synced | False | 🌐 Public |
-| PhenoProc | https://github.com/<REDACTED>/PhenoProc | ✅ Synced | False | 🌐 Public |
-| phenoSDK | https://github.com/<REDACTED>/phenoSDK.git | ⏳ Unverified | N/A | N/A |
-| PhenoSpecs | https://github.com/<REDACTED>/PhenoSpecs | ✅ Synced | False | 🌐 Public |
-| phenotype-auth-ts | https://github.com/<REDACTED>/phenotype-auth-ts | ✅ Synced | False | 🌐 Public |
+| phenoDesign | https://github.com/KooshaPari/phenoDesign | ✅ Synced | False | 🌐 Public |
+| PhenoDevOps | https://github.com/KooshaPari/PhenoDevOps | ✅ Synced | False | 🌐 Public |
+| PhenoHandbook | https://github.com/KooshaPari/PhenoHandbook | ✅ Synced | False | 🌐 Public |
+| PhenoKits | https://github.com/KooshaPari/PhenoKits | ✅ Synced | False | 🌐 Public |
+| PhenoLibs | https://github.com/KooshaPari/PhenoKit.git | ⏳ Unverified | N/A | N/A |
+| PhenoMCP | https://github.com/KooshaPari/PhenoMCP | ✅ Synced | False | 🌐 Public |
+| PhenoObservability | https://github.com/KooshaPari/PhenoObservability | ✅ Synced | False | 🌐 Public |
+| PhenoPlugins | https://github.com/KooshaPari/PhenoPlugins | ✅ Synced | False | 🌐 Public |
+| PhenoProc | https://github.com/KooshaPari/PhenoProc | ✅ Synced | False | 🌐 Public |
+| phenoSDK | https://github.com/KooshaPari/phenoSDK.git | ⏳ Unverified | N/A | N/A |
+| PhenoSpecs | https://github.com/KooshaPari/PhenoSpecs | ✅ Synced | False | 🌐 Public |
+| phenotype-auth-ts | https://github.com/KooshaPari/phenotype-auth-ts | ✅ Synced | False | 🌐 Public |
 | phenotype-bus | (not on GitHub) | ⚠️ No Remote | N/A | N/A |
-| phenotype-infra | https://github.com/<REDACTED>/phenotype-infra | ✅ Synced | False | 🌐 Public |
-| phenotype-journeys | https://github.com/<REDACTED>/phenotype-journeys | ✅ Synced | False | 🔒 Private |
-| phenotype-ops-mcp | https://github.com/<REDACTED>/phenotype-ops-mcp | ✅ Synced | False | 🌐 Public |
+| phenotype-infra | https://github.com/KooshaPari/phenotype-infra | ✅ Synced | False | 🌐 Public |
+| phenotype-journeys | https://github.com/KooshaPari/phenotype-journeys | ✅ Synced | False | 🔒 Private |
+| phenotype-ops-mcp | https://github.com/KooshaPari/phenotype-ops-mcp | ✅ Synced | False | 🌐 Public |
 | phenotype-org-audits | (not on GitHub) | ⚠️ No Remote | N/A | N/A |
-| phenotype-tooling | https://github.com/<REDACTED>/phenotype-tooling | ✅ Synced | False | 🌐 Public |
-| PhenoVCS | https://github.com/<REDACTED>/PhenoVCS | ✅ Synced | False | 🌐 Public |
-| phenoXdd | https://github.com/<REDACTED>/phenoXdd | ✅ Synced | False | 🌐 Public |
-| PlayCua | https://github.com/<REDACTED>/PlayCua | ✅ Synced | False | 🌐 Public |
+| phenotype-tooling | https://github.com/KooshaPari/phenotype-tooling | ✅ Synced | False | 🌐 Public |
+| PhenoVCS | https://github.com/KooshaPari/PhenoVCS | ✅ Synced | False | 🌐 Public |
+| phenoXdd | https://github.com/KooshaPari/phenoXdd | ✅ Synced | False | 🌐 Public |
+| PlayCua | https://github.com/KooshaPari/PlayCua | ✅ Synced | False | 🌐 Public |
 | PolicyStack | git@github.com:<REDACTED>/PolicyStack.git | ⏳ Unverified | N/A | N/A |
-| portage | https://github.com/<REDACTED>/portage | ✅ Synced | False | 🌐 Public |
-| QuadSGM | https://github.com/<REDACTED>/QuadSGM | ✅ Synced | False | 🔒 Private |
-| ResilienceKit | https://github.com/<REDACTED>/ResilienceKit | ✅ Synced | False | 🌐 Public |
+| portage | https://github.com/KooshaPari/portage | ✅ Synced | False | 🌐 Public |
+| QuadSGM | https://github.com/KooshaPari/QuadSGM | ✅ Synced | False | 🔒 Private |
+| ResilienceKit | https://github.com/KooshaPari/ResilienceKit | ✅ Synced | False | 🌐 Public |
 | rich-cli-kit | (not on GitHub) | ⚠️ No Remote | N/A | N/A |
 | Sidekick | (not on GitHub) | ⚠️ No Remote | N/A | N/A |
-| TestingKit | https://github.com/<REDACTED>/TestingKit | ✅ Synced | False | 🌐 Public |
-| thegent | https://github.com/<REDACTED>/thegent | ✅ Synced | False | 🌐 Public |
+| TestingKit | https://github.com/KooshaPari/TestingKit | ✅ Synced | False | 🌐 Public |
+| thegent | https://github.com/KooshaPari/thegent | ✅ Synced | False | 🌐 Public |
 | thegent-dispatch | (not on GitHub) | ⚠️ No Remote | N/A | N/A |
 | thegent-workspace | (not on GitHub) | ⚠️ No Remote | N/A | N/A |
-| Tokn | https://github.com/<REDACTED>/Tokn | ✅ Synced | False | 🌐 Public |
+| Tokn | https://github.com/KooshaPari/Tokn | ✅ Synced | False | 🌐 Public |
 | Tracely | (not on GitHub) | ⚠️ No Remote | N/A | N/A |
-| Tracera-recovered | https://github.com/<REDACTED>/Tracera.git | ⏳ Unverified | N/A | N/A |
+| Tracera-recovered | https://github.com/KooshaPari/Tracera.git | ⏳ Unverified | N/A | N/A |
 
 ---
 
@@ -97,16 +97,16 @@
 
 These repos exist locally but have no GitHub remote configured:
 
-1. **cheap-llm-mcp** — Initialize: `git remote add origin https://github.com/<REDACTED>/cheap-llm-mcp.git`
-2. **Eidolon** — Initialize: `git remote add origin https://github.com/<REDACTED>/Eidolon.git`
-3. **Paginary** — Initialize: `git remote add origin https://github.com/<REDACTED>/Paginary.git`
-4. **phenotype-bus** — Initialize: `git remote add origin https://github.com/<REDACTED>/phenotype-bus.git`
-5. **phenotype-org-audits** — Initialize: `git remote add origin https://github.com/<REDACTED>/phenotype-org-audits.git`
-6. **rich-cli-kit** — Initialize: `git remote add origin https://github.com/<REDACTED>/rich-cli-kit.git`
-7. **Sidekick** — Initialize: `git remote add origin https://github.com/<REDACTED>/Sidekick.git`
-8. **thegent-dispatch** — Initialize: `git remote add origin https://github.com/<REDACTED>/thegent-dispatch.git`
-9. **thegent-workspace** — Initialize: `git remote add origin https://github.com/<REDACTED>/thegent-workspace.git`
-10. **Tracely** — Initialize: `git remote add origin https://github.com/<REDACTED>/Tracely.git`
+1. **cheap-llm-mcp** — Initialize: `git remote add origin https://github.com/KooshaPari/cheap-llm-mcp.git`
+2. **Eidolon** — Initialize: `git remote add origin https://github.com/KooshaPari/Eidolon.git`
+3. **Paginary** — Initialize: `git remote add origin https://github.com/KooshaPari/Paginary.git`
+4. **phenotype-bus** — Initialize: `git remote add origin https://github.com/KooshaPari/phenotype-bus.git`
+5. **phenotype-org-audits** — Initialize: `git remote add origin https://github.com/KooshaPari/phenotype-org-audits.git`
+6. **rich-cli-kit** — Initialize: `git remote add origin https://github.com/KooshaPari/rich-cli-kit.git`
+7. **Sidekick** — Initialize: `git remote add origin https://github.com/KooshaPari/Sidekick.git`
+8. **thegent-dispatch** — Initialize: `git remote add origin https://github.com/KooshaPari/thegent-dispatch.git`
+9. **thegent-workspace** — Initialize: `git remote add origin https://github.com/KooshaPari/thegent-workspace.git`
+10. **Tracely** — Initialize: `git remote add origin https://github.com/KooshaPari/Tracely.git`
 
 ---
 
@@ -132,18 +132,18 @@ These exist locally but are archived on GitHub (no further development):
 
 Remotes using SSH or non-standard URLs (need manual verification):
 
-1. **AgentMCP** — `https://github.com/<REDACTED>/AgentMCP.git` (SSH format)
+1. **AgentMCP** — `https://github.com/KooshaPari/AgentMCP.git` (SSH format)
 2. **artifacts** — `git@github.com:<REDACTED>/PhenoKits.git` (mismatched remote)
-3. **bare-cua** — `https://github.com/<REDACTED>/bare-cua.git` (SSH format)
+3. **bare-cua** — `https://github.com/KooshaPari/bare-cua.git` (SSH format)
 4. **cloud** — `git@github.com:<REDACTED>/cloud.git` (SSH format)
-5. **FocalPoint** — `https://github.com/<REDACTED>/FocalPoint.git` (SSH format)
-6. **netweave-final2** — `https://github.com/<REDACTED>/netweave-final2.git` (SSH format)
+5. **FocalPoint** — `https://github.com/KooshaPari/FocalPoint.git` (SSH format)
+6. **netweave-final2** — `https://github.com/KooshaPari/netweave-final2.git` (SSH format)
 7. **org-github** — `git@github.com:<REDACTED>/.github.git` (.github repo)
 8. **phench** — `git@github.com:<REDACTED>/PhenoKits.git` (mismatched remote)
-9. **PhenoLibs** — `https://github.com/<REDACTED>/PhenoKit.git` (name mismatch: PhenoKit vs PhenoLibs)
-10. **phenoSDK** — `https://github.com/<REDACTED>/phenoSDK.git` (SSH format)
+9. **PhenoLibs** — `https://github.com/KooshaPari/PhenoKit.git` (name mismatch: PhenoKit vs PhenoLibs)
+10. **phenoSDK** — `https://github.com/KooshaPari/phenoSDK.git` (SSH format)
 11. **PolicyStack** — `git@github.com:<REDACTED>/PolicyStack.git` (SSH format)
-12. **Tracera-recovered** — `https://github.com/<REDACTED>/Tracera.git` (name mismatch: Tracera-recovered vs Tracera)
+12. **Tracera-recovered** — `https://github.com/KooshaPari/Tracera.git` (name mismatch: Tracera-recovered vs Tracera)
 
 ---
 

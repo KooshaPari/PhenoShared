@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://github.com/<REDACTED>/phenotype-registry/blob/main/catalog/registry.schema.json",
+  "$id": "https://github.com/KooshaPari/phenotype-registry/blob/main/catalog/registry.schema.json",
   "title": "Phenotype substrate catalog entry",
   "description": "Schema for catalog/registry.yaml entries per ADR-ECO-017.",
   "type": "object",

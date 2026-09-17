@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://github.com/<REDACTED>/phenotype-router-spec/schema/router-artifact.json",
+  "$id": "https://github.com/KooshaPari/phenotype-router-spec/schema/router-artifact.json",
   "title": "RouterArtifact",
   "description": "A structured output produced by an engine after task completion. Artifacts are returned in StructuredResult.artifacts as part of an EnginePort.extract_result call.",
   "type": "object",
@@ -60,7 +60,7 @@
     "task_id":    "110ec58a-a0f2-4ac4-8393-c866d813b8d1",
     "conv_id":    "f81d4fae-7dec-11d0-a765-00a0c91e6bf6",
     "kind": "pr_url",
-    "uri": "https://github.com/<REDACTED>/substrate/pull/1234",
+    "uri": "https://github.com/KooshaPari/substrate/pull/1234",
     "metadata": {
       "title": "fix(engine-agentapi): retry on /status 503",
       "branch": "fix/engine-agentapi-retry-503",

@@ -7,5 +7,5 @@
 Canonical implementation lives in Authvault. Depend via git pin:
 
 ```toml
-phenotype-crypto = { git = "https://github.com/<REDACTED>/Authvault", branch = "main", package = "phenotype-crypto" }
+phenotype-crypto = { git = "https://github.com/KooshaPari/Authvault", branch = "main", package = "phenotype-crypto" }
 ```

@@ -42,8 +42,8 @@
 //! separate workspace members — depend on them via git when needed:
 //!
 //! ```toml
-//! store-sqlite = { git = "https://github.com/<REDACTED>/substrate", package = "store-sqlite" }
-//! engine-forge = { git = "https://github.com/<REDACTED>/substrate", package = "engine-forge" }
+//! store-sqlite = { git = "https://github.com/KooshaPari/substrate", package = "store-sqlite" }
+//! engine-forge = { git = "https://github.com/KooshaPari/substrate", package = "engine-forge" }
 //! ```
 //!
 //! ## Public surface

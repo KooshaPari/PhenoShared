@@ -1,6 +1,6 @@
 # Canonical repo cutover — phenotype-omlx
 
-**Use [`<REDACTED>/phenotype-omlx`](https://github.com/<REDACTED>/phenotype-omlx) only.**
+**Use [`<REDACTED>/phenotype-omlx`](https://github.com/KooshaPari/phenotype-omlx) only.**
 
 This repository is the single canonical home for the Phenotype oMLX stack.
 Do not open new work, PRs, or clones against the archived supersets.

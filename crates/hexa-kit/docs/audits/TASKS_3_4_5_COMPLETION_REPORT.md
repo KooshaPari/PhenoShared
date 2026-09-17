@@ -22,7 +22,7 @@ Successfully completed Tasks 3, 4, and 5 of Phase 2 planning:
 - **Location:** `~/Repos/agent-wave/`
 - **Language:** TypeScript / JavaScript
 - **Package Manager:** Bun v1.2.0 (enforced via preinstall)
-- **Repository:** https://github.com/<REDACTED>/agent-wave
+- **Repository:** https://github.com/KooshaPari/agent-wave
 - **Size:** 3.3 MB, 404 files
 - **Status:** Governance-scaffolding phase
 

@@ -15,7 +15,7 @@ A comprehensive benchmarking tool for CLI tools, inspired by Terminal-Bench.
 ## Installation
 
 ```bash
-git clone https://github.com/<REDACTED>/heliosBench.git && cd heliosBench
+git clone https://github.com/KooshaPari/heliosBench.git && cd heliosBench
 pip install -e .
 ```
 

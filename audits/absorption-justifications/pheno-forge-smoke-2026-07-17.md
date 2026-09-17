@@ -118,7 +118,7 @@ runs; bridge-missing path is graceful.
 ```bash
 # Pre-absorption snapshot (already captured by GitHub archive command)
 gh repo archive <REDACTED>/pheno-forge-smoke
-git clone https://github.com/<REDACTED>/pheno-forge-smoke.git /tmp/pheno-forge-smoke-pre-absorption
+git clone https://github.com/KooshaPari/pheno-forge-smoke.git /tmp/pheno-forge-smoke-pre-absorption
 ```
 
 **Restore posture:** Source repo will be archived after this absorption PR is pushed.

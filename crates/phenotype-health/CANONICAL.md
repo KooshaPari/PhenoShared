@@ -4,8 +4,8 @@
 
 The canonical source for `phenotype-health` now lives at:
 
-- Repository: https://github.com/<REDACTED>/phenoShared
-- Path: https://github.com/<REDACTED>/phenoShared/tree/main/crates/phenotype-health
+- Repository: https://github.com/KooshaPari/phenoShared
+- Path: https://github.com/KooshaPari/phenoShared/tree/main/crates/phenotype-health
 
 ## Status
 

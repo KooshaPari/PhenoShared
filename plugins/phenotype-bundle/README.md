@@ -14,6 +14,6 @@ Merge `mcp.json` into Cursor MCP settings with this repo as cwd.
 
 | ID | Source | Notes |
 |----|--------|-------|
-| `agileplus-mcp-intent` | AgilePlus monorepo `crates/agileplus-mcp-intent` | Rust MCP; wire when binary path is pinned — see [AgilePlus docs/mcp/INTEGRATION.md](https://github.com/<REDACTED>/AgilePlus/blob/main/docs/mcp/INTEGRATION.md) |
+| `agileplus-mcp-intent` | AgilePlus monorepo `crates/agileplus-mcp-intent` | Rust MCP; wire when binary path is pinned — see [AgilePlus docs/mcp/INTEGRATION.md](https://github.com/KooshaPari/AgilePlus/blob/main/docs/mcp/INTEGRATION.md) |
 
 Fleet-lead agent references catalog pointers; extend `mcp.json` when agileplus binary is fleet-stable.

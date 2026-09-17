@@ -42,7 +42,7 @@ async fn main() {
 
 ## When NOT to use
 
-- You need OTLP wire-format export → use [`pheno-otel`](https://github.com/<REDACTED>/pheno-otel) + `tracing-opentelemetry`.
+- You need OTLP wire-format export → use [`pheno-otel`](https://github.com/KooshaPari/pheno-otel) + `tracing-opentelemetry`.
 - You need metrics / counters / gauges → use `pheno-otel` or `Prometheus`.
 - You need raw log output → use the `tracing` crate directly.
 - You need OpenTelemetry **resources** (service.name, service.version) → use `pheno-otel` `Resource::builder()`.
@@ -80,7 +80,7 @@ Consumer (pheno-errors, pheno-context, pheno-config, etc.)
 - [`WORKLOG.md`](./WORKLOG.md) — change history (v2.1 schema).
 - [`LICENSE-MIT`](./LICENSE-MIT) / [`LICENSE-APACHE`](./LICENSE-APACHE) — dual license.
 - [`llms.txt`](./llms.txt) — curated LLM-readable file index.
-- [`pheno-otel`](https://github.com/<REDACTED>/pheno-otel) — sibling OTLP substrate.
+- [`pheno-otel`](https://github.com/KooshaPari/pheno-otel) — sibling OTLP substrate.
 - ADR-036 — canonical tracing substrate decision.
 - ADR-023 — substrate placement policy ("no random phenoShared").
 - L5-110 Drift 1 — promotion of scattered duplicates to top-level repo.

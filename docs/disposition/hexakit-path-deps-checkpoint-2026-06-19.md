@@ -11,7 +11,7 @@
 rg 'path\s*=\s*".*HexaKit' --glob 'Cargo.toml' migration-work/
 
 # Git deps on HexaKit (expect 0 — consumers use terminal owners)
-rg 'git\s*=\s*"https://github.com/<REDACTED>/HexaKit' --glob 'Cargo.toml' migration-work/
+rg 'git\s*=\s*"https://github.com/KooshaPari/HexaKit' --glob 'Cargo.toml' migration-work/
 ```
 
 ## Results (2026-06-19)

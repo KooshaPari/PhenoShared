@@ -14,7 +14,7 @@ source repos after zero-dep gates. Python proc plane already lives at
 
 | ID | Task | Source repo | Target | Status |
 |----|------|-------------|--------|--------|
-| P5-1 | PhenoAgent Rust/CLI/docs → `crates/pheno-agent/` + absorption doc | PhenoAgent | Agentora | **done** — [Agentora#91](https://github.com/<REDACTED>/Agentora/pull/91); archived 2026-06-19 |
+| P5-1 | PhenoAgent Rust/CLI/docs → `crates/pheno-agent/` + absorption doc | PhenoAgent | Agentora | **done** — [Agentora#91](https://github.com/KooshaPari/Agentora/pull/91); archived 2026-06-19 |
 | P5-2 | PhenoAgent archive gate (post P5-1 merge) | PhenoAgent | archive | **done** — archived 2026-06-19 |
 | P5-3 | PhenoProc archive gate verify | PhenoProc | archive | **done** — archived 2026-06-19 |
 | P5-4 | phenoRouterMonitor Rust core → phenoAI | phenoRouterMonitor | phenoAI | **deferred** — repo archived; Streamlit dash retained; no code migration, docs-only boundary note |

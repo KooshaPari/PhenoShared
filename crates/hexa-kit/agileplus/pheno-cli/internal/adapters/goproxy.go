@@ -10,7 +10,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/<REDACTED>/pheno-cli/internal/version"
+	"github.com/KooshaPari/pheno-cli/internal/version"
 )
 
 // GoProxyAdapter implements RegistryAdapter for the Go module proxy.

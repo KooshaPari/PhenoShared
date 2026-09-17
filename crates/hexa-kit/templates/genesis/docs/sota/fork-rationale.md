@@ -10,7 +10,7 @@
 
 This repository is **not a fork** of upstream open source. No upstream divergence analysis is required.
 
-If charter or OKF later marks `fork: true`, replace this entire file per [HexaKit docs/genesis/SOTA_SPEC.md](https://github.com/<REDACTED>/HexaKit/blob/main/docs/genesis/SOTA_SPEC.md).
+If charter or OKF later marks `fork: true`, replace this entire file per [HexaKit docs/genesis/SOTA_SPEC.md](https://github.com/KooshaPari/HexaKit/blob/main/docs/genesis/SOTA_SPEC.md).
 
 ---
 

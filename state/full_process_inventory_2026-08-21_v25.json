@@ -1556,7 +1556,7 @@
       "pid": 15208,
       "name": "pwsh.exe",
       "rss_mb": 0.0,
-      "cmd": "C:\\Program Files\\PowerShell\\7-preview\\pwsh.exe -Command try { [Console]::OutputEncoding=[System.Text.Encoding]::UTF8 } catch {}\ngh repo view <REDACTED>/sharecli --json nameWithOwner,url,isPrivate,defaultBranchRef,updatedAt; rg -l '^name\\s*=\\s*\"sharecli\"' 'D:\\' -g 'Cargo.toml' -g '!**/target/**' -g '!**/node_modules/**' | Select-Object -First 80; rg -l 'github.com/<REDACTED>/sharecli' 'D:\\' -g 'README.md' -g 'Cargo.toml' -g '!**/target/**' -g '!**/node_modules/**' | Select-Object -First 80"
+      "cmd": "C:\\Program Files\\PowerShell\\7-preview\\pwsh.exe -Command try { [Console]::OutputEncoding=[System.Text.Encoding]::UTF8 } catch {}\ngh repo view <REDACTED>/sharecli --json nameWithOwner,url,isPrivate,defaultBranchRef,updatedAt; rg -l '^name\\s*=\\s*\"sharecli\"' 'D:\\' -g 'Cargo.toml' -g '!**/target/**' -g '!**/node_modules/**' | Select-Object -First 80; rg -l 'github.com/KooshaPari/sharecli' 'D:\\' -g 'README.md' -g 'Cargo.toml' -g '!**/target/**' -g '!**/node_modules/**' | Select-Object -First 80"
     },
     {
       "pid": 15224,
@@ -2084,7 +2084,7 @@
       "pid": 25640,
       "name": "git-remote-https.exe",
       "rss_mb": 1.0,
-      "cmd": "git-remote-https origin https://github.com/<REDACTED>/Dino.git"
+      "cmd": "git-remote-https origin https://github.com/KooshaPari/Dino.git"
     },
     {
       "pid": 25720,
@@ -2324,7 +2324,7 @@
       "pid": 30356,
       "name": "cmd.exe",
       "rss_mb": 0.0,
-      "cmd": "C:\\WINDOWS\\system32\\cmd.exe /C curl -sL https://github.com/<REDACTED>/Dino/archive/refs/heads/main.tar.gz -o C:\\Users\\koosh\\_dino_src.tar.gz 2>&1 && ls -la C:\\Users\\koosh\\_dino_src.tar.gz 2>&1"
+      "cmd": "C:\\WINDOWS\\system32\\cmd.exe /C curl -sL https://github.com/KooshaPari/Dino/archive/refs/heads/main.tar.gz -o C:\\Users\\koosh\\_dino_src.tar.gz 2>&1 && ls -la C:\\Users\\koosh\\_dino_src.tar.gz 2>&1"
     },
     {
       "pid": 30612,
@@ -2402,7 +2402,7 @@
       "pid": 31844,
       "name": "git.exe",
       "rss_mb": 0.2,
-      "cmd": "git.exe clone --depth 1 https://github.com/<REDACTED>/Dino.git C:\\Users\\koosh\\_dino_bld7"
+      "cmd": "git.exe clone --depth 1 https://github.com/KooshaPari/Dino.git C:\\Users\\koosh\\_dino_bld7"
     },
     {
       "pid": 31928,
@@ -2606,7 +2606,7 @@
       "pid": 36316,
       "name": "rg.exe",
       "rss_mb": 8.0,
-      "cmd": "C:\\Users\\koosh\\.bun\\install\\global\\node_modules\\@openai\\codex-win32-x64\\vendor\\x86_64-pc-windows-msvc\\codex-path\\rg.exe -l github.com/<REDACTED>/sharecli D:\\ -g README.md -g Cargo.toml -g !**/target/** -g !**/node_modules/**"
+      "cmd": "C:\\Users\\koosh\\.bun\\install\\global\\node_modules\\@openai\\codex-win32-x64\\vendor\\x86_64-pc-windows-msvc\\codex-path\\rg.exe -l github.com/KooshaPari/sharecli D:\\ -g README.md -g Cargo.toml -g !**/target/** -g !**/node_modules/**"
     },
     {
       "pid": 36412,
@@ -2636,7 +2636,7 @@
       "pid": 36816,
       "name": "curl.exe",
       "rss_mb": 0.9,
-      "cmd": "curl -sL https://github.com/<REDACTED>/Dino/archive/refs/heads/main.tar.gz -o C:\\Users\\koosh\\_dino_src.tar.gz"
+      "cmd": "curl -sL https://github.com/KooshaPari/Dino/archive/refs/heads/main.tar.gz -o C:\\Users\\koosh\\_dino_src.tar.gz"
     },
     {
       "pid": 37068,
@@ -2756,7 +2756,7 @@
       "pid": 39252,
       "name": "git.exe",
       "rss_mb": 0.0,
-      "cmd": "git remote-https origin https://github.com/<REDACTED>/Dino.git"
+      "cmd": "git remote-https origin https://github.com/KooshaPari/Dino.git"
     },
     {
       "pid": 39340,
@@ -2798,7 +2798,7 @@
       "pid": 40484,
       "name": "git.exe",
       "rss_mb": 0.0,
-      "cmd": "git clone --depth 1 https://github.com/<REDACTED>/Dino.git C:\\Users\\koosh\\_dino_bld7"
+      "cmd": "git clone --depth 1 https://github.com/KooshaPari/Dino.git C:\\Users\\koosh\\_dino_bld7"
     },
     {
       "pid": 40496,

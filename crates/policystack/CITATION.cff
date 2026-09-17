@@ -5,6 +5,6 @@ authors:
   - family-names: "Pari"
     given-names: "Koosha"
     affiliation: "Phenotype"
-repository-code: "https://github.com/<REDACTED>/PolicyStack"
+repository-code: "https://github.com/KooshaPari/PolicyStack"
 url: "https://phenotype.space"
 license: "MIT OR Apache-2.0"

@@ -12,7 +12,7 @@
 
 | Legacy path | Canonical package | Install |
 |-------------|-------------------|---------|
-| `python/pheno-mcp` (HexaKit) | [PhenoMCP](https://github.com/<REDACTED>/PhenoMCP) `python/src/pheno_mcp` | `pip install git+https://github.com/<REDACTED>/PhenoMCP.git` or clone + `pip install -e .` |
+| `python/pheno-mcp` (HexaKit) | [PhenoMCP](https://github.com/KooshaPari/PhenoMCP) `python/src/pheno_mcp` | `pip install git+https://github.com/KooshaPari/PhenoMCP.git` or clone + `pip install -e .` |
 | `python/pheno-mcp` (HexaKit/phenoShared) | **PhenoMCP** submodule / `phenotype-python-sdk` `packages/mcp-kit` | pip from PhenoMCP or SDK `[connect]` extras (see below) |
 | `python/pheno-mcp` (Pyron vendored) | PhenoMCP | Drop vendored tree; redirect manifest |
 
@@ -24,13 +24,13 @@ HexaKit and Pyron legacy trees are **pointer stubs** only — see `MIGRATED.md` 
 |----------|------|-------|
 | `packages/mcp-kit/` | Py MCP kit umbrella (McpKit absorption) | Python binding lives in PhenoMCP submodule (`python/pheno-mcp`); Rust `mcp-forge` codegen in kit |
 | `packages/mcp-kit/rust/` | Rust MCP framework surface | Registry-driven bindings; not the runtime server plane |
-| substrate `crates/phenotype-mcp` | Rust MCP **runtime** canonical | [substrate#28](https://github.com/<REDACTED>/substrate/pull/28) — connect role SSOT |
+| substrate `crates/phenotype-mcp` | Rust MCP **runtime** canonical | [substrate#28](https://github.com/KooshaPari/substrate/pull/28) — connect role SSOT |
 
 **Install via SDK workspace:**
 
 ```bash
 # Preferred: canonical PhenoMCP package
-git clone --recurse-submodules https://github.com/<REDACTED>/PhenoMCP.git
+git clone --recurse-submodules https://github.com/KooshaPari/PhenoMCP.git
 cd PhenoMCP && pip install -e .
 
 # Or from phenotype-python-sdk mcp-kit submodule path

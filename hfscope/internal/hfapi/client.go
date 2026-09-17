@@ -17,7 +17,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/<REDACTED>/hfscope/internal/cache"
+	"github.com/KooshaPari/hfscope/internal/cache"
 )
 
 // Client talks to the HuggingFace Hub.

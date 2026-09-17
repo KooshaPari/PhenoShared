@@ -8,10 +8,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/<REDACTED>/MCPForge/integrationtests/tests/common"
-	"github.com/<REDACTED>/MCPForge/integrationtests/tests/python/internal"
-	"github.com/<REDACTED>/MCPForge/internal/protocol"
-	"github.com/<REDACTED>/MCPForge/internal/tools"
+	"github.com/KooshaPari/MCPForge/integrationtests/tests/common"
+	"github.com/KooshaPari/MCPForge/integrationtests/tests/python/internal"
+	"github.com/KooshaPari/MCPForge/internal/protocol"
+	"github.com/KooshaPari/MCPForge/internal/tools"
 )
 
 // TestDiagnostics tests diagnostics functionality with the Python language server

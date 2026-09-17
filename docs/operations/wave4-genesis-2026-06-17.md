@@ -4,11 +4,11 @@
 
 | Repo | Role | PR |
 |------|------|-----|
-| phenotype-otel | observe | [#6](https://github.com/<REDACTED>/phenotype-otel/pull/6) |
-| PhenoMCP | connect | [#165](https://github.com/<REDACTED>/PhenoMCP/pull/165) |
-| Authvault | connect | [#83](https://github.com/<REDACTED>/Authvault/pull/83) |
-| kwality | quality | [#42](https://github.com/<REDACTED>/kwality/pull/42) — additive; existing `SOTA.md` preserved |
-| AgilePlus | specs | [#758](https://github.com/<REDACTED>/AgilePlus/pull/758) |
+| phenotype-otel | observe | [#6](https://github.com/KooshaPari/phenotype-otel/pull/6) |
+| PhenoMCP | connect | [#165](https://github.com/KooshaPari/PhenoMCP/pull/165) |
+| Authvault | connect | [#83](https://github.com/KooshaPari/Authvault/pull/83) |
+| kwality | quality | [#42](https://github.com/KooshaPari/kwality/pull/42) — additive; existing `SOTA.md` preserved |
+| AgilePlus | specs | [#758](https://github.com/KooshaPari/AgilePlus/pull/758) |
 
 Each PR adds: `charter.md`, `intent.md`, `review.md`, `SOTA.md` (or preserved), `okf/manifest.okf.yaml`, `docs/sota/technical.md`, `docs/intent/*`.
 
@@ -29,6 +29,6 @@ Each PR adds: `charter.md`, `intent.md`, `review.md`, `SOTA.md` (or preserved), 
 
 ## Next
 
-1. ~~Fix phenotype-journeys workflow path on GitHub; re-run genesis rollout~~ → Wave 5 [#111](https://github.com/<REDACTED>/phenotype-journeys/pull/111)
-2. ~~Pyron pheno workspace lockstep (`Logify`, `Metron`, …)~~ → Wave 5 [#53](https://github.com/<REDACTED>/Pyron/pull/53)
+1. ~~Fix phenotype-journeys workflow path on GitHub; re-run genesis rollout~~ → Wave 5 [#111](https://github.com/KooshaPari/phenotype-journeys/pull/111)
+2. ~~Pyron pheno workspace lockstep (`Logify`, `Metron`, …)~~ → Wave 5 [#53](https://github.com/KooshaPari/Pyron/pull/53)
 3. Metron archive path remap

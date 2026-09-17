@@ -58,7 +58,7 @@ The installer is idempotent: re-running it does not duplicate or overwrite local
 
 ```bash
 # Fresh install
-git clone https://github.com/<REDACTED>/forge-runner-scripts
+git clone https://github.com/KooshaPari/forge-runner-scripts
 cd forge-runner-scripts
 ./install.sh
 

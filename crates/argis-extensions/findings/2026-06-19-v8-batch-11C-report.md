@@ -17,7 +17,7 @@
 ## Headline numbers
 
 - **Fleet mean (cycle 2, 8 repos):** 1.50 / 3.00 (vs cycle 1 fleet mean 1.43 — substrates score higher than apps, as expected).
-- **Repos below Tier 0 (mean < 1.00):** 2 — pheno-vibecoding-guard (0.78), pheno-worklog-schema (0.94). Both are **orphans** (repo exists on github.com/<REDACTED>, but source not on this branch's sparse-checkout cone).
+- **Repos below Tier 0 (mean < 1.00):** 2 — pheno-vibecoding-guard (0.78), pheno-worklog-schema (0.94). Both are **orphans** (repo exists on github.com/KooshaPari, but source not on this branch's sparse-checkout cone).
 - **Repos in remediate-first list:** 2 — same 2 orphans.
 - **P0 gaps (cycle 2 fleet):** 31 across 8 repos; fleet-wide top P0 is **L38 AGENTS.md** (4 repos) and **L29 CI pipeline** (5 repos).
 - **Top unlock (fleet-wide, 4 repos):** wire `pheno-tracing` (ADR-012) → +0.30 mean on each.

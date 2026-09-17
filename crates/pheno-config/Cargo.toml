@@ -4,7 +4,7 @@ version = "0.1.0"
 edition = "2021"
 description = "PhenoCompose centralized configuration — figment-backed, layered config (TOML + env + defaults)"
 license = "MIT OR Apache-2.0"
-repository = "https://github.com/<REDACTED>/phenotype-infra"
+repository = "https://github.com/KooshaPari/phenotype-infra"
 authors = ["<REDACTED>"]
 publish = false
 

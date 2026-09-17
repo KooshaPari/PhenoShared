@@ -13,7 +13,7 @@ import (
 
 	toml "github.com/pelletier/go-toml/v2"
 
-	"github.com/<REDACTED>/pheno-cli/internal/version"
+	"github.com/KooshaPari/pheno-cli/internal/version"
 )
 
 type cargoToml struct {
@@ -191,7 +191,7 @@ func (a *CratesAdapter) Verify(pkg Package, ver string) (bool, error) {
 
 	for time.Now().Before(deadline) {
 		req, _ := http.NewRequest("GET", url, nil)
-		req.Header.Set("User-Agent", "pheno-cli (https://github.com/<REDACTED>/pheno-cli)")
+		req.Header.Set("User-Agent", "pheno-cli (https://github.com/KooshaPari/pheno-cli)")
 
 		resp, err := client.Do(req)
 		if err != nil {

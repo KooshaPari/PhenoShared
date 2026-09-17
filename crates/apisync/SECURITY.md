@@ -8,7 +8,7 @@ report it **privately** — do **not** open a public GitHub issue.
 ### Preferred: GitHub Private Vulnerability Reporting
 
 Use the repository's **Security → Report a vulnerability** page
-(https://github.com/<REDACTED>/Apisync/security/advisories/new). Reports
+(https://github.com/KooshaPari/Apisync/security/advisories/new). Reports
 land directly with the maintainers and are not visible publicly.
 
 ### Alternative: Email

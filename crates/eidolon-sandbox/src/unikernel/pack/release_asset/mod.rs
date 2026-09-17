@@ -59,10 +59,10 @@ pub const DEFAULT_RELEASE_ARCH: &str = "x86_64";
 pub const ROOTFS_RELEASE_PUBLISHED: bool = true;
 pub const ROOTFS_RELEASE_VERSION: &str = "0.1.0";
 pub const ROOTFS_RELEASE_FILENAME: &str = "eidolon-canned-rootfs-0.1.0-x86_64.ext4.img";
-pub const ROOTFS_RELEASE_URL: &str = "https://github.com/<REDACTED>/Eidolon/releases/download/rootfs-v0.1.0/eidolon-canned-rootfs-0.1.0-x86_64.ext4.img";
+pub const ROOTFS_RELEASE_URL: &str = "https://github.com/KooshaPari/Eidolon/releases/download/rootfs-v0.1.0/eidolon-canned-rootfs-0.1.0-x86_64.ext4.img";
 pub const ROOTFS_RELEASE_SHA256: &str =
     "edee5005e4b206667faff33decbada12d57fb825d59cdb659b838f4857368b03";
-pub const ROOTFS_RELEASE_SOURCE: &str = "https://github.com/<REDACTED>/Eidolon/releases";
+pub const ROOTFS_RELEASE_SOURCE: &str = "https://github.com/KooshaPari/Eidolon/releases";
 
 pub fn versioned_image_filename(version: &str, arch: &str) -> String {
     let ver = version.trim().trim_start_matches('v');

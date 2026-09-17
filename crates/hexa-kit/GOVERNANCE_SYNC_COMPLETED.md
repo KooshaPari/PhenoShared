@@ -69,7 +69,7 @@
 ## Next Steps
 
 ### 1. Review + Merge PR `chore/sync-origin-main`
-- Link: https://github.com/<REDACTED>/phenotype-infrakit/compare/main...chore/sync-origin-main
+- Link: https://github.com/KooshaPari/phenotype-infrakit/compare/main...chore/sync-origin-main
 - QA gates: `cargo build`, `cargo test`, `cargo clippy`, security scans
 - Approval: Code review + automated checks
 

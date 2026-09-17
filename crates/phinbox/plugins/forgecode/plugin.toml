@@ -9,7 +9,7 @@ version = "0.1.0"
 description = "Native OS popup elicitation tool — pause the agent and ask the human a structured question"
 author = "Phenotype Contributors"
 license = "MIT"
-homepage = "https://github.com/<REDACTED>/phenotype-tooling/tree/main/crates/phinbox"
+homepage = "https://github.com/KooshaPari/phenotype-tooling/tree/main/crates/phinbox"
 
 [skill]
 path = "../../.phinbox/skills/phinbox/SKILL.md"

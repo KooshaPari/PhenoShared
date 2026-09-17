@@ -6,7 +6,7 @@ description = "Universal task execution framework with scheduling, workflow orch
 license = "MIT OR Apache-2.0"
 authors = ["Phenotype <dev@<REDACTED>.com>"]
 readme = "README.md"
-repository = "https://github.com/<REDACTED>/zz-Tasken"
+repository = "https://github.com/KooshaPari/zz-Tasken"
 documentation = "https://docs.rs/tasken"
 rust-version = "1.75"
 

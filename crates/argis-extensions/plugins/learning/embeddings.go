@@ -8,7 +8,7 @@ import (
 	"sync"
 
 	"github.com/google/uuid"
-	voyage "github.com/<REDACTED>/bifrost-extensions/plugins/voyage"
+	voyage "github.com/KooshaPari/bifrost-extensions/plugins/voyage"
 )
 
 // EmbeddingStore stores learning events with embeddings for semantic retrieval

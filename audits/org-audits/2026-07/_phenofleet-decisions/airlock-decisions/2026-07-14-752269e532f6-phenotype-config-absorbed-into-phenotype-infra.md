@@ -1,6 +1,6 @@
 # Airlock Decision: phenotype-config → <REDACTED>/phenotype-infra
 
-**Decision:** Absorbed into [`<REDACTED>/phenotype-infra`](https://github.com/<REDACTED>/phenotype-infra) as the `pheno-config` crate. No recreation needed.
+**Decision:** Absorbed into [`<REDACTED>/phenotype-infra`](https://github.com/KooshaPari/phenotype-infra) as the `pheno-config` crate. No recreation needed.
 **Decision date:** 2026-07-14
 **Decision author:** Forge (automated inventory + absorption probe)
 
@@ -11,7 +11,7 @@
 | field | value |
 |---|---|
 | airlock id | `752269e532f6` |
-| original upstream | `github.com/<REDACTED>/phenotype-config.git` (now MISSING on GitHub) |
+| original upstream | `github.com/KooshaPari/phenotype-config.git` (now MISSING on GitHub) |
 | bare mirror | `/Users/<REDACTED>/.airlock/repos/752269e532f6.git/` |
 | worktree | `/Users/<REDACTED>/.airlock/worktrees/752269e532f6/` |
 | canonical working_path | `phenotype-config/` |
@@ -28,7 +28,7 @@
 
 ## Absorption target
 
-**Primary target:** [`<REDACTED>/phenotype-infra`](https://github.com/<REDACTED>/phenotype-infra) (active, last push 2026-07-15 today, Go workspace).
+**Primary target:** [`<REDACTED>/phenotype-infra`](https://github.com/KooshaPari/phenotype-infra) (active, last push 2026-07-15 today, Go workspace).
 
 ---
 
@@ -73,8 +73,8 @@ done
 | airlock worktree | `/Users/<REDACTED>/.airlock/worktrees/752269e532f6/` (detached HEAD) |
 | full airlock inventory | `~/CodeProjects/Phenotype/repos/.airlock-inventory-2026-07-14.json` |
 | absorption probe | `~/CodeProjects/Phenotype/repos/.airlock-absorption-probe-2026-07-14.json` |
-| remote backup | https://gist.github.com/<REDACTED>/3e6038adbfc4fe4c38965d02d0fc867e |
+| remote backup | https://gist.github.com/KooshaPari/3e6038adbfc4fe4c38965d02d0fc867e |
 | probe scripts (re-runnable) | `~/CodeProjects/Phenotype/repos/_airlock-inventory-probe.py`, `~/CodeProjects/Phenotype/repos/_airlock-absorption-probe.py` |
-| upstream URL (gone) | https://github.com/<REDACTED>/phenotype-config |
-| absorption target | https://github.com/<REDACTED>/phenotype-infra |
-| NOT a target (for confusion) | https://github.com/<REDACTED>/pheno-runtime-config |
+| upstream URL (gone) | https://github.com/KooshaPari/phenotype-config |
+| absorption target | https://github.com/KooshaPari/phenotype-infra |
+| NOT a target (for confusion) | https://github.com/KooshaPari/pheno-runtime-config |

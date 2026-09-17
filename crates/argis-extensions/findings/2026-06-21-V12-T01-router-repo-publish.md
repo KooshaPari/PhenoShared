@@ -28,7 +28,7 @@
 ```
 spikes/go/phenotype-router/
 ├── README.md                                                    72 lines
-├── go.mod                                                        3 lines (module github.com/<REDACTED>/phenotype-router; go 1.26)
+├── go.mod                                                        3 lines (module github.com/KooshaPari/phenotype-router; go 1.26)
 ├── e2e/e2e_test.go                                             637 lines
 └── internal/
     ├── plugins/toolrouter/
@@ -58,7 +58,7 @@ spikes/go/phenotype-router/
 
 ```
 $ go build ./...
-# github.com/<REDACTED>/phenotype-router/internal/router
+# github.com/KooshaPari/phenotype-router/internal/router
 internal/router/router.go:33:6: Plugin redeclared in this block
 internal/router/plugin.go:124:6: other declaration of Plugin
 internal/router/router.go:77:18: replaced.Shutdown undefined (type Plugin has no field or method Shutdown)
@@ -82,17 +82,17 @@ $ echo $?
 
 ```
 $ go test ./... -count=1 -timeout 30s
-# github.com/<REDACTED>/phenotype-router/internal/router
+# github.com/KooshaPari/phenotype-router/internal/router
 internal/router/router.go:33:6: Plugin redeclared in this block
 ...
 --- FAIL: TestApplyProfile_ReordersByPreferred (0.00s)
     routing_test.go:38: applyProfile reorder = [a b c], want [b a c]
-FAIL  github.com/<REDACTED>/phenotype-router/internal/plugins/toolrouter  0.260s
+FAIL  github.com/KooshaPari/phenotype-router/internal/plugins/toolrouter  0.260s
 --- FAIL: TestE2E_RouterThroughMockOpenAI (0.00s)
     e2e_test.go:465: response.Model = "gpt-4o", want "gpt-4o-mock" (echo from mock)
-FAIL  github.com/<REDACTED>/phenotype-router/e2e                          0.166s
-FAIL  github.com/<REDACTED>/phenotype-router/internal/router            [build failed]
-?     github.com/<REDACTED>/phenotype-router/internal/sdk               [no test files]
+FAIL  github.com/KooshaPari/phenotype-router/e2e                          0.166s
+FAIL  github.com/KooshaPari/phenotype-router/internal/router            [build failed]
+?     github.com/KooshaPari/phenotype-router/internal/sdk               [no test files]
 $ echo $?
 1
 ```

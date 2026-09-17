@@ -25,7 +25,7 @@
 # PhenoSpecs - Specification Registry
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Legacy Tooling Gate](https://github.com/<REDACTED>/PhenoSpecs/actions/workflows/legacy-tooling-gate.yml/badge.svg)](https://github.com/<REDACTED>/PhenoSpecs/actions/workflows/legacy-tooling-gate.yml)
+[![Legacy Tooling Gate](https://github.com/KooshaPari/PhenoSpecs/actions/workflows/legacy-tooling-gate.yml/badge.svg)](https://github.com/KooshaPari/PhenoSpecs/actions/workflows/legacy-tooling-gate.yml)
 [![Specs](https://img.shields.io/badge/spec-markdown-blue.svg)](https://commonmark.org)
 
 **Unified specification registry for the Phenotype ecosystem.**
@@ -38,10 +38,10 @@ PhenoSpecs is the **ADRs / contracts** member of a four-repo spine. Each repo ow
 
 | Repo | Role | Owns |
 |------|------|------|
-| [phenotype-registry](https://github.com/<REDACTED>/phenotype-registry) | **INDEX** | Canonical ecosystem map ([ECOSYSTEM_MAP.md](https://github.com/<REDACTED>/phenotype-registry/blob/main/ECOSYSTEM_MAP.md)) + dependency graph |
+| [phenotype-registry](https://github.com/KooshaPari/phenotype-registry) | **INDEX** | Canonical ecosystem map ([ECOSYSTEM_MAP.md](https://github.com/KooshaPari/phenotype-registry/blob/main/ECOSYSTEM_MAP.md)) + dependency graph |
 | **PhenoSpecs** (this repo) | **ADRs / contracts** | Architecture Decision Records (canonical home: [`adrs/`](adrs/)), API contracts, specs |
-| [PhenoHandbook](https://github.com/<REDACTED>/PhenoHandbook) | **CONVENTIONS** | Patterns, methodologies — how we build |
-| [phenotype-org-governance](https://github.com/<REDACTED>/phenotype-org-governance) | **ENFORCEMENT** | Reusable policy workflows + `deny.toml`/license baseline |
+| [PhenoHandbook](https://github.com/KooshaPari/PhenoHandbook) | **CONVENTIONS** | Patterns, methodologies — how we build |
+| [phenotype-org-governance](https://github.com/KooshaPari/phenotype-org-governance) | **ENFORCEMENT** | Reusable policy workflows + `deny.toml`/license baseline |
 
 When two documents disagree, authority follows role. `registry.yaml` here is the spec↔implementation traceability index, not the ecosystem index — `ECOSYSTEM_MAP.md` is.
 
@@ -121,7 +121,7 @@ See [registry.yaml](./registry.yaml) for complete index with:
 
 ## Governance
 
-- **New specs**: Must follow [kitty-spec format](https://github.com/<REDACTED>/AgilePlus/tree/main/kitty-specs)
+- **New specs**: Must follow [kitty-spec format](https://github.com/KooshaPari/AgilePlus/tree/main/kitty-specs)
 - **Updates**: Require ADR if architectural impact
 - **Deprecation**: Move to `archive/` with migration guide
 - **Traceability**: All specs must link to at least one implementation
@@ -130,9 +130,9 @@ See [registry.yaml](./registry.yaml) for complete index with:
 
 ## Links
 
-- [AgilePlus CLI](https://github.com/<REDACTED>/AgilePlus) - Spec-driven development
-- [HexaKit](https://github.com/<REDACTED>/HexaKit) - Templates
-- [PhenoHandbook](https://github.com/<REDACTED>/PhenoHandbook) - Patterns & guidelines
+- [AgilePlus CLI](https://github.com/KooshaPari/AgilePlus) - Spec-driven development
+- [HexaKit](https://github.com/KooshaPari/HexaKit) - Templates
+- [PhenoHandbook](https://github.com/KooshaPari/PhenoHandbook) - Patterns & guidelines
 
 ## License
 

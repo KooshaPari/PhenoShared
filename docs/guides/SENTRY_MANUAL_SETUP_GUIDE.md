@@ -205,21 +205,21 @@ For each repository, verify that CI workflows can access the secret:
 
 #### For AgilePlus:
 
-1. Go to https://github.com/<REDACTED>/AgilePlus
+1. Go to https://github.com/KooshaPari/AgilePlus
 2. Click **Settings** (top nav)
 3. Click **Secrets and variables → Actions** (left sidebar)
 4. You should see **SENTRY_DSN_AGILEPLUS** in the organization secrets list
 
 #### For phenotype-infrakit:
 
-1. Go to https://github.com/<REDACTED>/phenotype-infrakit
+1. Go to https://github.com/KooshaPari/phenotype-infrakit
 2. Click **Settings** (top nav)
 3. Click **Secrets and variables → Actions** (left sidebar)
 4. You should see **SENTRY_DSN_INFRAKIT** in the organization secrets list
 
 #### For heliosCLI:
 
-1. Go to https://github.com/<REDACTED>/heliosCLI
+1. Go to https://github.com/KooshaPari/heliosCLI
 2. Click **Settings** (top nav)
 3. Click **Secrets and variables → Actions** (left sidebar)
 4. You should see **SENTRY_DSN_HELIOSCLI** in the organization secrets list

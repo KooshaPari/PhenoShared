@@ -35,5 +35,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Removed stale shelf-catalog references from the active docs.
 - Rewrote the local `agileplus` project docs into clean project-root guides.
 
-[Unreleased]: https://github.com/<REDACTED>/HexaKit/compare/v0.0.0...HEAD
-[2026-04-29]: https://github.com/<REDACTED>/HexaKit/releases/tag/2026-04-29
+[Unreleased]: https://github.com/KooshaPari/HexaKit/compare/v0.0.0...HEAD
+[2026-04-29]: https://github.com/KooshaPari/HexaKit/releases/tag/2026-04-29

@@ -11,7 +11,7 @@
   "role": "primitives-parent",
   "domain_role": "foundational-rust-utilities",
   "boundary": "rust-primitive-crate-workspace",
-  "gh_url": "https://github.com/<REDACTED>/phenoUtils",
+  "gh_url": "https://github.com/KooshaPari/phenoUtils",
   "default_branch": "main",
   "remote_default_sha_at_audit": "6fa1a43a06b945796d0b69d7423129e56f46ac98",
   "disposition": "KEEP_CANONICAL_PARENT",

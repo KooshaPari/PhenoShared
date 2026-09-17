@@ -104,8 +104,8 @@
 ## WP-05: Set up org-level .github repo with reusable workflows
 
 **File Scope:**
-- Read: [`github.com/<REDACTED>/.github`, `.github/workflows/`, active repo workflow files under `.github/workflows/*.yml`]
-- Write: [`github.com/<REDACTED>/.github`, `.github/workflows/`, active repo workflow files under `.github/workflows/*.yml`]
+- Read: [`github.com/KooshaPari/.github`, `.github/workflows/`, active repo workflow files under `.github/workflows/*.yml`]
+- Write: [`github.com/KooshaPari/.github`, `.github/workflows/`, active repo workflow files under `.github/workflows/*.yml`]
 **Depends on:** WP-04
 **Effort:** L
 
@@ -116,7 +116,7 @@
 
 ### Tasks
 
-- [ ] T033 — Create github.com/<REDACTED>/.github repo — `github.com/<REDACTED>/.github`
+- [ ] T033 — Create github.com/KooshaPari/.github repo — `github.com/KooshaPari/.github`
 - [ ] T034 — Move 32 workflow files from shelf root to .github/workflows/ — `.github/workflows/`
 - [ ] T035 — Create reusable ci-rust.yml workflow — `.github/workflows/ci-rust.yml`
 - [ ] T036 — Create reusable ci-python.yml workflow — `.github/workflows/ci-python.yml`
@@ -333,7 +333,7 @@
 
 ### Tasks
 
-- [ ] T092 — Create separate GitHub org or use personal account — `github.com/<REDACTED>`
+- [ ] T092 — Create separate GitHub org or use personal account — `github.com/KooshaPari`
 - [ ] T093 — Move koosha-portfolio — `koosha-portfolio/`
 - [ ] T094 — Move dotfiles — `dotfiles/`
 - [ ] T095 — Move vibeproxy (after audit) — `vibeproxy/`
@@ -667,7 +667,7 @@
 ### Tasks
 
 - [ ] T161 — Configure GitHub Actions cache (30 days) — `.github/workflows/`
-- [ ] T162 — Configure GitHub Releases (permanent) — `github.com/<REDACTED>/*/releases`
+- [ ] T162 — Configure GitHub Releases (permanent) — `github.com/KooshaPari/*/releases`
 - [ ] T163 — Configure GHCR (90 days) — `ghcr.io/<REDACTED>`
 - [ ] T164 — Configure S3/GitHub Pages for benchmarks — `docs/benchmarks/`
 
@@ -728,8 +728,8 @@
 
 - [ ] T173 — Verify all repos reference org workflows — `*/.github/workflows/`
 - [ ] T174 — Fix any CI failures — `*/.github/workflows/`
-- [ ] T175 — Set up branch protection rules — `github.com/<REDACTED>/*/settings/branches`
-- [ ] T176 — Configure required status checks — `github.com/<REDACTED>/*/settings/branches`
+- [ ] T175 — Set up branch protection rules — `github.com/KooshaPari/*/settings/branches`
+- [ ] T176 — Configure required status checks — `github.com/KooshaPari/*/settings/branches`
 
 ## WP-33: Governance audit — verify compliance
 

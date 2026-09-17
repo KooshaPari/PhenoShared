@@ -293,7 +293,7 @@ Job completed in: ~15 minutes (4 × full builds + overhead)
    ```
 
 2. Monitor workflow in GitHub Actions tab:
-   - Go to: https://github.com/<REDACTED>/phenotype-infrakit/actions
+   - Go to: https://github.com/KooshaPari/phenotype-infrakit/actions
    - Find: "Mold Linker Benchmark" job
    - Verify: All steps pass
 

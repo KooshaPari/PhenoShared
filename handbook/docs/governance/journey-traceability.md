@@ -13,7 +13,7 @@ Patterns are easier to trust when they come with proof:
 
 This mirrors the shared Phenotype standard documented in:
 
-- [phenotype-infra journey standard](https://github.com/<REDACTED>/phenotype-infra/blob/main/docs/governance/journey-traceability-standard.md)
+- [phenotype-infra journey standard](https://github.com/KooshaPari/phenotype-infra/blob/main/docs/governance/journey-traceability-standard.md)
 - hwLedger, which is the reference implementation for `ShotGallery` and
   `RecordingEmbed`
 

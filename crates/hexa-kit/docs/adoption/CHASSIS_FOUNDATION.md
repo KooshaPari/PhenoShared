@@ -33,7 +33,7 @@ Spec-driven delivery framework with:
 
 Three-step integration for new repos:
 
-1. Add submodule: `git submodule add https://github.com/<REDACTED>/phenotype-docs.git docs/.phenotype-chassis`
+1. Add submodule: `git submodule add https://github.com/KooshaPari/phenotype-docs.git docs/.phenotype-chassis`
 2. Configure VitePress with Chassis config
 3. Create `.agileplus/config.json` with governance settings
 

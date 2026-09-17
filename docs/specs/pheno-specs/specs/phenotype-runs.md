@@ -6,9 +6,9 @@
 
 ## Source
 
-- Repository: [<REDACTED>/phenotype-runs](https://github.com/<REDACTED>/phenotype-runs)
+- Repository: [<REDACTED>/phenotype-runs](https://github.com/KooshaPari/phenotype-runs)
 - Local seed spec: `C:/Users/koosh/Dev/phenotype-runs/SPEC.md`
-- Spec approval issue: [<REDACTED>/phenotype-runs#1](https://github.com/<REDACTED>/phenotype-runs/issues/1)
+- Spec approval issue: [<REDACTED>/phenotype-runs#1](https://github.com/KooshaPari/phenotype-runs/issues/1)
 
 ## Summary
 

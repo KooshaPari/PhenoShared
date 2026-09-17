@@ -25,7 +25,7 @@ Used when `forge` is unavailable or when a lane is scoped to IDE-native agent to
 
 ## HarnessProfile mapping
 
-At dispatch, HexaKit maps lane `harness: "cursor-agent"` to a [HarnessProfile](https://github.com/<REDACTED>/thegent/blob/main/contracts/provider-bridge/schema/harness-profile.schema.json) with `defaults.intent_capability: tool_execution` and `defaults.latency_tier: interactive`. Tool policy inherits from session AACP bundle when present.
+At dispatch, HexaKit maps lane `harness: "cursor-agent"` to a [HarnessProfile](https://github.com/KooshaPari/thegent/blob/main/contracts/provider-bridge/schema/harness-profile.schema.json) with `defaults.intent_capability: tool_execution` and `defaults.latency_tier: interactive`. Tool policy inherits from session AACP bundle when present.
 
 ## Example lane
 

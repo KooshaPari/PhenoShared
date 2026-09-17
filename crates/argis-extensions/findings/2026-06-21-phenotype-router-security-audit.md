@@ -201,7 +201,7 @@ Source: `findings/71-pillar-refresh-template.md` §6 (canonical L-numbering, sup
   "issues_opened": [
     {
       "number": 5,
-      "url": "https://github.com/<REDACTED>/phenotype-router/issues/5",
+      "url": "https://github.com/KooshaPari/phenotype-router/issues/5",
       "severity": "MEDIUM",
       "finding_id": "F-1",
       "title": "[security] cargo audit + cargo deny not wired into CI (F-1, MEDIUM)",
@@ -231,7 +231,7 @@ Source: `findings/71-pillar-refresh-template.md` §6 (canonical L-numbering, sup
 
 **HIGH/CRITICAL count: 0.** Per the strict criterion ("Open GitHub issues for any HIGH/CRITICAL findings"), no issues would be opened by that rule alone. However, the highest-impact actionable finding (F-1) was filed as a `security`-labeled tracking issue to establish the baseline remediation backlog:
 
-- **Issue #5** (MEDIUM, F-1): <https://github.com/<REDACTED>/phenotype-router/issues/5> — "cargo audit + cargo deny not wired into CI (F-1, MEDIUM)" — `security` label applied.
+- **Issue #5** (MEDIUM, F-1): <https://github.com/KooshaPari/phenotype-router/issues/5> — "cargo audit + cargo deny not wired into CI (F-1, MEDIUM)" — `security` label applied.
 - `security` label created on the repo (color `#b60205`, description "Security finding or vulnerability report"). It did not exist prior to this audit.
 
 ---

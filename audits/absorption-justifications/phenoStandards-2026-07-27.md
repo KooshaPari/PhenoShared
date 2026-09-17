@@ -1,7 +1,7 @@
 # phenoStandards Boundary Correction (2026-07-27)
 
 **Audit ID:** ABS-JUS-phenoStandards-2026-07-27  
-**Source:** `https://github.com/<REDACTED>/phenoStandards`  
+**Source:** `https://github.com/KooshaPari/phenoStandards`  
 **Audited remote SHA:** `23c0dda23bfd7bd060f53a608032102287498f85` (`main`)  
 **Verdict:** `KEEP_STANDALONE_PENDING_BOUNDARY_REVIEW`  
 **Confidence:** HIGH for liveness/content; MEDIUM for final owner

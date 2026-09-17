@@ -82,7 +82,7 @@ No HTTP(S) links present.
 
 - **4 of 8 crates (50 %)** carry zero rustdoc HTTP links at all (`pheno-context`, `pheno-tracing`, `pheno-port-adapter`, `pheno-events`, `pheno-flags`, `pheno-cli-base` — 6 of 8 actually). This is consistent with the substrate / framework posture of these crates: their docs reference internal types and traits, not external URLs.
 - **Of the 2 crates that do reference external URLs, both have at least one broken link** (`pheno-config` 2/2 broken, `pheno-errors` 1/2 broken). This is a small-N but worrying signal: when authors do reach for external references, the references rot.
-- **No links in the 8 crates point to fleet-internal paths** (e.g., no `github.com/<REDACTED>/pheno-…` or `docs.rs/pheno-…` cross-references). Fleet crates rely on rustdoc's intra-doc-link resolution for cross-crate references.
+- **No links in the 8 crates point to fleet-internal paths** (e.g., no `github.com/KooshaPari/pheno-…` or `docs.rs/pheno-…` cross-references). Fleet crates rely on rustdoc's intra-doc-link resolution for cross-crate references.
 - **No links to spec / RFC / Wikipedia / standards bodies are broken** other than the `errors.pheno.dev` placeholder — the IETF reference for RFC 7807 resolves cleanly.
 
 ---
