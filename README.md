@@ -5,6 +5,10 @@
 > This crate is a pre-alpha planning placeholder whose implemented surface is a
 > single two-type sketch (not a framework). See [TOMBSTONE.md](./TOMBSTONE.md)
 > for the full deprecation record.
+>
+> Caveat, verified 2026-09-17: neither this repository nor the named successor
+> currently resolves on GitHub (`KooshaPari/DataKit` returns 404; the successor
+> path was not found). Treat the supersession target as unconfirmed.
 
 > **Work-state:** planning | `[#---------]` | 10%
 >

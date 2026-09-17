@@ -12,7 +12,13 @@ dangling until now.
 | Recorded | 2026-09-17 |
 | Crate | `datakit` v0.1.0, edition 2021, MIT |
 | Successor | `phenotype-python-sdk/packages/data-kit` |
-| Successor verification | Not verifiable from this working tree. The successor path is as asserted by the pre-existing repository banner. The successor repo is not checked out alongside this one. |
+| Successor verification | **Verified absent (2026-09-17).** `gh api repos/KooshaPari/phenotype-python-sdk` and `repos/phenotype-python-sdk` both return HTTP 404, and `gh search repos phenotype-python-sdk` returns nothing. The successor path is unverified and unreachable. |
+| This repo on GitHub | **Absent.** `git remote -v` points at `https://github.com/KooshaPari/DataKit.git`, but `gh api repos/KooshaPari/DataKit` returns 404, `git ls-remote origin` reports "Repository not found", and DataKit is not among the 46 repos returned by `gh repo list KooshaPari`. The authenticated account is `KooshaPari`. |
+
+Both the deprecation target and this repository's own remote are currently
+unreachable on GitHub. Anyone arriving here through git history or a stale link
+should treat the supersession claim as unconfirmed until a reachable successor
+is identified.
 
 ## Why it was deprecated
 
