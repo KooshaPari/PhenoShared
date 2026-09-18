@@ -209,6 +209,34 @@ async fn finalize_via_state(
         ElicitResponse::Answered { .. } => RequestState::Answered,
         ElicitResponse::Deferred { .. } => RequestState::Pending,
     };
+    // A defer is not a final answer: the operator moved the request into the
+    // durable inbox to answer it later. Finalizing here would archive the
+    // file to `answered/`, hiding it from `list_pending` and the inbox UI.
+    // Instead, re-write the pending entry with the defer response recorded
+    // so waiters can see the defer, and keep it answerable.
+    if matches!(response, ElicitResponse::Deferred { .. }) {
+        pending.state = new_state;
+        pending.response = Some(response);
+        let dir = inbox::inbox_pending_dir(&state.root);
+        std::fs::create_dir_all(&dir).map_err(|e| {
+            Response::err(Value::Null, super::ERR_IO, e.to_string())
+        })?;
+        let path = pending.path_in(&dir);
+        let tmp = dir.join(format!("{}.tmp", pending.request_id));
+        let json = serde_json::to_vec_pretty(&pending).map_err(|e| {
+            Response::err(Value::Null, super::ERR_IO, e.to_string())
+        })?;
+        std::fs::write(&tmp, &json).map_err(|e| {
+            Response::err(Value::Null, super::ERR_IO, e.to_string())
+        })?;
+        std::fs::rename(&tmp, &path).map_err(|e| {
+            Response::err(Value::Null, super::ERR_IO, e.to_string())
+        })?;
+        crate::inbox::InboxChangeBus::global()
+            .notify(&format!("defer:{}", pending.request_id));
+        state.notify_answered(rid, ResponseStatus::Pending);
+        return Ok(pending);
+    }
     pending.state = new_state;
     pending.response = Some(response);
     match crate::inbox::finalize(&state.root, &pending) {

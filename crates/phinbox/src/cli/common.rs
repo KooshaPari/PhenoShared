@@ -150,6 +150,7 @@ pub fn build_minimal_spec_from_flags(args: &super::ask::AskArgs) -> Result<Promp
             cancel: args.cancel_label.clone().unwrap_or_else(|| "Cancel".into()),
             confirm: args.confirm_label.clone().unwrap_or_else(|| "OK".into()),
             default_is_cancel: false,
+            defer_label: None,
         })
     } else {
         None
