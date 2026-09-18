@@ -315,7 +315,7 @@ Layout — split pane:
   one exists.
 - Bottom status bar: row count, refresh interval, current keymap hint.
 
-Keybindings (default; rebindable via `PHINBOX_TUI_KEYMAP_*` env vars):
+Keybindings (default, fixed):
 
 | Key            | Action                          |
 |----------------|---------------------------------|
@@ -325,6 +325,7 @@ Keybindings (default; rebindable via `PHINBOX_TUI_KEYMAP_*` env vars):
 | `Tab`          | switch focus between list & detail |
 | `Enter` / `o`  | open selected form in default browser |
 | `r` / `F5`     | force refresh                   |
+| `a`            | answer the selected request     |
 | `d`            | mark request dismissed          |
 | `?`            | toggle keybinding cheat-sheet   |
 | `q` / `Esc`    | quit                            |

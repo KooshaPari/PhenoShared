@@ -19,10 +19,13 @@ use crate::inbox::change::InboxWatcher;
 
 use super::state::{snapshot_inbox, ViewerState, TuiOutcome, POLL_INTERVAL};
 
-/// Try to set the terminal into raw mode. On failure (e.g. CI without TTY),
-/// we return `Ok(false)` so the caller can render a plain-text fallback.
+/// Try to set the terminal into raw mode. On failure (e.g. CI without TTY,
+/// `TERM=dumb`, piped stdin), we return `Ok(false)` so the caller can render
+/// a plain-text fallback instead of crashing.
 pub(crate) fn enter_raw_mode() -> Result<bool, String> {
-    enable_raw_mode().map_err(|e| format!("enable_raw_mode: {e}"))?;
+    if enable_raw_mode().is_err() {
+        return Ok(false);
+    }
     let mut out = stdout();
     if execute!(out, EnterAlternateScreen, EnableMouseCapture).is_err() {
         let _ = disable_raw_mode();
@@ -88,6 +91,10 @@ pub(crate) fn handle_key(key: KeyEvent, state: &mut ViewerState) -> Option<TuiOu
                 );
                 let _ = crate::inbox::daemon::notifier::open_in_default_browser(&url);
             }
+            None
+        }
+        KeyCode::Char('?') => {
+            state.show_help = !state.show_help;
             None
         }
         KeyCode::Char('r') | KeyCode::F(5) => {

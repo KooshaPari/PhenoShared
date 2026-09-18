@@ -314,3 +314,281 @@ mod tests {
         assert!(entries.iter().any(|e| e.request_id == "b"));
     }
 }
+
+// ----------------- layout & render tests (defect regressions) -----------
+
+#[cfg(test)]
+mod render_tests {
+    use super::*;
+    use crate::inbox::RequestOrigin;
+    use crate::spec::{FieldSpec, PromptSpec, Urgency};
+    use crate::inbox::{PendingRequest, RequestState};
+    use crate::tui::event;
+    use ratatui::backend::TestBackend;
+    use ratatui::Terminal;
+
+    fn sample_spec() -> PromptSpec {
+        PromptSpec {
+            details: None,
+            title: "Ship v0.5".to_string(),
+            question: "Are we ready to ship?".to_string(),
+            field: FieldSpec::Boolean {
+                label: "Confirm?".into(),
+                default: Some(true),
+            },
+            notes: None,
+            buttons: None,
+            urgency: Urgency::Warning,
+            timeout_secs: 600,
+            request_id: Some("req-1".to_string()),
+        }
+    }
+
+    fn sample_origin() -> RequestOrigin {
+        RequestOrigin {
+            hostname: "host".into(),
+            process: "agent".into(),
+            pid: 42,
+            callback: None,
+        }
+    }
+
+    /// Seed an inbox directory with one pending request.
+    fn seed(dir: &std::path::Path) {
+        let req = PendingRequest {
+            request_id: "req-1".into(),
+            origin: sample_origin(),
+            spec: sample_spec(),
+            queued_at_ms: crate::inbox::unix_now_ms(),
+            expires_at_ms: u64::MAX,
+            state: RequestState::Pending,
+            response: None,
+            notified_via: vec![],
+            metadata: serde_json::Map::new(),
+        };
+        crate::inbox::enqueue(dir, &req).unwrap();
+    }
+
+    /// Render the terminal buffer to a plain-text string (one line per row).
+    fn buffer_text(terminal: &Terminal<TestBackend>) -> String {
+        let buf = terminal.backend().buffer();
+        let area = buf.area();
+        let mut out = String::new();
+        for y in 0..area.height {
+            for x in 0..area.width {
+                out.push_str(buf.cell((x, y)).map_or(" ", |c| c.symbol()));
+            }
+            out.push('\n');
+        }
+        out
+    }
+
+    /// Helper: render state to a 80x24 TestBackend, return buffer text.
+    fn render_80x24(
+        state: &ViewerState,
+        inbox_root: &std::path::Path,
+    ) -> String {
+        let backend = TestBackend::new(80, 24);
+        let mut terminal = Terminal::new(backend).unwrap();
+        render::render(&mut terminal, state, inbox_root).unwrap();
+        buffer_text(&terminal)
+    }
+
+    // -- Defect 1: detail pane must be visible at 80x24 --------------------
+
+    #[test]
+    fn detail_pane_visible_at_80x24() {
+        let tmp = tempfile::tempdir().unwrap();
+        seed(tmp.path());
+        let mut state = ViewerState::default();
+        state.entries = snapshot_inbox(tmp.path()).unwrap();
+        let text = render_80x24(&state, tmp.path());
+
+        // The detail pane should contain "question" from the PromptSpec,
+        // and the help line should contain the keybinding hint.
+        assert!(
+            text.contains("question"),
+            "detail pane content missing at 80x24:\n{text}"
+        );
+        assert!(
+            text.contains("[?] help"),
+            "help line missing at 80x24:\n{text}"
+        );
+        // The detail pane block title should appear.
+        assert!(
+            text.contains("Ship v0.5") || text.contains(" detail "),
+            "detail pane title missing at 80x24:\n{text}"
+        );
+    }
+
+    #[test]
+    fn detail_pane_and_help_line_are_separate_rows_at_80x24() {
+        let tmp = tempfile::tempdir().unwrap();
+        seed(tmp.path());
+        let mut state = ViewerState::default();
+        state.entries = snapshot_inbox(tmp.path()).unwrap();
+        let backend = TestBackend::new(80, 24);
+        let mut terminal = Terminal::new(backend).unwrap();
+        render::render(&mut terminal, &state, tmp.path()).unwrap();
+
+        let buf = terminal.backend().buffer();
+        let area = buf.area();
+        // Find the help line row (contains "[?] help").
+        let mut help_row: Option<u16> = None;
+        for y in 0..area.height {
+            let row: String = (0..area.width)
+                .filter_map(|x| buf.cell((x, y)).map(|c| c.symbol().to_string()))
+                .collect();
+            if row.contains("[?] help") {
+                help_row = Some(y);
+                break;
+            }
+        }
+        let help_row = help_row.expect("help line row not found in buffer");
+
+        // Find a row that contains "question" (detail pane content).
+        let mut detail_row: Option<u16> = None;
+        for y in 0..area.height {
+            if y == help_row {
+                continue;
+            }
+            let row: String = (0..area.width)
+                .filter_map(|x| buf.cell((x, y)).map(|c| c.symbol().to_string()))
+                .collect();
+            if row.contains("question") {
+                detail_row = Some(y);
+                break;
+            }
+        }
+        assert!(
+            detail_row.is_some(),
+            "detail pane 'question' text not found in any row"
+        );
+        assert_ne!(
+            detail_row.unwrap(),
+            help_row,
+            "detail pane and help line must be on different rows"
+        );
+    }
+
+    // -- Defect 1 (edge): small terminal degrades gracefully ---------------
+
+    #[test]
+    fn small_terminal_5x80_has_no_detail_but_has_status() {
+        let tmp = tempfile::tempdir().unwrap();
+        seed(tmp.path());
+        let mut state = ViewerState::default();
+        state.entries = snapshot_inbox(tmp.path()).unwrap();
+        let backend = TestBackend::new(80, 5);
+        let mut terminal = Terminal::new(backend).unwrap();
+        render::render(&mut terminal, &state, tmp.path()).unwrap();
+        let text = buffer_text(&terminal);
+
+        // At 5 rows, the detail pane should still be present
+        // (minimum layout: list + detail + help + status).
+        assert!(
+            text.contains("pending") || text.contains("total"),
+            "status bar missing at 5x80:\n{text}"
+        );
+    }
+
+    #[test]
+    fn tiny_terminal_3x80_degrades_no_crash() {
+        let tmp = tempfile::tempdir().unwrap();
+        seed(tmp.path());
+        let mut state = ViewerState::default();
+        state.entries = snapshot_inbox(tmp.path()).unwrap();
+        let backend = TestBackend::new(80, 3);
+        let mut terminal = Terminal::new(backend).unwrap();
+        // Should not panic.
+        render::render(&mut terminal, &state, tmp.path()).unwrap();
+    }
+
+    // -- Defect 2: ? key toggles help overlay -----------------------------
+
+    #[test]
+    fn question_mark_key_toggles_help_overlay() {
+        let mut state = ViewerState::default();
+        assert!(!state.show_help);
+
+        let key = crossterm::event::KeyEvent::new(
+            crossterm::event::KeyCode::Char('?'),
+            crossterm::event::KeyModifiers::NONE,
+        );
+        let outcome = event::handle_key(key, &mut state);
+        assert!(outcome.is_none(), "? should not exit the TUI");
+        assert!(state.show_help, "show_help should be true after ?");
+
+        let key2 = crossterm::event::KeyEvent::new(
+            crossterm::event::KeyCode::Char('?'),
+            crossterm::event::KeyModifiers::NONE,
+        );
+        let outcome2 = event::handle_key(key2, &mut state);
+        assert!(outcome2.is_none());
+        assert!(!state.show_help, "show_help should be false after second ?");
+    }
+
+    #[test]
+    fn help_overlay_renders_keybinding_cheat_sheet() {
+        let tmp = tempfile::tempdir().unwrap();
+        seed(tmp.path());
+        let mut state = ViewerState::default();
+        state.entries = snapshot_inbox(tmp.path()).unwrap();
+        state.show_help = true;
+        let text = render_80x24(&state, tmp.path());
+
+        assert!(
+            text.contains("cheat-sheet"),
+            "help overlay title missing:\n{text}"
+        );
+        // The first several lines of the help overlay should be visible
+        // (the detail pane is ~10 rows inner, content is13 lines, so the
+        // top ~8 items are visible before the block border clips).
+        assert!(
+            text.contains("move selection down"),
+            "help content missing:\n{text}"
+        );
+        assert!(
+            text.contains("quit"),
+            "quit keybinding missing:\n{text}"
+        );
+    }
+
+    #[test]
+    fn help_overlay_does_not_appear_when_show_help_is_false() {
+        let tmp = tempfile::tempdir().unwrap();
+        seed(tmp.path());
+        let mut state = ViewerState::default();
+        state.entries = snapshot_inbox(tmp.path()).unwrap();
+        state.show_help = false;
+        let text = render_80x24(&state, tmp.path());
+
+        assert!(
+            !text.contains("cheat-sheet"),
+            "help overlay should NOT appear when show_help is false"
+        );
+    }
+
+    // -- Defect 3: non-TTY fallback returns Ok(false) ---------------------
+
+    #[test]
+    fn enter_raw_mode_returns_false_on_failure() {
+        // In a test harness without a TTY, enable_raw_mode fails.
+        // Before the fix this returned Err; now it must return Ok(false).
+        let result = event::enter_raw_mode();
+        match result {
+            Ok(false) => {} // expected in test environment
+            Ok(true) => {
+                // If we're somehow in a TTY, that's fine too — the function
+                // succeeded and we need to clean up.
+                event::leave_raw_mode();
+            }
+            Err(e) => {
+                panic!(
+                    "enter_raw_mode should return Ok(false) on failure, \
+                     not Err: {e}"
+                );
+            }
+        }
+    }
+}

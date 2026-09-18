@@ -1346,9 +1346,8 @@ are keyboard-only friendly and don't fight the user's muscle memory:
 | `?`            | toggle help                     | standard                                            |
 | `q` / `Esc`    | quit                            | vim convention + universal Esc                       |
 
-All keybindings are rebindable via `PHINBOX_TUI_KEYMAP_<KEY>=<action>`
-env vars. We deliberately do not ship a config file in v0.5 — env vars
-are enough for a 9-action keymap and avoid the YAML/TOML config-debate.
+All keybindings use the defaults listed above and are not rebindable.
+The v0.5 scope does not include a config file or env-var keymap override.
 
 ### 20.6 Verification matrix (v0.5)
 

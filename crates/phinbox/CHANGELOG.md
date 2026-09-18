@@ -275,8 +275,7 @@ and redirects the browser to `/inbox/{rid}/done`.
   between list and detail pane, `Enter`/`o` opens the selected form in
   the default browser (`xdg-open` / `open` / `Start-Process`), `r`/`F5`
   force a refresh, `d` marks the request dismissed, `?` toggles the
-  keybinding cheat-sheet, `q`/`Esc` quits. All keybindings are
-  configurable via `PHINBOX_TUI_KEYMAP_<KEY>=<action>` env vars.
+  keybinding cheat-sheet, `q`/`Esc` quits.
 - **Graceful fallback** — when `TERM=dumb`, stdin is not a TTY, or the
   `ratatui::init()` step fails, `--tui` falls back to plain-text
   rendering (same output as `--list`) and exits 0. CI runs, detached

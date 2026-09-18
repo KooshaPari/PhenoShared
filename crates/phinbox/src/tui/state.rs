@@ -46,6 +46,8 @@ pub struct ViewerState {
     pub selected: usize,
     pub focus_on_list: bool,
     pub status_message: String,
+    /// When true, the help overlay is drawn on top of the detail pane.
+    pub show_help: bool,
 }
 
 impl Default for ViewerState {
@@ -55,6 +57,7 @@ impl Default for ViewerState {
             selected: 0,
             focus_on_list: true,
             status_message: String::from("press ? for keys · q to quit"),
+            show_help: false,
         }
     }
 }
