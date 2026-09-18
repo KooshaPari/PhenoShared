@@ -54,6 +54,16 @@ pub struct PromptSpec {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub buttons: Option<ButtonSpec>,
 
+    /// Optional rich detail block for approval-style prompts.
+    ///
+    /// This is how a *tool approval* carries structured, human-readable
+    /// context: the files a destructive action will touch, the reason the
+    /// agent is asking, and the effects of saying yes. Renderers that can
+    /// draw it (browser form, TUI, in-chat) print it as discrete items;
+    /// renderers that cannot (native popup chrome) fold it into the body.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub details: Option<DetailsSpec>,
+
     /// Urgency hint — affects icon + sound.
     #[serde(default)]
     pub urgency: Urgency,
@@ -196,6 +206,12 @@ pub struct ButtonSpec {
     /// If true, swap which button is the default (Enter-key target).
     #[serde(default)]
     pub default_is_cancel: bool,
+    /// Label for the optional third "defer" button. When set, every renderer
+    /// that can (popup, TUI, in-chat) draws a button that moves this request
+    /// into the durable inbox so the operator can answer it later. `None`
+    /// disables the affordance. The deferred reply is `ElicitResponse::Deferred`.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub defer_label: Option<String>,
 }
 
 impl Default for ButtonSpec {
@@ -204,8 +220,89 @@ impl Default for ButtonSpec {
             cancel: "Cancel".to_string(),
             confirm: "OK".to_string(),
             default_is_cancel: false,
+            defer_label: None,
         }
     }
+}
+
+/// Rich, structured context shown alongside a prompt — the payload that makes
+/// a *tool approval* legible ("these 3 files will be deleted; this is why;
+/// this is what changes").
+///
+/// All fields are optional so the block degrades to whatever the caller knows.
+#[derive(Debug, Clone, Default, Serialize, Deserialize, JsonSchema)]
+#[serde(deny_unknown_fields)]
+pub struct DetailsSpec {
+    /// Human-readable reason the agent is asking.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub reason: Option<String>,
+
+    /// Discrete items to render (files, key/values, warnings, notes).
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub items: Vec<DetailItem>,
+
+    /// One-line description of the consequences of approving.
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub effects: Vec<String>,
+
+    /// The literal command or tool call being approved, if any.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub command: Option<String>,
+}
+
+/// A single rich item inside a [`DetailsSpec`].
+#[derive(Debug, Clone, Serialize, Deserialize, JsonSchema)]
+#[schemars(tag = "kind", rename_all = "snake_case")]
+#[serde(tag = "kind", rename_all = "snake_case", deny_unknown_fields)]
+pub enum DetailItem {
+    /// A file that the approved action will touch.
+    File {
+        /// Path as the caller knows it (absolute or repo-relative).
+        path: String,
+        /// What the action does to the file.
+        action: FileAction,
+        /// Optional note, e.g. "92 MB, will be removed from history".
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        note: Option<String>,
+    },
+    /// A labelled free-text block.
+    Text {
+        /// Short label.
+        label: String,
+        /// Body text.
+        body: String,
+    },
+    /// A key/value pair, e.g. `repo` -> `KooshaPari/pheno`.
+    KeyValue {
+        /// Field name.
+        key: String,
+        /// Field value.
+        value: String,
+    },
+    /// A warning the operator should read before deciding.
+    Warning {
+        /// Warning text.
+        message: String,
+    },
+}
+
+/// What an approved action does to a file.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize, JsonSchema)]
+#[schemars(rename_all = "lowercase")]
+#[serde(rename_all = "lowercase")]
+pub enum FileAction {
+    /// Reads only.
+    Read,
+    /// Modifies in place.
+    Write,
+    /// Creates a new file.
+    Create,
+    /// Removes a file.
+    Delete,
+    /// Renames or moves.
+    Rename,
+    /// Executes.
+    Execute,
 }
 
 /// Urgency hint — affects icon and sound on GUI popups.
@@ -272,6 +369,20 @@ pub enum ElicitResponse {
     Cancelled {
         #[serde(default, skip_serializing_if = "Option::is_none")]
         notes: Option<String>,
+    },
+    /// The operator chose "defer": the request has been moved to the durable
+    /// inbox and will be answered later. The caller should NOT assume either
+    /// yes or no — it should keep working and either poll the inbox or let the
+    /// inbox surface wake it.
+    Deferred {
+        /// Correlation id of the queued inbox entry.
+        request_id: String,
+        /// Browser/phone deeplink the operator can open to answer.
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        open_url: Option<String>,
+        /// Durable path of the pending entry, when on the same host.
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        path: Option<String>,
     },
     /// Popup timed out without a response.
     TimedOut {

@@ -229,6 +229,7 @@ mod tests {
             request_id: "post-1".into(),
             origin,
             spec: crate::spec::PromptSpec {
+                details: None,
                 title: "Choose".into(),
                 question: "Pick env".into(),
                 field: FieldSpec::Choice {
@@ -297,6 +298,7 @@ mod tests {
                 callback: None,
             },
             spec: crate::spec::PromptSpec {
+                details: None,
                 title: "Approve?".into(),
                 question: "?".into(),
                 field: FieldSpec::Boolean {

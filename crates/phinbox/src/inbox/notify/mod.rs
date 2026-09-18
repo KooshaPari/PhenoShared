@@ -222,6 +222,7 @@ mod tests {
 
     fn sample_req(request_id: &str) -> PendingRequest {
         let spec = crate::spec::PromptSpec {
+            details: None,
             title: "Approval needed".into(),
             question: "Continue with rollout to production?".into(),
             field: crate::spec::FieldSpec::Boolean {

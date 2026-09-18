@@ -25,6 +25,7 @@ pub fn trace_request_end(request_id: &str, response: &ElicitResponse) {
         ElicitResponse::Cancelled { .. } => "cancelled",
         ElicitResponse::TimedOut { .. } => "timed_out",
         ElicitResponse::Failed { .. } => "failed",
+        ElicitResponse::Deferred { .. } => "deferred",
     };
     tracing::info!(
         target: "phinbox",

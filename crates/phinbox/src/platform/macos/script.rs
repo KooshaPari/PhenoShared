@@ -90,6 +90,7 @@ mod tests {
     #[test]
     fn script_includes_title_and_question() {
         let spec = PromptSpec {
+            details: None,
             title: "Test".into(),
             question: "What?".into(),
             field: FieldSpec::Boolean {
@@ -112,6 +113,7 @@ mod tests {
     #[test]
     fn script_uses_hidden_answer_for_secret() {
         let spec = PromptSpec {
+            details: None,
             title: "Token".into(),
             question: "Enter token".into(),
             field: FieldSpec::Text {
@@ -135,6 +137,7 @@ mod tests {
     #[test]
     fn script_includes_timeout_clause() {
         let spec = PromptSpec {
+            details: None,
             title: "t".into(),
             question: "q".into(),
             field: FieldSpec::Text {

@@ -15,6 +15,7 @@ mod tests {
 
     fn minimal_text() -> PromptSpec {
         PromptSpec {
+    details: None,
             title: "Test".into(),
             question: "?".into(),
             field: FieldSpec::Text {

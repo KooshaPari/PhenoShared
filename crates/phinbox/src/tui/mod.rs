@@ -52,6 +52,7 @@ mod tests {
 
     fn sample_spec() -> PromptSpec {
         PromptSpec {
+    details: None,
             title: "Ship v0.5".to_string(),
             question: "Are we ready to ship?".to_string(),
             field: FieldSpec::Boolean {

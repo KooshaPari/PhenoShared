@@ -18,6 +18,7 @@
 //! implementation plan.
 
 pub mod spec;
+pub mod approval;
 pub mod options;
 pub mod error;
 pub mod escape;
@@ -50,6 +51,7 @@ pub mod tray;
 /// TTY allocation).
 pub mod tui;
 
+pub use approval::{ToolApproval, AffectedFile};
 pub use error::ElicitError;
 pub use inbox::daemon::{
     live_url as inbox_live_url, read_lockfile as inbox_read_lockfile, DEFAULT_PORT as INBOX_DEFAULT_PORT,

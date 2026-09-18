@@ -79,6 +79,7 @@ members = [
     "crates/phenotype-crypto",
     "crates/phenotype-observability",
     "crates/phenotype-policy-engine",
+    "crates/phinbox",
 ]
 [workspace.package]
 version = "0.3.10"
@@ -150,6 +151,7 @@ criterion = { version = "0.5", features = ["html_reports"] }
 # so all consumers across the pheno-* fleet see the same OTLP wire-format
 # export surface. See https://github.com/KooshaPari/PhenoObservability/releases/tag/v0.1.0
 pheno-otel = { path = "crates/argis-extensions/pheno-otel", version = "0.1.0" }
+pheno-tracing = { path = "crates/pheno-tracing", version = "0.4.0" }
 
 # --- PhenoFabric dependencies (absorbed 2026-09-16) ---
 blake3 = "1.5"

@@ -207,6 +207,7 @@ async fn finalize_via_state(
         ElicitResponse::TimedOut { .. } => RequestState::Expired,
         ElicitResponse::Failed { .. } => RequestState::Expired,
         ElicitResponse::Answered { .. } => RequestState::Answered,
+        ElicitResponse::Deferred { .. } => RequestState::Pending,
     };
     pending.state = new_state;
     pending.response = Some(response);
@@ -215,6 +216,7 @@ async fn finalize_via_state(
             let status = match &pending.response {
                 Some(ElicitResponse::Cancelled { .. }) => ResponseStatus::Cancelled,
                 Some(ElicitResponse::TimedOut { .. }) => ResponseStatus::TimedOut,
+                Some(ElicitResponse::Deferred { .. }) => ResponseStatus::Pending,
                 Some(_) => ResponseStatus::Answered,
                 None => ResponseStatus::Pending,
             };

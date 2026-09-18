@@ -63,6 +63,7 @@ pub fn cmd_smoke(args: SmokeArgs, renderer: Option<RendererPreference>) -> Resul
         return Ok(());
     }
     let spec = PromptSpec {
+    details: None,
         title: args.title,
         question: "This is the phinbox smoke test. Did it work?".into(),
         field: FieldSpec::Boolean {
@@ -154,6 +155,7 @@ pub fn build_minimal_spec_from_flags(args: &super::ask::AskArgs) -> Result<Promp
         None
     };
     Ok(PromptSpec {
+    details: None,
         title,
         question,
         field: FieldSpec::Text {

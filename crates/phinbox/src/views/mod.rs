@@ -41,6 +41,7 @@ mod tests {
                 callback: None,
             },
             spec: PromptSpec {
+    details: None,
                 title: "What is your favorite color?".into(),
                 question: "Please answer honestly.".into(),
                 field: FieldSpec::Text {

@@ -44,6 +44,9 @@ pub struct PhinboxParams {
     /// Optional request ID for correlation.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub request_id: Option<String>,
+    /// Optional rich detail block (files touched, reason, effects, warnings).
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub details: Option<crate::spec::DetailsSpec>,
 }
 
 const fn default_timeout() -> u32 {
@@ -61,6 +64,7 @@ impl From<PhinboxParams> for PromptSpec {
             urgency: p.urgency,
             timeout_secs: p.timeout_secs,
             request_id: p.request_id,
+            details: p.details,
         }
     }
 }
@@ -168,6 +172,7 @@ mod tests {
             urgency: crate::spec::Urgency::default(),
             timeout_secs: default_timeout(),
             request_id: None,
+            details: None,
         };
         let s: PromptSpec = p.into();
         assert_eq!(s.timeout_secs, 600);
