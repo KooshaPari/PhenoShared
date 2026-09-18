@@ -195,6 +195,22 @@ async fn finalize_via_state(
         Ok(None) => return Err(Response::err(Value::Null, super::ERR_NOT_FOUND, format!("rid={rid}"))),
         Err(e) => return Err(Response::err(Value::Null, super::ERR_IO, e.to_string())),
     };
+    // Expiry is authoritative at the point of answering, not only in the
+    // daemon's notifier sweeper — a client may talk to an IPC server that has
+    // no sweeper running. The in-place transition matches what the sweeper
+    // would have written, so the state a client observes is the same either
+    // way. A defer is an answer attempt too: you cannot defer a closed window.
+    match crate::inbox::expire_if_due(&state.root, &mut pending) {
+        Ok(true) => {
+            return Err(Response::err(
+                Value::Null,
+                super::ERR_EXPIRED,
+                format!("rid={rid} expired at {} ms since the epoch", pending.expires_at_ms),
+            ))
+        }
+        Ok(false) => {}
+        Err(e) => return Err(Response::err(Value::Null, super::ERR_IO, e.to_string())),
+    }
     if !matches!(pending.state, RequestState::Pending) {
         return Err(Response::err(
             Value::Null,

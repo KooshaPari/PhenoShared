@@ -6,7 +6,7 @@
 
 use std::path::Path;
 
-use crate::inbox::{finalize, load, PendingRequest, RequestState};
+use crate::inbox::{expire_if_due, finalize, load, PendingRequest, RequestState};
 use crate::spec::{ElicitResponse, FieldSpec, FieldValue};
 use serde::Deserialize;
 
@@ -16,6 +16,9 @@ use serde::Deserialize;
 /// collapsing every failure into a generic error string.
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub(crate) enum SubmitError {
+    /// The request is past its TTL. A late POST must not record an answer —
+    /// the TTL is authoritative even when no daemon is running to sweep it.
+    Expired { expires_at_ms: u64 },
     /// The request is Answered / Cancelled / Expired. The first answer
     /// stands; a later POST must never rewrite it.
     AlreadyFinalized(RequestState),
@@ -26,6 +29,10 @@ pub(crate) enum SubmitError {
 impl std::fmt::Display for SubmitError {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
+            Self::Expired { expires_at_ms } => write!(
+                f,
+                "request expired at {expires_at_ms} ms since the epoch; a late answer is not recorded"
+            ),
             Self::AlreadyFinalized(state) => write!(
                 f,
                 "request is already finalized (state={state:?}); the recorded answer stands"
@@ -74,10 +81,19 @@ pub(crate) fn submit_answer(
         url_decode_form(body_str)
     };
 
-    let req = match load(inbox_root, request_id) {
+    let mut req = match load(inbox_root, request_id) {
         Ok(r) => r,
         Err(e) => return Err(SubmitError::BadRequest(e.to_string())),
     };
+
+    // Expiry is enforced here, not only by the daemon's notifier sweeper — a
+    // daemon may not be running at all. The in-place transition mirrors what
+    // the sweeper would have written, so the recorded state is the same.
+    if expire_if_due(inbox_root, &mut req).map_err(|e| SubmitError::BadRequest(e.to_string()))? {
+        return Err(SubmitError::Expired {
+            expires_at_ms: req.expires_at_ms,
+        });
+    }
 
     // The first answer stands. `cli/answer.rs` and `inbox/ipc/server.rs` both
     // refuse to touch a terminal request; HTTP has to agree with them, or a

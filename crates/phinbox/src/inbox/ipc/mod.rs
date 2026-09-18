@@ -32,6 +32,8 @@ use crate::inbox::{self, PendingRequest, ResponseStatus};
 
 mod client;
 mod server;
+#[cfg(test)]
+mod tests;
 
 pub use client::Client;
 pub use server::{bind_listener, spawn_accept};
@@ -126,6 +128,10 @@ pub const ERR_INTERNAL: i32 = -32603;
 pub const ERR_NOT_FOUND: i32 = 1001;
 pub const ERR_BAD_STATE: i32 = 1002;
 pub const ERR_IO: i32 = 1003;
+/// The request is past its TTL and is not answerable. Distinct from
+/// [`ERR_BAD_STATE`] so a caller can tell "already answered/cancelled" from
+/// "the window closed". Clients should re-issue the prompt, not retry.
+pub const ERR_EXPIRED: i32 = 1004;
 
 // ---------------------------------------------------------------------------
 // Server state (shared with the daemon)

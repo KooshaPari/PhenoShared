@@ -171,6 +171,62 @@ fn text_field() -> FieldSpec {
     }
 }
 
+/// A request whose TTL is long past, as it looks when no daemon has been
+/// running to sweep it (the sweeper only runs while a daemon is up).
+fn pending_expired(id: &str) -> PendingRequest {
+    PendingRequest {
+        expires_at_ms: 1,
+        ..pending(id, text_field(), None)
+    }
+}
+
+/// The load-bearing case for "expiry must not depend on a daemon being up":
+/// an expired-but-unswept request is not answerable, and the attempt settles
+/// the state in place exactly as the sweeper would have, so an observer
+/// cannot tell which of the two wrote `Expired`.
+#[test]
+fn expired_request_is_refused_without_a_daemon() {
+    let tmp = tempfile::tempdir().unwrap();
+    crate::inbox::enqueue(tmp.path(), &pending_expired("stale-1")).unwrap();
+    // Precondition: still `pending` on disk, i.e. genuinely unswept.
+    assert_eq!(load(tmp.path(), "stale-1").unwrap().state, RequestState::Pending);
+
+    let err = submit_answer(tmp.path(), "stale-1", b"value=late&confirm=ok").unwrap_err();
+    assert!(
+        matches!(err, SubmitError::Expired { expires_at_ms: 1 }),
+        "a late POST must be refused as expired, got {err:?}"
+    );
+
+    let after = load(tmp.path(), "stale-1").unwrap();
+    assert_eq!(
+        after.state,
+        RequestState::Expired,
+        "the refusal must settle the state the sweeper would have written"
+    );
+    assert!(after.response.is_none(), "no answer may be recorded");
+    assert!(
+        !crate::inbox::answered_dir(tmp.path()).join("stale-1.json").exists(),
+        "an expired request must not be archived as answered"
+    );
+}
+
+/// Cancel is an answer attempt too, and a fresh request is unaffected.
+#[test]
+fn expired_request_cannot_be_cancelled_and_fresh_requests_still_answer() {
+    let tmp = tempfile::tempdir().unwrap();
+    crate::inbox::enqueue(tmp.path(), &pending_expired("stale-2")).unwrap();
+    assert!(matches!(
+        submit_answer(tmp.path(), "stale-2", b"cancel=1"),
+        Err(SubmitError::Expired { .. })
+    ));
+    assert_eq!(load(tmp.path(), "stale-2").unwrap().state, RequestState::Expired);
+
+    // Control: the same path with a live TTL still records the answer.
+    crate::inbox::enqueue(tmp.path(), &pending("fresh-1", text_field(), None)).unwrap();
+    submit_answer(tmp.path(), "fresh-1", b"value=ok&confirm=ok").unwrap();
+    assert_eq!(load(tmp.path(), "fresh-1").unwrap().state, RequestState::Answered);
+}
+
 /// v0.9.1: a body with no submit marker, or without the field the spec
 /// asked for, is not an answer; and the first answer stands forever.
 #[test]

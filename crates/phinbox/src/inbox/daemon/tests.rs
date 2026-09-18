@@ -11,19 +11,22 @@ use std::time::Duration;
 #[test]
 fn start_stop_roundtrip() {
     let tmp = tempfile::tempdir().unwrap();
-    let port = pick_unused_port().expect("pick port");
-    // Brief settling time to avoid the kernel's TIME_WAIT race.
-    thread::sleep(Duration::from_millis(50));
+    // Bind port 0 and use the port the daemon actually got. Picking a port by
+    // binding and immediately releasing it is a TOCTOU race against every
+    // other process on the box ("is it free?" is answered before the daemon
+    // rebinds it); an ephemeral bind inside `start_daemon` has no such window.
     let cfg = DaemonConfig {
         inbox_root: tmp.path().to_path_buf(),
-        port,
+        port: 0,
         bind: IpAddr::V4(Ipv4Addr::LOCALHOST),
         notify: NotifyChannels::default(),
         enable_tray: false,
     };
     let handle = start_daemon(cfg).unwrap();
-    assert_eq!(handle.port, port);
-    // Health check (retry until the listener is ready)
+    assert_ne!(handle.port, 0, "daemon must report the port it bound");
+    // Health check. `start_daemon` binds the listener before returning, so the
+    // kernel queues this connection even before the accept thread runs; the
+    // retry loop is only a safety net for a partially started daemon.
     let addr = SocketAddr::new(IpAddr::V4(Ipv4Addr::LOCALHOST), handle.port);
     let deadline = std::time::Instant::now() + Duration::from_secs(5);
     let mut stream = None;
@@ -50,6 +53,53 @@ fn start_stop_roundtrip() {
     thread::sleep(Duration::from_millis(200));
 }
 
+/// Deterministic regression for the intermittent `start_stop_roundtrip`
+/// failure (`ConnectionReset` / "empty read").
+///
+/// The accept loop needs a non-blocking listener to poll `shutdown`, and on
+/// BSD/macOS `accept()` makes the accepted socket *inherit* `O_NONBLOCK`
+/// (Linux's `accept()` does not). A non-blocking socket ignores
+/// `SO_RCVTIMEO`, so the handler's first `read()` returned `EAGAIN` whenever
+/// the client's request bytes had not landed yet: the connection was dropped
+/// with no response and the client observed EOF or ECONNRESET. Whether that
+/// happened depended on winning a millisecond-scale race against the client's
+/// `write()`, which is why it only showed up intermittently.
+///
+/// A client that connects and then waits before sending makes the race
+/// deterministic — this fails 100% of the time against the defect.
+#[test]
+fn slow_client_still_gets_a_response() {
+    let tmp = tempfile::tempdir().unwrap();
+    let handle = start_daemon_on(tmp.path());
+    let addr = SocketAddr::new(IpAddr::V4(Ipv4Addr::LOCALHOST), handle.port);
+
+    let mut stream = TcpStream::connect(addr).expect("connect daemon");
+    stream
+        .set_read_timeout(Some(Duration::from_secs(5)))
+        .unwrap();
+    // Give the accept loop time to accept the connection *before* any request
+    // bytes exist, which is exactly the window the flake depended on.
+    thread::sleep(Duration::from_millis(300));
+    stream
+        .write_all(b"GET /health HTTP/1.1\r\nHost: localhost\r\nConnection: close\r\n\r\n")
+        .expect("write request");
+    stream.flush().unwrap();
+
+    let mut reader = BufReader::new(&stream);
+    let mut status = String::new();
+    let n = reader
+        .read_line(&mut status)
+        .expect("a slow client must not be dropped");
+    assert!(n > 0, "no response from daemon: empty read");
+    assert!(
+        status.contains("200"),
+        "expected HTTP/1.1 200, got: {status}"
+    );
+
+    let _ = handle.stop();
+    thread::sleep(Duration::from_millis(200));
+}
+
 // ---- v0.9.1: HTTP status / answer-integrity regressions ----
 //
 // Three defects were audited live against a running daemon:
@@ -61,12 +111,11 @@ fn start_stop_roundtrip() {
 
 /// Start a daemon on a free port over `root` and wait until it accepts.
 fn start_daemon_on(root: &std::path::Path) -> DaemonHandle {
-    let port = pick_unused_port().expect("pick port");
-    // Brief settling time to avoid the kernel's TIME_WAIT race.
-    thread::sleep(Duration::from_millis(50));
+    // `port: 0` lets the kernel pick; the daemon reports what it bound. See
+    // `start_stop_roundtrip` for why picking a port first is racy.
     let cfg = DaemonConfig {
         inbox_root: root.to_path_buf(),
-        port,
+        port: 0,
         bind: IpAddr::V4(Ipv4Addr::LOCALHOST),
         notify: NotifyChannels::default(),
         enable_tray: false,
@@ -123,6 +172,11 @@ fn status_line(resp: &str) -> &str {
 
 /// Queue a pending `Text` request under `root`.
 fn enqueue_text(root: &std::path::Path, id: &str) {
+    enqueue_text_expiring(root, id, unix_now_ms() + 600_000);
+}
+
+/// Queue a pending `Text` request under `root` with an explicit TTL.
+fn enqueue_text_expiring(root: &std::path::Path, id: &str, expires_at_ms: u64) {
     use crate::inbox::{enqueue, PendingRequest, RequestOrigin};
     use crate::spec::{FieldSpec, PromptSpec, Urgency};
     let spec = PromptSpec {
@@ -143,7 +197,7 @@ fn enqueue_text(root: &std::path::Path, id: &str) {
         timeout_secs: 600,
         request_id: Some(id.into()),
     };
-    let req = PendingRequest::new(
+    let mut req = PendingRequest::new(
         spec,
         RequestOrigin {
             hostname: "h".into(),
@@ -152,7 +206,47 @@ fn enqueue_text(root: &std::path::Path, id: &str) {
             callback: None,
         },
     );
+    req.expires_at_ms = expires_at_ms;
     enqueue(root, &req).expect("enqueue");
+}
+
+/// Expiry must hold at the HTTP answer surface, not only in the daemon's
+/// sweeper: an expired request is reported as gone (410) and is never
+/// archived as answered. Whether the sweeper or the answer attempt settles
+/// the state, the operator-visible outcome is the same.
+#[test]
+fn http_expired_request_is_not_answerable() {
+    use crate::inbox::{answered_dir, load, RequestState};
+
+    let tmp = tempfile::tempdir().unwrap();
+    let handle = start_daemon_on(tmp.path());
+    let port = handle.port;
+    enqueue_text_expiring(tmp.path(), "stale-http", 1);
+
+    // The form page reports the expiry instead of offering a live form.
+    assert_eq!(
+        status_line(&http_get(port, "/inbox/stale-http")),
+        "HTTP/1.1 410 Gone",
+        "an expired request must not render an answerable form"
+    );
+    // A late POST is refused, exactly like an already-finalized request is.
+    let post = http_post(port, "/inbox/stale-http/answer", "value=late&confirm=ok");
+    assert_eq!(
+        status_line(&post),
+        "HTTP/1.1 410 Gone",
+        "a late POST must be refused: {post}"
+    );
+
+    let req = load(tmp.path(), "stale-http").unwrap();
+    assert_eq!(req.state, RequestState::Expired);
+    assert!(req.response.is_none(), "no answer may be recorded");
+    assert!(
+        !answered_dir(tmp.path()).join("stale-http.json").exists(),
+        "an expired request must not be archived as answered"
+    );
+
+    let _ = handle.stop();
+    thread::sleep(Duration::from_millis(200));
 }
 
 /// Defect 1: the status each route decided on must reach the wire.
@@ -309,7 +403,11 @@ fn live_url_rejects_stale_lockfile() {
 #[test]
 fn live_url_accepts_running_daemon() {
     let dir = tempdir_v051();
-    let port = pick_unused_port().expect("no free port");
+    // Bind first, then advertise the port we actually hold in the lockfile.
+    // `pick_unused_port()` would release the port before `live_url` probes it.
+    let hold = TcpListener::bind(SocketAddr::new(IpAddr::V4(Ipv4Addr::LOCALHOST), 0))
+        .expect("bind test port");
+    let port = hold.local_addr().expect("local_addr").port();
     let payload = LockfilePayload {
         root: dir.clone(),
         port,
@@ -322,15 +420,10 @@ fn live_url_accepts_running_daemon() {
         serde_json::to_vec(&payload).unwrap(),
     )
     .unwrap();
-    // Bind to the port so is_port_live() returns true.
-    let _hold = TcpListener::bind(SocketAddr::new(
-        IpAddr::V4(Ipv4Addr::LOCALHOST),
-        port,
-    ))
-    .expect("bind test port");
     let url = live_url(&dir, None);
     assert!(url.is_some(), "live_url should accept a live socket");
     assert!(url.unwrap().contains(&format!(":{port}")));
+    drop(hold);
 }
 
 #[test]
@@ -369,12 +462,4 @@ fn tempdir_v051() -> std::path::PathBuf {
     ));
     std::fs::create_dir_all(&p).unwrap();
     p
-}
-
-fn pick_unused_port() -> Option<u16> {
-    let addr = SocketAddr::new(IpAddr::V4(Ipv4Addr::LOCALHOST), 0);
-    let l = TcpListener::bind(addr).ok()?;
-    let p = l.local_addr().ok()?.port();
-    drop(l);
-    Some(p)
 }

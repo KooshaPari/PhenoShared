@@ -214,6 +214,34 @@ pub fn unix_now_ms() -> u64 {
         .map_or(0, |d| d.as_millis() as u64)
 }
 
+/// Enforce `expires_at_ms` at the point of use.
+///
+/// The daemon's notifier sweeper flips stale pending requests to
+/// [`RequestState::Expired`] on a timer, but that only happens while a daemon
+/// is running. Expiry must not depend on that: an expired request is not
+/// answerable, and it must *report* the state a sweeper would have written.
+///
+/// This lazily performs the same in-place transition the sweeper performs
+/// (via [`mark_expired_in_place`], which keeps the file in `inbox/` so the UI
+/// can still render it), so an expired-but-unswept request is
+/// indistinguishable from a swept one.
+///
+/// Returns `Ok(true)` when `req` is expired — either it was already
+/// [`RequestState::Expired`], or it just transitioned. A request that was
+/// already answered or cancelled returns `Ok(false)`: the recorded answer
+/// stands, and its TTL is history.
+pub fn expire_if_due(root: &Path, req: &mut PendingRequest) -> Result<bool, ElicitError> {
+    if matches!(req.state, RequestState::Expired) {
+        return Ok(true);
+    }
+    if req.is_terminal() || !req.is_expired_now() {
+        return Ok(false);
+    }
+    req.state = RequestState::Expired;
+    mark_expired_in_place(root, req)?;
+    Ok(true)
+}
+
 /// Where the inbox data lives on disk.
 ///
 /// Honours `PHINBOX_INBOX_DIR` (overrides everything), falls back to
@@ -292,10 +320,12 @@ pub fn wait_for_response(
         // notify raced the rename — the rename is in `enqueue`/`finalize`
         // *before* the bus ping, so this is theoretically unreachable,
         // but a defensive load() costs nothing).
-        match load(root, request_id) {
-            Ok(req) if req.is_terminal() => return Ok(req),
-            Ok(_req) => {}
-            Err(e) => return Err(e),
+        let mut req = load(root, request_id)?;
+        // Enforce the TTL here too: with no daemon running to sweep a stale
+        // request, a waiter would otherwise block until its own overall
+        // timeout even though the request already expired.
+        if expire_if_due(root, &mut req)? || req.is_terminal() {
+            return Ok(req);
         }
         if std::time::Instant::now() >= deadline {
             return Err(ElicitError::Timeout(
