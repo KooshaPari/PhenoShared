@@ -124,12 +124,28 @@ workspace containing only `phinbox` plus the workspace's inherited
 `[workspace.package]` / `[workspace.dependencies]`. Same source, no other
 members.
 
-## Structural gap (reported, not fixed)
+## Structural gap — closed in `d0144316`
 
-`crates/phinbox/src/inbox/ipc/` is a Unix-domain-socket design and is **not**
-`cfg`-gated, so `phinbox` cannot compile for Windows at all
-(`tokio::net::UnixListener`, `std::os::unix`). Either the IPC layer needs a
-Windows transport (named pipes) or the module must be gated behind `unix` so
-the crate builds with the inbox absent. Out of scope here: it is a portability
-project, not a renderer fix, and cannot be verified without a Windows host.
+`crates/phinbox/src/inbox/ipc/` is a Unix-domain-socket design and was **not**
+`cfg`-gated, so `phinbox` could not compile for Windows at all
+(`tokio::net::UnixListener`, `std::os::unix`). That made the Windows renderer
+fix unreachable. Nothing in the crate references the module except its own
+declaration and one integration test, so it is now `#[cfg(unix)]` and that
+test is gated to match; the HTTP daemon, the inbox and every renderer are
+unaffected on Unix. `installer/powershell.rs` also used `Command` inside its
+Windows-only blocks without importing it.
+
+Because the platform renderers are `cfg`-gated, a broken one is invisible to a
+native `cargo test` — it is simply never compiled. That is how both failures
+survived. `crates/phinbox/scripts/check-targets.sh` now checks Linux and
+Windows for all targets (skipping uninstalled ones), with a negative control
+confirmed: breaking `windows.rs` makes it exit 1, and 0 when clean.
+
+| Check | Result |
+|---|---|
+| `--all-targets` for `x86_64-pc-windows-gnu` | 0 errors (was: could not compile) |
+| `--all-targets` for `x86_64-unknown-linux-gnu` | 0 errors |
+| macOS full matrix after the change | 193 passed / 0 failed |
+| guard negative control | exit 1 broken, exit 0 clean |
+
 
