@@ -12,6 +12,25 @@
 //! Wire format: the PowerShell script prints
 //! `STATUS|BUTTON|TEXT|NOTES` to stdout, which we parse identically to
 //! the macOS renderer.
+//!
+//! # Interactive desktop required
+//!
+//! `Form.ShowDialog` presents on the caller's window station. A process not
+//! attached to the user's interactive desktop cannot show the dialog: it
+//! returns as cancelled immediately, or the popup is simply never seen. This
+//! is easy to hit and easy to misread as a renderer bug.
+//!
+//! Observed on Windows 11 (build 10.0.28120): an SSH login runs in
+//! **session 0** with `UserInteractive=False` and window station
+//! `Service-0x6-…$`, while the operator's desktop is **session 1** on
+//! `WinSta0` (where `explorer.exe` lives). `phinbox --renderer gui` run from
+//! that SSH session could not display the dialog; the same command run in
+//! session 1 rendered it and completed the round-trip (`smoke: passed`,
+//! exit 0).
+//!
+//! So verify Windows popups from an interactive session, not over SSH. A
+//! service or daemon in session 0 has the same constraint and should use the
+//! async inbox rather than a blocking popup.
 
 use std::process::{Command, Stdio};
 use std::time::{Duration, Instant};

@@ -21,8 +21,8 @@ use tracing::warn;
 
 use super::lockfile::LOCKFILE_NAME;
 use response::{
-    redirect_response, render_inbox_css, render_inbox_html, simple_text, text_response,
-    write_response,
+    reason_phrase, redirect_response, render_inbox_css, render_inbox_html, simple_text,
+    text_response, write_response, Reply,
 };
 use route::{parse_route, Route};
 
@@ -109,7 +109,10 @@ fn handle_connection(
 
     let (rt, id) = parse_route(target);
 
-    let body = match rt {
+    // Each arm returns the response it decided on, status included; `None`
+    // means "already written to the socket" (the 302, and the raw
+    // static/error paths, which `return` early).
+    let reply: Option<Reply> = match rt {
         Route::Health => Some(simple_text(200, "ok")),
         Route::Index => Some(text_response(
             200,
@@ -119,7 +122,7 @@ fn handle_connection(
         )),
         Route::InboxForm => match id.and_then(|id| load(inbox_root, &id).ok()) {
             Some(req) if matches!(req.state, RequestState::Expired) => {
-                Some(text_response(200, &crate::views::render_expired_html(&req)))
+                Some(text_response(410, &crate::views::render_expired_html(&req)))
             }
             Some(req) => Some(text_response(200, &render_inbox_html(&req))),
             None => Some(simple_text(404, "request not found")),
@@ -140,7 +143,7 @@ fn handle_connection(
             if method == "GET" {
                 match load(inbox_root, &id) {
                     Ok(req) if matches!(req.state, RequestState::Expired) => {
-                        Some(text_response(200, &crate::views::render_expired_html(&req)))
+                        Some(text_response(410, &crate::views::render_expired_html(&req)))
                     }
                     Ok(req) => Some(text_response(200, &render_inbox_html(&req))),
                     Err(_) => Some(simple_text(404, "request not found")),
@@ -180,7 +183,19 @@ fn handle_connection(
                     }
                     _ => match super::form::submit_answer(inbox_root, &id, &buf) {
                         Ok(()) => {
-                            redirect_response(&mut stream, &format!("/inbox/{id}/done"))?
+                            redirect_response(&mut stream, &format!("/inbox/{id}/done"))?;
+                            None
+                        }
+                        Err(super::form::SubmitError::AlreadyFinalized(state)) => {
+                            Some(text_response(
+                                409,
+                                &format!(
+                                    "<h1>Already answered</h1>\
+                                     <p>This request is already {state:?}; the first answer \
+                                     stands and was not changed.</p>\
+                                     <a href=/inbox>Return to inbox</a>"
+                                ),
+                            ))
                         }
                         Err(e) => Some(text_response(400, &format!("<h1>Error</h1><p>{e}</p>"))),
                     },
@@ -239,13 +254,14 @@ fn handle_connection(
         }
     };
 
-    let body = body.unwrap_or_else(|| simple_text(500, "internal"));
-    write_response(
-        &mut stream,
-        200,
-        "OK",
-        "text/html; charset=utf-8",
-        body.as_bytes(),
-    )?;
+    if let Some((status, body)) = reply {
+        write_response(
+            &mut stream,
+            status,
+            reason_phrase(status),
+            "text/html; charset=utf-8",
+            body.as_bytes(),
+        )?;
+    }
     Ok(())
 }

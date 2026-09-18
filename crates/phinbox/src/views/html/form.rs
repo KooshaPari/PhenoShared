@@ -194,9 +194,9 @@ pub fn render_form_html(req: &PendingRequest) -> String {
          <span class=ago>{ago}</span></div>\
          <div class=row-sub><span>{field_kind}</span></div></div></div>\
          <main class=card><h2>{question}</h2>\
+         <form method=POST action=/inbox/{rid}/answer class=actions>\
          {widget}\
          {notes_box}\
-         <form method=POST action=/inbox/{rid}/answer class=actions>\
          <button type=submit name=confirm value=ok class=ok>Submit</button>\
          <button type=submit name=cancel value=1 class=cancel>Cancel</button>\
          </form>\

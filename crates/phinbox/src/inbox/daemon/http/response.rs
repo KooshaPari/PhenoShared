@@ -5,6 +5,30 @@ use std::net::TcpStream;
 
 use crate::inbox::PendingRequest;
 
+/// A decided-but-unwritten HTTP response: `(status, body)`.
+///
+/// The status travels *with* the body so no caller can drop it on the floor.
+pub(crate) type Reply = (u16, String);
+
+/// Reason phrase for a status code.
+///
+/// Cosmetic — clients act on the numeric status — but a hand-rolled response
+/// with the wrong phrase is a giveaway that the status was hardcoded.
+pub(crate) fn reason_phrase(status: u16) -> &'static str {
+    match status {
+        200 => "OK",
+        302 => "Found",
+        400 => "Bad Request",
+        403 => "Forbidden",
+        404 => "Not Found",
+        405 => "Method Not Allowed",
+        409 => "Conflict",
+        410 => "Gone",
+        500 => "Internal Server Error",
+        _ => "Unknown",
+    }
+}
+
 /// Write a raw HTTP response with the given status, content-type, and body.
 pub(crate) fn write_response(
     stream: &mut TcpStream,
@@ -23,12 +47,14 @@ pub(crate) fn write_response(
     Ok(())
 }
 
-/// Write a 302 redirect to `location` and return `None` so the caller
-/// doesn't accidentally fall through to the default 200 path.
+/// Write a 302 redirect to `location`.
+///
+/// The response is written here in full, so callers must not write another
+/// response afterwards.
 pub(crate) fn redirect_response(
     stream: &mut TcpStream,
     location: &str,
-) -> std::io::Result<Option<String>> {
+) -> std::io::Result<()> {
     let body = format!(
         "<!doctype html><meta charset=utf-8><title>redirecting</title>\
          <body><p>Redirecting to <a href=\"{location}\">{location}</a>...</p>"
@@ -41,21 +67,24 @@ pub(crate) fn redirect_response(
     )?;
     stream.write_all(body.as_bytes())?;
     stream.flush()?;
-    Ok(None)
+    Ok(())
 }
 
-/// Build a simple text-status page.
-pub(crate) fn simple_text(_status: u16, msg: &str) -> String {
-    format!(
-        "<!doctype html><meta charset=utf-8><title>phinbox</title>\
-         <body style=\"font-family:system-ui;margin:2rem\">\
-         <h1>phinbox</h1><p>{msg}</p>"
+/// Build a simple text-status page carrying its status code.
+pub(crate) fn simple_text(status: u16, msg: &str) -> Reply {
+    (
+        status,
+        format!(
+            "<!doctype html><meta charset=utf-8><title>phinbox</title>\
+             <body style=\"font-family:system-ui;margin:2rem\">\
+             <h1>phinbox</h1><p>{msg}</p>"
+        ),
     )
 }
 
-/// Wrap raw HTML body for return.
-pub(crate) fn text_response(_status: u16, body: &str) -> String {
-    body.to_string()
+/// Wrap a raw HTML body for return, carrying its status code.
+pub(crate) fn text_response(status: u16, body: &str) -> Reply {
+    (status, body.to_string())
 }
 
 // ---- HTML rendering for the daemon's own form pages ----
