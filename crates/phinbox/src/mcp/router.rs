@@ -6,7 +6,7 @@
 
 use rmcp::handler::server::router::tool::ToolRouter;
 use rmcp::handler::server::wrapper::Parameters;
-use rmcp::model::{CallToolResponse, CallToolResult, ContentBlock, ServerInfo, ServerCapabilities, Implementation};
+use rmcp::model::{CallToolResponse, CallToolResult, ContentBlock, ServerCapabilities, ServerConfig, Implementation};
 use rmcp::schemars::JsonSchema;
 use rmcp::ServerHandler;
 use rmcp::{tool, tool_handler, tool_router};
@@ -142,8 +142,8 @@ impl PhinboxMcp {
 
 #[tool_handler]
 impl ServerHandler for PhinboxMcp {
-    fn get_info(&self) -> ServerInfo {
-        ServerInfo::new(ServerCapabilities::default())
+    fn get_info(&self) -> ServerConfig {
+        ServerConfig::new(ServerCapabilities::default())
             .with_server_info(Implementation::new("phinbox", env!("CARGO_PKG_VERSION")))
             .with_instructions(
                 "phinbox_mcp renders a native OS popup and blocks until the human responds. \

@@ -100,11 +100,10 @@ pub fn render(spec: &PromptSpec, opts: &ElicitOptions) -> Result<ElicitResponse,
 fn build_script(spec: &PromptSpec) -> Result<String, ElicitError> {
     let title = powershell_escape(&format!("phinbox · {}", spec.title))?;
     let question = powershell_escape(&spec.question)?;
-    let (cancel_label, confirm_label) = spec
-        .buttons
-        .as_ref()
-        .map(|b| (b.cancel.clone(), b.confirm.clone()))
-        .unwrap_or_else(|| ("Cancel".to_string(), "OK".to_string()));
+    let (cancel_label, confirm_label) = spec.buttons.as_ref().map_or_else(
+        || ("Cancel".to_string(), "OK".to_string()),
+        |b| (b.cancel.clone(), b.confirm.clone()),
+    );
     let cancel_q = powershell_escape(&cancel_label)?;
     let confirm_q = powershell_escape(&confirm_label)?;
 
@@ -186,9 +185,9 @@ $lblQuestion.AutoSize = $false
 $txtField = New-Object System.Windows.Forms.{input_kind}
 $txtField.Location = New-Object System.Drawing.Point(20, 110)
 $txtField.Size = New-Object System.Drawing.Size(440, 25)
-$fieldDefault = {default}
+$fieldDefault = {default_expr}
 if ($fieldDefault -ne "") {{ $txtField.Text = $fieldDefault }}
-$fieldPlaceholder = {placeholder}
+$fieldPlaceholder = {placeholder_expr}
 if ($fieldPlaceholder -ne "") {{
     try {{ $txtField.PlaceholderText = $fieldPlaceholder }} catch {{ }}
 }}
@@ -221,16 +220,6 @@ if ($dialogResult -eq [System.Windows.Forms.DialogResult]::OK) {{
     Write-Output ("cancelled|" + {cancel_q} + "|" + $fieldText + "|" + $notesText)
 }}
 "#,
-        title = title,
-        question = question,
-        default = default_expr,
-        placeholder = placeholder_expr,
-        input_kind = input_kind,
-        secret_clause = secret_clause,
-        notes_block = notes_block,
-        confirm_q = confirm_q,
-        cancel_q = cancel_q,
-        urgency_clause = urgency_clause,
     );
 
     Ok(script)
@@ -261,7 +250,7 @@ fn parse_output(
 
     let status = parts[0];
     let entered = parts[2];
-    let notes = parts.get(3).map(|s| s.to_string());
+    let notes = parts.get(3).map(|s| (*s).to_string());
 
     match status {
         "answered" => {
