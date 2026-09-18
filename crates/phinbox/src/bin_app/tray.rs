@@ -131,6 +131,12 @@ pub(crate) fn create_tray_and_run_event_loop(
     eprintln!("phinbox: tray icon created (backend: {})", tray.backend_name());
 
     // Schedule an NSTimer on the main RunLoop to pump tray events.
+    // SAFETY ESCAPE HATCH: `StackBlock` + the objc2 NSTimer entry point are
+    // FFI by construction, and a repeating timer must run on the main thread's
+    // RunLoop — which is exactly where this is called from. The crate sets
+    // `unsafe_code = "deny"`, so this is the same documented hatch used in
+    // `cli/open.rs`.
+    #[allow(unsafe_code)]
     unsafe {
         let mut block = block2::StackBlock::new(|_timer: std::ptr::NonNull<NSTimer>| {
             phinbox::tray::poll_tray();

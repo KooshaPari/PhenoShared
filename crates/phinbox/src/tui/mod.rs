@@ -159,6 +159,24 @@ mod tests {
     }
 
     #[test]
+    fn truncate_never_panics_on_a_multibyte_boundary() {
+        // Regression: the byte-slicing version panicked when the cut landed
+        // inside a multi-byte character. This is the exact shape that killed
+        // the viewer — a 43-byte title whose 'é' straddled byte 39 (the old
+        // 40-byte limit). `title`/`request_id` are agent-supplied.
+        let title = format!("{}ézzz", "a".repeat(38));
+        let out = truncate(&title, 40);
+        assert!(out.ends_with('\u{2026}'));
+        assert_eq!(out.chars().count(), 40);
+
+        // Every cut position must be safe for a string of multi-byte chars.
+        let wide = "é".repeat(30);
+        for max in 0..40 {
+            let _ = truncate(&wide, max);
+        }
+    }
+
+    #[test]
     fn build_entry_marks_terminal_states() {
         let req = PendingRequest {
             request_id: "r".into(),

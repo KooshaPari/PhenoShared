@@ -38,6 +38,11 @@ static mut EV_TX: Option<Sender<TrayEvent>> = None;
 ///
 /// Returns the `Tray` trait object for sending commands cross-thread and
 /// receiving events.
+// SAFETY ESCAPE HATCH: the crate sets `unsafe_code = "deny"` (Cargo.toml
+// `[lints.rust]`). This function needs `unsafe` to publish the tray handles
+// into process-wide statics for the main-thread pump. Each block carries its
+// own `SAFETY:` rationale. Same pattern as `cli/open.rs` and `cli/daemon.rs`.
+#[allow(unsafe_code)]
 pub fn create_native_tray(cfg: TrayConfig) -> TrayResult<Arc<dyn Tray>> {
     let icon = make_placeholder_icon()?;
 
@@ -99,6 +104,9 @@ pub fn create_native_tray(cfg: TrayConfig) -> TrayResult<Arc<dyn Tray>> {
 
 /// Drain pending commands and forward tray events.
 /// Call this from an NSTimer on the main thread (e.g. every 100ms).
+// SAFETY ESCAPE HATCH: reads the same statics written by
+// `create_native_tray`; each block carries its own `SAFETY:` rationale.
+#[allow(unsafe_code)]
 pub fn poll_tray() {
     // SAFETY: called only from main thread after `create_native_tray`.
     let (cmd_rx, ev_tx) = unsafe {

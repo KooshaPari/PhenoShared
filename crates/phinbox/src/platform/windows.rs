@@ -29,7 +29,8 @@ pub fn render(spec: &PromptSpec, opts: &ElicitOptions) -> Result<ElicitResponse,
     spec.validate().map_err(ElicitError::InvalidSpec)?;
 
     let script = build_script(spec)?;
-    let timeout = opts.timeout.unwrap_or(Duration::from_secs(spec.timeout_secs as u64));
+    // `None` = wait forever (timeout_secs 0 is documented as "no timeout").
+    let timeout = super::deadline_for(spec, opts);
 
     let start = Instant::now();
     let mut command = Command::new("powershell.exe");
@@ -60,7 +61,7 @@ pub fn render(spec: &PromptSpec, opts: &ElicitOptions) -> Result<ElicitResponse,
                 break out;
             }
             Ok(None) => {
-                if start.elapsed() >= timeout {
+                if timeout.is_some_and(|t| start.elapsed() >= t) {
                     let _ = child.kill();
                     let _ = child.wait();
                     return Ok(ElicitResponse::TimedOut {

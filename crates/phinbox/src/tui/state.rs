@@ -135,13 +135,19 @@ pub(crate) fn format_age(ms: u64) -> String {
     }
 }
 
-/// Truncate a string at `max` bytes, appending `…` if truncated.
+/// Truncate a string to `max` **characters**, appending `…` if truncated.
 pub(crate) fn truncate(s: &str, max: usize) -> String {
-    if s.len() <= max {
-        s.to_string()
-    } else {
-        format!("{}…", &s[..max.saturating_sub(1)])
+    // `max` counts *characters*, not bytes, and the ellipsis takes one of
+    // them. Slicing `&s[..max]` would panic whenever the boundary lands
+    // inside a multi-byte character — and `s` is agent-supplied
+    // (`spec.title`, `request_id`), so any non-ASCII title could kill the
+    // whole inbox viewer.
+    if s.chars().count() <= max {
+        return s.to_string();
     }
+    let mut out: String = s.chars().take(max.saturating_sub(1)).collect();
+    out.push('…');
+    out
 }
 
 /// Sort entries: pending first (newest at top), then terminal (newest first

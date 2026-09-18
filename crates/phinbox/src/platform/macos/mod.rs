@@ -37,9 +37,8 @@ pub fn render(spec: &PromptSpec, opts: &ElicitOptions) -> Result<ElicitResponse,
     spec.validate().map_err(ElicitError::InvalidSpec)?;
 
     let script = build_script(spec)?;
-    let timeout = opts
-        .timeout
-        .unwrap_or(Duration::from_secs(u64::from(spec.timeout_secs)));
+    // `None` = wait forever (timeout_secs 0 is documented as "no timeout").
+    let timeout = super::deadline_for(spec, opts);
 
     let start = Instant::now();
     let mut child = Command::new("osascript")
@@ -59,7 +58,7 @@ pub fn render(spec: &PromptSpec, opts: &ElicitOptions) -> Result<ElicitResponse,
                 break out;
             }
             Ok(None) => {
-                if start.elapsed() >= timeout {
+                if timeout.is_some_and(|t| start.elapsed() >= t) {
                     let _ = child.kill();
                     let _ = child.wait();
                     return Ok(ElicitResponse::TimedOut {

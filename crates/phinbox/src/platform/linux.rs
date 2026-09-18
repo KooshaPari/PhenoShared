@@ -272,6 +272,13 @@ struct Outcome {
 /// [`crate::spec::ElicitResponse::TimedOut`]).
 fn run_with_timeout(cmd: &mut Command, timeout: Duration) -> Result<Outcome, ElicitError> {
     let start = Instant::now();
+    // `timeout` of zero is documented as "no timeout": never give up on the
+    // user, rather than killing the dialog on the first poll.
+    let deadline = if timeout.is_zero() {
+        None
+    } else {
+        Some(timeout)
+    };
     let mut child = cmd
         .stdin(Stdio::null())
         .stdout(Stdio::piped())
@@ -291,7 +298,7 @@ fn run_with_timeout(cmd: &mut Command, timeout: Duration) -> Result<Outcome, Eli
                 });
             }
             Ok(None) => {
-                if start.elapsed() >= timeout {
+                if deadline.is_some_and(|t| start.elapsed() >= t) {
                     let _ = child.kill();
                     let _ = child.wait();
                     return Err(ElicitError::Timeout(timeout));

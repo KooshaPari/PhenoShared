@@ -126,6 +126,12 @@ pub(crate) fn daemon_shutdown_signal() {
     }
 }
 
+/// Block the main thread until a termination signal arrives.
+// SAFETY ESCAPE HATCH: installing C signal handlers is FFI. The handler only
+// calls `process::exit`, which is async-signal-safe. The crate sets
+// `unsafe_code = "deny"`, so this is the same documented hatch used in
+// `cli/open.rs`.
+#[allow(unsafe_code)]
 #[cfg(unix)]
 fn wait_for_termination() {
     use std::os::raw::c_int;
