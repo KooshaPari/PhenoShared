@@ -103,6 +103,13 @@ fn latest_pending_form_url(inbox_dir: &PathBuf, base: &str) -> Option<String> {
     ))
 }
 
+/// Call `setsid(2)` to detach the spawned daemon into its own session.
+///
+/// # Safety
+///
+/// `setsid` only affects the calling process, reports failure by returning
+/// `-1` rather than corrupting state, and the caller ignores the result.
+/// No pointers cross the boundary.
 #[allow(unsafe_code)]
 #[cfg(unix)]
 unsafe fn libc_setsid() -> i32 {

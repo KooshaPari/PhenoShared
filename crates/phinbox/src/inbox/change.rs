@@ -253,7 +253,10 @@ mod tests {
     fn global_bus_is_singleton() {
         let a = InboxChangeBus::global();
         let b = InboxChangeBus::global();
-        assert!(std::ptr::eq(a as *const _, b as *const _));
+        assert!(std::ptr::eq(
+            std::ptr::from_ref(a),
+            std::ptr::from_ref(b)
+        ));
     }
 
     #[test]

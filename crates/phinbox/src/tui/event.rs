@@ -89,12 +89,11 @@ pub(crate) fn handle_key(key: KeyEvent, state: &mut ViewerState) -> Option<TuiOu
                 // The opener (injected by the run loop) resolves the live
                 // daemon base. Falling back to `inbox_open_url_for` keeps
                 // the env/default behaviour when no live base is known.
-                match state.opener.as_ref() {
-                    Some(open) => (open.0)(&id),
-                    None => {
-                        let url = crate::inbox::notify::inbox_open_url_for(&id);
-                        let _ = crate::inbox::daemon::notifier::open_in_default_browser(&url);
-                    }
+                if let Some(open) = state.opener.as_ref() {
+                    (open.0)(&id);
+                } else {
+                    let url = crate::inbox::notify::inbox_open_url_for(&id);
+                    let _ = crate::inbox::daemon::notifier::open_in_default_browser(&url);
                 }
             }
             None
