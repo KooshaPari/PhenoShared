@@ -67,6 +67,9 @@ pub(super) fn build_script(spec: &PromptSpec) -> Result<String, ElicitError> {
         r#"
 try
     set theResponse to display dialog {body} with title {title}{default_arg} with icon {icon}{hidden_clause} buttons {{{cancel_q}, {confirm_q}}} default button {default_btn}{timeout_clause}
+    if gave up of theResponse then
+        return "timed_out|||"
+    end if
     set theButton to button returned of theResponse
     {text_extract}
     if theButton is {confirm_q} then
@@ -109,6 +112,34 @@ end try
 mod tests {
     use super::*;
     use crate::spec::{FieldSpec, PromptSpec, Urgency};
+
+    #[test]
+    fn script_guards_gave_up_before_reading_button() {
+        // On AppleScript timeout the response record has `gave up:true`
+        // and no `button returned`; reading it would throw. The guard must
+        // come first and map to the "timed_out" wire status.
+        let spec = PromptSpec {
+            details: None,
+            title: "T".into(),
+            question: "?".into(),
+            field: FieldSpec::Boolean {
+                label: "b".into(),
+                default: None,
+            },
+            notes: None,
+            buttons: None,
+            urgency: Urgency::Info,
+            timeout_secs: 5,
+            request_id: None,
+        };
+        let s = build_script(&spec).unwrap();
+        let guard = s.find("if gave up of theResponse").expect("gave-up guard");
+        let btn = s
+            .find("set theButton to button returned")
+            .expect("button read");
+        assert!(guard < btn, "gave-up guard must precede button read: {s}");
+        assert!(s.contains(r#"return "timed_out|||""#));
+    }
 
     #[test]
     fn button_only_dialog_does_not_read_text_returned() {
