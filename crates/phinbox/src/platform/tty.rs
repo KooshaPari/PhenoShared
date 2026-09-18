@@ -25,15 +25,27 @@ pub fn render(spec: &PromptSpec, _opts: &ElicitOptions) -> Result<ElicitResponse
             default,
             placeholder,
             max_length,
-            secret: _,
+            secret,
             pattern,
         } => {
-            let v = inquire::Text::new(label)
-                .with_help_message(spec.question.as_str())
-                .with_initial_value(default.as_deref().unwrap_or(""))
-                .with_placeholder(placeholder.as_deref().unwrap_or(""))
-                .prompt()
-                .map_err(map_inquire_error)?;
+            // Secrets must not be echoed to the terminal. `inquire::Text`
+            // renders in plaintext, so use the masked `Password` prompt for
+            // `secret: true` fields. A password prompt cannot be prefilled,
+            // so `default`/`placeholder` are only honoured for plain text.
+            let v = if *secret {
+                inquire::Password::new(label)
+                    .with_help_message(spec.question.as_str())
+                    .without_confirmation()
+                    .prompt()
+                    .map_err(map_inquire_error)?
+            } else {
+                inquire::Text::new(label)
+                    .with_help_message(spec.question.as_str())
+                    .with_initial_value(default.as_deref().unwrap_or(""))
+                    .with_placeholder(placeholder.as_deref().unwrap_or(""))
+                    .prompt()
+                    .map_err(map_inquire_error)?
+            };
             if let Some(max) = max_length {
                 if v.chars().count() > *max as usize {
                     return Err(ElicitError::InvalidSpec(format!(
@@ -58,12 +70,12 @@ pub fn render(spec: &PromptSpec, _opts: &ElicitOptions) -> Result<ElicitResponse
             default,
             max_length,
         } => {
-            // inquire::Editor is for single-line; for multi-line we use
-            // Text with a help message hinting at multi-line entry. This
-            // is a deliberate trade-off — we don't want to launch a blocking
-            // editor in a TTY fallback context.
+            // inquire's multi-line `Editor` needs an external $EDITOR, which
+            // is unavailable in CI/SSH contexts — exactly where the TTY
+            // fallback runs. So LongText collects a single line here; the
+            // help text says so rather than promising multi-line entry.
             let v = inquire::Text::new(label)
-                .with_help_message("(end with a single blank line to finish)")
+                .with_help_message("(single line; the TTY fallback has no multi-line editor)")
                 .with_initial_value(default.as_deref().unwrap_or(""))
                 .prompt()
                 .map_err(map_inquire_error)?;
@@ -179,9 +191,13 @@ pub fn render(spec: &PromptSpec, _opts: &ElicitOptions) -> Result<ElicitResponse
                 let mut p = inquire::DateSelect::new(label)
                     .with_help_message(spec.question.as_str());
                 if let Some(d) = default {
-                    // RFC3339 date prefix
-                    if let Ok(parsed) = chrono::NaiveDate::parse_from_str(&d[..10], "%Y-%m-%d") {
-                        p = p.with_starting_date(parsed);
+                    // Take the date prefix if present, but never slice blindly:
+                    // `&d[..10]` panics on inputs shorter than 10 bytes, and
+                    // `default` is caller-supplied (MCP/CLI), i.e. untrusted.
+                    if let Some(prefix) = d.trim().get(..10) {
+                        if let Ok(parsed) = chrono::NaiveDate::parse_from_str(prefix, "%Y-%m-%d") {
+                            p = p.with_starting_date(parsed);
+                        }
                     }
                 }
                 let v = p

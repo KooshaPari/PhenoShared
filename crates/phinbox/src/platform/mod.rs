@@ -6,7 +6,10 @@ pub mod tty;
 #[cfg(target_os = "macos")]
 pub mod macos;
 
-#[cfg(target_os = "windows")]
+// The Windows renderer's script builder and output parser are pure and
+// platform-independent, so compile them under `test` on every host to keep
+// them covered from a macOS/Linux checkout.
+#[cfg(any(target_os = "windows", test))]
 pub mod windows;
 
 #[cfg(target_os = "linux")]

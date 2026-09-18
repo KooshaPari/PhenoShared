@@ -88,11 +88,15 @@ fn build_script(spec: &PromptSpec) -> Result<String, ElicitError> {
     let cancel_q = powershell_escape(&cancel_label)?;
     let confirm_q = powershell_escape(&confirm_label)?;
 
-    let icon_expr = match spec.urgency {
-        Urgency::Info => "[System.Windows.Forms.MessageBoxIcon]::Information",
-        Urgency::Warning => "[System.Windows.Forms.MessageBoxIcon]::Warning",
-        Urgency::Error => "[System.Windows.Forms.MessageBoxIcon]::Error",
-        Urgency::Secret => "[System.Windows.Forms.MessageBoxIcon]::Warning",
+    // A custom `Form` has no MessageBox icon, so urgency is expressed as
+    // the question label's colour instead. (The previous `MessageBoxIcon`
+    // expression was interpolated nowhere: the format! arg was unused.)
+    let urgency_clause = match spec.urgency {
+        Urgency::Error | Urgency::Secret => {
+            "$lblQuestion.ForeColor = [System.Drawing.Color]::FromArgb(180, 0, 0)\n"
+        }
+        Urgency::Warning => "$lblQuestion.ForeColor = [System.Drawing.Color]::FromArgb(150, 90, 0)\n",
+        Urgency::Info => "",
     };
 
     // For text fields with defaults, pass the default through
@@ -157,11 +161,17 @@ $lblQuestion.Text = {question}
 $lblQuestion.Location = New-Object System.Drawing.Point(20, 20)
 $lblQuestion.Size = New-Object System.Drawing.Size(440, 100)
 $lblQuestion.AutoSize = $false
-$form.Controls.Add($lblQuestion)
+{urgency_clause}$form.Controls.Add($lblQuestion)
 
 $txtField = New-Object System.Windows.Forms.{input_kind}
 $txtField.Location = New-Object System.Drawing.Point(20, 110)
 $txtField.Size = New-Object System.Drawing.Size(440, 25)
+$fieldDefault = {default}
+if ($fieldDefault -ne "") {{ $txtField.Text = $fieldDefault }}
+$fieldPlaceholder = {placeholder}
+if ($fieldPlaceholder -ne "") {{
+    try {{ $txtField.PlaceholderText = $fieldPlaceholder }} catch {{ }}
+}}
 {secret_clause}$form.Controls.Add($txtField)
 {notes_block}
 
@@ -186,9 +196,9 @@ $fieldText = $txtField.Text
 $notesText = if ($txtNotes) {{ $txtNotes.Text }} else {{ "" }}
 
 if ($dialogResult -eq [System.Windows.Forms.DialogResult]::OK) {{
-    Write-Output ("answered|{confirm_label}|" + $fieldText + "|" + $notesText)
+    Write-Output ("answered|" + {confirm_q} + "|" + $fieldText + "|" + $notesText)
 }} else {{
-    Write-Output ("cancelled|{cancel_label}|" + $fieldText + "|" + $notesText)
+    Write-Output ("cancelled|" + {cancel_q} + "|" + $fieldText + "|" + $notesText)
 }}
 "#,
         title = title,
@@ -200,9 +210,7 @@ if ($dialogResult -eq [System.Windows.Forms.DialogResult]::OK) {{
         notes_block = notes_block,
         confirm_q = confirm_q,
         cancel_q = cancel_q,
-        confirm_label = confirm_label,
-        cancel_label = cancel_label,
-        icon = icon_expr,
+        urgency_clause = urgency_clause,
     );
 
     Ok(script)
@@ -237,8 +245,9 @@ fn parse_output(
 
     match status {
         "answered" => {
-            // Coerce using the spec — but we don't have it here. Return
-            // Text; the dispatcher coerces using the original spec.
+            // `display`-style dialogs hand back text; the typed coercion into
+            // the spec's FieldSpec kind happens centrally in
+            // `render::dispatch` (this function has no access to the spec).
             Ok(ElicitResponse::Answered {
                 value: crate::spec::FieldValue::Text(entered.to_string()),
                 notes,
@@ -321,5 +330,116 @@ mod tests {
     fn parse_output_cancelled() {
         let r = parse_output(b"cancelled|Cancel|||", b"", Duration::from_secs(1)).unwrap();
         assert!(r.is_cancelled());
+    }
+
+    #[test]
+    fn parse_output_timeout_and_failure() {
+        let t = parse_output(b"timed_out|||", b"", Duration::from_secs(2)).unwrap();
+        assert!(t.is_timed_out());
+
+        let f = parse_output(b"failed|Error|boom|", b"", Duration::from_secs(1)).unwrap();
+        assert!(f.is_failed());
+
+        let unknown = parse_output(b"weird|a|b|", b"", Duration::from_secs(1)).unwrap();
+        assert!(unknown.is_failed(), "unknown status must not be treated as success");
+    }
+
+    #[test]
+    fn parse_output_handles_malformed_without_panicking() {
+        for raw in [&b""[..], b"onlyonefield", b"answered", b"answered|OK"] {
+            let r = parse_output(raw, b"", Duration::from_secs(1)).unwrap();
+            assert!(r.is_failed(), "expected Failed for {raw:?}");
+        }
+        // Non-utf8 stdout is an error, never a panic.
+        assert!(parse_output(&[0xff, 0xfe, 0xfd], b"", Duration::from_secs(1)).is_err());
+    }
+
+    #[test]
+    fn build_interpolates_default_and_placeholder() {
+        // Regression: `default`, `placeholder` and the icon expression were
+        // passed to format! but referenced nowhere in the template, which is a
+        // hard error — the crate had never compiled for Windows. The values
+        // were also silently dropped from the dialog.
+        let mut spec = spec_text();
+        spec.field = FieldSpec::Text {
+            label: "l".into(),
+            default: Some("prefilled".into()),
+            placeholder: Some("hint".into()),
+            max_length: None,
+            secret: false,
+            pattern: None,
+        };
+        let s = build_script(&spec).unwrap();
+        assert!(s.contains(r#""prefilled""#), "default must reach the script");
+        assert!(s.contains(r#""hint""#), "placeholder must reach the script");
+        assert!(s.contains("$txtField.Text = $fieldDefault"));
+        assert!(s.contains("$txtField.PlaceholderText = $fieldPlaceholder"));
+    }
+
+    #[test]
+    fn build_renders_urgency_as_label_colour() {
+        let mut spec = spec_text();
+        spec.urgency = Urgency::Error;
+        let s = build_script(&spec).unwrap();
+        assert!(s.contains("$lblQuestion.ForeColor"), "urgency must render");
+
+        spec.urgency = Urgency::Info;
+        let s = build_script(&spec).unwrap();
+        assert!(!s.contains("$lblQuestion.ForeColor"), "info adds no colour");
+    }
+
+    #[test]
+    fn build_escapes_button_labels_into_the_output_line() {
+        let mut spec = spec_text();
+        spec.buttons = Some(crate::spec::ButtonSpec {
+            cancel: "Deny".into(),
+            confirm: "Approve \"it\"".into(),
+            default_is_cancel: false,
+            defer_label: None,
+        });
+        let s = build_script(&spec).unwrap();
+        // PowerShell escapes a double quote by doubling it.
+        assert!(
+            s.contains(r#""Approve ""it""""#),
+            "button label must be escaped into the script: {s}"
+        );
+    }
+
+    /// The Windows renderer cannot execute on this host, but its generated
+    /// PowerShell is still text we can syntax-check wherever `pwsh` exists.
+    /// `pwsh` cannot resolve WinForms types here, and that is fine: this
+    /// asserts *parseability*, which is exactly the class of break the
+    /// unused-argument bug lived in.
+    #[test]
+    fn generated_script_parses_under_powershell() {
+        if std::process::Command::new("pwsh")
+            .arg("-v")
+            .output()
+            .is_err()
+        {
+            eprintln!("SKIP: pwsh not installed; cannot syntax-check the script");
+            return;
+        }
+
+        let script = build_script(&spec_text()).unwrap();
+        let dir = tempfile::tempdir().unwrap();
+        let path = dir.path().join("phinbox.ps1");
+        std::fs::write(&path, &script).unwrap();
+
+        let check = format!(
+            "$e=$null; [void][System.Management.Automation.Language.Parser]::ParseFile('{}',[ref]$null,[ref]$e); \
+             if($e){{ $e | ForEach-Object {{ Write-Output $_.Message }}; exit 1 }}",
+            path.display()
+        );
+        let out = std::process::Command::new("pwsh")
+            .args(["-NoProfile", "-NonInteractive", "-Command", &check])
+            .output()
+            .expect("run pwsh");
+
+        assert!(
+            out.status.success(),
+            "generated PowerShell has parse errors: {}\n{script}",
+            String::from_utf8_lossy(&out.stdout)
+        );
     }
 }

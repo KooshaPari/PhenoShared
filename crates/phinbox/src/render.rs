@@ -3,8 +3,7 @@
 use crate::error::ElicitError;
 use crate::options::ElicitOptions;
 use crate::platform;
-use crate::spec::ElicitResponse;
-use crate::spec::PromptSpec;
+use crate::spec::{self, ElicitResponse, FieldValue, PromptSpec};
 use crate::tracing_setup;
 
 /// Render a popup and return the response. This is the synchronous
@@ -21,21 +20,32 @@ pub fn dispatch(spec: &PromptSpec, opts: &ElicitOptions) -> Result<ElicitRespons
 
     let result = platform::render_on_platform(spec, opts);
 
-    // The TUI renderer uses a sentinel error string for user cancellation;
-    // translate it to a proper Cancelled response.
-    let result = result.map_err(|e| match e {
-        ElicitError::InvalidSpec(msg) if msg == platform::tty::CANCELLED_SENTINEL => {
-            ElicitError::InvalidSpec(platform::tty::CANCELLED_SENTINEL.into())
-        }
-        other => other,
-    });
-
     let final_response = match result {
         Ok(response) => response,
+        // The TTY renderer signals user cancellation with a sentinel error
+        // string; translate it into a typed Cancelled response.
         Err(ElicitError::InvalidSpec(msg)) if msg == platform::tty::CANCELLED_SENTINEL => {
             ElicitResponse::Cancelled { notes: None }
         }
+        // A backend-side timeout is a legitimate outcome, not a failure.
+        Err(ElicitError::Timeout(elapsed)) => ElicitResponse::TimedOut {
+            elapsed_secs: elapsed.as_secs_f64(),
+        },
         Err(e) => return Err(e),
+    };
+
+    // Every backend returns a raw *string*; the spec declares the intended
+    // kind. Coerce once here so all platforms (macOS/windows/linux/tty)
+    // hand the caller the typed FieldValue it asked for. Doing this per
+    // backend previously left `Text` leaking out of the untested ones.
+    let final_response = match final_response {
+        ElicitResponse::Answered { value: FieldValue::Text(raw), notes } => {
+            ElicitResponse::Answered {
+                value: spec::coerce(&spec.field, &raw)?,
+                notes,
+            }
+        }
+        other => other,
     };
 
     tracing_setup::trace_request_end(&request_id, &final_response);

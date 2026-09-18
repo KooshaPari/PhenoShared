@@ -4,9 +4,11 @@
 //! Both surfaces serialize via serde; the JSON Schema is exported by
 //! [`crate::schema`] for the MCP server's `inputSchema` / `outputSchema`.
 
+mod coerce;
 mod types;
 mod validate;
 
+pub use coerce::coerce;
 pub use types::*;
 
 #[cfg(test)]
