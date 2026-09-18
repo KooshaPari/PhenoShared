@@ -31,6 +31,12 @@ use script::build_script;
 pub use parse::coerce_value;
 
 /// Render the popup on macOS.
+///
+/// `display dialog` returns everything as a plain string, so `parse_output`
+/// produces `FieldValue::Text` for every answered popup regardless of the
+/// requested `FieldSpec` kind. Coerce here so callers (`phinbox smoke`,
+/// the MCP server, the inbox answer path) receive the typed value the
+/// spec asked for.
 pub fn render(spec: &PromptSpec, opts: &ElicitOptions) -> Result<ElicitResponse, ElicitError> {
     spec.validate().map_err(ElicitError::InvalidSpec)?;
 
@@ -70,5 +76,18 @@ pub fn render(spec: &PromptSpec, opts: &ElicitOptions) -> Result<ElicitResponse,
         }
     };
 
-    parse_output(&output.stdout, &output.stderr, start.elapsed())
+    let response = parse_output(&output.stdout, &output.stderr, start.elapsed())?;
+
+    // Coerce the raw text into the typed `FieldValue` the spec requested.
+    if let ElicitResponse::Answered { value, notes } = response {
+        let typed = match value {
+            crate::spec::FieldValue::Text(raw) => parse::coerce_value(&spec.field, &raw)?,
+            other => other,
+        };
+        return Ok(ElicitResponse::Answered {
+            value: typed,
+            notes,
+        });
+    }
+    Ok(response)
 }

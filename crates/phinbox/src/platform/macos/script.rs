@@ -13,10 +13,23 @@ pub(super) fn build_script(spec: &PromptSpec) -> Result<String, ElicitError> {
         FieldSpec::Integer { default, .. } => default.map(|v| v.to_string()).unwrap_or_default(),
         _ => String::new(),
     };
-    let default_arg = if default.is_empty() {
-        String::new()
+    // Text-bearing fields always render an answer box so `text returned`
+    // exists; Boolean/Choice are button-only and must not pass `default answer`.
+    let has_answer_box = matches!(
+        &spec.field,
+        FieldSpec::Text { .. }
+            | FieldSpec::LongText { .. }
+            | FieldSpec::Integer { .. }
+            | FieldSpec::DateTime { .. }
+    );
+    let default_arg = if has_answer_box {
+        if default.is_empty() {
+            " default answer \"\"".to_string()
+        } else {
+            format!(" default answer {}", applescript_escape(&default)?)
+        }
     } else {
-        format!(" default answer {}", applescript_escape(&default)?)
+        String::new()
     };
 
     let icon = match spec.urgency {
@@ -41,12 +54,21 @@ pub(super) fn build_script(spec: &PromptSpec) -> Result<String, ElicitError> {
         _ => "",
     };
 
+    // `display dialog` only has a `text returned` property when it was
+    // invoked with `default answer` (see has_answer_box above). Reading it
+    // on a button-only dialog raises "Can't get text returned".
+    let text_extract = if has_answer_box {
+        "set theText to text returned of theResponse"
+    } else {
+        "set theText to \"\""
+    };
+
     let script = format!(
         r#"
 try
     set theResponse to display dialog {body} with title {title}{default_arg} with icon {icon}{hidden_clause} buttons {{{cancel_q}, {confirm_q}}} default button {default_btn}{timeout_clause}
     set theButton to button returned of theResponse
-    set theText to text returned of theResponse
+    {text_extract}
     if theButton is {confirm_q} then
         return "answered|" & theButton & "|" & theText & "|"
     else
@@ -65,6 +87,7 @@ end try
         default_arg = default_arg,
         icon = icon,
         hidden_clause = hidden_clause,
+        text_extract = text_extract,
         cancel_q = applescript_escape(&cancel_label)?,
         confirm_q = applescript_escape(&confirm_label)?,
         default_btn = if spec
@@ -86,6 +109,55 @@ end try
 mod tests {
     use super::*;
     use crate::spec::{FieldSpec, PromptSpec, Urgency};
+
+    #[test]
+    fn button_only_dialog_does_not_read_text_returned() {
+        // Regression: `text returned` only exists when `default answer`
+        // is passed. On a Boolean/Choice dialog (no answer box) reading it
+        // raised "Can't get text returned" and failed the whole popup.
+        let spec = PromptSpec {
+            details: None,
+            title: "Approve".into(),
+            question: "OK to proceed?".into(),
+            field: FieldSpec::Boolean {
+                label: "yes?".into(),
+                default: Some(false),
+            },
+            notes: None,
+            buttons: None,
+            urgency: Urgency::Error,
+            timeout_secs: 60,
+            request_id: None,
+        };
+        let s = build_script(&spec).unwrap();
+        assert!(
+            !s.contains("text returned"),
+            "button-only dialog must not reference 'text returned': {s}"
+        );
+        assert!(s.contains("set theText to \"\""));
+
+        // Text-field dialogs keep reading the answer box.
+        let text_spec = PromptSpec {
+            details: None,
+            title: "Name".into(),
+            question: "Who?".into(),
+            field: FieldSpec::Text {
+                label: "name".into(),
+                default: None,
+                placeholder: None,
+                max_length: None,
+                secret: false,
+                pattern: None,
+            },
+            notes: None,
+            buttons: None,
+            urgency: Urgency::Info,
+            timeout_secs: 60,
+            request_id: None,
+        };
+        let s2 = build_script(&text_spec).unwrap();
+        assert!(s2.contains("text returned of theResponse"));
+    }
 
     #[test]
     fn script_includes_title_and_question() {

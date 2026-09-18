@@ -33,7 +33,12 @@ pub(super) fn parse_output(
 
     match status {
         "answered" => {
-            let value = FieldValue::Text(entered.to_string());
+            // Button-only dialogs (Boolean/Choice — no `default answer` box)
+            // carry the semantic answer in the button label, not the text.
+            // Fall back to it so the render-boundary coercion sees "OK",
+            // "Approve", etc. rather than an empty string.
+            let raw = if entered.is_empty() { parts[1] } else { entered };
+            let value = FieldValue::Text(raw.to_string());
             Ok(ElicitResponse::Answered {
                 value,
                 notes: notes_raw.filter(|s| !s.is_empty()),
@@ -165,6 +170,25 @@ mod tests {
     #[test]
     fn parse_output_answered() {
         let r = parse_output(b"answered|OK|hello|", b"", Duration::from_secs(1)).unwrap();
+        assert!(r.is_answered());
+    }
+
+    #[test]
+    fn parse_output_answered_button_only_uses_button_label() {
+        // Button-only dialog: empty text, answer lives in the button label.
+        let r = parse_output(b"answered|Approve||", b"", Duration::from_secs(1)).unwrap();
+        match r {
+            crate::spec::ElicitResponse::Answered { value, .. } => {
+                assert!(matches!(value, crate::spec::FieldValue::Text(ref t) if t == "Approve"));
+            }
+            other => panic!("expected Answered, got {other:?}"),
+        }
+    }
+
+    #[test]
+    fn parse_output_answered_empty_text_and_empty_button() {
+        // Degenerate: both empty — must not panic; yields Text("").
+        let r = parse_output(b"answered|||", b"", Duration::from_secs(1)).unwrap();
         assert!(r.is_answered());
     }
 
