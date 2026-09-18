@@ -149,3 +149,110 @@ confirmed: breaking `windows.rs` makes it exit 1, and 0 when clean.
 | guard negative control | exit 1 broken, exit 0 clean |
 
 
+---
+
+# Phase 3 — audit of the untested surfaces, and real Windows runtime
+
+A read-only audit of every surface never driven end-to-end, plus a native
+Windows run, found eight more defects. Each was reproduced before being
+fixed. Commits `e2ebd5e6`, `b215d543`, `0562f222`.
+
+## Defects
+
+1. **`--features tray-native` had never compiled.** `[lints.rust]` sets
+   `unsafe_code = "deny"` while `src/tray/native.rs` and the `phinbox-app`
+   bin contain five FFI `unsafe` blocks. The whole tray feature and the
+   `phinbox-app` binary were unreachable, which also invalidated the SPEC
+   acceptance criteria and README claims built on them. Fixed with the
+   escape hatch already used in `cli/open.rs`.
+
+2. **The TUI panicked on any non-ASCII title.** `tui/state.rs::truncate`
+   sliced `&s[..n]` on a byte index, so a multi-byte character straddling
+   the boundary aborted the viewer. `title`/`request_id` are agent-supplied
+   and `validate()` allows 80 chars, so this was ordinary input.
+
+3. **`timeout_secs: 0` fired instantly**, contradicting both
+   `PromptSpec::timeout_secs` ("Set to 0 for no timeout") and
+   `phinbox ask --help`. All three renderers did `start.elapsed() >=
+   timeout`, true on the first poll. Now resolved via
+   `platform::deadline_for`, where 0 means no deadline.
+
+4. **Every inbox HTTP route returned 200.** The status was computed and
+   discarded by the response helpers. Behind it sat a second bug: a
+   successful answer emitted *two* status lines because the 500
+   fall-through wrote a second full response after the redirect.
+
+5. **An already-answered request could be re-answered and silently
+   overwritten.** The CLI and the IPC server both already refused this;
+   HTTP did not.
+
+6. **An empty or partial POST body was recorded as a successful answer**,
+   so `phinbox wait` returned a plausible value the human never chose.
+   Now an absent key is a 400 while an explicit `value=` is a legitimate
+   empty answer — conflating those two was the bug.
+
+7. **The HTML form emitted its `<input>` and `<textarea>` outside
+   `<form>`**, so a browser submit sent only `confirm=ok` and the typed
+   value never arrived. Defect 6 is precisely what hid this: the daemon
+   used to accept the result as an empty answer. Found by the audit, not
+   by the tests, because the tests POSTed directly.
+
+8. **`--tui` did not degrade as documented.** Non-TTY stdin produced
+   `enable_raw_mode: Device not configured` and exit 1 rather than the
+   documented plain-text fallback. `?` help was also documented but
+   unimplemented, and `PHINBOX_TUI_KEYMAP_*` was documented in four places
+   with no implementation at all — the docs were corrected rather than the
+   feature invented.
+
+## Windows: verified at runtime, not just compiled
+
+A Tailscale Windows host was used. Two things had to be established first:
+
+- **The Rust shims were fine; RedirectionGuard was the problem.** The
+  earlier "0-byte cargo.exe" reading was wrong — PowerShell reports
+  `Length 0` for symlinks, and `cargo.exe` is a symlink to `rustup.exe`.
+  `sshd.exe` carries an IFEO `MitigationOptions` opt-in, so every
+  sshd-descended process refuses symlinks created by a non-elevated token
+  (`STATUS_UNTRUSTED_MOUNT_POINT`). Recreated from an elevated session;
+  `.cargo\bin` was also missing from PATH. Verified with a real
+  `cargo new` + `cargo run`.
+- **Bare `link.exe` resolves to Git's, not MSVC's.** Entering `vcvars64.bat`
+  is required or the link step picks the wrong tool.
+
+Runtime result: native `cargo test -p phinbox --lib` → **127 passed, 0
+failed** (including the 10 `platform::windows` tests). The popup itself
+renders and round-trips:
+
+```
+window_station=WinSta0
+visible-titled-window-count=28
+  hwnd=0x110e7e title=phinbox · phinbox smoke test
+smoke: passed        exit 0
+```
+
+An SSH login runs in **session 0** (`UserInteractive=False`, window station
+`Service-0x6-…$`), so a popup launched over SSH has no real desktop and
+cannot be verified there; the dialog was run in **session 1** via a
+scheduled task and answered by a purpose-built Win32 injector (PowerShell
+and cscript hang under the scheduler on that host). This is now documented
+in `platform/windows.rs`. Negative controls confirmed a garbled script
+yields a parser error and exit 1, so a broken script cannot report success.
+
+## Verification
+
+| Check | Result |
+|---|---|
+| macOS full matrix | 212 passed / 0 failed |
+| Windows native lib suite | 127 passed / 0 failed (executed on the Windows host) |
+| Windows runtime popup | dialog rendered, `smoke: passed`, exit 0 |
+| Linux lib suite | 123 passed / 0 failed (executed in a container) |
+| Cross-target guard | Linux + Windows, 0 errors |
+| `--features tray-native --all-targets` | compiles (was: 5 hard errors) |
+
+## Method note
+
+Every defect here was invisible to the existing suite, for one of three
+reasons: the code was `cfg`-gated so it was never compiled; the test POSTed
+to the daemon directly and so never exercised the HTML form; or the
+documented behaviour simply had no test because it had never been
+implemented. Compile-and-unit-test gates do not reach any of those.
