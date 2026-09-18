@@ -67,3 +67,69 @@ Commits: `c0350183`, `8652e0f7`, `a35c9eae` — all pushed to `origin/main`.
   signed). Re-install pattern: `cp` then `codesign --force --sign -`.
 - `phinbox` and `phinbox-mcp` binaries both verified to contain the fixes via
   `strings`.
+
+---
+
+# Phase 2 — renderer parity (linux / windows / tty)
+
+The macOS closure above left three renderers that had never been driven.
+Auditing them found six more defects of the same classes. Commit `ed295a3c`.
+
+## Defects
+
+1. **Coercion was macOS-only.** `render::dispatch` is the single choke point
+   for every backend; coercion now lives there (`spec::coerce`, moved out of
+   the macOS-gated module). `windows.rs` even carried the comment *"the
+   dispatcher coerces using the original spec"* — it never did, so every
+   Windows Boolean/Choice/Integer answer was mistyped. Same leak in linux/tty.
+2. **linux.rs discarded the answer.** `run_with_timeout` piped stdout and
+   never read it; `parse_zenity_status` returned a hardcoded `Text("yes")` and
+   kdialog returned the literal `"(see kdialog stdout)"`. Every Text, Integer,
+   Choice and Date answer was replaced by a placeholder. The outcome now
+   carries stdout and the real value flows through.
+3. **linux.rs reported timeouts as errors.** `Err(ElicitError::Timeout)` rather
+   than `ElicitResponse::TimedOut`; dispatch now maps it.
+4. **tty.rs panicked** on a fixed 10-byte slice when a DateTime `default` was
+   shorter than 10 bytes. `default` is caller-supplied (MCP/CLI), so a client
+   could crash the server. Verified with a standalone `rustc` reproduction.
+5. **tty.rs leaked secrets.** `secret: true` Text fields were rendered in
+   plaintext (`secret: _` was destructured away). Now a masked
+   `inquire::Password`.
+6. **tty.rs LongText lied.** Help text promised multi-line entry while
+   collecting a single line.
+
+## Windows had never compiled
+
+`windows.rs` passed `default`, `placeholder` and an icon expression to
+`format!` that the template never referenced — a hard *"unused formatting
+arguments"* error. The crate cannot build for Windows (see the structural gap
+below). The script now applies `default`/`placeholder`, renders urgency as a
+label colour, and escapes button labels into the output line. The module is
+compiled under `test` on every host so its pure script builder and parser stay
+covered from a macOS checkout.
+
+## Verification method
+
+| Check | Evidence |
+|---|---|
+| macOS full matrix | 193 passed / 0 failed |
+| Windows renderer logic | 10 tests run on macOS, incl. a real `pwsh` parse of the generated script |
+| Linux full lib suite **executed** | 123 passed / 0 failed in `rust:1-bookworm`, incl. all 6 `platform::linux` tests (stdout capture, real-value flow, timeout mapping, cancel, fallbacks) and all 6 `spec::coerce` tests |
+| Linux renderer compiles | `cargo check --target x86_64-unknown-linux-gnu` (lib + tests) clean |
+| Windows renderer compiles | `cargo check --target x86_64-pc-windows-gnu`: `windows.rs` clean |
+
+The real workspace root cannot resolve inside the container (an unrelated member
+pulls a private git dependency), so the Linux run uses a generated mini
+workspace containing only `phinbox` plus the workspace's inherited
+`[workspace.package]` / `[workspace.dependencies]`. Same source, no other
+members.
+
+## Structural gap (reported, not fixed)
+
+`crates/phinbox/src/inbox/ipc/` is a Unix-domain-socket design and is **not**
+`cfg`-gated, so `phinbox` cannot compile for Windows at all
+(`tokio::net::UnixListener`, `std::os::unix`). Either the IPC layer needs a
+Windows transport (named pipes) or the module must be gated behind `unix` so
+the crate builds with the inbox absent. Out of scope here: it is a portability
+project, not a renderer fix, and cannot be verified without a Windows host.
+
