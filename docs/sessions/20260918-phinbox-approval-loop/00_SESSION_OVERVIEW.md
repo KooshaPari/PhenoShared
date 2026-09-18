@@ -256,3 +256,94 @@ reasons: the code was `cfg`-gated so it was never compiled; the test POSTed
 to the daemon directly and so never exercised the HTML form; or the
 documented behaviour simply had no test because it had never been
 implemented. Compile-and-unit-test gates do not reach any of those.
+---
+
+# Phase 4 — the lint gate was dead, and it was hiding real defects
+
+## The gate itself was broken
+
+`clippy.toml` at the repo root contained only two keys:
+
+```toml
+warn  = ["clippy::all", "clippy::pedantic"]
+allow = [...]
+```
+
+Neither is a valid `clippy.toml` field. Lint *levels* belong in
+`[lints.clippy]` in a Cargo.toml. The result was not a warning but a hard
+config error, for **every crate in the workspace**:
+
+```
+$ cargo clippy -p phinbox --lib ; echo $?
+error: error reading Clippy's configuration file: unknown field `warn`
+101
+```
+
+So the repo's own documented gate (`make check` → `make clippy` → `cargo
+clippy --workspace --all-targets -- -D warnings`) could not run at all.
+The file arrived with an absorbed sibling repo (`7a8ef302`).
+
+With it removed, clippy immediately reported things nobody could have seen:
+
+- three `[lints.clippy]` entries naming lints that **do not exist**
+  (`trivially_copy_pastable_by_value`, `too_many_bools`,
+  `needless_pass_by_ref`), each silently inert — clippy emits
+  `warning[E0602]: unknown lint` and the allow never applies
+- a deprecated `rmcp::model::ServerInfo` alias used three times
+- three pedantic lints in `platform/windows.rs`
+- later, three more in files that were in flight at the time
+
+The crate is now clippy-clean: `cargo clippy -p phinbox --all-targets` exits
+0 with no output.
+
+## Defects found while verifying rather than trusting
+
+Re-running an agent's fix with my own harness caught what its report missed:
+`phinbox open --latest` and `inbox --url` were fixed, but `ask --async`'s
+`open_url` — the value an agent prints to the user — still advertised the
+default port, as did the daemon's own startup JSON and the TUI `[o]` key.
+Four of five sites were still wrong after the first pass.
+
+Other findings this phase:
+
+- **Expiry depended on a daemon being up.** A request 56 years past its TTL
+  was answerable whenever no daemon was running to reap it. Now settled
+  lazily at every answer point (CLI, HTTP, IPC, `wait`).
+- **The flaky `start_stop_roundtrip` was root-caused**: the accept loop
+  needs a non-blocking listener, and on BSD/macOS `accept()` makes the
+  *accepted* socket inherit `O_NONBLOCK` (Linux's does not). A non-blocking
+  socket ignores `SO_RCVTIMEO`, so the first `read()` returned `EAGAIN`.
+  The test also raced on the port twice via `pick_unused_port`'s
+  bind-then-release TOCTOU.
+- **The documented CLI did not exist**: the README quickstart and several
+  SPEC acceptance criteria used `--field-kind`, `phinbox validate` and
+  `phinbox tui`, none of which were real. `validate` and `tui` are now
+  implemented; the rest of the examples were corrected and every one was
+  run verbatim.
+- More doc drift: SPEC §4.1 listed `Urgency::Danger`, `FieldSpec::Number`
+  and `FieldSpec::MultiSelect`, all rejected by the binary.
+
+## Verification
+
+| Check | Result |
+|---|---|
+| macOS full matrix | 249 passed / 0 failed |
+| `cargo clippy -p phinbox --all-targets` | exit 0, no output |
+| Cross-target guard | Linux + Windows, 0 errors |
+| `--features tray-native --all-targets` | compiles |
+| `start_stop_roundtrip`, 15 isolated runs | 15/15 (was ~1 failure in 6) |
+| Expired-request refusal | CLI exit 1, on-disk state settles to `expired` |
+| All README/SPEC commands | run verbatim, real output recorded |
+
+Mutation checks were used throughout: each new regression test was confirmed
+to fail with the fix reverted (5 tests for expiry, 3 for the URL port, 1 for
+the form nesting).
+
+## Note on git auth
+
+The `osxkeychain` credential helper began failing mid-session
+(`errSecInteractionNotAllowed`, keychain locked with no TTY to prompt) and
+`gh`'s stored token was invalid. Pushes were completed over SSH
+(`git@github.com:KooshaPari/PhenoShared.git`), which authenticates with
+`~/.ssh/push_key`. The `origin` remote is still HTTPS; if keychain access is
+restored it will work as before, otherwise point `origin` at the SSH URL.
