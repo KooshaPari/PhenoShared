@@ -65,7 +65,13 @@ pub fn cmd_daemon(args: DaemonArgs, inbox_dir: &PathBuf) -> Result<(), String> {
             "bind": handle.bind_addr.to_string(),
             "inbox_root": handle.inbox_root,
             "open_url": super::open_url_from_handle(&handle),
-            "open_url_format": phinbox::inbox_open_url_for("<id>"),
+            // Same live base as `open_url` above (origin, not the
+            // `/inbox` index), so the advertised template agrees with the
+            // port the daemon actually bound.
+            "open_url_format": phinbox::inbox::notify::inbox_open_url_with_base(
+                &super::open_origin_from_handle(&handle),
+                "<id>",
+            ),
         }))
         .unwrap()
     );

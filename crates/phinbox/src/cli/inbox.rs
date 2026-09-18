@@ -46,7 +46,9 @@ phinbox::TuiOutcome::Dismissed(_)) => return Ok(()),
         }
     }
     if let Some(id) = args.url {
-        let url = phinbox::inbox_open_url_for(&id);
+        // User-facing link: prefer the live daemon's host *and* port over
+        // the default-port fallback.
+        let url = phinbox::inbox::notify::inbox_open_url_with_base(&live_base(inbox_dir), &id);
         println!("{url}");
         return Ok(());
     }
@@ -59,8 +61,7 @@ phinbox::TuiOutcome::Dismissed(_)) => return Ok(()),
         return Ok(());
     }
     if args.open {
-        let base = phinbox::inbox_live_url(inbox_dir, None)
-            .unwrap_or_else(|| format!("http://127.0.0.1:{}", phinbox::INBOX_DEFAULT_PORT));
+        let base = live_base(inbox_dir);
         let url = format!("{base}/inbox");
         println!("{url}");
         let _ = std::process::Command::new(open_cmd())
@@ -103,6 +104,13 @@ phinbox::TuiOutcome::Dismissed(_)) => return Ok(()),
         serde_json::to_string(&summaries).map_err(|e| e.to_string())?
     );
     Ok(())
+}
+
+/// Base URL for user-facing links: the live daemon's actual bind address
+/// and port when one is running, else the default-port fallback.
+fn live_base(inbox_dir: &PathBuf) -> String {
+    phinbox::inbox_live_url(inbox_dir, None)
+        .unwrap_or_else(|| format!("http://127.0.0.1:{}", phinbox::INBOX_DEFAULT_PORT))
 }
 
 pub(crate) fn open_cmd() -> &'static str {

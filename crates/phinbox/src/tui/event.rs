@@ -85,11 +85,17 @@ pub(crate) fn handle_key(key: KeyEvent, state: &mut ViewerState) -> Option<TuiOu
         KeyCode::Char('o') | KeyCode::Enter => {
             // Open in browser — fire-and-forget.
             if let Some(entry) = state.selected_entry() {
-                let url = format!(
-                    "http://127.0.0.1:7117/inbox/{}",
-                    entry.request_id
-                );
-                let _ = crate::inbox::daemon::notifier::open_in_default_browser(&url);
+                let id = entry.request_id.clone();
+                // The opener (injected by the run loop) resolves the live
+                // daemon base. Falling back to `inbox_open_url_for` keeps
+                // the env/default behaviour when no live base is known.
+                match state.opener.as_ref() {
+                    Some(open) => (open.0)(&id),
+                    None => {
+                        let url = crate::inbox::notify::inbox_open_url_for(&id);
+                        let _ = crate::inbox::daemon::notifier::open_in_default_browser(&url);
+                    }
+                }
             }
             None
         }
@@ -113,6 +119,21 @@ pub(crate) fn run_loop(
     watcher: Option<InboxWatcher>,
 ) -> Result<TuiOutcome, String> {
     let mut state = ViewerState::default();
+    // Inject the browser opener so `[o]` targets the daemon that actually
+    // holds these requests. The base is resolved at key-press time (not
+    // here), because a daemon may start or move after the TUI opens.
+    {
+        let root = inbox_root.to_path_buf();
+        state.opener = Some(super::state::OpenerSlot(Box::new(move |request_id: &str| {
+            let url = crate::inbox::daemon::live_url(&root, None).map_or_else(
+                || crate::inbox::notify::inbox_open_url_for(request_id),
+                |base| {
+                    crate::inbox::notify::inbox_open_url_with_base(&base, request_id)
+                },
+            );
+            let _ = crate::inbox::daemon::notifier::open_in_default_browser(&url);
+        })));
+    }
     let mut last_poll = Instant::now().checked_sub(POLL_INTERVAL).unwrap();
     let mut last_change_gen = 0u64;
     let mut stdout_handle = stdout();

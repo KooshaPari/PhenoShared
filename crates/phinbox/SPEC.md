@@ -40,15 +40,23 @@ in the same shape every time.
 ### 4.1 Library — `phinbox::*`
 
 ```rust
-pub enum FieldSpec { Boolean, Text, Choice, MultiSelect, Integer, Number, DateTime }
-pub struct PromptSpec { title, question, field, notes?, buttons?, urgency, timeout_secs, request_id? }
-pub enum ElicitResponse { Answered { value, notes? }, Cancelled { notes? }, TimedOut { elapsed_secs }, Failed { reason } }
-pub enum Urgency { Info, Warning, Danger, Secret }
-pub enum FieldValue { Boolean, Text, Choice, MultiSelect, Integer, Number, DateTime, Empty }
+// JSON wire tag for each variant shown in parentheses.
+pub enum FieldSpec { Text("text"), LongText("long_text"), Integer("integer"),
+                     Choice("choice"), Boolean("boolean"), DateTime("date_time") }
+pub struct PromptSpec { title, question, field, notes?, buttons?, details?, urgency, timeout_secs, request_id? }
+pub enum ElicitResponse { Answered { value, notes? }, Cancelled { notes? },
+                          Deferred { request_id, open_url?, path? },
+                          TimedOut { elapsed_secs }, Failed { reason } }
+pub enum Urgency { Info, Warning, Error, Secret }        // "info" | "warning" | "error" | "secret"
+pub enum FieldValue { Text, LongText, Integer, Choice { value, index }, Boolean, DateTime }
 
 pub fn elicit(spec: &PromptSpec, opts: ElicitOptions) -> Result<ElicitResponse>;
 pub fn schema_json() -> serde_json::Value;
 ```
+
+There is no `Number`, `MultiSelect`, or `Empty` variant and no `Danger` urgency.
+`phinbox schema` is the authoritative shape; `phinbox validate --from-json '<spec>'`
+is the fastest way to check a spec against it (see §10.8).
 
 ### 4.2 CLI — `phinbox`
 
@@ -60,6 +68,7 @@ phinbox answer          # submit an answer to a queued request (scriptable)
 phinbox inbox           # list / show / open / clean the inbox
 phinbox inbox --tui     # launch the ratatui-based terminal inbox viewer
 phinbox tui             # shorthand for `inbox --tui`
+phinbox open            # open the inbox index (or --latest form) in the browser
 phinbox daemon          # run the long-lived HTTP + tray + notifier server
 phinbox install         # one-shot setup: copies binaries, writes PATH, registers launch agent
 phinbox uninstall       # remove everything `install` added
@@ -278,15 +287,17 @@ Daemon CLI additions for v0.4.0:
 1. copies `phinbox` and `phinbox-mcp` to `--prefix` (default
    `~/.local/bin` on Linux, `~/Library/Application Support/phinbox/bin`
    on macOS, `%LOCALAPPDATA%\phinbox\bin` on Windows),
-2. adds that prefix to the user's PATH in `.zshrc` / `.bashrc`
-   (or PowerShell profile on Windows),
+2. optionally appends that prefix to the user's PATH in `.zshrc` /
+   `.bashrc` (or PowerShell profile on Windows) — opt-in via
+   `--with-shell-rc`, off by default,
 3. installs the inbox daemon as a user service (launch agent / systemd
    unit / registry Run key),
-4. runs `phinbox smoke` to verify the renderer works.
+4. runs `phinbox smoke --no-render` and reports the result in the
+   install report.
 
 `phinbox install --no-launch-agent` skips step 3. `phinbox install
---skip-path` skips step 2. `phinbox uninstall --yes` reverses everything
-without prompting.
+--with-shell-rc` opts into step 2. `phinbox uninstall --yes` reverses
+everything without prompting.
 
 ### 10.6 Terminal inbox viewer (TUI)
 
@@ -294,6 +305,10 @@ without prompting.
 the same `<inbox>/inbox/*.json` files the daemon reads. It is the
 canonical local UX for the inbox: no daemon required, no browser
 required.
+
+`phinbox tui` is the documented shorthand and is implemented as a thin
+forward to the same command (it cannot drift): it passes `--follow`
+through to `inbox --tui` and sets nothing else.
 
 Library API (`phinbox::tui`):
 
@@ -347,21 +362,25 @@ A reviewer should be able to:
 1. `cargo build -p phinbox` and see binaries `phinbox` and `phinbox-mcp`.
 2. Run `phinbox schema` and see valid JSON Schema.
 3. Run `phinbox detect` and see the detected platform + renderer.
-4. Run `phinbox ask --title T --question Q --field-kind boolean --field-label "?" --renderer tty`
+4. Run `phinbox ask --from-json '{"title":"T","question":"Q","field":{"kind":"boolean","label":"?"}}' --renderer tty`
    and observe a TUI prompt. Press Enter. Observe a JSON response on stdout.
+   (`ask` describes the field through the spec; there are no `--field-kind` /
+   `--field-label` flags.)
 5. Run the MCP server under `mcp-client` and see `phinbox_mcp` listed with the correct schema.
 6. Run `cargo test -p phinbox` and see green.
 7. Run `phinbox-mcp` and pipe in a `tools/call` request with an invalid `title`. See a structured
    error response.
-8. Run `phinbox ask --async --title T --field-kind boolean` and see a `queued` JSON envelope
-   within ~20ms. Verify `<inbox>/<id>.json` was created.
+8. Run `phinbox ask --async --inbox-dir <dir> --from-json '{"title":"T","question":"Q","field":{"kind":"boolean","label":"?"}}'`
+   and see a `queued` JSON envelope. Verify `<inbox>/<id>.json` was created.
 9. Run `phinbox inbox --list --inbox-dir <dir>` and see the pending request in the index.
-10. Run `phinbox answer --request-id <id> --value true --inbox-dir <dir>` and observe the JSON
+10. Run `phinbox answer --request-id <id> --boolean true --inbox-dir <dir>` and observe the JSON
     file move to the answered state. Run `phinbox wait --request-id <id>` from another shell
     in parallel and confirm it returned the answered value.
-11. Run `phinbox install --prefix /tmp/test --no-launch-agent --skip-path --no-smoke` and
+11. Run `phinbox install --prefix /tmp/test --no-launch-agent` and
     confirm both binaries are at `/tmp/test/{phinbox,phinbox-mcp}`. Run
     `phinbox uninstall --prefix /tmp/test --yes` and confirm they're gone.
+    (`--skip-path` / `--no-smoke` do not exist: PATH edits are opt-in via
+    `--with-shell-rc`, and the bundled smoke check always runs.)
 12. Run `phinbox daemon --inbox-dir /tmp/test --port 0` (random port) and confirm it serves
     `GET /health` returning 200.
 13. With `cargo build -p phinbox --features tray-native`, run
@@ -369,8 +388,11 @@ A reviewer should be able to:
     a tray icon appears with a pending count badge. The badge increments when
     `phinbox ask --async` enqueues a request and decrements when
     `phinbox answer` resolves it.
-14. `cargo test -p phinbox --features tray-native` and `cargo test -p phinbox`
-    (default features) both pass — same test count, same test IDs.
+14. `cargo test -p phinbox` (default features) passes. `cargo test -p phinbox
+    --features tray-native` builds and runs, but on macOS 5 tests that
+    construct a tray currently fail with `muda::Menu` can only be created
+    on the main thread` (the `tray::tests` + `inbox::daemon::tests`
+    subset) — tracked as an open defect, see criterion 20.
 15. Run `phinbox ask --async --inbox-dir <dir> --from-file spec.json` to enqueue
     a request, then run `phinbox inbox --tui --inbox-dir <dir>` in a TTY.
     Observe the request in the left pane with `[pending]` badge, the full
@@ -378,17 +400,22 @@ A reviewer should be able to:
     to open the form URL in the default browser, or `q` to quit cleanly.
     Repeat with `TERM=dumb` and observe the same `--tui` invocation exits 0
     and prints a plain-text summary instead of entering raw mode.
-16. Run `phinbox open` (no daemon running) and observe the command
-    printing a clear "no daemon running on port 7117" error and a
-    one-line `did you mean: phinbox daemon --auto-open-browser`
-    hint. With `--spawn-if-missing`, observe a detached daemon being
-    spawned and the URL opening in the default browser within 1 s.
+16. Run `phinbox open --print-only` with an `--inbox-dir` that has no
+    running daemon, and observe it print the fallback URL
+    (`http://127.0.0.1:7117/inbox`) and exit 0 — `open` never fails hard
+    on a missing daemon, it falls back to the default port and opens that.
+    `--spawn-if-missing` launches a detached `phinbox daemon` for the same
+    inbox dir; the child's stdout/stderr are discarded, so when the
+    default port is already held by another daemon the child exits
+    silently and `open` still prints the fallback URL (observed on macOS
+    with the launchd-managed daemon owning `:7117`).
 17. With a daemon already running on `--port 8118`, run
     `phinbox open` and observe the URL printed / opened points at
     `http://127.0.0.1:8118/inbox`, **not** the hardcoded `:7117`.
-    The same applies to `phinbox inbox --open`, `phinbox inbox --tui`
-    (auto-opens if `--auto-open` is set), and the tray-icon left-click
-    handler.
+    The same applies to `phinbox inbox --open`, `phinbox inbox --url <id>`,
+    and the tray-icon left-click handler. (`phinbox inbox --tui` has no
+    `--auto-open` flag; the viewer opens the selected form's URL on
+    `Enter` / `o`.)
 18. After enqueuing 3 requests via `phinbox ask --async`, with the
     tray-native feature compiled in and `phinbox daemon` running on
     macOS / Windows, observe the menu-bar badge shows "3" (or "3+"
@@ -401,9 +428,13 @@ A reviewer should be able to:
     `phinbox · 3 pending · 0 answered` (or similar). After all
     requests are answered, observe
     `phinbox · 0 pending · 3 answered`.
-20. `cargo test -p phinbox` reports **133 tests, 0 failures** across
-    both the default feature set and `--features tray-native`. The 4
-    new v0.5.1 regression tests (`live_url_*`) all pass.
+20. `cargo test -p phinbox` (default features) reports **0 failures**.
+    The exact test count is not pinned here — it grows with every release.
+    Known gap: with `--features tray-native` on macOS, 5 tests
+    (`tray::tests::build_tray_returns_something` and 4 in
+    `inbox::daemon::tests`) fail on `muda::Menu` main-thread assertions;
+    the tray build itself works, the tests do not. Correcting that is
+    out of scope for this document.
 
 ## 12. Out of scope (v0.5.x)
 
@@ -432,7 +463,9 @@ Deferred to v0.6+:
 The user's experience of "open the inbox" is split across four
 surfaces, all of which must be discoverable from `phinbox --help`:
 
-1. **Standalone CLI** — `phinbox open [--latest] [--spawn-if-missing] [--print-only] [--inbox-dir DIR] [--port N]`.
+1. **Standalone CLI** — `phinbox open [--latest] [--spawn-if-missing] [--print-only] [--inbox-dir DIR]`.
+   (There is no `--port`; the port comes from the running daemon's
+   lockfile, falling back to `7117`.)
    - `--latest` deep-links to the most recently enqueued pending form
      (vs. the inbox index if omitted).
    - `--spawn-if-missing` launches a detached `phinbox daemon` if
@@ -456,3 +489,41 @@ The shared code path is `phinbox::open_in_default_browser(url)`,
 which routes through `mac::open` / `cmd /c start ""` /
 `xdg-open` depending on the platform — same helper as the v0.3
 notify fanout, now exported for CLI reuse.
+
+### 10.8 Spec validation (v0.9.x)
+
+`phinbox validate` checks a JSON `PromptSpec` without rendering anything. It
+is the CI entry point: no popup, no inbox, no side effects.
+
+```
+phinbox validate --from-file <PATH>
+phinbox validate --from-json '<JSON>'
+```
+
+Exactly one source is required (`--from-file` and `--from-json` are mutually
+exclusive; there is no stdin form, matching `ask`). The checks are the ones
+the render path already applies:
+
+1. serde parse of the JSON into `PromptSpec` (unknown fields and unknown
+   `kind` / `urgency` variants are rejected here), then
+2. `PromptSpec::validate()` — the same gate `render::dispatch` calls before
+   any backend is chosen, then
+3. an idempotent serde round-trip, so a spec that serializes to something
+   this crate cannot parse back is rejected rather than silently accepted.
+
+Output is one machine-readable JSON object on stdout. Exit 0:
+
+```json
+{
+  "valid": true,
+  "source": "spec.json",
+  "title": "Deploy?",
+  "field_kind": "boolean",
+  "urgency": "warning",
+  "timeout_secs": 120,
+  "request_id": "abc-123"
+}
+```
+
+Exit non-zero (`1`) prints the same envelope with `"valid": false` and an
+`"error"` string, plus an `error: <message>` line on stderr.

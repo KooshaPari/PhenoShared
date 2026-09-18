@@ -82,7 +82,7 @@ pub fn cmd_ask(
             "status": "queued",
             "request_id": req.request_id,
             "path": path,
-            "open_url": phinbox::inbox_open_url_for(&req.request_id),
+            "open_url": printed_open_url(inbox_dir, &req.request_id),
             "wait": format!("phinbox wait --request-id {}", req.request_id),
         });
         println!("{}", serde_json::to_string_pretty(&out).unwrap());
@@ -118,4 +118,68 @@ pub fn cmd_ask(
         serde_json::to_string_pretty(&response).map_err(|e| format!("serialize response: {e}"))?;
     println!("{out}");
     Ok(())
+}
+
+/// The `open_url` advertised by `--async`. This is the value the calling
+/// agent shows the user, so it must point at whichever daemon actually
+/// holds the request: the live local daemon's base (host **and** port)
+/// when one is running, else `PHINBOX_BASE_URL`-or-default, which is the
+/// legitimate shape for a remote / reverse-proxied inbox where no local
+/// daemon exists.
+fn printed_open_url(inbox_dir: &PathBuf, request_id: &str) -> String {
+    phinbox::inbox_live_url(inbox_dir, None).map_or_else(
+        || phinbox::inbox_open_url_for(request_id),
+        |base| phinbox::inbox::notify::inbox_open_url_with_base(&base, request_id),
+    )
+}
+
+// ---- tests ----------------------------------------------------------
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use std::net::TcpListener;
+
+    /// Publish a lockfile that points at a genuinely listening socket, so
+    /// `inbox_live_url`'s liveness probe accepts it.
+    fn fake_live_daemon(root: &std::path::Path, port: u16) {
+        let payload = serde_json::json!({
+            "root": root,
+            "port": port,
+            "bind": "127.0.0.1",
+            "booted_at_ms": 0,
+        });
+        std::fs::write(
+            root.join(phinbox::inbox::daemon::lockfile::LOCKFILE_NAME),
+            serde_json::to_vec_pretty(&payload).unwrap(),
+        )
+        .unwrap();
+    }
+
+    #[test]
+    fn printed_open_url_uses_live_daemon_port() {
+        let dir = tempfile::tempdir().unwrap();
+        let listener = TcpListener::bind("127.0.0.1:0").unwrap();
+        let port = listener.local_addr().unwrap().port();
+        assert_ne!(
+            port,
+            phinbox::INBOX_DEFAULT_PORT,
+            "test needs a non-default port"
+        );
+        fake_live_daemon(dir.path(), port);
+
+        let url = printed_open_url(&dir.path().to_path_buf(), "req-1");
+        // Regression: this used to be `PHINBOX_BASE_URL`-or-`localhost:7117`
+        // regardless of the running daemon, handing the user a dead link.
+        assert_eq!(url, format!("http://127.0.0.1:{port}/inbox/req-1"));
+    }
+
+    #[test]
+    fn printed_open_url_without_daemon_keeps_env_or_default_semantics() {
+        let dir = tempfile::tempdir().unwrap();
+        let url = printed_open_url(&dir.path().to_path_buf(), "req-1");
+        // No live daemon: the remote / reverse-proxy path is unchanged, so
+        // the result must equal `inbox_open_url_for` (env-aware) exactly.
+        assert_eq!(url, phinbox::inbox_open_url_for("req-1"));
+    }
 }

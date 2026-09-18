@@ -40,7 +40,10 @@ pub struct ListEntry {
 }
 
 /// UI state for the inbox viewer — renderable without touching the terminal.
-#[derive(Debug, Clone)]
+///
+/// Not `Clone`: it carries the injected browser `opener` closure. Tests and
+/// callers construct fresh state via `ViewerState::default()`.
+#[derive(Debug)]
 pub struct ViewerState {
     pub entries: Vec<ListEntry>,
     pub selected: usize,
@@ -48,7 +51,20 @@ pub struct ViewerState {
     pub status_message: String,
     /// When true, the help overlay is drawn on top of the detail pane.
     pub show_help: bool,
+    /// Opens a request's inbox form in the browser. Injected so the TUI
+    /// targets whichever daemon actually holds the request (its host
+    /// **and** port) instead of assuming the default port.
+    pub opener: Option<OpenerSlot>,
 }
+
+impl std::fmt::Debug for OpenerSlot {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.write_str("OpenerSlot(..)")
+    }
+}
+
+/// Debug-friendly wrapper so `ViewerState` can keep `#[derive(Debug)]`.
+pub struct OpenerSlot(pub Box<dyn Fn(&str) + Send>);
 
 impl Default for ViewerState {
     fn default() -> Self {
@@ -58,6 +74,7 @@ impl Default for ViewerState {
             focus_on_list: true,
             status_message: String::from("press ? for keys · q to quit"),
             show_help: false,
+            opener: None,
         }
     }
 }

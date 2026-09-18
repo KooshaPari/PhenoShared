@@ -58,15 +58,15 @@ match response {
 
 ```bash
 # Open a popup with a literal JSON spec
-phinbox ask --title "Deploy?" --question "Deploy to production?" \
-    --field-kind boolean --field-label "Confirm" --field-default true
+phinbox ask --from-json \
+  '{"title":"Deploy?","question":"Deploy to production?","field":{"kind":"boolean","label":"Confirm","default":true}}'
 
-# Pipe a JSON spec via stdin
-echo '{"title":"OK?","question":"","field":{"kind":"boolean","label":"OK","default":true}}' \
-  | phinbox ask --from-json -
+# …or read the spec from a file
+phinbox ask --from-file spec.json
 
-# Validate a spec without rendering
+# Validate a spec without rendering (CI-friendly: exit 0 = valid)
 phinbox validate --from-file spec.json
+phinbox validate --from-json '{"title":"OK?","question":"","field":{"kind":"boolean","label":"OK","default":true}}'
 
 # Print JSON Schema
 phinbox schema
@@ -80,6 +80,11 @@ phinbox install --prefix ~/.local/bin
 phinbox uninstall --yes
 ```
 
+`ask` takes `--from-json` (a literal JSON object) or `--from-file <PATH>`; there is no
+stdin form. The single field is described by the spec — `ask` has no `--field-kind` /
+`--field-label` flags. Without a spec, `phinbox ask --title T --question Q` builds a
+text field. `--from-json` conflicts with `--title` / `--question`.
+
 ### Async / non-blocking workflow
 
 When a popup would block the agent longer than you want (CI runs, long-lived
@@ -89,20 +94,28 @@ shell.
 
 ```bash
 # Queue the prompt — returns instantly with a request_id and an open URL
-phinbox ask --async --title "Approve PR?" --question "Merge?" \
-    --field-kind boolean --field-label "Yes"
+phinbox ask --async --from-json \
+  '{"title":"Approve PR?","question":"Merge?","field":{"kind":"boolean","label":"Yes","default":true}}'
 # → {"status":"queued","request_id":"abc-…","open_url":"http://localhost:7117/inbox/abc-…","path":"…"}
 
 # Open the inbox UI in the default browser (or via the deep link)
-phinbox inbox --open                    # open the index
-phinbox inbox --open --request-id abc-…  # open a specific form
+phinbox inbox --open          # open the index
+phinbox open --latest         # deep-link to the newest pending form
+phinbox inbox --url abc-…     # print one form's URL without opening
+
+# Full-screen terminal viewer, no browser required (non-TTY degrades to a
+# plain-text listing and exits 0)
+phinbox tui                   # alias for `phinbox inbox --tui`
 
 # Poll for the answer from another shell / another agent
 phinbox wait --request-id abc-…
 
 # Submit an answer from a script (no UI required)
-phinbox answer --request-id abc-… --value true --notes "ship it"
+phinbox answer --request-id abc-… --boolean true --notes "ship it"
 ```
+
+`phinbox answer` picks the flag by field kind: `--boolean` / `--integer` for those
+fields, `--value` for text, long-text, choice, and date-time, `--cancel` to cancel.
 
 The inbox daemon (`phinbox daemon`) is the long-running process that:
 
