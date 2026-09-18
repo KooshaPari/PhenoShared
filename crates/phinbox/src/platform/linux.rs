@@ -288,8 +288,8 @@ mod tests {
     }
 
     fn spec_with_field(field: FieldSpec) -> PromptSpec {
-    details: None,
         PromptSpec {
+            details: None,
             title: "t".into(),
             question: "q".into(),
             field,

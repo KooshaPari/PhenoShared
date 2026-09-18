@@ -270,7 +270,7 @@ mod tests {
 
     fn spec_text() -> PromptSpec {
         PromptSpec {
-    details: None,
+            details: None,
             title: "T".into(),
             question: "Q".into(),
             field: FieldSpec::Text {

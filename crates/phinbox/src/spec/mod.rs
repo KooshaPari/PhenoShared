@@ -15,7 +15,7 @@ mod tests {
 
     fn minimal_text() -> PromptSpec {
         PromptSpec {
-    details: None,
+            details: None,
             title: "Test".into(),
             question: "?".into(),
             field: FieldSpec::Text {
@@ -124,6 +124,7 @@ mod tests {
     #[test]
     fn serde_roundtrip_choice() {
         let s = PromptSpec {
+            details: None,
             field: FieldSpec::Choice {
                 label: "target".into(),
                 options: vec![
