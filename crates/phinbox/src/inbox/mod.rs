@@ -38,6 +38,12 @@ use crate::spec::{ElicitResponse, PromptSpec};
 
 pub mod change;
 pub mod daemon;
+// JSON-RPC over a Unix domain socket. UDS has no Windows equivalent, and
+// `tokio::net::UnixListener` / `std::os::unix` do not exist there, so this
+// module is Unix-only. Gating it here (rather than letting it fail to
+// compile) is what allows the crate to build for Windows at all — the
+// HTTP daemon and every renderer work there.
+#[cfg(unix)]
 pub mod ipc;
 pub mod notify;
 #[cfg(test)] mod tests;

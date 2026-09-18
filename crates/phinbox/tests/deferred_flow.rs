@@ -173,6 +173,11 @@ fn deferred_from_disk(root: &std::path::Path, rid: &str) -> PendingRequest {
 /// with a Deferred response must leave the request in pending/ (state
 /// Pending), NOT run finalize() which would move it to answered/.
 /// Drives the REAL server over its Unix socket.
+///
+/// `inbox::ipc` is Unix-only (no UDS on Windows), so this test is gated to
+/// match; the defer semantics it covers are asserted portably by
+/// `deferred_request_stays_in_pending_and_is_answerable` above.
+#[cfg(unix)]
 #[tokio::test(flavor = "multi_thread", worker_threads = 2)]
 async fn ipc_answer_with_deferred_keeps_request_in_pending() {
     let (_tmp, root) = temp_root("ipc-defer");

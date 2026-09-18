@@ -3,7 +3,12 @@
 //! Contains helpers for appending `PATH` export lines to the user's shell rc
 //! files so that the `phinbox` binaries are available on every new shell.
 
+// Only the Unix shell/launchd/systemd paths read and write rc files; on
+// Windows the PowerShell installer is used instead, so these imports (and
+// `home_dir`) would be dead there.
+#[cfg(unix)]
 use std::fs;
+#[cfg(unix)]
 use std::io;
 use std::path::{Path, PathBuf};
 
@@ -59,6 +64,7 @@ pub(crate) fn ensure_path_line(rc: &Path, bin_dir: &Path) -> io::Result<()> {
     Ok(())
 }
 
+#[cfg(unix)]
 pub(crate) fn home_dir() -> Option<PathBuf> {
     std::env::var_os("HOME").map(PathBuf::from)
 }

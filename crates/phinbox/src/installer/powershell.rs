@@ -1,6 +1,11 @@
 //! PowerShell / Windows installer generation.
 use std::path::{Path, PathBuf};
 
+// Only the Windows code paths below shell out; importing unconditionally
+// would leave an unused import on every other target.
+#[cfg(windows)]
+use std::process::Command;
+
 
 #[allow(dead_code)]
 pub(crate) fn update_path_via_setx(bin_dir: &Path) -> Option<PathBuf> {
