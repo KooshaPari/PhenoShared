@@ -89,7 +89,7 @@ not reproducible.
 | ID | Task | Est | Depends |
 |---|---|---|---|
 | E2.1.1 | ~~Reproduce the linker defect~~ **DONE** — verified independently: plain `cc` on a 2-line C file exits **1**; `SDKROOT=<xcode sdk>` alone fixes it; Rust builds are unaffected | — | done |
-| E2.6 | **Fix the host SDK split-brain.** `xcrun --show-sdk-path` resolves to CommandLineTools while `xcode-select -p` points at Xcode; the CLT SDK's `.tbd` stubs declare `arm64e.x1-macos`, which the installed `ld-1221.4` cannot parse. Fix via `SDKROOT`, `DEVELOPER_DIR`, or repairing `xcode-select`; then confirm plain `cc` exits 0 | 10m | — |
+| E2.6 | **Fix the host SDK split-brain.** Measured root cause (2026-09-19): `SDKROOT` is **not** set, and `xcrun --show-sdk-path` returns the CLT SDK **even when `DEVELOPER_DIR` is pointed at Xcode** — so this is the CLT install resolving ahead of the Xcode selection, not an env-var bug. The CLT `.tbd` (`MacOSX27.0.sdk/usr/lib/libSystem.B.tbd`) declares `arm64e.x1-macos`, which `ld-1221.4` (Xcode 26) cannot parse. Proven per-build workaround (no sudo): `export SDKROOT="$(xcode-select -p)/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk"` — plain `cc` exits 0. Permanent fix is a system-level change (regenerate/remove the malformed CLT `.tbd`, or repair the CLT via `xcode-select --install`), which needs approval | 10m + approval | — |
 | E2.7 | Verify the **14** `*-sys` and **2** `cc` crates build once the SDK is corrected | 10m | E2.6 |
 | E2.2 | Fix or formally exclude the **4** non-member crates with real compile errors | 10m | — |
 | E2.3 | Decide the **440** non-member manifests that never load (register / exclude / delete) | 10m | — |
