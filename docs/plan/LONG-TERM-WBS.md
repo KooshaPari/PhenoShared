@@ -187,43 +187,69 @@ recommendation. That is ~16 tasks per family; the count is the point.
 
 ---
 
-## E10 — The ledger overstates what was migrated (HOST, highest integrity risk)
+## E10 — The ledger overstates what was migrated (HOST)
 
-`docs/absorption/ABSORPTION-LINEAGE.md` §2.3 found **33 absorption records whose
-destination does not exist in this tree**, 11 of them naming an explicit
-destination — and **none of the 11 exists**. The registry marks these
-`absorbed`; the code is absent. This is the single largest integrity problem
-in the repo: the ledger cannot be trusted as a statement of what is here.
+### What is actually measurable (measured 2026-09-19, `projects/*.json`)
 
-Named cases and severity, from the audit:
+178 registry files. **11** carry `status: "absorbed"`. An earlier draft of this
+epic claimed all 11 names an absent destination. That was wrong — it came from
+testing a free-text field with `os.path.exists()`. The real split:
 
-| Case | Claimed destination | Reality |
+| Bucket | Count | Meaning |
 |---|---|---|
-| `phenoData` | `crates/pheno-data-{core,query,surreal,pg,smoke-tests}` | All five absent. Lines 32-33 claim five stale artefacts were *removed*; that directory still holds 14 files and is the only surviving phenoData code — **CRITICAL** |
-| `phenotype-pm-core` | `crates/traceability-{core,decorators}`, `crates/trace-gate` | All three absent; a 3-crate absorption documented as complete left nothing — **HIGH** |
-| `agent-user-status` | `crates/agent-user-status/` | Absent, and not in the absorbing repo's checkout either; the record's own promised marker `crates/agent-user-status/ABSORPTION.md` does not exist, so the absorb never landed — **HIGH** |
-| `Benchora` | `crates/benchora/` | Absent — HIGH |
-| `agent-platform` | `adapters/web/agent-platform/` | Absent (`adapters/`, `web/`, `agent-platform/` all absent) — HIGH |
-| `grapheon-bindings` | `packages/graphclient/` | Absent — HIGH |
-| `byteport` | `crates/byteport/` | Absent — MEDIUM |
-| `docs/ABSORPTION_INDEX.md` | `docs/absorbed-from/<repo>/README.md` per entry | 2 of 33 exist — MEDIUM |
+| destination is a local path and **exists** | 0 via `absorbing_path` (4 via prose, see below) | absorb landed |
+| destination is a local path and is **ABSENT** | **1** | the only *provable* registry violation: `agent-user-status`, `absorbing_path: "crates/agent-user-status/"` |
+| destination is another repo / free text | **10** | **unverifiable from this tree** — absence here is expected, not a defect |
 
-- **E10.1** For each of the 33 records, classify: **code present elsewhere**
-  (name the path) / **recoverable from an archived source** / **lost**.
-- **E10.2** For every "marked absorbed but absent" record, set the registry
-  status back to `AFFIRM` or `PENDING` — the current `absorbed` value is a
-  false statement. `projects/agent-user-status.json` is the template.
-- **E10.3** Recover what can be recovered (sources are archived on GitHub;
-  `gh auth` is currently invalid, which blocks every restore — **this is the
-  first thing to unblock**).
-- **E10.4** Add a registry invariant test: no record may read `absorbed`
-  unless its `absorbing_path` exists in the tree. This class cannot recur
-  silently once that check exists.
-- **E10.5** `phenoData` needs a human decision: the ledger says the surviving
+Four of those ten name local crates that **do** exist, so those absorbs landed:
+`crates/logkit` (`Logify`), `crates/phench` (`phench`),
+`crates/pheno-cdylib-bridge`, `crates/pheno-forge-smoke`.
+
+Separately, `projects/phenotype-dag-core-rename-2026-09-01.json` has **no
+`status` key at all**.
+
+### The systemic problem (this is the real finding)
+
+The registry **cannot express a checkable claim**. Destinations are free text —
+`"phenotype-infra"`, `"phenoUtils"`, `"pheno (crates/phench)"` — held in
+`absorbing_repo` / `absorbed_into`, with a real path field (`absorbing_path`)
+used by exactly one record. Because a destination could be either a path or a
+repo slug and nothing distinguished them, **no invariant was ever possible**,
+which is why this went undetected. The fix is schema-level, not data-level.
+
+### The wider set from the lineage audit
+
+`docs/absorption/ABSORPTION-LINEAGE.md` §2.3 reports a larger figure: 33
+records across *all* ledger sources (`docs/absorption/*/README.md`,
+`crates/ABSORPTION_MANIFEST.md`, `docs/ABSORPTION_INDEX.md`), 11 naming an
+explicit destination and none present. That set is real but **heterogeneous**:
+it mixes other-repo destinations (whose absence here is expected and not
+evidence of anything) with genuine local paths (`tools/kwatch`,
+`tools/kodevibe`, `crates/agent-user-status` — these *are* real violations).
+Its severity is therefore inflated for the other-repo subset and should be
+re-derived with the same three-bucket rule before being quoted as a count.
+
+Worst individual case remains `phenoData` (**CRITICAL**): the record describes a
+completed migration to five crates that do not exist *and* claims to have
+deleted the stale artefacts that are still the only surviving copy of that code.
+
+- **E10.1** Re-derive every count above using the three-bucket rule (path+exists
+  / path+absent / not-a-local-path). No bucket may be merged into another.
+- **E10.2** Correct the one provable false `absorbed` status
+  (`agent-user-status` → `AFFIRM`/`PENDING`), and decide the ten unverifiable
+  records: either supply a real `absorbing_path` or record that they cannot be
+  verified from this tree.
+- **E10.3** Recover what can be recovered. Sources are archived on GitHub;
+  recovery is currently blocked on account-wide credentials (see §2.3 note).
+- **E10.4** Schema first: require `absorbing_path` (a repo-relative path) or
+  `absorbing_repo` (a repo slug) as **distinct typed fields**, then add the
+  invariant test (no record may read `absorbed` with an absent
+  `absorbing_path`). Without the schema split the test is unrepresentable.
+- **E10.5** Give `phenoData` a human decision: the ledger says the surviving
   `crates/pheno-data-from-phenoData/` was superseded, but it is the only copy.
 
-**Done when:** no record claims a destination that is absent, and the
-invariant test runs in CI.
+**Done when:** destination kind is typed, no record claims `absorbed` with an
+absent `absorbing_path`, and unverifiable records say so explicitly.
 
 ---
 

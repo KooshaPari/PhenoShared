@@ -235,6 +235,29 @@ source is gone.** Re-authenticating the CLI (or adding an account-level SSH
 key) is the first unblocking action; after that, every record in this class
 becomes testable with one command.
 
+**CAVEAT on the counts above (added 2026-09-19 after re-measuring).** This
+section treats "destination" as one kind of thing. It is not. Re-measuring the
+machine-readable registry (`projects/*.json`, 178 files) shows the destinations
+fall into two kinds that must be counted separately:
+
+| Destination kind | Behaviour | Correct classification |
+|---|---|---|
+| a repo-relative **path** (e.g. `crates/agent-user-status/`) | checkable with a filesystem test | absent ⇒ **violation** |
+| a **repo slug or free text** (e.g. `phenotype-infra`, `pheno (crates/phench)`) | not checkable from this tree | absent ⇒ **unverifiable, NOT a violation** |
+
+Of the 11 registry records with `status: "absorbed"`, only **one** supplies a
+checkable path (`agent-user-status`, `absorbing_path: "crates/agent-user-status/"`,
+absent — a genuine violation). Ten supply only free text, so their absence here
+means nothing. Four of those ten do name local crates that exist
+(`crates/logkit`, `crates/phench`, `crates/pheno-cdylib-bridge`,
+`crates/pheno-forge-smoke`), i.e. those absorbs landed.
+
+Consequence: the "none of the 11 destinations is in this tree" severity in
+§2.3 is **inflated for the other-repo subset** and must not be quoted as a
+count of defects until re-derived with the bucket rule. The genuine local-path
+violations in that row are `tools/kwatch`, `tools/kodevibe` and
+`crates/agent-user-status`.
+
 ### 2.4 Duplicate destinations (same code, two or three arrivals)
 | Code | Copies | Arrivals |
 |---|---|---|
