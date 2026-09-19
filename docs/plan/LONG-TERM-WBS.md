@@ -271,8 +271,19 @@ deleted the stale artefacts that are still the only surviving copy of that code.
   (`agent-user-status` → `AFFIRM`/`PENDING`), and decide the ten unverifiable
   records: either supply a real `absorbing_path` or record that they cannot be
   verified from this tree.
-- **E10.3** Recover what can be recovered. Sources are archived on GitHub;
-  recovery is currently blocked on account-wide credentials (see §2.3 note).
+- **E10.3** Recover what can be recovered. Two distinct recovery paths, and only
+  one of them needs credentials:
+  - **Local, unblocked now.** At least one "absent" destination exists on an
+    **unmerged branch in a local sibling worktree**. Verified example: `Benchora`
+    is absent from the checked-out `phenotype-tooling` but present in **3**
+    sibling worktrees (`phenotype-tooling-wtrees/{pheno-forge-scaffold,
+    redispatch-origin-main-candidate,redispatch-state-fix}/crates/benchora`).
+    So its disappearance is a branch-state fact, not a lost absorb, and the
+    correct status is `PENDING` until a branch and commit are named. The same
+    3-worktree search should be run for every other absent destination before
+    anyone concludes anything is lost.
+  - **Credential-blocked.** Sources archived on GitHub still require
+    account-wide auth; the SSH key here is a deploy key scoped to this repo.
 - **E10.4** Schema first: require `absorbing_path` (a repo-relative path) or
   `absorbing_repo` (a repo slug) as **distinct typed fields**, then add the
   invariant test (no record may read `absorbed` with an absent
