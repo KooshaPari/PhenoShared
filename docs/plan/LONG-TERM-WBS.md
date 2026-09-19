@@ -4,7 +4,7 @@
 manifests under `crates/` + `tools/`, 84 workflow files.
 
 **Read with:** `docs/audits/GIT-HISTORY-INTEGRITY.md`,
-`docs/audits/IDENTITY-CLAIMS.md`, `docs/atlas/INVENTORY.md`,
+`docs/audits/IDENTITY-CLAIMS.md`, `docs/atlas/codebase/INVENTORY.md`,
 `docs/absorption/ABSORPTION-LINEAGE.md`, `docs/audits/PII-SWEEP-DAMAGE.md`.
 
 Task IDs follow the house convention (`E.N` ≈ 10 minutes; `E.0` = epic;
@@ -61,7 +61,7 @@ would not.
 - **E2.1** `cargo build --workspace --locked` — record the failure set.
 - **E2.2** `cargo test --workspace --locked` — record pass/fail per package.
 - **E2.3** Triage into: never compiled / compiles, tests fail / compiles,
-  untested. Publish the table in `docs/atlas/`.
+  untested. Publish the table in `docs/atlas/codebase/`.
 - **E2.4+** One 10-minute task per broken package (unknown count until E2.3).
 
 **Unknown:** the true number. 494 manifests exist; the root workspace has 79
@@ -109,7 +109,7 @@ workspace (26 found) or unbuilt.
 ## E5 — Repository hygiene at scale (DESK)
 
 - **E5.1** Land the atlas generator and artifacts (`scripts/atlas/`,
-  `docs/atlas/`) — in flight.
+  `docs/atlas/codebase/`) — in flight.
 - **E5.2** Work the file-size list: every file >500 lines is a hard breach
   (house rule); >350 is the target. Split by concern, not by size.
 - **E5.3** Rename test files violating the naming rule (`_v2`, `_new`, `_old`,
@@ -220,6 +220,6 @@ currently no gate that would reject a bad change.
 - `cargo clippy --workspace --locked -- -D warnings` exit 0.
 - `cargo fmt --check` exit 0 under a stated toolchain.
 - Cross-target guard green for every `cfg`-gated crate.
-- Every crate in `docs/atlas/INVENTORY.md` has a build/test verdict.
+- Every crate in `docs/atlas/codebase/INVENTORY.md` has a build/test verdict.
 - No `<REDACTED>` in a path, repo name, URL, or provenance field.
 - One archive tree, no zero-byte files, no mis-titled documents.

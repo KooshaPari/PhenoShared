@@ -36,7 +36,7 @@ STEP 3 — Read these five artifacts before touching code
   docs/audits/IDENTITY-CLAIMS.md          # what the repo claims vs reality
   docs/audits/PII-SWEEP-DAMAGE.md         # collateral damage from the redaction sweep
   docs/absorption/ABSORPTION-LINEAGE.md   # source repo -> destination mapping
-  docs/atlas/INVENTORY.md, FILES.md, HYGIENE.md   # generated inventory
+  docs/atlas/codebase/INVENTORY.md, FILES.md, HYGIENE.md   # generated inventory
 
 If any of those do not exist yet, the other machine is still generating them.
 Proceed with whichever exist and say which were missing.
