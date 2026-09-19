@@ -213,15 +213,27 @@ and four copies under `audits/*/forge-runner-scripts/`.
 | `docs/audits/GIT-HISTORY-INTEGRITY.md:86,114` | `docs/audits/PII-SWEEP-DAMAGE.md` | **RESOLVED** — the artifact was written after this table was compiled and is present (committed in `eae02a5b`). Row retained as a worked example of how this class is found; re-run the check before relying on it | RESOLVED |
 | `docs/absorption/pheno-forge-smoke/README.md:64-65` | repository URL rewritten to `<REDACTED>/pheno` | Cannot be checked; the repo is `PhenoShared` | LOW |
 
-**Recovery status for this class (measured 2026-09-19).** The restore command in
-`docs/absorption/agent-user-status/README.md` is `gh repo clone
-<REDACTED>/agent-user-status`, and the org is redacted in every record. Against
-`KooshaPari/agent-user-status`, `git ls-remote` over **SSH returns
-`Repository not found`** and over **HTTPS returns nothing** — i.e. the source is
-either private to credentials we do not have, or gone. `gh auth status` reports
-the stored token **invalid**, so neither listing nor cloning is currently
-possible. **Every recovery in this class is blocked on re-authenticating `gh`.**
-That is the first unblocking action, not a code change.
+**Recovery status for this class (measured 2026-09-19).** Two facts, both
+measured, and the second changes the conclusion:
+
+1. The org is redacted in every record, so the documented restore command
+   cannot be reconstructed from the ledger alone.
+2. `git ls-remote` against `KooshaPari/agent-user-status` returns
+   `Repository not found` over SSH and nothing over HTTPS. **This proves
+   nothing about whether the repo still exists.** The SSH key authenticates
+   account-wide (`ssh -T` reports `Hi KooshaPari!`) but is scoped as a
+   **deploy key to PhenoShared only**: of three repos, `PhenoShared` is
+   VISIBLE while `phenoAI` and `docs` — which certainly exist — both return
+   the same `Repository not found`. A deploy key returns exactly this error
+   for every repo outside its scope, so a private-but-intact source is
+   indistinguishable from a deleted one from this host.
+
+`gh auth status` reports the stored token **invalid** and neither `GH_TOKEN`
+nor `GITHUB_TOKEN` is set. **Recovery is therefore blocked purely on
+account-wide GitHub credentials, not on code and not on evidence that the
+source is gone.** Re-authenticating the CLI (or adding an account-level SSH
+key) is the first unblocking action; after that, every record in this class
+becomes testable with one command.
 
 ### 2.4 Duplicate destinations (same code, two or three arrivals)
 | Code | Copies | Arrivals |
