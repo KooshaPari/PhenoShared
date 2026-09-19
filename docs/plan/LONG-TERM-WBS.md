@@ -21,7 +21,7 @@ worked, and nothing detected that.**
 | Episode | Built | Actually happened |
 |---|---|---|
 | `clippy.toml` | A lint config | `cargo clippy` exited 101 for every crate; `make check` could not run |
-| `rustfmt.toml` | A style config | 19 options are nightly-only; CI runs stable; `cargo fmt --check` exits 1 and wants 334 files changed in one crate alone |
+| `rustfmt.toml` | A style config | 19 options are nightly-only; CI runs stable; stable `cargo fmt --all --check` exits 1 wanting **288** distinct files changed (nightly wants **456**; **168** nightly-only, **0** stable-only) |
 | `tray-native` | A tray feature, its own binary, SPEC acceptance criteria | Never compiled (until now); still fails at runtime — `muda::Menu` off the main thread |
 | `bc7c0ad7` | "Add unit tests for DurationExt" | Committed 3,763 files, 3,757 of them zero-byte |
 
@@ -38,9 +38,21 @@ The only epic that blocks the others.
 - **E1.1** Decide the fmt policy: point the CI fmt step at nightly (honours
   `rustfmt.toml`'s intent) **or** trim `rustfmt.toml` to stable-only options.
   Record the decision in `docs/decisions/`.
+  Measured inputs (verified 2026-09-19, `docs/audits/FMT-GATE.md`): stable
+  `cargo fmt --all -- --check` exits **1** and wants **288** distinct files
+  changed; the same command under nightly exits **1** and wants **456**, of
+  which **168 are nightly-only and 0 are stable-only** — so the stable set is a
+  strict subset of the nightly set. `crates/phinbox` alone accounts for **69**
+  of the 288 (83% of its 83 tracked `.rs` files).
+  **Trap:** the rustup **default** toolchain on this host is `nightly`, so any
+  `cargo fmt` run from a directory outside this repo silently formats with
+  nightly. Any instruction to "run cargo fmt" must state the toolchain
+  explicitly, or the result is not reproducible.
 - **E1.2** Implement the decision; confirm `cargo fmt --check` exits 0.
 - **E1.3** Reformat in a dedicated, message-scoped commit (never mixed with
-  logic changes) — expect hundreds of files.
+  logic changes) — this is a **288-file** change under stable (456 under
+  nightly), of which 69 are in `phinbox`, so it must not be mixed with the
+  phinbox work in E3/E4.
 - **E1.4** Measure `cargo clippy --workspace --locked -- -D warnings`
   (what `quality-gate.yml` runs). Until this passes, **`main` cannot merge**.
 - **E1.5** Fix or allow-with-reason the workspace clippy findings; ban blanket
