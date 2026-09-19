@@ -165,6 +165,28 @@ the absorb never landed.
 "wrong path in the ledger", and **2** more to a branch-state question — so only
 **~12** are genuinely absent locally.
 
+### Proposed E11.3 corrections (apply only with sign-off — they edit the source-of-truth registry)
+
+The 4 "present locally" cases do **not** all get the same fix. Only one is a
+clean path correction; the other three are disposition decisions, because the
+invariant scans both `projects/*.json` **and** the `docs/absorption/*/README.md`
+claims, so a fix must touch every claim site of a destination.
+
+| Destination | Claimed | Actual | Fix & expected invariant effect |
+|---|---|---|---|
+| `policystack` | `packages/policystack` | `crates/policystack` (1,711 files) | **clean path edit at every claim site** → removes its VIOLATION |
+| `byteport` | `crates/byteport` | `absorption/byteport` (still **staged**) | do **not** claim the staging path as final; set status `PENDING` + note "staged at absorption/byteport" |
+| `melosviz` | `packages/melosviz` | `crates/argis-extensions/melosviz-wt/...` (unstable worktree path) | not a stable location → set `PENDING` |
+| `traceability-core` | `crates/traceability-core` | `crates/agile-plus/crates/traceability-core` (**different lineage**, see absorption audit) | do **not** alias two different lineages → keep flagged / `PENDING` until provenance is confirmed |
+
+Honest expected drop on the **violation count**: at most **1** from a pure
+path-correction (`policystack`), because the other three case decisions change
+*disposition*, not a claim path — and disposition changes only affect
+`projects/*.json` `status=absorbed` rows, while the docs-derived claim lines
+stay violations until the claim itself is edited. So E11.3 does **not** "shrink
+18 to ~14 by itself"; that number only lands after the E10.2 status corrections
+and the docs-claim edits are done together and the invariant is re-run.
+
 ---
 
 ## 6. E12 — NEW: `cargo` mutates committed lockfiles
