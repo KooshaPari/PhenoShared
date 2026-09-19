@@ -210,11 +210,20 @@ and four copies under `audits/*/forge-runner-scripts/`.
 | `crates/ABSORPTION_MANIFEST.md:34` | `<REDACTED>/rich-cli-kit/crates/klipdot/` | Absent. Related survivors: `crates/klipdot-capture`, `crates/sharecli` | MEDIUM |
 | `crates/ABSORPTION_MANIFEST.md:44` | root `agentkit` | Absent | LOW |
 | `docs/ABSORPTION_INDEX.md:3,11-12,22` | `docs/absorbed-from/<repo>/README.md` for each index entry | Only **2** of 33 exist (`phenotype-hub`, `vibeproxy-monitoring-unified`) | MEDIUM — the index promises a disposition README per entry and carries 2 |
-| `docs/audits/GIT-HISTORY-INTEGRITY.md:86,114` | `docs/audits/PII-SWEEP-DAMAGE.md` | **Absent.** The audit that computed the `2,541` damage figure cites its own supporting artifact twice, and that artifact does not exist | MEDIUM — see §3.2 |
+| `docs/audits/GIT-HISTORY-INTEGRITY.md:86,114` | `docs/audits/PII-SWEEP-DAMAGE.md` | **RESOLVED** — the artifact was written after this table was compiled and is present (committed in `eae02a5b`). Row retained as a worked example of how this class is found; re-run the check before relying on it | RESOLVED |
 | `docs/absorption/pheno-forge-smoke/README.md:64-65` | repository URL rewritten to `<REDACTED>/pheno` | Cannot be checked; the repo is `PhenoShared` | LOW |
 
-### 2.4 Duplicate destinations (same code, two or three arrivals)
+**Recovery status for this class (measured 2026-09-19).** The restore command in
+`docs/absorption/agent-user-status/README.md` is `gh repo clone
+<REDACTED>/agent-user-status`, and the org is redacted in every record. Against
+`KooshaPari/agent-user-status`, `git ls-remote` over **SSH returns
+`Repository not found`** and over **HTTPS returns nothing** — i.e. the source is
+either private to credentials we do not have, or gone. `gh auth status` reports
+the stored token **invalid**, so neither listing nor cloning is currently
+possible. **Every recovery in this class is blocked on re-authenticating `gh`.**
+That is the first unblocking action, not a code change.
 
+### 2.4 Duplicate destinations (same code, two or three arrivals)
 | Code | Copies | Arrivals |
 |---|---|---|
 | `phenotype-router-monitor/src/lib.rs` | **3**, byte-identical (md5 `816d3875…`) | `6016c04a` (2026-04-02, root), `33673213` (`absorption/`), `121f79f6` (`crates/`) |

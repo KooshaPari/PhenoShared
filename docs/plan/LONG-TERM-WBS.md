@@ -187,6 +187,46 @@ recommendation. That is ~16 tasks per family; the count is the point.
 
 ---
 
+## E10 — The ledger overstates what was migrated (HOST, highest integrity risk)
+
+`docs/absorption/ABSORPTION-LINEAGE.md` §2.3 found **33 absorption records whose
+destination does not exist in this tree**, 11 of them naming an explicit
+destination — and **none of the 11 exists**. The registry marks these
+`absorbed`; the code is absent. This is the single largest integrity problem
+in the repo: the ledger cannot be trusted as a statement of what is here.
+
+Named cases and severity, from the audit:
+
+| Case | Claimed destination | Reality |
+|---|---|---|
+| `phenoData` | `crates/pheno-data-{core,query,surreal,pg,smoke-tests}` | All five absent. Lines 32-33 claim five stale artefacts were *removed*; that directory still holds 14 files and is the only surviving phenoData code — **CRITICAL** |
+| `phenotype-pm-core` | `crates/traceability-{core,decorators}`, `crates/trace-gate` | All three absent; a 3-crate absorption documented as complete left nothing — **HIGH** |
+| `agent-user-status` | `crates/agent-user-status/` | Absent, and not in the absorbing repo's checkout either; the record's own promised marker `crates/agent-user-status/ABSORPTION.md` does not exist, so the absorb never landed — **HIGH** |
+| `Benchora` | `crates/benchora/` | Absent — HIGH |
+| `agent-platform` | `adapters/web/agent-platform/` | Absent (`adapters/`, `web/`, `agent-platform/` all absent) — HIGH |
+| `grapheon-bindings` | `packages/graphclient/` | Absent — HIGH |
+| `byteport` | `crates/byteport/` | Absent — MEDIUM |
+| `docs/ABSORPTION_INDEX.md` | `docs/absorbed-from/<repo>/README.md` per entry | 2 of 33 exist — MEDIUM |
+
+- **E10.1** For each of the 33 records, classify: **code present elsewhere**
+  (name the path) / **recoverable from an archived source** / **lost**.
+- **E10.2** For every "marked absorbed but absent" record, set the registry
+  status back to `AFFIRM` or `PENDING` — the current `absorbed` value is a
+  false statement. `projects/agent-user-status.json` is the template.
+- **E10.3** Recover what can be recovered (sources are archived on GitHub;
+  `gh auth` is currently invalid, which blocks every restore — **this is the
+  first thing to unblock**).
+- **E10.4** Add a registry invariant test: no record may read `absorbed`
+  unless its `absorbing_path` exists in the tree. This class cannot recur
+  silently once that check exists.
+- **E10.5** `phenoData` needs a human decision: the ledger says the surviving
+  `crates/pheno-data-from-phenoData/` was superseded, but it is the only copy.
+
+**Done when:** no record claims a destination that is absent, and the
+invariant test runs in CI.
+
+---
+
 ## 5. Two-machine split
 
 Disjoint by path prefix, so the two machines never edit the same file.
