@@ -119,22 +119,51 @@ broken mechanisms in this repo.
 
 ---
 
-## 5. E11 — NEW: the path-mismatch class
+## 5. E11 — NEW: the path-mismatch class (MEASURED)
 
-Discovered while verifying E10.3. `policystack` is recorded as
-`packages/policystack` (absent) but exists at **`crates/policystack`** with
-**1,711 files**. This is not a lost absorption; it is a **wrong path in the
-ledger**, fixable in one line.
+Discovered while verifying E10.3, then classified by a single-pass sweep over
+every sibling checkout (159 directory hits). **The 18 "absent" destinations are
+not 18 missing absorptions.** They split four ways:
 
-| ID | Task | Est |
+### (a) PRESENT LOCALLY — ledger names the wrong path (4)
+
+| Destination | Ledger says | Actual location |
 |---|---|---|
-| E11.1 | For each of the 18 absent destinations, test the same basename under `crates/`, `packages/`, `libs/`, `tools/`, `apps/` | 10m |
-| E11.2 | Split the 18 into **mis-pathed** / **branch-only** / **truly absent** | 10m |
-| E11.3 | Correct the mis-pathed records; re-run the invariant and record the drop | 10m |
-| E11.4 | Add a "did you mean" hint to the invariant: on VIOLATION, report a same-basename directory elsewhere | 10m |
+| `policystack` | `packages/policystack` | **`crates/policystack`** — 1,711 files |
+| `byteport` | `crates/byteport` | **`absorption/byteport`** — still in the *staging* directory |
+| `melosviz` | `packages/melosviz` | `crates/argis-extensions/melosviz-wt/.../melosviz` |
+| `traceability-core` | `crates/traceability-core` | `crates/agile-plus/crates/traceability-core` — **caution: a different lineage**, not the same crate |
 
-**Expected effect:** E11 should substantially shrink the 18 without any recovery
-and without credentials.
+These are **ledger edits, not recoveries**. They need no credentials and no
+network.
+
+### (b) BRANCH / SIBLING ONLY — unmerged or other checkouts (2)
+
+`benchora` (4 sibling worktrees), `phenotype-research-engine` (14 sibling hits).
+Correct status is `PENDING` until a branch and commit are named.
+
+### (c) DOC PLACEHOLDER only — no code anywhere (1)
+
+`agent-user-status` — the only trace in the entire tree is
+`docs/absorption/agent-user-status/`. Consistent with the earlier finding that
+the absorb never landed.
+
+### (d) TRULY ABSENT locally (17)
+
+`kodevibe`, `kwatch`, the five `pheno-plugins-*`, `quillts`, `graphclient`,
+`pheno-utils`, `traceability-decorators`, `trace-gate`, the five
+`pheno-data-*`, `klipdot`. Credentials-blocked for recovery.
+
+| ID | Task | Est | Status |
+|---|---|---|---|
+| E11.1 | Locate each absent destination across sibling checkouts (single-pass sweep) | 10m | **done** — 159 hits |
+| E11.2 | Split into mis-pathed / branch-only / placeholder / truly-absent | 10m | **done** — 4 / 2 / 1 / 17 |
+| E11.3 | Correct the **4** mis-pathed ledger records; re-run the invariant and record the drop | 10m | queued |
+| E11.4 | Add a "did you mean" hint: on VIOLATION, report a same-basename directory elsewhere in the tree | 10m | queued |
+
+**Effect:** E11 converts **4** of the 18 violations from "missing code" to
+"wrong path in the ledger", and **2** more to a branch-state question — so only
+**~12** are genuinely absent locally.
 
 ---
 
