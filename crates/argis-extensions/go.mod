@@ -8,7 +8,7 @@ require (
 	connectrpc.com/connect v1.20.0
 	github.com/99designs/gqlgen v0.17.93
 	github.com/bytedance/sonic v1.15.2
-	github.com/fsnotify/fsnotify v1.10.0
+	github.com/fsnotify/fsnotify v1.10.1
 	github.com/go-chi/chi/v5 v5.3.1
 	github.com/go-chi/cors v1.2.2
 	github.com/go-playground/validator/v10 v10.30.3
