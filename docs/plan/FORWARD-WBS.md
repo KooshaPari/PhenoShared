@@ -117,6 +117,29 @@ broken mechanisms in this repo.
 | E10.6 | Extend the scanner to prose path lists (**≥5** more violations known) — deliberately deferred so the gate does not cry wolf | 10m | deferred on purpose |
 | E10.7 | Wire the invariant into CI as a gate | 10m | queued |
 
+### E10.5 decision package (phenoData) — one-word yes
+
+Verified the record's shape: there is **no `projects/phenoData.json`** —
+`phenoData` survives only as `docs/absorption/phenoData/README.md`. So E10.5 is
+**not** a registry-status change; it is a README-claim correction.
+
+- `README.md:32-33` asserts "Removed 5 stale `crates/pheno-data-from-phenoData/`
+  artefacts" — **false**: that directory still exists with **14 files**.
+- `README.md:17-21` claims the target is the external `pheno/crates/pheno-data-*`
+  monorepo — **unverifiable from this tree** (external repo), the same as every
+  other other-repo destination.
+
+Two independent decisions, both one-word:
+- **A (safe doc-truth fix, do now):** correct line 32-33 to state the artefacts
+  were *intended* to be removed and *are still present*. Aligns the record to
+  reality, deletes nothing. Say **"fix"** and I apply it.
+- **B (destructive, separate):** whether to *actually delete*
+  `crates/pheno-data-from-phenoData` (14 files). This is a real deletion and is
+  **not** bundled with A. Say **"delete"** (with that specific dir) and I will,
+  after a confirming check; otherwise it stays exactly as-is.
+
+A "yes" to A does not imply B, and vice versa.
+
 ---
 
 ## 5. E11 — NEW: the path-mismatch class (MEASURED)
