@@ -241,6 +241,26 @@ evidence of anything) with genuine local paths (`tools/kwatch`,
 Its severity is therefore inflated for the other-repo subset and should be
 re-derived with the same three-bucket rule before being quoted as a count.
 
+### Cross-verified violation count (two independent methods, 2026-09-19)
+
+Two independent passes over the ledger now agree, and the reconciliation is
+exact — record it so neither number is later "corrected" to match the other:
+
+| Method | Unit | Result |
+|---|---|---|
+| Per-record bucket pass over **4** ledger families (`ABSORPTION-STATUS-TRUTH.md`) | records | **12** records name an absent local path |
+| Executable invariant over **5** sources, negative-controlled (`scripts/audit/registry-invariant.sh`) | paths | **18** absent paths, exit 1 |
+
+`12 records = 18 paths` because two records name several destinations on one
+line: `docs/absorption/PhenoPlugins/README.md:19-23` names **5** crates (+4) and
+`docs/absorption/phenotype-pm-core/README.md:9` names **3** (+2). 12+4+2 = 18.
+Both counts are right; they differ only in what they count.
+
+The same pass also lists **16-69 unverifiable** claims depending on source set
+(destinations that are repo slugs or free text), which the schema cannot check
+at all. Those are not defects; they are the reason no invariant was possible
+before the split in **E10.4**.
+
 Worst individual case remains `phenoData` (**CRITICAL**): the record describes a
 completed migration to five crates that do not exist *and* claims to have
 deleted the stale artefacts that are still the only surviving copy of that code.
