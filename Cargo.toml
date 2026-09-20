@@ -80,6 +80,14 @@ members = [
     "crates/phenotype-observability",
     "crates/phenotype-policy-engine",
     "crates/phinbox",
+    # --- eyetracker crates (absorbed 2026-08-13 from KooshaPari/eyetracker per docket O18) ---
+    "crates/eyetracker-domain",
+    "crates/eyetracker-math",
+    "crates/eyetracker-core",
+    "crates/eyetracker-ffi",
+    "crates/eyetracker-camera",
+    "crates/eyetracker-inference",
+    "crates/eyetracker-cli",
 ]
 [workspace.package]
 version = "0.3.10"
