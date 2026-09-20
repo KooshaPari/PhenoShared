@@ -27,7 +27,7 @@ printed in the `status` column. Doc-only claims are labelled `PROSE-ONLY`.
 
 | # | Source repo | Hop chain | Destination path(s) | Evidence (commit + ledger) | Status |
 |---|---|---|---|---|---|
-| 1 | `KooshaPari/zz-merge-unk-eyetracker` | direct | `crates/eyetracker/eyetracker-{domain,math,core,camera,inference,cli,ffi}` (7 crates) | `2fe6b59a` (2026-08-13, 40 files; 37 under `crates/eyetracker/`); `crates/eyetracker-PROVENANCE.md:5-19` | VERIFIED. Message says 7 crates; tree has 7. **Duplicate twins exist**: flat `crates/eyetracker-{camera,cli,core,domain,ffi,inference,math}` were added by `33673213`, not by this commit |
+| 1 | `KooshaPari/zz-merge-unk-eyetracker` | direct | `crates/eyetracker-{domain,math,core,camera,inference,cli,ffi}` (7 crates at top level) | `2fe6b59a` (2026-08-13, 40 files; original `crates/eyetracker/eyetracker-*` tree since deleted at `6393ef62` per `docs/audits/EYETRACKER-DUPLICATE.md`); `crates/eyetracker-PROVENANCE.md:5-19`; promotion to workspace members at `ee54d336` | VERIFIED. Message says 7 crates; canonical tree is now Tree B (flat layout). Duplicate Tree A removed 2026-09-20 |
 | 2 | `pheno-substrate-family` | direct | `crates/pheno-cdylib-bridge`, `crates/pheno-forge-smoke`, `crates/pheno-runtime-config`, `crates/pheno-context` | `c3f47016` (2026-08-14, 52 files); `docs/absorption/{pheno-cdylib-bridge,pheno-forge-smoke,pheno-runtime-config,pheno-context}/README.md` | VERIFIED. Message says 4 crates; tree has exactly 4 |
 | 3 | `KooshaPari/Configra` | direct | `crates/settly`, `crates/pheno-config`, `crates/configra-ops`, `crates/config-schema`, `crates/phenotype-config-loader`, `crates/phenoctl` | `9b9275f0` (2026-08-21, 137 added files); `audits/absorption-justifications/Configra-2026-07-17.md:3-4` | **GIT BEATS DOC.** The audit's final disposition is `ARCHIVE_ONLY` ("absorption failsafe"); git shows 6 crates migrated. The audit also lists a 5-crate workspace and does **not** mention `phenoctl`, which git did migrate |
 | 4 | `KooshaPari/Apisync` | direct | `crates/apisync` | `76cb136b` (2026-09-13, 126 files); `crates/apisync/PROVENANCE.md:1-13`; `registry/absorbed-crates/apisync/ABSORPTION.md` | VERIFIED. `crates/apisync/PROVENANCE.md:11` dates it 2026-09-14; the commit is 2026-09-13. Git wins on the date |
@@ -262,7 +262,7 @@ violations in that row are `tools/kwatch`, `tools/kodevibe` and
 | Code | Copies | Arrivals |
 |---|---|---|
 | `phenotype-router-monitor/src/lib.rs` | **3**, byte-identical (md5 `816d3875…`) | `6016c04a` (2026-04-02, root), `33673213` (`absorption/`), `121f79f6` (`crates/`) |
-| eyetracker crates | **2** | `2fe6b59a` (`crates/eyetracker/eyetracker-*`), `33673213` (`crates/eyetracker-*`) |
+| eyetracker crates | **1 (Tree B only)** | `33673213` (`crates/eyetracker-*`); Tree A (`crates/eyetracker/eyetracker-*`) deleted 2026-09-20 at `6393ef62` |
 | 32-product docset | **2** | `7202e1b2` (`docs/phenotype-docset-v1.1/products/`), `6c9b79ca` (`docs/atlas/products/`) |
 | PhenoGfx | **2** | `9047e9dc` (`crates/phenotype-gfx`), `25c8dde1` (`phenotype-gfx/`) |
 | BytePort | **4 partial** | `absorption/byteport` (stub), `apps/byteport`, `_archived/byteport`, `sites/byteport-landing` |

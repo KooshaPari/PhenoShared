@@ -19,29 +19,29 @@ One row per tracked `Cargo.toml` directory: what it is, how big it is, how it is
 
 | metric | value |
 |---|---|
-| Cargo package directories (tracked `Cargo.toml`) | 594 |
-| root workspace members | 74 |
-| tracked files | 29061 |
-| tracked LOC (all file types) | 7139542 |
-| Rust files | 5759 |
-| Rust LOC | 1104852 |
-| test declarations (all languages) | 31891 |
-| Rust LOC inside root workspace members | 139864 |
-| files outside every nested package (the `workspace-root` bucket) | 16926 files / 4742487 LOC |
+| Cargo package directories (tracked `Cargo.toml`) | 587 |
+| root workspace members | 81 |
+| tracked files | 29049 |
+| tracked LOC (all file types) | 7159661 |
+| Rust files | 5730 |
+| Rust LOC | 1095486 |
+| test declarations (all languages) | 31741 |
+| Rust LOC inside root workspace members | 149433 |
+| files outside every nested package (the `workspace-root` bucket) | 16951 files / 4772222 LOC |
 
-74 of 594 package directories belong to the single root Cargo workspace. The rest are tracked crates outside it: absorbed vendor trees, test fixtures, nested fuzz/Tauri workspaces, and template scaffolds.
+81 of 587 package directories belong to the single root Cargo workspace. The rest are tracked crates outside it: absorbed vendor trees, test fixtures, nested fuzz/Tauri workspaces, and template scaffolds.
 
-## Packages (594)
+## Packages (587)
 
 Sorted by tree LOC descending.
 
 | path | package | kind | LOC | rs files | files | tests | docs | os_cfg | last | role |
 |---|---|---|---|---|---|---|---|---|---|---|
-| (workspace root) | (root) | workspace-root/meta | 4742487 | 762 | 16926 | 5623 | 6663 | linux,macos,windows | 2026-09-18 | Shared infrastructure workspace for the [Phenotype](https://github.com/KooshaPari) |
+| (workspace root) | (root) | workspace-root/meta | 4772222 | 762 | 16951 | 5628 | 6677 | linux,macos,windows | 2026-09-19 | Shared infrastructure workspace for the [Phenotype](https://github.com/KooshaPari) |
 | crates/hexa-kit | hexakit | sub-workspace/meta | 874865 | 352 | 2853 | 1533 | 1337 | linux,macos,windows | 2026-09-16 | HexaKit — Phenotype Infrastructure Kit: shared Rust crates powering the Phenotype platform (config, errors, logging, contracts, MCP, policy, compliance, analytics, etc.) |
 | crates/agile-plus | agile-plus | sub-workspace/meta | 218907 | 11 | 1152 | 231 | 640 | - | 2026-09-16 | [![Coverage ≥85%](https://img.shields.io/badge/coverage-≥85%25-brightgreen)](.github/workflows/coverage.yml) |
 | crates/sharecli | sharecli | non-member/lib+bin | 101676 | 433 | 491 | 2803 | 6 | linux,macos,windows | 2026-09-16 | Shared CLI process manager for multi-project agent orchestration |
-| _archived/byteport | byteport | sub-workspace/meta | 88034 | 3 | 490 | 489 | 80 | - | 2026-09-16 | [![CI](https://github.com/KooshaPari/BytePort/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/KooshaPari/BytePort/actions/workflows/ci.yml) |
+| _archived/byteport | byteport | sub-workspace/meta | 88027 | 3 | 490 | 489 | 80 | - | 2026-09-19 | [![CI](https://github.com/KooshaPari/BytePort/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/KooshaPari/BytePort/actions/workflows/ci.yml) |
 | tests | phenotype-infra-tests | non-member/meta | 80641 | 25 | 290 | 4537 | 7 | - | 2026-09-16 | Cross-crate integration tests for phenotype-infra monorepo |
 | crates/gateway | gateway | non-member/bin | 70815 | 288 | 289 | 2574 | 0 | - | 2026-09-15 | OpenAI-compatible HTTP gateway for substrate routing, A2A mailbox, and management config. |
 | crates/phenotype-gfx | phenotype-gfx | member/lib | 32970 | 81 | 258 | 314 | 46 | - | 2026-09-16 | Unified graphics kernel: voxel, LOD, streaming, postfx, water, voxelizer, terrain. Single Rust core per ADR-004. |
@@ -79,8 +79,7 @@ Sorted by tree LOC descending.
 | crates/klipdot-capture | klipdot-capture | non-member/meta | 6077 | 12 | 13 | 46 | 0 | linux,macos,windows | 2026-09-15 | KlipDot daemon: terminal image interceptor and clipboard processor |
 | crates/pheno-terminal | pheno-terminal | non-member/meta | 5657 | 11 | 12 | 41 | 0 | linux,macos,windows | 2026-09-16 | Terminal utilities: clipboard, interception, image processing, shell hooks |
 | crates/focus-ffi | focus-ffi | non-member/lib+bin | 5630 | 6 | 12 | 28 | 1 | - | 2026-09-16 | UniFFI export surface for FocalPoint core. Exposes the mascot state machine plus rules/rewards/penalties/policy/audit/sync sub-APIs to Swift (via UniFFI) and Ko |
-| crates/eyetracker/eyetracker-inference | eyetracker-inference | non-member/lib | 5603 | 14 | 15 | 106 | 0 | macos | 2026-08-25 | ML inference pipeline for eye tracking |
-| crates/eyetracker-inference | eyetracker-inference | non-member/lib | 5584 | 14 | 15 | 106 | 0 | macos | 2026-09-15 | ML inference pipeline for eye tracking |
+| crates/eyetracker-inference | eyetracker-inference | member/lib | 5585 | 14 | 15 | 106 | 0 | macos | 2026-09-19 | ML inference pipeline for eye tracking |
 | crates/settly | settly | non-member/meta | 5512 | 24 | 92 | 29 | 24 | - | 2026-09-16 | Settings management with validation, versioning, and migration support |
 | crates/hexa-kit/crates/phenotype-xdd-lib | phenotype-xdd-lib | non-member/lib | 5382 | 10 | 45 | 44 | 22 | - | 2026-09-16 | Cross-cutting xDD (TDD/BDD/DDD/PDD) utilities library for Rust |
 | crates/agile-plus/crates/agileplus-subcmds | agileplus-subcmds | non-member/meta | 5216 | 38 | 39 | 100 | 0 | macos,windows | 2026-09-16 | AgilePlus CLI subcommands (platform, dashboard, events, sync) |
@@ -168,8 +167,7 @@ Sorted by tree LOC descending.
 | crates/focus-rules | focus-rules | non-member/meta | 2048 | 3 | 5 | 49 | 1 | - | 2026-09-16 | Rule DSL, evaluation, priority, cooldowns, explanation. Traces to FR-RULE-001..008. Defines `Rule` primitive: trigger (event type match), conditions (state pred |
 | crates/pheno-compose-bindings | nvms-ffi | non-member/lib | 2047 | 2 | 5 | 2 | 0 | linux,macos | 2026-09-16 | Rust FFI bindings to NVMS Go Core |
 | crates/pheno-config | pheno-config | non-member/lib | 1965 | 8 | 17 | 35 | 5 | - | 2026-09-16 | PhenoCompose centralized configuration — figment-backed, layered config (TOML + env + defaults) |
-| crates/eyetracker-cli | eyetracker-cli | non-member/bin | 1939 | 6 | 7 | 9 | 0 | macos | 2026-09-15 | Eye tracker CLI application |
-| crates/eyetracker/eyetracker-cli | eyetracker-cli | non-member/bin | 1938 | 6 | 7 | 9 | 0 | macos | 2026-08-25 | Eye tracker CLI application |
+| crates/eyetracker-cli | eyetracker-cli | member/bin | 1935 | 6 | 7 | 9 | 0 | macos | 2026-09-19 | Eye tracker CLI application |
 | python/ffi | omlx-research-perf | sub-workspace/lib | 1926 | 5 | 8 | 8 | 0 | - | 2026-09-16 | phenotype-omlx Rust perf-core → Python pyo3 FFI bridge |
 | crates/harness-native | harness-native | non-member/lib+bin | 1914 | 23 | 28 | 36 | 0 | - | 2026-09-15 | Native helpers for agent-harness: cache-key, is-agent, dispatcher |
 | crates/agileplus-telemetry | agileplus-telemetry | non-member/meta | 1911 | 8 | 9 | 27 | 0 | - | 2026-08-25 | ~ AgilePlus planning crate |
@@ -273,10 +271,10 @@ Sorted by tree LOC descending.
 | crates/focus-webhook-server | focus-webhook-server | non-member/bin | 946 | 3 | 5 | 5 | 1 | - | 2026-09-16 | HTTP server for receiving real-time webhook notifications from connectors (GitHub, Notion, etc.). Validates HMAC-SHA256 / ed25519 signatures, parses events, and |
 | crates/connector-readwise | connector-readwise | non-member/meta | 934 | 5 | 7 | 26 | 1 | - | 2026-09-16 | Readwise Reader connector for FocalPoint. Implements token-based authentication with REST API polling for reading activity: highlights, articles, and reading li |
 | crates/focus-entitlements | focus-entitlements | non-member/meta | 932 | 2 | 4 | 4 | 1 | - | 2026-09-16 | Subscription tier management and feature gates for FocalPoint. |
-| crates/agile-plus/crates/agileplus-cache | agileplus-cache | non-member/lib | 930 | 8 | 10 | 24 | 1 | - | 2026-08-08 | Cache, projection cache, rate limiting, pooling, and health abstractions. |
 | crates/fuse-smoke-runner | fuse-smoke-runner | non-member/bin | 919 | 4 | 5 | 6 | 0 | linux,macos,windows | 2026-09-15 | OS×arch privileged FUSE mount-smoke matrix runner (AC-009.22+) |
 | crates/phenotype-health | phenotype-health | non-member/lib | 918 | 4 | 8 | 18 | 3 | - | 2026-09-16 | ~ phenotype platform crate |
 | crates/pine-loader | pine-loader | non-member/meta | 917 | 2 | 3 | 15 | 0 | - | 2026-09-15 | ~ (no description declared) |
+| crates/agile-plus/crates/agileplus-cache | agileplus-cache | manifest-only/lib | 909 | 8 | 10 | 24 | 1 | - | 2026-08-08 | Cache, projection cache, rate limiting, pooling, and health abstractions. |
 | crates/focus-audit | focus-audit | non-member/meta | 903 | 3 | 5 | 20 | 1 | - | 2026-09-16 | Append-only audit log with tamper-evident SHA-256 hash chains. Each record commits to its predecessor's hash; the first record chains from the literal string `" |
 | crates/fabric-tui | fabric-tui | member/bin | 901 | 4 | 5 | 0 | 0 | - | 2026-09-17 | TUI dashboard for Phenotype Fabric daemon |
 | crates/forgecode-core | forgecode-core | non-member/meta | 901 | 6 | 7 | 37 | 0 | - | 2026-09-15 | Forgecode agent/provider stubs (PhenoProc absorption) |
@@ -293,8 +291,7 @@ Sorted by tree LOC descending.
 | registry/absorbed-crates/eidolon/eidolon-desktop | eidolon-desktop | non-member/meta | 873 | 5 | 6 | 34 | 0 | macos | 2026-09-16 | ~ (no description declared) |
 | crates/pheno-proc-runtime/pheno-proc-queue | pheno-proc-queue | non-member/lib | 864 | 3 | 4 | 18 | 0 | - | 2026-09-15 | Priority task queue for PhenoProc |
 | crates/agile-plus/agileplus-agents | agileplus-agents | sub-workspace/meta | 862 | 0 | 11 | 0 | 2 | - | 2026-09-16 | Overview |
-| crates/eyetracker/eyetracker-ffi | eyetracker-ffi | non-member/lib+bin | 862 | 4 | 6 | 20 | 0 | - | 2026-08-25 | ~ (no description declared) |
-| crates/eyetracker-ffi | eyetracker-ffi | non-member/lib+bin | 861 | 4 | 6 | 20 | 0 | - | 2026-09-15 | ~ (no description declared) |
+| crates/eyetracker-ffi | eyetracker-ffi | member/lib+bin | 862 | 4 | 6 | 20 | 0 | - | 2026-09-19 | ~ (no description declared) |
 | _archived/pheno-compose | pheno-compose-driver | non-member/lib | 853 | 5 | 6 | 17 | 0 | - | 2026-09-16 | PhenoCompose NVMS Driver - Rust interface to NVMS 3-tier isolation |
 | crates/release-cut | release-cut | non-member/bin | 850 | 4 | 6 | 8 | 1 | - | 2026-09-16 | Release-cut utility for phenotype-tooling |
 | crates/phenotype-mock | phenotype-mock | non-member/meta | 847 | 4 | 7 | 18 | 2 | - | 2026-09-16 | Mock testing utilities for Phenotype |
@@ -424,9 +421,8 @@ Sorted by tree LOC descending.
 | crates/a2a | substrate-a2a | member/lib | 406 | 5 | 7 | 8 | 1 | - | 2026-09-16 | A2A-shaped wire schema (Task, Message, Artifact, Part). Transport-agnostic; depends only on serde/uuid/thiserror. |
 | archives/zz-archive-phenotype-registry/docs/absorption/PhenoLang/registry-preservation-2026-06-20/crates/omniroute-core/benches | omniroute-benchmarks | non-member/meta | 403 | 4 | 5 | 0 | 0 | - | 2026-09-16 | ~ (no description declared) |
 | agents/phenoagent/phenotype-skills | phenotype_skills | non-member/meta | 401 | 1 | 2 | 3 | 0 | - | 2026-09-15 | Core skill types and traits for phenotype-daemon |
+| crates/eyetracker-camera | eyetracker-camera | member/lib | 382 | 1 | 2 | 3 | 0 | - | 2026-09-15 | Webcam capture module for eye tracking |
 | crates/agile-plus/crates/agileplus-convoy | agileplus-convoy | non-member/meta | 381 | 5 | 6 | 2 | 0 | - | 2026-09-16 | Convoy primitive: two-phase commit bead coordination for MEOW |
-| crates/eyetracker-camera | eyetracker-camera | non-member/lib | 381 | 1 | 2 | 3 | 0 | - | 2026-09-15 | Webcam capture module for eye tracking |
-| crates/eyetracker/eyetracker-camera | eyetracker-camera | non-member/lib | 381 | 1 | 2 | 3 | 0 | - | 2026-08-25 | Webcam capture module for eye tracking |
 | crates/cloud-cursor | cloud-cursor | member/meta | 380 | 2 | 4 | 3 | 1 | - | 2026-09-15 | CloudDispatchPort adapter for Cursor Cloud Agents (REST API v1). |
 | crates/phenotype-service-registry | phenotype-service-registry | member/meta | 379 | 5 | 6 | 11 | 0 | - | 2026-09-16 | Service registry and discovery with hexagonal port + in-memory adapter (migrated from <REDACTED>/Servion) |
 | crates/phenotype-flags | phenotype-flags | non-member/lib | 374 | 1 | 2 | 13 | 0 | - | 2026-08-25 | Synchronous, in-memory feature-flag set with environment-variable loading |
@@ -452,8 +448,7 @@ Sorted by tree LOC descending.
 | crates/phenotype-casbin-wrapper | phenotype-casbin-wrapper | non-member/lib | 333 | 4 | 5 | 4 | 0 | - | 2026-08-25 | Casbin adapter providing policy enforcement for the Phenotype ecosystem |
 | crates/port-input | port-input | sub-workspace/lib | 332 | 2 | 3 | 7 | 0 | - | 2026-09-15 | InputSource port trait for the PlayCua hex refactor (L4 #61). Defines the abstract boundary between the application core and any concrete input-event source (enigo synthetic events, recorded playback from a .pcua trace, WebDriver / DevTools event stream, mock event queue for tests, etc.). |
 | crates/hexa-kit/crates/phenotype-compliance-scanner | phenotype-compliance-scanner | non-member/lib | 331 | 1 | 3 | 2 | 1 | - | 2026-09-16 | **Governance rule types and federation schema only.** |
-| crates/eyetracker/eyetracker-math | eyetracker-math | non-member/lib | 326 | 2 | 3 | 5 | 0 | - | 2026-08-21 | ~ (no description declared) |
-| crates/eyetracker-math | eyetracker-math | non-member/lib | 325 | 2 | 3 | 5 | 0 | - | 2026-09-15 | ~ (no description declared) |
+| crates/eyetracker-math | eyetracker-math | member/lib | 326 | 2 | 3 | 5 | 0 | - | 2026-09-19 | ~ (no description declared) |
 | crates/agile-plus/crates/agileplus-witness | agileplus-witness | non-member/meta | 324 | 4 | 5 | 2 | 0 | - | 2026-09-16 | Witness primitive: evidence-based verdict engine for MEOW |
 | crates/phenotype-time | phenotype-time | non-member/lib | 317 | 4 | 6 | 8 | 1 | - | 2026-09-16 | ~ phenotype platform crate |
 | crates/port-window-mgr | port-window-mgr | sub-workspace/lib | 316 | 2 | 3 | 7 | 0 | - | 2026-09-15 | WindowManager port trait for the PlayCua hex refactor (L4 #61). Defines the abstract boundary between the application core and any concrete window-manager adapter (X11 EWMH, macOS NSWorkspace, Windows EnumWindows + SetForegroundWindow, headless test double, etc.). |
@@ -466,8 +461,7 @@ Sorted by tree LOC descending.
 | crates/sharecli-ffi | sharecli-ffi | non-member/lib | 301 | 1 | 2 | 0 | 0 | - | 2026-09-15 | C-ABI FFI surface for sharecli — consumed by Swift macOS tray |
 | crates/hexa-kit/crates/phenotype-time | phenotype-time | non-member/lib | 299 | 4 | 5 | 8 | 0 | - | 2026-08-08 | ~ phenotype platform crate |
 | crates/argis-extensions/pheno-errors-macros | pheno-errors-macros | non-member/lib | 297 | 1 | 3 | 0 | 1 | - | 2026-09-15 | Proc macros for pheno-errors (span annotations per L42) |
-| crates/eyetracker/eyetracker-core | eyetracker-core | non-member/lib | 297 | 1 | 2 | 6 | 0 | - | 2026-08-21 | ~ (no description declared) |
-| crates/eyetracker-core | eyetracker-core | non-member/lib | 296 | 1 | 2 | 6 | 0 | - | 2026-09-15 | ~ (no description declared) |
+| crates/eyetracker-core | eyetracker-core | member/lib | 297 | 1 | 2 | 6 | 0 | - | 2026-09-19 | ~ (no description declared) |
 | crates/hexa-kit/rust | agileplus-proto | sub-workspace/meta | 294 | 2 | 12 | 0 | 0 | - | 2026-09-16 | Generated gRPC stubs for AgilePlus |
 | crates/mcp-server | mcp-server | non-member/meta | 294 | 1 | 2 | 6 | 0 | - | 2026-09-15 | MCP protocol server implementation |
 | crates/phenotype-logging | phenotype-logging | non-member/lib | 292 | 4 | 5 | 0 | 0 | - | 2026-07-02 | ~ phenotype platform crate |
@@ -515,9 +509,8 @@ Sorted by tree LOC descending.
 | crates/commit-msg-check | commit-msg-check | non-member/bin | 184 | 1 | 2 | 12 | 0 | - | 2026-09-16 | Commit-message checker for phenotype-tooling |
 | crates/connector-testkit | connector-testkit | non-member/meta | 184 | 2 | 4 | 1 | 1 | - | 2026-09-16 | Testing harness and fixtures for FocalPoint connector authors. Provides replay playbooks, mock sync runners, and in-memory event stores for validating connector |
 | crates/hexa-kit/crates/phenotype-rate-limit | phenotype-rate-limit | non-member/lib | 184 | 1 | 2 | 8 | 0 | - | 2026-08-08 | ~ phenotype platform crate |
-| crates/eyetracker/eyetracker-domain | eyetracker-domain | non-member/lib | 183 | 1 | 2 | 6 | 0 | - | 2026-08-25 | ~ (no description declared) |
+| crates/eyetracker-domain | eyetracker-domain | member/lib | 182 | 1 | 2 | 6 | 0 | - | 2026-09-19 | ~ (no description declared) |
 | crates/phenotype-state-machine | phenotype-state-machine | non-member/meta | 182 | 2 | 4 | 12 | 1 | - | 2026-09-16 | Phenotype shared crate |
-| crates/eyetracker-domain | eyetracker-domain | non-member/lib | 181 | 1 | 2 | 6 | 0 | - | 2026-09-15 | ~ (no description declared) |
 | crates/pheno-schema-port | pheno-schema-port | non-member/meta | 181 | 6 | 8 | 5 | 1 | - | 2026-09-16 | PhenoSchema hexagonal port definitions |
 | crates/sharecli-sync | sharecli-sync | non-member/meta | 175 | 2 | 3 | 4 | 0 | - | 2026-09-15 | Loom-verified sync primitives for sharecli ProcessPool (C00 L7) |
 | crates/agile-plus/crates/shared-traceability | shared-traceability | non-member/meta | 171 | 1 | 2 | 5 | 0 | - | 2026-08-08 | Canonical traceability models shared by Tracera and AgilePlus |
@@ -632,7 +625,7 @@ Sorted by tree LOC descending.
 | crates/hexa-kit/libs/phenotype-cache-adapter | phenotype-cache-adapter | non-member/meta | 7 | 0 | 1 | 0 | 0 | - | 2026-08-08 | Cache adapter stub — archive-if-unused per ADR-ECO-014 |
 | crates/settly/fuzz | fuzz | non-member/meta | 7 | 0 | 1 | 0 | 0 | - | 2026-08-21 | ~ (no description declared) |
 
-Files not inside any nested package directory belong to the `workspace-root` row above: 16926 files, 4742487 LOC, 5623 test declarations. They are repository-level sources and docs, not unowned orphans.
+Files not inside any nested package directory belong to the `workspace-root` row above: 16951 files, 4772222 LOC, 5628 test declarations. They are repository-level sources and docs, not unowned orphans.
 
-- Source revision: `da51939fac26` (`git rev-parse HEAD`)
+- Source revision: `ee54d33680d4` (`git rev-parse HEAD`)
 - Source of truth: `git ls-files` — tracked files only, so build output and untracked files are excluded.
