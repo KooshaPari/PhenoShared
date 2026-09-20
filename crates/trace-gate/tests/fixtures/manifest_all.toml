@@ -1,0 +1,9 @@
+[[requirement]]
+fr_id = "FR-001"
+description = "User can log in"
+spec_id = "SPEC-001"
+
+[[requirement]]
+fr_id = "FR-002"
+description = "User can register"
+spec_id = "SPEC-002"

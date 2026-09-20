@@ -198,13 +198,14 @@ Three rows above are superseded by direct evidence:
   (2026-09-11, PR #313) deleted was the `crates/benchora` **stub** (v0.1.0,
   19-line lib.rs), not the absorbed content. The record's "v0.2.0, 78 files"
   matches neither tree.
-- **pm-core ×3 move (d) → recoverable from the archive bundle.** Fetched
-  `refs/archive/phenotype-pm-core-2026-08-09/*` from
-  `zz-archive/git-bundles-20260910/phenotype-archive.bundle` into a scratch
-  repo: it holds all three claimed crates — `traceability-core` (13 src files,
-  **fuller than pheno's 11**: `execution_graph.rs`, `progress.rs` missing
-  here), `traceability-decorators` (5 src files), `trace-gate` (binary + 3
-  test fixtures + `trace-gate.yml` workflow).
+- **pm-core ×3 move (d) → RESOLVED 2026-09-20 via bundle.** Fetched
+  `refs/archive/phenotype-pm-core-2026-08-09/heads/master` from
+  `zz-archive/git-bundles-20260910/phenotype-archive.bundle` (HEAD
+  `d3277c40`, 2026-08-01), extracted the 3 crates to canonical paths
+  (`crates/traceability-core/`, `crates/traceability-decorators/`,
+  `crates/trace-gate/`). `cargo check` passes; 101/102 tests pass
+  (1 perf-gate flake under host load). The old partial at
+  `crates/agile-plus/crates/traceability-core` is orphaned gitignored.
 - **quillts negative strengthened.** The `phenodocs` checkout exists at
   `_full_pheno/phenodocs`; its `packages/` tree object holds only
   pheno-core/pheno-llm/pheno-resilience — **no quillts, and no quillts commit
@@ -229,15 +230,17 @@ claims, so a fix must touch every claim site of a destination.
 | `policystack` | `packages/policystack` | `crates/policystack` (1,711 files) | **clean path edit at every claim site** → removes its VIOLATION |
 | `byteport` | `crates/byteport` | `absorption/byteport` (still **staged**) | do **not** claim the staging path as final; set status `PENDING` + note "staged at absorption/byteport" |
 | `melosviz` | `packages/melosviz` | `crates/argis-extensions/melosviz-wt/...` (unstable worktree path) | not a stable location → set `PENDING` |
-| `traceability-core` | `crates/traceability-core` | `crates/agile-plus/crates/traceability-core` (**different lineage**, see absorption audit) | do **not** alias two different lineages → keep flagged / `PENDING` until provenance is confirmed |
+| `traceability-core` | `crates/traceability-core` | `crates/traceability-core` (restored 2026-09-20 from bundle, 13 src) | **done** — supersedes old `crates/agile-plus/crates/traceability-core` partial (orphaned gitignored) |
 
 Honest expected drop on the **violation count**: at most **1** from a pure
 path-correction (`policystack`), because the other three case decisions change
 *disposition*, not a claim path — and disposition changes only affect
 `projects/*.json` `status=absorbed` rows, while the docs-derived claim lines
 stay violations until the claim itself is edited. So E11.3 does **not** "shrink
-18 to ~14 by itself"; that number only lands after the E10.2 status corrections
-and the docs-claim edits are done together and the invariant is re-run.
+18 to ~13 by itself" — and pm-core (traceability-{core,decorators}+trace-gate)
+already moved 3 violations to resolution on 2026-09-20; that number only
+lands after the E10.2 status corrections and the docs-claim edits are done
+together and the invariant is re-run.
 
 ---
 

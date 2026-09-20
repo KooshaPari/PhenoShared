@@ -56,7 +56,7 @@ Provenance: see section 3 for each command and its literal output.
 | 2 | B10 (`phenoUtils` ×7) | `crates/pheno-utils-{shell,fs,net,async,crypto,testing,chaos}/` | only the `phenoUtils-wtrees/utils01-20260908` worktree carries 6 of them with original names; the 7th (`async`) and 8th (`chaos-injection`) never existed | **(branch)** for the 6; **(b)** for `async`/`chaos` (never-landed) |
 | 3 | B11 (`phenoData`) | `crates/pheno-data-{core,query,surreal,pg,smoke-tests}/` | **NO** in any pheno tree (`for c in core query surreal pg smoke-tests; do test -e crates/pheno-data-$c; echo $?; done` → five `1`s) | **(b)** — credentials-blocked for confirmation against the upstream `phenoData` repo |
 | 4 | B12 (`PhenoPlugins`) | `crates/pheno-plugins-{core,git,sqlite,vessel,examples}/` | **NO** (`for c in core git sqlite vessel examples; do test -e crates/pheno-plugins-$c; echo $?; done` → five `1`s) | **(b)** — credentials-blocked |
-| 5 | B13 (`phenotype-pm-core` ×3) | `crates/traceability-core`, `crates/traceability-decorators`, `crates/trace-gate` | partial: `crates/agile-plus/crates/traceability-core/` exists (11 src); the other two absent | **(bundle)** — all three recoverable from `phenotype-archive.bundle` |
+| 5 | B13 (`phenotype-pm-core` ×3) | `crates/traceability-core`, `crates/traceability-decorators`, `crates/trace-gate` | **RESOLVED 2026-09-20** via bundle: all 3 restored to canonical paths (13 / 5 / 4 src files). Old partial at `crates/agile-plus/crates/traceability-core` (11 src) is orphaned gitignored — superseded | done — `cargo check` passes; 101/102 tests pass (1 perf-gate flake under host load) |
 | 6 | B14 (`phenoResearchEngine`) | `phenotype-research-engine/` | **NO** | **(b)** — credentials-blocked |
 | 7 | B15b (`Quillr` TS half) | `packages/quillts/` in `phenodocs` | **NO** (and no quillts commit in any phenodocs ref) | **(b)** for TS half — Rust half `crates/httpora-core` exists |
 | 8 | B17 (`audit-tool`) | `phenotype-registry/scripts/audit.py` | **NO** (`scripts/` has 19 files, no `audit.py`) | **(b)** |
@@ -71,9 +71,9 @@ Provenance: see section 3 for each command and its literal output.
 | 17 | C8 (`libs/phenotype-observability`) | `libs/phenotype-observability` | **NO** | **(b)** |
 | 18 | C10 (root `agentkit`) | root `agentkit` workspace member | **NO** (`test -e agentkit; echo $?` → `1`) | **(b)** |
 
-**Verdict counts:** `(a→)` 2, `(branch)` 1, `(bundle)` 1, `(b)` 14.
+**Verdict counts:** `(a→)` 2, `(branch)` 1, `(bundle)→done` 1, `(b)` 13.
 
-Of the 14 `(b)` cases, 4 (B11, B12, B14, C4) are upstream-repo claims that
+Of the 13 `(b)` cases, 4 (B11, B12, B14, C4) are upstream-repo claims that
 need GitHub-side confirmation beyond this host's checkouts, and 1
 (agent-user-status) has a dedicated forensics verdict already pushed.
 
@@ -154,13 +154,22 @@ content itself.
 
 ---
 
-## 3. The (bundle) reclassification: pm-core
+## 3. The (bundle) reclassification: pm-core — RESOLVED 2026-09-20
 
-`docs/absorption/phenotype-pm-core/README.md:9` claims
+`docs/absorption/phenotype-pm-core/README.md:9` claimed
 `crates/traceability-core/`, `crates/traceability-decorators/`, and
-`crates/trace-gate/`. None is in PhenoShared's tree; only a partial copy
-of `traceability-core` lives at `crates/agile-plus/crates/traceability-core/`
+`crates/trace-gate/`. None was in PhenoShared's tree; only a partial copy
+of `traceability-core` lived at `crates/agile-plus/crates/traceability-core/`
 (11 src files).
+
+**Resolution (2026-09-20):** All 3 crates were restored to canonical paths
+from `phenotype-archive.bundle` (ref `refs/archive/phenotype-pm-core-2026-08-09/heads/master`,
+HEAD `d3277c4049c85eeafa12f7939d8fca90e92a969f`, 2026-08-01). The old
+`agile-plus/crates/traceability-core` partial is orphaned (gitignored) and
+strictly superseded by the canonical restore. `cargo check -p traceability-{core,decorators} -p trace-gate`
+passes cleanly (276 + 2 doc warnings, no errors). `cargo test -p traceability-core --lib`
+reports 101/102 passed (the 1 failure is `impact_analysis_10k_node_regression_gate`,
+a 0.5s perf budget exceeded under heavy host load — see known-issues).
 
 Evidence (commands run, output abbreviated):
 
@@ -170,22 +179,16 @@ $ BUNDLE=~/CodeProjects/Phenotype/zz-archive/git-bundles-20260910/phenotype-arch
 
 $ mkdir -p "$JCODE_SCRATCH_DIR/bundle-probe-repo" && cd "$JCODE_SCRATCH_DIR/bundle-probe-repo"
 $ git init -q && git bundle verify "$BUNDLE" 2>&1 | grep pm-core | wc -l      # 39 lines
-$ git fetch "$BUNDLE" 'refs/archive/phenotype-pm-core-2026-08-09/refs_pull_1_head'
+$ git fetch "$BUNDLE" 'refs/archive/phenotype-pm-core-2026-08-09/heads/master'
 ```
 
-Inspecting `refs/archive/phenotype-pm-core-2026-08-09/refs_pull_1_head` (the
-oldest preserved PR head):
+Inspecting `refs/archive/phenotype-pm-core-2026-08-09/heads/master`:
 
-| Crate | In PhenoShared? | In bundle | Source files |
+| Crate | Pre-2026-09-20 status | Bundle | Now in PhenoShared |
 |---|---|---|---|
-| `traceability-core` | partial (11 src, under `crates/agile-plus/`) | **YES** | 13 src — **fuller**: `execution_graph.rs`, `progress.rs` are present here and absent in the agile-plus copy |
-| `traceability-decorators` | absent | **YES** | 5 src files |
-| `trace-gate` | absent as a crate (only `trace-gate.toml` config + workflow refs in `agileplus-sqlite`) | **YES** | `src/main.rs` + 3 test fixtures + `.github/workflows/trace-gate.yml` |
-
-So the pm-core absorb is recoverable from the archive bundle, with content
-that is **strictly a superset** of what made it into PhenoShared. Restoring
-these crates is an E10.3.x decision (apply vs document the source), not a
-re-classification of the registry.
+| `traceability-core` | partial (11 src, under `crates/agile-plus/`) | **YES** (13 src — **fuller**: `execution_graph.rs`, `progress.rs` are present here and absent in the agile-plus copy) | **restored** at `crates/traceability-core/` (13 src) |
+| `traceability-decorators` | absent | **YES** (5 src files) | **restored** at `crates/traceability-decorators/` |
+| `trace-gate` | absent as a crate (only `trace-gate.toml` config + workflow refs in `agileplus-sqlite`) | **YES** (`src/main.rs` + 3 test fixtures + `.github/workflows/trace-gate.yml`) | **restored** at `crates/trace-gate/` |
 
 ---
 

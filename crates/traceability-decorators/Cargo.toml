@@ -1,0 +1,21 @@
+[package]
+name = "traceability-decorators"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+description = "Source-file scanner that extracts FR/spec trace annotations and emits ScanTraceLink records"
+
+[[bin]]
+name = "trace-scan"
+path = "src/main.rs"
+
+[dependencies]
+traceability-core = { path = "../traceability-core" }
+regex = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+thiserror = { workspace = true }
+walkdir = "2"
+
+[dev-dependencies]
