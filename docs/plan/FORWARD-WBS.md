@@ -108,7 +108,7 @@ broken mechanisms in this repo.
 |---|---|---|---|
 | E10.1 | Re-derive every count with the three-bucket rule (path+exists / path+absent / not-a-local-path) | 10m | **done** (2 methods reconciled: 12 records = 18 paths) |
 | E10.2 | Correct the 1 provable false `absorbed` status (`agent-user-status`) | 10m | queued |
-| E10.3 | Reclassify all 18 absent paths against the **local** sibling checkouts | 10m | **in progress** |
+| E10.3 | Reclassify all 18 absent paths against the **local** sibling checkouts | 10m | **done** (2026-09-19, `docs/audits/ABSORPTION-TRIAGE-18.md`) |
 | E10.3.1 | Path-mismatch cases: code present under a different root (e.g. `crates/policystack`, 1,711 files, claimed as `packages/policystack`) → ledger fix, not recovery | 10m | measured, not yet committed |
 | E10.3.2 | Branch-only cases: present on unmerged branches (`Benchora` in 3 worktrees) → `PENDING` until branch+commit named | 10m | measured |
 | E10.3.3 | Genuinely absent locally (`kodevibe`, `kwatch`, `pheno-plugins-*`) → credentials-blocked | 10m | blocked |
@@ -181,12 +181,41 @@ the absorb never landed.
 |---|---|---|---|
 | E11.1 | Locate each absent destination across sibling checkouts (single-pass sweep) | 10m | **done** — 159 hits |
 | E11.2 | Split into mis-pathed / branch-only / placeholder / truly-absent | 10m | **done** — 4 / 2 / 1 / 17 |
-| E11.3 | Correct the **4** mis-pathed ledger records; re-run the invariant and record the drop | 10m | queued |
+| E11.3 | Correct the mis-pathed ledger records; re-run the invariant and record the drop | 10m | triaged (see measured updates below); sign-off needed |
 | E11.4 | Add a "did you mean" hint: on VIOLATION, report a same-basename directory elsewhere in the tree | 10m | queued |
 
 **Effect:** E11 converts **4** of the 18 violations from "missing code" to
 "wrong path in the ledger", and **2** more to a branch-state question — so only
 **~12** are genuinely absent locally.
+
+### Measured updates (2026-09-19 late, `docs/audits/ABSORPTION-TRIAGE-18.md`)
+
+Three rows above are superseded by direct evidence:
+
+- **Benchora moves (b) → (a).** The real absorb `f1f9a025` (#322, 2026-09-13)
+  landed the repo at the tooling **root** as `Benchora/` (138 files) and it is
+  an ancestor of `main` — it **survives on main today**. What `d7480faa`
+  (2026-09-11, PR #313) deleted was the `crates/benchora` **stub** (v0.1.0,
+  19-line lib.rs), not the absorbed content. The record's "v0.2.0, 78 files"
+  matches neither tree.
+- **pm-core ×3 move (d) → recoverable from the archive bundle.** Fetched
+  `refs/archive/phenotype-pm-core-2026-08-09/*` from
+  `zz-archive/git-bundles-20260910/phenotype-archive.bundle` into a scratch
+  repo: it holds all three claimed crates — `traceability-core` (13 src files,
+  **fuller than pheno's 11**: `execution_graph.rs`, `progress.rs` missing
+  here), `traceability-decorators` (5 src files), `trace-gate` (binary + 3
+  test fixtures + `trace-gate.yml` workflow).
+- **quillts negative strengthened.** The `phenodocs` checkout exists at
+  `_full_pheno/phenodocs`; its `packages/` tree object holds only
+  pheno-core/pheno-llm/pheno-resilience — **no quillts, and no quillts commit
+  in any phenodocs ref**. The TS half survives only in the standalone `Quillr`
+  checkout (`src/` = `@<REDACTED>/quillts`).
+
+Also measured: KodeVibe content **exists** at
+`phenotype-tooling/docs/absorbed-from-kodevibe/` (155 files at the absorb
+commit and at HEAD, incl. 38 real Go files under `engine/` and the 48 KB
+`kodevibe` bash script); KWatch has **0 of 816** tooling commits touching
+`tools/kwatch/` (the 42-file claim went nowhere).
 
 ### Proposed E11.3 corrections (apply only with sign-off — they edit the source-of-truth registry)
 
