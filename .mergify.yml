@@ -16,9 +16,7 @@ pull_request_rules:
       merge:
         method: squash
         commit_message_format:
-          title: "{{ title }} (#{{ number }})"
-          trailers:
-            - message: "Co-authored-by: {{ author }}"
+          title: pr-title
 
 
   # Auto-merge dependabot/Renovate PRs when CI passes
@@ -34,9 +32,7 @@ pull_request_rules:
       merge:
         method: squash
         commit_message_format:
-          title: "{{ title }} (#{{ number }})"
-          trailers:
-            - message: "Co-authored-by: {{ author }}"
+          title: pr-title
 
   # Auto-merge bot PRs (CI configs, formatting) when CI passes
   - name: Auto-merge bot housekeeping PRs
