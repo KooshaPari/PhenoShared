@@ -11,14 +11,12 @@ use eyetracker_inference::accessibility::AccessibilityAction;
 use tracing::{debug, warn};
 
 #[cfg(target_os = "macos")]
-use core_graphics::event::CGEventType;
-
-#[cfg(target_os = "macos")]
 mod platform {
-    use super::*;
     use core_graphics::event::{CGEvent, CGEventTapLocation, CGMouseButton, ScrollEventUnit};
     use core_graphics::event_source::{CGEventSource, CGEventSourceStateID};
     use core_graphics::geometry::CGPoint;
+
+    use super::*;
 
     /// Send a click + release at the absolute display coordinates.
     pub fn click_at(x: f64, y: f64, button: MouseButton) {
@@ -45,29 +43,24 @@ mod platform {
 
     /// Send a vertical scroll delta. `lines` is in "lines" units (positive = up).
     pub fn scroll_at(x: f64, y: f64, lines: i32) {
-        // wheel_event is gated behind the `highsierra` feature on core-graphics 0.23;
-        // fall back to a no-op if not available so the build doesn't break on older
-        // macOS or stripped environments.
-        // The conversion: 1 line ≈ 10 wheel units (Apple convention).
+        // `CGEventCreateScrollWheelEvent2` is exposed by `core-graphics 0.23`
+        // only when the `highsierra` feature is enabled, and returns
+        // `Result<CGEvent, ()>`. The result can fail when the underlying
+        // `CGEventSource` is invalid (e.g. running under a screen-locked
+        // state); we treat any Err as a no-op and let the accessibility
+        // driver re-issue the action on the next dispatch.
+        // Conversion: 1 line ≈ 10 wheel units (Apple convention). `lines`
+        // is bounded to ±100 by accessibility.rs before reaching this call.
         let delta = (lines * 10) as i64;
         let source =
             CGEventSource::new(CGEventSourceStateID::HIDSystemState).expect("CGEventSource::new");
-        // Build a scroll event manually via the C-style API since the Rust binding
-        // for `CGEventCreateScrollWheelEvent2` is not exposed in 0.23 by default.
-        // SAFETY: `source` is a valid CGEventSource obtained from
-        // `CGEventSource::new(HIDSystemState).expect(…)` above.
-        // `ScrollEventUnit::LINE` is a valid enum discriminant.
-        // `delta as i32` is sound because `lines` is bounded to [-i32::MAX/10,
-        // i32::MAX/10] at every call site (accessibility.rs clamps scroll lines
-        // to ±100). See docs/SAFETY.md § mouse.rs for the full invariant register.
-        unsafe {
-            let event =
-                CGEvent::new_scroll_event(source, ScrollEventUnit::LINE, 1, delta as i32, 0, 0);
-            if let Ok(ev) = event {
-                ev.post(CGEventTapLocation::HID);
+        match CGEvent::new_scroll_event(source, ScrollEventUnit::LINE, 1, delta as i32, 0, 0) {
+            Ok(event) => {
+                event.post(CGEventTapLocation::HID);
                 debug!("scroll posted at ({}, {}), lines={}", x, y, lines);
-            } else {
-                warn!("CGEvent::new_scroll_event returned Err (highsierra feature missing?)");
+            }
+            Err(()) => {
+                warn!("CGEvent::new_scroll_event failed (no display? locked screen?)");
             }
         }
     }
@@ -96,7 +89,8 @@ pub enum MouseButton {
 
 impl MouseButton {
     #[cfg(target_os = "macos")]
-    fn down_event(self) -> CGEventType {
+    fn down_event(self) -> core_graphics::event::CGEventType {
+        use core_graphics::event::CGEventType;
         match self {
             MouseButton::Left => CGEventType::LeftMouseDown,
             MouseButton::Right => CGEventType::RightMouseDown,
@@ -104,7 +98,8 @@ impl MouseButton {
     }
 
     #[cfg(target_os = "macos")]
-    fn up_event(self) -> CGEventType {
+    fn up_event(self) -> core_graphics::event::CGEventType {
+        use core_graphics::event::CGEventType;
         match self {
             MouseButton::Left => CGEventType::LeftMouseUp,
             MouseButton::Right => CGEventType::RightMouseUp,
