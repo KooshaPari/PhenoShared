@@ -15,10 +15,10 @@ pull_request_rules:
     actions:
       merge:
         method: squash
-        commit_message_template: |
-          {{ title }} (#{{ number }})
-
-          Co-authored-by: {{ author }}
+        commit_message_format:
+          title: "{{ title }} (#{{ number }})"
+          trailers:
+            - message: "Co-authored-by: {{ author }}"
 
 
   # Auto-merge owner PRs when CI passes (no self-review required)
@@ -35,10 +35,10 @@ pull_request_rules:
     actions:
       merge:
         method: squash
-        commit_message_template: |
-          {{ title }} (#{{ number }})
-
-          Co-authored-by: {{ author }}
+        commit_message_format:
+          title: "{{ title }} (#{{ number }})"
+          trailers:
+            - message: "Co-authored-by: {{ author }}"
       post_merge:
         action: close
 
@@ -54,10 +54,10 @@ pull_request_rules:
     actions:
       merge:
         method: squash
-        commit_message_template: |
-          {{ title }} (#{{ number }})
-
-          Co-authored-by: {{ author }}
+        commit_message_format:
+          title: "{{ title }} (#{{ number }})"
+          trailers:
+            - message: "Co-authored-by: {{ author }}"
 
   # Auto-merge bot PRs (CI configs, formatting) when CI passes
   - name: Auto-merge bot housekeeping PRs
