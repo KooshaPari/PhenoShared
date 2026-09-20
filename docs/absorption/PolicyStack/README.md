@@ -6,7 +6,7 @@
 |-------|-------|
 | Source repo | `<REDACTED>/PolicyStack` |
 | Target repo | `<REDACTED>/phenotype-python-sdk` |
-| Target path | `packages/policystack/` |
+| Target path | `crates/policystack/` (originally absorbed into `phenotype-python-sdk/packages/policystack/` 2026-07-17; Pheno meta-absorption 2026-09 relocated into `crates/policystack/` using the rust `crates/` convention for Python code) |
 | Absorbed date | 2026-07-17 |
 | Absorbed by | forge agent (batch absorption) |
 | Verification | File count match: 1,350 files (8.0 MB) |

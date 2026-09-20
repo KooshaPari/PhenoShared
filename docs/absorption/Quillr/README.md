@@ -10,10 +10,10 @@ the wave completed)
 **Quillr v1.0.1** (the merged identity that subsumes Httpora)
 absorbed from `<REDACTED>/Quillr` into two spine targets:
 
-| Half | Language | Target | Path | Status |
-|------|----------|--------|------|--------|
+| Half | Language | Target | Where it lives | Status |
+|------|----------|--------|----------------|--------|
 | `crates/httpora-core` | Rust | `pheno` monorepo | `crates/httpora-core/` | ✅ absorbed (commit `absorb/httpora-core-2026-07-17`) |
-| `src/` (`@<REDACTED>/quillts`) | TypeScript | `phenodocs` | `packages/quillts/` | ✅ absorbed (commit `absorb/quillts-2026-07-17`) |
+| `src/` (`@<REDACTED>/quillts`) | TypeScript | — (standalone) | `repos/Quillr/src/` (not in PhenoShared tree) | ❌ **NOT absorbed into PhenoShared**. The TS half lives only in the standalone `Quillr` checkout at `repos/Quillr/src/`; the README's 2026-07-17 claim of `phenodocs/packages/quillts/` was incorrect (FORWARD-WBS §5: "quillts negative strengthened. The `phenodocs` checkout exists at `_full_pheno/phenodocs`; its `packages/` tree object holds only pheno-core/pheno-llm/pheno-resilience — **no quillts**, and no quillts commit in any phenodocs ref"). The intended phenodocs repo never merged the absorb. |
 
 ## Identity reconciliation
 

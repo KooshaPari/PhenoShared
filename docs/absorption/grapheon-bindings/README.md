@@ -6,7 +6,7 @@
 |-------|-------|
 | Source repo | `<REDACTED>/grapheon-bindings` |
 | Target repo | `<REDACTED>/phenotype-go-sdk` |
-| Target paths | `packages/graphclient/` |
+| Where it lives (intended) | **PENDING — not absorbed into PhenoShared**. Originally intended for packages/graphclient/ in phenotype-go-sdk. Per ABSORPTION-LINEAGE §table row 202: the go-sdk's packages tree holds only auth, design-tokens, docs, github-fetcher, pheno-core, pheno-llm, pheno-resilience — no graphclient. No commit in any go-sdk ref touches packages/graphclient. The closest content is crates/pheno-compose-bindings (different lineage — pheno-compose- prefix not graphclient; Rust not Go). |
 | Absorbed date | 2026-07-17 |
 | Absorbed by | forge agent |
 | Verification | `go build ./packages/graphclient/...` clean; `go vet` clean |
