@@ -107,6 +107,17 @@ def emit(verdict, source, line, path, text=None):
     elif verdict == 'violation':
         STATE['violations'] += 1
         print('VIOLATION %s:%s absorbed-but-absent %s' % (source, line, path))
+    elif verdict == 'prose':
+        # Prose path-lists (e.g. "Files transferred") are NOT gating: flagging
+        # every illustrative path in prose would make the gate cry wolf, which
+        # is how gates get disabled. Reported in a separate, visible category,
+        # counted but never raising the exit code.
+        STATE['prose_total'] += 1
+        absent = not os.path.exists(os.path.join(ROOT, path))
+        if absent:
+            STATE['prose_absent'] += 1
+        print('PROSE %s:%s %s %s'
+              % (source, line, 'absent' if absent else 'present', path))
     else:
         STATE['unverifiable'] += 1
         print('UNVERIFIABLE %s:%s destination is not a local path: %s'
@@ -325,6 +336,36 @@ def scan_absorption_readme(source):
                         check(source, i, tok)
 
 
+# --- prose path lists ("Files transferred" style), non-gating ---
+CONTENT_ROOTS_TUPLE = (
+    'crates', 'packages', 'libs', 'tools', 'apps', 'platform', 'adapters')
+
+
+def scan_prose_paths(source):
+    """Scan backticked repo-anchored DIRECTORY tokens in prose lines.
+
+    Catches the coverage gap the destination-marker scan misses: a line like
+    "`crates/pheno-data-core/`: Cargo.toml, src/lib.rs" names a dir the agent
+    claims to have landed but the markers do not read. Reported under 'prose',
+    which never raises the exit code, so illustrative prose paths cannot turn
+    the gate into a wolf.
+    """
+    for i, line in enumerate(unfenced(read_lines(source)), 1):
+        if line is None or not line.strip():
+            continue
+        for tok in re.findall(r'`([^`]+)`', line):
+            t = tok.rstrip('/')
+            segs = [s for s in t.split('/') if s not in ('', '.')]
+            if len(segs) < 2:
+                continue
+            if segs[0] not in CONTENT_ROOTS_TUPLE:
+                continue
+            last = segs[-1]
+            if '.' in last and last.rsplit('.', 1)[1].isalpha():
+                continue  # a file token (src/lib.rs, Cargo.toml), not a dir header
+            emit('prose', source, i, t)
+
+
 # --- relative markdown links ---
 LINK_RE = re.compile(r'\]\(([^)]+)\)')
 
@@ -362,6 +403,8 @@ def scan_manifest(source):
 
 
 def main():
+    STATE['prose_total'] = 0
+    STATE['prose_absent'] = 0
     scan_projects()
     patterns = [('docs/absorption/*/README.md', 'absorption'),
                 ('docs/ABSORPTION_INDEX.md', 'links'),
@@ -373,14 +416,15 @@ def main():
             source = os.path.relpath(full, ROOT)
             if kind == 'absorption':
                 scan_absorption_readme(source)
+                scan_prose_paths(source)
             elif kind == 'manifest':
                 scan_manifest(source)
             scan_links(source)
     print('SUMMARY files=%d projects_absorbed=%d claims=%d ok=%d violations=%d '
-          'unverifiable=%d skipped_no_status=%d'
+          'unverifiable=%d skipped_no_status=%d prose_absent=%d'
           % (STATE['files'], STATE['projects_absorbed'], STATE['claims'],
              STATE['ok'], STATE['violations'], STATE['unverifiable'],
-             STATE['skipped_no_status']))
+             STATE['skipped_no_status'], STATE['prose_absent']))
 
 
 main()
