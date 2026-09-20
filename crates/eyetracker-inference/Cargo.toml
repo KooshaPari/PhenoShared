@@ -2,6 +2,7 @@
 name = "eyetracker-inference"
 version = "0.1.0-alpha"
 edition = "2021"
+license = "MIT"
 description = "ML inference pipeline for eye tracking"
 
 [dependencies]
