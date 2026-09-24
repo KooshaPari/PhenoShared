@@ -7,9 +7,7 @@ pub(crate) fn tray_event_dispatch(
     shutdown: &std::sync::atomic::AtomicBool,
     port: u16,
 ) {
-    use std::sync::atomic::Ordering;
-    use std::thread;
-    use std::time::Duration;
+    use std::{sync::atomic::Ordering, thread, time::Duration};
 
     while !shutdown.load(Ordering::SeqCst) {
         let Some(event) = tray.try_recv() else {
@@ -19,8 +17,10 @@ pub(crate) fn tray_event_dispatch(
         match event {
             phinbox::tray::TrayEvent::Click | phinbox::tray::TrayEvent::DoubleClick => {
                 activate_inbox_helper(port);
-            }
-            phinbox::tray::TrayEvent::MenuItem { id } => {
+            },
+            phinbox::tray::TrayEvent::MenuItem {
+                id,
+            } => {
                 use phinbox::tray::MenuAction;
                 let action = match id.as_str() {
                     x if x == MenuAction::OpenInbox.id() => Some(MenuAction::OpenInbox),
@@ -33,21 +33,21 @@ pub(crate) fn tray_event_dispatch(
                     match a {
                         MenuAction::OpenInbox => {
                             activate_inbox_helper(port);
-                        }
+                        },
                         MenuAction::OpenLatest => {
                             activate_inbox_helper(port);
-                        }
+                        },
                         MenuAction::ToggleQuiet => {
                             let _ = tray.set_tooltip("phinbox inbox (quiet)");
-                        }
+                        },
                         MenuAction::Quit => {
                             tracing::info!("quit requested from tray");
                             shutdown.store(true, Ordering::SeqCst);
                             break;
-                        }
+                        },
                     }
                 }
-            }
+            },
         }
     }
 }
@@ -97,19 +97,22 @@ pub(crate) fn create_tray_and_run_event_loop(
     handle: phinbox::inbox::daemon::DaemonHandle,
     owns_daemon: bool,
 ) {
-    use objc2_app_kit::{NSApplication, NSApplicationActivationPolicy};
-    use objc2_foundation::{NSTimer, MainThreadMarker};
-    use objc2::rc::Retained;
     use std::sync::Arc;
+
+    use objc2::rc::Retained;
+    use objc2_app_kit::{NSApplication, NSApplicationActivationPolicy};
+    use objc2_foundation::{MainThreadMarker, NSTimer};
 
     let mtm = match MainThreadMarker::new() {
         Some(m) => m,
         None => {
             eprintln!("phinbox: not on main thread, cannot create tray");
             super::daemon_shutdown_signal();
-            if owns_daemon { let _ = handle.stop(); }
+            if owns_daemon {
+                let _ = handle.stop();
+            }
             return;
-        }
+        },
     };
 
     // Initialize NSApplication (required for tray icon event loop)
@@ -124,11 +127,16 @@ pub(crate) fn create_tray_and_run_event_loop(
         Err(e) => {
             eprintln!("phinbox: tray creation failed: {e}");
             super::daemon_shutdown_signal();
-            if owns_daemon { let _ = handle.stop(); }
+            if owns_daemon {
+                let _ = handle.stop();
+            }
             return;
-        }
+        },
     };
-    eprintln!("phinbox: tray icon created (backend: {})", tray.backend_name());
+    eprintln!(
+        "phinbox: tray icon created (backend: {})",
+        tray.backend_name()
+    );
 
     // Schedule an NSTimer on the main RunLoop to pump tray events.
     // SAFETY ESCAPE HATCH: `StackBlock` + the objc2 NSTimer entry point are
@@ -141,9 +149,8 @@ pub(crate) fn create_tray_and_run_event_loop(
         let mut block = block2::StackBlock::new(|_timer: std::ptr::NonNull<NSTimer>| {
             phinbox::tray::poll_tray();
         });
-        let _timer: Retained<NSTimer> = NSTimer::scheduledTimerWithTimeInterval_repeats_block(
-            0.1, true, &mut block,
-        );
+        let _timer: Retained<NSTimer> =
+            NSTimer::scheduledTimerWithTimeInterval_repeats_block(0.1, true, &mut block);
     }
 
     // Dispatch tray events on a background thread.

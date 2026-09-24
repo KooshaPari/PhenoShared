@@ -33,17 +33,14 @@ pub(super) fn launch_inbox_helper(port: u16) {
             let url = format!("http://127.0.0.1:{}/inbox/", port);
             match Command::new(path).arg(&url).spawn() {
                 Ok(child) => {
-                    eprintln!(
-                        "phinbox: launched inbox helper (PID {})",
-                        child.id()
-                    );
+                    eprintln!("phinbox: launched inbox helper (PID {})", child.id());
                     // Detach -- let it run independently
                     std::mem::forget(child);
                     return;
-                }
+                },
                 Err(e) => {
                     eprintln!("phinbox: failed to launch {path}: {e}");
-                }
+                },
             }
         }
     }

@@ -2,9 +2,7 @@
 
 use std::path::PathBuf;
 
-use phinbox::inbox::RequestOrigin;
-use phinbox::options::RendererPreference;
-use phinbox::spec::PromptSpec;
+use phinbox::{inbox::RequestOrigin, options::RendererPreference, spec::PromptSpec};
 use serde_json::json;
 
 /// Render a popup (blocking) or queue it (with `--async`).
@@ -58,8 +56,8 @@ pub fn cmd_ask(
         serde_json::from_str::<PromptSpec>(&json_str)
             .map_err(|e| format!("invalid --from-json: {e}"))?
     } else if let Some(path) = args.from_file {
-        let text = std::fs::read_to_string(&path)
-            .map_err(|e| format!("read {}: {e}", path.display()))?;
+        let text =
+            std::fs::read_to_string(&path).map_err(|e| format!("read {}: {e}", path.display()))?;
         serde_json::from_str::<PromptSpec>(&text)
             .map_err(|e| format!("parse {}: {e}", path.display()))?
     } else {
@@ -137,8 +135,9 @@ fn printed_open_url(inbox_dir: &PathBuf, request_id: &str) -> String {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
     use std::net::TcpListener;
+
+    use super::*;
 
     /// Publish a lockfile that points at a genuinely listening socket, so
     /// `inbox_live_url`'s liveness probe accepts it.

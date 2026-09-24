@@ -2,8 +2,10 @@
 
 use std::path::PathBuf;
 
-use phinbox::inbox::{finalize, RequestState};
-use phinbox::spec::{ElicitResponse, FieldSpec, FieldValue};
+use phinbox::{
+    inbox::{finalize, RequestState},
+    spec::{ElicitResponse, FieldSpec, FieldValue},
+};
 use serde_json::json;
 
 /// Submit an answer to a queued inbox request via the CLI (no UI).
@@ -30,8 +32,7 @@ pub struct AnswerArgs {
 }
 
 pub fn cmd_answer(args: AnswerArgs, inbox_dir: &PathBuf) -> Result<(), String> {
-    let mut req = phinbox::inbox::load(inbox_dir, &args.request_id)
-        .map_err(|e| e.to_string())?;
+    let mut req = phinbox::inbox::load(inbox_dir, &args.request_id).map_err(|e| e.to_string())?;
 
     // Expiry is authoritative here, not only in the daemon's sweeper: an
     // expired request must not be answerable when no daemon is up to reap it.
@@ -69,9 +70,15 @@ pub fn cmd_answer(args: AnswerArgs, inbox_dir: &PathBuf) -> Result<(), String> {
         }
     } else if let Some(v) = args.value {
         let value = match &req.spec.field {
-            FieldSpec::Text { .. } => FieldValue::Text(v),
-            FieldSpec::LongText { .. } => FieldValue::LongText(v),
-            FieldSpec::Choice { options, .. } => {
+            FieldSpec::Text {
+                ..
+            } => FieldValue::Text(v),
+            FieldSpec::LongText {
+                ..
+            } => FieldValue::LongText(v),
+            FieldSpec::Choice {
+                options, ..
+            } => {
                 let idx = options
                     .iter()
                     .position(|o| o.value == v || o.label == v)
@@ -80,8 +87,10 @@ pub fn cmd_answer(args: AnswerArgs, inbox_dir: &PathBuf) -> Result<(), String> {
                     value: options[idx].value.clone(),
                     index: idx,
                 }
-            }
-            FieldSpec::DateTime { .. } => FieldValue::DateTime(v),
+            },
+            FieldSpec::DateTime {
+                ..
+            } => FieldValue::DateTime(v),
             _ => return Err("use --integer or --boolean for this field type".into()),
         };
         ElicitResponse::Answered {
@@ -93,7 +102,9 @@ pub fn cmd_answer(args: AnswerArgs, inbox_dir: &PathBuf) -> Result<(), String> {
     };
 
     req.state = match response {
-        ElicitResponse::Cancelled { .. } => RequestState::Cancelled,
+        ElicitResponse::Cancelled {
+            ..
+        } => RequestState::Cancelled,
         _ => RequestState::Answered,
     };
     req.response = Some(response.clone());
@@ -113,11 +124,12 @@ pub fn cmd_answer(args: AnswerArgs, inbox_dir: &PathBuf) -> Result<(), String> {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
-    use phinbox::inbox::{
-        answered_dir, enqueue, load, PendingRequest, RequestOrigin, RequestState,
+    use phinbox::{
+        inbox::{answered_dir, enqueue, load, PendingRequest, RequestOrigin, RequestState},
+        spec::{ElicitResponse, FieldSpec, PromptSpec, Urgency},
     };
-    use phinbox::spec::{ElicitResponse, FieldSpec, PromptSpec, Urgency};
+
+    use super::*;
 
     fn pending(id: &str, expires_at_ms: u64) -> PendingRequest {
         let spec = PromptSpec {
@@ -167,7 +179,10 @@ mod tests {
         enqueue(&root, &pending("stale-1", 1)).unwrap();
 
         let err = cmd_answer(answer_args("stale-1", false), &root).unwrap_err();
-        assert!(err.contains("expired"), "refusal must name the expiry: {err}");
+        assert!(
+            err.contains("expired"),
+            "refusal must name the expiry: {err}"
+        );
 
         let after = load(&root, "stale-1").unwrap();
         assert_eq!(after.state, RequestState::Expired);

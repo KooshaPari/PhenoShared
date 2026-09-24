@@ -6,11 +6,13 @@
 //! before sending the next, otherwise the rmcp transport will see EOF on
 //! stdin before it can dispatch the queued requests.
 
-use std::io::{BufRead, BufReader, Write};
-use std::process::{Command, Stdio};
-use std::sync::mpsc;
-use std::thread;
-use std::time::Duration;
+use std::{
+    io::{BufRead, BufReader, Write},
+    process::{Command, Stdio},
+    sync::mpsc,
+    thread,
+    time::Duration,
+};
 
 use phinbox::spec::PromptSpec;
 
@@ -57,7 +59,12 @@ impl McpHandle {
             }
         });
 
-        McpHandle { stdin, stdout_rx: out_rx, stderr_rx: err_rx, child }
+        McpHandle {
+            stdin,
+            stdout_rx: out_rx,
+            stderr_rx: err_rx,
+            child,
+        }
     }
 
     fn send(&mut self, msg: &serde_json::Value) {
@@ -84,7 +91,7 @@ impl McpHandle {
                         collected.push_str(&line);
                         collected.push('\n');
                     }
-                }
+                },
                 Err(mpsc::RecvTimeoutError::Timeout) => return None,
                 Err(mpsc::RecvTimeoutError::Disconnected) => return None,
             }
@@ -146,7 +153,9 @@ fn mcp_server_lists_tools() {
         "params": {}
     });
     h.send(&request);
-    let resp = h.recv_id(2, Duration::from_secs(3)).expect("tools/list response");
+    let resp = h
+        .recv_id(2, Duration::from_secs(3))
+        .expect("tools/list response");
     assert_eq!(resp["jsonrpc"], "2.0");
     let tools = resp["result"]["tools"].as_array().expect("tools array");
     let names: Vec<&str> = tools.iter().filter_map(|t| t["name"].as_str()).collect();
@@ -172,8 +181,13 @@ fn mcp_server_rejects_unknown_tool() {
         }
     });
     h.send(&request);
-    let resp = h.recv_id(3, Duration::from_secs(3)).expect("tools/call response");
-    assert!(resp.get("error").is_some(), "expected error response, got {resp}");
+    let resp = h
+        .recv_id(3, Duration::from_secs(3))
+        .expect("tools/call response");
+    assert!(
+        resp.get("error").is_some(),
+        "expected error response, got {resp}"
+    );
     h.shutdown();
 }
 
@@ -196,11 +210,12 @@ fn mcp_server_validates_prompt_spec() {
         }
     });
     h.send(&request);
-    let resp = h.recv_id(4, Duration::from_secs(3)).expect("tools/call response");
+    let resp = h
+        .recv_id(4, Duration::from_secs(3))
+        .expect("tools/call response");
     let r = &resp["result"];
     let is_error = r.get("is_error").and_then(|v| v.as_bool()).unwrap_or(false);
-    let has_invalid = serde_json::to_string(r)
-        .is_ok_and(|s| s.contains("invalid"));
+    let has_invalid = serde_json::to_string(r).is_ok_and(|s| s.contains("invalid"));
     assert!(
         is_error || resp.get("error").is_some() || has_invalid,
         "expected error response for invalid spec. got {resp}"

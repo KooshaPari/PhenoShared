@@ -1,13 +1,13 @@
 //! TUI run loop entry point, plain-text fallback, and outcome helpers.
 
-use std::io::stdout;
-use std::path::Path;
+use std::{io::stdout, path::Path};
 
-use ratatui::backend::CrosstermBackend;
-use ratatui::Terminal;
+use ratatui::{backend::CrosstermBackend, Terminal};
 
-use super::event;
-use super::state::{snapshot_inbox, TuiOutcome};
+use super::{
+    event,
+    state::{snapshot_inbox, TuiOutcome},
+};
 
 /// Run the TUI viewer to completion. Returns the outcome (quit / answered /
 /// dismissed) or `TuiOutcome::NoTty` if the terminal refused raw mode.
@@ -22,7 +22,7 @@ pub fn run(inbox_root: &Path, follow: bool) -> Result<TuiOutcome, String> {
         Err(e) => {
             event::leave_raw_mode();
             return Err(format!("Terminal::new: {e}"));
-        }
+        },
     };
 
     let watcher = if follow {

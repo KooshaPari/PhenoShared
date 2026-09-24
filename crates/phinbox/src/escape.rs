@@ -15,11 +15,10 @@ use crate::error::ElicitError;
 /// Rules applied:
 /// - Wraps in `"..."`.
 /// - Escapes `\` and `"`.
-/// - Rejects ASCII control chars (0x00..=0x1F except `\t`) — caller should
-///   sanitize input before passing.
-/// - Rejects non-ASCII characters other than printable Unicode — `AppleScript`
-///   encoding is fragile on strings containing weird code points; reject
-///   to fail safely.
+/// - Rejects ASCII control chars (0x00..=0x1F except `\t`) — caller should sanitize input before
+///   passing.
+/// - Rejects non-ASCII characters other than printable Unicode — `AppleScript` encoding is fragile
+///   on strings containing weird code points; reject to fail safely.
 ///
 /// # Errors
 ///
@@ -28,7 +27,7 @@ use crate::error::ElicitError;
 pub fn applescript_escape(s: &str) -> Result<String, ElicitError> {
     for c in s.chars() {
         let code = c as u32;
-        let is_allowed = (code >= 0x20 && code != 0x7F) || c == '\t' || c == '\n' || c == '\r';
+        let is_allowed = (code >= 0x20 && code != 0x7f) || c == '\t' || c == '\n' || c == '\r';
         if !is_allowed {
             return Err(ElicitError::InvalidSpec(format!(
                 "refusing to applescript-escape string containing forbidden char U+{code:04X}"

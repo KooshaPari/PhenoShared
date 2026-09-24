@@ -1,23 +1,25 @@
 //! Async JSON-RPC server over Unix domain socket.
 
-use std::path::Path;
-use std::time::Duration;
+use std::{path::Path, time::Duration};
 
 use serde::Deserialize;
 use serde_json::{json, Value};
-use tokio::io::{AsyncBufReadExt, AsyncWriteExt, BufReader};
-use tokio::net::{UnixListener, UnixStream};
-use tokio::sync::broadcast;
-use tokio::task::JoinHandle;
-
-use crate::error::ElicitError;
-use crate::inbox::{
-    self, list_pending, load_pending, PendingRequest, RequestState,
-    ResponseStatus, PHINBOX_VERSION,
+use tokio::{
+    io::{AsyncBufReadExt, AsyncWriteExt, BufReader},
+    net::{UnixListener, UnixStream},
+    sync::broadcast,
+    task::JoinHandle,
 };
-use crate::spec::ElicitResponse;
 
-use super::{RpcState, Response};
+use super::{Response, RpcState};
+use crate::{
+    error::ElicitError,
+    inbox::{
+        self, list_pending, load_pending, PendingRequest, RequestState, ResponseStatus,
+        PHINBOX_VERSION,
+    },
+    spec::ElicitResponse,
+};
 
 // ---------------------------------------------------------------------------
 // Server lifecycle
@@ -91,7 +93,7 @@ async fn handle_conn(state: RpcState, stream: UnixStream) -> std::io::Result<()>
                 let resp = Response::err(Value::Null, super::ERR_PARSE, e.to_string());
                 write_frame(&mut write_half, &resp).await?;
                 continue;
-            }
+            },
         };
 
         if req.method == "inbox.subscribe" {
@@ -140,7 +142,7 @@ async fn dispatch(state: &RpcState, req: super::Request) -> Response {
         "daemon.shutdown" => {
             state.shutdown.notify_waiters();
             Response::ok(id, json!({ "ok": true }))
-        }
+        },
 
         "inbox.list" => match list_pending(&state.root) {
             Ok(reqs) => Response::ok(id, json!({ "requests": reqs })),
@@ -165,7 +167,15 @@ async fn dispatch(state: &RpcState, req: super::Request) -> Response {
         },
 
         "inbox.cancel" => match parse_params::<RidParams>(&req.params) {
-            Ok(p) => match finalize_via_state(state, &p.rid, ElicitResponse::Cancelled { notes: None }).await {
+            Ok(p) => match finalize_via_state(
+                state,
+                &p.rid,
+                ElicitResponse::Cancelled {
+                    notes: None,
+                },
+            )
+            .await
+            {
                 Ok(updated) => Response::ok(id, json!({ "request": updated })),
                 Err(e) => e,
             },
@@ -192,7 +202,13 @@ async fn finalize_via_state(
 ) -> Result<PendingRequest, Response> {
     let mut pending = match load_pending(&state.root, rid) {
         Ok(Some(p)) => p,
-        Ok(None) => return Err(Response::err(Value::Null, super::ERR_NOT_FOUND, format!("rid={rid}"))),
+        Ok(None) => {
+            return Err(Response::err(
+                Value::Null,
+                super::ERR_NOT_FOUND,
+                format!("rid={rid}"),
+            ))
+        },
         Err(e) => return Err(Response::err(Value::Null, super::ERR_IO, e.to_string())),
     };
     // Expiry is authoritative at the point of answering, not only in the
@@ -205,10 +221,13 @@ async fn finalize_via_state(
             return Err(Response::err(
                 Value::Null,
                 super::ERR_EXPIRED,
-                format!("rid={rid} expired at {} ms since the epoch", pending.expires_at_ms),
+                format!(
+                    "rid={rid} expired at {} ms since the epoch",
+                    pending.expires_at_ms
+                ),
             ))
-        }
-        Ok(false) => {}
+        },
+        Ok(false) => {},
         Err(e) => return Err(Response::err(Value::Null, super::ERR_IO, e.to_string())),
     }
     if !matches!(pending.state, RequestState::Pending) {
@@ -219,11 +238,21 @@ async fn finalize_via_state(
         ));
     }
     let new_state = match &response {
-        ElicitResponse::Cancelled { .. } => RequestState::Cancelled,
-        ElicitResponse::TimedOut { .. } => RequestState::Expired,
-        ElicitResponse::Failed { .. } => RequestState::Expired,
-        ElicitResponse::Answered { .. } => RequestState::Answered,
-        ElicitResponse::Deferred { .. } => RequestState::Pending,
+        ElicitResponse::Cancelled {
+            ..
+        } => RequestState::Cancelled,
+        ElicitResponse::TimedOut {
+            ..
+        } => RequestState::Expired,
+        ElicitResponse::Failed {
+            ..
+        } => RequestState::Expired,
+        ElicitResponse::Answered {
+            ..
+        } => RequestState::Answered,
+        ElicitResponse::Deferred {
+            ..
+        } => RequestState::Pending,
     };
     // A defer is not a final answer: the operator moved the request into the
     // durable inbox to answer it later. Finalizing here would archive the
@@ -234,22 +263,17 @@ async fn finalize_via_state(
         pending.state = new_state;
         pending.response = Some(response);
         let dir = inbox::inbox_pending_dir(&state.root);
-        std::fs::create_dir_all(&dir).map_err(|e| {
-            Response::err(Value::Null, super::ERR_IO, e.to_string())
-        })?;
+        std::fs::create_dir_all(&dir)
+            .map_err(|e| Response::err(Value::Null, super::ERR_IO, e.to_string()))?;
         let path = pending.path_in(&dir);
         let tmp = dir.join(format!("{}.tmp", pending.request_id));
-        let json = serde_json::to_vec_pretty(&pending).map_err(|e| {
-            Response::err(Value::Null, super::ERR_IO, e.to_string())
-        })?;
-        std::fs::write(&tmp, &json).map_err(|e| {
-            Response::err(Value::Null, super::ERR_IO, e.to_string())
-        })?;
-        std::fs::rename(&tmp, &path).map_err(|e| {
-            Response::err(Value::Null, super::ERR_IO, e.to_string())
-        })?;
-        crate::inbox::InboxChangeBus::global()
-            .notify(&format!("defer:{}", pending.request_id));
+        let json = serde_json::to_vec_pretty(&pending)
+            .map_err(|e| Response::err(Value::Null, super::ERR_IO, e.to_string()))?;
+        std::fs::write(&tmp, &json)
+            .map_err(|e| Response::err(Value::Null, super::ERR_IO, e.to_string()))?;
+        std::fs::rename(&tmp, &path)
+            .map_err(|e| Response::err(Value::Null, super::ERR_IO, e.to_string()))?;
+        crate::inbox::InboxChangeBus::global().notify(&format!("defer:{}", pending.request_id));
         state.notify_answered(rid, ResponseStatus::Pending);
         return Ok(pending);
     }
@@ -258,15 +282,21 @@ async fn finalize_via_state(
     match crate::inbox::finalize(&state.root, &pending) {
         Ok(_path) => {
             let status = match &pending.response {
-                Some(ElicitResponse::Cancelled { .. }) => ResponseStatus::Cancelled,
-                Some(ElicitResponse::TimedOut { .. }) => ResponseStatus::TimedOut,
-                Some(ElicitResponse::Deferred { .. }) => ResponseStatus::Pending,
+                Some(ElicitResponse::Cancelled {
+                    ..
+                }) => ResponseStatus::Cancelled,
+                Some(ElicitResponse::TimedOut {
+                    ..
+                }) => ResponseStatus::TimedOut,
+                Some(ElicitResponse::Deferred {
+                    ..
+                }) => ResponseStatus::Pending,
                 Some(_) => ResponseStatus::Answered,
                 None => ResponseStatus::Pending,
             };
             state.notify_answered(rid, status);
             Ok(pending)
-        }
+        },
         Err(e) => Err(Response::err(Value::Null, super::ERR_IO, e.to_string())),
     }
 }
@@ -291,9 +321,15 @@ async fn handle_subscribe<W: AsyncWriteExt + Unpin>(
             "requests": pending,
         }
     });
-    write_frame(w, &serde_json::from_value::<Response>(snapshot).unwrap_or_else(|_| {
-        Response::ok(id.clone(), json!({ "kind": "snapshot", "requests": pending }))
-    }))
+    write_frame(
+        w,
+        &serde_json::from_value::<Response>(snapshot).unwrap_or_else(|_| {
+            Response::ok(
+                id.clone(),
+                json!({ "kind": "snapshot", "requests": pending }),
+            )
+        }),
+    )
     .await?;
 
     let mut rx = state.changes.subscribe();

@@ -1,12 +1,15 @@
 //! Integration tests for the inbox daemon.
 
+use std::{
+    io::{BufRead, BufReader, Read, Write},
+    net::{Ipv4Addr, TcpListener, TcpStream},
+    sync::atomic::Ordering,
+    thread,
+    time::Duration,
+};
+
 use super::*;
 use crate::inbox::unix_now_ms;
-use std::io::{BufRead, BufReader, Read, Write};
-use std::net::{Ipv4Addr, TcpListener, TcpStream};
-use std::sync::atomic::Ordering;
-use std::thread;
-use std::time::Duration;
 
 #[test]
 fn start_stop_roundtrip() {
@@ -35,7 +38,7 @@ fn start_stop_roundtrip() {
             Ok(s) => {
                 stream = Some(s);
                 break;
-            }
+            },
             Err(_) => thread::sleep(Duration::from_millis(50)),
         }
     }
@@ -48,7 +51,10 @@ fn start_stop_roundtrip() {
     let mut status = String::new();
     let n = reader.read_line(&mut status).unwrap();
     assert!(n > 0, "no response from daemon: empty read");
-    assert!(status.contains("200"), "expected HTTP/1.1 200, got: {status}");
+    assert!(
+        status.contains("200"),
+        "expected HTTP/1.1 200, got: {status}"
+    );
     handle.stop().unwrap();
     thread::sleep(Duration::from_millis(200));
 }
@@ -103,8 +109,8 @@ fn slow_client_still_gets_a_response() {
 // ---- v0.9.1: HTTP status / answer-integrity regressions ----
 //
 // Three defects were audited live against a running daemon:
-//   1. every route answered `200 OK` because the status was computed and then
-//      discarded (`write_response(&mut stream, 200, ...)` hardcoded);
+//   1. every route answered `200 OK` because the status was computed and then discarded
+//      (`write_response(&mut stream, 200, ...)` hardcoded);
 //   2. a second POST silently overwrote an answer that was already recorded;
 //   3. an empty or partial body was recorded as a successful answer.
 // The tests below pin the wire behaviour, not the internals.
@@ -158,8 +164,8 @@ fn http_post(port: u16, path: &str, body: &str) -> String {
     http_roundtrip(
         port,
         &format!(
-            "POST {path} HTTP/1.1\r\nHost: 127.0.0.1\r\nContent-Length: {}\r\n\
-             Connection: close\r\n\r\n{body}",
+            "POST {path} HTTP/1.1\r\nHost: 127.0.0.1\r\nContent-Length: {}\r\nConnection: \
+             close\r\n\r\n{body}",
             body.len()
         ),
     )
@@ -177,8 +183,10 @@ fn enqueue_text(root: &std::path::Path, id: &str) {
 
 /// Queue a pending `Text` request under `root` with an explicit TTL.
 fn enqueue_text_expiring(root: &std::path::Path, id: &str, expires_at_ms: u64) {
-    use crate::inbox::{enqueue, PendingRequest, RequestOrigin};
-    use crate::spec::{FieldSpec, PromptSpec, Urgency};
+    use crate::{
+        inbox::{enqueue, PendingRequest, RequestOrigin},
+        spec::{FieldSpec, PromptSpec, Urgency},
+    };
     let spec = PromptSpec {
         details: None,
         title: "Probe".into(),
@@ -272,14 +280,18 @@ fn http_routes_return_their_intended_status() {
     );
     // An unknown request id is a client error, not success.
     assert_eq!(
-        status_line(&http_post(port, "/inbox/missing-id/answer", "value=x&confirm=ok")),
+        status_line(&http_post(
+            port,
+            "/inbox/missing-id/answer",
+            "value=x&confirm=ok"
+        )),
         "HTTP/1.1 400 Bad Request"
     );
     // Neither GET nor POST on the answer route.
     let put = http_roundtrip(
         port,
-        "PUT /inbox/missing-id/answer HTTP/1.1\r\nHost: 127.0.0.1\r\n\
-         Content-Length: 0\r\nConnection: close\r\n\r\n",
+        "PUT /inbox/missing-id/answer HTTP/1.1\r\nHost: 127.0.0.1\r\nContent-Length: \
+         0\r\nConnection: close\r\n\r\n",
     );
     assert_eq!(status_line(&put), "HTTP/1.1 405 Method Not Allowed");
 
@@ -291,8 +303,10 @@ fn http_routes_return_their_intended_status() {
 /// the body that arrives second is not written to disk.
 #[test]
 fn http_reanswer_is_refused_and_the_first_answer_stands() {
-    use crate::inbox::{load, RequestState};
-    use crate::spec::{ElicitResponse, FieldValue};
+    use crate::{
+        inbox::{load, RequestState},
+        spec::{ElicitResponse, FieldValue},
+    };
 
     let tmp = tempfile::tempdir().unwrap();
     let handle = start_daemon_on(tmp.path());
@@ -333,8 +347,10 @@ fn http_reanswer_is_refused_and_the_first_answer_stands() {
 /// while an explicitly empty text value is one.
 #[test]
 fn http_partial_body_is_not_recorded_as_an_answer() {
-    use crate::inbox::{load, RequestState};
-    use crate::spec::{ElicitResponse, FieldValue};
+    use crate::{
+        inbox::{load, RequestState},
+        spec::{ElicitResponse, FieldValue},
+    };
 
     let tmp = tempfile::tempdir().unwrap();
     let handle = start_daemon_on(tmp.path());

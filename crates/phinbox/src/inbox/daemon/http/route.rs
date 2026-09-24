@@ -15,7 +15,11 @@ pub(crate) enum Route {
 
 /// Parse the URL path into a `(Route, optional_id)` pair.
 pub(crate) fn parse_route(target: &str) -> (Route, Option<String>) {
-    let path = target.split('?').next().unwrap_or(target).trim_end_matches('/');
+    let path = target
+        .split('?')
+        .next()
+        .unwrap_or(target)
+        .trim_end_matches('/');
     if path == "/health" || path == "/ping" {
         return (Route::Health, None);
     }

@@ -5,15 +5,13 @@
 //! forwarding, long-running services), [`crate::elicit`] would either hang
 //! or fail silently. The **inbox** turns that into an async workflow:
 //!
-//! 1. The agent calls `phinbox ask --async --json <spec>`. Instead of
-//!    blocking on a popup, the spec is persisted to an on-disk queue,
-//!    surfaced via tray notification / iMessage / email, and the CLI
-//!    returns immediately with the new `request_id`.
-//! 2. The user opens the inbox (`phinbox inbox` or `phinbox inbox
-//!    --web`) at their leisure, reads the queued prompt, and submits
-//!    an answer through the inbox UI.
-//! 3. The agent's next call to `phinbox wait --request-id <id>`
-//!    (or `--block-on <id>`) returns the now-answered response.
+//! 1. The agent calls `phinbox ask --async --json <spec>`. Instead of blocking on a popup, the spec
+//!    is persisted to an on-disk queue, surfaced via tray notification / iMessage / email, and the
+//!    CLI returns immediately with the new `request_id`.
+//! 2. The user opens the inbox (`phinbox inbox` or `phinbox inbox --web`) at their leisure, reads
+//!    the queued prompt, and submits an answer through the inbox UI.
+//! 3. The agent's next call to `phinbox wait --request-id <id>` (or `--block-on <id>`) returns the
+//!    now-answered response.
 //!
 //! ## File layout
 //!
@@ -28,13 +26,17 @@
 //! [`PendingRequest`] to disk. The native popup path is only used when the
 //! agent explicitly opts in.
 
-use std::path::{Path, PathBuf};
-use std::time::{Duration, SystemTime, UNIX_EPOCH};
+use std::{
+    path::{Path, PathBuf},
+    time::{Duration, SystemTime, UNIX_EPOCH},
+};
 
 use serde::{Deserialize, Serialize};
 
-use crate::error::ElicitError;
-use crate::spec::{ElicitResponse, PromptSpec};
+use crate::{
+    error::ElicitError,
+    spec::{ElicitResponse, PromptSpec},
+};
 
 pub mod change;
 pub mod daemon;
@@ -46,7 +48,8 @@ pub mod daemon;
 #[cfg(unix)]
 pub mod ipc;
 pub mod notify;
-#[cfg(test)] mod tests;
+#[cfg(test)]
+mod tests;
 
 pub mod expire;
 pub mod load;
@@ -54,7 +57,7 @@ pub mod mark;
 
 pub use change::{InboxChangeBus, InboxWatcher};
 pub use expire::mark_expired_in_place;
-pub use load::{load_pending, load_request, list_pending};
+pub use load::{list_pending, load_pending, load_request};
 pub use mark::{enqueue, finalize};
 
 /// Crate version, exposed so the IPC ping can report it.
@@ -329,8 +332,7 @@ pub fn wait_for_response(
         }
         if std::time::Instant::now() >= deadline {
             return Err(ElicitError::Timeout(
-                std::time::Instant::now()
-                    .saturating_duration_since(start),
+                std::time::Instant::now().saturating_duration_since(start),
             ));
         }
         // Sleep at most `poll_interval` or until the next bus wake, whichever

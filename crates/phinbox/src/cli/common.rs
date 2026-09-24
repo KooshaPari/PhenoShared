@@ -1,9 +1,9 @@
 //! Shared CLI types and utilities for the phinbox binary.
 
-use phinbox::spec::{
-    ButtonSpec, ElicitResponse, FieldSpec, FieldValue, NotesSpec, PromptSpec, Urgency,
+use phinbox::{
+    options::RendererPreference,
+    spec::{ButtonSpec, ElicitResponse, FieldSpec, FieldValue, NotesSpec, PromptSpec, Urgency},
 };
-use phinbox::options::RendererPreference;
 use serde_json::json;
 
 // ---- args ----
@@ -92,17 +92,23 @@ pub fn cmd_smoke(args: SmokeArgs, renderer: Option<RendererPreference>) -> Resul
                 println!("smoke: user said no");
                 Err("user reported failure".into())
             }
-        }
-        Ok(ElicitResponse::Cancelled { .. }) => Err("user cancelled".into()),
+        },
+        Ok(ElicitResponse::Cancelled {
+            ..
+        }) => Err("user cancelled".into()),
         // A timed-out popup still proves the full render path works:
         // binary boots, osascript spawns, dialog displays and stays up
         // for the whole timeout. agents_smoke documents this contract:
         // "smoke should exit 0 even if the popup times out".
-        Ok(ElicitResponse::TimedOut { elapsed_secs }) => {
+        Ok(ElicitResponse::TimedOut {
+            elapsed_secs,
+        }) => {
             println!("smoke: popup rendered, timed out after {elapsed_secs:.0}s (ok)");
             Ok(())
-        }
-        Ok(ElicitResponse::Failed { reason }) => Err(format!("popup failed: {reason}")),
+        },
+        Ok(ElicitResponse::Failed {
+            reason,
+        }) => Err(format!("popup failed: {reason}")),
         Ok(other) => Err(format!("unexpected response variant: {other:?}")),
         Err(e) => Err(e.to_string()),
     }
@@ -130,21 +136,18 @@ pub fn hostname() -> String {
         .or_else(|_| std::env::var("COMPUTERNAME"))
         .unwrap_or_else(|_| {
             std::fs::read_to_string("/etc/hostname")
-                .ok().map_or_else(|| "unknown".to_string(), |s| s.trim().to_string())
+                .ok()
+                .map_or_else(|| "unknown".to_string(), |s| s.trim().to_string())
         })
 }
 
 pub fn build_minimal_spec_from_flags(args: &super::ask::AskArgs) -> Result<PromptSpec, String> {
-    let title = args
-        .title
-        .clone()
-        .ok_or_else(|| "--title is required (or use --from-json / --from-file / --async)".to_string())?;
-    let question = args
-        .question
-        .clone()
-        .ok_or_else(|| {
-            "--question is required (or use --from-json / --from-file / --async)".to_string()
-        })?;
+    let title = args.title.clone().ok_or_else(|| {
+        "--title is required (or use --from-json / --from-file / --async)".to_string()
+    })?;
+    let question = args.question.clone().ok_or_else(|| {
+        "--question is required (or use --from-json / --from-file / --async)".to_string()
+    })?;
     let urgency = match args.urgency.as_str() {
         "info" => Urgency::Info,
         "warning" => Urgency::Warning,
@@ -251,12 +254,12 @@ mod tests {
             "native,imessage:<REDACTED>@icloud.com,email:k@k.com,webhook:https://ntfy.sh/x",
         ));
         assert!(cfg.native);
-        assert_eq!(cfg.imessage_target.as_deref(), Some("<REDACTED>@icloud.com"));
-        assert_eq!(cfg.email_target.as_deref(), Some("k@k.com"));
         assert_eq!(
-            cfg.webhook_url.as_deref(),
-            Some("https://ntfy.sh/x")
+            cfg.imessage_target.as_deref(),
+            Some("<REDACTED>@icloud.com")
         );
+        assert_eq!(cfg.email_target.as_deref(), Some("k@k.com"));
+        assert_eq!(cfg.webhook_url.as_deref(), Some("https://ntfy.sh/x"));
     }
 
     #[test]

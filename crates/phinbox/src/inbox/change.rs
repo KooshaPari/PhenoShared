@@ -6,23 +6,23 @@
 //! immediately instead of polling.
 //!
 //! Design:
-//! - One process-wide bus, lazily initialised on first call to
-//!   [`InboxChangeBus::global`] (or any [`notify_changed`]). Lives in a
-//!   `OnceLock` so it's cheap to access.
-//! - Each subscriber gets a *dedicated* MPSC channel registered with the
-//!   bus; `notify()` fans out to every active subscriber (broadcast
-//!   semantics, no subscriber sees another's state).
-//! - Channels carry a `Generation` (monotonic u64) so a slow subscriber can
-//!   tell it missed notifications: `wait_changed` returns the *current*
-//!   generation, and the caller can compare against its own watermark.
+//! - One process-wide bus, lazily initialised on first call to [`InboxChangeBus::global`] (or any
+//!   [`notify_changed`]). Lives in a `OnceLock` so it's cheap to access.
+//! - Each subscriber gets a *dedicated* MPSC channel registered with the bus; `notify()` fans out
+//!   to every active subscriber (broadcast semantics, no subscriber sees another's state).
+//! - Channels carry a `Generation` (monotonic u64) so a slow subscriber can tell it missed
+//!   notifications: `wait_changed` returns the *current* generation, and the caller can compare
+//!   against its own watermark.
 //!
 //! Pure std + `crossbeam-channel` — no tokio runtime required, so the
 //! sync TUI / CLI flows can subscribe cheaply.
 //!
 //! [`notify_changed`]: InboxChangeBus::notify
 
-use std::sync::{Mutex, OnceLock};
-use std::time::Duration;
+use std::{
+    sync::{Mutex, OnceLock},
+    time::Duration,
+};
 
 use crossbeam_channel::{Receiver, Sender};
 
@@ -93,12 +93,12 @@ impl InboxChangeBus {
                         // (one older generation at worst) which is fine for
                         // an inbox change feed.
                         break;
-                    }
+                    },
                     Err(crossbeam_channel::TrySendError::Disconnected(_)) => {
                         // Subscriber is gone — leave the slot; bounded by
                         // program lifetime.
                         break;
-                    }
+                    },
                 }
             }
         }
@@ -121,10 +121,7 @@ impl InboxChangeBus {
     /// the receiver end of a fresh channel.
     pub fn subscribe(&self) -> InboxWatcher {
         let (tx, rx): Channel = crossbeam_channel::unbounded();
-        self.subscribers
-            .lock()
-            .expect("subscribers lock")
-            .push(tx);
+        self.subscribers.lock().expect("subscribers lock").push(tx);
         InboxWatcher {
             receiver: rx,
             last_seen: self.current_generation(),
@@ -140,9 +137,8 @@ pub struct InboxWatcher {
 
 impl InboxWatcher {
     /// Block up to `timeout` for an inbox change. Returns:
-    /// - `Some(generation)` — the inbox changed; `generation` is the
-    ///   newest change seen so far (may be > `last_seen` if multiple
-    ///   changes happened during the wait).
+    /// - `Some(generation)` — the inbox changed; `generation` is the newest change seen so far (may
+    ///   be > `last_seen` if multiple changes happened during the wait).
     /// - `None` — `timeout` elapsed with no change.
     ///
     /// Safe to call from any thread.
@@ -176,7 +172,7 @@ impl InboxWatcher {
                 }
                 self.last_seen = newest;
                 Some(newest)
-            }
+            },
             Err(crossbeam_channel::RecvTimeoutError::Timeout) => None,
             Err(crossbeam_channel::RecvTimeoutError::Disconnected) => None,
         }
@@ -193,8 +189,9 @@ impl InboxWatcher {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
     use std::time::Duration;
+
+    use super::*;
 
     #[test]
     fn notify_increments_generation() {
@@ -253,10 +250,7 @@ mod tests {
     fn global_bus_is_singleton() {
         let a = InboxChangeBus::global();
         let b = InboxChangeBus::global();
-        assert!(std::ptr::eq(
-            std::ptr::from_ref(a),
-            std::ptr::from_ref(b)
-        ));
+        assert!(std::ptr::eq(std::ptr::from_ref(a), std::ptr::from_ref(b)));
     }
 
     #[test]
@@ -284,9 +278,6 @@ mod tests {
 
         // But a new notify wakes us immediately.
         bus.notify("post");
-        assert_eq!(
-            watcher.wait_changed(Duration::from_millis(20)),
-            Some(3)
-        );
+        assert_eq!(watcher.wait_changed(Duration::from_millis(20)), Some(3));
     }
 }

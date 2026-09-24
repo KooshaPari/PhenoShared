@@ -15,12 +15,14 @@ mod tray;
 mod webhook;
 
 pub use imessage::{notify_email, notify_imessage};
+use serde::{Deserialize, Serialize};
 pub use tray::notify_native;
 pub use webhook::notify_webhook;
 
-use crate::inbox::{NotificationKind, PendingRequest};
-use crate::spec::PromptSpec;
-use serde::{Deserialize, Serialize};
+use crate::{
+    inbox::{NotificationKind, PendingRequest},
+    spec::PromptSpec,
+};
 
 /// Per-surface configuration captured by the agent at enqueue time or
 /// inherited from the environment.
@@ -226,7 +228,7 @@ pub(super) fn url_encode(s: &str) -> String {
         match b {
             b'A'..=b'Z' | b'a'..=b'z' | b'0'..=b'9' | b'-' | b'_' | b'.' | b'~' => {
                 out.push(b as char);
-            }
+            },
             _ => out.push_str(&format!("%{b:02X}")),
         }
     }

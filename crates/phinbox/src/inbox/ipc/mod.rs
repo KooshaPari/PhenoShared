@@ -16,17 +16,22 @@
 //! - `inbox.get`     (`rid`)     -> `{ request: PendingRequest }` or not-found
 //! - `inbox.answer`   (`rid`, `response`) -> `{ request: PendingRequest }` after finalization
 //! - `inbox.cancel`   (`rid`)    -> `{ request: PendingRequest }` (writes Cancelled response)
-//! - `inbox.subscribe`           -> server-streaming: emits `{ kind: "added|answered|removed", request? }`
+//! - `inbox.subscribe`           -> server-streaming: emits `{ kind: "added|answered|removed",
+//!   request? }`
 
-use std::collections::HashMap;
-use std::path::{Path, PathBuf};
-use std::sync::Arc;
+use std::{
+    collections::HashMap,
+    path::{Path, PathBuf},
+    sync::Arc,
+};
 
 use parking_lot::Mutex;
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
-use tokio::sync::{broadcast, Notify};
-use tokio::net::UnixListener;
+use tokio::{
+    net::UnixListener,
+    sync::{broadcast, Notify},
+};
 
 use crate::inbox::{self, PendingRequest, ResponseStatus};
 
@@ -172,7 +177,9 @@ impl RpcState {
     }
 
     pub fn notify_added(&self, req: &PendingRequest) {
-        let _ = self.changes.send(ChangeEvent::Added { request: req.clone() });
+        let _ = self.changes.send(ChangeEvent::Added {
+            request: req.clone(),
+        });
     }
 
     pub fn notify_answered(&self, rid: &str, status: ResponseStatus) {

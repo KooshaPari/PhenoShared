@@ -26,8 +26,10 @@ pub use html::{
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::inbox::{PendingRequest, RequestOrigin};
-    use crate::spec::{FieldSpec, PromptSpec, Urgency};
+    use crate::{
+        inbox::{PendingRequest, RequestOrigin},
+        spec::{FieldSpec, PromptSpec, Urgency},
+    };
 
     fn sample_pending(id: &str, urgent: Urgency) -> PendingRequest {
         PendingRequest {
@@ -118,11 +120,7 @@ mod tests {
         let html = render_inbox_index_html(&reqs);
         assert!(snapshot_contains(
             &html,
-            &[
-                "r1",
-                "What is your favorite color?",
-                "Info",
-            ]
+            &["r1", "What is your favorite color?", "Info",]
         ));
         assert!(html.contains("</html>"));
     }
@@ -252,9 +250,7 @@ mod tests {
         assert!(html.contains(r#"<option value="staging""#));
         assert!(html.contains(r#"<option value="prod" selected"#));
         assert!(html.contains(r#"<option value="staging">Staging</option>"#));
-        assert!(html.contains(
-            r#"<option value="prod" selected>Production</option>"#
-        ));
+        assert!(html.contains(r#"<option value="prod" selected>Production</option>"#));
     }
 
     #[test]

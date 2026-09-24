@@ -20,7 +20,7 @@ pub fn notify_webhook(req: &PendingRequest, url: &str) -> NotifyAttempt {
         Ok(s) => s,
         Err(e) => {
             return NotifyAttempt::err(NotificationKind::Webhook, format!("serialize: {e}"));
-        }
+        },
     };
     match post_form(url, &json) {
         Ok(()) => NotifyAttempt::ok(NotificationKind::Webhook, "ok"),
@@ -33,9 +33,7 @@ pub fn notify_webhook(req: &PendingRequest, url: &str) -> NotifyAttempt {
 /// enough for the small NTFY-style payloads we send. If the URL is
 /// unreachable, the inbox still works, so the failure is fine.
 fn post_form(url: &str, body: &str) -> Result<(), String> {
-    use std::io::Write;
-    use std::net::TcpStream;
-    use std::time::Duration;
+    use std::{io::Write, net::TcpStream, time::Duration};
 
     let stripped = url
         .strip_prefix("http://")
@@ -52,20 +50,14 @@ fn post_form(url: &str, body: &str) -> Result<(), String> {
     };
     let addr = format!("{host}:{port}");
 
-    let mut stream =
-        TcpStream::connect(&addr).map_err(|e| format!("connect {addr}: {e}"))?;
+    let mut stream = TcpStream::connect(&addr).map_err(|e| format!("connect {addr}: {e}"))?;
     stream
         .set_write_timeout(Some(Duration::from_secs(3)))
         .map_err(|e| format!("set timeout: {e}"))?;
 
     let req = format!(
-        "POST {path} HTTP/1.1\r\n\
-         Host: {host}\r\n\
-         Content-Type: application/json\r\n\
-         Content-Length: {len}\r\n\
-         Connection: close\r\n\
-         \r\n\
-         {body}",
+        "POST {path} HTTP/1.1\r\nHost: {host}\r\nContent-Type: \
+         application/json\r\nContent-Length: {len}\r\nConnection: close\r\n\r\n{body}",
         path = path,
         host = host,
         len = body.len(),

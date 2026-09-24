@@ -1,7 +1,6 @@
 //! HTTP response helpers and HTML rendering for the daemon's inbox pages.
 
-use std::io::Write;
-use std::net::TcpStream;
+use std::{io::Write, net::TcpStream};
 
 use crate::inbox::PendingRequest;
 
@@ -39,7 +38,8 @@ pub(crate) fn write_response(
 ) -> std::io::Result<()> {
     write!(
         stream,
-        "HTTP/1.1 {status} {reason}\r\nContent-Length: {}\r\nConnection: close\r\nContent-Type: {content_type}\r\n\r\n",
+        "HTTP/1.1 {status} {reason}\r\nContent-Length: {}\r\nConnection: close\r\nContent-Type: \
+         {content_type}\r\n\r\n",
         body.len()
     )?;
     stream.write_all(body)?;
@@ -51,17 +51,15 @@ pub(crate) fn write_response(
 ///
 /// The response is written here in full, so callers must not write another
 /// response afterwards.
-pub(crate) fn redirect_response(
-    stream: &mut TcpStream,
-    location: &str,
-) -> std::io::Result<()> {
+pub(crate) fn redirect_response(stream: &mut TcpStream, location: &str) -> std::io::Result<()> {
     let body = format!(
-        "<!doctype html><meta charset=utf-8><title>redirecting</title>\
-         <body><p>Redirecting to <a href=\"{location}\">{location}</a>...</p>"
+        "<!doctype html><meta charset=utf-8><title>redirecting</title><body><p>Redirecting to <a \
+         href=\"{location}\">{location}</a>...</p>"
     );
     write!(
         stream,
-        "HTTP/1.1 302 Found\r\nLocation: {loc}\r\nContent-Length: {}\r\nConnection: close\r\nContent-Type: text/html; charset=utf-8\r\n\r\n",
+        "HTTP/1.1 302 Found\r\nLocation: {loc}\r\nContent-Length: {}\r\nConnection: \
+         close\r\nContent-Type: text/html; charset=utf-8\r\n\r\n",
         body.len(),
         loc = location
     )?;
@@ -75,9 +73,8 @@ pub(crate) fn simple_text(status: u16, msg: &str) -> Reply {
     (
         status,
         format!(
-            "<!doctype html><meta charset=utf-8><title>phinbox</title>\
-             <body style=\"font-family:system-ui;margin:2rem\">\
-             <h1>phinbox</h1><p>{msg}</p>"
+            "<!doctype html><meta charset=utf-8><title>phinbox</title><body \
+             style=\"font-family:system-ui;margin:2rem\"><h1>phinbox</h1><p>{msg}</p>"
         ),
     )
 }
@@ -96,13 +93,9 @@ pub(crate) fn render_inbox_html(req: &PendingRequest) -> String {
     let title = html_escape(&req.spec.title);
     let question = html_escape(&req.spec.question);
     format!(
-        "<!doctype html><meta charset=utf-8><title>{title}</title>\
-         <style>{css}</style><body>\
-         <div class=card>\
-           <h1>{title}</h1><p class=q>{question}</p>\
-           <p class=meta>From <code>{origin}</code> on <code>{host}</code> . queued {queued}</p>\
-           {body}\
-         </div>",
+        "<!doctype html><meta charset=utf-8><title>{title}</title><style>{css}</style><body><div \
+         class=card><h1>{title}</h1><p class=q>{question}</p><p class=meta>From \
+         <code>{origin}</code> on <code>{host}</code> . queued {queued}</p>{body}</div>",
         title = title,
         css = render_inbox_css(),
         question = question,
@@ -115,19 +108,17 @@ pub(crate) fn render_inbox_html(req: &PendingRequest) -> String {
 
 /// Inline CSS for the daemon's inbox UI.
 pub(crate) fn render_inbox_css() -> &'static str {
-    "body{background:#0f172a;color:#f8fafc;font-family:system-ui;margin:0;padding:2rem}\
-     .card{max-width:640px;margin:auto;background:#1e293b;border-radius:12px;padding:2rem;\
-     box-shadow:0 8px 24px rgba(0,0,0,.4)}\
-     h1{margin:0 0 .5rem}p.q{white-space:pre-wrap;color:#cbd5e1}\
-     p.meta{color:#64748b;font-size:.85rem;margin:0 0 1.5rem}\
-     label{display:block;margin:1rem 0 .25rem;font-weight:600}\
-     input[type=text],input[type=number],textarea,select{width:100%;padding:.6rem;\
-     border-radius:8px;background:#0f172a;color:#f8fafc;border:1px solid #334155;font-size:1rem}\
-     textarea{min-height:6rem}\
-     button{padding:.7rem 1.4rem;border-radius:8px;border:none;font-weight:600;\
-     cursor:pointer;margin-right:.5rem}\
-     .ok{background:#22c55e;color:#052e16}.cancel{background:#ef4444;color:#fff}\
-     .secret{background:#facc15;color:#1c1917}"
+    "body{background:#0f172a;color:#f8fafc;font-family:system-ui;margin:0;padding:2rem}.\
+     card{max-width:640px;margin:auto;background:#1e293b;border-radius:12px;padding:2rem;\
+     box-shadow:0 8px 24px rgba(0,0,0,.4)}h1{margin:0 0 \
+     .5rem}p.q{white-space:pre-wrap;color:#cbd5e1}p.meta{color:#64748b;font-size:.85rem;margin:0 0 \
+     1.5rem}label{display:block;margin:1rem 0 \
+     .25rem;font-weight:600}input[type=text],input[type=number],textarea,select{width:100%;padding:\
+     .6rem;border-radius:8px;background:#0f172a;color:#f8fafc;border:1px solid \
+     #334155;font-size:1rem}textarea{min-height:6rem}button{padding:.7rem \
+     1.4rem;border-radius:8px;border:none;font-weight:600;cursor:pointer;margin-right:.5rem}.\
+     ok{background:#22c55e;color:#052e16}.cancel{background:#ef4444;color:#fff}.secret{background:#\
+     facc15;color:#1c1917}"
 }
 
 /// Escape HTML special characters.

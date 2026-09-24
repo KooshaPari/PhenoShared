@@ -3,11 +3,9 @@
 //! Subcommands are implemented in sibling modules (`ask`, `inbox`, `daemon`,
 //! etc.) and dispatched from `main()`.
 
-use std::path::PathBuf;
-use std::process::ExitCode;
+use std::{path::PathBuf, process::ExitCode};
 
 use clap::{Parser, Subcommand};
-
 use phinbox::options::RendererPreference;
 
 mod answer;
@@ -28,9 +26,9 @@ mod wait;
     version,
     about = "Native OS popup elicitation for autonomous agents",
     long_about = "phinbox renders a native OS popup (NSAlert on macOS, Win32 form on Windows, \
-                  zenity/kdialog/Tk/inquire on Linux) and returns the user's response as typed JSON. \
-                  For non-blocking workflows, queue the prompt in the inbox via `--async` and use \
-                  `phinbox wait --request-id <id>` to retrieve the answer later."
+                  zenity/kdialog/Tk/inquire on Linux) and returns the user's response as typed \
+                  JSON. For non-blocking workflows, queue the prompt in the inbox via `--async` \
+                  and use `phinbox wait --request-id <id>` to retrieve the answer later."
 )]
 struct Cli {
     #[command(subcommand)]
@@ -157,15 +155,18 @@ pub fn main() -> ExitCode {
         Cmd::Wait(args) => wait::cmd_wait(args, &inbox_dir),
         Cmd::Answer(args) => answer::cmd_answer(args, &inbox_dir),
         Cmd::Serve => {
-            eprintln!("error: 'serve' is provided by the `phinbox-mcp` binary, not `phinbox`. Run `phinbox-mcp` instead.");
+            eprintln!(
+                "error: 'serve' is provided by the `phinbox-mcp` binary, not `phinbox`. Run \
+                 `phinbox-mcp` instead."
+            );
             return ExitCode::from(2);
-        }
+        },
         Cmd::Version => {
             println!("phinbox {}", env!("CARGO_PKG_VERSION"));
             println!("license: MIT");
             println!("repository: https://github.com/KooshaPari/phenotype-tooling");
             return ExitCode::SUCCESS;
-        }
+        },
     };
 
     match result {
@@ -173,7 +174,7 @@ pub fn main() -> ExitCode {
         Err(e) => {
             eprintln!("error: {e}");
             ExitCode::FAILURE
-        }
+        },
     }
 }
 
@@ -191,8 +192,9 @@ fn open_origin_from_handle(h: &phinbox::inbox::daemon::DaemonHandle) -> String {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
     use clap::Parser;
+
+    use super::*;
 
     #[test]
     fn parse_help() {
@@ -213,16 +215,17 @@ mod tests {
 
     #[test]
     fn parse_ask_with_from_json() {
-        let json = r#"{"title":"t","question":"q","field":{"kind":"boolean","label":"?","default":true}}"#;
+        let json =
+            r#"{"title":"t","question":"q","field":{"kind":"boolean","label":"?","default":true}}"#;
         let cli = Cli::try_parse_from(["phinbox", "ask", "--from-json", json]).unwrap();
         assert!(matches!(cli.cmd, Cmd::Ask(_)));
     }
 
     #[test]
     fn parse_ask_async() {
-        let json = r#"{"title":"t","question":"q","field":{"kind":"boolean","label":"?","default":true}}"#;
-        let cli =
-            Cli::try_parse_from(["phinbox", "ask", "--async", "--from-json", json]).unwrap();
+        let json =
+            r#"{"title":"t","question":"q","field":{"kind":"boolean","label":"?","default":true}}"#;
+        let cli = Cli::try_parse_from(["phinbox", "ask", "--async", "--from-json", json]).unwrap();
         if let Cmd::Ask(a) = cli.cmd {
             assert!(a.r#async);
         } else {
@@ -244,8 +247,7 @@ mod tests {
 
     #[test]
     fn parse_wait() {
-        let cli =
-            Cli::try_parse_from(["phinbox", "wait", "--request-id", "abc"]).unwrap();
+        let cli = Cli::try_parse_from(["phinbox", "wait", "--request-id", "abc"]).unwrap();
         if let Cmd::Wait(w) = cli.cmd {
             assert_eq!(w.request_id, "abc");
         } else {
@@ -273,8 +275,7 @@ mod tests {
 
     #[test]
     fn parse_validate_from_file() {
-        let cli = Cli::try_parse_from(["phinbox", "validate", "--from-file", "spec.json"])
-            .unwrap();
+        let cli = Cli::try_parse_from(["phinbox", "validate", "--from-file", "spec.json"]).unwrap();
         if let Cmd::Validate(a) = cli.cmd {
             assert_eq!(
                 a.from_file.as_deref(),

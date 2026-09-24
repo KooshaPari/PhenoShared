@@ -3,13 +3,10 @@
 //! Exposes a single tool, `phinbox_mcp`, over stdio JSON-RPC. Connects
 //! to Forge, Codex, Cursor, Claude Code, or any MCP-compatible host.
 
-use std::process::ExitCode;
-use std::sync::Arc;
-use std::time::Duration;
+use std::{process::ExitCode, sync::Arc, time::Duration};
 
 use clap::Parser;
-use phinbox::mcp::shutdown::ShutdownCoordinator;
-use phinbox::mcp::PhinboxMcp;
+use phinbox::mcp::{shutdown::ShutdownCoordinator, PhinboxMcp};
 use rmcp::ServiceExt;
 
 #[derive(Parser)]
@@ -29,7 +26,9 @@ async fn main() -> ExitCode {
     let transport = rmcp::transport::io::stdio();
 
     let result: Result<(), Box<dyn std::error::Error>> = async {
-        let coord = Arc::new(ShutdownCoordinator::new(Duration::from_secs(args.shutdown_timeout_secs)));
+        let coord = Arc::new(ShutdownCoordinator::new(Duration::from_secs(
+            args.shutdown_timeout_secs,
+        )));
         let mut shutdown_rx = ShutdownCoordinator::install(Arc::clone(&coord));
 
         let server = server.serve(transport).await?;
@@ -51,14 +50,13 @@ async fn main() -> ExitCode {
         Err(e) => {
             eprintln!("error: {e}");
             ExitCode::FAILURE
-        }
+        },
     }
 }
 
 fn init_tracing() {
     use tracing_subscriber::EnvFilter;
-    let filter = EnvFilter::try_from_default_env()
-        .unwrap_or_else(|_| EnvFilter::new("info"));
+    let filter = EnvFilter::try_from_default_env().unwrap_or_else(|_| EnvFilter::new("info"));
     let _ = tracing_subscriber::fmt()
         .with_env_filter(filter)
         .with_target(false)

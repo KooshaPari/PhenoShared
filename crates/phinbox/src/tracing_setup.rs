@@ -21,11 +21,21 @@ pub fn trace_request_start(request_id: &str, spec: &PromptSpec) {
 /// Emit a tracing event when a popup closes (any outcome).
 pub fn trace_request_end(request_id: &str, response: &ElicitResponse) {
     let status = match response {
-        ElicitResponse::Answered { .. } => "answered",
-        ElicitResponse::Cancelled { .. } => "cancelled",
-        ElicitResponse::TimedOut { .. } => "timed_out",
-        ElicitResponse::Failed { .. } => "failed",
-        ElicitResponse::Deferred { .. } => "deferred",
+        ElicitResponse::Answered {
+            ..
+        } => "answered",
+        ElicitResponse::Cancelled {
+            ..
+        } => "cancelled",
+        ElicitResponse::TimedOut {
+            ..
+        } => "timed_out",
+        ElicitResponse::Failed {
+            ..
+        } => "failed",
+        ElicitResponse::Deferred {
+            ..
+        } => "deferred",
     };
     tracing::info!(
         target: "phinbox",
@@ -38,13 +48,27 @@ pub fn trace_request_end(request_id: &str, response: &ElicitResponse) {
 fn field_kind_str(spec: &crate::spec::FieldSpec) -> &'static str {
     use crate::spec::FieldSpec;
     match spec {
-        FieldSpec::Text { secret: true, .. } => "text(secret)",
-        FieldSpec::Text { .. } => "text",
-        FieldSpec::LongText { .. } => "long_text",
-        FieldSpec::Integer { .. } => "integer",
-        FieldSpec::Choice { .. } => "choice",
-        FieldSpec::Boolean { .. } => "boolean",
-        FieldSpec::DateTime { .. } => "datetime",
+        FieldSpec::Text {
+            secret: true, ..
+        } => "text(secret)",
+        FieldSpec::Text {
+            ..
+        } => "text",
+        FieldSpec::LongText {
+            ..
+        } => "long_text",
+        FieldSpec::Integer {
+            ..
+        } => "integer",
+        FieldSpec::Choice {
+            ..
+        } => "choice",
+        FieldSpec::Boolean {
+            ..
+        } => "boolean",
+        FieldSpec::DateTime {
+            ..
+        } => "datetime",
     }
 }
 

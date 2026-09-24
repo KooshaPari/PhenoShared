@@ -1,11 +1,14 @@
 //! Tests for the JSON-RPC inbox server: the `inbox.answer` surface must
 //! enforce expiry itself, not rely on the daemon's notifier sweeper.
 
-use super::*;
-use crate::error::ElicitError;
-use crate::inbox::{enqueue, inbox_pending_dir, load_request, RequestOrigin, RequestState};
-use crate::spec::{FieldSpec, PromptSpec, Urgency};
 use serde_json::json;
+
+use super::*;
+use crate::{
+    error::ElicitError,
+    inbox::{enqueue, inbox_pending_dir, load_request, RequestOrigin, RequestState},
+    spec::{FieldSpec, PromptSpec, Urgency},
+};
 
 /// A request whose TTL is decades past, as it looks with no daemon
 /// running to sweep it.
@@ -40,10 +43,7 @@ fn expired_request(id: &str) -> PendingRequest {
 /// Boot a real IPC server over `root` and return a connected client.
 async fn server_and_client(
     root: &std::path::Path,
-) -> (
-    crate::inbox::ipc::Client,
-    tokio::task::JoinHandle<()>,
-) {
+) -> (crate::inbox::ipc::Client, tokio::task::JoinHandle<()>) {
     let sock = crate::inbox::ipc::ipc_socket_path(root);
     let state = RpcState::new(root.to_path_buf(), sock.clone());
     let listener = bind_listener(&sock).await.expect("bind ipc socket");
@@ -88,10 +88,13 @@ async fn inbox_answer_refuses_an_expired_request() {
         .call("inbox.answer", answer_params("ipc-stale-1", "answered"))
         .expect_err("an expired request must not be answerable");
     match err {
-        ElicitError::Rpc { code, message } => {
+        ElicitError::Rpc {
+            code,
+            message,
+        } => {
             assert_eq!(code, crate::inbox::ipc::ERR_EXPIRED, "message: {message}");
             assert!(message.contains("expired"), "message: {message}");
-        }
+        },
         other => panic!("expected an RPC error, got {other:?}"),
     }
     server.abort();

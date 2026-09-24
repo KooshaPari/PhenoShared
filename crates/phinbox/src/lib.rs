@@ -2,11 +2,10 @@
 //!
 //! This crate exposes three coordinated surfaces:
 //!
-//! - **Library** ([`elicit`], [`elicit_async`], [`ElicitOptions`]) for use
-//!   from Rust code.
+//! - **Library** ([`elicit`], [`elicit_async`], [`ElicitOptions`]) for use from Rust code.
 //! - **CLI binary** (`phinbox`) for shell scripting.
-//! - **MCP server** (`phinbox-mcp`) for use as an MCP tool from Forge,
-//!   Codex, Cursor, or any stdio JSON-RPC client.
+//! - **MCP server** (`phinbox-mcp`) for use as an MCP tool from Forge, Codex, Cursor, or any stdio
+//!   JSON-RPC client.
 //!
 //! The popup is rendered by the operating system — `NSAlert` on macOS, a
 //! Win32 form on Windows, and a zenity/kdialog/Tk/inquire chain on Linux.
@@ -17,17 +16,17 @@
 //! `plans/2026-07-21-phinbox-EXECUTION-PLAN-v1.md` for the phased
 //! implementation plan.
 
-pub mod spec;
 pub mod approval;
-pub mod options;
 pub mod error;
 pub mod escape;
+pub mod inbox;
+pub mod installer;
+pub mod options;
 pub mod platform;
 pub mod render;
 pub mod schema;
+pub mod spec;
 pub mod tracing_setup;
-pub mod inbox;
-pub mod installer;
 pub mod views;
 
 #[cfg(feature = "mcp")]
@@ -51,15 +50,18 @@ pub mod tray;
 /// TTY allocation).
 pub mod tui;
 
-pub use approval::{ToolApproval, AffectedFile};
+pub use approval::{AffectedFile, ToolApproval};
 pub use error::ElicitError;
-pub use inbox::daemon::{
-    live_url as inbox_live_url, read_lockfile as inbox_read_lockfile, DEFAULT_PORT as INBOX_DEFAULT_PORT,
-};
-pub use inbox::notify::{inbox_open_url, inbox_open_url_for, open_in_default_browser, NotifyAttempt, NotifyChannels};
 pub use inbox::{
-    load as inbox_load, list_pending as inbox_list_pending, wait_for_response, PendingRequest,
-    RequestOrigin, RequestState,
+    daemon::{
+        live_url as inbox_live_url, read_lockfile as inbox_read_lockfile,
+        DEFAULT_PORT as INBOX_DEFAULT_PORT,
+    },
+    list_pending as inbox_list_pending, load as inbox_load,
+    notify::{
+        inbox_open_url, inbox_open_url_for, open_in_default_browser, NotifyAttempt, NotifyChannels,
+    },
+    wait_for_response, PendingRequest, RequestOrigin, RequestState,
 };
 pub use options::{ElicitOptions, RendererPreference};
 pub use platform::Platform;
@@ -67,11 +69,11 @@ pub use spec::{
     ButtonSpec, ChoiceOption, DateTimeKind, ElicitResponse, FieldSpec, FieldValue, NotesSpec,
     PromptSpec, Urgency,
 };
+pub use tray::{build_tray, MenuAction, Tray, TrayConfig, TrayError, TrayEvent, TrayResult};
 pub use tui::{
     render_plain as tui_render_plain, run as tui_run, snapshot_inbox as tui_snapshot, ListEntry,
     TuiOutcome, ViewerState,
 };
-pub use tray::{build_tray, MenuAction, Tray, TrayConfig, TrayError, TrayEvent, TrayResult};
 pub use views::{render_form_html, render_full_html, render_plain_text, render_summary};
 
 /// Render a popup and block until the user responds (or the popup times out).
@@ -96,10 +98,7 @@ pub fn elicit(spec: &PromptSpec) -> Result<ElicitResponse, ElicitError> {
 /// Render a popup with explicit options.
 ///
 /// See [`ElicitOptions`] for the override knobs.
-pub fn elicit_with(
-    spec: &PromptSpec,
-    opts: &ElicitOptions,
-) -> Result<ElicitResponse, ElicitError> {
+pub fn elicit_with(spec: &PromptSpec, opts: &ElicitOptions) -> Result<ElicitResponse, ElicitError> {
     render::dispatch(spec, opts)
 }
 

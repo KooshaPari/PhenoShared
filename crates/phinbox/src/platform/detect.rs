@@ -1,7 +1,8 @@
 //! Platform and renderer detection.
 
-use crate::options::RendererPreference;
 use serde::{Deserialize, Serialize};
+
+use crate::options::RendererPreference;
 
 /// The OS the binary is running on.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
@@ -68,8 +69,8 @@ pub fn detect_renderer(pref: RendererPreference) -> RendererKind {
         RendererPreference::ForceTty => RendererKind::Tty,
         RendererPreference::AutoGui => {
             let is_ci = std::env::var_os("CI").is_some();
-            let is_ssh = std::env::var_os("SSH_CLIENT").is_some()
-                || std::env::var_os("SSH_TTY").is_some();
+            let is_ssh =
+                std::env::var_os("SSH_CLIENT").is_some() || std::env::var_os("SSH_TTY").is_some();
             let has_display = std::env::var_os("DISPLAY").is_some()
                 || std::env::var_os("WAYLAND_DISPLAY").is_some();
 
@@ -80,7 +81,7 @@ pub fn detect_renderer(pref: RendererPreference) -> RendererKind {
             } else {
                 RendererKind::Tty
             }
-        }
+        },
     }
 }
 

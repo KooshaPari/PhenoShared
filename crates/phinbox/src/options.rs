@@ -1,7 +1,6 @@
 //! Caller-tunable knobs for [`elicit_with`](crate::elicit_with).
 
-use std::path::PathBuf;
-use std::time::Duration;
+use std::{path::PathBuf, time::Duration};
 
 /// Optional overrides for an [`elicit`](crate::elicit) call.
 #[derive(Debug, Clone, Default)]
@@ -9,7 +8,8 @@ pub struct ElicitOptions {
     /// Renderer selection. Default: [`RendererPreference::AutoGui`].
     pub renderer: RendererPreference,
 
-    /// Per-call timeout. If `None`, uses [`PromptSpec::timeout_secs`](crate::PromptSpec::timeout_secs).
+    /// Per-call timeout. If `None`, uses
+    /// [`PromptSpec::timeout_secs`](crate::PromptSpec::timeout_secs).
     pub timeout: Option<Duration>,
 
     /// Working directory used to resolve relative paths (e.g., custom icons).

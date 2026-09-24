@@ -1,12 +1,10 @@
 //! Form detail page, field-widget renderer, and answer confirmation page.
 
-use crate::inbox::PendingRequest;
-use crate::spec::FieldSpec;
-
-use super::super::css::full_html_css;
-use super::super::helpers::{
-    field_kind_label, format_age, html_attr, html_escape, unix_now_ms_diff, NAV_HTML,
+use super::super::{
+    css::full_html_css,
+    helpers::{field_kind_label, format_age, html_attr, html_escape, unix_now_ms_diff, NAV_HTML},
 };
+use crate::{inbox::PendingRequest, spec::FieldSpec};
 
 // ---- form detail page ----
 
@@ -50,17 +48,14 @@ pub fn render_field_widget(field: &FieldSpec) -> String {
                 r"<label for=eli-field>{label_html}</label>\
                    <input id=eli-field type={input_type} name=value{placeholder_html}{default_html}{max_len_html} required>",
             )
-        }
+        },
         FieldSpec::LongText {
             label,
             default,
             max_length,
         } => {
             let label_html = html_escape(label);
-            let default_html = default
-                .as_deref()
-                .map(html_escape)
-                .unwrap_or_default();
+            let default_html = default.as_deref().map(html_escape).unwrap_or_default();
             let max_len_html = max_length
                 .map(|m| format!(r#" maxlength="{m}""#))
                 .unwrap_or_default();
@@ -72,7 +67,7 @@ pub fn render_field_widget(field: &FieldSpec) -> String {
                 max_len = max_len_html,
                 default = default_html,
             )
-        }
+        },
         FieldSpec::Integer {
             label,
             min,
@@ -89,7 +84,7 @@ pub fn render_field_widget(field: &FieldSpec) -> String {
                 r"<label for=eli-field>{label_html}</label>\
                    <input id=eli-field type=number name=integer{min_html}{max_html}{default_html} required>",
             )
-        }
+        },
         FieldSpec::Choice {
             label,
             options,
@@ -110,8 +105,11 @@ pub fn render_field_widget(field: &FieldSpec) -> String {
                 r"<label for=eli-field>{label_html}</label>\
                    <select id=eli-field name=value required>{opts}</select>",
             )
-        }
-        FieldSpec::Boolean { label, default } => {
+        },
+        FieldSpec::Boolean {
+            label,
+            default,
+        } => {
             let label_html = html_escape(label);
             let checked = default.unwrap_or(false);
             let checked_attr = if checked { " checked" } else { "" };
@@ -119,7 +117,7 @@ pub fn render_field_widget(field: &FieldSpec) -> String {
                 r"<label class=bool><input type=checkbox name=boolean value=on{checked_attr}> \
                    <span>{label_html}</span></label>",
             )
-        }
+        },
         FieldSpec::DateTime {
             label,
             default,
@@ -140,7 +138,7 @@ pub fn render_field_widget(field: &FieldSpec) -> String {
                 r"<label for=eli-field>{label_html}</label>\
                    <input id=eli-field type={input_type} name=value{default_html} required>",
             )
-        }
+        },
     }
 }
 
@@ -182,26 +180,15 @@ pub fn render_form_html(req: &PendingRequest) -> String {
         })
         .unwrap_or_default();
     format!(
-        "<!doctype html><html lang=en>\
-         <meta charset=utf-8>\
-         <meta name=viewport content='width=device-width,initial-scale=1'>\
-         <title>{title}</title>\
-         <style>{css}</style>\
-         <body>\
-         {nav}\
-         <div class=card{urg}><div class=row>\
-         <div class=row-main><strong>{title}</strong>\
-         <span class=ago>{ago}</span></div>\
-         <div class=row-sub><span>{field_kind}</span></div></div></div>\
-         <main class=card><h2>{question}</h2>\
-         <form method=POST action=/inbox/{rid}/answer class=actions>\
-         {widget}\
-         {notes_box}\
-         <button type=submit name=confirm value=ok class=ok>Submit</button>\
-         <button type=submit name=cancel value=1 class=cancel>Cancel</button>\
-         </form>\
-         </main>\
-         </body></html>",
+        "<!doctype html><html lang=en><meta charset=utf-8><meta name=viewport \
+         content='width=device-width,initial-scale=1'><title>{title}</title><style>{css}</\
+         style><body>{nav}<div class=card{urg}><div class=row><div \
+         class=row-main><strong>{title}</strong><span class=ago>{ago}</span></div><div \
+         class=row-sub><span>{field_kind}</span></div></div></div><main \
+         class=card><h2>{question}</h2><form method=POST action=/inbox/{rid}/answer \
+         class=actions>{widget}{notes_box}<button type=submit name=confirm value=ok \
+         class=ok>Submit</button><button type=submit name=cancel value=1 \
+         class=cancel>Cancel</button></form></main></body></html>",
         title = html_escape(req.spec.title.as_str()),
         css = full_html_css(),
         nav = NAV_HTML,
@@ -227,17 +214,11 @@ pub fn render_answer_html(_request_id: &str, success: bool, message: &str) -> St
         "Failed to record answer"
     };
     format!(
-        "<!doctype html><html lang=en>\
-         <meta charset=utf-8>\
-         <meta name=viewport content='width=device-width,initial-scale=1'>\
-         <title>{icon} {heading}</title>\
-         <style>{css}</style>\
-         <body>\
-         {nav}\
-         <main class=card><h2>{icon} {heading}</h2>\
-         <p>{message}</p>\
-         <a href=/inbox class=ok>Return to inbox</a></main>\
-         </body></html>",
+        "<!doctype html><html lang=en><meta charset=utf-8><meta name=viewport \
+         content='width=device-width,initial-scale=1'><title>{icon} \
+         {heading}</title><style>{css}</style><body>{nav}<main class=card><h2>{icon} \
+         {heading}</h2><p>{message}</p><a href=/inbox class=ok>Return to \
+         inbox</a></main></body></html>",
         icon = icon,
         heading = heading,
         css = full_html_css(),

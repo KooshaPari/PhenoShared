@@ -6,9 +6,12 @@
 
 use std::path::Path;
 
-use crate::inbox::{expire_if_due, finalize, load, PendingRequest, RequestState};
-use crate::spec::{ElicitResponse, FieldSpec, FieldValue};
 use serde::Deserialize;
+
+use crate::{
+    inbox::{expire_if_due, finalize, load, PendingRequest, RequestState},
+    spec::{ElicitResponse, FieldSpec, FieldValue},
+};
 
 /// Why a form submission was refused.
 ///
@@ -29,9 +32,12 @@ pub(crate) enum SubmitError {
 impl std::fmt::Display for SubmitError {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
-            Self::Expired { expires_at_ms } => write!(
+            Self::Expired {
+                expires_at_ms,
+            } => write!(
                 f,
-                "request expired at {expires_at_ms} ms since the epoch; a late answer is not recorded"
+                "request expired at {expires_at_ms} ms since the epoch; a late answer is not \
+                 recorded"
             ),
             Self::AlreadyFinalized(state) => write!(
                 f,
@@ -73,8 +79,7 @@ pub(crate) fn submit_answer(
     body: &[u8],
 ) -> Result<(), SubmitError> {
     // Accept both application/x-www-form-urlencoded and JSON.
-    let body_str =
-        std::str::from_utf8(body).map_err(|e| SubmitError::BadRequest(e.to_string()))?;
+    let body_str = std::str::from_utf8(body).map_err(|e| SubmitError::BadRequest(e.to_string()))?;
     let payload: FormPayload = if body_str.trim_start().starts_with('{') {
         serde_json::from_str(body_str).map_err(|e| SubmitError::BadRequest(e.to_string()))?
     } else {
@@ -140,7 +145,9 @@ pub(crate) fn submit_answer(
             inbox_root,
             &PendingRequest {
                 state: RequestState::Cancelled,
-                response: Some(ElicitResponse::Cancelled { notes }),
+                response: Some(ElicitResponse::Cancelled {
+                    notes,
+                }),
                 ..req.clone()
             },
         )
@@ -181,7 +188,7 @@ pub(crate) fn url_decode_form(body: &str) -> FormPayload {
             "notes" => out.notes = Some(v),
             "cancel" => out.cancel = Some(v),
             "confirm" => out.confirm = Some(v),
-            _ => {}
+            _ => {},
         }
     }
     out
@@ -204,15 +211,15 @@ pub(crate) fn url_decode(s: &str) -> String {
                     out.push(b'%');
                     i += 1;
                 }
-            }
+            },
             b'+' => {
                 out.push(b' ');
                 i += 1;
-            }
+            },
             b => {
                 out.push(b);
                 i += 1;
-            }
+            },
         }
     }
     String::from_utf8_lossy(&out).into_owned()
@@ -239,22 +246,28 @@ pub(crate) fn coerce_field_value(
     payload: &FormPayload,
 ) -> Result<FieldValue, SubmitError> {
     match field {
-        FieldSpec::Text { .. } => Ok(FieldValue::Text(required_value(payload)?)),
-        FieldSpec::LongText { .. } => Ok(FieldValue::LongText(required_value(payload)?)),
-        FieldSpec::Choice { options, .. } => {
+        FieldSpec::Text {
+            ..
+        } => Ok(FieldValue::Text(required_value(payload)?)),
+        FieldSpec::LongText {
+            ..
+        } => Ok(FieldValue::LongText(required_value(payload)?)),
+        FieldSpec::Choice {
+            options, ..
+        } => {
             let raw = required_value(payload)?;
             let idx = options
                 .iter()
                 .position(|o| o.value == raw || o.label == raw)
-                .ok_or_else(|| {
-                    SubmitError::BadRequest(format!("choice '{raw}' not in options"))
-                })?;
+                .ok_or_else(|| SubmitError::BadRequest(format!("choice '{raw}' not in options")))?;
             Ok(FieldValue::Choice {
                 value: options[idx].value.clone(),
                 index: idx,
             })
-        }
-        FieldSpec::Boolean { .. } => {
+        },
+        FieldSpec::Boolean {
+            ..
+        } => {
             // An unchecked HTML checkbox omits its key entirely, so absence
             // means `false`. The caller has already established that this is a
             // real submission (a submit marker was present).
@@ -266,8 +279,10 @@ pub(crate) fn coerce_field_value(
                     "'{other}' is not a boolean"
                 ))),
             }
-        }
-        FieldSpec::Integer { .. } => {
+        },
+        FieldSpec::Integer {
+            ..
+        } => {
             let raw = payload
                 .integer
                 .clone()
@@ -278,8 +293,10 @@ pub(crate) fn coerce_field_value(
                 .parse()
                 .map_err(|e| SubmitError::BadRequest(format!("not an int: {e}")))?;
             Ok(FieldValue::Integer(n))
-        }
-        FieldSpec::DateTime { .. } => Ok(FieldValue::DateTime(required_value(payload)?)),
+        },
+        FieldSpec::DateTime {
+            ..
+        } => Ok(FieldValue::DateTime(required_value(payload)?)),
     }
 }
 

@@ -8,23 +8,27 @@
 pub(crate) mod response;
 pub(crate) mod route;
 
-use std::io::{BufRead, BufReader, Read};
-use std::net::TcpStream;
-use std::path::Path;
-use std::sync::atomic::{AtomicBool, Ordering};
-use std::sync::Arc;
-use std::thread;
-use std::time::Duration;
+use std::{
+    io::{BufRead, BufReader, Read},
+    net::TcpStream,
+    path::Path,
+    sync::{
+        atomic::{AtomicBool, Ordering},
+        Arc,
+    },
+    thread,
+    time::Duration,
+};
 
-use crate::inbox::{expire_if_due, list_pending, load, RequestState};
-use tracing::warn;
-
-use super::lockfile::LOCKFILE_NAME;
 use response::{
     reason_phrase, redirect_response, render_inbox_css, render_inbox_html, simple_text,
     text_response, write_response, Reply,
 };
 use route::{parse_route, Route};
+use tracing::warn;
+
+use super::lockfile::LOCKFILE_NAME;
+use crate::inbox::{expire_if_due, list_pending, load, RequestState};
 
 /// How long an idle HTTP connection is allowed to live.
 const HTTP_KEEPALIVE_TIMEOUT: Duration = Duration::from_secs(30);
@@ -76,14 +80,14 @@ pub(crate) fn run_http_loop(
                 thread::spawn(move || {
                     let _ = handle_connection(stream, &inbox_root, &shutdown);
                 });
-            }
+            },
             Err(ref e) if e.kind() == std::io::ErrorKind::WouldBlock => {
                 thread::sleep(Duration::from_millis(50));
-            }
+            },
             Err(e) => {
                 warn!(error = %e, "accept failed");
                 thread::sleep(Duration::from_millis(50));
-            }
+            },
         }
     }
     Ok(())
@@ -136,14 +140,12 @@ fn handle_connection(
         Route::Health => Some(simple_text(200, "ok")),
         Route::Index => Some(text_response(
             200,
-            &crate::views::render_inbox_index_html(
-                &list_pending(inbox_root).unwrap_or_default(),
-            ),
+            &crate::views::render_inbox_index_html(&list_pending(inbox_root).unwrap_or_default()),
         )),
         Route::InboxForm => match id.and_then(|id| load_settled(inbox_root, &id)) {
             Some(req) if matches!(req.state, RequestState::Expired) => {
                 Some(text_response(410, &crate::views::render_expired_html(&req)))
-            }
+            },
             Some(req) => Some(text_response(200, &render_inbox_html(&req))),
             None => Some(simple_text(404, "request not found")),
         },
@@ -158,13 +160,13 @@ fn handle_connection(
                         "text/plain; charset=utf-8",
                         b"missing id",
                     )
-                }
+                },
             };
             if method == "GET" {
                 match load_settled(inbox_root, &id) {
                     Some(req) if matches!(req.state, RequestState::Expired) => {
                         Some(text_response(410, &crate::views::render_expired_html(&req)))
-                    }
+                    },
                     Some(req) => Some(text_response(200, &render_inbox_html(&req))),
                     None => Some(simple_text(404, "request not found")),
                 }
@@ -195,41 +197,39 @@ fn handle_connection(
                 match load_settled(inbox_root, &id) {
                     Some(req) if matches!(req.state, RequestState::Expired) => {
                         Some(text_response(410, &crate::views::render_expired_html(&req)))
-                    }
+                    },
                     _ => match super::form::submit_answer(inbox_root, &id, &buf) {
                         Ok(()) => {
                             redirect_response(&mut stream, &format!("/inbox/{id}/done"))?;
                             None
-                        }
+                        },
                         // Raced the TTL between the settle above and the
                         // submit: the same refusal, with the same status.
-                        Err(super::form::SubmitError::Expired { expires_at_ms }) => {
-                            Some(text_response(
-                                410,
-                                &format!(
-                                    "<h1>Request Expired</h1>\
-                                     <p>This request expired at {expires_at_ms} ms since the \
-                                     epoch and can no longer be answered.</p>\
-                                     <a href=/inbox>Return to inbox</a>"
-                                ),
-                            ))
-                        }
+                        Err(super::form::SubmitError::Expired {
+                            expires_at_ms,
+                        }) => Some(text_response(
+                            410,
+                            &format!(
+                                "<h1>Request Expired</h1><p>This request expired at \
+                                 {expires_at_ms} ms since the epoch and can no longer be \
+                                 answered.</p><a href=/inbox>Return to inbox</a>"
+                            ),
+                        )),
                         Err(super::form::SubmitError::AlreadyFinalized(state)) => {
                             Some(text_response(
                                 409,
                                 &format!(
-                                    "<h1>Already answered</h1>\
-                                     <p>This request is already {state:?}; the first answer \
-                                     stands and was not changed.</p>\
-                                     <a href=/inbox>Return to inbox</a>"
+                                    "<h1>Already answered</h1><p>This request is already \
+                                     {state:?}; the first answer stands and was not \
+                                     changed.</p><a href=/inbox>Return to inbox</a>"
                                 ),
                             ))
-                        }
+                        },
                         Err(e) => Some(text_response(400, &format!("<h1>Error</h1><p>{e}</p>"))),
                     },
                 }
             }
-        }
+        },
         Route::Done => match id.and_then(|id| load(inbox_root, &id).ok()) {
             Some(req) => {
                 let html = crate::views::render_answer_html(
@@ -242,24 +242,28 @@ fn handle_connection(
                     },
                 );
                 Some(text_response(200, &html))
-            }
+            },
             None => Some(simple_text(404, "request not found")),
         },
         Route::Static(p) => match p.as_str() {
-            "" | "index.css" | "index.html" => return write_response(
-                &mut stream,
-                200,
-                "OK",
-                "text/css; charset=utf-8",
-                render_inbox_css().as_bytes(),
-            ),
-            other if other.ends_with(".css") => return write_response(
-                &mut stream,
-                200,
-                "OK",
-                "text/css; charset=utf-8",
-                render_inbox_css().as_bytes(),
-            ),
+            "" | "index.css" | "index.html" => {
+                return write_response(
+                    &mut stream,
+                    200,
+                    "OK",
+                    "text/css; charset=utf-8",
+                    render_inbox_css().as_bytes(),
+                )
+            },
+            other if other.ends_with(".css") => {
+                return write_response(
+                    &mut stream,
+                    200,
+                    "OK",
+                    "text/css; charset=utf-8",
+                    render_inbox_css().as_bytes(),
+                )
+            },
             other => {
                 let body = format!("not found: {other}");
                 return write_response(
@@ -269,7 +273,7 @@ fn handle_connection(
                     "text/plain; charset=utf-8",
                     body.as_bytes(),
                 );
-            }
+            },
         },
         Route::NotFound => Some(simple_text(404, "not found")),
         Route::Shutdown => {
@@ -279,7 +283,7 @@ fn handle_connection(
             } else {
                 Some(simple_text(403, "use POST"))
             }
-        }
+        },
     };
 
     if let Some((status, body)) = reply {

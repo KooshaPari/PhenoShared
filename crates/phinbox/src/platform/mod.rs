@@ -15,12 +15,15 @@ pub mod windows;
 #[cfg(target_os = "linux")]
 pub mod linux;
 
+use std::time::Duration;
+
 pub use detect::{detect, detect_renderer, Platform, RendererKind};
 
-use crate::error::ElicitError;
-use crate::options::ElicitOptions;
-use crate::spec::{ElicitResponse, PromptSpec};
-use std::time::Duration;
+use crate::{
+    error::ElicitError,
+    options::ElicitOptions,
+    spec::{ElicitResponse, PromptSpec},
+};
 
 /// Resolve the wall-clock deadline for a popup, if any.
 ///
@@ -58,7 +61,7 @@ pub fn render_on_platform(
             } else {
                 tty::render(spec, opts)
             }
-        }
+        },
         RendererKind::Tty => tty::render(spec, opts),
         RendererKind::Gui => {
             #[cfg(target_os = "macos")]
@@ -78,7 +81,7 @@ pub fn render_on_platform(
                 let _ = (spec, opts);
                 Err(ElicitError::NoRenderer)
             }
-        }
+        },
     }
 }
 #[cfg(test)]

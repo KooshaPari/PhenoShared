@@ -6,8 +6,8 @@
 //!
 //! 1. `osascript` is a system component on every macOS install (since OS 8).
 //! 2. Linking `AppKit` requires Xcode SDK + a Cocoa build script.
-//! 3. The popup is rendered out-of-process, so the MCP server is never
-//!    blocked on the `AppKit` main thread.
+//! 3. The popup is rendered out-of-process, so the MCP server is never blocked on the `AppKit` main
+//!    thread.
 //!
 //! Wire format: we emit a single `display dialog` call with custom
 //! properties (title, default answer, icon, timeout). The user-entered
@@ -17,16 +17,20 @@
 mod parse;
 mod script;
 
-use std::os::unix::process::CommandExt;
-use std::process::{Command, Stdio};
-use std::time::{Duration, Instant};
-
-use crate::error::ElicitError;
-use crate::options::ElicitOptions;
-use crate::spec::{ElicitResponse, PromptSpec};
+use std::{
+    os::unix::process::CommandExt,
+    process::{Command, Stdio},
+    time::{Duration, Instant},
+};
 
 use parse::parse_output;
 use script::build_script;
+
+use crate::{
+    error::ElicitError,
+    options::ElicitOptions,
+    spec::{ElicitResponse, PromptSpec},
+};
 
 /// Render the popup on macOS.
 ///
@@ -56,7 +60,7 @@ pub fn render(spec: &PromptSpec, opts: &ElicitOptions) -> Result<ElicitResponse,
             Ok(Some(_status)) => {
                 let out = child.wait_with_output().map_err(ElicitError::Io)?;
                 break out;
-            }
+            },
             Ok(None) => {
                 if timeout.is_some_and(|t| start.elapsed() >= t) {
                     let _ = child.kill();
@@ -66,7 +70,7 @@ pub fn render(spec: &PromptSpec, opts: &ElicitOptions) -> Result<ElicitResponse,
                     });
                 }
                 std::thread::sleep(Duration::from_millis(100));
-            }
+            },
             Err(e) => return Err(ElicitError::Io(e)),
         }
     };

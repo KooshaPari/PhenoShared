@@ -5,7 +5,8 @@ pub mod metrics {
     use std::sync::OnceLock;
 
     use prometheus::{
-        register_counter_vec, register_gauge, register_histogram_vec, CounterVec, Gauge, HistogramVec,
+        register_counter_vec, register_gauge, register_histogram_vec, CounterVec, Gauge,
+        HistogramVec,
     };
 
     static IN_FLIGHT: OnceLock<Gauge> = OnceLock::new();
@@ -17,11 +18,7 @@ pub mod metrics {
     /// Initialize all metric families. Idempotent — safe to call multiple times.
     pub fn init() {
         IN_FLIGHT.get_or_init(|| {
-            register_gauge!(
-                "phinbox_in_flight",
-                "Number of popups currently open"
-            )
-            .unwrap()
+            register_gauge!("phinbox_in_flight", "Number of popups currently open").unwrap()
         });
         TOTAL.get_or_init(|| {
             register_counter_vec!(
@@ -77,15 +74,13 @@ pub mod metrics {
         if status == "timed_out" {
             if let Some(c) = TIMEOUTS.get() {
                 let platform = format!("{:?}", crate::platform());
-                c.with_label_values(&[platform])
-                    .inc_by(1.0);
+                c.with_label_values(&[platform]).inc_by(1.0);
             }
         }
         if status == "failed" {
             if let Some(c) = FAILURES.get() {
                 let platform = format!("{:?}", crate::platform());
-                c.with_label_values(&[platform])
-                    .inc_by(1.0);
+                c.with_label_values(&[platform]).inc_by(1.0);
             }
         }
         if let Some(h) = ELAPSED.get() {

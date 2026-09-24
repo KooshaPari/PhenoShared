@@ -9,9 +9,11 @@
 mod powershell;
 mod shell;
 
-use std::fs;
-use std::path::{Path, PathBuf};
-use std::process::Command;
+use std::{
+    fs,
+    path::{Path, PathBuf},
+    process::Command,
+};
 
 // ---------------------------------------------------------------------------
 // Public types
@@ -105,17 +107,25 @@ pub fn default_bin_dir() -> PathBuf {
 }
 
 fn default_inbox_root() -> PathBuf {
-    if let Ok(p) = std::env::var("PHINBOX_INBOX_DIR") { return PathBuf::from(p); }
-    if let Ok(p) = std::env::var("XDG_DATA_HOME") { return PathBuf::from(p).join("phinbox"); }
+    if let Ok(p) = std::env::var("PHINBOX_INBOX_DIR") {
+        return PathBuf::from(p);
+    }
+    if let Ok(p) = std::env::var("XDG_DATA_HOME") {
+        return PathBuf::from(p).join("phinbox");
+    }
     if cfg!(target_os = "macos") {
         if let Some(home) = std::env::var_os("HOME") {
             return PathBuf::from(home).join("Library/Application Support/phinbox");
         }
     }
     if cfg!(target_os = "windows") {
-        if let Ok(p) = std::env::var("LOCALAPPDATA") { return PathBuf::from(p).join("phinbox"); }
+        if let Ok(p) = std::env::var("LOCALAPPDATA") {
+            return PathBuf::from(p).join("phinbox");
+        }
     }
-    if let Some(home) = std::env::var_os("HOME") { return PathBuf::from(home).join(".local/share/phinbox"); }
+    if let Some(home) = std::env::var_os("HOME") {
+        return PathBuf::from(home).join(".local/share/phinbox");
+    }
     std::env::temp_dir().join("phinbox-inbox")
 }
 
@@ -123,22 +133,38 @@ fn default_inbox_root() -> PathBuf {
 pub fn source_bin_dir() -> PathBuf {
     if let Ok(p) = std::env::var("PHINBOX_SRC_BIN") {
         let p = PathBuf::from(p);
-        if p.is_dir() { return p; }
+        if p.is_dir() {
+            return p;
+        }
     }
-    std::env::current_exe().ok()
+    std::env::current_exe()
+        .ok()
         .and_then(|p| p.parent().map(std::path::Path::to_path_buf))
         .unwrap_or_else(|| PathBuf::from("."))
 }
 
 fn copy_binary(src: &Path, dst_dir: &Path, name: &str) -> Result<PathBuf, String> {
-    let exe = if cfg!(windows) { format!("{name}.exe") } else { name.to_string() };
+    let exe = if cfg!(windows) {
+        format!("{name}.exe")
+    } else {
+        name.to_string()
+    };
     let src_path = src.join(&exe);
     let dst_path = dst_dir.join(&exe);
     if !src_path.exists() {
-        return Err(format!("source binary not found: {} (build phinbox first or set $PHINBOX_SRC_BIN)", src_path.display()));
+        return Err(format!(
+            "source binary not found: {} (build phinbox first or set $PHINBOX_SRC_BIN)",
+            src_path.display()
+        ));
     }
-    fs::copy(&src_path, &dst_path)
-        .map_err(|e| format!("copy {} -> {}: {}", src_path.display(), dst_path.display(), e))?;
+    fs::copy(&src_path, &dst_path).map_err(|e| {
+        format!(
+            "copy {} -> {}: {}",
+            src_path.display(),
+            dst_path.display(),
+            e
+        )
+    })?;
     #[cfg(unix)]
     {
         use std::os::unix::fs::PermissionsExt;
@@ -152,11 +178,18 @@ fn copy_binary(src: &Path, dst_dir: &Path, name: &str) -> Result<PathBuf, String
 }
 
 fn run_smoke(cli: &Path) -> Result<SmokeResult, String> {
-    let output = Command::new(cli).args(["smoke", "--no-render"]).output()
+    let output = Command::new(cli)
+        .args(["smoke", "--no-render"])
+        .output()
         .map_err(|e| format!("failed to spawn smoke: {e}"))?;
     let stdout = String::from_utf8_lossy(&output.stdout).to_string();
     let stderr = String::from_utf8_lossy(&output.stderr).to_string();
-    Ok(SmokeResult { ok: output.status.success(), stdout, stderr, exit_code: output.status.code() })
+    Ok(SmokeResult {
+        ok: output.status.success(),
+        stdout,
+        stderr,
+        exit_code: output.status.code(),
+    })
 }
 
 // ---------------------------------------------------------------------------
@@ -166,26 +199,47 @@ fn run_smoke(cli: &Path) -> Result<SmokeResult, String> {
 pub fn install(opts: &InstallOptions) -> Result<InstallReport, String> {
     let bin_dir = opts.prefix.clone().unwrap_or_else(default_bin_dir);
     let mut report = InstallReport {
-        bin_dir: bin_dir.clone(), cli_path: PathBuf::new(), mcp_path: PathBuf::new(),
-        inbox_dir: opts.inbox_dir.clone(), path_exports: Vec::new(), shell_rc_updated: Vec::new(),
-        autostart_installed: false, autostart_target: None, smoke: None, warnings: Vec::new(),
+        bin_dir: bin_dir.clone(),
+        cli_path: PathBuf::new(),
+        mcp_path: PathBuf::new(),
+        inbox_dir: opts.inbox_dir.clone(),
+        path_exports: Vec::new(),
+        shell_rc_updated: Vec::new(),
+        autostart_installed: false,
+        autostart_target: None,
+        smoke: None,
+        warnings: Vec::new(),
     };
     if opts.dry_run {
-        report.cli_path = bin_dir.join(if cfg!(windows) { "phinbox.exe" } else { "phinbox" });
-        report.mcp_path = bin_dir.join(if cfg!(windows) { "phinbox-mcp.exe" } else { "phinbox-mcp" });
+        report.cli_path = bin_dir.join(if cfg!(windows) {
+            "phinbox.exe"
+        } else {
+            "phinbox"
+        });
+        report.mcp_path = bin_dir.join(if cfg!(windows) {
+            "phinbox-mcp.exe"
+        } else {
+            "phinbox-mcp"
+        });
         return Ok(report);
     }
-    fs::create_dir_all(&bin_dir).map_err(|e| format!("failed to create bin dir {}: {}", bin_dir.display(), e))?;
+    fs::create_dir_all(&bin_dir)
+        .map_err(|e| format!("failed to create bin dir {}: {}", bin_dir.display(), e))?;
     fs::create_dir_all(&opts.inbox_dir).ok();
     let src = source_bin_dir();
     report.cli_path = copy_binary(&src, &bin_dir, "phinbox")?;
     report.mcp_path = copy_binary(&src, &bin_dir, "phinbox-mcp")?;
     if opts.update_shell_rc {
-        if let Some(rc) = shell::update_path_and_rc(&bin_dir) { report.shell_rc_updated.extend(rc); }
+        if let Some(rc) = shell::update_path_and_rc(&bin_dir) {
+            report.shell_rc_updated.extend(rc);
+        }
     }
     if opts.register_launch_agent {
         match install_autostart(&report.cli_path) {
-            Ok(target) => { report.autostart_installed = true; report.autostart_target = Some(target); }
+            Ok(target) => {
+                report.autostart_installed = true;
+                report.autostart_target = Some(target);
+            },
             Err(e) => report.warnings.push(format!("autostart: {e}")),
         }
     }
@@ -201,25 +255,43 @@ pub fn uninstall(opts: &UninstallOptions) -> Result<UninstallReport, String> {
     let mut removed = Vec::new();
     let mut warnings = Vec::new();
     for name in ["phinbox", "phinbox-mcp"] {
-        let exe = if cfg!(windows) { format!("{name}.exe") } else { name.to_string() };
+        let exe = if cfg!(windows) {
+            format!("{name}.exe")
+        } else {
+            name.to_string()
+        };
         let p = bin_dir.join(&exe);
         if p.exists() {
-            if let Err(e) = fs::remove_file(&p) { warnings.push(format!("remove {}: {e}", p.display())); }
-            else { removed.push(p.display().to_string()); }
+            if let Err(e) = fs::remove_file(&p) {
+                warnings.push(format!("remove {}: {e}", p.display()));
+            } else {
+                removed.push(p.display().to_string());
+            }
         }
     }
     #[cfg(not(target_os = "windows"))]
-    { shell::remove_autostart(&mut removed, &mut warnings); }
+    {
+        shell::remove_autostart(&mut removed, &mut warnings);
+    }
     #[cfg(target_os = "windows")]
-    { powershell::remove_scheduled_task(); }
-    Ok(UninstallReport { removed, warnings })
+    {
+        powershell::remove_scheduled_task();
+    }
+    Ok(UninstallReport {
+        removed,
+        warnings,
+    })
 }
 
 fn install_autostart(cli_path: &Path) -> Result<PathBuf, String> {
     #[cfg(not(target_os = "windows"))]
-    { shell::install_autostart(cli_path) }
+    {
+        shell::install_autostart(cli_path)
+    }
     #[cfg(target_os = "windows")]
-    { powershell::install_scheduled_task(cli_path) }
+    {
+        powershell::install_scheduled_task(cli_path)
+    }
 }
 
 #[cfg(test)]
@@ -227,14 +299,18 @@ mod tests {
     use super::*;
 
     #[test]
-    fn default_bin_dir_is_resolvable() { let _ = default_bin_dir(); }
+    fn default_bin_dir_is_resolvable() {
+        let _ = default_bin_dir();
+    }
 
     #[test]
     fn install_dry_run_does_not_touch_disk() {
         let report = install(&InstallOptions {
             prefix: Some(PathBuf::from("/tmp/phinbox-dry-run-test")),
-            dry_run: true, ..Default::default()
-        }).unwrap();
+            dry_run: true,
+            ..Default::default()
+        })
+        .unwrap();
         assert!(report.autostart_target.is_none());
         assert!(!report.cli_path.as_os_str().is_empty());
         assert!(!Path::new("/tmp/phinbox-dry-run-test/phinbox").exists());
@@ -244,8 +320,10 @@ mod tests {
     fn uninstall_on_missing_is_a_noop() {
         let r = uninstall(&UninstallOptions {
             prefix: Some(PathBuf::from("/tmp/phinbox-missing-for-test")),
-            assume_yes: true, ..Default::default()
-        }).unwrap();
+            assume_yes: true,
+            ..Default::default()
+        })
+        .unwrap();
         assert!(r.removed.is_empty());
     }
 }

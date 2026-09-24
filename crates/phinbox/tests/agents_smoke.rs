@@ -2,13 +2,15 @@
 //! elicate MCP config entry, and the MCP server responds to the standard
 //! handshake.
 
-use std::fs;
-use std::io::{BufRead, BufReader, Write};
-use std::path::PathBuf;
-use std::process::{Command, Stdio};
-use std::sync::mpsc;
-use std::thread;
-use std::time::Duration;
+use std::{
+    fs,
+    io::{BufRead, BufReader, Write},
+    path::PathBuf,
+    process::{Command, Stdio},
+    sync::mpsc,
+    thread,
+    time::Duration,
+};
 
 // ─── helpers ────────────────────────────────────────────────────────
 fn phinbox_bin() -> PathBuf {
@@ -189,7 +191,7 @@ fn mcp_handshake_initialize_and_list_tools() {
                                 return Some(v);
                             }
                         }
-                    }
+                    },
                     Err(mpsc::RecvTimeoutError::Timeout) => return None,
                     Err(mpsc::RecvTimeoutError::Disconnected) => return None,
                 }

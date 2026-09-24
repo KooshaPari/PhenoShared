@@ -34,8 +34,8 @@ pub struct ValidateArgs {
 /// Where a spec came from, for the report envelope.
 fn read_source(args: &ValidateArgs) -> Result<(String, String), String> {
     if let Some(path) = &args.from_file {
-        let text = std::fs::read_to_string(path)
-            .map_err(|e| format!("read {}: {e}", path.display()))?;
+        let text =
+            std::fs::read_to_string(path).map_err(|e| format!("read {}: {e}", path.display()))?;
         return Ok((path.display().to_string(), text));
     }
     let inline = args
@@ -49,8 +49,7 @@ fn read_source(args: &ValidateArgs) -> Result<(String, String), String> {
 ///
 /// Public so the CLI tests can exercise it without spawning a process.
 pub fn check_spec(raw: &str, source: &str) -> Result<Value, String> {
-    let spec: PromptSpec =
-        serde_json::from_str(raw).map_err(|e| format!("parse {source}: {e}"))?;
+    let spec: PromptSpec = serde_json::from_str(raw).map_err(|e| format!("parse {source}: {e}"))?;
 
     // Same gate the render path applies (`render::dispatch`).
     spec.validate()?;
@@ -61,8 +60,7 @@ pub fn check_spec(raw: &str, source: &str) -> Result<Value, String> {
     let first = serde_json::to_value(&spec).map_err(|e| format!("serialize {source}: {e}"))?;
     let reparsed: PromptSpec = serde_json::from_value(first.clone())
         .map_err(|e| format!("serde round-trip failed for {source}: {e}"))?;
-    let second =
-        serde_json::to_value(&reparsed).map_err(|e| format!("serialize {source}: {e}"))?;
+    let second = serde_json::to_value(&reparsed).map_err(|e| format!("serialize {source}: {e}"))?;
     if first != second {
         return Err(format!("serde round-trip is not stable for {source}"));
     }
@@ -104,8 +102,9 @@ pub fn cmd_validate(args: ValidateArgs) -> Result<(), String> {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
     use clap::Parser;
+
+    use super::*;
 
     const VALID: &str = r#"{"title":"Deploy?","question":"Ship it?",
         "field":{"kind":"boolean","label":"Confirm","default":true}}"#;
@@ -175,8 +174,8 @@ mod tests {
 
     #[test]
     fn read_source_reports_a_missing_file() {
-        let err = read_source(&args(None, Some(PathBuf::from("/nonexistent/spec.json"))))
-            .unwrap_err();
+        let err =
+            read_source(&args(None, Some(PathBuf::from("/nonexistent/spec.json")))).unwrap_err();
         assert!(err.starts_with("read /nonexistent/spec.json:"), "got {err}");
     }
 
@@ -192,10 +191,12 @@ mod tests {
             Validate(ValidateArgs),
         }
 
-        let cli =
-            Wrapper::try_parse_from(["t", "validate", "--from-file", "spec.json"]).unwrap();
+        let cli = Wrapper::try_parse_from(["t", "validate", "--from-file", "spec.json"]).unwrap();
         let TestCmd::Validate(a) = cli.cmd;
-        assert_eq!(a.from_file.as_deref(), Some(std::path::Path::new("spec.json")));
+        assert_eq!(
+            a.from_file.as_deref(),
+            Some(std::path::Path::new("spec.json"))
+        );
         assert!(a.from_json.is_none());
 
         let cli = Wrapper::try_parse_from(["t", "validate", "--from-json", VALID]).unwrap();
@@ -203,16 +204,14 @@ mod tests {
         assert!(a.from_json.is_some());
 
         // `--from-file` and `--from-json` are mutually exclusive.
-        assert!(
-            Wrapper::try_parse_from([
-                "t",
-                "validate",
-                "--from-file",
-                "spec.json",
-                "--from-json",
-                "{}"
-            ])
-            .is_err()
-        );
+        assert!(Wrapper::try_parse_from([
+            "t",
+            "validate",
+            "--from-file",
+            "spec.json",
+            "--from-json",
+            "{}"
+        ])
+        .is_err());
     }
 }

@@ -8,9 +8,13 @@
 //! or their timeout fires. This is the desired behavior: closing the
 //! terminal does not lose the user's in-progress answer.
 
-use std::sync::atomic::{AtomicUsize, Ordering};
-use std::sync::Arc;
-use std::time::Duration;
+use std::{
+    sync::{
+        atomic::{AtomicUsize, Ordering},
+        Arc,
+    },
+    time::Duration,
+};
 
 use tokio::sync::oneshot;
 
@@ -92,10 +96,8 @@ impl ShutdownCoordinator {
         let this = self.clone();
         tokio::spawn(async move {
             use tokio::signal::unix::{signal, SignalKind};
-            let mut sigterm =
-                signal(SignalKind::terminate()).expect("install SIGTERM handler");
-            let mut sigint =
-                signal(SignalKind::interrupt()).expect("install SIGINT handler");
+            let mut sigterm = signal(SignalKind::terminate()).expect("install SIGTERM handler");
+            let mut sigint = signal(SignalKind::interrupt()).expect("install SIGINT handler");
             tokio::select! {
                 _ = sigterm.recv() => {},
                 _ = sigint.recv() => {},
@@ -139,8 +141,9 @@ impl Drop for InFlightGuard {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
     use std::sync::Arc;
+
+    use super::*;
 
     #[tokio::test]
     async fn cancel_all_returns_zero_when_nothing_inflight() {

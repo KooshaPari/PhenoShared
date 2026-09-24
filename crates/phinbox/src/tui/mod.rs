@@ -45,10 +45,11 @@ pub use state::{position_of, snapshot_inbox, ListEntry, TuiOutcome, ViewerState}
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::inbox::RequestOrigin;
-    use crate::spec::{FieldSpec, PromptSpec, Urgency};
-    use crate::inbox::{PendingRequest, RequestState};
-    use crate::tui::state::{build_entry, format_age, sort_entries, truncate};
+    use crate::{
+        inbox::{PendingRequest, RequestOrigin, RequestState},
+        spec::{FieldSpec, PromptSpec, Urgency},
+        tui::state::{build_entry, format_age, sort_entries, truncate},
+    };
 
     fn sample_spec() -> PromptSpec {
         PromptSpec {
@@ -319,13 +320,14 @@ mod tests {
 
 #[cfg(test)]
 mod render_tests {
+    use ratatui::{backend::TestBackend, Terminal};
+
     use super::*;
-    use crate::inbox::RequestOrigin;
-    use crate::spec::{FieldSpec, PromptSpec, Urgency};
-    use crate::inbox::{PendingRequest, RequestState};
-    use crate::tui::event;
-    use ratatui::backend::TestBackend;
-    use ratatui::Terminal;
+    use crate::{
+        inbox::{PendingRequest, RequestOrigin, RequestState},
+        spec::{FieldSpec, PromptSpec, Urgency},
+        tui::event,
+    };
 
     fn sample_spec() -> PromptSpec {
         PromptSpec {
@@ -384,10 +386,7 @@ mod render_tests {
     }
 
     /// Helper: render state to a 80x24 TestBackend, return buffer text.
-    fn render_80x24(
-        state: &ViewerState,
-        inbox_root: &std::path::Path,
-    ) -> String {
+    fn render_80x24(state: &ViewerState, inbox_root: &std::path::Path) -> String {
         let backend = TestBackend::new(80, 24);
         let mut terminal = Terminal::new(backend).unwrap();
         render::render(&mut terminal, state, inbox_root).unwrap();
@@ -548,10 +547,7 @@ mod render_tests {
             text.contains("move selection down"),
             "help content missing:\n{text}"
         );
-        assert!(
-            text.contains("quit"),
-            "quit keybinding missing:\n{text}"
-        );
+        assert!(text.contains("quit"), "quit keybinding missing:\n{text}");
     }
 
     #[test]
@@ -577,18 +573,15 @@ mod render_tests {
         // Before the fix this returned Err; now it must return Ok(false).
         let result = event::enter_raw_mode();
         match result {
-            Ok(false) => {} // expected in test environment
+            Ok(false) => {}, // expected in test environment
             Ok(true) => {
                 // If we're somehow in a TTY, that's fine too — the function
                 // succeeded and we need to clean up.
                 event::leave_raw_mode();
-            }
+            },
             Err(e) => {
-                panic!(
-                    "enter_raw_mode should return Ok(false) on failure, \
-                     not Err: {e}"
-                );
-            }
+                panic!("enter_raw_mode should return Ok(false) on failure, not Err: {e}");
+            },
         }
     }
 }

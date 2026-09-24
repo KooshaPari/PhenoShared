@@ -1,19 +1,14 @@
 use std::path::{Path, PathBuf};
 
-use super::{inbox_pending_dir, PendingRequest};
+use super::{change::InboxChangeBus, inbox_pending_dir, PendingRequest};
 use crate::error::ElicitError;
-
-use super::change::InboxChangeBus;
 
 /// Mark an expired request in-place inside the pending directory.
 ///
 /// Unlike [`super::mark::finalize`], this does NOT move the file to
 /// `answered/` — it rewrites the JSON in `inbox/` with the new terminal
 /// state so the inbox UI can still render it (greyed-out / expired badge).
-pub fn mark_expired_in_place(
-    root: &Path,
-    req: &PendingRequest,
-) -> Result<PathBuf, ElicitError> {
+pub fn mark_expired_in_place(root: &Path, req: &PendingRequest) -> Result<PathBuf, ElicitError> {
     let dir = inbox_pending_dir(root);
     let path = dir.join(format!("{}.json", req.request_id));
     if !path.exists() {

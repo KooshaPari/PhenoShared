@@ -1,8 +1,8 @@
 //! TUI state types and inbox snapshot logic.
 
+use std::{path::Path, time::Duration};
+
 use crate::inbox::{list_pending as inbox_list_pending, PendingRequest, RequestState};
-use std::path::Path;
-use std::time::Duration;
 
 /// Hard cap on entries rendered in the list pane — anything older scrolls
 /// off the bottom but stays on disk.

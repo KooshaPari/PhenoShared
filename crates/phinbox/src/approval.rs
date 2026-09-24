@@ -105,7 +105,12 @@ impl ToolApproval {
 
     /// Add a file the action will touch.
     #[must_use]
-    pub fn file(mut self, path: impl Into<String>, action: FileAction, note: Option<String>) -> Self {
+    pub fn file(
+        mut self,
+        path: impl Into<String>,
+        action: FileAction,
+        note: Option<String>,
+    ) -> Self {
         self.files.push(AffectedFile {
             path: path.into(),
             action,
@@ -225,7 +230,13 @@ mod tests {
             .to_prompt_spec();
 
         assert_eq!(spec.title, "Approve: delete files");
-        assert!(matches!(spec.field, FieldSpec::Boolean { default: Some(false), .. }));
+        assert!(matches!(
+            spec.field,
+            FieldSpec::Boolean {
+                default: Some(false),
+                ..
+            }
+        ));
         let buttons = spec.buttons.expect("buttons");
         assert_eq!(buttons.defer_label.as_deref(), Some("Defer to inbox"));
         let d = spec.details.expect("details");
@@ -239,7 +250,10 @@ mod tests {
             .any(|i| matches!(i, DetailItem::Warning { .. })));
         assert!(d.items.iter().any(|i| matches!(
             i,
-            DetailItem::File { action: FileAction::Delete, .. }
+            DetailItem::File {
+                action: FileAction::Delete,
+                ..
+            }
         )));
     }
 

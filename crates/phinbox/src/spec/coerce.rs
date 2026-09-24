@@ -11,8 +11,10 @@
 //! once, centrally, in [`crate::render::dispatch`], so it applies uniformly
 //! to every platform backend.
 
-use crate::error::ElicitError;
-use crate::spec::{DateTimeKind, FieldSpec, FieldValue};
+use crate::{
+    error::ElicitError,
+    spec::{DateTimeKind, FieldSpec, FieldValue},
+};
 
 /// Parse `raw` into the value kind declared by `spec`.
 ///
@@ -23,13 +25,22 @@ use crate::spec::{DateTimeKind, FieldSpec, FieldValue};
 /// label for a Choice, an unparseable date, ...).
 pub fn coerce(spec: &FieldSpec, raw: &str) -> Result<FieldValue, ElicitError> {
     match spec {
-        FieldSpec::Text { .. } => Ok(FieldValue::Text(raw.to_string())),
-        FieldSpec::LongText { .. } => Ok(FieldValue::LongText(raw.to_string())),
-        FieldSpec::Integer { min, max, .. } => {
+        FieldSpec::Text {
+            ..
+        } => Ok(FieldValue::Text(raw.to_string())),
+        FieldSpec::LongText {
+            ..
+        } => Ok(FieldValue::LongText(raw.to_string())),
+        FieldSpec::Integer {
+            min,
+            max,
+            ..
+        } => {
             // Some backends append units or whitespace; trim before parsing.
-            let v: i64 = raw.trim().parse().map_err(|_| {
-                ElicitError::RendererFailed(format!("not an integer: {raw:?}"))
-            })?;
+            let v: i64 = raw
+                .trim()
+                .parse()
+                .map_err(|_| ElicitError::RendererFailed(format!("not an integer: {raw:?}")))?;
             if let Some(min) = min {
                 if v < *min {
                     return Err(ElicitError::RendererFailed(format!(
@@ -45,8 +56,10 @@ pub fn coerce(spec: &FieldSpec, raw: &str) -> Result<FieldValue, ElicitError> {
                 }
             }
             Ok(FieldValue::Integer(v))
-        }
-        FieldSpec::Choice { options, .. } => {
+        },
+        FieldSpec::Choice {
+            options, ..
+        } => {
             let needle = raw.trim();
             for (i, o) in options.iter().enumerate() {
                 if o.label.eq_ignore_ascii_case(needle) || o.value.eq_ignore_ascii_case(needle) {
@@ -59,15 +72,19 @@ pub fn coerce(spec: &FieldSpec, raw: &str) -> Result<FieldValue, ElicitError> {
             Err(ElicitError::RendererFailed(format!(
                 "value {raw:?} not in choice options"
             )))
-        }
-        FieldSpec::Boolean { .. } => match raw.trim().to_ascii_lowercase().as_str() {
+        },
+        FieldSpec::Boolean {
+            ..
+        } => match raw.trim().to_ascii_lowercase().as_str() {
             "yes" | "true" | "ok" | "1" | "on" => Ok(FieldValue::Boolean(true)),
             "no" | "false" | "cancel" | "0" | "off" => Ok(FieldValue::Boolean(false)),
             other => Err(ElicitError::RendererFailed(format!(
                 "not a boolean: {other:?}"
             ))),
         },
-        FieldSpec::DateTime { picker_kind, .. } => {
+        FieldSpec::DateTime {
+            picker_kind, ..
+        } => {
             let s = raw.trim().to_string();
             let bad = |expected: &str| {
                 ElicitError::RendererFailed(format!("expected {expected}, got {s:?}"))
@@ -77,20 +94,20 @@ pub fn coerce(spec: &FieldSpec, raw: &str) -> Result<FieldValue, ElicitError> {
                     if chrono::NaiveDate::parse_from_str(&s, "%Y-%m-%d").is_err() {
                         return Err(bad("a date (YYYY-MM-DD)"));
                     }
-                }
+                },
                 DateTimeKind::Time => {
                     if chrono::NaiveTime::parse_from_str(&s, "%H:%M").is_err() {
                         return Err(bad("a time (HH:MM)"));
                     }
-                }
+                },
                 DateTimeKind::DateTime => {
                     if chrono::DateTime::parse_from_rfc3339(&s).is_err() {
                         return Err(bad("an RFC3339 timestamp"));
                     }
-                }
+                },
             }
             Ok(FieldValue::DateTime(s))
-        }
+        },
     }
 }
 
@@ -114,8 +131,14 @@ mod tests {
             label: "?".into(),
             default: None,
         };
-        assert!(matches!(coerce(&spec, "OK").unwrap(), FieldValue::Boolean(true)));
-        assert!(matches!(coerce(&spec, "Cancel").unwrap(), FieldValue::Boolean(false)));
+        assert!(matches!(
+            coerce(&spec, "OK").unwrap(),
+            FieldValue::Boolean(true)
+        ));
+        assert!(matches!(
+            coerce(&spec, "Cancel").unwrap(),
+            FieldValue::Boolean(false)
+        ));
         assert!(coerce(&spec, "maybe").is_err());
     }
 
@@ -140,11 +163,17 @@ mod tests {
         // kdialog prints the *value*; zenity prints the *label*.
         assert!(matches!(
             coerce(&spec, "staging").unwrap(),
-            FieldValue::Choice { index: 0, .. }
+            FieldValue::Choice {
+                index: 0,
+                ..
+            }
         ));
         assert!(matches!(
             coerce(&spec, "Production").unwrap(),
-            FieldValue::Choice { index: 1, .. }
+            FieldValue::Choice {
+                index: 1,
+                ..
+            }
         ));
         assert!(coerce(&spec, "nope").is_err());
     }

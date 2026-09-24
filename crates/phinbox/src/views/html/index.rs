@@ -1,29 +1,24 @@
 //! Inbox index page.
 
-use crate::inbox::PendingRequest;
-
-use super::super::css::full_html_css;
-use super::super::helpers::{
-    field_kind_label, format_age, html_attr, html_escape, truncate, unix_now_ms_diff,
-    urgency_class, urgency_label, INBOX_SLUG,
+use super::super::{
+    css::full_html_css,
+    helpers::{
+        field_kind_label, format_age, html_attr, html_escape, truncate, unix_now_ms_diff,
+        urgency_class, urgency_label, INBOX_SLUG,
+    },
 };
+use crate::inbox::PendingRequest;
 
 #[must_use]
 pub fn render_inbox_index_html(requests: &[PendingRequest]) -> String {
     let count = requests.len();
     if count == 0 {
         return format!(
-            "<!doctype html><html lang=en>\
-             <meta charset=utf-8>\
-             <meta name=viewport content='width=device-width,initial-scale=1'>\
-             <title>{title}</title>\
-             <style>{css}</style>\
-             <body>\
-             <header><h1>{title}</h1></header>\
-             <main class=empty><p>No pending requests</p>\
-             <p>Use <code>phinbox ask</code> from your agent.</p></main>\
-             <footer><p>phinbox</p></footer>\
-             </body></html>",
+            "<!doctype html><html lang=en><meta charset=utf-8><meta name=viewport \
+             content='width=device-width,initial-scale=1'><title>{title}</title><style>{css}</\
+             style><body><header><h1>{title}</h1></header><main class=empty><p>No pending \
+             requests</p><p>Use <code>phinbox ask</code> from your \
+             agent.</p></main><footer><p>phinbox</p></footer></body></html>",
             title = INBOX_SLUG,
             css = full_html_css(),
         );
@@ -43,12 +38,11 @@ pub fn render_inbox_index_html(requests: &[PendingRequest]) -> String {
             ""
         };
         rows.push_str(&format!(
-            "<a href=/inbox/{rid} class=card {urg}{expired}><div class=row>\
-             <div class=row-main><strong>{title}</strong>\
-             <span class=ago>{ago}</span></div>\
-             <div class=row-sub><span>{question}</span>\
-             <span class=badge>{urgency_label}</span>\
-             <span>{field_kind}</span>{expired_badge}</div></div></a>",
+            "<a href=/inbox/{rid} class=card {urg}{expired}><div class=row><div \
+             class=row-main><strong>{title}</strong><span class=ago>{ago}</span></div><div \
+             class=row-sub><span>{question}</span><span \
+             class=badge>{urgency_label}</span><span>{field_kind}</span>{expired_badge}</div></\
+             div></a>",
             rid = html_attr(&req.request_id),
             urg = urg,
             expired = expired_class,
@@ -61,16 +55,11 @@ pub fn render_inbox_index_html(requests: &[PendingRequest]) -> String {
         ));
     }
     format!(
-        "<!doctype html><html lang=en>\
-         <meta charset=utf-8>\
-         <meta name=viewport content='width=device-width,initial-scale=1'>\
-         <title>{title}</title>\
-         <style>{css}</style>\
-         <body>\
-         <header><h1>{title}</h1><span class=badge>{count}</span></header>\
-         <main>{rows}</main>\
-         <footer><p>phinbox</p></footer>\
-         </body></html>",
+        "<!doctype html><html lang=en><meta charset=utf-8><meta name=viewport \
+         content='width=device-width,initial-scale=1'><title>{title}</title><style>{css}</\
+         style><body><header><h1>{title}</h1><span \
+         class=badge>{count}</span></header><main>{rows}</main><footer><p>phinbox</p></footer></\
+         body></html>",
         title = INBOX_SLUG,
         css = full_html_css(),
         count = count,

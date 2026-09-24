@@ -37,14 +37,11 @@ fn notify_native_windows(req: &PendingRequest) -> Result<String, String> {
     let title = escape_powershell(&truncate(&req.spec.title, 60));
     let question = escape_powershell(&truncate(&req.spec.question, 200));
     let ps = format!(
-        "Add-Type -AssemblyName System.Windows.Forms | Out-Null;\n\
-         $n = New-Object System.Windows.Forms.NotifyIcon;\n\
-         $n.Icon = [System.Drawing.SystemIcons]::Information;\n\
-         $n.BalloonTipIcon = 'Info';\n\
-         $n.Visible = $true;\n\
-         $n.ShowBalloonTip(10000, '{title}', '{question}', [System.Windows.Forms.ToolTipIcon]::Info);\n\
-         Start-Sleep -Seconds 6;\n\
-         $n.Dispose();"
+        "Add-Type -AssemblyName System.Windows.Forms | Out-Null;\n$n = New-Object \
+         System.Windows.Forms.NotifyIcon;\n$n.Icon = \
+         [System.Drawing.SystemIcons]::Information;\n$n.BalloonTipIcon = 'Info';\n$n.Visible = \
+         $true;\n$n.ShowBalloonTip(10000, '{title}', '{question}', \
+         [System.Windows.Forms.ToolTipIcon]::Info);\nStart-Sleep -Seconds 6;\n$n.Dispose();"
     );
     let status = Command::new("powershell")
         .args(["-NoProfile", "-Command", &ps])

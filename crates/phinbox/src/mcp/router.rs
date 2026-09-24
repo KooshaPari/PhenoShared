@@ -4,16 +4,21 @@
 //! Codex, Cursor, Claude Code, etc.). Each tool call is dispatched to
 //! `phinbox::elicit()` and the response is returned as MCP tool output.
 
-use rmcp::handler::server::router::tool::ToolRouter;
-use rmcp::handler::server::wrapper::Parameters;
-use rmcp::model::{CallToolResponse, CallToolResult, ContentBlock, ServerCapabilities, ServerConfig, Implementation};
-use rmcp::schemars::JsonSchema;
-use rmcp::ServerHandler;
-use rmcp::{tool, tool_handler, tool_router};
+use rmcp::{
+    handler::server::{router::tool::ToolRouter, wrapper::Parameters},
+    model::{
+        CallToolResponse, CallToolResult, ContentBlock, Implementation, ServerCapabilities,
+        ServerConfig,
+    },
+    schemars::JsonSchema,
+    tool, tool_handler, tool_router, ServerHandler,
+};
 use serde::{Deserialize, Serialize};
 
-use crate::spec::{ElicitResponse, PromptSpec};
-use crate::ElicitOptions;
+use crate::{
+    spec::{ElicitResponse, PromptSpec},
+    ElicitOptions,
+};
 
 /// Parameters for the `phinbox_mcp` tool.
 ///
@@ -90,7 +95,10 @@ impl PhinboxMcp {
     /// The single tool: render a native popup and block until the user responds.
     #[tool(
         name = "phinbox_mcp",
-        description = "Render a native OS popup and block until the human operator responds (or the prompt times out). Use this whenever an autonomous agent needs a single, structured decision from a human: a confirmation, a multi-choice selection, a secret, a disambiguation. Returns a typed JSON ElicitResponse."
+        description = "Render a native OS popup and block until the human operator responds (or \
+                       the prompt times out). Use this whenever an autonomous agent needs a \
+                       single, structured decision from a human: a confirmation, a multi-choice \
+                       selection, a secret, a disambiguation. Returns a typed JSON ElicitResponse."
     )]
     async fn elicit(
         &self,
@@ -102,7 +110,8 @@ impl PhinboxMcp {
         if let Err(msg) = spec.validate() {
             return Ok(CallToolResult::error(vec![ContentBlock::text(format!(
                 "invalid PromptSpec: {msg}"
-            ))]).into());
+            ))])
+            .into());
         }
 
         // Run the popup on a blocking thread so we don't park the tokio worker.
@@ -118,19 +127,21 @@ impl PhinboxMcp {
             Err(e) => {
                 return Ok(CallToolResult::error(vec![ContentBlock::text(format!(
                     "popup failed: {e}"
-                ))]).into());
-            }
+                ))])
+                .into());
+            },
         };
 
         let json = serde_json::to_value(&response).map_err(|e| {
             rmcp::ErrorData::internal_error(format!("serialize response: {e}"), None)
         })?;
 
-        let content_block = ContentBlock::text(
-            serde_json::to_string(&json).unwrap_or_default(),
-        );
+        let content_block = ContentBlock::text(serde_json::to_string(&json).unwrap_or_default());
 
-        let is_error = matches!(&response, ElicitResponse::Failed { .. } | ElicitResponse::TimedOut { .. });
+        let is_error = matches!(
+            &response,
+            ElicitResponse::Failed { .. } | ElicitResponse::TimedOut { .. }
+        );
 
         if is_error {
             Ok(CallToolResult::error(vec![content_block]).into())
@@ -146,10 +157,10 @@ impl ServerHandler for PhinboxMcp {
         ServerConfig::new(ServerCapabilities::default())
             .with_server_info(Implementation::new("phinbox", env!("CARGO_PKG_VERSION")))
             .with_instructions(
-                "phinbox_mcp renders a native OS popup and blocks until the human responds. \
-                 Use it whenever you need a single, structured decision from the operator: \
+                "phinbox_mcp renders a native OS popup and blocks until the human responds. Use \
+                 it whenever you need a single, structured decision from the operator: \
                  confirmations, secrets, multi-choice selection, disambiguation. Returns typed \
-                 JSON: {status: answered|cancelled|timed_out|failed, value?, notes?}."
+                 JSON: {status: answered|cancelled|timed_out|failed, value?, notes?}.",
             )
     }
 }

@@ -1,6 +1,8 @@
-use crate::error::ElicitError;
-use crate::escape::applescript_escape;
-use crate::spec::{FieldSpec, PromptSpec, Urgency};
+use crate::{
+    error::ElicitError,
+    escape::applescript_escape,
+    spec::{FieldSpec, PromptSpec, Urgency},
+};
 
 /// Build the `AppleScript` source for a `display dialog` call.
 pub(super) fn build_script(spec: &PromptSpec) -> Result<String, ElicitError> {
@@ -8,9 +10,15 @@ pub(super) fn build_script(spec: &PromptSpec) -> Result<String, ElicitError> {
     let title = applescript_escape(&format!("phinbox · {}", spec.title))?;
 
     let default = match &spec.field {
-        FieldSpec::Text { default, .. } => default.clone().unwrap_or_default(),
-        FieldSpec::LongText { default, .. } => default.clone().unwrap_or_default(),
-        FieldSpec::Integer { default, .. } => default.map(|v| v.to_string()).unwrap_or_default(),
+        FieldSpec::Text {
+            default, ..
+        } => default.clone().unwrap_or_default(),
+        FieldSpec::LongText {
+            default, ..
+        } => default.clone().unwrap_or_default(),
+        FieldSpec::Integer {
+            default, ..
+        } => default.map(|v| v.to_string()).unwrap_or_default(),
         _ => String::new(),
     };
     // Text-bearing fields always render an answer box so `text returned`
@@ -39,9 +47,10 @@ pub(super) fn build_script(spec: &PromptSpec) -> Result<String, ElicitError> {
         Urgency::Secret => "caution",
     };
 
-    let (cancel_label, confirm_label) = spec
-        .buttons
-        .as_ref().map_or_else(|| ("Cancel".to_string(), "OK".to_string()), |b| (b.cancel.clone(), b.confirm.clone()));
+    let (cancel_label, confirm_label) = spec.buttons.as_ref().map_or_else(
+        || ("Cancel".to_string(), "OK".to_string()),
+        |b| (b.cancel.clone(), b.confirm.clone()),
+    );
 
     let timeout_clause = if spec.timeout_secs == 0 {
         String::new()
@@ -50,7 +59,9 @@ pub(super) fn build_script(spec: &PromptSpec) -> Result<String, ElicitError> {
     };
 
     let hidden_clause = match &spec.field {
-        FieldSpec::Text { secret: true, .. } => " with hidden answer",
+        FieldSpec::Text {
+            secret: true, ..
+        } => " with hidden answer",
         _ => "",
     };
 
@@ -93,11 +104,7 @@ end try
         text_extract = text_extract,
         cancel_q = applescript_escape(&cancel_label)?,
         confirm_q = applescript_escape(&confirm_label)?,
-        default_btn = if spec
-            .buttons
-            .as_ref()
-            .is_some_and(|b| b.default_is_cancel)
-        {
+        default_btn = if spec.buttons.as_ref().is_some_and(|b| b.default_is_cancel) {
             applescript_escape(&cancel_label)?
         } else {
             applescript_escape(&confirm_label)?

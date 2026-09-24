@@ -13,8 +13,10 @@
 mod helper;
 mod tray;
 
-use std::path::PathBuf;
-use std::sync::{Arc, Condvar, Mutex};
+use std::{
+    path::PathBuf,
+    sync::{Arc, Condvar, Mutex},
+};
 
 fn main() {
     let inbox_dir: PathBuf = std::env::var("PHINBOX_INBOX_DIR")
@@ -46,19 +48,13 @@ fn main() {
 
     // Try to start the daemon. If one is already running on this port,
     // read the lockfile to reuse its port/inbox_root for the tray.
-    let (handle, owns_daemon) = match phinbox::inbox::daemon::start_daemon(cfg.clone())
-    {
+    let (handle, owns_daemon) = match phinbox::inbox::daemon::start_daemon(cfg.clone()) {
         Ok(h) => (h, true),
         Err(e) => {
             let msg = e.to_string();
             if msg.contains("daemon already running") {
-                if let Some(lf) =
-                    phinbox::inbox::daemon::lockfile::read_lockfile(&cfg.inbox_root)
-                {
-                    eprintln!(
-                        "phinbox: reusing existing daemon on port {}",
-                        lf.port
-                    );
+                if let Some(lf) = phinbox::inbox::daemon::lockfile::read_lockfile(&cfg.inbox_root) {
+                    eprintln!("phinbox: reusing existing daemon on port {}", lf.port);
                     (
                         phinbox::inbox::daemon::DaemonHandle {
                             port: lf.port,
@@ -67,9 +63,9 @@ fn main() {
                             lockfile: cfg
                                 .inbox_root
                                 .join(phinbox::inbox::daemon::lockfile::LOCKFILE_NAME),
-                            shutdown: std::sync::Arc::new(
-                                std::sync::atomic::AtomicBool::new(false),
-                            ),
+                            shutdown: std::sync::Arc::new(std::sync::atomic::AtomicBool::new(
+                                false,
+                            )),
                         },
                         false,
                     )
@@ -81,13 +77,16 @@ fn main() {
                 eprintln!("phinbox: failed to start daemon: {e}");
                 std::process::exit(1);
             }
-        }
+        },
     };
 
     // Open inbox in the native Swift helper window
     helper::launch_inbox_helper(handle.port);
 
-    eprintln!("phinbox: daemon running on http://127.0.0.1:{}", handle.port);
+    eprintln!(
+        "phinbox: daemon running on http://127.0.0.1:{}",
+        handle.port
+    );
 
     // On macOS: create tray on main thread and run Cocoa event loop
     #[cfg(target_os = "macos")]

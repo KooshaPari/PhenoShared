@@ -7,11 +7,12 @@
 
 use std::time::Duration;
 
-use phinbox::inbox::{
-    enqueue, finalize, list_pending, load_request, PendingRequest, RequestOrigin,
-    RequestState,
+use phinbox::{
+    inbox::{
+        enqueue, finalize, list_pending, load_request, PendingRequest, RequestOrigin, RequestState,
+    },
+    spec::{ElicitResponse, FieldSpec, PromptSpec},
 };
-use phinbox::spec::{ElicitResponse, FieldSpec, PromptSpec};
 
 fn temp_root(tag: &str) -> (tempfile::TempDir, std::path::PathBuf) {
     let dir = tempfile::tempdir().expect("tempdir");
@@ -74,8 +75,8 @@ fn deferred_request_stays_in_pending_and_is_answerable() {
     let req = new_req("defer-1");
     enqueue(&root, &req).expect("enqueue");
 
-    // 2. Operator clicks "Defer to inbox" on the popup.
-    //    Popup side: state stays Pending, response records the defer.
+    // 2. Operator clicks "Defer to inbox" on the popup. Popup side: state stays Pending, response
+    //    records the defer.
     let mut deferred = req.clone();
     deferred.state = RequestState::Pending;
     deferred.response = Some(ElicitResponse::Deferred {
@@ -83,19 +84,25 @@ fn deferred_request_stays_in_pending_and_is_answerable() {
         open_url: None,
         path: None,
     });
-    // 3. The popup-side defer must NOT move the file to answered/.
-    //    It should keep it in pending/ so the inbox UI and list_pending see it.
+    // 3. The popup-side defer must NOT move the file to answered/. It should keep it in pending/ so
+    //    the inbox UI and list_pending see it.
     let path = phinbox::inbox::inbox_pending_dir(&root).join("defer-1.json");
     assert!(path.exists(), "deferred request must remain in pending/");
 
     // 4. list_pending still surfaces it (the inbox is the operator's to-do list).
     let pending = list_pending(&root).expect("list_pending");
-    assert_eq!(pending.len(), 1, "deferred request must stay visible in inbox");
+    assert_eq!(
+        pending.len(),
+        1,
+        "deferred request must stay visible in inbox"
+    );
     assert_eq!(pending[0].request_id, "defer-1");
     assert!(!pending[0].is_terminal(), "deferred must not be terminal");
 
     // 5. load_request (used by inbox.get) still finds it.
-    let reloaded = load_request(&root, "defer-1").expect("load_request").expect("present");
+    let reloaded = load_request(&root, "defer-1")
+        .expect("load_request")
+        .expect("present");
     assert_eq!(reloaded.state, RequestState::Pending);
 
     // 6. Later, the operator answers it from the inbox UI.
@@ -109,8 +116,13 @@ fn deferred_request_stays_in_pending_and_is_answerable() {
 
     // 7. Now it leaves pending and lands in answered/.
     let pending_after = list_pending(&root).expect("list_pending");
-    assert!(pending_after.is_empty(), "answered request leaves the inbox");
-    let answered_file = load_request(&root, "defer-1").expect("load_request").expect("still on disk in answered/");
+    assert!(
+        pending_after.is_empty(),
+        "answered request leaves the inbox"
+    );
+    let answered_file = load_request(&root, "defer-1")
+        .expect("load_request")
+        .expect("still on disk in answered/");
     assert_eq!(answered_file.state, RequestState::Answered);
 }
 
@@ -157,7 +169,10 @@ fn wait_for_response_ignores_defer_and_blocks_until_answer() {
         Duration::from_secs(5),
     )
     .expect("wait_for_response");
-    assert!(final_req.is_terminal(), "waiter unblocks only on real answer");
+    assert!(
+        final_req.is_terminal(),
+        "waiter unblocks only on real answer"
+    );
     assert_eq!(final_req.state, RequestState::Answered);
     assert!(
         !matches!(final_req.response, Some(ElicitResponse::Deferred { .. })),
@@ -188,7 +203,9 @@ async fn ipc_answer_with_deferred_keeps_request_in_pending() {
     // Boot the real IPC server on a temp socket, exactly like the daemon does.
     let sock = root.join("ipc.sock");
     let state = phinbox::inbox::ipc::RpcState::new(root.clone(), sock.clone());
-    let listener = phinbox::inbox::ipc::bind_listener(&sock).await.expect("bind");
+    let listener = phinbox::inbox::ipc::bind_listener(&sock)
+        .await
+        .expect("bind");
     let _server = phinbox::inbox::ipc::spawn_accept(state, listener);
 
     // Enqueue event for watchers (mirrors daemon behavior).
@@ -214,7 +231,10 @@ async fn ipc_answer_with_deferred_keeps_request_in_pending() {
     let req_back: PendingRequest =
         serde_json::from_value(result["request"].clone()).expect("parse response");
     assert_eq!(req_back.state, RequestState::Pending);
-    assert!(matches!(req_back.response, Some(ElicitResponse::Deferred { .. })));
+    assert!(matches!(
+        req_back.response,
+        Some(ElicitResponse::Deferred { .. })
+    ));
 
     // THE CONTRACT: after the server processes a defer, the request must
     // still be in the inbox (pending), not archived to answered/.
@@ -222,8 +242,8 @@ async fn ipc_answer_with_deferred_keeps_request_in_pending() {
     assert_eq!(
         visible.len(),
         1,
-        "BUG: server defer path finalized the request into answered/, \
-         hiding it from the operator's inbox"
+        "BUG: server defer path finalized the request into answered/, hiding it from the \
+         operator's inbox"
     );
     assert_eq!(visible[0].request_id, "defer-3");
 
@@ -246,7 +266,10 @@ async fn ipc_answer_with_deferred_keeps_request_in_pending() {
 
     // 5. Now it leaves pending and is archived in answered/.
     let pending_after = list_pending(&root).expect("list_pending");
-    assert!(pending_after.is_empty(), "answered request leaves the inbox");
+    assert!(
+        pending_after.is_empty(),
+        "answered request leaves the inbox"
+    );
 }
 
 /// Schema wire-format check: the details block round-trips through JSON
@@ -268,8 +291,14 @@ fn details_block_serde_roundtrip_preserves_everything() {
         }]
     ));
     // Wire format uses the tagged kind discriminators.
-    assert!(json.contains("\"kind\":\"file\""), "file item tag must serialize: {json}");
-    assert!(json.contains("\"action\":\"delete\""), "file action lowercase: {json}");
+    assert!(
+        json.contains("\"kind\":\"file\""),
+        "file item tag must serialize: {json}"
+    );
+    assert!(
+        json.contains("\"action\":\"delete\""),
+        "file action lowercase: {json}"
+    );
 
     // Old callers (pre-details) must still deserialize — field is optional.
     let minimal = serde_json::json!({
@@ -289,13 +318,25 @@ fn details_block_serde_roundtrip_preserves_everything() {
 fn schema_export_includes_details_and_deferred() {
     let s = phinbox::schema::prompt_spec_schema();
     let s_str = serde_json::to_string(&s).expect("schema serializes");
-    assert!(s_str.contains("DetailsSpec"), "PromptSpec schema must document details: {s_str}");
-    assert!(s_str.contains("DetailItem"), "schema must document detail items");
-    assert!(s_str.contains("defer_label"), "ButtonSpec schema must document defer_label");
+    assert!(
+        s_str.contains("DetailsSpec"),
+        "PromptSpec schema must document details: {s_str}"
+    );
+    assert!(
+        s_str.contains("DetailItem"),
+        "schema must document detail items"
+    );
+    assert!(
+        s_str.contains("defer_label"),
+        "ButtonSpec schema must document defer_label"
+    );
 
     let r = phinbox::schema::elicit_response_schema();
     let r_str = serde_json::to_string(&r).expect("response schema serializes");
-    assert!(r_str.contains("deferred"), "ElicitResponse schema must document Deferred: {r_str}");
+    assert!(
+        r_str.contains("deferred"),
+        "ElicitResponse schema must document Deferred: {r_str}"
+    );
 }
 
 /// The ToolApproval builder is the ergonomic front door; verify its output
@@ -305,7 +346,11 @@ fn tool_approval_builder_produces_renderable_spec() {
     let spec = phinbox::approval::ToolApproval::new("git push --force")
         .reason("Feature branch needs a force push after rebase.")
         .command("git push --force origin feature/x")
-        .file("refs/heads/feature/x", phinbox::spec::FileAction::Write, None)
+        .file(
+            "refs/heads/feature/x",
+            phinbox::spec::FileAction::Write,
+            None,
+        )
         .effect("Remote history rewritten")
         .warn("Collaborators must re-clone")
         .fact("branch", "feature/x")
@@ -316,7 +361,10 @@ fn tool_approval_builder_produces_renderable_spec() {
     spec.validate().expect("builder output passes validation");
 
     let d = spec.details.clone().expect("builder sets details");
-    assert_eq!(d.reason.as_deref(), Some("Feature branch needs a force push after rebase."));
+    assert_eq!(
+        d.reason.as_deref(),
+        Some("Feature branch needs a force push after rebase.")
+    );
     assert!(d.items.len() >= 3, "file + fact + warning items present");
     let json = serde_json::to_string(&spec).expect("serialize");
     let back: PromptSpec = serde_json::from_str(&json).expect("deserialize");

@@ -8,8 +8,7 @@
 //! without an answer (cancelled is a legitimate outcome; expired/timeout is
 //! not) must not look like success to a caller that only checks the status.
 
-use std::path::PathBuf;
-use std::time::Duration;
+use std::{path::PathBuf, time::Duration};
 
 use phinbox::spec::ElicitResponse;
 
@@ -53,8 +52,7 @@ pub fn cmd_wait(args: WaitArgs, inbox_dir: &PathBuf) -> Result<(), String> {
         ElicitResponse::Failed { .. } | ElicitResponse::TimedOut { .. }
     ) {
         return Err(format!(
-            "request {request_id} resolved to {state:?} without an answer \
-             (failure envelope above)"
+            "request {request_id} resolved to {state:?} without an answer (failure envelope above)"
         ));
     }
     Ok(())
@@ -62,10 +60,14 @@ pub fn cmd_wait(args: WaitArgs, inbox_dir: &PathBuf) -> Result<(), String> {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
-    use phinbox::inbox::{enqueue, RequestOrigin, RequestState};
-    use phinbox::spec::{FieldSpec, FieldValue, PromptSpec, Urgency};
     use std::time::Instant;
+
+    use phinbox::{
+        inbox::{enqueue, RequestOrigin, RequestState},
+        spec::{FieldSpec, FieldValue, PromptSpec, Urgency},
+    };
+
+    use super::*;
 
     fn spec(id: &str) -> PromptSpec {
         PromptSpec {

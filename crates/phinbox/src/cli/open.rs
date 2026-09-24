@@ -25,8 +25,8 @@ pub fn cmd_open(args: OpenArgs, inbox_dir: &PathBuf) -> Result<(), String> {
     // Optionally spawn a daemon if nothing is running.
     if base.is_none() && args.spawn_if_missing {
         eprintln!(
-            "(no inbox daemon running — spawning one in the background; \
-             set --inbox-dir to control the data location)"
+            "(no inbox daemon running — spawning one in the background; set --inbox-dir to \
+             control the data location)"
         );
         let exe = std::env::current_exe().map_err(|e| e.to_string())?;
         let mut cmd = Command::new(exe);
@@ -66,9 +66,7 @@ pub fn cmd_open(args: OpenArgs, inbox_dir: &PathBuf) -> Result<(), String> {
         }
     }
 
-    let base = base.unwrap_or_else(|| {
-        format!("http://127.0.0.1:{}", phinbox::INBOX_DEFAULT_PORT)
-    });
+    let base = base.unwrap_or_else(|| format!("http://127.0.0.1:{}", phinbox::INBOX_DEFAULT_PORT));
 
     let url = if args.latest {
         match latest_pending_form_url(inbox_dir, &base) {
@@ -91,9 +89,7 @@ pub fn cmd_open(args: OpenArgs, inbox_dir: &PathBuf) -> Result<(), String> {
 
 fn latest_pending_form_url(inbox_dir: &PathBuf, base: &str) -> Option<String> {
     let reqs = phinbox::inbox_list_pending(inbox_dir).ok()?;
-    let newest = reqs
-        .into_iter()
-        .max_by_key(|r| r.queued_at_ms)?;
+    let newest = reqs.into_iter().max_by_key(|r| r.queued_at_ms)?;
     // Build from the live base so the daemon's host *and* port are kept.
     // Patching a URL that was constructed from a different base threw the
     // live port away (and duplicated it when `PHINBOX_BASE_URL` was set).
@@ -123,9 +119,12 @@ unsafe fn libc_setsid() -> i32 {
 
 #[cfg(test)]
 mod tests {
+    use phinbox::{
+        inbox::{RequestOrigin, RequestState},
+        PromptSpec,
+    };
+
     use super::*;
-    use phinbox::inbox::{RequestOrigin, RequestState};
-    use phinbox::PromptSpec;
 
     fn spec_with_id(request_id: &str) -> PromptSpec {
         PromptSpec {

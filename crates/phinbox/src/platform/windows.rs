@@ -6,8 +6,7 @@
 //!
 //! 1. PowerShell ships with every supported Windows version (10/11/Server).
 //! 2. Direct Win32 calls from Rust are fragile across OS patches.
-//! 3. The popup is rendered out-of-process, so the MCP server is not
-//!    blocked on a UI thread.
+//! 3. The popup is rendered out-of-process, so the MCP server is not blocked on a UI thread.
 //!
 //! Wire format: the PowerShell script prints
 //! `STATUS|BUTTON|TEXT|NOTES` to stdout, which we parse identically to
@@ -32,13 +31,17 @@
 //! service or daemon in session 0 has the same constraint and should use the
 //! async inbox rather than a blocking popup.
 
-use std::process::{Command, Stdio};
-use std::time::{Duration, Instant};
+use std::{
+    process::{Command, Stdio},
+    time::{Duration, Instant},
+};
 
-use crate::error::ElicitError;
-use crate::escape::powershell_escape;
-use crate::options::ElicitOptions;
-use crate::spec::{ElicitResponse, FieldSpec, PromptSpec, Urgency};
+use crate::{
+    error::ElicitError,
+    escape::powershell_escape,
+    options::ElicitOptions,
+    spec::{ElicitResponse, FieldSpec, PromptSpec, Urgency},
+};
 
 #[cfg(target_os = "windows")]
 const CREATE_NEW_PROCESS_GROUP: u32 = 0x0000_0200;
@@ -78,7 +81,7 @@ pub fn render(spec: &PromptSpec, opts: &ElicitOptions) -> Result<ElicitResponse,
             Ok(Some(_status)) => {
                 let out = child.wait_with_output().map_err(ElicitError::Io)?;
                 break out;
-            }
+            },
             Ok(None) => {
                 if timeout.is_some_and(|t| start.elapsed() >= t) {
                     let _ = child.kill();
@@ -88,7 +91,7 @@ pub fn render(spec: &PromptSpec, opts: &ElicitOptions) -> Result<ElicitResponse,
                     });
                 }
                 std::thread::sleep(Duration::from_millis(100));
-            }
+            },
             Err(e) => return Err(ElicitError::Io(e)),
         }
     };
@@ -113,17 +116,21 @@ fn build_script(spec: &PromptSpec) -> Result<String, ElicitError> {
     let urgency_clause = match spec.urgency {
         Urgency::Error | Urgency::Secret => {
             "$lblQuestion.ForeColor = [System.Drawing.Color]::FromArgb(180, 0, 0)\n"
-        }
-        Urgency::Warning => "$lblQuestion.ForeColor = [System.Drawing.Color]::FromArgb(150, 90, 0)\n",
+        },
+        Urgency::Warning => {
+            "$lblQuestion.ForeColor = [System.Drawing.Color]::FromArgb(150, 90, 0)\n"
+        },
         Urgency::Info => "",
     };
 
     // For text fields with defaults, pass the default through
     let default_expr = match &spec.field {
-        FieldSpec::Text { default, .. } => powershell_escape(default.as_deref().unwrap_or(""))?,
-        FieldSpec::LongText { default, .. } => {
-            powershell_escape(default.as_deref().unwrap_or(""))?
-        }
+        FieldSpec::Text {
+            default, ..
+        } => powershell_escape(default.as_deref().unwrap_or(""))?,
+        FieldSpec::LongText {
+            default, ..
+        } => powershell_escape(default.as_deref().unwrap_or(""))?,
         _ => powershell_escape("")?,
     };
 
@@ -146,19 +153,36 @@ fn build_script(spec: &PromptSpec) -> Result<String, ElicitError> {
 
     // Secret field uses a TextBox with PasswordChar
     let (input_kind, secret_clause) = match &spec.field {
-        FieldSpec::Text { secret: true, .. } => ("TextBox", "    $txtField.PasswordChar = '*'\n"),
-        FieldSpec::Text { .. } | FieldSpec::LongText { .. } => ("TextBox", ""),
-        FieldSpec::Integer { .. } => {
-            ("NumericUpDown", "    $txtField.Minimum = -2147483648\n    $txtField.Maximum = 2147483647\n")
+        FieldSpec::Text {
+            secret: true, ..
+        } => ("TextBox", "    $txtField.PasswordChar = '*'\n"),
+        FieldSpec::Text {
+            ..
         }
-        FieldSpec::Choice { .. } | FieldSpec::Boolean { .. } => ("ComboBox", ""),
-        FieldSpec::DateTime { .. } => ("DateTimePicker", ""),
+        | FieldSpec::LongText {
+            ..
+        } => ("TextBox", ""),
+        FieldSpec::Integer {
+            ..
+        } => (
+            "NumericUpDown",
+            "    $txtField.Minimum = -2147483648\n    $txtField.Maximum = 2147483647\n",
+        ),
+        FieldSpec::Choice {
+            ..
+        }
+        | FieldSpec::Boolean {
+            ..
+        } => ("ComboBox", ""),
+        FieldSpec::DateTime {
+            ..
+        } => ("DateTimePicker", ""),
     };
 
     let placeholder_expr = match &spec.field {
-        FieldSpec::Text { placeholder, .. } => {
-            powershell_escape(placeholder.as_deref().unwrap_or(""))?
-        }
+        FieldSpec::Text {
+            placeholder, ..
+        } => powershell_escape(placeholder.as_deref().unwrap_or(""))?,
         _ => powershell_escape("")?,
     };
 
@@ -261,7 +285,7 @@ fn parse_output(
                 value: crate::spec::FieldValue::Text(entered.to_string()),
                 notes,
             })
-        }
+        },
         "cancelled" => Ok(ElicitResponse::Cancelled {
             notes: if notes.as_ref().is_some_and(|s| !s.is_empty()) {
                 notes
@@ -350,7 +374,10 @@ mod tests {
         assert!(f.is_failed());
 
         let unknown = parse_output(b"weird|a|b|", b"", Duration::from_secs(1)).unwrap();
-        assert!(unknown.is_failed(), "unknown status must not be treated as success");
+        assert!(
+            unknown.is_failed(),
+            "unknown status must not be treated as success"
+        );
     }
 
     #[test]
@@ -379,7 +406,10 @@ mod tests {
             pattern: None,
         };
         let s = build_script(&spec).unwrap();
-        assert!(s.contains(r#""prefilled""#), "default must reach the script");
+        assert!(
+            s.contains(r#""prefilled""#),
+            "default must reach the script"
+        );
         assert!(s.contains(r#""hint""#), "placeholder must reach the script");
         assert!(s.contains("$txtField.Text = $fieldDefault"));
         assert!(s.contains("$txtField.PlaceholderText = $fieldPlaceholder"));
@@ -436,8 +466,9 @@ mod tests {
         std::fs::write(&path, &script).unwrap();
 
         let check = format!(
-            "$e=$null; [void][System.Management.Automation.Language.Parser]::ParseFile('{}',[ref]$null,[ref]$e); \
-             if($e){{ $e | ForEach-Object {{ Write-Output $_.Message }}; exit 1 }}",
+            "$e=$null; [void][System.Management.Automation.Language.Parser]::ParseFile('{}',\
+             [ref]$null,[ref]$e); if($e){{ $e | ForEach-Object {{ Write-Output $_.Message }}; \
+             exit 1 }}",
             path.display()
         );
         let out = std::process::Command::new("pwsh")

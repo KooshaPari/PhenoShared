@@ -1,8 +1,7 @@
 //! Unit tests for the inbox daemon form-submission path.
 
 use super::*;
-use crate::inbox::RequestOrigin;
-use crate::inbox::unix_now_ms;
+use crate::inbox::{unix_now_ms, RequestOrigin};
 
 #[test]
 fn form_decode_parses_simple() {
@@ -72,16 +71,22 @@ fn post_handler_writes_answer() {
     let loaded = load(tmp.path(), "post-1").unwrap();
     assert_eq!(loaded.state, RequestState::Answered);
     match loaded.response {
-        Some(ElicitResponse::Answered { value, notes }) => {
+        Some(ElicitResponse::Answered {
+            value,
+            notes,
+        }) => {
             match value {
-                FieldValue::Choice { value: v, index } => {
+                FieldValue::Choice {
+                    value: v,
+                    index,
+                } => {
                     assert_eq!(v, "staging");
                     assert_eq!(index, 0);
-                }
+                },
                 other => panic!("expected FieldValue::Choice, got {other:?}"),
             }
             assert_eq!(notes.as_deref(), Some("green build"));
-        }
+        },
         other => panic!("expected Answered response, got {other:?}"),
     }
     assert!(!tmp.path().join("inbox/post-1.json").exists());
@@ -123,9 +128,11 @@ fn post_handler_writes_answer() {
     let loaded2 = load(tmp.path(), "post-2").unwrap();
     assert_eq!(loaded2.state, RequestState::Cancelled);
     match loaded2.response {
-        Some(ElicitResponse::Cancelled { notes }) => {
+        Some(ElicitResponse::Cancelled {
+            notes,
+        }) => {
             assert_eq!(notes.as_deref(), Some("on second thought"));
-        }
+        },
         other => panic!("expected Cancelled response, got {other:?}"),
     }
 }
@@ -189,11 +196,19 @@ fn expired_request_is_refused_without_a_daemon() {
     let tmp = tempfile::tempdir().unwrap();
     crate::inbox::enqueue(tmp.path(), &pending_expired("stale-1")).unwrap();
     // Precondition: still `pending` on disk, i.e. genuinely unswept.
-    assert_eq!(load(tmp.path(), "stale-1").unwrap().state, RequestState::Pending);
+    assert_eq!(
+        load(tmp.path(), "stale-1").unwrap().state,
+        RequestState::Pending
+    );
 
     let err = submit_answer(tmp.path(), "stale-1", b"value=late&confirm=ok").unwrap_err();
     assert!(
-        matches!(err, SubmitError::Expired { expires_at_ms: 1 }),
+        matches!(
+            err,
+            SubmitError::Expired {
+                expires_at_ms: 1
+            }
+        ),
         "a late POST must be refused as expired, got {err:?}"
     );
 
@@ -205,7 +220,9 @@ fn expired_request_is_refused_without_a_daemon() {
     );
     assert!(after.response.is_none(), "no answer may be recorded");
     assert!(
-        !crate::inbox::answered_dir(tmp.path()).join("stale-1.json").exists(),
+        !crate::inbox::answered_dir(tmp.path())
+            .join("stale-1.json")
+            .exists(),
         "an expired request must not be archived as answered"
     );
 }
@@ -219,12 +236,18 @@ fn expired_request_cannot_be_cancelled_and_fresh_requests_still_answer() {
         submit_answer(tmp.path(), "stale-2", b"cancel=1"),
         Err(SubmitError::Expired { .. })
     ));
-    assert_eq!(load(tmp.path(), "stale-2").unwrap().state, RequestState::Expired);
+    assert_eq!(
+        load(tmp.path(), "stale-2").unwrap().state,
+        RequestState::Expired
+    );
 
     // Control: the same path with a live TTL still records the answer.
     crate::inbox::enqueue(tmp.path(), &pending("fresh-1", text_field(), None)).unwrap();
     submit_answer(tmp.path(), "fresh-1", b"value=ok&confirm=ok").unwrap();
-    assert_eq!(load(tmp.path(), "fresh-1").unwrap().state, RequestState::Answered);
+    assert_eq!(
+        load(tmp.path(), "fresh-1").unwrap().state,
+        RequestState::Answered
+    );
 }
 
 /// v0.9.1: a body with no submit marker, or without the field the spec
@@ -296,11 +319,7 @@ fn submit_answer_enforces_required_notes() {
         max_length: None,
         required: true,
     };
-    crate::inbox::enqueue(
-        tmp.path(),
-        &pending("guard-3", text_field(), Some(notes)),
-    )
-    .unwrap();
+    crate::inbox::enqueue(tmp.path(), &pending("guard-3", text_field(), Some(notes))).unwrap();
 
     assert!(matches!(
         submit_answer(tmp.path(), "guard-3", b"value=x&confirm=ok"),
@@ -315,9 +334,11 @@ fn submit_answer_enforces_required_notes() {
     );
     submit_answer(tmp.path(), "guard-3", b"value=x&notes=why&confirm=ok").unwrap();
     match load(tmp.path(), "guard-3").unwrap().response {
-        Some(ElicitResponse::Answered { notes, .. }) => {
+        Some(ElicitResponse::Answered {
+            notes, ..
+        }) => {
             assert_eq!(notes.as_deref(), Some("why"));
-        }
+        },
         other => panic!("expected Answered, got {other:?}"),
     }
 }

@@ -1,10 +1,12 @@
 //! Integration tests for the phinbox library.
 
-use phinbox::spec::{
-    ButtonSpec, ChoiceOption, DateTimeKind, ElicitResponse, FieldSpec, FieldValue, NotesSpec,
-    PromptSpec, Urgency,
+use phinbox::{
+    spec::{
+        ButtonSpec, ChoiceOption, DateTimeKind, ElicitResponse, FieldSpec, FieldValue, NotesSpec,
+        PromptSpec, Urgency,
+    },
+    ElicitOptions, RendererPreference,
 };
-use phinbox::{ElicitOptions, RendererPreference};
 
 fn bool_spec(label: &str, default: Option<bool>) -> PromptSpec {
     PromptSpec {
@@ -64,7 +66,10 @@ fn schema_roundtrip_choice() {
     };
     let json = serde_json::to_string(&spec).unwrap();
     let back: PromptSpec = serde_json::from_str(&json).unwrap();
-    if let FieldSpec::Choice { options, .. } = &back.field {
+    if let FieldSpec::Choice {
+        options, ..
+    } = &back.field
+    {
         assert_eq!(options.len(), 1);
     } else {
         panic!("lost variant");
@@ -90,7 +95,10 @@ fn schema_roundtrip_datetime() {
     };
     let json = serde_json::to_string(&spec).unwrap();
     let back: PromptSpec = serde_json::from_str(&json).unwrap();
-    if let FieldSpec::DateTime { picker_kind, .. } = &back.field {
+    if let FieldSpec::DateTime {
+        picker_kind, ..
+    } = &back.field
+    {
         assert!(matches!(picker_kind, DateTimeKind::DateTime));
     } else {
         panic!("lost variant");
@@ -106,10 +114,14 @@ fn response_predicates_work() {
     assert!(r1.is_answered());
     assert!(!r1.is_cancelled());
 
-    let r2 = ElicitResponse::Cancelled { notes: None };
+    let r2 = ElicitResponse::Cancelled {
+        notes: None,
+    };
     assert!(r2.is_cancelled());
 
-    let r3 = ElicitResponse::TimedOut { elapsed_secs: 1.0 };
+    let r3 = ElicitResponse::TimedOut {
+        elapsed_secs: 1.0,
+    };
     assert!(r3.is_timed_out());
 
     let r4 = ElicitResponse::Failed {
@@ -130,9 +142,8 @@ fn fixture_files_parse() {
         let text = std::fs::read_to_string(&path).unwrap();
         let spec: PromptSpec = serde_json::from_str(&text)
             .unwrap_or_else(|e| panic!("failed to parse {}: {e}", path.display()));
-        spec.validate().unwrap_or_else(|e| {
-            panic!("invalid spec in {}: {e}", path.display())
-        });
+        spec.validate()
+            .unwrap_or_else(|e| panic!("invalid spec in {}: {e}", path.display()));
     }
 }
 

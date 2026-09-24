@@ -20,7 +20,12 @@ impl PromptSpec {
                 self.question.chars().count()
             ));
         }
-        if let FieldSpec::Choice { options, default_index, .. } = &self.field {
+        if let FieldSpec::Choice {
+            options,
+            default_index,
+            ..
+        } = &self.field
+        {
             if options.is_empty() {
                 return Err("choice field must have at least one option".into());
             }
@@ -33,7 +38,10 @@ impl PromptSpec {
                 }
             }
         }
-        if let FieldSpec::Text { pattern: Some(p), .. } = &self.field {
+        if let FieldSpec::Text {
+            pattern: Some(p), ..
+        } = &self.field
+        {
             regex::Regex::new(p).map_err(|e| format!("invalid pattern regex: {e}"))?;
         }
         Ok(())

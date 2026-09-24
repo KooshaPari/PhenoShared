@@ -1,9 +1,7 @@
 use std::path::{Path, PathBuf};
 
-use super::{answered_dir, inbox_pending_dir, PendingRequest};
+use super::{answered_dir, change::InboxChangeBus, inbox_pending_dir, PendingRequest};
 use crate::error::ElicitError;
-
-use super::change::InboxChangeBus;
 
 /// Persist a pending request to disk. Creates parent dirs if missing.
 ///
@@ -45,8 +43,8 @@ pub fn finalize(root: &Path, req: &PendingRequest) -> Result<PathBuf, ElicitErro
     let tmp = answered.join(format!("{}.tmp", req.request_id));
     std::fs::write(&tmp, &json)?;
     std::fs::rename(&tmp, &dst)?;
-    // 2. Best-effort remove the original pending file (no-op if it was
-    //    already removed by another worker).
+    // 2. Best-effort remove the original pending file (no-op if it was already removed by another
+    //    worker).
     std::fs::remove_file(&pending).ok();
     InboxChangeBus::global().notify(&format!("finalize:{}", req.request_id));
     Ok(dst)

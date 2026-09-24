@@ -14,11 +14,11 @@ pub use expired::render_expired_html;
 pub use form::{render_answer_html, render_field_widget, render_form_html};
 pub use index::render_inbox_index_html;
 
-use crate::inbox::PendingRequest;
-use crate::spec::FieldSpec;
-
-use super::css::full_html_css;
-use super::helpers::{field_kind_label, html_escape};
+use super::{
+    css::full_html_css,
+    helpers::{field_kind_label, html_escape},
+};
+use crate::{inbox::PendingRequest, spec::FieldSpec};
 
 // ---- generic helpers ----
 
@@ -28,12 +28,9 @@ use super::helpers::{field_kind_label, html_escape};
 #[must_use]
 pub fn render_full_html(title: &str, content: &str) -> String {
     format!(
-        "<!doctype html><html lang=en>\
-         <meta charset=utf-8>\
-         <meta name=viewport content='width=device-width,initial-scale=1'>\
-         <title>{title}</title>\
-         <style>{css}</style>\
-         <body>{content}</body></html>",
+        "<!doctype html><html lang=en><meta charset=utf-8><meta name=viewport \
+         content='width=device-width,initial-scale=1'><title>{title}</title><style>{css}</\
+         style><body>{content}</body></html>",
         title = html_escape(title),
         css = full_html_css(),
         content = content,
@@ -67,12 +64,24 @@ pub fn render_summary(req: &PendingRequest) -> String {
 #[must_use]
 pub fn render_summary_json(req: &PendingRequest) -> serde_json::Value {
     let field_kind = match &req.spec.field {
-        FieldSpec::Text { .. } => "text",
-        FieldSpec::LongText { .. } => "long_text",
-        FieldSpec::Integer { .. } => "integer",
-        FieldSpec::Choice { .. } => "choice",
-        FieldSpec::Boolean { .. } => "boolean",
-        FieldSpec::DateTime { .. } => "date_time",
+        FieldSpec::Text {
+            ..
+        } => "text",
+        FieldSpec::LongText {
+            ..
+        } => "long_text",
+        FieldSpec::Integer {
+            ..
+        } => "integer",
+        FieldSpec::Choice {
+            ..
+        } => "choice",
+        FieldSpec::Boolean {
+            ..
+        } => "boolean",
+        FieldSpec::DateTime {
+            ..
+        } => "date_time",
     };
     serde_json::json!({
         "request_id": req.request_id,

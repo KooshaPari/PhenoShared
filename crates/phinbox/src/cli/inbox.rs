@@ -32,16 +32,19 @@ pub fn cmd_inbox(args: InboxArgs, inbox_dir: &PathBuf) -> Result<(), String> {
     // TUI viewer
     if args.tui {
         match phinbox::tui_run(inbox_dir, args.follow) {
-            Ok(phinbox::TuiOutcome::Quit | phinbox::TuiOutcome::Answered(_) |
-phinbox::TuiOutcome::Dismissed(_)) => return Ok(()),
+            Ok(
+                phinbox::TuiOutcome::Quit
+                | phinbox::TuiOutcome::Answered(_)
+                | phinbox::TuiOutcome::Dismissed(_),
+            ) => return Ok(()),
             Ok(phinbox::TuiOutcome::NoTty) => {
                 let count = phinbox::tui_render_plain(inbox_dir)?;
                 eprintln!(
-                    "(running plain-text fallback — {count} pending request(s); \
-                     run on a real terminal for the full split-pane UI)"
+                    "(running plain-text fallback — {count} pending request(s); run on a real \
+                     terminal for the full split-pane UI)"
                 );
                 return Ok(());
-            }
+            },
             Err(e) => return Err(e),
         }
     }
@@ -98,7 +101,10 @@ phinbox::TuiOutcome::Dismissed(_)) => return Ok(()),
     }
     // Default: --list
     let reqs = phinbox::inbox::list_pending(inbox_dir).map_err(|e| e.to_string())?;
-    let summaries: Vec<_> = reqs.iter().map(phinbox::views::render_summary_json).collect();
+    let summaries: Vec<_> = reqs
+        .iter()
+        .map(phinbox::views::render_summary_json)
+        .collect();
     println!(
         "{}",
         serde_json::to_string(&summaries).map_err(|e| e.to_string())?
