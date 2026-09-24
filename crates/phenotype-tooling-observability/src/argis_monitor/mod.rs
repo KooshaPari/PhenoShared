@@ -52,7 +52,7 @@ pub mod metrics;
 pub mod poller;
 pub mod push;
 pub mod ring_buffer;
-pub mod slo;
+pub use crate::slo;
 pub mod state_store;
 pub mod suppression;
 pub mod target;
