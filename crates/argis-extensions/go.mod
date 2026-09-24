@@ -5,7 +5,7 @@ go 1.26
 toolchain go1.26.4
 
 require (
-	connectrpc.com/connect v1.20.0
+	connectrpc.com/connect v1.21.0
 	github.com/99designs/gqlgen v0.17.93
 	github.com/bytedance/sonic v1.15.2
 	github.com/fsnotify/fsnotify v1.10.0
