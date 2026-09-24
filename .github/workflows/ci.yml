@@ -200,6 +200,8 @@ jobs:
   registry-invariant:
     name: Registry Invariant (absorption claims)
     runs-on: ubuntu-latest
+    env:
+      JCODE_SCRATCH_DIR: ${{ runner.temp }}/jcode-scratch
     steps:
       - uses: actions/checkout@v4
       - name: self-test analyzer
