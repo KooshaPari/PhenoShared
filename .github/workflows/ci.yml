@@ -200,12 +200,13 @@ jobs:
   registry-invariant:
     name: Registry Invariant (absorption claims)
     runs-on: ubuntu-latest
-    env:
-      JCODE_SCRATCH_DIR: ${{ runner.temp }}/jcode-scratch
     steps:
       - uses: actions/checkout@v4
       - name: self-test analyzer
-        run: bash scripts/audit/registry-invariant.sh --self-test
+        # RUNNER_TEMP is set on every runner; job-level `env` cannot use the
+        # `runner` context (build-time "Unrecognized named-value" -> run
+        # fails with zero jobs), so export it inside the step shell.
+        run: JCODE_SCRATCH_DIR="$RUNNER_TEMP/jcode-scratch" bash scripts/audit/registry-invariant.sh --self-test
       - name: registry-invariant gate
         run: bash scripts/audit/registry-invariant.sh
 
