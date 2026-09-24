@@ -46,8 +46,11 @@ jobs:
         with:
           workspaces: iac -> target
 
+      - name: Install pinned nightly rustfmt
+        run: rustup toolchain install nightly-2026-07-31 --profile minimal --component rustfmt --no-self-update
+
       - name: cargo fmt --check
-        run: cargo fmt --manifest-path iac/Cargo.toml --all -- --check
+        run: cargo +nightly-2026-07-31 fmt --manifest-path iac/Cargo.toml --all -- --check
 
       - name: cargo check
         run: cargo check --manifest-path iac/Cargo.toml --workspace --locked
@@ -75,8 +78,11 @@ jobs:
         with:
           workspaces: iac/landing-bootstrap -> target
 
+      - name: Install pinned nightly rustfmt
+        run: rustup toolchain install nightly-2026-07-31 --profile minimal --component rustfmt --no-self-update
+
       - name: cargo fmt --check
-        run: cargo fmt --manifest-path iac/landing-bootstrap/Cargo.toml --all -- --check
+        run: cargo +nightly-2026-07-31 fmt --manifest-path iac/landing-bootstrap/Cargo.toml --all -- --check
 
       - name: cargo check
         run: cargo check --manifest-path iac/landing-bootstrap/Cargo.toml --locked

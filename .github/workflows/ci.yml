@@ -87,9 +87,11 @@ jobs:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
       - uses: Swatinem/rust-cache@v2
+      - name: Install pinned nightly rustfmt
+        run: rustup toolchain install nightly-2026-07-31 --profile minimal --component rustfmt --no-self-update
       - name: cargo fmt --check
         run: |
-          cargo fmt --all -- --check 2>&1 || echo "::warning::cargo fmt issues (advisory)"
+          cargo +nightly-2026-07-31 fmt --all -- --check 2>&1 || echo "::warning::cargo fmt issues (advisory)"
       - name: cargo clippy
         run: |
           cargo clippy --all-targets -- -D warnings 2>&1 || echo "::warning::clippy issues (advisory)"
