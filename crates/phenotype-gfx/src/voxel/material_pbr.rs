@@ -268,7 +268,7 @@ impl MaterialSeedManifest {
                 } else {
                     Ok(None)
                 }
-            }
+            },
             MaterialMode::Primitive => match self.per_matid_overrides.get(&matid) {
                 Some(ov) => Ok(Some(ov)),
                 None => Err(ManifestError::NoEntryForMaterial(matid)),

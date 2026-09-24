@@ -1,5 +1,7 @@
-use a2a::message::{Artifact, Message, MessageKind, MsgState, Part};
-use a2a::task::{Task, TaskState};
+use a2a::{
+    message::{Artifact, Message, MessageKind, MsgState, Part},
+    task::{Task, TaskState},
+};
 
 #[test]
 fn task_serde_round_trip() {

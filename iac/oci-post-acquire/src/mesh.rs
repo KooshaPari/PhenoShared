@@ -1,11 +1,12 @@
 //! Mesh-state commit — flips OCI to ✅ in compute-mesh-state.md and commits.
 
-use crate::InstanceFile;
-use oci_helpers::expand_home;
 use anyhow::{Context, Result, anyhow};
 use chrono::Utc;
+use oci_helpers::expand_home;
 use tokio::process::Command;
 use tracing::info;
+
+use crate::InstanceFile;
 
 pub async fn commit_state(repo: &str, inst: &InstanceFile) -> Result<()> {
     let repo_path = expand_home(repo);
@@ -16,9 +17,9 @@ pub async fn commit_state(repo: &str, inst: &InstanceFile) -> Result<()> {
 
     let timestamp = Utc::now().format("%Y-%m-%d %H:%M UTC");
     let marker = format!(
-        "\n\n<!-- oci-post-acquire: AUTO-INSERTED {timestamp} -->\n\
-         ## OCI Status: ✅ ACQUIRED\n\n\
-         - Region: `{}`\n- AD: `{}`\n- Public IP: `{}`\n- Instance OCID: `{}`\n- Acquired: `{}`\n",
+        "\n\n<!-- oci-post-acquire: AUTO-INSERTED {timestamp} -->\n## OCI Status: ✅ \
+         ACQUIRED\n\n- Region: `{}`\n- AD: `{}`\n- Public IP: `{}`\n- Instance OCID: `{}`\n- \
+         Acquired: `{}`\n",
         inst.region, inst.ad, inst.public_ip, inst.instance_ocid, inst.acquired_at,
     );
 

@@ -7,17 +7,17 @@
 //! Hybridisation notes (see ADR-0001 §3):
 //! * `ArtifactKind` keeps Tracera's 7-variant vocabulary (Requirement/Design/Code/
 //!   Test/Evidence/Risk/Rationale). It is the **graph-side** node kind.
-//! * AgilePlus' `NodeType` (Intent/Plan/Feature/Story/Task/Spec/Commit/Test/PR/
-//!   Bug/Artifact) is the **ontology-side** node kind, kept in `intent_graph`.
-//! * The two are mapped at the boundary by [`ArtifactRef::kind_str`]: a `Test`
-//!   artifact can be linked from a `Test` intent node and from a `Code`
-//!   artifact without loss.
-//! * `ArtifactRef` is kept as a tagged enum so Neo4j / SQL can round-trip
-//!   each kind. The `kind` discriminant is the database-facing label.
+//! * AgilePlus' `NodeType` (Intent/Plan/Feature/Story/Task/Spec/Commit/Test/PR/ Bug/Artifact) is
+//!   the **ontology-side** node kind, kept in `intent_graph`.
+//! * The two are mapped at the boundary by [`ArtifactRef::kind_str`]: a `Test` artifact can be
+//!   linked from a `Test` intent node and from a `Code` artifact without loss.
+//! * `ArtifactRef` is kept as a tagged enum so Neo4j / SQL can round-trip each kind. The `kind`
+//!   discriminant is the database-facing label.
+
+use std::collections::BTreeMap;
 
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
-use std::collections::BTreeMap;
 use uuid::Uuid;
 
 use crate::ids::{NfrId, RequirementId};
@@ -125,14 +125,30 @@ impl ArtifactRef {
     /// Lowercase kind string, used as a discriminant in DB / URL routing.
     pub fn kind_str(&self) -> String {
         match self {
-            Self::Requirement { .. } => "requirement",
-            Self::NonFunctionalRequirement { .. } => "nfr",
-            Self::Test { .. } => "test",
-            Self::CodeEntity { .. } => "code",
-            Self::Journey { .. } => "journey",
-            Self::AgentRun { .. } => "agent",
-            Self::Evidence { .. } => "evidence",
-            Self::Document { .. } => "document",
+            Self::Requirement {
+                ..
+            } => "requirement",
+            Self::NonFunctionalRequirement {
+                ..
+            } => "nfr",
+            Self::Test {
+                ..
+            } => "test",
+            Self::CodeEntity {
+                ..
+            } => "code",
+            Self::Journey {
+                ..
+            } => "journey",
+            Self::AgentRun {
+                ..
+            } => "agent",
+            Self::Evidence {
+                ..
+            } => "evidence",
+            Self::Document {
+                ..
+            } => "document",
         }
         .to_string()
     }

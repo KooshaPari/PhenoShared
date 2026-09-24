@@ -6,15 +6,22 @@
 mod handlers;
 pub mod protocol;
 
-use crate::auth::AuthMiddleware;
-use crate::auth::middleware::routes::auth_error_response;
-use crate::auth::middleware::set_current_user;
-use crate::coordinator::Coordinator;
-use std::io::{BufRead, BufReader, Write};
-use std::net::{TcpListener, TcpStream};
-use std::sync::Arc;
-use std::time::Duration;
+use std::{
+    io::{BufRead, BufReader, Write},
+    net::{TcpListener, TcpStream},
+    sync::Arc,
+    time::Duration,
+};
+
 use tracing::{debug, error, info, warn};
+
+use crate::{
+    auth::{
+        middleware::{routes::auth_error_response, set_current_user},
+        AuthMiddleware,
+    },
+    coordinator::Coordinator,
+};
 
 /// Error type for wire server operations.
 #[derive(Debug, thiserror::Error)]
@@ -34,9 +41,9 @@ pub fn run_wire_server(
     auth: Arc<AuthMiddleware>,
     runtime: Arc<tokio::runtime::Runtime>,
 ) -> Result<(), WireServerError> {
-    listener.set_nonblocking(false).map_err(|e| {
-        WireServerError::Io(format!("failed to set listener to blocking: {e}"))
-    })?;
+    listener
+        .set_nonblocking(false)
+        .map_err(|e| WireServerError::Io(format!("failed to set listener to blocking: {e}")))?;
 
     let timeout = Duration::from_millis(request_timeout_ms);
     let mut active_connections: usize = 0;
@@ -85,16 +92,16 @@ pub fn run_wire_server(
 
                 // Detach the thread (we don't join here -- fire and forget).
                 drop(handle);
-            }
+            },
             Err(ref e) if e.kind() == std::io::ErrorKind::WouldBlock => {
                 // No connection available, check shutdown flag.
                 std::thread::sleep(Duration::from_millis(100));
                 continue;
-            }
+            },
             Err(e) => {
                 error!("accept error: {e}");
                 std::thread::sleep(Duration::from_millis(100));
-            }
+            },
         }
     }
 
@@ -123,17 +130,14 @@ fn handle_connection(
         Err(e) => {
             debug!(peer = %peer, error = %e, "failed to clone stream");
             return;
-        }
+        },
     };
     let reader = BufReader::new(reader_stream);
     let mut writer = stream;
 
     for line in reader.lines() {
         if coordinator.is_shutting_down() {
-            let _ = write!(
-                writer,
-                "{{\"error\":\"shutting_down\"}}\n"
-            );
+            let _ = write!(writer, "{{\"error\":\"shutting_down\"}}\n");
             break;
         }
 
@@ -142,11 +146,11 @@ fn handle_connection(
             Err(ref e) if e.kind() == std::io::ErrorKind::WouldBlock => {
                 debug!(peer = %peer, "read timeout, closing connection");
                 break;
-            }
+            },
             Err(e) => {
                 debug!(peer = %peer, error = %e, "read error, closing connection");
                 break;
-            }
+            },
         };
 
         let line = line.trim().to_string();
@@ -170,15 +174,14 @@ fn handle_connection(
                     }
                     // Re-serialize for process_message (user field attached).
                     let re_serialized = msg.to_string();
-                    let response =
-                        protocol::process_message(&re_serialized, &coordinator);
+                    let response = protocol::process_message(&re_serialized, &coordinator);
                     if let Some(resp) = response {
                         if let Err(e) = write!(writer, "{resp}\n") {
                             debug!(peer = %peer, error = %e, "write error");
                             break;
                         }
                     }
-                }
+                },
                 Ok(None) => {
                     // Public route or auth disabled -- proceed normally.
                     let response = protocol::process_message(&line, &coordinator);
@@ -188,7 +191,7 @@ fn handle_connection(
                             break;
                         }
                     }
-                }
+                },
                 Err(e) => {
                     warn!(peer = %peer, error = %e, "auth: rejected");
                     let resp = auth_error_response(&e);
@@ -196,7 +199,7 @@ fn handle_connection(
                         debug!(peer = %peer, error = %write_err, "write error");
                         break;
                     }
-                }
+                },
             }
         } else {
             // Invalid JSON -- let process_message return the validation error.

@@ -50,7 +50,7 @@ fn apply_single(input: &[u8], name: &str) -> Result<Vec<u8>, TransformError> {
             Ok(base64::engine::general_purpose::STANDARD
                 .encode(input)
                 .into_bytes())
-        }
+        },
         "base64_decode" => {
             use base64::Engine;
             let s =
@@ -58,10 +58,9 @@ fn apply_single(input: &[u8], name: &str) -> Result<Vec<u8>, TransformError> {
             base64::engine::general_purpose::STANDARD
                 .decode(s)
                 .map_err(|e| TransformError::Decoding(e.to_string()))
-        }
+        },
         "gzip_compress" => {
-            use flate2::write::GzEncoder;
-            use flate2::Compression;
+            use flate2::{write::GzEncoder, Compression};
             let mut encoder = GzEncoder::new(Vec::new(), Compression::default());
             encoder
                 .write_all(input)
@@ -69,7 +68,7 @@ fn apply_single(input: &[u8], name: &str) -> Result<Vec<u8>, TransformError> {
             encoder
                 .finish()
                 .map_err(|e| TransformError::Encoding(e.to_string()))
-        }
+        },
         "gzip_decompress" => {
             use flate2::read::GzDecoder;
             let mut decoder = GzDecoder::new(input);
@@ -78,19 +77,19 @@ fn apply_single(input: &[u8], name: &str) -> Result<Vec<u8>, TransformError> {
                 .read_to_end(&mut output)
                 .map_err(|e| TransformError::Decoding(e.to_string()))?;
             Ok(output)
-        }
+        },
         "sha256" => {
             use sha2::{Digest, Sha256};
             let mut hasher = Sha256::new();
             hasher.update(input);
             Ok(hasher.finalize().to_vec())
-        }
+        },
         "msgpack_encode" => {
             rmp_serde::to_vec(input).map_err(|e| TransformError::Encoding(e.to_string()))
-        }
+        },
         "msgpack_decode" => {
             rmp_serde::from_slice(input).map_err(|e| TransformError::Decoding(e.to_string()))
-        }
+        },
         other => Err(TransformError::UnknownTransform(other.to_string())),
     }
 }

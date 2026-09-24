@@ -2,10 +2,10 @@
 //!
 //! Provides two hot-path helpers used by the meshing pipeline:
 //!
-//! * [`simd_normals_batch`] — normalise an array of `[f32;3]` normal vectors in
-//!   batches of 4 using SSE2/AVX2 when available, with a scalar fallback.
-//! * [`simd_aabb_center_batch`] — compute the centre of axis-aligned bounding
-//!   boxes given as `[min_xyz; max_xyz]` (length-6 slices) in batches of 4.
+//! * [`simd_normals_batch`] — normalise an array of `[f32;3]` normal vectors in batches of 4 using
+//!   SSE2/AVX2 when available, with a scalar fallback.
+//! * [`simd_aabb_center_batch`] — compute the centre of axis-aligned bounding boxes given as
+//!   `[min_xyz; max_xyz]` (length-6 slices) in batches of 4.
 //!
 //! All functions are safe to call on any platform. On `x86_64` with SSE2
 //! (baseline for the target) the SIMD path is selected automatically; on other
@@ -100,7 +100,7 @@ mod x86_impl {
             let mut out = [0.0f32; 3];
             out[0] = _mm_cvtss_f32(v);
             out[1] = _mm_cvtss_f32(_mm_shuffle_ps(v, v, 0x55));
-            out[2] = _mm_cvtss_f32(_mm_shuffle_ps(v, v, 0xAA));
+            out[2] = _mm_cvtss_f32(_mm_shuffle_ps(v, v, 0xaa));
             out
         };
 
@@ -145,7 +145,7 @@ mod x86_impl {
             let mut out = [0.0f32; 3];
             out[0] = _mm_cvtss_f32(v);
             out[1] = _mm_cvtss_f32(_mm_shuffle_ps(v, v, 0x55));
-            out[2] = _mm_cvtss_f32(_mm_shuffle_ps(v, v, 0xAA));
+            out[2] = _mm_cvtss_f32(_mm_shuffle_ps(v, v, 0xaa));
             out
         };
 

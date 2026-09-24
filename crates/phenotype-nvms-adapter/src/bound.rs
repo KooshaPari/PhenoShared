@@ -72,7 +72,11 @@ pub struct BoundManifestBuilder {
 
 impl BoundManifestBuilder {
     /// Create a new builder.
-    pub fn new(manifest: Manifest, host: CapabilityDescriptor, bound_by: impl Into<String>) -> Self {
+    pub fn new(
+        manifest: Manifest,
+        host: CapabilityDescriptor,
+        bound_by: impl Into<String>,
+    ) -> Self {
         Self {
             manifest,
             host,
@@ -163,10 +167,9 @@ impl BoundManifestBuilder {
 
 #[cfg(test)]
 mod tests {
+    use fabric_capability::descriptor::{AudioCapabilities, Capabilities, ComputeCapabilities};
+
     use super::*;
-    use fabric_capability::descriptor::{
-        AudioCapabilities, Capabilities, ComputeCapabilities,
-    };
 
     fn minimal_host() -> CapabilityDescriptor {
         CapabilityDescriptor {

@@ -4,8 +4,8 @@
 //! "Two graphs, one product":
 //!
 //! * [`IntentGraph`] models *what should exist* — Intent, Feature, Task, Spec, PR…
-//! * [`ExecutionGraph`] models *what actually ran* — Build, Test, Deploy, Job, with
-//!   concrete statuses, durations, and DAG edges between them.
+//! * [`ExecutionGraph`] models *what actually ran* — Build, Test, Deploy, Job, with concrete
+//!   statuses, durations, and DAG edges between them.
 //!
 //! Both graphs share a uniform style (`NodeType` + `Edge` + `Meta` + validate/cycle
 //! detection) so consumers can apply the same traversal/diff machinery to either.
@@ -13,8 +13,10 @@
 //! Source of inspiration: [`AgilePlus/crates/agileplus-domain/src/intent_graph.rs`](https://example.invalid/AgilePlus/crates/agileplus-domain/src/intent_graph.rs)
 //! — runtime DAG is the dual of the intent DAG.
 
-use std::collections::{HashMap, HashSet};
-use std::fmt;
+use std::{
+    collections::{HashMap, HashSet},
+    fmt,
+};
 
 use chrono::{DateTime, Utc};
 use regex::Regex;
@@ -464,7 +466,7 @@ impl ExecutionGraph {
                     match colors.get(neighbor).copied().unwrap_or(Color::White) {
                         Color::White => dfs(neighbor, adj, colors)?,
                         Color::Gray => return Err(ExecutionValidationError::CycleDetected),
-                        Color::Black => {}
+                        Color::Black => {},
                     }
                 }
             }

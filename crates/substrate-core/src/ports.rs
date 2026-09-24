@@ -6,10 +6,13 @@
 
 use async_trait::async_trait;
 
-use crate::domain::{
-    ConversationDump, EngineCapabilities, Mailbox, Message, RoutingDecision, StructuredResult, Task,
+use crate::{
+    domain::{
+        ConversationDump, EngineCapabilities, Mailbox, Message, RoutingDecision, StructuredResult,
+        Task,
+    },
+    error::Result,
 };
-use crate::error::Result;
 
 /// Drives a concrete agent engine (a CLI such as `forge`, or an SDK).
 ///

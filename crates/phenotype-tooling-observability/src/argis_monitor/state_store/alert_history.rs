@@ -2,8 +2,7 @@
 
 use serde::{Deserialize, Serialize};
 
-use super::types::StateStoreError;
-use super::StateStore;
+use super::{types::StateStoreError, StateStore};
 
 /// One row of alert history.
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
@@ -30,9 +29,18 @@ impl StateStore {
         fired_at_unix: u64,
     ) -> Result<(), StateStoreError> {
         self.conn.execute(
-            "INSERT INTO alert_history (key, event, severity, burn_rate, threshold, payload_json, fired_at_unix)
+            "INSERT INTO alert_history (key, event, severity, burn_rate, threshold, payload_json, \
+             fired_at_unix)
              VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7)",
-            rusqlite::params![key, event, severity, burn_rate, threshold, payload_json, fired_at_unix as i64],
+            rusqlite::params![
+                key,
+                event,
+                severity,
+                burn_rate,
+                threshold,
+                payload_json,
+                fired_at_unix as i64
+            ],
         )?;
         Ok(())
     }
@@ -70,7 +78,9 @@ impl StateStore {
             None => stmt.query_map(rusqlite::params![limit], row_map)?,
         };
         let mut out = Vec::new();
-        for row in rows { out.push(row?); }
+        for row in rows {
+            out.push(row?);
+        }
         Ok(out)
     }
 }

@@ -2,12 +2,12 @@
 
 use tracing::warn;
 
-use crate::argis_monitor::alerts::{self, AlertPayload, AlertStateTracker, Decision};
-use crate::argis_monitor::state_store::TrackerSnapshot;
-use crate::argis_monitor::suppression;
-use crate::argis_monitor::webhook;
-
 use super::monitor::Monitor;
+use crate::argis_monitor::{
+    alerts::{self, AlertPayload, AlertStateTracker, Decision},
+    state_store::TrackerSnapshot,
+    suppression, webhook,
+};
 
 /// Evaluate every alert rule against the latest burn rates. Returns the
 /// list of payloads that fired (already delivered via webhooks).
@@ -36,7 +36,9 @@ pub(crate) async fn evaluate_alerts_impl(
         .collect();
     for rule in &inner.config.alert_rules {
         let key = format!("{}::{}", target_name, rule.name);
-        if disabled.contains(&key) { continue; }
+        if disabled.contains(&key) {
+            continue;
+        }
         let burn = match rule.window {
             Some(w) if w >= crate::argis_monitor::slo::BurnWindow::SLOW_BURN.long => burn_long,
             _ => burn_short,
@@ -45,7 +47,9 @@ pub(crate) async fn evaluate_alerts_impl(
         let snap;
         {
             let mut trackers = inner.alert_trackers.lock().await;
-            let tracker = trackers.entry(key.clone()).or_insert_with(AlertStateTracker::default);
+            let tracker = trackers
+                .entry(key.clone())
+                .or_insert_with(AlertStateTracker::default);
             match alerts::evaluate(rule, target_name, burn, ts, tracker) {
                 Decision::Fire(payload) => {
                     // Suppression check. A matching window swallows the
@@ -67,7 +71,8 @@ pub(crate) async fn evaluate_alerts_impl(
                             "alert suppressed by window"
                         );
                     } else {
-                        let reports = webhook::deliver_all(&inner.http, &rule.webhooks, &payload).await;
+                        let reports =
+                            webhook::deliver_all(&inner.http, &rule.webhooks, &payload).await;
                         let mut last = inner.last_delivery.lock().await;
                         for r in reports {
                             if !r.success {
@@ -80,7 +85,8 @@ pub(crate) async fn evaluate_alerts_impl(
                                 // memory counter so failures survive a
                                 // monitor restart.
                                 if let Some(s) = store.as_mut() {
-                                    let msg = r.error.as_deref().unwrap_or("webhook delivery failed");
+                                    let msg =
+                                        r.error.as_deref().unwrap_or("webhook delivery failed");
                                     if let Err(e) = s.record_alert_failure(&key, ts, msg) {
                                         warn!(target = %target_name, rule = %rule.name, error = %e, "alert failure record failed");
                                     }
@@ -125,8 +131,8 @@ pub(crate) async fn evaluate_alerts_impl(
                             }
                         }
                     }
-                }
-                Decision::None => {}
+                },
+                Decision::None => {},
             }
             snap = TrackerSnapshot {
                 state: tracker.state.clone(),
@@ -134,7 +140,15 @@ pub(crate) async fn evaluate_alerts_impl(
             };
         }
         // Capture fired-meta for the alert_history insert below.
-        let fired_meta = fired.last().map(|p| (p.rule.clone(), p.severity, p.burn_rate, p.threshold, p.fired_at_unix));
+        let fired_meta = fired.last().map(|p| {
+            (
+                p.rule.clone(),
+                p.severity,
+                p.burn_rate,
+                p.threshold,
+                p.fired_at_unix,
+            )
+        });
         // Persist outside the trackers lock to avoid contention.
         if let Some(s) = store.as_mut() {
             if let Err(e) = s.save(&key, &snap) {
@@ -149,15 +163,21 @@ pub(crate) async fn evaluate_alerts_impl(
                     "threshold": threshold,
                     "severity": format!("{:?}", severity).to_lowercase(),
                     "fired_at_unix": ts,
-                })).unwrap_or_default();
+                }))
+                .unwrap_or_default();
                 let event = match snap.state {
                     crate::argis_monitor::alerts::AlertState::Ok => "resolved",
                     _ => "fired",
                 };
                 let severity_str = format!("{:?}", severity).to_lowercase();
                 if let Err(e) = s.record_event(
-                    &key, event, &severity_str,
-                    *burn, *threshold, &payload_json, *ts,
+                    &key,
+                    event,
+                    &severity_str,
+                    *burn,
+                    *threshold,
+                    &payload_json,
+                    *ts,
                 ) {
                     warn!(target = %target_name, rule = %rule_name, error = %e, "alert history record failed");
                 }

@@ -5,6 +5,7 @@
 //! (e.g. add an AWS region later without re-constructing).
 
 use std::collections::HashMap;
+
 use serde::{Deserialize, Serialize};
 
 /// Where to send an alert payload when a rule fires.

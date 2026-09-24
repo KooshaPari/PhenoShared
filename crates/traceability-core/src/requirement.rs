@@ -2,14 +2,13 @@
 //!
 //! ## Hybridisation (ADR-0001 §4)
 //!
-//! * The `Requirement` struct itself is **Tracera's** shape
-//!   ([`Tracera/crates/tracera-core/src/lib.rs:157-186`](https://example.invalid/Tracera/crates/tracera-core/src/lib.rs)):
-//!   it embeds an `Artifact`, holds `status`, `priority`, `rationale`,
-//!   `acceptance_criteria: Vec<String>`, and `verification_method: Option<...>`.
-//! * `RequirementStatus` is **Tracera's** ISO 29148 § 5.2.8 vocabulary
-//!   (Draft / Proposed / Approved / Implemented / Verified / Deprecated / Rejected).
-//! * `VerificationMethod` is **Tracera's** DO-178C / IEEE 1012 vocabulary
-//!   (Test / Analysis / Inspection / Demonstration / Review).
+//! * The `Requirement` struct itself is **Tracera's** shape ([`Tracera/crates/tracera-core/src/lib.rs:157-186`](https://example.invalid/Tracera/crates/tracera-core/src/lib.rs)):
+//!   it embeds an `Artifact`, holds `status`, `priority`, `rationale`, `acceptance_criteria:
+//!   Vec<String>`, and `verification_method: Option<...>`.
+//! * `RequirementStatus` is **Tracera's** ISO 29148 § 5.2.8 vocabulary (Draft / Proposed / Approved
+//!   / Implemented / Verified / Deprecated / Rejected).
+//! * `VerificationMethod` is **Tracera's** DO-178C / IEEE 1012 vocabulary (Test / Analysis /
+//!   Inspection / Demonstration / Review).
 //!
 //! ### How AgilePlus' `Evidence` / `EvidenceType` is reconciled
 //!
@@ -40,11 +39,10 @@
 //! strings (one per acceptance bullet). `AcceptanceContract::criteria` in
 //! `crate::contract` is a *testable* list of `Criterion { test_ref, evidence_ref }`
 //! that maps to a Covered matrix cell. To stay lossless:
-//! 1. `Requirement::acceptance_criteria` keeps the **free-form** shape so
-//!    any existing Tracera JSON / SQL payload still round-trips.
-//! 2. `AcceptanceContract::criteria` is the **testable** layer that the
-//!    progression gate enforces. Free-form bullets can be promoted to
-//!    `Criterion` lazily.
+//! 1. `Requirement::acceptance_criteria` keeps the **free-form** shape so any existing Tracera JSON
+//!    / SQL payload still round-trips.
+//! 2. `AcceptanceContract::criteria` is the **testable** layer that the progression gate enforces.
+//!    Free-form bullets can be promoted to `Criterion` lazily.
 
 use serde::{Deserialize, Serialize};
 
@@ -189,10 +187,12 @@ pub use crate::tracelink::is_core_link_type;
 
 #[cfg(test)]
 mod tests {
+    use std::collections::BTreeMap;
+
+    use uuid::Uuid;
+
     use super::*;
     use crate::ids::RequirementId;
-    use std::collections::BTreeMap;
-    use uuid::Uuid;
 
     fn sample_artifact() -> Artifact {
         Artifact {

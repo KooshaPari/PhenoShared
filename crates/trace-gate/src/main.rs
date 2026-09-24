@@ -18,15 +18,13 @@ mod coverage;
 mod manifest;
 mod push;
 
-use std::path::PathBuf;
-use std::process;
+use std::{path::PathBuf, process};
 
 use clap::Parser;
-use traceability_core::CoverageState;
-use traceability_decorators::{patterns::Patterns, scan_dir};
-
 use coverage::CoverageSummary;
 use manifest::Manifest;
+use traceability_core::CoverageState;
+use traceability_decorators::{patterns::Patterns, scan_dir};
 
 // ── Terminal colour helpers ───────────────────────────────────────────────────
 
@@ -109,9 +107,12 @@ fn main() {
         Ok(m) => m,
         Err(e) => {
             tracing::error!("trace-gate: cannot load manifest — {e}");
-            tracing::warn!("hint: check that '{}' exists and is valid TOML", args.manifest);
+            tracing::warn!(
+                "hint: check that '{}' exists and is valid TOML",
+                args.manifest
+            );
             process::exit(2);
-        }
+        },
     };
 
     if manifest.requirement.is_empty() {
@@ -131,7 +132,7 @@ fn main() {
                 args.src
             );
             process::exit(2);
-        }
+        },
     };
 
     // ── Build coverage summary ───────────────────────────────────────────────
@@ -164,10 +165,10 @@ fn main() {
                     };
                     println!("       {}:{}{}", loc.file, loc.line, sym);
                 }
-            }
+            },
             _ => {
                 println!("  {fail_sym} {} — MISSING ({})", req.fr_id, req.description);
-            }
+            },
         }
     }
     println!();

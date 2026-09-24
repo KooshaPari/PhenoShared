@@ -1,13 +1,13 @@
 //! `Dispatcher` trait + a `MockDispatcher` used in MVP cut-line tests.
 
-use std::sync::atomic::{AtomicUsize, Ordering};
-use std::sync::Arc;
+use std::sync::{
+    atomic::{AtomicUsize, Ordering},
+    Arc,
+};
 
 use async_trait::async_trait;
 
-use crate::error::Result;
-use crate::runner::DispatchOutcome;
-use crate::wave::TaskSpec;
+use crate::{error::Result, runner::DispatchOutcome, wave::TaskSpec};
 
 #[async_trait]
 pub trait Dispatcher: Send + Sync {

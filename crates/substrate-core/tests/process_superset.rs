@@ -1,7 +1,9 @@
 //! Process superset: core port contracts compile and round-trip.
 
-use substrate_core::process_port::{ProcessSpawnSpec, ProcessState};
-use substrate_core::watcher_port::{WatchEvent, WatchEventKind};
+use substrate_core::{
+    process_port::{ProcessSpawnSpec, ProcessState},
+    watcher_port::{WatchEvent, WatchEventKind},
+};
 
 #[test]
 fn process_spawn_spec_round_trips_json() {
@@ -17,7 +19,9 @@ fn process_spawn_spec_round_trips_json() {
 
 #[test]
 fn process_state_variants_are_distinct() {
-    let running = ProcessState::Running { pid: 42 };
+    let running = ProcessState::Running {
+        pid: 42,
+    };
     let exited = ProcessState::Exited {
         pid: 42,
         code: Some(0),

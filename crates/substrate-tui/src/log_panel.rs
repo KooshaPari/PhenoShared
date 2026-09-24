@@ -1,3 +1,5 @@
+use std::collections::VecDeque;
+
 use ratatui::{
     layout::Rect,
     style::{Color, Style},
@@ -5,7 +7,6 @@ use ratatui::{
     widgets::{Block, Borders, List, ListItem},
     Frame,
 };
-use std::collections::VecDeque;
 
 #[derive(Clone, Debug, PartialEq)]
 pub enum LogLevel {

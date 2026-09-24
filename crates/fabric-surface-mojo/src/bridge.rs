@@ -8,16 +8,15 @@
 //!
 //! Mojo compiles kernels with a `target` parameter:
 //!
-//! - **`target = "cpu"`** — emits x86/ARM SIMD intrinsics. Maps to Fabric tiers
-//!   L0SameProcess through L2CrossNumaShm where the kernel runs in-process on
-//!   the same host.
+//! - **`target = "cpu"`** — emits x86/ARM SIMD intrinsics. Maps to Fabric tiers L0SameProcess
+//!   through L2CrossNumaShm where the kernel runs in-process on the same host.
 //!
-//! - **`target = "gpu"`** — emits CUDA/ROCm/Metal PTX via MLIR. Maps to L3PcieP2P
-//!   through L5Loopback where the kernel runs on a GPU attached to the same host
-//!   or a locally networked peer.
+//! - **`target = "gpu"`** — emits CUDA/ROCm/Metal PTX via MLIR. Maps to L3PcieP2P through
+//!   L5Loopback where the kernel runs on a GPU attached to the same host or a locally networked
+//!   peer.
 //!
-//! - **`target = "remote"`** — serializes kernel args as a protobuf/FlatBuffer
-//!   and ships them to a remote executor. Maps to L6Lan through L8Oob.
+//! - **`target = "remote"`** — serializes kernel args as a protobuf/FlatBuffer and ships them to a
+//!   remote executor. Maps to L6Lan through L8Oob.
 //!
 //! The key insight is that Mojo's parametric compilation means you write ONE
 //! kernel definition and the compiler produces the right native code for each

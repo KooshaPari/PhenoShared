@@ -7,10 +7,11 @@
 //! The protocol is intentionally minimal: it wraps the existing `failover::replan`
 //! signature and never invents new types beyond a thin request/response wrapper.
 
+use fabric_graph::{
+    failover::{FailoverError, FailoverOutcome},
+    model::{Intent, NodeId, RoutePlan, Topology},
+};
 use serde::{Deserialize, Serialize};
-
-use fabric_graph::failover::{FailoverError, FailoverOutcome};
-use fabric_graph::model::{Intent, NodeId, RoutePlan, Topology};
 
 /// The full request body for `replan`.
 ///
@@ -56,8 +57,12 @@ impl ReplanResponse {
     #[must_use]
     pub fn kind(&self) -> &'static str {
         match self {
-            ReplanResponse::Replaced { .. } => "replaced",
-            ReplanResponse::NoReplacement { .. } => "no_replacement",
+            ReplanResponse::Replaced {
+                ..
+            } => "replaced",
+            ReplanResponse::NoReplacement {
+                ..
+            } => "no_replacement",
         }
     }
 }
@@ -119,7 +124,9 @@ pub fn replan(req: &ReplanRequest) -> Result<ReplanResponse, ReplanError> {
     )
     .map_err(replan_err_from)?;
     Ok(match outcome {
-        FailoverOutcome::Replaced(new_plan) => ReplanResponse::Replaced { new_plan },
+        FailoverOutcome::Replaced(new_plan) => ReplanResponse::Replaced {
+            new_plan,
+        },
         FailoverOutcome::NoReplacement => ReplanResponse::NoReplacement {
             failed_nodes: req.failed_nodes.clone(),
         },
@@ -164,10 +171,12 @@ impl ReplanError {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
+    use fabric_graph::{
+        builder::{IntentBuilder, TopologyBuilder},
+        LocalityTier,
+    };
 
-    use fabric_graph::builder::{IntentBuilder, TopologyBuilder};
-    use fabric_graph::LocalityTier;
+    use super::*;
 
     fn two_node_topology() -> (Topology, NodeId, NodeId) {
         let a = NodeId::new("a");
@@ -198,9 +207,11 @@ mod tests {
         };
         let resp = replan(&req).unwrap();
         match resp {
-            ReplanResponse::Replaced { new_plan } => {
+            ReplanResponse::Replaced {
+                new_plan,
+            } => {
                 assert_eq!(new_plan.id, original.id);
-            }
+            },
             other => panic!("expected Replaced, got {:?}", other.kind()),
         }
         let _ = a;
@@ -229,11 +240,13 @@ mod tests {
         };
         let resp = replan(&req).unwrap();
         match resp {
-            ReplanResponse::Replaced { new_plan } => {
+            ReplanResponse::Replaced {
+                new_plan,
+            } => {
                 for step in &new_plan.steps {
                     assert_eq!(step.node, b, "step must use surviving node");
                 }
-            }
+            },
             other => panic!("expected Replaced, got {:?}", other.kind()),
         }
     }
@@ -256,9 +269,11 @@ mod tests {
         };
         let resp = replan(&req).unwrap();
         match resp {
-            ReplanResponse::NoReplacement { failed_nodes } => {
+            ReplanResponse::NoReplacement {
+                failed_nodes,
+            } => {
                 assert_eq!(failed_nodes.len(), 2);
-            }
+            },
             other => panic!("expected NoReplacement, got {:?}", other.kind()),
         }
     }

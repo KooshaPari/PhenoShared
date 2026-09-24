@@ -20,11 +20,14 @@
 use std::sync::{Arc, Mutex};
 
 use async_trait::async_trait;
-use substrate_core::domain::{RoutingDecision, Task};
-use substrate_core::error::{Result, SubstrateError};
-use substrate_core::ports::RoutingPort;
-use substrate_core::routing_port::{
-    CircuitBreakerConfig, RoutingStrategy, RoutingSuperset, RoutingTarget, SupersetRoutingDecision,
+use substrate_core::{
+    domain::{RoutingDecision, Task},
+    error::{Result, SubstrateError},
+    ports::RoutingPort,
+    routing_port::{
+        CircuitBreakerConfig, RoutingStrategy, RoutingSuperset, RoutingTarget,
+        SupersetRoutingDecision,
+    },
 };
 
 /// Default base URL for the OmniRoute local proxy.
@@ -58,7 +61,10 @@ impl ProviderConfig {
             .map_err(|e| SubstrateError::Routing(format!("OMNIROUTE_API_KEY not set: {e}")))?;
         let base_url =
             std::env::var("OMNIROUTE_BASE_URL").unwrap_or_else(|_| DEFAULT_BASE_URL.to_string());
-        Ok(ProviderConfig { base_url, api_key })
+        Ok(ProviderConfig {
+            base_url,
+            api_key,
+        })
     }
 
     /// Build a `ProviderConfig` from explicit values (no environment

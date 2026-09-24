@@ -12,9 +12,11 @@ use tracing::{debug, warn};
 
 #[cfg(target_os = "macos")]
 mod platform {
-    use core_graphics::event::{CGEvent, CGEventTapLocation, CGMouseButton, ScrollEventUnit};
-    use core_graphics::event_source::{CGEventSource, CGEventSourceStateID};
-    use core_graphics::geometry::CGPoint;
+    use core_graphics::{
+        event::{CGEvent, CGEventTapLocation, CGMouseButton, ScrollEventUnit},
+        event_source::{CGEventSource, CGEventSourceStateID},
+        geometry::CGPoint,
+    };
 
     use super::*;
 
@@ -58,10 +60,10 @@ mod platform {
             Ok(event) => {
                 event.post(CGEventTapLocation::HID);
                 debug!("scroll posted at ({}, {}), lines={}", x, y, lines);
-            }
+            },
             Err(()) => {
                 warn!("CGEvent::new_scroll_event failed (no display? locked screen?)");
-            }
+            },
         }
     }
 }
@@ -134,26 +136,26 @@ pub fn dispatch(
         return;
     }
     match action {
-        AccessibilityAction::None => {}
+        AccessibilityAction::None => {},
         AccessibilityAction::Click => {
             platform::click_at(screen_x, screen_y, MouseButton::Left);
-        }
+        },
         AccessibilityAction::ScrollUp => {
             let lines = scroll_lines_from_speed(scroll_speed);
             platform::scroll_at(screen_x, screen_y, lines);
-        }
+        },
         AccessibilityAction::ScrollDown => {
             let lines = scroll_lines_from_speed(scroll_speed);
             platform::scroll_at(screen_x, screen_y, -lines);
-        }
+        },
         AccessibilityAction::DwellStarted => {
             // Pure signal — no mouse event to post.
             debug!("dwell started at ({}, {})", screen_x, screen_y);
-        }
+        },
         AccessibilityAction::DwellCancelled => {
             // Pure signal — no mouse event to post.
             debug!("dwell cancelled at ({}, {})", screen_x, screen_y);
-        }
+        },
     }
 }
 

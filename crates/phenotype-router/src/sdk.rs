@@ -3,14 +3,12 @@
 //! ADR-052 (the Bifrost plugin SDK spec) is defined in Go. This module is
 //! the **Rust** translation of the same contract:
 //!
-//! - [`LlmPort`] — async provider port. Mirrors ADR-051 §4 transport rules:
-//!   plugins call into the router via this trait; the trait is the only
-//!   surface that crosses the substrate boundary.
-//! - [`DecisionPlugin`] — sync in-process decision hook. Mirrors ADR-052
-//!   §1 (5-method Plugin interface), narrowed for the v0.1 lib surface.
-//! - [`ConnectorPort`] — async external-data connector (vector stores,
-//!   retrievers, MCP servers, remote HTTP services). Mirrors ADR-052 §1
-//!   plugin-with-`CapNetworkIO` shape.
+//! - [`LlmPort`] — async provider port. Mirrors ADR-051 §4 transport rules: plugins call into the
+//!   router via this trait; the trait is the only surface that crosses the substrate boundary.
+//! - [`DecisionPlugin`] — sync in-process decision hook. Mirrors ADR-052 §1 (5-method Plugin
+//!   interface), narrowed for the v0.1 lib surface.
+//! - [`ConnectorPort`] — async external-data connector (vector stores, retrievers, MCP servers,
+//!   remote HTTP services). Mirrors ADR-052 §1 plugin-with-`CapNetworkIO` shape.
 //!
 //! All three traits emit OTel-compatible spans via the `tracing` crate
 //! (ADR-012 / ADR-036B — `pheno-tracing` substrate). Plugin authors MUST

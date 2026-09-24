@@ -2,18 +2,20 @@
 //!
 //! See `docs/adr/ADR-0001-superset-merge.md` §6 for design rationale.
 //!
-//! * [`AcceptanceContract`] is satisfied **only** when every [`Criterion`] maps to
-//!   a [`CoverageState::Covered`] cell in the supplied [`CoverageMatrix`].
-//! * [`ProgressionGate`] evaluates layer-to-layer advancement using governance
-//!   vocabulary (`not_approved`, `missing_acceptance`, `missing_evidence`,
-//!   `missing_implementation`, `missing_test`).
+//! * [`AcceptanceContract`] is satisfied **only** when every [`Criterion`] maps to a
+//!   [`CoverageState::Covered`] cell in the supplied [`CoverageMatrix`].
+//! * [`ProgressionGate`] evaluates layer-to-layer advancement using governance vocabulary
+//!   (`not_approved`, `missing_acceptance`, `missing_evidence`, `missing_implementation`,
+//!   `missing_test`).
 
 use serde::{Deserialize, Serialize};
 
-use crate::artifact::ArtifactRef;
-use crate::governance::Evidence;
-use crate::matrix::{CoverageMatrix, CoverageState};
-use crate::requirement::{Requirement, RequirementStatus, VerificationMethod};
+use crate::{
+    artifact::ArtifactRef,
+    governance::Evidence,
+    matrix::{CoverageMatrix, CoverageState},
+    requirement::{Requirement, RequirementStatus, VerificationMethod},
+};
 
 /// Phenotype layer stack for progression gates.
 ///
@@ -263,7 +265,7 @@ impl ProgressionGate {
                 } else {
                     None
                 }
-            }
+            },
             GatePredicate::MissingAcceptance => {
                 let satisfied = ctx
                     .acceptance
@@ -275,7 +277,7 @@ impl ProgressionGate {
                 } else {
                     None
                 }
-            }
+            },
             GatePredicate::MissingEvidence => {
                 let has_evidence = !ctx.evidence.is_empty();
                 if !has_evidence {
@@ -283,21 +285,21 @@ impl ProgressionGate {
                 } else {
                     None
                 }
-            }
+            },
             GatePredicate::MissingImplementation => {
                 if !ctx.has_implementation {
                     Some(GateReason::MissingImplementation)
                 } else {
                     None
                 }
-            }
+            },
             GatePredicate::MissingTest => {
                 if !ctx.has_test_links {
                     Some(GateReason::MissingTest)
                 } else {
                     None
                 }
-            }
+            },
             GatePredicate::CodegenBeforeWalls => {
                 let walls_defined = ctx
                     .acceptance
@@ -308,7 +310,7 @@ impl ProgressionGate {
                 } else {
                     None
                 }
-            }
+            },
             GatePredicate::MissingValidator => {
                 let missing = ctx
                     .acceptance
@@ -325,7 +327,7 @@ impl ProgressionGate {
                 } else {
                     None
                 }
-            }
+            },
             GatePredicate::BridgeNotEstablished => {
                 let bridged = ctx
                     .acceptance
@@ -336,7 +338,7 @@ impl ProgressionGate {
                 } else {
                     None
                 }
-            }
+            },
         }
     }
 
@@ -365,16 +367,19 @@ impl ProgressionGate {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
-    use crate::artifact::Artifact;
-    use crate::artifact::ArtifactKind;
-    use crate::governance::EvidenceType;
-    use crate::ids::RequirementId;
-    use crate::matrix::MatrixCell;
+    use std::collections::BTreeMap;
+
     use chrono::Utc;
     use indexmap::IndexMap;
-    use std::collections::BTreeMap;
     use uuid::Uuid;
+
+    use super::*;
+    use crate::{
+        artifact::{Artifact, ArtifactKind},
+        governance::EvidenceType,
+        ids::RequirementId,
+        matrix::MatrixCell,
+    };
 
     fn sample_matrix(covered: bool) -> CoverageMatrix {
         let state = if covered {

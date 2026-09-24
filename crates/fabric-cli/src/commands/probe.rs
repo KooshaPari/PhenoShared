@@ -6,7 +6,6 @@
 
 use anyhow::{Context, Result};
 use clap::Args;
-
 use fabric_capability::{probe::default_probe, signing};
 
 use crate::output;
@@ -23,7 +22,9 @@ pub struct ProbeArgs {
 
 pub fn dispatch(args: &ProbeArgs) -> Result<()> {
     let probe = default_probe();
-    let mut descriptor = probe.probe().context("capability probe failed on this host")?;
+    let mut descriptor = probe
+        .probe()
+        .context("capability probe failed on this host")?;
 
     // Auto-sign the descriptor.
     let key = signing::SigningKey::generate();

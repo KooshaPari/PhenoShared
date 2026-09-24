@@ -1,8 +1,6 @@
 //! Common health checker implementations.
 
-use std::future::Future;
-use std::pin::Pin;
-use std::sync::Arc;
+use std::{future::Future, pin::Pin, sync::Arc};
 
 use crate::{HealthChecker, HealthStatus};
 

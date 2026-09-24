@@ -4,9 +4,10 @@
 //! (lines 46-72, 184-239, 322-381). Split out of the monolithic `lib.rs` so
 //! `artifact` and `matrix` can depend on link types without circular imports.
 
+use std::collections::BTreeMap;
+
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
-use std::collections::BTreeMap;
 use uuid::Uuid;
 
 use crate::artifact::{ArtifactKind, ArtifactRef, TraceLinkError};
@@ -179,17 +180,21 @@ pub struct Neo4jSchema;
 impl Neo4jSchema {
     /// Uniqueness / existence constraints.
     pub const CONSTRAINTS: &'static [&'static str] = &[
-        "CREATE CONSTRAINT artifact_id_unique IF NOT EXISTS FOR (a:Artifact) REQUIRE a.id IS UNIQUE",
-        "CREATE CONSTRAINT requirement_id_unique IF NOT EXISTS FOR (r:Requirement) REQUIRE r.id IS UNIQUE",
+        "CREATE CONSTRAINT artifact_id_unique IF NOT EXISTS FOR (a:Artifact) REQUIRE a.id IS \
+         UNIQUE",
+        "CREATE CONSTRAINT requirement_id_unique IF NOT EXISTS FOR (r:Requirement) REQUIRE r.id \
+         IS UNIQUE",
         "CREATE CONSTRAINT project_id_unique IF NOT EXISTS FOR (p:Project) REQUIRE p.id IS UNIQUE",
     ];
 
     /// Lookup / range indexes for the common RAG-side queries.
     pub const INDEXES: &'static [&'static str] = &[
-        "CREATE INDEX artifact_project_kind IF NOT EXISTS FOR (a:Artifact) ON (a.project_id, a.kind)",
+        "CREATE INDEX artifact_project_kind IF NOT EXISTS FOR (a:Artifact) ON (a.project_id, \
+         a.kind)",
         "CREATE INDEX artifact_external_id IF NOT EXISTS FOR (a:Artifact) ON (a.external_id)",
         "CREATE INDEX requirement_status IF NOT EXISTS FOR (r:Requirement) ON (r.status)",
-        "CREATE FULLTEXT INDEX artifact_text IF NOT EXISTS FOR (a:Artifact) ON EACH [a.title, a.description]",
+        "CREATE FULLTEXT INDEX artifact_text IF NOT EXISTS FOR (a:Artifact) ON EACH [a.title, \
+         a.description]",
     ];
 
     /// All DDL statements in apply order (constraints before indexes).

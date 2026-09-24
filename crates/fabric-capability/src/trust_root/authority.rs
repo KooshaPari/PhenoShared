@@ -1,9 +1,11 @@
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 
-use crate::descriptor::Signature;
-use crate::error::Result;
-use crate::signing::{SigningKey, VerificationKey};
+use crate::{
+    descriptor::Signature,
+    error::Result,
+    signing::{SigningKey, VerificationKey},
+};
 
 // ---------------------------------------------------------------------------
 // Authority

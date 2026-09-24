@@ -3,8 +3,11 @@
 //! Thread-safe via `std::sync::RwLock`. Suitable for tests, single-process
 //! service meshes, and as a reference implementation for new adapters.
 
-use std::collections::HashMap;
-use std::sync::{Arc, RwLock};
+use std::{
+    collections::HashMap,
+    sync::{Arc, RwLock},
+};
+
 use uuid::Uuid;
 
 use crate::{HealthStatus, RegistryError, RegistryPort, ServiceRegistration};
@@ -71,7 +74,7 @@ impl RegistryPort for InMemoryRegistry {
             Some(svc) => {
                 svc.health = status;
                 Ok(())
-            }
+            },
             None => Err(RegistryError::NotFound(instance_id.to_string())),
         }
     }

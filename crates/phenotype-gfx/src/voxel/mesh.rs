@@ -5,9 +5,7 @@
 
 use serde::{Deserialize, Serialize};
 
-use crate::voxel::chunk::ChunkView;
-use crate::voxel::lod::LodLevel;
-use crate::voxel::material::MaterialId;
+use crate::voxel::{chunk::ChunkView, lod::LodLevel, material::MaterialId};
 
 /// Engine-neutral vertex layout. PBR-suitable: position + normal + uv + material slot.
 #[derive(Debug, Clone, Copy, PartialEq, Serialize, Deserialize)]

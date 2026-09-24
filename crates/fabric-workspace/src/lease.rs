@@ -136,7 +136,7 @@ impl SeatLease {
             Transition::Expire => {
                 self.state = LifecycleState::Expired;
                 return Some(LifecycleState::Expired);
-            }
+            },
         };
         self.state = next.clone();
         Some(next)
@@ -190,14 +190,20 @@ mod tests {
     #[test]
     fn test_transition_pending_to_active() {
         let mut lease = make_lease(LifecycleState::Pending, Some(i64::MAX));
-        assert_eq!(lease.transition(Transition::Activate), Some(LifecycleState::Active));
+        assert_eq!(
+            lease.transition(Transition::Activate),
+            Some(LifecycleState::Active)
+        );
         assert_eq!(lease.state, LifecycleState::Active);
     }
 
     #[test]
     fn test_transition_active_to_released() {
         let mut lease = make_lease(LifecycleState::Active, Some(i64::MAX));
-        assert_eq!(lease.transition(Transition::Release), Some(LifecycleState::Released));
+        assert_eq!(
+            lease.transition(Transition::Release),
+            Some(LifecycleState::Released)
+        );
     }
 
     #[test]
@@ -210,7 +216,10 @@ mod tests {
     #[test]
     fn test_expire_sets_state() {
         let mut lease = make_lease(LifecycleState::Active, Some(i64::MAX));
-        assert_eq!(lease.transition(Transition::Expire), Some(LifecycleState::Expired));
+        assert_eq!(
+            lease.transition(Transition::Expire),
+            Some(LifecycleState::Expired)
+        );
         assert_eq!(lease.state, LifecycleState::Expired);
     }
 

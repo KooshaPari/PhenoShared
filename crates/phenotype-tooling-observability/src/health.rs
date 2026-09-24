@@ -3,8 +3,7 @@
 //! Returns a JSON body with process uptime. Backed by an axum router
 //! behind the `server` feature.
 
-use std::sync::OnceLock;
-use std::time::Instant;
+use std::{sync::OnceLock, time::Instant};
 
 static START: OnceLock<Instant> = OnceLock::new();
 
@@ -44,8 +43,9 @@ impl HealthReport {
 
 #[cfg(feature = "server")]
 mod http {
-    use super::*;
     use axum::{routing::get, Json, Router};
+
+    use super::*;
 
     /// Axum router exposing `/health`.
     pub fn router() -> Router {

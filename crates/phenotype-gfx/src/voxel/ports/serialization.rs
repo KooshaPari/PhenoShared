@@ -20,8 +20,7 @@ use std::io::{self, Read, Write};
 
 use thiserror::Error;
 
-use crate::voxel::chunk::Chunk;
-use crate::voxel::serial;
+use crate::voxel::{chunk::Chunk, serial};
 
 // ────────────────────────────────────────────────────────────────────────────
 // Errors
@@ -142,7 +141,7 @@ impl ChunkSerializer for MockChunkSerializer {
         // interior mutability is overkill for a mock. Tests that need
         // call-count assertions should wrap the mock in a RefCell or use the
         // dedicated `record_save` helper below from a `&mut` context.
-        w.write_all(&[0xAB, 0xCD])?;
+        w.write_all(&[0xab, 0xcd])?;
         Ok(())
     }
 

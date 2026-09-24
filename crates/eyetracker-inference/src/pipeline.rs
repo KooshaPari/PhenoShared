@@ -3,13 +3,16 @@
 //! Orchestrates camera capture → face detection → face mesh → gaze estimation.
 //! Provides a high-level API for the CLI and other consumers.
 
-use eyetracker_camera::{Camera, CameraConfig, Frame};
 use std::time::Instant;
 
-use crate::classification::{GazeClassifier, GazeEvent};
-use crate::face_mesh::{extract_eye_regions, FaceBox, FaceDetector, FaceResult, Landmark3D};
-use crate::gaze_estimator::{GazeEstimatorTrait, GazeResult, GeometricGazeEstimator};
-use crate::smoothing::GazeSmoother;
+use eyetracker_camera::{Camera, CameraConfig, Frame};
+
+use crate::{
+    classification::{GazeClassifier, GazeEvent},
+    face_mesh::{extract_eye_regions, FaceBox, FaceDetector, FaceResult, Landmark3D},
+    gaze_estimator::{GazeEstimatorTrait, GazeResult, GeometricGazeEstimator},
+    smoothing::GazeSmoother,
+};
 
 /// Configuration for the eye tracking pipeline
 #[derive(Debug, Clone)]
@@ -126,16 +129,16 @@ impl TrackingPipeline {
                     match self.gaze_estimator.estimate(&face_result, &frame) {
                         Ok(gaze_result) => {
                             gaze = Some(gaze_result);
-                        }
+                        },
                         Err(e) => {
                             tracing::warn!("Gaze estimation failed: {}", e);
-                        }
+                        },
                     }
                     face = Some(face_result);
-                }
+                },
                 Err(e) => {
                     tracing::warn!("Face detection failed: {}", e);
-                }
+                },
             }
         } else if self.config.use_geometric_fallback {
             // No ML model loaded; still attempt gaze estimation using fallback
@@ -144,10 +147,10 @@ impl TrackingPipeline {
                 Ok(gaze_result) => {
                     gaze = Some(gaze_result);
                     face = Some(fallback_face);
-                }
+                },
                 Err(e) => {
                     tracing::warn!("Fallback gaze estimation failed: {}", e);
-                }
+                },
             }
         }
 
@@ -321,9 +324,18 @@ fn create_fallback_face(frame: &Frame) -> FaceResult {
         use crate::face_mesh::EyeRegion;
         let default = EyeRegion {
             landmark_indices: vec![],
-            center: crate::face_mesh::Landmark2D { x: 0.5, y: 0.5 },
-            inner_corner: crate::face_mesh::Landmark2D { x: 0.48, y: 0.5 },
-            outer_corner: crate::face_mesh::Landmark2D { x: 0.52, y: 0.5 },
+            center: crate::face_mesh::Landmark2D {
+                x: 0.5,
+                y: 0.5,
+            },
+            inner_corner: crate::face_mesh::Landmark2D {
+                x: 0.48,
+                y: 0.5,
+            },
+            outer_corner: crate::face_mesh::Landmark2D {
+                x: 0.52,
+                y: 0.5,
+            },
             pupil: None,
         };
         (default.clone(), default)
@@ -340,8 +352,9 @@ fn create_fallback_face(frame: &Frame) -> FaceResult {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
     use eyetracker_camera::PixelFormat;
+
+    use super::*;
 
     #[test]
     fn test_pipeline_config_default() {

@@ -1,11 +1,11 @@
 //! SQLite-backed persistent alert state.
 //!
 //! Why SQLite and not Postgres or a flat file:
-//!   - Postgres requires a server (overkill for the substrate's scale;
-//!     ~tens of rows of alert state per monitor instance).
+//!   - Postgres requires a server (overkill for the substrate's scale; ~tens of rows of alert state
+//!     per monitor instance).
 //!   - A flat file works but is racy under concurrent ticks.
-//!   - SQLite (via rusqlite with the `bundled` feature) gives us ACID
-//!     transactions without external dependencies.
+//!   - SQLite (via rusqlite with the `bundled` feature) gives us ACID transactions without external
+//!     dependencies.
 //!
 //! The connection + SCHEMA + initial open live here. Table-specific CRUD is
 //! in `alert_state`, `alert_history`, and `alert_failures` (all defined as
@@ -38,7 +38,9 @@ impl StateStore {
         }
         let conn = Connection::open(path)?;
         conn.execute_batch(SCHEMA)?;
-        Ok(Self { conn })
+        Ok(Self {
+            conn,
+        })
     }
 
     /// Load every persisted (key -> snapshot). Used on startup to
@@ -55,7 +57,13 @@ impl StateStore {
             let sustained_secs: u64 = row.get(4)?;
             let state = parse_state(&state_str, since_unix, last_fired_unix)
                 .map_err(|e| rusqlite::Error::InvalidQuery)?;
-            Ok((key, TrackerSnapshot { state, sustained_secs }))
+            Ok((
+                key,
+                TrackerSnapshot {
+                    state,
+                    sustained_secs,
+                },
+            ))
         })?;
         let mut out = Vec::new();
         for row in rows {
@@ -102,11 +110,20 @@ CREATE INDEX IF NOT EXISTS idx_alert_failures_fired_at ON alert_failures(fired_a
 
 /// Internal parser used by `load_all`. Kept here next to SCHEMA so schema
 /// and parser evolve together.
-pub(super) fn parse_state(s: &str, since: u64, last_fired: u64) -> Result<crate::argis_monitor::alerts::AlertState, StateStoreError> {
+pub(super) fn parse_state(
+    s: &str,
+    since: u64,
+    last_fired: u64,
+) -> Result<crate::argis_monitor::alerts::AlertState, StateStoreError> {
     match s {
         "ok" => Ok(crate::argis_monitor::alerts::AlertState::Ok),
-        "pending" => Ok(crate::argis_monitor::alerts::AlertState::Pending { since }),
-        "firing" => Ok(crate::argis_monitor::alerts::AlertState::Firing { since, last_fired_at: last_fired }),
+        "pending" => Ok(crate::argis_monitor::alerts::AlertState::Pending {
+            since,
+        }),
+        "firing" => Ok(crate::argis_monitor::alerts::AlertState::Firing {
+            since,
+            last_fired_at: last_fired,
+        }),
         other => Err(StateStoreError::InvalidState(other.to_string())),
     }
 }
@@ -117,7 +134,12 @@ pub(super) fn flatten(snap: &TrackerSnapshot) -> (&'static str, u64, u64) {
     use crate::argis_monitor::alerts::AlertState;
     match &snap.state {
         AlertState::Ok => ("ok", 0, 0),
-        AlertState::Pending { since } => ("pending", *since, 0),
-        AlertState::Firing { since, last_fired_at } => ("firing", *since, *last_fired_at),
+        AlertState::Pending {
+            since,
+        } => ("pending", *since, 0),
+        AlertState::Firing {
+            since,
+            last_fired_at,
+        } => ("firing", *since, *last_fired_at),
     }
 }

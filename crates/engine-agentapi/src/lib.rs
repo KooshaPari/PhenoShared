@@ -57,39 +57,42 @@
 //!
 //! ## Integration modes
 //!
-//! - **Default (`AGENTAPI_INTEGRATION` unset):** the engine runs in
-//!   *offline* mode — `start()` allocates a synthetic `conv_id`
-//!   (`agentapi-<task-id>`), `dump()` returns a stub JSON dump, and SSE
-//!   streaming yields no events. The [`engine-conformance`] suite passes
-//!   with zero IO. CI stays network-free.
-//! - **Live (`AGENTAPI_INTEGRATION=1`):** the engine spawns the
-//!   `agentapi-plusplus` binary as a child, polls `/status` until ready,
-//!   then talks the real HTTP API end-to-end.
-//! - **Externally managed:** if the caller passes a non-loopback
-//!   `AGENTAPI_ENDPOINT` (e.g. `http://agentapi.internal:3284`), the
-//!   engine skips child-process management and acts as a pure HTTP
-//!   client to the pre-existing server.
+//! - **Default (`AGENTAPI_INTEGRATION` unset):** the engine runs in *offline* mode — `start()`
+//!   allocates a synthetic `conv_id` (`agentapi-<task-id>`), `dump()` returns a stub JSON dump, and
+//!   SSE streaming yields no events. The [`engine-conformance`] suite passes with zero IO. CI stays
+//!   network-free.
+//! - **Live (`AGENTAPI_INTEGRATION=1`):** the engine spawns the `agentapi-plusplus` binary as a
+//!   child, polls `/status` until ready, then talks the real HTTP API end-to-end.
+//! - **Externally managed:** if the caller passes a non-loopback `AGENTAPI_ENDPOINT` (e.g. `http://agentapi.internal:3284`),
+//!   the engine skips child-process management and acts as a pure HTTP client to the pre-existing
+//!   server.
 #![forbid(unsafe_code)]
 #![warn(missing_docs)]
 
-use std::net::{SocketAddr, TcpListener};
-use std::path::PathBuf;
-use std::process::Stdio;
-use std::sync::Arc;
-use std::time::Duration;
+use std::{
+    net::{SocketAddr, TcpListener},
+    path::PathBuf,
+    process::Stdio,
+    sync::Arc,
+    time::Duration,
+};
 
 use async_trait::async_trait;
 use engine_spec::{ArgvBuilder, TaskSpec};
 use futures_util::stream::StreamExt;
 use serde::{Deserialize, Serialize};
-use substrate_core::domain::{
-    ConversationDump, EngineCapabilities, Mailbox, Session, StructuredResult, Task, TaskState,
+use substrate_core::{
+    domain::{
+        ConversationDump, EngineCapabilities, Mailbox, Session, StructuredResult, Task, TaskState,
+    },
+    error::{Result, SubstrateError},
+    ports::EnginePort,
 };
-use substrate_core::error::{Result, SubstrateError};
-use substrate_core::ports::EnginePort;
-use tokio::io::{AsyncBufReadExt, BufReader};
-use tokio::process::{Child, Command};
-use tokio::sync::Mutex;
+use tokio::{
+    io::{AsyncBufReadExt, BufReader},
+    process::{Child, Command},
+    sync::Mutex,
+};
 
 // ---------------------------------------------------------------------------
 // Constants
@@ -634,7 +637,7 @@ impl AgentApiClient {
                 Ok(bytes) => {
                     let text = String::from_utf8_lossy(&bytes).into_owned();
                     parse_sse_record(&text)
-                }
+                },
                 Err(e) => Err(e),
             })
             .filter_map(|res| async move {
@@ -680,7 +683,7 @@ fn parse_sse_record(text: &str) -> Result<Option<SseEvent>> {
                 id: None,
                 data: body,
             }
-        }
+        },
         "message_update" => {
             let body: MessageUpdateBody = serde_json::from_str(&data)
                 .map_err(|e| SubstrateError::Engine(format!("SSE message_update json: {e}")))?;
@@ -688,7 +691,7 @@ fn parse_sse_record(text: &str) -> Result<Option<SseEvent>> {
                 id: None,
                 data: body,
             }
-        }
+        },
         "agent_error" => {
             let body: ErrorBody = serde_json::from_str(&data)
                 .map_err(|e| SubstrateError::Engine(format!("SSE agent_error json: {e}")))?;
@@ -696,12 +699,12 @@ fn parse_sse_record(text: &str) -> Result<Option<SseEvent>> {
                 id: None,
                 data: body,
             }
-        }
+        },
         other => {
             return Err(SubstrateError::Engine(format!(
                 "unknown SSE event type: {other}"
             )))
-        }
+        },
     };
     Ok(Some(parsed))
 }
@@ -713,8 +716,8 @@ fn parse_sse_record(text: &str) -> Result<Option<SseEvent>> {
 /// The agentapi-plusplus engine adapter.
 ///
 /// One engine instance maps 1:1 to one server lifecycle:
-/// - `start()` spawns the child + allocates a port + waits for ready, or
-///   points at an externally-managed endpoint.
+/// - `start()` spawns the child + allocates a port + waits for ready, or points at an
+///   externally-managed endpoint.
 /// - `post_message()` (engine-internal) sends a user prompt.
 /// - `dump()` queries the full conversation history.
 /// - `cancel()` sends a SIGINT/SIGTERM-equivalent via the child's PID.
@@ -896,7 +899,8 @@ impl EnginePort for AgentApiEngine {
             return Ok(ConversationDump {
                 conversation_id: conv_id.to_string(),
                 raw: format!(
-                    "{{\"conv_id\":\"{conv_id}\",\"status\":\"completed\",\"agent\":\"claude\",\"messages\":[]}}"
+                    "{{\"conv_id\":\"{conv_id}\",\"status\":\"completed\",\"agent\":\"claude\",\"\
+                     messages\":[]}}"
                 ),
             });
         }
@@ -1131,36 +1135,47 @@ mod tests {
             "event: status_change\ndata: {\"agent_type\":\"claude\",\"status\":\"running\"}\n\n";
         let ev = parse_sse_record(text).unwrap().unwrap();
         match ev {
-            SseEvent::StatusChange { data, .. } => {
+            SseEvent::StatusChange {
+                data, ..
+            } => {
                 assert_eq!(data.agent_type, "claude");
                 assert_eq!(data.status, AgentStatusKind::Running);
-            }
+            },
             _ => panic!("expected status_change"),
         }
     }
 
     #[test]
     fn sse_parse_message_update() {
-        let text = "event: message_update\ndata: {\"id\":42,\"message\":\"hi\",\"role\":\"agent\",\"time\":\"2026-06-22T00:00:00Z\"}\n\n";
+        let text = "event: message_update\ndata: \
+                    {\"id\":42,\"message\":\"hi\",\"role\":\"agent\",\"time\":\"2026-06-22T00:00:\
+                    00Z\"}\n\n";
         let ev = parse_sse_record(text).unwrap().unwrap();
         match ev {
-            SseEvent::MessageUpdate { data, .. } => {
+            SseEvent::MessageUpdate {
+                data, ..
+            } => {
                 assert_eq!(data.id, 42);
                 assert_eq!(data.role, ConversationRole::Agent);
-            }
+            },
             _ => panic!("expected message_update"),
         }
     }
 
     #[test]
     fn sse_parse_agent_error() {
-        let text = "event: agent_error\ndata: {\"level\":\"error\",\"message\":\"crash\",\"time\":\"2026-06-22T00:00:00Z\"}\n\n";
+        let text = "event: agent_error\ndata: \
+                    {\"level\":\"error\",\"message\":\"crash\",\"time\":\"2026-06-22T00:00:00Z\"}\\
+                    \
+                    n\n";
         let ev = parse_sse_record(text).unwrap().unwrap();
         match ev {
-            SseEvent::AgentError { data, .. } => {
+            SseEvent::AgentError {
+                data, ..
+            } => {
                 assert_eq!(data.level, "error");
                 assert_eq!(data.message, "crash");
-            }
+            },
             _ => panic!("expected agent_error"),
         }
     }

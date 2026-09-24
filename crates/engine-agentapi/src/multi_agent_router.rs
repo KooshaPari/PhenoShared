@@ -3,8 +3,8 @@
 //! This module glues [`crate::routing`] (the pure engine-name → agent-type
 //! mapping) into substrate's [`RoutingPort`] contract so the dispatcher can:
 //!
-//! 1. Receive a `Task` whose routing layer has decided `engine =
-//!    "agentapi-claude"` (or `"agentapi:gemini"`, `"codex"`, etc.).
+//! 1. Receive a `Task` whose routing layer has decided `engine = "agentapi-claude"` (or
+//!    `"agentapi:gemini"`, `"codex"`, etc.).
 //! 2. Call `route_decision(task)` → get the engine + model + reason.
 //! 3. Look up the right agentapi engine (one per agent type) and forward.
 //!
@@ -23,19 +23,19 @@
 //! `RoutingDecision::default_forge_kimi()` so the dispatcher falls through
 //! to the next engine adapter in its chain.
 
-use std::collections::HashMap;
-use std::sync::Arc;
+use std::{collections::HashMap, sync::Arc};
 
 use async_trait::async_trait;
-use substrate_core::domain::{RoutingDecision, Task};
-use substrate_core::error::Result;
 #[allow(unused_imports)]
 use substrate_core::error::SubstrateError;
-use substrate_core::ports::RoutingPort;
+use substrate_core::{
+    domain::{RoutingDecision, Task},
+    error::Result,
+    ports::RoutingPort,
+};
 use tokio::sync::RwLock;
 
-use crate::routing;
-use crate::AgentApiEngine;
+use crate::{routing, AgentApiEngine};
 
 /// Multi-agent router that fronts the agentapi engine family.
 ///
@@ -119,8 +119,8 @@ impl RoutingPort for AgentApiMultiAgentRouter {
 
     /// Map the routing layer's engine name to an agentapi-shaped decision.
     ///
-    /// - `"agentapi-claude"` → `engine = "agentapi-claude"`,
-    ///   `model = "claude"`, `reason = "agentapi-multi-agent"`.
+    /// - `"agentapi-claude"` → `engine = "agentapi-claude"`, `model = "claude"`, `reason =
+    ///   "agentapi-multi-agent"`.
     /// - `"forge"` (or any non-agentapi name) → the configured fallback.
     async fn route_decision(&self, task: &Task) -> Result<RoutingDecision> {
         // Inspect the task's prompt for an explicit `engine: <name>` hint.
@@ -171,8 +171,9 @@ fn extract_engine_hint(prompt: &str) -> Option<&str> {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
     use uuid::Uuid;
+
+    use super::*;
 
     fn make_task(prompt: &str) -> Task {
         Task {

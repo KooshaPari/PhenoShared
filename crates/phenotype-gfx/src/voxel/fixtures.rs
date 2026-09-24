@@ -8,19 +8,18 @@
 //!
 //! Three families are exposed:
 //!
-//! * [`sample_sequence`] — a single, well-known write sequence that mixes
-//!   chunks and sequence numbers; used to assert `(chunk_id, write_seq)`
-//!   sort order is stable.
-//! * [`sample_with_ties`] — a sequence containing two events with identical
-//!   `(chunk_id, write_seq)` values; consumers must treat these as a no-op
-//!   and not double-rebuild the chunk.
-//! * [`sample_lod_transition`] — a sequence that interleaves writes from
-//!   two adjacent LOD levels on the same chunk; ordering must be preserved
-//!   across the transition so LOD demotion/promotion does not desync
-//!   rebuild order.
+//! * [`sample_sequence`] — a single, well-known write sequence that mixes chunks and sequence
+//!   numbers; used to assert `(chunk_id, write_seq)` sort order is stable.
+//! * [`sample_with_ties`] — a sequence containing two events with identical `(chunk_id, write_seq)`
+//!   values; consumers must treat these as a no-op and not double-rebuild the chunk.
+//! * [`sample_lod_transition`] — a sequence that interleaves writes from two adjacent LOD levels on
+//!   the same chunk; ordering must be preserved across the transition so LOD demotion/promotion
+//!   does not desync rebuild order.
 
-use crate::voxel::chunk::ChunkId;
-use crate::voxel::delta::{DirtyChunkEvent, WriteSeq};
+use crate::voxel::{
+    chunk::ChunkId,
+    delta::{DirtyChunkEvent, WriteSeq},
+};
 
 /// A canonical write sequence used by the sort-by-(chunk_id, write_seq) test.
 ///

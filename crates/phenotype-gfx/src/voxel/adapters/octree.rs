@@ -1,9 +1,11 @@
 //! Octree adapter: implements the [`OctreeQueryable`] and [`OctreeStorage`] ports
 //! on the domain [`VoxelOctree`] type.
 
-use crate::voxel::coord::ChunkCoord;
-use crate::voxel::octree::{OctreeNode, VoxelOctree};
-use crate::voxel::ports::octree::{OctreeQueryable, OctreeStorage};
+use crate::voxel::{
+    coord::ChunkCoord,
+    octree::{OctreeNode, VoxelOctree},
+    ports::octree::{OctreeQueryable, OctreeStorage},
+};
 
 /// Thin adapter that wraps [`VoxelOctree`] and implements the port traits.
 ///
@@ -18,7 +20,9 @@ pub struct OctreeAdapter<T: Clone + PartialEq> {
 impl<T: Clone + PartialEq> OctreeAdapter<T> {
     /// Construct from an existing [`VoxelOctree`].
     pub fn new(inner: VoxelOctree<T>) -> Self {
-        Self { inner }
+        Self {
+            inner,
+        }
     }
 
     /// Consume the adapter and return the underlying [`VoxelOctree`].

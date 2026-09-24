@@ -3,13 +3,19 @@
 use std::path::{Path, PathBuf};
 
 use serde::Deserialize;
-use substrate_core::cloud_dispatch_port::CloudResult;
-use substrate_core::error::{Result, SubstrateError};
+use substrate_core::{
+    cloud_dispatch_port::CloudResult,
+    error::{Result, SubstrateError},
+};
 use tokio::process::Command;
 
 use crate::gateway::KiloGatewayConfig;
 
-const SYSTEM_PROMPT: &str = "You are a coding agent. Respond with a single JSON object only (no markdown fences) containing: commit_message, pr_title, pr_body, diff_summary, and files (array of {path, content} objects with repo-relative paths). Keep changes minimal and focused on the user task.";
+const SYSTEM_PROMPT: &str = "You are a coding agent. Respond with a single JSON object only (no \
+                             markdown fences) containing: commit_message, pr_title, pr_body, \
+                             diff_summary, and files (array of {path, content} objects with \
+                             repo-relative paths). Keep changes minimal and focused on the user \
+                             task.";
 
 /// Structured payload extracted from the gateway response.
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
@@ -66,8 +72,8 @@ pub async fn run_dispatch(
     prompt: &str,
 ) -> Result<CloudResult> {
     let user = format!(
-        "Repository: {repo}\nWork branch: {branch}\nTask: {prompt}\n\
-         Produce JSON with file edits implementing the task."
+        "Repository: {repo}\nWork branch: {branch}\nTask: {prompt}\nProduce JSON with file edits \
+         implementing the task."
     );
     let llm_text = config.complete(SYSTEM_PROMPT, &user).await?;
     let payload = parse_llm_payload(&llm_text)?;
@@ -205,8 +211,9 @@ fn tempfile_dir() -> Result<PathBuf> {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
     use std::process::Command as StdCommand;
+
+    use super::*;
 
     #[test]
     fn remote_branch_exists_in_ls_remote_detects_head() {

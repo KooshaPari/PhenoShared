@@ -13,8 +13,8 @@
 //!
 //! - `x` = pixel column (left → right).
 //! - `y` = pixel row (bottom → top, matching OpenGL / Unity UV).
-//! - `z` = depth axis, `+z` = "front", `0..depth` centered around the sprite
-//!   plane so `z_center = depth / 2`.
+//! - `z` = depth axis, `+z` = "front", `0..depth` centered around the sprite plane so `z_center =
+//!   depth / 2`.
 //!
 //! ## Usage
 //!
@@ -31,8 +31,10 @@
 
 use serde::{Deserialize, Serialize};
 
-use crate::voxel::chunk::{Chunk, CHUNK_EDGE};
-use crate::voxel::material::MaterialId;
+use crate::voxel::{
+    chunk::{Chunk, CHUNK_EDGE},
+    material::MaterialId,
+};
 
 /// Alpha threshold below which a pixel is considered transparent ("air").
 /// WSM3D uses 16 / 255; we adopt the same constant.
@@ -158,7 +160,7 @@ pub fn voxelize_image(
                     let z_start = z_center.saturating_sub(d);
                     let z_end = (z_center + d + 1).min(depth);
                     (z_start, z_end)
-                }
+                },
             };
 
             for z in z_start..z_end {
@@ -252,9 +254,9 @@ pub fn compute_manhattan_dist_to_air(pixels: &[[u8; 4]], width: u32, height: u32
 /// - `pixels` — row-major RGBA8 pixels, length `width * height`.
 /// - `width`, `height` — image dimensions in pixels (each must be ≤ `CHUNK_EDGE`).
 /// - `depth` — number of Z slices to extrude per opaque pixel (must be ≤ `CHUNK_EDGE`).
-/// - `pixel_to_material` — closure mapping an RGBA8 pixel to a `MaterialId`. Called
-///   once per opaque pixel; transparent pixels are skipped (they remain `MaterialId(0)`,
-///   the conventional "air" value).
+/// - `pixel_to_material` — closure mapping an RGBA8 pixel to a `MaterialId`. Called once per opaque
+///   pixel; transparent pixels are skipped (they remain `MaterialId(0)`, the conventional "air"
+///   value).
 ///
 /// # Out-of-bounds handling
 /// Pixels / depth values that would exceed `CHUNK_EDGE` in any dimension are silently
@@ -476,8 +478,7 @@ mod tests {
 
     // ── voxelize_to_chunk tests ────────────────────────────────────────────────
 
-    use crate::voxel::chunk::CHUNK_EDGE;
-    use crate::voxel::material::MaterialId;
+    use crate::voxel::{chunk::CHUNK_EDGE, material::MaterialId};
 
     fn red_pixel() -> [u8; 4] {
         [255, 0, 0, 255]

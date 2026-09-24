@@ -5,8 +5,7 @@
 use anyhow::{Context, Result};
 use clap::Args;
 
-use crate::output;
-use crate::wire_client;
+use crate::{output, wire_client};
 
 #[derive(Args, Debug)]
 pub struct NetworkStatusArgs {
@@ -85,30 +84,17 @@ fn network_status(args: &NetworkStatusArgs) -> Result<()> {
                 let fmt_status = |s: &str| match s {
                     "ok" | "available" | "connected" => {
                         console::style(s).green().bold().to_string()
-                    }
-                    "degraded" | "unavailable" => {
-                        console::style(s).yellow().bold().to_string()
-                    }
+                    },
+                    "degraded" | "unavailable" => console::style(s).yellow().bold().to_string(),
                     "error" | "disabled" | "not_running" => {
                         console::style(s).red().bold().to_string()
-                    }
+                    },
                     _ => console::style(s).to_string(),
                 };
 
-                let mut out = format!(
-                    "{}\n\n",
-                    console::style("Network status:").cyan().bold(),
-                );
-                out.push_str(&format!(
-                    "  {:<16} {}\n",
-                    "UPnP:",
-                    fmt_status(upnp_status),
-                ));
-                out.push_str(&format!(
-                    "  {:<16} {}\n",
-                    "STUN:",
-                    fmt_status(stun_status),
-                ));
+                let mut out = format!("{}\n\n", console::style("Network status:").cyan().bold(),);
+                out.push_str(&format!("  {:<16} {}\n", "UPnP:", fmt_status(upnp_status),));
+                out.push_str(&format!("  {:<16} {}\n", "STUN:", fmt_status(stun_status),));
                 out.push_str(&format!(
                     "  {:<16} {}\n",
                     "Tailscale:",
@@ -135,8 +121,10 @@ fn network_status(args: &NetworkStatusArgs) -> Result<()> {
 
                 out
             })?;
-        }
-        Err(wire_client::WireClientError::ConnectionRefused { addr }) => {
+        },
+        Err(wire_client::WireClientError::ConnectionRefused {
+            addr,
+        }) => {
             if args.json {
                 println!(
                     "{}",
@@ -153,7 +141,7 @@ fn network_status(args: &NetworkStatusArgs) -> Result<()> {
                 );
                 eprintln!("  start fabric-daemon to query network status");
             }
-        }
+        },
         Err(e) => return Err(e).context("network status failed"),
     }
 
@@ -181,10 +169,7 @@ fn stun(args: &StunArgs) -> Result<()> {
                     .unwrap_or("(unknown)");
 
                 format!(
-                    "{}\n\n\
-                     {:<18} {}\n\
-                     {:<18} {}\n\
-                     {:<18} {}\n",
+                    "{}\n\n{:<18} {}\n{:<18} {}\n{:<18} {}\n",
                     console::style("STUN query:").cyan().bold(),
                     console::style("External addr:").cyan().bold(),
                     external_addr,
@@ -194,8 +179,10 @@ fn stun(args: &StunArgs) -> Result<()> {
                     mapped,
                 )
             })?;
-        }
-        Err(wire_client::WireClientError::ConnectionRefused { addr }) => {
+        },
+        Err(wire_client::WireClientError::ConnectionRefused {
+            addr,
+        }) => {
             if args.json {
                 println!(
                     "{}",
@@ -212,7 +199,7 @@ fn stun(args: &StunArgs) -> Result<()> {
                 );
                 eprintln!("  start fabric-daemon to query STUN");
             }
-        }
+        },
         Err(e) => return Err(e).context("STUN query failed"),
     }
 
@@ -251,10 +238,7 @@ fn tailscale(args: &TailscaleArgs) -> Result<()> {
                 };
 
                 let mut out = format!(
-                    "{}\n\n\
-                     {:<18} {}\n\
-                     {:<18} {}\n\
-                     {:<18} {}\n",
+                    "{}\n\n{:<18} {}\n{:<18} {}\n{:<18} {}\n",
                     console::style("Tailscale status:").cyan().bold(),
                     console::style("Status:").cyan().bold(),
                     status_style,
@@ -265,28 +249,20 @@ fn tailscale(args: &TailscaleArgs) -> Result<()> {
                 );
 
                 if peers.is_empty() {
-                    out.push_str(&format!(
-                        "\n  {}\n",
-                        console::style("(no peers)").dim(),
-                    ));
+                    out.push_str(&format!("\n  {}\n", console::style("(no peers)").dim(),));
                 } else {
                     out.push_str(&format!(
                         "\n{:<20} {:<16} {:<20} {}\n",
                         "HOSTNAME", "TAILSCALE_IP", "OS", "ONLINE"
                     ));
                     for peer in &peers {
-                        let peer_host = peer
-                            .get("hostname")
-                            .and_then(|v| v.as_str())
-                            .unwrap_or("?");
+                        let peer_host =
+                            peer.get("hostname").and_then(|v| v.as_str()).unwrap_or("?");
                         let peer_ip = peer
                             .get("tailscale_ip")
                             .and_then(|v| v.as_str())
                             .unwrap_or("-");
-                        let peer_os = peer
-                            .get("os")
-                            .and_then(|v| v.as_str())
-                            .unwrap_or("-");
+                        let peer_os = peer.get("os").and_then(|v| v.as_str()).unwrap_or("-");
                         let online = peer
                             .get("online")
                             .and_then(|v| v.as_bool())
@@ -305,8 +281,10 @@ fn tailscale(args: &TailscaleArgs) -> Result<()> {
 
                 out
             })?;
-        }
-        Err(wire_client::WireClientError::ConnectionRefused { addr }) => {
+        },
+        Err(wire_client::WireClientError::ConnectionRefused {
+            addr,
+        }) => {
             if args.json {
                 println!(
                     "{}",
@@ -323,7 +301,7 @@ fn tailscale(args: &TailscaleArgs) -> Result<()> {
                 );
                 eprintln!("  start fabric-daemon to query Tailscale peers");
             }
-        }
+        },
         Err(e) => return Err(e).context("tailscale query failed"),
     }
 

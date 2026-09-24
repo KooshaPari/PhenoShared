@@ -1,12 +1,12 @@
 //! The `rebind_or_fail` function -- canonical failover integration entry point.
 
-use crate::failover::{replan, FailoverError, FailoverOutcome};
-use crate::model::{Intent, NodeId, RoutePlan, RoutePlanId, RouteStep, Topology};
-use crate::surface::{SurfaceError, SurfaceLease, SurfaceSpecError};
-use crate::surface_ops::{bind, fail};
-
 use super::types::RebindOutcome;
-use crate::surface::LeaseExitReason;
+use crate::{
+    failover::{replan, FailoverError, FailoverOutcome},
+    model::{Intent, NodeId, RoutePlan, RoutePlanId, RouteStep, Topology},
+    surface::{LeaseExitReason, SurfaceError, SurfaceLease, SurfaceSpecError},
+    surface_ops::{bind, fail},
+};
 
 /// Rebind or fail the lease, depending on whether `failover::replan`
 /// could find a replacement route on the (caller-pruned) post-failure
@@ -19,15 +19,13 @@ use crate::surface::LeaseExitReason;
 /// - `SurfaceError::EpochDrift` -- strict-epoch check failed. Lease unchanged.
 /// - `SurfaceError::NoMatchingRoute` -- `failover::replan` returned
 ///   `FailoverError::AllCandidatesFailed`. Lease unchanged.
-/// - `SurfaceError::InvalidSpec(SurfaceSpecError::EmptyName)` --
-///   `failover::replan` returned `FailoverError::EmptyIntent`. Lease
-///   unchanged.
-/// - `SurfaceError::IllegalTransition` -- the lease FSM guard rejected the
-///   bind/fail the integration wanted to perform (e.g., the lease was
-///   already terminal). Lease state depends on which side of the call.
-/// - `SurfaceError::NoMatchingRoute` propagated from `surface_ops::bind`
-///   (only reachable if the new step doesn't satisfy the spec; not
-///   expected under normal operation since `replan` re-uses the
+/// - `SurfaceError::InvalidSpec(SurfaceSpecError::EmptyName)` -- `failover::replan` returned
+///   `FailoverError::EmptyIntent`. Lease unchanged.
+/// - `SurfaceError::IllegalTransition` -- the lease FSM guard rejected the bind/fail the
+///   integration wanted to perform (e.g., the lease was already terminal). Lease state depends on
+///   which side of the call.
+/// - `SurfaceError::NoMatchingRoute` propagated from `surface_ops::bind` (only reachable if the new
+///   step doesn't satisfy the spec; not expected under normal operation since `replan` re-uses the
 ///   post-failure topology).
 pub fn rebind_or_fail(
     lease: &mut SurfaceLease,
@@ -64,8 +62,10 @@ pub fn rebind_or_fail(
             // ---- Step 3a: silent re-bind ----
             let new_plan_id = new_plan.id.clone();
             bind(lease, new_plan_id.clone(), new_step)?;
-            Ok(RebindOutcome::Rebound { new_plan_id })
-        }
+            Ok(RebindOutcome::Rebound {
+                new_plan_id,
+            })
+        },
         Ok(FailoverOutcome::NoReplacement) => {
             // ---- Step 3b: terminate the lease ----
             let host_node = failed_nodes
@@ -76,8 +76,10 @@ pub fn rebind_or_fail(
                 host_node: host_node.clone(),
             };
             fail(lease, reason.clone())?;
-            Ok(RebindOutcome::Failed { reason })
-        }
+            Ok(RebindOutcome::Failed {
+                reason,
+            })
+        },
         Err(e) => Err(map_failover_error(e)),
     }
 }
@@ -95,7 +97,7 @@ fn map_failover_error(e: FailoverError) -> SurfaceError {
         FailoverError::EmptyIntent => {
             // Empty intent name is a spec-level issue; map to InvalidSpec(EmptyName).
             SurfaceError::InvalidSpec(SurfaceSpecError::EmptyName)
-        }
+        },
         FailoverError::AllCandidatesFailed => SurfaceError::NoMatchingRoute,
     }
 }

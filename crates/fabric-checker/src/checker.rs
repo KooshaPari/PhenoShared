@@ -3,30 +3,26 @@
 //! (Severity::Reject) short-circuit; soft warnings (Severity::AdmitWithNotes)
 //! accumulate without failing the decision.
 
-use crate::decision::{CheckOutcome, Decision, Severity};
-use crate::checks;
-use crate::manifest::CheckerManifest;
-
 use fabric_capability::descriptor::CapabilityDescriptor;
+
+use crate::{
+    checks,
+    decision::{CheckOutcome, Decision, Severity},
+    manifest::CheckerManifest,
+};
 
 /// Runs the full check suite against a host descriptor and a manifest.
 ///
 /// Returns a `Decision` with `Admit` if all reject-level checks pass,
 /// `AdmitWithNotes` if only notes-level checks failed, or `Reject` if any
 /// reject-level check failed.
-pub fn check(
-    descriptor: &CapabilityDescriptor,
-    manifest: &CheckerManifest,
-) -> Decision {
+pub fn check(descriptor: &CapabilityDescriptor, manifest: &CheckerManifest) -> Decision {
     let outcomes = run_all(descriptor, manifest);
     collapse(outcomes)
 }
 
 /// Public for testing — runs every check and returns the raw outcomes.
-pub fn run_all(
-    descriptor: &CapabilityDescriptor,
-    manifest: &CheckerManifest,
-) -> Vec<CheckOutcome> {
+pub fn run_all(descriptor: &CapabilityDescriptor, manifest: &CheckerManifest) -> Vec<CheckOutcome> {
     let fns: Vec<fn(&CapabilityDescriptor, &CheckerManifest) -> Result<(), CheckOutcome>> = vec![
         checks::check_memory_sufficient,
         checks::check_cores_sufficient,
@@ -71,30 +67,32 @@ pub fn collapse(outcomes: Vec<CheckOutcome>) -> Decision {
                     reason_code: o.code,
                     reason_message: o.message,
                 };
-            }
+            },
             Severity::AdmitWithNotes => {
                 notes.push(o);
-            }
+            },
         }
     }
     if notes.is_empty() {
         Decision::Admit
     } else {
-        Decision::AdmitWithNotes { notes }
+        Decision::AdmitWithNotes {
+            notes,
+        }
     }
 }
 
 #[cfg(test)]
 mod tests {
-    use super::*;
-    use crate::decision::ReasonCode;
     use fabric_capability::descriptor::{
-        AudioCapabilities, Capabilities, ComputeCapabilities, DisplayCapabilities,
-        DisplayInfo, GpuInfo, AcceleratorCapabilities, HardwareCodecMatrix,
-        InputCapabilities, NetworkCapabilities, NetworkInterface, StorageCapabilities,
-        StorageDevice,
+        AcceleratorCapabilities, AudioCapabilities, Capabilities, ComputeCapabilities,
+        DisplayCapabilities, DisplayInfo, GpuInfo, HardwareCodecMatrix, InputCapabilities,
+        NetworkCapabilities, NetworkInterface, StorageCapabilities, StorageDevice,
     };
     use uuid::Uuid;
+
+    use super::*;
+    use crate::decision::ReasonCode;
 
     /// Helper to build a minimal valid descriptor that passes basic checks.
     fn base_descriptor() -> CapabilityDescriptor {

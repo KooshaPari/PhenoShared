@@ -7,16 +7,15 @@
 //! signalled on timeout. Platform specifics (Unix `setsid` / Windows
 //! `CREATE_NEW_PROCESS_GROUP`) are handled inside `command-group`.
 
-use std::collections::HashMap;
-use std::sync::Arc;
-use std::time::Duration;
+use std::{collections::HashMap, sync::Arc, time::Duration};
 
 use async_trait::async_trait;
 use command_group::{AsyncCommandGroup, AsyncGroupChild};
-use substrate_core::error::{Result, SubstrateError};
-use substrate_core::process_port::{ProcessHandle, ProcessPort, ProcessSpawnSpec, ProcessState};
-use tokio::process::Command;
-use tokio::sync::Mutex;
+use substrate_core::{
+    error::{Result, SubstrateError},
+    process_port::{ProcessHandle, ProcessPort, ProcessSpawnSpec, ProcessState},
+};
+use tokio::{process::Command, sync::Mutex};
 use uuid::Uuid;
 
 struct ManagedChild {
@@ -51,7 +50,10 @@ impl CommandGroupProcess {
     }
 
     fn map_state(pid: u32, code: Option<i32>) -> ProcessState {
-        ProcessState::Exited { pid, code }
+        ProcessState::Exited {
+            pid,
+            code,
+        }
     }
 }
 
@@ -69,12 +71,17 @@ impl ProcessPort for CommandGroupProcess {
             .map_err(|e| SubstrateError::Process(format!("spawn {}: {e}", spec.program)))?;
         let pid = child.id().unwrap_or(0);
         let id = Uuid::new_v4();
-        let handle = ProcessHandle { id, pid };
+        let handle = ProcessHandle {
+            id,
+            pid,
+        };
 
-        self.children
-            .lock()
-            .await
-            .insert(id, ManagedChild { child });
+        self.children.lock().await.insert(
+            id,
+            ManagedChild {
+                child,
+            },
+        );
 
         Ok(handle)
     }
@@ -87,7 +94,9 @@ impl ProcessPort for CommandGroupProcess {
 
         match managed.child.try_wait() {
             Ok(Some(status)) => Ok(Self::map_state(handle.pid, status.code())),
-            Ok(None) => Ok(ProcessState::Running { pid: handle.pid }),
+            Ok(None) => Ok(ProcessState::Running {
+                pid: handle.pid,
+            }),
             Err(e) => Err(SubstrateError::Process(format!("try_wait: {e}"))),
         }
     }
@@ -107,14 +116,14 @@ impl ProcessPort for CommandGroupProcess {
                 let state = Self::map_state(handle.pid, status.code());
                 children.remove(&handle.id);
                 Ok(state)
-            }
+            },
             Ok(Err(e)) => Err(SubstrateError::Process(format!("wait: {e}"))),
             Err(_) => {
                 let _ = managed.child.kill().await;
                 let _ = managed.child.wait().await;
                 children.remove(&handle.id);
                 Ok(Self::map_state(handle.pid, None))
-            }
+            },
         }
     }
 
@@ -137,8 +146,9 @@ impl ProcessPort for CommandGroupProcess {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
     use std::time::Duration;
+
+    use super::*;
 
     /// Portable long-running child for timeout/kill tests.
     fn sleep_spec(secs: u64) -> ProcessSpawnSpec {
@@ -212,11 +222,15 @@ mod tests {
         let mut saw_running = false;
         for _ in 0..20 {
             match proc.status(&handle).await.unwrap() {
-                ProcessState::Running { .. } => saw_running = true,
-                ProcessState::Exited { code, .. } => {
+                ProcessState::Running {
+                    ..
+                } => saw_running = true,
+                ProcessState::Exited {
+                    code, ..
+                } => {
                     assert_eq!(code, Some(0));
                     break;
-                }
+                },
             }
             tokio::time::sleep(Duration::from_millis(10)).await;
         }

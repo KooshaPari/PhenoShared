@@ -7,8 +7,10 @@
 use std::net::{Ipv4Addr, SocketAddr, UdpSocket};
 
 use serde::{Deserialize, Serialize};
-use tokio::net::UdpSocket as TokioUdpSocket;
-use tokio::time::{timeout, Duration};
+use tokio::{
+    net::UdpSocket as TokioUdpSocket,
+    time::{timeout, Duration},
+};
 
 use super::NetworkError;
 
@@ -16,15 +18,10 @@ const SSDP_MULTICAST_ADDR: Ipv4Addr = Ipv4Addr::new(239, 255, 255, 250);
 const SSDP_PORT: u16 = 1900;
 
 const IGD_SERVICE_TYPE: &str = "urn:schemas-upnp-org:device:InternetGatewayDevice:1";
-const WAN_SERVICE_TYPE: &str =
-    "urn:schemas-upnp-org:service:WANIPConnection:1";
+const WAN_SERVICE_TYPE: &str = "urn:schemas-upnp-org:service:WANIPConnection:1";
 
-const MSEARCH_TEMPLATE: &str = "M-SEARCH * HTTP/1.1\r\n\
-    HOST: 239.255.255.250:1900\r\n\
-    MAN: \"ssdp:discover\"\r\n\
-    MX: 3\r\n\
-    ST: {st}\r\n\
-    \r\n";
+const MSEARCH_TEMPLATE: &str = "M-SEARCH * HTTP/1.1\r\nHOST: 239.255.255.250:1900\r\nMAN: \
+                                \"ssdp:discover\"\r\nMX: 3\r\nST: {st}\r\n\r\n";
 
 const SSDP_BUFFER_SIZE: usize = 4096;
 const DISCOVERY_TIMEOUT: Duration = Duration::from_secs(5);
@@ -122,11 +119,7 @@ impl UPnPClient {
             manufacturer: self.extract_header(&response, "Manufacturer"),
             friendly_name: self.extract_header(&response, "FriendlyName"),
         };
-        let external_ip = self
-            .get_external_ip(&temp_gw)
-            .await
-            .ok()
-            .flatten();
+        let external_ip = self.get_external_ip(&temp_gw).await.ok().flatten();
 
         Ok(GatewayInfo {
             external_ip,
@@ -232,15 +225,18 @@ impl UPnPClient {
         let msearch = MSEARCH_TEMPLATE.replace("{st}", IGD_SERVICE_TYPE);
         let msearch_bytes = msearch.as_bytes();
 
-        let socket = TokioUdpSocket::bind("0.0.0.0:0")
-            .await
-            .map_err(|e| NetworkError::UdpBind {
-                source: e,
-            })?;
+        let socket =
+            TokioUdpSocket::bind("0.0.0.0:0")
+                .await
+                .map_err(|e| NetworkError::UdpBind {
+                    source: e,
+                })?;
 
         socket
             .set_broadcast(true)
-            .map_err(|e| NetworkError::UdpBind { source: e })?;
+            .map_err(|e| NetworkError::UdpBind {
+                source: e,
+            })?;
 
         let dest = SocketAddr::new(SSDP_MULTICAST_ADDR.into(), SSDP_PORT);
 
@@ -256,7 +252,9 @@ impl UPnPClient {
         let (len, _addr) = timeout(self.discovery_timeout, socket.recv_from(&mut buf))
             .await
             .map_err(|_| NetworkError::DiscoveryTimeout)?
-            .map_err(|e| NetworkError::UdpRecv { source: e })?;
+            .map_err(|e| NetworkError::UdpRecv {
+                source: e,
+            })?;
 
         let response = String::from_utf8_lossy(&buf[..len]).to_string();
         Ok(response)
@@ -282,8 +280,8 @@ impl UPnPClient {
     }
 
     fn fetch_device_description(&self, location: &str) -> Result<String, NetworkError> {
-        let response = reqwest::blocking::get(location)
-            .map_err(|e| NetworkError::UpnpDiscovery {
+        let response =
+            reqwest::blocking::get(location).map_err(|e| NetworkError::UpnpDiscovery {
                 message: format!("Failed to fetch device description: {e}"),
             })?;
 
@@ -299,7 +297,11 @@ impl UPnPClient {
         action: &str,
         body: &str,
     ) -> Result<String, NetworkError> {
-        let url = format!("http://{}{}", self.gateway_host(gateway)?, gateway.control_url);
+        let url = format!(
+            "http://{}{}",
+            self.gateway_host(gateway)?,
+            gateway.control_url
+        );
         let action_header = format!("{WAN_SERVICE_TYPE}#{action}");
 
         let client = reqwest::Client::builder()
@@ -331,18 +333,22 @@ impl UPnPClient {
     fn gateway_host(&self, gateway: &GatewayInfo) -> Result<String, NetworkError> {
         Ok(format!(
             "{}",
-            gateway
-                .control_url
-                .split('/')
-                .nth(2)
-                .unwrap_or("localhost")
+            gateway.control_url.split('/').nth(2).unwrap_or("localhost")
         ))
     }
 
     fn get_local_ip(&self) -> Result<String, NetworkError> {
-        let socket = UdpSocket::bind("0.0.0.0:0").map_err(|e| NetworkError::UdpBind { source: e })?;
-        socket.connect("8.8.8.8:80").map_err(|e| NetworkError::UdpBind { source: e })?;
-        let local_addr = socket.local_addr().map_err(|e| NetworkError::UdpBind { source: e })?;
+        let socket = UdpSocket::bind("0.0.0.0:0").map_err(|e| NetworkError::UdpBind {
+            source: e,
+        })?;
+        socket
+            .connect("8.8.8.8:80")
+            .map_err(|e| NetworkError::UdpBind {
+                source: e,
+            })?;
+        let local_addr = socket.local_addr().map_err(|e| NetworkError::UdpBind {
+            source: e,
+        })?;
         Ok(match local_addr {
             SocketAddr::V4(v4) => v4.ip().to_string(),
             SocketAddr::V6(v6) => v6.ip().to_string(),
@@ -485,10 +491,7 @@ mod tests {
 
     #[test]
     fn client_custom_timeouts() {
-        let client = UPnPClient::with_timeouts(
-            Duration::from_secs(10),
-            Duration::from_secs(30),
-        );
+        let client = UPnPClient::with_timeouts(Duration::from_secs(10), Duration::from_secs(30));
         assert_eq!(client.discovery_timeout, Duration::from_secs(10));
         assert_eq!(client.soap_timeout, Duration::from_secs(30));
     }

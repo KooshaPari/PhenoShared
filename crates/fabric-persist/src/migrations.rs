@@ -274,15 +274,12 @@ pub fn migrate(conn: &Connection) -> Result<(), PersistError> {
 
     for m in &migrations {
         if m.version() > current {
-            info!(
-                version = m.version(),
-                name = m.name(),
-                "applying migration"
-            );
+            info!(version = m.version(), name = m.name(), "applying migration");
             conn.execute_batch("BEGIN;")?;
             conn.execute_batch(m.up())?;
             conn.execute_batch(&format!(
-                "INSERT INTO migrations (version, name, applied_at) VALUES ({}, '{}', datetime('now'));",
+                "INSERT INTO migrations (version, name, applied_at) VALUES ({}, '{}', \
+                 datetime('now'));",
                 m.version(),
                 m.name(),
             ))?;
@@ -337,8 +334,9 @@ pub fn rollback(conn: &Connection, to_version: i32) -> Result<(), PersistError> 
 
 #[cfg(test)]
 mod tests {
-    use super::*;
     use rusqlite::Connection;
+
+    use super::*;
 
     fn fresh_conn() -> Connection {
         let conn = Connection::open_in_memory().unwrap();
@@ -468,7 +466,8 @@ mod tests {
         // Verify metadata column exists on topology_nodes
         let has_col: bool = conn
             .query_row(
-                "SELECT COUNT(*) > 0 FROM pragma_table_info('topology_nodes') WHERE name='metadata'",
+                "SELECT COUNT(*) > 0 FROM pragma_table_info('topology_nodes') WHERE \
+                 name='metadata'",
                 [],
                 |row| row.get(0),
             )

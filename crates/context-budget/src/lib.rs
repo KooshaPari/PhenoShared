@@ -59,15 +59,14 @@
 #![forbid(unsafe_code)]
 #![warn(missing_docs)]
 
-use std::collections::HashMap;
-use std::sync::Arc;
+use std::{collections::HashMap, sync::Arc};
 
 use async_trait::async_trait;
-use substrate_core::domain::{
-    ConversationDump, EngineCapabilities, Mailbox, Session, StructuredResult, Task,
+use substrate_core::{
+    domain::{ConversationDump, EngineCapabilities, Mailbox, Session, StructuredResult, Task},
+    error::{Result, SubstrateError},
+    ports::EnginePort,
 };
-use substrate_core::error::{Result, SubstrateError};
-use substrate_core::ports::EnginePort;
 use tokio::sync::RwLock;
 
 // ---------------------------------------------------------------------------
@@ -288,7 +287,8 @@ impl BudgetEngine {
 
         match self.config.policy {
             OverflowPolicy::Reject => Err(SubstrateError::Engine(format!(
-                "context-budget: prompt of {tokens} tokens exceeds remaining {remaining} of budget {} for conv {conv_id}",
+                "context-budget: prompt of {tokens} tokens exceeds remaining {remaining} of \
+                 budget {} for conv {conv_id}",
                 self.config.max_tokens
             ))),
             OverflowPolicy::Truncate => {
@@ -298,12 +298,12 @@ impl BudgetEngine {
                 let truncated_tokens = estimate_tokens(&truncated);
                 ledger.used += truncated_tokens;
                 Ok(truncated)
-            }
+            },
             OverflowPolicy::Warn => {
                 ledger.used += tokens;
                 ledger.overflowed = true;
                 Ok(prompt.to_string())
-            }
+            },
         }
     }
 }
@@ -354,8 +354,9 @@ impl EnginePort for BudgetEngine {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
     use substrate_core::domain::TaskState;
+
+    use super::*;
 
     /// Stub engine that echoes the prompt as a dump.
     /// Returns unique conv_ids for each `start()` call.
@@ -520,7 +521,7 @@ mod tests {
                 assert!(msg.contains("context-budget"), "got: {msg}");
                 assert!(msg.contains("25"));
                 assert!(msg.contains("10"));
-            }
+            },
             other => panic!("expected Engine error, got {other:?}"),
         }
     }

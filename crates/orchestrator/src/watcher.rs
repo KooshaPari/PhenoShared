@@ -5,9 +5,11 @@
 //! dumps and forge logs because hand-off between dispatchers is part of the
 //! MVP surface.
 
-use std::path::{Path, PathBuf};
-use std::pin::Pin;
-use std::task::{Context, Poll};
+use std::{
+    path::{Path, PathBuf},
+    pin::Pin,
+    task::{Context, Poll},
+};
 
 use futures_core::Stream;
 use serde::{Deserialize, Serialize};
@@ -98,7 +100,7 @@ fn collect_jsonl_records(
                         })),
                     }
                 }
-            }
+            },
             Err(e) => out.push(Err(crate::error::OrchestratorError::Watcher {
                 path: file,
                 message: format!("read: {e}"),
@@ -131,10 +133,13 @@ impl Stream for WatcherStream {
 
 #[cfg(test)]
 mod tests {
+    use std::{
+        io::Write,
+        sync::Arc,
+        task::{Wake, Waker},
+    };
+
     use super::*;
-    use std::io::Write;
-    use std::sync::Arc;
-    use std::task::{Wake, Waker};
 
     struct NoopWaker;
     impl Wake for NoopWaker {
@@ -208,7 +213,9 @@ mod tests {
     #[test]
     fn reports_parse_errors_per_line() {
         let dir = tempfile::tempdir().expect("tmpdir");
-        let body = "{\"task_id\":\"t-1\",\"tool_name\":\"agent_run\",\"args\":{},\"timestamp\":1}\nnot-json\n";
+        let body = "{\"task_id\":\"t-1\",\"tool_name\":\"agent_run\",\"args\":{},\"timestamp\":1}\\
+                    \
+                    nnot-json\n";
         write_jsonl(dir.path(), "bad.jsonl", body);
         let items = drain(watch_project_tasks(dir.path()));
         assert_eq!(items.len(), 2);

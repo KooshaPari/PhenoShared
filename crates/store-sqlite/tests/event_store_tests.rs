@@ -1,9 +1,10 @@
-use std::sync::Arc;
-use std::thread;
+use std::{sync::Arc, thread};
 
 use store_sqlite::SqliteEventStore;
-use substrate_core::domain::TaskState;
-use substrate_core::event_store_port::{replay_task_state, EventStorePort, TaskLifecycleEvent};
+use substrate_core::{
+    domain::TaskState,
+    event_store_port::{replay_task_state, EventStorePort, TaskLifecycleEvent},
+};
 use uuid::Uuid;
 
 fn make_store() -> SqliteEventStore<TaskLifecycleEvent> {

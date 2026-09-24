@@ -7,17 +7,18 @@
 //!
 //! Traces to: FR-EYE-INTEROP-001, FR-EYE-INTEROP-002, FR-EYE-INTEROP-003
 
-use eyetracker_inference::accessibility::{AccessibilityAction, AccessibilityManager};
-use eyetracker_inference::calibration::{
-    save_calibration, CalibrationPoint, CalibrationResult, CalibrationSample,
-};
-use eyetracker_inference::classification::{GazeClassification, GazeClassifier};
-use eyetracker_inference::focalpoint::FocalPointConnector;
-use eyetracker_inference::pipeline::{PipelineConfig, TrackingPipeline};
-use eyetracker_inference::privacy::{ConsentScope, PrivacyManager, PrivacyMode};
-use eyetracker_inference::smoothing::GazeSmoother;
-use serde::{Deserialize, Serialize};
 use std::time::{Duration, Instant};
+
+use eyetracker_inference::{
+    accessibility::{AccessibilityAction, AccessibilityManager},
+    calibration::{save_calibration, CalibrationPoint, CalibrationResult, CalibrationSample},
+    classification::{GazeClassification, GazeClassifier},
+    focalpoint::FocalPointConnector,
+    pipeline::{PipelineConfig, TrackingPipeline},
+    privacy::{ConsentScope, PrivacyManager, PrivacyMode},
+    smoothing::GazeSmoother,
+};
+use serde::{Deserialize, Serialize};
 
 /// FFI-safe gaze event payload (matches the UDL dictionary)
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -297,7 +298,7 @@ impl ModernEyeTracker {
         match scroll_action {
             AccessibilityAction::ScrollUp => return format!("ScrollUp@{:.2}", speed),
             AccessibilityAction::ScrollDown => return format!("ScrollDown@{:.2}", speed),
-            _ => {}
+            _ => {},
         }
         match dwell_action {
             AccessibilityAction::Click => "Click".to_string(),

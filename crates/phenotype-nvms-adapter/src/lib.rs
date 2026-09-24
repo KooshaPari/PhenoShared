@@ -15,23 +15,21 @@
 //!
 //! This adapter bridges the two:
 //!
-//! 1. **Manifest → Required Capabilities**: Given an `odin.nvms` manifest,
-//!    produce a Fabric `Capabilities` block that *describes the minimum
-//!    machine capability needed to satisfy it*. Useful for the route
-//!    compiler to filter candidate hosts.
-//! 2. **Manifest + Descriptor → Bound Manifest**: Given a manifest
-//!    AND a target host descriptor, produce a `BoundManifest` that says
-//!    "this manifest is bound to this host, signed by the manifest
-//!    author, witnessed by the host." This is the artifact the
-//!    deployment runtime consumes.
+//! 1. **Manifest → Required Capabilities**: Given an `odin.nvms` manifest, produce a Fabric
+//!    `Capabilities` block that *describes the minimum machine capability needed to satisfy it*.
+//!    Useful for the route compiler to filter candidate hosts.
+//! 2. **Manifest + Descriptor → Bound Manifest**: Given a manifest AND a target host descriptor,
+//!    produce a `BoundManifest` that says "this manifest is bound to this host, signed by the
+//!    manifest author, witnessed by the host." This is the artifact the deployment runtime
+//!    consumes.
 //!
 //! ## Out of scope (R0.5)
 //!
 //! - Actual placement / scheduling (PF-WP-020, R1)
-//! - Pulling live capabilities from the host (use `capability-probe`
-//!   for that; this crate just maps manifests)
-//! - Reverse mapping (host → manifest). The host's descriptor is the
-//!   ground truth; the manifest is a wish.
+//! - Pulling live capabilities from the host (use `capability-probe` for that; this crate just maps
+//!   manifests)
+//! - Reverse mapping (host → manifest). The host's descriptor is the ground truth; the manifest is
+//!   a wish.
 
 #![forbid(unsafe_code)]
 
@@ -39,11 +37,8 @@ mod bound;
 mod required;
 
 pub use bound::{BoundManifest, BoundManifestBuilder, BoundManifestError};
-pub use required::{
-    required_capabilities, RequiredCapabilities, RequiredCapabilitiesError,
-};
-
 /// Re-export the upstream `phenotype_manifest` types so downstream
 /// consumers don't need to add a second dependency just to construct
 /// a manifest.
 pub use phenotype_manifest;
+pub use required::{required_capabilities, RequiredCapabilities, RequiredCapabilitiesError};

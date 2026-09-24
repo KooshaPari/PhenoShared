@@ -4,15 +4,13 @@
 //! connect route plans to concrete capability surfaces (displays, audio,
 //! network endpoints, etc.).
 
+use std::{path::Path, str::FromStr};
+
 use anyhow::{Context, Result};
 use clap::Args;
-use std::path::Path;
-use std::str::FromStr;
-
 use fabric_graph::surface::{SurfaceProtocol, SurfaceSpec};
 
-use crate::output;
-use crate::wire_client;
+use crate::{output, wire_client};
 
 #[derive(Args, Debug)]
 pub struct LeaseArgs {
@@ -107,8 +105,10 @@ fn lease(args: &LeaseArgs, _workspace: &Path) -> Result<()> {
                     state,
                 )
             })?;
-        }
-        Err(wire_client::WireClientError::ConnectionRefused { addr }) => {
+        },
+        Err(wire_client::WireClientError::ConnectionRefused {
+            addr,
+        }) => {
             // Daemon not running — report the lease spec that would be created.
             eprintln!(
                 "{} daemon not reachable at {} — surface spec validated but not yet leased",
@@ -136,7 +136,7 @@ fn lease(args: &LeaseArgs, _workspace: &Path) -> Result<()> {
                     console::style("warning:").yellow(),
                 )
             })?;
-        }
+        },
         Err(e) => return Err(e).context("surface lease request failed"),
     }
 
@@ -165,31 +165,30 @@ fn list(args: &ListArgs) -> Result<()> {
                         "NODE", "DESCRIPTOR", "TRUST"
                     ));
                     for cap in caps_arr {
-                        let node = cap
-                            .get("node_name")
-                            .and_then(|v| v.as_str())
-                            .unwrap_or("?");
+                        let node = cap.get("node_name").and_then(|v| v.as_str()).unwrap_or("?");
                         let desc = cap
                             .get("descriptor_id")
                             .and_then(|v| v.as_str())
                             .unwrap_or("?");
-                        let trust = cap
-                            .get("trust")
-                            .and_then(|v| v.as_str())
-                            .unwrap_or("?");
+                        let trust = cap.get("trust").and_then(|v| v.as_str()).unwrap_or("?");
                         out.push_str(&format!("{:<24} {:<36} {}\n", node, desc, trust));
                     }
                 }
                 out
             })?;
-        }
-        Err(wire_client::WireClientError::ConnectionRefused { addr }) => {
+        },
+        Err(wire_client::WireClientError::ConnectionRefused {
+            addr,
+        }) => {
             if args.json {
-                println!("{}", serde_json::json!({
-                    "error": "daemon_unreachable",
-                    "address": addr,
-                    "surfaces": [],
-                }));
+                println!(
+                    "{}",
+                    serde_json::json!({
+                        "error": "daemon_unreachable",
+                        "address": addr,
+                        "surfaces": [],
+                    })
+                );
             } else {
                 eprintln!(
                     "{} daemon not reachable at {}",
@@ -198,7 +197,7 @@ fn list(args: &ListArgs) -> Result<()> {
                 );
                 eprintln!("  start fabric-daemon to manage surface leases");
             }
-        }
+        },
         Err(e) => return Err(e).context("surface list request failed"),
     }
 

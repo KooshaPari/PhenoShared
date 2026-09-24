@@ -4,9 +4,7 @@
 //! so that macOS and Windows probes can be added in later releases without changing
 //! the descriptor types.
 
-use crate::descriptor::CapabilityDescriptor;
-use crate::error::Result;
-use crate::locality::LocalityTier;
+use crate::{descriptor::CapabilityDescriptor, error::Result, locality::LocalityTier};
 
 /// A capability probe for a specific platform.
 ///
@@ -22,11 +20,11 @@ pub trait Probe {
     /// Probes the current node and returns a capability descriptor.
     ///
     /// Implementations should:
-    /// - Respect the budget: the small (CPU/NUMA/cache) probe must complete
-    ///   in under 100ms; the full probe in under 1s.
+    /// - Respect the budget: the small (CPU/NUMA/cache) probe must complete in under 100ms; the
+    ///   full probe in under 1s.
     /// - Return [`crate::Error::Unsupported`] if the platform is not supported.
-    /// - Be deterministic: same hardware + same kernel state + same probe
-    ///   version should produce byte-identical descriptors (modulo timestamps).
+    /// - Be deterministic: same hardware + same kernel state + same probe version should produce
+    ///   byte-identical descriptors (modulo timestamps).
     fn probe(&self) -> Result<CapabilityDescriptor>;
 }
 
@@ -103,7 +101,6 @@ impl Probe for PosixProbe {
 mod cpu {
     use super::*;
     use crate::descriptor::ComputeCapabilities;
-    
 
     /// Probes CPU/NUMA/cache/memory from /proc and /sys.
     ///

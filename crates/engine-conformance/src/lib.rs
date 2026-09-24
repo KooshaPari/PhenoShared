@@ -9,8 +9,8 @@
 //! ## What is tested
 //!
 //! 1. `start()` returns a session with a non-empty `conv_id`.
-//! 2. `dump()` returns a `ConversationDump` whose `conversation_id` matches
-//!    what `start()` gave back.
+//! 2. `dump()` returns a `ConversationDump` whose `conversation_id` matches what `start()` gave
+//!    back.
 //! 3. `extract_result()` succeeds and the status is a valid [`TaskState`].
 //! 4. `resume()` returns a session reusing the same `conv_id`.
 //! 5. `cancel()` completes without error.
@@ -19,8 +19,10 @@
 #![forbid(unsafe_code)]
 #![warn(missing_docs)]
 
-use substrate_core::domain::{Mailbox, Task, TaskState};
-use substrate_core::ports::EnginePort;
+use substrate_core::{
+    domain::{Mailbox, Task, TaskState},
+    ports::EnginePort,
+};
 
 /// Run the full conformance suite against `engine`.
 ///
@@ -66,7 +68,8 @@ pub async fn assert_engine_conformance<E: EnginePort>(engine: &E) {
     );
     assert!(
         valid,
-        "conformance: extract_result().status must be a plausible terminal/live state, got {result:?}"
+        "conformance: extract_result().status must be a plausible terminal/live state, got \
+         {result:?}"
     );
 
     // 4. resume() → same conv_id echoed back

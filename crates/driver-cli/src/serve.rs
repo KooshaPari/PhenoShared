@@ -5,14 +5,12 @@
 //!
 //! 1. [`probe`] the serve-lock for `"substrate"`.
 //! 2. [`decide`] what to do given the probe result and `--on-conflict` policy.
-//! 3. On [`Decision::Serve`] or [`Decision::Replace`]: acquire the lock, bind
-//!    the HTTP server, print the URL, and block until Ctrl+C.
+//! 3. On [`Decision::Serve`] or [`Decision::Replace`]: acquire the lock, bind the HTTP server,
+//!    print the URL, and block until Ctrl+C.
 //! 4. On [`Decision::Attach`]: print the existing server's URL and exit 0.
 //! 5. On [`Decision::Abort`]: print the reason and exit with a non-zero code.
 
-use std::net::SocketAddr;
-use std::path::PathBuf;
-use std::process;
+use std::{net::SocketAddr, path::PathBuf, process};
 
 use anyhow::{Context, Result};
 use driver_http::{serve as http_serve, HttpConfig};
@@ -71,30 +69,37 @@ pub async fn run(args: ServeArgs) -> Result<()> {
         Decision::Attach => {
             // A live server is already running — report its URL and exit clean.
             let url = match &state {
-                ServeState::Running { info, .. } => info.url.clone(),
+                ServeState::Running {
+                    info, ..
+                } => info.url.clone(),
                 ServeState::Free => bind_url.clone(), // unreachable in practice
             };
             eprintln!("substrate serve: already running at {url} (attach)");
             return Ok(());
-        }
+        },
         Decision::Abort => {
             let url = match &state {
-                ServeState::Running { info, .. } => info.url.clone(),
+                ServeState::Running {
+                    info, ..
+                } => info.url.clone(),
                 ServeState::Free => String::new(),
             };
-            eprintln!("substrate serve: another server is running at {url}; refusing (--on-conflict abort)");
+            eprintln!(
+                "substrate serve: another server is running at {url}; refusing (--on-conflict \
+                 abort)"
+            );
             process::exit(1);
-        }
+        },
         Decision::Replace => {
             eprintln!(
                 "substrate serve: replacing existing server at {bind_url} (--on-conflict replace)"
             );
             // Fall through to acquire + serve below; ServeLock::try_acquire
             // will take over the stale/replaced pidfile.
-        }
+        },
         Decision::Serve => {
             // No conflict — proceed.
-        }
+        },
     }
 
     // Acquire the serve-lock. If another process snuck in between probe and now,

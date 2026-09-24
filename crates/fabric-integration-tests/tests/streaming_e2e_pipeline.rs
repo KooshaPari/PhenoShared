@@ -6,15 +6,16 @@
 //! - Full E2E pipeline: topology -> compile -> check -> persist -> lease -> frame
 
 use fabric_frame_transport::{Codec, FrameHeader};
-use fabric_graph::model::NodeId;
-use fabric_graph::multihop::builtin_stages;
-use fabric_graph::surface::{CaptureDirection, LeaseState, SurfaceProtocol, SurfaceSpec};
-use fabric_graph::surface_ops;
-
+use fabric_graph::{
+    model::NodeId,
+    multihop::builtin_stages,
+    surface::{CaptureDirection, LeaseState, SurfaceProtocol, SurfaceSpec},
+    surface_ops,
+};
 // Import shared helpers from the crate lib.
 use fabric_integration_tests::{
-    build_4node_topology, decode_frame_wire, encode_frame_wire, make_coordinator,
-    make_descriptor, make_intent, make_manifest, make_rgba_payload,
+    build_4node_topology, decode_frame_wire, encode_frame_wire, make_coordinator, make_descriptor,
+    make_intent, make_manifest, make_rgba_payload,
 };
 
 // ===========================================================================
@@ -30,7 +31,8 @@ fn daemon_wire_message_flow_topo_routes_lease() {
 
     // -- topology_request --
     let topo_req = serde_json::json!({"type": "topology_request"});
-    let resp = fabric_daemon::wire::protocol::process_message(&topo_req.to_string(), &coord).unwrap();
+    let resp =
+        fabric_daemon::wire::protocol::process_message(&topo_req.to_string(), &coord).unwrap();
     let val: serde_json::Value = serde_json::from_str(&resp).unwrap();
     assert_eq!(val["type"].as_str().unwrap(), "probe_response");
     assert!(val["topology_epoch"].is_number());
@@ -40,7 +42,8 @@ fn daemon_wire_message_flow_topo_routes_lease() {
 
     // -- routes_request --
     let routes_req = serde_json::json!({"type": "routes_request"});
-    let resp = fabric_daemon::wire::protocol::process_message(&routes_req.to_string(), &coord).unwrap();
+    let resp =
+        fabric_daemon::wire::protocol::process_message(&routes_req.to_string(), &coord).unwrap();
     let val: serde_json::Value = serde_json::from_str(&resp).unwrap();
     assert_eq!(val["type"].as_str().unwrap(), "routes_response");
     assert!(val["routes"].is_array());
@@ -78,16 +81,15 @@ fn daemon_wire_health_topology_compile_sequence() {
     coord.set_topology(topo).unwrap();
 
     // health_check
-    let resp = fabric_daemon::wire::protocol::process_message(
-        r#"{"type":"health_check"}"#, &coord,
-    ).unwrap();
+    let resp = fabric_daemon::wire::protocol::process_message(r#"{"type":"health_check"}"#, &coord)
+        .unwrap();
     let val: serde_json::Value = serde_json::from_str(&resp).unwrap();
     assert_eq!(val["status"].as_str().unwrap(), "healthy");
 
     // topology_request
-    let resp = fabric_daemon::wire::protocol::process_message(
-        r#"{"type":"topology_request"}"#, &coord,
-    ).unwrap();
+    let resp =
+        fabric_daemon::wire::protocol::process_message(r#"{"type":"topology_request"}"#, &coord)
+            .unwrap();
     let val: serde_json::Value = serde_json::from_str(&resp).unwrap();
     assert_eq!(val["node_count"].as_u64().unwrap(), 4);
 
@@ -95,11 +97,14 @@ fn daemon_wire_health_topology_compile_sequence() {
     let resp = fabric_daemon::wire::protocol::process_message(
         r#"{"type":"compile_request","source":"n1","destination":"n4","intent_name":"stream"}"#,
         &coord,
-    ).unwrap();
+    )
+    .unwrap();
     let val: serde_json::Value = serde_json::from_str(&resp).unwrap();
     assert_eq!(val["type"].as_str().unwrap(), "compile_response");
     assert_eq!(val["status"].as_str().unwrap(), "ok");
-    let steps = val["plan"]["steps"].as_array().expect("plan should have steps");
+    let steps = val["plan"]["steps"]
+        .as_array()
+        .expect("plan should have steps");
     assert_eq!(steps.len(), 4, "4-node path -> 4 steps");
 }
 
@@ -114,7 +119,11 @@ async fn multihop_compile_and_frame_flow() {
     let intent = make_intent();
 
     let result = fabric_graph::multihop::compile_multihop(
-        &topo, &NodeId::new("n1"), &NodeId::new("n4"), &intent, &stages,
+        &topo,
+        &NodeId::new("n1"),
+        &NodeId::new("n4"),
+        &intent,
+        &stages,
     )
     .expect("multihop compile should succeed");
 
@@ -142,7 +151,8 @@ async fn multihop_compile_and_frame_flow() {
             dts_us: frame_seq * 33_000,
             is_keyframe: hop_idx == 0,
             codec: Codec::Rgba,
-            width, height,
+            width,
+            height,
             payload_len: current_payload.len() as u32,
             duration_us: 16_667,
         };
@@ -153,7 +163,8 @@ async fn multihop_compile_and_frame_flow() {
         assert_eq!(decoded_header.seq, frame_seq, "hop {hop_idx}: seq");
         assert_eq!(decoded_header.width, width, "hop {hop_idx}: width");
         assert_eq!(
-            &decoded_payload[..], &current_payload[..],
+            &decoded_payload[..],
+            &current_payload[..],
             "hop {hop_idx}: pixel data corrupted"
         );
 
@@ -177,7 +188,11 @@ fn full_e2e_pipeline_compile_check_persist_frame() {
     let stages = builtin_stages();
     let intent = make_intent();
     let result = fabric_graph::multihop::compile_multihop(
-        &topo, &NodeId::new("n1"), &NodeId::new("n4"), &intent, &stages,
+        &topo,
+        &NodeId::new("n1"),
+        &NodeId::new("n4"),
+        &intent,
+        &stages,
     )
     .expect("multihop compile should succeed");
     assert_eq!(result.primary.steps.len(), 4);
@@ -199,7 +214,10 @@ fn full_e2e_pipeline_compile_check_persist_frame() {
     let db_path = dir.path().join("e2e-streaming.db");
     let persist = fabric_persist::Persist::open(&db_path).expect("open persist");
     persist.save_topology(&topo).expect("save topology");
-    let loaded = persist.load_topology().expect("load topology").expect("exists");
+    let loaded = persist
+        .load_topology()
+        .expect("load topology")
+        .expect("exists");
     assert_eq!(loaded.nodes.len(), 4);
     assert_eq!(loaded.edges.len(), 3);
 
@@ -222,9 +240,13 @@ fn full_e2e_pipeline_compile_check_persist_frame() {
     // Encode a frame and verify roundtrip.
     let pixel_data = make_rgba_payload(1920, 1080);
     let header = FrameHeader {
-        seq: 1, pts_us: 33_333, dts_us: 33_000,
-        is_keyframe: true, codec: Codec::Rgba,
-        width: 1920, height: 1080,
+        seq: 1,
+        pts_us: 33_333,
+        dts_us: 33_000,
+        is_keyframe: true,
+        codec: Codec::Rgba,
+        width: 1920,
+        height: 1080,
         payload_len: pixel_data.len() as u32,
         duration_us: 16_667,
     };
@@ -248,20 +270,23 @@ fn daemon_wire_invalid_json_and_unknown_type() {
     assert!(resp.contains("INVALID_JSON") || resp.contains("invalid_json"));
 
     // Unknown message type
-    let resp = fabric_daemon::wire::protocol::process_message(
-        r#"{"type":"foo_bar"}"#, &coord,
-    ).unwrap();
+    let resp =
+        fabric_daemon::wire::protocol::process_message(r#"{"type":"foo_bar"}"#, &coord).unwrap();
     assert!(resp.contains("UNKNOWN_TYPE") || resp.contains("unknown_message"));
 
     // Compile request with missing source
     let resp = fabric_daemon::wire::protocol::process_message(
-        r#"{"type":"compile_request","destination":"b"}"#, &coord,
-    ).unwrap();
+        r#"{"type":"compile_request","destination":"b"}"#,
+        &coord,
+    )
+    .unwrap();
     assert!(resp.contains("MISSING_FIELD") || resp.contains("missing_source"));
 
     // Compile request on empty topology
     let resp = fabric_daemon::wire::protocol::process_message(
-        r#"{"type":"compile_request","source":"a","destination":"b"}"#, &coord,
-    ).unwrap();
+        r#"{"type":"compile_request","source":"a","destination":"b"}"#,
+        &coord,
+    )
+    .unwrap();
     assert!(resp.contains("compile_error") || resp.contains("compile_failed"));
 }

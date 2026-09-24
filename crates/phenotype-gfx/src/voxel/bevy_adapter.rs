@@ -4,15 +4,17 @@
 //! `bevy` feature can turn a [`MeshBuffer`](crate::voxel::mesh::MeshBuffer) into a Bevy
 //! [`Mesh`](bevy::render::mesh::Mesh) without re-implementing the buffer mapping.
 
-use bevy::asset::RenderAssetUsages;
-use bevy::mesh::{Indices, Mesh, MeshVertexAttribute, PrimitiveTopology, VertexFormat};
+use bevy::{
+    asset::RenderAssetUsages,
+    mesh::{Indices, Mesh, MeshVertexAttribute, PrimitiveTopology, VertexFormat},
+};
 
 use crate::voxel::mesh::MeshBuffer;
 
 /// Custom per-vertex ambient-occlusion attribute stored alongside Bevy's built-in
 /// position / normal / UV attributes.
 pub const ATTRIBUTE_AO: MeshVertexAttribute =
-    MeshVertexAttribute::new("VoxelAO", 0x564F_5845_4C5F_414F, VertexFormat::Float32);
+    MeshVertexAttribute::new("VoxelAO", 0x564f_5845_4c5f_414f, VertexFormat::Float32);
 
 /// Convert an engine-neutral [`MeshBuffer`] into a Bevy [`Mesh`].
 pub fn to_bevy_mesh(buffer: &MeshBuffer) -> Mesh {

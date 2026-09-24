@@ -6,13 +6,14 @@
 use std::sync::{Arc, Mutex};
 
 use async_trait::async_trait;
-use uuid::Uuid;
-
-use substrate_core::domain::{
-    ConversationDump, EngineCapabilities, Mailbox, Session, StructuredResult, Task, TaskState,
+use substrate_core::{
+    domain::{
+        ConversationDump, EngineCapabilities, Mailbox, Session, StructuredResult, Task, TaskState,
+    },
+    error::Result,
+    ports::EnginePort,
 };
-use substrate_core::error::Result;
-use substrate_core::ports::EnginePort;
+use uuid::Uuid;
 
 /// A pre-programmed response for a single engine call.
 #[derive(Debug, Clone)]

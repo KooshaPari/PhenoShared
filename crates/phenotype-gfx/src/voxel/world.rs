@@ -10,10 +10,12 @@ use std::collections::BTreeMap;
 
 use serde::{Deserialize, Serialize};
 
-use crate::voxel::chunk::{Chunk, CHUNK_EDGE, CHUNK_VOXELS};
-use crate::voxel::coord::{to_chunk_coord, ChunkCoord, WorldCoord};
-use crate::voxel::delta::{DirtyChunkEvent, WriteSeq};
-use crate::voxel::octree::VoxelOctree;
+use crate::voxel::{
+    chunk::{Chunk, CHUNK_EDGE, CHUNK_VOXELS},
+    coord::{to_chunk_coord, ChunkCoord, WorldCoord},
+    delta::{DirtyChunkEvent, WriteSeq},
+    octree::VoxelOctree,
+};
 
 /// World container.
 ///
@@ -195,7 +197,11 @@ mod tests {
     #[test]
     fn empty_world_reads_default() {
         let w: VoxelWorld<u8> = VoxelWorld::new(1_000_000);
-        let v = w.read(WorldCoord { x: 0, y: 0, z: 0 });
+        let v = w.read(WorldCoord {
+            x: 0,
+            y: 0,
+            z: 0,
+        });
         assert_eq!(v, 0);
         assert_eq!(w.chunk_count(), 0);
     }
@@ -221,7 +227,11 @@ mod tests {
     #[test]
     fn idempotent_write_emits_no_event() {
         let mut w: VoxelWorld<u8> = VoxelWorld::new(1_000_000);
-        let pos = WorldCoord { x: 0, y: 0, z: 0 };
+        let pos = WorldCoord {
+            x: 0,
+            y: 0,
+            z: 0,
+        };
         w.write(pos, 7);
         let _ = w.drain_dirty();
         w.write(pos, 7);
@@ -234,7 +244,11 @@ mod tests {
     fn dirty_events_drain_in_sorted_order() {
         let mut w: VoxelWorld<u8> = VoxelWorld::new(1_000_000);
         // Two distinct chunks, two writes each, interleaved.
-        let a0 = WorldCoord { x: 0, y: 0, z: 0 };
+        let a0 = WorldCoord {
+            x: 0,
+            y: 0,
+            z: 0,
+        };
         let b0 = WorldCoord {
             x: 100_000_000,
             y: 0,
@@ -293,7 +307,14 @@ mod tests {
         assert_eq!(w.chunk_count(), 0);
         assert_eq!(w.uniform_chunk_count(), 1);
         // Read still works through the octree fallback.
-        assert_eq!(w.read(WorldCoord { x: 0, y: 0, z: 0 }), 1);
+        assert_eq!(
+            w.read(WorldCoord {
+                x: 0,
+                y: 0,
+                z: 0
+            }),
+            1
+        );
         assert_eq!(
             w.read(WorldCoord {
                 x: 5_000_000,
@@ -309,7 +330,14 @@ mod tests {
     #[test]
     fn compact_skips_non_uniform_chunks() {
         let mut w: VoxelWorld<u8> = VoxelWorld::new(1_000_000);
-        w.write(WorldCoord { x: 0, y: 0, z: 0 }, 1);
+        w.write(
+            WorldCoord {
+                x: 0,
+                y: 0,
+                z: 0,
+            },
+            1,
+        );
         w.write(
             WorldCoord {
                 x: 1_000_000,
@@ -380,7 +408,11 @@ mod tests {
         assert_eq!(w1.chunk_count(), w2.chunk_count());
         assert_eq!(w1.uniform_chunk_count(), w2.uniform_chunk_count());
         // Reads through the octree fallback agree.
-        let probe = WorldCoord { x: 0, y: 0, z: 0 };
+        let probe = WorldCoord {
+            x: 0,
+            y: 0,
+            z: 0,
+        };
         assert_eq!(w1.read(probe), w2.read(probe));
     }
 
@@ -448,7 +480,14 @@ mod tests {
     #[test]
     fn chunk_returns_some_after_write() {
         let mut w: VoxelWorld<u8> = VoxelWorld::new(1_000_000);
-        let coord = w.write(WorldCoord { x: 0, y: 0, z: 0 }, 11);
+        let coord = w.write(
+            WorldCoord {
+                x: 0,
+                y: 0,
+                z: 0,
+            },
+            11,
+        );
         assert!(w.chunk(coord).is_some());
     }
 
@@ -581,7 +620,11 @@ mod tests {
     fn multiple_writes_to_same_chunk_coexist() {
         let mut w: VoxelWorld<u8> = VoxelWorld::new(1_000_000);
         // All three positions are inside the 16³ chunk at origin (voxel_span=1e6).
-        let p0 = WorldCoord { x: 0, y: 0, z: 0 };
+        let p0 = WorldCoord {
+            x: 0,
+            y: 0,
+            z: 0,
+        };
         let p1 = WorldCoord {
             x: 1_000_000,
             y: 0,
@@ -628,7 +671,7 @@ mod tests {
         let expected = crate::voxel::chunk::ChunkId(
             (((coord.cx as u32) as u64) << 40)
                 | (((coord.cy as u32) as u64) << 16)
-                | (((coord.cz as u32) as u64) & 0xFFFF),
+                | (((coord.cz as u32) as u64) & 0xffff),
         );
         assert_eq!(coord.chunk_id(), expected);
 

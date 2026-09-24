@@ -1,11 +1,11 @@
 //! Integration tests for the substrate HTTP driver (offline, fake-forge).
 
-use std::net::SocketAddr;
-use std::path::PathBuf;
-use std::process::Command as StdCommand;
+use std::{net::SocketAddr, path::PathBuf, process::Command as StdCommand};
 
-use axum::body::Body;
-use axum::http::{Request, StatusCode};
+use axum::{
+    body::Body,
+    http::{Request, StatusCode},
+};
 use driver_http::{build_router, test_state};
 use http_body_util::BodyExt;
 use tower::ServiceExt;

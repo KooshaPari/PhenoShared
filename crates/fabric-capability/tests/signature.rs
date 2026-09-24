@@ -5,8 +5,10 @@
 //! - tampered descriptors fail verification
 //! - descriptors with no signatures fail verification
 
-use fabric_capability::descriptor::{Capabilities, CapabilityDescriptor};
-use fabric_capability::{sign, verify, SigningKey};
+use fabric_capability::{
+    descriptor::{Capabilities, CapabilityDescriptor},
+    sign, verify, SigningKey,
+};
 use uuid::Uuid;
 
 fn test_descriptor() -> CapabilityDescriptor {

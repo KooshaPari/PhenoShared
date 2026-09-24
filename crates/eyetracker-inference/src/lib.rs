@@ -16,8 +16,8 @@
 //! - FR-EYE-ACCESS-001: Dwell-click selection (accessibility.rs)
 //! - FR-EYE-ACCESS-002: Scroll-by-gaze (accessibility.rs)
 //! - FR-EYE-INTEROP-003: FocalPoint connector (focalpoint.rs)
-//! - FR-EYE-PRIVACY-001/002/003: On-device processing, no default cloud,
-//!   recording consent (privacy.rs)
+//! - FR-EYE-PRIVACY-001/002/003: On-device processing, no default cloud, recording consent
+//!   (privacy.rs)
 
 pub mod accessibility;
 pub mod calibration;

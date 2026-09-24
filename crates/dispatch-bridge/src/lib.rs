@@ -45,8 +45,7 @@
 //!
 //! See [`DispatchEnvelope`] for full schema.
 
-use std::pin::Pin;
-use std::sync::Arc;
+use std::{pin::Pin, sync::Arc};
 
 use async_trait::async_trait;
 use futures::Stream;
@@ -133,11 +132,21 @@ impl DispatchEnvelope {
     /// Stable wire-format identifier for this envelope variant.
     pub fn kind(&self) -> &'static str {
         match self {
-            DispatchEnvelope::LaneRequest { .. } => "lane_request",
-            DispatchEnvelope::LaneAck { .. } => "lane_ack",
-            DispatchEnvelope::TaskUpdate { .. } => "task_update",
-            DispatchEnvelope::Heartbeat { .. } => "heartbeat",
-            DispatchEnvelope::Shutdown { .. } => "shutdown",
+            DispatchEnvelope::LaneRequest {
+                ..
+            } => "lane_request",
+            DispatchEnvelope::LaneAck {
+                ..
+            } => "lane_ack",
+            DispatchEnvelope::TaskUpdate {
+                ..
+            } => "task_update",
+            DispatchEnvelope::Heartbeat {
+                ..
+            } => "heartbeat",
+            DispatchEnvelope::Shutdown {
+                ..
+            } => "shutdown",
         }
     }
 
@@ -232,7 +241,9 @@ pub struct Bridge {
 impl Bridge {
     /// Wrap a transport for forward-pumping.
     pub fn new(transport: Arc<dyn Transport>) -> Self {
-        Self { transport }
+        Self {
+            transport,
+        }
     }
 
     /// Run the bridge loop until the transport closes or `Shutdown` arrives.
@@ -246,14 +257,20 @@ impl Bridge {
         use futures::StreamExt;
         while let Some(envelope) = stream.next().await {
             match &envelope {
-                DispatchEnvelope::Shutdown { from, reason } => {
+                DispatchEnvelope::Shutdown {
+                    from,
+                    reason,
+                } => {
                     info!(from = %from, reason = %reason, "shutdown received");
                     break;
-                }
-                DispatchEnvelope::Heartbeat { from, seq } => {
+                },
+                DispatchEnvelope::Heartbeat {
+                    from,
+                    seq,
+                } => {
                     debug!(from = %from, seq, "heartbeat");
-                }
-                _ => {}
+                },
+                _ => {},
             }
             if let Err(e) = on_envelope(envelope).await {
                 error!(error = %e, "envelope handler failed");
@@ -270,8 +287,9 @@ impl Bridge {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
     use futures::StreamExt;
+
+    use super::*;
 
     fn make_request(lane_id: uuid::Uuid) -> DispatchEnvelope {
         DispatchEnvelope::LaneRequest {
@@ -362,7 +380,7 @@ mod tests {
                 assert_eq!(lane_id, id);
                 assert!(!accepted);
                 assert_eq!(reason, "busy");
-            }
+            },
             _ => panic!("wrong variant"),
         }
     }
@@ -394,11 +412,13 @@ mod tests {
         let received = stream.next().await.expect("recv one");
         match received {
             DispatchEnvelope::LaneRequest {
-                lane_id, prompt, ..
+                lane_id,
+                prompt,
+                ..
             } => {
                 assert_eq!(lane_id, id);
                 assert_eq!(prompt, "fix the bug");
-            }
+            },
             _ => panic!("wrong variant"),
         }
     }
@@ -419,10 +439,13 @@ mod tests {
         for i in 0..10 {
             let env = stream.next().await.expect("recv heartbeat");
             match env {
-                DispatchEnvelope::Heartbeat { from, seq } => {
+                DispatchEnvelope::Heartbeat {
+                    from,
+                    seq,
+                } => {
                     assert_eq!(from, format!("sender-{i}"));
                     assert_eq!(seq, i as u64);
-                }
+                },
                 _ => panic!("wrong variant"),
             }
         }
@@ -438,7 +461,10 @@ mod tests {
                 .run(|env| {
                     Box::pin(async move {
                         // Echo envelopes back as ack.
-                        if let DispatchEnvelope::LaneRequest { lane_id, .. } = &env {
+                        if let DispatchEnvelope::LaneRequest {
+                            lane_id, ..
+                        } = &env
+                        {
                             let ack = DispatchEnvelope::LaneAck {
                                 lane_id: *lane_id,
                                 accepted: true,
@@ -507,7 +533,12 @@ mod tests {
         a.send(req).await.expect("send");
         let mut s = b.recv_stream();
         let env = s.next().await.expect("recv");
-        if let DispatchEnvelope::LaneRequest { engine, model, .. } = env {
+        if let DispatchEnvelope::LaneRequest {
+            engine,
+            model,
+            ..
+        } = env
+        {
             assert!(engine.is_none());
             assert!(model.is_none());
         } else {

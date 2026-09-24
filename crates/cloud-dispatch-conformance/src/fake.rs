@@ -3,10 +3,10 @@
 use std::sync::{Arc, Mutex};
 
 use async_trait::async_trait;
-use substrate_core::cloud_dispatch_port::{
-    CloudDispatchPort, CloudResult, CloudTaskHandle, CloudTaskStatus,
+use substrate_core::{
+    cloud_dispatch_port::{CloudDispatchPort, CloudResult, CloudTaskHandle, CloudTaskStatus},
+    error::{Result, SubstrateError},
 };
-use substrate_core::error::{Result, SubstrateError};
 
 /// Outcome scripted for the next submitted task.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -117,7 +117,9 @@ impl CloudDispatchPort for FakeCloudDispatch {
                 .result
                 .clone()
                 .ok_or_else(|| SubstrateError::CloudDispatch("missing harvest payload".into())),
-            Some(CloudTaskStatus::Failed { message }) => Err(SubstrateError::CloudDispatch(
+            Some(CloudTaskStatus::Failed {
+                message,
+            }) => Err(SubstrateError::CloudDispatch(
                 message.clone().unwrap_or_else(|| "task failed".into()),
             )),
             _ => Err(SubstrateError::CloudDispatch(

@@ -5,11 +5,15 @@
 
 use std::collections::{HashMap, HashSet};
 
-use petgraph::algo::is_cyclic_directed;
-use petgraph::graph::{DiGraph, NodeIndex};
-use petgraph::Direction;
-use substrate_core::error::{Result, SubstrateError};
-use substrate_core::workflow_port::{Workflow, WorkflowPort};
+use petgraph::{
+    algo::is_cyclic_directed,
+    graph::{DiGraph, NodeIndex},
+    Direction,
+};
+use substrate_core::{
+    error::{Result, SubstrateError},
+    workflow_port::{Workflow, WorkflowPort},
+};
 
 /// [`WorkflowPort`] backed by petgraph directed graphs.
 #[derive(Debug, Default, Clone, Copy)]
@@ -127,14 +131,17 @@ impl WorkflowPort for DagWorkflow {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
     use substrate_core::workflow_port::{WorkflowEdge, WorkflowNode};
+
+    use super::*;
 
     fn wf(nodes: &[&str], edges: &[(&str, &str)]) -> Workflow {
         Workflow {
             nodes: nodes
                 .iter()
-                .map(|id| WorkflowNode { id: (*id).into() })
+                .map(|id| WorkflowNode {
+                    id: (*id).into(),
+                })
                 .collect(),
             edges: edges
                 .iter()

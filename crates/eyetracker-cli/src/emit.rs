@@ -55,11 +55,11 @@ pub fn emit_gaze(frame: &GazeFrame, fmt: Format) {
                 "{:>8}ms  gaze=({:.4}, {:.4})  event={:<9}  latency={:.1}ms",
                 frame.ts_ms, frame.gaze_x, frame.gaze_y, frame.event, frame.latency_ms
             );
-        }
+        },
         Format::Json => {
             // serde_json::to_string never fails on this struct; unwrap is sound.
             println!("{}", serde_json::to_string(frame).unwrap());
-        }
+        },
     }
 }
 
@@ -76,10 +76,10 @@ pub fn emit_error(ev: &ErrorEvent, fmt: Format) {
                 ev.message,
                 ev.hint.map(|h| format!("(hint: {h})")).unwrap_or_default()
             );
-        }
+        },
         Format::Json => {
             eprintln!("{}", serde_json::to_string(ev).unwrap());
-        }
+        },
     }
 }
 

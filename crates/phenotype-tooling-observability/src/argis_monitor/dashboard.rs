@@ -63,7 +63,11 @@ mod tests {
 
     #[test]
     fn known_metrics_list_includes_every_family() {
-        for m in ["argis_monitor_up", "argis_monitor_burn_rate", "argis_monitor_slo_target"] {
+        for m in [
+            "argis_monitor_up",
+            "argis_monitor_burn_rate",
+            "argis_monitor_slo_target",
+        ] {
             assert!(KNOWN_METRICS.contains(&m));
         }
     }

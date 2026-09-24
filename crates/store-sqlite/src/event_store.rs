@@ -1,17 +1,14 @@
 //! `SqliteEventStore`: append-only event log with global monotonic ordering.
 
-use std::marker::PhantomData;
-use std::sync::Mutex;
+use std::{marker::PhantomData, sync::Mutex};
 
 use chrono::Utc;
 use rusqlite::{params, Connection, TransactionBehavior};
 use serde::{de::DeserializeOwned, Serialize};
+use substrate_core::event_store_port::{EventEnvelope, EventStorePort};
 use uuid::Uuid;
 
-use substrate_core::event_store_port::{EventEnvelope, EventStorePort};
-
-use crate::error::StoreError;
-use crate::schema;
+use crate::{error::StoreError, schema};
 
 /// SQLite-backed [`EventStorePort`] with `BEGIN IMMEDIATE` sequence allocation.
 pub struct SqliteEventStore<E> {
@@ -47,8 +44,8 @@ where
     pub fn load_all_global(&self) -> Result<Vec<EventEnvelope<E>>, StoreError> {
         let conn = self.conn.lock().unwrap();
         let mut stmt = conn.prepare(
-            "SELECT aggregate_id, aggregate_seq, global_seq, payload, occurred_at \
-             FROM event_log ORDER BY global_seq ASC",
+            "SELECT aggregate_id, aggregate_seq, global_seq, payload, occurred_at FROM event_log \
+             ORDER BY global_seq ASC",
         )?;
         let rows = stmt.query_map([], |row| {
             Ok((
@@ -117,8 +114,8 @@ where
         let occurred_at = Utc::now().timestamp();
 
         tx.execute(
-            "INSERT INTO event_log (aggregate_id, aggregate_seq, global_seq, payload, occurred_at) \
-             VALUES (?1, ?2, ?3, ?4, ?5)",
+            "INSERT INTO event_log (aggregate_id, aggregate_seq, global_seq, payload, \
+             occurred_at) VALUES (?1, ?2, ?3, ?4, ?5)",
             params![
                 aggregate_id.to_string(),
                 expected_seq as i64,
@@ -142,8 +139,8 @@ where
     fn load(&self, aggregate_id: Uuid) -> Result<Vec<EventEnvelope<Self::Event>>, Self::Error> {
         let conn = self.conn.lock().unwrap();
         let mut stmt = conn.prepare(
-            "SELECT aggregate_id, aggregate_seq, global_seq, payload, occurred_at \
-             FROM event_log WHERE aggregate_id = ?1 ORDER BY aggregate_seq ASC",
+            "SELECT aggregate_id, aggregate_seq, global_seq, payload, occurred_at FROM event_log \
+             WHERE aggregate_id = ?1 ORDER BY aggregate_seq ASC",
         )?;
         let rows = stmt.query_map(params![aggregate_id.to_string()], |row| {
             Ok((

@@ -15,9 +15,8 @@
 //! PROPTEST_CASES=256 cargo test --test proptest_smoke
 //! ```
 
-use proptest::prelude::*;
-
 use pheno_otel::OtlpError;
+use proptest::prelude::*;
 
 proptest! {
     /// `Display` of an `OtlpError::SerializeFailed` always begins with

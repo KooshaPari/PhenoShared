@@ -5,8 +5,10 @@
 
 use serde::{Deserialize, Serialize};
 
-use crate::terrain::error::TerrainResult;
-use crate::terrain::lod::{LodBase, LodTier};
+use crate::terrain::{
+    error::TerrainResult,
+    lod::{LodBase, LodTier},
+};
 
 /// Default LOD config for terrain chunks.
 #[derive(Debug, Clone, Copy, PartialEq, Serialize, Deserialize)]

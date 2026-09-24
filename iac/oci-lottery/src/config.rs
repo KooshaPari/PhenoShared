@@ -1,6 +1,7 @@
+use std::path::PathBuf;
+
 use oci_helpers::home_or_fallback;
 use serde::{Deserialize, Serialize};
-use std::path::PathBuf;
 
 /// Runtime configuration for the OCI lottery daemon.
 #[derive(Debug, Clone, Serialize, Deserialize)]

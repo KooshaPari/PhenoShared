@@ -1,8 +1,9 @@
-use std::sync::Arc;
-use std::thread;
+use std::{sync::Arc, thread};
 
-use a2a::message::{Message, MessageKind, Part};
-use a2a::task::Task;
+use a2a::{
+    message::{Message, MessageKind, Part},
+    task::Task,
+};
 use store_sqlite::SqliteMailboxStore;
 use substrate_core::mailbox_port::{MailboxStore, MailboxTaskState};
 
@@ -18,7 +19,9 @@ fn inbox_returns_unread_for_correct_recipient() {
         "lead",
         "worker-1",
         MessageKind::Task,
-        vec![Part::Text { text: "go".into() }],
+        vec![Part::Text {
+            text: "go".into(),
+        }],
     );
     let msg2 = Message::new(
         "team-a",

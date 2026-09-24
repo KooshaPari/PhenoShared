@@ -6,8 +6,7 @@
 //! Queries the substrate gateway for health, A2A tasks, and management config.
 //! Wraps `reqwest` with auth token injection and JSON deserialisation.
 
-use std::collections::HashMap;
-use std::time::Duration;
+use std::{collections::HashMap, time::Duration};
 
 use anyhow::Context;
 use serde::Deserialize;
@@ -35,7 +34,10 @@ impl GatewayClient {
             .default_headers(headers)
             .build()
             .expect("reqwest client build");
-        Self { base_url, client }
+        Self {
+            base_url,
+            client,
+        }
     }
 
     // ── health ──────────────────────────────────────────────────────────
@@ -379,9 +381,11 @@ mod tests {
 
     #[tokio::test]
     async fn get_status_no_port_yields_stopped() {
-        use crate::proccompose::{Composition, CompositionStatus, Member};
         use std::time::Duration;
+
         use uuid::Uuid;
+
+        use crate::proccompose::{Composition, CompositionStatus, Member};
 
         let comp = Composition {
             name: "forge-daemon".into(),
@@ -407,9 +411,11 @@ mod tests {
 
     #[tokio::test]
     async fn get_status_refused_connection_yields_stopped() {
-        use crate::proccompose::{Composition, CompositionStatus, Member};
         use std::time::Duration;
+
         use uuid::Uuid;
+
+        use crate::proccompose::{Composition, CompositionStatus, Member};
 
         // Port 19999 is almost certainly not in use in test environments.
         let comp = Composition {
@@ -437,8 +443,9 @@ mod tests {
 
 #[cfg(test)]
 mod log_panel_tests {
-    use super::*;
     use ratatui::style::Color;
+
+    use super::*;
 
     // ── log_entry_color ────────────────────────────────────────────────
 
@@ -538,11 +545,11 @@ fn urlencoding(s: &str) -> String {
         match byte {
             b'A'..=b'Z' | b'a'..=b'z' | b'0'..=b'9' | b'-' | b'_' | b'.' | b'~' => {
                 out.push(byte as char);
-            }
+            },
             b' ' => out.push_str("%20"),
             _ => {
                 out.push_str(&format!("%{:02X}", byte));
-            }
+            },
         }
     }
     out

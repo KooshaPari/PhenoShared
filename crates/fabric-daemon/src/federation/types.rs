@@ -1,7 +1,8 @@
 //! Shared types for multi-node federation.
 
-use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
+
+use serde::{Deserialize, Serialize};
 
 /// Merge strategy for federated topologies.
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]

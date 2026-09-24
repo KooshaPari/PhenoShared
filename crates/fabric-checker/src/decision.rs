@@ -4,8 +4,8 @@
 //! question: "is this host + this manifest combination admissible for
 //! placement?"  Three answers, no more:
 //!   * `Admit`         — every requirement satisfied with at least Margin=0.
-//!   * `AdmitWithNotes` — admissible but with at least one advisory (e.g.,
-//!                        `AcceleratorMissing` for an optional GPU).
+//!   * `AdmitWithNotes` — admissible but with at least one advisory (e.g., `AcceleratorMissing` for
+//!     an optional GPU).
 //!   * `Reject`        — at least one hard requirement is not met.
 //!
 //! Reasons are the evidence: every `Decision` carries one or more
@@ -35,7 +35,14 @@ impl PartialEq for Decision {
     fn eq(&self, other: &Self) -> bool {
         match (self, other) {
             (Self::Admit, Self::Admit) => true,
-            (Self::AdmitWithNotes { notes: a }, Self::AdmitWithNotes { notes: b }) => a == b,
+            (
+                Self::AdmitWithNotes {
+                    notes: a,
+                },
+                Self::AdmitWithNotes {
+                    notes: b,
+                },
+            ) => a == b,
             (
                 Self::Reject {
                     reason_code: rc1,

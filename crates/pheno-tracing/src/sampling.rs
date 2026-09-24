@@ -5,33 +5,32 @@
 //! whether a given span gets recorded at the source (head-based) or after
 //! the span completes (tail-based). Three samplers ship in-tree:
 //!
-//! - [`ParentBasedSampler`] — W3C/OTel-default; if the parent context is
-//!   sampled, sample; otherwise drop. Implements the "respect upstream
-//!   intent" rule from W3C Trace Context §3.
-//! - [`RateLimitSampler`] — token-bucket sampler; cap at N spans per
-//!   second. Useful for high-throughput services where a fixed budget
-//!   is preferable to a probabilistic rate.
-//! - [`TailBasedSampler`] — observes the recent stream of span outcomes
-//!   and records when the error rate exceeds a threshold. Cheap
-//!   approximation: a sliding window of (timestamp, was_error) pairs.
+//! - [`ParentBasedSampler`] — W3C/OTel-default; if the parent context is sampled, sample; otherwise
+//!   drop. Implements the "respect upstream intent" rule from W3C Trace Context §3.
+//! - [`RateLimitSampler`] — token-bucket sampler; cap at N spans per second. Useful for
+//!   high-throughput services where a fixed budget is preferable to a probabilistic rate.
+//! - [`TailBasedSampler`] — observes the recent stream of span outcomes and records when the error
+//!   rate exceeds a threshold. Cheap approximation: a sliding window of (timestamp, was_error)
+//!   pairs.
 //!
 //! # When to use
 //!
-//! - You want a single trait surface so adapters can swap sampling logic
-//!   without touching the call graph.
-//! - You need explicit control over what gets recorded (vs. relying on
-//!   defaults that may oversample or undersample in production).
+//! - You want a single trait surface so adapters can swap sampling logic without touching the call
+//!   graph.
+//! - You need explicit control over what gets recorded (vs. relying on defaults that may oversample
+//!   or undersample in production).
 //!
 //! # When NOT to use
 //!
-//! - You only need "always sample" or "never sample" → construct an
-//!   [`AlwaysSampler`] / [`NeverSampler`] inline; no need for this
-//!   module.
-//! - You need vendor-specific adaptive sampling → depend on a vendor
-//!   SDK directly; this module is the fleet-port contract.
+//! - You only need "always sample" or "never sample" → construct an [`AlwaysSampler`] /
+//!   [`NeverSampler`] inline; no need for this module.
+//! - You need vendor-specific adaptive sampling → depend on a vendor SDK directly; this module is
+//!   the fleet-port contract.
 
-use std::sync::{Mutex, MutexGuard};
-use std::time::Instant;
+use std::{
+    sync::{Mutex, MutexGuard},
+    time::Instant,
+};
 
 /// Acquire a sampler mutex, recovering from poison if needed (T24 P3 fix).
 ///
@@ -448,8 +447,9 @@ impl Sampler for TailBasedSampler {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
     use std::time::Duration;
+
+    use super::*;
 
     fn child_of(parent: SpanContext) -> SpanContext {
         SpanContext::root("child-trace", "child-span", false).with_parent(parent)
@@ -651,7 +651,7 @@ mod tests {
         let ctx = SpanContext {
             trace_id: "t".into(),
             span_id: "s".into(),
-            trace_flags: 0xFE, // bits 1-7 set, bit 0 clear
+            trace_flags: 0xfe, // bits 1-7 set, bit 0 clear
             parent: None,
         };
         assert!(!ctx.is_sampled());
@@ -659,7 +659,7 @@ mod tests {
         let ctx_sampled = SpanContext {
             trace_id: "t".into(),
             span_id: "s".into(),
-            trace_flags: 0xFF, // all bits set, including bit 0
+            trace_flags: 0xff, // all bits set, including bit 0
             parent: None,
         };
         assert!(ctx_sampled.is_sampled());

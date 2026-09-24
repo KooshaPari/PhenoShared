@@ -14,11 +14,13 @@
 //! | 6–7    | uv (u, v)    |
 //! | 8      | ao (0.0–3.0) |
 
-use phenotype_gfx::voxel::chunk::{Chunk, ChunkId, ChunkView, CHUNK_EDGE};
-use phenotype_gfx::voxel::cubic_mesher::CubicMesher;
-use phenotype_gfx::voxel::lod::LodLevel;
-use phenotype_gfx::voxel::material::MaterialId;
-use phenotype_gfx::voxel::mesh::Mesher;
+use phenotype_gfx::voxel::{
+    chunk::{Chunk, ChunkId, ChunkView, CHUNK_EDGE},
+    cubic_mesher::CubicMesher,
+    lod::LodLevel,
+    material::MaterialId,
+    mesh::Mesher,
+};
 
 fn main() {
     // --- 1. Build a simple chunk: solid 2×2×2 block in the corner, rest air ---

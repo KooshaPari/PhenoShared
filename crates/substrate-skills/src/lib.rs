@@ -6,9 +6,9 @@
 use std::collections::HashMap;
 
 use serde_json::Value;
-use substrate_core::error::{Result, SubstrateError};
-use substrate_core::skill_port::{
-    validate_json_schema, SkillDescriptor, SkillHandler, SkillPort, ToolRegistry,
+use substrate_core::{
+    error::{Result, SubstrateError},
+    skill_port::{validate_json_schema, SkillDescriptor, SkillHandler, SkillPort, ToolRegistry},
 };
 
 /// In-memory skill registry with schema-validated invoke.
@@ -79,9 +79,10 @@ impl SkillPort for InMemoryToolRegistry {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
     use serde_json::json;
     use substrate_core::skill_port::SkillHandler;
+
+    use super::*;
 
     struct EchoHandler;
 

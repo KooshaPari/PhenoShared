@@ -1,10 +1,14 @@
 //! Policy loading from TOML configuration files.
 
-use crate::error::PolicyEngineError;
-use crate::policy::Policy;
-use crate::rule::{Rule, RuleType};
-use serde::{Deserialize, Serialize};
 use std::path::Path;
+
+use serde::{Deserialize, Serialize};
+
+use crate::{
+    error::PolicyEngineError,
+    policy::Policy,
+    rule::{Rule, RuleType},
+};
 
 /// TOML representation of a rule for loading.
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -31,7 +35,7 @@ impl RuleConfig {
                     "Invalid rule type: '{}'. Expected 'Allow', 'Deny', or 'Require'.",
                     invalid
                 )))
-            }
+            },
         };
 
         let mut rule = Rule::new(rule_type, self.fact.clone(), self.pattern.clone());
@@ -113,9 +117,11 @@ impl PoliciesConfigFile {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
     use std::io::Write;
+
     use tempfile::NamedTempFile;
+
+    use super::*;
 
     #[test]
     fn test_rule_config_to_rule_allow() {

@@ -4,12 +4,14 @@ use std::sync::{Arc, Mutex};
 
 use async_trait::async_trait;
 use substrate_app::DispatchService;
-use substrate_core::domain::{
-    ConversationDump, EngineCapabilities, Mailbox, Message, Session, StructuredResult, Task,
-    TaskState,
+use substrate_core::{
+    domain::{
+        ConversationDump, EngineCapabilities, Mailbox, Message, Session, StructuredResult, Task,
+        TaskState,
+    },
+    error::{Result, SubstrateError},
+    ports::{DispatchApi, EnginePort, StorePort, TransportPort},
 };
-use substrate_core::error::{Result, SubstrateError};
-use substrate_core::ports::{DispatchApi, EnginePort, StorePort, TransportPort};
 use uuid::Uuid;
 
 struct FakeEngine;

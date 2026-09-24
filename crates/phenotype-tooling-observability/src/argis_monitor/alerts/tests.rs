@@ -3,14 +3,21 @@
 
 use std::time::Duration;
 
-use super::evaluate::evaluate;
-use super::payload::AlertPayload;
-use super::rules::AlertRule;
-use super::types::{AlertState, AlertStateTracker, Decision, Severity};
+use super::{
+    evaluate::evaluate,
+    payload::AlertPayload,
+    rules::AlertRule,
+    types::{AlertState, AlertStateTracker, Decision, Severity},
+};
 
 #[test]
 fn ok_below_threshold_does_not_fire() {
-    let rule = AlertRule { name: "r".into(), slo: "s".into(), threshold: 2.0, ..Default::default() };
+    let rule = AlertRule {
+        name: "r".into(),
+        slo: "s".into(),
+        threshold: 2.0,
+        ..Default::default()
+    };
     let mut t = AlertStateTracker::default();
     assert_eq!(evaluate(&rule, "gateway", 0.5, 100, &mut t), Decision::None);
     assert_eq!(t.state, AlertState::Ok);
@@ -18,7 +25,13 @@ fn ok_below_threshold_does_not_fire() {
 
 #[test]
 fn crossing_threshold_enters_pending_not_firing() {
-    let rule = AlertRule { name: "r".into(), slo: "s".into(), threshold: 2.0, for_secs: Duration::from_secs(30), ..Default::default() };
+    let rule = AlertRule {
+        name: "r".into(),
+        slo: "s".into(),
+        threshold: 2.0,
+        for_secs: Duration::from_secs(30),
+        ..Default::default()
+    };
     let mut t = AlertStateTracker::default();
     let d = evaluate(&rule, "gateway", 3.0, 100, &mut t);
     assert_eq!(d, Decision::None);
@@ -27,8 +40,20 @@ fn crossing_threshold_enters_pending_not_firing() {
 
 #[test]
 fn sustained_burn_promotes_to_firing() {
-    let rule = AlertRule { name: "r".into(), slo: "s".into(), threshold: 2.0, for_secs: Duration::from_secs(5), cooldown: Duration::from_secs(60), ..Default::default() };
-    let mut t = AlertStateTracker { state: AlertState::Pending { since: 100 }, sustained_for: Duration::from_secs(5) };
+    let rule = AlertRule {
+        name: "r".into(),
+        slo: "s".into(),
+        threshold: 2.0,
+        for_secs: Duration::from_secs(5),
+        cooldown: Duration::from_secs(60),
+        ..Default::default()
+    };
+    let mut t = AlertStateTracker {
+        state: AlertState::Pending {
+            since: 100,
+        },
+        sustained_for: Duration::from_secs(5),
+    };
     let d = evaluate(&rule, "gateway", 3.0, 106, &mut t);
     assert!(matches!(d, Decision::Fire(_)));
     assert!(matches!(t.state, AlertState::Firing { .. }));
@@ -36,8 +61,21 @@ fn sustained_burn_promotes_to_firing() {
 
 #[test]
 fn cooldown_suppresses_repeat_fires() {
-    let rule = AlertRule { name: "r".into(), slo: "s".into(), threshold: 2.0, for_secs: Duration::from_secs(0), cooldown: Duration::from_secs(300), ..Default::default() };
-    let mut t = AlertStateTracker { state: AlertState::Firing { since: 100, last_fired_at: 100 }, sustained_for: Duration::from_secs(60) };
+    let rule = AlertRule {
+        name: "r".into(),
+        slo: "s".into(),
+        threshold: 2.0,
+        for_secs: Duration::from_secs(0),
+        cooldown: Duration::from_secs(300),
+        ..Default::default()
+    };
+    let mut t = AlertStateTracker {
+        state: AlertState::Firing {
+            since: 100,
+            last_fired_at: 100,
+        },
+        sustained_for: Duration::from_secs(60),
+    };
     // 60s after last fire, still in cooldown
     assert_eq!(evaluate(&rule, "gateway", 3.0, 160, &mut t), Decision::None);
     // 301s after last fire, cooldown elapsed, re-fires
@@ -47,14 +85,27 @@ fn cooldown_suppresses_repeat_fires() {
 
 #[test]
 fn resolve_emits_resolve_payload() {
-    let rule = AlertRule { name: "r".into(), slo: "s".into(), threshold: 2.0, resolve_threshold: Some(1.0), for_secs: Duration::from_secs(0), ..Default::default() };
-    let mut t = AlertStateTracker { state: AlertState::Firing { since: 100, last_fired_at: 100 }, sustained_for: Duration::from_secs(60) };
+    let rule = AlertRule {
+        name: "r".into(),
+        slo: "s".into(),
+        threshold: 2.0,
+        resolve_threshold: Some(1.0),
+        for_secs: Duration::from_secs(0),
+        ..Default::default()
+    };
+    let mut t = AlertStateTracker {
+        state: AlertState::Firing {
+            since: 100,
+            last_fired_at: 100,
+        },
+        sustained_for: Duration::from_secs(60),
+    };
     let d = evaluate(&rule, "gateway", 0.5, 200, &mut t);
     match d {
         Decision::Fire(p) => {
             assert_eq!(p.severity, Severity::Ok);
             assert!(p.message.contains("RESOLVED"));
-        }
+        },
         _ => panic!("expected resolve payload"),
     }
     assert_eq!(t.state, AlertState::Ok);

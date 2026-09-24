@@ -36,12 +36,16 @@
 //! the bottom), OTel spans (above), and a `PREDICTIVE.md` next to
 //! the source (per ADR-047 4-criterion rule).
 
-use crate::decision::Request;
-use crate::sdk::{
-    Capabilities, ConnectorConfig, ConnectorError, ConnectorHandle, ConnectorPort, HealthStatus,
-};
-use async_trait::async_trait;
 use std::sync::{Arc, Mutex};
+
+use async_trait::async_trait;
+
+use crate::{
+    decision::Request,
+    sdk::{
+        Capabilities, ConnectorConfig, ConnectorError, ConnectorHandle, ConnectorPort, HealthStatus,
+    },
+};
 
 /// Plugin name (kebab-case, fleet-wide stable).
 pub const PLUGIN_NAME: &str = "contextfolding";
@@ -221,7 +225,9 @@ impl ContextFoldingConnector {
     /// Construct a connector with a custom strategy (tests + future
     /// pluggable strategies).
     pub fn with_strategy(strategy: Arc<dyn FoldingStrategy>) -> Self {
-        Self { strategy }
+        Self {
+            strategy,
+        }
     }
 
     /// Read-only view of the active strategy.
@@ -442,8 +448,7 @@ mod tests {
     /// poisoned-mutex panic in the other threads).
     #[test]
     fn fold_releases_mutex_before_logging() {
-        use std::sync::Arc;
-        use std::thread;
+        use std::{sync::Arc, thread};
 
         let h = ContextFoldHandle {
             config: ConnectorConfig {

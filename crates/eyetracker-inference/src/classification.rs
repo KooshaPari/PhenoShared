@@ -10,8 +10,10 @@
 //! Blink rejection suppresses events when confidence drops and recovers within
 //! 300 ms.
 
-use std::collections::VecDeque;
-use std::time::{Duration, Instant};
+use std::{
+    collections::VecDeque,
+    time::{Duration, Instant},
+};
 
 // ---------------------------------------------------------------------------
 // Constants
@@ -276,13 +278,13 @@ impl GazeClassifier {
         match self.state {
             ClassifierState::Unknown => {
                 self.handle_unknown(velocity, gaze_x, gaze_y, timestamp, &mut events);
-            }
+            },
             ClassifierState::Fixation => {
                 self.handle_fixation(velocity, gaze_x, gaze_y, timestamp, &mut events);
-            }
+            },
             ClassifierState::Saccade => {
                 self.handle_saccade(velocity, gaze_x, gaze_y, timestamp, &mut events);
-            }
+            },
         }
 
         events
@@ -304,8 +306,11 @@ impl GazeClassifier {
                     (Some(start), Some(last)) => last.duration_since(start),
                     _ => Duration::ZERO,
                 };
-                GazeClassification::Fixation { centroid, duration }
-            }
+                GazeClassification::Fixation {
+                    centroid,
+                    duration,
+                }
+            },
             ClassifierState::Saccade => GazeClassification::Saccade,
             ClassifierState::Unknown => GazeClassification::Unknown,
         }
@@ -610,7 +615,11 @@ mod tests {
             "Classifier should report fixating after stable gaze",
         );
 
-        if let GazeClassification::Fixation { centroid, duration } = classifier.current_state() {
+        if let GazeClassification::Fixation {
+            centroid,
+            duration,
+        } = classifier.current_state()
+        {
             assert!(
                 duration >= Duration::from_millis(100),
                 "Fixation duration should be at least 100 ms, got {:?}",

@@ -81,7 +81,9 @@ fn fifo_snapshot_serializes_and_round_trips() {
 
 #[test]
 fn fair_share_deficit_rebalances_under_churn() {
-    let mut q = FairnessQueue::new(FairnessPolicy::FairShare { weight: 5 });
+    let mut q = FairnessQueue::new(FairnessPolicy::FairShare {
+        weight: 5,
+    });
     let a = TenantId::new("a");
     let b = TenantId::new("b");
     // A keeps grabbing.
@@ -101,7 +103,9 @@ fn fair_share_deficit_rebalances_under_churn() {
 
 #[test]
 fn wrr_serves_in_rotation_order() {
-    let mut q = FairnessQueue::new(FairnessPolicy::WeightedRoundRobin { weight: 2 });
+    let mut q = FairnessQueue::new(FairnessPolicy::WeightedRoundRobin {
+        weight: 2,
+    });
     let a = TenantId::new("a");
     let b = TenantId::new("b");
     // Register A (2 slots) and exhaust them. After exhaustion, B comes next.
@@ -125,7 +129,9 @@ fn wrr_serves_in_rotation_order() {
 
 #[test]
 fn priority_weighted_denies_lower_priority_under_contention() {
-    let mut q = FairnessQueue::new(FairnessPolicy::PriorityWeighted { priority: 1 });
+    let mut q = FairnessQueue::new(FairnessPolicy::PriorityWeighted {
+        priority: 1,
+    });
     let a = TenantId::new("a");
     let b = TenantId::new("b");
     q.try_acquire(a.clone(), 1);
@@ -135,11 +141,13 @@ fn priority_weighted_denies_lower_priority_under_contention() {
     let r = q.try_acquire(b.clone(), 5);
     match r {
         FairnessDecision::Denied {
-            reason: DenyReason::LowerPriority { blocking, .. },
+            reason: DenyReason::LowerPriority {
+                blocking, ..
+            },
             ..
         } => {
             assert_eq!(blocking, a);
-        }
+        },
         other => panic!("expected LowerPriority denial, got {other:?}"),
     }
     // A still can acquire.
@@ -192,7 +200,7 @@ fn pardon_rejects_bad_token_and_bad_spec() {
     let bad_spec = spec_invalid();
     let err = pardon(bad_spec, "ops:phenotype:default").unwrap_err();
     match err {
-        PardonError::SpecInvalid(SurfaceSpecError::EmptyName) => {}
+        PardonError::SpecInvalid(SurfaceSpecError::EmptyName) => {},
         other => panic!("expected SpecInvalid(EmptyName), got {other:?}"),
     }
 }

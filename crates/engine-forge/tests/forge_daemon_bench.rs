@@ -23,10 +23,12 @@
 //!   F5_BENCH_M="8,16,32"  (default)
 //!   F5_BENCH_SKIP_DAEMON=1  (skip the daemon arm; for fast re-runs)
 
-use std::path::PathBuf;
-use std::process::Command as StdCommand;
-use std::sync::Arc;
-use std::time::{Duration, Instant};
+use std::{
+    path::PathBuf,
+    process::Command as StdCommand,
+    sync::Arc,
+    time::{Duration, Instant},
+};
 
 use engine_forge::ForgeEngine;
 use substrate_core::ports::EnginePort;
@@ -126,13 +128,18 @@ async fn run_m(engine: Arc<ForgeEngine>, m: usize) -> (Duration, usize) {
 
 fn fmt_row(label: &str, m: usize, wall: Duration, ok: usize, rss: Option<f64>) -> String {
     let wall_ms = wall.as_millis() as f64;
-    let agents_per_s = if wall_ms > 0.0 { (ok as f64) / (wall_ms / 1000.0) } else { 0.0 };
+    let agents_per_s = if wall_ms > 0.0 {
+        (ok as f64) / (wall_ms / 1000.0)
+    } else {
+        0.0
+    };
     let rss_s = rss
         .map(|mib| format!("{mib:7.1}"))
         .unwrap_or_else(|| "  n/a  ".into());
     let ok_pct = if m > 0 { (ok * 100) / m } else { 0 };
     format!(
-        "{label:>9}  M={m:>2}  wall={wall_ms:>8.1} ms  agents/s={agents_per_s:>7.2}  ok={ok:>2}/{m:<2} ({ok_pct:>3}%)  rss={rss_s} MiB"
+        "{label:>9}  M={m:>2}  wall={wall_ms:>8.1} ms  agents/s={agents_per_s:>7.2}  \
+         ok={ok:>2}/{m:<2} ({ok_pct:>3}%)  rss={rss_s} MiB"
     )
 }
 
@@ -160,13 +167,18 @@ async fn f5_bench_m8_m16_m32() {
     println!("\nF5 bench (real substrate dispatch via run_simple)");
     println!(
         "fake-forge: {bin}    M values: {ms:?}    daemon arm: {}",
-        if skip_daemon { "SKIPPED" } else { "ENABLED if F5 daemon alive" }
+        if skip_daemon {
+            "SKIPPED"
+        } else {
+            "ENABLED if F5 daemon alive"
+        }
     );
 
     for &m in &ms {
         // ---- direct path (no env) ----
         std::env::remove_var("FORGE_DAEMON");
-        let engine = Arc::new(ForgeEngine::with_bin(bin.clone()).with_timeout(Duration::from_secs(60)));
+        let engine =
+            Arc::new(ForgeEngine::with_bin(bin.clone()).with_timeout(Duration::from_secs(60)));
         let (wall, ok) = run_m(engine, m).await;
         println!("{}", fmt_row("direct", m, wall, ok, current_rss_mib()));
 
@@ -178,7 +190,8 @@ async fn f5_bench_m8_m16_m32() {
         #[cfg(feature = "forge_daemon")]
         {
             use std::ffi::CString;
-            let sock = std::env::temp_dir().join(format!("f5-bench-{}-{}.sock", std::process::id(), m));
+            let sock =
+                std::env::temp_dir().join(format!("f5-bench-{}-{}.sock", std::process::id(), m));
             let sock_s = sock.to_string_lossy().into_owned();
             let _ = std::fs::remove_file(&sock);
             let cpath = CString::new(sock_s.clone()).expect("nul in path");
@@ -187,7 +200,10 @@ async fn f5_bench_m8_m16_m32() {
             std::env::set_var("FORGE_DAEMON", "1");
             std::env::set_var("FORGE_DAEMON_SOCKET", &sock_s);
 
-            let engine = Arc::new(ForgeEngine::with_bin(bench_fake_forge_bin().to_string_lossy().into_owned()).with_timeout(Duration::from_secs(60)));
+            let engine = Arc::new(
+                ForgeEngine::with_bin(bench_fake_forge_bin().to_string_lossy().into_owned())
+                    .with_timeout(Duration::from_secs(60)),
+            );
             let (wall, ok) = run_m(engine, m).await;
             println!("{}", fmt_row("daemon", m, wall, ok, current_rss_mib()));
 
@@ -199,7 +215,10 @@ async fn f5_bench_m8_m16_m32() {
 
         #[cfg(not(feature = "forge_daemon"))]
         {
-            println!("{:>9}  M={m:>2}  [skip: forge_daemon feature off]", "daemon");
+            println!(
+                "{:>9}  M={m:>2}  [skip: forge_daemon feature off]",
+                "daemon"
+            );
         }
     }
 }

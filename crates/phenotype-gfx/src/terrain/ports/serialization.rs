@@ -2,8 +2,7 @@
 //!
 //! Ported from C# `Ports/ISerializationPort.cs`. Format version is `1`.
 
-use std::fs;
-use std::path::Path;
+use std::{fs, path::Path};
 
 use serde::{Deserialize, Serialize};
 

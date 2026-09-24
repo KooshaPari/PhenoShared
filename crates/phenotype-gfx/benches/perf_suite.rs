@@ -7,15 +7,17 @@
 //!   - Chunk fill (world write) + dirty-tracking drain
 
 use criterion::{black_box, criterion_group, criterion_main, BenchmarkId, Criterion, Throughput};
-use phenotype_gfx::voxel::chunk::{Chunk, ChunkId, ChunkView, CHUNK_EDGE, CHUNK_VOXELS};
-use phenotype_gfx::voxel::coord::ChunkCoord;
-use phenotype_gfx::voxel::cubic_mesher::CubicMesher;
-use phenotype_gfx::voxel::lod::LodLevel;
-use phenotype_gfx::voxel::material::MaterialId;
-use phenotype_gfx::voxel::octree::VoxelOctree;
-use phenotype_gfx::voxel::serial::{load_chunk, save_chunk};
-use phenotype_gfx::voxel::world::VoxelWorld;
-use phenotype_gfx::voxel::{WorldCoord, FIXED_SCALE};
+use phenotype_gfx::voxel::{
+    chunk::{Chunk, ChunkId, ChunkView, CHUNK_EDGE, CHUNK_VOXELS},
+    coord::ChunkCoord,
+    cubic_mesher::CubicMesher,
+    lod::LodLevel,
+    material::MaterialId,
+    octree::VoxelOctree,
+    serial::{load_chunk, save_chunk},
+    world::VoxelWorld,
+    WorldCoord, FIXED_SCALE,
+};
 
 // ---------------------------------------------------------------------------
 // Shared chunk fixtures (same 4 shapes as mesher_compare for consistency)
@@ -71,7 +73,9 @@ fn sparse_u8_chunk() -> Chunk<u8> {
 /// Named "dense" because it represents the dense/worst-case serialization path.
 fn dense_u8_chunk() -> Chunk<u8> {
     let voxels: Vec<u8> = (0..CHUNK_VOXELS).map(|i| (i % 2) as u8).collect();
-    Chunk { voxels }
+    Chunk {
+        voxels,
+    }
 }
 
 fn checkerboard_u8_chunk() -> Chunk<u8> {
@@ -203,8 +207,8 @@ fn bench_svo_compact(c: &mut Criterion) {
 }
 
 // ---------------------------------------------------------------------------
-// 3. AO cost: CubicMesher dense solid with vs without AO
-//    (CubicMesher always computes AO; this bench tracks the all-in cost)
+// 3. AO cost: CubicMesher dense solid with vs without AO (CubicMesher always computes AO; this
+//    bench tracks the all-in cost)
 // ---------------------------------------------------------------------------
 
 fn bench_cubic_ao(c: &mut Criterion) {
@@ -276,7 +280,11 @@ fn bench_world_fill_and_drain(c: &mut Criterion) {
     group.bench_function("idempotent_writes_no_dirty", |b| {
         b.iter(|| {
             let mut world = VoxelWorld::<MaterialId>::new(span);
-            let pos = WorldCoord { x: 0, y: 0, z: 0 };
+            let pos = WorldCoord {
+                x: 0,
+                y: 0,
+                z: 0,
+            };
             world.write(pos, MaterialId(1));
             let _ = world.drain_dirty();
             // Second write is idempotent.

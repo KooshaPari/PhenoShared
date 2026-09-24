@@ -2,13 +2,13 @@
 //!
 //! This crate is a **superset merge** of two prior domains:
 //!
-//! * [`tracera-core`](https://example.invalid/Tracera/crates/tracera-core) —
-//!   canonical `Artifact` / `Requirement` / `TraceLink` / coverage-matrix model,
-//!   7 link types with confidence, ISO 29148 + DO-178C vocabulary.
+//! * [`tracera-core`](https://example.invalid/Tracera/crates/tracera-core) — canonical `Artifact` /
+//!   `Requirement` / `TraceLink` / coverage-matrix model, 7 link types with confidence, ISO 29148 +
+//!   DO-178C vocabulary.
 //! * [`agileplus-domain`](https://example.invalid/AgilePlus/crates/agileplus-domain) —
-//!   `FeatureState` 8-stage lifecycle, `IntentGraph` ontology with node types /
-//!   dag stages / relationship types, `GovernanceContract` + `PolicyRule` +
-//!   `EvidenceType` + `BuiltinPolicy` vocabulary.
+//!   `FeatureState` 8-stage lifecycle, `IntentGraph` ontology with node types / dag stages /
+//!   relationship types, `GovernanceContract` + `PolicyRule` + `EvidenceType` + `BuiltinPolicy`
+//!   vocabulary.
 //!
 //! Hybridisation decisions live in
 //! [`docs/adr/ADR-0001-superset-merge.md`](https://example.invalid/docs/adr/ADR-0001-superset-merge.md).
@@ -30,11 +30,10 @@
 //! | [`contract`]      | **NEW (this crate)**    | `AcceptanceContract` + `ProgressionGate`                           |
 //!
 //! Consumers:
-//! * **AgilePlus** (authoring) imports `lifecycle`, `governance`, `intent_graph`,
-//!   `contract`, `requirement`, `artifact`, `ids`.
-//! * **Tracera** (live service) imports `artifact`, `requirement`, `tracelink`,
-//!   `matrix`, `impact`, `ids`, and *reads* `contract`/`governance` for
-//!   gate evaluation but does not author them.
+//! * **AgilePlus** (authoring) imports `lifecycle`, `governance`, `intent_graph`, `contract`,
+//!   `requirement`, `artifact`, `ids`.
+//! * **Tracera** (live service) imports `artifact`, `requirement`, `tracelink`, `matrix`, `impact`,
+//!   `ids`, and *reads* `contract`/`governance` for gate evaluation but does not author them.
 
 #![forbid(unsafe_code)]
 #![warn(missing_docs)]
@@ -77,13 +76,12 @@ pub use lifecycle::{FeatureState, Transition, TransitionResult};
 pub use matrix::{
     build_from_pairs, build_matrix, classify_cell, neighbors, BuildResult, MatrixCell,
 };
+// CoverageState is re-exported from the matrix module so the lib-level
+// `pub use` list stays compact.
+pub use matrix::{CoverageMatrix, CoverageState};
 pub use progress::{slope, snapshot, ProgressSnapshot};
 pub use requirement::{is_core_link_type, Requirement, RequirementStatus, VerificationMethod};
 pub use tracelink::{
     Neo4jSchema, TraceLink, TraceLinkType, CORE_TRACE_LINK_TYPES, NEO4J_NODE_LABELS,
     NEO4J_RELATIONSHIP_TYPES,
 };
-
-// CoverageState is re-exported from the matrix module so the lib-level
-// `pub use` list stays compact.
-pub use matrix::{CoverageMatrix, CoverageState};

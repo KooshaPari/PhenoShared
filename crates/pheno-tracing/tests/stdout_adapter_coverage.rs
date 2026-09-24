@@ -5,15 +5,17 @@
 //!   - Construction via `Default::default()` (the unit-struct form)
 //!   - `Clone` and `Copy` semantics (both derives are present in src)
 //!   - `Debug` formatting
-//!   - All five `SpanKind` variants through the adapter (each prints a
-//!     different `kind=...` token)
+//!   - All five `SpanKind` variants through the adapter (each prints a different `kind=...` token)
 //!   - Multi-submit: submit two spans, verify both return `TraceStatus::Ok`
 //!   - Flush after submit: flush must succeed even after submitting multiple spans
 //!   - Attribute passthrough: result IDs must echo the submitted IDs exactly
 
-use pheno_tracing::adapters::StdoutAdapter;
-use pheno_tracing::port::{SpanId, SpanKind, TraceId, TraceOperation, TracePort, TraceStatus};
 use std::collections::HashMap;
+
+use pheno_tracing::{
+    adapters::StdoutAdapter,
+    port::{SpanId, SpanKind, TraceId, TraceOperation, TracePort, TraceStatus},
+};
 
 fn minimal_op(trace_id: &str, span_id: &str, kind: SpanKind) -> TraceOperation {
     TraceOperation {
@@ -41,7 +43,7 @@ fn stdout_adapter_default_construction() {
 fn stdout_adapter_copy_semantics() {
     let a = StdoutAdapter;
     let b = a; // copy (not move — StdoutAdapter: Copy)
-    // Both `a` and `b` are still usable after the copy.
+               // Both `a` and `b` are still usable after the copy.
     let _ = a;
     let _ = b;
 }
@@ -67,7 +69,9 @@ fn stdout_adapter_debug_is_non_empty() {
 #[tokio::test]
 async fn stdout_adapter_submit_internal_span() {
     let adapter = StdoutAdapter;
-    let result = adapter.submit(minimal_op("t-int", "s-int", SpanKind::Internal)).await;
+    let result = adapter
+        .submit(minimal_op("t-int", "s-int", SpanKind::Internal))
+        .await;
     assert_eq!(result.status, TraceStatus::Ok);
     assert_eq!(result.trace_id.0, "t-int");
     assert_eq!(result.span_id.0, "s-int");
@@ -76,28 +80,36 @@ async fn stdout_adapter_submit_internal_span() {
 #[tokio::test]
 async fn stdout_adapter_submit_client_span() {
     let adapter = StdoutAdapter;
-    let result = adapter.submit(minimal_op("t-cli", "s-cli", SpanKind::Client)).await;
+    let result = adapter
+        .submit(minimal_op("t-cli", "s-cli", SpanKind::Client))
+        .await;
     assert_eq!(result.status, TraceStatus::Ok);
 }
 
 #[tokio::test]
 async fn stdout_adapter_submit_server_span() {
     let adapter = StdoutAdapter;
-    let result = adapter.submit(minimal_op("t-srv", "s-srv", SpanKind::Server)).await;
+    let result = adapter
+        .submit(minimal_op("t-srv", "s-srv", SpanKind::Server))
+        .await;
     assert_eq!(result.status, TraceStatus::Ok);
 }
 
 #[tokio::test]
 async fn stdout_adapter_submit_producer_span() {
     let adapter = StdoutAdapter;
-    let result = adapter.submit(minimal_op("t-prod", "s-prod", SpanKind::Producer)).await;
+    let result = adapter
+        .submit(minimal_op("t-prod", "s-prod", SpanKind::Producer))
+        .await;
     assert_eq!(result.status, TraceStatus::Ok);
 }
 
 #[tokio::test]
 async fn stdout_adapter_submit_consumer_span() {
     let adapter = StdoutAdapter;
-    let result = adapter.submit(minimal_op("t-cons", "s-cons", SpanKind::Consumer)).await;
+    let result = adapter
+        .submit(minimal_op("t-cons", "s-cons", SpanKind::Consumer))
+        .await;
     assert_eq!(result.status, TraceStatus::Ok);
 }
 
@@ -108,8 +120,12 @@ async fn stdout_adapter_submit_consumer_span() {
 #[tokio::test]
 async fn stdout_adapter_multi_submit_succeeds() {
     let adapter = StdoutAdapter;
-    let r1 = adapter.submit(minimal_op("trace-a", "span-1", SpanKind::Internal)).await;
-    let r2 = adapter.submit(minimal_op("trace-a", "span-2", SpanKind::Internal)).await;
+    let r1 = adapter
+        .submit(minimal_op("trace-a", "span-1", SpanKind::Internal))
+        .await;
+    let r2 = adapter
+        .submit(minimal_op("trace-a", "span-2", SpanKind::Internal))
+        .await;
     assert_eq!(r1.status, TraceStatus::Ok);
     assert_eq!(r2.status, TraceStatus::Ok);
 }
@@ -120,7 +136,9 @@ async fn stdout_adapter_multi_submit_succeeds() {
 #[tokio::test]
 async fn stdout_adapter_flush_after_submit() {
     let adapter = StdoutAdapter;
-    adapter.submit(minimal_op("t-flush", "s-flush", SpanKind::Internal)).await;
+    adapter
+        .submit(minimal_op("t-flush", "s-flush", SpanKind::Internal))
+        .await;
     let result = adapter.flush().await;
     assert!(result.is_ok(), "flush must not fail; got: {result:?}");
 }
@@ -146,7 +164,10 @@ async fn stdout_adapter_result_ids_echo_submitted_ids() {
         ]),
     };
     let result = adapter.submit(op).await;
-    assert_eq!(result.trace_id.0, trace_id, "trace_id must be echoed exactly");
+    assert_eq!(
+        result.trace_id.0, trace_id,
+        "trace_id must be echoed exactly"
+    );
     assert_eq!(result.span_id.0, span_id, "span_id must be echoed exactly");
     assert_eq!(result.status, TraceStatus::Ok);
 }

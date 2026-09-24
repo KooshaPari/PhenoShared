@@ -1,21 +1,24 @@
 //! The `Supervisor<E, S>` — manages one teammate lane end-to-end.
 //!
 //! Lifecycle:
-//! 1. [`Supervisor::spawn`] — start the engine, record `conv_id`, wire mailbox,
-//!    create an A2A task record.
-//! 2. [`Supervisor::pump_one`] — claim one inbox message, resume the engine,
-//!    mark consumed; Question kind → task transitions to `InputRequired`.
+//! 1. [`Supervisor::spawn`] — start the engine, record `conv_id`, wire mailbox, create an A2A task
+//!    record.
+//! 2. [`Supervisor::pump_one`] — claim one inbox message, resume the engine, mark consumed;
+//!    Question kind → task transitions to `InputRequired`.
 //! 3. [`Supervisor::pump_loop`] — iterate `pump_one` up to `max_turns`, stop on
 //!    [`SupervisorError::NoMessages`].
 
 use std::sync::Arc;
 
-use a2a::message::{Message, MessageKind, Part};
-use a2a::task::Task as A2aTask;
-use a2a::task::TaskState;
-use substrate_core::domain::{Mailbox, Task};
-use substrate_core::mailbox_port::{MailboxStore, MailboxTaskState};
-use substrate_core::ports::EnginePort;
+use a2a::{
+    message::{Message, MessageKind, Part},
+    task::{Task as A2aTask, TaskState},
+};
+use substrate_core::{
+    domain::{Mailbox, Task},
+    mailbox_port::{MailboxStore, MailboxTaskState},
+    ports::EnginePort,
+};
 
 use crate::error::SupervisorError;
 
@@ -209,14 +212,14 @@ where
                         .map_err(|e3| SupervisorError::Store(e3.to_string()))?;
                     return Err(SupervisorError::Engine(e2.to_string()));
                 }
-            }
+            },
             Err(e) => {
                 self.store
                     .unclaim(msg.id)
                     .map_err(|e2| SupervisorError::Store(e2.to_string()))?;
                 return Err(SupervisorError::Engine(e.to_string()));
-            }
-            Ok(_) => {}
+            },
+            Ok(_) => {},
         }
 
         // Mark the message consumed.
@@ -260,7 +263,10 @@ fn parts_to_text(parts: &[Part]) -> String {
     parts
         .iter()
         .filter_map(|p| {
-            if let Part::Text { text } = p {
+            if let Part::Text {
+                text,
+            } = p
+            {
                 Some(text.as_str())
             } else {
                 None

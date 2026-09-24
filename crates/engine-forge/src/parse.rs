@@ -1,11 +1,12 @@
 //! Pure parsing helpers (no IO) so they can be unit-tested directly.
 
-use std::collections::HashSet;
-use std::sync::OnceLock;
+use std::{collections::HashSet, sync::OnceLock};
 
 use regex::Regex;
-use substrate_core::domain::{ConversationDump, Part, StructuredResult, TaskState};
-use substrate_core::error::{Result, SubstrateError};
+use substrate_core::{
+    domain::{ConversationDump, Part, StructuredResult, TaskState},
+    error::{Result, SubstrateError},
+};
 use uuid::Uuid;
 
 fn conv_id_re() -> &'static Regex {
@@ -71,8 +72,8 @@ struct ForgeMessage {
 /// Normalize a raw forge dump into a [`StructuredResult`].
 ///
 /// Status priority (highest first):
-/// 1. `exit_code == 0` AND assistant text contains `"max steps"` -> [`TaskState::Failed`]
-///    (forge's "max steps" signal is a soft failure, not a clean done).
+/// 1. `exit_code == 0` AND assistant text contains `"max steps"` -> [`TaskState::Failed`] (forge's
+///    "max steps" signal is a soft failure, not a clean done).
 /// 2. Non-zero `exit_code` (without max-steps) -> [`TaskState::Failed`].
 /// 3. `DONE:` marker or at least one PR URL -> [`TaskState::Completed`].
 /// 4. Otherwise -> [`TaskState::Failed`].

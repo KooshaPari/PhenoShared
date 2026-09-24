@@ -154,7 +154,7 @@ impl KalmanState2D {
                 // If S is singular fall back to zero gain.
                 tracing::warn!("Kalman filter innovation covariance is singular; skipping update");
                 return (self.state[0], self.state[1]);
-            }
+            },
         };
 
         // State update: x = x + K * y
@@ -451,8 +451,8 @@ mod tests {
         // expected given default noise parameters).
         assert!(
             no_reset_dist_from_measurement > reset_dist_from_measurement * 1.5,
-            "saccade reset should bring output much closer to measurement \
-             (no_reset dist={:.2}, reset dist={:.2})",
+            "saccade reset should bring output much closer to measurement (no_reset dist={:.2}, \
+             reset dist={:.2})",
             no_reset_dist_from_measurement,
             reset_dist_from_measurement,
         );

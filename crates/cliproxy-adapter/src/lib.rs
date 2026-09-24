@@ -14,11 +14,11 @@
 //! (long-lived `agentapi server <cli>` child processes with a 5-endpoint
 //! REST + SSE control plane). The two crates are complementary:
 //!
-//! - `engine-agentapi` is for **steering** a specific agent CLI as a PTY
-//!   session: full transcript access, file upload, status events.
-//! - `cliproxy-adapter` is for **calling** any of those CLIs through a
-//!   uniform OpenAI-compat surface: stateless chat completions, model
-//!   discovery, streaming — the same wire format as OpenAI.
+//! - `engine-agentapi` is for **steering** a specific agent CLI as a PTY session: full transcript
+//!   access, file upload, status events.
+//! - `cliproxy-adapter` is for **calling** any of those CLIs through a uniform OpenAI-compat
+//!   surface: stateless chat completions, model discovery, streaming — the same wire format as
+//!   OpenAI.
 //!
 //! Both adapter crates consume the same upstream CLIProxyAPI binary family
 //! (cliproxy-api-plusplus) and both implement `substrate_core::ports::EnginePort`,
@@ -58,41 +58,43 @@
 //!
 //! ## Integration modes
 //!
-//! - **Default (`CLIPROXY_INTEGRATION` unset):** the engine runs in
-//!   *offline* mode — `start()` allocates a synthetic `conv_id`
-//!   (`cliproxy-<task-id>`), `dump()` returns a stub JSON dump, and the
-//!   `extract_result` returns deterministic placeholder text. The
-//!   [`engine-conformance`] suite passes with zero IO. CI stays
-//!   network-free.
-//! - **Live (`CLIPROXY_INTEGRATION=1`):** the engine spawns the
-//!   `cliproxyapi-plusplus` binary as a child on an auto-allocated port,
-//!   polls `GET /v1/models` until 200 OK, then drives the real OpenAI-compat
-//!   HTTP API end-to-end.
-//! - **Externally managed:** if the caller passes a non-loopback
-//!   `CLIPROXY_BASE_URL` (e.g. `https://cliproxy.internal/v1`), the
-//!   engine skips child-process management and acts as a pure HTTP client
-//!   to the pre-existing server.
+//! - **Default (`CLIPROXY_INTEGRATION` unset):** the engine runs in *offline* mode — `start()`
+//!   allocates a synthetic `conv_id` (`cliproxy-<task-id>`), `dump()` returns a stub JSON dump, and
+//!   the `extract_result` returns deterministic placeholder text. The [`engine-conformance`] suite
+//!   passes with zero IO. CI stays network-free.
+//! - **Live (`CLIPROXY_INTEGRATION=1`):** the engine spawns the `cliproxyapi-plusplus` binary as a
+//!   child on an auto-allocated port, polls `GET /v1/models` until 200 OK, then drives the real
+//!   OpenAI-compat HTTP API end-to-end.
+//! - **Externally managed:** if the caller passes a non-loopback `CLIPROXY_BASE_URL` (e.g. `https://cliproxy.internal/v1`),
+//!   the engine skips child-process management and acts as a pure HTTP client to the pre-existing
+//!   server.
 #![forbid(unsafe_code)]
 #![warn(missing_docs)]
 
-use std::net::{SocketAddr, TcpListener};
-use std::path::PathBuf;
-use std::process::Stdio;
-use std::sync::Arc;
-use std::time::Duration;
+use std::{
+    net::{SocketAddr, TcpListener},
+    path::PathBuf,
+    process::Stdio,
+    sync::Arc,
+    time::Duration,
+};
 
 use async_trait::async_trait;
 use engine_spec::{ArgvBuilder, TaskSpec};
 use futures_util::stream::StreamExt;
 use serde::{Deserialize, Serialize};
-use substrate_core::domain::{
-    ConversationDump, EngineCapabilities, Mailbox, Session, StructuredResult, Task, TaskState,
+use substrate_core::{
+    domain::{
+        ConversationDump, EngineCapabilities, Mailbox, Session, StructuredResult, Task, TaskState,
+    },
+    error::{Result, SubstrateError},
+    ports::EnginePort,
 };
-use substrate_core::error::{Result, SubstrateError};
-use substrate_core::ports::EnginePort;
-use tokio::io::{AsyncBufReadExt, BufReader};
-use tokio::process::{Child, Command};
-use tokio::sync::Mutex;
+use tokio::{
+    io::{AsyncBufReadExt, BufReader},
+    process::{Child, Command},
+    sync::Mutex,
+};
 
 // ---------------------------------------------------------------------------
 // Constants
@@ -543,7 +545,7 @@ impl CliproxyClient {
                 Ok(b) => {
                     let text = String::from_utf8_lossy(&b).into_owned();
                     parse_sse_record(&text)
-                }
+                },
                 Err(e) => Err(e),
             })
             .filter_map(|res| async move {
@@ -596,13 +598,12 @@ fn parse_sse_record(text: &str) -> Result<Option<ChatChunk>> {
 /// The cliproxy-plus engine adapter.
 ///
 /// One engine instance maps 1:1 to one server lifecycle:
-/// - `start()` issues a single `POST /v1/chat/completions` call (non-streaming
-///   by default) and returns a synthetic `conv_id` (`cliproxy-<task-id>`).
+/// - `start()` issues a single `POST /v1/chat/completions` call (non-streaming by default) and
+///   returns a synthetic `conv_id` (`cliproxy-<task-id>`).
 /// - `dump()` returns the JSON envelope of the last request/response.
-/// - `cancel()` is a no-op (cliproxy is stateless; the upstream OpenAI-compat
-///   spec doesn't expose cancellation on the server side).
-/// - `wire_mailbox()` subscribes to the SSE stream and forwards chunks to a
-///   substrate mailbox.
+/// - `cancel()` is a no-op (cliproxy is stateless; the upstream OpenAI-compat spec doesn't expose
+///   cancellation on the server side).
+/// - `wire_mailbox()` subscribes to the SSE stream and forwards chunks to a substrate mailbox.
 pub struct CliproxyEngine {
     /// Path to the `cliproxyapi-plusplus` binary (default: `cliproxyapi-plusplus`).
     bin: String,
@@ -812,7 +813,9 @@ impl EnginePort for CliproxyEngine {
             return Ok(ConversationDump {
                 conversation_id: conv_id.to_string(),
                 raw: format!(
-                    "{{\"conv_id\":\"{conv_id}\",\"status\":\"completed\",\"model\":\"{DEFAULT_MODEL}\",\"messages\":[{{\"role\":\"assistant\",\"content\":\"cliproxy offline stub\"}}]}}"
+                    "{{\"conv_id\":\"{conv_id}\",\"status\":\"completed\",\"model\":\"\
+                     {DEFAULT_MODEL}\",\"messages\":[{{\"role\":\"assistant\",\"content\":\"\
+                     cliproxy offline stub\"}}]}}"
                 ),
             });
         }
@@ -1017,7 +1020,9 @@ mod tests {
 
     #[test]
     fn sse_parse_chat_chunk() {
-        let text = "data: {\"id\":\"cmpl-1\",\"object\":\"chat.completion.chunk\",\"created\":1716400000,\"model\":\"gpt-4o-mini\",\"choices\":[{\"index\":0,\"delta\":{\"role\":\"assistant\",\"content\":\"hi\"},\"finish_reason\":null}]}\n\n";
+        let text = "data: {\"id\":\"cmpl-1\",\"object\":\"chat.completion.chunk\",\"created\":\
+                    1716400000,\"model\":\"gpt-4o-mini\",\"choices\":[{\"index\":0,\"delta\":{\"\
+                    role\":\"assistant\",\"content\":\"hi\"},\"finish_reason\":null}]}\n\n";
         let chunk = parse_sse_record(text).unwrap().unwrap();
         assert_eq!(chunk.id, "cmpl-1");
         assert_eq!(chunk.model, "gpt-4o-mini");
@@ -1040,7 +1045,8 @@ mod tests {
     #[test]
     fn sse_parse_multi_line_data() {
         // The `data:` lines are concatenated by the parser.
-        let text = "data: {\"id\":\"a\",\"object\":\"chat.completion.chunk\",\"created\":1,\"model\":\"m\",\"choices\":[]}\ndata: extra-but-ignored\n\n";
+        let text = "data: {\"id\":\"a\",\"object\":\"chat.completion.chunk\",\"created\":1,\"\
+                    model\":\"m\",\"choices\":[]}\ndata: extra-but-ignored\n\n";
         // The concatenation makes this unparseable as JSON, so it errors
         // — that's the correct behaviour: malformed upstream SSE.
         let res = parse_sse_record(text);

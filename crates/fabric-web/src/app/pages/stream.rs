@@ -1,15 +1,13 @@
 //! Stream page — WebRTC surface streaming from a Fabric node.
 
+use std::{cell::RefCell, rc::Rc};
+
+use fabric_frame_transport::{Codec, FrameHeader, FrameMessage};
 use leptos::prelude::*;
-use std::cell::RefCell;
-use std::rc::Rc;
-use wasm_bindgen::prelude::*;
-use wasm_bindgen::JsCast;
+use wasm_bindgen::{prelude::*, JsCast};
 use web_sys::{HtmlCanvasElement, HtmlInputElement};
 
-use crate::api::*;
-use crate::webrtc_channel::WebRtcChannel;
-use fabric_frame_transport::{Codec, FrameHeader, FrameMessage};
+use crate::{api::*, webrtc_channel::WebRtcChannel};
 
 /// WebRTC offer request body for the daemon signaling API.
 #[derive(serde::Serialize)]
@@ -94,9 +92,9 @@ pub fn StreamPage() -> impl IntoView {
             // --- 1. Create RTCPeerConnection ---
             add_log("Creating RTCPeerConnection...".to_string());
             let ice_server = web_sys::RtcIceServer::new();
-            ice_server.set_urls(
-                &js_sys::Array::of1(&JsValue::from_str("stun:stun.l.google.com:19302")),
-            );
+            ice_server.set_urls(&js_sys::Array::of1(&JsValue::from_str(
+                "stun:stun.l.google.com:19302",
+            )));
             let ice_servers = js_sys::Array::of1(&ice_server.into());
             let rtc_config = web_sys::RtcConfiguration::new();
             rtc_config.set_ice_servers(&ice_servers);
@@ -108,7 +106,7 @@ pub fn StreamPage() -> impl IntoView {
                     add_log(msg.clone());
                     set_status.set(msg);
                     return;
-                }
+                },
             };
             *pc_ref.borrow_mut() = Some(pc.clone());
 
@@ -127,7 +125,7 @@ pub fn StreamPage() -> impl IntoView {
                     add_log(msg.clone());
                     set_status.set(msg);
                     return;
-                }
+                },
             };
 
             // Extract SDP string from the returned RTCSessionDescription JS object.
@@ -139,14 +137,14 @@ pub fn StreamPage() -> impl IntoView {
                         add_log(msg.clone());
                         set_status.set(msg);
                         return;
-                    }
+                    },
                 },
                 Err(e) => {
                     let msg = format!("Failed to read SDP from offer: {e:?}");
                     add_log(msg.clone());
                     set_status.set(msg);
                     return;
-                }
+                },
             };
             add_log(format!("SDP offer created ({} chars)", sdp.len()));
 
@@ -155,10 +153,9 @@ pub fn StreamPage() -> impl IntoView {
             let offer_sdp_init =
                 web_sys::RtcSessionDescriptionInit::new(web_sys::RtcSdpType::Offer);
             offer_sdp_init.set_sdp(&sdp);
-            if let Err(e) = wasm_bindgen_futures::JsFuture::from(
-                pc.set_local_description(&offer_sdp_init),
-            )
-            .await
+            if let Err(e) =
+                wasm_bindgen_futures::JsFuture::from(pc.set_local_description(&offer_sdp_init))
+                    .await
             {
                 let msg = format!("Failed to set local description: {e:?}");
                 add_log(msg.clone());
@@ -175,15 +172,14 @@ pub fn StreamPage() -> impl IntoView {
             };
             add_log(format!("POST {} with target={}", offer_url, target_clone));
 
-            let answer = match post_json::<WebrtcOfferResponse, _>(&offer_url, &offer_body).await
-            {
+            let answer = match post_json::<WebrtcOfferResponse, _>(&offer_url, &offer_body).await {
                 Ok(a) => a,
                 Err(e) => {
                     let msg = format!("Failed to get SDP answer: {e}");
                     add_log(msg.clone());
                     set_status.set(msg);
                     return;
-                }
+                },
             };
             add_log(format!(
                 "Received answer: status={}, sdp_len={}",
@@ -192,13 +188,10 @@ pub fn StreamPage() -> impl IntoView {
             ));
 
             // --- 6. Set remote description with answer SDP ---
-            let answer_sdp =
-                web_sys::RtcSessionDescriptionInit::new(web_sys::RtcSdpType::Answer);
+            let answer_sdp = web_sys::RtcSessionDescriptionInit::new(web_sys::RtcSdpType::Answer);
             answer_sdp.set_sdp(&answer.sdp);
-            if let Err(e) = wasm_bindgen_futures::JsFuture::from(
-                pc.set_remote_description(&answer_sdp),
-            )
-            .await
+            if let Err(e) =
+                wasm_bindgen_futures::JsFuture::from(pc.set_remote_description(&answer_sdp)).await
             {
                 let msg = format!("Failed to set remote description: {e:?}");
                 add_log(msg.clone());
@@ -213,8 +206,8 @@ pub fn StreamPage() -> impl IntoView {
                 let target_ice = target_clone.clone();
                 let add_log_ice = add_log.clone();
 
-                let onice = Closure::wrap(Box::new(
-                    move |event: web_sys::RtcPeerConnectionIceEvent| {
+                let onice =
+                    Closure::wrap(Box::new(move |event: web_sys::RtcPeerConnectionIceEvent| {
                         if let Some(candidate) = event.candidate() {
                             let cand_str = candidate.candidate();
                             let truncated = if cand_str.len() > 60 {
@@ -231,9 +224,8 @@ pub fn StreamPage() -> impl IntoView {
                             };
                             let target_send = target_ice.clone();
                             leptos::task::spawn_local(async move {
-                                match post_json::<WebrtcIceResponse, _>(&ice_url, &ice_body).await
-                                {
-                                    Ok(_) => {}
+                                match post_json::<WebrtcIceResponse, _>(&ice_url, &ice_body).await {
+                                    Ok(_) => {},
                                     Err(e) => {
                                         web_sys::console::warn_1(
                                             &format!(
@@ -242,14 +234,14 @@ pub fn StreamPage() -> impl IntoView {
                                             )
                                             .into(),
                                         );
-                                    }
+                                    },
                                 }
                             });
                         } else {
                             add_log_ice("ICE gathering complete".to_string());
                         }
-                    },
-                ) as Box<dyn FnMut(web_sys::RtcPeerConnectionIceEvent)>);
+                    })
+                        as Box<dyn FnMut(web_sys::RtcPeerConnectionIceEvent)>);
                 pc.set_onicecandidate(Some(onice.as_ref().unchecked_ref()));
                 onice.forget();
             }
@@ -262,10 +254,7 @@ pub fn StreamPage() -> impl IntoView {
 
                 let ondc = Closure::wrap(Box::new(move |event: web_sys::RtcDataChannelEvent| {
                     let data_channel = event.channel();
-                    add_log_dc(format!(
-                        "Data channel opened: '{}'",
-                        data_channel.label()
-                    ));
+                    add_log_dc(format!("Data channel opened: '{}'", data_channel.label()));
 
                     let channel = WebRtcChannel::new(data_channel);
 
@@ -275,19 +264,17 @@ pub fn StreamPage() -> impl IntoView {
                         let set_status_frame = set_status_dc.clone();
 
                         channel.on_message(move |msg| match msg {
-                            FrameMessage::FrameData { header, payload } => {
-                                render_frame(
-                                    &canvas_render,
-                                    &set_status_frame,
-                                    &header,
-                                    &payload,
-                                );
-                            }
+                            FrameMessage::FrameData {
+                                header,
+                                payload,
+                            } => {
+                                render_frame(&canvas_render, &set_status_frame, &header, &payload);
+                            },
                             _ => {
                                 web_sys::console::log_1(
                                     &format!("[fabric-web] Non-frame message: {:?}", msg).into(),
                                 );
-                            }
+                            },
                         });
                     }
 
@@ -298,7 +285,8 @@ pub fn StreamPage() -> impl IntoView {
                             set_status_open.set("Connected (channel open)".to_string());
                         });
                     }
-                }) as Box<dyn FnMut(web_sys::RtcDataChannelEvent)>);
+                })
+                    as Box<dyn FnMut(web_sys::RtcDataChannelEvent)>);
                 pc.set_ondatachannel(Some(ondc.as_ref().unchecked_ref()));
                 ondc.forget();
             }
@@ -392,7 +380,7 @@ fn render_frame(
                 &"[fabric-web] Canvas element not found, cannot render frame".into(),
             );
             return;
-        }
+        },
     };
 
     // Resize canvas if the frame dimensions differ.
@@ -411,21 +399,17 @@ fn render_frame(
     let ctx = match canvas.get_context("2d") {
         Ok(Some(ctx)) => ctx,
         _ => {
-            web_sys::console::warn_1(
-                &"[fabric-web] Failed to get 2d canvas context".into(),
-            );
+            web_sys::console::warn_1(&"[fabric-web] Failed to get 2d canvas context".into());
             return;
-        }
+        },
     };
 
     let ctx: web_sys::CanvasRenderingContext2d = match ctx.dyn_into() {
         Ok(c) => c,
         Err(_) => {
-            web_sys::console::warn_1(
-                &"[fabric-web] Canvas context is not 2d".into(),
-            );
+            web_sys::console::warn_1(&"[fabric-web] Canvas context is not 2d".into());
             return;
-        }
+        },
     };
 
     match header.codec {
@@ -457,14 +441,14 @@ fn render_frame(
                             &format!("[fabric-web] putImageData failed: {e:?}").into(),
                         );
                     }
-                }
+                },
                 Err(e) => {
                     web_sys::console::warn_1(
                         &format!("[fabric-web] ImageData creation failed: {e:?}").into(),
                     );
-                }
+                },
             }
-        }
+        },
         Codec::Hevc | Codec::Av1 => {
             web_sys::console::log_1(
                 &format!(
@@ -476,7 +460,7 @@ fn render_frame(
                 )
                 .into(),
             );
-        }
+        },
         Codec::Nv12 => {
             web_sys::console::log_1(
                 &format!(
@@ -485,7 +469,7 @@ fn render_frame(
                 )
                 .into(),
             );
-        }
+        },
     }
 
     // Update status with frame info.

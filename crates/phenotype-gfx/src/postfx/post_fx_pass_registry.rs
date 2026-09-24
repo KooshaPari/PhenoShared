@@ -175,8 +175,10 @@ impl PostFxPassRegistry {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::postfx::error::{PostFxError, PostFxResult};
-    use crate::postfx::ports::post_fx_pass::{PassEffect, PassQuality, PostFxContext, PostFxPass};
+    use crate::postfx::{
+        error::{PostFxError, PostFxResult},
+        ports::post_fx_pass::{PassEffect, PassQuality, PostFxContext, PostFxPass},
+    };
 
     struct MockPass {
         effect: PassEffect,

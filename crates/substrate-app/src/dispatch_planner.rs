@@ -6,8 +6,10 @@
 
 use engine_spec::TaskSpec;
 use serde::{Deserialize, Serialize};
-use substrate_core::domain::EngineCapabilities;
-use substrate_core::error::{Result, SubstrateError};
+use substrate_core::{
+    domain::EngineCapabilities,
+    error::{Result, SubstrateError},
+};
 
 /// How the engine session is run once dispatched.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]

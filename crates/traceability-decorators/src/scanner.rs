@@ -127,13 +127,13 @@ pub fn scan_dir(dir: &Path, patterns: &Patterns) -> Result<Vec<ScanTraceLink>, S
             Err(e) if e.kind() == std::io::ErrorKind::InvalidData => {
                 // Binary file — skip silently.
                 continue;
-            }
+            },
             Err(e) => {
                 return Err(ScanError::Io {
                     path: path_str,
                     source: e,
                 })
-            }
+            },
         };
         let links = scan_file(&path_str, &content, patterns);
         all.extend(links);

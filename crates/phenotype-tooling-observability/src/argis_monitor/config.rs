@@ -24,8 +24,12 @@ pub struct SLO {
     pub target: f64,
 }
 
-fn default_slo_window_secs() -> u64 { 30 * 24 * 3600 }
-fn default_slo_target() -> f64 { 0.999 }
+fn default_slo_window_secs() -> u64 {
+    30 * 24 * 3600
+}
+fn default_slo_target() -> f64 {
+    0.999
+}
 
 impl Default for SLO {
     fn default() -> Self {
@@ -106,21 +110,34 @@ pub struct Config {
     pub otlp_push_interval_secs: u64,
 }
 
-fn default_push_interval() -> u64 { 15 }
-fn default_otlp_push_interval() -> u64 { 30 }
+fn default_push_interval() -> u64 {
+    15
+}
+fn default_otlp_push_interval() -> u64 {
+    30
+}
 
 fn default_data_dir() -> Option<std::path::PathBuf> {
     Some(std::path::PathBuf::from("./data"))
 }
 
-fn default_poll_interval() -> Duration { Duration::from_secs(15) }
-fn default_poll_timeout() -> Duration { Duration::from_secs(5) }
-fn default_exporter_addr() -> String { "0.0.0.0:9090".to_string() }
+fn default_poll_interval() -> Duration {
+    Duration::from_secs(15)
+}
+fn default_poll_timeout() -> Duration {
+    Duration::from_secs(5)
+}
+fn default_exporter_addr() -> String {
+    "0.0.0.0:9090".to_string()
+}
 
 impl Default for Config {
     fn default() -> Self {
         Self {
-            targets: vec![crate::argis_monitor::target::Target::new("gateway", "http://127.0.0.1:8080")],
+            targets: vec![crate::argis_monitor::target::Target::new(
+                "gateway",
+                "http://127.0.0.1:8080",
+            )],
             poll_interval: default_poll_interval(),
             poll_timeout: default_poll_timeout(),
             exporter_addr: default_exporter_addr(),
@@ -150,13 +167,17 @@ impl Config {
         if let Some(t) = self.targets.first_mut() {
             t.url = url.into();
         } else {
-            self.targets.push(crate::argis_monitor::target::Target::new("gateway", url.into()));
+            self.targets.push(crate::argis_monitor::target::Target::new(
+                "gateway",
+                url.into(),
+            ));
         }
         self
     }
     /// Add a target by name + URL.
     pub fn with_target_named(mut self, name: impl Into<String>, url: impl Into<String>) -> Self {
-        self.targets.push(crate::argis_monitor::target::Target::new(name, url.into()));
+        self.targets
+            .push(crate::argis_monitor::target::Target::new(name, url.into()));
         self
     }
 }
@@ -164,15 +185,18 @@ impl Config {
 impl Config {
     /// Set the poll interval (used when no per-target override is set).
     pub fn with_poll_interval_secs(mut self, secs: u64) -> Self {
-        self.poll_interval = Duration::from_secs(secs); self
+        self.poll_interval = Duration::from_secs(secs);
+        self
     }
     /// Add a single SLO.
     pub fn with_slo(mut self, slo: SLO) -> Self {
-        self.slos.push(slo); self
+        self.slos.push(slo);
+        self
     }
     /// Add a single alert rule.
     pub fn with_alert_rule(mut self, rule: crate::argis_monitor::alerts::AlertRule) -> Self {
-        self.alert_rules.push(rule); self
+        self.alert_rules.push(rule);
+        self
     }
 }
 
@@ -180,8 +204,9 @@ impl Config {
 /// strings like "15s", "30s" to be parsed in YAML. Kept minimal — we don't
 /// pull in `humantime-serde` to avoid an extra dep.
 mod seconds_as_duration {
-    use serde::{Deserialize, Deserializer, Serializer};
     use std::time::Duration;
+
+    use serde::{Deserialize, Deserializer, Serializer};
 
     pub fn serialize<S: Serializer>(d: &Duration, s: S) -> Result<S::Ok, S::Error> {
         s.serialize_u64(d.as_secs())
@@ -190,7 +215,10 @@ mod seconds_as_duration {
     pub fn deserialize<'de, D: Deserializer<'de>>(d: D) -> Result<Duration, D::Error> {
         #[derive(Deserialize)]
         #[serde(untagged)]
-        enum Repr { Secs(u64), Text(String) }
+        enum Repr {
+            Secs(u64),
+            Text(String),
+        }
         match Repr::deserialize(d)? {
             Repr::Secs(n) => Ok(Duration::from_secs(n)),
             Repr::Text(t) => parse_human(&t).map_err(serde::de::Error::custom),
@@ -200,7 +228,9 @@ mod seconds_as_duration {
     fn parse_human(s: &str) -> Result<Duration, String> {
         let s = s.trim();
         let (num, unit) = s.split_at(s.len().saturating_sub(1));
-        let n: u64 = num.parse().map_err(|e: std::num::ParseIntError| e.to_string())?;
+        let n: u64 = num
+            .parse()
+            .map_err(|e: std::num::ParseIntError| e.to_string())?;
         let mul = match unit {
             "s" => 1,
             "m" => 60,
@@ -211,7 +241,6 @@ mod seconds_as_duration {
         Ok(Duration::from_secs(n * mul))
     }
 }
-
 
 impl Config {
     /// Convenience for tests: a single-target Config pointing at `target`.

@@ -18,9 +18,11 @@
 
 use thiserror::Error;
 
-use crate::voxel::chunk::Chunk;
-use crate::voxel::coord::{ChunkCoord, WorldCoord};
-use crate::voxel::delta::{DirtyChunkEvent, WriteSeq};
+use crate::voxel::{
+    chunk::Chunk,
+    coord::{ChunkCoord, WorldCoord},
+    delta::{DirtyChunkEvent, WriteSeq},
+};
 
 // ────────────────────────────────────────────────────────────────────────────
 // Errors
@@ -259,7 +261,11 @@ mod tests {
     #[test]
     fn mock_write_read_roundtrip() {
         let mut store = MockWorldStore::<u8>::new(crate::voxel::coord::FIXED_SCALE);
-        let pos = WorldCoord { x: 0, y: 0, z: 0 };
+        let pos = WorldCoord {
+            x: 0,
+            y: 0,
+            z: 0,
+        };
         let coord = store.write(pos, 7);
         assert_eq!(store.read(pos), 7);
         assert_eq!(store.voxel_count(), 1);
@@ -273,7 +279,11 @@ mod tests {
     #[test]
     fn mock_idempotent_write_emits_no_event() {
         let mut store = MockWorldStore::<u8>::new(crate::voxel::coord::FIXED_SCALE);
-        let pos = WorldCoord { x: 0, y: 0, z: 0 };
+        let pos = WorldCoord {
+            x: 0,
+            y: 0,
+            z: 0,
+        };
         store.write(pos, 7);
         let _ = store.drain_dirty();
         store.write(pos, 7);
@@ -297,7 +307,11 @@ mod tests {
     #[test]
     fn mock_record_read_returns_value_or_default() {
         let mut store = MockWorldStore::<u8>::new(crate::voxel::coord::FIXED_SCALE);
-        let pos = WorldCoord { x: 0, y: 0, z: 0 };
+        let pos = WorldCoord {
+            x: 0,
+            y: 0,
+            z: 0,
+        };
         store.write(pos, 11);
         store.reset_calls();
         let got = store.record_read(pos);

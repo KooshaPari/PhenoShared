@@ -6,12 +6,12 @@
 //!
 //! - **Capability descriptor types** ([`CapabilityDescriptor`]) — a signed, versioned,
 //!   self-describing inventory of a node's hardware and software capabilities.
-//! - **Probe trait** ([`Probe`]) — a pluggable interface for discovering capabilities
-//!   on a given platform.
-//! - **Signing and verification** ([`sign`], [`verify`], [`SigningKey`]) — Ed25519 signing
-//!   of descriptor deltas so that a malicious peer cannot inject false capabilities.
-//! - **Schema validation** ([`validate_descriptor`] ) — validates a descriptor against
-//!   the canonical JSON schema.
+//! - **Probe trait** ([`Probe`]) — a pluggable interface for discovering capabilities on a given
+//!   platform.
+//! - **Signing and verification** ([`sign`], [`verify`], [`SigningKey`]) — Ed25519 signing of
+//!   descriptor deltas so that a malicious peer cannot inject false capabilities.
+//! - **Schema validation** ([`validate_descriptor`] ) — validates a descriptor against the
+//!   canonical JSON schema.
 //!
 //! # Locality tiers
 //!

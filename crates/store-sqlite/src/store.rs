@@ -2,16 +2,16 @@
 
 use std::sync::Mutex;
 
+use a2a::{
+    message::{Message, MessageKind, MsgState, Part},
+    task::{Task, TaskState},
+};
 use chrono::Utc;
 use rusqlite::{params, Connection};
+use substrate_core::mailbox_port::{MailboxStore, MailboxTaskState};
 use uuid::Uuid;
 
-use a2a::message::{Message, MessageKind, MsgState, Part};
-use a2a::task::{Task, TaskState};
-use substrate_core::mailbox_port::{MailboxStore, MailboxTaskState};
-
-use crate::error::StoreError;
-use crate::schema;
+use crate::{error::StoreError, schema};
 
 /// A `MailboxStore` backed by a SQLite database.
 ///
@@ -107,9 +107,9 @@ impl MailboxStore for SqliteMailboxStore {
         let conn = self.conn.lock().unwrap();
         let parts_json = serde_json::to_string(&msg.parts)?;
         conn.execute(
-            "INSERT INTO mailbox \
-             (id, team_id, task_id, from_agent, to_agent, kind, parts, in_reply_to, state, created_at, consumed_at) \
-             VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11)",
+            "INSERT INTO mailbox (id, team_id, task_id, from_agent, to_agent, kind, parts, \
+             in_reply_to, state, created_at, consumed_at) VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, \
+             ?9, ?10, ?11)",
             params![
                 msg.id.to_string(),
                 msg.team_id,
@@ -130,11 +130,9 @@ impl MailboxStore for SqliteMailboxStore {
     fn inbox(&self, team_id: &str, to: &str) -> Result<Vec<Message>, StoreError> {
         let conn = self.conn.lock().unwrap();
         let mut stmt = conn.prepare(
-            "SELECT id, team_id, task_id, from_agent, to_agent, kind, parts, \
-                    in_reply_to, state, created_at, consumed_at \
-             FROM mailbox \
-             WHERE team_id=?1 AND to_agent=?2 AND state='unread' \
-             ORDER BY created_at ASC",
+            "SELECT id, team_id, task_id, from_agent, to_agent, kind, parts, in_reply_to, state, \
+             created_at, consumed_at FROM mailbox WHERE team_id=?1 AND to_agent=?2 AND \
+             state='unread' ORDER BY created_at ASC",
         )?;
         let rows: Vec<Message> = stmt
             .query_map(params![team_id, to], |row| {
@@ -222,9 +220,9 @@ impl MailboxStore for SqliteMailboxStore {
     fn task_create(&self, task: &Task) -> Result<(), StoreError> {
         let conn = self.conn.lock().unwrap();
         conn.execute(
-            "INSERT INTO tasklist \
-             (id, team_id, title, state, owner, parent_task_id, requirement_id, epic_id, created_at, updated_at) \
-             VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10)",
+            "INSERT INTO tasklist (id, team_id, title, state, owner, parent_task_id, \
+             requirement_id, epic_id, created_at, updated_at) VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, \
+             ?8, ?9, ?10)",
             params![
                 task.id.to_string(),
                 task.team_id,
@@ -263,8 +261,8 @@ impl MailboxStore for SqliteMailboxStore {
     fn task_list(&self, team_id: &str) -> Result<Vec<Task>, StoreError> {
         let conn = self.conn.lock().unwrap();
         let mut stmt = conn.prepare(
-            "SELECT id, team_id, title, state, owner, parent_task_id, requirement_id, epic_id, created_at, updated_at \
-             FROM tasklist WHERE team_id=?1 ORDER BY created_at ASC",
+            "SELECT id, team_id, title, state, owner, parent_task_id, requirement_id, epic_id, \
+             created_at, updated_at FROM tasklist WHERE team_id=?1 ORDER BY created_at ASC",
         )?;
         let tasks: Vec<Task> = stmt
             .query_map(params![team_id], |row| {

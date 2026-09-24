@@ -1,12 +1,13 @@
 //! Structured logging setup for fabric-daemon.
 
-use crate::config::LoggingConfig;
 use tracing_subscriber::EnvFilter;
+
+use crate::config::LoggingConfig;
 
 /// Initialize structured logging.
 pub fn init_logging(config: &LoggingConfig) {
-    let filter = EnvFilter::try_from_default_env()
-        .unwrap_or_else(|_| EnvFilter::new(&config.level));
+    let filter =
+        EnvFilter::try_from_default_env().unwrap_or_else(|_| EnvFilter::new(&config.level));
 
     let subscriber = tracing_subscriber::fmt()
         .with_env_filter(filter)
@@ -16,14 +17,14 @@ pub fn init_logging(config: &LoggingConfig) {
     match config.format.as_str() {
         "json" => {
             subscriber.json().init();
-        }
+        },
         "compact" => {
             subscriber.compact().init();
-        }
+        },
         _ => {
             // "pretty" or default
             subscriber.init();
-        }
+        },
     }
 }
 

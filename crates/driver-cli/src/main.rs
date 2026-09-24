@@ -10,8 +10,7 @@ mod serve;
 mod splash;
 mod theme;
 
-use std::path::PathBuf;
-use std::sync::Arc;
+use std::{path::PathBuf, sync::Arc};
 
 use anyhow::{anyhow, Context};
 use clap::{Parser, Subcommand};
@@ -21,12 +20,11 @@ use engine_forge::ForgeEngine;
 use engine_spec::TaskSpec;
 use plan::{engine_catalog, enrich_plan_argv, print_plan};
 use store_file::FileStore;
-use substrate_app::tiered_dispatch::{dispatch_with_reroute_async, select_auto_tier};
-use substrate_app::DispatchService;
-use substrate_app::{DispatchPlanner, PlanRequest, SessionMode};
-use substrate_core::domain::Task;
-use substrate_core::ports::DispatchApi;
-use substrate_core::Tier;
+use substrate_app::{
+    tiered_dispatch::{dispatch_with_reroute_async, select_auto_tier},
+    DispatchPlanner, DispatchService, PlanRequest, SessionMode,
+};
+use substrate_core::{domain::Task, ports::DispatchApi, Tier};
 use transport_file::FileTransport;
 
 #[derive(Parser)]
@@ -39,13 +37,11 @@ use transport_file::FileTransport;
                   the chosen engine, session mode, and argv without spawning a process.",
     subcommand_required = true,
     arg_required_else_help = true,
-    after_help = "EXAMPLES:\n  \
-                  substrate plan --engine forge --cwd . \"fix the bug\"\n  \
-                  substrate dispatch --fake --cwd . \"echo hi\"\n  \
-                  substrate dispatch --dry-run --cwd . \"echo hi\"\n  \
-                  substrate argv --provider forge --prompt \"hello\" --dry-run\n\n\
-                  ENV (engine binaries):\n  \
-                  FORGE_BIN, CODEX_BIN, CLAUDE_BIN, AGENTAPI_ENDPOINT"
+    after_help = "EXAMPLES:\n  substrate plan --engine forge --cwd . \"fix the bug\"\n  substrate \
+                  dispatch --fake --cwd . \"echo hi\"\n  substrate dispatch --dry-run --cwd . \
+                  \"echo hi\"\n  substrate argv --provider forge --prompt \"hello\" \
+                  --dry-run\n\nENV (engine binaries):\n  FORGE_BIN, CODEX_BIN, CLAUDE_BIN, \
+                  AGENTAPI_ENDPOINT"
 )]
 struct Cli {
     /// Print the Backbone-2 splash banner before running (L97/L98/L99).
@@ -99,7 +95,8 @@ struct DispatchOptions {
     /// Print the plan without spawning (same output as the `plan` subcommand).
     #[arg(long)]
     dry_run: bool,
-    /// Run codex through tiered dispatch (`heavy`, `main`, or `worker`); auto-selected when omitted for codex.
+    /// Run codex through tiered dispatch (`heavy`, `main`, or `worker`); auto-selected when
+    /// omitted for codex.
     #[arg(long, value_name = "TIER")]
     tier: Option<String>,
     /// Working directory the engine runs in.
@@ -116,7 +113,8 @@ struct DispatchOptions {
 #[derive(Parser)]
 #[command(next_help_heading = "CLOUD DISPATCH")]
 struct CloudDispatchArgs {
-    /// Cloud platform: `cursor` (Cursor Cloud Agents), `codex` (Codex Cloud CLI), or `kilo` (gateway + local git).
+    /// Cloud platform: `cursor` (Cursor Cloud Agents), `codex` (Codex Cloud CLI), or `kilo`
+    /// (gateway + local git).
     #[arg(long, value_enum, value_name = "PLATFORM")]
     platform: cloud_dispatch::CloudPlatform,
     /// Repository URL (for example `https://github.com/org/repo`).
@@ -312,15 +310,17 @@ async fn main() -> anyhow::Result<()> {
                 return execute_tiered_dispatch(&args, tier).await;
             }
             execute_plan(&plan, &args.options.cwd).await
-        }
+        },
         Command::Plan(args) => {
             let plan = args.plan()?;
             print_plan(&plan)
-        }
-        Command::Argv { args } => driver_argv::dispatch::run(args),
+        },
+        Command::Argv {
+            args,
+        } => driver_argv::dispatch::run(args),
         Command::CloudDispatch(args) => {
             cloud_dispatch::run(args.platform, &args.repo, &args.branch, &args.task).await
-        }
+        },
         Command::Serve(args) => serve::run(args).await,
     }
 }

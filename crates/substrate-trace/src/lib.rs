@@ -139,13 +139,17 @@ impl std::fmt::Debug for MultiTrace {
 impl MultiTrace {
     /// Create a fan-out trace with the given sinks.
     pub fn new(sinks: Vec<Arc<dyn TracePort>>) -> Self {
-        MultiTrace { sinks }
+        MultiTrace {
+            sinks,
+        }
     }
 
     /// Create an empty fan-out (equivalent to [`NoopTrace`]; add sinks with
     /// [`MultiTrace::with_sink`]).
     pub fn empty() -> Self {
-        MultiTrace { sinks: vec![] }
+        MultiTrace {
+            sinks: vec![],
+        }
     }
 
     /// Append a sink and return `self` for chained construction.

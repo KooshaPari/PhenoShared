@@ -3,10 +3,12 @@
 use dashmap::DashMap;
 use serde::{Deserialize, Serialize};
 
-use crate::context::EvaluationContext;
-use crate::error::PolicyEngineError;
-use crate::policy::{EvaluablePolicy, Policy};
-use crate::result::PolicyResult;
+use crate::{
+    context::EvaluationContext,
+    error::PolicyEngineError,
+    policy::{EvaluablePolicy, Policy},
+    result::PolicyResult,
+};
 
 /// A thread-safe policy engine that evaluates contexts against multiple policies.
 ///

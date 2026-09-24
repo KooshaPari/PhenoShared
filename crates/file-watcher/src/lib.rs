@@ -7,15 +7,19 @@
 //! single debounced notification per path. Platform backends (inotify,
 //! FSEvents, ReadDirectoryChangesW) are selected by `notify`.
 
-use std::collections::{HashMap, HashSet};
-use std::path::{Path, PathBuf};
-use std::sync::{Arc, Mutex as StdMutex};
-use std::time::Duration;
+use std::{
+    collections::{HashMap, HashSet},
+    path::{Path, PathBuf},
+    sync::{Arc, Mutex as StdMutex},
+    time::Duration,
+};
 
 use async_trait::async_trait;
 use notify_debouncer_mini::{new_debouncer, DebounceEventResult};
-use substrate_core::error::{Result, SubstrateError};
-use substrate_core::watcher_port::{WatchEvent, WatchEventKind, WatchHandle, WatcherPort};
+use substrate_core::{
+    error::{Result, SubstrateError},
+    watcher_port::{WatchEvent, WatchEventKind, WatchHandle, WatcherPort},
+};
 use tokio::sync::{mpsc, Mutex};
 use uuid::Uuid;
 
@@ -111,7 +115,10 @@ impl WatcherPort for NotifyWatcher {
                         for path in event_paths(&event.path, &watched_path, &canonical_watched) {
                             let mut known = known_paths.lock().expect("known_paths lock");
                             let kind = classify_event(&path, &mut known);
-                            let mapped = WatchEvent { path, kind };
+                            let mapped = WatchEvent {
+                                path,
+                                kind,
+                            };
                             let _ = tx.blocking_send(mapped);
                         }
                     }
@@ -130,7 +137,9 @@ impl WatcherPort for NotifyWatcher {
             .map_err(|e| SubstrateError::Watcher(format!("watch {}: {e}", path.display())))?;
 
         let id = Uuid::new_v4();
-        let handle = WatchHandle { id };
+        let handle = WatchHandle {
+            id,
+        };
         self.subs.lock().await.insert(
             id,
             Subscription {
@@ -166,9 +175,9 @@ impl WatcherPort for NotifyWatcher {
 
 #[cfg(test)]
 mod tests {
+    use std::{fs, time::Duration};
+
     use super::*;
-    use std::fs;
-    use std::time::Duration;
 
     #[tokio::test(flavor = "multi_thread")]
     async fn detects_create_and_modify_in_tempdir() {

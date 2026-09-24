@@ -89,13 +89,14 @@ pub fn init() {
 
 #[cfg(feature = "server")]
 mod http {
-    use super::*;
     use axum::{
         http::{header, HeaderValue, StatusCode},
         response::IntoResponse,
         routing::get,
         Router,
     };
+
+    use super::*;
 
     /// Axum router exposing `/metrics`.
     pub fn router() -> Router {

@@ -3,8 +3,10 @@
 //! Ported from C# `Rendering/WaterLod.cs`. Default thresholds: 50 / 150 / 400
 //! world units. Default per-tier resolutions: 64 / 32 / 16 quads per side.
 
-use crate::terrain::lod::{LodBase, LodTier};
-use crate::water::error::WaterResult;
+use crate::{
+    terrain::lod::{LodBase, LodTier},
+    water::error::WaterResult,
+};
 
 /// Default LOD config for water surface mesh.
 #[derive(Debug, Clone, Copy, PartialEq)]

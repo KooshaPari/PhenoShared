@@ -165,8 +165,8 @@ fn palette_distinct_from_sharecli_and_tracera() {
     // Defensive: ensure we didn't accidentally sharecli-swap the dominant accent.
     let content =
         std::fs::read_to_string(brand_dir().join("substrate-icon.svg")).expect("read svg");
-    // substrate dominant = sync-violet (#a371f7) — must appear more prominently than pulse-green (#3fb950).
-    // Cheap heuristic: count occurrences.
+    // substrate dominant = sync-violet (#a371f7) — must appear more prominently than pulse-green
+    // (#3fb950). Cheap heuristic: count occurrences.
     let violet_count = content.matches("#a371f7").count();
     let green_count = content.matches("#3fb950").count();
     assert!(

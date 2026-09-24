@@ -3,8 +3,10 @@
 //! Uses `proptest` to verify roundtrip serialization and locality tier
 //! index stability for arbitrary inputs.
 
-use fabric_capability::descriptor::{CapabilityDescriptor, Capabilities};
-use fabric_capability::locality::LocalityTier;
+use fabric_capability::{
+    descriptor::{Capabilities, CapabilityDescriptor},
+    locality::LocalityTier,
+};
 use proptest::prelude::*;
 
 // ---------------------------------------------------------------------------
@@ -13,9 +15,8 @@ use proptest::prelude::*;
 
 fn arb_uuid() -> impl Strategy<Value = uuid::Uuid> {
     // Use arbitrary bytes to construct a UUID.
-    ("[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}").prop_map(|s| {
-        uuid::Uuid::parse_str(&s).unwrap_or_else(|_| uuid::Uuid::nil())
-    })
+    ("[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}")
+        .prop_map(|s| uuid::Uuid::parse_str(&s).unwrap_or_else(|_| uuid::Uuid::nil()))
 }
 
 fn arb_descriptor() -> impl Strategy<Value = CapabilityDescriptor> {
@@ -25,8 +26,8 @@ fn arb_descriptor() -> impl Strategy<Value = CapabilityDescriptor> {
         "[a-z0-9\\-]{1,20}",
         "[a-z0-9]{1,40}",
     )
-        .prop_map(|(node_id, epoch, schema_version, topology_hash)| {
-            CapabilityDescriptor {
+        .prop_map(
+            |(node_id, epoch, schema_version, topology_hash)| CapabilityDescriptor {
                 node_id,
                 epoch,
                 schema_version,
@@ -35,8 +36,8 @@ fn arb_descriptor() -> impl Strategy<Value = CapabilityDescriptor> {
                 topology_hash,
                 capabilities: Capabilities::default(),
                 signatures: vec![],
-            }
-        })
+            },
+        )
 }
 
 // ---------------------------------------------------------------------------

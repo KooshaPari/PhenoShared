@@ -179,8 +179,9 @@ fn validate(cfg: &WaveConfig, path: &Path) -> Result<()> {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
     use std::io::Write;
+
+    use super::*;
 
     fn tmp_wave(content: &str) -> tempfile::NamedTempFile {
         let mut f = tempfile::NamedTempFile::new().expect("tmp");

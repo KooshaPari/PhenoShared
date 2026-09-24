@@ -2,10 +2,11 @@
 //! Every hook is "failsoft" — a failure in one stage MUST NOT stop the
 //! remaining hooks from running. We log + continue.
 
+use std::path::PathBuf;
+
 use anyhow::Result;
 use oci_helpers::which_on_path;
 use serde_json::json;
-use std::path::PathBuf;
 use tokio::process::Command;
 use tracing::{error, info, warn};
 
@@ -64,7 +65,8 @@ async fn run_post_acquire_hook(inst: &AcquiredInstance) -> Result<()> {
         info!(
             ?path_bin,
             ?path_sh,
-            "no post-acquire hook present (tried oci-post-acquire binary and .sh wrapper), skipping"
+            "no post-acquire hook present (tried oci-post-acquire binary and .sh wrapper), \
+             skipping"
         );
         return Ok(());
     };
@@ -88,7 +90,7 @@ async fn post_webhook(inst: &AcquiredInstance) -> Result<()> {
         _ => {
             info!("OCI_LOTTERY_WEBHOOK_URL not set, skipping webhook");
             return Ok(());
-        }
+        },
     };
     let body = json!({
         "text": format!(

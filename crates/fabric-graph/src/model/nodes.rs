@@ -3,8 +3,10 @@
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 
-use super::ids::NodeId;
-use super::types::{CapabilityRef, TrustLevel};
+use super::{
+    ids::NodeId,
+    types::{CapabilityRef, TrustLevel},
+};
 
 /// A node in the topology graph.
 ///
@@ -67,10 +69,13 @@ impl Node {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
-    use crate::model::ids::NodeId;
-    use crate::model::types::{CapabilityRef, TrustLevel};
     use fabric_capability::locality::LocalityTier;
+
+    use super::*;
+    use crate::model::{
+        ids::NodeId,
+        types::{CapabilityRef, TrustLevel},
+    };
 
     #[test]
     fn test_node_with_capabilities() {

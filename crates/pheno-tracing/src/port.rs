@@ -5,8 +5,9 @@
 //! depend only on the port so backend swaps don't ripple through the call
 //! graph.
 
-use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
+
+use serde::{Deserialize, Serialize};
 use thiserror::Error;
 
 /// Unique trace identifier (128-bit, base16-encoded in OTLP).

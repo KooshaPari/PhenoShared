@@ -7,17 +7,16 @@
 //! - 3-tier chain (root → intermediate → leaf) verifies successfully
 //! - Revocation propagates from root to leaf
 //! - Expiration rejection
-//! - Two-trust-store isolation (a descriptor signed by store A's chain
-//!   must NOT verify against store B's root)
-//! - Wire-format round-trip (Authority/RevocationList serialize +
-//!   deserialize without losing signature validity)
+//! - Two-trust-store isolation (a descriptor signed by store A's chain must NOT verify against
+//!   store B's root)
+//! - Wire-format round-trip (Authority/RevocationList serialize + deserialize without losing
+//!   signature validity)
 //! - Chain depth cap enforced at construction
 
 use chrono::{Duration, Utc};
-use fabric_capability::descriptor::Capabilities;
 use fabric_capability::{
-    sign, Authority, CapabilityDescriptor, RevocationEntry, RevocationList, RevocationReason,
-    SigningKey, TrustError, TrustStore,
+    descriptor::Capabilities, sign, Authority, CapabilityDescriptor, RevocationEntry,
+    RevocationList, RevocationReason, SigningKey, TrustError, TrustStore,
 };
 use uuid::Uuid;
 
@@ -172,7 +171,9 @@ fn it05_authority_wire_format_roundtrip() {
     // Verify the restored Authority's signature is still valid against
     // the parent's key.
     let mut store = TrustStore::new(root).unwrap();
-    store.add_authority(restored).expect("restored auth must be acceptable");
+    store
+        .add_authority(restored)
+        .expect("restored auth must be acceptable");
 }
 
 #[test]
@@ -198,7 +199,9 @@ fn it06_revocation_list_wire_format_roundtrip() {
 
     let root = Authority::trust_root(&root_key, "test-root");
     let mut store = TrustStore::new(root).unwrap();
-    store.set_revocation_list(restored).expect("restored list must be accepted");
+    store
+        .set_revocation_list(restored)
+        .expect("restored list must be accepted");
 }
 
 #[test]

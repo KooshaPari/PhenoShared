@@ -6,8 +6,7 @@
 //! * `cloud diff <task_id>` → canned unified diff on success tasks
 //! * `cloud apply <task_id>` → prints apply success (no filesystem changes)
 
-use std::fs;
-use std::path::PathBuf;
+use std::{fs, path::PathBuf};
 
 fn state_path(task_id: &str) -> PathBuf {
     let base = std::env::temp_dir().join("fake-codex-cloud");
@@ -45,7 +44,7 @@ fn main() {
         other => {
             eprintln!("fake-codex-cloud: unsupported cloud subcommand: {other:?}");
             std::process::exit(2);
-        }
+        },
     }
 }
 
@@ -60,15 +59,15 @@ fn run_exec(args: &[String]) {
             "--env" => {
                 i += 1;
                 env_id = args.get(i).cloned().unwrap_or_default();
-            }
+            },
             "--branch" => {
                 i += 1;
                 branch = args.get(i).cloned().unwrap_or_else(|| "main".into());
-            }
-            flag if flag.starts_with("--") => {}
+            },
+            flag if flag.starts_with("--") => {},
             text => {
                 prompt = text.to_string();
-            }
+            },
         }
         i += 1;
     }

@@ -8,14 +8,18 @@
 //! The connector is a thin shim that wraps the eye tracker pipeline and
 //! forwards TrackingResult events to the bus.
 
-use crate::pipeline::TrackingResult;
+use std::{
+    io::Write,
+    os::unix::net::UnixStream,
+    path::PathBuf,
+    sync::Mutex,
+    time::{SystemTime, UNIX_EPOCH},
+};
+
 use anyhow::{Context, Result};
 use serde::{Deserialize, Serialize};
-use std::io::Write;
-use std::os::unix::net::UnixStream;
-use std::path::PathBuf;
-use std::sync::Mutex;
-use std::time::{SystemTime, UNIX_EPOCH};
+
+use crate::pipeline::TrackingResult;
 
 /// Default socket path used by FocalPoint subscribers
 pub const DEFAULT_SOCKET: &str = "/tmp/eyetracker-focalpoint.sock";
@@ -136,11 +140,12 @@ fn unix_millis() -> u64 {
 
 #[cfg(test)]
 mod tests {
+    use std::{os::unix::net::UnixListener, time::Instant};
+
+    use eyetracker_camera::{Frame, PixelFormat};
+
     use super::*;
     use crate::calibration::CalibrationResult;
-    use eyetracker_camera::{Frame, PixelFormat};
-    use std::os::unix::net::UnixListener;
-    use std::time::Instant;
 
     fn dummy_result() -> TrackingResult {
         TrackingResult {
@@ -234,7 +239,10 @@ mod tests {
         let mut r = dummy_result();
         r.smoothed_gaze = None;
         r.gaze = Some(crate::gaze_estimator::GazeResult {
-            screen_point: crate::gaze_estimator::Point2D { x: 0.3, y: 0.4 },
+            screen_point: crate::gaze_estimator::Point2D {
+                x: 0.3,
+                y: 0.4,
+            },
             combined: crate::gaze_estimator::GazeVector {
                 x: 0.3,
                 y: 0.4,

@@ -4,8 +4,10 @@
 //! Source: [`AgilePlus/crates/agileplus-domain/src/intent_graph.rs`](https://example.invalid/AgilePlus/crates/agileplus-domain/src/intent_graph.rs)
 //! (1:1 port; `builder` re-exports omitted — not part of this crate).
 
-use std::collections::{HashMap, HashSet};
-use std::fmt;
+use std::{
+    collections::{HashMap, HashSet},
+    fmt,
+};
 
 use chrono::{DateTime, Utc};
 use regex::Regex;
@@ -670,7 +672,7 @@ impl IntentGraph {
                     match colors.get(neighbor).copied().unwrap_or(Color::White) {
                         Color::White => dfs(neighbor, adj, colors)?,
                         Color::Gray => return Err(ValidationError::CycleDetected),
-                        Color::Black => {}
+                        Color::Black => {},
                     }
                 }
             }

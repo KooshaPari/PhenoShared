@@ -1,7 +1,8 @@
 //! Health check endpoint for fabric-daemon.
 
-use serde::Serialize;
 use std::time::Instant;
+
+use serde::Serialize;
 
 /// Health check response.
 #[derive(Debug, Serialize)]
@@ -38,8 +39,9 @@ impl HealthResponse {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
     use std::time::Duration;
+
+    use super::*;
 
     #[test]
     fn health_response_json() {

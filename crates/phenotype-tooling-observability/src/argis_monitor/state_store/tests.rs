@@ -2,9 +2,11 @@
 
 use std::sync::atomic::{AtomicU64, Ordering};
 
-use super::connection::parse_state;
-use super::types::{StateStoreError, TrackerSnapshot};
-use super::StateStore;
+use super::{
+    connection::parse_state,
+    types::{StateStoreError, TrackerSnapshot},
+    StateStore,
+};
 use crate::argis_monitor::alerts::{AlertState, AlertStateTracker};
 
 static SEQ: AtomicU64 = AtomicU64::new(0);
@@ -14,7 +16,10 @@ fn tmpfile(label: &str) -> std::path::PathBuf {
     let tid = std::thread::current().id();
     let dir = std::env::temp_dir().join(format!(
         "argis-monitor-test-pid{}-{:?}-{}-{}",
-        std::process::id(), tid, label, n,
+        std::process::id(),
+        tid,
+        label,
+        n,
     ));
     std::fs::create_dir_all(&dir).unwrap();
     dir.join("state.sqlite")
@@ -39,12 +44,19 @@ fn round_trip_pending_state() {
     let _ = std::fs::remove_file(&path);
     let mut store = StateStore::open(&path).unwrap();
     let snap = TrackerSnapshot {
-        state: AlertState::Pending { since: 1234567890 },
+        state: AlertState::Pending {
+            since: 1234567890,
+        },
         sustained_secs: 12,
     };
     store.save("gw::rule_b", &snap).unwrap();
     let all = store.load_all().unwrap();
-    assert_eq!(all[0].1.state, AlertState::Pending { since: 1234567890 });
+    assert_eq!(
+        all[0].1.state,
+        AlertState::Pending {
+            since: 1234567890
+        }
+    );
     assert_eq!(all[0].1.sustained_secs, 12);
 }
 
@@ -54,10 +66,18 @@ fn upsert_overwrites_previous_state() {
     let _ = std::fs::remove_file(&path);
     let mut store = StateStore::open(&path).unwrap();
     store.save("gw::rule_c", &TrackerSnapshot::ok()).unwrap();
-    store.save("gw::rule_c", &TrackerSnapshot {
-        state: AlertState::Firing { since: 100, last_fired_at: 100 },
-        sustained_secs: 0,
-    }).unwrap();
+    store
+        .save(
+            "gw::rule_c",
+            &TrackerSnapshot {
+                state: AlertState::Firing {
+                    since: 100,
+                    last_fired_at: 100,
+                },
+                sustained_secs: 0,
+            },
+        )
+        .unwrap();
     let all = store.load_all().unwrap();
     assert_eq!(all.len(), 1);
     assert!(matches!(all[0].1.state, AlertState::Firing { .. }));
@@ -67,9 +87,26 @@ fn upsert_overwrites_previous_state() {
 fn restart_rehydration_matches_in_memory() {
     let path = tmpfile("restart");
     let snaps = vec![
-        ("gw::r1", TrackerSnapshot { state: AlertState::Pending { since: 1000 }, sustained_secs: 5 }),
+        (
+            "gw::r1",
+            TrackerSnapshot {
+                state: AlertState::Pending {
+                    since: 1000,
+                },
+                sustained_secs: 5,
+            },
+        ),
         ("gw::r2", TrackerSnapshot::ok()),
-        ("openai::r1", TrackerSnapshot { state: AlertState::Firing { since: 2000, last_fired_at: 2000 }, sustained_secs: 30 }),
+        (
+            "openai::r1",
+            TrackerSnapshot {
+                state: AlertState::Firing {
+                    since: 2000,
+                    last_fired_at: 2000,
+                },
+                sustained_secs: 30,
+            },
+        ),
     ];
     {
         let mut store = StateStore::open(&path).unwrap();
@@ -81,7 +118,10 @@ fn restart_rehydration_matches_in_memory() {
     let restored = store.load_all().unwrap();
     assert_eq!(restored.len(), snaps.len());
     for (k, s) in &snaps {
-        let found = restored.iter().find(|(rk, _)| rk == k).expect("missing key");
+        let found = restored
+            .iter()
+            .find(|(rk, _)| rk == k)
+            .expect("missing key");
         assert_eq!(&found.1, s);
     }
 }
@@ -100,9 +140,20 @@ fn parse_state_err_handles_unknown_string() {
     let ok = parse_state("ok", 0, 0).unwrap();
     assert_eq!(ok, AlertState::Ok);
     let pending = parse_state("pending", 100, 0).unwrap();
-    assert_eq!(pending, AlertState::Pending { since: 100 });
+    assert_eq!(
+        pending,
+        AlertState::Pending {
+            since: 100
+        }
+    );
     let firing = parse_state("firing", 200, 250).unwrap();
-    assert_eq!(firing, AlertState::Firing { since: 200, last_fired_at: 250 });
+    assert_eq!(
+        firing,
+        AlertState::Firing {
+            since: 200,
+            last_fired_at: 250
+        }
+    );
     let err = parse_state("wat", 0, 0).unwrap_err();
     assert!(matches!(err, StateStoreError::InvalidState(s) if s == "wat"));
 }
@@ -112,12 +163,22 @@ fn alert_state_tracker_conversion() {
     let path = tmpfile("tracker");
     let mut store = StateStore::open(&path).unwrap();
     let mut tracker = AlertStateTracker::default();
-    tracker.state = AlertState::Pending { since: 42 };
+    tracker.state = AlertState::Pending {
+        since: 42,
+    };
     tracker.sustained_for = std::time::Duration::from_secs(7);
-    let snap = TrackerSnapshot { state: tracker.state.clone(), sustained_secs: tracker.sustained_for.as_secs() };
+    let snap = TrackerSnapshot {
+        state: tracker.state.clone(),
+        sustained_secs: tracker.sustained_for.as_secs(),
+    };
     store.save("gw::r1", &snap).unwrap();
     let restored = store.load_all().unwrap();
-    assert_eq!(restored[0].1.state, AlertState::Pending { since: 42 });
+    assert_eq!(
+        restored[0].1.state,
+        AlertState::Pending {
+            since: 42
+        }
+    );
     assert_eq!(restored[0].1.sustained_secs, 7);
 }
 
@@ -159,7 +220,9 @@ fn list_history_filters_by_key_prefix() {
     }
     let gw_only = store.list_history(Some("gw::"), 100).unwrap();
     assert_eq!(gw_only.len(), 2);
-    for r in &gw_only { assert!(r.key.starts_with("gw::")); }
+    for r in &gw_only {
+        assert!(r.key.starts_with("gw::"));
+    }
 }
 
 #[test]

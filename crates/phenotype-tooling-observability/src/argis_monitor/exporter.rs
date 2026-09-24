@@ -4,12 +4,10 @@
 //! the Prometheus text exposition format. Run alongside the `Monitor` poll
 //! loop (typically in the same binary).
 
-use std::net::SocketAddr;
-use std::sync::Arc;
+use std::{net::SocketAddr, sync::Arc};
 
 use axum::{extract::State, http::StatusCode, response::IntoResponse, routing::get, Router};
-use prometheus_client::encoding::text::encode;
-use prometheus_client::registry::Registry;
+use prometheus_client::{encoding::text::encode, registry::Registry};
 use tokio::sync::watch;
 use tower_http::trace::{DefaultMakeSpan, DefaultOnRequest, DefaultOnResponse, TraceLayer};
 use tracing::{error, info, Level};
@@ -33,7 +31,9 @@ struct AppState {
 /// default hooks at INFO; the span name is `http_request`. Operators can
 /// adjust the level via `RUST_LOG` (e.g. `RUST_LOG=argis_monitor::exporter=debug`).
 pub async fn serve(addr: &str, registry: Arc<Registry>) -> anyhow::Result<ExporterHandle> {
-    let state = AppState { registry };
+    let state = AppState {
+        registry,
+    };
     let app = Router::new()
         .route("/metrics", get(metrics_handler))
         .route("/healthz", get(healthz))
@@ -54,10 +54,9 @@ pub async fn serve(addr: &str, registry: Arc<Registry>) -> anyhow::Result<Export
 
     tokio::spawn(async move {
         info!(addr = %local_addr, "argis-monitor exporter listening");
-        let server = axum::serve(listener, app)
-            .with_graceful_shutdown(async move {
-                let _ = rx.changed().await;
-            });
+        let server = axum::serve(listener, app).with_graceful_shutdown(async move {
+            let _ = rx.changed().await;
+        });
         if let Err(e) = server.await {
             error!(error = %e, "exporter server stopped");
         }
@@ -74,16 +73,26 @@ async fn metrics_handler(State(state): State<AppState>) -> impl IntoResponse {
     if let Err(e) = encode(&mut buf, &state.registry) {
         return (
             StatusCode::INTERNAL_SERVER_ERROR,
-            [(axum::http::header::CONTENT_TYPE, "text/plain; charset=utf-8")],
-            format!("encode error: {e}
-"),
+            [(
+                axum::http::header::CONTENT_TYPE,
+                "text/plain; charset=utf-8",
+            )],
+            format!(
+                "encode error: {e}
+"
+            ),
         );
     }
     (
         StatusCode::OK,
-        [(axum::http::header::CONTENT_TYPE, "text/plain; version=0.0.4; charset=utf-8")],
+        [(
+            axum::http::header::CONTENT_TYPE,
+            "text/plain; version=0.0.4; charset=utf-8",
+        )],
         buf,
     )
 }
 
-async fn healthz() -> &'static str { "ok" }
+async fn healthz() -> &'static str {
+    "ok"
+}

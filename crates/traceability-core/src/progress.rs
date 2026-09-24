@@ -60,10 +60,11 @@ pub fn slope(prev: &ProgressSnapshot, cur: &ProgressSnapshot) -> f32 {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
-    use crate::matrix::MatrixCell;
     use chrono::Utc;
     use indexmap::IndexMap;
+
+    use super::*;
+    use crate::matrix::MatrixCell;
 
     fn cell(from: &str, to: &str, coverage: CoverageState) -> MatrixCell {
         MatrixCell {

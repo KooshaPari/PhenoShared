@@ -12,14 +12,13 @@
 //!
 //! # Shape
 //!
-//! - [`ServeLock`] — RAII holder of an exclusive advisory lock on a well-known
-//!   pidfile. Acquiring it writes a JSON [`ServeInfo`] (`pid`, `service`, `url`,
-//!   `started_at_unix`) so other actors can read the running deploy's identity.
-//!   Dropping it releases the lock and removes the pidfile.
-//! - [`probe`] — read-only: returns [`ServeState`] (`Free` / `Running { stale }`)
-//!   without taking the lock, so a caller can inspect before committing.
-//! - [`decide`] — pure policy: maps `(ServeState, OnConflict)` → [`Decision`].
-//!   The interactive prompt itself is the CLI's job; this returns the decision.
+//! - [`ServeLock`] — RAII holder of an exclusive advisory lock on a well-known pidfile. Acquiring
+//!   it writes a JSON [`ServeInfo`] (`pid`, `service`, `url`, `started_at_unix`) so other actors
+//!   can read the running deploy's identity. Dropping it releases the lock and removes the pidfile.
+//! - [`probe`] — read-only: returns [`ServeState`] (`Free` / `Running { stale }`) without taking
+//!   the lock, so a caller can inspect before committing.
+//! - [`decide`] — pure policy: maps `(ServeState, OnConflict)` → [`Decision`]. The interactive
+//!   prompt itself is the CLI's job; this returns the decision.
 //!
 //! # Safety default
 //!
@@ -35,10 +34,12 @@
 // Tracking: https://github.com/rust-lang/rust-clippy/issues/14246
 #![allow(clippy::incompatible_msrv)]
 
-use std::fs;
-use std::io::{Read, Write};
-use std::path::{Path, PathBuf};
-use std::process;
+use std::{
+    fs,
+    io::{Read, Write},
+    path::{Path, PathBuf},
+    process,
+};
 
 use anyhow::{Context, Result};
 use fs2::FileExt;
@@ -99,8 +100,8 @@ pub enum Decision {
 /// Resolve `(state, policy)` into a concrete [`Decision`]. Pure — no I/O.
 ///
 /// - `Free`                      → always [`Decision::Serve`].
-/// - `Running { stale: true }`   → [`Decision::Serve`] (take over the dead lock),
-///   regardless of policy: a crashed server should never block a healthy one.
+/// - `Running { stale: true }`   → [`Decision::Serve`] (take over the dead lock), regardless of
+///   policy: a crashed server should never block a healthy one.
 /// - `Running { stale: false }`  → follow `policy`:
 ///   - `Attach`  → [`Decision::Attach`]
 ///   - `Replace` → [`Decision::Replace`]
@@ -109,8 +110,12 @@ pub enum Decision {
 pub fn decide(state: &ServeState, policy: OnConflict) -> Decision {
     match state {
         ServeState::Free => Decision::Serve,
-        ServeState::Running { stale: true, .. } => Decision::Serve,
-        ServeState::Running { stale: false, .. } => match policy {
+        ServeState::Running {
+            stale: true, ..
+        } => Decision::Serve,
+        ServeState::Running {
+            stale: false, ..
+        } => match policy {
             OnConflict::Attach => Decision::Attach,
             OnConflict::Replace => Decision::Replace,
             OnConflict::Abort => Decision::Abort,
@@ -211,7 +216,7 @@ pub fn probe(service: &str) -> Result<ServeState> {
         Err(_) if !exclusively_held => return Ok(ServeState::Free),
         Err(e) => {
             return Err(e).with_context(|| format!("parse pidfile {}", path.display()));
-        }
+        },
     };
 
     // The pidfile owner is live if either the lock is currently held exclusively
@@ -318,7 +323,10 @@ mod tests {
             let dir = tempfile::tempdir().expect("tempdir");
             let prev = std::env::var_os("XDG_RUNTIME_DIR");
             std::env::set_var("XDG_RUNTIME_DIR", dir.path());
-            Self { _dir: dir, prev }
+            Self {
+                _dir: dir,
+                prev,
+            }
         }
     }
 
@@ -399,14 +407,17 @@ mod tests {
         // probe() must detect the dead PID and report stale=true (or Free when
         // the platform short-circuits on an unlocked pidfile — both are correct).
         match probe("svc-d").unwrap() {
-            ServeState::Running { stale, info } => {
+            ServeState::Running {
+                stale,
+                info,
+            } => {
                 assert!(stale, "dead-pid pidfile must be reported stale");
                 assert_eq!(info.pid, u32::MAX);
-            }
+            },
             ServeState::Free => {
                 // Some platforms surface an unlocked dead-pid file as Free.
                 // That is also a valid response — the serve slot is available.
-            }
+            },
         }
 
         // After removing the stale file the slot must be Free.

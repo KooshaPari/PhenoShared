@@ -111,8 +111,10 @@ impl RingBuffer {
         let step = (stride / self.bucket_size_secs).min(n);
         for _ in 0..step {
             let first = self.buckets.remove(0);
-            self.buckets
-                .push(Bucket { success: 0, failure: 0 });
+            self.buckets.push(Bucket {
+                success: 0,
+                failure: 0,
+            });
             let _ = first;
         }
         self.head_ts = target;

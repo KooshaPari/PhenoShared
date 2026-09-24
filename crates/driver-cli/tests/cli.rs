@@ -1,8 +1,7 @@
 //! Integration: `substrate dispatch --engine forge` runs with zero network,
 //! driven by the bundled fake-forge (resolved via `FORGE_BIN`).
 
-use std::path::PathBuf;
-use std::process::Command as StdCommand;
+use std::{path::PathBuf, process::Command as StdCommand};
 
 use assert_cmd::Command;
 use predicates::prelude::*;

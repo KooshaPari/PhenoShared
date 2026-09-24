@@ -6,8 +6,7 @@ use chrono::Utc;
 use rusqlite::{params, Connection};
 use serde::Serialize;
 
-use crate::error::StoreError;
-use crate::schema;
+use crate::{error::StoreError, schema};
 
 /// A key-value config entry.
 #[derive(Debug, Clone, PartialEq, Eq, Serialize)]
@@ -48,7 +47,8 @@ impl SqliteConfigStore {
         let conn = self.conn.lock().unwrap();
         conn.execute(
             "INSERT INTO gateway_config (key, value, updated_at) VALUES (?1, ?2, ?3)
-             ON CONFLICT(key) DO UPDATE SET value = excluded.value, updated_at = excluded.updated_at",
+             ON CONFLICT(key) DO UPDATE SET value = excluded.value, updated_at = \
+             excluded.updated_at",
             params![key, value, updated_at],
         )?;
         Ok(ConfigEntry {

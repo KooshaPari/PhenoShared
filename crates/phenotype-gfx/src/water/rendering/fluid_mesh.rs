@@ -4,8 +4,7 @@
 //! in the XZ plane; each vertex is displaced by a [`GerstnerWaveBank`] at
 //! the given time.
 
-use crate::water::error::WaterError;
-use crate::water::gerstner_wave_bank::GerstnerWaveBank;
+use crate::water::{error::WaterError, gerstner_wave_bank::GerstnerWaveBank};
 
 /// Snapshot of a generated water grid mesh at a single point in time.
 #[derive(Debug, Clone, PartialEq)]

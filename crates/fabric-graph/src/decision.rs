@@ -60,7 +60,7 @@ pub fn reduce(severities: impl IntoIterator<Item = Severity>) -> Decision {
         match sev {
             Severity::Block => return Decision::Reject,
             Severity::Warn => saw_warn = true,
-            Severity::Info => {}
+            Severity::Info => {},
         }
     }
     if saw_warn {

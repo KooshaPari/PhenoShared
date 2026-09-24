@@ -71,7 +71,9 @@ impl GerstnerWaveBank {
 
     /// Create a bank pre-populated with `waves`.
     pub fn from_waves(waves: Vec<GerstnerWave>) -> Self {
-        Self { waves }
+        Self {
+            waves,
+        }
     }
 
     /// Read-only view of the current wave set.

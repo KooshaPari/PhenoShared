@@ -1,18 +1,19 @@
 //! Criterion benchmarks for fabric-persist SQLite operations.
 
-use std::sync::Arc;
-use std::thread;
+use std::{sync::Arc, thread};
 
 use chrono::Utc;
 use criterion::{black_box, criterion_group, criterion_main, Criterion};
-use fabric_graph::model::{
-    CapabilityRef, Edge, EdgeId, IntentId, LinkMetrics, Node, NodeId, RoutePlan, RoutePlanId,
-    RouteStep, Topology, TopologyEpoch, TopologyMeta, TrustLevel,
+use fabric_graph::{
+    model::{
+        CapabilityRef, Edge, EdgeId, IntentId, LinkMetrics, Node, NodeId, RoutePlan, RoutePlanId,
+        RouteStep, Topology, TopologyEpoch, TopologyMeta, TrustLevel,
+    },
+    surface::{
+        CaptureDirection, LeaseState, SurfaceHandle, SurfaceLease, SurfaceProtocol, SurfaceSpec,
+    },
+    LocalityTier,
 };
-use fabric_graph::surface::{
-    CaptureDirection, LeaseState, SurfaceHandle, SurfaceLease, SurfaceProtocol, SurfaceSpec,
-};
-use fabric_graph::LocalityTier;
 use fabric_persist::Persist;
 
 // ---------------------------------------------------------------------------

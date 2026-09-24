@@ -59,26 +59,26 @@ pub fn build_argv(engine: &str, spec: &TaskSpec) -> Vec<String> {
             let mut argv = ForgeArgv::default().build_start(spec);
             argv.insert(0, bin);
             argv
-        }
+        },
         "codex" => {
             let bin = std::env::var("CODEX_BIN").unwrap_or_else(|_| "codex".into());
             let mut argv = CodexArgv::default().build_start(spec);
             argv.insert(0, bin);
             argv
-        }
+        },
         "claude" => {
             let bin = std::env::var("CLAUDE_BIN").unwrap_or_else(|_| "claude".into());
             let mut argv = ClaudeArgv::default().build_start(spec);
             argv.insert(0, bin);
             argv
-        }
+        },
         "agentapi" => {
             let endpoint = std::env::var("AGENTAPI_ENDPOINT")
                 .unwrap_or_else(|_| "http://localhost:3284".into());
             let mut argv = AgentApiArgv::new(endpoint, 3284).build_start(spec);
             argv.insert(0, "agentapi".into());
             argv
-        }
+        },
         other => vec![other.into()],
     }
 }

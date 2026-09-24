@@ -1,9 +1,8 @@
 //! Policy abstraction and trait definitions.
 
-use crate::context::EvaluationContext;
-use crate::result::PolicyResult;
-use crate::rule::Rule;
 use serde::{Deserialize, Serialize};
+
+use crate::{context::EvaluationContext, result::PolicyResult, rule::Rule};
 
 /// Trait for evaluable policies.
 ///

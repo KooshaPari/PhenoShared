@@ -3,9 +3,11 @@
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 
-use super::ids::{IntentId, NodeId};
-use super::nodes::Node;
-use super::types::TrustLevel;
+use super::{
+    ids::{IntentId, NodeId},
+    nodes::Node,
+    types::TrustLevel,
+};
 
 /// The desired execution context for a placed object.
 ///
@@ -79,9 +81,10 @@ impl IntentRequirements {
 
 #[cfg(test)]
 mod tests {
+    use fabric_capability::locality::LocalityTier;
+
     use super::*;
     use crate::model::ids::NodeId;
-    use fabric_capability::locality::LocalityTier;
 
     #[test]
     fn test_intent_requirements_matches_node() {

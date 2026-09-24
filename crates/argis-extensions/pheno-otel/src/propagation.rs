@@ -28,15 +28,14 @@
 //! # When to use
 //!
 //! - You need to extract/inject trace context across an HTTP/gRPC boundary.
-//! - You want a fleet-wide consistent propagation surface that matches the
-//!   W3C spec (so vendor SDKs, Jaeger, Tempo, Honeycomb, etc. interoperate).
+//! - You want a fleet-wide consistent propagation surface that matches the W3C spec (so vendor
+//!   SDKs, Jaeger, Tempo, Honeycomb, etc. interoperate).
 //!
 //! # When NOT to use
 //!
 //! - You only need in-process tracing → use `pheno-tracing` directly.
-//! - You need a custom vendor header (B3, X-Amzn-Trace-Id, etc.) → fork
-//!   this module or add a sibling `b3_propagator` and dispatch at the
-//!   adapter boundary.
+//! - You need a custom vendor header (B3, X-Amzn-Trace-Id, etc.) → fork this module or add a
+//!   sibling `b3_propagator` and dispatch at the adapter boundary.
 //!
 //! [w3c-tc]: <https://www.w3.org/TR/trace-context/>
 
@@ -183,17 +182,16 @@ impl W3CTraceContextPropagator {
     /// Public so callers that already have the header value (e.g. from a
     /// gRPC metadata slice) can reuse the parser without rebuilding a
     /// HashMap.
-    pub fn parse_traceparent(
-        &self,
-        value: &str,
-    ) -> Result<SpanContext, PropagationError> {
+    pub fn parse_traceparent(&self, value: &str) -> Result<SpanContext, PropagationError> {
         // Trim leading/trailing whitespace (HTTP allows OWS around field values).
         let value = value.trim();
 
         // Split on '-' — exactly four fields required.
         let parts: Vec<&str> = value.split('-').collect();
         if parts.len() != 4 {
-            return Err(PropagationError::Malformed("expected 4 dash-separated fields"));
+            return Err(PropagationError::Malformed(
+                "expected 4 dash-separated fields",
+            ));
         }
 
         let version_str = parts[0];
@@ -207,7 +205,7 @@ impl W3CTraceContextPropagator {
         }
         let version = u8::from_str_radix(version_str, 16)
             .map_err(|_| PropagationError::Malformed("version is not hex"))?;
-        if version == 0xFF {
+        if version == 0xff {
             return Err(PropagationError::InvalidVersion);
         }
 
@@ -235,7 +233,9 @@ impl W3CTraceContextPropagator {
 
         // Flags: exactly 2 hex chars.
         if flags_str.len() != 2 {
-            return Err(PropagationError::Malformed("trace-flags must be 2 hex chars"));
+            return Err(PropagationError::Malformed(
+                "trace-flags must be 2 hex chars",
+            ));
         }
         let trace_flags = u8::from_str_radix(flags_str, 16)
             .map_err(|_| PropagationError::Malformed("trace-flags is not hex"))?;
@@ -251,7 +251,9 @@ impl W3CTraceContextPropagator {
 
 /// True when `s` is non-empty and every char is in `[0-9a-f]`.
 fn is_lower_hex(s: &str) -> bool {
-    !s.is_empty() && s.bytes().all(|b| b.is_ascii_hexdigit() && !b.is_ascii_uppercase())
+    !s.is_empty()
+        && s.bytes()
+            .all(|b| b.is_ascii_hexdigit() && !b.is_ascii_uppercase())
 }
 
 #[cfg(test)]
@@ -351,7 +353,10 @@ mod tests {
     fn extract_rejects_wrong_field_count() {
         let prop = W3CTraceContextPropagator::new();
         let mut headers = HashMap::new();
-        headers.insert("traceparent".to_string(), "00-only-three-fields".to_string());
+        headers.insert(
+            "traceparent".to_string(),
+            "00-only-three-fields".to_string(),
+        );
         let err = prop.extract(&headers).unwrap_err();
         assert!(matches!(err, PropagationError::Malformed(_)));
     }
@@ -363,11 +368,7 @@ mod tests {
         let mut headers = HashMap::new();
         headers.insert(
             "traceparent".to_string(),
-            format!(
-                "00-{}-{}",
-                "g".repeat(32),
-                SAMPLE_SPAN_ID
-            ),
+            format!("00-{}-{}", "g".repeat(32), SAMPLE_SPAN_ID),
         );
         let err = prop.extract(&headers).unwrap_err();
         assert!(matches!(err, PropagationError::Malformed(_)));
@@ -441,7 +442,7 @@ mod tests {
             version: 0x00,
             trace_id: SAMPLE_TRACE_ID.to_string(),
             span_id: SAMPLE_SPAN_ID.to_string(),
-            trace_flags: 0xFE, // bit 0 clear
+            trace_flags: 0xfe, // bit 0 clear
         };
         assert!(!ctx.is_sampled());
     }

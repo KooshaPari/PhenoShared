@@ -7,10 +7,7 @@
 mod config;
 mod plan;
 
-pub use config::HttpConfig;
-
-use std::path::Path;
-use std::sync::Arc;
+use std::{path::Path, sync::Arc};
 
 use axum::{
     extract::{Query, State},
@@ -20,6 +17,7 @@ use axum::{
     routing::{get, post},
     Json, Router,
 };
+pub use config::HttpConfig;
 use engine_forge::ForgeEngine;
 use engine_spec::TaskSpec;
 use plan::{engine_catalog, enrich_plan_argv};
@@ -28,9 +26,11 @@ use serde::{Deserialize, Serialize};
 use store_file::FileStore;
 use store_sqlite::SqliteMailboxStore;
 use substrate_app::{DispatchPlanner, DispatchService, PlanRequest, SessionMode};
-use substrate_core::domain::{RoutingDecision, StructuredResult, Task};
-use substrate_core::mailbox_port::MailboxStore;
-use substrate_core::ports::{DispatchApi, RoutingPort};
+use substrate_core::{
+    domain::{RoutingDecision, StructuredResult, Task},
+    mailbox_port::MailboxStore,
+    ports::{DispatchApi, RoutingPort},
+};
 use transport_file::FileTransport;
 
 // ---------------------------------------------------------------------------

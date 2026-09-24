@@ -6,10 +6,11 @@
 //! 3. Environment variables
 //! 4. Defaults
 
-use crate::auth;
+use std::path::PathBuf;
 
 use serde::{Deserialize, Serialize};
-use std::path::PathBuf;
+
+use crate::auth;
 
 /// Top-level daemon configuration.
 #[derive(Debug, Clone, Deserialize, Serialize)]
@@ -253,8 +254,7 @@ impl DaemonConfig {
 
         // Ensure parent directory exists.
         if let Some(parent) = path.parent() {
-            std::fs::create_dir_all(parent)
-                .map_err(|e| ConfigError::Io(e.to_string()))?;
+            std::fs::create_dir_all(parent).map_err(|e| ConfigError::Io(e.to_string()))?;
         }
 
         std::fs::write(path, content).map_err(|e| ConfigError::Io(e.to_string()))
@@ -262,8 +262,8 @@ impl DaemonConfig {
 
     /// Load configuration from a TOML file.
     pub fn from_file(path: impl AsRef<std::path::Path>) -> Result<Self, ConfigError> {
-        let content = std::fs::read_to_string(path.as_ref())
-            .map_err(|e| ConfigError::Io(e.to_string()))?;
+        let content =
+            std::fs::read_to_string(path.as_ref()).map_err(|e| ConfigError::Io(e.to_string()))?;
         let config: DaemonConfig =
             toml::from_str(&content).map_err(|e| ConfigError::Parse(e.to_string()))?;
         Ok(config)

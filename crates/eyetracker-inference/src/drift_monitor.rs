@@ -4,10 +4,11 @@
 //! When drift exceeds a configurable threshold (>2° from baseline), a
 //! recalibration event is emitted. The user may dismiss once per session.
 
-use crate::multi_monitor::DisplayId;
-use crate::smoothing::GazeSmoother;
-use serde::{Deserialize, Serialize};
 use std::time::{Duration, Instant};
+
+use serde::{Deserialize, Serialize};
+
+use crate::{multi_monitor::DisplayId, smoothing::GazeSmoother};
 
 /// Drift severity level
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
@@ -339,8 +340,10 @@ mod tests {
 
 // Minimal local RNG to avoid adding a new dep just for tests
 mod fastrand {
-    use std::cell::Cell;
-    use std::time::{SystemTime, UNIX_EPOCH};
+    use std::{
+        cell::Cell,
+        time::{SystemTime, UNIX_EPOCH},
+    };
 
     thread_local! {
         static STATE: Cell<u64> = Cell::new({

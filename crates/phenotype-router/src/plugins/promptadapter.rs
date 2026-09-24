@@ -31,8 +31,10 @@
 //! OTel spans (above), and a `PREDICTIVE.md` next to the source (per
 //! ADR-047 4-criterion rule).
 
-use crate::decision::{Decision, Request, Response};
-use crate::sdk::{Capabilities, DecisionPlugin, Phase, PluginDecision, PluginError};
+use crate::{
+    decision::{Decision, Request, Response},
+    sdk::{Capabilities, DecisionPlugin, Phase, PluginDecision, PluginError},
+};
 
 /// Plugin name (kebab-case, fleet-wide stable).
 pub const PLUGIN_NAME: &str = "promptadapter";
@@ -256,7 +258,7 @@ impl DecisionPlugin for PromptAdapter {
                 ::tracing::debug!("no transform matched; passthrough");
                 PluginDecision::allow()
                     .with_annotation("phenotype.router.adapter.transform", "passthrough")
-            }
+            },
             Some(transform) => match transform.apply(req) {
                 Ok(rewritten) => {
                     let count = self.registry.len();
@@ -280,7 +282,7 @@ impl DecisionPlugin for PromptAdapter {
                         count.to_string(),
                     ));
                     d
-                }
+                },
                 Err(reason) => {
                     ::tracing::warn!(reason = %reason, "transform failed");
                     PluginDecision::deny(format!(
@@ -288,7 +290,7 @@ impl DecisionPlugin for PromptAdapter {
                         transform.name(),
                         reason
                     ))
-                }
+                },
             },
         };
 
@@ -464,8 +466,7 @@ mod tests {
         assert_eq!(d.rewritten_prompt.as_deref(), Some("test payload"));
         assert!(
             d.chosen_model.is_none(),
-            "chosen_model must be None after promptadapter transform, \
-             got {:?}",
+            "chosen_model must be None after promptadapter transform, got {:?}",
             d.chosen_model
         );
         // The transform name must appear in annotations.

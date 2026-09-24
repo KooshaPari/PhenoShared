@@ -7,10 +7,13 @@
 //!
 //! The planner is a thin layer on top of [`compile`](crate::compile::compile).
 
-use crate::compile::{compile, CompileError};
-use crate::model::{Intent, RoutePlan, Topology};
 use serde::{Deserialize, Serialize};
 use thiserror::Error;
+
+use crate::{
+    compile::{compile, CompileError},
+    model::{Intent, RoutePlan, Topology},
+};
 
 #[derive(Error, Debug)]
 pub enum PlanError {
@@ -71,10 +74,13 @@ pub fn plan_sequence(
 
 #[cfg(test)]
 mod tests {
-    use super::*;
-    use crate::builder::{IntentBuilder, TopologyBuilder};
-    use crate::model::Intent;
     use fabric_capability::locality::LocalityTier;
+
+    use super::*;
+    use crate::{
+        builder::{IntentBuilder, TopologyBuilder},
+        model::Intent,
+    };
 
     fn make_topology() -> Topology {
         TopologyBuilder::new()
@@ -86,9 +92,18 @@ mod tests {
 
     fn make_intents() -> Vec<Intent> {
         vec![
-            IntentBuilder::new().name("step-1").require_tag("rt-island").build(),
-            IntentBuilder::new().name("step-2").require_tag("rt-island").build(),
-            IntentBuilder::new().name("step-3").require_tag("rt-island").build(),
+            IntentBuilder::new()
+                .name("step-1")
+                .require_tag("rt-island")
+                .build(),
+            IntentBuilder::new()
+                .name("step-2")
+                .require_tag("rt-island")
+                .build(),
+            IntentBuilder::new()
+                .name("step-3")
+                .require_tag("rt-island")
+                .build(),
         ]
     }
 
@@ -112,7 +127,10 @@ mod tests {
     #[test]
     fn test_plan_sequence_one_intent() {
         let topo = make_topology();
-        let intents = vec![IntentBuilder::new().name("solo").require_tag("rt-island").build()];
+        let intents = vec![IntentBuilder::new()
+            .name("solo")
+            .require_tag("rt-island")
+            .build()];
         let multi = plan_sequence(&topo, "solo", &intents).expect("should plan");
         assert_eq!(multi.plans.len(), 1);
     }

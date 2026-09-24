@@ -8,8 +8,8 @@
 //!
 //! ## Modules
 //!
-//! - [`metrics`] — Prometheus registry, default counters/histograms,
-//!   axum `/metrics` router (behind `server` feature).
+//! - [`metrics`] — Prometheus registry, default counters/histograms, axum `/metrics` router (behind
+//!   `server` feature).
 //! - [`health`] — `/health` endpoint reporting process uptime.
 //! - [`slo`] — declarative [`slo::Slo`] type and [`slo::default_slos`].
 //!

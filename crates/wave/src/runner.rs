@@ -9,9 +9,11 @@ use std::sync::Arc;
 
 use a2a::task::Task as A2aTask;
 use store_sqlite::SqliteMailboxStore;
-use substrate_core::domain::TaskState;
-use substrate_core::mailbox_port::{MailboxStore, MailboxTaskState};
-use substrate_core::ports::EnginePort;
+use substrate_core::{
+    domain::TaskState,
+    mailbox_port::{MailboxStore, MailboxTaskState},
+    ports::EnginePort,
+};
 use tokio::sync::Semaphore;
 use uuid::Uuid;
 
@@ -246,7 +248,7 @@ where
                             pr_urls: vec![],
                             files_changed: 0,
                         }
-                    }
+                    },
                     Ok(session) => {
                         // Dump the conversation and extract the structured result.
                         let dump_result = engine.dump(&session.conv_id).await;
@@ -271,7 +273,7 @@ where
                                     LaneStatus::Failed("engine returned Failed".into())
                                 };
                                 (ls, r.pr_urls.clone())
-                            }
+                            },
                             Some(ref r) => {
                                 let message =
                                     format!("engine returned non-terminal state: {:?}", r.status);
@@ -281,7 +283,7 @@ where
                                     Some(&message),
                                 );
                                 (LaneStatus::Failed(message), r.pr_urls.clone())
-                            }
+                            },
                             None => {
                                 let message =
                                     "engine did not return a structured result".to_string();
@@ -291,7 +293,7 @@ where
                                     Some(&message),
                                 );
                                 (LaneStatus::Failed(message), vec![])
-                            }
+                            },
                         };
 
                         LaneResult {
@@ -300,7 +302,7 @@ where
                             pr_urls,
                             files_changed: 0,
                         }
-                    }
+                    },
                 }
                 // _permit dropped here, freeing the concurrency slot.
             });
@@ -382,7 +384,7 @@ pub fn task_depth_in_store(
                     task_id,
                     format!("task {current} not found in team {team_id}"),
                 ))
-            }
+            },
             Some(None) => break, // root
             Some(Some(pid)) => {
                 depth += 1;
@@ -393,7 +395,7 @@ pub fn task_depth_in_store(
                     ));
                 }
                 current = *pid;
-            }
+            },
         }
     }
     Ok(depth)

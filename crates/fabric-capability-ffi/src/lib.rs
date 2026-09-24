@@ -7,8 +7,9 @@
 //!
 //! All functions that accept or return raw pointers are `unsafe`.
 
-use fabric_capability::descriptor::CapabilityDescriptor;
-use fabric_capability::{sign, verify, SigningKey, VerificationKey};
+use fabric_capability::{
+    descriptor::CapabilityDescriptor, sign, verify, SigningKey, VerificationKey,
+};
 
 /// Error codes returned by FFI functions.
 #[repr(i32)]
@@ -63,7 +64,6 @@ pub unsafe extern "C" fn fabric_capability_free_string(ptr: *mut std::os::raw::c
 ///
 /// Caller owns the returned pointer. Free with `fabric_capability_free_string`.
 /// Returns `null` on error.
-//
 // Safety contract:
 // - `descriptor_json` must be a valid, null-terminated C string.
 #[no_mangle]
@@ -82,7 +82,7 @@ pub unsafe extern "C" fn fabric_capability_to_json(
         Ok(s) => {
             let cstring = std::ffi::CString::new(s).unwrap_or_default();
             cstring.into_raw()
-        }
+        },
         Err(_) => std::ptr::null_mut(),
     }
 }
@@ -91,7 +91,9 @@ pub unsafe extern "C" fn fabric_capability_to_json(
 ///
 /// The returned pointer is a static string — do not free it.
 #[no_mangle]
-pub extern "C" fn fabric_capability_error_message(code: FabricError) -> *const std::os::raw::c_char {
+pub extern "C" fn fabric_capability_error_message(
+    code: FabricError,
+) -> *const std::os::raw::c_char {
     let s: &'static str = match code {
         FabricError::Ok => "success",
         FabricError::Unsupported => "unsupported platform",
@@ -150,9 +152,11 @@ pub unsafe extern "C" fn fabric_capability_sign_json(
     match serde_json::to_string(&descriptor) {
         Ok(s) => {
             let cstring = std::ffi::CString::new(s).unwrap();
-            unsafe { *out_signed = cstring.into_raw(); }
+            unsafe {
+                *out_signed = cstring.into_raw();
+            }
             FabricError::Ok
-        }
+        },
         Err(_) => FabricError::Serde,
     }
 }
@@ -206,7 +210,9 @@ pub extern "C" fn fabric_capability_generate_key(out_key: *mut [u8; 32]) -> Fabr
     }
 
     let key = SigningKey::generate();
-    unsafe { *out_key = key.to_bytes(); }
+    unsafe {
+        *out_key = key.to_bytes();
+    }
     FabricError::Ok
 }
 
@@ -214,9 +220,7 @@ pub extern "C" fn fabric_capability_generate_key(out_key: *mut [u8; 32]) -> Fabr
 ///
 /// The returned pointer must be freed by the caller with `fabric_capability_free_string`.
 #[no_mangle]
-pub extern "C" fn fabric_capability_key_id(
-    key_bytes: *const u8,
-) -> *mut std::os::raw::c_char {
+pub extern "C" fn fabric_capability_key_id(key_bytes: *const u8) -> *mut std::os::raw::c_char {
     if key_bytes.is_null() {
         return std::ptr::null_mut();
     }

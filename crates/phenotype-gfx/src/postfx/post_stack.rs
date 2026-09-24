@@ -14,11 +14,15 @@
 
 use serde::{Deserialize, Serialize};
 
-use crate::postfx::bloom_pass::BloomConfig;
-use crate::postfx::ports::post_fx_pass::{PassDescriptor, PassQuality};
-use crate::postfx::ports::shader_availability::PostFxShaderAvailability;
-use crate::postfx::post_fx_pass_registry::PostFxPassRegistry;
-use crate::postfx::ssao_pass::SsaoConfig;
+use crate::postfx::{
+    bloom_pass::BloomConfig,
+    ports::{
+        post_fx_pass::{PassDescriptor, PassQuality},
+        shader_availability::PostFxShaderAvailability,
+    },
+    post_fx_pass_registry::PostFxPassRegistry,
+    ssao_pass::SsaoConfig,
+};
 
 /// All post-fx configuration. Engine-agnostic: carries only logical state,
 /// not Unity references.
@@ -259,9 +263,9 @@ impl Default for PostStack {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::postfx::ports::post_fx_pass::PassEffect;
-    use crate::postfx::ports::shader_availability::{
-        DefaultPostFxShaderAvailability, MapPostFxShaderAvailability,
+    use crate::postfx::ports::{
+        post_fx_pass::PassEffect,
+        shader_availability::{DefaultPostFxShaderAvailability, MapPostFxShaderAvailability},
     };
 
     #[test]

@@ -20,10 +20,10 @@
 //! # When NOT to use
 //!
 //! - You only need in-process tracing → use `pheno-tracing`.
-//! - You need Prometheus-format export → use `pheno-otel` + a Prometheus
-//!   scrape target via the `HttpExporter` adapter.
-//! - You need language-specific SDKs → use the `opentelemetry` crate family
-//!   directly (this crate is a thin fleet-port wrapper, not a full SDK).
+//! - You need Prometheus-format export → use `pheno-otel` + a Prometheus scrape target via the
+//!   `HttpExporter` adapter.
+//! - You need language-specific SDKs → use the `opentelemetry` crate family directly (this crate is
+//!   a thin fleet-port wrapper, not a full SDK).
 
 #![deny(missing_docs)]
 #![deny(unsafe_code)]

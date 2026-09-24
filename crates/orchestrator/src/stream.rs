@@ -1,7 +1,9 @@
 //! Minimal `Stream` adapter over a `Vec` for tests and pre-buffered parses.
 
-use std::pin::Pin;
-use std::task::{Context, Poll};
+use std::{
+    pin::Pin,
+    task::{Context, Poll},
+};
 
 use futures_core::Stream;
 

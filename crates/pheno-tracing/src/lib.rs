@@ -36,14 +36,28 @@ pub mod metrics;
 pub mod port;
 pub mod sampling;
 
-pub use error::TraceError;
-pub use metrics::{Counter, Histogram, OtlpEndpoint, RequestMetrics, ServiceName, SpanGuard, TracePortConfig};
-pub use port::{SpanId, SpanKind, TraceId, TraceOperation, TracePort, TraceResult};
-pub use sampling::{
-    AlwaysSampler, NeverSampler, ParentBasedSampler, RateLimitSampler, Sampler, SamplingDecision,
-    SpanContext, TailBasedSampler,
+// Re-export the `compat` module's macro family at the crate root for ergonomic
+// imports. Downstream consumers can either write
+//   use pheno_tracing::{info, span, instrument};
+// or
+//   use pheno_tracing::compat::{info, span, instrument};
+// Both resolve to the same upstream `tracing` macros. The re-export at the
+// crate root is the documented stable path; the `compat` module also exposes
+// them so adapters that need the version-detection helpers can keep imports
+// in one place.
+pub use compat::{
+    current_backend_kind, debug, error, info, instrument, span, trace, warn, CollectorAdapter,
+    SubscriberAdapter, SubscriberKind, TracingBackend, TracingVersion,
 };
-
+pub use error::TraceError;
+pub use metrics::{
+    Counter, Histogram, OtlpEndpoint, RequestMetrics, ServiceName, SpanGuard, TracePortConfig,
+};
+pub use port::{SpanId, SpanKind, TraceId, TraceOperation, TracePort, TraceResult};
+/// Adapter that always records every span (v12-04 spec name).
+pub use sampling::AlwaysSampler as AlwaysOnSampler;
+/// Adapter that always drops every span (v12-04 spec name).
+pub use sampling::NeverSampler as AlwaysOffSampler;
 // =============================================================================
 // Hexagonal port aliases (v12-04 — sampling-policy port surface)
 //
@@ -61,33 +75,14 @@ pub use sampling::{
 // spellings refer to the same trait / type, so existing consumers do not
 // need to migrate.
 // =============================================================================
-
 /// Hexagonal Port alias for [`sampling::Sampler`] (v12-04).
 ///
 /// `HexSamplingPort` is the spec-mandated name for the sampling-decision
 /// Port trait; it is a 1:1 alias of [`Sampler`] so either spelling works.
 pub use sampling::Sampler as HexSamplingPort;
-
 /// Hexagonal carrier alias for [`sampling::SpanContext`] (v12-04).
 pub use sampling::SpanContext as SamplingContext;
-
-/// Adapter that always records every span (v12-04 spec name).
-pub use sampling::AlwaysSampler as AlwaysOnSampler;
-
-/// Adapter that always drops every span (v12-04 spec name).
-pub use sampling::NeverSampler as AlwaysOffSampler;
-
-// Re-export the `compat` module's macro family at the crate root for ergonomic
-// imports. Downstream consumers can either write
-//   use pheno_tracing::{info, span, instrument};
-// or
-//   use pheno_tracing::compat::{info, span, instrument};
-// Both resolve to the same upstream `tracing` macros. The re-export at the
-// crate root is the documented stable path; the `compat` module also exposes
-// them so adapters that need the version-detection helpers can keep imports
-// in one place.
-pub use compat::{
-    current_backend_kind, CollectorAdapter, SubscriberAdapter, SubscriberKind, TracingBackend,
-    TracingVersion,
+pub use sampling::{
+    AlwaysSampler, NeverSampler, ParentBasedSampler, RateLimitSampler, Sampler, SamplingDecision,
+    SpanContext, TailBasedSampler,
 };
-pub use compat::{debug, error, info, instrument, span, trace, warn};

@@ -1,13 +1,14 @@
-use crate::cli::{ArgvCli, Mode, Provider};
 use anyhow::{bail, Result};
+
+use crate::cli::{ArgvCli, Mode, Provider};
 
 /// Resolve provider-native argv for a given request. Does not execute.
 pub fn build_argv(args: &ArgvCli) -> Result<Vec<String>> {
     match args.provider {
         Provider::Copilot if args.model.is_some() => {
             bail!("copilot is Haiku-locked; --model is not permitted");
-        }
-        _ => {}
+        },
+        _ => {},
     }
 
     if args.session != crate::cli::Session::Interactive && args.prompt.is_none() {

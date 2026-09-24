@@ -58,20 +58,23 @@ pub mod suppression;
 pub mod target;
 pub mod webhook;
 
-pub use alerts::{AlertPayload, AlertRule, AlertState, AlertStateTracker, Decision, MetaAlertRule, Severity, WebhookTarget};
-pub use dashboard::{load_and_summarize, DashboardSummary};
-pub use push::{push_to, run_pusher, PushError};
-pub use state_store::{AlertHistoryRow, StateStore, TrackerSnapshot, StateStoreError};
-pub use suppression::{is_suppressed, Day, WindowSpec};
+pub use alerts::{
+    AlertPayload, AlertRule, AlertState, AlertStateTracker, Decision, MetaAlertRule, Severity,
+    WebhookTarget,
+};
 pub use auth::BearerTokenCache;
 pub use aws_sigv4::{sign_request_headers, SignError};
 pub use config::{Config, SLO};
-pub use ring_buffer::{Bucket, RingBuffer};
-pub use target::Target;
-pub use webhook::{deliver_all, DeliveryReport};
+pub use dashboard::{load_and_summarize, DashboardSummary};
 pub use metrics::{Outcome, Sample};
 pub use poller::{Monitor, PollError, PollOutcome};
+pub use push::{push_to, run_pusher, PushError};
+pub use ring_buffer::{Bucket, RingBuffer};
 pub use slo::{burn_rate, BurnWindow};
+pub use state_store::{AlertHistoryRow, StateStore, StateStoreError, TrackerSnapshot};
+pub use suppression::{is_suppressed, Day, WindowSpec};
+pub use target::Target;
+pub use webhook::{deliver_all, DeliveryReport};
 
 /// Re-export of the crate version (matches `Cargo.toml`).
 pub const VERSION: &str = env!("CARGO_PKG_VERSION");

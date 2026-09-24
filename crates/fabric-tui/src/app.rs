@@ -1,8 +1,10 @@
 //! Application state, tab navigation, and data refresh logic.
 
-use std::io::{BufRead, BufReader, Write};
-use std::net::TcpStream;
-use std::time::{Duration, Instant};
+use std::{
+    io::{BufRead, BufReader, Write},
+    net::TcpStream,
+    time::{Duration, Instant},
+};
 
 use serde::Deserialize;
 
@@ -164,10 +166,10 @@ impl App {
                             .collect(),
                     };
                 }
-            }
+            },
             Err(e) => {
                 self.error_msg = Some(format!("DB error: {e}"));
-            }
+            },
         }
     }
 }
@@ -176,9 +178,11 @@ impl App {
 // Wire protocol helpers
 // ---------------------------------------------------------------------------
 
-fn fetch_daemon_json<T: for<'de> Deserialize<'de>>(addr: &str, msg_type: &str) -> Result<T, String> {
-    let mut stream =
-        TcpStream::connect(addr).map_err(|e| format!("connect failed: {e}"))?;
+fn fetch_daemon_json<T: for<'de> Deserialize<'de>>(
+    addr: &str,
+    msg_type: &str,
+) -> Result<T, String> {
+    let mut stream = TcpStream::connect(addr).map_err(|e| format!("connect failed: {e}"))?;
     stream.set_read_timeout(Some(Duration::from_secs(3))).ok();
     stream.set_write_timeout(Some(Duration::from_secs(3))).ok();
 

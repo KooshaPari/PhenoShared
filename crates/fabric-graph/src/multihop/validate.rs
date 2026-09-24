@@ -1,7 +1,8 @@
 //! Route plan validation for multi-hop routes.
 
-use crate::model::{RoutePlan, Topology};
 use thiserror::Error;
+
+use crate::model::{RoutePlan, Topology};
 
 /// Errors from multi-hop route validation.
 #[derive(Debug, Error)]
@@ -40,7 +41,10 @@ pub fn validate_multihop(
 
     // Epoch check.
     if plan.topology_epoch != topology.epoch {
-        return Err(RouteValidationError::EpochMismatch(plan.topology_epoch.0, topology.epoch.0));
+        return Err(RouteValidationError::EpochMismatch(
+            plan.topology_epoch.0,
+            topology.epoch.0,
+        ));
     }
 
     let mut visited = std::collections::HashSet::new();
@@ -61,7 +65,10 @@ pub fn validate_multihop(
             if let Some(ref edge_id) = step.via_edge {
                 if !topology.edges.contains_key(edge_id) {
                     let prev = &plan.steps[i - 1];
-                    return Err(RouteValidationError::MissingEdge(prev.node.0.clone(), step.node.0.clone()));
+                    return Err(RouteValidationError::MissingEdge(
+                        prev.node.0.clone(),
+                        step.node.0.clone(),
+                    ));
                 }
             }
             // Note: via_edge being None for i > 0 means same-machine hop
@@ -74,11 +81,14 @@ pub fn validate_multihop(
 
 #[cfg(test)]
 mod tests {
-    use super::*;
-    use crate::model::{Edge, EdgeId, Node, NodeId, RoutePlanId, TopologyEpoch, TopologyMeta};
-    use crate::LocalityTier;
     use chrono::Utc;
     use uuid::Uuid;
+
+    use super::*;
+    use crate::{
+        model::{Edge, EdgeId, Node, NodeId, RoutePlanId, TopologyEpoch, TopologyMeta},
+        LocalityTier,
+    };
 
     fn make_topo() -> Topology {
         let mut topo = Topology::new();

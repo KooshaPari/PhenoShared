@@ -1,7 +1,9 @@
 //! Lifecycle FSM tests: valid transitions accepted, invalid rejected.
 
-use substrate_core::domain::{Task, TaskState};
-use substrate_core::SubstrateError;
+use substrate_core::{
+    domain::{Task, TaskState},
+    SubstrateError,
+};
 
 #[test]
 fn happy_path_transitions_are_legal() {

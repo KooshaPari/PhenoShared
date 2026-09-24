@@ -5,8 +5,8 @@
 //! # Architecture (Hexagonal)
 //!
 //! * **Port**: [`RegistryPort`] trait — the only surface consumers depend on.
-//! * **Adapters**: [`InMemoryRegistry`] (default, sync-safe); further adapters
-//!   (Consul, etcd) can be added without changing the port.
+//! * **Adapters**: [`InMemoryRegistry`] (default, sync-safe); further adapters (Consul, etcd) can
+//!   be added without changing the port.
 //!
 //! # Quick start
 //!

@@ -6,10 +6,11 @@ use anyhow::bail;
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 
-use super::edges::Edge;
-use super::ids::{EdgeId, IntentId, NodeId, RoutePlanId, TopologyEpoch};
-use super::nodes::Node;
-
+use super::{
+    edges::Edge,
+    ids::{EdgeId, IntentId, NodeId, RoutePlanId, TopologyEpoch},
+    nodes::Node,
+};
 
 // ---------------------------------------------------------------------------
 // Route plan
@@ -240,8 +241,10 @@ impl ScoreBreakdown {
         capability_score: f64,
         trust_score: f64,
     ) -> Self {
-        let composite =
-            locality_score * 0.35 + latency_score * 0.30 + capability_score * 0.25 + trust_score * 0.10;
+        let composite = locality_score * 0.35
+            + latency_score * 0.30
+            + capability_score * 0.25
+            + trust_score * 0.10;
         Self {
             locality_score,
             latency_score,
@@ -266,9 +269,10 @@ pub struct Score {
 
 #[cfg(test)]
 mod tests {
+    use fabric_capability::locality::LocalityTier;
+
     use super::*;
     use crate::model::ids::{EdgeId, IntentId, NodeId, RoutePlanId, TopologyEpoch};
-    use fabric_capability::locality::LocalityTier;
 
     #[test]
     fn test_route_plan_validate() {

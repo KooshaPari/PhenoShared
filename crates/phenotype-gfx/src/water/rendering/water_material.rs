@@ -10,7 +10,8 @@ use super::water_shader::WaterShader;
 /// material lives in the engine; this is a stable identity for the registry.
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 #[deprecated(
-    note = "WaterMaterial is a name-only pass-through. Use the engine-side material at render time."
+    note = "WaterMaterial is a name-only pass-through. Use the engine-side material at render \
+            time."
 )]
 pub struct WaterMaterial {
     id: u64,

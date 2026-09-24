@@ -8,14 +8,18 @@
 #![forbid(unsafe_code)]
 #![warn(missing_docs)]
 
-use std::fs::{self, OpenOptions};
-use std::io::Write;
-use std::path::{Path, PathBuf};
+use std::{
+    fs::{self, OpenOptions},
+    io::Write,
+    path::{Path, PathBuf},
+};
 
 use async_trait::async_trait;
-use substrate_core::domain::{Mailbox, Message};
-use substrate_core::error::{Result, SubstrateError};
-use substrate_core::ports::TransportPort;
+use substrate_core::{
+    domain::{Mailbox, Message},
+    error::{Result, SubstrateError},
+    ports::TransportPort,
+};
 use uuid::Uuid;
 
 /// File-backed transport rooted at a directory.
@@ -29,7 +33,9 @@ impl FileTransport {
     pub fn new(root: impl Into<PathBuf>) -> Result<Self> {
         let root = root.into();
         fs::create_dir_all(&root).map_err(io)?;
-        Ok(FileTransport { root })
+        Ok(FileTransport {
+            root,
+        })
     }
 
     fn mailbox_path(&self, owner: &str) -> PathBuf {
@@ -90,7 +96,7 @@ impl TransportPort for FileTransport {
             Ok(mut f) => {
                 let _ = write!(f, "claimed");
                 Ok(msg)
-            }
+            },
             Err(e) if e.kind() == std::io::ErrorKind::AlreadyExists => Err(
                 SubstrateError::ClaimConflict(format!("message {message_id} already claimed")),
             ),

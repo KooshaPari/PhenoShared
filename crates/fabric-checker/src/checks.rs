@@ -7,10 +7,12 @@
 //! Pure = no I/O, no side effects, deterministic. The `Checker` composes these
 //! into a single top-level `Decision`.
 
-use crate::decision::{CheckOutcome, ReasonCode};
-use crate::manifest::CheckerManifest;
-
 use fabric_capability::descriptor::CapabilityDescriptor;
+
+use crate::{
+    decision::{CheckOutcome, ReasonCode},
+    manifest::CheckerManifest,
+};
 
 // ---------------------------------------------------------------------------
 // Aggregate capability accessors (so we don't depend on private fields)
@@ -29,12 +31,10 @@ fn core_count(caps: &CapabilityDescriptor) -> u32 {
 }
 
 fn storage_total_bytes(caps: &CapabilityDescriptor) -> Option<u64> {
-    caps.capabilities.storage.as_ref().map(|s| {
-        s.devices
-            .iter()
-            .map(|d| d.size_bytes)
-            .sum::<u64>()
-    })
+    caps.capabilities
+        .storage
+        .as_ref()
+        .map(|s| s.devices.iter().map(|d| d.size_bytes).sum::<u64>())
 }
 
 // ---------------------------------------------------------------------------
@@ -46,10 +46,8 @@ pub fn check_memory_sufficient(
     descriptor: &CapabilityDescriptor,
     manifest: &CheckerManifest,
 ) -> Result<(), CheckOutcome> {
-    let host_mem =
-        mem_total_bytes(descriptor).ok_or_else(|| {
-            CheckOutcome::hard(ReasonCode::MemoryUnknown, "host memory unknown")
-        })?;
+    let host_mem = mem_total_bytes(descriptor)
+        .ok_or_else(|| CheckOutcome::hard(ReasonCode::MemoryUnknown, "host memory unknown"))?;
     let req_mem = manifest.memory_bytes;
     if host_mem < req_mem {
         return Err(CheckOutcome::hard(
@@ -85,10 +83,8 @@ pub fn check_storage_sufficient(
     descriptor: &CapabilityDescriptor,
     manifest: &CheckerManifest,
 ) -> Result<(), CheckOutcome> {
-    let host_storage =
-        storage_total_bytes(descriptor).ok_or_else(|| {
-            CheckOutcome::soft(ReasonCode::StorageUnknown, "host storage unknown")
-        })?;
+    let host_storage = storage_total_bytes(descriptor)
+        .ok_or_else(|| CheckOutcome::soft(ReasonCode::StorageUnknown, "host storage unknown"))?;
     if host_storage < manifest.storage_bytes {
         return Err(CheckOutcome::hard(
             ReasonCode::StorageInsufficient,
@@ -157,7 +153,7 @@ pub fn check_audio_capable(
                 ReasonCode::CaptureRequiredButMissing,
                 "manifest requires audio but host has no audio backend",
             ));
-        }
+        },
         Some(audio) => {
             if audio.sinks.is_empty() && audio.sources.is_empty() {
                 return Err(CheckOutcome::hard(
@@ -165,7 +161,7 @@ pub fn check_audio_capable(
                     "manifest requires audio but host has no sinks or sources",
                 ));
             }
-        }
+        },
     }
     Ok(())
 }
@@ -186,13 +182,13 @@ pub fn check_network_reachable(
                 ReasonCode::BandwidthInsufficient,
                 "manifest requires network but host has no network interfaces",
             ));
-        }
+        },
         Some(net) if net.interfaces.is_empty() => {
             return Err(CheckOutcome::hard(
                 ReasonCode::BandwidthInsufficient,
                 "manifest requires network but host has no network interfaces",
             ));
-        }
+        },
         Some(_) => {
             // Host has at least one interface. Soft advisory since we can't
             // verify actual reachability.
@@ -200,7 +196,7 @@ pub fn check_network_reachable(
                 ReasonCode::BandwidthInsufficient,
                 "cannot verify network reachability at check time; host has at least one interface",
             ));
-        }
+        },
     }
 }
 
@@ -219,14 +215,14 @@ pub fn check_display_available(
                 ReasonCode::DisplayRequiredButMissing,
                 "manifest requires a display but host has none",
             ));
-        }
+        },
         Some(display) if display.displays.is_empty() => {
             return Err(CheckOutcome::hard(
                 ReasonCode::DisplayRequiredButMissing,
                 "manifest requires a display but host display list is empty",
             ));
-        }
-        Some(_) => {}
+        },
+        Some(_) => {},
     }
     Ok(())
 }
@@ -353,7 +349,7 @@ pub fn check_audio_io(
                 ReasonCode::CaptureRequiredButMissing,
                 "audio required but host has no audio backend",
             ));
-        }
+        },
         Some(audio) => {
             if audio.sinks.is_empty() && audio.sources.is_empty() {
                 return Err(CheckOutcome::soft(
@@ -361,7 +357,7 @@ pub fn check_audio_io(
                     "audio required but host has no sinks or sources",
                 ));
             }
-        }
+        },
     }
     Ok(())
 }
@@ -380,7 +376,7 @@ pub fn check_storage_io(
                 ReasonCode::StorageUnknown,
                 "storage required but host storage info unavailable",
             ));
-        }
+        },
         Some(storage) => {
             if storage.devices.is_empty() {
                 return Err(CheckOutcome::soft(
@@ -388,7 +384,7 @@ pub fn check_storage_io(
                     "storage required but host has no storage devices",
                 ));
             }
-        }
+        },
     }
     Ok(())
 }

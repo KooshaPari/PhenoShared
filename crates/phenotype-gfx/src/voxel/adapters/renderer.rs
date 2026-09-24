@@ -7,8 +7,10 @@
 //! renderer can be Bevy, Godot, headless, …; the counters work for all of
 //! them.
 
-use crate::voxel::mesh::MeshBuffer;
-use crate::voxel::ports::renderer::{Camera, FrameId, RenderResult, RendererPort};
+use crate::voxel::{
+    mesh::MeshBuffer,
+    ports::renderer::{Camera, FrameId, RenderResult, RendererPort},
+};
 
 /// Renderer decorator that tracks how many `begin_frame`,
 /// `submit_chunk`, and `end_frame` calls have been forwarded to the inner

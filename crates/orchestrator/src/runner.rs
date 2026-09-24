@@ -5,14 +5,15 @@
 //! failures) because retries are already handled by the upstream dispatchers
 //! (`forge`, `codex`). We surface failures loud and aggregated.
 
-use std::sync::Arc;
-use std::time::Instant;
+use std::{sync::Arc, time::Instant};
 
 use serde::{Deserialize, Serialize};
 
-use crate::dispatcher::Dispatcher;
-use crate::error::{OrchestratorError, Result};
-use crate::wave::WaveConfig;
+use crate::{
+    dispatcher::Dispatcher,
+    error::{OrchestratorError, Result},
+    wave::WaveConfig,
+};
 
 /// What a single dispatch invocation returned to the runner.
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -103,7 +104,7 @@ pub async fn run_wave(config: WaveConfig, dispatcher: Arc<dyn Dispatcher>) -> Re
                 Ok(o) => o,
                 Err(e) => {
                     DispatchOutcome::failure(start.elapsed().as_millis() as u64, 0.0, e.to_string())
-                }
+                },
             };
             (task, outcome)
         }));
@@ -129,13 +130,13 @@ pub async fn run_wave(config: WaveConfig, dispatcher: Arc<dyn Dispatcher>) -> Re
                         reason,
                     });
                 }
-            }
+            },
             Err(e) => {
                 return Err(OrchestratorError::Dispatch {
                     task: "<join>".into(),
                     message: format!("join error: {e}"),
                 });
-            }
+            },
         }
     }
 
@@ -152,10 +153,13 @@ pub async fn run_wave(config: WaveConfig, dispatcher: Arc<dyn Dispatcher>) -> Re
 
 #[cfg(test)]
 mod tests {
-    use super::*;
-    use crate::dispatcher::MockDispatcher;
-    use crate::wave::{DispatcherKind, Expectation, ExpectationKind, TaskSpec};
     use std::sync::Arc;
+
+    use super::*;
+    use crate::{
+        dispatcher::MockDispatcher,
+        wave::{DispatcherKind, Expectation, ExpectationKind, TaskSpec},
+    };
 
     fn make_cfg(name: &str, tasks: Vec<TaskSpec>) -> WaveConfig {
         WaveConfig {

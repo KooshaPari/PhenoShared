@@ -6,17 +6,14 @@
 //! retry-safe; partial-success recovery is documented in
 //! `docs/governance/oci-acquire-hook-chain.md`.
 
+use std::{path::PathBuf, str::FromStr, time::Duration};
+
 use anyhow::{Context, Result, anyhow};
 use chrono::Utc;
 use clap::Parser;
 use serde::{Deserialize, Serialize};
-use std::path::PathBuf;
-use std::str::FromStr;
-use std::time::Duration;
 use thiserror::Error;
-use tokio::io::AsyncWriteExt;
-use tokio::net::TcpStream;
-use tokio::process::Command;
+use tokio::{io::AsyncWriteExt, net::TcpStream, process::Command};
 use tracing::{error, info, warn};
 use tracing_subscriber::EnvFilter;
 
@@ -160,27 +157,42 @@ impl ProvisionError {
     /// Return a human-readable recovery suggestion.
     pub fn recovery_hint(&self) -> &'static str {
         match self {
-            Self::ReadInstance { .. } => {
-                "Verify oci-instance.json exists and is valid JSON. Re-run oci-lottery to regenerate."
-            }
-            Self::SshTimeout { .. } => {
-                "Check the node is booting and reachable. Verify security lists allow SSH (port 22). Wait and re-run this tool."
-            }
-            Self::AnsibleFailed { .. } => {
-                "Check node SSH access and ansible syntax. Re-run: `cargo run -p oci-post-acquire -- --dry-run` first."
-            }
-            Self::DnsFailed { .. } => {
-                "Verify CF_API_TOKEN/CF_TOKEN_FILE is valid and zone id is correct. Manual DNS upsert may be needed."
-            }
-            Self::MeshCommitFailed { .. } => {
-                "Check git repo access. Manual git commit of compute-mesh-state.md may be needed."
-            }
-            Self::NotifyFailed { .. } => {
-                "Notification is best-effort; this does not block provisioning. Check agent-imessage CLI."
-            }
-            Self::HookFailed { .. } => {
-                "Check hooks.d scripts for errors. A failing hook does not abort earlier steps."
-            }
+            Self::ReadInstance {
+                ..
+            } => {
+                "Verify oci-instance.json exists and is valid JSON. Re-run oci-lottery to \
+                 regenerate."
+            },
+            Self::SshTimeout {
+                ..
+            } => {
+                "Check the node is booting and reachable. Verify security lists allow SSH (port \
+                 22). Wait and re-run this tool."
+            },
+            Self::AnsibleFailed {
+                ..
+            } => {
+                "Check node SSH access and ansible syntax. Re-run: `cargo run -p oci-post-acquire \
+                 -- --dry-run` first."
+            },
+            Self::DnsFailed {
+                ..
+            } => {
+                "Verify CF_API_TOKEN/CF_TOKEN_FILE is valid and zone id is correct. Manual DNS \
+                 upsert may be needed."
+            },
+            Self::MeshCommitFailed {
+                ..
+            } => "Check git repo access. Manual git commit of compute-mesh-state.md may be needed.",
+            Self::NotifyFailed {
+                ..
+            } => {
+                "Notification is best-effort; this does not block provisioning. Check \
+                 agent-imessage CLI."
+            },
+            Self::HookFailed {
+                ..
+            } => "Check hooks.d scripts for errors. A failing hook does not abort earlier steps.",
         }
     }
 }
@@ -304,7 +316,7 @@ async fn wait_for_ssh(host: &str, port: u16, max_secs: u64) -> Result<()> {
             Ok(Ok(_)) => {
                 info!(attempt, "SSH port open on {addr}");
                 return Ok(());
-            }
+            },
             _ => {
                 if std::time::Instant::now() >= deadline {
                     return Err(anyhow!(
@@ -312,7 +324,7 @@ async fn wait_for_ssh(host: &str, port: u16, max_secs: u64) -> Result<()> {
                     ));
                 }
                 tokio::time::sleep(Duration::from_secs(2)).await;
-            }
+            },
         }
     }
 }
@@ -364,7 +376,8 @@ async fn notify(inst: &InstanceFile) -> Result<()> {
         .open(&path)
         .await?;
     let line = format!(
-        "# OCI Acquired {date}\n\n- ocid: {}\n- region: {}\n- ad: {}\n- ip: {}\n- acquired_at: {}\n",
+        "# OCI Acquired {date}\n\n- ocid: {}\n- region: {}\n- ad: {}\n- ip: {}\n- acquired_at: \
+         {}\n",
         inst.instance_ocid, inst.region, inst.ad, inst.public_ip, inst.acquired_at
     );
     f.write_all(line.as_bytes()).await?;

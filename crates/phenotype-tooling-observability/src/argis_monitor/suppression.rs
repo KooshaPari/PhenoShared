@@ -2,10 +2,10 @@
 //!
 //! Two flavors of windows are supported:
 //!
-//!   1. **Recurring** (time-of-day + days-of-week): e.g. "every weekday
-//!      22:00-06:00, suppress alerts for the gateway target".
-//!   2. **One-shot** (absolute timestamps): e.g. "2026-07-15T02:00:00Z to
-//!      2026-07-15T04:00:00Z, suppress everything".
+//!   1. **Recurring** (time-of-day + days-of-week): e.g. "every weekday 22:00-06:00, suppress
+//!      alerts for the gateway target".
+//!   2. **One-shot** (absolute timestamps): e.g. "2026-07-15T02:00:00Z to 2026-07-15T04:00:00Z,
+//!      suppress everything".
 //!
 //! Suppression is checked BEFORE webhook delivery. When a Fire decision is
 //! suppressed, the alert state machine still transitions (so we still see
@@ -23,7 +23,13 @@ use serde::{Deserialize, Serialize};
 #[derive(Debug, Clone, Copy, Serialize, Deserialize, PartialEq, Eq, Hash)]
 #[serde(rename_all = "lowercase")]
 pub enum Day {
-    Mon, Tue, Wed, Thu, Fri, Sat, Sun,
+    Mon,
+    Tue,
+    Wed,
+    Thu,
+    Fri,
+    Sat,
+    Sun,
 }
 
 impl Day {
@@ -84,9 +90,15 @@ pub fn is_suppressed(
     now_unix: u64,
 ) -> Option<String> {
     for w in windows {
-        if !window_active_now(w, now_unix) { continue; }
-        if !w.targets.is_empty() && !w.targets.iter().any(|t| t == target_name) { continue; }
-        if !w.rules.is_empty() && !w.rules.iter().any(|r| r == rule_name) { continue; }
+        if !window_active_now(w, now_unix) {
+            continue;
+        }
+        if !w.targets.is_empty() && !w.targets.iter().any(|t| t == target_name) {
+            continue;
+        }
+        if !w.rules.is_empty() && !w.rules.iter().any(|r| r == rule_name) {
+            continue;
+        }
         return Some(w.name.clone());
     }
     None
@@ -126,11 +138,17 @@ fn one_shot_active(w: &WindowSpec, now_unix: u64) -> bool {
 
 fn recurring_active(w: &WindowSpec, now_unix: u64) -> bool {
     let start_hhmm = match w.start_time.as_deref() {
-        Some(s) => match parse_hhmm(s) { Some(p) => p, None => return false },
+        Some(s) => match parse_hhmm(s) {
+            Some(p) => p,
+            None => return false,
+        },
         None => (0, 0),
     };
     let end_hhmm = match w.end_time.as_deref() {
-        Some(s) => match parse_hhmm(s) { Some(p) => p, None => return false },
+        Some(s) => match parse_hhmm(s) {
+            Some(p) => p,
+            None => return false,
+        },
         None => (23, 59),
     };
     // Convert now_unix to local-time NaiveDateTime. We use UTC for simplicity
@@ -142,7 +160,9 @@ fn recurring_active(w: &WindowSpec, now_unix: u64) -> bool {
     // Day filter (empty = every day).
     if !w.days.is_empty() {
         let today = Day::from_chrono(dt.weekday());
-        if !w.days.contains(&today) { return false; }
+        if !w.days.contains(&today) {
+            return false;
+        }
     }
     let (hh, mm) = (dt.hour(), dt.minute());
     let now_secs = hh * 3600 + mm * 60;
@@ -160,7 +180,9 @@ fn parse_hhmm(s: &str) -> Option<(u32, u32)> {
     let mut parts = s.split(':');
     let hh: u32 = parts.next()?.parse().ok()?;
     let mm: u32 = parts.next()?.parse().ok()?;
-    if hh > 23 || mm > 59 { return None; }
+    if hh > 23 || mm > 59 {
+        return None;
+    }
     Some((hh, mm))
 }
 
@@ -169,19 +191,25 @@ fn unix_to_naive_utc(unix: u64) -> Option<NaiveDateTime> {
     Some(dt_utc.naive_utc())
 }
 
-/// Helper for tests: build a fixed `now_unix` from a (year, month, day, hour, minute, second) UTC tuple.
+/// Helper for tests: build a fixed `now_unix` from a (year, month, day, hour, minute, second) UTC
+/// tuple.
 pub fn unix_from_utc(year: i32, month: u32, day: u32, hh: u32, mm: u32, ss: u32) -> u64 {
     chrono::DateTime::<chrono::Utc>::from_naive_utc_and_offset(
-        chrono::NaiveDate::from_ymd_opt(year, month, day).unwrap()
-            .and_hms_opt(hh, mm, ss).unwrap(),
+        chrono::NaiveDate::from_ymd_opt(year, month, day)
+            .unwrap()
+            .and_hms_opt(hh, mm, ss)
+            .unwrap(),
         chrono::Utc,
-    ).timestamp() as u64
+    )
+    .timestamp() as u64
 }
 
 /// Quick example: returns how many seconds the test caller should advance to
 /// skip past a recurring window. Convenience only — the matcher is the API.
 pub fn _active_for_at_least(window: &WindowSpec, now_unix: u64) -> Option<Duration> {
-    if !window_active_now(window, now_unix) { return None; }
+    if !window_active_now(window, now_unix) {
+        return None;
+    }
     Some(Duration::from_secs(1))
 }
 
@@ -191,7 +219,17 @@ mod tests {
 
     #[test]
     fn empty_window_is_inactive() {
-        let w = WindowSpec { name: "x".into(), start_time: None, end_time: None, days: vec![], start_at: None, end_at: None, targets: vec![], rules: vec![], reason: None };
+        let w = WindowSpec {
+            name: "x".into(),
+            start_time: None,
+            end_time: None,
+            days: vec![],
+            start_at: None,
+            end_at: None,
+            targets: vec![],
+            rules: vec![],
+            reason: None,
+        };
         assert!(!window_active_now(&w, 1_700_000_000));
         assert!(is_suppressed(&[w], "any", "any", 1_700_000_000).is_none());
     }
@@ -203,13 +241,18 @@ mod tests {
             start_time: Some("09:00".into()),
             end_time: Some("17:00".into()),
             days: vec![],
-            start_at: None, end_at: None,
-            targets: vec![], rules: vec![],
+            start_at: None,
+            end_at: None,
+            targets: vec![],
+            rules: vec![],
             reason: None,
         };
         // 2026-07-06 is a Monday. Pick 12:00 UTC -> inside 09-17.
         let t = unix_from_utc(2026, 7, 6, 12, 0, 0);
-        assert_eq!(is_suppressed(&[w.clone()], "any", "any", t), Some("daytime".into()));
+        assert_eq!(
+            is_suppressed(&[w.clone()], "any", "any", t),
+            Some("daytime".into())
+        );
         // 18:00 -> outside.
         let t = unix_from_utc(2026, 7, 6, 18, 0, 0);
         assert!(is_suppressed(&[w], "any", "any", t).is_none());
@@ -222,14 +265,28 @@ mod tests {
             start_time: Some("22:00".into()),
             end_time: Some("06:00".into()),
             days: vec![],
-            start_at: None, end_at: None,
-            targets: vec![], rules: vec![],
+            start_at: None,
+            end_at: None,
+            targets: vec![],
+            rules: vec![],
             reason: None,
         };
         // 23:00 -> inside (wraps).
-        assert!(is_suppressed(&[w.clone()], "any", "any", unix_from_utc(2026, 7, 6, 23, 0, 0)).is_some());
+        assert!(is_suppressed(
+            &[w.clone()],
+            "any",
+            "any",
+            unix_from_utc(2026, 7, 6, 23, 0, 0)
+        )
+        .is_some());
         // 02:00 -> inside (other side).
-        assert!(is_suppressed(&[w.clone()], "any", "any", unix_from_utc(2026, 7, 7, 2, 0, 0)).is_some());
+        assert!(is_suppressed(
+            &[w.clone()],
+            "any",
+            "any",
+            unix_from_utc(2026, 7, 7, 2, 0, 0)
+        )
+        .is_some());
         // 12:00 -> outside.
         assert!(is_suppressed(&[w], "any", "any", unix_from_utc(2026, 7, 6, 12, 0, 0)).is_none());
     }
@@ -241,12 +298,20 @@ mod tests {
             start_time: Some("22:00".into()),
             end_time: Some("06:00".into()),
             days: vec![Day::Mon, Day::Tue, Day::Wed, Day::Thu, Day::Fri],
-            start_at: None, end_at: None,
-            targets: vec![], rules: vec![],
+            start_at: None,
+            end_at: None,
+            targets: vec![],
+            rules: vec![],
             reason: None,
         };
         // 2026-07-06 Monday 23:00 -> inside (weekday + time).
-        assert!(is_suppressed(&[w.clone()], "any", "any", unix_from_utc(2026, 7, 6, 23, 0, 0)).is_some());
+        assert!(is_suppressed(
+            &[w.clone()],
+            "any",
+            "any",
+            unix_from_utc(2026, 7, 6, 23, 0, 0)
+        )
+        .is_some());
         // 2026-07-11 Saturday 23:00 -> outside (weekend).
         assert!(is_suppressed(&[w], "any", "any", unix_from_utc(2026, 7, 11, 23, 0, 0)).is_none());
     }
@@ -257,13 +322,34 @@ mod tests {
             name: "maintenance".into(),
             start_at: Some("2026-07-15T02:00:00Z".into()),
             end_at: Some("2026-07-15T04:00:00Z".into()),
-            start_time: None, end_time: None, days: vec![],
-            targets: vec![], rules: vec![],
+            start_time: None,
+            end_time: None,
+            days: vec![],
+            targets: vec![],
+            rules: vec![],
             reason: Some("DB upgrade".into()),
         };
-        assert!(is_suppressed(&[w.clone()], "any", "any", unix_from_utc(2026, 7, 15, 3, 0, 0)).is_some());
-        assert!(is_suppressed(&[w.clone()], "any", "any", unix_from_utc(2026, 7, 15, 1, 0, 0)).is_none());
-        assert!(is_suppressed(&[w.clone()], "any", "any", unix_from_utc(2026, 7, 15, 5, 0, 0)).is_none());
+        assert!(is_suppressed(
+            &[w.clone()],
+            "any",
+            "any",
+            unix_from_utc(2026, 7, 15, 3, 0, 0)
+        )
+        .is_some());
+        assert!(is_suppressed(
+            &[w.clone()],
+            "any",
+            "any",
+            unix_from_utc(2026, 7, 15, 1, 0, 0)
+        )
+        .is_none());
+        assert!(is_suppressed(
+            &[w.clone()],
+            "any",
+            "any",
+            unix_from_utc(2026, 7, 15, 5, 0, 0)
+        )
+        .is_none());
     }
 
     #[test]
@@ -272,7 +358,9 @@ mod tests {
             name: "gateway-only".into(),
             start_time: Some("00:00".into()),
             end_time: Some("23:59".into()),
-            days: vec![], start_at: None, end_at: None,
+            days: vec![],
+            start_at: None,
+            end_at: None,
             targets: vec!["gateway".into(), "openai".into()],
             rules: vec!["fast_burn".into()],
             reason: None,
@@ -292,20 +380,34 @@ mod tests {
             name: "broad".into(),
             start_time: Some("00:00".into()),
             end_time: Some("23:59".into()),
-            days: vec![], start_at: None, end_at: None,
-            targets: vec![], rules: vec![], reason: None,
+            days: vec![],
+            start_at: None,
+            end_at: None,
+            targets: vec![],
+            rules: vec![],
+            reason: None,
         };
         let w2 = WindowSpec {
             name: "specific".into(),
             start_time: Some("00:00".into()),
             end_time: Some("23:59".into()),
-            days: vec![], start_at: None, end_at: None,
-            targets: vec![], rules: vec![], reason: None,
+            days: vec![],
+            start_at: None,
+            end_at: None,
+            targets: vec![],
+            rules: vec![],
+            reason: None,
         };
         // Either matches; first in the list wins.
         let t = unix_from_utc(2026, 7, 6, 12, 0, 0);
-        assert_eq!(is_suppressed(&[w1.clone(), w2.clone()], "x", "y", t), Some("broad".into()));
-        assert_eq!(is_suppressed(&[w2, w1], "x", "y", t), Some("specific".into()));
+        assert_eq!(
+            is_suppressed(&[w1.clone(), w2.clone()], "x", "y", t),
+            Some("broad".into())
+        );
+        assert_eq!(
+            is_suppressed(&[w2, w1], "x", "y", t),
+            Some("specific".into())
+        );
     }
 
     #[test]
@@ -314,8 +416,12 @@ mod tests {
             name: "bad".into(),
             start_time: Some("not-a-time".into()),
             end_time: Some("06:00".into()),
-            days: vec![], start_at: None, end_at: None,
-            targets: vec![], rules: vec![], reason: None,
+            days: vec![],
+            start_at: None,
+            end_at: None,
+            targets: vec![],
+            rules: vec![],
+            reason: None,
         };
         assert!(!window_active_now(&w, 1_700_000_000));
     }

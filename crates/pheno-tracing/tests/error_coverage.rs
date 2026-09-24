@@ -129,8 +129,14 @@ fn trace_error_empty_inner_string_is_valid() {
     // Must not panic; Display must produce a non-empty string (the prefix alone).
     let s1 = flush_empty.to_string();
     let s2 = lock_empty.to_string();
-    assert!(!s1.is_empty(), "Display must not produce empty output for Flush(\"\")");
-    assert!(!s2.is_empty(), "Display must not produce empty output for LockPoisoned(\"\")");
+    assert!(
+        !s1.is_empty(),
+        "Display must not produce empty output for Flush(\"\")"
+    );
+    assert!(
+        !s2.is_empty(),
+        "Display must not produce empty output for LockPoisoned(\"\")"
+    );
 }
 
 // =============================================================================
@@ -162,7 +168,10 @@ fn port_trace_error_flush_failed_display() {
 
 #[test]
 fn port_trace_error_cardinality_cap_exceeded_display() {
-    let err = PortTraceError::CardinalityCapExceeded { limit: 1000, current: 1001 };
+    let err = PortTraceError::CardinalityCapExceeded {
+        limit: 1000,
+        current: 1001,
+    };
     let s = err.to_string();
     assert!(s.contains("cardinality cap exceeded"), "got: {s}");
     assert!(s.contains("1000"), "expected limit in display; got: {s}");
@@ -182,11 +191,17 @@ fn port_trace_error_debug_output_is_non_empty() {
     for err in [
         PortTraceError::BufferPoisoned("a".into()),
         PortTraceError::FlushFailed("b".into()),
-        PortTraceError::CardinalityCapExceeded { limit: 10, current: 11 },
+        PortTraceError::CardinalityCapExceeded {
+            limit: 10,
+            current: 11,
+        },
         PortTraceError::BackendExport("c".into()),
     ] {
         let s = format!("{err:?}");
-        assert!(!s.is_empty(), "Debug output must not be empty; variant: {s}");
+        assert!(
+            !s.is_empty(),
+            "Debug output must not be empty; variant: {s}"
+        );
     }
 }
 
@@ -196,13 +211,17 @@ fn port_trace_error_all_variants_are_std_error_leaf() {
     let variants: Vec<PortTraceError> = vec![
         PortTraceError::BufferPoisoned("x".into()),
         PortTraceError::FlushFailed("y".into()),
-        PortTraceError::CardinalityCapExceeded { limit: 5, current: 6 },
+        PortTraceError::CardinalityCapExceeded {
+            limit: 5,
+            current: 6,
+        },
         PortTraceError::BackendExport("z".into()),
     ];
     for err in &variants {
         assert!(
             err.source().is_none(),
-            "All PortTraceError variants are leaf errors; source() must return None. Variant: {err:?}"
+            "All PortTraceError variants are leaf errors; source() must return None. Variant: \
+             {err:?}"
         );
     }
 }

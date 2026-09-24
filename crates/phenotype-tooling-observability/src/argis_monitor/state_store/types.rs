@@ -25,6 +25,9 @@ pub struct TrackerSnapshot {
 
 impl TrackerSnapshot {
     pub fn ok() -> Self {
-        Self { state: AlertState::Ok, sustained_secs: 0 }
+        Self {
+            state: AlertState::Ok,
+            sustained_secs: 0,
+        }
     }
 }

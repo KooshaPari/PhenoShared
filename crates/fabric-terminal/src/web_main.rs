@@ -3,30 +3,32 @@
 //! Serves a REST API and WebSocket terminal streaming endpoint.
 //! Agents connect via API key, view pane content in real-time.
 
+use std::{
+    collections::HashMap,
+    net::SocketAddr,
+    path::PathBuf,
+    sync::{Arc, RwLock},
+};
+
 use anyhow::{Context, Result};
 use axum::{
+    Json, Router,
     extract::{
-        ws::{Message, WebSocket},
         Path, Query, State, WebSocketUpgrade,
+        ws::{Message, WebSocket},
     },
     http::StatusCode,
     response::{Html, IntoResponse, Response},
     routing::{get, post},
-    Json, Router,
 };
 use futures::{SinkExt, StreamExt};
 use serde::{Deserialize, Serialize};
-use std::collections::HashMap;
-use std::net::SocketAddr;
-use std::path::PathBuf;
-use std::sync::Arc;
-use std::sync::RwLock;
 use tokio::sync::RwLock as TokioRwLock;
 use tower_http::cors::{Any, CorsLayer};
 
-mod tmux_capture;
 #[cfg(feature = "self-update")]
 pub mod self_update;
+mod tmux_capture;
 
 /// Shared application state
 struct AppState {
@@ -150,10 +152,10 @@ fn save_pane_cache(state: &AppState) {
             if let Err(e) = std::fs::write(path, &json) {
                 tracing::warn!(error = %e, path = %path.display(), "Failed to save pane cache");
             }
-        }
+        },
         Err(e) => {
             tracing::warn!(error = %e, "Failed to serialize pane cache");
-        }
+        },
     }
 }
 
@@ -265,7 +267,7 @@ async fn capture_pane(
         _ => {
             let text = pane.lines.join("\n");
             Ok(text.into_response())
-        }
+        },
     }
 }
 // === Handler: Send Keys to Pane ===
@@ -277,7 +279,12 @@ async fn send_keys(
 ) -> Result<Json<ApiResponse<String>>, StatusCode> {
     let agent = validate_api_key(&state, &headers).await?;
 
-    tracing::info!("Agent '{}' sending keys to pane {}: {:?}", agent, pane_id, req.text);
+    tracing::info!(
+        "Agent '{}' sending keys to pane {}: {:?}",
+        agent,
+        pane_id,
+        req.text
+    );
 
     // In production: execute tmux send-keys via subprocess
     // For now: just log and broadcast to connected WebSockets
@@ -427,10 +434,10 @@ async fn handle_ws(socket: WebSocket, pane_id: String, state: Arc<AppState>) {
                             }
                         }
                     }
-                }
+                },
                 Err(tokio::sync::broadcast::error::RecvError::Lagged(n)) => {
                     tracing::warn!("WebSocket missed {} broadcasts", n);
-                }
+                },
                 Err(_) => break, // channel closed
             }
         }
@@ -442,9 +449,9 @@ async fn handle_ws(socket: WebSocket, pane_id: String, state: Arc<AppState>) {
             match msg {
                 Message::Text(text) => {
                     tracing::debug!("WS input on {}: {}", pane_id, text);
-                }
+                },
                 Message::Close(_) => break,
-                _ => {}
+                _ => {},
             }
         }
     });
@@ -495,9 +502,10 @@ fn spawn_stale_pane_cleaner(state: Arc<AppState>) {
                 std::thread::sleep(std::time::Duration::from_secs(60));
                 let removed = cleanup_stale_panes(&state);
                 if removed > 0 {
-                    tracing::debug!(remaining = {
-                        state.pane_cache.read().unwrap().len()
-                    }, "Stale pane cleanup cycle");
+                    tracing::debug!(
+                        remaining = { state.pane_cache.read().unwrap().len() },
+                        "Stale pane cleanup cycle"
+                    );
                 }
             }
         })
@@ -532,16 +540,16 @@ async fn main() -> Result<()> {
         let args: Vec<String> = std::env::args().collect();
         if args.len() > 1 {
             match args[1].as_str() {
-#[cfg(feature = "self-update")]
+                #[cfg(feature = "self-update")]
                 "self-update" => {
                     self_update::run("tf-web")?;
                     return Ok(());
-                }
+                },
                 "--version" | "-V" => {
                     println!("tf-web {}", env!("CARGO_PKG_VERSION"));
                     return Ok(());
-                }
-                _ => {}
+                },
+                _ => {},
             }
         }
     }
@@ -578,14 +586,12 @@ async fn main() -> Result<()> {
         }
         candidates[0].clone() // best guess: Linux path
     });
-    let tmux_bin = tmux_capture::find_tf_mux_binary()
-        .unwrap_or_else(|| {
-            tracing::warn!(
-                "tf-mux not found; capture loop will be disabled. \
-                 Set TMUX_BIN env var to enable."
-            );
-            PathBuf::from("tf-mux") // placeholder; loop won't run
-        });
+    let tmux_bin = tmux_capture::find_tf_mux_binary().unwrap_or_else(|| {
+        tracing::warn!(
+            "tf-mux not found; capture loop will be disabled. Set TMUX_BIN env var to enable."
+        );
+        PathBuf::from("tf-mux") // placeholder; loop won't run
+    });
     // Broadcast channel for pushing pane updates to WebSocket clients (capacity 256)
     let (broadcast_tx, _) = tokio::sync::broadcast::channel::<String>(256);
 
@@ -643,15 +649,15 @@ async fn main() -> Result<()> {
                             } else {
                                 tracing::info!(count = count, "Loaded persisted pane cache");
                             }
-                        }
+                        },
                         Err(e) => {
                             tracing::warn!(error = %e, "Failed to parse pane cache file");
-                        }
+                        },
                     }
-                }
+                },
                 Err(e) => {
                     tracing::warn!(error = %e, "Failed to read pane cache file");
-                }
+                },
             }
         }
     }
@@ -716,10 +722,8 @@ mod tests {
     #[tokio::test]
     async fn test_health_endpoint() {
         let resp = health().await;
-        let body: serde_json::Value = serde_json::from_str(
-            &serde_json::to_string(&resp.0).unwrap(),
-        )
-        .unwrap();
+        let body: serde_json::Value =
+            serde_json::from_str(&serde_json::to_string(&resp.0).unwrap()).unwrap();
         assert_eq!(body["status"], "ok");
         assert_eq!(body["service"], "tf-web");
         assert_eq!(body["version"], "0.2.0");
@@ -758,9 +762,7 @@ mod tests {
                 source: "windows".to_string(),
             }],
         };
-        let resp = ingest_panes(State(state.clone()), Json(req))
-            .await
-            .unwrap();
+        let resp = ingest_panes(State(state.clone()), Json(req)).await.unwrap();
         let body = resp.0;
         assert!(body.success);
         assert_eq!(body.data.unwrap(), "Ingested 1 panes");
@@ -801,9 +803,7 @@ mod tests {
                 },
             ],
         };
-        let resp = ingest_panes(State(state.clone()), Json(req))
-            .await
-            .unwrap();
+        let resp = ingest_panes(State(state.clone()), Json(req)).await.unwrap();
         let body = resp.0;
         assert!(body.success);
         assert_eq!(body.data.unwrap(), "Ingested 2 panes");
@@ -828,7 +828,9 @@ mod tests {
                 source: "windows".to_string(),
             }],
         };
-        let _ = ingest_panes(State(state.clone()), Json(req1)).await.unwrap();
+        let _ = ingest_panes(State(state.clone()), Json(req1))
+            .await
+            .unwrap();
         // Second ingest overwrites same pane_id
         let req2 = IngestRequest {
             panes: vec![IngestPane {
@@ -840,7 +842,9 @@ mod tests {
                 source: "windows".to_string(),
             }],
         };
-        let _ = ingest_panes(State(state.clone()), Json(req2)).await.unwrap();
+        let _ = ingest_panes(State(state.clone()), Json(req2))
+            .await
+            .unwrap();
 
         let cache = state.pane_cache.read().unwrap();
         assert_eq!(cache.len(), 1);
@@ -866,7 +870,9 @@ mod tests {
         // Register an agent and get API key for auth
         let reg_resp = register_agent(
             State(state.clone()),
-            Json(RegisterAgentRequest { name: "test".to_string() }),
+            Json(RegisterAgentRequest {
+                name: "test".to_string(),
+            }),
         )
         .await
         .unwrap();
@@ -877,9 +883,7 @@ mod tests {
             format!("Bearer {}", api_key).parse().unwrap(),
         );
 
-        let resp = list_panes(State(state), headers)
-            .await
-            .unwrap();
+        let resp = list_panes(State(state), headers).await.unwrap();
         let body = resp.0;
         assert!(body.success);
         let panes = body.data.unwrap();

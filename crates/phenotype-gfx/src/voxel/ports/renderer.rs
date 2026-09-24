@@ -136,14 +136,12 @@ pub type RenderResult<T> = Result<T, RenderError>;
 ///
 /// Models a per-frame render lifecycle:
 ///
-/// 1. [`begin_frame`](Self::begin_frame) opens a new frame addressed by
-///    the supplied [`Camera`] view and returns an opaque [`FrameId`].
-/// 2. [`submit_chunk`](Self::submit_chunk) queues one [`MeshBuffer`]'s
-///    worth of geometry into the open frame. Implementations translate
-///    the engine-neutral mesh into their engine's native draw resources
-///    (vertex buffer, draw command, …).
-/// 3. [`end_frame`](Self::end_frame) finalises the frame and hands it
-///    off to the GPU / surface.
+/// 1. [`begin_frame`](Self::begin_frame) opens a new frame addressed by the supplied [`Camera`]
+///    view and returns an opaque [`FrameId`].
+/// 2. [`submit_chunk`](Self::submit_chunk) queues one [`MeshBuffer`]'s worth of geometry into the
+///    open frame. Implementations translate the engine-neutral mesh into their engine's native draw
+///    resources (vertex buffer, draw command, …).
+/// 3. [`end_frame`](Self::end_frame) finalises the frame and hands it off to the GPU / surface.
 ///
 /// Splitting the lifecycle into three calls lets headless tests assert
 /// the *sequence* of submissions (begin → N submits → end) without

@@ -7,10 +7,12 @@
 #[cfg(target_os = "windows")]
 pub mod win {
     use std::ptr;
-    use windows_sys::Win32::Foundation::*;
-    use windows_sys::Win32::System::DataExchange::*;
-    use windows_sys::Win32::System::Memory::*;
-    use windows_sys::Win32::UI::WindowsAndMessaging::*;
+
+    use windows_sys::Win32::{
+        Foundation::*,
+        System::{DataExchange::*, Memory::*},
+        UI::WindowsAndMessaging::*,
+    };
 
     const CF_UNICODETEXT: u32 = 13;
     const WM_KEYDOWN: u32 = 0x0100;
@@ -45,13 +47,19 @@ pub mod win {
     /// Send a Ctrl+Key combination to a specific window via SendMessage.
     /// All messages target `hwnd` directly -- no global input injection.
     unsafe fn send_ctrl_key_to_window(hwnd: HWND, vk: u16) {
-        let scan_ctrl: u16 = 0x1D;
+        let scan_ctrl: u16 = 0x1d;
         let scan_key: u16 = match vk {
-            VK_A => 0x1E,
-            VK_C => 0x2E,
-            VK_1 => 0x02, VK_2 => 0x03, VK_3 => 0x04,
-            VK_4 => 0x05, VK_5 => 0x06, VK_6 => 0x07,
-            VK_7 => 0x08, VK_8 => 0x09, VK_9 => 0x0A,
+            VK_A => 0x1e,
+            VK_C => 0x2e,
+            VK_1 => 0x02,
+            VK_2 => 0x03,
+            VK_3 => 0x04,
+            VK_4 => 0x05,
+            VK_5 => 0x06,
+            VK_6 => 0x07,
+            VK_7 => 0x08,
+            VK_8 => 0x09,
+            VK_9 => 0x0a,
             _ => 0x00,
         };
 
@@ -141,8 +149,15 @@ pub mod win {
     pub fn capture_tab_by_index(wt_hwnd: isize, tab_index: u8) -> Option<String> {
         let hwnd = wt_hwnd as HWND;
         let vk = match tab_index {
-            1 => VK_1, 2 => VK_2, 3 => VK_3, 4 => VK_4,
-            5 => VK_5, 6 => VK_6, 7 => VK_7, 8 => VK_8, 9 => VK_9,
+            1 => VK_1,
+            2 => VK_2,
+            3 => VK_3,
+            4 => VK_4,
+            5 => VK_5,
+            6 => VK_6,
+            7 => VK_7,
+            8 => VK_8,
+            9 => VK_9,
             _ => return None,
         };
 

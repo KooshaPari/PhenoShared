@@ -8,11 +8,13 @@
 //! depend on the `VoxelWorld` concrete type — preserving the hexagon
 //! boundary defined in [`crate::voxel::ports::storage`].
 
-use crate::voxel::chunk::Chunk;
-use crate::voxel::coord::{ChunkCoord, WorldCoord};
-use crate::voxel::delta::DirtyChunkEvent;
-use crate::voxel::ports::storage::WorldStore;
-use crate::voxel::world::VoxelWorld;
+use crate::voxel::{
+    chunk::Chunk,
+    coord::{ChunkCoord, WorldCoord},
+    delta::DirtyChunkEvent,
+    ports::storage::WorldStore,
+    world::VoxelWorld,
+};
 
 /// Adapter that exposes a [`VoxelWorld`] through the [`WorldStore`] port.
 ///
@@ -136,7 +138,11 @@ mod tests {
     #[test]
     fn drain_dirty_is_sorted() {
         let mut store = VoxelWorldAdapter::<u8>::with_voxel_span(FIXED_SCALE);
-        let a0 = WorldCoord { x: 0, y: 0, z: 0 };
+        let a0 = WorldCoord {
+            x: 0,
+            y: 0,
+            z: 0,
+        };
         let b0 = WorldCoord {
             x: 100 * FIXED_SCALE,
             y: 0,
@@ -182,7 +188,14 @@ mod tests {
         assert_eq!(store.chunk_count(), 0);
         assert_eq!(store.uniform_chunk_count(), 1);
         // Read still works via the octree fallback.
-        assert_eq!(store.read(WorldCoord { x: 0, y: 0, z: 0 }), 7);
+        assert_eq!(
+            store.read(WorldCoord {
+                x: 0,
+                y: 0,
+                z: 0
+            }),
+            7
+        );
         // chunks_dense is now empty.
         assert_eq!(store.chunks_dense().count(), 0);
     }

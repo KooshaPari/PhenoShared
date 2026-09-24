@@ -4,10 +4,10 @@
 //! (1:1 port of the 8-stage linear lifecycle). `DomainError` is replaced with
 //! [`LifecycleError`] so this crate stays self-contained.
 
+use std::{fmt, str::FromStr};
+
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
-use std::fmt;
-use std::str::FromStr;
 
 /// States in the feature lifecycle (8 stages).
 ///

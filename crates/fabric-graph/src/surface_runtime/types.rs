@@ -59,15 +59,23 @@ impl Invalidation {
     pub fn to_wire_json(&self) -> serde_json::Value {
         let reason_str = match &self.reason {
             LeaseExitReason::NormalCompletion => "NormalCompletion",
-            LeaseExitReason::HostFailure { .. } => "HostFailure",
-            LeaseExitReason::EpochDrift { .. } => "EpochDrift",
+            LeaseExitReason::HostFailure {
+                ..
+            } => "HostFailure",
+            LeaseExitReason::EpochDrift {
+                ..
+            } => "EpochDrift",
             LeaseExitReason::OperatorRevoked => "Revoked",
             LeaseExitReason::Expired => "Expired",
-            LeaseExitReason::WorkloadReported { .. } => "Failed",
+            LeaseExitReason::WorkloadReported {
+                ..
+            } => "Failed",
         };
 
         let failed_node = match &self.reason {
-            LeaseExitReason::HostFailure { host_node } => host_node.to_string(),
+            LeaseExitReason::HostFailure {
+                host_node,
+            } => host_node.to_string(),
             _ => String::new(),
         };
 
@@ -85,15 +93,9 @@ impl Invalidation {
             serde_json::Value::String(reason_str.into()),
         );
         if !failed_node.is_empty() {
-            map.insert(
-                "failed_node".into(),
-                serde_json::Value::String(failed_node),
-            );
+            map.insert("failed_node".into(), serde_json::Value::String(failed_node));
         }
-        map.insert(
-            "epoch".into(),
-            serde_json::Value::Number(self.epoch.into()),
-        );
+        map.insert("epoch".into(), serde_json::Value::Number(self.epoch.into()));
 
         serde_json::Value::Object(map)
     }

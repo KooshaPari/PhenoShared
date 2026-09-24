@@ -3,14 +3,17 @@
 //! Source: [`Tracera/crates/tracera-core/src/matrix.rs`](https://example.invalid/Tracera/crates/tracera-core/src/matrix.rs)
 //! plus `CoverageMatrix` / `MatrixCell` / `CoverageState` from Tracera `lib.rs:291-316`.
 
+use std::collections::{BTreeSet, HashMap};
+
 use chrono::{DateTime, Utc};
 use indexmap::IndexMap;
 use serde::{Deserialize, Serialize};
-use std::collections::{BTreeSet, HashMap};
 use uuid::Uuid;
 
-use crate::ids::RequirementId;
-use crate::tracelink::{TraceLink, TraceLinkType};
+use crate::{
+    ids::RequirementId,
+    tracelink::{TraceLink, TraceLinkType},
+};
 
 /// Coverage state for a single matrix cell.
 ///
@@ -229,9 +232,10 @@ pub fn build_from_pairs(pairs: &[(RequirementId, BTreeSet<String>)]) -> BuildRes
 
 #[cfg(test)]
 mod tests {
+    use chrono::Duration;
+
     use super::*;
     use crate::LinkKind;
-    use chrono::Duration;
 
     fn make_link(link_type: TraceLinkType, confidence: f32, age_days: i64) -> TraceLink {
         let project = Uuid::new_v4();

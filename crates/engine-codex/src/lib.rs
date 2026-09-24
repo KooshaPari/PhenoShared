@@ -30,12 +30,14 @@
 
 use async_trait::async_trait;
 use engine_spec::{ArgvBuilder, TaskSpec};
-use substrate_core::domain::{
-    ConversationDump, EngineCapabilities, Mailbox, Session, StructuredResult, Task, TaskState,
+use substrate_core::{
+    domain::{
+        ConversationDump, EngineCapabilities, Mailbox, Session, StructuredResult, Task, TaskState,
+    },
+    error::{Result, SubstrateError},
+    ports::EnginePort,
+    Tier,
 };
-use substrate_core::error::{Result, SubstrateError};
-use substrate_core::ports::EnginePort;
-use substrate_core::Tier;
 use tokio::process::Command;
 
 /// Default model for the codex CLI.
@@ -268,8 +270,9 @@ impl EnginePort for CodexEngine {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
     use engine_spec::TaskSpec;
+
+    use super::*;
 
     #[test]
     fn argv_start_includes_exec_and_model_and_bypass() {

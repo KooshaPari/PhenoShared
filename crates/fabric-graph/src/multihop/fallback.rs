@@ -90,9 +90,10 @@ fn generate_degraded_path(primary: &RoutePlan, topology: &Topology) -> Option<Ro
     let dst = &primary.steps.last()?.node;
 
     // Find direct edge.
-    let direct_edge = topology.edges.values().find(|e| {
-        e.from == *src && e.to == *dst && e.up
-    })?;
+    let direct_edge = topology
+        .edges
+        .values()
+        .find(|e| e.from == *src && e.to == *dst && e.up)?;
 
     let mut steps = vec![
         RouteStep {
@@ -129,11 +130,14 @@ fn generate_degraded_path(primary: &RoutePlan, topology: &Topology) -> Option<Ro
 
 #[cfg(test)]
 mod tests {
-    use super::*;
-    use crate::model::{Edge, IntentId, Node, NodeId, RoutePlanId, TopologyEpoch, TopologyMeta};
-    use crate::LocalityTier;
     use chrono::Utc;
     use uuid::Uuid;
+
+    use super::*;
+    use crate::{
+        model::{Edge, IntentId, Node, NodeId, RoutePlanId, TopologyEpoch, TopologyMeta},
+        LocalityTier,
+    };
 
     fn make_topo() -> Topology {
         let mut topo = Topology::new();

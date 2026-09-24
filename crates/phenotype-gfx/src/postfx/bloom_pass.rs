@@ -10,11 +10,13 @@
 
 use serde::{Deserialize, Serialize};
 
-use crate::postfx::error::{PostFxError, PostFxResult};
-use crate::postfx::ports::post_fx_pass::{
-    PassDescriptor, PassEffect, PassQuality, PostFxContext, PostFxPass,
+use crate::postfx::{
+    error::{PostFxError, PostFxResult},
+    ports::{
+        post_fx_pass::{PassDescriptor, PassEffect, PassQuality, PostFxContext, PostFxPass},
+        shader_availability::PostFxShaderAvailability,
+    },
 };
-use crate::postfx::ports::shader_availability::PostFxShaderAvailability;
 
 /// Stable shader name used by the bloom pass.
 pub const BLOOM_SHADER_NAME: &str = "Hidden/Phenotype/BloomPass";
@@ -83,7 +85,9 @@ pub struct BloomPass {
 impl BloomPass {
     /// New bloom pass with the given config.
     pub fn new(config: BloomConfig) -> Self {
-        Self { config }
+        Self {
+            config,
+        }
     }
 
     /// Borrow the current config.

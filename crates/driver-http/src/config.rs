@@ -1,7 +1,6 @@
 //! HTTP server configuration from environment variables.
 
-use std::net::SocketAddr;
-use std::path::PathBuf;
+use std::{net::SocketAddr, path::PathBuf};
 
 /// Runtime configuration for the substrate HTTP driver.
 #[derive(Debug, Clone)]

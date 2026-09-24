@@ -2,8 +2,10 @@
 
 use std::future::Future;
 
-use substrate_core::error::{Result, SubstrateError};
-use substrate_core::Tier;
+use substrate_core::{
+    error::{Result, SubstrateError},
+    Tier,
+};
 
 /// Successful tiered dispatch result.
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -70,7 +72,7 @@ where
                     attempted_tiers,
                     output,
                 });
-            }
+            },
             Ok(_) => SubstrateError::Engine(format!("{tier} dispatch returned empty output")),
             Err(error) => error,
         };
@@ -79,7 +81,7 @@ where
             (false, Some(next)) => {
                 retried = true;
                 tier = next;
-            }
+            },
             _ => return Err(error),
         }
     }
@@ -107,7 +109,7 @@ where
                     attempted_tiers,
                     output,
                 });
-            }
+            },
             Ok(_) => SubstrateError::Engine(format!("{tier} dispatch returned empty output")),
             Err(error) => error,
         };
@@ -116,7 +118,7 @@ where
             (false, Some(next)) => {
                 retried = true;
                 tier = next;
-            }
+            },
             _ => return Err(error),
         }
     }

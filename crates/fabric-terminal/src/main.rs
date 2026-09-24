@@ -6,21 +6,19 @@
 
 #![allow(dead_code)]
 
+use std::{path::PathBuf, sync::Arc};
+
 use anyhow::{Context, Result};
 use clap::{Parser, Subcommand};
 use serde::{Deserialize, Serialize};
-use std::path::PathBuf;
-use std::sync::Arc;
 use tokio::sync::RwLock;
 
 pub mod relay;
-pub mod state;
 #[cfg(feature = "ssh")]
 pub mod ssh_tunnel;
+pub mod state;
 
 use state::SyncState;
-
-
 
 /// tf-sync: Cross-machine terminal synchronization
 #[derive(Parser)]
@@ -117,16 +115,19 @@ async fn main() -> Result<()> {
             poll_ms,
         } => {
             cmd_sync(&cli, session.as_deref(), &panes, poll_ms).await?;
-        }
+        },
         Commands::ListPanes => {
             cmd_list_panes(&cli).await?;
-        }
-        Commands::Capture { ref pane_id, ref format } => {
+        },
+        Commands::Capture {
+            ref pane_id,
+            ref format,
+        } => {
             cmd_capture(&cli, &pane_id, &format).await?;
-        }
+        },
         Commands::Status => {
             cmd_status(&cli).await?;
-        }
+        },
     }
 
     Ok(())
@@ -148,7 +149,7 @@ async fn cmd_sync(cli: &Cli, session: Option<&str>, panes: &str, poll_ms: u64) -
 
     // Establish SSH connection
     let tunnel = Arc::new(RwLock::new(
-        ssh_tunnel::SshTunnel::connect(target, &cli.socket).await?
+        ssh_tunnel::SshTunnel::connect(target, &cli.socket).await?,
     ));
 
     let state = Arc::new(RwLock::new(SyncState::new()));
@@ -173,7 +174,7 @@ async fn cmd_sync(cli: &Cli, session: Option<&str>, panes: &str, poll_ms: u64) -
                     // Broadcast to local tmux
                     relay::broadcast_local(&content).await?;
                 }
-            }
+            },
             Err(e) => {
                 tracing::warn!("Capture failed: {}", e);
                 // Attempt reconnection
@@ -182,13 +183,13 @@ async fn cmd_sync(cli: &Cli, session: Option<&str>, panes: &str, poll_ms: u64) -
                         let mut t = tunnel.write().await;
                         *t = new_tunnel;
                         tracing::info!("Reconnected to {}", target);
-                    }
+                    },
                     Err(re) => {
                         tracing::error!("Reconnect failed: {}", re);
                         tokio::time::sleep(std::time::Duration::from_secs(5)).await;
-                    }
+                    },
                 }
-            }
+            },
         }
     }
 }
@@ -221,15 +222,15 @@ async fn cmd_capture(cli: &Cli, pane_id: &str, format: &str) -> Result<()> {
         "json" => {
             let json = serde_json::to_string_pretty(&content)?;
             println!("{}", json);
-        }
+        },
         "text" => {
             for line in &content.lines {
                 println!("{}", line);
             }
-        }
+        },
         _ => {
             anyhow::bail!("Unknown format: {}", format);
-        }
+        },
     }
 
     Ok(())
@@ -246,10 +247,10 @@ async fn cmd_status(cli: &Cli) -> Result<()> {
                 println!("  Connection: OK");
                 let panes = tunnel.list_panes().await?;
                 println!("  Panes: {}", panes.len());
-            }
+            },
             Err(e) => {
                 println!("  Connection: FAILED ({})", e);
-            }
+            },
         }
     } else {
         println!("  Connection: No target specified");

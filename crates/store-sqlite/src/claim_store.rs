@@ -1,17 +1,14 @@
 //! `SqliteClaimStore`: atomic work-queue with fuzzy near-duplicate detection.
 
-use std::collections::HashSet;
-use std::sync::Mutex;
+use std::{collections::HashSet, sync::Mutex};
 
 use chrono::Utc;
 use rusqlite::{params, Connection, OptionalExtension, TransactionBehavior};
 use strsim::levenshtein;
+use substrate_core::claim_port::{ClaimPort, WorkItem, WorkItemState};
 use uuid::Uuid;
 
-use substrate_core::claim_port::{ClaimPort, WorkItem, WorkItemState};
-
-use crate::error::StoreError;
-use crate::schema;
+use crate::{error::StoreError, schema};
 
 /// Jaccard similarity threshold for token sets.
 const JACCARD_THRESHOLD: f64 = 0.75;
@@ -83,8 +80,8 @@ impl ClaimPort for SqliteClaimStore {
         let id = Uuid::new_v4();
         let conn = self.conn.lock().unwrap();
         conn.execute(
-            "INSERT INTO work_queue (id, queue, body, state, claimed_by, created_at) \
-             VALUES (?1, ?2, ?3, 'pending', NULL, ?4)",
+            "INSERT INTO work_queue (id, queue, body, state, claimed_by, created_at) VALUES (?1, \
+             ?2, ?3, 'pending', NULL, ?4)",
             params![id.to_string(), queue, body, Utc::now().to_rfc3339()],
         )?;
         Ok(id)
@@ -96,9 +93,8 @@ impl ClaimPort for SqliteClaimStore {
 
         let row: Option<(String, String, String)> = tx
             .query_row(
-                "SELECT id, queue, body FROM work_queue \
-                 WHERE queue=?1 AND state='pending' \
-                 ORDER BY created_at ASC LIMIT 1",
+                "SELECT id, queue, body FROM work_queue WHERE queue=?1 AND state='pending' ORDER \
+                 BY created_at ASC LIMIT 1",
                 params![queue],
                 |row| Ok((row.get(0)?, row.get(1)?, row.get(2)?)),
             )
@@ -110,8 +106,7 @@ impl ClaimPort for SqliteClaimStore {
         };
 
         let updated = tx.execute(
-            "UPDATE work_queue SET state='claimed', claimed_by=?2 \
-             WHERE id=?1 AND state='pending'",
+            "UPDATE work_queue SET state='claimed', claimed_by=?2 WHERE id=?1 AND state='pending'",
             params![id, worker_id],
         )?;
 
@@ -134,8 +129,7 @@ impl ClaimPort for SqliteClaimStore {
     fn is_near_duplicate(&self, queue: &str, body: &str) -> Result<bool, StoreError> {
         let conn = self.conn.lock().unwrap();
         let mut stmt = conn.prepare(
-            "SELECT body FROM work_queue \
-             WHERE queue=?1 AND state IN ('pending', 'claimed')",
+            "SELECT body FROM work_queue WHERE queue=?1 AND state IN ('pending', 'claimed')",
         )?;
         let rows = stmt.query_map(params![queue], |row| row.get::<_, String>(0))?;
         for row in rows {

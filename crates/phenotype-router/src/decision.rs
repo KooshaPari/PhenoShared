@@ -10,10 +10,10 @@
 //! Every decision-layer adapter implements four methods, mirroring the
 //! [`pheno-port-adapter`] reference impl:
 //!
-//! - [`DecisionLayer::name`] — stable adapter identifier (used by OTLP span
-//!   attributes and the plugin registry).
-//! - [`DecisionLayer::health`] — liveness probe; consumed by the upstream
-//!   health-aware provider pool (ADR-006 circuit-breaker pattern).
+//! - [`DecisionLayer::name`] — stable adapter identifier (used by OTLP span attributes and the
+//!   plugin registry).
+//! - [`DecisionLayer::health`] — liveness probe; consumed by the upstream health-aware provider
+//!   pool (ADR-006 circuit-breaker pattern).
 //! - [`DecisionLayer::decide`] — synchronous decision (the hot path).
 //! - [`DecisionLayer::adapter_kind`] — schema tag (`"bifrost"`, `"hello-world"`).
 //!

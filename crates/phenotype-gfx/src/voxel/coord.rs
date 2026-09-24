@@ -41,7 +41,7 @@ impl ChunkCoord {
         let cx = (self.cx as u32) as u64;
         let cy = (self.cy as u32) as u64;
         let cz = (self.cz as u32) as u64;
-        crate::voxel::chunk::ChunkId((cx << 40) | (cy << 16) | (cz & 0xFFFF))
+        crate::voxel::chunk::ChunkId((cx << 40) | (cy << 16) | (cz & 0xffff))
     }
 }
 
@@ -64,7 +64,11 @@ mod tests {
     /// FR-PHENO-VOXEL-COORD-000 — origin maps to origin chunk.
     #[test]
     fn origin_maps_to_origin_chunk() {
-        let w = WorldCoord { x: 0, y: 0, z: 0 };
+        let w = WorldCoord {
+            x: 0,
+            y: 0,
+            z: 0,
+        };
         let c = to_chunk_coord(w, 1_000_000, 16);
         assert_eq!(
             c,

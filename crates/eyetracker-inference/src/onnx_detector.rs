@@ -13,10 +13,11 @@
 //! allows compilation everywhere; the pipeline falls back to the geometric
 //! estimator.
 
-use crate::face_mesh::{FaceDetector, FaceResult};
 use anyhow::{anyhow, Result};
 use eyetracker_camera::Frame;
 use serde::{Deserialize, Serialize};
+
+use crate::face_mesh::{FaceDetector, FaceResult};
 
 /// ONNX face detector configuration
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -68,14 +69,17 @@ impl OnnxFaceDetector {
         let available = config.model_path.exists();
         if !available {
             tracing::warn!(
-                "ONNX model not found at {:?}; detector will return no detections. \
-                 Run ./download-models.sh to fetch the model.",
+                "ONNX model not found at {:?}; detector will return no detections. Run \
+                 ./download-models.sh to fetch the model.",
                 config.model_path
             );
         } else {
             tracing::info!("Loaded ONNX face detector: {:?}", config.model_path);
         }
-        Ok(Self { config, available })
+        Ok(Self {
+            config,
+            available,
+        })
     }
 
     /// Try to construct from the default model location
@@ -149,8 +153,8 @@ impl FaceDetector for OnnxFaceDetector {
     fn detect(&mut self, _frame: &Frame) -> Result<FaceResult> {
         if !self.available {
             return Err(anyhow!(
-                "ONNX model not loaded; detector unavailable. \
-                 Run ./download-models.sh to fetch it."
+                "ONNX model not loaded; detector unavailable. Run ./download-models.sh to fetch \
+                 it."
             ));
         }
         // A real implementation would:
@@ -178,9 +182,11 @@ impl FaceDetector for OnnxFaceDetector {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
-    use eyetracker_camera::PixelFormat;
     use std::time::Instant;
+
+    use eyetracker_camera::PixelFormat;
+
+    use super::*;
 
     fn dummy_frame() -> Frame {
         Frame {
@@ -281,16 +287,34 @@ mod tests {
             ],
             left_eye: EyeRegion {
                 landmark_indices: vec![],
-                center: Landmark2D { x: 0.3, y: 0.3 },
-                inner_corner: Landmark2D { x: 0.28, y: 0.3 },
-                outer_corner: Landmark2D { x: 0.32, y: 0.3 },
+                center: Landmark2D {
+                    x: 0.3,
+                    y: 0.3,
+                },
+                inner_corner: Landmark2D {
+                    x: 0.28,
+                    y: 0.3,
+                },
+                outer_corner: Landmark2D {
+                    x: 0.32,
+                    y: 0.3,
+                },
                 pupil: None,
             },
             right_eye: EyeRegion {
                 landmark_indices: vec![],
-                center: Landmark2D { x: 0.7, y: 0.3 },
-                inner_corner: Landmark2D { x: 0.68, y: 0.3 },
-                outer_corner: Landmark2D { x: 0.72, y: 0.3 },
+                center: Landmark2D {
+                    x: 0.7,
+                    y: 0.3,
+                },
+                inner_corner: Landmark2D {
+                    x: 0.68,
+                    y: 0.3,
+                },
+                outer_corner: Landmark2D {
+                    x: 0.72,
+                    y: 0.3,
+                },
                 pupil: None,
             },
             confidence: 0.9,

@@ -6,25 +6,23 @@
 //!
 //! For each of the 6 axis-aligned face directions:
 //! 1. Sweep through each "slice" perpendicular to that axis.
-//! 2. Build a 2-D mask of visible (exposed) faces, keyed by [`MaskCell`]
-//!    (material + 4-corner AO signature).  A face is visible if the voxel on
-//!    the face side is solid and the voxel on the opposite side (the
-//!    "neighbour") is not solid.  Per-vertex AO is computed with the same
+//! 2. Build a 2-D mask of visible (exposed) faces, keyed by [`MaskCell`] (material + 4-corner AO
+//!    signature).  A face is visible if the voxel on the face side is solid and the voxel on the
+//!    opposite side (the "neighbour") is not solid.  Per-vertex AO is computed with the same
 //!    `face_ao` helper used by [`CubicMesher`].
-//! 3. For each non-empty cell in the mask, extend a maximal rectangle: first
-//!    greedily widen along the primary axis until the material **or AO
-//!    signature** changes, then raise along the secondary axis as far as the
-//!    full width is available with the same key.
-//! 4. Emit one quad per rectangle, propagating the per-corner AO values.
-//!    Consumed cells are cleared from the mask so they are not emitted twice.
+//! 3. For each non-empty cell in the mask, extend a maximal rectangle: first greedily widen along
+//!    the primary axis until the material **or AO signature** changes, then raise along the
+//!    secondary axis as far as the full width is available with the same key.
+//! 4. Emit one quad per rectangle, propagating the per-corner AO values. Consumed cells are cleared
+//!    from the mask so they are not emitted twice.
 //!
 //! ## AO-aware merging
 //!
 //! Including the 4-corner AO signature in the equality key means:
-//! - Faces in a flat, unoccluded region share AO=[3,3,3,3] → merge freely
-//!   (greedy triangle-reduction benefit fully preserved).
-//! - Faces at an occlusion boundary carry different AO signatures → merge
-//!   stops at the boundary (AO detail preserved).
+//! - Faces in a flat, unoccluded region share AO=[3,3,3,3] → merge freely (greedy
+//!   triangle-reduction benefit fully preserved).
+//! - Faces at an occlusion boundary carry different AO signatures → merge stops at the boundary (AO
+//!   detail preserved).
 //! - A merged quad carries uniform AO; no interpolation artefact can arise.
 //!
 //! The resulting mesh has the same *visible surface area* as the cubic mesher
@@ -33,12 +31,14 @@
 
 use core::marker::PhantomData;
 
-use crate::voxel::chunk::{ChunkView, CHUNK_EDGE};
-use crate::voxel::cubic_mesher::face_ao;
 pub use crate::voxel::cubic_mesher::CubicVoxel;
-use crate::voxel::lod::LodLevel;
-use crate::voxel::material::MaterialId;
-use crate::voxel::mesh::{MeshBuffer, MeshError, MeshResult, MeshVertex, Mesher};
+use crate::voxel::{
+    chunk::{ChunkView, CHUNK_EDGE},
+    cubic_mesher::face_ao,
+    lod::LodLevel,
+    material::MaterialId,
+    mesh::{MeshBuffer, MeshError, MeshResult, MeshVertex, Mesher},
+};
 
 // ---------------------------------------------------------------------------
 // Mask cell — material + 4-corner AO signature
@@ -193,7 +193,10 @@ impl<V: CubicVoxel> GreedyMesher<V> {
                                 // face_ao expects the voxel (x,y,z) coordinates and
                                 // the face_id matching cubic's face encoding.
                                 let ao = face_ao(chunk.voxels, pos[0], pos[1], pos[2], face_id);
-                                Some(MaskCell { material, ao })
+                                Some(MaskCell {
+                                    material,
+                                    ao,
+                                })
                             } else {
                                 None
                             };
@@ -354,10 +357,12 @@ fn emit_quad(
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::voxel::chunk::{Chunk, ChunkId};
-    use crate::voxel::cubic_mesher::CubicMesher;
-    use crate::voxel::lod::LodLevel;
-    use crate::voxel::mesh::Mesher;
+    use crate::voxel::{
+        chunk::{Chunk, ChunkId},
+        cubic_mesher::CubicMesher,
+        lod::LodLevel,
+        mesh::Mesher,
+    };
 
     fn idx(x: i32, y: i32, z: i32) -> usize {
         x as usize + y as usize * CHUNK_EDGE + z as usize * CHUNK_EDGE * CHUNK_EDGE
@@ -615,7 +620,8 @@ mod tests {
         let cubic_tri = cubic.indices.len() / 3;
         let reduction = 100.0 * (1.0 - greedy_tri as f64 / cubic_tri as f64);
         eprintln!(
-            "[GREEDY-007] 4×4×1 slab — cubic: {cubic_tri} tris, greedy: {greedy_tri} tris, reduction: {reduction:.1}%"
+            "[GREEDY-007] 4×4×1 slab — cubic: {cubic_tri} tris, greedy: {greedy_tri} tris, \
+             reduction: {reduction:.1}%"
         );
         assert!(
             greedy.indices.len() < cubic.indices.len(),

@@ -3,9 +3,10 @@
 //! Uses the `jsonschema` crate for runtime validation. A fuller schema
 //! check is done in CI via `check_json_schemas.py`.
 
-use crate::error::{Error, Result};
 use jsonschema::validator_for;
 use serde::Serialize;
+
+use crate::error::{Error, Result};
 
 /// Validates a capability descriptor against a minimal canonical JSON schema.
 ///
@@ -34,11 +35,9 @@ pub fn validate_descriptor<T: Serialize>(value: &T) -> Result<()> {
         }
     });
 
-    let compiled = validator_for(&minimal_schema)
-        .map_err(|e| Error::Schema(e.to_string()))?;
+    let compiled = validator_for(&minimal_schema).map_err(|e| Error::Schema(e.to_string()))?;
 
-    let value_json = serde_json::to_value(value)
-        .map_err(|e| Error::Serde(e.to_string()))?;
+    let value_json = serde_json::to_value(value).map_err(|e| Error::Serde(e.to_string()))?;
 
     if let Err(e) = compiled.validate(&value_json) {
         // jsonschema 0.27 returns a single ValidationError
@@ -51,9 +50,10 @@ pub fn validate_descriptor<T: Serialize>(value: &T) -> Result<()> {
 
 #[cfg(test)]
 mod tests {
+    use uuid::Uuid;
+
     use super::*;
     use crate::descriptor::{Capabilities, CapabilityDescriptor};
-    use uuid::Uuid;
 
     #[test]
     fn validate_valid_descriptor() {

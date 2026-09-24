@@ -6,25 +6,24 @@
                      //
                      // Two usage modes:
                      //
-                     //   1. In-process C-ABI dispatch (DaemonDispatch):
-                     //      Calls forge_daemon_dispatch() directly from the same process — the Zig
-                     //      core handles posix_spawn, pipe, waitpid.  No daemon socket needed.
+                     //   1. In-process C-ABI dispatch (DaemonDispatch): Calls forge_daemon_dispatch() directly from the
+                     //      same process — the Zig core handles posix_spawn, pipe, waitpid.  No daemon socket needed.
                      //
-                     //   2. Socket-based client (DaemonClient):
-                     //      Connects to a running forge-daemon process over a Unix socket.
-                     //      Sends JSON requests, receives JSON responses.
+                     //   2. Socket-based client (DaemonClient): Connects to a running forge-daemon process over a Unix
+                     //      socket. Sends JSON requests, receives JSON responses.
                      //
                      // The Rust side of forge_main can use either mode; mode 1 is simpler for
                      // single-machine use.  Mode 2 supports the warm-pool long-running daemon
                      // model that eliminates dyld+tokio init cost across multiple callers.
 
-use std::ffi::CString;
-use std::path::Path;
+use std::{ffi::CString, path::Path};
 
 use anyhow::{Context, Result};
 use serde::{Deserialize, Serialize};
-use tokio::io::{AsyncReadExt, AsyncWriteExt};
-use tokio::net::UnixStream;
+use tokio::{
+    io::{AsyncReadExt, AsyncWriteExt},
+    net::UnixStream,
+};
 use tracing::{debug, info, warn};
 
 // ---------------------------------------------------------------------------
@@ -310,7 +309,10 @@ impl DaemonGuard {
             warn!(%socket_path, "daemon socket did not appear within 2s");
         }
 
-        Ok(Self { child, socket_path })
+        Ok(Self {
+            child,
+            socket_path,
+        })
     }
 
     pub fn socket_path(&self) -> &str {

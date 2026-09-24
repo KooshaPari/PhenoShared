@@ -42,7 +42,9 @@ pub trait LodBase {
     /// Returns the LOD tier appropriate for the given camera distance.
     fn select_tier(&self, distance: f32) -> TerrainResult<LodTier> {
         if distance < 0.0 {
-            return Err(TerrainError::InvalidDistance { value: distance });
+            return Err(TerrainError::InvalidDistance {
+                value: distance,
+            });
         }
         if distance < self.near_distance() {
             Ok(LodTier::Near)

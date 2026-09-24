@@ -13,9 +13,11 @@ use std::sync::Arc;
 use async_trait::async_trait;
 use phenotype_router::{BifrostAdapter, Decision, DecisionLayer, Request, Response};
 use serde::Serialize;
-use substrate_core::domain::{RoutingDecision, Task};
-use substrate_core::error::{Result, SubstrateError};
-use substrate_core::ports::RoutingPort;
+use substrate_core::{
+    domain::{RoutingDecision, Task},
+    error::{Result, SubstrateError},
+    ports::RoutingPort,
+};
 
 /// Default engine selected by the adapter when phenotype-router allows a task.
 pub const DEFAULT_ENGINE: &str = "forge";
@@ -137,8 +139,9 @@ impl RoutingPort for PhenotypeRouterAdapter {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
     use std::sync::Mutex;
+
+    use super::*;
 
     #[derive(Debug, Clone)]
     struct StaticDecisionLayer {
@@ -253,7 +256,7 @@ mod tests {
             SubstrateError::Routing(msg) => {
                 assert!(msg.contains("routing-phenotype-router"));
                 assert!(msg.contains("task-1"));
-            }
+            },
             other => panic!("expected routing error, got {other:?}"),
         }
     }

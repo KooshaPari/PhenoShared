@@ -26,14 +26,26 @@ pub fn merge_topologies_from_json(
 
     if let Some(node_list) = local.get("nodes").and_then(|v| v.as_array()) {
         for n in node_list {
-            let id = n.get("id").and_then(|v| v.as_str()).unwrap_or("" ).to_string();
+            let id = n
+                .get("id")
+                .and_then(|v| v.as_str())
+                .unwrap_or("")
+                .to_string();
             if id.is_empty() {
                 continue;
             }
             all_nodes.push(NodeEntry {
                 id: id.clone(),
-                label: n.get("label").and_then(|v| v.as_str()).unwrap_or("").to_string(),
-                locality: n.get("locality").and_then(|v| v.as_str()).unwrap_or("").to_string(),
+                label: n
+                    .get("label")
+                    .and_then(|v| v.as_str())
+                    .unwrap_or("")
+                    .to_string(),
+                locality: n
+                    .get("locality")
+                    .and_then(|v| v.as_str())
+                    .unwrap_or("")
+                    .to_string(),
                 cap_count: n.get("cap_count").and_then(|v| v.as_u64()).unwrap_or(0) as usize,
                 tags: n
                     .get("tags")
@@ -51,15 +63,31 @@ pub fn merge_topologies_from_json(
 
     if let Some(edge_list) = local.get("edges").and_then(|v| v.as_array()) {
         for e in edge_list {
-            let id = e.get("id").and_then(|v| v.as_str()).unwrap_or("").to_string();
+            let id = e
+                .get("id")
+                .and_then(|v| v.as_str())
+                .unwrap_or("")
+                .to_string();
             if id.is_empty() {
                 continue;
             }
             all_edges.push(EdgeEntry {
                 id,
-                from: e.get("from").and_then(|v| v.as_str()).unwrap_or("").to_string(),
-                to: e.get("to").and_then(|v| v.as_str()).unwrap_or("").to_string(),
-                locality: e.get("locality").and_then(|v| v.as_str()).unwrap_or("").to_string(),
+                from: e
+                    .get("from")
+                    .and_then(|v| v.as_str())
+                    .unwrap_or("")
+                    .to_string(),
+                to: e
+                    .get("to")
+                    .and_then(|v| v.as_str())
+                    .unwrap_or("")
+                    .to_string(),
+                locality: e
+                    .get("locality")
+                    .and_then(|v| v.as_str())
+                    .unwrap_or("")
+                    .to_string(),
                 federation_id: String::new(),
             });
         }
@@ -88,17 +116,12 @@ pub fn merge_topologies_from_json(
                     edge.federation_id = peer.federation_id.clone();
                     all_edges.push(edge);
                 }
-            }
+            },
             MergeStrategy::LocalPrimary => {
                 // Only add peer nodes that don't exist locally (by unprefixed name).
-                let local_ids: Vec<String> = all_nodes
-                    .iter()
-                    .map(|n| n.id.clone())
-                    .collect();
-                let local_ids_set: std::collections::HashSet<&str> = local_ids
-                    .iter()
-                    .map(|s| s.as_str())
-                    .collect();
+                let local_ids: Vec<String> = all_nodes.iter().map(|n| n.id.clone()).collect();
+                let local_ids_set: std::collections::HashSet<&str> =
+                    local_ids.iter().map(|s| s.as_str()).collect();
                 for (_, mut node) in peer.nodes.clone() {
                     if !local_ids_set.contains(node.id.as_str()) {
                         node.id = format!("{}/{}", peer.federation_id, node.id);
@@ -106,14 +129,9 @@ pub fn merge_topologies_from_json(
                         all_nodes.push(node);
                     }
                 }
-                let local_edge_ids: Vec<String> = all_edges
-                    .iter()
-                    .map(|e| e.id.clone())
-                    .collect();
-                let local_edge_ids_set: std::collections::HashSet<&str> = local_edge_ids
-                    .iter()
-                    .map(|s| s.as_str())
-                    .collect();
+                let local_edge_ids: Vec<String> = all_edges.iter().map(|e| e.id.clone()).collect();
+                let local_edge_ids_set: std::collections::HashSet<&str> =
+                    local_edge_ids.iter().map(|s| s.as_str()).collect();
                 for (_, mut edge) in peer.edges.clone() {
                     if !local_edge_ids_set.contains(edge.id.as_str()) {
                         edge.id = format!("{}/{}", peer.federation_id, edge.id);
@@ -123,7 +141,7 @@ pub fn merge_topologies_from_json(
                         all_edges.push(edge);
                     }
                 }
-            }
+            },
             MergeStrategy::PeerPrimary => {
                 // Peer nodes overwrite local nodes with the same base name.
                 // For simplicity in this merged view, we always add the peer version
@@ -140,7 +158,7 @@ pub fn merge_topologies_from_json(
                     edge.federation_id = peer.federation_id.clone();
                     all_edges.push(edge);
                 }
-            }
+            },
         }
     }
 
@@ -155,8 +173,9 @@ pub fn merge_topologies_from_json(
 
 #[cfg(test)]
 mod tests {
-    use super::*;
     use std::collections::HashMap;
+
+    use super::*;
 
     fn make_peer_snapshot(
         federation_id: &str,
@@ -203,11 +222,7 @@ mod tests {
 
         let peer = make_peer_snapshot("peer-1", "10.0.0.2:9400", 2, &["remote-x"]);
 
-        let result = merge_topologies_from_json(
-            local_json,
-            &[peer],
-            &MergeStrategy::MergeAll,
-        );
+        let result = merge_topologies_from_json(local_json, &[peer], &MergeStrategy::MergeAll);
 
         assert_eq!(result.nodes.len(), 2, "should have 1 local + 1 peer node");
         assert_eq!(result.max_epoch, 2);
@@ -236,18 +251,9 @@ mod tests {
         }"#;
 
         // Peer has a node with same base name "shared-node".
-        let peer = make_peer_snapshot(
-            "peer-2",
-            "10.0.0.3:9400",
-            5,
-            &["shared-node"],
-        );
+        let peer = make_peer_snapshot("peer-2", "10.0.0.3:9400", 5, &["shared-node"]);
 
-        let result = merge_topologies_from_json(
-            local_json,
-            &[peer],
-            &MergeStrategy::LocalPrimary,
-        );
+        let result = merge_topologies_from_json(local_json, &[peer], &MergeStrategy::LocalPrimary);
 
         // LocalPrimary should only keep the local copy for existing names.
         let local_nodes: Vec<&NodeEntry> = result
@@ -301,11 +307,7 @@ mod tests {
             },
         );
 
-        let result = merge_topologies_from_json(
-            local_json,
-            &[peer],
-            &MergeStrategy::MergeAll,
-        );
+        let result = merge_topologies_from_json(local_json, &[peer], &MergeStrategy::MergeAll);
 
         assert_eq!(result.edges.len(), 2);
         let peer_edge = result
@@ -330,11 +332,7 @@ mod tests {
             "edges": []
         }"#;
 
-        let result = merge_topologies_from_json(
-            local_json,
-            &[],
-            &MergeStrategy::MergeAll,
-        );
+        let result = merge_topologies_from_json(local_json, &[], &MergeStrategy::MergeAll);
 
         assert_eq!(result.nodes.len(), 1);
         assert_eq!(result.edges.len(), 0);
@@ -357,11 +355,8 @@ mod tests {
         let peer1 = make_peer_snapshot("node-a", "10.0.0.1:9400", 2, &["a1", "a2"]);
         let peer2 = make_peer_snapshot("node-b", "10.0.0.2:9400", 3, &["b1"]);
 
-        let result = merge_topologies_from_json(
-            local_json,
-            &[peer1, peer2],
-            &MergeStrategy::MergeAll,
-        );
+        let result =
+            merge_topologies_from_json(local_json, &[peer1, peer2], &MergeStrategy::MergeAll);
 
         assert_eq!(result.nodes.len(), 4, "1 local + 2 peer-1 + 1 peer-2");
         assert_eq!(result.max_epoch, 3);

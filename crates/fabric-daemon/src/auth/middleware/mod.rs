@@ -10,10 +10,10 @@
 mod jwt;
 pub mod routes;
 
+use std::{collections::HashSet, sync::Arc};
+
 use reqwest::Client;
 use serde::{Deserialize, Serialize};
-use std::collections::HashSet;
-use std::sync::Arc;
 use thiserror::Error;
 use tokio::sync::RwLock;
 
@@ -164,10 +164,7 @@ impl AuthMiddleware {
         }
 
         // Check if this is a public route.
-        let msg_type = message
-            .get("type")
-            .and_then(|v| v.as_str())
-            .unwrap_or("");
+        let msg_type = message.get("type").and_then(|v| v.as_str()).unwrap_or("");
 
         if self.is_public_route(msg_type) {
             return Ok(None);
@@ -216,8 +213,7 @@ impl AuthMiddleware {
         {
             let cache = self.user_cache.read().await;
             if let Some(entry) = cache.iter().find(|e| {
-                e.token_hash == token_hash(token)
-                    && std::time::Instant::now() < e.expires_at
+                e.token_hash == token_hash(token) && std::time::Instant::now() < e.expires_at
             }) {
                 return Ok(Some(entry.user.clone()));
             }
@@ -236,15 +232,13 @@ impl AuthMiddleware {
             return match provider.introspect_token(token).await {
                 Ok(introspection) if introspection.active => {
                     let user = AuthenticatedUser {
-                        user_id: introspection
-                            .sub
-                            .unwrap_or_else(|| "unknown".to_string()),
+                        user_id: introspection.sub.unwrap_or_else(|| "unknown".to_string()),
                         email: String::new(), // Introspection doesn't return email.
                         org_id: None,
                     };
                     self.cache_user(token, &user, 300).await;
                     Ok(Some(user))
-                }
+                },
                 Ok(_) => Err(AuthError::TokenExpired),
                 Err(e) => Err(AuthError::Introspection(e.to_string())),
             };
@@ -334,23 +328,15 @@ fn parse_bearer_token(header: &str) -> Result<String, AuthError> {
 /// Attach authentication to a message by adding auth fields.
 ///
 /// This is used by clients to include authentication in wire messages.
-pub fn attach_auth(
-    message: &mut serde_json::Value,
-    token: &str,
-) -> Result<(), std::io::Error> {
-    let obj = message
-        .as_object_mut()
-        .ok_or_else(|| {
-            std::io::Error::new(
-                std::io::ErrorKind::InvalidInput,
-                "cannot attach auth to non-object message",
-            )
-        })?;
+pub fn attach_auth(message: &mut serde_json::Value, token: &str) -> Result<(), std::io::Error> {
+    let obj = message.as_object_mut().ok_or_else(|| {
+        std::io::Error::new(
+            std::io::ErrorKind::InvalidInput,
+            "cannot attach auth to non-object message",
+        )
+    })?;
 
-    obj.insert(
-        "auth".to_string(),
-        serde_json::json!({ "token": token }),
-    );
+    obj.insert("auth".to_string(), serde_json::json!({ "token": token }));
 
     Ok(())
 }

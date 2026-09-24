@@ -7,13 +7,17 @@
 #![forbid(unsafe_code)]
 #![warn(missing_docs)]
 
-use std::fs::{self, OpenOptions};
-use std::path::PathBuf;
+use std::{
+    fs::{self, OpenOptions},
+    path::PathBuf,
+};
 
 use async_trait::async_trait;
-use substrate_core::domain::{StructuredResult, Task, TaskState};
-use substrate_core::error::{Result, SubstrateError};
-use substrate_core::ports::StorePort;
+use substrate_core::{
+    domain::{StructuredResult, Task, TaskState},
+    error::{Result, SubstrateError},
+    ports::StorePort,
+};
 use uuid::Uuid;
 
 /// File-backed store rooted at a directory.
@@ -27,7 +31,9 @@ impl FileStore {
     pub fn new(root: impl Into<PathBuf>) -> Result<Self> {
         let root = root.into();
         fs::create_dir_all(&root).map_err(io)?;
-        Ok(FileStore { root })
+        Ok(FileStore {
+            root,
+        })
     }
 
     fn task_path(&self, id: &Uuid) -> PathBuf {
@@ -72,12 +78,12 @@ impl StorePort for FileStore {
         // Atomic CAS lease: create_new fails if the lock already exists.
         let lock = self.claim_lock_path(id);
         match OpenOptions::new().write(true).create_new(true).open(&lock) {
-            Ok(_) => {}
+            Ok(_) => {},
             Err(e) if e.kind() == std::io::ErrorKind::AlreadyExists => {
                 return Err(SubstrateError::ClaimConflict(format!(
                     "task {id} already claimed"
                 )));
-            }
+            },
             Err(e) => return Err(io(e)),
         }
 

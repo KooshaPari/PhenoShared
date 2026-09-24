@@ -12,21 +12,22 @@ mod hooks;
 mod oci;
 mod state;
 
+use std::{path::PathBuf, str::FromStr, time::Duration};
+
 use anyhow::{Context, Result};
 use chrono::Utc;
 use clap::Parser;
 use rand::prelude::*;
-use std::path::PathBuf;
-use std::str::FromStr;
-use std::time::Duration;
 #[cfg(unix)]
 use tokio::signal::unix::{SignalKind, signal};
 use tracing::{error, info, warn};
 use tracing_subscriber::EnvFilter;
 
-use crate::config::Config;
-use crate::oci::{instance_public_ip, list_availability_domains, try_launch};
-use crate::state::{AcquiredInstance, LotteryState, write_acquired};
+use crate::{
+    config::Config,
+    oci::{instance_public_ip, list_availability_domains, try_launch},
+    state::{AcquiredInstance, LotteryState, write_acquired},
+};
 
 #[derive(Debug, Parser)]
 #[command(
@@ -171,11 +172,11 @@ async fn main() -> Result<()> {
                 Ok(_) => {
                     warn!(region = %region, "no availability domains returned");
                     continue;
-                }
+                },
                 Err(e) => {
                     warn!(region = %region, error = %e, "AD list failed; skipping region this round");
                     continue;
-                }
+                },
             };
 
             for idx in ad_indices.iter().copied() {
@@ -214,11 +215,11 @@ async fn main() -> Result<()> {
                         hooks::fire_all(&acquired, args.infra_repo.as_ref()).await;
                         info!("hook chain complete; exiting");
                         return Ok(());
-                    }
+                    },
                     Ok(out) if out.out_of_capacity => {
                         st.last_error = Some("out-of-capacity".into());
                         info!(region = %region, ad = %ad_name, "out of capacity");
-                    }
+                    },
                     Ok(out) => {
                         let err = if !out.raw_stderr.is_empty() {
                             out.raw_stderr
@@ -227,11 +228,11 @@ async fn main() -> Result<()> {
                         };
                         warn!(region = %region, ad = %ad_name, error = %err, "launch failed");
                         st.last_error = Some(err);
-                    }
+                    },
                     Err(e) => {
                         error!(region = %region, error = %e, "oci CLI invocation error");
                         st.last_error = Some(e.to_string());
-                    }
+                    },
                 }
                 st.save(&state_path).await.ok();
 
