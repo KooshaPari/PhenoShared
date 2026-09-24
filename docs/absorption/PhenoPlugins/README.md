@@ -2,7 +2,7 @@
 
 **Source repo**: `<REDACTED>/PhenoPlugins` (archived 2026-07-17)
 **Target**: `<REDACTED>/pheno` monorepo
-**Path**: `crates/pheno-plugins-{core,git,sqlite,vessel,examples}/`
+**Path**: `crates/phenotype-plugins/` (five member crates `pheno-plugin-{core,git,sqlite,vessel,examples}` inside — see Reality check below)
 **Branch**: `absorb/pheno-plugins-2026-07-17`
 **Wave**: `2026-07-17-queue-refresh-2`
 
@@ -16,11 +16,11 @@ with traits, manifest, registry, lifecycle, guardrails).
 
 | Source                          | Target                          |
 |---------------------------------|---------------------------------|
-| `crates/pheno-plugin-core`      | `crates/pheno-plugins-core`     |
-| `crates/pheno-plugin-git`       | `crates/pheno-plugins-git`      |
-| `crates/pheno-plugin-sqlite`    | `crates/pheno-plugins-sqlite`   |
-| `crates/pheno-plugin-vessel`    | `crates/pheno-plugins-vessel`   |
-| `crates/pheno-plugin-examples`  | `crates/pheno-plugins-examples` |
+| `crates/pheno-plugin-core`      | `crates/phenotype-plugins/pheno-plugin-core`     |
+| `crates/pheno-plugin-git`       | `crates/phenotype-plugins/pheno-plugin-git`      |
+| `crates/pheno-plugin-sqlite`    | `crates/phenotype-plugins/pheno-plugin-sqlite`   |
+| `crates/pheno-plugin-vessel`    | `crates/phenotype-plugins/pheno-plugin-vessel`   |
+| `crates/pheno-plugin-examples`  | `crates/phenotype-plugins/pheno-plugin-examples` |
 
 ## Changes made during absorption
 
@@ -36,6 +36,20 @@ with traits, manifest, registry, lifecycle, guardrails).
    rusqlite 0.32; only one package may specify `links="sqlite3"`
    to avoid native lib conflict)
 6. **Workspace members** registered in `Cargo.toml`
+
+> **Reality check (2026-09-24).** Items 1-4 and 6 describe the intended
+> `absorb/pheno-plugins-2026-07-17` branch work; that branch exists in no
+> fetched ref here and its plural-renamed layout never existed in this repo
+> (no commit in any ref touches those paths). What is actually present —
+> identical in this tree, the `pheno` target, and `phenotype-tooling` — is
+> `crates/phenotype-plugins/` (99 tracked files plus `PROVENANCE.md`, which
+> records a separate 2026-09-15 arrival from `zz-merge-unk-PhenoPlugins`):
+> crate names are the **source** names (`pheno-plugin-*`, no rename), the
+> orphan `[[bench]]` item 4 claims to have removed is still present at line
+> 27 of the vessel manifest, workspace members are **not** registered in the
+> root `Cargo.toml` here or in `pheno`, and the fenced verification
+> transcript below names crate names that do not exist. Only item 5 matches:
+> `rusqlite` is indeed 0.32.
 
 ## Verification
 
@@ -56,6 +70,6 @@ All 5 plugin crates compile clean. Test imports verified.
 
 PhenoPlugins crates are now the canonical plugin system for the
 pheno monorepo. The plugin contract (traits, manifest, registry,
-guardrails, lifecycle) is exposed via `pheno-plugins-core` and
-extended by `pheno-plugins-{git,sqlite,vessel}` for the canonical
+guardrails, lifecycle) is exposed via `pheno-plugin-core` and
+extended by `pheno-plugin-{git,sqlite,vessel}` for the canonical
 adapter implementations.
