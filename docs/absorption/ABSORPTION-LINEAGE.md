@@ -455,7 +455,7 @@ have nothing to do with provenance.
 
 | Ledger:line | Link | Where it would have pointed | Does the target exist anywhere in this repo? |
 |---|---|---|---|
-| `crates/ABSORPTION_MANIFEST.md:9` | `../absorption/PHENOAGENT_ABSORPTION_2026_06_18.md` | `absorption/PHENOAGENT_ABSORPTION_2026_06_18.md` — the only ledger for the PhenoAgent absorption | **NO.** Exhaustive `find` for `PHENOAGENT_ABSORPTION*` returns nothing. This was the sole record for one of the 50+ absorptions |
+| `crates/ABSORPTION_MANIFEST.md:9` | ~~`../absorption/PHENOAGENT_ABSORPTION_2026_06_18.md`~~ link removed `a465c667` (2026-09-19); replaced by a prose pointer to the sibling-repo canonical | `absorption/PHENOAGENT_ABSORPTION_2026_06_18.md` — the PhenoAgent absorption ledger | **NO in this repo — and not lost.** Correction 2026-09-24: the ledger exists in the sibling `../Agentora` checkout (canonical owner per the manifest) and in the `wt-agentora-clippy-20260911` worktree, verified by direct file read. An exhaustive `find` **within this repo** returns nothing, which was by design |
 | `crates/ABSORPTION_MANIFEST.md:20` | `../../../migration-work/registry-wt/docs/operations/p5-4-phenoroutermonitor-absorption-2026-06-20.md` | from `crates/`, `../../../` climbs out of the repo to `Phenotype/migration-work/registry-wt/…`. Repo-root-equivalent: `../migration-work/registry-wt/docs/operations/p5-4-phenoroutermonitor-absorption-2026-06-20.md` | **YES — relocated.** The file exists at `docs/operations/p5-4-phenoroutermonitor-absorption-2026-06-20.md`. The absorption was absorbed; the link was not rewritten. `migration-work/` itself does not exist, here or in the parent directory |
 | `absorption/byteport/README.md:24` | `../../docs/absorption/BYTEPORT_PORT.md` | `docs/absorption/BYTEPORT_PORT.md` | **NO.** No file of that name exists. `docs/boundary/BytePort.md` and `docs/intent/BytePort.md` exist but are different documents |
 | `absorption/helios-bench/README.md:25` | `../../docs/absorption/HELIOS_BENCH_PORT.md` | `docs/absorption/HELIOS_BENCH_PORT.md` | **NO.** No file of that name exists |
@@ -533,8 +533,13 @@ are `crates/traceability-{core,decorators}`, `crates/trace-gate`,
    inside the placeholder) — the original was already truncated before the sweep.
 6. **`docs/audits/PII-SWEEP-DAMAGE.md`** and the arithmetic behind the `2,541`
    figure.
-7. **`absorption/PHENOAGENT_ABSORPTION_2026_06_18.md`** — the only PhenoAgent
-   ledger, referenced and never present.
+7. **`absorption/PHENOAGENT_ABSORPTION_2026_06_18.md`** — the PhenoAgent
+   ledger, never present **in this repo**. **Correction (2026-09-24): not lost.**
+   The record exists in the sibling Agentora repo (canonical owner, per the
+   manifest) at `docs/absorption/PHENOAGENT_ABSORPTION_2026_06_18.md` and
+   identically in the `wt-agentora-clippy-20260911` worktree; this repo's
+   `docs/absorption/` was never its home. Verified by direct file read. This
+   item required stepping outside PhenoShared, not recovering a lost record.
 8. **Whether `crates/byteport`, `crates/pheno-data-*`, `crates/trace-gate`,
    `packages/graphclient`, `adapters/web/agent-platform` ever existed here.**
    No commit adds them and no commit removes them; they are absent, not deleted.
