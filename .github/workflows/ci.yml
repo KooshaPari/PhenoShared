@@ -197,10 +197,20 @@ jobs:
         with:
           fail-on-severity: low
 
+  registry-invariant:
+    name: Registry Invariant (absorption claims)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: self-test analyzer
+        run: bash scripts/audit/registry-invariant.sh --self-test
+      - name: registry-invariant gate
+        run: bash scripts/audit/registry-invariant.sh
+
   lint:
     name: ci / lint
     if: always()
-    needs: [detect, rust, cargo-deny, python, go, typescript, security, dep-review]
+    needs: [detect, rust, cargo-deny, python, go, typescript, security, dep-review, registry-invariant]
     runs-on: ubuntu-latest
     steps:
       - name: Aggregate lint gate
@@ -214,6 +224,7 @@ jobs:
             "typescript:${{ needs.typescript.result }}" \
             "security:${{ needs.security.result }}" \
             "dep-review:${{ needs.dependency-review.result }}" \
+            "registry-invariant:${{ needs.registry-invariant.result }}" \
             ; do
             name="${pair%%:*}"
             result="${pair#*:}"

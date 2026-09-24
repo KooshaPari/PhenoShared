@@ -115,7 +115,7 @@ broken mechanisms in this repo.
 | E10.4 | Schema split: typed `absorbing_path` (repo-relative) vs `absorbing_repo` (slug) | 10m | recommended |
 | E10.5 | `phenoData` decision — the ledger says the surviving `crates/pheno-data-from-phenoData/` was removed; it is still there with 14 files | 10m | **your call** |
 | E10.6 | Extend the scanner to prose path lists (**≥5** more violations known) — deliberately deferred so the gate does not cry wolf | 10m | deferred on purpose |
-| E10.7 | Wire the invariant into CI as a gate | 10m | queued |
+| E10.7 | Wire the invariant into CI as a gate | 10m | **landed 2026-09-24** — hard `registry-invariant` job (self-test + gate) feeding the `ci / lint` aggregate |
 
 ### E10.5 decision package (phenoData) — one-word yes
 
