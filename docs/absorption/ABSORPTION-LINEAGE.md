@@ -204,7 +204,7 @@ and four copies under `audits/*/forge-runner-scripts/`.
 | `docs/absorption/Benchora/README.md` | `crates/benchora/` | Absent. `audits/absorption-justifications/Benchora-2026-09-01.md` also exists | HIGH |
 | `docs/absorption/pheno-forge-smoke/README.md` | `crates/pheno-sidecar-stub/` | Absent; the crate has 14 files under `registry/absorbed-crates/pheno-forge-smoke/sidecars/` | MEDIUM |
 | `absorption/byteport/README.md:17` | `crates/byteport/` | Absent | MEDIUM |
-| `docs/absorption/audit-tool/README.md:10`, `docs/absorption/scripts/README.md`, `docs/absorption/Sidekick/README.md:4`, `docs/absorption/template-commons/README.md:6`, `docs/absorption/PolicyStack/README.md:8`, `docs/absorption/PhenoSpecs/README.md:8`, `docs/absorption/{KodeVibe,KWatch,Quillr,utility-targets,curated-traces,localbase3,backend-melosviz}/README.md` | `KooshaPari/phenotype-python-sdk`, `phenokits-commons`, `phenotype-registry`, `phenotype-go-sdk`, `tools/kwatch/`, `tools/kodevibe/`, `crates/agent-user-status/` | None of these destinations exist in this repo (`tools/` has no `kwatch` or `kodevibe`; there is no `crates/agent-user-status`) | HIGH — 33 records, 11 with an explicit destination, and **none of the 11 destinations is in this tree** |
+| `docs/absorption/audit-tool/README.md:10`, `docs/absorption/scripts/README.md`, `docs/absorption/Sidekick/README.md:4`, `docs/absorption/template-commons/README.md:6`, `docs/absorption/PolicyStack/README.md:8`, `docs/absorption/PhenoSpecs/README.md:8`, `docs/absorption/{KodeVibe,KWatch,Quillr,utility-targets,curated-traces,localbase3,backend-melosviz}/README.md` | `KooshaPari/phenotype-python-sdk`, `phenokits-commons`, `phenotype-registry`, `phenotype-go-sdk`, `tools/kwatch/`, `tools/kodevibe/`, `crates/agent-user-status/` | None of these destinations exist in this repo (`tools/` has no `kwatch` or `kodevibe`; there is no `crates/agent-user-status`) — **2026-09-24 status:** as of gate run on 2026-09-24 the registry-invariant gate reports **zero violations from every README listed in this row** (claims resolve as exists, prose, or unverifiable; PolicyStack/Quillr/backend-melosviz corrected in `7ac67d15`, phenoResearchEngine in `017481e1`, both 2026-09-20); `crates/agent-user-status` was repo-qualified 2026-09-24 — see the dated update under the destination-kind caveat below | ~~HIGH — 33 records, 11 with an explicit destination, and **none of the 11 destinations is in this tree**~~ **RESOLVED-AS-OF-2026-09-24 for gate purposes**; the row's historical claim stands, its severity does not |
 | `crates/ABSORPTION_MANIFEST.md:52` | `libs/phenotype-observability` → `PhenoObservability` | Absent (`libs/` exists, without that path) | MEDIUM |
 | `crates/ABSORPTION_MANIFEST.md:26-27` | `adapters/web/agent-platform/` | Absent; `adapters/`, `web/` and `agent-platform/` are all absent | HIGH |
 | `crates/ABSORPTION_MANIFEST.md:34` | `<REDACTED>/rich-cli-kit/crates/klipdot/` | Absent. Related survivors: `crates/klipdot-capture`, `crates/sharecli` | MEDIUM |
@@ -257,6 +257,28 @@ Consequence: the "none of the 11 destinations is in this tree" severity in
 count of defects until re-derived with the bucket rule. The genuine local-path
 violations in that row are `tools/kwatch`, `tools/kodevibe` and
 `crates/agent-user-status`.
+
+**2026-09-24 update — the one checkable-path record is reclassified.** The
+`absorbing_path` in `projects/agent-user-status.json` was always a claim about
+**another repo** (`absorbing_repo: <REDACTED>/phenotype-tooling`) but was written
+repo-relative, so the gate read it as a local-path claim. It is now written
+repo-qualified (`phenotype-tooling/crates/agent-user-status/`), the gate's own
+`external_qualified` form for "that repo, this path", which classifies it
+*unverifiable* — its designed bucket for claims this tree cannot test. It is
+not reclassified as OK. New evidence, gathered 2026-09-24 from the sibling
+clone `../phenotype-tooling` (refs current to `origin/main` 2026-09-14):
+`git log --all -- crates/agent-user-status` returns nothing; claimed commit
+`29ce5dd4d7baecd4920e5ccedca744eee5422a10` is absent; branch
+`salvage/phenotype-tooling-workspace-2026-07-15` is absent; the target-side
+`crates/agent-user-status/ABSORPTION.md` marker is absent; `origin/main`'s
+2026-07-14..07-20 window holds only dependency bumps. Today's fetch returns
+`Repository not found` over SSH — the deploy-key scope of §2.3, which cannot
+distinguish deleted from private. The claim is therefore **contradicted by the
+best available proxy but not provable either way**; it stays unverifiable,
+never OK, and closes only on account-wide GitHub credentials. With that, the
+sentence above listing three "genuine local-path violations" becomes: `tools/kwatch`
+and `tools/kodevibe` were resolved earlier (gate-clean as of 2026-09-20), and
+`crates/agent-user-status` is no longer a local-path claim at all.
 
 ### 2.4 Duplicate destinations (same code, two or three arrivals)
 | Code | Copies | Arrivals |

@@ -49,4 +49,38 @@ gh repo clone <REDACTED>/agent-user-status /tmp/agent-user-status-restore
 - `docs/boundary/agent-user-status.md` (boundary doc — to follow)
 - `crates/agent-user-status/ABSORPTION.md` (target-side provenance marker)
 
+## Verification status (2026-09-24)
+
+The destination is **cross-repo**: `absorbing_repo` is `KooshaPari/phenotype-tooling`,
+not this tree. The registry row wrote `absorbing_path` repo-relative
+(`crates/agent-user-status/`), which `scripts/audit/registry-invariant.sh` reads
+as a local-path claim and therefore flags as a violation. The field is now
+repo-qualified (`phenotype-tooling/crates/agent-user-status/`) — the gate's
+`external_qualified` form for "that repo, this path" — which classifies it
+**unverifiable** (counted, non-gating). It is NOT marked OK: the gate cannot
+test another repo's tree from here.
+
+Best-available evidence, from the sibling clone `../phenotype-tooling` whose
+refs are current to `origin/main` 2026-09-14:
+
+- `git log --all -- crates/agent-user-status` returns nothing — no fetched ref
+  has ever touched that path.
+- Claimed absorbing commit `29ce5dd4d7baecd4920e5ccedca744eee5422a10` is absent
+  from the clone.
+- Branch `salvage/phenotype-tooling-workspace-2026-07-15` is absent.
+- The target-side provenance marker `crates/agent-user-status/ABSORPTION.md`
+  listed under "Audit / boundary references" above does not exist there.
+- `origin/main`'s 2026-07-14..07-20 window contains only dependency bumps — no
+  salvage merge.
+
+`git fetch` on 2026-09-24 returns `Repository not found` over SSH: the deploy
+key is scoped to PhenoShared only (see `docs/absorption/ABSORPTION-LINEAGE.md`
+§2.3), which makes a private-but-intact repo indistinguishable from a deleted
+one from this host.
+
+**Consequence:** the absorption claim is currently contradicted by the best
+available proxy but not provable either way. It stays in the unverifiable
+bucket and closes only on account-wide GitHub credentials (re-auth `gh`, or an
+account-level SSH key), after which one `git ls-remote` + `git fetch` settles it.
+
 **End of absorption record.**
