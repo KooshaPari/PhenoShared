@@ -11,8 +11,9 @@
 //! If a fixture's JSON stops parsing, this test fails with the serde error
 //! path so the regression is immediately fixable.
 
-use fabric_capability::CapabilityDescriptor;
 use std::path::PathBuf;
+
+use fabric_capability::CapabilityDescriptor;
 
 fn fixture_dir() -> PathBuf {
     // CARGO_MANIFEST_DIR points at crates/fabric-capability; testdata lives two
@@ -66,7 +67,8 @@ fn every_descriptor_fixture_round_trips_through_capability_descriptor() {
             .unwrap_or_else(|e| panic!("read {}: {e}", path.display()));
         let parsed: CapabilityDescriptor = serde_json::from_str(&raw).unwrap_or_else(|e| {
             panic!(
-                "fixture {name} failed to deserialize into CapabilityDescriptor.\n  serde error: {e}"
+                "fixture {name} failed to deserialize into CapabilityDescriptor.\n  serde error: \
+                 {e}"
             )
         });
         assert_eq!(
@@ -104,8 +106,8 @@ fn every_manifest_fixture_is_valid_json_with_minimal_shape() {
     //   1. parse as JSON
     //   2. be a top-level object
     //   3. have a "name" field (the checker's manifest-name extractor reads it)
-    //   4. carry at least one substantive resource field so the checker has
-    //      something to compare against the descriptor.
+    //   4. carry at least one substantive resource field so the checker has something to compare
+    //      against the descriptor.
     // They need NOT carry every field of the full phenotype-manifest schema;
     // that lives in `phenotype-nvms-adapter` and is exercised there.
     let dir = fixture_dir();
@@ -156,8 +158,8 @@ fn capability_descriptor_round_trips_through_json() {
 
         // Re-serialize to JSON and parse it back; expect semantic equality
         // on the fields the checker actually reads.
-        let re_json = serde_json::to_string(&d)
-            .unwrap_or_else(|e| panic!("{name}: serialize failed: {e}"));
+        let re_json =
+            serde_json::to_string(&d).unwrap_or_else(|e| panic!("{name}: serialize failed: {e}"));
         let d2: CapabilityDescriptor = serde_json::from_str(&re_json)
             .unwrap_or_else(|e| panic!("{name}: re-deserialize failed: {e}"));
         assert_eq!(d.epoch, d2.epoch, "{name}: epoch round-trip differs");
@@ -169,8 +171,7 @@ fn capability_descriptor_round_trips_through_json() {
             d.topology_hash, d2.topology_hash,
             "{name}: topology_hash round-trip differs"
         );
-        if let (Some(c1), Some(c2)) = (&d.capabilities.compute, &d2.capabilities.compute)
-        {
+        if let (Some(c1), Some(c2)) = (&d.capabilities.compute, &d2.capabilities.compute) {
             assert_eq!(
                 c1.memory_bytes, c2.memory_bytes,
                 "{name}: memory_bytes round-trip differs"

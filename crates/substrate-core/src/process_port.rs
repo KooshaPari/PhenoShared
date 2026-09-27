@@ -3,8 +3,7 @@
 //! Core defines the port contract and value types; `runtime-process` wraps a
 //! vetted process-group crate for platform-specific group semantics.
 
-use std::path::PathBuf;
-use std::time::Duration;
+use std::{path::PathBuf, time::Duration};
 
 use async_trait::async_trait;
 use serde::{Deserialize, Serialize};

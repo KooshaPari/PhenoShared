@@ -1,6 +1,7 @@
 //! Topology page — shows nodes from the daemon.
 
 use leptos::prelude::*;
+
 use crate::api::*;
 
 /// Topology page — shows nodes from the daemon.

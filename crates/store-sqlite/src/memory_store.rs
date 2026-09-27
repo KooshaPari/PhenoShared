@@ -4,12 +4,10 @@ use std::sync::Mutex;
 
 use chrono::Utc;
 use rusqlite::{params, Connection};
+use substrate_core::memory_port::{MemoryEntry, MemoryPort};
 use uuid::Uuid;
 
-use substrate_core::memory_port::{MemoryEntry, MemoryPort};
-
-use crate::error::StoreError;
-use crate::schema;
+use crate::{error::StoreError, schema};
 
 /// Durable memory store with full history in SQLite.
 pub struct SqliteMemoryStore {
@@ -48,7 +46,8 @@ impl MemoryPort for SqliteMemoryStore {
     fn get(&self, key: &str) -> Result<Option<String>, Self::Error> {
         let conn = self.conn.lock().unwrap();
         let mut stmt = conn.prepare(
-            "SELECT content FROM memory WHERE mem_key = ?1 ORDER BY created_at DESC, rowid DESC LIMIT 1",
+            "SELECT content FROM memory WHERE mem_key = ?1 ORDER BY created_at DESC, rowid DESC \
+             LIMIT 1",
         )?;
         let mut rows = stmt.query(params![key])?;
         if let Some(row) = rows.next()? {
@@ -82,7 +81,8 @@ impl SqliteMemoryStore {
     fn history_limited(&self, limit: usize) -> Result<Vec<MemoryEntry>, StoreError> {
         let conn = self.conn.lock().unwrap();
         let mut stmt = conn.prepare(
-            "SELECT id, mem_key, content, created_at FROM memory ORDER BY created_at DESC, rowid DESC LIMIT ?1",
+            "SELECT id, mem_key, content, created_at FROM memory ORDER BY created_at DESC, rowid \
+             DESC LIMIT ?1",
         )?;
         let rows = stmt.query_map(params![limit as i64], |row| {
             let id_str: String = row.get(0)?;

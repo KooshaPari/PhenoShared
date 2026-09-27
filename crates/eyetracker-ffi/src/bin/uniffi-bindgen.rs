@@ -1,5 +1,6 @@
 // uniffi-bindgen.rs — Generate Swift and Kotlin bindings
-// Invoked as: cargo run --bin uniffi-bindgen --features cli -- generate --language swift --out-dir bindings/swift
+// Invoked as: cargo run --bin uniffi-bindgen --features cli -- generate --language swift --out-dir
+// bindings/swift
 
 #[cfg(feature = "cli")]
 fn main() {

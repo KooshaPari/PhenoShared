@@ -4,10 +4,8 @@
 
 use tracing::{info, warn};
 
-use crate::argis_monitor::alerts;
-use crate::argis_monitor::webhook;
-
 use super::monitor::Monitor;
+use crate::argis_monitor::{alerts, webhook};
 
 /// Evaluate every meta-alert rule and deliver the resulting payloads.
 /// Returns the names of the meta-alerts that fired in this tick.
@@ -25,14 +23,16 @@ use super::monitor::Monitor;
 pub(crate) async fn evaluate_meta_alerts_impl(me: &Monitor, ts: u64) -> Vec<String> {
     let inner = me.inner.load();
     let rules = inner.config.meta_alerts.clone();
-    if rules.is_empty() { return Vec::new(); }
+    if rules.is_empty() {
+        return Vec::new();
+    }
     let mut store_guard = inner.state_store.lock().await;
     let store = match store_guard.as_mut() {
         Some(s) => s,
         None => {
             tracing::debug!("meta-alert evaluation skipped: no state store configured");
             return Vec::new();
-        }
+        },
     };
     let mut fired = Vec::new();
     for rule in &rules {
@@ -52,7 +52,7 @@ pub(crate) async fn evaluate_meta_alerts_impl(me: &Monitor, ts: u64) -> Vec<Stri
             Err(e) => {
                 warn!(meta = %rule.name, error = %e, "alert_failures count failed");
                 continue;
-            }
+            },
         };
         if count >= u64::from(rule.consecutive_failures) {
             info!(
@@ -86,10 +86,17 @@ pub(crate) async fn evaluate_meta_alerts_impl(me: &Monitor, ts: u64) -> Vec<Stri
             let webhook_targets: Vec<alerts::WebhookTarget> = if !rule.webhooks.is_empty() {
                 rule.webhooks.clone()
             } else {
-                inner.config.alert_rules.iter()
+                inner
+                    .config
+                    .alert_rules
+                    .iter()
                     .find(|ar| {
                         ar.name == rule.rule.clone().unwrap_or_default()
-                            && inner.config.targets.iter().any(|t| t.name == ar.slo || t.name == rule.target)
+                            && inner
+                                .config
+                                .targets
+                                .iter()
+                                .any(|t| t.name == ar.slo || t.name == rule.target)
                     })
                     .map(|ar| ar.webhooks.clone())
                     .unwrap_or_default()
@@ -102,9 +109,7 @@ pub(crate) async fn evaluate_meta_alerts_impl(me: &Monitor, ts: u64) -> Vec<Stri
                     "meta-alert fired but no webhook targets configured"
                 );
             } else {
-                let reports = webhook::deliver_all(
-                    &inner.http, &webhook_targets, &payload,
-                ).await;
+                let reports = webhook::deliver_all(&inner.http, &webhook_targets, &payload).await;
                 let mut last = inner.last_delivery.lock().await;
                 for r in reports {
                     last.insert(r.url.clone(), r);

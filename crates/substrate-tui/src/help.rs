@@ -38,7 +38,9 @@ pub fn draw_help(frame: &mut Frame, area: Rect) {
 
     let paragraph = Paragraph::new(lines)
         .block(block)
-        .wrap(Wrap { trim: false })
+        .wrap(Wrap {
+            trim: false,
+        })
         .alignment(Alignment::Left);
 
     // Clear area first for overlay effect.

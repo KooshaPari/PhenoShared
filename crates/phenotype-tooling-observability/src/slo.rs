@@ -221,7 +221,10 @@ mod tests {
         let (s, l) = multi_window_burn(999, 100, 9990, 10, 0.999);
         // short: 100/1099 error ratio vs 0.001 budget = ~90.99x
         let expected_short = (100.0_f64 / 1099.0) / 0.001;
-        assert!((s - expected_short).abs() < 1e-3, "expected ~{expected_short}, got {s}");
+        assert!(
+            (s - expected_short).abs() < 1e-3,
+            "expected ~{expected_short}, got {s}"
+        );
         // long: 10/10000 error ratio vs 0.001 budget = 1x
         assert!((l - 1.0).abs() < 1e-9, "expected ~1.0, got {l}");
     }

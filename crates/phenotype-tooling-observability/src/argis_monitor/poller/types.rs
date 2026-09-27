@@ -1,20 +1,21 @@
 //! Shared types for the poller: PollOutcome + PollError + per-target counters
 //! + the `MonitorInner` struct that all the impl-Monitor submodules read.
 
-use std::collections::HashMap;
-use std::sync::Arc;
+use std::{collections::HashMap, sync::Arc};
 
 use prometheus_client::registry::Registry;
 use serde::{Deserialize, Serialize};
 use thiserror::Error;
 use tokio::sync::Mutex;
 
-use crate::argis_monitor::alerts::AlertStateTracker;
-use crate::argis_monitor::config::Config;
-use crate::argis_monitor::metrics::Metrics;
-use crate::argis_monitor::ring_buffer::RingBuffer;
-use crate::argis_monitor::state_store::{StateStore, TrackerSnapshot};
-use crate::argis_monitor::webhook;
+use crate::argis_monitor::{
+    alerts::AlertStateTracker,
+    config::Config,
+    metrics::Metrics,
+    ring_buffer::RingBuffer,
+    state_store::{StateStore, TrackerSnapshot},
+    webhook,
+};
 
 /// One poll's outcome.
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
@@ -63,7 +64,8 @@ pub struct MonitorInner {
     /// whether to auto-disable a noisy rule. Bounded to the largest
     /// `auto_disable_after` in the active config (so the memory footprint
     /// stays predictable).
-    pub rule_fire_history: tokio::sync::Mutex<std::collections::HashMap<String, std::collections::VecDeque<u64>>>,
+    pub rule_fire_history:
+        tokio::sync::Mutex<std::collections::HashMap<String, std::collections::VecDeque<u64>>>,
     /// Slice 34: rules that have been auto-disabled by the circuit breaker.
     /// The poller skips evaluation for any rule in this set.
     pub auto_disabled_rules: tokio::sync::Mutex<std::collections::HashSet<String>>,

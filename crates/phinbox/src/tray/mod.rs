@@ -6,9 +6,7 @@
 //! without touching the OS. This keeps the daemon's tray wiring unconditional
 //! at the call site — there's a single `TrayHandle` regardless of backend.
 
-use std::fmt;
-use std::path::PathBuf;
-use std::sync::Arc;
+use std::{fmt, path::PathBuf, sync::Arc};
 
 use serde::{Deserialize, Serialize};
 
@@ -149,7 +147,7 @@ pub fn build_tray(cfg: TrayConfig) -> TrayResult<Arc<dyn Tray>> {
             Err(e) => {
                 tracing::warn!(error = %e, "tray-native build failed; falling back to NoopTray");
                 Ok(Arc::new(NoopTray::new(cfg)))
-            }
+            },
         }
     }
 
@@ -176,7 +174,9 @@ pub struct NoopTray {
 impl NoopTray {
     #[must_use]
     pub fn new(cfg: TrayConfig) -> Self {
-        Self { cfg }
+        Self {
+            cfg,
+        }
     }
 }
 
@@ -259,10 +259,7 @@ mod tests {
 
     #[test]
     fn noop_tray_is_a_noop() {
-        let tray = NoopTray::new(TrayConfig::new(
-            "http://127.0.0.1:7117",
-            "/tmp/inbox",
-        ));
+        let tray = NoopTray::new(TrayConfig::new("http://127.0.0.1:7117", "/tmp/inbox"));
         assert_eq!(tray.backend_name(), "noop");
         assert!(tray.set_badge("5").is_ok());
         assert!(tray.set_tooltip("hi").is_ok());
@@ -273,10 +270,7 @@ mod tests {
 
     #[test]
     fn build_tray_returns_something() {
-        let t = build_tray(TrayConfig::new(
-            "http://127.0.0.1:7117",
-            "/tmp/inbox",
-        ));
+        let t = build_tray(TrayConfig::new("http://127.0.0.1:7117", "/tmp/inbox"));
         let t = match t {
             Ok(t) => t,
             Err(TrayError::NotAvailable(_)) => return, // headless CI

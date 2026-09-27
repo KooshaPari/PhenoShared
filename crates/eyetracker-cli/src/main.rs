@@ -123,10 +123,10 @@ fn main() -> Result<()> {
         match calibration::load_calibration()? {
             Some(cal) => {
                 println!("Calibration loaded (quality: {:.1}%)", cal.quality * 100.0);
-            }
+            },
             None => {
                 println!("No calibration file found. Run --calibrate first.");
-            }
+            },
         }
         return Ok(());
     }

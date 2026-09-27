@@ -6,8 +6,8 @@
 //!
 //! 1. `osascript` is a system component on every macOS install (since OS 8).
 //! 2. Linking `AppKit` requires Xcode SDK + a Cocoa build script.
-//! 3. The popup is rendered out-of-process, so the MCP server is never
-//!    blocked on the `AppKit` main thread.
+//! 3. The popup is rendered out-of-process, so the MCP server is never blocked on the `AppKit` main
+//!    thread.
 //!
 //! Wire format: we emit a single `display dialog` call with custom
 //! properties (title, default answer, icon, timeout). The user-entered
@@ -17,27 +17,32 @@
 mod parse;
 mod script;
 
-use std::os::unix::process::CommandExt;
-use std::process::{Command, Stdio};
-use std::time::{Duration, Instant};
-
-use crate::error::ElicitError;
-use crate::options::ElicitOptions;
-use crate::spec::{ElicitResponse, PromptSpec};
+use std::{
+    os::unix::process::CommandExt,
+    process::{Command, Stdio},
+    time::{Duration, Instant},
+};
 
 use parse::parse_output;
 use script::build_script;
 
-pub use parse::coerce_value;
+use crate::{
+    error::ElicitError,
+    options::ElicitOptions,
+    spec::{ElicitResponse, PromptSpec},
+};
 
 /// Render the popup on macOS.
+///
+/// `display dialog` returns everything as a plain string, so this returns a
+/// `FieldValue::Text`. Typed coercion lives centrally in
+/// [`crate::render::dispatch`], which applies it for every platform.
 pub fn render(spec: &PromptSpec, opts: &ElicitOptions) -> Result<ElicitResponse, ElicitError> {
     spec.validate().map_err(ElicitError::InvalidSpec)?;
 
     let script = build_script(spec)?;
-    let timeout = opts
-        .timeout
-        .unwrap_or(Duration::from_secs(u64::from(spec.timeout_secs)));
+    // `None` = wait forever (timeout_secs 0 is documented as "no timeout").
+    let timeout = super::deadline_for(spec, opts);
 
     let start = Instant::now();
     let mut child = Command::new("osascript")
@@ -55,9 +60,9 @@ pub fn render(spec: &PromptSpec, opts: &ElicitOptions) -> Result<ElicitResponse,
             Ok(Some(_status)) => {
                 let out = child.wait_with_output().map_err(ElicitError::Io)?;
                 break out;
-            }
+            },
             Ok(None) => {
-                if start.elapsed() >= timeout {
+                if timeout.is_some_and(|t| start.elapsed() >= t) {
                     let _ = child.kill();
                     let _ = child.wait();
                     return Ok(ElicitResponse::TimedOut {
@@ -65,7 +70,7 @@ pub fn render(spec: &PromptSpec, opts: &ElicitOptions) -> Result<ElicitResponse,
                     });
                 }
                 std::thread::sleep(Duration::from_millis(100));
-            }
+            },
             Err(e) => return Err(ElicitError::Io(e)),
         }
     };

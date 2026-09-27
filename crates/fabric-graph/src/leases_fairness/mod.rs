@@ -18,10 +18,10 @@
 //!
 //! - **Fifo**: pure round-robin; rotation order = insertion order.
 //! - **FairShare**: pick tenant with max deficit; ties broken FIFO.
-//! - **PriorityWeighted**: serve by priority group; within group FIFO.
-//!   Deny if higher-priority tenant is waiting.
-//! - **WeightedRoundRobin**: each tenant gets `weight` slots per rotation;
-//!   rotation cursor advances after each grant.
+//! - **PriorityWeighted**: serve by priority group; within group FIFO. Deny if higher-priority
+//!   tenant is waiting.
+//! - **WeightedRoundRobin**: each tenant gets `weight` slots per rotation; rotation cursor advances
+//!   after each grant.
 
 mod pardon;
 mod queue;

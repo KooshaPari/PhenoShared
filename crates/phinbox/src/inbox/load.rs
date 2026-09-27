@@ -1,15 +1,12 @@
 use std::path::Path;
 
-use super::{inbox_pending_dir, answered_dir, PendingRequest};
+use super::{answered_dir, inbox_pending_dir, PendingRequest};
 use crate::error::ElicitError;
 
 /// Load a pending (non-terminal) request by id from `root`.
 ///
 /// Returns `Ok(None)` when the entry is missing or already terminal.
-pub fn load_pending(
-    root: &Path,
-    request_id: &str,
-) -> Result<Option<PendingRequest>, ElicitError> {
+pub fn load_pending(root: &Path, request_id: &str) -> Result<Option<PendingRequest>, ElicitError> {
     let pending = inbox_pending_dir(root).join(format!("{request_id}.json"));
     if !pending.exists() {
         return Ok(None);
@@ -22,10 +19,7 @@ pub fn load_pending(
 /// Load a request by id from `root` (pending OR answered).
 ///
 /// Returns `Ok(None)` when the entry does not exist.
-pub fn load_request(
-    root: &Path,
-    request_id: &str,
-) -> Result<Option<PendingRequest>, ElicitError> {
+pub fn load_request(root: &Path, request_id: &str) -> Result<Option<PendingRequest>, ElicitError> {
     let candidates = [
         inbox_pending_dir(root).join(format!("{request_id}.json")),
         answered_dir(root).join(format!("{request_id}.json")),

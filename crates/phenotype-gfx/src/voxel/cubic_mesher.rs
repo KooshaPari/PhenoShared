@@ -9,10 +9,12 @@
 //! Production renderers will replace this with greedy-quad or marching-cubes /
 //! dual-contouring meshers; the cubic version is the floor.
 
-use crate::voxel::chunk::{ChunkView, CHUNK_EDGE};
-use crate::voxel::lod::LodLevel;
-use crate::voxel::material::MaterialId;
-use crate::voxel::mesh::{MeshBuffer, MeshError, MeshResult, MeshVertex, Mesher};
+use crate::voxel::{
+    chunk::{ChunkView, CHUNK_EDGE},
+    lod::LodLevel,
+    material::MaterialId,
+    mesh::{MeshBuffer, MeshError, MeshResult, MeshVertex, Mesher},
+};
 
 /// Trait that voxel value types must implement to feed a [`CubicMesher`]. The
 /// mesher needs to know whether a voxel is "solid" (face-emitting) and what
@@ -351,8 +353,7 @@ fn emit_face<V: CubicVoxel>(
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::voxel::chunk::Chunk;
-    use crate::voxel::mesh::Mesher;
+    use crate::voxel::{chunk::Chunk, mesh::Mesher};
 
     fn single_voxel_chunk_at_origin() -> Chunk<MaterialId> {
         let mut c = Chunk::<MaterialId>::default();

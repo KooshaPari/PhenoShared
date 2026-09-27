@@ -116,11 +116,14 @@ pub fn parse_claude_stream_buffer(buf: &str) -> Result<Vec<Result<ClaudeEvent>>>
 
 #[cfg(test)]
 mod tests {
+    use std::{
+        io::Cursor,
+        pin::Pin,
+        sync::{Arc, Mutex, OnceLock},
+        task::{Context, Poll, Wake, Waker},
+    };
+
     use super::*;
-    use std::io::Cursor;
-    use std::pin::Pin;
-    use std::sync::{Arc, Mutex, OnceLock};
-    use std::task::{Context, Poll, Wake, Waker};
 
     struct NoopWaker;
     impl Wake for NoopWaker {
@@ -167,15 +170,21 @@ mod tests {
 
         assert_eq!(v.len(), 3);
         match &v[0] {
-            Ok(ClaudeEvent::AssistantDelta { text }) => assert_eq!(text, "hello"),
+            Ok(ClaudeEvent::AssistantDelta {
+                text,
+            }) => assert_eq!(text, "hello"),
             other => panic!("unexpected 0: {other:?}"),
         }
         match &v[1] {
-            Ok(ClaudeEvent::ToolUse { id, name, input }) => {
+            Ok(ClaudeEvent::ToolUse {
+                id,
+                name,
+                input,
+            }) => {
                 assert_eq!(id, "t1");
                 assert_eq!(name, "Read");
                 assert_eq!(input["path"], "./README.md");
-            }
+            },
             other => panic!("unexpected 1: {other:?}"),
         }
         match &v[2] {
@@ -185,7 +194,7 @@ mod tests {
             }) => {
                 assert_eq!(*duration_ms, 1234);
                 assert!((cost_usd - 0.0023).abs() < 1e-9);
-            }
+            },
             other => panic!("unexpected 2: {other:?}"),
         }
     }

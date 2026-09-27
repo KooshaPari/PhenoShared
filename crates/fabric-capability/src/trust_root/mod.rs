@@ -17,17 +17,15 @@
 //! ## Verification contract
 //!
 //! See spec 021 §4 for the full algorithm. Summary:
-//! 1. For each signature in `descriptor.signatures`:
-//!    a. Look up `key_id` in `by_key_id`. Missing → `UnknownAuthority`.
-//!    b. If revocation list is set, check `key_id` is not in it. Found → `KeyRevoked`.
-//!    c. Walk parent chain; at each step check `not_after > now()`,
-//!       depth ≤ cap, parent exists. Depth > cap → `ChainTooDeep`.
-//!    d. Walk back down, verifying each `Authority.signature` against
-//!       the parent's `VerificationKey`.
-//!    e. Verify the descriptor signature against the leaf.
-//!    f. Return `Ok(ChainVerification { node_authority, chain_depth })`.
-//! 2. If no signature yields a valid chain, return the FIRST error
-//!    (more informative than the last).
+//! 1. For each signature in `descriptor.signatures`: a. Look up `key_id` in `by_key_id`. Missing →
+//!    `UnknownAuthority`. b. If revocation list is set, check `key_id` is not in it. Found →
+//!    `KeyRevoked`. c. Walk parent chain; at each step check `not_after > now()`, depth ≤ cap,
+//!    parent exists. Depth > cap → `ChainTooDeep`. d. Walk back down, verifying each
+//!    `Authority.signature` against the parent's `VerificationKey`. e. Verify the descriptor
+//!    signature against the leaf. f. Return `Ok(ChainVerification { node_authority, chain_depth
+//!    })`.
+//! 2. If no signature yields a valid chain, return the FIRST error (more informative than the
+//!    last).
 //!
 //! ## Backwards compatibility
 //!
@@ -40,6 +38,4 @@ mod types;
 
 pub use authority::Authority;
 pub use store::{ChainVerification, TrustStore};
-pub use types::{
-    MAX_CHAIN_DEPTH, RevocationEntry, RevocationList, RevocationReason, TrustError,
-};
+pub use types::{RevocationEntry, RevocationList, RevocationReason, TrustError, MAX_CHAIN_DEPTH};

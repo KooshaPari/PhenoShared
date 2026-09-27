@@ -6,13 +6,12 @@
 //!
 //! 1. `traceparent` header **parsing** — extract from carrier headers.
 //! 2. `traceparent` header **generation** — inject into carrier headers.
-//! 3. **Sampling flag** handling — bit 0 of `trace_flags` is read correctly
-//!    on extract and written correctly on inject (round-trip preserved).
-//! 4. **Version negotiation** — `0x00` accepted, `0x01` tolerated (W3C §3.2.2.1
-//!    forward-compat), `0xFF` rejected.
-//! 5. **Parent-span correlation** — child spans inherit the parent
-//!    `trace_id` and choose their own `span_id`; sibling spans share the
-//!    same `trace_id`.
+//! 3. **Sampling flag** handling — bit 0 of `trace_flags` is read correctly on extract and written
+//!    correctly on inject (round-trip preserved).
+//! 4. **Version negotiation** — `0x00` accepted, `0x01` tolerated (W3C §3.2.2.1 forward-compat),
+//!    `0xFF` rejected.
+//! 5. **Parent-span correlation** — child spans inherit the parent `trace_id` and choose their own
+//!    `span_id`; sibling spans share the same `trace_id`.
 //!
 //! ## On the exporter choice
 //!
@@ -27,8 +26,8 @@
 //!
 //! ## Interop targets
 //!
-//! - **Jaeger** — accepts W3C `traceparent` directly (no `uber-trace-id` rewrite
-//!   needed since Jaeger 1.35+; native W3C propagation is the default).
+//! - **Jaeger** — accepts W3C `traceparent` directly (no `uber-trace-id` rewrite needed since
+//!   Jaeger 1.35+; native W3C propagation is the default).
 //! - **Tempo** — accepts W3C `traceparent` directly.
 //! - **Honeycomb** — accepts W3C `traceparent` directly.
 //! - **Datadog** — accepts W3C `traceparent` since dd-trace-js 4.x / dd-trace-py 2.x.
@@ -38,14 +37,16 @@
 //!
 //! [w3c-tc]: <https://www.w3.org/TR/trace-context/>
 
-use pheno_otel::exporters::stdout::StdoutExporter;
-use pheno_otel::exporters::ExporterConfig;
-use pheno_otel::propagation::{
-    PropagationError, SpanContext, W3CTraceContextPropagator, TRACEPARENT_HEADER,
+use std::{
+    collections::HashMap,
+    sync::{Arc, Mutex},
 };
-use pheno_otel::OtlpPort;
-use std::collections::HashMap;
-use std::sync::{Arc, Mutex};
+
+use pheno_otel::{
+    exporters::{stdout::StdoutExporter, ExporterConfig},
+    propagation::{PropagationError, SpanContext, W3CTraceContextPropagator, TRACEPARENT_HEADER},
+    OtlpPort,
+};
 
 // =============================================================================
 // In-memory test exporter (test-only, mirrors the `MockExporter` pattern in
@@ -182,7 +183,9 @@ fn w3c_traceparent_parsing_matches_spec_example() {
         sample_header(0x01), // sampled
     );
 
-    let ctx = prop.extract(&headers).expect("valid W3C example must parse");
+    let ctx = prop
+        .extract(&headers)
+        .expect("valid W3C example must parse");
     assert_eq!(ctx.version, 0x00, "spec example is version 0x00");
     assert_eq!(
         ctx.trace_id, SAMPLE_TRACE_ID,
@@ -265,10 +268,7 @@ fn w3c_sampling_flag_handling_is_bit_zero_only() {
 
     // Case A — bit 0 set (sampled). All other bits clear.
     let mut h = HashMap::new();
-    h.insert(
-        TRACEPARENT_HEADER.to_string(),
-        sample_header(0x01),
-    );
+    h.insert(TRACEPARENT_HEADER.to_string(), sample_header(0x01));
     let sampled = prop.extract(&h).unwrap();
     assert!(sampled.is_sampled());
     assert_eq!(sampled.trace_flags, 0x01);
@@ -291,7 +291,7 @@ fn w3c_sampling_flag_handling_is_bit_zero_only() {
 
     // Case D — bit 0 clear, other bits set (e.g. 0xFE). MUST NOT be sampled.
     let mut h = HashMap::new();
-    h.insert(TRACEPARENT_HEADER.to_string(), sample_header(0xFE));
+    h.insert(TRACEPARENT_HEADER.to_string(), sample_header(0xfe));
     let cleared = prop.extract(&h).unwrap();
     assert!(
         !cleared.is_sampled(),
@@ -323,17 +323,22 @@ fn w3c_sampling_flag_handling_is_bit_zero_only() {
     );
     let p0 = String::from_utf8_lossy(&payloads[0]);
     let p1 = String::from_utf8_lossy(&payloads[1]);
-    assert!(p0.contains("\"flags\":1"), "first payload must carry flags=1");
-    assert!(p1.contains("\"flags\":0"), "second payload must carry flags=0");
+    assert!(
+        p0.contains("\"flags\":1"),
+        "first payload must carry flags=1"
+    );
+    assert!(
+        p1.contains("\"flags\":0"),
+        "second payload must carry flags=0"
+    );
 }
 
 /// Test 4 — **Version negotiation**.
 ///
 /// Per W3C Trace Context §3.2.2.1:
 /// - `0x00` is the only currently-defined version and MUST be accepted.
-/// - Future versions (`0x01..0xFE`) MUST be parsed and forwarded as-is so
-///   the trace survives across a service boundary where a newer SDK is
-///   already deployed.
+/// - Future versions (`0x01..0xFE`) MUST be parsed and forwarded as-is so the trace survives across
+///   a service boundary where a newer SDK is already deployed.
 /// - `0xFF` is explicitly invalid and MUST be rejected.
 #[test]
 fn w3c_version_negotiation_accepts_v00_tolerates_v01_rejects_vff() {
@@ -392,12 +397,10 @@ fn w3c_version_negotiation_accepts_v00_tolerates_v01_rejects_vff() {
 /// `trace_id` (the trace-wide identity) verbatim across service boundaries
 /// while each hop picks its own `span_id` (the local hop identity). This
 /// test asserts:
-/// - a child of `parent` shares `parent.trace_id` and has its own
-///   `span_id`;
-/// - two siblings under the same parent share `trace_id` and have
-///   distinct `span_id`s;
-/// - a span from an unrelated trace has a different `trace_id` (i.e. we
-///   don't accidentally merge traces).
+/// - a child of `parent` shares `parent.trace_id` and has its own `span_id`;
+/// - two siblings under the same parent share `trace_id` and have distinct `span_id`s;
+/// - a span from an unrelated trace has a different `trace_id` (i.e. we don't accidentally merge
+///   traces).
 #[test]
 fn w3c_parent_span_correlation_preserves_trace_id_across_hops() {
     let prop = W3CTraceContextPropagator::new();

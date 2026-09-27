@@ -3,8 +3,7 @@
 //! This library module exposes testable types. The binary crate (`main.rs`)
 //! contains the tray event loop and platform-specific logic.
 
-use std::net::TcpStream;
-use std::time::Duration;
+use std::{net::TcpStream, time::Duration};
 
 /// Daemon health status derived from polling.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -37,10 +36,10 @@ impl DaemonStatus {
 /// Create a simple tray icon (colored circle based on status).
 pub fn create_icon(status: DaemonStatus) -> tray_icon::Icon {
     let (r, g, b) = match status {
-        DaemonStatus::Healthy => (0x22, 0xC5, 0x5E),
-        DaemonStatus::Degraded => (0xEF, 0xBF, 0x04),
-        DaemonStatus::Stopped => (0xEF, 0x44, 0x44),
-        DaemonStatus::Starting => (0x60, 0xA5, 0xFA),
+        DaemonStatus::Healthy => (0x22, 0xc5, 0x5e),
+        DaemonStatus::Degraded => (0xef, 0xbf, 0x04),
+        DaemonStatus::Stopped => (0xef, 0x44, 0x44),
+        DaemonStatus::Starting => (0x60, 0xa5, 0xfa),
     };
 
     let mut rgba = vec![0u8; 32 * 32 * 4];
@@ -91,10 +90,10 @@ pub fn check_daemon_health(port: u16) -> DaemonStatus {
                     } else {
                         DaemonStatus::Degraded
                     }
-                }
+                },
                 _ => DaemonStatus::Degraded,
             }
-        }
+        },
         Err(_) => DaemonStatus::Stopped,
     }
 }

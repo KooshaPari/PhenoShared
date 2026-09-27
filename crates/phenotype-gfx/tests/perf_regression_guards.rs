@@ -13,15 +13,17 @@
 
 use std::time::Instant;
 
-use phenotype_gfx::voxel::chunk::{Chunk, ChunkId, ChunkView, CHUNK_EDGE, CHUNK_VOXELS};
-use phenotype_gfx::voxel::coord::ChunkCoord;
-use phenotype_gfx::voxel::cubic_mesher::CubicMesher;
-use phenotype_gfx::voxel::lod::LodLevel;
-use phenotype_gfx::voxel::material::MaterialId;
-use phenotype_gfx::voxel::octree::VoxelOctree;
-use phenotype_gfx::voxel::serial::save_chunk;
-use phenotype_gfx::voxel::world::VoxelWorld;
-use phenotype_gfx::voxel::{WorldCoord, FIXED_SCALE};
+use phenotype_gfx::voxel::{
+    chunk::{Chunk, ChunkId, ChunkView, CHUNK_EDGE, CHUNK_VOXELS},
+    coord::ChunkCoord,
+    cubic_mesher::CubicMesher,
+    lod::LodLevel,
+    material::MaterialId,
+    octree::VoxelOctree,
+    serial::save_chunk,
+    world::VoxelWorld,
+    WorldCoord, FIXED_SCALE,
+};
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -36,7 +38,9 @@ fn empty_u8_chunk() -> Chunk<u8> {
 /// A truly alternating-pattern chunk: every adjacent pair differs, forcing CHUNK_VOXELS RLE runs.
 fn alternating_u8_chunk() -> Chunk<u8> {
     let voxels: Vec<u8> = (0..CHUNK_VOXELS).map(|i| (i % 2) as u8).collect();
-    Chunk { voxels }
+    Chunk {
+        voxels,
+    }
 }
 
 fn serialized_u8_bytes(chunk: &Chunk<u8>) -> Vec<u8> {
@@ -141,7 +145,14 @@ fn svo_compact_8_siblings_exact() {
     for cx in [0i32, 1] {
         for cy in [0i32, 1] {
             for cz in [0i32, 1] {
-                tree.insert_uniform(ChunkCoord { cx, cy, cz }, MaterialId(1));
+                tree.insert_uniform(
+                    ChunkCoord {
+                        cx,
+                        cy,
+                        cz,
+                    },
+                    MaterialId(1),
+                );
             }
         }
     }
@@ -215,7 +226,14 @@ fn svo_compact_mixed_siblings_unchanged() {
         for cy in [0i32, 1] {
             for cz in [0i32, 1] {
                 let val = if i == 7 { MaterialId(2) } else { MaterialId(1) };
-                tree.insert_uniform(ChunkCoord { cx, cy, cz }, val);
+                tree.insert_uniform(
+                    ChunkCoord {
+                        cx,
+                        cy,
+                        cz,
+                    },
+                    val,
+                );
                 i += 1;
             }
         }
@@ -303,7 +321,14 @@ fn dirty_tracking_event_count_exact() {
     );
 
     // Idempotent write at position (0,0,0) — value already MaterialId(1).
-    world.write(WorldCoord { x: 0, y: 0, z: 0 }, MaterialId(1));
+    world.write(
+        WorldCoord {
+            x: 0,
+            y: 0,
+            z: 0,
+        },
+        MaterialId(1),
+    );
     let events2 = world.drain_dirty();
     assert_eq!(
         events2.len(),
@@ -384,6 +409,7 @@ fn dirty_event_count_scales_with_writes() {
     let four = count_for(4);
     assert!(
         one < four,
-        "REGRESSION: 1-chunk fill ({one} events) must produce fewer dirty events than 4-chunk fill ({four} events)"
+        "REGRESSION: 1-chunk fill ({one} events) must produce fewer dirty events than 4-chunk \
+         fill ({four} events)"
     );
 }

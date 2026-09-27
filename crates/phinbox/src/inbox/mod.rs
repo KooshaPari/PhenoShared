@@ -5,15 +5,13 @@
 //! forwarding, long-running services), [`crate::elicit`] would either hang
 //! or fail silently. The **inbox** turns that into an async workflow:
 //!
-//! 1. The agent calls `phinbox ask --async --json <spec>`. Instead of
-//!    blocking on a popup, the spec is persisted to an on-disk queue,
-//!    surfaced via tray notification / iMessage / email, and the CLI
-//!    returns immediately with the new `request_id`.
-//! 2. The user opens the inbox (`phinbox inbox` or `phinbox inbox
-//!    --web`) at their leisure, reads the queued prompt, and submits
-//!    an answer through the inbox UI.
-//! 3. The agent's next call to `phinbox wait --request-id <id>`
-//!    (or `--block-on <id>`) returns the now-answered response.
+//! 1. The agent calls `phinbox ask --async --json <spec>`. Instead of blocking on a popup, the spec
+//!    is persisted to an on-disk queue, surfaced via tray notification / iMessage / email, and the
+//!    CLI returns immediately with the new `request_id`.
+//! 2. The user opens the inbox (`phinbox inbox` or `phinbox inbox --web`) at their leisure, reads
+//!    the queued prompt, and submits an answer through the inbox UI.
+//! 3. The agent's next call to `phinbox wait --request-id <id>` (or `--block-on <id>`) returns the
+//!    now-answered response.
 //!
 //! ## File layout
 //!
@@ -28,19 +26,30 @@
 //! [`PendingRequest`] to disk. The native popup path is only used when the
 //! agent explicitly opts in.
 
-use std::path::{Path, PathBuf};
-use std::time::{Duration, SystemTime, UNIX_EPOCH};
+use std::{
+    path::{Path, PathBuf},
+    time::{Duration, SystemTime, UNIX_EPOCH},
+};
 
 use serde::{Deserialize, Serialize};
 
-use crate::error::ElicitError;
-use crate::spec::{ElicitResponse, PromptSpec};
+use crate::{
+    error::ElicitError,
+    spec::{ElicitResponse, PromptSpec},
+};
 
 pub mod change;
 pub mod daemon;
+// JSON-RPC over a Unix domain socket. UDS has no Windows equivalent, and
+// `tokio::net::UnixListener` / `std::os::unix` do not exist there, so this
+// module is Unix-only. Gating it here (rather than letting it fail to
+// compile) is what allows the crate to build for Windows at all — the
+// HTTP daemon and every renderer work there.
+#[cfg(unix)]
 pub mod ipc;
 pub mod notify;
-#[cfg(test)] mod tests;
+#[cfg(test)]
+mod tests;
 
 pub mod expire;
 pub mod load;
@@ -48,7 +57,7 @@ pub mod mark;
 
 pub use change::{InboxChangeBus, InboxWatcher};
 pub use expire::mark_expired_in_place;
-pub use load::{load_pending, load_request, list_pending};
+pub use load::{list_pending, load_pending, load_request};
 pub use mark::{enqueue, finalize};
 
 /// Crate version, exposed so the IPC ping can report it.
@@ -208,6 +217,34 @@ pub fn unix_now_ms() -> u64 {
         .map_or(0, |d| d.as_millis() as u64)
 }
 
+/// Enforce `expires_at_ms` at the point of use.
+///
+/// The daemon's notifier sweeper flips stale pending requests to
+/// [`RequestState::Expired`] on a timer, but that only happens while a daemon
+/// is running. Expiry must not depend on that: an expired request is not
+/// answerable, and it must *report* the state a sweeper would have written.
+///
+/// This lazily performs the same in-place transition the sweeper performs
+/// (via [`mark_expired_in_place`], which keeps the file in `inbox/` so the UI
+/// can still render it), so an expired-but-unswept request is
+/// indistinguishable from a swept one.
+///
+/// Returns `Ok(true)` when `req` is expired — either it was already
+/// [`RequestState::Expired`], or it just transitioned. A request that was
+/// already answered or cancelled returns `Ok(false)`: the recorded answer
+/// stands, and its TTL is history.
+pub fn expire_if_due(root: &Path, req: &mut PendingRequest) -> Result<bool, ElicitError> {
+    if matches!(req.state, RequestState::Expired) {
+        return Ok(true);
+    }
+    if req.is_terminal() || !req.is_expired_now() {
+        return Ok(false);
+    }
+    req.state = RequestState::Expired;
+    mark_expired_in_place(root, req)?;
+    Ok(true)
+}
+
 /// Where the inbox data lives on disk.
 ///
 /// Honours `PHINBOX_INBOX_DIR` (overrides everything), falls back to
@@ -286,15 +323,16 @@ pub fn wait_for_response(
         // notify raced the rename — the rename is in `enqueue`/`finalize`
         // *before* the bus ping, so this is theoretically unreachable,
         // but a defensive load() costs nothing).
-        match load(root, request_id) {
-            Ok(req) if req.is_terminal() => return Ok(req),
-            Ok(_req) => {}
-            Err(e) => return Err(e),
+        let mut req = load(root, request_id)?;
+        // Enforce the TTL here too: with no daemon running to sweep a stale
+        // request, a waiter would otherwise block until its own overall
+        // timeout even though the request already expired.
+        if expire_if_due(root, &mut req)? || req.is_terminal() {
+            return Ok(req);
         }
         if std::time::Instant::now() >= deadline {
             return Err(ElicitError::Timeout(
-                std::time::Instant::now()
-                    .saturating_duration_since(start),
+                std::time::Instant::now().saturating_duration_since(start),
             ));
         }
         // Sleep at most `poll_interval` or until the next bus wake, whichever

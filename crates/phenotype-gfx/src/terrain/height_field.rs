@@ -47,7 +47,7 @@ impl HeightField {
                     });
                 }
                 d
-            }
+            },
             None => vec![0.0; expected],
         };
         Ok(Self {

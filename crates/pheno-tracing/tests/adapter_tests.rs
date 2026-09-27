@@ -1,6 +1,9 @@
-use pheno_tracing::adapters::StdoutAdapter;
-use pheno_tracing::port::{SpanId, SpanKind, TraceId, TraceOperation, TracePort, TraceStatus};
 use std::collections::HashMap;
+
+use pheno_tracing::{
+    adapters::StdoutAdapter,
+    port::{SpanId, SpanKind, TraceId, TraceOperation, TracePort, TraceStatus},
+};
 
 #[tokio::test]
 async fn test_stdout_adapter_submits_span() {

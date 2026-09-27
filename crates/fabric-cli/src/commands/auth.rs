@@ -5,8 +5,7 @@
 use anyhow::{Context, Result};
 use clap::Args;
 
-use crate::output;
-use crate::wire_client;
+use crate::{output, wire_client};
 
 #[derive(Args, Debug)]
 pub struct LoginArgs {
@@ -60,8 +59,7 @@ fn login(args: &LoginArgs) -> Result<()> {
                     .unwrap_or("unknown");
 
                 format!(
-                    "{} {}\n\
-                     {:<18} {}\n",
+                    "{} {}\n{:<18} {}\n",
                     console::style("Auth login initiated:").cyan().bold(),
                     console::style(state).green(),
                     console::style("Open URL:").cyan().bold(),
@@ -81,8 +79,10 @@ fn login(args: &LoginArgs) -> Result<()> {
                     auth_url,
                 );
             }
-        }
-        Err(wire_client::WireClientError::ConnectionRefused { addr }) => {
+        },
+        Err(wire_client::WireClientError::ConnectionRefused {
+            addr,
+        }) => {
             if args.json {
                 println!(
                     "{}",
@@ -99,7 +99,7 @@ fn login(args: &LoginArgs) -> Result<()> {
                 );
                 eprintln!("  start fabric-daemon to enable auth login");
             }
-        }
+        },
         Err(e) => return Err(e).context("auth login failed"),
     }
 
@@ -137,10 +137,7 @@ fn status(args: &StatusArgs) -> Result<()> {
                 };
 
                 format!(
-                    "{:<18} {}\n\
-                     {:<18} {}\n\
-                     {:<18} {}\n\
-                     {:<18} {}\n",
+                    "{:<18} {}\n{:<18} {}\n{:<18} {}\n{:<18} {}\n",
                     console::style("Auth status:").cyan().bold(),
                     auth_label,
                     console::style("Provider:").cyan().bold(),
@@ -151,8 +148,10 @@ fn status(args: &StatusArgs) -> Result<()> {
                     expires,
                 )
             })?;
-        }
-        Err(wire_client::WireClientError::ConnectionRefused { addr }) => {
+        },
+        Err(wire_client::WireClientError::ConnectionRefused {
+            addr,
+        }) => {
             if args.json {
                 println!(
                     "{}",
@@ -169,7 +168,7 @@ fn status(args: &StatusArgs) -> Result<()> {
                 );
                 eprintln!("  start fabric-daemon to check auth status");
             }
-        }
+        },
         Err(e) => return Err(e).context("auth status failed"),
     }
 

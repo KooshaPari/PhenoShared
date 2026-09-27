@@ -60,7 +60,7 @@ pub fn truncate(s: &str, max_chars: usize) -> String {
 /// Map `Urgency` to its CSS class for card styling.
 #[must_use]
 pub fn urgency_class(u: crate::spec::Urgency) -> &'static str {
-    use crate::spec::Urgency::{Info, Warning, Error, Secret};
+    use crate::spec::Urgency::{Error, Info, Secret, Warning};
     match u {
         Info => "info",
         Warning => "warn",
@@ -72,7 +72,7 @@ pub fn urgency_class(u: crate::spec::Urgency) -> &'static str {
 /// Map `Urgency` to a short human label.
 #[must_use]
 pub fn urgency_label(u: crate::spec::Urgency) -> &'static str {
-    use crate::spec::Urgency::{Info, Warning, Error, Secret};
+    use crate::spec::Urgency::{Error, Info, Secret, Warning};
     match u {
         Info => "Info",
         Warning => "Warning",
@@ -85,11 +85,23 @@ pub fn urgency_label(u: crate::spec::Urgency) -> &'static str {
 #[must_use]
 pub fn field_kind_label(f: &FieldSpec) -> &'static str {
     match f {
-        FieldSpec::Text { .. } => "text",
-        FieldSpec::LongText { .. } => "long text",
-        FieldSpec::Integer { .. } => "integer",
-        FieldSpec::Choice { .. } => "choice",
-        FieldSpec::Boolean { .. } => "yes / no",
-        FieldSpec::DateTime { .. } => "date",
+        FieldSpec::Text {
+            ..
+        } => "text",
+        FieldSpec::LongText {
+            ..
+        } => "long text",
+        FieldSpec::Integer {
+            ..
+        } => "integer",
+        FieldSpec::Choice {
+            ..
+        } => "choice",
+        FieldSpec::Boolean {
+            ..
+        } => "yes / no",
+        FieldSpec::DateTime {
+            ..
+        } => "date",
     }
 }

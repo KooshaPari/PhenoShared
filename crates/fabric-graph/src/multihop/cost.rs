@@ -1,7 +1,8 @@
 //! Cost model for multi-hop route plans.
 
-use crate::model::{RoutePlan, Topology};
 use serde::{Deserialize, Serialize};
+
+use crate::model::{RoutePlan, Topology};
 
 /// Aggregate cost across an entire multi-hop route plan.
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
@@ -79,11 +80,14 @@ pub fn compute_route_cost(plan: &RoutePlan, topology: &Topology) -> RouteCost {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
-    use crate::model::{Edge, EdgeId, NodeId, RoutePlanId, TopologyEpoch};
-    use crate::LocalityTier;
     use chrono::Utc;
     use uuid::Uuid;
+
+    use super::*;
+    use crate::{
+        model::{Edge, EdgeId, NodeId, RoutePlanId, TopologyEpoch},
+        LocalityTier,
+    };
 
     fn test_plan_with_edges() -> (RoutePlan, Topology) {
         let mut topo = Topology::new();

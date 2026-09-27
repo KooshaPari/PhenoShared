@@ -3,13 +3,15 @@
 //! Verifies that [`CapabilityDescriptor`] survives JSON serialization roundtrips
 //! without data loss.
 
-use fabric_capability::descriptor::{
-    AcceleratorCapabilities, AudioCapabilities, AudioDevice, CapabilityDescriptor,
-    ComputeCapabilities, DisplayCapabilities, DisplayInfo, HardwareCodecMatrix,
-    InputCapabilities, NetworkCapabilities, NetworkInterface, PcieCapabilities,
-    StorageCapabilities, StorageDevice,
+use fabric_capability::{
+    descriptor::{
+        AcceleratorCapabilities, AudioCapabilities, AudioDevice, CapabilityDescriptor,
+        ComputeCapabilities, DisplayCapabilities, DisplayInfo, HardwareCodecMatrix,
+        InputCapabilities, NetworkCapabilities, NetworkInterface, PcieCapabilities,
+        StorageCapabilities, StorageDevice,
+    },
+    locality::LocalityTier,
 };
-use fabric_capability::locality::LocalityTier;
 use uuid::Uuid;
 
 fn minimal_descriptor() -> CapabilityDescriptor {

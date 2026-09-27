@@ -3,8 +3,7 @@
 //! The tier table is pure core data so drivers and adapters can agree on the
 //! same model/effort mapping without depending on each other.
 
-use std::fmt;
-use std::str::FromStr;
+use std::{fmt, str::FromStr};
 
 use serde::{Deserialize, Serialize};
 

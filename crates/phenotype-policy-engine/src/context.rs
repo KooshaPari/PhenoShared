@@ -1,7 +1,8 @@
 //! Evaluation context for policy evaluation.
 
-use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
+
+use serde::{Deserialize, Serialize};
 
 /// A context containing key-value pairs (facts) used for policy evaluation.
 ///
@@ -23,7 +24,9 @@ impl EvaluationContext {
 
     /// Creates an evaluation context from a HashMap.
     pub fn from_map(facts: HashMap<String, serde_json::Value>) -> Self {
-        Self { facts }
+        Self {
+            facts,
+        }
     }
 
     /// Creates an evaluation context from a JSON value.
@@ -31,8 +34,10 @@ impl EvaluationContext {
         match value {
             serde_json::Value::Object(map) => {
                 let facts = map.into_iter().map(|(k, v)| (k, v)).collect();
-                Self { facts }
-            }
+                Self {
+                    facts,
+                }
+            },
             _ => Self::new(),
         }
     }

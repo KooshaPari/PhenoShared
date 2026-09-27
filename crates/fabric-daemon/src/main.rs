@@ -12,16 +12,13 @@ mod health;
 mod logging;
 mod wire;
 
-use clap::{Parser, Subcommand};
-use std::net::TcpListener;
-use std::path::PathBuf;
-use std::sync::Arc;
-use tracing::info;
-
-use config::DaemonConfig;
-use coordinator::Coordinator;
+use std::{net::TcpListener, path::PathBuf, sync::Arc};
 
 use auth::{AuthMiddleware, AuthMiddlewareConfig};
+use clap::{Parser, Subcommand};
+use config::DaemonConfig;
+use coordinator::Coordinator;
+use tracing::info;
 
 #[derive(Parser)]
 #[command(
@@ -80,8 +77,12 @@ fn main() {
             listen,
             log_level,
         } => cmd_start(config, db, listen, log_level),
-        Commands::Health { connect } => cmd_health(&connect),
-        Commands::Status { connect } => cmd_status(&connect),
+        Commands::Health {
+            connect,
+        } => cmd_health(&connect),
+        Commands::Status {
+            connect,
+        } => cmd_status(&connect),
     }
 }
 
@@ -98,7 +99,7 @@ fn cmd_start(
             Err(e) => {
                 eprintln!("error loading config: {e}");
                 std::process::exit(1);
-            }
+            },
         },
         None => DaemonConfig::default(),
     };
@@ -120,7 +121,7 @@ fn cmd_start(
         Err(e) => {
             tracing::error!("failed to create coordinator: {e}");
             std::process::exit(1);
-        }
+        },
     };
 
     // If a config file path was provided, wire it for persistence on changes.
@@ -145,7 +146,7 @@ fn cmd_start(
         Err(e) => {
             tracing::error!("failed to bind to {addr}: {e}");
             std::process::exit(1);
-        }
+        },
     };
 
     let max_conn = config.server.max_connections;
@@ -157,10 +158,7 @@ fn cmd_start(
     let auth_enabled = config.auth.enabled;
     let auth_config: AuthMiddlewareConfig = config.auth.into();
     let auth = Arc::new(AuthMiddleware::new(auth_config));
-    info!(
-        enabled = auth_enabled,
-        "auth middleware initialized"
-    );
+    info!(enabled = auth_enabled, "auth middleware initialized");
 
     // Create a dedicated tokio runtime for auth middleware async operations.
     let runtime = Arc::new(
@@ -204,18 +202,18 @@ fn cmd_health(addr: &str) {
                 match line {
                     Ok(l) => {
                         println!("{l}");
-                    }
+                    },
                     Err(e) => {
                         eprintln!("read error: {e}");
                         break;
-                    }
+                    },
                 }
             }
-        }
+        },
         Err(e) => {
             eprintln!("failed to connect to {addr}: {e}");
             std::process::exit(1);
-        }
+        },
     }
 }
 

@@ -3,12 +3,12 @@
 //! Provides reusable functions to construct topologies of various sizes
 //! for benchmarking the graph compiler, negotiation, and failover paths.
 
-use fabric_graph::model::{
-    CapabilityRef, Edge, EdgeId, Intent, IntentId, IntentRequirements, LinkMetrics, Node,
-    NodeId, Topology, TopologyMeta, TrustLevel,
-};
-use fabric_graph::{score_locality, FairnessPolicy, FairnessQueue, LocalityTier,
-    TenantId,
+use fabric_graph::{
+    model::{
+        CapabilityRef, Edge, EdgeId, Intent, IntentId, IntentRequirements, LinkMetrics, Node,
+        NodeId, Topology, TopologyMeta, TrustLevel,
+    },
+    score_locality, FairnessPolicy, FairnessQueue, LocalityTier, TenantId,
 };
 
 /// Build a fully-connected topology with `n` nodes.
@@ -328,7 +328,9 @@ pub fn bench_score_locality_throughput(topo: &Topology, intent: &Intent) {
 /// Create a pre-filled fairness queue with `n` tenants, each having
 /// made `acquire_count` acquire calls.
 pub fn build_fairness_queue(tenant_count: usize, acquire_count: u32) -> FairnessQueue {
-    let mut queue = FairnessQueue::new(FairnessPolicy::FairShare { weight: 1 });
+    let mut queue = FairnessQueue::new(FairnessPolicy::FairShare {
+        weight: 1,
+    });
     for t in 0..tenant_count {
         let tenant = TenantId::new(format!("tenant-{t}"));
         for _ in 0..acquire_count {

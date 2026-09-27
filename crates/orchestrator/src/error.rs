@@ -3,6 +3,7 @@
 //! "Fail clearly, not silently" mandate).
 
 use std::path::PathBuf;
+
 use thiserror::Error;
 
 #[derive(Debug, Error)]

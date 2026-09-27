@@ -4,9 +4,11 @@
 //! Both surfaces serialize via serde; the JSON Schema is exported by
 //! [`crate::schema`] for the MCP server's `inputSchema` / `outputSchema`.
 
+mod coerce;
 mod types;
 mod validate;
 
+pub use coerce::coerce;
 pub use types::*;
 
 #[cfg(test)]
@@ -15,6 +17,7 @@ mod tests {
 
     fn minimal_text() -> PromptSpec {
         PromptSpec {
+            details: None,
             title: "Test".into(),
             question: "?".into(),
             field: FieldSpec::Text {
@@ -101,14 +104,20 @@ mod tests {
         assert!(ans.is_answered());
         assert!(!ans.is_cancelled());
 
-        let can = ElicitResponse::Cancelled { notes: None };
+        let can = ElicitResponse::Cancelled {
+            notes: None,
+        };
         assert!(can.is_cancelled());
         assert!(!can.is_answered());
 
-        let to = ElicitResponse::TimedOut { elapsed_secs: 1.0 };
+        let to = ElicitResponse::TimedOut {
+            elapsed_secs: 1.0,
+        };
         assert!(to.is_timed_out());
 
-        let f = ElicitResponse::Failed { reason: "x".into() };
+        let f = ElicitResponse::Failed {
+            reason: "x".into(),
+        };
         assert!(f.is_failed());
     }
 
@@ -123,6 +132,7 @@ mod tests {
     #[test]
     fn serde_roundtrip_choice() {
         let s = PromptSpec {
+            details: None,
             field: FieldSpec::Choice {
                 label: "target".into(),
                 options: vec![
@@ -143,7 +153,10 @@ mod tests {
         };
         let json = serde_json::to_string(&s).unwrap();
         let back: PromptSpec = serde_json::from_str(&json).unwrap();
-        if let FieldSpec::Choice { options, .. } = &back.field {
+        if let FieldSpec::Choice {
+            options, ..
+        } = &back.field
+        {
             assert_eq!(options.len(), 2);
             assert_eq!(options[0].value, "staging");
         } else {

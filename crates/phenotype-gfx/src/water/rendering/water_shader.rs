@@ -17,7 +17,9 @@ pub struct WaterShader {
 impl WaterShader {
     /// Create a new shader handle by name.
     pub fn new(name: impl Into<String>) -> Self {
-        Self { name: name.into() }
+        Self {
+            name: name.into(),
+        }
     }
     /// The shader name (Unity `Shader.Find` lookup key).
     pub fn name(&self) -> &str {

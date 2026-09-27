@@ -13,25 +13,22 @@
 //! ## Contract (spec 020 \u00a73)
 //!
 //! * On `FailoverOutcome::Replaced(new_plan)`:
-//!   - If `lease.spec.strict_epoch_binding` is true AND the post-failure
-//!     topology's `epoch` differs from the lease's prior `bound_at_epoch`,
-//!     return `SurfaceError::EpochDrift { previous, current }` (the
-//!     surface must be invalidated; **no silent re-bind**). The check
-//!     runs *before* `failover::replan` is even called, so we don't waste
-//!     a `compile()` on a binding that would be thrown away.
-//!   - Otherwise, call `surface_ops::bind(&mut lease, new_plan.id, new_step)`
-//!     to re-bind. The user's `SurfaceHandle` is unchanged; the prior
-//!     binding moves to `lease.history`. The lease stays in `Active`.
+//!   - If `lease.spec.strict_epoch_binding` is true AND the post-failure topology's `epoch` differs
+//!     from the lease's prior `bound_at_epoch`, return `SurfaceError::EpochDrift { previous,
+//!     current }` (the surface must be invalidated; **no silent re-bind**). The check runs *before*
+//!     `failover::replan` is even called, so we don't waste a `compile()` on a binding that would
+//!     be thrown away.
+//!   - Otherwise, call `surface_ops::bind(&mut lease, new_plan.id, new_step)` to re-bind. The
+//!     user's `SurfaceHandle` is unchanged; the prior binding moves to `lease.history`. The lease
+//!     stays in `Active`.
 //!   - Return `RebindOutcome::Rebound { new_plan_id }`.
 //! * On `FailoverOutcome::NoReplacement`:
-//!   - Call `surface_ops::fail(&mut lease, LeaseExitReason::HostFailure {
-//!     host_node: first_failed_node })`. The lease transitions to
-//!     `LeaseState::Failed` and the caller is expected to drop the
-//!     `SurfaceHandle` and re-admit if desired.
+//!   - Call `surface_ops::fail(&mut lease, LeaseExitReason::HostFailure { host_node:
+//!     first_failed_node })`. The lease transitions to `LeaseState::Failed` and the caller is
+//!     expected to drop the `SurfaceHandle` and re-admit if desired.
 //!   - Return `RebindOutcome::Failed { reason }`.
 //! * On `Err(FailoverError::*)`:
-//!   - Map to `SurfaceError` (see `map_failover_error`). The lease is
-//!     unchanged.
+//!   - Map to `SurfaceError` (see `map_failover_error`). The lease is unchanged.
 //!
 //! `failed_nodes` is the list of `NodeId`s pruned from the topology
 //! before this call. It is informational (used to populate
@@ -43,11 +40,9 @@
 //! Read these four modules before changing this file (ADR-0028):
 //!
 //! - `crate::failover` -- `replan`, `FailoverError`, `FailoverOutcome`
-//! - `crate::surface` -- `SurfaceLease`, `LeaseState`, `LeaseExitReason`,
-//!   `SurfaceError`
+//! - `crate::surface` -- `SurfaceLease`, `LeaseState`, `LeaseExitReason`, `SurfaceError`
 //! - `crate::surface_ops` -- `bind`, `fail`, `new_lease`
-//! - `crate::lease_fsm` -- `can_transition` (the FSM table this module
-//!   implicitly obeys)
+//! - `crate::lease_fsm` -- `can_transition` (the FSM table this module implicitly obeys)
 
 mod rebind;
 mod types;
@@ -62,13 +57,16 @@ pub use types::RebindOutcome;
 
 #[cfg(test)]
 mod tests {
-    use super::*;
-    use crate::builder::{make_plan, make_step, IntentBuilder, TopologyBuilder};
-    use crate::compile;
-    use crate::surface::{CaptureDirection, SurfaceProtocol, SurfaceSpec};
-    use crate::surface_ops::{is_terminal, new_lease};
-    use crate::TrustLevel;
     use fabric_capability::LocalityTier;
+
+    use super::*;
+    use crate::{
+        builder::{make_plan, make_step, IntentBuilder, TopologyBuilder},
+        compile,
+        surface::{CaptureDirection, SurfaceProtocol, SurfaceSpec},
+        surface_ops::{is_terminal, new_lease},
+        TrustLevel,
+    };
 
     // ---------------- helpers ----------------
 
@@ -97,7 +95,11 @@ mod tests {
     /// Two-node topology with a single edge. Compile picks the lower
     /// locality tier node first (`L1SameNuma`), so the route step will
     /// be on `a`.
-    fn two_node_topology() -> (crate::model::Topology, crate::model::NodeId, crate::model::NodeId) {
+    fn two_node_topology() -> (
+        crate::model::Topology,
+        crate::model::NodeId,
+        crate::model::NodeId,
+    ) {
         let a = crate::model::NodeId::new("a");
         let b = crate::model::NodeId::new("b");
         let topo = TopologyBuilder::new()
@@ -171,9 +173,11 @@ mod tests {
         .expect("rebind should succeed");
 
         match outcome {
-            RebindOutcome::Rebound { new_plan_id } => {
+            RebindOutcome::Rebound {
+                new_plan_id,
+            } => {
                 assert_ne!(new_plan_id, original_plan.id, "must be a new plan");
-            }
+            },
             other => panic!("expected Rebound, got {other:?}"),
         }
         assert_eq!(lease.state, crate::surface::LeaseState::Active);
@@ -224,10 +228,14 @@ mod tests {
         .expect("rebind should return Ok(Failed), not Err");
 
         match &outcome {
-            RebindOutcome::Failed { reason } => match reason {
-                crate::surface::LeaseExitReason::HostFailure { host_node } => {
+            RebindOutcome::Failed {
+                reason,
+            } => match reason {
+                crate::surface::LeaseExitReason::HostFailure {
+                    host_node,
+                } => {
                     assert_eq!(host_node, &a, "reason should name the failed node");
-                }
+                },
                 other => panic!("expected HostFailure, got {other:?}"),
             },
             other => panic!("expected Failed, got {other:?}"),
@@ -241,10 +249,7 @@ mod tests {
             is_terminal(lease.state),
             "Failed is a terminal state per spec 019"
         );
-        assert!(
-            lease.exit_reason.is_some(),
-            "exit_reason must be populated"
-        );
+        assert!(lease.exit_reason.is_some(), "exit_reason must be populated");
         assert_eq!(
             lease.handle, original_handle,
             "handle must be preserved even on Failed"
@@ -297,20 +302,19 @@ mod tests {
         );
 
         match result {
-            Err(crate::surface::SurfaceError::EpochDrift { previous, current }) => {
+            Err(crate::surface::SurfaceError::EpochDrift {
+                previous,
+                current,
+            }) => {
                 assert_eq!(previous, orig_topo.epoch.0);
                 assert_eq!(current, post_epoch);
-            }
+            },
             other => panic!("expected EpochDrift err, got {other:?}"),
         }
         // Lease must be unchanged (Active, handle preserved, no history).
         assert_eq!(lease.state, original_state, "lease must be unchanged");
         assert_eq!(lease.handle, original_handle);
-        assert_eq!(
-            lease.history.len(),
-            0,
-            "no re-bind should have happened"
-        );
+        assert_eq!(lease.history.len(), 0, "no re-bind should have happened");
     }
 
     // ---------------- T-L04 ----------------
@@ -318,8 +322,7 @@ mod tests {
     #[test]
     fn rebind_propagates_failover_error() {
         let (orig_topo, _, _) = two_node_topology();
-        let original_plan =
-            compile(&orig_topo, &intent("rebinds-4")).expect("compile");
+        let original_plan = compile(&orig_topo, &intent("rebinds-4")).expect("compile");
 
         // Empty intent name -> FailoverError::EmptyIntent -> SurfaceError.
         let empty_intent = IntentBuilder::new()
@@ -352,18 +355,14 @@ mod tests {
         match result {
             Err(crate::surface::SurfaceError::InvalidSpec(
                 crate::surface::SurfaceSpecError::EmptyName,
-            )) => {}
+            )) => {},
             other => panic!("expected InvalidSpec(EmptyName), got {other:?}"),
         }
         assert_eq!(
             lease.handle, original_handle,
             "handle must be preserved on error"
         );
-        assert_eq!(
-            lease.history.len(),
-            0,
-            "no re-bind should have happened"
-        );
+        assert_eq!(lease.history.len(), 0, "no re-bind should have happened");
     }
 
     // ---------------- T-L05 ----------------
@@ -374,8 +373,7 @@ mod tests {
             new_plan_id: crate::model::RoutePlanId::new(),
         };
         let json_rebound = serde_json::to_string(&rebound).expect("serialize Rebound");
-        let back: RebindOutcome =
-            serde_json::from_str(&json_rebound).expect("deserialize Rebound");
+        let back: RebindOutcome = serde_json::from_str(&json_rebound).expect("deserialize Rebound");
         assert_eq!(back, rebound);
 
         let failed = RebindOutcome::Failed {
@@ -384,15 +382,11 @@ mod tests {
             },
         };
         let json_failed = serde_json::to_string(&failed).expect("serialize Failed");
-        let back2: RebindOutcome =
-            serde_json::from_str(&json_failed).expect("deserialize Failed");
+        let back2: RebindOutcome = serde_json::from_str(&json_failed).expect("deserialize Failed");
         assert_eq!(back2, failed);
 
         // make_plan is here to silence the unused-import warning when no
         // integration tests reference it; the integration suite uses it.
-        let _ = make_plan(
-            vec![make_step("x", "y")],
-            crate::model::TopologyEpoch(0),
-        );
+        let _ = make_plan(vec![make_step("x", "y")], crate::model::TopologyEpoch(0));
     }
 }

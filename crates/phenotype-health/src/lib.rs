@@ -11,9 +11,11 @@ mod project;
 #[cfg(test)]
 mod tests;
 
-use std::future::Future;
-use std::pin::Pin;
-use std::time::{Duration, Instant};
+use std::{
+    future::Future,
+    pin::Pin,
+    time::{Duration, Instant},
+};
 
 pub use checkers::{
     CacheHealthChecker, DatabaseHealthChecker, ExternalServiceHealthChecker, MemoryHealthChecker,
@@ -173,7 +175,10 @@ impl HealthMonitor {
         let status = checks
             .iter()
             .fold(HealthStatus::Healthy, |acc, r| acc.worse(r.status));
-        HealthResponse { status, checks }
+        HealthResponse {
+            status,
+            checks,
+        }
     }
 }
 

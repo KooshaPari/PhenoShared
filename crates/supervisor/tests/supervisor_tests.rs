@@ -2,8 +2,10 @@
 
 use std::sync::Arc;
 
-use a2a::message::{Message, MessageKind, Part};
-use a2a::task::Task as A2aTask;
+use a2a::{
+    message::{Message, MessageKind, Part},
+    task::Task as A2aTask,
+};
 use store_sqlite::SqliteMailboxStore;
 use substrate_core::mailbox_port::MailboxStore;
 use supervisor::{FakeEngine, FakeResponse, LaneConfig, Supervisor};
@@ -15,7 +17,9 @@ fn make_msg(team_id: &str, to: &str, kind: MessageKind, text: &str) -> Message {
         "test-sender",
         to,
         kind,
-        vec![Part::Text { text: text.into() }],
+        vec![Part::Text {
+            text: text.into(),
+        }],
     )
 }
 

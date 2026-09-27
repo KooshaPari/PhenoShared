@@ -16,11 +16,13 @@
 //! when a node in a multi-hop path fails, it first tries pre-generated
 //! fallback routes before doing a fresh compile on the pruned topology.
 
-use crate::compile;
-use crate::model::{Intent, NodeId, RoutePlan, Topology};
-use crate::multihop::{compile_multihop, MultihopError, MultihopResult, TransportStage};
-
 use thiserror::Error;
+
+use crate::{
+    compile,
+    model::{Intent, NodeId, RoutePlan, Topology},
+    multihop::{compile_multihop, MultihopError, MultihopResult, TransportStage},
+};
 
 #[derive(Debug, Error, PartialEq, Eq)]
 pub enum FailoverError {
@@ -81,10 +83,10 @@ pub fn replan(
 /// Multi-hop failover: try fallback routes first, then fresh compile.
 ///
 /// When a node in a multi-hop path fails, this function:
-/// 1. Checks pre-generated fallback routes from `MultihopResult.fallbacks`
-///    — the first fallback whose path avoids all failed nodes is used.
-/// 2. If no fallback works, does a fresh `compile_multihop()` on the
-///    pruned topology (failed nodes removed by caller).
+/// 1. Checks pre-generated fallback routes from `MultihopResult.fallbacks` — the first fallback
+///    whose path avoids all failed nodes is used.
+/// 2. If no fallback works, does a fresh `compile_multihop()` on the pruned topology (failed nodes
+///    removed by caller).
 /// 3. Returns `NoReplacement` if both paths fail.
 ///
 /// This is the R3 extension to the single-hop `replan()` above.
@@ -111,7 +113,10 @@ pub fn replan_multihop(
 
     // Step 1: Try pre-generated fallback routes.
     for fallback in &original.fallbacks {
-        let touches_failed = fallback.steps.iter().any(|step| failed_set.contains(&step.node));
+        let touches_failed = fallback
+            .steps
+            .iter()
+            .any(|step| failed_set.contains(&step.node));
         if !touches_failed {
             return Ok(FailoverOutcome::Replaced(fallback.clone()));
         }
@@ -165,7 +170,7 @@ mod tests {
         match outcome {
             FailoverOutcome::Replaced(p) => {
                 assert_eq!(p.id, original.id);
-            }
+            },
             _ => panic!("expected Replaced"),
         }
         // Suppress unused warning for the non-blacklist arg
@@ -188,15 +193,14 @@ mod tests {
         let pruned = pruned.add(node_b);
         let pruned_topo = pruned.build();
 
-        let outcome = replan(&pruned_topo, &intent, &original, &[a.clone()])
-            .expect("no error");
+        let outcome = replan(&pruned_topo, &intent, &original, &[a.clone()]).expect("no error");
         match outcome {
             FailoverOutcome::Replaced(new_plan) => {
                 // The new plan must use only `b` (since `a` was pruned).
                 for step in &new_plan.steps {
                     assert_eq!(step.node, b, "step must use surviving node");
                 }
-            }
+            },
             _ => panic!("expected Replaced"),
         }
     }
@@ -212,8 +216,7 @@ mod tests {
 
         // Caller prunes BOTH nodes → empty topology.
         let empty_topo = TopologyBuilder::new().with_name("empty").build();
-        let outcome = replan(&empty_topo, &intent, &original, &[a, b])
-            .expect("no error");
+        let outcome = replan(&empty_topo, &intent, &original, &[a, b]).expect("no error");
         assert!(matches!(outcome, FailoverOutcome::NoReplacement));
     }
 
@@ -257,8 +260,8 @@ mod tests {
         let catalog = crate::multihop::builtin_stages();
         let result = compile_multihop(&topo, &a, &c, &intent, &catalog)
             .expect("compile_multihop should succeed");
-        let outcome = replan_multihop(&topo, &intent, &result, &[], &a, &c, &catalog)
-            .expect("no error");
+        let outcome =
+            replan_multihop(&topo, &intent, &result, &[], &a, &c, &catalog).expect("no error");
         match outcome {
             FailoverOutcome::Replaced(plan) => assert_eq!(plan.id, result.primary.id),
             _ => panic!("expected Replaced"),
@@ -285,11 +288,11 @@ mod tests {
                 for step in &plan.steps {
                     assert_ne!(step.node, b, "replacement must avoid failed node b");
                 }
-            }
+            },
             FailoverOutcome::NoReplacement => {
                 // Acceptable if no fallback exists and fresh compile also fails
                 // (depends on topology connectivity after pruning).
-            }
+            },
         }
     }
 

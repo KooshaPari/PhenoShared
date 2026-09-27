@@ -1,16 +1,16 @@
 //! Accessibility features (FR-EYE-ACCESS-001, FR-EYE-ACCESS-002)
 //!
-//! - FR-EYE-ACCESS-001: Dwell-click selection. A fixation lasting at least
-//!   the configured dwell time (200-1000ms, default 500ms) on a stable
-//!   screen region triggers a click event. Cancellable via saccade to a
-//!   safe zone (the screen edges).
+//! - FR-EYE-ACCESS-001: Dwell-click selection. A fixation lasting at least the configured dwell
+//!   time (200-1000ms, default 500ms) on a stable screen region triggers a click event. Cancellable
+//!   via saccade to a safe zone (the screen edges).
 //!
-//! - FR-EYE-ACCESS-002: Scroll-by-gaze. Fixation in the upper 20% of the
-//!   screen scrolls up; lower 20% scrolls down. Speed is proportional to
-//!   the distance from the screen center (0% at 50% from center, max at 0/100%).
+//! - FR-EYE-ACCESS-002: Scroll-by-gaze. Fixation in the upper 20% of the screen scrolls up; lower
+//!   20% scrolls down. Speed is proportional to the distance from the screen center (0% at 50% from
+//!   center, max at 0/100%).
+
+use std::time::{Duration, Instant};
 
 use serde::{Deserialize, Serialize};
-use std::time::{Duration, Instant};
 
 /// Action triggered by accessibility logic
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
@@ -129,13 +129,13 @@ impl DwellClickDetector {
                     return AccessibilityAction::Click;
                 }
                 AccessibilityAction::None
-            }
+            },
             _ => {
                 // Start a new dwell
                 self.dwell_start_pos = Some((x, y));
                 self.dwell_start_time = Some(Instant::now());
                 AccessibilityAction::DwellStarted
-            }
+            },
         }
     }
 
@@ -200,7 +200,9 @@ pub struct ScrollDetector {
 
 impl ScrollDetector {
     pub fn new(config: ScrollConfig) -> Self {
-        Self { config }
+        Self {
+            config,
+        }
     }
 
     /// Compute the scroll action for the current gaze position.

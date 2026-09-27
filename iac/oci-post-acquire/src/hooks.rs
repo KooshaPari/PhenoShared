@@ -3,11 +3,12 @@
 //! fields as env vars. A failing hook does not abort the chain; we collect
 //! errors and warn at the end.
 
-use crate::InstanceFile;
-use oci_helpers::expand_home;
 use anyhow::{Result, anyhow};
+use oci_helpers::expand_home;
 use tokio::process::Command;
 use tracing::{info, warn};
+
+use crate::InstanceFile;
 
 pub async fn run_dropins(dir: &str, inst: &InstanceFile) -> Result<()> {
     let p = expand_home(dir);
@@ -43,11 +44,11 @@ pub async fn run_dropins(dir: &str, inst: &InstanceFile) -> Result<()> {
             Ok(s) => {
                 warn!(hook = %name, ?s, "hook failed");
                 errors.push(format!("{name}: {s}"));
-            }
+            },
             Err(e) => {
                 warn!(hook = %name, error = ?e, "spawn failed");
                 errors.push(format!("{name}: {e}"));
-            }
+            },
         }
     }
     if errors.is_empty() {

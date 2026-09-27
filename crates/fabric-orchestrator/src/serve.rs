@@ -4,11 +4,9 @@
 //! wrapping the synchronous `fabric_daemon::wire::run_wire_server` in a
 //! Tokio-compatible spawn.
 
-use std::net::TcpListener;
-use std::sync::Arc;
+use std::{net::TcpListener, sync::Arc};
 
-use fabric_daemon::auth::AuthMiddleware;
-use fabric_daemon::coordinator::Coordinator;
+use fabric_daemon::{auth::AuthMiddleware, coordinator::Coordinator};
 use tracing::info;
 
 /// Start the wire server on a background thread, returning the listener's
@@ -24,8 +22,8 @@ pub fn start_wire_server(
     auth: Arc<AuthMiddleware>,
     runtime: Arc<tokio::runtime::Runtime>,
 ) -> Result<(), WireServerError> {
-    let listener = TcpListener::bind(listen_addr)
-        .map_err(|e| WireServerError::Bind(e.to_string()))?;
+    let listener =
+        TcpListener::bind(listen_addr).map_err(|e| WireServerError::Bind(e.to_string()))?;
 
     info!(addr = %listen_addr, "wire server binding");
 
@@ -52,8 +50,9 @@ pub enum WireServerError {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
     use fabric_daemon::config::{DaemonConfig, DatabaseConfig, ServerConfig};
+
+    use super::*;
 
     fn make_coordinator() -> (Arc<Coordinator>, tempfile::TempDir) {
         let dir = tempfile::tempdir().unwrap();

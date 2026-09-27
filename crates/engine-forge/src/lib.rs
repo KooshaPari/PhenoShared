@@ -5,51 +5,49 @@
 //! which lets tests point at the bundled fake-forge with zero network.
 //!
 //! Phase 1 (`real forge invocation`):
-//! * `start()` spawns `forge -p <prompt> --agent forge -C <cwd> [--sandbox <lane>]`
-//!   in its own process group (`setsid` on Unix, `CREATE_NEW_PROCESS_GROUP` on
-//!   Windows), tees stdout to a logfile, and waits with a configurable
-//!   timeout (default 1800s).
-//! * On timeout the whole process group is killed and `Failed` is
-//!   surfaced; the adapter still attempts a partial
-//!   `forge conversation dump <id>` for whatever was captured.
+//! * `start()` spawns `forge -p <prompt> --agent forge -C <cwd> [--sandbox <lane>]` in its own
+//!   process group (`setsid` on Unix, `CREATE_NEW_PROCESS_GROUP` on Windows), tees stdout to a
+//!   logfile, and waits with a configurable timeout (default 1800s).
+//! * On timeout the whole process group is killed and `Failed` is surfaced; the adapter still
+//!   attempts a partial `forge conversation dump <id>` for whatever was captured.
 //! * Conversation id capture is two-tier:
-//!   1. tolerant regex on the first stdout lines (`conversation-id: ...` or
-//!      bare-uuid fallback), then
-//!   2. authoritative: snapshot `forge conversation list` BEFORE spawn,
-//!      snapshot AGAIN after, diff to find the newly-created id.
-//! * When a [`StorePort`] is attached via [`ForgeEngine::with_store`], the
-//!   captured conversation id is persisted immediately on capture (so a
-//!   crash mid-run leaves a traceable record).
-//! * `extract_result` populates `pr_urls` (de-duplicated, in order) and
-//!   the terminal `status` (Completed on `DONE:`/PR, Failed on `"max steps"`
-//!   or non-zero exit code).
+//!   1. tolerant regex on the first stdout lines (`conversation-id: ...` or bare-uuid fallback),
+//!      then
+//!   2. authoritative: snapshot `forge conversation list` BEFORE spawn, snapshot AGAIN after, diff
+//!      to find the newly-created id.
+//! * When a [`StorePort`] is attached via [`ForgeEngine::with_store`], the captured conversation id
+//!   is persisted immediately on capture (so a crash mid-run leaves a traceable record).
+//! * `extract_result` populates `pr_urls` (de-duplicated, in order) and the terminal `status`
+//!   (Completed on `DONE:`/PR, Failed on `"max steps"` or non-zero exit code).
 #![forbid(unsafe_code)]
 #![warn(missing_docs)]
 
 mod parse;
 
-use std::collections::HashMap;
-use std::path::PathBuf;
-use std::sync::Arc;
-use std::sync::Mutex;
-use std::time::Duration;
+use std::{
+    collections::HashMap,
+    path::PathBuf,
+    sync::{Arc, Mutex},
+    time::Duration,
+};
 
 use async_trait::async_trait;
 use engine_spec::{ArgvBuilder, TaskSpec};
-use substrate_core::domain::{
-    ConversationDump, EngineCapabilities, Mailbox, Session, StructuredResult, Task,
-};
-use substrate_core::error::{Result, SubstrateError};
-use substrate_core::ports::{EnginePort, StorePort};
-use tokio::io::{AsyncReadExt, AsyncWriteExt};
-use tokio::process::Command;
-use tokio::sync::Mutex as AsyncMutex;
-use uuid::Uuid;
-
 pub use parse::{
     extract_conversation_id, extract_pr_urls, fallback_conversation_id, find_new_conversation_id,
     parse_dump, parse_list_snapshot,
 };
+use substrate_core::{
+    domain::{ConversationDump, EngineCapabilities, Mailbox, Session, StructuredResult, Task},
+    error::{Result, SubstrateError},
+    ports::{EnginePort, StorePort},
+};
+use tokio::{
+    io::{AsyncReadExt, AsyncWriteExt},
+    process::Command,
+    sync::Mutex as AsyncMutex,
+};
+use uuid::Uuid;
 
 /// Default per-run timeout for `start()` (300 seconds = 5 minutes).
 /// Can be overridden via `SUBSTRATE_FORGE_TIMEOUT_SECS` env var.
@@ -252,7 +250,7 @@ impl ForgeEngine {
                     out_bytes.len()
                 );
                 Ok((stdout, Some(exit_code)))
-            }
+            },
             Err(e) => {
                 eprintln!("[engine-forge] forge_daemon dispatch failed; falling back: {e}");
                 let output = Command::new(&self.bin)
@@ -262,7 +260,7 @@ impl ForgeEngine {
                     .map_err(|e2| SubstrateError::Engine(format!("spawn {}: {e2}", self.bin)))?;
                 let stdout = String::from_utf8_lossy(&output.stdout).into_owned();
                 Ok((stdout, output.status.code()))
-            }
+            },
         }
     }
 
@@ -343,7 +341,7 @@ impl ForgeEngine {
                     Ok(0) => break,
                     Ok(n) => {
                         let _ = file.write_all(&buf[..n]).await;
-                    }
+                    },
                     Err(_) => break,
                 }
             }
@@ -357,8 +355,10 @@ impl ForgeEngine {
         #[cfg(all(unix, not(target_os = "macos")))]
         {
             if let Some(pid) = child.id() {
-                use nix::sys::signal::{killpg, Signal};
-                use nix::unistd::Pid;
+                use nix::{
+                    sys::signal::{killpg, Signal},
+                    unistd::Pid,
+                };
                 // After setsid(), pgid == pid.
                 let _ = killpg(Pid::from_raw(pid as i32), Signal::SIGKILL);
             }
@@ -438,7 +438,7 @@ impl EnginePort for ForgeEngine {
                 let _ = self.kill_group(&mut child);
                 let _ = child.wait().await;
                 true
-            }
+            },
         };
 
         // Drop stdout writer — EOF flushes the tee to disk.
@@ -467,7 +467,7 @@ impl EnginePort for ForgeEngine {
                     before.iter().map(String::as_str),
                     after.iter().map(String::as_str),
                 )
-            }
+            },
         };
 
         let conv_id = conv_id.unwrap_or_else(fallback_conversation_id);
@@ -583,10 +583,10 @@ async fn read_log_head(path: &std::path::Path, max_bytes: usize) -> String {
                 Ok(n) => {
                     buf.truncate(n);
                     String::from_utf8_lossy(&buf).into_owned()
-                }
+                },
                 Err(_) => String::new(),
             }
-        }
+        },
         Err(_) => String::new(),
     }
 }

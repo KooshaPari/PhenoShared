@@ -1,8 +1,12 @@
-use crate::cli::{ArgvCli, Emit, Session};
-use crate::provider;
+use std::process::Command;
+
 use anyhow::{Context, Result};
 use serde::Serialize;
-use std::process::Command;
+
+use crate::{
+    cli::{ArgvCli, Emit, Session},
+    provider,
+};
 
 #[derive(Serialize)]
 struct DispatchPlan<'a> {

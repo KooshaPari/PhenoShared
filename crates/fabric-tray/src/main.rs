@@ -3,15 +3,19 @@
 //! Always-running tray icon with daemon lifecycle control, health monitoring,
 //! and quick-launch for TUI/GUI surfaces.
 
-use std::path::PathBuf;
-use std::process::{Child, Command};
-use std::time::{Duration, Instant};
+use std::{
+    path::PathBuf,
+    process::{Child, Command},
+    time::{Duration, Instant},
+};
 
 use anyhow::{Context, Result};
 use fabric_tray::{check_daemon_health, create_icon, DaemonStatus};
-use tray_icon::menu::{Menu, MenuEvent, MenuItem, PredefinedMenuItem};
-use tray_icon::TrayIconBuilder;
 use tao::event_loop::{ControlFlow, EventLoopBuilder};
+use tray_icon::{
+    menu::{Menu, MenuEvent, MenuItem, PredefinedMenuItem},
+    TrayIconBuilder,
+};
 
 /// User events forwarded from muda to tao event loop.
 #[derive(Debug)]
@@ -78,13 +82,13 @@ impl TrayApp {
                     self.daemon_process = None;
                     self.status = DaemonStatus::Stopped;
                     return;
-                }
-                Ok(None) => {}
+                },
+                Ok(None) => {},
                 Err(e) => {
                     tracing::error!("failed to check daemon status: {}", e);
                     self.status = DaemonStatus::Degraded;
                     return;
-                }
+                },
             }
         }
 
@@ -110,11 +114,11 @@ impl TrayApp {
                 tracing::info!("daemon started with pid {}", child.id());
                 self.daemon_process = Some(child);
                 self.status = DaemonStatus::Starting;
-            }
+            },
             Err(e) => {
                 tracing::error!("failed to start daemon: {}", e);
                 self.status = DaemonStatus::Stopped;
-            }
+            },
         }
     }
 
@@ -176,9 +180,7 @@ impl TrayApp {
         }
         #[cfg(target_os = "windows")]
         {
-            let _ = Command::new("cmd")
-                .args(["/C", "start", &url])
-                .spawn();
+            let _ = Command::new("cmd").args(["/C", "start", &url]).spawn();
         }
     }
 
@@ -261,13 +263,13 @@ fn main() -> Result<()> {
             tao::event::Event::LoopDestroyed => {
                 tracing::info!("event loop shutting down");
                 app.stop_daemon();
-            }
+            },
             tao::event::Event::MainEventsCleared => {
                 app.poll_health();
                 if let Some(ref tray) = tray_icon {
                     app.update_tooltip(tray);
                 }
-            }
+            },
             tao::event::Event::UserEvent(UserEvent::Menu(menu_event)) => {
                 let id = menu_event.id.0.as_str();
                 tracing::debug!("menu event: {}", id);
@@ -277,25 +279,22 @@ fn main() -> Result<()> {
                     "stop-daemon" => app.stop_daemon(),
                     "health-status" => {
                         tracing::info!("daemon: {}", app.status.label());
-                    }
+                    },
                     "open-tui" => app.open_tui(),
                     "open-gui" => app.open_gui(),
                     "open-web" => app.open_web(),
                     "about" => {
-                        tracing::info!(
-                            "Phenotype Fabric v{}",
-                            env!("CARGO_PKG_VERSION")
-                        );
-                    }
+                        tracing::info!("Phenotype Fabric v{}", env!("CARGO_PKG_VERSION"));
+                    },
                     "quit" => {
                         tracing::info!("quit requested");
                         app.stop_daemon();
                         *control_flow = ControlFlow::Exit;
-                    }
-                    _ => {}
+                    },
+                    _ => {},
                 }
-            }
-            _ => {}
+            },
+            _ => {},
         }
     });
 }

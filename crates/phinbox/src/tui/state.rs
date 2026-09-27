@@ -1,8 +1,8 @@
 //! TUI state types and inbox snapshot logic.
 
+use std::{path::Path, time::Duration};
+
 use crate::inbox::{list_pending as inbox_list_pending, PendingRequest, RequestState};
-use std::path::Path;
-use std::time::Duration;
 
 /// Hard cap on entries rendered in the list pane — anything older scrolls
 /// off the bottom but stays on disk.
@@ -40,13 +40,31 @@ pub struct ListEntry {
 }
 
 /// UI state for the inbox viewer — renderable without touching the terminal.
-#[derive(Debug, Clone)]
+///
+/// Not `Clone`: it carries the injected browser `opener` closure. Tests and
+/// callers construct fresh state via `ViewerState::default()`.
+#[derive(Debug)]
 pub struct ViewerState {
     pub entries: Vec<ListEntry>,
     pub selected: usize,
     pub focus_on_list: bool,
     pub status_message: String,
+    /// When true, the help overlay is drawn on top of the detail pane.
+    pub show_help: bool,
+    /// Opens a request's inbox form in the browser. Injected so the TUI
+    /// targets whichever daemon actually holds the request (its host
+    /// **and** port) instead of assuming the default port.
+    pub opener: Option<OpenerSlot>,
 }
+
+impl std::fmt::Debug for OpenerSlot {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.write_str("OpenerSlot(..)")
+    }
+}
+
+/// Debug-friendly wrapper so `ViewerState` can keep `#[derive(Debug)]`.
+pub struct OpenerSlot(pub Box<dyn Fn(&str) + Send>);
 
 impl Default for ViewerState {
     fn default() -> Self {
@@ -55,6 +73,8 @@ impl Default for ViewerState {
             selected: 0,
             focus_on_list: true,
             status_message: String::from("press ? for keys · q to quit"),
+            show_help: false,
+            opener: None,
         }
     }
 }
@@ -135,13 +155,19 @@ pub(crate) fn format_age(ms: u64) -> String {
     }
 }
 
-/// Truncate a string at `max` bytes, appending `…` if truncated.
+/// Truncate a string to `max` **characters**, appending `…` if truncated.
 pub(crate) fn truncate(s: &str, max: usize) -> String {
-    if s.len() <= max {
-        s.to_string()
-    } else {
-        format!("{}…", &s[..max.saturating_sub(1)])
+    // `max` counts *characters*, not bytes, and the ellipsis takes one of
+    // them. Slicing `&s[..max]` would panic whenever the boundary lands
+    // inside a multi-byte character — and `s` is agent-supplied
+    // (`spec.title`, `request_id`), so any non-ASCII title could kill the
+    // whole inbox viewer.
+    if s.chars().count() <= max {
+        return s.to_string();
     }
+    let mut out: String = s.chars().take(max.saturating_sub(1)).collect();
+    out.push('…');
+    out
 }
 
 /// Sort entries: pending first (newest at top), then terminal (newest first

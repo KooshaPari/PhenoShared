@@ -5,6 +5,7 @@ This directory contains the Architecture Decision Records (ADRs) for this projec
 ## Index
 
 - [0001 — Record architecture decisions](0001-record-architecture-decisions.md)
+- [0002 — Adopt a pinned nightly rustfmt for every formatting gate](0002-pinned-nightly-rustfmt.md)
 
 ## How to add a new ADR
 

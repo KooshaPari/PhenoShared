@@ -4,11 +4,12 @@
 //! Rust core, callers compose the [`GerstnerWaveBank`], [`WaterLod`], and
 //! [`super::fluid_mesh::build`] directly.
 
-use super::fluid_mesh::{self, MeshData};
-use super::water_lod::WaterLod;
-use super::water_material::WaterMaterial;
-use crate::water::error::WaterResult;
-use crate::water::gerstner_wave_bank::GerstnerWaveBank;
+use super::{
+    fluid_mesh::{self, MeshData},
+    water_lod::WaterLod,
+    water_material::WaterMaterial,
+};
+use crate::water::{error::WaterResult, gerstner_wave_bank::GerstnerWaveBank};
 
 /// Orchestrator that combines the wave bank, LOD selection, mesh generation,
 /// and material application. Deprecated.

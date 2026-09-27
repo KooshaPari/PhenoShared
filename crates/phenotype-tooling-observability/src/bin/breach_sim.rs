@@ -6,15 +6,18 @@
 //! `slo:phase1:crit` auto-issue path.
 //!
 //! Usage:
-//!     breach-sim [--target URL] [--slo NAME] [--error-count N] [--success-count N] [--iterations N]
+//!     breach-sim [--target URL] [--slo NAME] [--error-count N] [--success-count N] [--iterations
+//! N]
 //!
 //! Default target is `http://127.0.0.1:9090/metrics` (the dev
 //! `pt observability` server). Default counts are 100 errors + 900
 //! successes per iteration; raising --error-count pushes the burn rate
 //! above the 5x threshold faster.
 
-use std::env;
-use std::time::{Duration, SystemTime, UNIX_EPOCH};
+use std::{
+    env,
+    time::{Duration, SystemTime, UNIX_EPOCH},
+};
 
 use serde_json::json;
 
@@ -59,37 +62,37 @@ fn parse_args() -> Result<Args, String> {
                 target = iter
                     .next()
                     .ok_or_else(|| "--target requires a value".to_string())?
-            }
+            },
             "--slo" => {
                 slo = iter
                     .next()
                     .ok_or_else(|| "--slo requires a value".to_string())?
-            }
+            },
             "--error-count" => {
                 error_count = iter
                     .next()
                     .ok_or_else(|| "--error-count requires a value".to_string())?
                     .parse()
                     .map_err(|e| format!("--error-count must be u64: {e}"))?
-            }
+            },
             "--success-count" => {
                 success_count = iter
                     .next()
                     .ok_or_else(|| "--success-count requires a value".to_string())?
                     .parse()
                     .map_err(|e| format!("--success-count must be u64: {e}"))?
-            }
+            },
             "--iterations" => {
                 iterations = iter
                     .next()
                     .ok_or_else(|| "--iterations requires a value".to_string())?
                     .parse()
                     .map_err(|e| format!("--iterations must be u32: {e}"))?
-            }
+            },
             "--help" | "-h" => {
                 print_help();
                 std::process::exit(0);
-            }
+            },
             other => return Err(format!("unknown argument: {other}")),
         }
     }
@@ -158,11 +161,10 @@ fn main() -> Result<(), String> {
     }
 
     println!(
-        "\nbreach-sim: complete. In your dev stack:\n  \
-         1. prometheus should fire PHENOTYPE-1 (5x burn, 30m window) within ~6m.\n  \
-         2. .github/workflows/slo-backlog.yml opens a `slo:phase1:crit` issue.\n  \
-         3. .github/workflows/slo-incident.yml assigns the on-call rotation.\n  \
-         4. After ack + mitigation, incident-postmortem.yml writes postmortem/N.md.\n"
+        "\nbreach-sim: complete. In your dev stack:\n  1. prometheus should fire PHENOTYPE-1 (5x \
+         burn, 30m window) within ~6m.\n  2. .github/workflows/slo-backlog.yml opens a \
+         `slo:phase1:crit` issue.\n  3. .github/workflows/slo-incident.yml assigns the on-call \
+         rotation.\n  4. After ack + mitigation, incident-postmortem.yml writes postmortem/N.md.\n"
     );
 
     Ok(())
@@ -171,12 +173,13 @@ fn main() -> Result<(), String> {
 /// Minimal HTTP/1.1 POST helper. Sends Content-Length + body,
 /// reads status line, returns Ok(()) for any 2xx; Err otherwise.
 fn post_json(host: &str, port: u16, path: &str, body: &str) -> Result<(), String> {
-    use std::io::{Read, Write};
-    use std::net::TcpStream;
+    use std::{
+        io::{Read, Write},
+        net::TcpStream,
+    };
 
     let addr = format!("{host}:{port}");
-    let mut stream = TcpStream::connect(&addr)
-        .map_err(|e| format!("connect {addr}: {e}"))?;
+    let mut stream = TcpStream::connect(&addr).map_err(|e| format!("connect {addr}: {e}"))?;
     stream
         .set_read_timeout(Some(Duration::from_secs(5)))
         .map_err(|e| format!("set timeout: {e}"))?;
@@ -185,13 +188,8 @@ fn post_json(host: &str, port: u16, path: &str, body: &str) -> Result<(), String
         .map_err(|e| format!("set timeout: {e}"))?;
 
     let req = format!(
-        "POST {path} HTTP/1.1\r\n\
-         Host: {host}\r\n\
-         Content-Type: application/json\r\n\
-         Content-Length: {len}\r\n\
-         Connection: close\r\n\
-         \r\n\
-         {body}",
+        "POST {path} HTTP/1.1\r\nHost: {host}\r\nContent-Type: \
+         application/json\r\nContent-Length: {len}\r\nConnection: close\r\n\r\n{body}",
         path = path,
         host = host,
         len = body.len(),

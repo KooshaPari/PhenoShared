@@ -13,10 +13,11 @@
 //! API reference: POST /api/v2/tailnet/{tailnet}/keys
 //!   https://tailscale.com/api#tag/keys/POST/api/v2/tailnet/{tailnet}/keys
 
+use std::str::FromStr;
+
 use anyhow::{Context, Result, bail};
 use clap::Parser;
 use serde::{Deserialize, Serialize};
-use std::str::FromStr;
 use tracing_subscriber::EnvFilter;
 
 /// Mint an ephemeral, single-use, tagged Tailscale auth-key.

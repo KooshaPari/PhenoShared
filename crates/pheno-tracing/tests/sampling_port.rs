@@ -12,11 +12,11 @@
 //! - `SamplingContext` is the same type as `SpanContext`.
 //! - `AlwaysOnSampler` (alias for `AlwaysSampler`) records every span.
 //! - `AlwaysOffSampler` (alias for `NeverSampler`) drops every span.
-//! - `ParentBasedSampler` honors the parent's sampled bit (sampled parent
-//!   → child records; unsampled parent → child drops).
+//! - `ParentBasedSampler` honors the parent's sampled bit (sampled parent → child records;
+//!   unsampled parent → child drops).
 //! - `dyn HexSamplingPort` is object-safe (compile-time check).
-//! - The port can be driven by config: a `Sampler`-typed slot in a
-//!   config-driven consumer is satisfied by any of the 3 adapters.
+//! - The port can be driven by config: a `Sampler`-typed slot in a config-driven consumer is
+//!   satisfied by any of the 3 adapters.
 //!
 //! ## On the "config-driven sampler trait" framing
 //!
@@ -243,7 +243,7 @@ fn config_driven_dispatch_via_hex_sampling_port() {
                     sampler.should_sample(&unsampled_child),
                     SamplingDecision::Record
                 );
-            }
+            },
             "always-off" => {
                 assert_eq!(
                     sampler.should_sample(&sampled_child),
@@ -253,7 +253,7 @@ fn config_driven_dispatch_via_hex_sampling_port() {
                     sampler.should_sample(&unsampled_child),
                     SamplingDecision::Drop
                 );
-            }
+            },
             "parent-based" => {
                 assert_eq!(
                     sampler.should_sample(&sampled_child),
@@ -265,7 +265,7 @@ fn config_driven_dispatch_via_hex_sampling_port() {
                     SamplingDecision::Drop,
                     "parent-based with unsampled parent must drop the child"
                 );
-            }
+            },
             _ => panic!("unknown sampler name: {name}"),
         }
     }

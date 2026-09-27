@@ -5,8 +5,7 @@
 //!
 //! Read from CLI args / env vars with sensible defaults for local dev.
 
-use std::path::PathBuf;
-use std::time::Duration;
+use std::{path::PathBuf, time::Duration};
 
 /// Dashboard configuration.
 #[derive(Clone, Debug)]

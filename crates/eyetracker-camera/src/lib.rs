@@ -3,6 +3,8 @@
 //! Provides camera enumeration, frame capture, and configuration
 //! via nokhwa (AVFoundation on macOS).
 
+use std::time::Instant;
+
 use anyhow::{anyhow, Result};
 use nokhwa::{
     pixel_format::RgbFormat,
@@ -13,7 +15,6 @@ use nokhwa::{
     Camera as NokhwaCamera,
 };
 use serde::{Deserialize, Serialize};
-use std::time::Instant;
 use thiserror::Error;
 
 /// Camera-related errors
@@ -156,10 +157,10 @@ pub fn list_cameras() -> Vec<CameraInfo> {
                     description: info.description().to_string(),
                 });
             }
-        }
+        },
         Err(e) => {
             tracing::warn!("Failed to query cameras: {e}");
-        }
+        },
     }
     cameras
 }

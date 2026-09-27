@@ -2,10 +2,13 @@
 //!
 //! Discovers and manages projects across the repos shelf for health tracking.
 
+use std::{
+    collections::HashMap,
+    path::{Path, PathBuf},
+};
+
 use phenotype_health::LanguageStack;
 use serde::{Deserialize, Serialize};
-use std::collections::HashMap;
-use std::path::{Path, PathBuf};
 
 /// Metadata about a discovered project
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -127,7 +130,10 @@ impl ProjectRegistry {
         let workflow_count = self.count_workflows(path).await;
 
         // Try to extract GitHub owner from git remote or use default
-        let owner = self.detect_owner(path).await.unwrap_or_else(|| "<REDACTED>".to_string());
+        let owner = self
+            .detect_owner(path)
+            .await
+            .unwrap_or_else(|| "<REDACTED>".to_string());
 
         Some(ProjectMetadata {
             name: name.to_string(),
@@ -198,7 +204,7 @@ impl ProjectRegistry {
                     }
                 }
                 count
-            }
+            },
             Err(_) => 0,
         }
     }
@@ -223,8 +229,9 @@ impl ProjectRegistry {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
     use tempfile::TempDir;
+
+    use super::*;
 
     #[tokio::test]
     async fn test_detect_language_rust() {

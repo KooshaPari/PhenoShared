@@ -16,22 +16,29 @@
 //! - `inbox.get`     (`rid`)     -> `{ request: PendingRequest }` or not-found
 //! - `inbox.answer`   (`rid`, `response`) -> `{ request: PendingRequest }` after finalization
 //! - `inbox.cancel`   (`rid`)    -> `{ request: PendingRequest }` (writes Cancelled response)
-//! - `inbox.subscribe`           -> server-streaming: emits `{ kind: "added|answered|removed", request? }`
+//! - `inbox.subscribe`           -> server-streaming: emits `{ kind: "added|answered|removed",
+//!   request? }`
 
-use std::collections::HashMap;
-use std::path::{Path, PathBuf};
-use std::sync::Arc;
+use std::{
+    collections::HashMap,
+    path::{Path, PathBuf},
+    sync::Arc,
+};
 
 use parking_lot::Mutex;
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
-use tokio::sync::{broadcast, Notify};
-use tokio::net::UnixListener;
+use tokio::{
+    net::UnixListener,
+    sync::{broadcast, Notify},
+};
 
 use crate::inbox::{self, PendingRequest, ResponseStatus};
 
 mod client;
 mod server;
+#[cfg(test)]
+mod tests;
 
 pub use client::Client;
 pub use server::{bind_listener, spawn_accept};
@@ -126,6 +133,10 @@ pub const ERR_INTERNAL: i32 = -32603;
 pub const ERR_NOT_FOUND: i32 = 1001;
 pub const ERR_BAD_STATE: i32 = 1002;
 pub const ERR_IO: i32 = 1003;
+/// The request is past its TTL and is not answerable. Distinct from
+/// [`ERR_BAD_STATE`] so a caller can tell "already answered/cancelled" from
+/// "the window closed". Clients should re-issue the prompt, not retry.
+pub const ERR_EXPIRED: i32 = 1004;
 
 // ---------------------------------------------------------------------------
 // Server state (shared with the daemon)
@@ -166,7 +177,9 @@ impl RpcState {
     }
 
     pub fn notify_added(&self, req: &PendingRequest) {
-        let _ = self.changes.send(ChangeEvent::Added { request: req.clone() });
+        let _ = self.changes.send(ChangeEvent::Added {
+            request: req.clone(),
+        });
     }
 
     pub fn notify_answered(&self, rid: &str, status: ResponseStatus) {

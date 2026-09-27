@@ -5,13 +5,21 @@ use serde::{Deserialize, Serialize};
 /// Severity of an alert firing. `Ok` is emitted on resolve.
 #[derive(Debug, Clone, Copy, Serialize, Deserialize, PartialEq, Eq)]
 #[serde(rename_all = "snake_case")]
-pub enum Severity { Ok, Warning, Critical }
+pub enum Severity {
+    Ok,
+    Warning,
+    Critical,
+}
 
 impl Severity {
     pub fn from_burn(burn: f64, threshold: f64) -> Self {
-        if burn > threshold * 2.0 { Severity::Critical }
-        else if burn >= threshold { Severity::Warning }
-        else { Severity::Ok }
+        if burn > threshold * 2.0 {
+            Severity::Critical
+        } else if burn >= threshold {
+            Severity::Warning
+        } else {
+            Severity::Ok
+        }
     }
 }
 

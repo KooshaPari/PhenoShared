@@ -29,7 +29,7 @@ jobs:
           echo "Event: $EVENT_NAME"
           echo "Branch: $branch"
 
-          valid_pattern='^(main|master|specs/main|dependabot/.+|snyk-fix/[0-9]+|((feat|fix|docs|refactor|chore|test|ci|perf|release|hotfix|stack|layer)/[a-z0-9][a-z0-9._-]*|specs/(agent|recovery)-[a-z0-9][a-z0-9._-]*))$'
+          valid_pattern='^(main|master|specs/main|dependabot/.+|snyk-fix/[0-9]+|mergify/[a-z0-9][a-z0-9._-]*|((feat|fix|docs|refactor|chore|test|ci|perf|release|hotfix|stack|layer)/[a-z0-9][a-z0-9._-]*|specs/(agent|recovery)-[a-z0-9][a-z0-9._-]*))$'
 
           if [[ ! "$branch" =~ $valid_pattern ]]; then
             echo "ERROR: Branch name does not follow the repository convention."

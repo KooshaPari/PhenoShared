@@ -3,6 +3,7 @@ name = "fabric-tui"
 version = "0.1.0"
 edition = "2021"
 description = "TUI dashboard for Phenotype Fabric daemon"
+license.workspace = true
 publish = false
 
 [[bin]]
@@ -14,7 +15,7 @@ fabric-graph = { path = "../fabric-graph" }
 fabric-checker = { path = "../fabric-checker" }
 fabric-persist = { path = "../fabric-persist" }
 fabric-capability = { path = "../fabric-capability" }
-ratatui = "0.29"
+ratatui = "0.30"
 crossterm = { version = "0.28", features = ["event-stream"] }
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"

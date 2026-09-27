@@ -11,19 +11,16 @@
 //!
 //! To keep downstream consumers unblocked, this module exposes:
 //!
-//! 1. **Macro re-exports** — `info!`, `warn!`, `error!`, `debug!`, `trace!`,
-//!    `span!`, `instrument` — pulled from the underlying `tracing` dep. On
-//!    0.1 they expand as today; on 0.2 the same call sites resolve to the
-//!    0.2 implementations without any source change in consumers.
-//! 2. **`SubscriberAdapter` / `CollectorAdapter` traits** — thin wrappers
-//!    over the 0.1 Subscriber trait shape (and the projected 0.2 Collector
-//!    shape). On 0.1, `CollectorAdapter: SubscriberAdapter` (blanket impl)
-//!    so existing Subscriber impls are also Collector impls. On 0.2 the
-//!    shim flips the supertrait so that `CollectorAdapter` becomes the
-//!    primary type.
-//! 3. **`TracingBackend` / `TracingVersion` / `SubscriberKind`** — runtime
-//!    facade for downstream code that needs to branch on which tracing
-//!    version is active (rare; most consumers will not need this).
+//! 1. **Macro re-exports** — `info!`, `warn!`, `error!`, `debug!`, `trace!`, `span!`, `instrument`
+//!    — pulled from the underlying `tracing` dep. On 0.1 they expand as today; on 0.2 the same call
+//!    sites resolve to the 0.2 implementations without any source change in consumers.
+//! 2. **`SubscriberAdapter` / `CollectorAdapter` traits** — thin wrappers over the 0.1 Subscriber
+//!    trait shape (and the projected 0.2 Collector shape). On 0.1, `CollectorAdapter:
+//!    SubscriberAdapter` (blanket impl) so existing Subscriber impls are also Collector impls. On
+//!    0.2 the shim flips the supertrait so that `CollectorAdapter` becomes the primary type.
+//! 3. **`TracingBackend` / `TracingVersion` / `SubscriberKind`** — runtime facade for downstream
+//!    code that needs to branch on which tracing version is active (rare; most consumers will not
+//!    need this).
 //!
 //! ## Activation
 //!
@@ -233,7 +230,9 @@ impl TracingBackend {
     /// Construct a backend facade tagged with an explicit kind. Useful for
     /// tests that want to verify the "other" branch.
     pub fn with_kind(kind: SubscriberKind) -> Self {
-        Self { kind }
+        Self {
+            kind,
+        }
     }
 
     /// Returns the kind tag for this backend.
@@ -263,16 +262,14 @@ impl TracingBackend {
 // macros themselves are stable across the version bump — only the
 // underlying trait they call changes, and that's abstracted by
 // `SubscriberAdapter`/`CollectorAdapter`.
-pub use tracing::{debug, error, info, instrument, span, trace, warn};
-
 //==============================================================================
 // Blanket re-export of tracing's Level for convenience
 //==============================================================================
-
 /// Re-export of `tracing::Level` so downstream code can write
 /// `pheno_tracing::compat::Level::INFO` without depending on `tracing`
 /// directly. Keeps the forward-compat boundary in one place.
 pub use tracing::Level;
+pub use tracing::{debug, error, info, instrument, span, trace, warn};
 
 //==============================================================================
 // Internal marker for doc links (kept private; documents the shim's
@@ -285,7 +282,6 @@ pub const SHIM_VERSION: &str = env!("CARGO_PKG_VERSION");
 //==============================================================================
 // Tests
 //==============================================================================
-//
 // Unit tests covering the 0.1→0.2 forward-compat shim. The integration test
 // suite at `tests/tracing-0-2-compat.rs` exercises the `tracing-0-2` Cargo
 // feature path; these inline tests cover the always-on default (V0_1 today)
@@ -426,10 +422,10 @@ mod tests {
             match kind {
                 SubscriberKind::Subscriber => {
                     assert_eq!(backend.version(), TracingVersion::V0_1)
-                }
+                },
                 SubscriberKind::Collector => {
                     assert_eq!(backend.version(), TracingVersion::V0_2)
-                }
+                },
             }
         }
     }
@@ -651,7 +647,10 @@ mod tests {
         let b = TracingBackend::new();
         let s = format!("{b:?}");
         assert!(!s.is_empty(), "TracingBackend Debug must not be empty");
-        assert!(s.contains("TracingBackend"), "Debug should contain type name");
+        assert!(
+            s.contains("TracingBackend"),
+            "Debug should contain type name"
+        );
     }
 
     #[test]

@@ -8,8 +8,10 @@
 //!
 //! and must be skipped on CI with no network.
 
-use substrate_core::domain::{RoutingDecision, Task};
-use substrate_core::ports::RoutingPort;
+use substrate_core::{
+    domain::{RoutingDecision, Task},
+    ports::RoutingPort,
+};
 
 #[tokio::test]
 async fn route_decision_returns_default_forge_kimi() {

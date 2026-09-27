@@ -18,11 +18,13 @@
 
 use async_trait::async_trait;
 use engine_spec::{ArgvBuilder, TaskSpec};
-use substrate_core::domain::{
-    ConversationDump, EngineCapabilities, Mailbox, Session, StructuredResult, Task, TaskState,
+use substrate_core::{
+    domain::{
+        ConversationDump, EngineCapabilities, Mailbox, Session, StructuredResult, Task, TaskState,
+    },
+    error::Result,
+    ports::EnginePort,
 };
-use substrate_core::error::Result;
-use substrate_core::ports::EnginePort;
 
 /// Argv builder for the claude CLI surface.
 #[derive(Debug, Clone, Default)]
@@ -165,8 +167,9 @@ impl EnginePort for ClaudeEngine {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
     use engine_spec::TaskSpec;
+
+    use super::*;
 
     #[test]
     fn argv_start_includes_p_and_output_format() {

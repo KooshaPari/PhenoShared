@@ -30,17 +30,22 @@ pub struct CapturedContent {
 
 #[cfg(target_os = "windows")]
 mod os_specific {
+    use windows_sys::Win32::{
+        Foundation::{HANDLE, HWND, INVALID_HANDLE_VALUE, LPARAM},
+        System::{
+            Console::{
+                AttachConsole, FreeConsole, GetConsoleScreenBufferInfo, GetStdHandle,
+                ReadConsoleOutputCharacterW, CONSOLE_SCREEN_BUFFER_INFO, COORD, STD_OUTPUT_HANDLE,
+            },
+            Threading::GetCurrentProcessId,
+        },
+        UI::WindowsAndMessaging::{
+            EnumWindows, GetClassNameW, GetWindowTextLengthW, GetWindowTextW,
+            GetWindowThreadProcessId, IsWindowVisible,
+        },
+    };
+
     use super::*;
-    use windows_sys::Win32::Foundation::{HANDLE, HWND, LPARAM, INVALID_HANDLE_VALUE};
-    use windows_sys::Win32::System::Console::{
-        AttachConsole, FreeConsole, GetConsoleScreenBufferInfo, GetStdHandle,
-        ReadConsoleOutputCharacterW, CONSOLE_SCREEN_BUFFER_INFO, COORD, STD_OUTPUT_HANDLE,
-    };
-    use windows_sys::Win32::System::Threading::GetCurrentProcessId;
-    use windows_sys::Win32::UI::WindowsAndMessaging::{
-        EnumWindows, GetClassNameW, GetWindowTextLengthW, GetWindowTextW,
-        GetWindowThreadProcessId, IsWindowVisible,
-    };
 
     const CONSOLE_CLASSES: &[&str] = &[
         "ConsoleWindowClass",
@@ -217,7 +222,11 @@ mod os_specific {
                 AttachConsole(my_pid);
             }
 
-            Some(CapturedContent { lines, width, height })
+            Some(CapturedContent {
+                lines,
+                width,
+                height,
+            })
         }
     }
 

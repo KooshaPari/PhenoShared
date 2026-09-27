@@ -3,9 +3,9 @@
 use bytes::BytesMut;
 use criterion::{black_box, criterion_group, criterion_main, Criterion, Throughput};
 use fabric_frame_transport::{
+    transport::{encode_wire, parse_message},
     Codec, FrameHeader, FrameMessage, MessageType, SessionInit, PROTOCOL_VERSION,
 };
-use fabric_frame_transport::transport::{encode_wire, parse_message};
 
 // ---------------------------------------------------------------------------
 // Existing benchmarks: RGBA frame encode/decode
@@ -41,8 +41,7 @@ fn bench_encode_frame_1080p(c: &mut Criterion) {
 
     group.bench_function("wire_encode_full", |b| {
         b.iter(|| {
-            let mut body =
-                BytesMut::with_capacity(FrameHeader::SERIALIZED_SIZE + payload.len());
+            let mut body = BytesMut::with_capacity(FrameHeader::SERIALIZED_SIZE + payload.len());
             header.encode(&mut body);
             body.extend_from_slice(&payload);
             let wire = encode_wire(MessageType::FrameData, black_box(&body)).unwrap();
@@ -52,8 +51,7 @@ fn bench_encode_frame_1080p(c: &mut Criterion) {
 
     group.bench_function("header_payload_combined", |b| {
         b.iter(|| {
-            let mut body =
-                BytesMut::with_capacity(FrameHeader::SERIALIZED_SIZE + payload.len());
+            let mut body = BytesMut::with_capacity(FrameHeader::SERIALIZED_SIZE + payload.len());
             header.encode(&mut body);
             body.extend_from_slice(&payload);
             black_box(&body);
@@ -104,11 +102,7 @@ fn bench_decode_frame_1080p(c: &mut Criterion) {
 
     group.bench_function("wire_decode_full", |b| {
         b.iter(|| {
-            let msg = parse_message(
-                MessageType::FrameData,
-                black_box(wire_bytes.clone()),
-            )
-            .unwrap();
+            let msg = parse_message(MessageType::FrameData, black_box(wire_bytes.clone())).unwrap();
             black_box(&msg);
         });
     });
@@ -129,7 +123,7 @@ fn bench_roundtrip_small(c: &mut Criterion) {
         payload_len: (64 * 64 * 4) as u32,
         duration_us: 16_667,
     };
-    let payload = vec![0xABu8; 64 * 64 * 4];
+    let payload = vec![0xabu8; 64 * 64 * 4];
 
     let mut body = BytesMut::with_capacity(FrameHeader::SERIALIZED_SIZE + payload.len());
     header.encode(&mut body);
@@ -139,7 +133,11 @@ fn bench_roundtrip_small(c: &mut Criterion) {
     c.bench_function("roundtrip_small_64x64", |b| {
         b.iter(|| {
             let msg = parse_message(MessageType::FrameData, black_box(wire.clone())).unwrap();
-            if let FrameMessage::FrameData { header, payload } = msg {
+            if let FrameMessage::FrameData {
+                header,
+                payload,
+            } = msg
+            {
                 let mut buf = BytesMut::with_capacity(FrameHeader::SERIALIZED_SIZE + payload.len());
                 header.encode(&mut buf);
                 buf.extend_from_slice(&payload);
@@ -186,8 +184,7 @@ fn bench_encode_frame_nv12_1080p(c: &mut Criterion) {
 
     group.bench_function("wire_encode_full", |b| {
         b.iter(|| {
-            let mut body =
-                BytesMut::with_capacity(FrameHeader::SERIALIZED_SIZE + payload.len());
+            let mut body = BytesMut::with_capacity(FrameHeader::SERIALIZED_SIZE + payload.len());
             header.encode(&mut body);
             body.extend_from_slice(&payload);
             let wire = encode_wire(MessageType::FrameData, black_box(&body)).unwrap();
@@ -239,11 +236,7 @@ fn bench_decode_frame_nv12_1080p(c: &mut Criterion) {
 
     group.bench_function("wire_decode_full", |b| {
         b.iter(|| {
-            let msg = parse_message(
-                MessageType::FrameData,
-                black_box(wire_bytes.clone()),
-            )
-            .unwrap();
+            let msg = parse_message(MessageType::FrameData, black_box(wire_bytes.clone())).unwrap();
             black_box(&msg);
         });
     });
@@ -282,11 +275,7 @@ fn bench_roundtrip_session_init(c: &mut Criterion) {
 
     group.bench_function("decode", |b| {
         b.iter(|| {
-            let msg = parse_message(
-                MessageType::SessionInit,
-                black_box(wire.clone()),
-            )
-            .unwrap();
+            let msg = parse_message(MessageType::SessionInit, black_box(wire.clone())).unwrap();
             black_box(&msg);
         });
     });

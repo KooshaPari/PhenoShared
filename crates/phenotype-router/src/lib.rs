@@ -48,18 +48,16 @@ pub mod tracing;
 // with `--features chaos`; normal `cargo test` (no features) skips it.
 #[cfg(feature = "chaos")]
 pub mod chaos;
+pub use bifrost_adapter::BifrostAdapter;
 #[cfg(feature = "chaos")]
 pub use chaos as chaos_matrix;
-
-pub use bifrost_adapter::BifrostAdapter;
 pub use decision::{Decision, DecisionError, DecisionLayer, Request, Response};
 pub use hello_world::{hello_response, HelloWorld, HelloWorldPort, HelloWorldResponse};
+#[cfg(feature = "otlp")]
+pub use otel::{OtelConfig, OtlpDecisionRecorder};
 pub use sdk::{
     Capabilities, ConnectorConfig, ConnectorError, ConnectorHandle, ConnectorPort, DecisionPlugin,
     HealthStatus, LlmError, LlmPort, LlmRequest, LlmResponse, Phase, PluginDecision, PluginError,
 };
-
-#[cfg(feature = "otlp")]
-pub use otel::{OtelConfig, OtlpDecisionRecorder};
 #[cfg(feature = "otlp")]
 pub use tracing as tracing_facade;

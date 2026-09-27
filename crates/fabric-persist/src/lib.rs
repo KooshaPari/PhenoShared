@@ -12,20 +12,19 @@
 //! - Startup recovery loads all active state into memory
 
 mod error;
+mod evidence;
+mod leases;
 pub mod migrations;
+mod recovery;
+mod routes;
 pub mod schema;
 mod topology;
-mod leases;
-mod routes;
-mod evidence;
-mod recovery;
+
+use std::{path::Path, sync::Mutex};
 
 pub use error::PersistError;
 pub use recovery::RecoveredState;
-
 use rusqlite::Connection;
-use std::path::Path;
-use std::sync::Mutex;
 
 /// The main persistence handle. Thread-safe via internal Mutex.
 ///
@@ -84,7 +83,10 @@ impl Persist {
     where
         F: FnOnce(&Connection) -> Result<R, PersistError>,
     {
-        let conn = self.conn.lock().map_err(|e| PersistError::Lock(e.to_string()))?;
+        let conn = self
+            .conn
+            .lock()
+            .map_err(|e| PersistError::Lock(e.to_string()))?;
         f(&conn)
     }
 }

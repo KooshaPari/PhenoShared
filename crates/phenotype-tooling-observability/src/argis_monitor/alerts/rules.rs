@@ -4,10 +4,10 @@
 //! path can be shared (see `poller::evaluate_alerts` / `evaluate_meta_alerts`).
 
 use std::time::Duration;
+
 use serde::{Deserialize, Serialize};
 
-use super::types::Severity;
-use super::webhook_target::WebhookTarget;
+use super::{types::Severity, webhook_target::WebhookTarget};
 
 /// One alert rule. Evaluated independently per (target x SLO).
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
@@ -25,14 +25,21 @@ pub struct AlertRule {
     #[serde(default)]
     pub resolve_threshold: Option<f64>,
     /// Window over which the burn rate is computed. Defaults to FAST_BURN.long.
-    #[serde(default, deserialize_with = "super::serde_mods::opt_seconds_as_duration::deserialize", serialize_with = "super::serde_mods::opt_seconds_as_duration::serialize")]
+    #[serde(
+        default,
+        deserialize_with = "super::serde_mods::opt_seconds_as_duration::deserialize",
+        serialize_with = "super::serde_mods::opt_seconds_as_duration::serialize"
+    )]
     pub window: Option<Duration>,
     /// Sustained-burn duration before the rule fires. Defaults to 0s (fire
     /// immediately on threshold crossing).
     #[serde(default, with = "super::serde_mods::seconds_as_duration")]
     pub for_secs: Duration,
     /// Minimum seconds between consecutive fires. Default 300s (5 min).
-    #[serde(default = "default_cooldown_secs", with = "super::serde_mods::seconds_as_duration")]
+    #[serde(
+        default = "default_cooldown_secs",
+        with = "super::serde_mods::seconds_as_duration"
+    )]
     pub cooldown: Duration,
     /// Webhooks to notify when the rule fires.
     #[serde(default)]
@@ -48,8 +55,12 @@ pub struct AlertRule {
     pub auto_disable_window: Duration,
 }
 
-fn default_cooldown_secs() -> Duration { Duration::from_secs(300) }
-fn default_auto_disable_window() -> Duration { Duration::from_secs(600) }
+fn default_cooldown_secs() -> Duration {
+    Duration::from_secs(300)
+}
+fn default_auto_disable_window() -> Duration {
+    Duration::from_secs(600)
+}
 
 impl Default for AlertRule {
     fn default() -> Self {
@@ -89,7 +100,10 @@ pub struct MetaAlertRule {
     #[serde(default = "default_meta_consecutive")]
     pub consecutive_failures: u32,
     /// Sliding window over which failures are counted. Default: 300s.
-    #[serde(default = "default_meta_window", with = "super::serde_mods::seconds_as_duration")]
+    #[serde(
+        default = "default_meta_window",
+        with = "super::serde_mods::seconds_as_duration"
+    )]
     pub window: Duration,
     /// Severity emitted when the meta-alert fires. Defaults to Critical
     /// because the failure pattern itself is the signal.
@@ -104,9 +118,15 @@ pub struct MetaAlertRule {
     pub webhooks: Vec<WebhookTarget>,
 }
 
-fn default_meta_consecutive() -> u32 { 3 }
-fn default_meta_window() -> Duration { Duration::from_secs(300) }
-fn default_meta_severity() -> Severity { Severity::Critical }
+fn default_meta_consecutive() -> u32 {
+    3
+}
+fn default_meta_window() -> Duration {
+    Duration::from_secs(300)
+}
+fn default_meta_severity() -> Severity {
+    Severity::Critical
+}
 
 impl Default for MetaAlertRule {
     fn default() -> Self {

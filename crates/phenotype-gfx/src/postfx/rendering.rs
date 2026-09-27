@@ -18,7 +18,9 @@ pub struct MaterialHandle {
 impl MaterialHandle {
     /// New handle.
     pub fn new(id: u64) -> Self {
-        Self { id }
+        Self {
+            id,
+        }
     }
 }
 
@@ -49,7 +51,8 @@ impl RenderTarget {
 /// and [`crate::postfx::ssao_pass::SsaoConfig`].
 #[deprecated(
     since = "0.2.0",
-    note = "Use the per-pass config types (BloomConfig, SsaoConfig, ...) directly; this type is a pass-through kept for C# edge compatibility."
+    note = "Use the per-pass config types (BloomConfig, SsaoConfig, ...) directly; this type is a \
+            pass-through kept for C# edge compatibility."
 )]
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub struct PostFxMaterial {
@@ -73,7 +76,8 @@ impl PostFxMaterial {
 /// `#[deprecated]` pass-through shader name type.
 #[deprecated(
     since = "0.2.0",
-    note = "Use the engine-side shader lookup; this type is a name-only pass-through kept for C# edge compatibility."
+    note = "Use the engine-side shader lookup; this type is a name-only pass-through kept for C# \
+            edge compatibility."
 )]
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub struct PostFxShader {
@@ -85,7 +89,9 @@ pub struct PostFxShader {
 impl PostFxShader {
     /// New shader.
     pub fn new(name: impl Into<String>) -> Self {
-        Self { name: name.into() }
+        Self {
+            name: name.into(),
+        }
     }
 }
 
@@ -93,7 +99,8 @@ impl PostFxShader {
 /// The real orchestration is in [`crate::postfx::post_stack::PostStack`].
 #[deprecated(
     since = "0.2.0",
-    note = "Use PostStack::describe_passes() + per-pass configs directly; this orchestrator is a pass-through kept for C# edge compatibility."
+    note = "Use PostStack::describe_passes() + per-pass configs directly; this orchestrator is a \
+            pass-through kept for C# edge compatibility."
 )]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct PostFxRenderer {

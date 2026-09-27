@@ -39,7 +39,9 @@ pub struct ProviderPanel {
 }
 impl ProviderPanel {
     pub fn new() -> Self {
-        Self { providers: vec![] }
+        Self {
+            providers: vec![],
+        }
     }
     pub fn push(&mut self, s: ProviderStat) {
         self.providers.push(s);

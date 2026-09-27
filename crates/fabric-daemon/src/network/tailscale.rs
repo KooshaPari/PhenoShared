@@ -162,11 +162,9 @@ fn parse_status_json(json: &str) -> Result<TailscaleStatus, NetworkError> {
         message: format!("Failed to parse tailscale status JSON: {e}"),
     })?;
 
-    let self_node = raw
-        .self_node
-        .ok_or_else(|| NetworkError::TailscaleCli {
-            message: "No Self node in tailscale status".into(),
-        })?;
+    let self_node = raw.self_node.ok_or_else(|| NetworkError::TailscaleCli {
+        message: "No Self node in tailscale status".into(),
+    })?;
 
     let self_node = convert_peer(self_node)?;
 
@@ -177,7 +175,10 @@ fn parse_status_json(json: &str) -> Result<TailscaleStatus, NetworkError> {
         .filter_map(|p| convert_peer(p).ok())
         .collect();
 
-    Ok(TailscaleStatus { self_node, peers })
+    Ok(TailscaleStatus {
+        self_node,
+        peers,
+    })
 }
 
 /// Converts a raw peer entry into a `TailscalePeer`.

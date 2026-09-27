@@ -13,18 +13,19 @@ mod proccompose;
 mod sparkline;
 mod statusbar;
 
-use std::io;
-use std::time::{Duration, Instant};
+use std::{
+    io,
+    time::{Duration, Instant},
+};
 
+use app::App;
+use config::TuiConfig;
 use crossterm::{
     event::{self, DisableMouseCapture, EnableMouseCapture, Event, KeyCode, KeyModifiers},
     execute,
     terminal::{disable_raw_mode, enable_raw_mode, EnterAlternateScreen, LeaveAlternateScreen},
 };
 use ratatui::{backend::CrosstermBackend, Terminal};
-
-use app::App;
-use config::TuiConfig;
 
 const POLL_INTERVAL: Duration = Duration::from_secs(5);
 const EVENT_TIMEOUT: Duration = Duration::from_millis(100);
@@ -87,7 +88,7 @@ async fn run_app(terminal: &mut Terminal<CrosstermBackend<io::Stdout>>) -> anyho
                     (KeyCode::Char('r'), _) | (KeyCode::Char('R'), _) => {
                         app.refresh_service_statuses().await;
                         last_refresh = Instant::now();
-                    }
+                    },
 
                     // Navigate down
                     (KeyCode::Char('j'), _) | (KeyCode::Down, _) => app.select_next(),
@@ -104,15 +105,15 @@ async fn run_app(terminal: &mut Terminal<CrosstermBackend<io::Stdout>>) -> anyho
                         if app.show_logs {
                             app.refresh_logs().await;
                         }
-                    }
+                    },
 
                     // Toggle help
                     (KeyCode::Char('?'), _) | (KeyCode::Char('h'), _) => app.toggle_help(),
 
                     // Enter — currently a no-op placeholder for detail view
-                    (KeyCode::Enter, _) => {}
+                    (KeyCode::Enter, _) => {},
 
-                    _ => {}
+                    _ => {},
                 }
             }
         }

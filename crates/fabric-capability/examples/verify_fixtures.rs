@@ -3,10 +3,10 @@
 //!
 //! Run with:
 //!     cargo run --example verify_fixtures -p fabric-capability -- <path>
+use std::{collections::BTreeMap, path::PathBuf};
+
 use fabric_capability::CapabilityDescriptor;
 use serde_json::Value;
-use std::collections::BTreeMap;
-use std::path::PathBuf;
 
 fn main() {
     let dir = std::env::args()
@@ -19,7 +19,7 @@ fn main() {
         Err(e) => {
             eprintln!("cannot read testdata dir {dir:?}: {e}");
             std::process::exit(2);
-        }
+        },
     };
 
     let mut descriptor_files: Vec<PathBuf> = Vec::new();
@@ -49,25 +49,17 @@ fn main() {
                     format!("READ-ERR {e}"),
                 );
                 continue;
-            }
+            },
         };
         match serde_json::from_str::<CapabilityDescriptor>(&raw) {
             Ok(d) => {
-                let mem = d
-                    .capabilities
-                    .compute
-                    .as_ref()
-                    .map(|c| c.memory_bytes);
+                let mem = d.capabilities.compute.as_ref().map(|c| c.memory_bytes);
                 let cores = d
                     .capabilities
                     .compute
                     .as_ref()
                     .map(|c| (c.cores_physical, c.cores_logical));
-                let proc = d
-                    .capabilities
-                    .compute
-                    .as_ref()
-                    .map(|c| c.processor.clone());
+                let proc = d.capabilities.compute.as_ref().map(|c| c.processor.clone());
                 desc_results.insert(
                     desc.file_name().unwrap().to_string_lossy().to_string(),
                     format!(
@@ -75,19 +67,22 @@ fn main() {
                         d.epoch, mem, cores, proc
                     ),
                 );
-            }
+            },
             Err(e) => {
                 desc_results.insert(
                     desc.file_name().unwrap().to_string_lossy().to_string(),
                     format!("PARSE-ERR {e}"),
                 );
-            }
+            },
         }
     }
     for (k, v) in &desc_results {
         println!("  {k:50}  {v}");
     }
-    let d_ok = desc_results.values().filter(|v| v.starts_with("OK")).count();
+    let d_ok = desc_results
+        .values()
+        .filter(|v| v.starts_with("OK"))
+        .count();
     let d_err = desc_results.len() - d_ok;
 
     println!("\n=== manifest fixtures ({}) ===", manifest_files.len());
@@ -101,7 +96,7 @@ fn main() {
                     format!("READ-ERR {e}"),
                 );
                 continue;
-            }
+            },
         };
         match serde_json::from_str::<Value>(&raw) {
             Ok(v) => {
@@ -110,13 +105,13 @@ fn main() {
                     mp.file_name().unwrap().to_string_lossy().to_string(),
                     format!("OK  fields={n}"),
                 );
-            }
+            },
             Err(e) => {
                 man_results.insert(
                     mp.file_name().unwrap().to_string_lossy().to_string(),
                     format!("PARSE-ERR {e}"),
                 );
-            }
+            },
         }
     }
     for (k, v) in &man_results {
@@ -126,7 +121,8 @@ fn main() {
     let m_err = man_results.len() - m_ok;
 
     println!(
-        "\n=== summary ===\n  descriptors: ok={d_ok}  err={d_err}\n  manifests:   ok={m_ok}  err={m_err}"
+        "\n=== summary ===\n  descriptors: ok={d_ok}  err={d_err}\n  manifests:   ok={m_ok}  \
+         err={m_err}"
     );
     if d_err > 0 || m_err > 0 {
         std::process::exit(1);

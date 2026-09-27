@@ -4,11 +4,13 @@
 
 mod fake;
 
-pub use fake::FakeCloudDispatch;
-
 use std::time::Duration;
-use substrate_core::cloud_dispatch_port::{CloudDispatchPort, CloudResult, CloudTaskStatus};
-use substrate_core::error::SubstrateError;
+
+pub use fake::FakeCloudDispatch;
+use substrate_core::{
+    cloud_dispatch_port::{CloudDispatchPort, CloudResult, CloudTaskStatus},
+    error::SubstrateError,
+};
 
 /// Run the full cloud-dispatch conformance suite against `adapter`.
 ///
@@ -42,7 +44,8 @@ pub async fn assert_happy_path(adapter: &dyn CloudDispatchPort) {
         polls += 1;
         assert!(
             polls <= 32,
-            "conformance: poll_status did not reach terminal state within 32 polls, last={status:?}"
+            "conformance: poll_status did not reach terminal state within 32 polls, \
+             last={status:?}"
         );
         status = adapter
             .poll_status(&handle)
@@ -65,12 +68,12 @@ pub async fn assert_happy_path(adapter: &dyn CloudDispatchPort) {
             Ok(value) => {
                 result = Some(value);
                 break;
-            }
+            },
             Err(SubstrateError::CloudDispatch(message))
                 if message.contains("not ready for harvest") =>
             {
                 std::thread::sleep(Duration::from_millis(10));
-            }
+            },
             Err(error) => panic!("conformance: harvest failed after Succeeded: {error}"),
         }
     }
@@ -142,8 +145,7 @@ pub fn expect_harvest_not_ready(err: SubstrateError) -> bool {
 
 #[cfg(test)]
 mod tests {
-    use std::path::PathBuf;
-    use std::process::Command as StdCommand;
+    use std::{path::PathBuf, process::Command as StdCommand};
 
     use cloud_codex::{CodexCloudConfig, CodexCloudDispatch};
 

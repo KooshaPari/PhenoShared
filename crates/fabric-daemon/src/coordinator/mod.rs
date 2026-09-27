@@ -5,17 +5,23 @@
 
 mod config_ops;
 
-use fabric_graph::model::{RoutePlan, Topology, TopologyEpoch};
-use fabric_graph::surface::SurfaceLease;
+use std::{
+    path::PathBuf,
+    sync::{
+        atomic::{AtomicBool, Ordering},
+        Arc, Mutex,
+    },
+    time::Instant,
+};
+
+use fabric_graph::{
+    model::{RoutePlan, Topology, TopologyEpoch},
+    surface::SurfaceLease,
+};
 use fabric_persist::Persist;
-use std::path::PathBuf;
-use std::sync::atomic::{AtomicBool, Ordering};
-use std::sync::{Arc, Mutex};
-use std::time::Instant;
 use tracing::info;
 
-use crate::config::DaemonConfig;
-use crate::health::HealthResponse;
+use crate::{config::DaemonConfig, health::HealthResponse};
 
 /// The main coordinator state, shared across threads.
 pub struct Coordinator {
@@ -475,6 +481,12 @@ mod tests {
         coord.set_topology(topo).unwrap();
         let affected = coord.mark_node_failed(&fabric_graph::model::NodeId::new("n1"));
         assert_eq!(affected, 0); // no leases touch n1
-        assert!(!coord.state.lock().unwrap().topology.nodes.contains_key(&fabric_graph::model::NodeId::new("n1")));
+        assert!(!coord
+            .state
+            .lock()
+            .unwrap()
+            .topology
+            .nodes
+            .contains_key(&fabric_graph::model::NodeId::new("n1")));
     }
 }

@@ -35,9 +35,11 @@
 //! bottom), OTel spans (above), and a `PREDICTIVE.md` next to the
 //! source (per ADR-047 4-criterion rule).
 
-use crate::sdk::{Capabilities, HealthStatus, LlmError, LlmPort, LlmRequest, LlmResponse};
-use async_trait::async_trait;
 use std::sync::Arc;
+
+use async_trait::async_trait;
+
+use crate::sdk::{Capabilities, HealthStatus, LlmError, LlmPort, LlmRequest, LlmResponse};
 
 /// Plugin name (kebab-case, fleet-wide stable).
 pub const PLUGIN_NAME: &str = "researchintel";
@@ -116,7 +118,9 @@ impl ResearchIntel {
     /// Construct a `ResearchIntel` with a custom provider (tests +
     /// production HTTP-backed providers).
     pub fn with_provider(provider: Arc<dyn ResearchProvider>) -> Self {
-        Self { provider }
+        Self {
+            provider,
+        }
     }
 
     /// Read-only view of the active provider.
@@ -369,10 +373,13 @@ mod tests {
         };
         let res = ri.send(&req).await;
         match res {
-            Err(LlmError::Provider { status, body }) => {
+            Err(LlmError::Provider {
+                status,
+                body,
+            }) => {
                 assert_eq!(status, 502);
                 assert!(body.contains("upstream 503"));
-            }
+            },
             other => panic!("expected Provider error, got {:?}", other),
         }
     }

@@ -1,13 +1,17 @@
 //! HTTP client for Cursor Cloud Agents API v1.
 
-use std::collections::HashMap;
-use std::sync::{Arc, Mutex};
+use std::{
+    collections::HashMap,
+    sync::{Arc, Mutex},
+};
 
 use base64::{engine::general_purpose::STANDARD, Engine as _};
 use reqwest::Client;
 use serde::Deserialize;
-use substrate_core::cloud_dispatch_port::{CloudResult, CloudTaskHandle, CloudTaskStatus};
-use substrate_core::error::{Result, SubstrateError};
+use substrate_core::{
+    cloud_dispatch_port::{CloudResult, CloudTaskHandle, CloudTaskStatus},
+    error::{Result, SubstrateError},
+};
 
 use crate::map_run_status;
 
@@ -131,7 +135,9 @@ impl CursorCloudDispatch {
             },
         );
 
-        Ok(CloudTaskHandle { id: handle_id })
+        Ok(CloudTaskHandle {
+            id: handle_id,
+        })
     }
 
     /// Poll run status for a submitted handle.

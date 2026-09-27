@@ -7,10 +7,13 @@
 //! In R1+ (PF-WP-020), the topology becomes a fully synthesized graph with
 //! a path planner.
 
-use crate::descriptor::{CapabilityDescriptor, LinkMetrics, TopologyEdge, TopologyCapabilities};
-use crate::error::Result;
-use crate::locality::LocalityTier;
 use uuid::Uuid;
+
+use crate::{
+    descriptor::{CapabilityDescriptor, LinkMetrics, TopologyCapabilities, TopologyEdge},
+    error::Result,
+    locality::LocalityTier,
+};
 
 /// Builds a `TopologyCapabilities` with a single self-loop edge.
 ///

@@ -3,8 +3,7 @@
 //! Ported from C# `Ports/ISerializationPort.cs`. Format version is `1`.
 //! `MockSerializationPort` is dropped per the migration audit (YAGNI).
 
-use std::fs;
-use std::path::Path;
+use std::{fs, path::Path};
 
 use serde::{Deserialize, Serialize};
 

@@ -10,9 +10,11 @@
 //! up the new token within `refresh_secs` of the rotation, with zero
 //! downtime.
 
-use std::path::{Path, PathBuf};
-use std::sync::Mutex;
-use std::time::{Duration, Instant};
+use std::{
+    path::{Path, PathBuf},
+    sync::Mutex,
+    time::{Duration, Instant},
+};
 
 use tokio::fs;
 
@@ -32,7 +34,9 @@ pub struct BearerTokenCache {
 }
 
 impl BearerTokenCache {
-    pub fn new() -> Self { Self::default() }
+    pub fn new() -> Self {
+        Self::default()
+    }
 
     /// Resolve the bearer token for `target`. Returns `Some(token)` to be
     /// sent as `Authorization: Bearer <token>`, or `None` if no token is
@@ -43,7 +47,9 @@ impl BearerTokenCache {
     pub async fn resolve(&self, target: &WebhookTarget) -> Option<String> {
         if let Some(path) = &target.bearer_token_file {
             let refresh = Duration::from_secs(
-                target.bearer_token_refresh_secs.unwrap_or(DEFAULT_REFRESH_SECS)
+                target
+                    .bearer_token_refresh_secs
+                    .unwrap_or(DEFAULT_REFRESH_SECS),
             );
             if let Some(cached) = self.inner.lock().expect("poisoned").as_ref() {
                 if cached.fetched_at.elapsed() < refresh {
@@ -57,11 +63,11 @@ impl BearerTokenCache {
                         fetched_at: Instant::now(),
                     });
                     Some(value)
-                }
+                },
                 Err(e) => {
                     tracing::warn!(path = %path.display(), error = %e, "bearer_token_file read failed; skipping delivery");
                     None
-                }
+                },
             }
         } else {
             target.bearer_token.clone()

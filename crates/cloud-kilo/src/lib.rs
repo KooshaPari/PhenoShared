@@ -8,17 +8,18 @@
 mod gateway;
 mod worker;
 
-use std::collections::HashMap;
-use std::sync::{Arc, Mutex};
+use std::{
+    collections::HashMap,
+    sync::{Arc, Mutex},
+};
 
 use async_trait::async_trait;
-use substrate_core::cloud_dispatch_port::{
-    CloudDispatchPort, CloudResult, CloudTaskHandle, CloudTaskStatus,
-};
-use substrate_core::error::{Result, SubstrateError};
-use uuid::Uuid;
-
 pub use gateway::{KiloGatewayConfig, DEFAULT_GATEWAY_URL, DEFAULT_MODEL};
+use substrate_core::{
+    cloud_dispatch_port::{CloudDispatchPort, CloudResult, CloudTaskHandle, CloudTaskStatus},
+    error::{Result, SubstrateError},
+};
+use uuid::Uuid;
 pub use worker::{parse_llm_payload, LlmDispatchPayload};
 
 /// In-memory task record for async model-backed dispatch.
@@ -87,17 +88,19 @@ impl CloudDispatchPort for KiloCloudDispatch {
                     Ok(result) => {
                         rec.status = CloudTaskStatus::Succeeded;
                         rec.result = Some(result);
-                    }
+                    },
                     Err(e) => {
                         rec.status = CloudTaskStatus::Failed {
                             message: Some(e.to_string()),
                         };
-                    }
+                    },
                 }
             }
         });
 
-        Ok(CloudTaskHandle { id })
+        Ok(CloudTaskHandle {
+            id,
+        })
     }
 
     async fn poll_status(&self, handle: &CloudTaskHandle) -> Result<CloudTaskStatus> {
@@ -120,7 +123,9 @@ impl CloudDispatchPort for KiloCloudDispatch {
                 .result
                 .clone()
                 .ok_or_else(|| SubstrateError::CloudDispatch("missing harvest payload".into())),
-            CloudTaskStatus::Failed { message } => Err(SubstrateError::CloudDispatch(
+            CloudTaskStatus::Failed {
+                message,
+            } => Err(SubstrateError::CloudDispatch(
                 message.clone().unwrap_or_else(|| "kilo task failed".into()),
             )),
             _ => Err(SubstrateError::CloudDispatch(

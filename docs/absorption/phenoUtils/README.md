@@ -1,10 +1,31 @@
 # phenoUtils Absorption
 
-**Date**: 2026-07-17
+**Date**: 2026-07-17 (claimed); source repo on disk **404 (deleted)** at the time of audit
 **Source**: `<REDACTED>/phenoUtils` (archived)
-**Target**: `pheno` monorepo as `crates/pheno-utils-*/`
-**Branch**: `absorb/pheno-utils-2026-07-17` (pushed to origin)
+**Target**: `phenoUtils` worktree `phenoUtils-wtrees/utils01-20260908/`, branch
+  `fix/utils01-walker-errors-20260908 @ 961d122` (6 of 8 claimed crates).
+  PhenoShared does **not** host these crates; the `crates/pheno-utils-*` target
+  in the original record is not on this tree.
+**Branch**: `absorb/pheno-utils-2026-07-17` (pushed to origin) — never landed
+  on PhenoShared's `main`; only on the worktree branch above.
 **Wave**: `2026-07-17-queue-refresh-2`
+
+## Status per crate
+
+| Source crate | Target crate | Status |
+|---|---|---|
+| `pheno-shell` | `pheno-utils-shell` | **PRESENT** on `fix/utils01-walker-errors-20260908 @ 961d122` |
+| `pheno-fs` | `pheno-utils-fs` | **PRESENT** on `fix/utils01-walker-errors-20260908 @ 961d122` |
+| `pheno-net` | `pheno-utils-net` | **PRESENT** on `fix/utils01-walker-errors-20260908 @ 961d122` |
+| `pheno-async` | `pheno-utils-async` | **NEVER LANDED** — no commit in any phenoUtils ref |
+| `pheno-crypto` | `pheno-utils-crypto` | **PRESENT** on `fix/utils01-walker-errors-20260908 @ 961d122` |
+| `pheno-testing` | `pheno-utils-testing` | **PRESENT** on `fix/utils01-walker-errors-20260908 @ 961d122` |
+| `pheno-schema-port` | `pheno-schema-port` | **PRESENT** on `fix/utils01-walker-errors-20260908 @ 961d122` (not in original list; in worktree) |
+| `chaos-injection` | `pheno-utils-chaos` | **NEVER LANDED** — no commit in any phenoUtils ref |
+
+The 6 present crates retain their **original names** in the worktree (e.g.
+`pheno-shell/`, not `pheno-utils-shell/`); the rename proposed in this README
+never happened.
 
 ## What was absorbed
 
@@ -31,24 +52,29 @@ phenoUtils v0.1.0 — a 7-crate workspace of substrate-utility primitives:
 
 ## Verification
 
-```
-cargo check -p pheno-utils-{shell,fs,net,async,crypto,testing,chaos}
-  → Finished `dev` profile [unoptimized + debuginfo] target(s) in 5.67s
-```
+The verification originally recorded here (`cargo check -p pheno-utils-{...}`)
+is **not reproducible**: none of the `pheno-utils-*` crates exists on this tree
+(`for c in shell fs net async crypto testing chaos; do test -e crates/pheno-utils-$c; echo $?; done` → seven `1`s). The source repo `<REDACTED>/phenoUtils` is
+404-deleted; no preservation bundle carries the namespace. The 6 crates that
+do exist are only on the worktree branch above, with original names, total
+807 LOC.
 
-All 7 crates compile cleanly standalone. Tests are present in source (`tests/chaos_test.rs`
-for fs and net, plus inline `#[cfg(test)]` modules) — full test run deferred to CI due
-to heavy deps (wiremock + reqwest + tokio).
+`pheno-utils-async` and `pheno-utils-chaos` (originally `chaos-injection`)
+have no commit in any phenoUtils ref.
 
 ## Notes
 
-- The `pheno-utils-*` naming aligns with the existing convention (`pheno-context`,
-  `pheno-cdylib-bridge`, `pheno-events`, `httpora-core`) — kebab-case, prefixed
-- These are substrate-utility primitives intended to be depended on by other pheno
-  crates. None of them have been wired as deps yet — that's a follow-up.
-- The `chaos-injection` crate is the most novel: `FaultInjector::new(config)` lets
-  tests probabilistically inject IO/network failures.
+- The 6 worktree crates retain original names (`pheno-shell`, `pheno-fs`,
+  `pheno-net`, `pheno-crypto`, `pheno-testing`, `pheno-schema-port`); the
+  proposed rename to `pheno-utils-*` never happened.
+- The Python half (`pheno/python/pheno_utils/`, absorbed into `pheno` at
+  `pheno @ 77917bcdd` 2026-04-25) is **separate** and unrelated to this
+  Rust absorb.
 
 ## Disposition
 
-`disposition-index.json` row `repo-phenoUtils` → `fsm=absorbed, archived=true`.
+`disposition-index.json` row `repo-phenoUtils` →
+**`fsm=PENDING, archived=true, branch_pinned=true`**: source repo deleted,
+absorbing branch never merged to PhenoShared `main`, 6 of 8 crates
+present on `fix/utils01-walker-errors-20260908 @ 961d122`, 2 crates
+never-landed.

@@ -1,5 +1,6 @@
-use crate::{HealthStatus, RegistryError, ServiceRegistration};
 use uuid::Uuid;
+
+use crate::{HealthStatus, RegistryError, ServiceRegistration};
 
 /// Hexagonal **port** — the only trait consumers depend on.
 ///

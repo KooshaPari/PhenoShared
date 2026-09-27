@@ -1,8 +1,10 @@
 //! Transport conformance: publish/subscribe round-trip and atomic claim.
 
-use substrate_core::domain::{Message, MessageKind, Part};
-use substrate_core::ports::TransportPort;
-use substrate_core::SubstrateError;
+use substrate_core::{
+    domain::{Message, MessageKind, Part},
+    ports::TransportPort,
+    SubstrateError,
+};
 use transport_file::FileTransport;
 use uuid::Uuid;
 

@@ -2,24 +2,22 @@
 
 use std::path::Path;
 
-use ratatui::backend::CrosstermBackend;
-use ratatui::layout::{Constraint, Direction, Layout};
-use ratatui::style::{Color, Modifier, Style};
-use ratatui::text::{Line, Span};
-use ratatui::widgets::{Block, Borders, List, ListItem, ListState, Paragraph};
-use ratatui::Terminal;
+use ratatui::{
+    layout::{Constraint, Direction, Layout},
+    style::{Color, Modifier, Style},
+    text::{Line, Span},
+    widgets::{Block, Borders, List, ListItem, ListState, Paragraph},
+    Terminal,
+};
 
-use crate::inbox::{load as inbox_load, RequestOrigin};
-use crate::spec::{FieldSpec, PromptSpec};
-
-use super::state::ViewerState;
-use super::state::truncate;
+use super::state::{truncate, ViewerState};
+use crate::{
+    inbox::{load as inbox_load, RequestOrigin},
+    spec::{FieldSpec, PromptSpec},
+};
 
 /// Build the lines that should appear in the detail pane for a given request.
-pub(crate) fn render_detail_lines(
-    spec: &PromptSpec,
-    origin: &RequestOrigin,
-) -> Vec<Line<'static>> {
+pub(crate) fn render_detail_lines(spec: &PromptSpec, origin: &RequestOrigin) -> Vec<Line<'static>> {
     let mut out: Vec<Line<'static>> = Vec::new();
     out.push(Line::from(vec![
         Span::styled("title    ", Style::default().fg(Color::DarkGray)),
@@ -78,8 +76,10 @@ pub(crate) fn field_summary(field: &FieldSpec) -> String {
                 pattern.as_ref().map_or("text", |_| "text (pattern)")
             };
             format!("{kind} — {label}")
-        }
-        FieldSpec::LongText { label, .. } => format!("long text — {label}"),
+        },
+        FieldSpec::LongText {
+            label, ..
+        } => format!("long text — {label}"),
         FieldSpec::Integer {
             label,
             min,
@@ -93,17 +93,24 @@ pub(crate) fn field_summary(field: &FieldSpec) -> String {
                 (None, None) => String::new(),
             };
             format!("integer{range} — {label}")
-        }
-        FieldSpec::Choice { label, options, .. } => {
+        },
+        FieldSpec::Choice {
+            label,
+            options,
+            ..
+        } => {
             let labels: Vec<&str> = options.iter().map(|o| o.label.as_str()).collect();
             format!("choice [{}] — {label}", labels.join(", "))
-        }
-        FieldSpec::Boolean { label, default } => {
+        },
+        FieldSpec::Boolean {
+            label,
+            default,
+        } => {
             let def = default.map_or(String::new(), |d| {
                 format!(" (default {})", if d { "yes" } else { "no" })
             });
             format!("boolean — {label}{def}")
-        }
+        },
         FieldSpec::DateTime {
             label,
             picker_kind,
@@ -114,18 +121,13 @@ pub(crate) fn field_summary(field: &FieldSpec) -> String {
 
 /// Build the status bar paragraph.
 pub(crate) fn render_status_bar(state: &ViewerState) -> Paragraph<'_> {
-    let pending = state
-        .entries
-        .iter()
-        .filter(|e| !e.is_terminal)
-        .count();
+    let pending = state.entries.iter().filter(|e| !e.is_terminal).count();
     let total = state.entries.len();
-    let msg = format!(" {} pending · {} total · {}", pending, total, state.status_message);
-    Paragraph::new(msg).style(
-        Style::default()
-            .fg(Color::White)
-            .bg(Color::DarkGray),
-    )
+    let msg = format!(
+        " {} pending · {} total · {}",
+        pending, total, state.status_message
+    );
+    Paragraph::new(msg).style(Style::default().fg(Color::White).bg(Color::DarkGray))
 }
 
 /// Build the list pane widget and its state.
@@ -148,22 +150,10 @@ pub(crate) fn render_list_pane(state: &ViewerState) -> (List<'_>, ListState) {
             let marker = if selected { "▶" } else { " " };
             let line = Line::from(vec![
                 Span::styled(format!("{marker} "), style),
-                Span::styled(
-                    truncate(&e.request_id, 14),
-                    style,
-                ),
-                Span::styled(
-                    format!(" ({})", e.age_label),
-                    style.fg(Color::DarkGray),
-                ),
-                Span::styled(
-                    format!("  {:<40}", truncate(&e.title, 40)),
-                    style,
-                ),
-                Span::styled(
-                    format!("{} {}", e.state_badge, e.urgency_label),
-                    style,
-                ),
+                Span::styled(truncate(&e.request_id, 14), style),
+                Span::styled(format!(" ({})", e.age_label), style.fg(Color::DarkGray)),
+                Span::styled(format!("  {:<40}", truncate(&e.title, 40)), style),
+                Span::styled(format!("{} {}", e.state_badge, e.urgency_label), style),
             ]);
             ListItem::new(line)
         })
@@ -212,7 +202,7 @@ pub(crate) fn render_detail_pane(
                     Color::Cyan
                 }));
             (Paragraph::new(lines).block(block), false)
-        }
+        },
         Err(e) => (
             Paragraph::new(format!("error loading request: {e}")).block(
                 Block::default()
@@ -227,32 +217,99 @@ pub(crate) fn render_detail_pane(
 
 /// Build the help line at the bottom.
 pub(crate) fn render_help_line() -> Paragraph<'static> {
-    Paragraph::new(" [a] answer · [o] open · [d] dismiss · [Tab] focus · [j/k] navigate · [q] quit")
-        .style(Style::default().fg(Color::DarkGray))
+    Paragraph::new(
+        " [a] answer · [o] open · [d] dismiss · [Tab] focus · [j/k] navigate · [?] help · [q] quit",
+    )
+    .style(Style::default().fg(Color::DarkGray))
+}
+
+/// Build a help overlay paragraph that replaces the detail pane when `?` is
+/// pressed. Shows all keybindings in a bordered block.
+pub(crate) fn render_help_overlay() -> Paragraph<'static> {
+    let lines = vec![
+        Line::from(" keybinding cheat-sheet"),
+        Line::from(""),
+        Line::from("  j / ↓         move selection down"),
+        Line::from("  k / ↑         move selection up"),
+        Line::from("  g / G         jump to first / last"),
+        Line::from("  Tab           switch focus list ↔ detail"),
+        Line::from("  Enter / o     open form in browser"),
+        Line::from("  a             answer selected request"),
+        Line::from("  d             dismiss selected request"),
+        Line::from("  r / F5        force refresh"),
+        Line::from("  ?             toggle this help"),
+        Line::from("  q / Esc       quit"),
+        Line::from(""),
+        Line::from(Span::styled(
+            " press ? again to close",
+            Style::default().fg(Color::DarkGray),
+        )),
+    ];
+    Paragraph::new(lines).block(
+        Block::default()
+            .title(" help ")
+            .borders(Borders::ALL)
+            .border_style(Style::default().fg(Color::Cyan)),
+    )
 }
 
 /// Render the current state to the terminal.
-pub(crate) fn render(
-    terminal: &mut Terminal<CrosstermBackend<std::io::Stdout>>,
+///
+/// Generic over the backend so tests can drive it with
+/// [`ratatui::backend::TestBackend`] and assert on the resulting buffer.
+pub(crate) fn render<B: ratatui::backend::Backend>(
+    terminal: &mut Terminal<B>,
     state: &ViewerState,
     inbox_root: &Path,
 ) -> Result<(), String> {
     terminal
         .draw(|f| {
-            let chunks = Layout::default()
-                .direction(Direction::Vertical)
-                .constraints([
-                    Constraint::Min(3),
-                    Constraint::Length(1),
-                    Constraint::Length(1),
-                ])
-                .split(f.area());
+            let area = f.area();
+            let total_h = area.height;
+
+            // Minimum viable layout: at least 5 rows to show list + help + status.
+            // Below that we degrade to list-only + status bar.
+            let chunks = if total_h >= 5 {
+                // Detail pane gets at least 3 inner rows (5 total with block borders),
+                // capped at 40% of the terminal so the list pane stays usable.
+                let detail_max = (total_h * 2 / 5).max(5);
+                let detail_rows = detail_max.min(total_h.saturating_sub(4));
+                Layout::default()
+                    .direction(Direction::Vertical)
+                    .constraints([
+                        Constraint::Min(3),
+                        Constraint::Length(detail_rows),
+                        Constraint::Length(1),
+                        Constraint::Length(1),
+                    ])
+                    .split(area)
+            } else {
+                // Degraded: list + status only (no room for detail).
+                Layout::default()
+                    .direction(Direction::Vertical)
+                    .constraints([Constraint::Min(1), Constraint::Length(1)])
+                    .split(area)
+            };
+
+            // Always render the list pane in chunks[0].
             let (list, mut list_state) = render_list_pane(state);
             f.render_stateful_widget(list, chunks[0], &mut list_state);
-            let (detail, _) = render_detail_pane(state, inbox_root);
-            f.render_widget(detail, chunks[1]);
-            f.render_widget(render_help_line(), chunks[1]);
-            f.render_widget(render_status_bar(state), chunks[2]);
+
+            if total_h >= 5 {
+                // Detail pane (or help overlay) in chunks[1], help line in chunks[2],
+                // status in chunks[3].
+                if state.show_help {
+                    f.render_widget(render_help_overlay(), chunks[1]);
+                } else {
+                    let (detail, _) = render_detail_pane(state, inbox_root);
+                    f.render_widget(detail, chunks[1]);
+                }
+                f.render_widget(render_help_line(), chunks[2]);
+                f.render_widget(render_status_bar(state), chunks[3]);
+            } else {
+                // Degraded: no detail pane, just status bar.
+                f.render_widget(render_status_bar(state), chunks[1]);
+            }
         })
         .map_err(|e| format!("terminal.draw: {e}"))?;
     Ok(())

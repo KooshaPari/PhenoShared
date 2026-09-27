@@ -10,14 +10,16 @@ use ratatui::{
     Frame,
 };
 
-use crate::config::TuiConfig;
-use crate::dispatch_client::{
-    format_log_timestamp, log_entry_color, truncate_str, GatewayClient, GatewayMetrics, LogEntry,
-    ServiceStatus,
+use crate::{
+    config::TuiConfig,
+    dispatch_client::{
+        format_log_timestamp, log_entry_color, truncate_str, GatewayClient, GatewayMetrics,
+        LogEntry, ServiceStatus,
+    },
+    help::draw_help,
+    proccompose::{load_compositions, Composition},
+    statusbar::draw_statusbar,
 };
-use crate::help::draw_help;
-use crate::proccompose::{load_compositions, Composition};
-use crate::statusbar::draw_statusbar;
 
 /// Top-level application state.
 pub struct App {
@@ -225,8 +227,7 @@ impl App {
     }
 
     fn render_metrics_panel(&self, frame: &mut Frame, area: Rect) {
-        use ratatui::text::Line;
-        use ratatui::widgets::Paragraph;
+        use ratatui::{text::Line, widgets::Paragraph};
 
         let block = Block::default()
             .borders(Borders::ALL)
@@ -239,7 +240,7 @@ impl App {
             None => {
                 let p = Paragraph::new("No metrics available — gateway may be unreachable.");
                 frame.render_widget(p, inner);
-            }
+            },
             Some(m) => {
                 // Summary line
                 let summary = format!(
@@ -282,7 +283,7 @@ impl App {
 
                 let p = Paragraph::new(lines);
                 frame.render_widget(p, inner);
-            }
+            },
         }
     }
 
@@ -291,8 +292,10 @@ impl App {
     /// Each row shows: `[HH:MM:SS] provider/model  status  latency_ms ms`
     /// Color coding: green=2xx, yellow=429, red=5xx.
     fn render_logs_panel(&self, frame: &mut Frame, area: Rect) {
-        use ratatui::text::Line;
-        use ratatui::widgets::{List, ListItem};
+        use ratatui::{
+            text::Line,
+            widgets::{List, ListItem},
+        };
 
         let block = Block::default()
             .borders(Borders::ALL)

@@ -12,11 +12,13 @@ use engine_spec::TaskSpec;
 use futures_util::{Stream, StreamExt};
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
-use substrate_core::domain::{
-    ConversationDump, EngineCapabilities, Mailbox, Session, StructuredResult, Task, TaskState,
+use substrate_core::{
+    domain::{
+        ConversationDump, EngineCapabilities, Mailbox, Session, StructuredResult, Task, TaskState,
+    },
+    error::{Result, SubstrateError},
+    ports::EnginePort,
 };
-use substrate_core::error::{Result, SubstrateError};
-use substrate_core::ports::EnginePort;
 
 /// Default A2A REST status poll interval.
 pub const DEFAULT_POLL_INTERVAL_MS: u64 = 250;
@@ -117,7 +119,7 @@ impl A2AEngine {
                 Ok(bytes) => {
                     let text = String::from_utf8_lossy(&bytes).into_owned();
                     parse_sse_record(&text)
-                }
+                },
                 Err(e) => Err(e),
             })
             .filter_map(|record| async move {
@@ -350,7 +352,10 @@ fn parse_sse_record(text: &str) -> Result<Option<A2AEvent>> {
         Some("artifact") | Some("artifact_update") => A2AEvent::Artifact {
             artifact: serde_json::from_value(value)?,
         },
-        _ => A2AEvent::Other { event, data: value },
+        _ => A2AEvent::Other {
+            event,
+            data: value,
+        },
     };
     Ok(Some(parsed))
 }

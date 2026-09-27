@@ -1,5 +1,4 @@
 //! Surface plane — surface leasing and route binding (PF-WP-015, spec 019).
-//!
 // A `Surface` is a presentation binding: an opaque handle the user keeps open
 //! while the route plan may be silently re-planned underneath. The lease FSM
 //! guarantees that a held surface either continues to work or is invalidated
@@ -7,12 +6,12 @@
 //! capability surface (this is the spec 019 "no-steal" invariant).
 //!
 //! ## Module map
-//! - `SurfaceSpec` — declarative description of a surface (protocol, route binding,
-//!   locality floor, display/audio capture rules, RT constraints).
-//! - `SurfaceLease` — FSM-held lease bound to a `RouteStep`; transitions through
-//!   `Pending → Active → (Completed | Failed | Revoked | Expired)`.
-//! - `SurfaceHandle` — opaque id issued to a user-facing session; never reveals
-//!   underlying topology changes.
+//! - `SurfaceSpec` — declarative description of a surface (protocol, route binding, locality floor,
+//!   display/audio capture rules, RT constraints).
+//! - `SurfaceLease` — FSM-held lease bound to a `RouteStep`; transitions through `Pending → Active
+//!   → (Completed | Failed | Revoked | Expired)`.
+//! - `SurfaceHandle` — opaque id issued to a user-facing session; never reveals underlying topology
+//!   changes.
 //! - `bind`/`rebind`/`invalidate` — surface operations.
 //!
 //! ## Stability classification (per ADR-0027 stability model)
@@ -23,8 +22,10 @@ use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 
-use crate::model::{NodeId, RoutePlanId, RouteStep, TrustLevel};
-use crate::LocalityTier;
+use crate::{
+    model::{NodeId, RoutePlanId, RouteStep, TrustLevel},
+    LocalityTier,
+};
 
 // -----------------------------------------------------------------------------
 // SurfaceSpec
@@ -106,7 +107,12 @@ impl SurfaceSpec {
             return Err(SurfaceSpecError::EmptyName);
         }
         if let Some(c) = self.capture {
-            if matches!(self.protocol, SurfaceProtocol::Posix) && !matches!(c, CaptureDirection::Source | CaptureDirection::Bidirectional) {
+            if matches!(self.protocol, SurfaceProtocol::Posix)
+                && !matches!(
+                    c,
+                    CaptureDirection::Source | CaptureDirection::Bidirectional
+                )
+            {
                 return Err(SurfaceSpecError::IncompatibleCapture {
                     protocol: self.protocol.clone(),
                     capture: c,
@@ -124,7 +130,10 @@ impl SurfaceSpec {
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum SurfaceSpecError {
     EmptyName,
-    IncompatibleCapture { protocol: SurfaceProtocol, capture: CaptureDirection },
+    IncompatibleCapture {
+        protocol: SurfaceProtocol,
+        capture: CaptureDirection,
+    },
     RtRequiresLocality,
 }
 
@@ -132,7 +141,10 @@ impl std::fmt::Display for SurfaceSpecError {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
             Self::EmptyName => write!(f, "SurfaceSpec.name must be non-empty"),
-            Self::IncompatibleCapture { protocol, capture } => write!(
+            Self::IncompatibleCapture {
+                protocol,
+                capture,
+            } => write!(
                 f,
                 "SurfaceSpec: capture {:?} not compatible with protocol {:?}",
                 capture, protocol
@@ -283,10 +295,16 @@ pub enum SurfaceError {
     NoMatchingRoute,
     /// The host has the required capability but at a trust level below the spec's
     /// `min_host_trust`.
-    InsufficientTrust { required: TrustLevel, offered: TrustLevel },
+    InsufficientTrust {
+        required: TrustLevel,
+        offered: TrustLevel,
+    },
     /// The lease FSM rejected the transition (e.g. trying to invalidate a
     /// Completed lease).
-    IllegalTransition { from: LeaseState, attempted: &'static str },
+    IllegalTransition {
+        from: LeaseState,
+        attempted: &'static str,
+    },
     /// Plan epoch drift invalidates the binding (`strict_epoch_binding`).
     EpochDrift { previous: u64, current: u64 },
     /// The referenced node does not exist in the topology (spec 024).
@@ -300,21 +318,35 @@ impl std::fmt::Display for SurfaceError {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
             Self::InvalidSpec(e) => write!(f, "invalid SurfaceSpec: {e}"),
-            Self::NoMatchingRoute => write!(f, "no RouteStep in the plan satisfies the surface's locality+protocol requirements"),
-            Self::InsufficientTrust { required, offered } => write!(
+            Self::NoMatchingRoute => write!(
+                f,
+                "no RouteStep in the plan satisfies the surface's locality+protocol requirements"
+            ),
+            Self::InsufficientTrust {
+                required,
+                offered,
+            } => write!(
                 f,
                 "host trust {offered:?} is below surface requirement {required:?}"
             ),
-            Self::IllegalTransition { from, attempted } => write!(
+            Self::IllegalTransition {
+                from,
+                attempted,
+            } => write!(f, "cannot {attempted} from state {from:?}"),
+            Self::EpochDrift {
+                previous,
+                current,
+            } => write!(
                 f,
-                "cannot {attempted} from state {from:?}"
+                "plan epoch drifted from {previous} to {current}; strict-binding surface \
+                 invalidated"
             ),
-            Self::EpochDrift { previous, current } => write!(
-                f,
-                "plan epoch drifted from {previous} to {current}; strict-binding surface invalidated"
-            ),
-            Self::UnknownNode { node } => write!(f, "unknown node in topology: {node}"),
-            Self::SpecViolation { detail } => write!(f, "spec violation: {detail}"),
+            Self::UnknownNode {
+                node,
+            } => write!(f, "unknown node in topology: {node}"),
+            Self::SpecViolation {
+                detail,
+            } => write!(f, "spec violation: {detail}"),
         }
     }
 }

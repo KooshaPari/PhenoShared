@@ -8,8 +8,9 @@
 //!
 //! The composite score is a weighted sum of these four dimensions.
 
-use crate::model::{IntentRequirements, Node, RouteStep, TrustLevel};
 use std::collections::HashMap;
+
+use crate::model::{IntentRequirements, Node, RouteStep, TrustLevel};
 
 /// Weights for the four scoring dimensions.
 ///
@@ -63,7 +64,11 @@ pub fn score_locality(node: &Node, requirements: &IntentRequirements) -> f64 {
 }
 
 #[allow(dead_code)]
-fn score_latency(step: &RouteStep, edges: &HashMap<String, crate::model::Edge>, requirements: &IntentRequirements) -> f64 {
+fn score_latency(
+    step: &RouteStep,
+    edges: &HashMap<String, crate::model::Edge>,
+    requirements: &IntentRequirements,
+) -> f64 {
     let Some(edge_id) = &step.via_edge else {
         // Direct hop — best possible latency
         return 1.0;
@@ -88,7 +93,10 @@ fn score_latency(step: &RouteStep, edges: &HashMap<String, crate::model::Edge>, 
 
 pub(crate) fn score_capability(node: &Node, requirements: &IntentRequirements) -> f64 {
     // Simple count-based scoring: does the node have the minimum required capabilities?
-    let has_gpu = node.capabilities.iter().any(|c| c.descriptor_id.contains("gpu"));
+    let has_gpu = node
+        .capabilities
+        .iter()
+        .any(|c| c.descriptor_id.contains("gpu"));
     let has_cpu = !node.capabilities.is_empty();
 
     let mut score: f64 = 0.0;
@@ -133,15 +141,20 @@ pub(crate) fn score_trust(node: &Node) -> f64 {
 
 #[cfg(test)]
 mod tests {
+    use std::collections::HashMap;
+
+    use fabric_capability::locality::LocalityTier;
+
     use super::*;
     use crate::model::{CapabilityRef, EdgeId, LinkMetrics, NodeId, RouteStep, ScoreBreakdown};
-    use fabric_capability::locality::LocalityTier;
-    use std::collections::HashMap;
 
     fn make_node(id: &str, tier: u8, trust: TrustLevel) -> Node {
         let cap = CapabilityRef::new(format!("sha256:{}", id)).with_trust(trust);
-        Node::new(NodeId::new(id), LocalityTier::from_index(tier).unwrap_or(LocalityTier::L5Loopback))
-            .with_capability(cap)
+        Node::new(
+            NodeId::new(id),
+            LocalityTier::from_index(tier).unwrap_or(LocalityTier::L5Loopback),
+        )
+        .with_capability(cap)
     }
 
     fn make_step(node_id: &str) -> RouteStep {
@@ -264,8 +277,7 @@ mod tests {
 
     #[test]
     fn test_score_breakdown_composite() {
-        let breakdown =
-            ScoreBreakdown::new(1.0, 1.0, 1.0, 1.0);
+        let breakdown = ScoreBreakdown::new(1.0, 1.0, 1.0, 1.0);
         // 0.35 + 0.30 + 0.25 + 0.10 = 1.0
         assert!((breakdown.composite - 1.0).abs() < 0.001);
     }

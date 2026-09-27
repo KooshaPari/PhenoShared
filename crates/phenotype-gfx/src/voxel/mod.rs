@@ -14,13 +14,13 @@
 //!
 //! ## Determinism contract
 //!
-//! - World coordinates are fixed-point `i64` at `10^6` scale. No `f32`/`f64` crosses
-//!   the public API.
-//! - Dirty events are ordered by `(chunk_id, write_seq)`. Iteration of internal
-//!   collections never leaks ordering into the public surface.
-//! - `VoxelScaleMultiplier` is a first-class semantic with a sensible default; LOD
-//!   selection composes with it through provided helpers so consumers cannot
-//!   accidentally desynchronise (WSM3D-lineage invariant).
+//! - World coordinates are fixed-point `i64` at `10^6` scale. No `f32`/`f64` crosses the public
+//!   API.
+//! - Dirty events are ordered by `(chunk_id, write_seq)`. Iteration of internal collections never
+//!   leaks ordering into the public surface.
+//! - `VoxelScaleMultiplier` is a first-class semantic with a sensible default; LOD selection
+//!   composes with it through provided helpers so consumers cannot accidentally desynchronise
+//!   (WSM3D-lineage invariant).
 //!
 //! ## Inlining note (L5-109, 2026-06-18)
 //!

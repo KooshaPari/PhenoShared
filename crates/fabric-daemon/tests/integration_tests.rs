@@ -3,15 +3,17 @@
 //! These tests span multiple crates and verify they work together correctly.
 //! Run with: `cargo test -p fabric-daemon --test integration_tests`
 
-use fabric_capability::descriptor::{Capabilities, ComputeCapabilities, Signature};
-use fabric_capability::LocalityTier;
-use fabric_checker::checker::check;
-use fabric_checker::manifest::CheckerManifest;
-use fabric_graph::builder::TopologyBuilder;
-use fabric_graph::multihop::{builtin_stages, compile_multihop};
-use fabric_graph::surface::{CaptureDirection, SurfaceProtocol, SurfaceSpec};
-use fabric_graph::surface_ops;
-use fabric_graph::{IntentBuilder, NodeId, Topology};
+use fabric_capability::{
+    descriptor::{Capabilities, ComputeCapabilities, Signature},
+    LocalityTier,
+};
+use fabric_checker::{checker::check, manifest::CheckerManifest};
+use fabric_graph::{
+    builder::TopologyBuilder,
+    multihop::{builtin_stages, compile_multihop},
+    surface::{CaptureDirection, SurfaceProtocol, SurfaceSpec},
+    surface_ops, IntentBuilder, NodeId, Topology,
+};
 use uuid::Uuid;
 
 // ---------------------------------------------------------------------------
@@ -26,7 +28,10 @@ use uuid::Uuid;
 /// - non-nil node_id
 /// - non-empty topology_hash
 /// - recent probed_at
-fn base_descriptor(cores_logical: u32, memory_bytes: u64) -> fabric_capability::CapabilityDescriptor {
+fn base_descriptor(
+    cores_logical: u32,
+    memory_bytes: u64,
+) -> fabric_capability::CapabilityDescriptor {
     fabric_capability::CapabilityDescriptor {
         node_id: Uuid::now_v7(),
         epoch: 1,
@@ -151,14 +156,11 @@ fn topology_compile_check_lease() {
     // 2. Compile a multihop route from n1 to n3.
     let source = NodeId::new("n1");
     let destination = NodeId::new("n3");
-    let intent = IntentBuilder::new()
-        .name("integration-route")
-        .build();
+    let intent = IntentBuilder::new().name("integration-route").build();
     let catalog = builtin_stages();
 
-    let result =
-        compile_multihop(&topology, &source, &destination, &intent, &catalog)
-            .expect("multihop compilation should succeed");
+    let result = compile_multihop(&topology, &source, &destination, &intent, &catalog)
+        .expect("multihop compilation should succeed");
 
     // Route should span 3 nodes (n1 -> n2 -> n3).
     assert_eq!(result.primary.steps.len(), 3);
@@ -187,8 +189,7 @@ fn topology_compile_check_lease() {
 
     // 7. Bind the lease to the first route step and verify Active.
     let first_step = result.primary.steps[0].clone();
-    surface_ops::bind(&mut lease, result.primary.id, first_step)
-        .expect("bind should succeed");
+    surface_ops::bind(&mut lease, result.primary.id, first_step).expect("bind should succeed");
     assert_eq!(lease.state, fabric_graph::surface::LeaseState::Active);
 }
 
@@ -198,8 +199,8 @@ fn topology_compile_check_lease() {
 
 #[test]
 fn checker_rejects_insufficient_resources() {
-    // 1. Create a CapabilityDescriptor with 2 cores, 8 GiB memory (memory
-    //    is sufficient so the memory check passes first).
+    // 1. Create a CapabilityDescriptor with 2 cores, 8 GiB memory (memory is sufficient so the
+    //    memory check passes first).
     let descriptor = base_descriptor(2, 8 * 1024 * 1024 * 1024);
 
     // 2. Create a CheckerManifest requiring 8 cores, 4 GiB memory.
@@ -217,7 +218,7 @@ fn checker_rejects_insufficient_resources() {
                 "expected CoresInsufficient, got {:?}",
                 reason_code
             );
-        }
+        },
         other => panic!("expected Reject with CoresInsufficient, got {:?}", other),
     }
 }
@@ -256,8 +257,11 @@ fn checker_rejects_missing_audio() {
                 "expected CaptureRequiredButMissing, got {:?}",
                 reason_code
             );
-        }
-        other => panic!("expected Reject with CaptureRequiredButMissing, got {:?}", other),
+        },
+        other => panic!(
+            "expected Reject with CaptureRequiredButMissing, got {:?}",
+            other
+        ),
     }
 }
 
@@ -275,20 +279,20 @@ fn multihop_compile_full_topology() {
     // 2. Compile route n1 -> n4.
     let source = NodeId::new("n1");
     let destination = NodeId::new("n4");
-    let intent = IntentBuilder::new()
-        .name("full-topology-route")
-        .build();
+    let intent = IntentBuilder::new().name("full-topology-route").build();
     let catalog = builtin_stages();
 
-    let result =
-        compile_multihop(&topology, &source, &destination, &intent, &catalog)
-            .expect("multihop compilation should succeed");
+    let result = compile_multihop(&topology, &source, &destination, &intent, &catalog)
+        .expect("multihop compilation should succeed");
 
     // 3. Verify route has 4 steps (one per node: n1 -> n2 -> n3 -> n4).
     assert_eq!(result.primary.steps.len(), 4);
 
     // 4. Verify cost is computed (non-negative).
-    assert!(result.cost.latency_us >= 0.0, "latency should be non-negative");
+    assert!(
+        result.cost.latency_us >= 0.0,
+        "latency should be non-negative"
+    );
 
     // 5. Verify fallbacks are generated.
     assert!(
@@ -306,8 +310,7 @@ fn multihop_compile_full_topology() {
 
 #[test]
 fn daemon_probe_roundtrip() {
-    use fabric_daemon::config::DaemonConfig;
-    use fabric_daemon::coordinator::Coordinator;
+    use fabric_daemon::{config::DaemonConfig, coordinator::Coordinator};
     use fabric_graph::model::{Edge, EdgeId, Node};
 
     let tmp = tempfile::tempdir().expect("tempdir");
@@ -327,14 +330,8 @@ fn daemon_probe_roundtrip() {
     // 2. Set a topology with 2 nodes and 1 edge.
     let mut topo = Topology::default();
     topo.meta.name = "probe-test".to_string();
-    topo.add_node(Node::new(
-        NodeId::new("host-a"),
-        LocalityTier::L1SameNuma,
-    ));
-    topo.add_node(Node::new(
-        NodeId::new("host-b"),
-        LocalityTier::L6Lan,
-    ));
+    topo.add_node(Node::new(NodeId::new("host-a"), LocalityTier::L1SameNuma));
+    topo.add_node(Node::new(NodeId::new("host-b"), LocalityTier::L6Lan));
     topo.add_edge(Edge::new(
         EdgeId::new("a-b"),
         NodeId::new("host-a"),
@@ -366,13 +363,9 @@ fn daemon_probe_roundtrip() {
 
     // 5. Call capabilities_snapshot() — verify empty caps initially.
     let caps = coordinator.capabilities_snapshot();
-    let caps_parsed: serde_json::Value =
-        serde_json::from_str(&caps).expect("parse caps snapshot");
+    let caps_parsed: serde_json::Value = serde_json::from_str(&caps).expect("parse caps snapshot");
     assert_eq!(caps_parsed["type"], "capabilities_response");
-    assert!(caps_parsed["capabilities"]
-        .as_array()
-        .unwrap()
-        .is_empty());
+    assert!(caps_parsed["capabilities"].as_array().unwrap().is_empty());
 }
 
 // ===========================================================================
@@ -387,31 +380,23 @@ fn surface_lease_web_rtc() {
     // 2. Compile a route plan.
     let source = NodeId::new("n1");
     let destination = NodeId::new("n3");
-    let intent = IntentBuilder::new()
-        .name("webrtc-route")
-        .build();
+    let intent = IntentBuilder::new().name("webrtc-route").build();
     let catalog = builtin_stages();
 
-    let result =
-        compile_multihop(&topology, &source, &destination, &intent, &catalog)
-            .expect("multihop compilation");
+    let result = compile_multihop(&topology, &source, &destination, &intent, &catalog)
+        .expect("multihop compilation");
 
     // 3. Create a SurfaceSpec for WebRtc protocol.
     let spec = web_rtc_surface_spec();
     assert_eq!(spec.protocol, SurfaceProtocol::WebRtc);
 
     // 4. Create a SurfaceLease.
-    let mut lease =
-        surface_ops::new_lease(spec.clone()).expect("new_lease should succeed");
-    assert_eq!(
-        lease.state,
-        fabric_graph::surface::LeaseState::Pending
-    );
+    let mut lease = surface_ops::new_lease(spec.clone()).expect("new_lease should succeed");
+    assert_eq!(lease.state, fabric_graph::surface::LeaseState::Pending);
 
     // 5. Bind and verify lease state is Active.
     let step = result.primary.steps[0].clone();
-    surface_ops::bind(&mut lease, result.primary.id, step)
-        .expect("bind should succeed");
+    surface_ops::bind(&mut lease, result.primary.id, step).expect("bind should succeed");
     assert_eq!(lease.state, fabric_graph::surface::LeaseState::Active);
 
     // 6. Verify lease has correct protocol.
@@ -445,9 +430,11 @@ fn frame_transport_session_init() {
     assert!(json.contains("1080"));
 
     // 3. Verify it deserializes correctly.
-    let deserialized: SessionInit =
-        serde_json::from_str(&json).expect("deserialize SessionInit");
-    assert_eq!(deserialized.version, fabric_frame_transport::PROTOCOL_VERSION);
+    let deserialized: SessionInit = serde_json::from_str(&json).expect("deserialize SessionInit");
+    assert_eq!(
+        deserialized.version,
+        fabric_frame_transport::PROTOCOL_VERSION
+    );
     assert_eq!(deserialized.preferred_codec, Codec::Hevc);
     assert_eq!(deserialized.width, 1920);
     assert_eq!(deserialized.height, 1080);
@@ -462,8 +449,9 @@ fn frame_transport_session_init() {
 
 #[test]
 fn nvms_to_checker_flow() {
-    use phenotype_nvms_adapter::phenotype_manifest::validate as validate_manifest;
-    use phenotype_nvms_adapter::required_capabilities;
+    use phenotype_nvms_adapter::{
+        phenotype_manifest::validate as validate_manifest, required_capabilities,
+    };
 
     // 1. Parse a minimal NVMS manifest JSON.
     let manifest_json = r#"{
@@ -483,12 +471,10 @@ fn nvms_to_checker_flow() {
         }
     }"#;
 
-    let manifest =
-        validate_manifest(manifest_json).expect("NVMS manifest should parse");
+    let manifest = validate_manifest(manifest_json).expect("NVMS manifest should parse");
 
     // 2. Convert to RequiredCapabilities using phenotype-nvms-adapter.
-    let req = required_capabilities(&manifest)
-        .expect("required_capabilities should succeed");
+    let req = required_capabilities(&manifest).expect("required_capabilities should succeed");
 
     // Verify the mapping extracted the right values.
     assert_eq!(req.compute.cores_physical, 4);

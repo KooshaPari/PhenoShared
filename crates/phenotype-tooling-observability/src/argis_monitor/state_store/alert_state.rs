@@ -2,9 +2,11 @@
 
 use rusqlite::params;
 
-use super::connection::flatten;
-use super::types::{StateStoreError, TrackerSnapshot};
-use super::StateStore;
+use super::{
+    connection::flatten,
+    types::{StateStoreError, TrackerSnapshot},
+    StateStore,
+};
 
 impl StateStore {
     /// Upsert one (key -> state) snapshot.
@@ -18,7 +20,13 @@ impl StateStore {
                 since_unix=excluded.since_unix,
                 last_fired_unix=excluded.last_fired_unix,
                 sustained_secs=excluded.sustained_secs",
-            params![key, state_str, since as i64, last_fired as i64, snap.sustained_secs as i64],
+            params![
+                key,
+                state_str,
+                since as i64,
+                last_fired as i64,
+                snap.sustained_secs as i64
+            ],
         )?;
         Ok(())
     }
@@ -26,7 +34,8 @@ impl StateStore {
     /// Delete the row for `key`. Used when an alert rule is removed from
     /// the config; we don't want stale rows hanging around forever.
     pub fn delete(&mut self, key: &str) -> Result<(), StateStoreError> {
-        self.conn.execute("DELETE FROM alert_state WHERE key = ?1", params![key])?;
+        self.conn
+            .execute("DELETE FROM alert_state WHERE key = ?1", params![key])?;
         Ok(())
     }
 }

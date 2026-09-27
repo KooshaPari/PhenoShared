@@ -3,8 +3,8 @@
 //! Wire format: `Content-Type: application/json` per the OTel spec.
 //! Retry policy: caller is responsible; this exporter is a single-shot POST.
 
-use crate::{ExportHandle, OtlpError, OtlpPort};
 use super::ExporterConfig;
+use crate::{ExportHandle, OtlpError, OtlpPort};
 
 /// OTLP exporter that POSTs payloads to an OTLP/HTTP endpoint.
 #[derive(Debug)]
@@ -139,7 +139,10 @@ mod tests {
     #[test]
     fn http_exporter_export_empty_fails() {
         let exp = HttpExporter::traces(ExporterConfig::new("http://localhost:4318", "test"));
-        assert!(matches!(exp.export(b""), Err(OtlpError::SerializeFailed(_))));
+        assert!(matches!(
+            exp.export(b""),
+            Err(OtlpError::SerializeFailed(_))
+        ));
     }
 
     #[test]

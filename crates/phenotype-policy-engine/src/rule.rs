@@ -1,9 +1,9 @@
 //! Policy rules - Allow, Deny, Require with pattern matching.
 
-use crate::context::EvaluationContext;
-use crate::error::PolicyEngineError;
 use regex::Regex;
 use serde::{Deserialize, Serialize};
+
+use crate::{context::EvaluationContext, error::PolicyEngineError};
 
 /// Types of policy rules.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
@@ -83,21 +83,21 @@ impl Rule {
                     Some(value) => Ok(regex.is_match(&value)),
                     None => Ok(true), // Absence is allowed
                 }
-            }
+            },
             RuleType::Deny => {
                 // Deny: fact must NOT match pattern
                 match fact_value {
                     Some(value) => Ok(!regex.is_match(&value)),
                     None => Ok(true), // Absence is allowed (not denied)
                 }
-            }
+            },
             RuleType::Require => {
                 // Require: fact must exist AND match pattern
                 match fact_value {
                     Some(value) => Ok(regex.is_match(&value)),
                     None => Ok(false), // Missing fact fails Require
                 }
-            }
+            },
         }
     }
 }

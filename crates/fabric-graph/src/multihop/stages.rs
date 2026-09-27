@@ -3,8 +3,9 @@
 //! Defines the set of available transport/transcoding stages that can be
 //! inserted between topology hops.
 
-use crate::LocalityTier;
 use serde::{Deserialize, Serialize};
+
+use crate::LocalityTier;
 
 /// Unique identifier for a transport stage.
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]

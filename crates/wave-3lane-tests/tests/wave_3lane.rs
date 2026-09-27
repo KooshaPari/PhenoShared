@@ -7,8 +7,8 @@
 //! Lanes:
 //! - **Sync** — single engine, single task, sequential.
 //! - **Fanout** — same prompt fanned out to N engines in parallel.
-//! - **Tree** — DAG execution: parent task spawns child tasks, each child
-//!   runs on a different engine; results propagate up.
+//! - **Tree** — DAG execution: parent task spawns child tasks, each child runs on a different
+//!   engine; results propagate up.
 //!
 //! The test does not perform real HTTP/PTY IO. Instead it uses an in-memory
 //! mock engine that satisfies the `EnginePort` contract offline.
@@ -19,12 +19,13 @@ use std::sync::Arc;
 
 use async_trait::async_trait;
 use parking_lot::Mutex;
-
-use substrate_core::domain::{
-    ConversationDump, Mailbox, RoutingDecision, Session, StructuredResult, Task, TaskState,
+use substrate_core::{
+    domain::{
+        ConversationDump, Mailbox, RoutingDecision, Session, StructuredResult, Task, TaskState,
+    },
+    error::{Result, SubstrateError},
+    ports::{EnginePort, RoutingPort},
 };
-use substrate_core::error::{Result, SubstrateError};
-use substrate_core::ports::{EnginePort, RoutingPort};
 
 // ---------------------------------------------------------------------------
 // Mock engine — satisfies EnginePort contract offline.

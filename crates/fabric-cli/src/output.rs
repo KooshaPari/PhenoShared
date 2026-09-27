@@ -1,7 +1,6 @@
 //! Output formatting helpers for the fabric CLI.
 use anyhow::Result;
-use fabric_capability::CapabilityDescriptor;
-use fabric_capability::locality::LocalityTier;
+use fabric_capability::{locality::LocalityTier, CapabilityDescriptor};
 use fabric_graph::model::TrustLevel;
 use serde::Serialize;
 

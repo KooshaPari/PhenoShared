@@ -3,10 +3,13 @@
 //! These tests verify end-to-end workflows combining SurfaceRegistry,
 //! topology compilation, lease binding, and node failure invalidation.
 
-use fabric_graph::builder::{make_step, IntentBuilder, TopologyBuilder};
-use fabric_graph::surface::{CaptureDirection, LeaseState, SurfaceProtocol};
-use fabric_graph::surface_ops::{bind, new_lease};
-use fabric_graph::{compile, LocalityTier, SurfaceHandle, SurfaceRegistry, SurfaceSpec, TrustLevel};
+use fabric_graph::{
+    builder::{make_step, IntentBuilder, TopologyBuilder},
+    compile,
+    surface::{CaptureDirection, LeaseState, SurfaceProtocol},
+    surface_ops::{bind, new_lease},
+    LocalityTier, SurfaceHandle, SurfaceRegistry, SurfaceSpec, TrustLevel,
+};
 
 fn sample_spec(name: &str) -> SurfaceSpec {
     SurfaceSpec {
@@ -57,13 +60,9 @@ fn surface_runtime_end_to_end_bind_then_invalidate() {
 
     // Create a lease bound to node-a.
     let mut lease = new_lease(sample_spec("e2e-1")).expect("new_lease");
-    bind(&mut lease, plan.id.clone(), make_step("node-a", "compute"))
-        .expect("bind");
+    bind(&mut lease, plan.id.clone(), make_step("node-a", "compute")).expect("bind");
     assert_eq!(lease.state, LeaseState::Active);
-    assert_eq!(
-        lease.current.as_ref().unwrap().step_node,
-        a
-    );
+    assert_eq!(lease.current.as_ref().unwrap().step_node, a);
 
     // Insert into registry.
     let handle = lease.handle;
@@ -91,12 +90,22 @@ fn surface_runtime_multi_lease_invalidates_only_touching() {
 
     // Lease on node-a.
     let mut lease_a = new_lease(sample_spec("lease-a")).expect("new_lease");
-    bind(&mut lease_a, plan_a.id.clone(), make_step("node-a", "compute")).unwrap();
+    bind(
+        &mut lease_a,
+        plan_a.id.clone(),
+        make_step("node-a", "compute"),
+    )
+    .unwrap();
     let h_a = lease_a.handle;
 
     // Lease on node-b.
     let mut lease_b = new_lease(sample_spec("lease-b")).expect("new_lease");
-    bind(&mut lease_b, plan_b.id.clone(), make_step("node-b", "compute")).unwrap();
+    bind(
+        &mut lease_b,
+        plan_b.id.clone(),
+        make_step("node-b", "compute"),
+    )
+    .unwrap();
     let h_b = lease_b.handle;
 
     let mut reg = SurfaceRegistry::new();

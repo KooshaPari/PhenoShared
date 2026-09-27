@@ -5,9 +5,11 @@
 //! The lockfile is also used as a shutdown signal — `stop()` touches the
 //! file to wake the HTTP loop's mtime poll.
 
-use std::net::{IpAddr, SocketAddr, TcpStream};
-use std::path::{Path, PathBuf};
-use std::time::Duration;
+use std::{
+    net::{IpAddr, SocketAddr, TcpStream},
+    path::{Path, PathBuf},
+    time::Duration,
+};
 
 use serde::{Deserialize, Serialize};
 

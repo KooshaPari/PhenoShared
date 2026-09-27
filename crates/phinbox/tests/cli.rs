@@ -93,7 +93,15 @@ fn cli_ask_with_from_json_validates_spec() {
 #[test]
 fn cli_ask_rejects_invalid_urgency() {
     let out = Command::new(phinbox_bin())
-        .args(["ask", "--title", "t", "--question", "q", "--urgency", "bogus"])
+        .args([
+            "ask",
+            "--title",
+            "t",
+            "--question",
+            "q",
+            "--urgency",
+            "bogus",
+        ])
         .output()
         .expect("spawn phinbox ask --urgency bogus");
     // clap rejects the bad urgency enum
@@ -119,10 +127,9 @@ fn cli_ask_from_file_loads() {
         serde_json::from_str(&stdout).expect("output is not valid JSON");
     assert!(parsed.get("status").is_some());
     // Sanity: the prompt loaded our fixture
-    let _: PromptSpec = serde_json::from_str(
-        &std::fs::read_to_string(&path).expect("read fixture"),
-    )
-    .expect("fixture is valid");
+    let _: PromptSpec =
+        serde_json::from_str(&std::fs::read_to_string(&path).expect("read fixture"))
+            .expect("fixture is valid");
 }
 
 #[test]
@@ -153,16 +160,25 @@ fn cli_install_dry_run_does_not_touch_disk() {
     let out = Command::new(phinbox_bin())
         .args([
             "install",
-            "--prefix", prefix.to_str().unwrap(),
+            "--prefix",
+            prefix.to_str().unwrap(),
             "--no-launch-agent",
             "--dry-run",
-            "--inbox-dir", inbox_root.to_str().unwrap(),
+            "--inbox-dir",
+            inbox_root.to_str().unwrap(),
         ])
         .output()
         .expect("spawn phinbox install --dry-run");
-    assert!(out.status.success(), "install dry-run failed: stderr={}", String::from_utf8_lossy(&out.stderr));
+    assert!(
+        out.status.success(),
+        "install dry-run failed: stderr={}",
+        String::from_utf8_lossy(&out.stderr)
+    );
     // Dry-run should not have created any binaries.
-    assert!(!prefix.join("phinbox").exists(), "dry-run should not copy binaries");
+    assert!(
+        !prefix.join("phinbox").exists(),
+        "dry-run should not copy binaries"
+    );
 }
 
 #[test]
@@ -178,29 +194,41 @@ fn cli_install_and_uninstall_roundtrip() {
         .env("HOME", &fake_home)
         .args([
             "install",
-            "--prefix", prefix.to_str().unwrap(),
+            "--prefix",
+            prefix.to_str().unwrap(),
             "--no-launch-agent",
-            "--inbox-dir", inbox_root.to_str().unwrap(),
+            "--inbox-dir",
+            inbox_root.to_str().unwrap(),
         ])
         .output()
         .expect("spawn install");
-    assert!(out.status.success(), "install failed: stderr={}", String::from_utf8_lossy(&out.stderr));
+    assert!(
+        out.status.success(),
+        "install failed: stderr={}",
+        String::from_utf8_lossy(&out.stderr)
+    );
 
     // Verify the phinbox binary was copied.
-    assert!(prefix.join("phinbox").exists(), "install did not copy phinbox binary");
-    assert!(prefix.join("phinbox-mcp").exists(), "install did not copy phinbox-mcp binary");
+    assert!(
+        prefix.join("phinbox").exists(),
+        "install did not copy phinbox binary"
+    );
+    assert!(
+        prefix.join("phinbox-mcp").exists(),
+        "install did not copy phinbox-mcp binary"
+    );
 
     // Uninstall.
     let out = Command::new(phinbox_bin())
         .env("HOME", &fake_home)
-        .args([
-            "uninstall",
-            "--prefix", prefix.to_str().unwrap(),
-            "--yes",
-        ])
+        .args(["uninstall", "--prefix", prefix.to_str().unwrap(), "--yes"])
         .output()
         .expect("spawn uninstall");
-    assert!(out.status.success(), "uninstall failed: stderr={}", String::from_utf8_lossy(&out.stderr));
+    assert!(
+        out.status.success(),
+        "uninstall failed: stderr={}",
+        String::from_utf8_lossy(&out.stderr)
+    );
 }
 
 #[test]
@@ -209,13 +237,22 @@ fn cli_inbox_list_with_empty_dir_returns_empty_json() {
     // The CLI treats `--inbox-dir` as the parent; data lives in `<dir>/inbox/`.
     let inbox_parent = tmp.path().to_path_buf();
     let out = Command::new(phinbox_bin())
-        .args(["inbox", "--inbox-dir", inbox_parent.to_str().unwrap(), "--list"])
+        .args([
+            "inbox",
+            "--inbox-dir",
+            inbox_parent.to_str().unwrap(),
+            "--list",
+        ])
         .output()
         .expect("spawn inbox list");
-    assert!(out.status.success(), "inbox list failed: stderr={}", String::from_utf8_lossy(&out.stderr));
+    assert!(
+        out.status.success(),
+        "inbox list failed: stderr={}",
+        String::from_utf8_lossy(&out.stderr)
+    );
     let stdout = String::from_utf8_lossy(&out.stdout);
-    let v: serde_json::Value = serde_json::from_str(stdout.trim())
-        .expect("inbox list output must be JSON");
+    let v: serde_json::Value =
+        serde_json::from_str(stdout.trim()).expect("inbox list output must be JSON");
     assert!(v.is_array());
     assert_eq!(v.as_array().unwrap().len(), 0);
 }
@@ -224,34 +261,51 @@ fn cli_inbox_list_with_empty_dir_returns_empty_json() {
 fn cli_ask_async_enqueue_then_list() {
     let tmp = tempfile::tempdir().expect("tempdir");
     let inbox_parent = tmp.path().to_path_buf();
-    let fixture = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
-        .join("tests/fixtures/simple_text.json");
+    let fixture =
+        std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/simple_text.json");
     let out = Command::new(phinbox_bin())
         .args([
             "ask",
             "--async",
-            "--inbox-dir", inbox_parent.to_str().unwrap(),
-            "--from-file", fixture.to_str().unwrap(),
+            "--inbox-dir",
+            inbox_parent.to_str().unwrap(),
+            "--from-file",
+            fixture.to_str().unwrap(),
         ])
         .output()
         .expect("spawn phinbox ask --async");
-    assert!(out.status.success(), "async enqueue failed: stderr={}", String::from_utf8_lossy(&out.stderr));
+    assert!(
+        out.status.success(),
+        "async enqueue failed: stderr={}",
+        String::from_utf8_lossy(&out.stderr)
+    );
     let stdout = String::from_utf8_lossy(&out.stdout);
-    let parsed: serde_json::Value = serde_json::from_str(stdout.trim())
-        .expect("async enqueue must emit JSON");
-    let req_id = parsed.get("request_id").and_then(|v| v.as_str())
+    let parsed: serde_json::Value =
+        serde_json::from_str(stdout.trim()).expect("async enqueue must emit JSON");
+    let req_id = parsed
+        .get("request_id")
+        .and_then(|v| v.as_str())
         .expect("response must have request_id")
         .to_string();
     assert!(!req_id.is_empty());
     // Pending files live at `<inbox-dir>/inbox/<id>.json` (no `pending/` subdir).
     let inbox_dir = inbox_parent.join("inbox");
-    assert!(inbox_dir.exists(), "inbox dir not created at {}", inbox_dir.display());
+    assert!(
+        inbox_dir.exists(),
+        "inbox dir not created at {}",
+        inbox_dir.display()
+    );
     let entries: Vec<_> = std::fs::read_dir(&inbox_dir)
         .unwrap()
         .filter_map(|e| e.ok())
         .collect();
-    assert!(!entries.is_empty(), "no pending requests after async enqueue");
-    let hit = entries.iter().any(|e| e.file_name().to_string_lossy().contains(&req_id));
+    assert!(
+        !entries.is_empty(),
+        "no pending requests after async enqueue"
+    );
+    let hit = entries
+        .iter()
+        .any(|e| e.file_name().to_string_lossy().contains(&req_id));
     assert!(hit, "no file matches request_id {req_id}");
 }
 
@@ -290,5 +344,8 @@ fn cli_daemon_starts_and_health_responds() {
     }
     let _ = child.kill();
     let _ = child.wait();
-    assert!(ok, "daemon did not start listening on port {port} within 5s");
+    assert!(
+        ok,
+        "daemon did not start listening on port {port} within 5s"
+    );
 }

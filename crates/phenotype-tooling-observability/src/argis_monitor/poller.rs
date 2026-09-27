@@ -20,15 +20,11 @@ mod types;
 
 use std::time::Duration;
 
-use tracing::instrument;
-
 pub use monitor::Monitor;
+use tracing::instrument;
 pub use types::{MonitorInner, PollError, PollOutcome, TargetCounters};
 
-use crate::argis_monitor::alerts;
-use crate::argis_monitor::config::SLO;
-use crate::argis_monitor::slo::BurnWindow;
-use crate::argis_monitor::target::Target;
+use crate::argis_monitor::{alerts, config::SLO, slo::BurnWindow, target::Target};
 
 // =====================================================================
 // Public API wrappers (preserve the original Monitor API surface).
@@ -37,18 +33,26 @@ use crate::argis_monitor::target::Target;
 impl Monitor {
     /// Poll one specific target once. Public wrapper around
     /// `poll_loop::poll_once_target_impl`.
-    pub async fn poll_once_target(&self, target: &Target, timeout: Duration)
-        -> Result<PollOutcome, PollError>
-    {
+    pub async fn poll_once_target(
+        &self,
+        target: &Target,
+        timeout: Duration,
+    ) -> Result<PollOutcome, PollError> {
         poll_loop::poll_once_target_impl(self, target, timeout).await
     }
 
     /// Backward-compat helper: poll the first target once.
     pub async fn poll_once(&self) -> Result<PollOutcome, PollError> {
-        let target = self.inner.load().config.targets.first()
+        let target = self
+            .inner
+            .load()
+            .config
+            .targets
+            .first()
             .ok_or(PollError::NoTargets)?
             .clone();
-        self.poll_once_target(&target, self.inner.load().config.poll_timeout).await
+        self.poll_once_target(&target, self.inner.load().config.poll_timeout)
+            .await
     }
 
     pub fn windows(&self) -> &'static [BurnWindow] {
@@ -92,7 +96,12 @@ impl Monitor {
 }
 
 impl SLO {
-    pub fn with_window_secs(mut self, secs: u64) -> Self { self.window_secs = secs; self }
-    pub fn with_target(mut self, target: f64) -> Self { self.target = target; self }
+    pub fn with_window_secs(mut self, secs: u64) -> Self {
+        self.window_secs = secs;
+        self
+    }
+    pub fn with_target(mut self, target: f64) -> Self {
+        self.target = target;
+        self
+    }
 }
-

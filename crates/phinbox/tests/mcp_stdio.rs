@@ -6,11 +6,13 @@
 //! before sending the next, otherwise the rmcp transport will see EOF on
 //! stdin before it can dispatch the queued requests.
 
-use std::io::{BufRead, BufReader, Write};
-use std::process::{Command, Stdio};
-use std::sync::mpsc;
-use std::thread;
-use std::time::Duration;
+use std::{
+    io::{BufRead, BufReader, Write},
+    process::{Command, Stdio},
+    sync::mpsc,
+    thread,
+    time::Duration,
+};
 
 use phinbox::spec::PromptSpec;
 
@@ -57,7 +59,12 @@ impl McpHandle {
             }
         });
 
-        McpHandle { stdin, stdout_rx: out_rx, stderr_rx: err_rx, child }
+        McpHandle {
+            stdin,
+            stdout_rx: out_rx,
+            stderr_rx: err_rx,
+            child,
+        }
     }
 
     fn send(&mut self, msg: &serde_json::Value) {
@@ -84,7 +91,7 @@ impl McpHandle {
                         collected.push_str(&line);
                         collected.push('\n');
                     }
-                }
+                },
                 Err(mpsc::RecvTimeoutError::Timeout) => return None,
                 Err(mpsc::RecvTimeoutError::Disconnected) => return None,
             }
@@ -115,7 +122,13 @@ fn perform_handshake(h: &mut McpHandle) {
         }
     });
     h.send(&init);
-    let resp = h.recv_id(1, Duration::from_secs(3)).expect("initialize response");
+    // Generous budget: this asserts protocol correctness, not latency.
+    // The first exec of a freshly linked/signed binary can take seconds
+    // while the kernel validates it, and the four protocol tests spawn
+    // servers concurrently. A tight budget here flakes; it is not the SUT.
+    let resp = h
+        .recv_id(1, Duration::from_secs(15))
+        .expect("initialize response");
     assert_eq!(resp["jsonrpc"], "2.0");
     assert!(
         resp["result"]["serverInfo"]["name"].as_str() == Some("phinbox"),
@@ -140,7 +153,9 @@ fn mcp_server_lists_tools() {
         "params": {}
     });
     h.send(&request);
-    let resp = h.recv_id(2, Duration::from_secs(3)).expect("tools/list response");
+    let resp = h
+        .recv_id(2, Duration::from_secs(3))
+        .expect("tools/list response");
     assert_eq!(resp["jsonrpc"], "2.0");
     let tools = resp["result"]["tools"].as_array().expect("tools array");
     let names: Vec<&str> = tools.iter().filter_map(|t| t["name"].as_str()).collect();
@@ -166,8 +181,13 @@ fn mcp_server_rejects_unknown_tool() {
         }
     });
     h.send(&request);
-    let resp = h.recv_id(3, Duration::from_secs(3)).expect("tools/call response");
-    assert!(resp.get("error").is_some(), "expected error response, got {resp}");
+    let resp = h
+        .recv_id(3, Duration::from_secs(3))
+        .expect("tools/call response");
+    assert!(
+        resp.get("error").is_some(),
+        "expected error response, got {resp}"
+    );
     h.shutdown();
 }
 
@@ -190,14 +210,64 @@ fn mcp_server_validates_prompt_spec() {
         }
     });
     h.send(&request);
-    let resp = h.recv_id(4, Duration::from_secs(3)).expect("tools/call response");
+    let resp = h
+        .recv_id(4, Duration::from_secs(3))
+        .expect("tools/call response");
     let r = &resp["result"];
     let is_error = r.get("is_error").and_then(|v| v.as_bool()).unwrap_or(false);
-    let has_invalid = serde_json::to_string(r)
-        .is_ok_and(|s| s.contains("invalid"));
+    let has_invalid = serde_json::to_string(r).is_ok_and(|s| s.contains("invalid"));
     assert!(
         is_error || resp.get("error").is_some() || has_invalid,
         "expected error response for invalid spec. got {resp}"
+    );
+    h.shutdown();
+}
+
+/// End-to-end: the MCP tool must render a Boolean popup.
+///
+/// Before the fix, `display dialog` was always invoked with `default answer`
+/// handling that read `text returned` unconditionally. Boolean fields are
+/// button-only, so `text returned` raised "Can't get text returned" and the
+/// elicitation failed immediately. A correctly rendered Boolean popup either
+/// returns a typed `answered`/boolean (if clicked) or `timed_out` — never an
+/// AppleScript error.
+#[cfg(target_os = "macos")]
+#[test]
+fn mcp_elicit_boolean_renders_without_applescript_error() {
+    let mut h = McpHandle::spawn();
+    perform_handshake(&mut h);
+
+    let request = serde_json::json!({
+        "jsonrpc": "2.0",
+        "id": 7,
+        "method": "tools/call",
+        "params": {
+            "name": "phinbox_mcp",
+            "arguments": {
+                "title": "phinbox mcp e2e",
+                "question": "Did the popup render?",
+                "field": { "kind": "boolean", "label": "Rendered?" },
+                "timeout_secs": 2
+            }
+        }
+    });
+    h.send(&request);
+    let resp = h
+        .recv_id(7, Duration::from_secs(20))
+        .expect("tools/call response");
+
+    let body = serde_json::to_string(&resp).unwrap();
+    assert!(
+        !body.contains("text returned"),
+        "Boolean elicitation must not hit the AppleScript 'text returned' error: {body}"
+    );
+    assert!(
+        resp.get("error").is_none(),
+        "expected a tools/call result, got protocol error: {body}"
+    );
+    assert!(
+        body.contains("answered") || body.contains("timed_out"),
+        "expected an answered or timed_out outcome, got: {body}"
     );
     h.shutdown();
 }

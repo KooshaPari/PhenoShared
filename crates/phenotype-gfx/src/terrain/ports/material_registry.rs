@@ -8,8 +8,7 @@ use std::collections::HashMap;
 
 use uuid::Uuid;
 
-use crate::terrain::error::TerrainError;
-use crate::terrain::materials::TerrainMaterial;
+use crate::terrain::{error::TerrainError, materials::TerrainMaterial};
 
 /// Hexagonal port: registry of terrain materials.
 pub trait IMaterialRegistry {

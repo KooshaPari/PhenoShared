@@ -5,13 +5,15 @@
 use std::net::{Ipv4Addr, SocketAddr, ToSocketAddrs};
 
 use serde::{Deserialize, Serialize};
-use tokio::net::UdpSocket as TokioUdpSocket;
-use tokio::time::{timeout, Duration};
+use tokio::{
+    net::UdpSocket as TokioUdpSocket,
+    time::{timeout, Duration},
+};
 
 use super::NetworkError;
 
 // RFC 5389 constants.
-const MAGIC_COOKIE: u32 = 0x2112A442;
+const MAGIC_COOKIE: u32 = 0x2112a442;
 const BINDING_REQUEST: u16 = 0x0001;
 const BINDING_RESPONSE: u16 = 0x0101;
 const HEADER_SIZE: usize = 20;
@@ -123,9 +125,12 @@ impl StunClient {
 
     /// UDP hole-punching: returns a bound socket plus the external address.
     pub async fn bind(&self) -> Result<(TokioUdpSocket, StunResponse), NetworkError> {
-        let socket = TokioUdpSocket::bind("0.0.0.0:0")
-            .await
-            .map_err(|e| NetworkError::UdpBind { source: e })?;
+        let socket =
+            TokioUdpSocket::bind("0.0.0.0:0")
+                .await
+                .map_err(|e| NetworkError::UdpBind {
+                    source: e,
+                })?;
         let external = self.query_external_address().await?;
         Ok((socket, external))
     }
@@ -150,7 +155,7 @@ impl StunClient {
                     if attempt < self.config.retries - 1 {
                         tokio::time::sleep(Duration::from_millis(100 * (attempt as u64 + 1))).await;
                     }
-                }
+                },
             }
         }
         Err(last_error.unwrap_or(NetworkError::StunTimeout {
@@ -158,47 +163,61 @@ impl StunClient {
         }))
     }
 
-    async fn send_udp(
-        &self,
-        server: &str,
-        request: &[u8],
-    ) -> Result<StunResponse, NetworkError> {
+    async fn send_udp(&self, server: &str, request: &[u8]) -> Result<StunResponse, NetworkError> {
         let addr = resolve_stun_addr(server)?;
-        let socket = TokioUdpSocket::bind("0.0.0.0:0")
-            .await
-            .map_err(|e| NetworkError::UdpBind { source: e })?;
+        let socket =
+            TokioUdpSocket::bind("0.0.0.0:0")
+                .await
+                .map_err(|e| NetworkError::UdpBind {
+                    source: e,
+                })?;
         socket
             .send_to(request, addr)
             .await
-            .map_err(|e| NetworkError::UdpSend { source: e })?;
+            .map_err(|e| NetworkError::UdpSend {
+                source: e,
+            })?;
         let mut buf = vec![0u8; 1024];
         let (len, _) = timeout(self.config.timeout, socket.recv_from(&mut buf))
             .await
-            .map_err(|_| NetworkError::StunTimeout { server: server.to_string() })?
-            .map_err(|e| NetworkError::UdpRecv { source: e })?;
+            .map_err(|_| NetworkError::StunTimeout {
+                server: server.to_string(),
+            })?
+            .map_err(|e| NetworkError::UdpRecv {
+                source: e,
+            })?;
         parse_response(&buf[..len], server)
     }
 
-    async fn send_tcp(
-        &self,
-        server: &str,
-        request: &[u8],
-    ) -> Result<StunResponse, NetworkError> {
+    async fn send_tcp(&self, server: &str, request: &[u8]) -> Result<StunResponse, NetworkError> {
         use tokio::io::{AsyncReadExt, AsyncWriteExt};
         let addr = resolve_stun_addr(server)?;
         let mut stream = timeout(self.config.timeout, tokio::net::TcpStream::connect(addr))
             .await
-            .map_err(|_| NetworkError::StunTimeout { server: server.to_string() })?
-            .map_err(|e| NetworkError::StunTcp { server: server.to_string(), source: e })?;
+            .map_err(|_| NetworkError::StunTimeout {
+                server: server.to_string(),
+            })?
+            .map_err(|e| NetworkError::StunTcp {
+                server: server.to_string(),
+                source: e,
+            })?;
         stream
             .write_all(request)
             .await
-            .map_err(|e| NetworkError::StunTcp { server: server.to_string(), source: e })?;
+            .map_err(|e| NetworkError::StunTcp {
+                server: server.to_string(),
+                source: e,
+            })?;
         let mut buf = vec![0u8; 1024];
         let len = timeout(self.config.timeout, stream.read(&mut buf))
             .await
-            .map_err(|_| NetworkError::StunTimeout { server: server.to_string() })?
-            .map_err(|e| NetworkError::StunTcp { server: server.to_string(), source: e })?;
+            .map_err(|_| NetworkError::StunTimeout {
+                server: server.to_string(),
+            })?
+            .map_err(|e| NetworkError::StunTcp {
+                server: server.to_string(),
+                source: e,
+            })?;
         parse_response(&buf[..len], server)
     }
 }
@@ -206,7 +225,10 @@ impl StunClient {
 fn resolve_stun_addr(server: &str) -> Result<SocketAddr, NetworkError> {
     server
         .to_socket_addrs()
-        .map_err(|e| NetworkError::StunDns { server: server.to_string(), source: e })?
+        .map_err(|e| NetworkError::StunDns {
+            server: server.to_string(),
+            source: e,
+        })?
         .find(|a| a.is_ipv4())
         .ok_or_else(|| NetworkError::StunDns {
             server: server.to_string(),
@@ -275,18 +297,18 @@ fn parse_response(data: &[u8], server: &str) -> Result<StunResponse, NetworkErro
                 if let Some(a) = parse_mapped(d) {
                     mapped = Some(a);
                 }
-            }
+            },
             ATTR_XOR_MAPPED => {
                 if let Some(a) = parse_xor_mapped(d, tid) {
                     xor_mapped = Some(a);
                 }
-            }
+            },
             ATTR_CHANGED => {
                 if let Some(a) = parse_mapped(d) {
                     changed = Some(a);
                 }
-            }
-            _ => {}
+            },
+            _ => {},
         }
         pos += ATTR_HDR + attr_len;
         pos = (pos + 3) & !3;
@@ -316,12 +338,15 @@ fn parse_mapped(data: &[u8]) -> Option<SocketAddr> {
         0x01 if data.len() >= 8 => {
             let ip = Ipv4Addr::new(data[4], data[5], data[6], data[7]);
             Some(SocketAddr::new(ip.into(), port))
-        }
+        },
         0x02 if data.len() >= 20 => {
             let mut octets = [0u8; 16];
             octets.copy_from_slice(&data[4..20]);
-            Some(SocketAddr::new(std::net::Ipv6Addr::from(octets).into(), port))
-        }
+            Some(SocketAddr::new(
+                std::net::Ipv6Addr::from(octets).into(),
+                port,
+            ))
+        },
         _ => None,
     }
 }
@@ -335,8 +360,11 @@ fn parse_xor_mapped(data: &[u8], tid: &[u8; 12]) -> Option<SocketAddr> {
     match data[1] {
         0x01 if data.len() >= 8 => {
             let raw = u32::from_be_bytes(data[4..8].try_into().unwrap()) ^ MAGIC_COOKIE;
-            Some(SocketAddr::new(Ipv4Addr::from(raw.to_be_bytes()).into(), port))
-        }
+            Some(SocketAddr::new(
+                Ipv4Addr::from(raw.to_be_bytes()).into(),
+                port,
+            ))
+        },
         0x02 if data.len() >= 20 => {
             let mut a = [0u8; 16];
             a.copy_from_slice(&data[4..20]);
@@ -347,7 +375,7 @@ fn parse_xor_mapped(data: &[u8], tid: &[u8; 12]) -> Option<SocketAddr> {
                 a[4 + i] ^= tid[i];
             }
             Some(SocketAddr::new(std::net::Ipv6Addr::from(a).into(), port))
-        }
+        },
         _ => None,
     }
 }
@@ -362,12 +390,15 @@ mod tests {
         assert_eq!(req.len(), HEADER_SIZE);
         assert_eq!(&req[0..2], &[0x00, 0x01]);
         assert_eq!(&req[2..4], &[0x00, 0x00]);
-        assert_eq!(u32::from_be_bytes(req[4..8].try_into().unwrap()), MAGIC_COOKIE);
+        assert_eq!(
+            u32::from_be_bytes(req[4..8].try_into().unwrap()),
+            MAGIC_COOKIE
+        );
     }
 
     #[test]
     fn parse_mapped_ipv4() {
-        let data = [0x00, 0x01, 0x00, 0x50, 0xC0, 0xA8, 0x01, 0x01];
+        let data = [0x00, 0x01, 0x00, 0x50, 0xc0, 0xa8, 0x01, 0x01];
         assert_eq!(parse_mapped(&data), Some("192.168.1.1:80".parse().unwrap()));
     }
 
@@ -385,7 +416,10 @@ mod tests {
         let mut data = vec![0x00, 0x01];
         data.extend_from_slice(&xport.to_be_bytes());
         data.extend_from_slice(&xip.to_be_bytes());
-        assert_eq!(parse_xor_mapped(&data, &[0u8; 12]), Some("10.0.0.1:12345".parse().unwrap()));
+        assert_eq!(
+            parse_xor_mapped(&data, &[0u8; 12]),
+            Some("10.0.0.1:12345".parse().unwrap())
+        );
     }
 
     #[test]

@@ -3,12 +3,11 @@
 //! Defines the JSON wire format used between the daemon and its clients,
 //! and provides the top-level message dispatcher.
 
-use crate::coordinator::Coordinator;
-
 use fabric_frame_transport::validation::{validate_message, validation_error_response};
+use tracing::warn;
 
 use super::handlers;
-use tracing::warn;
+use crate::coordinator::Coordinator;
 
 /// Process a single wire message and return an optional response.
 pub fn process_message(message: &str, coordinator: &Coordinator) -> Option<String> {
@@ -22,51 +21,43 @@ pub fn process_message(message: &str, coordinator: &Coordinator) -> Option<Strin
                 "wire protocol validation failed"
             );
             return Some(validation_error_response(&e));
-        }
+        },
     };
 
     let msg_type = &validated.msg_type;
 
     match msg_type.as_str() {
-        "heartbeat" | "Heartbeat" => Some(
-            r#"{"type":"heartbeat_ack","status":"ok"}"#.into(),
-        ),
+        "heartbeat" | "Heartbeat" => Some(r#"{"type":"heartbeat_ack","status":"ok"}"#.into()),
         "health_check" | "HealthCheck" => {
             let health = coordinator.health();
             Some(health.to_json())
-        }
-        "probe_request" | "ProbeRequest" => {
-            Some(coordinator.topology_snapshot())
-        }
-        "topology_request" | "TopologyRequest" => {
-            Some(coordinator.topology_snapshot())
-        }
-        "routes_request" | "RoutesRequest" => {
-            Some(coordinator.plans_snapshot())
-        }
-        "capabilities_request" | "CapabilitiesRequest" => {
-            Some(coordinator.capabilities_snapshot())
-        }
+        },
+        "probe_request" | "ProbeRequest" => Some(coordinator.topology_snapshot()),
+        "topology_request" | "TopologyRequest" => Some(coordinator.topology_snapshot()),
+        "routes_request" | "RoutesRequest" => Some(coordinator.plans_snapshot()),
+        "capabilities_request" | "CapabilitiesRequest" => Some(coordinator.capabilities_snapshot()),
         // --- WebRTC signaling ---
         "webrtc_offer" | "WebRTCOffer" => {
             handlers::handle_webrtc_offer(&validated.value, coordinator)
-        }
+        },
         "webrtc_answer" | "WebRTCAnswer" => {
             handlers::handle_webrtc_answer(&validated.value, coordinator)
-        }
+        },
         "webrtc_ice" | "WebRTCIce" => {
             // ICE candidate relay -- acknowledge receipt.
             Some(format!(
                 r#"{{"type":"webrtc_ice_ack","status":"ok","from":"{}"}}"#,
-                validated.value.get("from").and_then(|v| v.as_str()).unwrap_or("unknown")
+                validated
+                    .value
+                    .get("from")
+                    .and_then(|v| v.as_str())
+                    .unwrap_or("unknown")
             ))
-        }
+        },
         "compile_request" | "CompileRequest" => {
             handlers::handle_compile_request(&validated.value, coordinator)
-        }
-        "save_config" | "SaveConfig" => {
-            handlers::handle_save_config(&validated.value, coordinator)
-        }
+        },
+        "save_config" | "SaveConfig" => handlers::handle_save_config(&validated.value, coordinator),
         _ => Some(format!(
             r#"{{"error":"unknown_message","type":"{}"}}"#,
             msg_type
@@ -76,8 +67,9 @@ pub fn process_message(message: &str, coordinator: &Coordinator) -> Option<Strin
 
 #[cfg(test)]
 mod tests {
-    use super::*;
     use std::sync::Arc;
+
+    use super::*;
 
     fn make_coordinator() -> Arc<Coordinator> {
         let dir = tempfile::tempdir().unwrap();

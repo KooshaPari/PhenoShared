@@ -4,9 +4,11 @@
 //! The alert + meta-alert evaluators live in `evaluate_alerts` and
 //! `evaluate_meta_alerts`.
 
-use std::collections::HashMap;
-use std::sync::Arc;
-use std::time::{Duration, SystemTime, UNIX_EPOCH};
+use std::{
+    collections::HashMap,
+    sync::Arc,
+    time::{Duration, SystemTime, UNIX_EPOCH},
+};
 
 use anyhow;
 use arc_swap::ArcSwap;
@@ -14,16 +16,14 @@ use prometheus_client::registry::Registry;
 use tokio::sync::Mutex;
 use tracing::{info, warn};
 
-use crate::argis_monitor::alerts::AlertStateTracker;
-use crate::argis_monitor::config::Config;
-use crate::argis_monitor::metrics::Metrics;
-use crate::argis_monitor::ring_buffer::RingBuffer;
-use crate::argis_monitor::slo::BurnWindow;
-use crate::argis_monitor::state_store::StateStore;
-use crate::argis_monitor::target::Target;
-
-use super::poll_loop::poll_once_target_impl;
-use super::types::{MonitorInner, PollError, TargetCounters};
+use super::{
+    poll_loop::poll_once_target_impl,
+    types::{MonitorInner, PollError, TargetCounters},
+};
+use crate::argis_monitor::{
+    alerts::AlertStateTracker, config::Config, metrics::Metrics, ring_buffer::RingBuffer,
+    slo::BurnWindow, state_store::StateStore, target::Target,
+};
 
 /// The monitor: shared registry + metrics + per-target ring buffers + HTTP client.
 ///
@@ -42,7 +42,9 @@ impl Clone for Monitor {
         // `arc_swap::ArcSwap::clone(&self.inner)` only exists via `ArcSwapAny`
         // internals, so we go through `load().clone()` (returns `Arc<MonitorInner>`,
         // which is Clone) and rebuild the ArcSwap wrapper.
-        Self { inner: arc_swap::ArcSwap::from(self.inner.load().clone()) }
+        Self {
+            inner: arc_swap::ArcSwap::from(self.inner.load().clone()),
+        }
     }
 }
 
@@ -56,9 +58,9 @@ impl Monitor {
         if let Some(tok) = &config.bearer_token {
             headers.insert(
                 reqwest::header::AUTHORIZATION,
-                format!("Bearer {tok}").parse().map_err(|_| {
-                    PollError::InvalidConfig("invalid bearer token".into())
-                })?,
+                format!("Bearer {tok}")
+                    .parse()
+                    .map_err(|_| PollError::InvalidConfig("invalid bearer token".into()))?,
             );
         }
         let http = reqwest::Client::builder()
@@ -74,20 +76,34 @@ impl Monitor {
         }
 
         // Pre-create per-target ring buffers covering the longest SLO window.
-        let max_window_secs = config.slos.iter().map(|s| s.window_secs).max().unwrap_or(30 * 86_400);
-        let now = SystemTime::now().duration_since(UNIX_EPOCH).unwrap_or_default().as_secs();
+        let max_window_secs = config
+            .slos
+            .iter()
+            .map(|s| s.window_secs)
+            .max()
+            .unwrap_or(30 * 86_400);
+        let now = SystemTime::now()
+            .duration_since(UNIX_EPOCH)
+            .unwrap_or_default()
+            .as_secs();
         let mut counters = HashMap::new();
         for target in &config.targets {
-            counters.insert(target.name.clone(), TargetCounters {
-                short: RingBuffer::new(BurnWindow::FAST_BURN.long.as_secs(), now),
-                long: RingBuffer::new(max_window_secs, now),
-            });
+            counters.insert(
+                target.name.clone(),
+                TargetCounters {
+                    short: RingBuffer::new(BurnWindow::FAST_BURN.long.as_secs(), now),
+                    long: RingBuffer::new(max_window_secs, now),
+                },
+            );
         }
 
         let mut alert_trackers = HashMap::new();
         for target in &config.targets {
             for rule in &config.alert_rules {
-                alert_trackers.insert(format!("{}::{}", target.name, rule.name), AlertStateTracker::default());
+                alert_trackers.insert(
+                    format!("{}::{}", target.name, rule.name),
+                    AlertStateTracker::default(),
+                );
             }
         }
 
@@ -102,21 +118,24 @@ impl Monitor {
                                 for (key, snap) in restored {
                                     if let Some(slot) = alert_trackers.get_mut(&key) {
                                         slot.state = snap.state;
-                                        slot.sustained_for = std::time::Duration::from_secs(snap.sustained_secs);
+                                        slot.sustained_for =
+                                            std::time::Duration::from_secs(snap.sustained_secs);
                                     }
                                 }
                                 tracing::info!(path = %path.display(), "state store loaded");
-                            }
-                            Err(e) => tracing::warn!(error = %e, "failed to load state store; starting fresh"),
+                            },
+                            Err(e) => {
+                                tracing::warn!(error = %e, "failed to load state store; starting fresh")
+                            },
                         }
                         Some(s)
-                    }
+                    },
                     Err(e) => {
                         tracing::warn!(error = %e, path = %path.display(), "failed to open state store; alerts will be in-memory only");
                         None
-                    }
+                    },
                 }
-            }
+            },
             None => None,
         };
 
@@ -138,8 +157,12 @@ impl Monitor {
         })
     }
 
-    pub fn registry(&self) -> Arc<Registry> { self.inner.load().registry.clone() }
-    pub fn config(&self) -> Config { self.inner.load().config.clone() }
+    pub fn registry(&self) -> Arc<Registry> {
+        self.inner.load().registry.clone()
+    }
+    pub fn config(&self) -> Config {
+        self.inner.load().config.clone()
+    }
 
     /// Hot-reload the monitor from a YAML config file on disk. Builds a fresh
     /// `MonitorInner` from the file and atomically swaps it into place via the
@@ -181,7 +204,8 @@ impl Monitor {
             "argis-monitor starting"
         );
 
-        let mut sigterm = tokio::signal::unix::signal(tokio::signal::unix::SignalKind::terminate())?;
+        let mut sigterm =
+            tokio::signal::unix::signal(tokio::signal::unix::SignalKind::terminate())?;
         let mut sigint = tokio::signal::unix::signal(tokio::signal::unix::SignalKind::interrupt())?;
 
         // Spawn one task per target.
@@ -201,7 +225,9 @@ impl Monitor {
             _ = sigterm.recv() => { info!("SIGTERM, exiting"); }
             _ = sigint.recv()  => { info!("SIGINT, exiting");  }
         }
-        for h in handles { let _ = h.await; }
+        for h in handles {
+            let _ = h.await;
+        }
         Ok(())
     }
 

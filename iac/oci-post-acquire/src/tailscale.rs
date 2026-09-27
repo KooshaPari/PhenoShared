@@ -1,11 +1,12 @@
 //! Tailscale enroll — mints an ephemeral auth-key via the Tailscale API and
 //! installs+brings up `tailscale` on the freshly-booted instance over SSH.
 
-use crate::InstanceFile;
 use anyhow::{Context, Result, anyhow};
 use serde::{Deserialize, Serialize};
 use tokio::process::Command;
 use tracing::info;
+
+use crate::InstanceFile;
 
 #[derive(Debug, Serialize)]
 struct CreateKeyReq<'a> {
@@ -73,8 +74,8 @@ pub async fn enroll(inst: &InstanceFile) -> Result<()> {
 
     // SSH in, install + up.
     let remote_cmd = format!(
-        "set -e; curl -fsSL https://tailscale.com/install.sh | sudo sh; \
-         sudo tailscale up --auth-key={} --ssh --hostname={}-oci --accept-routes",
+        "set -e; curl -fsSL https://tailscale.com/install.sh | sudo sh; sudo tailscale up \
+         --auth-key={} --ssh --hostname={}-oci --accept-routes",
         parsed.key,
         inst.region.replace('_', "-")
     );

@@ -1,5 +1,4 @@
-use std::pin::Pin;
-use std::time::Duration;
+use std::{pin::Pin, time::Duration};
 
 use crate::{
     CacheHealthChecker, DatabaseHealthChecker, ExternalServiceHealthChecker, HealthCheckConfig,

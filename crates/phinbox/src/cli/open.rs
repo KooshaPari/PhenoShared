@@ -25,8 +25,8 @@ pub fn cmd_open(args: OpenArgs, inbox_dir: &PathBuf) -> Result<(), String> {
     // Optionally spawn a daemon if nothing is running.
     if base.is_none() && args.spawn_if_missing {
         eprintln!(
-            "(no inbox daemon running — spawning one in the background; \
-             set --inbox-dir to control the data location)"
+            "(no inbox daemon running — spawning one in the background; set --inbox-dir to \
+             control the data location)"
         );
         let exe = std::env::current_exe().map_err(|e| e.to_string())?;
         let mut cmd = Command::new(exe);
@@ -66,9 +66,7 @@ pub fn cmd_open(args: OpenArgs, inbox_dir: &PathBuf) -> Result<(), String> {
         }
     }
 
-    let base = base.unwrap_or_else(|| {
-        format!("http://127.0.0.1:{}", phinbox::INBOX_DEFAULT_PORT)
-    });
+    let base = base.unwrap_or_else(|| format!("http://127.0.0.1:{}", phinbox::INBOX_DEFAULT_PORT));
 
     let url = if args.latest {
         match latest_pending_form_url(inbox_dir, &base) {
@@ -91,21 +89,23 @@ pub fn cmd_open(args: OpenArgs, inbox_dir: &PathBuf) -> Result<(), String> {
 
 fn latest_pending_form_url(inbox_dir: &PathBuf, base: &str) -> Option<String> {
     let reqs = phinbox::inbox_list_pending(inbox_dir).ok()?;
-    let newest = reqs
-        .into_iter()
-        .max_by_key(|r| r.queued_at_ms)?;
-    Some(phinbox::inbox_open_url_for(&newest.request_id))
-        .map(|u| u.replace("127.0.0.1", &base_url_host(base)))
+    let newest = reqs.into_iter().max_by_key(|r| r.queued_at_ms)?;
+    // Build from the live base so the daemon's host *and* port are kept.
+    // Patching a URL that was constructed from a different base threw the
+    // live port away (and duplicated it when `PHINBOX_BASE_URL` was set).
+    Some(phinbox::inbox::notify::inbox_open_url_with_base(
+        base,
+        &newest.request_id,
+    ))
 }
 
-fn base_url_host(base: &str) -> String {
-    base.trim_start_matches("http://")
-        .split('/')
-        .next()
-        .unwrap_or("127.0.0.1")
-        .to_string()
-}
-
+/// Call `setsid(2)` to detach the spawned daemon into its own session.
+///
+/// # Safety
+///
+/// `setsid` only affects the calling process, reports failure by returning
+/// `-1` rather than corrupting state, and the caller ignores the result.
+/// No pointers cross the boundary.
 #[allow(unsafe_code)]
 #[cfg(unix)]
 unsafe fn libc_setsid() -> i32 {
@@ -113,4 +113,85 @@ unsafe fn libc_setsid() -> i32 {
         fn setsid() -> i32;
     }
     setsid()
+}
+
+// ---- tests ----------------------------------------------------------
+
+#[cfg(test)]
+mod tests {
+    use phinbox::{
+        inbox::{RequestOrigin, RequestState},
+        PromptSpec,
+    };
+
+    use super::*;
+
+    fn spec_with_id(request_id: &str) -> PromptSpec {
+        PromptSpec {
+            details: None,
+            title: "t".into(),
+            question: "q".into(),
+            field: phinbox::FieldSpec::Boolean {
+                label: "?".into(),
+                default: Some(true),
+            },
+            notes: None,
+            buttons: None,
+            urgency: phinbox::Urgency::Info,
+            timeout_secs: 600,
+            request_id: Some(request_id.into()),
+        }
+    }
+
+    fn enqueue(root: &std::path::Path, request_id: &str, queued_at_ms: u64) {
+        let origin = RequestOrigin {
+            hostname: "h".into(),
+            process: "p".into(),
+            pid: 1,
+            callback: None,
+        };
+        let mut req = phinbox::PendingRequest::new(spec_with_id(request_id), origin);
+        req.queued_at_ms = queued_at_ms;
+        req.state = RequestState::Pending;
+        phinbox::inbox::enqueue(root, &req).expect("enqueue");
+    }
+
+    #[test]
+    fn latest_url_uses_live_base_host_and_port() {
+        let dir = tempfile::tempdir().unwrap();
+        enqueue(dir.path(), "req-1", 1_000);
+        let url = latest_pending_form_url(&dir.path().to_path_buf(), "http://127.0.0.1:7412")
+            .expect("a pending request");
+        // Regression: the old host-patching path always produced
+        // `http://localhost:7117/...` because the literal `127.0.0.1`
+        // never appears in the default `localhost` base.
+        assert_eq!(url, "http://127.0.0.1:7412/inbox/req-1");
+    }
+
+    #[test]
+    fn latest_url_picks_newest_and_keeps_trailing_slash_base_clean() {
+        let dir = tempfile::tempdir().unwrap();
+        enqueue(dir.path(), "old", 1_000);
+        enqueue(dir.path(), "new", 2_000);
+        let url = latest_pending_form_url(&dir.path().to_path_buf(), "http://127.0.0.1:7412/")
+            .expect("a pending request");
+        assert_eq!(url, "http://127.0.0.1:7412/inbox/new");
+    }
+
+    #[test]
+    fn latest_url_does_not_rewrite_request_id() {
+        let dir = tempfile::tempdir().unwrap();
+        enqueue(dir.path(), "127.0.0.1-x", 1_000);
+        let url = latest_pending_form_url(&dir.path().to_path_buf(), "http://127.0.0.1:7412")
+            .expect("a pending request");
+        assert_eq!(url, "http://127.0.0.1:7412/inbox/127.0.0.1-x");
+    }
+
+    #[test]
+    fn latest_url_is_none_when_nothing_pending() {
+        let dir = tempfile::tempdir().unwrap();
+        assert!(
+            latest_pending_form_url(&dir.path().to_path_buf(), "http://127.0.0.1:7412").is_none()
+        );
+    }
 }

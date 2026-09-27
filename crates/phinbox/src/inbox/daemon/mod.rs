@@ -1,9 +1,9 @@
 //! Inbox daemon — long-running process that:
 //! 1. Serves the HTML inbox UI on `http://127.0.0.1:7117/inbox/<id>`.
-//! 2. Receives `POST /answer/<id>` from the HTML form and persists the
-//!    answer to `answered/` so the agent's `phinbox wait` returns.
-//! 3. Polls the inbox directory and surfaces new requests via the
-//!    configured `NotifyChannels` (tray, iMessage, email, webhook).
+//! 2. Receives `POST /answer/<id>` from the HTML form and persists the answer to `answered/` so the
+//!    agent's `phinbox wait` returns.
+//! 3. Polls the inbox directory and surfaces new requests via the configured `NotifyChannels`
+//!    (tray, iMessage, email, webhook).
 //!
 //! The daemon is **single-host, single-user** — there is exactly one
 //! inbox per machine, identified by the resolved `default_inbox_root()`.
@@ -19,18 +19,24 @@ pub(crate) mod http;
 pub mod lockfile;
 pub mod notifier;
 
-use std::net::{IpAddr, SocketAddr, TcpListener};
-use std::path::PathBuf;
-use std::sync::atomic::{AtomicBool, Ordering};
-use std::sync::Arc;
-use std::thread;
-
-use crate::error::ElicitError;
-use crate::inbox::notify::NotifyChannels;
-use crate::tray::{build_tray, Tray, TrayConfig};
-use tracing::{info, warn};
+use std::{
+    net::{IpAddr, SocketAddr, TcpListener},
+    path::PathBuf,
+    sync::{
+        atomic::{AtomicBool, Ordering},
+        Arc,
+    },
+    thread,
+};
 
 pub use lockfile::{live_url, read_lockfile, LockfilePayload};
+use tracing::{info, warn};
+
+use crate::{
+    error::ElicitError,
+    inbox::notify::NotifyChannels,
+    tray::{build_tray, Tray, TrayConfig},
+};
 
 /// Default port the daemon listens on.
 pub const DEFAULT_PORT: u16 = 7117;
@@ -83,9 +89,7 @@ pub fn start_daemon(cfg: DaemonConfig) -> Result<DaemonHandle, ElicitError> {
     // Detect an existing daemon and short-circuit if we're already
     // running on the same port + root.
     if let Some(existing) = lockfile::read_lockfile(&cfg.inbox_root) {
-        if existing.root == cfg.inbox_root
-            && existing.port == cfg.port
-            && existing.bind == cfg.bind
+        if existing.root == cfg.inbox_root && existing.port == cfg.port && existing.bind == cfg.bind
         {
             // Verify it's actually live; if not, remove the stale lock.
             if lockfile::is_port_live(cfg.bind, cfg.port) {
@@ -94,16 +98,13 @@ pub fn start_daemon(cfg: DaemonConfig) -> Result<DaemonHandle, ElicitError> {
                     cfg.bind, cfg.port
                 )));
             }
-            let _ = std::fs::remove_file(
-                cfg.inbox_root.join(lockfile::LOCKFILE_NAME),
-            );
+            let _ = std::fs::remove_file(cfg.inbox_root.join(lockfile::LOCKFILE_NAME));
         }
     }
 
     let bind_addr = SocketAddr::new(cfg.bind, cfg.port);
-    let listener = TcpListener::bind(bind_addr).map_err(|e| {
-        ElicitError::RendererFailed(format!("bind {bind_addr}: {e}"))
-    })?;
+    let listener = TcpListener::bind(bind_addr)
+        .map_err(|e| ElicitError::RendererFailed(format!("bind {bind_addr}: {e}")))?;
     // The default accept is blocking. Use non-blocking so the wakeup
     // loop can poll `shutdown` frequently without a separate timer thread.
     listener
@@ -126,15 +127,11 @@ pub fn start_daemon(cfg: DaemonConfig) -> Result<DaemonHandle, ElicitError> {
             Ok(t) => {
                 info!(backend = t.backend_name(), "tray icon attached");
                 t
-            }
+            },
             Err(e) => {
                 warn!(error = %e, "tray attach failed; daemon will run without tray");
-                build_tray(TrayConfig::new(
-                    tray_url.clone(),
-                    cfg.inbox_root.clone(),
-                ))
-                .unwrap()
-            }
+                build_tray(TrayConfig::new(tray_url.clone(), cfg.inbox_root.clone())).unwrap()
+            },
         }
     } else {
         build_tray(TrayConfig::new(tray_url.clone(), cfg.inbox_root.clone())).unwrap()
@@ -164,12 +161,7 @@ pub fn start_daemon(cfg: DaemonConfig) -> Result<DaemonHandle, ElicitError> {
         thread::Builder::new()
             .name("phinbox-notify".into())
             .spawn(move || {
-                notifier::run_notifier_loop(
-                    &inbox_root,
-                    notify,
-                    &shutdown,
-                    Some(tray_for_badge),
-                );
+                notifier::run_notifier_loop(&inbox_root, notify, &shutdown, Some(tray_for_badge));
             })?;
     }
 

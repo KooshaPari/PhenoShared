@@ -1,9 +1,11 @@
 //! Store conformance: persist/load round-trip and atomic claim.
 
 use store_file::FileStore;
-use substrate_core::domain::{Task, TaskState};
-use substrate_core::ports::StorePort;
-use substrate_core::SubstrateError;
+use substrate_core::{
+    domain::{Task, TaskState},
+    ports::StorePort,
+    SubstrateError,
+};
 
 #[tokio::test]
 async fn persist_then_load_roundtrips() {

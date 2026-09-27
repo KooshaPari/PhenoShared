@@ -1,6 +1,9 @@
-use pheno_tracing::adapters::InMemoryAdapter;
-use pheno_tracing::port::{SpanId, SpanKind, TraceId, TraceOperation, TracePort, TraceStatus};
 use std::collections::HashMap;
+
+use pheno_tracing::{
+    adapters::InMemoryAdapter,
+    port::{SpanId, SpanKind, TraceId, TraceOperation, TracePort, TraceStatus},
+};
 
 fn op(trace: &str, span: &str) -> TraceOperation {
     TraceOperation {

@@ -40,8 +40,10 @@ pub(super) fn decode_jwt(token: &str, secret: &str) -> Result<AuthenticatedUser,
 
 /// Simple hash function for token caching.
 pub(super) fn token_hash(token: &str) -> u64 {
-    use std::collections::hash_map::DefaultHasher;
-    use std::hash::{Hash, Hasher};
+    use std::{
+        collections::hash_map::DefaultHasher,
+        hash::{Hash, Hasher},
+    };
 
     let mut hasher = DefaultHasher::new();
     token.hash(&mut hasher);

@@ -1,8 +1,8 @@
 //! F5 (2026-06-30): forge-daemon opt-in drop-in for `engine_forge::run_simple`.
 //!
 //! Verifies the integration is structurally sound end-to-end:
-//!   1. `FORGE_DAEMON=1` set + daemon not running → falls back to direct spawn,
-//!      `start()` against `fake-forge` still succeeds and captures a conv id.
+//!   1. `FORGE_DAEMON=1` set + daemon not running → falls back to direct spawn, `start()` against
+//!      `fake-forge` still succeeds and captures a conv id.
 //!   2. `FORGE_DAEMON` unset → direct-spawn path, `start()` still succeeds.
 //!
 //! The two paths share all the engine-forge surface; the daemon fast-path
@@ -10,13 +10,13 @@
 //! (the Zig kqueue+posix_spawn hot core). Real perf numbers live in
 //! `benchmarks/forge_daemon_bench/`.
 
-use std::path::PathBuf;
-use std::process::Command as StdCommand;
-use std::time::Duration;
+use std::{path::PathBuf, process::Command as StdCommand, time::Duration};
 
 use engine_forge::{ForgeEngine, DEFAULT_TIMEOUT_SECS};
-use substrate_core::domain::{Task, TaskState};
-use substrate_core::ports::EnginePort;
+use substrate_core::{
+    domain::{Task, TaskState},
+    ports::EnginePort,
+};
 use uuid::Uuid;
 
 /// Resolve `fake-forge` (mirrors helper in `spawn.rs`).

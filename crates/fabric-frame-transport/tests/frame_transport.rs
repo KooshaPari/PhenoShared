@@ -4,10 +4,10 @@
 //! payloads, and max-frame-size encoding.
 
 use bytes::Bytes;
-use fabric_frame_transport::transport::{encode_wire, parse_message};
 use fabric_frame_transport::{
+    transport::{encode_wire, parse_message},
     Codec, FrameAck, FrameHeader, FrameMessage, KeyFrameRequest, MessageType, Ping, Pong,
-    PROTOCOL_VERSION, SessionAck, SessionInit, TransportError,
+    SessionAck, SessionInit, TransportError, PROTOCOL_VERSION,
 };
 
 // ---------------------------------------------------------------------------
@@ -70,7 +70,7 @@ fn test_all_message_types_roundtrip() {
                 assert_eq!(parsed.width, 1920);
                 assert_eq!(parsed.height, 1080);
                 assert_eq!(parsed.client_id, "integration-test");
-            }
+            },
             other => panic!("expected SessionInit, got {other:?}"),
         }
     }
@@ -86,14 +86,14 @@ fn test_all_message_types_roundtrip() {
             FrameMessage::SessionAck(parsed) => {
                 assert_eq!(parsed.session_id, 42);
                 assert_eq!(parsed.codec, Codec::Av1);
-            }
+            },
             other => panic!("expected SessionAck, got {other:?}"),
         }
     }
 
     // --- FrameData (binary header + payload) ---
     {
-        let raw_frame = vec![0xABu8; 256];
+        let raw_frame = vec![0xabu8; 256];
         let header = FrameHeader {
             seq: 7,
             pts_us: 8_000,
@@ -105,9 +105,8 @@ fn test_all_message_types_roundtrip() {
             payload_len: raw_frame.len() as u32,
             duration_us: 16_667,
         };
-        let mut body_buf = bytes::BytesMut::with_capacity(
-            FrameHeader::SERIALIZED_SIZE + raw_frame.len(),
-        );
+        let mut body_buf =
+            bytes::BytesMut::with_capacity(FrameHeader::SERIALIZED_SIZE + raw_frame.len());
         header.encode(&mut body_buf);
         body_buf.extend_from_slice(&raw_frame);
         let wire = encode_wire(MessageType::FrameData, &body_buf).unwrap();
@@ -122,7 +121,7 @@ fn test_all_message_types_roundtrip() {
                 assert_eq!(parsed_header.width, 1920);
                 assert!(parsed_header.is_keyframe);
                 assert_eq!(&payload[..], &raw_frame[..]);
-            }
+            },
             other => panic!("expected FrameData, got {other:?}"),
         }
     }
@@ -142,7 +141,7 @@ fn test_all_message_types_roundtrip() {
             FrameMessage::FrameAck(parsed) => {
                 assert_eq!(parsed.seq, 100);
                 assert_eq!(parsed.rtt_us, 5_000);
-            }
+            },
             other => panic!("expected FrameAck, got {other:?}"),
         }
     }
@@ -161,7 +160,7 @@ fn test_all_message_types_roundtrip() {
             FrameMessage::Ping(parsed) => {
                 assert_eq!(parsed.nonce, 99);
                 assert_eq!(parsed.timestamp_us, 1_234_567);
-            }
+            },
             other => panic!("expected Ping, got {other:?}"),
         }
     }
@@ -180,7 +179,7 @@ fn test_all_message_types_roundtrip() {
             FrameMessage::Pong(parsed) => {
                 assert_eq!(parsed.nonce, 77);
                 assert_eq!(parsed.timestamp_us, 2_345_678);
-            }
+            },
             other => panic!("expected Pong, got {other:?}"),
         }
     }
@@ -201,14 +200,16 @@ fn test_all_message_types_roundtrip() {
                 assert_eq!(parsed.code, 503);
                 assert!(parsed.fatal);
                 assert_eq!(parsed.message, "service unavailable");
-            }
+            },
             other => panic!("expected Error, got {other:?}"),
         }
     }
 
     // --- KeyFrameRequest (JSON) ---
     {
-        let kfr = KeyFrameRequest { reason: 42 };
+        let kfr = KeyFrameRequest {
+            reason: 42,
+        };
         let payload = serde_json::to_vec(&kfr).unwrap();
         let wire = encode_wire(MessageType::KeyFrameRequest, &payload).unwrap();
         let (mt, body) = parse_wire_frame(&wire);
@@ -216,7 +217,7 @@ fn test_all_message_types_roundtrip() {
         match parse_message(mt, body).unwrap() {
             FrameMessage::KeyFrameRequest(parsed) => {
                 assert_eq!(parsed.reason, 42);
-            }
+            },
             other => panic!("expected KeyFrameRequest, got {other:?}"),
         }
     }
@@ -229,7 +230,7 @@ fn test_all_message_types_roundtrip() {
 #[test]
 fn test_invalid_msg_type() {
     // MessageType::from_u8 should return None for unknown bytes.
-    for byte in [0x00, 0x09, 0x0A, 0x10, 0x7F, 0xFE, 0xFF] {
+    for byte in [0x00, 0x09, 0x0a, 0x10, 0x7f, 0xfe, 0xff] {
         assert!(
             MessageType::from_u8(byte).is_none(),
             "from_u8({:#04x}) should be None",
@@ -295,7 +296,10 @@ fn test_truncated_payload() {
     let mut frame_body = header_buf.to_vec();
     frame_body.extend_from_slice(&[0u8; 10]);
     let result = parse_message(MessageType::FrameData, Bytes::from(frame_body));
-    assert!(result.is_err(), "FrameData with mismatched payload_len should fail");
+    assert!(
+        result.is_err(),
+        "FrameData with mismatched payload_len should fail"
+    );
 }
 
 // ---------------------------------------------------------------------------
@@ -306,7 +310,7 @@ fn test_truncated_payload() {
 fn test_max_frame_size() {
     // Encode a 16 MB FrameData frame and verify it round-trips.
     let frame_size = 16 * 1024 * 1024; // MAX_FRAME_SIZE
-    let raw_frame = vec![0xCDu8; frame_size];
+    let raw_frame = vec![0xcdu8; frame_size];
 
     let header = FrameHeader {
         seq: u64::MAX,
@@ -320,8 +324,7 @@ fn test_max_frame_size() {
         duration_us: u32::MAX,
     };
 
-    let mut body_buf =
-        bytes::BytesMut::with_capacity(FrameHeader::SERIALIZED_SIZE + frame_size);
+    let mut body_buf = bytes::BytesMut::with_capacity(FrameHeader::SERIALIZED_SIZE + frame_size);
     header.encode(&mut body_buf);
     body_buf.extend_from_slice(&raw_frame);
 
@@ -355,8 +358,8 @@ fn test_max_frame_size() {
             assert_eq!(parsed_header.codec, Codec::Rgba);
             assert_eq!(parsed_header.payload_len, frame_size as u32);
             assert_eq!(payload.len(), frame_size);
-            assert!(payload.iter().all(|&b| b == 0xCD));
-        }
+            assert!(payload.iter().all(|&b| b == 0xcd));
+        },
         other => panic!("expected FrameData, got {other:?}"),
     }
 }

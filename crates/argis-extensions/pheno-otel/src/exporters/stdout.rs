@@ -2,8 +2,8 @@
 //!
 //! Useful for local dev, CI smoke tests, and dogfooding. **Not** for prod.
 
-use crate::{ExportHandle, OtlpError, OtlpPort};
 use super::ExporterConfig;
+use crate::{ExportHandle, OtlpError, OtlpPort};
 
 /// OTLP exporter that writes payloads to stderr.
 #[derive(Debug)]
@@ -14,7 +14,9 @@ pub struct StdoutExporter {
 impl StdoutExporter {
     /// Build a new `StdoutExporter` with the given config.
     pub fn new(config: ExporterConfig) -> Self {
-        Self { config }
+        Self {
+            config,
+        }
     }
 }
 
@@ -86,7 +88,10 @@ mod tests {
     #[test]
     fn stdout_exporter_export_empty_fails() {
         let exp = StdoutExporter::new(ExporterConfig::new("http://localhost:4318", "test"));
-        assert!(matches!(exp.export(b""), Err(OtlpError::SerializeFailed(_))));
+        assert!(matches!(
+            exp.export(b""),
+            Err(OtlpError::SerializeFailed(_))
+        ));
     }
 
     #[test]

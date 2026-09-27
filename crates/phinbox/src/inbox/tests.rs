@@ -12,6 +12,7 @@ fn sample_origin() -> RequestOrigin {
 #[test]
 fn new_fills_request_id_and_timestamps() {
     let spec = crate::spec::PromptSpec {
+        details: None,
         title: "t".into(),
         question: "?".into(),
         field: crate::spec::FieldSpec::Boolean {
@@ -41,6 +42,7 @@ fn path_in_is_stable() {
         request_id: "abc".into(),
         origin: sample_origin(),
         spec: crate::spec::PromptSpec {
+            details: None,
             title: "t".into(),
             question: "?".into(),
             field: crate::spec::FieldSpec::Boolean {
@@ -71,6 +73,7 @@ fn enqueue_and_load_roundtrip() {
         request_id: "rt-1".into(),
         origin: sample_origin(),
         spec: crate::spec::PromptSpec {
+            details: None,
             title: "t".into(),
             question: "?".into(),
             field: crate::spec::FieldSpec::Boolean {
@@ -103,6 +106,7 @@ fn finalize_moves_to_answered_dir() {
         request_id: "fn-1".into(),
         origin: sample_origin(),
         spec: crate::spec::PromptSpec {
+            details: None,
             title: "t".into(),
             question: "?".into(),
             field: crate::spec::FieldSpec::Boolean {

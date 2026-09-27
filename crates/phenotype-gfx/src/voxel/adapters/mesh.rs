@@ -4,12 +4,18 @@
 //! root for backward compatibility. Future engine-specific adapters (Bevy, Godot,
 //! Unreal) would be added here as additional implementations.
 
-pub use crate::voxel::cubic_mesher::{CubicMesher, CubicVoxel};
-pub use crate::voxel::greedy_mesher::GreedyMesher;
-use crate::voxel::lod::LodLevel;
-use crate::voxel::mesh::Mesher;
-use crate::voxel::ports::chunk::ChunkView;
-use crate::voxel::ports::mesh::{MeshBuffer, MeshResult};
+pub use crate::voxel::{
+    cubic_mesher::{CubicMesher, CubicVoxel},
+    greedy_mesher::GreedyMesher,
+};
+use crate::voxel::{
+    lod::LodLevel,
+    mesh::Mesher,
+    ports::{
+        chunk::ChunkView,
+        mesh::{MeshBuffer, MeshResult},
+    },
+};
 
 /// Convenience type alias for the engine-neutral mesh buffer.
 pub type NeutralMesh = MeshBuffer;

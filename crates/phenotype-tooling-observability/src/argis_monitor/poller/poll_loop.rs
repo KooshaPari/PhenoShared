@@ -5,17 +5,20 @@ use std::time::{Instant, SystemTime, UNIX_EPOCH};
 
 use tracing::{error, info};
 
-use crate::argis_monitor::alerts::{self, Severity};
-use crate::argis_monitor::metrics::{Metrics, Outcome, Sample};
-use crate::argis_monitor::ring_buffer::RingBuffer;
-use crate::argis_monitor::slo::{burn_rate, BurnWindow};
-use crate::argis_monitor::state_store::TrackerSnapshot;
-use crate::argis_monitor::target::Target;
-
-use super::evaluate_alerts::evaluate_alerts_impl;
-use super::evaluate_meta_alerts::evaluate_meta_alerts_impl;
-use super::monitor::Monitor;
-use super::types::{PollError, PollOutcome};
+use super::{
+    evaluate_alerts::evaluate_alerts_impl,
+    evaluate_meta_alerts::evaluate_meta_alerts_impl,
+    monitor::Monitor,
+    types::{PollError, PollOutcome},
+};
+use crate::argis_monitor::{
+    alerts::{self, Severity},
+    metrics::{Metrics, Outcome, Sample},
+    ring_buffer::RingBuffer,
+    slo::{burn_rate, BurnWindow},
+    state_store::TrackerSnapshot,
+    target::Target,
+};
 
 /// Poll one specific target once. Free function so it can be unit-tested
 /// without going through the `Monitor` API surface.
@@ -36,12 +39,19 @@ pub(crate) async fn poll_once_target_impl(
     };
     let res = inner.http.get(&url).timeout(timeout).send().await;
     let latency = started.elapsed();
-    let ts = SystemTime::now().duration_since(UNIX_EPOCH).unwrap_or_default().as_secs();
+    let ts = SystemTime::now()
+        .duration_since(UNIX_EPOCH)
+        .unwrap_or_default()
+        .as_secs();
 
     let sample = match res {
         Ok(resp) => {
             let status = resp.status().as_u16();
-            let outcome = if resp.status().is_success() { Outcome::Ok } else { Outcome::Error };
+            let outcome = if resp.status().is_success() {
+                Outcome::Ok
+            } else {
+                Outcome::Error
+            };
             Sample {
                 provider: target.name.clone(),
                 outcome,
@@ -49,7 +59,7 @@ pub(crate) async fn poll_once_target_impl(
                 status_code: status,
                 timestamp_secs: ts,
             }
-        }
+        },
         Err(e) => {
             error!(target = %target.name, error = %e, "transport error");
             Sample {
@@ -59,7 +69,7 @@ pub(crate) async fn poll_once_target_impl(
                 status_code: 0,
                 timestamp_secs: ts,
             }
-        }
+        },
     };
 
     let mut m = inner.metrics.lock().await;
@@ -84,8 +94,16 @@ pub(crate) async fn poll_once_target_impl(
     for slo in &inner.config.slos {
         let bs = burn_rate(s_short, f_short, slo.target);
         let bl = burn_rate(s_long, f_long, slo.target);
-        m.record_burn(&format!("{}::{}", target.name, slo.name), BurnWindow::FAST_BURN, bs);
-        m.record_burn(&format!("{}::{}", target.name, slo.name), BurnWindow::SLOW_BURN, bl);
+        m.record_burn(
+            &format!("{}::{}", target.name, slo.name),
+            BurnWindow::FAST_BURN,
+            bs,
+        );
+        m.record_burn(
+            &format!("{}::{}", target.name, slo.name),
+            BurnWindow::SLOW_BURN,
+            bl,
+        );
         burn_short = bs;
         burn_long = bl;
     }
@@ -123,5 +141,10 @@ pub(crate) async fn poll_once_target_impl(
             );
         }
     }
-    Ok(PollOutcome { sample, burn_short, burn_long, alert_payloads: payloads })
+    Ok(PollOutcome {
+        sample,
+        burn_short,
+        burn_long,
+        alert_payloads: payloads,
+    })
 }

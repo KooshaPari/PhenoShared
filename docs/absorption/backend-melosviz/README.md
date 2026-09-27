@@ -1,11 +1,23 @@
 # Absorption: backend → phenotype-python-sdk/packages/melosviz
 
 **Source**: `<REDACTED>/backend` (MelosViz scoring engine, 48KB)
-**Target**: `<REDACTED>/phenotype-python-sdk` as `packages/melosviz/`
+**Target**: `<REDACTED>/phenotype-python-sdk` as packages/melosviz/ (see **Status** below)
 **Wave**: 2026-07-17-queue-refresh-2
 **Branch**: `wip/2026-07-16-0030-auto` (commit `bbeedd5`)
 **Disposition row**: `repo-backend-melosviz`
 **Date**: 2026-07-17
+
+**Status (2026-09-20 reclassification): PENDING** — the originally-claimed
+target `packages/melosviz/` is absent from PhenoShared (the claim was for the
+python-sdk repo, not PhenoShared; FORWARD-WBS §5 reclassification). The actual
+content lives in an unstable worktree path,
+`crates/argis-extensions/melosviz-wt/wp-4-backend-implement-analysis-engine/`
+(inside `crates/argis-extensions/`, in a `-wt` worktree — not a stable location).
+The companion scaffold `crates/argis-extensions/melosviz-wt/wp-33-tauri-scaffold/`
+shares the same unstable parent. Until the worktree is promoted to a stable
+path (e.g. `crates/melosviz/` or `crates/argis-extensions/melosviz/`) this
+absorption remains **PENDING** and the claim cannot be verified by a stable
+path-check.
 
 ## Source identity
 

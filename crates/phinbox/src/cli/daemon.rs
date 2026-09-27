@@ -65,7 +65,13 @@ pub fn cmd_daemon(args: DaemonArgs, inbox_dir: &PathBuf) -> Result<(), String> {
             "bind": handle.bind_addr.to_string(),
             "inbox_root": handle.inbox_root,
             "open_url": super::open_url_from_handle(&handle),
-            "open_url_format": phinbox::inbox_open_url_for("<id>"),
+            // Same live base as `open_url` above (origin, not the
+            // `/inbox` index), so the advertised template agrees with the
+            // port the daemon actually bound.
+            "open_url_format": phinbox::inbox::notify::inbox_open_url_with_base(
+                &super::open_origin_from_handle(&handle),
+                "<id>",
+            ),
         }))
         .unwrap()
     );
@@ -102,8 +108,10 @@ fn daemon_shutdown_signal() -> impl std::future::Future<Output = ()> + Send + 's
 }
 
 fn block_on<F: std::future::Future<Output = ()>>(fut: F) {
-    use std::sync::Arc;
-    use std::task::{Context, Poll, Wake, Waker};
+    use std::{
+        sync::Arc,
+        task::{Context, Poll, Wake, Waker},
+    };
     struct ParkOnce;
     impl Wake for ParkOnce {
         fn wake(self: Arc<Self>) {}
@@ -144,10 +152,7 @@ fn wait_for_termination() {
 #[allow(unsafe_code)]
 fn wait_for_termination() {
     extern "system" {
-        fn SetConsoleCtrlHandler(
-            handler: Option<extern "system" fn(u32) -> i32>,
-            add: i32,
-        ) -> i32;
+        fn SetConsoleCtrlHandler(handler: Option<extern "system" fn(u32) -> i32>, add: i32) -> i32;
     }
     extern "system" fn handler(_typ: u32) -> i32 {
         std::process::exit(0);

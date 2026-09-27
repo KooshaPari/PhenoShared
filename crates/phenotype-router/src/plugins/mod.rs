@@ -7,22 +7,19 @@
 //!
 //! - unit tests in a `#[cfg(test)] mod tests` block at the bottom
 //! - OTel-compatible `tracing` spans per ADR-012 / ADR-036B
-//! - `PREDICTIVE.md` next to the source documenting the ADR-047 4-criterion
-//!   predictive-DRY check for promotion to Tier-1 substrate status
+//! - `PREDICTIVE.md` next to the source documenting the ADR-047 4-criterion predictive-DRY check
+//!   for promotion to Tier-1 substrate status
 //!
 //! ## v13 3-plugin port wave (`feat/v13-3-plugin-ports-2026-06-21`)
 //!
-//! - `promptadapter` (ADR-052 DecisionPlugin, phase=RequestTransform) —
-//!   rewrites prompts via an in-process transform registry; safe
-//!   passthrough when no transform matches. See `promptadapter.rs` +
-//!   `promptadapter/PREDICTIVE.md`.
-//! - `contextfolding` (ADR-052 ConnectorPort) — folds long payloads
-//!   into shorter ones via a pluggable `FoldingStrategy` (default:
-//!   `WhitespaceDedupeStrategy`). See `contextfolding.rs` +
+//! - `promptadapter` (ADR-052 DecisionPlugin, phase=RequestTransform) — rewrites prompts via an
+//!   in-process transform registry; safe passthrough when no transform matches. See
+//!   `promptadapter.rs` + `promptadapter/PREDICTIVE.md`.
+//! - `contextfolding` (ADR-052 ConnectorPort) — folds long payloads into shorter ones via a
+//!   pluggable `FoldingStrategy` (default: `WhitespaceDedupeStrategy`). See `contextfolding.rs` +
 //!   `contextfolding/PREDICTIVE.md`.
-//! - `researchintel` (ADR-052 LlmPort) — synthesizes a research
-//!   summary via a pluggable `ResearchProvider` (default:
-//!   `SynthesizedResearchProvider`). See `researchintel.rs` +
+//! - `researchintel` (ADR-052 LlmPort) — synthesizes a research summary via a pluggable
+//!   `ResearchProvider` (default: `SynthesizedResearchProvider`). See `researchintel.rs` +
 //!   `researchintel/PREDICTIVE.md`.
 
 pub mod contextfolding;

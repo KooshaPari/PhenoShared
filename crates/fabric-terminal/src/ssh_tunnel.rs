@@ -3,10 +3,10 @@
 //! Connects to remote machine via SSH, executes tmux commands,
 //! and captures screen content. Uses ssh2 for the transport.
 
+use std::{io::Read, net::TcpStream};
+
 use anyhow::{Context, Result};
 use ssh2::Session;
-use std::io::Read;
-use std::net::TcpStream;
 use tracing::{debug, info};
 
 use crate::PaneContent;
@@ -65,10 +65,7 @@ impl SshTunnel {
 
     /// Execute a tmux command on the remote machine.
     pub async fn exec_tmux(&self, command: &str) -> Result<String> {
-        let full_cmd = format!(
-            "tmux -S {} {}",
-            self.socket_path, command
-        );
+        let full_cmd = format!("tmux -S {} {}", self.socket_path, command);
 
         debug!("Executing: {}", full_cmd);
 
@@ -85,7 +82,10 @@ impl SshTunnel {
     /// List all panes on the remote tmux server.
     pub async fn list_panes(&self) -> Result<Vec<PaneInfo>> {
         let output = self
-            .exec_tmux("list-panes -F \"#{pane_id}|#{window_name}|#{pane_width}|#{pane_height}|#{pane_alive}\"")
+            .exec_tmux(
+                "list-panes -F \
+                 \"#{pane_id}|#{window_name}|#{pane_width}|#{pane_height}|#{pane_alive}\"",
+            )
             .await?;
 
         let mut panes = Vec::new();
@@ -120,15 +120,25 @@ impl SshTunnel {
         // Get cursor position
         let cursor_output = self
             .exec_tmux(&format!(
-                "display-message -t {} -p \"#{{cursor_y}},#{{cursor_x}},#{{pane_width}},#{{pane_height}}\"",
+                "display-message -t {} -p \
+                 \"#{{cursor_y}},#{{cursor_x}},#{{pane_width}},#{{pane_height}}\"",
                 pane_id
             ))
             .await?;
 
         let cursor_parts: Vec<&str> = cursor_output.split(',').collect();
-        let cursor_row = cursor_parts.first().and_then(|s| s.parse().ok()).unwrap_or(0);
-        let cursor_col = cursor_parts.get(1).and_then(|s| s.parse().ok()).unwrap_or(0);
-        let width = cursor_parts.get(2).and_then(|s| s.parse().ok()).unwrap_or(80);
+        let cursor_row = cursor_parts
+            .first()
+            .and_then(|s| s.parse().ok())
+            .unwrap_or(0);
+        let cursor_col = cursor_parts
+            .get(1)
+            .and_then(|s| s.parse().ok())
+            .unwrap_or(0);
+        let width = cursor_parts
+            .get(2)
+            .and_then(|s| s.parse().ok())
+            .unwrap_or(80);
 
         Ok(PaneContent {
             pane_id: pane_id.to_string(),

@@ -14,11 +14,12 @@
 //! surface: macro re-exports, the `SubscriberAdapter`/`CollectorAdapter` trait
 //! family, and the version-detection helpers.
 
+use std::collections::HashMap;
+
 use pheno_tracing::compat::{
     current_backend_kind, debug, error, info, instrument, span, trace, warn, CollectorAdapter,
     SubscriberAdapter, SubscriberKind, TracingBackend, TracingVersion,
 };
-use std::collections::HashMap;
 
 //---- macro re-export shape (compile-time + sanity) -----------------------
 

@@ -141,7 +141,6 @@ ptr_arg = "allow"
 needless_raw_string_hashes = "allow"
 redundant_closure_for_method_calls = "allow"
 redundant_closure = "allow"
-too_many_bools = "allow"
 option_if_let_else = "allow"
 missing_asserts_for_indexing = "allow"
 doc_overindented_list_items = "allow"
@@ -150,7 +149,11 @@ field_reassign_with_default = "allow"
 assertions_on_constants = "allow"
 manual_div_ceil = "allow"
 cast_sign_loss = "allow"
-trivially_copy_pastable_by_value = "allow"
-needless_pass_by_ref = "allow"
+# NOTE: lint names must be real. `trivially_copy_pastable_by_value`,
+# `too_many_bools` and `needless_pass_by_ref` are not clippy lints, and an
+# unknown name is silently inert (`warning[E0602]`), so the allow never
+# applied. Corrected to the names clippy suggests.
+trivially_copy_pass_by_ref = "allow"
+needless_pass_by_ref_mut = "allow"
 struct_excessive_bools = "allow"
 module_inception = "allow"

@@ -3,8 +3,7 @@
 //! Seeded by the poller whenever a webhook delivery comes back non-success.
 //! Read by `evaluate_meta_alerts` to decide if a meta-alert should fire.
 
-use super::types::StateStoreError;
-use super::StateStore;
+use super::{types::StateStoreError, StateStore};
 
 impl StateStore {
     /// Record one alert webhook delivery failure. Called by the poller
@@ -58,10 +57,7 @@ impl StateStore {
 
     /// Delete alert_failures rows older than `older_than_unix` (Unix seconds).
     /// Returns the number of rows deleted.
-    pub fn prune_alert_failures(
-        &mut self,
-        older_than_unix: u64,
-    ) -> Result<u64, StateStoreError> {
+    pub fn prune_alert_failures(&mut self, older_than_unix: u64) -> Result<u64, StateStoreError> {
         let threshold: i64 = if older_than_unix > i64::MAX as u64 {
             i64::MAX
         } else {

@@ -6,8 +6,8 @@
 #![allow(dead_code)]
 
 mod capture;
-mod clipboard;
 mod client;
+mod clipboard;
 #[cfg(feature = "self-update")]
 mod self_update;
 mod uia;
@@ -45,15 +45,15 @@ async fn main() -> Result<()> {
         if args.len() > 1 {
             match args[1].as_str() {
                 "self-update" => {
-#[cfg(feature = "self-update")]
+                    #[cfg(feature = "self-update")]
                     self_update::run("tf-win-capture")?;
                     return Ok(());
-                }
+                },
                 "--version" | "-V" => {
                     println!("tf-win-capture {}", env!("CARGO_PKG_VERSION"));
                     return Ok(());
-                }
-                _ => {}
+                },
+                _ => {},
             }
         }
     }
@@ -85,8 +85,8 @@ async fn main() -> Result<()> {
     #[cfg(not(target_os = "windows"))]
     {
         anyhow::bail!(
-            "tf-win-capture only runs on Windows. \
-             This binary was compiled for a non-Windows target."
+            "tf-win-capture only runs on Windows. This binary was compiled for a non-Windows \
+             target."
         );
     }
 
@@ -122,20 +122,20 @@ async fn run_capture_loop(args: &Args) -> Result<()> {
                                 source: "windows-capture".to_string(),
                                 process_id: pane.process_id,
                             });
-                        }
+                        },
                         None => {
                             tracing::debug!(
                                 hwnd = pane.hwnd,
                                 title = %pane.title,
                                 "Console buffer capture failed (likely ConPTY)"
                             );
-                        }
+                        },
                     }
                 }
-            }
+            },
             Err(e) => {
                 tracing::warn!(error = %e, "Failed to enumerate console windows");
-            }
+            },
         }
 
         // Phase 2: PseudoConsoleWindow capture (ConPTY terminals).
@@ -165,10 +165,10 @@ async fn run_capture_loop(args: &Args) -> Result<()> {
                             process_id: 0,
                         });
                     }
-                }
+                },
                 None => {
                     tracing::debug!(hwnd = hwnd, "PseudoConsoleWindow capture returned None");
-                }
+                },
             }
         }
 
@@ -302,17 +302,10 @@ async fn run_capture_loop(args: &Args) -> Result<()> {
 
         // Post all captured data.
         if !pane_data_list.is_empty() {
-            if let Err(e) = client::post_panes(
-                &args.url,
-                &args.token,
-                &pane_data_list,
-            ).await {
+            if let Err(e) = client::post_panes(&args.url, &args.token, &pane_data_list).await {
                 tracing::warn!(error = %e, "Failed to post panes to tf-web");
             } else {
-                tracing::debug!(
-                    count = pane_data_list.len(),
-                    "Posted pane data to tf-web"
-                );
+                tracing::debug!(count = pane_data_list.len(), "Posted pane data to tf-web");
             }
         }
 

@@ -31,17 +31,17 @@ pub async fn run(
             let adapter =
                 CursorCloudDispatch::from_env().map_err(|e| anyhow!("cursor adapter: {e}"))?;
             run_with_adapter(&adapter, repo, branch, task).await
-        }
+        },
         CloudPlatform::Codex => {
             let adapter =
                 CodexCloudDispatch::from_env().map_err(|e| anyhow!("codex adapter: {e}"))?;
             run_with_adapter(&adapter, repo, branch, task).await
-        }
+        },
         CloudPlatform::Kilo => {
             let adapter =
                 KiloCloudDispatch::from_env().map_err(|e| anyhow!("kilo adapter: {e}"))?;
             run_with_adapter(&adapter, repo, branch, task).await
-        }
+        },
     }
 }
 
@@ -63,13 +63,15 @@ async fn run_with_adapter(
             CloudTaskStatus::Queued | CloudTaskStatus::Running => {
                 tokio::time::sleep(delay).await;
                 delay = delay.saturating_mul(2).min(Duration::from_secs(30));
-            }
-            CloudTaskStatus::Failed { message } => {
+            },
+            CloudTaskStatus::Failed {
+                message,
+            } => {
                 return Err(anyhow!(
                     "cloud task failed: {}",
                     message.unwrap_or_else(|| "unknown".into())
                 ));
-            }
+            },
             CloudTaskStatus::Succeeded => break,
         }
     }

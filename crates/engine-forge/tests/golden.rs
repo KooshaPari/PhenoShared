@@ -1,7 +1,9 @@
 //! Golden tests: recorded forge dumps normalize to the expected result.
 
-use substrate_core::domain::{ConversationDump, TaskState};
-use substrate_core::ports::EnginePort;
+use substrate_core::{
+    domain::{ConversationDump, TaskState},
+    ports::EnginePort,
+};
 
 fn load(name: &str) -> ConversationDump {
     let raw = std::fs::read_to_string(format!("tests/fixtures/{name}")).unwrap();

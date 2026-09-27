@@ -331,7 +331,11 @@ mod tests {
     use super::*;
 
     fn coord(cx: i32, cy: i32, cz: i32) -> ChunkCoord {
-        ChunkCoord { cx, cy, cz }
+        ChunkCoord {
+            cx,
+            cy,
+            cz,
+        }
     }
 
     #[test]

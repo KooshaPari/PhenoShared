@@ -8,14 +8,13 @@
 mod cli;
 
 use async_trait::async_trait;
-use substrate_core::cloud_dispatch_port::{
-    CloudDispatchPort, CloudResult, CloudTaskHandle, CloudTaskStatus,
-};
-
 pub use cli::{
     map_codex_status, parse_status_label, parse_summary_line, parse_task_id_from_output,
     strip_ansi, summarize_diff, CodexCloudConfig, CodexCloudDispatch, CodexCommandOutput,
     CodexCommandRunner, TokioCodexRunner, ENV_CLOUD_ENV_ID,
+};
+use substrate_core::cloud_dispatch_port::{
+    CloudDispatchPort, CloudResult, CloudTaskHandle, CloudTaskStatus,
 };
 
 #[async_trait]
@@ -46,8 +45,7 @@ impl CloudDispatchPort for CodexCloudDispatch {
 
 #[cfg(test)]
 mod conformance_tests {
-    use std::path::PathBuf;
-    use std::process::Command as StdCommand;
+    use std::{path::PathBuf, process::Command as StdCommand};
 
     use cloud_dispatch_conformance::assert_cloud_dispatch_conformance;
 

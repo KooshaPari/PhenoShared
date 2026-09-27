@@ -10,10 +10,10 @@ fn random_rgba_image(width: u32, height: u32, seed: u32) -> Vec<[u8; 4]> {
         state ^= state >> 17;
         state ^= state << 5;
         pixels.push([
-            (state & 0xFF) as u8,
-            ((state >> 8) & 0xFF) as u8,
-            ((state >> 16) & 0xFF) as u8,
-            ((state >> 24) & 0xFF) as u8,
+            (state & 0xff) as u8,
+            ((state >> 8) & 0xff) as u8,
+            ((state >> 16) & 0xff) as u8,
+            ((state >> 24) & 0xff) as u8,
         ]);
     }
 
@@ -21,7 +21,7 @@ fn random_rgba_image(width: u32, height: u32, seed: u32) -> Vec<[u8; 4]> {
 }
 
 fn bench_voxelize_image(c: &mut Criterion) {
-    let pixels = random_rgba_image(32, 32, 0xC0FFEE_u32);
+    let pixels = random_rgba_image(32, 32, 0xc0ffee_u32);
     let cfg = VoxelizeConfig {
         depth: 8,
         mode: ExtrusionMode::Flat,

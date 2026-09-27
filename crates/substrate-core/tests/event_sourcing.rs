@@ -1,8 +1,10 @@
 //! Event sourcing: projection replay and task lifecycle fold.
 
-use substrate_core::domain::TaskState;
-use substrate_core::event_store_port::{
-    replay, EventEnvelope, EventStorePort, TaskLifecycleEvent, TaskLifecycleProjection,
+use substrate_core::{
+    domain::TaskState,
+    event_store_port::{
+        replay, EventEnvelope, EventStorePort, TaskLifecycleEvent, TaskLifecycleProjection,
+    },
 };
 use uuid::Uuid;
 

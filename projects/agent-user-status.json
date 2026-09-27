@@ -8,12 +8,12 @@
   "path": "repos/agent-user-status",
   "disposition": "ABSORB",
   "absorbing_repo": "<REDACTED>/phenotype-tooling",
-  "absorbing_path": "crates/agent-user-status/",
+  "absorbing_path": "phenotype-tooling/crates/agent-user-status/",
   "absorbed_date": "2026-07-17",
   "absorbed_commit": "29ce5dd4d7baecd4920e5ccedca744eee5422a10",
   "absorbed_branch": "salvage/phenotype-tooling-workspace-2026-07-15",
   "archived": true,
   "archived_at": "2026-07-17T14:30:00Z",
   "archive_method": "gh repo archive",
-  "note": "Audited 2026-07-17; ABSORBED into <REDACTED>/phenotype-tooling as crates/agent-user-status/. Single Python project (>=3.12) + stdio MCP server + optional macOS Swift native monitor bundle. 91/91 pytests pass on Python 3.14.6. Original AFFIRM verdict (rust primary_language field) was incorrect; project is Python with embedded Swift native sources. Source repo archived on GitHub via gh repo archive -y (isArchived=true verified)."
+  "note": "Audited 2026-07-17; ABSORBED into <REDACTED>/phenotype-tooling as crates/agent-user-status/. Single Python project (>=3.12) + stdio MCP server + optional macOS Swift native monitor bundle. 91/91 pytests pass on Python 3.14.6. Original AFFIRM verdict (rust primary_language field) was incorrect; project is Python with embedded Swift native sources. Source repo archived on GitHub via gh repo archive -y (isArchived=true verified). Verification 2026-09-24: destination is cross-repo (absorbing_repo = KooshaPari/phenotype-tooling), so absorbing_path is now repo-qualified — the gate classifies it unverifiable ('that repo, this path'), not a local-path violation. Sibling clone at CodeProjects/Phenotype/repos/phenotype-tooling with refs current to origin/main 2026-09-14 shows NO trace: git log --all -- crates/agent-user-status empty; claimed commit 29ce5dd4d7baecd4920e5ccedca744eee5422a10 absent; salvage/phenotype-tooling-workspace-2026-07-15 branch absent; target-side crates/agent-user-status/ABSORPTION.md marker absent; origin/main 2026-07-14..07-20 window contains only dependency bumps. Fetch today returns 'Repository not found' over SSH (deploy key scoped to PhenoShared only, per ABSORPTION-LINEAGE 2.3), which cannot distinguish deleted from private. Claim is currently contradicted by the best available proxy but not provable either way; closes on account-wide GitHub credentials." 
 }

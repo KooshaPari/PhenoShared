@@ -1,5 +1,4 @@
-use std::sync::Arc;
-use std::thread;
+use std::{sync::Arc, thread};
 
 use store_sqlite::SqliteClaimStore;
 use substrate_core::claim_port::ClaimPort;

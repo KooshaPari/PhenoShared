@@ -6,12 +6,11 @@
 mod pipeline;
 mod serve;
 
-use clap::{Parser, Subcommand};
-use std::path::PathBuf;
-use std::sync::Arc;
-use tracing::info;
+use std::{path::PathBuf, sync::Arc};
 
+use clap::{Parser, Subcommand};
 use pipeline::FabricPipeline;
+use tracing::info;
 
 #[derive(Parser)]
 #[command(
@@ -85,9 +84,17 @@ fn main() -> anyhow::Result<()> {
             db,
             log_level,
         } => cmd_run(config, listen, db, log_level),
-        Commands::Compile { topology, output } => cmd_compile(topology, output),
-        Commands::Check { manifest, probe } => cmd_check(manifest, probe),
-        Commands::Status { connect } => cmd_status(&connect),
+        Commands::Compile {
+            topology,
+            output,
+        } => cmd_compile(topology, output),
+        Commands::Check {
+            manifest,
+            probe,
+        } => cmd_check(manifest, probe),
+        Commands::Status {
+            connect,
+        } => cmd_status(&connect),
     }
 }
 
@@ -146,7 +153,14 @@ fn cmd_run(
     info!(addr = %addr, "launching wire server");
 
     // Run the wire server (blocking until shutdown).
-    serve::start_wire_server(pipeline.coordinator().clone(), &addr, max_conn, timeout, auth, runtime)?;
+    serve::start_wire_server(
+        pipeline.coordinator().clone(),
+        &addr,
+        max_conn,
+        timeout,
+        auth,
+        runtime,
+    )?;
 
     // Flush state before exit.
     info!("flushing state to database");
@@ -170,10 +184,10 @@ fn cmd_compile(topology_path: PathBuf, output: Option<PathBuf>) -> anyhow::Resul
         Some(path) => {
             std::fs::write(&path, &json)?;
             println!("wrote route plans to {}", path.display());
-        }
+        },
         None => {
             println!("{json}");
-        }
+        },
     }
 
     Ok(())
@@ -202,8 +216,10 @@ fn cmd_check(manifest_path: PathBuf, probe: bool) -> anyhow::Result<()> {
 }
 
 fn cmd_status(addr: &str) -> anyhow::Result<()> {
-    use std::net::TcpStream;
-    use std::io::{BufRead, BufReader, Write};
+    use std::{
+        io::{BufRead, BufReader, Write},
+        net::TcpStream,
+    };
 
     let mut stream = TcpStream::connect(addr)?;
 
@@ -217,7 +233,7 @@ fn cmd_status(addr: &str) -> anyhow::Result<()> {
             Err(e) => {
                 eprintln!("read error: {e}");
                 break;
-            }
+            },
         }
     }
 
@@ -232,7 +248,7 @@ fn cmd_status(addr: &str) -> anyhow::Result<()> {
             Err(e) => {
                 eprintln!("read error: {e}");
                 break;
-            }
+            },
         }
     }
 
@@ -249,18 +265,16 @@ fn init_logging(logging: &fabric_daemon::config::LoggingConfig) {
                 .with_env_filter(filter)
                 .json()
                 .init();
-        }
+        },
         "compact" => {
             tracing_subscriber::fmt()
                 .with_env_filter(filter)
                 .compact()
                 .init();
-        }
+        },
         _ => {
-            tracing_subscriber::fmt()
-                .with_env_filter(filter)
-                .init();
-        }
+            tracing_subscriber::fmt().with_env_filter(filter).init();
+        },
     }
 }
 

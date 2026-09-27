@@ -1,6 +1,7 @@
 //! Network page — shows UPnP, Tailscale, and STUN status.
 
 use leptos::prelude::*;
+
 use crate::api::*;
 
 /// Network page — shows UPnP port mappings, Tailscale peers, and STUN external address.
@@ -17,7 +18,7 @@ pub fn NetworkPage() -> impl IntoView {
             Ok(data) => {
                 set_network.set(Some(data));
                 set_last_refresh.set("now".to_string());
-            }
+            },
             Err(e) => set_error.set(Some(e)),
         }
     });
@@ -29,7 +30,8 @@ pub fn NetworkPage() -> impl IntoView {
             None => return,
         };
         let closure = js_sys::Function::new_no_args(
-            "() => { const btn = document.querySelector('[data-refresh-network]'); if (btn) btn.click(); }",
+            "() => { const btn = document.querySelector('[data-refresh-network]'); if (btn) \
+             btn.click(); }",
         );
         let _ = window.set_interval_with_callback_and_timeout_and_arguments_0(&closure, 5000);
     });
@@ -42,7 +44,7 @@ pub fn NetworkPage() -> impl IntoView {
                 Ok(data) => {
                     set_network.set(Some(data));
                     set_last_refresh.set("just now".to_string());
-                }
+                },
                 Err(e) => set_error.set(Some(e)),
             }
         });

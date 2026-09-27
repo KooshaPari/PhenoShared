@@ -4,8 +4,7 @@
 //! `decide()` hot path is **1.5 s p99**. The criterion harness measures
 //! the per-call latency decomposed by adapter:
 //!
-//! - `BifrostAdapter` — stub adapter (in-tree; mirrors Bifrost's allow/deny
-//!   rules per ADR-050).
+//! - `BifrostAdapter` — stub adapter (in-tree; mirrors Bifrost's allow/deny rules per ADR-050).
 //! - `HelloWorld` — no-op fixture (returns `Allow` for every request).
 //!
 //! ## How to run

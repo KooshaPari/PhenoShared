@@ -1,15 +1,16 @@
 //! Topology persistence — save/load entire topologies to/from SQLite.
 
 use chrono::{DateTime, Utc};
-use fabric_graph::model::{
-    CapabilityRef, Edge, EdgeId, LinkMetrics, Node, NodeId, Topology, TopologyEpoch,
-    TopologyMeta,
+use fabric_graph::{
+    model::{
+        CapabilityRef, Edge, EdgeId, LinkMetrics, Node, NodeId, Topology, TopologyEpoch,
+        TopologyMeta,
+    },
+    LocalityTier,
 };
-use fabric_graph::LocalityTier;
 use rusqlite::params;
 
-use crate::error::PersistError;
-use crate::Persist;
+use crate::{error::PersistError, Persist};
 
 impl Persist {
     /// Save a full topology (nodes + edges + meta) in a single transaction.
@@ -64,7 +65,8 @@ impl Persist {
                 let tags_json = serde_json::to_string(&node.tags)?;
                 let caps_json = serde_json::to_string(&node.capabilities)?;
                 tx.execute(
-                    "INSERT INTO topology_nodes (id, label, locality_tier, capabilities, tags, last_seen)
+                    "INSERT INTO topology_nodes (id, label, locality_tier, capabilities, tags, \
+                     last_seen)
                      VALUES (?1, ?2, ?3, ?4, ?5, ?6)",
                     params![
                         node.id.0,
@@ -81,7 +83,8 @@ impl Persist {
             for edge in topo.edges.values() {
                 let metrics_json = serde_json::to_string(&edge.metrics)?;
                 tx.execute(
-                    "INSERT INTO topology_edges (id, from_node, to_node, locality_tier, metrics, up)
+                    "INSERT INTO topology_edges (id, from_node, to_node, locality_tier, metrics, \
+                     up)
                      VALUES (?1, ?2, ?3, ?4, ?5, ?6)",
                     params![
                         edge.id.0,
@@ -126,26 +129,27 @@ impl Persist {
                         if let Ok(e) = v.parse::<u64>() {
                             epoch = TopologyEpoch(e);
                         }
-                    }
+                    },
                     "name" => meta.name = v,
                     "created_by" => meta.created_by = Some(v),
                     "created_at" => {
                         meta.created_at = DateTime::parse_from_rfc3339(&v)
                             .ok()
                             .map(|dt| dt.with_timezone(&Utc));
-                    }
+                    },
                     "annotations" => {
                         if let Ok(a) = serde_json::from_str(&v) {
                             meta.annotations = a;
                         }
-                    }
-                    _ => {}
+                    },
+                    _ => {},
                 }
             }
 
             // Load nodes.
             let mut stmt = conn.prepare(
-                "SELECT id, label, locality_tier, capabilities, tags, last_seen FROM topology_nodes",
+                "SELECT id, label, locality_tier, capabilities, tags, last_seen FROM \
+                 topology_nodes",
             )?;
             let nodes: Vec<Node> = stmt
                 .query_map([], |row| {
@@ -233,10 +237,7 @@ impl Persist {
             let new_epoch = current_epoch + 1;
 
             // Update.
-            conn.execute(
-                "DELETE FROM topology_meta WHERE key = 'epoch'",
-                [],
-            )?;
+            conn.execute("DELETE FROM topology_meta WHERE key = 'epoch'", [])?;
             conn.execute(
                 "INSERT INTO topology_meta (key, value) VALUES ('epoch', ?1)",
                 params![new_epoch.to_string()],
@@ -258,8 +259,9 @@ fn i32_to_tier(i: i32) -> Option<LocalityTier> {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
     use fabric_graph::model::{Edge, Node};
+
+    use super::*;
 
     fn test_topology() -> Topology {
         let mut topo = Topology::new();
@@ -335,17 +337,12 @@ mod tests {
         topo.meta.name = "full-meta-test".into();
         topo.meta.created_by = Some("test-agent".into());
         topo.meta.created_at = Some(Utc::now());
-        topo.meta
-            .annotations
-            .insert("env".into(), "staging".into());
+        topo.meta.annotations.insert("env".into(), "staging".into());
         persist.save_topology(&topo).unwrap();
 
         let loaded = persist.load_topology().unwrap().unwrap();
         assert_eq!(loaded.meta.name, "full-meta-test");
-        assert_eq!(
-            loaded.meta.created_by.as_deref(),
-            Some("test-agent")
-        );
+        assert_eq!(loaded.meta.created_by.as_deref(), Some("test-agent"));
         assert!(loaded.meta.created_at.is_some());
         assert_eq!(
             loaded.meta.annotations.get("env").map(|s| s.as_str()),

@@ -8,9 +8,10 @@
 
 #![allow(dead_code)]
 
+use std::collections::HashMap;
+
 use reqwest::Client;
 use serde::{Deserialize, Serialize};
-use std::collections::HashMap;
 use thiserror::Error;
 
 /// Default WorkOS API base URL.
@@ -146,12 +147,18 @@ impl WorkOsProvider {
             .timeout(std::time::Duration::from_secs(30))
             .build()
             .expect("failed to create HTTP client");
-        Self { config, http }
+        Self {
+            config,
+            http,
+        }
     }
 
     /// Create a new WorkOS provider with a custom HTTP client (for testing).
     pub fn with_client(config: WorkOsConfig, http: Client) -> Self {
-        Self { config, http }
+        Self {
+            config,
+            http,
+        }
     }
 
     /// Generate an authorization URL for initiating OAuth login.
@@ -171,7 +178,10 @@ impl WorkOsProvider {
             urlencoding(&scopes),
         );
 
-        AuthorizationRequest { url, state }
+        AuthorizationRequest {
+            url,
+            state,
+        }
     }
 
     /// Generate an authorization URL with specific scopes.
@@ -188,7 +198,10 @@ impl WorkOsProvider {
             urlencoding(&scope_str),
         );
 
-        AuthorizationRequest { url, state }
+        AuthorizationRequest {
+            url,
+            state,
+        }
     }
 
     /// Exchange an authorization code for tokens.
@@ -215,15 +228,10 @@ impl WorkOsProvider {
         if !response.status().is_success() {
             let status = response.status();
             let body = response.text().await.unwrap_or_default();
-            return Err(OAuthError::TokenExchange(format!(
-                "HTTP {status}: {body}"
-            )));
+            return Err(OAuthError::TokenExchange(format!("HTTP {status}: {body}")));
         }
 
-        let token_data: TokenData = response
-            .json()
-            .await
-            .map_err(OAuthError::http)?;
+        let token_data: TokenData = response.json().await.map_err(OAuthError::http)?;
 
         // Fetch user info with the new access token.
         let user = self.get_user(&token_data.access_token).await?;
@@ -261,15 +269,10 @@ impl WorkOsProvider {
         if !response.status().is_success() {
             let status = response.status();
             let body = response.text().await.unwrap_or_default();
-            return Err(OAuthError::TokenRefresh(format!(
-                "HTTP {status}: {body}"
-            )));
+            return Err(OAuthError::TokenRefresh(format!("HTTP {status}: {body}")));
         }
 
-        let token_data: TokenData = response
-            .json()
-            .await
-            .map_err(OAuthError::http)?;
+        let token_data: TokenData = response.json().await.map_err(OAuthError::http)?;
 
         // Fetch user info with the refreshed access token.
         let user = self.get_user(&token_data.access_token).await?;
@@ -298,15 +301,10 @@ impl WorkOsProvider {
         if !response.status().is_success() {
             let status = response.status();
             let body = response.text().await.unwrap_or_default();
-            return Err(OAuthError::UserInfo(format!(
-                "HTTP {status}: {body}"
-            )));
+            return Err(OAuthError::UserInfo(format!("HTTP {status}: {body}")));
         }
 
-        let user: WorkOsUser = response
-            .json()
-            .await
-            .map_err(OAuthError::http)?;
+        let user: WorkOsUser = response.json().await.map_err(OAuthError::http)?;
 
         Ok(user)
     }
@@ -333,15 +331,10 @@ impl WorkOsProvider {
         if !response.status().is_success() {
             let status = response.status();
             let body = response.text().await.unwrap_or_default();
-            return Err(OAuthError::TokenExchange(format!(
-                "HTTP {status}: {body}"
-            )));
+            return Err(OAuthError::TokenExchange(format!("HTTP {status}: {body}")));
         }
 
-        let introspection: TokenIntrospection = response
-            .json()
-            .await
-            .map_err(OAuthError::http)?;
+        let introspection: TokenIntrospection = response.json().await.map_err(OAuthError::http)?;
 
         Ok(introspection)
     }
@@ -398,7 +391,7 @@ fn urlencoding(s: &str) -> String {
         .map(|b| match b {
             b'A'..=b'Z' | b'a'..=b'z' | b'0'..=b'9' | b'-' | b'_' | b'.' | b'~' => {
                 String::from(b as char)
-            }
+            },
             _ => format!("%{b:02X}"),
         })
         .collect()

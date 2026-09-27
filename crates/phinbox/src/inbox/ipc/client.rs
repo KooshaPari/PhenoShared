@@ -4,10 +4,8 @@ use std::path::PathBuf;
 
 use serde_json::{json, Value};
 
-use crate::error::ElicitError;
-use crate::inbox;
-
 use super::{live_socket, monotonic_id, Request, Response};
+use crate::{error::ElicitError, inbox};
 
 /// A small blocking client used by the CLI subcommands. Each call opens a new
 /// socket connection -- the daemon's accept loop is already concurrent and the
@@ -25,17 +23,20 @@ impl Client {
                 format!("ipc socket not found at {}", sock.display()),
             )));
         }
-        Ok(Self { sock })
+        Ok(Self {
+            sock,
+        })
     }
 
     /// Convenience constructor that walks the inbox root + lockfile.
     pub fn connect_default() -> Result<Self, ElicitError> {
         let root = inbox::default_inbox_root();
-        let sock = live_socket(&root)
-            .ok_or_else(|| ElicitError::Io(std::io::Error::new(
+        let sock = live_socket(&root).ok_or_else(|| {
+            ElicitError::Io(std::io::Error::new(
                 std::io::ErrorKind::NotFound,
                 "no live phinbox daemon (no lockfile with ipc_sock)",
-            )))?;
+            ))
+        })?;
         Self::connect_to(sock)
     }
 

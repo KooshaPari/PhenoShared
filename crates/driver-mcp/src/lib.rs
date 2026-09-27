@@ -37,15 +37,14 @@
 //! MCP `initialize` advertises three tools:
 //!
 //! - `substrate.dispatch` — start a new task; returns `{conv_id, status}`.
-//! - `substrate.post_message` — append a user message to an existing
-//!   conversation; returns `{ok, status}`.
-//! - `substrate.dump` — read the full conversation dump; returns the
-//!   raw transcript JSON.
+//! - `substrate.post_message` — append a user message to an existing conversation; returns `{ok,
+//!   status}`.
+//! - `substrate.dump` — read the full conversation dump; returns the raw transcript JSON.
 //!
 //! Resources exposed (read-only):
 //!
-//! - `substrate://capabilities` — JSON of substrate EngineCapabilities
-//!   across all engines (concurrency, mcp_import, subagents, resume).
+//! - `substrate://capabilities` — JSON of substrate EngineCapabilities across all engines
+//!   (concurrency, mcp_import, subagents, resume).
 //!
 //! # Error semantics
 //!
@@ -73,12 +72,15 @@
 //! forwards the RouterDispatch envelope as a JSON argv payload and
 //! reads the structured result from stdout.
 
+use std::sync::Arc;
+
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
-use std::sync::Arc;
-use substrate_core::domain::{EngineCapabilities, Mailbox, RoutingDecision, Task};
-use substrate_core::error::SubstrateError;
-use substrate_core::ports::EnginePort;
+use substrate_core::{
+    domain::{EngineCapabilities, Mailbox, RoutingDecision, Task},
+    error::SubstrateError,
+    ports::EnginePort,
+};
 use uuid::Uuid;
 
 /// MCP protocol version advertised by this driver.
@@ -384,7 +386,7 @@ impl DriverMcp {
                         }],
                     }),
                 }
-            }
+            },
             other => self.error_response(
                 id,
                 jsonrpc::INVALID_PARAMS,
@@ -446,7 +448,7 @@ impl DriverMcp {
         match futures_block_on(self.engine.resume(&params.conv_id, &params.prompt)) {
             Ok(_) => {
                 ToolResult::ok(serde_json::json!({"ok": true, "status": "stable"}).to_string())
-            }
+            },
             Err(e) => ToolResult::err(format!("resume failed: {}", e)),
         }
     }
@@ -619,8 +621,9 @@ fn _ensure_use(_e: &SubstrateError, _u: &Uuid) {}
 
 #[cfg(test)]
 mod tests {
-    use super::*;
     use serial_test::serial;
+
+    use super::*;
 
     #[test]
     #[serial]

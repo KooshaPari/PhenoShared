@@ -6,8 +6,7 @@
 //! Adapters query this to validate that all required shader variants are loaded
 //! before the pass runs (otherwise the pass would no-op or assert at runtime).
 
-use std::collections::HashMap;
-use std::sync::Arc;
+use std::{collections::HashMap, sync::Arc};
 
 /// Hexagonal port: asks the platform "is this shader available right now?".
 ///

@@ -1,11 +1,15 @@
 //! `codex cloud` CLI invocation and output parsing.
 
-use std::collections::HashMap;
-use std::sync::{Arc, Mutex};
+use std::{
+    collections::HashMap,
+    sync::{Arc, Mutex},
+};
 
 use async_trait::async_trait;
-use substrate_core::cloud_dispatch_port::{CloudResult, CloudTaskHandle, CloudTaskStatus};
-use substrate_core::error::{Result, SubstrateError};
+use substrate_core::{
+    cloud_dispatch_port::{CloudResult, CloudTaskHandle, CloudTaskStatus},
+    error::{Result, SubstrateError},
+};
 use tokio::process::Command;
 
 /// Environment variable for the Codex Cloud environment id (`codex cloud exec --env`).
@@ -93,7 +97,10 @@ impl CodexCloudDispatch {
         let env_id = std::env::var(ENV_CLOUD_ENV_ID).map_err(|e| {
             SubstrateError::CloudDispatch(format!("{ENV_CLOUD_ENV_ID} not set: {e}"))
         })?;
-        Ok(Self::new(CodexCloudConfig { bin, env_id }))
+        Ok(Self::new(CodexCloudConfig {
+            bin,
+            env_id,
+        }))
     }
 
     /// Build with explicit config and the default tokio subprocess runner.
@@ -159,7 +166,9 @@ impl CodexCloudDispatch {
             },
         );
 
-        Ok(CloudTaskHandle { id: handle_id })
+        Ok(CloudTaskHandle {
+            id: handle_id,
+        })
     }
 
     /// Poll task status via `codex cloud status`.
@@ -220,17 +229,19 @@ impl CodexCloudDispatch {
             });
 
         match status {
-            CloudTaskStatus::Succeeded => {}
-            CloudTaskStatus::Failed { message } => {
+            CloudTaskStatus::Succeeded => {},
+            CloudTaskStatus::Failed {
+                message,
+            } => {
                 return Err(SubstrateError::CloudDispatch(
                     message.unwrap_or_else(|| "codex cloud task failed".into()),
                 ));
-            }
+            },
             _ => {
                 return Err(SubstrateError::CloudDispatch(
                     "codex cloud task not ready for harvest".into(),
                 ));
-            }
+            },
         }
 
         let diff_args = vec!["cloud".into(), "diff".into(), meta.task_id.clone()];

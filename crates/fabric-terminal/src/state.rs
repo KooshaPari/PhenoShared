@@ -3,8 +3,9 @@
 //! Maintains the last known state of each pane and detects changes.
 //! This is what enables efficient diff-based synchronization.
 
-use crate::PaneContent;
 use std::collections::HashMap;
+
+use crate::PaneContent;
 
 /// Tracks screen state across sync cycles.
 pub struct SyncState {
@@ -38,7 +39,7 @@ impl SyncState {
         changed
     }
 
-#[allow(dead_code)]
+    #[allow(dead_code)]
     pub fn sequence(&self) -> u64 {
         self.sequence
     }

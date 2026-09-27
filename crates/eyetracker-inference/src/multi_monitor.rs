@@ -4,11 +4,12 @@
 //! On focus change to a new monitor, the corresponding calibration is loaded.
 //! If no calibration exists for the active display, the user is warned.
 
-use crate::calibration::CalibrationResult;
+use std::{collections::HashMap, path::PathBuf};
+
 use anyhow::Result;
 use serde::{Deserialize, Serialize};
-use std::collections::HashMap;
-use std::path::PathBuf;
+
+use crate::calibration::CalibrationResult;
 
 /// Per-display metadata for multi-monitor calibration
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq, Hash)]
@@ -149,9 +150,10 @@ pub fn detect_active_display() -> Result<DisplayId> {
 
 #[cfg(test)]
 mod tests {
+    use std::time::Instant;
+
     use super::*;
     use crate::calibration::{CalibrationPoint, CalibrationSample};
-    use std::time::Instant;
 
     fn dummy_calibration() -> CalibrationResult {
         CalibrationResult {

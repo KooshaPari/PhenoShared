@@ -11,7 +11,11 @@
 
 use std::time::Duration;
 
-fn headers_mut_insert(h: &mut reqwest::header::HeaderMap, name: reqwest::header::HeaderName, val: reqwest::header::HeaderValue) {
+fn headers_mut_insert(
+    h: &mut reqwest::header::HeaderMap,
+    name: reqwest::header::HeaderName,
+    val: reqwest::header::HeaderValue,
+) {
     h.insert(name, val);
 }
 
@@ -53,20 +57,32 @@ pub async fn deliver_all(
     reports
 }
 
-async fn deliver_one(http: &reqwest::Client, target: &WebhookTarget, payload: &AlertPayload) -> DeliveryReport {
+async fn deliver_one(
+    http: &reqwest::Client,
+    target: &WebhookTarget,
+    payload: &AlertPayload,
+) -> DeliveryReport {
     let mut last_err = None;
     let mut last_status = None;
     for attempt in 0..2u8 {
         let body = match serde_json::to_vec(payload) {
             Ok(b) => b,
-            Err(e) => { last_err = Some(format!("serialize: {e}")); continue; }
+            Err(e) => {
+                last_err = Some(format!("serialize: {e}"));
+                continue;
+            },
         };
-        let mut req = match http.post(&target.url)
+        let mut req = match http
+            .post(&target.url)
             .header(reqwest::header::CONTENT_TYPE, "application/json")
             .body(body.clone())
-            .build() {
+            .build()
+        {
             Ok(r) => r,
-            Err(e) => { last_err = Some(format!("build: {e}")); continue; }
+            Err(e) => {
+                last_err = Some(format!("build: {e}"));
+                continue;
+            },
         };
         // apply user-supplied headers
         {
@@ -89,29 +105,42 @@ async fn deliver_one(http: &reqwest::Client, target: &WebhookTarget, payload: &A
                     Err(e) => {
                         tracing::warn!(error = %e, "bearer_token_file read failed; skipping delivery");
                         None
-                    }
+                    },
                 }
             } else {
                 target.bearer_token.clone()
             };
             if let Some(token) = resolved {
-                if let Ok(val) = reqwest::header::HeaderValue::from_str(&format!("Bearer {token}")) {
-                    req.headers_mut().insert(reqwest::header::AUTHORIZATION, val);
+                if let Ok(val) = reqwest::header::HeaderValue::from_str(&format!("Bearer {token}"))
+                {
+                    req.headers_mut()
+                        .insert(reqwest::header::AUTHORIZATION, val);
                 }
             } else {
-                return DeliveryReport { url: target.url.clone(), success: false, status: None, error: Some("bearer_token_file read failed".into()) };
+                return DeliveryReport {
+                    url: target.url.clone(),
+                    success: false,
+                    status: None,
+                    error: Some("bearer_token_file read failed".into()),
+                };
             }
         }
         // SigV4 signing (if AWS config present).
         if target.aws_region.is_some() && target.aws_service.is_some() {
             let creds = crate::argis_monitor::aws_sigv4::AwsCreds {
-                access_key: target.aws_access_key_id.clone()
+                access_key: target
+                    .aws_access_key_id
+                    .clone()
                     .or_else(|| std::env::var("AWS_ACCESS_KEY_ID").ok())
                     .unwrap_or_default(),
-                secret_key: target.aws_secret_access_key.clone()
+                secret_key: target
+                    .aws_secret_access_key
+                    .clone()
                     .or_else(|| std::env::var("AWS_SECRET_ACCESS_KEY").ok())
                     .unwrap_or_default(),
-                session_token: target.aws_session_token.clone()
+                session_token: target
+                    .aws_session_token
+                    .clone()
                     .or_else(|| std::env::var("AWS_SESSION_TOKEN").ok()),
             };
             match crate::argis_monitor::aws_sigv4::sign_request_headers(
@@ -131,11 +160,11 @@ async fn deliver_one(http: &reqwest::Client, target: &WebhookTarget, payload: &A
                             }
                         }
                     }
-                }
+                },
                 Err(e) => {
                     last_err = Some(format!("aws sign: {e}"));
                     continue;
-                }
+                },
             }
         }
         match http.execute(req).await {
@@ -144,19 +173,31 @@ async fn deliver_one(http: &reqwest::Client, target: &WebhookTarget, payload: &A
                 last_status = Some(s);
                 if resp.status().is_success() {
                     info!(url = %target.url, attempt, status = s, "webhook delivered");
-                    return DeliveryReport { url: target.url.clone(), success: true, status: Some(s), error: None };
+                    return DeliveryReport {
+                        url: target.url.clone(),
+                        success: true,
+                        status: Some(s),
+                        error: None,
+                    };
                 } else {
                     last_err = Some(format!("http {s}"));
                 }
-            }
-            Err(e) => { last_err = Some(e.to_string()); }
+            },
+            Err(e) => {
+                last_err = Some(e.to_string());
+            },
         }
         if attempt == 0 {
             tokio::time::sleep(Duration::from_millis(250)).await;
         }
     }
     error!(url = %target.url, error = ?last_err, status = ?last_status, "webhook delivery failed");
-    DeliveryReport { url: target.url.clone(), success: false, status: last_status, error: last_err }
+    DeliveryReport {
+        url: target.url.clone(),
+        success: false,
+        status: last_status,
+        error: last_err,
+    }
 }
 
 #[cfg(test)]
@@ -165,7 +206,12 @@ mod tests {
 
     #[test]
     fn delivery_report_serializes_to_json() {
-        let r = DeliveryReport { url: "http://example.com".into(), success: true, status: Some(200), error: None };
+        let r = DeliveryReport {
+            url: "http://example.com".into(),
+            success: true,
+            status: Some(200),
+            error: None,
+        };
         let s = serde_json::to_string(&r).unwrap();
         assert!(s.contains("true"), "expected true in: {s}");
         assert!(!s.contains("false"), "expected no false in: {s}");

@@ -33,17 +33,25 @@ impl AlertPayload {
             severity: Severity::from_burn(burn, threshold),
             fired_at_unix: ts,
             message: format!(
-                "argis-monitor: target={target} slo={slo} burn={burn:.2}x threshold={threshold:.2}x ({} severity)",
+                "argis-monitor: target={target} slo={slo} burn={burn:.2}x \
+                 threshold={threshold:.2}x ({} severity)",
                 match Severity::from_burn(burn, threshold) {
                     Severity::Critical => "CRITICAL",
-                    Severity::Warning  => "WARNING",
-                    Severity::Ok       => "ok",
+                    Severity::Warning => "WARNING",
+                    Severity::Ok => "ok",
                 }
             ),
         }
     }
 
-    pub fn resolved(rule: &str, target: &str, slo: &str, burn: f64, resolve_threshold: f64, ts: u64) -> Self {
+    pub fn resolved(
+        rule: &str,
+        target: &str,
+        slo: &str,
+        burn: f64,
+        resolve_threshold: f64,
+        ts: u64,
+    ) -> Self {
         Self {
             rule: rule.into(),
             target: target.into(),
@@ -52,7 +60,10 @@ impl AlertPayload {
             threshold: resolve_threshold,
             severity: Severity::Ok,
             fired_at_unix: ts,
-            message: format!("argis-monitor: RESOLVED target={target} slo={slo} burn={burn:.2}x <= {resolve_threshold:.2}x"),
+            message: format!(
+                "argis-monitor: RESOLVED target={target} slo={slo} burn={burn:.2}x <= \
+                 {resolve_threshold:.2}x"
+            ),
         }
     }
 
@@ -80,12 +91,17 @@ impl AlertPayload {
             severity,
             fired_at_unix: ts,
             message: format!(
-                "argis-monitor: META-ALERT {name} target-count={count:.0} threshold={threshold:.0}{} ({})",
-                if reason_str.is_empty() { String::new() } else { format!(" reason={reason_str}") },
+                "argis-monitor: META-ALERT {name} target-count={count:.0} \
+                 threshold={threshold:.0}{} ({})",
+                if reason_str.is_empty() {
+                    String::new()
+                } else {
+                    format!(" reason={reason_str}")
+                },
                 match severity {
                     Severity::Critical => "CRITICAL",
-                    Severity::Warning  => "WARNING",
-                    Severity::Ok       => "ok",
+                    Severity::Warning => "WARNING",
+                    Severity::Ok => "ok",
                 }
             ),
         }

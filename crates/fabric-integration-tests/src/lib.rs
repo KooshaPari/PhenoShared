@@ -1,20 +1,24 @@
 //! Shared test helpers for Phenotype Fabric integration tests.
 
+use std::sync::Arc;
+
+use bytes::BytesMut;
 use chrono::Utc;
-use fabric_capability::descriptor::{
-    AudioCapabilities, Capabilities, ComputeCapabilities, DisplayCapabilities, DisplayInfo,
-    InputCapabilities, StorageCapabilities, StorageDevice,
+use fabric_capability::{
+    descriptor::{
+        AudioCapabilities, Capabilities, ComputeCapabilities, DisplayCapabilities, DisplayInfo,
+        InputCapabilities, StorageCapabilities, StorageDevice,
+    },
+    LocalityTier,
 };
-use fabric_capability::LocalityTier;
-use fabric_daemon::config::{DatabaseConfig, DaemonConfig};
-use fabric_daemon::coordinator::Coordinator;
-use fabric_frame_transport::transport::encode_wire;
-use fabric_frame_transport::{FrameHeader, MessageType};
+use fabric_daemon::{
+    config::{DaemonConfig, DatabaseConfig},
+    coordinator::Coordinator,
+};
+use fabric_frame_transport::{transport::encode_wire, FrameHeader, MessageType};
 use fabric_graph::model::{
     Edge, EdgeId, Intent, IntentId, IntentRequirements, Node, NodeId, Topology,
 };
-use std::sync::Arc;
-use bytes::BytesMut;
 use uuid::Uuid;
 
 /// Create a temporary database-backed Coordinator for testing.
@@ -36,10 +40,7 @@ pub fn make_coordinator() -> (Arc<Coordinator>, tempfile::TempDir) {
 pub fn build_4node_topology() -> Topology {
     let mut topo = Topology::new();
     topo.add_node(Node::new(NodeId::new("n1"), LocalityTier::L1SameNuma));
-    topo.add_node(Node::new(
-        NodeId::new("n2"),
-        LocalityTier::L2CrossNumaShm,
-    ));
+    topo.add_node(Node::new(NodeId::new("n2"), LocalityTier::L2CrossNumaShm));
     topo.add_node(Node::new(NodeId::new("n3"), LocalityTier::L6Lan));
     topo.add_node(Node::new(NodeId::new("n4"), LocalityTier::L7Wan));
 
@@ -73,9 +74,9 @@ pub fn make_rgba_payload(width: u32, height: u32) -> Vec<u8> {
     let pixel_count = (width * height) as usize;
     let mut data = Vec::with_capacity(pixel_count * 4);
     for i in 0..pixel_count {
-        data.push(((i * 4) & 0xFF) as u8);
-        data.push(((i * 4 + 1) & 0xFF) as u8);
-        data.push(((i * 4 + 2) & 0xFF) as u8);
+        data.push(((i * 4) & 0xff) as u8);
+        data.push(((i * 4 + 1) & 0xff) as u8);
+        data.push(((i * 4 + 2) & 0xff) as u8);
         data.push(255u8);
     }
     data

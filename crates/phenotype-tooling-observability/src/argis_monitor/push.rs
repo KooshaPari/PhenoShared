@@ -6,18 +6,16 @@
 //!
 //! Use cases:
 //!   - Short-lived batch jobs that need to expose metrics
-//!   - Service-discovery-free "push" topologies (the gateway pulls from
-//!     the pushgateway instead of scraping each instance)
+//!   - Service-discovery-free "push" topologies (the gateway pulls from the pushgateway instead of
+//!     scraping each instance)
 //!   - Forwarding to a downstream TSDB when direct scraping isn't possible
 //!
 //! The push is best-effort: failures are logged with `warn!` and the task
 //! continues. Backoff is the standard retry pattern (1 retry after 5s).
 
-use std::sync::Arc;
-use std::time::Duration;
+use std::{sync::Arc, time::Duration};
 
-use prometheus_client::encoding::text::encode;
-use prometheus_client::registry::Registry;
+use prometheus_client::{encoding::text::encode, registry::Registry};
 use thiserror::Error;
 use tracing::{error, info, warn};
 
@@ -50,7 +48,9 @@ pub async fn push_to(url: &str, registry: &Registry) -> Result<u16, PushError> {
     if resp.status().is_success() {
         Ok(status)
     } else {
-        Err(PushError::NonSuccess { status })
+        Err(PushError::NonSuccess {
+            status,
+        })
     }
 }
 
@@ -83,9 +83,9 @@ pub async fn run_pusher(
 
 #[cfg(test)]
 mod tests {
+    use prometheus_client::{metrics::counter::Counter, registry::Registry};
+
     use super::*;
-    use prometheus_client::metrics::counter::Counter;
-    use prometheus_client::registry::Registry;
 
     #[test]
     fn push_url_encodes_job_and_instance() {
@@ -98,7 +98,10 @@ mod tests {
             urlencoding::encode(job),
             urlencoding::encode(inst),
         );
-        assert_eq!(push_url, "http://pushgateway:9091/metrics/job/argis%20monitor/instance/host%2F01");
+        assert_eq!(
+            push_url,
+            "http://pushgateway:9091/metrics/job/argis%20monitor/instance/host%2F01"
+        );
     }
 
     #[tokio::test]

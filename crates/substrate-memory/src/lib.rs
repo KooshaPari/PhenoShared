@@ -3,8 +3,7 @@
 
 //! Two-tier agent memory: bounded ring buffer + persistent SQLite history.
 
-use std::collections::VecDeque;
-use std::sync::Mutex;
+use std::{collections::VecDeque, sync::Mutex};
 
 use chrono::Utc;
 use store_sqlite::SqliteMemoryStore;
@@ -140,9 +139,12 @@ impl MemoryPort for TwoTierMemory {
 
 #[cfg(test)]
 mod tests {
+    use std::{
+        sync::{Arc, Barrier},
+        thread,
+    };
+
     use super::*;
-    use std::sync::{Arc, Barrier};
-    use std::thread;
 
     #[test]
     fn ring_evicts_oldest_at_capacity() {

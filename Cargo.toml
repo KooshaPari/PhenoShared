@@ -79,13 +79,26 @@ members = [
     "crates/phenotype-crypto",
     "crates/phenotype-observability",
     "crates/phenotype-policy-engine",
+    "crates/phinbox",
+    # --- eyetracker crates (absorbed 2026-08-13 from KooshaPari/eyetracker per docket O18) ---
+    "crates/eyetracker-domain",
+    "crates/eyetracker-math",
+    "crates/eyetracker-core",
+    "crates/eyetracker-ffi",
+    "crates/eyetracker-camera",
+    "crates/eyetracker-inference",
+    "crates/eyetracker-cli",
+    # --- pm-core crates (restored 2026-09-20 from zz-archive/git-bundles-20260910/phenotype-archive.bundle @ refs/archive/phenotype-pm-core-2026-08-09/heads/master d3277c40; content strictly supersedes the partial traceability-core copy under crates/agile-plus/) ---
+    "crates/traceability-core",
+    "crates/traceability-decorators",
+    "crates/trace-gate",
 ]
 [workspace.package]
 version = "0.3.10"
 edition = "2021"
 authors = ["<REDACTED> <<REDACTED>@phenotype.space>"]
 license = "MIT OR Apache-2.0"
-repository = "https://github.com/KooshaPari/substrate"
+repository = "https://github.com/KooshaPari/PhenoShared"
 rust-version = "1.80"
 
 [workspace.dependencies]
@@ -99,6 +112,7 @@ store-sqlite = { version = "0.3.8", path = "crates/store-sqlite" }
 engine-forge = { version = "0.3.8", path = "crates/engine-forge" }
 forge_daemon = { version = "0.2.0", path = "crates/forge_daemon" }
 serde = { version = "1.0", features = ["derive"] }
+indexmap = { version = "2", features = ["serde"] }
 serde_json = "1.0"
 thiserror = "2.0"
 uuid = { version = "1.11", features = ["v4", "serde"] }
@@ -150,6 +164,7 @@ criterion = { version = "0.5", features = ["html_reports"] }
 # so all consumers across the pheno-* fleet see the same OTLP wire-format
 # export surface. See https://github.com/KooshaPari/PhenoObservability/releases/tag/v0.1.0
 pheno-otel = { path = "crates/argis-extensions/pheno-otel", version = "0.1.0" }
+pheno-tracing = { path = "crates/pheno-tracing", version = "0.4.0" }
 
 # --- PhenoFabric dependencies (absorbed 2026-09-16) ---
 blake3 = "1.5"

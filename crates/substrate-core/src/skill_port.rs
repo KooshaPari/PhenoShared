@@ -78,7 +78,7 @@ pub fn validate_json_schema(value: &Value, schema: &Value) -> Result<()> {
                 return Err(SubstrateError::SchemaValidation(format!(
                     "unsupported schema type: {other}"
                 )));
-            }
+            },
         };
         if !matches {
             return Err(SubstrateError::SchemaValidation(format!(

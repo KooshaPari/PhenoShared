@@ -1,5 +1,7 @@
-use crate::surface_ops::new_lease;
-use crate::surface::{SurfaceLease, SurfaceSpec, SurfaceSpecError};
+use crate::{
+    surface::{SurfaceLease, SurfaceSpec, SurfaceSpecError},
+    surface_ops::new_lease,
+};
 
 // ---------------------------------------------------------------------------
 // PardonError
@@ -49,8 +51,8 @@ impl std::error::Error for PardonError {}
 ///
 /// # Errors
 ///
-/// - `PardonError::TokenRejected` — `operator_token` doesn't match the
-///   known prefix. Production would verify an Ed25519 signature.
+/// - `PardonError::TokenRejected` — `operator_token` doesn't match the known prefix. Production
+///   would verify an Ed25519 signature.
 ///
 /// - `PardonError::SpecInvalid` — `spec.validate()` returned an error.
 ///
@@ -123,7 +125,7 @@ mod tests {
         };
         let result = pardon(spec, "evil-token");
         match result {
-            Err(PardonError::TokenRejected) => {}
+            Err(PardonError::TokenRejected) => {},
             other => panic!("expected TokenRejected, got {other:?}"),
         }
     }

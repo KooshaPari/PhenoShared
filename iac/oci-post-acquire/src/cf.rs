@@ -1,10 +1,9 @@
 //! Cloudflare DNS upsert — creates or updates an A record.
 
 use anyhow::{Context, Result, anyhow};
+use oci_helpers::expand_home;
 use serde::{Deserialize, Serialize};
 use tracing::info;
-
-use oci_helpers::expand_home;
 
 #[derive(Debug, Serialize)]
 struct ARecord<'a> {

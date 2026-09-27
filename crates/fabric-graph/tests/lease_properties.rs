@@ -3,8 +3,10 @@
 //! Uses `proptest` to verify the FSM transition table invariants that
 //! must hold for any sequence of valid transitions.
 
-use fabric_graph::lease_fsm::{can_transition, next_state, LeaseTransitionError};
-use fabric_graph::surface::LeaseState;
+use fabric_graph::{
+    lease_fsm::{can_transition, next_state, LeaseTransitionError},
+    surface::LeaseState,
+};
 use proptest::prelude::*;
 
 // ---------------------------------------------------------------------------

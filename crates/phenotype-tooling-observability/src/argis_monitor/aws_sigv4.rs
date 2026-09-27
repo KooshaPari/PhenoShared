@@ -10,8 +10,10 @@
 //! to be added to the outbound request. Used by `webhook::deliver_one`
 //! when the `WebhookTarget` config carries AWS credentials.
 
-use std::collections::HashMap;
-use std::time::{SystemTime, UNIX_EPOCH};
+use std::{
+    collections::HashMap,
+    time::{SystemTime, UNIX_EPOCH},
+};
 
 use chrono::{DateTime, Utc};
 use hmac::{Hmac, Mac};
@@ -54,7 +56,10 @@ pub fn sign_request_headers(
     service: &str,
     creds: &AwsCreds,
 ) -> Result<HashMap<String, String>, SignError> {
-    let now = SystemTime::now().duration_since(UNIX_EPOCH).unwrap_or_default().as_secs();
+    let now = SystemTime::now()
+        .duration_since(UNIX_EPOCH)
+        .unwrap_or_default()
+        .as_secs();
     let dt = DateTime::<Utc>::from_timestamp(now as i64, 0)
         .ok_or_else(|| SignError::BadDate(format!("{now}")))?;
     let amz_date = dt.format("%Y%m%dT%H%M%SZ").to_string();
@@ -132,7 +137,9 @@ pub fn sign_request_headers(
 }
 
 fn split_url(url: &str) -> Result<(String, String), SignError> {
-    let scheme_end = url.find("://").ok_or_else(|| SignError::InvalidUrl(url.to_string()))?;
+    let scheme_end = url
+        .find("://")
+        .ok_or_else(|| SignError::InvalidUrl(url.to_string()))?;
     let after_scheme = &url[scheme_end + 3..];
     let slash = after_scheme.find('/').unwrap_or(after_scheme.len());
     let host = after_scheme[..slash].to_string();
@@ -170,7 +177,8 @@ mod tests {
 
     #[test]
     fn split_url_handles_path_and_query() {
-        let (host, path) = split_url("https://sns.us-east-1.amazonaws.com:443/topics/test?param=1").unwrap();
+        let (host, path) =
+            split_url("https://sns.us-east-1.amazonaws.com:443/topics/test?param=1").unwrap();
         assert_eq!(host, "sns.us-east-1.amazonaws.com:443");
         assert_eq!(path, "/topics/test?param=1".to_string());
     }
@@ -202,14 +210,36 @@ mod tests {
             "us-east-1",
             "sns",
             &creds,
-        ).unwrap();
-        assert!(headers.contains_key("authorization"), "missing authorization: {:?}", headers);
-        assert!(headers.contains_key("x-amz-date"), "missing x-amz-date: {:?}", headers);
-        assert!(headers.contains_key("x-amz-content-sha256"), "missing sha256: {:?}", headers);
+        )
+        .unwrap();
+        assert!(
+            headers.contains_key("authorization"),
+            "missing authorization: {:?}",
+            headers
+        );
+        assert!(
+            headers.contains_key("x-amz-date"),
+            "missing x-amz-date: {:?}",
+            headers
+        );
+        assert!(
+            headers.contains_key("x-amz-content-sha256"),
+            "missing sha256: {:?}",
+            headers
+        );
         let auth = &headers["authorization"];
-        assert!(auth.contains("AWS4-HMAC-SHA256"), "Authorization should use SigV4 scheme: {auth}");
-        assert!(auth.contains("Credential=AKIDEXAMPLE"), "Authorization must contain the access key: {auth}");
-        assert!(auth.contains("us-east-1/sns/aws4_request"), "Authorization must contain the region+service scope: {auth}");
+        assert!(
+            auth.contains("AWS4-HMAC-SHA256"),
+            "Authorization should use SigV4 scheme: {auth}"
+        );
+        assert!(
+            auth.contains("Credential=AKIDEXAMPLE"),
+            "Authorization must contain the access key: {auth}"
+        );
+        assert!(
+            auth.contains("us-east-1/sns/aws4_request"),
+            "Authorization must contain the region+service scope: {auth}"
+        );
         // Body "Hello" -> known SHA256.
         let expected_body_hash = "185f8db32271fe25f561a6fc938b2e264306ec304eda518007d1764826381969";
         assert_eq!(headers["x-amz-content-sha256"], expected_body_hash);
@@ -229,7 +259,8 @@ mod tests {
             "us-east-1",
             "sts",
             &creds,
-        ).unwrap();
+        )
+        .unwrap();
         assert!(headers.contains_key("x-amz-security-token"));
         assert_eq!(headers["x-amz-security-token"], "session-token-123");
     }
@@ -252,7 +283,8 @@ mod tests {
             "us-east-1",
             "service",
             &creds,
-        ).unwrap();
+        )
+        .unwrap();
         let auth = &headers["authorization"];
         // Signature is hex of HMAC-SHA256, exactly 64 chars.
         let sig_start = auth.rfind("Signature=").unwrap() + "Signature=".len();

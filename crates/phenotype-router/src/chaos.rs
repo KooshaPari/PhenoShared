@@ -10,13 +10,11 @@
 //! categories below. The `tests/chaos_matrix.rs` integration test wires
 //! each plugin through every fault and asserts:
 //!
-//! 1. The decision is *valid* (`Allow` or `Deny`; never a panic or a
-//!    half-formed `Response`).
-//! 2. The decision is *stable* across repeated invocations under the same
-//!    fault (chaos is a *category* of behaviour, not a single outcome).
-//! 3. The decision is *traceable* — at least one
-//!    `phenotype.router.plugin.chaos` attribute is present on the
-//!    `Response.trace` map.
+//! 1. The decision is *valid* (`Allow` or `Deny`; never a panic or a half-formed `Response`).
+//! 2. The decision is *stable* across repeated invocations under the same fault (chaos is a
+//!    *category* of behaviour, not a single outcome).
+//! 3. The decision is *traceable* — at least one `phenotype.router.plugin.chaos` attribute is
+//!    present on the `Response.trace` map.
 
 use std::collections::BTreeMap;
 
@@ -119,7 +117,9 @@ impl Default for ChaosMatrix {
             ChaosKind::Overload,
             ChaosScenario::always(ChaosKind::Overload),
         );
-        Self { scenarios: m }
+        Self {
+            scenarios: m,
+        }
     }
 }
 

@@ -108,11 +108,11 @@ impl Calibrator {
                         self.accuracy
                     )))
                 }
-            }
+            },
             Err(e) => {
                 self.state = CalibrationState::Failed;
                 Err(EyetrackerError::CalibrationFailed(e))
-            }
+            },
         }
     }
 

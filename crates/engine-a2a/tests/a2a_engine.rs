@@ -1,9 +1,11 @@
-use std::net::SocketAddr;
-use std::sync::{
-    atomic::{AtomicUsize, Ordering},
-    Arc,
+use std::{
+    net::SocketAddr,
+    sync::{
+        atomic::{AtomicUsize, Ordering},
+        Arc,
+    },
+    time::Duration,
 };
-use std::time::Duration;
 
 use axum::{
     extract::{Path, State},
@@ -13,8 +15,10 @@ use axum::{
 };
 use engine_a2a::A2AEngine;
 use engine_spec::TaskSpec;
-use substrate_core::domain::{ConversationDump, Task, TaskState};
-use substrate_core::ports::EnginePort;
+use substrate_core::{
+    domain::{ConversationDump, Task, TaskState},
+    ports::EnginePort,
+};
 use tokio::net::TcpListener;
 
 #[test]

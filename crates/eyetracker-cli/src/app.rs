@@ -4,6 +4,15 @@
 //! classification) with the drift monitor, multi-monitor calibration store,
 //! and privacy manager. Surfaces all state to the TUI dashboard.
 
+use std::{
+    io::Stdout,
+    sync::{
+        atomic::{AtomicBool, Ordering},
+        mpsc,
+    },
+    time::Instant,
+};
+
 use anyhow::Result;
 use eyetracker_inference::{
     accessibility::{AccessibilityAction, AccessibilityManager},
@@ -14,13 +23,8 @@ use eyetracker_inference::{
     PipelineConfig, TrackingPipeline, TrackingResult,
 };
 use ratatui::Terminal;
-use std::io::Stdout;
-use std::sync::atomic::{AtomicBool, Ordering};
-use std::sync::mpsc;
-use std::time::Instant;
 
-use crate::mouse;
-use crate::ui;
+use crate::{mouse, ui};
 
 /// Shared state surfaced to the TUI
 struct AppState {
@@ -80,7 +84,7 @@ impl AppState {
                     DriftSeverity::None => "OK",
                 };
                 (label.to_string(), format!("{:.2}°", ev.drift_degrees))
-            }
+            },
             _ => ("OK".to_string(), "—".to_string()),
         }
     }
@@ -91,7 +95,7 @@ impl AppState {
         match &self.last_recalibration_event {
             Some(ev) => {
                 !self.drift_monitor.is_dismissed() && matches!(ev.severity, DriftSeverity::Critical)
-            }
+            },
             None => false,
         }
     }
@@ -120,7 +124,7 @@ impl AppState {
                     n,
                     if n == 1 { "" } else { "s" }
                 )
-            }
+            },
         }
     }
 
@@ -201,7 +205,7 @@ pub fn run_tui(
             Err(e) => {
                 tracing::error!("Failed to create pipeline in worker: {}", e);
                 return;
-            }
+            },
         };
         if let Err(e) = local_pipeline.start() {
             tracing::error!("Failed to start pipeline in worker: {}", e);
@@ -217,10 +221,10 @@ pub fn run_tui(
                     if tx.send(result).is_err() {
                         break;
                     }
-                }
+                },
                 Err(e) => {
                     tracing::warn!("Frame processing error: {}", e);
-                }
+                },
             }
         }
         let _ = local_pipeline.stop();
@@ -255,9 +259,15 @@ pub fn run_tui(
                     .events
                     .iter()
                     .map(|e| match e {
-                        GazeEvent::FixationStart { .. } => "F+".to_string(),
-                        GazeEvent::FixationEnd { .. } => "F-".to_string(),
-                        GazeEvent::Saccade { .. } => "S".to_string(),
+                        GazeEvent::FixationStart {
+                            ..
+                        } => "F+".to_string(),
+                        GazeEvent::FixationEnd {
+                            ..
+                        } => "F-".to_string(),
+                        GazeEvent::Saccade {
+                            ..
+                        } => "S".to_string(),
                     })
                     .collect::<Vec<_>>()
                     .join(",")
@@ -406,7 +416,8 @@ pub fn run_csv_dump(
 
     // CSV header (extra columns for the accessibility action + dispatch target)
     println!(
-        "timestamp_ms,frame,processing_ms,gaze_x,gaze_y,gaze_z,confidence,face_detected,accessibility_action,screen_x,screen_y"
+        "timestamp_ms,frame,processing_ms,gaze_x,gaze_y,gaze_z,confidence,face_detected,\
+         accessibility_action,screen_x,screen_y"
     );
 
     let state = std::sync::Arc::new(std::sync::Mutex::new(AppState::new(dwell_duration)));
@@ -472,10 +483,10 @@ pub fn run_csv_dump(
                     sx,
                     sy,
                 );
-            }
+            },
             Err(e) => {
                 tracing::warn!("Frame error: {}", e);
-            }
+            },
         }
     }
 

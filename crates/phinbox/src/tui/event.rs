@@ -1,28 +1,31 @@
 //! TUI event handling and terminal mode management.
 
-use std::io::{stdout, Write};
-use std::path::Path;
-use std::time::{Duration, Instant};
-
-use crossterm::event::{
-    self, DisableMouseCapture, EnableMouseCapture, Event, KeyCode, KeyEvent, KeyEventKind,
-    KeyModifiers,
+use std::{
+    io::{stdout, Write},
+    path::Path,
+    time::{Duration, Instant},
 };
-use crossterm::execute;
-use crossterm::terminal::{
-    disable_raw_mode, enable_raw_mode, EnterAlternateScreen, LeaveAlternateScreen,
-};
-use ratatui::backend::CrosstermBackend;
-use ratatui::Terminal;
 
+use crossterm::{
+    event::{
+        self, DisableMouseCapture, EnableMouseCapture, Event, KeyCode, KeyEvent, KeyEventKind,
+        KeyModifiers,
+    },
+    execute,
+    terminal::{disable_raw_mode, enable_raw_mode, EnterAlternateScreen, LeaveAlternateScreen},
+};
+use ratatui::{backend::CrosstermBackend, Terminal};
+
+use super::state::{snapshot_inbox, TuiOutcome, ViewerState, POLL_INTERVAL};
 use crate::inbox::change::InboxWatcher;
 
-use super::state::{snapshot_inbox, ViewerState, TuiOutcome, POLL_INTERVAL};
-
-/// Try to set the terminal into raw mode. On failure (e.g. CI without TTY),
-/// we return `Ok(false)` so the caller can render a plain-text fallback.
+/// Try to set the terminal into raw mode. On failure (e.g. CI without TTY,
+/// `TERM=dumb`, piped stdin), we return `Ok(false)` so the caller can render
+/// a plain-text fallback instead of crashing.
 pub(crate) fn enter_raw_mode() -> Result<bool, String> {
-    enable_raw_mode().map_err(|e| format!("enable_raw_mode: {e}"))?;
+    if enable_raw_mode().is_err() {
+        return Ok(false);
+    }
     let mut out = stdout();
     if execute!(out, EnterAlternateScreen, EnableMouseCapture).is_err() {
         let _ = disable_raw_mode();
@@ -48,27 +51,27 @@ pub(crate) fn handle_key(key: KeyEvent, state: &mut ViewerState) -> Option<TuiOu
         KeyCode::Char('q') | KeyCode::Esc => Some(TuiOutcome::Quit),
         KeyCode::Char('c') if key.modifiers.contains(KeyModifiers::CONTROL) => {
             Some(TuiOutcome::Quit)
-        }
+        },
         KeyCode::Char('j') | KeyCode::Down => {
             state.move_down(1);
             None
-        }
+        },
         KeyCode::Char('k') | KeyCode::Up => {
             state.move_up(1);
             None
-        }
+        },
         KeyCode::Char('g') => {
             state.jump_top();
             None
-        }
+        },
         KeyCode::Char('G') => {
             state.jump_bottom();
             None
-        }
+        },
         KeyCode::Tab => {
             state.toggle_focus();
             None
-        }
+        },
         KeyCode::Char('a' | 'd') => {
             // Answer / Dismiss — pop the selected entry and record the ID.
             let entry = state.selected_entry()?.clone();
@@ -78,23 +81,32 @@ pub(crate) fn handle_key(key: KeyEvent, state: &mut ViewerState) -> Option<TuiOu
             } else {
                 Some(TuiOutcome::Dismissed(id))
             }
-        }
+        },
         KeyCode::Char('o') | KeyCode::Enter => {
             // Open in browser — fire-and-forget.
             if let Some(entry) = state.selected_entry() {
-                let url = format!(
-                    "http://127.0.0.1:7117/inbox/{}",
-                    entry.request_id
-                );
-                let _ = crate::inbox::daemon::notifier::open_in_default_browser(&url);
+                let id = entry.request_id.clone();
+                // The opener (injected by the run loop) resolves the live
+                // daemon base. Falling back to `inbox_open_url_for` keeps
+                // the env/default behaviour when no live base is known.
+                if let Some(open) = state.opener.as_ref() {
+                    (open.0)(&id);
+                } else {
+                    let url = crate::inbox::notify::inbox_open_url_for(&id);
+                    let _ = crate::inbox::daemon::notifier::open_in_default_browser(&url);
+                }
             }
             None
-        }
+        },
+        KeyCode::Char('?') => {
+            state.show_help = !state.show_help;
+            None
+        },
         KeyCode::Char('r') | KeyCode::F(5) => {
             // Force refresh is implicit — the next poll cycle will pick up changes.
             state.status_message = "refreshed".into();
             None
-        }
+        },
         _ => None,
     }
 }
@@ -106,6 +118,21 @@ pub(crate) fn run_loop(
     watcher: Option<InboxWatcher>,
 ) -> Result<TuiOutcome, String> {
     let mut state = ViewerState::default();
+    // Inject the browser opener so `[o]` targets the daemon that actually
+    // holds these requests. The base is resolved at key-press time (not
+    // here), because a daemon may start or move after the TUI opens.
+    {
+        let root = inbox_root.to_path_buf();
+        state.opener = Some(super::state::OpenerSlot(Box::new(
+            move |request_id: &str| {
+                let url = crate::inbox::daemon::live_url(&root, None).map_or_else(
+                    || crate::inbox::notify::inbox_open_url_for(request_id),
+                    |base| crate::inbox::notify::inbox_open_url_with_base(&base, request_id),
+                );
+                let _ = crate::inbox::daemon::notifier::open_in_default_browser(&url);
+            },
+        )));
+    }
     let mut last_poll = Instant::now().checked_sub(POLL_INTERVAL).unwrap();
     let mut last_change_gen = 0u64;
     let mut stdout_handle = stdout();
@@ -125,17 +152,16 @@ pub(crate) fn run_loop(
             match snapshot_inbox(inbox_root) {
                 Ok(entries) => {
                     if entries.len() != state.entries.len() {
-                        state.status_message =
-                            format!("refreshed · {} pending", entries.len());
+                        state.status_message = format!("refreshed · {} pending", entries.len());
                     }
                     state.entries = entries;
                     if state.selected >= state.entries.len() {
                         state.jump_bottom();
                     }
-                }
+                },
                 Err(e) => {
                     state.status_message = format!("poll error: {e}");
-                }
+                },
             }
             last_poll = Instant::now();
         }
@@ -143,17 +169,15 @@ pub(crate) fn run_loop(
         super::render::render(terminal, &state, inbox_root)?;
         stdout_handle.flush().ok();
 
-        if event::poll(Duration::from_millis(200))
-            .map_err(|e| format!("event::poll: {e}"))?
-        {
+        if event::poll(Duration::from_millis(200)).map_err(|e| format!("event::poll: {e}"))? {
             match event::read().map_err(|e| format!("event::read: {e}"))? {
                 Event::Key(key) => {
                     if let Some(outcome) = handle_key(key, &mut state) {
                         return Ok(outcome);
                     }
-                }
-                Event::Resize(_, _) => {}
-                _ => {}
+                },
+                Event::Resize(_, _) => {},
+                _ => {},
             }
         }
     }

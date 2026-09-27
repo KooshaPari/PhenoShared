@@ -130,3 +130,6 @@ llvm-cov-*
 *.proposed
 .draft/
 # ===== End standard hygiene =====
+
+# Linked worktree of an unrelated project (not part of this repo)
+/BytePort/

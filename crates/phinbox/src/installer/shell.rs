@@ -3,7 +3,12 @@
 //! Contains helpers for appending `PATH` export lines to the user's shell rc
 //! files so that the `phinbox` binaries are available on every new shell.
 
+// Only the Unix shell/launchd/systemd paths read and write rc files; on
+// Windows the PowerShell installer is used instead, so these imports (and
+// `home_dir`) would be dead there.
+#[cfg(unix)]
 use std::fs;
+#[cfg(unix)]
 use std::io;
 use std::path::{Path, PathBuf};
 
@@ -40,7 +45,11 @@ pub(crate) fn update_path_and_rc(bin_dir: &Path) -> Option<Vec<PathBuf>> {
             }
         }
     }
-    if updated.is_empty() { None } else { Some(updated) }
+    if updated.is_empty() {
+        None
+    } else {
+        Some(updated)
+    }
 }
 
 /// Ensure that the `export PATH` line exists in `rc`.
@@ -59,6 +68,7 @@ pub(crate) fn ensure_path_line(rc: &Path, bin_dir: &Path) -> io::Result<()> {
     Ok(())
 }
 
+#[cfg(unix)]
 pub(crate) fn home_dir() -> Option<PathBuf> {
     std::env::var_os("HOME").map(PathBuf::from)
 }
@@ -103,9 +113,9 @@ pub(crate) fn install_autostart(cli_path: &Path) -> Result<PathBuf, String> {
         fs::create_dir_all(&dir).map_err(|e| e.to_string())?;
         let unit = dir.join("phinbox.service");
         let body = format!(
-            "[Unit]\nDescription=Phinbox inbox daemon\nAfter=network.target\n\n\
-             [Service]\nExecStart={} daemon\nRestart=on-failure\n\n\
-             [Install]\nWantedBy=default.target\n",
+            "[Unit]\nDescription=Phinbox inbox \
+             daemon\nAfter=network.target\n\n[Service]\nExecStart={} \
+             daemon\nRestart=on-failure\n\n[Install]\nWantedBy=default.target\n",
             cli_path.display()
         );
         fs::write(&unit, body).map_err(|e| e.to_string())?;
@@ -121,9 +131,14 @@ pub(crate) fn remove_autostart(removed: &mut Vec<String>, warnings: &mut Vec<Str
     #[cfg(target_os = "macos")]
     {
         if let Some(home) = home_dir() {
-            let plist = home.join("Library").join("LaunchAgents").join("com.phenotype.phinbox.plist");
+            let plist = home
+                .join("Library")
+                .join("LaunchAgents")
+                .join("com.phenotype.phinbox.plist");
             if plist.exists() {
-                let _ = std::process::Command::new("launchctl").args(["unload", &plist.display().to_string()]).status();
+                let _ = std::process::Command::new("launchctl")
+                    .args(["unload", &plist.display().to_string()])
+                    .status();
                 if let Err(e) = fs::remove_file(&plist) {
                     warnings.push(format!("remove {}: {e}", plist.display()));
                 } else {
@@ -135,9 +150,15 @@ pub(crate) fn remove_autostart(removed: &mut Vec<String>, warnings: &mut Vec<Str
     #[cfg(all(unix, not(target_os = "macos")))]
     {
         if let Some(home) = home_dir() {
-            let unit = home.join(".config").join("systemd").join("user").join("phinbox.service");
+            let unit = home
+                .join(".config")
+                .join("systemd")
+                .join("user")
+                .join("phinbox.service");
             if unit.exists() {
-                let _ = std::process::Command::new("systemctl").args(["--user", "disable", "--now", "phinbox.service"]).status();
+                let _ = std::process::Command::new("systemctl")
+                    .args(["--user", "disable", "--now", "phinbox.service"])
+                    .status();
                 if let Err(e) = fs::remove_file(&unit) {
                     warnings.push(format!("remove {}: {e}", unit.display()));
                 } else {

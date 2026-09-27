@@ -2,8 +2,10 @@
 
 use serde::{Deserialize, Serialize};
 
-use super::ids::{EdgeId, NodeId};
-use super::types::LinkMetrics;
+use super::{
+    ids::{EdgeId, NodeId},
+    types::LinkMetrics,
+};
 
 /// An edge (link) between two nodes in the topology graph.
 ///

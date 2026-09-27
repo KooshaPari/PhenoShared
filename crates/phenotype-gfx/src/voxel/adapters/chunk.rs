@@ -2,8 +2,10 @@
 
 use std::collections::HashMap;
 
-use crate::voxel::chunk::Chunk;
-use crate::voxel::ports::chunk::{ChunkId, ChunkView, Chunkable};
+use crate::voxel::{
+    chunk::Chunk,
+    ports::chunk::{ChunkId, ChunkView, Chunkable},
+};
 
 /// Dense chunk storage keyed by [`ChunkId`].
 #[derive(Debug, Clone)]

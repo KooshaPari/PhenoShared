@@ -1,0 +1,67 @@
+# Monthly SBOM Refresh — reusable workflow
+#
+# Generates a CycloneDX SBOM for the calling repo.
+# The calling workflow should invoke this via:
+#
+#   uses: KooshaPari/PhenoShared/.github/workflows/sbom-monthly.yml@<SHA>
+#   with:
+#     repo_path: '.'
+#     build_system: 'rust'
+#
+# Permissions required by caller: contents: read (minimum)
+
+name: Monthly SBOM Refresh
+
+on:
+  workflow_call:
+    inputs:
+      repo_path:
+        description: 'Path within the workspace to the repo root'
+        required: true
+        type: string
+        default: '.'
+      build_system:
+        description: 'Build system hint (e.g. rust, node)'
+        required: true
+        type: string
+        default: 'rust'
+  workflow_dispatch:
+    inputs:
+      repo_path:
+        description: 'Path within the workspace to the repo root'
+        required: false
+        type: string
+        default: '.'
+      build_system:
+        description: 'Build system hint (e.g. rust, node)'
+        required: false
+        type: string
+        default: 'rust'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  sbom:
+    name: CycloneDX SBOM (${{ inputs.build_system }})
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout calling repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          path: ${{ inputs.repo_path }}
+
+      - name: Generate CycloneDX SBOM
+        uses: anchore/sbom-action@4a30bbadbe35d73a1729ee95a9196544192d905e
+        with:
+          path: ${{ inputs.repo_path }}
+          format: cyclonedx-json
+          artifact-name: sbom.cdx.json
+
+      - name: Upload SBOM artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: sbom-monthly-${{ github.event.repository.name }}-${{ github.sha }}
+          path: ${{ inputs.repo_path }}/sbom.cdx.json
+          retention-days: 90

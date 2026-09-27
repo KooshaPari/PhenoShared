@@ -1,8 +1,9 @@
 //! eyetracker-domain: Core types for eye-tracking domain
 //! Traces to: FR-EYE-CAL-001, FR-EYE-CAL-002, FR-EYE-INFER-001, FR-EYE-INFER-002, FR-EYE-INFER-003
 
-use serde::{Deserialize, Serialize};
 use std::time::{Duration, SystemTime};
+
+use serde::{Deserialize, Serialize};
 
 /// 2D point in screen coordinates (pixels).
 #[derive(Debug, Clone, Copy, PartialEq, Serialize, Deserialize)]
@@ -13,7 +14,10 @@ pub struct Point {
 
 impl Point {
     pub fn new(x: f64, y: f64) -> Self {
-        Self { x, y }
+        Self {
+            x,
+            y,
+        }
     }
 
     /// Euclidean distance to another point.
@@ -31,7 +35,10 @@ pub struct Vector {
 
 impl Vector {
     pub fn new(dx: f64, dy: f64) -> Self {
-        Self { dx, dy }
+        Self {
+            dx,
+            dy,
+        }
     }
 
     /// Magnitude (speed).

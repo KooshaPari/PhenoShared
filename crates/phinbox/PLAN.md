@@ -130,7 +130,7 @@ browser.
       (`--poll-ms` configurable).
 - [x] Default keymap: `j/k` or `↓/↑` move; `Tab` switch focus; `Enter`/`o`
       open in browser; `r`/`F5` refresh; `d` dismiss; `?` help; `q`/`Esc`
-      quit. Rebindable via `PHINBOX_TUI_KEYMAP_<KEY>=<action>` env vars.
+      quit.
 - [x] Graceful fallback: `TERM=dumb`, no TTY, or `ratatui::init()` failure
       → plain-text output, exit 0. CI / `ssh` without TTY allocation
       works without extra flags.

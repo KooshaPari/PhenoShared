@@ -3,11 +3,9 @@
 //! Subcommands are implemented in sibling modules (`ask`, `inbox`, `daemon`,
 //! etc.) and dispatched from `main()`.
 
-use std::path::PathBuf;
-use std::process::ExitCode;
+use std::{path::PathBuf, process::ExitCode};
 
 use clap::{Parser, Subcommand};
-
 use phinbox::options::RendererPreference;
 
 mod answer;
@@ -17,6 +15,7 @@ mod daemon;
 mod inbox;
 mod install;
 mod open;
+mod validate;
 mod wait;
 
 /// Native OS popup elicitation — render a modal dialog and read the user's
@@ -27,9 +26,9 @@ mod wait;
     version,
     about = "Native OS popup elicitation for autonomous agents",
     long_about = "phinbox renders a native OS popup (NSAlert on macOS, Win32 form on Windows, \
-                  zenity/kdialog/Tk/inquire on Linux) and returns the user's response as typed JSON. \
-                  For non-blocking workflows, queue the prompt in the inbox via `--async` and use \
-                  `phinbox wait --request-id <id>` to retrieve the answer later."
+                  zenity/kdialog/Tk/inquire on Linux) and returns the user's response as typed \
+                  JSON. For non-blocking workflows, queue the prompt in the inbox via `--async` \
+                  and use `phinbox wait --request-id <id>` to retrieve the answer later."
 )]
 struct Cli {
     #[command(subcommand)]
@@ -65,6 +64,32 @@ impl From<RendererArg> for RendererPreference {
     }
 }
 
+/// Shorthand for `phinbox inbox --tui`.
+///
+/// Thin on purpose: it forwards to the same `inbox` command that owns the
+/// viewer, so the two spellings cannot drift apart.
+#[derive(Debug, clap::Args)]
+struct TuiArgs {
+    /// Live-follow changes via the inbox change bus.
+    #[arg(long)]
+    follow: bool,
+}
+
+impl TuiArgs {
+    /// The exact `inbox` invocation this shorthand stands for.
+    fn into_inbox(self) -> inbox::InboxArgs {
+        inbox::InboxArgs {
+            list: false,
+            show: None,
+            url: None,
+            open: false,
+            gc_age_secs: None,
+            tui: true,
+            follow: self.follow,
+        }
+    }
+}
+
 #[derive(Debug, Subcommand)]
 enum Cmd {
     /// Render a popup from CLI flags, --from-json, or --from-file.
@@ -83,6 +108,10 @@ enum Cmd {
     Daemon(daemon::DaemonArgs),
     /// Inspect the inbox: list pending, show one in detail, or open the UI.
     Inbox(inbox::InboxArgs),
+    /// Launch the terminal-UI inbox viewer (shorthand for `inbox --tui`).
+    Tui(TuiArgs),
+    /// Validate a JSON spec without rendering it (exit 0 = valid).
+    Validate(validate::ValidateArgs),
     /// Open the inbox in the default browser.
     Open(open::OpenArgs),
     /// Block until a queued `--async` request has been answered (or times out).
@@ -120,19 +149,24 @@ pub fn main() -> ExitCode {
         Cmd::Uninstall(args) => install::cmd_uninstall(args, &inbox_dir),
         Cmd::Daemon(args) => daemon::cmd_daemon(args, &inbox_dir),
         Cmd::Inbox(args) => inbox::cmd_inbox(args, &inbox_dir),
+        Cmd::Tui(args) => inbox::cmd_inbox(args.into_inbox(), &inbox_dir),
+        Cmd::Validate(args) => validate::cmd_validate(args),
         Cmd::Open(args) => open::cmd_open(args, &inbox_dir),
         Cmd::Wait(args) => wait::cmd_wait(args, &inbox_dir),
         Cmd::Answer(args) => answer::cmd_answer(args, &inbox_dir),
         Cmd::Serve => {
-            eprintln!("error: 'serve' is provided by the `phinbox-mcp` binary, not `phinbox`. Run `phinbox-mcp` instead.");
+            eprintln!(
+                "error: 'serve' is provided by the `phinbox-mcp` binary, not `phinbox`. Run \
+                 `phinbox-mcp` instead."
+            );
             return ExitCode::from(2);
-        }
+        },
         Cmd::Version => {
             println!("phinbox {}", env!("CARGO_PKG_VERSION"));
             println!("license: MIT");
             println!("repository: https://github.com/KooshaPari/phenotype-tooling");
             return ExitCode::SUCCESS;
-        }
+        },
     };
 
     match result {
@@ -140,7 +174,7 @@ pub fn main() -> ExitCode {
         Err(e) => {
             eprintln!("error: {e}");
             ExitCode::FAILURE
-        }
+        },
     }
 }
 
@@ -148,12 +182,19 @@ fn open_url_from_handle(h: &phinbox::inbox::daemon::DaemonHandle) -> String {
     format!("http://{}:{}/inbox", h.bind_addr, h.port)
 }
 
+/// Origin (scheme + host + port) of a running daemon, without the `/inbox`
+/// suffix -- the right base for building inbox form URLs.
+fn open_origin_from_handle(h: &phinbox::inbox::daemon::DaemonHandle) -> String {
+    format!("http://{}:{}", h.bind_addr, h.port)
+}
+
 // ---- tests ----------------------------------------------------------
 
 #[cfg(test)]
 mod tests {
-    use super::*;
     use clap::Parser;
+
+    use super::*;
 
     #[test]
     fn parse_help() {
@@ -174,16 +215,17 @@ mod tests {
 
     #[test]
     fn parse_ask_with_from_json() {
-        let json = r#"{"title":"t","question":"q","field":{"kind":"boolean","label":"?","default":true}}"#;
+        let json =
+            r#"{"title":"t","question":"q","field":{"kind":"boolean","label":"?","default":true}}"#;
         let cli = Cli::try_parse_from(["phinbox", "ask", "--from-json", json]).unwrap();
         assert!(matches!(cli.cmd, Cmd::Ask(_)));
     }
 
     #[test]
     fn parse_ask_async() {
-        let json = r#"{"title":"t","question":"q","field":{"kind":"boolean","label":"?","default":true}}"#;
-        let cli =
-            Cli::try_parse_from(["phinbox", "ask", "--async", "--from-json", json]).unwrap();
+        let json =
+            r#"{"title":"t","question":"q","field":{"kind":"boolean","label":"?","default":true}}"#;
+        let cli = Cli::try_parse_from(["phinbox", "ask", "--async", "--from-json", json]).unwrap();
         if let Cmd::Ask(a) = cli.cmd {
             assert!(a.r#async);
         } else {
@@ -205,8 +247,7 @@ mod tests {
 
     #[test]
     fn parse_wait() {
-        let cli =
-            Cli::try_parse_from(["phinbox", "wait", "--request-id", "abc"]).unwrap();
+        let cli = Cli::try_parse_from(["phinbox", "wait", "--request-id", "abc"]).unwrap();
         if let Cmd::Wait(w) = cli.cmd {
             assert_eq!(w.request_id, "abc");
         } else {
@@ -230,5 +271,78 @@ mod tests {
         } else {
             panic!("expected Answer");
         }
+    }
+
+    #[test]
+    fn parse_validate_from_file() {
+        let cli = Cli::try_parse_from(["phinbox", "validate", "--from-file", "spec.json"]).unwrap();
+        if let Cmd::Validate(a) = cli.cmd {
+            assert_eq!(
+                a.from_file.as_deref(),
+                Some(std::path::Path::new("spec.json"))
+            );
+        } else {
+            panic!("expected Validate");
+        }
+    }
+
+    #[test]
+    fn parse_validate_from_json() {
+        let json =
+            r#"{"title":"t","question":"q","field":{"kind":"boolean","label":"?","default":true}}"#;
+        let cli = Cli::try_parse_from(["phinbox", "validate", "--from-json", json]).unwrap();
+        if let Cmd::Validate(a) = cli.cmd {
+            assert_eq!(a.from_json.as_deref(), Some(json));
+        } else {
+            panic!("expected Validate");
+        }
+    }
+
+    #[test]
+    fn parse_validate_requires_a_source() {
+        assert!(Cli::try_parse_from(["phinbox", "validate"]).is_err());
+        assert!(Cli::try_parse_from([
+            "phinbox",
+            "validate",
+            "--from-file",
+            "spec.json",
+            "--from-json",
+            "{}"
+        ])
+        .is_err());
+    }
+
+    #[test]
+    fn parse_tui_defaults_to_no_follow() {
+        let cli = Cli::try_parse_from(["phinbox", "tui"]).unwrap();
+        if let Cmd::Tui(a) = cli.cmd {
+            assert!(!a.follow);
+        } else {
+            panic!("expected Tui");
+        }
+    }
+
+    #[test]
+    fn parse_tui_follow_flag() {
+        let cli = Cli::try_parse_from(["phinbox", "tui", "--follow"]).unwrap();
+        if let Cmd::Tui(a) = cli.cmd {
+            assert!(a.follow);
+        } else {
+            panic!("expected Tui");
+        }
+    }
+
+    #[test]
+    fn tui_maps_onto_inbox_tui() {
+        let args = Cli::try_parse_from(["phinbox", "tui", "--follow"]).unwrap();
+        let Cmd::Tui(t) = args.cmd else {
+            panic!("expected Tui");
+        };
+        let mapped = t.into_inbox();
+        assert!(mapped.tui);
+        assert!(mapped.follow);
+        // Must not smuggle in any other inbox action.
+        assert!(!mapped.list && !mapped.open && mapped.show.is_none() && mapped.url.is_none());
+        assert!(mapped.gc_age_secs.is_none());
     }
 }

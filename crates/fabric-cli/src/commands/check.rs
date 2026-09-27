@@ -3,10 +3,10 @@
 //! Runs the fabric-checker against a manifest to determine whether the
 //! local machine satisfies the application's requirements.
 
-use anyhow::{Context, Result};
-use clap::Args;
 use std::path::PathBuf;
 
+use anyhow::{Context, Result};
+use clap::Args;
 use fabric_capability::probe::default_probe;
 use fabric_checker::{self, CheckerManifest};
 
@@ -32,7 +32,11 @@ pub fn dispatch(args: &CheckArgs) -> Result<()> {
     // Load manifest.
     let text = std::fs::read_to_string(&args.manifest)
         .with_context(|| format!("read {}", args.manifest.display()))?;
-    let manifest: CheckerManifest = if args.manifest.extension().map_or(false, |e| e == "yaml" || e == "yml") {
+    let manifest: CheckerManifest = if args
+        .manifest
+        .extension()
+        .map_or(false, |e| e == "yaml" || e == "yml")
+    {
         serde_yaml::from_str(&text).context("parse manifest YAML")?
     } else {
         serde_json::from_str(&text).context("parse manifest JSON")?
@@ -40,7 +44,9 @@ pub fn dispatch(args: &CheckArgs) -> Result<()> {
 
     // Probe local capabilities.
     let probe = default_probe();
-    let descriptor = probe.probe().context("capability probe failed on this host")?;
+    let descriptor = probe
+        .probe()
+        .context("capability probe failed on this host")?;
 
     // Run the checker.
     let decision = fabric_checker::check(&descriptor, &manifest);
@@ -54,8 +60,10 @@ pub fn dispatch(args: &CheckArgs) -> Result<()> {
                     "{} machine satisfies manifest requirements\n",
                     console::style("ADMIT").green().bold(),
                 ));
-            }
-            fabric_checker::Decision::AdmitWithNotes { notes } => {
+            },
+            fabric_checker::Decision::AdmitWithNotes {
+                notes,
+            } => {
                 out.push_str(&format!(
                     "{} machine satisfies manifest requirements (with notes)\n\n",
                     console::style("ADMIT WITH NOTES").yellow().bold(),
@@ -67,7 +75,7 @@ pub fn dispatch(args: &CheckArgs) -> Result<()> {
                         note.message,
                     ));
                 }
-            }
+            },
             fabric_checker::Decision::Reject {
                 reason_code,
                 reason_message,
@@ -81,7 +89,7 @@ pub fn dispatch(args: &CheckArgs) -> Result<()> {
                     console::style(format!("[{:?}]", reason_code)).red(),
                     reason_message,
                 ));
-            }
+            },
         }
         out.push_str(&format!(
             "\n{} node_id: {}\n",

@@ -9,18 +9,16 @@
 
 use std::time::{Duration, Instant};
 
-use eyetracker_inference::accessibility::{
-    AccessibilityAction, AccessibilityManager, DwellClickConfig,
+use eyetracker_inference::{
+    accessibility::{AccessibilityAction, AccessibilityManager, DwellClickConfig},
+    calibration::{default_grid_points, CalibrationPoint, CalibrationResult, CalibrationSample},
+    classification::{GazeClassifier, GazeEvent},
+    drift_monitor::{DriftMonitor, DriftMonitorConfig, DriftSeverity},
+    focalpoint::{FocalPointConnector, FocalPointGazeEvent},
+    multi_monitor::{DisplayId, MultiMonitorCalibration},
+    privacy::{ConsentScope, PrivacyManager, PrivacyMode},
+    smoothing::{GazeSmoother, KalmanState2D},
 };
-use eyetracker_inference::calibration::{
-    default_grid_points, CalibrationPoint, CalibrationResult, CalibrationSample,
-};
-use eyetracker_inference::classification::{GazeClassifier, GazeEvent};
-use eyetracker_inference::drift_monitor::{DriftMonitor, DriftMonitorConfig, DriftSeverity};
-use eyetracker_inference::focalpoint::{FocalPointConnector, FocalPointGazeEvent};
-use eyetracker_inference::multi_monitor::{DisplayId, MultiMonitorCalibration};
-use eyetracker_inference::privacy::{ConsentScope, PrivacyManager, PrivacyMode};
-use eyetracker_inference::smoothing::{GazeSmoother, KalmanState2D};
 
 // ---------------------------------------------------------------------------
 // Test helpers
@@ -155,8 +153,7 @@ fn fr_eye_cal_004_drift_trigger_to_dismiss_to_resume_cycle() {
     //   2) the monitor reports `is_dismissed() == false` (UI shows prompt),
     //   3) the user dismisses, monitor reports `is_dismissed() == true`,
     //   4) subsequent samples do not re-emit events while dismissed,
-    //   5) a fresh `reset_dismissed()` re-enables the monitor for the
-    //      next time drift accumulates.
+    //   5) a fresh `reset_dismissed()` re-enables the monitor for the next time drift accumulates.
     let mut monitor = DriftMonitor::new(DriftMonitorConfig::default());
     monitor.register_baseline(display("d1"), 0.1, 0.1, 0.0);
 
@@ -185,8 +182,8 @@ fn fr_eye_cal_004_drift_trigger_to_dismiss_to_resume_cycle() {
         "dismiss() should set the dismissed flag"
     );
 
-    // 4) Suppressed: no events for the rest of the session even with
-    //    more drift accumulating on top of the existing baseline error.
+    // 4) Suppressed: no events for the rest of the session even with more drift accumulating on top
+    //    of the existing baseline error.
     for _ in 0..40 {
         let e = monitor.record_sample(0.7, 0.7, 0.95);
         assert!(e.is_none(), "post-dismiss events must be suppressed");
@@ -499,7 +496,7 @@ fn fr_eye_access_001_dwell_click_fires_through_app_tick_path() {
         match action {
             AccessibilityAction::Click => click_observed = true,
             AccessibilityAction::DwellStarted => dwell_started_count += 1,
-            _ => {}
+            _ => {},
         }
         std::thread::sleep(Duration::from_millis(10));
     }
@@ -663,8 +660,7 @@ fn fr_eye_interop_002_uniffi_kotlin_scaffold() {
 fn fr_eye_interop_003_focalpoint_connector() {
     // FR-EYE-INTEROP-003: The system shall publish gaze events to a
     // FocalPoint-compatible NDJSON-over-Unix-socket bus.
-    use std::io::Read;
-    use std::os::unix::net::UnixListener;
+    use std::{io::Read, os::unix::net::UnixListener};
 
     let sock = std::env::temp_dir().join(format!(
         "eyetracker-focalpoint-itest-{}.sock",
@@ -795,7 +791,10 @@ fn screen_point_from_gaze(
     let cy = frame_h as f64 / 2.0;
     let px = (gaze_x + cx) / frame_w as f64 * screen_w as f64;
     let py = (gaze_y + cy) / frame_h as f64 * screen_h as f64;
-    ScreenCoord { px_x: px, px_y: py }
+    ScreenCoord {
+        px_x: px,
+        px_y: py,
+    }
 }
 
 #[test]

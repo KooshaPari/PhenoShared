@@ -39,18 +39,25 @@ pub use runner::{LaneResult, LaneStatus, WaveReport, WaveRunner, WaveSpec};
 
 #[cfg(test)]
 mod tests {
-    use std::sync::atomic::{AtomicUsize, Ordering};
-    use std::sync::Arc;
-    use std::time::Duration;
+    use std::{
+        sync::{
+            atomic::{AtomicUsize, Ordering},
+            Arc,
+        },
+        time::Duration,
+    };
 
     use a2a::task::Task as A2aTask;
     use store_sqlite::SqliteMailboxStore;
-    use substrate_core::domain::{
-        ConversationDump, EngineCapabilities, Mailbox, Session, StructuredResult, Task, TaskState,
+    use substrate_core::{
+        domain::{
+            ConversationDump, EngineCapabilities, Mailbox, Session, StructuredResult, Task,
+            TaskState,
+        },
+        error::Result,
+        mailbox_port::MailboxStore,
+        ports::EnginePort,
     };
-    use substrate_core::error::Result;
-    use substrate_core::mailbox_port::MailboxStore;
-    use substrate_core::ports::EnginePort;
     use tokio::sync::Semaphore;
     use uuid::Uuid;
 

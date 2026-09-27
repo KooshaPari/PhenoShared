@@ -116,7 +116,9 @@ fn integration_silent_rebind_preserves_handle_and_history() {
 
     // The outcome should be Rebound.
     let new_plan_id = match outcome {
-        RebindOutcome::Rebound { new_plan_id } => new_plan_id,
+        RebindOutcome::Rebound {
+            new_plan_id,
+        } => new_plan_id,
         other => panic!("expected Rebound, got: {other:?}"),
     };
     assert_ne!(new_plan_id, original_plan.id, "must be a new plan");
@@ -168,13 +170,17 @@ fn integration_loud_fail_on_no_replacement_terminates_lease() {
     .expect("rebind should return Ok(Failed), not Err");
 
     match &outcome {
-        RebindOutcome::Failed { reason } => match reason {
-            LeaseExitReason::HostFailure { host_node } => {
+        RebindOutcome::Failed {
+            reason,
+        } => match reason {
+            LeaseExitReason::HostFailure {
+                host_node,
+            } => {
                 assert_eq!(
                     host_node, &a,
                     "reason must name the failed node from the input list"
                 );
-            }
+            },
             other => panic!("expected HostFailure, got: {other:?}"),
         },
         other => panic!("expected Failed, got: {other:?}"),
@@ -233,10 +239,13 @@ fn integration_strict_epoch_drift_short_circuits_replan() {
     );
 
     match result {
-        Err(SurfaceError::EpochDrift { previous, current }) => {
+        Err(SurfaceError::EpochDrift {
+            previous,
+            current,
+        }) => {
             assert_eq!(previous, orig_topo.epoch.0);
             assert_eq!(current, post_epoch);
-        }
+        },
         other => panic!("expected EpochDrift err, got: {other:?}"),
     }
 
@@ -303,7 +312,10 @@ fn integration_lease_intact_when_failover_error_returns() {
     let original_plan = compile(&orig_topo, &intent("i-t05")).expect("compile");
 
     // Empty intent name → FailoverError::EmptyIntent → SurfaceError.
-    let empty_intent = IntentBuilder::new().name("").min_trust(TrustLevel::Untrusted).build();
+    let empty_intent = IntentBuilder::new()
+        .name("")
+        .min_trust(TrustLevel::Untrusted)
+        .build();
     let post = topology_with_only(&[("b", LocalityTier::L1)]);
 
     let mut lease = prebound_lease(valid_spec("i-t05-spec"), a.clone(), orig_topo.epoch.0);
@@ -321,7 +333,7 @@ fn integration_lease_intact_when_failover_error_returns() {
     );
 
     match result {
-        Err(SurfaceError::InvalidSpec(SurfaceSpecError::EmptyName)) => {}
+        Err(SurfaceError::InvalidSpec(SurfaceSpecError::EmptyName)) => {},
         other => panic!("expected InvalidSpec(EmptyName), got: {other:?}"),
     }
 
@@ -383,11 +395,7 @@ fn integration_zero_epoch_round_trips_through_rebind() {
 
     let mut lease = prebound_lease(spec, NodeId::new("a"), orig_topo.epoch.0);
     // Sanity: prior_epoch captured on the lease matches the topology's epoch.
-    let prior_epoch = lease
-        .current
-        .as_ref()
-        .expect("just bound")
-        .bound_at_epoch;
+    let prior_epoch = lease.current.as_ref().expect("just bound").bound_at_epoch;
     assert_eq!(prior_epoch, orig_topo.epoch.0);
 
     let outcome = rebind_or_fail(

@@ -5,15 +5,18 @@
 //!
 //! Run with: `cargo test -p fabric-integration-tests --test e2e_smoke`
 
-use fabric_daemon::config::DaemonConfig;
-use fabric_daemon::coordinator::Coordinator;
-use fabric_daemon::wire::run_wire_server;
-use std::io::{BufRead, BufReader, Write};
-use std::net::TcpStream;
-use std::sync::atomic::{AtomicBool, Ordering};
-use std::sync::Arc;
-use std::thread;
-use std::time::{Duration, Instant};
+use std::{
+    io::{BufRead, BufReader, Write},
+    net::TcpStream,
+    sync::{
+        atomic::{AtomicBool, Ordering},
+        Arc,
+    },
+    thread,
+    time::{Duration, Instant},
+};
+
+use fabric_daemon::{config::DaemonConfig, coordinator::Coordinator, wire::run_wire_server};
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -96,7 +99,7 @@ fn wait_for_daemon(addr: &str, max_wait: Duration) {
             Ok(_) => return,
             Err(_) if start.elapsed() < max_wait => {
                 thread::sleep(Duration::from_millis(50));
-            }
+            },
             Err(e) => panic!("daemon did not become ready: {e}"),
         }
     }

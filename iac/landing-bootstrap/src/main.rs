@@ -2,15 +2,13 @@
 //!
 //! End-to-end automation for Tier 2 of the Phenotype org-pages tree.
 //! Given a slug + GitHub repo, this tool:
-//!   1. Checks GitHub `homepageUrl` for a `.dev` collision (skip if present + emit
-//!      a redirect-only marker for downstream Vercel config).
+//!   1. Checks GitHub `homepageUrl` for a `.dev` collision (skip if present + emit a redirect-only
+//!      marker for downstream Vercel config).
 //!   2. Creates a Cloudflare CNAME `<slug> → cname.vercel-dns.com`.
-//!   3. Scaffolds a fresh `<slug>-landing/` directory from the
-//!      `agileplus-landing` template, swapping in the slug-specific
-//!      title/description/REPO constant.
+//!   3. Scaffolds a fresh `<slug>-landing/` directory from the `agileplus-landing` template,
+//!      swapping in the slug-specific title/description/REPO constant.
 //!   4. `git init`, commits, creates `<REDACTED>/<slug>-landing` on GitHub, pushes.
-//!   5. `vercel link --yes` and `vercel deploy --prod --yes` against the new
-//!      project.
+//!   5. `vercel link --yes` and `vercel deploy --prod --yes` against the new project.
 //!   6. Attaches `<slug>.<REDACTED>.com` as a custom domain.
 //!
 //! Idempotent: each step is a no-op if already done (404 → create, 4xx existing → skip).
@@ -29,11 +27,14 @@
 //!
 //! Wraps: `gh` CLI + `vercel` CLI + Cloudflare REST API.
 
+use std::{
+    path::{Path, PathBuf},
+    process::Command,
+};
+
 use anyhow::{Context, Result, bail};
 use clap::Parser;
 use serde::{Deserialize, Serialize};
-use std::path::{Path, PathBuf};
-use std::process::Command;
 
 const ZONE_ID_DEFAULT: &str = "6c9edab581e9c7b8fdb6a83adc6878ea";
 
@@ -290,11 +291,11 @@ fn cf_upsert_cname(token: &str, zone: &str, slug: &str, dry: &bool) -> Result<()
             } else {
                 eprintln!("  ⚠ CF response (likely already exists): {v}");
             }
-        }
+        },
         Err(e) => {
             // ureq 3.x: non-2xx surfaces as Error::StatusCode; treat as "likely already exists"
             eprintln!("  ⚠ CF non-2xx (assuming already exists): {e}");
-        }
+        },
     }
     Ok(())
 }
@@ -415,7 +416,8 @@ fn scaffold_redirect(out: &Path, slug: &str, canonical: &str, dry: &bool) -> Res
     std::fs::write(
         out.join("README.md"),
         format!(
-            "# {slug}-landing\n\n301 redirect from {slug}.<REDACTED>.com → {canonical} (canonical .dev domain).\n"
+            "# {slug}-landing\n\n301 redirect from {slug}.<REDACTED>.com → {canonical} (canonical \
+             .dev domain).\n"
         ),
     )?;
     std::fs::write(
@@ -538,12 +540,12 @@ fn scaffold_governance(out: &Path, license: &str, dry: &bool) -> Result<()> {
     match license.to_ascii_uppercase().as_str() {
         "NONE" => {
             eprintln!("  ↺ LICENSE skipped (--license NONE)");
-        }
+        },
         "MIT" => {
             let year = current_year();
             let body = TPL_LICENSE_MIT.replace("{{YEAR}}", &year);
             std::fs::write(out.join("LICENSE"), body).context("write LICENSE")?;
-        }
+        },
         other => bail!("unsupported --license {other} (supported: MIT, NONE)"),
     }
     eprintln!("  ✓ governance: dependabot.yml, ci.yml, LICENSE ({license})");

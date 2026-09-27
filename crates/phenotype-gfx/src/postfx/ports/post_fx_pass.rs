@@ -12,8 +12,10 @@
 
 use std::fmt;
 
-use crate::postfx::error::{PostFxError, PostFxResult};
-use crate::postfx::ports::shader_availability::PostFxShaderAvailability;
+use crate::postfx::{
+    error::{PostFxError, PostFxResult},
+    ports::shader_availability::PostFxShaderAvailability,
+};
 
 /// Identifies each post-processing effect.
 ///
@@ -69,7 +71,9 @@ impl PassEffect {
 }
 
 /// Quality settings — the driver passes the current value to each pass.
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, serde::Serialize, serde::Deserialize, Default)]
+#[derive(
+    Debug, Clone, Copy, PartialEq, Eq, Hash, serde::Serialize, serde::Deserialize, Default,
+)]
 #[serde(rename_all = "snake_case")]
 pub enum PassQuality {
     /// Effect is disabled.

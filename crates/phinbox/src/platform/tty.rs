@@ -5,10 +5,10 @@
 
 use inquire::error::InquireError;
 
-use crate::error::ElicitError;
-use crate::options::ElicitOptions;
-use crate::spec::{
-    DateTimeKind, ElicitResponse, FieldSpec, FieldValue, NotesSpec, PromptSpec, Urgency,
+use crate::{
+    error::ElicitError,
+    options::ElicitOptions,
+    spec::{DateTimeKind, ElicitResponse, FieldSpec, FieldValue, NotesSpec, PromptSpec, Urgency},
 };
 
 /// Render a prompt via the terminal.
@@ -25,15 +25,27 @@ pub fn render(spec: &PromptSpec, _opts: &ElicitOptions) -> Result<ElicitResponse
             default,
             placeholder,
             max_length,
-            secret: _,
+            secret,
             pattern,
         } => {
-            let v = inquire::Text::new(label)
-                .with_help_message(spec.question.as_str())
-                .with_initial_value(default.as_deref().unwrap_or(""))
-                .with_placeholder(placeholder.as_deref().unwrap_or(""))
-                .prompt()
-                .map_err(map_inquire_error)?;
+            // Secrets must not be echoed to the terminal. `inquire::Text`
+            // renders in plaintext, so use the masked `Password` prompt for
+            // `secret: true` fields. A password prompt cannot be prefilled,
+            // so `default`/`placeholder` are only honoured for plain text.
+            let v = if *secret {
+                inquire::Password::new(label)
+                    .with_help_message(spec.question.as_str())
+                    .without_confirmation()
+                    .prompt()
+                    .map_err(map_inquire_error)?
+            } else {
+                inquire::Text::new(label)
+                    .with_help_message(spec.question.as_str())
+                    .with_initial_value(default.as_deref().unwrap_or(""))
+                    .with_placeholder(placeholder.as_deref().unwrap_or(""))
+                    .prompt()
+                    .map_err(map_inquire_error)?
+            };
             if let Some(max) = max_length {
                 if v.chars().count() > *max as usize {
                     return Err(ElicitError::InvalidSpec(format!(
@@ -51,19 +63,19 @@ pub fn render(spec: &PromptSpec, _opts: &ElicitOptions) -> Result<ElicitResponse
                 }
             }
             FieldValue::Text(v)
-        }
+        },
 
         FieldSpec::LongText {
             label,
             default,
             max_length,
         } => {
-            // inquire::Editor is for single-line; for multi-line we use
-            // Text with a help message hinting at multi-line entry. This
-            // is a deliberate trade-off — we don't want to launch a blocking
-            // editor in a TTY fallback context.
+            // inquire's multi-line `Editor` needs an external $EDITOR, which
+            // is unavailable in CI/SSH contexts — exactly where the TTY
+            // fallback runs. So LongText collects a single line here; the
+            // help text says so rather than promising multi-line entry.
             let v = inquire::Text::new(label)
-                .with_help_message("(end with a single blank line to finish)")
+                .with_help_message("(single line; the TTY fallback has no multi-line editor)")
                 .with_initial_value(default.as_deref().unwrap_or(""))
                 .prompt()
                 .map_err(map_inquire_error)?;
@@ -75,7 +87,7 @@ pub fn render(spec: &PromptSpec, _opts: &ElicitOptions) -> Result<ElicitResponse
                 }
             }
             FieldValue::LongText(v)
-        }
+        },
 
         FieldSpec::Integer {
             label,
@@ -106,7 +118,7 @@ pub fn render(spec: &PromptSpec, _opts: &ElicitOptions) -> Result<ElicitResponse
                 }
             }
             FieldValue::Integer(value)
-        }
+        },
 
         FieldSpec::Choice {
             label,
@@ -159,16 +171,19 @@ pub fn render(spec: &PromptSpec, _opts: &ElicitOptions) -> Result<ElicitResponse
                 value: chosen_value,
                 index: chosen_index,
             }
-        }
+        },
 
-        FieldSpec::Boolean { label, default } => {
+        FieldSpec::Boolean {
+            label,
+            default,
+        } => {
             let value = inquire::Confirm::new(label)
                 .with_help_message(spec.question.as_str())
                 .with_default(default.unwrap_or(false))
                 .prompt()
                 .map_err(map_inquire_error)?;
             FieldValue::Boolean(value)
-        }
+        },
 
         FieldSpec::DateTime {
             label,
@@ -176,12 +191,16 @@ pub fn render(spec: &PromptSpec, _opts: &ElicitOptions) -> Result<ElicitResponse
             picker_kind,
         } => match picker_kind {
             DateTimeKind::Date => {
-                let mut p = inquire::DateSelect::new(label)
-                    .with_help_message(spec.question.as_str());
+                let mut p =
+                    inquire::DateSelect::new(label).with_help_message(spec.question.as_str());
                 if let Some(d) = default {
-                    // RFC3339 date prefix
-                    if let Ok(parsed) = chrono::NaiveDate::parse_from_str(&d[..10], "%Y-%m-%d") {
-                        p = p.with_starting_date(parsed);
+                    // Take the date prefix if present, but never slice blindly:
+                    // `&d[..10]` panics on inputs shorter than 10 bytes, and
+                    // `default` is caller-supplied (MCP/CLI), i.e. untrusted.
+                    if let Some(prefix) = d.trim().get(..10) {
+                        if let Ok(parsed) = chrono::NaiveDate::parse_from_str(prefix, "%Y-%m-%d") {
+                            p = p.with_starting_date(parsed);
+                        }
                     }
                 }
                 let v = p
@@ -190,7 +209,7 @@ pub fn render(spec: &PromptSpec, _opts: &ElicitOptions) -> Result<ElicitResponse
                     .format("%Y-%m-%d")
                     .to_string();
                 FieldValue::DateTime(v)
-            }
+            },
             DateTimeKind::Time => {
                 // inquire 0.7 has no TimeSelect; accept HH:MM via Text and validate.
                 let v = inquire::Text::new(label)
@@ -205,7 +224,7 @@ pub fn render(spec: &PromptSpec, _opts: &ElicitOptions) -> Result<ElicitResponse
                     ));
                 }
                 FieldValue::DateTime(v)
-            }
+            },
             DateTimeKind::DateTime => {
                 // inquire 0.7 has no DateTimeSelect; combine Date + Time.
                 let date = inquire::DateSelect::new(label)
@@ -216,12 +235,11 @@ pub fn render(spec: &PromptSpec, _opts: &ElicitOptions) -> Result<ElicitResponse
                     .with_initial_value("00:00")
                     .prompt()
                     .map_err(map_inquire_error)?;
-                let t = chrono::NaiveTime::parse_from_str(&time_str, "%H:%M").map_err(|e| {
-                    ElicitError::RendererFailed(format!("invalid time: {e}"))
-                })?;
+                let t = chrono::NaiveTime::parse_from_str(&time_str, "%H:%M")
+                    .map_err(|e| ElicitError::RendererFailed(format!("invalid time: {e}")))?;
                 let dt = date.and_time(t);
                 FieldValue::DateTime(dt.and_utc().to_rfc3339())
-            }
+            },
         },
     };
 
@@ -235,11 +253,15 @@ pub fn render(spec: &PromptSpec, _opts: &ElicitOptions) -> Result<ElicitResponse
     // terminal buffers are a known footgun.
     if matches!(spec.urgency, Urgency::Secret) {
         eprintln!(
-            "warning: urgency=secret over TTY; the entered value will be visible in your shell scrollback."
+            "warning: urgency=secret over TTY; the entered value will be visible in your shell \
+             scrollback."
         );
     }
 
-    Ok(ElicitResponse::Answered { value, notes })
+    Ok(ElicitResponse::Answered {
+        value,
+        notes,
+    })
 }
 
 fn prompt_notes(spec: &NotesSpec, _context: &str) -> Result<Option<String>, ElicitError> {

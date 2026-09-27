@@ -8,11 +8,13 @@
 //! These are regular `#[test]` items — not benchmarks — so `cargo test` catches
 //! regressions in CI without needing a timing baseline.
 
-use phenotype_gfx::voxel::chunk::{Chunk, ChunkId, ChunkView, CHUNK_EDGE, CHUNK_VOXELS};
-use phenotype_gfx::voxel::cubic_mesher::CubicMesher;
-use phenotype_gfx::voxel::greedy_mesher::GreedyMesher;
-use phenotype_gfx::voxel::lod::LodLevel;
-use phenotype_gfx::voxel::material::MaterialId;
+use phenotype_gfx::voxel::{
+    chunk::{Chunk, ChunkId, ChunkView, CHUNK_EDGE, CHUNK_VOXELS},
+    cubic_mesher::CubicMesher,
+    greedy_mesher::GreedyMesher,
+    lod::LodLevel,
+    material::MaterialId,
+};
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -134,19 +136,22 @@ fn dense_solid_chunk_greedy_strictly_fewer_triangles() {
     let expected_cubic = 6 * CHUNK_EDGE * CHUNK_EDGE * 2;
     assert_eq!(
         cubic, expected_cubic,
-        "cubic dense-solid triangle count sanity check failed: got {cubic}, expected {expected_cubic}"
+        "cubic dense-solid triangle count sanity check failed: got {cubic}, expected \
+         {expected_cubic}"
     );
 
     // Strict inequality: AO-aware greedy must still beat cubic.
     // (Uniform-AO interior regions collapse; only AO boundary cells split.)
     assert!(
         greedy < cubic,
-        "REGRESSION: greedy ({greedy} tris) must be STRICTLY FEWER than cubic ({cubic} tris) for dense-solid chunk"
+        "REGRESSION: greedy ({greedy} tris) must be STRICTLY FEWER than cubic ({cubic} tris) for \
+         dense-solid chunk"
     );
 
     let reduction_pct = 100.0 * (1.0 - greedy as f64 / cubic as f64);
     eprintln!(
-        "[REGRESS-MESHER-003] dense-solid 16³ — cubic: {cubic} tris, greedy: {greedy} tris, reduction: {reduction_pct:.1}%"
+        "[REGRESS-MESHER-003] dense-solid 16³ — cubic: {cubic} tris, greedy: {greedy} tris, \
+         reduction: {reduction_pct:.1}%"
     );
 }
 

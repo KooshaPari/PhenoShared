@@ -26,8 +26,10 @@
 //!
 //! [`MaterialId`]: crate::voxel::material::MaterialId
 
-use std::io::{self, Read, Write};
-use std::mem;
+use std::{
+    io::{self, Read, Write},
+    mem,
+};
 
 use bytemuck::Pod;
 
@@ -147,7 +149,9 @@ where
         ));
     }
 
-    Ok(Chunk { voxels })
+    Ok(Chunk {
+        voxels,
+    })
 }
 
 // ────────────────────────────────────────────────────────────────────────────

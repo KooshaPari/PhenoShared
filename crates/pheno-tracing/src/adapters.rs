@@ -3,12 +3,12 @@
 //! Two adapters ship with the crate:
 //!
 //! - [`InMemoryAdapter`] — for unit/integration tests; stores spans in an
-//!   `Arc<Mutex<Vec<TraceOperation>>>` so tests can assert on what was
-//!   submitted.
+//!   `Arc<Mutex<Vec<TraceOperation>>>` so tests can assert on what was submitted.
 //! - [`StdoutAdapter`] — for local debugging; prints spans to stdout.
 
-use crate::port::{TraceOperation, TracePort, TraceResult, TraceStatus};
 use std::sync::{Arc, Mutex};
+
+use crate::port::{TraceOperation, TracePort, TraceResult, TraceStatus};
 
 /// In-memory adapter for testing.
 ///
@@ -42,7 +42,7 @@ impl TracePort for InMemoryAdapter {
                     "submit: mutex lock poisoned — recovering data"
                 );
                 poisoned.into_inner()
-            }
+            },
         };
         spans.push(op.clone());
         TraceResult {

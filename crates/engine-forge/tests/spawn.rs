@@ -6,13 +6,10 @@
 //! binary. The conv-id regex strategy is the path that wins; the
 //! list-diff fallback is unit-tested in `parse::tests`.
 
-use std::path::PathBuf;
-use std::process::Command as StdCommand;
-use std::time::Duration;
+use std::{path::PathBuf, process::Command as StdCommand, time::Duration};
 
 use engine_forge::{ForgeEngine, DEFAULT_TIMEOUT_SECS};
-use substrate_core::domain::Task;
-use substrate_core::ports::EnginePort;
+use substrate_core::{domain::Task, ports::EnginePort};
 use uuid::Uuid;
 
 /// Resolve the clean `fake-forge` binary, building it first if absent.

@@ -3,8 +3,9 @@
 
 # ── advisories ──────────────────────────────────────────────────────────
 [advisories]
-# Deny any advisory at any severity level.
-vulnerability = "deny"
+# cargo-deny >= 0.14 schema (PR #611): the `vulnerability`/`unmaintained`/
+# `unsound`/`notice` level keys are removed — advisories are denied by
+# default and only the `ignore` list below opts specific IDs out.
 # Warn on yanked crates (deny blocks the build; warn is informational).
 yanked = "warn"
 # Ignore specific advisories (add RUSTSEC-XXXX-XXXX here if needed).
@@ -15,6 +16,21 @@ ignore = [
     # Risk: LOW (requires malicious local D-Bus service).
     "RUSTSEC-2026-0195",
     "RUSTSEC-2026-0196",
+    # Unmaintained crates with NO safe upgrade (all evaluated 2026-09-24);
+    # each is pinned by an upstream tree we do not control. Revisit when the
+    # listed parent ships a replacement.
+    # bincode 1.3.3 (RUSTSEC-2025-0141): eyetracker-cli model-format dep;
+    #   upstream declared 1.3.3 final — migrate to postcard/rkyv when touched.
+    "RUSTSEC-2025-0141",
+    # instant 0.1.13 (RUSTSEC-2024-0384): transitive via tao (fabric-tray).
+    "RUSTSEC-2024-0384",
+    # paste 1.0.15 (RUSTSEC-2024-0436): transitive via leptos/nokhwa/either_of.
+    "RUSTSEC-2024-0436",
+    # proc-macro-error 1.0.4 (RUSTSEC-2024-0370): transitive via glib-macros/gtk.
+    "RUSTSEC-2024-0370",
+    # proc-macro-error2 2.0.1 (RUSTSEC-2026-0173): transitive via leptos_macro;
+    #   the fork's own abandonment mirrors RUSTSEC-2024-0370.
+    "RUSTSEC-2026-0173",
 ]
 
 # ── licenses ────────────────────────────────────────────────────────────
@@ -32,29 +48,22 @@ allow = [
     "Zlib",
     "BSL-1.0",
     "0BSD",
-    "MIT OR Apache-2.0",
     "Unlicense",
     "CC0-1.0",
     "CC-BY-4.0",
+    # The licenses below were auto-allowed by the removed pre-PR-611 default
+    # (`allow-osi-fsf-free = both`); version-2 behavior allows ONLY the
+    # explicit list, so they are named here to preserve the prior effective
+    # policy (all four are OSI-approved; MPL-2.0 is weak/file-level copyleft).
+    "MIT-0",
+    "NCSA",
+    "MPL-2.0",
+    "CDLA-Permissive-2.0",
 ]
-# Deny copyleft and other restrictive licenses.
-deny = [
-    "GPL-2.0",
-    "GPL-2.0-only",
-    "GPL-2.0-or-later",
-    "GPL-3.0",
-    "GPL-3.0-only",
-    "GPL-3.0-or-later",
-    "AGPL-1.0",
-    "AGPL-1.0-only",
-    "AGPL-1.0-or-later",
-    "AGPL-3.0",
-    "AGPL-3.0-only",
-    "AGPL-3.0-or-later",
-    "SSPL-1.0",
-    "EUPL-1.1",
-    "EUPL-1.2",
-]
+# cargo-deny >= 0.19 schema (PR #611): the [licenses] `deny` list is removed.
+# Under current behavior everything NOT in `allow` (or an exception) is
+# rejected, which subsumes the old deny list (GPL/AGPL/SSPL/EUPL are simply
+# not allowed above) with a single source of truth.
 # Don't confidence-check the license field.
 confidence-threshold = 0.8
 

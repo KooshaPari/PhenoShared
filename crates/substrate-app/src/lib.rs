@@ -14,17 +14,18 @@
 mod dispatch_planner;
 pub mod tiered_dispatch;
 
-pub use dispatch_planner::{
-    DispatchPlan, DispatchPlanner, EngineCandidate, PlanRequest, SessionMode,
-};
-
 use std::sync::Arc;
 
 use async_trait::async_trait;
-use substrate_core::domain::{StructuredResult, Task, TaskState};
-use substrate_core::error::{Result, SubstrateError};
-use substrate_core::ports::{DispatchApi, EnginePort, StorePort, TransportPort};
-use substrate_core::trace::{TaskCompleted, TaskFailed, TaskRegistered, TracePort};
+pub use dispatch_planner::{
+    DispatchPlan, DispatchPlanner, EngineCandidate, PlanRequest, SessionMode,
+};
+use substrate_core::{
+    domain::{StructuredResult, Task, TaskState},
+    error::{Result, SubstrateError},
+    ports::{DispatchApi, EnginePort, StorePort, TransportPort},
+    trace::{TaskCompleted, TaskFailed, TaskRegistered, TracePort},
+};
 use uuid::Uuid;
 
 /// Orchestrates dispatch over the three driven ports.
@@ -122,7 +123,7 @@ where
             Err(e) => {
                 self.emit_failed(&task, &e.to_string());
                 return Err(e);
-            }
+            },
         };
         task.conv_id = Some(session.conv_id.clone());
         self.store.persist(&task).await?;
@@ -133,14 +134,14 @@ where
             Err(e) => {
                 self.emit_failed(&task, &e.to_string());
                 return Err(e);
-            }
+            },
         };
         let result = match self.engine.extract_result(&dump) {
             Ok(r) => r,
             Err(e) => {
                 self.emit_failed(&task, &e.to_string());
                 return Err(e);
-            }
+            },
         };
 
         // 5. Reflect the engine's terminal status onto the task.
@@ -154,7 +155,7 @@ where
         match result.status {
             TaskState::Failed => self.emit_failed(&task, &result.text),
             TaskState::Completed => self.emit_completed(&task, &result),
-            _ => {}
+            _ => {},
         }
 
         Ok(result)

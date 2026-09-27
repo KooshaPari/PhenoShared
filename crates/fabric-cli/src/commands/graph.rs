@@ -1,14 +1,17 @@
 //! `fabric graph` subcommand.
 
+use std::{
+    path::{Path, PathBuf},
+    str::FromStr,
+};
+
 use anyhow::{Context, Result};
 use clap::Args;
-use std::path::{Path, PathBuf};
-use std::str::FromStr;
-
-use fabric_capability::descriptor::CapabilityDescriptor;
-use fabric_capability::locality::LocalityTier;
-use fabric_graph::builder::TopologyBuilder;
-use fabric_graph::model::{CapabilityRef, Edge, LinkMetrics, Node, NodeId, Topology};
+use fabric_capability::{descriptor::CapabilityDescriptor, locality::LocalityTier};
+use fabric_graph::{
+    builder::TopologyBuilder,
+    model::{CapabilityRef, Edge, LinkMetrics, Node, NodeId, Topology},
+};
 
 use crate::output;
 
@@ -80,8 +83,8 @@ pub fn dispatch(sub: &crate::GraphCommand, workspace: &Path) -> Result<()> {
 fn build(args: &BuildArgs, workspace: &Path) -> Result<()> {
     let mut builder = TopologyBuilder::new().with_name(&args.name);
     for path in &args.descriptors {
-        let json = std::fs::read_to_string(path)
-            .with_context(|| format!("read {}", path.display()))?;
+        let json =
+            std::fs::read_to_string(path).with_context(|| format!("read {}", path.display()))?;
         let desc: CapabilityDescriptor = serde_json::from_str(&json).context("parse descriptor")?;
         let node_id = NodeId::new(desc.node_id.to_string());
         let locality = LocalityTier::L0SameProcess;
@@ -178,8 +181,7 @@ fn add_edge(args: &AddEdgeArgs) -> Result<()> {
 }
 
 fn load_topology(path: &Path) -> Result<Topology> {
-    let json = std::fs::read_to_string(path)
-        .with_context(|| format!("read {}", path.display()))?;
+    let json = std::fs::read_to_string(path).with_context(|| format!("read {}", path.display()))?;
     serde_json::from_str(&json).context("parse topology JSON")
 }
 
@@ -195,11 +197,10 @@ fn save_topology(
             let dir = workspace.join("topologies");
             std::fs::create_dir_all(&dir)?;
             dir.join(format!("{}.json", name))
-        }
+        },
     };
     let json = serde_json::to_string_pretty(topology)?;
-    std::fs::write(&out_path, json)
-        .with_context(|| format!("write {}", out_path.display()))?;
+    std::fs::write(&out_path, json).with_context(|| format!("write {}", out_path.display()))?;
     eprintln!("wrote {}", out_path.display());
     Ok(())
 }

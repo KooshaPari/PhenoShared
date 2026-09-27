@@ -3,8 +3,10 @@
 //! Core defines the port contract; `file-watcher` wraps the `notify` crate
 //! (inotify / FSEvents / ReadDirectoryChangesW) with a debounced stream.
 
-use std::path::{Path, PathBuf};
-use std::time::Duration;
+use std::{
+    path::{Path, PathBuf},
+    time::Duration,
+};
 
 use async_trait::async_trait;
 use serde::{Deserialize, Serialize};

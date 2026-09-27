@@ -12,8 +12,10 @@
 // `NoReplacement` outcome happens when the pruned topology has no feasible
 // route.
 
-use std::io::Write;
-use std::process::{Command, Stdio};
+use std::{
+    io::Write,
+    process::{Command, Stdio},
+};
 
 fn bin_path() -> std::path::PathBuf {
     std::path::PathBuf::from(env!("CARGO_BIN_EXE_fabric-graph-cli"))
@@ -54,8 +56,8 @@ fn build_replan_request(
     }
     let intent = ib.build();
 
-    let old_plan = fabric_graph::compile(&topo, &intent)
-        .expect("compile succeeds for surviving topology");
+    let old_plan =
+        fabric_graph::compile(&topo, &intent).expect("compile succeeds for surviving topology");
 
     let req = fabric_graph_cli::protocol::ReplanRequest {
         topology: topo,
@@ -110,8 +112,8 @@ fn cli_replan_unknown_failed_node_does_not_change_topology() {
     // failed_nodes)`; if the NodeId does NOT exist, prune is a no-op
     // and the topology survives. Documenting this invariant:
     //   - failed_nodes is a hint, not a command
-    //   - callers wanting strict no_replace-on-failed-node behavior
-    //     must prune the topology themselves before calling replan.
+    //   - callers wanting strict no_replace-on-failed-node behavior must prune the topology
+    //     themselves before calling replan.
     let req = build_replan_request(
         None,
         vec!["019200a8-0000-7000-8000-000000000001"], // not in the topology
@@ -148,8 +150,8 @@ fn cli_replan_pruned_only_node_returns_replaced_with_single_step() {
         .min_trust(fabric_graph::TrustLevel::Untrusted)
         .prefer_node("target")
         .build();
-    let old_plan = fabric_graph::compile(&full_topo, &intent)
-        .expect("compile succeeds for full topology");
+    let old_plan =
+        fabric_graph::compile(&full_topo, &intent).expect("compile succeeds for full topology");
     let req = fabric_graph_cli::protocol::ReplanRequest {
         topology: pruned_topo,
         intent,
@@ -163,9 +165,11 @@ fn cli_replan_pruned_only_node_returns_replaced_with_single_step() {
     assert_eq!(resp["status"], "replaced");
     assert!(resp["new_plan"].is_object());
     let steps = resp["new_plan"]["steps"].as_array().expect("steps array");
-    assert!(!steps.is_empty(),
+    assert!(
+        !steps.is_empty(),
         "remaining node must route; prune + replan returns Replaced with steps={:?}",
-        steps);
+        steps
+    );
 }
 
 #[test]
@@ -173,8 +177,10 @@ fn cli_replan_empty_blacklist_returns_replaced() {
     // Empty blacklist -> replan returns Replaced(old_plan) immediately
     // (no work to do). This is the documented shortcut per failover.rs.
     use chrono::Utc;
-    use fabric_graph::builder::{IntentBuilder, TopologyBuilder};
-    use fabric_graph::model::{IntentId, RoutePlan, RoutePlanId, TopologyEpoch};
+    use fabric_graph::{
+        builder::{IntentBuilder, TopologyBuilder},
+        model::{IntentId, RoutePlan, RoutePlanId, TopologyEpoch},
+    };
     let topo = TopologyBuilder::new().with_name("empty").build();
     let intent = IntentBuilder::new()
         .name("smoke-empty")
@@ -212,7 +218,11 @@ fn cli_no_subcommand_exits_one() {
         .stderr(Stdio::piped())
         .output()
         .expect("spawn");
-    assert_eq!(out.status.code(), Some(1), "exit code 1 for missing subcommand");
+    assert_eq!(
+        out.status.code(),
+        Some(1),
+        "exit code 1 for missing subcommand"
+    );
 }
 
 #[test]

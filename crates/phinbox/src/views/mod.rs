@@ -26,8 +26,10 @@ pub use html::{
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::inbox::{PendingRequest, RequestOrigin};
-    use crate::spec::{FieldSpec, PromptSpec, Urgency};
+    use crate::{
+        inbox::{PendingRequest, RequestOrigin},
+        spec::{FieldSpec, PromptSpec, Urgency},
+    };
 
     fn sample_pending(id: &str, urgent: Urgency) -> PendingRequest {
         PendingRequest {
@@ -41,6 +43,7 @@ mod tests {
                 callback: None,
             },
             spec: PromptSpec {
+                details: None,
                 title: "What is your favorite color?".into(),
                 question: "Please answer honestly.".into(),
                 field: FieldSpec::Text {
@@ -69,6 +72,39 @@ mod tests {
     }
 
     #[test]
+    fn form_widget_is_inside_the_form_element() {
+        // Regression: the answer widget and the notes box were emitted BEFORE
+        // `<form>`, so a real browser submit sent only `confirm=ok` and the
+        // value the human typed never reached the server. The daemon used to
+        // store that as an empty answer, which is exactly what hid the bug.
+        let mut req = sample_pending("inside-1", Urgency::Info);
+        req.spec.notes = Some(crate::spec::NotesSpec {
+            label: "Why?".into(),
+            required: false,
+            default: None,
+            max_length: None,
+        });
+        let html = render_form_html(&req);
+
+        let open = html.find("<form").expect("form open tag");
+        let close = html.find("</form>").expect("form close tag");
+        let field = html.find("name=value").expect("answer field");
+        let notes = html.find("name=notes").expect("notes box");
+        let submit = html.find("name=confirm").expect("submit button");
+
+        assert!(open < close, "form must be closed after it opens: {html}");
+        assert!(
+            open < field && field < close,
+            "the answer field must be inside <form>, else submit drops it: {html}"
+        );
+        assert!(
+            open < notes && notes < close,
+            "the notes box must be inside <form>, else submit drops it: {html}"
+        );
+        assert!(open < submit && submit < close);
+    }
+
+    #[test]
     fn index_empty() {
         let html = render_inbox_index_html(&[]);
         assert!(snapshot_contains(
@@ -84,11 +120,7 @@ mod tests {
         let html = render_inbox_index_html(&reqs);
         assert!(snapshot_contains(
             &html,
-            &[
-                "r1",
-                "What is your favorite color?",
-                "Info",
-            ]
+            &["r1", "What is your favorite color?", "Info",]
         ));
         assert!(html.contains("</html>"));
     }
@@ -218,9 +250,7 @@ mod tests {
         assert!(html.contains(r#"<option value="staging""#));
         assert!(html.contains(r#"<option value="prod" selected"#));
         assert!(html.contains(r#"<option value="staging">Staging</option>"#));
-        assert!(html.contains(
-            r#"<option value="prod" selected>Production</option>"#
-        ));
+        assert!(html.contains(r#"<option value="prod" selected>Production</option>"#));
     }
 
     #[test]

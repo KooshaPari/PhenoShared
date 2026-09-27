@@ -1,8 +1,7 @@
 //! Unit tests for multi-provider argv construction.
 
 use clap::Parser;
-use driver_argv::cli::ArgvCli;
-use driver_argv::provider::build_argv;
+use driver_argv::{cli::ArgvCli, provider::build_argv};
 
 fn parse(args: &[&str]) -> ArgvCli {
     let mut full = vec!["argv"];

@@ -48,20 +48,31 @@
 //!
 //! ## Public surface
 //!
-//! - **Domain**: [`Task`], [`TaskState`], [`StructuredResult`], [`Session`], mailboxes, routing decisions
-//! - **Ports** ([`ports`]): [`EnginePort`], [`StorePort`], [`TransportPort`], [`RoutingPort`], [`DispatchApi`], plus schedule/workflow/claim/skill/memory/process/watcher/event-store ports
+//! - **Domain**: [`Task`], [`TaskState`], [`StructuredResult`], [`Session`], mailboxes, routing
+//!   decisions
+//! - **Ports** ([`ports`]): [`EnginePort`], [`StorePort`], [`TransportPort`], [`RoutingPort`],
+//!   [`DispatchApi`], plus schedule/workflow/claim/skill/memory/process/watcher/event-store ports
 //! - **Planning** (`app`): [`DispatchPlanner`], [`DispatchPlan`], [`PlanRequest`], [`SessionMode`]
 //! - **Spec** (`spec`): [`TaskSpec`] for provider-agnostic argv building
 #![forbid(unsafe_code)]
 #![warn(missing_docs)]
 
-pub use substrate_core::{
-    claim_port, domain, error, event_store_port, mailbox_port, memory_port, ports, process_port,
-    routing_port, schedule_port, skill_port, trace, watcher_port, workflow_port,
+#[cfg(feature = "spec")]
+pub use engine_spec::{ArgvBuilder, TaskSpec};
+#[cfg(feature = "app")]
+pub use substrate_app::{
+    DispatchPlan, DispatchPlanner, DispatchService, EngineCandidate, PlanRequest, SessionMode,
 };
-
+/// Domain entities and value objects (re-exported for ergonomic `use substrate::Task`).
+pub use substrate_core::domain::{
+    Agent, AgentRole, Conversation, ConversationDump, EngineCapabilities, Mailbox, Message,
+    MessageKind, Part, RoutingDecision, Session, StructuredResult, Task, TaskState, Team,
+};
 pub use substrate_core::{
-    replay, replay_task_state, validate_json_schema, CircuitBreaker, CircuitBreakerConfig,
+    claim_port, domain, error, event_store_port, mailbox_port, memory_port, ports,
+    ports::{DispatchApi, EnginePort, RoutingPort, StorePort, TransportPort},
+    process_port, replay, replay_task_state, routing_port, schedule_port, skill_port, trace,
+    validate_json_schema, watcher_port, workflow_port, CircuitBreaker, CircuitBreakerConfig,
     CircuitState, ClaimPort, EventEnvelope, EventStorePort, FallbackEntry, MailboxStore,
     MemoryEntry, MemoryPort, ProcessHandle, ProcessPort, ProcessSpawnSpec, ProcessState,
     Projection, Result, RoutingPoolState, RoutingSelector, RoutingStrategy, RoutingSuperset,
@@ -71,22 +82,6 @@ pub use substrate_core::{
     TracePort, WatchEvent, WatchEventKind, WatchHandle, WatcherPort, Weekday, WorkItem,
     WorkItemState, Workflow, WorkflowEdge, WorkflowNode, WorkflowPort,
 };
-
-pub use substrate_core::ports::{DispatchApi, EnginePort, RoutingPort, StorePort, TransportPort};
-
-/// Domain entities and value objects (re-exported for ergonomic `use substrate::Task`).
-pub use substrate_core::domain::{
-    Agent, AgentRole, Conversation, ConversationDump, EngineCapabilities, Mailbox, Message,
-    MessageKind, Part, RoutingDecision, Session, StructuredResult, Task, TaskState, Team,
-};
-
-#[cfg(feature = "app")]
-pub use substrate_app::{
-    DispatchPlan, DispatchPlanner, DispatchService, EngineCandidate, PlanRequest, SessionMode,
-};
-
-#[cfg(feature = "spec")]
-pub use engine_spec::{ArgvBuilder, TaskSpec};
 
 /// A2A wire-schema types (distinct from [`domain`] task/message shapes).
 #[cfg(feature = "a2a")]

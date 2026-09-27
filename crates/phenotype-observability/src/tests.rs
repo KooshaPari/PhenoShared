@@ -1,9 +1,9 @@
 //! Integration tests for observability crate
 
-use crate::headers::{
-    EventId, FallbackStep, HeaderBuilder, RequestId, ResponseCost, TimeToFirstToken,
+use crate::{
+    headers::{EventId, FallbackStep, HeaderBuilder, RequestId, ResponseCost, TimeToFirstToken},
+    telemetry::{ResponseReceivedEvent, TelemetryEvent},
 };
-use crate::telemetry::{ResponseReceivedEvent, TelemetryEvent};
 
 // Traces to: FR-OBSERVABILITY-INTEGRATION-HEADERS-001
 #[test]

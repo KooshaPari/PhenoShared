@@ -4,12 +4,11 @@
 
 mod api;
 
+pub use api::{basic_auth_header, CursorCloudDispatch, DEFAULT_BASE_URL};
 use async_trait::async_trait;
 use substrate_core::cloud_dispatch_port::{
     CloudDispatchPort, CloudResult, CloudTaskHandle, CloudTaskStatus,
 };
-
-pub use api::{basic_auth_header, CursorCloudDispatch, DEFAULT_BASE_URL};
 
 /// Map a Cursor run status string to [`CloudTaskStatus`].
 pub fn map_run_status(raw: &str, error_message: Option<&str>) -> CloudTaskStatus {

@@ -1,9 +1,8 @@
 //! Mesh port: engine-neutral vertex / index buffers and the per-engine [`Mesher`] trait.
 
 // Re-export domain types so the trait and implementations share the same types.
-use crate::voxel::lod::LodLevel;
 pub use crate::voxel::mesh::{MeshBuffer, MeshError, MeshResult, MeshVertex};
-use crate::voxel::ports::chunk::ChunkView;
+use crate::voxel::{lod::LodLevel, ports::chunk::ChunkView};
 
 /// A per-engine adapter that turns a chunk view + LOD level into an engine-specific
 /// mesh artifact (Bevy `Mesh`, Godot `ArrayMesh`, Unreal procedural mesh, …).

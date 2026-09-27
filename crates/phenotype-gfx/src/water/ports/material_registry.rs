@@ -8,8 +8,10 @@
 //! material's `id: u64` as the registry key (the C# equivalent derived a
 //! Guid from `material.GetHashCode()`).
 
-use std::collections::HashMap;
-use std::sync::atomic::{AtomicU64, Ordering};
+use std::{
+    collections::HashMap,
+    sync::atomic::{AtomicU64, Ordering},
+};
 
 use crate::water::error::{WaterError, WaterResult};
 #[allow(deprecated)]

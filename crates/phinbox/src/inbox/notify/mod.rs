@@ -15,12 +15,14 @@ mod tray;
 mod webhook;
 
 pub use imessage::{notify_email, notify_imessage};
+use serde::{Deserialize, Serialize};
 pub use tray::notify_native;
 pub use webhook::notify_webhook;
 
-use crate::inbox::{NotificationKind, PendingRequest};
-use crate::spec::PromptSpec;
-use serde::{Deserialize, Serialize};
+use crate::{
+    inbox::{NotificationKind, PendingRequest},
+    spec::PromptSpec,
+};
 
 /// Per-surface configuration captured by the agent at enqueue time or
 /// inherited from the environment.
@@ -177,13 +179,47 @@ pub fn inbox_open_url(req: &PendingRequest) -> String {
     inbox_open_url_for(&req.request_id)
 }
 
-/// URL helper -- defaults to the local daemon (`localhost:7117`) unless
-/// `PHINBOX_BASE_URL` is set.
+/// Base URL of the local inbox daemon when `PHINBOX_BASE_URL` is not set.
+/// The port comes from the daemon's own `DEFAULT_PORT` so there is exactly
+/// one place that knows the default.
+#[must_use]
+pub fn default_inbox_base_url() -> String {
+    format!("http://localhost:{}", crate::inbox::daemon::DEFAULT_PORT)
+}
+
+/// Base URL for user-facing inbox links: `PHINBOX_BASE_URL` when set (a
+/// remote or reverse-proxied inbox), else the local daemon default.
+///
+/// Callers that already know a live daemon base (host **and** port, e.g.
+/// from the lockfile via `inbox_live_url`) must NOT go through this --
+/// use [`inbox_open_url_with_base`] so the live port is preserved.
+#[must_use]
+pub fn inbox_base_url() -> String {
+    match std::env::var("PHINBOX_BASE_URL") {
+        Ok(v) if !v.trim().is_empty() => v.trim().trim_end_matches('/').to_string(),
+        _ => default_inbox_base_url(),
+    }
+}
+
+/// Build the inbox form URL for `request_id` against an **explicit** base
+/// such as `http://127.0.0.1:7412`.
+///
+/// This is the correct constructor whenever a live daemon base is known:
+/// it keeps the base's host *and* port intact and never rewrites the
+/// request id.
+#[must_use]
+pub fn inbox_open_url_with_base(base: &str, request_id: &str) -> String {
+    format!("{}/inbox/{request_id}", base.trim_end_matches('/'))
+}
+
+/// URL helper for notification bodies (iMessage / email / webhook text),
+/// where no local daemon base may be discoverable: `PHINBOX_BASE_URL`
+/// when set, else the local daemon default.
+///
+/// Prefer [`inbox_open_url_with_base`] when a live daemon base is known.
 #[must_use]
 pub fn inbox_open_url_for(request_id: &str) -> String {
-    let base = std::env::var("PHINBOX_BASE_URL")
-        .unwrap_or_else(|_| "http://localhost:7117".to_string());
-    format!("{base}/inbox/{request_id}")
+    inbox_open_url_with_base(&inbox_base_url(), request_id)
 }
 
 pub(super) fn url_encode(s: &str) -> String {
@@ -192,7 +228,7 @@ pub(super) fn url_encode(s: &str) -> String {
         match b {
             b'A'..=b'Z' | b'a'..=b'z' | b'0'..=b'9' | b'-' | b'_' | b'.' | b'~' => {
                 out.push(b as char);
-            }
+            },
             _ => out.push_str(&format!("%{b:02X}")),
         }
     }
@@ -222,6 +258,7 @@ mod tests {
 
     fn sample_req(request_id: &str) -> PendingRequest {
         let spec = crate::spec::PromptSpec {
+            details: None,
             title: "Approval needed".into(),
             question: "Continue with rollout to production?".into(),
             field: crate::spec::FieldSpec::Boolean {
@@ -280,6 +317,41 @@ mod tests {
     #[test]
     fn inbox_open_url_default_port() {
         assert!(inbox_open_url_for("xyz").ends_with("/inbox/xyz"));
+    }
+
+    #[test]
+    fn explicit_base_keeps_host_and_port() {
+        assert_eq!(
+            inbox_open_url_with_base("http://127.0.0.1:7412", "abc"),
+            "http://127.0.0.1:7412/inbox/abc"
+        );
+    }
+
+    #[test]
+    fn explicit_base_tolerates_trailing_slash() {
+        assert_eq!(
+            inbox_open_url_with_base("http://127.0.0.1:7412/", "abc"),
+            "http://127.0.0.1:7412/inbox/abc"
+        );
+    }
+
+    #[test]
+    fn explicit_base_does_not_rewrite_request_id() {
+        // Regression: `phinbox open --latest` used to patch the host with
+        // `String::replace`, which also rewrote any request id containing
+        // the literal being replaced (and mangled the port).
+        assert_eq!(
+            inbox_open_url_with_base("http://127.0.0.1:7412", "127.0.0.1-x"),
+            "http://127.0.0.1:7412/inbox/127.0.0.1-x"
+        );
+    }
+
+    #[test]
+    fn default_base_tracks_daemon_default_port() {
+        assert_eq!(
+            default_inbox_base_url(),
+            format!("http://localhost:{}", crate::inbox::daemon::DEFAULT_PORT)
+        );
     }
 
     #[test]

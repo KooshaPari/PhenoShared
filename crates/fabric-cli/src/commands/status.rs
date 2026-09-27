@@ -5,8 +5,7 @@
 use anyhow::{Context, Result};
 use clap::Args;
 
-use crate::output;
-use crate::wire_client;
+use crate::{output, wire_client};
 
 #[derive(Args, Debug)]
 pub struct StatusArgs {
@@ -51,11 +50,7 @@ pub fn dispatch(args: &StatusArgs) -> Result<()> {
                 };
 
                 format!(
-                    "{:<18} {}\n\
-                     {:<18} {}\n\
-                     {:<18} {}\n\
-                     {:<18} {}\n\
-                     {:<18} {}\n",
+                    "{:<18} {}\n{:<18} {}\n{:<18} {}\n{:<18} {}\n{:<18} {}\n",
                     console::style("Status:").cyan().bold(),
                     status_style,
                     console::style("Uptime:").cyan().bold(),
@@ -68,8 +63,10 @@ pub fn dispatch(args: &StatusArgs) -> Result<()> {
                     format!("{} leases, {} plans", leases, plans),
                 )
             })?;
-        }
-        Err(wire_client::WireClientError::ConnectionRefused { addr }) => {
+        },
+        Err(wire_client::WireClientError::ConnectionRefused {
+            addr,
+        }) => {
             if args.json {
                 println!(
                     "{}",
@@ -87,7 +84,7 @@ pub fn dispatch(args: &StatusArgs) -> Result<()> {
                 eprintln!("  start fabric-daemon to enable status monitoring");
             }
             std::process::exit(1);
-        }
+        },
         Err(e) => return Err(e).context("status check failed"),
     }
 

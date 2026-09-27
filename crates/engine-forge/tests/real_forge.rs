@@ -10,12 +10,10 @@
 //! Run explicitly with:
 //!   RUN_FORGE_INT=1 cargo test -p engine-forge --test real_forge -- --ignored --nocapture
 
-use std::process::Command as StdCommand;
-use std::time::Duration;
+use std::{process::Command as StdCommand, time::Duration};
 
 use engine_forge::ForgeEngine;
-use substrate_core::domain::Task;
-use substrate_core::ports::EnginePort;
+use substrate_core::{domain::Task, ports::EnginePort};
 use uuid::Uuid;
 
 fn git_available() -> bool {

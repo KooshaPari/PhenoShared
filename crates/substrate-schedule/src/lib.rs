@@ -3,11 +3,14 @@
 
 //! Cron/interval/daily/weekly scheduling via [`SchedulePort`].
 
+use std::str::FromStr;
+
 use chrono::{DateTime, Datelike, Duration, Utc, Weekday as ChronoWeekday};
 use croner::Cron;
-use std::str::FromStr;
-use substrate_core::error::{Result, SubstrateError};
-use substrate_core::schedule_port::{ScheduleInstant, SchedulePort, ScheduleTrigger, Weekday};
+use substrate_core::{
+    error::{Result, SubstrateError},
+    schedule_port::{ScheduleInstant, SchedulePort, ScheduleTrigger, Weekday},
+};
 
 /// [`SchedulePort`] backed by the `croner` crate for cron expressions.
 #[derive(Debug, Default, Clone, Copy)]
@@ -96,7 +99,9 @@ impl SchedulePort for CronSchedule {
     ) -> Result<ScheduleInstant> {
         let after_dt = from_instant(after);
         match trigger {
-            ScheduleTrigger::Cron { expr } => {
+            ScheduleTrigger::Cron {
+                expr,
+            } => {
                 // croner 3.x: `Cron::from_str` is the documented entry point and the
                 // underlying `CronParser` defaults to `Seconds::Optional`, which matches
                 // the legacy `with_seconds_optional()` behavior for 5- and 6-field patterns.
@@ -106,8 +111,10 @@ impl SchedulePort for CronSchedule {
                     .find_next_occurrence(&after_dt, false)
                     .map_err(|e| SubstrateError::InvalidSchedule(format!("cron next: {e}")))?;
                 Ok(to_instant(next))
-            }
-            ScheduleTrigger::Interval { every_secs } => {
+            },
+            ScheduleTrigger::Interval {
+                every_secs,
+            } => {
                 if *every_secs == 0 {
                     return Err(SubstrateError::InvalidSchedule(
                         "interval every_secs must be > 0".into(),
@@ -115,8 +122,11 @@ impl SchedulePort for CronSchedule {
                 }
                 let next = after_dt + Duration::seconds(*every_secs as i64);
                 Ok(to_instant(next))
-            }
-            ScheduleTrigger::Daily { hour, minute } => next_daily(after_dt, *hour, *minute),
+            },
+            ScheduleTrigger::Daily {
+                hour,
+                minute,
+            } => next_daily(after_dt, *hour, *minute),
             ScheduleTrigger::Weekly {
                 weekday,
                 hour,
@@ -128,8 +138,9 @@ impl SchedulePort for CronSchedule {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
     use chrono::{TimeZone, Timelike};
+
+    use super::*;
 
     fn sched() -> CronSchedule {
         CronSchedule::new()
@@ -160,7 +171,12 @@ mod tests {
         let s = sched();
         let after = at(2026, 6, 15, 10, 0);
         let next = s
-            .next_run(&ScheduleTrigger::Interval { every_secs: 300 }, after)
+            .next_run(
+                &ScheduleTrigger::Interval {
+                    every_secs: 300,
+                },
+                after,
+            )
             .unwrap();
         assert_eq!(next.secs - after.secs, 300);
     }
@@ -170,7 +186,13 @@ mod tests {
         let s = sched();
         let after = at(2026, 6, 15, 8, 0);
         let next = s
-            .next_run(&ScheduleTrigger::Daily { hour: 9, minute: 0 }, after)
+            .next_run(
+                &ScheduleTrigger::Daily {
+                    hour: 9,
+                    minute: 0,
+                },
+                after,
+            )
             .unwrap();
         let dt = from_instant(next);
         assert_eq!(dt.hour(), 9);

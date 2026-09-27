@@ -37,8 +37,9 @@ impl Target {
 }
 
 mod opt_seconds_as_duration {
-    use serde::{Deserialize, Deserializer, Serializer};
     use std::time::Duration;
+
+    use serde::{Deserialize, Deserializer, Serializer};
 
     pub fn serialize<S: Serializer>(d: &Option<Duration>, s: S) -> Result<S::Ok, S::Error> {
         match d {
@@ -65,7 +66,9 @@ mod opt_seconds_as_duration {
     fn parse_human(s: &str) -> Result<Duration, String> {
         let s = s.trim();
         let (num, unit) = s.split_at(s.len().saturating_sub(1));
-        let n: u64 = num.parse().map_err(|e: std::num::ParseIntError| e.to_string())?;
+        let n: u64 = num
+            .parse()
+            .map_err(|e: std::num::ParseIntError| e.to_string())?;
         let mul = match unit {
             "s" => 1,
             "m" => 60,

@@ -1,6 +1,7 @@
 //! Settings page — daemon configuration and feature toggles.
 
 use leptos::prelude::*;
+
 use crate::api::*;
 
 /// Settings page — daemon configuration and feature toggles.
@@ -18,7 +19,7 @@ pub fn SettingsPage() -> impl IntoView {
             Ok(data) => {
                 set_features.set(data.features.clone());
                 set_settings.set(Some(data));
-            }
+            },
             Err(e) => set_save_error.set(Some(e)),
         }
     });
@@ -41,7 +42,7 @@ pub fn SettingsPage() -> impl IntoView {
                     set_features.set(data.features.clone());
                     set_settings.set(Some(data));
                     set_save_status.set("Saved".to_string());
-                }
+                },
                 Err(e) => set_save_error.set(Some(e)),
             }
         });
@@ -134,7 +135,7 @@ fn FeatureToggle(
             "upnp" => f.upnp_enabled = !f.upnp_enabled,
             "logging" => f.logging_enabled = !f.logging_enabled,
             "federation" => f.federation_enabled = !f.federation_enabled,
-            _ => {}
+            _ => {},
         });
     };
 

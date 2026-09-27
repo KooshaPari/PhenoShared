@@ -154,7 +154,10 @@ pub fn extract_eye_regions(landmarks: &[Landmark3D]) -> Option<(EyeRegion, EyeRe
         return None;
     }
 
-    let to_2d = |l: &Landmark3D| Landmark2D { x: l.x, y: l.y };
+    let to_2d = |l: &Landmark3D| Landmark2D {
+        x: l.x,
+        y: l.y,
+    };
 
     // Left eye
     let left_center = Landmark2D {

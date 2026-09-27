@@ -5,8 +5,12 @@ Files under `crates/` from archived `<REDACTED>/PhenoProc` (wave 6, 2026-06-17).
 ## PhenoAgent absorption (P5, 2026-06-19)
 
 Rust agent daemon/skills from `<REDACTED>/PhenoAgent` canonical in
-`crates/pheno-agent/` (`phenotype-daemon`, `phenotype-skills`). See
-[`docs/absorption/PHENOAGENT_ABSORPTION_2026_06_18.md`](../absorption/PHENOAGENT_ABSORPTION_2026_06_18.md).
+`crates/pheno-agent/` (`phenotype-daemon`, `phenotype-skills`). Full
+absorption record lives in sibling repos at this path:
+`../Agentora/docs/absorption/PHENOAGENT_ABSORPTION_2026_06_18.md`
+(also in `../wt-agentora-clippy-20260911/docs/absorption/`). The file
+is intentionally not duplicated in PhenoShared; Agentora is the canonical
+owner of the PHENOAGENT lineage.
 Source repo deprecated; archive gate P5-2 pending.
 
 ## phenoRouterMonitor → phenoAI absorption (P5-4, 2026-06-20)

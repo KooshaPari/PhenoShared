@@ -1,321 +1,443 @@
 # PhenoShared
 
-**Phenotype shared workspace — the main monorepo coordinating the Phenotype ecosystem across Rust, Swift, TypeScript, and Python.**
+Shared infrastructure workspace for the [Phenotype](https://github.com/KooshaPari)
+org. It is a container repository, not a single-purpose project: it holds the
+shared Rust crates, the reusable GitHub Actions workflows and composite actions,
+and the shared documentation (including the Global Handbook) that the rest of the
+fleet consumes.
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![License: Apache-2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
-[![Rust](https://img.shields.io/badge/rust-1.81%2B-orange.svg)](https://www.rust-lang.org/)
-[![Workspace: Cargo](https://img.shields.io/badge/workspace-cargo-blueviolet.svg)](https://doc.rust-lang.org/cargo/)
-[![Crates: 365+](https://img.shields.io/badge/crates-365%2B-success.svg)](./crates/)
+Local clones of this repo are often still checked out as `repos/pheno`; the
+canonical GitHub name is `KooshaPari/PhenoShared`, and `KooshaPari/pheno`
+redirects to it.
 
----
+## At a glance
 
-## What is this?
+| Field | Value | How measured |
+| --- | --- | --- |
+| Root workspace packages | **76** | `cargo metadata --no-deps` (2026-09-17) |
+| `[workspace].members` entries | 73, plus 3 path-dep members | `Cargo.toml` |
+| Binary targets in root workspace | **16** | `cargo metadata --no-deps` |
+| First-level crate manifests under `crates/` | **329** | `ls crates/*/Cargo.toml` |
+| Nested Cargo workspaces under `crates/` | **26** | `grep -rl '^\[workspace\]' --include=Cargo.toml` |
+| Workspace version | `0.3.10` | `[workspace.package]` |
+| Rust edition / MSRV | 2021 / `rust-version = "1.80"` | `Cargo.toml` |
+| Unsafe code | `forbid` workspace-wide | `[workspace.lints.rust]` |
+| Reusable workflow files | **84** | `find .github/workflows -maxdepth 1 -name '*.y*ml'` |
+| Composite actions | **5** | `ls -d .github/actions/*/` |
+| Markdown files under `docs/` | 2,507 | `find docs -name '*.md'` |
+| ADRs | 82 in `docs/adr/`, 25 in `docs/adrs/` | directory listing |
+| Registered project manifests | 178 | `projects/*.json` |
+| License | `MIT OR Apache-2.0` | `Cargo.toml`, `LICENSE-MIT`, `LICENSE-APACHE` |
 
-`phenoAI` is the **shared Phenotype workspace** at `KooshaPari/PhenoShared`. It hosts **365+ crates**, several standalone apps, and the documentation/contracts that bind the Phenotype ecosystem together. It is *not* a single product — it is the substrate, engines, fabric, integrations, tooling, and apps that specialized products (PhenoMLX, HeliosLab, Portage, …) are built on top of.
+## What this repository is
 
-Distinct from PhenoMLX, which focuses on MLX-native multi-backend inference, this repository owns:
+Three cross-org functions are co-located in one workspace:
 
-- the **Rust core** (substrate, engines, fabric, agileplus, phenotype-*, store-*, wave, supervisor, …)
-- the **agent dispatch surface** (Claude / Codex / Forge / A2A / AgentAPI engines, OmniRoute adapters, cloud bridges)
-- the **client applications** (phinbox-app, bench-cockpit, byteport, tooling, desktop shells)
-- the **contracts and docs** that keep all of the above consistent (ARCHITECTURE.md, ADR/, docs/, AGENTS.md)
+| Function | Location | Scope |
+| --- | --- | --- |
+| Shared Rust crates | `crates/` | 329 first-level manifests; 76 packages in the root workspace |
+| Reusable workflows | `.github/workflows/` | 84 workflow files, called from other repos |
+| Shared actions | `.github/actions/` | 5 composite actions |
+| Shared docs | `docs/`, `handbook/` | Global Handbook, ADRs, absorption records, session artifacts |
 
-If a change extends Fabric into governed-intent, agent dispatch, economic allocation, evidence-graph, session-ledger, or process-supervision domains, an ADR is required first (see `CONTRIBUTING.md`).
+The workspace consolidates infrastructure, tooling, agent frameworks, connectors,
+compute-mesh IaC, and ecosystem governance that previously lived across many
+standalone repositories. The absorption trail is recorded in
+[`docs/ABSORPTION_INDEX.md`](docs/ABSORPTION_INDEX.md) and `docs/absorption/`
+(33 per-project records).
 
-## Highlights
+## The substrate spine
 
-- **Polyglot by default, Rust-first where it wins.** No language is forbidden; the choice is driven by measured performance and fit.
-- **Capability-based runtime.** Substrate layer exposes typed ports and adapters; engines compose on top.
-- **Multi-agent orchestration.** `engine-claude`, `engine-codex`, `engine-forge`, `engine-a2a`, `engine-agentapi` and the `agileplus-*` intent plane.
-- **Fabric layer.** Distributed topology, capability inventory, route plans, leases, and surface isolation (absorbed 2026-09-16).
-- **Production-grade quality gates.** Workspace `cargo clippy --workspace -- -D warnings`, `unsafe_code = "forbid"`, and dedicated CI.
+The root workspace builds around `substrate`, the Tier 0 dispatch spine. It
+routes a task to the best available coding engine through a deterministic planner
+and a set of hexagonal ports, so consumers depend on one facade instead of wiring
+adapters by hand. The dependency direction is enforced mechanically by
+`arch-test`, which fails the build when an edge crosses the domain/adapter
+boundary the wrong way.
 
-## Key Crates (Sampled)
+### Core spine
 
-The workspace contains **365+ crates**; this is a representative sample, grouped by family. Package names match each crate's `Cargo.toml` `[package].name`.
+| Crate | Path | Role |
+| --- | --- | --- |
+| `substrate` | `crates/substrate` | SDK facade: re-exports ports, domain types, planner, optional adapters. Features `app`, `spec`, `a2a`. |
+| `substrate-core` | `crates/substrate-core` | Hexagonal core contracts (domain + ports). Depends only on `serde`, `thiserror`, `uuid`, `async-trait`. |
+| `substrate-app` | `crates/substrate-app` | Application layer: `DispatchService` use-case and `DispatchPlanner`, generic over the core ports. |
+| `engine-spec` | `crates/engine-spec` | Provider-agnostic `TaskSpec` to argv contract. |
+| `arch-test` | `crates/arch-test` | Architecture conformance tests: enforces hexagonal dependency direction. |
 
-### Substrate (core runtime)
+### Inbound drivers
 
-| Crate | Package | Purpose |
-|-------|---------|---------|
-| `crates/substrate` | `substrate` | Rust SDK facade: hexagonal ports, domain types, dispatch planner, optional adapters |
-| `crates/substrate-core` | `substrate-core` | Inner core types and traits |
-| `crates/substrate-app` | `substrate-app` | Application runtime on top of substrate-core |
-| `crates/substrate-trace` | `substrate-trace` | Distributed tracing primitives |
-| `crates/substrate-schedule` | `substrate-schedule` | Scheduling primitives |
-| `crates/substrate-dag` | `substrate-dag` | Workflow DAG execution |
-| `crates/substrate-skills` | `substrate-skills` | Skill system for agents |
-| `crates/substrate-memory` | `substrate-memory` | Agent memory layer |
-| `crates/substrate-serve-lock` | `substrate-serve-lock` | Worktree locking mechanism |
-| `crates/substrate-tui` | `substrate-tui` | Terminal UI primitives |
+| Crate | Binary | Role |
+| --- | --- | --- |
+| `driver-cli` | `substrate` | Composition-root CLI: `dispatch`, `plan`, `argv`, `cloud-dispatch`, `serve`. |
+| `driver-http` | `substrate-http` | HTTP/REST inbound driver for dispatch, planning, routing, and the A2A mailbox. |
+| `driver-argv` | — | Multi-provider argv builders ported from `thegent-dispatch`. |
+| `driver-mcp` | — | MCP inbound driver bridging `EnginePort`/`RoutingPort`/`ToolPort` over stdio JSON-RPC. |
+| `context-budget` | — | `EnginePort` middleware enforcing per-conversation token budgets (reject/truncate/warn). |
 
-### Engines (agent execution)
+### Engine adapters
 
-| Crate | Package | Purpose |
-|-------|---------|---------|
-| `crates/engine-spec` | `engine-spec` | Engine contract and conformance specification |
-| `crates/engine-forge` | `engine-forge` | Plugin execution engine |
-| `crates/engine-claude` | `engine-claude` | Claude agent integration |
-| `crates/engine-codex` | `engine-codex` | Codex agent integration |
-| `crates/engine-a2a` | `engine-a2a` | Agent-to-agent communication |
-| `crates/engine-agentapi` | `engine-agentapi` | Generic agent API integration |
-| `crates/engine-conformance` | `engine-conformance` | Engine conformance test suite |
+| Crate | Role |
+| --- | --- |
+| `engine-forge` | `EnginePort` adapter driving the `forge` CLI. |
+| `engine-codex` | `EnginePort` adapter for the `codex` CLI. |
+| `engine-claude` | `EnginePort` adapter for the `claude` CLI (Claude Code). |
+| `engine-agentapi` | HTTP client plus child-process manager for `agentapi-plusplus`. |
+| `engine-a2a` | `EnginePort` adapter for the A2A Agent-to-Agent REST protocol. |
+| `engine-conformance` | Conformance suite proving `EnginePort` stays harness-agnostic across adapters. |
+| `cliproxy-adapter` | `EnginePort` adapter for `cliproxyapi-plusplus` (50+ agent CLIs behind one OpenAI-compatible endpoint). |
 
-### AgilePlus (intent / planning)
+### Routing, ports, and transports
 
-| Crate | Package | Purpose |
-|-------|---------|---------|
-| `crates/agileplus-api` | `agileplus-api` | Public API surface |
-| `crates/agileplus-cli` | `agileplus-cli` | Command-line interface |
-| `crates/agileplus-domain` | `agileplus-domain` | Domain types |
-| `crates/agileplus-events` | `agileplus-events` | Event sourcing |
-| `crates/agileplus-graph` | `agileplus-graph` | Intent graph |
-| `crates/agileplus-git` | `agileplus-git` | Git-backed intent store |
-| `crates/agileplus-github` | `agileplus-github` | GitHub adapter |
-| `crates/agileplus-nats` | `agileplus-nats` | NATS event bus |
-| `crates/agileplus-sqlite` | `agileplus-sqlite` | SQLite store |
-| `crates/agileplus-cache` | `agileplus-cache` | Cache layer |
-| `crates/agileplus-telemetry` | `agileplus-telemetry` | Telemetry hooks |
-| `crates/agileplus-triage` | `agileplus-triage` | Triage workflows |
+| Crate | Role |
+| --- | --- |
+| `phenotype-router` | Phenotype-owned router decision layer (ADR-050/051) with OTel-native span emission. |
+| `routing-phenotype-router` | `RoutingPort` adapter delegating decisions to `phenotype-router`. |
+| `omniroute-adapter` | `RoutingPort` adapter pointing forge's `openai_compatible` provider at OmniRoute. |
+| `transport-file` | File-backed `TransportPort`: append-only JSONL mailboxes with lockfile-lease claim. |
+| `store-file` | File-backed `StorePort`: one JSON file per task/result. |
+| `store-sqlite` | SQLite-backed `MailboxStore`, `ClaimPort`, `MemoryPort`, `EventStorePort` adapters. |
+| `runtime-process` | `ProcessPort`: cross-platform managed subprocess via `command-group`. |
+| `file-watcher` | `WatcherPort`: debounced filesystem events via `notify`. |
+| `substrate-serve-lock` | Lock-based single-instance guard for `substrate serve`. |
 
-### Phenotype (core integrations)
+### Workflow and orchestration
 
-| Crate | Package | Purpose |
-|-------|---------|---------|
-| `crates/phenotype-cli` | `phenotype-cli` | Phenotype command-line |
-| `crates/phenotype-mcp` | `phenotype-mcp` | MCP server infrastructure |
-| `crates/phenotype-hub` | `phenotype-hub` | Hub/orchestration facade |
-| `crates/phenotype-core` | `phenotype-core` | Shared core types |
-| `crates/phenotype-contracts` | `phenotype-contracts` | Cross-crate contracts |
-| `crates/phenotype-shared` | `phenotype-shared` | Shared utilities |
-| `crates/phenotype-config` | `phenotype-config` | Configuration types and loader |
-| `crates/phenotype-event-bus` | `phenotype-event-bus` | Event bus |
-| `crates/phenotype-policy-engine` | `phenotype-policy-engine` | Policy engine |
-| `crates/phenotype-routing` | `phenotype-router` | Routing helpers |
+| Crate | Role |
+| --- | --- |
+| `substrate-trace` | `TracePort` adapters: Noop, Recording, MultiTrace, AgilePlus, Tracera. |
+| `substrate-schedule` | `SchedulePort`: cron/interval/daily/weekly `next_run` via `croner`. |
+| `substrate-dag` | `WorkflowPort` DAG orchestration via `petgraph`. |
+| `substrate-skills` | `SkillPort`/`ToolRegistry`: in-memory named skills with JSON-schema validation. |
+| `substrate-memory` | `MemoryPort`: bounded ring buffer plus two-tier compose with `store-sqlite`. |
+| `substrate-tui` | Terminal UI dashboard for the dispatch surface. |
+| `substrate-a2a` | A2A-shaped wire schema (Task, Message, Artifact, Part); transport-agnostic. |
+| `dispatch-bridge` | A2A/Wave envelope over HTTP+SSE+Unix-socket, wiring the spine across processes. |
+| `phenotype-mcp` | MCP integration adapter for substrate routing and dispatch. |
+| `supervisor` | Supervisor orchestration runtime for substrate workers. |
+| `wave` | Parallel wave runner: N concurrent teammate lanes with sub-subagent fan-out. |
+| `wave-3lane-tests` | Integration tests exercising sync, fanout, and tree lanes end to end. |
+| `orchestrator` | `wave.toml` loader, dispatch trait, gated `claude -p` stream-json parser, JSONL watcher. |
 
-### Fabric (distributed fabric layer)
+### Cloud dispatch
 
-| Crate | Package | Purpose |
-|-------|---------|---------|
-| `crates/fabric-capability` | `fabric-capability` | Capability inventory |
-| `crates/fabric-capability-ffi` | `fabric-capability-ffi` | C ABI for capability layer |
-| `crates/fabric-graph` | `fabric-graph` | Topology and routing graph |
-| `crates/fabric-checker` | `fabric-checker` | Capability/lease checks |
-| `crates/fabric-cli` | `fabric-cli` | Fabric CLI |
-| `crates/fabric-gui` | `fabric-gui` | GUI shell (Tauri) |
-| `crates/fabric-daemon` | `fabric-daemon` | Long-running fabric daemon |
-| `crates/fabric-frame-transport` | `fabric-frame-transport` | Frame-based transport |
-| `crates/fabric-surface-mojo` | `fabric-surface-mojo` | Mojo surface adapter |
+| Crate | Role |
+| --- | --- |
+| `cloud-codex` | `CloudDispatchPort` adapter for OpenAI Codex Cloud. |
+| `cloud-cursor` | `CloudDispatchPort` adapter for Cursor Cloud Agents (REST v1). |
+| `cloud-kilo` | `CloudDispatchPort` adapter for Kilo (gateway LLM plus local git PR). |
+| `cloud-dispatch-conformance` | Contract suite plus a fake `CloudDispatchPort` for the adapters above. |
 
-### Storage, transport, drivers
+## Absorbed crate families in the root workspace
 
-| Crate | Package | Purpose |
-|-------|---------|---------|
-| `crates/store-file` | `store-file` | File-based storage |
-| `crates/store-sqlite` | `store-sqlite` | SQLite storage |
-| `crates/transport-file` | `transport-file` | File transport |
-| `crates/runtime-process` | `runtime-process` | Process isolation and sandboxing |
-| `crates/supervisor` | `supervisor` | Process supervision tree |
-| `crates/file-watcher` | `file-watcher` | Cross-platform file watching |
-| `crates/wave` | `wave` | 3-lane reliability protocol |
-| `crates/wave-3lane-tests` | `wave-3lane-tests` | Wave conformance suite |
-| `crates/driver-cli` | `driver-cli` | CLI driver |
-| `crates/driver-http` | `driver-http` | HTTP driver |
-| `crates/driver-argv` | `driver-argv` | Argv driver |
-| `crates/driver-mcp` | `driver-mcp` | MCP driver |
+### PhenoFabric (22 packages)
 
-### Integrations and adapters
+Physical execution substrate: capability inventory, topology, route compilation,
+leases, surface isolation, and streaming.
 
-| Crate | Package | Purpose |
-|-------|---------|---------|
-| `crates/omniroute-adapter` | `omniroute-adapter` | OmniRoute integration adapter |
-| `crates/dispatch-bridge` | `dispatch-bridge` | Cross-engine dispatch bridge |
-| `crates/cliproxy-adapter` | `cliproxy-adapter` | CLI proxy adapter |
-| `crates/context-budget` | `context-budget` | Token/context budget management |
-| `crates/cloud-codex` | `cloud-codex` | Codex cloud integration |
-| `crates/cloud-cursor` | `cloud-cursor` | Cursor cloud integration |
-| `crates/cloud-kilo` | `cloud-kilo` | Kilo cloud integration |
-| `crates/cloud-dispatch-conformance` | `cloud-dispatch-conformance` | Cloud dispatch conformance |
-| `crates/a2a` | `a2a` | Agent-to-agent primitives |
-| `crates/cli-wrapper` | `playcua-cli-wrapper` | CLI wrapper (PlayCUA) |
+| Crate | Role |
+| --- | --- |
+| `fabric-capability` | Capability discovery, descriptor signing, topology probing. |
+| `fabric-capability-ffi` | C FFI bindings for `fabric-capability`. |
+| `fabric-checker` | Cross-checks a capability probe against an application manifest; emits an admission decision. |
+| `fabric-graph` | Topology graph model and route compilation. |
+| `fabric-graph-cli` | Thin CLI over `fabric_graph::failover::replan()`; bridges Go callers without cgo. |
+| `fabric-persist` | SQLite persistence for coordinator state. |
+| `fabric-daemon` | Long-running coordinator: topology, leases, wire transport, health checks. |
+| `fabric-orchestrator` | Wires coordinator, persist, wire server, and surface registry into one process. |
+| `fabric-cli` (`fabric`) | Reference CLI: `cap`, `graph`, `route`, `workspace`. |
+| `fabric-workspace` | Seat-leases and workspace state management. |
+| `fabric-frame-transport` | HEVC/AV1 encoded frames over TCP for Parsec-style streaming. |
+| `fabric-surface-mojo` | GPU compute surface backend with a Mojo FFI bridge. |
+| `fabric-terminal` (`tf-web`, `tf-sync`) | Terminal mirroring: web server and sync tools. |
+| `fabric-capture` | Windows Terminal content capture agent. |
+| `fabric-tray` | System tray app: daemon lifecycle, quick actions, status. |
+| `fabric-tui` | TUI dashboard for the daemon. |
+| `fabric-gui` | Tauri v2 desktop shell with daemon integration. |
+| `fabric-web` | Leptos WASM single-page frontend. |
+| `fabric-research-ledger` | Research ledger surface. |
+| `fabric-integration-tests` | Cross-crate integration tests. |
+| `phenotype-nvms-adapter` | Maps `odin.nvms` application manifests onto Fabric capability descriptors. |
+| `fabric-full-demo` (`fabric-full-demo`) | Boots daemon, loads topology, compiles routes, streams a test frame. |
 
-## Repository Structure
+### PhenoGfx (2 packages)
 
-```
-phenoAI/
-├── apps/                  # User-facing applications (mixed languages)
-│   ├── bench-cockpit/     # Bun + TypeScript benchmark cockpit
-│   ├── byteport/          # Data transfer utility
-│   ├── desktop/           # Desktop shell resources (macOS)
-│   ├── phinbox-app/       # Phinbox notification app (Swift)
-│   └── tooling/           # Tauri-based developer tooling
-│
-├── crates/                # 365+ Rust crates (workspace members)
-│   ├── substrate*/        # Core runtime substrate
-│   ├── engine-*/          # Agent execution engines
-│   ├── agileplus-*/       # Intent and planning system
-│   ├── phenotype-*/       # Core integrations and shared types
-│   ├── fabric-*/          # Distributed fabric layer
-│   ├── store-*/           # Storage backends
-│   ├── driver-*/          # Driver surfaces (cli/http/argv/mcp)
-│   ├── cloud-*/           # Cloud integrations
-│   └── ...                # ~300 more domain crates
-│
-├── tools/                 # Standalone tooling executables (workspace members)
-│   ├── fake-forge/        # Forge agent simulator
-│   ├── fake-codex-cloud/  # Codex cloud simulator
-│   ├── iac-plan-viewer/   # Infrastructure-as-code visualizer
-│   ├── org-audits/        # Organizational audit tooling
-│   └── check-ecosystem.ts # Ecosystem linting entrypoint
-│
-├── docs/                  # Documentation
-│   ├── architecture/      # Architecture overviews (overview, ports, domain-model)
-│   ├── adr/               # Architecture Decision Records (0001-…)
-│   ├── api/               # API reference
-│   ├── guides/            # User and developer guides
-│   ├── contributing/      # Contributing playbooks
-│   └── atlas/             # Cross-repo atlas and assessments
-│
-├── scripts/               # Workspace utility scripts (CI helpers, harnesses)
-├── configs/               # Configuration templates
-├── benches/               # Performance benchmarks
-│
-├── ARCHITECTURE.md        # Top-level architecture (read first)
-├── CONTRIBUTING.md        # Contribution rules (read first)
-├── AGENTS.md              # Agent contract (worktree, language policy)
-├── CLAUDE.md              # Claude-specific guide
-├── CHARTER.md             # Project charter
-├── ADR.md / ADRS.md       # ADR index
-├── Cargo.toml             # Workspace manifest (365+ members)
-└── Cargo.lock             # Workspace lockfile
-```
+| Crate | Role |
+| --- | --- |
+| `phenotype-gfx` | Unified graphics kernel: voxel, LOD, streaming, postfx, water, voxelizer, terrain (ADR-004). |
+| `phenotype-voxel` | Compatibility shim re-exporting the `phenotype-gfx` voxel kernel. |
 
-## Quick Start
+### PhenoRegistry (3 packages)
 
-### Prerequisites
+| Crate | Role |
+| --- | --- |
+| `phenotype-project-registry` | Project registry. |
+| `phenotype-service-registry` | Service registry and discovery with hexagonal port plus in-memory adapter. |
+| `phenotype-health` | Health primitives for registry consumers. |
 
-- **Rust** 1.81+ via [rustup](https://rustup.rs/) (workspace lints are pinned in `Cargo.toml`'s `[workspace.lints.rust]` and `[workspace.package]`)
-- **Git** 2.0+
-- Optional:
-  - `cargo-deny` — `cargo install cargo-deny`
-  - `mdBook` — `cargo install mdbook` (for `docs/book.toml`)
-  - **Bun** (for `apps/bench-cockpit`)
-  - **Xcode / Swift toolchain** (for `apps/phinbox-app`)
-  - **Tauri prerequisites** (for `apps/tooling`, `crates/fabric-gui`)
+### PhenoInfra (3 packages)
 
-### Clone and build
+| Crate | Role |
+| --- | --- |
+| `phenotype-crypto` | Hashing, symmetric encryption, key derivation, HMAC signatures. |
+| `phenotype-observability` | Standardized header types and telemetry structures. |
+| `phenotype-policy-engine` | Generic rule-based policy evaluation across domains. |
+
+### Observability and test tooling
+
+| Crate | Role |
+| --- | --- |
+| `pheno-otel` | Pinned OTLP export surface (`crates/argis-extensions/pheno-otel`). |
+| `fake-forge` (`fake-forge`, `bench-fake-forge`) | Network-free fake forge for offline dispatch tests and benches. |
+| `fake-codex-cloud` | Fake Codex Cloud endpoint for cloud-dispatch contract tests. |
+
+## Crate inventory by prefix
+
+First-level crate directories under `crates/`, grouped by naming prefix:
+
+| Prefix | Count | Origin |
+| --- | --- | --- |
+| `pheno-*` | 117 | PhenoAI, PhenoAgent, and shared fleet primitives |
+| `phenotype-*` | 75 | PhenoInfra, PhenoRegistry, cross-org infrastructure |
+| `focus-*` | 43 | FocalPoint productivity platform |
+| `agileplus-*` | 23 | AgilePlus planning and sync |
+| `fabric-*` | 20 | PhenoFabric |
+| `substrate-*` | 10 | substrate dispatch spine |
+| `connector-*` | 9 | Connector integrations (GitHub, Linear, Notion, Fitbit, Strava, GCal, Readwise) |
+| `eyetracker-*` | 8 | Eye tracking pipeline |
+| `engine-*` | 7 | Engine adapters |
+| `cloud-*` | 4 | Cloud dispatch adapters |
+| `driver-*` | 4 | substrate inbound drivers |
+| `eidolon-*` | 4 | Eidolon cross-platform surfaces |
+| `store-*` | 2 | substrate store backends |
+| `playcua-*` | 2 | PlayCua computer-use ports |
+| others | ~60 | Standalone absorbed crates (sharecli, teamcomm, phenocompose, hexakit, and more) |
+
+Not every manifest under `crates/` is a member of the root workspace. Some live
+in nested sub-workspaces; see below.
+
+## Beyond the root workspace
+
+`crates/` also hosts **26 nested Cargo workspaces** that build independently:
+
+- `crates/agile-plus/` — AgilePlus: domain, API, gRPC, sqlite, git, NATS,
+  P2P sync, triage, telemetry.
+- `crates/focus-*/`, `crates/connector-*` — FocalPoint platform (53 crates
+  extracted from FocalPoint).
+- `crates/phenocompose-*/` — PhenoCompose port traits, adapters, CLI.
+- `crates/sharecli*/` — process/IO/syscall hypervisor with FUSE, mesh, fleet,
+  and tray tiers.
+- `crates/teamcomm-*/` — inter-agent coordination protocol, daemon, MCP server.
+- `crates/pheno-proc-runtime/` — process runtime with queue and dedup fuzz
+  targets.
+- `crates/hexa-kit/`, `crates/argis-extensions/`, `crates/Cmdra/`,
+  `crates/eyetracker-*/`, `crates/playcua-*/`.
+
+Non-Rust surfaces:
+
+| Path | What it is |
+| --- | --- |
+| `python/omlx_research/` | PhenoMLX research stack: `backends/`, `engines/`, `agents/`, `cli/`, `web.py`, `ports/`, `nanovm/`. |
+| `cli/bin/omlx-research`, `cli/bin/omlx-cli` | PhenoMLX launchers. |
+| `linux-client/`, `windows-client/`, `gui/` | PhenoMLX client launchers. |
+| `scripts/phenotype-omlx-ready`, `scripts/phenotype-omlx-env.sh` | PhenoMLX readiness and environment wiring. |
+| `projects/*.json` | 178 project registry manifests. |
+| `sites/` | Astro/Bun landing site factory (see `SPEC.md`). |
+
+## Reusable workflows
+
+All workflows live in `.github/workflows/` and are referenced by other repos.
+84 workflow files exist; the most-used groups:
+
+| Category | Workflows |
+| --- | --- |
+| CI | `ci.yml`, `coverage.yml`, `e2e.yml`, `flaky-tests.yml` |
+| Security | `codeql.yml`, `security-scan.yml`, `trufflehog.yml`, `secret-guard.yml`, `dependency-scan.yml` |
+| Rust | `cargo-deny.yml`, `cargo-machete.yml`, `cargo-semver-checks.yml`, `deny.yml` |
+| Release | `release.yml`, `release-binary.yml`, `release-crates.yml`, `release-npm.yml`, `publish.yml`, `sbom.yml` |
+| Docs | `docs.yml`, `docs-check.yml`, `docs-lint.yml`, `docs-validation.yml`, `doc-links.yml` |
+| Quality gates | `quality-gate.yml`, `policy-gate.yml`, `traceability-gate.yml`, `fr-coverage.yml` |
+| Infrastructure / IaC | `terraform-plan.yml`, `tf-ci.yml`, `iac-rust.yml` |
+| Governance and audit | `governance.yml`, `audit.yml`, `quarterly-audit.yml`, `no-idle-audit.yml` |
+| Benchmarks and fuzzing | `bench.yml`, `benchmark.yml`, `fuzz.yml`, `fuzzing.yml` |
+
+Every filename in the table above was verified present on 2026-09-17. See
+[`.github/README.md`](.github/README.md) for the workflow-reference syntax.
+
+## Composite actions
+
+Five composite actions live in `.github/actions/`:
+
+| Action | Description |
+| --- | --- |
+| `build-rust-binary` | Cross-platform Rust binary build |
+| `run-benchmarks` | Benchmark runner |
+| `run-tests` | Test runner with matrix support |
+| `security-checks` | Aggregate security scanning |
+| `setup-env` | Multi-tool environment setup |
+
+## Quick start
+
+Requires Rust stable (MSRV 1.80).
 
 ```bash
-git clone https://github.com/KooshaPari/PhenoShared.git
+git clone git@github.com:KooshaPari/PhenoShared.git
 cd PhenoShared
 
-# Build the workspace (may take a while on a cold cache)
+# Build the root workspace
 cargo build --workspace
 
-# Run the test suite
-cargo test --workspace
+# Inspect the dispatch plan without spawning anything
+cargo run -p driver-cli -- plan --engine forge --cwd . "fix the bug"
 
-# Lint (CI policy: deny warnings)
-cargo clippy --workspace -- -D warnings
+# Dispatch against the bundled network-free fake engine
+cargo run -p driver-cli -- dispatch --fake --cwd . "echo hi"
 
-# Format
-cargo fmt --all
+# Provider-native argv for an external agent CLI
+cargo run -p driver-cli -- argv --provider forge --prompt "hello" --dry-run
 
-# Generate crate docs locally
-cargo doc --workspace --no-deps --open
+# Start the HTTP driver (single-instance guarded)
+cargo run -p driver-cli -- serve
 ```
 
-### Run a representative subset
+The `substrate` CLI reads engine binary locations from `FORGE_BIN`,
+`CODEX_BIN`, `CLAUDE_BIN`, and `AGENTAPI_ENDPOINT`.
+
+### PhenoMLX quick start
+
+The absorbed PhenoMLX member keeps its own launchers and readiness check:
 
 ```bash
-# Phenotype command-line
-cargo run -p phenotype-cli -- --help
-
-# AgilePlus CLI
-cargo run -p agileplus-cli -- --help
-
-# Phenotype MCP server
-cargo run -p phenotype-mcp -- --help
-
-# Fabric CLI
-cargo run -p fabric-cli -- --help
-
-# Substrate binary
-cargo run -p substrate -- --help
+./scripts/phenotype-omlx-ready
+./cli/bin/omlx-research doctor
+./cli/bin/omlx-research inference --prompt "Hello" --policy auto
 ```
 
-> **Tip:** the workspace excludes `crates/forge_daemon`, `crates/fabric-frame-transport/fuzz`, and `crates/fabric-gui/src-tauri` from the default members (see `[workspace] exclude` in `Cargo.toml`). Pass `--workspace` to include them explicitly when needed.
+## Build, test, and quality gates
 
-## Architecture
+`Taskfile.yml` and `Makefile` mirror each other and drive plain Cargo, so they
+work without extra tooling installed.
 
-Start with **[ARCHITECTURE.md](./ARCHITECTURE.md)** for the high-level picture, then read:
+| Task | Command |
+| --- | --- |
+| Build | `cargo build --workspace` |
+| Check | `cargo check --workspace --all-targets` |
+| Format check | `cargo fmt --all --check` |
+| Lint | `cargo clippy --workspace --all-targets -- -D warnings` |
+| Test | `cargo test --workspace` |
+| Architecture gate | `cargo test -p arch-test` |
+| Dependency audit | `cargo deny check` (see `deny.toml`) |
+| Coverage | `cargo tarpaulin` (see `tarpaulin.toml`) |
+| Unused dependencies | `cargo machete` |
 
-- [`docs/architecture/overview.md`](./docs/architecture/overview.md) — system overview
-- [`docs/architecture/domain-model.md`](./docs/architecture/domain-model.md) — domain model
-- [`docs/architecture/ports.md`](./docs/architecture/ports.md) — hexagonal ports & adapters
-- [`docs/architecture/development-container.md`](./docs/architecture/development-container.md) — dev environment
-- [`docs/architecture/rust-analyzer.md`](./docs/architecture/rust-analyzer.md) — IDE wiring
+Equivalent entry points: `make check`, `make clippy`, `make verify`,
+`make test-unit`, `task lint`, `task test`, `task fmt:check`.
 
-For decisions and trade-offs, browse **[`docs/adr/`](./docs/adr/)** (e.g. `0001-record-architecture-decisions.md`, `0002-hexagonal-ports-adapters.md`, `0003-universal-typed-graph.md`).
+CI runs `.github/workflows/ci.yml` across Rust, Python (ruff), Go, and
+TypeScript, with `cargo-deny` advisories plus gitleaks and dependency review.
 
-Layered architecture (top → bottom):
+## Documentation map
 
-1. **Applications** — `apps/` (phinbox-app, bench-cockpit, byteport, tooling, desktop)
-2. **Adapters / drivers** — `crates/driver-*`, MCP surfaces, CLI wrappers
-3. **Engines** — `crates/engine-*` (claude, codex, forge, a2a, agentapi, conformance)
-4. **AgilePlus** — intent / planning / events (`crates/agileplus-*`)
-5. **Substrate** — hexagonal ports, dispatch planner, tracing, DAG, skills, memory
-6. **Fabric** — distributed topology, capabilities, leases, transport
-7. **Storage** — `crates/store-file`, `crates/store-sqlite`
+Start with the canonical handbook rather than the root of `docs/`:
 
-## Workspace Conventions
+| Document | Purpose |
+| --- | --- |
+| [`docs/GLOBAL_HANDBOOK.md`](docs/GLOBAL_HANDBOOK.md) | Pinned canonical handbook for agent behavior, quality gates, portfolio, and delivery. Revision 2026-09-16. |
+| [`docs/adr/`](docs/adr/) (82) and [`docs/adrs/`](docs/adrs/) (25) | Architecture decision records. |
+| [`docs/ABSORPTION_INDEX.md`](docs/ABSORPTION_INDEX.md) | Which repositories were absorbed or retired, and where they went. |
+| [`docs/absorption/`](docs/absorption/) (33) | Per-project absorption records. |
+| [`docs/sessions/`](docs/sessions/) | Dated session artifacts: research, plans, DAG/WBS, validation. |
+| [`docs/dossiers/`](docs/dossiers/) | Handoff dossiers for absorbed projects (PhenoRegistry, PhenoShared). |
+| [`docs/architecture/`](docs/architecture/) | Port-trait and domain-model references. |
+| [`handbook/`](handbook/) | Ecosystem handbook: specs, patterns, anti-patterns, ADRs. |
+| [`crates/substrate/README.md`](crates/substrate/README.md) | SDK usage example and feature flags. |
+| [`CONTRIBUTING.md`](CONTRIBUTING.md) | Contribution workflow. |
+| [`SECURITY.md`](SECURITY.md) | Vulnerability reporting. |
+| [`llms.txt`](llms.txt) | Machine-readable repo orientation. |
 
-- **Edition:** Rust 2021 (see `[workspace.package] edition`)
-- **Safety:** `unsafe_code = "forbid"` is the default
-- **Lint policy:** `[workspace.lints.rust]` is the source of truth; CI runs `cargo clippy --workspace -- -D warnings`
-- **Members:** declared in `Cargo.toml` `members = [ … ]`; exclusions are explicit
-- **Commits:** every agent commit carries `tx-agent:` and `tx-validated:` trailers (immutable transaction ledger — see `AGENTS.md` §"Immutable Transaction Ledger")
-- **Worktrees:** feature work happens in `repos/worktrees/phenoAI/<topic>` (see `AGENTS.md`)
-- **ADR-first:** any change that extends this repo into governed intent, agent dispatch, economic allocation, evidence graph, session ledger, or process supervision requires an ADR before code
+## Known documentation debt
+
+This repository is mid-consolidation, and several root-level documents are stale
+artifacts from absorbed projects that still carry the wrong identity. They are
+listed here so nobody is misled by them:
+
+| File | Actual content | Status |
+| --- | --- | --- |
+| `ARCHITECTURE.md` | `phenotype-omlx` tier diagram | Wrong-project artifact; needs replacement covering the Rust spine. |
+| `AGENTS.md` | `phenotype-omlx` agent contract | Wrong-project artifact. |
+| `CHARTER.md` | `phenodocs` mission | Wrong-project artifact. |
+| `PRD.md` | `phenotype-shared` requirements | Wrong-project artifact. |
+| `SPEC.md`, `justfile` | `phenotype-landing` site factory | Scope-limited to `sites/`. |
+| `SPINE.md` | `phenoDesign` spine declaration | Wrong-project artifact. |
+| `docs/architecture.md` | `Pine` architecture draft | Wrong-project artifact. |
+| `docs/architecture/overview.md`, `docs/architecture/ports.md` | AgilePlus port docs | Scoped to AgilePlus. |
+| `CONTRIBUTING.md` | `Phenotype Fabric` | Scoped to an absorbed project. |
+| `SECURITY.md` | `phenotype-shared-temp` | Scoped to an absorbed project. |
+| `INDEX.md` | Phenotype Fabric document baseline | Scoped to Fabric. |
+| 128 root-level `.md` files | Mixed provenance | Consolidation pending. |
+
+Two further items:
+
+- `Taskfile.yml`'s `ci` task calls `./scripts/ci-local.sh`, which is not present
+  in the tree. Use `make check` or the Cargo commands above instead.
+- `[workspace.package] repository` in `Cargo.toml` still points at a stale origin
+  URL rather than `github.com/KooshaPari/PhenoShared`.
+
+## Consuming PhenoShared
+
+Crates:
+
+```toml
+[dependencies.phenotype-mcp]
+git = "https://github.com/KooshaPari/PhenoShared"
+package = "phenotype-mcp"
+```
+
+Or against a local clone:
+
+```toml
+[dependencies]
+phenotype-mcp = { path = "../PhenoShared/crates/phenotype-mcp" }
+```
+
+Workflows: reference them from a consumer repo, for example
+
+```yaml
+jobs:
+  ci:
+    uses: KooshaPari/PhenoShared/.github/workflows/ci.yml@main
+```
+
+Repositories that consume these crates, workflows, or docs include
+[phenotooling](https://github.com/KooshaPari/phenotooling),
+[PhenoMLX](https://github.com/KooshaPari/PhenoMLX),
+[HeliosLab](https://github.com/KooshaPari/HeliosLab), and other KooshaPari org
+repos.
 
 ## Contributing
 
-1. Read **[`CONTRIBUTING.md`](./CONTRIBUTING.md)** and **[`AGENTS.md`](./AGENTS.md)** in full.
-2. Read **[`CHARTER.md`](./CHARTER.md)** and the relevant ADR in **[`docs/adr/`](./docs/adr/)**.
-3. Fork or use a worktree:
-   ```bash
-   git -C ~/CodeProjects/Phenotype/repos/phenoAI \
-       worktree add ../worktrees/phenoAI/<topic> -b <topic>
-   ```
-4. Make changes; run `cargo fmt`, `cargo clippy --workspace -- -D warnings`, and `cargo test --workspace`.
-5. Commit with the ledger trailers (see `~/.gitmessage` template).
-6. Open a PR referencing the relevant ADR / issue.
+See [`CONTRIBUTING.md`](CONTRIBUTING.md) and
+[`docs/GLOBAL_HANDBOOK.md`](docs/GLOBAL_HANDBOOK.md). Before adding a
+cross-domain dependency, check whether an existing crate in the tables above
+already covers it; the workspace prefers extending an adapter over a new parallel
+implementation. Keep files under 500 lines, with 350 as the goal.
 
-Bug reports and security disclosures: see `CODE_OF_CONDUCT.md` and `SECURITY.md`.
+Agent-authored commits carry ledger trailers (`tx-agent`, `tx-validated`).
+History is append-only: no force pushes and no history rewrites.
 
-## Related Repositories
+## Security
 
-| Repository | Role |
-|---|---|
-| **[KooshaPari/PhenoShared](https://github.com/KooshaPari/PhenoShared)** | This workspace (main monorepo) |
-| **[KooshaPari/phenotype-omlx](https://github.com/KooshaPari/phenotype-omlx)** | PhenoMLX — MLX-native inference stack built on top of Phenotype engines |
-| **[KooshaPari/HeliosLab](https://github.com/KooshaPari/HeliosLab)** | Experimental hardware-integration lab |
-| **[KooshaPari/portage](https://github.com/KooshaPari/portage)** | Deployment and release engineering |
+Report vulnerabilities per [`SECURITY.md`](SECURITY.md); do not open a public
+issue for a suspected vulnerability. `gitleaks`, `cargo-deny`, CodeQL, and
+dependency review run in CI.
 
 ## License
 
-Dual-licensed under your choice of:
+Dual-licensed under either of:
 
-- **[MIT](./LICENSE-MIT)**
-- **[Apache 2.0](./LICENSE-APACHE)**
+- MIT License — [`LICENSE-MIT`](LICENSE-MIT)
+- Apache License 2.0 — [`LICENSE-APACHE`](LICENSE-APACHE)
 
-Unless you explicitly state otherwise, any contribution intentionally submitted for inclusion is licensed under the same terms.
-
-## Acknowledgements
-
-Built by the Phenotype open-source community. Special thanks to all contributors who have helped shape this workspace.
-
----
-
-*Last refreshed: September 2026. For canonical product state, see [`docs/atlas/`](./docs/atlas/) and [`docs/architecture/overview.md`](./docs/architecture/overview.md).*
+at your option. The workspace default is
+`[workspace.package] license = "MIT OR Apache-2.0"`. Third-party and vendored
+code retains its upstream license; see `NOTICE` and per-crate `license` fields.

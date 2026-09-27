@@ -8,8 +8,10 @@ use std::collections::HashMap;
 
 use serde::{Deserialize, Serialize};
 
-use crate::domain::RoutingDecision;
-use crate::error::{Result, SubstrateError};
+use crate::{
+    domain::RoutingDecision,
+    error::{Result, SubstrateError},
+};
 
 /// Load-balancing strategy over a pool of candidate targets.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
@@ -96,7 +98,7 @@ impl CircuitBreaker {
                 } else {
                     CircuitState::Open
                 }
-            }
+            },
             other => other,
         }
     }
@@ -116,8 +118,8 @@ impl CircuitBreaker {
                 self.state = CircuitState::Closed;
                 self.consecutive_failures = 0;
                 self.opened_at_secs = None;
-            }
-            CircuitState::Open => {}
+            },
+            CircuitState::Open => {},
         }
     }
 
@@ -130,13 +132,13 @@ impl CircuitBreaker {
                     self.state = CircuitState::Open;
                     self.opened_at_secs = Some(now_secs);
                 }
-            }
+            },
             CircuitState::HalfOpen => {
                 self.state = CircuitState::Open;
                 self.opened_at_secs = Some(now_secs);
                 self.consecutive_failures = self.config.failure_threshold;
-            }
-            CircuitState::Open => {}
+            },
+            CircuitState::Open => {},
         }
     }
 }
@@ -246,7 +248,7 @@ impl RoutingSelector {
                 let cursor = state.round_robin_cursor % healthy.len();
                 state.round_robin_cursor = state.round_robin_cursor.wrapping_add(1);
                 healthy[cursor]
-            }
+            },
             RoutingStrategy::Weighted => {
                 let weights: Vec<u32> = healthy.iter().map(|&i| pool[i].weight.max(1)).collect();
                 let total: u32 = weights.iter().sum();
@@ -261,7 +263,7 @@ impl RoutingSelector {
                     pick_weight -= w;
                 }
                 chosen
-            }
+            },
             RoutingStrategy::LeastUsed => {
                 let mut best = healthy[0];
                 let mut best_load = u64::MAX;
@@ -276,7 +278,7 @@ impl RoutingSelector {
                     }
                 }
                 best
-            }
+            },
             RoutingStrategy::PowerOfTwoChoices => {
                 let n = healthy.len();
                 if n == 1 {
@@ -305,7 +307,7 @@ impl RoutingSelector {
                         b
                     }
                 }
-            }
+            },
         };
 
         Some(pick)

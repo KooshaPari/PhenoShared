@@ -10,11 +10,13 @@
 
 use serde::{Deserialize, Serialize};
 
-use crate::postfx::error::{PostFxError, PostFxResult};
-use crate::postfx::ports::post_fx_pass::{
-    PassDescriptor, PassEffect, PostFxContext, PostFxPass,
+use crate::postfx::{
+    error::{PostFxError, PostFxResult},
+    ports::{
+        post_fx_pass::{PassDescriptor, PassEffect, PostFxContext, PostFxPass},
+        shader_availability::PostFxShaderAvailability,
+    },
 };
-use crate::postfx::ports::shader_availability::PostFxShaderAvailability;
 
 /// Stable shader name used by the SSAO pass.
 pub const SSAO_SHADER_NAME: &str = "Hidden/Phenotype/SSAOPass";
@@ -108,7 +110,10 @@ impl SsaoPass {
     /// New SSAO pass with the given config.
     pub fn new(config: SsaoConfig) -> Self {
         let kernel = SsaoConfig::build_kernel(config.kernel_size);
-        Self { config, kernel }
+        Self {
+            config,
+            kernel,
+        }
     }
 
     /// Borrow the current config.
@@ -178,8 +183,9 @@ impl PostFxPass for SsaoPass {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::postfx::ports::post_fx_pass::PassQuality;
-    use crate::postfx::ports::shader_availability::DefaultPostFxShaderAvailability;
+    use crate::postfx::ports::{
+        post_fx_pass::PassQuality, shader_availability::DefaultPostFxShaderAvailability,
+    };
 
     #[test]
     fn default_config() {

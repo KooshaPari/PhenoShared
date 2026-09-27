@@ -13,7 +13,7 @@ pub(crate) fn handle_compile_request(
             return Some(
                 r#"{"type":"compile_error","error":"missing_source","message":"source field required"}"#.into(),
             );
-        }
+        },
     };
     let destination = match parsed.get("destination").and_then(|v| v.as_str()) {
         Some(s) => fabric_graph::model::NodeId::new(s),
@@ -21,7 +21,7 @@ pub(crate) fn handle_compile_request(
             return Some(
                 r#"{"type":"compile_error","error":"missing_destination","message":"destination field required"}"#.into(),
             );
-        }
+        },
     };
 
     // Build a minimal intent from the request (or use defaults).
@@ -43,7 +43,7 @@ pub(crate) fn handle_compile_request(
                 r#"{{"type":"compile_response","plan":{},"status":"ok"}}"#,
                 plan_json
             ))
-        }
+        },
         Err(e) => Some(format!(
             r#"{{"type":"compile_error","error":"compile_failed","message":"{}"}}"#,
             e
@@ -76,15 +76,16 @@ pub(crate) fn handle_webrtc_offer(
             return Some(
                 r#"{"type":"webrtc_error","error":"missing_target","message":"target field required"}"#.into(),
             );
-        }
+        },
     };
     let _sdp = match parsed.get("sdp").and_then(|v| v.as_str()) {
         Some(s) => s,
         None => {
             return Some(
-                r#"{"type":"webrtc_error","error":"missing_sdp","message":"sdp field required"}"#.into(),
+                r#"{"type":"webrtc_error","error":"missing_sdp","message":"sdp field required"}"#
+                    .into(),
             );
-        }
+        },
     };
     // In production, relay the offer to the target node via frame transport.
     // For now, acknowledge receipt and return a placeholder answer.
@@ -105,7 +106,7 @@ pub(crate) fn handle_webrtc_answer(
             return Some(
                 r#"{"type":"webrtc_error","error":"missing_target","message":"target field required"}"#.into(),
             );
-        }
+        },
     };
     Some(format!(
         r#"{{"type":"webrtc_answer_ack","target":"{}","status":"ok"}}"#,
@@ -133,7 +134,7 @@ pub(crate) fn handle_save_config(
                     r#"{{"type":"save_config_response","status":"ok","config":{}}}"#,
                     coordinator.config_snapshot()
                 ))
-            }
+            },
             Err(e) => Some(format!(
                 r#"{{"type":"save_config_error","error":"invalid_config","message":"{}"}}"#,
                 e
@@ -160,9 +161,10 @@ pub(crate) fn handle_save_config(
 
 #[cfg(test)]
 mod tests {
+    use std::sync::Arc;
+
     use super::*;
     use crate::wire::protocol::process_message;
-    use std::sync::Arc;
 
     fn make_coordinator() -> Arc<Coordinator> {
         let dir = tempfile::tempdir().unwrap();
@@ -210,10 +212,13 @@ mod tests {
         // Add a node to the topology.
         let topo = fabric_graph::builder::TopologyBuilder::new()
             .with_name("test-topo")
-            .add(fabric_graph::Node::new(
-                fabric_graph::model::NodeId::new("n1"),
-                fabric_graph::LocalityTier::L5Loopback,
-            ).with_label("Node One"))
+            .add(
+                fabric_graph::Node::new(
+                    fabric_graph::model::NodeId::new("n1"),
+                    fabric_graph::LocalityTier::L5Loopback,
+                )
+                .with_label("Node One"),
+            )
             .build();
         coord.set_topology(topo).unwrap();
 

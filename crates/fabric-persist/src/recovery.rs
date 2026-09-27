@@ -1,10 +1,11 @@
 //! Startup recovery: load all active state from SQLite into memory.
 
-use crate::error::PersistError;
-use fabric_graph::model::{RoutePlan, Topology};
-use fabric_graph::surface::SurfaceLease;
+use fabric_graph::{
+    model::{RoutePlan, Topology},
+    surface::SurfaceLease,
+};
 
-use crate::Persist;
+use crate::{error::PersistError, Persist};
 
 /// State recovered from the database at startup.
 pub struct RecoveredState {
@@ -25,21 +26,17 @@ impl Persist {
 
         let last_evidence_id: i64 = self.with_conn(|conn| {
             Ok(conn
-                .query_row(
-                    "SELECT COALESCE(MAX(id), 0) FROM evidence_log",
-                    [],
-                    |row| row.get(0),
-                )
+                .query_row("SELECT COALESCE(MAX(id), 0) FROM evidence_log", [], |row| {
+                    row.get(0)
+                })
                 .unwrap_or(0))
         })?;
 
         let last_audit_id: i64 = self.with_conn(|conn| {
             Ok(conn
-                .query_row(
-                    "SELECT COALESCE(MAX(id), 0) FROM audit_log",
-                    [],
-                    |row| row.get(0),
-                )
+                .query_row("SELECT COALESCE(MAX(id), 0) FROM audit_log", [], |row| {
+                    row.get(0)
+                })
                 .unwrap_or(0))
         })?;
 

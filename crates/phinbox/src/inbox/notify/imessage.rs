@@ -12,11 +12,9 @@ use crate::inbox::{NotificationKind, PendingRequest};
 pub fn notify_imessage(req: &PendingRequest, target: &str) -> NotifyAttempt {
     let body = render_imessage_body(req);
     let script = format!(
-        "tell application \"Messages\"\n\
-         \x20 set targetService to 1st service whose service type = iMessage\n\
-         \x20 set targetBuddy to buddy \"{target}\" of targetService\n\
-         \x20 send \"{body}\" to targetBuddy\n\
-         end tell",
+        "tell application \"Messages\"\n\x20 set targetService to 1st service whose service type \
+         = iMessage\n\x20 set targetBuddy to buddy \"{target}\" of targetService\n\x20 send \
+         \"{body}\" to targetBuddy\nend tell",
         target = super::escape_applescript(target),
         body = super::escape_applescript(&body),
     );
@@ -39,7 +37,10 @@ pub fn notify_email(req: &PendingRequest, target: &str) -> NotifyAttempt {
         url_encode(&body)
     );
     match open_url(&url) {
-        Ok(()) => NotifyAttempt::ok(NotificationKind::Email, format!("opened mailto for {target}")),
+        Ok(()) => NotifyAttempt::ok(
+            NotificationKind::Email,
+            format!("opened mailto for {target}"),
+        ),
         Err(e) => NotifyAttempt::err(NotificationKind::Email, e),
     }
 }

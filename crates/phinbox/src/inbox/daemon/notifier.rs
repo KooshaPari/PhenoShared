@@ -5,16 +5,26 @@
 //! iMessage, email, webhook). The tray event pump dispatches menu
 //! actions from the OS tray icon.
 
-use std::path::Path;
-use std::sync::atomic::{AtomicBool, Ordering};
-use std::sync::Arc;
-use std::thread;
-use std::time::{Duration, Instant};
+use std::{
+    path::Path,
+    sync::{
+        atomic::{AtomicBool, Ordering},
+        Arc,
+    },
+    thread,
+    time::{Duration, Instant},
+};
 
-use crate::inbox::notify::{NotifyChannels, surface_all};
-use crate::inbox::{mark_expired_in_place, list_pending, RequestState};
-use crate::tray::{MenuAction, Tray, TrayEvent};
 use tracing::{debug, info, warn};
+
+use crate::{
+    inbox::{
+        list_pending, mark_expired_in_place,
+        notify::{surface_all, NotifyChannels},
+        RequestState,
+    },
+    tray::{MenuAction, Tray, TrayEvent},
+};
 
 /// How often the daemon scans the inbox dir for new entries.
 const POLL_INTERVAL: Duration = Duration::from_millis(500);
@@ -66,7 +76,7 @@ pub(crate) fn run_notifier_loop(
                         }
                     }
                 }
-            }
+            },
             Err(e) => warn!(error = %e, "inbox scan failed"),
         }
         // Reap expired requests every minute-ish (cheap, no separate timer).
@@ -91,11 +101,7 @@ pub(crate) fn run_notifier_loop(
 /// Long-running loop that dispatches menu events from the tray icon.
 /// Runs on its own thread; exits when `shutdown` flips or the OS tray
 /// thread terminates.
-pub fn run_tray_loop(
-    tray: &dyn Tray,
-    shutdown: &Arc<AtomicBool>,
-    fallback_url: &str,
-) {
+pub fn run_tray_loop(tray: &dyn Tray, shutdown: &Arc<AtomicBool>, fallback_url: &str) {
     while !shutdown.load(Ordering::SeqCst) {
         let Some(event) = tray.try_recv() else {
             thread::sleep(Duration::from_millis(100));
@@ -105,8 +111,10 @@ pub fn run_tray_loop(
             TrayEvent::Click | TrayEvent::DoubleClick => {
                 let url = tray_click_url(tray, fallback_url);
                 let _ = open_in_default_browser(&url);
-            }
-            TrayEvent::MenuItem { id } => {
+            },
+            TrayEvent::MenuItem {
+                id,
+            } => {
                 let action = match id.as_str() {
                     x if x == MenuAction::OpenInbox.id() => Some(MenuAction::OpenInbox),
                     x if x == MenuAction::OpenLatest.id() => Some(MenuAction::OpenLatest),
@@ -119,22 +127,22 @@ pub fn run_tray_loop(
                     match a {
                         MenuAction::OpenInbox => {
                             let _ = open_in_default_browser(&base);
-                        }
+                        },
                         MenuAction::OpenLatest => {
                             let url = format!("{base}/inbox/latest");
                             let _ = open_in_default_browser(&url);
-                        }
+                        },
                         MenuAction::ToggleQuiet => {
                             let _ = tray.set_tooltip("phinbox inbox (quiet)");
-                        }
+                        },
                         MenuAction::Quit => {
                             info!("quit requested from tray");
                             shutdown.store(true, Ordering::SeqCst);
                             break;
-                        }
+                        },
                     }
                 }
-            }
+            },
         }
     }
 }
@@ -143,7 +151,10 @@ pub fn run_tray_loop(
 /// click-to-open target. Falls back to the daemon's actual bind
 /// URL if the tray doesn't expose one (legacy `NoopTray` configs).
 fn tray_click_url(tray: &dyn Tray, fallback: &str) -> String {
-    tray.inbox_url().map_or_else(|| fallback.trim_end_matches('/').to_string(), |u| u.trim_end_matches('/').to_string())
+    tray.inbox_url().map_or_else(
+        || fallback.trim_end_matches('/').to_string(),
+        |u| u.trim_end_matches('/').to_string(),
+    )
 }
 
 /// Open `url` in the user's default browser. Best-effort; failures
