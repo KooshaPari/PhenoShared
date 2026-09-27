@@ -203,8 +203,15 @@ pub unsafe extern "C" fn fabric_capability_verify_json(
 ///
 /// The returned key is 32 bytes (seed). The caller owns the returned memory.
 /// Free with `fabric_capability_free_key`.
+///
+/// # Safety
+///
+/// `out_key` must be a valid, aligned, writable pointer to 32 bytes for the
+/// duration of the call. A null pointer is rejected before any write (the
+/// contract still requires liveness — the check is defense in depth, not
+/// permission to pass null).
 #[no_mangle]
-pub extern "C" fn fabric_capability_generate_key(out_key: *mut [u8; 32]) -> FabricError {
+pub unsafe extern "C" fn fabric_capability_generate_key(out_key: *mut [u8; 32]) -> FabricError {
     if out_key.is_null() {
         return FabricError::NullPointer;
     }
@@ -219,8 +226,14 @@ pub extern "C" fn fabric_capability_generate_key(out_key: *mut [u8; 32]) -> Fabr
 /// Returns the key fingerprint (key_id) for a given key as a hex string.
 ///
 /// The returned pointer must be freed by the caller with `fabric_capability_free_string`.
+///
+/// # Safety
+///
+/// `key_bytes` must point to at least 32 readable bytes for the duration of
+/// the call. A null pointer is rejected before any read (defense in depth,
+/// not permission to pass null).
 #[no_mangle]
-pub extern "C" fn fabric_capability_key_id(key_bytes: *const u8) -> *mut std::os::raw::c_char {
+pub unsafe extern "C" fn fabric_capability_key_id(key_bytes: *const u8) -> *mut std::os::raw::c_char {
     if key_bytes.is_null() {
         return std::ptr::null_mut();
     }
