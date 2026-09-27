@@ -11,6 +11,27 @@ Task granularity follows the 10-minute rule: leaf tasks are ~10 minutes.
 
 ## 0. Verified state of the world (inputs to the plan)
 
+> **2026-09-27 addendum (CI cold-runner campaign):** the port of the deleted
+> `KooshaPari/nanovms` git dep into `crates/nvms-manifest` (821cc1cb) removed
+> the last git dependency and unblocked three gates. Evidence landed today:
+> `cargo-deny.yml`, `ci.yml` **green** on 762102b1 (run head_sha query);
+> `deny.yml` both jobs green on dispatched run 36342489246 (go-audit fix
+> ec1682d5: go 1.26 + govulncheck@v1.8.0). Linux-build blockers fixed with
+> evidence per commit: glib-sys (1c838b69 GTK3 apt deps), cfg(linux) probe
+> branch (9a06d2c2, cross-target `cargo check --target x86_64-unknown-linux-gnu`
+> exit 0), fabric-tray `-lxdo` link (dc932ff0 libxdo-dev). iac advisory/license
+> gate (762102b1) verified locally under cargo-deny 0.20.2: `advisories ok,
+> bans ok, licenses ok, sources ok` (iac full `check`, exit 0).
+>
+> **fmt correction:** E1.3.2's "done" was overstated — validation had run
+> without `--all`. Measured 2026-09-27: `cargo fmt --all --check` at HEAD
+> = 152 files failing; at the E1.3.2 commit itself = 326 (same stable
+> rustfmt 1.9.0-stable / rustc 1.97.1, `rustfmt.toml` unchanged since
+> 09-24 — so it is formatting debt, not toolchain drift). Full
+> `cargo fmt --all` reformat landed; check now exit 0. Note
+> `cargo +nightly fmt --all --check` also fails (nightly-only options are
+> active there); the pin (`rust-toolchain.toml` = stable) is the standard.
+
 | Fact | Value | Evidence |
 |---|---|---|
 | Workspace members | **79** | `cargo metadata --no-deps` |
@@ -71,9 +92,9 @@ E1.6 cannot be honest while `cargo check` is being substituted for a link.
 | E1.2 | Implement the decision in `rustfmt.toml` / workflow | 10m | E1.1 | |
 | E1.3.1 | Reformat `crates/phinbox` (69 files) alone, message-scoped | 10m | E1.2 | |
 | E1.3.2 | Reformat the other 219 files, separate commit | 10m | E1.3.1 | |
-| E1.3.3 | Confirm `cargo fmt --check` exits 0 under the chosen toolchain | 10m | E1.3.2 | |
-| E1.4 | Measure `cargo clippy --workspace --locked -- -D warnings` | 10m | E2.1 | |
-| E1.5.x | Fix/allow the clippy findings it exposes (scoped allows only, see E4) | 10m each | E1.4 | unknown N |
+| E1.3.3 | Confirm `cargo fmt --check` exits 0 under the chosen toolchain | 10m | E1.3.2 | **done 2026-09-27 (2nd pass)** — 1st-pass claim retracted: `--all` was never clean. The E1.3.2 tree itself measures **326** diff files under the same toolchain (worktree test at 1f250aad); HEAD was at **152**. Full `cargo fmt --all` reformat landed 2026-09-27, `cargo fmt --all --check` exit 0 |
+| E1.4 | Measure `cargo clippy --workspace --locked -- -D warnings` | 10m | E2.1 | **done 2026-09-27** — findings: traceability-core 277 `missing_docs` + 1 `int_plus_one`; fabric-checker/graph 14 src + 11 tests/benches. All fixed same day (0f161d08, 7feb3c64); workspace-wide re-measure lands in E1.6 |
+| E1.5.x | Fix/allow the clippy findings it exposes (scoped allows only, see E4) | 10m each | E1.4 | **2 batches done**: 0f161d08 (traceability-core, 0 errors), 7feb3c64 (checker/graph, 0 errors, 2 scoped allows) |
 | E1.6 | `make check` green end to end | 10m | E1.3.3, E1.5.x | |
 | E1.7 | Generalise `crates/phinbox/scripts/check-targets.sh` → `scripts/check-cross-targets.sh` | 10m | — | |
 | E1.8 | One Linux-only CI job running E1.6 + E1.7; delete/gate the redundant ones | 10m | E1.6, E1.7 | |
