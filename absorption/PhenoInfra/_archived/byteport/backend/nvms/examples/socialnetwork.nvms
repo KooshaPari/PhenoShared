@@ -1,0 +1,133 @@
+FROM: aws-ubuntu:minimal
+NAME: social-network
+
+CLUSTER:
+  api-servers:
+    INSTANCES: 10-50
+    PATH: ./api
+    BUILD: cargo build --release
+    SCALE:
+      CPU_THRESHOLD: 70
+      MEMORY_THRESHOLD: 80
+
+  feed-generator:
+    INSTANCES: 5-20
+    PATH: ./feed
+    BUILD: cargo build --release
+    SCALE:
+      QUEUE_THRESHOLD: 1000
+
+  recommendation:
+    INSTANCES: 3-15
+    PATH: ./recommendation
+    BUILD: 
+      - python -m pip install -r requirements.txt
+      - python setup.py install
+    SCALE:
+      GPU_UTILIZATION: 80
+
+  notification:
+    INSTANCES: 2-10
+    PATH: ./notification
+    BUILD: cargo build --release
+    SCALE:
+      QUEUE_THRESHOLD: 500
+
+SERVICES:
+  frontend:
+    PATH: ./frontend
+    BUILD: npm run build
+    PORT: 3000
+
+  websocket:
+    PATH: ./websocket
+    BUILD: cargo build --release
+    PORT: 8080
+
+  search:
+    PATH: ./search
+    BUILD: cargo build --release
+    PORT: 8081
+
+AWS:
+  REGION: us-east-1
+  SERVICES:
+    - TYPE: Aurora
+      ENGINE: postgres
+      MODE: CLUSTER
+      REPLICAS: 5
+    - TYPE: ElastiCache
+      ENGINE: redis
+      MODE: CLUSTER
+      SIZE: cache.r6g.2xlarge
+    - TYPE: OpenSearch
+      MODE: CLUSTER
+      SIZE: r6g.2xlarge.search
+    - TYPE: MSK
+      NAME: events
+      PARTITIONS: 100
+    - TYPE: DynamoDB
+      TABLES:
+        - NAME: users
+          RCU: 5000
+          WCU: 1000
+        - NAME: posts
+          RCU: 10000
+          WCU: 2000
+    - TYPE: S3
+      NAME: media-storage
+    - TYPE: CloudFront
+      ORIGIN: ${aws:s3:media-storage}
+    - TYPE: SageMaker
+      INSTANCES:
+        - ml.g4dn.xlarge
+    - TYPE: Lambda
+      FUNCTIONS:
+        - NAME: image-processor
+        - NAME: video-processor
+    - TYPE: SNS
+      TOPICS:
+        - NAME: notifications
+    - TYPE: SQS
+      NAME: tasks
+
+NETWORK:
+  DOMAIN: social.example.com
+  SSL: true
+  LOAD_BALANCER:
+    TYPE: ALB
+    SSL: true
+  CDN:
+    ENABLED: true
+    CACHE_POLICY: CachingOptimized
+  SECURITY:
+    VPC: true
+    PRIVATE_SUBNETS: true
+    WAF: true
+    DDOS_PROTECTION: true
+    RULES:
+      INBOUND:
+        - "TCP 443 ANY"
+        - "TCP 8080 VPC"
+        - "TCP 8081 VPC"
+      OUTBOUND:
+        - "TCP ANY VPC"
+
+MONITORING:
+  METRICS:
+    - CPU_UTILIZATION
+    - MEMORY_UTILIZATION
+    - REQUEST_LATENCY
+    - ERROR_RATE
+  ALERTS:
+    - TYPE: ERROR_RATE
+      THRESHOLD: 1%
+      WINDOW: 5m
+    - TYPE: LATENCY
+      THRESHOLD: 500ms
+      WINDOW: 1m
+
+BACKUP:
+  ENABLED: true
+  RETENTION: 30d
+  SCHEDULE: "0 0 * * *"

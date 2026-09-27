@@ -1,0 +1,322 @@
+name: perf-core CI
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "perf-core/**"
+  pull_request:
+    branches: [main]
+    paths:
+      - "perf-core/**"
+  merge_group:
+  workflow_dispatch:
+
+env:
+  CARGO_TERM_COLOR: always
+  RUST_BACKTRACE: 1
+
+jobs:
+  check:
+    name: Check (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust nightly
+        uses: dtolnay/rust-toolchain@nightly
+        with:
+          components: rustfmt, clippy
+
+      - name: Cache cargo registry + git
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            perf-core/target
+          key: ${{ runner.os }}-cargo-${{ hashFiles('perf-core/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-
+
+      - name: Install Zig (macOS)
+        if: runner.os == 'macOS'
+        run: brew install zig
+
+      - name: Install Zig (Ubuntu)
+        if: runner.os == 'Linux'
+        run: |
+          sudo snap install zig --classic --channel=latest/stable || {
+            ZIG_VERSION="0.15.2"
+            ZIG_SHA256="02aa270f183da276e5b5920b1dac44a63f1a49e55050ebde3aecc9eb82f93239"
+            curl --fail --location --retry 5 --retry-connrefused --silent --show-error \
+              "https://ziglang.org/download/${ZIG_VERSION}/zig-x86_64-linux-${ZIG_VERSION}.tar.xz" \
+              -o /tmp/zig.tar.xz
+            echo "${ZIG_SHA256}  /tmp/zig.tar.xz" | sha256sum --check --status
+            sudo tar -xf /tmp/zig.tar.xz -C /usr/local/bin --strip-components=1
+            rm /tmp/zig.tar.xz
+          }
+
+      - name: Verify Zig
+        run: zig version
+
+      - name: Verify Nim
+        if: runner.os == 'macOS'
+        run: nim --version || brew install nim
+
+      - name: Verify Nim (Ubuntu)
+        if: runner.os == 'Linux'
+        run: nim --version || { curl https://nim-lang.org/choosenim/init.sh -sSf | bash -s -- -y && echo "$HOME/.nimble/bin" >> "$GITHUB_PATH"; }
+
+      - name: cargo check (exclude mojo + cuda)
+        working-directory: perf-core
+        run: cargo check --workspace --exclude turbo-quant-mojo --exclude concurrent-exec-cuda
+
+  test:
+    name: Test (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust nightly
+        uses: dtolnay/rust-toolchain@nightly
+
+      - name: Cache cargo registry + git
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            perf-core/target
+          key: ${{ runner.os }}-cargo-${{ hashFiles('perf-core/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-
+
+      - name: Install Zig (macOS)
+        if: runner.os == 'macOS'
+        run: brew install zig
+
+      - name: Install Zig (Ubuntu)
+        if: runner.os == 'Linux'
+        run: |
+          sudo snap install zig --classic --channel=latest/stable || {
+            ZIG_VERSION="0.15.2"
+            ZIG_SHA256="02aa270f183da276e5b5920b1dac44a63f1a49e55050ebde3aecc9eb82f93239"
+            curl --fail --location --retry 5 --retry-connrefused --silent --show-error \
+              "https://ziglang.org/download/${ZIG_VERSION}/zig-x86_64-linux-${ZIG_VERSION}.tar.xz" \
+              -o /tmp/zig.tar.xz
+            echo "${ZIG_SHA256}  /tmp/zig.tar.xz" | sha256sum --check --status
+            sudo tar -xf /tmp/zig.tar.xz -C /usr/local/bin --strip-components=1
+            rm /tmp/zig.tar.xz
+          }
+
+      - name: Verify Zig
+        run: zig version
+
+      - name: Verify Nim
+        if: runner.os == 'macOS'
+        run: nim --version || brew install nim
+
+      - name: Verify Nim (Ubuntu)
+        if: runner.os == 'Linux'
+        run: nim --version || { curl https://nim-lang.org/choosenim/init.sh -sSf | bash -s -- -y && echo "$HOME/.nimble/bin" >> "$GITHUB_PATH"; }
+
+      - name: cargo test (exclude mojo + cuda)
+        working-directory: perf-core
+        run: cargo test --workspace --exclude turbo-quant-mojo --exclude concurrent-exec-cuda
+
+  clippy:
+    name: Clippy (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust nightly
+        uses: dtolnay/rust-toolchain@nightly
+        with:
+          components: clippy
+
+      - name: Cache cargo registry + git
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            perf-core/target
+          key: ${{ runner.os }}-cargo-${{ hashFiles('perf-core/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-
+
+      - name: Install Zig (macOS)
+        if: runner.os == 'macOS'
+        run: brew install zig
+
+      - name: Install Zig (Ubuntu)
+        if: runner.os == 'Linux'
+        run: |
+          sudo snap install zig --classic --channel=latest/stable || {
+            ZIG_VERSION="0.15.2"
+            ZIG_SHA256="02aa270f183da276e5b5920b1dac44a63f1a49e55050ebde3aecc9eb82f93239"
+            curl --fail --location --retry 5 --retry-connrefused --silent --show-error \
+              "https://ziglang.org/download/${ZIG_VERSION}/zig-x86_64-linux-${ZIG_VERSION}.tar.xz" \
+              -o /tmp/zig.tar.xz
+            echo "${ZIG_SHA256}  /tmp/zig.tar.xz" | sha256sum --check --status
+            sudo tar -xf /tmp/zig.tar.xz -C /usr/local/bin --strip-components=1
+            rm /tmp/zig.tar.xz
+          }
+
+      - name: Verify Zig
+        run: zig version
+
+      - name: Verify Nim
+        if: runner.os == 'macOS'
+        run: nim --version || brew install nim
+
+      - name: Verify Nim (Ubuntu)
+        if: runner.os == 'Linux'
+        run: nim --version || { curl https://nim-lang.org/choosenim/init.sh -sSf | bash -s -- -y && echo "$HOME/.nimble/bin" >> "$GITHUB_PATH"; }
+
+      - name: cargo clippy (exclude mojo + cuda)
+        working-directory: perf-core
+        run: cargo clippy --workspace --all-targets --exclude turbo-quant-mojo --exclude concurrent-exec-cuda -- -D warnings
+
+  format:
+    name: Format
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install Rust nightly
+        uses: dtolnay/rust-toolchain@nightly
+        with:
+          components: rustfmt
+
+      - name: Detect changed Rust files
+        id: rust-changes
+        shell: bash
+        run: |
+          set -euo pipefail
+          base="${{ github.event.pull_request.base.sha || github.event.before }}"
+          if [ -z "$base" ] || ! git cat-file -e "$base^{commit}" 2>/dev/null; then
+            base="$(git rev-parse HEAD^)"
+          fi
+          git diff --name-only "$base" HEAD -- '*.rs' > "$RUNNER_TEMP/rust-files"
+          if [ -s "$RUNNER_TEMP/rust-files" ]; then
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            echo "No Rust files changed."
+          fi
+
+      - name: rustfmt changed Rust files
+        if: steps.rust-changes.outputs.changed == 'true'
+        working-directory: perf-core
+        run: |
+          while IFS= read -r file; do
+            rustfmt --edition 2021 --check "../$file"
+          done < "$RUNNER_TEMP/rust-files"
+
+  # ---------- Windows (experimental) ----------
+  windows-check:
+    name: Windows check
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust nightly
+        uses: dtolnay/rust-toolchain@nightly
+
+      - name: Cache cargo registry + git
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            perf-core/target
+          key: ${{ runner.os }}-cargo-${{ hashFiles('perf-core/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-
+
+      - name: cargo check (exclude mojo + cuda)
+        working-directory: perf-core
+        run: cargo check --workspace --exclude turbo-quant-mojo --exclude concurrent-exec-cuda
+
+      - name: cargo test (exclude mojo + cuda)
+        working-directory: perf-core
+        run: cargo test --workspace --exclude turbo-quant-mojo --exclude concurrent-exec-cuda
+
+  # ---------- Platform-specific optional jobs ----------
+  # NOTE: turbo-quant-zig is NOT in the workspace members list yet.
+  # Build it standalone via --manifest-path when Zig is available.
+  # NOTE: Mojo SDK is not installable on GitHub Actions runners.
+  # turbo-quant-mojo is excluded from all workspace commands above.
+  # NOTE: CUDA tests are skipped — concurrent-exec-cuda requires NVIDIA
+  # hardware and the `cuda` feature flag, neither available on standard
+  # GitHub Actions runners.
+
+  zig-crate:
+    name: Zig crate (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust nightly
+        uses: dtolnay/rust-toolchain@nightly
+
+      - name: Cache cargo registry + git
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            perf-core/target
+          key: ${{ runner.os }}-cargo-zig-${{ hashFiles('perf-core/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-zig-
+
+      - name: Install Zig (macOS)
+        if: runner.os == 'macOS'
+        run: brew install zig
+
+      - name: Install Zig (Ubuntu)
+        if: runner.os == 'Linux'
+        run: |
+          sudo snap install zig --classic --channel=latest/stable || {
+            ZIG_VERSION="0.15.2"
+            ZIG_SHA256="02aa270f183da276e5b5920b1dac44a63f1a49e55050ebde3aecc9eb82f93239"
+            curl --fail --location --retry 5 --retry-connrefused --silent --show-error \
+              "https://ziglang.org/download/${ZIG_VERSION}/zig-x86_64-linux-${ZIG_VERSION}.tar.xz" \
+              -o /tmp/zig.tar.xz
+            echo "${ZIG_SHA256}  /tmp/zig.tar.xz" | sha256sum --check --status
+            sudo tar -xf /tmp/zig.tar.xz -C /usr/local/bin --strip-components=1
+            rm /tmp/zig.tar.xz
+          }
+
+      - name: Verify Zig
+        run: zig version
+
+      - name: cargo check -p turbo-quant-zig
+        working-directory: perf-core
+        run: cargo check --manifest-path turbo-quant-zig/Cargo.toml
+
+      - name: cargo test -p turbo-quant-zig
+        working-directory: perf-core
+        run: cargo test --manifest-path turbo-quant-zig/Cargo.toml

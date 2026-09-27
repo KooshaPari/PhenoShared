@@ -1,0 +1,30 @@
+{
+  "id": "dial-story",
+  "medium": "interactive",
+  "artifactKind": "concept",
+  "editableSources": [
+    "dial.ai",
+    "dial.blend",
+    "motion.ts"
+  ],
+  "outputs": [
+    "dial.svg",
+    "dial.glb",
+    "poster.png",
+    "story.mp4"
+  ],
+  "acceptance": [
+    "Native sources reopen with named editable layers/parts",
+    "Drag, keyboard and touch reveal the same available information",
+    "Reduced motion has complete readable content",
+    "No stale/missing evidence is marked PASS"
+  ],
+  "rights": {
+    "basis": "Original authored forms; acquired dependencies require item-specific records"
+  },
+  "budgets": {
+    "renderSlots": 1,
+    "textureMaxEdge": 2048,
+    "initialTransferBytes": 400000
+  }
+}

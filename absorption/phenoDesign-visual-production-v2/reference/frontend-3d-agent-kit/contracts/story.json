@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "asset_id": "concept-trainer-v1",
+  "progress_range": [
+    0,
+    1
+  ],
+  "controller": "single normalized absolute progress",
+  "pose": {
+    "yaw_radians": "-0.28 + smoothstep(progress) * PI * 1.66 + userYawOffset",
+    "tilt_radians": "0.03 + sin(progress * PI) * 0.15",
+    "explosion": "manualOverride == null ? smoothstep((progress-.29)/.24)*(1-smoothstep((progress-.75)/.19)) : (manualOverride ? 1 : 0)"
+  },
+  "beats": [
+    {
+      "range": [
+        0,
+        0.28
+      ],
+      "id": "form",
+      "meaning": "Silhouette and product identity"
+    },
+    {
+      "range": [
+        0.28,
+        0.76
+      ],
+      "id": "structure",
+      "meaning": "Independent upper, midsole and outsole"
+    },
+    {
+      "range": [
+        0.76,
+        1
+      ],
+      "id": "finish",
+      "meaning": "Reassembled form and accent selection"
+    }
+  ],
+  "required_nodes": [
+    "Upper",
+    "Midsole",
+    "Outsole"
+  ],
+  "motion_policy": {
+    "reduced_motion": "No scroll-linked pose by default; direct actions remain available",
+    "hidden": "No continuous rendering",
+    "offscreen": "No continuous rendering"
+  },
+  "validation_progress": [
+    0,
+    0.25,
+    0.5,
+    0.75,
+    1
+  ]
+}

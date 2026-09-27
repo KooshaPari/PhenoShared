@@ -1,0 +1,41 @@
+{
+  "id": "PILOT-PRD-PORTAGE",
+  "product_id": "PRD-PORTAGE",
+  "status": "PLANNED_NOT_EXECUTED",
+  "subject_repository_id": 1165351720,
+  "hypothesis": "A measured environment/adapter/scheduling or evidence benefit over upstream, not a renamed runner.",
+  "baseline_candidates": [
+    "Exact upstream Harbor base",
+    "Current Harbor",
+    "Direct task scripts in controlled environments",
+    "Inspect for matching evaluation workloads"
+  ],
+  "scenario": "Run one known-good and one known-bad agent through a real environment/task. Add an infrastructure failure, timeout, missing dependency and cancellation. Compare the fork with its upstream on retained output fidelity, configuration effort and any owned adapter/scheduling improvement.",
+  "failure_cases": [
+    "Missing implementation skips to green",
+    "Reward fabricated from metadata",
+    "Sandbox not used by tool code",
+    "Logs lost after cancellation",
+    "Required extra unavailable but accepted",
+    "Duplicate task charged/executed twice"
+  ],
+  "metrics": [
+    "Correct outcome classification",
+    "Reproducibility",
+    "Setup and adapter authoring effort",
+    "Resource enforcement",
+    "Artifact completeness",
+    "Fork maintenance burden"
+  ],
+  "required_before_execution": [
+    "versioned subjects and fixtures",
+    "predeclared critical invariants",
+    "reviewed non-inferiority margins",
+    "resource and trust limits",
+    "independent outcome oracle",
+    "retained failed-trial policy"
+  ],
+  "results": null,
+  "winner": null,
+  "protocol": "../../research/COMPARATIVE-PILOT-PROTOCOL.md"
+}

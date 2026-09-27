@@ -1,0 +1,90 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Frontend asset source/delivery manifest",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "asset_id",
+    "source",
+    "editable_source",
+    "rights",
+    "coordinate_system",
+    "parts",
+    "exports"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "asset_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "source": {
+      "type": "string"
+    },
+    "editable_source": {
+      "type": "string"
+    },
+    "rights": {
+      "type": "object",
+      "required": [
+        "creator",
+        "license",
+        "third_party_inputs"
+      ],
+      "properties": {
+        "creator": {
+          "type": "string"
+        },
+        "license": {
+          "type": "string"
+        },
+        "third_party_inputs": {
+          "type": "array"
+        }
+      }
+    },
+    "coordinate_system": {
+      "type": "object",
+      "required": [
+        "up",
+        "forward",
+        "units"
+      ]
+    },
+    "parts": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "exports": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "path",
+          "bytes",
+          "sha256"
+        ],
+        "properties": {
+          "path": {
+            "type": "string"
+          },
+          "bytes": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          }
+        }
+      }
+    }
+  },
+  "additionalProperties": true
+}

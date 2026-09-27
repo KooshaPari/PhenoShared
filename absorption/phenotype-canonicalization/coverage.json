@@ -1,0 +1,44 @@
+{
+  "as_of_date": "2026-09-16",
+  "mode": "read_only_research_and_handoff",
+  "discovered_repository_count": 46,
+  "selected_source_file_repositories": [
+    "AgilePlus",
+    "HeliosLab",
+    "OmniRoute",
+    "PhenoDesign",
+    "PhenoInfra",
+    "PhenoRegistry",
+    "PhenoShared",
+    "Portage",
+    "Tracera"
+  ],
+  "full_git_graph_audit": false,
+  "full_repository_checkout_or_build": false,
+  "all_conversations_read": false,
+  "history_scope": [
+    "five recent PhenoShared commits",
+    "Tracera typecheck contract file path history"
+  ],
+  "installed_consumer_verification": false,
+  "hosted_workflow_execution_verified": false,
+  "local_execution": [
+    "synthetic TypeScript 5.8.3 multi-project counterexample",
+    "packet tests reported separately after execution"
+  ],
+  "limitations": [
+    "GitHub connector searches cover indexed default branches, not every branch or local dirty worktree.",
+    "The analysis container could not resolve external GitHub hosts for a full clone.",
+    "Some long connector responses were truncated; claims are limited to returned content.",
+    "Search nonmatches and repository-name 404s are not proof of absence.",
+    "No production performance winner has been measured.",
+    "Discovery lifecycle flags and old names do not override explicit user lifecycle decisions."
+  ],
+  "next_unresolved": [
+    "Full ref/lineage/consumer graph",
+    "Clean installed consumer tests",
+    "Exact release/toolchain pin qualification",
+    "Provider access/identity resolution",
+    "Profile-by-profile existing exception reconciliation"
+  ]
+}

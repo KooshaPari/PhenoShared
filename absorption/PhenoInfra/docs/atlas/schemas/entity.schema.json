@@ -1,0 +1,257 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:phenotype:atlas-plan:1:entity",
+  "title": "entity",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[A-Za-z][A-Za-z0-9_.:-]*$",
+      "minLength": 2
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "human-source",
+        "intent",
+        "interpretation",
+        "decision",
+        "assumption",
+        "conflict",
+        "product",
+        "user-job",
+        "persona",
+        "journey",
+        "capability",
+        "applet",
+        "surface",
+        "repository",
+        "package",
+        "source-unit",
+        "symbol",
+        "build-profile",
+        "interface",
+        "state-machine",
+        "data-entity",
+        "migration",
+        "config-key",
+        "dependency",
+        "asset",
+        "obligation",
+        "test",
+        "fixture",
+        "oracle",
+        "measurement",
+        "run",
+        "evidence",
+        "exception",
+        "artifact",
+        "release",
+        "installation",
+        "deployment",
+        "consumer",
+        "claim",
+        "dissatisfaction",
+        "hypothesis",
+        "experiment",
+        "work-package",
+        "task",
+        "observation",
+        "actor",
+        "permission",
+        "resource-lease"
+      ]
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1
+    },
+    "subject_id": {
+      "type": "string",
+      "pattern": "^[A-Za-z][A-Za-z0-9_.:-]*$",
+      "minLength": 2
+    },
+    "state": {
+      "type": "string",
+      "enum": [
+        "unknown",
+        "proposed",
+        "reported",
+        "observed-source",
+        "observed-remote",
+        "measured",
+        "superseded",
+        "synthetic"
+      ]
+    },
+    "purpose": {
+      "type": "string",
+      "minLength": 1
+    },
+    "rationale_kind": {
+      "type": "string",
+      "enum": [
+        "historical-source",
+        "inference",
+        "proposal",
+        "unknown",
+        "synthetic"
+      ]
+    },
+    "rationale_source_ids": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 0
+    },
+    "source_anchor": {
+      "anyOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "repository_id": {
+              "type": [
+                "integer",
+                "null"
+              ],
+              "minimum": 1
+            },
+            "revision": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "path": {
+              "type": "string",
+              "minLength": 1
+            },
+            "blob_sha": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "symbol": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "span": {
+              "anyOf": [
+                {
+                  "type": "null"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "start_line": {
+                      "type": "integer",
+                      "minimum": 1
+                    },
+                    "end_line": {
+                      "type": "integer",
+                      "minimum": 1
+                    }
+                  },
+                  "required": [
+                    "start_line",
+                    "end_line"
+                  ],
+                  "additionalProperties": false
+                }
+              ]
+            },
+            "extractor": {
+              "type": "string",
+              "minLength": 1
+            },
+            "boundary": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "repository_id",
+            "revision",
+            "path",
+            "blob_sha",
+            "symbol",
+            "span",
+            "extractor",
+            "boundary"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "constraint_ids": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 0
+    },
+    "consumer_ids": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 0
+    },
+    "evidence_ids": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 0
+    },
+    "visibility": {
+      "type": "string",
+      "enum": [
+        "private",
+        "public-approved",
+        "internal",
+        "synthetic"
+      ]
+    },
+    "unknowns": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 0
+    },
+    "synthetic": {
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "id",
+    "type",
+    "title",
+    "subject_id",
+    "state",
+    "purpose",
+    "rationale_kind",
+    "rationale_source_ids",
+    "source_anchor",
+    "constraint_ids",
+    "consumer_ids",
+    "evidence_ids",
+    "visibility",
+    "unknowns",
+    "synthetic"
+  ],
+  "additionalProperties": false
+}

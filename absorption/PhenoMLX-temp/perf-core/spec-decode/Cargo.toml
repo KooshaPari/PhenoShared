@@ -1,0 +1,36 @@
+[package]
+name = "spec-decode"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+
+[lib]
+name = "spec_decode"
+path = "src/lib.rs"
+
+[dependencies]
+tokio = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+thiserror = { workspace = true }
+async-trait = { workspace = true }
+tracing = { workspace = true }
+turbo-quant = { path = "../turbo-quant" }
+metal = { workspace = true, optional = true }
+
+[dev-dependencies]
+criterion = { version = "0.5", features = ["html_reports"] }
+
+[[bench]]
+name = "find_subseq_bench"
+harness = false
+
+[[bench]]
+name = "pipeline_breakdown"
+harness = false
+
+
+[features]
+default = []
+metal = ["dep:metal"]

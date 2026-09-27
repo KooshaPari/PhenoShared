@@ -1,0 +1,941 @@
+{
+  "schema_version": "1",
+  "cells": [
+    {
+      "component": "synthetic-core",
+      "language": "python",
+      "platform": "synthetic-test",
+      "profile": "reference",
+      "family": "unit",
+      "metric": "executable-lines",
+      "subject_id": "SYN-PRODUCT",
+      "revision": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "artifact_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "eligible_ids": [
+        "executable-lines-00",
+        "executable-lines-01",
+        "executable-lines-02",
+        "executable-lines-03",
+        "executable-lines-04",
+        "executable-lines-05",
+        "executable-lines-06",
+        "executable-lines-07",
+        "executable-lines-08",
+        "executable-lines-09",
+        "executable-lines-10",
+        "executable-lines-11",
+        "executable-lines-12",
+        "executable-lines-13",
+        "executable-lines-14",
+        "executable-lines-15",
+        "executable-lines-16",
+        "executable-lines-17",
+        "executable-lines-18",
+        "executable-lines-19"
+      ],
+      "covered_ids": [
+        "executable-lines-00",
+        "executable-lines-01",
+        "executable-lines-02",
+        "executable-lines-03",
+        "executable-lines-04",
+        "executable-lines-05",
+        "executable-lines-06",
+        "executable-lines-07",
+        "executable-lines-08",
+        "executable-lines-09",
+        "executable-lines-10",
+        "executable-lines-11",
+        "executable-lines-12",
+        "executable-lines-13",
+        "executable-lines-14",
+        "executable-lines-15",
+        "executable-lines-16",
+        "executable-lines-17"
+      ],
+      "critical_ids": [
+        "executable-lines-00",
+        "executable-lines-01"
+      ],
+      "denominator_sha256": "6c1f6d80d96f505d0a62984532931d21db84b64579b9c946feecef6841c8f56e",
+      "run_id": "synthetic-unit",
+      "run_status": "completed",
+      "outcome": "pass",
+      "accumulator_families": [
+        "unit"
+      ],
+      "checks": [
+        {
+          "id": "positive",
+          "status": "pass"
+        },
+        {
+          "id": "negative",
+          "status": "pass"
+        }
+      ],
+      "evidence_refs": [
+        "synthetic-reference-not-product-proof"
+      ],
+      "data_origin": "synthetic"
+    },
+    {
+      "component": "synthetic-core",
+      "language": "python",
+      "platform": "synthetic-test",
+      "profile": "reference",
+      "family": "unit",
+      "metric": "branches-decisions",
+      "subject_id": "SYN-PRODUCT",
+      "revision": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "artifact_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "eligible_ids": [
+        "branches-decisions-00",
+        "branches-decisions-01",
+        "branches-decisions-02",
+        "branches-decisions-03",
+        "branches-decisions-04",
+        "branches-decisions-05",
+        "branches-decisions-06",
+        "branches-decisions-07",
+        "branches-decisions-08",
+        "branches-decisions-09",
+        "branches-decisions-10",
+        "branches-decisions-11",
+        "branches-decisions-12",
+        "branches-decisions-13",
+        "branches-decisions-14",
+        "branches-decisions-15",
+        "branches-decisions-16",
+        "branches-decisions-17",
+        "branches-decisions-18",
+        "branches-decisions-19"
+      ],
+      "covered_ids": [
+        "branches-decisions-00",
+        "branches-decisions-01",
+        "branches-decisions-02",
+        "branches-decisions-03",
+        "branches-decisions-04",
+        "branches-decisions-05",
+        "branches-decisions-06",
+        "branches-decisions-07",
+        "branches-decisions-08",
+        "branches-decisions-09",
+        "branches-decisions-10",
+        "branches-decisions-11",
+        "branches-decisions-12",
+        "branches-decisions-13",
+        "branches-decisions-14",
+        "branches-decisions-15",
+        "branches-decisions-16",
+        "branches-decisions-17"
+      ],
+      "critical_ids": [
+        "branches-decisions-00",
+        "branches-decisions-01"
+      ],
+      "denominator_sha256": "2e6731f1c902f3390caf40f304f72f64c760a2ca4369d7af722c9793d17ad057",
+      "run_id": "synthetic-unit",
+      "run_status": "completed",
+      "outcome": "pass",
+      "accumulator_families": [
+        "unit"
+      ],
+      "checks": [
+        {
+          "id": "positive",
+          "status": "pass"
+        },
+        {
+          "id": "negative",
+          "status": "pass"
+        }
+      ],
+      "evidence_refs": [
+        "synthetic-reference-not-product-proof"
+      ],
+      "data_origin": "synthetic"
+    },
+    {
+      "component": "synthetic-core",
+      "language": "python",
+      "platform": "synthetic-test",
+      "profile": "reference",
+      "family": "unit",
+      "metric": "functions",
+      "subject_id": "SYN-PRODUCT",
+      "revision": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "artifact_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "eligible_ids": [
+        "functions-00",
+        "functions-01",
+        "functions-02",
+        "functions-03",
+        "functions-04",
+        "functions-05",
+        "functions-06",
+        "functions-07",
+        "functions-08",
+        "functions-09",
+        "functions-10",
+        "functions-11",
+        "functions-12",
+        "functions-13",
+        "functions-14",
+        "functions-15",
+        "functions-16",
+        "functions-17",
+        "functions-18",
+        "functions-19"
+      ],
+      "covered_ids": [
+        "functions-00",
+        "functions-01",
+        "functions-02",
+        "functions-03",
+        "functions-04",
+        "functions-05",
+        "functions-06",
+        "functions-07",
+        "functions-08",
+        "functions-09",
+        "functions-10",
+        "functions-11",
+        "functions-12",
+        "functions-13",
+        "functions-14",
+        "functions-15",
+        "functions-16",
+        "functions-17"
+      ],
+      "critical_ids": [
+        "functions-00",
+        "functions-01"
+      ],
+      "denominator_sha256": "a136881e31b934124a1450d966fbd543f401122ea68c29acb54be1a8b4e4fd78",
+      "run_id": "synthetic-unit",
+      "run_status": "completed",
+      "outcome": "pass",
+      "accumulator_families": [
+        "unit"
+      ],
+      "checks": [
+        {
+          "id": "positive",
+          "status": "pass"
+        },
+        {
+          "id": "negative",
+          "status": "pass"
+        }
+      ],
+      "evidence_refs": [
+        "synthetic-reference-not-product-proof"
+      ],
+      "data_origin": "synthetic"
+    },
+    {
+      "component": "synthetic-core",
+      "language": "python",
+      "platform": "synthetic-test",
+      "profile": "reference",
+      "family": "unit",
+      "metric": "behavioral-obligations",
+      "subject_id": "SYN-PRODUCT",
+      "revision": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "artifact_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "eligible_ids": [
+        "behavioral-obligations-00",
+        "behavioral-obligations-01",
+        "behavioral-obligations-02",
+        "behavioral-obligations-03",
+        "behavioral-obligations-04",
+        "behavioral-obligations-05",
+        "behavioral-obligations-06",
+        "behavioral-obligations-07",
+        "behavioral-obligations-08",
+        "behavioral-obligations-09",
+        "behavioral-obligations-10",
+        "behavioral-obligations-11",
+        "behavioral-obligations-12",
+        "behavioral-obligations-13",
+        "behavioral-obligations-14",
+        "behavioral-obligations-15",
+        "behavioral-obligations-16",
+        "behavioral-obligations-17",
+        "behavioral-obligations-18",
+        "behavioral-obligations-19"
+      ],
+      "covered_ids": [
+        "behavioral-obligations-00",
+        "behavioral-obligations-01",
+        "behavioral-obligations-02",
+        "behavioral-obligations-03",
+        "behavioral-obligations-04",
+        "behavioral-obligations-05",
+        "behavioral-obligations-06",
+        "behavioral-obligations-07",
+        "behavioral-obligations-08",
+        "behavioral-obligations-09",
+        "behavioral-obligations-10",
+        "behavioral-obligations-11",
+        "behavioral-obligations-12",
+        "behavioral-obligations-13",
+        "behavioral-obligations-14",
+        "behavioral-obligations-15",
+        "behavioral-obligations-16",
+        "behavioral-obligations-17"
+      ],
+      "critical_ids": [
+        "behavioral-obligations-00",
+        "behavioral-obligations-01"
+      ],
+      "denominator_sha256": "d36d4eb706b9a360c743089dade2a537eb9791e2cfca7206cca8e9a434a48acd",
+      "run_id": "synthetic-unit",
+      "run_status": "completed",
+      "outcome": "pass",
+      "accumulator_families": [
+        "unit"
+      ],
+      "checks": [
+        {
+          "id": "positive",
+          "status": "pass"
+        },
+        {
+          "id": "negative",
+          "status": "pass"
+        }
+      ],
+      "evidence_refs": [
+        "synthetic-reference-not-product-proof"
+      ],
+      "data_origin": "synthetic"
+    },
+    {
+      "component": "synthetic-core",
+      "language": "python",
+      "platform": "synthetic-test",
+      "profile": "reference",
+      "family": "integration",
+      "metric": "executable-lines",
+      "subject_id": "SYN-PRODUCT",
+      "revision": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "artifact_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "eligible_ids": [
+        "executable-lines-00",
+        "executable-lines-01",
+        "executable-lines-02",
+        "executable-lines-03",
+        "executable-lines-04",
+        "executable-lines-05",
+        "executable-lines-06",
+        "executable-lines-07",
+        "executable-lines-08",
+        "executable-lines-09",
+        "executable-lines-10",
+        "executable-lines-11",
+        "executable-lines-12",
+        "executable-lines-13",
+        "executable-lines-14",
+        "executable-lines-15",
+        "executable-lines-16",
+        "executable-lines-17",
+        "executable-lines-18",
+        "executable-lines-19"
+      ],
+      "covered_ids": [
+        "executable-lines-00",
+        "executable-lines-01",
+        "executable-lines-02",
+        "executable-lines-03",
+        "executable-lines-04",
+        "executable-lines-05",
+        "executable-lines-06",
+        "executable-lines-07",
+        "executable-lines-08",
+        "executable-lines-09",
+        "executable-lines-10",
+        "executable-lines-11",
+        "executable-lines-12",
+        "executable-lines-13",
+        "executable-lines-14",
+        "executable-lines-15",
+        "executable-lines-16",
+        "executable-lines-17"
+      ],
+      "critical_ids": [
+        "executable-lines-00",
+        "executable-lines-01"
+      ],
+      "denominator_sha256": "6c1f6d80d96f505d0a62984532931d21db84b64579b9c946feecef6841c8f56e",
+      "run_id": "synthetic-integration",
+      "run_status": "completed",
+      "outcome": "pass",
+      "accumulator_families": [
+        "integration"
+      ],
+      "checks": [
+        {
+          "id": "positive",
+          "status": "pass"
+        },
+        {
+          "id": "negative",
+          "status": "pass"
+        }
+      ],
+      "evidence_refs": [
+        "synthetic-reference-not-product-proof"
+      ],
+      "data_origin": "synthetic"
+    },
+    {
+      "component": "synthetic-core",
+      "language": "python",
+      "platform": "synthetic-test",
+      "profile": "reference",
+      "family": "integration",
+      "metric": "branches-decisions",
+      "subject_id": "SYN-PRODUCT",
+      "revision": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "artifact_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "eligible_ids": [
+        "branches-decisions-00",
+        "branches-decisions-01",
+        "branches-decisions-02",
+        "branches-decisions-03",
+        "branches-decisions-04",
+        "branches-decisions-05",
+        "branches-decisions-06",
+        "branches-decisions-07",
+        "branches-decisions-08",
+        "branches-decisions-09",
+        "branches-decisions-10",
+        "branches-decisions-11",
+        "branches-decisions-12",
+        "branches-decisions-13",
+        "branches-decisions-14",
+        "branches-decisions-15",
+        "branches-decisions-16",
+        "branches-decisions-17",
+        "branches-decisions-18",
+        "branches-decisions-19"
+      ],
+      "covered_ids": [
+        "branches-decisions-00",
+        "branches-decisions-01",
+        "branches-decisions-02",
+        "branches-decisions-03",
+        "branches-decisions-04",
+        "branches-decisions-05",
+        "branches-decisions-06",
+        "branches-decisions-07",
+        "branches-decisions-08",
+        "branches-decisions-09",
+        "branches-decisions-10",
+        "branches-decisions-11",
+        "branches-decisions-12",
+        "branches-decisions-13",
+        "branches-decisions-14",
+        "branches-decisions-15",
+        "branches-decisions-16",
+        "branches-decisions-17"
+      ],
+      "critical_ids": [
+        "branches-decisions-00",
+        "branches-decisions-01"
+      ],
+      "denominator_sha256": "2e6731f1c902f3390caf40f304f72f64c760a2ca4369d7af722c9793d17ad057",
+      "run_id": "synthetic-integration",
+      "run_status": "completed",
+      "outcome": "pass",
+      "accumulator_families": [
+        "integration"
+      ],
+      "checks": [
+        {
+          "id": "positive",
+          "status": "pass"
+        },
+        {
+          "id": "negative",
+          "status": "pass"
+        }
+      ],
+      "evidence_refs": [
+        "synthetic-reference-not-product-proof"
+      ],
+      "data_origin": "synthetic"
+    },
+    {
+      "component": "synthetic-core",
+      "language": "python",
+      "platform": "synthetic-test",
+      "profile": "reference",
+      "family": "integration",
+      "metric": "functions",
+      "subject_id": "SYN-PRODUCT",
+      "revision": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "artifact_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "eligible_ids": [
+        "functions-00",
+        "functions-01",
+        "functions-02",
+        "functions-03",
+        "functions-04",
+        "functions-05",
+        "functions-06",
+        "functions-07",
+        "functions-08",
+        "functions-09",
+        "functions-10",
+        "functions-11",
+        "functions-12",
+        "functions-13",
+        "functions-14",
+        "functions-15",
+        "functions-16",
+        "functions-17",
+        "functions-18",
+        "functions-19"
+      ],
+      "covered_ids": [
+        "functions-00",
+        "functions-01",
+        "functions-02",
+        "functions-03",
+        "functions-04",
+        "functions-05",
+        "functions-06",
+        "functions-07",
+        "functions-08",
+        "functions-09",
+        "functions-10",
+        "functions-11",
+        "functions-12",
+        "functions-13",
+        "functions-14",
+        "functions-15",
+        "functions-16",
+        "functions-17"
+      ],
+      "critical_ids": [
+        "functions-00",
+        "functions-01"
+      ],
+      "denominator_sha256": "a136881e31b934124a1450d966fbd543f401122ea68c29acb54be1a8b4e4fd78",
+      "run_id": "synthetic-integration",
+      "run_status": "completed",
+      "outcome": "pass",
+      "accumulator_families": [
+        "integration"
+      ],
+      "checks": [
+        {
+          "id": "positive",
+          "status": "pass"
+        },
+        {
+          "id": "negative",
+          "status": "pass"
+        }
+      ],
+      "evidence_refs": [
+        "synthetic-reference-not-product-proof"
+      ],
+      "data_origin": "synthetic"
+    },
+    {
+      "component": "synthetic-core",
+      "language": "python",
+      "platform": "synthetic-test",
+      "profile": "reference",
+      "family": "integration",
+      "metric": "behavioral-obligations",
+      "subject_id": "SYN-PRODUCT",
+      "revision": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "artifact_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "eligible_ids": [
+        "behavioral-obligations-00",
+        "behavioral-obligations-01",
+        "behavioral-obligations-02",
+        "behavioral-obligations-03",
+        "behavioral-obligations-04",
+        "behavioral-obligations-05",
+        "behavioral-obligations-06",
+        "behavioral-obligations-07",
+        "behavioral-obligations-08",
+        "behavioral-obligations-09",
+        "behavioral-obligations-10",
+        "behavioral-obligations-11",
+        "behavioral-obligations-12",
+        "behavioral-obligations-13",
+        "behavioral-obligations-14",
+        "behavioral-obligations-15",
+        "behavioral-obligations-16",
+        "behavioral-obligations-17",
+        "behavioral-obligations-18",
+        "behavioral-obligations-19"
+      ],
+      "covered_ids": [
+        "behavioral-obligations-00",
+        "behavioral-obligations-01",
+        "behavioral-obligations-02",
+        "behavioral-obligations-03",
+        "behavioral-obligations-04",
+        "behavioral-obligations-05",
+        "behavioral-obligations-06",
+        "behavioral-obligations-07",
+        "behavioral-obligations-08",
+        "behavioral-obligations-09",
+        "behavioral-obligations-10",
+        "behavioral-obligations-11",
+        "behavioral-obligations-12",
+        "behavioral-obligations-13",
+        "behavioral-obligations-14",
+        "behavioral-obligations-15",
+        "behavioral-obligations-16",
+        "behavioral-obligations-17"
+      ],
+      "critical_ids": [
+        "behavioral-obligations-00",
+        "behavioral-obligations-01"
+      ],
+      "denominator_sha256": "d36d4eb706b9a360c743089dade2a537eb9791e2cfca7206cca8e9a434a48acd",
+      "run_id": "synthetic-integration",
+      "run_status": "completed",
+      "outcome": "pass",
+      "accumulator_families": [
+        "integration"
+      ],
+      "checks": [
+        {
+          "id": "positive",
+          "status": "pass"
+        },
+        {
+          "id": "negative",
+          "status": "pass"
+        }
+      ],
+      "evidence_refs": [
+        "synthetic-reference-not-product-proof"
+      ],
+      "data_origin": "synthetic"
+    },
+    {
+      "component": "synthetic-core",
+      "language": "python",
+      "platform": "synthetic-test",
+      "profile": "reference",
+      "family": "e2e",
+      "metric": "executable-lines",
+      "subject_id": "SYN-PRODUCT",
+      "revision": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "artifact_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "eligible_ids": [
+        "executable-lines-00",
+        "executable-lines-01",
+        "executable-lines-02",
+        "executable-lines-03",
+        "executable-lines-04",
+        "executable-lines-05",
+        "executable-lines-06",
+        "executable-lines-07",
+        "executable-lines-08",
+        "executable-lines-09",
+        "executable-lines-10",
+        "executable-lines-11",
+        "executable-lines-12",
+        "executable-lines-13",
+        "executable-lines-14",
+        "executable-lines-15",
+        "executable-lines-16",
+        "executable-lines-17",
+        "executable-lines-18",
+        "executable-lines-19"
+      ],
+      "covered_ids": [
+        "executable-lines-00",
+        "executable-lines-01",
+        "executable-lines-02",
+        "executable-lines-03",
+        "executable-lines-04",
+        "executable-lines-05",
+        "executable-lines-06",
+        "executable-lines-07",
+        "executable-lines-08",
+        "executable-lines-09",
+        "executable-lines-10",
+        "executable-lines-11",
+        "executable-lines-12",
+        "executable-lines-13",
+        "executable-lines-14",
+        "executable-lines-15",
+        "executable-lines-16",
+        "executable-lines-17"
+      ],
+      "critical_ids": [
+        "executable-lines-00",
+        "executable-lines-01"
+      ],
+      "denominator_sha256": "6c1f6d80d96f505d0a62984532931d21db84b64579b9c946feecef6841c8f56e",
+      "run_id": "synthetic-e2e",
+      "run_status": "completed",
+      "outcome": "pass",
+      "accumulator_families": [
+        "e2e"
+      ],
+      "checks": [
+        {
+          "id": "positive",
+          "status": "pass"
+        },
+        {
+          "id": "negative",
+          "status": "pass"
+        }
+      ],
+      "evidence_refs": [
+        "synthetic-reference-not-product-proof"
+      ],
+      "data_origin": "synthetic"
+    },
+    {
+      "component": "synthetic-core",
+      "language": "python",
+      "platform": "synthetic-test",
+      "profile": "reference",
+      "family": "e2e",
+      "metric": "branches-decisions",
+      "subject_id": "SYN-PRODUCT",
+      "revision": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "artifact_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "eligible_ids": [
+        "branches-decisions-00",
+        "branches-decisions-01",
+        "branches-decisions-02",
+        "branches-decisions-03",
+        "branches-decisions-04",
+        "branches-decisions-05",
+        "branches-decisions-06",
+        "branches-decisions-07",
+        "branches-decisions-08",
+        "branches-decisions-09",
+        "branches-decisions-10",
+        "branches-decisions-11",
+        "branches-decisions-12",
+        "branches-decisions-13",
+        "branches-decisions-14",
+        "branches-decisions-15",
+        "branches-decisions-16",
+        "branches-decisions-17",
+        "branches-decisions-18",
+        "branches-decisions-19"
+      ],
+      "covered_ids": [
+        "branches-decisions-00",
+        "branches-decisions-01",
+        "branches-decisions-02",
+        "branches-decisions-03",
+        "branches-decisions-04",
+        "branches-decisions-05",
+        "branches-decisions-06",
+        "branches-decisions-07",
+        "branches-decisions-08",
+        "branches-decisions-09",
+        "branches-decisions-10",
+        "branches-decisions-11",
+        "branches-decisions-12",
+        "branches-decisions-13",
+        "branches-decisions-14",
+        "branches-decisions-15",
+        "branches-decisions-16",
+        "branches-decisions-17"
+      ],
+      "critical_ids": [
+        "branches-decisions-00",
+        "branches-decisions-01"
+      ],
+      "denominator_sha256": "2e6731f1c902f3390caf40f304f72f64c760a2ca4369d7af722c9793d17ad057",
+      "run_id": "synthetic-e2e",
+      "run_status": "completed",
+      "outcome": "pass",
+      "accumulator_families": [
+        "e2e"
+      ],
+      "checks": [
+        {
+          "id": "positive",
+          "status": "pass"
+        },
+        {
+          "id": "negative",
+          "status": "pass"
+        }
+      ],
+      "evidence_refs": [
+        "synthetic-reference-not-product-proof"
+      ],
+      "data_origin": "synthetic"
+    },
+    {
+      "component": "synthetic-core",
+      "language": "python",
+      "platform": "synthetic-test",
+      "profile": "reference",
+      "family": "e2e",
+      "metric": "functions",
+      "subject_id": "SYN-PRODUCT",
+      "revision": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "artifact_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "eligible_ids": [
+        "functions-00",
+        "functions-01",
+        "functions-02",
+        "functions-03",
+        "functions-04",
+        "functions-05",
+        "functions-06",
+        "functions-07",
+        "functions-08",
+        "functions-09",
+        "functions-10",
+        "functions-11",
+        "functions-12",
+        "functions-13",
+        "functions-14",
+        "functions-15",
+        "functions-16",
+        "functions-17",
+        "functions-18",
+        "functions-19"
+      ],
+      "covered_ids": [
+        "functions-00",
+        "functions-01",
+        "functions-02",
+        "functions-03",
+        "functions-04",
+        "functions-05",
+        "functions-06",
+        "functions-07",
+        "functions-08",
+        "functions-09",
+        "functions-10",
+        "functions-11",
+        "functions-12",
+        "functions-13",
+        "functions-14",
+        "functions-15",
+        "functions-16",
+        "functions-17"
+      ],
+      "critical_ids": [
+        "functions-00",
+        "functions-01"
+      ],
+      "denominator_sha256": "a136881e31b934124a1450d966fbd543f401122ea68c29acb54be1a8b4e4fd78",
+      "run_id": "synthetic-e2e",
+      "run_status": "completed",
+      "outcome": "pass",
+      "accumulator_families": [
+        "e2e"
+      ],
+      "checks": [
+        {
+          "id": "positive",
+          "status": "pass"
+        },
+        {
+          "id": "negative",
+          "status": "pass"
+        }
+      ],
+      "evidence_refs": [
+        "synthetic-reference-not-product-proof"
+      ],
+      "data_origin": "synthetic"
+    },
+    {
+      "component": "synthetic-core",
+      "language": "python",
+      "platform": "synthetic-test",
+      "profile": "reference",
+      "family": "e2e",
+      "metric": "behavioral-obligations",
+      "subject_id": "SYN-PRODUCT",
+      "revision": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "artifact_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "eligible_ids": [
+        "behavioral-obligations-00",
+        "behavioral-obligations-01",
+        "behavioral-obligations-02",
+        "behavioral-obligations-03",
+        "behavioral-obligations-04",
+        "behavioral-obligations-05",
+        "behavioral-obligations-06",
+        "behavioral-obligations-07",
+        "behavioral-obligations-08",
+        "behavioral-obligations-09",
+        "behavioral-obligations-10",
+        "behavioral-obligations-11",
+        "behavioral-obligations-12",
+        "behavioral-obligations-13",
+        "behavioral-obligations-14",
+        "behavioral-obligations-15",
+        "behavioral-obligations-16",
+        "behavioral-obligations-17",
+        "behavioral-obligations-18",
+        "behavioral-obligations-19"
+      ],
+      "covered_ids": [
+        "behavioral-obligations-00",
+        "behavioral-obligations-01",
+        "behavioral-obligations-02",
+        "behavioral-obligations-03",
+        "behavioral-obligations-04",
+        "behavioral-obligations-05",
+        "behavioral-obligations-06",
+        "behavioral-obligations-07",
+        "behavioral-obligations-08",
+        "behavioral-obligations-09",
+        "behavioral-obligations-10",
+        "behavioral-obligations-11",
+        "behavioral-obligations-12",
+        "behavioral-obligations-13",
+        "behavioral-obligations-14",
+        "behavioral-obligations-15",
+        "behavioral-obligations-16",
+        "behavioral-obligations-17"
+      ],
+      "critical_ids": [
+        "behavioral-obligations-00",
+        "behavioral-obligations-01"
+      ],
+      "denominator_sha256": "d36d4eb706b9a360c743089dade2a537eb9791e2cfca7206cca8e9a434a48acd",
+      "run_id": "synthetic-e2e",
+      "run_status": "completed",
+      "outcome": "pass",
+      "accumulator_families": [
+        "e2e"
+      ],
+      "checks": [
+        {
+          "id": "positive",
+          "status": "pass"
+        },
+        {
+          "id": "negative",
+          "status": "pass"
+        }
+      ],
+      "evidence_refs": [
+        "synthetic-reference-not-product-proof"
+      ],
+      "data_origin": "synthetic"
+    }
+  ]
+}

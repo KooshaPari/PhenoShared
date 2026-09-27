@@ -1,0 +1,98 @@
+{
+  "format_version": "1.2",
+  "terraform_version": "1.9.5",
+  "planned_values": { "root_module": { "resources": [] } },
+  "resource_changes": [
+    {
+      "address": "aws_instance.web",
+      "mode": "managed",
+      "type": "aws_instance",
+      "name": "web",
+      "provider_name": "hashicorp/aws",
+      "change": {
+        "actions": ["create"],
+        "before": null,
+        "after": { "ami": "ami-0c55b159cbfafe1f0", "instance_type": "t3.micro" }
+      }
+    },
+    {
+      "address": "aws_security_group.web_sg",
+      "mode": "managed",
+      "type": "aws_security_group",
+      "name": "web_sg",
+      "provider_name": "hashicorp/aws",
+      "change": {
+        "actions": ["update"],
+        "before": { "name": "web-sg-old" },
+        "after": { "name": "web-sg" }
+      }
+    },
+    {
+      "address": "aws_s3_bucket.logs",
+      "mode": "managed",
+      "type": "aws_s3_bucket",
+      "name": "logs",
+      "provider_name": "hashicorp/aws",
+      "change": {
+        "actions": ["delete"],
+        "before": { "bucket": "old-logs-bucket" },
+        "after": null
+      }
+    },
+    {
+      "address": "aws_lb.main",
+      "mode": "managed",
+      "type": "aws_lb",
+      "name": "main",
+      "provider_name": "hashicorp/aws",
+      "change": {
+        "actions": ["no-op"],
+        "before": { "name": "main-alb" },
+        "after": { "name": "main-alb" }
+      }
+    },
+    {
+      "address": "data.aws_ami.ubuntu",
+      "mode": "data",
+      "type": "aws_ami",
+      "name": "ubuntu",
+      "provider_name": "hashicorp/aws",
+      "change": {
+        "actions": ["read"],
+        "before": null,
+        "after": { "id": "ami-ubuntu-2404" }
+      }
+    },
+    {
+      "address": "aws_db_instance.database",
+      "mode": "managed",
+      "type": "aws_db_instance",
+      "name": "database",
+      "provider_name": "hashicorp/aws",
+      "change": {
+        "actions": ["delete", "create"],
+        "before": { "instance_class": "db.t3.small" },
+        "after": { "instance_class": "db.t3.medium" }
+      }
+    },
+    {
+      "address": "aws_iam_role.lambda_role",
+      "mode": "managed",
+      "type": "aws_iam_role",
+      "name": "lambda_role",
+      "provider_name": "hashicorp/aws",
+      "change": {
+        "actions": ["create"],
+        "before": null,
+        "after": { "name": "lambda-exec-role" }
+      }
+    }
+  ],
+  "output_changes": {
+    "alb_dns_name": {
+      "actions": ["no-op"],
+      "before": "myalb-123.us-east-1.elb.amazonaws.com",
+      "after": "myalb-123.us-east-1.elb.amazonaws.com"
+    }
+  }
+}

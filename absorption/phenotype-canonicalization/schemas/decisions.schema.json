@@ -1,0 +1,73 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "array",
+  "minItems": 1,
+  "items": {
+    "type": "object",
+    "required": [
+      "id",
+      "domain",
+      "choice",
+      "scope",
+      "acceptance",
+      "exception_contract",
+      "authority_status",
+      "enforcement_status",
+      "alternatives_considered",
+      "evidence",
+      "mutation_authority"
+    ],
+    "properties": {
+      "id": {
+        "type": "string",
+        "minLength": 1
+      },
+      "domain": {
+        "type": "string",
+        "minLength": 1
+      },
+      "choice": {
+        "type": "string",
+        "minLength": 1
+      },
+      "scope": {
+        "type": "string",
+        "minLength": 1
+      },
+      "acceptance": {
+        "type": "string",
+        "minLength": 1
+      },
+      "exception_contract": {
+        "type": "string",
+        "minLength": 1
+      },
+      "authority_status": {
+        "type": "string",
+        "minLength": 1
+      },
+      "enforcement_status": {
+        "type": "string",
+        "minLength": 1
+      },
+      "alternatives_considered": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "evidence": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "mutation_authority": {
+        "const": false
+      }
+    },
+    "additionalProperties": false
+  }
+}

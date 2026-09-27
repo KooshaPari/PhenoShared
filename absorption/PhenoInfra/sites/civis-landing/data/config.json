@@ -1,0 +1,24 @@
+{
+  "name": "Civis",
+  "slug": "civis",
+  "tagline": "Civilization simulation engine: deterministic godgame with multi-client protocol.",
+  "domain": "civis.phenotype.space",
+  "color": "#16a34a",
+  "description": "Civilization simulation engine: deterministic godgame with multi-client protocol.",
+  "tier": 2,
+  "repo": "KooshaPari/Civis",
+  "language": "Rust",
+  "license": "MIT",
+  "status": "active",
+  "features": [
+    "Deterministic sim",
+    "Multi-client protocol",
+    "Godgame engine",
+    "Replay system"
+  ],
+  "links": {
+    "github": "https://github.com/KooshaPari/Civis",
+    "docs": "https://civis.phenotype.space/docs",
+    "releases": "https://github.com/KooshaPari/Civis/releases"
+  }
+}

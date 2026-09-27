@@ -1,0 +1,163 @@
+{
+  "new_skills": [
+    {
+      "name": "pd-visual-production",
+      "description": "Route an end-to-end visual request across raster, vector, motion, 3D and interactive delivery.",
+      "path": "skills/pd-visual-production/SKILL.md",
+      "kind": "original"
+    },
+    {
+      "name": "pd-illustrator-vector",
+      "description": "Create editable Illustrator vector artwork, icon systems, diagrams and product illustration with native scripts.",
+      "path": "skills/pd-illustrator-vector/SKILL.md",
+      "kind": "original"
+    },
+    {
+      "name": "pd-photoshop-raster",
+      "description": "Author layered raster compositions, masks, textures and image derivatives using a qualified Photoshop host.",
+      "path": "skills/pd-photoshop-raster/SKILL.md",
+      "kind": "original"
+    },
+    {
+      "name": "pd-type-layout",
+      "description": "Design typography, grids, editorial rhythm and responsive composition rather than decorating generic component templates.",
+      "path": "skills/pd-type-layout/SKILL.md",
+      "kind": "original"
+    },
+    {
+      "name": "pd-brand-icons",
+      "description": "Build coherent identity assets and icon families across SVG, raster, 3D and motion without flattening every product into one template.",
+      "path": "skills/pd-brand-icons/SKILL.md",
+      "kind": "original"
+    },
+    {
+      "name": "pd-character-animation",
+      "description": "Create expressive 2D or 3D characters and mascots with coherent construction, rigs and state behavior.",
+      "path": "skills/pd-character-animation/SKILL.md",
+      "kind": "original"
+    },
+    {
+      "name": "pd-frame-sprite-animation",
+      "description": "Produce frame-by-frame 2D animation, spritesheets, animated illustration and efficient runtime atlases.",
+      "path": "skills/pd-frame-sprite-animation/SKILL.md",
+      "kind": "original"
+    },
+    {
+      "name": "pd-rive-authoring",
+      "description": "Use the current Rive CLI and source workflow for locally authored interactive vector assets and state machines.",
+      "path": "skills/pd-rive-authoring/SKILL.md",
+      "kind": "original"
+    },
+    {
+      "name": "pd-lottie-delivery",
+      "description": "Prepare and validate timeline vector animation for Lottie or dotLottie delivery.",
+      "path": "skills/pd-lottie-delivery/SKILL.md",
+      "kind": "original"
+    },
+    {
+      "name": "pd-remotion-production",
+      "description": "Create frame-deterministic video compositions, product films, explainers and journey derivatives with Remotion.",
+      "path": "skills/pd-remotion-production/SKILL.md",
+      "kind": "original"
+    },
+    {
+      "name": "pd-after-effects-production",
+      "description": "Use After Effects for editable motion design and compositing with controlled native authoring and aerender delivery.",
+      "path": "skills/pd-after-effects-production/SKILL.md",
+      "kind": "original"
+    },
+    {
+      "name": "pd-video-audio-post",
+      "description": "Finish video and audio derivatives with reproducible FFmpeg processing, captions and delivery checks.",
+      "path": "skills/pd-video-audio-post/SKILL.md",
+      "kind": "original"
+    },
+    {
+      "name": "pd-interactive-2d",
+      "description": "Build input-driven SVG, Canvas and 2.5D props with usable semantics and deterministic interaction.",
+      "path": "skills/pd-interactive-2d/SKILL.md",
+      "kind": "original"
+    },
+    {
+      "name": "pd-generative-assets",
+      "description": "Source or locally generate raster, texture and 3D candidates without confusing generation with production readiness.",
+      "path": "skills/pd-generative-assets/SKILL.md",
+      "kind": "original"
+    },
+    {
+      "name": "pd-data-diagrams",
+      "description": "Produce accurate diagrams, data visualizations and explanatory animation with editable semantic sources.",
+      "path": "skills/pd-data-diagrams/SKILL.md",
+      "kind": "original"
+    },
+    {
+      "name": "pd-editorial-print",
+      "description": "Prepare editorial layouts, printable documents and packaging graphics with real preflight rather than web-only assumptions.",
+      "path": "skills/pd-editorial-print/SKILL.md",
+      "kind": "original"
+    },
+    {
+      "name": "pd-native-host-validation",
+      "description": "Qualify local creative applications for nondisruptive agent work in owned sessions.",
+      "path": "skills/pd-native-host-validation/SKILL.md",
+      "kind": "original"
+    },
+    {
+      "name": "pd-cross-media-journeys",
+      "description": "Extend existing phenotype journey capture into multi-medium production and consumer verification without creating a competing evidence ledger.",
+      "path": "skills/pd-cross-media-journeys/SKILL.md",
+      "kind": "original"
+    },
+    {
+      "name": "pd-asset-acquisition",
+      "description": "Acquire missing tools, plugins, skills, models and stock assets with provenance and bounded permissions.",
+      "path": "skills/pd-asset-acquisition/SKILL.md",
+      "kind": "original"
+    },
+    {
+      "name": "pd-render-scheduling",
+      "description": "Budget and schedule creative workers across local devices while preserving interactive and audio workloads.",
+      "path": "skills/pd-render-scheduling/SKILL.md",
+      "kind": "original"
+    },
+    {
+      "name": "pd-repository-integration",
+      "description": "Integrate the visual-production kit into phenoDesign and the partial journey migration without overwriting concurrent work.",
+      "path": "skills/pd-repository-integration/SKILL.md",
+      "kind": "original"
+    },
+    {
+      "name": "pd-remotion-regressions",
+      "description": "Test Remotion asset staging, crop geometry, timeline boundaries, cancellation and actual encoded media.",
+      "path": "skills/pd-remotion-regressions/SKILL.md",
+      "kind": "original"
+    },
+    {
+      "name": "pd-visual-critique",
+      "description": "Perform image- and interaction-based design critique tied to the real brief and placement.",
+      "path": "skills/pd-visual-critique/SKILL.md",
+      "kind": "original"
+    },
+    {
+      "name": "pd-creative-shaders",
+      "description": "Build procedural 2D/3D effects, particles and material experiments that remain controllable and affordable.",
+      "path": "skills/pd-creative-shaders/SKILL.md",
+      "kind": "original"
+    },
+    {
+      "name": "pd-spatial-scenes",
+      "description": "Plan AR/XR and richer spatial presentations while preserving source, scale, material and interaction semantics.",
+      "path": "skills/pd-spatial-scenes/SKILL.md",
+      "kind": "original"
+    },
+    {
+      "name": "pd-material-textures",
+      "description": "Create materials, texture sets and 2.5D surfaces consistently across raster sources, Blender and realtime consumers.",
+      "path": "skills/pd-material-textures/SKILL.md",
+      "kind": "original"
+    }
+  ],
+  "inherited_original_skills": 18,
+  "upstream_snapshots": 1,
+  "upstream_note": "Anthropic frontend-design snapshot is in reference/frontend-3d-agent-kit/upstream/anthropic/frontend-design. Official Remotion skills are acquisition references, not vendored without an explicit redistribution basis."
+}

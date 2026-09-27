@@ -1,0 +1,139 @@
+---
+# common.yml — baseline setup for every Oracle Linux 8 ARM64 OCI VM.
+# Installs core tooling, creates Phenotype dirs, configures firewall and swap.
+# Repo enablement for cloudflared + tailscale is done here so per-service
+# playbooks can assume binaries are installable.
+
+- name: Baseline OCI Ampere host bootstrap
+  hosts: oci_primary
+  become: true
+  tasks:
+    - name: Update all dnf packages
+      ansible.builtin.dnf:
+        name: "*"
+        state: latest
+        update_cache: true
+
+    - name: Install core utilities
+      ansible.builtin.dnf:
+        name:
+          - wget
+          - curl
+          - vim
+          - tmux
+          - git
+          - htop
+          - jq
+          - tar
+          - unzip
+          - policycoreutils-python-utils
+          - firewalld
+        state: present
+
+    - name: Add cloudflared yum repo
+      ansible.builtin.yum_repository:
+        name: cloudflared
+        description: Cloudflare cloudflared repo
+        baseurl: https://pkg.cloudflare.com/cloudflared/rpm
+        gpgcheck: true
+        gpgkey: https://pkg.cloudflare.com/cloudflare-main.gpg
+        enabled: true
+
+    - name: Install cloudflared
+      ansible.builtin.dnf:
+        name: cloudflared
+        state: present
+
+    - name: Add Tailscale yum repo (Oracle Linux 8)
+      ansible.builtin.get_url:
+        url: https://pkgs.tailscale.com/stable/oracle/8/tailscale.repo
+        dest: /etc/yum.repos.d/tailscale.repo
+        mode: "0644"
+
+    - name: Install tailscale
+      ansible.builtin.dnf:
+        name: tailscale
+        state: present
+
+    - name: Enable + start tailscaled
+      ansible.builtin.systemd:
+        name: tailscaled
+        enabled: true
+        state: started
+
+    - name: Create /opt/phenotype
+      ansible.builtin.file:
+        path: /opt/phenotype
+        state: directory
+        owner: root
+        group: root
+        mode: "0755"
+
+    - name: Create /var/lib/phenotype
+      ansible.builtin.file:
+        path: /var/lib/phenotype
+        state: directory
+        owner: root
+        group: root
+        mode: "0755"
+
+    - name: Enable + start firewalld
+      ansible.builtin.systemd:
+        name: firewalld
+        enabled: true
+        state: started
+
+    - name: Allow SSH (22) through firewalld
+      ansible.posix.firewalld:
+        service: ssh
+        permanent: true
+        immediate: true
+        state: enabled
+
+    # NOTE: 443 is NOT opened to 0.0.0.0 — Caddy listens on 127.0.0.1 and
+    # Cloudflare Tunnel is the only public ingress. Tailscale handles admin.
+    - name: Ensure public HTTP/HTTPS are blocked (explicit)
+      ansible.posix.firewalld:
+        service: "{{ item }}"
+        permanent: true
+        immediate: true
+        state: disabled
+      loop:
+        - http
+        - https
+
+    - name: Check if swap file exists
+      ansible.builtin.stat:
+        path: /swapfile
+      register: swapfile_stat
+
+    - name: Allocate 4GB swap file
+      ansible.builtin.command: fallocate -l 4G /swapfile
+      args:
+        creates: /swapfile
+      when: not swapfile_stat.stat.exists
+
+    - name: Set swap file permissions
+      ansible.builtin.file:
+        path: /swapfile
+        owner: root
+        group: root
+        mode: "0600"
+
+    - name: Format swap
+      ansible.builtin.command: mkswap /swapfile
+      register: mkswap_result
+      changed_when: "'Setting up swapspace' in mkswap_result.stdout"
+      failed_when: mkswap_result.rc != 0 and 'already' not in mkswap_result.stderr
+
+    - name: Enable swap now
+      ansible.builtin.command: swapon /swapfile
+      register: swapon_result
+      changed_when: swapon_result.rc == 0
+      failed_when: swapon_result.rc != 0 and 'already active' not in swapon_result.stderr
+
+    - name: Persist swap in /etc/fstab
+      ansible.builtin.lineinfile:
+        path: /etc/fstab
+        line: "/swapfile none swap sw 0 0"
+        state: present

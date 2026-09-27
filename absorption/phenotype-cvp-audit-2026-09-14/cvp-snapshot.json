@@ -1,0 +1,81 @@
+{
+  "as_of": "2026-09-14T16:37:00-07:00",
+  "baseline": "2026-09-11 movement audit",
+  "scope": "remote GitHub + prior audit context; local worktrees not observed",
+  "metrics": {
+    "current_repo_count_observed": 138,
+    "repos_pushed_since_2026_09_12_observed": 101,
+    "merged_prs_owned_estate_since_sep11_cutoff": 493,
+    "merged_prs_authored_by_user_since_sep11_cutoff": 163,
+    "civis_current_head_actions_total": 20,
+    "civis_current_head_actions_success": 14,
+    "civis_current_head_actions_failure": 6
+  },
+  "cvp_policy": {
+    "unit_floor": 0.85,
+    "integration_floor": 0.85,
+    "e2e_floor": 0.85,
+    "mutation_floor_when_applicable": 0.85,
+    "critical_obligations": 1.0,
+    "macos_gui_requires_installed_app": true,
+    "default_tombstone_days": 60,
+    "fork_network_delete_default": "forbidden"
+  },
+  "priority": [
+    {
+      "repo": "Civis",
+      "state": "CVP packaging active",
+      "next": "installed Civis.app + full journey + QA floor"
+    },
+    {
+      "repo": "AgilePlus",
+      "state": "desktop packaging active, assurance gaps self-identified",
+      "next": "installed app + coverage/transport/perf/full E2E"
+    },
+    {
+      "repo": "sharecli",
+      "state": "quality/polish active",
+      "next": "packaged supervision journey + native coverage"
+    },
+    {
+      "repo": "Tracera",
+      "state": "E2E/simplification improved; owner chat reportedly down",
+      "next": "re-establish owner + deployable real datastore/auth journey"
+    },
+    {
+      "repo": "PhenoFabric",
+      "state": "runtime/CI/bench/auth work active",
+      "next": "real two-node composition proof"
+    },
+    {
+      "repo": "terminal-fabric",
+      "state": "new active observability substrate",
+      "next": "secure installable service + privacy/retention"
+    },
+    {
+      "repo": "BytePort/nanovms",
+      "state": "dedup/migration active",
+      "next": "consumer parity + restore/e2e proof"
+    },
+    {
+      "repo": "Portage",
+      "state": "maintenance/gate-heavy",
+      "next": "real evaluation CVP"
+    },
+    {
+      "repo": "PhenoLab",
+      "state": "bench/lab active",
+      "next": "clean reproducible benchmark bundle"
+    },
+    {
+      "repo": "hwLedger",
+      "state": "quality gate repair active",
+      "next": "install/probe/query product proof"
+    },
+    {
+      "repo": "PhenoMLX/hfscope",
+      "state": "archived/tombstoned risk",
+      "next": "preserve; verify successor + active sessions before deletion"
+    }
+  ]
+}

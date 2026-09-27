@@ -1,0 +1,42 @@
+{
+  "id": "PILOT-PRD-SHARECLI",
+  "product_id": "PRD-SHARECLI",
+  "status": "PLANNED_NOT_EXECUTED",
+  "subject_repository_id": 1191459198,
+  "hypothesis": "Safely remove redundant work and contention without corrupting task semantics or degrading foreground use.",
+  "baseline_candidates": [
+    "No supervisor",
+    "Process Compose",
+    "Platform-native service supervision",
+    "A bounded task runner with caching",
+    "Existing owned baseline before compression"
+  ],
+  "scenario": "Run compiler/test/agent workloads with and without ShareCLI, including truly identical pure work and deceptively similar non-coalescible jobs. Introduce input/config/credential differences, cancel a waiter, fail the producer and restart the supervisor. Maintain foreground game/audio workload constraints.",
+  "failure_cases": [
+    "Improper coalescing shares data or skips side effects",
+    "Cancelled client terminates other consumers incorrectly",
+    "Dead child/resource leak",
+    "Cache pollution across subjects",
+    "Thermal/load pressure causes worse latency",
+    "Tray and CLI disagree on ownership"
+  ],
+  "metrics": [
+    "Correctness before savings",
+    "Duplicate work avoided",
+    "Foreground p95/p99 disruption",
+    "Memory/CPU/I/O pressure",
+    "Cancellation/restart fidelity",
+    "Time to diagnose a failed job"
+  ],
+  "required_before_execution": [
+    "versioned subjects and fixtures",
+    "predeclared critical invariants",
+    "reviewed non-inferiority margins",
+    "resource and trust limits",
+    "independent outcome oracle",
+    "retained failed-trial policy"
+  ],
+  "results": null,
+  "winner": null,
+  "protocol": "../../research/COMPARATIVE-PILOT-PROTOCOL.md"
+}

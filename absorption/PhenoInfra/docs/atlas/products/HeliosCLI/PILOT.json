@@ -1,0 +1,41 @@
+{
+  "id": "PILOT-PRD-HELIOSCLI",
+  "product_id": "PRD-HELIOSCLI",
+  "status": "PLANNED_NOT_EXECUTED",
+  "subject_repository_id": 1165315873,
+  "hypothesis": "A small useful compatibility or workflow delta that justifies maintaining the fork; inherited Codex features alone are not novelty.",
+  "baseline_candidates": [
+    "Exact upstream Codex base",
+    "Current upstream Codex",
+    "HeliosLite",
+    "KCode",
+    "A minimal direct model/tool runner"
+  ],
+  "scenario": "Build the actual advertised executable in a clean environment, install it and perform a fixed coding task. Trigger a tool failure, denied filesystem action, interruption and session resume. Upgrade the fork and confirm identity and persisted session compatibility.",
+  "failure_cases": [
+    "Wrong workspace builds while binary is missing",
+    "Permission context lost on resume",
+    "Authentication/config path differs from docs",
+    "Model swap changes tool semantics silently",
+    "A root library smoke test is substituted for real agent execution"
+  ],
+  "metrics": [
+    "Task success and restriction compliance",
+    "Setup and maintenance effort",
+    "Provider portability",
+    "Resumption correctness",
+    "Artifact size/startup/resource use",
+    "Owned patch divergence and upstream integration effort"
+  ],
+  "required_before_execution": [
+    "versioned subjects and fixtures",
+    "predeclared critical invariants",
+    "reviewed non-inferiority margins",
+    "resource and trust limits",
+    "independent outcome oracle",
+    "retained failed-trial policy"
+  ],
+  "results": null,
+  "winner": null,
+  "protocol": "../../research/COMPARATIVE-PILOT-PROTOCOL.md"
+}

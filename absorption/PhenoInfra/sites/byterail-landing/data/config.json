@@ -1,0 +1,24 @@
+{
+  "name": "BytePort",
+  "slug": "byterail",
+  "tagline": "Declarative Go/AWS deployment platform: GitHub repo to running service.",
+  "domain": "byteport.phenotype.space",
+  "color": "#3b82f6",
+  "description": "Declarative Go/AWS deployment platform: GitHub repo to running service.",
+  "tier": 2,
+  "repo": "KooshaPari/BytePort",
+  "language": "Go / Svelte / Rust",
+  "license": "MIT",
+  "status": "active",
+  "features": [
+    "DMG/.app/.deb packaging",
+    "GitHub release automation",
+    "One-click deploy to AWS",
+    "Declarative infra config"
+  ],
+  "links": {
+    "github": "https://github.com/KooshaPari/BytePort",
+    "docs": "https://byteport.phenotype.space/docs",
+    "releases": "https://github.com/KooshaPari/BytePort/releases"
+  }
+}

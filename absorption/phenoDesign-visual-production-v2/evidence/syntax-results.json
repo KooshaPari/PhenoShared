@@ -1,0 +1,71 @@
+{
+  "scope": "syntax/transpile only, not native execution or module/type resolution",
+  "typescript": "5.8.3",
+  "results": [
+    {
+      "file": "phenoDesign-overlay/packages/visual-production/src/contracts.mjs",
+      "status": "SYNTAX_PASS",
+      "diagnostics": []
+    },
+    {
+      "file": "phenoDesign-overlay/packages/visual-production/src/geometry.mjs",
+      "status": "SYNTAX_PASS",
+      "diagnostics": []
+    },
+    {
+      "file": "phenoDesign-overlay/packages/visual-production/src/index.mjs",
+      "status": "SYNTAX_PASS",
+      "diagnostics": []
+    },
+    {
+      "file": "phenoDesign-overlay/packages/visual-production/src/probe-media.mjs",
+      "status": "SYNTAX_PASS",
+      "diagnostics": []
+    },
+    {
+      "file": "phenoDesign-overlay/packages/visual-production/src/staging.mjs",
+      "status": "SYNTAX_PASS",
+      "diagnostics": []
+    },
+    {
+      "file": "phenoDesign-overlay/packages/visual-production/test/core.test.mjs",
+      "status": "SYNTAX_PASS",
+      "diagnostics": []
+    },
+    {
+      "file": "phenoDesign-overlay/remotion/doc-embeds/bin/render.mjs",
+      "status": "SYNTAX_PASS",
+      "diagnostics": []
+    },
+    {
+      "file": "phenoDesign-overlay/remotion/doc-embeds/src/DocEmbed.tsx",
+      "status": "SYNTAX_PASS",
+      "diagnostics": []
+    },
+    {
+      "file": "phenoDesign-overlay/remotion/doc-embeds/src/components/Highlight.tsx",
+      "status": "SYNTAX_PASS",
+      "diagnostics": []
+    },
+    {
+      "file": "phenoDesign-overlay/remotion/doc-embeds/src/components/SceneView.tsx",
+      "status": "SYNTAX_PASS",
+      "diagnostics": []
+    },
+    {
+      "file": "phenoDesign-overlay/remotion/doc-embeds/src/schema.ts",
+      "status": "SYNTAX_PASS",
+      "diagnostics": []
+    },
+    {
+      "file": "worker-recipes/adobe/photoshop/main.js",
+      "status": "SYNTAX_PASS",
+      "diagnostics": []
+    },
+    {
+      "file": "worker-recipes/after-effects/canary.jsx",
+      "status": "SYNTAX_PASS",
+      "diagnostics": []
+    }
+  ]
+}

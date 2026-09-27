@@ -1,0 +1,29 @@
+[package]
+name = "oci-post-acquire"
+version = "0.1.0"
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+description = "Universal post-acquire hook chain — provisions a freshly-won OCI Always-Free instance into the Phenotype mesh end-to-end (SSH wait → Tailscale enroll → Ansible baseline → Cloudflare DNS → mesh-state commit → notify → downstream hooks)."
+
+# Sibling to `oci-lottery`. Both crates are members of the `iac/` workspace;
+# `oci-lottery::hooks` invokes the `oci-post-acquire` binary as the preferred
+# post-acquire hook (with the legacy `~/.local/bin/oci-post-acquire.sh` wrapper
+# as fallback).
+
+[[bin]]
+name = "oci-post-acquire"
+path = "src/main.rs"
+
+[dependencies]
+clap = { workspace = true }
+anyhow = { workspace = true }
+thiserror = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+tokio = { workspace = true }
+reqwest = { workspace = true }
+tracing = { workspace = true }
+tracing-subscriber = { workspace = true }
+chrono = { workspace = true }
+glob = { workspace = true }

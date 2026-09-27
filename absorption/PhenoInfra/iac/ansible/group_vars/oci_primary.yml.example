@@ -1,0 +1,30 @@
+---
+# group_vars/oci_primary.yml.example
+# Copy to oci_primary.yml (or pass via `-e @vars.yml`) and fill in.
+# Prefer ansible-vault for any value listed as <PLACEHOLDER_*>.
+
+# --- Tailscale ---
+# Ephemeral auth key from https://login.tailscale.com/admin/settings/keys
+tailscale_authkey: "<PLACEHOLDER_TAILSCALE_AUTH_KEY>"
+
+# --- Cloudflare (DNS-01 + Tunnel) ---
+# Scoped API token with Zone:DNS:Edit on kooshapari.com
+cf_api_token: "<PLACEHOLDER_CF_API_TOKEN>"
+
+# Pre-provisioned tunnel. Create once locally with
+#   cloudflared tunnel create phenotype-oci-primary
+# then paste the resulting UUID + credentials.json contents here.
+cloudflared_tunnel_id: "<PLACEHOLDER_TUNNEL_UUID>"
+cloudflared_credentials_json: |
+  <PLACEHOLDER_TUNNEL_CREDENTIALS_JSON_CONTENTS>
+
+# --- Caddy ---
+caddy_admin_email: kooshapari@gmail.com
+
+# --- Woodpecker OAuth against Forgejo ---
+# Register a new OAuth2 application in Forgejo UI at
+#   https://forgejo.kooshapari.com/-/admin/applications
+# after Forgejo is up, then fill in. Leave as placeholder for first run;
+# Woodpecker server will fail to authenticate until populated (rerun playbook).
+woodpecker_gitea_client: "<PLACEHOLDER_REGISTER_IN_FORGEJO>"
+woodpecker_gitea_secret: "<PLACEHOLDER_REGISTER_IN_FORGEJO>"

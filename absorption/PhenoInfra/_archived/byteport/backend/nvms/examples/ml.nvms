@@ -1,0 +1,52 @@
+FROM: aws-ubuntu:ml
+NAME: ml-platform
+
+CLUSTER:
+  training:
+    INSTANCES: 1-5
+    PATH: ./training
+    BUILD: python setup.py install
+    RESOURCES:
+      GPU: true
+    SCALE:
+      GPU_UTILIZATION: 80
+
+  inference:
+    INSTANCES: 2-10
+    PATH: ./inference
+    BUILD: python setup.py install
+    SCALE:
+      CPU_THRESHOLD: 70
+
+SERVICES:
+  frontend:
+    PATH: ./frontend
+    BUILD: npm run build
+    PORT: 3000
+
+  api:
+    PATH: ./api
+    BUILD: cargo build --release
+    PORT: 8080
+
+AWS:
+  REGION: us-east-1
+  SERVICES:
+    - TYPE: SageMaker
+      INSTANCES:
+        - ml.p3.2xlarge
+    - TYPE: S3
+      NAME: model-storage
+    - TYPE: RDS
+      ENGINE: postgres
+      MODE: CLUSTER
+    - TYPE: ElastiCache
+      ENGINE: redis
+      MODE: CLUSTER
+
+NETWORK:
+  DOMAIN: ml.example.com
+  SSL: true
+  SECURITY:
+    VPC: true
+    PRIVATE_SUBNETS: true

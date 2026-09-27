@@ -1,0 +1,24 @@
+{
+  "name": "PhenoTooling",
+  "slug": "phenotooling",
+  "tagline": "Internal tooling monorepo: 97+ Rust crates for CI/CD, agent dispatch, and release governance.",
+  "domain": "phenotooling.phenotype.space",
+  "color": "#f59e0b",
+  "description": "Internal tooling monorepo: 97+ Rust crates for CI/CD, agent dispatch, and release governance.",
+  "tier": 1,
+  "repo": "KooshaPari/PhenoTooling",
+  "language": "Rust / Go / TypeScript",
+  "license": "MIT",
+  "status": "active",
+  "features": [
+    "97+ workspace crates",
+    "Agent dispatch",
+    "Release governance",
+    "CI/CD pipelines"
+  ],
+  "links": {
+    "github": "https://github.com/KooshaPari/PhenoTooling",
+    "docs": "https://phenotooling.phenotype.space/docs",
+    "releases": "https://github.com/KooshaPari/PhenoTooling/releases"
+  }
+}

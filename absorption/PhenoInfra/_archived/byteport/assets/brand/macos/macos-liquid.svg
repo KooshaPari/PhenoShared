@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-label="BytePort macOS">
+  <title>BytePort macOS</title>
+  <desc>Hand-authored macOS liquid-glass variant for the BytePort port/socket brand mark.</desc>
+  <defs>
+    <clipPath id="squircle">
+      <path d="M256,36 C350,36 396,36 422,63 C448,90 492,136 492,256 C492,376 448,422 422,449 C396,476 350,476 256,476 C162,476 116,476 90,449 C64,422 20,376 20,256 C20,136 64,90 90,63 C116,36 162,36 256,36 Z"/>
+    </clipPath>
+    <linearGradient id="sky" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#112f2c"/>
+      <stop offset="50%" stop-color="#0e2422"/>
+      <stop offset="100%" stop-color="#090a0c"/>
+    </linearGradient>
+    <radialGradient id="skyBlob" cx="72%" cy="24%" r="38%">
+      <stop offset="0%" stop-color="#7ebab5" stop-opacity="0.78"/>
+      <stop offset="100%" stop-color="#090a0c" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="skyBlob2" cx="20%" cy="80%" r="35%">
+      <stop offset="0%" stop-color="#95ccc8" stop-opacity="0.25"/>
+      <stop offset="100%" stop-color="#090a0c" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="liquid" x="-12%" y="-12%" width="124%" height="124%">
+      <feTurbulence type="turbulence" baseFrequency="0.018 0.024" numOctaves="2" seed="42" result="t"/>
+      <feDisplacementMap in="SourceGraphic" in2="t" scale="24" xChannelSelector="R" yChannelSelector="G"/>
+      <feGaussianBlur stdDeviation="1.3"/>
+    </filter>
+    <linearGradient id="glass" x1="0.1" y1="0" x2="0.9" y2="1">
+      <stop offset="0%" stop-color="#95ccc8" stop-opacity="0.42"/>
+      <stop offset="55%" stop-color="#7ebab5" stop-opacity="0.22"/>
+      <stop offset="100%" stop-color="#090a0c" stop-opacity="0.48"/>
+    </linearGradient>
+    <linearGradient id="sweep" x1="1" y1="0" x2="0.2" y2="0.55">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.72"/>
+      <stop offset="18%" stop-color="#ffffff" stop-opacity="0.28"/>
+      <stop offset="42%" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+
+  <g clip-path="url(#squircle)">
+    <rect x="24" y="24" width="464" height="464" fill="url(#sky)"/>
+    <rect x="24" y="24" width="464" height="464" fill="url(#skyBlob)"/>
+    <rect x="24" y="24" width="464" height="464" fill="url(#skyBlob2)"/>
+    <rect x="24" y="24" width="464" height="464" fill="url(#sweep)" opacity="0.6"/>
+    <rect x="24" y="24" width="464" height="464" fill="url(#glass)" />
+    <g transform="translate(110 94) scale(0.6)">
+      <rect x="98" y="90" width="336" height="352" rx="74" ry="74" fill="#1b3d39"/>
+      <rect x="108" y="100" width="316" height="332" rx="68" ry="68" fill="#224542"/>
+      <rect x="140" y="132" width="252" height="268" rx="56" ry="56" fill="#090a0c"/>
+      <rect x="140" y="82" width="232" height="54" rx="28" ry="28" fill="#224542"/>
+      <rect x="164" y="62" width="184" height="30" rx="15" ry="15" fill="#95ccc8" fill-opacity="0.56"/>
+      <rect x="158" y="404" width="196" height="34" rx="17" ry="17" fill="#224542"/>
+      <rect x="170" y="412" width="172" height="18" rx="9" ry="9" fill="#090a0c" fill-opacity="0.74"/>
+      <g fill="#7ebab5">
+        <circle cx="188" cy="236" r="12"/>
+        <circle cx="232" cy="236" r="12"/>
+        <circle cx="276" cy="236" r="12"/>
+        <circle cx="320" cy="236" r="12"/>
+        <circle cx="188" cy="272" r="12"/>
+        <circle cx="232" cy="272" r="12"/>
+        <circle cx="276" cy="272" r="12"/>
+        <circle cx="320" cy="272" r="12"/>
+      </g>
+      <g fill="#95ccc8" opacity="0.78">
+        <circle cx="200" cy="236" r="4"/>
+        <circle cx="244" cy="236" r="4"/>
+        <circle cx="288" cy="236" r="4"/>
+        <circle cx="332" cy="236" r="4"/>
+        <circle cx="200" cy="272" r="4"/>
+        <circle cx="244" cy="272" r="4"/>
+        <circle cx="288" cy="272" r="4"/>
+        <circle cx="332" cy="272" r="4"/>
+      </g>
+    </g>
+    <rect x="24" y="24" width="464" height="464" fill="none" stroke="#95ccc8" stroke-opacity="0.38" stroke-width="2"/>
+  </g>
+
+  <g opacity="0.45" transform="translate(110 94) scale(0.6)">
+    <g transform="translate(0 0)" filter="url(#liquid)">
+      <path d="M256 200L296 242L340 236L294 276L308 322L256 302L204 322L218 276L172 236L216 242Z" fill="#ffffff" fill-opacity="0.22"/>
+    </g>
+  </g>
+</svg>

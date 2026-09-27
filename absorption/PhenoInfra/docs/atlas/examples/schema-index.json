@@ -1,0 +1,52 @@
+[
+  {
+    "path": "examples/entity.json",
+    "schema": "schemas/entity.schema.json",
+    "status": "SYNTHETIC_STRUCTURE_EXAMPLE"
+  },
+  {
+    "path": "examples/relation.json",
+    "schema": "schemas/relation.schema.json",
+    "status": "SYNTHETIC_STRUCTURE_EXAMPLE"
+  },
+  {
+    "path": "examples/obligation.json",
+    "schema": "schemas/obligation.schema.json",
+    "status": "SYNTHETIC_STRUCTURE_EXAMPLE"
+  },
+  {
+    "path": "examples/pilot-plan.json",
+    "schema": "schemas/pilot-plan.schema.json",
+    "status": "SYNTHETIC_STRUCTURE_EXAMPLE"
+  },
+  {
+    "path": "examples/work-item.json",
+    "schema": "schemas/work-item.schema.json",
+    "status": "SYNTHETIC_STRUCTURE_EXAMPLE"
+  },
+  {
+    "path": "examples/applet.json",
+    "schema": "schemas/applet.schema.json",
+    "status": "SYNTHETIC_STRUCTURE_EXAMPLE"
+  },
+  {
+    "path": "examples/dissatisfaction.json",
+    "schema": "schemas/dissatisfaction.schema.json",
+    "status": "SYNTHETIC_STRUCTURE_EXAMPLE"
+  },
+  {
+    "path": "examples/qa-cell.json",
+    "schema": "schemas/qa-cell.schema.json",
+    "status": "SYNTHETIC_STRUCTURE_EXAMPLE"
+  },
+  {
+    "path": "examples/topic-proposal.json",
+    "schema": "schemas/topic-proposal.schema.json",
+    "status": "SYNTHETIC_STRUCTURE_EXAMPLE"
+  },
+  {
+    "path": "examples/ecosystem-impact.json",
+    "schema": "schemas/ecosystem-impact.schema.json",
+    "status": "SYNTHETIC_STRUCTURE_EXAMPLE"
+  }
+]

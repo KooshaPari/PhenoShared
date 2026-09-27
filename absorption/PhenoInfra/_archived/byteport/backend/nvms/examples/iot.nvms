@@ -1,0 +1,52 @@
+FROM: aws-ubuntu:minimal
+NAME: iot-platform
+
+CLUSTER:
+  device-gateway:
+    INSTANCES: 3-15
+    PATH: ./gateway
+    BUILD: cargo build --release
+    SCALE:
+      CONNECTION_COUNT: 10000
+
+  data-processor:
+    INSTANCES: 5-20
+    PATH: ./processor
+    BUILD: cargo build --release
+    SCALE:
+      QUEUE_THRESHOLD: 5000
+
+SERVICES:
+  dashboard:
+    PATH: ./dashboard
+    BUILD: npm run build
+    PORT: 3000
+
+  api:
+    PATH: ./api
+    BUILD: cargo build --release
+    PORT: 8080
+
+AWS:
+  REGION: us-east-1
+  SERVICES:
+    - TYPE: IoT
+      NAME: device-hub
+    - TYPE: Kinesis
+      NAME: data-stream
+    - TYPE: TimeStreamDB
+      NAME: metrics
+    - TYPE: OpenSearch
+      MODE: CLUSTER
+    - TYPE: S3
+      NAME: device-data
+
+NETWORK:
+  DOMAIN: iot.example.com
+  SSL: true
+  LOAD_BALANCER:
+    TYPE: NLB
+    SSL: true
+  SECURITY:
+    VPC: true
+    PRIVATE_SUBNETS: true

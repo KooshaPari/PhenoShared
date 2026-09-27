@@ -1,0 +1,48 @@
+# Work references — SPEC-03
+
+- **WP-G02** — Agree minimal interchange and source-anchor contracts; owner Schema/integration owners; prerequisites WP-G01; unclaimed.
+- **WP-G05** — Establish semantic indexing adapter baseline; owner Indexing owner; prerequisites WP-G02; unclaimed.
+- **WP-T01** — Product/schema and integration lead; owner Tracera seat 01; prerequisites WP-G02; unclaimed.
+- **WP-T02** — Source inventory/indexing adapters; owner Tracera seat 02; prerequisites WP-T01, WP-G05; unclaimed.
+- **WP-T03** — Intent/specification ingestion; owner Tracera seat 03; prerequisites WP-T01; unclaimed.
+- **WP-T04** — Persistent model and reconciliation; owner Tracera seat 04; prerequisites WP-T01; unclaimed.
+- **WP-T05** — Impact and dissatisfaction analysis; owner Tracera seat 05; prerequisites WP-T02, WP-T03, WP-T04; unclaimed.
+- **WP-T06** — Assurance evidence ingestion; owner Tracera seat 06; prerequisites WP-T01, WP-G03; unclaimed.
+- **WP-T07** — Product exploration UI; owner Tracera seat 07; prerequisites WP-T01, WP-T04; unclaimed.
+- **WP-T08** — CLI/API/MCP parity; owner Tracera seat 08; prerequisites WP-T01, WP-T04; unclaimed.
+- **WP-T09** — Packaging/runtime and recovery; owner Tracera seat 09; prerequisites WP-T01; unclaimed.
+- **WP-T10** — Independent comparative and adversarial verification; owner Tracera seat 10; prerequisites WP-T01, WP-G06; unclaimed.
+- **WP-T11** — Integrated product witness and artifact acceptance; owner Tracera seat 01 + independent verifier; prerequisites WP-T02, WP-T03, WP-T04, WP-T05, WP-T06, WP-T07, WP-T08, WP-T09, WP-T10; unclaimed.
+- **WP-P01-A** — Bind AgilePlus atlas and current artifact; owner AgilePlus product owner; prerequisites WP-G01; unclaimed.
+- **WP-P02-A** — Bind HeliosLab atlas and current artifact; owner HeliosLab product owner; prerequisites WP-G01; unclaimed.
+- **WP-P03-A** — Bind ResearchLedger atlas and current artifact; owner ResearchLedger product owner; prerequisites WP-G01; unclaimed.
+- **WP-P04-A** — Bind SessionLedger atlas and current artifact; owner SessionLedger product owner; prerequisites WP-G01; unclaimed.
+- **WP-P05-A** — Bind KCode atlas and current artifact; owner KCode product owner; prerequisites WP-G01; unclaimed.
+- **WP-P06-A** — Bind HeliosLite atlas and current artifact; owner HeliosLite product owner; prerequisites WP-G01; unclaimed.
+- **WP-P07-A** — Bind HeliosCLI atlas and current artifact; owner HeliosCLI product owner; prerequisites WP-G01; unclaimed.
+- **WP-P08-A** — Bind Khostty atlas and current artifact; owner Khostty product owner; prerequisites WP-G01; unclaimed.
+- **WP-P09-A** — Bind ShareCLI atlas and current artifact; owner ShareCLI product owner; prerequisites WP-G01; unclaimed.
+- **WP-P10-A** — Bind BytePort atlas and current artifact; owner BytePort product owner; prerequisites WP-G01; unclaimed.
+- **WP-P11-A** — Bind PhenoFabric atlas and current artifact; owner PhenoFabric product owner; prerequisites WP-G01; unclaimed.
+- **WP-P12-A** — Bind Pine atlas and current artifact; owner Pine product owner; prerequisites WP-G01; unclaimed.
+- **WP-P13-A** — Bind OmniRoute atlas and current artifact; owner OmniRoute product owner; prerequisites WP-G01; unclaimed.
+- **WP-P14-A** — Bind Substrate atlas and current artifact; owner Substrate product owner; prerequisites WP-G01; unclaimed.
+- **WP-P15-A** — Bind PhenoMLX atlas and current artifact; owner PhenoMLX product owner; prerequisites WP-G01; unclaimed.
+- **WP-P16-A** — Bind Portage atlas and current artifact; owner Portage product owner; prerequisites WP-G01; unclaimed.
+- **WP-P17-A** — Bind PhenoLab atlas and current artifact; owner PhenoLab product owner; prerequisites WP-G01; unclaimed.
+- **WP-P18-A** — Bind Civis atlas and current artifact; owner Civis product owner; prerequisites WP-G01; unclaimed.
+- **WP-P19-A** — Bind Dino atlas and current artifact; owner Dino product owner; prerequisites WP-G01; unclaimed.
+- **WP-P20-A** — Bind WorldSphereMod atlas and current artifact; owner WorldSphereMod product owner; prerequisites WP-G01; unclaimed.
+- **WP-P21-A** — Bind CivicWarfare atlas and current artifact; owner CivicWarfare product owner; prerequisites WP-G01; unclaimed.
+- **WP-P22-A** — Bind Melosviz atlas and current artifact; owner Melosviz product owner; prerequisites WP-G01; unclaimed.
+- **WP-S01** — PhenoInfra capability/consumer contract; owner PhenoInfra pooled owner; prerequisites WP-G01, WP-G02; unclaimed.
+- **WP-S02** — PhenoTooling capability/consumer contract; owner PhenoTooling pooled owner; prerequisites WP-G01, WP-G02; unclaimed.
+- **WP-S03** — PhenoAI capability/consumer contract; owner PhenoAI pooled owner; prerequisites WP-G01, WP-G02; unclaimed.
+- **WP-S04** — PhenoGfx capability/consumer contract; owner PhenoGfx pooled owner; prerequisites WP-G01, WP-G02; unclaimed.
+- **WP-S05** — PhenoRegistry capability/consumer contract; owner PhenoRegistry pooled owner; prerequisites WP-G01, WP-G02; unclaimed.
+- **WP-S06** — PhenoDesign capability/consumer contract; owner PhenoDesign pooled owner; prerequisites WP-G01, WP-G02; unclaimed.
+- **WP-S07** — KooshaPari capability/consumer contract; owner KooshaPari pooled owner; prerequisites WP-G01, WP-G02; unclaimed.
+- **WP-S08** — PhenoApps capability/consumer contract; owner PhenoApps pooled owner; prerequisites WP-G01, WP-G02; unclaimed.
+- **WP-S09** — Agentora-capability capability/consumer contract; owner Agentora-capability pooled owner; prerequisites WP-G01, WP-G02; unclaimed.
+
+Completion requires actual accepted evidence, not this list being checked off by the document generator.

@@ -1,0 +1,126 @@
+# pheno-cargo-template canonical Taskfile (L2 #27).
+#
+# This Taskfile is the canonical automation entrypoint for any Rust
+# crate instantiated from the pheno-cargo-template template. It
+# mirrors the per-task commands documented in README.md and the
+# `Makefile-LEGACY.md` mapping table; CI workflows and developer
+# scripts should prefer these `task` recipes over ad-hoc `cargo`
+# invocations.
+#
+# Long-running recipes (test, build) carry explicit timeouts so we
+# surface clean failures instead of letting cargo hangs cascade.
+# The `LONG_TIMEOUT` is set to 10m, which matches the PlayCua L2 #21
+# baseline (the 300s L1 cargo-check audit finding is the precedent).
+#
+# # Includes
+#
+# The canonical pattern (per PlayCua L2 #21) is to expose shared
+# recipes via Taskfile `includes:` so multiple sibling repos can
+# consume the same gates. The intended layout, when the template
+# family is published, is:
+#
+#   includes:
+#     rust:  ./Taskfile.rust.yml   # test, build, lint, fmt
+#     deny:  ./Taskfile.deny.yml   # deny, audit, hygiene
+#     ci:    ./Taskfile.ci.yml     # ci, release
+#
+# Until those sibling Taskfiles are committed the recipes below are
+# inline. Adding new recipes to this file keeps the runner working
+# without an `include:` graph; moving them to a sibling Taskfile is
+# purely a refactor once two or more repos need the same recipe.
+#
+# # Pairing with justfile
+#
+# A sibling `justfile` mirrors these recipes for CI consumers that
+# prefer `just` (e.g. repos with a hard `just` requirement in CI).
+# Both files must be kept in lockstep. The cross-runner mapping is
+# the single source of truth documented in `Makefile-LEGACY.md`.
+#
+# Usage: `task <recipe>` (run from the repo root).
+version: '3'
+
+vars:
+  CARGO: 'cargo'
+  WORKSPACE_FLAG: '--workspace'
+  # Per the L1 audit baseline that found `cargo check` did not
+  # complete within 300s bounded local runs: allow 10m for the
+  # long-running recipes so we surface a clean failure rather than
+  # letting CLI-level kills cascade through CI.
+  LONG_TIMEOUT: '10m'
+
+tasks:
+  default:
+    desc: List available tasks
+    cmds:
+      - 'task --list-all'
+
+  test:
+    desc: 'cargo test --workspace (timeout: {{.LONG_TIMEOUT}})'
+    dir: '{{.TASKFILE_DIR}}'
+    cmds:
+      - '{{.CARGO}} test {{.WORKSPACE_FLAG}}'
+    timeout: '{{.LONG_TIMEOUT}}'
+
+  build:
+    desc: 'cargo build --workspace (timeout: {{.LONG_TIMEOUT}})'
+    dir: '{{.TASKFILE_DIR}}'
+    cmds:
+      - '{{.CARGO}} build {{.WORKSPACE_FLAG}}'
+    timeout: '{{.LONG_TIMEOUT}}'
+
+  lint:
+    desc: cargo clippy --workspace --all-targets --all-features -- -D warnings
+    dir: '{{.TASKFILE_DIR}}'
+    cmds:
+      - '{{.CARGO}} clippy {{.WORKSPACE_FLAG}} --all-targets --all-features -- -D warnings'
+
+  fmt:
+    desc: cargo fmt --all -- --check (idempotent format check)
+    dir: '{{.TASKFILE_DIR}}'
+    cmds:
+      - '{{.CARGO}} fmt --all -- --check'
+
+  fmt-fix:
+    desc: cargo fmt --all (apply formatting; not part of ci)
+    dir: '{{.TASKFILE_DIR}}'
+    cmds:
+      - '{{.CARGO}} fmt --all'
+
+  deny:
+    desc: cargo deny check (advisories, bans, licenses, sources)
+    dir: '{{.TASKFILE_DIR}}'
+    cmds:
+      - '{{.CARGO}} deny check'
+
+  audit:
+    desc: cargo audit (RustSec advisory database scan)
+    dir: '{{.TASKFILE_DIR}}'
+    cmds:
+      - '{{.CARGO}} audit'
+
+  ci:
+    desc: Full local CI sweep (lint + fmt + test + build + deny)
+    dir: '{{.TASKFILE_DIR}}'
+    deps: [lint, fmt, test, build, deny]
+    cmds:
+      - 'echo "ci: all required gates passed (lint + fmt + test + build + deny)"'
+
+  hygiene:
+    desc: Code-hygiene sweep (fmt + lint + deny + audit)
+    dir: '{{.TASKFILE_DIR}}'
+    deps: [fmt, lint, deny, audit]
+    cmds:
+      - 'echo "hygiene: fmt + lint + deny + audit all clean"'
+
+  release:
+    desc: Dry-run release prep (fmt + lint + test + build + deny + audit)
+    dir: '{{.TASKFILE_DIR}}'
+    deps: [fmt, lint, test, build, deny, audit]
+    cmds:
+      - '{{.CARGO}} package --no-verify --list'
+      - 'echo "release: dry-run complete; run `cargo publish` from a release branch"'
+
+  coverage:
+    desc: Measure code coverage (SSOT: see grade.sh for the canonical command).
+    cmds:
+      - cargo llvm-cov --workspace --fail-under-lines 85

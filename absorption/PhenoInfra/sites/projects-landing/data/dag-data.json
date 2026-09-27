@@ -1,0 +1,541 @@
+{
+  "title": "Phenotype Compute/Infra - DAG Work Breakdown",
+  "description": "Interactive DAG showing the work breakdown across all compute/infra epics (A-H).",
+  "lastUpdated": "2026-06-24T12:00:00.000Z",
+  "nodes": [
+    {
+      "id": "a01",
+      "label": "Infra provisioning (Pulumi)",
+      "status": "completed",
+      "type": "impl",
+      "epic": "Epic A — Infrastructure Foundations",
+      "repo": "phenotype-infra"
+    },
+    {
+      "id": "a02",
+      "label": "Kubernetes cluster bootstrap",
+      "status": "in-progress",
+      "type": "impl",
+      "epic": "Epic A — Infrastructure Foundations",
+      "repo": "phenotype-infra"
+    },
+    {
+      "id": "a03",
+      "label": "VPC and networking setup",
+      "status": "completed",
+      "type": "impl",
+      "epic": "Epic A — Infrastructure Foundations",
+      "repo": "phenotype-infra"
+    },
+    {
+      "id": "a04",
+      "label": "Secrets management (Vault)",
+      "status": "pending",
+      "type": "impl",
+      "epic": "Epic A — Infrastructure Foundations",
+      "repo": "phenotype-infra"
+    },
+    {
+      "id": "a05",
+      "label": "Observability stack (OTel)",
+      "status": "in-progress",
+      "type": "impl",
+      "epic": "Epic A — Infrastructure Foundations",
+      "repo": "phenotype-infra"
+    },
+    {
+      "id": "b01",
+      "label": "Schema registry (protobuf)",
+      "status": "completed",
+      "type": "spec",
+      "epic": "Epic B — Data & Schema Layer",
+      "repo": "phenotype-registry"
+    },
+    {
+      "id": "b02",
+      "label": "Migration runner",
+      "status": "completed",
+      "type": "tooling",
+      "epic": "Epic B — Data & Schema Layer",
+      "repo": "phenotype-registry"
+    },
+    {
+      "id": "b03",
+      "label": "Query router",
+      "status": "in-progress",
+      "type": "impl",
+      "epic": "Epic B — Data & Schema Layer",
+      "repo": "phenotype-registry"
+    },
+    {
+      "id": "b04",
+      "label": "Audit trail storage",
+      "status": "pending",
+      "type": "impl",
+      "epic": "Epic B — Data & Schema Layer",
+      "repo": "phenotype-registry"
+    },
+    {
+      "id": "c01",
+      "label": "MCP router gateway",
+      "status": "completed",
+      "type": "impl",
+      "epic": "Epic C — MCP Router & SDK",
+      "repo": "pheno-mcp-router"
+    },
+    {
+      "id": "c02",
+      "label": "SDK core types",
+      "status": "completed",
+      "type": "spec",
+      "epic": "Epic C — MCP Router & SDK",
+      "repo": "pheno-sdk"
+    },
+    {
+      "id": "c03",
+      "label": "Transport layer (gRPC)",
+      "status": "in-progress",
+      "type": "impl",
+      "epic": "Epic C — MCP Router & SDK",
+      "repo": "pheno-mcp-router"
+    },
+    {
+      "id": "c04",
+      "label": "SDK client bindings",
+      "status": "in-progress",
+      "type": "impl",
+      "epic": "Epic C — MCP Router & SDK",
+      "repo": "pheno-sdk"
+    },
+    {
+      "id": "c05",
+      "label": "Rate limiter middleware",
+      "status": "pending",
+      "type": "impl",
+      "epic": "Epic C — MCP Router & SDK",
+      "repo": "pheno-mcp-router"
+    },
+    {
+      "id": "d01",
+      "label": "Port adapter interface",
+      "status": "completed",
+      "type": "spec",
+      "epic": "Epic D — Port Adapters & Integrations",
+      "repo": "pheno-port-adapter"
+    },
+    {
+      "id": "d02",
+      "label": "GitHub webhook adapter",
+      "status": "completed",
+      "type": "impl",
+      "epic": "Epic D — Port Adapters & Integrations",
+      "repo": "pheno-port-adapter"
+    },
+    {
+      "id": "d03",
+      "label": "Slack notification adapter",
+      "status": "in-progress",
+      "type": "impl",
+      "epic": "Epic D — Port Adapters & Integrations",
+      "repo": "pheno-port-adapter"
+    },
+    {
+      "id": "d04",
+      "label": "Email gateway adapter",
+      "status": "pending",
+      "type": "impl",
+      "epic": "Epic D — Port Adapters & Integrations",
+      "repo": "pheno-port-adapter"
+    },
+    {
+      "id": "d05",
+      "label": "Webhook retry + dedup",
+      "status": "pending",
+      "type": "impl",
+      "epic": "Epic D — Port Adapters & Integrations",
+      "repo": "pheno-port-adapter"
+    },
+    {
+      "id": "e01",
+      "label": "Execution engine spec",
+      "status": "completed",
+      "type": "spec",
+      "epic": "Epic E — Execution Engine",
+      "repo": "phenotype-landing"
+    },
+    {
+      "id": "e02",
+      "label": "DAG runtime",
+      "status": "in-progress",
+      "type": "impl",
+      "epic": "Epic E — Execution Engine",
+      "repo": "phenotype-landing"
+    },
+    {
+      "id": "e03",
+      "label": "Step retry policy",
+      "status": "pending",
+      "type": "impl",
+      "epic": "Epic E — Execution Engine",
+      "repo": "phenotype-landing"
+    },
+    {
+      "id": "e04",
+      "label": "Concurrency limiter",
+      "status": "pending",
+      "type": "impl",
+      "epic": "Epic E — Execution Engine",
+      "repo": "phenotype-landing"
+    },
+    {
+      "id": "f01",
+      "label": "DAG data model (spec)",
+      "status": "completed",
+      "type": "spec",
+      "epic": "Epic F — DAG Foundation & Automation",
+      "repo": "phenotype-landing"
+    },
+    {
+      "id": "f02",
+      "label": "DAG schema validation",
+      "status": "completed",
+      "type": "impl",
+      "epic": "Epic F — DAG Foundation & Automation",
+      "repo": "phenotype-landing"
+    },
+    {
+      "id": "f03",
+      "label": "DAG YAML/JSON parser",
+      "status": "completed",
+      "type": "impl",
+      "epic": "Epic F — DAG Foundation & Automation",
+      "repo": "phenotype-landing"
+    },
+    {
+      "id": "f04",
+      "label": "DAG topological sort",
+      "status": "completed",
+      "type": "impl",
+      "epic": "Epic F — DAG Foundation & Automation",
+      "repo": "phenotype-landing"
+    },
+    {
+      "id": "f05",
+      "label": "DAG cycle detection",
+      "status": "completed",
+      "type": "impl",
+      "epic": "Epic F — DAG Foundation & Automation",
+      "repo": "phenotype-landing"
+    },
+    {
+      "id": "f06",
+      "label": "DAG execution engine",
+      "status": "in-progress",
+      "type": "impl",
+      "epic": "Epic F — DAG Foundation & Automation",
+      "repo": "phenotype-landing"
+    },
+    {
+      "id": "f07",
+      "label": "DAG state persistence",
+      "status": "pending",
+      "type": "impl",
+      "epic": "Epic F — DAG Foundation & Automation",
+      "repo": "phenotype-landing"
+    },
+    {
+      "id": "f08",
+      "label": "DAG status reporting",
+      "status": "pending",
+      "type": "impl",
+      "epic": "Epic F — DAG Foundation & Automation",
+      "repo": "phenotype-landing"
+    },
+    {
+      "id": "f09",
+      "label": "DAG CLI tooling",
+      "status": "pending",
+      "type": "tooling",
+      "epic": "Epic F — DAG Foundation & Automation",
+      "repo": "phenotype-landing"
+    },
+    {
+      "id": "f10",
+      "label": "DAG web renderer (this page)",
+      "status": "in-progress",
+      "type": "render",
+      "epic": "Epic F — DAG Foundation & Automation",
+      "repo": "phenotype-landing"
+    },
+    {
+      "id": "f11",
+      "label": "DAG CI integration",
+      "status": "pending",
+      "type": "tooling",
+      "epic": "Epic F — DAG Foundation & Automation",
+      "repo": "phenotype-landing"
+    },
+    {
+      "id": "f12",
+      "label": "DAG observability hooks",
+      "status": "completed",
+      "type": "impl",
+      "epic": "Epic F — DAG Foundation & Automation",
+      "repo": "phenotype-landing"
+    },
+    {
+      "id": "f13",
+      "label": "DAG test suite",
+      "status": "in-progress",
+      "type": "qa",
+      "epic": "Epic F — DAG Foundation & Automation",
+      "repo": "phenotype-landing"
+    },
+    {
+      "id": "f14",
+      "label": "DAG documentation",
+      "status": "failed",
+      "type": "docs",
+      "epic": "Epic F — DAG Foundation & Automation",
+      "repo": "phenotype-landing"
+    },
+    {
+      "id": "f15",
+      "label": "DAG deployment pipeline",
+      "status": "pending",
+      "type": "tooling",
+      "epic": "Epic F — DAG Foundation & Automation",
+      "repo": "phenotype-landing"
+    },
+    {
+      "id": "g01",
+      "label": "OTel collector config",
+      "status": "completed",
+      "type": "impl",
+      "epic": "Epic G — Observability",
+      "repo": "pheno-otel"
+    },
+    {
+      "id": "g02",
+      "label": "Metrics dashboard",
+      "status": "in-progress",
+      "type": "render",
+      "epic": "Epic G — Observability",
+      "repo": "pheno-otel"
+    },
+    {
+      "id": "g03",
+      "label": "Distributed tracing setup",
+      "status": "in-progress",
+      "type": "impl",
+      "epic": "Epic G — Observability",
+      "repo": "pheno-otel"
+    },
+    {
+      "id": "g04",
+      "label": "Alert routing rules",
+      "status": "pending",
+      "type": "impl",
+      "epic": "Epic G — Observability",
+      "repo": "pheno-otel"
+    },
+    {
+      "id": "h01",
+      "label": "Runtime security policy",
+      "status": "completed",
+      "type": "spec",
+      "epic": "Epic H — Security & Compliance",
+      "repo": "phenotype-infra"
+    },
+    {
+      "id": "h02",
+      "label": "CVE scanning pipeline",
+      "status": "in-progress",
+      "type": "tooling",
+      "epic": "Epic H — Security & Compliance",
+      "repo": "phenotype-infra"
+    },
+    {
+      "id": "h03",
+      "label": "SBOM generation",
+      "status": "pending",
+      "type": "tooling",
+      "epic": "Epic H — Security & Compliance",
+      "repo": "phenotype-infra"
+    },
+    {
+      "id": "h04",
+      "label": "Access audit log",
+      "status": "pending",
+      "type": "impl",
+      "epic": "Epic H — Security & Compliance",
+      "repo": "phenotype-infra"
+    }
+  ],
+  "edges": [
+    {
+      "from": "a03",
+      "to": "a01"
+    },
+    {
+      "from": "a01",
+      "to": "a02"
+    },
+    {
+      "from": "a01",
+      "to": "a04"
+    },
+    {
+      "from": "a02",
+      "to": "a05"
+    },
+    {
+      "from": "b01",
+      "to": "b02"
+    },
+    {
+      "from": "b02",
+      "to": "b03"
+    },
+    {
+      "from": "b03",
+      "to": "b04"
+    },
+    {
+      "from": "c01",
+      "to": "c03"
+    },
+    {
+      "from": "c02",
+      "to": "c04"
+    },
+    {
+      "from": "c03",
+      "to": "c05"
+    },
+    {
+      "from": "d01",
+      "to": "d02"
+    },
+    {
+      "from": "d02",
+      "to": "d03"
+    },
+    {
+      "from": "d02",
+      "to": "d04"
+    },
+    {
+      "from": "d04",
+      "to": "d05"
+    },
+    {
+      "from": "e01",
+      "to": "e02"
+    },
+    {
+      "from": "e02",
+      "to": "e03"
+    },
+    {
+      "from": "e03",
+      "to": "e04"
+    },
+    {
+      "from": "f01",
+      "to": "f02"
+    },
+    {
+      "from": "f02",
+      "to": "f03"
+    },
+    {
+      "from": "f03",
+      "to": "f04"
+    },
+    {
+      "from": "f03",
+      "to": "f05"
+    },
+    {
+      "from": "f04",
+      "to": "f06"
+    },
+    {
+      "from": "f05",
+      "to": "f06"
+    },
+    {
+      "from": "f06",
+      "to": "f07"
+    },
+    {
+      "from": "f06",
+      "to": "f08"
+    },
+    {
+      "from": "f07",
+      "to": "f09"
+    },
+    {
+      "from": "f08",
+      "to": "f09"
+    },
+    {
+      "from": "f09",
+      "to": "f10"
+    },
+    {
+      "from": "f06",
+      "to": "f11"
+    },
+    {
+      "from": "f10",
+      "to": "f11"
+    },
+    {
+      "from": "f06",
+      "to": "f12"
+    },
+    {
+      "from": "f03",
+      "to": "f13"
+    },
+    {
+      "from": "f10",
+      "to": "f14"
+    },
+    {
+      "from": "f11",
+      "to": "f15"
+    },
+    {
+      "from": "f13",
+      "to": "f14"
+    },
+    {
+      "from": "g01",
+      "to": "g02"
+    },
+    {
+      "from": "g01",
+      "to": "g03"
+    },
+    {
+      "from": "g03",
+      "to": "g04"
+    },
+    {
+      "from": "h01",
+      "to": "h02"
+    },
+    {
+      "from": "h02",
+      "to": "h03"
+    },
+    {
+      "from": "h03",
+      "to": "h04"
+    }
+  ]
+}

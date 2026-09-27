@@ -1,0 +1,17 @@
+[package]
+name = "phenotype-macros"
+version = "0.2.0"
+edition = "2021"
+license = "MIT"
+authors = ["Phenotype Team"]
+repository = "https://github.com/KooshaPari/PhenoInfra"
+description = "Proc-macro utilities for the Phenotype ecosystem"
+
+[lib]
+path = "src/lib.rs"
+proc-macro = true
+
+[dependencies]
+proc-macro2 = "1"
+quote = "1"
+syn = "2"

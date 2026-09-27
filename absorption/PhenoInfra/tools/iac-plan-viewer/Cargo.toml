@@ -1,0 +1,25 @@
+[workspace]
+
+[package]
+name = "iac-plan-viewer"
+version = "0.1.0"
+description = "WASM-based IaC plan viewer — parse Terraform/OpenTofu plan JSON and render interactive diff summaries in the browser"
+edition = "2021"
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/KooshaPari/phenotype-infra"
+authors = ["Phenotype Infra <infra@phenotype.dev>"]
+publish = false
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+wasm-bindgen = "0.2"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+
+[profile.release]
+lto = true
+opt-level = "s"
+strip = true
+codegen-units = 1

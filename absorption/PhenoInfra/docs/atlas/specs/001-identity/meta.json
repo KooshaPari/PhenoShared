@@ -1,0 +1,48 @@
+{
+  "id": "SPEC-01",
+  "title": "Identity, scope and incremental observation",
+  "state": "proposed",
+  "format": "PROVISIONAL_AGILEPLUS_SHAPED_NOT_ENGINE_VALIDATED",
+  "requirements": [
+    "REQ-01-01",
+    "REQ-01-02",
+    "REQ-01-03",
+    "REQ-01-04",
+    "REQ-01-05",
+    "REQ-01-06",
+    "REQ-01-07",
+    "REQ-01-08"
+  ],
+  "source_intent": [
+    "INT-001"
+  ],
+  "work_package_ids": [
+    "WP-G01",
+    "WP-G07",
+    "WP-G11",
+    "WP-P01-A",
+    "WP-P02-A",
+    "WP-P03-A",
+    "WP-P04-A",
+    "WP-P05-A",
+    "WP-P06-A",
+    "WP-P07-A",
+    "WP-P08-A",
+    "WP-P09-A",
+    "WP-P10-A",
+    "WP-P11-A",
+    "WP-P12-A",
+    "WP-P13-A",
+    "WP-P14-A",
+    "WP-P15-A",
+    "WP-P16-A",
+    "WP-P17-A",
+    "WP-P18-A",
+    "WP-P19-A",
+    "WP-P20-A",
+    "WP-P21-A",
+    "WP-P22-A"
+  ],
+  "engine_receipt": null,
+  "human_approval": null
+}

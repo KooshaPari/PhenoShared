@@ -1,0 +1,114 @@
+---
+import "../../styles/globals.css";
+
+// Tier-3 microfrontend: /otel — observability iframe.
+// Spec: phenotype-infra/docs/governance/path-microfrontends-tier3.md
+//
+// Stub iframe pointing at PHENO_OTLP_UI_URL (e.g. Phoenix, Jaeger, Tempo).
+// When the env var is missing, render a clear, actionable not-configured panel.
+// We do NOT silently render an empty iframe.
+
+const PROJECT_NAME = "Byteport";
+const REPO_SLUG = "byteport";
+const otelUrl = import.meta.env.PHENO_OTLP_UI_URL ?? null;
+---
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>OTel · {PROJECT_NAME}</title>
+    <meta name="description" content="Embedded observability backend (traces, metrics, logs)." />
+  </head>
+  <body class="min-h-screen">
+    <nav class="max-w-7xl mx-auto px-4 sm:px-6 pt-8 sm:pt-10 mono text-xs text-[var(--muted)]" aria-label="Breadcrumb">
+      <a href="/" class="hover:text-[var(--accent)]">{REPO_SLUG}</a>
+      <span class="mx-1">/</span>
+      <span aria-current="page">otel</span>
+    </nav>
+
+    <header class="max-w-7xl mx-auto px-4 sm:px-6 mt-4 mb-6 flex flex-wrap items-baseline justify-between gap-3">
+      <div>
+        <h1 class="text-2xl sm:text-3xl font-bold">Observability</h1>
+        <p class="text-[var(--muted)] text-sm">
+          Embedded OTel UI (traces, metrics, logs) from the Phenotype observability backend.
+        </p>
+      </div>
+      {otelUrl && (
+        <a href={otelUrl} target="_blank" rel="noopener"
+           class="mono text-xs px-3 py-1.5 rounded border hover:text-[var(--accent)] hover:border-[var(--accent)] transition focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
+           style="border-color: var(--border);">
+          open in new tab →
+        </a>
+      )}
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 pb-10" id="main-content">
+      {otelUrl ? (
+        <div class="otel-frame-wrap">
+          <iframe
+            src={otelUrl}
+            title="OTel observability UI"
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+            sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
+            class="otel-frame"
+          ></iframe>
+        </div>
+      ) : (
+        <div class="otel-degraded" role="status" aria-label="Backend not configured">
+          <h2 class="mono text-sm uppercase tracking-wider mb-3">Backend not configured</h2>
+          <p class="mb-3">
+            The <code>PHENO_OTLP_UI_URL</code> environment variable is not set
+            for this Vercel deployment. Tier-3 <code>/otel</code> requires an
+            externally-hosted OTel UI (Phoenix, Jaeger, Grafana Tempo, etc.)
+            to embed.
+          </p>
+          <details class="mt-4">
+            <summary class="cursor-pointer text-[var(--accent)] mono text-sm">how to fix</summary>
+            <ol class="mt-3 ml-5 text-sm space-y-2 list-decimal text-[var(--muted)]">
+              <li>Deploy a Phenotype observability backend (PhenoObservability) and obtain its public UI URL.</li>
+              <li>In the Vercel dashboard for <code>{REPO_SLUG}-landing</code>, add an env var named <code>PHENO_OTLP_UI_URL</code>.</li>
+              <li>Redeploy. The iframe will pick up the URL on the next build.</li>
+            </ol>
+          </details>
+        </div>
+      )}
+    </main>
+
+    <footer class="max-w-7xl mx-auto px-4 sm:px-6 mt-10 pt-6 border-t text-xs text-[var(--muted)] mono pb-8" style="border-color: var(--border);">
+      Spec: <a href="https://github.com/KooshaPari/phenotype-infra/blob/main/docs/governance/path-microfrontends-tier3.md" class="underline hover:text-[var(--accent)]">path-microfrontends-tier3.md</a>
+    </footer>
+
+    <style is:global>
+      .otel-frame-wrap {
+        border: 1px solid var(--border);
+        border-radius: 0.75rem;
+        overflow: hidden;
+        background: var(--card);
+        height: calc(100vh - 240px);
+        min-height: 500px;
+      }
+      .otel-frame {
+        width: 100%;
+        height: 100%;
+        border: 0;
+        display: block;
+      }
+      .otel-degraded {
+        border: 1px solid var(--border);
+        border-left: 3px solid var(--accent);
+        background: var(--card);
+        padding: 1.5rem 1.75rem;
+        border-radius: 0.75rem;
+        max-width: 720px;
+      }
+      .otel-degraded code {
+        background: rgba(0,0,0,0.25);
+        padding: 0.1rem 0.35rem;
+        border-radius: 0.2rem;
+        font-size: 0.9em;
+      }
+    </style>
+  </body>
+</html>

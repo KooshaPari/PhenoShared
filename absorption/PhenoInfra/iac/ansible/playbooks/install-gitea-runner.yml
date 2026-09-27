@@ -1,0 +1,13 @@
+---
+# install-gitea-runner.yml — Compatibility: install act_runner (Gitea Actions runner) as an alternative to Woodpecker agent.
+# Stub. Use only if ADR 0005 revises the CI choice.
+
+- name: Install Gitea act_runner (optional)
+  hosts: runners
+  become: true
+  tasks:
+    # TODO: download pinned act_runner binary
+    # TODO: register against Forgejo with runner registration token (FJ-02)
+    # TODO: systemd unit gitea-runner.service
+    - ansible.builtin.debug:
+        msg: "act_runner install is a stub; primary CI is Woodpecker per ADR 0005."

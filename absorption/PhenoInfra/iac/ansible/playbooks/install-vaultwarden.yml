@@ -1,0 +1,147 @@
+---
+# install-vaultwarden.yml — Vaultwarden on oci_primary, 127.0.0.1:8080.
+# Binary install (no Docker); SQLite backend at /var/lib/vaultwarden/.
+
+- name: Install and configure Vaultwarden
+  hosts: oci_primary
+  become: true
+  vars:
+    vaultwarden_version: "1.32.1"
+    vaultwarden_arch: aarch64
+    vaultwarden_home: /var/lib/vaultwarden
+    vaultwarden_etc: /etc/vaultwarden
+    vaultwarden_bin: /usr/local/bin/vaultwarden
+    vaultwarden_web_dir: /var/lib/vaultwarden/web-vault
+  tasks:
+    - name: Create vaultwarden user
+      ansible.builtin.user:
+        name: vaultwarden
+        system: true
+        shell: /sbin/nologin
+        home: "{{ vaultwarden_home }}"
+        create_home: true
+
+    - name: Ensure dirs
+      ansible.builtin.file:
+        path: "{{ item }}"
+        state: directory
+        owner: vaultwarden
+        group: vaultwarden
+        mode: "0750"
+      loop:
+        - "{{ vaultwarden_home }}"
+        - "{{ vaultwarden_home }}/data"
+        - "{{ vaultwarden_web_dir }}"
+
+    - name: Ensure /etc/vaultwarden
+      ansible.builtin.file:
+        path: "{{ vaultwarden_etc }}"
+        state: directory
+        owner: root
+        group: vaultwarden
+        mode: "0750"
+
+    # dani-garcia/vaultwarden ships a prebuilt linux-aarch64 tarball per release.
+    - name: Download Vaultwarden release tarball
+      ansible.builtin.get_url:
+        url: "https://github.com/dani-garcia/vaultwarden/releases/download/{{ vaultwarden_version }}/vaultwarden-{{ vaultwarden_version }}-linux-{{ vaultwarden_arch }}.tar.gz"
+        dest: /tmp/vaultwarden.tar.gz
+        mode: "0644"
+
+    - name: Extract vaultwarden binary
+      ansible.builtin.unarchive:
+        src: /tmp/vaultwarden.tar.gz
+        dest: /usr/local/bin/
+        remote_src: true
+        creates: "{{ vaultwarden_bin }}"
+        mode: "0755"
+
+    - name: Download web-vault bundle
+      ansible.builtin.get_url:
+        url: "https://github.com/dani-garcia/bw_web_builds/releases/latest/download/bw_web_v2024.6.2.tar.gz"
+        dest: /tmp/bw_web.tar.gz
+        mode: "0644"
+
+    - name: Extract web-vault
+      ansible.builtin.unarchive:
+        src: /tmp/bw_web.tar.gz
+        dest: "{{ vaultwarden_web_dir }}"
+        remote_src: true
+        extra_opts: ["--strip-components=1"]
+        owner: vaultwarden
+        group: vaultwarden
+        creates: "{{ vaultwarden_web_dir }}/index.html"
+
+    - name: Generate ADMIN_TOKEN if missing
+      ansible.builtin.shell: openssl rand -base64 48
+      args:
+        creates: "{{ vaultwarden_etc }}/.admin_token"
+      register: admin_token_gen
+      changed_when: admin_token_gen.rc == 0
+
+    - name: Persist ADMIN_TOKEN
+      ansible.builtin.copy:
+        dest: "{{ vaultwarden_etc }}/.admin_token"
+        content: "{{ admin_token_gen.stdout }}\n"
+        owner: root
+        group: vaultwarden
+        mode: "0640"
+        force: false
+      when: admin_token_gen.stdout is defined and admin_token_gen.stdout | length > 0
+
+    - name: Read ADMIN_TOKEN
+      ansible.builtin.slurp:
+        src: "{{ vaultwarden_etc }}/.admin_token"
+      register: admin_token_slurp
+
+    - name: Write vaultwarden .env
+      ansible.builtin.copy:
+        dest: "{{ vaultwarden_etc }}/.env"
+        owner: root
+        group: vaultwarden
+        mode: "0640"
+        content: |
+          DOMAIN=https://vault.kooshapari.com
+          ROCKET_ADDRESS=127.0.0.1
+          ROCKET_PORT=8080
+          DATA_FOLDER={{ vaultwarden_home }}/data
+          WEB_VAULT_FOLDER={{ vaultwarden_web_dir }}
+          DATABASE_URL={{ vaultwarden_home }}/data/db.sqlite3
+          SIGNUPS_ALLOWED=false
+          INVITATIONS_ALLOWED=true
+          ADMIN_TOKEN={{ admin_token_slurp.content | b64decode | trim }}
+          WEBSOCKET_ENABLED=true
+          LOG_LEVEL=info
+
+    - name: Install vaultwarden systemd unit
+      ansible.builtin.copy:
+        dest: /etc/systemd/system/vaultwarden.service
+        mode: "0644"
+        content: |
+          [Unit]
+          Description=Vaultwarden
+          After=network-online.target
+          Wants=network-online.target
+
+          [Service]
+          Type=simple
+          User=vaultwarden
+          Group=vaultwarden
+          EnvironmentFile={{ vaultwarden_etc }}/.env
+          ExecStart={{ vaultwarden_bin }}
+          WorkingDirectory={{ vaultwarden_home }}
+          Restart=always
+          LimitNOFILE=65535
+          PrivateTmp=true
+          ProtectSystem=strict
+          ReadWritePaths={{ vaultwarden_home }}
+
+          [Install]
+          WantedBy=multi-user.target
+
+    - name: Enable + start vaultwarden
+      ansible.builtin.systemd:
+        name: vaultwarden
+        daemon_reload: true
+        enabled: true
+        state: started

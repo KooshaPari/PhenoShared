@@ -1,0 +1,17 @@
+# cloudflared config — EXAMPLE. Place at /etc/cloudflared/config.yml on oci-primary.
+
+tunnel: <CLOUDFLARE_TUNNEL_UUID>
+credentials-file: /etc/cloudflared/credentials.json
+
+ingress:
+  - hostname: git.phenotype.io
+    service: http://localhost:3000
+  - hostname: vault.phenotype.io
+    service: http://localhost:8080
+  - hostname: ci.phenotype.io
+    service: http://localhost:8000
+  - service: http_status:404
+
+no-autoupdate: false
+logfile: /var/log/cloudflared.log
+loglevel: info

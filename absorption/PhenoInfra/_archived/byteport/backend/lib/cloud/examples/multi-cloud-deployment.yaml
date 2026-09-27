@@ -1,0 +1,139 @@
+# Multi-cloud deployment example
+# Frontend on Vercel Edge, API on Render, Database on Supabase
+
+version: "1.0"
+environment: production
+
+project:
+  name: multi-cloud-app
+  region: us-west-2
+  tags:
+    app: multi-cloud
+    team: platform
+    cost-center: engineering
+
+# Configure multiple providers
+providers:
+  vercel:
+    auth:
+      type: token
+      token_env: VERCEL_TOKEN
+
+  render:
+    auth:
+      type: api_key
+      key_env: RENDER_API_KEY
+
+  supabase:
+    auth:
+      type: api_key
+      key_env: SUPABASE_KEY
+      project_id_env: SUPABASE_PROJECT_ID
+
+resources:
+  # Serverless PostgreSQL on Supabase
+  - name: postgres
+    type: database.serverless
+    provider: supabase
+    spec:
+      engine: postgresql
+      version: "15"
+      storage: 20GB
+      connection_pooling:
+        min: 5
+        max: 50
+        timeout: 30
+      backup:
+        enabled: true
+        schedule: "0 2 * * *"  # Daily at 2 AM UTC
+        retention_days: 30
+        point_in_time_recovery: true
+    tags:
+      tier: database
+
+  # API server on Render
+  - name: api-server
+    type: compute.container
+    provider: render
+    region: oregon
+    spec:
+      runtime: docker
+      dockerfile: ./api/Dockerfile
+      port: 8080
+      env:
+        NODE_ENV: production
+        DATABASE_URL: ${resources.postgres.connection_string}
+        CORS_ORIGIN: https://${resources.edge-frontend.domain}
+        LOG_LEVEL: info
+      scale:
+        min: 3
+        max: 15
+        target_cpu: 70
+        target_memory: 80
+        scale_up_policy:
+          cooldown: 60s
+          step: 2
+          threshold: 75
+        scale_down_policy:
+          cooldown: 300s
+          step: 1
+          threshold: 40
+    deploy:
+      strategy: rolling
+      timeout: 10m
+      health_check:
+        type: http
+        path: /health
+        port: 8080
+        interval: 30s
+        timeout: 5s
+        retries: 3
+        initial_delay: 20s
+        success_threshold: 2
+        failure_threshold: 3
+      rollback:
+        enabled: true
+        max_retries: 3
+        retry_interval: 60s
+    tags:
+      tier: backend
+      service: api
+
+  # Edge function on Vercel for frontend
+  - name: edge-frontend
+    type: compute.edge
+    provider: vercel
+    spec:
+      runtime: nodejs20
+      entry: ./frontend/edge.ts
+      regions: [iad1, sfo1, cdg1, hnd1]  # Multi-region for low latency
+      env:
+        API_URL: https://${resources.api-server.url}
+        NEXT_PUBLIC_ENV: production
+      edge_config:
+        max_duration: 10
+        memory: 128
+    deploy:
+      strategy: atomic
+      timeout: 5m
+      health_check:
+        type: http
+        path: /
+        interval: 60s
+        timeout: 3s
+        retries: 2
+    tags:
+      tier: frontend
+      service: edge
+
+# Define resource dependencies
+dependencies:
+  # API server depends on database
+  - resource: api-server
+    depends_on: [postgres]
+    wait_for: ACTIVE
+
+  # Edge frontend depends on API server
+  - resource: edge-frontend
+    depends_on: [api-server]
+    wait_for: HEALTH_CHECK

@@ -1,0 +1,24 @@
+{
+  "name": "SessionLedger",
+  "slug": "sessionledger",
+  "tagline": "Incubating: session ledger, viewergate, and live tokio daemon-graph pipeline.",
+  "domain": "sessionledger.phenotype.space",
+  "color": "#a3a3a3",
+  "description": "Incubating: session ledger, viewergate, and live tokio daemon-graph pipeline.",
+  "tier": 2,
+  "repo": "KooshaPari/SessionLedger",
+  "language": "Rust",
+  "license": "MIT",
+  "status": "active",
+  "features": [
+    "Session tracking",
+    "Live daemon graph",
+    "Tokio pipeline",
+    "Viewer gate"
+  ],
+  "links": {
+    "github": "https://github.com/KooshaPari/SessionLedger",
+    "docs": "https://sessionledger.phenotype.space/docs",
+    "releases": "https://github.com/KooshaPari/SessionLedger/releases"
+  }
+}

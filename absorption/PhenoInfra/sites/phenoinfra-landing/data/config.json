@@ -1,0 +1,24 @@
+{
+  "name": "PhenoInfra",
+  "slug": "phenoinfra",
+  "tagline": "Compute mesh infrastructure-as-code: OCI + Cloudflare + GCP + AWS + Vercel with ADRs, specs, and runbooks.",
+  "domain": "phenoinfra.phenotype.space",
+  "color": "#8b5cf6",
+  "description": "Compute mesh infrastructure-as-code: OCI + Cloudflare + GCP + AWS + Vercel with ADRs, specs, and runbooks.",
+  "tier": 1,
+  "repo": "KooshaPari/PhenoInfra",
+  "language": "Rust / TOML / YAML",
+  "license": "MIT",
+  "status": "active",
+  "features": [
+    "28 shared infrakit crates",
+    "Multi-cloud IaC",
+    "Landing page factory",
+    "Vercel auto-deploy"
+  ],
+  "links": {
+    "github": "https://github.com/KooshaPari/PhenoInfra",
+    "docs": "https://phenoinfra.phenotype.space/docs",
+    "releases": "https://github.com/KooshaPari/PhenoInfra/releases"
+  }
+}

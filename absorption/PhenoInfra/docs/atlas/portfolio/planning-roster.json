@@ -1,0 +1,333 @@
+{
+  "source": "Latest visible planning response, reconciled with inherited repository IDs. Not a fresh census.",
+  "reported_total_repository_count": 52,
+  "reported_count_evidence": "PRIOR_RESPONSE_NOT_RECOUNTED_HERE",
+  "core_planning_cohort": 30,
+  "product_labs": 23,
+  "pooled_foundations": 4,
+  "support_surfaces": 3,
+  "additional_conditional_or_capability_records": 2,
+  "product_session_capacity": 54,
+  "entries": [
+    {
+      "id": "PRD-TRACERA",
+      "repository_id": 1162254344,
+      "name": "Tracera",
+      "class": "product-or-lab",
+      "role": "Persistent product/system model and dissatisfaction discovery",
+      "planned_seats": 10,
+      "dossier": "products/Tracera/DOSSIER.md",
+      "authorization": "not_granted_by_package"
+    },
+    {
+      "id": "PRD-AGILEPLUS",
+      "repository_id": 1169608854,
+      "name": "AgilePlus",
+      "class": "product-or-lab",
+      "role": "Repository-scoped governed specification and work tooling",
+      "planned_seats": 2,
+      "dossier": "products/AgilePlus/DOSSIER.md",
+      "authorization": "not_granted_by_package"
+    },
+    {
+      "id": "PRD-HELIOSLAB",
+      "repository_id": 1167587447,
+      "name": "HeliosLab",
+      "class": "product-or-lab",
+      "role": "Agent workbench or configuration composite; identity adjudication first",
+      "planned_seats": 2,
+      "dossier": "products/HeliosLab/DOSSIER.md",
+      "authorization": "not_granted_by_package"
+    },
+    {
+      "id": "PRD-RESEARCHLEDGER",
+      "repository_id": 1308558334,
+      "name": "ResearchLedger",
+      "class": "product-or-lab",
+      "role": "Local research provenance, retrieval and portable vault",
+      "planned_seats": 2,
+      "dossier": "products/ResearchLedger/DOSSIER.md",
+      "authorization": "not_granted_by_package"
+    },
+    {
+      "id": "PRD-SESSIONLEDGER",
+      "repository_id": 1284536541,
+      "name": "SessionLedger",
+      "class": "product-or-lab",
+      "role": "Cross-harness capture, preservation, search and replay view",
+      "planned_seats": 2,
+      "dossier": "products/SessionLedger/DOSSIER.md",
+      "authorization": "not_granted_by_package"
+    },
+    {
+      "id": "PRD-KCODE",
+      "repository_id": 1365855438,
+      "name": "KCode",
+      "class": "product-or-lab",
+      "role": "Owned jcode-derived coding harness",
+      "planned_seats": 2,
+      "dossier": "products/KCode/DOSSIER.md",
+      "authorization": "not_granted_by_package"
+    },
+    {
+      "id": "PRD-HELIOSLITE",
+      "repository_id": 1226104769,
+      "name": "HeliosLite",
+      "class": "product-or-lab",
+      "role": "Forgecode-derived coding-agent CLI",
+      "planned_seats": 2,
+      "dossier": "products/HeliosLite/DOSSIER.md",
+      "authorization": "not_granted_by_package"
+    },
+    {
+      "id": "PRD-HELIOSCLI",
+      "repository_id": 1165315873,
+      "name": "HeliosCLI",
+      "class": "product-or-lab",
+      "role": "Codex-derived CLI and reusable harness workspace",
+      "planned_seats": 2,
+      "dossier": "products/HeliosCLI/DOSSIER.md",
+      "authorization": "not_granted_by_package"
+    },
+    {
+      "id": "PRD-KHOSTTY",
+      "repository_id": 1322607630,
+      "name": "Khostty",
+      "class": "product-or-lab",
+      "role": "Owned terminal fork or embedded terminal surface",
+      "planned_seats": 2,
+      "dossier": "products/Khostty/DOSSIER.md",
+      "authorization": "not_granted_by_package"
+    },
+    {
+      "id": "PRD-SHARECLI",
+      "repository_id": 1191459198,
+      "name": "ShareCLI",
+      "class": "product-or-lab",
+      "role": "OS-adjacent process and resource supervisor",
+      "planned_seats": 2,
+      "dossier": "products/ShareCLI/DOSSIER.md",
+      "authorization": "not_granted_by_package"
+    },
+    {
+      "id": "PRD-BYTEPORT",
+      "repository_id": 861430079,
+      "name": "BytePort",
+      "class": "product-or-lab",
+      "role": "Git-to-service deployment application",
+      "planned_seats": 2,
+      "dossier": "products/BytePort/DOSSIER.md",
+      "authorization": "not_granted_by_package"
+    },
+    {
+      "id": "PRD-PHENOFABRIC",
+      "repository_id": 1363521465,
+      "name": "PhenoFabric",
+      "class": "product-or-lab",
+      "role": "Distributed real-time compute, data and I/O product",
+      "planned_seats": 2,
+      "dossier": "products/PhenoFabric/DOSSIER.md",
+      "authorization": "not_granted_by_package"
+    },
+    {
+      "id": "PRD-PINE",
+      "repository_id": 1226547140,
+      "name": "Pine",
+      "class": "product-or-lab",
+      "role": "Bounded cross-platform application compatibility research",
+      "planned_seats": 2,
+      "dossier": "products/Pine/DOSSIER.md",
+      "authorization": "not_granted_by_package"
+    },
+    {
+      "id": "PRD-OMNIROUTE",
+      "repository_id": 1226171396,
+      "name": "OmniRoute",
+      "class": "product-or-lab",
+      "role": "Owned multi-provider model gateway and routing fork",
+      "planned_seats": 2,
+      "dossier": "products/OmniRoute/DOSSIER.md",
+      "authorization": "not_granted_by_package"
+    },
+    {
+      "id": "PRD-SUBSTRATE",
+      "repository_id": 1269596554,
+      "name": "Substrate",
+      "class": "product-or-lab",
+      "role": "Model routing and/or agent-process execution substrate; boundary split required",
+      "planned_seats": 2,
+      "dossier": "products/Substrate/DOSSIER.md",
+      "authorization": "not_granted_by_package"
+    },
+    {
+      "id": "PRD-PHENOMLX",
+      "repository_id": 1214745478,
+      "name": "PhenoMLX",
+      "class": "product-or-lab",
+      "role": "Owned MLX/OMLX inference extension and research product",
+      "planned_seats": 2,
+      "dossier": "products/PhenoMLX/DOSSIER.md",
+      "authorization": "not_granted_by_package"
+    },
+    {
+      "id": "PRD-PORTAGE",
+      "repository_id": 1165351720,
+      "name": "Portage",
+      "class": "product-or-lab",
+      "role": "Harbor-derived evaluation runner and environment adapters",
+      "planned_seats": 2,
+      "dossier": "products/Portage/DOSSIER.md",
+      "authorization": "not_granted_by_package"
+    },
+    {
+      "id": "PRD-PHENOLAB",
+      "repository_id": 1269695199,
+      "name": "PhenoLab",
+      "class": "product-or-lab",
+      "role": "Reproducible experiment/evaluation consumer",
+      "planned_seats": 2,
+      "dossier": "products/PhenoLab/DOSSIER.md",
+      "authorization": "not_granted_by_package"
+    },
+    {
+      "id": "PRD-CIVIS",
+      "repository_id": 1164684442,
+      "name": "Civis",
+      "class": "product-or-lab",
+      "role": "Persistent game-first systemic sandbox",
+      "planned_seats": 2,
+      "dossier": "products/Civis/DOSSIER.md",
+      "authorization": "not_granted_by_package"
+    },
+    {
+      "id": "PRD-DINO",
+      "repository_id": 1177712269,
+      "name": "Dino",
+      "class": "product-or-lab",
+      "role": "Game mod/pack platform and companion tooling",
+      "planned_seats": 2,
+      "dossier": "products/Dino/DOSSIER.md",
+      "authorization": "not_granted_by_package"
+    },
+    {
+      "id": "PRD-WORLDSPHEREMOD",
+      "repository_id": 1241972761,
+      "name": "WorldSphereMod",
+      "class": "product-or-lab",
+      "role": "Game-specific spherical/3D presentation mod",
+      "planned_seats": 2,
+      "dossier": "products/WorldSphereMod/DOSSIER.md",
+      "authorization": "not_granted_by_package"
+    },
+    {
+      "id": "PRD-CIVICWARFARE",
+      "repository_id": 1308570444,
+      "name": "CivicWarfare",
+      "class": "product-or-lab",
+      "role": "Distributed game/mod scenario with potentially private producer tools",
+      "planned_seats": 2,
+      "dossier": "products/CivicWarfare/DOSSIER.md",
+      "authorization": "not_granted_by_package"
+    },
+    {
+      "id": "PRD-MELOSVIZ",
+      "repository_id": 1262466303,
+      "name": "Melosviz",
+      "class": "product-or-lab",
+      "role": "Music visualization authoring and rendering application",
+      "planned_seats": 2,
+      "dossier": "products/Melosviz/DOSSIER.md",
+      "authorization": "not_granted_by_package"
+    },
+    {
+      "id": "SUP-PHENOINFRA",
+      "repository_id": 1220334053,
+      "name": "PhenoInfra",
+      "class": "pooled-foundation",
+      "role": "Compute/runtime and operational infrastructure",
+      "planned_seats": 0,
+      "dossier": "products/PhenoInfra/DOSSIER.md",
+      "authorization": "not_granted_by_package"
+    },
+    {
+      "id": "SUP-PHENOTOOLING",
+      "repository_id": 1220333985,
+      "name": "PhenoTooling",
+      "class": "pooled-foundation",
+      "role": "Quality, developer workflow and absorbed tool capabilities",
+      "planned_seats": 0,
+      "dossier": "products/PhenoTooling/DOSSIER.md",
+      "authorization": "not_granted_by_package"
+    },
+    {
+      "id": "SUP-PHENOAI",
+      "repository_id": 1201987910,
+      "name": "PhenoAI",
+      "class": "pooled-foundation",
+      "role": "AI/framework/device capability collection pending consolidation",
+      "planned_seats": 0,
+      "dossier": "products/PhenoAI/DOSSIER.md",
+      "authorization": "not_granted_by_package"
+    },
+    {
+      "id": "SUP-PHENOGFX",
+      "repository_id": 1271708536,
+      "name": "PhenoGfx",
+      "class": "pooled-foundation",
+      "role": "Shared graphics/data/FFI components",
+      "planned_seats": 0,
+      "dossier": "products/PhenoGfx/DOSSIER.md",
+      "authorization": "not_granted_by_package"
+    },
+    {
+      "id": "SUP-PHENOREGISTRY",
+      "repository_id": 1201113097,
+      "name": "PhenoRegistry",
+      "class": "supporting-surface",
+      "role": "Curated portfolio identity and ownership projection",
+      "planned_seats": 0,
+      "dossier": "products/PhenoRegistry/DOSSIER.md",
+      "authorization": "not_granted_by_package"
+    },
+    {
+      "id": "SUP-PHENODESIGN",
+      "repository_id": 1169864396,
+      "name": "PhenoDesign",
+      "class": "supporting-surface",
+      "role": "Shared visual identity, tokens, components and creative-source custody",
+      "planned_seats": 0,
+      "dossier": "products/PhenoDesign/DOSSIER.md",
+      "authorization": "not_granted_by_package"
+    },
+    {
+      "id": "SUP-KOOSHAPARI",
+      "repository_id": 1349458262,
+      "name": "KooshaPari",
+      "class": "supporting-surface",
+      "role": "Public portfolio and landing/publication consumer",
+      "planned_seats": 0,
+      "dossier": "products/KooshaPari/DOSSIER.md",
+      "authorization": "not_granted_by_package"
+    },
+    {
+      "id": "SUP-PHENOAPPS",
+      "repository_id": 1272990345,
+      "name": "PhenoApps",
+      "class": "conditional-target",
+      "role": "Possible bounded application collection",
+      "planned_seats": 0,
+      "dossier": "products/PhenoApps/DOSSIER.md",
+      "authorization": "not_granted_by_package"
+    },
+    {
+      "id": "SUP-AGENTORA-CAPABILITY",
+      "repository_id": null,
+      "name": "Agentora-capability",
+      "class": "absorbed-capability",
+      "role": "Agent framework API after absorption",
+      "planned_seats": 0,
+      "dossier": "products/Agentora-capability/DOSSIER.md",
+      "authorization": "not_granted_by_package"
+    }
+  ]
+}

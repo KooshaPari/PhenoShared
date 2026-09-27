@@ -1,0 +1,41 @@
+name: Runner Probe
+
+on:
+  workflow_dispatch:
+
+jobs:
+  probe-selfhosted-runner:
+    runs-on: [self-hosted, podman, wsl2, fedora44]
+    steps:
+      - name: Identity
+        run: |
+          echo "::group::runner identity"
+          echo "runner_name=$RUNNER_NAME"
+          echo "runner_os=$RUNNER_OS"
+          echo "runner_arch=$RUNNER_ARCH"
+          echo "runner_env=$RUNNER_ENVIRONMENT"
+          echo "::endgroup::"
+      - name: Host
+        run: |
+          echo "::group::host"
+          uname -a
+          cat /etc/os-release | head -3
+          echo "::endgroup::"
+      - name: Container tooling
+        run: |
+          echo "::group::podman"
+          podman --version || true
+          podman-compose --version || true
+          podman info --format 'rootless={{.Host.Security.Rootless}}' 2>/dev/null || true
+          echo "::endgroup::"
+      - name: GitHub tooling
+        run: |
+          echo "::group::gh"
+          gh --version 2>/dev/null | head -1 || true
+          echo "hostname=$(hostname)"
+          echo "::endgroup::"
+      - name: Reachability from runner to host service
+        run: |
+          echo "::group::x-pheno-studio via tunnel"
+          curl -sS -o /dev/null -w "wsl_loopback_status=%{http_code}\n" --max-time 5 http://127.0.0.1:8080/healthz || echo "loopback not reachable (expected unless host forwards)"
+          echo "::endgroup::"

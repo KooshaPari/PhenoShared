@@ -1,0 +1,104 @@
+<div id="readme" class="md" data-path="README.md"><article class="markdown-body entry-content container-lg" itemprop="text"><div class="markdown-heading" dir="auto"><h1 class="heading-element" dir="auto">hwLedger</h1><a id="user-content-hwledger" class="anchor" aria-label="Permalink: hwLedger" href="#hwledger"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a></div>
+<p dir="auto"><em>LLM capacity planner + fleet ledger + desktop inference runtime.</em></p>
+<p dir="auto"><strong>Status:</strong> pre-alpha, Phase 0 bootstrap. See <a href="./PLAN.md">PLAN.md</a> for the implementation roadmap.</p>
+<p dir="auto">hwLedger is an Apache-2.0 desktop app + agent/server pair that:</p>
+<ol dir="auto">
+<li><strong>Plans</strong> VRAM and throughput for any HF / GGUF / MLX / Ollama model, correctly handling dense, MoE, MLA, GQA, sliding-window, SSM/Mamba, and hybrid-attention architectures — with a slider UX over a live per-layer breakdown.</li>
+<li><strong>Reconciles</strong> predictions against live telemetry from MLX, mistral.rs, llama.cpp, vLLM, or TGI.</li>
+<li><strong>Runs</strong> inference locally on Apple Silicon via a forked oMlx sidecar with SSD-paged KV cache.</li>
+<li><strong>Ledgers</strong> a heterogeneous fleet — local NVIDIA/AMD boxes, Apple Silicon laptops, cheap cloud rentals (Vast.ai, RunPod, Lambda) — with a shared event-sourced audit log, dispatch planner, and spot-price-aware cost model.</li>
+<li>Ships as <strong>per-OS native GUIs</strong> (SwiftUI / WinUI 3 / Qt 6 + Slint) over a shared Rust FFI core.</li>
+</ol>
+<blockquote>
+<p dir="auto"><em>A hobbyist-sized fleet with enterprise bones.</em></p>
+</blockquote>
+<div class="markdown-heading" dir="auto"><h2 class="heading-element" dir="auto">Quickstart</h2><a id="user-content-quickstart" class="anchor" aria-label="Permalink: Quickstart" href="#quickstart"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a></div>
+<p dir="auto">Install the CLI from source — this is the fastest path to a working hwLedger today:</p>
+<div class="highlight highlight-source-shell notranslate position-relative overflow-auto" dir="auto" data-snippet-clipboard-copy-content="cargo install --path crates/hwledger-cli
+hwledger --help"><pre>cargo install --path crates/hwledger-cli
+hwledger --help</pre></div>
+<blockquote>
+<p dir="auto"><strong>macOS DMG note:</strong> Native macOS DMG distribution is currently blocked on Apple Developer certificate renewal — use the Streamlit fallback at <code>apps/streamlit/</code> or the CLI above for now.</p>
+</blockquote>
+<div class="markdown-heading" dir="auto"><h2 class="heading-element" dir="auto">Why</h2><a id="user-content-why" class="anchor" aria-label="Permalink: Why" href="#why"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a></div>
+<p dir="auto">Every existing public VRAM calculator (HF Accelerate, can-it-run-llm, LM Studio's gauge) gets MoE and MLA wrong — they under-count KV cache and over-count MoE throughput. hwLedger's math core is architecture-keyed: it dispatches per <code>AttentionKind</code> (MHA / GQA / MQA / MLA / Sliding / SSM / Hybrid / Sink) and treats resident-vs-active parameters separately for MoE. See <a href="./PLAN.md#5-math-core-51-is-the-products-soul">PLAN.md §5</a>.</p>
+<div class="markdown-heading" dir="auto"><h2 class="heading-element" dir="auto">Architecture</h2><a id="user-content-architecture" class="anchor" aria-label="Permalink: Architecture" href="#architecture"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a></div>
+<ul dir="auto">
+<li><strong>Core</strong>: Rust workspace (<code>hwledger-core</code>, <code>-arch</code>, <code>-ingest</code>, <code>-probe</code>, <code>-inference</code>, <code>-ledger</code>, <code>-fleet-proto</code>, <code>-agent</code>, <code>-server</code>, <code>-cli</code>, <code>-ffi</code>)</li>
+<li><strong>Sidecar</strong>: <code>sidecars/omlx-fork/</code> — fat fork of <a href="https://github.com/jundot/omlx">jundot/omlx</a>, Apache-2.0</li>
+<li><strong>Native apps</strong>: <code>apps/macos/</code> (SwiftUI + UniFFI + XCFramework), <code>apps/windows/</code> (WinUI 3 + .NET 9 + csbindgen), <code>apps/linux-qt/</code> (Qt 6 + cxx-qt + QML), <code>apps/linux-slint/</code> (Rust-native)</li>
+<li><strong>Fleet wire</strong>: Axum + rustls mTLS for agents; russh + deadpool for SSH agentless; reqwest for Vast/RunPod/Lambda/Modal; <code>tailscale status --json</code> for tailnet discovery</li>
+</ul>
+<p dir="auto">See the component diagram in <a href="./PLAN.md#41-component-map">PLAN.md §4.1</a>.</p>
+<div class="markdown-heading" dir="auto"><h2 class="heading-element" dir="auto">Dev setup</h2><a id="user-content-dev-setup" class="anchor" aria-label="Permalink: Dev setup" href="#dev-setup"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a></div>
+<p dir="auto">One-liner to build FFI + launch server, docs-site, and Streamlit:</p>
+<div class="highlight highlight-source-shell notranslate position-relative overflow-auto" dir="auto" data-snippet-clipboard-copy-content="cargo run -p hwledger-devtools -- up"><pre>cargo run -p hwledger-devtools -- up</pre></div>
+<p dir="auto">See <a href="./docs-site/getting-started/dev-setup.md">docs-site/getting-started/dev-setup.md</a> for ports, log locations, and troubleshooting (FFI auto-build, Swift "engine missing" sheet, streamlit hot-reload).</p>
+<div class="markdown-heading" dir="auto"><h2 class="heading-element" dir="auto">Documentation</h2><a id="user-content-documentation" class="anchor" aria-label="Permalink: Documentation" href="#documentation"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a></div>
+<ul dir="auto">
+<li><a href="./PLAN.md">PLAN.md</a> — phased WBS + DAG + risks + reuse opportunities</li>
+<li><a href="./PRD.md">PRD.md</a> — product requirements (forthcoming)</li>
+<li><a href="./ADR.md">ADR.md</a> — index of architecture decisions (see <code>docs/adr/</code>)</li>
+<li><a href="./CHARTER.md">CHARTER.md</a> — scope + principles (forthcoming)</li>
+<li><a href="./AGENTS.md">AGENTS.md</a> — AI-agent operating notes (forthcoming)</li>
+<li><a href="./docs/research/">docs/research/</a> — archived Haiku research briefs (oMlx, MLX IPC, inference engines, KV cache formulas, config ingestion, GPU telemetry, Swift/WinUI/Qt FFI, fleet wire, competitor survey)</li>
+</ul>
+<div class="markdown-heading" dir="auto"><h2 class="heading-element" dir="auto">Development status</h2><a id="user-content-development-status" class="anchor" aria-label="Permalink: Development status" href="#development-status"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a></div>
+<markdown-accessiblity-table><table>
+<thead>
+<tr>
+<th>Phase</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>P0 Foundation</td>
+<td>in progress</td>
+</tr>
+<tr>
+<td>P1 Math core</td>
+<td>planned</td>
+</tr>
+<tr>
+<td>P2 Ingestion + probe</td>
+<td>planned</td>
+</tr>
+<tr>
+<td>P3 macOS GUI MVP</td>
+<td>planned</td>
+</tr>
+<tr>
+<td>P4 Inference</td>
+<td>planned (macOS only in MVP)</td>
+</tr>
+<tr>
+<td>P5 Fleet</td>
+<td>planned</td>
+</tr>
+<tr>
+<td>P6 Windows GUI</td>
+<td>deferred</td>
+</tr>
+<tr>
+<td>P7 Linux GUI</td>
+<td>deferred</td>
+</tr>
+<tr>
+<td><strong>WP21 macOS Release</strong></td>
+<td><strong>code complete</strong> (waiting notarization creds)</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<p dir="auto">Tracked in AgilePlus: feature <code>hwledger-v1-macos-mvp</code> (see <code>agileplus status</code>).</p>
+<p dir="auto">WP21 deliverables (macOS distribution):</p>
+<ul dir="auto">
+<li>Codesigning infrastructure: READY (Developer ID cert installed, entitlements defined, scripts complete)</li>
+<li>GitHub Actions release workflow: READY (release.yml deployed)</li>
+<li>DMG + notarization flow: READY (scripts deployed, awaiting App Store Connect credentials)</li>
+<li>Sparkle integration: READY (Package.swift updated, updater wired, key generation documented)</li>
+<li>Documentation: READY (docs/reports/WP21-APPLE-DEV-SECRETS.md with step-by-step setup)</li>
+</ul>
+<div class="markdown-heading" dir="auto"><h2 class="heading-element" dir="auto">License</h2><a id="user-content-license" class="anchor" aria-label="Permalink: License" href="#license"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a></div>
+<p dir="auto">Apache-2.0. See <a href="./LICENSE">LICENSE</a>.</p>
+</article></div>

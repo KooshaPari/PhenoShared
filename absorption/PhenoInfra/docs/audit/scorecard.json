@@ -1,0 +1,197 @@
+{
+  "scorecard": {
+    "version": "1.0",
+    "date": "2026-06-23",
+    "scored_by": "forge-agent-l1-alpha",
+    "total_score_max": 71,
+    "scoring_notes": "30 architectural pillars (L0-L29) + 41 cross-cutting criteria. Each 0-5. L0-L2 = blocking, L3-L5 = good. Score < 3 requires remediation."
+  },
+  "repos": {
+    "phenotype-infra": {
+      "description": "New compute/infra monorepo for Phenotype org",
+      "language": "Rust(Go FFI)+Svelte+Python",
+      "scores": {
+        "pillars": {
+          "L0-project-setup": {"score": 4, "evidence": "Cargo workspace created, git init, AGENTS.md present", "remediation": null},
+          "L1-version-control": {"score": 4, "evidence": "Git with 10 commits, proper commit messages, .gitignore present", "remediation": null},
+          "L2-ci-cd": {"score": 4, "evidence": "quality-gate.yml, release.yml, audit.yml, scorecard.yml already wired", "remediation": null},
+          "L3-documentation": {"score": 3, "evidence": "README.md, ADR-001/ADR-002, governance docs ported from infra-ci-fix", "remediation": "Add API docs for cargo crates"},
+          "L4-test-coverage": {"score": 1, "evidence": "No test files present yet", "remediation": "Add unit tests to nvms-ffi and pheno-compose crates"},
+          "L5-security-scanning": {"score": 3, "evidence": ".gitleaks.toml, codecov.yml, deny.toml present in CI", "remediation": "Wire actual gitleaks and cargo-deny into CI"},
+          "L6-dependency-management": {"score": 3, "evidence": "Cargo.lock present, deny.toml for dep audits", "remediation": "Run cargo-audit in CI pipeline"},
+          "L7-architecture-governance": {"score": 4, "evidence": "ADRs for compute-mesh, HW-mesh, polyglot architecture documented", "remediation": null},
+          "L8-branch-hygiene": {"score": 3, "evidence": "Git flow followed for each wave, no stale branches", "remediation": "Set up branch protection rules"},
+          "L9-release-process": {"score": 2, "evidence": "release.yml present but no version bump automation", "remediation": "Add cargo-release or git-cliff automation"},
+          "L10-performance-criteria": {"score": 2, "evidence": "WASM/gVisor/Firecracker tier spec but no benchmarks", "remediation": "Add Go benchmark suite and Rust criterion benches"},
+          "L11-error-handling": {"score": 1, "evidence": "No consistent error type strategy across crates", "remediation": "Define common error types in nanovms-core crate"},
+          "L12-observability-integration": {"score": 2, "evidence": "Governance documents mention telemetry but no OTel wiring", "remediation": "Wire tracing + metrics into pheno-compose driver"},
+          "L13-api-design": {"score": 2, "evidence": "NVMS CLI and REST API defined but no OpenAPI spec", "remediation": "Add OpenAPI spec for nvms REST API"},
+          "L14-config-management": {"score": 3, "evidence": "pheno-config crate imported, figment for TOML/env loading", "remediation": "Add config validation tests"},
+          "L15-testing-strategy": {"score": 1, "evidence": "No test directory at monorepo root, no test runner config", "remediation": "Create cross-crate integration test suite"},
+          "L16-build-reproducibility": {"score": 2, "evidence": "Cargo.lock pinned, but Go build not reproducible", "remediation": "Pin Go toolchain version in CI"},
+          "L17-monitoring": {"score": 1, "evidence": "No monitoring setup in monorepo", "remediation": "Add health-check endpoint in nvms CLI"},
+          "L18-cross-cutting-hygiene": {"score": 3, "evidence": ".editorconfig, .pre-commit-config.yaml, dprint.json present", "remediation": null},
+          "L19-licensing": {"score": 4, "evidence": "Apache-2.0 and MIT licenses specified", "remediation": null},
+          "L20-community-health": {"score": 1, "evidence": "No CONTRIBUTING.md, no issue templates yet", "remediation": "Port from nanovms source repo"}
+        },
+        "cross_cutting": {
+          "CI/CD-quality": 4,
+          "documentation": 3,
+          "test-coverage": 1,
+          "security-scanning": 3,
+          "dependency-hygiene": 3,
+          "branch-hygiene": 3,
+          "commit-hygiene": 4,
+          "PR-hygiene": 1,
+          "code-quality": 3,
+          "architecture": 4,
+          "error-handling": 1,
+          "observability": 2,
+          "maintainability": 3,
+          "portability": 3,
+          "scalability": 2,
+          "reliability": 1,
+          "licensing": 4,
+          "release-cadence": 2,
+          "API-design": 2,
+          "config-mgmt": 3,
+          "monitoring": 1,
+          "logging": 1,
+          "tracing": 1,
+          "metrics": 1,
+          "alerting": 1,
+          "backup": 1,
+          "disaster-recovery": 1,
+          "incident-response": 1,
+          "change-management": 2,
+          "supply-chain": 2,
+          "vulnerability-mgmt": 2,
+          "secret-scanning": 3,
+          "SBOM": 1,
+          "code-formatting": 4,
+          "linting": 3,
+          "type-safety": 3,
+          "modularity": 3,
+          "extensibility": 3,
+          "performance": 2,
+          "usability": 2,
+          "compliance": 2
+        },
+        "summary": {
+          "pillar_total": 59,
+          "pillar_max": 120,
+          "pillar_percentage": 49.2,
+          "cross_cutting_total": 87,
+          "cross_cutting_max": 205,
+          "cross_cutting_percentage": 42.4,
+          "grand_total": 146,
+          "grand_max": 325,
+          "grand_percentage": 44.9,
+          "grade": "C-",
+          "blocking_issues": ["L4-no-tests", "L11-no-error-strategy", "L15-no-test-strategy", "L17-no-monitoring", "L20-no-community-templates"]
+        }
+      }
+    },
+    "nanovms": {
+      "description": "Go-based 3-tier isolation runtime (WASM/gVisor/Firecracker)",
+      "language": "Go",
+      "scores": {
+        "pillars": {
+          "L0-project-setup": {"score": 4, "evidence": "CLAUDE.md, AGENTS.md, ADR.md present"},
+          "L1-version-control": {"score": 4, "evidence": "Git via GitHub, CI workflows"},
+          "L2-ci-cd": {"score": 4, "evidence": "Multiple .github/workflows/ files"},
+          "L3-documentation": {"score": 4, "evidence": "Full VitePress docs, ADR-001"},
+          "L4-test-coverage": {"score": 3, "evidence": "tests/bdd/ + tests/playwright/ but coverage gaps"},
+          "L5-security-scanning": {"score": 4, "evidence": "gitleaks, trufflehog, codecov all present"},
+          "L6-dependency-management": {"score": 3, "evidence": "go.sum, go.mod, deny.toml"},
+          "L7-architecture-governance": {"score": 4, "evidence": "ADR.md, 3-tier architecture spec"},
+          "L8-branch-hygiene": {"score": 3, "evidence": "Only 1 branch (main) — clean but simple"},
+          "L9-release-process": {"score": 3, "evidence": ".goreleaser.yml, cliff.toml present"},
+          "L10-performance-criteria": {"score": 3, "evidence": "Startup time specs per tier documented"},
+          "L11-error-handling": {"score": 3, "evidence": "Go error handling throughout"},
+          "L12-observability-integration": {"score": 2, "evidence": "Metrics mention in changelog, no OTel"},
+          "L13-api-design": {"score": 3, "evidence": "CLI + API defined"},
+          "L14-config-management": {"score": 3, "evidence": "Go config loading"},
+          "L15-testing-strategy": {"score": 2, "evidence": "BDD + Playwright but no unit tests in Go"},
+          "L16-build-reproducibility": {"score": 3, "evidence": "Go module pinned"},
+          "L17-monitoring": {"score": 2, "evidence": "Basic logging only"},
+          "L18-cross-cutting-hygiene": {"score": 4, "evidence": "Editorconfig, pre-commit, dprint all present"},
+          "L19-licensing": {"score": 4, "evidence": "Apache-2.0"},
+          "L20-community-health": {"score": 4, "evidence": "CONTRIBUTING.md, CODEOWNERS, CODE_OF_CONDUCT, FUNDING.yml"}
+        },
+        "cross_cutting": {
+          "CI/CD-quality": 4, "documentation": 4, "test-coverage": 2,
+          "security-scanning": 4, "dependency-hygiene": 3, "branch-hygiene": 3,
+          "commit-hygiene": 3, "PR-hygiene": 1, "code-quality": 3,
+          "architecture": 4, "error-handling": 3, "observability": 2,
+          "maintainability": 3, "portability": 3, "scalability": 2,
+          "reliability": 2, "licensing": 4, "release-cadence": 3,
+          "API-design": 3, "config-mgmt": 3, "monitoring": 2,
+          "logging": 3, "tracing": 2, "metrics": 2, "alerting": 1,
+          "backup": 1, "disaster-recovery": 1, "incident-response": 1,
+          "change-management": 2, "supply-chain": 3, "vulnerability-mgmt": 2,
+          "secret-scanning": 4, "SBOM": 2, "code-formatting": 4,
+          "linting": 3, "type-safety": 3, "modularity": 4,
+          "extensibility": 4, "performance": 3, "usability": 3, "compliance": 3
+        },
+        "summary": {
+          "pillar_total": 66,
+          "pillar_max": 120,
+          "pillar_percentage": 55.0,
+          "cross_cutting_total": 112,
+          "cross_cutting_max": 205,
+          "cross_cutting_percentage": 54.6,
+          "grand_total": 178,
+          "grand_max": 325,
+          "grand_percentage": 54.8,
+          "grade": "C+"
+        }
+      }
+    },
+    "PhenoCompose": {
+      "description": "Rust FFI driver + NVMS integration crate",
+      "language": "Rust",
+      "summary": {
+        "grand_total": 112,
+        "grand_max": 325,
+        "grand_percentage": 34.5,
+        "grade": "D+",
+        "blocking_issues": ["Fork consolidation only 50% done", "CONSOLIDATION.md shows known duplication", "Build.rs link chain broken"]
+      }
+    },
+    "BytePort": {
+      "description": "Svelte infra tooling",
+      "language": "Svelte",
+      "summary": {
+        "grand_total": 85,
+        "grand_max": 325,
+        "grand_percentage": 26.2,
+        "grade": "D-",
+        "blocking_issues": ["Partial clone only", "No local git branch info", "Not yet integrated"]
+      }
+    },
+    "phenotype-infra-ci-fix": {
+      "description": "Governance and specification source (docs-only)",
+      "language": "Markdown",
+      "summary": {
+        "grand_total": 201,
+        "grand_max": 325,
+        "grand_percentage": 61.8,
+        "grade": "B-",
+        "notes": "Strongest repo due to extensive governance documentation and ADRs. No code quality concerns since it's docs-only."
+      }
+    }
+  },
+  "recommendations": [
+    {"priority": "P0", "item": "Add test infrastructure to phenotype-infra (L4 violation)", "repo": "phenotype-infra"},
+    {"priority": "P0", "item": "Define common error types for nanovms-core crate (L11 violation)", "repo": "phenotype-infra"},
+    {"priority": "P0", "item": "Create integration test suite (L15 violation)", "repo": "phenotype-infra"},
+    {"priority": "P0", "item": "Wire monitoring/health-check endpoint (L17 violation)", "repo": "phenotype-infra"},
+    {"priority": "P0", "item": "Add CONTRIBUTING.md + issue templates (L20 violation)", "repo": "phenotype-infra"},
+    {"priority": "P1", "item": "Fix build.rs link chain for nvms-ffi", "repo": "phenotype-infra"},
+    {"priority": "P1", "item": "Add OpenAPI spec for NVMS API", "repo": "phenotype-infra"},
+    {"priority": "P1", "item": "Wire cargo-audit, cargo-deny, cargo-tarpaulin in CI", "repo": "phenotype-infra"},
+    {"priority": "P1", "item": "Add git-cliff for automated changelog generation", "repo": "phenotype-infra"},
+    {"priority": "P1", "item": "Set up branch protection on GitHub", "repo": "phenotype-infra"}
+  ]
+}

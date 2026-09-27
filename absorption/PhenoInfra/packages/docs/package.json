@@ -1,0 +1,37 @@
+{
+  "name": "@phenotype/docs",
+  "version": "0.1.0",
+  "private": false,
+  "type": "module",
+  "description": "Shared Phenotype VitePress documentation theme, config builder, and utilities",
+  "exports": {
+    "./theme": "./src/theme/index.ts",
+    "./config": "./src/config/index.ts",
+    "./utils": "./src/utils/index.ts",
+    "./types": "./src/types/index.ts",
+    "./css/custom.css": "./src/css/custom.css"
+  },
+  "peerDependencies": {
+    "vitepress": "^1.0.0"
+  },
+  "dependencies": {
+    "@phenotype/design": "github:KooshaPari/phenoDesign",
+    "vue": "^3.5.0"
+  },
+  "keywords": [
+    "phenotype",
+    "vitepress",
+    "theme",
+    "documentation"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/KooshaPari/phenodocs.git",
+    "directory": "packages/docs"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com",
+    "access": "public"
+  }
+}

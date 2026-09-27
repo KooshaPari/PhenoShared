@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-label="BytePort logo">
+  <title>BytePort</title>
+  <desc>Hand-authored BytePort brand mark: port/socket silhouette with 2x4 byte dots in teal-on-midnight glass palette.</desc>
+  <defs>
+    <linearGradient id="shell" x1="0" y1="60" x2="0" y2="452">
+      <stop offset="0%" stop-color="#1f3e3a"/>
+      <stop offset="45%" stop-color="#21403c"/>
+      <stop offset="100%" stop-color="#090a0c"/>
+    </linearGradient>
+    <linearGradient id="cavity" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0f1618"/>
+      <stop offset="100%" stop-color="#090a0c"/>
+    </linearGradient>
+    <radialGradient id="rimGlow" cx="32%" cy="18%" r="72%">
+      <stop offset="0%" stop-color="#95ccc8" stop-opacity="0.26"/>
+      <stop offset="100%" stop-color="#95ccc8" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="soft" x="-25%" y="-25%" width="150%" height="150%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="8"/>
+    </filter>
+    <filter id="softInset" x="-8%" y="-8%" width="116%" height="116%">
+      <feColorMatrix type="matrix" values="
+        1 0 0 0 0
+        0 1 0 0 0
+        0 0 1 0 0
+        0 0 0 0.96 0"/>
+    </filter>
+  </defs>
+
+  <rect x="88" y="80" width="336" height="352" rx="74" ry="74" fill="#090a0c" fill-opacity="0.22" filter="url(#soft)"/>
+  <g filter="url(#softInset)">
+    <rect x="98" y="90" width="316" height="332" rx="68" ry="68" fill="url(#shell)"/>
+    <rect x="130" y="122" width="252" height="268" rx="56" ry="56" fill="url(#cavity)"/>
+
+    <rect x="140" y="82" width="232" height="54" rx="28" ry="28" fill="url(#shell)"/>
+    <rect x="164" y="60" width="184" height="30" rx="15" ry="15" fill="#95ccc8" fill-opacity="0.56"/>
+
+    <rect x="158" y="396" width="196" height="34" rx="17" ry="17" fill="url(#shell)" fill-opacity="0.92"/>
+    <rect x="170" y="404" width="172" height="18" rx="9" ry="9" fill="#090a0c" fill-opacity="0.78"/>
+
+    <rect x="182" y="130" width="148" height="16" rx="8" fill="#90d0cb" fill-opacity="0.16"/>
+    <rect x="182" y="156" width="148" height="10" rx="5" fill="#7ebab5" fill-opacity="0.18"/>
+    <rect x="182" y="176" width="148" height="7" rx="4" fill="#95ccc8" fill-opacity="0.20"/>
+    <rect x="182" y="188" width="148" height="6" rx="3" fill="#7ebab5" fill-opacity="0.17"/>
+
+    <g fill="#7ebab5">
+      <circle cx="188" cy="236" r="12"/>
+      <circle cx="232" cy="236" r="12"/>
+      <circle cx="276" cy="236" r="12"/>
+      <circle cx="320" cy="236" r="12"/>
+      <circle cx="188" cy="272" r="12"/>
+      <circle cx="232" cy="272" r="12"/>
+      <circle cx="276" cy="272" r="12"/>
+      <circle cx="320" cy="272" r="12"/>
+    </g>
+
+    <g fill="#95ccc8" opacity="0.78">
+      <circle cx="200" cy="236" r="4"/>
+      <circle cx="244" cy="236" r="4"/>
+      <circle cx="288" cy="236" r="4"/>
+      <circle cx="332" cy="236" r="4"/>
+      <circle cx="200" cy="272" r="4"/>
+      <circle cx="244" cy="272" r="4"/>
+      <circle cx="288" cy="272" r="4"/>
+      <circle cx="332" cy="272" r="4"/>
+    </g>
+
+    <circle cx="256" cy="254" r="126" fill="none" stroke="url(#rimGlow)" stroke-width="2"/>
+  </g>
+</svg>

@@ -1,0 +1,21 @@
+---
+# site.yml — orchestrates full oci-primary bringup.
+# Usage:
+#   ansible-playbook -i ../inventory.yml -e @../group_vars/oci_primary.yml site.yml
+#
+# Order is intentional:
+#   1. common    — base OS, repos, firewall, swap, tailscale+cloudflared binaries
+#   2. tailscale — join mesh (need this before we can ansible via MagicDNS on reruns)
+#   3. caddy     — front proxy, needs CF_API_TOKEN for ACME DNS-01
+#   4. cloudflared — public ingress, depends on Caddy being up on :443
+#   5. forgejo   — git + Actions
+#   6. woodpecker — CI, OAuths against forgejo
+#   7. vaultwarden — credentials store
+
+- import_playbook: common.yml
+- import_playbook: install-tailscale.yml
+- import_playbook: install-caddy.yml
+- import_playbook: install-cloudflared.yml
+- import_playbook: install-forgejo.yml
+- import_playbook: install-woodpecker.yml
+- import_playbook: install-vaultwarden.yml

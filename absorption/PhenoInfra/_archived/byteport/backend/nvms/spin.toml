@@ -1,0 +1,57 @@
+spin_manifest_version = 2
+
+[application]
+name = "nvms"
+version = "0.1.0"
+authors = ["KooshaPari <kooshapari@gmail.com>"]
+description = "UI Gen Config Parse and Systems builder IAC Platform"
+
+[[trigger.http]]
+route = "/..."
+component = "nvms"
+
+[component.nvms]
+source = "main.wasm"
+environment = {ENCRYPTION_KEY='t1rSGxkBSy38s8+JNLvHkvJAax4zO/KRsli27VSu6Ks=', SERVICE_KEY="69438bb4a39c6e5ad86678846642a5c6f0b8a0299d467c40d674722e46805bcb"}
+allowed_outbound_hosts = ["*://*:*","http://self"]
+[component.nvms.build]
+command = "tinygo build -target=wasip1 -gc=leaking -no-debug -o main.wasm main.go"
+watch = ["**/*.go", "go.mod"]
+
+[[trigger.http]]
+route = "/provision"
+component = "provisioner"
+
+[component.provisioner]
+source = "Provisioner/main.wasm"
+environment = {ENCRYPTION_KEY='t1rSGxkBSy38s8+JNLvHkvJAax4zO/KRsli27VSu6Ks=', SERVICE_KEY="69438bb4a39c6e5ad86678846642a5c6f0b8a0299d467c40d674722e46805bcb"}
+allowed_outbound_hosts = ["*://api.github.com:*", "*://github.com:*", "*://*.githubusercontent.com:*", "*://*.github.com:*","http://self"]
+[component.provisioner.build]
+command = "tinygo build -target=wasip1 -gc=leaking -no-debug -o main.wasm main.go"
+workdir = "Provisioner"
+watch = ["**/*.go", "go.mod"]
+
+[[trigger.http]]
+route = "/generate"
+component = "demonstrator"
+
+[component.demonstrator]
+source = "Demonstrator/main.wasm"
+environment = {ENCRYPTION_KEY='t1rSGxkBSy38s8+JNLvHkvJAax4zO/KRsli27VSu6Ks=', SERVICE_KEY="69438bb4a39c6e5ad86678846642a5c6f0b8a0299d467c40d674722e46805bcb"}
+allowed_outbound_hosts = ["http://self","https://api.openai.com","*://*:*"]
+[component.demonstrator.build]
+command = "tinygo build -target=wasip1 -gc=leaking -no-debug -o main.wasm main.go"
+workdir = "Demonstrator"
+watch = ["**/*.go", "go.mod"]
+
+[[trigger.http]]
+route = "/build"
+component = "builder"
+
+[component.builder]
+source = "Builder/main.wasm"
+allowed_outbound_hosts = []
+[component.builder.build]
+command = "tinygo build -target=wasi -gc=leaking -no-debug -o main.wasm main.go"
+workdir = "Builder"
+watch = ["**/*.go", "go.mod"]

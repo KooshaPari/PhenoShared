@@ -1,0 +1,22 @@
+FROM: aws-ubuntu:minimal
+NAME: blog
+
+SERVICES:
+  frontend:
+    PATH: ./frontend
+    BUILD: npm run build
+    PORT: 3000
+  
+  backend:
+    PATH: ./backend
+    BUILD: npm run build
+    PORT: 8080
+    ENV:
+      - DATABASE_URL=${aws:rds:url}
+
+AWS:
+  REGION: us-east-1
+  SERVICES:
+    - TYPE: RDS
+      ENGINE: postgres
+      SIZE: db.t3.micro

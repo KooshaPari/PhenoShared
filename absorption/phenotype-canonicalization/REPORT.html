@@ -1,0 +1,760 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Phenotype — Canonical Engineering Audit &amp; Agent Handoff</title><style>
+:root{--ink:#18262a;--muted:#526269;--accent:#28756e;--edge:#d9e4e4;--paper:#fff;--wash:#f2f6f5}
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:24px}body{margin:0;color:var(--ink);background:var(--wash);font:16px/1.65 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+header{background:#0f181b;color:#f6f5f5;padding:34px max(5vw,22px) 32px;border-bottom:6px solid #7ebab5}.eyebrow{letter-spacing:.13em;font-size:12px;font-weight:750;color:#b5d9d5;text-transform:uppercase}header h1{font-size:clamp(28px,4.3vw,47px);line-height:1.12;max-width:940px;margin:14px 0 18px}header p{margin:0;max-width:900px;color:#cfdddd}.status{display:inline-block;margin-top:20px;border:1px solid #657c7d;padding:5px 12px;font-size:12px;letter-spacing:.05em}
+.layout{max-width:1510px;margin:0 auto;display:grid;grid-template-columns:265px minmax(0,1fr);gap:35px;padding:32px max(3vw,18px)}aside{align-self:start;position:sticky;top:20px;max-height:calc(100vh - 40px);overflow:auto;font-size:13px;padding:7px 0}aside strong{font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted)}nav a{display:block;text-decoration:none;color:var(--muted);padding:6px 8px;border-left:2px solid transparent}nav a:hover{border-color:var(--accent);color:var(--accent);background:white}main{min-width:0;background:var(--paper);padding:32px 38px 65px;border:1px solid var(--edge)}main>h1{font-size:29px;line-height:1.3;margin-top:0}h2{font-size:24px;line-height:1.35;margin:46px 0 17px;padding-top:13px;border-top:1px solid var(--edge)}h3{font-size:18px;line-height:1.4;margin:29px 0 12px}p{margin:12px 0}a{color:var(--accent);text-underline-offset:3px}strong{font-weight:700}ul,ol{padding-left:25px}li{margin:5px 0}.source-ref{font-size:.86em;white-space:nowrap}code{font:0.88em/1.6 ui-monospace,SFMono-Regular,Consolas,monospace;background:#eff4f4;padding:2px 4px;overflow-wrap:anywhere}pre{background:#142328;color:#e2eeed;padding:18px;overflow:auto;border-radius:2px}pre code{background:none;padding:0;color:inherit;overflow-wrap:normal}.table-wrap{overflow-x:auto;border:1px solid var(--edge);margin:18px 0 25px}table{border-collapse:collapse;min-width:640px;width:100%;font-size:13px;line-height:1.5}th{text-align:left;background:#e7f0ef;padding:12px;vertical-align:top}td{padding:12px;border-top:1px solid var(--edge);vertical-align:top}tr:nth-child(even) td{background:#f9fbfb}blockquote{margin:20px 0;padding:5px 20px;border-left:4px solid #7ebab5;background:var(--wash)}hr{border:0;border-top:1px solid var(--edge);margin:35px 0}.footer{font-size:12px;padding:16px 0;color:var(--muted)}
+@media(max-width:1050px){.layout{grid-template-columns:1fr;padding:18px}aside{position:static;max-height:none}nav{display:flex;flex-wrap:wrap;gap:5px}nav a{border:1px solid var(--edge);padding:5px 8px}main{padding:25px 22px}}@media print{body{background:white;font-size:10pt}header{background:white;color:#18262a;padding:10px 0;border-bottom:2px solid #7ebab5}header p,.eyebrow{color:#18262a}header h1{font-size:25pt}.status{margin-top:10px}.layout{display:block;padding:0}aside{display:none}main{padding:0;border:none}h2,h3{break-after:avoid}table{font-size:8pt;min-width:0}.table-wrap{overflow:visible}tr{break-inside:avoid}a{color:inherit}pre{white-space:pre-wrap;background:#f2f6f5;color:#18262a}}
+</style></head><body><header><div class="eyebrow">Phenotype / Engineering Systems / September 16, 2026</div><h1>Canonical engineering.<br>Shared capabilities. Verified outcomes.</h1><p>Tooling, architecture patterns, consumer adoption and aggressive optimization—grounded in selected repository evidence and explicit decision rules.</p><div class="status">RESEARCH + IMPLEMENTATION HANDOFF · v0.1 · NOT A DEPLOYED FLEET POLICY</div></header><div class="layout"><aside><strong>Report contents</strong><nav><a href="#section-1">1. Diagnosis</a><a href="#section-4">2. Extend the existing authority; do not invent a competing one</a><a href="#section-5">3. The decision model</a><a href="#section-10">4. Canonical tooling selections</a><a href="#section-14">5. Shared architecture: thin products without a shared monolith</a><a href="#section-19">6. PhenoDocs, landings and design need product contracts</a><a href="#section-23">7. Canonicalize patterns, not only tools</a><a href="#section-24">8. Maximum exploration, measured production promotion</a><a href="#section-29">9. Missing-capability audit</a><a href="#section-30">10. Distribution and drift control</a><a href="#section-31">11. Execution order without governance paralysis</a><a href="#section-32">12. Metrics that would mean something</a><a href="#section-33">13. Completion and limits of this handoff</a><a href="#section-34">Source map</a></nav><p class="footer">Selected source review in 9 repositories.<br>46 identities discovered.<br>Full product builds and installed-consumer checks: not run.</p></aside><main><h1 id="section-0">Canonical engineering, shared consumption and outcome-driven optimization</h1>
+<p><strong>Phenotype · September 16, 2026 · Research and handoff v0.1</strong></p>
+<h2 id="section-1">1. Diagnosis</h2>
+<p>The problem is larger than inconsistent tool preferences. It is a broken chain between <strong>intent, decision, source ownership, selected implementation, actual consumer use, and independently verified outcome</strong>. A repository can mention the desired tool, contain its configuration, and still execute an old tool or fail to cover its own source. A shared capability can exist in several directories and still lack an identifiable release that a clean consumer can install.</p>
+<p>The audit found concrete examples of these failure modes. They justify an executable decision-and-adoption layer, but not an indiscriminate migration script or another giant governance application.</p>
+<h3 id="section-2">1.1 Evidence that changes the plan</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Finding</th>
+<th>What is directly visible</th>
+<th>Interpretation and required caution</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>F01 — conflicting Shared identities</strong></td>
+<td>PhenoShared's README describes PhenoMLX/OMLX; root npm manifest names <code>phenodocs</code>; Cargo identifies a substrate workspace with absorbed Fabric, Registry and Infra domains. <strong><a class="source-ref" href="#G01">[G01–G03]</a></strong></td>
+<td>Establish component boundaries and writer/release authority. Multiple roots can be intentional; the conflicting presentation is not proof that every component is broken.</td>
+</tr>
+<tr>
+<td><strong>F02/F03 — false-confidence typechecking</strong></td>
+<td>Tracera repeats six <code>-p</code> flags in a single compiler invocation. Its “native typecheck contract” test asserts that exact command. <strong><a class="source-ref" href="#G04">[G04, G05]</a></strong></td>
+<td>A text assertion does not establish project coverage. A local TypeScript 5.8.3 fixture reproduced last-project selection; run this canary with Tracera's actual pinned compiler and every component. <strong><a class="source-ref" href="#E01">[E01]</a></strong></td>
+</tr>
+<tr>
+<td><strong>F04 — a check repairs source</strong></td>
+<td>Tracera's <code>lint:stylelint</code> calls <code>lint:stylelint:fix</code> before checking. <strong><a class="source-ref" href="#G04">[G04]</a></strong></td>
+<td>Separate repair from verification. Explicit cache writes can be allowed; hidden source repair cannot be a prerequisite for claiming the original state passed.</td>
+</tr>
+<tr>
+<td><strong>F05 — actual tool drift</strong></td>
+<td>Tracera uses Oxlint/Oxfmt. HeliosLab's live scripts use Biome. OmniRoute's live lint command uses ESLint. <strong><a class="source-ref" href="#G04">[G04, G06, G07]</a></strong></td>
+<td>This is not merely search noise from historical documents. Still, preserve framework/plugin/upstream obligations until replacement coverage is demonstrated.</td>
+</tr>
+<tr>
+<td><strong>F06 — tool provenance gaps</strong></td>
+<td>PhenoDesign calls <code>oxfmt</code> without a direct declaration in the shown manifest; several tools use <code>latest</code>; <code>packageManager</code> is bare <code>bun</code>. <strong><a class="source-ref" href="#G08">[G08]</a></strong></td>
+<td>A lockfile or parent workspace can resolve these inputs. Require a cold installation and exact binary provenance instead of declaring failure from a manifest alone.</td>
+</tr>
+<tr>
+<td><strong>F07 — Python dimensions conflated</strong></td>
+<td>AgilePlus declares Python <code>&gt;=3.14</code> while Ruff targets <code>py312</code>. Portage already uses uv, Ruff and ty but declares a <code>&gt;=3.12</code> compatibility minimum. <strong><a class="source-ref" href="#G09">[G09, G10]</a></strong></td>
+<td>Minimum supported Python, lint syntax target, selected interpreter and runtime GIL state are separate facts.</td>
+</tr>
+<tr>
+<td><strong>F08 — MCP is present, not absent</strong></td>
+<td>AgilePlus and several Shared paths import FastMCP; Shared server READMEs refer to PhenoFastMCP. Similar server paths exist in separate trees. <strong><a class="source-ref" href="#G17">[G17–G20]</a></strong></td>
+<td>Resolve actual package source and writer ownership before making another wrapper. Similar excerpts are not enough to declare entire implementations duplicates.</td>
+</tr>
+<tr>
+<td><strong>F09 — unresolved shared CI</strong></td>
+<td>AgilePlus calls <code>phenotype-tooling/.github/workflows/sbom-monthly.yml@main</code>. The old provider name returns 404 through this connection. <strong><a class="source-ref" href="#G15">[G15, G23]</a></strong></td>
+<td>Resolve stable provider identity, access and workflow location. 404 does not distinguish deletion, access restriction or an unavailable rename path.</td>
+</tr>
+<tr>
+<td><strong>F10 — optimization objective mismatch candidate</strong></td>
+<td>Shared's Cargo release uses <code>opt-level="z"</code>, LTO and one codegen unit. <strong><a class="source-ref" href="#G03">[G03]</a></strong></td>
+<td>Size, throughput, tail latency and build time need different qualified profiles. Size optimization is not itself evidence of slower execution.</td>
+</tr>
+<tr>
+<td><strong>F11/F12 — publication and consumption differ</strong></td>
+<td>Registry's visible index text is dated May/June; a September 16 global handbook exists. Shared already declares docs/design dependencies. <strong><a class="source-ref" href="#G02">[G02, G08, G11–G13]</a></strong></td>
+<td>Repair authority and consumer proof, not just documentation volume. A dependency declaration is not proof of useful consumption.</td>
+</tr>
+<tr>
+<td><strong>F13/F14 — local assumptions survive consolidation</strong></td>
+<td>Infra's Lefthook hardcodes one package and ambient Python; Tracera chains seven postinstall patches; Shared's recent history contains a redaction sweep followed by URL repairs. <strong><a class="source-ref" href="#G04">[G04, G14, G21]</a></strong></td>
+<td>Account for tool resolution, scope, patches and semantic transformations. Neither “one hook file exists” nor “mass edit committed” closes these obligations.</td>
+</tr>
+</tbody>
+</table></div>
+<p>The findings registry separates observation, interpretation, countercase, acceptance proof and owner role. The repository inventory is a discovery denominator—not an assertion that all discovered repositories are active or audited.</p>
+<h3 id="section-3">1.2 History is evidence, not a completion signal</h3>
+<p>The Tracera contract-test path history points to commit <code>d34adf39dfd979279acdfb23ca8f9a6b686d318c</code>, associated with PR 900 and a native/non-mutating typecheck repair in August. The current file still asserts the repeated-project command. That makes semantic verification more important than trusting a commit title. The five recent Shared commits also show that source-shaping work and URL repair are happening during the same period as handbook consolidation. <strong><a class="source-ref" href="#G21">[G21, G22]</a></strong></p>
+<p>This was targeted history inspection, not a complete ancestry, blame, merge-base or upstream-patch audit. The runbook specifies the remaining analysis explicitly.</p>
+<h2 id="section-4">2. Extend the existing authority; do not invent a competing one</h2>
+<p>The September 16 global handbook already requires ecosystem-first reuse, honest non-pass states, independent verification, immutable subject identity, and separate working/published/integrated/verified/packaged/installed/released/adopted states. It expressly says it is not a migration approval or permission grant. <strong><a class="source-ref" href="#G13">[G13]</a></strong></p>
+<p>The June stack policy already distinguishes capability boundaries from language buckets and prefers Rust, Zig and adopted Mojo cores, with scoped edge-language justification. That is existing decision material—not something to pretend never existed. Its “TypeScript 7 preview” wording and location/authority relationships need reconciliation with the newer handbook and current upstream facts. <strong><a class="source-ref" href="#G12">[G12]</a></strong></p>
+<p>The proposed integration is:</p>
+<p><strong>Existing handbook principles → typed decision records → component profiles → generated configs/workflows/agent views → execution receipts → existing product graph and assessment records.</strong></p>
+<p>PhenoShared can host most of the implementation. Registry is a logical indexing role; it must not become a second owner of every contract. Tracera remains the persistent canonical product/system model, including gaps and dissatisfaction, rather than being reduced to an audit-log sink. AgilePlus remains a bounded execution/work-management component. This packet is source material for those existing roles, not a proposal for an additional product named “canonicalization.”</p>
+<p>Every incorporated record needs an authority pointer, revision, applicability selector, owner, selected solution, alternatives, acceptance tests and supersession rule. Do not silently convert a research suggestion or old assistant answer into an accepted decision.</p>
+<h2 id="section-5">3. The decision model</h2>
+<h3 id="section-6">3.1 Canonical means one answer for a defined situation</h3>
+<p>It does not mean one implementation for every language, framework, device or workload. Define the decision key as:</p>
+<p><code>capability × consumer requirement × runtime/language × platform × deployment profile × constraints × policy revision</code></p>
+<p>A TS library, Vue docs renderer, Bun desktop application and Node-native upstream fork are different consumers. A CPU throughput library, a realtime audio callback, and a GPU host interface are different performance profiles. A single generic “use fastest technology” rule does not resolve any of those choices.</p>
+<p>The decision record should carry both a selected default and the predicate for choosing an alternative. A tree makes routing explicit. A matrix exposes comparisons. The chosen solution makes ordinary work fast. These representations should be generated from one authoritative record set rather than maintained as three competing descriptions.</p>
+<h3 id="section-7">3.2 Keep state dimensions separate</h3>
+<p><strong>Decision state:</strong> proposed, accepted, superseded, rejected, research-only.</p>
+<p><strong>Applicability:</strong> applicable, not-applicable-with-proof, unknown.</p>
+<p><strong>Implementation disposition:</strong> canonical implementation, supported profile variant, temporary exception, blocked by a capability gap, unassessed.</p>
+<p><strong>Evidence stage:</strong> declared, resolved, executed, independently verified, packaged, installed, adopted.</p>
+<p>A scoped exception is not canonical adoption. A successful package build is not installation. A native binary name is not native compiler provenance. A generated page is not a useful docs experience. Never flatten these axes into one optimistic percentage.</p>
+<h3 id="section-8">3.3 Exception contract</h3>
+<p>A temporary exception identifies the component and path, violated decision, reason, actual alternative evidence, owner, expiry, migration trigger, acceptance test and exit condition. Expiry must cause an affected non-pass state—not silently refresh itself. A lasting intentional variant belongs in a supported profile with its own qualification; it must not live forever as a waiver.</p>
+<p>The purpose is not to ask a human to approve every choice. Agents can apply accepted rules and existing authority autonomously. The purpose is to prevent an unreviewed deviation, unsupported backend or swallowed error from masquerading as the chosen solution.</p>
+<h3 id="section-9">3.4 Counterfactuals are required</h3>
+<p>For a material change, test at least the current baseline, an improved version of that baseline and a credible alternative. Ask how the proposed choice could be wrong: a hidden copy, cold-start penalty, missing rule, native-addon mismatch, worse tail latency, upstream maintenance tax, or increased total code. Record disconfirming observations, not just favorable screenshots and microbenchmarks.</p>
+<h2 id="section-10">4. Canonical tooling selections</h2>
+<p>The following are proposed operational rules for the user's stated directions. Their deployment status is <strong>not deployed</strong>. Exact production versions should be chosen through a qualified lock/toolchain release, not guessed from today's version strings.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Area</th>
+<th>Selected direction</th>
+<th>Qualification and legitimate branch</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>JS/TS lint</td>
+<td><strong>Oxlint</strong> primary.</td>
+<td>Map existing rules, custom plugin behavior, type-aware checks and framework rules. A residual runner owns only named missing obligations. <strong><a class="source-ref" href="#W02">[W02]</a></strong></td>
+</tr>
+<tr>
+<td>Formatting</td>
+<td><strong>Oxfmt</strong> for qualified supported formats.</td>
+<td>Demonstrate semantic preservation and idempotence; unsupported languages/plugins get disjoint selectors, not two competing formatters. <strong><a class="source-ref" href="#W03">[W03]</a></strong></td>
+</tr>
+<tr>
+<td>TS CLI checking/building</td>
+<td><strong>Qualified native TypeScript 7</strong>, by resolved package/version.</td>
+<td>The current native command is <code>tsc</code> for TypeScript 7 RC and later; <code>tsgo</code> was the preview command. Compiler-API and framework adapters are separate decisions. <strong><a class="source-ref" href="#W01">[W01]</a></strong></td>
+</tr>
+<tr>
+<td>JS installation</td>
+<td><strong>Pinned Bun and frozen locks</strong> for eligible first-party workspaces.</td>
+<td>Package-manager, runtime and test-runner transitions are separate. Prove lifecycle scripts, workspace packing and cold consumer resolution. <strong><a class="source-ref" href="#W07">[W07]</a></strong></td>
+</tr>
+<tr>
+<td>JS runtime</td>
+<td><strong>Prefer Bun where behavior is qualified.</strong></td>
+<td>OmniRoute-style native/upstream constraints need real API/ABI/shutdown tests, not a string replacement of <code>node</code>. <strong><a class="source-ref" href="#G07">[G07, W07]</a></strong></td>
+</tr>
+<tr>
+<td>Python environment</td>
+<td><strong>uv</strong> owns interpreter/environment/dependency resolution.</td>
+<td>Record selected interpreter build and lock; support multiple explicitly qualified profiles rather than ambient Python. <strong><a class="source-ref" href="#W04">[W04]</a></strong></td>
+</tr>
+<tr>
+<td>Python runtime</td>
+<td><strong>CPython 3.14t target</strong> for eligible owned execution.</td>
+<td>Verify the build and actual GIL state after real imports. Unsupported extensions can re-enable the GIL. Do not force an unsafe GIL-off mode to satisfy a checkbox. <strong><a class="source-ref" href="#W05">[W05]</a></strong></td>
+</tr>
+<tr>
+<td>Python analysis</td>
+<td><strong>Ruff</strong> lint/format; <strong>ty preferred after parity qualification</strong>.</td>
+<td>Existing mypy/framework/stub coverage stays explicitly scoped until replaced. This type-checker preference is a recommendation, not a claim that every repo has accepted it. <strong><a class="source-ref" href="#G09">[G09, G10]</a></strong></td>
+</tr>
+<tr>
+<td>Git hooks</td>
+<td><strong>Lefthook</strong>, one owned orchestrator.</td>
+<td>Inspect effective configuration and installed hooks; run the same required checks in CI because local hooks can be bypassed. <strong><a class="source-ref" href="#W08">[W08, W24]</a></strong></td>
+</tr>
+<tr>
+<td>Python MCP</td>
+<td><strong>Maintained standalone FastMCP</strong>.</td>
+<td>Keep PhenoFast integration thin. Qualify schema, transport, auth, cancellation, errors and shutdown. Main-branch docs can describe unreleased features. <strong><a class="source-ref" href="#W06">[W06]</a></strong></td>
+</tr>
+<tr>
+<td>Native-host MCP</td>
+<td><strong>Qualified native SDK/profile when justified.</strong></td>
+<td>Adding Python solely for brand consistency may violate the performance/deployment objective. The external contract remains shared.</td>
+</tr>
+<tr>
+<td>Shared CI</td>
+<td><strong>Reusable provider workflows/actions, immutable refs, thin generated callers.</strong></td>
+<td>GitHub requires actual provider workflow files in <code>.github/workflows</code> and job-level reuse. Verify provider access and hosted execution. <strong><a class="source-ref" href="#W09">[W09]</a></strong></td>
+</tr>
+<tr>
+<td>Native release</td>
+<td><strong>Separate outcome-specific profiles.</strong></td>
+<td>Measure speed/size/latency/build tradeoffs; do not treat <code>opt-level="z"</code> or maximum optimization as universally optimal. <strong><a class="source-ref" href="#W10">[W10]</a></strong></td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="section-11">4.1 Fix Tracera's checking semantics before treating a compiler migration as complete</h3>
+<p>Enumerate the exact projects and eligible source sets. Use one checked invocation per independent project or a correctly configured references/build graph with declared outputs. Do not concatenate repeated <code>-p</code> flags and assume union semantics. Add a unique deliberate type error in each project's isolated canary and require the <strong>final</strong> verification command to fail for every case. Include source currently omitted by globs, tests where appropriate, generated declarations, and cross-package references.</p>
+<p>Retain the non-mutating intent. Redirect permitted build cache outputs explicitly; avoid banning a correct mode by name merely because an earlier implementation wrote to the checkout. The contract is coverage, correctness and side-effect boundaries—not a fixed command string.</p>
+<h3 id="section-12">4.2 Python 3.14t means more than an interpreter suffix</h3>
+<p>The runtime qualification has four independent obligations: the selected interpreter is the intended free-threaded build; actual application imports leave the GIL disabled; the dependency and FFI stack is thread-safe under its intended access patterns; and time/memory behavior satisfies the product's workload. Process-based parallelism, native libraries that already release the GIL, and an ordinary GIL build are useful comparison controls rather than enemies of the requested target. <strong><a class="source-ref" href="#W05">[W05]</a></strong></p>
+<p>A failed dependency import or GIL transition is a recorded compatibility gap. It must not be converted to a no-op stub, a passing empty test suite, or a silent runtime substitution. Resolve the underlying dependency or qualify a clearly bounded profile variant.</p>
+<h3 id="section-13">4.3 Avoid residual-tool deletion by grep</h3>
+<p>An ESLint plugin dependency can still supply a custom rule even when the entry point is Oxlint. <code>typescript</code> can be used through a compiler API as well as the CLI. <code>node</code> can be an intentional supported runtime, not a forgotten installer. Multiple locks can belong to genuinely isolated workspaces. The audit must trace roles before deleting names.</p>
+<p>The opposite mistake is equally bad: “it might be needed” is not a permanent exception. Require an exact use, actual behavior and an exit criterion where replacement is intended.</p>
+<h2 id="section-14">5. Shared architecture: thin products without a shared monolith</h2>
+<h3 id="section-15">5.1 What the product should own</h3>
+<p>A product should normally own its distinctive domain behavior, composition, content/configuration, and product-specific acceptance tests. Common auth integration, telemetry, protocol glue, versioning, configuration loaders, docs plumbing, design primitives, release workflows, and ordinary infrastructure adapters should usually come from qualified shared or external capabilities.</p>
+<p>Do not force a raw line-count target. A product can legitimately contain substantial domain logic. A wrapper can hide enormous runtime or maintenance cost in dependencies. Generated bindings and tests can add many useful lines. The target is <strong>less duplicated, hand-maintained commodity behavior across the whole system</strong>, not merely fewer visible files in each application.</p>
+<h3 id="section-16">5.2 Narrow capabilities, not one compulsory import</h3>
+<p>Treat PhenoShared as a collection of separately consumable capability packages with clear exports, optional features and dependency direction. A docs renderer should not pull a GPU stack. A policy client should not import the complete orchestration engine. A landing page should not need the entire desktop component runtime. A native CLI should not require a Python installation merely to reach a tiny protocol feature unless that is an intentional qualified boundary.</p>
+<p>A useful structure is logical rather than an instruction to create these exact folders:</p>
+<ul>
+<li>Foundation contracts and language-neutral data types.</li>
+<li>Runtime capabilities, grouped by domain rather than language buckets.</li>
+<li>Thin bindings/adapters for supported runtimes.</li>
+<li>Docs/design/landing production capabilities.</li>
+<li>Toolchain/configuration/CI/release packages.</li>
+<li>Contract suites, consumer fixtures and policy data.</li>
+</ul>
+<p>Do not duplicate upstream implementation merely to place a Phenotype name around it. Use the external library directly when no shared semantics are needed. Add a wrapper only for an actual policy, compatibility, telemetry, lifecycle or domain boundary.</p>
+<h3 id="section-17">5.3 A consumption edge needs proof</h3>
+<p>For each provider/consumer edge record:</p>
+<p><code>provider capability → exact source/release → distribution artifact → consumer resolution → entry point → exercised behavior → retained evidence</code></p>
+<p>Classify the edge as runtime, build-time, test-time, code generation, documentation, design asset, configuration, workflow, or intended future consumption. A planned edge is not installed reuse. A package import alone is not enough when a local copy can shadow the imported behavior.</p>
+<p>The acceptance fixture installs the provider artifact in an isolated consumer without sibling checkouts or developer-global tools, exercises the relevant contract, and proves that removing or changing the provider affects the expected behavior. Also prove that changing an unrelated optional capability does not expand the consumer dependency closure unexpectedly.</p>
+<h3 id="section-18">5.4 Do not collapse distinct kinds of integration</h3>
+<p>Cross-consumption can be shared implementation, protocol interoperability, common contracts, data transformations, component composition, renderable assets, or coherent user journeys. It does not require an iframe or visibly embedded second application. Nor does a seamless UI automatically prove shared semantics underneath. Record and test the actual integration mode.</p>
+<h2 id="section-19">6. PhenoDocs, landings and design need product contracts</h2>
+<h3 id="section-20">6.1 PhenoDocs</h3>
+<p>The current manifest already exposes a docs federation concept and references shared docs/design packages. That is a starting point, not sufficient acceptance. <strong><a class="source-ref" href="#G02">[G02, G08]</a></strong></p>
+<p>Define PhenoDocs as a <strong>versioned documentation production and consumption system</strong>. Its shared scope includes renderer/theme integration, navigation composition, version and locale routing, source attribution, search indexing boundaries, generated API references, executable examples, broken-link checks, preview/publish plumbing, and machine-readable discovery.</p>
+<p>Product teams retain the meaning: explanations, task flows, API/domain concepts, troubleshooting, examples and release-specific facts. Central copies must be generated projections with source revision and invalidation rules. A copied Markdown warehouse with no freshness contract is not the target.</p>
+<p>The qualification fixture should contain two materially different consumers: for example a library/API reference and a desktop/product guide. It must prove clean rendering, versioned URLs, code-example execution, theme consumption, navigation/link correctness, accessibility, and source lineage. It must also fail when a referenced version or input disappears.</p>
+<h3 id="section-21">6.2 Landings</h3>
+<p>A landing is more than a README render. Share the product descriptor, supported scene/component slots, token origin, navigation/CTA schema, media pipeline, metadata generation and delivery/measurement plumbing. Keep product narrative and distinctive interaction intentional.</p>
+<p>Validate actual destinations, installed or demo state, responsive layout, keyboard behavior, loading/error/offline states, reduced-motion behavior where relevant, and asset/version provenance. Shared infrastructure should enable authored spatial/interactive experiences, not make every product a clone of one generic template. That is consistent with the current handbook's explicit scene and interaction direction. <strong><a class="source-ref" href="#G13">[G13]</a></strong></p>
+<h3 id="section-22">6.3 Design authority</h3>
+<p>Use one token/component source and a controlled extension mechanism. Do not count a copied palette as continuous consumption. Test that a supported upstream token change reaches the intended consumer artifact, that local overrides are named and bounded, and that unrelated products do not become coupled through accidental global CSS or state.</p>
+<h2 id="section-23">7. Canonicalize patterns, not only tools</h2>
+<p>The larger pattern matrix in <code>pattern-matrix.json</code> covers the questions below. These are proposed defaults and branch conditions, not claims that the current ecosystem lacks each capability.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Question</th>
+<th>Default</th>
+<th>Branch that justifies another choice</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Local library or service?</td>
+<td>Local typed boundary when lifecycle and ownership permit.</td>
+<td>Independent deployment, fault/trust boundary, shared lifecycle or remote access requires a service.</td>
+</tr>
+<tr>
+<td>New domain implementation?</td>
+<td>Improve the current owner or use a qualified dependency.</td>
+<td>No suitable implementation or a measured/required advantage outweighs ownership and migration costs.</td>
+</tr>
+<tr>
+<td>Protocol?</td>
+<td>Existing typed in-process interface; preserve supported public contracts.</td>
+<td>C ABI for native interop, a generated RPC contract for remote typed calls, or an HTTP API where its consumers require it.</td>
+</tr>
+<tr>
+<td>Durable state?</td>
+<td>One explicit owner and minimal persistence for required semantics.</td>
+<td>Multiple writers, consistency/durability or scale requirements warrant a different qualified data system.</td>
+</tr>
+<tr>
+<td>Cache?</td>
+<td>No cache without a specific repeated-cost problem.</td>
+<td>Define key, version, permissions, eviction and invalidation before adding one.</td>
+</tr>
+<tr>
+<td>Retry?</td>
+<td>No blind retry of non-idempotent effects.</td>
+<td>Transient failure plus idempotency/deduplication and a bounded deadline permits retry.</td>
+</tr>
+<tr>
+<td>Workflow engine?</td>
+<td>Small trigger + durable dedupe/journal + scoped action when enough.</td>
+<td>Durable long-lived coordination, compensation, fan-out or replay requirements justify an existing workflow engine.</td>
+</tr>
+<tr>
+<td>Concurrency?</td>
+<td>Bounded tasks with explicit cancellation and resource budgets.</td>
+<td>Increase parallelism only when the constrained resource and tail-latency behavior improve.</td>
+</tr>
+<tr>
+<td>Error contract?</td>
+<td>Typed failure category, origin, retryability and safe context.</td>
+<td>Domain-specific extensions remain compatible; never return success-shaped defaults on failure.</td>
+</tr>
+<tr>
+<td>Generated code/config?</td>
+<td>One source and deterministic generator.</td>
+<td>Handwritten extension seams are explicit; edits to derived views are rejected or regenerated.</td>
+</tr>
+<tr>
+<td>Test evidence?</td>
+<td>Independent required families and real denominators.</td>
+<td>Profile-scoped not-applicable status requires proof, not an empty suite.</td>
+</tr>
+<tr>
+<td>Release done?</td>
+<td>Package, install and exercise outside the source checkout.</td>
+<td>Role-specific equivalent for library/CLI/service; do not invent a GUI just to satisfy packaging.</td>
+</tr>
+</tbody>
+</table></div>
+<p>For a file-watch/cron-to-agent workflow, the canonical minimal workflow is: normalize the event, prove input readiness, deduplicate by stable identity, evaluate scope/policy, acquire a bounded claim, execute the agent with constrained actions, validate its proposed effect, apply authorized effects idempotently, record outcome, and retry only through explicit failure semantics. A cron trigger does not remove the need for a journal or side-effect control; it can still be the right trigger.</p>
+<p>The policy should also cover API evolution, authentication/authorization, secret/config resolution, process lifecycle, telemetry, model/tool budgets, serialization, feature flags, schema migrations, backup/restore, release rollouts and human-facing quality. <code>pattern-matrix.json</code> makes these concrete routing questions rather than leaving them hidden in per-project conventions.</p>
+<h2 id="section-24">8. Maximum exploration, measured production promotion</h2>
+<h3 id="section-25">8.1 The three objectives are related, not interchangeable</h3>
+<p>“Exotic” expands the candidate space. “Novel” invites architectural and algorithmic improvement, not just a new language. “Outcome” decides what should survive in the product. Maximizing the number of installed toolchains is not the same as maximizing any useful product outcome.</p>
+<p>The existing language tier should be a default and ownership aid, not a reason to reject a measured superior implementation. Conversely, a promising language feature or vendor benchmark does not qualify an ecosystem-wide migration.</p>
+<h3 id="section-26">8.2 A workload-specific frontier</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Candidate</th>
+<th>First useful experiment</th>
+<th>Main disconfirming question</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Zig</td>
+<td>Allocation-sensitive native/FFI or SIMD path. <strong><a class="source-ref" href="#W11">[W11]</a></strong></td>
+<td>Does it beat the optimized current implementation after safety, ABI and packaging costs?</td>
+</tr>
+<tr>
+<td>Odin</td>
+<td>Simulation/graphics/asset processing with explicit layout. <strong><a class="source-ref" href="#W12">[W12]</a></strong></td>
+<td>Is the advantage actually data-layout work that could be adopted more cheaply in the current language?</td>
+</tr>
+<tr>
+<td>Nim</td>
+<td>Native utility/domain transform using metaprogramming. <strong><a class="source-ref" href="#W13">[W13]</a></strong></td>
+<td>Do runtime, memory-model and interop obligations erase the implementation benefit?</td>
+</tr>
+<tr>
+<td>Julia</td>
+<td>Numerical simulation, planning or optimization slice. <strong><a class="source-ref" href="#W14">[W14]</a></strong></td>
+<td>Do specialization, startup and boundary costs fit the real request distribution?</td>
+</tr>
+<tr>
+<td>Pony</td>
+<td>Actor-oriented scheduler/control experiment. <strong><a class="source-ref" href="#W15">[W15]</a></strong></td>
+<td>Does the model improve correctness or useful concurrency once operational integration is included?</td>
+</tr>
+<tr>
+<td>Mojo</td>
+<td>CPU/GPU numeric slice. <strong><a class="source-ref" href="#W16">[W16]</a></strong></td>
+<td>Is the required target/toolchain/distribution supported and beneficial now?</td>
+</tr>
+<tr>
+<td>CUDA + CUTLASS/CuTe</td>
+<td>A demonstrated NVIDIA hot path with a good vendor/library baseline. <strong><a class="source-ref" href="#W19">[W19]</a></strong></td>
+<td>Are speedups still present across required shapes/devices after transfer and launch overhead?</td>
+</tr>
+<tr>
+<td>Triton</td>
+<td>A tiled tensor kernel that current compiled operations do not serve well. <strong><a class="source-ref" href="#W17">[W17]</a></strong></td>
+<td>Are compile cost, shape coverage and full-request behavior favorable?</td>
+</tr>
+<tr>
+<td>ISPC</td>
+<td>CPU batch/vector transform. <strong><a class="source-ref" href="#W20">[W20]</a></strong></td>
+<td>Does explicit SPMD beat current auto-vectorized code at actual batch sizes?</td>
+</tr>
+<tr>
+<td>TileLang</td>
+<td>Another tile/kernel search space for the same GPU workload. <strong><a class="source-ref" href="#W21">[W21]</a></strong></td>
+<td>Is a better isolated kernel offset by integration or target restrictions?</td>
+</tr>
+<tr>
+<td>Futhark</td>
+<td>An array-parallel algorithm. <strong><a class="source-ref" href="#W22">[W22]</a></strong></td>
+<td>Does host integration and supported operation coverage fit the product?</td>
+</tr>
+<tr>
+<td>Halide</td>
+<td>An image/video/array pipeline. <strong><a class="source-ref" href="#W23">[W23]</a></strong></td>
+<td>Does schedule search improve the entire pipeline, including memory and transfer costs?</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Trident is not silently normalized to Triton.</strong> The identified <code>kakaobrain/trident</code> is a real Triton-based ML library, but its repository has been archived since October 16, 2023. It may be useful research material; intended identity, a maintained successor or a narrowly owned port must be resolved before treating it as a current production default. <strong><a class="source-ref" href="#W18">[W18]</a></strong></p>
+<p>This is a researched seed set, not an exhaustive list of all beneficial languages or libraries. The selection process stays open: every performance/correctness/capability gap can introduce a candidate with a precise hypothesis and evidence source. Current-language algorithm changes, better external libraries and removal of work remain mandatory controls.</p>
+<h3 id="section-27">8.3 Promotion objective</h3>
+<p>First enforce hard requirements: correctness, numerical tolerance, security/trust boundaries, supported targets, required features and delivery constraints. Then compare the remaining candidates on a Pareto frontier rather than a made-up universal score.</p>
+<p>Measure at least end-to-end p50/p95/p99, useful throughput, startup/compilation, peak and steady memory, transfer/copy volume, build/test duration, artifact/dependency size, agent repair burden, integration cost and ongoing maintenance. Use only dimensions relevant to the workload, but record what was omitted.</p>
+<p>A useful accounting identity is:</p>
+<p><code>total cost = implementation + integration + migration + qualification + operations over the chosen horizon + expected maintenance/rework</code></p>
+<p>For a native/GPU extraction, a useful latency decomposition is:</p>
+<p><code>request time = queue + host work + serialization/FFI/copies + device transfer + launch + kernel + return/synchronization</code></p>
+<p>A faster kernel can lose end-to-end. A slightly faster path can still be valuable at large volume. Do not impose an arbitrary “must be 20% faster” rule or let noisy 1% differences drive a rewrite. Compare uncertainty, repeated trials, actual request distributions and the applicable horizon.</p>
+<h3 id="section-28">8.4 Experiments that merit doing early</h3>
+<p>The Shared size-profile question is a cheap experiment before changing languages. Tracera checking and docs build latency are useful tooling baselines. A genuinely measured high-cost serialization, routing, numerical or media path is a candidate for a bounded language/kernel tournament. The concurrent agent/game/audio environment should be represented where it affects the product; an idle-machine microbenchmark is not enough for a realtime promise.</p>
+<p>The packet does not name a production performance winner. None of these ecosystem workloads was benchmarked here.</p>
+<h2 id="section-29">9. Missing-capability audit</h2>
+<p>Do not audit only selected tools. Audit the presence, consumption and correctness of the following obligations: component/source identity; reproducible bootstrapping; config and secret resolution; required lint/type/security coverage; mutation-resistant instruments; real unit/integration/E2E/mutation denominators; API/schema compatibility; dependency graph direction; source/consumer release binding; hook/CI equivalence; licensed/upstream patch maintenance; packaging and clean installation; telemetry and budgets; cancellation/backpressure/idempotency; docs/search/versioning; design/accessibility/interaction; data durability and restore; target-specific performance; and lifecycle/rollback authority.</p>
+<p>Each cell is <strong>present-and-qualified, present-unqualified, absent-with-evidence, not-applicable-with-proof, or unknown</strong>. Search nonmatches are unknown until the eligible inventory and actual execution paths have been inspected. A generated catalog is not implementation. A test counter is not a coverage denominator. A failed or skipped measurement is not a pass.</p>
+<p>The September handbook's independent unit/integration/E2E/mutation floors are 85%, with 100% of critical obligations selected and passing. Preserve those semantics and its reviewed denominators rather than averaging a weak family away. The synthetic receipt checker illustrates those rules but does not authenticate any supplied data or implement the full product assessment system. <strong><a class="source-ref" href="#G13">[G13]</a></strong></p>
+<h2 id="section-30">10. Distribution and drift control</h2>
+<p>A decision is incomplete until agents can consume it and changes propagate safely. Publish a qualified policy/toolchain/config release, not a pile of copied snippets. The release identifies tool versions and binary provenance, schema/config content, workflow commit refs, supported profiles, mandatory fixtures and compatibility changes.</p>
+<p>Consumers select a policy release in a component manifest. The agent-facing instructions, effective lint/format/type settings, hook commands, CI callers, and human matrices are generated projections. A check detects disagreement; an explicit repair command regenerates them. Do not have a gate silently repair itself.</p>
+<p>Use staged consumer promotion. Update a representative consumer first, then the bounded affected set, then wider adoption. Immutable pinning must be paired with an update mechanism; otherwise it simply makes drift permanent. A stale policy release, missing export, unavailable provider, unsupported target or expired exception must be visible in existing product/assessment records.</p>
+<p>For GitHub workflows, package-level storage can be the authoring source, but the provider must expose an actual workflow under <code>.github/workflows</code>. Consumer <code>uses</code> values must be supported literal refs, with verified permissions and access. A successfully parsed YAML file is not proof that GitHub can invoke it. <strong><a class="source-ref" href="#W09">[W09]</a></strong></p>
+<h2 id="section-31">11. Execution order without governance paralysis</h2>
+<p>There are three concurrent tracks: comprehension/identity, qualification/instruments, and useful delivery/simplification. The current handbook already makes clear that no perfect atlas must precede all useful repair. <strong><a class="source-ref" href="#G13">[G13]</a></strong></p>
+<p>The ten work packages in <code>migration/work-packages.json</code> form a DAG. The first useful assignments are:</p>
+<p><strong>Instrument lane:</strong> repair Tracera's multi-project check and independent negative controls. This is bounded and can progress while ownership mapping continues.</p>
+<p><strong>Authority/consumption lane:</strong> resolve Shared's root component map and the current reusable-workflow provider. Establish an actual installable/exported provider and one cold consumer before mass migration.</p>
+<p><strong>Toolchain lane:</strong> qualify OXC/native TypeScript/Bun and uv/3.14t against representative supported profiles. Do not mix runtime changes, formatter changes and domain rewrites into one unreviewable diff.</p>
+<p><strong>Product pilots:</strong> migrate a bounded Tracera/HeliosLab surface; qualify docs/design consumption in real consumers; qualify one existing FastMCP service. Keep the upstream-heavy OmniRoute runtime matrix separate from straightforward first-party tooling cleanup.</p>
+<p><strong>Performance lane:</strong> run a small bounded tournament against a measured bottleneck and the size-profile hypothesis. Do not start a wholesale language rewrite to manufacture activity.</p>
+<p>Shared manifests, lockfiles and release state need an integration writer/lease. Read-only investigations and isolated implementation slices can run in parallel. Work should be assigned by capability and acceptance target, not mechanically one agent per repository.</p>
+<h2 id="section-32">12. Metrics that would mean something</h2>
+<p>Measure known applicable decisions resolved to a qualified implementation, verified provider/consumer edges, canonical version adoption by profile, unresolved/expired exceptions, commodity code duplicated across products, clean install success, consumer compatibility failures, actual release-to-installed lineage, and outcome regressions.</p>
+<p>Report the denominator and unknown count. The 46 discovered repositories are not a valid denominator for “Lefthook adoption” until active eligible checkouts and subcomponents are classified. A positive dependency edge is not a unit of delivered value. Fewer repositories, more tests, more policy files and more languages are not success metrics by themselves.</p>
+<p>For code reduction, compare both product-local code and total shared + adapter + generator + migration burden. Count dependencies and build fan-out separately. A successful extraction removes duplicated ownership while preserving useful behavior and reducing total maintenance or increasing measured capability.</p>
+<h2 id="section-33">13. Completion and limits of this handoff</h2>
+<p>This packet provides a concrete decision set, profiles, pattern branches, research hypotheses, source-grounded findings, work packages, schemas, an agent prompt, a continuation runbook and small tested reference tools. It is usable now as a bounded implementation assignment.</p>
+<p>It does <strong>not</strong> certify the whole ecosystem. The connected review covered selected current files in nine repositories, targeted searches, a small history sample, relevant retrieved context and primary public documentation. Some long responses were truncated. Container DNS prevented a full remote clone. No exact current product build, hosted workflow run, installed-consumer verification or production performance comparison was executed.</p>
+<p>The required next evidence is explicit: full source/lineage mapping, exact toolchain release qualification, real consumer conformance, hosted reuse and installed artifact checks. Agents should close those cells, not relabel this research packet as a completed fleet migration.</p>
+<hr/>
+<h2 id="section-34">Source map</h2>
+<p>The human-readable <a href="SOURCE-INDEX.md">source index</a> and machine-readable <code>audit/sources.json</code> resolve all references. The latter retains URLs or Library identities, source paths, observed Git blob identities where available, pinned commits where actually requested, acquisition scope and limits. A blob SHA is not a commit SHA. A mutable source URL is not immutable evidence by itself. Local experiment output is retained separately under <code>verification/</code>.</p>
+<hr/>
+<h1 id="section-35">Source index</h1>
+<p><strong>Research snapshot: September 16, 2026.</strong> URLs identify sources, not authentication of a claim or execution of a product test. Mutable <code>main</code> links may change. Observed blob identities and explicitly requested commits are retained separately in <code>audit/sources.json</code>.</p>
+<p><a id="G01"></a></p>
+<h2 id="section-36">G01 — KooshaPari/PhenoShared — README.md</h2>
+<p><a href="https://github.com/KooshaPari/PhenoShared/blob/main/README.md">Open source</a></p>
+<p><strong>kind:</strong> github_source</p>
+<p><strong>blob sha:</strong> a86d1085527c1e05599ee2f4f79c551d9e774316</p>
+<p><strong>requested ref:</strong> default branch</p>
+<p><strong>accessed date:</strong> 2026-09-16</p>
+<p><strong>scope note:</strong> Selected content read through GitHub connector; no product execution.</p>
+<p><a id="G02"></a></p>
+<h2 id="section-37">G02 — KooshaPari/PhenoShared — package.json</h2>
+<p><a href="https://github.com/KooshaPari/PhenoShared/blob/main/package.json">Open source</a></p>
+<p><strong>kind:</strong> github_source</p>
+<p><strong>blob sha:</strong> ae81eb9ed131c2d097bbec410b176a6d45157de3</p>
+<p><strong>requested ref:</strong> default branch</p>
+<p><strong>accessed date:</strong> 2026-09-16</p>
+<p><strong>scope note:</strong> Selected content read through GitHub connector; no product execution.</p>
+<p><a id="G03"></a></p>
+<h2 id="section-38">G03 — KooshaPari/PhenoShared — Cargo.toml</h2>
+<p><a href="https://github.com/KooshaPari/PhenoShared/blob/main/Cargo.toml">Open source</a></p>
+<p><strong>kind:</strong> github_source</p>
+<p><strong>blob sha:</strong> c7457f186182e348107401a13fe528456e59321b</p>
+<p><strong>requested ref:</strong> default branch</p>
+<p><strong>accessed date:</strong> 2026-09-16</p>
+<p><strong>scope note:</strong> Selected content read through GitHub connector; no product execution.</p>
+<p><a id="G04"></a></p>
+<h2 id="section-39">G04 — KooshaPari/Tracera — frontend/package.json</h2>
+<p><a href="https://github.com/KooshaPari/Tracera/blob/main/frontend/package.json">Open source</a></p>
+<p><strong>kind:</strong> github_source</p>
+<p><strong>blob sha:</strong> d5a5e6a1ad913b58822e0bd63998f984d7d30e04</p>
+<p><strong>requested ref:</strong> default branch</p>
+<p><strong>accessed date:</strong> 2026-09-16</p>
+<p><strong>scope note:</strong> Selected content read through GitHub connector; no product execution.</p>
+<p><a id="G05"></a></p>
+<h2 id="section-40">G05 — KooshaPari/Tracera — frontend/scripts/test-native-typecheck-contract.mjs</h2>
+<p><a href="https://github.com/KooshaPari/Tracera/blob/main/frontend/scripts/test-native-typecheck-contract.mjs">Open source</a></p>
+<p><strong>kind:</strong> github_source</p>
+<p><strong>blob sha:</strong> bdb2c50967bf27cc97ebc615e2f3d1796974cb9a</p>
+<p><strong>requested ref:</strong> default branch</p>
+<p><strong>accessed date:</strong> 2026-09-16</p>
+<p><strong>scope note:</strong> Selected content read through GitHub connector; no product execution.</p>
+<p><a id="G06"></a></p>
+<h2 id="section-41">G06 — KooshaPari/HeliosLab — package.json</h2>
+<p><a href="https://github.com/KooshaPari/HeliosLab/blob/main/package.json">Open source</a></p>
+<p><strong>kind:</strong> github_source</p>
+<p><strong>blob sha:</strong> 078a295034b23c8d12d5afc04f083ee0d0dadaba</p>
+<p><strong>requested ref:</strong> default branch</p>
+<p><strong>accessed date:</strong> 2026-09-16</p>
+<p><strong>scope note:</strong> Selected content read through GitHub connector; no product execution.</p>
+<p><a id="G07"></a></p>
+<h2 id="section-42">G07 — KooshaPari/OmniRoute — package.json</h2>
+<p><a href="https://github.com/KooshaPari/OmniRoute/blob/main/package.json">Open source</a></p>
+<p><strong>kind:</strong> github_source</p>
+<p><strong>requested ref:</strong> default branch</p>
+<p><strong>accessed date:</strong> 2026-09-16</p>
+<p><strong>scope note:</strong> Returned content truncated; inspected visible scripts/engines only. Do not infer unseen dependency versions.</p>
+<p><a id="G08"></a></p>
+<h2 id="section-43">G08 — KooshaPari/PhenoDesign — package.json</h2>
+<p><a href="https://github.com/KooshaPari/PhenoDesign/blob/main/package.json">Open source</a></p>
+<p><strong>kind:</strong> github_source</p>
+<p><strong>blob sha:</strong> de801285b0c70f43023f6984ca880b19c3fcc812</p>
+<p><strong>requested ref:</strong> default branch</p>
+<p><strong>accessed date:</strong> 2026-09-16</p>
+<p><strong>scope note:</strong> Selected content read through GitHub connector; no product execution.</p>
+<p><a id="G09"></a></p>
+<h2 id="section-44">G09 — KooshaPari/AgilePlus — python/pyproject.toml</h2>
+<p><a href="https://github.com/KooshaPari/AgilePlus/blob/main/python/pyproject.toml">Open source</a></p>
+<p><strong>kind:</strong> github_source</p>
+<p><strong>blob sha:</strong> 0854e7cff42804f9497c973d3b5eba3d4201eec4</p>
+<p><strong>requested ref:</strong> default branch</p>
+<p><strong>accessed date:</strong> 2026-09-16</p>
+<p><strong>scope note:</strong> Selected content read through GitHub connector; no product execution.</p>
+<p><a id="G10"></a></p>
+<h2 id="section-45">G10 — KooshaPari/Portage — pyproject.toml</h2>
+<p><a href="https://github.com/KooshaPari/Portage/blob/main/pyproject.toml">Open source</a></p>
+<p><strong>kind:</strong> github_source</p>
+<p><strong>blob sha:</strong> 6a60ced0e5c22d04e9d2b4591b805bc9d19bfc58</p>
+<p><strong>requested ref:</strong> default branch</p>
+<p><strong>accessed date:</strong> 2026-09-16</p>
+<p><strong>scope note:</strong> Selected content read through GitHub connector; no product execution.</p>
+<p><a id="G11"></a></p>
+<h2 id="section-46">G11 — KooshaPari/PhenoRegistry — README.md</h2>
+<p><a href="https://github.com/KooshaPari/PhenoRegistry/blob/main/README.md">Open source</a></p>
+<p><strong>kind:</strong> github_source</p>
+<p><strong>requested ref:</strong> default branch</p>
+<p><strong>accessed date:</strong> 2026-09-16</p>
+<p><strong>scope note:</strong> Long response truncated; visible dated index and role declarations reviewed, not every link.</p>
+<p><a id="G12"></a></p>
+<h2 id="section-47">G12 — KooshaPari/PhenoRegistry — docs/rationalization/STACK_POLICY.md</h2>
+<p><a href="https://github.com/KooshaPari/PhenoRegistry/blob/f2e925e784ab1794b1697471ebe888ce74f2d9bd/docs/rationalization/STACK_POLICY.md">Open source</a></p>
+<p><strong>kind:</strong> github_source</p>
+<p><strong>blob sha:</strong> 592e11267ce43c05839910da4508467932a1833a</p>
+<p><strong>commit sha:</strong> f2e925e784ab1794b1697471ebe888ce74f2d9bd</p>
+<p><strong>requested ref:</strong> f2e925e784ab1794b1697471ebe888ce74f2d9bd</p>
+<p><strong>accessed date:</strong> 2026-09-16</p>
+<p><strong>scope note:</strong> Selected content read through GitHub connector; no product execution.</p>
+<p><a id="G13"></a></p>
+<h2 id="section-48">G13 — KooshaPari/PhenoShared — docs/GLOBAL_HANDBOOK.md</h2>
+<p><a href="https://github.com/KooshaPari/PhenoShared/blob/ed4c0642ffc464b73859c43cb9258bc0d72feb69/docs/GLOBAL_HANDBOOK.md">Open source</a></p>
+<p><strong>kind:</strong> github_source</p>
+<p><strong>blob sha:</strong> ea6a43bcd520bfc8d9cc0dfaeee0cfd760c2f4fe</p>
+<p><strong>commit sha:</strong> ed4c0642ffc464b73859c43cb9258bc0d72feb69</p>
+<p><strong>requested ref:</strong> ed4c0642ffc464b73859c43cb9258bc0d72feb69</p>
+<p><strong>accessed date:</strong> 2026-09-16</p>
+<p><strong>scope note:</strong> Read in two contiguous ranges covering the document. Self-declared pinned policy; this packet does not independently authenticate its authority.</p>
+<p><a id="G14"></a></p>
+<h2 id="section-49">G14 — KooshaPari/PhenoInfra — lefthook.yml</h2>
+<p><a href="https://github.com/KooshaPari/PhenoInfra/blob/ecf486cab18b8e84213838d497a39ea3a94aca71/lefthook.yml">Open source</a></p>
+<p><strong>kind:</strong> github_source</p>
+<p><strong>blob sha:</strong> 2ac301b1db7e0eed804dbe83e1f9f210213715f3</p>
+<p><strong>commit sha:</strong> ecf486cab18b8e84213838d497a39ea3a94aca71</p>
+<p><strong>requested ref:</strong> ecf486cab18b8e84213838d497a39ea3a94aca71</p>
+<p><strong>accessed date:</strong> 2026-09-16</p>
+<p><strong>scope note:</strong> Selected content read through GitHub connector; no product execution.</p>
+<p><a id="G15"></a></p>
+<h2 id="section-50">G15 — KooshaPari/AgilePlus — .github/workflows/sbom-refresh.yml</h2>
+<p><a href="https://github.com/KooshaPari/AgilePlus/blob/3cc0c145ae6e7290df26b3782c65521d5c2c8f0e/.github/workflows/sbom-refresh.yml">Open source</a></p>
+<p><strong>kind:</strong> github_source</p>
+<p><strong>commit sha:</strong> 3cc0c145ae6e7290df26b3782c65521d5c2c8f0e</p>
+<p><strong>requested ref:</strong> 3cc0c145ae6e7290df26b3782c65521d5c2c8f0e</p>
+<p><strong>accessed date:</strong> 2026-09-16</p>
+<p><strong>scope note:</strong> Indexed excerpt: caller uses phenotype-tooling/.github/workflows/sbom-monthly.yml@main; not a workflow execution.</p>
+<p><a id="G16"></a></p>
+<h2 id="section-51">G16 — KooshaPari/Tracera — CONTRIBUTING.md</h2>
+<p><a href="https://github.com/KooshaPari/Tracera/blob/f18ac630ffd9c7848aa4f43f39e9e746ef3aa55f/CONTRIBUTING.md">Open source</a></p>
+<p><strong>kind:</strong> github_source</p>
+<p><strong>commit sha:</strong> f18ac630ffd9c7848aa4f43f39e9e746ef3aa55f</p>
+<p><strong>requested ref:</strong> f18ac630ffd9c7848aa4f43f39e9e746ef3aa55f</p>
+<p><strong>accessed date:</strong> 2026-09-16</p>
+<p><strong>scope note:</strong> Indexed excerpt documents Biome alternatives despite current OXC manifest.</p>
+<p><a id="G17"></a></p>
+<h2 id="section-52">G17 — KooshaPari/PhenoShared — servers/pheno-org/README.md</h2>
+<p><a href="https://github.com/KooshaPari/PhenoShared/blob/ed4c0642ffc464b73859c43cb9258bc0d72feb69/servers/pheno-org/README.md">Open source</a></p>
+<p><strong>kind:</strong> github_source</p>
+<p><strong>commit sha:</strong> ed4c0642ffc464b73859c43cb9258bc0d72feb69</p>
+<p><strong>requested ref:</strong> ed4c0642ffc464b73859c43cb9258bc0d72feb69</p>
+<p><strong>accessed date:</strong> 2026-09-16</p>
+<p><strong>scope note:</strong> Indexed excerpt names PhenoFastMCP / fastmcp 3.4.2; does not establish fork/package resolution.</p>
+<p><a id="G18"></a></p>
+<h2 id="section-53">G18 — KooshaPari/PhenoShared — driver-mcp/lead_server.py</h2>
+<p><a href="https://github.com/KooshaPari/PhenoShared/blob/ed4c0642ffc464b73859c43cb9258bc0d72feb69/driver-mcp/lead_server.py">Open source</a></p>
+<p><strong>kind:</strong> github_source</p>
+<p><strong>commit sha:</strong> ed4c0642ffc464b73859c43cb9258bc0d72feb69</p>
+<p><strong>requested ref:</strong> ed4c0642ffc464b73859c43cb9258bc0d72feb69</p>
+<p><strong>accessed date:</strong> 2026-09-16</p>
+<p><strong>scope note:</strong> Indexed import excerpt, not full implementation comparison.</p>
+<p><a id="G19"></a></p>
+<h2 id="section-54">G19 — KooshaPari/PhenoShared — servers/substrate/lead_server.py</h2>
+<p><a href="https://github.com/KooshaPari/PhenoShared/blob/ed4c0642ffc464b73859c43cb9258bc0d72feb69/servers/substrate/lead_server.py">Open source</a></p>
+<p><strong>kind:</strong> github_source</p>
+<p><strong>commit sha:</strong> ed4c0642ffc464b73859c43cb9258bc0d72feb69</p>
+<p><strong>requested ref:</strong> ed4c0642ffc464b73859c43cb9258bc0d72feb69</p>
+<p><strong>accessed date:</strong> 2026-09-16</p>
+<p><strong>scope note:</strong> Indexed import excerpt; parallel path is a lineage investigation candidate, not proven duplicate.</p>
+<p><a id="G20"></a></p>
+<h2 id="section-55">G20 — KooshaPari/AgilePlus — python/src/agileplus_mcp/server.py</h2>
+<p><a href="https://github.com/KooshaPari/AgilePlus/blob/3cc0c145ae6e7290df26b3782c65521d5c2c8f0e/python/src/agileplus_mcp/server.py">Open source</a></p>
+<p><strong>kind:</strong> github_source</p>
+<p><strong>commit sha:</strong> 3cc0c145ae6e7290df26b3782c65521d5c2c8f0e</p>
+<p><strong>requested ref:</strong> 3cc0c145ae6e7290df26b3782c65521d5c2c8f0e</p>
+<p><strong>accessed date:</strong> 2026-09-16</p>
+<p><strong>scope note:</strong> Indexed FastMCP Context/Middleware import excerpt.</p>
+<p><a id="G21"></a></p>
+<h2 id="section-56">G21 — github_history</h2>
+<p><a href="https://api.github.com/repos/KooshaPari/PhenoShared/commits?per_page=5">Open source</a></p>
+<p><strong>kind:</strong> github_history</p>
+<p><strong>accessed date:</strong> 2026-09-16</p>
+<p><strong>scope note:</strong> Five recent commits: handbook consolidation, audit snapshots, redaction and two URL repair commits. No complete ancestry analysis.</p>
+<p><a id="G22"></a></p>
+<h2 id="section-57">G22 — github_history</h2>
+<p><a href="https://api.github.com/repos/KooshaPari/Tracera/commits?path=frontend/scripts/test-native-typecheck-contract.mjs&amp;per_page=3">Open source</a></p>
+<p><strong>kind:</strong> github_history</p>
+<p><strong>accessed date:</strong> 2026-09-16</p>
+<p><strong>scope note:</strong> Path history returned d34adf39dfd979279acdfb23ca8f9a6b686d318c, 2026-08-22 UTC, associated with PR 900. No full PR review or deployment verification.</p>
+<p><a id="G23"></a></p>
+<h2 id="section-58">G23 — connector_resolution</h2>
+<p><a href="https://github.com/KooshaPari/phenotype-tooling">Open source</a></p>
+<p><strong>kind:</strong> connector_resolution</p>
+<p><strong>accessed date:</strong> 2026-09-16</p>
+<p><strong>scope note:</strong> get_repo returned 404 in this connection. Does not distinguish deletion, rename without accessible redirect, or access restriction.</p>
+<p><a id="L01"></a></p>
+<h2 id="section-59">L01 — 04-polyrepo-ecosystem-consolidation.md</h2>
+<p><strong>kind:</strong> library_document</p>
+<p><strong>file id:</strong> file_00000000002881fdb6918d612d9a3bac</p>
+<p><strong>scope note:</strong> Relevant semantic-search excerpts reviewed; not all historical documents/conversations.</p>
+<p><a id="U01"></a></p>
+<h2 id="section-60">U01 — Canonical tooling/processes request, September 16 2026</h2>
+<p><strong>kind:</strong> current_user_instruction</p>
+<p><strong>scope note:</strong> Explicit direction for OXC, native TypeScript, Bun, uv, Python 3.14t, Lefthook, FastMCP, aggressive outcome-driven alternatives and shared consumption.</p>
+<p><a id="E01"></a></p>
+<h2 id="section-61">E01 — verification/typescript-multiple-projects.json</h2>
+<p><strong>kind:</strong> local_experiment</p>
+<p><strong>scope note:</strong> Executed isolated two-project fixture with TypeScript 5.8.3; not Tracera or its pinned compiler.</p>
+<p><a id="W01"></a></p>
+<h2 id="section-62">W01 — Native TypeScript command identity</h2>
+<p><a href="https://github.com/microsoft/typescript-go">Open source</a></p>
+<p><strong>kind:</strong> primary_web_source</p>
+<p><strong>accessed date:</strong> 2026-09-16</p>
+<p><strong>scope note:</strong> Official staging repo says port completed and TypeScript 7 RC+ uses tsc; older feature table also remains, so check exact supported release.</p>
+<p><a id="W02"></a></p>
+<h2 id="section-63">W02 — Oxlint</h2>
+<p><a href="https://oxc.rs/docs/guide/usage/linter">Open source</a></p>
+<p><strong>kind:</strong> primary_web_source</p>
+<p><strong>accessed date:</strong> 2026-09-16</p>
+<p><strong>scope note:</strong> Official capability documentation, not an ecosystem benchmark.</p>
+<p><a id="W03"></a></p>
+<h2 id="section-64">W03 — Oxfmt</h2>
+<p><a href="https://oxc.rs/docs/guide/usage/formatter.html">Open source</a></p>
+<p><strong>kind:</strong> primary_web_source</p>
+<p><strong>accessed date:</strong> 2026-09-16</p>
+<p><strong>scope note:</strong> Official supported formatter capabilities; verify version and plugins.</p>
+<p><a id="W04"></a></p>
+<h2 id="section-65">W04 — uv Python versions</h2>
+<p><a href="https://docs.astral.sh/uv/concepts/python-versions/">Open source</a></p>
+<p><strong>kind:</strong> primary_web_source</p>
+<p><strong>accessed date:</strong> 2026-09-16</p>
+<p><strong>scope note:</strong> Explicit free-threaded interpreter requests; deployment patch/build pin still required.</p>
+<p><a id="W05"></a></p>
+<h2 id="section-66">W05 — CPython free threading</h2>
+<p><a href="https://docs.python.org/3.14/howto/free-threading-python.html">Open source</a></p>
+<p><strong>kind:</strong> primary_web_source</p>
+<p><strong>accessed date:</strong> 2026-09-16</p>
+<p><strong>scope note:</strong> Build support and actual GIL state differ; extension imports may re-enable GIL.</p>
+<p><a id="W06"></a></p>
+<h2 id="section-67">W06 — FastMCP</h2>
+<p><a href="https://gofastmcp.com/getting-started/welcome">Open source</a></p>
+<p><strong>kind:</strong> primary_web_source</p>
+<p><strong>accessed date:</strong> 2026-09-16</p>
+<p><strong>scope note:</strong> Docs reflect main and can include unreleased features; qualify a release, not every documented feature.</p>
+<p><a id="W07"></a></p>
+<h2 id="section-68">W07 — Bun compatibility</h2>
+<p><a href="https://bun.sh/docs/runtime/nodejs-compat">Open source</a></p>
+<p><strong>kind:</strong> primary_web_source</p>
+<p><strong>accessed date:</strong> 2026-09-16</p>
+<p><strong>scope note:</strong> Compatibility is API-specific; package-manager and runtime qualification are separate.</p>
+<p><a id="W08"></a></p>
+<h2 id="section-69">W08 — Lefthook remotes</h2>
+<p><a href="https://lefthook.dev/configuration/remotes/">Open source</a></p>
+<p><strong>kind:</strong> primary_web_source</p>
+<p><strong>accessed date:</strong> 2026-09-16</p>
+<p><strong>scope note:</strong> Shared hook configuration mechanism; use immutable tested ref and inspect effective config.</p>
+<p><a id="W09"></a></p>
+<h2 id="section-70">W09 — GitHub reusable workflows</h2>
+<p><a href="https://docs.github.com/en/actions/how-tos/reuse-automations/reuse-workflows">Open source</a></p>
+<p><strong>kind:</strong> primary_web_source</p>
+<p><strong>accessed date:</strong> 2026-09-16</p>
+<p><strong>scope note:</strong> Job-level reuse, literal refs, .github/workflows provider location, permission constraints.</p>
+<p><a id="W10"></a></p>
+<h2 id="section-71">W10 — Cargo build profiles</h2>
+<p><a href="https://doc.rust-lang.org/cargo/reference/profiles.html">Open source</a></p>
+<p><strong>kind:</strong> primary_web_source</p>
+<p><strong>accessed date:</strong> 2026-09-16</p>
+<p><strong>scope note:</strong> Size and speed optimization profiles are distinct; benchmark actual workload.</p>
+<p><a id="W11"></a></p>
+<h2 id="section-72">W11 — Zig</h2>
+<p><a href="https://ziglang.org/learn/overview/">Open source</a></p>
+<p><strong>kind:</strong> primary_web_source</p>
+<p><strong>accessed date:</strong> 2026-09-16</p>
+<p><strong>scope note:</strong> Explicit allocation, C ABI, comptime and SIMD facilities. No local performance result.</p>
+<p><a id="W12"></a></p>
+<h2 id="section-73">W12 — Odin</h2>
+<p><a href="https://odin-lang.org/docs/overview/">Open source</a></p>
+<p><strong>kind:</strong> primary_web_source</p>
+<p><strong>accessed date:</strong> 2026-09-16</p>
+<p><strong>scope note:</strong> Language/runtime/allocator and data-layout facilities. No local performance result.</p>
+<p><a id="W13"></a></p>
+<h2 id="section-74">W13 — Nim</h2>
+<p><a href="https://nim-lang.org/docs/manual.html">Open source</a></p>
+<p><strong>kind:</strong> primary_web_source</p>
+<p><strong>accessed date:</strong> 2026-09-16</p>
+<p><strong>scope note:</strong> Native compilation/metaprogramming/interop features. No local performance result.</p>
+<p><a id="W14"></a></p>
+<h2 id="section-75">W14 — Julia</h2>
+<p><a href="https://docs.julialang.org/en/v1/manual/performance-tips/">Open source</a></p>
+<p><strong>kind:</strong> primary_web_source</p>
+<p><strong>accessed date:</strong> 2026-09-16</p>
+<p><strong>scope note:</strong> Type stability, allocation and compilation-sensitive optimization. No local performance result.</p>
+<p><a id="W15"></a></p>
+<h2 id="section-76">W15 — Pony</h2>
+<p><a href="https://www.ponylang.io/discover/">Open source</a></p>
+<p><strong>kind:</strong> primary_web_source</p>
+<p><strong>accessed date:</strong> 2026-09-16</p>
+<p><strong>scope note:</strong> Actor/reference-capability concurrency model. No local scheduler benchmark.</p>
+<p><a id="W16"></a></p>
+<h2 id="section-77">W16 — Mojo</h2>
+<p><a href="https://mojolang.org/docs/manual/">Open source</a></p>
+<p><strong>kind:</strong> primary_web_source</p>
+<p><strong>accessed date:</strong> 2026-09-16</p>
+<p><strong>scope note:</strong> Official language documentation; exact target and redistribution qualification remain required.</p>
+<p><a id="W17"></a></p>
+<h2 id="section-78">W17 — Triton</h2>
+<p><a href="https://triton-lang.org/main/index.html">Open source</a></p>
+<p><strong>kind:</strong> primary_web_source</p>
+<p><strong>accessed date:</strong> 2026-09-16</p>
+<p><strong>scope note:</strong> GPU programming/compiler framework, distinct from Trident.</p>
+<p><a id="W18"></a></p>
+<h2 id="section-79">W18 — Trident</h2>
+<p><a href="https://github.com/kakaobrain/trident">Open source</a></p>
+<p><strong>kind:</strong> primary_web_source</p>
+<p><strong>accessed date:</strong> 2026-09-16</p>
+<p><strong>scope note:</strong> Real Triton-based ML library; repo archived October 16 2023. User intended identity still needs resolution.</p>
+<p><a id="W19"></a></p>
+<h2 id="section-80">W19 — CUTLASS</h2>
+<p><a href="https://docs.nvidia.com/cutlass/latest/overview.html">Open source</a></p>
+<p><strong>kind:</strong> primary_web_source</p>
+<p><strong>accessed date:</strong> 2026-09-16</p>
+<p><strong>scope note:</strong> CUDA templates and CuTe facilities; kernel architecture eligibility must be tested.</p>
+<p><a id="W20"></a></p>
+<h2 id="section-81">W20 — ISPC</h2>
+<p><a href="https://ispc.github.io/">Open source</a></p>
+<p><strong>kind:</strong> primary_web_source</p>
+<p><strong>accessed date:</strong> 2026-09-16</p>
+<p><strong>scope note:</strong> SPMD CPU-vectorization compiler. No local performance result.</p>
+<p><a id="W21"></a></p>
+<h2 id="section-82">W21 — TileLang</h2>
+<p><a href="https://tilelang.com/">Open source</a></p>
+<p><strong>kind:</strong> primary_web_source</p>
+<p><strong>accessed date:</strong> 2026-09-16</p>
+<p><strong>scope note:</strong> GPU kernel DSL; qualify exact target/compiler pair.</p>
+<p><a id="W22"></a></p>
+<h2 id="section-83">W22 — Futhark</h2>
+<p><a href="https://futhark-lang.org/">Open source</a></p>
+<p><strong>kind:</strong> primary_web_source</p>
+<p><strong>accessed date:</strong> 2026-09-16</p>
+<p><strong>scope note:</strong> Array-oriented data-parallel compiler. Candidate, not adopted.</p>
+<p><a id="W23"></a></p>
+<h2 id="section-84">W23 — Halide</h2>
+<p><a href="https://halide-lang.org/">Open source</a></p>
+<p><strong>kind:</strong> primary_web_source</p>
+<p><strong>accessed date:</strong> 2026-09-16</p>
+<p><strong>scope note:</strong> Image/array pipeline algorithm and schedule separation. Candidate, not adopted.</p>
+<p><a id="W24"></a></p>
+<h2 id="section-85">W24 — Lefthook usage</h2>
+<p><a href="https://lefthook.dev/usage/">Open source</a></p>
+<p><strong>kind:</strong> primary_web_source</p>
+<p><strong>accessed date:</strong> 2026-09-16</p>
+<p><strong>scope note:</strong> install, validate and dump commands; local hooks can be bypassed.</p>
+<p class="footer">Compiled from the source index and bounded observations retained in this packet. Successful packet checks do not authenticate evidence or qualify products.</p></main></div></body></html>

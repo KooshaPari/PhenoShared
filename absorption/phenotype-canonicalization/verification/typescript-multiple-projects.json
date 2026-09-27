@@ -1,0 +1,47 @@
+{
+  "kind": "isolated_compiler_counterexample",
+  "compiler": "Version 5.8.3",
+  "scope": "Synthetic two-project fixture; not a Tracera build and not its locked compiler",
+  "results": [
+    {
+      "command": [
+        "tsc",
+        "--pretty",
+        "false",
+        "-p",
+        "bad/tsconfig.json"
+      ],
+      "exit_code": 2,
+      "stdout": "bad/index.ts(1,7): error TS2322: Type 'string' is not assignable to type 'number'.\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "tsc",
+        "--pretty",
+        "false",
+        "-p",
+        "bad/tsconfig.json",
+        "-p",
+        "good/tsconfig.json"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "tsc",
+        "--pretty",
+        "false",
+        "-p",
+        "good/tsconfig.json",
+        "-p",
+        "bad/tsconfig.json"
+      ],
+      "exit_code": 2,
+      "stdout": "bad/index.ts(1,7): error TS2322: Type 'string' is not assignable to type 'number'.\n",
+      "stderr": ""
+    }
+  ]
+}

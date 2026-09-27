@@ -1,0 +1,35 @@
+---
+name: Feature Request
+about: Suggest an idea for this project
+title: 'feat: '
+labels: enhancement
+assignees: KooshaPari
+
+---
+
+## Problem
+
+<!-- Is your feature request related to a problem? Describe what's frustrating you. -->
+
+## Proposed Solution
+
+<!-- Describe the solution you'd like in detail. -->
+
+## Alternative Approaches
+
+<!-- Describe alternatives you've considered. -->
+
+## Impact
+
+<!-- Which landing site(s) would this affect? -->
+
+- [ ] agileplus-landing
+- [ ] byteport-landing
+- [ ] hwledger-landing
+- [ ] phenokits-landing
+- [ ] projects-landing
+- [ ] thegent-landing
+- [ ] odin-landing
+- [ ] packages/ (shared)
+- [ ] templates/
+- [ ] Root (CI, tooling)
