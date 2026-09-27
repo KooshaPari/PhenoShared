@@ -152,9 +152,7 @@ where
     D: serde::Deserializer<'de>,
 {
     let opt: Option<String> = Option::deserialize(de)?;
-    Ok(opt.map(|command| ReadinessProbe {
-        command,
-    }))
+    Ok(opt.map(|command| ReadinessProbe { command }))
 }
 
 // Alias kept for internal use so the existing `load_compositions` logic can

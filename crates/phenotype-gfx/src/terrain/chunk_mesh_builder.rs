@@ -39,9 +39,7 @@ impl ChunkMeshBuilder {
     /// `resolution² * 6` indices.
     pub fn build_mesh(&self, resolution: i32, size: f32) -> TerrainResult<MeshData> {
         if resolution <= 0 {
-            return Err(TerrainError::InvalidResolution {
-                value: resolution,
-            });
+            return Err(TerrainError::InvalidResolution { value: resolution });
         }
         let res_u = resolution as usize;
         let vertex_count = (res_u + 1) * (res_u + 1);
@@ -102,9 +100,7 @@ impl ChunkMeshBuilder {
         size: f32,
     ) -> TerrainResult<MeshData> {
         if resolution <= 0 {
-            return Err(TerrainError::InvalidResolution {
-                value: resolution,
-            });
+            return Err(TerrainError::InvalidResolution { value: resolution });
         }
         let res_u = resolution as usize;
         let vertex_count = (res_u + 1) * (res_u + 1);

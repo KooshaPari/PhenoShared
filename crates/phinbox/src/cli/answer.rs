@@ -70,15 +70,9 @@ pub fn cmd_answer(args: AnswerArgs, inbox_dir: &PathBuf) -> Result<(), String> {
         }
     } else if let Some(v) = args.value {
         let value = match &req.spec.field {
-            FieldSpec::Text {
-                ..
-            } => FieldValue::Text(v),
-            FieldSpec::LongText {
-                ..
-            } => FieldValue::LongText(v),
-            FieldSpec::Choice {
-                options, ..
-            } => {
+            FieldSpec::Text { .. } => FieldValue::Text(v),
+            FieldSpec::LongText { .. } => FieldValue::LongText(v),
+            FieldSpec::Choice { options, .. } => {
                 let idx = options
                     .iter()
                     .position(|o| o.value == v || o.label == v)
@@ -88,9 +82,7 @@ pub fn cmd_answer(args: AnswerArgs, inbox_dir: &PathBuf) -> Result<(), String> {
                     index: idx,
                 }
             },
-            FieldSpec::DateTime {
-                ..
-            } => FieldValue::DateTime(v),
+            FieldSpec::DateTime { .. } => FieldValue::DateTime(v),
             _ => return Err("use --integer or --boolean for this field type".into()),
         };
         ElicitResponse::Answered {
@@ -102,9 +94,7 @@ pub fn cmd_answer(args: AnswerArgs, inbox_dir: &PathBuf) -> Result<(), String> {
     };
 
     req.state = match response {
-        ElicitResponse::Cancelled {
-            ..
-        } => RequestState::Cancelled,
+        ElicitResponse::Cancelled { .. } => RequestState::Cancelled,
         _ => RequestState::Answered,
     };
     req.response = Some(response.clone());

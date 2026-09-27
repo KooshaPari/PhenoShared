@@ -69,9 +69,7 @@ pub async fn run(args: ServeArgs) -> Result<()> {
         Decision::Attach => {
             // A live server is already running — report its URL and exit clean.
             let url = match &state {
-                ServeState::Running {
-                    info, ..
-                } => info.url.clone(),
+                ServeState::Running { info, .. } => info.url.clone(),
                 ServeState::Free => bind_url.clone(), // unreachable in practice
             };
             eprintln!("substrate serve: already running at {url} (attach)");
@@ -79,9 +77,7 @@ pub async fn run(args: ServeArgs) -> Result<()> {
         },
         Decision::Abort => {
             let url = match &state {
-                ServeState::Running {
-                    info, ..
-                } => info.url.clone(),
+                ServeState::Running { info, .. } => info.url.clone(),
                 ServeState::Free => String::new(),
             };
             eprintln!(

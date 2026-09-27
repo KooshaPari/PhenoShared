@@ -193,10 +193,7 @@ impl<V: CubicVoxel> GreedyMesher<V> {
                                 // face_ao expects the voxel (x,y,z) coordinates and
                                 // the face_id matching cubic's face encoding.
                                 let ao = face_ao(chunk.voxels, pos[0], pos[1], pos[2], face_id);
-                                Some(MaskCell {
-                                    material,
-                                    ao,
-                                })
+                                Some(MaskCell { material, ao })
                             } else {
                                 None
                             };

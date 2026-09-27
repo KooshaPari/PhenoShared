@@ -77,12 +77,8 @@ fn main() {
             listen,
             log_level,
         } => cmd_start(config, db, listen, log_level),
-        Commands::Health {
-            connect,
-        } => cmd_health(&connect),
-        Commands::Status {
-            connect,
-        } => cmd_status(&connect),
+        Commands::Health { connect } => cmd_health(&connect),
+        Commands::Status { connect } => cmd_status(&connect),
     }
 }
 

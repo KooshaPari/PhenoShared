@@ -98,9 +98,7 @@ impl CloudDispatchPort for KiloCloudDispatch {
             }
         });
 
-        Ok(CloudTaskHandle {
-            id,
-        })
+        Ok(CloudTaskHandle { id })
     }
 
     async fn poll_status(&self, handle: &CloudTaskHandle) -> Result<CloudTaskStatus> {
@@ -123,9 +121,7 @@ impl CloudDispatchPort for KiloCloudDispatch {
                 .result
                 .clone()
                 .ok_or_else(|| SubstrateError::CloudDispatch("missing harvest payload".into())),
-            CloudTaskStatus::Failed {
-                message,
-            } => Err(SubstrateError::CloudDispatch(
+            CloudTaskStatus::Failed { message } => Err(SubstrateError::CloudDispatch(
                 message.clone().unwrap_or_else(|| "kilo task failed".into()),
             )),
             _ => Err(SubstrateError::CloudDispatch(

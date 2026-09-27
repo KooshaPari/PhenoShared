@@ -34,10 +34,7 @@ impl GatewayClient {
             .default_headers(headers)
             .build()
             .expect("reqwest client build");
-        Self {
-            base_url,
-            client,
-        }
+        Self { base_url, client }
     }
 
     // ── health ──────────────────────────────────────────────────────────

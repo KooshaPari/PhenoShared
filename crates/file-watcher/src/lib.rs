@@ -115,10 +115,7 @@ impl WatcherPort for NotifyWatcher {
                         for path in event_paths(&event.path, &watched_path, &canonical_watched) {
                             let mut known = known_paths.lock().expect("known_paths lock");
                             let kind = classify_event(&path, &mut known);
-                            let mapped = WatchEvent {
-                                path,
-                                kind,
-                            };
+                            let mapped = WatchEvent { path, kind };
                             let _ = tx.blocking_send(mapped);
                         }
                     }
@@ -137,9 +134,7 @@ impl WatcherPort for NotifyWatcher {
             .map_err(|e| SubstrateError::Watcher(format!("watch {}: {e}", path.display())))?;
 
         let id = Uuid::new_v4();
-        let handle = WatchHandle {
-            id,
-        };
+        let handle = WatchHandle { id };
         self.subs.lock().await.insert(
             id,
             Subscription {

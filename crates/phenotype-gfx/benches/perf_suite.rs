@@ -73,9 +73,7 @@ fn sparse_u8_chunk() -> Chunk<u8> {
 /// Named "dense" because it represents the dense/worst-case serialization path.
 fn dense_u8_chunk() -> Chunk<u8> {
     let voxels: Vec<u8> = (0..CHUNK_VOXELS).map(|i| (i % 2) as u8).collect();
-    Chunk {
-        voxels,
-    }
+    Chunk { voxels }
 }
 
 fn checkerboard_u8_chunk() -> Chunk<u8> {
@@ -280,11 +278,7 @@ fn bench_world_fill_and_drain(c: &mut Criterion) {
     group.bench_function("idempotent_writes_no_dirty", |b| {
         b.iter(|| {
             let mut world = VoxelWorld::<MaterialId>::new(span);
-            let pos = WorldCoord {
-                x: 0,
-                y: 0,
-                z: 0,
-            };
+            let pos = WorldCoord { x: 0, y: 0, z: 0 };
             world.write(pos, MaterialId(1));
             let _ = world.drain_dirty();
             // Second write is idempotent.

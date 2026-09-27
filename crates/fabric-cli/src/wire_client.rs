@@ -133,9 +133,7 @@ mod tests {
         let result = send_message("127.0.0.1:59999", &serde_json::json!({"type": "heartbeat"}));
         assert!(result.is_err());
         match result.unwrap_err() {
-            WireClientError::ConnectionRefused {
-                addr,
-            } => {
+            WireClientError::ConnectionRefused { addr } => {
                 assert!(addr.contains("59999"));
             },
             other => panic!("expected ConnectionRefused, got {:?}", other),

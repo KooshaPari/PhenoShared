@@ -244,10 +244,7 @@ impl OtlpDecisionRecorder {
     /// Construct a recorder backed by an arbitrary [`TracePort`] adapter
     /// (e.g. an OTLP/HTTP exporter in production).
     pub fn with_port(port: Arc<dyn TracePort>, config: OtelConfig) -> Self {
-        Self {
-            port,
-            config,
-        }
+        Self { port, config }
     }
 
     /// Read-only view of the active config.

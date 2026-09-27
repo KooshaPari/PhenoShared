@@ -61,9 +61,7 @@ pub fn dispatch(args: &CheckArgs) -> Result<()> {
                     console::style("ADMIT").green().bold(),
                 ));
             },
-            fabric_checker::Decision::AdmitWithNotes {
-                notes,
-            } => {
+            fabric_checker::Decision::AdmitWithNotes { notes } => {
                 out.push_str(&format!(
                     "{} machine satisfies manifest requirements (with notes)\n\n",
                     console::style("ADMIT WITH NOTES").yellow().bold(),

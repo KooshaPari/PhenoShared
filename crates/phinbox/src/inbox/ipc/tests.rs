@@ -88,10 +88,7 @@ async fn inbox_answer_refuses_an_expired_request() {
         .call("inbox.answer", answer_params("ipc-stale-1", "answered"))
         .expect_err("an expired request must not be answerable");
     match err {
-        ElicitError::Rpc {
-            code,
-            message,
-        } => {
+        ElicitError::Rpc { code, message } => {
             assert_eq!(code, crate::inbox::ipc::ERR_EXPIRED, "message: {message}");
             assert!(message.contains("expired"), "message: {message}");
         },

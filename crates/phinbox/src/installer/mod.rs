@@ -277,10 +277,7 @@ pub fn uninstall(opts: &UninstallOptions) -> Result<UninstallReport, String> {
     {
         powershell::remove_scheduled_task();
     }
-    Ok(UninstallReport {
-        removed,
-        warnings,
-    })
+    Ok(UninstallReport { removed, warnings })
 }
 
 fn install_autostart(cli_path: &Path) -> Result<PathBuf, String> {

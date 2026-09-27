@@ -175,10 +175,7 @@ impl HealthMonitor {
         let status = checks
             .iter()
             .fold(HealthStatus::Healthy, |acc, r| acc.worse(r.status));
-        HealthResponse {
-            status,
-            checks,
-        }
+        HealthResponse { status, checks }
     }
 }
 

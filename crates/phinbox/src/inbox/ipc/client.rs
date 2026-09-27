@@ -23,9 +23,7 @@ impl Client {
                 format!("ipc socket not found at {}", sock.display()),
             )));
         }
-        Ok(Self {
-            sock,
-        })
+        Ok(Self { sock })
     }
 
     /// Convenience constructor that walks the inbox root + lockfile.

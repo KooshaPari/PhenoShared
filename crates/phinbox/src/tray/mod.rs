@@ -174,9 +174,7 @@ pub struct NoopTray {
 impl NoopTray {
     #[must_use]
     pub fn new(cfg: TrayConfig) -> Self {
-        Self {
-            cfg,
-        }
+        Self { cfg }
     }
 }
 

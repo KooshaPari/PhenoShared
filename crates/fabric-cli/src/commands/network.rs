@@ -122,9 +122,7 @@ fn network_status(args: &NetworkStatusArgs) -> Result<()> {
                 out
             })?;
         },
-        Err(wire_client::WireClientError::ConnectionRefused {
-            addr,
-        }) => {
+        Err(wire_client::WireClientError::ConnectionRefused { addr }) => {
             if args.json {
                 println!(
                     "{}",
@@ -180,9 +178,7 @@ fn stun(args: &StunArgs) -> Result<()> {
                 )
             })?;
         },
-        Err(wire_client::WireClientError::ConnectionRefused {
-            addr,
-        }) => {
+        Err(wire_client::WireClientError::ConnectionRefused { addr }) => {
             if args.json {
                 println!(
                     "{}",
@@ -282,9 +278,7 @@ fn tailscale(args: &TailscaleArgs) -> Result<()> {
                 out
             })?;
         },
-        Err(wire_client::WireClientError::ConnectionRefused {
-            addr,
-        }) => {
+        Err(wire_client::WireClientError::ConnectionRefused { addr }) => {
             if args.json {
                 println!(
                     "{}",

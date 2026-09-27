@@ -133,11 +133,7 @@ fn bench_roundtrip_small(c: &mut Criterion) {
     c.bench_function("roundtrip_small_64x64", |b| {
         b.iter(|| {
             let msg = parse_message(MessageType::FrameData, black_box(wire.clone())).unwrap();
-            if let FrameMessage::FrameData {
-                header,
-                payload,
-            } = msg
-            {
+            if let FrameMessage::FrameData { header, payload } = msg {
                 let mut buf = BytesMut::with_capacity(FrameHeader::SERIALIZED_SIZE + payload.len());
                 header.encode(&mut buf);
                 buf.extend_from_slice(&payload);

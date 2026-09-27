@@ -64,18 +64,12 @@ impl FairnessQueue {
 
         match &self.policy {
             FairnessPolicy::Fifo => self.try_acquire_fifo(tenant, weight),
-            FairnessPolicy::FairShare {
-                ..
-            } => self.try_acquire_fair_share(tenant, weight),
-            FairnessPolicy::PriorityWeighted {
-                priority,
-            } => {
+            FairnessPolicy::FairShare { .. } => self.try_acquire_fair_share(tenant, weight),
+            FairnessPolicy::PriorityWeighted { priority } => {
                 let priority = *priority;
                 self.try_acquire_priority(tenant, weight, priority)
             },
-            FairnessPolicy::WeightedRoundRobin {
-                ..
-            } => self.try_acquire_wrr(tenant, weight),
+            FairnessPolicy::WeightedRoundRobin { .. } => self.try_acquire_wrr(tenant, weight),
         }
     }
 
@@ -131,9 +125,7 @@ impl FairnessQueue {
 
     fn register_tenant(&mut self, tenant: &TenantId) {
         let priority = match &self.policy {
-            FairnessPolicy::PriorityWeighted {
-                priority,
-            } => *priority,
+            FairnessPolicy::PriorityWeighted { priority } => *priority,
             _ => u8::MAX,
         };
         self.accounting.insert(
@@ -148,10 +140,9 @@ impl FairnessQueue {
         self.insertion_order.push(tenant.clone());
         // For Fifo + WRR, the tenant joins the rotation.
         match &self.policy {
-            FairnessPolicy::Fifo
-            | FairnessPolicy::WeightedRoundRobin {
-                ..
-            } if !self.rotation.contains(tenant) => {
+            FairnessPolicy::Fifo | FairnessPolicy::WeightedRoundRobin { .. }
+                if !self.rotation.contains(tenant) =>
+            {
                 self.rotation.push_back(tenant.clone());
             },
             _ => {},
@@ -334,9 +325,7 @@ impl FairnessQueue {
         // budget). Initial registration primes a tenant with `policy.weight`
         // slots; each grant consumes 1 slot.
         let policy_weight = match self.policy {
-            FairnessPolicy::WeightedRoundRobin {
-                weight: pw,
-            } => pw,
+            FairnessPolicy::WeightedRoundRobin { weight: pw } => pw,
             _ => 1,
         };
 
@@ -429,9 +418,7 @@ mod tests {
 
     #[test]
     fn fair_share_equal_grants() {
-        let mut q = FairnessQueue::new(FairnessPolicy::FairShare {
-            weight: 3,
-        });
+        let mut q = FairnessQueue::new(FairnessPolicy::FairShare { weight: 3 });
         let a = TenantId::new("a");
         let b = TenantId::new("b");
         let c = TenantId::new("c");
@@ -455,9 +442,7 @@ mod tests {
 
     #[test]
     fn priority_skips_higher_priority_tenant() {
-        let mut q = FairnessQueue::new(FairnessPolicy::PriorityWeighted {
-            priority: 1,
-        });
+        let mut q = FairnessQueue::new(FairnessPolicy::PriorityWeighted { priority: 1 });
         let a = TenantId::new("a");
         let r1 = q.try_acquire(a.clone(), 5);
         assert!(matches!(r1, FairnessDecision::Granted { .. }));
@@ -470,12 +455,8 @@ mod tests {
         q.set_priority(&b, 2);
         let r2 = q.try_acquire(b.clone(), 5);
         match r2 {
-            FairnessDecision::Denied {
-                reason, ..
-            } => match reason {
-                DenyReason::LowerPriority {
-                    blocking, ..
-                } => {
+            FairnessDecision::Denied { reason, .. } => match reason {
+                DenyReason::LowerPriority { blocking, .. } => {
                     assert_eq!(blocking, a);
                 },
                 other => panic!("expected LowerPriority, got {other:?}"),
@@ -488,9 +469,7 @@ mod tests {
 
     #[test]
     fn wrr_weighted_slots() {
-        let mut q = FairnessQueue::new(FairnessPolicy::WeightedRoundRobin {
-            weight: 2,
-        });
+        let mut q = FairnessQueue::new(FairnessPolicy::WeightedRoundRobin { weight: 2 });
         let a = TenantId::new("a");
         let b = TenantId::new("b");
         // First call from A — registers, goes to rotation front.
@@ -527,9 +506,7 @@ mod tests {
 
     #[test]
     fn snapshot_serde_round_trip() {
-        let mut q = FairnessQueue::new(FairnessPolicy::FairShare {
-            weight: 5,
-        });
+        let mut q = FairnessQueue::new(FairnessPolicy::FairShare { weight: 5 });
         let a = TenantId::new("alpha");
         let b = TenantId::new("beta");
         q.try_acquire(a.clone(), 2);

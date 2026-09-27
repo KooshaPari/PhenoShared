@@ -309,10 +309,7 @@ impl DaemonGuard {
             warn!(%socket_path, "daemon socket did not appear within 2s");
         }
 
-        Ok(Self {
-            child,
-            socket_path,
-        })
+        Ok(Self { child, socket_path })
     }
 
     pub fn socket_path(&self) -> &str {

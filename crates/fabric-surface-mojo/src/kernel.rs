@@ -78,9 +78,7 @@ impl CpuSimdKernel {
 
     /// Create a CPU kernel that references a specific Mojo kernel.
     pub fn with_meta(meta: MojoKernel) -> Self {
-        Self {
-            kernel_meta: meta,
-        }
+        Self { kernel_meta: meta }
     }
 }
 
@@ -247,10 +245,7 @@ impl CpuFrameBuffer {
     /// Create a CPU frame buffer with existing data.
     pub fn with_data(width: u32, height: u32, pixel_format: &str, data: Vec<u8>) -> Self {
         let inner = MojoFrameBuffer::new(0, width, height, pixel_format, -1);
-        Self {
-            inner,
-            data,
-        }
+        Self { inner, data }
     }
 }
 

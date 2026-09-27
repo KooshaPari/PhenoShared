@@ -85,23 +85,11 @@ pub fn urgency_label(u: crate::spec::Urgency) -> &'static str {
 #[must_use]
 pub fn field_kind_label(f: &FieldSpec) -> &'static str {
     match f {
-        FieldSpec::Text {
-            ..
-        } => "text",
-        FieldSpec::LongText {
-            ..
-        } => "long text",
-        FieldSpec::Integer {
-            ..
-        } => "integer",
-        FieldSpec::Choice {
-            ..
-        } => "choice",
-        FieldSpec::Boolean {
-            ..
-        } => "yes / no",
-        FieldSpec::DateTime {
-            ..
-        } => "date",
+        FieldSpec::Text { .. } => "text",
+        FieldSpec::LongText { .. } => "long text",
+        FieldSpec::Integer { .. } => "integer",
+        FieldSpec::Choice { .. } => "choice",
+        FieldSpec::Boolean { .. } => "yes / no",
+        FieldSpec::DateTime { .. } => "date",
     }
 }

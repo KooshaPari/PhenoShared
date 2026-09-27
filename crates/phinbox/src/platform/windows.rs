@@ -125,12 +125,8 @@ fn build_script(spec: &PromptSpec) -> Result<String, ElicitError> {
 
     // For text fields with defaults, pass the default through
     let default_expr = match &spec.field {
-        FieldSpec::Text {
-            default, ..
-        } => powershell_escape(default.as_deref().unwrap_or(""))?,
-        FieldSpec::LongText {
-            default, ..
-        } => powershell_escape(default.as_deref().unwrap_or(""))?,
+        FieldSpec::Text { default, .. } => powershell_escape(default.as_deref().unwrap_or(""))?,
+        FieldSpec::LongText { default, .. } => powershell_escape(default.as_deref().unwrap_or(""))?,
         _ => powershell_escape("")?,
     };
 
@@ -153,36 +149,20 @@ fn build_script(spec: &PromptSpec) -> Result<String, ElicitError> {
 
     // Secret field uses a TextBox with PasswordChar
     let (input_kind, secret_clause) = match &spec.field {
-        FieldSpec::Text {
-            secret: true, ..
-        } => ("TextBox", "    $txtField.PasswordChar = '*'\n"),
-        FieldSpec::Text {
-            ..
-        }
-        | FieldSpec::LongText {
-            ..
-        } => ("TextBox", ""),
-        FieldSpec::Integer {
-            ..
-        } => (
+        FieldSpec::Text { secret: true, .. } => ("TextBox", "    $txtField.PasswordChar = '*'\n"),
+        FieldSpec::Text { .. } | FieldSpec::LongText { .. } => ("TextBox", ""),
+        FieldSpec::Integer { .. } => (
             "NumericUpDown",
             "    $txtField.Minimum = -2147483648\n    $txtField.Maximum = 2147483647\n",
         ),
-        FieldSpec::Choice {
-            ..
-        }
-        | FieldSpec::Boolean {
-            ..
-        } => ("ComboBox", ""),
-        FieldSpec::DateTime {
-            ..
-        } => ("DateTimePicker", ""),
+        FieldSpec::Choice { .. } | FieldSpec::Boolean { .. } => ("ComboBox", ""),
+        FieldSpec::DateTime { .. } => ("DateTimePicker", ""),
     };
 
     let placeholder_expr = match &spec.field {
-        FieldSpec::Text {
-            placeholder, ..
-        } => powershell_escape(placeholder.as_deref().unwrap_or(""))?,
+        FieldSpec::Text { placeholder, .. } => {
+            powershell_escape(placeholder.as_deref().unwrap_or(""))?
+        },
         _ => powershell_escape("")?,
     };
 

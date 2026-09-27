@@ -108,9 +108,7 @@ mod tests {
             process_id: 12345,
         }];
 
-        let req = PaneUpdateRequest {
-            panes,
-        };
+        let req = PaneUpdateRequest { panes };
         let json = serde_json::to_string(&req).unwrap();
         assert!(json.contains("panes"));
     }

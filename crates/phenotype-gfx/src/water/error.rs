@@ -53,13 +53,8 @@ pub enum WaterError {
 impl fmt::Display for WaterError {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
-            Self::OutOfBounds {
-                msg,
-            } => write!(f, "Out of range: {}", msg),
-            Self::InvalidDataLength {
-                got,
-                expected,
-            } => {
+            Self::OutOfBounds { msg } => write!(f, "Out of range: {}", msg),
+            Self::InvalidDataLength { got, expected } => {
                 write!(f, "Invalid data length: got {}, expected {}", got, expected)
             },
             Self::Io(e) => write!(f, "I/O error: {}", e),
@@ -67,17 +62,11 @@ impl fmt::Display for WaterError {
             Self::NullMaterial => write!(f, "WaterMaterial must not be null"),
             Self::NullShader => write!(f, "WaterShader must not be null"),
             Self::NullWaveBank => write!(f, "GerstnerWaveBank must not be null"),
-            Self::InvalidDistance {
-                value,
-            } => {
+            Self::InvalidDistance { value } => {
                 write!(f, "Distance mismatch: {} out of range", value)
             },
-            Self::InvalidThresholds {
-                msg,
-            } => write!(f, "Invalid thresholds: {}", msg),
-            Self::MissingField {
-                name,
-            } => write!(f, "Missing required field: {}", name),
+            Self::InvalidThresholds { msg } => write!(f, "Invalid thresholds: {}", msg),
+            Self::MissingField { name } => write!(f, "Missing required field: {}", name),
         }
     }
 }
@@ -106,37 +95,17 @@ impl From<crate::terrain::error::TerrainError> for WaterError {
     fn from(e: crate::terrain::error::TerrainError) -> Self {
         use crate::terrain::error::TerrainError as T;
         match e {
-            T::OutOfBounds {
-                msg,
-            } => Self::OutOfBounds {
-                msg,
-            },
-            T::InvalidDataLength {
-                got,
-                expected,
-            } => Self::InvalidDataLength {
-                got,
-                expected,
-            },
-            T::InvalidDistance {
-                value,
-            } => Self::InvalidDistance {
-                value,
-            },
-            T::InvalidThresholds {
-                msg,
-            } => Self::InvalidThresholds {
-                msg,
-            },
+            T::OutOfBounds { msg } => Self::OutOfBounds { msg },
+            T::InvalidDataLength { got, expected } => Self::InvalidDataLength { got, expected },
+            T::InvalidDistance { value } => Self::InvalidDistance { value },
+            T::InvalidThresholds { msg } => Self::InvalidThresholds { msg },
             T::MaterialNotFound(name) => Self::OutOfBounds {
                 msg: format!("terrain material not found: {name}"),
             },
             T::NullMaterial => Self::NullMaterial,
             T::Io(e) => Self::Io(e),
             T::Json(e) => Self::Json(e),
-            T::InvalidResolution {
-                ..
-            } => Self::OutOfBounds {
+            T::InvalidResolution { .. } => Self::OutOfBounds {
                 msg: "Invalid resolution (from terrain LOD)".to_string(),
             },
         }

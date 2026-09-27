@@ -352,10 +352,7 @@ fn parse_sse_record(text: &str) -> Result<Option<A2AEvent>> {
         Some("artifact") | Some("artifact_update") => A2AEvent::Artifact {
             artifact: serde_json::from_value(value)?,
         },
-        _ => A2AEvent::Other {
-            event,
-            data: value,
-        },
+        _ => A2AEvent::Other { event, data: value },
     };
     Ok(Some(parsed))
 }

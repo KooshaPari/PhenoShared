@@ -259,15 +259,9 @@ pub fn run_tui(
                     .events
                     .iter()
                     .map(|e| match e {
-                        GazeEvent::FixationStart {
-                            ..
-                        } => "F+".to_string(),
-                        GazeEvent::FixationEnd {
-                            ..
-                        } => "F-".to_string(),
-                        GazeEvent::Saccade {
-                            ..
-                        } => "S".to_string(),
+                        GazeEvent::FixationStart { .. } => "F+".to_string(),
+                        GazeEvent::FixationEnd { .. } => "F-".to_string(),
+                        GazeEvent::Saccade { .. } => "S".to_string(),
                     })
                     .collect::<Vec<_>>()
                     .join(",")

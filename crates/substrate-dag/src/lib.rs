@@ -139,9 +139,7 @@ mod tests {
         Workflow {
             nodes: nodes
                 .iter()
-                .map(|id| WorkflowNode {
-                    id: (*id).into(),
-                })
+                .map(|id| WorkflowNode { id: (*id).into() })
                 .collect(),
             edges: edges
                 .iter()

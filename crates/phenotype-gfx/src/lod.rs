@@ -205,21 +205,13 @@ impl ExtentBudget {
     pub const FR_ID: &'static str = "FR-CIV-SCALE-002";
 
     /// Legacy WORLD_DIMS_SMALL (256 chunks/side).
-    pub const SMALL: Self = Self::Bounded {
-        side_chunks: 256,
-    };
+    pub const SMALL: Self = Self::Bounded { side_chunks: 256 };
     /// Legacy WORLD_DIMS_MEDIUM.
-    pub const MEDIUM: Self = Self::Bounded {
-        side_chunks: 512,
-    };
+    pub const MEDIUM: Self = Self::Bounded { side_chunks: 512 };
     /// Legacy WORLD_DIMS_LARGE.
-    pub const LARGE: Self = Self::Bounded {
-        side_chunks: 1024,
-    };
+    pub const LARGE: Self = Self::Bounded { side_chunks: 1024 };
     /// Legacy WORLD_DIMS_HUGE.
-    pub const HUGE: Self = Self::Bounded {
-        side_chunks: 2048,
-    };
+    pub const HUGE: Self = Self::Bounded { side_chunks: 2048 };
     /// FR-CIV-SCALE-002 final target.
     pub const FINAL: Self = Self::Unbounded;
 
@@ -239,9 +231,7 @@ impl ExtentBudget {
     pub fn validate(&self, coord: ChunkCoord) -> Result<(), ExtentError> {
         match *self {
             Self::Unbounded => Ok(()),
-            Self::Bounded {
-                side_chunks,
-            } => {
+            Self::Bounded { side_chunks } => {
                 if side_chunks == 0 {
                     return Err(ExtentError::ZeroSide);
                 }
@@ -255,10 +245,7 @@ impl ExtentBudget {
                 {
                     Ok(())
                 } else {
-                    Err(ExtentError::OutOfExtent {
-                        coord,
-                        side_chunks,
-                    })
+                    Err(ExtentError::OutOfExtent { coord, side_chunks })
                 }
             },
         }
@@ -289,10 +276,7 @@ impl core::fmt::Display for ExtentError {
     fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         match self {
             Self::ZeroSide => f.write_str("ExtentBudget::Bounded side_chunks must be > 0"),
-            Self::OutOfExtent {
-                coord,
-                side_chunks,
-            } => write!(
+            Self::OutOfExtent { coord, side_chunks } => write!(
                 f,
                 "coord ({}, {}, {}) is outside the bounded world (side_chunks = {})",
                 coord.cx, coord.cy, coord.cz, side_chunks
@@ -674,11 +658,7 @@ mod tests {
     }
 
     fn coord(cx: i32, cy: i32, cz: i32) -> ChunkCoord {
-        ChunkCoord {
-            cx,
-            cy,
-            cz,
-        }
+        ChunkCoord { cx, cy, cz }
     }
 
     #[test]

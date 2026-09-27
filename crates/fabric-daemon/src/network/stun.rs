@@ -125,12 +125,9 @@ impl StunClient {
 
     /// UDP hole-punching: returns a bound socket plus the external address.
     pub async fn bind(&self) -> Result<(TokioUdpSocket, StunResponse), NetworkError> {
-        let socket =
-            TokioUdpSocket::bind("0.0.0.0:0")
-                .await
-                .map_err(|e| NetworkError::UdpBind {
-                    source: e,
-                })?;
+        let socket = TokioUdpSocket::bind("0.0.0.0:0")
+            .await
+            .map_err(|e| NetworkError::UdpBind { source: e })?;
         let external = self.query_external_address().await?;
         Ok((socket, external))
     }
@@ -165,27 +162,20 @@ impl StunClient {
 
     async fn send_udp(&self, server: &str, request: &[u8]) -> Result<StunResponse, NetworkError> {
         let addr = resolve_stun_addr(server)?;
-        let socket =
-            TokioUdpSocket::bind("0.0.0.0:0")
-                .await
-                .map_err(|e| NetworkError::UdpBind {
-                    source: e,
-                })?;
+        let socket = TokioUdpSocket::bind("0.0.0.0:0")
+            .await
+            .map_err(|e| NetworkError::UdpBind { source: e })?;
         socket
             .send_to(request, addr)
             .await
-            .map_err(|e| NetworkError::UdpSend {
-                source: e,
-            })?;
+            .map_err(|e| NetworkError::UdpSend { source: e })?;
         let mut buf = vec![0u8; 1024];
         let (len, _) = timeout(self.config.timeout, socket.recv_from(&mut buf))
             .await
             .map_err(|_| NetworkError::StunTimeout {
                 server: server.to_string(),
             })?
-            .map_err(|e| NetworkError::UdpRecv {
-                source: e,
-            })?;
+            .map_err(|e| NetworkError::UdpRecv { source: e })?;
         parse_response(&buf[..len], server)
     }
 

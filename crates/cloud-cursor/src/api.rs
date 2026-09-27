@@ -135,9 +135,7 @@ impl CursorCloudDispatch {
             },
         );
 
-        Ok(CloudTaskHandle {
-            id: handle_id,
-        })
+        Ok(CloudTaskHandle { id: handle_id })
     }
 
     /// Poll run status for a submitted handle.

@@ -150,9 +150,7 @@ pub fn required_capabilities(
             hyperthread_pairs: vec![],
             tdp_watts: None,
         },
-        network: NetworkCapabilities {
-            interfaces,
-        },
+        network: NetworkCapabilities { interfaces },
         audio,
     })
 }

@@ -126,18 +126,14 @@ pub fn poll_tray() {
     // Drain commands → apply to TrayIcon.
     loop {
         match cmd_rx.try_recv() {
-            Ok(TrayCmd::SetBadge {
-                text,
-            }) => unsafe {
+            Ok(TrayCmd::SetBadge { text }) => unsafe {
                 if let Some(ref tray) = TRAY_ICON {
                     let _ = tray.set_title(Some(text.clone()));
                     let tip = format!("phinbox inbox · {} pending", text);
                     let _ = tray.set_tooltip(Some(tip));
                 }
             },
-            Ok(TrayCmd::SetTooltip {
-                text,
-            }) => unsafe {
+            Ok(TrayCmd::SetTooltip { text }) => unsafe {
                 if let Some(ref tray) = TRAY_ICON {
                     let _ = tray.set_tooltip(Some(text));
                 }
@@ -156,12 +152,8 @@ pub fn poll_tray() {
     // Forward tray-icon click events.
     if let Ok(ev) = tray_icon::TrayIconEvent::receiver().try_recv() {
         let mapped = match ev {
-            tray_icon::TrayIconEvent::Click {
-                ..
-            } => Some(TrayEvent::Click),
-            tray_icon::TrayIconEvent::DoubleClick {
-                ..
-            } => Some(TrayEvent::DoubleClick),
+            tray_icon::TrayIconEvent::Click { .. } => Some(TrayEvent::Click),
+            tray_icon::TrayIconEvent::DoubleClick { .. } => Some(TrayEvent::DoubleClick),
             _ => None,
         };
         if let Some(m) = mapped {

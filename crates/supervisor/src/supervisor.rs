@@ -263,10 +263,7 @@ fn parts_to_text(parts: &[Part]) -> String {
     parts
         .iter()
         .filter_map(|p| {
-            if let Part::Text {
-                text,
-            } = p
-            {
+            if let Part::Text { text } = p {
                 Some(text.as_str())
             } else {
                 None

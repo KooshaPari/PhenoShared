@@ -173,9 +173,7 @@ mod tests {
         .expect("rebind should succeed");
 
         match outcome {
-            RebindOutcome::Rebound {
-                new_plan_id,
-            } => {
+            RebindOutcome::Rebound { new_plan_id } => {
                 assert_ne!(new_plan_id, original_plan.id, "must be a new plan");
             },
             other => panic!("expected Rebound, got {other:?}"),
@@ -228,12 +226,8 @@ mod tests {
         .expect("rebind should return Ok(Failed), not Err");
 
         match &outcome {
-            RebindOutcome::Failed {
-                reason,
-            } => match reason {
-                crate::surface::LeaseExitReason::HostFailure {
-                    host_node,
-                } => {
+            RebindOutcome::Failed { reason } => match reason {
+                crate::surface::LeaseExitReason::HostFailure { host_node } => {
                     assert_eq!(host_node, &a, "reason should name the failed node");
                 },
                 other => panic!("expected HostFailure, got {other:?}"),
@@ -302,10 +296,7 @@ mod tests {
         );
 
         match result {
-            Err(crate::surface::SurfaceError::EpochDrift {
-                previous,
-                current,
-            }) => {
+            Err(crate::surface::SurfaceError::EpochDrift { previous, current }) => {
                 assert_eq!(previous, orig_topo.epoch.0);
                 assert_eq!(current, post_epoch);
             },

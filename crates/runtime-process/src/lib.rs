@@ -50,10 +50,7 @@ impl CommandGroupProcess {
     }
 
     fn map_state(pid: u32, code: Option<i32>) -> ProcessState {
-        ProcessState::Exited {
-            pid,
-            code,
-        }
+        ProcessState::Exited { pid, code }
     }
 }
 
@@ -71,17 +68,12 @@ impl ProcessPort for CommandGroupProcess {
             .map_err(|e| SubstrateError::Process(format!("spawn {}: {e}", spec.program)))?;
         let pid = child.id().unwrap_or(0);
         let id = Uuid::new_v4();
-        let handle = ProcessHandle {
-            id,
-            pid,
-        };
+        let handle = ProcessHandle { id, pid };
 
-        self.children.lock().await.insert(
-            id,
-            ManagedChild {
-                child,
-            },
-        );
+        self.children
+            .lock()
+            .await
+            .insert(id, ManagedChild { child });
 
         Ok(handle)
     }
@@ -94,9 +86,7 @@ impl ProcessPort for CommandGroupProcess {
 
         match managed.child.try_wait() {
             Ok(Some(status)) => Ok(Self::map_state(handle.pid, status.code())),
-            Ok(None) => Ok(ProcessState::Running {
-                pid: handle.pid,
-            }),
+            Ok(None) => Ok(ProcessState::Running { pid: handle.pid }),
             Err(e) => Err(SubstrateError::Process(format!("try_wait: {e}"))),
         }
     }
@@ -222,12 +212,8 @@ mod tests {
         let mut saw_running = false;
         for _ in 0..20 {
             match proc.status(&handle).await.unwrap() {
-                ProcessState::Running {
-                    ..
-                } => saw_running = true,
-                ProcessState::Exited {
-                    code, ..
-                } => {
+                ProcessState::Running { .. } => saw_running = true,
+                ProcessState::Exited { code, .. } => {
                     assert_eq!(code, Some(0));
                     break;
                 },

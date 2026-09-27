@@ -207,9 +207,7 @@ fn test_all_message_types_roundtrip() {
 
     // --- KeyFrameRequest (JSON) ---
     {
-        let kfr = KeyFrameRequest {
-            reason: 42,
-        };
+        let kfr = KeyFrameRequest { reason: 42 };
         let payload = serde_json::to_vec(&kfr).unwrap();
         let wire = encode_wire(MessageType::KeyFrameRequest, &payload).unwrap();
         let (mt, body) = parse_wire_frame(&wire);

@@ -24,10 +24,7 @@ pub struct Point {
 
 impl Point {
     pub fn new(x: f64, y: f64) -> Self {
-        Self {
-            x,
-            y,
-        }
+        Self { x, y }
     }
 
     fn to_domain(self) -> DomainPoint {
@@ -35,10 +32,7 @@ impl Point {
     }
 
     fn from_domain(p: DomainPoint) -> Self {
-        Self {
-            x: p.x,
-            y: p.y,
-        }
+        Self { x: p.x, y: p.y }
     }
 }
 

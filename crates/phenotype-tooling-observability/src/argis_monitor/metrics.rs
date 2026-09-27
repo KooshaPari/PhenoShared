@@ -300,9 +300,7 @@ impl Metrics {
     pub fn record_slo_target(&self, slo: &str, target: f64) {
         let scaled = (target * 1_000.0).round() as i64;
         self.slo_target
-            .get_or_create(&SloOnlyLabels {
-                slo: slo.into(),
-            })
+            .get_or_create(&SloOnlyLabels { slo: slo.into() })
             .set(scaled);
     }
 

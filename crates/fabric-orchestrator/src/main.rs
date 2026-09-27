@@ -84,17 +84,9 @@ fn main() -> anyhow::Result<()> {
             db,
             log_level,
         } => cmd_run(config, listen, db, log_level),
-        Commands::Compile {
-            topology,
-            output,
-        } => cmd_compile(topology, output),
-        Commands::Check {
-            manifest,
-            probe,
-        } => cmd_check(manifest, probe),
-        Commands::Status {
-            connect,
-        } => cmd_status(&connect),
+        Commands::Compile { topology, output } => cmd_compile(topology, output),
+        Commands::Check { manifest, probe } => cmd_check(manifest, probe),
+        Commands::Status { connect } => cmd_status(&connect),
     }
 }
 

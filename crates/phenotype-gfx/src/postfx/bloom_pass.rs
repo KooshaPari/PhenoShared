@@ -85,9 +85,7 @@ pub struct BloomPass {
 impl BloomPass {
     /// New bloom pass with the given config.
     pub fn new(config: BloomConfig) -> Self {
-        Self {
-            config,
-        }
+        Self { config }
     }
 
     /// Borrow the current config.

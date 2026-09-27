@@ -116,9 +116,7 @@ fn integration_silent_rebind_preserves_handle_and_history() {
 
     // The outcome should be Rebound.
     let new_plan_id = match outcome {
-        RebindOutcome::Rebound {
-            new_plan_id,
-        } => new_plan_id,
+        RebindOutcome::Rebound { new_plan_id } => new_plan_id,
         other => panic!("expected Rebound, got: {other:?}"),
     };
     assert_ne!(new_plan_id, original_plan.id, "must be a new plan");
@@ -170,12 +168,8 @@ fn integration_loud_fail_on_no_replacement_terminates_lease() {
     .expect("rebind should return Ok(Failed), not Err");
 
     match &outcome {
-        RebindOutcome::Failed {
-            reason,
-        } => match reason {
-            LeaseExitReason::HostFailure {
-                host_node,
-            } => {
+        RebindOutcome::Failed { reason } => match reason {
+            LeaseExitReason::HostFailure { host_node } => {
                 assert_eq!(
                     host_node, &a,
                     "reason must name the failed node from the input list"
@@ -239,10 +233,7 @@ fn integration_strict_epoch_drift_short_circuits_replan() {
     );
 
     match result {
-        Err(SurfaceError::EpochDrift {
-            previous,
-            current,
-        }) => {
+        Err(SurfaceError::EpochDrift { previous, current }) => {
             assert_eq!(previous, orig_topo.epoch.0);
             assert_eq!(current, post_epoch);
         },

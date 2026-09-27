@@ -18,9 +18,7 @@ pub(crate) fn tray_event_dispatch(
             phinbox::tray::TrayEvent::Click | phinbox::tray::TrayEvent::DoubleClick => {
                 activate_inbox_helper(port);
             },
-            phinbox::tray::TrayEvent::MenuItem {
-                id,
-            } => {
+            phinbox::tray::TrayEvent::MenuItem { id } => {
                 use phinbox::tray::MenuAction;
                 let action = match id.as_str() {
                     x if x == MenuAction::OpenInbox.id() => Some(MenuAction::OpenInbox),

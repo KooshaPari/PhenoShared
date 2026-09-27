@@ -103,10 +103,10 @@ mod cpu {
     use crate::descriptor::ComputeCapabilities;
     // These imports are referenced only from the cfg-gated branches below;
     // gating them keeps macOS builds warning-free under `-D warnings`.
-    #[cfg(not(target_os = "macos"))]
-    use crate::error::Error;
     #[cfg(target_os = "linux")]
     use crate::descriptor::CacheInfo;
+    #[cfg(not(target_os = "macos"))]
+    use crate::error::Error;
 
     /// Probes CPU/NUMA/cache/memory from /proc and /sys.
     ///

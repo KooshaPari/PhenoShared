@@ -22,10 +22,7 @@ pub fn evaluate(
     let resolve = rule.resolve_threshold.unwrap_or(threshold / 2.0);
 
     match tracker.state {
-        AlertState::Ok
-        | AlertState::Pending {
-            ..
-        } => {
+        AlertState::Ok | AlertState::Pending { .. } => {
             if burn >= threshold {
                 if rule.for_secs.is_zero() {
                     // Fire immediately
@@ -43,10 +40,7 @@ pub fn evaluate(
                     };
                     tracker.sustained_for = Duration::from_secs(0);
                     Decision::Fire(payload)
-                } else if let AlertState::Pending {
-                    since,
-                } = tracker.state
-                {
+                } else if let AlertState::Pending { since } = tracker.state {
                     if ts.saturating_sub(since) >= rule.for_secs.as_secs() {
                         let payload = AlertPayload::firing(
                             &rule.name,
@@ -67,9 +61,7 @@ pub fn evaluate(
                     }
                 } else {
                     // Just crossed threshold, enter Pending
-                    tracker.state = AlertState::Pending {
-                        since: ts,
-                    };
+                    tracker.state = AlertState::Pending { since: ts };
                     tracker.sustained_for = Duration::from_secs(0);
                     Decision::None
                 }

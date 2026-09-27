@@ -138,11 +138,7 @@ mod tests {
     #[test]
     fn drain_dirty_is_sorted() {
         let mut store = VoxelWorldAdapter::<u8>::with_voxel_span(FIXED_SCALE);
-        let a0 = WorldCoord {
-            x: 0,
-            y: 0,
-            z: 0,
-        };
+        let a0 = WorldCoord { x: 0, y: 0, z: 0 };
         let b0 = WorldCoord {
             x: 100 * FIXED_SCALE,
             y: 0,
@@ -188,14 +184,7 @@ mod tests {
         assert_eq!(store.chunk_count(), 0);
         assert_eq!(store.uniform_chunk_count(), 1);
         // Read still works via the octree fallback.
-        assert_eq!(
-            store.read(WorldCoord {
-                x: 0,
-                y: 0,
-                z: 0
-            }),
-            7
-        );
+        assert_eq!(store.read(WorldCoord { x: 0, y: 0, z: 0 }), 7);
         // chunks_dense is now empty.
         assert_eq!(store.chunks_dense().count(), 0);
     }

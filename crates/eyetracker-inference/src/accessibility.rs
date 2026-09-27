@@ -200,9 +200,7 @@ pub struct ScrollDetector {
 
 impl ScrollDetector {
     pub fn new(config: ScrollConfig) -> Self {
-        Self {
-            config,
-        }
+        Self { config }
     }
 
     /// Compute the scroll action for the current gaze position.

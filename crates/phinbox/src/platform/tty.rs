@@ -173,10 +173,7 @@ pub fn render(spec: &PromptSpec, _opts: &ElicitOptions) -> Result<ElicitResponse
             }
         },
 
-        FieldSpec::Boolean {
-            label,
-            default,
-        } => {
+        FieldSpec::Boolean { label, default } => {
             let value = inquire::Confirm::new(label)
                 .with_help_message(spec.question.as_str())
                 .with_default(default.unwrap_or(false))
@@ -258,10 +255,7 @@ pub fn render(spec: &PromptSpec, _opts: &ElicitOptions) -> Result<ElicitResponse
         );
     }
 
-    Ok(ElicitResponse::Answered {
-        value,
-        notes,
-    })
+    Ok(ElicitResponse::Answered { value, notes })
 }
 
 fn prompt_notes(spec: &NotesSpec, _context: &str) -> Result<Option<String>, ElicitError> {

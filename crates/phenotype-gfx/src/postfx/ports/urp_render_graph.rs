@@ -49,9 +49,7 @@ pub struct BrpToUrpAdapter<P: PostFxPass> {
 impl<P: PostFxPass> BrpToUrpAdapter<P> {
     /// Wrap a BRP pass so it can be added to a URP 17 RenderGraph.
     pub fn new(brp_pass: P) -> Self {
-        Self {
-            brp_pass,
-        }
+        Self { brp_pass }
     }
 }
 

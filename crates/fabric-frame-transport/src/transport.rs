@@ -26,9 +26,7 @@ pub struct FrameSender {
 impl FrameSender {
     /// Creates a sender over `stream`.
     pub fn new(stream: TcpStream) -> Self {
-        Self {
-            stream,
-        }
+        Self { stream }
     }
 
     pub async fn send_session_init(&mut self, init: &SessionInit) -> Result<()> {
@@ -105,9 +103,7 @@ pub struct FrameReceiver {
 impl FrameReceiver {
     /// Creates a receiver over `stream`.
     pub fn new(stream: TcpStream) -> Self {
-        Self {
-            stream,
-        }
+        Self { stream }
     }
 
     /// Reads and parses exactly one framed protocol message.
@@ -183,10 +179,7 @@ pub fn parse_message(message_type: MessageType, mut payload: Bytes) -> Result<Fr
                     header.payload_len
                 );
             }
-            Ok(FrameMessage::FrameData {
-                header,
-                payload,
-            })
+            Ok(FrameMessage::FrameData { header, payload })
         },
         MessageType::FrameAck => Ok(FrameMessage::FrameAck(parse_json(&payload)?)),
         MessageType::Ping => Ok(FrameMessage::Ping(parse_json(&payload)?)),
@@ -277,10 +270,7 @@ mod tests {
         )
         .unwrap()
         {
-            FrameMessage::FrameData {
-                header,
-                payload,
-            } => {
+            FrameMessage::FrameData { header, payload } => {
                 assert_eq!(header.seq, 7);
                 assert_eq!(&payload[..], raw);
             },
@@ -342,9 +332,7 @@ mod tests {
     fn keyframe_request_frame_roundtrip() {
         match json(
             MessageType::KeyFrameRequest,
-            &KeyFrameRequest {
-                reason: 12,
-            },
+            &KeyFrameRequest { reason: 12 },
         ) {
             FrameMessage::KeyFrameRequest(value) => assert_eq!(value.reason, 12),
             _ => panic!("expected KeyFrameRequest"),

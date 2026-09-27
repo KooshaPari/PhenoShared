@@ -49,9 +49,7 @@ fn sustained_burn_promotes_to_firing() {
         ..Default::default()
     };
     let mut t = AlertStateTracker {
-        state: AlertState::Pending {
-            since: 100,
-        },
+        state: AlertState::Pending { since: 100 },
         sustained_for: Duration::from_secs(5),
     };
     let d = evaluate(&rule, "gateway", 3.0, 106, &mut t);

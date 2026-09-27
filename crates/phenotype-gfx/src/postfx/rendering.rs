@@ -18,9 +18,7 @@ pub struct MaterialHandle {
 impl MaterialHandle {
     /// New handle.
     pub fn new(id: u64) -> Self {
-        Self {
-            id,
-        }
+        Self { id }
     }
 }
 
@@ -89,9 +87,7 @@ pub struct PostFxShader {
 impl PostFxShader {
     /// New shader.
     pub fn new(name: impl Into<String>) -> Self {
-        Self {
-            name: name.into(),
-        }
+        Self { name: name.into() }
     }
 }
 

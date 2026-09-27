@@ -164,30 +164,14 @@ impl ArtifactRef {
     /// Lowercase kind string, used as a discriminant in DB / URL routing.
     pub fn kind_str(&self) -> String {
         match self {
-            Self::Requirement {
-                ..
-            } => "requirement",
-            Self::NonFunctionalRequirement {
-                ..
-            } => "nfr",
-            Self::Test {
-                ..
-            } => "test",
-            Self::CodeEntity {
-                ..
-            } => "code",
-            Self::Journey {
-                ..
-            } => "journey",
-            Self::AgentRun {
-                ..
-            } => "agent",
-            Self::Evidence {
-                ..
-            } => "evidence",
-            Self::Document {
-                ..
-            } => "document",
+            Self::Requirement { .. } => "requirement",
+            Self::NonFunctionalRequirement { .. } => "nfr",
+            Self::Test { .. } => "test",
+            Self::CodeEntity { .. } => "code",
+            Self::Journey { .. } => "journey",
+            Self::AgentRun { .. } => "agent",
+            Self::Evidence { .. } => "evidence",
+            Self::Document { .. } => "document",
         }
         .to_string()
     }

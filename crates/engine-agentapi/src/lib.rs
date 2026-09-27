@@ -1135,9 +1135,7 @@ mod tests {
             "event: status_change\ndata: {\"agent_type\":\"claude\",\"status\":\"running\"}\n\n";
         let ev = parse_sse_record(text).unwrap().unwrap();
         match ev {
-            SseEvent::StatusChange {
-                data, ..
-            } => {
+            SseEvent::StatusChange { data, .. } => {
                 assert_eq!(data.agent_type, "claude");
                 assert_eq!(data.status, AgentStatusKind::Running);
             },
@@ -1152,9 +1150,7 @@ mod tests {
                     00Z\"}\n\n";
         let ev = parse_sse_record(text).unwrap().unwrap();
         match ev {
-            SseEvent::MessageUpdate {
-                data, ..
-            } => {
+            SseEvent::MessageUpdate { data, .. } => {
                 assert_eq!(data.id, 42);
                 assert_eq!(data.role, ConversationRole::Agent);
             },
@@ -1170,9 +1166,7 @@ mod tests {
                     n\n";
         let ev = parse_sse_record(text).unwrap().unwrap();
         match ev {
-            SseEvent::AgentError {
-                data, ..
-            } => {
+            SseEvent::AgentError { data, .. } => {
                 assert_eq!(data.level, "error");
                 assert_eq!(data.message, "crash");
             },

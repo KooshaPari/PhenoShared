@@ -44,19 +44,12 @@ fn round_trip_pending_state() {
     let _ = std::fs::remove_file(&path);
     let mut store = StateStore::open(&path).unwrap();
     let snap = TrackerSnapshot {
-        state: AlertState::Pending {
-            since: 1234567890,
-        },
+        state: AlertState::Pending { since: 1234567890 },
         sustained_secs: 12,
     };
     store.save("gw::rule_b", &snap).unwrap();
     let all = store.load_all().unwrap();
-    assert_eq!(
-        all[0].1.state,
-        AlertState::Pending {
-            since: 1234567890
-        }
-    );
+    assert_eq!(all[0].1.state, AlertState::Pending { since: 1234567890 });
     assert_eq!(all[0].1.sustained_secs, 12);
 }
 
@@ -90,9 +83,7 @@ fn restart_rehydration_matches_in_memory() {
         (
             "gw::r1",
             TrackerSnapshot {
-                state: AlertState::Pending {
-                    since: 1000,
-                },
+                state: AlertState::Pending { since: 1000 },
                 sustained_secs: 5,
             },
         ),
@@ -140,12 +131,7 @@ fn parse_state_err_handles_unknown_string() {
     let ok = parse_state("ok", 0, 0).unwrap();
     assert_eq!(ok, AlertState::Ok);
     let pending = parse_state("pending", 100, 0).unwrap();
-    assert_eq!(
-        pending,
-        AlertState::Pending {
-            since: 100
-        }
-    );
+    assert_eq!(pending, AlertState::Pending { since: 100 });
     let firing = parse_state("firing", 200, 250).unwrap();
     assert_eq!(
         firing,
@@ -163,9 +149,7 @@ fn alert_state_tracker_conversion() {
     let path = tmpfile("tracker");
     let mut store = StateStore::open(&path).unwrap();
     let mut tracker = AlertStateTracker::default();
-    tracker.state = AlertState::Pending {
-        since: 42,
-    };
+    tracker.state = AlertState::Pending { since: 42 };
     tracker.sustained_for = std::time::Duration::from_secs(7);
     let snap = TrackerSnapshot {
         state: tracker.state.clone(),
@@ -173,12 +157,7 @@ fn alert_state_tracker_conversion() {
     };
     store.save("gw::r1", &snap).unwrap();
     let restored = store.load_all().unwrap();
-    assert_eq!(
-        restored[0].1.state,
-        AlertState::Pending {
-            since: 42
-        }
-    );
+    assert_eq!(restored[0].1.state, AlertState::Pending { since: 42 });
     assert_eq!(restored[0].1.sustained_secs, 7);
 }
 

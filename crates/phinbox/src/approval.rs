@@ -173,9 +173,7 @@ impl ToolApproval {
             });
         }
         for w in &self.warnings {
-            items.push(DetailItem::Warning {
-                message: w.clone(),
-            });
+            items.push(DetailItem::Warning { message: w.clone() });
         }
         if let Some(r) = &self.reason {
             items.push(DetailItem::Text {

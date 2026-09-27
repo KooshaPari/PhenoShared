@@ -417,10 +417,7 @@ pub(crate) fn enum_terminals() -> Vec<WindowInfo> {
         .lock()
         .unwrap()
         .drain(..)
-        .map(|(_class, title, hwnd)| WindowInfo {
-            hwnd,
-            title,
-        })
+        .map(|(_class, title, hwnd)| WindowInfo { hwnd, title })
         .collect()
 }
 

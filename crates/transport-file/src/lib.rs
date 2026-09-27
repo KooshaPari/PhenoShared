@@ -33,9 +33,7 @@ impl FileTransport {
     pub fn new(root: impl Into<PathBuf>) -> Result<Self> {
         let root = root.into();
         fs::create_dir_all(&root).map_err(io)?;
-        Ok(FileTransport {
-            root,
-        })
+        Ok(FileTransport { root })
     }
 
     fn mailbox_path(&self, owner: &str) -> PathBuf {

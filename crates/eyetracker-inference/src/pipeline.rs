@@ -324,18 +324,9 @@ fn create_fallback_face(frame: &Frame) -> FaceResult {
         use crate::face_mesh::EyeRegion;
         let default = EyeRegion {
             landmark_indices: vec![],
-            center: crate::face_mesh::Landmark2D {
-                x: 0.5,
-                y: 0.5,
-            },
-            inner_corner: crate::face_mesh::Landmark2D {
-                x: 0.48,
-                y: 0.5,
-            },
-            outer_corner: crate::face_mesh::Landmark2D {
-                x: 0.52,
-                y: 0.5,
-            },
+            center: crate::face_mesh::Landmark2D { x: 0.5, y: 0.5 },
+            inner_corner: crate::face_mesh::Landmark2D { x: 0.48, y: 0.5 },
+            outer_corner: crate::face_mesh::Landmark2D { x: 0.52, y: 0.5 },
             pupil: None,
         };
         (default.clone(), default)

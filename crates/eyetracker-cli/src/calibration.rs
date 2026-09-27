@@ -161,9 +161,7 @@ pub fn run_calibration(config: &PipelineConfig) -> Result<CalibrationResult> {
             println!("  Collected {} samples → {:?}", count, outcome);
 
             match &outcome {
-                PointOutcome::Stable {
-                    ..
-                } => break raw,
+                PointOutcome::Stable { .. } => break raw,
                 _ if attempt >= MAX_RETRIES_PER_POINT => {
                     println!(
                         "  Max retries ({}); accepting this point anyway.",
@@ -171,14 +169,10 @@ pub fn run_calibration(config: &PipelineConfig) -> Result<CalibrationResult> {
                     );
                     break raw;
                 },
-                PointOutcome::InsufficientSamples {
-                    ..
-                } => {
+                PointOutcome::InsufficientSamples { .. } => {
                     println!("  Insufficient samples — please look at the target and try again.");
                 },
-                PointOutcome::NoFixation {
-                    max_drift,
-                } => {
+                PointOutcome::NoFixation { max_drift } => {
                     println!(
                         "  Gaze drifted ({:.1}% off) — keep your eyes on the target and try again.",
                         max_drift * 100.0

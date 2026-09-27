@@ -48,9 +48,7 @@ pub async fn push_to(url: &str, registry: &Registry) -> Result<u16, PushError> {
     if resp.status().is_success() {
         Ok(status)
     } else {
-        Err(PushError::NonSuccess {
-            status,
-        })
+        Err(PushError::NonSuccess { status })
     }
 }
 

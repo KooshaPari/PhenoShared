@@ -278,9 +278,7 @@ fn webrtc_wire_format_json_message_compatibility() {
     }
 
     // KeyFrameRequest
-    let kf = KeyFrameRequest {
-        reason: 3,
-    };
+    let kf = KeyFrameRequest { reason: 3 };
     let wire = encode_wire(
         MessageType::KeyFrameRequest,
         &serde_json::to_vec(&kf).unwrap(),

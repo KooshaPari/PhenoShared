@@ -10,15 +10,9 @@ pub(super) fn build_script(spec: &PromptSpec) -> Result<String, ElicitError> {
     let title = applescript_escape(&format!("phinbox · {}", spec.title))?;
 
     let default = match &spec.field {
-        FieldSpec::Text {
-            default, ..
-        } => default.clone().unwrap_or_default(),
-        FieldSpec::LongText {
-            default, ..
-        } => default.clone().unwrap_or_default(),
-        FieldSpec::Integer {
-            default, ..
-        } => default.map(|v| v.to_string()).unwrap_or_default(),
+        FieldSpec::Text { default, .. } => default.clone().unwrap_or_default(),
+        FieldSpec::LongText { default, .. } => default.clone().unwrap_or_default(),
+        FieldSpec::Integer { default, .. } => default.map(|v| v.to_string()).unwrap_or_default(),
         _ => String::new(),
     };
     // Text-bearing fields always render an answer box so `text returned`
@@ -59,9 +53,7 @@ pub(super) fn build_script(spec: &PromptSpec) -> Result<String, ElicitError> {
     };
 
     let hidden_clause = match &spec.field {
-        FieldSpec::Text {
-            secret: true, ..
-        } => " with hidden answer",
+        FieldSpec::Text { secret: true, .. } => " with hidden answer",
         _ => "",
     };
 

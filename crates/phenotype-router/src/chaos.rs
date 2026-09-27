@@ -117,9 +117,7 @@ impl Default for ChaosMatrix {
             ChaosKind::Overload,
             ChaosScenario::always(ChaosKind::Overload),
         );
-        Self {
-            scenarios: m,
-        }
+        Self { scenarios: m }
     }
 }
 

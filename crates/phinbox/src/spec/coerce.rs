@@ -25,17 +25,9 @@ use crate::{
 /// label for a Choice, an unparseable date, ...).
 pub fn coerce(spec: &FieldSpec, raw: &str) -> Result<FieldValue, ElicitError> {
     match spec {
-        FieldSpec::Text {
-            ..
-        } => Ok(FieldValue::Text(raw.to_string())),
-        FieldSpec::LongText {
-            ..
-        } => Ok(FieldValue::LongText(raw.to_string())),
-        FieldSpec::Integer {
-            min,
-            max,
-            ..
-        } => {
+        FieldSpec::Text { .. } => Ok(FieldValue::Text(raw.to_string())),
+        FieldSpec::LongText { .. } => Ok(FieldValue::LongText(raw.to_string())),
+        FieldSpec::Integer { min, max, .. } => {
             // Some backends append units or whitespace; trim before parsing.
             let v: i64 = raw
                 .trim()
@@ -57,9 +49,7 @@ pub fn coerce(spec: &FieldSpec, raw: &str) -> Result<FieldValue, ElicitError> {
             }
             Ok(FieldValue::Integer(v))
         },
-        FieldSpec::Choice {
-            options, ..
-        } => {
+        FieldSpec::Choice { options, .. } => {
             let needle = raw.trim();
             for (i, o) in options.iter().enumerate() {
                 if o.label.eq_ignore_ascii_case(needle) || o.value.eq_ignore_ascii_case(needle) {
@@ -73,18 +63,14 @@ pub fn coerce(spec: &FieldSpec, raw: &str) -> Result<FieldValue, ElicitError> {
                 "value {raw:?} not in choice options"
             )))
         },
-        FieldSpec::Boolean {
-            ..
-        } => match raw.trim().to_ascii_lowercase().as_str() {
+        FieldSpec::Boolean { .. } => match raw.trim().to_ascii_lowercase().as_str() {
             "yes" | "true" | "ok" | "1" | "on" => Ok(FieldValue::Boolean(true)),
             "no" | "false" | "cancel" | "0" | "off" => Ok(FieldValue::Boolean(false)),
             other => Err(ElicitError::RendererFailed(format!(
                 "not a boolean: {other:?}"
             ))),
         },
-        FieldSpec::DateTime {
-            picker_kind, ..
-        } => {
+        FieldSpec::DateTime { picker_kind, .. } => {
             let s = raw.trim().to_string();
             let bad = |expected: &str| {
                 ElicitError::RendererFailed(format!("expected {expected}, got {s:?}"))
@@ -163,17 +149,11 @@ mod tests {
         // kdialog prints the *value*; zenity prints the *label*.
         assert!(matches!(
             coerce(&spec, "staging").unwrap(),
-            FieldValue::Choice {
-                index: 0,
-                ..
-            }
+            FieldValue::Choice { index: 0, .. }
         ));
         assert!(matches!(
             coerce(&spec, "Production").unwrap(),
-            FieldValue::Choice {
-                index: 1,
-                ..
-            }
+            FieldValue::Choice { index: 1, .. }
         ));
         assert!(coerce(&spec, "nope").is_err());
     }

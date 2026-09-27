@@ -117,9 +117,7 @@ impl CloudDispatchPort for FakeCloudDispatch {
                 .result
                 .clone()
                 .ok_or_else(|| SubstrateError::CloudDispatch("missing harvest payload".into())),
-            Some(CloudTaskStatus::Failed {
-                message,
-            }) => Err(SubstrateError::CloudDispatch(
+            Some(CloudTaskStatus::Failed { message }) => Err(SubstrateError::CloudDispatch(
                 message.clone().unwrap_or_else(|| "task failed".into()),
             )),
             _ => Err(SubstrateError::CloudDispatch(

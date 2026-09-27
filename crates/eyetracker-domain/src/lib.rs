@@ -14,10 +14,7 @@ pub struct Point {
 
 impl Point {
     pub fn new(x: f64, y: f64) -> Self {
-        Self {
-            x,
-            y,
-        }
+        Self { x, y }
     }
 
     /// Euclidean distance to another point.
@@ -35,10 +32,7 @@ pub struct Vector {
 
 impl Vector {
     pub fn new(dx: f64, dy: f64) -> Self {
-        Self {
-            dx,
-            dy,
-        }
+        Self { dx, dy }
     }
 
     /// Magnitude (speed).

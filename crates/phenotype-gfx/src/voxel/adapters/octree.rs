@@ -20,9 +20,7 @@ pub struct OctreeAdapter<T: Clone + PartialEq> {
 impl<T: Clone + PartialEq> OctreeAdapter<T> {
     /// Construct from an existing [`VoxelOctree`].
     pub fn new(inner: VoxelOctree<T>) -> Self {
-        Self {
-            inner,
-        }
+        Self { inner }
     }
 
     /// Consume the adapter and return the underlying [`VoxelOctree`].

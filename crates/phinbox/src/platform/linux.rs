@@ -67,9 +67,7 @@ fn render_zenity(spec: &PromptSpec, opts: &ElicitOptions) -> Result<ElicitRespon
     // Field type selection
     let outcome = match &spec.field {
         FieldSpec::Text {
-            default,
-            secret,
-            ..
+            default, secret, ..
         } => {
             cmd.arg("--entry");
             if let Some(d) = default {
@@ -80,18 +78,14 @@ fn render_zenity(spec: &PromptSpec, opts: &ElicitOptions) -> Result<ElicitRespon
             }
             run_with_timeout(&mut cmd, timeout)?
         },
-        FieldSpec::LongText {
-            default, ..
-        } => {
+        FieldSpec::LongText { default, .. } => {
             cmd.arg("--entry");
             if let Some(d) = default {
                 cmd.arg("--entry-text").arg(d);
             }
             run_with_timeout(&mut cmd, timeout)?
         },
-        FieldSpec::Integer {
-            default, ..
-        } => {
+        FieldSpec::Integer { default, .. } => {
             cmd.arg("--entry");
             if let Some(d) = default {
                 cmd.arg("--entry-text").arg(d.to_string());
@@ -117,9 +111,7 @@ fn render_zenity(spec: &PromptSpec, opts: &ElicitOptions) -> Result<ElicitRespon
             }
             run_with_timeout(&mut cmd, timeout)?
         },
-        FieldSpec::Boolean {
-            ..
-        } => {
+        FieldSpec::Boolean { .. } => {
             // zenity --question returns 0 for yes, 1 for no
             cmd.arg("--question");
             cmd.arg("--ok-label").arg(
@@ -136,9 +128,7 @@ fn render_zenity(spec: &PromptSpec, opts: &ElicitOptions) -> Result<ElicitRespon
             );
             run_with_timeout(&mut cmd, timeout)?
         },
-        FieldSpec::DateTime {
-            picker_kind, ..
-        } => {
+        FieldSpec::DateTime { picker_kind, .. } => {
             cmd.arg("--calendar");
             if matches!(
                 picker_kind,
@@ -174,9 +164,7 @@ fn parse_zenity_outcome(
         }),
         // 1 = cancel/No. With `--ok-label`/`--cancel-label` this is the
         // cancel button, so it maps to Cancelled rather than a false answer.
-        1 => Ok(ElicitResponse::Cancelled {
-            notes: None,
-        }),
+        1 => Ok(ElicitResponse::Cancelled { notes: None }),
         5 => Ok(ElicitResponse::TimedOut {
             elapsed_secs: outcome.elapsed.as_secs_f64(),
         }),
@@ -195,12 +183,8 @@ fn answer_text(outcome: &Outcome, spec: &PromptSpec) -> String {
         return outcome.stdout.clone();
     }
     match &spec.field {
-        FieldSpec::Boolean {
-            ..
-        } => "yes".to_string(),
-        FieldSpec::Choice {
-            options, ..
-        } => options
+        FieldSpec::Boolean { .. } => "yes".to_string(),
+        FieldSpec::Choice { options, .. } => options
             .first()
             .map_or_else(String::new, |o| o.value.clone()),
         _ => String::new(),
@@ -219,9 +203,7 @@ fn render_kdialog(spec: &PromptSpec, opts: &ElicitOptions) -> Result<ElicitRespo
 
     let outcome = match &spec.field {
         FieldSpec::Text {
-            default,
-            secret,
-            ..
+            default, secret, ..
         } => {
             cmd.arg(if *secret { "--password" } else { "--inputbox" });
             cmd.arg("value");
@@ -230,9 +212,7 @@ fn render_kdialog(spec: &PromptSpec, opts: &ElicitOptions) -> Result<ElicitRespo
             }
             run_with_timeout(&mut cmd, timeout)?
         },
-        FieldSpec::Boolean {
-            ..
-        } => {
+        FieldSpec::Boolean { .. } => {
             cmd.arg("--yesno");
             cmd.arg(&spec.question);
             run_with_timeout(&mut cmd, timeout)?
@@ -270,9 +250,7 @@ fn render_kdialog(spec: &PromptSpec, opts: &ElicitOptions) -> Result<ElicitRespo
             value: crate::spec::FieldValue::Text(answer_text(&outcome, spec)),
             notes: None,
         }),
-        1 => Ok(ElicitResponse::Cancelled {
-            notes: None,
-        }),
+        1 => Ok(ElicitResponse::Cancelled { notes: None }),
         _ => Ok(ElicitResponse::Failed {
             reason: format!("kdialog exited {code}"),
         }),
@@ -398,9 +376,7 @@ mod tests {
         let outcome = run_with_timeout(&mut cmd, Duration::from_secs(5)).unwrap();
         let r = parse_zenity_outcome(outcome, &boolean_spec()).unwrap();
         match r {
-            ElicitResponse::Answered {
-                value, ..
-            } => {
+            ElicitResponse::Answered { value, .. } => {
                 assert!(
                     matches!(value, crate::spec::FieldValue::Text(ref s) if s == "typed-by-user"),
                     "must carry the real value, got {value:?}"

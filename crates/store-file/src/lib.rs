@@ -31,9 +31,7 @@ impl FileStore {
     pub fn new(root: impl Into<PathBuf>) -> Result<Self> {
         let root = root.into();
         fs::create_dir_all(&root).map_err(io)?;
-        Ok(FileStore {
-            root,
-        })
+        Ok(FileStore { root })
     }
 
     fn task_path(&self, id: &Uuid) -> PathBuf {

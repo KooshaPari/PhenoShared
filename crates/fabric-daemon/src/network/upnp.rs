@@ -225,36 +225,27 @@ impl UPnPClient {
         let msearch = MSEARCH_TEMPLATE.replace("{st}", IGD_SERVICE_TYPE);
         let msearch_bytes = msearch.as_bytes();
 
-        let socket =
-            TokioUdpSocket::bind("0.0.0.0:0")
-                .await
-                .map_err(|e| NetworkError::UdpBind {
-                    source: e,
-                })?;
+        let socket = TokioUdpSocket::bind("0.0.0.0:0")
+            .await
+            .map_err(|e| NetworkError::UdpBind { source: e })?;
 
         socket
             .set_broadcast(true)
-            .map_err(|e| NetworkError::UdpBind {
-                source: e,
-            })?;
+            .map_err(|e| NetworkError::UdpBind { source: e })?;
 
         let dest = SocketAddr::new(SSDP_MULTICAST_ADDR.into(), SSDP_PORT);
 
         socket
             .send_to(msearch_bytes, dest)
             .await
-            .map_err(|e| NetworkError::UdpSend {
-                source: e,
-            })?;
+            .map_err(|e| NetworkError::UdpSend { source: e })?;
 
         let mut buf = vec![0u8; SSDP_BUFFER_SIZE];
 
         let (len, _addr) = timeout(self.discovery_timeout, socket.recv_from(&mut buf))
             .await
             .map_err(|_| NetworkError::DiscoveryTimeout)?
-            .map_err(|e| NetworkError::UdpRecv {
-                source: e,
-            })?;
+            .map_err(|e| NetworkError::UdpRecv { source: e })?;
 
         let response = String::from_utf8_lossy(&buf[..len]).to_string();
         Ok(response)
@@ -338,17 +329,14 @@ impl UPnPClient {
     }
 
     fn get_local_ip(&self) -> Result<String, NetworkError> {
-        let socket = UdpSocket::bind("0.0.0.0:0").map_err(|e| NetworkError::UdpBind {
-            source: e,
-        })?;
+        let socket =
+            UdpSocket::bind("0.0.0.0:0").map_err(|e| NetworkError::UdpBind { source: e })?;
         socket
             .connect("8.8.8.8:80")
-            .map_err(|e| NetworkError::UdpBind {
-                source: e,
-            })?;
-        let local_addr = socket.local_addr().map_err(|e| NetworkError::UdpBind {
-            source: e,
-        })?;
+            .map_err(|e| NetworkError::UdpBind { source: e })?;
+        let local_addr = socket
+            .local_addr()
+            .map_err(|e| NetworkError::UdpBind { source: e })?;
         Ok(match local_addr {
             SocketAddr::V4(v4) => v4.ip().to_string(),
             SocketAddr::V6(v6) => v6.ip().to_string(),

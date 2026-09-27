@@ -399,9 +399,7 @@ pub enum ElicitResponse {
 
 impl Default for ElicitResponse {
     fn default() -> Self {
-        Self::Cancelled {
-            notes: None,
-        }
+        Self::Cancelled { notes: None }
     }
 }
 

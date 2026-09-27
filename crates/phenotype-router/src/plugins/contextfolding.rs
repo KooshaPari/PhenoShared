@@ -225,9 +225,7 @@ impl ContextFoldingConnector {
     /// Construct a connector with a custom strategy (tests + future
     /// pluggable strategies).
     pub fn with_strategy(strategy: Arc<dyn FoldingStrategy>) -> Self {
-        Self {
-            strategy,
-        }
+        Self { strategy }
     }
 
     /// Read-only view of the active strategy.

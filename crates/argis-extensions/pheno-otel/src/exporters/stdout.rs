@@ -14,9 +14,7 @@ pub struct StdoutExporter {
 impl StdoutExporter {
     /// Build a new `StdoutExporter` with the given config.
     pub fn new(config: ExporterConfig) -> Self {
-        Self {
-            config,
-        }
+        Self { config }
     }
 }
 

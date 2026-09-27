@@ -80,9 +80,7 @@ mod tests {
         // Button-only dialog: empty text, answer lives in the button label.
         let r = parse_output(b"answered|Approve||", b"", Duration::from_secs(1)).unwrap();
         match r {
-            crate::spec::ElicitResponse::Answered {
-                value, ..
-            } => {
+            crate::spec::ElicitResponse::Answered { value, .. } => {
                 assert!(matches!(value, crate::spec::FieldValue::Text(ref t) if t == "Approve"));
             },
             other => panic!("expected Answered, got {other:?}"),

@@ -79,9 +79,7 @@ pub fn collapse(outcomes: Vec<CheckOutcome>) -> Decision {
     if notes.is_empty() {
         Decision::Admit
     } else {
-        Decision::AdmitWithNotes {
-            notes,
-        }
+        Decision::AdmitWithNotes { notes }
     }
 }
 
@@ -239,9 +237,7 @@ mod tests {
         let d = check(&descriptor, &manifest);
         // Should be rejected because display is required but missing.
         let reject = match d {
-            Decision::Reject {
-                reason_code, ..
-            } => reason_code,
+            Decision::Reject { reason_code, .. } => reason_code,
             _ => panic!("expected Reject, got {:?}", d),
         };
         assert_eq!(reject, ReasonCode::DisplayRequiredButMissing);

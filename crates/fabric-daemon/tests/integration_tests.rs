@@ -209,9 +209,7 @@ fn checker_rejects_insufficient_resources() {
     // 3. Run the checker — should Reject with CoresInsufficient.
     let decision = check(&descriptor, &manifest);
     match &decision {
-        fabric_checker::Decision::Reject {
-            reason_code, ..
-        } => {
+        fabric_checker::Decision::Reject { reason_code, .. } => {
             assert_eq!(
                 *reason_code,
                 fabric_checker::ReasonCode::CoresInsufficient,
@@ -248,9 +246,7 @@ fn checker_rejects_missing_audio() {
     // 3. Run checker — should Reject (audio required but missing).
     let decision = check(&descriptor, &manifest);
     match &decision {
-        fabric_checker::Decision::Reject {
-            reason_code, ..
-        } => {
+        fabric_checker::Decision::Reject { reason_code, .. } => {
             assert_eq!(
                 *reason_code,
                 fabric_checker::ReasonCode::CaptureRequiredButMissing,

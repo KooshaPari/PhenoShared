@@ -64,24 +64,12 @@ pub fn render_summary(req: &PendingRequest) -> String {
 #[must_use]
 pub fn render_summary_json(req: &PendingRequest) -> serde_json::Value {
     let field_kind = match &req.spec.field {
-        FieldSpec::Text {
-            ..
-        } => "text",
-        FieldSpec::LongText {
-            ..
-        } => "long_text",
-        FieldSpec::Integer {
-            ..
-        } => "integer",
-        FieldSpec::Choice {
-            ..
-        } => "choice",
-        FieldSpec::Boolean {
-            ..
-        } => "boolean",
-        FieldSpec::DateTime {
-            ..
-        } => "date_time",
+        FieldSpec::Text { .. } => "text",
+        FieldSpec::LongText { .. } => "long_text",
+        FieldSpec::Integer { .. } => "integer",
+        FieldSpec::Choice { .. } => "choice",
+        FieldSpec::Boolean { .. } => "boolean",
+        FieldSpec::DateTime { .. } => "date_time",
     };
     serde_json::json!({
         "request_id": req.request_id,

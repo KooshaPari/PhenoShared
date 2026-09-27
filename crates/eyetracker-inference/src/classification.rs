@@ -306,10 +306,7 @@ impl GazeClassifier {
                     (Some(start), Some(last)) => last.duration_since(start),
                     _ => Duration::ZERO,
                 };
-                GazeClassification::Fixation {
-                    centroid,
-                    duration,
-                }
+                GazeClassification::Fixation { centroid, duration }
             },
             ClassifierState::Saccade => GazeClassification::Saccade,
             ClassifierState::Unknown => GazeClassification::Unknown,
@@ -615,11 +612,7 @@ mod tests {
             "Classifier should report fixating after stable gaze",
         );
 
-        if let GazeClassification::Fixation {
-            centroid,
-            duration,
-        } = classifier.current_state()
-        {
+        if let GazeClassification::Fixation { centroid, duration } = classifier.current_state() {
             assert!(
                 duration >= Duration::from_millis(100),
                 "Fixation duration should be at least 100 ms, got {:?}",

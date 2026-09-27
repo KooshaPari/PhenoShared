@@ -170,17 +170,11 @@ mod tests {
 
         assert_eq!(v.len(), 3);
         match &v[0] {
-            Ok(ClaudeEvent::AssistantDelta {
-                text,
-            }) => assert_eq!(text, "hello"),
+            Ok(ClaudeEvent::AssistantDelta { text }) => assert_eq!(text, "hello"),
             other => panic!("unexpected 0: {other:?}"),
         }
         match &v[1] {
-            Ok(ClaudeEvent::ToolUse {
-                id,
-                name,
-                input,
-            }) => {
+            Ok(ClaudeEvent::ToolUse { id, name, input }) => {
                 assert_eq!(id, "t1");
                 assert_eq!(name, "Read");
                 assert_eq!(input["path"], "./README.md");

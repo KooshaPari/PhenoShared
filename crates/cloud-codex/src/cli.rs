@@ -97,10 +97,7 @@ impl CodexCloudDispatch {
         let env_id = std::env::var(ENV_CLOUD_ENV_ID).map_err(|e| {
             SubstrateError::CloudDispatch(format!("{ENV_CLOUD_ENV_ID} not set: {e}"))
         })?;
-        Ok(Self::new(CodexCloudConfig {
-            bin,
-            env_id,
-        }))
+        Ok(Self::new(CodexCloudConfig { bin, env_id }))
     }
 
     /// Build with explicit config and the default tokio subprocess runner.
@@ -166,9 +163,7 @@ impl CodexCloudDispatch {
             },
         );
 
-        Ok(CloudTaskHandle {
-            id: handle_id,
-        })
+        Ok(CloudTaskHandle { id: handle_id })
     }
 
     /// Poll task status via `codex cloud status`.
@@ -230,9 +225,7 @@ impl CodexCloudDispatch {
 
         match status {
             CloudTaskStatus::Succeeded => {},
-            CloudTaskStatus::Failed {
-                message,
-            } => {
+            CloudTaskStatus::Failed { message } => {
                 return Err(SubstrateError::CloudDispatch(
                     message.unwrap_or_else(|| "codex cloud task failed".into()),
                 ));

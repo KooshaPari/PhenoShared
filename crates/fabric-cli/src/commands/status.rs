@@ -64,9 +64,7 @@ pub fn dispatch(args: &StatusArgs) -> Result<()> {
                 )
             })?;
         },
-        Err(wire_client::WireClientError::ConnectionRefused {
-            addr,
-        }) => {
+        Err(wire_client::WireClientError::ConnectionRefused { addr }) => {
             if args.json {
                 println!(
                     "{}",

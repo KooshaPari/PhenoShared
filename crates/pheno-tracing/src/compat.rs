@@ -230,9 +230,7 @@ impl TracingBackend {
     /// Construct a backend facade tagged with an explicit kind. Useful for
     /// tests that want to verify the "other" branch.
     pub fn with_kind(kind: SubscriberKind) -> Self {
-        Self {
-            kind,
-        }
+        Self { kind }
     }
 
     /// Returns the kind tag for this backend.

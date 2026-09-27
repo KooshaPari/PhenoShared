@@ -66,10 +66,7 @@ fn schema_roundtrip_choice() {
     };
     let json = serde_json::to_string(&spec).unwrap();
     let back: PromptSpec = serde_json::from_str(&json).unwrap();
-    if let FieldSpec::Choice {
-        options, ..
-    } = &back.field
-    {
+    if let FieldSpec::Choice { options, .. } = &back.field {
         assert_eq!(options.len(), 1);
     } else {
         panic!("lost variant");
@@ -95,10 +92,7 @@ fn schema_roundtrip_datetime() {
     };
     let json = serde_json::to_string(&spec).unwrap();
     let back: PromptSpec = serde_json::from_str(&json).unwrap();
-    if let FieldSpec::DateTime {
-        picker_kind, ..
-    } = &back.field
-    {
+    if let FieldSpec::DateTime { picker_kind, .. } = &back.field {
         assert!(matches!(picker_kind, DateTimeKind::DateTime));
     } else {
         panic!("lost variant");
@@ -114,19 +108,13 @@ fn response_predicates_work() {
     assert!(r1.is_answered());
     assert!(!r1.is_cancelled());
 
-    let r2 = ElicitResponse::Cancelled {
-        notes: None,
-    };
+    let r2 = ElicitResponse::Cancelled { notes: None };
     assert!(r2.is_cancelled());
 
-    let r3 = ElicitResponse::TimedOut {
-        elapsed_secs: 1.0,
-    };
+    let r3 = ElicitResponse::TimedOut { elapsed_secs: 1.0 };
     assert!(r3.is_timed_out());
 
-    let r4 = ElicitResponse::Failed {
-        reason: "x".into(),
-    };
+    let r4 = ElicitResponse::Failed { reason: "x".into() };
     assert!(r4.is_failed());
 }
 

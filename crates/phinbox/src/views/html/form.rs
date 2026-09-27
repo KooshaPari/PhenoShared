@@ -106,10 +106,7 @@ pub fn render_field_widget(field: &FieldSpec) -> String {
                    <select id=eli-field name=value required>{opts}</select>",
             )
         },
-        FieldSpec::Boolean {
-            label,
-            default,
-        } => {
+        FieldSpec::Boolean { label, default } => {
             let label_html = html_escape(label);
             let checked = default.unwrap_or(false);
             let checked_attr = if checked { " checked" } else { "" };

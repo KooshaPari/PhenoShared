@@ -106,9 +106,7 @@ fn lease(args: &LeaseArgs, _workspace: &Path) -> Result<()> {
                 )
             })?;
         },
-        Err(wire_client::WireClientError::ConnectionRefused {
-            addr,
-        }) => {
+        Err(wire_client::WireClientError::ConnectionRefused { addr }) => {
             // Daemon not running — report the lease spec that would be created.
             eprintln!(
                 "{} daemon not reachable at {} — surface spec validated but not yet leased",
@@ -177,9 +175,7 @@ fn list(args: &ListArgs) -> Result<()> {
                 out
             })?;
         },
-        Err(wire_client::WireClientError::ConnectionRefused {
-            addr,
-        }) => {
+        Err(wire_client::WireClientError::ConnectionRefused { addr }) => {
             if args.json {
                 println!(
                     "{}",

@@ -114,9 +114,7 @@ impl SurfaceRegistry {
                     .as_ref()
                     .map(|b| b.step_node.clone())
                     .unwrap_or_else(|| NodeId::new(""));
-                let reason = LeaseExitReason::HostFailure {
-                    host_node,
-                };
+                let reason = LeaseExitReason::HostFailure { host_node };
 
                 // Extract binding_id and epoch from the current binding
                 // before failing the lease.

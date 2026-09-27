@@ -82,10 +82,7 @@ fn surface_spec_posix_with_sink_capture_is_rejected() {
     spec.protocol = SurfaceProtocol::Posix;
     spec.capture = Some(CaptureDirection::Sink);
     match spec.validate().unwrap_err() {
-        SurfaceSpecError::IncompatibleCapture {
-            protocol,
-            capture,
-        } => {
+        SurfaceSpecError::IncompatibleCapture { protocol, capture } => {
             assert_eq!(protocol, SurfaceProtocol::Posix);
             assert_eq!(capture, CaptureDirection::Sink);
         },

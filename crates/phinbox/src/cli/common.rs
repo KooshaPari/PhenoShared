@@ -93,22 +93,16 @@ pub fn cmd_smoke(args: SmokeArgs, renderer: Option<RendererPreference>) -> Resul
                 Err("user reported failure".into())
             }
         },
-        Ok(ElicitResponse::Cancelled {
-            ..
-        }) => Err("user cancelled".into()),
+        Ok(ElicitResponse::Cancelled { .. }) => Err("user cancelled".into()),
         // A timed-out popup still proves the full render path works:
         // binary boots, osascript spawns, dialog displays and stays up
         // for the whole timeout. agents_smoke documents this contract:
         // "smoke should exit 0 even if the popup times out".
-        Ok(ElicitResponse::TimedOut {
-            elapsed_secs,
-        }) => {
+        Ok(ElicitResponse::TimedOut { elapsed_secs }) => {
             println!("smoke: popup rendered, timed out after {elapsed_secs:.0}s (ok)");
             Ok(())
         },
-        Ok(ElicitResponse::Failed {
-            reason,
-        }) => Err(format!("popup failed: {reason}")),
+        Ok(ElicitResponse::Failed { reason }) => Err(format!("popup failed: {reason}")),
         Ok(other) => Err(format!("unexpected response variant: {other:?}")),
         Err(e) => Err(e.to_string()),
     }

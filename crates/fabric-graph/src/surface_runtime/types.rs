@@ -59,23 +59,15 @@ impl Invalidation {
     pub fn to_wire_json(&self) -> serde_json::Value {
         let reason_str = match &self.reason {
             LeaseExitReason::NormalCompletion => "NormalCompletion",
-            LeaseExitReason::HostFailure {
-                ..
-            } => "HostFailure",
-            LeaseExitReason::EpochDrift {
-                ..
-            } => "EpochDrift",
+            LeaseExitReason::HostFailure { .. } => "HostFailure",
+            LeaseExitReason::EpochDrift { .. } => "EpochDrift",
             LeaseExitReason::OperatorRevoked => "Revoked",
             LeaseExitReason::Expired => "Expired",
-            LeaseExitReason::WorkloadReported {
-                ..
-            } => "Failed",
+            LeaseExitReason::WorkloadReported { .. } => "Failed",
         };
 
         let failed_node = match &self.reason {
-            LeaseExitReason::HostFailure {
-                host_node,
-            } => host_node.to_string(),
+            LeaseExitReason::HostFailure { host_node } => host_node.to_string(),
             _ => String::new(),
         };
 

@@ -112,9 +112,7 @@ pub fn run_tray_loop(tray: &dyn Tray, shutdown: &Arc<AtomicBool>, fallback_url: 
                 let url = tray_click_url(tray, fallback_url);
                 let _ = open_in_default_browser(&url);
             },
-            TrayEvent::MenuItem {
-                id,
-            } => {
+            TrayEvent::MenuItem { id } => {
                 let action = match id.as_str() {
                     x if x == MenuAction::OpenInbox.id() => Some(MenuAction::OpenInbox),
                     x if x == MenuAction::OpenLatest.id() => Some(MenuAction::OpenLatest),

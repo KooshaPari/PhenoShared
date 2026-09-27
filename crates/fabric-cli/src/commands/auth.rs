@@ -80,9 +80,7 @@ fn login(args: &LoginArgs) -> Result<()> {
                 );
             }
         },
-        Err(wire_client::WireClientError::ConnectionRefused {
-            addr,
-        }) => {
+        Err(wire_client::WireClientError::ConnectionRefused { addr }) => {
             if args.json {
                 println!(
                     "{}",
@@ -149,9 +147,7 @@ fn status(args: &StatusArgs) -> Result<()> {
                 )
             })?;
         },
-        Err(wire_client::WireClientError::ConnectionRefused {
-            addr,
-        }) => {
+        Err(wire_client::WireClientError::ConnectionRefused { addr }) => {
             if args.json {
                 println!(
                     "{}",

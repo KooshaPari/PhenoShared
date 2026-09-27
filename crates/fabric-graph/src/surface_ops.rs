@@ -147,27 +147,15 @@ pub fn new_lease(spec: SurfaceSpec) -> Result<SurfaceLease, SurfaceSpecError> {
 fn derive_endpoint_for_step(step: &RouteStep) -> crate::surface::CapabilityEndpoint {
     use crate::surface::CapabilityEndpoint;
     match step.action.as_str() {
-        "compute" => CapabilityEndpoint::Compute {
-            pid: 0,
-        },
-        "display" => CapabilityEndpoint::Display {
-            index: 0,
-        },
-        "audio" => CapabilityEndpoint::Audio {
-            index: 0,
-        },
-        "input" => CapabilityEndpoint::Input {
-            index: 0,
-        },
-        "network" => CapabilityEndpoint::Network {
-            port: 0,
-        },
+        "compute" => CapabilityEndpoint::Compute { pid: 0 },
+        "display" => CapabilityEndpoint::Display { index: 0 },
+        "audio" => CapabilityEndpoint::Audio { index: 0 },
+        "input" => CapabilityEndpoint::Input { index: 0 },
+        "network" => CapabilityEndpoint::Network { port: 0 },
         "storage" => CapabilityEndpoint::Storage {
             path: String::new(),
         },
-        _ => CapabilityEndpoint::Compute {
-            pid: 0,
-        },
+        _ => CapabilityEndpoint::Compute { pid: 0 },
     }
 }
 

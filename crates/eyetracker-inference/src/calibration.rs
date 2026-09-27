@@ -267,9 +267,7 @@ pub const MIN_SAMPLES_FOR_EVAL: usize = 5;
 pub fn classify_point(sample: &CalibrationSample, frame_duration_ms: u64) -> PointOutcome {
     let n = sample.gaze_samples.len();
     if n < MIN_SAMPLES_FOR_EVAL {
-        return PointOutcome::InsufficientSamples {
-            collected: n,
-        };
+        return PointOutcome::InsufficientSamples { collected: n };
     }
     let mut stable_count = 0usize;
     let mut max_drift: f32 = 0.0;
@@ -290,9 +288,7 @@ pub fn classify_point(sample: &CalibrationSample, frame_duration_ms: u64) -> Poi
             stable_count,
         }
     } else {
-        PointOutcome::NoFixation {
-            max_drift,
-        }
+        PointOutcome::NoFixation { max_drift }
     }
 }
 
@@ -313,9 +309,7 @@ where
         let sample = collect();
         let outcome = classify_point(&sample, frame_duration_ms);
         match &outcome {
-            PointOutcome::Stable {
-                ..
-            } => return (outcome, attempts),
+            PointOutcome::Stable { .. } => return (outcome, attempts),
             _ if attempts >= max_retries => return (outcome, attempts),
             _ => continue,
         }
@@ -541,12 +535,7 @@ mod tests {
         let s = make_perfect_sample(0.5, 0.5, 3);
         let outcome = classify_point(&s, 30);
         assert!(
-            matches!(
-                outcome,
-                PointOutcome::InsufficientSamples {
-                    collected: 3
-                }
-            ),
+            matches!(outcome, PointOutcome::InsufficientSamples { collected: 3 }),
             "got {outcome:?}"
         );
     }

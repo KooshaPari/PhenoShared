@@ -205,16 +205,16 @@ fn handle_connection(
                         },
                         // Raced the TTL between the settle above and the
                         // submit: the same refusal, with the same status.
-                        Err(super::form::SubmitError::Expired {
-                            expires_at_ms,
-                        }) => Some(text_response(
-                            410,
-                            &format!(
-                                "<h1>Request Expired</h1><p>This request expired at \
+                        Err(super::form::SubmitError::Expired { expires_at_ms }) => {
+                            Some(text_response(
+                                410,
+                                &format!(
+                                    "<h1>Request Expired</h1><p>This request expired at \
                                  {expires_at_ms} ms since the epoch and can no longer be \
                                  answered.</p><a href=/inbox>Return to inbox</a>"
-                            ),
-                        )),
+                                ),
+                            ))
+                        },
                         Err(super::form::SubmitError::AlreadyFinalized(state)) => {
                             Some(text_response(
                                 409,

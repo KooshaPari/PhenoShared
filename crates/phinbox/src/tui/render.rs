@@ -77,14 +77,9 @@ pub(crate) fn field_summary(field: &FieldSpec) -> String {
             };
             format!("{kind} — {label}")
         },
-        FieldSpec::LongText {
-            label, ..
-        } => format!("long text — {label}"),
+        FieldSpec::LongText { label, .. } => format!("long text — {label}"),
         FieldSpec::Integer {
-            label,
-            min,
-            max,
-            ..
+            label, min, max, ..
         } => {
             let range = match (min, max) {
                 (Some(a), Some(b)) => format!(" [{a}..{b}]"),
@@ -94,27 +89,18 @@ pub(crate) fn field_summary(field: &FieldSpec) -> String {
             };
             format!("integer{range} — {label}")
         },
-        FieldSpec::Choice {
-            label,
-            options,
-            ..
-        } => {
+        FieldSpec::Choice { label, options, .. } => {
             let labels: Vec<&str> = options.iter().map(|o| o.label.as_str()).collect();
             format!("choice [{}] — {label}", labels.join(", "))
         },
-        FieldSpec::Boolean {
-            label,
-            default,
-        } => {
+        FieldSpec::Boolean { label, default } => {
             let def = default.map_or(String::new(), |d| {
                 format!(" (default {})", if d { "yes" } else { "no" })
             });
             format!("boolean — {label}{def}")
         },
         FieldSpec::DateTime {
-            label,
-            picker_kind,
-            ..
+            label, picker_kind, ..
         } => format!("{picker_kind:?} — {label}"),
     }
 }

@@ -24,9 +24,7 @@ impl EvaluationContext {
 
     /// Creates an evaluation context from a HashMap.
     pub fn from_map(facts: HashMap<String, serde_json::Value>) -> Self {
-        Self {
-            facts,
-        }
+        Self { facts }
     }
 
     /// Creates an evaluation context from a JSON value.
@@ -34,9 +32,7 @@ impl EvaluationContext {
         match value {
             serde_json::Value::Object(map) => {
                 let facts = map.into_iter().map(|(k, v)| (k, v)).collect();
-                Self {
-                    facts,
-                }
+                Self { facts }
             },
             _ => Self::new(),
         }

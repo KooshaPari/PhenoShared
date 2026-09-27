@@ -64,9 +64,7 @@ async fn run_with_adapter(
                 tokio::time::sleep(delay).await;
                 delay = delay.saturating_mul(2).min(Duration::from_secs(30));
             },
-            CloudTaskStatus::Failed {
-                message,
-            } => {
+            CloudTaskStatus::Failed { message } => {
                 return Err(anyhow!(
                     "cloud task failed: {}",
                     message.unwrap_or_else(|| "unknown".into())

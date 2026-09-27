@@ -31,9 +31,7 @@ struct AppState {
 /// default hooks at INFO; the span name is `http_request`. Operators can
 /// adjust the level via `RUST_LOG` (e.g. `RUST_LOG=argis_monitor::exporter=debug`).
 pub async fn serve(addr: &str, registry: Arc<Registry>) -> anyhow::Result<ExporterHandle> {
-    let state = AppState {
-        registry,
-    };
+    let state = AppState { registry };
     let app = Router::new()
         .route("/metrics", get(metrics_handler))
         .route("/healthz", get(healthz))

@@ -17,9 +17,7 @@ fn make_msg(team_id: &str, to: &str, kind: MessageKind, text: &str) -> Message {
         "test-sender",
         to,
         kind,
-        vec![Part::Text {
-            text: text.into(),
-        }],
+        vec![Part::Text { text: text.into() }],
     )
 }
 

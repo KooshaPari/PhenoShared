@@ -287,30 +287,14 @@ pub fn conflicts_only(report: &ImpactReport) -> &[TraceLink] {
 
 fn artifact_key(a: &ArtifactRef) -> String {
     match a {
-        ArtifactRef::Requirement {
-            id,
-        } => id.as_str().to_string(),
-        ArtifactRef::NonFunctionalRequirement {
-            id,
-        } => id.as_str().to_string(),
-        ArtifactRef::Test {
-            id,
-        } => format!("test:{}", id),
-        ArtifactRef::CodeEntity {
-            id, ..
-        } => format!("code:{}", id),
-        ArtifactRef::Journey {
-            id,
-        } => format!("journey:{}", id),
-        ArtifactRef::AgentRun {
-            id,
-        } => format!("agent:{}", id),
-        ArtifactRef::Evidence {
-            id, ..
-        } => format!("evidence:{}", id),
-        ArtifactRef::Document {
-            id, ..
-        } => format!("document:{}", id),
+        ArtifactRef::Requirement { id } => id.as_str().to_string(),
+        ArtifactRef::NonFunctionalRequirement { id } => id.as_str().to_string(),
+        ArtifactRef::Test { id } => format!("test:{}", id),
+        ArtifactRef::CodeEntity { id, .. } => format!("code:{}", id),
+        ArtifactRef::Journey { id } => format!("journey:{}", id),
+        ArtifactRef::AgentRun { id } => format!("agent:{}", id),
+        ArtifactRef::Evidence { id, .. } => format!("evidence:{}", id),
+        ArtifactRef::Document { id, .. } => format!("document:{}", id),
     }
 }
 
@@ -351,9 +335,7 @@ fn parse_artifact_key(s: &str) -> ArtifactRef {
             id: crate::ids::RequirementId::from_string(s),
         }
     } else {
-        ArtifactRef::Test {
-            id: s.to_string(),
-        }
+        ArtifactRef::Test { id: s.to_string() }
     }
 }
 
@@ -375,9 +357,7 @@ mod tests {
         }
     }
     fn test(id: &str) -> ArtifactRef {
-        ArtifactRef::Test {
-            id: id.to_string(),
-        }
+        ArtifactRef::Test { id: id.to_string() }
     }
 
     fn make_link(from: ArtifactRef, to: ArtifactRef, ty: TraceLinkType, conf: f32) -> TraceLink {

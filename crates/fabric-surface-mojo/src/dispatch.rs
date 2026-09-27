@@ -176,10 +176,7 @@ impl DispatchPlan {
             },
         ];
 
-        Self {
-            steps,
-            summary,
-        }
+        Self { steps, summary }
     }
 
     /// Look up the dispatch step for a specific locality tier.

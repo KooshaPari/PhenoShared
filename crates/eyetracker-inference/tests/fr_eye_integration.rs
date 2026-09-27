@@ -791,10 +791,7 @@ fn screen_point_from_gaze(
     let cy = frame_h as f64 / 2.0;
     let px = (gaze_x + cx) / frame_w as f64 * screen_w as f64;
     let py = (gaze_y + cy) / frame_h as f64 * screen_h as f64;
-    ScreenCoord {
-        px_x: px,
-        px_y: py,
-    }
+    ScreenCoord { px_x: px, px_y: py }
 }
 
 #[test]

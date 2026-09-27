@@ -110,12 +110,8 @@ pub enum Decision {
 pub fn decide(state: &ServeState, policy: OnConflict) -> Decision {
     match state {
         ServeState::Free => Decision::Serve,
-        ServeState::Running {
-            stale: true, ..
-        } => Decision::Serve,
-        ServeState::Running {
-            stale: false, ..
-        } => match policy {
+        ServeState::Running { stale: true, .. } => Decision::Serve,
+        ServeState::Running { stale: false, .. } => match policy {
             OnConflict::Attach => Decision::Attach,
             OnConflict::Replace => Decision::Replace,
             OnConflict::Abort => Decision::Abort,
@@ -323,10 +319,7 @@ mod tests {
             let dir = tempfile::tempdir().expect("tempdir");
             let prev = std::env::var_os("XDG_RUNTIME_DIR");
             std::env::set_var("XDG_RUNTIME_DIR", dir.path());
-            Self {
-                _dir: dir,
-                prev,
-            }
+            Self { _dir: dir, prev }
         }
     }
 
@@ -407,10 +400,7 @@ mod tests {
         // probe() must detect the dead PID and report stale=true (or Free when
         // the platform short-circuits on an unlocked pidfile — both are correct).
         match probe("svc-d").unwrap() {
-            ServeState::Running {
-                stale,
-                info,
-            } => {
+            ServeState::Running { stale, info } => {
                 assert!(stale, "dead-pid pidfile must be reported stale");
                 assert_eq!(info.pid, u32::MAX);
             },

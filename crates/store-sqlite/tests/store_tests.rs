@@ -19,9 +19,7 @@ fn inbox_returns_unread_for_correct_recipient() {
         "lead",
         "worker-1",
         MessageKind::Task,
-        vec![Part::Text {
-            text: "go".into(),
-        }],
+        vec![Part::Text { text: "go".into() }],
     );
     let msg2 = Message::new(
         "team-a",

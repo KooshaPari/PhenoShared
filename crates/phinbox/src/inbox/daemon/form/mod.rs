@@ -32,9 +32,7 @@ pub(crate) enum SubmitError {
 impl std::fmt::Display for SubmitError {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
-            Self::Expired {
-                expires_at_ms,
-            } => write!(
+            Self::Expired { expires_at_ms } => write!(
                 f,
                 "request expired at {expires_at_ms} ms since the epoch; a late answer is not \
                  recorded"
@@ -145,9 +143,7 @@ pub(crate) fn submit_answer(
             inbox_root,
             &PendingRequest {
                 state: RequestState::Cancelled,
-                response: Some(ElicitResponse::Cancelled {
-                    notes,
-                }),
+                response: Some(ElicitResponse::Cancelled { notes }),
                 ..req.clone()
             },
         )
@@ -246,15 +242,9 @@ pub(crate) fn coerce_field_value(
     payload: &FormPayload,
 ) -> Result<FieldValue, SubmitError> {
     match field {
-        FieldSpec::Text {
-            ..
-        } => Ok(FieldValue::Text(required_value(payload)?)),
-        FieldSpec::LongText {
-            ..
-        } => Ok(FieldValue::LongText(required_value(payload)?)),
-        FieldSpec::Choice {
-            options, ..
-        } => {
+        FieldSpec::Text { .. } => Ok(FieldValue::Text(required_value(payload)?)),
+        FieldSpec::LongText { .. } => Ok(FieldValue::LongText(required_value(payload)?)),
+        FieldSpec::Choice { options, .. } => {
             let raw = required_value(payload)?;
             let idx = options
                 .iter()
@@ -265,9 +255,7 @@ pub(crate) fn coerce_field_value(
                 index: idx,
             })
         },
-        FieldSpec::Boolean {
-            ..
-        } => {
+        FieldSpec::Boolean { .. } => {
             // An unchecked HTML checkbox omits its key entirely, so absence
             // means `false`. The caller has already established that this is a
             // real submission (a submit marker was present).
@@ -280,9 +268,7 @@ pub(crate) fn coerce_field_value(
                 ))),
             }
         },
-        FieldSpec::Integer {
-            ..
-        } => {
+        FieldSpec::Integer { .. } => {
             let raw = payload
                 .integer
                 .clone()
@@ -294,9 +280,7 @@ pub(crate) fn coerce_field_value(
                 .map_err(|e| SubmitError::BadRequest(format!("not an int: {e}")))?;
             Ok(FieldValue::Integer(n))
         },
-        FieldSpec::DateTime {
-            ..
-        } => Ok(FieldValue::DateTime(required_value(payload)?)),
+        FieldSpec::DateTime { .. } => Ok(FieldValue::DateTime(required_value(payload)?)),
     }
 }
 

@@ -60,9 +60,7 @@ pub struct OtlpEndpoint {
 impl OtlpEndpoint {
     /// Create a new endpoint.
     pub fn new(url: impl Into<String>) -> Self {
-        Self {
-            url: url.into(),
-        }
+        Self { url: url.into() }
     }
 
     /// Borrow the URL string.
@@ -79,17 +77,13 @@ impl fmt::Display for OtlpEndpoint {
 
 impl From<&str> for OtlpEndpoint {
     fn from(s: &str) -> Self {
-        Self {
-            url: s.to_string(),
-        }
+        Self { url: s.to_string() }
     }
 }
 
 impl From<String> for OtlpEndpoint {
     fn from(s: String) -> Self {
-        Self {
-            url: s,
-        }
+        Self { url: s }
     }
 }
 

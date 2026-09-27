@@ -59,20 +59,14 @@ impl SigningKey {
     pub fn generate() -> Self {
         let inner = DalekSigningKey::generate(&mut OsRng);
         let key_id = B64.encode(inner.to_bytes());
-        Self {
-            inner,
-            key_id,
-        }
+        Self { inner, key_id }
     }
 
     /// Deserializes a signing key from a 32-byte seed.
     pub fn from_bytes(bytes: &[u8; 32]) -> Self {
         let inner = DalekSigningKey::from_bytes(bytes);
         let key_id = B64.encode(bytes);
-        Self {
-            inner,
-            key_id,
-        }
+        Self { inner, key_id }
     }
 
     /// Returns the key fingerprint (base64 of the 32-byte key).
@@ -112,10 +106,7 @@ impl VerificationKey {
     pub fn from_bytes(bytes: &[u8; 32]) -> Self {
         let inner = ed25519_dalek::VerifyingKey::from_bytes(bytes).expect("invalid key");
         let key_id = B64.encode(bytes);
-        Self {
-            inner,
-            key_id,
-        }
+        Self { inner, key_id }
     }
 
     /// Returns the key fingerprint.

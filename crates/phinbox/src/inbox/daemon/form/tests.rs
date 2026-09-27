@@ -71,15 +71,9 @@ fn post_handler_writes_answer() {
     let loaded = load(tmp.path(), "post-1").unwrap();
     assert_eq!(loaded.state, RequestState::Answered);
     match loaded.response {
-        Some(ElicitResponse::Answered {
-            value,
-            notes,
-        }) => {
+        Some(ElicitResponse::Answered { value, notes }) => {
             match value {
-                FieldValue::Choice {
-                    value: v,
-                    index,
-                } => {
+                FieldValue::Choice { value: v, index } => {
                     assert_eq!(v, "staging");
                     assert_eq!(index, 0);
                 },
@@ -128,9 +122,7 @@ fn post_handler_writes_answer() {
     let loaded2 = load(tmp.path(), "post-2").unwrap();
     assert_eq!(loaded2.state, RequestState::Cancelled);
     match loaded2.response {
-        Some(ElicitResponse::Cancelled {
-            notes,
-        }) => {
+        Some(ElicitResponse::Cancelled { notes }) => {
             assert_eq!(notes.as_deref(), Some("on second thought"));
         },
         other => panic!("expected Cancelled response, got {other:?}"),
@@ -203,12 +195,7 @@ fn expired_request_is_refused_without_a_daemon() {
 
     let err = submit_answer(tmp.path(), "stale-1", b"value=late&confirm=ok").unwrap_err();
     assert!(
-        matches!(
-            err,
-            SubmitError::Expired {
-                expires_at_ms: 1
-            }
-        ),
+        matches!(err, SubmitError::Expired { expires_at_ms: 1 }),
         "a late POST must be refused as expired, got {err:?}"
     );
 
@@ -334,9 +321,7 @@ fn submit_answer_enforces_required_notes() {
     );
     submit_answer(tmp.path(), "guard-3", b"value=x&notes=why&confirm=ok").unwrap();
     match load(tmp.path(), "guard-3").unwrap().response {
-        Some(ElicitResponse::Answered {
-            notes, ..
-        }) => {
+        Some(ElicitResponse::Answered { notes, .. }) => {
             assert_eq!(notes.as_deref(), Some("why"));
         },
         other => panic!("expected Answered, got {other:?}"),

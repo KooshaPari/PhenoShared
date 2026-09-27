@@ -124,17 +124,12 @@ impl Projection for TaskLifecycleProjection {
 
     fn apply(mut state: Self::State, event: &Self::Event) -> Self::State {
         match event {
-            TaskLifecycleEvent::Created {
-                prompt,
-                cwd,
-            } => {
+            TaskLifecycleEvent::Created { prompt, cwd } => {
                 state.prompt = prompt.clone();
                 state.cwd = cwd.clone();
                 state.state = TaskState::Submitted;
             },
-            TaskLifecycleEvent::Advanced {
-                to,
-            } => {
+            TaskLifecycleEvent::Advanced { to } => {
                 if TaskState::can_transition(state.state, *to) {
                     state.state = *to;
                 }

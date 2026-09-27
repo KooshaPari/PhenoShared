@@ -167,17 +167,13 @@ async fn dispatch(state: &RpcState, req: super::Request) -> Response {
         },
 
         "inbox.cancel" => match parse_params::<RidParams>(&req.params) {
-            Ok(p) => match finalize_via_state(
-                state,
-                &p.rid,
-                ElicitResponse::Cancelled {
-                    notes: None,
-                },
-            )
-            .await
-            {
-                Ok(updated) => Response::ok(id, json!({ "request": updated })),
-                Err(e) => e,
+            Ok(p) => {
+                match finalize_via_state(state, &p.rid, ElicitResponse::Cancelled { notes: None })
+                    .await
+                {
+                    Ok(updated) => Response::ok(id, json!({ "request": updated })),
+                    Err(e) => e,
+                }
             },
             Err(e) => Response::err(id, super::ERR_INVALID_PARAMS, e.clone()),
         },
@@ -238,21 +234,11 @@ async fn finalize_via_state(
         ));
     }
     let new_state = match &response {
-        ElicitResponse::Cancelled {
-            ..
-        } => RequestState::Cancelled,
-        ElicitResponse::TimedOut {
-            ..
-        } => RequestState::Expired,
-        ElicitResponse::Failed {
-            ..
-        } => RequestState::Expired,
-        ElicitResponse::Answered {
-            ..
-        } => RequestState::Answered,
-        ElicitResponse::Deferred {
-            ..
-        } => RequestState::Pending,
+        ElicitResponse::Cancelled { .. } => RequestState::Cancelled,
+        ElicitResponse::TimedOut { .. } => RequestState::Expired,
+        ElicitResponse::Failed { .. } => RequestState::Expired,
+        ElicitResponse::Answered { .. } => RequestState::Answered,
+        ElicitResponse::Deferred { .. } => RequestState::Pending,
     };
     // A defer is not a final answer: the operator moved the request into the
     // durable inbox to answer it later. Finalizing here would archive the
@@ -282,15 +268,9 @@ async fn finalize_via_state(
     match crate::inbox::finalize(&state.root, &pending) {
         Ok(_path) => {
             let status = match &pending.response {
-                Some(ElicitResponse::Cancelled {
-                    ..
-                }) => ResponseStatus::Cancelled,
-                Some(ElicitResponse::TimedOut {
-                    ..
-                }) => ResponseStatus::TimedOut,
-                Some(ElicitResponse::Deferred {
-                    ..
-                }) => ResponseStatus::Pending,
+                Some(ElicitResponse::Cancelled { .. }) => ResponseStatus::Cancelled,
+                Some(ElicitResponse::TimedOut { .. }) => ResponseStatus::TimedOut,
+                Some(ElicitResponse::Deferred { .. }) => ResponseStatus::Pending,
                 Some(_) => ResponseStatus::Answered,
                 None => ResponseStatus::Pending,
             };

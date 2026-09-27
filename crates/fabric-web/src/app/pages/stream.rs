@@ -264,10 +264,7 @@ pub fn StreamPage() -> impl IntoView {
                         let set_status_frame = set_status_dc.clone();
 
                         channel.on_message(move |msg| match msg {
-                            FrameMessage::FrameData {
-                                header,
-                                payload,
-                            } => {
+                            FrameMessage::FrameData { header, payload } => {
                                 render_frame(&canvas_render, &set_status_frame, &header, &payload);
                             },
                             _ => {

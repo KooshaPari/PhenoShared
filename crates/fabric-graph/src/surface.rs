@@ -141,10 +141,7 @@ impl std::fmt::Display for SurfaceSpecError {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
             Self::EmptyName => write!(f, "SurfaceSpec.name must be non-empty"),
-            Self::IncompatibleCapture {
-                protocol,
-                capture,
-            } => write!(
+            Self::IncompatibleCapture { protocol, capture } => write!(
                 f,
                 "SurfaceSpec: capture {:?} not compatible with protocol {:?}",
                 capture, protocol
@@ -322,31 +319,20 @@ impl std::fmt::Display for SurfaceError {
                 f,
                 "no RouteStep in the plan satisfies the surface's locality+protocol requirements"
             ),
-            Self::InsufficientTrust {
-                required,
-                offered,
-            } => write!(
+            Self::InsufficientTrust { required, offered } => write!(
                 f,
                 "host trust {offered:?} is below surface requirement {required:?}"
             ),
-            Self::IllegalTransition {
-                from,
-                attempted,
-            } => write!(f, "cannot {attempted} from state {from:?}"),
-            Self::EpochDrift {
-                previous,
-                current,
-            } => write!(
+            Self::IllegalTransition { from, attempted } => {
+                write!(f, "cannot {attempted} from state {from:?}")
+            },
+            Self::EpochDrift { previous, current } => write!(
                 f,
                 "plan epoch drifted from {previous} to {current}; strict-binding surface \
                  invalidated"
             ),
-            Self::UnknownNode {
-                node,
-            } => write!(f, "unknown node in topology: {node}"),
-            Self::SpecViolation {
-                detail,
-            } => write!(f, "spec violation: {detail}"),
+            Self::UnknownNode { node } => write!(f, "unknown node in topology: {node}"),
+            Self::SpecViolation { detail } => write!(f, "spec violation: {detail}"),
         }
     }
 }

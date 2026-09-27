@@ -61,10 +61,7 @@ impl ProviderConfig {
             .map_err(|e| SubstrateError::Routing(format!("OMNIROUTE_API_KEY not set: {e}")))?;
         let base_url =
             std::env::var("OMNIROUTE_BASE_URL").unwrap_or_else(|_| DEFAULT_BASE_URL.to_string());
-        Ok(ProviderConfig {
-            base_url,
-            api_key,
-        })
+        Ok(ProviderConfig { base_url, api_key })
     }
 
     /// Build a `ProviderConfig` from explicit values (no environment

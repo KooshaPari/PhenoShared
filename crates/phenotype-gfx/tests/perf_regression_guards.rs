@@ -38,9 +38,7 @@ fn empty_u8_chunk() -> Chunk<u8> {
 /// A truly alternating-pattern chunk: every adjacent pair differs, forcing CHUNK_VOXELS RLE runs.
 fn alternating_u8_chunk() -> Chunk<u8> {
     let voxels: Vec<u8> = (0..CHUNK_VOXELS).map(|i| (i % 2) as u8).collect();
-    Chunk {
-        voxels,
-    }
+    Chunk { voxels }
 }
 
 fn serialized_u8_bytes(chunk: &Chunk<u8>) -> Vec<u8> {
@@ -145,14 +143,7 @@ fn svo_compact_8_siblings_exact() {
     for cx in [0i32, 1] {
         for cy in [0i32, 1] {
             for cz in [0i32, 1] {
-                tree.insert_uniform(
-                    ChunkCoord {
-                        cx,
-                        cy,
-                        cz,
-                    },
-                    MaterialId(1),
-                );
+                tree.insert_uniform(ChunkCoord { cx, cy, cz }, MaterialId(1));
             }
         }
     }
@@ -226,14 +217,7 @@ fn svo_compact_mixed_siblings_unchanged() {
         for cy in [0i32, 1] {
             for cz in [0i32, 1] {
                 let val = if i == 7 { MaterialId(2) } else { MaterialId(1) };
-                tree.insert_uniform(
-                    ChunkCoord {
-                        cx,
-                        cy,
-                        cz,
-                    },
-                    val,
-                );
+                tree.insert_uniform(ChunkCoord { cx, cy, cz }, val);
                 i += 1;
             }
         }
@@ -321,14 +305,7 @@ fn dirty_tracking_event_count_exact() {
     );
 
     // Idempotent write at position (0,0,0) — value already MaterialId(1).
-    world.write(
-        WorldCoord {
-            x: 0,
-            y: 0,
-            z: 0,
-        },
-        MaterialId(1),
-    );
+    world.write(WorldCoord { x: 0, y: 0, z: 0 }, MaterialId(1));
     let events2 = world.drain_dirty();
     assert_eq!(
         events2.len(),

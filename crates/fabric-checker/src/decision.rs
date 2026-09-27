@@ -35,14 +35,7 @@ impl PartialEq for Decision {
     fn eq(&self, other: &Self) -> bool {
         match (self, other) {
             (Self::Admit, Self::Admit) => true,
-            (
-                Self::AdmitWithNotes {
-                    notes: a,
-                },
-                Self::AdmitWithNotes {
-                    notes: b,
-                },
-            ) => a == b,
+            (Self::AdmitWithNotes { notes: a }, Self::AdmitWithNotes { notes: b }) => a == b,
             (
                 Self::Reject {
                     reason_code: rc1,

@@ -147,18 +147,12 @@ impl WorkOsProvider {
             .timeout(std::time::Duration::from_secs(30))
             .build()
             .expect("failed to create HTTP client");
-        Self {
-            config,
-            http,
-        }
+        Self { config, http }
     }
 
     /// Create a new WorkOS provider with a custom HTTP client (for testing).
     pub fn with_client(config: WorkOsConfig, http: Client) -> Self {
-        Self {
-            config,
-            http,
-        }
+        Self { config, http }
     }
 
     /// Generate an authorization URL for initiating OAuth login.
@@ -178,10 +172,7 @@ impl WorkOsProvider {
             urlencoding(&scopes),
         );
 
-        AuthorizationRequest {
-            url,
-            state,
-        }
+        AuthorizationRequest { url, state }
     }
 
     /// Generate an authorization URL with specific scopes.
@@ -198,10 +189,7 @@ impl WorkOsProvider {
             urlencoding(&scope_str),
         );
 
-        AuthorizationRequest {
-            url,
-            state,
-        }
+        AuthorizationRequest { url, state }
     }
 
     /// Exchange an authorization code for tokens.

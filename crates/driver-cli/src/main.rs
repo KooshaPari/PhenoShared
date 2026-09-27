@@ -315,9 +315,7 @@ async fn main() -> anyhow::Result<()> {
             let plan = args.plan()?;
             print_plan(&plan)
         },
-        Command::Argv {
-            args,
-        } => driver_argv::dispatch::run(args),
+        Command::Argv { args } => driver_argv::dispatch::run(args),
         Command::CloudDispatch(args) => {
             cloud_dispatch::run(args.platform, &args.repo, &args.branch, &args.task).await
         },

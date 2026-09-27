@@ -110,10 +110,7 @@ impl SsaoPass {
     /// New SSAO pass with the given config.
     pub fn new(config: SsaoConfig) -> Self {
         let kernel = SsaoConfig::build_kernel(config.kernel_size);
-        Self {
-            config,
-            kernel,
-        }
+        Self { config, kernel }
     }
 
     /// Borrow the current config.

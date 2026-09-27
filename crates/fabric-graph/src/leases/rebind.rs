@@ -62,9 +62,7 @@ pub fn rebind_or_fail(
             // ---- Step 3a: silent re-bind ----
             let new_plan_id = new_plan.id.clone();
             bind(lease, new_plan_id.clone(), new_step)?;
-            Ok(RebindOutcome::Rebound {
-                new_plan_id,
-            })
+            Ok(RebindOutcome::Rebound { new_plan_id })
         },
         Ok(FailoverOutcome::NoReplacement) => {
             // ---- Step 3b: terminate the lease ----
@@ -76,9 +74,7 @@ pub fn rebind_or_fail(
                 host_node: host_node.clone(),
             };
             fail(lease, reason.clone())?;
-            Ok(RebindOutcome::Failed {
-                reason,
-            })
+            Ok(RebindOutcome::Failed { reason })
         },
         Err(e) => Err(map_failover_error(e)),
     }

@@ -19,9 +19,7 @@ fn process_spawn_spec_round_trips_json() {
 
 #[test]
 fn process_state_variants_are_distinct() {
-    let running = ProcessState::Running {
-        pid: 42,
-    };
+    let running = ProcessState::Running { pid: 42 };
     let exited = ProcessState::Exited {
         pid: 42,
         code: Some(0),

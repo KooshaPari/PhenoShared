@@ -118,9 +118,7 @@ impl ResearchIntel {
     /// Construct a `ResearchIntel` with a custom provider (tests +
     /// production HTTP-backed providers).
     pub fn with_provider(provider: Arc<dyn ResearchProvider>) -> Self {
-        Self {
-            provider,
-        }
+        Self { provider }
     }
 
     /// Read-only view of the active provider.
@@ -373,10 +371,7 @@ mod tests {
         };
         let res = ri.send(&req).await;
         match res {
-            Err(LlmError::Provider {
-                status,
-                body,
-            }) => {
+            Err(LlmError::Provider { status, body }) => {
                 assert_eq!(status, 502);
                 assert!(body.contains("upstream 503"));
             },
