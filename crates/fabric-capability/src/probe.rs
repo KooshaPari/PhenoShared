@@ -101,6 +101,12 @@ impl Probe for PosixProbe {
 mod cpu {
     use super::*;
     use crate::descriptor::ComputeCapabilities;
+    // These imports are referenced only from the cfg-gated branches below;
+    // gating them keeps macOS builds warning-free under `-D warnings`.
+    #[cfg(not(target_os = "macos"))]
+    use crate::error::Error;
+    #[cfg(target_os = "linux")]
+    use crate::descriptor::CacheInfo;
 
     /// Probes CPU/NUMA/cache/memory from /proc and /sys.
     ///
@@ -221,7 +227,7 @@ mod cpu {
                 .unwrap_or(64);
             let cores_sharing = std::fs::read_to_string(path.join("shared_cpu_list"))
                 .ok()
-                .and_then(|s| s.trim().matches(',').count() as u32)
+                .map(|s| s.trim().matches(',').count() as u32)
                 .unwrap_or(0)
                 + 1;
             if level > 0 {
