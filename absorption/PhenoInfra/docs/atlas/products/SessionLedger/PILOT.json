@@ -1,0 +1,41 @@
+{
+  "id": "PILOT-PRD-SESSIONLEDGER",
+  "product_id": "PRD-SESSIONLEDGER",
+  "status": "PLANNED_NOT_EXECUTED",
+  "subject_repository_id": 1284536541,
+  "hypothesis": "Cross-harness provenance and recovery reduce operator uncertainty without turning transcripts into a new authority or side-effect replay engine.",
+  "baseline_candidates": [
+    "Native harness exports plus compressed files/search",
+    "Langfuse trace/session inspection",
+    "Local structured archive with SQLite FTS",
+    "A small format-specific conversion pipeline"
+  ],
+  "scenario": "Archive long interrupted and branched sessions from several harnesses, including duplicate journals, malformed records and missing tool receipts. Search for the actual approval that authorized one action, show the sequence, export it and restore in a clean installation. Introduce a parser upgrade and compare fidelity.",
+  "failure_cases": [
+    "Duplicate journal inflates activity",
+    "Missing tool output is fabricated",
+    "Attachment orphaned",
+    "Replay executes an old tool command",
+    "Redacted secret remains in search index",
+    "Normalized timestamp presented as original"
+  ],
+  "metrics": [
+    "Lossless raw preservation and parse coverage",
+    "Correct sequence/branch reconstruction",
+    "Query correctness",
+    "Recovery fidelity",
+    "Storage/index overhead",
+    "Time to locate an actual scoped approval"
+  ],
+  "required_before_execution": [
+    "versioned subjects and fixtures",
+    "predeclared critical invariants",
+    "reviewed non-inferiority margins",
+    "resource and trust limits",
+    "independent outcome oracle",
+    "retained failed-trial policy"
+  ],
+  "results": null,
+  "winner": null,
+  "protocol": "../../research/COMPARATIVE-PILOT-PROTOCOL.md"
+}

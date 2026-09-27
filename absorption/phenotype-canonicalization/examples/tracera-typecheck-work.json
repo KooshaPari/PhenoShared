@@ -1,0 +1,36 @@
+{
+  "state": "proposed_not_executed",
+  "finding_ids": [
+    "F02",
+    "F03",
+    "F15"
+  ],
+  "repository_id": 1162254344,
+  "source_evidence": [
+    "G04",
+    "G05",
+    "G22"
+  ],
+  "projects_observed_in_manifest": [
+    "packages/api-client/tsconfig.json",
+    "packages/config/tsconfig.json",
+    "packages/env-manager/tsconfig.json",
+    "packages/state/tsconfig.json",
+    "packages/types/tsconfig.json",
+    "packages/ui/tsconfig.json"
+  ],
+  "additional_project": "apps/web/tsconfig.json",
+  "assignment": "Prove coverage of every required project with one canary at a time; replace repeated -p semantics without silently weakening non-mutation or framework obligations.",
+  "protected_invariants": [
+    "No disabling rules or shrinking source selection to obtain pass.",
+    "No assertion of native compiler identity from executable name.",
+    "Exact locked release reproduction is required; the local 5.8.3 fixture is only a counterexample."
+  ],
+  "acceptance": [
+    "Each independent canary fails final command",
+    "Valid clean reference passes",
+    "Every expected project/file is in reviewed denominator",
+    "Source unchanged by check",
+    "Tool/source/evaluator identities retained"
+  ]
+}

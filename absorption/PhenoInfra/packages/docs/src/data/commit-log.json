@@ -1,0 +1,16 @@
+[
+  {
+    "sha": "a1b2c3d",
+    "date": "2026-03-24",
+    "author": "docs-bot",
+    "subject": "chore(docs): sample commit for PhenoDocs commit-log view",
+    "repo": "phenodocs"
+  },
+  {
+    "sha": "e4f5g6h",
+    "date": "2026-03-20",
+    "author": "ci",
+    "subject": "ci: deploy GitHub Pages",
+    "repo": "phenodocs"
+  }
+]

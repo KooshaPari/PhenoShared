@@ -1,0 +1,25 @@
+{
+  "id": "SYN-CAP-RESUME",
+  "type": "capability",
+  "title": "Synthetic resumable CLI task",
+  "subject_id": "SYN-PRODUCT",
+  "state": "synthetic",
+  "purpose": "Illustrate purpose/constraint links without claiming a real product implementation.",
+  "rationale_kind": "synthetic",
+  "rationale_source_ids": [
+    "SYN-INTENT"
+  ],
+  "source_anchor": null,
+  "constraint_ids": [
+    "SYN-OBL-NO-DUPLICATE"
+  ],
+  "consumer_ids": [
+    "SYN-CLI"
+  ],
+  "evidence_ids": [],
+  "visibility": "synthetic",
+  "unknowns": [
+    "No real source inspected for this fixture."
+  ],
+  "synthetic": true
+}

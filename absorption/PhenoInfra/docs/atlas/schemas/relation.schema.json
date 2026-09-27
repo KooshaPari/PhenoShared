@@ -1,0 +1,117 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:phenotype:atlas-plan:1:relation",
+  "title": "relation",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[A-Za-z][A-Za-z0-9_.:-]*$",
+      "minLength": 2
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "defines",
+        "interprets",
+        "supersedes",
+        "constrains",
+        "contains",
+        "realizes",
+        "exposes",
+        "owns-state",
+        "composes",
+        "implements",
+        "located-in",
+        "member-of",
+        "calls",
+        "requires",
+        "produces",
+        "supports",
+        "uses-config",
+        "migrates",
+        "derives-from",
+        "generated-by",
+        "obligates",
+        "verifies",
+        "uses-fixture",
+        "interpreted-by",
+        "executes",
+        "reports",
+        "retains",
+        "measures",
+        "qualifies",
+        "publishes",
+        "installs",
+        "deploys",
+        "consumes",
+        "evidences",
+        "challenges",
+        "affects",
+        "supported-by",
+        "tests-hypothesis",
+        "compares",
+        "addresses",
+        "decomposes",
+        "depends-on",
+        "permitted-by",
+        "claimed-by",
+        "leases",
+        "covered-by",
+        "equivalence-candidate",
+        "moved-from",
+        "stales",
+        "visible-as"
+      ]
+    },
+    "from_id": {
+      "type": "string",
+      "pattern": "^[A-Za-z][A-Za-z0-9_.:-]*$",
+      "minLength": 2
+    },
+    "to_id": {
+      "type": "string",
+      "pattern": "^[A-Za-z][A-Za-z0-9_.:-]*$",
+      "minLength": 2
+    },
+    "state": {
+      "type": "string",
+      "enum": [
+        "unknown",
+        "proposed",
+        "reported",
+        "observed-source",
+        "observed-remote",
+        "measured",
+        "superseded",
+        "synthetic"
+      ]
+    },
+    "source_ids": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 0
+    },
+    "applicability": {
+      "type": "string",
+      "minLength": 1
+    },
+    "synthetic": {
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "id",
+    "type",
+    "from_id",
+    "to_id",
+    "state",
+    "source_ids",
+    "applicability",
+    "synthetic"
+  ],
+  "additionalProperties": false
+}

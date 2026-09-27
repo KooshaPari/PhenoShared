@@ -1,0 +1,13 @@
+{
+  "name": "fd3d-three-gsap-reference",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "predev": "node prepare.mjs",
+    "dev": "vite --host 127.0.0.1",
+    "prebuild": "node prepare.mjs",
+    "build": "vite build",
+    "preview": "vite preview --host 127.0.0.1"
+  }
+}

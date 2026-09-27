@@ -1,0 +1,10 @@
+version = 1
+
+[[skills]]
+name = "dotagents"
+source = "getsentry/dotagents"
+
+[[skills]]
+name = "agileplus-shard-lock-dag"
+source = "kooshapari/AgilePlus"
+description = "Shard-lock DAG protocol for parallel agent dispatch with disjoint file allow-lists per ADR-0001."

@@ -1,0 +1,28 @@
+{
+  "name": "BytePort",
+  "slug": "byteport",
+  "domain": "byteport.kooshapari.com",
+  "description": "Self-hosted IaC deployment + portfolio platform for developer projects. Go 1.25 backend, SvelteKit 5 frontend, Tauri 2 desktop shell.",
+  "tier": 2,
+  "repo": "KooshaPari/BytePort",
+  "language": "Go / SvelteKit / Tauri",
+  "license": "MIT",
+  "status": "active",
+  "features": [
+    "MicroVM-backed deployment via Spin/nvms",
+    "LLM-generated showcase metadata",
+    "Portfolio site registration",
+    "PASETO auth",
+    "SQLite persistence"
+  ],
+  "links": {
+    "github": "https://github.com/KooshaPari/BytePort",
+    "docs": "https://byteport.kooshapari.com/docs",
+    "releases": "https://github.com/KooshaPari/BytePort/releases"
+  },
+  "badges": [
+    "https://img.shields.io/github/actions/workflow/status/KooshaPari/BytePort/ci.yml?branch=main&label=build",
+    "https://img.shields.io/github/v/release/KooshaPari/BytePort?include_prereleases&sort=semver",
+    "https://img.shields.io/github/license/KooshaPari/BytePort"
+  ]
+}

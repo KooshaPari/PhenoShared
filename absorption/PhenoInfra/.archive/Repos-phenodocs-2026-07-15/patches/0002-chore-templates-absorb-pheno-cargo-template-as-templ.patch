@@ -1,0 +1,1357 @@
+From 727f16da7811e5712588d92606c4a18c3ce9a771 Mon Sep 17 00:00:00 2001
+From: phenotype-orchestrator <orchestrator@phenotype.local>
+Date: Sat, 20 Jun 2026 02:38:44 -0700
+Subject: [PATCH 2/2] chore(templates): absorb pheno-cargo-template as
+ templates/rust-crate/ (L5-115)
+
+Absorbs KooshaPari/pheno-cargo-template (canonical Rust crate template
+for the Phenotype ecosystem) into phenodocs under templates/rust-crate/.
+
+Migration: 28 unique template files preserved 1:1. 37 source boilerplate
+governance/CI files excluded as INTENTIONALLY_DEPRECATED (byte-identical
+files already exist in phenodocs or phenotype-org-audits).
+
+Template consumer paths must be updated:
+  cargo generate --git ...templates/rust-crate/  (from ...pheno-cargo-template)
+
+Audit: findings/2026-06-20-L5-115-cargo-template-absorption.md
+---
+ templates/rust-crate/Taskfile.yml             | 126 ++++++++++++++++++
+ .../rust-crate/examples/template_usage.rs     |  15 +++
+ templates/rust-crate/justfile                 |  81 +++++++++++
+ templates/rust-crate/src/lib.rs               |  16 +++
+ templates/rust-crate/template.root.Cargo.toml |  27 ++++
+ .../rust-crate/template/.drift-detector.yaml  |  12 ++
+ .../rust-crate/template/.framework-lint.yaml  |  16 +++
+ .../workflows/predictive-dry-check.yml        |  90 +++++++++++++
+ templates/rust-crate/template/.predict.yaml   |  21 +++
+ .../rust-crate/template/AGENTS.md.additions   |   9 ++
+ templates/rust-crate/template/CONTRIBUTING.md |  86 ++++++++++++
+ templates/rust-crate/template/Cargo.toml      |  34 +++++
+ templates/rust-crate/template/PREDICTIVE.md   |  48 +++++++
+ templates/rust-crate/template/PROMOTION.md    |  93 +++++++++++++
+ .../templates/hexagonal/.clippy.toml          |  14 ++
+ .../rust-crate/templates/hexagonal/README.md  | 117 ++++++++++++++++
+ .../templates/hexagonal/Taskfile.yml          |  52 ++++++++
+ .../templates/hexagonal/_typos.toml           |  19 +++
+ .../rust-crate/templates/hexagonal/cliff.toml |  54 ++++++++
+ .../rust-crate/templates/hexagonal/deny.toml  |  38 ++++++
+ .../rust-crate/templates/hexagonal/mise.toml  |  37 +++++
+ .../templates/hexagonal/nextest.toml          |  15 +++
+ .../templates/hexagonal/rust-toolchain.toml   |   5 +
+ .../templates/hexagonal/rustfmt.toml          |  22 +++
+ .../templates/hexagonal/src/sentry_config.rs  |  83 ++++++++++++
+ 25 files changed, 1130 insertions(+)
+ create mode 100644 templates/rust-crate/Taskfile.yml
+ create mode 100644 templates/rust-crate/examples/template_usage.rs
+ create mode 100644 templates/rust-crate/justfile
+ create mode 100644 templates/rust-crate/src/lib.rs
+ create mode 100644 templates/rust-crate/template.root.Cargo.toml
+ create mode 100644 templates/rust-crate/template/.drift-detector.yaml
+ create mode 100644 templates/rust-crate/template/.framework-lint.yaml
+ create mode 100644 templates/rust-crate/template/.github/workflows/predictive-dry-check.yml
+ create mode 100644 templates/rust-crate/template/.predict.yaml
+ create mode 100644 templates/rust-crate/template/AGENTS.md.additions
+ create mode 100644 templates/rust-crate/template/CONTRIBUTING.md
+ create mode 100644 templates/rust-crate/template/Cargo.toml
+ create mode 100644 templates/rust-crate/template/PREDICTIVE.md
+ create mode 100644 templates/rust-crate/template/PROMOTION.md
+ create mode 100644 templates/rust-crate/templates/hexagonal/.clippy.toml
+ create mode 100644 templates/rust-crate/templates/hexagonal/README.md
+ create mode 100644 templates/rust-crate/templates/hexagonal/Taskfile.yml
+ create mode 100644 templates/rust-crate/templates/hexagonal/_typos.toml
+ create mode 100644 templates/rust-crate/templates/hexagonal/cliff.toml
+ create mode 100644 templates/rust-crate/templates/hexagonal/deny.toml
+ create mode 100644 templates/rust-crate/templates/hexagonal/mise.toml
+ create mode 100644 templates/rust-crate/templates/hexagonal/nextest.toml
+ create mode 100644 templates/rust-crate/templates/hexagonal/rust-toolchain.toml
+ create mode 100644 templates/rust-crate/templates/hexagonal/rustfmt.toml
+ create mode 100644 templates/rust-crate/templates/hexagonal/src/sentry_config.rs
+
+diff --git a/templates/rust-crate/Taskfile.yml b/templates/rust-crate/Taskfile.yml
+new file mode 100644
+index 0000000..9f08c66
+--- /dev/null
++++ b/templates/rust-crate/Taskfile.yml
+@@ -0,0 +1,126 @@
++# pheno-cargo-template canonical Taskfile (L2 #27).
++#
++# This Taskfile is the canonical automation entrypoint for any Rust
++# crate instantiated from the pheno-cargo-template template. It
++# mirrors the per-task commands documented in README.md and the
++# `Makefile-LEGACY.md` mapping table; CI workflows and developer
++# scripts should prefer these `task` recipes over ad-hoc `cargo`
++# invocations.
++#
++# Long-running recipes (test, build) carry explicit timeouts so we
++# surface clean failures instead of letting cargo hangs cascade.
++# The `LONG_TIMEOUT` is set to 10m, which matches the PlayCua L2 #21
++# baseline (the 300s L1 cargo-check audit finding is the precedent).
++#
++# # Includes
++#
++# The canonical pattern (per PlayCua L2 #21) is to expose shared
++# recipes via Taskfile `includes:` so multiple sibling repos can
++# consume the same gates. The intended layout, when the template
++# family is published, is:
++#
++#   includes:
++#     rust:  ./Taskfile.rust.yml   # test, build, lint, fmt
++#     deny:  ./Taskfile.deny.yml   # deny, audit, hygiene
++#     ci:    ./Taskfile.ci.yml     # ci, release
++#
++# Until those sibling Taskfiles are committed the recipes below are
++# inline. Adding new recipes to this file keeps the runner working
++# without an `include:` graph; moving them to a sibling Taskfile is
++# purely a refactor once two or more repos need the same recipe.
++#
++# # Pairing with justfile
++#
++# A sibling `justfile` mirrors these recipes for CI consumers that
++# prefer `just` (e.g. repos with a hard `just` requirement in CI).
++# Both files must be kept in lockstep. The cross-runner mapping is
++# the single source of truth documented in `Makefile-LEGACY.md`.
++#
++# Usage: `task <recipe>` (run from the repo root).
++version: '3'
++
++vars:
++  CARGO: 'cargo'
++  WORKSPACE_FLAG: '--workspace'
++  # Per the L1 audit baseline that found `cargo check` did not
++  # complete within 300s bounded local runs: allow 10m for the
++  # long-running recipes so we surface a clean failure rather than
++  # letting CLI-level kills cascade through CI.
++  LONG_TIMEOUT: '10m'
++
++tasks:
++  default:
++    desc: List available tasks
++    cmds:
++      - 'task --list-all'
++
++  test:
++    desc: 'cargo test --workspace (timeout: {{.LONG_TIMEOUT}})'
++    dir: '{{.TASKFILE_DIR}}'
++    cmds:
++      - '{{.CARGO}} test {{.WORKSPACE_FLAG}}'
++    timeout: '{{.LONG_TIMEOUT}}'
++
++  build:
++    desc: 'cargo build --workspace (timeout: {{.LONG_TIMEOUT}})'
++    dir: '{{.TASKFILE_DIR}}'
++    cmds:
++      - '{{.CARGO}} build {{.WORKSPACE_FLAG}}'
++    timeout: '{{.LONG_TIMEOUT}}'
++
++  lint:
++    desc: cargo clippy --workspace --all-targets --all-features -- -D warnings
++    dir: '{{.TASKFILE_DIR}}'
++    cmds:
++      - '{{.CARGO}} clippy {{.WORKSPACE_FLAG}} --all-targets --all-features -- -D warnings'
++
++  fmt:
++    desc: cargo fmt --all -- --check (idempotent format check)
++    dir: '{{.TASKFILE_DIR}}'
++    cmds:
++      - '{{.CARGO}} fmt --all -- --check'
++
++  fmt-fix:
++    desc: cargo fmt --all (apply formatting; not part of ci)
++    dir: '{{.TASKFILE_DIR}}'
++    cmds:
++      - '{{.CARGO}} fmt --all'
++
++  deny:
++    desc: cargo deny check (advisories, bans, licenses, sources)
++    dir: '{{.TASKFILE_DIR}}'
++    cmds:
++      - '{{.CARGO}} deny check'
++
++  audit:
++    desc: cargo audit (RustSec advisory database scan)
++    dir: '{{.TASKFILE_DIR}}'
++    cmds:
++      - '{{.CARGO}} audit'
++
++  ci:
++    desc: Full local CI sweep (lint + fmt + test + build + deny)
++    dir: '{{.TASKFILE_DIR}}'
++    deps: [lint, fmt, test, build, deny]
++    cmds:
++      - 'echo "ci: all required gates passed (lint + fmt + test + build + deny)"'
++
++  hygiene:
++    desc: Code-hygiene sweep (fmt + lint + deny + audit)
++    dir: '{{.TASKFILE_DIR}}'
++    deps: [fmt, lint, deny, audit]
++    cmds:
++      - 'echo "hygiene: fmt + lint + deny + audit all clean"'
++
++  release:
++    desc: Dry-run release prep (fmt + lint + test + build + deny + audit)
++    dir: '{{.TASKFILE_DIR}}'
++    deps: [fmt, lint, test, build, deny, audit]
++    cmds:
++      - '{{.CARGO}} package --no-verify --list'
++      - 'echo "release: dry-run complete; run `cargo publish` from a release branch"'
++
++  coverage:
++    desc: Measure code coverage (SSOT: see grade.sh for the canonical command).
++    cmds:
++      - cargo llvm-cov --workspace --fail-under-lines 85
+diff --git a/templates/rust-crate/examples/template_usage.rs b/templates/rust-crate/examples/template_usage.rs
+new file mode 100644
+index 0000000..8cddd68
+--- /dev/null
++++ b/templates/rust-crate/examples/template_usage.rs
+@@ -0,0 +1,15 @@
++//! Quickstart example for pheno-cargo-template.
++//!
++//! Run with:
++//!   cargo run --example template_usage
++
++use pheno_cargo_template::crate_name;
++
++fn main() {
++    println!("Template crate name: {}", crate_name());
++    println!("This binary was generated from the pheno-cargo-template template.");
++    println!();
++    println!("To generate your own crate from this template:");
++    println!("  cargo install cargo-generate");
++    println!("  cargo generate --git https://github.com/KooshaPari/pheno-cargo-template");
++}
+diff --git a/templates/rust-crate/justfile b/templates/rust-crate/justfile
+new file mode 100644
+index 0000000..667d354
+--- /dev/null
++++ b/templates/rust-crate/justfile
+@@ -0,0 +1,81 @@
++# pheno-cargo-template canonical justfile (L2 #27).
++#
++# Mirrors the recipes in `Taskfile.yml` for CI consumers that prefer
++# `just` (e.g. projects that have a hard `just` requirement in CI).
++#
++# The `set shell := ["bash", "-uc"]` directive turns on:
++#   -u  error on unset variables (fail loud, fail fast)
++#   -c  pipefail — propagate the exit status of the first failing
++#      command in a pipe, so a `cargo ... | tail -5` cannot mask a
++#      cargo failure.
++# This guards against silent partial failures in long cargo pipelines.
++#
++# Usage: `just <recipe>` (run from the repo root).
++# Run `just` with no args to see the list below.
++
++set shell := ["bash", "-uc"]
++set dotenv-load
++
++# Toolchain / scope
++cargo  := "cargo"
++ws     := "--workspace"
++
++# Mirror the Taskfile `LONG_TIMEOUT` so both runners surface the
++# failure consistently when a `cargo` invocation hangs (per the L1
++# audit baseline that found `cargo check` did not complete within
++# 300s bounded local runs).
++long_timeout  := "10m"
++
++# Default: list recipes.
++default:
++    @just --list
++
++# ---------- Build / test / lint / format ----------
++
++# `cargo test --workspace` with an explicit timeout.
++test timeout=long_timeout:
++    timeout {{timeout}} {{cargo}} test {{ws}}
++
++# `cargo build --workspace` with an explicit timeout.
++build timeout=long_timeout:
++    timeout {{timeout}} {{cargo}} build {{ws}}
++
++# `cargo clippy --workspace --all-targets --all-features -- -D warnings`.
++lint:
++    {{cargo}} clippy {{ws}} --all-targets --all-features -- -D warnings
++
++# `cargo fmt --all -- --check` (idempotent format check).
++fmt:
++    {{cargo}} fmt --all -- --check
++
++# `cargo fmt --all` (apply formatting; not part of ci).
++fmt-fix:
++    {{cargo}} fmt --all
++
++# ---------- Supply-chain ----------
++
++# `cargo deny check` (advisories + bans + licenses + sources).
++deny:
++    {{cargo}} deny check
++
++# `cargo audit` (RustSec advisory database).
++audit:
++    {{cargo}} audit
++
++# ---------- Composed sweeps ----------
++
++# Full local CI sweep: lint + fmt + test + build + deny.
++ci: lint fmt test build deny
++    @echo "ci: all required gates passed (lint + fmt + test + build + deny)"
++
++# Code-hygiene sweep: fmt + lint + deny + audit.
++hygiene: fmt lint deny audit
++    @echo "hygiene: fmt + lint + deny + audit all clean"
++
++# Dry-run release prep: fmt + lint + test + build + deny + audit.
++release: fmt lint test build deny audit
++    @echo "release: dry-run complete; run `cargo publish` from a release branch"
++
++# Measure code coverage (SSOT: see grade.sh for the canonical command)
++coverage:
++    cargo llvm-cov --workspace --fail-under-lines 85
+diff --git a/templates/rust-crate/src/lib.rs b/templates/rust-crate/src/lib.rs
+new file mode 100644
+index 0000000..e93e00d
+--- /dev/null
++++ b/templates/rust-crate/src/lib.rs
+@@ -0,0 +1,16 @@
++//! Canonical Phenotype Rust crate template.
++
++/// Returns the template crate name.
++pub fn crate_name() -> &'static str {
++    "pheno-cargo-template"
++}
++
++#[cfg(test)]
++mod tests {
++    use super::*;
++
++    #[test]
++    fn crate_name_matches_package() {
++        assert_eq!(crate_name(), "pheno-cargo-template");
++    }
++}
+diff --git a/templates/rust-crate/template.root.Cargo.toml b/templates/rust-crate/template.root.Cargo.toml
+new file mode 100644
+index 0000000..8c31759
+--- /dev/null
++++ b/templates/rust-crate/template.root.Cargo.toml
+@@ -0,0 +1,27 @@
++[package]
++name = "pheno-cargo-template"
++version = "0.1.0"
++edition = "2021"
++rust-version = "1.78"
++license = "MIT OR Apache-2.0"
++description = "Canonical Phenotype Rust crate template."
++repository = "https://github.com/KooshaPari/pheno-cargo-template"
++readme = "README.md"
++keywords = ["phenotype", "template", "rust"]
++categories = ["development-tools"]
++publish = false
++
++[lib]
++name = "pheno_cargo_template"
++path = "src/lib.rs"
++
++[dependencies]
++
++[dev-dependencies]
++# The template includes a tracing feature flag pattern (per ADR-036).
++# Generated crates may keep or remove this block; it's a starting point.
++tracing = { version = "0.1", optional = true }
++
++[features]
++default = []
++tracing = ["dep:tracing"]
+diff --git a/templates/rust-crate/template/.drift-detector.yaml b/templates/rust-crate/template/.drift-detector.yaml
+new file mode 100644
+index 0000000..a0565cb
+--- /dev/null
++++ b/templates/rust-crate/template/.drift-detector.yaml
+@@ -0,0 +1,12 @@
++# pheno-drift-detector override config (per ADR-043)
++# Use this to mark capabilities as keep-in-app (with justification) so the weekly
++# scan does not file issues for them.
++
++# Default: no overrides (every capability is scanned).
++overrides: []
++# Example:
++# overrides:
++#   - path: src/legacy_thing.rs
++#     reason: "tied to app-specific state in apps/web; would lose context if extracted"
++#     set_by: kooshapari
++#     set_date: 2026-06-18
+diff --git a/templates/rust-crate/template/.framework-lint.yaml b/templates/rust-crate/template/.framework-lint.yaml
+new file mode 100644
+index 0000000..bfba065
+--- /dev/null
++++ b/templates/rust-crate/template/.framework-lint.yaml
+@@ -0,0 +1,16 @@
++# pheno-framework-lint config (per ADR-042)
++# This file declares the canonical tier for this crate.
++# Update this file when you promote the crate (lib → SDK → framework → service).
++# See ADR-042 for tier-gate requirements.
++
++tier: pheno-*-lib  # one of: pheno-*-lib, phenotype-*-sdk, phenotype-*-framework, federated-service
++port-adapter: true  # set true when promoted to SDK (tier 2+)
++conventions-doc: conventions.md  # set when promoted to framework (tier 3+)
++federated-service: false  # set true when promoted to service (tier 4)
++deployment: null  # set to "helm" | "docker-compose" | "nix" when promoted to service
++
++# Tier-specific rules (per ADR-042):
++# Tier 1 (lib): no required rules
++# Tier 2 (SDK): port-adapter=true, 80% coverage, 2+ polyglot consumers
++# Tier 3 (framework): conventions-doc present, 70% coverage, IoC lifecycle, 3+ examples
++# Tier 4 (service): federated-service=true, 60% coverage, mTLS, OTLP, deployment story
+diff --git a/templates/rust-crate/template/.github/workflows/predictive-dry-check.yml b/templates/rust-crate/template/.github/workflows/predictive-dry-check.yml
+new file mode 100644
+index 0000000..6f0e888
+--- /dev/null
++++ b/templates/rust-crate/template/.github/workflows/predictive-dry-check.yml
+@@ -0,0 +1,90 @@
++name: predictive-dry-check
++# Predictive DRY PR lint (ADR-041, L72).
++# Triggers on PRs that touch a substrate crate (pheno-*-lib, phenotype-*-sdk,
++# phenotype-*-framework) or that extract a capability from an app repo.
++# Validates the 4 ADR-041 criteria are addressed in the PR body.
++#
++# Exit codes:
++#   0 — all 4 criteria addressed (or PR is exempt)
++#   1 — workflow error
++#   2 — at least one criterion NOT addressed (PR is blocked)
++#
++# See: docs/adr/2026-06-18/ADR-041-predictive-dry.md
++
++on:
++  pull_request:
++    types: [opened, edited, reopened, synchronize]
++
++jobs:
++  check-predictive-dry:
++    name: Predictive DRY 4-criteria check
++    runs-on: ubuntu-latest
++    permissions:
++      pull-requests: read
++    steps:
++      - name: Checkout
++        uses: actions/checkout@v4
++
++      - name: Detect substrate-tier change
++        id: detect
++        run: |
++          # Check if any changed path matches a substrate pattern OR an app-repo
++          # extraction (i.e. files removed from apps/* and added to pheno-*/).
++          SUBSTRATE_PATTERN='^(pheno-[a-z0-9-]+|phenotype-[a-z0-9-]+(-(sdk|ts|py|go|rs|js|kotlin|swift))?(-framework)?)/'
++          APP_PATTERN='^apps?/[A-Z][A-Za-z0-9]+/'
++          CHANGED=$(gh pr view ${{ github.event.pull_request.number }} --json files --jq '.files[].path')
++          if echo "$CHANGED" | grep -qE "$SUBSTRATE_PATTERN"; then
++            echo "is_substrate=true" >> "$GITHUB_OUTPUT"
++          fi
++          if echo "$CHANGED" | grep -qE "$APP_PATTERN"; then
++            echo "is_app_change=true" >> "$GITHUB_OUTPUT"
++          fi
++
++      - name: Skip if not a substrate or app extraction
++        if: steps.detect.outputs.is_substrate != 'true' && steps.detect.outputs.is_app_change != 'true'
++        run: |
++          echo "PR does not touch a substrate tier or extract from an app repo — skipping predictive-DRY check."
++          exit 0
++
++      - name: Run 4-criteria PR lint
++        uses: actions/github-script@v7
++        with:
++          script: |
++            const body = context.payload.pull_request.body || "";
++            const requiredMarkers = [
++              { id: "criterion-1", label: "1+ current consumer", pattern: /criterion[- ]?1|current[- ]consumer|works?[ -]?in/i },
++              { id: "criterion-2", label: "1+ named predicted consumer", pattern: /criterion[- ]?2|predicted[- ]consumer|consumer[- ]name/i },
++              { id: "criterion-3", label: "Clean abstraction boundary (Port trait)", pattern: /criterion[- ]?3|port[- ]trait|abstraction[- ]boundary/i },
++              { id: "criterion-4", label: "Bounded reversal cost (≤ 1 day)", pattern: /criterion[- ]?4|reversal[- ]cost|1[- ]?day/i }
++            ];
++            const missing = requiredMarkers.filter(m => !m.pattern.test(body));
++            if (missing.length === 0) {
++              core.info("✓ All 4 ADR-041 criteria addressed in PR body.");
++              return;
++            }
++            const list = missing.map(m => `- **${m.label}** (${m.id})`).join("\n");
++            const msg = [
++              "## Predictive DRY check failed (ADR-041)",
++              "",
++              "Your PR touches a substrate tier or extracts from an app repo, so it must address the **4 ADR-041 criteria** in the PR body.",
++              "",
++              "Missing markers:",
++              "",
++              list,
++              "",
++              "### How to fix",
++              "",
++              "Add the following template (or use the `PREDICTIVE.md` template from `pheno-ci-templates`) to your PR description:",
++              "",
++              "```",
++              "## Predictive DRY (ADR-041)",
++              "",
++              "- criterion-1: 1+ current consumer = <repo/path> (working code)",
++              "- criterion-2: 1+ predicted consumer = <name> (Q-YYYY, scope: <capability>)",
++              "- criterion-3: abstraction = Port trait in <path>, MockAdapter present",
++              "- criterion-4: reversal cost = ≤ 1 day (delete crate + revert consumer)",
++              "```",
++              "",
++              "See `docs/adr/2026-06-18/ADR-041-predictive-dry.md` for the full policy.",
++            ].join("\n");
++            core.setFailed(msg);
+\ No newline at end of file
+diff --git a/templates/rust-crate/template/.predict.yaml b/templates/rust-crate/template/.predict.yaml
+new file mode 100644
+index 0000000..898425b
+--- /dev/null
++++ b/templates/rust-crate/template/.predict.yaml
+@@ -0,0 +1,21 @@
++# pheno-predict config (per ADR-041)
++# Declares the "predicted consumers" for this crate, used by pheno-predict scan.
++
++# Current consumer: minimum 1 required for a predictive extract (per ADR-041)
++current_consumer:
++  - path: src/lib.rs  # the public surface used by the current consumer
++    consumer: <name>  # e.g., "KooshaPari/dispatch-mcp"
++    since: <YYYY-MM-DD>  # when this consumer first imported the surface
++
++# Predicted consumers: required for predictive DRY (per ADR-041)
++# Each entry must be named (repo), dated (target quarter), scoped (capability)
++predicted_consumers:
++  - repo: <name>
++    target_quarter: <YYYY-QN>
++    capability: <short description>
++
++# Port trait (per ADR-038)
++port_trait:
++  name: <PortName>
++  method_count: <N>  # must be ≤ 5
++  has_mock_adapter: <true|false>
+diff --git a/templates/rust-crate/template/AGENTS.md.additions b/templates/rust-crate/template/AGENTS.md.additions
+new file mode 100644
+index 0000000..9b7e6a3
+--- /dev/null
++++ b/templates/rust-crate/template/AGENTS.md.additions
+@@ -0,0 +1,9 @@
++## v8 governance (ADR-041-045)
++
++This crate is a substrate. The following v8 governance applies:
++
++- **Predictive DRY (ADR-041):** New shared primitives must fill out `PREDICTIVE.md` before merging.
++- **Substrate graduation (ADR-042):** Tier is declared in `.framework-lint.yaml`. Promotions require `PROMOTION.md`.
++- **Drift detection (ADR-043):** When this crate is included in a parent app, `pheno-drift-detector` scans weekly. Use `.drift-detector.yaml` overrides to mark keep-in-app.
++- **Cron deployment (ADR-044):** All fleet substrate tools run on the heavy-runner weekly. Backup is GitHub Actions.
++- **Tier compliance (ADR-045):** This crate's tier is audited by `pheno-framework-lint`. See findings/ for the latest report.
+diff --git a/templates/rust-crate/template/CONTRIBUTING.md b/templates/rust-crate/template/CONTRIBUTING.md
+new file mode 100644
+index 0000000..8c64b0d
+--- /dev/null
++++ b/templates/rust-crate/template/CONTRIBUTING.md
+@@ -0,0 +1,86 @@
++# Contributing
++
++Thank you for your interest in contributing to this crate!
++
++## About
++
++This crate is a **substrate** (per [ADR-023](../../docs/adr/2026-06-15/ADR-023-agent-effort-governance.md)).
++The fleet's v8 governance applies to every new capability added here.
++
++## When adding a new shared capability
++
++Per [ADR-041](../../docs/adr/2026-06-18/ADR-041-predictive-dry.md) (predictive DRY), every new shared primitive must:
++
++1. **Fill out `PREDICTIVE.md`** in the PR description, addressing the 4 ADR-041 criteria:
++   - criterion-1: 1+ current consumer with working code (stable for ≥ 30 days)
++   - criterion-2: 1+ predicted consumer (named, dated, scoped)
++   - criterion-3: clean abstraction boundary (Port trait + MockAdapter, ≤ 5 methods)
++   - criterion-4: bounded reversal cost (≤ 1 day to revert)
++2. **Update `.predict.yaml`** in the repo root with the current + predicted consumers.
++3. **Add a Port trait** (per ADR-038) for the new surface, plus a `MockAdapter` for tests.
++
++The CI lint `predictive-dry-check.yml` will block the PR if any of the 4 criteria
++is not addressed in the PR body.
++
++## When promoting this crate to a new tier
++
++Per [ADR-042](../../docs/adr/2026-06-18/ADR-042-substrate-graduation-path.md) (substrate graduation path), tier transitions are explicit and audited:
++
++1. **Fill out `PROMOTION.md`** in the PR description, listing every gate of the
++   from-tier → to-tier transition with evidence (link to a test, doc, file, etc.).
++2. **Update `.framework-lint.yaml`** in the repo root with the new tier:
++   - `tier: pheno-*-lib` (default)
++   - `tier: phenotype-*-sdk` (after lib → SDK promotion)
++   - `tier: phenotype-*-framework` (after SDK → framework promotion)
++   - `tier: federated-service` (after framework → federated service promotion)
++3. **Update `[package.metadata.phenotype].tier`** in `Cargo.toml` to match.
++4. **Tier-skipping is forbidden** unless the skipped tier would have been empty
++   (ADR-042 §4). Declare any skip in `PROMOTION.md`.
++
++## Weekly cron
++
++Per [ADR-044](../../docs/adr/2026-06-18/ADR-044-cron-deployment.md), the following
++tools run weekly on the heavy-runner against this repo (and the rest of the fleet):
++
++- **`pheno-framework-lint`** — checks tier compliance (L73). Reads `.framework-lint.yaml`
++  if present, otherwise infers tier from the repo name.
++- **`pheno-drift-detector`** — checks for app-substrate drift (L74). Reads
++  `.drift-detector.yaml` overrides to suppress false positives.
++- **`pheno-predict`** — checks for similar-code candidates against fleet baselines (L72).
++  Reads `.predict.yaml` to know this crate's declared consumers.
++
++A backup of these scans runs in GitHub Actions (`.github/workflows/predictive-dry-check.yml`).
++The cron is the source of truth; CI is the safety net.
++
++## Tier compliance
++
++Per [ADR-045](../../docs/adr/2026-06-18/ADR-045-event-bus-substrate-consolidation.md) (substrate consolidation / tier compliance), this
++crate's tier is audited by `pheno-framework-lint`. The latest report lives in
++`findings/`. Open a fix PR if your tier is non-compliant.
++
++## PR conventions
++
++- Branch naming: `feat/`, `fix/`, `chore/`, `docs/`, `refactor/`.
++- One logical change per PR.
++- All PRs must pass `clippy`, `fmt`, `test`, and `predictive-dry-check`.
++- Update `CHANGELOG.md` under `[Unreleased]`.
++- Squash-merge with a conventional commit message.
++
++## Commit message format
++
++We follow conventional commits:
++- `feat:` New feature
++- `fix:` Bug fix
++- `docs:` Documentation
++- `style:` Formatting
++- `refactor:` Code restructuring
++- `test:` Tests
++- `chore:` Maintenance
++
++## Code review
++
++All submissions require review. Please ensure:
++- CI checks pass
++- Code is documented
++- Tests cover new functionality
++- If a new tier is being introduced, `PROMOTION.md` is filled out
+diff --git a/templates/rust-crate/template/Cargo.toml b/templates/rust-crate/template/Cargo.toml
+new file mode 100644
+index 0000000..7ca43dd
+--- /dev/null
++++ b/templates/rust-crate/template/Cargo.toml
+@@ -0,0 +1,34 @@
++[package]
++name = "pheno-cargo-template"
++version = "0.1.0"
++edition = "2021"
++rust-version = "1.78"
++license = "MIT OR Apache-2.0"
++description = "Phenotype substrate crate scaffolded from pheno-cargo-template; v8 governance pre-filled (ADR-041, ADR-042, ADR-043)."
++repository = "https://github.com/KooshaPari/pheno-cargo-template"
++readme = "README.md"
++keywords = ["phenotype", "substrate", "v8-governance", "ADR-041", "ADR-042", "ADR-043"]
++categories = ["development-tools"]
++publish = false
++
++[lib]
++name = "pheno_cargo_template"
++path = "src/lib.rs"
++
++[dependencies]
++
++[dev-dependencies]
++# The template includes a tracing feature flag pattern (per ADR-036).
++# Generated crates may keep or remove this block; it's a starting point.
++tracing = { version = "0.1", optional = true }
++
++[features]
++default = []
++tracing = ["dep:tracing"]
++
++[package.metadata.phenotype]
++# Tier declaration mirrored from .framework-lint.yaml.
++# Update both files together when promoting (per ADR-042).
++tier = "pheno-*-lib"
++# Governance ADRs that apply to this crate (pre-filled per template).
++governance = ["ADR-041", "ADR-042", "ADR-043", "ADR-044", "ADR-045"]
+diff --git a/templates/rust-crate/template/PREDICTIVE.md b/templates/rust-crate/template/PREDICTIVE.md
+new file mode 100644
+index 0000000..d6f13bf
+--- /dev/null
++++ b/templates/rust-crate/template/PREDICTIVE.md
+@@ -0,0 +1,48 @@
++# Predictive DRY PR template (PREDICTIVE.md)
++
++Use this template in your PR description when your PR touches a substrate
++tier (`pheno-*-lib`, `phenotype-*-sdk`, `phenotype-*-framework`) or extracts
++a capability from an app-level repo into a substrate crate.
++
++The CI lint (`pheno-ci-templates/predictive-dry-check.yml`) requires the 4
++ADR-041 criteria to be addressed in the PR body. Copy this template, fill
++in the four lines, and your PR will pass.
++
++---
++
++## Predictive DRY (ADR-041)
++
++- **criterion-1 (current consumer):** <repo/path> with working code stable for ≥ 30 days
++- **criterion-2 (predicted consumer):** <repo-or-app-name>, target quarter Q-YYYY, scope: <specific capability>
++- **criterion-3 (abstraction):** Port trait in `<path/to/trait.rs>`, MockAdapter in `<path/to/mock.rs>`, ≤ 5 methods
++- **criterion-4 (reversal cost):** ≤ 1 day — delete crate + revert consumer to local copy (estimated < 4 h)
++
++---
++
++## PROMOTION.md (for tier promotions only)
++
++If your PR also promotes a substrate to a higher tier (lib → SDK → framework
++→ federated service), add a PROMOTION.md to the repo root documenting how
++each ADR-042 gate was met. See `pheno-ci-templates/PROMOTION.md` template.
++
++---
++
++## Why these 4 criteria?
++
++Per ADR-041, the goal is to prevent two failure modes:
++
++1. **Speculative DRY** — extracting "just in case" with no real consumer.
++2. **Premature abstraction** — extracting before the abstraction is clean.
++
++Criterion 1 ensures there is real code to extract. Criterion 2 prevents
++speculation. Criterion 3 forces a clean `Port` trait boundary (per ADR-014)
++rather than a free-function copy. Criterion 4 bounds the reversal cost so
++that a bad predictive extract is cheap to undo.
++
++## Related
++
++- `docs/adr/2026-06-18/ADR-041-predictive-dry.md` — full policy
++- `docs/adr/2026-06-18/ADR-042-substrate-graduation-path.md` — tier promotion policy
++- `pheno-predict` — fleet-wide similar-code scanner
++- `pheno-drift-detector` — app-substrate drift scanner
++- `pheno-framework-lint` — tier-convention enforcer
+\ No newline at end of file
+diff --git a/templates/rust-crate/template/PROMOTION.md b/templates/rust-crate/template/PROMOTION.md
+new file mode 100644
+index 0000000..94c6f3a
+--- /dev/null
++++ b/templates/rust-crate/template/PROMOTION.md
+@@ -0,0 +1,93 @@
++# Substrate promotion PR template (PROMOTION.md)
++
++Use this template in your PR when promoting a substrate from one tier to
++another (lib → SDK → framework → federated service). Required by ADR-042 §6
++for every tier transition.
++
++`pheno-framework-lint` will check the resulting repo for tier compliance
++after merge.
++
++---
++
++## PROMOTION: `<from-tier>` → `<to-tier>`
++
++**Repo:** <repo-name>
++**Date:** YYYY-MM-DD
++**Author:** @<handle>
++**ADR:** ADR-042
++
++---
++
++## Gate compliance
++
++Each transition has 4-6 specific gates. Mark each ✓ or ✗ and link to evidence.
++
++### `<from-tier>` → `<to-tier>` gates
++
++- [ ] Gate 1: <description> — evidence: <link>
++- [ ] Gate 2: <description> — evidence: <link>
++- [ ] Gate 3: <description> — evidence: <link>
++- [ ] Gate 4: <description> — evidence: <link>
++- [ ] Gate 5: <description> — evidence: <link>  *(if applicable)*
++- [ ] Gate 6: <description> — evidence: <link>  *(if applicable)*
++
++---
++
++## Tier-skipping declaration (REQUIRED if skipping tiers)
++
++**Are you skipping any tier?** ☐ No  ☐ Yes — `<skipped-tier>` to `<final-tier>`
++
++If yes, justify the skip in 1-2 sentences:
++
++> <justification>
++
++ADR-042 §4: tier-skipping is **forbidden** unless the skipped tier would
++have been empty. (Example: a pure-data primitive lib can promote directly
++to SDK if it never had business logic; "lib → framework" without an
++intermediate SDK is forbidden.)
++
++---
++
++## Breaking-change budget
++
++Per ADR-042 §5, the breaking-change budget for each tier transition is:
++
++| Transition | Max breaking changes | Public API widening? |
++|---|---|---|
++| lib → SDK | 5 | Allowed (must be additive) |
++| SDK → framework | 10 | Forbidden |
++| framework → federated service | 20 | Forbidden (semver-major) |
++
++**Estimated breaking changes in this PR:** <N>
++**Rationale:** <if ≥ 5, justify>
++
++---
++
++## Reversal plan
++
++If the promotion turns out to be wrong (e.g., new consumer count drops
++below the next-tier threshold), how would we reverse?
++
++1. <step>
++2. <step>
++3. <step>
++
++**Estimated reversal cost:** <hours>
++
++---
++
++## Reviewer checklist
++
++- [ ] All 4 (or 6) tier-transition gates are ✓ with evidence
++- [ ] Tier-skipping is declared and justified (if applicable)
++- [ ] Breaking-change budget is respected
++- [ ] Reversal plan is concrete and ≤ 1 day
++- [ ] ADR-042 §7 promotion-decision ADR is filed (or will be in this PR)
++
++---
++
++## Related
++
++- `docs/adr/2026-06-18/ADR-042-substrate-graduation-path.md` — full policy + gate table
++- `pheno-framework-lint` — tier-convention enforcer
++- `pheno-ci-templates/PREDICTIVE.md` — predictive-DRY template (use for lib extraction)
+\ No newline at end of file
+diff --git a/templates/rust-crate/templates/hexagonal/.clippy.toml b/templates/rust-crate/templates/hexagonal/.clippy.toml
+new file mode 100644
+index 0000000..7426837
+--- /dev/null
++++ b/templates/rust-crate/templates/hexagonal/.clippy.toml
+@@ -0,0 +1,14 @@
++# Migrated from KooshaPari/Apisync (archived 2026-06-19) — original commit d981353
++
++avoid-breaking-exported-api = false
++allow-expect-in-tests = true
++allow-unwrap-in-tests = true
++allow-print-in-tests = true
++cognitive-complexity-threshold = 25
++max-fn-params-bools = 3
++too-many-arguments-threshold = 7
++type-complexity-threshold = 250
++too-many-lines-threshold = 100
++large-error-threshold = 1024
++check-private-items = false
++suppress-restriction-lint-in-const = true
+diff --git a/templates/rust-crate/templates/hexagonal/README.md b/templates/rust-crate/templates/hexagonal/README.md
+new file mode 100644
+index 0000000..2511e23
+--- /dev/null
++++ b/templates/rust-crate/templates/hexagonal/README.md
+@@ -0,0 +1,117 @@
++# Hexagonal Rust Template
++
++<!-- Migrated from KooshaPari/Apisync (archived 2026-06-19) — original commit d981353 -->
++
++This template was extracted from [`KooshaPari/Apisync`](https://github.com/KooshaPari/Apisync)
++shortly before that repository was archived on 2026-06-19. It preserves the **hexagonal /
++ports-and-adapters** scaffold patterns that Apisync used: a thin `Taskfile`-driven quality
++gate, a tightly-pinned Rust toolchain, opinionated lint/format/audit configs, and a starter
++Sentry module that integrates cleanly into an API service.
++
++## Origin
++
++| Field            | Value                                                             |
++| ---------------- | ----------------------------------------------------------------- |
++| Source repo      | `KooshaPari/Apisync` (archived 2026-06-19)                        |
++| Source commit    | `d981353` — *"wip: pre-push snapshot 2026-06-18T02:00:13Z"*       |
++| Reason           | Apisync deprecated per ADR-017; template absorbed here for reuse  |
++| License          | Apache-2.0 (inherited from Apisync)                               |
++
++## What you get
++
++```
++templates/hexagonal/
++├── README.md                        # this file
++├── Taskfile.yml                     # build / test / lint / audit / bench / clean / default
++├── mise.toml                        # mise task aliases (format, lint, test, build, audit, docs)
++├── rust-toolchain.toml              # pins nightly + rustfmt, clippy, rust-docs
++├── rustfmt.toml                     # Phenotype formatting standard (100-col, grouped imports)
++├── nextest.toml                     # cargo-nextest profile with per-test/per-item timeouts
++├── _typos.toml                      # typos-cli wordlist + exclude globs
++├── deny.toml                        # cargo-deny license allowlist + RUSTSEC advisories
++├── .clippy.toml                     # clippy cognitive-complexity + lint relaxations
++├── cliff.toml                       # git-cliff conventional-commits changelog config
++├── src/
++│   └── sentry_config.rs             # starter sentry init + API error capture helpers
++└── .agileplus/
++    └── specs/
++        └── 001-core-setup/          # core-setup spec scaffolding (Apisync FR-APISYNC-SENTRY-001)
++            ├── spec.md
++            ├── tasks.md
++            └── meta.json
++```
++
++## How to consume this template
++
++### 1. Copy into a new crate
++
++```bash
++# From the new crate root
++cp -r /path/to/pheno-cargo-template/templates/hexagonal/. .
++```
++
++### 2. Customize the placeholder values
++
++- **`Taskfile.yml`** — replace `PROJECT: apisync` with your crate name in the `vars` block.
++- **`rust-toolchain.toml`** — keep `nightly` unless you have a strong reason to drop it; Apisync
++  relied on nightly-only formatter behaviour.
++- **`deny.toml`** — the RUSTSEC advisories ignored in this file are Apisync-specific
++  (`rustls-pemfile`, `gix`, `async-nats`). Re-evaluate them for your dependency tree.
++- **`cliff.toml`** — the conventional-commit group names are inherited as-is.
++- **`sentry_config.rs`** — the trace tag `FR-APISYNC-SENTRY-001` should be replaced with your
++  feature ID; the helpers themselves (`init`, `capture_api_error`, `set_request_context`)
++  are domain-agnostic.
++
++### 3. Wire up Sentry (optional)
++
++```rust
++// src/main.rs
++mod sentry_config;
++
++fn main() {
++    let _guard = sentry_config::init();
++    // ...
++}
++```
++
++Add to `Cargo.toml`:
++
++```toml
++[dependencies]
++sentry = "0.34"
++```
++
++### 4. Run the quality gate
++
++```bash
++task              # full gate: build + lint + test
++task build
++task test
++task lint         # clippy -D warnings + fmt --check
++task audit        # cargo audit
++task bench
++```
++
++Or via `mise`:
++
++```bash
++mise run build
++mise run lint
++mise run test
++mise run audit
++```
++
++## Customization notes
++
++- The `_typos.toml` `extend-words` block (`agileplus`, `RTO`, `unparseable`) is from the
++  Phenotype monorepo. Trim or extend it for your vocabulary.
++- `rustfmt.toml` enforces 100-column wrapping (`max_width = 100`) per the Phenotype standard.
++- The `.agileplus/specs/001-core-setup/` tree is **starter scaffolding** — replace the spec
++  content with your own feature once you fork the template. The `meta.json` carries a
++  `_attribution` field recording the original commit; remove it once you've forked.
++
++## See also
++
++- [`KooshaPari/Apisync`](https://github.com/KooshaPari/Apisync) @ `d981353` — the source of truth
++- [`KooshaPari/pheno-cargo-template`](../..) — this repository's root
++- ADR-017 — *"Deprecate Apisync; absorb template patterns into pheno-cargo-template"*
+\ No newline at end of file
+diff --git a/templates/rust-crate/templates/hexagonal/Taskfile.yml b/templates/rust-crate/templates/hexagonal/Taskfile.yml
+new file mode 100644
+index 0000000..2c760a4
+--- /dev/null
++++ b/templates/rust-crate/templates/hexagonal/Taskfile.yml
+@@ -0,0 +1,52 @@
++# Migrated from KooshaPari/Apisync (archived 2026-06-19) — original commit d981353
++
++version: '3'
++
++vars:
++  PROJECT: apisync
++  RUST_VERSION: "stable"
++
++tasks:
++  build:
++    desc: "Build the crate"
++    cmds:
++      - cargo build --all-targets
++
++  test:
++    desc: "Run all tests"
++    cmds:
++      - cargo test --all-targets
++
++  lint:
++    desc: "Run clippy and format checks"
++    cmds:
++      - cargo clippy --all-targets -- -D warnings
++      - cargo fmt -- --check
++
++  fmt:
++    desc: "Auto-format code"
++    cmds:
++      - cargo fmt
++
++  audit:
++    desc: "Run cargo audit"
++    cmds:
++      - cargo audit
++
++  bench:
++    desc: "Run benchmarks"
++    cmds:
++      - cargo bench
++
++  clean:
++    desc: "Remove build artifacts"
++    cmds:
++      - cargo clean
++      - rm -rf target
++
++  default:
++    desc: "Run the full quality gate (build, lint, test)"
++    cmds:
++      - task: build
++      - task: lint
++      - task: test
+diff --git a/templates/rust-crate/templates/hexagonal/_typos.toml b/templates/rust-crate/templates/hexagonal/_typos.toml
+new file mode 100644
+index 0000000..82926d2
+--- /dev/null
++++ b/templates/rust-crate/templates/hexagonal/_typos.toml
+@@ -0,0 +1,19 @@
++# Migrated from KooshaPari/Apisync (archived 2026-06-19) — original commit d981353
++
++[default.extend-words]
++# Add project-specific words that typos should not flag
++agileplus = "agileplus"
++RTO = "RTO"
++unparseable = "unparseable"
++
++[files]
++extend-exclude = [
++    "*.lock",
++    "target/",
++    "*.pyc",
++    "__pycache__/",
++    "python/src/gen/",
++    "rust/src/gen/",
++    "pheno-cli/go.mod",
++    "templates/static/*.min.js",
++]
+diff --git a/templates/rust-crate/templates/hexagonal/cliff.toml b/templates/rust-crate/templates/hexagonal/cliff.toml
+new file mode 100644
+index 0000000..fd337ce
+--- /dev/null
++++ b/templates/rust-crate/templates/hexagonal/cliff.toml
+@@ -0,0 +1,54 @@
++# Migrated from KooshaPari/Apisync (archived 2026-06-19) — original commit d981353
++
++# Configuration for git-cliff: https://git-cliff.org/
++# Generates CHANGELOG from conventional commits
++
++[changelog]
++header = """
++# Changelog
++
++All notable changes to this project will be documented in this file.
++"""
++
++body = """
++{%- for group, commits in commits | group_by(attribute="group") %}
++## {{ group | replace(from="Features", to="✨ Features") | replace(from="Bug Fixes", to="🐛 Bug Fixes") | replace(from="Documentation", to="📚 Documentation") | replace(from="Performance", to="⚡ Performance") }}
++
++{%- for commit in commits %}
++- {% if commit.breaking %}**BREAKING** {% endif %}{{ commit.message | upper_first }} ([`{{ commit.id | truncate(length=7, end="") }}`]({{ commit.link }}))
++  {%- if commit.body %}
++  {{ commit.body | indent(prefix="  > ") }}
++  {%- endif %}
++{%- endfor %}
++{%- endfor %}
++"""
++
++footer = """
++---
++
++**Release Date:** {{ now | date(format="%Y-%m-%d") }}
++"""
++
++trim = true
++
++[git]
++conventional_commits = true
++
++commit_parsers = [
++  {message = "^feat", group = "Features"},
++  {message = "^fix", group = "Bug Fixes"},
++  {message = "^doc", group = "Documentation"},
++  {message = "^perf", group = "Performance"},
++  {message = "^refactor", group = "Refactoring"},
++  {message = "^test", group = "Testing"},
++  {message = "^chore", skip = true},
++  {message = "^ci", skip = true},
++]
++
++commit_filters = [
++  {remove_if_matches = ".*skip.*changelog.*"},
++]
++
++tag_pattern = "v[0-9].*"
++skip_tags = ""
++sort_commits = "newest"
+diff --git a/templates/rust-crate/templates/hexagonal/deny.toml b/templates/rust-crate/templates/hexagonal/deny.toml
+new file mode 100644
+index 0000000..59ccaea
+--- /dev/null
++++ b/templates/rust-crate/templates/hexagonal/deny.toml
+@@ -0,0 +1,38 @@
++# Migrated from KooshaPari/Apisync (archived 2026-06-19) — original commit d981353
++
++[licenses]
++version = 2
++allow = [
++    "Apache-2.0",
++    "Apache-2.0 WITH LLVM-exception",
++    "BSD-2-Clause",
++    "BSD-3-Clause",
++    "BSD-3-Clause-Clear",
++    "CC0-1.0",
++    "CC-BY-SA-4.0",
++    "GPL-3.0-only",
++    "ISC",
++    "MIT",
++    "MPL-2.0",
++    "Unicode-3.0",
++    "Unicode-DFS-2016",
++    "Zlib",
++    "0BSD",
++    "BlueOak-1.0.0",
++    "CDLA-Permissive-2.0",
++    "Unlicense",
++    "WTFPL",
++]
++
++[sources]
++unknown-git = "deny"
++
++[advisories]
++ignore = [
++    # No safe upgrade available - rustls-pemfile deprecated, migration requires async-nats update
++    { id = "RUSTSEC-2025-0134", reason = "No safe upgrade available. rustls-pemfile deprecated, migration requires async-nats update." },
++    # No safe upgrade available - gix = "0.71" pinned in Cargo.toml, requires major version bump
++    { id = "RUSTSEC-2025-0140", reason = "No safe upgrade available. gix = 0.71 pinned in Cargo.toml, requires breaking API change." },
++    # No safe upgrade available - async-nats 0.46.0 still uses rustls-webpki 0.102.x
++    { id = "RUSTSEC-2026-0049", reason = "No safe upgrade available. async-nats 0.46.0 still uses vulnerable rustls-webpki." },
++]
+diff --git a/templates/rust-crate/templates/hexagonal/mise.toml b/templates/rust-crate/templates/hexagonal/mise.toml
+new file mode 100644
+index 0000000..203383e
+--- /dev/null
++++ b/templates/rust-crate/templates/hexagonal/mise.toml
+@@ -0,0 +1,37 @@
++# Migrated from KooshaPari/Apisync (archived 2026-06-19) — original commit d981353
++
++[tasks.format]
++description = "Format code"
++
++run = "cargo fmt"
++
++
++[tasks.lint]
++description = "Lint code"
++
++run = "cargo clippy -- -D warnings"
++
++
++[tasks.test]
++description = "Run tests"
++
++run = "cargo test"
++
++
++[tasks.build]
++description = "Build project"
++
++run = "cargo build --release"
++
++
++[tasks.audit]
++description = "Audit dependencies"
++
++run = "cargo audit"
++
++
++[tasks.docs:build]
++description = "Build documentation"
++
++run = "cargo doc --no-deps --open"
++
+diff --git a/templates/rust-crate/templates/hexagonal/nextest.toml b/templates/rust-crate/templates/hexagonal/nextest.toml
+new file mode 100644
+index 0000000..fff8f27
+--- /dev/null
++++ b/templates/rust-crate/templates/hexagonal/nextest.toml
+@@ -0,0 +1,15 @@
++# Migrated from KooshaPari/Apisync (archived 2026-06-19) — original commit d981353
++
++# Cargo-nextest configuration
++
++[profile.default]
++timeout = { per_test = 120, per_item = 60 }
++formatter = "pretty"
++failure-output = "immediate"
++show_skipped = true
++fail-fast = false
++retries = 1
++
++[[profile.default.overrides]]
++filter = "test(integration::)"
++retries = 2
+diff --git a/templates/rust-crate/templates/hexagonal/rust-toolchain.toml b/templates/rust-crate/templates/hexagonal/rust-toolchain.toml
+new file mode 100644
+index 0000000..9f10dfb
+--- /dev/null
++++ b/templates/rust-crate/templates/hexagonal/rust-toolchain.toml
+@@ -0,0 +1,5 @@
++# Migrated from KooshaPari/Apisync (archived 2026-06-19) — original commit d981353
++
++[toolchain]
++channel = "nightly"
++components = ["rustfmt", "clippy", "rust-docs"]
+diff --git a/templates/rust-crate/templates/hexagonal/rustfmt.toml b/templates/rust-crate/templates/hexagonal/rustfmt.toml
+new file mode 100644
+index 0000000..3d47702
+--- /dev/null
++++ b/templates/rust-crate/templates/hexagonal/rustfmt.toml
+@@ -0,0 +1,22 @@
++# Migrated from KooshaPari/Apisync (archived 2026-06-19) — original commit d981353
++
++# Rust Formatting Configuration
++# Phenotype Standard
++
++# Basic formatting
++edition = "2021"
++tab_spaces = 4
++hard_tabs = false
++max_width = 100
++
++# Import settings
++group_imports = "StdExternalCrate"
++use_small_heuristics = "Max"
++
++# Reorder settings
++reorder_imports = true
++reorder_modules = true
++
++# Other settings
++newline_style = "Unix"
++indent_style = "Block"
+diff --git a/templates/rust-crate/templates/hexagonal/src/sentry_config.rs b/templates/rust-crate/templates/hexagonal/src/sentry_config.rs
+new file mode 100644
+index 0000000..c44529f
+--- /dev/null
++++ b/templates/rust-crate/templates/hexagonal/src/sentry_config.rs
+@@ -0,0 +1,83 @@
++//! Migrated from KooshaPari/Apisync (archived 2026-06-19) — original commit d981353
++
++//! Sentry configuration for Apisync
++//!
++//! Traces to: FR-APISYNC-SENTRY-001
++//!
++//! Error tracking for API toolkit with REST/GraphQL/WebSocket support
++
++use std::env;
++
++/// Initialize Sentry for API server
++pub fn init() -> Option<sentry::ClientInitGuard> {
++    let dsn = env::var("SENTRY_DSN").ok()?;
++    let environment = env::var("SENTRY_ENVIRONMENT").unwrap_or_else(|_| "development".to_string());
++    let release = format!("{}@{}", env!("CARGO_PKG_NAME"), env!("CARGO_PKG_VERSION"));
++
++    Some(sentry::init((
++        dsn,
++        sentry::ClientOptions {
++            environment: Some(environment.into()),
++            release: Some(release.into()),
++            attach_stacktrace: true,
++            debug: cfg!(debug_assertions),
++            
++            // Before send to filter out common API noise
++            before_send: Some(std::sync::Arc::new(|mut event| {
++                // Filter out validation errors (400s)
++                if let Some(ref exc) = event.exception.values.first() {
++                    if exc.ty == "ValidationError" || exc.ty == "BadRequest" {
++                        return None;
++                    }
++                }
++                Some(event)
++            })),
++            
++            ..Default::default()
++        },
++    )))
++}
++
++/// Capture API error with request context
++pub fn capture_api_error(
++    error: &impl std::error::Error,
++    endpoint: &str,
++    method: &str,
++    status_code: u16,
++) {
++    sentry::with_scope(
++        |scope| {
++            scope.set_tag("api.endpoint", endpoint);
++            scope.set_tag("api.method", method);
++            scope.set_tag("api.status_code", &status_code.to_string());
++            scope.set_extra("api.context", format!("{} {}", method, endpoint).into());
++        },
++        || sentry::capture_error(error),
++    );
++}
++
++/// Set request context for all subsequent events
++pub fn set_request_context(request_id: &str, user_id: Option<&str>) {
++    sentry::configure_scope(|scope| {
++        scope.set_tag("request.id", request_id);
++        if let Some(uid) = user_id {
++            scope.set_user(Some(sentry::User {
++                id: Some(uid.into()),
++                ..Default::default()
++            }));
++        }
++    });
++}
++
++#[cfg(test)]
++mod tests {
++    use super::*;
++
++    // Traces to: FR-APISYNC-SENTRY-001
++    #[test]
++    fn test_sentry_init_respects_environment() {
++        let guard = init();
++        // Without SENTRY_DSN, should return None
++        assert!(guard.is_none());
++    }
++}
+-- 
+2.50.1 (Apple Git-155)
+

@@ -1,0 +1,17 @@
+{
+  "id": "pd-raster-canary",
+  "width": 800,
+  "height": 800,
+  "layers": [
+    {
+      "file": "base.png",
+      "name": "Base art",
+      "opacity": 100
+    },
+    {
+      "file": "overlay.png",
+      "name": "Editable accent layer",
+      "opacity": 75
+    }
+  ]
+}

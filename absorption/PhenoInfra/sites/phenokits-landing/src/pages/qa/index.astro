@@ -1,0 +1,169 @@
+---
+import "../../styles/globals.css";
+import qaSnapshot from "../../data/qa-snapshot.json";
+import { sitePath } from "../../lib/site";
+
+// Tier-3 microfrontend: /qa — quality dashboard.
+// Spec: phenotype-infra/docs/governance/path-microfrontends-tier3.md
+//
+// Reads three JSON drops from the source repo's docs/reports/:
+//   - coverage.json
+//   - lint.json
+//   - fr-trace.json
+//
+// Each panel degrades gracefully and loudly when its source is absent.
+
+const REPO = "KooshaPari/PhenoKits";
+const PROJECT_NAME = "PhenoKits";
+const REPO_SLUG = "phenokits";
+const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
+
+interface CoverageReport {
+  pct?: number;
+  lines_total?: number;
+  lines_covered?: number;
+  generated_at?: string;
+}
+interface LintReport {
+  clippy?: { errors: number; warnings: number };
+  ruff?: { errors: number; warnings: number };
+  vale?: { errors: number; warnings: number; suggestions?: number };
+  generated_at?: string;
+}
+interface FrTraceReport {
+  total_frs?: number;
+  covered_frs?: number;
+  uncovered?: string[];
+  generated_at?: string;
+}
+
+interface PanelResult<T> {
+  data: T | null;
+  reason: string | null;
+}
+
+const SNAPSHOT: Record<string, PanelResult<any>> = qaSnapshot as any;
+
+async function ghReport<T>(file: string, snapshotKey: string): Promise<PanelResult<T>> {
+  const fallback = SNAPSHOT[snapshotKey] as PanelResult<T> | undefined;
+  try {
+    const res = await fetch(
+      `https://api.github.com/repos/${REPO}/contents/docs/reports/${file}?ref=main`,
+      {
+        headers: {
+          Accept: "application/vnd.github.raw",
+          "User-Agent": "phenokits-landing-build",
+          ...(GITHUB_TOKEN ? { Authorization: `Bearer ${GITHUB_TOKEN}` } : {}),
+        },
+      },
+    );
+    if (res.status === 404) {
+      return {
+        data: null,
+        reason: `<code>docs/reports/${file}</code> not yet emitted by <code>${REPO}</code>. Add the file to populate this panel.`,
+      };
+    }
+    if (!res.ok) {
+      console.warn(
+        `[qa] GitHub contents/${file} -> ${res.status} ${res.statusText}; using snapshot`,
+      );
+      return (
+        fallback ?? {
+          data: null,
+          reason: `GitHub API error: ${res.status} ${res.statusText}.`,
+        }
+      );
+    }
+    const text = await res.text();
+    return { data: JSON.parse(text) as T, reason: null };
+  } catch (err: any) {
+    console.warn(`[qa] GitHub contents/${file} fetch failed: ${err?.message ?? String(err)}; using snapshot`);
+    return (
+      fallback ?? {
+        data: null,
+        reason: `Failed to parse JSON: ${err?.message ?? String(err)}`,
+      }
+    );
+  }
+}
+
+const [coverage, lint, frTrace] = await Promise.all([
+  ghReport<CoverageReport>("coverage.json", "coverage"),
+  ghReport<LintReport>("lint.json", "lint"),
+  ghReport<FrTraceReport>("fr-trace.json", "frTrace"),
+]);
+
+function pctClass(pct: number | undefined): string {
+  if (pct === undefined) return "";
+  if (pct >= 80) return "ok";
+  if (pct >= 60) return "warn";
+  return "bad";
+}
+---
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>QA - {PROJECT_NAME}</title>
+    <meta name="description" content={`Quality dashboard for ${PROJECT_NAME}: coverage, lint, FR traceability.`} />
+  </head>
+  <body class="min-h-screen">
+    <main class="max-w-4xl mx-auto px-6 py-12">
+      <header class="mb-10">
+        <div class="mono text-xs text-[var(--muted)] mb-2">
+          <a href={sitePath("/")} class="hover:text-[var(--accent)]">{REPO_SLUG}</a>
+          <span class="mx-1">/</span>
+          <span>qa</span>
+        </div>
+        <h1 class="text-4xl font-bold tracking-tight mb-2">Quality dashboard</h1>
+        <p class="text-[var(--muted)]">Live from <code>{REPO}</code> · degrades to last committed snapshot when GitHub is rate-limited.</p>
+      </header>
+
+      <section class="mb-8">
+        <h2 class="mono text-sm uppercase tracking-wider text-[var(--muted)] mb-3">Coverage</h2>
+        {coverage.data ? (
+          <div class="p-4 rounded-lg border" style="border-color: var(--border);">
+            <div class={`text-3xl font-bold ${pctClass(coverage.data.pct)}`}>{coverage.data.pct?.toFixed(1) ?? "—"}%</div>
+            <div class="mono text-xs text-[var(--muted)] mt-1">
+              {coverage.data.lines_covered ?? "?"} / {coverage.data.lines_total ?? "?"} lines
+              {coverage.data.generated_at && <> · {coverage.data.generated_at}</>}
+            </div>
+          </div>
+        ) : (
+          <p class="text-[var(--muted)] text-sm" set:html={coverage.reason ?? "No coverage data."} />
+        )}
+      </section>
+
+      <section class="mb-8">
+        <h2 class="mono text-sm uppercase tracking-wider text-[var(--muted)] mb-3">Lint</h2>
+        {lint.data ? (
+          <ul class="mono text-sm space-y-1">
+            {lint.data.clippy && <li>clippy: {lint.data.clippy.errors} errors, {lint.data.clippy.warnings} warnings</li>}
+            {lint.data.ruff && <li>ruff: {lint.data.ruff.errors} errors, {lint.data.ruff.warnings} warnings</li>}
+            {lint.data.vale && <li>vale: {lint.data.vale.errors} errors, {lint.data.vale.warnings} warnings</li>}
+          </ul>
+        ) : (
+          <p class="text-[var(--muted)] text-sm" set:html={lint.reason ?? "No lint data."} />
+        )}
+      </section>
+
+      <section class="mb-8">
+        <h2 class="mono text-sm uppercase tracking-wider text-[var(--muted)] mb-3">FR traceability</h2>
+        {frTrace.data ? (
+          <div class="mono text-sm">
+            {frTrace.data.covered_frs ?? 0} / {frTrace.data.total_frs ?? 0} FRs covered
+            {frTrace.data.uncovered && frTrace.data.uncovered.length > 0 && (
+              <details class="mt-2">
+                <summary class="cursor-pointer text-[var(--muted)]">{frTrace.data.uncovered.length} uncovered</summary>
+                <ul class="mt-2 space-y-0.5">{frTrace.data.uncovered.map((id: string) => <li>{id}</li>)}</ul>
+              </details>
+            )}
+          </div>
+        ) : (
+          <p class="text-[var(--muted)] text-sm" set:html={frTrace.reason ?? "No FR data."} />
+        )}
+      </section>
+    </main>
+  </body>
+</html>

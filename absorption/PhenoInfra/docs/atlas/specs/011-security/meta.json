@@ -1,0 +1,25 @@
+{
+  "id": "SPEC-11",
+  "title": "Preservation and safe boundaries",
+  "state": "proposed",
+  "format": "PROVISIONAL_AGILEPLUS_SHAPED_NOT_ENGINE_VALIDATED",
+  "requirements": [
+    "REQ-11-01",
+    "REQ-11-02",
+    "REQ-11-03",
+    "REQ-11-04",
+    "REQ-11-05",
+    "REQ-11-06",
+    "REQ-11-07",
+    "REQ-11-08"
+  ],
+  "source_intent": [
+    "INT-001"
+  ],
+  "work_package_ids": [
+    "WP-G04",
+    "WP-G09"
+  ],
+  "engine_receipt": null,
+  "human_approval": null
+}

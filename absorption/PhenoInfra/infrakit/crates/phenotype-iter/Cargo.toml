@@ -1,0 +1,19 @@
+[package]
+name = "phenotype-iter"
+version = "0.2.0"
+edition = "2021"
+license = "MIT"
+description = "Async iterator utilities for the Phenotype ecosystem"
+
+[lib]
+path = "src/lib.rs"
+
+[dependencies]
+serde.workspace = true
+thiserror.workspace = true
+async-trait.workspace = true
+futures.workspace = true
+tokio.workspace = true
+
+[dev-dependencies]
+tokio.workspace = true

@@ -1,0 +1,41 @@
+{
+  "id": "PILOT-PRD-PINE",
+  "product_id": "PRD-PINE",
+  "status": "PLANNED_NOT_EXECUTED",
+  "subject_repository_id": 1226547140,
+  "hypothesis": "A narrow practical compatibility capability or integration improvement; a general replacement claim requires a much larger corpus.",
+  "baseline_candidates": [
+    "Wine",
+    "Proton where applicable",
+    "QEMU/VM path",
+    "Native execution",
+    "Existing platform compatibility layer"
+  ],
+  "scenario": "Select a small fixed program corpus with declared binaries, imports and target architecture. Include one useful program beyond trivial startup. Compare observable results, errors, supported calls, overhead and installation with the matching reference path; keep unsupported cases explicit.",
+  "failure_cases": [
+    "Unsupported syscall returns success",
+    "ABI mismatch corrupts memory",
+    "Isolation escape",
+    "Wrong time/filesystem semantics",
+    "Program launches but useful operation fails"
+  ],
+  "metrics": [
+    "Correct observable results",
+    "Explicit unsupported coverage",
+    "Startup/runtime overhead",
+    "Host resource use",
+    "Debuggability",
+    "Custom API surface retained versus reused"
+  ],
+  "required_before_execution": [
+    "versioned subjects and fixtures",
+    "predeclared critical invariants",
+    "reviewed non-inferiority margins",
+    "resource and trust limits",
+    "independent outcome oracle",
+    "retained failed-trial policy"
+  ],
+  "results": null,
+  "winner": null,
+  "protocol": "../../research/COMPARATIVE-PILOT-PROTOCOL.md"
+}

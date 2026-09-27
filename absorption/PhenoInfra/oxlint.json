@@ -1,0 +1,6 @@
+{
+  "ignorePatterns": [".vitepress/dist/**", "node_modules/**"],
+  "rules": {
+    "no-unused-vars": "warn"
+  }
+}

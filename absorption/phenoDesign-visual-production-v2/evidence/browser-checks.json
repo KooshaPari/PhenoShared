@@ -1,0 +1,81 @@
+{
+  "target": "standalone SVG canary loaded with set_content; navigation is blocked by browser environment policy",
+  "browser": "Chromium, installed executable",
+  "checks": [
+    {
+      "name": "initial state text",
+      "status": "PASS"
+    },
+    {
+      "name": "initial state geometry",
+      "status": "PASS"
+    },
+    {
+      "name": "native keyboard input",
+      "status": "PASS"
+    },
+    {
+      "name": "upper bound state",
+      "status": "PASS"
+    },
+    {
+      "name": "geometry rotation updated",
+      "status": "PASS"
+    },
+    {
+      "name": "reverse input",
+      "status": "PASS"
+    },
+    {
+      "name": "material control state",
+      "status": "PASS"
+    },
+    {
+      "name": "material changes SVG bytes",
+      "status": "PASS"
+    },
+    {
+      "name": "pause/interpolation control",
+      "status": "PASS"
+    },
+    {
+      "name": "reset",
+      "status": "PASS"
+    },
+    {
+      "name": "settled geometry matches value",
+      "status": "PASS"
+    },
+    {
+      "name": "no uncaught browser errors",
+      "status": "PASS"
+    },
+    {
+      "name": "reduced motion recognized",
+      "status": "PASS"
+    },
+    {
+      "name": "reduced motion interpolation disabled",
+      "status": "PASS"
+    },
+    {
+      "name": "no mobile horizontal overflow",
+      "status": "PASS"
+    },
+    {
+      "name": "no-script fallback present",
+      "status": "PASS"
+    },
+    {
+      "name": "no-script illustration remains",
+      "status": "PASS"
+    }
+  ],
+  "not_covered": [
+    "Remotion runtime",
+    "native Adobe",
+    "Blender",
+    "physical mobile hardware",
+    "screen reader user evaluation"
+  ]
+}

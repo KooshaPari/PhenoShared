@@ -1,0 +1,24 @@
+{
+  "name": "Dino",
+  "slug": "dino",
+  "tagline": "DINOForge: general-purpose mod platform for AI agents in Unity.",
+  "domain": "dino.phenotype.space",
+  "color": "#65a30d",
+  "description": "DINOForge: general-purpose mod platform for AI agents in Unity.",
+  "tier": 2,
+  "repo": "KooshaPari/Dino",
+  "language": "C# / Unity",
+  "license": "MIT",
+  "status": "active",
+  "features": [
+    "Unity mod platform",
+    "AI agent integration",
+    "Mod loader",
+    "Runtime hooking"
+  ],
+  "links": {
+    "github": "https://github.com/KooshaPari/Dino",
+    "docs": "https://dino.phenotype.space/docs",
+    "releases": "https://github.com/KooshaPari/Dino/releases"
+  }
+}

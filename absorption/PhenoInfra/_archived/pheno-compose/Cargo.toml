@@ -1,0 +1,29 @@
+[package]
+name = "pheno-compose-driver"
+version = "0.1.0"
+edition = "2021"
+description = "PhenoCompose NVMS Driver - Rust interface to NVMS 3-tier isolation"
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/KooshaPari/phenotype-infra"
+documentation = "https://docs.rs/pheno-compose-driver"
+keywords = ["phenotype", "pheno-compose"]
+categories = ["development-tools"]
+authors = ["kooshapari"]
+
+[dependencies]
+nvms-ffi = { path = "../nvms-ffi" }
+pheno-config = { path = "../pheno-config" }
+serde = { workspace = true }
+thiserror = { workspace = true }
+
+[dev-dependencies]
+serde_json = { workspace = true }
+
+[features]
+default = ["nvms"]
+nvms = []  # Enable NVMS backend (nvms-ffi is always a dep for error types)
+mock = []  # Use mock backend for testing
+
+[lib]
+name = "pheno_compose_driver"
+crate-type = ["lib", "staticlib", "cdylib"]

@@ -1,0 +1,90 @@
+name: predictive-dry-check
+# Predictive DRY PR lint (ADR-041, L72).
+# Triggers on PRs that touch a substrate crate (pheno-*-lib, phenotype-*-sdk,
+# phenotype-*-framework) or that extract a capability from an app repo.
+# Validates the 4 ADR-041 criteria are addressed in the PR body.
+#
+# Exit codes:
+#   0 — all 4 criteria addressed (or PR is exempt)
+#   1 — workflow error
+#   2 — at least one criterion NOT addressed (PR is blocked)
+#
+# See: docs/adr/2026-06-18/ADR-041-predictive-dry.md
+
+on:
+  pull_request:
+    types: [opened, edited, reopened, synchronize]
+
+jobs:
+  check-predictive-dry:
+    name: Predictive DRY 4-criteria check
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Detect substrate-tier change
+        id: detect
+        run: |
+          # Check if any changed path matches a substrate pattern OR an app-repo
+          # extraction (i.e. files removed from apps/* and added to pheno-*/).
+          SUBSTRATE_PATTERN='^(pheno-[a-z0-9-]+|phenotype-[a-z0-9-]+(-(sdk|ts|py|go|rs|js|kotlin|swift))?(-framework)?)/'
+          APP_PATTERN='^apps?/[A-Z][A-Za-z0-9]+/'
+          CHANGED=$(gh pr view ${{ github.event.pull_request.number }} --json files --jq '.files[].path')
+          if echo "$CHANGED" | grep -qE "$SUBSTRATE_PATTERN"; then
+            echo "is_substrate=true" >> "$GITHUB_OUTPUT"
+          fi
+          if echo "$CHANGED" | grep -qE "$APP_PATTERN"; then
+            echo "is_app_change=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Skip if not a substrate or app extraction
+        if: steps.detect.outputs.is_substrate != 'true' && steps.detect.outputs.is_app_change != 'true'
+        run: |
+          echo "PR does not touch a substrate tier or extract from an app repo — skipping predictive-DRY check."
+          exit 0
+
+      - name: Run 4-criteria PR lint
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const body = context.payload.pull_request.body || "";
+            const requiredMarkers = [
+              { id: "criterion-1", label: "1+ current consumer", pattern: /criterion[- ]?1|current[- ]consumer|works?[ -]?in/i },
+              { id: "criterion-2", label: "1+ named predicted consumer", pattern: /criterion[- ]?2|predicted[- ]consumer|consumer[- ]name/i },
+              { id: "criterion-3", label: "Clean abstraction boundary (Port trait)", pattern: /criterion[- ]?3|port[- ]trait|abstraction[- ]boundary/i },
+              { id: "criterion-4", label: "Bounded reversal cost (≤ 1 day)", pattern: /criterion[- ]?4|reversal[- ]cost|1[- ]?day/i }
+            ];
+            const missing = requiredMarkers.filter(m => !m.pattern.test(body));
+            if (missing.length === 0) {
+              core.info("✓ All 4 ADR-041 criteria addressed in PR body.");
+              return;
+            }
+            const list = missing.map(m => `- **${m.label}** (${m.id})`).join("\n");
+            const msg = [
+              "## Predictive DRY check failed (ADR-041)",
+              "",
+              "Your PR touches a substrate tier or extracts from an app repo, so it must address the **4 ADR-041 criteria** in the PR body.",
+              "",
+              "Missing markers:",
+              "",
+              list,
+              "",
+              "### How to fix",
+              "",
+              "Add the following template (or use the `PREDICTIVE.md` template from `pheno-ci-templates`) to your PR description:",
+              "",
+              "```",
+              "## Predictive DRY (ADR-041)",
+              "",
+              "- criterion-1: 1+ current consumer = <repo/path> (working code)",
+              "- criterion-2: 1+ predicted consumer = <name> (Q-YYYY, scope: <capability>)",
+              "- criterion-3: abstraction = Port trait in <path>, MockAdapter present",
+              "- criterion-4: reversal cost = ≤ 1 day (delete crate + revert consumer)",
+              "```",
+              "",
+              "See `docs/adr/2026-06-18/ADR-041-predictive-dry.md` for the full policy.",
+            ].join("\n");
+            core.setFailed(msg);

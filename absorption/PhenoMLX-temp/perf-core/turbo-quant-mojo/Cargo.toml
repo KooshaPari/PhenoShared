@@ -1,0 +1,24 @@
+[package]
+name = "turbo-quant-mojo"
+version = "0.1.0"
+edition = "2021"
+description = "phenotype-omlx turbo-quant in Mojo (cross-language FFI polyglot crate)"
+
+[lib]
+name = "turbo_quant_mojo"
+crate-type = ["staticlib", "rlib"]
+
+[dependencies]
+libc = "0.2"
+
+[features]
+# The FFI ABI requires a separately built Mojo shared library, so it is opt-in.
+# Default builds retain validation and Rust fallbacks without unresolved symbols.
+default = []
+# Compile + link the Mojo kernel. Requires `mojo` in PATH and the generated
+# `libturbo_quant_mojo.dylib` beside this manifest.
+mojo = []
+# Enable Mojo GEMV FFI path (falls back to Rust on panic or missing symbol).
+mojo-ffi = []
+
+[build-dependencies]

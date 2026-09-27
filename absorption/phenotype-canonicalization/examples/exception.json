@@ -1,0 +1,18 @@
+{
+  "id": "EXAMPLE-ONLY",
+  "decision_id": "D05",
+  "component_id": "example.docs-renderer",
+  "repository_id": 1,
+  "paths": [
+    "packages/docs/**/*.vue"
+  ],
+  "owner_role": "example owner",
+  "reason": "Synthetic example: framework adapter has required semantics not yet covered by selected native CLI.",
+  "exit_condition": "A replacement catches every framework canary and preserves emitted public declarations.",
+  "migration_trigger": "Qualified framework-adapter release or deadline.",
+  "expires_on": "2026-10-16",
+  "evidence_refs": [
+    "example-framework-canary-not-real-evidence"
+  ],
+  "state": "example_not_observed"
+}

@@ -1,0 +1,18 @@
+{
+  "package_version": "1.1.0",
+  "scope_date": "2026-09-15",
+  "packaged_at_utc": null,
+  "packaged_at_pacific": null,
+  "mode": "DOCUMENTATION_AND_REFERENCE_VALIDATION_ONLY",
+  "fresh_github_audit_performed": false,
+  "native_product_tests_performed": false,
+  "source_repositories_mutated": false,
+  "pilot_results_generated": false,
+  "runtime_authority_granted": false,
+  "based_on_package_version": "1.0.0",
+  "base_archive_sha256": "4cf290cefb3e25c83131efa7b3a084ca04fbbe55bedfa0f0971420d5d0baa5a7",
+  "revision_intent_ids": [
+    "INT-003"
+  ],
+  "packaged_at_note": "Rebuilt in current session; exact external observation timestamp not asserted."
+}

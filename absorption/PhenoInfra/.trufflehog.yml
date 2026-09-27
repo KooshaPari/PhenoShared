@@ -1,0 +1,29 @@
+# Trufflehog exclusions for governance and documentation files.
+# These files contain URL patterns, email addresses, and token placeholders
+# that trigger false positives in the ~700 default detectors.
+
+exclude_paths:
+  # Governance files (false positives from URL/email patterns)
+  - "AGENTS.md"
+  - "CLAUDE.md"
+  - "CODEOWNERS"
+  - "SECURITY.md"
+  - "DESIGN.md"
+  - "CITATION.cff"
+  - "FUNDING.yml"
+  - "NOTICE"
+  - "LICENSE"
+  - "LICENSE-APACHE"
+  - "LICENSE-MIT"
+  - "CHANGELOG.md"
+  - "CONTRIBUTING.md"
+  - "*.md"
+  # Config files (false positives from placeholder tokens)
+  - ".gitleaks.toml"
+  - ".trufflehog.yml"
+  - ".forge"
+  - ".trunk/**"
+  # Generated files
+  - "Cargo.lock"
+  - "package-lock.json"
+  - "*.min.js"

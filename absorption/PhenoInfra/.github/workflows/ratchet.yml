@@ -1,0 +1,71 @@
+# Q2 Quality Ratchet Template
+name: Quality Ratchet
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  coverage-ratchet:
+    name: Coverage ratchet
+    if: github.actor != 'dependabot[bot]'
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Setup language
+        uses: actions/setup-node@v6
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install
+        run: npm ci
+
+      - name: Run tests with coverage
+        run: |
+          npm test -- --coverage --coverageReporters=json-summary 2>&1 | tee test-output.log
+
+      - name: Read previous coverage
+        id: prev
+        run: |
+          if [ -f .coverage-baseline ]; then
+            echo "prev=$(cat .coverage-baseline)" >> $GITHUB_OUTPUT
+          else
+            echo "prev=0" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Read current coverage
+        id: curr
+        run: |
+          CURRENT=$(cat coverage/coverage-summary.json | jq '.total.lines.pct')
+          echo "curr=$CURRENT" >> $GITHUB_OUTPUT
+          echo "Current coverage: $CURRENT%"
+
+      - name: Assert coverage ratchet
+        run: |
+          PREV=${{ steps.prev.outputs.prev }}
+          CURR=${{ steps.curr.outputs.curr }}
+          if (( $(echo "$CURR < $PREV" | bc -l) )); then
+            echo "::error::Coverage regressed from ${PREV}% to ${CURR}%"
+            exit 1
+          fi
+          echo "Coverage ratchet: ${PREV}% -> ${CURR}% (no regression)"
+
+      - name: Update baseline on main
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        run: |
+          echo -n "${{ steps.curr.outputs.curr }}" > .coverage-baseline
+          git add .coverage-baseline
+          git commit -m "ci: bump coverage baseline to ${{ steps.curr.outputs.curr }}%" || true
+          git push || true

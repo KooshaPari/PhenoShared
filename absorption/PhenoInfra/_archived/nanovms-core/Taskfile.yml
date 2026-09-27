@@ -1,0 +1,236 @@
+version: '3'
+
+# ---------------------------------------------------------------------------
+# nanovms canonical task runner.
+#
+# This file wraps the canonical Go commands documented in AGENTS.md / CLAUDE.md.
+# All Go invocations pin GOCACHE to a stable, repo-scoped location so the
+# build is hermetic and reproducible across local + CI runs.
+#
+# Authored by: L2 subagent #22 (V3 DAG FLEET_100TASK_DAG_V3.md task #22).
+# ---------------------------------------------------------------------------
+
+env:
+  GOCACHE: /private/tmp/nanovms-gocache
+  GOFLAGS: -mod=readonly
+  CGO_ENABLED: "0"
+
+vars:
+  PROJECT_LANGUAGES:
+    sh: |
+      languages=""
+      if [ -f go.mod ]; then
+        languages="${languages}go "
+      fi
+      if [ -f package.json ]; then
+        languages="${languages}node "
+      fi
+      if [ -n "$languages" ]; then
+        printf "%s" "$languages" | sed 's/[[:space:]]*$//'
+      else
+        printf unknown
+      fi
+  NODE_PM:
+    sh: |
+      if [ -f bun.lockb ] || [ -f bun.lock ]; then
+        printf bun
+      elif [ -f pnpm-lock.yaml ]; then
+        printf pnpm
+      elif [ -f yarn.lock ]; then
+        printf yarn
+      else
+        printf npm
+      fi
+  HAS_DOCS_BUILD:
+    sh: |
+      if [ -f package.json ] && grep -q '"docs:build"' package.json; then
+        printf true
+      else
+        printf false
+      fi
+  HAS_NODE_TEST:
+    sh: |
+      if [ -f package.json ] && grep -q '"test"' package.json; then
+        printf true
+      else
+        printf false
+      fi
+  HAS_NODE_LINT:
+    sh: |
+      if [ -f package.json ] && grep -q '"lint"' package.json; then
+        printf true
+      else
+        printf false
+      fi
+  RUST_DIR:
+    sh: |
+      if [ -d sdk/rust ]; then
+        printf sdk/rust
+      else
+        printf .
+      fi
+  HAS_RUST:
+    sh: |
+      if [ -f sdk/rust/Cargo.toml ] || [ -f Cargo.toml ]; then
+        printf true
+      else
+        printf false
+      fi
+
+tasks:
+  # -------------------------------------------------------------------------
+  # Default
+  # -------------------------------------------------------------------------
+  default:
+    desc: Show available tasks and detected project languages.
+    cmds:
+      - task --list
+      - 'echo "detected languages: {{.PROJECT_LANGUAGES}}"'
+      - 'echo "GOCACHE=$GOCACHE"'
+
+  # -------------------------------------------------------------------------
+  # L2-22 canonical Go tasks (per V3 DAG task #22)
+  # -------------------------------------------------------------------------
+  build:
+    desc: 'Build all Go packages and binaries (canonical: `go build ./...`).'
+    cmds:
+      - go build ./...
+
+  test:
+    desc: 'Run Go tests with race detection and coverage (canonical: `go test -race -coverprofile=coverage.out ./...`).'
+    cmds:
+      - go test -race -coverprofile=coverage.out -covermode=atomic ./...
+
+  vet:
+    desc: 'Run go vet (canonical: `go vet ./...`).'
+    cmds:
+      - go vet ./...
+
+  lint:
+    desc: Run golangci-lint with the repo config (`.github/golangci.yml`); no-op if the binary is missing.
+    cmds:
+      - |
+        if command -v golangci-lint >/dev/null 2>&1; then
+          golangci-lint run --config=.github/golangci.yml ./...
+        else
+          echo "golangci-lint not installed; skipping (install via 'brew install golangci-lint')"
+          exit 0
+        fi
+
+  cov:
+    desc: Print per-function coverage summary from `coverage.out` (run `task test` first).
+    cmds:
+      - go tool cover -func=coverage.out
+
+  tidy:
+    desc: 'Tidy go.mod / go.sum (canonical: `go mod tidy`).'
+    cmds:
+      - go mod tidy
+
+  ci:
+    desc: 'Full CI gate: vet + test (race + coverage) + lint. Same checks CI runs.'
+    deps: [vet, test, lint]
+
+  # -------------------------------------------------------------------------
+  # Polyglot helpers (preserved from the prior hygiene-round Taskfile.yml).
+  # The L2-22 lane focuses on Go; these remain so the polyglot workflow
+  # is not regressed.
+  # -------------------------------------------------------------------------
+  backend:build:
+    desc: Build all Go packages and binaries (alias of `build`).
+    cmds:
+      - go build ./...
+
+  backend:test:
+    desc: Run Go tests with race detection (verbose, no coverage; alias of `test`).
+    cmds:
+      - go test -v -race ./...
+
+  backend:lint:
+    desc: Run gofmt + go vet + golangci-lint.
+    cmds:
+      - test -z "$(gofmt -l $(find . -name '*.go' -not -path './vendor/*'))"
+      - go vet ./...
+      - |
+        if command -v golangci-lint >/dev/null 2>&1; then
+          golangci-lint run --config=.github/golangci.yml ./...
+        else
+          echo "golangci-lint not installed; skipping"
+        fi
+
+  fmt:
+    desc: Format Go files in place.
+    cmds:
+      - go fmt ./...
+
+  fmt-check:
+    desc: Verify Go files are gofmt-clean (CI gate).
+    cmds:
+      - test -z "$(gofmt -l $(find . -name '*.go' -not -path './vendor/*'))"
+
+  sdk:rs:build:
+    desc: Build the Rust SDK.
+    dir: "{{.RUST_DIR}}"
+    cmds:
+      - cargo build --all-features
+
+  sdk:rs:test:
+    desc: Run Rust SDK tests.
+    dir: "{{.RUST_DIR}}"
+    cmds:
+      - cargo test --all-features
+
+  sdk:rs:lint:
+    desc: Run cargo fmt and clippy on the Rust SDK.
+    dir: "{{.RUST_DIR}}"
+    cmds:
+      - cargo fmt -- --check
+      - cargo clippy --all-features -- -D warnings
+
+  web:build:
+    desc: Build web / docs assets.
+    cmds:
+      - |
+        if [ "{{.HAS_DOCS_BUILD}}" = "true" ]; then
+          {{.NODE_PM}} run docs:build
+        else
+          echo "No docs:build script found; skipping"
+        fi
+
+  web:lint:
+    desc: Run web lint if available.
+    cmds:
+      - |
+        if [ "{{.HAS_NODE_LINT}}" = "true" ]; then
+          {{.NODE_PM}} run lint
+        else
+          echo "No lint script found; skipping"
+        fi
+
+  all:build:
+    desc: Build all backend, SDK, and web targets.
+    deps: [backend:build, sdk:rs:build, web:build]
+
+  all:test:
+    desc: Run all test suites.
+    deps: [backend:test, sdk:rs:test]
+
+  all:lint:
+    desc: Run all lint checks.
+    deps: [backend:lint, sdk:rs:lint, web:lint]
+
+  clean:
+    desc: Remove build outputs and test caches.
+    cmds:
+      - |
+        if [ -f go.mod ]; then
+          go clean -cache -testcache || echo "go clean cache cleanup skipped"
+          find . \( -name coverage.out -o -name coverage.html -o -name coverage.xml -o -name test-output.json -o -name unit-tests.xml \) -type f -delete
+        fi
+        if [ -f package.json ]; then
+          rm -rf node_modules docs/.vitepress/dist dist build coverage
+        fi
+      - |
+        if [ "{{.HAS_RUST}}" = "true" ]; then
+          cd {{.RUST_DIR}} && cargo clean || echo "cargo clean skipped"
+        fi

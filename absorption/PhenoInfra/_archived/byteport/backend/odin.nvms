@@ -1,0 +1,14 @@
+NAME: "BytePort"
+DESCRIPTION: "IAC Deployment Platform Powered By Spin and Gin-Gonic"
+SERVICES:
+  - NAME: "api"
+    PATH: "./backend/byteport"
+    PORT: 8081
+
+  - NAME: "nvms"
+    PATH: "./backend/nvms"
+    PORT: 3000
+  - NAME: "main"
+    PATH: "./frontend/web"
+    PORT: 5173
+## set ENV for nvms/api, nvms also needs a buildpack

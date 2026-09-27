@@ -1,0 +1,44 @@
+{
+  "id": "PILOT-PRD-OMNIROUTE",
+  "product_id": "PRD-OMNIROUTE",
+  "status": "PLANNED_NOT_EXECUTED",
+  "subject_repository_id": 1226171396,
+  "hypothesis": "A specific operational fit on the actual endpoints with reliable normalization and accounting, not a provider-count contest.",
+  "baseline_candidates": [
+    "Pinned upstream OmniRoute",
+    "Current upstream OmniRoute",
+    "LiteLLM Proxy",
+    "Bifrost",
+    "Portkey gateway",
+    "Direct provider SDKs"
+  ],
+  "scenario": "Exercise a fixed used-provider set with normal streams, tool calls, cancellation, partial responses, throttles, auth expiry and hard failures. Compare routing choices under a fixed quality/cost workload. Run a real deployed owned artifact separately from the upstream-contribution queue.",
+  "failure_cases": [
+    "Retry after partial result silently duplicates work",
+    "Budget scope wrong",
+    "Provider error normalized to false success",
+    "Secret logged",
+    "Wrong account selected",
+    "Cancellation keeps spending",
+    "Quota window uses incorrect timezone/scope"
+  ],
+  "metrics": [
+    "Task quality held constant",
+    "Availability and error fidelity",
+    "p95/p99 request overhead",
+    "Cost/quota accounting accuracy",
+    "Operator recovery burden",
+    "Provider delta maintenance"
+  ],
+  "required_before_execution": [
+    "versioned subjects and fixtures",
+    "predeclared critical invariants",
+    "reviewed non-inferiority margins",
+    "resource and trust limits",
+    "independent outcome oracle",
+    "retained failed-trial policy"
+  ],
+  "results": null,
+  "winner": null,
+  "protocol": "../../research/COMPARATIVE-PILOT-PROTOCOL.md"
+}

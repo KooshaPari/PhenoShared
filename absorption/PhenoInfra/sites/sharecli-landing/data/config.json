@@ -1,0 +1,24 @@
+{
+  "name": "ShareCLI",
+  "slug": "sharecli",
+  "tagline": "Rust process/resource runtime: high-concurrency agent workload scheduler.",
+  "domain": "sharecli.phenotype.space",
+  "color": "#0891b2",
+  "description": "Rust process/resource runtime: high-concurrency agent workload scheduler.",
+  "tier": 2,
+  "repo": "KooshaPari/ShareCLI",
+  "language": "Rust",
+  "license": "MIT",
+  "status": "active",
+  "features": [
+    "Process scheduling",
+    "Resource management",
+    "Agent workloads",
+    "Concurrency control"
+  ],
+  "links": {
+    "github": "https://github.com/KooshaPari/ShareCLI",
+    "docs": "https://sharecli.phenotype.space/docs",
+    "releases": "https://github.com/KooshaPari/ShareCLI/releases"
+  }
+}

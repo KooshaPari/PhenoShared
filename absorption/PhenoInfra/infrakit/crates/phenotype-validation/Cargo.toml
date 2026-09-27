@@ -1,0 +1,16 @@
+[package]
+name = "phenotype-validation"
+version = "0.2.0"
+edition = "2021"
+license = "MIT"
+description = "Validation utilities for the Phenotype ecosystem"
+[lib]
+path = "src/lib.rs"
+[dependencies]
+serde = { workspace = true, features = ["derive"] }
+serde_json.workspace = true
+thiserror.workspace = true
+regex.workspace = true
+parking_lot.workspace = true
+[dev-dependencies]
+tokio.workspace = true

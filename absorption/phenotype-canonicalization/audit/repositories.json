@@ -1,0 +1,467 @@
+{
+  "as_of_date": "2026-09-16",
+  "boundary": "Connected installation discovery, paginated to returned terminal cursor; not the entire historical portfolio",
+  "count": 46,
+  "repositories": [
+    {
+      "repository_id": 861430079,
+      "full_name": "KooshaPari/BytePort",
+      "default_branch": "main",
+      "visibility": "public",
+      "archived_observed": false,
+      "current_lifecycle_authority": "unresolved; discovery is not an activity or mutation decision",
+      "audit_depth": "discovery or targeted search only",
+      "mutation_authorized_by_this_packet": false
+    },
+    {
+      "repository_id": 960016965,
+      "full_name": "KooshaPari/zz-pause-inc-AgsLag",
+      "default_branch": "main",
+      "visibility": "private",
+      "archived_observed": false,
+      "current_lifecycle_authority": "unresolved; discovery is not an activity or mutation decision",
+      "audit_depth": "discovery or targeted search only",
+      "mutation_authorized_by_this_packet": false
+    },
+    {
+      "repository_id": 980996178,
+      "full_name": "KooshaPari/zz-pause-Localbase",
+      "default_branch": "main",
+      "visibility": "private",
+      "archived_observed": false,
+      "current_lifecycle_authority": "unresolved; discovery is not an activity or mutation decision",
+      "audit_depth": "discovery or targeted search only",
+      "mutation_authorized_by_this_packet": false
+    },
+    {
+      "repository_id": 998124581,
+      "full_name": "KooshaPari/zz-pause-ref-AtomsTech",
+      "default_branch": "main",
+      "visibility": "private",
+      "archived_observed": false,
+      "current_lifecycle_authority": "unresolved; discovery is not an activity or mutation decision",
+      "audit_depth": "discovery or targeted search only",
+      "mutation_authorized_by_this_packet": false
+    },
+    {
+      "repository_id": 1048244869,
+      "full_name": "KooshaPari/zz-pause-ref-Synthia",
+      "default_branch": "main",
+      "visibility": "public",
+      "archived_observed": false,
+      "current_lifecycle_authority": "unresolved; discovery is not an activity or mutation decision",
+      "audit_depth": "discovery or targeted search only",
+      "mutation_authorized_by_this_packet": false
+    },
+    {
+      "repository_id": 1077977094,
+      "full_name": "KooshaPari/zz-aa-dep-AgentApiPlusPlus",
+      "default_branch": "main",
+      "visibility": "public",
+      "archived_observed": false,
+      "current_lifecycle_authority": "unresolved; discovery is not an activity or mutation decision",
+      "audit_depth": "discovery or targeted search only",
+      "mutation_authorized_by_this_packet": false
+    },
+    {
+      "repository_id": 1159182006,
+      "full_name": "KooshaPari/zz-aa-dep-CliproxyApiPlusPlus",
+      "default_branch": "main",
+      "visibility": "public",
+      "archived_observed": false,
+      "current_lifecycle_authority": "unresolved; discovery is not an activity or mutation decision",
+      "audit_depth": "discovery or targeted search only",
+      "mutation_authorized_by_this_packet": false
+    },
+    {
+      "repository_id": 1162254344,
+      "full_name": "KooshaPari/Tracera",
+      "default_branch": "main",
+      "visibility": "public",
+      "archived_observed": false,
+      "current_lifecycle_authority": "unresolved; discovery is not an activity or mutation decision",
+      "audit_depth": "selected source files read",
+      "mutation_authorized_by_this_packet": false
+    },
+    {
+      "repository_id": 1162255140,
+      "full_name": "KooshaPari/zz-pause-unk-Thegent",
+      "default_branch": "main",
+      "visibility": "private",
+      "archived_observed": false,
+      "current_lifecycle_authority": "unresolved; discovery is not an activity or mutation decision",
+      "audit_depth": "discovery or targeted search only",
+      "mutation_authorized_by_this_packet": false
+    },
+    {
+      "repository_id": 1164684442,
+      "full_name": "KooshaPari/Civis",
+      "default_branch": "main",
+      "visibility": "public",
+      "archived_observed": false,
+      "current_lifecycle_authority": "unresolved; discovery is not an activity or mutation decision",
+      "audit_depth": "discovery or targeted search only",
+      "mutation_authorized_by_this_packet": false
+    },
+    {
+      "repository_id": 1164684829,
+      "full_name": "KooshaPari/zz-pause-inc-Parpoura",
+      "default_branch": "main",
+      "visibility": "private",
+      "archived_observed": false,
+      "current_lifecycle_authority": "unresolved; discovery is not an activity or mutation decision",
+      "audit_depth": "discovery or targeted search only",
+      "mutation_authorized_by_this_packet": false
+    },
+    {
+      "repository_id": 1164703420,
+      "full_name": "KooshaPari/zz-pause-inc-QuadSGM",
+      "default_branch": "main",
+      "visibility": "private",
+      "archived_observed": false,
+      "current_lifecycle_authority": "unresolved; discovery is not an activity or mutation decision",
+      "audit_depth": "discovery or targeted search only",
+      "mutation_authorized_by_this_packet": false
+    },
+    {
+      "repository_id": 1165315873,
+      "full_name": "KooshaPari/HeliosCLI",
+      "default_branch": "main",
+      "visibility": "public",
+      "archived_observed": false,
+      "current_lifecycle_authority": "unresolved; discovery is not an activity or mutation decision",
+      "audit_depth": "discovery or targeted search only",
+      "mutation_authorized_by_this_packet": false
+    },
+    {
+      "repository_id": 1165351720,
+      "full_name": "KooshaPari/Portage",
+      "default_branch": "main",
+      "visibility": "public",
+      "archived_observed": false,
+      "current_lifecycle_authority": "unresolved; discovery is not an activity or mutation decision",
+      "audit_depth": "selected source files read",
+      "mutation_authorized_by_this_packet": false
+    },
+    {
+      "repository_id": 1167587447,
+      "full_name": "KooshaPari/HeliosLab",
+      "default_branch": "main",
+      "visibility": "public",
+      "archived_observed": false,
+      "current_lifecycle_authority": "unresolved; discovery is not an activity or mutation decision",
+      "audit_depth": "selected source files read",
+      "mutation_authorized_by_this_packet": false
+    },
+    {
+      "repository_id": 1169608854,
+      "full_name": "KooshaPari/AgilePlus",
+      "default_branch": "main",
+      "visibility": "public",
+      "archived_observed": false,
+      "current_lifecycle_authority": "unresolved; discovery is not an activity or mutation decision",
+      "audit_depth": "selected source files read",
+      "mutation_authorized_by_this_packet": false
+    },
+    {
+      "repository_id": 1169864396,
+      "full_name": "KooshaPari/PhenoDesign",
+      "default_branch": "main",
+      "visibility": "public",
+      "archived_observed": false,
+      "current_lifecycle_authority": "unresolved; discovery is not an activity or mutation decision",
+      "audit_depth": "selected source files read",
+      "mutation_authorized_by_this_packet": false
+    },
+    {
+      "repository_id": 1177712269,
+      "full_name": "KooshaPari/Dino",
+      "default_branch": "main",
+      "visibility": "public",
+      "archived_observed": false,
+      "current_lifecycle_authority": "unresolved; discovery is not an activity or mutation decision",
+      "audit_depth": "discovery or targeted search only",
+      "mutation_authorized_by_this_packet": false
+    },
+    {
+      "repository_id": 1185005735,
+      "full_name": "KooshaPari/zz-aa-dep-UnityDoorstop",
+      "default_branch": "master",
+      "visibility": "public",
+      "archived_observed": false,
+      "current_lifecycle_authority": "unresolved; discovery is not an activity or mutation decision",
+      "audit_depth": "discovery or targeted search only",
+      "mutation_authorized_by_this_packet": false
+    },
+    {
+      "repository_id": 1191459198,
+      "full_name": "KooshaPari/ShareCLI",
+      "default_branch": "main",
+      "visibility": "public",
+      "archived_observed": false,
+      "current_lifecycle_authority": "unresolved; discovery is not an activity or mutation decision",
+      "audit_depth": "discovery or targeted search only",
+      "mutation_authorized_by_this_packet": false
+    },
+    {
+      "repository_id": 1194326424,
+      "full_name": "KooshaPari/zz-aa-dep-Planify",
+      "default_branch": "master",
+      "visibility": "public",
+      "archived_observed": false,
+      "current_lifecycle_authority": "unresolved; discovery is not an activity or mutation decision",
+      "audit_depth": "discovery or targeted search only",
+      "mutation_authorized_by_this_packet": false
+    },
+    {
+      "repository_id": 1199812615,
+      "full_name": "KooshaPari/.github",
+      "default_branch": "main",
+      "visibility": "public",
+      "archived_observed": false,
+      "current_lifecycle_authority": "unresolved; discovery is not an activity or mutation decision",
+      "audit_depth": "discovery or targeted search only",
+      "mutation_authorized_by_this_packet": false
+    },
+    {
+      "repository_id": 1200273587,
+      "full_name": "KooshaPari/PhenoShared",
+      "default_branch": "main",
+      "visibility": "public",
+      "archived_observed": false,
+      "current_lifecycle_authority": "unresolved; discovery is not an activity or mutation decision",
+      "audit_depth": "selected source files read",
+      "mutation_authorized_by_this_packet": false
+    },
+    {
+      "repository_id": 1201113097,
+      "full_name": "KooshaPari/PhenoRegistry",
+      "default_branch": "main",
+      "visibility": "public",
+      "archived_observed": false,
+      "current_lifecycle_authority": "unresolved; discovery is not an activity or mutation decision",
+      "audit_depth": "selected source files read",
+      "mutation_authorized_by_this_packet": false
+    },
+    {
+      "repository_id": 1214745478,
+      "full_name": "KooshaPari/PhenoMLX",
+      "default_branch": "main",
+      "visibility": "public",
+      "archived_observed": false,
+      "current_lifecycle_authority": "unresolved; discovery is not an activity or mutation decision",
+      "audit_depth": "discovery or targeted search only",
+      "mutation_authorized_by_this_packet": false
+    },
+    {
+      "repository_id": 1220449881,
+      "full_name": "KooshaPari/zz-pause-inc-FocalPoint",
+      "default_branch": "main",
+      "visibility": "private",
+      "archived_observed": false,
+      "current_lifecycle_authority": "unresolved; discovery is not an activity or mutation decision",
+      "audit_depth": "discovery or targeted search only",
+      "mutation_authorized_by_this_packet": false
+    },
+    {
+      "repository_id": 1226104769,
+      "full_name": "KooshaPari/HeliosLite",
+      "default_branch": "main",
+      "visibility": "public",
+      "archived_observed": false,
+      "current_lifecycle_authority": "unresolved; discovery is not an activity or mutation decision",
+      "audit_depth": "discovery or targeted search only",
+      "mutation_authorized_by_this_packet": false
+    },
+    {
+      "repository_id": 1226168548,
+      "full_name": "KooshaPari/zz-aa-dep-Bifrost",
+      "default_branch": "main",
+      "visibility": "public",
+      "archived_observed": false,
+      "current_lifecycle_authority": "unresolved; discovery is not an activity or mutation decision",
+      "audit_depth": "discovery or targeted search only",
+      "mutation_authorized_by_this_packet": false
+    },
+    {
+      "repository_id": 1226171396,
+      "full_name": "KooshaPari/OmniRoute",
+      "default_branch": "main",
+      "visibility": "public",
+      "archived_observed": false,
+      "current_lifecycle_authority": "unresolved; discovery is not an activity or mutation decision",
+      "audit_depth": "selected source files read",
+      "mutation_authorized_by_this_packet": false
+    },
+    {
+      "repository_id": 1241972761,
+      "full_name": "KooshaPari/WorldSphereMod",
+      "default_branch": "main",
+      "visibility": "public",
+      "archived_observed": false,
+      "current_lifecycle_authority": "unresolved; discovery is not an activity or mutation decision",
+      "audit_depth": "discovery or targeted search only",
+      "mutation_authorized_by_this_packet": false
+    },
+    {
+      "repository_id": 1262466303,
+      "full_name": "KooshaPari/Melosviz",
+      "default_branch": "main",
+      "visibility": "public",
+      "archived_observed": false,
+      "current_lifecycle_authority": "unresolved; discovery is not an activity or mutation decision",
+      "audit_depth": "discovery or targeted search only",
+      "mutation_authorized_by_this_packet": false
+    },
+    {
+      "repository_id": 1269695199,
+      "full_name": "KooshaPari/PhenoLab",
+      "default_branch": "main",
+      "visibility": "private",
+      "archived_observed": false,
+      "current_lifecycle_authority": "unresolved; discovery is not an activity or mutation decision",
+      "audit_depth": "discovery or targeted search only",
+      "mutation_authorized_by_this_packet": false
+    },
+    {
+      "repository_id": 1272990345,
+      "full_name": "KooshaPari/PhenoApps",
+      "default_branch": "apps-extract",
+      "visibility": "private",
+      "archived_observed": false,
+      "current_lifecycle_authority": "unresolved; discovery is not an activity or mutation decision",
+      "audit_depth": "discovery or targeted search only",
+      "mutation_authorized_by_this_packet": false
+    },
+    {
+      "repository_id": 1273002789,
+      "full_name": "KooshaPari/zz-aa-dep-MobileCli",
+      "default_branch": "main",
+      "visibility": "public",
+      "archived_observed": false,
+      "current_lifecycle_authority": "unresolved; discovery is not an activity or mutation decision",
+      "audit_depth": "discovery or targeted search only",
+      "mutation_authorized_by_this_packet": false
+    },
+    {
+      "repository_id": 1308570444,
+      "full_name": "KooshaPari/CivicWarfare",
+      "default_branch": "main",
+      "visibility": "public",
+      "archived_observed": false,
+      "current_lifecycle_authority": "unresolved; discovery is not an activity or mutation decision",
+      "audit_depth": "discovery or targeted search only",
+      "mutation_authorized_by_this_packet": false
+    },
+    {
+      "repository_id": 1315997929,
+      "full_name": "KooshaPari/zz-aa-dep-TurboQuant",
+      "default_branch": "main",
+      "visibility": "public",
+      "archived_observed": false,
+      "current_lifecycle_authority": "unresolved; discovery is not an activity or mutation decision",
+      "audit_depth": "discovery or targeted search only",
+      "mutation_authorized_by_this_packet": false
+    },
+    {
+      "repository_id": 1319179066,
+      "full_name": "KooshaPari/zz-aa-dep-AirLock",
+      "default_branch": "main",
+      "visibility": "public",
+      "archived_observed": false,
+      "current_lifecycle_authority": "unresolved; discovery is not an activity or mutation decision",
+      "audit_depth": "discovery or targeted search only",
+      "mutation_authorized_by_this_packet": false
+    },
+    {
+      "repository_id": 1322607630,
+      "full_name": "KooshaPari/Khostty",
+      "default_branch": "main",
+      "visibility": "public",
+      "archived_observed": false,
+      "current_lifecycle_authority": "unresolved; discovery is not an activity or mutation decision",
+      "audit_depth": "discovery or targeted search only",
+      "mutation_authorized_by_this_packet": false
+    },
+    {
+      "repository_id": 1328507619,
+      "full_name": "KooshaPari/zz-aa-dep-PhenoUnslothStudio",
+      "default_branch": "main",
+      "visibility": "public",
+      "archived_observed": false,
+      "current_lifecycle_authority": "unresolved; discovery is not an activity or mutation decision",
+      "audit_depth": "discovery or targeted search only",
+      "mutation_authorized_by_this_packet": false
+    },
+    {
+      "repository_id": 1330430083,
+      "full_name": "KooshaPari/zz-aa-dep-CompoundSpheres3D",
+      "default_branch": "main",
+      "visibility": "public",
+      "archived_observed": false,
+      "current_lifecycle_authority": "unresolved; discovery is not an activity or mutation decision",
+      "audit_depth": "discovery or targeted search only",
+      "mutation_authorized_by_this_packet": false
+    },
+    {
+      "repository_id": 1349458262,
+      "full_name": "KooshaPari/KooshaPari",
+      "default_branch": "main",
+      "visibility": "public",
+      "archived_observed": false,
+      "current_lifecycle_authority": "unresolved; discovery is not an activity or mutation decision",
+      "audit_depth": "discovery or targeted search only",
+      "mutation_authorized_by_this_packet": false
+    },
+    {
+      "repository_id": 1363521465,
+      "full_name": "KooshaPari/PhenoFabric",
+      "default_branch": "main",
+      "visibility": "public",
+      "archived_observed": false,
+      "current_lifecycle_authority": "unresolved; discovery is not an activity or mutation decision",
+      "audit_depth": "discovery or targeted search only",
+      "mutation_authorized_by_this_packet": false
+    },
+    {
+      "repository_id": 1365855438,
+      "full_name": "KooshaPari/KCode",
+      "default_branch": "master",
+      "visibility": "public",
+      "archived_observed": false,
+      "current_lifecycle_authority": "unresolved; discovery is not an activity or mutation decision",
+      "audit_depth": "discovery or targeted search only",
+      "mutation_authorized_by_this_packet": false
+    },
+    {
+      "repository_id": 1372886076,
+      "full_name": "KooshaPari/PhenoMLX-temp",
+      "default_branch": "main",
+      "visibility": "private",
+      "archived_observed": false,
+      "current_lifecycle_authority": "unresolved; discovery is not an activity or mutation decision",
+      "audit_depth": "discovery or targeted search only",
+      "mutation_authorized_by_this_packet": false
+    },
+    {
+      "repository_id": 1372977354,
+      "full_name": "KooshaPari/PhenoInfra",
+      "default_branch": "main",
+      "visibility": "public",
+      "archived_observed": false,
+      "current_lifecycle_authority": "unresolved; discovery is not an activity or mutation decision",
+      "audit_depth": "selected source files read",
+      "mutation_authorized_by_this_packet": false
+    },
+    {
+      "repository_id": 1373712976,
+      "full_name": "KooshaPari/cmux",
+      "default_branch": "main",
+      "visibility": "public",
+      "archived_observed": false,
+      "current_lifecycle_authority": "unresolved; discovery is not an activity or mutation decision",
+      "audit_depth": "discovery or targeted search only",
+      "mutation_authorized_by_this_packet": false
+    }
+  ]
+}

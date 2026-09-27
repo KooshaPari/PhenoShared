@@ -1,0 +1,34 @@
+version: '3'
+
+# Detected stack: Astro static site using Bun from package.json and bun.lock.
+
+tasks:
+  default:
+    desc: Build the landing page
+    cmds:
+      - task: build
+
+  install:
+    desc: Install Bun dependencies from the lockfile
+    cmds:
+      - bun install --frozen-lockfile
+
+  build:
+    desc: Build the Astro site with Bun
+    cmds:
+      - bun run build
+
+  test:
+    desc: Run Astro and TypeScript validation
+    cmds:
+      - bun run astro check --tsconfig tsconfig.json
+
+  lint:
+    desc: Run static Astro checks
+    cmds:
+      - bun run astro check --tsconfig tsconfig.json
+
+  clean:
+    desc: Remove generated build artifacts
+    cmds:
+      - rm -rf dist .astro .vite .vercel .output coverage

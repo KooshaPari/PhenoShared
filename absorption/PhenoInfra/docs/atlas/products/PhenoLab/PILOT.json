@@ -1,0 +1,40 @@
+{
+  "id": "PILOT-PRD-PHENOLAB",
+  "product_id": "PRD-PHENOLAB",
+  "status": "PLANNED_NOT_EXECUTED",
+  "subject_repository_id": 1269695199,
+  "hypothesis": "Less work to produce trustworthy reusable experiments, with stronger failure accounting rather than more abstractions.",
+  "baseline_candidates": [
+    "Direct Harbor/Portage task",
+    "Inspect AI",
+    "Small native experiment script",
+    "Relevant public benchmark implementation"
+  ],
+  "scenario": "Reproduce one useful experiment through both PhenoLab and a direct baseline. Freeze inputs, models, resource limits and scoring. Include bad answers, malformed output, missing environment, known task failure and infrastructure failure. Repeat on a clean host or independent operator where feasible.",
+  "failure_cases": [
+    "Unimplemented feature determines whether its own test runs",
+    "Unscored case counted as success",
+    "Model failure mixed with infrastructure outage",
+    "Only selected good trials retained",
+    "Private inputs leak into report"
+  ],
+  "metrics": [
+    "Reproduction success",
+    "Scorer validity and calibration",
+    "Failure classification accuracy",
+    "Operator effort",
+    "Total evaluation cost",
+    "Result portability and auditability"
+  ],
+  "required_before_execution": [
+    "versioned subjects and fixtures",
+    "predeclared critical invariants",
+    "reviewed non-inferiority margins",
+    "resource and trust limits",
+    "independent outcome oracle",
+    "retained failed-trial policy"
+  ],
+  "results": null,
+  "winner": null,
+  "protocol": "../../research/COMPARATIVE-PILOT-PROTOCOL.md"
+}

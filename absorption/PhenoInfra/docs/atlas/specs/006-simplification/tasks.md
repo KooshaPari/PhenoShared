@@ -1,0 +1,49 @@
+# Work references — SPEC-06
+
+The existing work graph is retained; consumer-aware acceptance is added rather than creating a new audit phase.
+
+- **WP-G04** — Resolve shared source and clean dependency boundaries; owner Foundation integration owner; prerequisites WP-G01; unclaimed.
+- **WP-G11** — Make adoption and state-delta reporting incremental; owner Product-model/catalog owners; prerequisites WP-G02; unclaimed.
+- **WP-G12** — Adjudicate first completed product/replacement outcome; owner Independent portfolio reviewer; prerequisites WP-G06; unclaimed.
+- **WP-T01** — Product/schema and integration lead; owner Tracera seat 01; prerequisites WP-G02; unclaimed.
+- **WP-T02** — Source inventory/indexing adapters; owner Tracera seat 02; prerequisites WP-T01, WP-G05; unclaimed.
+- **WP-T03** — Intent/specification ingestion; owner Tracera seat 03; prerequisites WP-T01; unclaimed.
+- **WP-T04** — Persistent model and reconciliation; owner Tracera seat 04; prerequisites WP-T01; unclaimed.
+- **WP-T05** — Impact and dissatisfaction analysis; owner Tracera seat 05; prerequisites WP-T02, WP-T03, WP-T04; unclaimed.
+- **WP-T06** — Assurance evidence ingestion; owner Tracera seat 06; prerequisites WP-T01, WP-G03; unclaimed.
+- **WP-T07** — Product exploration UI; owner Tracera seat 07; prerequisites WP-T01, WP-T04; unclaimed.
+- **WP-T08** — CLI/API/MCP parity; owner Tracera seat 08; prerequisites WP-T01, WP-T04; unclaimed.
+- **WP-T09** — Packaging/runtime and recovery; owner Tracera seat 09; prerequisites WP-T01; unclaimed.
+- **WP-T10** — Independent comparative and adversarial verification; owner Tracera seat 10; prerequisites WP-T01, WP-G06; unclaimed.
+- **WP-T11** — Integrated product witness and artifact acceptance; owner Tracera seat 01 + independent verifier; prerequisites WP-T02, WP-T03, WP-T04, WP-T05, WP-T06, WP-T07, WP-T08, WP-T09, WP-T10; unclaimed.
+- **WP-P01-C** — Deliver one AgilePlus semantic improvement; owner AgilePlus product owner; prerequisites WP-P01-A, WP-P01-B; unclaimed.
+- **WP-P02-C** — Deliver one HeliosLab semantic improvement; owner HeliosLab product owner; prerequisites WP-P02-A, WP-P02-B; unclaimed.
+- **WP-P03-C** — Deliver one ResearchLedger semantic improvement; owner ResearchLedger product owner; prerequisites WP-P03-A, WP-P03-B; unclaimed.
+- **WP-P04-C** — Deliver one SessionLedger semantic improvement; owner SessionLedger product owner; prerequisites WP-P04-A, WP-P04-B; unclaimed.
+- **WP-P05-C** — Deliver one KCode semantic improvement; owner KCode product owner; prerequisites WP-P05-A, WP-P05-B; unclaimed.
+- **WP-P06-C** — Deliver one HeliosLite semantic improvement; owner HeliosLite product owner; prerequisites WP-P06-A, WP-P06-B; unclaimed.
+- **WP-P07-C** — Deliver one HeliosCLI semantic improvement; owner HeliosCLI product owner; prerequisites WP-P07-A, WP-P07-B; unclaimed.
+- **WP-P08-C** — Deliver one Khostty semantic improvement; owner Khostty product owner; prerequisites WP-P08-A, WP-P08-B; unclaimed.
+- **WP-P09-C** — Deliver one ShareCLI semantic improvement; owner ShareCLI product owner; prerequisites WP-P09-A, WP-P09-B; unclaimed.
+- **WP-P10-C** — Deliver one BytePort semantic improvement; owner BytePort product owner; prerequisites WP-P10-A, WP-P10-B; unclaimed.
+- **WP-P11-C** — Deliver one PhenoFabric semantic improvement; owner PhenoFabric product owner; prerequisites WP-P11-A, WP-P11-B; unclaimed.
+- **WP-P12-C** — Deliver one Pine semantic improvement; owner Pine product owner; prerequisites WP-P12-A, WP-P12-B; unclaimed.
+- **WP-P13-C** — Deliver one OmniRoute semantic improvement; owner OmniRoute product owner; prerequisites WP-P13-A, WP-P13-B; unclaimed.
+- **WP-P14-C** — Deliver one Substrate semantic improvement; owner Substrate product owner; prerequisites WP-P14-A, WP-P14-B; unclaimed.
+- **WP-P15-C** — Deliver one PhenoMLX semantic improvement; owner PhenoMLX product owner; prerequisites WP-P15-A, WP-P15-B; unclaimed.
+- **WP-P16-C** — Deliver one Portage semantic improvement; owner Portage product owner; prerequisites WP-P16-A, WP-P16-B; unclaimed.
+- **WP-P17-C** — Deliver one PhenoLab semantic improvement; owner PhenoLab product owner; prerequisites WP-P17-A, WP-P17-B; unclaimed.
+- **WP-P18-C** — Deliver one Civis semantic improvement; owner Civis product owner; prerequisites WP-P18-A, WP-P18-B; unclaimed.
+- **WP-P19-C** — Deliver one Dino semantic improvement; owner Dino product owner; prerequisites WP-P19-A, WP-P19-B; unclaimed.
+- **WP-P20-C** — Deliver one WorldSphereMod semantic improvement; owner WorldSphereMod product owner; prerequisites WP-P20-A, WP-P20-B; unclaimed.
+- **WP-P21-C** — Deliver one CivicWarfare semantic improvement; owner CivicWarfare product owner; prerequisites WP-P21-A, WP-P21-B; unclaimed.
+- **WP-P22-C** — Deliver one Melosviz semantic improvement; owner Melosviz product owner; prerequisites WP-P22-A, WP-P22-B; unclaimed.
+- **WP-S01** — PhenoInfra capability/consumer contract; owner PhenoInfra pooled owner; prerequisites WP-G01, WP-G02; unclaimed.
+- **WP-S02** — PhenoTooling capability/consumer contract; owner PhenoTooling pooled owner; prerequisites WP-G01, WP-G02; unclaimed.
+- **WP-S03** — PhenoAI capability/consumer contract; owner PhenoAI pooled owner; prerequisites WP-G01, WP-G02; unclaimed.
+- **WP-S04** — PhenoGfx capability/consumer contract; owner PhenoGfx pooled owner; prerequisites WP-G01, WP-G02; unclaimed.
+- **WP-S05** — PhenoRegistry capability/consumer contract; owner PhenoRegistry pooled owner; prerequisites WP-G01, WP-G02; unclaimed.
+- **WP-S06** — PhenoDesign capability/consumer contract; owner PhenoDesign pooled owner; prerequisites WP-G01, WP-G02; unclaimed.
+- **WP-S07** — KooshaPari capability/consumer contract; owner KooshaPari pooled owner; prerequisites WP-G01, WP-G02; unclaimed.
+- **WP-S08** — PhenoApps capability/consumer contract; owner PhenoApps pooled owner; prerequisites WP-G01, WP-G02; unclaimed.
+- **WP-S09** — Agentora-capability capability/consumer contract; owner Agentora-capability pooled owner; prerequisites WP-G01, WP-G02; unclaimed.

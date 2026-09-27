@@ -1,0 +1,163 @@
+@import "tailwindcss";
+
+/* impeccable CSS baseline — github.com/pbakaus/impeccable */
+*, *::before, *::after { box-sizing: border-box; }
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+img, video { max-width: 100%; height: auto; }
+input, button, textarea, select { font: inherit; }
+p, h1, h2, h3, h4, h5, h6 { overflow-wrap: break-word; }
+
+:root {
+  color-scheme: dark light;
+
+  /* Dark-mode tokens */
+  --bg-dark: #0a0a0b;
+  --fg-dark: #ededed;
+  --muted-dark: #8a8a93;
+  --surface-dark: #111114;
+  --surface-strong-dark: #18181d;
+  --border-dark: #1f1f23;
+  --card-dark: #111114;
+  --accent-dark: #f97316;
+  --ok-dark: #22c55e;
+  --warn-dark: #eab308;
+  --bad-dark: #ef4444;
+
+  /* Light-mode tokens */
+  --bg-light: #fafafa;
+  --fg-light: #0a0a0b;
+  --muted-light: #6b6b73;
+  --surface-light: #ffffff;
+  --surface-strong-light: #f5f5f8;
+  --border-light: #e5e5e8;
+  --card-light: #ffffff;
+  --accent-light: #c2410c;
+  --ok-light: #16a34a;
+  --warn-light: #ca8a04;
+  --bad-light: #dc2626;
+
+  --bg: var(--bg-dark);
+  --fg: var(--fg-dark);
+  --muted: var(--muted-dark);
+  --surface: var(--surface-dark);
+  --surface-strong: var(--surface-strong-dark);
+  --border: var(--border-dark);
+  --card: var(--card-dark);
+  --accent: var(--accent-dark);
+  --ok: var(--ok-dark);
+  --warn: var(--warn-dark);
+  --bad: var(--bad-dark);
+
+  --text: var(--fg);
+  --line: var(--border);
+  --container-inline: 1rem;
+  --container-max: 100%;
+  --section-gap: 2.5rem;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --bg: var(--bg-light);
+    --fg: var(--fg-light);
+    --muted: var(--muted-light);
+    --surface: var(--surface-light);
+    --surface-strong: var(--surface-strong-light);
+    --border: var(--border-light);
+    --card: var(--card-light);
+    --accent: var(--accent-light);
+    --ok: var(--ok-light);
+    --warn: var(--warn-light);
+    --bad: var(--bad-light);
+    --text: var(--fg);
+    --line: var(--border);
+  }
+}
+
+html, body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+/* Responsive shell */
+.site-shell {
+  width: min(100% - (var(--container-inline) * 2), var(--container-max));
+  margin-inline: auto;
+  padding-inline: var(--container-inline);
+}
+
+/* Standard breakpoints: 640px, 768px, 1024px */
+@media (min-width: 640px) {
+  :root {
+    --container-inline: 1.25rem;
+    --section-gap: 3rem;
+    --container-max: 640px;
+  }
+}
+
+@media (min-width: 768px) {
+  :root {
+    --container-inline: 1.5rem;
+    --section-gap: 4rem;
+    --container-max: 768px;
+  }
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --container-inline: 2rem;
+    --section-gap: 5rem;
+    --container-max: 1024px;
+  }
+}
+
+.mono { font-family: ui-monospace, SFMono-Regular, "JetBrains Mono", Menlo, monospace; }
+
+.responsive-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+@media (min-width: 640px) {
+  .responsive-actions {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+}
+
+.responsive-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+@media (min-width: 768px) {
+  .responsive-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .responsive-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.readme-prose {
+  max-width: min(100%, 72ch);
+}

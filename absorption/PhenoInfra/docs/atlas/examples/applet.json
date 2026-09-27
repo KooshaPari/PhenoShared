@@ -1,0 +1,36 @@
+{
+  "id": "SYN-APPLET",
+  "version": "0.0.0-example",
+  "subject_id": "SYN-PRODUCT",
+  "provided_capabilities": [
+    "SYN-CAP-RESUME"
+  ],
+  "required_capabilities": [
+    "SYN-STORE"
+  ],
+  "optional_capabilities": [],
+  "ports": [
+    {
+      "name": "state-store",
+      "direction": "requires",
+      "contract_id": "SYN-STORE-CONTRACT"
+    }
+  ],
+  "owned_state_ids": [
+    "SYN-TASK-STATE"
+  ],
+  "permission_ids": [
+    "SYN-READ"
+  ],
+  "resource_profile_ids": [
+    "SYN-PROFILE"
+  ],
+  "surfaces": [
+    "cli",
+    "library"
+  ],
+  "children": [],
+  "lifecycle_contract_id": "SYN-LIFECYCLE",
+  "federation_policy": "Direct in-process composition in this example.",
+  "synthetic": true
+}

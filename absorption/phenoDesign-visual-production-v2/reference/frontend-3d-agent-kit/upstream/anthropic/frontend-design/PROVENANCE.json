@@ -1,0 +1,14 @@
+{
+  "repository": "https://github.com/anthropics/skills",
+  "path": "skills/frontend-design/SKILL.md",
+  "retrieved_on": "2026-09-15",
+  "ref": "main at retrieval; whole-tree commit not resolved",
+  "upstream_git_blob_sha": "a5333457c414d20d625f307df945842c0952ecc3",
+  "local_git_blob_sha": "a5333457c414d20d625f307df945842c0952ecc3",
+  "blob_match": true,
+  "local_sha256": "d91970639e9f5c37682ac7ab60094d35f1c7c1f38d731bd56396563aee10c1d3",
+  "license": "Apache-2.0",
+  "license_evidence": "skills/frontend-design/LICENSE.txt read via GitHub; upstream license blob f433b1a53f5b830a205fd2df78e2b34974656c7b",
+  "license_packaging": "Standard full Apache 2.0 terms and appendix included; no claim of byte-identity to the upstream license formatting.",
+  "modifications": "None to SKILL.md if blob_match is true; see blob identity."
+}

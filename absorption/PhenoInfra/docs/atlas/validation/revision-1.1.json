@@ -1,0 +1,12 @@
+{
+  "revision": "1.1.0",
+  "reference_tests_passed": 175,
+  "new_structural_tests": 18,
+  "coverage_remeasured": false,
+  "assurance_checker_unchanged": true,
+  "native_consumer_tests_executed": false,
+  "source_mutations": false,
+  "new_work_packages": 0,
+  "new_requirements": 12,
+  "pdf_pages": 33
+}

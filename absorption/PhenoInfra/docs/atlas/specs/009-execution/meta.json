@@ -1,0 +1,38 @@
+{
+  "id": "SPEC-09",
+  "title": "Multi-agent and incremental execution",
+  "state": "proposed",
+  "format": "PROVISIONAL_AGILEPLUS_SHAPED_NOT_ENGINE_VALIDATED",
+  "requirements": [
+    "REQ-09-01",
+    "REQ-09-02",
+    "REQ-09-03",
+    "REQ-09-04",
+    "REQ-09-05",
+    "REQ-09-06",
+    "REQ-09-07",
+    "REQ-09-08",
+    "REQ-09-09",
+    "REQ-09-10"
+  ],
+  "source_intent": [
+    "INT-001"
+  ],
+  "work_package_ids": [
+    "WP-G01",
+    "WP-G10",
+    "WP-T01",
+    "WP-T02",
+    "WP-T03",
+    "WP-T04",
+    "WP-T05",
+    "WP-T06",
+    "WP-T07",
+    "WP-T08",
+    "WP-T09",
+    "WP-T10",
+    "WP-T11"
+  ],
+  "engine_receipt": null,
+  "human_approval": null
+}

@@ -1,0 +1,24 @@
+{
+  "name": "Pine",
+  "slug": "pine",
+  "tagline": "Wine-equivalent for Phenotype: Windows and cross-platform app compatibility layer.",
+  "domain": "pine.phenotype.space",
+  "color": "#059669",
+  "description": "Wine-equivalent for Phenotype: Windows and cross-platform app compatibility layer.",
+  "tier": 1,
+  "repo": "KooshaPari/Pine",
+  "language": "Rust",
+  "license": "MIT",
+  "status": "active",
+  "features": [
+    "Windows syscall translation",
+    "macOS/Linux adapter scaffolding",
+    "NanoVMS integration",
+    "CI + cargo-deny"
+  ],
+  "links": {
+    "github": "https://github.com/KooshaPari/Pine",
+    "docs": "https://pine.phenotype.space/docs",
+    "releases": "https://github.com/KooshaPari/Pine/releases"
+  }
+}

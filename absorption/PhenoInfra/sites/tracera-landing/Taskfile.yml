@@ -1,0 +1,31 @@
+version: '3'
+
+vars:
+  RUNNER: bun
+
+tasks:
+  default:
+    desc: Run the standard validation suite
+    cmds:
+      - task: test
+
+  build:
+    desc: Build the Bun/Astro site for production
+    cmds:
+      - '{{.RUNNER}} run build'
+
+  test:
+    desc: Run lint checks and verify the production build
+    cmds:
+      - task: lint
+      - task: build
+
+  lint:
+    desc: Run Astro's TypeScript/content checks
+    cmds:
+      - '{{.RUNNER}} run astro check'
+
+  clean:
+    desc: Remove generated Astro build and cache artifacts
+    cmds:
+      - rm -rf dist .astro

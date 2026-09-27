@@ -1,0 +1,31 @@
+---
+# inventory.yml.example — copy to inventory.yml and edit.
+# Hostnames resolve via Tailscale MagicDNS once the node has joined the tailnet.
+# For first-ever bringup (before tailscale up), set ansible_host to the OCI
+# public IP temporarily, run common.yml + install-tailscale.yml, then switch
+# back to the MagicDNS name.
+
+all:
+  vars:
+    ansible_user: opc
+    ansible_ssh_private_key_file: ~/.ssh/oci_ampere_phenotype
+    ansible_ssh_common_args: "-o StrictHostKeyChecking=accept-new"
+    ansible_python_interpreter: /usr/bin/python3
+
+  children:
+    oci_primary:
+      hosts:
+        oci-primary:
+          # Replace <TAILNET> with your tailnet, e.g. tail2b570.ts.net
+          ansible_host: oci-primary.<TAILNET>.ts.net
+
+    # Reserved for future nodes. oci-secondary + gcp-e2 not yet provisioned.
+    backbone:
+      hosts:
+        oci-secondary:
+          ansible_host: oci-secondary.<TAILNET>.ts.net
+
+    runners:
+      hosts:
+        gcp-e2:
+          ansible_host: gcp-e2.<TAILNET>.ts.net

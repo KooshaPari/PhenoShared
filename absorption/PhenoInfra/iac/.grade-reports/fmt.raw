@@ -1,0 +1,90 @@
+Diff in \\?\C:\Users\koosh\phenotype-infra-ci-fix\iac\observability\src\lib.rs:23:
+ #![deny(missing_docs)]
+ #![deny(rust_2018_idioms)]
+ #![warn(clippy::all)]
+[31m-
+[0m #![deny(missing_docs)]
+ #![deny(rust_2018_idioms)]
+ #![warn(clippy::all)]
+Diff in \\?\C:\Users\koosh\phenotype-infra-ci-fix\iac\observability\src\lib.rs:31:
+ use std::sync::Arc;
+ 
+ use tracing::Level;
+[31m-use tracing_subscriber::{fmt, prelude::*, EnvFilter};
+[0m[32m+use tracing_subscriber::{EnvFilter, fmt, prelude::*};
+[0m 
+ use phenotype_logging::is_initialized;
+ 
+Diff in \\?\C:\Users\koosh\phenotype-infra-ci-fix\iac\observability\src\lib.rs:64:
+         phenotype_logging::init_tracing(service_name, DEFAULT_LEVEL);
+     }
+ 
+[31m-    tracing::info!(service.name = service_name, "tracing initialised (phenotype-infra-observability 0.2.0)");
+[0m[32m+    tracing::info!(
+[0m[32m+        service.name = service_name,
+[0m[32m+        "tracing initialised (phenotype-infra-observability 0.2.0)"
+[0m[32m+    );
+[0m     Arc::new(())
+ }
+ 
+Diff in \\?\C:\Users\koosh\phenotype-infra-ci-fix\iac\oci-post-acquire\src\hooks.rs:4:
+ //! errors and warn at the end.
+ 
+ use crate::InstanceFile;
+[31m-use oci_helpers::expand_home;
+[0m use anyhow::{Result, anyhow};
+[32m+use oci_helpers::expand_home;
+[0m use tokio::process::Command;
+ use tracing::{info, warn};
+ 
+Diff in \\?\C:\Users\koosh\phenotype-infra-ci-fix\iac\oci-post-acquire\src\mesh.rs:1:
+ //! Mesh-state commit — flips OCI to ✅ in compute-mesh-state.md and commits.
+ 
+ use crate::InstanceFile;
+[31m-use oci_helpers::expand_home;
+[0m use anyhow::{Context, Result, anyhow};
+ use chrono::Utc;
+[32m+use oci_helpers::expand_home;
+[0m use tokio::process::Command;
+ use tracing::info;
+ 
+Diff in \\?\C:\Users\koosh\phenotype-infra-ci-fix\iac\phenotype-logging-stub\src\lib.rs:40:
+ static INITIALIZED: AtomicBool = AtomicBool::new(false);
+ 
+ /// Re-export the `tracing` macros for ergonomic single-import.
+[31m-pub use tracing::{debug, error, info, instrument, span, trace, warn, Level};
+[0m[32m+pub use tracing::{Level, debug, error, info, instrument, span, trace, warn};
+[0m 
+ /// Default `tracing_subscriber::EnvFilter` directive used when `RUST_LOG` is
+ /// unset. Exposed as a public constant so daemons that need to install their
+Diff in \\?\C:\Users\koosh\phenotype-infra-ci-fix\iac\phenotype-logging-stub\src\lib.rs:63:
+ /// Installs an `env-filter`-driven `fmt` subscriber. Reads `RUST_LOG` from
+ /// env (falls back to `level`). Idempotent: subsequent calls are a no-op.
+ pub fn init_tracing(service_name: &'static str, level: Level) {
+[31m-    use tracing_subscriber::{fmt, prelude::*, EnvFilter};
+[0m[32m+    use tracing_subscriber::{EnvFilter, fmt, prelude::*};
+[0m     if INITIALIZED.swap(true, Ordering::SeqCst) {
+         return;
+     }
+Diff in \\?\C:\Users\koosh\phenotype-infra-ci-fix\iac\phenotype-logging-stub\src\lib.rs:70:
+[31m-    let filter = EnvFilter::try_from_default_env()
+[0m[31m-        .unwrap_or_else(|_| EnvFilter::new(level.as_str()));
+[0m[32m+    let filter =
+[0m[32m+        EnvFilter::try_from_default_env().unwrap_or_else(|_| EnvFilter::new(level.as_str()));
+[0m     let fmt_layer = fmt::layer().with_target(true).with_thread_ids(false);
+     let _ = tracing_subscriber::registry()
+         .with(filter)
+Diff in \\?\C:\Users\koosh\phenotype-infra-ci-fix\iac\tailscale\tailscale-keygen\src\main.rs:84:
+     // Just the tracing-subscriber fmt layer with stderr writer is correct.
+     tracing_subscriber::fmt()
+         .with_env_filter(
+[31m-            tracing_subscriber::EnvFilter::try_from_default_env()
+[0m[31m-                .unwrap_or_else(|_| {
+[0m[31m-                    tracing_subscriber::EnvFilter::new(phenotype_logging::DEFAULT_FILTER)
+[0m[31m-                }),
+[0m[32m+            tracing_subscriber::EnvFilter::try_from_default_env().unwrap_or_else(|_| {
+[0m[32m+                tracing_subscriber::EnvFilter::new(phenotype_logging::DEFAULT_FILTER)
+[0m[32m+            }),
+[0m         )
+         .with_writer(std::io::stderr) // never to stdout — stdout is the key
+         .init();

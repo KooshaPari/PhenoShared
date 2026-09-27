@@ -1,0 +1,17 @@
+{
+  "id": "SYN-GAP",
+  "subject_id": "SYN-PRODUCT",
+  "capability_id": "SYN-CAP-RESUME",
+  "kind": "unknown",
+  "observation": "The synthetic scenario has no native result.",
+  "evidence_ids": [],
+  "impact": "Cannot claim product qualification.",
+  "alternatives": [
+    "Execute actual native test",
+    "Keep unknown rather than invent result"
+  ],
+  "proposed_resolution": "Bind real product only in an authorized future task.",
+  "acceptance": "Source-bound native proof exists.",
+  "state": "synthetic",
+  "synthetic": true
+}

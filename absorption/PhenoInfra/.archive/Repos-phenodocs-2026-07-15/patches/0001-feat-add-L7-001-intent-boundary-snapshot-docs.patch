@@ -1,0 +1,185 @@
+From 25832f00149bee512d1ca3b4a7d49107e2aedfa8 Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Thu, 18 Jun 2026 02:55:07 -0700
+Subject: [PATCH 1/2] feat: add L7-001 intent+boundary snapshot docs
+
+Propagated from KooshaPari/phenotype-registry @ chore/l7-001-curation-snapshot (a1aa44660).
+Files: docs/boundary/<repo>.md, docs/intent/<repo>.md
+These are read-only governance docs; do not edit locally.
+---
+ docs/boundary/phenodocs.md |  46 ++++++++++++++++
+ docs/intent/phenodocs.md   | 109 +++++++++++++++++++++++++++++++++++++
+ 2 files changed, 155 insertions(+)
+ create mode 100644 docs/boundary/phenodocs.md
+ create mode 100644 docs/intent/phenodocs.md
+
+diff --git a/docs/boundary/phenodocs.md b/docs/boundary/phenodocs.md
+new file mode 100644
+index 0000000..d8558f1
+--- /dev/null
++++ b/docs/boundary/phenodocs.md
+@@ -0,0 +1,46 @@
++<!--
++propagated-from: KooshaPari/phenotype-registry @ chore/l7-001-curation-snapshot
++date: 2026-06-17
++source-commit: a1aa44660
++do-not-edit-locally: regenerate via scripts/propagate-intent-to-repos.py
++                     or update in the source-of-truth registry repo
++-->
++---
++repo: "phenodocs"
++role: unknown
++status: active
++last_boundary_review: 2026-06-17
++review_cadence: 30d
++in_scope:
++  - "<to be filled>"
++out_of_scope:
++  - "<to be filled>"
++---
++
++# Boundary — phenodocs
++
++## In Scope
++
++<To be filled.>
++
++## Out of Scope
++
++| Not here | Lives in | Reason |
++| -------- | -------- | ------ |
++| <capability> | <other-repo-or-N/A> | <why> |
++
++## Boundary Crossings
++
++| Crossing | Direction | Surface | Status |
++| -------- | --------- | ------- | ------ |
++| <capability or interface> | <this-repo→other\|other→this-repo> | <Trait / HTTP / CLI / file / event> | <green\|amber\|red> |
++
++## Last Boundary Review
++
++**Date:** 2026-06-17
++**Reviewer:** forge subagent (L7-001 sweep)
++**Worklog / finding:** `worklogs/L7-001-intent-boundary-curation-2026-06-17.json`
++**Decisions:**
++- Initial scaffolding; needs human review.
++
++**Next review:** 2026-07-17
+diff --git a/docs/intent/phenodocs.md b/docs/intent/phenodocs.md
+new file mode 100644
+index 0000000..e940632
+--- /dev/null
++++ b/docs/intent/phenodocs.md
+@@ -0,0 +1,109 @@
++<!--
++propagated-from: KooshaPari/phenotype-registry @ chore/l7-001-curation-snapshot
++date: 2026-06-17
++source-commit: a1aa44660
++do-not-edit-locally: regenerate via scripts/propagate-intent-to-repos.py
++                     or update in the source-of-truth registry repo
++-->
++---
++repo: "phenodocs"
++aliases: []
++role: unknown
++status: active
++last_verified: 2026-06-17
++bound_prompts: 381
++bound_plans: 0
++bound_responses: 0
++device: macbook
++---
++
++# Intent — phenodocs
++
++## Intent Statement
++
++<To be filled in by hand from the most recent binding prompt. This repo is bound to 381 prompts, 0 plans, and 0 agent responses captured between 2025-08 and 2026-06-17.>
++
++## Bound Prompts
++
++| Date | Source | File | Tag |
++| ---- | ------ | ---- | --- |
++| ? | claude-code | `docs/curated-prompts/claude-code/unknown/0057b46cca242d07.md` | repo-defining |
++| ? | claude-code | `docs/curated-prompts/claude-code/unknown/007c304cd070d062.md` | repo-defining |
++| ? | claude-code | `docs/curated-prompts/claude-code/unknown/00a19add355d11ae.md` | repo-defining |
++| ? | claude-code | `docs/curated-prompts/claude-code/unknown/01d6e281f3ab47ca.md` | repo-defining |
++| ? | claude-code | `docs/curated-prompts/claude-code/unknown/0209d0fc1d709992.md` | repo-defining |
++| ? | claude-code | `docs/curated-prompts/claude-code/unknown/033ee59e70a0ba3c.md` | narrative |
++| ? | claude-code | `docs/curated-prompts/claude-code/unknown/03a253659cf4fc16.md` | repo-defining |
++| ? | claude-code | `docs/curated-prompts/claude-code/unknown/0451cfbdb4eb94b2.md` | repo-defining |
++| ? | claude-code | `docs/curated-prompts/claude-code/unknown/048d8fcbb9fc0608.md` | repo-defining |
++| ? | claude-code | `docs/curated-prompts/claude-code/unknown/057188d9566f7444.md` | policy-setting |
++| ? | claude-code | `docs/curated-prompts/claude-code/unknown/0573ef490c410b98.md` | repo-defining |
++| ? | claude-code | `docs/curated-prompts/claude-code/unknown/06a9c4a5db4db69a.md` | repo-defining |
++| ? | claude-code | `docs/curated-prompts/claude-code/unknown/06bf0c91a2d6fc13.md` | repo-defining |
++| 2026-03-25 | claude-code | `docs/curated-prompts/claude-code/2026-03/06d28a97e784b356.md` | narrative |
++| ? | claude-code | `docs/curated-prompts/claude-code/unknown/0705a3f918e4c07d.md` | repo-defining |
++| ? | claude-code | `docs/curated-prompts/claude-code/unknown/07a0f50808690371.md` | repo-defining |
++| ? | claude-code | `docs/curated-prompts/claude-code/unknown/0970b23a232e6bf8.md` | repo-defining |
++| ? | claude-code | `docs/curated-prompts/claude-code/unknown/0a41a8e7df2db767.md` | repo-defining |
++| ? | claude-code | `docs/curated-prompts/claude-code/unknown/0b41f163f074e102.md` | repo-defining |
++| ? | claude-code | `docs/curated-prompts/claude-code/unknown/0b6fa91b04e1296e.md` | repo-defining |
++| ? | claude-code | `docs/curated-prompts/claude-code/unknown/0ce437f25483c49c.md` | repo-defining |
++| ? | claude-code | `docs/curated-prompts/claude-code/unknown/0d3c3303ffa9c73d.md` | repo-defining |
++| ? | claude-code | `docs/curated-prompts/claude-code/unknown/0dc89603cf6f6d37.md` | repo-defining |
++| ? | claude-code | `docs/curated-prompts/claude-code/unknown/0e272523e38f78a6.md` | repo-defining |
++| ? | claude-code | `docs/curated-prompts/claude-code/unknown/0e6af18466dccf8f.md` | repo-defining |
++| ? | claude-code | `docs/curated-prompts/claude-code/unknown/0ec956804b620d04.md` | repo-defining |
++| ? | claude-code | `docs/curated-prompts/claude-code/unknown/0ff072afa83bd5f9.md` | repo-defining |
++| ? | claude-code | `docs/curated-prompts/claude-code/unknown/1015ce940d834aa1.md` | repo-defining |
++| ? | claude-code | `docs/curated-prompts/claude-code/unknown/107328e643f4b7d3.md` | repo-defining |
++| ? | claude-code | `docs/curated-prompts/claude-code/unknown/10a862dff3220e77.md` | repo-defining |
++| ? | claude-code | `docs/curated-prompts/claude-code/unknown/10aee4a6e99faf2d.md` | repo-defining |
++| ? | claude-code | `docs/curated-prompts/claude-code/unknown/10ee7831c310f515.md` | repo-defining |
++| ? | claude-code | `docs/curated-prompts/claude-code/unknown/11d545383946b102.md` | repo-defining |
++| ? | claude-code | `docs/curated-prompts/claude-code/unknown/124cfb022f2aab13.md` | repo-defining |
++| ? | claude-code | `docs/curated-prompts/claude-code/unknown/1296ccb82532da21.md` | repo-defining |
++| ? | claude-code | `docs/curated-prompts/claude-code/unknown/13477e379ef8b76b.md` | repo-defining |
++| ? | claude-code | `docs/curated-prompts/claude-code/unknown/1390f06c8f06f899.md` | repo-defining |
++| ? | claude-code | `docs/curated-prompts/claude-code/unknown/14d7e7d06b5e99a1.md` | repo-defining |
++| ? | claude-code | `docs/curated-prompts/claude-code/unknown/159d9b984330f80f.md` | repo-defining |
++| ? | claude-code | `docs/curated-prompts/claude-code/unknown/1b71d0e336b7e61b.md` | repo-defining |
++| ? | claude-code | `docs/curated-prompts/claude-code/unknown/1bc17d58f4757f23.md` | repo-defining |
++| ? | claude-code | `docs/curated-prompts/claude-code/unknown/1bf7db2cea0365ac.md` | repo-defining |
++| ? | claude-code | `docs/curated-prompts/claude-code/unknown/1c12fb17f5ab966c.md` | repo-defining |
++| ? | claude-code | `docs/curated-prompts/claude-code/unknown/1c81c22935370f97.md` | repo-defining |
++| 2026-02-26 | claude-code | `docs/curated-prompts/claude-code/2026-02/1dc4a2ae7f703de9.md` | policy-setting |
++| ? | claude-code | `docs/curated-prompts/claude-code/unknown/1dd1ed029aa72d17.md` | repo-defining |
++| ? | claude-code | `docs/curated-prompts/claude-code/unknown/1e164070d1d6487e.md` | repo-defining |
++| ? | claude-code | `docs/curated-prompts/claude-code/unknown/1e7b575ae5fb225e.md` | repo-defining |
++| ? | claude-code | `docs/curated-prompts/claude-code/unknown/1e9a7e497fbb6fd0.md` | repo-defining |
++| ? | claude-code | `docs/curated-prompts/claude-code/unknown/1f7fb0d05ba16e50.md` | repo-defining |
++
++_…and 331 more. See `_bindings.json` for full list._
++
++## Bound Plans
++
++| Date | Source | File | Status |
++| ---- | ------ | ---- | ------ |
++
++## Bound Responses (specs, ideas, plans from agents)
++
++| Date | Source | File | Kind |
++| ---- | ------ | ---- | ---- |
++
++## Boundary
++
++See: [`docs/boundary/phenodocs.md`](../boundary/phenodocs.md)
++
++## Ecosystem Role
++
++<See `ECOSYSTEM_MAP.md` for the canonical ecosystem role.>
++
++## Open Questions
++
++- <To be filled from the latest prompt on this repo.>
++
++## Change Log
++
++| Date | Change | Worklog |
++| ---- | ------ | ------- |
++| 2026-06-17 | Initial binding (L7-001 sweep) | `worklogs/L7-001-intent-boundary-curation-2026-06-17.json` |
+-- 
+2.50.1 (Apple Git-155)
+

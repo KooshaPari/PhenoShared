@@ -1,0 +1,514 @@
+[
+  {
+    "id": "D01",
+    "domain": "Authority and subject identity",
+    "choice": "Extend the current handbook and registry roles; resolve logical capability to immutable repository ID, source path, release and consumers.",
+    "scope": "All first-party components",
+    "alternatives_considered": [
+      "A new separate governance repository",
+      "Newest README wins",
+      "Names as stable IDs"
+    ],
+    "acceptance": "Unique authoritative writer and explicit supersession, no unresolved field silently promoted to fact.",
+    "exception_contract": "Ambiguous authority blocks only affected writes; useful independent product work continues.",
+    "evidence": [
+      "G13",
+      "G11",
+      "G12",
+      "U01"
+    ],
+    "authority_status": "proposed operationalization",
+    "enforcement_status": "not_deployed",
+    "mutation_authority": false
+  },
+  {
+    "id": "D02",
+    "domain": "Reuse and new code",
+    "choice": "Prefer removal of unnecessary work, existing external/shared capabilities, owned upstream improvement and narrow adapters before new generic implementations.",
+    "scope": "Libraries, services, tools, docs, patterns and schemas",
+    "alternatives_considered": [
+      "Use as-is",
+      "Extend owner",
+      "Upstream contribution",
+      "Bounded fork",
+      "Keep local domain logic"
+    ],
+    "acceptance": "Consumer contract and total ecosystem burden improve; actual installed/imported path uses selected provider.",
+    "exception_contract": "New implementation is permitted with explicit missing capability and evidence against serious alternatives.",
+    "evidence": [
+      "G13",
+      "U01"
+    ],
+    "authority_status": "proposed operationalization",
+    "enforcement_status": "not_deployed",
+    "mutation_authority": false
+  },
+  {
+    "id": "D03",
+    "domain": "JavaScript/TypeScript lint",
+    "choice": "Oxlint is the primary first-party lint engine; map existing semantic rules and enable applicable type-aware coverage.",
+    "scope": "Eligible JS/TS first-party profiles",
+    "alternatives_considered": [
+      "Full ESLint",
+      "Biome",
+      "Oxlint plus disjoint missing-rule runner"
+    ],
+    "acceptance": "Seed representative errors for every required rule family; no loss of framework/security/boundary coverage.",
+    "exception_contract": "A residual rule runner owns named unmatched rules/files only, has an owner, removal trigger and review deadline.",
+    "evidence": [
+      "U01",
+      "G04",
+      "G06",
+      "G07",
+      "W02"
+    ],
+    "authority_status": "proposed operationalization",
+    "enforcement_status": "not_deployed",
+    "mutation_authority": false
+  },
+  {
+    "id": "D04",
+    "domain": "Formatting",
+    "choice": "Oxfmt owns supported eligible source formats; route other formats/plugins through explicit disjoint selectors.",
+    "scope": "JS/TS and supported text formats",
+    "alternatives_considered": [
+      "Prettier",
+      "Biome",
+      "Format-specific tools"
+    ],
+    "acceptance": "Determinism, idempotence, semantic preservation and representative plugin/language fixtures.",
+    "exception_contract": "Unsupported syntax/plugin behavior is an explicit compatibility gap; never run competing formatters on the same file set.",
+    "evidence": [
+      "U01",
+      "W03"
+    ],
+    "authority_status": "proposed operationalization",
+    "enforcement_status": "not_deployed",
+    "mutation_authority": false
+  },
+  {
+    "id": "D05",
+    "domain": "TypeScript compiler",
+    "choice": "Qualified native TypeScript 7 release, identified by resolved package/version/binary provenance; tsc is a valid native command.",
+    "scope": "Typecheck/build CLI where supported",
+    "alternatives_considered": [
+      "Pinned JS TypeScript",
+      "Native preview tsgo",
+      "Framework-specific typecheck adapters"
+    ],
+    "acceptance": "Every project canary fails independently; diagnostics, module resolution, declarations, build and framework behavior pass.",
+    "exception_contract": "Keep a scoped compiler-API/framework adapter until replaced with proven parity; do not remove it merely because its name contains typescript.",
+    "evidence": [
+      "U01",
+      "W01",
+      "G02",
+      "G04",
+      "G05"
+    ],
+    "authority_status": "proposed operationalization",
+    "enforcement_status": "not_deployed",
+    "mutation_authority": false
+  },
+  {
+    "id": "D06",
+    "domain": "JS dependency manager",
+    "choice": "Pinned Bun with frozen dependency resolution for eligible first-party workspaces.",
+    "scope": "Install, lockfile and script entry-point ownership",
+    "alternatives_considered": [
+      "npm",
+      "pnpm",
+      "Yarn"
+    ],
+    "acceptance": "Clean-room install, lifecycle-script behavior, workspace resolution, package packing and deploy reproducibility.",
+    "exception_contract": "Upstream fork install contracts can be retained temporarily with exact boundary and migration proof.",
+    "evidence": [
+      "U01",
+      "G02",
+      "G06",
+      "W07"
+    ],
+    "authority_status": "proposed operationalization",
+    "enforcement_status": "not_deployed",
+    "mutation_authority": false
+  },
+  {
+    "id": "D07",
+    "domain": "JavaScript runtime and testing",
+    "choice": "Prefer Bun independently of package-manager choice, after runtime and test-runner conformance.",
+    "scope": "Owned services, CLIs and tests",
+    "alternatives_considered": [
+      "Node runtime",
+      "Bun runtime",
+      "Native module extraction"
+    ],
+    "acceptance": "Production API, native ABI, shutdown, streams, TLS, subprocess, snapshot/mocking and test selection parity.",
+    "exception_contract": "Node-specific upstream/native behavior must have an owned exception or remediation; no blind executable substitution.",
+    "evidence": [
+      "U01",
+      "G07",
+      "W07"
+    ],
+    "authority_status": "proposed operationalization",
+    "enforcement_status": "not_deployed",
+    "mutation_authority": false
+  },
+  {
+    "id": "D08",
+    "domain": "Python management",
+    "choice": "uv owns interpreter/environment/dependency resolution, with frozen locks for application profiles.",
+    "scope": "Python first-party components",
+    "alternatives_considered": [
+      "pip/venv",
+      "Poetry",
+      "Conda for specific binary stacks"
+    ],
+    "acceptance": "Clean environment and explicit interpreter/dependency identities; supported platform matrix.",
+    "exception_contract": "External binary distribution boundaries may require another tool, never a silently interchangeable environment.",
+    "evidence": [
+      "U01",
+      "W04",
+      "G09",
+      "G10"
+    ],
+    "authority_status": "proposed operationalization",
+    "enforcement_status": "not_deployed",
+    "mutation_authority": false
+  },
+  {
+    "id": "D09",
+    "domain": "Python free threading",
+    "choice": "Target CPython 3.14t for eligible owned execution profiles; verify supported build and actual GIL state after relevant imports.",
+    "scope": "Runtime profiles, not package minimum metadata",
+    "alternatives_considered": [
+      "GIL-enabled CPython",
+      "Processes",
+      "Native hot path",
+      "Different interpreter"
+    ],
+    "acceptance": "GIL state, native wheels, race tests, concurrency load and actual time/memory improve or satisfy accepted budgets.",
+    "exception_contract": "Unsupported extension or unacceptable measured regression is explicit blocked/exception state, not automatic fallback or forced unsafe GIL disable.",
+    "evidence": [
+      "U01",
+      "W05",
+      "G09",
+      "G10"
+    ],
+    "authority_status": "proposed operationalization",
+    "enforcement_status": "not_deployed",
+    "mutation_authority": false
+  },
+  {
+    "id": "D10",
+    "domain": "Python static analysis",
+    "choice": "Ruff for lint/format; qualify ty as preferred fast type-checker for supported profiles while retaining indispensable scoped API/plugin coverage.",
+    "scope": "Python owned source",
+    "alternatives_considered": [
+      "mypy",
+      "Pyright",
+      "ty"
+    ],
+    "acceptance": "Seed missing imports, bad types and framework contracts; intended syntax target matches policy.",
+    "exception_contract": "Do not silently lose mypy plugin/stub behavior; exact remaining scope is recorded.",
+    "evidence": [
+      "G09",
+      "G10"
+    ],
+    "authority_status": "recommended selection; type-checker promotion requires parity",
+    "enforcement_status": "not_deployed",
+    "mutation_authority": false
+  },
+  {
+    "id": "D11",
+    "domain": "Git hooks",
+    "choice": "Lefthook is the single owned hook orchestrator; shared commands also run in mandatory CI.",
+    "scope": "Active first-party development checkouts",
+    "alternatives_considered": [
+      "Husky",
+      "pre-commit",
+      "Handwritten hooks"
+    ],
+    "acceptance": "Installed hook path, effective config, nested/staged file selection, failure propagation and CI equivalence.",
+    "exception_contract": "Unmodified upstream checkout can retain its hooks under a fork boundary; do not stack competing managers.",
+    "evidence": [
+      "U01",
+      "G14",
+      "W08",
+      "W24"
+    ],
+    "authority_status": "proposed operationalization",
+    "enforcement_status": "not_deployed",
+    "mutation_authority": false
+  },
+  {
+    "id": "D12",
+    "domain": "MCP",
+    "choice": "Use maintained FastMCP for Python servers; PhenoFast is a thin shared integration policy layer only where it adds nonduplicated value.",
+    "scope": "MCP framework, auth/telemetry integration and service bindings",
+    "alternatives_considered": [
+      "Raw protocol implementation",
+      "Official native-language SDK",
+      "Qualified same-team TS FastMCP counterpart"
+    ],
+    "acceptance": "Transport/schema/authorization/cancellation/error/shutdown/consumer conformance; no import-success stub counted as service.",
+    "exception_contract": "Native host profile can use a qualified native SDK when Python adds measurable cost or deployment incompatibility; must implement same external contract.",
+    "evidence": [
+      "U01",
+      "W06",
+      "G09",
+      "G17",
+      "G20"
+    ],
+    "authority_status": "proposed operationalization",
+    "enforcement_status": "not_deployed",
+    "mutation_authority": false
+  },
+  {
+    "id": "D13",
+    "domain": "Shared CI",
+    "choice": "Reuse actual provider workflows and actions at immutable refs; generate literal consumer wrappers from selected policy release.",
+    "scope": "GitHub Actions and equivalent local commands",
+    "alternatives_considered": [
+      "Copy workflow YAML",
+      "Mutable main reference",
+      "New bespoke CI platform"
+    ],
+    "acceptance": "Hosted cross-repo call succeeds with correct permissions, dependency pin and exact result provenance.",
+    "exception_contract": "Private-provider visibility is validated; unavailable provider blocks affected assurance, not substituted echo success.",
+    "evidence": [
+      "G15",
+      "G23",
+      "W09"
+    ],
+    "authority_status": "proposed operationalization",
+    "enforcement_status": "not_deployed",
+    "mutation_authority": false
+  },
+  {
+    "id": "D14",
+    "domain": "Native build profiles",
+    "choice": "Separate low-latency, throughput, distribution-size and debug/verification profiles; choose against workload measurements.",
+    "scope": "Rust/Zig/C++ and equivalent native builds",
+    "alternatives_considered": [
+      "One size profile",
+      "One highest optimization profile",
+      "PGO/LTO variants"
+    ],
+    "acceptance": "Correctness, sanitizer coverage where applicable, end-to-end benchmarks, symbol/debug policy and build budget.",
+    "exception_contract": "Hardware-specific artifact must have explicit target dispatch/compatibility; no unsupported instruction surprise.",
+    "evidence": [
+      "G03",
+      "W10",
+      "W11"
+    ],
+    "authority_status": "proposed operationalization",
+    "enforcement_status": "not_deployed",
+    "mutation_authority": false
+  },
+  {
+    "id": "D15",
+    "domain": "Language and accelerator admission",
+    "choice": "Broad candidate exploration; production selection is workload-specific and evidence-gated, not popularity- or novelty-gated.",
+    "scope": "Component or hot path; avoid whole-project rewrite by default",
+    "alternatives_considered": [
+      "Improve algorithm/layout",
+      "Improve current implementation",
+      "External library",
+      "Native/GPU/DSL kernel",
+      "Whole rewrite"
+    ],
+    "acceptance": "Same outputs/tolerances, full boundary overhead, target hardware, consumer install and reproducible net advantage.",
+    "exception_contract": "A prototype can be admitted without production promotion; no arbitrary requirement that novelty itself lower code quality.",
+    "evidence": [
+      "U01",
+      "G12"
+    ],
+    "authority_status": "proposed operationalization",
+    "enforcement_status": "not_deployed",
+    "mutation_authority": false
+  },
+  {
+    "id": "D16",
+    "domain": "Docs",
+    "choice": "PhenoDocs is a versioned documentation production and federation capability, not a second owner of product meaning.",
+    "scope": "Shared renderer/search/nav/API-doc pipelines; product-owned content",
+    "alternatives_considered": [
+      "Each app invents a site",
+      "Central copied prose warehouse",
+      "One universal docs framework"
+    ],
+    "acceptance": "Consumer package install, release-bound references, content/API examples executed, routes/links/versioning and access boundaries validated.",
+    "exception_contract": "Framework differences use adapters; product content remains near its authority; stale docs are not live specifications.",
+    "evidence": [
+      "G02",
+      "G08",
+      "G13"
+    ],
+    "authority_status": "proposed operationalization",
+    "enforcement_status": "not_deployed",
+    "mutation_authority": false
+  },
+  {
+    "id": "D17",
+    "domain": "Design and landings",
+    "choice": "Consume shared design tokens/components/scenes and a constrained landing composition contract; keep product-specific narrative and interaction.",
+    "scope": "Web/desktop surfaces and public/internal landings",
+    "alternatives_considered": [
+      "Copy CSS/components",
+      "One generic visual template",
+      "Independent landing implementation"
+    ],
+    "acceptance": "Resolved token origin, no shadow copy, responsive/accessibility/state coverage, interactive and visual review evidence.",
+    "exception_contract": "A deliberate product visual difference has a named extension seam; shared does not mean identical.",
+    "evidence": [
+      "G08",
+      "G13",
+      "U01"
+    ],
+    "authority_status": "proposed operationalization",
+    "enforcement_status": "not_deployed",
+    "mutation_authority": false
+  },
+  {
+    "id": "D18",
+    "domain": "Contracts and pattern selection",
+    "choice": "Canonicalize error envelopes, deadlines/cancellation, retry/idempotency, data ownership, cache invalidation and boundary protocols as applicability rules plus tests.",
+    "scope": "All cross-component behavior",
+    "alternatives_considered": [
+      "Per-project conventions",
+      "Universal remote services",
+      "Universal shared database"
+    ],
+    "acceptance": "Consumer/provider contracts, negative cases and compatibility versions.",
+    "exception_contract": "Async, remote, event-sourced, cached or durable execution requires its specific need; simple local calls remain valid.",
+    "evidence": [
+      "G13",
+      "U01"
+    ],
+    "authority_status": "proposed operationalization",
+    "enforcement_status": "not_deployed",
+    "mutation_authority": false
+  },
+  {
+    "id": "D19",
+    "domain": "Evidence and gate integrity",
+    "choice": "Independent, revision-bound gate inputs; empty/missing/stale/skipped/blocked never pass.",
+    "scope": "All mandatory quality and adoption checks",
+    "alternatives_considered": [
+      "Builder self-assertion",
+      "Test counts",
+      "Presence of config",
+      "Second agent prompt alone"
+    ],
+    "acceptance": "Negative controls defeat missing tools, wrong revision, zero denominator, swallowed exit and changed evaluator.",
+    "exception_contract": "Hashes retain identity but do not authenticate a producer or authorize a result.",
+    "evidence": [
+      "G05",
+      "G13",
+      "E01"
+    ],
+    "authority_status": "proposed operationalization",
+    "enforcement_status": "not_deployed",
+    "mutation_authority": false
+  },
+  {
+    "id": "D20",
+    "domain": "Exceptions",
+    "choice": "Every deviation is bounded by subject, capability, rule, reason, alternative proof, owner, expiry and exit condition.",
+    "scope": "Temporary compatibility or accepted scoped variant",
+    "alternatives_considered": [
+      "Silent fallback",
+      "Permanent grandfathering",
+      "Global waiver"
+    ],
+    "acceptance": "Expired/malformed/ambiguous exception fails closed for affected qualification; canonical remains a separate state.",
+    "exception_contract": "An intentional permanent variant is a first-class profile with its own tests, not an endless temporary waiver.",
+    "evidence": [
+      "G13",
+      "U01"
+    ],
+    "authority_status": "proposed operationalization",
+    "enforcement_status": "not_deployed",
+    "mutation_authority": false
+  },
+  {
+    "id": "D21",
+    "domain": "Concurrency and process coordination",
+    "choice": "One writer/lease for shared manifests and releases; bounded parallel component work with independent verification.",
+    "scope": "Multi-agent development and CI workload scheduling",
+    "alternatives_considered": [
+      "One agent per repo",
+      "Unbounded fan-out",
+      "Serial entire portfolio"
+    ],
+    "acceptance": "No lost updates, base-ref checks, idempotent retry and explicit cancellation/resource budgets.",
+    "exception_contract": "Separate unrelated work need not wait on shared governance or a complete atlas.",
+    "evidence": [
+      "G13",
+      "L01"
+    ],
+    "authority_status": "proposed operationalization",
+    "enforcement_status": "not_deployed",
+    "mutation_authority": false
+  },
+  {
+    "id": "D22",
+    "domain": "Migration and deletion",
+    "choice": "Consumer-first, reversible migration with exact source mapping; retire old implementation only after actual adoption and provenance preservation.",
+    "scope": "All shared extraction, tooling migration and repo lifecycle changes",
+    "alternatives_considered": [
+      "Folder move = done",
+      "Rewrite all first",
+      "Leave dual writers forever"
+    ],
+    "acceptance": "Packaging, integration, negative tests, live/installed consumer proof, rollback and license/history retention.",
+    "exception_contract": "This packet grants no archive/delete/publish/host mutation authority.",
+    "evidence": [
+      "L01",
+      "G13"
+    ],
+    "authority_status": "proposed operationalization",
+    "enforcement_status": "not_deployed",
+    "mutation_authority": false
+  },
+  {
+    "id": "D23",
+    "domain": "Verification versus repair",
+    "choice": "Separate non-mutating checks from explicitly invoked repair; permitted cache writes are declared and never conceal source changes.",
+    "scope": "Lint, typecheck, docs checks, migrations and policy generation",
+    "alternatives_considered": [
+      "Auto-fix during a gate",
+      "Ignore changed tracked files"
+    ],
+    "acceptance": "Snapshot comparison plus injected known defect fails before repair; generated policy drift detected, not silently fixed.",
+    "exception_contract": "A named repair task may mutate within its existing authorization.",
+    "evidence": [
+      "G04",
+      "G05",
+      "G13"
+    ],
+    "authority_status": "proposed operationalization",
+    "enforcement_status": "not_deployed",
+    "mutation_authority": false
+  },
+  {
+    "id": "D24",
+    "domain": "Dependency and patch lifecycle",
+    "choice": "Record source/version/license/consumer/patch rationale and update trigger; thin upstream-linked deltas instead of anonymous postinstall edits.",
+    "scope": "External dependencies and internal published packages",
+    "alternatives_considered": [
+      "Unpinned Git dependency",
+      "Opaque fork",
+      "Mass text rewrite"
+    ],
+    "acceptance": "Clean resolution, scoped patch canaries, license/provenance, advisory response and consumer rollout.",
+    "exception_contract": "Lockfiles can legitimately resolve version ranges; qualified identity lives in resolved evidence, not manifest spelling alone.",
+    "evidence": [
+      "G04",
+      "G08",
+      "G21"
+    ],
+    "authority_status": "proposed operationalization",
+    "enforcement_status": "not_deployed",
+    "mutation_authority": false
+  }
+]

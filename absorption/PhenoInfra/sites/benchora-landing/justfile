@@ -1,0 +1,50 @@
+# justfile for benchora-landing
+# Standard recipes for the Hygiene bundle (2026-06-08).
+# https://github.com/casey/just
+
+set dotenv-load := true
+set shell := ["bash", "-uc"]
+set positional-arguments := true
+
+# Default: list available recipes.
+_default:
+	@just --list
+
+# Install dependencies.
+install:
+	bun install
+
+# Run the Astro dev server.
+dev:
+	bun run dev
+
+# Production build.
+build:
+	bun run build
+
+# Preview the production build locally.
+preview:
+	bun run preview
+
+# Run the test suite.
+test:
+	bun run test --if-present
+
+# Type-check the project.
+typecheck:
+	bunx astro check
+
+# Lint.
+lint:
+	bun run lint --if-present
+
+# Format.
+format:
+	bun run format --if-present
+
+# Clean build artifacts.
+clean:
+	rm -rf dist .astro .vercel
+
+# CI target: install + lint + typecheck + test + build.
+ci: install lint typecheck test build

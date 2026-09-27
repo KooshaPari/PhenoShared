@@ -1,0 +1,85 @@
+{
+  "schema_version": 1,
+  "asset_id": "concept-trainer-v1",
+  "source": "scripts/build_asset.py",
+  "editable_source": "assets/concept-trainer.json",
+  "native_blend_status": "NOT_BUILT: run blender/build_product.py on a Blender worker",
+  "rights": {
+    "creator": "Original asset authored for this kit",
+    "license": "MIT",
+    "third_party_inputs": []
+  },
+  "coordinate_system": {
+    "up": "+Y",
+    "forward": "+X",
+    "units": "design units"
+  },
+  "parts": [
+    "Outsole",
+    "Midsole",
+    "Upper",
+    "Cage_-1_0",
+    "Cage_-1_1",
+    "Cage_-1_2",
+    "Cage_-1_3",
+    "Welt_-1",
+    "Toe_trim_-1",
+    "Cage_1_0",
+    "Cage_1_1",
+    "Cage_1_2",
+    "Cage_1_3",
+    "Welt_1",
+    "Toe_trim_1",
+    "Collar_inner",
+    "Collar_padding",
+    "Tongue",
+    "Lace_0",
+    "Lace_cross_0",
+    "Lace_1",
+    "Lace_cross_1",
+    "Lace_2",
+    "Lace_cross_2",
+    "Lace_3",
+    "Lace_cross_3",
+    "Lace_4",
+    "Lace_cross_4",
+    "Lace_5",
+    "Heel_clip",
+    "Pull_loop",
+    "Tread_0_-1",
+    "Tread_0_1",
+    "Tread_1_-1",
+    "Tread_1_1",
+    "Tread_2_-1",
+    "Tread_2_1",
+    "Tread_3_-1",
+    "Tread_3_1",
+    "Tread_4_-1",
+    "Tread_4_1",
+    "Tread_5_-1",
+    "Tread_5_1",
+    "Tread_6_-1",
+    "Tread_6_1",
+    "Tread_7_-1",
+    "Tread_7_1"
+  ],
+  "triangle_count": 25900,
+  "vertex_count": 13274,
+  "exports": [
+    {
+      "path": "assets/concept-trainer.json",
+      "bytes": 1023996,
+      "sha256": "9a9311f0a8753aec09061288e7311dd11576fa34fcf0426d4d7da6ead29d3568"
+    },
+    {
+      "path": "assets/concept-trainer.glb",
+      "bytes": 670108,
+      "sha256": "b5243d6151e3b1913be62f1d596c18e249e96b5550d494e0b17ac7151552e880"
+    }
+  ],
+  "limitations": [
+    "No UVs or texture maps in the canonical seed; add UVs and bake in Blender for production.",
+    "Geometry includes overlapping constructive surfaces, not watertight manufacturing topology.",
+    "Named parts and explode vectors are semantic test fixtures."
+  ]
+}
