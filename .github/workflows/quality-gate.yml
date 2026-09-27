@@ -62,6 +62,10 @@ jobs:
         uses: actions/setup-go@v7
         with:
           go-version: '1.24'
+      - name: Install Linux GUI system deps (fabric-tray -> tao -> gtk3/glib-sys)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y pkg-config libgtk-3-dev
       - name: cargo build --workspace
         run: cargo build --workspace --locked
       - run: cargo fmt --check
