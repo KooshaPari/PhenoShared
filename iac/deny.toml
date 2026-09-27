@@ -13,6 +13,15 @@ allow = [
   "ISC",
   "Zlib",
   "Unicode-3.0",
+  # Aligned with the root deny.toml policy of record (2026-09-24 restore of
+  # OSI/FSF-approved licenses). CDLA-Permissive-2.0 is REQUIRED here: the
+  # iac graph's webpki-roots 1.0.8 (via reqwest -> rustls) is CDLA-
+  # Permissive-2.0 and cargo-deny 0.20.2 rejected it on 2026-09-27 CI
+  # because this list predated the root policy.
+  "MIT-0",
+  "NCSA",
+  "MPL-2.0",
+  "CDLA-Permissive-2.0",
 ]
 
 [bans]
