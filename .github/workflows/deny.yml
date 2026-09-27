@@ -49,11 +49,17 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v7
         with:
-          go-version: "1.21"
+          # 1.26 required to BUILD govulncheck: golang.org/x/vuln v1.8.0
+          # declares `go >= 1.26.0`; the old 1.21 pin + GOTOOLCHAIN=local
+          # made `go install` fail on cold runners (observed 2026-09-27).
+          # cmd/* modules target go 1.21/1.22 and compile fine under 1.26.
+          go-version: "1.26"
           cache: false
 
       - name: Install govulncheck
-        run: go install golang.org/x/vuln/cmd/govulncheck@latest
+        # Pinned: @latest drifts independently of this toolchain pin and
+        # silently breaks the install step when upstream bumps its go directive.
+        run: go install golang.org/x/vuln/cmd/govulncheck@v1.8.0
 
       - name: Run govulncheck (capprobe)
         working-directory: cmd/capprobe
