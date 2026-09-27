@@ -28,12 +28,19 @@ use crate::ids::{NfrId, RequirementId};
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
 #[serde(rename_all = "lowercase")]
 pub enum ArtifactKind {
+    /// A functional or non-functional requirement node.
     Requirement,
+    /// A design document or design-decision node.
     Design,
+    /// A source-code entity (file, module, function).
     Code,
+    /// A test case or test-suite node.
     Test,
+    /// Proof of verification (test run, review record, artefact hash).
     Evidence,
+    /// An identified risk node.
     Risk,
+    /// A rationale / decision-justification node.
     Rationale,
 }
 
@@ -73,7 +80,9 @@ pub struct Artifact {
     pub external_id: Option<String>,
     /// Open-ended metadata bag.
     pub metadata: BTreeMap<String, serde_json::Value>,
+    /// Creation timestamp (UTC), set on construction.
     pub created_at: Option<DateTime<Utc>>,
+    /// Last-modification timestamp (UTC), bumped on edits.
     pub updated_at: Option<DateTime<Utc>>,
 }
 
@@ -104,21 +113,51 @@ impl Artifact {
 #[serde(tag = "kind", rename_all = "snake_case")]
 pub enum ArtifactRef {
     /// Functional requirement.
-    Requirement { id: RequirementId },
+    Requirement {
+        /// FR-prefixed requirement id.
+        id: RequirementId,
+    },
     /// Non-functional requirement.
-    NonFunctionalRequirement { id: NfrId },
+    NonFunctionalRequirement {
+        /// NFR-prefixed requirement id.
+        id: NfrId,
+    },
     /// Test (any flavour).
-    Test { id: String },
+    Test {
+        /// Test identifier (e.g. `checkout flow/test verifies receipt`).
+        id: String,
+    },
     /// Source-code entity.
-    CodeEntity { id: String, lang: String },
+    CodeEntity {
+        /// Language-qualified entity path.
+        id: String,
+        /// Programming language of the entity.
+        lang: String,
+    },
     /// User journey.
-    Journey { id: String },
+    Journey {
+        /// Journey identifier.
+        id: String,
+    },
     /// Agent run / execution record.
-    AgentRun { id: String },
+    AgentRun {
+        /// Run identifier.
+        id: String,
+    },
     /// Evidence artifact (sha256 content-addressed).
-    Evidence { id: String, sha256: String },
+    Evidence {
+        /// Evidence identifier.
+        id: String,
+        /// SHA-256 content hash of the evidence payload.
+        sha256: String,
+    },
     /// Document reference (path + optional line range).
-    Document { id: String, range: Option<String> },
+    Document {
+        /// Document path or URL.
+        id: String,
+        /// Optional line/section range within the document.
+        range: Option<String>,
+    },
 }
 
 impl ArtifactRef {

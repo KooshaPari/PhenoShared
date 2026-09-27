@@ -59,25 +59,37 @@ impl Default for ImpactConfig {
 /// One node in the blast radius.
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct BlastNode {
+    /// Artifact at this position in the blast radius.
     pub artifact: ArtifactRef,
+    /// BFS hop distance from the nearest seed.
     pub depth: u32,
+    /// Link types traversed on the discovery path (empty for seeds).
     pub via: Vec<TraceLinkType>,
+    /// Weighted impact score of this node (negative for conflict links).
     pub score: f32,
 }
 
 /// Result of a blast-radius / impact computation.
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
 pub struct ImpactReport {
+    /// Seed artifacts the traversal started from.
     pub seeds: Vec<ArtifactRef>,
+    /// Every affected node, sorted by descending absolute score.
     pub blast: Vec<BlastNode>,
+    /// Sum of all node scores.
     pub total_score: f32,
+    /// Score subtotals bucketed by artifact kind.
     pub by_kind: HashMap<String, f32>,
+    /// Whether the traversal stopped early at `max_depth`.
     pub truncated: bool,
+    /// Deepest BFS depth actually reached.
     pub max_depth_seen: u32,
+    /// Deduplicated ConflictsWith links encountered during traversal.
     pub conflicts: Vec<TraceLink>,
 }
 
 impl ImpactReport {
+    /// Distinct artifact kinds present in [`Self::by_kind`].
     pub fn affected_kinds(&self) -> HashSet<String> {
         self.by_kind.keys().cloned().collect()
     }
@@ -189,7 +201,7 @@ pub fn compute_impact(
                         }
                     },
                 };
-                if should_enqueue && (depth + 1 <= cfg.max_depth || cfg.max_depth == 0) {
+                if should_enqueue && (depth < cfg.max_depth || cfg.max_depth == 0) {
                     queue.push_back((nbr_key.to_string(), depth + 1, decay * 0.85));
                 }
             }

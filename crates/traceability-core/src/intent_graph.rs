@@ -20,16 +20,27 @@ use thiserror::Error;
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
 #[serde(rename_all = "PascalCase")]
 pub enum NodeType {
+    /// Raw user intent / problem statement.
     Intent,
+    /// Delivery plan.
     Plan,
+    /// Product feature.
     Feature,
+    /// User story.
     Story,
+    /// Implementation task.
     Task,
+    /// Specification / ADR document.
     Spec,
+    /// Source-code commit.
     Commit,
+    /// Test case.
     Test,
+    /// Pull request.
     PR,
+    /// Reported bug.
     Bug,
+    /// Other traceable artifact.
     Artifact,
 }
 
@@ -97,16 +108,27 @@ impl TryFrom<String> for NodeType {
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
 #[serde(rename_all = "lowercase")]
 pub enum DagStage {
+    /// Intent stage.
     Intent,
+    /// Plan stage.
     Plan,
+    /// Feature stage.
     Feature,
+    /// Story stage.
     Story,
+    /// Task stage.
     Task,
+    /// Spec stage.
     Spec,
+    /// Commit stage.
     Commit,
+    /// Test stage.
     Test,
+    /// Pull-request stage.
     PR,
+    /// Bug stage.
     Bug,
+    /// Artifact stage.
     Artifact,
 }
 
@@ -174,13 +196,21 @@ impl TryFrom<String> for DagStage {
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
 #[serde(rename_all = "kebab-case")]
 pub enum RelationshipType {
+    /// Source realizes the target (intent realizes feature, task realizes spec).
     Implements,
+    /// Source test exercises the target.
     Tests,
+    /// Source covers the target (feature covered by test).
     Covers,
+    /// Generic traceability link with no constraint (wildcard).
     TracesTo,
+    /// Target is the origin of the source (decomposition / parentage).
     DerivesFrom,
+    /// Source bug is resolved by the target (commit, PR, task).
     Resolves,
+    /// Source blocks the target from starting.
     Blocks,
+    /// Source requires the target to complete first.
     DependsOn,
 }
 
@@ -239,13 +269,21 @@ impl TryFrom<String> for RelationshipType {
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
 pub enum CanonicalLinkType {
+    /// Source is the parent of the target.
     ParentOf,
+    /// Source is the child of the target.
     ChildOf,
+    /// Source requires the target.
     DependsOn,
+    /// Source prevents the target from progressing.
     Blocks,
+    /// Source realizes the target.
     Implements,
+    /// Source verifies the target.
     Verifies,
+    /// Source refers to the target without stronger semantics.
     References,
+    /// Source and target are duplicates.
     Duplicates,
 }
 
@@ -304,15 +342,25 @@ impl TryFrom<String> for CanonicalLinkType {
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
 pub enum Status {
+    /// Written but not yet worked on.
     Draft,
+    /// Currently being worked on.
     Active,
+    /// Work finished.
     Completed,
+    /// No longer current; superseded.
     Deprecated,
+    /// Turned down / not going to be done.
     Rejected,
+    /// Open for triage (bugs, requests).
     Open,
+    /// Mid-flight work in progress.
     InProgress,
+    /// Halted by an external dependency.
     Blocked,
+    /// Postponed to a later horizon.
     Deferred,
+    /// Abandoned before completion.
     Cancelled,
 }
 
@@ -393,7 +441,9 @@ pub struct Meta {
 /// ---------------------------------------------------------------------------
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CanonicalMap {
+    /// Canonical link vocabulary the edge maps to.
     pub link_type: CanonicalLinkType,
+    /// Optional traversal direction hint (e.g. "forward", "inverse").
     #[serde(skip_serializing_if = "Option::is_none")]
     pub direction: Option<String>,
 }
@@ -405,19 +455,29 @@ pub struct CanonicalMap {
 pub struct Node {
     /// Globally unique node ID. Format: `<Type>#<slug>`.
     pub id: String,
+    /// Ontology kind of this node.
     pub node_type: NodeType,
+    /// DAG stage this node sits in.
     pub dag_stage: DagStage,
+    /// Human-readable title.
     pub title: String,
+    /// Optional longer description.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
+    /// Workflow status of the node.
     pub status: Status,
+    /// Free-form labels for filtering / grouping.
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub tags: Vec<String>,
+    /// Provenance metadata (source, agent, timestamp, confidence).
     pub meta: Meta,
+    /// Free-form structured payload.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub properties: Option<serde_json::Value>,
+    /// Optional backing table name for persistence.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub table_ref: Option<String>,
+    /// Optional backing table row id for persistence.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub table_id: Option<String>,
 }
@@ -427,13 +487,20 @@ pub struct Node {
 /// ---------------------------------------------------------------------------
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Edge {
+    /// Edge identifier, unique within the graph.
     pub id: String,
+    /// ID of the source node.
     pub source: String,
+    /// ID of the target node.
     pub target: String,
+    /// Semantics of the relationship.
     pub relationship_type: RelationshipType,
+    /// Optional mapping to the canonical link vocabulary.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub canonical_map: Option<CanonicalMap>,
+    /// Provenance metadata (source, agent, timestamp, confidence).
     pub meta: Meta,
+    /// Free-form structured payload.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub properties: Option<serde_json::Value>,
 }
@@ -443,17 +510,25 @@ pub struct Edge {
 /// ---------------------------------------------------------------------------
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct GraphMetadata {
+    /// Ontology document version.
     pub version: String,
+    /// URI of the intent-ontology schema this graph conforms to.
     pub schema_uri: String,
+    /// UTC time the graph was created.
     pub created_at: DateTime<Utc>,
+    /// UTC time the graph was last updated.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub updated_at: Option<DateTime<Utc>>,
+    /// Node count at export time, when known.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub node_count: Option<u64>,
+    /// Edge count at export time, when known.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub edge_count: Option<u64>,
+    /// Recorded result of a DAG validation run, when known.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dag_valid: Option<bool>,
+    /// Upstream system the graph was exported from.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source_system: Option<String>,
 }
@@ -463,8 +538,11 @@ pub struct GraphMetadata {
 /// ---------------------------------------------------------------------------
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct IntentGraph {
+    /// Intent-side nodes of the ontology.
     pub nodes: Vec<Node>,
+    /// Directed relationship edges between nodes.
     pub edges: Vec<Edge>,
+    /// Document-level metadata for the graph.
     pub metadata: GraphMetadata,
 }
 
@@ -473,36 +551,58 @@ pub struct IntentGraph {
 /// ---------------------------------------------------------------------------
 #[derive(Debug, Error, Clone, PartialEq)]
 pub enum ValidationError {
+    /// A node ID did not match the `<Type>#<slug>` format.
     #[error("invalid node ID: {0}")]
     InvalidNodeId(String),
+    /// A required field was empty or absent.
     #[error("missing required field: {0}")]
     MissingRequiredField(String),
+    /// The node-type string was not in the vocabulary.
     #[error("unknown node type: {0}")]
     UnknownNodeType(String),
+    /// The DAG-stage string was not in the vocabulary.
     #[error("unknown DAG stage: {0}")]
     InvalidDagStage(String),
+    /// The relationship-type string was not in the vocabulary.
     #[error("unknown relationship type: {0}")]
     UnknownRelationshipType(String),
+    /// The canonical-link string was not in the vocabulary.
     #[error("unknown canonical link type: {0}")]
     UnknownCanonicalLinkType(String),
+    /// The status string was not in the vocabulary.
     #[error("unknown status: {0}")]
     UnknownStatus(String),
+    /// The edge connected a disallowed pair of node types.
     #[error("invalid edge constraint: {relationship} from {from} to {to}")]
     InvalidEdgeConstraint {
+        /// Relationship type that was attempted.
         relationship: String,
+        /// Node type at the edge source.
         from: String,
+        /// Node type at the edge target.
         to: String,
     },
+    /// The graph contained a cycle.
     #[error("cycle detected in graph")]
     CycleDetected,
+    /// A root node (in-degree 0) was not an Intent.
     #[error("invalid root node: expected Intent, got {0}")]
     InvalidRootNode(String),
+    /// A node or edge meta field (e.g. `source`) was empty.
     #[error("missing meta on {0}")]
     MissingMeta(String),
+    /// Two nodes shared the same ID.
     #[error("duplicate node ID: {0}")]
     DuplicateNodeId(String),
+    /// An edge referenced a node that does not exist.
     #[error("orphaned edge: {edge_id} references missing node {node_id}")]
-    OrphanedEdge { edge_id: String, node_id: String },
+    OrphanedEdge {
+        /// ID of the edge with the dangling reference.
+        edge_id: String,
+        /// ID of the node the edge points at but that is missing.
+        node_id: String,
+    },
+    /// A confidence value fell outside `0.0..=1.0`.
     #[error("confidence out of range: {0}")]
     ConfidenceOutOfRange(f64),
 }

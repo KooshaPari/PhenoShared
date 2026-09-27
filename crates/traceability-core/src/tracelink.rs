@@ -89,7 +89,9 @@ pub struct TraceLink {
     pub rationale: Option<String>,
     /// Open-ended metadata bag.
     pub metadata: BTreeMap<String, serde_json::Value>,
+    /// Creation timestamp (UTC), set on construction.
     pub created_at: Option<DateTime<Utc>>,
+    /// Last-modification timestamp (UTC), bumped on edits.
     pub updated_at: Option<DateTime<Utc>>,
 }
 

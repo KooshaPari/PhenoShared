@@ -17,6 +17,7 @@ use uuid::Uuid;
 
 macro_rules! id_type {
     ($name:ident, $prefix:literal) => {
+        /// Strongly-typed, `$prefix`-prefixed identifier newtype (e.g. `FR-77` / `NFR-PERF-01`).
         #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord, Hash, Serialize, Deserialize)]
         #[serde(transparent)]
         pub struct $name(String);

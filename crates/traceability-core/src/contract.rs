@@ -23,11 +23,17 @@ use crate::{
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
 pub enum Layer {
+    /// Raw intent / problem statement.
     Intent,
+    /// Written intent document.
     IntentDoc,
+    /// Spec and architecture decision records.
     SpecAdr,
+    /// Plan and work-breakdown structure.
     PlanWbs,
+    /// Implementation in progress.
     Execution,
+    /// Collected verification evidence.
     Evidence,
 }
 
@@ -71,8 +77,11 @@ pub struct Criterion {
 /// Gherkin scenario reference for BDD traceability.
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct GherkinRef {
+    /// Path to the feature file declaring the scenario.
     pub feature_file: String,
+    /// Scenario (or scenario-outline) name.
     pub scenario: String,
+    /// Optional line number of the scenario in the feature file.
     pub line: Option<u32>,
 }
 
@@ -96,9 +105,13 @@ pub enum BridgePhase {
 /// **and** every `must_not_break` invariant remains covered.
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AcceptanceContract {
+    /// Artifact the contract is bound to.
     pub artifact_ref: ArtifactRef,
+    /// Testable criteria that must all map to Covered cells.
     pub criteria: Vec<Criterion>,
+    /// How the artifact is verified (test, analysis, inspection, demo).
     pub verification: VerificationMethod,
+    /// Gherkin scenarios backing the criteria.
     pub bdd: Vec<GherkinRef>,
     /// Optional human-readable goal for the contract.
     #[serde(default)]
@@ -165,10 +178,15 @@ impl AcceptanceContract {
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
 pub enum GatePredicate {
+    /// Requirement has not reached Approved/Implemented/Verified status.
     NotApproved,
+    /// Acceptance contract is missing or not fully covered.
     MissingAcceptance,
+    /// No evidence artifacts were supplied.
     MissingEvidence,
+    /// No Implements trace links exist yet.
     MissingImplementation,
+    /// No Verifies trace links exist yet.
     MissingTest,
     /// Execution/code exists before acceptance criteria and tests are defined.
     CodegenBeforeWalls,
@@ -182,13 +200,21 @@ pub enum GatePredicate {
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
 pub enum GateReason {
+    /// The requirement was not approved.
     NotApproved,
+    /// Acceptance criteria were not satisfied.
     MissingAcceptance,
+    /// Required evidence was absent.
     MissingEvidence,
+    /// Implementation links were absent.
     MissingImplementation,
+    /// Test links were absent.
     MissingTest,
+    /// Code existed before walls (criteria + tests) were defined.
     CodegenBeforeWalls,
+    /// A criterion had no bound validator cell.
     MissingValidator,
+    /// The bridge phase was below [`BridgePhase::Bridged`].
     BridgeNotEstablished,
 }
 
@@ -227,8 +253,11 @@ pub struct GateContext<'a> {
 /// Layer-to-layer gate with governance predicates.
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct ProgressionGate {
+    /// Layer the gate guards the exit of.
     pub from_layer: Layer,
+    /// Layer the gate guards the entry of.
     pub to_layer: Layer,
+    /// Predicates that must all pass for progression.
     pub predicates: Vec<GatePredicate>,
 }
 

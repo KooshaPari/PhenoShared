@@ -29,9 +29,13 @@ use thiserror::Error;
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
 #[serde(rename_all = "PascalCase")]
 pub enum ExecutionNodeType {
+    /// Compilation / packaging step.
     Build,
+    /// Test-execution step.
     Test,
+    /// Deployment / release step.
     Deploy,
+    /// Generic CI job wrapping other runtime steps.
     Job,
 }
 
@@ -78,12 +82,19 @@ impl TryFrom<String> for ExecutionNodeType {
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
 pub enum ExecutionStatus {
+    /// Created but not yet dispatched.
     Pending,
+    /// Waiting in the runner queue.
     Queued,
+    /// Currently executing.
     Running,
+    /// Finished successfully.
     Passed,
+    /// Finished with failures.
     Failed,
+    /// Intentionally not run (conditional skip).
     Skipped,
+    /// Stopped before completion (cancellation / timeout).
     Cancelled,
 }
 
@@ -210,13 +221,19 @@ pub struct ExecutionMeta {
 pub struct ExecutionNode {
     /// Globally unique node ID. Format: `<Type>#<slug>`.
     pub id: String,
+    /// Kind of runtime unit (build, test, deploy, job).
     pub node_type: ExecutionNodeType,
+    /// Human-readable name of the run.
     pub title: String,
+    /// Optional longer description of the run.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
+    /// Current lifecycle status of the run.
     pub status: ExecutionStatus,
+    /// Free-form labels for filtering / grouping runs.
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub tags: Vec<String>,
+    /// Provenance metadata (source, agent, timestamp, confidence).
     pub meta: ExecutionMeta,
     /// Wall-clock duration of the run, milliseconds. None while pending/queued.
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -237,11 +254,17 @@ pub struct ExecutionNode {
 /// ---------------------------------------------------------------------------
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ExecutionEdge {
+    /// Edge identifier, unique within the graph.
     pub id: String,
+    /// ID of the source execution node.
     pub source: String,
+    /// ID of the target execution node.
     pub target: String,
+    /// Causality semantics of the edge.
     pub edge_type: ExecutionEdgeType,
+    /// Provenance metadata (source, agent, timestamp, confidence).
     pub meta: ExecutionMeta,
+    /// Free-form runner-specific payload (attempt counts, timeouts, etc.).
     #[serde(skip_serializing_if = "Option::is_none")]
     pub properties: Option<serde_json::Value>,
 }
@@ -251,15 +274,22 @@ pub struct ExecutionEdge {
 /// ---------------------------------------------------------------------------
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ExecutionGraphMetadata {
+    /// Ontology document version.
     pub version: String,
+    /// URI of the execution-ontology schema this graph conforms to.
     pub schema_uri: String,
+    /// UTC time the graph was created.
     pub created_at: DateTime<Utc>,
+    /// UTC time the graph was last updated.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub updated_at: Option<DateTime<Utc>>,
+    /// Node count at export time, when known.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub node_count: Option<u64>,
+    /// Edge count at export time, when known.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub edge_count: Option<u64>,
+    /// Recorded result of a DAG validation run, when known.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dag_valid: Option<bool>,
     /// e.g. "github-actions", "buildkite", "local".
@@ -275,8 +305,11 @@ pub struct ExecutionGraphMetadata {
 /// ---------------------------------------------------------------------------
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ExecutionGraph {
+    /// Runtime units of the executed pipeline.
     pub nodes: Vec<ExecutionNode>,
+    /// Directed causality edges between runtime units.
     pub edges: Vec<ExecutionEdge>,
+    /// Document-level metadata for the graph.
     pub metadata: ExecutionGraphMetadata,
 }
 
@@ -286,34 +319,55 @@ pub struct ExecutionGraph {
 /// ---------------------------------------------------------------------------
 #[derive(Debug, Error, Clone, PartialEq)]
 pub enum ExecutionValidationError {
+    /// A node ID did not match the `<Type>#<slug>` format.
     #[error("invalid execution node ID: {0}")]
     InvalidNodeId(String),
+    /// A required field was empty or absent.
     #[error("missing required field: {0}")]
     MissingRequiredField(String),
+    /// The node-type string was not in the vocabulary.
     #[error("unknown execution node type: {0}")]
     UnknownNodeType(String),
+    /// The status string was not in the vocabulary.
     #[error("unknown execution status: {0}")]
     UnknownStatus(String),
+    /// The edge-type string was not in the vocabulary.
     #[error("unknown execution edge type: {0}")]
     UnknownEdgeType(String),
+    /// The edge connected a disallowed pair of node types.
     #[error("invalid edge constraint: {edge} from {from} to {to}")]
     InvalidEdgeConstraint {
+        /// Edge type that was attempted.
         edge: String,
+        /// Node type at the edge source.
         from: String,
+        /// Node type at the edge target.
         to: String,
     },
+    /// The graph contained a cycle.
     #[error("cycle detected in execution graph")]
     CycleDetected,
+    /// A node or edge meta field (e.g. `source`) was empty.
     #[error("missing meta on {0}")]
     MissingMeta(String),
+    /// Two nodes shared the same ID.
     #[error("duplicate node ID: {0}")]
     DuplicateNodeId(String),
+    /// An edge referenced a node that does not exist.
     #[error("orphaned edge: {edge_id} references missing node {node_id}")]
-    OrphanedEdge { edge_id: String, node_id: String },
+    OrphanedEdge {
+        /// ID of the edge with the dangling reference.
+        edge_id: String,
+        /// ID of the node the edge points at but that is missing.
+        node_id: String,
+    },
+    /// A confidence value fell outside `0.0..=1.0`.
     #[error("confidence out of range: {0}")]
     ConfidenceOutOfRange(f64),
+    /// An edge started and ended at the same node.
     #[error("self-loop edge: {0}")]
     SelfLoop(String),
+    /// A duration was set while the node was not in a terminal status.
     #[error("duration set on non-terminal status: node {0} status {1}")]
     DurationOnNonTerminal(String, String),
 }

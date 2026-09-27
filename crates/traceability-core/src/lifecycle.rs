@@ -15,13 +15,21 @@ use serde::{Deserialize, Serialize};
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
 #[serde(rename_all = "lowercase")]
 pub enum FeatureState {
+    /// Feature idea captured but not yet specified.
     Created,
+    /// Acceptance spec written.
     Specified,
+    /// Research / spike completed.
     Researched,
+    /// Implementation plan committed.
     Planned,
+    /// Work in progress.
     Implementing,
+    /// Acceptance criteria verified.
     Validated,
+    /// Released to users.
     Shipped,
+    /// Retrospective recorded.
     Retrospected,
 }
 
@@ -62,14 +70,18 @@ impl FromStr for FeatureState {
 /// A recorded state transition.
 #[derive(Debug, Clone)]
 pub struct Transition {
+    /// Stage the transition started from.
     pub from: FeatureState,
+    /// Stage the transition moved to.
     pub to: FeatureState,
 }
 
 /// The result of a successful state machine transition.
 #[derive(Debug, Clone)]
 pub struct TransitionResult {
+    /// The recorded from/to stage pair.
     pub transition: Transition,
+    /// UTC time the transition was accepted.
     pub timestamp: DateTime<Utc>,
 }
 

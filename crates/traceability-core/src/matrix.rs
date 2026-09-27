@@ -38,9 +38,13 @@ pub enum CoverageState {
 /// Source: Tracera `lib.rs:298-305`.
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct MatrixCell {
+    /// Source artifact key of the cell.
     pub from: String,
+    /// Target artifact key of the cell.
     pub to: String,
+    /// Trace links that make up this cell.
     pub trace_links: Vec<TraceLink>,
+    /// Aggregated coverage state of the cell.
     pub coverage: CoverageState,
 }
 
@@ -49,7 +53,9 @@ pub struct MatrixCell {
 /// Source: Tracera `lib.rs:291-296`.
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
 pub struct CoverageMatrix {
+    /// Cells keyed by `(from, to)` artifact key, sorted for stable iteration.
     pub cells: IndexMap<(String, String), MatrixCell>,
+    /// UTC time the matrix was generated.
     pub generated_at: DateTime<Utc>,
 }
 
@@ -58,10 +64,15 @@ pub struct CoverageMatrix {
 /// Source: Tracera `matrix.rs:13-21`.
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
 pub struct BuildResult {
+    /// The freshly built coverage matrix.
     pub matrix: CoverageMatrix,
+    /// UTC time the build completed.
     pub built_at: DateTime<Utc>,
+    /// Number of trace links consumed.
     pub link_count: usize,
+    /// Number of matrix cells produced.
     pub cell_count: usize,
+    /// Number of consumed links older than the staleness window.
     pub stale_links: usize,
 }
 
@@ -303,7 +314,7 @@ mod tests {
     fn added_removed_changed_diff() {
         let a = make_link(TraceLinkType::Verifies, 0.95, 1);
         let b = make_link(TraceLinkType::Verifies, 0.95, 1);
-        let old = build_matrix(&[a.clone()]).matrix;
+        let old = build_matrix(std::slice::from_ref(&a)).matrix;
         let new = build_matrix(&[a, b]).matrix;
         assert_eq!(added(&old, &new).len(), 1);
         assert_eq!(removed(&old, &new).len(), 0);

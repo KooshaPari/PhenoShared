@@ -12,10 +12,15 @@ use serde::{Deserialize, Serialize};
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "lowercase")]
 pub enum PolicyDomain {
+    /// Security posture policies (scans, hardening).
     Security,
+    /// Quality policies (tests, CI, lint).
     Quality,
+    /// Regulatory / process compliance policies.
     Compliance,
+    /// Performance and budget policies.
     Performance,
+    /// Team-defined domain outside the built-ins.
     Custom,
 }
 
@@ -35,18 +40,26 @@ impl PolicyDomain {
 /// The definition of a policy rule (stored as JSON blob).
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct PolicyDefinition {
+    /// Human-readable statement of what the rule requires.
     pub description: String,
+    /// How the rule is checked (manual vs automated).
     pub check: PolicyCheck,
 }
 
 /// An active policy rule in the registry.
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct PolicyRule {
+    /// Registry id of the rule.
     pub id: i64,
+    /// Domain the rule belongs to.
     pub domain: PolicyDomain,
+    /// The rule body (description + check mode).
     pub rule: PolicyDefinition,
+    /// Whether the rule is currently enforced.
     pub active: bool,
+    /// UTC creation time.
     pub created_at: DateTime<Utc>,
+    /// UTC last-modification time.
     pub updated_at: DateTime<Utc>,
 }
 
@@ -62,18 +75,26 @@ pub struct EvidenceRequirement {
 /// A governance rule captured inside a contract.
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct GovernanceRule {
+    /// Lifecycle transition the rule guards (e.g. `Active->Done`).
     pub transition: String,
+    /// Evidence that must exist for the transition.
     pub required_evidence: Vec<EvidenceRequirement>,
+    /// Registry ids of the [`PolicyRule`]s referenced by this rule.
     pub policy_refs: Vec<i64>,
 }
 
 /// A versioned governance contract bound to a feature.
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct GovernanceContract {
+    /// Contract id.
     pub id: i64,
+    /// Feature the contract is bound to.
     pub feature_id: i64,
+    /// Monotonic contract version.
     pub version: i32,
+    /// Rules that make up the contract.
     pub rules: Vec<GovernanceRule>,
+    /// UTC time the contract was bound to the feature.
     pub bound_at: DateTime<Utc>,
 }
 
@@ -83,11 +104,17 @@ pub struct GovernanceContract {
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
 pub enum EvidenceType {
+    /// Automated test-run output.
     TestResult,
+    /// CI pipeline artifact / log.
     CiOutput,
+    /// Peer-review sign-off record.
     ReviewApproval,
+    /// Security-scanner report.
     SecurityScan,
+    /// Linter / static-analysis output.
     LintResult,
+    /// Human attestation recorded manually.
     ManualAttestation,
 }
 
@@ -108,19 +135,28 @@ impl EvidenceType {
 /// An evidence artifact attached to a work package.
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Evidence {
+    /// Evidence record id.
     pub id: i64,
+    /// Work package the evidence belongs to.
     pub wp_id: i64,
+    /// Functional requirement the evidence satisfies.
     pub fr_id: String,
+    /// Kind of evidence recorded.
     pub evidence_type: EvidenceType,
+    /// Path to the evidence artifact.
     pub artifact_path: String,
+    /// Optional structured payload (metrics, hashes, etc.).
     pub metadata: Option<serde_json::Value>,
+    /// UTC time the evidence was recorded.
     pub created_at: DateTime<Utc>,
 }
 
 /// The result of a policy check.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 pub enum PolicyCheck {
+    /// A human must approve the policy.
     ManualApproval,
+    /// The policy is verified by an automated check.
     Automated,
 }
 

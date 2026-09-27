@@ -9,9 +9,13 @@ use crate::matrix::{CoverageMatrix, CoverageState};
 pub struct ProgressSnapshot {
     /// Total matrix cells counted as criteria.
     pub total_criteria: usize,
+    /// Cells in [`CoverageState::Covered`].
     pub covered: usize,
+    /// Cells in [`CoverageState::Partial`] or [`CoverageState::Stale`].
     pub partial: usize,
+    /// Cells in [`CoverageState::Missing`].
     pub missing: usize,
+    /// Cells in [`CoverageState::Conflict`].
     pub conflict: usize,
     /// Percent of cells in [`CoverageState::Covered`], 0–100.
     pub percent_covered: f32,
