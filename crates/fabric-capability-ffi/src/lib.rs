@@ -233,7 +233,9 @@ pub unsafe extern "C" fn fabric_capability_generate_key(out_key: *mut [u8; 32]) 
 /// the call. A null pointer is rejected before any read (defense in depth,
 /// not permission to pass null).
 #[no_mangle]
-pub unsafe extern "C" fn fabric_capability_key_id(key_bytes: *const u8) -> *mut std::os::raw::c_char {
+pub unsafe extern "C" fn fabric_capability_key_id(
+    key_bytes: *const u8,
+) -> *mut std::os::raw::c_char {
     if key_bytes.is_null() {
         return std::ptr::null_mut();
     }
