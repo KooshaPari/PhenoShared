@@ -3,6 +3,7 @@ name = "fabric-integration-tests"
 version = "0.1.0"
 edition = "2021"
 description = "Cross-crate integration tests for Phenotype Fabric"
+license.workspace = true
 publish = false
 
 # Shared helpers in src/lib.rs need these as regular dependencies.
