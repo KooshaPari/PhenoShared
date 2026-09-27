@@ -1,0 +1,51 @@
+# Herdr agent-detection rules for the stock ForgeCode CLI.
+#
+# Herdr's pane-detector scans terminal output looking for harness fingerprints
+# to figure out which agent is running where. This file is loaded into the
+# merged rule set at ~/.config/herdr/agent-detection/ when the plugin is
+# installed.
+#
+# Schema: each [[rule]] defines a regex matched against pane lines plus the
+# agent_id and source tag Herdr should record when the rule fires.
+#
+# This plugin's whole point is "no fork of ForgeCode required" — so we only
+# match stock upstream forgecode fingerprints here. Forks (e.g. any
+# KooshaPari/fork-* build) carry their own detection file in their own plugin.
+
+# Unique agent identifier reported to Herdr.
+agent_id = "forgecode"
+display_name = "ForgeCode"
+source_tag = "herdr:forgecode"
+priority = 80  # higher than upstream default (50); prefer this when ambiguous
+
+[[rule]]
+# The ForgeCode ASCII banner (the box around the logo upstream tailcallhq/forgecode
+# emits at startup). Match a few distinctive characters from the top of the box.
+pattern = "^\\s*_\\s+_\\s+_\\s*$|Version:\\s*v?[0-9]+\\.[0-9]+\\.[0-9]+(-[a-zA-Z0-9.]+)?"
+match_field = "pane_text"
+weight = 90
+
+[[rule]]
+# `forge --help` text contains `Forge` and the `forge` subcommand set.
+pattern = "\\bForge\\b.*\\b(agent|conversation|sessions|mcp|provider)\\b"
+match_field = "pane_text"
+weight = 60
+
+[[rule]]
+# Catch the binary itself if Herdr is matching on the shell command.
+pattern = "\\bforge(\\s+--?[a-z-]+|\\s+[a-z-]+)"
+match_field = "command_line"
+weight = 40
+
+[[rule]]
+# Default-fork suffix used by KooshaPari for ForgeCode forks (e.g. 1.5.3-k0.1.2).
+# Only present if a fork actually exists; absent for the stock install.
+pattern = "v[0-9]+\\.[0-9]+\\.[0-9]+-k\\.[0-9]+\\.[0-9]+\\.[0-9]+"
+match_field = "pane_text"
+weight = 95
+
+[meta]
+schema_version = 1
+maintainer = "KooshaPari"
+description = "Detect stock ForgeCode CLI in terminal panes. HeliosLite uses a separate detection file (herdr-helioslite)."
+notes = "Pattern priority is 80 (higher than upstream 50). Forks add a higher-priority rule in their own detection file."

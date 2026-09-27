@@ -1,0 +1,50 @@
+# Herdr plugin manifest for the stock ForgeCode CLI.
+#
+# Schema follows the canonical Herdr v1 plugin manifest shape
+# (top-level scalars + `[[actions]]` arrays), matching the local
+# `agent-cockpit.pilot` and upstream `leonardoacosta.herdr-jcode`
+# manifests.
+#
+# No fork of ForgeCode is required. The plugin wraps the stock `forge`
+# binary and emits pane.report_agent to the local Herdr daemon.
+
+id = "kooshapari.herdr-forgecode"
+name = "Herdr ForgeCode"
+version = "0.1.0"
+min_herdr_version = "0.8.0"
+description = "Reports ForgeCode working/idle lifecycle state plus session identity. Bash wrapper around the stock forge binary — no fork required. Cross-platform (mac, linux, git-bash on Windows)."
+platforms = ["macos", "linux", "windows"]
+
+[[agents]]
+kind = "forgecode"
+manifest = "agent-detection/forgecode.toml"
+
+[[actions]]
+id = "install"
+title = "Install ForgeCode lifecycle reporting"
+description = "Wire herdr-forgecode-report into the user's PATH and Herdr pane detector."
+command = ["sh", "install.sh"]
+
+[[actions]]
+id = "uninstall"
+title = "Uninstall ForgeCode lifecycle reporting"
+description = "Remove the plugin's hooks from the user's environment."
+command = ["sh", "uninstall.sh"]
+
+[[actions]]
+id = "status"
+title = "Show ForgeCode HERDR status"
+description = "Print which forge binary is detected and Herdr env vars."
+command = ["sh", "-c", "$HERDR_PLUGIN_ROOT/bin/herdr-forgecode-report status"]
+
+[[actions]]
+id = "doctor"
+title = "Diagnose ForgeCode integration"
+description = "Smoke-check: emit a sample session_start, verify Herdr receives it."
+command = ["sh", "-c", "$HERDR_PLUGIN_ROOT/bin/herdr-forgecode-report doctor"]
+
+[[actions]]
+id = "wrapper"
+title = "Run forge under the wrapper"
+description = "Spawn the stock forge binary with reporting; used as the command Herdr invokes per-pane."
+command = ["sh", "-c", "$HERDR_PLUGIN_ROOT/bin/herdr-forgecode-report wrapper"]

@@ -1,0 +1,239 @@
+#!/usr/bin/env bash
+# herdr-forgecode-report
+# Reports ForgeCode lifecycle events to the Herdr daemon via pane.report_agent.
+#
+# Modes (driven by first positional argument):
+#   session_start | start  -> working
+#   turn_end                 -> idle
+#   error | blocked          -> blocked
+#   session_end | end        -> done
+#   report <state> <message> -> arbitrary emit
+#   forge <args...>          -> wrapper: emit working, exec stock `forge`, emit final state
+#
+# Reads HERDR_PANE_ID and HERDR_WORKSPACE_ID from the environment (injected by
+# the Herdr host). If HERDR_PANE_ID is empty (standalone invocation), the
+# wrapper mode still passes through to the stock `forge` binary without
+# touching Herdr; other modes print a notice and exit 0 so callers don't break.
+#
+# Cross-platform: detects MSYS/Cygwin/git-bash on Windows and resolves the
+# `forge.exe` binary; emits a friendly notice if the binary is missing rather
+# than failing.
+#
+# Self-contained: no jq/python required. JSON built with hand-rolled escaping
+# so this works on macOS bash 3.2 + Linux bash 4 + git-bash.
+
+set -euo pipefail
+
+# ---------- Constants & helpers ----------
+
+PLUGIN_NAME="herdr-forgecode"
+SOURCE_TAG="herdr:forgecode"
+AGENT_ID="forgecode"
+DISPLAY_NAME="ForgeCode"
+STATE_LABELS="working=thinking,idle=ready,blocked=needs help,done=task done"
+
+# Resolve Herdr CLI. Default to `herdr` on PATH; honor explicit override.
+HERDR_BIN="${HERDR_BIN_PATH:-herdr}"
+
+# Plugin root for state-file side channel.
+PLUGIN_ROOT="${HERDR_PLUGIN_ROOT:-$HOME/.local/share/herdr/plugins/$PLUGIN_NAME}"
+
+# Detect Windows-ish shells early so binary resolution uses `.exe`.
+case "$(uname -s 2>/dev/null || echo unknown)" in
+  MINGW*|MSYS*|CYGWIN*) _HERDR_OS="windows" ;;
+  Darwin*)             _HERDR_OS="macos"  ;;
+  Linux*)              _HERDR_OS="linux"  ;;
+  *)                   _HERDR_OS="unix"   ;;
+esac
+
+_resolve_binary() {
+  local base="$1"
+  if [[ "$_HERDR_OS" == "windows" ]]; then
+    if command -v "${base}.exe" >/dev/null 2>&1; then printf '%s' "${base}.exe"; return 0; fi
+    if command -v "$base.exe" >/dev/null 2>&1; then printf '%s' "$base.exe"; return 0; fi
+  else
+    if command -v "$base" >/dev/null 2>&1; then printf '%s' "$base"; return 0; fi
+  fi
+  printf '%s' ""
+}
+
+cmd_ping() {
+  # Daemon liveness probe. `herdr status server` is the canonical surface;
+  # fall back to `herdr api call daemon.ping` if the daemon is offline so the
+  # host can still see "no-daemon" rather than a hard error.
+  if ! command -v "$HERDR_BIN" >/dev/null 2>&1; then
+    printf 'no-cli\n'
+    return 0
+  fi
+  if "$HERDR_BIN" status server >/dev/null 2>&1; then
+    printf 'pong\n'
+    return 0
+  fi
+  printf 'no-daemon\n'
+}
+
+_log() {
+  # Herdr-friendly log line on stderr; never on stdout (wrapper passes through).
+  printf '[%s] %s\n' "$PLUGIN_NAME" "$*" >&2
+}
+
+# JSON-escape a string for a flat string scalar (handles ", \, control chars).
+_json_escape() {
+  local s="${1-}"
+  s="${s//\\/\\\\}"
+  s="${s//\"/\\\"}"
+  s="${s//$'\n'/\\n}"
+  s="${s//$'\r'/\\r}"
+  s="${s//$'\t'/\\t}"
+  printf '%s' "$s"
+}
+
+# Emit one pane.report_agent call. Tolerant of Herdr CLI failures (best-effort).
+_emit() {
+  local state="$1" message="$2"
+  if [[ -z "${HERDR_PANE_ID:-}" ]]; then
+    return 0
+  fi
+  if ! command -v "$HERDR_BIN" >/dev/null 2>&1; then
+    _log "herdr CLI not found on PATH ($HERDR_BIN); skipping pane.report_agent"
+    return 0
+  fi
+
+  # Real Herdr CLI surface (per `herdr pane report-agent --help`):
+  #   herdr pane report-agent <PANE_ID>
+  #     --source <ID> --agent <LABEL> --state <STATUS>
+  #     [--message <TEXT>] [--seq <N>]
+  #     [--agent-session-id <ID>] [--agent-session-path <PATH>]
+  "$HERDR_BIN" pane report-agent "$HERDR_PANE_ID" \
+    --source "$SOURCE_TAG" \
+    --agent "$AGENT_ID" \
+    --state "$state" \
+    --message "$message" >/dev/null 2>&1 || _log "pane.report_agent failed (non-fatal)"
+
+  "$HERDR_BIN" pane report-metadata "$HERDR_PANE_ID" \
+    --source "$SOURCE_TAG" \
+    --title "${message:0:80}" \
+    --display-agent "$DISPLAY_NAME" >/dev/null 2>&1 || true
+
+  _write_state_file "$state" "$message"
+}
+
+# Persist current state to a JSON file under the plugin root (side-channel).
+# This is informational and best-effort; failures here never abort the script.
+_write_state_file() {
+  local state="$1" message="$2"
+  local state_dir="$PLUGIN_ROOT/state"
+  mkdir -p "$state_dir" 2>/dev/null || true
+
+  local pane="${HERDR_PANE_ID:-unknown}"
+  local ts
+  ts="$(date -u +'%Y-%m-%dT%H:%M:%SZ' 2>/dev/null || echo "1970-01-01T00:00:00Z")"
+  local esc_msg
+  esc_msg="$(_json_escape "${message:0:200}")"
+
+  printf '{"pane_id":"%s","harness":"%s","status":"%s","message":"%s","timestamp":"%s"}\n' \
+    "$pane" "$AGENT_ID" "$state" "$esc_msg" "$ts" \
+    > "$state_dir/agent-${pane}.json" 2>/dev/null || true
+}
+
+# ---------- Argument routing ----------
+
+ACTION="${1:-report}"
+shift || true
+
+# Standalone (no Herdr pane context): only wrapper mode is meaningful.
+if [[ -z "${HERDR_PANE_ID:-}" ]]; then
+  case "$ACTION" in
+    forge|wrapper)
+      _resolve_binary() { command -v "${1}.exe" >/dev/null 2>&1 && printf '%s' "${1}.exe" || command -v "$1" 2>/dev/null || printf ''; }
+      bin="$(_resolve_binary forge)"
+      if [[ -z "$bin" ]]; then
+        _log "forge binary not found on PATH; cannot run wrapper"
+        exit 127
+      fi
+      exec "$bin" "$@"
+      ;;
+    *)
+      _log "no HERDR_PANE_ID set and no wrapper requested; nothing to do"
+      exit 0
+      ;;
+  esac
+fi
+
+case "$ACTION" in
+  start|session_start)
+    _msg="ForgeCode session started"
+    if [[ $# -gt 0 ]]; then _msg="ForgeCode: $*"; fi
+    _emit working "$_msg"
+    ;;
+
+  end|session_end)
+    _emit "done" "ForgeCode session ended"
+    ;;
+
+  turn_end)
+    status="${1:-ok}"
+    if [[ "$status" == "error" ]]; then
+      shift || true
+      _emit blocked "ForgeCode error: ${1:-unknown}"
+    else
+      shift || true
+      _emit idle "${*:-Turn complete}"
+    fi
+    ;;
+
+  blocked|error)
+    _msg="${*:-Waiting for input}"
+    _emit blocked "$_msg"
+    ;;
+
+  working)
+    _msg="${*:-Working...}"
+    _emit working "$_msg"
+    ;;
+
+  idle)
+    _msg="${*:-Idle}"
+    _emit idle "$_msg"
+    ;;
+
+  report)
+    state="${1:-idle}"
+    shift || true
+    message="${*:-No message}"
+    _emit "$state" "$message"
+    ;;
+
+  doctor|diag)
+    # Health check: binary, herdr CLI, daemon liveness, final pane ping.
+    bin="$(_resolve_binary forge)"
+    if [[ -z "$bin" ]]; then
+      printf 'binary: missing (need forge on PATH)\n'
+    else
+      printf 'binary: %s (%s)\n' "$bin" "$("$bin" --version 2>/dev/null | head -1 || echo 'unknown-version')"
+    fi
+    if ! command -v "$HERDR_BIN" >/dev/null 2>&1; then
+      printf 'herdr:   no-cli\n'
+    else
+      printf 'herdr:   %s\n' "$(cmd_ping)"
+    fi
+    printf 'pane:    %s\n' "${HERDR_PANE_ID:-unset}"
+    printf 'agent:   %s\n' "$AGENT_ID"
+    ;;
+
+  forge|wrapper)
+    _resolve_binary() { command -v "${1}.exe" >/dev/null 2>&1 && printf '%s' "${1}.exe" || command -v "$1" 2>/dev/null || printf ''; }
+    bin="$(_resolve_binary forge)"
+    if [[ -z "$bin" ]]; then
+      _log "forge binary not found on PATH; cannot run wrapper"
+      exit 127
+    fi
+    exec "$bin" "$@"
+    ;;
+  *)
+    _log "no HERDR_PANE_ID set and no wrapper requested; nothing to do"
+    exit 0
+    ;;
+esac
+
+exit 0

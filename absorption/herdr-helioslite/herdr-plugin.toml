@@ -1,0 +1,52 @@
+# Herdr plugin manifest for HeliosLite.
+#
+# Schema follows the canonical Herdr v1 plugin manifest shape
+# (top-level scalars + `[[agents]]` + `[[actions]]` arrays), matching
+# the local `agent-cockpit.pilot` and upstream `leonardoacosta.herdr-jcode`
+# manifests.
+#
+# No fork of HeliosLite is required. The plugin wraps the stock
+# `helioslite` binary (if present on PATH) and emits pane.report_agent
+# to the local Herdr daemon. When `helioslite` is not installed the
+# plugin registers cleanly anyway and surfaces a graceful advisory.
+
+id = "kooshapari.herdr-helioslite"
+name = "Herdr HeliosLite"
+version = "0.1.0"
+min_herdr_version = "0.8.0"
+description = "Reports HeliosLite working/idle/blocked lifecycle state plus session identity. Bash wrapper around the stock helioslite binary — no fork required. Cross-platform (mac, linux, git-bash on Windows). HeliosLite is optional; the plugin installs cleanly even if it is not on PATH."
+platforms = ["macos", "linux", "windows"]
+
+[[agents]]
+kind = "helioslite"
+manifest = "agent-detection/helioslite.toml"
+
+[[actions]]
+id = "install"
+title = "Install HeliosLite lifecycle reporting"
+description = "Wire herdr-helioslite-report into PATH and the Herdr pane detector. Does not require HeliosLite itself."
+command = ["sh", "install.sh"]
+
+[[actions]]
+id = "uninstall"
+title = "Uninstall HeliosLite lifecycle reporting"
+description = "Remove the plugin's hooks from the user's environment."
+command = ["sh", "uninstall.sh"]
+
+[[actions]]
+id = "status"
+title = "Show HeliosLite HERDR status"
+description = "Print whether helioslite is on PATH and Herdr env vars."
+command = ["sh", "-c", "$HERDR_PLUGIN_ROOT/bin/herdr-helioslite-report status"]
+
+[[actions]]
+id = "doctor"
+title = "Diagnose HeliosLite integration"
+description = "Smoke-check: emit a sample session_start, verify Herdr receives it."
+command = ["sh", "-c", "$HERDR_PLUGIN_ROOT/bin/herdr-helioslite-report doctor"]
+
+[[actions]]
+id = "wrapper"
+title = "Run helioslite under the wrapper"
+description = "Spawn the stock helioslite binary with reporting; used as the command Herdr invokes per-pane. Exits 0 with an advisory if helioslite is not installed."
+command = ["sh", "-c", "$HERDR_PLUGIN_ROOT/bin/herdr-helioslite-report wrapper"]

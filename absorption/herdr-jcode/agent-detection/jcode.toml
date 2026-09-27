@@ -1,0 +1,70 @@
+# Herdr agent-detection manifest for the stock Jcode CLI.
+#
+# Schema matches Herdr's canonical agent-detection manifests (see the cached
+# remote manifests under ~/.local/state/herdr/agent-detection/remote/*.toml):
+# a top-level `id`/`version`/`min_engine_version` plus `[[rules]]` entries with
+# `state`, `priority`, `region`, and match predicates (`regex` / `line_regex` /
+# `contains` / `any`).
+#
+# Jcode reports lifecycle state authoritatively through the `jcode-herdr`
+# reporter (socket `pane.report_agent`). These screen rules are the fallback
+# for stock builds without that reporter, and for `herdr agent explain`.
+#
+# This plugin's whole point is "no fork of Jcode required" — so we only match
+# stock upstream jcode fingerprints here.
+
+id = "jcode"
+version = "2026.09.20.1"
+min_engine_version = 2
+aliases = ["jcode"]
+
+[[rules]]
+id = "jcode_prompt_idle"
+state = "idle"
+priority = 900
+region = "bottom_non_empty_lines(6)"
+line_regex = ['^\s*❯\s*$']
+
+[[rules]]
+id = "jcode_permission_blocked"
+state = "blocked"
+priority = 1000
+region = "bottom_non_empty_lines(20)"
+visible_blocker = true
+any = [
+  { contains = ["Do you want to proceed?"] },
+  { contains = ["Allow once"] },
+  { contains = ["Yes, allow"] },
+]
+
+[[rules]]
+id = "jcode_streaming_working"
+state = "working"
+priority = 950
+region = "bottom_non_empty_lines(20)"
+visible_working = true
+contains = ["Streaming..."]
+
+[[rules]]
+id = "jcode_baking_working"
+state = "working"
+priority = 940
+region = "bottom_non_empty_lines(20)"
+visible_working = true
+contains = ["Baking..."]
+
+[[rules]]
+id = "jcode_thinking_working"
+state = "working"
+priority = 930
+region = "bottom_non_empty_lines(20)"
+visible_working = true
+contains = ["Thinking..."]
+
+[[rules]]
+id = "jcode_spinner_working"
+state = "working"
+priority = 900
+region = "bottom_non_empty_lines(3)"
+visible_working = true
+line_regex = ['^●\s+']
