@@ -11,6 +11,9 @@ use crate::{
     manifest::CheckerManifest,
 };
 
+/// A single check function in the check suite.
+type CheckFn = fn(&CapabilityDescriptor, &CheckerManifest) -> Result<(), CheckOutcome>;
+
 /// Runs the full check suite against a host descriptor and a manifest.
 ///
 /// Returns a `Decision` with `Admit` if all reject-level checks pass,
@@ -23,7 +26,7 @@ pub fn check(descriptor: &CapabilityDescriptor, manifest: &CheckerManifest) -> D
 
 /// Public for testing — runs every check and returns the raw outcomes.
 pub fn run_all(descriptor: &CapabilityDescriptor, manifest: &CheckerManifest) -> Vec<CheckOutcome> {
-    let fns: Vec<fn(&CapabilityDescriptor, &CheckerManifest) -> Result<(), CheckOutcome>> = vec![
+    let fns: Vec<CheckFn> = vec![
         checks::check_memory_sufficient,
         checks::check_cores_sufficient,
         checks::check_storage_sufficient,

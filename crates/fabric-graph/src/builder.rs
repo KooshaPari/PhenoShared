@@ -25,6 +25,8 @@ impl TopologyBuilder {
         self
     }
 
+    // Public builder API; renaming would be a breaking change (clippy::should_implement_trait).
+    #[allow(clippy::should_implement_trait)]
     pub fn add(mut self, node: Node) -> Self {
         self.inner.add_node(node);
         self
@@ -259,6 +261,8 @@ impl MultiIntent {
         }
     }
 
+    // Public builder API; renaming would be a breaking change (clippy::should_implement_trait).
+    #[allow(clippy::should_implement_trait)]
     pub fn add(mut self, intent: Intent) -> Self {
         self.intents.push(intent);
         self

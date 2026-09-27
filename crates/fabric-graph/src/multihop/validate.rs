@@ -86,7 +86,7 @@ mod tests {
 
     use super::*;
     use crate::{
-        model::{Edge, EdgeId, Node, NodeId, RoutePlanId, TopologyEpoch, TopologyMeta},
+        model::{Edge, EdgeId, NodeId, RoutePlanId, TopologyEpoch, TopologyMeta},
         LocalityTier,
     };
 

@@ -146,11 +146,7 @@ fn build_steps(
             &edge.from
         };
         let _upstream_node = topology.node(upstream).expect("edge references valid node");
-        if intent
-            .preferred_node
-            .as_ref()
-            .map_or(false, |n| n == upstream)
-        {
+        if intent.preferred_node.as_ref() == Some(upstream) {
             // Source is already the preferred node — direct execution
             (upstream.clone(), None, "source-execute".to_string())
         } else {
@@ -224,9 +220,7 @@ mod tests {
     use fabric_capability::locality::LocalityTier;
 
     use super::*;
-    use crate::model::{
-        CapabilityRef, Edge, EdgeId, IntentId, IntentRequirements, Node, NodeId, TopologyEpoch,
-    };
+    use crate::model::{CapabilityRef, Edge, EdgeId, IntentId, IntentRequirements, Node, NodeId};
 
     fn make_topology() -> Topology {
         let mut topo = Topology::new();

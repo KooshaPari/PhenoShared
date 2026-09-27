@@ -97,7 +97,7 @@ pub fn negotiate(topology: &Topology, intent: &Intent) -> NegotiationResult {
     });
 
     // Assign ranks
-    for (_i, _cand) in candidates.iter_mut().enumerate() {
+    for _cand in candidates.iter_mut() {
         // We need to update the score rank — but ScoreBreakdown doesn't have rank.
         // Instead, we'll track rank in the candidate.
     }
@@ -197,13 +197,10 @@ fn format_reason(node: &Node, breakdown: &ScoreBreakdown, _reqs: &IntentRequirem
 
 #[cfg(test)]
 mod tests {
-    use chrono::Utc;
     use fabric_capability::locality::LocalityTier;
 
     use super::*;
-    use crate::model::{
-        CapabilityRef, EdgeId, IntentId, IntentRequirements, NodeId, RoutePlanId, TopologyEpoch,
-    };
+    use crate::model::{CapabilityRef, IntentId, IntentRequirements, NodeId};
 
     fn make_topo() -> Topology {
         let mut topo = Topology::new();

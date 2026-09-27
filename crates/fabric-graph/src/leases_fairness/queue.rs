@@ -151,10 +151,8 @@ impl FairnessQueue {
             FairnessPolicy::Fifo
             | FairnessPolicy::WeightedRoundRobin {
                 ..
-            } => {
-                if !self.rotation.contains(tenant) {
-                    self.rotation.push_back(tenant.clone());
-                }
+            } if !self.rotation.contains(tenant) => {
+                self.rotation.push_back(tenant.clone());
             },
             _ => {},
         }

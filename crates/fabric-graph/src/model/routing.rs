@@ -89,9 +89,9 @@ impl RoutePlan {
         }
         let step = &self.steps[0];
         if let Some(_edge_id) = &step.via_edge {
-            if let Some(_edge) = self.steps.get(0) {
+            if let Some(_edge) = self.steps.first() {
                 // Check if the edge locality tier is L0 or L1
-                if let Some(_e) = step.node.to_string().is_empty().then(|| None::<&Edge>) {
+                if let Some(_e) = step.node.to_string().is_empty().then_some(None::<&Edge>) {
                     // We don't have the edge here; check via topology
                 }
             }
@@ -279,7 +279,7 @@ mod tests {
         let mut topology = Topology::new();
         topology.add_node(Node::new(NodeId::new("a"), LocalityTier::L1));
         topology.add_node(Node::new(NodeId::new("b"), LocalityTier::L2));
-        topology.add_edge(Edge::new(
+        let _ = topology.add_edge(Edge::new(
             EdgeId::new("a-b"),
             NodeId::new("a"),
             NodeId::new("b"),

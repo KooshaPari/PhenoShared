@@ -6,8 +6,7 @@
 use fabric_graph::{
     compile::{compile, compile_all},
     model::{
-        Edge, EdgeId, Intent, IntentId, IntentRequirements, Node, NodeId, RoutePlan, Topology,
-        TopologyEpoch, TopologyMeta,
+        Edge, EdgeId, Intent, IntentId, IntentRequirements, Node, NodeId, Topology, TopologyMeta,
     },
     multihop::{builtin_stages, compile_multihop},
     LocalityTier,

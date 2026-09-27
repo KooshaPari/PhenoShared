@@ -217,7 +217,7 @@ impl SurfaceRegistry {
 mod tests {
     use super::*;
     use crate::{
-        builder::{make_plan, make_step, TopologyBuilder},
+        builder::{make_step, TopologyBuilder},
         surface::LeaseState,
         surface_ops::{bind, new_lease},
         LocalityTier, TrustLevel,
@@ -293,7 +293,7 @@ mod tests {
         let handle = lease.handle;
         reg.insert(handle, lease, spec);
 
-        let invalidations = reg.notify_node_failure(&[a.clone()]);
+        let invalidations = reg.notify_node_failure(std::slice::from_ref(&a));
         assert_eq!(invalidations.len(), 1);
         assert_eq!(invalidations[0].handle, handle);
         assert!(reg.is_empty());
@@ -382,8 +382,6 @@ mod tests {
 
     #[test]
     fn invalidation_to_wire_json_matches_spec025_shape() {
-        use crate::model::RoutePlanId;
-
         let (topo, _a, _b) = two_node_topology();
         let mut reg = SurfaceRegistry::new();
 

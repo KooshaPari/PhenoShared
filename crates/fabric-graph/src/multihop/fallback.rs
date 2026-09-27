@@ -135,7 +135,7 @@ mod tests {
 
     use super::*;
     use crate::{
-        model::{Edge, IntentId, Node, NodeId, RoutePlanId, TopologyEpoch, TopologyMeta},
+        model::{Edge, IntentId, NodeId, RoutePlanId, TopologyEpoch, TopologyMeta},
         LocalityTier,
     };
 
