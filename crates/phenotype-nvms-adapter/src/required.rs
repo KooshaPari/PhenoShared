@@ -2,7 +2,7 @@
 //! target host must have to satisfy it.
 
 use fabric_capability::descriptor::{AudioCapabilities, ComputeCapabilities, NetworkCapabilities};
-use phenotype_manifest::Manifest;
+use nvms_manifest::Manifest;
 use thiserror::Error;
 
 /// Result of mapping an NVMS manifest to a required-capabilities block.
@@ -43,7 +43,7 @@ pub enum RequiredCapabilitiesError {
 /// # Example
 ///
 /// ```
-/// use phenotype_manifest::Manifest;
+/// use nvms_manifest::Manifest;
 /// use phenotype_nvms_adapter::required_capabilities;
 ///
 /// let json = r#"{

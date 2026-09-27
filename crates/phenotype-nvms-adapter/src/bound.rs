@@ -3,7 +3,7 @@
 
 use chrono::{DateTime, Utc};
 use fabric_capability::descriptor::CapabilityDescriptor;
-use phenotype_manifest::Manifest;
+use nvms_manifest::Manifest;
 use serde::{Deserialize, Serialize};
 use thiserror::Error;
 use uuid::Uuid;

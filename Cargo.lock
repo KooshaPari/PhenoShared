@@ -3253,7 +3253,7 @@ dependencies = [
  "blake3",
  "chrono",
  "ed25519-dalek",
- "jsonschema",
+ "jsonschema 0.27.1",
  "proptest",
  "rand 0.8.8",
  "schemars 0.8.22",
@@ -3655,6 +3655,17 @@ checksum = "b95f7c0680e4142284cf8b22c14a476e87d61b004a3a0861872b32ef7ead40a2"
 dependencies = [
  "bit-set 0.5.3",
  "regex",
+]
+
+[[package]]
+name = "fancy-regex"
+version = "0.13.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "531e46835a22af56d1e3b66f04844bed63158bc094a628bec1d321d9b4c44bf2"
+dependencies = [
+ "bit-set 0.5.3",
+ "regex-automata",
+ "regex-syntax",
 ]
 
 [[package]]
@@ -5218,6 +5229,33 @@ dependencies = [
 
 [[package]]
 name = "jsonschema"
+version = "0.24.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "0dcc912bffdb292c8824cf79ff785799ebfa73d53e54e1d2c305894995e3f69b"
+dependencies = [
+ "ahash",
+ "anyhow",
+ "base64 0.22.1",
+ "bytecount",
+ "email_address",
+ "fancy-regex 0.13.0",
+ "fraction",
+ "idna",
+ "itoa",
+ "num-cmp",
+ "once_cell",
+ "percent-encoding",
+ "referencing 0.24.3",
+ "regex-syntax",
+ "reqwest 0.12.28",
+ "serde",
+ "serde_json",
+ "url",
+ "uuid-simd",
+]
+
+[[package]]
+name = "jsonschema"
 version = "0.27.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "c9deec35f105267485e0b85b4da7861d444ad498bd476418ec10aeaec3c2ead1"
@@ -5233,7 +5271,7 @@ dependencies = [
  "num-cmp",
  "once_cell",
  "percent-encoding",
- "referencing",
+ "referencing 0.27.1",
  "regex-syntax",
  "reqwest 0.12.28",
  "serde",
@@ -6420,6 +6458,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "nvms-manifest"
+version = "0.2.0"
+dependencies = [
+ "jsonschema 0.24.3",
+ "schemars 1.2.2",
+ "serde",
+ "serde_json",
+ "thiserror 2.0.20",
+]
+
+[[package]]
 name = "objc"
 version = "0.2.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -7084,17 +7133,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "phenotype-manifest"
-version = "0.2.0"
-source = "git+https://github.com/KooshaPari/nanovms.git#22207f33c60cf0c0e5a259a750e443e5257f4ec5"
-dependencies = [
- "schemars 1.2.2",
- "serde",
- "serde_json",
- "thiserror 2.0.20",
-]
-
-[[package]]
 name = "phenotype-mcp"
 version = "0.3.10"
 dependencies = [
@@ -7108,7 +7146,7 @@ version = "0.1.0"
 dependencies = [
  "chrono",
  "fabric-capability",
- "phenotype-manifest",
+ "nvms-manifest",
  "schemars 0.8.22",
  "serde",
  "serde_json",
@@ -8330,6 +8368,19 @@ dependencies = [
  "proc-macro2",
  "quote",
  "syn 3.0.5",
+]
+
+[[package]]
+name = "referencing"
+version = "0.24.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "bfd514950c8d8153064fad28508b884838e9ce6a1d8571bda01db4dfaa1e7be3"
+dependencies = [
+ "ahash",
+ "fluent-uri",
+ "once_cell",
+ "percent-encoding",
+ "serde_json",
 ]
 
 [[package]]
@@ -9837,7 +9888,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "32497e9a4c7b38532efcdebeef879707aa9f794296a4f0244f6f69e9bc8574bd"
 dependencies = [
  "fastrand",
- "getrandom 0.3.4",
+ "getrandom 0.4.3",
  "once_cell",
  "rustix 1.1.4",
  "windows-sys 0.61.2",
@@ -10767,7 +10818,7 @@ dependencies = [
  "serde",
  "tempfile",
  "textwrap",
- "toml 0.8.2",
+ "toml 0.9.12+spec-1.1.0",
  "uniffi_internal_macros",
  "uniffi_meta",
  "uniffi_pipeline",
@@ -10823,7 +10874,7 @@ dependencies = [
  "quote",
  "serde",
  "syn 2.0.119",
- "toml 0.8.2",
+ "toml 0.9.12+spec-1.1.0",
  "uniffi_meta",
 ]
 

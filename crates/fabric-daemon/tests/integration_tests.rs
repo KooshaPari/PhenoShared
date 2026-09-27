@@ -450,7 +450,7 @@ fn frame_transport_session_init() {
 #[test]
 fn nvms_to_checker_flow() {
     use phenotype_nvms_adapter::{
-        phenotype_manifest::validate as validate_manifest, required_capabilities,
+        nvms_manifest::validate as validate_manifest, required_capabilities,
     };
 
     // 1. Parse a minimal NVMS manifest JSON.

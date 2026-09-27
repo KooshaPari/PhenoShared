@@ -59,6 +59,7 @@ members = [
     "crates/fabric-gui",
     "crates/fabric-web",
     "crates/fabric-frame-transport",
+    "crates/nvms-manifest",
     "crates/phenotype-nvms-adapter",
     "crates/fabric-integration-tests",
     "crates/fabric-tui",

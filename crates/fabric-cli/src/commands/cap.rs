@@ -149,10 +149,9 @@ fn import_nvms(args: &ImportNvmsArgs) -> Result<()> {
     let text = std::fs::read_to_string(&args.manifest)
         .with_context(|| format!("read {}", args.manifest.display()))?;
     // Try JSON first, then YAML
-    let manifest: phenotype_nvms_adapter::phenotype_manifest::Manifest =
-        serde_json::from_str(&text)
-            .or_else(|_| serde_yaml::from_str(&text))
-            .context("parse manifest (expected JSON or YAML)")?;
+    let manifest: phenotype_nvms_adapter::nvms_manifest::Manifest = serde_json::from_str(&text)
+        .or_else(|_| serde_yaml::from_str(&text))
+        .context("parse manifest (expected JSON or YAML)")?;
     let req_caps = phenotype_nvms_adapter::required_capabilities(&manifest)
         .context("compute required capabilities")?;
     // RequiredCapabilities doesn't implement Serialize; use Debug output
