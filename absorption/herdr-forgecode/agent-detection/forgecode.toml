@@ -15,7 +15,12 @@
 # Unique agent identifier reported to Herdr.
 agent_id = "forgecode"
 display_name = "ForgeCode"
-source_tag = "herdr:forgecode"
+# MUST NOT start with `herdr:` -- that prefix is reserved for Herdr's own
+# built-in integrations (per herdr.dev/docs/add-herdr-support/). This file is
+# user-installed, so it takes a custom tag. Must match SOURCE_TAG in
+# bin/herdr-forgecode-report so screen-manifest detection and the reporting
+# hook record the same source (one authority per pane).
+source_tag = "custom:forgecode"
 priority = 80  # higher than upstream default (50); prefer this when ambiguous
 
 [[rule]]

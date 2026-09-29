@@ -27,10 +27,80 @@ set -euo pipefail
 # ---------- Constants & helpers ----------
 
 PLUGIN_NAME="herdr-forgecode"
-SOURCE_TAG="herdr:forgecode"
+# Source tag MUST NOT start with `herdr:` -- Herdr's own docs ("Add Herdr
+# support to your agent") say: "Don't start it with herdr:, because Herdr's
+# own integrations use that prefix." A `herdr:`-prefixed custom source has
+# its session ref and resume command silently dropped (report returns ok,
+# nothing stored), which is why forge panes restored as empty shells.
+SOURCE_TAG="custom:forgecode"
 AGENT_ID="forgecode"
 DISPLAY_NAME="ForgeCode"
 STATE_LABELS="working=thinking,idle=ready,blocked=needs help,done=task done"
+
+# Resume command advertised alongside the next state report: the argv that
+# reopens the current session after a Herdr server restart (0.9.2+). Callers
+# set it before _emit; left empty when no session id is known. macOS ships
+# bash 3.2 where `"${arr[@]}"` on an empty array aborts under `set -u`, so
+# expansion is gated on the scalar sentinel rather than the array length.
+_RESUME_ARGV=()
+_RESUME_ARGV_SET=0
+_RESUME_SESSION_ID=""
+
+# Command name advertised for resume. Must be a plain name on PATH, never a
+# path (Herdr rejects anything else with `invalid_resume_argv`). Note the
+# resolved binary warns it is deprecated in favor of `helioslite`; flip this
+# one constant if/when the wrapper targets helioslite instead.
+RESUME_CMD_NAME="forge"
+
+# Herdr added the trailing `-- [RESUME_ARG]...` syntax in 0.9.2. On an older
+# CLI the trailing args are rejected outright, which would fail the whole
+# state report -- so probe once, cache, and omit the argv when unsupported.
+_HERDR_HAS_RESUME=""
+_supports_resume_argv() {
+  if [[ -z "$_HERDR_HAS_RESUME" ]]; then
+    if "$HERDR_BIN" pane report-agent --help 2>/dev/null | grep -q 'RESUME_ARG'; then
+      _HERDR_HAS_RESUME="yes"
+    else
+      _HERDR_HAS_RESUME="no"
+    fi
+  fi
+  [[ "$_HERDR_HAS_RESUME" == "yes" ]]
+}
+
+# Conversation id this run uses: an explicit --conversation-id from the
+# caller, else a freshly minted UUID. Minting is what makes restore work --
+# Herdr re-runs the advertised argv and `--conversation-id` resumes (or
+# creates) exactly that row, verified against ~/.forge/.forge.writes.db.
+_existing_conversation_id() {
+  local prev="" a
+  for a in "$@"; do
+    if [[ "$prev" == "--conversation-id" ]]; then
+      printf '%s' "$a"
+      return 0
+    fi
+    case "$a" in
+      --conversation-id=*)
+        printf '%s' "${a#--conversation-id=}"
+        return 0
+        ;;
+    esac
+    prev="$a"
+  done
+  return 1
+}
+
+_mint_uuid() {
+  if command -v uuidgen >/dev/null 2>&1; then
+    uuidgen | tr 'A-Z' 'a-z'
+  elif [[ -r /proc/sys/kernel/random/uuid ]]; then
+    tr -d '\n' < /proc/sys/kernel/random/uuid
+  else
+    # Last-resort weak id: only reached without uuidgen or /proc.
+    printf '%08x-%04x-%04x-%04x-%012x' \
+      "$RANDOM$RANDOM" "$RANDOM" "$RANDOM" "$RANDOM" "$RANDOM$RANDOM$RANDOM"
+  fi
+}
+
 
 # Resolve Herdr CLI. Default to `herdr` on PATH; honor explicit override.
 HERDR_BIN="${HERDR_BIN_PATH:-herdr}"
@@ -99,16 +169,40 @@ _emit() {
     return 0
   fi
 
+  # Later reports arrive as fresh processes with no in-memory conversation
+  # id, so reload the one the wrapper minted. Re-advertising on every report
+  # keeps agent_resume intact if a state report overwrites the session ref.
+  if [[ "$_RESUME_ARGV_SET" -ne 1 ]]; then
+    _load_persisted_conversation_id || true
+  fi
+
   # Real Herdr CLI surface (per `herdr pane report-agent --help`):
   #   herdr pane report-agent <PANE_ID>
   #     --source <ID> --agent <LABEL> --state <STATUS>
   #     [--message <TEXT>] [--seq <N>]
   #     [--agent-session-id <ID>] [--agent-session-path <PATH>]
-  "$HERDR_BIN" pane report-agent "$HERDR_PANE_ID" \
-    --source "$SOURCE_TAG" \
-    --agent "$AGENT_ID" \
-    --state "$state" \
-    --message "$message" >/dev/null 2>&1 || _log "pane.report_agent failed (non-fatal)"
+  #     [-- <RESUME_ARG>...]      # 0.9.2+; first token must be a plain cmd name
+  #
+  # The resume argv rides on this SAME state report: Herdr stores it only
+  # while the reporting source holds the pane, and this first report is what
+  # claims the pane. Splitting them across two calls returns
+  # `resume_not_accepted` and stores nothing.
+  local -a _report
+  _report=(
+    pane report-agent "$HERDR_PANE_ID"
+    --source "$SOURCE_TAG"
+    --agent "$AGENT_ID"
+    --state "$state"
+    --message "$message"
+  )
+  if [[ -n "$_RESUME_SESSION_ID" ]]; then
+    _report+=(--agent-session-id "$_RESUME_SESSION_ID")
+  fi
+  if [[ "$_RESUME_ARGV_SET" -eq 1 ]] && _supports_resume_argv; then
+    _report+=(-- "${_RESUME_ARGV[@]}")
+  fi
+  "$HERDR_BIN" "${_report[@]}" >/dev/null 2>&1 \
+    || _log "pane.report_agent failed (non-fatal)"
 
   "$HERDR_BIN" pane report-metadata "$HERDR_PANE_ID" \
     --source "$SOURCE_TAG" \
@@ -134,6 +228,32 @@ _write_state_file() {
   printf '{"pane_id":"%s","harness":"%s","status":"%s","message":"%s","timestamp":"%s"}\n' \
     "$pane" "$AGENT_ID" "$state" "$esc_msg" "$ts" \
     > "$state_dir/agent-${pane}.json" 2>/dev/null || true
+}
+
+# Conversation id is written once per pane so that later report invocations
+# (fresh processes) can re-advertise the identical resume argv. Best-effort.
+_persist_conversation_id() {
+  local pane="${HERDR_PANE_ID:-unknown}"
+  local state_dir="$PLUGIN_ROOT/state"
+  mkdir -p "$state_dir" 2>/dev/null || true
+  printf '%s' "$1" > "$state_dir/conversation-${pane}" 2>/dev/null || true
+}
+
+_load_persisted_conversation_id() {
+  local pane="${HERDR_PANE_ID:-unknown}"
+  local state_dir="$PLUGIN_ROOT/state"
+  local f="$state_dir/conversation-${pane}"
+  [[ -r "$f" ]] || return 1
+  local cid
+  cid="$(tr -d ' \t\n\r' < "$f" 2>/dev/null)"
+  # Reject anything that is not a plausible uuid -- never advertise argv
+  # built from a truncated or corrupted file.
+  [[ "$cid" =~ ^[0-9a-fA-F-]{36}$ ]] || return 1
+  [[ -n "$cid" ]] || return 1
+  _RESUME_SESSION_ID="$cid"
+  _RESUME_ARGV=("$RESUME_CMD_NAME" --conversation-id "$cid")
+  _RESUME_ARGV_SET=1
+  return 0
 }
 
 # ---------- Argument routing ----------
@@ -228,7 +348,29 @@ case "$ACTION" in
       _log "forge binary not found on PATH; cannot run wrapper"
       exit 127
     fi
-    exec "$bin" "$@"
+    # Claim the pane and advertise the resume argv BEFORE exec'ing forge:
+    # after exec there is no shell left to report from, and Herdr stores a
+    # resume command only from the source that holds the pane. The argv we
+    # advertise is exactly the command we are about to run, so a restore
+    # replays it and lands on the same conversation row.
+    if cid="$(_existing_conversation_id "$@")"; then
+      # Caller pinned the conversation: reuse it verbatim and do not add a
+      # second --conversation-id (a duplicate flag is rejected on some
+      # builds), but still advertise it so the pane restores to that row.
+      _RESUME_SESSION_ID="$cid"
+      _RESUME_ARGV=("$RESUME_CMD_NAME" --conversation-id "$cid")
+      _RESUME_ARGV_SET=1
+      _persist_conversation_id "$cid"
+      _emit working "ForgeCode session started"
+      exec "$bin" "$@"
+    fi
+    cid="$(_mint_uuid)"
+    _RESUME_SESSION_ID="$cid"
+    _RESUME_ARGV=("$RESUME_CMD_NAME" --conversation-id "$cid")
+    _RESUME_ARGV_SET=1
+    _persist_conversation_id "$cid"
+    _emit working "ForgeCode session started"
+    exec "$bin" --conversation-id "$cid" "$@"
     ;;
   *)
     _log "no HERDR_PANE_ID set and no wrapper requested; nothing to do"
