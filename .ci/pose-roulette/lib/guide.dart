@@ -12,9 +12,9 @@ Matrix4 guideTransform(Size size, ui.Image image, double x, double y, double sca
 class GuideLayer extends StatelessWidget {
   const GuideLayer({super.key,required this.source,required this.mask,required this.mode,
     required this.opacity,required this.dim,required this.blur,required this.x,required this.y,
-    required this.scale,required this.angle,required this.mirror});
+    required this.scale,required this.angle,required this.mirror,this.signalColor});
   final ui.Image source;final ui.Image? mask;final String mode;
-  final double opacity,dim,blur,x,y,scale,angle;final bool mirror;
+  final double opacity,dim,blur,x,y,scale,angle;final bool mirror;final Color? signalColor;
   @override Widget build(BuildContext context)=>IgnorePointer(child:LayoutBuilder(builder:(context,c){
     final size=Size(c.maxWidth,c.maxHeight),matte=mask;
     if(mode=='off')return const SizedBox.expand();
@@ -25,14 +25,14 @@ class GuideLayer extends StatelessWidget {
           guideTransform(size,matte,x,y,scale,angle,mirror).storage),
         child:BackdropFilter(filter:ui.ImageFilter.blur(sigmaX:blur,sigmaY:blur),
           child:ColoredBox(color:Colors.black.withValues(alpha:dim))))),
-      CustomPaint(painter:_GuidePainter(source,matte,mode,opacity,x,y,scale,angle,mirror))
+      CustomPaint(painter:_GuidePainter(source,matte,mode,opacity,x,y,scale,angle,mirror,signalColor))
     ]);
   }));
 }
 class _GuidePainter extends CustomPainter {
-  _GuidePainter(this.source,this.mask,this.mode,this.opacity,this.x,this.y,this.scale,this.angle,this.mirror);
+  _GuidePainter(this.source,this.mask,this.mode,this.opacity,this.x,this.y,this.scale,this.angle,this.mirror,this.signalColor);
   final ui.Image source;final ui.Image? mask;final String mode;
-  final double opacity,x,y,scale,angle;final bool mirror;
+  final double opacity,x,y,scale,angle;final bool mirror;final Color? signalColor;
   @override void paint(Canvas canvas,Size size){
     final rect=Rect.fromLTWH(0,0,source.width.toDouble(),source.height.toDouble());
     final m=mask;
@@ -47,7 +47,7 @@ class _GuidePainter extends CustomPainter {
         canvas.drawImageRect(m,mr,rect,Paint()..blendMode=BlendMode.dstIn..filterQuality=FilterQuality.medium);
       }else{
         canvas.drawImageRect(m,mr,rect,Paint()
-          ..colorFilter=const ColorFilter.mode(Color(0xffeed4ff),BlendMode.srcIn)
+          ..colorFilter=ColorFilter.mode(signalColor??const Color(0xffeed4ff),BlendMode.srcIn)
           ..imageFilter=ui.ImageFilter.dilate(radiusX:4,radiusY:4));
         canvas.drawImageRect(m,mr,rect,Paint()..blendMode=BlendMode.dstOut);
       }
