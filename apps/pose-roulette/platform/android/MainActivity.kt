@@ -18,11 +18,13 @@ import java.io.FileOutputStream
 class MainActivity: FlutterActivity() {
     private val channelName = "space.phenotype.pose/native"
     private var channel: MethodChannel? = null
+    private var recapRenderer: RecapRenderer? = null
     private var cameraActive = false
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
         channel = MethodChannel(flutterEngine.dartExecutor.binaryMessenger, channelName)
+        recapRenderer = RecapRenderer(channel!!)
         channel!!.setMethodCallHandler { call, result ->
             when (call.method) {
                 "cameraActive" -> {
@@ -42,11 +44,21 @@ class MainActivity: FlutterActivity() {
                     if (input == null || output == null) result.error("ARG","Missing matte path",null)
                     else qualityMatte(input, output, result)
                 }
-                "recap" -> result.error("RECAP_PENDING", "Native recap encoder is not initialized in this build.", null)
-                "cancelRecap" -> result.success(true)
+                "recap" -> {
+                    @Suppress("UNCHECKED_CAST")
+                    val args = call.arguments as? Map<String, Any?>
+                    if (args == null) result.error("ARG", "Missing recap arguments", null)
+                    else recapRenderer!!.render(args, result)
+                }
+                "cancelRecap" -> { recapRenderer?.cancel(); result.success(true) }
                 else -> result.notImplemented()
             }
         }
+    }
+
+    override fun onDestroy() {
+        recapRenderer?.cancel()
+        super.onDestroy()
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
