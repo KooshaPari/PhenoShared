@@ -549,9 +549,9 @@ mod tests {
 
     #[test]
     fn shim_version_is_semver_pre_release() {
-        // The shim is pre-release per the module docs (this version is
-        // `0.3.0-pre.0`). The test guards against an accidental GA bump that
-        // forgets to clear the `-pre.*` suffix — which would be a
+        // The shim is pre-release per the module docs (the compat surface is
+        // still experimental). The test guards against an accidental GA bump
+        // that forgets to clear the `-pre.*` suffix — which would be a
         // semver-violating stable release of a still-experimental surface.
         let v = SHIM_VERSION;
         assert!(
