@@ -1,0 +1,14 @@
+name: Pose Roulette public CI probe
+on:
+  push:
+    branches: [tmp-pose-ci]
+    paths: [.github/workflows/pose-roulette-ci-probe.yml]
+permissions:
+  contents: read
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          echo "runner=$RUNNER_OS/$RUNNER_ARCH"
+          python3 --version
