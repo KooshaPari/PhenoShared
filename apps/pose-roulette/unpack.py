@@ -1,14 +1,13 @@
-"""Materialize the exact reviewed native source bundle for cloud builds.
+"""Materialize checksum-verified native source, then apply explicit source repairs.
 
-The text-only connector stages a gzip tar as four base64 transport parts.
-SHA-256 is checked before parsing. This archive contains application source,
-not binaries, credentials, reference photographs, or user content.
+The archive contains source, not binaries, credentials or reference photos.
 """
 import base64
 import gzip
 import hashlib
 import io
 from pathlib import Path, PurePosixPath
+import re
 import tarfile
 
 root = Path(__file__).resolve().parent
@@ -38,3 +37,14 @@ with tarfile.open(fileobj=io.BytesIO(raw)) as archive:
         target.write_bytes(data)
         print(f'{path}: {len(data)} bytes')
 print('Native source integrity verified:', actual)
+
+# UIKit already declares UIView.mask: UIView?. Our editor stores a UIImage.
+# Restrict this rename to the editor classes: GuideView's UIView.mask is correct.
+swift = root / 'ios' / 'PoseRoulette.swift'
+s = swift.read_text()
+a = s.index('final class MaskCanvas')
+b = s.index('final class ReviewController')
+assert 'var mask:UIImage?' in s[a:b], 'Unexpected editor source'
+s = s[:a] + re.sub(r'\bmask\b', 'maskImage', s[a:b]) + s[b:]
+swift.write_text(s)
+print('Applied UIKit editor property fix:', hashlib.sha256(s.encode()).hexdigest())
