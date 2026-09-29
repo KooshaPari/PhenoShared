@@ -246,7 +246,7 @@ class _CapturePageState extends State<CapturePage> with WidgetsBindingObserver{
     return Center(child:SizedBox(width:w,height:h,child:ClipRect(child:Stack(fit:StackFit.expand,children:[
       CameraPreview(cam),
       if(s!=null)GuideLayer(source:s,mask:mask,mode:mode,opacity:opacity,dim:dim,blur:blur,
-        x:x,y:y,scale:scale,angle:angle,mirror:mirror),
+        x:x,y:y,scale:scale,angle:angle,mirror:mirror,signalColor:coachMode=='off'?null:(fit==null?Colors.grey:HSVColor.fromAHSV(1,fit!.score*1.2,.78,.95).toColor())),
       if(coachMode=='coach'&&livePoints.isNotEmpty)CustomPaint(painter:LiveSkeletonPainter(livePoints,fit)),
       if(coachMode!='off')Positioned(top:12,right:12,left:12,child:FitHud(
         result:fit,mode:coachMode,preparing:widget.pose.prep.landmarks.isEmpty)),
@@ -273,20 +273,24 @@ class FitHud extends StatelessWidget{
   @override Widget build(BuildContext context){
     final r=result,score=r?.score??0;
     final color=r==null?Colors.grey:HSVColor.fromAHSV(1,score*1.2,.78,.95).toColor();
-    final hint=preparing?'Preparing pose model in background…':(r?.hint??'Step into frame for live matching');
-    return IgnorePointer(child:Row(crossAxisAlignment:CrossAxisAlignment.start,children:[
-      Container(width:72,height:72,decoration:BoxDecoration(shape:BoxShape.circle,color:Colors.black54,
-        border:Border.all(color:color,width:5),boxShadow:const [BoxShadow(blurRadius:12,color:Colors.black45)]),
-        alignment:Alignment.center,child:Text(r==null?'—':'${r.score}',style:const TextStyle(fontSize:22,fontWeight:FontWeight.w800))),
-      if(mode!='minimal')...[
-        const SizedBox(width:10),Expanded(child:Container(padding:const EdgeInsets.symmetric(horizontal:12,vertical:9),
-          decoration:BoxDecoration(color:Colors.black54,borderRadius:BorderRadius.circular(14)),
-          child:Column(crossAxisAlignment:CrossAxisAlignment.start,children:[
-            Text(hint,style:const TextStyle(fontWeight:FontWeight.w700)),
-            if(mode=='coach'&&r!=null)Text('Pose ${r.shape} · framing ${r.framing} · ${r.visible}/${r.total} joints',
-              style:Theme.of(context).textTheme.bodySmall)
-          ])))]
-    ]));
+    final hint=preparing?'Preparing pose model…':(r?.hint??'Step into frame');
+    return IgnorePointer(child:Align(alignment:Alignment.topCenter,child:Container(
+      constraints:const BoxConstraints(maxWidth:360),
+      padding:mode=='minimal'?const EdgeInsets.all(7):const EdgeInsets.symmetric(horizontal:10,vertical:7),
+      decoration:BoxDecoration(color:Colors.black45,borderRadius:BorderRadius.circular(999),
+        border:Border.all(color:color.withValues(alpha:.55))),
+      child:mode=='minimal'
+        ? SizedBox(width:12,height:12,child:DecoratedBox(decoration:BoxDecoration(color:color,shape:BoxShape.circle)))
+        : Row(mainAxisSize:MainAxisSize.min,children:[
+            Container(width:10,height:10,decoration:BoxDecoration(color:color,shape:BoxShape.circle)),
+            const SizedBox(width:7),
+            if(r!=null)...[Text('${r.score}',style:TextStyle(fontSize:12,fontWeight:FontWeight.w800,color:color)),const SizedBox(width:6)],
+            Flexible(child:Text(hint,maxLines:1,overflow:TextOverflow.ellipsis,
+              style:const TextStyle(fontSize:11,fontWeight:FontWeight.w700))),
+            if(mode=='coach'&&r!=null)...[const SizedBox(width:7),
+              Text('P${r.shape} F${r.framing}',style:Theme.of(context).textTheme.labelSmall)]
+          ])
+    )));
   }
 }
 
