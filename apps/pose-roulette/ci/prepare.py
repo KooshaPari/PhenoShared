@@ -66,6 +66,11 @@ if android_bridge.exists():
     old=target/"android/app/src/main/kotlin/space/phenotype/pose_roulette/MainActivity.kt"
     if old.exists(): old.unlink()
     shutil.copy2(android_bridge,dest)
+    recap=src/"platform/android/RecapRenderer.kt"
+    if recap.exists(): shutil.copy2(recap,dest.parent/"RecapRenderer.kt")
 ios_bridge=src/"platform/ios/AppDelegate.swift"
-if ios_bridge.exists(): shutil.copy2(ios_bridge,target/"ios/Runner/AppDelegate.swift")
+if ios_bridge.exists():
+    shutil.copy2(ios_bridge,target/"ios/Runner/AppDelegate.swift")
+    recap=src/"platform/ios/RecapRenderer.swift"
+    if recap.exists(): shutil.copy2(recap,target/"ios/Runner/RecapRenderer.swift")
 print(target)
