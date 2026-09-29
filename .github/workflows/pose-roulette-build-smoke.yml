@@ -1,0 +1,12 @@
+name: Pose Roulette build smoke
+on:
+  push:
+    branches: [pose-roulette/build]
+permissions:
+  contents: read
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - run: echo "pose-roulette hosted runner works"
