@@ -91,6 +91,63 @@ class _CapturePageState extends State<CapturePage> with WidgetsBindingObserver{
     }catch(e){report(e);}
     finally{if(mounted)setState((){shooting=false;countdown=0;});}
   }
+  Future<void> syncPreparedAssets()async{
+    final path=widget.pose.maskPath;
+    if(path==null||path==loadedMaskPath||!await File(path).exists())return;
+    try{
+      final fresh=await pictureFile(path,maxSide:1280);
+      if(!mounted){fresh.dispose();return;}
+      final old=mask;setState((){mask=fresh;loadedMaskPath=path;mode='outline';
+        message=widget.pose.prep.quality=='native-quality'?'Detailed local guide ready.':'Fast guide ready; quality refinement continues in the background.';});old?.dispose();
+    }catch(_){}
+  }
+
+  mlpose.InputImage? inputFromCamera(CameraController c,CameraImage image){
+    var sensor=c.description.sensorOrientation;
+    if(Platform.isAndroid){
+      const orientations=<DeviceOrientation,int>{
+        DeviceOrientation.portraitUp:0,DeviceOrientation.landscapeLeft:90,
+        DeviceOrientation.portraitDown:180,DeviceOrientation.landscapeRight:270};
+      final compensation=orientations[c.value.deviceOrientation]??0;
+      sensor=c.description.lensDirection==CameraLensDirection.front
+        ?(sensor+compensation)%360:(sensor-compensation+360)%360;
+    }
+    final rotation=mlpose.InputImageRotationValue.fromRawValue(sensor);
+    final format=mlpose.InputImageFormatValue.fromRawValue(image.format.raw);
+    if(rotation==null||format==null||image.planes.length!=1)return null;
+    if(Platform.isAndroid&&format!=mlpose.InputImageFormat.nv21)return null;
+    if(Platform.isIOS&&format!=mlpose.InputImageFormat.bgra8888)return null;
+    final plane=image.planes.first;
+    return mlpose.InputImage.fromBytes(bytes:plane.bytes,metadata:mlpose.InputImageMetadata(
+      size:Size(image.width.toDouble(),image.height.toDouble()),rotation:rotation,
+      format:format,bytesPerRow:plane.bytesPerRow));
+  }
+
+  Future<void> onPoseFrame(CameraController c,CameraImage image,int token)async{
+    if(poseInFlight||shooting||coachMode=='off'||generation!=token||!mounted)return;
+    final now=DateTime.now().millisecondsSinceEpoch;if(now-lastPoseMs<115)return;
+    final input=inputFromCamera(c,image);if(input==null)return;
+    poseInFlight=true;lastPoseMs=now;
+    try{
+      final results=await livePose.processImage(input);
+      if(!mounted||generation!=token)return;
+      if(results.isEmpty){setState(()=>fit=null);return;}
+      final pose=results.first;
+      final rotated=c.description.sensorOrientation==90||c.description.sensorOrientation==270;
+      final logicalW=(rotated?image.height:image.width).toDouble(),logicalH=(rotated?image.width:image.height).toDouble();
+      final points=<String,PosePoint>{};
+      for(final landmark in pose.landmarks.values){
+        var nx=(landmark.x/logicalW).clamp(-.5,1.5),ny=(landmark.y/logicalH).clamp(-.5,1.5);
+        if(c.description.lensDirection==CameraLensDirection.front)nx=1-nx;
+        points[landmark.type.name]=PosePoint(nx,ny,landmark.z/max(logicalW,logicalH),landmark.likelihood.clamp(0,1));
+      }
+      final target=transformReference(widget.pose.prep.landmarks,x:x,y:y,scale:scale,angle:angle,mirror:mirror);
+      final result=target.isEmpty?null:comparePoses(target,points);
+      setState((){livePoints=points;fit=result;});
+    }catch(_){if(mounted)setState(()=>fit=null);}
+    finally{poseInFlight=false;}
+  }
+
   Future<void> buildMask({Rect? crop})async{
     if(source==null||maskBusy)return;final token=++maskGeneration;
     setState((){maskBusy=true;message=Platform.isIOS?'Apple Vision is finding the person locally…':'Native ONNX Runtime is building the person matte locally…';});
