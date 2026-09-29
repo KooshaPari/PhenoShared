@@ -16,7 +16,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          sparse-checkout: apps/pose-roulette
+          sparse-checkout: |
+            apps/pose-roulette
+            pose-build-transport
+      - name: Verify and unpack native sources
+        run: python3 apps/pose-roulette/unpack.py
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
@@ -27,11 +31,30 @@ jobs:
       - name: Build installable development APK
         working-directory: apps/pose-roulette/android
         run: gradle --no-daemon assembleDebug
+      - name: Inspect APK signature and contents
+        run: |
+          APK=apps/pose-roulette/android/app/build/outputs/apk/debug/app-debug.apk
+          "$ANDROID_HOME/build-tools/35.0.0/apksigner" verify --verbose "$APK"
+          sha256sum "$APK" > apps/pose-roulette/android/app/build/outputs/apk/debug/SHA256.txt
       - uses: actions/upload-artifact@v4
         with:
           name: Pose-Roulette-Android-APK
-          path: apps/pose-roulette/android/app/build/outputs/apk/debug/*.apk
+          path: |
+            apps/pose-roulette/android/app/build/outputs/apk/debug/*.apk
+            apps/pose-roulette/android/app/build/outputs/apk/debug/SHA256.txt
           if-no-files-found: error
+          retention-days: 14
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: Pose-Roulette-Expanded-Native-Source
+          path: |
+            apps/pose-roulette/android/app/src
+            apps/pose-roulette/android/*.gradle
+            apps/pose-roulette/android/*.properties
+            apps/pose-roulette/android/app/build.gradle
+            apps/pose-roulette/ios/*.swift
+            apps/pose-roulette/ios/*.sh
           retention-days: 14
   ios:
     runs-on: macos-15
@@ -39,7 +62,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          sparse-checkout: apps/pose-roulette
+          sparse-checkout: |
+            apps/pose-roulette
+            pose-build-transport
+      - name: Verify and unpack native sources
+        run: python3 apps/pose-roulette/unpack.py
       - name: Build iPhone arm64 application
         run: bash apps/pose-roulette/ios/build.sh
       - name: Sign with existing Apple credentials when configured
