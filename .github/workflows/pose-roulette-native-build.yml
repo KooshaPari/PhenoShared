@@ -1,0 +1,78 @@
+name: Pose Roulette native build
+run-name: Pose Roulette native · ${{ github.sha }}
+on:
+  push:
+    branches: [pose-roulette/build]
+    paths:
+      - 'apps/pose-roulette/**'
+      - '.github/workflows/pose-roulette-native-build.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: pose-roulette-native-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  android:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: apps/pose-roulette
+          persist-credentials: false
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.35.7'
+          channel: stable
+          cache: true
+      - run: python3 apps/pose-roulette/ci/prepare.py "$RUNNER_TEMP/pose-roulette-project"
+      - working-directory: ${{ runner.temp }}/pose-roulette-project
+        run: |
+          flutter pub get
+          flutter analyze --no-fatal-infos
+          flutter test
+          flutter build apk --release --target-platform android-arm64
+          mkdir -p "$RUNNER_TEMP/pose-delivery"
+          cp build/app/outputs/flutter-apk/app-release.apk "$RUNNER_TEMP/pose-delivery/PoseRoulette-Pixel9ProXL-arm64.apk"
+          cp pubspec.lock "$RUNNER_TEMP/pose-delivery/pubspec.lock"
+          sha256sum "$RUNNER_TEMP/pose-delivery/PoseRoulette-Pixel9ProXL-arm64.apk" > "$RUNNER_TEMP/pose-delivery/SHA256SUMS.txt"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: PoseRoulette-Android-${{ github.run_number }}
+          path: ${{ runner.temp }}/pose-delivery/
+          if-no-files-found: error
+          retention-days: 14
+  ios:
+    runs-on: macos-15
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: apps/pose-roulette
+          persist-credentials: false
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.35.7'
+          channel: stable
+          cache: true
+      - run: python3 apps/pose-roulette/ci/prepare.py "$RUNNER_TEMP/pose-roulette-project"
+      - working-directory: ${{ runner.temp }}/pose-roulette-project
+        run: |
+          flutter pub get
+          flutter analyze --no-fatal-infos
+          flutter test
+          flutter build ios --release --no-codesign
+          mkdir -p "$RUNNER_TEMP/pose-delivery"
+          ditto -c -k --keepParent build/ios/iphoneos/Runner.app "$RUNNER_TEMP/pose-delivery/PoseRoulette-iPhone17ProMax-UNSIGNED.app.zip"
+          cp pubspec.lock "$RUNNER_TEMP/pose-delivery/pubspec.lock"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: PoseRoulette-iOS-unsigned-${{ github.run_number }}
+          path: ${{ runner.temp }}/pose-delivery/
+          if-no-files-found: error
+          retention-days: 14
