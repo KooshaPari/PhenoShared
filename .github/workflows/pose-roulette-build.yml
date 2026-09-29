@@ -1,0 +1,89 @@
+name: Pose Roulette isolated build
+run-name: Pose Roulette isolated · ${{ github.sha }}
+on:
+  push:
+    branches: [tmp-pose-ci]
+    paths:
+      - '.ci/pose-roulette/**'
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: Source ref to build
+        required: false
+        default: tmp-pose-ci
+permissions:
+  contents: read
+concurrency:
+  group: pose-roulette-isolated-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  android:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event_name == 'workflow_dispatch' && inputs.ref || github.ref }}
+          sparse-checkout: .ci/pose-roulette
+          persist-credentials: false
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.35.7'
+          channel: stable
+          cache: true
+      - name: Prepare isolated project
+        run: python3 .ci/pose-roulette/ci/prepare.py "$RUNNER_TEMP/pose-roulette"
+      - name: Analyze and test
+        working-directory: ${{ runner.temp }}/pose-roulette
+        run: |
+          flutter pub get
+          flutter analyze --no-fatal-infos
+          flutter test
+      - name: Build arm64 APK
+        working-directory: ${{ runner.temp }}/pose-roulette
+        run: flutter build apk --release --target-platform android-arm64
+      - uses: actions/upload-artifact@v4
+        with:
+          name: PoseRoulette-Android
+          path: ${{ runner.temp }}/pose-roulette/build/app/outputs/flutter-apk/app-release.apk
+          if-no-files-found: error
+          retention-days: 14
+  ios-unsigned:
+    runs-on: macos-15
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event_name == 'workflow_dispatch' && inputs.ref || github.ref }}
+          sparse-checkout: .ci/pose-roulette
+          persist-credentials: false
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.35.7'
+          channel: stable
+          cache: true
+      - name: Prepare isolated project
+        run: python3 .ci/pose-roulette/ci/prepare.py "$RUNNER_TEMP/pose-roulette"
+      - name: Analyze and test
+        working-directory: ${{ runner.temp }}/pose-roulette
+        run: |
+          flutter pub get
+          flutter analyze --no-fatal-infos
+          flutter test
+      - name: Build unsigned iOS app
+        working-directory: ${{ runner.temp }}/pose-roulette
+        run: flutter build ios --release --no-codesign
+      - name: Package unsigned app
+        run: |
+          cd "$RUNNER_TEMP/pose-roulette/build/ios/iphoneos"
+          ditto -c -k --keepParent Runner.app "$RUNNER_TEMP/PoseRoulette-iOS-UNSIGNED.app.zip"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: PoseRoulette-iOS-unsigned
+          path: ${{ runner.temp }}/PoseRoulette-iOS-UNSIGNED.app.zip
+          if-no-files-found: error
+          retention-days: 14
