@@ -31,6 +31,24 @@ Task granularity follows the 10-minute rule: leaf tasks are ~10 minutes.
 > `cargo fmt --all` reformat landed; check now exit 0. Note
 > `cargo +nightly fmt --all --check` also fails (nightly-only options are
 > active there); the pin (`rust-toolchain.toml` = stable) is the standard.
+>
+> **2026-09-29 addendum (clippy -D remediation + E1.6 green):** quality-gate
+> went RED on f8a891c4 (cargo-check job = cold clippy `-D warnings`).
+> Workspace-wide measure: **166 warning lines** = 41 autofixable files +
+> 46 manual sites across ~25 files. Remediation landed as `2fc733e8`
+> (54 files: `cargo clippy --workspace --all-targets --locked --
+> -D warnings` exit 0; `cargo fmt --all --check` exit 0). First full-green
+> `make check` (E1.6) 2026-09-29 20:29 UTC: fmt 0 + clippy 0 + test-unit
+> **79 targets, 0 failed**, after closing 8 pre-existing unit-test failures
+> CI never gated (ci.yml's cargo test step is advisory: `|| echo
+> "::warning::test failures (advisory)"`): 6 in `98263c03` (two malformed
+> fixture literals; `OMNIROUTE_BASE_URL` host-env leak whose panic poisoned
+> the static ENV_LOCK and cascaded 3 more), 1 in `ca9b9cc3` (pheno-tracing
+> restored to `0.4.0-pre.0` per compat pre-release policy — the 0.4.0 came
+> in via absorb-Substrate 33673213), 1 in `2a8c7fef` (absolute wall-clock
+> perf assert → load-robust paired-ratio gate; host load measured **348 →
+> 802** from parallel sessions during the runs). Pushed through a merge
+> with `d24b13ed` (Pose Roulette workflow); HEAD `2a8c7fef`.
 
 | Fact | Value | Evidence |
 |---|---|---|
@@ -93,9 +111,9 @@ E1.6 cannot be honest while `cargo check` is being substituted for a link.
 | E1.3.1 | Reformat `crates/phinbox` (69 files) alone, message-scoped | 10m | E1.2 | |
 | E1.3.2 | Reformat the other 219 files, separate commit | 10m | E1.3.1 | |
 | E1.3.3 | Confirm `cargo fmt --check` exits 0 under the chosen toolchain | 10m | E1.3.2 | **done 2026-09-27 (2nd pass)** — 1st-pass claim retracted: `--all` was never clean. The E1.3.2 tree itself measures **326** diff files under the same toolchain (worktree test at 1f250aad); HEAD was at **152**. Full `cargo fmt --all` reformat landed 2026-09-27, `cargo fmt --all --check` exit 0 |
-| E1.4 | Measure `cargo clippy --workspace --locked -- -D warnings` | 10m | E2.1 | **done 2026-09-27** — findings: traceability-core 277 `missing_docs` + 1 `int_plus_one`; fabric-checker/graph 14 src + 11 tests/benches. All fixed same day (0f161d08, 7feb3c64); workspace-wide re-measure lands in E1.6 |
-| E1.5.x | Fix/allow the clippy findings it exposes (scoped allows only, see E4) | 10m each | E1.4 | **2 batches done**: 0f161d08 (traceability-core, 0 errors), 7feb3c64 (checker/graph, 0 errors, 2 scoped allows) |
-| E1.6 | `make check` green end to end | 10m | E1.3.3, E1.5.x | |
+| E1.4 | Measure `cargo clippy --workspace --locked -- -D warnings` | 10m | E2.1 | **done; re-corrected 2026-09-29** — the 2026-09-27 "done" was freshness-limited to two sub-areas (traceability-core 277 `missing_docs` + `int_plus_one`; fabric-checker/graph; fixed 0f161d08, 7feb3c64). The full workspace measure ran 2026-09-29: **166 warning lines**, 41 autofixable files + 46 manual sites, all remediated in 2fc733e8 with `-D warnings` exit 0 |
+| E1.5.x | Fix/allow the clippy findings it exposes (scoped allows only, see E4) | 10m each | E1.4 | **3 batches done**: 0f161d08 (traceability-core, 0 errors), 7feb3c64 (checker/graph, 0 errors, 2 scoped allows), 2fc733e8 (full workspace: 41 autofix + 46 manual incl. scoped allows in material_registry tests and settings.rs file-level `unused_unit` — proc-macro spans escape item-level attributes — plus `[lints.rust]` check-cfg declarations for pheno-otel `cfg(loom)` and policy-engine vestigial `feature(casbin-backend)`); `-D warnings` exit 0 |
+| E1.6 | `make check` green end to end | 10m | E1.3.3, E1.5.x | **done 2026-09-29** — exit 0 (first full-green run): fmt 0, clippy -D 0, test-unit 79 targets/0 failed. Evidence: 2fc733e8 (lints), 98263c03 (test repairs), ca9b9cc3 (version policy), 2a8c7fef (load-robust perf gate). CI's cargo test step is advisory, so the 8 pre-existing failures had never gated |
 | E1.7 | Generalise `crates/phinbox/scripts/check-targets.sh` → `scripts/check-cross-targets.sh` | 10m | — | |
 | E1.8 | One Linux-only CI job running E1.6 + E1.7; delete/gate the redundant ones | 10m | E1.6, E1.7 | |
 
@@ -317,6 +335,15 @@ repo **modifies committed `Cargo.lock` files** and creates new ones
 [E3/E8 three domains ] ██████░░░░░░░░░░░░░░  30%  all three need a decision
 --------------------------------------------------------------
 OVERALL              ] ██████░░░░░░░░░░░░░░  33%
+```
+
+**E1 re-measure 2026-09-29** (dated; the block above stays frozen at its
+2026-09-19 observation): 6/10 E1 leaves done — E1.3.1, E1.3.2, E1.3.3,
+E1.4, E1.5.x, E1.6 — = 60%. Remaining: E1.1/E1.2 (fmt policy decision,
+sponsor-blocked), E1.7, E1.8.
+
+```
+[E1 gates run        ] ████████████░░░░░░░░  60%  2026-09-29: E1.6 make check green
 ```
 
 ---
