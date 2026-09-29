@@ -8,6 +8,8 @@ import CoreImage
 @objc class AppDelegate: FlutterAppDelegate {
   private let channelName = "space.phenotype.pose/native"
   private let ciContext = CIContext(options: [.cacheIntermediates: false])
+  private var methodChannel: FlutterMethodChannel?
+  private var recapRenderer: RecapRenderer?
 
   override func application(
     _ application: UIApplication,
@@ -15,6 +17,8 @@ import CoreImage
   ) -> Bool {
     let controller = window?.rootViewController as! FlutterViewController
     let channel = FlutterMethodChannel(name: channelName, binaryMessenger: controller.binaryMessenger)
+    methodChannel = channel
+    recapRenderer = RecapRenderer(channel: channel)
     channel.setMethodCallHandler { [weak self] call, result in
       guard let self else { result(FlutterError(code:"APP",message:"App unavailable",details:nil)); return }
       switch call.method {
@@ -31,8 +35,12 @@ import CoreImage
         }
         self.qualityMatte(input:input, output:output, result:result)
       case "recap":
-        result(FlutterError(code:"RECAP_PENDING",message:"Native recap encoder is not initialized in this build.",details:nil))
-      case "cancelRecap": result(true)
+        guard let args=call.arguments as? [String:Any] else {
+          result(FlutterError(code:"ARG",message:"Missing recap arguments",details:nil)); return
+        }
+        self.recapRenderer?.render(args, reply: result)
+      case "cancelRecap":
+        self.recapRenderer?.cancel(); result(true)
       default: result(FlutterMethodNotImplemented)
       }
     }
