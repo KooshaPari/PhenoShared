@@ -1160,10 +1160,9 @@ mod tests {
 
     #[test]
     fn sse_parse_agent_error() {
-        let text = "event: agent_error\ndata: \
-                    {\"level\":\"error\",\"message\":\"crash\",\"time\":\"2026-06-22T00:00:00Z\"}\\
-                    \
-                    n\n";
+        let text = "event: agent_error\n\
+                    data: {\"level\":\"error\",\"message\":\"crash\",\
+                    \"time\":\"2026-06-22T00:00:00Z\"}\n\n";
         let ev = parse_sse_record(text).unwrap().unwrap();
         match ev {
             SseEvent::AgentError { data, .. } => {

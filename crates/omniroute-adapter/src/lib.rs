@@ -276,6 +276,11 @@ mod tests {
     fn configure_forge_provider_uses_env_not_network() {
         let _g = ENV_LOCK.lock().unwrap();
         let orig_key = std::env::var("OMNIROUTE_API_KEY").ok();
+        let orig_url = std::env::var("OMNIROUTE_BASE_URL").ok();
+        // Hermetic: this host may export OMNIROUTE_BASE_URL globally, and the
+        // assertions below require the localhost default — clear the outer
+        // value while holding ENV_LOCK and restore it afterwards.
+        std::env::remove_var("OMNIROUTE_BASE_URL");
         std::env::set_var("OMNIROUTE_API_KEY", "test-api-key");
 
         let adapter = OmniRouteAdapter::new();
@@ -290,6 +295,9 @@ mod tests {
         std::env::remove_var("OMNIROUTE_API_KEY");
         if let Some(k) = orig_key {
             std::env::set_var("OMNIROUTE_API_KEY", k);
+        }
+        if let Some(u) = orig_url {
+            std::env::set_var("OMNIROUTE_BASE_URL", u);
         }
     }
 

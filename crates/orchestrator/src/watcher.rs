@@ -213,9 +213,9 @@ mod tests {
     #[test]
     fn reports_parse_errors_per_line() {
         let dir = tempfile::tempdir().expect("tmpdir");
-        let body = "{\"task_id\":\"t-1\",\"tool_name\":\"agent_run\",\"args\":{},\"timestamp\":1}\\
-                    \
-                    nnot-json\n";
+        let body =
+            "{\"task_id\":\"t-1\",\"tool_name\":\"agent_run\",\"args\":{},\"timestamp\":1}\n\
+                    not-json\n";
         write_jsonl(dir.path(), "bad.jsonl", body);
         let items = drain(watch_project_tasks(dir.path()));
         assert_eq!(items.len(), 2);
