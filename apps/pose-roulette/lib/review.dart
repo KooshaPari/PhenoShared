@@ -13,6 +13,7 @@ class ReviewPage extends StatefulWidget{
 }
 class _ReviewPageState extends State<ReviewPage> with WidgetsBindingObserver{
   bool busy=false,encoding=false;double progress=0;String? video;String details='Original kept in this app.';
+  String recapStyle='snap';
   StreamSubscription<MethodCall>? subscription;
   @override void initState(){super.initState();WidgetsBinding.instance.addObserver(this);
     subscription=Native.events.stream.listen((event){
@@ -42,7 +43,7 @@ class _ReviewPageState extends State<ReviewPage> with WidgetsBindingObserver{
       if(!await File(draw.wheelPath).exists())throw StateError('The original wheel snapshot is unavailable; a different spin will not be substituted.');
       final path=await Native.recap({'wheel':draw.wheelPath,'reference':widget.shot.referencePath,
         'photo':widget.shot.path,'start':draw.start,'travel':draw.travel,'target':draw.target,
-        'output':'${widget.root}/recap-${uniqueId()}.mp4'});
+        'style':recapStyle,'output':'${widget.root}/recap-${uniqueId()}.mp4'});
       if(mounted)setState(()=>video=path);
     }catch(e){notice(e);}finally{if(mounted)setState(()=>encoding=false);}
   }
@@ -57,7 +58,13 @@ class _ReviewPageState extends State<ReviewPage> with WidgetsBindingObserver{
             Expanded(child:FilledButton.icon(onPressed:busy?null:()=>save(widget.shot.path),icon:const Icon(Icons.save_alt),label:const Text('Save original'))),
             const SizedBox(width:8),IconButton(tooltip:'Share original',onPressed:()=>share(widget.shot.path),icon:const Icon(Icons.ios_share))]),
           ExpansionTile(tilePadding:EdgeInsets.zero,title:const Text('Optional: spin → pose → photo video'),children:[
-            const Text('A separate 6.4-second, 720 × 1280 H.264 MP4. Replays the saved draw, shows its reference, then cuts to this photo. No microphone. Your original is not resized or overwritten.'),
+            const Text('A separate 6.4-second, 720 × 1280 H.264 MP4. It replays the actual draw with kinetic edits, punches into the selected pose, whip-cuts to the final photo, and holds a styled end frame. No microphone. Your original is untouched.'),
+            const SizedBox(height:10),
+            SegmentedButton<String>(segments:const [
+              ButtonSegment(value:'snap',label:Text('Snap')),
+              ButtonSegment(value:'editorial',label:Text('Editorial')),
+              ButtonSegment(value:'chaos',label:Text('Chaos'))],
+              selected:{recapStyle},onSelectionChanged:encoding?null:(s)=>setState(()=>recapStyle=s.first)),
             const SizedBox(height:10),
             if(widget.shot.draw==null)const Text('This reference was not selected by a recorded spin. No replacement spin will be invented.'),
             if(encoding)...[LinearProgressIndicator(value:progress),Text('${(progress*100).round()}%'),
