@@ -7,19 +7,15 @@ use serde::{Deserialize, Serialize};
 /// Merge strategy for federated topologies.
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 #[serde(rename_all = "PascalCase")]
+#[derive(Default)]
 pub enum MergeStrategy {
     /// Merge all peers, deduplicating by prefixed node ID.
+    #[default]
     MergeAll,
     /// Local topology wins on conflicts.
     LocalPrimary,
     /// Peer topology wins on conflicts.
     PeerPrimary,
-}
-
-impl Default for MergeStrategy {
-    fn default() -> Self {
-        Self::MergeAll
-    }
 }
 
 /// A simplified topology snapshot fetched from a peer daemon.

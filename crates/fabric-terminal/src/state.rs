@@ -13,6 +13,12 @@ pub struct SyncState {
     sequence: u64,
 }
 
+impl Default for SyncState {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl SyncState {
     pub fn new() -> Self {
         Self {

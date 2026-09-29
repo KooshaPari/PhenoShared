@@ -7,9 +7,8 @@ use bytes::Bytes;
 use chrono::Utc;
 use fabric_capability::{
     descriptor::{
-        AcceleratorCapabilities, AudioCapabilities, Capabilities, ComputeCapabilities,
-        DisplayCapabilities, DisplayInfo, GpuInfo, HardwareCodecMatrix, InputCapabilities,
-        StorageCapabilities, StorageDevice,
+        AudioCapabilities, Capabilities, ComputeCapabilities, DisplayCapabilities, DisplayInfo,
+        InputCapabilities, StorageCapabilities, StorageDevice,
     },
     LocalityTier,
 };

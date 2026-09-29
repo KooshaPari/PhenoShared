@@ -79,6 +79,12 @@ pub struct StunClient {
     config: StunBindConfig,
 }
 
+impl Default for StunClient {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl StunClient {
     pub fn new() -> Self {
         Self {
@@ -358,8 +364,8 @@ fn parse_xor_mapped(data: &[u8], tid: &[u8; 12]) -> Option<SocketAddr> {
         0x02 if data.len() >= 20 => {
             let mut a = [0u8; 16];
             a.copy_from_slice(&data[4..20]);
-            for i in 0..4 {
-                a[i] ^= (MAGIC_COOKIE >> (24 - 8 * i)) as u8;
+            for (i, byte) in a.iter_mut().enumerate().take(4) {
+                *byte ^= (MAGIC_COOKIE >> (24 - 8 * i)) as u8;
             }
             for i in 0..12 {
                 a[4 + i] ^= tid[i];

@@ -12,11 +12,12 @@
 //! - `parent_based_deep_chain`: ~100-300 ns (recursive flag check in depth 16)
 //! - `span_context_is_sampled`: ~100-200 ns (depth 32 hex comparison)
 
-use criterion::{black_box, criterion_group, criterion_main, Criterion};
+use criterion::{criterion_group, criterion_main, Criterion};
 use pheno_tracing::{
     AlwaysSampler, NeverSampler, ParentBasedSampler, RateLimitSampler, Sampler, SpanContext,
     TailBasedSampler,
 };
+use std::hint::black_box;
 
 // =============================================================================
 // Benchmark helpers

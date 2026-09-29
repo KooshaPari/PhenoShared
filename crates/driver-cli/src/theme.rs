@@ -49,15 +49,10 @@ impl Rgb {
     }
 }
 
-#[derive(Copy, Clone, Debug, PartialEq, Eq)]
+#[derive(Copy, Clone, Debug, PartialEq, Eq, Default)]
 pub enum ThemeVariant {
+    #[default]
     Backbone2,
-}
-
-impl Default for ThemeVariant {
-    fn default() -> Self {
-        ThemeVariant::Backbone2
-    }
 }
 
 /// Backbone-2 token set — exact mirror of tokens.css.

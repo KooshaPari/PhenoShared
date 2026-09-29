@@ -130,8 +130,8 @@ impl IMaterialRegistry for RecordingWaterMaterialRegistry {
 
 #[cfg(test)]
 mod tests {
+    #![allow(deprecated)] // the deprecated name-only pass-through types ARE the port under test
     use super::*;
-    #[allow(deprecated)]
     use crate::water::rendering::water_shader::WaterShader;
 
     #[test]

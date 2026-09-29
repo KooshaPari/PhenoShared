@@ -71,9 +71,9 @@ pub fn run_wire_server(
                         "connection limit reached, rejecting"
                     );
                     let mut stream = stream;
-                    let _ = write!(
+                    let _ = writeln!(
                         stream,
-                        "{{\"error\":\"server_busy\",\"message\":\"max connections reached\"}}\n"
+                        "{{\"error\":\"server_busy\",\"message\":\"max connections reached\"}}"
                     );
                     continue;
                 }
@@ -137,7 +137,7 @@ fn handle_connection(
 
     for line in reader.lines() {
         if coordinator.is_shutting_down() {
-            let _ = write!(writer, "{{\"error\":\"shutting_down\"}}\n");
+            let _ = writeln!(writer, "{{\"error\":\"shutting_down\"}}");
             break;
         }
 
@@ -176,7 +176,7 @@ fn handle_connection(
                     let re_serialized = msg.to_string();
                     let response = protocol::process_message(&re_serialized, &coordinator);
                     if let Some(resp) = response {
-                        if let Err(e) = write!(writer, "{resp}\n") {
+                        if let Err(e) = writeln!(writer, "{resp}") {
                             debug!(peer = %peer, error = %e, "write error");
                             break;
                         }
@@ -186,7 +186,7 @@ fn handle_connection(
                     // Public route or auth disabled -- proceed normally.
                     let response = protocol::process_message(&line, &coordinator);
                     if let Some(resp) = response {
-                        if let Err(e) = write!(writer, "{resp}\n") {
+                        if let Err(e) = writeln!(writer, "{resp}") {
                             debug!(peer = %peer, error = %e, "write error");
                             break;
                         }
@@ -195,7 +195,7 @@ fn handle_connection(
                 Err(e) => {
                     warn!(peer = %peer, error = %e, "auth: rejected");
                     let resp = auth_error_response(&e);
-                    if let Err(write_err) = write!(writer, "{resp}\n") {
+                    if let Err(write_err) = writeln!(writer, "{resp}") {
                         debug!(peer = %peer, error = %write_err, "write error");
                         break;
                     }
@@ -205,7 +205,7 @@ fn handle_connection(
             // Invalid JSON -- let process_message return the validation error.
             let response = protocol::process_message(&line, &coordinator);
             if let Some(resp) = response {
-                if let Err(e) = write!(writer, "{resp}\n") {
+                if let Err(e) = writeln!(writer, "{resp}") {
                     debug!(peer = %peer, error = %e, "write error");
                     break;
                 }

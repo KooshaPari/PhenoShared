@@ -114,7 +114,7 @@ async fn main() -> Result<()> {
             ref panes,
             poll_ms,
         } => {
-            cmd_sync(&cli, session.as_deref(), &panes, poll_ms).await?;
+            cmd_sync(&cli, session.as_deref(), panes, poll_ms).await?;
         },
         Commands::ListPanes => {
             cmd_list_panes(&cli).await?;
@@ -123,7 +123,7 @@ async fn main() -> Result<()> {
             ref pane_id,
             ref format,
         } => {
-            cmd_capture(&cli, &pane_id, &format).await?;
+            cmd_capture(&cli, pane_id, format).await?;
         },
         Commands::Status => {
             cmd_status(&cli).await?;

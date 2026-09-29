@@ -55,6 +55,12 @@ pub struct TailscaleClient {
     binary_path: String,
 }
 
+impl Default for TailscaleClient {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl TailscaleClient {
     /// Creates a new Tailscale client using the default binary path.
     pub fn new() -> Self {

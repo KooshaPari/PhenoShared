@@ -15,6 +15,7 @@ use crate::auth;
 /// Top-level daemon configuration.
 #[derive(Debug, Clone, Deserialize, Serialize)]
 #[serde(default)]
+#[derive(Default)]
 pub struct DaemonConfig {
     pub server: ServerConfig,
     pub database: DatabaseConfig,
@@ -22,19 +23,6 @@ pub struct DaemonConfig {
     pub leases: LeaseConfig,
     pub logging: LoggingConfig,
     pub auth: AuthConfig,
-}
-
-impl Default for DaemonConfig {
-    fn default() -> Self {
-        Self {
-            server: ServerConfig::default(),
-            database: DatabaseConfig::default(),
-            topology: TopologyConfig::default(),
-            leases: LeaseConfig::default(),
-            logging: LoggingConfig::default(),
-            auth: AuthConfig::default(),
-        }
-    }
 }
 
 #[derive(Debug, Clone, Deserialize, Serialize)]

@@ -71,7 +71,7 @@ fn main() -> anyhow::Result<()> {
     let plan = compile(&topology, &intent)?;
     println!(
         "      Plan {:?} compiled with {} step(s), estimated latency: {:.0} us",
-        &plan.id,
+        plan.id,
         plan.steps.len(),
         plan.estimated_latency_us.unwrap_or(0.0)
     );
@@ -380,7 +380,7 @@ fn make_coordinator() -> anyhow::Result<(
 // ---------------------------------------------------------------------------
 
 fn send_wire_message(stream: &mut TcpStream, msg: &str) -> anyhow::Result<()> {
-    write!(stream, "{msg}\n")?;
+    writeln!(stream, "{msg}")?;
     stream.flush()?;
     Ok(())
 }

@@ -14,10 +14,7 @@
 //! successes per iteration; raising --error-count pushes the burn rate
 //! above the 5x threshold faster.
 
-use std::{
-    env,
-    time::{Duration, SystemTime, UNIX_EPOCH},
-};
+use std::{env, time::Duration};
 
 use serde_json::json;
 
@@ -104,13 +101,6 @@ fn parse_args() -> Result<Args, String> {
         success_count,
         iterations,
     })
-}
-
-fn now() -> i64 {
-    SystemTime::now()
-        .duration_since(UNIX_EPOCH)
-        .map(|d| d.as_secs() as i64)
-        .unwrap_or(0)
 }
 
 fn main() -> Result<(), String> {

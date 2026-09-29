@@ -111,7 +111,6 @@ mod tests {
         let counter = metrics.requests_total();
         counter.inc();
         let counter_value = counter.value();
-        drop(counter);
         let histogram = metrics.request_duration_seconds();
         histogram.observe(0.123);
         assert_eq!(counter_value, 1);

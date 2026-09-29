@@ -13,7 +13,9 @@ pub enum ScanError {
     /// I/O error reading a source file.
     #[error("I/O error reading {path}: {source}")]
     Io {
+        /// Source path that could not be read.
         path: String,
+        /// Underlying I/O error.
         #[source]
         source: std::io::Error,
     },

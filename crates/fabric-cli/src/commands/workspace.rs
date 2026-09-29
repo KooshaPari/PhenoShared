@@ -99,7 +99,7 @@ fn load_index(workspace: &Path) -> Result<Vec<WorkspaceState>> {
     if json.trim().is_empty() {
         return Ok(Vec::new());
     }
-    Ok(serde_json::from_str(&json).context("parse workspace index")?)
+    serde_json::from_str(&json).context("parse workspace index")
 }
 
 fn save_index(workspace: &Path, entries: &[WorkspaceState]) -> Result<()> {
@@ -160,8 +160,8 @@ fn list(args: &ListArgs, workspace: &Path) -> Result<()> {
             return Ok(());
         }
         println!(
-            "{:<24} {:<36} {:<18} {:<10} {}",
-            "NAME", "ID", "TIER", "SEATS", "CREATED_UNIX"
+            "{:<24} {:<36} {:<18} {:<10} CREATED_UNIX",
+            "NAME", "ID", "TIER", "SEATS"
         );
         for w in &index {
             println!(

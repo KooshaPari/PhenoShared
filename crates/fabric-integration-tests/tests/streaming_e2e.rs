@@ -353,7 +353,7 @@ async fn concurrent_frame_encode_decode_stress() {
             let pixel_data = make_rgba_payload(32, 32);
             for seq in 0..50 {
                 let header = FrameHeader {
-                    seq: (task_id * 1000 + seq) as u64,
+                    seq: (task_id * 1000 + seq),
                     pts_us: seq * 33_333,
                     dts_us: seq * 33_000,
                     is_keyframe: seq == 0,

@@ -76,6 +76,6 @@ fn add_edge_to_topology() {
         NodeId::new("b"),
         LocalityTier::L6Lan,
     );
-    topo.add_edge(edge);
+    topo.add_edge(edge).expect("edge should add");
     assert_eq!(topo.edge_count(), 1);
 }

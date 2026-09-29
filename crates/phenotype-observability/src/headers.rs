@@ -145,7 +145,7 @@ impl ResponseCost {
     }
 
     /// Convert to header value format
-    pub fn to_header_value(&self) -> String {
+    pub fn to_header_value(self) -> String {
         self.0.to_string()
     }
 
@@ -182,7 +182,7 @@ impl TimeToFirstToken {
     }
 
     /// Convert to header value format
-    pub fn to_header_value(&self) -> String {
+    pub fn to_header_value(self) -> String {
         self.0.to_string()
     }
 
@@ -219,7 +219,7 @@ impl FallbackStep {
     }
 
     /// Convert to header value format
-    pub fn to_header_value(&self) -> String {
+    pub fn to_header_value(self) -> String {
         self.0.to_string()
     }
 

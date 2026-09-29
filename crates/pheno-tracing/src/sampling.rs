@@ -678,7 +678,7 @@ mod tests {
     fn always_sampler_name_and_default() {
         let s = AlwaysSampler;
         assert_eq!(s.name(), "always");
-        let s2 = AlwaysSampler::default();
+        let s2 = AlwaysSampler;
         let ctx = SpanContext::root("t", "s", false);
         assert_eq!(s2.should_sample(&ctx), SamplingDecision::Record);
     }
@@ -687,7 +687,7 @@ mod tests {
     fn never_sampler_name_and_default() {
         let s = NeverSampler;
         assert_eq!(s.name(), "never");
-        let s2 = NeverSampler::default();
+        let s2 = NeverSampler;
         let ctx = SpanContext::root("t", "s", true);
         assert_eq!(s2.should_sample(&ctx), SamplingDecision::Drop);
     }

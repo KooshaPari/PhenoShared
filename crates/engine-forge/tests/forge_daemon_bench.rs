@@ -50,25 +50,6 @@ fn fake_forge_bin() -> PathBuf {
     clean
 }
 
-/// `bench-fake-forge` (sibling binary) prints a fixed conv-id and exits in
-/// <1 ms regardless of argv. The F5 daemon builds the argv for the child,
-/// so the daemon arm needs a binary that doesn't gate on specific flags.
-fn bench_fake_forge_bin() -> PathBuf {
-    let exe = std::env::current_exe().unwrap();
-    let debug_dir = exe.parent().unwrap().parent().unwrap().to_path_buf();
-    let suffix = if cfg!(windows) { ".exe" } else { "" };
-    let path = debug_dir.join(format!("bench-fake-forge{suffix}"));
-
-    if !path.exists() {
-        let status = StdCommand::new(env!("CARGO"))
-            .args(["build", "-p", "fake-forge", "--bin", "bench-fake-forge"])
-            .status()
-            .expect("failed to build bench-fake-forge");
-        assert!(status.success(), "bench-fake-forge build failed");
-    }
-    path
-}
-
 /// Read RSS (MiB) of the current process. Best-effort telemetry.
 fn current_rss_mib() -> Option<f64> {
     #[cfg(target_os = "linux")]
@@ -85,7 +66,7 @@ fn current_rss_mib() -> Option<f64> {
             .output()
             .ok()?;
         let kib: f64 = String::from_utf8_lossy(&out.stdout).trim().parse().ok()?;
-        return Some(kib / 1024.0);
+        Some(kib / 1024.0)
     }
     #[cfg(not(any(target_os = "macos", target_os = "linux")))]
     {
@@ -136,7 +117,7 @@ fn fmt_row(label: &str, m: usize, wall: Duration, ok: usize, rss: Option<f64>) -
     let rss_s = rss
         .map(|mib| format!("{mib:7.1}"))
         .unwrap_or_else(|| "  n/a  ".into());
-    let ok_pct = if m > 0 { (ok * 100) / m } else { 0 };
+    let ok_pct = (ok * 100).checked_div(m).unwrap_or(0);
     format!(
         "{label:>9}  M={m:>2}  wall={wall_ms:>8.1} ms  agents/s={agents_per_s:>7.2}  \
          ok={ok:>2}/{m:<2} ({ok_pct:>3}%)  rss={rss_s} MiB"

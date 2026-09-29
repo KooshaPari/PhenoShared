@@ -295,11 +295,7 @@ impl Coordinator {
         let affected = state
             .active_leases
             .iter()
-            .filter(|l| {
-                l.current
-                    .as_ref()
-                    .map_or(false, |b| b.step_node == *node_id)
-            })
+            .filter(|l| l.current.as_ref().is_some_and(|b| b.step_node == *node_id))
             .count();
         state.dirty = true;
         affected

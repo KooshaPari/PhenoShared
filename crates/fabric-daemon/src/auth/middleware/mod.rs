@@ -185,19 +185,19 @@ impl AuthMiddleware {
         // Check nested auth.token
         if let Some(auth) = message.get("auth") {
             if let Some(token) = auth.get("token").and_then(|v| v.as_str()) {
-                return Ok(parse_bearer_token(token)?);
+                return parse_bearer_token(token);
             }
         }
 
         // Check top-level token
         if let Some(token) = message.get("token").and_then(|v| v.as_str()) {
-            return Ok(parse_bearer_token(token)?);
+            return parse_bearer_token(token);
         }
 
         // Check headers.authorization
         if let Some(headers) = message.get("headers") {
             if let Some(auth) = headers.get("authorization").and_then(|v| v.as_str()) {
-                return Ok(parse_bearer_token(auth)?);
+                return parse_bearer_token(auth);
             }
         }
 

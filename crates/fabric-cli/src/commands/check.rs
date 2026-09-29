@@ -35,7 +35,7 @@ pub fn dispatch(args: &CheckArgs) -> Result<()> {
     let manifest: CheckerManifest = if args
         .manifest
         .extension()
-        .map_or(false, |e| e == "yaml" || e == "yml")
+        .is_some_and(|e| e == "yaml" || e == "yml")
     {
         serde_yaml::from_str(&text).context("parse manifest YAML")?
     } else {

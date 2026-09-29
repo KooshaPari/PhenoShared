@@ -38,7 +38,7 @@ fn daemon_wire_message_flow_topo_routes_lease() {
     assert!(val["topology_epoch"].is_number());
     assert_eq!(val["node_count"].as_u64().unwrap(), 4);
     assert_eq!(val["edge_count"].as_u64().unwrap(), 3);
-    assert!(val["nodes"].as_array().map_or(false, |a| a.len() == 4));
+    assert!(val["nodes"].as_array().is_some_and(|a| a.len() == 4));
 
     // -- routes_request --
     let routes_req = serde_json::json!({"type": "routes_request"});
@@ -142,9 +142,8 @@ async fn multihop_compile_and_frame_flow() {
     let height = 720u32;
     let pixel_data = make_rgba_payload(width, height);
     let mut current_payload = pixel_data.clone();
-    let mut frame_seq: u64 = 1;
 
-    for (hop_idx, _step) in result.primary.steps.iter().enumerate() {
+    for (frame_seq, (hop_idx, _step)) in (1_u64..).zip(result.primary.steps.iter().enumerate()) {
         let header = FrameHeader {
             seq: frame_seq,
             pts_us: frame_seq * 33_333,
@@ -169,7 +168,6 @@ async fn multihop_compile_and_frame_flow() {
         );
 
         current_payload = decoded_payload.to_vec();
-        frame_seq += 1;
     }
 
     // Final payload must match original.

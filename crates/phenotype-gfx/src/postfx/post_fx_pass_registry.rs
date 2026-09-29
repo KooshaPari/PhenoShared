@@ -177,7 +177,7 @@ mod tests {
     use super::*;
     use crate::postfx::{
         error::{PostFxError, PostFxResult},
-        ports::post_fx_pass::{PassEffect, PassQuality, PostFxContext, PostFxPass},
+        ports::post_fx_pass::{PassEffect, PostFxContext, PostFxPass},
     };
 
     struct MockPass {
@@ -214,20 +214,6 @@ mod tests {
         ) -> Result<(), PostFxError> {
             Ok(())
         }
-    }
-
-    fn make_provider(effect: PassEffect) -> Box<dyn PostFxPassDescriptor> {
-        Box::new(BlitProvider::new(
-            BlitPassDescriptor {
-                effect,
-                display_name: effect.name().to_string(),
-                shader_name: format!("Hidden/{}", effect.name()),
-            },
-            MockPass {
-                effect,
-                enabled: true,
-            },
-        ))
     }
 
     #[test]

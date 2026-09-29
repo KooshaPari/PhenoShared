@@ -348,7 +348,7 @@ fn daemon_probe_roundtrip() {
     assert!(parsed["edge_count"].as_u64().unwrap() >= 1);
     assert!(parsed["topology_epoch"].as_u64().unwrap() > 0);
     assert!(parsed["nodes"].as_array().unwrap().len() >= 2);
-    assert!(parsed["edges"].as_array().unwrap().len() >= 1);
+    assert!(!parsed["edges"].as_array().unwrap().is_empty());
 
     // 4. Call plans_snapshot() — verify empty routes initially.
     let plans = coordinator.plans_snapshot();

@@ -190,7 +190,7 @@ fn cmd_health(addr: &str) {
         Ok(mut stream) => {
             use std::io::Write;
             let msg = r#"{"type":"health_check"}"#;
-            let _ = write!(stream, "{msg}\n");
+            let _ = writeln!(stream, "{msg}");
 
             use std::io::BufRead;
             let reader = std::io::BufReader::new(&stream);

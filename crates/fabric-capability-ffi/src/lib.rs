@@ -64,8 +64,9 @@ pub unsafe extern "C" fn fabric_capability_free_string(ptr: *mut std::os::raw::c
 ///
 /// Caller owns the returned pointer. Free with `fabric_capability_free_string`.
 /// Returns `null` on error.
-// Safety contract:
-// - `descriptor_json` must be a valid, null-terminated C string.
+///
+/// # Safety
+/// - `descriptor_json` must be a valid, null-terminated C string.
 #[no_mangle]
 pub unsafe extern "C" fn fabric_capability_to_json(
     descriptor_json: *const std::os::raw::c_char,

@@ -55,13 +55,13 @@ pub(crate) fn find_tf_mux_binary() -> Option<PathBuf> {
     }
 
     // 3. System PATH
-    if let Ok(output) = std::process::Command::new("which").arg("tf-mux").output() {
-        if output.status.success() {
-            let stdout = String::from_utf8_lossy(&output.stdout);
-            let path = PathBuf::from(stdout.trim());
-            if path.exists() {
-                return Some(path);
-            }
+    if let Ok(output) = std::process::Command::new("which").arg("tf-mux").output()
+        && output.status.success()
+    {
+        let stdout = String::from_utf8_lossy(&output.stdout);
+        let path = PathBuf::from(stdout.trim());
+        if path.exists() {
+            return Some(path);
         }
     }
 

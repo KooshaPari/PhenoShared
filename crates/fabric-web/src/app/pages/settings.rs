@@ -1,5 +1,11 @@
 //! Settings page — daemon configuration and feature toggles.
 
+// The empty `fallback=|| view! {}` closures expand to a unit value inside the
+// leptos `view!` proc macro, and that lint span is attributed to the macro
+// expansion rather than the enclosing item — so item-level attributes do not
+// reach it. Scope the allowance to this file.
+#![allow(clippy::unused_unit)]
+
 use leptos::prelude::*;
 
 use crate::api::*;

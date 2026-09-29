@@ -41,7 +41,7 @@ impl Protocol {
         }
     }
 
-    pub fn from_str(s: &str) -> Option<Self> {
+    pub fn parse(s: &str) -> Option<Self> {
         match s.to_uppercase().as_str() {
             "TCP" => Some(Protocol::Tcp),
             "UDP" => Some(Protocol::Udp),
@@ -85,6 +85,12 @@ pub struct UPnPClient {
     discovery_timeout: Duration,
     /// Timeout for SOAP requests.
     soap_timeout: Duration,
+}
+
+impl Default for UPnPClient {
+    fn default() -> Self {
+        Self::new()
+    }
 }
 
 impl UPnPClient {
@@ -322,10 +328,12 @@ impl UPnPClient {
     }
 
     fn gateway_host(&self, gateway: &GatewayInfo) -> Result<String, NetworkError> {
-        Ok(format!(
-            "{}",
-            gateway.control_url.split('/').nth(2).unwrap_or("localhost")
-        ))
+        Ok(gateway
+            .control_url
+            .split('/')
+            .nth(2)
+            .unwrap_or("localhost")
+            .to_string())
     }
 
     fn get_local_ip(&self) -> Result<String, NetworkError> {
@@ -419,9 +427,9 @@ mod tests {
     fn protocol_str_roundtrip() {
         assert_eq!(Protocol::Tcp.as_str(), "TCP");
         assert_eq!(Protocol::Udp.as_str(), "UDP");
-        assert_eq!(Protocol::from_str("tcp"), Some(Protocol::Tcp));
-        assert_eq!(Protocol::from_str("UDP"), Some(Protocol::Udp));
-        assert_eq!(Protocol::from_str("invalid"), None);
+        assert_eq!(Protocol::parse("tcp"), Some(Protocol::Tcp));
+        assert_eq!(Protocol::parse("UDP"), Some(Protocol::Udp));
+        assert_eq!(Protocol::parse("invalid"), None);
     }
 
     #[test]

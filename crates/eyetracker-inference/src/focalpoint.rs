@@ -204,7 +204,7 @@ mod tests {
 
         c.publish(&dummy_result()).expect("publish");
         let received = accept.join().unwrap();
-        let _ = c.disconnect();
+        c.disconnect();
 
         // Verify the published event
         let v: serde_json::Value = serde_json::from_str(received.trim()).expect("parse json");

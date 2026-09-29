@@ -8,10 +8,7 @@
 use std::{
     io::{BufRead, BufReader, Write},
     net::TcpStream,
-    sync::{
-        atomic::{AtomicBool, Ordering},
-        Arc,
-    },
+    sync::{atomic::AtomicBool, Arc},
     thread,
     time::{Duration, Instant},
 };
@@ -79,7 +76,7 @@ fn send_and_receive(addr: &str, message: &str) -> String {
         .unwrap();
 
     // Send message with newline terminator.
-    write!(stream, "{}\n", message).unwrap();
+    writeln!(stream, "{}", message).unwrap();
     stream.flush().unwrap();
 
     // Read response line.

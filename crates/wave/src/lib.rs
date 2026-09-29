@@ -223,12 +223,7 @@ mod tests {
                 text: dump.raw.clone(),
                 artifacts: vec![],
                 pr_urls,
-                status: self
-                    .result_state
-                    .lock()
-                    .unwrap()
-                    .clone()
-                    .unwrap_or(TaskState::Completed),
+                status: (*self.result_state.lock().unwrap()).unwrap_or(TaskState::Completed),
             })
         }
 

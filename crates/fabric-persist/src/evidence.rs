@@ -2,7 +2,6 @@
 
 use chrono::{DateTime, Utc};
 use rusqlite::params;
-use serde_json;
 
 use crate::{error::PersistError, Persist};
 

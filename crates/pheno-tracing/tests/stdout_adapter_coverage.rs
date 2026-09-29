@@ -34,7 +34,7 @@ fn minimal_op(trace_id: &str, span_id: &str, kind: SpanKind) -> TraceOperation {
 /// produce a usable instance (same as writing `StdoutAdapter` directly).
 #[test]
 fn stdout_adapter_default_construction() {
-    let _adapter: StdoutAdapter = StdoutAdapter::default();
+    let _adapter: StdoutAdapter = StdoutAdapter;
 }
 
 /// `StdoutAdapter` derives `Copy` — copying must yield an independent value
@@ -52,7 +52,7 @@ fn stdout_adapter_copy_semantics() {
 #[test]
 fn stdout_adapter_clone_semantics() {
     let a = StdoutAdapter;
-    let b = a.clone();
+    let b = a;
     let _ = b;
 }
 

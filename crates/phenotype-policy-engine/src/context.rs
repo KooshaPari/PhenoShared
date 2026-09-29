@@ -31,7 +31,7 @@ impl EvaluationContext {
     pub fn from_json(value: serde_json::Value) -> Self {
         match value {
             serde_json::Value::Object(map) => {
-                let facts = map.into_iter().map(|(k, v)| (k, v)).collect();
+                let facts = map.into_iter().collect();
                 Self { facts }
             },
             _ => Self::new(),

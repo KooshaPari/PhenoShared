@@ -325,6 +325,17 @@ impl Drop for Camera {
     }
 }
 
+// Helper on PixelFormat (in this module, not conflicting)
+impl PixelFormat {
+    #[allow(dead_code)]
+    fn bytes_per_pixel(&self) -> u8 {
+        match self {
+            PixelFormat::Rgb8 | PixelFormat::Bgr8 => 3,
+            PixelFormat::Gray8 => 1,
+        }
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -349,16 +360,5 @@ mod tests {
     fn test_frame_format_bytes() {
         assert_eq!(PixelFormat::Rgb8.bytes_per_pixel(), 3);
         assert_eq!(PixelFormat::Gray8.bytes_per_pixel(), 1);
-    }
-}
-
-// Helper on PixelFormat (in this module, not conflicting)
-impl PixelFormat {
-    #[allow(dead_code)]
-    fn bytes_per_pixel(&self) -> u8 {
-        match self {
-            PixelFormat::Rgb8 | PixelFormat::Bgr8 => 3,
-            PixelFormat::Gray8 => 1,
-        }
     }
 }

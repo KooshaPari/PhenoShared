@@ -31,3 +31,8 @@ proptest = "1"
 # Permutation-tests shared-state data structures used in this crate's
 # public API. Stable Rust 1.75+ compatible; no nightly required.
 loom = "0.7"
+
+[lints.rust]
+# The permutation tests gate on `cfg(loom)` (run with RUSTFLAGS="--cfg loom");
+# declare the name so check-cfg stops flagging it.
+unexpected_cfgs = { level = "warn", check-cfg = ['cfg(loom)'] }

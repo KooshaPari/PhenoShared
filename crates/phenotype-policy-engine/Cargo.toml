@@ -17,3 +17,10 @@ regex.workspace = true
 [dev-dependencies]
 tempfile = "3"
 proptest = "1"
+
+[lints.rust]
+# Vestigial gate: the casbin backend (feature existed in the archived crate)
+# was dropped from this crate, so the integration test stays compiled out
+# until the feature is rebuilt. Declaring the expected value silences
+# unexpected_cfgs without pretending the feature exists.
+unexpected_cfgs = { level = "warn", check-cfg = ['cfg(feature, values("casbin-backend"))'] }
