@@ -1,5 +1,8 @@
 name: Pose Roulette public CI probe
 on:
+  pull_request:
+    branches: [main]
+    paths: [.github/workflows/pose-roulette-ci-probe.yml]
   push:
     branches: [tmp-pose-ci]
     paths: [.github/workflows/pose-roulette-ci-probe.yml]
@@ -8,7 +11,9 @@ permissions:
 jobs:
   probe:
     runs-on: ubuntu-latest
+    timeout-minutes: 3
     steps:
       - run: |
+          set -euxo pipefail
           echo "runner=$RUNNER_OS/$RUNNER_ARCH"
           python3 --version
