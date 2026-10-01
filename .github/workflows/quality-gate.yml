@@ -29,7 +29,7 @@ jobs:
         with:
           filters: |
             go: ['crates/nanovms-core/**/*.go', 'crates/nanovms-core/go.mod', 'crates/nanovms-core/go.sum']
-            rust: ['**/*.rs', '**/Cargo.toml', '**/Cargo.lock']
+            rust: ['**/*.rs', '**/Cargo.toml', '**/Cargo.lock', 'Makefile', 'rustfmt.toml', 'rust-toolchain.toml', 'scripts/check-cross-targets.sh', '.github/workflows/quality-gate.yml']
             any: ['**']
 
   go-vet:
@@ -53,9 +53,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: dtolnay/rust-toolchain@stable
+      # Pinned to match rust-toolchain.toml (E1.2, 2026-10-01): the floating
+      # @stable let CI run a newer clippy than the local pin (cold-gate run
+      # 36626812921, 2026-09-29: CI clippy 1.98.0 vs stale local 1.97.1 →
+      # 8 findings impossible to reproduce locally). Bump this value together
+      # with rust-toolchain.toml, in one commit, after a full local
+      # `make check` on the new version.
+      - uses: dtolnay/rust-toolchain@1.99.0
         with:
-          toolchain: stable
+          toolchain: "1.99.0"
           components: rustfmt, clippy
       - uses: Swatinem/rust-cache@v2
       - name: Install Go (for libnvms_core.a build)
@@ -69,11 +75,23 @@ jobs:
           # libxdo-dev: fabric-tray links -lxdo at final link (observed 2026-09-27,
           # rust-lld "unable to find library -lxdo" on run 36342217754).
           sudo apt-get install -y pkg-config libgtk-3-dev libxdo-dev
-      - name: cargo build --workspace
+      # One Linux-only gate job (E1.8, 2026-10-01): this job is the whole
+      # rust gate — real link proof first (E2.1), then `make check` (E1.6:
+      # fmt + clippy -D warnings + unit tests), then the cross-target
+      # matrix (E1.7), then the full workspace test suite. The former
+      # advisory rust lane in ci.yml (nightly fmt + clippy + test, every
+      # step `|| echo ::warning::`) was deleted in the same commit; there
+      # is deliberately exactly one rust gate, and it is this job.
+      - name: 'cargo build --workspace (E2.1: real link proof)'
         run: cargo build --workspace --locked
-      - run: cargo fmt --check
-      - run: cargo clippy --workspace --locked -- -D warnings
-      - run: cargo test --workspace --locked
+      - name: 'make check (E1.6: fmt + clippy -D warnings + unit tests)'
+        run: make check
+      - name: Install cross-target std (E1.7)
+        run: rustup target add x86_64-pc-windows-gnu x86_64-apple-darwin
+      - name: Cross-target check (E1.7)
+        run: ./scripts/check-cross-targets.sh
+      - name: 'cargo test --workspace (belt-and-braces: lib overlaps make check on purpose; adds bins/integration/doc targets)'
+        run: cargo test --workspace --locked --no-fail-fast
 
   go-lint:
     needs: changes
