@@ -1,11 +1,28 @@
-# Rust formatting configuration for substrate
-# Stable, default rustfmt style with these project-specific choices:
-# - max_width=100 (matches the rust-lang default but explicit for IDEs/CI)
-# - group_imports=StdExternalCrate groups std / external / crate imports
-# - reorder_imports=true keeps imports in a deterministic order
-# - use_small_heuristics=Default avoids stylistic churn from "Max" heuristics
-# - imports_granularity=Crate keeps one `use` group per crate (cleaner diffs)
-# - format_strings=true runs the unstable string formatting check
+# Rust formatting configuration for PhenoShared / substrate.
+#
+# Stable-only policy (E1.1 decided 2026-10-01): every option below is
+# settable by STABLE rustfmt, and the toolchain is pinned in
+# rust-toolchain.toml, so "run cargo fmt" in this repo is reproducible
+# without naming a toolchain.
+#
+# The 18 previously-embedded nightly-only options were silently ignored by
+# stable rustfmt — every run printed `Warning: can't set <opt>, unstable
+# features are only available in nightly channel` (observed with rustfmt
+# 1.10.0 / rustc 1.99.0 on 2026-10-01, captured in the E1.2 evidence) and
+# were removed here. A config line no applied toolchain honours is a lie;
+# the alternative, running fmt through nightly, would swap that lie for
+# daily formatting drift as nightly rustfmt changes. The trim does not
+# reformat anything: stable rustfmt never applied the removed options, so
+# `cargo fmt --all --check` output is identical before and after (exit 0
+# on both sides of the trim, same binary).
+#
+# Removed 2026-10-01 (were nightly-only, no effect on stable):
+#   brace_style, comment_width, condense_wildcard_suffixes,
+#   control_brace_style, empty_item_single_line, fn_single_line,
+#   format_macro_matchers, format_strings, group_imports,
+#   imports_granularity, normalize_comments, normalize_doc_attributes,
+#   struct_lit_single_line, trailing_comma, trailing_semicolon,
+#   unstable_features, where_single_line, wrap_comments
 #
 # Run `cargo fmt --all` locally; CI runs `cargo fmt --all -- --check`.
 
@@ -16,28 +33,10 @@ tab_spaces = 4
 newline_style = "Unix"
 use_small_heuristics = "Default"
 reorder_imports = true
-group_imports = "StdExternalCrate"
-imports_granularity = "Crate"
-format_strings = true
-format_macro_matchers = true
-normalize_comments = true
-normalize_doc_attributes = true
-wrap_comments = true
-comment_width = 100
-trailing_comma = "Vertical"
-trailing_semicolon = true
 match_block_trailing_comma = true
-brace_style = "SameLineWhere"
-control_brace_style = "AlwaysSameLine"
-empty_item_single_line = true
-fn_single_line = false
-where_single_line = false
-struct_lit_single_line = false
 hex_literal_case = "Lower"
 use_try_shorthand = true
-condense_wildcard_suffixes = false
 force_explicit_abi = true
-unstable_features = false
 
 # Skip vendored or generated files (cargo fmt still formats these unless excluded).
 # ignore = [

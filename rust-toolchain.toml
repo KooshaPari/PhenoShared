@@ -1,3 +1,11 @@
 [toolchain]
-channel = "stable"
+# Pinned (E1.1/E1.2, 2026-10-01): exact version, not "stable". A floating
+# channel let this machine's rustup lag at 1.97.1 while CI's dtolnay
+# @stable floated to 1.98+/1.99, so a locally-green `make check` failed
+# the cold gate on lints that could not reproduce here. Local runs, CI
+# (quality-gate.yml pins dtolnay to the same version), and any future
+# instruction that just says `cargo ...` in this repo now all mean 1.99.0.
+# Bump this file and .github/workflows/quality-gate.yml together, in one
+# commit, with a full `make check` on the new version.
+channel = "1.99.0"
 components = ["rustfmt", "clippy"]
