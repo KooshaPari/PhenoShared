@@ -122,7 +122,7 @@ pub(crate) fn install_autostart(cli_path: &Path) -> Result<PathBuf, String> {
         let _ = std::process::Command::new("systemctl")
             .args(["--user", "enable", "--now", "phinbox.service"])
             .status();
-        return Ok(unit);
+        Ok(unit)
     }
 }
 

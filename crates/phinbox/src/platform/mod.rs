@@ -15,6 +15,7 @@ pub mod windows;
 #[cfg(target_os = "linux")]
 pub mod linux;
 
+#[cfg(any(target_os = "macos", target_os = "windows", test))]
 use std::time::Duration;
 
 pub use detect::{detect, detect_renderer, Platform, RendererKind};
@@ -32,6 +33,11 @@ use crate::{
 /// rather than "expire on the first poll". Every renderer previously did
 /// `start.elapsed() >= timeout`, which made `0` fire immediately.
 /// Returns `None` when there is no deadline.
+///
+/// Linux stays out of this helper on purpose: its renderers hand the duration
+/// to `run_with_timeout`, which already maps a zero `Duration` to "wait
+/// forever", so this would be dead code on that platform.
+#[cfg(any(target_os = "macos", target_os = "windows", test))]
 #[must_use]
 pub(crate) fn deadline_for(spec: &PromptSpec, opts: &ElicitOptions) -> Option<Duration> {
     let t = opts

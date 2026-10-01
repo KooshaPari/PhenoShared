@@ -80,7 +80,7 @@ mod tests {
     #[test]
     fn viewer_state_default_has_no_entries_and_focus_on_list() {
         let s = ViewerState::default();
-        assert!(s.entries.is_empty());
+        assert_eq!(s.entries, [] as [ListEntry; 0]);
         assert!(s.focus_on_list);
         assert_eq!(s.selected, 0);
     }
@@ -274,7 +274,7 @@ mod tests {
     fn snapshot_inbox_empty_when_dir_missing() {
         let tmp = tempfile::tempdir().unwrap();
         let entries = snapshot_inbox(tmp.path()).unwrap();
-        assert!(entries.is_empty());
+        assert_eq!(entries, [] as [ListEntry; 0]);
     }
 
     #[test]

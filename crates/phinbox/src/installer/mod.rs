@@ -321,6 +321,6 @@ mod tests {
             ..Default::default()
         })
         .unwrap();
-        assert!(r.removed.is_empty());
+        assert_eq!(r.removed, [] as [String; 0]);
     }
 }

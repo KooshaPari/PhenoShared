@@ -287,7 +287,7 @@ fn cli_ask_async_enqueue_then_list() {
         .and_then(|v| v.as_str())
         .expect("response must have request_id")
         .to_string();
-    assert!(!req_id.is_empty());
+    assert_ne!(req_id, "");
     // Pending files live at `<inbox-dir>/inbox/<id>.json` (no `pending/` subdir).
     let inbox_dir = inbox_parent.join("inbox");
     assert!(

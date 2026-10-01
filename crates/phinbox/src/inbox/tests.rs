@@ -26,7 +26,7 @@ fn new_fills_request_id_and_timestamps() {
         request_id: None,
     };
     let req = PendingRequest::new(spec.clone(), sample_origin());
-    assert!(!req.request_id.is_empty());
+    assert_ne!(req.request_id, "");
     assert!(req.expires_at_ms > req.queued_at_ms);
     assert!(!req.is_terminal());
 

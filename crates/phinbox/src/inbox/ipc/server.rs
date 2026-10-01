@@ -161,7 +161,7 @@ async fn dispatch(state: &RpcState, req: super::Request) -> Response {
         "inbox.answer" => match parse_params::<AnswerParams>(&req.params) {
             Ok(p) => match finalize_via_state(state, &p.rid, p.response).await {
                 Ok(updated) => Response::ok(id, json!({ "request": updated })),
-                Err(e) => e,
+                Err(e) => *e,
             },
             Err(e) => Response::err(id, super::ERR_INVALID_PARAMS, e.clone()),
         },
@@ -172,7 +172,7 @@ async fn dispatch(state: &RpcState, req: super::Request) -> Response {
                     .await
                 {
                     Ok(updated) => Response::ok(id, json!({ "request": updated })),
-                    Err(e) => e,
+                    Err(e) => *e,
                 }
             },
             Err(e) => Response::err(id, super::ERR_INVALID_PARAMS, e.clone()),
@@ -195,17 +195,23 @@ async fn finalize_via_state(
     state: &RpcState,
     rid: &str,
     response: ElicitResponse,
-) -> Result<PendingRequest, Response> {
+) -> Result<PendingRequest, Box<Response>> {
     let mut pending = match load_pending(&state.root, rid) {
         Ok(Some(p)) => p,
         Ok(None) => {
-            return Err(Response::err(
+            return Err(Box::new(Response::err(
                 Value::Null,
                 super::ERR_NOT_FOUND,
                 format!("rid={rid}"),
-            ))
+            )))
         },
-        Err(e) => return Err(Response::err(Value::Null, super::ERR_IO, e.to_string())),
+        Err(e) => {
+            return Err(Box::new(Response::err(
+                Value::Null,
+                super::ERR_IO,
+                e.to_string(),
+            )))
+        },
     };
     // Expiry is authoritative at the point of answering, not only in the
     // daemon's notifier sweeper — a client may talk to an IPC server that has
@@ -214,24 +220,30 @@ async fn finalize_via_state(
     // way. A defer is an answer attempt too: you cannot defer a closed window.
     match crate::inbox::expire_if_due(&state.root, &mut pending) {
         Ok(true) => {
-            return Err(Response::err(
+            return Err(Box::new(Response::err(
                 Value::Null,
                 super::ERR_EXPIRED,
                 format!(
                     "rid={rid} expired at {} ms since the epoch",
                     pending.expires_at_ms
                 ),
-            ))
+            )))
         },
         Ok(false) => {},
-        Err(e) => return Err(Response::err(Value::Null, super::ERR_IO, e.to_string())),
+        Err(e) => {
+            return Err(Box::new(Response::err(
+                Value::Null,
+                super::ERR_IO,
+                e.to_string(),
+            )))
+        },
     }
     if !matches!(pending.state, RequestState::Pending) {
-        return Err(Response::err(
+        return Err(Box::new(Response::err(
             Value::Null,
             super::ERR_BAD_STATE,
             format!("rid={rid} already finalized (state={:?})", pending.state),
-        ));
+        )));
     }
     let new_state = match &response {
         ElicitResponse::Cancelled { .. } => RequestState::Cancelled,
@@ -277,7 +289,11 @@ async fn finalize_via_state(
             state.notify_answered(rid, status);
             Ok(pending)
         },
-        Err(e) => Err(Response::err(Value::Null, super::ERR_IO, e.to_string())),
+        Err(e) => Err(Box::new(Response::err(
+            Value::Null,
+            super::ERR_IO,
+            e.to_string(),
+        ))),
     }
 }
 

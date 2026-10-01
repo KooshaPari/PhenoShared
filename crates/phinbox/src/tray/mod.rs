@@ -283,7 +283,7 @@ mod tests {
     fn tray_config_fields_default() {
         let cfg = TrayConfig::new("http://localhost:7117", "/tmp/inbox");
         assert_eq!(cfg.tooltip, "phinbox inbox");
-        assert!(cfg.initial_badge.is_empty());
+        assert_eq!(cfg.initial_badge, "");
         assert!(!cfg.quiet);
     }
 

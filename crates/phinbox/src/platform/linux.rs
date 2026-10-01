@@ -41,8 +41,7 @@ fn python_tkinter_available() -> bool {
         .stdout(Stdio::null())
         .stderr(Stdio::null())
         .status()
-        .map(|s| s.success())
-        .unwrap_or(false)
+        .is_ok_and(|s| s.success())
 }
 
 /// Render via `zenity` (GNOME).
@@ -117,14 +116,12 @@ fn render_zenity(spec: &PromptSpec, opts: &ElicitOptions) -> Result<ElicitRespon
             cmd.arg("--ok-label").arg(
                 spec.buttons
                     .as_ref()
-                    .map(|b| b.confirm.clone())
-                    .unwrap_or_else(|| "OK".into()),
+                    .map_or_else(|| "OK".into(), |b| b.confirm.clone()),
             );
             cmd.arg("--cancel-label").arg(
                 spec.buttons
                     .as_ref()
-                    .map(|b| b.cancel.clone())
-                    .unwrap_or_else(|| "Cancel".into()),
+                    .map_or_else(|| "Cancel".into(), |b| b.cancel.clone()),
             );
             run_with_timeout(&mut cmd, timeout)?
         },
@@ -195,7 +192,7 @@ fn answer_text(outcome: &Outcome, spec: &PromptSpec) -> String {
 fn render_kdialog(spec: &PromptSpec, opts: &ElicitOptions) -> Result<ElicitResponse, ElicitError> {
     let timeout = opts
         .timeout
-        .unwrap_or(Duration::from_secs(spec.timeout_secs as u64));
+        .unwrap_or(Duration::from_secs(u64::from(spec.timeout_secs)));
 
     let mut cmd = Command::new("kdialog");
     cmd.arg("--title").arg(format!("phinbox · {}", spec.title));

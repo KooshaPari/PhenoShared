@@ -381,7 +381,7 @@ fn http_partial_body_is_not_recorded_as_an_answer() {
         Some(ElicitResponse::Answered {
             value: FieldValue::Text(v),
             ..
-        }) => assert!(v.is_empty()),
+        }) => assert_eq!(v, ""),
         other => panic!("expected Answered(Text(\"\")), got {other:?}"),
     }
 

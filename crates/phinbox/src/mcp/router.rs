@@ -151,6 +151,11 @@ impl PhinboxMcp {
     }
 }
 
+// rmcp's `#[tool_handler]` expansion emits the `ServerHandler` async entry
+// points itself; several carry no `.await`, so 1.98+ clippy's
+// `unused_async_trait_impl` fires with its span on the macro attribute —
+// outside our control, hence a scoped allow on this impl (E4 policy).
+#[allow(clippy::unused_async_trait_impl)]
 #[tool_handler]
 impl ServerHandler for PhinboxMcp {
     fn get_info(&self) -> ServerConfig {

@@ -800,7 +800,7 @@ mod tests {
     // -----------------------------------------------------------------------
     fn total_triangle_area(buf: &MeshBuffer) -> f64 {
         let mut area = 0.0_f64;
-        for tri in buf.indices.chunks_exact(3) {
+        for tri in buf.indices.as_chunks::<3>().0 {
             let a = buf.vertices[tri[0] as usize].position;
             let b = buf.vertices[tri[1] as usize].position;
             let c = buf.vertices[tri[2] as usize].position;
