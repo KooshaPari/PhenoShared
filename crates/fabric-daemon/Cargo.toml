@@ -29,15 +29,15 @@ clap = { version = "4", features = ["derive"] }
 tracing = "0.1"
 tracing-subscriber = { version = "0.3", features = ["json", "env-filter"] }
 prometheus = "0.14"
-opentelemetry = "0.32"
-opentelemetry_sdk = "0.32"
-opentelemetry-otlp = "0.32"
-tracing-opentelemetry = "0.32"
-toml = "0.8"
+opentelemetry = "0.33"
+opentelemetry_sdk = "0.33"
+opentelemetry-otlp = "0.33"
+tracing-opentelemetry = "0.34"
+toml = "1.1"
 ctrlc = "3"
 tokio = { version = "1", features = ["net", "io-util", "time", "process", "macros", "rt"] }
 reqwest = { version = "0.12", features = ["json"] }
-jsonwebtoken = "10"
+jsonwebtoken = "11"
 
 [dev-dependencies]
 tempfile = "3"
