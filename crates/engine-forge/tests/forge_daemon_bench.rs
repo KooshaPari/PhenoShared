@@ -56,7 +56,7 @@ fn current_rss_mib() -> Option<f64> {
     {
         let s = std::fs::read_to_string("/proc/self/statm").ok()?;
         let pages: u64 = s.split_whitespace().nth(1)?.parse().ok()?;
-        return Some(pages as f64 * 4.0 / 1024.0);
+        Some(pages as f64 * 4.0 / 1024.0)
     }
     #[cfg(target_os = "macos")]
     {
