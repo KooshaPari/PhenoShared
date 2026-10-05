@@ -67,7 +67,10 @@ use substrate_core::mailbox_port::MailboxStore;
 use substrate_core::ports::RoutingPort;
 use tracing::instrument;
 
-use openai::{complete_chat, complete_chat_stream, models_from_decision, ChatCompletionRequest};
+use openai::{
+    complete_chat_for_session, complete_chat_stream_for_session, models_from_decision,
+    ChatCompletionRequest,
+};
 use stream_usage as stream_accounting;
 use streaming::StreamingResponseBuilder;
 
@@ -510,6 +513,12 @@ async fn chat_completions_handler(
         .and_then(|v| v.to_str().ok())
         .map(|s| s.to_owned())
         .unwrap_or_else(|| uuid::Uuid::new_v4().to_string());
+    let key_session_id = headers
+        .get("x-opencode-session")
+        .or_else(|| headers.get("x-session-id"))
+        .and_then(|v| v.to_str().ok())
+        .unwrap_or(&session_id)
+        .to_owned();
 
     // Check budget before forwarding to upstream.
     if let Err(exceeded) =
@@ -567,7 +576,9 @@ async fn chat_completions_handler(
         .collect();
 
     if body.stream {
-        let raw_stream = complete_chat_stream(state.routing.as_ref(), &body, &providers_snap)
+        let raw_stream = complete_chat_stream_for_session(
+            state.routing.as_ref(), &body, &providers_snap, &key_session_id,
+        )
             .await
             .map_err(|e| {
                 let latency_ms = t0.elapsed().as_millis() as u64;
@@ -633,7 +644,9 @@ async fn chat_completions_handler(
         );
         Ok(StreamingResponseBuilder::sse_stream(stream))
     } else {
-        let response = complete_chat(state.routing.as_ref(), &body, &providers_snap)
+        let response = complete_chat_for_session(
+            state.routing.as_ref(), &body, &providers_snap, &key_session_id,
+        )
             .await
             .map_err(|e| {
                 let latency_ms = t0.elapsed().as_millis() as u64;

@@ -80,21 +80,43 @@ impl ProviderConfig {
     /// Resolve the API key from the environment at runtime.
     /// Returns `None` (and logs a warning) if the variable is not set.
     pub fn resolve_api_key(&self) -> Option<String> {
+        let keys = self.resolve_api_keys();
+        keys.into_iter().next()
+    }
+
+    /// Resolve the configured key pool. `OPENCODE_API_KEYS` is a comma-separated
+    /// list and takes precedence over the legacy single-key variable. Pooling is
+    /// opt-in and callers must be authorized to use every configured key. The
+    /// gateway has no provider quota API; it only fails over after HTTP 429.
+    pub fn resolve_api_keys(&self) -> Vec<String> {
+        if self.api_key_env == "OPENCODE_API_KEY"
+            && let Ok(value) = std::env::var("OPENCODE_API_KEYS")
+        {
+            let keys: Vec<String> = value
+                .split(',')
+                .map(str::trim)
+                .filter(|key| !key.is_empty())
+                .map(str::to_owned)
+                .collect();
+            if !keys.is_empty() {
+                return keys;
+            }
+        }
         match std::env::var(&self.api_key_env) {
-            Ok(k) if !k.trim().is_empty() => Some(k),
+            Ok(k) if !k.trim().is_empty() => vec![k],
             Ok(_) => {
                 eprintln!(
                     "[gateway] WARNING: env var {} is set but empty; skipping provider {}",
                     self.api_key_env, self.name
                 );
-                None
+                Vec::new()
             }
             Err(_) => {
                 eprintln!(
                     "[gateway] WARNING: env var {} not set; provider {} will be unavailable",
                     self.api_key_env, self.name
                 );
-                None
+                Vec::new()
             }
         }
     }

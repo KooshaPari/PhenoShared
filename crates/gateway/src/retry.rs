@@ -37,19 +37,21 @@ impl RetryPolicy {
 
 pub struct RetryableError {
     pub msg: String,
+    pub status: Option<u16>,
 }
 
 impl RetryableError {
     pub fn retryable(msg: impl Into<String>) -> Self {
-        Self { msg: msg.into() }
+        Self { msg: msg.into(), status: None }
     }
     pub fn from_status(status: u16, _body: &str, _provider: &str) -> Self {
         Self {
             msg: format!("upstream HTTP {}", status),
+            status: Some(status),
         }
     }
     pub fn permanent(msg: impl Into<String>) -> Self {
-        Self { msg: msg.into() }
+        Self { msg: msg.into(), status: None }
     }
     pub fn message(&self) -> &str {
         &self.msg

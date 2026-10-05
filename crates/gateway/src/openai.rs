@@ -158,6 +158,15 @@ pub async fn complete_chat(
     req: &ChatCompletionRequest,
     providers: &[ProviderConfig],
 ) -> Result<ChatCompletionResponse, String> {
+    complete_chat_for_session(routing, req, providers, "").await
+}
+
+pub async fn complete_chat_for_session(
+    routing: &dyn RoutingPort,
+    req: &ChatCompletionRequest,
+    providers: &[ProviderConfig],
+    session_id: &str,
+) -> Result<ChatCompletionResponse, String> {
     let prompt = req.user_prompt()?;
 
     // Check if the model field carries a provider prefix
@@ -172,10 +181,22 @@ pub async fn complete_chat(
             // Build a fallback chain if the provider declares fallbacks.
             if primary.fallbacks.is_empty() {
                 // Fast path: no fallbacks configured — dispatch directly.
-                let api_key = primary.resolve_api_key().ok_or_else(|| {
-                    format!("API key not available for provider {}", primary.name)
-                })?;
-                forward_to_provider(primary, &stripped_model, req, &api_key).await
+                let keys = ordered_keys(primary, session_id);
+                if keys.is_empty() {
+                    return Err(format!("API key not available for provider {}", primary.name));
+                }
+                let mut last_error = None;
+                for api_key in keys {
+                    match forward_to_provider(primary, &stripped_model, req, &api_key).await {
+                        Ok(response) => return Ok(response),
+                        Err(error) if error.status == Some(429) => last_error = Some(error),
+                        Err(error) => return Err(error.to_string()),
+                    }
+                }
+                return Err(last_error.map_or_else(
+                    || format!("API key not available for provider {}", primary.name),
+                    |error| error.to_string(),
+                ));
             } else {
                 let chain = FallbackChain::from_provider_config(primary);
                 let model = stripped_model.clone();
@@ -189,7 +210,7 @@ pub async fn complete_chat(
                         let api_key = key.ok_or_else(|| {
                             format!("API key not available for provider {}", p_clone.name)
                         })?;
-                        forward_to_provider(&p_clone, &m, &r, &api_key).await
+                        forward_to_provider(&p_clone, &m, &r, &api_key).await.map_err(|e| e.to_string())
                     }
                 })
                 .await
@@ -218,7 +239,7 @@ async fn forward_to_provider(
     model: &str,
     req: &ChatCompletionRequest,
     api_key: &str,
-) -> Result<ChatCompletionResponse, String> {
+) -> Result<ChatCompletionResponse, crate::retry::RetryableError> {
     let url = format!("{}/chat/completions", provider.base_url);
     let provider_name = provider.name.clone();
 
@@ -278,9 +299,7 @@ async fn forward_to_provider(
 
             Ok(upstream)
         }
-    })
-    .await
-    .map_err(|e| e.to_string())?;
+    }).await?;
 
     let content = result["choices"][0]["message"]["content"]
         .as_str()
@@ -301,6 +320,18 @@ async fn forward_to_provider(
             finish_reason: "stop",
         }],
     })
+}
+
+fn ordered_keys(provider: &ProviderConfig, session_id: &str) -> Vec<String> {
+    use std::hash::{Hash, Hasher};
+    let mut keys = provider.resolve_api_keys();
+    if keys.len() > 1 {
+        let mut hasher = std::collections::hash_map::DefaultHasher::new();
+        session_id.hash(&mut hasher);
+        let start = (hasher.finish() as usize) % keys.len();
+        keys.rotate_left(start);
+    }
+    keys
 }
 
 fn chat_response_from_decision(decision: &RoutingDecision) -> ChatCompletionResponse {
@@ -464,6 +495,15 @@ pub async fn complete_chat_stream(
     req: &ChatCompletionRequest,
     providers: &[ProviderConfig],
 ) -> Result<BoxStream<'static, Result<Bytes, std::io::Error>>, String> {
+    complete_chat_stream_for_session(routing, req, providers, "").await
+}
+
+pub async fn complete_chat_stream_for_session(
+    routing: &dyn RoutingPort,
+    req: &ChatCompletionRequest,
+    providers: &[ProviderConfig],
+    session_id: &str,
+) -> Result<BoxStream<'static, Result<Bytes, std::io::Error>>, String> {
     let prompt = req.user_prompt()?;
 
     match resolve_provider_route(providers, &req.model) {
@@ -473,12 +513,22 @@ pub async fn complete_chat_stream(
                 .find(|p| p.name == provider_name)
                 .ok_or_else(|| format!("provider not found: {provider_name}"))?;
 
-            let api_key = provider
-                .resolve_api_key()
-                .ok_or_else(|| format!("API key not available for provider {}", provider.name))?;
-
-            // Forward streaming request to the upstream provider.
-            stream_from_provider(provider, &stripped_model, req, &api_key).await
+            let keys = ordered_keys(provider, session_id);
+            if keys.is_empty() {
+                return Err(format!("API key not available for provider {}", provider.name));
+            }
+            let mut last_error = None;
+            for api_key in keys {
+                match stream_from_provider(provider, &stripped_model, req, &api_key).await {
+                    Ok(stream) => return Ok(stream),
+                    Err(error) if error.status == Some(429) => last_error = Some(error),
+                    Err(error) => return Err(error.to_string()),
+                }
+            }
+            Err(last_error.map_or_else(
+                || format!("API key not available for provider {}", provider.name),
+                |error| error.to_string(),
+            ))
         }
         ProviderRoute::OmniRoute => {
             // OmniRoute: get a routing decision and synthesise a single-chunk stream
@@ -523,7 +573,7 @@ async fn stream_from_provider(
     model: &str,
     req: &ChatCompletionRequest,
     api_key: &str,
-) -> Result<BoxStream<'static, Result<Bytes, std::io::Error>>, String> {
+) -> Result<BoxStream<'static, Result<Bytes, std::io::Error>>, RetryableError> {
     let url = format!("{}/chat/completions", provider.base_url);
     let provider_name = provider.name.clone();
 
@@ -578,9 +628,7 @@ async fn stream_from_provider(
             }
             Ok(resp)
         }
-    })
-    .await
-    .map_err(|e| e.to_string())?;
+    }).await?;
 
     // Pass the upstream SSE byte stream through directly.
     // `map_err` converts reqwest errors to io::Error so they appear as Err items
