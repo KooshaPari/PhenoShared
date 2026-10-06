@@ -89,17 +89,17 @@ impl ProviderConfig {
     /// opt-in and callers must be authorized to use every configured key. The
     /// gateway has no provider quota API; it only fails over after HTTP 429.
     pub fn resolve_api_keys(&self) -> Vec<String> {
-        if self.api_key_env == "OPENCODE_API_KEY"
-            && let Ok(value) = std::env::var("OPENCODE_API_KEYS")
-        {
-            let keys: Vec<String> = value
-                .split(',')
-                .map(str::trim)
-                .filter(|key| !key.is_empty())
-                .map(str::to_owned)
-                .collect();
-            if !keys.is_empty() {
-                return keys;
+        if self.api_key_env == "OPENCODE_API_KEY" {
+            if let Ok(value) = std::env::var("OPENCODE_API_KEYS") {
+                let keys: Vec<String> = value
+                    .split(',')
+                    .map(str::trim)
+                    .filter(|key| !key.is_empty())
+                    .map(str::to_owned)
+                    .collect();
+                if !keys.is_empty() {
+                    return keys;
+                }
             }
         }
         match std::env::var(&self.api_key_env) {
