@@ -134,7 +134,7 @@ not reproducible.
 | E2.2 | Fix or formally exclude the **4** non-member crates with real compile errors | 10m | — |
 | E2.3 | Decide the **440** non-member manifests that never load (register / exclude / delete) | 10m | — |
 | E2.4 | Root-cause the **292** "believes it's in a workspace when it's not" | 10m | — |
-| E2.5 | Encode `--locked` (or `--offline`) everywhere so measuring never mutates lockfiles (see E12) | 10m | — |
+| E2.5 | **DONE (2026-10-08)** — audit complete. `--locked` added to every build/test/clippy/bench `cargo` invocation in CI workflows, repo scripts, and `grade.sh`; 14 files in 3 commits: `e8324250` (.github/workflows), `65ecac9a` (scripts/), `c5dfa0e1` (grade.sh). Justified skips recorded in E12.4. | done | — |
 
 **Why E2.1 first:** it is the difference between "compiles" and "works". `check`
 passing on a warm target dir is exactly the kind of green that hid four earlier
@@ -296,6 +296,7 @@ repo **modifies committed `Cargo.lock` files** and creates new ones
 | E12.1 | Identify the minimal command that triggers it | 10m |
 | E12.2 | Document the trap (any measurement must use `--locked`/`--offline`) | 10m |
 | E12.3 | Restore the 4 paths and verify a clean tree after a full measurement run | 10m |
+| E12.4 | **DONE (2026-10-08)** — E2.5 audit closed. 131 candidate files triaged: 14 hardened with `--locked` (`e8324250`, `65ecac9a`, `c5dfa0e1`); remaining invocations are already-locked (a) or intentional-no-lock (c). Skips: dead workflows (`perf-core/`, `libs/phenotype-auth`, `nanovms/` absent), lockfile-less standalone crates (`rust/`), external-repo builds (`phenotype-tooling`), and install/publish/audit/deny/fmt/metadata. Report: `~/.jcode/scratch/worker-reports/E2.5-locked-everywhere.md` | done |
 
 ---
 
@@ -350,7 +351,7 @@ sponsor-blocked), E1.7, E1.8.
 [E1.9 libclang ARM64 ] ░░░░░░░░░░░░░░░░░░░░   0%  queued 2026-10-08 06:25Z — fix replica6-pipeline.sh hard-coded x86_64-linux-gnu path
 [E1.10 PIPESTATUS     ] ░░░░░░░░░░░░░░░░░░░░   0%  queued — audit any other self-healing pipelines for RC=$? after pipe
 [E2.2 4 non-member    ] ░░░░░░░░░░░░░░░░░░░░   0%  queued 2026-10-08 06:25Z — WORKSPACE-BUILD.md §4.2: oci-lottery, oci-post-acquire, argis-monitor, agileplus-agent-service
-[E2.5 --locked everywhere] ░░░░░░░░░░░░░░░░░░░░   0%  queued — audit all cargo invocations lacking --locked (E12 evidence)
+[E2.5 --locked everywhere] ████████████████████ 100%  14 files hardened, 3 commits (e8324250, 65ecac9a, c5dfa0e1) — audit closed 2026-10-08
 ```
 
 **E1 CLOSEOUT 2026-10-08 01:09Z (Pacific)** — quality gate **GREEN** on
