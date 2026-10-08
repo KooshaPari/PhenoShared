@@ -225,15 +225,27 @@ mod tests {
         let _ = std::fs::remove_file(&tmp);
         let listener = UnixListener::bind(&tmp).expect("bind listener");
         let c = FocalPointConnector::new(&tmp);
-        c.connect().expect("connect");
 
+        // Synchronize the thread's accept() with the main thread's write so the
+        // test no longer races: if the writer runs first the unix stream can
+        // close the recv side before the listener accepts, surfacing as
+        // EPIPE ("Broken pipe") on the writer. Barrier ensures the listener
+        // thread has entered accept() before we call connect(), which in turn
+        // guarantees the connection is fully established by the time publish
+        // writes.
+        let ready = std::sync::Arc::new(std::sync::Barrier::new(2));
+        let ready_thread = std::sync::Arc::clone(&ready);
         let accept = std::thread::spawn(move || {
+            ready_thread.wait();
             let (mut stream, _) = listener.accept().expect("accept");
             use std::io::Read;
             let mut buf = [0u8; 256];
             let n = stream.read(&mut buf).expect("read");
             String::from_utf8_lossy(&buf[..n]).to_string()
         });
+
+        ready.wait();
+        c.connect().expect("connect");
 
         // No smoothed gaze — should fall back to a raw gaze
         let mut r = dummy_result();
