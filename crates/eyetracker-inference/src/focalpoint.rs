@@ -112,8 +112,14 @@ impl FocalPointConnector {
         let stream = guard
             .as_mut()
             .ok_or_else(|| anyhow::anyhow!("Not connected to FocalPoint bus"))?;
-        let json = serde_json::to_string(event)?;
-        writeln!(stream, "{}", json)?;
+        // Emit the complete newline-delimited frame in a single syscall.
+        // `writeln!` expands to multiple `write_all` calls; if a reader
+        // consumes only part of the frame and closes, the follow-up write
+        // can surface EPIPE even though the payload was delivered. One
+        // atomic write keeps the frame whole and avoids that race.
+        let mut payload = serde_json::to_string(event)?;
+        payload.push('\n');
+        stream.write_all(payload.as_bytes())?;
         stream.flush()?;
         Ok(())
     }
@@ -193,13 +199,17 @@ mod tests {
         c.connect().expect("connect");
         assert!(c.is_connected());
 
-        // Accept a connection in another thread
+        // Accept a connection in another thread. Read a complete
+        // newline-delimited frame: a single `read` can return after the
+        // first segment of the payload, and dropping the stream at that
+        // point makes the writer's next write surface EPIPE.
         let accept = std::thread::spawn(move || {
-            let (mut stream, _) = listener.accept().expect("accept");
-            use std::io::Read;
-            let mut buf = [0u8; 256];
-            let n = stream.read(&mut buf).expect("read");
-            String::from_utf8_lossy(&buf[..n]).to_string()
+            use std::io::BufRead;
+            let (stream, _) = listener.accept().expect("accept");
+            let mut reader = std::io::BufReader::new(stream);
+            let mut line = String::new();
+            reader.read_line(&mut line).expect("read_line");
+            line
         });
 
         c.publish(&dummy_result()).expect("publish");
@@ -237,11 +247,12 @@ mod tests {
         let ready_thread = std::sync::Arc::clone(&ready);
         let accept = std::thread::spawn(move || {
             ready_thread.wait();
-            let (mut stream, _) = listener.accept().expect("accept");
-            use std::io::Read;
-            let mut buf = [0u8; 256];
-            let n = stream.read(&mut buf).expect("read");
-            String::from_utf8_lossy(&buf[..n]).to_string()
+            use std::io::BufRead;
+            let (stream, _) = listener.accept().expect("accept");
+            let mut reader = std::io::BufReader::new(stream);
+            let mut line = String::new();
+            reader.read_line(&mut line).expect("read_line");
+            line
         });
 
         ready.wait();
