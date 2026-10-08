@@ -52,7 +52,12 @@ tracing-subscriber = { version = "0.3", features = ["env-filter", "json"] }
 # tracing crate with opentelemetry; opentelemetry-otlp emits OTLP.
 tracing-opentelemetry = "0.28"
 opentelemetry = { version = "0.27", features = ["trace"] }
-opentelemetry_sdk = { version = "0.32", features = ["trace", "rt-tokio"] }
+# Must match `opentelemetry` above: telemetry.rs targets the 0.27-era API
+# (`trace::TracerProvider`, public `Resource::new`, runtime arg on
+# `with_batch_exporter`). A 0.32 SDK pulls a second `opentelemetry` (0.32)
+# into the graph, causing E0432/E0624/E0271 (renamed type, private `new`,
+# mismatched `KeyValue`). Keep these three pinned together.
+opentelemetry_sdk = { version = "0.27", features = ["trace", "rt-tokio"] }
 opentelemetry-otlp = { version = "0.27", features = ["grpc-tonic", "trace"] }
 # Pushgateway wire-format encoder.
 urlencoding = "2"
