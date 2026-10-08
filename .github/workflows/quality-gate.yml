@@ -90,8 +90,23 @@ jobs:
         run: rustup target add x86_64-pc-windows-gnu x86_64-apple-darwin
       - name: Cross-target check (E1.7)
         run: ./scripts/check-cross-targets.sh
-      - name: 'cargo test --workspace (belt-and-braces: lib overlaps make check on purpose; adds bins/integration/doc targets)'
-        run: cargo test --workspace --locked --no-fail-fast
+      # arch-test contract: the workspace test suite must run through
+      # cargo-nextest's `ci` profile (.config/nextest.toml). Pinned in the same
+      # style as security-scan.yml's install-action usage.
+      - name: Install cargo-nextest
+        uses: taiki-e/install-action@37f7c5781271959fb65b6b35224e28652ff2b63d # v2
+        with:
+          tool: cargo-nextest
+      - name: 'cargo nextest run --workspace (belt-and-braces: lib overlaps make check on purpose; adds bins/integration targets; ci profile)'
+        run: cargo nextest run --workspace --profile ci --locked --no-fail-fast
+      - name: 'Upload cargo-nextest JUnit report (target/nextest/ci/junit.xml)'
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: substrate-nextest-ci-junit
+          path: target/nextest/ci/junit.xml
+          if-no-files-found: warn
+          retention-days: 14
 
   go-lint:
     needs: changes
