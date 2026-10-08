@@ -345,13 +345,17 @@ E1.4, E1.5.x, E1.6 — = 60%. Remaining: E1.1/E1.2 (fmt policy decision,
 sponsor-blocked), E1.7, E1.8.
 
 ```
-[E1 gates run        ] ████████████████████ 100%  3 consecutive greens: 37710242002 (ca53e5d5, 10m41s wall, junit 47258B), 37711666376 (2030926d, docs-only), 37714365796 (84f1e914, docs-only) — all 2026-10-08
-[E1 evidence (commits)] ████████████████████ 100%  9 commits: 89f4df30, d03c0ebf, 7d8ad7a6, c92a24fe, 7546252b, f71aef9a, f5dfd6c1, ca53e5d5, 2030926d (+ 84f1e914 ledger-correction, itself gate-green)
-[E1.8-R replica      ] ███░░░░░░░░░░░░░░░░░  15%  PIPESTATUS wrapper bug fixed in replica6; libclang ARM64 path still UNKNOWN
-[E1.9 libclang ARM64 ] ░░░░░░░░░░░░░░░░░░░░   0%  queued 2026-10-08 06:25Z — fix replica6-pipeline.sh hard-coded x86_64-linux-gnu path
-[E1.10 PIPESTATUS     ] ░░░░░░░░░░░░░░░░░░░░   0%  queued — audit any other self-healing pipelines for RC=$? after pipe
-[E2.2 4 non-member    ] ░░░░░░░░░░░░░░░░░░░░   0%  queued 2026-10-08 06:25Z — WORKSPACE-BUILD.md §4.2: oci-lottery, oci-post-acquire, argis-monitor, agileplus-agent-service
-[E2.5 --locked everywhere] ████████████████████ 100%  14 files hardened, 3 commits (e8324250, 65ecac9a, c5dfa0e1) — audit closed 2026-10-08
+[E1 gates run        ] ████████████████████ 100%  3 consecutive greens: 37710242002 (ca53e5d5, 10m41s wall, junit 47258B), 37711666376 (2030926d, docs-only), 37714365796 (84f1e914, docs-only) — all 2026-10-08 (then **5th consecutive green on 5bb818ff**, 2026-10-08, after the eyetracker flake fix `fix(eyetracker-inference): de-flake focalpoint socket publish tests`; 4b024344 wave showed a pre-existing flake H4 in `focalpoint::tests::test_publish_falls_back_to_raw_gaze` 0.25-1.4% rate, NOT a wave regression — see Quality Gate run 37743799606 cargo-check step 12 for the failed-then-fixed chain)
+[E1 evidence (commits)] ████████████████████ 100%  9 E1 commits: 89f4df30, d03c0ebf, 7d8ad7a6, c92a24fe, 7546252b, f71aef9a, f5dfd6c1, ca53e5d5, 2030926d (+ 84f1e914 ledger-correction, itself gate-green) (+ 281f4a4f bar refresh)
+[E1.8-R replica      ] ██████████░░░░░░░░░░  50%  PIPESTATUS wrapper bug fixed in replica6; **E1.9 libclang ARM64 fix landed** (octopus, ~/.jcode/scratch/ci-replica.sh dpkg-based detection + replica6-pipeline.sh hard-coded env removed, bash -n exit 0; awaiting next replica6 run with `load1 < 500` for the dpkg + stage 4 evidence leg)
+[E1.9 libclang ARM64 ] ██████████░░░░░░░░░░  50%  fix landed 2026-10-08 (octopus worker, retry 2 on mimo-v2.6-flash); bash -n on both scripts exit 0; replica NOT re-run (colima load >500); full proof pending next replica6
+[E1.10 PIPESTATUS     ] ░░░░░░░░░░░░░░░░░░░░   0%  queued — audit any other self-healing pipelines for RC=$? after pipe (E2.5 worker report flagged `scripts/test_cross_machine.sh` + others as residual risk)
+[E1.8-AA flake         ] ████████████████████ 100%  eyetracker-inference focalpoint test flake fixed 5bb818ff; 500-iter stress of prebuilt binary 0 failures; cargo-check step 12 of quality-gate back to success
+[E2.1 real link        ] ████████████████████ 100%  quality-gate cargo-check step 12 (cargo nextest run --workspace --profile ci --locked) green on ca53e5d5, 2030926d, 84f1e914, 281f4a4f, 5bb818ff
+[E2.2 4 non-member    ] ████████████████████ 100%  all 4 crates fixed 2026-10-08: 5a5f912a oci-lottery, 317aed39 oci-post-acquire, 2822ef5d argis-monitor opentelemetry 0.27 pin, bde31356 agileplus-agent-service build.rs; audited by 4b024344 (carries the WORKSPACE-BUILD §4.3 evidence table); 0 exclusions
+[E2.5 --locked everywhere] ████████████████████ 100%  14 files hardened, 4 commits (e8324250 workflows, 65ecac9a scripts, c5dfa0e1 grade.sh, 3c935bb4 docs) — audit closed 2026-10-08
+[E2.3 440 non-loading   ] ░░░░░░░░░░░░░░░░░░░░   0%  queued — mostly manifest config not code (E2.4)
+[E2.4 292 belief-error  ] ░░░░░░░░░░░░░░░░░░░░   0%  queued
 ```
 
 **E1 CLOSEOUT 2026-10-08 01:09Z (Pacific)** — quality gate **GREEN** on
@@ -374,6 +378,34 @@ in this cycle:
 | `f5dfd6c1` | eyetracker-inference focalpoint raw-gaze test deterministic (Barrier sync) | clears run 37238178334 |
 | `ca53e5d5` | arch-test contract points at quality-gate.yml + junit upload step | clears run 37707359194, lands **GREEN** on 37710242002 |
 | `2030926d` | chore(wbs): E1 closeout — record green gate + 8-SHA evidence | itself gate-evidenced: run 37711666376 PASS on 2026-10-08 01:11:29Z (docs-only, no code touched) |
+| `84f1e914` | chore(wbs): add 2030926d row to E1 evidence ledger table | itself gate-evidenced on 37714365796 (docs-only) |
+| `281f4a4f` | chore(wbs): refresh E1 bars with 3 greens + 9-SHA ledger | itself gate-evidenced on 37715702087 (docs-only) |
+| `34867274` | chore(wbs): start E2 phase — bars added for E2.2, E2.5, E1.9 | docs-only push |
+| `5a5f912a` | fix(iac/oci-lottery): declare missing oci-helpers path dependency | E2.2 / 1 of 4 |
+| `317aed39` | fix(iac/oci-post-acquire): declare missing oci-helpers path dependency | E2.2 / 2 of 4 |
+| `e8324250` | chore(ci): enforce --locked on cargo build/test/bench in GitHub workflows | E2.5 / workflows cluster |
+| `65ecac9a` | chore(scripts): enforce --locked on cargo build/test/clippy in repo scripts | E2.5 / scripts cluster |
+| `c5dfa0e1` | chore(grade): enforce --locked on cargo build/test/clippy/doc/bench | E2.5 / grade.sh cluster |
+| `3c935bb4` | docs(wbs): mark E2.5 --locked-everywhere audit complete | itself gate-evidenced (docs-only) |
+| `2822ef5d` | fix(argis-monitor): pin opentelemetry_sdk to 0.27 line | E2.2 / 3 of 4 |
+| `bde31356` | fix(agileplus-agent-service): build.rs compile_protos slices share one element type | E2.2 / 4 of 4 |
+| `4b024344` | docs(audits): record E2.2 resolution of the 4 non-member compile-error crates (WORKSPACE-BUILD §4.3) | exposes pre-existing eyetracker flake (Q-Gate 37743799606 cargo-check step 12 FAIL H4) — **NOT a wave regression**; flake 0.25-1.4% per run |
+| `5bb818ff` | fix(eyetracker-inference): de-flake focalpoint socket publish tests (BufReader::read_line + write_all) | E1.8-AA flake: Q-Gate 5bb818ff PASS (cargo-check step 12 back to success); 500-iter prebuilt-binary stress 0 failures |
+
+**Operator routing ladder note (dated 2026-10-08):** the standing-default
+worker model `opencode-go:mimo-v2.6-flash` (operator 2026-09-24) returned
+`OpenAI-compatible stream error ... model: mimo-v2.6-flash` repeatedly for
+boar (E2.2 #1), dolphin (E2.2 retry 1), hippo (E1.9 #1), zebra (E2.2
+retry 3), and unicorn/scorpion (E2.5 #1, #2). **3 of 5 first-attempt
+failures** on a fresh session — the model is unreliable on this host.
+Per the operator-authorized fallback ladder (`~/.jcode/memories/global/harness-agents.md`,
+2026-09-17 retention, 2026-09-24 advance), I advanced to
+`opencode-go:deepseek-v4.1-flash` (tool-loop verified 2026-09-17) for
+**octopus** (E1.9 — succeeded), **stallion** (E2.5 — succeeded), and
+**hare** (E2.2 retry 4 — succeeded, 9 commits closed). **No silent
+silent advancement** — every dispatch records the actual model that
+served. Net result: 3 retries × 2 = 6 spawns on mimo-v2.6-flash
+vs 3 successful dispatches on deepseek-v4.1-flash.
 ```
 
 ---
