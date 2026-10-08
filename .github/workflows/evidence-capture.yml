@@ -46,7 +46,7 @@ jobs:
         id: cargo_test
         run: |
           mkdir -p .agileplus/evidence/ci-run
-          cargo test 2>&1 | tee .agileplus/evidence/ci-run/test-results.txt
+          cargo test --locked 2>&1 | tee .agileplus/evidence/ci-run/test-results.txt
           PASSED=$(grep -c '^test .* \.\.\. ok$' .agileplus/evidence/ci-run/test-results.txt || echo "0")
           FAILED=$(grep -c '^test .* \.\.\. FAILED$' .agileplus/evidence/ci-run/test-results.txt || echo "0")
           echo "passed_count=$PASSED" >> "$GITHUB_OUTPUT"

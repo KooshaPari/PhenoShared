@@ -44,7 +44,7 @@ jobs:
           fi
       - name: Run benchmarks
         if: steps.check-benches.outputs.has-benches == 'true'
-        run: cargo bench --all --no-run
+        run: cargo bench --all --no-run --locked
         continue-on-error: true
       - name: Store benchmark results
         if: steps.check-benches.outputs.has-benches == 'true'

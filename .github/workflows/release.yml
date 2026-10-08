@@ -46,14 +46,14 @@ jobs:
           cache-on-failure: true
 
       - name: Build all Rust crates
-        run: cargo build --release --workspace
+        run: cargo build --release --workspace --locked
 
       - name: Run Go tests
         working-directory: crates/nanovms-core
         run: go test -v ./...
 
       - name: Run Rust tests
-        run: cargo test --workspace
+        run: cargo test --workspace --locked
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v7
