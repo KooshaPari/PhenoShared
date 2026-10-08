@@ -16,6 +16,7 @@ name = "oci-post-acquire"
 path = "src/main.rs"
 
 [dependencies]
+oci-helpers = { path = "../oci-helpers" }
 clap = { workspace = true }
 anyhow = { workspace = true }
 thiserror = { workspace = true }
