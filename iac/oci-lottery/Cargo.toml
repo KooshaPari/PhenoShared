@@ -11,6 +11,7 @@ name = "oci-lottery"
 path = "src/main.rs"
 
 [dependencies]
+oci-helpers = { path = "../oci-helpers" }
 clap = { workspace = true }
 anyhow = { workspace = true }
 serde = { workspace = true }
