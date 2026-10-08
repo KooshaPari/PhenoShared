@@ -99,6 +99,14 @@ jobs:
           tool: cargo-nextest
       - name: 'cargo nextest run --workspace (belt-and-braces: lib overlaps make check on purpose; adds bins/integration targets; ci profile)'
         run: cargo nextest run --workspace --profile ci --locked --no-fail-fast
+      - name: 'Upload cargo-nextest JUnit report (target/nextest/ci/junit.xml)'
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: substrate-nextest-ci-junit
+          path: target/nextest/ci/junit.xml
+          if-no-files-found: warn
+          retention-days: 14
 
   go-lint:
     needs: changes
