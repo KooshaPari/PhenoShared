@@ -344,8 +344,8 @@ E1.4, E1.5.x, E1.6 — = 60%. Remaining: E1.1/E1.2 (fmt policy decision,
 sponsor-blocked), E1.7, E1.8.
 
 ```
-[E1 gates run        ] ████████████████████ 100%  2026-10-08: run 37710242002 GREEN (ca53e5d5, 10m41s wall, junit 47258B)
-[E1 evidence (commits)] ████████████████████ 100%  8 commits: 89f4df30, d03c0ebf, 7d8ad7a6, c92a24fe, 7546252b, f71aef9a, f5dfd6c1, ca53e5d5
+[E1 gates run        ] ████████████████████ 100%  3 consecutive greens: 37710242002 (ca53e5d5, 10m41s wall, junit 47258B), 37711666376 (2030926d, docs-only), 37714365796 (84f1e914, docs-only) — all 2026-10-08
+[E1 evidence (commits)] ████████████████████ 100%  9 commits: 89f4df30, d03c0ebf, 7d8ad7a6, c92a24fe, 7546252b, f71aef9a, f5dfd6c1, ca53e5d5, 2030926d (+ 84f1e914 ledger-correction, itself gate-green)
 [E1.8-R replica      ] ███░░░░░░░░░░░░░░░░░  15%  PIPESTATUS wrapper bug fixed in replica6; libclang ARM64 path still UNKNOWN
 ```
 
