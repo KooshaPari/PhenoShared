@@ -53,7 +53,7 @@ log "gate 2 ok: working tree clean on $(git rev-parse --abbrev-ref HEAD)"
 # Gate 3 — Rust workspace tests
 # ---------------------------------------------------------------------------
 log "gate 3: running cargo test --workspace --all-targets..."
-TEST_OUT="$(cd perf-core && cargo test --workspace --all-targets 2>&1)"
+TEST_OUT="$(cd perf-core && cargo test --workspace --all-targets --locked 2>&1)"
 TEST_SUMMARY="$(printf '%s\n' "${TEST_OUT}" | grep -E '^test result' | \
     awk -F'[ .;]+' '{p+=$5; f+=$7; i+=$9} END {print "passed=" p, "failed=" f, "ignored=" i}')"
 log "  ${TEST_SUMMARY}"
@@ -69,7 +69,7 @@ fi
 # Gate 4 — clippy with -D warnings
 # ---------------------------------------------------------------------------
 log "gate 4: running cargo clippy --workspace --all-targets -- -D warnings..."
-CLIPPY_OUT="$(cd perf-core && cargo clippy --workspace --all-targets -- -D warnings 2>&1)"
+CLIPPY_OUT="$(cd perf-core && cargo clippy --workspace --all-targets --locked -- -D warnings 2>&1)"
 CLIPPY_RC=$?
 if [ "${CLIPPY_RC}" -ne 0 ]; then
     printf '%s\n' "${CLIPPY_OUT}" >&2

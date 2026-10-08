@@ -27,7 +27,7 @@ echo ""
 echo "--- Building for ${HOST_TARGET} ---"
 for bin in "${BINS[@]}"; do
   echo "  Building ${bin}..."
-  cargo build --release --bin "${bin}" 2>&1 | tail -1
+  cargo build --release --bin "${bin}" --locked 2>&1 | tail -1
 done
 
 # 2. Package host target

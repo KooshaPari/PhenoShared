@@ -28,7 +28,7 @@ TEST_RESULTS_FILE="$EVIDENCE_DIR/test-results.txt"
 TEST_PASSED=false
 TEST_SUMMARY=""
 
-if cargo test 2>&1 | tee "$TEST_RESULTS_FILE"; then
+if cargo test --locked 2>&1 | tee "$TEST_RESULTS_FILE"; then
   TEST_PASSED=true
   TEST_SUMMARY="All tests passed"
 else

@@ -64,7 +64,7 @@ check_rust() {
   fi
 
   echo "  → Running clippy..."
-  if ! cargo clippy --all-targets -- -D warnings 2>/dev/null; then
+  if ! cargo clippy --all-targets --locked -- -D warnings 2>/dev/null; then
     echo "  ❌ Clippy check failed"
     FAILED=1
   else
