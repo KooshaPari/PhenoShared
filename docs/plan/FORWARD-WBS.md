@@ -347,6 +347,10 @@ sponsor-blocked), E1.7, E1.8.
 [E1 gates run        ] ████████████████████ 100%  3 consecutive greens: 37710242002 (ca53e5d5, 10m41s wall, junit 47258B), 37711666376 (2030926d, docs-only), 37714365796 (84f1e914, docs-only) — all 2026-10-08
 [E1 evidence (commits)] ████████████████████ 100%  9 commits: 89f4df30, d03c0ebf, 7d8ad7a6, c92a24fe, 7546252b, f71aef9a, f5dfd6c1, ca53e5d5, 2030926d (+ 84f1e914 ledger-correction, itself gate-green)
 [E1.8-R replica      ] ███░░░░░░░░░░░░░░░░░  15%  PIPESTATUS wrapper bug fixed in replica6; libclang ARM64 path still UNKNOWN
+[E1.9 libclang ARM64 ] ░░░░░░░░░░░░░░░░░░░░   0%  queued 2026-10-08 06:25Z — fix replica6-pipeline.sh hard-coded x86_64-linux-gnu path
+[E1.10 PIPESTATUS     ] ░░░░░░░░░░░░░░░░░░░░   0%  queued — audit any other self-healing pipelines for RC=$? after pipe
+[E2.2 4 non-member    ] ░░░░░░░░░░░░░░░░░░░░   0%  queued 2026-10-08 06:25Z — WORKSPACE-BUILD.md §4.2: oci-lottery, oci-post-acquire, argis-monitor, agileplus-agent-service
+[E2.5 --locked everywhere] ░░░░░░░░░░░░░░░░░░░░   0%  queued — audit all cargo invocations lacking --locked (E12 evidence)
 ```
 
 **E1 CLOSEOUT 2026-10-08 01:09Z (Pacific)** — quality gate **GREEN** on
