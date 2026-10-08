@@ -368,6 +368,7 @@ in this cycle:
 | `f71aef9a` | E1.8-rev: workflow `cargo nextest run --profile ci` + repair CI-broken tests | unblocks nextest leg |
 | `f5dfd6c1` | eyetracker-inference focalpoint raw-gaze test deterministic (Barrier sync) | clears run 37238178334 |
 | `ca53e5d5` | arch-test contract points at quality-gate.yml + junit upload step | clears run 37707359194, lands **GREEN** on 37710242002 |
+| `2030926d` | chore(wbs): E1 closeout — record green gate + 8-SHA evidence | itself gate-evidenced: run 37711666376 PASS on 2026-10-08 01:11:29Z (docs-only, no code touched) |
 ```
 
 ---
