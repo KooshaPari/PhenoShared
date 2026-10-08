@@ -11,9 +11,13 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     tonic_prost_build::configure()
         .build_server(true)
         .build_client(true)
+        // `compile_protos<P>(protos: &[P], includes: &[P])` requires both slices
+        // to share one element type `P`. The protos slice is `&[PathBuf]`, so the
+        // includes slice must be `&[PathBuf]` too — a `&[&PathBuf]` is a different
+        // `P` and fails with E0308 (expected `PathBuf`, found `&PathBuf`).
         .compile_protos(
             &[proto_root.join("agileplus/v1/agents.proto")],
-            &[&proto_root],
+            &[proto_root],
         )?;
 
     Ok(())
