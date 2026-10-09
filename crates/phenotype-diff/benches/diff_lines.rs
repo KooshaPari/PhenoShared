@@ -17,7 +17,7 @@ fn make_input(lines: usize, change_pct: usize) -> (String, String) {
     let step = if change_pct == 0 {
         usize::MAX
     } else {
-        100 / change_pct
+        100usize.checked_div(change_pct).expect("change_pct > 0")
     };
     for (i, line) in new.iter_mut().enumerate() {
         if i % step == 0 {

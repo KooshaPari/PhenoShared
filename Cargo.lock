@@ -3378,7 +3378,7 @@ dependencies = [
  "schemars 0.8.22",
  "serde",
  "serde_json",
- "similar",
+ "similar 2.7.0",
  "tempfile",
  "thiserror 2.0.20",
  "uuid",
@@ -7518,6 +7518,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "phenotype-diff"
+version = "0.3.10"
+dependencies = [
+ "criterion 0.5.1",
+ "serde",
+ "similar 3.2.0",
+ "thiserror 2.0.20",
+]
+
+[[package]]
 name = "phenotype-flags"
 version = "0.3.10"
 dependencies = [
@@ -9811,6 +9821,15 @@ name = "similar"
 version = "2.7.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "bbbb5d9659141646ae647b42fe094daf6c6192d1620870b449d9557f748b2daa"
+
+[[package]]
+name = "similar"
+version = "3.2.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "4f66ca1f7aca2474dc10c942eb22feffc897735f54cd1db90138c2fddb490987"
+dependencies = [
+ "bstr",
+]
 
 [[package]]
 name = "simple_asn1"
