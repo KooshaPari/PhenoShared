@@ -65,10 +65,10 @@ fn main() -> ExitCode {
             }
 
             ExitCode::from(report.exit_code() as u8)
-        }
+        },
         Command::Version => {
             println!("configra-ops {VERSION}");
             ExitCode::SUCCESS
-        }
+        },
     }
 }
