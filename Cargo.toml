@@ -196,3 +196,12 @@ opt-level = "z"
 lto = true
 codegen-units = 1
 strip = true
+
+# Offline vendor-patch: lancedb 0.38.0 has a latent bug where src/job.rs uses
+# Error::Http unconditionally, but src/error.rs only defines that variant
+# under #[cfg(feature = "remote")]. Enabling `remote` requires tower-http 0.5.2
+# which is not in the local cargo cache. The vendor copy at .vendor/lancedb
+# gates the job.rs usage under the same cfg so the default build compiles
+# without the remote feature. Drop this patch once lancedb 0.38.1+ is cached.
+[patch.crates-io]
+lancedb = { path = ".vendor/lancedb" }
