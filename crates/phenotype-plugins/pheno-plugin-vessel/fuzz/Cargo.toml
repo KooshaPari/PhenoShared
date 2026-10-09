@@ -10,5 +10,7 @@ documentation = "https://docs.rs/fuzz"
 keywords = ["phenotype", "pheno-plugins"]
 categories = ["development-tools"]
 authors = ["<REDACTED>"]
+[workspace]
+
 [dependencies]
 libfuzzer-sys = "0.4"

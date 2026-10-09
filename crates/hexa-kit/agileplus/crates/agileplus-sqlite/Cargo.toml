@@ -25,5 +25,7 @@ publish = false
 #   4. Update the bench targets in `agileplus-benchmarks/Cargo.toml` to use
 #      the full surface.
 
+[workspace]
+
 [lib]
 path = "src/stub.rs"

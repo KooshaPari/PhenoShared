@@ -5,5 +5,7 @@ edition = "2021"
 license = "MIT"
 description = "Service registry and discovery (stub — see MIGRATED.md)"
 
+[workspace]
+
 [lib]
 path = "src/lib.rs"

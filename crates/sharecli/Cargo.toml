@@ -8,6 +8,8 @@ license = "MIT"
 authors = ["Phenotype"]
 repository = "https://github.com/KooshaPari/phenotype-tooling"
 
+[workspace]
+
 [package.metadata.dist]
 installers = ["cargo-binstall"]
 targets = ["aarch64-apple-darwin", "x86_64-unknown-linux-gnu"]

@@ -8,6 +8,8 @@ repository = "https://github.com/KooshaPari/PhenoCompose"
 description = "Truthful composition planner and Podman runtime CLI"
 publish = false
 
+[workspace]
+
 [[bin]]
 name = "pheno-compose"
 path = "src/main.rs"

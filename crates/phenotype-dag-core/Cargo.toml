@@ -4,6 +4,8 @@ version = "0.1.0"
 edition = "2021"
 description = "DAG foundation for Phenotype compute/infra automation (epic F) — standalone crate extracted from BytePort. Renamed 2026-09-01 from 'pheno-dag' to break name collision with Go-based 'phenodag' repo (absorbed into Tracera spec 008 + AgilePlus mirror). See ADR-dag-collision-phenodag-phenodag-2026-09-01.md."
 
+[workspace]
+
 [dependencies]
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"

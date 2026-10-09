@@ -11,6 +11,8 @@ homepage = "https://github.com/KooshaPari/phenotype-tooling"
 keywords = ["phenotype", "tooling", "cli"]
 categories = ["command-line-utilities"]
 
+[workspace]
+
 [lib]
 name = "phenotype_cli"
 path = "src/lib.rs"

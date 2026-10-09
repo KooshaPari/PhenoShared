@@ -6,6 +6,8 @@ description = "Synchronous CLI / install helper for the Forge Agent SDK (forge3)
 license = "MIT OR Apache-2.0"
 repository = "https://github.com/KooshaPari/phenotype-forge3-bridge"
 
+[workspace]
+
 [[bin]]
 name = "forge3-ctl"
 path = "src/main.rs"

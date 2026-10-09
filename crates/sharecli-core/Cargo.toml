@@ -5,6 +5,8 @@ edition = "2021"
 description = "Hypervisor engine tier for sharecli — process spawn/lifecycle/IO-ownership with Lock-Wait-Cache coalescing"
 license = "MIT"
 
+[workspace]
+
 [dependencies]
 sharecli-ipc = { path = "../sharecli-ipc" }
 sharecli-fleet = { path = "../sharecli-fleet" }

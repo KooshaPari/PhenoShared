@@ -7,6 +7,8 @@ license = "MIT OR Apache-2.0"
 repository = "https://github.com/KooshaPari/Quillr"
 documentation = "https://docs.rs/httpora-core"
 
+[workspace]
+
 [dependencies]
 tower = { version = "0.5", features = ["util"], optional = true }
 pin-project = { version = "1", optional = true }

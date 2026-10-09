@@ -11,6 +11,8 @@ keywords = ["cache", "caching", "memory", "redis", "ttl", "tiered", "singlefligh
 categories = ["caching", "data-structures"]
 rust-version = "1.75"
 
+[workspace]
+
 [dependencies]
 # Async runtime
 tokio = { version = "1", features = ["full"] }

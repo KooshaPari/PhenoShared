@@ -11,6 +11,8 @@ categories = ["filesystem"]
 authors = ["<REDACTED>"]
 
 
+[workspace]
+
 [dependencies]
 tokio = { version = "1", features = ["full"] }
 serde = { version = "1.0", features = ["derive"] }

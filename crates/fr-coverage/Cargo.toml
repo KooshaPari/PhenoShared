@@ -10,6 +10,8 @@ repository = "https://github.com/KooshaPari/phenotype-tooling"
 homepage = "https://github.com/KooshaPari/phenotype-tooling"
 keywords = ["phenotype", "tooling", "cli"]
 categories = ["command-line-utilities"]
+[workspace]
+
 [dependencies]
 regex = "1"
 walkdir = "2"

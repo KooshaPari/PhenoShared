@@ -5,6 +5,8 @@ edition = "2021"
 description = "Loom-verified sync primitives for sharecli ProcessPool (C00 L7)"
 license = "MIT"
 
+[workspace]
+
 [lints.rust]
 unexpected_cfgs = { level = "warn", check-cfg = ["cfg(loom)"] }
 

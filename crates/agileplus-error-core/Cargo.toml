@@ -7,6 +7,8 @@ repository = "https://github.com/KooshaPari/pheno"
 authors = ["Phenotype Team"]
 description = "Unified error handling for AgilePlus ecosystem"
 
+[workspace]
+
 [dependencies]
 thiserror = "2.0"
 serde = { version = "1.0", features = ["derive"] }

@@ -5,6 +5,8 @@ edition = "2021"
 license = "MIT"
 description = "IPC server + coalesce/debounce/queue primitives for sharecli — Unix socket JSON-RPC + Lock-Wait-Cache command deduplication"
 
+[workspace]
+
 [dependencies]
 # Coalesce/cache primitives
 sha2 = "0.11"

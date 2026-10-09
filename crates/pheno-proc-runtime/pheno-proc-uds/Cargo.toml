@@ -4,6 +4,8 @@ version = "0.1.0"
 edition = "2021"
 description = "Unix Domain Socket IPC for PhenoProc"
 
+[workspace]
+
 [dependencies]
 tokio = { version = "1", features = ["rt", "net", "macros", "io-util", "sync", "time"] }
 futures = "0.3"

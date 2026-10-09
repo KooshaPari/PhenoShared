@@ -5,6 +5,8 @@ edition = "2021"
 description = "Proc macros for pheno-errors (span annotations per L42)"
 license = "MIT OR Apache-2.0"
 
+[workspace]
+
 [lib]
 proc-macro = true
 

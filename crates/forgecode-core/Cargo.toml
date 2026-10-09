@@ -6,6 +6,8 @@ description = "Forgecode agent/provider stubs (PhenoProc absorption)"
 license = "MIT OR Apache-2.0"
 publish = false
 
+[workspace]
+
 [dependencies]
 async-trait = "0.1"
 serde = { version = "1.0", features = ["derive"] }

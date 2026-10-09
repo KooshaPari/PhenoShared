@@ -5,6 +5,8 @@ edition = "2021"
 description = "Native helpers for agent-harness: cache-key, is-agent, dispatcher"
 license = "MIT"
 
+[workspace]
+
 [[bin]]
 name = "harness-cache-key"
 path = "src/cache_key.rs"

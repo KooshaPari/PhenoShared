@@ -7,6 +7,8 @@ license = "MIT"
 authors = ["Phenotype"]
 repository = "https://github.com/KooshaPari/sharecli"
 
+[workspace]
+
 [lib]
 name = "sharecli_tray_linux"
 path = "src/lib.rs"

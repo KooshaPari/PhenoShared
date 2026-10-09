@@ -7,6 +7,8 @@ license = "MIT OR Apache-2.0"
 build = "build.rs"
 links = "spawn_core"
 
+[workspace]
+
 [dependencies]
 anyhow = "1"
 

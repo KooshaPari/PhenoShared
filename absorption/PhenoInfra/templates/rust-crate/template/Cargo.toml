@@ -11,6 +11,8 @@ keywords = ["phenotype", "substrate", "v8-governance", "ADR-041", "ADR-042", "AD
 categories = ["development-tools"]
 publish = false
 
+[workspace]
+
 [lib]
 name = "pheno_cargo_template"
 path = "src/lib.rs"

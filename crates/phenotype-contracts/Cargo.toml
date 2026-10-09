@@ -8,6 +8,8 @@ repository = "https://github.com/phenotype/phenotype-infrakit"
 keywords = ["hexagonal", "ports", "adapters", "architecture"]
 categories = ["architecture"]
 
+[workspace]
+
 [dependencies]
 thiserror = "2.0"
 async-trait = "0.1"

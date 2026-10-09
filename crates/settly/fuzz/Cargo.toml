@@ -3,5 +3,7 @@ name = "fuzz"
 version = "0.0.0"
 publish = false
 edition = "2021"
+[workspace]
+
 [dependencies]
 libfuzzer-sys = "0.4"

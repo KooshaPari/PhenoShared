@@ -5,6 +5,8 @@ edition = "2021"
 license = "MIT"
 description = "Shared configuration types and utilities for Phenotype crates"
 
+[workspace]
+
 [lib]
 path = "src/lib.rs"
 

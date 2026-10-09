@@ -11,6 +11,8 @@ keywords = ["phenotype", "pheno-compose", "port", "secret"]
 categories = ["development-tools"]
 authors = ["<REDACTED>"]
 
+[workspace]
+
 [lib]
 path = "src/lib.rs"
 

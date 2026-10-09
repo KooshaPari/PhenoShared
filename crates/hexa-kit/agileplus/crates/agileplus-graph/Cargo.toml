@@ -10,6 +10,8 @@ keywords = ["phenotype", "hexa", "graph", "neo4j"]
 categories = ["data-structures"]
 authors = ["<REDACTED>"]
 
+[workspace]
+
 [lib]
 path = "src/lib.rs"
 

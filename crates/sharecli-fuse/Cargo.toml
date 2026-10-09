@@ -6,6 +6,8 @@ description = "FUSE IO-interception layer for the sharecli OS process/IO/syscall
 license = "MIT"
 build = "build.rs"
 
+[workspace]
+
 [[bin]]
 name = "fuse-mount-smoke"
 path = "src/bin/fuse-mount-smoke.rs"

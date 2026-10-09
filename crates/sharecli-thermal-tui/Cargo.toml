@@ -5,6 +5,8 @@ edition = "2021"
 description = "Live thermal-gate / hypervisor-state TUI for sharecli"
 license = "MIT"
 
+[workspace]
+
 [dependencies]
 sharecli-fleet = { path = "../sharecli-fleet" }
 sharecli-fuse = { path = "../sharecli-fuse" }

@@ -11,6 +11,8 @@ repository = "https://github.com/KooshaPari/phenotype-tooling"
 homepage = "https://github.com/KooshaPari/phenotype-tooling"
 keywords = ["phenotype", "tooling", "cli"]
 categories = ["command-line-utilities"]
+[workspace]
+
 [dependencies]
 walkdir = "2"
 pulldown-cmark = "0.13"

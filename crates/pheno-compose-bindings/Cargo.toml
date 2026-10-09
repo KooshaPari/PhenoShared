@@ -10,6 +10,8 @@ keywords = ["phenotype", "pheno-compose", "ffi"]
 categories = ["api-bindings"]
 authors = ["<REDACTED>"]
 
+[workspace]
+
 [dependencies]
 
 [build-dependencies]

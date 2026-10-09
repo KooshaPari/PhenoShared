@@ -10,6 +10,8 @@ keywords = ["phenotype", "pheno-plugins", "git"]
 categories = ["development-tools::version-control", "development-tools"]
 authors = ["<REDACTED>"]
 
+[workspace]
+
 [dependencies]
 pheno-plugin-core = { path = "../pheno-plugin-core" }
 git2 = "0.21"

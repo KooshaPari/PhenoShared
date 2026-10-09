@@ -8,6 +8,8 @@ repository = "https://github.com/KooshaPari/pheno-forge-smoke"
 keywords = ["forgecode", "memory", "smoke-test", "phenotype", "cdylib"]
 categories = ["command-line-utilities", "development-tools::testing"]
 
+[workspace]
+
 [lib]
 name = "pheno_forge_smoke"
 path = "src/lib.rs"
