@@ -9,7 +9,7 @@ fn bench_pipeline_run(c: &mut Criterion) {
             let pipeline = Pipeline::new(Box::new(|x: i32| x * 2));
             let input: Vec<DataStream<i32>> = (0..size).map(DataStream::new).collect();
             b.iter(|| {
-                let cloned: Vec<DataStream<i32>> = input.iter().cloned().collect();
+                let cloned: Vec<DataStream<i32>> = input.to_vec();
                 pipeline.run(black_box(cloned))
             });
         });
