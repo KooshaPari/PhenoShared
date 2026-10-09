@@ -345,7 +345,7 @@ E1.4, E1.5.x, E1.6 — = 60%. Remaining: E1.1/E1.2 (fmt policy decision,
 sponsor-blocked), E1.7, E1.8.
 
 ```
-[E1 gates run        ] ████████████████████ 100%  **10 consecutive greens**: 37710242002 (ca53e5d5, 10m41s wall, junit 47258B), 37711666376 (2030926d, docs-only), 37714365796 (84f1e914, docs-only), 37715702087 (281f4a4f, docs-only); then 4b024344 wave showed a pre-existing flake H4 in `focalpoint::tests::test_publish_falls_back_to_raw_gaze` 0.25-1.4% rate (Q-Gate run 37743799606 cargo-check step 12 FAIL — **NOT a wave regression**); **5th green on 5bb818ff** (eyetracker flake fix, 2026-10-08); **6th on 7bc7629b** (E2 closeout WBS, 37857091818); **7th on 2188abb2** (E1.10 row refinement, 37866329121); **then 7th-green-broken: e4d62fae (E2.3 pilot 156/230 belief-errors) hit pre-existing flake H4 in `pheno-tracing::sampling::tests::rate_limit_with_burst_one_records_exactly_one` (Q-Gate 37871880927 cargo nextest step 12 FAIL — wall-clock-based test, NOT a wave regression)**; **8th green on 3a952562** (pheno-tracing de-flake, 37873411415); **9th on db771c1e** (E2.3+flake WBS update, 37874803628); **10th on 93818948** (E2.3 no-source 5/5 follow-up: 3 fuzz stub lib.rs + 2 template feature-gate fixes, 37875531905). All 2026-10-08 except 7bc7629b / 2188abb2 / e4d62fae / 3a952562 / db771c1e / 93818948 which are 2026-10-09.
+[E1 gates run        ] ████████████████████ 100%  **11 consecutive greens**: 37710242002 (ca53e5d5, 10m41s wall, junit 47258B), 37711666376 (2030926d, docs-only), 37714365796 (84f1e914, docs-only), 37715702087 (281f4a4f, docs-only); then 4b024344 wave showed a pre-existing flake H4 in `focalpoint::tests::test_publish_falls_back_to_raw_gaze` 0.25-1.4% rate (Q-Gate run 37743799606 cargo-check step 12 FAIL — **NOT a wave regression**); **5th green on 5bb818ff** (eyetracker flake fix, 2026-10-08); **6th on 7bc7629b** (E2 closeout WBS, 37857091818); **7th on 2188abb2** (E1.10 row refinement, 37866329121); **then 7th-green-broken: e4d62fae (E2.3 pilot 156/230 belief-errors) hit pre-existing flake H4 in `pheno-tracing::sampling::tests::rate_limit_with_burst_one_records_exactly_one` (Q-Gate 37871880927 cargo nextest step 12 FAIL — wall-clock-based test, NOT a wave regression)**; **8th green on 3a952562** (pheno-tracing de-flake, 37873411415); **9th on db771c1e** (E2.3+flake WBS update, 37874803628); **10th on 93818948** (E2.3 no-source 5/5 follow-up: 3 fuzz stub lib.rs + 2 template feature-gate fixes, 37875531905); **11th on 4e34ba51** (E2.4 audit commit: 04_E24_AUDIT.md + 00_SESSION_OVERVIEW.md, 37877254566). All 2026-10-08 except 7bc7629b / 2188abb2 / e4d62fae / 3a952562 / db771c1e / 93818948 / 4e34ba51 which are 2026-10-09.
 [E1 evidence (commits)] ████████████████████ 100%  9 E1 commits: 89f4df30, d03c0ebf, 7d8ad7a6, c92a24fe, 7546252b, f71aef9a, f5dfd6c1, ca53e5d5, 2030926d (+ 84f1e914 ledger-correction, itself gate-green) (+ 281f4a4f bar refresh) (+ 7bc7629b E2 closeout, gate-green 37857091818) (+ 2188abb2 E1.10 row refinement, gate-green 37866329121)
 [E1.8-R replica      ] ██████████░░░░░░░░░░  50%  PIPESTATUS wrapper bug fixed in replica6; **E1.9 libclang ARM64 fix landed** (octopus, ~/.jcode/scratch/ci-replica.sh dpkg-based detection + replica6-pipeline.sh hard-coded env removed, bash -n exit 0; awaiting next replica6 run with `load1 < 500` for the dpkg + stage 4 evidence leg)
 [E1.9 libclang ARM64 ] ██████████░░░░░░░░░░  50%  fix landed 2026-10-08 (octopus worker, retry 2 on mimo-v2.6-flash); bash -n on both scripts exit 0; replica NOT re-run (colima load >500); full proof pending next replica6
@@ -354,8 +354,8 @@ sponsor-blocked), E1.7, E1.8.
 [E2.1 real link        ] ████████████████████ 100%  quality-gate cargo-check step 12 (cargo nextest run --workspace --profile ci --locked) green on ca53e5d5, 2030926d, 84f1e914, 281f4a4f, 5bb818ff
 [E2.2 4 non-member    ] ████████████████████ 100%  all 4 crates fixed 2026-10-08: 5a5f912a oci-lottery, 317aed39 oci-post-acquire, 2822ef5d argis-monitor opentelemetry 0.27 pin, bde31356 agileplus-agent-service build.rs; audited by 4b024344 (carries the WORKSPACE-BUILD §4.3 evidence table); 0 exclusions
 [E2.5 --locked everywhere] ████████████████████ 100%  14 files hardened, 4 commits (e8324250 workflows, 65ecac9a scripts, c5dfa0e1 grade.sh, 3c935bb4 docs) — audit closed 2026-10-08
-[E2.3 440 non-loading   ] ████████████████░░░░  70%  **E2.3 pilot landed e4d62fae (156/230 belief-errors fixed via empty `[workspace]` table) + no-source follow-up 93818948 (5/5)** = 161/161 simple + no-source = 100% of mechanically-fixable belief-errors outside the 53-complex + 9-archived subsets: 681 total Cargo.toml files, 85 workspace members, 596 non-members; 230 had `cargo metadata` "current package believes it's in a workspace" errors; classified 170 simple (no `workspace = true` deps) + 60 complex (use `workspace = true` for deps) = 230; applied fix to 161 non-archived simple manifests (9 archived out of scope); verified 156/161 PASS `cargo metadata` (5 fail = rust-crate templates + 3 fuzz targets with no source, different bug class); 93818948 closed those 5 (3 stub `src/lib.rs` for fuzz targets, 2 template `[dev-dependencies]` optional=tracing fixes moved to `[dependencies]`). Remaining: 53 complex (E2.4 disposition) + 9 archived (out of scope). Q-Gate 37871880927 on e4d62fae FAIL — pre-existing flake H4 in pheno-tracing (NOT a wave regression); Q-Gate 37873411415 on 3a952562 PASS, 37874803628 on db771c1e PASS, **37875531905 on 93818948 PASS** — streak restored to 10. Self-execution pattern: clover worker orphaned in cross-swarm after 46min silence, base chat took over the mechanical fix.
-[E2.4 292 belief-error  ] ░░░░░░░░░░░░░░░░░░░░   0%  queued
+[E2.3 440 non-loading   ] ████████████████░░░░  70%  **E2.3 pilot landed e4d62fae (156/230 belief-errors fixed via empty `[workspace]` table) + no-source follow-up 93818948 (5/5)** = 161/161 simple + no-source = 100% of mechanically-fixable belief-errors outside the 53-complex + 9-archived subsets: 681 total Cargo.toml files, 85 workspace members, 596 non-members; 230 had `cargo metadata` "current package believes it's in a workspace" errors; classified 170 simple (no `workspace = true` deps) + 60 complex (use `workspace = true` for deps) = 230; applied fix to 161 non-archived simple manifests (9 archived out of scope); verified 156/161 PASS `cargo metadata` (5 fail = rust-crate templates + 3 fuzz targets with no source, different bug class); 93818948 closed those 5 (3 stub `src/lib.rs` for fuzz targets, 2 template `[dev-dependencies]` optional=tracing fixes moved to `[dependencies]`). Remaining: **94 live complex** (62 Pattern A `package.*.workspace=true` + 31 Pattern B concrete-version+broken-deps + 1 anomaly) + 4 archived (out of scope). Q-Gate 37871880927 on e4d62fae FAIL — pre-existing flake H4 in pheno-tracing (NOT a wave regression); Q-Gate 37873411415 on 3a952562 PASS, 37874803628 on db771c1e PASS, 37875531905 on 93818948 PASS, 37877254566 on 4e34ba51 PASS — streak at 11. E2.4 audit (04_E24_AUDIT.md) recommends Option A.1+B.1 batch fix (add 62+31 to root `workspace.members`, expand root `[workspace.dependencies]` from 2 to ~12, add `[workspace.package]`). Pilot B script (mechanical dep conversion) reverted 2026-10-09: only 11/33 fixed, 22 still broke due to `package.*.workspace=true` fields + workspace-internal path deps. Self-execution pattern: clover worker orphaned in cross-swarm after 46min silence, base chat took over the mechanical fix.
+[E2.4 292 belief-error  ] ████░░░░░░░░░░░░░░░░  20%  audit complete: 94 live broken (62 Pattern A + 31 Pattern B + 1 anomaly) + 4 archived; 04_E24_AUDIT.md recommends Option A.1+B.1 batch fix; operator sign-off pending (Options A/B/C/D in audit)
 ```
 
 **E1 CLOSEOUT 2026-10-08 01:09Z (Pacific)** — quality gate **GREEN** on
@@ -400,23 +400,31 @@ in this cycle:
 | `e4d62fae` | fix(workspace): add empty `[workspace]` table to 156 self-contained belief-error manifests | E2.3 / 1 of N (pilot): 681 total Cargo.toml, 230 belief-errors, 156 simple non-archived fixed; 5 expected-fail (templates + fuzz no-source); 60 complex + 9 archived remain for E2.4. Q-Gate 37871880927 FAIL on this SHA — pre-existing flake H4 in pheno-tracing (wall-clock-based test, NOT a wave regression) |
 | `3a952562` | fix(pheno-tracing): de-flake `rate_limit_with_burst_one_records_exactly_one` (`with_burst(1e6, 1.0)` → `with_burst(0.1, 1.0)` with comment) | E1.8-AA flake / 2nd occurrence of wall-clock-based-test class (5bb818ff was 1st); 1us timing assumption fails on slow CI runners. Q-Gate 37873411415 PASS — streak restored to 8 consecutive greens |
 | `93818948` | fix(workspace): resolve 5 E2.3 no-source pilot failures (3 fuzz `src/lib.rs` stubs + 2 template `[dev-dependencies]` optional=tracing moved to `[dependencies]`) | E2.3 / 2 of N (no-source follow-up): 156+5=161/161 simple + no-source = 100% of mechanically-fixable belief-errors outside the 53-complex + 9-archived subsets. Q-Gate 37875531905 PASS — 10th consecutive green. |
+| `4e34ba51` | fix(docs): E2.4 complex belief-error audit + session overview (04_E24_AUDIT.md, 00_SESSION_OVERVIEW.md) | E2.4 audit: 94 live broken (62 Pattern A `package.*.workspace=true` + 31 Pattern B concrete-version+broken-deps + 1 anomaly) + 4 archived; pilot B script (mechanical dep conversion) reverted (only 11/33 fixed, 22 still broke due to `package.*.workspace=true` fields); operator disposition requested. Q-Gate 37877254566 PASS — 11th consecutive green. |
 
-**E2 pilot + no-source update (2026-10-09 02:52Z, Pacific):** 10 consecutive
-quality-gate greens, 28-SHA evidence ledger. E2.3 pilot + no-source
-follow-up closed: 161/161 mechanically-fixable belief-error manifests
-(156 simple + 5 no-source) now stand as standalone workspace roots.
-74 remaining for E2.4 (53 complex + 9 archived + ~12 sponsor-blocked
-fmt). 7th-green-streak was broken by pre-existing flake H4 in
-pheno-tracing (wall-clock-based test, same class as eyetracker
+**E2 pilot + no-source + E2.4 audit update (2026-10-09 03:01Z, Pacific):** 11
+consecutive quality-gate greens, 30-SHA evidence ledger. E2.3 pilot +
+no-source follow-up closed: 161/161 mechanically-fixable belief-error
+manifests (156 simple + 5 no-source) now stand as standalone workspace
+roots. 74 remaining for E2.4 (53 complex + 9 archived + ~12
+sponsor-blocked fmt). 7th-green-streak was broken by pre-existing flake
+H4 in pheno-tracing (wall-clock-based test, same class as eyetracker
 5bb818ff); 8th on `3a952562` (de-flake), 9th on `db771c1e` (WBS
-refresh), 10th on `93818948` (5 no-source fixes).
-E1 + E2.1 + E2.2 + E2.5 + E1.8-AA + E1.10 = 6 of 7 phase rows at
-100%. Open: E1.8-R (replica evidence leg, 50%, blocked on colima
-load < 500), E1.9 (libclang ARM64, 50%, same blocker), E2.3 (70%
-pilot, 30% remaining for E2.4), E2.4 (53 complex belief-errors, 9
-archived). Sponsor/operator-blocked remain: E1.1/E1.2 (fmt policy),
-E2.6 (SDK split-brain, needs sudo), E2.7 (`*.SYS/*` builds, depends
-on E2.6).
+refresh), 10th on `93818948` (5 no-source fixes), 11th on `4e34ba51`
+(E2.4 audit commit). E2.4 audit: actual remaining is 94 live broken
+(62 Pattern A `package.*.workspace=true` + 31 Pattern B
+concrete-version+broken-deps + 1 anomaly) + 4 archived; pilot B
+mechanical dep-conversion reverted (only 11/33 fixed, 22 still broke
+due to `package.*.workspace=true` fields + workspace-internal path
+deps); audit recommends Option A.1+B.1 batch fix (add 62+31 to root
+`workspace.members`, expand root `[workspace.dependencies]` from 2 to
+~12, add `[workspace.package]`). E1 + E2.1 + E2.2 + E2.5 + E1.8-AA +
+E1.10 = 6 of 7 phase rows at 100%. Open: E1.8-R (replica evidence
+leg, 50%, blocked on colima load < 500), E1.9 (libclang ARM64, 50%,
+same blocker), E2.3 (70% pilot, 30% remaining for E2.4), E2.4 (94
+complex + 4 archived, audit complete + operator sign-off pending).
+Sponsor/operator-blocked remain: E1.1/E1.2 (fmt policy), E2.6 (SDK
+split-brain, needs sudo), E2.7 (`*.SYS/*` builds, depends on E2.6).
 
 **Operator routing ladder note (dated 2026-10-09):** the standing-default
 worker model `opencode-go:mimo-v2.6-flash` (operator 2026-09-24) returned
