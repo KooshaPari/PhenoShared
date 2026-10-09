@@ -93,6 +93,13 @@ members = [
     "crates/traceability-core",
     "crates/traceability-decorators",
     "crates/trace-gate",
+    # --- E2.4 Pattern A wave 1 (2026-10-09): 6 small/leaf crates (phenotype-mock deferred; latent Drop+StubFn source bugs) ---
+    "crates/bench-guard",
+    "crates/connector-testkit",
+    "crates/fuzz-setup",
+    "crates/perfharness",
+    "crates/phenotype-flags",
+    "crates/release-cut",
 ]
 [workspace.package]
 version = "0.3.10"
@@ -186,6 +193,11 @@ prometheus = { version = "0.14" }
 bevy = { version = "0.18.1", default-features = false, features = ["bevy_asset", "bevy_mesh"] }
 wgpu = { version = "22" }
 pollster = { version = "0.3" }
+
+# --- E2.4 Pattern A wave 1 (2026-10-09): unblock connector-testkit path-deps ---
+secrecy = "0.10"
+sha2 = "0.10"
+hex = "0.4"
 
 [workspace.lints.rust]
 unsafe_code = "forbid"
