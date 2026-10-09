@@ -93,9 +93,8 @@ members = [
     "crates/traceability-core",
     "crates/traceability-decorators",
     "crates/trace-gate",
-    # --- E2.4 Pattern A wave 1 (2026-10-09): 6 small/leaf crates (phenotype-mock deferred; latent Drop+StubFn source bugs) ---
+    # --- E2.4 Pattern A wave 1 (2026-10-09): 5 small/leaf crates (connector-testkit deferred; pulls PhenoObservability path-dep not in CI; phenotype-mock deferred; latent Drop+StubFn source bugs) ---
     "crates/bench-guard",
-    "crates/connector-testkit",
     "crates/fuzz-setup",
     "crates/perfharness",
     "crates/phenotype-flags",
