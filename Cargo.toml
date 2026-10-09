@@ -126,6 +126,9 @@ members = [
     "crates/focus-release-bot",
     "crates/phenotype-logging",
     "crates/mcp-server",
+    # --- E2.4 Pattern A wave 3 batch G (2026-10-09): 2 small libs (phenotype-contract, anthropic-usage-poll) ---
+    "crates/phenotype-contract",
+    "crates/anthropic-usage-poll",
 ]
 [workspace.package]
 version = "0.3.10"

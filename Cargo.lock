@@ -207,6 +207,20 @@ dependencies = [
 ]
 
 [[package]]
+name = "anthropic-usage-poll"
+version = "0.3.10"
+dependencies = [
+ "anyhow",
+ "chrono",
+ "clap",
+ "futures",
+ "reqwest 0.12.28",
+ "serde",
+ "serde_json",
+ "tokio",
+]
+
+[[package]]
 name = "any_spawner"
 version = "0.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -7395,6 +7409,14 @@ dependencies = [
  "thiserror 2.0.20",
  "tokio",
  "tracing",
+]
+
+[[package]]
+name = "phenotype-contract"
+version = "0.3.10"
+dependencies = [
+ "serde",
+ "thiserror 2.0.20",
 ]
 
 [[package]]

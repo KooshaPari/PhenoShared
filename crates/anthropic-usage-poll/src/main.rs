@@ -105,10 +105,10 @@ async fn fetch_usage_concurrent(concurrent: usize, api_key: &str) -> Result<Usag
                 if merged.is_none() {
                     merged = Some(s);
                 }
-            }
+            },
             Err(e) => {
                 eprintln!("[anthropic-usage-poll] fetch error: {e}");
-            }
+            },
         }
     }
 
