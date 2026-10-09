@@ -136,6 +136,8 @@ members = [
     "crates/phenotype-diff",
     # --- E2.4 Pattern A wave 3 batch J (2026-10-09): 1 small lib (configra-ops; logkit deferred) ---
     "crates/configra-ops",
+    # --- E2.4 Pattern A wave 3 batch K (2026-10-09): 1 focus-* lib (focus-coaching; secrecy added to workspace) ---
+    "crates/focus-coaching",
 ]
 [workspace.package]
 version = "0.3.10"
@@ -232,7 +234,7 @@ prometheus = { version = "0.14" }
 bevy = { version = "0.18.1", default-features = false, features = ["bevy_asset", "bevy_mesh"] }
 wgpu = { version = "22" }
 pollster = { version = "0.3" }
-
+secrecy = "0.10"
 [workspace.lints.rust]
 unsafe_code = "forbid"
 unused_must_use = "deny"

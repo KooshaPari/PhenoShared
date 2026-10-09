@@ -3983,6 +3983,22 @@ dependencies = [
 ]
 
 [[package]]
+name = "focus-coaching"
+version = "0.3.10"
+dependencies = [
+ "anyhow",
+ "async-trait",
+ "chrono",
+ "reqwest 0.12.28",
+ "secrecy",
+ "serde",
+ "serde_json",
+ "thiserror 2.0.20",
+ "tokio",
+ "tracing",
+]
+
+[[package]]
 name = "focus-domain"
 version = "0.3.10"
 dependencies = [
@@ -9404,6 +9420,15 @@ dependencies = [
  "proc-macro2",
  "quote",
  "syn 2.0.119",
+]
+
+[[package]]
+name = "secrecy"
+version = "0.10.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e891af845473308773346dc847b2c23ee78fe442e0472ac50e22a18a93d3ae5a"
+dependencies = [
+ "zeroize",
 ]
 
 [[package]]
