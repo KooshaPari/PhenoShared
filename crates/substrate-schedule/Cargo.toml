@@ -9,7 +9,7 @@ description = "SchedulePort implementation: cron/interval/daily/weekly next_run 
 
 [dependencies]
 substrate-core = { version = "0.3.8", path = "../substrate-core" }
-croner = "3.0"
+croner = "4.0"
 chrono = { workspace = true }
 
 [dev-dependencies]
