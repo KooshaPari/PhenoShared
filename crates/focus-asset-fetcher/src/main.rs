@@ -1,8 +1,6 @@
 use anyhow::{Context, Result};
 use clap::Parser;
-use focus_asset_fetcher::{
-    download_asset, parse_sound_sources, FetcherConfig,
-};
+use focus_asset_fetcher::{download_asset, parse_sound_sources, FetcherConfig};
 use std::fs;
 use std::path::PathBuf;
 
@@ -51,9 +49,7 @@ fn main() -> Result<()> {
     // Resolve paths
     let sources_file = args
         .sources_file
-        .unwrap_or_else(|| {
-            PathBuf::from("apps/ios/FocalPoint/Resources/Audio/SOUND_SOURCES.md")
-        });
+        .unwrap_or_else(|| PathBuf::from("apps/ios/FocalPoint/Resources/Audio/SOUND_SOURCES.md"));
 
     let cache_dir = args
         .cache_dir
@@ -61,22 +57,17 @@ fn main() -> Result<()> {
 
     let output_sfx_dir = args
         .output_sfx_dir
-        .unwrap_or_else(|| {
-            PathBuf::from("apps/ios/FocalPoint/Resources/Audio/SFX")
-        });
+        .unwrap_or_else(|| PathBuf::from("apps/ios/FocalPoint/Resources/Audio/SFX"));
 
     let output_simlish_dir = args
         .output_simlish_dir
-        .unwrap_or_else(|| {
-            PathBuf::from("apps/ios/FocalPoint/Resources/Audio/Simlish")
-        });
+        .unwrap_or_else(|| PathBuf::from("apps/ios/FocalPoint/Resources/Audio/Simlish"));
 
     // Load main sources
-    let sources_content = fs::read_to_string(&sources_file)
-        .context(format!("read {}", sources_file.display()))?;
+    let sources_content =
+        fs::read_to_string(&sources_file).context(format!("read {}", sources_file.display()))?;
 
-    let assets = parse_sound_sources(&sources_content)
-        .context("parse SOUND_SOURCES.md")?;
+    let assets = parse_sound_sources(&sources_content).context("parse SOUND_SOURCES.md")?;
 
     println!("Fetching {} SFX assets...", assets.len());
 
@@ -84,7 +75,11 @@ fn main() -> Result<()> {
         println!("\n[DRY RUN] Plan:");
     }
 
-    let mut config = FetcherConfig::new(cache_dir.clone(), output_sfx_dir.clone(), output_simlish_dir.clone());
+    let mut config = FetcherConfig::new(
+        cache_dir.clone(),
+        output_sfx_dir.clone(),
+        output_simlish_dir.clone(),
+    );
     config.dry_run = args.dry_run;
     if let Some(delay) = args.request_delay_ms {
         config.request_delay_ms = delay;
@@ -95,13 +90,12 @@ fn main() -> Result<()> {
 
     // Fetch all assets
     for asset in assets {
-        let cached_path = download_asset(&asset, &config)
-            .context(format!("fetch {}", asset.name))?;
+        let cached_path =
+            download_asset(&asset, &config).context(format!("fetch {}", asset.name))?;
 
         if !args.dry_run {
             // Create output directory
-            fs::create_dir_all(&config.output_sfx_dir)
-                .context("create output SFX dir")?;
+            fs::create_dir_all(&config.output_sfx_dir).context("create output SFX dir")?;
 
             // For now, just copy cached file (post-processing would happen here with ffmpeg check)
             let output_path = config.output_sfx_dir.join(format!("{}.m4a", asset.name));
@@ -116,20 +110,22 @@ fn main() -> Result<()> {
             let simlish_content = fs::read_to_string(&simlish_file)
                 .context(format!("read {}", simlish_file.display()))?;
 
-            let simlish_assets = parse_sound_sources(&simlish_content)
-                .context("parse Simlish/SOURCES.md")?;
+            let simlish_assets =
+                parse_sound_sources(&simlish_content).context("parse Simlish/SOURCES.md")?;
 
             println!("Fetching {} Simlish phonemes...", simlish_assets.len());
 
             for asset in simlish_assets {
-                let cached_path = download_asset(&asset, &config)
-                    .context(format!("fetch {}", asset.name))?;
+                let cached_path =
+                    download_asset(&asset, &config).context(format!("fetch {}", asset.name))?;
 
                 if !args.dry_run {
                     fs::create_dir_all(&config.output_simlish_dir)
                         .context("create output Simlish dir")?;
 
-                    let output_path = config.output_simlish_dir.join(format!("{}.m4a", asset.name));
+                    let output_path = config
+                        .output_simlish_dir
+                        .join(format!("{}.m4a", asset.name));
                     fs::copy(&cached_path, &output_path)
                         .context(format!("copy asset to {}", output_path.display()))?;
                 }
