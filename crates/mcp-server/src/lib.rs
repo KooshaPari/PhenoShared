@@ -29,13 +29,13 @@ impl McpError {
         match self {
             McpError::ToolNotFound(_) => {
                 "Verify the tool name is correct. Use list_tools() to see available tools."
-            }
+            },
             McpError::ResourceNotFound(_) => {
                 "Verify the resource URI is correct. Use list_resources() to see available resources."
-            }
+            },
             McpError::InvalidRequest(_) => {
                 "Check that the request payload matches the expected schema for this tool/resource."
-            }
+            },
         }
     }
 }

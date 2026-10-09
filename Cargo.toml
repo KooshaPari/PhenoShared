@@ -121,6 +121,11 @@ members = [
     "crates/phenotype-port-interfaces",
     # --- E2.4 Pattern A wave 3 batch E (2026-10-09): 1 flag-definitions lib (pheno-flags; uses pheno-errors from wave 3 batch A) ---
     "crates/pheno-flags",
+    # --- E2.4 Pattern A wave 3 batch F (2026-10-09): 4 medium libs (focus-domain, focus-release-bot, phenotype-logging, mcp-server) ---
+    "crates/focus-domain",
+    "crates/focus-release-bot",
+    "crates/phenotype-logging",
+    "crates/mcp-server",
 ]
 [workspace.package]
 version = "0.3.10"

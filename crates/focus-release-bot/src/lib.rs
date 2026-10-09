@@ -81,7 +81,7 @@ impl ReleaseNotesPayload {
     }
 
     /// Convert to Discord message format.
-    pub fn to_discord_message(self) -> DiscordMessage {
+    pub fn into_discord_message(self) -> DiscordMessage {
         let mut content = format!("🎉 **FocalPoint {}** Release\n", self.version);
 
         let mut fields = Vec::new();
@@ -139,14 +139,10 @@ pub async fn post_to_webhook(
         return Err(BotError::InvalidWebhookUrl);
     }
 
-    let message = payload.to_discord_message();
+    let message = payload.into_discord_message();
     let client = reqwest::Client::new();
 
-    let response = client
-        .post(webhook_url)
-        .json(&message)
-        .send()
-        .await?;
+    let response = client.post(webhook_url).json(&message).send().await?;
 
     if !response.status().is_success() {
         return Err(BotError::WebhookError(format!(
@@ -168,13 +164,10 @@ pub fn post_to_webhook_blocking(
         return Err(BotError::InvalidWebhookUrl);
     }
 
-    let message = payload.to_discord_message();
+    let message = payload.into_discord_message();
     let client = reqwest::blocking::Client::new();
 
-    let response = client
-        .post(webhook_url)
-        .json(&message)
-        .send()?;
+    let response = client.post(webhook_url).json(&message).send()?;
 
     if !response.status().is_success() {
         return Err(BotError::WebhookError(format!(
@@ -194,13 +187,10 @@ mod tests {
     #[test]
     fn test_release_notes_serialization() {
         let payload = ReleaseNotesPayload::new("0.0.4")
-            .with_category(
-                "Added",
-                vec!["New release notes generator".to_string()],
-            )
+            .with_category("Added", vec!["New release notes generator".to_string()])
             .with_category("Fixed", vec!["CLI formatting".to_string()]);
 
-        let msg = payload.to_discord_message();
+        let msg = payload.into_discord_message();
         assert_eq!(msg.embeds.len(), 1);
         assert!(msg.content.contains("0.0.4"));
 
@@ -212,7 +202,7 @@ mod tests {
     #[test]
     fn test_discord_message_structure() {
         let payload = ReleaseNotesPayload::new("0.0.4");
-        let msg = payload.to_discord_message();
+        let msg = payload.into_discord_message();
 
         assert!(!msg.embeds.is_empty());
         let embed = &msg.embeds[0];
