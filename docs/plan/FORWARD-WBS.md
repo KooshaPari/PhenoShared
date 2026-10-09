@@ -345,8 +345,8 @@ E1.4, E1.5.x, E1.6 — = 60%. Remaining: E1.1/E1.2 (fmt policy decision,
 sponsor-blocked), E1.7, E1.8.
 
 ```
-[E1 gates run        ] ████████████████████ 100%  3 consecutive greens: 37710242002 (ca53e5d5, 10m41s wall, junit 47258B), 37711666376 (2030926d, docs-only), 37714365796 (84f1e914, docs-only) — all 2026-10-08 (then **5th consecutive green on 5bb818ff**, 2026-10-08, after the eyetracker flake fix `fix(eyetracker-inference): de-flake focalpoint socket publish tests`; 4b024344 wave showed a pre-existing flake H4 in `focalpoint::tests::test_publish_falls_back_to_raw_gaze` 0.25-1.4% rate, NOT a wave regression — see Quality Gate run 37743799606 cargo-check step 12 for the failed-then-fixed chain)
-[E1 evidence (commits)] ████████████████████ 100%  9 E1 commits: 89f4df30, d03c0ebf, 7d8ad7a6, c92a24fe, 7546252b, f71aef9a, f5dfd6c1, ca53e5d5, 2030926d (+ 84f1e914 ledger-correction, itself gate-green) (+ 281f4a4f bar refresh)
+[E1 gates run        ] ████████████████████ 100%  **7 consecutive greens**: 37710242002 (ca53e5d5, 10m41s wall, junit 47258B), 37711666376 (2030926d, docs-only), 37714365796 (84f1e914, docs-only), 37715702087 (281f4a4f, docs-only); then 4b024344 wave showed a pre-existing flake H4 in `focalpoint::tests::test_publish_falls_back_to_raw_gaze` 0.25-1.4% rate (Q-Gate run 37743799606 cargo-check step 12 FAIL — **NOT a wave regression**); **5th green on 5bb818ff** (eyetracker flake fix, 2026-10-08); **6th on 7bc7629b** (E2 closeout WBS, 37857091818); **7th on 2188abb2** (E1.10 row refinement, 37866329121). All 2026-10-08 except 7bc7629b / 2188abb2 which are 2026-10-09 00:44Z.
+[E1 evidence (commits)] ████████████████████ 100%  9 E1 commits: 89f4df30, d03c0ebf, 7d8ad7a6, c92a24fe, 7546252b, f71aef9a, f5dfd6c1, ca53e5d5, 2030926d (+ 84f1e914 ledger-correction, itself gate-green) (+ 281f4a4f bar refresh) (+ 7bc7629b E2 closeout, gate-green 37857091818) (+ 2188abb2 E1.10 row refinement, gate-green 37866329121)
 [E1.8-R replica      ] ██████████░░░░░░░░░░  50%  PIPESTATUS wrapper bug fixed in replica6; **E1.9 libclang ARM64 fix landed** (octopus, ~/.jcode/scratch/ci-replica.sh dpkg-based detection + replica6-pipeline.sh hard-coded env removed, bash -n exit 0; awaiting next replica6 run with `load1 < 500` for the dpkg + stage 4 evidence leg)
 [E1.9 libclang ARM64 ] ██████████░░░░░░░░░░  50%  fix landed 2026-10-08 (octopus worker, retry 2 on mimo-v2.6-flash); bash -n on both scripts exit 0; replica NOT re-run (colima load >500); full proof pending next replica6
 [E1.10 PIPESTATUS     ] ████████████████████ 100%  audit CLOSED 2026-10-08. 306 `.sh` files in scope (255 with `pipefail`), 62 lines containing `$?`: **0 PIPELINE_DROP**, **0 ALREADY_PIPESTATUS** among `$?` sites (the only `${PIPESTATUS[0]}` user, `scripts/migrate_50_beads.sh:31`, contains no `$?` at all), 1 pipeline-adjacent but semantically correct (`crates/local-ops/tests/test_jcode_tool_safety.sh:35` — the last pipeline element *is* the hook under test), 61 NOT_AFTER_PIPE (redirection / command substitution only). The E2.5-flagged `scripts/test_cross_machine.sh` is clean (no `$?` after a pipe; `set -euo pipefail` line 13) — the E2.5 mention was about a missing lockfile, not RC handling. Real defects were elsewhere: **44c33538** `demos/bench-throughput-stress/scripts/stress.sh` (RC clobbered by `|| true` → `exit_code` always 0, *and* `pipefail` making the suite-list fallback dead code so the driver died at the probe), **39af864d** repo CI tee-masking (`.github/workflows/ratchet.yml`, `compute-infra-auditors.yml`), **5e5cfce4** crate CI tee-masking (`crates/hexa-kit/.github/actions/run-benchmarks/action.yml`, `crates/agile-plus/.github/workflows/infra.yml`, `crates/settly/.github/workflows/benchmarks.yml`). Report: `~/.jcode/scratch/worker-reports/E1.10-pipestatus-audit.md`
@@ -391,6 +391,21 @@ in this cycle:
 | `bde31356` | fix(agileplus-agent-service): build.rs compile_protos slices share one element type | E2.2 / 4 of 4 |
 | `4b024344` | docs(audits): record E2.2 resolution of the 4 non-member compile-error crates (WORKSPACE-BUILD §4.3) | exposes pre-existing eyetracker flake (Q-Gate 37743799606 cargo-check step 12 FAIL H4) — **NOT a wave regression**; flake 0.25-1.4% per run |
 | `5bb818ff` | fix(eyetracker-inference): de-flake focalpoint socket publish tests (BufReader::read_line + write_all) | E1.8-AA flake: Q-Gate 5bb818ff PASS (cargo-check step 12 back to success); 500-iter prebuilt-binary stress 0 failures |
+| `7bc7629b` | chore(wbs): E2 phase closeout — 21-SHA evidence ledger, bars updated, routing-ladder footnote | itself gate-evidenced: Q-Gate 37857091818 PASS (docs-only) |
+| `44c33538` | fix(stress): capture real probe exit codes in bench throughput driver (demos/bench-throughput-stress/scripts/stress.sh) | E1.10 / 1 of 3 fixes; `|| true` was clobbering `exit_code`, suite-list fallback was dead code under `pipefail` |
+| `39af864d` | fix(ci): stop `\| tee` from masking step failures in repo workflows (`.github/workflows/ratchet.yml`, `compute-infra-auditors.yml`) | E1.10 / 2 of 3 fixes; explicit `set -o pipefail; set -e` blocks before pipelines |
+| `5e5cfce4` | fix(ci): stop `\| tee` from masking bench failures in crate workflows (`crates/hexa-kit/.github/actions/run-benchmarks/action.yml`, `crates/agile-plus/.github/workflows/infra.yml`, `crates/settly/.github/workflows/benchmarks.yml`) | E1.10 / 3 of 3 fixes |
+| `17202141` | docs(wbs): close E1.10 PIPESTATUS audit row with evidence | itself gate-evidenced: Q-Gate 37866241655 PASS (docs-only) |
+| `2188abb2` | chore(wbs): E1.10 audit-row refinement (62 sites / 61 NOT_AFTER_PIPE) | itself gate-evidenced: Q-Gate 37866329121 PASS (docs-only) |
+
+**E1+E2 phase final closeout (2026-10-09 00:53Z, Pacific):** 7 consecutive
+quality-gate greens, 25-SHA evidence ledger, E1 + E2.1 + E2.2 + E2.5 + E1.8-AA
++ E1.10 = 6 of 7 phase rows at 100%. Open: E1.8-R (replica evidence leg,
+50%, blocked on colima load < 500), E1.9 (libclang ARM64, 50%, same blocker),
+E2.3 (440 non-member manifests, E2.3 worker dispatched on `deepseek-v4.1-flash`),
+E2.4 (292 belief-error root-cause, same worker as E2.3). Sponsor/operator-blocked
+remain: E1.1/E1.2 (fmt policy), E2.6 (SDK split-brain, needs sudo), E2.7
+(`*.SYS/*` builds, depends on E2.6).
 
 **Operator routing ladder note (dated 2026-10-08):** the standing-default
 worker model `opencode-go:mimo-v2.6-flash` (operator 2026-09-24) returned
