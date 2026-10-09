@@ -7236,25 +7236,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "phenotype-cache-adapter"
-version = "0.3.10"
-dependencies = [
- "serde",
- "serde_json",
-]
-
-[[package]]
-name = "phenotype-config-loader"
-version = "0.2.0"
-dependencies = [
- "serde",
- "serde_json",
- "tempfile",
- "thiserror 2.0.20",
- "toml 1.1.6+spec-1.1.0",
-]
-
-[[package]]
 name = "phenotype-crypto"
 version = "0.2.0"
 dependencies = [
@@ -7269,10 +7250,6 @@ dependencies = [
  "thiserror 2.0.20",
  "zeroize",
 ]
-
-[[package]]
-name = "phenotype-event-bus"
-version = "0.3.10"
 
 [[package]]
 name = "phenotype-flags"
@@ -7309,15 +7286,6 @@ dependencies = [
  "serde_json",
  "thiserror 2.0.20",
  "tokio",
-]
-
-[[package]]
-name = "phenotype-macros"
-version = "0.3.10"
-dependencies = [
- "proc-macro2",
- "quote",
- "syn 2.0.119",
 ]
 
 [[package]]
@@ -7414,14 +7382,6 @@ dependencies = [
  "thiserror 2.0.20",
  "tokio",
  "uuid",
-]
-
-[[package]]
-name = "phenotype-state-machine"
-version = "0.3.10"
-dependencies = [
- "serde",
- "serde_json",
 ]
 
 [[package]]
