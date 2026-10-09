@@ -20,7 +20,9 @@ pub struct TestClock {
 
 impl TestClock {
     pub fn new(initial: DateTime<Utc>) -> Self {
-        Self { fixed: std::sync::Mutex::new(initial) }
+        Self {
+            fixed: std::sync::Mutex::new(initial),
+        }
     }
 
     pub fn advance(&self, by: chrono::Duration) {

@@ -15,15 +15,26 @@ fn test_icon_sprite_integrity() {
     use std::fs;
 
     let sprite_path = workspace_root().join("assets/icons/sprite.svg");
-    assert!(sprite_path.exists(), "Icon sprite must exist at assets/icons/sprite.svg");
+    assert!(
+        sprite_path.exists(),
+        "Icon sprite must exist at assets/icons/sprite.svg"
+    );
 
-    let sprite_content = fs::read_to_string(sprite_path)
-        .expect("Failed to read sprite.svg");
+    let sprite_content = fs::read_to_string(sprite_path).expect("Failed to read sprite.svg");
 
     // Verify sprite is valid SVG
-    assert!(sprite_content.contains("<svg"), "Sprite must contain SVG root");
-    assert!(sprite_content.contains("</svg>"), "Sprite must have closing SVG tag");
-    assert!(sprite_content.contains("<symbol"), "Sprite must contain symbol elements");
+    assert!(
+        sprite_content.contains("<svg"),
+        "Sprite must contain SVG root"
+    );
+    assert!(
+        sprite_content.contains("</svg>"),
+        "Sprite must have closing SVG tag"
+    );
+    assert!(
+        sprite_content.contains("<symbol"),
+        "Sprite must contain symbol elements"
+    );
 
     // Count symbols (each icon is a <symbol> element)
     let symbol_count = sprite_content.matches("<symbol").count();
@@ -31,14 +42,36 @@ fn test_icon_sprite_integrity() {
 
     // Verify expected icon names exist
     let expected_icons = vec![
-        "nav-home", "nav-focus", "nav-rules", "nav-insights", "nav-connectors", "nav-settings",
-        "focus-strict", "focus-moderate", "focus-light", "focus-break", "focus-sleep",
-        "rule-app", "rule-time", "rule-penalty", "rule-reward", "rule-allowlist",
-        "connector-canvas", "connector-slack", "connector-gmail",
-        "status-active", "status-blocked", "status-warning",
-        "achievement-streak", "achievement-milestone",
-        "action-add", "action-delete", "action-edit",
-        "mascot-happy", "mascot-thinking", "mascot-celebrating",
+        "nav-home",
+        "nav-focus",
+        "nav-rules",
+        "nav-insights",
+        "nav-connectors",
+        "nav-settings",
+        "focus-strict",
+        "focus-moderate",
+        "focus-light",
+        "focus-break",
+        "focus-sleep",
+        "rule-app",
+        "rule-time",
+        "rule-penalty",
+        "rule-reward",
+        "rule-allowlist",
+        "connector-canvas",
+        "connector-slack",
+        "connector-gmail",
+        "status-active",
+        "status-blocked",
+        "status-warning",
+        "achievement-streak",
+        "achievement-milestone",
+        "action-add",
+        "action-delete",
+        "action-edit",
+        "mascot-happy",
+        "mascot-thinking",
+        "mascot-celebrating",
     ];
 
     for icon_name in expected_icons {
@@ -56,8 +89,7 @@ fn test_icon_sprite_size() {
     use std::fs;
 
     let sprite_path = workspace_root().join("assets/icons/sprite.svg");
-    let metadata = fs::metadata(sprite_path)
-        .expect("Failed to stat sprite.svg");
+    let metadata = fs::metadata(sprite_path).expect("Failed to stat sprite.svg");
     let size_bytes = metadata.len();
 
     // Sprite should be reasonably sized (10-25 KB for 63 icons)
@@ -78,8 +110,7 @@ fn test_icon_types_generation() {
         "Icon types must exist at assets/icons/sprite.types.ts"
     );
 
-    let types_content = fs::read_to_string(types_path)
-        .expect("Failed to read sprite.types.ts");
+    let types_content = fs::read_to_string(types_path).expect("Failed to read sprite.types.ts");
 
     // Verify TypeScript exports
     assert!(

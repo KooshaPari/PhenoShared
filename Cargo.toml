@@ -99,6 +99,19 @@ members = [
     "crates/perfharness",
     "crates/phenotype-flags",
     "crates/release-cut",
+    # --- E2.4 Pattern A wave 2 (2026-10-09): 12 more small/leaf crates (3 placeholders + 9 small/real; all no-external-path-dep) ---
+    "crates/phenotype-git-core",
+    "crates/phenotype-cache-adapter",
+    "crates/phenotype-state-machine",
+    "crates/phenotype-event-bus",
+    "crates/phenotype-rate-limit",
+    "crates/focus-time",
+    "crates/focus-ui",
+    "crates/phenotype-macros",
+    "crates/phenovcs-observability",
+    "crates/sidekick-messaging",
+    "crates/datakit",
+    "crates/phenotype-config-loader",
 ]
 [workspace.package]
 version = "0.3.10"
