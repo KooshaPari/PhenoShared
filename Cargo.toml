@@ -112,6 +112,11 @@ members = [
     "crates/pheno-forge-scaffold",
     "crates/pheno-errors",
     "crates/agent-forecast",
+    # --- E2.4 Pattern A wave 3 batch B (2026-10-09): 4 CLI tools using walkdir (added walkdir 2.5 to [workspace.dependencies]) ---
+    "crates/fr-trace",
+    "crates/docs-health",
+    "crates/legacy-scan",
+    "crates/audit-privacy",
 ]
 [workspace.package]
 version = "0.3.10"
@@ -138,6 +143,8 @@ thiserror = "2.0"
 uuid = { version = "1.11", features = ["v4", "serde"] }
 async-trait = "0.1"
 tokio = { version = "1.42", features = ["rt", "rt-multi-thread", "macros", "process", "io-util", "sync", "time", "signal"] }
+walkdir = "2.5"
+agileplus-error-core = { version = "0.3.8", path = "crates/agileplus-error-core" }
 regex = "1.11"
 anyhow = "1.0"
 clap = { version = "4.5", features = ["derive", "env"] }
