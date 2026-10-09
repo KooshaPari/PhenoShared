@@ -129,6 +129,9 @@ members = [
     # --- E2.4 Pattern A wave 3 batch G (2026-10-09): 2 small libs (phenotype-contract, anthropic-usage-poll) ---
     "crates/phenotype-contract",
     "crates/anthropic-usage-poll",
+    # --- E2.4 Pattern A wave 3 batch H (2026-10-09): 2 small/medium libs (focus-sync-store, focus-asset-fetcher) ---
+    "crates/focus-sync-store",
+    "crates/focus-asset-fetcher",
 ]
 [workspace.package]
 version = "0.3.10"
