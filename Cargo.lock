@@ -7515,6 +7515,14 @@ dependencies = [
 ]
 
 [[package]]
+name = "pheno-schema-port"
+version = "0.1.0"
+dependencies = [
+ "serde",
+ "serde_json",
+]
+
+[[package]]
 name = "pheno-tracing"
 version = "0.4.0-pre.0"
 dependencies = [
@@ -7532,6 +7540,17 @@ version = "0.3.10"
 dependencies = [
  "serde",
  "thiserror 2.0.20",
+]
+
+[[package]]
+name = "phenotype-cost-core"
+version = "0.3.10"
+dependencies = [
+ "chrono",
+ "serde",
+ "serde_json",
+ "thiserror 2.0.20",
+ "uuid",
 ]
 
 [[package]]

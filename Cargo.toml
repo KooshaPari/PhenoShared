@@ -138,6 +138,9 @@ members = [
     "crates/configra-ops",
     # --- E2.4 Pattern A wave 3 batch K (2026-10-09): 1 focus-* lib (focus-coaching; secrecy added to workspace) ---
     "crates/focus-coaching",
+    # --- E2.4 Pattern A wave 3 batch L (2026-10-09): 2 small libs (pheno-schema-port, phenotype-cost-core) ---
+    "crates/pheno-schema-port",
+    "crates/phenotype-cost-core",
 ]
 [workspace.package]
 version = "0.3.10"
