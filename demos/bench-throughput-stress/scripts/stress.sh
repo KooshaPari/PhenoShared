@@ -7,11 +7,17 @@ REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../.." && pwd)"
 [ -f "${REPO_ROOT}/bench/cli.py" ] || { echo "bench/cli.py not found"; exit 1; }
 
 # Probe once: get available suites
+# E1.10: this pipeline sits under `set -o pipefail`, so a failing `bench/cli.py`
+# made the *assignment* non-zero and `set -e` killed the script here -- the
+# fallback below (python `except` + emptiness check) was dead code. Tolerate the
+# probe failing; the driver should still run and report the failures per probe.
+set +e
 SUITES=$(cd "$REPO_ROOT" && PYTHONPATH=. python3 bench/cli.py list 2>/dev/null | python3 -c 'import json,sys
 try:
     d=json.load(sys.stdin)
     print(" ".join(s["name"] for s in d.get("suites",[])))
 except: print("small medium")')
+set -e
 if [ -z "$SUITES" ]; then SUITES="small medium"; fi
 echo "[bench-throughput-stress] suites: $SUITES"
 
@@ -30,8 +36,13 @@ for ((i=0;i<N;i++)); do
       suite=$(echo $SUITES | cut -d' ' -f$((pick + 1)))
       [ -z "$suite" ] && suite="small"
       t_start=$(date +%s%N)
-      out=$(cd "$REPO_ROOT" && PYTHONPATH=. python3 bench/cli.py info "$suite" 2>&1) || true
+      # E1.10: capture the real exit code. The previous `... || true` form reset
+      # $? to 0 (true's status), so the "exit_code" field written below was
+      # always 0 and could never report a failing probe.
+      set +e
+      out=$(cd "$REPO_ROOT" && PYTHONPATH=. python3 bench/cli.py info "$suite" 2>&1)
       rc=$?
+      set -e
       t_end=$(date +%s%N)
       lat_ms=$(( (t_end - t_start) / 1000000 ))
       passed=$(echo "$out" | grep -oE '"passed":[ ]*(true|false)' | head -1 || echo "")
