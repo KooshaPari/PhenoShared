@@ -119,6 +119,8 @@ members = [
     "crates/audit-privacy",
     # --- E2.4 Pattern A wave 3 batch D (2026-10-09): 1 trait-definitions lib (phenotype-port-interfaces; added publish=false to [workspace.package]) ---
     "crates/phenotype-port-interfaces",
+    # --- E2.4 Pattern A wave 3 batch E (2026-10-09): 1 flag-definitions lib (pheno-flags; uses pheno-errors from wave 3 batch A) ---
+    "crates/pheno-flags",
 ]
 [workspace.package]
 version = "0.3.10"
@@ -147,6 +149,7 @@ uuid = { version = "1.11", features = ["v4", "serde"] }
 async-trait = "0.1"
 tokio = { version = "1.42", features = ["rt", "rt-multi-thread", "macros", "process", "io-util", "sync", "time", "signal"] }
 walkdir = "2.5"
+pheno-errors = { version = "0.3.10", path = "crates/pheno-errors" }
 regex = "1.11"
 anyhow = "1.0"
 clap = { version = "4.5", features = ["derive", "env"] }

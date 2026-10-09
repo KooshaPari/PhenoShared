@@ -7313,6 +7313,14 @@ dependencies = [
 ]
 
 [[package]]
+name = "pheno-flags"
+version = "0.3.10"
+dependencies = [
+ "pheno-errors",
+ "thiserror 2.0.20",
+]
+
+[[package]]
 name = "pheno-forge-scaffold"
 version = "0.0.1"
 dependencies = [
