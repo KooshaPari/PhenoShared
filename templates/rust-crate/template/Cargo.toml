@@ -18,10 +18,12 @@ name = "pheno_cargo_template"
 path = "src/lib.rs"
 
 [dependencies]
-
-[dev-dependencies]
 # The template includes a tracing feature flag pattern (per ADR-036).
 # Generated crates may keep or remove this block; it's a starting point.
+# Note: feature gating is via the `[features]` block below; tracing is
+# declared `optional = true` in `[dependencies]` (not `[dev-dependencies]`,
+# which cargo forbids making optional) so the `tracing` feature can
+# control whether the dep is enabled.
 tracing = { version = "0.1", optional = true }
 
 [features]
