@@ -11,6 +11,7 @@ fn workspace_root() -> std::path::PathBuf {
 }
 
 #[test]
+#[ignore = "requires generated assets/icons/sprite.svg; not built in CI (run `python3 assets/gen-all-assets.py` first)"]
 fn test_icon_sprite_integrity() {
     use std::fs;
 
@@ -85,6 +86,7 @@ fn test_icon_sprite_integrity() {
 }
 
 #[test]
+#[ignore = "requires generated assets/icons/sprite.svg; not built in CI (run `python3 assets/gen-all-assets.py` first)"]
 fn test_icon_sprite_size() {
     use std::fs;
 
@@ -101,6 +103,7 @@ fn test_icon_sprite_size() {
 }
 
 #[test]
+#[ignore = "requires generated assets/icons/sprite.svg; not built in CI (run `python3 assets/gen-all-assets.py` first)"]
 fn test_icon_types_generation() {
     use std::fs;
 
@@ -132,6 +135,7 @@ fn test_icon_types_generation() {
 }
 
 #[test]
+#[ignore = "requires generated assets/icons/sprite.svg; not built in CI (run `python3 assets/gen-all-assets.py` first)"]
 fn test_individual_icon_files() {
     use std::fs;
 
