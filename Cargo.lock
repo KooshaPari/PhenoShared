@@ -2560,6 +2560,19 @@ dependencies = [
 
 [[package]]
 name = "dashmap"
+version = "5.5.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "978747c1d849a7d2ee5e8adc0159961c48fb7e5db2f06af6723b80123bb53856"
+dependencies = [
+ "cfg-if 1.0.4",
+ "hashbrown 0.14.5",
+ "lock_api",
+ "once_cell",
+ "parking_lot_core",
+]
+
+[[package]]
+name = "dashmap"
 version = "6.2.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e6361d5c062261c78a176addb82d4c821ae42bed6089de0e12603cd25de2059c"
@@ -7470,6 +7483,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "pheno-cache-adapter"
+version = "0.2.0"
+dependencies = [
+ "dashmap 5.5.3",
+ "serde",
+ "thiserror 2.0.20",
+ "tokio",
+]
+
+[[package]]
 name = "pheno-errors"
 version = "0.3.10"
 dependencies = [
@@ -7665,7 +7688,7 @@ dependencies = [
 name = "phenotype-policy-engine"
 version = "0.3.10"
 dependencies = [
- "dashmap",
+ "dashmap 6.2.1",
  "proptest",
  "regex",
  "serde",
@@ -7707,6 +7730,14 @@ dependencies = [
  "serde",
  "serde_json",
  "thiserror 2.0.20",
+]
+
+[[package]]
+name = "phenotype-resilience"
+version = "0.3.10"
+dependencies = [
+ "thiserror 2.0.20",
+ "tokio",
 ]
 
 [[package]]
@@ -9656,7 +9687,7 @@ checksum = "8d05a9e3fd8d7404985418db38c6617cc793a1a27f398d4fbc9dfe8e41b804e6"
 dependencies = [
  "bytes",
  "const_format",
- "dashmap",
+ "dashmap 6.2.1",
  "futures",
  "gloo-net",
  "http",
