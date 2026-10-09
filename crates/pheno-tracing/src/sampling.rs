@@ -764,7 +764,14 @@ mod tests {
     fn rate_limit_with_burst_one_records_exactly_one() {
         // `max_burst = 1.0` means the bucket holds exactly one token.
         // The first call records, subsequent immediate calls drop.
-        let sampler = RateLimitSampler::with_burst(1_000_000.0, 1.0);
+        //
+        // Use a deliberately small rate (0.1/s) so the refill between two
+        // back-to-back `should_sample` calls is sub-token on any
+        // reasonable CI scheduler tick (a 1s gap would still only add
+        // 0.1 tokens, which floors to Drop). This avoids a 1-microsecond
+        // timing assumption that flakes on slow CI runners where the
+        // gap between the two calls can exceed 1us with rate=1e6/s.
+        let sampler = RateLimitSampler::with_burst(0.1, 1.0);
         let ctx = SpanContext::root("t", "s", false);
         assert_eq!(sampler.should_sample(&ctx), SamplingDecision::Record);
         assert_eq!(sampler.should_sample(&ctx), SamplingDecision::Drop);
