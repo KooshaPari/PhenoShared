@@ -78,6 +78,9 @@ jobs:
           GH_TOKEN: ${{ secrets.PAT_FANOUT || secrets.GITHUB_TOKEN }}
           REPO: ${{ matrix.repo.name }}
         run: |
+          # E1.10: pipefail so a failing `gh api` fails this step instead of being
+          # masked by `tee`'s exit status.
+          set -o pipefail
           echo "::group::workflows in $REPO"
           gh api repos/<REDACTED>/$REPO/contents/.github/workflows --jq '.[].name' | tee workflows.txt
           echo "::endgroup::"
