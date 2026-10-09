@@ -7455,6 +7455,19 @@ dependencies = [
 ]
 
 [[package]]
+name = "phenotype-port-interfaces"
+version = "0.3.10"
+dependencies = [
+ "async-trait",
+ "chrono",
+ "serde",
+ "serde_json",
+ "thiserror 2.0.20",
+ "tokio",
+ "uuid",
+]
+
+[[package]]
 name = "phenotype-project-registry"
 version = "0.3.10"
 dependencies = [

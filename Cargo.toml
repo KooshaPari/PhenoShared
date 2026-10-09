@@ -117,6 +117,8 @@ members = [
     "crates/docs-health",
     "crates/legacy-scan",
     "crates/audit-privacy",
+    # --- E2.4 Pattern A wave 3 batch D (2026-10-09): 1 trait-definitions lib (phenotype-port-interfaces; added publish=false to [workspace.package]) ---
+    "crates/phenotype-port-interfaces",
 ]
 [workspace.package]
 version = "0.3.10"
@@ -125,6 +127,7 @@ authors = ["<REDACTED> <<REDACTED>@phenotype.space>"]
 license = "MIT OR Apache-2.0"
 repository = "https://github.com/KooshaPari/PhenoShared"
 rust-version = "1.80"
+publish = false
 
 [workspace.dependencies]
 substrate-core = { version = "0.3.8", path = "crates/substrate-core" }
@@ -144,7 +147,6 @@ uuid = { version = "1.11", features = ["v4", "serde"] }
 async-trait = "0.1"
 tokio = { version = "1.42", features = ["rt", "rt-multi-thread", "macros", "process", "io-util", "sync", "time", "signal"] }
 walkdir = "2.5"
-agileplus-error-core = { version = "0.3.8", path = "crates/agileplus-error-core" }
 regex = "1.11"
 anyhow = "1.0"
 clap = { version = "4.5", features = ["derive", "env"] }
