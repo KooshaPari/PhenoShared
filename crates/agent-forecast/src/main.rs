@@ -71,7 +71,7 @@ fn main() -> Result<()> {
             let tokens = load_history(&history_path, &category)?;
             let f = compute_forecast(&category, &tokens);
             println!("{}", serde_json::to_string_pretty(&f)?);
-        }
+        },
     }
     Ok(())
 }

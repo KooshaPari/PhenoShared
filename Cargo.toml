@@ -107,6 +107,11 @@ members = [
     "crates/phenovcs-observability",
     "crates/sidekick-messaging",
     "crates/datakit",
+    # --- E2.4 Pattern A wave 3 (2026-10-09): 4 small/leaf crates (just-add; no new workspace.dependencies needed) ---
+    "crates/temporal-grounding",
+    "crates/pheno-forge-scaffold",
+    "crates/pheno-errors",
+    "crates/agent-forecast",
 ]
 [workspace.package]
 version = "0.3.10"
