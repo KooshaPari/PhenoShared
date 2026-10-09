@@ -313,14 +313,22 @@ mod tests {
 
     #[test]
     fn test_from_env_skips_nonprefixed() {
+        // Uses unique prefix `NONPFX_TEST` to avoid racing with the other
+        // `from_env` tests (test_from_env_skips_exact_prefix_match and
+        // test_from_env_empty_prefix_key_is_error) that share `MYAPP_`.
+        // Without distinct prefixes, parallel test threads can interleave
+        // their `set_var` / `from_env` / `remove_var` calls and one
+        // thread's empty / invalid value (e.g. `MYAPP_` = "") can be
+        // observed by another thread's `from_env("MYAPP")` call, causing
+        // a spurious `is_err()` result and a flaky failure.
         unsafe {
             std::env::set_var("UNRELATED_VAR", "true");
-            std::env::set_var("MYAPP_FOO", "1");
+            std::env::set_var("NONPFX_TEST_FOO", "1");
         };
-        let result = FlagSet::from_env("MYAPP");
+        let result = FlagSet::from_env("NONPFX_TEST");
         unsafe {
             std::env::remove_var("UNRELATED_VAR");
-            std::env::remove_var("MYAPP_FOO");
+            std::env::remove_var("NONPFX_TEST_FOO");
         };
         assert!(result.is_ok());
         let flags = result.unwrap();
@@ -331,30 +339,34 @@ mod tests {
     fn test_from_env_skips_exact_prefix_match() {
         // A variable named exactly "PREFIX" (without underscore)
         // should be skipped — only "PREFIX_KEY" is consumed.
+        // Uses unique prefix `EXACTPFX_TEST` to avoid racing with
+        // the other `from_env` tests — see test_from_env_skips_nonprefixed.
         unsafe {
-            std::env::set_var("MYAPP", "should_be_ignored");
-            std::env::set_var("MYAPP_FLAG", "true");
+            std::env::set_var("EXACTPFX_TEST", "should_be_ignored");
+            std::env::set_var("EXACTPFX_TEST_FLAG", "true");
         };
-        let result = FlagSet::from_env("MYAPP");
+        let result = FlagSet::from_env("EXACTPFX_TEST");
         unsafe {
-            std::env::remove_var("MYAPP");
-            std::env::remove_var("MYAPP_FLAG");
+            std::env::remove_var("EXACTPFX_TEST");
+            std::env::remove_var("EXACTPFX_TEST_FLAG");
         };
         assert!(result.is_ok());
         let flags = result.unwrap();
         assert!(flags.is_enabled("FLAG"));
-        assert!(!flags.is_enabled("MYAPP"));
+        assert!(!flags.is_enabled("EXACTPFX_TEST"));
     }
 
     #[test]
     fn test_from_env_empty_prefix_key_is_error() {
-        unsafe { std::env::set_var("MYAPP_", "true") };
-        let result = FlagSet::from_env("MYAPP");
-        unsafe { std::env::remove_var("MYAPP_") };
+        // Uses unique prefix `EMPTYPFX_TEST` to avoid racing with
+        // the other `from_env` tests — see test_from_env_skips_nonprefixed.
+        unsafe { std::env::set_var("EMPTYPFX_TEST_", "true") };
+        let result = FlagSet::from_env("EMPTYPFX_TEST");
+        unsafe { std::env::remove_var("EMPTYPFX_TEST_") };
         assert!(result.is_err());
         assert_eq!(
             result.unwrap_err(),
-            FlagError::InvalidValue("MYAPP_".to_string())
+            FlagError::InvalidValue("EMPTYPFX_TEST_".to_string())
         );
     }
 }
