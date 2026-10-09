@@ -193,11 +193,6 @@ bevy = { version = "0.18.1", default-features = false, features = ["bevy_asset",
 wgpu = { version = "22" }
 pollster = { version = "0.3" }
 
-# --- E2.4 Pattern A wave 1 (2026-10-09): unblock connector-testkit path-deps ---
-secrecy = "0.10"
-sha2 = "0.10"
-hex = "0.4"
-
 [workspace.lints.rust]
 unsafe_code = "forbid"
 unused_must_use = "deny"
