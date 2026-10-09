@@ -178,7 +178,7 @@ impl FlagSet {
                 None => {
                     offending = Some(env_key);
                     break;
-                }
+                },
             }
         }
         if let Some(var_name) = offending {

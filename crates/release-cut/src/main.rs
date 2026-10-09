@@ -69,7 +69,7 @@ fn main() -> Result<()> {
                     version
                 );
             }
-        }
+        },
 
         Commands::Rollback { version } => {
             let vers = parse_version(&version)?;
@@ -79,7 +79,7 @@ fn main() -> Result<()> {
             let executor = Executor::new(&repo_root);
             executor.rollback(&vers)?;
             println!("\n✅ Rollback of {} complete", vers);
-        }
+        },
     }
 
     Ok(())
