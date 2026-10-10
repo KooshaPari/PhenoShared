@@ -502,6 +502,8 @@ members = [
     # --- E2.4 Pattern A wave 3 batch H (2026-10-09): 2 small/medium libs (focus-sync-store, focus-asset-fetcher) ---
     "crates/focus-sync-store",
     "crates/focus-asset-fetcher",
+    # --- E2.4 Pattern A wave 3 batch AW (2026-10-09): 1 focus-mascot ---
+    "crates/focus-mascot",
     # --- E2.4 Pattern A wave 3 batch I (2026-10-09): 1 small lib (phenotype-diff) ---
     "crates/phenotype-diff",
     # --- E2.4 Pattern A wave 3 batch J (2026-10-09): 1 small lib (configra-ops; logkit deferred) ---
@@ -599,6 +601,8 @@ members = [
     "crates/focus-rituals",
     # --- E2.4 Pattern A wave 3 batch AV (2026-10-09): 1 focus-asset-fetcher ---
     "crates/focus-asset-fetcher",
+    # --- E2.4 Pattern A wave 3 batch AW (2026-10-09): 1 focus-mascot ---
+    "crates/focus-mascot",
 ]
 [workspace.package]
 version = "0.3.10"
