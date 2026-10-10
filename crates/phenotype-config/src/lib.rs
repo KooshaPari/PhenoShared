@@ -198,7 +198,7 @@ impl PhenotypeConfig {
                     "yaml" | "yml" => figment.merge(Yaml::file(path)),
                     _ => {
                         return Err(ConfigError::UnsupportedFormat(ext.into()));
-                    }
+                    },
                 };
             }
         } else {
@@ -443,6 +443,7 @@ discord_webhook_url = "https://discord.com/api/webhooks/test"
     }
 
     #[test]
+    #[allow(clippy::single_element_loop)]
     fn test_nested_env_overrides() {
         let _g = ENV_LOCK.lock().unwrap();
         for var in ["PHENOTYPE_SERVICE_HOST"] {

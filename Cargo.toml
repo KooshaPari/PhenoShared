@@ -356,6 +356,8 @@ members = [
     "crates/llm-router",
     # --- E2.4 Pattern A wave 3 batch AX-17 (2026-10-09): pheno-context ---
     "crates/pheno-context",
+    # --- E2.4 Pattern A wave 3 batch AX-18 (2026-10-09): phenotype-config ---
+    "crates/phenotype-config",
     "crates/focus-time",
     "crates/focus-ui",
     "crates/phenovcs-observability",
