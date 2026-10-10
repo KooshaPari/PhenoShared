@@ -3,6 +3,20 @@
 version = 3
 
 [[package]]
+name = "acceptance-contract"
+version = "0.3.10"
+dependencies = [
+ "anyhow",
+ "clap",
+ "regex",
+ "serde",
+ "serde_json",
+ "serde_yaml",
+ "sha2 0.11.0",
+ "tokio",
+]
+
+[[package]]
 name = "adler2"
 version = "2.0.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2683,6 +2697,18 @@ dependencies = [
  "proc-macro2",
  "quote",
  "syn 2.0.119",
+]
+
+[[package]]
+name = "dag-scheduler"
+version = "0.3.10"
+dependencies = [
+ "acceptance-contract",
+ "anyhow",
+ "clap",
+ "serde",
+ "serde_json",
+ "serde_yaml",
 ]
 
 [[package]]

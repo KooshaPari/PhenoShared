@@ -171,11 +171,7 @@ pub(crate) fn default_file_hash_changed() -> bool {
 // Helpers
 // ---------------------------------------------------------------------------
 
-pub(crate) fn command_output(
-    command: &str,
-    args: &[String],
-    cwd: Option<&Path>,
-) -> Result<String> {
+pub(crate) fn command_output(command: &str, args: &[String], cwd: Option<&Path>) -> Result<String> {
     let mut cmd = Command::new(command);
     cmd.args(args);
     if let Some(dir) = cwd {
