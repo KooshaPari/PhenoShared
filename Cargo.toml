@@ -109,6 +109,10 @@ members = [
     "crates/pheno-crypto",
     "crates/pheno-net",
     "crates/pheno-testing",
+    # --- E2.4 Pattern A wave 3 batch Q (2026-10-09): 4 small libs (focus-mascot, focus-planning, pheno-fs, pheno-terminal) ---
+    "crates/focus-mascot",
+    "crates/focus-planning",
+    "crates/pheno-fs",
     "crates/sidekick-messaging",
     "crates/datakit",
     # --- E2.4 Pattern A wave 3 (2026-10-09): 4 small/leaf crates (just-add; no new workspace.dependencies needed) ---
@@ -161,6 +165,10 @@ members = [
     "crates/pheno-crypto",
     "crates/pheno-net",
     "crates/pheno-testing",
+    # --- E2.4 Pattern A wave 3 batch Q (2026-10-09): 4 small libs (focus-mascot, focus-planning, pheno-fs, pheno-terminal) ---
+    "crates/focus-mascot",
+    "crates/focus-planning",
+    "crates/pheno-fs",
 ]
 [workspace.package]
 version = "0.3.10"

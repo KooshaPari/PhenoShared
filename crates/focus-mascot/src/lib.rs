@@ -87,7 +87,12 @@ pub struct MascotState {
 
 impl MascotState {
     pub fn new(pose: Pose, emotion: Emotion, bubble: Option<String>) -> Self {
-        Self { pose, emotion, since: Utc::now(), bubble_text: bubble }
+        Self {
+            pose,
+            emotion,
+            since: Utc::now(),
+            bubble_text: bubble,
+        }
     }
 
     /// MVP copy bank — deterministic strings per pose. Swap for LLM later.
@@ -106,7 +111,11 @@ impl MascotState {
 
 impl Default for MascotState {
     fn default() -> Self {
-        Self::new(Pose::Idle, Emotion::Neutral, Some(Self::default_bubble_for(Pose::Idle).into()))
+        Self::new(
+            Pose::Idle,
+            Emotion::Neutral,
+            Some(Self::default_bubble_for(Pose::Idle).into()),
+        )
     }
 }
 
@@ -124,7 +133,10 @@ pub struct MascotMachine {
 
 impl MascotMachine {
     pub fn new() -> Self {
-        Self { state: MascotState::default(), coaching: None }
+        Self {
+            state: MascotState::default(),
+            coaching: None,
+        }
     }
 
     /// Attach an LLM-backed bubble text provider. Opt-in — sync `on_event`
@@ -166,7 +178,7 @@ impl MascotMachine {
                 Err(e) => {
                     warn!(target: "coaching.fallback", error = %e, "bubble LLM error");
                     fallback.clone()
-                }
+                },
             }
         } else {
             fallback.clone()
@@ -194,23 +206,23 @@ fn pose_emotion_for(event: &MascotEvent) -> (Pose, Emotion) {
         MascotEvent::StreakReset(_) => (Pose::SleepyDisappointed, Emotion::Concerned),
         MascotEvent::CreditEarned { amount } if *amount >= 10 => {
             (Pose::Celebratory, Emotion::Excited)
-        }
+        },
         MascotEvent::CreditEarned { .. } => (Pose::Encouraging, Emotion::Happy),
         MascotEvent::BypassSpent { remaining } if *remaining <= 0 => {
             (Pose::SternToughLove, Emotion::Stern)
-        }
+        },
         MascotEvent::BypassSpent { .. } => (Pose::CuriousThinking, Emotion::Concerned),
         MascotEvent::PenaltyEscalated { .. } => (Pose::SternToughLove, Emotion::Concerned),
         MascotEvent::AppLaunchedWhileBlocked { .. } => (Pose::SternToughLove, Emotion::Stern),
         MascotEvent::FocusSessionStarted { .. } => (Pose::Confident, Emotion::Neutral),
         MascotEvent::FocusSessionCompleted { minutes } if *minutes >= 25 => {
             (Pose::Celebratory, Emotion::Excited)
-        }
+        },
         MascotEvent::FocusSessionCompleted { .. } => (Pose::Encouraging, Emotion::Happy),
         MascotEvent::DailyCheckIn => (Pose::Confident, Emotion::Warm),
         MascotEvent::SleepDebtReported { hours } if *hours < 5.0 => {
             (Pose::SleepyDisappointed, Emotion::Tired)
-        }
+        },
         MascotEvent::SleepDebtReported { .. } => (Pose::CuriousThinking, Emotion::Concerned),
         MascotEvent::Idle => (Pose::Idle, Emotion::Neutral),
     }
@@ -221,20 +233,20 @@ fn describe_event(event: &MascotEvent) -> String {
         MascotEvent::RuleFired { rule_name } => format!("RuleFired rule={rule_name}"),
         MascotEvent::StreakIncremented { name, count } => {
             format!("StreakIncremented name={name} count={count}")
-        }
+        },
         MascotEvent::StreakReset(n) => format!("StreakReset name={n}"),
         MascotEvent::CreditEarned { amount } => format!("CreditEarned amount={amount}"),
         MascotEvent::BypassSpent { remaining } => format!("BypassSpent remaining={remaining}"),
         MascotEvent::PenaltyEscalated { tier } => format!("PenaltyEscalated tier={tier}"),
         MascotEvent::AppLaunchedWhileBlocked { bundle_id } => {
             format!("AppLaunchedWhileBlocked bundle={bundle_id}")
-        }
+        },
         MascotEvent::FocusSessionStarted { minutes } => {
             format!("FocusSessionStarted minutes={minutes}")
-        }
+        },
         MascotEvent::FocusSessionCompleted { minutes } => {
             format!("FocusSessionCompleted minutes={minutes}")
-        }
+        },
         MascotEvent::DailyCheckIn => "DailyCheckIn".into(),
         MascotEvent::SleepDebtReported { hours } => format!("SleepDebtReported hours={hours:.1}"),
         MascotEvent::Idle => "Idle".into(),
@@ -254,7 +266,10 @@ mod tests {
     #[test]
     fn streak_shows_proud_encouraging() {
         let mut m = MascotMachine::new();
-        let s = m.on_event(MascotEvent::StreakIncremented { name: "study".into(), count: 3 });
+        let s = m.on_event(MascotEvent::StreakIncremented {
+            name: "study".into(),
+            count: 3,
+        });
         assert_eq!(s.pose, Pose::Encouraging);
         assert_eq!(s.emotion, Emotion::Proud);
     }
@@ -289,9 +304,15 @@ mod tests {
             Arc::new(StubCoachingProvider::single("Nice streak — keep rolling."));
         let mut m = MascotMachine::new().with_coaching(provider);
         let s = m
-            .on_event_with_bubble(MascotEvent::StreakIncremented { name: "study".into(), count: 4 })
+            .on_event_with_bubble(MascotEvent::StreakIncremented {
+                name: "study".into(),
+                count: 4,
+            })
             .await;
-        assert_eq!(s.bubble_text.as_deref(), Some("Nice streak — keep rolling."));
+        assert_eq!(
+            s.bubble_text.as_deref(),
+            Some("Nice streak — keep rolling.")
+        );
         assert_eq!(s.pose, Pose::Encouraging);
     }
 
@@ -300,13 +321,18 @@ mod tests {
         let provider: Arc<dyn focus_coaching::CoachingProvider> = Arc::new(NoopCoachingProvider);
         let mut m = MascotMachine::new().with_coaching(provider);
         let s = m.on_event_with_bubble(MascotEvent::Idle).await;
-        assert_eq!(s.bubble_text.as_deref(), Some(MascotState::default_bubble_for(Pose::Idle)));
+        assert_eq!(
+            s.bubble_text.as_deref(),
+            Some(MascotState::default_bubble_for(Pose::Idle))
+        );
     }
 
     #[tokio::test]
     async fn llm_bubble_without_provider_uses_static() {
         let mut m = MascotMachine::new();
-        let s = m.on_event_with_bubble(MascotEvent::FocusSessionCompleted { minutes: 50 }).await;
+        let s = m
+            .on_event_with_bubble(MascotEvent::FocusSessionCompleted { minutes: 50 })
+            .await;
         assert_eq!(s.pose, Pose::Celebratory);
         assert_eq!(
             s.bubble_text.as_deref(),
@@ -315,7 +341,10 @@ mod tests {
     }
 
     // Traces to: FR-MASCOT-002
+    // PHE-MSC-001: test is a stub — `unimplemented!()` panic. Mark ignored until
+    // coaching message generation from rule evals/streaks is implemented.
     #[test]
+    #[ignore = "PHE-MSC-001: stub — `unimplemented!()` panic; needs FR-MASCOT-002 implementation"]
     fn test_fr_mascot_002_coaching_message_generation() {
         unimplemented!("Coaching message generation from rule evaluations and streaks")
     }

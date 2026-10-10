@@ -36,11 +36,17 @@ pub struct DurationSpec {
 
 impl DurationSpec {
     pub fn fixed(d: Duration) -> Self {
-        Self { fixed: Some(d), estimate: None }
+        Self {
+            fixed: Some(d),
+            estimate: None,
+        }
     }
 
     pub fn estimated(p50: Duration, p90: Duration) -> Self {
-        Self { fixed: None, estimate: Some(Estimate { p50, p90 }) }
+        Self {
+            fixed: None,
+            estimate: Some(Estimate { p50, p90 }),
+        }
     }
 
     /// Best-guess duration to feed the scheduler. Fixed wins; else p90 (so we
@@ -77,7 +83,9 @@ impl Priority {
     }
 
     pub fn clamped(weight: f32) -> Self {
-        Self { weight: weight.clamp(0.0, 1.0) }
+        Self {
+            weight: weight.clamp(0.0, 1.0),
+        }
     }
 
     /// Returns a new Priority whose weight is nudged toward 1.0 by `bumps`
@@ -87,7 +95,9 @@ impl Priority {
         for _ in 0..bumps {
             w += (1.0 - w) * 0.10;
         }
-        Priority { weight: w.clamp(0.0, 1.0) }
+        Priority {
+            weight: w.clamp(0.0, 1.0),
+        }
     }
 }
 
@@ -112,15 +122,24 @@ pub struct Deadline {
 
 impl Deadline {
     pub fn none() -> Self {
-        Self { when: None, rigidity: Rigidity::Soft }
+        Self {
+            when: None,
+            rigidity: Rigidity::Soft,
+        }
     }
 
     pub fn hard(when: DateTime<Utc>) -> Self {
-        Self { when: Some(when), rigidity: Rigidity::Hard }
+        Self {
+            when: Some(when),
+            rigidity: Rigidity::Hard,
+        }
     }
 
     pub fn soft(when: DateTime<Utc>) -> Self {
-        Self { when: Some(when), rigidity: Rigidity::Soft }
+        Self {
+            when: Some(when),
+            rigidity: Rigidity::Soft,
+        }
     }
 
     pub fn is_hard(&self) -> bool {
@@ -320,20 +339,29 @@ impl MemoryTaskStore {
 
 impl TaskStore for MemoryTaskStore {
     fn list(&self, user_id: uuid::Uuid) -> anyhow::Result<Vec<Task>> {
-        let g =
-            self.inner.lock().map_err(|e| anyhow::anyhow!("memory task store poisoned: {e}"))?;
-        Ok(g.iter().filter(|(u, _)| *u == user_id).map(|(_, t)| t.clone()).collect())
+        let g = self
+            .inner
+            .lock()
+            .map_err(|e| anyhow::anyhow!("memory task store poisoned: {e}"))?;
+        Ok(g.iter()
+            .filter(|(u, _)| *u == user_id)
+            .map(|(_, t)| t.clone())
+            .collect())
     }
 
     fn get(&self, id: uuid::Uuid) -> anyhow::Result<Option<Task>> {
-        let g =
-            self.inner.lock().map_err(|e| anyhow::anyhow!("memory task store poisoned: {e}"))?;
+        let g = self
+            .inner
+            .lock()
+            .map_err(|e| anyhow::anyhow!("memory task store poisoned: {e}"))?;
         Ok(g.iter().find(|(_, t)| t.id == id).map(|(_, t)| t.clone()))
     }
 
     fn upsert(&self, user_id: uuid::Uuid, task: &Task) -> anyhow::Result<()> {
-        let mut g =
-            self.inner.lock().map_err(|e| anyhow::anyhow!("memory task store poisoned: {e}"))?;
+        let mut g = self
+            .inner
+            .lock()
+            .map_err(|e| anyhow::anyhow!("memory task store poisoned: {e}"))?;
         if let Some(slot) = g.iter_mut().find(|(_, t)| t.id == task.id) {
             slot.1 = task.clone();
         } else {
@@ -343,8 +371,10 @@ impl TaskStore for MemoryTaskStore {
     }
 
     fn delete(&self, id: uuid::Uuid) -> anyhow::Result<bool> {
-        let mut g =
-            self.inner.lock().map_err(|e| anyhow::anyhow!("memory task store poisoned: {e}"))?;
+        let mut g = self
+            .inner
+            .lock()
+            .map_err(|e| anyhow::anyhow!("memory task store poisoned: {e}"))?;
         let before = g.len();
         g.retain(|(_, t)| t.id != id);
         Ok(g.len() != before)
@@ -414,8 +444,10 @@ mod tests {
     fn deadline_hardness_reflects_rigidity() {
         let hard = Deadline::hard(t0());
         let soft = Deadline::soft(t0());
-        let semi =
-            Deadline { when: Some(t0()), rigidity: Rigidity::Semi(RigidityCost::CreditCost(10)) };
+        let semi = Deadline {
+            when: Some(t0()),
+            rigidity: Rigidity::Semi(RigidityCost::CreditCost(10)),
+        };
         let none = Deadline::none();
         assert!(hard.is_hard());
         assert!(!soft.is_hard());
@@ -439,7 +471,10 @@ mod tests {
             ..Task::new("compose", DurationSpec::fixed(Duration::hours(1)), t0())
         };
         assert_eq!(task.constraints.len(), 3);
-        assert!(matches!(task.constraints[2], Constraint::EnergyTier(EnergyTier::DeepFocus)));
+        assert!(matches!(
+            task.constraints[2],
+            Constraint::EnergyTier(EnergyTier::DeepFocus)
+        ));
     }
 
     // Traces to: FR-PLAN-001
@@ -483,8 +518,16 @@ mod tests {
         let store = MemoryTaskStore::new();
         let alice = Uuid::new_v4();
         let bob = Uuid::new_v4();
-        let a1 = Task::new("alice-one", DurationSpec::fixed(Duration::minutes(25)), t0());
-        let a2 = Task::new("alice-two", DurationSpec::fixed(Duration::minutes(50)), t0());
+        let a1 = Task::new(
+            "alice-one",
+            DurationSpec::fixed(Duration::minutes(25)),
+            t0(),
+        );
+        let a2 = Task::new(
+            "alice-two",
+            DurationSpec::fixed(Duration::minutes(50)),
+            t0(),
+        );
         let b1 = Task::new("bob-one", DurationSpec::fixed(Duration::minutes(30)), t0());
         store.upsert(alice, &a1).unwrap();
         store.upsert(alice, &a2).unwrap();
@@ -492,7 +535,10 @@ mod tests {
 
         assert_eq!(store.list(alice).unwrap().len(), 2);
         assert_eq!(store.list(bob).unwrap().len(), 1);
-        assert_eq!(store.get(a1.id).unwrap().as_ref().map(|t| t.title.as_str()), Some("alice-one"));
+        assert_eq!(
+            store.get(a1.id).unwrap().as_ref().map(|t| t.title.as_str()),
+            Some("alice-one")
+        );
 
         // Upsert updates in place.
         let mut a1_mut = a1.clone();
