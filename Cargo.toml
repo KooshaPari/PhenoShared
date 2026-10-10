@@ -115,6 +115,8 @@ members = [
     "crates/pheno-fs",
     # --- E2.4 Pattern A wave 3 batch R (2026-10-09): 1 focus lib (focus-events) ---
     "crates/focus-events",
+    # --- E2.4 Pattern A wave 3 batch S (2026-10-09): 1 small lib (agileplus-graph) ---
+    "crates/agileplus-graph",
     "crates/sidekick-messaging",
     "crates/datakit",
     # --- E2.4 Pattern A wave 3 (2026-10-09): 4 small/leaf crates (just-add; no new workspace.dependencies needed) ---
@@ -173,6 +175,8 @@ members = [
     "crates/pheno-fs",
     # --- E2.4 Pattern A wave 3 batch R (2026-10-09): 1 focus lib (focus-events) ---
     "crates/focus-events",
+    # --- E2.4 Pattern A wave 3 batch S (2026-10-09): 1 small lib (agileplus-graph) ---
+    "crates/agileplus-graph",
 ]
 [workspace.package]
 version = "0.3.10"

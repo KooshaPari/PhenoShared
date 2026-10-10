@@ -90,6 +90,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "agileplus-graph"
+version = "0.3.10"
+dependencies = [
+ "async-trait",
+ "serde",
+ "serde_json",
+ "thiserror 2.0.20",
+ "tokio",
+]
+
+[[package]]
 name = "ahash"
 version = "0.8.12"
 source = "registry+https://github.com/rust-lang/crates.io-index"
