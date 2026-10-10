@@ -1,8 +1,9 @@
 //! PhenoCrypto - Cryptographic Utilities
 
-use aes_gcm::{Aes256Gcm, KeyInit as AesKeyInit, Nonce, aead::Aead};
-use base64::{Engine as _, engine::general_purpose::STANDARD as BASE64_STANDARD};
-use hmac::{Hmac, KeyInit, Mac};
+use aes_gcm::{aead::Aead, Aes256Gcm, KeyInit as AesKeyInit, Nonce};
+use base64::{engine::general_purpose::STANDARD as BASE64_STANDARD, Engine as _};
+// PHE-PHC-001: clippy::unused_imports — drop the `KeyInit` re-export (never used).
+use hmac::{Hmac, Mac};
 use sha2::Sha256;
 use thiserror::Error;
 
@@ -29,6 +30,10 @@ impl AesEncryptor {
 
     pub fn encrypt(&self, plaintext: &[u8]) -> Result<Vec<u8>, CryptoError> {
         let binding: [u8; 12] = rand::random();
+        // PHE-PHC-002: aes_gcm 0.11 deprecated `Nonce::from_slice` in favor of
+        // `Nonce::try_from(&binding)` (returns `Result`); suppress on the slice
+        // form until the upstream upgrade lands.
+        #[allow(deprecated)]
         let nonce = Nonce::from_slice(&binding);
         let ciphertext = self
             .cipher
@@ -45,6 +50,8 @@ impl AesEncryptor {
             return Err(CryptoError::DecryptionFailed);
         }
 
+        // PHE-PHC-002 (continued): same deprecation suppression.
+        #[allow(deprecated)]
         let nonce = Nonce::from_slice(&data[..12]);
         let ciphertext = &data[12..];
 
