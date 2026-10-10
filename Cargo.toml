@@ -89,11 +89,17 @@ members = [
     "examples/full-demo",
     # --- GFX SDK crates (absorbed from PhenoGfx) ---
     "crates/phenotype-gfx",
+    # --- E2.4 Pattern A wave 3 batch AX-23 (2026-10-09): casbin + voxel ---
+    "crates/phenotype-casbin-wrapper",
+    "crates/phenotype-voxel",
     "crates/phenotype-voxel",
     # --- PhenoRegistry crates (absorbed from PhenoRegistry) ---
     "crates/phenotype-project-registry",
     # --- E2.4 Pattern A wave 3 batch AX-22 (2026-10-09): phenotype-gfx ---
     "crates/phenotype-gfx",
+    # --- E2.4 Pattern A wave 3 batch AX-23 (2026-10-09): casbin + voxel ---
+    "crates/phenotype-casbin-wrapper",
+    "crates/phenotype-voxel",
     "crates/phenotype-service-registry",
     # --- PhenoInfra crates (absorbed from PhenoInfra) ---
     "crates/phenotype-crypto",
@@ -370,6 +376,9 @@ members = [
     "crates/phenotype-project-registry",
     # --- E2.4 Pattern A wave 3 batch AX-22 (2026-10-09): phenotype-gfx ---
     "crates/phenotype-gfx",
+    # --- E2.4 Pattern A wave 3 batch AX-23 (2026-10-09): casbin + voxel ---
+    "crates/phenotype-casbin-wrapper",
+    "crates/phenotype-voxel",
     "crates/focus-time",
     "crates/focus-ui",
     "crates/phenovcs-observability",
