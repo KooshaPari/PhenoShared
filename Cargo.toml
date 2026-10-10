@@ -538,6 +538,7 @@ opentelemetry-otlp = { version = "0.17", features = ["tonic"] }
 fs2 = "0.4"
 libc = "0.2"
 ring = "0.17"
+url = "2.5"
 criterion = { version = "0.5", features = ["html_reports"] }
 # Use pheno-otel from PhenoObservability v0.1.0 (ADR-037 substrate).
 # Git + tag + subdirectory form pins the crate to a known-good release
