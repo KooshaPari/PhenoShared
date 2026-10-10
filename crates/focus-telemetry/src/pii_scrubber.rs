@@ -37,10 +37,10 @@ impl PiiScrubber {
                     scrubbed.insert(k, self.scrub_json(v));
                 }
                 Value::Object(scrubbed)
-            }
+            },
             Value::Array(arr) => {
                 Value::Array(arr.into_iter().map(|v| self.scrub_json(v)).collect())
-            }
+            },
             other => other,
         }
     }
@@ -50,10 +50,22 @@ impl PiiScrubber {
         let mut result = input.to_string();
 
         // Order matters: scrub more specific/longer patterns first to avoid partial matches
-        result = self.uuid_regex.replace_all(&result, "[REDACTED_UUID]").to_string();
-        result = self.email_regex.replace_all(&result, "[REDACTED_EMAIL]").to_string();
-        result = self.token_regex.replace_all(&result, "[REDACTED_TOKEN]").to_string();
-        result = self.phone_regex.replace_all(&result, "[REDACTED_PHONE]").to_string();
+        result = self
+            .uuid_regex
+            .replace_all(&result, "[REDACTED_UUID]")
+            .to_string();
+        result = self
+            .email_regex
+            .replace_all(&result, "[REDACTED_EMAIL]")
+            .to_string();
+        result = self
+            .token_regex
+            .replace_all(&result, "[REDACTED_TOKEN]")
+            .to_string();
+        result = self
+            .phone_regex
+            .replace_all(&result, "[REDACTED_PHONE]")
+            .to_string();
         result = self
             .healthkit_regex
             .replace_all(&result, "[REDACTED_HEALTHKIT]")
@@ -72,9 +84,7 @@ impl Default for PiiScrubber {
 /// Email pattern: user@domain.com
 fn email_pattern() -> &'static Regex {
     static REGEX: OnceLock<Regex> = OnceLock::new();
-    REGEX.get_or_init(|| {
-        Regex::new(r"[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}").unwrap()
-    })
+    REGEX.get_or_init(|| Regex::new(r"[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}").unwrap())
 }
 
 /// Phone pattern: (555) 555-0123, +1-555-0124, etc.
@@ -82,10 +92,8 @@ fn phone_pattern() -> &'static Regex {
     static REGEX: OnceLock<Regex> = OnceLock::new();
     REGEX.get_or_init(|| {
         // Match phone patterns like (555) 555-0123, 555-555-0123, +1-555-555-0123
-        Regex::new(
-            r"(?:\+\d{1,3})?[-.\s]?\(?(?:0\d{1}|[1-9]\d{0,2})\)?[-.\s]?\d{3,4}[-.\s]?\d{4}",
-        )
-        .unwrap()
+        Regex::new(r"(?:\+\d{1,3})?[-.\s]?\(?(?:0\d{1}|[1-9]\d{0,2})\)?[-.\s]?\d{3,4}[-.\s]?\d{4}")
+            .unwrap()
     })
 }
 
@@ -101,8 +109,7 @@ fn token_pattern() -> &'static Regex {
 fn uuid_pattern() -> &'static Regex {
     static REGEX: OnceLock<Regex> = OnceLock::new();
     REGEX.get_or_init(|| {
-        Regex::new(r"[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}")
-            .unwrap()
+        Regex::new(r"[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}").unwrap()
     })
 }
 
@@ -172,7 +179,8 @@ mod tests {
             Some("[REDACTED_EMAIL]")
         );
         assert_eq!(
-            output.get("nested")
+            output
+                .get("nested")
                 .and_then(|v| v.get("phone"))
                 .and_then(|v| v.as_str()),
             Some("[REDACTED_PHONE]")
@@ -186,7 +194,8 @@ mod tests {
     #[test]
     fn test_scrub_multiple_patterns_in_one_string() {
         let scrubber = PiiScrubber::new();
-        let input = "Email alice@example.com, phone (555) 555-0123, token Bearer sk_live_abc123def456";
+        let input =
+            "Email alice@example.com, phone (555) 555-0123, token Bearer sk_live_abc123def456";
         let output = scrubber.scrub_string(input);
 
         assert!(output.contains("[REDACTED_EMAIL]"));

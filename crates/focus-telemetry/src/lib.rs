@@ -5,7 +5,7 @@
 //! (only when user has opted in).
 //!
 //! **Event Schema:**
-//! ```
+//! ```text
 //! {
 //!   event_id: UUID,
 //!   name: str,         // e.g., "app.opened", "connector.connected"
@@ -181,7 +181,7 @@ impl TelemetryClient {
             None => {
                 // No endpoint configured; buffer persists forever.
                 return Ok(());
-            }
+            },
         };
 
         // Fetch unflushed events
@@ -256,10 +256,10 @@ impl TelemetryClient {
     }
 
     /// Count buffered (unflushed) events.
-    pub fn buffered_event_count(&self) -> Result<usize> {
+    pub fn buffered_event_count(&self) -> Result<i64> {
         let conn = rusqlite::Connection::open(&self.db_path)?;
-        let count: usize = conn.query_row(
-            "SELECT COUNT(*) FROM telemetry_events WHERE flushed = 0",
+        let count: i64 = conn.query_row(
+            "SELECT CAST(COUNT(*) AS INTEGER) FROM telemetry_events WHERE flushed = 0",
             [],
             |row| row.get(0),
         )?;
@@ -318,9 +318,7 @@ mod tests {
         .unwrap();
 
         let props = json!({"feature": "connector.connected"});
-        client
-            .track("connector.connected", props.clone())
-            .unwrap();
+        client.track("connector.connected", props.clone()).unwrap();
 
         // Verify event is buffered
         let count = client.buffered_event_count().unwrap();
@@ -430,9 +428,9 @@ mod tests {
 
         // Verify audit table exists and is empty before flush
         let conn = rusqlite::Connection::open(db_file.path()).unwrap();
-        let audit_count: usize = conn
+        let audit_count: i64 = conn
             .query_row(
-                "SELECT COUNT(*) FROM telemetry_audit",
+                "SELECT CAST(COUNT(*) AS INTEGER) FROM telemetry_audit",
                 [],
                 |row| row.get(0),
             )
