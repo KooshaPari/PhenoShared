@@ -350,6 +350,8 @@ members = [
     "crates/teamcomm-mcp",
     # --- E2.4 Pattern A wave 3 batch AX-14 (2026-10-09): qgate ---
     "crates/qgate",
+    # --- E2.4 Pattern A wave 3 batch AX-15 (2026-10-09): pheno-forge-smoke ---
+    "crates/pheno-forge-smoke",
     "crates/focus-time",
     "crates/focus-ui",
     "crates/phenovcs-observability",

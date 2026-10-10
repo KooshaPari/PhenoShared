@@ -184,7 +184,7 @@ async fn main() -> Result<()> {
                 duration_ms: 0,
             });
             b
-        }
+        },
         Err(e) => {
             checks.push(CheckResult {
                 name: "bridge_load".into(),
@@ -193,7 +193,7 @@ async fn main() -> Result<()> {
                 duration_ms: 0,
             });
             return finalize(started, args, checks, bridge_path, String::new()).await;
-        }
+        },
     };
 
     // 2. Verify version
@@ -206,7 +206,7 @@ async fn main() -> Result<()> {
                 duration_ms: 0,
             });
             v
-        }
+        },
         Err(e) => {
             checks.push(CheckResult {
                 name: "bridge_version".into(),
@@ -215,7 +215,7 @@ async fn main() -> Result<()> {
                 duration_ms: 0,
             });
             String::new()
-        }
+        },
     };
 
     // 3. Sidecar healthchecks (live sidecar mode only)
@@ -288,7 +288,7 @@ async fn check_endpoint_health(name: &str, url: &str) -> CheckResult {
                 detail: format!("reqwest build failed: {}", e),
                 duration_ms: start.elapsed().as_millis() as u64,
             }
-        }
+        },
     };
     match client.get(url).send().await {
         Ok(resp) if resp.status().is_success() => CheckResult {
@@ -332,7 +332,7 @@ async fn run_scope_route(
                 detail: format!("handle construct failed: {}", e),
                 duration_ms: start.elapsed().as_millis() as u64,
             };
-        }
+        },
     };
 
     // Each bridge.* call takes &self + a Copy handle; handle is Copy so we
@@ -351,7 +351,7 @@ async fn run_scope_route(
             // call went all the way through the cdylib and into the
             // backend adapter).
             store_result.is_err() || recall_result.is_err()
-        }
+        },
         Mode::Sidecar => store_result.is_ok() && recall_result.is_ok() && forget_result.is_ok(),
     };
 
@@ -385,7 +385,7 @@ fn run_composite_construct(bridge: &Bridge) -> CheckResult {
         Ok(h) => {
             bridge.free_handle(h);
             "composite provider constructs, handle freed cleanly".to_string()
-        }
+        },
         Err(e) => format!("composite construct failed: {}", e),
     };
     CheckResult {
