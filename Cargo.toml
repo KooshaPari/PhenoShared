@@ -343,6 +343,8 @@ members = [
     "crates/pheno-testing",
     # --- E2.4 Pattern A wave 3 batch Q (2026-10-09): 4 small libs (focus-mascot, focus-planning, pheno-fs, pheno-terminal) ---
     "crates/focus-mascot",
+    # --- E2.4 Pattern A wave 3 batch AX (2026-10-09): 1 teamcomm-protocol ---
+    "crates/teamcomm-protocol",
     # --- E2.4 Pattern A wave 3 batch AX (2026-10-09): 1 substrate-a2a ---
     "crates/a2a",
     "crates/focus-planning",
@@ -506,6 +508,8 @@ members = [
     "crates/focus-asset-fetcher",
     # --- E2.4 Pattern A wave 3 batch AW (2026-10-09): 1 focus-mascot ---
     "crates/focus-mascot",
+    # --- E2.4 Pattern A wave 3 batch AX (2026-10-09): 1 teamcomm-protocol ---
+    "crates/teamcomm-protocol",
     # --- E2.4 Pattern A wave 3 batch AX (2026-10-09): 1 substrate-a2a ---
     "crates/a2a",
     # --- E2.4 Pattern A wave 3 batch I (2026-10-09): 1 small lib (phenotype-diff) ---
@@ -535,6 +539,8 @@ members = [
     "crates/pheno-testing",
     # --- E2.4 Pattern A wave 3 batch Q (2026-10-09): 4 small libs (focus-mascot, focus-planning, pheno-fs, pheno-terminal) ---
     "crates/focus-mascot",
+    # --- E2.4 Pattern A wave 3 batch AX (2026-10-09): 1 teamcomm-protocol ---
+    "crates/teamcomm-protocol",
     # --- E2.4 Pattern A wave 3 batch AX (2026-10-09): 1 substrate-a2a ---
     "crates/a2a",
     "crates/focus-planning",
@@ -609,6 +615,8 @@ members = [
     "crates/focus-asset-fetcher",
     # --- E2.4 Pattern A wave 3 batch AW (2026-10-09): 1 focus-mascot ---
     "crates/focus-mascot",
+    # --- E2.4 Pattern A wave 3 batch AX (2026-10-09): 1 teamcomm-protocol ---
+    "crates/teamcomm-protocol",
     # --- E2.4 Pattern A wave 3 batch AX (2026-10-09): 1 substrate-a2a ---
     "crates/a2a",
 ]
