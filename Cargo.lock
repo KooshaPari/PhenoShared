@@ -8970,6 +8970,19 @@ dependencies = [
 ]
 
 [[package]]
+name = "phenotype-shared-config"
+version = "0.3.10"
+dependencies = [
+ "dirs 5.0.1",
+ "serde",
+ "serde_json",
+ "serde_yaml",
+ "thiserror 2.0.20",
+ "tokio",
+ "toml 0.8.2",
+]
+
+[[package]]
 name = "phenotype-state-machine"
 version = "0.3.10"
 dependencies = [
@@ -8987,6 +9000,19 @@ dependencies = [
  "tokio",
  "unicode-normalization",
  "zstd",
+]
+
+[[package]]
+name = "phenotype-telemetry"
+version = "0.3.10"
+dependencies = [
+ "chrono",
+ "serde",
+ "serde_json",
+ "thiserror 2.0.20",
+ "tokio",
+ "tracing",
+ "tracing-subscriber",
 ]
 
 [[package]]
@@ -9018,6 +9044,18 @@ dependencies = [
  "tracing-subscriber",
  "url",
  "urlencoding",
+]
+
+[[package]]
+name = "phenotype-validation"
+version = "0.3.10"
+dependencies = [
+ "parking_lot",
+ "regex",
+ "serde",
+ "serde_json",
+ "thiserror 2.0.20",
+ "tokio",
 ]
 
 [[package]]

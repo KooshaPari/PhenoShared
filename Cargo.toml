@@ -335,6 +335,11 @@ members = [
     "crates/phenotype-git-core",
     "crates/phenotype-rate-limit",
     "crates/phenotype-string",
+    # --- E2.4 Pattern A wave 3 batch AX-9 (2026-10-09): shared-config + validation + port-interfaces + telemetry ---
+    "crates/phenotype-shared-config",
+    "crates/phenotype-validation",
+    "crates/phenotype-port-interfaces",
+    "crates/phenotype-telemetry",
     "crates/focus-time",
     "crates/focus-ui",
     "crates/phenovcs-observability",
