@@ -92,7 +92,13 @@ members = [
     # --- E2.4 Pattern A wave 3 batch AX-23 (2026-10-09): casbin + voxel ---
     "crates/phenotype-casbin-wrapper",
     "crates/phenotype-voxel",
+    # --- E2.4 Pattern A wave 3 batch AX-24 (2026-10-09): agileplus-nats + agileplus-graph ---
+    "crates/agileplus-nats",
+    "crates/agileplus-graph",
     "crates/phenotype-voxel",
+    # --- E2.4 Pattern A wave 3 batch AX-24 (2026-10-09): agileplus-nats + agileplus-graph ---
+    "crates/agileplus-nats",
+    "crates/agileplus-graph",
     # --- PhenoRegistry crates (absorbed from PhenoRegistry) ---
     "crates/phenotype-project-registry",
     # --- E2.4 Pattern A wave 3 batch AX-22 (2026-10-09): phenotype-gfx ---
@@ -100,6 +106,9 @@ members = [
     # --- E2.4 Pattern A wave 3 batch AX-23 (2026-10-09): casbin + voxel ---
     "crates/phenotype-casbin-wrapper",
     "crates/phenotype-voxel",
+    # --- E2.4 Pattern A wave 3 batch AX-24 (2026-10-09): agileplus-nats + agileplus-graph ---
+    "crates/agileplus-nats",
+    "crates/agileplus-graph",
     "crates/phenotype-service-registry",
     # --- PhenoInfra crates (absorbed from PhenoInfra) ---
     "crates/phenotype-crypto",
@@ -379,6 +388,9 @@ members = [
     # --- E2.4 Pattern A wave 3 batch AX-23 (2026-10-09): casbin + voxel ---
     "crates/phenotype-casbin-wrapper",
     "crates/phenotype-voxel",
+    # --- E2.4 Pattern A wave 3 batch AX-24 (2026-10-09): agileplus-nats + agileplus-graph ---
+    "crates/agileplus-nats",
+    "crates/agileplus-graph",
     "crates/focus-time",
     "crates/focus-ui",
     "crates/phenovcs-observability",
