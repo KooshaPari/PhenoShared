@@ -94,7 +94,7 @@ async fn main() -> Result<()> {
             eprint!("{}", tree.render_tree());
             let exit = if tree.all_pass() { 0 } else { 1 };
             std::process::exit(exit);
-        }
+        },
         Some(Commands::Checks) => {
             let matrix = run_all_checks(&root, &cfg).await?;
             let empty_cov = CoverageTree {
@@ -102,7 +102,7 @@ async fn main() -> Result<()> {
                 nodes: vec![],
             };
             (empty_cov, matrix)
-        }
+        },
         Some(Commands::Run {
             coverage_report,
             coverage_format,
@@ -131,7 +131,7 @@ async fn main() -> Result<()> {
 
             let matrix = run_all_checks(&root, &cfg).await?;
             (tree, matrix)
-        }
+        },
         None => {
             // Default: same as `run` with no overrides
             let threshold = cfg.coverage_threshold;
@@ -152,7 +152,7 @@ async fn main() -> Result<()> {
             };
             let matrix = run_all_checks(&root, &cfg).await?;
             (tree, matrix)
-        }
+        },
     };
 
     let report = GateReport::new(coverage, checks);

@@ -348,6 +348,8 @@ members = [
     "crates/teamcomm-client",
     # --- E2.4 Pattern A wave 3 batch AX-13 (2026-10-09): teamcomm-mcp ---
     "crates/teamcomm-mcp",
+    # --- E2.4 Pattern A wave 3 batch AX-14 (2026-10-09): qgate ---
+    "crates/qgate",
     "crates/focus-time",
     "crates/focus-ui",
     "crates/phenovcs-observability",

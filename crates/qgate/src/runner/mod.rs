@@ -109,8 +109,13 @@ async fn run_unit(stack: &StackDetector<'_>, root: &Path, cfg: &QGateConfig) -> 
             .await
             .unwrap_or((false, "cargo not found".into()));
         return make_result(
-            CheckCategory::Unit, ok, detail, "all unit tests passed",
-            Some(100.0), Some(0.0), Some(Thresholds::UNIT_PASS_RATE),
+            CheckCategory::Unit,
+            ok,
+            detail,
+            "all unit tests passed",
+            Some(100.0),
+            Some(0.0),
+            Some(Thresholds::UNIT_PASS_RATE),
         );
     }
     if stack.has_typescript() {
@@ -118,8 +123,13 @@ async fn run_unit(stack: &StackDetector<'_>, root: &Path, cfg: &QGateConfig) -> 
             .await
             .unwrap_or((false, "bun not found".into()));
         return make_result(
-            CheckCategory::Unit, ok, detail, "all bun tests passed",
-            Some(100.0), Some(0.0), Some(Thresholds::UNIT_PASS_RATE),
+            CheckCategory::Unit,
+            ok,
+            detail,
+            "all bun tests passed",
+            Some(100.0),
+            Some(0.0),
+            Some(Thresholds::UNIT_PASS_RATE),
         );
     }
     if stack.has_python() {
@@ -127,8 +137,13 @@ async fn run_unit(stack: &StackDetector<'_>, root: &Path, cfg: &QGateConfig) -> 
             .await
             .unwrap_or((false, "uv not found".into()));
         return make_result(
-            CheckCategory::Unit, ok, detail, "all pytest tests passed",
-            Some(100.0), Some(0.0), Some(Thresholds::UNIT_PASS_RATE),
+            CheckCategory::Unit,
+            ok,
+            detail,
+            "all pytest tests passed",
+            Some(100.0),
+            Some(0.0),
+            Some(Thresholds::UNIT_PASS_RATE),
         );
     }
     skipped("unit", CheckCategory::Unit, "no supported stack detected")
@@ -143,26 +158,40 @@ async fn run_integration(stack: &StackDetector<'_>, root: &Path, cfg: &QGateConf
             .await
             .unwrap_or((false, "cargo not found".into()));
         return make_result(
-            CheckCategory::Integration, ok, detail, "integration tests passed",
-            Some(100.0), Some(0.0), Some(Thresholds::INTEGRATION_PASS_RATE),
+            CheckCategory::Integration,
+            ok,
+            detail,
+            "integration tests passed",
+            Some(100.0),
+            Some(0.0),
+            Some(Thresholds::INTEGRATION_PASS_RATE),
         );
     }
-    skipped("integration", CheckCategory::Integration, "stack-specific runner not configured")
+    skipped(
+        "integration",
+        CheckCategory::Integration,
+        "stack-specific runner not configured",
+    )
 }
 
 async fn run_e2e(root: &Path, cfg: &QGateConfig) -> CheckResult {
     if cfg.is_na("e2e") {
         return na("e2e", CheckCategory::E2e);
     }
-    let playwright_ok = root.join("playwright.config.ts").exists()
-        || root.join("playwright.config.js").exists();
+    let playwright_ok =
+        root.join("playwright.config.ts").exists() || root.join("playwright.config.js").exists();
     if playwright_ok {
         let (ok, detail) = run_cmd("bun", &["x", "playwright", "test"], root)
             .await
             .unwrap_or((false, "playwright not available".into()));
         return make_result(
-            CheckCategory::E2e, ok, detail, "playwright e2e passed",
-            Some(100.0), Some(0.0), Some(Thresholds::E2E_PASS_RATE),
+            CheckCategory::E2e,
+            ok,
+            detail,
+            "playwright e2e passed",
+            Some(100.0),
+            Some(0.0),
+            Some(Thresholds::E2E_PASS_RATE),
         );
     }
     skipped("e2e", CheckCategory::E2e, "no playwright.config found")
@@ -178,8 +207,13 @@ async fn run_chaos(root: &Path, cfg: &QGateConfig) -> CheckResult {
             .await
             .unwrap_or((false, "bash not found".into()));
         return make_result(
-            CheckCategory::Chaos, ok, detail, "chaos tests passed",
-            None, None, Some(Thresholds::CHAOS_RESILIENCE),
+            CheckCategory::Chaos,
+            ok,
+            detail,
+            "chaos tests passed",
+            None,
+            None,
+            Some(Thresholds::CHAOS_RESILIENCE),
         );
     }
     skipped("chaos", CheckCategory::Chaos, "no scripts/chaos.sh found")
@@ -194,8 +228,13 @@ async fn run_perf(stack: &StackDetector<'_>, root: &Path, cfg: &QGateConfig) -> 
             .await
             .unwrap_or((false, "cargo not found".into()));
         return make_result(
-            CheckCategory::Perf, ok, detail, "bench compile passed",
-            None, None, Some(cfg.perf_init_ms),
+            CheckCategory::Perf,
+            ok,
+            detail,
+            "bench compile passed",
+            None,
+            None,
+            Some(cfg.perf_init_ms),
         );
     }
     skipped("perf", CheckCategory::Perf, "no Rust bench runner detected")
@@ -207,16 +246,27 @@ async fn run_property(stack: &StackDetector<'_>, root: &Path, cfg: &QGateConfig)
     }
     if stack.has_rust() {
         let (ok, detail) = run_cmd(
-            "cargo", &["test", "--workspace", "--features", "proptest"], root,
+            "cargo",
+            &["test", "--workspace", "--features", "proptest"],
+            root,
         )
         .await
         .unwrap_or((false, "no proptest feature".into()));
         return make_result(
-            CheckCategory::Property, ok, detail, "property tests passed",
-            None, None, Some(Thresholds::PROPERTY_COUNTEREXAMPLES),
+            CheckCategory::Property,
+            ok,
+            detail,
+            "property tests passed",
+            None,
+            None,
+            Some(Thresholds::PROPERTY_COUNTEREXAMPLES),
         );
     }
-    skipped("property", CheckCategory::Property, "no Rust proptest runner")
+    skipped(
+        "property",
+        CheckCategory::Property,
+        "no Rust proptest runner",
+    )
 }
 
 async fn run_mutation(stack: &StackDetector<'_>, root: &Path, cfg: &QGateConfig) -> CheckResult {
@@ -230,30 +280,48 @@ async fn run_mutation(stack: &StackDetector<'_>, root: &Path, cfg: &QGateConfig)
             .unwrap_or(false);
         if mutants_available {
             let (ok, detail) = run_cmd(
-                "cargo", &["mutants", "--workspace", "--timeout", "60"], root,
+                "cargo",
+                &["mutants", "--workspace", "--timeout", "60"],
+                root,
             )
             .await
             .unwrap_or((false, "cargo-mutants failed".into()));
             return make_result(
-                CheckCategory::Mutation, ok, detail, "mutation score passed",
-                None, None, Some(cfg.mutation_threshold),
+                CheckCategory::Mutation,
+                ok,
+                detail,
+                "mutation score passed",
+                None,
+                None,
+                Some(cfg.mutation_threshold),
             );
         }
-        return skipped("mutation", CheckCategory::Mutation, "cargo-mutants not installed");
+        return skipped(
+            "mutation",
+            CheckCategory::Mutation,
+            "cargo-mutants not installed",
+        );
     }
     if stack.has_python() {
         let (ok, detail) = run_cmd("uv", &["run", "mutmut", "run"], root)
             .await
             .unwrap_or((false, "mutmut not found".into()));
         return make_result(
-            CheckCategory::Mutation, ok, detail, "mutmut passed",
-            None, None, Some(cfg.mutation_threshold),
+            CheckCategory::Mutation,
+            ok,
+            detail,
+            "mutmut passed",
+            None,
+            None,
+            Some(cfg.mutation_threshold),
         );
     }
-    skipped("mutation", CheckCategory::Mutation, "no mutation runner for stack")
+    skipped(
+        "mutation",
+        CheckCategory::Mutation,
+        "no mutation runner for stack",
+    )
 }
-
-
 
 async fn run_sast(root: &Path, cfg: &QGateConfig) -> CheckResult {
     if cfg.is_na("sast") {
@@ -276,14 +344,24 @@ async fn run_sast(root: &Path, cfg: &QGateConfig) -> CheckResult {
     };
     let (ok, detail) = run_cmd(
         "semgrep",
-        &[cfg_arg, "--error", "--quiet", "--json", "--output=/tmp/semgrep.json", "."],
+        &[
+            cfg_arg,
+            "--error",
+            "--quiet",
+            "--json",
+            "--output=/tmp/semgrep.json",
+            ".",
+        ],
         root,
     )
     .await
     .unwrap_or((false, "semgrep failed".into()));
     let high_count = parse_semgrep_high_count("/tmp/semgrep.json");
     let (status, score) = if !ok {
-        (crate::checks::CheckStatus::Failed, Some(high_count.max(1.0)))
+        (
+            crate::checks::CheckStatus::Failed,
+            Some(high_count.max(1.0)),
+        )
     } else if high_count > 0.0 {
         (crate::checks::CheckStatus::Failed, Some(high_count))
     } else {
@@ -309,9 +387,12 @@ async fn run_dast(root: &Path, cfg: &QGateConfig) -> CheckResult {
     let dast_cfg = match DastConfig::discover(root) {
         Some(c) => c,
         None => {
-            return skipped("dast", CheckCategory::Dast,
-                "no .qgate/dast.toml or QGATE_DAST_BASE_URL configured");
-        }
+            return skipped(
+                "dast",
+                CheckCategory::Dast,
+                "no .qgate/dast.toml or QGATE_DAST_BASE_URL configured",
+            );
+        },
     };
     let schemathesis_available = run_cmd("schemathesis", &["--version"], root)
         .await
@@ -325,8 +406,13 @@ async fn run_dast(root: &Path, cfg: &QGateConfig) -> CheckResult {
     let (ok, detail) = run_cmd(
         "schemathesis",
         &[
-            "run", schema_arg, "--base-url", &dast_cfg.base_url,
-            "--checks=all", "--max-examples=50", "--request-timeout=5",
+            "run",
+            schema_arg,
+            "--base-url",
+            &dast_cfg.base_url,
+            "--checks=all",
+            "--max-examples=50",
+            "--request-timeout=5",
             &format!("--report-json={}", report_path.display()),
         ],
         root,
@@ -342,8 +428,10 @@ async fn run_dast(root: &Path, cfg: &QGateConfig) -> CheckResult {
         (crate::checks::CheckStatus::Passed, Some(0.0))
     };
     let details = match status {
-        crate::checks::CheckStatus::Passed =>
-            format!("schemathesis: 0 failed checks against {}", dast_cfg.base_url),
+        crate::checks::CheckStatus::Passed => format!(
+            "schemathesis: 0 failed checks against {}",
+            dast_cfg.base_url
+        ),
         _ => format!("schemathesis: {failed} failed checks — {detail}"),
     };
     CheckResult {
@@ -366,19 +454,33 @@ async fn run_sbom(root: &Path, cfg: &QGateConfig) -> CheckResult {
         let artifact = root.join("target/sbom.cdx.json");
         let present = artifact.exists();
         let (status, score, details) = if ok && present {
-            (crate::checks::CheckStatus::Passed, Some(1.0),
-             format!("sbom generated: {}", artifact.display()))
+            (
+                crate::checks::CheckStatus::Passed,
+                Some(1.0),
+                format!("sbom generated: {}", artifact.display()),
+            )
         } else if present {
-            (crate::checks::CheckStatus::Passed, Some(1.0),
-             format!("sbom artifact present (command exited non-zero but artifact exists): {}",
-                     artifact.display()))
+            (
+                crate::checks::CheckStatus::Passed,
+                Some(1.0),
+                format!(
+                    "sbom artifact present (command exited non-zero but artifact exists): {}",
+                    artifact.display()
+                ),
+            )
         } else {
-            (crate::checks::CheckStatus::Failed, Some(0.0),
-             format!("sbom command did not produce target/sbom.cdx.json: {detail}"))
+            (
+                crate::checks::CheckStatus::Failed,
+                Some(0.0),
+                format!("sbom command did not produce target/sbom.cdx.json: {detail}"),
+            )
         };
         return CheckResult {
-            category: CheckCategory::Sbom, status, score,
-            threshold: Some(Thresholds::SBOM_MUST_EXIST), details,
+            category: CheckCategory::Sbom,
+            status,
+            score,
+            threshold: Some(Thresholds::SBOM_MUST_EXIST),
+            details,
         };
     }
     let artifact = root.join("target/sbom.cdx.json");
@@ -391,8 +493,11 @@ async fn run_sbom(root: &Path, cfg: &QGateConfig) -> CheckResult {
             details: format!("sbom artifact present at {}", artifact.display()),
         };
     }
-    skipped("sbom", CheckCategory::Sbom,
-        "no sbom_command in .qgate.toml and target/sbom.cdx.json not found")
+    skipped(
+        "sbom",
+        CheckCategory::Sbom,
+        "no sbom_command in .qgate.toml and target/sbom.cdx.json not found",
+    )
 }
 
 async fn run_a11y(stack: &StackDetector<'_>, root: &Path, cfg: &QGateConfig) -> CheckResult {
@@ -404,8 +509,13 @@ async fn run_a11y(stack: &StackDetector<'_>, root: &Path, cfg: &QGateConfig) -> 
             .await
             .unwrap_or((true, "axe not installed — skipping".into()));
         return make_result(
-            CheckCategory::A11y, ok, detail, "axe: 0 violations",
-            None, None, Some(Thresholds::A11Y_VIOLATIONS),
+            CheckCategory::A11y,
+            ok,
+            detail,
+            "axe: 0 violations",
+            None,
+            None,
+            Some(Thresholds::A11Y_VIOLATIONS),
         );
     }
     na("a11y", CheckCategory::A11y)

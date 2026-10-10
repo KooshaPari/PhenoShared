@@ -50,11 +50,7 @@ pub(crate) fn make_result(
         },
         score: if ok { score_if_pass } else { score_if_fail },
         threshold,
-        details: if ok {
-            success_msg.into()
-        } else {
-            detail
-        },
+        details: if ok { success_msg.into() } else { detail },
     }
 }
 
