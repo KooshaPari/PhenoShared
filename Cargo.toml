@@ -14,6 +14,9 @@ members = [
     "crates/driver-argv",
     # --- E2.4 Pattern A wave 3 batch AX-32 (2026-10-09): dag-scheduler ---
     "crates/dag-scheduler",
+    # --- E2.4 Pattern A wave 3 batch AX-33 (2026-10-09): fabric-capability + fabric-checker ---
+    "crates/fabric-capability",
+    "crates/fabric-checker",
     "crates/driver-mcp",
     "crates/arch-test",
     "crates/omniroute-adapter",
@@ -43,6 +46,9 @@ members = [
     "crates/driver-argv",
     # --- E2.4 Pattern A wave 3 batch AX-32 (2026-10-09): dag-scheduler ---
     "crates/dag-scheduler",
+    # --- E2.4 Pattern A wave 3 batch AX-33 (2026-10-09): fabric-capability + fabric-checker ---
+    "crates/fabric-capability",
+    "crates/fabric-checker",
     # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): klipdot + logkit ---
     # --- E2.4 Pattern A wave 3 batch AG (2026-10-09): 1 focus-ci-watcher ---
     "crates/focus-ci-watcher",
@@ -89,6 +95,9 @@ members = [
     "crates/driver-argv",
     # --- E2.4 Pattern A wave 3 batch AX-32 (2026-10-09): dag-scheduler ---
     "crates/dag-scheduler",
+    # --- E2.4 Pattern A wave 3 batch AX-33 (2026-10-09): fabric-capability + fabric-checker ---
+    "crates/fabric-capability",
+    "crates/fabric-checker",
     "crates/cloud-cursor",
     "crates/cloud-kilo",
     "crates/cloud-codex",
@@ -154,6 +163,9 @@ members = [
     "crates/driver-argv",
     # --- E2.4 Pattern A wave 3 batch AX-32 (2026-10-09): dag-scheduler ---
     "crates/dag-scheduler",
+    # --- E2.4 Pattern A wave 3 batch AX-33 (2026-10-09): fabric-capability + fabric-checker ---
+    "crates/fabric-capability",
+    "crates/fabric-checker",
     # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): klipdot + logkit ---
     "crates/phenotype-voxel",
     # --- E2.4 Pattern A wave 3 batch AX-24 (2026-10-09): agileplus-nats + agileplus-graph ---
@@ -186,6 +198,9 @@ members = [
     "crates/driver-argv",
     # --- E2.4 Pattern A wave 3 batch AX-32 (2026-10-09): dag-scheduler ---
     "crates/dag-scheduler",
+    # --- E2.4 Pattern A wave 3 batch AX-33 (2026-10-09): fabric-capability + fabric-checker ---
+    "crates/fabric-capability",
+    "crates/fabric-checker",
     # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): klipdot + logkit ---
     # --- PhenoRegistry crates (absorbed from PhenoRegistry) ---
     "crates/phenotype-project-registry",
@@ -224,6 +239,9 @@ members = [
     "crates/driver-argv",
     # --- E2.4 Pattern A wave 3 batch AX-32 (2026-10-09): dag-scheduler ---
     "crates/dag-scheduler",
+    # --- E2.4 Pattern A wave 3 batch AX-33 (2026-10-09): fabric-capability + fabric-checker ---
+    "crates/fabric-capability",
+    "crates/fabric-checker",
     # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): klipdot + logkit ---
     "crates/phenotype-service-registry",
     # --- PhenoInfra crates (absorbed from PhenoInfra) ---
@@ -254,6 +272,9 @@ members = [
     # --- E2.4 Pattern A wave 3 batch AB2 (2026-10-09): 2 small libs (acceptance-contract, dag-scheduler) ---
     "crates/acceptance-contract",
     "crates/dag-scheduler",
+    # --- E2.4 Pattern A wave 3 batch AX-33 (2026-10-09): fabric-capability + fabric-checker ---
+    "crates/fabric-capability",
+    "crates/fabric-checker",
     # --- E2.4 Pattern A wave 3 batch AC (2026-10-09): 1 agileplus lib (agileplus-nats) ---
     "crates/agileplus-nats",
     # --- E2.4 Pattern A wave 3 batch AD (2026-10-09): 1 small phenotype lib (bench-guard) ---
@@ -272,6 +293,9 @@ members = [
     "crates/driver-argv",
     # --- E2.4 Pattern A wave 3 batch AX-32 (2026-10-09): dag-scheduler ---
     "crates/dag-scheduler",
+    # --- E2.4 Pattern A wave 3 batch AX-33 (2026-10-09): fabric-capability + fabric-checker ---
+    "crates/fabric-capability",
+    "crates/fabric-checker",
     # --- E2.4 Pattern A wave 3 batch AE (2026-10-09): 1 example lib (clap-ext-examples) ---
     "crates/clap-ext-examples",
     # --- E2.4 Pattern A wave 3 batch AF (2026-10-09): 1 substrate-a2a leaf ---
@@ -298,6 +322,9 @@ members = [
     "crates/driver-argv",
     # --- E2.4 Pattern A wave 3 batch AX-32 (2026-10-09): dag-scheduler ---
     "crates/dag-scheduler",
+    # --- E2.4 Pattern A wave 3 batch AX-33 (2026-10-09): fabric-capability + fabric-checker ---
+    "crates/fabric-capability",
+    "crates/fabric-checker",
     # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): klipdot + logkit ---
     # --- E2.4 Pattern A wave 3 batch AG (2026-10-09): 1 focus-ci-watcher ---
     "crates/focus-ci-watcher",
@@ -333,6 +360,9 @@ members = [
     # --- E2.4 Pattern A wave 3 batch AB2 (2026-10-09): 2 small libs (acceptance-contract, dag-scheduler) ---
     "crates/acceptance-contract",
     "crates/dag-scheduler",
+    # --- E2.4 Pattern A wave 3 batch AX-33 (2026-10-09): fabric-capability + fabric-checker ---
+    "crates/fabric-capability",
+    "crates/fabric-checker",
     # --- E2.4 Pattern A wave 3 batch AC (2026-10-09): 1 agileplus lib (agileplus-nats) ---
     "crates/agileplus-nats",
     # --- E2.4 Pattern A wave 3 batch AD (2026-10-09): 1 small phenotype lib (bench-guard) ---
@@ -351,6 +381,9 @@ members = [
     "crates/driver-argv",
     # --- E2.4 Pattern A wave 3 batch AX-32 (2026-10-09): dag-scheduler ---
     "crates/dag-scheduler",
+    # --- E2.4 Pattern A wave 3 batch AX-33 (2026-10-09): fabric-capability + fabric-checker ---
+    "crates/fabric-capability",
+    "crates/fabric-checker",
     # --- E2.4 Pattern A wave 3 batch AE (2026-10-09): 1 example lib (clap-ext-examples) ---
     "crates/clap-ext-examples",
     # --- E2.4 Pattern A wave 3 batch AF (2026-10-09): 1 substrate-a2a leaf ---
@@ -377,6 +410,9 @@ members = [
     "crates/driver-argv",
     # --- E2.4 Pattern A wave 3 batch AX-32 (2026-10-09): dag-scheduler ---
     "crates/dag-scheduler",
+    # --- E2.4 Pattern A wave 3 batch AX-33 (2026-10-09): fabric-capability + fabric-checker ---
+    "crates/fabric-capability",
+    "crates/fabric-checker",
     # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): klipdot + logkit ---
     # --- E2.4 Pattern A wave 3 batch AG (2026-10-09): 1 focus-ci-watcher ---
     "crates/focus-ci-watcher",
@@ -405,6 +441,9 @@ members = [
     # --- E2.4 Pattern A wave 3 batch AB2 (2026-10-09): 2 small libs (acceptance-contract, dag-scheduler) ---
     "crates/acceptance-contract",
     "crates/dag-scheduler",
+    # --- E2.4 Pattern A wave 3 batch AX-33 (2026-10-09): fabric-capability + fabric-checker ---
+    "crates/fabric-capability",
+    "crates/fabric-checker",
     # --- E2.4 Pattern A wave 3 batch AC (2026-10-09): 1 agileplus lib (agileplus-nats) ---
     "crates/agileplus-nats",
     # --- E2.4 Pattern A wave 3 batch AD (2026-10-09): 1 small phenotype lib (bench-guard) ---
@@ -423,6 +462,9 @@ members = [
     "crates/driver-argv",
     # --- E2.4 Pattern A wave 3 batch AX-32 (2026-10-09): dag-scheduler ---
     "crates/dag-scheduler",
+    # --- E2.4 Pattern A wave 3 batch AX-33 (2026-10-09): fabric-capability + fabric-checker ---
+    "crates/fabric-capability",
+    "crates/fabric-checker",
     # --- E2.4 Pattern A wave 3 batch AE (2026-10-09): 1 example lib (clap-ext-examples) ---
     "crates/clap-ext-examples",
     # --- E2.4 Pattern A wave 3 batch AF (2026-10-09): 1 substrate-a2a leaf ---
@@ -449,6 +491,9 @@ members = [
     "crates/driver-argv",
     # --- E2.4 Pattern A wave 3 batch AX-32 (2026-10-09): dag-scheduler ---
     "crates/dag-scheduler",
+    # --- E2.4 Pattern A wave 3 batch AX-33 (2026-10-09): fabric-capability + fabric-checker ---
+    "crates/fabric-capability",
+    "crates/fabric-checker",
     # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): klipdot + logkit ---
     # --- E2.4 Pattern A wave 3 batch AG (2026-10-09): 1 focus-ci-watcher ---
     "crates/focus-ci-watcher",
@@ -481,6 +526,9 @@ members = [
     # --- E2.4 Pattern A wave 3 batch AB2 (2026-10-09): 2 small libs (acceptance-contract, dag-scheduler) ---
     "crates/acceptance-contract",
     "crates/dag-scheduler",
+    # --- E2.4 Pattern A wave 3 batch AX-33 (2026-10-09): fabric-capability + fabric-checker ---
+    "crates/fabric-capability",
+    "crates/fabric-checker",
     # --- E2.4 Pattern A wave 3 batch AC (2026-10-09): 1 agileplus lib (agileplus-nats) ---
     "crates/agileplus-nats",
     # --- E2.4 Pattern A wave 3 batch AD (2026-10-09): 1 small phenotype lib (bench-guard) ---
@@ -499,6 +547,9 @@ members = [
     "crates/driver-argv",
     # --- E2.4 Pattern A wave 3 batch AX-32 (2026-10-09): dag-scheduler ---
     "crates/dag-scheduler",
+    # --- E2.4 Pattern A wave 3 batch AX-33 (2026-10-09): fabric-capability + fabric-checker ---
+    "crates/fabric-capability",
+    "crates/fabric-checker",
     # --- E2.4 Pattern A wave 3 batch AE (2026-10-09): 1 example lib (clap-ext-examples) ---
     "crates/clap-ext-examples",
     # --- E2.4 Pattern A wave 3 batch AF (2026-10-09): 1 substrate-a2a leaf ---
@@ -525,6 +576,9 @@ members = [
     "crates/driver-argv",
     # --- E2.4 Pattern A wave 3 batch AX-32 (2026-10-09): dag-scheduler ---
     "crates/dag-scheduler",
+    # --- E2.4 Pattern A wave 3 batch AX-33 (2026-10-09): fabric-capability + fabric-checker ---
+    "crates/fabric-capability",
+    "crates/fabric-checker",
     # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): klipdot + logkit ---
     # --- E2.4 Pattern A wave 3 batch AG (2026-10-09): 1 focus-ci-watcher ---
     "crates/focus-ci-watcher",
@@ -555,6 +609,9 @@ members = [
     # --- E2.4 Pattern A wave 3 batch AB2 (2026-10-09): 2 small libs (acceptance-contract, dag-scheduler) ---
     "crates/acceptance-contract",
     "crates/dag-scheduler",
+    # --- E2.4 Pattern A wave 3 batch AX-33 (2026-10-09): fabric-capability + fabric-checker ---
+    "crates/fabric-capability",
+    "crates/fabric-checker",
     # --- E2.4 Pattern A wave 3 batch AC (2026-10-09): 1 agileplus lib (agileplus-nats) ---
     "crates/agileplus-nats",
     # --- E2.4 Pattern A wave 3 batch AD (2026-10-09): 1 small phenotype lib (bench-guard) ---
@@ -573,6 +630,9 @@ members = [
     "crates/driver-argv",
     # --- E2.4 Pattern A wave 3 batch AX-32 (2026-10-09): dag-scheduler ---
     "crates/dag-scheduler",
+    # --- E2.4 Pattern A wave 3 batch AX-33 (2026-10-09): fabric-capability + fabric-checker ---
+    "crates/fabric-capability",
+    "crates/fabric-checker",
     # --- E2.4 Pattern A wave 3 batch AE (2026-10-09): 1 example lib (clap-ext-examples) ---
     "crates/clap-ext-examples",
     # --- E2.4 Pattern A wave 3 batch AF (2026-10-09): 1 substrate-a2a leaf ---
@@ -599,6 +659,9 @@ members = [
     "crates/driver-argv",
     # --- E2.4 Pattern A wave 3 batch AX-32 (2026-10-09): dag-scheduler ---
     "crates/dag-scheduler",
+    # --- E2.4 Pattern A wave 3 batch AX-33 (2026-10-09): fabric-capability + fabric-checker ---
+    "crates/fabric-capability",
+    "crates/fabric-checker",
     # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): klipdot + logkit ---
     # --- E2.4 Pattern A wave 3 batch AG (2026-10-09): 1 focus-ci-watcher ---
     "crates/focus-ci-watcher",
@@ -638,6 +701,9 @@ members = [
     "crates/driver-argv",
     # --- E2.4 Pattern A wave 3 batch AX-32 (2026-10-09): dag-scheduler ---
     "crates/dag-scheduler",
+    # --- E2.4 Pattern A wave 3 batch AX-33 (2026-10-09): fabric-capability + fabric-checker ---
+    "crates/fabric-capability",
+    "crates/fabric-checker",
     # --- E2.4 Pattern A wave 3 batch AE (2026-10-09): 1 example lib (clap-ext-examples) ---
     "crates/clap-ext-examples",
     # --- E2.4 Pattern A wave 3 batch AF (2026-10-09): 1 substrate-a2a leaf ---
@@ -664,6 +730,9 @@ members = [
     "crates/driver-argv",
     # --- E2.4 Pattern A wave 3 batch AX-32 (2026-10-09): dag-scheduler ---
     "crates/dag-scheduler",
+    # --- E2.4 Pattern A wave 3 batch AX-33 (2026-10-09): fabric-capability + fabric-checker ---
+    "crates/fabric-capability",
+    "crates/fabric-checker",
     # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): klipdot + logkit ---
     # --- E2.4 Pattern A wave 3 batch AG (2026-10-09): 1 focus-ci-watcher ---
     "crates/focus-ci-watcher",
@@ -756,6 +825,9 @@ members = [
     "crates/driver-argv",
     # --- E2.4 Pattern A wave 3 batch AX-32 (2026-10-09): dag-scheduler ---
     "crates/dag-scheduler",
+    # --- E2.4 Pattern A wave 3 batch AX-33 (2026-10-09): fabric-capability + fabric-checker ---
+    "crates/fabric-capability",
+    "crates/fabric-checker",
     # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): klipdot + logkit ---
     "crates/focus-time",
     "crates/focus-ui",
@@ -803,6 +875,9 @@ members = [
     "crates/driver-argv",
     # --- E2.4 Pattern A wave 3 batch AX-32 (2026-10-09): dag-scheduler ---
     "crates/dag-scheduler",
+    # --- E2.4 Pattern A wave 3 batch AX-33 (2026-10-09): fabric-capability + fabric-checker ---
+    "crates/fabric-capability",
+    "crates/fabric-checker",
     # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): klipdot + logkit ---
     "crates/focus-planning",
     "crates/pheno-fs",
@@ -837,6 +912,9 @@ members = [
     "crates/driver-argv",
     # --- E2.4 Pattern A wave 3 batch AX-32 (2026-10-09): dag-scheduler ---
     "crates/dag-scheduler",
+    # --- E2.4 Pattern A wave 3 batch AX-33 (2026-10-09): fabric-capability + fabric-checker ---
+    "crates/fabric-capability",
+    "crates/fabric-checker",
     # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): klipdot + logkit ---
     # --- E2.4 Pattern A wave 3 batch T4 (2026-10-09): 4 tiny libs (focus-ui, focus-time, phenotype-git-core, eyetracker-domain) ---
     "crates/focus-ui",
@@ -864,6 +942,9 @@ members = [
     # --- E2.4 Pattern A wave 3 batch AB2 (2026-10-09): 2 small libs (acceptance-contract, dag-scheduler) ---
     "crates/acceptance-contract",
     "crates/dag-scheduler",
+    # --- E2.4 Pattern A wave 3 batch AX-33 (2026-10-09): fabric-capability + fabric-checker ---
+    "crates/fabric-capability",
+    "crates/fabric-checker",
     # --- E2.4 Pattern A wave 3 batch AC (2026-10-09): 1 agileplus lib (agileplus-nats) ---
     "crates/agileplus-nats",
     # --- E2.4 Pattern A wave 3 batch AD (2026-10-09): 1 small phenotype lib (bench-guard) ---
@@ -882,6 +963,9 @@ members = [
     "crates/driver-argv",
     # --- E2.4 Pattern A wave 3 batch AX-32 (2026-10-09): dag-scheduler ---
     "crates/dag-scheduler",
+    # --- E2.4 Pattern A wave 3 batch AX-33 (2026-10-09): fabric-capability + fabric-checker ---
+    "crates/fabric-capability",
+    "crates/fabric-checker",
     # --- E2.4 Pattern A wave 3 batch AE (2026-10-09): 1 example lib (clap-ext-examples) ---
     "crates/clap-ext-examples",
     # --- E2.4 Pattern A wave 3 batch AF (2026-10-09): 1 substrate-a2a leaf ---
@@ -908,6 +992,9 @@ members = [
     "crates/driver-argv",
     # --- E2.4 Pattern A wave 3 batch AX-32 (2026-10-09): dag-scheduler ---
     "crates/dag-scheduler",
+    # --- E2.4 Pattern A wave 3 batch AX-33 (2026-10-09): fabric-capability + fabric-checker ---
+    "crates/fabric-capability",
+    "crates/fabric-checker",
     # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): klipdot + logkit ---
     # --- E2.4 Pattern A wave 3 batch AG (2026-10-09): 1 focus-ci-watcher ---
     "crates/focus-ci-watcher",
@@ -946,6 +1033,9 @@ members = [
     # --- E2.4 Pattern A wave 3 batch AB2 (2026-10-09): 2 small libs (acceptance-contract, dag-scheduler) ---
     "crates/acceptance-contract",
     "crates/dag-scheduler",
+    # --- E2.4 Pattern A wave 3 batch AX-33 (2026-10-09): fabric-capability + fabric-checker ---
+    "crates/fabric-capability",
+    "crates/fabric-checker",
     # --- E2.4 Pattern A wave 3 batch AC (2026-10-09): 1 agileplus lib (agileplus-nats) ---
     "crates/agileplus-nats",
     # --- E2.4 Pattern A wave 3 batch AD (2026-10-09): 1 small phenotype lib (bench-guard) ---
@@ -964,6 +1054,9 @@ members = [
     "crates/driver-argv",
     # --- E2.4 Pattern A wave 3 batch AX-32 (2026-10-09): dag-scheduler ---
     "crates/dag-scheduler",
+    # --- E2.4 Pattern A wave 3 batch AX-33 (2026-10-09): fabric-capability + fabric-checker ---
+    "crates/fabric-capability",
+    "crates/fabric-checker",
     # --- E2.4 Pattern A wave 3 batch AE (2026-10-09): 1 example lib (clap-ext-examples) ---
     "crates/clap-ext-examples",
     # --- E2.4 Pattern A wave 3 batch AF (2026-10-09): 1 substrate-a2a leaf ---
@@ -990,6 +1083,9 @@ members = [
     "crates/driver-argv",
     # --- E2.4 Pattern A wave 3 batch AX-32 (2026-10-09): dag-scheduler ---
     "crates/dag-scheduler",
+    # --- E2.4 Pattern A wave 3 batch AX-33 (2026-10-09): fabric-capability + fabric-checker ---
+    "crates/fabric-capability",
+    "crates/fabric-checker",
     # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): klipdot + logkit ---
     # --- E2.4 Pattern A wave 3 batch AG (2026-10-09): 1 focus-ci-watcher ---
     "crates/focus-ci-watcher",
@@ -1032,6 +1128,9 @@ members = [
     # --- E2.4 Pattern A wave 3 batch AB2 (2026-10-09): 2 small libs (acceptance-contract, dag-scheduler) ---
     "crates/acceptance-contract",
     "crates/dag-scheduler",
+    # --- E2.4 Pattern A wave 3 batch AX-33 (2026-10-09): fabric-capability + fabric-checker ---
+    "crates/fabric-capability",
+    "crates/fabric-checker",
     # --- E2.4 Pattern A wave 3 batch AC (2026-10-09): 1 agileplus lib (agileplus-nats) ---
     "crates/agileplus-nats",
     # --- E2.4 Pattern A wave 3 batch AD (2026-10-09): 1 small phenotype lib (bench-guard) ---
@@ -1050,6 +1149,9 @@ members = [
     "crates/driver-argv",
     # --- E2.4 Pattern A wave 3 batch AX-32 (2026-10-09): dag-scheduler ---
     "crates/dag-scheduler",
+    # --- E2.4 Pattern A wave 3 batch AX-33 (2026-10-09): fabric-capability + fabric-checker ---
+    "crates/fabric-capability",
+    "crates/fabric-checker",
     # --- E2.4 Pattern A wave 3 batch AE (2026-10-09): 1 example lib (clap-ext-examples) ---
     "crates/clap-ext-examples",
     # --- E2.4 Pattern A wave 3 batch AF (2026-10-09): 1 substrate-a2a leaf ---
@@ -1076,6 +1178,9 @@ members = [
     "crates/driver-argv",
     # --- E2.4 Pattern A wave 3 batch AX-32 (2026-10-09): dag-scheduler ---
     "crates/dag-scheduler",
+    # --- E2.4 Pattern A wave 3 batch AX-33 (2026-10-09): fabric-capability + fabric-checker ---
+    "crates/fabric-capability",
+    "crates/fabric-checker",
     # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): klipdot + logkit ---
     # --- E2.4 Pattern A wave 3 batch AG (2026-10-09): 1 focus-ci-watcher ---
     "crates/focus-ci-watcher",
@@ -1141,6 +1246,9 @@ members = [
     "crates/driver-argv",
     # --- E2.4 Pattern A wave 3 batch AX-32 (2026-10-09): dag-scheduler ---
     "crates/dag-scheduler",
+    # --- E2.4 Pattern A wave 3 batch AX-33 (2026-10-09): fabric-capability + fabric-checker ---
+    "crates/fabric-capability",
+    "crates/fabric-checker",
     # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): klipdot + logkit ---
     # --- E2.4 Pattern A wave 3 batch I (2026-10-09): 1 small lib (phenotype-diff) ---
     "crates/phenotype-diff",
@@ -1158,6 +1266,9 @@ members = [
     "crates/driver-argv",
     # --- E2.4 Pattern A wave 3 batch AX-32 (2026-10-09): dag-scheduler ---
     "crates/dag-scheduler",
+    # --- E2.4 Pattern A wave 3 batch AX-33 (2026-10-09): fabric-capability + fabric-checker ---
+    "crates/fabric-capability",
+    "crates/fabric-checker",
     # --- E2.4 Pattern A wave 3 batch K (2026-10-09): 1 focus-* lib (focus-coaching; secrecy added to workspace) ---
     "crates/focus-coaching",
     # --- E2.4 Pattern A wave 3 batch L (2026-10-09): 2 small libs (pheno-schema-port, phenotype-cost-core) ---
@@ -1174,6 +1285,9 @@ members = [
     "crates/driver-argv",
     # --- E2.4 Pattern A wave 3 batch AX-32 (2026-10-09): dag-scheduler ---
     "crates/dag-scheduler",
+    # --- E2.4 Pattern A wave 3 batch AX-33 (2026-10-09): fabric-capability + fabric-checker ---
+    "crates/fabric-capability",
+    "crates/fabric-checker",
     "crates/arch-test",
     "crates/sidekick-messaging",
     "crates/phenovcs-observability",
@@ -1220,6 +1334,9 @@ members = [
     "crates/driver-argv",
     # --- E2.4 Pattern A wave 3 batch AX-32 (2026-10-09): dag-scheduler ---
     "crates/dag-scheduler",
+    # --- E2.4 Pattern A wave 3 batch AX-33 (2026-10-09): fabric-capability + fabric-checker ---
+    "crates/fabric-capability",
+    "crates/fabric-checker",
     # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): klipdot + logkit ---
     "crates/focus-planning",
     "crates/pheno-fs",
@@ -1254,6 +1371,9 @@ members = [
     "crates/driver-argv",
     # --- E2.4 Pattern A wave 3 batch AX-32 (2026-10-09): dag-scheduler ---
     "crates/dag-scheduler",
+    # --- E2.4 Pattern A wave 3 batch AX-33 (2026-10-09): fabric-capability + fabric-checker ---
+    "crates/fabric-capability",
+    "crates/fabric-checker",
     # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): klipdot + logkit ---
     # --- E2.4 Pattern A wave 3 batch T4 (2026-10-09): 4 tiny libs (focus-ui, focus-time, phenotype-git-core, eyetracker-domain) ---
     "crates/focus-ui",
@@ -1281,6 +1401,9 @@ members = [
     # --- E2.4 Pattern A wave 3 batch AB2 (2026-10-09): 2 small libs (acceptance-contract, dag-scheduler) ---
     "crates/acceptance-contract",
     "crates/dag-scheduler",
+    # --- E2.4 Pattern A wave 3 batch AX-33 (2026-10-09): fabric-capability + fabric-checker ---
+    "crates/fabric-capability",
+    "crates/fabric-checker",
     # --- E2.4 Pattern A wave 3 batch AC (2026-10-09): 1 agileplus lib (agileplus-nats) ---
     "crates/agileplus-nats",
     # --- E2.4 Pattern A wave 3 batch AD (2026-10-09): 1 small phenotype lib (bench-guard) ---
@@ -1299,6 +1422,9 @@ members = [
     "crates/driver-argv",
     # --- E2.4 Pattern A wave 3 batch AX-32 (2026-10-09): dag-scheduler ---
     "crates/dag-scheduler",
+    # --- E2.4 Pattern A wave 3 batch AX-33 (2026-10-09): fabric-capability + fabric-checker ---
+    "crates/fabric-capability",
+    "crates/fabric-checker",
     # --- E2.4 Pattern A wave 3 batch AE (2026-10-09): 1 example lib (clap-ext-examples) ---
     "crates/clap-ext-examples",
     # --- E2.4 Pattern A wave 3 batch AF (2026-10-09): 1 substrate-a2a leaf ---
@@ -1325,6 +1451,9 @@ members = [
     "crates/driver-argv",
     # --- E2.4 Pattern A wave 3 batch AX-32 (2026-10-09): dag-scheduler ---
     "crates/dag-scheduler",
+    # --- E2.4 Pattern A wave 3 batch AX-33 (2026-10-09): fabric-capability + fabric-checker ---
+    "crates/fabric-capability",
+    "crates/fabric-checker",
     # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): klipdot + logkit ---
     # --- E2.4 Pattern A wave 3 batch AG (2026-10-09): 1 focus-ci-watcher ---
     "crates/focus-ci-watcher",
@@ -1395,6 +1524,9 @@ members = [
     "crates/driver-argv",
     # --- E2.4 Pattern A wave 3 batch AX-32 (2026-10-09): dag-scheduler ---
     "crates/dag-scheduler",
+    # --- E2.4 Pattern A wave 3 batch AX-33 (2026-10-09): fabric-capability + fabric-checker ---
+    "crates/fabric-capability",
+    "crates/fabric-checker",
     # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): klipdot + logkit ---
 ]
 [workspace.package]
