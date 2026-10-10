@@ -4582,6 +4582,19 @@ dependencies = [
 ]
 
 [[package]]
+name = "focus-penalties"
+version = "0.3.10"
+dependencies = [
+ "chrono",
+ "focus-audit",
+ "focus-domain",
+ "serde",
+ "serde_json",
+ "thiserror 2.0.20",
+ "uuid",
+]
+
+[[package]]
 name = "focus-planning"
 version = "0.3.10"
 dependencies = [

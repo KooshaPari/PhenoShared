@@ -98,7 +98,9 @@ pub enum PenaltyMutation {
     RepayDebt(i64),
     AddLockout(LockoutWindow),
     ClearLockouts,
-    SetStrictMode { until: DateTime<Utc> },
+    SetStrictMode {
+        until: DateTime<Utc>,
+    },
     Clear,
 }
 
@@ -158,11 +160,11 @@ impl PenaltyState {
         let (record_type, payload): (&'static str, serde_json::Value) = match &mutation {
             PenaltyMutation::Escalate(tier) => {
                 ("penalty.escalate", json!({ "tier": format!("{tier:?}") }))
-            }
+            },
             PenaltyMutation::SpendBypass(n) => ("penalty.spend_bypass", json!({ "amount": n })),
             PenaltyMutation::SpendBypassOrDebt(n) => {
                 ("penalty.spend_bypass_or_debt", json!({ "amount": n }))
-            }
+            },
             PenaltyMutation::GrantBypass(n) => ("penalty.grant_bypass", json!({ "amount": n })),
             PenaltyMutation::RepayDebt(n) => ("penalty.repay_debt", json!({ "amount": n })),
             PenaltyMutation::AddLockout(w) => (
@@ -176,7 +178,7 @@ impl PenaltyState {
             PenaltyMutation::ClearLockouts => ("penalty.clear_lockouts", json!({})),
             PenaltyMutation::SetStrictMode { until } => {
                 ("penalty.set_strict_mode", json!({ "until": until }))
-            }
+            },
             PenaltyMutation::Clear => ("penalty.clear", json!({})),
         };
 
@@ -188,7 +190,7 @@ impl PenaltyState {
                     ));
                 }
                 self.escalation_tier = tier;
-            }
+            },
             PenaltyMutation::SpendBypass(n) => {
                 if n < 0 {
                     return Err(PenaltyError::NegativeAmount(n));
@@ -203,7 +205,7 @@ impl PenaltyState {
                 if self.bypass_budget < 0 {
                     return Err(PenaltyError::Invariant("bypass_budget < 0".into()));
                 }
-            }
+            },
             PenaltyMutation::SpendBypassOrDebt(n) => {
                 if n < 0 {
                     return Err(PenaltyError::NegativeAmount(n));
@@ -215,14 +217,14 @@ impl PenaltyState {
                     .debt_balance
                     .checked_add(shortfall)
                     .ok_or_else(|| PenaltyError::Invariant("debt overflow".into()))?;
-            }
+            },
             PenaltyMutation::RepayDebt(n) => {
                 if n < 0 {
                     return Err(PenaltyError::NegativeAmount(n));
                 }
                 // Clamp at zero; overpayment is silently ignored, not credited.
                 self.debt_balance = (self.debt_balance - n).max(0);
-            }
+            },
             PenaltyMutation::GrantBypass(n) => {
                 if n < 0 {
                     return Err(PenaltyError::NegativeAmount(n));
@@ -231,28 +233,28 @@ impl PenaltyState {
                     .bypass_budget
                     .checked_add(n)
                     .ok_or_else(|| PenaltyError::Invariant("bypass overflow".into()))?;
-            }
+            },
             PenaltyMutation::AddLockout(w) => {
                 if w.ends_at <= w.starts_at {
                     return Err(PenaltyError::Invariant("lockout ends <= starts".into()));
                 }
                 self.lockout_windows.push(w);
-            }
+            },
             PenaltyMutation::ClearLockouts => {
                 self.lockout_windows.clear();
-            }
+            },
             PenaltyMutation::SetStrictMode { until } => {
                 if until <= now {
                     return Err(PenaltyError::Invariant("strict_mode_until in past".into()));
                 }
                 self.strict_mode_until = Some(until);
-            }
+            },
             PenaltyMutation::Clear => {
                 self.escalation_tier = EscalationTier::Clear;
                 self.strict_mode_until = None;
                 self.lockout_windows.clear();
                 self.debt_balance = 0;
-            }
+            },
         }
         audit
             .record_mutation(record_type, &self.user_id.to_string(), payload, now)
@@ -313,7 +315,8 @@ mod tests {
             &NoopAuditSink,
         )
         .unwrap();
-        s.apply(PenaltyMutation::Clear, t(2026, 1, 1, 1), &NoopAuditSink).unwrap();
+        s.apply(PenaltyMutation::Clear, t(2026, 1, 1, 1), &NoopAuditSink)
+            .unwrap();
         assert_eq!(s.escalation_tier, EscalationTier::Clear);
     }
 
@@ -321,11 +324,25 @@ mod tests {
     #[test]
     fn bypass_budget_nonnegative() {
         let mut s = PenaltyState::default();
-        s.apply(PenaltyMutation::GrantBypass(10), t(2026, 1, 1, 0), &NoopAuditSink).unwrap();
-        s.apply(PenaltyMutation::SpendBypass(7), t(2026, 1, 1, 1), &NoopAuditSink).unwrap();
+        s.apply(
+            PenaltyMutation::GrantBypass(10),
+            t(2026, 1, 1, 0),
+            &NoopAuditSink,
+        )
+        .unwrap();
+        s.apply(
+            PenaltyMutation::SpendBypass(7),
+            t(2026, 1, 1, 1),
+            &NoopAuditSink,
+        )
+        .unwrap();
         assert_eq!(s.bypass_budget, 3);
         let err = s
-            .apply(PenaltyMutation::SpendBypass(10), t(2026, 1, 1, 2), &NoopAuditSink)
+            .apply(
+                PenaltyMutation::SpendBypass(10),
+                t(2026, 1, 1, 2),
+                &NoopAuditSink,
+            )
             .unwrap_err();
         assert!(matches!(err, PenaltyError::InsufficientBypass { .. }));
     }
@@ -335,13 +352,20 @@ mod tests {
     fn strict_mode_auto_clears_after_expiry() {
         let mut s = PenaltyState::default();
         s.apply(
-            PenaltyMutation::SetStrictMode { until: t(2026, 1, 1, 10) },
+            PenaltyMutation::SetStrictMode {
+                until: t(2026, 1, 1, 10),
+            },
             t(2026, 1, 1, 9),
             &NoopAuditSink,
         )
         .unwrap();
         assert!(s.is_strict(t(2026, 1, 1, 9)));
-        s.apply(PenaltyMutation::ClearLockouts, t(2026, 1, 1, 11), &NoopAuditSink).unwrap();
+        s.apply(
+            PenaltyMutation::ClearLockouts,
+            t(2026, 1, 1, 11),
+            &NoopAuditSink,
+        )
+        .unwrap();
         assert!(!s.is_strict(t(2026, 1, 1, 11)));
         assert!(s.strict_mode_until.is_none());
     }
@@ -356,7 +380,12 @@ mod tests {
             reason: "x".into(),
             rigidity: Rigidity::Hard,
         });
-        s.apply(PenaltyMutation::GrantBypass(0), t(2026, 1, 1, 5), &NoopAuditSink).unwrap();
+        s.apply(
+            PenaltyMutation::GrantBypass(0),
+            t(2026, 1, 1, 5),
+            &NoopAuditSink,
+        )
+        .unwrap();
         assert!(s.lockout_windows.is_empty());
     }
 
@@ -364,7 +393,12 @@ mod tests {
     #[test]
     fn quote_happy_path() {
         let mut s = PenaltyState::default();
-        s.apply(PenaltyMutation::GrantBypass(10), t(2026, 1, 1, 0), &NoopAuditSink).unwrap();
+        s.apply(
+            PenaltyMutation::GrantBypass(10),
+            t(2026, 1, 1, 0),
+            &NoopAuditSink,
+        )
+        .unwrap();
         let q = s.quote_bypass(4).unwrap();
         assert_eq!(q.cost, 4);
         assert_eq!(q.remaining_after, 6);
@@ -413,8 +447,12 @@ mod tests {
     fn escalate_records_audit_line() {
         let mut s = PenaltyState::default();
         let sink = CapturingAuditSink::new();
-        s.apply(PenaltyMutation::Escalate(EscalationTier::Strict), t(2026, 1, 1, 0), &sink)
-            .unwrap();
+        s.apply(
+            PenaltyMutation::Escalate(EscalationTier::Strict),
+            t(2026, 1, 1, 0),
+            &sink,
+        )
+        .unwrap();
         let snap = sink.snapshot();
         assert_eq!(snap.len(), 1);
         assert_eq!(snap[0].0, "penalty.escalate");
@@ -426,10 +464,17 @@ mod tests {
     fn failed_escalation_does_not_audit() {
         let mut s = PenaltyState::default();
         let sink = CapturingAuditSink::new();
-        s.apply(PenaltyMutation::Escalate(EscalationTier::Restricted), t(2026, 1, 1, 0), &sink)
-            .unwrap();
-        let _ =
-            s.apply(PenaltyMutation::Escalate(EscalationTier::Warning), t(2026, 1, 1, 1), &sink);
+        s.apply(
+            PenaltyMutation::Escalate(EscalationTier::Restricted),
+            t(2026, 1, 1, 0),
+            &sink,
+        )
+        .unwrap();
+        let _ = s.apply(
+            PenaltyMutation::Escalate(EscalationTier::Warning),
+            t(2026, 1, 1, 1),
+            &sink,
+        );
         // Only the first succeeded and audited; the rejected downgrade did not.
         assert_eq!(sink.len(), 1);
     }
@@ -439,8 +484,10 @@ mod tests {
     fn bypass_spend_and_grant_audit() {
         let mut s = PenaltyState::default();
         let sink = CapturingAuditSink::new();
-        s.apply(PenaltyMutation::GrantBypass(10), t(2026, 1, 1, 0), &sink).unwrap();
-        s.apply(PenaltyMutation::SpendBypass(4), t(2026, 1, 1, 1), &sink).unwrap();
+        s.apply(PenaltyMutation::GrantBypass(10), t(2026, 1, 1, 0), &sink)
+            .unwrap();
+        s.apply(PenaltyMutation::SpendBypass(4), t(2026, 1, 1, 1), &sink)
+            .unwrap();
         let snap = sink.snapshot();
         assert_eq!(snap.len(), 2);
         assert_eq!(snap[0].0, "penalty.grant_bypass");
@@ -453,9 +500,18 @@ mod tests {
     #[test]
     fn spend_or_debt_drains_budget_then_accrues_debt() {
         let mut s = PenaltyState::default();
-        s.apply(PenaltyMutation::GrantBypass(10), t(2026, 1, 1, 0), &NoopAuditSink).unwrap();
-        s.apply(PenaltyMutation::SpendBypassOrDebt(15), t(2026, 1, 1, 1), &NoopAuditSink)
-            .unwrap();
+        s.apply(
+            PenaltyMutation::GrantBypass(10),
+            t(2026, 1, 1, 0),
+            &NoopAuditSink,
+        )
+        .unwrap();
+        s.apply(
+            PenaltyMutation::SpendBypassOrDebt(15),
+            t(2026, 1, 1, 1),
+            &NoopAuditSink,
+        )
+        .unwrap();
         assert_eq!(s.bypass_budget, 0);
         assert_eq!(s.debt_balance, 5);
     }
@@ -463,7 +519,12 @@ mod tests {
     #[test]
     fn spend_or_debt_no_budget_all_to_debt() {
         let mut s = PenaltyState::default();
-        s.apply(PenaltyMutation::SpendBypassOrDebt(7), t(2026, 1, 1, 0), &NoopAuditSink).unwrap();
+        s.apply(
+            PenaltyMutation::SpendBypassOrDebt(7),
+            t(2026, 1, 1, 0),
+            &NoopAuditSink,
+        )
+        .unwrap();
         assert_eq!(s.bypass_budget, 0);
         assert_eq!(s.debt_balance, 7);
     }
@@ -472,7 +533,11 @@ mod tests {
     fn spend_or_debt_rejects_negative() {
         let mut s = PenaltyState::default();
         let err = s
-            .apply(PenaltyMutation::SpendBypassOrDebt(-1), t(2026, 1, 1, 0), &NoopAuditSink)
+            .apply(
+                PenaltyMutation::SpendBypassOrDebt(-1),
+                t(2026, 1, 1, 0),
+                &NoopAuditSink,
+            )
             .unwrap_err();
         assert!(matches!(err, PenaltyError::NegativeAmount(_)));
     }
@@ -480,12 +545,27 @@ mod tests {
     #[test]
     fn repay_debt_reduces_balance_clamps_at_zero() {
         let mut s = PenaltyState::default();
-        s.apply(PenaltyMutation::SpendBypassOrDebt(10), t(2026, 1, 1, 0), &NoopAuditSink).unwrap();
+        s.apply(
+            PenaltyMutation::SpendBypassOrDebt(10),
+            t(2026, 1, 1, 0),
+            &NoopAuditSink,
+        )
+        .unwrap();
         assert_eq!(s.debt_balance, 10);
-        s.apply(PenaltyMutation::RepayDebt(6), t(2026, 1, 1, 1), &NoopAuditSink).unwrap();
+        s.apply(
+            PenaltyMutation::RepayDebt(6),
+            t(2026, 1, 1, 1),
+            &NoopAuditSink,
+        )
+        .unwrap();
         assert_eq!(s.debt_balance, 4);
         // Overpayment — clamps, does NOT credit budget.
-        s.apply(PenaltyMutation::RepayDebt(100), t(2026, 1, 1, 2), &NoopAuditSink).unwrap();
+        s.apply(
+            PenaltyMutation::RepayDebt(100),
+            t(2026, 1, 1, 2),
+            &NoopAuditSink,
+        )
+        .unwrap();
         assert_eq!(s.debt_balance, 0);
         assert_eq!(s.bypass_budget, 0);
     }
@@ -493,8 +573,14 @@ mod tests {
     #[test]
     fn clear_zeros_debt_balance() {
         let mut s = PenaltyState::default();
-        s.apply(PenaltyMutation::SpendBypassOrDebt(5), t(2026, 1, 1, 0), &NoopAuditSink).unwrap();
-        s.apply(PenaltyMutation::Clear, t(2026, 1, 1, 1), &NoopAuditSink).unwrap();
+        s.apply(
+            PenaltyMutation::SpendBypassOrDebt(5),
+            t(2026, 1, 1, 0),
+            &NoopAuditSink,
+        )
+        .unwrap();
+        s.apply(PenaltyMutation::Clear, t(2026, 1, 1, 1), &NoopAuditSink)
+            .unwrap();
         assert_eq!(s.debt_balance, 0);
     }
 
@@ -502,8 +588,14 @@ mod tests {
     fn debt_mutations_emit_audit_lines() {
         let sink = CapturingAuditSink::new();
         let mut s = PenaltyState::default();
-        s.apply(PenaltyMutation::SpendBypassOrDebt(3), t(2026, 1, 1, 0), &sink).unwrap();
-        s.apply(PenaltyMutation::RepayDebt(1), t(2026, 1, 1, 1), &sink).unwrap();
+        s.apply(
+            PenaltyMutation::SpendBypassOrDebt(3),
+            t(2026, 1, 1, 0),
+            &sink,
+        )
+        .unwrap();
+        s.apply(PenaltyMutation::RepayDebt(1), t(2026, 1, 1, 1), &sink)
+            .unwrap();
         let snap = sink.snapshot();
         assert_eq!(snap.len(), 2);
         assert_eq!(snap[0].0, "penalty.spend_bypass_or_debt");
