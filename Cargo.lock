@@ -8801,6 +8801,21 @@ dependencies = [
 ]
 
 [[package]]
+name = "phenotype-state-machine"
+version = "0.3.10"
+dependencies = [
+ "serde",
+ "serde_json",
+]
+
+[[package]]
+name = "phenotype-test-fixtures"
+version = "0.3.10"
+dependencies = [
+ "serde",
+]
+
+[[package]]
 name = "phenotype-tooling-observability"
 version = "0.3.10"
 dependencies = [
