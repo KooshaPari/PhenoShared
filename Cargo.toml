@@ -27,6 +27,8 @@ members = [
     "crates/focus-crypto",
     # --- E2.4 Pattern A wave 3 batch AJ (2026-10-09): 1 focus-telemetry + url workspace dep ---
     "crates/focus-telemetry",
+    # --- E2.4 Pattern A wave 3 batch AK (2026-10-09): 1 focus-entitlements + uniffi workspace dep ---
+    "crates/focus-entitlements",
     "crates/store-sqlite",
     "crates/supervisor",
     "crates/wave",
@@ -128,6 +130,8 @@ members = [
     "crates/focus-crypto",
     # --- E2.4 Pattern A wave 3 batch AJ (2026-10-09): 1 focus-telemetry + url workspace dep ---
     "crates/focus-telemetry",
+    # --- E2.4 Pattern A wave 3 batch AK (2026-10-09): 1 focus-entitlements + uniffi workspace dep ---
+    "crates/focus-entitlements",
     "crates/eyetracker-math",
     "crates/eyetracker-core",
     # --- E2.4 Pattern A wave 3 batch W (2026-10-09): 1 eyetracker lib (eyetracker-camera) ---
@@ -161,6 +165,8 @@ members = [
     "crates/focus-crypto",
     # --- E2.4 Pattern A wave 3 batch AJ (2026-10-09): 1 focus-telemetry + url workspace dep ---
     "crates/focus-telemetry",
+    # --- E2.4 Pattern A wave 3 batch AK (2026-10-09): 1 focus-entitlements + uniffi workspace dep ---
+    "crates/focus-entitlements",
     "crates/eyetracker-ffi",
     # --- E2.4 Pattern A wave 3 batch Z (2026-10-09): 1 focus lib (focus-release-bot) ---
     "crates/focus-release-bot",
@@ -187,6 +193,8 @@ members = [
     "crates/focus-crypto",
     # --- E2.4 Pattern A wave 3 batch AJ (2026-10-09): 1 focus-telemetry + url workspace dep ---
     "crates/focus-telemetry",
+    # --- E2.4 Pattern A wave 3 batch AK (2026-10-09): 1 focus-entitlements + uniffi workspace dep ---
+    "crates/focus-entitlements",
     "crates/eyetracker-camera",
     # --- E2.4 Pattern A wave 3 batch X (2026-10-09): 1 eyetracker lib (eyetracker-inference) ---
     "crates/eyetracker-inference",
@@ -217,6 +225,8 @@ members = [
     "crates/focus-crypto",
     # --- E2.4 Pattern A wave 3 batch AJ (2026-10-09): 1 focus-telemetry + url workspace dep ---
     "crates/focus-telemetry",
+    # --- E2.4 Pattern A wave 3 batch AK (2026-10-09): 1 focus-entitlements + uniffi workspace dep ---
+    "crates/focus-entitlements",
     "crates/eyetracker-inference",
     # --- E2.4 Pattern A wave 3 batch Y (2026-10-09): 1 eyetracker lib (eyetracker-ffi) ---
     "crates/eyetracker-ffi",
@@ -245,6 +255,8 @@ members = [
     "crates/focus-crypto",
     # --- E2.4 Pattern A wave 3 batch AJ (2026-10-09): 1 focus-telemetry + url workspace dep ---
     "crates/focus-telemetry",
+    # --- E2.4 Pattern A wave 3 batch AK (2026-10-09): 1 focus-entitlements + uniffi workspace dep ---
+    "crates/focus-entitlements",
     "crates/eyetracker-cli",
     # --- pm-core crates (restored 2026-09-20 from zz-archive/git-bundles-20260910/phenotype-archive.bundle @ refs/archive/phenotype-pm-core-2026-08-09/heads/master d3277c40; content strictly supersedes the partial traceability-core copy under crates/agile-plus/) ---
     "crates/traceability-core",
@@ -264,6 +276,8 @@ members = [
     "crates/focus-crypto",
     # --- E2.4 Pattern A wave 3 batch AJ (2026-10-09): 1 focus-telemetry + url workspace dep ---
     "crates/focus-telemetry",
+    # --- E2.4 Pattern A wave 3 batch AK (2026-10-09): 1 focus-entitlements + uniffi workspace dep ---
+    "crates/focus-entitlements",
     "crates/fuzz-setup",
     "crates/perfharness",
     "crates/phenotype-flags",
@@ -328,6 +342,8 @@ members = [
     "crates/focus-crypto",
     # --- E2.4 Pattern A wave 3 batch AJ (2026-10-09): 1 focus-telemetry + url workspace dep ---
     "crates/focus-telemetry",
+    # --- E2.4 Pattern A wave 3 batch AK (2026-10-09): 1 focus-entitlements + uniffi workspace dep ---
+    "crates/focus-entitlements",
     "crates/sidekick-messaging",
     "crates/datakit",
     # --- E2.4 Pattern A wave 3 batch V2 (2026-10-09): 2 eyetracker libs (eyetracker-math, eyetracker-core) ---
@@ -364,6 +380,8 @@ members = [
     "crates/focus-crypto",
     # --- E2.4 Pattern A wave 3 batch AJ (2026-10-09): 1 focus-telemetry + url workspace dep ---
     "crates/focus-telemetry",
+    # --- E2.4 Pattern A wave 3 batch AK (2026-10-09): 1 focus-entitlements + uniffi workspace dep ---
+    "crates/focus-entitlements",
     # --- E2.4 Pattern A wave 3 (2026-10-09): 4 small/leaf crates (just-add; no new workspace.dependencies needed) ---
     "crates/temporal-grounding",
     "crates/pheno-forge-scaffold",
@@ -404,6 +422,8 @@ members = [
     "crates/focus-crypto",
     # --- E2.4 Pattern A wave 3 batch AJ (2026-10-09): 1 focus-telemetry + url workspace dep ---
     "crates/focus-telemetry",
+    # --- E2.4 Pattern A wave 3 batch AK (2026-10-09): 1 focus-entitlements + uniffi workspace dep ---
+    "crates/focus-entitlements",
     "crates/phenotype-logging",
     "crates/mcp-server",
     # --- E2.4 Pattern A wave 3 batch G (2026-10-09): 2 small libs (phenotype-contract, anthropic-usage-poll) ---
@@ -487,6 +507,8 @@ members = [
     "crates/focus-crypto",
     # --- E2.4 Pattern A wave 3 batch AJ (2026-10-09): 1 focus-telemetry + url workspace dep ---
     "crates/focus-telemetry",
+    # --- E2.4 Pattern A wave 3 batch AK (2026-10-09): 1 focus-entitlements + uniffi workspace dep ---
+    "crates/focus-entitlements",
 ]
 [workspace.package]
 version = "0.3.10"
@@ -561,6 +583,7 @@ fs2 = "0.4"
 libc = "0.2"
 ring = "0.17"
 url = "2.5"
+uniffi = { version = "0.31", features = ["cli"] }
 criterion = { version = "0.5", features = ["html_reports"] }
 # Use pheno-otel from PhenoObservability v0.1.0 (ADR-037 substrate).
 # Git + tag + subdirectory form pins the crate to a known-good release

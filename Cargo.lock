@@ -4402,6 +4402,22 @@ dependencies = [
 ]
 
 [[package]]
+name = "focus-entitlements"
+version = "0.3.10"
+dependencies = [
+ "anyhow",
+ "async-trait",
+ "chrono",
+ "serde",
+ "serde_json",
+ "thiserror 2.0.20",
+ "tokio",
+ "tokio-test",
+ "uniffi",
+ "uuid",
+]
+
+[[package]]
 name = "focus-events"
 version = "0.3.10"
 dependencies = [
