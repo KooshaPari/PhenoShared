@@ -4,7 +4,7 @@
 #[cfg(test)]
 mod tests {
     use crate::{
-        init_tracing, ConnectorSpanAttrs, MetricsRegistry, RuleSpanAttrs, AuditSpanAttrs,
+        init_tracing, AuditSpanAttrs, ConnectorSpanAttrs, MetricsRegistry, RuleSpanAttrs,
         SpanPrivacyFilter,
     };
     use serde_json::json;

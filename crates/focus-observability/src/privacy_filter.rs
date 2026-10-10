@@ -19,14 +19,12 @@ static PII_PATTERNS: OnceLock<PiiPatterns> = OnceLock::new();
 
 fn patterns() -> &'static PiiPatterns {
     PII_PATTERNS.get_or_init(|| PiiPatterns {
-        email: Regex::new(r"[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}")
-            .unwrap(),
-        phone: Regex::new(
-            r"\+?1?[-.\s]?\(?[0-9]{3}\)?[-.\s]?[0-9]{3}[-.\s]?[0-9]{4}"
+        email: Regex::new(r"[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}").unwrap(),
+        phone: Regex::new(r"\+?1?[-.\s]?\(?[0-9]{3}\)?[-.\s]?[0-9]{3}[-.\s]?[0-9]{4}").unwrap(),
+        token: Regex::new(
+            r"(?:Bearer|token|api[_-]?key|sk[_-]?live|pk[_-]?live)[\s:]*([a-zA-Z0-9_\-\.]+)",
         )
         .unwrap(),
-        token: Regex::new(r"(?:Bearer|token|api[_-]?key|sk[_-]?live|pk[_-]?live)[\s:]*([a-zA-Z0-9_\-\.]+)")
-            .unwrap(),
         url_with_auth: Regex::new(r"https?://[^/\s:]+:[^/\s@]+@").unwrap(),
     })
 }
@@ -48,22 +46,13 @@ impl SpanPrivacyFilter {
         let mut result = value.to_string();
 
         // Email
-        result = p
-            .email
-            .replace_all(&result, "[REDACTED_EMAIL]")
-            .to_string();
+        result = p.email.replace_all(&result, "[REDACTED_EMAIL]").to_string();
 
         // Phone
-        result = p
-            .phone
-            .replace_all(&result, "[REDACTED_PHONE]")
-            .to_string();
+        result = p.phone.replace_all(&result, "[REDACTED_PHONE]").to_string();
 
         // API tokens
-        result = p
-            .token
-            .replace_all(&result, "[REDACTED_TOKEN]")
-            .to_string();
+        result = p.token.replace_all(&result, "[REDACTED_TOKEN]").to_string();
 
         // URLs with auth
         result = p
@@ -84,10 +73,10 @@ impl SpanPrivacyFilter {
                     *v = self.scrub_json(v.take());
                 }
                 Value::Object(scrubbed)
-            }
+            },
             Value::Array(arr) => {
                 Value::Array(arr.into_iter().map(|v| self.scrub_json(v)).collect())
-            }
+            },
             other => other,
         }
     }
