@@ -115,6 +115,20 @@ dependencies = [
 ]
 
 [[package]]
+name = "agileplus-nats"
+version = "0.3.10"
+dependencies = [
+ "async-trait",
+ "chrono",
+ "phenotype-health",
+ "serde",
+ "serde_json",
+ "thiserror 2.0.20",
+ "tokio",
+ "uuid",
+]
+
+[[package]]
 name = "ahash"
 version = "0.8.12"
 source = "registry+https://github.com/rust-lang/crates.io-index"
