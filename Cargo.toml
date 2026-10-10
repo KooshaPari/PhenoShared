@@ -34,6 +34,11 @@ members = [
     "crates/cloud-cursor",
     "crates/cloud-kilo",
     "crates/cloud-dispatch-conformance",
+    # --- E2.4 Pattern A wave 3 batch AX-31 (2026-10-09): 5 simple ---
+    "crates/clap-ext",
+    "crates/datakit",
+    "crates/docs-health",
+    "crates/driver-argv",
     # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): klipdot + logkit ---
     # --- E2.4 Pattern A wave 3 batch AG (2026-10-09): 1 focus-ci-watcher ---
     "crates/focus-ci-watcher",
@@ -73,6 +78,11 @@ members = [
     "crates/wave-3lane-tests",
     "crates/dispatch-bridge",
     "crates/cloud-dispatch-conformance",
+    # --- E2.4 Pattern A wave 3 batch AX-31 (2026-10-09): 5 simple ---
+    "crates/clap-ext",
+    "crates/datakit",
+    "crates/docs-health",
+    "crates/driver-argv",
     "crates/cloud-cursor",
     "crates/cloud-kilo",
     "crates/cloud-codex",
@@ -131,6 +141,11 @@ members = [
     "crates/cloud-cursor",
     "crates/cloud-kilo",
     "crates/cloud-dispatch-conformance",
+    # --- E2.4 Pattern A wave 3 batch AX-31 (2026-10-09): 5 simple ---
+    "crates/clap-ext",
+    "crates/datakit",
+    "crates/docs-health",
+    "crates/driver-argv",
     # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): klipdot + logkit ---
     "crates/phenotype-voxel",
     # --- E2.4 Pattern A wave 3 batch AX-24 (2026-10-09): agileplus-nats + agileplus-graph ---
@@ -156,6 +171,11 @@ members = [
     "crates/cloud-cursor",
     "crates/cloud-kilo",
     "crates/cloud-dispatch-conformance",
+    # --- E2.4 Pattern A wave 3 batch AX-31 (2026-10-09): 5 simple ---
+    "crates/clap-ext",
+    "crates/datakit",
+    "crates/docs-health",
+    "crates/driver-argv",
     # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): klipdot + logkit ---
     # --- PhenoRegistry crates (absorbed from PhenoRegistry) ---
     "crates/phenotype-project-registry",
@@ -187,6 +207,11 @@ members = [
     "crates/cloud-cursor",
     "crates/cloud-kilo",
     "crates/cloud-dispatch-conformance",
+    # --- E2.4 Pattern A wave 3 batch AX-31 (2026-10-09): 5 simple ---
+    "crates/clap-ext",
+    "crates/datakit",
+    "crates/docs-health",
+    "crates/driver-argv",
     # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): klipdot + logkit ---
     "crates/phenotype-service-registry",
     # --- PhenoInfra crates (absorbed from PhenoInfra) ---
@@ -228,6 +253,11 @@ members = [
     "crates/cloud-cursor",
     "crates/cloud-kilo",
     "crates/cloud-dispatch-conformance",
+    # --- E2.4 Pattern A wave 3 batch AX-31 (2026-10-09): 5 simple ---
+    "crates/clap-ext",
+    "crates/datakit",
+    "crates/docs-health",
+    "crates/driver-argv",
     # --- E2.4 Pattern A wave 3 batch AE (2026-10-09): 1 example lib (clap-ext-examples) ---
     "crates/clap-ext-examples",
     # --- E2.4 Pattern A wave 3 batch AF (2026-10-09): 1 substrate-a2a leaf ---
@@ -247,6 +277,11 @@ members = [
     "crates/cloud-cursor",
     "crates/cloud-kilo",
     "crates/cloud-dispatch-conformance",
+    # --- E2.4 Pattern A wave 3 batch AX-31 (2026-10-09): 5 simple ---
+    "crates/clap-ext",
+    "crates/datakit",
+    "crates/docs-health",
+    "crates/driver-argv",
     # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): klipdot + logkit ---
     # --- E2.4 Pattern A wave 3 batch AG (2026-10-09): 1 focus-ci-watcher ---
     "crates/focus-ci-watcher",
@@ -293,6 +328,11 @@ members = [
     "crates/cloud-cursor",
     "crates/cloud-kilo",
     "crates/cloud-dispatch-conformance",
+    # --- E2.4 Pattern A wave 3 batch AX-31 (2026-10-09): 5 simple ---
+    "crates/clap-ext",
+    "crates/datakit",
+    "crates/docs-health",
+    "crates/driver-argv",
     # --- E2.4 Pattern A wave 3 batch AE (2026-10-09): 1 example lib (clap-ext-examples) ---
     "crates/clap-ext-examples",
     # --- E2.4 Pattern A wave 3 batch AF (2026-10-09): 1 substrate-a2a leaf ---
@@ -312,6 +352,11 @@ members = [
     "crates/cloud-cursor",
     "crates/cloud-kilo",
     "crates/cloud-dispatch-conformance",
+    # --- E2.4 Pattern A wave 3 batch AX-31 (2026-10-09): 5 simple ---
+    "crates/clap-ext",
+    "crates/datakit",
+    "crates/docs-health",
+    "crates/driver-argv",
     # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): klipdot + logkit ---
     # --- E2.4 Pattern A wave 3 batch AG (2026-10-09): 1 focus-ci-watcher ---
     "crates/focus-ci-watcher",
@@ -351,6 +396,11 @@ members = [
     "crates/cloud-cursor",
     "crates/cloud-kilo",
     "crates/cloud-dispatch-conformance",
+    # --- E2.4 Pattern A wave 3 batch AX-31 (2026-10-09): 5 simple ---
+    "crates/clap-ext",
+    "crates/datakit",
+    "crates/docs-health",
+    "crates/driver-argv",
     # --- E2.4 Pattern A wave 3 batch AE (2026-10-09): 1 example lib (clap-ext-examples) ---
     "crates/clap-ext-examples",
     # --- E2.4 Pattern A wave 3 batch AF (2026-10-09): 1 substrate-a2a leaf ---
@@ -370,6 +420,11 @@ members = [
     "crates/cloud-cursor",
     "crates/cloud-kilo",
     "crates/cloud-dispatch-conformance",
+    # --- E2.4 Pattern A wave 3 batch AX-31 (2026-10-09): 5 simple ---
+    "crates/clap-ext",
+    "crates/datakit",
+    "crates/docs-health",
+    "crates/driver-argv",
     # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): klipdot + logkit ---
     # --- E2.4 Pattern A wave 3 batch AG (2026-10-09): 1 focus-ci-watcher ---
     "crates/focus-ci-watcher",
@@ -413,6 +468,11 @@ members = [
     "crates/cloud-cursor",
     "crates/cloud-kilo",
     "crates/cloud-dispatch-conformance",
+    # --- E2.4 Pattern A wave 3 batch AX-31 (2026-10-09): 5 simple ---
+    "crates/clap-ext",
+    "crates/datakit",
+    "crates/docs-health",
+    "crates/driver-argv",
     # --- E2.4 Pattern A wave 3 batch AE (2026-10-09): 1 example lib (clap-ext-examples) ---
     "crates/clap-ext-examples",
     # --- E2.4 Pattern A wave 3 batch AF (2026-10-09): 1 substrate-a2a leaf ---
@@ -432,6 +492,11 @@ members = [
     "crates/cloud-cursor",
     "crates/cloud-kilo",
     "crates/cloud-dispatch-conformance",
+    # --- E2.4 Pattern A wave 3 batch AX-31 (2026-10-09): 5 simple ---
+    "crates/clap-ext",
+    "crates/datakit",
+    "crates/docs-health",
+    "crates/driver-argv",
     # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): klipdot + logkit ---
     # --- E2.4 Pattern A wave 3 batch AG (2026-10-09): 1 focus-ci-watcher ---
     "crates/focus-ci-watcher",
@@ -473,6 +538,11 @@ members = [
     "crates/cloud-cursor",
     "crates/cloud-kilo",
     "crates/cloud-dispatch-conformance",
+    # --- E2.4 Pattern A wave 3 batch AX-31 (2026-10-09): 5 simple ---
+    "crates/clap-ext",
+    "crates/datakit",
+    "crates/docs-health",
+    "crates/driver-argv",
     # --- E2.4 Pattern A wave 3 batch AE (2026-10-09): 1 example lib (clap-ext-examples) ---
     "crates/clap-ext-examples",
     # --- E2.4 Pattern A wave 3 batch AF (2026-10-09): 1 substrate-a2a leaf ---
@@ -492,6 +562,11 @@ members = [
     "crates/cloud-cursor",
     "crates/cloud-kilo",
     "crates/cloud-dispatch-conformance",
+    # --- E2.4 Pattern A wave 3 batch AX-31 (2026-10-09): 5 simple ---
+    "crates/clap-ext",
+    "crates/datakit",
+    "crates/docs-health",
+    "crates/driver-argv",
     # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): klipdot + logkit ---
     # --- E2.4 Pattern A wave 3 batch AG (2026-10-09): 1 focus-ci-watcher ---
     "crates/focus-ci-watcher",
@@ -524,6 +599,11 @@ members = [
     "crates/cloud-cursor",
     "crates/cloud-kilo",
     "crates/cloud-dispatch-conformance",
+    # --- E2.4 Pattern A wave 3 batch AX-31 (2026-10-09): 5 simple ---
+    "crates/clap-ext",
+    "crates/datakit",
+    "crates/docs-health",
+    "crates/driver-argv",
     # --- E2.4 Pattern A wave 3 batch AE (2026-10-09): 1 example lib (clap-ext-examples) ---
     "crates/clap-ext-examples",
     # --- E2.4 Pattern A wave 3 batch AF (2026-10-09): 1 substrate-a2a leaf ---
@@ -543,6 +623,11 @@ members = [
     "crates/cloud-cursor",
     "crates/cloud-kilo",
     "crates/cloud-dispatch-conformance",
+    # --- E2.4 Pattern A wave 3 batch AX-31 (2026-10-09): 5 simple ---
+    "crates/clap-ext",
+    "crates/datakit",
+    "crates/docs-health",
+    "crates/driver-argv",
     # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): klipdot + logkit ---
     # --- E2.4 Pattern A wave 3 batch AG (2026-10-09): 1 focus-ci-watcher ---
     "crates/focus-ci-watcher",
@@ -628,6 +713,11 @@ members = [
     "crates/cloud-cursor",
     "crates/cloud-kilo",
     "crates/cloud-dispatch-conformance",
+    # --- E2.4 Pattern A wave 3 batch AX-31 (2026-10-09): 5 simple ---
+    "crates/clap-ext",
+    "crates/datakit",
+    "crates/docs-health",
+    "crates/driver-argv",
     # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): klipdot + logkit ---
     "crates/focus-time",
     "crates/focus-ui",
@@ -668,6 +758,11 @@ members = [
     "crates/cloud-cursor",
     "crates/cloud-kilo",
     "crates/cloud-dispatch-conformance",
+    # --- E2.4 Pattern A wave 3 batch AX-31 (2026-10-09): 5 simple ---
+    "crates/clap-ext",
+    "crates/datakit",
+    "crates/docs-health",
+    "crates/driver-argv",
     # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): klipdot + logkit ---
     "crates/focus-planning",
     "crates/pheno-fs",
@@ -695,6 +790,11 @@ members = [
     "crates/cloud-cursor",
     "crates/cloud-kilo",
     "crates/cloud-dispatch-conformance",
+    # --- E2.4 Pattern A wave 3 batch AX-31 (2026-10-09): 5 simple ---
+    "crates/clap-ext",
+    "crates/datakit",
+    "crates/docs-health",
+    "crates/driver-argv",
     # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): klipdot + logkit ---
     # --- E2.4 Pattern A wave 3 batch T4 (2026-10-09): 4 tiny libs (focus-ui, focus-time, phenotype-git-core, eyetracker-domain) ---
     "crates/focus-ui",
@@ -733,6 +833,11 @@ members = [
     "crates/cloud-cursor",
     "crates/cloud-kilo",
     "crates/cloud-dispatch-conformance",
+    # --- E2.4 Pattern A wave 3 batch AX-31 (2026-10-09): 5 simple ---
+    "crates/clap-ext",
+    "crates/datakit",
+    "crates/docs-health",
+    "crates/driver-argv",
     # --- E2.4 Pattern A wave 3 batch AE (2026-10-09): 1 example lib (clap-ext-examples) ---
     "crates/clap-ext-examples",
     # --- E2.4 Pattern A wave 3 batch AF (2026-10-09): 1 substrate-a2a leaf ---
@@ -752,6 +857,11 @@ members = [
     "crates/cloud-cursor",
     "crates/cloud-kilo",
     "crates/cloud-dispatch-conformance",
+    # --- E2.4 Pattern A wave 3 batch AX-31 (2026-10-09): 5 simple ---
+    "crates/clap-ext",
+    "crates/datakit",
+    "crates/docs-health",
+    "crates/driver-argv",
     # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): klipdot + logkit ---
     # --- E2.4 Pattern A wave 3 batch AG (2026-10-09): 1 focus-ci-watcher ---
     "crates/focus-ci-watcher",
@@ -801,6 +911,11 @@ members = [
     "crates/cloud-cursor",
     "crates/cloud-kilo",
     "crates/cloud-dispatch-conformance",
+    # --- E2.4 Pattern A wave 3 batch AX-31 (2026-10-09): 5 simple ---
+    "crates/clap-ext",
+    "crates/datakit",
+    "crates/docs-health",
+    "crates/driver-argv",
     # --- E2.4 Pattern A wave 3 batch AE (2026-10-09): 1 example lib (clap-ext-examples) ---
     "crates/clap-ext-examples",
     # --- E2.4 Pattern A wave 3 batch AF (2026-10-09): 1 substrate-a2a leaf ---
@@ -820,6 +935,11 @@ members = [
     "crates/cloud-cursor",
     "crates/cloud-kilo",
     "crates/cloud-dispatch-conformance",
+    # --- E2.4 Pattern A wave 3 batch AX-31 (2026-10-09): 5 simple ---
+    "crates/clap-ext",
+    "crates/datakit",
+    "crates/docs-health",
+    "crates/driver-argv",
     # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): klipdot + logkit ---
     # --- E2.4 Pattern A wave 3 batch AG (2026-10-09): 1 focus-ci-watcher ---
     "crates/focus-ci-watcher",
@@ -873,6 +993,11 @@ members = [
     "crates/cloud-cursor",
     "crates/cloud-kilo",
     "crates/cloud-dispatch-conformance",
+    # --- E2.4 Pattern A wave 3 batch AX-31 (2026-10-09): 5 simple ---
+    "crates/clap-ext",
+    "crates/datakit",
+    "crates/docs-health",
+    "crates/driver-argv",
     # --- E2.4 Pattern A wave 3 batch AE (2026-10-09): 1 example lib (clap-ext-examples) ---
     "crates/clap-ext-examples",
     # --- E2.4 Pattern A wave 3 batch AF (2026-10-09): 1 substrate-a2a leaf ---
@@ -892,6 +1017,11 @@ members = [
     "crates/cloud-cursor",
     "crates/cloud-kilo",
     "crates/cloud-dispatch-conformance",
+    # --- E2.4 Pattern A wave 3 batch AX-31 (2026-10-09): 5 simple ---
+    "crates/clap-ext",
+    "crates/datakit",
+    "crates/docs-health",
+    "crates/driver-argv",
     # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): klipdot + logkit ---
     # --- E2.4 Pattern A wave 3 batch AG (2026-10-09): 1 focus-ci-watcher ---
     "crates/focus-ci-watcher",
@@ -950,6 +1080,11 @@ members = [
     "crates/cloud-cursor",
     "crates/cloud-kilo",
     "crates/cloud-dispatch-conformance",
+    # --- E2.4 Pattern A wave 3 batch AX-31 (2026-10-09): 5 simple ---
+    "crates/clap-ext",
+    "crates/datakit",
+    "crates/docs-health",
+    "crates/driver-argv",
     # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): klipdot + logkit ---
     # --- E2.4 Pattern A wave 3 batch I (2026-10-09): 1 small lib (phenotype-diff) ---
     "crates/phenotype-diff",
@@ -960,6 +1095,11 @@ members = [
     "crates/cloud-cursor",
     "crates/cloud-kilo",
     "crates/cloud-dispatch-conformance",
+    # --- E2.4 Pattern A wave 3 batch AX-31 (2026-10-09): 5 simple ---
+    "crates/clap-ext",
+    "crates/datakit",
+    "crates/docs-health",
+    "crates/driver-argv",
     # --- E2.4 Pattern A wave 3 batch K (2026-10-09): 1 focus-* lib (focus-coaching; secrecy added to workspace) ---
     "crates/focus-coaching",
     # --- E2.4 Pattern A wave 3 batch L (2026-10-09): 2 small libs (pheno-schema-port, phenotype-cost-core) ---
@@ -1013,6 +1153,11 @@ members = [
     "crates/cloud-cursor",
     "crates/cloud-kilo",
     "crates/cloud-dispatch-conformance",
+    # --- E2.4 Pattern A wave 3 batch AX-31 (2026-10-09): 5 simple ---
+    "crates/clap-ext",
+    "crates/datakit",
+    "crates/docs-health",
+    "crates/driver-argv",
     # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): klipdot + logkit ---
     "crates/focus-planning",
     "crates/pheno-fs",
@@ -1040,6 +1185,11 @@ members = [
     "crates/cloud-cursor",
     "crates/cloud-kilo",
     "crates/cloud-dispatch-conformance",
+    # --- E2.4 Pattern A wave 3 batch AX-31 (2026-10-09): 5 simple ---
+    "crates/clap-ext",
+    "crates/datakit",
+    "crates/docs-health",
+    "crates/driver-argv",
     # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): klipdot + logkit ---
     # --- E2.4 Pattern A wave 3 batch T4 (2026-10-09): 4 tiny libs (focus-ui, focus-time, phenotype-git-core, eyetracker-domain) ---
     "crates/focus-ui",
@@ -1078,6 +1228,11 @@ members = [
     "crates/cloud-cursor",
     "crates/cloud-kilo",
     "crates/cloud-dispatch-conformance",
+    # --- E2.4 Pattern A wave 3 batch AX-31 (2026-10-09): 5 simple ---
+    "crates/clap-ext",
+    "crates/datakit",
+    "crates/docs-health",
+    "crates/driver-argv",
     # --- E2.4 Pattern A wave 3 batch AE (2026-10-09): 1 example lib (clap-ext-examples) ---
     "crates/clap-ext-examples",
     # --- E2.4 Pattern A wave 3 batch AF (2026-10-09): 1 substrate-a2a leaf ---
@@ -1097,6 +1252,11 @@ members = [
     "crates/cloud-cursor",
     "crates/cloud-kilo",
     "crates/cloud-dispatch-conformance",
+    # --- E2.4 Pattern A wave 3 batch AX-31 (2026-10-09): 5 simple ---
+    "crates/clap-ext",
+    "crates/datakit",
+    "crates/docs-health",
+    "crates/driver-argv",
     # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): klipdot + logkit ---
     # --- E2.4 Pattern A wave 3 batch AG (2026-10-09): 1 focus-ci-watcher ---
     "crates/focus-ci-watcher",
@@ -1160,6 +1320,11 @@ members = [
     "crates/cloud-cursor",
     "crates/cloud-kilo",
     "crates/cloud-dispatch-conformance",
+    # --- E2.4 Pattern A wave 3 batch AX-31 (2026-10-09): 5 simple ---
+    "crates/clap-ext",
+    "crates/datakit",
+    "crates/docs-health",
+    "crates/driver-argv",
     # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): klipdot + logkit ---
 ]
 [workspace.package]
