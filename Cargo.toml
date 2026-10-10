@@ -89,8 +89,12 @@ members = [
     # --- E2.4 Pattern A wave 3 batch V2 (2026-10-09): 2 eyetracker libs (eyetracker-math, eyetracker-core) ---
     "crates/eyetracker-math",
     "crates/eyetracker-core",
+    # --- E2.4 Pattern A wave 3 batch W (2026-10-09): 1 eyetracker lib (eyetracker-camera) ---
+    "crates/eyetracker-camera",
     "crates/eyetracker-math",
     "crates/eyetracker-core",
+    # --- E2.4 Pattern A wave 3 batch W (2026-10-09): 1 eyetracker lib (eyetracker-camera) ---
+    "crates/eyetracker-camera",
     "crates/eyetracker-ffi",
     "crates/eyetracker-camera",
     "crates/eyetracker-inference",
@@ -134,11 +138,15 @@ members = [
     # --- E2.4 Pattern A wave 3 batch V2 (2026-10-09): 2 eyetracker libs (eyetracker-math, eyetracker-core) ---
     "crates/eyetracker-math",
     "crates/eyetracker-core",
+    # --- E2.4 Pattern A wave 3 batch W (2026-10-09): 1 eyetracker lib (eyetracker-camera) ---
+    "crates/eyetracker-camera",
     "crates/sidekick-messaging",
     "crates/datakit",
     # --- E2.4 Pattern A wave 3 batch V2 (2026-10-09): 2 eyetracker libs (eyetracker-math, eyetracker-core) ---
     "crates/eyetracker-math",
     "crates/eyetracker-core",
+    # --- E2.4 Pattern A wave 3 batch W (2026-10-09): 1 eyetracker lib (eyetracker-camera) ---
+    "crates/eyetracker-camera",
     # --- E2.4 Pattern A wave 3 (2026-10-09): 4 small/leaf crates (just-add; no new workspace.dependencies needed) ---
     "crates/temporal-grounding",
     "crates/pheno-forge-scaffold",
@@ -208,6 +216,8 @@ members = [
     # --- E2.4 Pattern A wave 3 batch V2 (2026-10-09): 2 eyetracker libs (eyetracker-math, eyetracker-core) ---
     "crates/eyetracker-math",
     "crates/eyetracker-core",
+    # --- E2.4 Pattern A wave 3 batch W (2026-10-09): 1 eyetracker lib (eyetracker-camera) ---
+    "crates/eyetracker-camera",
 ]
 [workspace.package]
 version = "0.3.10"
