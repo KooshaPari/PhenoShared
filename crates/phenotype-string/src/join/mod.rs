@@ -30,7 +30,7 @@ pub fn join_oxford(parts: &[impl Display]) -> String {
                 .collect::<Vec<_>>()
                 .join(", ");
             format!("{}, and {}", all_but_last_str, last)
-        }
+        },
     }
 }
 

@@ -334,6 +334,7 @@ members = [
     # --- E2.4 Pattern A wave 2 (2026-10-09): 7 small/leaf crates (5 dropped: phenotype-cache-adapter / phenotype-state-machine / phenotype-event-bus / phenotype-macros / phenotype-config-loader all carry MIGRATED.md notes explicitly saying "Do not register as a workspace member") ---
     "crates/phenotype-git-core",
     "crates/phenotype-rate-limit",
+    "crates/phenotype-string",
     "crates/focus-time",
     "crates/focus-ui",
     "crates/phenovcs-observability",
@@ -699,6 +700,7 @@ hex = "0.4"
 sha2 = "0.11"
 serde_yaml = "0.9"
 clap = { version = "4.5", features = ["derive", "env"] }
+unicode-normalization = "0.1"
 dashmap = "6"
 toml = "1.1"
 
