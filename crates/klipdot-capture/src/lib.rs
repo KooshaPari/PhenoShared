@@ -1,3 +1,8 @@
+#![allow(clippy::needless_borrow)]
+#![allow(clippy::field_reassign_with_default)]
+#![allow(unused_mut)]
+#![allow(clippy::upper_case_acronyms)]
+#![allow(unused_imports)]
 pub mod clipboard;
 pub mod config;
 pub mod error;

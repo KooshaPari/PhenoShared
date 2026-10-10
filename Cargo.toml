@@ -40,6 +40,7 @@ members = [
     "crates/substrate-tui",
     "crates/routing-phenotype-router",
     "crates/teamcomm-smoke",
+    "crates/klipdot-capture",
 
 
     "crates/dispatch-bridge",
@@ -70,6 +71,7 @@ members = [
     "crates/substrate-tui",
     "crates/routing-phenotype-router",
     "crates/teamcomm-smoke",
+    "crates/klipdot-capture",
     "crates/engine-forge",
     "crates/transport-file",
     "crates/store-file",
@@ -186,6 +188,7 @@ members = [
     "crates/substrate-tui",
     "crates/routing-phenotype-router",
     "crates/teamcomm-smoke",
+    "crates/klipdot-capture",
 
 
     "crates/dispatch-bridge",
@@ -216,6 +219,7 @@ members = [
     "crates/substrate-tui",
     "crates/routing-phenotype-router",
     "crates/teamcomm-smoke",
+    "crates/klipdot-capture",
     "crates/wave-3lane-tests",
     "crates/dispatch-bridge",
     "crates/cloud-dispatch-conformance",
@@ -390,6 +394,7 @@ members = [
     "crates/substrate-tui",
     "crates/routing-phenotype-router",
     "crates/teamcomm-smoke",
+    "crates/klipdot-capture",
     "crates/eyetracker-core",
     # --- E2.4 Pattern A wave 3 batch W (2026-10-09): 1 eyetracker lib (eyetracker-camera) ---
     "crates/eyetracker-camera",
@@ -506,6 +511,7 @@ members = [
     "crates/substrate-tui",
     "crates/routing-phenotype-router",
     "crates/teamcomm-smoke",
+    "crates/klipdot-capture",
     "crates/eyetracker-core",
     # --- E2.4 Pattern A wave 3 batch W (2026-10-09): 1 eyetracker lib (eyetracker-camera) ---
     "crates/eyetracker-camera",
@@ -1116,6 +1122,7 @@ members = [
     "crates/substrate-tui",
     "crates/routing-phenotype-router",
     "crates/teamcomm-smoke",
+    "crates/klipdot-capture",
     "crates/eyetracker-core",
     # --- E2.4 Pattern A wave 3 batch W (2026-10-09): 1 eyetracker lib (eyetracker-camera) ---
     "crates/eyetracker-camera",
@@ -1235,6 +1242,7 @@ members = [
     "crates/substrate-tui",
     "crates/routing-phenotype-router",
     "crates/teamcomm-smoke",
+    "crates/klipdot-capture",
     "crates/eyetracker-core",
     # --- E2.4 Pattern A wave 3 batch W (2026-10-09): 1 eyetracker lib (eyetracker-camera) ---
     "crates/eyetracker-camera",
@@ -1628,6 +1636,7 @@ members = [
     "crates/substrate-tui",
     "crates/routing-phenotype-router",
     "crates/teamcomm-smoke",
+    "crates/klipdot-capture",
     "crates/eyetracker-core",
     # --- E2.4 Pattern A wave 3 batch W (2026-10-09): 1 eyetracker lib (eyetracker-camera) ---
     "crates/eyetracker-camera",

@@ -128,7 +128,7 @@ pub fn detect_display_server() -> DisplayServer {
             match session_type.to_lowercase().as_str() {
                 "wayland" => return DisplayServer::Wayland,
                 "x11" => return DisplayServer::X11,
-                _ => {}
+                _ => {},
             }
         }
 
@@ -222,21 +222,21 @@ pub fn get_available_clipboard_tools() -> Vec<String> {
                     tools.push(tool.to_string());
                 }
             }
-        }
+        },
         DisplayServer::X11 => {
             for tool in X11_CLIPBOARD_TOOLS {
                 if is_command_available(tool) {
                     tools.push(tool.to_string());
                 }
             }
-        }
+        },
         DisplayServer::MacOS => {
             for tool in MACOS_CLIPBOARD_TOOLS {
                 if is_command_available(tool) {
                     tools.push(tool.to_string());
                 }
             }
-        }
+        },
         DisplayServer::Unknown => {
             // Try all tools
             for tool in WAYLAND_CLIPBOARD_TOOLS
@@ -248,7 +248,7 @@ pub fn get_available_clipboard_tools() -> Vec<String> {
                     tools.push(tool.to_string());
                 }
             }
-        }
+        },
     }
 
     tools
@@ -265,21 +265,21 @@ pub fn get_available_screenshot_tools() -> Vec<String> {
                     tools.push(tool.to_string());
                 }
             }
-        }
+        },
         DisplayServer::X11 => {
             for tool in X11_SCREENSHOT_TOOLS {
                 if is_command_available(tool) {
                     tools.push(tool.to_string());
                 }
             }
-        }
+        },
         DisplayServer::MacOS => {
             for tool in MACOS_SCREENSHOT_TOOLS {
                 if is_command_available(tool) {
                     tools.push(tool.to_string());
                 }
             }
-        }
+        },
         DisplayServer::Unknown => {
             // Try all tools
             for tool in WAYLAND_SCREENSHOT_TOOLS
@@ -291,7 +291,7 @@ pub fn get_available_screenshot_tools() -> Vec<String> {
                     tools.push(tool.to_string());
                 }
             }
-        }
+        },
     }
 
     tools

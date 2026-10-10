@@ -537,14 +537,14 @@ impl Config {
                         }
                     }
                 }
-            }
+            },
             crate::DisplayServer::X11 => {
                 for tool in &self.display_server.clipboard_tools.x11_tools {
                     if crate::is_command_available(tool) {
                         tools.push(tool.clone());
                     }
                 }
-            }
+            },
             crate::DisplayServer::MacOS => {
                 // On macOS, pbcopy/pbpaste are in both tool lists
                 for tool in &self.display_server.clipboard_tools.x11_tools {
@@ -552,7 +552,7 @@ impl Config {
                         tools.push(tool.clone());
                     }
                 }
-            }
+            },
             crate::DisplayServer::Unknown => {
                 // Try both
                 for tool in &self.display_server.clipboard_tools.wayland_tools {
@@ -565,7 +565,7 @@ impl Config {
                         tools.push(tool.clone());
                     }
                 }
-            }
+            },
         }
 
         tools
@@ -590,14 +590,14 @@ impl Config {
                         tools.push(tool.clone());
                     }
                 }
-            }
+            },
             crate::DisplayServer::X11 => {
                 for tool in &self.display_server.screenshot_tools.x11_tools {
                     if crate::is_command_available(tool) {
                         tools.push(tool.clone());
                     }
                 }
-            }
+            },
             crate::DisplayServer::MacOS => {
                 // On macOS, screencapture is in both tool lists
                 for tool in &self.display_server.screenshot_tools.x11_tools {
@@ -605,7 +605,7 @@ impl Config {
                         tools.push(tool.clone());
                     }
                 }
-            }
+            },
             crate::DisplayServer::Unknown => {
                 // Try both
                 for tool in &self.display_server.screenshot_tools.wayland_tools {
@@ -618,7 +618,7 @@ impl Config {
                         tools.push(tool.clone());
                     }
                 }
-            }
+            },
         }
 
         tools

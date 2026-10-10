@@ -52,7 +52,7 @@ impl ShellInstaller {
                     self.shell_type
                 );
                 self.install_bash_hooks().await?;
-            }
+            },
         }
 
         // Add source line to shell RC file
