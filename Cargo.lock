@@ -8686,6 +8686,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "pheno-config"
+version = "0.1.0"
+dependencies = [
+ "figment",
+ "serde",
+ "serde_json",
+]
+
+[[package]]
 name = "pheno-context"
 version = "0.3.10"
 dependencies = [

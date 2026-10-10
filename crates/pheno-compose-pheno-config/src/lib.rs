@@ -141,7 +141,8 @@ impl PhenoConfig {
     /// Convenience for `init` / `main` contexts where a missing
     /// config file is a hard failure.
     pub fn load_or_panic() -> Self {
-        Self::load().expect("PhenoConfig: failed to load (check PhenoCompose.toml or PHENO_* env vars)")
+        Self::load()
+            .expect("PhenoConfig: failed to load (check PhenoCompose.toml or PHENO_* env vars)")
     }
 
     /// Return only the parsed defaults (ignores file and env
@@ -207,7 +208,10 @@ mod tests {
         let cfg = PhenoConfig::default();
         assert!(!cfg.nvms.version.is_empty(), "version must not be empty");
         assert!(!cfg.nvms.platform.is_empty(), "platform must not be empty");
-        assert!(cfg.nvms.platform.contains('/'), "platform should contain '/'");
+        assert!(
+            cfg.nvms.platform.contains('/'),
+            "platform should contain '/'"
+        );
     }
 
     #[test]
@@ -223,7 +227,10 @@ mod tests {
     fn default_config_has_sane_driver_values() {
         let cfg = PhenoConfig::default();
         assert_eq!(cfg.driver.firecracker_default_cpus, 2);
-        assert_eq!(cfg.driver.firecracker_default_memory_bytes, 2 * 1024 * 1024 * 1024);
+        assert_eq!(
+            cfg.driver.firecracker_default_memory_bytes,
+            2 * 1024 * 1024 * 1024
+        );
     }
 
     #[test]
@@ -271,7 +278,10 @@ mod tests {
         };
         let cfg = PhenoConfig::default().with_driver(drv);
         assert_eq!(cfg.driver.firecracker_default_cpus, 4);
-        assert_eq!(cfg.driver.firecracker_default_memory_bytes, 4 * 1024 * 1024 * 1024);
+        assert_eq!(
+            cfg.driver.firecracker_default_memory_bytes,
+            4 * 1024 * 1024 * 1024
+        );
     }
 
     // -- Serialization round-trip ------------------------------------------
@@ -281,7 +291,10 @@ mod tests {
         let cfg = PhenoConfig::default();
         let json = serde_json::to_string(&cfg).expect("serialize");
         let deserialized: PhenoConfig = serde_json::from_str(&json).expect("deserialize");
-        assert_eq!(deserialized.sandbox.max_sandbox_id_len, cfg.sandbox.max_sandbox_id_len);
+        assert_eq!(
+            deserialized.sandbox.max_sandbox_id_len,
+            cfg.sandbox.max_sandbox_id_len
+        );
         assert_eq!(
             deserialized.driver.firecracker_default_cpus,
             cfg.driver.firecracker_default_cpus,
