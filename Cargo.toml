@@ -358,6 +358,9 @@ members = [
     "crates/pheno-context",
     # --- E2.4 Pattern A wave 3 batch AX-18 (2026-10-09): phenotype-config ---
     "crates/phenotype-config",
+    # --- E2.4 Pattern A wave 3 batch AX-19 (2026-10-09): tooling-obs + journeys-obs ---
+    "crates/phenotype-tooling-observability",
+    "crates/phenotype-journeys-observability",
     "crates/focus-time",
     "crates/focus-ui",
     "crates/phenovcs-observability",
