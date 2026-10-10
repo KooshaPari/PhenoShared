@@ -36,6 +36,7 @@ members = [
     "crates/omniroute-adapter",
     "crates/orchestrator",
     "crates/phenotype-config-core",
+    "crates/phenotype-nvms-adapter",
 
 
     "crates/dispatch-bridge",
@@ -62,6 +63,7 @@ members = [
     "crates/omniroute-adapter",
     "crates/orchestrator",
     "crates/phenotype-config-core",
+    "crates/phenotype-nvms-adapter",
     "crates/engine-forge",
     "crates/transport-file",
     "crates/store-file",
@@ -174,6 +176,7 @@ members = [
     "crates/omniroute-adapter",
     "crates/orchestrator",
     "crates/phenotype-config-core",
+    "crates/phenotype-nvms-adapter",
 
 
     "crates/dispatch-bridge",
@@ -200,6 +203,7 @@ members = [
     "crates/omniroute-adapter",
     "crates/orchestrator",
     "crates/phenotype-config-core",
+    "crates/phenotype-nvms-adapter",
     "crates/wave-3lane-tests",
     "crates/dispatch-bridge",
     "crates/cloud-dispatch-conformance",
@@ -370,6 +374,7 @@ members = [
     "crates/omniroute-adapter",
     "crates/orchestrator",
     "crates/phenotype-config-core",
+    "crates/phenotype-nvms-adapter",
     "crates/eyetracker-core",
     # --- E2.4 Pattern A wave 3 batch W (2026-10-09): 1 eyetracker lib (eyetracker-camera) ---
     "crates/eyetracker-camera",
@@ -482,6 +487,7 @@ members = [
     "crates/omniroute-adapter",
     "crates/orchestrator",
     "crates/phenotype-config-core",
+    "crates/phenotype-nvms-adapter",
     "crates/eyetracker-core",
     # --- E2.4 Pattern A wave 3 batch W (2026-10-09): 1 eyetracker lib (eyetracker-camera) ---
     "crates/eyetracker-camera",
@@ -1088,6 +1094,7 @@ members = [
     "crates/omniroute-adapter",
     "crates/orchestrator",
     "crates/phenotype-config-core",
+    "crates/phenotype-nvms-adapter",
     "crates/eyetracker-core",
     # --- E2.4 Pattern A wave 3 batch W (2026-10-09): 1 eyetracker lib (eyetracker-camera) ---
     "crates/eyetracker-camera",
@@ -1203,6 +1210,7 @@ members = [
     "crates/omniroute-adapter",
     "crates/orchestrator",
     "crates/phenotype-config-core",
+    "crates/phenotype-nvms-adapter",
     "crates/eyetracker-core",
     # --- E2.4 Pattern A wave 3 batch W (2026-10-09): 1 eyetracker lib (eyetracker-camera) ---
     "crates/eyetracker-camera",
@@ -1592,6 +1600,7 @@ members = [
     "crates/omniroute-adapter",
     "crates/orchestrator",
     "crates/phenotype-config-core",
+    "crates/phenotype-nvms-adapter",
     "crates/eyetracker-core",
     # --- E2.4 Pattern A wave 3 batch W (2026-10-09): 1 eyetracker lib (eyetracker-camera) ---
     "crates/eyetracker-camera",
@@ -1807,6 +1816,7 @@ futures-core = "0.3"
 parking_lot = "0.12"
 tokio-stream = "0.1"
 tokio-test = "0.4"
+phenotype-cache-adapter = { path = "crates/phenotype-cache-adapter" }
 tracing = "0.1"
 tracing-subscriber = { version = "0.3", features = ["env-filter", "json"] }
 tracing-opentelemetry = "0.25"
