@@ -49,12 +49,18 @@ impl SecureSecretStore for InMemorySecretStore {
     }
 
     fn load(&self, key: &str) -> anyhow::Result<Option<SecretString>> {
-        let guard = self.inner.lock().map_err(|e| anyhow::anyhow!("poisoned mutex: {e}"))?;
+        let guard = self
+            .inner
+            .lock()
+            .map_err(|e| anyhow::anyhow!("poisoned mutex: {e}"))?;
         Ok(guard.get(key).map(|v| SecretString::from(v.clone())))
     }
 
     fn delete(&self, key: &str) -> anyhow::Result<()> {
-        self.inner.lock().map_err(|e| anyhow::anyhow!("poisoned mutex: {e}"))?.remove(key);
+        self.inner
+            .lock()
+            .map_err(|e| anyhow::anyhow!("poisoned mutex: {e}"))?
+            .remove(key);
         Ok(())
     }
 }
@@ -112,7 +118,9 @@ mod apple {
 
     impl AppleKeychainStore {
         pub fn new(service_name: impl Into<String>) -> Self {
-            Self { service_name: service_name.into() }
+            Self {
+                service_name: service_name.into(),
+            }
         }
 
         pub fn service_name(&self) -> &str {
@@ -132,7 +140,7 @@ mod apple {
                     let s = String::from_utf8(bytes)
                         .map_err(|e| anyhow::anyhow!("keychain value not utf8: {e}"))?;
                     Ok(Some(SecretString::from(s)))
-                }
+                },
                 Err(e) => {
                     // security-framework returns an error when item is absent.
                     // There's no stable cross-version enum for "not found",
@@ -142,7 +150,7 @@ mod apple {
                     } else {
                         Err(anyhow::anyhow!("keychain get_generic_password: {e}"))
                     }
-                }
+                },
             }
         }
 
@@ -179,7 +187,9 @@ mod linux {
 
     impl LinuxSecretServiceStore {
         pub fn new(service_name: impl Into<String>) -> Self {
-            Self { service_name: service_name.into() }
+            Self {
+                service_name: service_name.into(),
+            }
         }
 
         fn attrs<'a>(&'a self, key: &'a str) -> HashMap<&'a str, &'a str> {
@@ -219,8 +229,9 @@ mod linux {
             let Some(item) = found else {
                 return Ok(None);
             };
-            let secret =
-                item.get_secret().map_err(|e| anyhow::anyhow!("secret-service get_secret: {e}"))?;
+            let secret = item
+                .get_secret()
+                .map_err(|e| anyhow::anyhow!("secret-service get_secret: {e}"))?;
             let s = String::from_utf8(secret)
                 .map_err(|e| anyhow::anyhow!("secret-service value not utf8: {e}"))?;
             Ok(Some(SecretString::from(s)))
@@ -233,7 +244,8 @@ mod linux {
                 .search_items(self.attrs(key))
                 .map_err(|e| anyhow::anyhow!("secret-service search: {e}"))?;
             for item in items.unlocked.iter().chain(items.locked.iter()) {
-                item.delete().map_err(|e| anyhow::anyhow!("secret-service delete: {e}"))?;
+                item.delete()
+                    .map_err(|e| anyhow::anyhow!("secret-service delete: {e}"))?;
             }
             Ok(())
         }
@@ -343,10 +355,18 @@ mod tests {
         assert!(store.load(&key).unwrap().is_none());
 
         store.store(&key, SecretString::from("hunter2")).unwrap();
-        assert_eq!(store.load(&key).unwrap().unwrap().expose_secret(), "hunter2");
+        assert_eq!(
+            store.load(&key).unwrap().unwrap().expose_secret(),
+            "hunter2"
+        );
 
-        store.store(&key, SecretString::from("correcthorse")).unwrap();
-        assert_eq!(store.load(&key).unwrap().unwrap().expose_secret(), "correcthorse");
+        store
+            .store(&key, SecretString::from("correcthorse"))
+            .unwrap();
+        assert_eq!(
+            store.load(&key).unwrap().unwrap().expose_secret(),
+            "correcthorse"
+        );
 
         store.delete(&key).unwrap();
         assert!(store.load(&key).unwrap().is_none());
