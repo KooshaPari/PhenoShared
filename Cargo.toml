@@ -81,6 +81,11 @@ members = [
     "crates/file-watcher",
     "crates/phenotype-mcp",
     "crates/context-budget",
+    # --- E2.4 Pattern A wave 3 batch AX-35 (2026-10-09): 4 more engine-* ---
+    "crates/engine-codex",
+    "crates/engine-conformance",
+    "crates/engine-forge",
+    "crates/engine-spec",
     "crates/wave-3lane-tests",
     "crates/dispatch-bridge",
     "crates/cloud-dispatch-conformance",
