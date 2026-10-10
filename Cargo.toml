@@ -5,6 +5,23 @@ members = [
     "crates/substrate",
     "crates/substrate-core",
     "crates/engine-spec",
+    "crates/eyetracker-camera",
+    "crates/eyetracker-cli",
+    "crates/eyetracker-core",
+    "crates/eyetracker-domain",
+    "crates/eyetracker-ffi",
+    "crates/eyetracker-inference",
+    "crates/eyetracker-math",
+    "crates/dispatch-bridge",
+    "crates/driver-cli",
+    "crates/driver-http",
+    "crates/driver-mcp",
+
+
+    "crates/dispatch-bridge",
+    "crates/driver-cli",
+    "crates/driver-http",
+    "crates/driver-mcp",
     "crates/engine-forge",
     "crates/transport-file",
     "crates/store-file",
@@ -86,6 +103,23 @@ members = [
     "crates/engine-conformance",
     "crates/engine-forge",
     "crates/engine-spec",
+    "crates/eyetracker-camera",
+    "crates/eyetracker-cli",
+    "crates/eyetracker-core",
+    "crates/eyetracker-domain",
+    "crates/eyetracker-ffi",
+    "crates/eyetracker-inference",
+    "crates/eyetracker-math",
+    "crates/dispatch-bridge",
+    "crates/driver-cli",
+    "crates/driver-http",
+    "crates/driver-mcp",
+
+
+    "crates/dispatch-bridge",
+    "crates/driver-cli",
+    "crates/driver-http",
+    "crates/driver-mcp",
     "crates/wave-3lane-tests",
     "crates/dispatch-bridge",
     "crates/cloud-dispatch-conformance",
@@ -232,6 +266,10 @@ members = [
     "crates/datakit",
     # --- E2.4 Pattern A wave 3 batch V2 (2026-10-09): 2 eyetracker libs (eyetracker-math, eyetracker-core) ---
     "crates/eyetracker-math",
+    "crates/dispatch-bridge",
+    "crates/driver-cli",
+    "crates/driver-http",
+    "crates/driver-mcp",
     "crates/eyetracker-core",
     # --- E2.4 Pattern A wave 3 batch W (2026-10-09): 1 eyetracker lib (eyetracker-camera) ---
     "crates/eyetracker-camera",
@@ -320,6 +358,10 @@ members = [
     "crates/focus-scheduler",
     # --- E2.4 Pattern A wave 3 batch AO (2026-10-09): 1 focus-observability ---
     "crates/eyetracker-math",
+    "crates/dispatch-bridge",
+    "crates/driver-cli",
+    "crates/driver-http",
+    "crates/driver-mcp",
     "crates/eyetracker-core",
     # --- E2.4 Pattern A wave 3 batch W (2026-10-09): 1 eyetracker lib (eyetracker-camera) ---
     "crates/eyetracker-camera",
@@ -902,6 +944,10 @@ members = [
     "crates/datakit",
     # --- E2.4 Pattern A wave 3 batch V2 (2026-10-09): 2 eyetracker libs (eyetracker-math, eyetracker-core) ---
     "crates/eyetracker-math",
+    "crates/dispatch-bridge",
+    "crates/driver-cli",
+    "crates/driver-http",
+    "crates/driver-mcp",
     "crates/eyetracker-core",
     # --- E2.4 Pattern A wave 3 batch W (2026-10-09): 1 eyetracker lib (eyetracker-camera) ---
     "crates/eyetracker-camera",
@@ -993,6 +1039,10 @@ members = [
     "crates/datakit",
     # --- E2.4 Pattern A wave 3 batch V2 (2026-10-09): 2 eyetracker libs (eyetracker-math, eyetracker-core) ---
     "crates/eyetracker-math",
+    "crates/dispatch-bridge",
+    "crates/driver-cli",
+    "crates/driver-http",
+    "crates/driver-mcp",
     "crates/eyetracker-core",
     # --- E2.4 Pattern A wave 3 batch W (2026-10-09): 1 eyetracker lib (eyetracker-camera) ---
     "crates/eyetracker-camera",
@@ -1358,6 +1408,10 @@ members = [
     "crates/datakit",
     # --- E2.4 Pattern A wave 3 batch V2 (2026-10-09): 2 eyetracker libs (eyetracker-math, eyetracker-core) ---
     "crates/eyetracker-math",
+    "crates/dispatch-bridge",
+    "crates/driver-cli",
+    "crates/driver-http",
+    "crates/driver-mcp",
     "crates/eyetracker-core",
     # --- E2.4 Pattern A wave 3 batch W (2026-10-09): 1 eyetracker lib (eyetracker-camera) ---
     "crates/eyetracker-camera",
