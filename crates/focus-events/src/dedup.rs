@@ -41,16 +41,11 @@ pub fn compute_canonical_hash(
     payload: &serde_json::Value,
 ) -> DedupeResult<DedupeKey> {
     // Normalize payload by sorting keys (JSON object key order doesn't matter)
-    let normalized = normalize_json_keys(payload)
-        .map_err(|e| DedupeError::HashFailed(e.to_string()))?;
+    let normalized =
+        normalize_json_keys(payload).map_err(|e| DedupeError::HashFailed(e.to_string()))?;
 
     // Construct deterministic input: connector_id || event_type || normalized_json
-    let input = format!(
-        "{}||{}||{}",
-        connector_id,
-        event_type,
-        normalized
-    );
+    let input = format!("{}||{}||{}", connector_id, event_type, normalized);
 
     let mut hasher = Sha256::new();
     hasher.update(input.as_bytes());
@@ -72,12 +67,12 @@ fn normalize_json_keys(value: &serde_json::Value) -> serde_json::Result<serde_js
                 sorted.insert(key.clone(), normalized_val);
             }
             Ok(serde_json::Value::Object(sorted))
-        }
+        },
         serde_json::Value::Array(arr) => {
             let normalized: serde_json::Result<Vec<_>> =
                 arr.iter().map(normalize_json_keys).collect();
             Ok(serde_json::Value::Array(normalized?))
-        }
+        },
         other => Ok(other.clone()),
     }
 }
@@ -165,10 +160,8 @@ mod tests {
     #[test]
     fn canonical_hash_deterministic_same_payload() {
         let payload = json!({ "id": "123", "value": 42 });
-        let hash1 = compute_canonical_hash("connector-a", "event_type_x", &payload)
-            .expect("hash1");
-        let hash2 = compute_canonical_hash("connector-a", "event_type_x", &payload)
-            .expect("hash2");
+        let hash1 = compute_canonical_hash("connector-a", "event_type_x", &payload).expect("hash1");
+        let hash2 = compute_canonical_hash("connector-a", "event_type_x", &payload).expect("hash2");
         assert_eq!(hash1, hash2);
     }
 
@@ -177,10 +170,10 @@ mod tests {
     fn canonical_hash_different_key_order_same_hash() {
         let payload1 = json!({ "id": "123", "value": 42 });
         let payload2 = json!({ "value": 42, "id": "123" });
-        let hash1 = compute_canonical_hash("connector-a", "event_type_x", &payload1)
-            .expect("hash1");
-        let hash2 = compute_canonical_hash("connector-a", "event_type_x", &payload2)
-            .expect("hash2");
+        let hash1 =
+            compute_canonical_hash("connector-a", "event_type_x", &payload1).expect("hash1");
+        let hash2 =
+            compute_canonical_hash("connector-a", "event_type_x", &payload2).expect("hash2");
         assert_eq!(hash1, hash2, "JSON key order should not affect hash");
     }
 
@@ -188,10 +181,10 @@ mod tests {
     #[test]
     fn canonical_hash_different_connector_different_hash() {
         let payload = json!({ "id": "123", "value": 42 });
-        let hash_a = compute_canonical_hash("connector-a", "event_type_x", &payload)
-            .expect("hash_a");
-        let hash_b = compute_canonical_hash("connector-b", "event_type_x", &payload)
-            .expect("hash_b");
+        let hash_a =
+            compute_canonical_hash("connector-a", "event_type_x", &payload).expect("hash_a");
+        let hash_b =
+            compute_canonical_hash("connector-b", "event_type_x", &payload).expect("hash_b");
         assert_ne!(hash_a, hash_b);
     }
 
@@ -211,10 +204,10 @@ mod tests {
     fn canonical_hash_different_payload_different_hash() {
         let payload1 = json!({ "id": "123", "value": 42 });
         let payload2 = json!({ "id": "123", "value": 99 });
-        let hash1 = compute_canonical_hash("connector-a", "event_type_x", &payload1)
-            .expect("hash1");
-        let hash2 = compute_canonical_hash("connector-a", "event_type_x", &payload2)
-            .expect("hash2");
+        let hash1 =
+            compute_canonical_hash("connector-a", "event_type_x", &payload1).expect("hash1");
+        let hash2 =
+            compute_canonical_hash("connector-a", "event_type_x", &payload2).expect("hash2");
         assert_ne!(hash1, hash2);
     }
 
@@ -265,11 +258,7 @@ mod tests {
         let input = json!({ "z": 1, "a": 2 });
         let normalized = normalize_json_keys(&input).expect("normalize");
         // Keys should be sorted
-        let keys: Vec<_> = normalized
-            .as_object()
-            .expect("object")
-            .keys()
-            .collect();
+        let keys: Vec<_> = normalized.as_object().expect("object").keys().collect();
         assert_eq!(keys, vec!["a", "z"]);
     }
 
@@ -282,11 +271,7 @@ mod tests {
         });
         let normalized = normalize_json_keys(&input).expect("normalize");
         let outer = normalized.get("outer").expect("outer");
-        let outer_keys: Vec<_> = outer
-            .as_object()
-            .expect("object")
-            .keys()
-            .collect();
+        let outer_keys: Vec<_> = outer.as_object().expect("object").keys().collect();
         assert_eq!(outer_keys, vec!["a", "z"]);
     }
 

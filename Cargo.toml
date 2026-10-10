@@ -113,6 +113,8 @@ members = [
     "crates/focus-mascot",
     "crates/focus-planning",
     "crates/pheno-fs",
+    # --- E2.4 Pattern A wave 3 batch R (2026-10-09): 1 focus lib (focus-events) ---
+    "crates/focus-events",
     "crates/sidekick-messaging",
     "crates/datakit",
     # --- E2.4 Pattern A wave 3 (2026-10-09): 4 small/leaf crates (just-add; no new workspace.dependencies needed) ---
@@ -169,6 +171,8 @@ members = [
     "crates/focus-mascot",
     "crates/focus-planning",
     "crates/pheno-fs",
+    # --- E2.4 Pattern A wave 3 batch R (2026-10-09): 1 focus lib (focus-events) ---
+    "crates/focus-events",
 ]
 [workspace.package]
 version = "0.3.10"
@@ -200,6 +204,8 @@ walkdir = "2.5"
 pheno-errors = { version = "0.3.10", path = "crates/pheno-errors" }
 regex = "1.11"
 anyhow = "1.0"
+hex = "0.4"
+sha2 = "0.11"
 clap = { version = "4.5", features = ["derive", "env"] }
 dashmap = "6"
 toml = "1.1"

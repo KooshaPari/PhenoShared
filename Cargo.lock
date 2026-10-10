@@ -4190,6 +4190,23 @@ dependencies = [
 ]
 
 [[package]]
+name = "focus-events"
+version = "0.3.10"
+dependencies = [
+ "async-trait",
+ "chrono",
+ "focus-domain",
+ "hex",
+ "parking_lot",
+ "serde",
+ "serde_json",
+ "sha2 0.11.0",
+ "thiserror 2.0.20",
+ "tokio",
+ "uuid",
+]
+
+[[package]]
 name = "focus-mascot"
 version = "0.3.10"
 dependencies = [
