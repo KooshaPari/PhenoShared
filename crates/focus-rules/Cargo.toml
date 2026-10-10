@@ -16,7 +16,7 @@ async-trait.workspace = true
 anyhow.workspace = true
 tracing.workspace = true
 focus-coaching = { path = "../focus-coaching" }
-cron = "0.16"
+cron = "0.17"
 regex = "1"
 
 [dev-dependencies]

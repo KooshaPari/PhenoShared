@@ -646,7 +646,7 @@ dotenvy = "0.15"
 chrono = { version = "0.4", features = ["serde"] }
 rusqlite = { version = "0.40", features = ["bundled"] }
 reqwest = { version = "0.12", default-features = false, features = ["json", "rustls-tls"] }
-croner = "3.0"
+croner = "4.0"
 petgraph = "0.8"
 strsim = "0.11"
 command-group = { version = "5.0", features = ["with-tokio"] }
@@ -663,14 +663,14 @@ tracing = "0.1"
 tracing-subscriber = { version = "0.3", features = ["env-filter", "json"] }
 tracing-opentelemetry = "0.25"
 opentelemetry = "0.32"
-opentelemetry_sdk = { version = "0.32", features = ["rt-tokio"] }
-opentelemetry-otlp = { version = "0.17", features = ["tonic"] }
+opentelemetry_sdk = { version = "0.33", features = ["rt-tokio"] }
+opentelemetry-otlp = { version = "0.32", features = ["tonic"] }
 fs2 = "0.4"
 libc = "0.2"
 ring = "0.17"
 url = "2.5"
-uniffi = { version = "0.31", features = ["cli"] }
-criterion = { version = "0.5", features = ["html_reports"] }
+uniffi = { version = "0.32", features = ["cli"] }
+criterion = { version = "0.8", features = ["html_reports"] }
 # Use pheno-otel from PhenoObservability v0.1.0 (ADR-037 substrate).
 # Git + tag + subdirectory form pins the crate to a known-good release
 # so all consumers across the pheno-* fleet see the same OTLP wire-format
@@ -681,7 +681,7 @@ pheno-tracing = { path = "crates/pheno-tracing", version = "0.4.0-pre.0" }
 # --- PhenoFabric dependencies (absorbed 2026-09-16) ---
 blake3 = "1.5"
 ed25519-dalek = { version = "2.1", features = ["rand_core"] }
-rand_core = "0.6"
+rand_core = "0.10"
 schemars = { version = "0.8", features = ["derive", "chrono"] }
 jsonschema = "0.27"
 fabric-capability = { path = "crates/fabric-capability" }
@@ -690,11 +690,11 @@ fabric-graph = { path = "crates/fabric-graph" }
 # --- GFX SDK crates (absorbed from PhenoGfx) ---
 phenotype-voxel = { version = "0.2.0", path = "crates/phenotype-voxel" }
 bytemuck = { version = "1", features = ["derive"] }
-glam = { version = "0.29", features = ["serde"] }
+glam = { version = "0.30", features = ["serde"] }
 metrics = { version = "0.24", default-features = false }
 zstd = "0.13"
 prometheus = { version = "0.14" }
-bevy = { version = "0.18.1", default-features = false, features = ["bevy_asset", "bevy_mesh"] }
+bevy = { version = "0.19.1", default-features = false, features = ["bevy_asset", "bevy_mesh"] }
 wgpu = { version = "22" }
 pollster = { version = "0.3" }
 secrecy = "0.10"

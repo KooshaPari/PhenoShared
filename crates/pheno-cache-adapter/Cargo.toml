@@ -10,7 +10,7 @@ path = "src/lib.rs"
 [dependencies]
 serde = { workspace = true }
 thiserror = { workspace = true }
-dashmap = "5"
+dashmap = "6"
 tokio = { workspace = true }
 
 [dev-dependencies]
