@@ -147,10 +147,14 @@ impl WeeklyReviewEngine {
         let prompt = format!(
             "Summarize the week: {:.1}h focus, {} tasks completed, rules firing: {}. \
              Write a ≤120-char narrative of wins.",
-            focus_hours, tasks_completed,
+            focus_hours,
+            tasks_completed,
             rule_names.join(", ")
         );
-        complete_guarded(self.coaching.as_ref(), &prompt, None, 120).await.ok().flatten()
+        complete_guarded(self.coaching.as_ref(), &prompt, None, 120)
+            .await
+            .ok()
+            .flatten()
     }
 
     async fn ask_growth_area(&self, tasks_slipped: u32) -> Option<String> {
@@ -162,12 +166,19 @@ impl WeeklyReviewEngine {
                 tasks_slipped
             )
         };
-        complete_guarded(self.coaching.as_ref(), &prompt, None, 50).await.ok().flatten()
+        complete_guarded(self.coaching.as_ref(), &prompt, None, 50)
+            .await
+            .ok()
+            .flatten()
     }
 
     async fn ask_weekly_closing(&self) -> Option<String> {
-        let prompt = "Write a closing line for the weekly review, encouraging next week's work (≤80 chars).";
-        complete_guarded(self.coaching.as_ref(), prompt, None, 80).await.ok().flatten()
+        let prompt =
+            "Write a closing line for the weekly review, encouraging next week's work (≤80 chars).";
+        complete_guarded(self.coaching.as_ref(), prompt, None, 80)
+            .await
+            .ok()
+            .flatten()
     }
 }
 
@@ -178,14 +189,20 @@ impl WeeklyReviewEngine {
 const STATIC_WEEKLY_CLOSING_FALLBACK: &str = "Strong week ahead. Keep the streak alive.";
 
 fn static_wins_summary(focus_hours: f32, tasks_completed: u32) -> String {
-    format!("{:.1}h focused, {} tasks shipped. Solid week.", focus_hours, tasks_completed)
+    format!(
+        "{:.1}h focused, {} tasks shipped. Solid week.",
+        focus_hours, tasks_completed
+    )
 }
 
 fn static_growth_area(tasks_slipped: u32) -> String {
     if tasks_slipped == 0 {
         "Increase task complexity or duration — you're ready for bigger challenges.".to_string()
     } else {
-        format!("Reduce slip rate — {} tasks slipped. Focus on estimation or scope.", tasks_slipped)
+        format!(
+            "Reduce slip rate — {} tasks slipped. Focus on estimation or scope.",
+            tasks_slipped
+        )
     }
 }
 

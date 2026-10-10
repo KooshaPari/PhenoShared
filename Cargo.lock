@@ -4648,6 +4648,32 @@ dependencies = [
 ]
 
 [[package]]
+name = "focus-rituals"
+version = "0.3.10"
+dependencies = [
+ "anyhow",
+ "async-trait",
+ "chrono",
+ "focus-audit",
+ "focus-calendar",
+ "focus-coaching",
+ "focus-domain",
+ "focus-events",
+ "focus-mascot",
+ "focus-penalties",
+ "focus-planning",
+ "focus-rewards",
+ "focus-scheduler",
+ "phenotype-observably-macros",
+ "serde",
+ "serde_json",
+ "thiserror 2.0.20",
+ "tokio",
+ "tracing",
+ "uuid",
+]
+
+[[package]]
 name = "focus-rules"
 version = "0.3.10"
 dependencies = [
@@ -8675,6 +8701,16 @@ dependencies = [
  "thiserror 2.0.20",
  "tokio",
  "uuid",
+]
+
+[[package]]
+name = "phenotype-observably-macros"
+version = "0.2.0"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn 2.0.119",
+ "tracing",
 ]
 
 [[package]]

@@ -145,13 +145,28 @@ pub struct TaskActual {
 
 impl TaskActual {
     pub fn skipped(task_id: Uuid) -> Self {
-        Self { task_id, actual_minutes: 0, completed_at: None, cancelled: false }
+        Self {
+            task_id,
+            actual_minutes: 0,
+            completed_at: None,
+            cancelled: false,
+        }
     }
     pub fn completed(task_id: Uuid, actual_minutes: u32, at: DateTime<Utc>) -> Self {
-        Self { task_id, actual_minutes, completed_at: Some(at), cancelled: false }
+        Self {
+            task_id,
+            actual_minutes,
+            completed_at: Some(at),
+            cancelled: false,
+        }
     }
     pub fn cancelled(task_id: Uuid) -> Self {
-        Self { task_id, actual_minutes: 0, completed_at: None, cancelled: true }
+        Self {
+            task_id,
+            actual_minutes: 0,
+            completed_at: None,
+            cancelled: true,
+        }
     }
 }
 
@@ -179,7 +194,12 @@ impl RitualsEngine {
         coaching: Arc<dyn CoachingProvider>,
         mascot: Arc<Mutex<MascotMachine>>,
     ) -> Self {
-        Self { scheduler, calendar, coaching, mascot }
+        Self {
+            scheduler,
+            calendar,
+            coaching,
+            mascot,
+        }
     }
 
     /// FR-RITUAL-001 — build today's Morning Brief.
@@ -197,7 +217,10 @@ impl RitualsEngine {
         let range = DateRange::new(now, now + horizon);
         let calendar_events = self.calendar.list_events(range).await.unwrap_or_default();
         // 2. Plan against those events so conflicts propagate.
-        let schedule = self.scheduler.plan(tasks, &calendar_events, now, horizon).await?;
+        let schedule = self
+            .scheduler
+            .plan(tasks, &calendar_events, now, horizon)
+            .await?;
 
         // 3. Top-3 priorities by schedule order (scheduler sorts by start_at,
         //    but deterministic score was applied internally; take earliest
@@ -248,12 +271,16 @@ impl RitualsEngine {
             *planned_minutes_by_task.entry(b.task_id).or_insert(0) += mins;
             // Titles aren't in TimeBlock; use short id surrogate. Hosts who
             // want real titles can join before calling.
-            title_by_task.entry(b.task_id).or_insert_with(|| short_title(&b.task_id));
+            title_by_task
+                .entry(b.task_id)
+                .or_insert_with(|| short_title(&b.task_id));
         }
 
         for actual in actuals {
-            let planned_minutes =
-                planned_minutes_by_task.get(&actual.task_id).copied().unwrap_or(0);
+            let planned_minutes = planned_minutes_by_task
+                .get(&actual.task_id)
+                .copied()
+                .unwrap_or(0);
             let title = title_by_task
                 .get(&actual.task_id)
                 .cloned()
@@ -266,7 +293,7 @@ impl RitualsEngine {
                         planned_minutes,
                         actual_minutes: actual.actual_minutes,
                     });
-                }
+                },
                 Classification::Slipped(reason) => {
                     slipped.push(SlippedTask {
                         id: actual.task_id,
@@ -274,7 +301,7 @@ impl RitualsEngine {
                         planned_minutes,
                         reason,
                     });
-                }
+                },
             }
         }
 
@@ -282,8 +309,11 @@ impl RitualsEngine {
         slipped.sort_by_key(|s| s.id);
 
         // Carryover: slipped but not cancelled.
-        let carryover: Vec<Uuid> =
-            slipped.iter().filter(|s| s.reason != SlipReason::Cancelled).map(|s| s.id).collect();
+        let carryover: Vec<Uuid> = slipped
+            .iter()
+            .filter(|s| s.reason != SlipReason::Cancelled)
+            .map(|s| s.id)
+            .collect();
 
         // Streak deltas: +1 focus streak if ≥3h shipped total.
         let mut streak_deltas: HashMap<String, i32> = HashMap::new();
@@ -338,7 +368,10 @@ impl RitualsEngine {
         now: DateTime<Utc>,
     ) -> anyhow::Result<Schedule> {
         let new_end = now + Duration::minutes(i64::from(overrun.actual_minutes));
-        let changes = vec![ScheduleChange::BlockOverran { task_id: overrun.task_id, new_end }];
+        let changes = vec![ScheduleChange::BlockOverran {
+            task_id: overrun.task_id,
+            new_end,
+        }];
         // Replan from the live task pool so reflow has a real base schedule to
         // layer the overrun onto, instead of synthesizing an empty one.
         let horizon = Duration::hours(24);
@@ -362,7 +395,10 @@ impl RitualsEngine {
             "Given these priorities today: {}. Write a ≤80-char morning greeting that names one of them specifically.",
             names.join(", ")
         );
-        complete_guarded(self.coaching.as_ref(), &prompt, None, 80).await.ok().flatten()
+        complete_guarded(self.coaching.as_ref(), &prompt, None, 80)
+            .await
+            .ok()
+            .flatten()
     }
 
     async fn ask_closing(&self, shipped: u32, slipped: u32) -> Option<String> {
@@ -370,7 +406,10 @@ impl RitualsEngine {
             "Close out the day. {} tasks shipped, {} slipped. Tell the user what went well in ≤60 chars, and what to carry over in ≤60 chars.",
             shipped, slipped
         );
-        complete_guarded(self.coaching.as_ref(), &prompt, None, 120).await.ok().flatten()
+        complete_guarded(self.coaching.as_ref(), &prompt, None, 120)
+            .await
+            .ok()
+            .flatten()
     }
 }
 
@@ -387,12 +426,16 @@ fn classify(actual: &TaskActual, planned_minutes: u32) -> Classification {
     if actual.cancelled {
         return Classification::Slipped(SlipReason::Cancelled);
     }
-    match (actual.completed_at.is_some(), actual.actual_minutes, planned_minutes) {
+    match (
+        actual.completed_at.is_some(),
+        actual.actual_minutes,
+        planned_minutes,
+    ) {
         (false, 0, _) => Classification::Slipped(SlipReason::Skipped),
         (true, act, plan) if plan > 0 && act > plan => Classification::Slipped(SlipReason::Overran),
         (true, act, plan) if plan > 0 && act < plan => {
             Classification::Slipped(SlipReason::Deferred)
-        }
+        },
         (true, _, _) => Classification::Shipped,
         // No completed_at but some minutes — treat as deferred (partial).
         (false, act, _) if act > 0 => Classification::Slipped(SlipReason::Deferred),
@@ -430,7 +473,12 @@ fn extract_top_priorities(tasks: &[Task], schedule: &Schedule, n: usize) -> Vec<
         }
     }
     seen.iter()
-        .filter_map(|id| tasks.iter().find(|t| t.id == *id).map(task_to_priority_line))
+        .filter_map(|id| {
+            tasks
+                .iter()
+                .find(|t| t.id == *id)
+                .map(task_to_priority_line)
+        })
         .collect()
 }
 
@@ -482,7 +530,11 @@ fn build_preview(schedule: &Schedule, calendar_events: &[CalendarEvent]) -> Sche
             .count() as u32;
     let soft_conflicts = schedule.rigidity_cost.soft_overrides;
 
-    SchedulePreview { windows, soft_conflicts, hard_conflicts }
+    SchedulePreview {
+        windows,
+        soft_conflicts,
+        hard_conflicts,
+    }
 }
 
 fn time_block_to_window(b: &TimeBlock) -> ScheduleWindowLine {
@@ -517,7 +569,12 @@ fn static_closing(shipped: usize, slipped: usize) -> String {
 
 fn build_wins_summary(shipped: &[ShippedTask], slipped: &[SlippedTask]) -> String {
     let focus_minutes: u32 = shipped.iter().map(|s| s.actual_minutes).sum();
-    format!("{} shipped ({} min focus), {} slipped.", shipped.len(), focus_minutes, slipped.len())
+    format!(
+        "{} shipped ({} min focus), {} slipped.",
+        shipped.len(),
+        focus_minutes,
+        slipped.len()
+    )
 }
 
 fn truncate(s: &str, max: usize) -> String {
@@ -582,8 +639,14 @@ mod tests {
             let coaching: Arc<dyn CoachingProvider> =
                 Arc::new(StubCoachingProvider::single("Start with write the spec."));
             let (_mascot, engine) = mk_engine(coaching);
-            let tasks = vec![mk_task("write the spec", 60, 0.9), mk_task("review PRs", 30, 0.5)];
-            engine.generate_morning_brief(&tasks, Uuid::new_v4(), t0()).await.unwrap()
+            let tasks = vec![
+                mk_task("write the spec", 60, 0.9),
+                mk_task("review PRs", 30, 0.5),
+            ];
+            engine
+                .generate_morning_brief(&tasks, Uuid::new_v4(), t0())
+                .await
+                .unwrap()
         });
         assert!(!brief.top_priorities.is_empty());
         assert_eq!(brief.coachy_opening, "Start with write the spec.");
@@ -597,7 +660,10 @@ mod tests {
             let coaching: Arc<dyn CoachingProvider> = Arc::new(NoopCoachingProvider);
             let (_m, engine) = mk_engine(coaching);
             let tasks = vec![mk_task("ship it", 45, 0.7)];
-            engine.generate_morning_brief(&tasks, Uuid::nil(), t0()).await.unwrap()
+            engine
+                .generate_morning_brief(&tasks, Uuid::nil(), t0())
+                .await
+                .unwrap()
         });
         assert!(brief.coachy_opening.contains("ship it"));
     }
@@ -610,7 +676,11 @@ mod tests {
         let t_ship = mk_task("ship", 60, 0.9);
         let t_skip = mk_task("skip", 30, 0.5);
         let tasks = vec![t_ship.clone(), t_skip.clone()];
-        let sched = engine.scheduler.plan(&tasks, &[], t0(), Duration::hours(8)).await.unwrap();
+        let sched = engine
+            .scheduler
+            .plan(&tasks, &[], t0(), Duration::hours(8))
+            .await
+            .unwrap();
         let actuals = vec![
             TaskActual::completed(t_ship.id, 60, t0() + Duration::hours(1)),
             TaskActual::skipped(t_skip.id),
@@ -632,7 +702,11 @@ mod tests {
         let a = mk_task("a", 30, 0.5);
         let b = mk_task("b", 30, 0.5);
         let tasks = vec![a.clone(), b.clone()];
-        let sched = engine.scheduler.plan(&tasks, &[], t0(), Duration::hours(8)).await.unwrap();
+        let sched = engine
+            .scheduler
+            .plan(&tasks, &[], t0(), Duration::hours(8))
+            .await
+            .unwrap();
         let actuals = vec![TaskActual::skipped(a.id), TaskActual::cancelled(b.id)];
         let sd = engine
             .generate_evening_shutdown(&sched, &actuals, t0() + Duration::hours(8))
@@ -649,9 +723,16 @@ mod tests {
         let coaching: Arc<dyn CoachingProvider> = Arc::new(NoopCoachingProvider);
         let (_m, engine) = mk_engine(coaching);
         let long = mk_task("long", 200, 0.9);
-        let sched =
-            engine.scheduler.plan(&[long.clone()], &[], t0(), Duration::hours(8)).await.unwrap();
-        let actuals = vec![TaskActual::completed(long.id, 200, t0() + Duration::hours(4))];
+        let sched = engine
+            .scheduler
+            .plan(&[long.clone()], &[], t0(), Duration::hours(8))
+            .await
+            .unwrap();
+        let actuals = vec![TaskActual::completed(
+            long.id,
+            200,
+            t0() + Duration::hours(4),
+        )];
         let sd = engine
             .generate_evening_shutdown(&sched, &actuals, t0() + Duration::hours(9))
             .await
@@ -666,7 +747,10 @@ mod tests {
             let coaching: Arc<dyn CoachingProvider> =
                 Arc::new(StubCoachingProvider::single("Pick one small thing."));
             let (_m, engine) = mk_engine(coaching);
-            engine.generate_morning_brief(&[], Uuid::nil(), t0()).await.unwrap()
+            engine
+                .generate_morning_brief(&[], Uuid::nil(), t0())
+                .await
+                .unwrap()
         });
         assert!(brief.top_priorities.is_empty());
         assert_eq!(brief.coachy_opening, "Pick one small thing.");
@@ -710,7 +794,10 @@ mod tests {
             .unwrap();
         let preview = build_preview(
             &sched,
-            &calendar.list_events(DateRange::new(t0(), t0() + Duration::hours(8))).await.unwrap(),
+            &calendar
+                .list_events(DateRange::new(t0(), t0() + Duration::hours(8)))
+                .await
+                .unwrap(),
         );
         assert!(preview.hard_conflicts >= 1);
         // Also verify morning_brief threads this through (the hard event is
@@ -728,7 +815,10 @@ mod tests {
         let coaching: Arc<dyn CoachingProvider> = Arc::new(StubCoachingProvider::single("Hi."));
         let (_m, engine) = mk_engine(coaching);
         let tasks = vec![mk_task("x", 30, 0.5)];
-        let mut brief = engine.generate_morning_brief(&tasks, Uuid::nil(), t0()).await.unwrap();
+        let mut brief = engine
+            .generate_morning_brief(&tasks, Uuid::nil(), t0())
+            .await
+            .unwrap();
         let before = brief.clone();
         let sink = focus_audit::CapturingAuditSink::new();
         engine.capture_intention(&mut brief, "finish the spec".into(), t0(), &sink);
@@ -736,7 +826,10 @@ mod tests {
         assert_eq!(records.len(), 1);
         assert_eq!(records[0].0, "ritual.intention.captured");
         assert_eq!(
-            records[0].2.get("intention").and_then(serde_json::Value::as_str),
+            records[0]
+                .2
+                .get("intention")
+                .and_then(serde_json::Value::as_str),
             Some("finish the spec")
         );
         assert_eq!(brief.intention.as_deref(), Some("finish the spec"));
@@ -751,7 +844,10 @@ mod tests {
         let coaching: Arc<dyn CoachingProvider> = Arc::new(StubCoachingProvider::single("x"));
         let (_m, engine) = mk_engine(coaching);
         let tasks = vec![mk_task("focus", 60, 0.9)];
-        let _brief = engine.generate_morning_brief(&tasks, Uuid::nil(), t0()).await.unwrap();
+        let _brief = engine
+            .generate_morning_brief(&tasks, Uuid::nil(), t0())
+            .await
+            .unwrap();
         let overrun = TaskActual::completed(tasks[0].id, 120, t0() + Duration::hours(2));
         let sched = engine.suggest_reflow(&tasks, &overrun, t0()).await.unwrap();
         // Reflow now runs against a real replanned base — the assignment for
@@ -770,13 +866,22 @@ mod tests {
                 Arc::new(StubCoachingProvider::single("Fixed opening."));
             let (_m, engine) = mk_engine(coaching);
             let id = Uuid::new_v4();
-            let t = Task { id, ..mk_task("fixed", 60, 0.5) };
+            let t = Task {
+                id,
+                ..mk_task("fixed", 60, 0.5)
+            };
             let tasks = vec![t];
-            let a = engine.generate_morning_brief(&tasks, Uuid::nil(), t0()).await.unwrap();
+            let a = engine
+                .generate_morning_brief(&tasks, Uuid::nil(), t0())
+                .await
+                .unwrap();
             let coaching2: Arc<dyn CoachingProvider> =
                 Arc::new(StubCoachingProvider::single("Fixed opening."));
             let (_m2, engine2) = mk_engine(coaching2);
-            let b = engine2.generate_morning_brief(&tasks, Uuid::nil(), t0()).await.unwrap();
+            let b = engine2
+                .generate_morning_brief(&tasks, Uuid::nil(), t0())
+                .await
+                .unwrap();
             (a, b)
         });
         assert_eq!(a.top_priorities, b.top_priorities);
@@ -791,13 +896,24 @@ mod tests {
         let coaching: Arc<dyn CoachingProvider> = Arc::new(NoopCoachingProvider);
         let (_m, engine) = mk_engine(coaching);
         let tasks = vec![mk_task("x", 30, 0.5)];
-        let brief = engine.generate_morning_brief(&tasks, Uuid::nil(), t0()).await.unwrap();
+        let brief = engine
+            .generate_morning_brief(&tasks, Uuid::nil(), t0())
+            .await
+            .unwrap();
         let json = serde_json::to_string(&brief).unwrap();
         let back: MorningBrief = serde_json::from_str(&json).unwrap();
         assert_eq!(brief, back);
 
-        let sched = engine.scheduler.plan(&tasks, &[], t0(), Duration::hours(4)).await.unwrap();
-        let actuals = vec![TaskActual::completed(tasks[0].id, 30, t0() + Duration::minutes(45))];
+        let sched = engine
+            .scheduler
+            .plan(&tasks, &[], t0(), Duration::hours(4))
+            .await
+            .unwrap();
+        let actuals = vec![TaskActual::completed(
+            tasks[0].id,
+            30,
+            t0() + Duration::minutes(45),
+        )];
         let sd = engine
             .generate_evening_shutdown(&sched, &actuals, t0() + Duration::hours(5))
             .await
@@ -828,7 +944,10 @@ mod tests {
         // behavior in ask_opening path — verify static fallback via flag.
         let _lock = ENV_MUTEX.lock().expect("env lock");
         std::env::set_var(focus_coaching::KILL_SWITCH_ENV, "1");
-        let rt = tokio::runtime::Builder::new_current_thread().enable_all().build().unwrap();
+        let rt = tokio::runtime::Builder::new_current_thread()
+            .enable_all()
+            .build()
+            .unwrap();
         let coaching: Arc<dyn CoachingProvider> =
             Arc::new(StubCoachingProvider::single("should-be-ignored"));
         let scheduler = Arc::new(Scheduler::new(WorkingHoursSpec::default()));
@@ -837,7 +956,9 @@ mod tests {
         let engine = RitualsEngine::new(scheduler, calendar, coaching, mascot);
         let brief = rt
             .block_on(async {
-                engine.generate_morning_brief(&[mk_task("thing", 30, 0.5)], Uuid::nil(), t0()).await
+                engine
+                    .generate_morning_brief(&[mk_task("thing", 30, 0.5)], Uuid::nil(), t0())
+                    .await
             })
             .unwrap();
         std::env::remove_var(focus_coaching::KILL_SWITCH_ENV);
@@ -856,7 +977,10 @@ mod tests {
     {
         let _g = ENV_MUTEX.lock().expect("env lock");
         std::env::remove_var(focus_coaching::KILL_SWITCH_ENV);
-        let rt = tokio::runtime::Builder::new_current_thread().enable_all().build().expect("rt");
+        let rt = tokio::runtime::Builder::new_current_thread()
+            .enable_all()
+            .build()
+            .expect("rt");
         rt.block_on(fut)
     }
 
@@ -865,16 +989,28 @@ mod tests {
     fn slip_reason_classification_matrix() {
         // cancelled wins regardless
         let cancelled = TaskActual::cancelled(Uuid::nil());
-        assert!(matches!(classify(&cancelled, 30), Classification::Slipped(SlipReason::Cancelled)));
+        assert!(matches!(
+            classify(&cancelled, 30),
+            Classification::Slipped(SlipReason::Cancelled)
+        ));
 
         let skipped = TaskActual::skipped(Uuid::nil());
-        assert!(matches!(classify(&skipped, 30), Classification::Slipped(SlipReason::Skipped)));
+        assert!(matches!(
+            classify(&skipped, 30),
+            Classification::Slipped(SlipReason::Skipped)
+        ));
 
         let over = TaskActual::completed(Uuid::nil(), 90, Utc::now());
-        assert!(matches!(classify(&over, 60), Classification::Slipped(SlipReason::Overran)));
+        assert!(matches!(
+            classify(&over, 60),
+            Classification::Slipped(SlipReason::Overran)
+        ));
 
         let deferred = TaskActual::completed(Uuid::nil(), 10, Utc::now());
-        assert!(matches!(classify(&deferred, 60), Classification::Slipped(SlipReason::Deferred)));
+        assert!(matches!(
+            classify(&deferred, 60),
+            Classification::Slipped(SlipReason::Deferred)
+        ));
 
         let shipped = TaskActual::completed(Uuid::nil(), 60, Utc::now());
         assert!(matches!(classify(&shipped, 60), Classification::Shipped));

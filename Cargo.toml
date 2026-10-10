@@ -595,6 +595,8 @@ members = [
     "crates/focus-rewards",
     # --- E2.4 Pattern A wave 3 batch AT (2026-10-09): 1 focus-policy ---
     "crates/focus-policy",
+    # --- E2.4 Pattern A wave 3 batch AU (2026-10-09): 1 focus-rituals ---
+    "crates/focus-rituals",
 ]
 [workspace.package]
 version = "0.3.10"
