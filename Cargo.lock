@@ -4608,6 +4608,22 @@ dependencies = [
 ]
 
 [[package]]
+name = "focus-policy"
+version = "0.3.10"
+dependencies = [
+ "anyhow",
+ "chrono",
+ "criterion 0.5.1",
+ "focus-audit",
+ "focus-domain",
+ "focus-rules",
+ "serde",
+ "serde_json",
+ "thiserror 2.0.20",
+ "uuid",
+]
+
+[[package]]
 name = "focus-release-bot"
 version = "0.3.10"
 dependencies = [
