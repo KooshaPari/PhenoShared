@@ -4518,6 +4518,26 @@ dependencies = [
 ]
 
 [[package]]
+name = "focus-scheduler"
+version = "0.3.10"
+dependencies = [
+ "anyhow",
+ "async-trait",
+ "chrono",
+ "criterion 0.5.1",
+ "focus-calendar",
+ "focus-domain",
+ "focus-planning",
+ "proptest",
+ "serde",
+ "serde_json",
+ "thiserror 2.0.20",
+ "tokio",
+ "tracing",
+ "uuid",
+]
+
+[[package]]
 name = "focus-sync-store"
 version = "0.3.10"
 dependencies = [
