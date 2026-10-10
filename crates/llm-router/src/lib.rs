@@ -29,7 +29,9 @@ pub enum LlmError {
     Provider(String),
     #[error("rate limited (retry after {retry_after_ms}ms)")]
     RateLimited { retry_after_ms: u64 },
-    #[error("timeout after {timeout_ms}ms — consider increasing timeout_ms or using a faster model")]
+    #[error(
+        "timeout after {timeout_ms}ms — consider increasing timeout_ms or using a faster model"
+    )]
     Timeout { timeout_ms: u64 },
     #[error("invalid model: {0}")]
     InvalidModel(String),
@@ -128,9 +130,9 @@ impl OpenAiProvider {
     /// Reads the API key from the configured environment variable.
     /// Returns `None` if the environment variable is unset.
     pub fn from_config(config: &providers::ProviderConfig) -> Option<Self> {
-        config.resolve_api_key().map(|key| {
-            Self::with_base_url(key, config.base_url.clone())
-        })
+        config
+            .resolve_api_key()
+            .map(|key| Self::with_base_url(key, config.base_url.clone()))
     }
 }
 
@@ -140,7 +142,7 @@ impl LlmProvider for OpenAiProvider {
     async fn complete(&self, request: &CompletionRequest) -> Result<CompletionResponse, LlmError> {
         let start = std::time::Instant::now();
 
-        let body = serde_json::json!({ 
+        let body = serde_json::json!({
             "model": request.model,
             "messages": request.messages,
             "temperature": request.temperature.unwrap_or(0.7),
@@ -256,11 +258,11 @@ impl LlmRouter {
             Some(provider) => {
                 info!(prefix = %prefix, "routing to provider");
                 provider.complete(request).await
-            }
+            },
             None => {
                 warn!(prefix = %prefix, model = %request.model, "no provider found for model prefix");
                 Err(LlmError::InvalidModel(request.model.clone()))
-            }
+            },
         }
     }
 
@@ -280,7 +282,7 @@ impl LlmRouter {
                         info!(attempt, "retry succeeded");
                     }
                     return Ok(response);
-                }
+                },
                 Err(e) if e.is_retryable() && attempt < max_attempts => {
                     let delay_ms = 100u64 * 2u64.pow(attempt - 1);
                     warn!(
@@ -292,13 +294,13 @@ impl LlmRouter {
                     );
                     tokio::time::sleep(Duration::from_millis(delay_ms)).await;
                     last_error = Some(e);
-                }
+                },
                 Err(e) => {
                     if attempt > 1 {
                         error!(attempt, max_attempts, error = %e, "all retries exhausted");
                     }
                     return Err(e);
-                }
+                },
             }
         }
 
@@ -371,9 +373,7 @@ mod tests {
         F: FnOnce() -> Fut,
         Fut: std::future::IntoFuture<Output = R>,
     {
-        let subscriber = tracing_subscriber::fmt()
-            .with_test_writer()
-            .finish();
+        let subscriber = tracing_subscriber::fmt().with_test_writer().finish();
         let _guard = tracing::subscriber::set_default(subscriber);
         f().await
     }
@@ -419,7 +419,10 @@ mod tests {
         let fb: Arc<dyn LlmProvider> = Arc::new(OpenAiProvider::new("sk-fb".to_string()));
         router.set_fallback(fb);
         assert!(router.unregister_provider("openai"));
-        assert!(router.fallback.is_some(), "fallback must survive unregister");
+        assert!(
+            router.fallback.is_some(),
+            "fallback must survive unregister"
+        );
     }
 
     #[tokio::test]
@@ -447,8 +450,7 @@ mod tests {
     #[tokio::test]
     async fn complete_with_retry_succeeds_on_first_try() {
         let router = LlmRouter::new();
-        let p: Arc<dyn LlmProvider> =
-            Arc::new(TestProvider::new("retry-provider"));
+        let p: Arc<dyn LlmProvider> = Arc::new(TestProvider::new("retry-provider"));
         router.register_provider("ok", p);
         let req = CompletionRequest {
             model: "ok/model".to_string(),
@@ -464,8 +466,7 @@ mod tests {
     #[tokio::test]
     async fn complete_with_retry_exhausts_after_max_attempts() {
         let router = LlmRouter::new();
-        let p: Arc<dyn LlmProvider> =
-            Arc::new(TestProvider::failing("always-fail"));
+        let p: Arc<dyn LlmProvider> = Arc::new(TestProvider::failing("always-fail"));
         router.register_provider("fail", p);
         let req = CompletionRequest {
             model: "fail/model".to_string(),
@@ -504,7 +505,9 @@ mod tests {
     #[test]
     fn llm_error_recovery_hints_are_distinct() {
         let p = LlmError::Provider("x".into());
-        let rl = LlmError::RateLimited { retry_after_ms: 1000 };
+        let rl = LlmError::RateLimited {
+            retry_after_ms: 1000,
+        };
         let to = LlmError::Timeout { timeout_ms: 5000 };
         let im = LlmError::InvalidModel("foo".into());
         let hints = [
@@ -520,7 +523,12 @@ mod tests {
     #[test]
     fn llm_error_is_retryable_classification() {
         assert!(LlmError::Provider("x".into()).is_retryable());
-        assert!(LlmError::RateLimited { retry_after_ms: 100 }.is_retryable());
+        assert!(
+            LlmError::RateLimited {
+                retry_after_ms: 100
+            }
+            .is_retryable()
+        );
         assert!(!LlmError::Timeout { timeout_ms: 5000 }.is_retryable());
         assert!(!LlmError::InvalidModel("foo".into()).is_retryable());
     }
@@ -590,7 +598,9 @@ mod tests {
     #[test]
     fn llm_error_variants_have_distinct_display() {
         let a = LlmError::Provider("x".into());
-        let b = LlmError::RateLimited { retry_after_ms: 1000 };
+        let b = LlmError::RateLimited {
+            retry_after_ms: 1000,
+        };
         let c = LlmError::Timeout { timeout_ms: 5000 };
         let d = LlmError::InvalidModel("foo".into());
         let messages = [
@@ -624,7 +634,9 @@ mod config_provider_tests {
     #[test]
     fn from_config_minimax() {
         let cfg = providers::minimax();
-        unsafe { std::env::set_var(&cfg.api_key_env, "test-minimax-key"); }
+        unsafe {
+            std::env::set_var(&cfg.api_key_env, "test-minimax-key");
+        }
         let p = OpenAiProvider::from_config(&cfg).expect("should construct from config");
         assert_eq!(p.provider_name(), "openai"); // provider_name() is hardcoded to "openai" for now
     }

@@ -10,9 +10,9 @@
 //!
 //! To use a provider, construct an `OpenAiProvider` with the appropriate config:
 //!
-//! ```no_run
-//! use phenoai_llm_router::{OpenAiProvider, LlmProvider, CompletionRequest};
-//! use phenoai_llm_router::providers::minimax;
+//! ```ignore
+//! use llm_router::{OpenAiProvider, LlmProvider, CompletionRequest};
+//! use llm_router::providers::minimax;
 //!
 //! let provider = OpenAiProvider::with_config(minimax());
 //! // ... use provider.complete(&request)
