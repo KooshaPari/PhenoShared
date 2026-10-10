@@ -28,6 +28,9 @@ members = [
     "crates/fabric-surface-mojo",
     "crates/fabric-terminal",
     "crates/fabric-tray",
+    "crates/fabric-tui",
+    "crates/fabric-web",
+    "crates/fabric-workspace",
 
 
     "crates/dispatch-bridge",
@@ -46,6 +49,9 @@ members = [
     "crates/fabric-surface-mojo",
     "crates/fabric-terminal",
     "crates/fabric-tray",
+    "crates/fabric-tui",
+    "crates/fabric-web",
+    "crates/fabric-workspace",
     "crates/engine-forge",
     "crates/transport-file",
     "crates/store-file",
@@ -150,6 +156,9 @@ members = [
     "crates/fabric-surface-mojo",
     "crates/fabric-terminal",
     "crates/fabric-tray",
+    "crates/fabric-tui",
+    "crates/fabric-web",
+    "crates/fabric-workspace",
 
 
     "crates/dispatch-bridge",
@@ -168,6 +177,9 @@ members = [
     "crates/fabric-surface-mojo",
     "crates/fabric-terminal",
     "crates/fabric-tray",
+    "crates/fabric-tui",
+    "crates/fabric-web",
+    "crates/fabric-workspace",
     "crates/wave-3lane-tests",
     "crates/dispatch-bridge",
     "crates/cloud-dispatch-conformance",
@@ -330,6 +342,9 @@ members = [
     "crates/fabric-surface-mojo",
     "crates/fabric-terminal",
     "crates/fabric-tray",
+    "crates/fabric-tui",
+    "crates/fabric-web",
+    "crates/fabric-workspace",
     "crates/eyetracker-core",
     # --- E2.4 Pattern A wave 3 batch W (2026-10-09): 1 eyetracker lib (eyetracker-camera) ---
     "crates/eyetracker-camera",
@@ -434,6 +449,9 @@ members = [
     "crates/fabric-surface-mojo",
     "crates/fabric-terminal",
     "crates/fabric-tray",
+    "crates/fabric-tui",
+    "crates/fabric-web",
+    "crates/fabric-workspace",
     "crates/eyetracker-core",
     # --- E2.4 Pattern A wave 3 batch W (2026-10-09): 1 eyetracker lib (eyetracker-camera) ---
     "crates/eyetracker-camera",
@@ -1032,6 +1050,9 @@ members = [
     "crates/fabric-surface-mojo",
     "crates/fabric-terminal",
     "crates/fabric-tray",
+    "crates/fabric-tui",
+    "crates/fabric-web",
+    "crates/fabric-workspace",
     "crates/eyetracker-core",
     # --- E2.4 Pattern A wave 3 batch W (2026-10-09): 1 eyetracker lib (eyetracker-camera) ---
     "crates/eyetracker-camera",
@@ -1139,6 +1160,9 @@ members = [
     "crates/fabric-surface-mojo",
     "crates/fabric-terminal",
     "crates/fabric-tray",
+    "crates/fabric-tui",
+    "crates/fabric-web",
+    "crates/fabric-workspace",
     "crates/eyetracker-core",
     # --- E2.4 Pattern A wave 3 batch W (2026-10-09): 1 eyetracker lib (eyetracker-camera) ---
     "crates/eyetracker-camera",
@@ -1520,6 +1544,9 @@ members = [
     "crates/fabric-surface-mojo",
     "crates/fabric-terminal",
     "crates/fabric-tray",
+    "crates/fabric-tui",
+    "crates/fabric-web",
+    "crates/fabric-workspace",
     "crates/eyetracker-core",
     # --- E2.4 Pattern A wave 3 batch W (2026-10-09): 1 eyetracker lib (eyetracker-camera) ---
     "crates/eyetracker-camera",
