@@ -349,6 +349,8 @@ members = [
     "crates/phenotype-event-bus",
     # --- E2.4 Pattern A wave 3 batch AX-4 (2026-10-09): 1 phenotype-state-machine ---
     "crates/phenotype-state-machine",
+    # --- E2.4 Pattern A wave 3 batch AX-5 (2026-10-09): 1 phenotype-journey-core ---
+    "crates/phenotype-journey-core",
     # --- E2.4 Pattern A wave 3 batch AX (2026-10-09): 1 substrate-a2a ---
     "crates/a2a",
     "crates/focus-planning",
@@ -518,6 +520,8 @@ members = [
     "crates/phenotype-event-bus",
     # --- E2.4 Pattern A wave 3 batch AX-4 (2026-10-09): 1 phenotype-state-machine ---
     "crates/phenotype-state-machine",
+    # --- E2.4 Pattern A wave 3 batch AX-5 (2026-10-09): 1 phenotype-journey-core ---
+    "crates/phenotype-journey-core",
     # --- E2.4 Pattern A wave 3 batch AX (2026-10-09): 1 substrate-a2a ---
     "crates/a2a",
     # --- E2.4 Pattern A wave 3 batch I (2026-10-09): 1 small lib (phenotype-diff) ---
@@ -553,6 +557,8 @@ members = [
     "crates/phenotype-event-bus",
     # --- E2.4 Pattern A wave 3 batch AX-4 (2026-10-09): 1 phenotype-state-machine ---
     "crates/phenotype-state-machine",
+    # --- E2.4 Pattern A wave 3 batch AX-5 (2026-10-09): 1 phenotype-journey-core ---
+    "crates/phenotype-journey-core",
     # --- E2.4 Pattern A wave 3 batch AX (2026-10-09): 1 substrate-a2a ---
     "crates/a2a",
     "crates/focus-planning",
@@ -633,6 +639,8 @@ members = [
     "crates/phenotype-event-bus",
     # --- E2.4 Pattern A wave 3 batch AX-4 (2026-10-09): 1 phenotype-state-machine ---
     "crates/phenotype-state-machine",
+    # --- E2.4 Pattern A wave 3 batch AX-5 (2026-10-09): 1 phenotype-journey-core ---
+    "crates/phenotype-journey-core",
     # --- E2.4 Pattern A wave 3 batch AX (2026-10-09): 1 substrate-a2a ---
     "crates/a2a",
 ]

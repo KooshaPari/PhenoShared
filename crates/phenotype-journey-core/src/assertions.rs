@@ -118,7 +118,7 @@ pub fn run_on_manifest(
                                 got_snippet: snippet(&text, 160),
                             });
                         }
-                    }
+                    },
                     Err(e) => {
                         violations.push(Violation {
                             step_index: step.index,
@@ -126,7 +126,7 @@ pub fn run_on_manifest(
                             expected: pattern.clone(),
                             got_snippet: format!("invalid regex: {e}"),
                         });
-                    }
+                    },
                 }
             }
             for needle in &a.must_not_contain {
@@ -253,12 +253,12 @@ pub fn ocr_text(frame_path: &Path) -> Result<String, JourneyError> {
     if let Ok(backend) = std::env::var(OCR_BACKEND_ENV) {
         match backend.as_str() {
             "vision" => return run_vision(frame_path),
-            "tesseract" | "" => {}
+            "tesseract" | "" => {},
             other => {
                 return Err(JourneyError::Ocr(format!(
                     "unknown {OCR_BACKEND_ENV}={other}; expected `tesseract` or `vision`"
                 )));
-            }
+            },
         }
     }
     run_tesseract(frame_path)

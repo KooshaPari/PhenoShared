@@ -11,6 +11,7 @@
 //! manifest modeled after `phenodocs-bootstrap.journey.yaml`.
 //!
 //! Traces to: phenodocs PR #168, journey-traceability-standard §CI Gate.
+#![allow(clippy::ptr_arg)]
 
 use phenotype_journey_core::{
     assertions::{run_on_manifest, OCR_CMD_ENV},
