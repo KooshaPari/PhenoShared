@@ -33,7 +33,7 @@ fn normalize(v: &Value) -> Value {
                 out.insert(k, v);
             }
             Value::Object(out)
-        }
+        },
         Value::Array(arr) => Value::Array(arr.iter().map(normalize).collect()),
         other => other.clone(),
     }

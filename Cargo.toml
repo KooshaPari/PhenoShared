@@ -587,6 +587,8 @@ members = [
     "crates/focus-scheduler",
     # --- E2.4 Pattern A wave 3 batch AO (2026-10-09): 1 focus-observability ---
     "crates/focus-observability",
+    # --- E2.4 Pattern A wave 3 batch AP (2026-10-09): 1 focus-audit ---
+    "crates/focus-audit",
 ]
 [workspace.package]
 version = "0.3.10"

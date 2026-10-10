@@ -4404,6 +4404,23 @@ dependencies = [
 ]
 
 [[package]]
+name = "focus-audit"
+version = "0.3.10"
+dependencies = [
+ "anyhow",
+ "chrono",
+ "criterion 0.5.1",
+ "focus-observability",
+ "hex",
+ "serde",
+ "serde_json",
+ "sha2 0.11.0",
+ "thiserror 2.0.20",
+ "tracing",
+ "uuid",
+]
+
+[[package]]
 name = "focus-calendar"
 version = "0.3.10"
 dependencies = [
