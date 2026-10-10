@@ -12043,6 +12043,23 @@ dependencies = [
 ]
 
 [[package]]
+name = "teamcomm-mcp"
+version = "0.3.10"
+dependencies = [
+ "anyhow",
+ "async-trait",
+ "chrono",
+ "serde",
+ "serde_json",
+ "teamcomm-protocol",
+ "tempfile",
+ "tokio",
+ "tracing",
+ "tracing-subscriber",
+ "uuid",
+]
+
+[[package]]
 name = "teamcomm-protocol"
 version = "0.3.10"
 dependencies = [

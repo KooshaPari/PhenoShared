@@ -346,6 +346,8 @@ members = [
     "crates/teamcomm-daemon",
     # --- E2.4 Pattern A wave 3 batch AX-12 (2026-10-09): teamcomm-client ---
     "crates/teamcomm-client",
+    # --- E2.4 Pattern A wave 3 batch AX-13 (2026-10-09): teamcomm-mcp ---
+    "crates/teamcomm-mcp",
     "crates/focus-time",
     "crates/focus-ui",
     "crates/phenovcs-observability",
@@ -702,7 +704,7 @@ serde_json = "1.0"
 thiserror = "2.0"
 uuid = { version = "1.11", features = ["v4", "serde"] }
 async-trait = "0.1"
-tokio = { version = "1.42", features = ["rt", "rt-multi-thread", "macros", "process", "io-util", "sync", "time", "signal"] }
+tokio = { version = "1.42", features = ["rt", "rt-multi-thread", "macros", "process", "io-util", "sync", "time", "signal", "io-std"]}
 walkdir = "2.5"
 pheno-errors = { version = "0.3.10", path = "crates/pheno-errors" }
 regex = "1.11"

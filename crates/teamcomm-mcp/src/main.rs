@@ -36,7 +36,7 @@ async fn main() -> ExitCode {
             Err(e) => {
                 tracing::error!(error = %e, "failed to read stdin");
                 return ExitCode::FAILURE;
-            }
+            },
         };
         if n == 0 {
             // EOF — graceful shutdown.
@@ -54,7 +54,7 @@ async fn main() -> ExitCode {
             Err(e) => {
                 tracing::error!(error = %e, "failed to serialise response");
                 continue;
-            }
+            },
         };
 
         if let Err(e) = writer.write_all(serialised.as_bytes()).await {
@@ -92,7 +92,7 @@ async fn handle_request_line(line: &str) -> Value {
         Ok(v) => v,
         Err(e) => {
             return jsonrpc_error(Value::Null, -32700, "parse error", Some(e.to_string()));
-        }
+        },
     };
 
     let id = request.get("id").cloned().unwrap_or(Value::Null);
@@ -101,7 +101,7 @@ async fn handle_request_line(line: &str) -> Value {
         Some(m) => m.to_string(),
         None => {
             return jsonrpc_error(id, -32600, "invalid request: missing method", None);
-        }
+        },
     };
 
     if method.is_empty() {
