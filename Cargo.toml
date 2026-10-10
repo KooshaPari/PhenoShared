@@ -344,6 +344,8 @@ members = [
     "crates/phenotype-macros",
     # --- E2.4 Pattern A wave 3 batch AX-11 (2026-10-09): teamcomm-daemon ---
     "crates/teamcomm-daemon",
+    # --- E2.4 Pattern A wave 3 batch AX-12 (2026-10-09): teamcomm-client ---
+    "crates/teamcomm-client",
     "crates/focus-time",
     "crates/focus-ui",
     "crates/phenovcs-observability",
