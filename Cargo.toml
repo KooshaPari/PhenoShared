@@ -19,6 +19,9 @@ members = [
     "tools/fake-forge",
     "tools/fake-codex-cloud",
     "crates/a2a",
+    # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): phenotype-router ---
+    "crates/phenotype-router",
+    # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): klipdot + logkit ---
     # --- E2.4 Pattern A wave 3 batch AG (2026-10-09): 1 focus-ci-watcher ---
     "crates/focus-ci-watcher",
     # --- E2.4 Pattern A wave 3 batch AH (2026-10-09): 1 focus-calendar ---
@@ -100,6 +103,9 @@ members = [
     "crates/anthropic-usage-poll",
     "crates/agent-forecast",
     "crates/a2a",
+    # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): phenotype-router ---
+    "crates/phenotype-router",
+    # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): klipdot + logkit ---
     "crates/phenotype-voxel",
     # --- E2.4 Pattern A wave 3 batch AX-24 (2026-10-09): agileplus-nats + agileplus-graph ---
     "crates/agileplus-nats",
@@ -109,6 +115,9 @@ members = [
     "crates/anthropic-usage-poll",
     "crates/agent-forecast",
     "crates/a2a",
+    # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): phenotype-router ---
+    "crates/phenotype-router",
+    # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): klipdot + logkit ---
     # --- PhenoRegistry crates (absorbed from PhenoRegistry) ---
     "crates/phenotype-project-registry",
     # --- E2.4 Pattern A wave 3 batch AX-22 (2026-10-09): phenotype-gfx ---
@@ -124,6 +133,9 @@ members = [
     "crates/anthropic-usage-poll",
     "crates/agent-forecast",
     "crates/a2a",
+    # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): phenotype-router ---
+    "crates/phenotype-router",
+    # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): klipdot + logkit ---
     "crates/phenotype-service-registry",
     # --- PhenoInfra crates (absorbed from PhenoInfra) ---
     "crates/phenotype-crypto",
@@ -161,6 +173,9 @@ members = [
     "crates/clap-ext-examples",
     # --- E2.4 Pattern A wave 3 batch AF (2026-10-09): 1 substrate-a2a leaf ---
     "crates/a2a",
+    # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): phenotype-router ---
+    "crates/phenotype-router",
+    # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): klipdot + logkit ---
     # --- E2.4 Pattern A wave 3 batch AG (2026-10-09): 1 focus-ci-watcher ---
     "crates/focus-ci-watcher",
     # --- E2.4 Pattern A wave 3 batch AH (2026-10-09): 1 focus-calendar ---
@@ -203,6 +218,9 @@ members = [
     "crates/clap-ext-examples",
     # --- E2.4 Pattern A wave 3 batch AF (2026-10-09): 1 substrate-a2a leaf ---
     "crates/a2a",
+    # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): phenotype-router ---
+    "crates/phenotype-router",
+    # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): klipdot + logkit ---
     # --- E2.4 Pattern A wave 3 batch AG (2026-10-09): 1 focus-ci-watcher ---
     "crates/focus-ci-watcher",
     # --- E2.4 Pattern A wave 3 batch AH (2026-10-09): 1 focus-calendar ---
@@ -238,6 +256,9 @@ members = [
     "crates/clap-ext-examples",
     # --- E2.4 Pattern A wave 3 batch AF (2026-10-09): 1 substrate-a2a leaf ---
     "crates/a2a",
+    # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): phenotype-router ---
+    "crates/phenotype-router",
+    # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): klipdot + logkit ---
     # --- E2.4 Pattern A wave 3 batch AG (2026-10-09): 1 focus-ci-watcher ---
     "crates/focus-ci-watcher",
     # --- E2.4 Pattern A wave 3 batch AH (2026-10-09): 1 focus-calendar ---
@@ -277,6 +298,9 @@ members = [
     "crates/clap-ext-examples",
     # --- E2.4 Pattern A wave 3 batch AF (2026-10-09): 1 substrate-a2a leaf ---
     "crates/a2a",
+    # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): phenotype-router ---
+    "crates/phenotype-router",
+    # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): klipdot + logkit ---
     # --- E2.4 Pattern A wave 3 batch AG (2026-10-09): 1 focus-ci-watcher ---
     "crates/focus-ci-watcher",
     # --- E2.4 Pattern A wave 3 batch AH (2026-10-09): 1 focus-calendar ---
@@ -314,6 +338,9 @@ members = [
     "crates/clap-ext-examples",
     # --- E2.4 Pattern A wave 3 batch AF (2026-10-09): 1 substrate-a2a leaf ---
     "crates/a2a",
+    # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): phenotype-router ---
+    "crates/phenotype-router",
+    # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): klipdot + logkit ---
     # --- E2.4 Pattern A wave 3 batch AG (2026-10-09): 1 focus-ci-watcher ---
     "crates/focus-ci-watcher",
     # --- E2.4 Pattern A wave 3 batch AH (2026-10-09): 1 focus-calendar ---
@@ -342,6 +369,9 @@ members = [
     "crates/clap-ext-examples",
     # --- E2.4 Pattern A wave 3 batch AF (2026-10-09): 1 substrate-a2a leaf ---
     "crates/a2a",
+    # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): phenotype-router ---
+    "crates/phenotype-router",
+    # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): klipdot + logkit ---
     # --- E2.4 Pattern A wave 3 batch AG (2026-10-09): 1 focus-ci-watcher ---
     "crates/focus-ci-watcher",
     # --- E2.4 Pattern A wave 3 batch AH (2026-10-09): 1 focus-calendar ---
@@ -411,6 +441,9 @@ members = [
     "crates/anthropic-usage-poll",
     "crates/agent-forecast",
     "crates/a2a",
+    # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): phenotype-router ---
+    "crates/phenotype-router",
+    # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): klipdot + logkit ---
     "crates/focus-time",
     "crates/focus-ui",
     "crates/phenovcs-observability",
@@ -435,6 +468,9 @@ members = [
     "crates/phenotype-iter",
     # --- E2.4 Pattern A wave 3 batch AX (2026-10-09): 1 substrate-a2a ---
     "crates/a2a",
+    # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): phenotype-router ---
+    "crates/phenotype-router",
+    # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): klipdot + logkit ---
     "crates/focus-planning",
     "crates/pheno-fs",
     # --- E2.4 Pattern A wave 3 batch R (2026-10-09): 1 focus lib (focus-events) ---
@@ -446,6 +482,9 @@ members = [
     "crates/anthropic-usage-poll",
     "crates/agent-forecast",
     "crates/a2a",
+    # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): phenotype-router ---
+    "crates/phenotype-router",
+    # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): klipdot + logkit ---
     # --- E2.4 Pattern A wave 3 batch T4 (2026-10-09): 4 tiny libs (focus-ui, focus-time, phenotype-git-core, eyetracker-domain) ---
     "crates/focus-ui",
     "crates/focus-time",
@@ -480,6 +519,9 @@ members = [
     "crates/clap-ext-examples",
     # --- E2.4 Pattern A wave 3 batch AF (2026-10-09): 1 substrate-a2a leaf ---
     "crates/a2a",
+    # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): phenotype-router ---
+    "crates/phenotype-router",
+    # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): klipdot + logkit ---
     # --- E2.4 Pattern A wave 3 batch AG (2026-10-09): 1 focus-ci-watcher ---
     "crates/focus-ci-watcher",
     # --- E2.4 Pattern A wave 3 batch AH (2026-10-09): 1 focus-calendar ---
@@ -525,6 +567,9 @@ members = [
     "crates/clap-ext-examples",
     # --- E2.4 Pattern A wave 3 batch AF (2026-10-09): 1 substrate-a2a leaf ---
     "crates/a2a",
+    # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): phenotype-router ---
+    "crates/phenotype-router",
+    # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): klipdot + logkit ---
     # --- E2.4 Pattern A wave 3 batch AG (2026-10-09): 1 focus-ci-watcher ---
     "crates/focus-ci-watcher",
     # --- E2.4 Pattern A wave 3 batch AH (2026-10-09): 1 focus-calendar ---
@@ -574,6 +619,9 @@ members = [
     "crates/clap-ext-examples",
     # --- E2.4 Pattern A wave 3 batch AF (2026-10-09): 1 substrate-a2a leaf ---
     "crates/a2a",
+    # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): phenotype-router ---
+    "crates/phenotype-router",
+    # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): klipdot + logkit ---
     # --- E2.4 Pattern A wave 3 batch AG (2026-10-09): 1 focus-ci-watcher ---
     "crates/focus-ci-watcher",
     # --- E2.4 Pattern A wave 3 batch AH (2026-10-09): 1 focus-calendar ---
@@ -616,6 +664,9 @@ members = [
     "crates/phenotype-iter",
     # --- E2.4 Pattern A wave 3 batch AX (2026-10-09): 1 substrate-a2a ---
     "crates/a2a",
+    # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): phenotype-router ---
+    "crates/phenotype-router",
+    # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): klipdot + logkit ---
     # --- E2.4 Pattern A wave 3 batch I (2026-10-09): 1 small lib (phenotype-diff) ---
     "crates/phenotype-diff",
     # --- E2.4 Pattern A wave 3 batch J (2026-10-09): 1 small lib (configra-ops; logkit deferred) ---
@@ -658,6 +709,9 @@ members = [
     "crates/phenotype-iter",
     # --- E2.4 Pattern A wave 3 batch AX (2026-10-09): 1 substrate-a2a ---
     "crates/a2a",
+    # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): phenotype-router ---
+    "crates/phenotype-router",
+    # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): klipdot + logkit ---
     "crates/focus-planning",
     "crates/pheno-fs",
     # --- E2.4 Pattern A wave 3 batch R (2026-10-09): 1 focus lib (focus-events) ---
@@ -669,6 +723,9 @@ members = [
     "crates/anthropic-usage-poll",
     "crates/agent-forecast",
     "crates/a2a",
+    # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): phenotype-router ---
+    "crates/phenotype-router",
+    # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): klipdot + logkit ---
     # --- E2.4 Pattern A wave 3 batch T4 (2026-10-09): 4 tiny libs (focus-ui, focus-time, phenotype-git-core, eyetracker-domain) ---
     "crates/focus-ui",
     "crates/focus-time",
@@ -703,6 +760,9 @@ members = [
     "crates/clap-ext-examples",
     # --- E2.4 Pattern A wave 3 batch AF (2026-10-09): 1 substrate-a2a leaf ---
     "crates/a2a",
+    # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): phenotype-router ---
+    "crates/phenotype-router",
+    # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): klipdot + logkit ---
     # --- E2.4 Pattern A wave 3 batch AG (2026-10-09): 1 focus-ci-watcher ---
     "crates/focus-ci-watcher",
     # --- E2.4 Pattern A wave 3 batch AH (2026-10-09): 1 focus-calendar ---
@@ -750,6 +810,9 @@ members = [
     "crates/phenotype-iter",
     # --- E2.4 Pattern A wave 3 batch AX (2026-10-09): 1 substrate-a2a ---
     "crates/a2a",
+    # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): phenotype-router ---
+    "crates/phenotype-router",
+    # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): klipdot + logkit ---
 ]
 [workspace.package]
 version = "0.3.10"
@@ -787,6 +850,7 @@ sha2 = "0.11"
 serde_yaml = "0.9"
 clap = { version = "4.5", features = ["derive", "env"] }
 unicode-normalization = "0.1"
+proptest = "1"
 dirs = "5"
 log = "0.4"
 dashmap = "6"
