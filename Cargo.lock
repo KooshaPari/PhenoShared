@@ -4057,6 +4057,28 @@ dependencies = [
 ]
 
 [[package]]
+name = "fabric-integration-tests"
+version = "0.1.0"
+dependencies = [
+ "bytes",
+ "chrono",
+ "fabric-capability",
+ "fabric-checker",
+ "fabric-daemon",
+ "fabric-frame-transport",
+ "fabric-graph",
+ "fabric-persist",
+ "fabric-workspace",
+ "phenotype-nvms-adapter",
+ "serde",
+ "serde_json",
+ "tempfile",
+ "tokio",
+ "toml 0.8.2",
+ "uuid",
+]
+
+[[package]]
 name = "fabric-orchestrator"
 version = "0.3.10"
 dependencies = [
@@ -6881,7 +6903,7 @@ dependencies = [
  "anyhow",
  "async-trait",
  "dashmap 7.0.0-rc2",
- "omniroute-adapter",
+ "omniroute-adapter 0.1.0",
  "reqwest 0.13.5",
  "serde",
  "serde_json",
@@ -8082,6 +8104,20 @@ dependencies = [
 ]
 
 [[package]]
+name = "omniroute-adapter"
+version = "0.3.10"
+dependencies = [
+ "async-trait",
+ "dotenvy",
+ "serde",
+ "serde_json",
+ "substrate-core 0.3.10",
+ "tempfile",
+ "thiserror 2.0.20",
+ "tokio",
+]
+
+[[package]]
 name = "once_cell"
 version = "1.21.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -8348,6 +8384,24 @@ name = "or_poisoned"
 version = "0.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "8c04f5d74368e4d0dfe06c45c8627c81bd7c317d52762d118fb9b3076f6420fd"
+
+[[package]]
+name = "orchestrator"
+version = "0.3.10"
+dependencies = [
+ "async-trait",
+ "chrono",
+ "futures-core",
+ "serde",
+ "serde_json",
+ "tempfile",
+ "thiserror 2.0.20",
+ "tokio",
+ "tokio-stream",
+ "toml 1.1.6+spec-1.1.0",
+ "tracing",
+ "uuid",
+]
 
 [[package]]
 name = "ordered-float"
@@ -8830,6 +8884,18 @@ dependencies = [
  "thiserror 2.0.20",
  "tracing",
  "uncased",
+]
+
+[[package]]
+name = "phenotype-config-core"
+version = "0.2.0"
+dependencies = [
+ "serde",
+ "serde_json",
+ "serde_yaml",
+ "thiserror 2.0.20",
+ "tokio-test",
+ "toml 1.1.6+spec-1.1.0",
 ]
 
 [[package]]

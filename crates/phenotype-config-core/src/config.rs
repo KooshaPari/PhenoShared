@@ -15,12 +15,12 @@ impl Config {
             values: HashMap::new(),
         }
     }
-    
+
     /// Get a configuration value
     pub fn get(&self, key: &str) -> Option<&String> {
         self.values.get(key)
     }
-    
+
     /// Set a configuration value
     pub fn set(&mut self, key: impl Into<String>, value: impl Into<String>) {
         self.values.insert(key.into(), value.into());
@@ -30,7 +30,7 @@ impl Config {
 #[cfg(test)]
 mod tests {
     use super::*;
-    
+
     #[test]
     fn test_config() {
         let mut config = Config::new();

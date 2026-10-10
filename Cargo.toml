@@ -31,6 +31,11 @@ members = [
     "crates/fabric-tui",
     "crates/fabric-web",
     "crates/fabric-workspace",
+    "crates/fabric-integration-tests",
+    "crates/nvms-manifest",
+    "crates/omniroute-adapter",
+    "crates/orchestrator",
+    "crates/phenotype-config-core",
 
 
     "crates/dispatch-bridge",
@@ -52,6 +57,11 @@ members = [
     "crates/fabric-tui",
     "crates/fabric-web",
     "crates/fabric-workspace",
+    "crates/fabric-integration-tests",
+    "crates/nvms-manifest",
+    "crates/omniroute-adapter",
+    "crates/orchestrator",
+    "crates/phenotype-config-core",
     "crates/engine-forge",
     "crates/transport-file",
     "crates/store-file",
@@ -159,6 +169,11 @@ members = [
     "crates/fabric-tui",
     "crates/fabric-web",
     "crates/fabric-workspace",
+    "crates/fabric-integration-tests",
+    "crates/nvms-manifest",
+    "crates/omniroute-adapter",
+    "crates/orchestrator",
+    "crates/phenotype-config-core",
 
 
     "crates/dispatch-bridge",
@@ -180,6 +195,11 @@ members = [
     "crates/fabric-tui",
     "crates/fabric-web",
     "crates/fabric-workspace",
+    "crates/fabric-integration-tests",
+    "crates/nvms-manifest",
+    "crates/omniroute-adapter",
+    "crates/orchestrator",
+    "crates/phenotype-config-core",
     "crates/wave-3lane-tests",
     "crates/dispatch-bridge",
     "crates/cloud-dispatch-conformance",
@@ -345,6 +365,11 @@ members = [
     "crates/fabric-tui",
     "crates/fabric-web",
     "crates/fabric-workspace",
+    "crates/fabric-integration-tests",
+    "crates/nvms-manifest",
+    "crates/omniroute-adapter",
+    "crates/orchestrator",
+    "crates/phenotype-config-core",
     "crates/eyetracker-core",
     # --- E2.4 Pattern A wave 3 batch W (2026-10-09): 1 eyetracker lib (eyetracker-camera) ---
     "crates/eyetracker-camera",
@@ -452,6 +477,11 @@ members = [
     "crates/fabric-tui",
     "crates/fabric-web",
     "crates/fabric-workspace",
+    "crates/fabric-integration-tests",
+    "crates/nvms-manifest",
+    "crates/omniroute-adapter",
+    "crates/orchestrator",
+    "crates/phenotype-config-core",
     "crates/eyetracker-core",
     # --- E2.4 Pattern A wave 3 batch W (2026-10-09): 1 eyetracker lib (eyetracker-camera) ---
     "crates/eyetracker-camera",
@@ -1053,6 +1083,11 @@ members = [
     "crates/fabric-tui",
     "crates/fabric-web",
     "crates/fabric-workspace",
+    "crates/fabric-integration-tests",
+    "crates/nvms-manifest",
+    "crates/omniroute-adapter",
+    "crates/orchestrator",
+    "crates/phenotype-config-core",
     "crates/eyetracker-core",
     # --- E2.4 Pattern A wave 3 batch W (2026-10-09): 1 eyetracker lib (eyetracker-camera) ---
     "crates/eyetracker-camera",
@@ -1163,6 +1198,11 @@ members = [
     "crates/fabric-tui",
     "crates/fabric-web",
     "crates/fabric-workspace",
+    "crates/fabric-integration-tests",
+    "crates/nvms-manifest",
+    "crates/omniroute-adapter",
+    "crates/orchestrator",
+    "crates/phenotype-config-core",
     "crates/eyetracker-core",
     # --- E2.4 Pattern A wave 3 batch W (2026-10-09): 1 eyetracker lib (eyetracker-camera) ---
     "crates/eyetracker-camera",
@@ -1547,6 +1587,11 @@ members = [
     "crates/fabric-tui",
     "crates/fabric-web",
     "crates/fabric-workspace",
+    "crates/fabric-integration-tests",
+    "crates/nvms-manifest",
+    "crates/omniroute-adapter",
+    "crates/orchestrator",
+    "crates/phenotype-config-core",
     "crates/eyetracker-core",
     # --- E2.4 Pattern A wave 3 batch W (2026-10-09): 1 eyetracker lib (eyetracker-camera) ---
     "crates/eyetracker-camera",
@@ -1761,6 +1806,7 @@ futures = "0.3"
 futures-core = "0.3"
 parking_lot = "0.12"
 tokio-stream = "0.1"
+tokio-test = "0.4"
 tracing = "0.1"
 tracing-subscriber = { version = "0.3", features = ["env-filter", "json"] }
 tracing-opentelemetry = "0.25"
