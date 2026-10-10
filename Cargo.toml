@@ -340,6 +340,8 @@ members = [
     "crates/phenotype-validation",
     "crates/phenotype-port-interfaces",
     "crates/phenotype-telemetry",
+    # --- E2.4 Pattern A wave 3 batch AX-10 (2026-10-09): phenotype-macros ---
+    "crates/phenotype-macros",
     "crates/focus-time",
     "crates/focus-ui",
     "crates/phenovcs-observability",

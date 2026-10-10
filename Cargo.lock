@@ -8829,6 +8829,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "phenotype-macros"
+version = "0.3.10"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn 2.0.119",
+]
+
+[[package]]
 name = "phenotype-mcp"
 version = "0.3.10"
 dependencies = [
