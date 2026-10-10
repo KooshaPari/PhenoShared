@@ -1,7 +1,8 @@
-use criterion::{black_box, criterion_group, criterion_main, Criterion};
-use focus_events::{NormalizedEvent, WellKnownEventType, DedupeKey, EventType};
-use focus_rules::{Action, Condition, Rule, Trigger};
+#![allow(clippy::unnecessary_cast)]
 use chrono::Utc;
+use criterion::{black_box, criterion_group, criterion_main, Criterion};
+use focus_events::{DedupeKey, EventType, NormalizedEvent, WellKnownEventType};
+use focus_rules::{Action, Condition, Rule, Trigger};
 use std::collections::HashMap;
 use uuid::Uuid;
 
@@ -106,11 +107,7 @@ fn bench_batch_1000_events_100_rules(c: &mut Criterion) {
                 .collect::<Vec<_>>(),
         );
 
-        let events = black_box(
-            (0..1000)
-                .map(|_| make_event())
-                .collect::<Vec<_>>(),
-        );
+        let events = black_box((0..1000).map(|_| make_event()).collect::<Vec<_>>());
 
         b.iter(|| {
             let mut decisions = 0;

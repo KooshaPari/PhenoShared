@@ -35,7 +35,11 @@ impl DslParam {
             name: name.into(),
             kind: kind.into(),
             required,
-            description: if description.is_empty() { None } else { Some(description.into()) },
+            description: if description.is_empty() {
+                None
+            } else {
+                Some(description.into())
+            },
         }
     }
 }
@@ -111,7 +115,12 @@ pub fn describe_dsl() -> DslCatalog {
     let conditions = vec![
         DslConditionSpec {
             kind: "confidence_gte".into(),
-            params: vec![DslParam::new("min", "number", true, "Minimum event.confidence (0..1).")],
+            params: vec![DslParam::new(
+                "min",
+                "number",
+                true,
+                "Minimum event.confidence (0..1).",
+            )],
             description: "Only fire when the source event's confidence meets the threshold.".into(),
         },
         DslConditionSpec {
@@ -126,7 +135,12 @@ pub fn describe_dsl() -> DslCatalog {
             kind: "payload_in".into(),
             params: vec![
                 DslParam::new("path", "string", true, "Dotted payload path."),
-                DslParam::new("values", "array<any>", true, "Set of permitted JSON values."),
+                DslParam::new(
+                    "values",
+                    "array<any>",
+                    true,
+                    "Set of permitted JSON values.",
+                ),
             ],
             description: "Payload value at `path` is one of `values`.".into(),
         },
@@ -148,7 +162,12 @@ pub fn describe_dsl() -> DslCatalog {
         },
         DslConditionSpec {
             kind: "payload_exists".into(),
-            params: vec![DslParam::new("path", "string", true, "Dotted payload path.")],
+            params: vec![DslParam::new(
+                "path",
+                "string",
+                true,
+                "Dotted payload path.",
+            )],
             description: "Payload key at `path` is present (null counts).".into(),
         },
         DslConditionSpec {
@@ -214,19 +233,34 @@ pub fn describe_dsl() -> DslCatalog {
     let actions = vec![
         DslActionSpec {
             kind: "GrantCredit".into(),
-            params: vec![DslParam::new("amount", "integer", true, "Credits to grant.")],
+            params: vec![DslParam::new(
+                "amount",
+                "integer",
+                true,
+                "Credits to grant.",
+            )],
             description: "Add credit to the wallet.".into(),
         },
         DslActionSpec {
             kind: "DeductCredit".into(),
-            params: vec![DslParam::new("amount", "integer", true, "Credits to deduct.")],
+            params: vec![DslParam::new(
+                "amount",
+                "integer",
+                true,
+                "Credits to deduct.",
+            )],
             description: "Remove credit from the wallet.".into(),
         },
         DslActionSpec {
             kind: "Block".into(),
             params: vec![
                 DslParam::new("profile", "string", true, "Enforcement profile id."),
-                DslParam::new("duration_seconds", "integer", true, "Block duration in seconds."),
+                DslParam::new(
+                    "duration_seconds",
+                    "integer",
+                    true,
+                    "Block duration in seconds.",
+                ),
                 DslParam::new(
                     "rigidity",
                     "enum<Hard|Soft>",
@@ -238,7 +272,12 @@ pub fn describe_dsl() -> DslCatalog {
         },
         DslActionSpec {
             kind: "Unblock".into(),
-            params: vec![DslParam::new("profile", "string", true, "Enforcement profile id.")],
+            params: vec![DslParam::new(
+                "profile",
+                "string",
+                true,
+                "Enforcement profile id.",
+            )],
             description: "Deactivate the named enforcement profile.".into(),
         },
         DslActionSpec {
@@ -253,14 +292,29 @@ pub fn describe_dsl() -> DslCatalog {
         },
         DslActionSpec {
             kind: "Notify".into(),
-            params: vec![DslParam::new("message", "string", true, "Notification body.")],
+            params: vec![DslParam::new(
+                "message",
+                "string",
+                true,
+                "Notification body.",
+            )],
             description: "Send a local notification to the user.".into(),
         },
         DslActionSpec {
             kind: "EmergencyExit".into(),
             params: vec![
-                DslParam::new("profiles", "array<string>", true, "Profiles to short-circuit."),
-                DslParam::new("duration_seconds", "integer", true, "Exit window in seconds."),
+                DslParam::new(
+                    "profiles",
+                    "array<string>",
+                    true,
+                    "Profiles to short-circuit.",
+                ),
+                DslParam::new(
+                    "duration_seconds",
+                    "integer",
+                    true,
+                    "Exit window in seconds.",
+                ),
                 DslParam::new("bypass_cost", "integer", true, "Bypass budget to consume."),
                 DslParam::new("reason", "string", true, "User-visible rationale."),
             ],
@@ -291,7 +345,11 @@ pub fn describe_dsl() -> DslCatalog {
         },
     ];
 
-    DslCatalog { triggers, conditions, actions }
+    DslCatalog {
+        triggers,
+        conditions,
+        actions,
+    }
 }
 
 /// Fluent builder for [`Rule`]s. Primarily used by tests and future
@@ -326,7 +384,10 @@ impl RuleBuilder {
     }
 
     pub fn condition(mut self, kind: impl Into<String>, params: serde_json::Value) -> Self {
-        self.rule.conditions.push(Condition { kind: kind.into(), params });
+        self.rule.conditions.push(Condition {
+            kind: kind.into(),
+            params,
+        });
         self
     }
 
@@ -397,7 +458,11 @@ mod tests {
             "any_of",
             "not",
         ];
-        assert_eq!(names.len(), expected.len(), "condition count drift: {names:?}");
+        assert_eq!(
+            names.len(),
+            expected.len(),
+            "condition count drift: {names:?}"
+        );
         for e in expected {
             assert!(names.contains(&e), "missing condition {e}");
         }
@@ -445,10 +510,21 @@ mod tests {
     fn every_action_has_required_params_where_expected() {
         let cat = describe_dsl();
         // EmergencyExit/Intervention/ScheduledUnlockWindow all require >1 param.
-        for kind in ["EmergencyExit", "Intervention", "ScheduledUnlockWindow", "Block"] {
-            let spec =
-                cat.actions.iter().find(|a| a.kind == kind).unwrap_or_else(|| panic!("{kind}"));
-            assert!(spec.params.iter().any(|p| p.required), "{kind} should have required params");
+        for kind in [
+            "EmergencyExit",
+            "Intervention",
+            "ScheduledUnlockWindow",
+            "Block",
+        ] {
+            let spec = cat
+                .actions
+                .iter()
+                .find(|a| a.kind == kind)
+                .unwrap_or_else(|| panic!("{kind}"));
+            assert!(
+                spec.params.iter().any(|p| p.required),
+                "{kind} should have required params"
+            );
         }
     }
 
