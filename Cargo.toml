@@ -95,10 +95,20 @@ members = [
     # --- E2.4 Pattern A wave 3 batch AX-24 (2026-10-09): agileplus-nats + agileplus-graph ---
     "crates/agileplus-nats",
     "crates/agileplus-graph",
+    # --- E2.4 Pattern A wave 3 batch AX-25 (2026-10-09): airlock-v2 + anthropic-usage-poll + agent-forecast + a2a ---
+    "crates/airlock-v2",
+    "crates/anthropic-usage-poll",
+    "crates/agent-forecast",
+    "crates/a2a",
     "crates/phenotype-voxel",
     # --- E2.4 Pattern A wave 3 batch AX-24 (2026-10-09): agileplus-nats + agileplus-graph ---
     "crates/agileplus-nats",
     "crates/agileplus-graph",
+    # --- E2.4 Pattern A wave 3 batch AX-25 (2026-10-09): airlock-v2 + anthropic-usage-poll + agent-forecast + a2a ---
+    "crates/airlock-v2",
+    "crates/anthropic-usage-poll",
+    "crates/agent-forecast",
+    "crates/a2a",
     # --- PhenoRegistry crates (absorbed from PhenoRegistry) ---
     "crates/phenotype-project-registry",
     # --- E2.4 Pattern A wave 3 batch AX-22 (2026-10-09): phenotype-gfx ---
@@ -109,6 +119,11 @@ members = [
     # --- E2.4 Pattern A wave 3 batch AX-24 (2026-10-09): agileplus-nats + agileplus-graph ---
     "crates/agileplus-nats",
     "crates/agileplus-graph",
+    # --- E2.4 Pattern A wave 3 batch AX-25 (2026-10-09): airlock-v2 + anthropic-usage-poll + agent-forecast + a2a ---
+    "crates/airlock-v2",
+    "crates/anthropic-usage-poll",
+    "crates/agent-forecast",
+    "crates/a2a",
     "crates/phenotype-service-registry",
     # --- PhenoInfra crates (absorbed from PhenoInfra) ---
     "crates/phenotype-crypto",
@@ -391,6 +406,11 @@ members = [
     # --- E2.4 Pattern A wave 3 batch AX-24 (2026-10-09): agileplus-nats + agileplus-graph ---
     "crates/agileplus-nats",
     "crates/agileplus-graph",
+    # --- E2.4 Pattern A wave 3 batch AX-25 (2026-10-09): airlock-v2 + anthropic-usage-poll + agent-forecast + a2a ---
+    "crates/airlock-v2",
+    "crates/anthropic-usage-poll",
+    "crates/agent-forecast",
+    "crates/a2a",
     "crates/focus-time",
     "crates/focus-ui",
     "crates/phenovcs-observability",
@@ -421,6 +441,11 @@ members = [
     "crates/focus-events",
     # --- E2.4 Pattern A wave 3 batch S (2026-10-09): 1 small lib (agileplus-graph) ---
     "crates/agileplus-graph",
+    # --- E2.4 Pattern A wave 3 batch AX-25 (2026-10-09): airlock-v2 + anthropic-usage-poll + agent-forecast + a2a ---
+    "crates/airlock-v2",
+    "crates/anthropic-usage-poll",
+    "crates/agent-forecast",
+    "crates/a2a",
     # --- E2.4 Pattern A wave 3 batch T4 (2026-10-09): 4 tiny libs (focus-ui, focus-time, phenotype-git-core, eyetracker-domain) ---
     "crates/focus-ui",
     "crates/focus-time",
@@ -639,6 +664,11 @@ members = [
     "crates/focus-events",
     # --- E2.4 Pattern A wave 3 batch S (2026-10-09): 1 small lib (agileplus-graph) ---
     "crates/agileplus-graph",
+    # --- E2.4 Pattern A wave 3 batch AX-25 (2026-10-09): airlock-v2 + anthropic-usage-poll + agent-forecast + a2a ---
+    "crates/airlock-v2",
+    "crates/anthropic-usage-poll",
+    "crates/agent-forecast",
+    "crates/a2a",
     # --- E2.4 Pattern A wave 3 batch T4 (2026-10-09): 4 tiny libs (focus-ui, focus-time, phenotype-git-core, eyetracker-domain) ---
     "crates/focus-ui",
     "crates/focus-time",
