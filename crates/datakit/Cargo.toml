@@ -7,8 +7,8 @@ edition = "2021"
 [dependencies]
 
 [dev-dependencies]
-criterion = { version = "0.5", features = ["html_reports"] }
-rand = "0.8"
+criterion = { version = "0.8", features = ["html_reports"] }
+rand = "0.10"
 
 [[bench]]
 name = "criterion_bench"

@@ -10,7 +10,7 @@ name = "focalpoint-icon-gen"
 path = "src/bin.rs"
 
 [dependencies]
-png = "0.17"
+png = "0.18"
 clap = { workspace = true, features = ["derive"] }
 anyhow.workspace = true
 serde = { workspace = true }
