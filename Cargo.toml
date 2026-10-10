@@ -353,6 +353,9 @@ members = [
     "crates/phenotype-journey-core",
     # --- E2.4 Pattern A wave 3 batch AX-6 (2026-10-09): 1 phenotype-router-monitor ---
     "crates/phenotype-router-monitor",
+    # --- E2.4 Pattern A wave 3 batch AX-7 (2026-10-09): phenotype-health + phenotype-iter ---
+    "crates/phenotype-health",
+    "crates/phenotype-iter",
     # --- E2.4 Pattern A wave 3 batch AX (2026-10-09): 1 substrate-a2a ---
     "crates/a2a",
     "crates/focus-planning",
@@ -526,6 +529,9 @@ members = [
     "crates/phenotype-journey-core",
     # --- E2.4 Pattern A wave 3 batch AX-6 (2026-10-09): 1 phenotype-router-monitor ---
     "crates/phenotype-router-monitor",
+    # --- E2.4 Pattern A wave 3 batch AX-7 (2026-10-09): phenotype-health + phenotype-iter ---
+    "crates/phenotype-health",
+    "crates/phenotype-iter",
     # --- E2.4 Pattern A wave 3 batch AX (2026-10-09): 1 substrate-a2a ---
     "crates/a2a",
     # --- E2.4 Pattern A wave 3 batch I (2026-10-09): 1 small lib (phenotype-diff) ---
@@ -565,6 +571,9 @@ members = [
     "crates/phenotype-journey-core",
     # --- E2.4 Pattern A wave 3 batch AX-6 (2026-10-09): 1 phenotype-router-monitor ---
     "crates/phenotype-router-monitor",
+    # --- E2.4 Pattern A wave 3 batch AX-7 (2026-10-09): phenotype-health + phenotype-iter ---
+    "crates/phenotype-health",
+    "crates/phenotype-iter",
     # --- E2.4 Pattern A wave 3 batch AX (2026-10-09): 1 substrate-a2a ---
     "crates/a2a",
     "crates/focus-planning",
@@ -649,6 +658,9 @@ members = [
     "crates/phenotype-journey-core",
     # --- E2.4 Pattern A wave 3 batch AX-6 (2026-10-09): 1 phenotype-router-monitor ---
     "crates/phenotype-router-monitor",
+    # --- E2.4 Pattern A wave 3 batch AX-7 (2026-10-09): phenotype-health + phenotype-iter ---
+    "crates/phenotype-health",
+    "crates/phenotype-iter",
     # --- E2.4 Pattern A wave 3 batch AX (2026-10-09): 1 substrate-a2a ---
     "crates/a2a",
 ]
