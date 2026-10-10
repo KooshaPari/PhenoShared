@@ -26,7 +26,7 @@ fn init_cmd_default_path_and_template() {
             assert_eq!(c.path, PathBuf::from("."));
             assert!(!c.force);
             assert_eq!(c.template, "default");
-        }
+        },
         _ => panic!("expected Init"),
     }
 }
@@ -38,7 +38,7 @@ fn validate_cmd_strict_flag() {
         Cmd::Validate(c) => {
             assert_eq!(c.path, PathBuf::from("/tmp/x"));
             assert!(c.strict);
-        }
+        },
         _ => panic!("expected Validate"),
     }
 }
@@ -47,7 +47,7 @@ fn validate_cmd_strict_flag() {
 fn version_cmd_unit_struct() {
     let w = Wrapper::parse_from(["t", "version"]);
     match w.cmd {
-        Cmd::Version(_) => {}
+        Cmd::Version(_) => {},
         _ => panic!("expected Version"),
     }
 }

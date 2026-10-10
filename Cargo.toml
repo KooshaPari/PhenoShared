@@ -144,6 +144,10 @@ members = [
     # --- E2.4 Pattern A wave 3 batch M (2026-10-09): 2 small libs (phenotype-resilience, pheno-cache-adapter) ---
     "crates/phenotype-resilience",
     "crates/pheno-cache-adapter",
+    # --- E2.4 Pattern A wave 3 batch N (2026-10-09): 3 small libs (pheno-shell, clap-ext, airlock-v2) ---
+    "crates/pheno-shell",
+    "crates/clap-ext",
+    "crates/airlock-v2",
 ]
 [workspace.package]
 version = "0.3.10"

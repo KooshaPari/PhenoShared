@@ -49,13 +49,13 @@ impl Shell {
                 Ok(Some(output)) => {
                     stdout.write_all(output.as_bytes()).await?;
                     stdout.write_all(b"\n").await?;
-                }
-                Ok(None) => {}
+                },
+                Ok(None) => {},
                 Err(e) => {
                     stdout
                         .write_all(format!("Error: {}\n", e).as_bytes())
                         .await?;
-                }
+                },
             }
         }
 
@@ -79,16 +79,16 @@ impl Shell {
                     Err(e) => {
                         eprintln!("Error: {} ({})", e, e.recovery_hint());
                         Ok(None)
-                    }
+                    },
                 }
-            }
+            },
             cmd => {
                 if let Some(cmd_def) = self.commands.iter().find(|c| c.name == cmd) {
                     (cmd_def.handler)(&parts[1..]).await
                 } else {
                     Err(ShellError::UnknownCommand(cmd.to_string()))
                 }
-            }
+            },
         }
     }
 
@@ -124,7 +124,7 @@ impl Shell {
     fn gen_bash_completions(&self) -> String {
         let mut script = format!(
             "_{name}_completions() {{\n  local cur=${{COMP_WORDS[COMP_CWORD]}}\n",
-            name = &self.name
+            name = self.name
         );
         let cmds: Vec<&str> = self
             .commands
@@ -139,7 +139,7 @@ impl Shell {
         script.push_str("}}\n");
         script.push_str(&format!(
             "complete -F _{name}_completions {name}\n",
-            name = &self.name
+            name = self.name
         ));
         script
     }
@@ -147,7 +147,7 @@ impl Shell {
     fn gen_zsh_completions(&self) -> String {
         let mut script = format!(
             "#compdef {name}\n_{name}() {{\n  local -a commands\n",
-            name = &self.name
+            name = self.name
         );
         script.push_str("  commands=(\n");
         for c in &self.commands {
@@ -164,36 +164,38 @@ impl Shell {
         script.push_str("  )\n");
         script.push_str("  _describe 'command' commands\n");
         script.push_str("}\n");
-        script.push_str(&format!("_{name}\n", name = &self.name));
+        script.push_str(&format!("_{name}\n", name = self.name));
         script
     }
 
     fn gen_fish_completions(&self) -> String {
         let mut script = String::new();
-        script.push_str(&format!("complete -c {name} -f\n", name = &self.name));
+        script.push_str(&format!("complete -c {name} -f\n", name = self.name));
         for c in &self.commands {
             script.push_str(&format!(
                 "complete -c {name} -n '__fish_use_subcommand' -a '{cname}' -d '{desc}'\n",
-                name = &self.name,
+                name = self.name,
                 cname = c.name,
+                // PHE-SHL-002: clippy::redundant_reference — pass `c.description` by value
+                // (String implements Display via itself).
                 desc = c.description
             ));
         }
         script.push_str(&format!(
             "complete -c {name} -n '__fish_use_subcommand' -a 'exit' -d 'Exit the shell'\n",
-            name = &self.name
+            name = self.name
         ));
         script.push_str(&format!(
             "complete -c {name} -n '__fish_use_subcommand' -a 'help' -d 'Show this help'\n",
-            name = &self.name
+            name = self.name
         ));
         script.push_str(&format!(
             "complete -c {name} -n '__fish_use_subcommand' -a 'history' -d 'Show command history'\n",
-            name = &self.name
+            name = self.name
         ));
         script.push_str(&format!(
             "complete -c {name} -n '__fish_use_subcommand' -a 'completions' -d 'Print shell completion script'\n",
-            name = &self.name
+            name = self.name
         ));
         script
     }
@@ -201,7 +203,7 @@ impl Shell {
     fn gen_powershell_completions(&self) -> String {
         let mut script = format!(
             "Register-ArgumentCompleter -Native -CommandName {name} -ScriptBlock {{\n  param($wordToComplete, $commandAst, $cursorPosition)\n",
-            name = &self.name
+            name = self.name
         );
         let cmds: Vec<&str> = self
             .commands

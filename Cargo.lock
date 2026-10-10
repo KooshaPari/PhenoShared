@@ -78,6 +78,18 @@ dependencies = [
 ]
 
 [[package]]
+name = "airlock-v2"
+version = "0.3.10"
+dependencies = [
+ "anyhow",
+ "chrono",
+ "clap",
+ "serde",
+ "serde_json",
+ "tempfile",
+]
+
+[[package]]
 name = "aligned"
 version = "0.4.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1611,6 +1623,16 @@ checksum = "473c7e07f409a8d772161724aa8db6a765a2532a70f9667eeb7b49d3d02fbdca"
 dependencies = [
  "clap_builder",
  "clap_derive",
+]
+
+[[package]]
+name = "clap-ext"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "clap",
+ "thiserror 2.0.20",
+ "tracing-subscriber",
 ]
 
 [[package]]
@@ -7543,6 +7565,19 @@ version = "0.1.0"
 dependencies = [
  "serde",
  "serde_json",
+]
+
+[[package]]
+name = "pheno-shell"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "async-trait",
+ "clap",
+ "serde",
+ "thiserror 2.0.20",
+ "tokio",
+ "tracing",
 ]
 
 [[package]]
