@@ -2712,7 +2712,7 @@ dependencies = [
  "libc",
  "mio 0.8.11",
  "parking_lot",
- "signal-hook",
+ "signal-hook 0.3.18",
  "signal-hook-mio",
  "winapi",
 ]
@@ -2729,7 +2729,7 @@ dependencies = [
  "mio 1.2.3",
  "parking_lot",
  "rustix 0.38.44",
- "signal-hook",
+ "signal-hook 0.3.18",
  "signal-hook-mio",
  "winapi",
 ]
@@ -2744,10 +2744,11 @@ dependencies = [
  "crossterm_winapi",
  "derive_more",
  "document-features",
+ "futures-core",
  "mio 1.2.3",
  "parking_lot",
  "rustix 1.1.4",
- "signal-hook",
+ "signal-hook 0.3.18",
  "signal-hook-mio",
  "winapi",
 ]
@@ -11495,6 +11496,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "signal-hook"
+version = "0.4.4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "b2a0c28ca5908dbdbcd52e6fdaa00358ab88637f8ab33e1f188dd510eb44b53d"
+dependencies = [
+ "libc",
+ "signal-hook-registry",
+]
+
+[[package]]
 name = "signal-hook-mio"
 version = "0.2.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -11503,7 +11514,7 @@ dependencies = [
  "libc",
  "mio 0.8.11",
  "mio 1.2.3",
- "signal-hook",
+ "signal-hook 0.3.18",
 ]
 
 [[package]]
@@ -11514,6 +11525,18 @@ checksum = "c4db69cba1110affc0e9f7bcd48bbf87b3f4fc7c61fc9155afd4c469eb3d6c1b"
 dependencies = [
  "errno",
  "libc",
+]
+
+[[package]]
+name = "signal-hook-tokio"
+version = "0.4.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e513e435a8898a0002270f29d0a708b7879708fb5c4d00e46983ca2d2d378cf0"
+dependencies = [
+ "futures-core",
+ "libc",
+ "signal-hook 0.4.4",
+ "tokio",
 ]
 
 [[package]]
@@ -11978,6 +12001,28 @@ dependencies = [
 ]
 
 [[package]]
+name = "substrate-tui"
+version = "0.3.10"
+dependencies = [
+ "anyhow",
+ "chrono",
+ "crossterm 0.29.0",
+ "dispatch-bridge",
+ "futures",
+ "ratatui 0.30.2",
+ "reqwest 0.12.28",
+ "serde",
+ "serde_json",
+ "signal-hook 0.3.18",
+ "signal-hook-tokio",
+ "substrate-core 0.3.10",
+ "tokio",
+ "tokio-stream",
+ "tracing",
+ "uuid",
+]
+
+[[package]]
 name = "subtle"
 version = "2.6.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -12288,6 +12333,19 @@ dependencies = [
 ]
 
 [[package]]
+name = "teamcomm-smoke"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "serde_json",
+ "teamcomm-daemon",
+ "teamcomm-protocol",
+ "tokio",
+ "tracing",
+ "tracing-subscriber",
+]
+
+[[package]]
 name = "tempfile"
 version = "3.27.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -12321,7 +12379,7 @@ dependencies = [
  "bitflags 2.13.2",
  "parking_lot",
  "rustix 1.1.4",
- "signal-hook",
+ "signal-hook 0.3.18",
  "windows-sys 0.61.2",
 ]
 
@@ -12388,7 +12446,7 @@ dependencies = [
  "pest_derive",
  "phf",
  "sha2 0.10.9",
- "signal-hook",
+ "signal-hook 0.3.18",
  "siphasher",
  "terminfo",
  "termios",

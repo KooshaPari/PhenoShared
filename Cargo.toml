@@ -37,6 +37,9 @@ members = [
     "crates/orchestrator",
     "crates/phenotype-config-core",
     "crates/phenotype-nvms-adapter",
+    "crates/substrate-tui",
+    "crates/routing-phenotype-router",
+    "crates/teamcomm-smoke",
 
 
     "crates/dispatch-bridge",
@@ -64,6 +67,9 @@ members = [
     "crates/orchestrator",
     "crates/phenotype-config-core",
     "crates/phenotype-nvms-adapter",
+    "crates/substrate-tui",
+    "crates/routing-phenotype-router",
+    "crates/teamcomm-smoke",
     "crates/engine-forge",
     "crates/transport-file",
     "crates/store-file",
@@ -177,6 +183,9 @@ members = [
     "crates/orchestrator",
     "crates/phenotype-config-core",
     "crates/phenotype-nvms-adapter",
+    "crates/substrate-tui",
+    "crates/routing-phenotype-router",
+    "crates/teamcomm-smoke",
 
 
     "crates/dispatch-bridge",
@@ -204,6 +213,9 @@ members = [
     "crates/orchestrator",
     "crates/phenotype-config-core",
     "crates/phenotype-nvms-adapter",
+    "crates/substrate-tui",
+    "crates/routing-phenotype-router",
+    "crates/teamcomm-smoke",
     "crates/wave-3lane-tests",
     "crates/dispatch-bridge",
     "crates/cloud-dispatch-conformance",
@@ -375,6 +387,9 @@ members = [
     "crates/orchestrator",
     "crates/phenotype-config-core",
     "crates/phenotype-nvms-adapter",
+    "crates/substrate-tui",
+    "crates/routing-phenotype-router",
+    "crates/teamcomm-smoke",
     "crates/eyetracker-core",
     # --- E2.4 Pattern A wave 3 batch W (2026-10-09): 1 eyetracker lib (eyetracker-camera) ---
     "crates/eyetracker-camera",
@@ -488,6 +503,9 @@ members = [
     "crates/orchestrator",
     "crates/phenotype-config-core",
     "crates/phenotype-nvms-adapter",
+    "crates/substrate-tui",
+    "crates/routing-phenotype-router",
+    "crates/teamcomm-smoke",
     "crates/eyetracker-core",
     # --- E2.4 Pattern A wave 3 batch W (2026-10-09): 1 eyetracker lib (eyetracker-camera) ---
     "crates/eyetracker-camera",
@@ -1095,6 +1113,9 @@ members = [
     "crates/orchestrator",
     "crates/phenotype-config-core",
     "crates/phenotype-nvms-adapter",
+    "crates/substrate-tui",
+    "crates/routing-phenotype-router",
+    "crates/teamcomm-smoke",
     "crates/eyetracker-core",
     # --- E2.4 Pattern A wave 3 batch W (2026-10-09): 1 eyetracker lib (eyetracker-camera) ---
     "crates/eyetracker-camera",
@@ -1211,6 +1232,9 @@ members = [
     "crates/orchestrator",
     "crates/phenotype-config-core",
     "crates/phenotype-nvms-adapter",
+    "crates/substrate-tui",
+    "crates/routing-phenotype-router",
+    "crates/teamcomm-smoke",
     "crates/eyetracker-core",
     # --- E2.4 Pattern A wave 3 batch W (2026-10-09): 1 eyetracker lib (eyetracker-camera) ---
     "crates/eyetracker-camera",
@@ -1601,6 +1625,9 @@ members = [
     "crates/orchestrator",
     "crates/phenotype-config-core",
     "crates/phenotype-nvms-adapter",
+    "crates/substrate-tui",
+    "crates/routing-phenotype-router",
+    "crates/teamcomm-smoke",
     "crates/eyetracker-core",
     # --- E2.4 Pattern A wave 3 batch W (2026-10-09): 1 eyetracker lib (eyetracker-camera) ---
     "crates/eyetracker-camera",
