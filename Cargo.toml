@@ -19,6 +19,8 @@ members = [
     "tools/fake-forge",
     "tools/fake-codex-cloud",
     "crates/a2a",
+    # --- E2.4 Pattern A wave 3 batch AG (2026-10-09): 1 focus-ci-watcher ---
+    "crates/focus-ci-watcher",
     "crates/store-sqlite",
     "crates/supervisor",
     "crates/wave",
@@ -112,6 +114,8 @@ members = [
     "crates/clap-ext-examples",
     # --- E2.4 Pattern A wave 3 batch AF (2026-10-09): 1 substrate-a2a leaf ---
     "crates/a2a",
+    # --- E2.4 Pattern A wave 3 batch AG (2026-10-09): 1 focus-ci-watcher ---
+    "crates/focus-ci-watcher",
     "crates/eyetracker-math",
     "crates/eyetracker-core",
     # --- E2.4 Pattern A wave 3 batch W (2026-10-09): 1 eyetracker lib (eyetracker-camera) ---
@@ -137,6 +141,8 @@ members = [
     "crates/clap-ext-examples",
     # --- E2.4 Pattern A wave 3 batch AF (2026-10-09): 1 substrate-a2a leaf ---
     "crates/a2a",
+    # --- E2.4 Pattern A wave 3 batch AG (2026-10-09): 1 focus-ci-watcher ---
+    "crates/focus-ci-watcher",
     "crates/eyetracker-ffi",
     # --- E2.4 Pattern A wave 3 batch Z (2026-10-09): 1 focus lib (focus-release-bot) ---
     "crates/focus-release-bot",
@@ -155,6 +161,8 @@ members = [
     "crates/clap-ext-examples",
     # --- E2.4 Pattern A wave 3 batch AF (2026-10-09): 1 substrate-a2a leaf ---
     "crates/a2a",
+    # --- E2.4 Pattern A wave 3 batch AG (2026-10-09): 1 focus-ci-watcher ---
+    "crates/focus-ci-watcher",
     "crates/eyetracker-camera",
     # --- E2.4 Pattern A wave 3 batch X (2026-10-09): 1 eyetracker lib (eyetracker-inference) ---
     "crates/eyetracker-inference",
@@ -177,6 +185,8 @@ members = [
     "crates/clap-ext-examples",
     # --- E2.4 Pattern A wave 3 batch AF (2026-10-09): 1 substrate-a2a leaf ---
     "crates/a2a",
+    # --- E2.4 Pattern A wave 3 batch AG (2026-10-09): 1 focus-ci-watcher ---
+    "crates/focus-ci-watcher",
     "crates/eyetracker-inference",
     # --- E2.4 Pattern A wave 3 batch Y (2026-10-09): 1 eyetracker lib (eyetracker-ffi) ---
     "crates/eyetracker-ffi",
@@ -197,6 +207,8 @@ members = [
     "crates/clap-ext-examples",
     # --- E2.4 Pattern A wave 3 batch AF (2026-10-09): 1 substrate-a2a leaf ---
     "crates/a2a",
+    # --- E2.4 Pattern A wave 3 batch AG (2026-10-09): 1 focus-ci-watcher ---
+    "crates/focus-ci-watcher",
     "crates/eyetracker-cli",
     # --- pm-core crates (restored 2026-09-20 from zz-archive/git-bundles-20260910/phenotype-archive.bundle @ refs/archive/phenotype-pm-core-2026-08-09/heads/master d3277c40; content strictly supersedes the partial traceability-core copy under crates/agile-plus/) ---
     "crates/traceability-core",
@@ -208,6 +220,8 @@ members = [
     "crates/clap-ext-examples",
     # --- E2.4 Pattern A wave 3 batch AF (2026-10-09): 1 substrate-a2a leaf ---
     "crates/a2a",
+    # --- E2.4 Pattern A wave 3 batch AG (2026-10-09): 1 focus-ci-watcher ---
+    "crates/focus-ci-watcher",
     "crates/fuzz-setup",
     "crates/perfharness",
     "crates/phenotype-flags",
@@ -264,6 +278,8 @@ members = [
     "crates/clap-ext-examples",
     # --- E2.4 Pattern A wave 3 batch AF (2026-10-09): 1 substrate-a2a leaf ---
     "crates/a2a",
+    # --- E2.4 Pattern A wave 3 batch AG (2026-10-09): 1 focus-ci-watcher ---
+    "crates/focus-ci-watcher",
     "crates/sidekick-messaging",
     "crates/datakit",
     # --- E2.4 Pattern A wave 3 batch V2 (2026-10-09): 2 eyetracker libs (eyetracker-math, eyetracker-core) ---
@@ -292,6 +308,8 @@ members = [
     "crates/clap-ext-examples",
     # --- E2.4 Pattern A wave 3 batch AF (2026-10-09): 1 substrate-a2a leaf ---
     "crates/a2a",
+    # --- E2.4 Pattern A wave 3 batch AG (2026-10-09): 1 focus-ci-watcher ---
+    "crates/focus-ci-watcher",
     # --- E2.4 Pattern A wave 3 (2026-10-09): 4 small/leaf crates (just-add; no new workspace.dependencies needed) ---
     "crates/temporal-grounding",
     "crates/pheno-forge-scaffold",
@@ -324,6 +342,8 @@ members = [
     "crates/clap-ext-examples",
     # --- E2.4 Pattern A wave 3 batch AF (2026-10-09): 1 substrate-a2a leaf ---
     "crates/a2a",
+    # --- E2.4 Pattern A wave 3 batch AG (2026-10-09): 1 focus-ci-watcher ---
+    "crates/focus-ci-watcher",
     "crates/phenotype-logging",
     "crates/mcp-server",
     # --- E2.4 Pattern A wave 3 batch G (2026-10-09): 2 small libs (phenotype-contract, anthropic-usage-poll) ---
@@ -399,6 +419,8 @@ members = [
     "crates/clap-ext-examples",
     # --- E2.4 Pattern A wave 3 batch AF (2026-10-09): 1 substrate-a2a leaf ---
     "crates/a2a",
+    # --- E2.4 Pattern A wave 3 batch AG (2026-10-09): 1 focus-ci-watcher ---
+    "crates/focus-ci-watcher",
 ]
 [workspace.package]
 version = "0.3.10"

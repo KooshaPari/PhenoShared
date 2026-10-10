@@ -4267,6 +4267,25 @@ dependencies = [
 ]
 
 [[package]]
+name = "focus-ci-watcher"
+version = "0.0.1"
+dependencies = [
+ "anyhow",
+ "chrono",
+ "clap",
+ "focus-release-bot",
+ "reqwest 0.12.28",
+ "serde",
+ "serde_json",
+ "tempfile",
+ "thiserror 2.0.20",
+ "tokio",
+ "tracing",
+ "tracing-subscriber",
+ "uuid",
+]
+
+[[package]]
 name = "focus-coaching"
 version = "0.3.10"
 dependencies = [

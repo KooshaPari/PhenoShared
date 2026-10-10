@@ -52,9 +52,7 @@ fn get_repo_url(repo_path: &Path) -> Result<String> {
         anyhow::bail!("Could not determine remote URL");
     }
 
-    Ok(String::from_utf8(output.stdout)?
-        .trim()
-        .to_string())
+    Ok(String::from_utf8(output.stdout)?.trim().to_string())
 }
 
 #[tokio::main]
@@ -92,31 +90,29 @@ async fn main() -> Result<()> {
             Ok(current_sha) => {
                 if let Some(ref prev) = last_sha {
                     if prev != &current_sha {
-                        info!("🔄 New commit detected: {} -> {}", &prev[..8], &current_sha[..8]);
-                        handle_new_commit(&args, &current_sha, &repo_url, &webhook_url)
-                            .await;
+                        info!(
+                            "🔄 New commit detected: {} -> {}",
+                            &prev[..8],
+                            &current_sha[..8]
+                        );
+                        handle_new_commit(&args, &current_sha, &repo_url, &webhook_url).await;
                         last_sha = Some(current_sha);
                     }
                 } else {
                     info!("📍 Initial poll: {}", &current_sha[..8]);
                     last_sha = Some(current_sha);
                 }
-            }
+            },
             Err(e) => {
                 error!("Failed to poll git: {}", e);
-            }
+            },
         }
 
         tokio::time::sleep(poll_interval).await;
     }
 }
 
-async fn handle_new_commit(
-    args: &Args,
-    sha: &str,
-    repo_url: &str,
-    webhook_url: &str,
-) {
+async fn handle_new_commit(args: &Args, sha: &str, repo_url: &str, webhook_url: &str) {
     info!("🚀 Running CI for {}", &sha[..8]);
 
     let sandbox = match create_sandbox(&args.temp_base) {
@@ -124,7 +120,7 @@ async fn handle_new_commit(
         Err(e) => {
             error!("Failed to create sandbox: {}", e);
             return;
-        }
+        },
     };
 
     let _success = if args.dry_run {
@@ -142,8 +138,7 @@ async fn handle_new_commit(
                         }
 
                         // Post to Discord
-                        let payload =
-                            format_ci_result(success, sha, &output, "FocalPoint");
+                        let payload = format_ci_result(success, sha, &output, "FocalPoint");
                         if let Err(e) =
                             focus_release_bot::post_to_webhook_blocking(webhook_url, payload)
                         {
@@ -151,17 +146,17 @@ async fn handle_new_commit(
                         }
 
                         success
-                    }
+                    },
                     Err(e) => {
                         error!("Failed to run fastlane ci: {}", e);
                         false
-                    }
+                    },
                 }
-            }
+            },
             Err(e) => {
                 error!("Failed to clone into sandbox: {}", e);
                 false
-            }
+            },
         }
     };
 
