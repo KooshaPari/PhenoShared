@@ -148,6 +148,11 @@ members = [
     "crates/pheno-shell",
     "crates/clap-ext",
     "crates/airlock-v2",
+    # --- E2.4 Pattern A wave 3 batch O (2026-10-09): 4 small libs (driver-argv, arch-test, sidekick-messaging, phenovcs-observability) ---
+    "crates/driver-argv",
+    "crates/arch-test",
+    "crates/sidekick-messaging",
+    "crates/phenovcs-observability",
 ]
 [workspace.package]
 version = "0.3.10"
