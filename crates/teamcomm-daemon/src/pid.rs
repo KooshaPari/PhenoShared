@@ -63,7 +63,7 @@ pub fn read_pid_file(path: &Path) -> Result<Option<u32>> {
                     .with_context(|| format!("non-numeric pid in {}", path.display()))?;
                 Ok(Some(pid))
             }
-        }
+        },
         Err(e) if e.kind() == std::io::ErrorKind::NotFound => Ok(None),
         Err(e) => Err(e).with_context(|| format!("failed to read pid file {}", path.display())),
     }
@@ -75,7 +75,7 @@ pub fn remove_pid_file(path: &Path) -> Result<()> {
         Ok(()) => {
             info!(path = %path.display(), "removed pid file");
             Ok(())
-        }
+        },
         Err(e) if e.kind() == std::io::ErrorKind::NotFound => Ok(()),
         Err(e) => Err(e).with_context(|| format!("failed to remove pid file {}", path.display())),
     }

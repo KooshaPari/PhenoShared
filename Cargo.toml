@@ -342,6 +342,8 @@ members = [
     "crates/phenotype-telemetry",
     # --- E2.4 Pattern A wave 3 batch AX-10 (2026-10-09): phenotype-macros ---
     "crates/phenotype-macros",
+    # --- E2.4 Pattern A wave 3 batch AX-11 (2026-10-09): teamcomm-daemon ---
+    "crates/teamcomm-daemon",
     "crates/focus-time",
     "crates/focus-ui",
     "crates/phenovcs-observability",
@@ -708,6 +710,8 @@ sha2 = "0.11"
 serde_yaml = "0.9"
 clap = { version = "4.5", features = ["derive", "env"] }
 unicode-normalization = "0.1"
+dirs = "5"
+log = "0.4"
 dashmap = "6"
 toml = "1.1"
 

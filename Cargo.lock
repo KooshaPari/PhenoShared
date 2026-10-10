@@ -12011,6 +12011,25 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "61c41af27dd6d1e27b1b16b489db798443478cef1f06a660c96db617ba5de3b1"
 
 [[package]]
+name = "teamcomm-daemon"
+version = "0.3.10"
+dependencies = [
+ "anyhow",
+ "chrono",
+ "clap",
+ "dirs 5.0.1",
+ "serde",
+ "serde_json",
+ "teamcomm-protocol",
+ "tempfile",
+ "thiserror 2.0.20",
+ "tokio",
+ "tracing",
+ "tracing-subscriber",
+ "uuid",
+]
+
+[[package]]
 name = "teamcomm-protocol"
 version = "0.3.10"
 dependencies = [

@@ -180,7 +180,7 @@ async fn cmd_stop(socket_path: Option<PathBuf>, pid_file: Option<PathBuf>) -> Re
         None => {
             println!("daemon not running (no pid file at {})", pid_file.display());
             return Ok(());
-        }
+        },
     };
 
     if !teamcomm_daemon::pid::is_pid_running(pid) {
@@ -229,7 +229,7 @@ async fn cmd_status(socket_path: Option<PathBuf>, pid_file: Option<PathBuf>) -> 
         None => {
             println!("stopped (no pid file at {})", pid_file.display());
             std::process::exit(3);
-        }
+        },
     };
 
     if teamcomm_daemon::pid::is_pid_running(pid) {
