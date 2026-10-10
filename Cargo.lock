@@ -4267,6 +4267,22 @@ dependencies = [
 ]
 
 [[package]]
+name = "focus-calendar"
+version = "0.3.10"
+dependencies = [
+ "anyhow",
+ "async-trait",
+ "chrono",
+ "focus-domain",
+ "serde",
+ "serde_json",
+ "thiserror 2.0.20",
+ "tokio",
+ "tracing",
+ "uuid",
+]
+
+[[package]]
 name = "focus-ci-watcher"
 version = "0.0.1"
 dependencies = [

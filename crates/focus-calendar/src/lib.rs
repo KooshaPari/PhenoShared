@@ -100,8 +100,11 @@ impl InMemoryCalendarPort {
 impl CalendarPort for InMemoryCalendarPort {
     async fn list_events(&self, range: DateRange) -> anyhow::Result<Vec<CalendarEvent>> {
         let guard = self.inner.read().await;
-        let mut out: Vec<CalendarEvent> =
-            guard.iter().filter(|e| range.contains_any(e)).cloned().collect();
+        let mut out: Vec<CalendarEvent> = guard
+            .iter()
+            .filter(|e| range.contains_any(e))
+            .cloned()
+            .collect();
         out.sort_by_key(|e| e.starts_at);
         Ok(out)
     }
@@ -156,7 +159,10 @@ mod tests {
     async fn in_memory_roundtrip_create_and_list() {
         let cal = InMemoryCalendarPort::new();
         let _ = cal.create_event(&draft("standup", 0, 30)).await.unwrap();
-        let evs = cal.list_events(DateRange::new(t0(), t0() + Duration::hours(2))).await.unwrap();
+        let evs = cal
+            .list_events(DateRange::new(t0(), t0() + Duration::hours(2)))
+            .await
+            .unwrap();
         assert_eq!(evs.len(), 1);
         assert_eq!(evs[0].title, "standup");
     }
@@ -168,7 +174,10 @@ mod tests {
         cal.create_event(&draft("late", 90, 30)).await.unwrap();
         cal.create_event(&draft("early", 0, 30)).await.unwrap();
         cal.create_event(&draft("middle", 45, 30)).await.unwrap();
-        let evs = cal.list_events(DateRange::new(t0(), t0() + Duration::hours(3))).await.unwrap();
+        let evs = cal
+            .list_events(DateRange::new(t0(), t0() + Duration::hours(3)))
+            .await
+            .unwrap();
         assert_eq!(evs.len(), 3);
         assert_eq!(evs[0].title, "early");
         assert_eq!(evs[1].title, "middle");
@@ -191,7 +200,10 @@ mod tests {
         let cal = InMemoryCalendarPort::new();
         cal.create_event(&draft("in", 10, 15)).await.unwrap();
         cal.create_event(&draft("out", 500, 15)).await.unwrap();
-        let evs = cal.list_events(DateRange::new(t0(), t0() + Duration::hours(2))).await.unwrap();
+        let evs = cal
+            .list_events(DateRange::new(t0(), t0() + Duration::hours(2)))
+            .await
+            .unwrap();
         assert_eq!(evs.len(), 1);
         assert_eq!(evs[0].title, "in");
     }
