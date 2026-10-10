@@ -117,6 +117,11 @@ members = [
     "crates/focus-events",
     # --- E2.4 Pattern A wave 3 batch S (2026-10-09): 1 small lib (agileplus-graph) ---
     "crates/agileplus-graph",
+    # --- E2.4 Pattern A wave 3 batch T4 (2026-10-09): 4 tiny libs (focus-ui, focus-time, phenotype-git-core, eyetracker-domain) ---
+    "crates/focus-ui",
+    "crates/focus-time",
+    "crates/phenotype-git-core",
+    "crates/eyetracker-domain",
     "crates/sidekick-messaging",
     "crates/datakit",
     # --- E2.4 Pattern A wave 3 (2026-10-09): 4 small/leaf crates (just-add; no new workspace.dependencies needed) ---
@@ -177,6 +182,11 @@ members = [
     "crates/focus-events",
     # --- E2.4 Pattern A wave 3 batch S (2026-10-09): 1 small lib (agileplus-graph) ---
     "crates/agileplus-graph",
+    # --- E2.4 Pattern A wave 3 batch T4 (2026-10-09): 4 tiny libs (focus-ui, focus-time, phenotype-git-core, eyetracker-domain) ---
+    "crates/focus-ui",
+    "crates/focus-time",
+    "crates/phenotype-git-core",
+    "crates/eyetracker-domain",
 ]
 [workspace.package]
 version = "0.3.10"
