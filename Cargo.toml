@@ -29,6 +29,11 @@ members = [
     "crates/bench-guard",
     # --- E2.4 Pattern A wave 3 batch AX-29 (2026-10-09): configra-ops + settly ---
     "crates/configra-ops",
+    # --- E2.4 Pattern A wave 3 batch AX-30 (2026-10-09): 4 cloud-* ---
+    "crates/cloud-codex",
+    "crates/cloud-cursor",
+    "crates/cloud-kilo",
+    "crates/cloud-dispatch-conformance",
     # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): klipdot + logkit ---
     # --- E2.4 Pattern A wave 3 batch AG (2026-10-09): 1 focus-ci-watcher ---
     "crates/focus-ci-watcher",
@@ -121,6 +126,11 @@ members = [
     "crates/bench-guard",
     # --- E2.4 Pattern A wave 3 batch AX-29 (2026-10-09): configra-ops + settly ---
     "crates/configra-ops",
+    # --- E2.4 Pattern A wave 3 batch AX-30 (2026-10-09): 4 cloud-* ---
+    "crates/cloud-codex",
+    "crates/cloud-cursor",
+    "crates/cloud-kilo",
+    "crates/cloud-dispatch-conformance",
     # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): klipdot + logkit ---
     "crates/phenotype-voxel",
     # --- E2.4 Pattern A wave 3 batch AX-24 (2026-10-09): agileplus-nats + agileplus-graph ---
@@ -141,6 +151,11 @@ members = [
     "crates/bench-guard",
     # --- E2.4 Pattern A wave 3 batch AX-29 (2026-10-09): configra-ops + settly ---
     "crates/configra-ops",
+    # --- E2.4 Pattern A wave 3 batch AX-30 (2026-10-09): 4 cloud-* ---
+    "crates/cloud-codex",
+    "crates/cloud-cursor",
+    "crates/cloud-kilo",
+    "crates/cloud-dispatch-conformance",
     # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): klipdot + logkit ---
     # --- PhenoRegistry crates (absorbed from PhenoRegistry) ---
     "crates/phenotype-project-registry",
@@ -167,6 +182,11 @@ members = [
     "crates/bench-guard",
     # --- E2.4 Pattern A wave 3 batch AX-29 (2026-10-09): configra-ops + settly ---
     "crates/configra-ops",
+    # --- E2.4 Pattern A wave 3 batch AX-30 (2026-10-09): 4 cloud-* ---
+    "crates/cloud-codex",
+    "crates/cloud-cursor",
+    "crates/cloud-kilo",
+    "crates/cloud-dispatch-conformance",
     # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): klipdot + logkit ---
     "crates/phenotype-service-registry",
     # --- PhenoInfra crates (absorbed from PhenoInfra) ---
@@ -203,6 +223,11 @@ members = [
     "crates/bench-guard",
     # --- E2.4 Pattern A wave 3 batch AX-29 (2026-10-09): configra-ops + settly ---
     "crates/configra-ops",
+    # --- E2.4 Pattern A wave 3 batch AX-30 (2026-10-09): 4 cloud-* ---
+    "crates/cloud-codex",
+    "crates/cloud-cursor",
+    "crates/cloud-kilo",
+    "crates/cloud-dispatch-conformance",
     # --- E2.4 Pattern A wave 3 batch AE (2026-10-09): 1 example lib (clap-ext-examples) ---
     "crates/clap-ext-examples",
     # --- E2.4 Pattern A wave 3 batch AF (2026-10-09): 1 substrate-a2a leaf ---
@@ -217,6 +242,11 @@ members = [
     "crates/bench-guard",
     # --- E2.4 Pattern A wave 3 batch AX-29 (2026-10-09): configra-ops + settly ---
     "crates/configra-ops",
+    # --- E2.4 Pattern A wave 3 batch AX-30 (2026-10-09): 4 cloud-* ---
+    "crates/cloud-codex",
+    "crates/cloud-cursor",
+    "crates/cloud-kilo",
+    "crates/cloud-dispatch-conformance",
     # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): klipdot + logkit ---
     # --- E2.4 Pattern A wave 3 batch AG (2026-10-09): 1 focus-ci-watcher ---
     "crates/focus-ci-watcher",
@@ -258,6 +288,11 @@ members = [
     "crates/bench-guard",
     # --- E2.4 Pattern A wave 3 batch AX-29 (2026-10-09): configra-ops + settly ---
     "crates/configra-ops",
+    # --- E2.4 Pattern A wave 3 batch AX-30 (2026-10-09): 4 cloud-* ---
+    "crates/cloud-codex",
+    "crates/cloud-cursor",
+    "crates/cloud-kilo",
+    "crates/cloud-dispatch-conformance",
     # --- E2.4 Pattern A wave 3 batch AE (2026-10-09): 1 example lib (clap-ext-examples) ---
     "crates/clap-ext-examples",
     # --- E2.4 Pattern A wave 3 batch AF (2026-10-09): 1 substrate-a2a leaf ---
@@ -272,6 +307,11 @@ members = [
     "crates/bench-guard",
     # --- E2.4 Pattern A wave 3 batch AX-29 (2026-10-09): configra-ops + settly ---
     "crates/configra-ops",
+    # --- E2.4 Pattern A wave 3 batch AX-30 (2026-10-09): 4 cloud-* ---
+    "crates/cloud-codex",
+    "crates/cloud-cursor",
+    "crates/cloud-kilo",
+    "crates/cloud-dispatch-conformance",
     # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): klipdot + logkit ---
     # --- E2.4 Pattern A wave 3 batch AG (2026-10-09): 1 focus-ci-watcher ---
     "crates/focus-ci-watcher",
@@ -306,6 +346,11 @@ members = [
     "crates/bench-guard",
     # --- E2.4 Pattern A wave 3 batch AX-29 (2026-10-09): configra-ops + settly ---
     "crates/configra-ops",
+    # --- E2.4 Pattern A wave 3 batch AX-30 (2026-10-09): 4 cloud-* ---
+    "crates/cloud-codex",
+    "crates/cloud-cursor",
+    "crates/cloud-kilo",
+    "crates/cloud-dispatch-conformance",
     # --- E2.4 Pattern A wave 3 batch AE (2026-10-09): 1 example lib (clap-ext-examples) ---
     "crates/clap-ext-examples",
     # --- E2.4 Pattern A wave 3 batch AF (2026-10-09): 1 substrate-a2a leaf ---
@@ -320,6 +365,11 @@ members = [
     "crates/bench-guard",
     # --- E2.4 Pattern A wave 3 batch AX-29 (2026-10-09): configra-ops + settly ---
     "crates/configra-ops",
+    # --- E2.4 Pattern A wave 3 batch AX-30 (2026-10-09): 4 cloud-* ---
+    "crates/cloud-codex",
+    "crates/cloud-cursor",
+    "crates/cloud-kilo",
+    "crates/cloud-dispatch-conformance",
     # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): klipdot + logkit ---
     # --- E2.4 Pattern A wave 3 batch AG (2026-10-09): 1 focus-ci-watcher ---
     "crates/focus-ci-watcher",
@@ -358,6 +408,11 @@ members = [
     "crates/bench-guard",
     # --- E2.4 Pattern A wave 3 batch AX-29 (2026-10-09): configra-ops + settly ---
     "crates/configra-ops",
+    # --- E2.4 Pattern A wave 3 batch AX-30 (2026-10-09): 4 cloud-* ---
+    "crates/cloud-codex",
+    "crates/cloud-cursor",
+    "crates/cloud-kilo",
+    "crates/cloud-dispatch-conformance",
     # --- E2.4 Pattern A wave 3 batch AE (2026-10-09): 1 example lib (clap-ext-examples) ---
     "crates/clap-ext-examples",
     # --- E2.4 Pattern A wave 3 batch AF (2026-10-09): 1 substrate-a2a leaf ---
@@ -372,6 +427,11 @@ members = [
     "crates/bench-guard",
     # --- E2.4 Pattern A wave 3 batch AX-29 (2026-10-09): configra-ops + settly ---
     "crates/configra-ops",
+    # --- E2.4 Pattern A wave 3 batch AX-30 (2026-10-09): 4 cloud-* ---
+    "crates/cloud-codex",
+    "crates/cloud-cursor",
+    "crates/cloud-kilo",
+    "crates/cloud-dispatch-conformance",
     # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): klipdot + logkit ---
     # --- E2.4 Pattern A wave 3 batch AG (2026-10-09): 1 focus-ci-watcher ---
     "crates/focus-ci-watcher",
@@ -408,6 +468,11 @@ members = [
     "crates/bench-guard",
     # --- E2.4 Pattern A wave 3 batch AX-29 (2026-10-09): configra-ops + settly ---
     "crates/configra-ops",
+    # --- E2.4 Pattern A wave 3 batch AX-30 (2026-10-09): 4 cloud-* ---
+    "crates/cloud-codex",
+    "crates/cloud-cursor",
+    "crates/cloud-kilo",
+    "crates/cloud-dispatch-conformance",
     # --- E2.4 Pattern A wave 3 batch AE (2026-10-09): 1 example lib (clap-ext-examples) ---
     "crates/clap-ext-examples",
     # --- E2.4 Pattern A wave 3 batch AF (2026-10-09): 1 substrate-a2a leaf ---
@@ -422,6 +487,11 @@ members = [
     "crates/bench-guard",
     # --- E2.4 Pattern A wave 3 batch AX-29 (2026-10-09): configra-ops + settly ---
     "crates/configra-ops",
+    # --- E2.4 Pattern A wave 3 batch AX-30 (2026-10-09): 4 cloud-* ---
+    "crates/cloud-codex",
+    "crates/cloud-cursor",
+    "crates/cloud-kilo",
+    "crates/cloud-dispatch-conformance",
     # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): klipdot + logkit ---
     # --- E2.4 Pattern A wave 3 batch AG (2026-10-09): 1 focus-ci-watcher ---
     "crates/focus-ci-watcher",
@@ -449,6 +519,11 @@ members = [
     "crates/bench-guard",
     # --- E2.4 Pattern A wave 3 batch AX-29 (2026-10-09): configra-ops + settly ---
     "crates/configra-ops",
+    # --- E2.4 Pattern A wave 3 batch AX-30 (2026-10-09): 4 cloud-* ---
+    "crates/cloud-codex",
+    "crates/cloud-cursor",
+    "crates/cloud-kilo",
+    "crates/cloud-dispatch-conformance",
     # --- E2.4 Pattern A wave 3 batch AE (2026-10-09): 1 example lib (clap-ext-examples) ---
     "crates/clap-ext-examples",
     # --- E2.4 Pattern A wave 3 batch AF (2026-10-09): 1 substrate-a2a leaf ---
@@ -463,6 +538,11 @@ members = [
     "crates/bench-guard",
     # --- E2.4 Pattern A wave 3 batch AX-29 (2026-10-09): configra-ops + settly ---
     "crates/configra-ops",
+    # --- E2.4 Pattern A wave 3 batch AX-30 (2026-10-09): 4 cloud-* ---
+    "crates/cloud-codex",
+    "crates/cloud-cursor",
+    "crates/cloud-kilo",
+    "crates/cloud-dispatch-conformance",
     # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): klipdot + logkit ---
     # --- E2.4 Pattern A wave 3 batch AG (2026-10-09): 1 focus-ci-watcher ---
     "crates/focus-ci-watcher",
@@ -543,6 +623,11 @@ members = [
     "crates/bench-guard",
     # --- E2.4 Pattern A wave 3 batch AX-29 (2026-10-09): configra-ops + settly ---
     "crates/configra-ops",
+    # --- E2.4 Pattern A wave 3 batch AX-30 (2026-10-09): 4 cloud-* ---
+    "crates/cloud-codex",
+    "crates/cloud-cursor",
+    "crates/cloud-kilo",
+    "crates/cloud-dispatch-conformance",
     # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): klipdot + logkit ---
     "crates/focus-time",
     "crates/focus-ui",
@@ -578,6 +663,11 @@ members = [
     "crates/bench-guard",
     # --- E2.4 Pattern A wave 3 batch AX-29 (2026-10-09): configra-ops + settly ---
     "crates/configra-ops",
+    # --- E2.4 Pattern A wave 3 batch AX-30 (2026-10-09): 4 cloud-* ---
+    "crates/cloud-codex",
+    "crates/cloud-cursor",
+    "crates/cloud-kilo",
+    "crates/cloud-dispatch-conformance",
     # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): klipdot + logkit ---
     "crates/focus-planning",
     "crates/pheno-fs",
@@ -600,6 +690,11 @@ members = [
     "crates/bench-guard",
     # --- E2.4 Pattern A wave 3 batch AX-29 (2026-10-09): configra-ops + settly ---
     "crates/configra-ops",
+    # --- E2.4 Pattern A wave 3 batch AX-30 (2026-10-09): 4 cloud-* ---
+    "crates/cloud-codex",
+    "crates/cloud-cursor",
+    "crates/cloud-kilo",
+    "crates/cloud-dispatch-conformance",
     # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): klipdot + logkit ---
     # --- E2.4 Pattern A wave 3 batch T4 (2026-10-09): 4 tiny libs (focus-ui, focus-time, phenotype-git-core, eyetracker-domain) ---
     "crates/focus-ui",
@@ -633,6 +728,11 @@ members = [
     "crates/bench-guard",
     # --- E2.4 Pattern A wave 3 batch AX-29 (2026-10-09): configra-ops + settly ---
     "crates/configra-ops",
+    # --- E2.4 Pattern A wave 3 batch AX-30 (2026-10-09): 4 cloud-* ---
+    "crates/cloud-codex",
+    "crates/cloud-cursor",
+    "crates/cloud-kilo",
+    "crates/cloud-dispatch-conformance",
     # --- E2.4 Pattern A wave 3 batch AE (2026-10-09): 1 example lib (clap-ext-examples) ---
     "crates/clap-ext-examples",
     # --- E2.4 Pattern A wave 3 batch AF (2026-10-09): 1 substrate-a2a leaf ---
@@ -647,6 +747,11 @@ members = [
     "crates/bench-guard",
     # --- E2.4 Pattern A wave 3 batch AX-29 (2026-10-09): configra-ops + settly ---
     "crates/configra-ops",
+    # --- E2.4 Pattern A wave 3 batch AX-30 (2026-10-09): 4 cloud-* ---
+    "crates/cloud-codex",
+    "crates/cloud-cursor",
+    "crates/cloud-kilo",
+    "crates/cloud-dispatch-conformance",
     # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): klipdot + logkit ---
     # --- E2.4 Pattern A wave 3 batch AG (2026-10-09): 1 focus-ci-watcher ---
     "crates/focus-ci-watcher",
@@ -691,6 +796,11 @@ members = [
     "crates/bench-guard",
     # --- E2.4 Pattern A wave 3 batch AX-29 (2026-10-09): configra-ops + settly ---
     "crates/configra-ops",
+    # --- E2.4 Pattern A wave 3 batch AX-30 (2026-10-09): 4 cloud-* ---
+    "crates/cloud-codex",
+    "crates/cloud-cursor",
+    "crates/cloud-kilo",
+    "crates/cloud-dispatch-conformance",
     # --- E2.4 Pattern A wave 3 batch AE (2026-10-09): 1 example lib (clap-ext-examples) ---
     "crates/clap-ext-examples",
     # --- E2.4 Pattern A wave 3 batch AF (2026-10-09): 1 substrate-a2a leaf ---
@@ -705,6 +815,11 @@ members = [
     "crates/bench-guard",
     # --- E2.4 Pattern A wave 3 batch AX-29 (2026-10-09): configra-ops + settly ---
     "crates/configra-ops",
+    # --- E2.4 Pattern A wave 3 batch AX-30 (2026-10-09): 4 cloud-* ---
+    "crates/cloud-codex",
+    "crates/cloud-cursor",
+    "crates/cloud-kilo",
+    "crates/cloud-dispatch-conformance",
     # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): klipdot + logkit ---
     # --- E2.4 Pattern A wave 3 batch AG (2026-10-09): 1 focus-ci-watcher ---
     "crates/focus-ci-watcher",
@@ -753,6 +868,11 @@ members = [
     "crates/bench-guard",
     # --- E2.4 Pattern A wave 3 batch AX-29 (2026-10-09): configra-ops + settly ---
     "crates/configra-ops",
+    # --- E2.4 Pattern A wave 3 batch AX-30 (2026-10-09): 4 cloud-* ---
+    "crates/cloud-codex",
+    "crates/cloud-cursor",
+    "crates/cloud-kilo",
+    "crates/cloud-dispatch-conformance",
     # --- E2.4 Pattern A wave 3 batch AE (2026-10-09): 1 example lib (clap-ext-examples) ---
     "crates/clap-ext-examples",
     # --- E2.4 Pattern A wave 3 batch AF (2026-10-09): 1 substrate-a2a leaf ---
@@ -767,6 +887,11 @@ members = [
     "crates/bench-guard",
     # --- E2.4 Pattern A wave 3 batch AX-29 (2026-10-09): configra-ops + settly ---
     "crates/configra-ops",
+    # --- E2.4 Pattern A wave 3 batch AX-30 (2026-10-09): 4 cloud-* ---
+    "crates/cloud-codex",
+    "crates/cloud-cursor",
+    "crates/cloud-kilo",
+    "crates/cloud-dispatch-conformance",
     # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): klipdot + logkit ---
     # --- E2.4 Pattern A wave 3 batch AG (2026-10-09): 1 focus-ci-watcher ---
     "crates/focus-ci-watcher",
@@ -820,11 +945,21 @@ members = [
     "crates/bench-guard",
     # --- E2.4 Pattern A wave 3 batch AX-29 (2026-10-09): configra-ops + settly ---
     "crates/configra-ops",
+    # --- E2.4 Pattern A wave 3 batch AX-30 (2026-10-09): 4 cloud-* ---
+    "crates/cloud-codex",
+    "crates/cloud-cursor",
+    "crates/cloud-kilo",
+    "crates/cloud-dispatch-conformance",
     # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): klipdot + logkit ---
     # --- E2.4 Pattern A wave 3 batch I (2026-10-09): 1 small lib (phenotype-diff) ---
     "crates/phenotype-diff",
     # --- E2.4 Pattern A wave 3 batch J (2026-10-09): 1 small lib (configra-ops; logkit deferred) ---
     "crates/configra-ops",
+    # --- E2.4 Pattern A wave 3 batch AX-30 (2026-10-09): 4 cloud-* ---
+    "crates/cloud-codex",
+    "crates/cloud-cursor",
+    "crates/cloud-kilo",
+    "crates/cloud-dispatch-conformance",
     # --- E2.4 Pattern A wave 3 batch K (2026-10-09): 1 focus-* lib (focus-coaching; secrecy added to workspace) ---
     "crates/focus-coaching",
     # --- E2.4 Pattern A wave 3 batch L (2026-10-09): 2 small libs (pheno-schema-port, phenotype-cost-core) ---
@@ -873,6 +1008,11 @@ members = [
     "crates/bench-guard",
     # --- E2.4 Pattern A wave 3 batch AX-29 (2026-10-09): configra-ops + settly ---
     "crates/configra-ops",
+    # --- E2.4 Pattern A wave 3 batch AX-30 (2026-10-09): 4 cloud-* ---
+    "crates/cloud-codex",
+    "crates/cloud-cursor",
+    "crates/cloud-kilo",
+    "crates/cloud-dispatch-conformance",
     # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): klipdot + logkit ---
     "crates/focus-planning",
     "crates/pheno-fs",
@@ -895,6 +1035,11 @@ members = [
     "crates/bench-guard",
     # --- E2.4 Pattern A wave 3 batch AX-29 (2026-10-09): configra-ops + settly ---
     "crates/configra-ops",
+    # --- E2.4 Pattern A wave 3 batch AX-30 (2026-10-09): 4 cloud-* ---
+    "crates/cloud-codex",
+    "crates/cloud-cursor",
+    "crates/cloud-kilo",
+    "crates/cloud-dispatch-conformance",
     # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): klipdot + logkit ---
     # --- E2.4 Pattern A wave 3 batch T4 (2026-10-09): 4 tiny libs (focus-ui, focus-time, phenotype-git-core, eyetracker-domain) ---
     "crates/focus-ui",
@@ -928,6 +1073,11 @@ members = [
     "crates/bench-guard",
     # --- E2.4 Pattern A wave 3 batch AX-29 (2026-10-09): configra-ops + settly ---
     "crates/configra-ops",
+    # --- E2.4 Pattern A wave 3 batch AX-30 (2026-10-09): 4 cloud-* ---
+    "crates/cloud-codex",
+    "crates/cloud-cursor",
+    "crates/cloud-kilo",
+    "crates/cloud-dispatch-conformance",
     # --- E2.4 Pattern A wave 3 batch AE (2026-10-09): 1 example lib (clap-ext-examples) ---
     "crates/clap-ext-examples",
     # --- E2.4 Pattern A wave 3 batch AF (2026-10-09): 1 substrate-a2a leaf ---
@@ -942,6 +1092,11 @@ members = [
     "crates/bench-guard",
     # --- E2.4 Pattern A wave 3 batch AX-29 (2026-10-09): configra-ops + settly ---
     "crates/configra-ops",
+    # --- E2.4 Pattern A wave 3 batch AX-30 (2026-10-09): 4 cloud-* ---
+    "crates/cloud-codex",
+    "crates/cloud-cursor",
+    "crates/cloud-kilo",
+    "crates/cloud-dispatch-conformance",
     # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): klipdot + logkit ---
     # --- E2.4 Pattern A wave 3 batch AG (2026-10-09): 1 focus-ci-watcher ---
     "crates/focus-ci-watcher",
@@ -1000,6 +1155,11 @@ members = [
     "crates/bench-guard",
     # --- E2.4 Pattern A wave 3 batch AX-29 (2026-10-09): configra-ops + settly ---
     "crates/configra-ops",
+    # --- E2.4 Pattern A wave 3 batch AX-30 (2026-10-09): 4 cloud-* ---
+    "crates/cloud-codex",
+    "crates/cloud-cursor",
+    "crates/cloud-kilo",
+    "crates/cloud-dispatch-conformance",
     # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): klipdot + logkit ---
 ]
 [workspace.package]
