@@ -21,6 +21,8 @@ members = [
     "crates/a2a",
     # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): phenotype-router ---
     "crates/phenotype-router",
+    # --- E2.4 Pattern A wave 3 batch AX-27 (2026-10-09): teamcomm-cli ---
+    "crates/teamcomm-cli",
     # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): klipdot + logkit ---
     # --- E2.4 Pattern A wave 3 batch AG (2026-10-09): 1 focus-ci-watcher ---
     "crates/focus-ci-watcher",
@@ -105,6 +107,8 @@ members = [
     "crates/a2a",
     # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): phenotype-router ---
     "crates/phenotype-router",
+    # --- E2.4 Pattern A wave 3 batch AX-27 (2026-10-09): teamcomm-cli ---
+    "crates/teamcomm-cli",
     # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): klipdot + logkit ---
     "crates/phenotype-voxel",
     # --- E2.4 Pattern A wave 3 batch AX-24 (2026-10-09): agileplus-nats + agileplus-graph ---
@@ -117,6 +121,8 @@ members = [
     "crates/a2a",
     # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): phenotype-router ---
     "crates/phenotype-router",
+    # --- E2.4 Pattern A wave 3 batch AX-27 (2026-10-09): teamcomm-cli ---
+    "crates/teamcomm-cli",
     # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): klipdot + logkit ---
     # --- PhenoRegistry crates (absorbed from PhenoRegistry) ---
     "crates/phenotype-project-registry",
@@ -135,6 +141,8 @@ members = [
     "crates/a2a",
     # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): phenotype-router ---
     "crates/phenotype-router",
+    # --- E2.4 Pattern A wave 3 batch AX-27 (2026-10-09): teamcomm-cli ---
+    "crates/teamcomm-cli",
     # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): klipdot + logkit ---
     "crates/phenotype-service-registry",
     # --- PhenoInfra crates (absorbed from PhenoInfra) ---
@@ -175,6 +183,8 @@ members = [
     "crates/a2a",
     # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): phenotype-router ---
     "crates/phenotype-router",
+    # --- E2.4 Pattern A wave 3 batch AX-27 (2026-10-09): teamcomm-cli ---
+    "crates/teamcomm-cli",
     # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): klipdot + logkit ---
     # --- E2.4 Pattern A wave 3 batch AG (2026-10-09): 1 focus-ci-watcher ---
     "crates/focus-ci-watcher",
@@ -220,6 +230,8 @@ members = [
     "crates/a2a",
     # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): phenotype-router ---
     "crates/phenotype-router",
+    # --- E2.4 Pattern A wave 3 batch AX-27 (2026-10-09): teamcomm-cli ---
+    "crates/teamcomm-cli",
     # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): klipdot + logkit ---
     # --- E2.4 Pattern A wave 3 batch AG (2026-10-09): 1 focus-ci-watcher ---
     "crates/focus-ci-watcher",
@@ -258,6 +270,8 @@ members = [
     "crates/a2a",
     # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): phenotype-router ---
     "crates/phenotype-router",
+    # --- E2.4 Pattern A wave 3 batch AX-27 (2026-10-09): teamcomm-cli ---
+    "crates/teamcomm-cli",
     # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): klipdot + logkit ---
     # --- E2.4 Pattern A wave 3 batch AG (2026-10-09): 1 focus-ci-watcher ---
     "crates/focus-ci-watcher",
@@ -300,6 +314,8 @@ members = [
     "crates/a2a",
     # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): phenotype-router ---
     "crates/phenotype-router",
+    # --- E2.4 Pattern A wave 3 batch AX-27 (2026-10-09): teamcomm-cli ---
+    "crates/teamcomm-cli",
     # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): klipdot + logkit ---
     # --- E2.4 Pattern A wave 3 batch AG (2026-10-09): 1 focus-ci-watcher ---
     "crates/focus-ci-watcher",
@@ -340,6 +356,8 @@ members = [
     "crates/a2a",
     # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): phenotype-router ---
     "crates/phenotype-router",
+    # --- E2.4 Pattern A wave 3 batch AX-27 (2026-10-09): teamcomm-cli ---
+    "crates/teamcomm-cli",
     # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): klipdot + logkit ---
     # --- E2.4 Pattern A wave 3 batch AG (2026-10-09): 1 focus-ci-watcher ---
     "crates/focus-ci-watcher",
@@ -371,6 +389,8 @@ members = [
     "crates/a2a",
     # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): phenotype-router ---
     "crates/phenotype-router",
+    # --- E2.4 Pattern A wave 3 batch AX-27 (2026-10-09): teamcomm-cli ---
+    "crates/teamcomm-cli",
     # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): klipdot + logkit ---
     # --- E2.4 Pattern A wave 3 batch AG (2026-10-09): 1 focus-ci-watcher ---
     "crates/focus-ci-watcher",
@@ -443,6 +463,8 @@ members = [
     "crates/a2a",
     # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): phenotype-router ---
     "crates/phenotype-router",
+    # --- E2.4 Pattern A wave 3 batch AX-27 (2026-10-09): teamcomm-cli ---
+    "crates/teamcomm-cli",
     # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): klipdot + logkit ---
     "crates/focus-time",
     "crates/focus-ui",
@@ -470,6 +492,8 @@ members = [
     "crates/a2a",
     # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): phenotype-router ---
     "crates/phenotype-router",
+    # --- E2.4 Pattern A wave 3 batch AX-27 (2026-10-09): teamcomm-cli ---
+    "crates/teamcomm-cli",
     # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): klipdot + logkit ---
     "crates/focus-planning",
     "crates/pheno-fs",
@@ -484,6 +508,8 @@ members = [
     "crates/a2a",
     # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): phenotype-router ---
     "crates/phenotype-router",
+    # --- E2.4 Pattern A wave 3 batch AX-27 (2026-10-09): teamcomm-cli ---
+    "crates/teamcomm-cli",
     # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): klipdot + logkit ---
     # --- E2.4 Pattern A wave 3 batch T4 (2026-10-09): 4 tiny libs (focus-ui, focus-time, phenotype-git-core, eyetracker-domain) ---
     "crates/focus-ui",
@@ -521,6 +547,8 @@ members = [
     "crates/a2a",
     # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): phenotype-router ---
     "crates/phenotype-router",
+    # --- E2.4 Pattern A wave 3 batch AX-27 (2026-10-09): teamcomm-cli ---
+    "crates/teamcomm-cli",
     # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): klipdot + logkit ---
     # --- E2.4 Pattern A wave 3 batch AG (2026-10-09): 1 focus-ci-watcher ---
     "crates/focus-ci-watcher",
@@ -569,6 +597,8 @@ members = [
     "crates/a2a",
     # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): phenotype-router ---
     "crates/phenotype-router",
+    # --- E2.4 Pattern A wave 3 batch AX-27 (2026-10-09): teamcomm-cli ---
+    "crates/teamcomm-cli",
     # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): klipdot + logkit ---
     # --- E2.4 Pattern A wave 3 batch AG (2026-10-09): 1 focus-ci-watcher ---
     "crates/focus-ci-watcher",
@@ -621,6 +651,8 @@ members = [
     "crates/a2a",
     # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): phenotype-router ---
     "crates/phenotype-router",
+    # --- E2.4 Pattern A wave 3 batch AX-27 (2026-10-09): teamcomm-cli ---
+    "crates/teamcomm-cli",
     # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): klipdot + logkit ---
     # --- E2.4 Pattern A wave 3 batch AG (2026-10-09): 1 focus-ci-watcher ---
     "crates/focus-ci-watcher",
@@ -666,6 +698,8 @@ members = [
     "crates/a2a",
     # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): phenotype-router ---
     "crates/phenotype-router",
+    # --- E2.4 Pattern A wave 3 batch AX-27 (2026-10-09): teamcomm-cli ---
+    "crates/teamcomm-cli",
     # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): klipdot + logkit ---
     # --- E2.4 Pattern A wave 3 batch I (2026-10-09): 1 small lib (phenotype-diff) ---
     "crates/phenotype-diff",
@@ -711,6 +745,8 @@ members = [
     "crates/a2a",
     # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): phenotype-router ---
     "crates/phenotype-router",
+    # --- E2.4 Pattern A wave 3 batch AX-27 (2026-10-09): teamcomm-cli ---
+    "crates/teamcomm-cli",
     # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): klipdot + logkit ---
     "crates/focus-planning",
     "crates/pheno-fs",
@@ -725,6 +761,8 @@ members = [
     "crates/a2a",
     # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): phenotype-router ---
     "crates/phenotype-router",
+    # --- E2.4 Pattern A wave 3 batch AX-27 (2026-10-09): teamcomm-cli ---
+    "crates/teamcomm-cli",
     # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): klipdot + logkit ---
     # --- E2.4 Pattern A wave 3 batch T4 (2026-10-09): 4 tiny libs (focus-ui, focus-time, phenotype-git-core, eyetracker-domain) ---
     "crates/focus-ui",
@@ -762,6 +800,8 @@ members = [
     "crates/a2a",
     # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): phenotype-router ---
     "crates/phenotype-router",
+    # --- E2.4 Pattern A wave 3 batch AX-27 (2026-10-09): teamcomm-cli ---
+    "crates/teamcomm-cli",
     # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): klipdot + logkit ---
     # --- E2.4 Pattern A wave 3 batch AG (2026-10-09): 1 focus-ci-watcher ---
     "crates/focus-ci-watcher",
@@ -812,6 +852,8 @@ members = [
     "crates/a2a",
     # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): phenotype-router ---
     "crates/phenotype-router",
+    # --- E2.4 Pattern A wave 3 batch AX-27 (2026-10-09): teamcomm-cli ---
+    "crates/teamcomm-cli",
     # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): klipdot + logkit ---
 ]
 [workspace.package]
@@ -851,6 +893,7 @@ serde_yaml = "0.9"
 clap = { version = "4.5", features = ["derive", "env"] }
 unicode-normalization = "0.1"
 proptest = "1"
+comfy-table = "7"
 dirs = "5"
 log = "0.4"
 dashmap = "6"

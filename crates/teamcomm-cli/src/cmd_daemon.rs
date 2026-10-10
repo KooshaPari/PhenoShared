@@ -95,7 +95,7 @@ async fn stop(socket: Option<PathBuf>) -> anyhow::Result<()> {
         Ok(Ok(_value)) => {
             println!("daemon acknowledged shutdown");
             Ok(())
-        }
+        },
         Ok(Err(rpc::RpcCallError::MethodNotFound { message })) => {
             // M0 placeholder: the daemon stub has no shutdown method.
             println!(
@@ -103,14 +103,14 @@ async fn stop(socket: Option<PathBuf>) -> anyhow::Result<()> {
                  The daemon binary is a stub in M0; nothing to stop."
             );
             Ok(())
-        }
+        },
         Ok(Err(rpc::RpcCallError::Transport(reason))) => {
             println!(
                 "could not reach the daemon at {} ({reason}); nothing to stop",
                 socket.display()
             );
             Ok(())
-        }
+        },
         Ok(Err(e)) => Err(anyhow::anyhow!(e.to_string())),
         Err(e) => Err(e),
     }
@@ -123,14 +123,14 @@ async fn status(socket: Option<PathBuf>) -> anyhow::Result<()> {
             println!("daemon: running");
             println!("socket: {}", socket.display());
             Ok(())
-        }
+        },
         Err(e) => {
             println!("daemon: not running");
             println!("socket: {}", socket.display());
             println!("reason: {e}");
             // Status is informational; exit 0 even when the daemon is down.
             Ok(())
-        }
+        },
     }
 }
 

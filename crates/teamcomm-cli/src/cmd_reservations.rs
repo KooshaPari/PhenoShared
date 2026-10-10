@@ -91,12 +91,12 @@ pub(super) async fn placeholder_or(
         Ok(Ok(value)) => {
             on_success(&value);
             Ok(())
-        }
+        },
         Ok(Err(rpc::RpcCallError::MethodNotFound { message })) => {
             println!("{}", output::m0_placeholder(method));
             eprintln!("hint: {message}");
             Ok(())
-        }
+        },
         Ok(Err(rpc::RpcCallError::Transport(reason))) => {
             println!("{}", output::m0_placeholder(method));
             eprintln!(
@@ -104,16 +104,16 @@ pub(super) async fn placeholder_or(
                 socket.display()
             );
             Ok(())
-        }
+        },
         Ok(Err(e)) => {
             println!("{}", output::m0_placeholder(method));
             eprintln!("hint: {}", e);
             Ok(())
-        }
+        },
         Err(e) => {
             println!("{}", output::m0_placeholder(method));
             eprintln!("hint: {e}");
             Ok(())
-        }
+        },
     }
 }
