@@ -311,7 +311,11 @@ mod tests {
 
         // Verify each PNG is non-empty and valid
         for (size, _name, png_data) in &sizes {
-            assert!(!png_data.is_empty(), "PNG for size {} must not be empty", size);
+            assert!(
+                !png_data.is_empty(),
+                "PNG for size {} must not be empty",
+                size
+            );
             assert!(
                 png_data.starts_with(&[137, 80, 78, 71, 13, 10, 26, 10]),
                 "PNG for size {} must have valid PNG signature",
@@ -324,12 +328,17 @@ mod tests {
     #[test]
     fn test_contents_json_valid() {
         let gen = IconGenerator::new();
-        let json_str = gen.generate_contents_json().expect("Generate Contents.json");
-        let parsed: serde_json::Value = serde_json::from_str(&json_str)
-            .expect("Contents.json must be valid JSON");
+        let json_str = gen
+            .generate_contents_json()
+            .expect("Generate Contents.json");
+        let parsed: serde_json::Value =
+            serde_json::from_str(&json_str).expect("Contents.json must be valid JSON");
 
         assert!(parsed["images"].is_array(), "images field must be array");
-        assert!(parsed["info"]["version"].is_number(), "info.version must be present");
+        assert!(
+            parsed["info"]["version"].is_number(),
+            "info.version must be present"
+        );
 
         let images = parsed["images"].as_array().expect("images array");
         assert!(!images.is_empty(), "images array must not be empty");

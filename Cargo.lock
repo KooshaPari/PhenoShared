@@ -4435,6 +4435,19 @@ dependencies = [
 ]
 
 [[package]]
+name = "focus-icon-gen"
+version = "0.3.10"
+dependencies = [
+ "anyhow",
+ "clap",
+ "hex",
+ "png 0.17.16",
+ "serde",
+ "serde_json",
+ "sha2 0.11.0",
+]
+
+[[package]]
 name = "focus-mascot"
 version = "0.3.10"
 dependencies = [
