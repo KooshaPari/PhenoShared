@@ -83,6 +83,9 @@ members = [
     "crates/phinbox",
     # --- eyetracker crates (absorbed 2026-08-13 from KooshaPari/eyetracker per docket O18) ---
     "crates/eyetracker-domain",
+    # --- E2.4 Pattern A wave 3 batch U (2026-10-09): 2 small libs (phenotype-logging, datakit) ---
+    "crates/phenotype-logging",
+    "crates/datakit",
     "crates/eyetracker-math",
     "crates/eyetracker-core",
     "crates/eyetracker-ffi",
@@ -122,6 +125,9 @@ members = [
     "crates/focus-time",
     "crates/phenotype-git-core",
     "crates/eyetracker-domain",
+    # --- E2.4 Pattern A wave 3 batch U (2026-10-09): 2 small libs (phenotype-logging, datakit) ---
+    "crates/phenotype-logging",
+    "crates/datakit",
     "crates/sidekick-messaging",
     "crates/datakit",
     # --- E2.4 Pattern A wave 3 (2026-10-09): 4 small/leaf crates (just-add; no new workspace.dependencies needed) ---
@@ -187,6 +193,9 @@ members = [
     "crates/focus-time",
     "crates/phenotype-git-core",
     "crates/eyetracker-domain",
+    # --- E2.4 Pattern A wave 3 batch U (2026-10-09): 2 small libs (phenotype-logging, datakit) ---
+    "crates/phenotype-logging",
+    "crates/datakit",
 ]
 [workspace.package]
 version = "0.3.10"
