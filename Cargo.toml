@@ -345,6 +345,8 @@ members = [
     "crates/focus-mascot",
     # --- E2.4 Pattern A wave 3 batch AX (2026-10-09): 1 teamcomm-protocol ---
     "crates/teamcomm-protocol",
+    # --- E2.4 Pattern A wave 3 batch AX-3 (2026-10-09): 1 phenotype-event-bus ---
+    "crates/phenotype-event-bus",
     # --- E2.4 Pattern A wave 3 batch AX (2026-10-09): 1 substrate-a2a ---
     "crates/a2a",
     "crates/focus-planning",
@@ -510,6 +512,8 @@ members = [
     "crates/focus-mascot",
     # --- E2.4 Pattern A wave 3 batch AX (2026-10-09): 1 teamcomm-protocol ---
     "crates/teamcomm-protocol",
+    # --- E2.4 Pattern A wave 3 batch AX-3 (2026-10-09): 1 phenotype-event-bus ---
+    "crates/phenotype-event-bus",
     # --- E2.4 Pattern A wave 3 batch AX (2026-10-09): 1 substrate-a2a ---
     "crates/a2a",
     # --- E2.4 Pattern A wave 3 batch I (2026-10-09): 1 small lib (phenotype-diff) ---
@@ -541,6 +545,8 @@ members = [
     "crates/focus-mascot",
     # --- E2.4 Pattern A wave 3 batch AX (2026-10-09): 1 teamcomm-protocol ---
     "crates/teamcomm-protocol",
+    # --- E2.4 Pattern A wave 3 batch AX-3 (2026-10-09): 1 phenotype-event-bus ---
+    "crates/phenotype-event-bus",
     # --- E2.4 Pattern A wave 3 batch AX (2026-10-09): 1 substrate-a2a ---
     "crates/a2a",
     "crates/focus-planning",
@@ -617,6 +623,8 @@ members = [
     "crates/focus-mascot",
     # --- E2.4 Pattern A wave 3 batch AX (2026-10-09): 1 teamcomm-protocol ---
     "crates/teamcomm-protocol",
+    # --- E2.4 Pattern A wave 3 batch AX-3 (2026-10-09): 1 phenotype-event-bus ---
+    "crates/phenotype-event-bus",
     # --- E2.4 Pattern A wave 3 batch AX (2026-10-09): 1 substrate-a2a ---
     "crates/a2a",
 ]

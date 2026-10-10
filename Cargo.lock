@@ -8622,6 +8622,10 @@ dependencies = [
 ]
 
 [[package]]
+name = "phenotype-event-bus"
+version = "0.3.10"
+
+[[package]]
 name = "phenotype-flags"
 version = "0.3.10"
 dependencies = [
