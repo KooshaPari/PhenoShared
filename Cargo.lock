@@ -8635,6 +8635,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "pheno-context"
+version = "0.3.10"
+dependencies = [
+ "http",
+ "proptest",
+ "thiserror 2.0.20",
+]
+
+[[package]]
 name = "pheno-crypto"
 version = "0.1.0"
 dependencies = [
