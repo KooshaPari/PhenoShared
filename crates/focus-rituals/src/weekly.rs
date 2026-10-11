@@ -1,3 +1,4 @@
+#![allow(unexpected_cfgs)]
 //! Weekly Review engine for focus-rituals.
 //!
 //! Traces to: FR-RITUAL-003 (Weekly Review).

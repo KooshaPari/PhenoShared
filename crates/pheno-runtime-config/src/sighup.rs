@@ -1,3 +1,4 @@
+#![allow(clippy::missing_safety_doc)]
 //! SIGHUP-based reload fallback.
 //!
 //! For environments without filesystem notifications (some sandboxes, CI
@@ -22,6 +23,13 @@ pub fn register_hup_handler() {
     }
 }
 
+/// Install a SIGHUP handler that flips an atomic flag.
+///
+/// # Safety
+/// This calls `libc::signal` to install a global signal handler. The handler
+/// is async-signal-safe: it only sets an `AtomicBool` and performs no
+/// allocation, locking, or I/O. Calling this more than once will replace
+/// the previous handler.
 #[cfg(unix)]
 unsafe fn libc_signal_hup() {
     unsafe extern "C" fn handler(_sig: libc::c_int) {
