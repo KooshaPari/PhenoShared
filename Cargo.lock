@@ -4853,6 +4853,24 @@ dependencies = [
 ]
 
 [[package]]
+name = "focus-templates"
+version = "0.3.10"
+dependencies = [
+ "chrono",
+ "ed25519-dalek",
+ "focus-domain",
+ "focus-rules",
+ "hex",
+ "rand_core 0.6.4",
+ "serde",
+ "serde_json",
+ "sha2 0.11.0",
+ "thiserror 2.0.20",
+ "toml 1.1.6+spec-1.1.0",
+ "uuid",
+]
+
+[[package]]
 name = "focus-time"
 version = "0.3.10"
 dependencies = [

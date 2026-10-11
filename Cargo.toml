@@ -42,6 +42,7 @@ members = [
     "crates/teamcomm-smoke",
     "crates/klipdot-capture",
     "crates/phenotype-cache-adapter",
+    "crates/focus-templates",
     "crates/focus-events",
     "crates/logkit",
     "crates/pheno-runtime-config",
