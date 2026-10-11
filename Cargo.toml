@@ -42,6 +42,7 @@ members = [
     "crates/teamcomm-smoke",
     "crates/klipdot-capture",
     "crates/phenotype-cache-adapter",
+    "crates/focus-events",
     "crates/logkit",
     "crates/pheno-runtime-config",
 
@@ -806,6 +807,7 @@ tokio-test = "0.4"
 phenotype-cache-adapter = { path = "crates/phenotype-cache-adapter" }
 clap-ext = { path = "crates/clap-ext" }
 arc-swap = "1.7"
+rand = "0.8"
 tracing = "0.1"
 tracing-subscriber = { version = "0.3", features = ["env-filter", "json"] }
 tracing-opentelemetry = "0.25"
