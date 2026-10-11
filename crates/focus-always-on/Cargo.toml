@@ -19,3 +19,8 @@ phenotype-observably-macros = { path = "../../../PhenoObservability/crates/pheno
 # Local crates
 focus-events = { path = "../focus-events" }
 focus-domain = { path = "../focus-domain" }
+
+
+[features]
+tracing = []
+

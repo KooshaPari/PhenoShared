@@ -4480,6 +4480,23 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "3f9eec918d3f24069decb9af1554cad7c880e2da24a9afd88aca000531ab82c1"
 
 [[package]]
+name = "focus-always-on"
+version = "0.3.10"
+dependencies = [
+ "anyhow",
+ "async-trait",
+ "chrono",
+ "focus-domain",
+ "focus-events",
+ "phenotype-observably-macros",
+ "serde",
+ "serde_json",
+ "thiserror 2.0.20",
+ "tokio",
+ "tracing",
+]
+
+[[package]]
 name = "focus-asset-fetcher"
 version = "0.3.10"
 dependencies = [
