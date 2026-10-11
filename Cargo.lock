@@ -8984,6 +8984,14 @@ dependencies = [
 ]
 
 [[package]]
+name = "phenotype-cache-adapter"
+version = "0.3.10"
+dependencies = [
+ "serde",
+ "serde_json",
+]
+
+[[package]]
 name = "phenotype-casbin-wrapper"
 version = "0.2.0"
 dependencies = [
