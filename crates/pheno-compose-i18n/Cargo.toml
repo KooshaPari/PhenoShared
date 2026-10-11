@@ -6,7 +6,5 @@ description = "i18n runtime for PhenoCompose. Reads locales/<lang>.json at compi
 license = "MIT OR Apache-2.0"
 publish = false
 
-[workspace]
-
 [lib]
 path = "src/lib.rs"

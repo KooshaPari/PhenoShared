@@ -88,7 +88,7 @@ fn main() -> Result<()> {
             Err(e) => {
                 eprintln!("Failed to read {}: {}", file_path.display(), e);
                 continue;
-            }
+            },
         };
 
         let parser = Parser::new(&content);

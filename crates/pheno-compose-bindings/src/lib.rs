@@ -251,7 +251,9 @@ impl std::fmt::Display for NvmsError {
             Self::StartFailed => write!(f, "NVMS instance start failed"),
             Self::StopFailed => write!(f, "NVMS instance stop failed"),
             Self::DestroyFailed => write!(f, "NVMS instance destroy failed"),
-            Self::AppleSiliconNotSupported => write!(f, "Apple Silicon not supported by this build"),
+            Self::AppleSiliconNotSupported => {
+                write!(f, "Apple Silicon not supported by this build")
+            },
             Self::CudaInitFailed => write!(f, "CUDA initialization failed"),
             Self::RocmInitFailed => write!(f, "ROCm initialization failed"),
             Self::Other(c) => write!(f, "NVMS returned unknown error code: {}", c),
@@ -446,7 +448,9 @@ pub fn list_instances() -> Vec<(u64, Tier, Status, String)> {
         .map(|guard| {
             guard
                 .iter()
-                .map(|(id, tier, status, name)| (*id, Tier::from(*tier), Status::from(*status), name.clone()))
+                .map(|(id, tier, status, name)| {
+                    (*id, Tier::from(*tier), Status::from(*status), name.clone())
+                })
                 .collect()
         })
         .unwrap_or_default()
@@ -456,7 +460,9 @@ fn cstr_to_string(ptr: *const c_char) -> String {
     if ptr.is_null() {
         return String::new();
     }
-    unsafe { CStr::from_ptr(ptr) }.to_string_lossy().into_owned()
+    unsafe { CStr::from_ptr(ptr) }
+        .to_string_lossy()
+        .into_owned()
 }
 
 fn write_name(dst: &mut [c_char; 256], value: &str) {
@@ -474,7 +480,8 @@ mod shim {
     use std::sync::Mutex;
 
     static INSTANCE_COUNTER: AtomicU64 = AtomicU64::new(0);
-    pub(crate) static INSTANCES: Mutex<Vec<(u64, sys::NvmsTier, sys::NvmsStatus, String)>> = Mutex::new(Vec::new());
+    pub(crate) static INSTANCES: Mutex<Vec<(u64, sys::NvmsTier, sys::NvmsStatus, String)>> =
+        Mutex::new(Vec::new());
 
     fn current_backend() -> sys::NvmsGpuBackend {
         if cfg!(target_os = "macos") && cfg!(target_arch = "aarch64") {
@@ -586,12 +593,17 @@ mod shim {
     }
 
     #[unsafe(no_mangle)]
-    pub extern "C" fn nvms_instance_create(tier: sys::NvmsTier, name: *const c_char) -> *mut sys::NvmsInstance {
+    pub extern "C" fn nvms_instance_create(
+        tier: sys::NvmsTier,
+        name: *const c_char,
+    ) -> *mut sys::NvmsInstance {
         let id = INSTANCE_COUNTER.fetch_add(1, Ordering::Relaxed) + 1;
         let display_name = if name.is_null() {
             "unnamed".to_string()
         } else {
-            unsafe { CStr::from_ptr(name) }.to_string_lossy().into_owned()
+            unsafe { CStr::from_ptr(name) }
+                .to_string_lossy()
+                .into_owned()
         };
         let owned_name = CString::new(display_name.as_str()).expect("valid CString");
         let instance = sys::NvmsInstance {

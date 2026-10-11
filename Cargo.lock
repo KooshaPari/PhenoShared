@@ -1684,6 +1684,18 @@ dependencies = [
 ]
 
 [[package]]
+name = "bifrost-routing"
+version = "0.1.0"
+dependencies = [
+ "async-trait",
+ "criterion 0.5.1",
+ "serde",
+ "serde_json",
+ "thiserror 2.0.20",
+ "tokio",
+]
+
+[[package]]
 name = "bincode"
 version = "1.3.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1713,6 +1725,26 @@ dependencies = [
  "shlex 1.3.0",
  "syn 2.0.119",
  "which 4.4.2",
+]
+
+[[package]]
+name = "bindgen"
+version = "0.72.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "993776b509cfb49c750f11b8f07a46fa23e0a1386ffc01fb1e7d343efc387895"
+dependencies = [
+ "bitflags 2.13.2",
+ "cexpr",
+ "clang-sys",
+ "itertools 0.13.0",
+ "log",
+ "prettyplease",
+ "proc-macro2",
+ "quote",
+ "regex",
+ "rustc-hash 2.1.3",
+ "shlex 1.3.0",
+ "syn 2.0.119",
 ]
 
 [[package]]
@@ -2536,6 +2568,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "commit-msg-check"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "clap",
+ "regex",
+]
+
+[[package]]
 name = "compact_str"
 version = "0.7.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2583,6 +2624,14 @@ dependencies = [
  "serde_core",
  "toml 1.1.6+spec-1.1.0",
  "winnow 1.0.4",
+]
+
+[[package]]
+name = "config-schema"
+version = "0.1.0"
+dependencies = [
+ "serde_json",
+ "thiserror 1.0.69",
 ]
 
 [[package]]
@@ -3750,6 +3799,17 @@ dependencies = [
  "proc-macro2",
  "quote",
  "syn 2.0.119",
+]
+
+[[package]]
+name = "doc-link-check"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "pulldown-cmark",
+ "tempfile",
+ "thiserror 2.0.20",
+ "walkdir",
 ]
 
 [[package]]
@@ -5505,6 +5565,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "fr-coverage"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "regex",
+ "walkdir",
+]
+
+[[package]]
 name = "fr-trace"
 version = "0.3.10"
 dependencies = [
@@ -5806,6 +5875,15 @@ checksum = "1bd49230192a3797a9a4d6abe9b3eed6f7fa4c8a8a4947977c6f80025f92cbd8"
 dependencies = [
  "rustix 1.1.4",
  "windows-link",
+]
+
+[[package]]
+name = "getopts"
+version = "0.2.24"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "cfe4fbac503b8d1f88e6676011885f34b7174f46e59956bba534ba83abded4df"
+dependencies = [
+ "unicode-width 0.2.0",
 ]
 
 [[package]]
@@ -9085,6 +9163,15 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "60993920e071b0c9b66f14e2b32740a4e27ffc82854dcd72035887f336a09a28"
 
 [[package]]
+name = "nexus"
+version = "0.1.0"
+dependencies = [
+ "serde",
+ "thiserror 1.0.69",
+ "tokio",
+]
+
+[[package]]
 name = "nix"
 version = "0.27.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -9513,6 +9600,13 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "5c7398b9c8b70908f6371f47ed36737907c87c52af34c268fed0bf0ceb92ead9"
 dependencies = [
  "libc",
+]
+
+[[package]]
+name = "nvms-ffi"
+version = "0.1.0"
+dependencies = [
+ "bindgen 0.72.1",
 ]
 
 [[package]]
@@ -10639,6 +10733,10 @@ dependencies = [
 ]
 
 [[package]]
+name = "pheno-i18n"
+version = "0.1.0"
+
+[[package]]
 name = "pheno-net"
 version = "0.1.0"
 dependencies = [
@@ -10728,6 +10826,70 @@ dependencies = [
 name = "pheno-vcs-core"
 version = "0.1.0"
 dependencies = [
+ "thiserror 2.0.20",
+]
+
+[[package]]
+name = "phenocompose-agentctl"
+version = "0.1.0"
+dependencies = [
+ "serde",
+ "serde_json",
+]
+
+[[package]]
+name = "phenocompose-plugin-api"
+version = "0.1.0"
+
+[[package]]
+name = "phenocompose-port-composer"
+version = "0.1.0"
+dependencies = [
+ "phenocompose-port-types",
+ "thiserror 2.0.20",
+]
+
+[[package]]
+name = "phenocompose-port-di"
+version = "0.1.0"
+dependencies = [
+ "phenocompose-port-composer",
+ "phenocompose-port-publisher",
+ "phenocompose-port-runtime",
+ "phenocompose-port-secret",
+ "phenocompose-port-types",
+]
+
+[[package]]
+name = "phenocompose-port-publisher"
+version = "0.1.0"
+dependencies = [
+ "phenocompose-port-types",
+ "thiserror 2.0.20",
+]
+
+[[package]]
+name = "phenocompose-port-runtime"
+version = "0.1.0"
+dependencies = [
+ "phenocompose-port-types",
+ "thiserror 2.0.20",
+]
+
+[[package]]
+name = "phenocompose-port-secret"
+version = "0.1.0"
+dependencies = [
+ "phenocompose-port-types",
+ "tempfile",
+ "thiserror 2.0.20",
+]
+
+[[package]]
+name = "phenocompose-port-types"
+version = "0.1.0"
+dependencies = [
+ "serde",
  "thiserror 2.0.20",
 ]
 
@@ -11774,6 +11936,25 @@ checksum = "3e36c2f31e0a47f9280fb347ef5e461ffcd2c52dd520d8e216b52f93b0b0d7d6"
 dependencies = [
  "thiserror 1.0.69",
 ]
+
+[[package]]
+name = "pulldown-cmark"
+version = "0.13.4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e9f068eba8e7071c5f9511831b44f32c740d5adf574e990f946ddb53db2f314e"
+dependencies = [
+ "bitflags 2.13.2",
+ "getopts",
+ "memchr",
+ "pulldown-cmark-escape",
+ "unicase",
+]
+
+[[package]]
+name = "pulldown-cmark-escape"
+version = "0.11.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "007d8adb5ddab6f8e3f491ac63566a7d5002cc7ed73901f72057943fa71ae1ae"
 
 [[package]]
 name = "pulp"
@@ -15768,7 +15949,7 @@ version = "0.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "6779878362b9bacadc7893eac76abe69612e8837ef746573c4a5239daf11990b"
 dependencies = [
- "bindgen",
+ "bindgen 0.65.1",
 ]
 
 [[package]]

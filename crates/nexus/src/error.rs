@@ -1,7 +1,7 @@
 //! Nexus error types
 
-use std::fmt;
 use std::error::Error as StdError;
+use std::fmt;
 
 #[derive(Debug)]
 pub enum NexusError {

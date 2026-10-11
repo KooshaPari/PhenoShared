@@ -133,3 +133,4 @@ llvm-cov-*
 
 # Linked worktree of an unrelated project (not part of this repo)
 /BytePort/
+crates/.eidolon-desktop

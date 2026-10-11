@@ -59,6 +59,7 @@ pub use secret::{Secret, SecretRef};
 
 #[cfg(test)]
 mod tests {
+    use super::*;
     #[test]
     fn manifest_new_sets_name_and_leaves_others_empty() {
         let m = Manifest::new("phenocommand-web");
@@ -81,8 +82,11 @@ mod tests {
 
     #[test]
     fn composed_artifact_tag_lookup() {
-        let a = ComposedArtifact::new("phenocommand-web:0.1.0", ImageRef::new("phenocommand-web:0.1.0"))
-            .with_tag("content-digest", "sha256:abc");
+        let a = ComposedArtifact::new(
+            "phenocommand-web:0.1.0",
+            ImageRef::new("phenocommand-web:0.1.0"),
+        )
+        .with_tag("content-digest", "sha256:abc");
         assert_eq!(a.tag("content-digest"), Some("sha256:abc"));
         assert_eq!(a.tag("missing"), None);
     }
@@ -125,7 +129,10 @@ mod tests {
 
     #[test]
     fn publish_target_new() {
-        let t = PublishTarget::new("docker-registry", "registry.phenotype/phenocommand/web:0.1.0");
+        let t = PublishTarget::new(
+            "docker-registry",
+            "registry.phenotype/phenocommand/web:0.1.0",
+        );
         assert_eq!(t.kind, "docker-registry");
         assert_eq!(t.locator, "registry.phenotype/phenocommand/web:0.1.0");
     }
@@ -133,7 +140,11 @@ mod tests {
     #[test]
     fn publish_receipt_new() {
         let t = PublishTarget::new("file", "/var/lib/phenocompose/x.tar");
-        let r = PublishReceipt::new("phenocommand-web:0.1.0", t.clone(), "/var/lib/phenocompose/x.tar");
+        let r = PublishReceipt::new(
+            "phenocommand-web:0.1.0",
+            t.clone(),
+            "/var/lib/phenocompose/x.tar",
+        );
         assert_eq!(r.artifact_id, "phenocommand-web:0.1.0");
         assert_eq!(r.target, t);
         assert_eq!(r.published_at, "/var/lib/phenocompose/x.tar");

@@ -11,8 +11,6 @@ keywords = ["phenotype", "pheno-compose", "time"]
 categories = ["date-and-time", "development-tools"]
 authors = ["<REDACTED>"]
 
-[workspace]
-
 [lib]
 path = "src/lib.rs"
 

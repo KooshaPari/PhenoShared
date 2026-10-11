@@ -10,7 +10,10 @@ fn table() -> &'static HashMap<String, String> {
         let mut m = HashMap::new();
         // Source of truth: locales/en.json
         m.insert("app.name".into(), "PhenoCompose".into());
-        m.insert("app.tagline".into(), "Phenotype deployment composition.".into());
+        m.insert(
+            "app.tagline".into(),
+            "Phenotype deployment composition.".into(),
+        );
         m.insert("deploy.idle".into(), "Idle".into());
         m.insert("deploy.deploying".into(), "Deploying...".into());
         m.insert("deploy.running".into(), "Running".into());

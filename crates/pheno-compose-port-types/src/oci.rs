@@ -157,7 +157,7 @@ pub fn parse(reference: &str) -> Result<Reference, String> {
                 ));
             }
             (left, Some(right.to_string()))
-        }
+        },
         None => (s, None),
     };
 
@@ -191,13 +191,16 @@ fn split_tag(input: &str) -> Result<(&str, Option<String>), String> {
     // if there's a '/' in the string, only the part after the last '/'
     // is checked for a colon (so `registry:5000/repo:tag` is parsed
     // correctly as registry=`registry:5000`, repo=`repo`, tag=`tag`).
-    let after_slash = input.rsplit_once('/').map(|(_, after)| after).unwrap_or(input);
+    let after_slash = input
+        .rsplit_once('/')
+        .map(|(_, after)| after)
+        .unwrap_or(input);
 
     match after_slash.rsplit_once(':') {
         Some((_, after)) if !after.is_empty() && !after.contains('/') => {
             let before_colon = &input[..input.len() - after.len() - 1];
             Ok((before_colon, Some(after.to_string())))
-        }
+        },
         _ => Ok((input, None)),
     }
 }
@@ -205,9 +208,11 @@ fn split_tag(input: &str) -> Result<(&str, Option<String>), String> {
 /// Split the registry host from a `<registry>/<repository>` string.
 fn split_registry(input: &str) -> (Option<String>, String) {
     match input.split_once('/') {
-        Some((potential_host, rest)) if potential_host.contains('.') || potential_host.contains(':') => {
+        Some((potential_host, rest))
+            if potential_host.contains('.') || potential_host.contains(':') =>
+        {
             (Some(potential_host.to_string()), rest.to_string())
-        }
+        },
         _ => (None, input.to_string()),
     }
 }
@@ -283,7 +288,9 @@ mod tests {
 
     #[test]
     fn parse_repo_digest() {
-        let r = parse("ubuntu@sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855").unwrap();
+        let r =
+            parse("ubuntu@sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855")
+                .unwrap();
         assert_eq!(r.registry(), None);
         assert_eq!(r.repository(), "ubuntu");
         assert_eq!(r.tag(), None);
@@ -328,13 +335,19 @@ mod tests {
     #[test]
     fn parse_digest_without_algorithm_prefix_returns_err() {
         let err = parse("ubuntu@abc123").unwrap_err();
-        assert!(err.contains("algorithm"), "expected algorithm error, got: {err}");
+        assert!(
+            err.contains("algorithm"),
+            "expected algorithm error, got: {err}"
+        );
     }
 
     #[test]
     fn parse_empty_digest_returns_err() {
         let err = parse("ubuntu@").unwrap_err();
-        assert!(err.contains("empty digest"), "expected empty digest error, got: {err}");
+        assert!(
+            err.contains("empty digest"),
+            "expected empty digest error, got: {err}"
+        );
     }
 
     // --- Display / to_string ----------------------------------------------
@@ -377,7 +390,10 @@ mod tests {
 
     #[test]
     fn with_digest_no_registry() {
-        assert_eq!(with_digest(None, "my-app", "sha256:abc"), "my-app@sha256:abc");
+        assert_eq!(
+            with_digest(None, "my-app", "sha256:abc"),
+            "my-app@sha256:abc"
+        );
     }
 
     #[test]

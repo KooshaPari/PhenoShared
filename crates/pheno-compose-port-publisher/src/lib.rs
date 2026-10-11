@@ -141,7 +141,10 @@ impl RecordingPublisher {
 
     /// Number of captured calls.
     pub fn len(&self) -> usize {
-        self.calls.lock().expect("recording publisher mutex poisoned").len()
+        self.calls
+            .lock()
+            .expect("recording publisher mutex poisoned")
+            .len()
     }
 
     /// `true` if no calls have been captured.
@@ -159,7 +162,10 @@ impl Publisher for RecordingPublisher {
         if artifact.id.is_empty() {
             return Err(PublishError::validation("artifact.id is empty"));
         }
-        let mut guard = self.calls.lock().expect("recording publisher mutex poisoned");
+        let mut guard = self
+            .calls
+            .lock()
+            .expect("recording publisher mutex poisoned");
         guard.push((artifact.clone(), target.clone()));
         Ok(PublishReceipt::new(
             artifact.id.clone(),
@@ -179,7 +185,10 @@ mod tests {
     use phenocompose_port_types::ImageRef;
 
     fn sample_artifact() -> ComposedArtifact {
-        ComposedArtifact::new("phenocommand-web:0.1.0", ImageRef::new("phenocommand-web:0.1.0"))
+        ComposedArtifact::new(
+            "phenocommand-web:0.1.0",
+            ImageRef::new("phenocommand-web:0.1.0"),
+        )
     }
 
     #[test]

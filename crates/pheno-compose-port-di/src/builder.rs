@@ -92,7 +92,9 @@ impl ContainerBuilder {
             composer: self.composer.unwrap_or_else(|| Box::new(NoopComposer)),
             publisher: self.publisher.unwrap_or_else(|| Box::new(NoopPublisher)),
             runtime: self.runtime.unwrap_or_else(|| Box::new(NoopRuntime::new())),
-            secrets: self.secrets.unwrap_or_else(|| Box::new(InMemorySecretStore::new())),
+            secrets: self
+                .secrets
+                .unwrap_or_else(|| Box::new(InMemorySecretStore::new())),
         }
     }
 }

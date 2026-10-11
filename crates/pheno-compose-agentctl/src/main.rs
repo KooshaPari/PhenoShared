@@ -28,7 +28,11 @@ fn dispatch(req: &Request) -> Response {
     match req.method.as_str() {
         "manifest.parse" => {
             // Stub: real implementation would call phenocompose_port_composer::Composer::Compose
-            let name = req.params.get("name").and_then(|v| v.as_str()).unwrap_or("");
+            let name = req
+                .params
+                .get("name")
+                .and_then(|v| v.as_str())
+                .unwrap_or("");
             if name.is_empty() {
                 return Response {
                     ok: false,
@@ -41,7 +45,7 @@ fn dispatch(req: &Request) -> Response {
                 result: Some(serde_json::json!({"id": format!("mf-{}", name), "name": name})),
                 error: None,
             }
-        }
+        },
         "secret.get" => {
             let id = req.params.get("id").and_then(|v| v.as_str()).unwrap_or("");
             if id.is_empty() {
@@ -56,7 +60,7 @@ fn dispatch(req: &Request) -> Response {
                 result: Some(serde_json::json!({"id": id, "version": 1})),
                 error: None,
             }
-        }
+        },
         "secret.list" => Response {
             ok: true,
             result: Some(serde_json::json!([])),
@@ -92,7 +96,7 @@ fn main() {
                     .unwrap()
                 );
                 continue;
-            }
+            },
         };
         let resp = dispatch(&req);
         let _ = writeln!(stdout, "{}", serde_json::to_string(&resp).unwrap());

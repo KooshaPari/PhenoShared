@@ -39,7 +39,10 @@ fn main() {
     let found_staticlib = search_dirs.iter().any(|dir| {
         let candidate = Path::new(dir).join("libnvms_core.a");
         if candidate.exists() {
-            println!("cargo:rustc-link-search=native={}", Path::new(dir).display());
+            println!(
+                "cargo:rustc-link-search=native={}",
+                Path::new(dir).display()
+            );
             println!("cargo:rustc-link-lib=static=nvms_core");
             println!("cargo:rerun-if-changed={}", candidate.display());
             true

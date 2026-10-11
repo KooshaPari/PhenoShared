@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT OR Apache-2.0
 //! `phenocompose-port-secret::store` - the `SecretStore` port trait.
 
-use phenocompose_port_types::{Secret, SecretRef};
 use crate::error::SecretStoreError;
+use phenocompose_port_types::{Secret, SecretRef};
 
 /// The SecretStore port trait — `Send + Sync` + no generics + no
 /// associated types ⇒ object-safe ⇒ storable as
@@ -68,4 +68,3 @@ pub trait SecretStore: Send + Sync {
         "unknown"
     }
 }
-
