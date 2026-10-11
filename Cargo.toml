@@ -42,6 +42,18 @@ members = [
     "crates/teamcomm-smoke",
     "crates/klipdot-capture",
     "crates/phenotype-cache-adapter",
+    "crates/focus-icon-gen",
+    "crates/focus-ci-watcher",
+    "crates/focus-time",
+    "crates/agileplus-error-core",
+    "crates/agileplus-git",
+    "crates/agileplus-triage",
+    "crates/agileplus-cache",
+    "crates/agileplus-events",
+    "crates/agileplus-domain",
+    "crates/agileplus-github",
+    "crates/agileplus-import",
+    "crates/phenotype-error-core",
     "crates/focus-always-on",
     "crates/pheno-tracing",
     "crates/focus-templates",
@@ -92,7 +104,6 @@ members = [
     # --- E2.4 Pattern A wave 3 batch AI (2026-10-09): 1 focus-crypto + ring workspace dep ---
     "crates/focus-crypto",
     # --- E2.4 Pattern A wave 3 batch AJ (2026-10-09): 1 focus-telemetry + url workspace dep ---
-    "crates/focus-telemetry",
     # --- E2.4 Pattern A wave 3 batch AK (2026-10-09): 1 focus-entitlements + uniffi workspace dep ---
     "crates/focus-entitlements",
     # --- E2.4 Pattern A wave 3 batch AL (2026-10-09): 1 focus-icon-gen ---
@@ -745,6 +756,8 @@ rust-version = "1.80"
 publish = false
 
 [workspace.dependencies]
+futures-util = "0.3"
+agileplus-error-core = { path = "crates/agileplus-error-core" }
 substrate-core = { version = "0.3.8", path = "crates/substrate-core" }
 substrate-serve-lock = { version = "0.3.8", path = "crates/substrate-serve-lock" }
 substrate-trace = { version = "0.3.8", path = "crates/substrate-trace" }

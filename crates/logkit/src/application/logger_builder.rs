@@ -100,3 +100,39 @@ mod tests {
         let _logger = logger;
     }
 }
+
+/// Sink-backed logger that delegates to any [`crate::adapters::sinks::Sink`].
+pub struct SinkLogger<S: crate::adapters::sinks::Sink> {
+    name: String,
+    level: Level,
+    sink: S,
+}
+
+#[async_trait]
+impl<S: crate::adapters::sinks::Sink> crate::domain::Logger for SinkLogger<S> {
+    async fn log(&self, entry: LogEntry) -> Result<(), LogError> {
+        if entry.level >= self.level {
+            self.sink.write(&entry).await?;
+        }
+        Ok(())
+    }
+    fn level(&self) -> Level {
+        self.level
+    }
+}
+
+impl<S: crate::adapters::sinks::Sink> SinkLogger<S> {
+    pub async fn flush(&self) -> Result<(), LogError> {
+        self.sink.flush().await
+    }
+}
+
+impl LoggerBuilder {
+    pub fn build_with_sink<S: crate::adapters::sinks::Sink>(self, sink: S) -> SinkLogger<S> {
+        SinkLogger {
+            name: self.name,
+            level: self.level,
+            sink,
+        }
+    }
+}

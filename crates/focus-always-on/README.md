@@ -22,7 +22,7 @@ Five types of proactive nudges:
 
 Output of the predictor:
 
-```rust
+```rust,ignore
 NudgeProposal {
     when: DateTime<Utc>,
     kind: NudgeKind,
@@ -35,7 +35,7 @@ NudgeProposal {
 
 Defines the interface for activity prediction:
 
-```rust
+```rust,ignore
 #[async_trait]
 pub trait HabitPredictor {
     async fn predict_next_nudge(&self, now: DateTime<Utc>) -> Result<Option<NudgeProposal>>;
@@ -57,7 +57,7 @@ MVP implementation using 7-day rolling averages:
 
 Main coordinator; wraps the predictor:
 
-```rust
+```rust,ignore
 let engine = AlwaysOnEngine::new(predictor, nudge_tx);
 engine.tick(now).await?; // Emit 0–1 proposals per tick
 ```
