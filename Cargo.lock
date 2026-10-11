@@ -10894,6 +10894,14 @@ dependencies = [
 ]
 
 [[package]]
+name = "phenotype-async-traits"
+version = "0.2.0"
+dependencies = [
+ "pin-project",
+ "tokio",
+]
+
+[[package]]
 name = "phenotype-cache-adapter"
 version = "0.3.10"
 dependencies = [

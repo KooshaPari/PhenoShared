@@ -45,6 +45,7 @@ members = [
     "crates/eidolon-sandbox",
     "crates/eidolon-desktop",
     "crates/eidolon-mobile",
+    "crates/phenotype-async-traits",
     "crates/pheno-compose-port-types",
     "crates/pheno-compose-port-secret",
     "crates/pheno-compose-port-runtime",
