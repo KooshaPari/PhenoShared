@@ -17,9 +17,7 @@ use std::sync::atomic::{AtomicBool, Ordering};
 use tokio::sync::Mutex;
 
 use bollard::exec::StartExecResults;
-use bollard::models::{
-    ContainerCreateBody, ExecConfig, HostConfig, PortBinding, PortMap,
-};
+use bollard::models::{ContainerCreateBody, ExecConfig, HostConfig, PortBinding, PortMap};
 use bollard::query_parameters::{
     CreateImageOptionsBuilder, RemoveContainerOptionsBuilder, StatsOptionsBuilder,
     StopContainerOptionsBuilder,
@@ -115,10 +113,10 @@ impl BollardDockerOrchestrator {
                         docker,
                         ready: AtomicBool::new(true),
                     });
-                }
+                },
                 Err(e) => {
                     last_detail = format!("ping failed: {e}");
-                }
+                },
             }
         }
         Err(docker_unavailable("try_new", last_detail))
@@ -146,11 +144,9 @@ impl BollardDockerOrchestrator {
                 continue;
             }
             let path_str = path.to_string_lossy();
-            if let Ok(d) = Docker::connect_with_unix(
-                path_str.as_ref(),
-                120,
-                bollard::API_DEFAULT_VERSION,
-            ) {
+            if let Ok(d) =
+                Docker::connect_with_unix(path_str.as_ref(), 120, bollard::API_DEFAULT_VERSION)
+            {
                 clients.push(d);
             }
         }
@@ -184,11 +180,7 @@ impl DockerOrchestrator for BollardDockerOrchestrator {
             image: Some(image.to_string()),
             // Keep the container alive so subsequent exec calls succeed.
             // BusyBox `sleep` may not accept `infinity`; `tail -f` is portable.
-            cmd: Some(vec![
-                "tail".into(),
-                "-f".into(),
-                "/dev/null".into(),
-            ]),
+            cmd: Some(vec!["tail".into(), "-f".into(), "/dev/null".into()]),
             host_config: Some(host_config_from(&config)),
             tty: Some(false),
             ..Default::default()
@@ -230,11 +222,7 @@ impl DockerOrchestrator for BollardDockerOrchestrator {
         self.docker
             .remove_container(
                 container_id,
-                Some(
-                    RemoveContainerOptionsBuilder::default()
-                        .force(true)
-                        .build(),
-                ),
+                Some(RemoveContainerOptionsBuilder::default().force(true).build()),
             )
             .await
             .map_err(|e| map_docker_err("stop_container", e))?;
@@ -277,7 +265,7 @@ impl DockerOrchestrator for BollardDockerOrchestrator {
                     }
                 }
                 Ok(buf)
-            }
+            },
             StartExecResults::Detached => Ok(String::new()),
         }
     }
@@ -436,8 +424,7 @@ impl SandboxAutomator for DockerSandboxClient {
         let guard = self.container_id.lock().await;
         let id = guard.as_ref().ok_or_else(|| {
             PhenoError::BadRequest(
-                "DockerSandboxClient::exec requires start() first (no container id)"
-                    .into(),
+                "DockerSandboxClient::exec requires start() first (no container id)".into(),
             )
         })?;
         self.orch.exec(id, cmd).await
@@ -454,9 +441,7 @@ impl SandboxAutomator for DockerSandboxClient {
         Ok(ResourceUsage {
             cpu_percent: snap.cpu_percent,
             memory_mb: snap.memory_mb.min(u64::from(u32::MAX)) as u32,
-            disk_mb: snap
-                .disk_mb
-                .map(|d| d.min(u64::from(u32::MAX)) as u32),
+            disk_mb: snap.disk_mb.map(|d| d.min(u64::from(u32::MAX)) as u32),
         })
     }
 

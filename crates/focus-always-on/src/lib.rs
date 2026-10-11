@@ -3,13 +3,13 @@
 
 use async_trait::async_trait;
 use chrono::{DateTime, Datelike, Timelike, Utc};
+use phenotype_observably_macros::async_instrumented;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use std::sync::Arc;
 use tokio::sync::Mutex;
-use phenotype_observably_macros::async_instrumented;
 
-pub use focus_events::{NormalizedEvent, EventType, WellKnownEventType};
+pub use focus_events::{EventType, NormalizedEvent, WellKnownEventType};
 
 /// NudgeKind describes the type of proactive nudge the engine proposes.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
@@ -74,7 +74,8 @@ pub trait HabitPredictor: Send + Sync {
     ///
     /// Returns 0 or 1 proposals per call. If no prediction meets confidence threshold,
     /// returns None.
-    async fn predict_next_nudge(&self, now: DateTime<Utc>) -> anyhow::Result<Option<NudgeProposal>>;
+    async fn predict_next_nudge(&self, now: DateTime<Utc>)
+        -> anyhow::Result<Option<NudgeProposal>>;
 
     /// Get the likely productive hours for a given day of week (0–6: Mon–Sun).
     ///
@@ -116,7 +117,9 @@ impl RollingAverageHabitPredictor {
 
             // Count a session as "success" if duration >= 25 min (inferred from payload or default).
             let is_success = {
-                let duration_min = event.payload.get("duration_minutes")
+                let duration_min = event
+                    .payload
+                    .get("duration_minutes")
                     .and_then(|v| v.as_i64())
                     .unwrap_or(25); // Default: assume success if not specified
                 duration_min >= 25
@@ -156,7 +159,10 @@ impl RollingAverageHabitPredictor {
 #[async_trait]
 impl HabitPredictor for RollingAverageHabitPredictor {
     #[async_instrumented]
-    async fn predict_next_nudge(&self, now: DateTime<Utc>) -> anyhow::Result<Option<NudgeProposal>> {
+    async fn predict_next_nudge(
+        &self,
+        now: DateTime<Utc>,
+    ) -> anyhow::Result<Option<NudgeProposal>> {
         let weekday = now.weekday().number_from_monday() - 1; // 0–6: Mon–Sun
         let hour = now.hour();
 
@@ -187,7 +193,8 @@ impl HabitPredictor for RollingAverageHabitPredictor {
         let activity = self.activity.lock().await;
         let mut hours: Vec<_> = (0..24)
             .filter(|h| {
-                !Self::is_sleep_hour(*h) && activity.get(&(day_of_week, *h)).copied().unwrap_or(0.0) > 0.6
+                !Self::is_sleep_hour(*h)
+                    && activity.get(&(day_of_week, *h)).copied().unwrap_or(0.0) > 0.6
             })
             .collect();
         hours.sort();
@@ -198,7 +205,8 @@ impl HabitPredictor for RollingAverageHabitPredictor {
         let activity = self.activity.lock().await;
         let mut hours: Vec<_> = (0..24)
             .filter(|h| {
-                !Self::is_sleep_hour(*h) && activity.get(&(day_of_week, *h)).copied().unwrap_or(0.0) < 0.3
+                !Self::is_sleep_hour(*h)
+                    && activity.get(&(day_of_week, *h)).copied().unwrap_or(0.0) < 0.3
             })
             .collect();
         hours.sort();
@@ -227,7 +235,10 @@ impl AlwaysOnEngine {
         predictor: Arc<dyn HabitPredictor>,
         nudge_tx: tokio::sync::mpsc::UnboundedSender<NudgeProposal>,
     ) -> Self {
-        Self { predictor, nudge_tx }
+        Self {
+            predictor,
+            nudge_tx,
+        }
     }
 
     /// Perform a single tick of the engine (called every 60 seconds in production).
@@ -292,7 +303,7 @@ mod tests {
 
         {
             let mut activity = predictor.activity.lock().await;
-            activity.insert((0, 9), 0.8);  // High productivity
+            activity.insert((0, 9), 0.8); // High productivity
             activity.insert((0, 10), 0.7); // High productivity
             activity.insert((0, 11), 0.4); // Low productivity
             activity.insert((0, 23), 0.9); // Would be sleep time (not included)
@@ -311,15 +322,21 @@ mod tests {
         {
             let mut activity = predictor.activity.lock().await;
             activity.insert((0, 23), 0.9); // High confidence, but sleep hour
-            activity.insert((0, 5), 0.9);  // High confidence, but sleep hour
+            activity.insert((0, 5), 0.9); // High confidence, but sleep hour
         }
 
         // 23:00 (11 PM) is a sleep hour.
-        let proposal = predictor.predict_next_nudge(Utc::now().with_hour(23).unwrap()).await.unwrap();
+        let proposal = predictor
+            .predict_next_nudge(Utc::now().with_hour(23).unwrap())
+            .await
+            .unwrap();
         assert!(proposal.is_none(), "Should not nudge during sleep hours");
 
         // 5:00 AM is a sleep hour.
-        let proposal = predictor.predict_next_nudge(Utc::now().with_hour(5).unwrap()).await.unwrap();
+        let proposal = predictor
+            .predict_next_nudge(Utc::now().with_hour(5).unwrap())
+            .await
+            .unwrap();
         assert!(proposal.is_none(), "Should not nudge during sleep hours");
     }
 
@@ -368,11 +385,11 @@ mod tests {
                     (p1.confidence - p2.confidence).abs() < 0.001,
                     "Confidence should be deterministic"
                 );
-            }
+            },
             (None, None) => {}, // Both None is also deterministic.
             (Some(_), None) | (None, Some(_)) => {
                 panic!("Non-deterministic prediction from same input time");
-            }
+            },
         }
     }
 }

@@ -224,7 +224,9 @@ impl SessionStore for MemorySessionStore {
             ));
         }
         if record.id.is_empty() {
-            return Err(PhenoError::BadRequest("session id must be non-empty".into()));
+            return Err(PhenoError::BadRequest(
+                "session id must be non-empty".into(),
+            ));
         }
         let mut guard = self.data.write().await;
         guard.upsert(record);
@@ -580,7 +582,7 @@ mod tests {
             .await
             .unwrap_err();
         assert_eq!(
-            err.unsupported_code(),
+            err.unsupported_code_value(),
             Some(codes::SANDBOX_SESSION_BACKEND)
         );
         assert_eq!(err.status_code(), 501);

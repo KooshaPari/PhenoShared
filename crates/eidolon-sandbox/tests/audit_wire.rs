@@ -67,7 +67,7 @@ async fn sandbox_client_unavailable_audit_fails_loud() {
         .unwrap_err();
     assert_eq!(err.status_code(), 501);
     assert_eq!(
-        err.unsupported_code().expect("code"),
+        err.unsupported_code_value().expect("code"),
         codes::SANDBOX_AUDIT_BACKEND
     );
 }

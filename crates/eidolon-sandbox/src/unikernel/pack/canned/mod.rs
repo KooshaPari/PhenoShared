@@ -370,7 +370,7 @@ mod tests {
         )
         .unwrap_err();
         assert_eq!(
-            err.unsupported_code(),
+            err.unsupported_code_value(),
             Some(codes::SANDBOX_VSOCK_AGENT_MISSING)
         );
         let _ = fs::remove_dir_all(&out);
@@ -402,8 +402,8 @@ mod tests {
         )
         .unwrap_err();
         assert!(
-            err.unsupported_code() == Some(codes::SANDBOX_ROOTFS_PACK_STUB)
-                || err.unsupported_code() == Some(codes::SANDBOX_ROOTFS_PACK_TOOL_MISSING),
+            err.unsupported_code_value() == Some(codes::SANDBOX_ROOTFS_PACK_STUB)
+                || err.unsupported_code_value() == Some(codes::SANDBOX_ROOTFS_PACK_TOOL_MISSING),
             "expected pack stub/tool missing, got {err:?}"
         );
         let _ = fs::remove_dir_all(&out);

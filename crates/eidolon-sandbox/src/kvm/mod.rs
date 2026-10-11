@@ -232,7 +232,7 @@ mod tests {
         assert!(!stub.kvm_ready());
         assert!(!stub.firecracker_ready());
         let err = stub.start().await.unwrap_err();
-        assert_eq!(err.unsupported_code(), Some(codes::SANDBOX_KVM_STUB));
+        assert_eq!(err.unsupported_code_value(), Some(codes::SANDBOX_KVM_STUB));
         assert_eq!(err.status_code(), 501);
     }
 

@@ -58,17 +58,8 @@ fn create_list_lock_remove_lifecycle() {
     let wt_path = tmp.path().join("wt-feature");
     let svc = service();
 
-    let created = svc.create_worktree(
-        &repo,
-        BranchName::new("feature/lifecycle"),
-        &wt_path,
-        None,
-    );
-    assert!(
-        created.success,
-        "create failed: {:?}",
-        created.error
-    );
+    let created = svc.create_worktree(&repo, BranchName::new("feature/lifecycle"), &wt_path, None);
+    assert!(created.success, "create failed: {:?}", created.error);
     assert!(wt_path.join("README.md").exists());
 
     let listing = svc.list_worktrees(&repo).expect("list");
@@ -103,11 +94,17 @@ fn create_list_lock_remove_lifecycle() {
 
     svc.unlock_worktree(&wt_path).expect("unlock");
     svc.remove_worktree(&wt_path, true).expect("remove");
-    assert!(!wt_path.exists(), "worktree path should be gone after remove");
+    assert!(
+        !wt_path.exists(),
+        "worktree path should be gone after remove"
+    );
 
     let listing = svc.list_worktrees(&repo).expect("list after remove");
     assert!(
-        !listing.worktrees.iter().any(|w| same_path(&w.path, &wt_path)),
+        !listing
+            .worktrees
+            .iter()
+            .any(|w| same_path(&w.path, &wt_path)),
         "removed worktree still listed"
     );
 }
@@ -163,21 +160,11 @@ fn create_rejects_duplicate_branch() {
     let svc = service();
 
     let first_path = tmp.path().join("wt-a");
-    let ok = svc.create_worktree(
-        &repo,
-        BranchName::new("feature/dup"),
-        &first_path,
-        None,
-    );
+    let ok = svc.create_worktree(&repo, BranchName::new("feature/dup"), &first_path, None);
     assert!(ok.success, "{:?}", ok.error);
 
     let second_path = tmp.path().join("wt-b");
-    let dup = svc.create_worktree(
-        &repo,
-        BranchName::new("feature/dup"),
-        &second_path,
-        None,
-    );
+    let dup = svc.create_worktree(&repo, BranchName::new("feature/dup"), &second_path, None);
     assert!(!dup.success);
     assert!(
         dup.error

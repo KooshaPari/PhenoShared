@@ -159,7 +159,9 @@ pub fn pidof_args(package: &str) -> Vec<String> {
 
 /// True when `pidof` stdout has a non-empty pid token.
 pub fn parse_pidof_running(stdout: &str) -> bool {
-    stdout.split_whitespace().any(|t| !t.is_empty() && t.chars().all(|c| c.is_ascii_digit()))
+    stdout
+        .split_whitespace()
+        .any(|t| !t.is_empty() && t.chars().all(|c| c.is_ascii_digit()))
 }
 
 /// UiAutomator2 lifecycle controller over an `adb` binary path.
@@ -346,7 +348,11 @@ impl Uia2Server {
             let stderr = String::from_utf8_lossy(&output.stderr);
             return Err(uia2_unavailable(
                 "install",
-                format!("adb install failed for {}: {}", apk.display(), stderr.trim()),
+                format!(
+                    "adb install failed for {}: {}",
+                    apk.display(),
+                    stderr.trim()
+                ),
             ));
         }
         Ok(())
@@ -409,7 +415,10 @@ mod tests {
             force_stop_args(DEFAULT_SERVER_PACKAGE),
             vec!["shell", "am", "force-stop", DEFAULT_SERVER_PACKAGE]
         );
-        assert_eq!(pm_list_packages_args(), vec!["shell", "pm", "list", "packages"]);
+        assert_eq!(
+            pm_list_packages_args(),
+            vec!["shell", "pm", "list", "packages"]
+        );
     }
 
     #[test]
@@ -430,14 +439,14 @@ mod tests {
             Ok(paths) => {
                 assert!(paths.server.is_file(), "resolved server must exist");
                 assert!(paths.test.is_file(), "resolved test must exist");
-            }
+            },
             Err(err) => {
                 assert_eq!(
-                    err.unsupported_code(),
+                    err.unsupported_code_value(),
                     Some(codes::MOBILE_UIA2_UNAVAILABLE)
                 );
                 assert_eq!(err.status_code(), 501);
-            }
+            },
         }
     }
 

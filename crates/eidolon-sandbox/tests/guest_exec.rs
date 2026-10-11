@@ -23,7 +23,7 @@ fn no_guest_fail_loud() {
     let mut guest: Option<Child> = None;
     let err = require_live_guest("GuestExecIt", &mut guest).unwrap_err();
     assert_eq!(
-        err.unsupported_code(),
+        err.unsupported_code_value(),
         Some(codes::SANDBOX_GUEST_NOT_RUNNING)
     );
     assert_eq!(err.status_code(), 501);
@@ -48,12 +48,14 @@ fn argv_transport_builders() {
     .expect("vsock req builds");
     let err = vsock.serial_stdin_frame().unwrap_err();
     assert_eq!(
-        err.unsupported_code(),
+        err.unsupported_code_value(),
         Some(codes::SANDBOX_GUEST_IO_UNAVAILABLE)
     );
     let frame = vsock.vsock_frame().expect("ndjson frame");
     assert!(frame.ends_with(b"\n"));
-    assert!(std::str::from_utf8(&frame).unwrap().contains("\"op\":\"exec\""));
+    assert!(std::str::from_utf8(&frame)
+        .unwrap()
+        .contains("\"op\":\"exec\""));
 
     let result = vsock_connect_spec(3, 52);
     #[cfg(all(feature = "sandbox-vsock", target_os = "linux"))]
@@ -64,7 +66,7 @@ fn argv_transport_builders() {
     {
         let err = result.unwrap_err();
         assert_eq!(
-            err.unsupported_code(),
+            err.unsupported_code_value(),
             Some(codes::SANDBOX_GUEST_IO_UNAVAILABLE)
         );
     }
@@ -93,7 +95,7 @@ fn exec_without_child_prefers_not_running_over_io() {
     let req = GuestExecRequest::serial("pwd").unwrap();
     let err = exec_on_guest("GuestExecIt", &mut guest, &req).unwrap_err();
     assert_eq!(
-        err.unsupported_code(),
+        err.unsupported_code_value(),
         Some(codes::SANDBOX_GUEST_NOT_RUNNING)
     );
 }

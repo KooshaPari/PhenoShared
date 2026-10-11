@@ -42,10 +42,7 @@ impl FfmpegRecorder {
 
     /// Whether a capture child is currently tracked.
     pub fn is_recording(&self) -> bool {
-        self.child
-            .lock()
-            .map(|g| g.is_some())
-            .unwrap_or(false)
+        self.child.lock().map(|g| g.is_some()).unwrap_or(false)
     }
 
     fn unavailable(method: &str, detail: impl Into<String>) -> PhenoError {
@@ -61,9 +58,10 @@ impl DesktopRecorder for FfmpegRecorder {
     async fn start(&self, output_path: &str, profile: QualityProfile) -> Result<()> {
         validate_output_parent(output_path)?;
 
-        let mut guard = self.child.lock().map_err(|_| {
-            PhenoError::Internal("FfmpegRecorder mutex poisoned".into())
-        })?;
+        let mut guard = self
+            .child
+            .lock()
+            .map_err(|_| PhenoError::Internal("FfmpegRecorder mutex poisoned".into()))?;
         if guard.is_some() {
             return Err(PhenoError::Platform(
                 "recording already in progress; call stop() first".into(),
@@ -77,9 +75,9 @@ impl DesktopRecorder for FfmpegRecorder {
             .stdout(Stdio::null())
             .stderr(Stdio::piped());
 
-        let child = cmd.spawn().map_err(|e| {
-            Self::unavailable("start", format!("failed to spawn ffmpeg: {e}"))
-        })?;
+        let child = cmd
+            .spawn()
+            .map_err(|e| Self::unavailable("start", format!("failed to spawn ffmpeg: {e}")))?;
 
         log::info!(
             "FfmpegRecorder started → {} (preset={})",
@@ -91,13 +89,12 @@ impl DesktopRecorder for FfmpegRecorder {
     }
 
     async fn stop(&self) -> Result<()> {
-        let mut guard = self.child.lock().map_err(|_| {
-            PhenoError::Internal("FfmpegRecorder mutex poisoned".into())
-        })?;
+        let mut guard = self
+            .child
+            .lock()
+            .map_err(|_| PhenoError::Internal("FfmpegRecorder mutex poisoned".into()))?;
         let Some(mut child) = guard.take() else {
-            return Err(PhenoError::Platform(
-                "no recording in progress".into(),
-            ));
+            return Err(PhenoError::Platform("no recording in progress".into()));
         };
 
         // Graceful quit: FFmpeg listens for 'q' on stdin.
@@ -118,7 +115,7 @@ impl DesktopRecorder for FfmpegRecorder {
                         "ffmpeg exited with status {status}"
                     )))
                 }
-            }
+            },
             Err(e) => Err(PhenoError::Platform(format!(
                 "failed waiting for ffmpeg: {e}"
             ))),

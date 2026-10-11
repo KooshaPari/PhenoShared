@@ -30,7 +30,7 @@ fn main() -> ExitCode {
         Err(e) => {
             eprintln!("eidolon-release-rootfs: {e}");
             ExitCode::FAILURE
-        }
+        },
     }
 }
 
@@ -49,7 +49,7 @@ fn run(args: Vec<String>) -> eidolon_core::Result<()> {
             "-h" | "--help" => {
                 print_help();
                 return Ok(());
-            }
+            },
             "--version" => {
                 i += 1;
                 version = Some(
@@ -57,41 +57,40 @@ fn run(args: Vec<String>) -> eidolon_core::Result<()> {
                         .ok_or_else(|| bad("--version requires a value"))?
                         .clone(),
                 );
-            }
+            },
             "--arch" => {
                 i += 1;
                 arch = args
                     .get(i)
                     .ok_or_else(|| bad("--arch requires a value"))?
                     .clone();
-            }
+            },
             "--from-img" => {
                 i += 1;
                 from_img = Some(PathBuf::from(
                     args.get(i)
                         .ok_or_else(|| bad("--from-img requires a path"))?,
                 ));
-            }
+            },
             "--out" => {
                 i += 1;
                 out_dir = Some(PathBuf::from(
                     args.get(i).ok_or_else(|| bad("--out requires a path"))?,
                 ));
-            }
+            },
             "--agent" => {
                 i += 1;
                 agent = Some(PathBuf::from(
-                    args.get(i)
-                        .ok_or_else(|| bad("--agent requires a path"))?,
+                    args.get(i).ok_or_else(|| bad("--agent requires a path"))?,
                 ));
-            }
+            },
             "--canned-out" => {
                 i += 1;
                 canned_out = Some(PathBuf::from(
                     args.get(i)
                         .ok_or_else(|| bad("--canned-out requires a path"))?,
                 ));
-            }
+            },
             "--tag" => {
                 i += 1;
                 tag = Some(
@@ -99,13 +98,11 @@ fn run(args: Vec<String>) -> eidolon_core::Result<()> {
                         .ok_or_else(|| bad("--tag requires a GH release tag"))?
                         .clone(),
                 );
-            }
+            },
             "--build" => build = true,
             other => {
-                return Err(bad(format!(
-                    "unknown argument {other:?} — try --help"
-                )));
-            }
+                return Err(bad(format!("unknown argument {other:?} — try --help")));
+            },
         }
         i += 1;
     }
@@ -127,9 +124,8 @@ fn run(args: Vec<String>) -> eidolon_core::Result<()> {
         );
         build_and_stage_release_rootfs(&canned, &version, Some(&arch), out_dir.as_deref())?
     } else {
-        let img = from_img.ok_or_else(|| {
-            bad("--from-img <path> required unless --build (see --help)")
-        })?;
+        let img = from_img
+            .ok_or_else(|| bad("--from-img <path> required unless --build (see --help)"))?;
         let mut req = ReleaseAssetRequest::new(img, &version)
             .with_arch(&arch)
             .with_checksum(true);

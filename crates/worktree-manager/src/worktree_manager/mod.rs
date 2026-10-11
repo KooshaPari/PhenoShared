@@ -12,5 +12,5 @@ pub mod ports;
 pub use application::WorktreeService;
 pub use domain::*;
 pub use infrastructure::{GitWorktreeAdapter, SimpleFilesystemAdapter};
-pub use pheno_vcs_core::{CommitId, RefName, VersionedPath, VcsError, VcsResult};
+pub use pheno_vcs_core::{CommitId, RefName, VcsError, VcsResult, VersionedPath};
 pub use ports::*;

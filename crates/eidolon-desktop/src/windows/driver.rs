@@ -190,7 +190,7 @@ impl DesktopAutomator for WindowsClient {
         match event.action.as_str() {
             "move" => {
                 self.move_absolute(event.x, event.y)?;
-            }
+            },
             "press" | "tap" => {
                 self.move_absolute(event.x, event.y)?;
                 Self::send_inputs(&[Self::mouse_input(0, 0, down)])?;
@@ -198,26 +198,26 @@ impl DesktopAutomator for WindowsClient {
                     std::thread::sleep(std::time::Duration::from_millis(50));
                 }
                 Self::send_inputs(&[Self::mouse_input(0, 0, up)])?;
-            }
+            },
             "release" => {
                 Self::send_inputs(&[Self::mouse_input(0, 0, up)])?;
-            }
+            },
             "long_press" => {
                 self.move_absolute(event.x, event.y)?;
                 Self::send_inputs(&[Self::mouse_input(0, 0, down)])?;
                 let duration = event.duration_ms.unwrap_or(500);
                 std::thread::sleep(std::time::Duration::from_millis(duration as u64));
                 Self::send_inputs(&[Self::mouse_input(0, 0, up)])?;
-            }
+            },
             "drag" => {
                 // press at current, move to target, release (macOS-parity extension)
                 Self::send_inputs(&[Self::mouse_input(0, 0, down)])?;
                 self.move_absolute(event.x, event.y)?;
                 Self::send_inputs(&[Self::mouse_input(0, 0, up)])?;
-            }
+            },
             other => {
                 log::warn!("Unknown pointer action: {other}");
-            }
+            },
         }
 
         log::debug!(
@@ -236,21 +236,21 @@ impl DesktopAutomator for WindowsClient {
         match event.input_type.as_str() {
             "keystroke" => {
                 Self::inject_unicode_text(&event.text, delay)?;
-            }
+            },
             "paste" => {
                 // Assumes clipboard already holds content (macOS Cmd+V parity).
                 Self::chord_ctrl(VK_V)?;
-            }
+            },
             "clear" => {
                 Self::chord_ctrl(VK_A)?;
                 Self::send_inputs(&[
                     Self::key_vk(VK_DELETE, false),
                     Self::key_vk(VK_DELETE, true),
                 ])?;
-            }
+            },
             other => {
                 log::warn!("Unknown text input type: {other}");
-            }
+            },
         }
 
         log::debug!(

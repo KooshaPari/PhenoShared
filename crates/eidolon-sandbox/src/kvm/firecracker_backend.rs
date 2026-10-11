@@ -75,11 +75,7 @@ impl FirecrackerKvmClient {
     }
 
     /// Construct with an explicit image label and isolation policy.
-    pub fn try_with_image(
-        sandbox_id: &str,
-        image: &str,
-        policy: SandboxPolicy,
-    ) -> Result<Self> {
+    pub fn try_with_image(sandbox_id: &str, image: &str, policy: SandboxPolicy) -> Result<Self> {
         validate_sandbox_id(sandbox_id)?;
         if image.trim().is_empty() {
             return Err(PhenoError::BadRequest(
@@ -181,10 +177,7 @@ impl FirecrackerKvmClient {
 
     /// Whether a live guest child was spawned.
     pub fn guest_spawned(&self) -> bool {
-        self.guest
-            .lock()
-            .map(|g| g.is_some())
-            .unwrap_or(false)
+        self.guest.lock().map(|g| g.is_some()).unwrap_or(false)
     }
 
     fn run_version(bin: &std::path::Path) -> Option<String> {
@@ -239,8 +232,7 @@ impl SandboxAutomator for FirecrackerKvmClient {
         if let Some(plan) = &self.plan {
             plan.require_ready()?;
             if boot::firecracker_boot_enabled() {
-                let child =
-                    boot::spawn_firecracker(&self.firecracker, plan, &self.config_path)?;
+                let child = boot::spawn_firecracker(&self.firecracker, plan, &self.config_path)?;
                 let mut guard = self.guest.lock().map_err(|_| {
                     PhenoError::unsupported_platform(
                         codes::SANDBOX_KVM_STUB,

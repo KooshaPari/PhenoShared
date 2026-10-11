@@ -7,12 +7,15 @@
 //! live child is held (`UNIKERNEL_EXEC_INTEGRATION=1`).
 
 use eidolon_core::error::PhenoError;
+use eidolon_core::traits::SandboxAutomator;
 use eidolon_sandbox::codes;
 use eidolon_sandbox::{nanovm_probe, NanoVmBackend, NanoVmStub};
-use eidolon_core::traits::SandboxAutomator;
 
 fn assert_nanovm_stub(err: PhenoError) {
-    assert_eq!(err.unsupported_code(), Some(codes::SANDBOX_NANOVM_STUB));
+    assert_eq!(
+        err.unsupported_code_value(),
+        Some(codes::SANDBOX_NANOVM_STUB)
+    );
     assert_eq!(err.status_code(), 501);
 }
 
@@ -37,8 +40,8 @@ fn probe_ops_consistency() {
 mod with_feature {
     use super::*;
     use eidolon_sandbox::{
-        unikernel_boot, LaunchPlan, OpsNanoVmClient, RootfsConfig, RootfsFormat,
-        UnikernelBackend, UnikernelLaunchConfig,
+        unikernel_boot, LaunchPlan, OpsNanoVmClient, RootfsConfig, RootfsFormat, UnikernelBackend,
+        UnikernelLaunchConfig,
     };
     use std::io::Write;
     use std::path::PathBuf;
@@ -70,11 +73,11 @@ mod with_feature {
                 assert!(!client.guest_spawned());
                 assert_nanovm_stub(client.exec("echo hi").await.unwrap_err());
                 client.stop().await.expect("stop");
-            }
+            },
             Err(err) => {
                 assert!(!nanovm_probe::ops_cli_ready());
                 assert_nanovm_stub(err);
-            }
+            },
         }
     }
 
@@ -100,13 +103,13 @@ mod with_feature {
                     Ok(client) => assert!(client.plan().is_some()),
                     Err(err) => assert_nanovm_stub(err),
                 }
-            }
+            },
             Err(err) => {
                 assert_eq!(
-                    err.unsupported_code(),
+                    err.unsupported_code_value(),
                     Some(codes::SANDBOX_UNIKERNEL_STUB)
                 );
-            }
+            },
         }
         let _ = std::fs::remove_file(&rootfs);
     }
@@ -123,17 +126,20 @@ mod with_feature {
             RootfsConfig::new(&rootfs),
         )
         .unwrap();
-        let plan = LaunchPlan::try_from_config(&cfg)
-            .expect("NANOVM_INTEGRATION=1 requires ops + rootfs");
+        let plan =
+            LaunchPlan::try_from_config(&cfg).expect("NANOVM_INTEGRATION=1 requires ops + rootfs");
         let client = OpsNanoVmClient::try_from_plan(plan)
             .expect("NANOVM_INTEGRATION=1 requires OpsNanoVmClient");
         match client.start().await {
             Ok(()) => {
                 let _ = client.stop().await;
-            }
+            },
             Err(err) => {
-                assert_eq!(err.unsupported_code(), Some(codes::SANDBOX_NANOVM_STUB));
-            }
+                assert_eq!(
+                    err.unsupported_code_value(),
+                    Some(codes::SANDBOX_NANOVM_STUB)
+                );
+            },
         }
         let _ = std::fs::remove_file(&rootfs);
     }

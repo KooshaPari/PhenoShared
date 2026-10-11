@@ -148,7 +148,7 @@ pub(crate) fn capture_primary_bmp(path: &Path) -> Result<WinCaptureBackend> {
                         path.display()
                     );
                     return Ok(WinCaptureBackend::Dxgi);
-                }
+                },
                 Err(e) => {
                     let msg = e.to_string();
                     log::warn!(
@@ -163,7 +163,7 @@ pub(crate) fn capture_primary_bmp(path: &Path) -> Result<WinCaptureBackend> {
                             last_dxgi.as_deref().unwrap_or("unknown")
                         )));
                     }
-                }
+                },
             },
             WinCaptureBackend::Gdi => match super::gdi::capture_bmp(path) {
                 Ok(()) => {
@@ -176,14 +176,14 @@ pub(crate) fn capture_primary_bmp(path: &Path) -> Result<WinCaptureBackend> {
                         log::info!("Screenshot (GDI BMP) saved to {}", path.display());
                     }
                     return Ok(WinCaptureBackend::Gdi);
-                }
+                },
                 Err(e) => {
                     return Err(capture_unavailable(format!(
                         "GDI BitBlt failed after plan {:?}: {e} (prior DXGI: {})",
                         plan,
                         last_dxgi.as_deref().unwrap_or("n/a")
                     )));
-                }
+                },
             },
         }
     }
@@ -243,7 +243,7 @@ mod tests {
     fn capture_unavailable_uses_stable_code() {
         let err = capture_unavailable("unit-test");
         assert_eq!(
-            err.unsupported_code(),
+            err.unsupported_code_value(),
             Some(codes::DESKTOP_WIN_CAPTURE_UNAVAILABLE)
         );
         assert_eq!(err.status_code(), 501);
@@ -266,7 +266,7 @@ mod tests {
         {
             let err = result.unwrap_err();
             assert_eq!(
-                err.unsupported_code(),
+                err.unsupported_code_value(),
                 Some(codes::DESKTOP_WIN_CAPTURE_UNAVAILABLE)
             );
             assert_eq!(err.status_code(), 501);
@@ -281,7 +281,7 @@ mod tests {
         }
         let err = require_windows_capture_smoke().unwrap_err();
         assert_eq!(
-            err.unsupported_code(),
+            err.unsupported_code_value(),
             Some(codes::DESKTOP_WIN_CAPTURE_UNAVAILABLE)
         );
         assert!(err.to_string().contains(CAPTURE_SMOKE_ENV));
@@ -294,15 +294,13 @@ mod tests {
     #[ignore = "subprocess harness only (requires EIDOLON_DESKTOP_WIN_CAPTURE_SMOKE=1)"]
     fn capture_smoke_gate_fails_loud_off_windows_with_env() {
         if !capture_smoke_requested() {
-            panic!(
-                "run with {CAPTURE_SMOKE_ENV}=1 (subprocess harness only)"
-            );
+            panic!("run with {CAPTURE_SMOKE_ENV}=1 (subprocess harness only)");
         }
         #[cfg(not(all(target_os = "windows", feature = "desktop-windows")))]
         {
             let err = require_windows_capture_smoke().unwrap_err();
             assert_eq!(
-                err.unsupported_code(),
+                err.unsupported_code_value(),
                 Some(codes::DESKTOP_WIN_CAPTURE_UNAVAILABLE)
             );
             assert_eq!(err.status_code(), 501);

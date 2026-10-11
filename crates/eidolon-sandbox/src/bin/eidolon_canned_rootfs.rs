@@ -28,7 +28,7 @@ fn main() -> ExitCode {
         Err(e) => {
             eprintln!("eidolon-canned-rootfs: {e}");
             ExitCode::FAILURE
-        }
+        },
     }
 }
 
@@ -46,31 +46,30 @@ fn run(args: Vec<String>) -> eidolon_core::Result<()> {
             "-h" | "--help" => {
                 print_help();
                 return Ok(());
-            }
+            },
             "--mode" => {
                 i += 1;
                 mode = parse_mode(args.get(i).map(String::as_str).unwrap_or(""))?;
-            }
+            },
             "--agent" => {
                 i += 1;
                 agent = Some(PathBuf::from(
-                    args.get(i)
-                        .ok_or_else(|| bad("--agent requires a path"))?,
+                    args.get(i).ok_or_else(|| bad("--agent requires a path"))?,
                 ));
-            }
+            },
             "--out" => {
                 i += 1;
                 out_dir = Some(PathBuf::from(
                     args.get(i).ok_or_else(|| bad("--out requires a path"))?,
                 ));
-            }
+            },
             "--base-tree" => {
                 i += 1;
                 base_tree = Some(PathBuf::from(
                     args.get(i)
                         .ok_or_else(|| bad("--base-tree requires a path"))?,
                 ));
-            }
+            },
             "--docker-ref" => {
                 i += 1;
                 docker_ref = Some(
@@ -78,14 +77,12 @@ fn run(args: Vec<String>) -> eidolon_core::Result<()> {
                         .ok_or_else(|| bad("--docker-ref requires an image/container"))?
                         .clone(),
                 );
-            }
+            },
             "--no-systemd" => systemd = false,
             "--fetch-agent" => allow_fetch = true,
             other => {
-                return Err(bad(format!(
-                    "unknown argument {other:?} — try --help"
-                )));
-            }
+                return Err(bad(format!("unknown argument {other:?} — try --help")));
+            },
         }
         i += 1;
     }

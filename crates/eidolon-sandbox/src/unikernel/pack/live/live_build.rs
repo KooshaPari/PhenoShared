@@ -95,7 +95,7 @@ pub(super) fn pack_virt_make_fs(tool: &Path, req: &PackRequest) -> Result<Packag
                 "virt_make_fs unsupported rootfs_format={} (use ext4/raw)",
                 rootfs_format_label(other)
             )));
-        }
+        },
     };
 
     let mut cmd = Command::new(tool);

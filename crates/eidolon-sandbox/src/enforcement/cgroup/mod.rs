@@ -34,8 +34,8 @@ pub use disk::{
 use crate::codes;
 use crate::enforcement::plan::EnforcementPlan;
 use eidolon_core::error::PhenoError;
-use eidolon_core::Result;
 use eidolon_core::security::validate_sandbox_id;
+use eidolon_core::Result;
 
 /// Result of moving the current process into a limited cgroup.
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -105,12 +105,8 @@ pub(crate) fn apply_plan_at(
     use std::fs;
 
     let child = parent.join(format!("eidolon-{sandbox_id}"));
-    fs::create_dir_all(&child).map_err(|e| {
-        unsupported(format!(
-            "failed to create cgroup {}: {e}",
-            child.display()
-        ))
-    })?;
+    fs::create_dir_all(&child)
+        .map_err(|e| unsupported(format!("failed to create cgroup {}: {e}", child.display())))?;
 
     write_controller(
         &child.join("memory.max"),
@@ -131,14 +127,14 @@ pub(crate) fn apply_plan_at(
                          (set {}=maj:min); cgroup v2 maps disk_mib → io.max rbps/wbps only",
                         disk::DISK_DEV_ENV
                     )));
-                }
+                },
             };
             // Best-effort enable io controller on the parent.
             let _ = try_enable_io(parent);
             let line = disk::io_max_line(maj, min, disk_mib);
             write_controller_disk(&child.join("io.max"), line.as_bytes())?;
             (true, Some(line))
-        }
+        },
     };
 
     if let Some(pid) = join_pid {
@@ -170,15 +166,12 @@ fn try_enable_io(parent: &std::path::Path) {
 fn write_controller(path: &std::path::Path, value: &[u8]) -> Result<()> {
     use std::fs;
     use std::io::Write;
-    let mut f = fs::OpenOptions::new()
-        .write(true)
-        .open(path)
-        .map_err(|e| {
-            unsupported(format!(
-                "cannot open cgroup controller {}: {e}",
-                path.display()
-            ))
-        })?;
+    let mut f = fs::OpenOptions::new().write(true).open(path).map_err(|e| {
+        unsupported(format!(
+            "cannot open cgroup controller {}: {e}",
+            path.display()
+        ))
+    })?;
     f.write_all(value).map_err(|e| {
         PhenoError::Platform(format!(
             "failed writing cgroup controller {}: {e}",
@@ -192,15 +185,12 @@ fn write_controller(path: &std::path::Path, value: &[u8]) -> Result<()> {
 fn write_controller_disk(path: &std::path::Path, value: &[u8]) -> Result<()> {
     use std::fs;
     use std::io::Write;
-    let mut f = fs::OpenOptions::new()
-        .write(true)
-        .open(path)
-        .map_err(|e| {
-            disk::disk_unavailable(format!(
-                "cannot open cgroup io.max {}: {e} (is the io controller enabled?)",
-                path.display()
-            ))
-        })?;
+    let mut f = fs::OpenOptions::new().write(true).open(path).map_err(|e| {
+        disk::disk_unavailable(format!(
+            "cannot open cgroup io.max {}: {e} (is the io controller enabled?)",
+            path.display()
+        ))
+    })?;
     f.write_all(value).map_err(|e| {
         disk::disk_unavailable(format!(
             "failed writing cgroup io.max {}: {e}",
@@ -257,7 +247,7 @@ mod linux {
             Ok(()) => {
                 let _ = fs::remove_dir(&probe);
                 true
-            }
+            },
             Err(_) => false,
         }
     }

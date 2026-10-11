@@ -108,7 +108,7 @@ impl DesktopAutomator for MacOSClient {
                             )
                         })?;
                 cg_event.post(core_graphics::event::CGEventTapLocation::HID);
-            }
+            },
             eidolon_core::input::PointerAction::Click => {
                 {
                     let event_source = MacOSClient::create_event_source()?;
@@ -135,7 +135,7 @@ impl DesktopAutomator for MacOSClient {
                             )
                         })?;
                 up_event.post(core_graphics::event::CGEventTapLocation::HID);
-            }
+            },
             eidolon_core::input::PointerAction::DoubleClick => {
                 {
                     let event_source = MacOSClient::create_event_source()?;
@@ -162,7 +162,7 @@ impl DesktopAutomator for MacOSClient {
                             )
                         })?;
                 up_event.post(core_graphics::event::CGEventTapLocation::HID);
-            }
+            },
             eidolon_core::input::PointerAction::RightClick => {
                 let event_source = MacOSClient::create_event_source()?;
                 let cg_event = CGEvent::new_mouse_event(
@@ -191,7 +191,7 @@ impl DesktopAutomator for MacOSClient {
                     )
                 })?;
                 cg_event.post(core_graphics::event::CGEventTapLocation::HID);
-            }
+            },
             eidolon_core::input::PointerAction::MiddleClick => {
                 let event_source = MacOSClient::create_event_source()?;
                 let cg_event = CGEvent::new_mouse_event(
@@ -216,10 +216,10 @@ impl DesktopAutomator for MacOSClient {
                             )
                         })?;
                 cg_event.post(core_graphics::event::CGEventTapLocation::HID);
-            }
+            },
             eidolon_core::input::PointerAction::Scroll => {
                 log::warn!("Scroll pointer action not yet implemented on macOS");
-            }
+            },
         }
 
         log::debug!(
@@ -252,7 +252,7 @@ impl DesktopAutomator for MacOSClient {
                         tokio::time::sleep(std::time::Duration::from_millis(delay as u64)).await;
                     }
                 }
-            }
+            },
             eidolon_core::input::InputType::Paste => {
                 let event_source = MacOSClient::create_event_source()?;
                 let flags = CGEventFlags::CGEventFlagCommand;
@@ -274,7 +274,7 @@ impl DesktopAutomator for MacOSClient {
                 })?;
                 key_up.set_flags(flags);
                 key_up.post(core_graphics::event::CGEventTapLocation::HID);
-            }
+            },
             eidolon_core::input::InputType::Char => {
                 let event_source = MacOSClient::create_event_source()?;
                 let select_all = CGEvent::new_keyboard_event(event_source.clone(), 0, true)
@@ -297,10 +297,10 @@ impl DesktopAutomator for MacOSClient {
                     )
                 })?;
                 delete.post(core_graphics::event::CGEventTapLocation::HID);
-            }
+            },
             eidolon_core::input::InputType::IME => {
                 log::warn!("IME input type not yet implemented on macOS");
-            }
+            },
         }
 
         log::debug!(

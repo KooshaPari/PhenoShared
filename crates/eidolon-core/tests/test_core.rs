@@ -245,7 +245,7 @@ mod automation_event {
         match event.payload {
             eidolon_core::event::EventPayload::Screenshot { ref path } => {
                 assert_eq!(path, "/tmp/screen.png");
-            }
+            },
             _ => panic!("Expected Screenshot payload"),
         }
     }
@@ -288,7 +288,7 @@ mod automation_event {
         let json = r#"{"id":"cust-1","event_type":{"custom":"test_event"},"platform":"unknown","payload":{"data":{"foo":"bar"}},"timestamp":1700000000}"#;
         let event: AutomationEvent = serde_json::from_str(json).unwrap();
         match event.payload {
-            eidolon_core::event::EventPayload::Custom { .. } => {}
+            eidolon_core::event::EventPayload::Custom { .. } => {},
             _ => panic!("Expected Custom payload"),
         }
     }

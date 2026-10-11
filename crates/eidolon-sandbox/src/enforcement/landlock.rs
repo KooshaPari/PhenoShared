@@ -109,14 +109,16 @@ mod linux {
                 .set_compatibility(CompatLevel::BestEffort)
                 .handle_access(AccessNet::BindTcp | AccessNet::ConnectTcp)
                 .map_err(|e| {
-                    unsupported(format!("Landlock net handle_access failed unexpectedly: {e}"))
+                    unsupported(format!(
+                        "Landlock net handle_access failed unexpectedly: {e}"
+                    ))
                 })?;
             net_handled = true;
         }
 
-        let mut created = ruleset.create().map_err(|e| {
-            unsupported(format!("Landlock ruleset create failed: {e}"))
-        })?;
+        let mut created = ruleset
+            .create()
+            .map_err(|e| unsupported(format!("Landlock ruleset create failed: {e}")))?;
 
         let mut rules_installed = 0usize;
         for path in &plan.landlock_fs.read_only {
@@ -132,9 +134,9 @@ mod linux {
             rules_installed += 1;
         }
 
-        created.restrict_self().map_err(|e| {
-            PhenoError::Platform(format!("Landlock restrict_self failed: {e}"))
-        })?;
+        created
+            .restrict_self()
+            .map_err(|e| PhenoError::Platform(format!("Landlock restrict_self failed: {e}")))?;
 
         Ok(LandlockStatus {
             abi: "V1",
@@ -143,19 +145,15 @@ mod linux {
         })
     }
 
-    fn add_rule<R>(
-        ruleset: R,
-        path: &Path,
-        access: BitFlags<AccessFs>,
-    ) -> Result<R>
+    fn add_rule<R>(ruleset: R, path: &Path, access: BitFlags<AccessFs>) -> Result<R>
     where
         R: RulesetCreatedAttr,
     {
         let fd = PathFd::new(path).map_err(|e| {
             PhenoError::BadRequest(format!("Landlock path {path:?} is not openable: {e}"))
         })?;
-        ruleset
-            .add_rule(PathBeneath::new(fd, access))
-            .map_err(|e| PhenoError::Platform(format!("Landlock add_rule for {path:?} failed: {e}")))
+        ruleset.add_rule(PathBeneath::new(fd, access)).map_err(|e| {
+            PhenoError::Platform(format!("Landlock add_rule for {path:?} failed: {e}"))
+        })
     }
 }

@@ -229,7 +229,7 @@ mod tests {
             .unwrap_err();
         assert_eq!(err.status_code(), 501);
         assert_eq!(
-            err.unsupported_code().expect("501 code"),
+            err.unsupported_code_value().expect("501 code"),
             codes::SANDBOX_AUDIT_BACKEND
         );
         // Inner ran before engine append failed.

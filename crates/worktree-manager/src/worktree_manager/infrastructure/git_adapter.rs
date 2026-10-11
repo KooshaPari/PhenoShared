@@ -117,8 +117,7 @@ impl WorktreeRepository for GitWorktreeAdapter {
             Self::push_record(wt, &mut main, &mut worktrees);
         }
 
-        let main =
-            main.unwrap_or_else(|| Worktree::main(repo_canonical, String::new()));
+        let main = main.unwrap_or_else(|| Worktree::main(repo_canonical, String::new()));
         let total_count = worktrees.len();
 
         Ok(WorktreeListing {

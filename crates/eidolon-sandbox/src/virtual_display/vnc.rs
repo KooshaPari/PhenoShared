@@ -96,10 +96,13 @@ mod tests {
         };
         let err = start_vnc(&VirtualDisplayConfig::default(), &handle).unwrap_err();
         if super::super::platform_is_linux() {
-            assert_eq!(err.unsupported_code(), Some(codes::SANDBOX_VNC_UNSUPPORTED));
+            assert_eq!(
+                err.unsupported_code_value(),
+                Some(codes::SANDBOX_VNC_UNSUPPORTED)
+            );
         } else {
             assert_eq!(
-                err.unsupported_code(),
+                err.unsupported_code_value(),
                 Some(codes::SANDBOX_VIRTUAL_DISPLAY_UNSUPPORTED)
             );
         }

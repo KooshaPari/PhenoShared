@@ -111,7 +111,7 @@ impl UnikernelGuestClient {
                     )
                 })?;
                 super::boot::spawn_firecracker(&bin, &self.plan, &self.config_path)
-            }
+            },
             UnikernelBackend::NanoVm => {
                 let ops = nanovm::probe::resolve_ops_cli().ok_or_else(|| {
                     PhenoError::unsupported_platform(
@@ -121,7 +121,7 @@ impl UnikernelGuestClient {
                     )
                 })?;
                 super::boot::spawn_ops(&ops, &self.plan)
-            }
+            },
         }
     }
 

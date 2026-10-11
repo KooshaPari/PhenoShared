@@ -83,10 +83,10 @@ pub fn ensure_vsock_agent_bin(explicit: Option<&Path>, allow_fetch: bool) -> Res
             if !allow_fetch {
                 return Err(e);
             }
-            if e.unsupported_code() != Some(codes::SANDBOX_VSOCK_AGENT_MISSING) {
+            if e.unsupported_code_value() != Some(codes::SANDBOX_VSOCK_AGENT_MISSING) {
                 return Err(e);
             }
-        }
+        },
     }
 
     let url = std::env::var(AGENT_URL_ENV).ok();
@@ -110,7 +110,7 @@ pub fn ensure_vsock_agent_bin(explicit: Option<&Path>, allow_fetch: bool) -> Res
                     ),
                 ));
             }
-        }
+        },
         (Some(_), None) | (None, Some(_)) => {
             return Err(PhenoError::unsupported_platform(
                 codes::SANDBOX_VSOCK_AGENT_MISSING,
@@ -119,8 +119,8 @@ pub fn ensure_vsock_agent_bin(explicit: Option<&Path>, allow_fetch: bool) -> Res
                      or pass an explicit binary / {AGENT_PATH_ENV} (docs/guides/canned-rootfs.md)"
                 ),
             ));
-        }
-        _ => {}
+        },
+        _ => {},
     }
 
     Err(PhenoError::unsupported_platform(

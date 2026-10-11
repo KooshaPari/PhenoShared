@@ -216,7 +216,11 @@ impl PolicySecurityGate {
     /// Permissive local-automation defaults ([`caps::DEFAULT_DESKTOP`]),
     /// 60 checks / 60s per capability.
     pub fn permissive_desktop() -> Self {
-        Self::new(caps::DEFAULT_DESKTOP.iter().copied(), 60, Duration::from_secs(60))
+        Self::new(
+            caps::DEFAULT_DESKTOP.iter().copied(),
+            60,
+            Duration::from_secs(60),
+        )
     }
 
     /// Empty allow-list — every well-formed capability is [`PhenoError::Forbidden`].
@@ -307,9 +311,8 @@ mod tests {
     fn policy_allows_default_desktop_caps() {
         let gate = PolicySecurityGate::permissive_desktop();
         for cap in caps::DEFAULT_DESKTOP {
-            gate.check_capability(cap).unwrap_or_else(|e| {
-                panic!("expected allow for {cap:?}, got {e:?}")
-            });
+            gate.check_capability(cap)
+                .unwrap_or_else(|e| panic!("expected allow for {cap:?}, got {e:?}"));
         }
     }
 
@@ -325,7 +328,7 @@ mod tests {
         let gate = PolicySecurityGate::permissive_desktop();
         let err = gate.check_capability("vault.encrypt").unwrap_err();
         assert_eq!(
-            err.unsupported_code(),
+            err.unsupported_code_value(),
             Some(codes::DESKTOP_SECURITY_UNAVAILABLE)
         );
         assert_eq!(err.status_code(), 501);
@@ -333,11 +336,7 @@ mod tests {
 
     #[test]
     fn policy_rate_limits() {
-        let gate = PolicySecurityGate::new(
-            [caps::POINTER_INJECT],
-            2,
-            Duration::from_secs(60),
-        );
+        let gate = PolicySecurityGate::new([caps::POINTER_INJECT], 2, Duration::from_secs(60));
         gate.check_capability(caps::POINTER_INJECT).unwrap();
         gate.check_capability(caps::POINTER_INJECT).unwrap();
         let err = gate.check_capability(caps::POINTER_INJECT).unwrap_err();
@@ -373,7 +372,7 @@ mod tests {
         let stub = SecurityHooksStub::new();
         let err = stub.check_capability(caps::POINTER_INJECT).unwrap_err();
         assert_eq!(
-            err.unsupported_code(),
+            err.unsupported_code_value(),
             Some(codes::DESKTOP_SECURITY_UNAVAILABLE)
         );
     }

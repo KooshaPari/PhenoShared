@@ -71,7 +71,7 @@ pub(super) fn apply_plan(plan: &NamespacePlan) -> Result<NamespaceApply> {
                     child_host_pid: child.as_raw() as u32,
                 })),
             })
-        }
+        },
         Ok(ForkResult::Child) => {
             drop(read_end);
             // Inherited ignored/custom SIGTERM would make stop()/teardown hang.
@@ -82,7 +82,7 @@ pub(super) fn apply_plan(plan: &NamespacePlan) -> Result<NamespaceApply> {
                     // Fail loud before returning to wiring — parent await will see pipe fail.
                     let _ = write_end;
                     return Err(e);
-                }
+                },
             };
             Ok(NamespaceApply {
                 status: NamespaceStatus {
@@ -94,7 +94,7 @@ pub(super) fn apply_plan(plan: &NamespacePlan) -> Result<NamespaceApply> {
                 },
                 setup: Some(PidNsSetup::Child(PidNsChildSetup { write_end })),
             })
-        }
+        },
         Err(e) => Err(unsupported(format!(
             "fork after unshare(CLONE_NEWPID) failed: {e} \
                  (PID ns isolation requires fork; refusing silent skip)"
@@ -143,7 +143,7 @@ pub(super) fn run_in_plan(
                         pivot_root_applied: want_pivot,
                         user_ns_mapped: want_user && mapped,
                     })
-                }
+                },
                 Ok(WaitStatus::Exited(_, code)) => Err(unsupported(format!(
                     "PID-ns child failed (exit={code}, pipe_byte={})",
                     if n == 1 { buf[0] } else { 255 }
@@ -153,7 +153,7 @@ pub(super) fn run_in_plan(
                 ))),
                 Err(e) => Err(unsupported(format!("waitpid PID-ns child: {e}"))),
             }
-        }
+        },
         Ok(ForkResult::Child) => {
             drop(read_end);
             reset_child_termination_signals();
@@ -163,7 +163,7 @@ pub(super) fn run_in_plan(
             let _ = write_end.flush();
             // Safety: child must not unwind into parent's Rust runtime.
             unsafe { libc::_exit(if ok { 0 } else { 1 }) }
-        }
+        },
         Err(e) => Err(unsupported(format!(
             "fork after unshare(CLONE_NEWPID) failed: {e}"
         ))),
@@ -254,14 +254,14 @@ pub(super) fn report_pid_ns_setup(write_end: &mut std::fs::File, ok: bool) -> Re
 pub(super) fn terminate_child(host_pid: u32) -> Result<()> {
     let pid = Pid::from_raw(host_pid as i32);
     match kill(pid, Signal::SIGTERM) {
-        Ok(()) => {}
+        Ok(()) => {},
         // Already gone — treat as clean teardown.
         Err(nix::errno::Errno::ESRCH) => return Ok(()),
         Err(e) => {
             return Err(unsupported(format!(
                 "kill({host_pid}, SIGTERM) for PID-ns child failed: {e}"
             )));
-        }
+        },
     }
 
     let deadline = Instant::now() + TERM_GRACE;
@@ -272,24 +272,24 @@ pub(super) fn terminate_child(host_pid: u32) -> Result<()> {
                     break;
                 }
                 std::thread::sleep(TERM_POLL);
-            }
+            },
             Ok(_) => return Ok(()),
             Err(nix::errno::Errno::ECHILD) => return Ok(()),
             Err(e) => {
                 return Err(unsupported(format!(
                     "waitpid({host_pid}) after SIGTERM failed: {e}"
                 )));
-            }
+            },
         }
     }
 
     match kill(pid, Signal::SIGKILL) {
-        Ok(()) | Err(nix::errno::Errno::ESRCH) => {}
+        Ok(()) | Err(nix::errno::Errno::ESRCH) => {},
         Err(e) => {
             return Err(unsupported(format!(
                 "kill({host_pid}, SIGKILL) for PID-ns child failed: {e}"
             )));
-        }
+        },
     }
     match waitpid(pid, None) {
         Ok(_) | Err(nix::errno::Errno::ECHILD) => Ok(()),

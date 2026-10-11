@@ -103,10 +103,9 @@ pub fn load_oci_allowlist_file(path: &Path) -> Result<Vec<String>> {
         ))
     })?;
     parse_oci_allowlist(&bytes).map_err(|e| match e {
-        PhenoError::BadRequest(msg) => PhenoError::BadRequest(format!(
-            "seccomp profile {}: {msg}",
-            path.display()
-        )),
+        PhenoError::BadRequest(msg) => {
+            PhenoError::BadRequest(format!("seccomp profile {}: {msg}", path.display()))
+        },
         other => other,
     })
 }
@@ -196,10 +195,7 @@ mod tests {
 
     #[test]
     fn load_file_roundtrip() {
-        let dir = std::env::temp_dir().join(format!(
-            "eidolon-seccomp-oci-{}",
-            std::process::id()
-        ));
+        let dir = std::env::temp_dir().join(format!("eidolon-seccomp-oci-{}", std::process::id()));
         let _ = std::fs::create_dir_all(&dir);
         let path = dir.join("profile.json");
         {

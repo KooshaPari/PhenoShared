@@ -11,13 +11,13 @@ pub fn create_credential_store(config: &AppConfig) -> Box<dyn CredentialStore> {
         CredentialBackend::Keychain => Box::new(KeychainCredentialStore::new()),
         CredentialBackend::File => {
             Box::new(FileCredentialStore::new(&config.credentials.file_path))
-        }
+        },
         CredentialBackend::Auto => {
             Box::new(FileCredentialStore::new(&config.credentials.file_path))
-        }
+        },
         #[cfg(not(feature = "keychain"))]
         CredentialBackend::Keychain => {
             Box::new(FileCredentialStore::new(&config.credentials.file_path))
-        }
+        },
     }
 }

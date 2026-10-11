@@ -30,12 +30,10 @@ mod gdi;
 
 pub use capture::{
     capture_mode_from_env, capture_plan, capture_smoke_requested, parse_capture_mode,
-    require_windows_capture_host, require_windows_capture_smoke, WinCaptureBackend,
-    WinCaptureMode, CAPTURE_MODE_ENV, CAPTURE_SMOKE_ENV,
+    require_windows_capture_host, require_windows_capture_smoke, WinCaptureBackend, WinCaptureMode,
+    CAPTURE_MODE_ENV, CAPTURE_SMOKE_ENV,
 };
-pub use gate::{
-    actions_allowed, require_actions_allowed, ACTIONS_ALLOW_ENV,
-};
+pub use gate::{actions_allowed, require_actions_allowed, ACTIONS_ALLOW_ENV};
 pub use stub::WindowsStub;
 
 #[cfg(all(target_os = "windows", feature = "desktop-windows"))]

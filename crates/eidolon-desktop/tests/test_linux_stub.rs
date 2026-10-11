@@ -19,12 +19,12 @@ use eidolon_desktop::{
 // ---------------------------------------------------------------------------
 
 fn assert_unsupported(err: PhenoError, code: &str, method: &str) {
-    assert_eq!(err.unsupported_code(), Some(code));
+    assert_eq!(err.unsupported_code_value(), Some(code));
     assert_eq!(err.status_code(), 501);
     match &err {
         PhenoError::UnsupportedPlatform {
             code: c,
-            message: msg,
+            detail: msg,
         } => {
             assert_eq!(c, code);
             assert!(
@@ -35,7 +35,7 @@ fn assert_unsupported(err: PhenoError, code: &str, method: &str) {
                 msg.contains("not implemented"),
                 "error message should say 'not implemented', got: {msg}"
             );
-        }
+        },
         other => panic!("expected UnsupportedPlatform, got {other:?}"),
     }
 }
@@ -105,7 +105,10 @@ async fn linux_stub_all_actions_fail_loud() {
         stub.text(&TextInput::keystroke("x")).await.unwrap_err(),
     ];
     for err in &errors {
-        assert_eq!(err.unsupported_code(), Some(codes::DESKTOP_LINUX_STUB));
+        assert_eq!(
+            err.unsupported_code_value(),
+            Some(codes::DESKTOP_LINUX_STUB)
+        );
         assert_eq!(err.status_code(), 501);
     }
     assert_eq!(errors.len(), 4);
@@ -227,7 +230,7 @@ async fn atspi_stub_all_actions_fail_loud() {
     ];
     for err in &errors {
         assert_eq!(
-            err.unsupported_code(),
+            err.unsupported_code_value(),
             Some(codes::DESKTOP_LINUX_ATSPI_STUB)
         );
         assert_eq!(err.status_code(), 501);
@@ -368,12 +371,12 @@ async fn linux_stub_error_message_contains_feature_hint() {
     let stub = LinuxStub::new();
     let err = stub.get_viewport().await.unwrap_err();
     match err {
-        PhenoError::UnsupportedPlatform { message, .. } => {
+        PhenoError::UnsupportedPlatform { detail, .. } => {
             assert!(
-                message.contains("desktop-linux"),
-                "message should mention desktop-linux feature: {message}"
+                detail.contains("desktop-linux"),
+                "message should mention desktop-linux feature: {detail}"
             );
-        }
+        },
         other => panic!("expected UnsupportedPlatform, got {other:?}"),
     }
 }
@@ -383,12 +386,12 @@ async fn atspi_stub_error_message_contains_feature_hint() {
     let stub = AtspiStub::new();
     let err = stub.list_nodes(1).await.unwrap_err();
     match err {
-        PhenoError::UnsupportedPlatform { message, .. } => {
+        PhenoError::UnsupportedPlatform { detail, .. } => {
             assert!(
-                message.contains("desktop-linux-atspi"),
-                "message should mention desktop-linux-atspi feature: {message}"
+                detail.contains("desktop-linux-atspi"),
+                "message should mention desktop-linux-atspi feature: {detail}"
             );
-        }
+        },
         other => panic!("expected UnsupportedPlatform, got {other:?}"),
     }
 }

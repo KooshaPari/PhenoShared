@@ -153,7 +153,7 @@ pub(crate) mod tests {
     fn guard_rejects_tmp() {
         let err = guard_against_tmp(Path::new("/tmp/eidolon-rootfs-release")).unwrap_err();
         assert_eq!(
-            err.unsupported_code(),
+            err.unsupported_code_value(),
             Some(codes::SANDBOX_ROOTFS_RELEASE_UNAVAILABLE)
         );
     }

@@ -62,6 +62,9 @@ pub enum ApiError {
     #[error("platform error: {0}")]
     Platform(String),
 
+    #[error("unsupported platform: {code}: {detail}")]
+    UnsupportedPlatform { code: String, detail: String },
+
     #[error(transparent)]
     Domain(#[from] DomainError),
 
@@ -70,6 +73,36 @@ pub enum ApiError {
 }
 
 impl ApiError {
+    /// True if this error is a 4xx client error.
+    pub fn is_client_error(&self) -> bool {
+        let s = self.status_code();
+        (400..500).contains(&s)
+    }
+
+    /// Get the platform/unsupported error code (if any).
+    pub fn unsupported_code_value(&self) -> Option<&str> {
+        match self {
+            Self::UnsupportedPlatform { code, .. } => Some(code.as_str()),
+            _ => None,
+        }
+    }
+
+    /// Construct an unsupported-code error.
+    pub fn unsupported_code(code: &str, detail: impl Into<String>) -> Self {
+        Self::UnsupportedPlatform {
+            code: code.to_string(),
+            detail: detail.into(),
+        }
+    }
+
+    /// Construct a platform-unsupported error from a code + detail.
+    pub fn unsupported_platform(code: &str, detail: impl Into<String>) -> Self {
+        Self::UnsupportedPlatform {
+            code: code.to_string(),
+            detail: detail.into(),
+        }
+    }
+
     /// HTTP status code for this error.
     pub fn status_code(&self) -> u16 {
         match self {
@@ -82,6 +115,7 @@ impl ApiError {
             Self::Timeout => 504,
             Self::Internal(_) => 500,
             Self::Platform(_) => 500,
+            Self::UnsupportedPlatform { .. } => 501,
             Self::Domain(_) => 422,
             Self::Repository(_) => 500,
         }

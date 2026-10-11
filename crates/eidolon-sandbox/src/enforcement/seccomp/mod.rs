@@ -131,11 +131,11 @@ mod linux {
             SeccompProfile::OciDefault => {
                 let names = oci_default_allowlist()?;
                 apply_allowlist(arch, &names, profile_label(&plan.profile))
-            }
+            },
             SeccompProfile::Custom(path) => {
                 let names = load_oci_allowlist_file(path)?;
                 apply_allowlist(arch, &names, profile_label(&plan.profile))
-            }
+            },
         }
     }
 
@@ -221,10 +221,7 @@ mod linux {
 
     /// Compile an allowlist to BPF without installing (hermetic Linux unit aid).
     #[cfg(test)]
-    pub(super) fn compile_allowlist_only(
-        arch: TargetArch,
-        names: &[String],
-    ) -> Result<usize> {
+    pub(super) fn compile_allowlist_only(arch: TargetArch, names: &[String]) -> Result<usize> {
         let resolved = resolve_allowlist(std::env::consts::ARCH, names);
         if resolved.is_empty() {
             return Err(unsupported("empty allowlist after arch resolve"));

@@ -123,7 +123,7 @@ fn fr004_screenshot_payload_path_preserved() {
     match event.payload {
         eidolon_core::event::EventPayload::Screenshot { path: ref p } => {
             assert_eq!(p, path);
-        }
+        },
         _ => panic!("Expected Screenshot payload variant"),
     }
 }

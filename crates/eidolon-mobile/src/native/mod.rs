@@ -150,22 +150,21 @@ impl AndroidTestAdapter for AdbAndroidTestAdapter {
 
     fn get_viewport(&self) -> Result<(u32, u32)> {
         // Synchronous bridge: shell wm size via list path.
-        let output = std::process::Command::new(
-            crate::android::probe::resolve_adb().ok_or_else(|| {
+        let output =
+            std::process::Command::new(crate::android::probe::resolve_adb().ok_or_else(|| {
                 PhenoError::unsupported_platform(
                     codes::MOBILE_ANDROID_STUB,
                     "adb missing for get_viewport",
                 )
-            })?,
-        )
-        .args(["shell", "wm", "size"])
-        .output()
-        .map_err(|e| {
-            PhenoError::unsupported_platform(
-                codes::MOBILE_ANDROID_STUB,
-                format!("wm size failed: {e}"),
-            )
-        })?;
+            })?)
+            .args(["shell", "wm", "size"])
+            .output()
+            .map_err(|e| {
+                PhenoError::unsupported_platform(
+                    codes::MOBILE_ANDROID_STUB,
+                    format!("wm size failed: {e}"),
+                )
+            })?;
         if !output.status.success() {
             return Err(PhenoError::unsupported_platform(
                 codes::MOBILE_ANDROID_STUB,
@@ -201,7 +200,7 @@ mod tests {
     #[test]
     fn stub_ios_run_test_fails_loud() {
         let err = StubIosTestAdapter.run_test("Smoke").unwrap_err();
-        assert_eq!(err.unsupported_code(), Some(codes::MOBILE_IOS_STUB));
+        assert_eq!(err.unsupported_code_value(), Some(codes::MOBILE_IOS_STUB));
         assert_eq!(err.status_code(), 501);
         let msg = err.to_string();
         assert!(msg.contains("run_test"), "err = {msg}");
@@ -211,7 +210,10 @@ mod tests {
     #[test]
     fn stub_android_execute_fails_loud() {
         let err = StubAndroidTestAdapter.execute("dump").unwrap_err();
-        assert_eq!(err.unsupported_code(), Some(codes::MOBILE_ANDROID_STUB));
+        assert_eq!(
+            err.unsupported_code_value(),
+            Some(codes::MOBILE_ANDROID_STUB)
+        );
         assert_eq!(err.status_code(), 501);
         let msg = err.to_string();
         assert!(msg.contains("execute"), "err = {msg}");

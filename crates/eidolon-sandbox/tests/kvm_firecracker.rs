@@ -12,7 +12,7 @@ use eidolon_sandbox::codes;
 use eidolon_sandbox::{kvm_probe, KvmBackend, KvmStub};
 
 fn assert_kvm_stub(err: PhenoError) {
-    assert_eq!(err.unsupported_code(), Some(codes::SANDBOX_KVM_STUB));
+    assert_eq!(err.unsupported_code_value(), Some(codes::SANDBOX_KVM_STUB));
     assert_eq!(err.status_code(), 501);
 }
 
@@ -43,8 +43,8 @@ fn probe_kvm_consistency() {
 mod with_feature {
     use super::*;
     use eidolon_sandbox::{
-        unikernel_boot, FirecrackerKvmClient, KernelConfig, LaunchPlan, RootfsConfig,
-        RootfsFormat, UnikernelBackend, UnikernelLaunchConfig,
+        unikernel_boot, FirecrackerKvmClient, KernelConfig, LaunchPlan, RootfsConfig, RootfsFormat,
+        UnikernelBackend, UnikernelLaunchConfig,
     };
     use std::io::Write;
     use std::path::PathBuf;
@@ -77,11 +77,11 @@ mod with_feature {
                 assert!(!client.guest_spawned());
                 assert_kvm_stub(client.exec("uname").await.unwrap_err());
                 client.stop().await.expect("stop");
-            }
+            },
             Err(err) => {
                 assert!(!kvm_probe::firecracker_cli_ready());
                 assert_kvm_stub(err);
-            }
+            },
         }
     }
 
@@ -108,17 +108,17 @@ mod with_feature {
                     Ok(client) => {
                         assert!(client.plan().is_some());
                         assert!(!client.guest_spawned());
-                    }
+                    },
                     Err(err) => assert_kvm_stub(err),
                 }
-            }
+            },
             Err(err) => {
                 // CLI absent on macOS CI.
                 assert_eq!(
-                    err.unsupported_code(),
+                    err.unsupported_code_value(),
                     Some(codes::SANDBOX_UNIKERNEL_STUB)
                 );
-            }
+            },
         }
         let _ = std::fs::remove_file(&rootfs);
         let _ = std::fs::remove_file(&kernel);
@@ -147,14 +147,14 @@ mod with_feature {
         match client.start().await {
             Ok(()) => {
                 let _ = client.stop().await;
-            }
+            },
             Err(err) => {
                 assert!(
-                    err.unsupported_code() == Some(codes::SANDBOX_KVM_STUB)
-                        || err.unsupported_code() == Some(codes::SANDBOX_KERNEL_MISSING)
-                        || err.unsupported_code() == Some(codes::SANDBOX_UNIKERNEL_STUB)
+                    err.unsupported_code_value() == Some(codes::SANDBOX_KVM_STUB)
+                        || err.unsupported_code_value() == Some(codes::SANDBOX_KERNEL_MISSING)
+                        || err.unsupported_code_value() == Some(codes::SANDBOX_UNIKERNEL_STUB)
                 );
-            }
+            },
         }
         let _ = std::fs::remove_file(&rootfs);
         let _ = std::fs::remove_file(&kernel);

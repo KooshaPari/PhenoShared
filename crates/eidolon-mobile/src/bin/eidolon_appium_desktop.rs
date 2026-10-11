@@ -25,10 +25,10 @@ fn main() -> ExitCode {
             loop {
                 thread::sleep(Duration::from_secs(3600));
             }
-        }
+        },
         Err(e) => {
             eprintln!("eidolon-appium-desktop: {e}");
             ExitCode::FAILURE
-        }
+        },
     }
 }

@@ -84,10 +84,10 @@ async fn test_screenshot_invalid_path_returns_error() {
     // or Err depending on whether the binary is available. The key
     // assertion: no panic, no crash.
     match result {
-        Ok(()) => { /* screencapture ran; it logged a warning but returned Ok */ }
+        Ok(()) => { /* screencapture ran; it logged a warning but returned Ok */ },
         Err(PhenoError::Platform(msg)) => {
             assert!(!msg.is_empty(), "Platform error message must not be empty");
-        }
+        },
         Err(other) => panic!("Expected PhenoError::Platform or Ok, got: {other:?}"),
     }
 }

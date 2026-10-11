@@ -18,7 +18,7 @@ use eidolon_sandbox::enforcement::{
 };
 
 fn assert_code(err: PhenoError, expected: &str) {
-    assert_eq!(err.unsupported_code(), Some(expected));
+    assert_eq!(err.unsupported_code_value(), Some(expected));
     assert_eq!(err.status_code(), 501);
 }
 
@@ -184,7 +184,7 @@ fn apply_isolation_fail_loud_when_no_live_platform() {
         )
         .unwrap_err();
         assert_eq!(err.status_code(), 501);
-        let code = err.unsupported_code().unwrap();
+        let code = err.unsupported_code_value().unwrap();
         assert!(
             code == codes::SANDBOX_LANDLOCK_UNSUPPORTED
                 || code == codes::SANDBOX_CGROUP_UNSUPPORTED

@@ -39,7 +39,17 @@ pub(crate) fn capture_bmp(path: &Path) -> Result<()> {
         }
 
         let old = SelectObject(hdc_mem, HGDIOBJ(hbmp.0));
-        if let Err(e) = BitBlt(hdc_mem, 0, 0, width, height, Some(hdc_screen), 0, 0, SRCCOPY) {
+        if let Err(e) = BitBlt(
+            hdc_mem,
+            0,
+            0,
+            width,
+            height,
+            Some(hdc_screen),
+            0,
+            0,
+            SRCCOPY,
+        ) {
             SelectObject(hdc_mem, old);
             let _ = DeleteObject(HGDIOBJ(hbmp.0));
             let _ = DeleteDC(hdc_mem);

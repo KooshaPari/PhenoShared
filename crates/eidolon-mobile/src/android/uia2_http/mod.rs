@@ -324,4 +324,3 @@ impl Uia2HttpClient {
 
 #[cfg(test)]
 mod tests;
-

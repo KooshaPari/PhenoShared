@@ -242,7 +242,7 @@ impl LaunchPlan {
                     })?;
                 require_file(&path, codes::SANDBOX_KERNEL_MISSING, "kernel")?;
                 (Some(path), k.boot_args.clone())
-            }
+            },
             None => {
                 // Env-only kernel is optional; if set it must exist.
                 if let Some(path) = super::probe::resolve_kernel(None) {
@@ -251,7 +251,7 @@ impl LaunchPlan {
                 } else {
                     (None, String::new())
                 }
-            }
+            },
         };
 
         require_backend_cli(cfg.backend)?;

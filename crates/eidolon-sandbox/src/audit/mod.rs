@@ -212,7 +212,7 @@ pub fn audit_entry_from_automation(
             if ["pointer", "text", "screenshot"].contains(&s.as_str()) =>
         {
             AuditEventType::DataAccess
-        }
+        },
         eidolon_core::EventType::Custom(s) if s == "navigate" => AuditEventType::SystemAccess,
         eidolon_core::EventType::Custom(s) if s == "assertion" => AuditEventType::ComplianceCheck,
         eidolon_core::EventType::TextInput => AuditEventType::DataAccess,
@@ -383,7 +383,10 @@ mod tests {
             .log_event(AuditEntry::builder("x"))
             .await
             .unwrap_err();
-        assert_eq!(err.unsupported_code(), Some(codes::SANDBOX_AUDIT_BACKEND));
+        assert_eq!(
+            err.unsupported_code_value(),
+            Some(codes::SANDBOX_AUDIT_BACKEND)
+        );
         assert_eq!(err.status_code(), 501);
     }
 

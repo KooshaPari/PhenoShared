@@ -65,7 +65,9 @@ fn uia2_unavailable(method: &str, detail: impl std::fmt::Display) -> PhenoError 
 
 /// Checkout-relative assets directory (`…/assets/uia2`).
 pub fn checkout_assets_dir() -> PathBuf {
-    PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("assets").join("uia2")
+    PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+        .join("assets")
+        .join("uia2")
 }
 
 /// Default durable cache directory for the pinned version.
@@ -123,12 +125,8 @@ pub fn guard_against_tmp(path: &Path) -> Result<()> {
 
 /// Hex-encode SHA-256 of file contents.
 pub fn sha256_file(path: &Path) -> Result<String> {
-    let bytes = fs::read(path).map_err(|e| {
-        uia2_unavailable(
-            "sha256_file",
-            format!("read {}: {e}", path.display()),
-        )
-    })?;
+    let bytes = fs::read(path)
+        .map_err(|e| uia2_unavailable("sha256_file", format!("read {}: {e}", path.display())))?;
     Ok(sha256_hex(&bytes))
 }
 
@@ -184,7 +182,10 @@ fn verified_pair(server: PathBuf, test: PathBuf) -> Result<super::uia2_server::U
 /// Env overrides skip SHA-256 checks (operator-supplied BYO). Checkout assets
 /// and durable cache are always hash-verified against the pinned release.
 pub fn resolve() -> Result<super::uia2_server::Uia2ApkPaths> {
-    resolve_with_roots(Some(&checkout_assets_dir()), durable_cache_dir().ok().as_deref())
+    resolve_with_roots(
+        Some(&checkout_assets_dir()),
+        durable_cache_dir().ok().as_deref(),
+    )
 }
 
 /// Resolve with injectable roots (hermetic tests).
@@ -197,20 +198,20 @@ pub fn resolve_with_roots(
     match (env_server, env_test) {
         (Some(server), Some(test)) => {
             return Ok(super::uia2_server::Uia2ApkPaths::new(server, test));
-        }
+        },
         (Some(_), None) => {
             return Err(uia2_unavailable(
                 "resolve",
                 format!("{UIA2_APK_ENV} set but {UIA2_TEST_APK_ENV} unset or not a file"),
             ));
-        }
+        },
         (None, Some(_)) => {
             return Err(uia2_unavailable(
                 "resolve",
                 format!("{UIA2_TEST_APK_ENV} set but {UIA2_APK_ENV} unset or not a file"),
             ));
-        }
-        (None, None) => {}
+        },
+        (None, None) => {},
     }
 
     if let Some(dir) = assets_dir {
@@ -247,7 +248,7 @@ pub fn ensure() -> Result<super::uia2_server::Uia2ApkPaths> {
             let cache = durable_cache_dir()?;
             fetch_into(&cache)?;
             resolve_with_roots(Some(&checkout_assets_dir()), Some(&cache))
-        }
+        },
     }
 }
 
@@ -256,10 +257,7 @@ pub fn ensure() -> Result<super::uia2_server::Uia2ApkPaths> {
 pub fn fetch_into(dest_dir: &Path) -> Result<()> {
     guard_against_tmp(dest_dir)?;
     fs::create_dir_all(dest_dir).map_err(|e| {
-        uia2_unavailable(
-            "fetch_into",
-            format!("mkdir {}: {e}", dest_dir.display()),
-        )
+        uia2_unavailable("fetch_into", format!("mkdir {}: {e}", dest_dir.display()))
     })?;
     download_verified(
         SERVER_APK_URL,
@@ -283,7 +281,7 @@ fn download_verified(url: &str, dest: &Path, expected_sha256: &str) -> Result<()
             Ok(()) => return Ok(()),
             Err(_) => {
                 let _ = fs::remove_file(dest);
-            }
+            },
         }
     }
 
@@ -344,8 +342,10 @@ mod tests {
 
     #[test]
     fn pinned_constants_match_manifest_filenames() {
-        assert!(SERVER_APK_FILENAME.contains(UIA2_PINNED_VERSION.trim_start_matches('v'))
-            || SERVER_APK_FILENAME.contains("v10.3.2"));
+        assert!(
+            SERVER_APK_FILENAME.contains(UIA2_PINNED_VERSION.trim_start_matches('v'))
+                || SERVER_APK_FILENAME.contains("v10.3.2")
+        );
         assert_eq!(SERVER_APK_SHA256.len(), 64);
         assert_eq!(TEST_APK_SHA256.len(), 64);
         assert!(SERVER_APK_URL.contains(UIA2_PINNED_VERSION));
@@ -354,9 +354,15 @@ mod tests {
     #[test]
     fn guard_rejects_tmp() {
         let err = guard_against_tmp(Path::new("/tmp/eidolon-uia2")).unwrap_err();
-        assert_eq!(err.unsupported_code(), Some(codes::MOBILE_UIA2_UNAVAILABLE));
+        assert_eq!(
+            err.unsupported_code_value(),
+            Some(codes::MOBILE_UIA2_UNAVAILABLE)
+        );
         let err = guard_against_tmp(Path::new("/private/tmp/x")).unwrap_err();
-        assert_eq!(err.unsupported_code(), Some(codes::MOBILE_UIA2_UNAVAILABLE));
+        assert_eq!(
+            err.unsupported_code_value(),
+            Some(codes::MOBILE_UIA2_UNAVAILABLE)
+        );
     }
 
     #[test]
@@ -371,15 +377,21 @@ mod tests {
             return;
         }
         let err = resolve_with_roots(None, None).unwrap_err();
-        assert_eq!(err.unsupported_code(), Some(codes::MOBILE_UIA2_UNAVAILABLE));
+        assert_eq!(
+            err.unsupported_code_value(),
+            Some(codes::MOBILE_UIA2_UNAVAILABLE)
+        );
         assert!(err.to_string().contains("eidolon-fetch-uia2") || err.to_string().contains("APK"));
     }
 
     #[test]
     fn verify_apk_rejects_missing() {
-        let err = verify_apk(Path::new("/nonexistent/uia2-server.apk"), SERVER_APK_SHA256)
-            .unwrap_err();
-        assert_eq!(err.unsupported_code(), Some(codes::MOBILE_UIA2_UNAVAILABLE));
+        let err =
+            verify_apk(Path::new("/nonexistent/uia2-server.apk"), SERVER_APK_SHA256).unwrap_err();
+        assert_eq!(
+            err.unsupported_code_value(),
+            Some(codes::MOBILE_UIA2_UNAVAILABLE)
+        );
     }
 
     #[test]
@@ -394,10 +406,8 @@ mod tests {
     #[test]
     fn resolve_prefers_env_over_roots() {
         let _g = ENV_LOCK.lock().unwrap();
-        let dir = std::env::temp_dir().join(format!(
-            "eidolon-uia2-env-test-{}",
-            std::process::id()
-        ));
+        let dir =
+            std::env::temp_dir().join(format!("eidolon-uia2-env-test-{}", std::process::id()));
         let _ = fs::remove_dir_all(&dir);
         fs::create_dir_all(&dir).unwrap();
         let server = dir.join("server.apk");
@@ -432,7 +442,10 @@ mod tests {
             assert!(paths.test.is_file());
         } else {
             let err = resolve_with_roots(None, Some(&cache)).unwrap_err();
-            assert_eq!(err.unsupported_code(), Some(codes::MOBILE_UIA2_UNAVAILABLE));
+            assert_eq!(
+                err.unsupported_code_value(),
+                Some(codes::MOBILE_UIA2_UNAVAILABLE)
+            );
         }
     }
 }

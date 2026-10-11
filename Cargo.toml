@@ -42,6 +42,13 @@ members = [
     "crates/teamcomm-smoke",
     "crates/klipdot-capture",
     "crates/phenotype-cache-adapter",
+    "crates/eidolon-sandbox",
+    "crates/eidolon-desktop",
+    "crates/eidolon-mobile",
+
+    "crates/pheno-vcs-core",
+    "crates/worktree-manager",
+    "crates/eidolon-core",
     "crates/focus-icon-gen",
     "crates/focus-ci-watcher",
     "crates/focus-time",
@@ -756,6 +763,15 @@ rust-version = "1.80"
 publish = false
 
 [workspace.dependencies]
+nix = "0.29"
+landlock = "0.4"
+seccompiler = "0.5"
+redis = "0.27"
+bollard = "0.18"
+ureq = "2"
+argon2 = "0.5"
+aes-gcm = "0.10"
+phenotype-error-core = { path = "crates/phenotype-error-core" }
 futures-util = "0.3"
 agileplus-error-core = { path = "crates/agileplus-error-core" }
 substrate-core = { version = "0.3.8", path = "crates/substrate-core" }

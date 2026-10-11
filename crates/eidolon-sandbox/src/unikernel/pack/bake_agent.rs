@@ -170,7 +170,8 @@ pub fn stage_vsock_agent_into_tree(
         if let Some(parent) = unit_dest.parent() {
             fs::create_dir_all(parent).map_err(|e| pack_io(parent, e))?;
         }
-        fs::write(&unit_dest, DEFAULT_SYSTEMD_UNIT.as_bytes()).map_err(|e| pack_io(&unit_dest, e))?;
+        fs::write(&unit_dest, DEFAULT_SYSTEMD_UNIT.as_bytes())
+            .map_err(|e| pack_io(&unit_dest, e))?;
         Some(unit_dest)
     } else {
         None
@@ -201,7 +202,9 @@ fn set_executable(path: &Path) -> Result<()> {
     #[cfg(unix)]
     {
         use std::os::unix::fs::PermissionsExt;
-        let mut perms = fs::metadata(path).map_err(|e| pack_io(path, e))?.permissions();
+        let mut perms = fs::metadata(path)
+            .map_err(|e| pack_io(path, e))?
+            .permissions();
         perms.set_mode(0o755);
         fs::set_permissions(path, perms).map_err(|e| pack_io(path, e))?;
     }
@@ -302,11 +305,9 @@ mod tests {
         let host = temp_dir("host");
         let tree = temp_dir("tree");
         let agent = fake_agent(&host);
-        let result = stage_vsock_agent_into_tree(
-            &tree,
-            &BakeAgentRequest::new().with_agent_bin(&agent),
-        )
-        .expect("stage");
+        let result =
+            stage_vsock_agent_into_tree(&tree, &BakeAgentRequest::new().with_agent_bin(&agent))
+                .expect("stage");
         assert!(result.agent_guest_path.is_file());
         assert!(result.agent_guest_path.ends_with(DEFAULT_GUEST_AGENT_REL));
         assert!(result.unit_guest_path.is_none());
@@ -345,7 +346,7 @@ mod tests {
         )
         .unwrap_err();
         assert_eq!(
-            err.unsupported_code(),
+            err.unsupported_code_value(),
             Some(codes::SANDBOX_VSOCK_AGENT_MISSING)
         );
         let _ = fs::remove_dir_all(&tree);
@@ -357,7 +358,7 @@ mod tests {
         std::env::set_var(AGENT_PATH_ENV, "/no/such/eidolon-vsock-agent-env");
         let err = resolve_vsock_agent_bin(None).unwrap_err();
         assert_eq!(
-            err.unsupported_code(),
+            err.unsupported_code_value(),
             Some(codes::SANDBOX_VSOCK_AGENT_MISSING)
         );
         std::env::remove_var(AGENT_PATH_ENV);
@@ -381,11 +382,9 @@ mod tests {
         let file = host.join("not-a-dir");
         fs::write(&file, b"x").unwrap();
         let agent = fake_agent(&host);
-        let err = stage_vsock_agent_into_tree(
-            &file,
-            &BakeAgentRequest::new().with_agent_bin(&agent),
-        )
-        .unwrap_err();
+        let err =
+            stage_vsock_agent_into_tree(&file, &BakeAgentRequest::new().with_agent_bin(&agent))
+                .unwrap_err();
         assert!(matches!(err, PhenoError::BadRequest(_)));
         let _ = fs::remove_dir_all(&host);
     }

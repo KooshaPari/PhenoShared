@@ -74,8 +74,7 @@ pub fn cpu_percent_from_container_stats(stats: &bollard::models::ContainerStatsR
         .unwrap_or(1)
         .max(1);
 
-    cpu_percent_from_deltas(cpu_total, precpu_total, system, pre_system, online_cpus)
-        .unwrap_or(0.0)
+    cpu_percent_from_deltas(cpu_total, precpu_total, system, pre_system, online_cpus).unwrap_or(0.0)
 }
 
 #[cfg(test)]
@@ -87,14 +86,7 @@ mod tests {
         // cpu_delta = 50ms, system_delta = 100ms, 2 CPUs → 100%
         let ns_50ms = 50_000_000u64;
         let ns_100ms = 100_000_000u64;
-        let got = cpu_percent_from_deltas(
-            ns_50ms,
-            0,
-            ns_100ms,
-            0,
-            2,
-        )
-        .expect("valid deltas");
+        let got = cpu_percent_from_deltas(ns_50ms, 0, ns_100ms, 0, 2).expect("valid deltas");
         assert!((got - 100.0).abs() < f64::EPSILON);
     }
 

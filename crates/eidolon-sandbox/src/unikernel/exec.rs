@@ -175,10 +175,7 @@ pub fn guest_io_unavailable(detail: impl std::fmt::Display) -> PhenoError {
 }
 
 /// Require a live guest child for exec.
-pub fn require_live_guest<'a>(
-    client: &str,
-    guest: &'a mut Option<Child>,
-) -> Result<&'a mut Child> {
+pub fn require_live_guest<'a>(client: &str, guest: &'a mut Option<Child>) -> Result<&'a mut Child> {
     guest.as_mut().ok_or_else(|| guest_not_running(client))
 }
 
@@ -204,10 +201,10 @@ pub fn exec_on_guest(
                 )));
             }
             exec_via_serial_stdio(_child, &req.cmd, req.timeout_ms)
-        }
+        },
         GuestIoTransport::Vsock { guest_cid, port } => {
             vsock::exec_via_vsock(guest_cid, port, &req.cmd, req.timeout_ms)
-        }
+        },
     }
 }
 
@@ -226,12 +223,12 @@ fn exec_via_serial_stdio(child: &mut Child, cmd: &str, timeout_ms: u64) -> Resul
                  (serial-stdio transport)",
             )
         })?;
-        stdin.write_all(&frame).map_err(|e| {
-            guest_io_unavailable(format!("serial stdin write failed: {e}"))
-        })?;
-        stdin.flush().map_err(|e| {
-            guest_io_unavailable(format!("serial stdin flush failed: {e}"))
-        })?;
+        stdin
+            .write_all(&frame)
+            .map_err(|e| guest_io_unavailable(format!("serial stdin write failed: {e}")))?;
+        stdin
+            .flush()
+            .map_err(|e| guest_io_unavailable(format!("serial stdin flush failed: {e}")))?;
     }
 
     // Take stdout for a bounded reader thread so a hung guest cannot block
@@ -270,7 +267,7 @@ fn read_stdout_with_timeout(mut stdout: ChildStdout, timeout: Duration) -> Resul
                     if out.len() >= 64 * 1024 {
                         break;
                     }
-                }
+                },
                 Err(_) => break,
             }
         }
@@ -288,7 +285,7 @@ fn read_stdout_with_timeout(mut stdout: ChildStdout, timeout: Duration) -> Resul
                 "serial stdout read timed out after {}ms",
                 timeout.as_millis()
             )))
-        }
+        },
         Err(mpsc::RecvTimeoutError::Disconnected) => Err(guest_io_unavailable(
             "serial stdout reader thread disconnected",
         )),
@@ -332,7 +329,7 @@ mod tests {
         {
             let err = err_or_ok.unwrap_err();
             assert_eq!(
-                err.unsupported_code(),
+                err.unsupported_code_value(),
                 Some(codes::SANDBOX_GUEST_IO_UNAVAILABLE)
             );
         }
@@ -351,7 +348,7 @@ mod tests {
         .unwrap();
         let err = req.serial_stdin_frame().unwrap_err();
         assert_eq!(
-            err.unsupported_code(),
+            err.unsupported_code_value(),
             Some(codes::SANDBOX_GUEST_IO_UNAVAILABLE)
         );
         let frame = req.vsock_frame().unwrap();
@@ -364,7 +361,7 @@ mod tests {
         let mut guest: Option<Child> = None;
         let err = require_live_guest("TestClient", &mut guest).unwrap_err();
         assert_eq!(
-            err.unsupported_code(),
+            err.unsupported_code_value(),
             Some(codes::SANDBOX_GUEST_NOT_RUNNING)
         );
     }
@@ -375,7 +372,7 @@ mod tests {
         let req = GuestExecRequest::serial("pwd").unwrap();
         let err = exec_on_guest("TestClient", &mut guest, &req).unwrap_err();
         assert_eq!(
-            err.unsupported_code(),
+            err.unsupported_code_value(),
             Some(codes::SANDBOX_GUEST_NOT_RUNNING)
         );
     }
@@ -395,10 +392,7 @@ mod tests {
         let _g = ENV_LOCK.lock().unwrap();
         std::env::remove_var(vsock::VSOCK_CID_ENV);
         std::env::remove_var(vsock::VSOCK_PORT_ENV);
-        assert_eq!(
-            GuestIoTransport::preferred(),
-            GuestIoTransport::SerialStdio
-        );
+        assert_eq!(GuestIoTransport::preferred(), GuestIoTransport::SerialStdio);
         assert_eq!(GuestIoTransport::SerialStdio.as_str(), "serial-stdio");
         std::env::set_var(vsock::VSOCK_CID_ENV, "3");
         std::env::set_var(vsock::VSOCK_PORT_ENV, "5252");

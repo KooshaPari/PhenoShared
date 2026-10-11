@@ -19,9 +19,7 @@ use crate::cli::{
     IOS_XCUI_BUNDLE_ENV,
 };
 use crate::codes;
-use crate::ios::xcui_helper::{
-    discover_preferred_helper, HELPER_BIN_NAME, XCODE_HELPER_BIN_NAME,
-};
+use crate::ios::xcui_helper::{discover_preferred_helper, HELPER_BIN_NAME, XCODE_HELPER_BIN_NAME};
 use eidolon_core::error::PhenoError;
 use eidolon_core::{Result, Viewport};
 use std::path::{Path, PathBuf};
@@ -315,10 +313,7 @@ pub fn escape_applescript_string(text: &str) -> String {
 
 /// Parse helper viewport stdout: `1080x1920`, `1080 1920`, or `1080 1920 2.0`.
 pub fn parse_viewport_stdout(raw: &str) -> Option<Viewport> {
-    let line = raw
-        .lines()
-        .map(str::trim)
-        .find(|l| !l.is_empty())?;
+    let line = raw.lines().map(str::trim).find(|l| !l.is_empty())?;
     if let Some((w, h)) = line.split_once('x') {
         let width: u32 = w.trim().parse().ok()?;
         let height: u32 = h.trim().parse().ok()?;
@@ -380,7 +375,7 @@ pub fn bundle_path_status() -> String {
             } else {
                 format!("helper path not a file ({})", path.display())
             }
-        }
+        },
         _ => format!("{IOS_XCUI_BUNDLE_ENV} unset"),
     }
 }
@@ -395,7 +390,7 @@ mod tests {
         assert!(!b.ready());
         let err = b.tap("UDID", 1, 2).unwrap_err();
         assert_eq!(
-            err.unsupported_code(),
+            err.unsupported_code_value(),
             Some(codes::MOBILE_IOS_XCUI_UNAVAILABLE)
         );
         assert_eq!(err.status_code(), 501);
@@ -446,7 +441,7 @@ mod tests {
         };
         let err = bridge.viewport("x").unwrap_err();
         assert_eq!(
-            err.unsupported_code(),
+            err.unsupported_code_value(),
             Some(codes::MOBILE_IOS_XCUI_UNAVAILABLE)
         );
     }

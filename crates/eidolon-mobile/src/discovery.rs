@@ -112,7 +112,7 @@ impl MobileDeviceDiscovery for InstrumentDiscovery {
                 Ok(mut devices) => {
                     succeeded += 1;
                     out.append(&mut devices);
-                }
+                },
                 Err(e) => last_err = Some(e),
             }
         }
@@ -124,7 +124,7 @@ impl MobileDeviceDiscovery for InstrumentDiscovery {
                 Ok(mut devices) => {
                     succeeded += 1;
                     out.append(&mut devices);
-                }
+                },
                 Err(e) => last_err = Some(e),
             }
         }
@@ -175,7 +175,7 @@ mod tests {
         assert!(!stub.instruments_ready());
         let err = stub.list_connected().unwrap_err();
         assert_eq!(
-            err.unsupported_code(),
+            err.unsupported_code_value(),
             Some(codes::MOBILE_DISCOVERY_UNAVAILABLE)
         );
     }

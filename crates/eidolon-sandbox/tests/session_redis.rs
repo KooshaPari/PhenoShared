@@ -36,9 +36,8 @@ async fn redis_session_round_trip_when_integration() {
         // Hermetic default: skip without claiming success against Redis.
         return;
     }
-    let url = redis_url().expect(
-        "REDIS_SESSION_INTEGRATION=1 requires EIDOLON_REDIS_URL or REDIS_URL",
-    );
+    let url =
+        redis_url().expect("REDIS_SESSION_INTEGRATION=1 requires EIDOLON_REDIS_URL or REDIS_URL");
     let prefix = format!(
         "eidolon:session:itest:{}",
         std::time::SystemTime::now()
@@ -48,7 +47,9 @@ async fn redis_session_round_trip_when_integration() {
     );
     let store = RedisSessionStore::connect_with_prefix(&url, &prefix)
         .await
-        .unwrap_or_else(|e| panic!("Redis connect failed (fail-loud expected only when down): {e}"));
+        .unwrap_or_else(|e| {
+            panic!("Redis connect failed (fail-loud expected only when down): {e}")
+        });
 
     let mut rec = SessionRecord::new("redis-itest", "docker");
     rec.container_id = Some("c-redis".into());
@@ -87,7 +88,7 @@ async fn redis_missing_env_code_documented() {
     // Always-on smoke: empty URL path (no Redis needed).
     let err = RedisSessionStore::connect("").await.unwrap_err();
     assert_eq!(
-        err.unsupported_code(),
+        err.unsupported_code_value(),
         Some(codes::SANDBOX_SESSION_REDIS)
     );
 }

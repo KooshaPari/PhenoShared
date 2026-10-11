@@ -105,16 +105,18 @@ pub fn load_token(path: &Path) -> Result<Option<String>> {
 pub fn save_token(path: &Path, token: &str) -> Result<()> {
     let token = token.trim();
     if token.is_empty() {
-        return Err(restore_io("save", "refusing to persist empty restore token"));
+        return Err(restore_io(
+            "save",
+            "refusing to persist empty restore token",
+        ));
     }
     if let Some(parent) = path.parent() {
-        std::fs::create_dir_all(parent)
-            .map_err(|e| restore_io("create_dir", &e.to_string()))?;
+        std::fs::create_dir_all(parent).map_err(|e| restore_io("create_dir", &e.to_string()))?;
     }
     let tmp = path.with_extension("tmp");
     {
-        let mut file = std::fs::File::create(&tmp)
-            .map_err(|e| restore_io("write_tmp", &e.to_string()))?;
+        let mut file =
+            std::fs::File::create(&tmp).map_err(|e| restore_io("write_tmp", &e.to_string()))?;
         file.write_all(token.as_bytes())
             .map_err(|e| restore_io("write_tmp", &e.to_string()))?;
         file.write_all(b"\n")
@@ -137,9 +139,7 @@ pub fn save_token(path: &Path, token: &str) -> Result<()> {
 fn restore_io(context: &str, detail: &str) -> PhenoError {
     PhenoError::unsupported_platform(
         codes::DESKTOP_LINUX_WAYLAND_RESTORE_IO,
-        format!(
-            "Wayland restore token {context} failed: {detail} — see docs/EXTRACTION_PLAN.md"
-        ),
+        format!("Wayland restore token {context} failed: {detail} — see docs/EXTRACTION_PLAN.md"),
     )
 }
 
@@ -178,10 +178,7 @@ mod tests {
     impl Drop for EnvGuard {
         fn drop(&mut self) {
             restore_env(WAYLAND_RESTORE_ENV, self.saved_restore.as_deref());
-            restore_env(
-                WAYLAND_RESTORE_TOKEN_PATH_ENV,
-                self.saved_path.as_deref(),
-            );
+            restore_env(WAYLAND_RESTORE_TOKEN_PATH_ENV, self.saved_path.as_deref());
             restore_env("XDG_STATE_HOME", self.saved_xdg.as_deref());
             restore_env("HOME", self.saved_home.as_deref());
         }
@@ -210,18 +207,13 @@ mod tests {
     #[test]
     fn resolve_token_path_uses_xdg_state_home() {
         let _guard = EnvGuard::new();
-        let base = std::env::temp_dir().join(format!(
-            "eidolon-wayland-restore-{}",
-            std::process::id()
-        ));
+        let base =
+            std::env::temp_dir().join(format!("eidolon-wayland-restore-{}", std::process::id()));
         let _ = std::fs::create_dir_all(&base);
         std::env::set_var("XDG_STATE_HOME", base.to_string_lossy().as_ref());
         std::env::remove_var(WAYLAND_RESTORE_TOKEN_PATH_ENV);
         let path = resolve_token_path().expect("resolve");
-        assert_eq!(
-            path,
-            base.join("eidolon").join(TOKEN_FILE_NAME)
-        );
+        assert_eq!(path, base.join("eidolon").join(TOKEN_FILE_NAME));
         let _ = std::fs::remove_dir_all(&base);
     }
 
@@ -229,10 +221,8 @@ mod tests {
     #[test]
     fn load_save_token_round_trip() {
         let _guard = EnvGuard::new();
-        let dir = std::env::temp_dir().join(format!(
-            "eidolon-wayland-restore-rt-{}",
-            std::process::id()
-        ));
+        let dir =
+            std::env::temp_dir().join(format!("eidolon-wayland-restore-rt-{}", std::process::id()));
         let _ = std::fs::create_dir_all(&dir);
         let path = dir.join("token");
         assert_eq!(load_token(&path).expect("load missing"), None);
@@ -266,7 +256,10 @@ mod tests {
         let path = dir.join("token");
         save_token(&path, "stored-token").expect("seed");
         std::env::set_var(WAYLAND_RESTORE_ENV, "1");
-        std::env::set_var(WAYLAND_RESTORE_TOKEN_PATH_ENV, path.to_string_lossy().as_ref());
+        std::env::set_var(
+            WAYLAND_RESTORE_TOKEN_PATH_ENV,
+            path.to_string_lossy().as_ref(),
+        );
         let cfg = RestoreConfig::load().expect("load");
         assert!(cfg.enabled);
         assert_eq!(cfg.token.as_deref(), Some("stored-token"));
@@ -278,7 +271,7 @@ mod tests {
     fn restore_io_uses_stable_code() {
         let err = restore_io("test", "detail");
         assert_eq!(
-            err.unsupported_code(),
+            err.unsupported_code_value(),
             Some(codes::DESKTOP_LINUX_WAYLAND_RESTORE_IO)
         );
     }

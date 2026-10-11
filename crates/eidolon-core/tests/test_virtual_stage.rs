@@ -21,11 +21,11 @@
 //! here.
 
 use async_trait::async_trait;
-use eidolon_core::traits::{ResourceUsage, SandboxMetadata};
 use eidolon_core::event::Platform;
+use eidolon_core::traits::{ResourceUsage, SandboxMetadata};
 use eidolon_core::{
-    AutomationEvent, MobileStage, PointerInput, Result, SandboxStage, TextInput,
-    Viewport, VirtualStage,
+    AutomationEvent, MobileStage, PointerInput, Result, SandboxStage, TextInput, Viewport,
+    VirtualStage,
 };
 use Platform::*;
 

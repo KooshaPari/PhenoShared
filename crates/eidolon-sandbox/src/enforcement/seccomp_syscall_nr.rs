@@ -6,15 +6,15 @@
 
 #![allow(dead_code)] // consumed by Linux apply path behind `sandbox-seccomp`
 
-#[cfg(any(target_arch = "x86_64", test))]
-#[path = "seccomp_syscall_nr_x86_64.rs"]
-mod x86_64;
 #[cfg(any(target_arch = "aarch64", test))]
 #[path = "seccomp_syscall_nr_aarch64.rs"]
 mod aarch64;
 #[cfg(any(target_arch = "riscv64", test))]
 #[path = "seccomp_syscall_nr_riscv64.rs"]
 mod riscv64;
+#[cfg(any(target_arch = "x86_64", test))]
+#[path = "seccomp_syscall_nr_x86_64.rs"]
+mod x86_64;
 
 /// Resolve `name` for `arch` (`std::env::consts::ARCH` values).
 pub fn syscall_nr(arch: &str, name: &str) -> Option<i64> {
@@ -29,7 +29,7 @@ pub fn syscall_nr(arch: &str, name: &str) -> Option<i64> {
                 let _ = name;
                 None
             }
-        }
+        },
         "aarch64" => {
             #[cfg(any(target_arch = "aarch64", test))]
             {
@@ -40,7 +40,7 @@ pub fn syscall_nr(arch: &str, name: &str) -> Option<i64> {
                 let _ = name;
                 None
             }
-        }
+        },
         "riscv64" => {
             #[cfg(any(target_arch = "riscv64", test))]
             {
@@ -51,7 +51,7 @@ pub fn syscall_nr(arch: &str, name: &str) -> Option<i64> {
                 let _ = name;
                 None
             }
-        }
+        },
         _ => None,
     }
 }

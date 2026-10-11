@@ -25,8 +25,7 @@ pub const FIRECRACKER_INTEGRATION_ENV: &str = "FIRECRACKER_INTEGRATION";
 pub const NANOVM_BOOT_INTEGRATION_ENV: &str = "NANOVM_INTEGRATION";
 
 /// Default Firecracker kernel boot args when [`LaunchPlan::boot_args`] is empty.
-pub const DEFAULT_FIRECRACKER_BOOT_ARGS: &str =
-    "console=ttyS0 reboot=k panic=1 pci=off";
+pub const DEFAULT_FIRECRACKER_BOOT_ARGS: &str = "console=ttyS0 reboot=k panic=1 pci=off";
 
 /// `true` when a live guest-boot integration env is set to `"1"`.
 pub fn boot_integration_enabled() -> bool {
@@ -228,7 +227,7 @@ fn json_escape(s: &str) -> String {
             '\t' => out.push_str("\\t"),
             c if c.is_control() => {
                 out.push_str(&format!("\\u{:04x}", c as u32));
-            }
+            },
             c => out.push(c),
         }
     }
@@ -319,7 +318,10 @@ mod tests {
             policy: eidolon_core::security::SandboxPolicy::default(),
         };
         let err = firecracker_config_json(&plan).unwrap_err();
-        assert_eq!(err.unsupported_code(), Some(codes::SANDBOX_KERNEL_MISSING));
+        assert_eq!(
+            err.unsupported_code_value(),
+            Some(codes::SANDBOX_KERNEL_MISSING)
+        );
         let _ = std::fs::remove_file(&rootfs);
     }
 
@@ -374,7 +376,10 @@ mod tests {
         )
         .unwrap();
         let err = LaunchPlan::try_from_config(&cfg).unwrap_err();
-        assert_eq!(err.unsupported_code(), Some(codes::SANDBOX_ROOTFS_MISSING));
+        assert_eq!(
+            err.unsupported_code_value(),
+            Some(codes::SANDBOX_ROOTFS_MISSING)
+        );
     }
 
     #[test]
@@ -389,7 +394,10 @@ mod tests {
         .with_kernel(KernelConfig::new("/no/such/eidolon-boot-vmlinux"))
         .unwrap();
         let err = LaunchPlan::try_from_config(&cfg).unwrap_err();
-        assert_eq!(err.unsupported_code(), Some(codes::SANDBOX_KERNEL_MISSING));
+        assert_eq!(
+            err.unsupported_code_value(),
+            Some(codes::SANDBOX_KERNEL_MISSING)
+        );
         let _ = std::fs::remove_file(&rootfs);
     }
 

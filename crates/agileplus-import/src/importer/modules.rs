@@ -104,6 +104,6 @@ pub(super) async fn resolve_parent_module_id<S: StoragePort>(
                     .context("checking parent module")?
                     .map(|m| m.id))
             }
-        }
+        },
     }
 }

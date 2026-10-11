@@ -28,7 +28,7 @@ fn artifact_full_path(
         match component {
             std::path::Component::ParentDir => {
                 normalized.pop();
-            }
+            },
             other => normalized.push(other),
         }
     }

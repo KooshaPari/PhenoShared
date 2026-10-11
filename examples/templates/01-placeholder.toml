@@ -1,0 +1,11 @@
+id = "placeholder"
+name = "Placeholder Pack"
+version = "0.0.0"
+author = "phenotype-team"
+description = "Placeholder template - real templates are added in follow-up work"
+sha256 = "0000000000000000000000000000000000000000000000000000000000000000"
+
+[[templates]]
+id = "00000000-0000-0000-0000-000000000001"
+name = "placeholder-rule"
+template = "noop"

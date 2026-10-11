@@ -200,7 +200,10 @@ mod tests {
         let stub = NanoVmStub::new("nano-ut");
         assert!(!stub.nanovm_ready());
         let err = stub.start().await.unwrap_err();
-        assert_eq!(err.unsupported_code(), Some(codes::SANDBOX_NANOVM_STUB));
+        assert_eq!(
+            err.unsupported_code_value(),
+            Some(codes::SANDBOX_NANOVM_STUB)
+        );
         assert_eq!(err.status_code(), 501);
     }
 

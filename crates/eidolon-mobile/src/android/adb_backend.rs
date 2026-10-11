@@ -312,9 +312,7 @@ pub fn parse_adb_devices(raw: &str) -> Vec<DeviceInfo> {
                 product = Some(v.to_string());
             }
         }
-        let name = model
-            .or(product)
-            .unwrap_or_else(|| format!("android-{id}"));
+        let name = model.or(product).unwrap_or_else(|| format!("android-{id}"));
         out.push(DeviceInfo {
             id: id.to_string(),
             name,
@@ -457,7 +455,7 @@ impl AndroidUiAutomatorDriver for AdbAndroidDriver {
         match self.uia2().packages_installed() {
             Ok(status) if status.both_installed() => {
                 self.uia2().server_process_running().unwrap_or(false)
-            }
+            },
             _ => false,
         }
     }

@@ -81,7 +81,7 @@ pub fn run_validated_cmd(cmd: &str, allow_shell: bool) -> VsockExecResponse {
                     c.args(&argv[1..]);
                 }
                 c.output()
-            }
+            },
             Err(e) => {
                 return VsockExecResponse {
                     v: VSOCK_PROTOCOL_VERSION,
@@ -93,7 +93,7 @@ pub fn run_validated_cmd(cmd: &str, allow_shell: bool) -> VsockExecResponse {
                     id: None,
                     error: Some(format!("argv split failed: {e}")),
                 };
-            }
+            },
         }
     };
 
@@ -119,7 +119,7 @@ pub fn run_validated_cmd(cmd: &str, allow_shell: bool) -> VsockExecResponse {
                     Some(format!("process exited with code {exit_code}"))
                 },
             }
-        }
+        },
         Err(e) => VsockExecResponse {
             v: VSOCK_PROTOCOL_VERSION,
             op: "exec_result".into(),
@@ -149,7 +149,7 @@ pub fn handle_request_line(line: &[u8], allow_shell: bool) -> Result<Vec<u8>> {
         Ok(req) => {
             let resp = handle_exec_request(&req, allow_shell);
             vsock_response_frame(&resp)
-        }
+        },
         Err(e) => {
             let resp = VsockExecResponse {
                 v: VSOCK_PROTOCOL_VERSION,
@@ -162,6 +162,6 @@ pub fn handle_request_line(line: &[u8], allow_shell: bool) -> Result<Vec<u8>> {
                 error: Some(e.to_string()),
             };
             vsock_response_frame(&resp)
-        }
+        },
     }
 }

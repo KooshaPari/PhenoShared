@@ -91,7 +91,7 @@ pub fn ensure() -> Result<PathBuf> {
                     ),
                 ))
             }
-        }
+        },
     }
 }
 
@@ -270,7 +270,7 @@ pub(crate) fn download_verified(url: &str, dest: &Path, expected_sha256: &str) -
             Ok(()) => return Ok(()),
             Err(_) => {
                 let _ = fs::remove_file(dest);
-            }
+            },
         }
     }
 
@@ -316,7 +316,7 @@ pub(crate) fn download_verified(url: &str, dest: &Path, expected_sha256: &str) -
             } else {
                 Err(plain_err)
             }
-        }
+        },
     };
     if let Err(e) = downloaded {
         let _ = fs::remove_file(&tmp);
@@ -353,7 +353,7 @@ mod tests {
              eidolon-canned-rootfs-0.1.0-x86_64.ext4.img",
         )
         .expect("parse");
-        assert_eq!(m.owner, "<REDACTED>");
+        assert_eq!(m.owner, "KooshaPari");
         assert_eq!(m.repo, "Eidolon");
         assert_eq!(m.tag, "rootfs-v0.1.0");
         assert_eq!(m.filename, "eidolon-canned-rootfs-0.1.0-x86_64.ext4.img");
@@ -418,7 +418,7 @@ mod tests {
         std::env::remove_var(super::ROOTFS_ASSET_SHA256_ENV);
         let err = fetch_into(&out).unwrap_err();
         assert_eq!(
-            err.unsupported_code(),
+            err.unsupported_code_value(),
             Some(codes::SANDBOX_ROOTFS_RELEASE_UNAVAILABLE)
         );
         std::env::remove_var(super::ROOTFS_ASSET_URL_ENV);
@@ -436,7 +436,7 @@ mod tests {
         )
         .unwrap_err();
         assert_eq!(
-            err.unsupported_code(),
+            err.unsupported_code_value(),
             Some(codes::SANDBOX_ROOTFS_RELEASE_UNAVAILABLE)
         );
         let _ = fs::remove_dir_all(&dir);

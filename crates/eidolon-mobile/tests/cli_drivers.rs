@@ -13,7 +13,7 @@ use eidolon_mobile::{
 };
 
 fn assert_stub_code(err: PhenoError, expected: &str) {
-    assert_eq!(err.unsupported_code(), Some(expected));
+    assert_eq!(err.unsupported_code_value(), Some(expected));
     assert_eq!(err.status_code(), 501);
 }
 
@@ -36,7 +36,7 @@ fn xcui_bridge_missing_is_fail_loud() {
     assert_eq!(bridge.backend_name(), "missing");
     let err = bridge.tap("udid", 0, 0).unwrap_err();
     assert_eq!(
-        err.unsupported_code(),
+        err.unsupported_code_value(),
         Some(codes::MOBILE_IOS_XCUI_UNAVAILABLE)
     );
 }
@@ -76,13 +76,16 @@ mod ios_feature {
                 // Destructive actions gated without env.
                 if !cli::actions_allowed() {
                     let err = driver.tap(1, 2).await.unwrap_err();
-                    assert_eq!(err.unsupported_code(), Some(codes::MOBILE_ACTIONS_GATED));
+                    assert_eq!(
+                        err.unsupported_code_value(),
+                        Some(codes::MOBILE_ACTIONS_GATED)
+                    );
                 }
-            }
+            },
             Err(err) => {
                 assert!(!ios_probe::xcrun_cli_ready());
                 assert_stub_code(err, codes::MOBILE_IOS_STUB);
-            }
+            },
         }
     }
 
@@ -95,13 +98,13 @@ mod ios_feature {
                 for d in &devices {
                     assert_eq!(d.modality, eidolon_mobile::Modality::Mobile);
                 }
-            }
+            },
             Err(err) => {
                 assert!(
-                    err.unsupported_code() == Some(codes::MOBILE_DISCOVERY_UNAVAILABLE)
-                        || err.unsupported_code() == Some(codes::MOBILE_IOS_STUB)
+                    err.unsupported_code_value() == Some(codes::MOBILE_DISCOVERY_UNAVAILABLE)
+                        || err.unsupported_code_value() == Some(codes::MOBILE_IOS_STUB)
                 );
-            }
+            },
         }
     }
 
@@ -122,7 +125,7 @@ mod ios_feature {
         let err = driver.tap(10, 20).await.unwrap_err();
         std::env::remove_var(cli::ACTIONS_ALLOW_ENV);
         assert_eq!(
-            err.unsupported_code(),
+            err.unsupported_code_value(),
             Some(codes::MOBILE_IOS_XCUI_UNAVAILABLE)
         );
     }
@@ -147,11 +150,8 @@ mod ios_feature {
     #[test]
     fn helper_parse_matches_bridge_argv() {
         use eidolon_mobile::{parse_argv, HelperCommand};
-        let argv = BundleXcuiBridge::build_argv(
-            "tap",
-            "SIM",
-            &[("--x", "5".into()), ("--y", "6".into())],
-        );
+        let argv =
+            BundleXcuiBridge::build_argv("tap", "SIM", &[("--x", "5".into()), ("--y", "6".into())]);
         assert_eq!(
             parse_argv(&argv).unwrap(),
             HelperCommand::Tap {
@@ -167,8 +167,8 @@ mod ios_feature {
         if std::env::var("IOS_MOBILE_INTEGRATION").ok().as_deref() != Some("1") {
             return;
         }
-        let mut driver = XcrunIosDriver::try_new()
-            .expect("IOS_MOBILE_INTEGRATION=1 requires reachable xcrun");
+        let mut driver =
+            XcrunIosDriver::try_new().expect("IOS_MOBILE_INTEGRATION=1 requires reachable xcrun");
         driver.hermetic_probe().expect("hermetic");
         let devices = driver.list_devices().expect("list");
         if let Some(d) = devices.first() {
@@ -182,16 +182,16 @@ mod ios_feature {
             Ok(()) => {
                 // Helper or AppleScript succeeded — only expected when configured.
                 assert!(driver.xcui_ready());
-            }
+            },
             Err(e) => {
-                let code = e.unsupported_code();
+                let code = e.unsupported_code_value();
                 assert!(
                     code == Some(codes::MOBILE_IOS_XCUI_UNAVAILABLE)
                         || code == Some(codes::MOBILE_IOS_STUB)
                         || matches!(e, PhenoError::BadRequest(_)),
                     "unexpected err={e:?}"
                 );
-            }
+            },
         }
     }
 }
@@ -201,8 +201,7 @@ mod android_feature {
     use super::*;
     use eidolon_core::traits::MobileAutomator;
     use eidolon_mobile::{
-        cli, AdbAndroidDriver, AndroidUiAutomatorDriver, InstrumentDiscovery,
-        MobileDeviceDiscovery,
+        cli, AdbAndroidDriver, AndroidUiAutomatorDriver, InstrumentDiscovery, MobileDeviceDiscovery,
     };
 
     #[tokio::test]
@@ -217,13 +216,16 @@ mod android_feature {
                 let _ = devices.len();
                 if !cli::actions_allowed() {
                     let err = driver.tap(1, 2).await.unwrap_err();
-                    assert_eq!(err.unsupported_code(), Some(codes::MOBILE_ACTIONS_GATED));
+                    assert_eq!(
+                        err.unsupported_code_value(),
+                        Some(codes::MOBILE_ACTIONS_GATED)
+                    );
                 }
-            }
+            },
             Err(err) => {
                 assert!(!android_probe::adb_cli_ready());
                 assert_stub_code(err, codes::MOBILE_ANDROID_STUB);
-            }
+            },
         }
     }
 
@@ -235,13 +237,13 @@ mod android_feature {
                 for d in &devices {
                     assert_eq!(d.platform, "android");
                 }
-            }
+            },
             Err(err) => {
                 assert!(
-                    err.unsupported_code() == Some(codes::MOBILE_DISCOVERY_UNAVAILABLE)
-                        || err.unsupported_code() == Some(codes::MOBILE_ANDROID_STUB)
+                    err.unsupported_code_value() == Some(codes::MOBILE_DISCOVERY_UNAVAILABLE)
+                        || err.unsupported_code_value() == Some(codes::MOBILE_ANDROID_STUB)
                 );
-            }
+            },
         }
     }
 
@@ -266,7 +268,10 @@ mod android_feature {
         std::env::remove_var(cli::ACTIONS_ALLOW_ENV);
         // If tap failed, it must not be ACTIONS_GATED (gate was on).
         if let Err(e) = tap {
-            assert_ne!(e.unsupported_code(), Some(codes::MOBILE_ACTIONS_GATED));
+            assert_ne!(
+                e.unsupported_code_value(),
+                Some(codes::MOBILE_ACTIONS_GATED)
+            );
         }
     }
 
@@ -280,7 +285,7 @@ mod android_feature {
         // Without actions gate, install fails loud (gated or missing APK).
         if !cli::actions_allowed() {
             let err = uia2.install_from_env().unwrap_err();
-            let code = err.unsupported_code();
+            let code = err.unsupported_code_value();
             assert!(
                 code == Some(codes::MOBILE_ACTIONS_GATED)
                     || code == Some(codes::MOBILE_UIA2_UNAVAILABLE),
@@ -292,19 +297,19 @@ mod android_feature {
             Ok(true) => {
                 // Packages installed; process may or may not be running.
                 let _ = driver.uia2_server_ready();
-            }
+            },
             Ok(false) => {
                 assert!(!driver.uia2_server_ready());
-            }
+            },
             Err(e) => {
                 assert!(!driver.uia2_server_ready());
-                let code = e.unsupported_code();
+                let code = e.unsupported_code_value();
                 assert!(
                     code == Some(codes::MOBILE_UIA2_UNAVAILABLE)
                         || code == Some(codes::MOBILE_ANDROID_STUB),
                     "unexpected err={e:?}"
                 );
-            }
+            },
         }
     }
 }
@@ -335,26 +340,26 @@ mod uia2_feature {
         assert_eq!(body["actions"][0]["type"], "pointer");
         let err = eidolon_mobile::Uia2HttpClient::unsupported("vendorOnly");
         assert_eq!(
-            err.unsupported_code(),
+            err.unsupported_code_value(),
             Some(codes::MOBILE_UIA2_UNAVAILABLE)
         );
         if std::env::var(cli::UIA2_APK_ENV).is_err() {
             // Empty roots → hermetic fail; live resolve may use durable cache.
             let hermetic = eidolon_mobile::uia2_assets::resolve_with_roots(None, None);
             assert_eq!(
-                hermetic.unwrap_err().unsupported_code(),
+                hermetic.unwrap_err().unsupported_code_value(),
                 Some(codes::MOBILE_UIA2_UNAVAILABLE)
             );
             match Uia2ApkPaths::resolve() {
                 Ok(paths) => {
                     assert!(paths.server.is_file() && paths.test.is_file());
-                }
+                },
                 Err(err) => {
                     assert_eq!(
-                        err.unsupported_code(),
+                        err.unsupported_code_value(),
                         Some(codes::MOBILE_UIA2_UNAVAILABLE)
                     );
-                }
+                },
             }
         }
     }
@@ -364,8 +369,8 @@ mod uia2_feature {
         if std::env::var("ANDROID_UIA2_INTEGRATION").ok().as_deref() != Some("1") {
             return;
         }
-        let driver = AdbAndroidDriver::try_new()
-            .expect("ANDROID_UIA2_INTEGRATION=1 requires reachable adb");
+        let driver =
+            AdbAndroidDriver::try_new().expect("ANDROID_UIA2_INTEGRATION=1 requires reachable adb");
         let devices = driver.list_devices().expect("list");
         assert!(
             !devices.is_empty(),
@@ -385,15 +390,15 @@ mod uia2_feature {
                 Ok(()) => {
                     let after = uia2.packages_installed().expect("re-probe");
                     assert!(after.both_installed());
-                }
+                },
                 Err(e) => {
-                    let code = e.unsupported_code();
+                    let code = e.unsupported_code_value();
                     assert!(
                         code == Some(codes::MOBILE_UIA2_UNAVAILABLE)
                             || code == Some(codes::MOBILE_ACTIONS_GATED),
                         "install miss must be UIA2_UNAVAILABLE (or gated), got {e:?}"
                     );
-                }
+                },
             }
             return;
         }
@@ -408,14 +413,14 @@ mod uia2_feature {
             Ok(client) => {
                 // Server process claimed ready — HTTP may still fail if port not forwarded.
                 let _ = client.status();
-            }
+            },
             Err(e) => {
                 assert_eq!(
-                    e.unsupported_code(),
+                    e.unsupported_code_value(),
                     Some(codes::MOBILE_UIA2_UNAVAILABLE),
                     "uia2_http without ready server must be UIA2_UNAVAILABLE, got {e:?}"
                 );
-            }
+            },
         }
     }
 }
@@ -441,12 +446,12 @@ mod appium_feature {
         if !probe.tools_present() {
             let err = require_appium_ready().unwrap_err();
             assert_eq!(
-                err.unsupported_code(),
+                err.unsupported_code_value(),
                 Some(codes::MOBILE_APPIUM_UNAVAILABLE)
             );
             let err = probe.http_status(Duration::from_millis(20)).unwrap_err();
             assert_eq!(
-                err.unsupported_code(),
+                err.unsupported_code_value(),
                 Some(codes::MOBILE_APPIUM_UNAVAILABLE)
             );
         }

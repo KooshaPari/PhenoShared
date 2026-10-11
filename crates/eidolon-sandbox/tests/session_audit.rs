@@ -60,7 +60,7 @@ async fn file_session_io_code_on_bad_json() {
                 msg.contains(codes::SANDBOX_SESSION_IO),
                 "expected SESSION_IO token, got {msg}"
             );
-        }
+        },
         other => panic!("expected Internal, got {other:?}"),
     }
 
@@ -91,10 +91,7 @@ async fn file_audit_store_round_trip_and_sha_integrity() {
         .await
         .unwrap();
     engine
-        .log_event(
-            AuditEntry::builder("sandbox.exec")
-                .outcome(OutcomeResult::Failure),
-        )
+        .log_event(AuditEntry::builder("sandbox.exec").outcome(OutcomeResult::Failure))
         .await
         .unwrap();
 
@@ -143,7 +140,10 @@ async fn file_audit_index_sidecar_persists_and_reopens() {
     }
 
     let idx_path = path.with_file_name("audit.jsonl.idx.json");
-    assert!(idx_path.exists(), "index sidecar should be written on flush");
+    assert!(
+        idx_path.exists(),
+        "index sidecar should be written on flush"
+    );
 
     let store2 = FileAuditStore::open(&path).await.unwrap();
     assert_eq!(store2.index_path(), idx_path.as_path());
@@ -183,7 +183,9 @@ async fn file_audit_corrupt_index_fails_loud_on_open() {
         version: INDEX_VERSION,
         ..Default::default()
     };
-    corrupt.by_time.insert("00000000000000000000:orphan".into(), ());
+    corrupt
+        .by_time
+        .insert("00000000000000000000:orphan".into(), ());
     std::fs::write(&idx_path, serde_json::to_string_pretty(&corrupt).unwrap()).unwrap();
 
     let err = FileAuditStore::open(&path).await.unwrap_err();
@@ -193,7 +195,7 @@ async fn file_audit_corrupt_index_fails_loud_on_open() {
                 msg.contains(codes::SANDBOX_AUDIT_INDEX),
                 "expected AUDIT_INDEX token, got {msg}"
             );
-        }
+        },
         other => panic!("expected Internal, got {other:?}"),
     }
 

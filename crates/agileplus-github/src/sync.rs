@@ -113,10 +113,10 @@ impl GitHubSyncAdapter {
             match self.client.get_issue(issue_number).await {
                 Ok(issue) => {
                     changes.push((item_id, issue.state));
-                }
+                },
                 Err(e) => {
                     tracing::warn!("Failed to poll GitHub issue #{}: {}", issue_number, e);
-                }
+                },
             }
         }
 

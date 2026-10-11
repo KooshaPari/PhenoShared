@@ -57,8 +57,8 @@ pub use cgroup::{
 pub use landlock::{apply as apply_landlock, landlock_ready, LandlockStatus};
 pub use namespaces::{
     apply as apply_namespaces, env_requests_pid_ns, env_requests_pivot_root, env_requests_user_ns,
-    env_requests_user_subids, env_user_ns_maps, namespaces_ready, parse_id_map_spec,
-    parse_subid_file, park_until_signal, resolve_pivot_rootfs, run_in_namespaces,
+    env_requests_user_subids, env_user_ns_maps, namespaces_ready, park_until_signal,
+    parse_id_map_spec, parse_subid_file, resolve_pivot_rootfs, run_in_namespaces,
     terminate_isolated_child, NamespaceApply, NamespaceStatus, PidNsChildSetup, PidNsParentSetup,
     PidNsSetup, NS_GID_MAP_ENV, NS_PID_ENV, NS_PIVOT_ENV, NS_PIVOT_ROOTFS_ENV, NS_UID_MAP_ENV,
     NS_USER_ENV, NS_USER_SUBIDS_ENV, SUBGID_FILE, SUBUID_FILE,
@@ -71,16 +71,16 @@ pub use plan::{
 };
 pub use seccomp::{apply as apply_seccomp, seccomp_ready, SeccompStatus};
 pub use seccomp_oci::{
-    load_oci_allowlist_file, oci_default_allowlist, parse_oci_allowlist, to_seccompiler_allowlist_json,
-    OCI_DEFAULT_JSON,
+    load_oci_allowlist_file, oci_default_allowlist, parse_oci_allowlist,
+    to_seccompiler_allowlist_json, OCI_DEFAULT_JSON,
 };
 pub use seccomp_profile::{
     parse_seccomp_profile_spec, profile_label, resolve_seccomp_profile, SECCOMP_PROFILE_ENV,
 };
 pub use wiring::{apply_enabled_enforcement, AppliedEnforcement, EnforcingSandbox};
 
-use eidolon_core::Result;
 use eidolon_core::security::SandboxPolicy;
+use eidolon_core::Result;
 
 /// Combined apply for features compiled into this build.
 ///

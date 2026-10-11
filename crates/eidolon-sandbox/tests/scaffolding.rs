@@ -16,13 +16,13 @@ use eidolon_sandbox::{
 };
 
 fn assert_code(err: PhenoError, expected: &str) {
-    assert_eq!(err.unsupported_code(), Some(expected));
+    assert_eq!(err.unsupported_code_value(), Some(expected));
     assert_eq!(err.status_code(), 501);
     match err {
-        PhenoError::UnsupportedPlatform { code, message } => {
+        PhenoError::UnsupportedPlatform { code, detail } => {
             assert_eq!(code, expected);
-            assert!(!message.is_empty());
-        }
+            assert!(!detail.is_empty());
+        },
         other => panic!("expected UnsupportedPlatform, got {other:?}"),
     }
 }
@@ -91,7 +91,10 @@ async fn nanovm_stub_fail_loud() {
     assert_eq!(meta.image, "stub:nanovm");
 
     assert_code(stub.start().await.unwrap_err(), codes::SANDBOX_NANOVM_STUB);
-    assert_code(stub.exec("ls").await.unwrap_err(), codes::SANDBOX_NANOVM_STUB);
+    assert_code(
+        stub.exec("ls").await.unwrap_err(),
+        codes::SANDBOX_NANOVM_STUB,
+    );
     assert_code(
         stub.resource_usage().await.unwrap_err(),
         codes::SANDBOX_NANOVM_STUB,
@@ -109,7 +112,10 @@ async fn kvm_stub_fail_loud() {
     assert_eq!(meta.image, "stub:kvm");
 
     assert_code(stub.start().await.unwrap_err(), codes::SANDBOX_KVM_STUB);
-    assert_code(stub.exec("uname").await.unwrap_err(), codes::SANDBOX_KVM_STUB);
+    assert_code(
+        stub.exec("uname").await.unwrap_err(),
+        codes::SANDBOX_KVM_STUB,
+    );
     assert_code(
         stub.resource_usage().await.unwrap_err(),
         codes::SANDBOX_KVM_STUB,
@@ -127,7 +133,10 @@ fn code_for_backend_mapping() {
     assert_eq!(code_for_backend("unikernel"), codes::SANDBOX_UNIKERNEL_STUB);
     assert_eq!(code_for_backend("rootfs"), codes::SANDBOX_UNIKERNEL_STUB);
     assert_eq!(code_for_backend("microvm"), codes::SANDBOX_UNIKERNEL_STUB);
-    assert_eq!(code_for_backend("rootfs-pack"), codes::SANDBOX_ROOTFS_PACK_STUB);
+    assert_eq!(
+        code_for_backend("rootfs-pack"),
+        codes::SANDBOX_ROOTFS_PACK_STUB
+    );
     assert_eq!(code_for_backend("pack"), codes::SANDBOX_ROOTFS_PACK_STUB);
     assert_eq!(code_for_backend("weird"), codes::SANDBOX_OTHER_STUB);
 }
@@ -160,7 +169,10 @@ fn documented_codes_are_stable() {
         codes::SANDBOX_CGROUP_DISK_UNAVAILABLE,
         "EIDOLON_SANDBOX_CGROUP_DISK_UNAVAILABLE"
     );
-    assert_eq!(codes::SANDBOX_ROOTFS_MISSING, "EIDOLON_SANDBOX_ROOTFS_MISSING");
+    assert_eq!(
+        codes::SANDBOX_ROOTFS_MISSING,
+        "EIDOLON_SANDBOX_ROOTFS_MISSING"
+    );
     assert_eq!(
         codes::SANDBOX_KERNEL_MISSING,
         "EIDOLON_SANDBOX_KERNEL_MISSING"
@@ -203,4 +215,3 @@ fn documented_codes_are_stable() {
         "EIDOLON_SANDBOX_WAYLAND_COMPOSITOR_UNSUPPORTED"
     );
 }
-

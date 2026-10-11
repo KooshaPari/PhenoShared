@@ -29,7 +29,7 @@ async fn test_screenshot_invalid_path_returns_platform_error() {
                 !msg.is_empty(),
                 "platform error message should not be empty"
             );
-        }
+        },
         Err(other) => panic!("expected Platform error, got: {other:?}"),
         Ok(_) => panic!("expected error, got Ok"),
     }

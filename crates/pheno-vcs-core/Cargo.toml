@@ -5,7 +5,6 @@ edition = "2021"
 description = "VCS primitives for PhenoVCS registry"
 license = "MIT"
 
-[workspace]
 
 [dependencies]
 thiserror = "2.0"

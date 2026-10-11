@@ -56,7 +56,7 @@ pub fn env_asset_pin() -> Result<Option<RootfsReleasePin>> {
                 filename: filename_from_asset_url(u),
                 from_env: true,
             }))
-        }
+        },
         (Some(_), None) | (None, Some(_)) => Err(release_unavailable(
             "env_asset_pin",
             format!(
@@ -152,7 +152,7 @@ mod tests {
         std::env::set_var(ROOTFS_ASSET_URL_ENV, "https://example.invalid/a.img");
         let err = env_asset_pin().unwrap_err();
         assert_eq!(
-            err.unsupported_code(),
+            err.unsupported_code_value(),
             Some(codes::SANDBOX_ROOTFS_RELEASE_UNAVAILABLE)
         );
         assert!(err.to_string().contains("incomplete"));
@@ -161,7 +161,7 @@ mod tests {
         std::env::set_var(ROOTFS_ASSET_SHA256_ENV, "abcd");
         let err = env_asset_pin().unwrap_err();
         assert_eq!(
-            err.unsupported_code(),
+            err.unsupported_code_value(),
             Some(codes::SANDBOX_ROOTFS_RELEASE_UNAVAILABLE)
         );
         std::env::remove_var(ROOTFS_ASSET_SHA256_ENV);
