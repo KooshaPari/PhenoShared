@@ -244,7 +244,7 @@ mod tests {
             Err(ResolveError::Ambiguous { name, matches }) => {
                 assert_eq!(name, "memcpy");
                 assert_eq!(matches, 2);
-            }
+            },
             other => panic!("expected Ambiguous, got {:?}", other),
         }
         // resolve_in_module disambiguates.

@@ -265,18 +265,18 @@ mod tests {
     #[test]
     fn read_bytes_past_section_end_returns_out_of_bounds() {
         let mut r = InMemorySectionReader::new();
-        r.insert(section(".data", 0x4000, 0x10, vec![0xAA; 8]));
+        r.insert(section(".data", 0x4000, 0x10, vec![0xaa; 8]));
         // Range straddles the section boundary.
         match r.read_bytes(0x4008, 16) {
             Err(SectionError::OutOfBounds { va, len }) => {
                 assert_eq!(va, 0x4008);
                 assert_eq!(len, 16);
-            }
+            },
             other => panic!("expected OutOfBounds, got {:?}", other),
         }
         // Range entirely outside any section.
         match r.read_bytes(0x9999, 4) {
-            Err(SectionError::OutOfBounds { .. }) => {}
+            Err(SectionError::OutOfBounds { .. }) => {},
             other => panic!("expected OutOfBounds, got {:?}", other),
         }
     }
@@ -295,10 +295,10 @@ mod tests {
     fn mock_implements_section_reader_trait() {
         // Trait conformance: MockSectionReader is a SectionReader.
         let mut mock = MockSectionReader::new();
-        mock.stage(section(".text", 0x1000, 0x100, vec![0xCC; 8]));
+        mock.stage(section(".text", 0x1000, 0x100, vec![0xcc; 8]));
         let reader: &dyn SectionReader = &mock;
         let s = reader.read_section(".text").unwrap();
-        assert_eq!(s.raw_data, vec![0xCC; 8]);
+        assert_eq!(s.raw_data, vec![0xcc; 8]);
         let names = reader.list_sections();
         assert_eq!(names, vec![".text"]);
     }
@@ -306,7 +306,7 @@ mod tests {
     #[test]
     fn mock_records_calls_and_surfaces_errors() {
         let mut mock = MockSectionReader::new();
-        mock.stage(section(".text", 0x1000, 0x100, vec![0xCC; 8]));
+        mock.stage(section(".text", 0x1000, 0x100, vec![0xcc; 8]));
 
         let _ = mock.list_sections();
         let _ = mock.read_section(".text");

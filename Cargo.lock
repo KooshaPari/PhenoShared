@@ -7014,7 +7014,18 @@ checksum = "1b363a30c165f666402fe6a3024d3bec7ebc898f96a4a23bd1c99f8dbf3f4f47"
 dependencies = [
  "log",
  "plain",
- "scroll",
+ "scroll 0.12.0",
+]
+
+[[package]]
+name = "goblin"
+version = "0.10.7"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "17582616a7718cca54cec18e534a76c7c4aec11a8b9a85695712f262fd15a4c8"
+dependencies = [
+ "log",
+ "plain",
+ "scroll 0.13.0",
 ]
 
 [[package]]
@@ -10956,6 +10967,18 @@ dependencies = [
 ]
 
 [[package]]
+name = "phenotype-contracts"
+version = "0.1.0"
+dependencies = [
+ "async-trait",
+ "chrono",
+ "serde",
+ "thiserror 2.0.20",
+ "tokio",
+ "uuid",
+]
+
+[[package]]
 name = "phenotype-cost-core"
 version = "0.3.10"
 dependencies = [
@@ -11007,6 +11030,27 @@ name = "phenotype-error-core"
 version = "0.2.0"
 dependencies = [
  "anyhow",
+ "serde",
+ "serde_json",
+ "thiserror 2.0.20",
+ "tokio",
+]
+
+[[package]]
+name = "phenotype-error-macros"
+version = "0.2.0"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn 2.0.119",
+ "thiserror 2.0.20",
+]
+
+[[package]]
+name = "phenotype-errors"
+version = "0.2.0"
+dependencies = [
+ "phenotype-error-core",
  "serde",
  "serde_json",
  "thiserror 2.0.20",
@@ -11263,6 +11307,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "phenotype-retry"
+version = "0.2.0"
+dependencies = [
+ "rand 0.8.8",
+ "serde",
+ "thiserror 2.0.20",
+ "tokio",
+]
+
+[[package]]
 name = "phenotype-router"
 version = "0.2.0"
 dependencies = [
@@ -11347,6 +11401,19 @@ dependencies = [
  "tokio",
  "tracing",
  "tracing-subscriber",
+]
+
+[[package]]
+name = "phenotype-test-infra"
+version = "0.2.0"
+dependencies = [
+ "chrono",
+ "serde",
+ "serde_json",
+ "tempfile",
+ "thiserror 2.0.20",
+ "tokio",
+ "uuid",
 ]
 
 [[package]]
@@ -11532,6 +11599,49 @@ name = "pin-project-lite"
 version = "0.2.17"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "a89322df9ebe1c1578d689c92318e070967d1042b512afbe49518723f4e6d5cd"
+
+[[package]]
+name = "pine-compat"
+version = "0.1.0"
+dependencies = [
+ "pine-core",
+]
+
+[[package]]
+name = "pine-core"
+version = "0.1.0"
+dependencies = [
+ "proptest",
+ "serde",
+ "serde_json",
+ "thiserror 1.0.69",
+ "tracing",
+ "tracing-subscriber",
+]
+
+[[package]]
+name = "pine-loader"
+version = "0.1.0"
+dependencies = [
+ "goblin 0.10.7",
+ "pine-core",
+ "proptest",
+]
+
+[[package]]
+name = "pine-nvms"
+version = "0.1.0"
+dependencies = [
+ "pine-core",
+]
+
+[[package]]
+name = "pine-syscall"
+version = "0.1.0"
+dependencies = [
+ "libloading 0.8.9",
+ "pine-core",
+]
 
 [[package]]
 name = "piper"
@@ -13294,7 +13404,16 @@ version = "0.12.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "6ab8598aa408498679922eff7fa985c25d58a90771bd6be794434c5277eab1a6"
 dependencies = [
- "scroll_derive",
+ "scroll_derive 0.12.1",
+]
+
+[[package]]
+name = "scroll"
+version = "0.13.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "c1257cd4248b4132760d6524d6dda4e053bc648c9070b960929bf50cfb1e7add"
+dependencies = [
+ "scroll_derive 0.13.2",
 ]
 
 [[package]]
@@ -13306,6 +13425,17 @@ dependencies = [
  "proc-macro2",
  "quote",
  "syn 2.0.119",
+]
+
+[[package]]
+name = "scroll_derive"
+version = "0.13.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e1a36a382ed65dbcc0ab47fd5e9a94112417ccd34560a392ef3b7b0f0ec39148"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn 3.0.5",
 ]
 
 [[package]]
@@ -15759,7 +15889,7 @@ dependencies = [
  "cargo_metadata",
  "fs-err",
  "glob",
- "goblin",
+ "goblin 0.8.2",
  "heck 0.5.0",
  "indexmap 2.14.2",
  "once_cell",

@@ -26,7 +26,7 @@ impl fmt::Display for WindowsSyscallError {
         match self {
             WindowsSyscallError::UnknownSyscall(num) => {
                 write!(f, "Unknown Windows syscall number: {}", num)
-            }
+            },
             WindowsSyscallError::InvalidArgument => write!(f, "Invalid argument"),
         }
     }
@@ -170,11 +170,11 @@ pub struct WindowsNtSyscallTranslator {
 /// Common Windows NT x64 syscall numbers (Windows 10/11, build 19041+).
 impl WindowsNtSyscallTranslator {
     /// `NtClose` — close an object handle
-    pub const NT_CLOSE: u32 = 0x0F;
+    pub const NT_CLOSE: u32 = 0x0f;
     /// `NtCreateFile` — create or open a file
     pub const NT_CREATE_FILE: u32 = 0x55;
     /// `NtCreateSection` — create a section object
-    pub const NT_CREATE_SECTION: u32 = 0x4A;
+    pub const NT_CREATE_SECTION: u32 = 0x4a;
     /// `NtDeviceIoControlFile` — perform device I/O control
     pub const NT_DEVICE_IO_CONTROL_FILE: u32 = 0x07;
     /// `NtDuplicateObject` — duplicate an object handle
@@ -182,7 +182,7 @@ impl WindowsNtSyscallTranslator {
     /// `NtFlushBuffersFile` — flush buffers for a file
     pub const NT_FLUSH_BUFFERS_FILE: u32 = 0x41;
     /// `NtFreeVirtualMemory` — free virtual memory
-    pub const NT_FREE_VIRTUAL_MEMORY: u32 = 0x1E;
+    pub const NT_FREE_VIRTUAL_MEMORY: u32 = 0x1e;
     /// `NtFsControlFile` — perform file system control
     pub const NT_FS_CONTROL_FILE: u32 = 0x09;
     /// `NtMapViewOfSection` — map a view of a section
@@ -192,9 +192,9 @@ impl WindowsNtSyscallTranslator {
     /// `NtOpenProcess` — open a process object
     pub const NT_OPEN_PROCESS: u32 = 0x26;
     /// `NtOpenSection` — open a section object
-    pub const NT_OPEN_SECTION: u32 = 0x4B;
+    pub const NT_OPEN_SECTION: u32 = 0x4b;
     /// `NtOpenThread` — open a thread object
-    pub const NT_OPEN_THREAD: u32 = 0x4D;
+    pub const NT_OPEN_THREAD: u32 = 0x4d;
     /// `NtProtectVirtualMemory` — change virtual memory protection
     pub const NT_PROTECT_VIRTUAL_MEMORY: u32 = 0x50;
     /// `NtQueryDirectoryFile` — query a directory
@@ -212,21 +212,21 @@ impl WindowsNtSyscallTranslator {
     /// `NtReadFile` — read from a file
     pub const NT_READ_FILE: u32 = 0x06;
     /// `NtReadVirtualMemory` — read virtual memory
-    pub const NT_READ_VIRTUAL_MEMORY: u32 = 0x3D;
+    pub const NT_READ_VIRTUAL_MEMORY: u32 = 0x3d;
     /// `NtResumeThread` — resume a thread
-    pub const NT_RESUME_THREAD: u32 = 0x4F;
+    pub const NT_RESUME_THREAD: u32 = 0x4f;
     /// `NtSetEvent` — set an event to signaled state
-    pub const NT_SET_EVENT: u32 = 0x0E;
+    pub const NT_SET_EVENT: u32 = 0x0e;
     /// `NtSetInformationFile` — set file information
     pub const NT_SET_INFORMATION_FILE: u32 = 0x27;
     /// `NtSuspendThread` — suspend a thread
     pub const NT_SUSPEND_THREAD: u32 = 0x36;
     /// `NtTerminateProcess` — terminate a process
-    pub const NT_TERMINATE_PROCESS: u32 = 0x2C;
+    pub const NT_TERMINATE_PROCESS: u32 = 0x2c;
     /// `NtTerminateThread` — terminate a thread
     pub const NT_TERMINATE_THREAD: u32 = 0x53;
     /// `NtUnmapViewOfSection` — unmap a view of a section
-    pub const NT_UNMAP_VIEW_OF_SECTION: u32 = 0x2A;
+    pub const NT_UNMAP_VIEW_OF_SECTION: u32 = 0x2a;
     /// `NtWaitForMultipleObjects` — wait for multiple objects
     pub const NT_WAIT_FOR_MULTIPLE_OBJECTS: u32 = 0x05;
     /// `NtWaitForSingleObject` — wait for a single object
@@ -234,7 +234,7 @@ impl WindowsNtSyscallTranslator {
     /// `NtWriteFile` — write to a file
     pub const NT_WRITE_FILE: u32 = 0x08;
     /// `NtWriteVirtualMemory` — write virtual memory
-    pub const NT_WRITE_VIRTUAL_MEMORY: u32 = 0x3A;
+    pub const NT_WRITE_VIRTUAL_MEMORY: u32 = 0x3a;
     /// `NtYieldExecution` — yield execution
     pub const NT_YIELD_EXECUTION: u32 = 0x46;
     /// `NtDelayExecution` — delay execution
@@ -252,23 +252,23 @@ impl WindowsNtSyscallTranslator {
     /// `NtQueryValueKey` — query a registry value
     pub const NT_QUERY_VALUE_KEY: u32 = 0x79;
     /// `NtSetValueKey` — set a registry value
-    pub const NT_SET_VALUE_KEY: u32 = 0x5D;
+    pub const NT_SET_VALUE_KEY: u32 = 0x5d;
     /// `NtDeleteKey` — delete a registry key
     pub const NT_DELETE_KEY: u32 = 0x63;
     /// `NtCreateThread` — create a thread
-    pub const NT_CREATE_THREAD: u32 = 0xA6;
+    pub const NT_CREATE_THREAD: u32 = 0xa6;
     /// `NtCreateThreadEx` — create a thread (extended)
-    pub const NT_CREATE_THREAD_EX: u32 = 0xB9;
+    pub const NT_CREATE_THREAD_EX: u32 = 0xb9;
     /// `NtCreateUserProcess` — create a user process
-    pub const NT_CREATE_USER_PROCESS: u32 = 0xC1;
+    pub const NT_CREATE_USER_PROCESS: u32 = 0xc1;
     /// `NtGetContextThread` — get thread context
-    pub const NT_GET_CONTEXT_THREAD: u32 = 0xD4;
+    pub const NT_GET_CONTEXT_THREAD: u32 = 0xd4;
     /// `NtSetContextThread` — set thread context
-    pub const NT_SET_CONTEXT_THREAD: u32 = 0xD5;
+    pub const NT_SET_CONTEXT_THREAD: u32 = 0xd5;
     /// `NtAccessCheck` — check access rights
     pub const NT_ACCESS_CHECK: u32 = 0x00;
     /// `NtResetEvent` — reset an event to non-signaled state
-    pub const NT_RESET_EVENT: u32 = 0xD1;
+    pub const NT_RESET_EVENT: u32 = 0xd1;
 
     /// Create a new translator with the standard Windows NT syscall table.
     pub fn new() -> Self {
@@ -280,49 +280,49 @@ impl WindowsNtSyscallTranslator {
         table.insert(0x07, WindowsSyscallName::NtDeviceIoControlFile);
         table.insert(0x08, WindowsSyscallName::NtWriteFile);
         table.insert(0x09, WindowsSyscallName::NtFsControlFile);
-        table.insert(0x0E, WindowsSyscallName::NtSetEvent);
-        table.insert(0x0F, WindowsSyscallName::NtClose);
+        table.insert(0x0e, WindowsSyscallName::NtSetEvent);
+        table.insert(0x0f, WindowsSyscallName::NtClose);
         table.insert(0x11, WindowsSyscallName::NtQueryInformationFile);
         table.insert(0x18, WindowsSyscallName::NtAllocateVirtualMemory);
         table.insert(0x19, WindowsSyscallName::NtQueryInformationProcess);
-        table.insert(0x1E, WindowsSyscallName::NtFreeVirtualMemory);
+        table.insert(0x1e, WindowsSyscallName::NtFreeVirtualMemory);
         table.insert(0x23, WindowsSyscallName::NtQueryVirtualMemory);
         table.insert(0x24, WindowsSyscallName::NtQuerySystemInformation);
         table.insert(0x25, WindowsSyscallName::NtQueryInformationThread);
         table.insert(0x26, WindowsSyscallName::NtOpenProcess);
         table.insert(0x27, WindowsSyscallName::NtSetInformationFile);
         table.insert(0x28, WindowsSyscallName::NtMapViewOfSection);
-        table.insert(0x2A, WindowsSyscallName::NtUnmapViewOfSection);
-        table.insert(0x2C, WindowsSyscallName::NtTerminateProcess);
+        table.insert(0x2a, WindowsSyscallName::NtUnmapViewOfSection);
+        table.insert(0x2c, WindowsSyscallName::NtTerminateProcess);
         table.insert(0x33, WindowsSyscallName::NtOpenFile);
         table.insert(0x34, WindowsSyscallName::NtDelayExecution);
         table.insert(0x36, WindowsSyscallName::NtSuspendThread);
-        table.insert(0x3A, WindowsSyscallName::NtWriteVirtualMemory);
-        table.insert(0x3D, WindowsSyscallName::NtReadVirtualMemory);
+        table.insert(0x3a, WindowsSyscallName::NtWriteVirtualMemory);
+        table.insert(0x3d, WindowsSyscallName::NtReadVirtualMemory);
         table.insert(0x41, WindowsSyscallName::NtFlushBuffersFile);
         table.insert(0x46, WindowsSyscallName::NtYieldExecution);
         table.insert(0x48, WindowsSyscallName::NtCreateEvent);
         table.insert(0x49, WindowsSyscallName::NtOpenEvent);
-        table.insert(0x4A, WindowsSyscallName::NtCreateSection);
-        table.insert(0x4B, WindowsSyscallName::NtOpenSection);
-        table.insert(0x4D, WindowsSyscallName::NtOpenThread);
-        table.insert(0x4F, WindowsSyscallName::NtResumeThread);
+        table.insert(0x4a, WindowsSyscallName::NtCreateSection);
+        table.insert(0x4b, WindowsSyscallName::NtOpenSection);
+        table.insert(0x4d, WindowsSyscallName::NtOpenThread);
+        table.insert(0x4f, WindowsSyscallName::NtResumeThread);
         table.insert(0x50, WindowsSyscallName::NtProtectVirtualMemory);
         table.insert(0x53, WindowsSyscallName::NtTerminateThread);
         table.insert(0x55, WindowsSyscallName::NtCreateFile);
         table.insert(0x57, WindowsSyscallName::NtDuplicateObject);
-        table.insert(0x5D, WindowsSyscallName::NtSetValueKey);
+        table.insert(0x5d, WindowsSyscallName::NtSetValueKey);
         table.insert(0x63, WindowsSyscallName::NtDeleteKey);
         table.insert(0x77, WindowsSyscallName::NtCreateKey);
         table.insert(0x78, WindowsSyscallName::NtOpenKey);
         table.insert(0x79, WindowsSyscallName::NtQueryValueKey);
         table.insert(0x91, WindowsSyscallName::NtQueryDirectoryFile);
-        table.insert(0xA6, WindowsSyscallName::NtCreateThread);
-        table.insert(0xB9, WindowsSyscallName::NtCreateThreadEx);
-        table.insert(0xC1, WindowsSyscallName::NtCreateUserProcess);
-        table.insert(0xD4, WindowsSyscallName::NtGetContextThread);
-        table.insert(0xD5, WindowsSyscallName::NtSetContextThread);
-        table.insert(0xD1, WindowsSyscallName::NtResetEvent);
+        table.insert(0xa6, WindowsSyscallName::NtCreateThread);
+        table.insert(0xb9, WindowsSyscallName::NtCreateThreadEx);
+        table.insert(0xc1, WindowsSyscallName::NtCreateUserProcess);
+        table.insert(0xd4, WindowsSyscallName::NtGetContextThread);
+        table.insert(0xd5, WindowsSyscallName::NtSetContextThread);
+        table.insert(0xd1, WindowsSyscallName::NtResetEvent);
         Self { table }
     }
 
@@ -411,7 +411,7 @@ mod tests {
             .translate(WindowsNtSyscallTranslator::NT_CLOSE, [0; 6])
             .unwrap();
         assert_eq!(result.name, WindowsSyscallName::NtClose);
-        assert_eq!(result.number, 0x0F);
+        assert_eq!(result.number, 0x0f);
     }
 
     #[test]
@@ -858,11 +858,11 @@ mod tests {
     #[test]
     fn windows_translator_returns_error_for_unknown() {
         let translator = WindowsNtSyscallTranslator::new();
-        let result = translator.translate(0xFFFF, [0; 6]);
+        let result = translator.translate(0xffff, [0; 6]);
         assert!(result.is_err());
         assert_eq!(
             result.unwrap_err(),
-            WindowsSyscallError::UnknownSyscall(0xFFFF)
+            WindowsSyscallError::UnknownSyscall(0xffff)
         );
     }
 
@@ -881,7 +881,7 @@ mod tests {
             translator.lookup_name(0x08),
             Some(&WindowsSyscallName::NtWriteFile)
         );
-        assert_eq!(translator.lookup_name(0xFFFF), None);
+        assert_eq!(translator.lookup_name(0xffff), None);
     }
 
     #[test]
@@ -901,7 +901,7 @@ mod tests {
         );
         assert_eq!(
             translator.lookup_number(WindowsSyscallName::NtClose),
-            Some(0x0F)
+            Some(0x0f)
         );
     }
 
@@ -941,7 +941,7 @@ mod tests {
             WindowsSyscallName::NtWriteFile
         );
         assert_eq!(
-            translator.translate(0x0F, [0; 6]).unwrap().name,
+            translator.translate(0x0f, [0; 6]).unwrap().name,
             WindowsSyscallName::NtClose
         );
         assert_eq!(
@@ -982,7 +982,7 @@ mod tests {
             WindowsSyscallName::NtAllocateVirtualMemory
         );
         assert_eq!(
-            translator.translate(0x1E, [0; 6]).unwrap().name,
+            translator.translate(0x1e, [0; 6]).unwrap().name,
             WindowsSyscallName::NtFreeVirtualMemory
         );
         assert_eq!(
@@ -994,7 +994,7 @@ mod tests {
             WindowsSyscallName::NtMapViewOfSection
         );
         assert_eq!(
-            translator.translate(0x2A, [0; 6]).unwrap().name,
+            translator.translate(0x2a, [0; 6]).unwrap().name,
             WindowsSyscallName::NtUnmapViewOfSection
         );
         assert_eq!(
@@ -1002,11 +1002,11 @@ mod tests {
             WindowsSyscallName::NtQueryVirtualMemory
         );
         assert_eq!(
-            translator.translate(0x3D, [0; 6]).unwrap().name,
+            translator.translate(0x3d, [0; 6]).unwrap().name,
             WindowsSyscallName::NtReadVirtualMemory
         );
         assert_eq!(
-            translator.translate(0x3A, [0; 6]).unwrap().name,
+            translator.translate(0x3a, [0; 6]).unwrap().name,
             WindowsSyscallName::NtWriteVirtualMemory
         );
     }
@@ -1019,11 +1019,11 @@ mod tests {
             WindowsSyscallName::NtOpenProcess
         );
         assert_eq!(
-            translator.translate(0x4D, [0; 6]).unwrap().name,
+            translator.translate(0x4d, [0; 6]).unwrap().name,
             WindowsSyscallName::NtOpenThread
         );
         assert_eq!(
-            translator.translate(0x2C, [0; 6]).unwrap().name,
+            translator.translate(0x2c, [0; 6]).unwrap().name,
             WindowsSyscallName::NtTerminateProcess
         );
         assert_eq!(
@@ -1035,19 +1035,19 @@ mod tests {
             WindowsSyscallName::NtSuspendThread
         );
         assert_eq!(
-            translator.translate(0x4F, [0; 6]).unwrap().name,
+            translator.translate(0x4f, [0; 6]).unwrap().name,
             WindowsSyscallName::NtResumeThread
         );
         assert_eq!(
-            translator.translate(0xA6, [0; 6]).unwrap().name,
+            translator.translate(0xa6, [0; 6]).unwrap().name,
             WindowsSyscallName::NtCreateThread
         );
         assert_eq!(
-            translator.translate(0xB9, [0; 6]).unwrap().name,
+            translator.translate(0xb9, [0; 6]).unwrap().name,
             WindowsSyscallName::NtCreateThreadEx
         );
         assert_eq!(
-            translator.translate(0xC1, [0; 6]).unwrap().name,
+            translator.translate(0xc1, [0; 6]).unwrap().name,
             WindowsSyscallName::NtCreateUserProcess
         );
         assert_eq!(
@@ -1059,11 +1059,11 @@ mod tests {
             WindowsSyscallName::NtQueryInformationThread
         );
         assert_eq!(
-            translator.translate(0xD4, [0; 6]).unwrap().name,
+            translator.translate(0xd4, [0; 6]).unwrap().name,
             WindowsSyscallName::NtGetContextThread
         );
         assert_eq!(
-            translator.translate(0xD5, [0; 6]).unwrap().name,
+            translator.translate(0xd5, [0; 6]).unwrap().name,
             WindowsSyscallName::NtSetContextThread
         );
     }
@@ -1080,11 +1080,11 @@ mod tests {
             WindowsSyscallName::NtWaitForMultipleObjects
         );
         assert_eq!(
-            translator.translate(0x0E, [0; 6]).unwrap().name,
+            translator.translate(0x0e, [0; 6]).unwrap().name,
             WindowsSyscallName::NtSetEvent
         );
         assert_eq!(
-            translator.translate(0xD1, [0; 6]).unwrap().name,
+            translator.translate(0xd1, [0; 6]).unwrap().name,
             WindowsSyscallName::NtResetEvent
         );
         assert_eq!(
@@ -1121,7 +1121,7 @@ mod tests {
             WindowsSyscallName::NtQueryValueKey
         );
         assert_eq!(
-            translator.translate(0x5D, [0; 6]).unwrap().name,
+            translator.translate(0x5d, [0; 6]).unwrap().name,
             WindowsSyscallName::NtSetValueKey
         );
         assert_eq!(
@@ -1134,11 +1134,11 @@ mod tests {
     fn windows_translator_translates_section_syscalls() {
         let translator = WindowsNtSyscallTranslator::new();
         assert_eq!(
-            translator.translate(0x4A, [0; 6]).unwrap().name,
+            translator.translate(0x4a, [0; 6]).unwrap().name,
             WindowsSyscallName::NtCreateSection
         );
         assert_eq!(
-            translator.translate(0x4B, [0; 6]).unwrap().name,
+            translator.translate(0x4b, [0; 6]).unwrap().name,
             WindowsSyscallName::NtOpenSection
         );
     }
@@ -1180,7 +1180,7 @@ mod tests {
     fn windows_translator_translates_handle_syscalls() {
         let translator = WindowsNtSyscallTranslator::new();
         assert_eq!(
-            translator.translate(0x0F, [0; 6]).unwrap().name,
+            translator.translate(0x0f, [0; 6]).unwrap().name,
             WindowsSyscallName::NtClose
         );
         assert_eq!(

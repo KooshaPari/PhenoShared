@@ -136,3 +136,8 @@ llvm-cov-*
 crates/.eidolon-desktop
 crates/phenotype-port-traits/src/inbound.rs
 crates/phenotype-port-traits/src/outbound.rs
+crates/phenotype-contracts/src/ports/inbound.rs
+crates/phenotype-contracts/src/ports/outbound.rs
+crates/phenotype-error-macros/tests/macro_expansion.rs.broken
+crates/phenotype-error-macros/tests/macro_expansion.rs.broken
+crates/phenotype-contracts/tests/property.rs.broken

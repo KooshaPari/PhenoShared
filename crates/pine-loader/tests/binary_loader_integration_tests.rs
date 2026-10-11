@@ -23,9 +23,9 @@ fn minimal_pe_with_exports_bytes() -> Vec<u8> {
     let mut b = vec![0u8; 0x600];
 
     // DOS Header (64 bytes)
-    b[0x00] = 0x4D; // 'M'
-    b[0x01] = 0x5A; // 'Z'
-    write_u32(&mut b, 0x3C, 0x40); // e_lfanew = 0x40
+    b[0x00] = 0x4d; // 'M'
+    b[0x01] = 0x5a; // 'Z'
+    write_u32(&mut b, 0x3c, 0x40); // e_lfanew = 0x40
 
     // PE Signature at 0x40
     b[0x40] = 0x50; // 'P'
@@ -34,94 +34,94 @@ fn minimal_pe_with_exports_bytes() -> Vec<u8> {
     b[0x43] = 0x00;
 
     // COFF Header (20 bytes) at 0x44
-    write_u16(&mut b, 0x44, 0x14C); // Machine: i386
+    write_u16(&mut b, 0x44, 0x14c); // Machine: i386
     write_u16(&mut b, 0x46, 0x0001); // NumberOfSections: 1
-    write_u16(&mut b, 0x54, 0x00E0); // SizeOfOptionalHeader: 224
+    write_u16(&mut b, 0x54, 0x00e0); // SizeOfOptionalHeader: 224
     write_u16(&mut b, 0x56, 0x0102); // Characteristics: EXECUTABLE_IMAGE | 32BIT_MACHINE
 
     // Optional Header (PE32, 224 bytes) at 0x58
-    write_u16(&mut b, 0x58, 0x010B); // Magic: PE32
-    write_u32(&mut b, 0x5C, 0x400); // SizeOfCode
+    write_u16(&mut b, 0x58, 0x010b); // Magic: PE32
+    write_u32(&mut b, 0x5c, 0x400); // SizeOfCode
     write_u32(&mut b, 0x60, 0x400); // SizeOfInitializedData
     write_u32(&mut b, 0x68, 0x1000); // AddressOfEntryPoint
-    write_u32(&mut b, 0x6C, 0x1000); // BaseOfCode
+    write_u32(&mut b, 0x6c, 0x1000); // BaseOfCode
     write_u32(&mut b, 0x70, 0x2000); // BaseOfData
     write_u32(&mut b, 0x74, 0x10000); // ImageBase
     write_u32(&mut b, 0x78, 0x1000); // SectionAlignment
-    write_u32(&mut b, 0x7C, 0x200); // FileAlignment
+    write_u32(&mut b, 0x7c, 0x200); // FileAlignment
     write_u16(&mut b, 0x80, 0x4); // MajorOperatingSystemVersion
     write_u16(&mut b, 0x88, 0x4); // MajorSubsystemVersion
     write_u32(&mut b, 0x90, 0x2000); // SizeOfImage
     write_u32(&mut b, 0x94, 0x200); // SizeOfHeaders
-    write_u16(&mut b, 0x9C, 0x1); // Subsystem: NATIVE
-    write_u32(&mut b, 0xA0, 0x100000); // SizeOfStackReserve
-    write_u32(&mut b, 0xA4, 0x1000); // SizeOfStackCommit
-    write_u32(&mut b, 0xA8, 0x100000); // SizeOfHeapReserve
-    write_u32(&mut b, 0xAC, 0x1000); // SizeOfHeapCommit
-    write_u32(&mut b, 0xB4, 0x10); // NumberOfRvaAndSizes
+    write_u16(&mut b, 0x9c, 0x1); // Subsystem: NATIVE
+    write_u32(&mut b, 0xa0, 0x100000); // SizeOfStackReserve
+    write_u32(&mut b, 0xa4, 0x1000); // SizeOfStackCommit
+    write_u32(&mut b, 0xa8, 0x100000); // SizeOfHeapReserve
+    write_u32(&mut b, 0xac, 0x1000); // SizeOfHeapCommit
+    write_u32(&mut b, 0xb4, 0x10); // NumberOfRvaAndSizes
 
     // Data Directory 0: Export
-    write_u32(&mut b, 0xB8, 0x1300); // Export RVA
-    write_u32(&mut b, 0xBC, 0x100); // Export Size
+    write_u32(&mut b, 0xb8, 0x1300); // Export RVA
+    write_u32(&mut b, 0xbc, 0x100); // Export Size
 
     // Section Header (.text) at 0x138
-    b[0x138] = 0x2E;
+    b[0x138] = 0x2e;
     b[0x139] = 0x74;
-    b[0x13A] = 0x65;
-    b[0x13B] = 0x78;
-    b[0x13C] = 0x74;
+    b[0x13a] = 0x65;
+    b[0x13b] = 0x78;
+    b[0x13c] = 0x74;
     write_u32(&mut b, 0x140, 0x400); // VirtualSize
     write_u32(&mut b, 0x144, 0x1000); // VirtualAddress
     write_u32(&mut b, 0x148, 0x400); // SizeOfRawData
-    write_u32(&mut b, 0x14C, 0x200); // PointerToRawData
-    write_u32(&mut b, 0x15C, 0x60000020); // Characteristics: CODE | EXECUTE | READ
+    write_u32(&mut b, 0x14c, 0x200); // PointerToRawData
+    write_u32(&mut b, 0x15c, 0x60000020); // Characteristics: CODE | EXECUTE | READ
 
     // .text data at 0x200
-    b[0x200] = 0xC3; // ret
+    b[0x200] = 0xc3; // ret
 
     // Export data at 0x500 (RVA 0x1300 within .text section)
     // Export Directory Table (40 bytes)
     write_u32(&mut b, 0x500, 0); // export_flags
     write_u32(&mut b, 0x504, 0); // time_date_stamp
     write_u16(&mut b, 0x508, 0); // major_version
-    write_u16(&mut b, 0x50A, 0); // minor_version
-    write_u32(&mut b, 0x50C, 0x133C); // name_rva (DLL name)
+    write_u16(&mut b, 0x50a, 0); // minor_version
+    write_u32(&mut b, 0x50c, 0x133c); // name_rva (DLL name)
     write_u32(&mut b, 0x510, 1); // ordinal_base
     write_u32(&mut b, 0x514, 1); // address_table_entries
     write_u32(&mut b, 0x518, 1); // number_of_name_pointers
-    write_u32(&mut b, 0x51C, 0x1328); // export_address_table_rva
-    write_u32(&mut b, 0x520, 0x132C); // name_pointer_rva
+    write_u32(&mut b, 0x51c, 0x1328); // export_address_table_rva
+    write_u32(&mut b, 0x520, 0x132c); // name_pointer_rva
     write_u32(&mut b, 0x524, 0x1330); // ordinal_table_rva
 
     // Export Address Table (4 bytes) at 0x528
     write_u32(&mut b, 0x528, 0x1000); // RVA of exported function
 
     // Export Name Pointer Table (4 bytes) at 0x52C
-    write_u32(&mut b, 0x52C, 0x1332); // RVA of "MyExport"
+    write_u32(&mut b, 0x52c, 0x1332); // RVA of "MyExport"
 
     // Export Ordinal Table (2 bytes) at 0x530
     write_u16(&mut b, 0x530, 0); // ordinal 0 -> ordinal_base + 0 = 1
 
     // Export name "MyExport\0" at 0x532
-    b[0x532] = 0x4D;
+    b[0x532] = 0x4d;
     b[0x533] = 0x79;
     b[0x534] = 0x45;
     b[0x535] = 0x78;
     b[0x536] = 0x70;
-    b[0x537] = 0x6F;
+    b[0x537] = 0x6f;
     b[0x538] = 0x72;
     b[0x539] = 0x74;
-    b[0x53A] = 0x00;
+    b[0x53a] = 0x00;
 
     // DLL name "test.dll\0" at 0x53C
-    b[0x53C] = 0x74;
-    b[0x53D] = 0x65;
-    b[0x53E] = 0x73;
-    b[0x53F] = 0x74;
-    b[0x540] = 0x2E;
+    b[0x53c] = 0x74;
+    b[0x53d] = 0x65;
+    b[0x53e] = 0x73;
+    b[0x53f] = 0x74;
+    b[0x540] = 0x2e;
     b[0x541] = 0x64;
-    b[0x542] = 0x6C;
-    b[0x543] = 0x6C;
+    b[0x542] = 0x6c;
+    b[0x543] = 0x6c;
     b[0x544] = 0x00;
 
     b
@@ -132,7 +132,7 @@ fn minimal_elf64_bytes() -> Vec<u8> {
     let mut b = vec![0u8; 0x800];
 
     // ELF Header (64 bytes)
-    b[0x00] = 0x7F;
+    b[0x00] = 0x7f;
     b[0x01] = b'E';
     b[0x02] = b'L';
     b[0x03] = b'F';
@@ -151,9 +151,9 @@ fn minimal_elf64_bytes() -> Vec<u8> {
     write_u16(&mut b, 0x34, 64); // e_ehsize
     write_u16(&mut b, 0x36, 56); // e_phentsize
     write_u16(&mut b, 0x38, 1); // e_phnum
-    write_u16(&mut b, 0x3A, 64); // e_shentsize
-    write_u16(&mut b, 0x3C, 5); // e_shnum
-    write_u16(&mut b, 0x3E, 4); // e_shstrndx
+    write_u16(&mut b, 0x3a, 64); // e_shentsize
+    write_u16(&mut b, 0x3c, 5); // e_shnum
+    write_u16(&mut b, 0x3e, 4); // e_shstrndx
 
     // Program Header (56 bytes) at 0x40
     write_u32(&mut b, 0x40, 1); // p_type: PT_LOAD
@@ -166,8 +166,8 @@ fn minimal_elf64_bytes() -> Vec<u8> {
     write_u64(&mut b, 0x70, 0x1000); // p_align
 
     // .text data at 0x100
-    b[0x100] = 0xCC; // int3
-    b[0x101] = 0xC3; // ret
+    b[0x100] = 0xcc; // int3
+    b[0x101] = 0xc3; // ret
 
     // .shstrtab at 0x200
     let shstrtab = b"\0.text\0.symtab\0.strtab\0.shstrtab\0";
