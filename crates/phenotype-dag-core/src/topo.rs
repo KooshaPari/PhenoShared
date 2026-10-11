@@ -45,11 +45,12 @@ where
 
         if let Some(children) = dag.children_of(node) {
             for child in children {
-                let deg = in_degree
-                    .get_mut(child)
-                    .ok_or_else(|| DagError::InternalInvariant(
-                        format!("child `{:?}` not found in in-degree map during Kahn sort", child),
-                    ))?;
+                let deg = in_degree.get_mut(child).ok_or_else(|| {
+                    DagError::InternalInvariant(format!(
+                        "child `{:?}` not found in in-degree map during Kahn sort",
+                        child
+                    ))
+                })?;
                 *deg -= 1;
                 if *deg == 0 {
                     queue.push_back(child);
@@ -129,7 +130,7 @@ where
                         format!("{:?}", node),
                         format!("{:?}", child),
                     ));
-                }
+                },
                 DfsColor::White => visit(dag, child, color, order)?,
                 DfsColor::Black => continue,
             }
@@ -163,8 +164,9 @@ mod tests {
         let ids: Vec<&str> = order.into_iter().copied().collect();
         // a must be before b before c before d
         let pos = |name: &str| -> Result<usize, DagError> {
-            ids.iter().position(|x| *x == name)
-                .ok_or_else(|| DagError::InternalInvariant(format!("node {} not found in order", name)))
+            ids.iter().position(|x| *x == name).ok_or_else(|| {
+                DagError::InternalInvariant(format!("node {} not found in order", name))
+            })
         };
         assert!(pos("a")? < pos("b")?);
         assert!(pos("b")? < pos("c")?);
@@ -186,8 +188,9 @@ mod tests {
         let order = kahn_sort(&dag)?;
         let ids: Vec<&str> = order.into_iter().copied().collect();
         let pos = |name: &str| -> Result<usize, DagError> {
-            ids.iter().position(|x| *x == name)
-                .ok_or_else(|| DagError::InternalInvariant(format!("node {} not found in order", name)))
+            ids.iter().position(|x| *x == name).ok_or_else(|| {
+                DagError::InternalInvariant(format!("node {} not found in order", name))
+            })
         };
         assert!(pos("a")? < pos("b")?);
         assert!(pos("a")? < pos("c")?);
@@ -232,11 +235,16 @@ mod tests {
         // Verify DFS order respects all edges.
         for node in dag.iter_nodes() {
             if let Some(children) = dag.children_of(node) {
-                let n_pos = dfs_order.iter().position(|x| *x == node)
-                    .ok_or_else(|| DagError::InternalInvariant(format!("node {:?} not found in DFS order", node)))?;
+                let n_pos = dfs_order.iter().position(|x| *x == node).ok_or_else(|| {
+                    DagError::InternalInvariant(format!("node {:?} not found in DFS order", node))
+                })?;
                 for child in children {
-                    let c_pos = dfs_order.iter().position(|x| *x == child)
-                        .ok_or_else(|| DagError::InternalInvariant(format!("child {:?} not found in DFS order", child)))?;
+                    let c_pos = dfs_order.iter().position(|x| *x == child).ok_or_else(|| {
+                        DagError::InternalInvariant(format!(
+                            "child {:?} not found in DFS order",
+                            child
+                        ))
+                    })?;
                     assert!(n_pos < c_pos, "DFS: {} should come before {}", node, child);
                 }
             }

@@ -605,7 +605,7 @@ mod tests {
             AcceptanceCriterion::LogCheck { negate, source, .. } => {
                 assert!(!negate, "negate should default to false");
                 assert!(source.is_none(), "source should default to None");
-            }
+            },
             _ => panic!("wrong variant"),
         }
         Ok(())

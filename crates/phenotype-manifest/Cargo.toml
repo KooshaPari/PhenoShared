@@ -9,8 +9,6 @@ readme = "README.md"
 categories = ["command-line-utilities", "development-tools", "security"]
 keywords = ["attestation", "manifest", "ci", "gitops", "supply-chain"]
 
-[workspace]
-
 [dependencies]
 clap = { version = "4.5", features = ["derive", "env", "std"] }
 anyhow = "1.0"

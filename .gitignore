@@ -134,3 +134,5 @@ llvm-cov-*
 # Linked worktree of an unrelated project (not part of this repo)
 /BytePort/
 crates/.eidolon-desktop
+crates/phenotype-port-traits/src/inbound.rs
+crates/phenotype-port-traits/src/outbound.rs

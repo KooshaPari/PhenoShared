@@ -10983,6 +10983,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "phenotype-dag-core"
+version = "0.1.0"
+dependencies = [
+ "serde",
+ "serde_json",
+ "serde_yaml",
+ "thiserror 2.0.20",
+]
+
+[[package]]
 name = "phenotype-diff"
 version = "0.3.10"
 dependencies = [
@@ -11042,6 +11052,20 @@ dependencies = [
  "serde_json",
  "thiserror 2.0.20",
  "tokio",
+]
+
+[[package]]
+name = "phenotype-http-client-core"
+version = "0.2.0"
+dependencies = [
+ "async-trait",
+ "chrono",
+ "reqwest 0.13.5",
+ "serde",
+ "serde_json",
+ "thiserror 2.0.20",
+ "tokio",
+ "tracing",
 ]
 
 [[package]]
@@ -11181,6 +11205,35 @@ dependencies = [
 ]
 
 [[package]]
+name = "phenotype-port-traits"
+version = "0.2.0"
+dependencies = [
+ "async-trait",
+ "chrono",
+ "serde",
+ "serde_json",
+ "thiserror 2.0.20",
+ "tokio",
+ "uuid",
+]
+
+[[package]]
+name = "phenotype-ports-canonical"
+version = "0.2.0"
+dependencies = [
+ "serde",
+ "thiserror 2.0.20",
+]
+
+[[package]]
+name = "phenotype-process"
+version = "0.2.0"
+dependencies = [
+ "serde",
+ "thiserror 2.0.20",
+]
+
+[[package]]
 name = "phenotype-project-registry"
 version = "0.3.10"
 dependencies = [
@@ -11294,6 +11347,16 @@ dependencies = [
  "tokio",
  "tracing",
  "tracing-subscriber",
+]
+
+[[package]]
+name = "phenotype-time"
+version = "0.2.0"
+dependencies = [
+ "chrono",
+ "serde",
+ "thiserror 2.0.20",
+ "tokio",
 ]
 
 [[package]]
@@ -12732,7 +12795,7 @@ dependencies = [
  "url",
  "wasm-bindgen",
  "wasm-bindgen-futures",
- "wasm-streams",
+ "wasm-streams 0.4.2",
  "web-sys",
  "webpki-roots 1.0.9",
 ]
@@ -12770,12 +12833,14 @@ dependencies = [
  "sync_wrapper",
  "tokio",
  "tokio-rustls",
+ "tokio-util",
  "tower 0.5.3",
  "tower-http 0.6.11",
  "tower-service",
  "url",
  "wasm-bindgen",
  "wasm-bindgen-futures",
+ "wasm-streams 0.5.0",
  "web-sys",
 ]
 
@@ -13568,7 +13633,7 @@ dependencies = [
  "url",
  "wasm-bindgen",
  "wasm-bindgen-futures",
- "wasm-streams",
+ "wasm-streams 0.4.2",
  "web-sys",
  "xxhash-rust",
 ]
@@ -16163,6 +16228,19 @@ name = "wasm-streams"
 version = "0.4.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "15053d8d85c7eccdbefef60f06769760a563c7f0a9d6902a13d35c7800b0ad65"
+dependencies = [
+ "futures-util",
+ "js-sys",
+ "wasm-bindgen",
+ "wasm-bindgen-futures",
+ "web-sys",
+]
+
+[[package]]
+name = "wasm-streams"
+version = "0.5.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "9d1ec4f6517c9e11ae630e200b2b65d193279042e28edd4a2cda233e46670bbb"
 dependencies = [
  "futures-util",
  "js-sys",
