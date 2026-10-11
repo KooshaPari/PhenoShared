@@ -42,6 +42,7 @@ members = [
     "crates/teamcomm-smoke",
     "crates/klipdot-capture",
     "crates/phenotype-cache-adapter",
+    "crates/pheno-tracing",
     "crates/focus-templates",
     "crates/focus-events",
     "crates/logkit",
@@ -467,8 +468,6 @@ members = [
     # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): klipdot + logkit ---
     "crates/focus-planning",
     "crates/pheno-fs",
-    # --- E2.4 Pattern A wave 3 batch R (2026-10-09): 1 focus lib (focus-events) ---
-    "crates/focus-events",
     # --- E2.4 Pattern A wave 3 batch S (2026-10-09): 1 small lib (agileplus-graph) ---
     # --- E2.4 Pattern A wave 3 batch AX-25 (2026-10-09): airlock-v2 + anthropic-usage-poll + agent-forecast + a2a ---
     # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): phenotype-router ---
