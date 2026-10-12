@@ -102,9 +102,6 @@ copy_file() {
 
 install_workflows() {
   echo "[install] workflows → $TARGET_DIR/.github/workflows-reusable/"
-  if [[ "$DRY_RUN" == "true" ]]; then
-    mkdir -p "$TARGET_DIR/.github/workflows-reusable"
-  fi
   for f in "$SOURCE_DIR/.github/workflows-reusable/"*.yml; do
     [[ -e "$f" ]] || continue
     fname="$(basename "$f")"
@@ -124,9 +121,6 @@ install_mcp() {
 
 install_scripts() {
   echo "[install] scripts → $TARGET_DIR/tools/integration-kit/"
-  if [[ "$DRY_RUN" == "true" ]]; then
-    mkdir -p "$TARGET_DIR/tools/integration-kit"
-  fi
   copy_file "$SCRIPT_DIR/install.sh" "$TARGET_DIR/tools/integration-kit/install.sh" "" "tools/integration-kit/install.sh"
   if [[ "$DRY_RUN" != "true" ]]; then
     chmod +x "$TARGET_DIR/tools/integration-kit/install.sh"
@@ -208,6 +202,7 @@ main() {
   if want mcp; then install_mcp; fi
   if want scripts; then install_scripts; fi
 
+  if [[ "$DRY_RUN" == "true" ]]; then return 0; fi
   post_install_check
 }
 
