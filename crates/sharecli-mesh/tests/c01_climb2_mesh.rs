@@ -27,7 +27,12 @@ fn fr003_smart_merger_git_fallback_paths() {
     let with_git = SmartMerger::new();
     let result = with_git.merge(&base, &ours, &theirs, &out);
     // Conflict or clean — both exercise merge codepaths.
-    let _ = (result.success, result.used_mergiraf, result.conflicts.len(), result.output.len());
+    let _ = (
+        result.success,
+        result.used_mergiraf,
+        result.conflicts.len(),
+        result.output.len(),
+    );
 }
 
 /// FR-003 / C01 — MaildirQueue enqueue/claim/ack/nack/status.
@@ -37,7 +42,9 @@ fn fr003_maildir_queue_enqueue_claim_ack_nack() {
     let q = MaildirQueue::open(dir.path()).expect("open");
     assert_eq!(q.path(), dir.path());
 
-    let id = q.enqueue(serde_json::json!({"op": "climb2"}), 2).expect("enqueue");
+    let id = q
+        .enqueue(serde_json::json!({"op": "climb2"}), 2)
+        .expect("enqueue");
     assert!(!id.is_empty());
 
     let status = q.status().expect("status");

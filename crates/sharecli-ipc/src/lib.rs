@@ -114,7 +114,11 @@ pub struct CoalesceCache {
 
 impl Clone for CoalesceCache {
     fn clone(&self) -> Self {
-        Self { root: self.root.clone(), ttl: self.ttl, debounce: self.debounce }
+        Self {
+            root: self.root.clone(),
+            ttl: self.ttl,
+            debounce: self.debounce,
+        }
     }
 }
 
@@ -140,7 +144,11 @@ impl CoalesceCache {
     /// `debounce` — on miss, wait this long then re-check before running the
     /// miss path (origin harness `debounce_ms`; `Duration::ZERO` disables).
     pub fn with_options(root: impl Into<PathBuf>, ttl: Duration, debounce: Duration) -> Self {
-        Self { root: root.into(), ttl, debounce }
+        Self {
+            root: root.into(),
+            ttl,
+            debounce,
+        }
     }
 
     /// Configured TTL for cache entries.
@@ -170,11 +178,14 @@ impl CoalesceCache {
     fn entry_age(&self, path: &Path) -> Result<Option<Duration>> {
         match fs::metadata(path) {
             Ok(meta) => {
-                let modified =
-                    meta.modified().with_context(|| format!("mtime for {}", path.display()))?;
-                let age = SystemTime::now().duration_since(modified).unwrap_or(Duration::ZERO);
+                let modified = meta
+                    .modified()
+                    .with_context(|| format!("mtime for {}", path.display()))?;
+                let age = SystemTime::now()
+                    .duration_since(modified)
+                    .unwrap_or(Duration::ZERO);
                 Ok(Some(age))
-            }
+            },
             Err(e) if e.kind() == io::ErrorKind::NotFound => Ok(None),
             Err(e) => Err(e).with_context(|| format!("metadata for {}", path.display())),
         }
@@ -194,7 +205,7 @@ impl CoalesceCache {
             Err(e) if e.kind() == io::ErrorKind::NotFound => return Ok(()),
             Err(e) => {
                 return Err(e).with_context(|| format!("read cache root {}", self.root.display()))
-            }
+            },
         };
 
         for entry in entries {
@@ -226,7 +237,7 @@ impl CoalesceCache {
                 let result: CachedResult = serde_json::from_slice(&bytes)
                     .with_context(|| format!("deserialise cache entry {}", path.display()))?;
                 Ok(Some(result))
-            }
+            },
             Err(e) if e.kind() == io::ErrorKind::NotFound => Ok(None),
             Err(e) => Err(e).with_context(|| format!("read cache entry {}", path.display())),
         }
@@ -246,11 +257,13 @@ impl CoalesceCache {
         // (same filesystem, no cross-device move).
         let mut tmp = tempfile::NamedTempFile::new_in(&self.root)
             .with_context(|| format!("create temp file in {}", self.root.display()))?;
-        tmp.write_all(&bytes).context("write cache bytes to temp file")?;
+        tmp.write_all(&bytes)
+            .context("write cache bytes to temp file")?;
         tmp.flush().context("flush temp file")?;
 
         let dest = self.entry_path(key);
-        tmp.persist(&dest).with_context(|| format!("persist cache entry to {}", dest.display()))?;
+        tmp.persist(&dest)
+            .with_context(|| format!("persist cache entry to {}", dest.display()))?;
 
         self.evict_stale()?;
 
@@ -381,9 +394,16 @@ mod tests {
         let key = command_key(&argv, Path::new("/workspace"), &[]);
 
         // Nothing stored yet.
-        assert!(cache.lookup(&key).unwrap().is_none(), "fresh cache should be empty");
+        assert!(
+            cache.lookup(&key).unwrap().is_none(),
+            "fresh cache should be empty"
+        );
 
-        let result = CachedResult { exit_code: 0, stdout: b"all good".to_vec(), stderr: vec![] };
+        let result = CachedResult {
+            exit_code: 0,
+            stdout: b"all good".to_vec(),
+            stderr: vec![],
+        };
 
         cache.store(&key, &result).expect("store");
 
@@ -410,7 +430,11 @@ mod tests {
         let r1: CachedResult = cache
             .with_lock(&key, || {
                 call_count += 1;
-                Ok(CachedResult { exit_code: 42, stdout: b"run1".to_vec(), stderr: vec![] })
+                Ok(CachedResult {
+                    exit_code: 42,
+                    stdout: b"run1".to_vec(),
+                    stderr: vec![],
+                })
             })
             .expect("first with_lock");
         assert_eq!(call_count, 1, "f() must run on first call");
@@ -420,11 +444,18 @@ mod tests {
         let r2: CachedResult = cache
             .with_lock(&key, || {
                 call_count += 1;
-                Ok(CachedResult { exit_code: 99, stdout: b"run2".to_vec(), stderr: vec![] })
+                Ok(CachedResult {
+                    exit_code: 99,
+                    stdout: b"run2".to_vec(),
+                    stderr: vec![],
+                })
             })
             .expect("second with_lock");
         assert_eq!(call_count, 1, "f() must NOT run when cache is populated");
-        assert_eq!(r2.exit_code, 42, "second call must return the cached result");
+        assert_eq!(
+            r2.exit_code, 42,
+            "second call must return the cached result"
+        );
         assert_eq!(r2.stdout, b"run1");
     }
 
@@ -445,7 +476,11 @@ mod tests {
         cache
             .store(
                 &stale_key,
-                &CachedResult { exit_code: 0, stdout: b"old".to_vec(), stderr: vec![] },
+                &CachedResult {
+                    exit_code: 0,
+                    stdout: b"old".to_vec(),
+                    stderr: vec![],
+                },
             )
             .expect("store stale candidate");
 
@@ -455,7 +490,11 @@ mod tests {
         cache
             .store(
                 &fresh_key,
-                &CachedResult { exit_code: 0, stdout: b"new".to_vec(), stderr: vec![] },
+                &CachedResult {
+                    exit_code: 0,
+                    stdout: b"new".to_vec(),
+                    stderr: vec![],
+                },
             )
             .expect("store triggers eviction");
 
@@ -483,7 +522,11 @@ mod tests {
             let bg = CoalesceCache::with_options(&root, Duration::from_secs(60), Duration::ZERO);
             bg.store(
                 &key_bg,
-                &CachedResult { exit_code: 0, stdout: b"from-bg".to_vec(), stderr: vec![] },
+                &CachedResult {
+                    exit_code: 0,
+                    stdout: b"from-bg".to_vec(),
+                    stderr: vec![],
+                },
             )
             .expect("bg store");
         });
@@ -492,7 +535,11 @@ mod tests {
         let (got, kind) = cache
             .with_lock_detailed(&key, || {
                 ran = true;
-                Ok(CachedResult { exit_code: 7, stdout: b"miss".to_vec(), stderr: vec![] })
+                Ok(CachedResult {
+                    exit_code: 7,
+                    stdout: b"miss".to_vec(),
+                    stderr: vec![],
+                })
             })
             .expect("with_lock_detailed");
 

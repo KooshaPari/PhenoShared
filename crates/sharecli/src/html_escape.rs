@@ -59,8 +59,9 @@ pub fn unescape(input: &str) -> String {
                     if let Some(s2) = rest.get(s) {
                         if *s2 == b';' {
                             if num_str.first() == Some(&b'x') || num_str.first() == Some(&b'X') {
-                                if let Ok(n) =
-                                    std::str::from_utf8(&num_str[1..]).unwrap_or("").parse::<u32>()
+                                if let Ok(n) = std::str::from_utf8(&num_str[1..])
+                                    .unwrap_or("")
+                                    .parse::<u32>()
                                 {
                                     if let Some(c) = char::from_u32(n) {
                                         out.push(c);

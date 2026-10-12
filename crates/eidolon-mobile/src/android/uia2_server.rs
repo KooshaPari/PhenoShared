@@ -370,6 +370,7 @@ impl Uia2Server {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::android::uia2_assets::ENV_LOCK;
     use crate::cli::env_uia2_apk;
 
     #[test]
@@ -431,6 +432,10 @@ mod tests {
 
     #[test]
     fn resolve_succeeds_or_fails_loud_without_silent_empty() {
+        // Serialize against uia2_assets tests that mutate UIA2 env overrides,
+        // otherwise resolve() can observe a half-set pair pointing at files
+        // deleted mid-test (parallel threads share process env).
+        let _g = ENV_LOCK.lock().unwrap();
         // When env unset: vendored/cache may satisfy resolve; otherwise fail loud.
         if env_uia2_apk().is_some() {
             return;

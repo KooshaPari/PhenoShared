@@ -9,7 +9,11 @@ pub struct ScheduledTask {
 
 impl ScheduledTask {
     pub fn new(name: impl Into<String>, interval: Duration) -> Self {
-        Self { name: name.into(), interval, last_run: None }
+        Self {
+            name: name.into(),
+            interval,
+            last_run: None,
+        }
     }
     pub fn is_due(&self) -> bool {
         match self.last_run {
@@ -37,8 +41,13 @@ impl Scheduler {
         self.tasks.iter().filter(|t| t.is_due()).collect()
     }
     pub fn tick(&mut self) -> Vec<String> {
-        let due: Vec<usize> =
-            self.tasks.iter().enumerate().filter(|(_, t)| t.is_due()).map(|(i, _)| i).collect();
+        let due: Vec<usize> = self
+            .tasks
+            .iter()
+            .enumerate()
+            .filter(|(_, t)| t.is_due())
+            .map(|(i, _)| i)
+            .collect();
         let names: Vec<String> = due.iter().map(|&i| self.tasks[i].name.clone()).collect();
         for i in due {
             self.tasks[i].mark_run();

@@ -38,7 +38,9 @@ pub fn parse(input: &str) -> Result<Sexp, String> {
     if v.len() > 1 {
         return Err("multiple top-level expressions".into());
     }
-    Ok(v.into_iter().next().expect("exactly one top-level expression (length checked above)"))
+    Ok(v.into_iter()
+        .next()
+        .expect("exactly one top-level expression (length checked above)"))
 }
 
 pub fn to_string(s: &Sexp) -> String {
@@ -47,7 +49,7 @@ pub fn to_string(s: &Sexp) -> String {
         Sexp::List(items) => {
             let inner: Vec<String> = items.iter().map(to_string).collect();
             format!("({})", inner.join(" "))
-        }
+        },
     }
 }
 
@@ -61,7 +63,7 @@ fn atom_str(a: &Atom) -> String {
             } else {
                 "#f".into()
             }
-        }
+        },
         Atom::Str(s) => format!("\"{}\"", s.replace('\\', "\\\\").replace('"', "\\\"")),
         Atom::Symbol(s) => s.clone(),
     }
@@ -117,7 +119,7 @@ impl<'a> Parser<'a> {
                 } else {
                     Err(format!("unknown # form at {}", self.pos))
                 }
-            }
+            },
             Some(c) if c == '-' => {
                 // Only treat '-' as a number sign if a digit follows.
                 let next = self.src[self.pos + c.len_utf8()..].chars().next();
@@ -126,7 +128,7 @@ impl<'a> Parser<'a> {
                 } else {
                     Ok(Sexp::Atom(Atom::Symbol(self.parse_symbol()?)))
                 }
-            }
+            },
             Some(c) if c.is_ascii_digit() => self.parse_number().map(Sexp::Atom),
             Some(c) if is_symbol_char(c) => Ok(Sexp::Atom(Atom::Symbol(self.parse_symbol()?))),
             Some(c) => Err(format!("unexpected '{}' at {}", c, self.pos)),
@@ -142,7 +144,7 @@ impl<'a> Parser<'a> {
                 Some(')') => {
                     self.advance();
                     return Ok(Sexp::List(items));
-                }
+                },
                 None => return Err("unterminated list".into()),
                 _ => items.push(self.parse_sexp()?),
             }

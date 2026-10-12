@@ -5,7 +5,9 @@ pub struct FeatureFlags {
 }
 impl FeatureFlags {
     pub fn new() -> Self {
-        Self { flags: HashMap::new() }
+        Self {
+            flags: HashMap::new(),
+        }
     }
     pub fn enable(&mut self, name: impl Into<String>) {
         self.flags.insert(name.into(), true);

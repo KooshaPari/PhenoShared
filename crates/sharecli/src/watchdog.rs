@@ -53,7 +53,12 @@ impl WatchdogEntry {
     /// Create a fresh entry in the [`WatchdogState::Running`] state with
     /// `restart_count = 0`.
     pub fn new(name: impl Into<String>, max_restarts: u32) -> Self {
-        Self { name: name.into(), restart_count: 0, max_restarts, state: WatchdogState::Running }
+        Self {
+            name: name.into(),
+            restart_count: 0,
+            max_restarts,
+            state: WatchdogState::Running,
+        }
     }
 
     /// Record an exit for this single entry and return the new state.
@@ -99,8 +104,11 @@ impl Watchdog {
     /// initial state).
     pub fn register(&mut self, name: impl Into<String>, max_restarts: u32) -> &WatchdogEntry {
         let name = name.into();
-        self.entries.insert(name.clone(), WatchdogEntry::new(name.clone(), max_restarts));
-        self.entries.get(&name).expect("entry was just inserted and must be present")
+        self.entries
+            .insert(name.clone(), WatchdogEntry::new(name.clone(), max_restarts));
+        self.entries
+            .get(&name)
+            .expect("entry was just inserted and must be present")
     }
 
     /// Record an exit for the named entry. Returns:

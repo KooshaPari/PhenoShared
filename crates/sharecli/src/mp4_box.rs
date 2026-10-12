@@ -21,8 +21,9 @@
 // stay opaque in `payload`.
 
 /// Container box types whose payload is itself a sequence of boxes.
-const CONTAINER_TYPES: &[&str] =
-    &["moov", "trak", "mdia", "minf", "stbl", "udta", "edts", "dinf", "stsd"];
+const CONTAINER_TYPES: &[&str] = &[
+    "moov", "trak", "mdia", "minf", "stbl", "udta", "edts", "dinf", "stsd",
+];
 
 /// Minimum size of a valid box header.
 pub const HEADER_SIZE: usize = 8;
@@ -57,7 +58,11 @@ impl Box {
 pub fn parse_boxes(input: &[u8], end: Option<usize>) -> Result<Vec<Box>, String> {
     let limit = end.unwrap_or(input.len());
     if limit > input.len() {
-        return Err(format!("end {} exceeds input length {}", limit, input.len()));
+        return Err(format!(
+            "end {} exceeds input length {}",
+            limit,
+            input.len()
+        ));
     }
 
     let mut out = Vec::new();
@@ -80,7 +85,10 @@ pub fn parse_boxes(input: &[u8], end: Option<usize>) -> Result<Vec<Box>, String>
         let box_type_bytes = &input[offset + 4..offset + HEADER_SIZE];
 
         if !is_ascii_type(box_type_bytes) {
-            return Err(format!("non-ASCII box type at offset {}: {:?}", offset, box_type_bytes));
+            return Err(format!(
+                "non-ASCII box type at offset {}: {:?}",
+                offset, box_type_bytes
+            ));
         }
         let box_type = std::str::from_utf8(box_type_bytes)
             .map_err(|e| format!("invalid UTF-8 in box type at offset {}: {}", offset, e))?
@@ -89,7 +97,10 @@ pub fn parse_boxes(input: &[u8], end: Option<usize>) -> Result<Vec<Box>, String>
         let (total_size, header_len) = if size32 == 1 {
             // 64-bit largesize lives in the next 8 bytes.
             if offset + HEADER_SIZE + 8 > limit {
-                return Err(format!("truncated largesize at offset {} (size=1 sentinel)", offset));
+                return Err(format!(
+                    "truncated largesize at offset {} (size=1 sentinel)",
+                    offset
+                ));
             }
             let hi = u32::from_be_bytes([
                 input[offset + HEADER_SIZE],
@@ -105,7 +116,10 @@ pub fn parse_boxes(input: &[u8], end: Option<usize>) -> Result<Vec<Box>, String>
             ]) as u64;
             let largesize = (hi << 32) | lo;
             if largesize < (HEADER_SIZE as u64 + 8) {
-                return Err(format!("invalid largesize {} at offset {}", largesize, offset));
+                return Err(format!(
+                    "invalid largesize {} at offset {}",
+                    largesize, offset
+                ));
             }
             (largesize as usize, HEADER_SIZE + 8)
         } else if size32 == 0 {
@@ -134,8 +148,12 @@ pub fn parse_boxes(input: &[u8], end: Option<usize>) -> Result<Vec<Box>, String>
         }
         let payload = input[offset + header_len..end_offset].to_vec();
 
-        let mut bx =
-            Box { box_type, size: total_size, payload: payload.clone(), children: Vec::new() };
+        let mut bx = Box {
+            box_type,
+            size: total_size,
+            payload: payload.clone(),
+            children: Vec::new(),
+        };
 
         if bx.is_container() {
             bx.children = parse_boxes(&payload, None)?;
@@ -166,7 +184,7 @@ fn is_ascii_type(b: &[u8]) -> bool {
     if b.len() != 4 {
         return false;
     }
-    b.iter().all(|c| (0x20..=0x7E).contains(c))
+    b.iter().all(|c| (0x20..=0x7e).contains(c))
 }
 
 #[cfg(test)]
@@ -202,7 +220,7 @@ mod tests {
     #[test]
     fn parse_moov_with_children() {
         // Build a moov containing a single mvhd child with 100 bytes of payload.
-        let mvhd_payload = vec![0xAB; 100];
+        let mvhd_payload = vec![0xab; 100];
         let mvhd = box_bytes(b"mvhd", &mvhd_payload);
         let moov = box_bytes(b"moov", &mvhd);
 
@@ -309,7 +327,7 @@ mod tests {
     fn non_ascii_type_rejects() {
         let mut bytes = Vec::new();
         bytes.extend_from_slice(&12u32.to_be_bytes());
-        bytes.extend_from_slice(&[0xFF, b't', b'y', b'p']);
+        bytes.extend_from_slice(&[0xff, b't', b'y', b'p']);
         bytes.extend_from_slice(&[0u8; 4]);
         assert!(parse_boxes(&bytes, None).is_err());
     }

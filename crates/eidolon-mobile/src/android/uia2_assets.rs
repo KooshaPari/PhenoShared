@@ -333,12 +333,16 @@ fn download_verified(url: &str, dest: &Path, expected_sha256: &str) -> Result<()
     Ok(())
 }
 
+/// Process-wide lock serializing tests that read or mutate the UIA2 APK env
+/// overrides (`UIA2_APK_ENV` / `UIA2_TEST_APK_ENV`). Shared with
+/// `uia2_server` tests so parallel test threads cannot observe a half-set
+/// env pair (which resolves Ok to since-deleted temp files).
+#[cfg(test)]
+pub(crate) static ENV_LOCK: std::sync::Mutex<()> = std::sync::Mutex::new(());
+
 #[cfg(test)]
 mod tests {
     use super::*;
-    use std::sync::Mutex;
-
-    static ENV_LOCK: Mutex<()> = Mutex::new(());
 
     #[test]
     fn pinned_constants_match_manifest_filenames() {

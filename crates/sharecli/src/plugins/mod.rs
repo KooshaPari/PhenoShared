@@ -30,7 +30,11 @@ impl PluginRegistry {
             let p = e.path();
             if p.is_file() {
                 plugins.push(PluginManifest {
-                    name: p.file_stem().unwrap_or_default().to_string_lossy().to_string(),
+                    name: p
+                        .file_stem()
+                        .unwrap_or_default()
+                        .to_string_lossy()
+                        .to_string(),
                     path: p,
                 });
             }
@@ -41,11 +45,16 @@ impl PluginRegistry {
         self.plugins.iter().find(|p| p.name == name)
     }
     pub fn call(&self, name: &str, input: &str) -> Result<String> {
-        let pl = self.get(name).ok_or_else(|| anyhow::anyhow!("plugin '{}' not found", name))?;
+        let pl = self
+            .get(name)
+            .ok_or_else(|| anyhow::anyhow!("plugin '{}' not found", name))?;
         if !pl.path.exists() {
             bail!("plugin binary not found: {}", pl.path.display());
         }
-        Ok(String::from_utf8_lossy(&Command::new(&pl.path).arg(input).output()?.stdout).to_string())
+        Ok(
+            String::from_utf8_lossy(&Command::new(&pl.path).arg(input).output()?.stdout)
+                .to_string(),
+        )
     }
 }
 
@@ -55,11 +64,17 @@ mod tests {
     #[test]
     fn empty_dir() {
         let d = tempfile::TempDir::new().unwrap();
-        assert!(PluginRegistry::load_dir(d.path()).unwrap().plugins.is_empty());
+        assert!(PluginRegistry::load_dir(d.path())
+            .unwrap()
+            .plugins
+            .is_empty());
     }
     #[test]
     fn nonexistent_dir() {
-        assert!(PluginRegistry::load_dir(Path::new("/no/such/dir")).unwrap().plugins.is_empty());
+        assert!(PluginRegistry::load_dir(Path::new("/no/such/dir"))
+            .unwrap()
+            .plugins
+            .is_empty());
     }
     #[test]
     fn finds_files() {
@@ -81,7 +96,10 @@ mod tests {
     fn call_ghost_binary() {
         let d = tempfile::TempDir::new().unwrap();
         let r = PluginRegistry {
-            plugins: vec![PluginManifest { name: "x".into(), path: d.path().join("ghost") }],
+            plugins: vec![PluginManifest {
+                name: "x".into(),
+                path: d.path().join("ghost"),
+            }],
         };
         assert!(r.call("x", "").is_err());
     }

@@ -62,7 +62,10 @@ fn extract_string(body: &str, key: &str) -> Option<String> {
         // Make sure this is a key (preceded by `,`, `{`, or whitespace) and not
         // a substring of some larger key like `"short_name"` matching `"name"`.
         let before_ok = abs == 0
-            || matches!(body.as_bytes()[abs - 1], b',' | b'{' | b'\n' | b' ' | b'\t' | b'\r');
+            || matches!(
+                body.as_bytes()[abs - 1],
+                b',' | b'{' | b'\n' | b' ' | b'\t' | b'\r'
+            );
         if !before_ok {
             idx = abs + 1;
             continue;
@@ -189,18 +192,18 @@ fn parse_object_members(body: &str) -> HashMap<String, String> {
                         if i < bytes.len() {
                             i += 1;
                         }
-                    }
+                    },
                     b'[' | b'{' => {
                         depth += 1;
                         i += 1;
-                    }
+                    },
                     b']' | b'}' => {
                         depth -= 1;
                         i += 1;
-                    }
+                    },
                     _ => {
                         i += 1;
-                    }
+                    },
                 }
             }
             out.insert(key, body[value_start..i].to_string());
@@ -230,7 +233,9 @@ fn extract_array(body: &str, key: &str) -> Option<String> {
 
 /// Parse the icons array. Returns `Vec<ManifestIcon>`.
 pub fn parse_icons(body: &str) -> Vec<ManifestIcon> {
-    let Some(arr) = extract_array(body, "icons") else { return Vec::new() };
+    let Some(arr) = extract_array(body, "icons") else {
+        return Vec::new();
+    };
     let mut icons = Vec::new();
     // Split top-level objects inside the array.
     let bytes = arr.as_bytes();
@@ -261,18 +266,18 @@ pub fn parse_icons(body: &str) -> Vec<ManifestIcon> {
                     if i < bytes.len() {
                         i += 1;
                     }
-                }
+                },
                 b'{' => {
                     depth += 1;
                     i += 1;
-                }
+                },
                 b'}' => {
                     depth -= 1;
                     i += 1;
-                }
+                },
                 _ => {
                     i += 1;
-                }
+                },
             }
         }
         let obj = &arr[obj_start..i];
@@ -453,7 +458,10 @@ mod tests {
     #[test]
     fn extract_string_handles_escaped_quotes() {
         let body = r#""name":"He said \"hi\"""#;
-        assert_eq!(extract_string(body, "name").as_deref(), Some("He said \"hi\""));
+        assert_eq!(
+            extract_string(body, "name").as_deref(),
+            Some("He said \"hi\"")
+        );
     }
 
     #[test]

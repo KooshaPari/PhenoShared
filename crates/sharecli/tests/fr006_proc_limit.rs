@@ -18,22 +18,45 @@ fn bin() -> Command {
 
 fn watch(pid: u32, family: &'static str) -> DetectedAgentWatch {
     DetectedAgentWatch {
-        agent: DetectedAgent { pid, family, comm: family.into() },
-        resource: AgentResourceSample { mem_rss_bytes: pid as u64 * 100, fd_count: None },
+        agent: DetectedAgent {
+            pid,
+            family,
+            comm: family.into(),
+        },
+        resource: AgentResourceSample {
+            mem_rss_bytes: pid as u64 * 100,
+            fd_count: None,
+        },
     }
 }
 
 fn tree_root(pid: u32) -> AgentTreeNode {
-    AgentTreeNode { pid, ppid: 1, comm: "agent".into(), family: Some("claude"), children: vec![] }
+    AgentTreeNode {
+        pid,
+        ppid: 1,
+        comm: "agent".into(),
+        family: Some("claude"),
+        children: vec![],
+    }
 }
 
 /// FR-006 / AC-006.21 — proc help documents --limit.
 #[test]
 fn fr006_proc_help_documents_limit() {
-    let out = bin().args(["proc", "--help"]).output().expect("spawn sharecli proc --help");
-    assert!(out.status.success(), "proc --help should exit 0; stderr: {:?}", out.stderr);
+    let out = bin()
+        .args(["proc", "--help"])
+        .output()
+        .expect("spawn sharecli proc --help");
+    assert!(
+        out.status.success(),
+        "proc --help should exit 0; stderr: {:?}",
+        out.stderr
+    );
     let s = String::from_utf8_lossy(&out.stdout);
-    assert!(s.contains("--limit"), "proc --help MUST document --limit; got: {s}");
+    assert!(
+        s.contains("--limit"),
+        "proc --help MUST document --limit; got: {s}"
+    );
 }
 
 /// FR-006 / AC-006.21 — limit keeps first N rows after sort order is applied.
@@ -76,6 +99,9 @@ fn fr006_proc_limit_zero_rejected() {
 /// FR-006 / AC-006.21 — CLI rejects --limit 0.
 #[test]
 fn fr006_proc_limit_zero_cli_exits_nonzero() {
-    let out = bin().args(["proc", "--limit", "0"]).output().expect("spawn sharecli proc --limit 0");
+    let out = bin()
+        .args(["proc", "--limit", "0"])
+        .output()
+        .expect("spawn sharecli proc --limit 0");
     assert!(!out.status.success(), "proc --limit 0 MUST fail");
 }

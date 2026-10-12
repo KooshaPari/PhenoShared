@@ -111,7 +111,10 @@ mod tests {
 
     #[test]
     fn zmx_advertises_durable_pty_only_when_available() {
-        let adapter = ZmxSurfaceAdapter { available: true, surfaces: Arc::new(vec![surface()]) };
+        let adapter = ZmxSurfaceAdapter {
+            available: true,
+            surfaces: Arc::new(vec![surface()]),
+        };
         assert!(adapter.capabilities(&surface()).unwrap().durable_pty);
     }
 }

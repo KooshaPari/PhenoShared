@@ -44,11 +44,26 @@ const AMBIGUOUS_FAMILIES: &[&str] = &["forge", "goose", "gemini", "cargo"];
 /// this list at startup (see `load_runtime_patterns`).
 pub const CMDLINE_FINGERPRINTS: &[(&str, &[&str])] = &[
     ("claude", &["claude", "claude-code", ".claude"]),
-    ("codex", &["openai-codex", "@openai/codex", "codex-cli", "/bin/codex"]),
+    (
+        "codex",
+        &["openai-codex", "@openai/codex", "codex-cli", "/bin/codex"],
+    ),
     ("gemini", &["gemini", "gemini-cli", "google-gemini"]),
-    ("cursor-agent", &["cursor-agent", ".cursor", "cursor agent", "@cursor/agent"]),
+    (
+        "cursor-agent",
+        &["cursor-agent", ".cursor", "cursor agent", "@cursor/agent"],
+    ),
     ("aider", &["aider", "aider-chat", ".aider"]),
-    ("amp", &["amp", "amp-code", "sourcegraph/amp", "@sourcegraph/amp", ".amp"]),
+    (
+        "amp",
+        &[
+            "amp",
+            "amp-code",
+            "sourcegraph/amp",
+            "@sourcegraph/amp",
+            ".amp",
+        ],
+    ),
     ("goose", &["goose", "block-goose", "goose-agent"]),
     ("forge", &["forge", ".forge", "forge conversation"]),
     ("jcode", &["jcode", ".jcode", "jcode-cli"]),
@@ -172,7 +187,7 @@ pub fn load_runtime_patterns(path: &Path) {
         Err(e) => {
             tracing::debug!("agent_patterns: could not read {}: {e}", path.display());
             return;
-        }
+        },
     };
 
     let file: AgentPatternsFile = match toml::from_str(&contents) {
@@ -180,7 +195,7 @@ pub fn load_runtime_patterns(path: &Path) {
         Err(e) => {
             tracing::warn!("agent_patterns: failed to parse {}: {e}", path.display());
             return;
-        }
+        },
     };
 
     RUNTIME_PATTERNS.with(|patterns| {
@@ -333,7 +348,10 @@ fn is_exact_comm_basename(comm: &str, family: &str) -> bool {
 }
 
 fn cmdline_has_fingerprint(family: &str, cmdline: &[impl AsRef<str>]) -> bool {
-    let Some(markers) = CMDLINE_FINGERPRINTS.iter().find(|(f, _)| *f == family).map(|(_, m)| *m)
+    let Some(markers) = CMDLINE_FINGERPRINTS
+        .iter()
+        .find(|(f, _)| *f == family)
+        .map(|(_, m)| *m)
     else {
         return false;
     };
@@ -456,7 +474,10 @@ mod tests {
 
     #[test]
     fn detects_path_cmdline() {
-        assert_eq!(match_known_agent("node", &["/usr/local/bin/claude"]), Some("claude"));
+        assert_eq!(
+            match_known_agent("node", &["/usr/local/bin/claude"]),
+            Some("claude")
+        );
     }
 
     #[test]
@@ -475,13 +496,19 @@ mod tests {
 
     #[test]
     fn ambiguous_forge_with_fingerprint_matches() {
-        assert_eq!(match_known_agent("forge", &["forge", "conversation", "list"]), Some("forge"));
+        assert_eq!(
+            match_known_agent("forge", &["forge", "conversation", "list"]),
+            Some("forge")
+        );
     }
 
     #[test]
     fn ambiguous_gemini_bare_comm_matches() {
         assert_eq!(match_known_agent("gemini", &[] as &[&str]), Some("gemini"));
-        assert_eq!(match_known_agent("gemini", &["gemini-cli", "chat"]), Some("gemini"));
+        assert_eq!(
+            match_known_agent("gemini", &["gemini-cli", "chat"]),
+            Some("gemini")
+        );
     }
 
     // --- Runtime pattern tests ---
@@ -529,7 +556,10 @@ mod tests {
             "#,
         );
 
-        assert_eq!(match_known_agent("mca", &["mca", "run"]), Some("my-custom-agent"));
+        assert_eq!(
+            match_known_agent("mca", &["mca", "run"]),
+            Some("my-custom-agent")
+        );
         // Also matches via cmdline marker.
         assert_eq!(
             match_known_agent("node", &["/usr/bin/my-custom-agent", "start"]),
@@ -579,7 +609,10 @@ mod tests {
         // Compile-time match still works.
         assert_eq!(match_known_agent("claude", &[] as &[&str]), Some("claude"));
         // Runtime match also works.
-        assert_eq!(match_known_agent("extra", &[] as &[&str]), Some("extra-agent"));
+        assert_eq!(
+            match_known_agent("extra", &[] as &[&str]),
+            Some("extra-agent")
+        );
 
         clear_runtime_patterns();
     }
@@ -596,7 +629,10 @@ mod tests {
         );
 
         assert_eq!(match_system_tool("rustc", &[] as &[&str]), Some("rustc"));
-        assert_eq!(match_system_tool("bash", &["rustc", "check"]), Some("rustc"));
+        assert_eq!(
+            match_system_tool("bash", &["rustc", "check"]),
+            Some("rustc")
+        );
 
         clear_runtime_patterns();
     }
@@ -616,7 +652,10 @@ mod tests {
         // Ambiguous with empty cmdline: bare-name hit.
         assert_eq!(match_system_tool("cargo", &[] as &[&str]), Some("cargo"));
         // Ambiguous with marker in cmdline.
-        assert_eq!(match_system_tool("bash", &["cargo", "build"]), Some("cargo"));
+        assert_eq!(
+            match_system_tool("bash", &["cargo", "build"]),
+            Some("cargo")
+        );
 
         clear_runtime_patterns();
     }
@@ -646,7 +685,10 @@ mod tests {
 
     #[test]
     fn detects_codex_openai_prefix() {
-        assert_eq!(match_known_agent("openai-codex", &[] as &[&str]), Some("codex"));
+        assert_eq!(
+            match_known_agent("openai-codex", &[] as &[&str]),
+            Some("codex")
+        );
     }
 
     #[test]
@@ -656,7 +698,10 @@ mod tests {
 
     #[test]
     fn detects_aider_cmdline() {
-        assert_eq!(match_known_agent("python", &["aider", "run"]), Some("aider"));
+        assert_eq!(
+            match_known_agent("python", &["aider", "run"]),
+            Some("aider")
+        );
     }
 
     #[test]
@@ -676,37 +721,58 @@ mod tests {
 
     #[test]
     fn detects_jcode_cli_comm() {
-        assert_eq!(match_known_agent("jcode-cli", &[] as &[&str]), Some("jcode"));
+        assert_eq!(
+            match_known_agent("jcode-cli", &[] as &[&str]),
+            Some("jcode")
+        );
     }
 
     #[test]
     fn detects_jcode_dotfile_cmdline() {
-        assert_eq!(match_known_agent("node", &["/usr/bin/.jcode"]), Some("jcode"));
+        assert_eq!(
+            match_known_agent("node", &["/usr/bin/.jcode"]),
+            Some("jcode")
+        );
     }
 
     #[test]
     fn detects_opencode_comm() {
-        assert_eq!(match_known_agent("opencode", &[] as &[&str]), Some("opencode"));
+        assert_eq!(
+            match_known_agent("opencode", &[] as &[&str]),
+            Some("opencode")
+        );
     }
 
     #[test]
     fn detects_opencode_cli_comm() {
-        assert_eq!(match_known_agent("opencode-cli", &[] as &[&str]), Some("opencode"));
+        assert_eq!(
+            match_known_agent("opencode-cli", &[] as &[&str]),
+            Some("opencode")
+        );
     }
 
     #[test]
     fn detects_opencode_dotfile_cmdline() {
-        assert_eq!(match_known_agent("node", &["/usr/bin/.opencode"]), Some("opencode"));
+        assert_eq!(
+            match_known_agent("node", &["/usr/bin/.opencode"]),
+            Some("opencode")
+        );
     }
 
     #[test]
     fn detects_cursor_agent_exact() {
-        assert_eq!(match_known_agent("cursor-agent", &[] as &[&str]), Some("cursor-agent"));
+        assert_eq!(
+            match_known_agent("cursor-agent", &[] as &[&str]),
+            Some("cursor-agent")
+        );
     }
 
     #[test]
     fn detects_cursor_agent_exe() {
-        assert_eq!(match_known_agent("cursor-agent.exe", &[] as &[&str]), Some("cursor-agent"));
+        assert_eq!(
+            match_known_agent("cursor-agent.exe", &[] as &[&str]),
+            Some("cursor-agent")
+        );
     }
 
     #[test]
@@ -724,7 +790,10 @@ mod tests {
 
     #[test]
     fn detects_goose_cmdline_marker() {
-        assert_eq!(match_known_agent("goose", &["goose", "block-goose", "run"]), Some("goose"));
+        assert_eq!(
+            match_known_agent("goose", &["goose", "block-goose", "run"]),
+            Some("goose")
+        );
     }
 
     #[test]
@@ -739,22 +808,34 @@ mod tests {
         // But "gemini-cli" as bare comm IS ambiguous too — needs fingerprint.
         assert_eq!(match_known_agent("gemini-cli", &[] as &[&str]), None);
         // With a fingerprint, it matches.
-        assert_eq!(match_known_agent("gemini", &["gemini-cli", "chat"]), Some("gemini"));
+        assert_eq!(
+            match_known_agent("gemini", &["gemini-cli", "chat"]),
+            Some("gemini")
+        );
     }
 
     #[test]
     fn detects_claude_code_cmdline() {
-        assert_eq!(match_known_agent("node", &["/usr/bin/claude-code", "run"]), Some("claude"));
+        assert_eq!(
+            match_known_agent("node", &["/usr/bin/claude-code", "run"]),
+            Some("claude")
+        );
     }
 
     #[test]
     fn detects_claude_dotfile_cmdline() {
-        assert_eq!(match_known_agent("node", &["/home/user/.claude/config"]), Some("claude"));
+        assert_eq!(
+            match_known_agent("node", &["/home/user/.claude/config"]),
+            Some("claude")
+        );
     }
 
     #[test]
     fn detects_codex_cmdline_marker() {
-        assert_eq!(match_known_agent("node", &["/usr/bin/openai-codex", "run"]), Some("codex"));
+        assert_eq!(
+            match_known_agent("node", &["/usr/bin/openai-codex", "run"]),
+            Some("codex")
+        );
     }
 
     #[test]
@@ -775,12 +856,18 @@ mod tests {
 
     #[test]
     fn detects_amp_cmdline_marker() {
-        assert_eq!(match_known_agent("node", &["@sourcegraph/amp", "serve"]), Some("amp"));
+        assert_eq!(
+            match_known_agent("node", &["@sourcegraph/amp", "serve"]),
+            Some("amp")
+        );
     }
 
     #[test]
     fn fingerprint_only_codex_cli() {
-        assert_eq!(match_known_agent("bash", &["codex-cli", "start"]), Some("codex"));
+        assert_eq!(
+            match_known_agent("bash", &["codex-cli", "start"]),
+            Some("codex")
+        );
     }
 
     #[test]

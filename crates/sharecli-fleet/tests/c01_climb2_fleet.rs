@@ -19,7 +19,11 @@ fn fr003_fleet_slot_queue_meters_format() {
     assert!(after.waits >= before.waits + 1);
     assert!(after.timeouts >= before.timeouts + 1);
 
-    let meters = SlotQueueMeters { acquires: 4, waits: 2, timeouts: 1 };
+    let meters = SlotQueueMeters {
+        acquires: 4,
+        waits: 2,
+        timeouts: 1,
+    };
     let section = meters.format_status_section();
     assert!(section.contains("SlotQueue"));
     assert!(section.contains("Acquires:"));

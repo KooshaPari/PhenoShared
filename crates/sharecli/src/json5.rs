@@ -91,15 +91,15 @@ impl<'a> Parser<'a> {
             'n' => {
                 self.expect_keyword("null")?;
                 Ok(Value::Null)
-            }
+            },
             't' => {
                 self.expect_keyword("true")?;
                 Ok(Value::Bool(true))
-            }
+            },
             'f' => {
                 self.expect_keyword("false")?;
                 Ok(Value::Bool(false))
-            }
+            },
             '"' | '\'' => Ok(Value::String(self.parse_string()?)),
             '[' => self.parse_array(),
             '{' => self.parse_object(),
@@ -110,7 +110,7 @@ impl<'a> Parser<'a> {
                 } else {
                     Err(format!("unexpected I at {}", self.pos))
                 }
-            }
+            },
             '-' => {
                 if self.src[self.pos..].starts_with("-Infinity") {
                     self.pos += 9;
@@ -118,7 +118,7 @@ impl<'a> Parser<'a> {
                 } else {
                     self.parse_number()
                 }
-            }
+            },
             'N' => {
                 if self.src[self.pos..].starts_with("NaN") {
                     self.pos += 3;
@@ -126,7 +126,7 @@ impl<'a> Parser<'a> {
                 } else {
                     Err(format!("unexpected N at {}", self.pos))
                 }
-            }
+            },
             '+' | '0'..='9' => self.parse_number(),
             _ => Err(format!("unexpected character '{}' at pos {}", c, self.pos)),
         }
@@ -162,19 +162,19 @@ impl<'a> Parser<'a> {
                     'r' => out.push('\r'),
                     'b' => out.push('\u{0008}'),
                     'f' => out.push('\u{000C}'),
-                    '\n' => {}
+                    '\n' => {},
                     '\r' => {
                         if self.peek() == Some('\n') {
                             self.advance();
                         }
-                    }
+                    },
                     'u' => {
                         let hex: String = (0..4).map(|_| self.advance().unwrap_or('\0')).collect();
                         let cp = u32::from_str_radix(&hex, 16).map_err(|_| "bad unicode")?;
                         if let Some(ch) = char::from_u32(cp) {
                             out.push(ch);
                         }
-                    }
+                    },
                     _ => return Err(format!("bad escape \\{}", esc)),
                 }
             } else if c == '\n' || c == '\r' {
@@ -245,9 +245,13 @@ impl<'a> Parser<'a> {
         }
         let s = &self.src[start..self.pos];
         if is_float {
-            s.parse::<f64>().map(Value::Number).map_err(|e| e.to_string())
+            s.parse::<f64>()
+                .map(Value::Number)
+                .map_err(|e| e.to_string())
         } else {
-            s.parse::<i64>().map(|i| Value::Number(i as f64)).map_err(|e| e.to_string())
+            s.parse::<i64>()
+                .map(|i| Value::Number(i as f64))
+                .map_err(|e| e.to_string())
         }
     }
     fn parse_array(&mut self) -> Result<Value, String> {
@@ -339,7 +343,7 @@ impl<'a> Parser<'a> {
                     }
                 }
                 Ok(self.src[start..self.pos].to_string())
-            }
+            },
             _ => Err(format!("expected key at pos {}", self.pos)),
         }
     }

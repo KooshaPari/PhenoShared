@@ -7,7 +7,10 @@ struct Node {
 }
 impl Node {
     fn new() -> Self {
-        Self { children: Vec::new(), is_word: false }
+        Self {
+            children: Vec::new(),
+            is_word: false,
+        }
     }
 }
 impl RadixTrie {
@@ -20,7 +23,11 @@ impl RadixTrie {
         loop {
             let mut found = None;
             for (i, (k, _)) in cur.children.iter().enumerate() {
-                let common: usize = k.chars().zip(rest.chars()).take_while(|(a, b)| a == b).count();
+                let common: usize = k
+                    .chars()
+                    .zip(rest.chars())
+                    .take_while(|(a, b)| a == b)
+                    .count();
                 if common > 0 {
                     found = Some((i, common));
                     break;
@@ -30,10 +37,13 @@ impl RadixTrie {
                 None => {
                     cur.children.push((
                         rest.clone(),
-                        Box::new(Node { children: Vec::new(), is_word: true }),
+                        Box::new(Node {
+                            children: Vec::new(),
+                            is_word: true,
+                        }),
                     ));
                     return;
-                }
+                },
                 Some((i, common)) => {
                     let k = cur.children[i].0.clone();
                     let child = &mut cur.children[i];
@@ -61,7 +71,10 @@ impl RadixTrie {
                     if !k_tail.is_empty() {
                         split_node.children.push((
                             k_tail,
-                            Box::new(Node { children: old_children, is_word: old_is_word }),
+                            Box::new(Node {
+                                children: old_children,
+                                is_word: old_is_word,
+                            }),
                         ));
                     }
                     if !r_tail.is_empty() {
@@ -80,7 +93,7 @@ impl RadixTrie {
                     cur.children[i].0 = prefix;
                     cur.children[i].1 = Box::new(split_node);
                     return;
-                }
+                },
             }
         }
     }
@@ -92,7 +105,11 @@ impl RadixTrie {
             return node.is_word;
         }
         for (k, child) in &node.children {
-            let common: usize = k.chars().zip(word.chars()).take_while(|(a, b)| a == b).count();
+            let common: usize = k
+                .chars()
+                .zip(word.chars())
+                .take_while(|(a, b)| a == b)
+                .count();
             if common == 0 {
                 continue;
             }

@@ -5,7 +5,11 @@ pub struct BloomFilter {
 }
 impl BloomFilter {
     pub fn new(size: usize, hash_count: u32) -> Self {
-        Self { bits: vec![false; size], size, hash_count }
+        Self {
+            bits: vec![false; size],
+            size,
+            hash_count,
+        }
     }
     fn hashes(&self, item: &str) -> Vec<usize> {
         let primary = simple_hash(item);

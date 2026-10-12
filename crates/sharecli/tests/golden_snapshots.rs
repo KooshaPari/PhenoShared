@@ -32,10 +32,22 @@ const GOLDEN_WATCH: ResourceWatchSample = ResourceWatchSample {
 
 const GOLDEN_FUSE: ReadCacheMeters = ReadCacheMeters { hits: 3, misses: 1 };
 const GOLDEN_NEG: NegDentryMeters = NegDentryMeters { hits: 2, misses: 1 };
-const GOLDEN_COALESCE: CoalesceMeters = CoalesceMeters { hits: 6, misses: 2, nocache_runs: 1 };
-const GOLDEN_WRITE_SERIALIZE: WriteSerializeMeters =
-    WriteSerializeMeters { passthrough_writes: 1, stages: 2, commits: 1, discards: 1 };
-const GOLDEN_SLOT_QUEUE: SlotQueueMeters = SlotQueueMeters { acquires: 2, waits: 1, timeouts: 0 };
+const GOLDEN_COALESCE: CoalesceMeters = CoalesceMeters {
+    hits: 6,
+    misses: 2,
+    nocache_runs: 1,
+};
+const GOLDEN_WRITE_SERIALIZE: WriteSerializeMeters = WriteSerializeMeters {
+    passthrough_writes: 1,
+    stages: 2,
+    commits: 1,
+    discards: 1,
+};
+const GOLDEN_SLOT_QUEUE: SlotQueueMeters = SlotQueueMeters {
+    acquires: 2,
+    waits: 1,
+    timeouts: 0,
+};
 
 fn golden_mesh_maildir() -> MaildirStatus {
     MaildirStatus {
@@ -47,7 +59,9 @@ fn golden_mesh_maildir() -> MaildirStatus {
 }
 
 fn golden_dir() -> PathBuf {
-    PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("tests").join("golden")
+    PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+        .join("tests")
+        .join("golden")
 }
 
 fn read_golden(name: &str) -> String {
@@ -64,7 +78,10 @@ fn write_golden(name: &str, contents: &str) {
 }
 
 fn updating() -> bool {
-    matches!(std::env::var("UPDATE_GOLDENS").as_deref(), Ok("1") | Ok("true"))
+    matches!(
+        std::env::var("UPDATE_GOLDENS").as_deref(),
+        Ok("1") | Ok("true")
+    )
 }
 
 fn assert_or_update(name: &str, actual: &str) {
@@ -85,7 +102,12 @@ fn bin() -> Command {
 }
 
 fn normalize_cli(stdout: &str) -> String {
-    stdout.replace("sharecli.exe", "sharecli").replace("\r\n", "\n").trim_end().to_string() + "\n"
+    stdout
+        .replace("sharecli.exe", "sharecli")
+        .replace("\r\n", "\n")
+        .trim_end()
+        .to_string()
+        + "\n"
 }
 
 fn render_thermal(level: ThermalLevel, slots: u32) -> String {
@@ -118,11 +140,18 @@ fn render_thermal(level: ThermalLevel, slots: u32) -> String {
 #[test]
 fn golden_cli_help() {
     let out = bin().arg("--help").output().expect("sharecli --help");
-    assert!(out.status.success(), "stderr: {}", String::from_utf8_lossy(&out.stderr));
+    assert!(
+        out.status.success(),
+        "stderr: {}",
+        String::from_utf8_lossy(&out.stderr)
+    );
     let actual = normalize_cli(&String::from_utf8_lossy(&out.stdout));
     assert_or_update("cli_help.txt", &actual);
     assert_or_update("help.txt", &actual);
-    assert!(actual.contains("Usage: sharecli"), "help MUST name the binary");
+    assert!(
+        actual.contains("Usage: sharecli"),
+        "help MUST name the binary"
+    );
     assert!(actual.contains("thermal"), "help MUST list thermal TUI");
 }
 
@@ -130,10 +159,17 @@ fn golden_cli_help() {
 #[test]
 fn golden_cli_ps_help() {
     let out = bin().args(["ps", "--help"]).output().expect("ps --help");
-    assert!(out.status.success(), "stderr: {}", String::from_utf8_lossy(&out.stderr));
+    assert!(
+        out.status.success(),
+        "stderr: {}",
+        String::from_utf8_lossy(&out.stderr)
+    );
     let actual = normalize_cli(&String::from_utf8_lossy(&out.stdout));
     assert_or_update("cli_ps_help.txt", &actual);
-    assert!(actual.to_lowercase().contains("project"), "ps help MUST document --project");
+    assert!(
+        actual.to_lowercase().contains("project"),
+        "ps help MUST document --project"
+    );
 }
 
 /// Thermal TUI headless goldens (green / yellow / red) — ≥3 fixtures for T-250.
@@ -149,16 +185,25 @@ fn golden_thermal_tui_levels() {
         assert_or_update(name, &actual);
         match level {
             ThermalLevel::Green => {
-                assert!(actual.contains("GREEN") && actual.contains("ADMIT"), "{name}");
-            }
+                assert!(
+                    actual.contains("GREEN") && actual.contains("ADMIT"),
+                    "{name}"
+                );
+            },
             ThermalLevel::Yellow => {
-                assert!(actual.contains("YELLOW") && actual.contains("ADMIT"), "{name}");
-            }
+                assert!(
+                    actual.contains("YELLOW") && actual.contains("ADMIT"),
+                    "{name}"
+                );
+            },
             ThermalLevel::Red => {
                 assert!(actual.contains("RED") && actual.contains("DENY"), "{name}");
-            }
+            },
         }
-        assert!(actual.contains("sharecli thermal monitor"), "{name} MUST show TUI title");
+        assert!(
+            actual.contains("sharecli thermal monitor"),
+            "{name} MUST show TUI title"
+        );
         assert!(
             actual.contains("Host Resource Watch") && actual.contains("Hypervisor IO Meters"),
             "{name} MUST include operator watch panels"
@@ -171,8 +216,14 @@ fn golden_thermal_tui_levels() {
             actual.contains("Slot acquires:"),
             "{name} MUST include Hypervisor SlotQueue meters"
         );
-        assert!(actual.contains("Mesh ready:"), "{name} MUST include mesh Maildir depth meters");
-        assert!(actual.contains("Detected Agents"), "{name} MUST include proc-scan agent panel");
+        assert!(
+            actual.contains("Mesh ready:"),
+            "{name} MUST include mesh Maildir depth meters"
+        );
+        assert!(
+            actual.contains("Detected Agents"),
+            "{name} MUST include proc-scan agent panel"
+        );
         assert!(
             actual.contains("Runtime Pool") || actual.contains(" pool unavailable"),
             "{name} MUST include runtime pool operator panel (AC-007.71)"
@@ -181,6 +232,9 @@ fn golden_thermal_tui_levels() {
             actual.contains("Proc Scan Status") || actual.contains(" status unavailable"),
             "{name} MUST include proc-scan status operator panel (AC-007.71)"
         );
-        assert!(actual.contains("Neg hits:"), "{name} MUST include neg dentry meters");
+        assert!(
+            actual.contains("Neg hits:"),
+            "{name} MUST include neg dentry meters"
+        );
     }
 }

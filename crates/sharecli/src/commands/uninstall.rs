@@ -17,7 +17,10 @@ pub fn run(purge_data: bool, dry_run: bool) -> Result<()> {
     println!("Config and data locations:");
     println!("  config:  {}", paths.config_dir.display());
     println!("  state:   {}", paths.state_dir.display());
-    println!("  runtime: {} (ephemeral locks)", paths.runtime_dir.display());
+    println!(
+        "  runtime: {} (ephemeral locks)",
+        paths.runtime_dir.display()
+    );
 
     if !purge_data {
         println!();

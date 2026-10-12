@@ -28,7 +28,10 @@ impl ZmxCommand {
         I: IntoIterator<Item = S>,
         S: Into<String>,
     {
-        Self { program: program.into(), args: args.into_iter().map(Into::into).collect() }
+        Self {
+            program: program.into(),
+            args: args.into_iter().map(Into::into).collect(),
+        }
     }
 }
 
@@ -47,7 +50,9 @@ pub struct ZmxSessionAdapter {
 
 impl ZmxSessionAdapter {
     pub fn new(binary: impl Into<String>) -> Self {
-        Self { binary: binary.into() }
+        Self {
+            binary: binary.into(),
+        }
     }
     pub fn attach(&self, name: &str, command: &[&str]) -> ZmxCommand {
         let mut args = vec!["attach".to_owned(), name.to_owned()];
@@ -104,7 +109,12 @@ pub struct GhosttyCapabilities {
 
 impl GhosttyCapabilities {
     pub fn from_probe(apple_events: bool, app_intents: bool, accessibility_readback: bool) -> Self {
-        Self { apple_events, app_intents, accessibility_readback, control_socket: false }
+        Self {
+            apple_events,
+            app_intents,
+            accessibility_readback,
+            control_socket: false,
+        }
     }
 
     pub fn with_control_socket(mut self, available: bool) -> Self {
@@ -202,7 +212,10 @@ static REQUEST_ID: AtomicU64 = AtomicU64::new(1);
 
 impl GhosttyControlClient {
     pub fn new(socket: impl Into<PathBuf>, token: Option<String>) -> Self {
-        Self { socket: socket.into(), token }
+        Self {
+            socket: socket.into(),
+            token,
+        }
     }
 
     pub fn socket(&self) -> &Path {
@@ -237,22 +250,31 @@ impl GhosttyControlClient {
     }
 
     pub fn send_text(&self, surface_id: &str, text: &str) -> anyhow::Result<()> {
-        self.request("surface.io.send", json!({"surface_id": surface_id, "text": text}))?;
+        self.request(
+            "surface.io.send",
+            json!({"surface_id": surface_id, "text": text}),
+        )?;
         Ok(())
     }
 
     pub fn list_surfaces(&self) -> anyhow::Result<Vec<SurfaceRecord>> {
-        Ok(serde_json::from_value(self.request("surface.list", json!({}))?)?)
-    }
-
-    pub fn surface_capabilities(&self, surface_id: &str) -> anyhow::Result<SurfaceCapabilities> {
         Ok(serde_json::from_value(
-            self.request("surface.io.capabilities", json!({"surface_id": surface_id}))?,
+            self.request("surface.list", json!({}))?,
         )?)
     }
 
+    pub fn surface_capabilities(&self, surface_id: &str) -> anyhow::Result<SurfaceCapabilities> {
+        Ok(serde_json::from_value(self.request(
+            "surface.io.capabilities",
+            json!({"surface_id": surface_id}),
+        )?)?)
+    }
+
     pub fn read_surface(&self, surface_id: &str, max_bytes: usize) -> anyhow::Result<Value> {
-        self.request("surface.io.read", json!({"surface_id": surface_id, "max_bytes": max_bytes}))
+        self.request(
+            "surface.io.read",
+            json!({"surface_id": surface_id, "max_bytes": max_bytes}),
+        )
     }
 
     pub fn resize(&self, surface_id: &str, rows: u16, cols: u16) -> anyhow::Result<()> {

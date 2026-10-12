@@ -64,11 +64,14 @@ fn decode_option(code: u8, value: &[u8]) -> DhcpOption {
         50 if value.len() == 4 => DhcpOption::RequestedIp([value[0], value[1], value[2], value[3]]),
         51 if value.len() == 4 => {
             DhcpOption::LeaseTime(u32::from_be_bytes([value[0], value[1], value[2], value[3]]))
-        }
+        },
         53 if value.len() == 1 => DhcpOption::MessageType(value[0]),
         54 if value.len() == 4 => DhcpOption::ServerId([value[0], value[1], value[2], value[3]]),
         55 => DhcpOption::ParamRequest(value.to_vec()),
-        _ => DhcpOption::Unknown { code, value: value.to_vec() },
+        _ => DhcpOption::Unknown {
+            code,
+            value: value.to_vec(),
+        },
     }
 }
 
@@ -80,63 +83,63 @@ pub fn encode_options(opts: &[DhcpOption]) -> Vec<u8> {
             DhcpOption::End => {
                 out.push(255);
                 return out;
-            }
+            },
             DhcpOption::SubnetMask(ip) => {
                 out.push(1);
                 out.push(4);
                 out.extend_from_slice(ip);
-            }
+            },
             DhcpOption::Router(v) => {
                 out.push(3);
                 out.push(v.len() as u8);
                 out.extend_from_slice(v);
-            }
+            },
             DhcpOption::Dns(v) => {
                 out.push(6);
                 out.push(v.len() as u8);
                 out.extend_from_slice(v);
-            }
+            },
             DhcpOption::Hostname(s) => {
                 let b = s.as_bytes();
                 out.push(12);
                 out.push(b.len() as u8);
                 out.extend_from_slice(b);
-            }
+            },
             DhcpOption::Mtu(m) => {
                 out.push(26);
                 out.push(2);
                 out.extend_from_slice(&m.to_be_bytes());
-            }
+            },
             DhcpOption::RequestedIp(ip) => {
                 out.push(50);
                 out.push(4);
                 out.extend_from_slice(ip);
-            }
+            },
             DhcpOption::LeaseTime(t) => {
                 out.push(51);
                 out.push(4);
                 out.extend_from_slice(&t.to_be_bytes());
-            }
+            },
             DhcpOption::MessageType(t) => {
                 out.push(53);
                 out.push(1);
                 out.push(*t);
-            }
+            },
             DhcpOption::ServerId(ip) => {
                 out.push(54);
                 out.push(4);
                 out.extend_from_slice(ip);
-            }
+            },
             DhcpOption::ParamRequest(v) => {
                 out.push(55);
                 out.push(v.len() as u8);
                 out.extend_from_slice(v);
-            }
+            },
             DhcpOption::Unknown { code, value } => {
                 out.push(*code);
                 out.push(value.len() as u8);
                 out.extend_from_slice(value);
-            }
+            },
         }
     }
     out
@@ -149,7 +152,10 @@ mod tests {
     fn parse_pad_end() {
         let data = vec![0, 0, 255];
         let opts = parse_options(&data).unwrap();
-        assert_eq!(opts, vec![DhcpOption::Pad, DhcpOption::Pad, DhcpOption::End]);
+        assert_eq!(
+            opts,
+            vec![DhcpOption::Pad, DhcpOption::Pad, DhcpOption::End]
+        );
     }
     #[test]
     fn parse_subnet_mask() {
@@ -185,7 +191,13 @@ mod tests {
     fn parse_unknown_option() {
         let data = vec![99, 3, 1, 2, 3];
         let opts = parse_options(&data).unwrap();
-        assert_eq!(opts, vec![DhcpOption::Unknown { code: 99, value: vec![1, 2, 3] }]);
+        assert_eq!(
+            opts,
+            vec![DhcpOption::Unknown {
+                code: 99,
+                value: vec![1, 2, 3]
+            }]
+        );
     }
     #[test]
     fn parse_truncated_value() {

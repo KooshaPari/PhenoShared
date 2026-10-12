@@ -28,12 +28,26 @@ const SAMPLE: ResourceWatchSample = ResourceWatchSample {
 fn fixture_agents() -> Vec<DetectedAgentWatch> {
     vec![
         DetectedAgentWatch {
-            agent: DetectedAgent { pid: 100, family: "claude", comm: "claude".into() },
-            resource: AgentResourceSample { mem_rss_bytes: 52_428_800, fd_count: Some(24) },
+            agent: DetectedAgent {
+                pid: 100,
+                family: "claude",
+                comm: "claude".into(),
+            },
+            resource: AgentResourceSample {
+                mem_rss_bytes: 52_428_800,
+                fd_count: Some(24),
+            },
         },
         DetectedAgentWatch {
-            agent: DetectedAgent { pid: 250, family: "cursor", comm: "cursor-agent".into() },
-            resource: AgentResourceSample { mem_rss_bytes: 104_857_600, fd_count: None },
+            agent: DetectedAgent {
+                pid: 250,
+                family: "cursor",
+                comm: "cursor-agent".into(),
+            },
+            resource: AgentResourceSample {
+                mem_rss_bytes: 104_857_600,
+                fd_count: None,
+            },
         },
     ]
 }
@@ -110,14 +124,22 @@ fn fr006_thermal_tui_render_includes_agent_panel() {
     app.update(ThermalLevel::Green, 0);
 
     terminal.draw(|f| render(f, &app)).expect("draw");
-    let rendered: String =
-        terminal.backend().buffer().content.iter().map(|c| c.symbol().to_string()).collect();
+    let rendered: String = terminal
+        .backend()
+        .buffer()
+        .content
+        .iter()
+        .map(|c| c.symbol().to_string())
+        .collect();
 
     assert!(
         rendered.contains("Detected Agents") && rendered.contains("PID 100"),
         "thermal TUI MUST surface proc-scan agent inventory"
     );
-    assert!(rendered.contains("RSS"), "thermal TUI MUST surface per-agent RSS watch");
+    assert!(
+        rendered.contains("RSS"),
+        "thermal TUI MUST surface per-agent RSS watch"
+    );
     assert!(
         rendered.contains("PID 100  S  claude"),
         "flat thermal render MUST show process state after PID (AC-006.40); got excerpt: {}",

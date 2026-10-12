@@ -33,7 +33,10 @@ fn rate_limit_exhaustion_and_refill() {
     assert!(lim.try_acquire(), "first acquire must succeed");
     assert!(lim.try_acquire(), "second acquire must succeed");
     // Third acquire must fail — tokens exhausted.
-    assert!(!lim.try_acquire(), "third acquire must fail after exhaustion");
+    assert!(
+        !lim.try_acquire(),
+        "third acquire must fail after exhaustion"
+    );
     // retry_after_secs must be >= 1 while saturated.
     assert!(
         lim.retry_after_secs() >= 1,
@@ -232,7 +235,11 @@ fn config_watcher_debounce_window() {
     // We cannot access it directly (private const), but we verify the expected
     // value here as a documentation/regression guard.
     let expected_debounce = Duration::from_millis(200);
-    assert_eq!(expected_debounce, Duration::from_millis(200), "DEBOUNCE must remain 200ms");
+    assert_eq!(
+        expected_debounce,
+        Duration::from_millis(200),
+        "DEBOUNCE must remain 200ms"
+    );
     assert_eq!(expected_debounce.as_millis(), 200);
 }
 
@@ -305,12 +312,21 @@ fn error_envelope_auth_failure_message() {
     ];
     for reason in known_reasons {
         let msg = auth_failure_message(reason);
-        assert!(!msg.is_empty(), "auth_failure_message({reason:?}) must return a non-empty string");
+        assert!(
+            !msg.is_empty(),
+            "auth_failure_message({reason:?}) must return a non-empty string"
+        );
     }
     // Spot-check specific mappings.
-    assert_eq!(auth_failure_message("missing_authorization"), "missing or invalid bearer token");
+    assert_eq!(
+        auth_failure_message("missing_authorization"),
+        "missing or invalid bearer token"
+    );
     assert_eq!(auth_failure_message("jwt_expired"), "jwt token expired");
-    assert_eq!(auth_failure_message("invalid_bearer"), "invalid bearer token");
+    assert_eq!(
+        auth_failure_message("invalid_bearer"),
+        "invalid bearer token"
+    );
 }
 
 // ---------------------------------------------------------------------------
@@ -369,10 +385,19 @@ fn process_state_export_json() {
     state_by_pid.insert(100, 'S');
     state_by_pid.insert(101, 'S');
     state_by_pid.insert(200, 'R');
-    assert_eq!(sharecli_core::proc_scan::state_text_for_pid(&state_by_pid, 100), "S");
-    assert_eq!(sharecli_core::proc_scan::state_text_for_pid(&state_by_pid, 200), "R");
+    assert_eq!(
+        sharecli_core::proc_scan::state_text_for_pid(&state_by_pid, 100),
+        "S"
+    );
+    assert_eq!(
+        sharecli_core::proc_scan::state_text_for_pid(&state_by_pid, 200),
+        "R"
+    );
     // Unknown pid returns "-".
-    assert_eq!(sharecli_core::proc_scan::state_text_for_pid(&state_by_pid, 9999), "-");
+    assert_eq!(
+        sharecli_core::proc_scan::state_text_for_pid(&state_by_pid, 9999),
+        "-"
+    );
 
     // Verify agent_label_for_pid.
     assert_eq!(
@@ -398,7 +423,10 @@ fn process_state_export_json() {
         })
         .collect();
     let json_str = serde_json::to_string(&export).expect("JSON serialization must succeed");
-    assert!(json_str.contains("claude"), "JSON must contain agent family");
+    assert!(
+        json_str.contains("claude"),
+        "JSON must contain agent family"
+    );
     assert!(json_str.contains("100"), "JSON must contain agent PID");
 }
 

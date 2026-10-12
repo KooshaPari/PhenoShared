@@ -8,7 +8,10 @@ use sharecli::runtime::ResourceCheck;
 /// Mirror of the status lines printed by `commands::check_limits`.
 fn format_check(project: &str, check: &ResourceCheck) -> String {
     let mut out = format!("=== Resource Limits for '{project}' ===\n\n");
-    out.push_str(&format!("Memory: {} MB / {} MB\n", check.memory_mb, check.memory_limit_mb));
+    out.push_str(&format!(
+        "Memory: {} MB / {} MB\n",
+        check.memory_mb, check.memory_limit_mb
+    ));
     if check.memory_ok {
         out.push_str("  Status: OK\n");
     } else {
@@ -17,7 +20,10 @@ fn format_check(project: &str, check: &ResourceCheck) -> String {
             check.memory_mb - check.memory_limit_mb
         ));
     }
-    out.push_str(&format!("\nProcesses: {} / {}\n", check.process_count, check.max_processes));
+    out.push_str(&format!(
+        "\nProcesses: {} / {}\n",
+        check.process_count, check.max_processes
+    ));
     if check.processes_ok {
         out.push_str("  Status: OK\n");
     } else {
@@ -28,7 +34,11 @@ fn format_check(project: &str, check: &ResourceCheck) -> String {
     }
     out.push_str(&format!(
         "\nOverall: {}\n",
-        if check.overall_ok { "OK" } else { "LIMIT EXCEEDED" }
+        if check.overall_ok {
+            "OK"
+        } else {
+            "LIMIT EXCEEDED"
+        }
     ));
     out
 }
@@ -65,7 +75,10 @@ fn fr005_resource_check_overall_ok_logic() {
 
     let proc_bad = check(64, 1024, 20, 10);
     assert!(proc_bad.memory_ok && !proc_bad.processes_ok);
-    assert!(!proc_bad.overall_ok, "processes EXCEEDED MUST clear overall_ok");
+    assert!(
+        !proc_bad.overall_ok,
+        "processes EXCEEDED MUST clear overall_ok"
+    );
 
     let both_bad = check(5000, 1024, 50, 10);
     assert!(!both_bad.memory_ok && !both_bad.processes_ok);
@@ -81,15 +94,30 @@ fn fr005_resource_check_overall_ok_logic() {
 fn fr005_check_prints_status_lines() {
     let ok = check(128, 1024, 3, 10);
     let out_ok = format_check("demo", &ok);
-    assert!(out_ok.contains("=== Resource Limits for 'demo' ==="), "got: {out_ok}");
+    assert!(
+        out_ok.contains("=== Resource Limits for 'demo' ==="),
+        "got: {out_ok}"
+    );
     assert!(out_ok.contains("Memory: 128 MB / 1024 MB"), "got: {out_ok}");
     assert!(out_ok.contains("Processes: 3 / 10"), "got: {out_ok}");
-    assert!(out_ok.matches("Status: OK").count() >= 2, "both axes MUST show OK; got: {out_ok}");
+    assert!(
+        out_ok.matches("Status: OK").count() >= 2,
+        "both axes MUST show OK; got: {out_ok}"
+    );
     assert!(out_ok.contains("Overall: OK"), "got: {out_ok}");
 
     let exceeded = check(2048, 1024, 15, 10);
     let out_bad = format_check("demo", &exceeded);
-    assert!(out_bad.contains("Status: EXCEEDED (over by 1024 MB)"), "got: {out_bad}");
-    assert!(out_bad.contains("Status: EXCEEDED (over by 5)"), "got: {out_bad}");
-    assert!(out_bad.contains("Overall: LIMIT EXCEEDED"), "got: {out_bad}");
+    assert!(
+        out_bad.contains("Status: EXCEEDED (over by 1024 MB)"),
+        "got: {out_bad}"
+    );
+    assert!(
+        out_bad.contains("Status: EXCEEDED (over by 5)"),
+        "got: {out_bad}"
+    );
+    assert!(
+        out_bad.contains("Overall: LIMIT EXCEEDED"),
+        "got: {out_bad}"
+    );
 }

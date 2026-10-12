@@ -69,7 +69,11 @@ pub fn journal_path() -> PathBuf {
     let home = std::env::var_os("HOME")
         .or_else(|| std::env::var_os("USERPROFILE"))
         .unwrap_or_else(|| std::ffi::OsString::from("."));
-    PathBuf::from(home).join(".local").join("state").join("sharecli").join("operations.jsonl")
+    PathBuf::from(home)
+        .join(".local")
+        .join("state")
+        .join("sharecli")
+        .join("operations.jsonl")
 }
 
 /// Ensure the parent directory exists (mkdir -p semantics). Returns the
@@ -279,7 +283,9 @@ mod tests {
         assert_eq!(restored.id, rec.id);
         let after = read_recent(&path, 10).unwrap();
         assert_eq!(after.len(), 2);
-        assert!(after.iter().any(|r| r.kind == "rollback" && r.target == rec.target));
+        assert!(after
+            .iter()
+            .any(|r| r.kind == "rollback" && r.target == rec.target));
         let _ = std::fs::remove_dir_all(path.parent().unwrap());
     }
 

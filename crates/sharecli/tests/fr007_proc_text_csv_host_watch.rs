@@ -27,9 +27,15 @@ fn fr007_host_watch_format_text_section() {
     }
     .format_text_section();
     for marker in TEXT_MARKERS {
-        assert!(section.contains(marker), "text section MUST include {marker}; got: {section}");
+        assert!(
+            section.contains(marker),
+            "text section MUST include {marker}; got: {section}"
+        );
     }
-    assert!(section.contains("42"), "text section MUST include fd_count; got: {section}");
+    assert!(
+        section.contains("42"),
+        "text section MUST include fd_count; got: {section}"
+    );
     assert!(
         section.contains("52428800"),
         "text section MUST include mem_rss_bytes; got: {section}"
@@ -47,7 +53,10 @@ fn fr007_host_watch_format_csv_companion() {
         load_1m: 0.5,
     }
     .format_csv_companion();
-    assert!(csv.contains(CSV_HEADER), "CSV companion MUST include host_watch header; got: {csv}");
+    assert!(
+        csv.contains(CSV_HEADER),
+        "CSV companion MUST include host_watch header; got: {csv}"
+    );
     assert!(
         csv.contains("host,7,11,22,4096,0.50"),
         "CSV companion MUST include host data row; got: {csv}"
@@ -59,14 +68,21 @@ fn fr007_host_watch_format_csv_companion() {
 #[serial_test::serial]
 fn fr007_proc_text_host_watch_footer() {
     let out = bin().args(["proc"]).output().expect("spawn sharecli proc");
-    assert!(out.status.success(), "proc MUST exit 0; stderr: {:?}", out.stderr);
+    assert!(
+        out.status.success(),
+        "proc MUST exit 0; stderr: {:?}",
+        out.stderr
+    );
     let s = String::from_utf8_lossy(&out.stdout);
     assert!(
         s.contains("=== Host Resource Watch ==="),
         "proc text MUST include host watch section (AC-007.14); got: {s}"
     );
     for marker in TEXT_MARKERS {
-        assert!(s.contains(marker), "proc text MUST include {marker} (AC-007.14)");
+        assert!(
+            s.contains(marker),
+            "proc text MUST include {marker} (AC-007.14)"
+        );
     }
 }
 
@@ -74,11 +90,19 @@ fn fr007_proc_text_host_watch_footer() {
 #[test]
 #[serial_test::serial]
 fn fr007_proc_csv_host_watch_companion() {
-    let out = bin().args(["proc", "--csv"]).output().expect("spawn sharecli proc --csv");
-    assert!(out.status.success(), "proc --csv MUST exit 0; stderr: {:?}", out.stderr);
+    let out = bin()
+        .args(["proc", "--csv"])
+        .output()
+        .expect("spawn sharecli proc --csv");
+    assert!(
+        out.status.success(),
+        "proc --csv MUST exit 0; stderr: {:?}",
+        out.stderr
+    );
     let s = String::from_utf8_lossy(&out.stdout);
     assert!(
-        s.lines().any(|line| line == "pid,family,comm,state,mem_rss_bytes,mem_rss,fd_count"),
+        s.lines()
+            .any(|line| line == "pid,family,comm,state,mem_rss_bytes,mem_rss,fd_count"),
         "proc --csv MUST preserve agent header (AC-006.24); got: {s}"
     );
     assert!(
@@ -95,8 +119,15 @@ fn fr007_proc_csv_host_watch_companion() {
 #[test]
 #[serial_test::serial]
 fn fr007_proc_tree_text_host_watch_footer() {
-    let out = bin().args(["proc", "--tree"]).output().expect("spawn sharecli proc --tree");
-    assert!(out.status.success(), "proc --tree MUST exit 0; stderr: {:?}", out.stderr);
+    let out = bin()
+        .args(["proc", "--tree"])
+        .output()
+        .expect("spawn sharecli proc --tree");
+    assert!(
+        out.status.success(),
+        "proc --tree MUST exit 0; stderr: {:?}",
+        out.stderr
+    );
     let s = String::from_utf8_lossy(&out.stdout);
     assert!(
         s.contains("=== Host Resource Watch ==="),
@@ -108,9 +139,15 @@ fn fr007_proc_tree_text_host_watch_footer() {
 #[test]
 #[serial_test::serial]
 fn fr007_proc_tree_csv_host_watch_companion() {
-    let out =
-        bin().args(["proc", "--tree", "--csv"]).output().expect("spawn sharecli proc --tree --csv");
-    assert!(out.status.success(), "proc --tree --csv MUST exit 0; stderr: {:?}", out.stderr);
+    let out = bin()
+        .args(["proc", "--tree", "--csv"])
+        .output()
+        .expect("spawn sharecli proc --tree --csv");
+    assert!(
+        out.status.success(),
+        "proc --tree --csv MUST exit 0; stderr: {:?}",
+        out.stderr
+    );
     let s = String::from_utf8_lossy(&out.stdout);
     assert!(
         s.lines().next().unwrap_or("").starts_with("root_index,"),

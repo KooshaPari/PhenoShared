@@ -28,7 +28,9 @@ const DEFAULT_RETAIN: usize = 5;
 
 /// True when spawn/serve audit rows are enabled via explicit `SHARECLI_AUDIT_LOG`.
 pub fn is_configured() -> bool {
-    std::env::var("SHARECLI_AUDIT_LOG").map(|s| !s.is_empty()).unwrap_or(false)
+    std::env::var("SHARECLI_AUDIT_LOG")
+        .map(|s| !s.is_empty())
+        .unwrap_or(false)
 }
 
 /// Emit one audit event (`event` + arbitrary JSON fields).
@@ -52,7 +54,10 @@ pub fn emit_to(path: &Path, event: &str, fields: Value) {
         }
     }
 
-    let ts = SystemTime::now().duration_since(UNIX_EPOCH).map(|d| d.as_secs_f64()).unwrap_or(0.0);
+    let ts = SystemTime::now()
+        .duration_since(UNIX_EPOCH)
+        .map(|d| d.as_secs_f64())
+        .unwrap_or(0.0);
 
     let mut record = json!({
         "ts": ts,
@@ -70,7 +75,7 @@ pub fn emit_to(path: &Path, event: &str, fields: Value) {
         Err(e) => {
             warn!(error = %e, "audit log: serialize failed");
             return;
-        }
+        },
     };
 
     let _guard = WRITE_LOCK.lock().unwrap_or_else(|e| e.into_inner());
@@ -80,10 +85,10 @@ pub fn emit_to(path: &Path, event: &str, fields: Value) {
             if let Err(e) = writeln!(f, "{line}") {
                 warn!(error = %e, path = %path.display(), "audit log: write failed");
             }
-        }
+        },
         Err(e) => {
             warn!(error = %e, path = %path.display(), "audit log: open failed");
-        }
+        },
     }
 }
 
@@ -232,7 +237,11 @@ mod tests {
             std::env::set_var("SHARECLI_AUDIT_RETAIN", "2");
         }
         for i in 0..6 {
-            emit_to(&path, "rot", json!({ "i": i, "pad": "xxxxxxxxxxxxxxxxxxxx" }));
+            emit_to(
+                &path,
+                "rot",
+                json!({ "i": i, "pad": "xxxxxxxxxxxxxxxxxxxx" }),
+            );
         }
         assert!(path.exists() || rotation_path(&path, 1).exists());
         assert!(rotation_path(&path, 1).exists() || rotation_path(&path, 2).exists());

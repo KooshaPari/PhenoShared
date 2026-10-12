@@ -40,13 +40,26 @@ fn session_layout_save_and_list_accept_explicit_database() {
         ])
         .output()
         .expect("spawn layout save");
-    assert!(save.status.success(), "layout save stderr: {}", String::from_utf8_lossy(&save.stderr));
+    assert!(
+        save.status.success(),
+        "layout save stderr: {}",
+        String::from_utf8_lossy(&save.stderr)
+    );
 
     let list = bin()
-        .args(["session", "layout-list", "--db", db.to_str().expect("utf8 path")])
+        .args([
+            "session",
+            "layout-list",
+            "--db",
+            db.to_str().expect("utf8 path"),
+        ])
         .output()
         .expect("spawn layout list");
-    assert!(list.status.success(), "layout list stderr: {}", String::from_utf8_lossy(&list.stderr));
+    assert!(
+        list.status.success(),
+        "layout list stderr: {}",
+        String::from_utf8_lossy(&list.stderr)
+    );
     assert!(String::from_utf8_lossy(&list.stdout).contains("daily"));
 }
 
@@ -71,9 +84,15 @@ fn session_register_accepts_surface_id_and_sidecar_path() {
         ])
         .output()
         .expect("spawn session register");
-    assert!(out.status.success(), "register stderr: {}", String::from_utf8_lossy(&out.stderr));
+    assert!(
+        out.status.success(),
+        "register stderr: {}",
+        String::from_utf8_lossy(&out.stderr)
+    );
     assert!(String::from_utf8_lossy(&out.stdout).contains("thread-abc"));
-    assert!(std::fs::read_to_string(sidecar).unwrap().contains("ghostty:1"));
+    assert!(std::fs::read_to_string(sidecar)
+        .unwrap()
+        .contains("ghostty:1"));
 }
 
 #[cfg(unix)]

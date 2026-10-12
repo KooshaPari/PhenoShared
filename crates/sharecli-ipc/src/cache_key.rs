@@ -47,19 +47,19 @@ pub fn command_key_with_mode(
     hash_argv(&mut hasher, argv);
 
     match mode {
-        CacheKeyMode::Args => {}
+        CacheKeyMode::Args => {},
         CacheKeyMode::Time => {
             hasher.update(b"\x01");
             hasher.update(cwd.to_string_lossy().as_bytes());
             hasher.update(b"\x01");
             hash_env_subset(&mut hasher, env_subset);
-        }
+        },
         CacheKeyMode::Git => {
             hasher.update(b"\x01");
             hasher.update(cwd.to_string_lossy().as_bytes());
             hasher.update(b"\x01");
             hasher.update(git_fingerprint(cwd).as_bytes());
-        }
+        },
     }
 
     CommandKey(hex::encode(hasher.finalize()))
@@ -95,16 +95,18 @@ fn git_fingerprint(cwd: &Path) -> String {
     let cwd_str = cwd.to_string_lossy();
     let mut state = String::new();
 
-    if let Ok(out) =
-        Command::new("git").args(["-C", cwd_str.as_ref(), "status", "--porcelain"]).output()
+    if let Ok(out) = Command::new("git")
+        .args(["-C", cwd_str.as_ref(), "status", "--porcelain"])
+        .output()
     {
         if out.status.success() {
             state.push_str(&String::from_utf8_lossy(&out.stdout));
         }
     }
 
-    if let Ok(out) =
-        Command::new("git").args(["-C", cwd_str.as_ref(), "rev-parse", "HEAD"]).output()
+    if let Ok(out) = Command::new("git")
+        .args(["-C", cwd_str.as_ref(), "rev-parse", "HEAD"])
+        .output()
     {
         if out.status.success() {
             state.push_str(&String::from_utf8_lossy(&out.stdout));

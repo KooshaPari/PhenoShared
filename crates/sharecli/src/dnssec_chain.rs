@@ -84,7 +84,7 @@ impl DnsKey {
             flags |= 1 << 14;
         }
         wire.push((flags >> 8) as u8);
-        wire.push((flags & 0xFF) as u8);
+        wire.push((flags & 0xff) as u8);
         wire.push(self.protocol);
         wire.push(self.algorithm);
         wire.extend_from_slice(&self.public_key);
@@ -106,7 +106,7 @@ impl DnsKey {
             }
         }
         ac += ac >> 16;
-        (ac & 0xFFFF) as u16
+        (ac & 0xffff) as u16
     }
 
     /// Validate that this record conforms to RFC 4034 §2 structural rules.
@@ -225,12 +225,12 @@ pub fn validate_chain(
                     "DNSKEY SHA-256 digest does not match DS digest (RFC 4034 §5.1.4)".into(),
                 );
             }
-        }
+        },
         1 => {
             // SHA-1 digest path — for chain-validation purposes the
             // digest equality check would need sha1; we keep the call
             // symmetric and rely on tests to provide matching digests.
-        }
+        },
         _ => unreachable!("validated above"),
     }
     ChainStatus::Secure
@@ -241,13 +241,20 @@ mod tests {
     use super::*;
 
     fn make_key(zone: bool, sep: bool, revoke: bool, algo: u8, pk: Vec<u8>) -> DnsKey {
-        DnsKey { sep, revoke, zone_key: zone, protocol: 3, algorithm: algo, public_key: pk }
+        DnsKey {
+            sep,
+            revoke,
+            zone_key: zone,
+            protocol: 3,
+            algorithm: algo,
+            public_key: pk,
+        }
     }
 
     #[test]
     fn key_tag_deterministic() {
-        let k1 = make_key(true, true, false, 13, vec![0xAA; 64]);
-        let k2 = make_key(true, true, false, 13, vec![0xAA; 64]);
+        let k1 = make_key(true, true, false, 13, vec![0xaa; 64]);
+        let k2 = make_key(true, true, false, 13, vec![0xaa; 64]);
         assert_eq!(k1.key_tag(), k2.key_tag());
         // key_tag is u16; assert non-trivial wire checksum for this key material
         assert_ne!(k1.key_tag(), 0);
@@ -257,8 +264,8 @@ mod tests {
     fn key_tag_differs_on_flag_change() {
         // Toggling SEP MUST change key_tag per RFC 4034 Appendix B because
         // bit 0 of the flags word is included in the checksum.
-        let k1 = make_key(true, true, false, 13, vec![0xAA; 32]);
-        let k2 = make_key(true, false, false, 13, vec![0xAA; 32]);
+        let k1 = make_key(true, true, false, 13, vec![0xaa; 32]);
+        let k2 = make_key(true, false, false, 13, vec![0xaa; 32]);
         assert_ne!(k1.key_tag(), k2.key_tag());
     }
 
@@ -279,34 +286,51 @@ mod tests {
 
     #[test]
     fn ds_validates_digest_lengths() {
-        let bad =
-            DelegationSigner { key_tag: 1, algorithm: 13, digest_type: 2, digest: vec![0u8; 31] };
+        let bad = DelegationSigner {
+            key_tag: 1,
+            algorithm: 13,
+            digest_type: 2,
+            digest: vec![0u8; 31],
+        };
         assert!(bad.validate().is_err());
 
-        let good =
-            DelegationSigner { key_tag: 1, algorithm: 13, digest_type: 2, digest: vec![0u8; 32] };
+        let good = DelegationSigner {
+            key_tag: 1,
+            algorithm: 13,
+            digest_type: 2,
+            digest: vec![0u8; 32],
+        };
         assert!(good.validate().is_ok());
     }
 
     #[test]
     fn ds_rejects_unknown_digest_type() {
-        let ds =
-            DelegationSigner { key_tag: 1, algorithm: 13, digest_type: 99, digest: vec![0u8; 32] };
+        let ds = DelegationSigner {
+            key_tag: 1,
+            algorithm: 13,
+            digest_type: 99,
+            digest: vec![0u8; 32],
+        };
         assert!(ds.validate().is_err());
     }
 
     #[test]
     fn chain_secure_when_sha256_digest_matches() {
-        let key = make_key(true, true, false, 13, vec![0xCD; 32]);
+        let key = make_key(true, true, false, 13, vec![0xcd; 32]);
         let owner = b"\x07example\x03com\x00".to_vec();
         let digest = Sha256::digest(canonical_dnskey_digest_input(&owner, &key)).to_vec();
-        let ds = DelegationSigner { key_tag: key.key_tag(), algorithm: 13, digest_type: 2, digest };
+        let ds = DelegationSigner {
+            key_tag: key.key_tag(),
+            algorithm: 13,
+            digest_type: 2,
+            digest,
+        };
         assert_eq!(validate_chain(&owner, &ds, &key), ChainStatus::Secure);
     }
 
     #[test]
     fn chain_insecure_when_digest_mismatches() {
-        let key = make_key(true, true, false, 13, vec![0xCD; 32]);
+        let key = make_key(true, true, false, 13, vec![0xcd; 32]);
         let owner = b"\x07example\x03com\x00".to_vec();
         let ds = DelegationSigner {
             key_tag: key.key_tag(),
@@ -317,14 +341,14 @@ mod tests {
         match validate_chain(&owner, &ds, &key) {
             ChainStatus::Insecure(reason) => {
                 assert!(reason.contains("digest"), "got: {}", reason);
-            }
+            },
             other => panic!("expected insecure, got {:?}", other),
         }
     }
 
     #[test]
     fn chain_insecure_when_key_tag_mismatches() {
-        let key = make_key(true, true, false, 13, vec![0xCD; 32]);
+        let key = make_key(true, true, false, 13, vec![0xcd; 32]);
         let owner = b"\x07example\x03com\x00".to_vec();
         let mut ds = DelegationSigner {
             key_tag: key.key_tag(),
@@ -336,14 +360,14 @@ mod tests {
         match validate_chain(&owner, &ds, &key) {
             ChainStatus::Insecure(reason) => {
                 assert!(reason.contains("key_tag"), "got: {}", reason);
-            }
+            },
             other => panic!("expected insecure, got {:?}", other),
         }
     }
 
     #[test]
     fn chain_insecure_on_algorithm_mismatch() {
-        let key = make_key(true, true, false, 13, vec![0xCD; 16]);
+        let key = make_key(true, true, false, 13, vec![0xcd; 16]);
         let owner = b"\x00".to_vec();
         let ds = DelegationSigner {
             key_tag: key.key_tag(),
@@ -354,14 +378,14 @@ mod tests {
         match validate_chain(&owner, &ds, &key) {
             ChainStatus::Insecure(reason) => {
                 assert!(reason.contains("algorithm"), "got: {}", reason);
-            }
+            },
             other => panic!("expected insecure, got {:?}", other),
         }
     }
 
     #[test]
     fn chain_insecure_on_protocol_violation() {
-        let mut key = make_key(true, true, false, 13, vec![0xAA; 16]);
+        let mut key = make_key(true, true, false, 13, vec![0xaa; 16]);
         key.protocol = 4;
         let owner = b"\x00".to_vec();
         let ds = DelegationSigner {
@@ -370,7 +394,10 @@ mod tests {
             digest_type: 1,
             digest: vec![0; 20],
         };
-        assert!(matches!(validate_chain(&owner, &ds, &key), ChainStatus::Insecure(_)));
+        assert!(matches!(
+            validate_chain(&owner, &ds, &key),
+            ChainStatus::Insecure(_)
+        ));
     }
 
     #[test]
@@ -378,8 +405,8 @@ mod tests {
         // Cross-check: flags (SEP + ZONE set), protocol=3, algorithm=13.
         // Wire bytes (big-endian): byte0 = 0x80 (ZONE = bit 7), byte1 = 0x80
         // (SEP = bit 15 = high bit of low byte after big-endian shift).
-        let key = make_key(true, true, false, 13, vec![0xDE, 0xAD]);
+        let key = make_key(true, true, false, 13, vec![0xde, 0xad]);
         let wire = key.to_wire();
-        assert_eq!(wire, vec![0x80, 0x80, 0x03, 0x0D, 0xDE, 0xAD]);
+        assert_eq!(wire, vec![0x80, 0x80, 0x03, 0x0d, 0xde, 0xad]);
     }
 }

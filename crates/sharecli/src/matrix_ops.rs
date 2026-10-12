@@ -15,7 +15,11 @@ pub struct Matrix {
 impl Matrix {
     /// Zero matrix of given shape.
     pub fn zeros(rows: usize, cols: usize) -> Self {
-        Matrix { rows, cols, data: vec![0.0; rows * cols] }
+        Matrix {
+            rows,
+            cols,
+            data: vec![0.0; rows * cols],
+        }
     }
     /// Identity matrix (rows == cols required).
     pub fn identity(n: usize) -> Self {

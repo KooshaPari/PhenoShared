@@ -67,7 +67,12 @@ impl MaildirQueue {
         for d in [&tmp, &new, &cur] {
             fs::create_dir_all(d).with_context(|| format!("create maildir dir {}", d.display()))?;
         }
-        Ok(Self { path, tmp, new, cur })
+        Ok(Self {
+            path,
+            tmp,
+            new,
+            cur,
+        })
     }
 
     pub fn path(&self) -> &Path {
@@ -79,7 +84,10 @@ impl MaildirQueue {
     /// Lifecycle: write `tmp/<id>` → rename → `new/<id>`.
     pub fn enqueue(&self, payload: Value, priority: u8) -> Result<String> {
         let task_id = Uuid::new_v4().to_string();
-        let now = SystemTime::now().duration_since(UNIX_EPOCH).unwrap_or_default().as_secs_f64();
+        let now = SystemTime::now()
+            .duration_since(UNIX_EPOCH)
+            .unwrap_or_default()
+            .as_secs_f64();
         let envelope = TaskEnvelope {
             id: task_id.clone(),
             payload,
@@ -108,9 +116,11 @@ impl MaildirQueue {
             return Ok(None);
         }
         candidates.sort_by(|a, b| {
-            a.priority
-                .cmp(&b.priority)
-                .then(a.created_at.partial_cmp(&b.created_at).unwrap_or(std::cmp::Ordering::Equal))
+            a.priority.cmp(&b.priority).then(
+                a.created_at
+                    .partial_cmp(&b.created_at)
+                    .unwrap_or(std::cmp::Ordering::Equal),
+            )
         });
 
         for mut envelope in candidates {
@@ -127,11 +137,11 @@ impl MaildirQueue {
                     fs::write(&cur_path, bytes)
                         .with_context(|| format!("update cur task {}", cur_path.display()))?;
                     return Ok(Some(envelope));
-                }
+                },
                 Err(e) if e.kind() == io::ErrorKind::NotFound => continue,
                 Err(e) => {
                     return Err(e).with_context(|| format!("claim rename {}", envelope.id));
-                }
+                },
             }
         }
         Ok(None)

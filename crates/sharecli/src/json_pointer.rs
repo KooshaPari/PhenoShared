@@ -17,7 +17,7 @@ pub fn resolve<'a>(root: &'a Value, pointer: &str) -> Option<&'a Value> {
             Value::Array(arr) => {
                 let idx: usize = unescaped.parse().ok()?;
                 arr.get(idx)?
-            }
+            },
             _ => return None,
         };
     }

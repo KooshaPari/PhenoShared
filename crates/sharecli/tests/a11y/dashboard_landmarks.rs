@@ -21,7 +21,10 @@ fn dashboard_has_lang_and_landmarks() {
             || html.contains("aria-label='Dashboard status'"),
         "nav should have aria-label"
     );
-    assert!(html.contains("id=\"main-content\""), "main needs skiplink target id");
+    assert!(
+        html.contains("id=\"main-content\""),
+        "main needs skiplink target id"
+    );
     assert!(
         html.contains(r#"id="main-content" tabindex="-1""#),
         "main must be focusable skip-link target"
@@ -31,7 +34,10 @@ fn dashboard_has_lang_and_landmarks() {
 #[test]
 fn dashboard_announces_live_status() {
     let html = dashboard_html();
-    assert!(html.contains("aria-live"), "connection/status updates should use aria-live");
+    assert!(
+        html.contains("aria-live"),
+        "connection/status updates should use aria-live"
+    );
 }
 
 #[test]
@@ -46,24 +52,43 @@ fn dashboard_sr_table_and_skip_link() {
         html.contains(r#"aria-labelledby="dashboard-title""#),
         "main should be labelled by the page title"
     );
-    assert!(html.matches("scope=\"col\"").count() >= 5, "every column header needs scope=col");
+    assert!(
+        html.matches("scope=\"col\"").count() >= 5,
+        "every column header needs scope=col"
+    );
     assert!(
         html.contains("href=\"#main-content\"") && html.contains("Skip to process table"),
         "skip link must target main content"
     );
     // L81.4: every <img> opening tag must carry a standalone alt attribute
     // (bare imgs without alt are banned; data-alt= does not satisfy the rule).
-    let every_img_has_alt =
-        html.split("<img").skip(1).filter_map(|frag| frag.split('>').next()).all(|tag| {
-            tag.split_whitespace().any(|attr| attr == "alt" || attr.starts_with("alt="))
+    let every_img_has_alt = html
+        .split("<img")
+        .skip(1)
+        .filter_map(|frag| frag.split('>').next())
+        .all(|tag| {
+            tag.split_whitespace()
+                .any(|attr| attr == "alt" || attr.starts_with("alt="))
         });
-    assert!(every_img_has_alt, "dashboard must not ship <img> without an alt attribute");
+    assert!(
+        every_img_has_alt,
+        "dashboard must not ship <img> without an alt attribute"
+    );
 }
 
 #[test]
 fn dashboard_has_responsive_breakpoints() {
     let html = dashboard_html();
-    assert!(html.contains(r#"name="viewport""#), "missing viewport meta for adaptive layout");
-    assert!(html.contains("@media (max-width: 768px)"), "missing tablet breakpoint smoke (768)");
-    assert!(html.contains("@media (max-width: 375px)"), "missing phone breakpoint smoke (375)");
+    assert!(
+        html.contains(r#"name="viewport""#),
+        "missing viewport meta for adaptive layout"
+    );
+    assert!(
+        html.contains("@media (max-width: 768px)"),
+        "missing tablet breakpoint smoke (768)"
+    );
+    assert!(
+        html.contains("@media (max-width: 375px)"),
+        "missing phone breakpoint smoke (375)"
+    );
 }

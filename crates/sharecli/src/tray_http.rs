@@ -25,8 +25,12 @@ pub fn get(url: &str) -> Result<String> {
         .with_context(|| format!("no address for {host}:{port}"))?;
     let mut stream = TcpStream::connect_timeout(&addr, CONNECT_TIMEOUT)
         .with_context(|| format!("connect to {host}:{port}"))?;
-    stream.set_read_timeout(Some(IO_TIMEOUT)).context("set HTTP read timeout")?;
-    stream.set_write_timeout(Some(IO_TIMEOUT)).context("set HTTP write timeout")?;
+    stream
+        .set_read_timeout(Some(IO_TIMEOUT))
+        .context("set HTTP read timeout")?;
+    stream
+        .set_write_timeout(Some(IO_TIMEOUT))
+        .context("set HTTP write timeout")?;
     let host_header = http_host_header(&host, port);
     let mut req = format!(
         "GET {path} HTTP/1.1\r\nHost: {host_header}\r\nConnection: close\r\nAccept: */*\r\n"
@@ -35,7 +39,9 @@ pub fn get(url: &str) -> Result<String> {
         req.push_str(&format!("traceparent: {tp}\r\n"));
     }
     req.push_str("\r\n");
-    stream.write_all(req.as_bytes()).context("write HTTP request")?;
+    stream
+        .write_all(req.as_bytes())
+        .context("write HTTP request")?;
     let mut buf = Vec::new();
     stream.read_to_end(&mut buf).context("read HTTP response")?;
     extract_http_body(&buf)
@@ -50,7 +56,9 @@ fn http_host_header(host: &str, port: u16) -> String {
 }
 
 fn parse_http_url(url: &str) -> Result<(String, u16, String)> {
-    let rest = url.strip_prefix("http://").context("only http:// URLs are supported")?;
+    let rest = url
+        .strip_prefix("http://")
+        .context("only http:// URLs are supported")?;
     let (authority, path) = match rest.split_once('/') {
         Some((auth, tail)) => (auth, format!("/{tail}")),
         None => (rest, "/".to_string()),
@@ -64,7 +72,9 @@ fn parse_http_url(url: &str) -> Result<(String, u16, String)> {
 
 fn extract_http_body(raw: &[u8]) -> Result<String> {
     let text = std::str::from_utf8(raw).context("response not UTF-8")?;
-    let (_, body) = text.split_once("\r\n\r\n").context("malformed HTTP response")?;
+    let (_, body) = text
+        .split_once("\r\n\r\n")
+        .context("malformed HTTP response")?;
     Ok(body.to_string())
 }
 
@@ -73,7 +83,10 @@ pub fn inject_dashboard_traceparent(html: &str) -> String {
     let Some(tp) = traceparent_http_value() else {
         return html.to_string();
     };
-    let escaped = tp.replace('&', "&amp;").replace('"', "&quot;").replace('\'', "&#39;");
+    let escaped = tp
+        .replace('&', "&amp;")
+        .replace('"', "&quot;")
+        .replace('\'', "&#39;");
     html.replace(
         "<html lang=\"en\">",
         &format!("<html lang=\"en\" data-traceparent=\"{escaped}\">"),
@@ -100,7 +113,10 @@ mod tests {
         // On Windows env keys are case-insensitive: remove before set so we do
         // not clear the value we just wrote via remove_var("TRACEPARENT").
         std::env::remove_var("TRACEPARENT");
-        std::env::set_var(key, "00-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa-bbbbbbbbbbbbbbbb-01");
+        std::env::set_var(
+            key,
+            "00-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa-bbbbbbbbbbbbbbbb-01",
+        );
         let html = inject_dashboard_traceparent("<html lang=\"en\"><body></body></html>");
         if let Some(previous) = prev {
             std::env::set_var(key, previous);
@@ -146,7 +162,10 @@ mod tests {
         let prev_upper = std::env::var("TRACEPARENT").ok();
         // Windows: remove before set (case-insensitive env slot).
         std::env::remove_var("TRACEPARENT");
-        std::env::set_var(key, "00-4bf92f3577b34da6a3ce929d0e0e4736-00f067aa0ba902b7-01");
+        std::env::set_var(
+            key,
+            "00-4bf92f3577b34da6a3ce929d0e0e4736-00f067aa0ba902b7-01",
+        );
 
         let url = format!("http://{addr}/healthz");
         let body = get(&url).expect("tray HTTP get");
@@ -160,7 +179,9 @@ mod tests {
             std::env::set_var("TRACEPARENT", previous);
         }
 
-        let (request, headers) = rx.recv_timeout(Duration::from_secs(5)).expect("request captured");
+        let (request, headers) = rx
+            .recv_timeout(Duration::from_secs(5))
+            .expect("request captured");
         handle.join().expect("server thread");
         assert_eq!(body, "ok");
         assert!(request.starts_with("GET /healthz HTTP/1.1"));

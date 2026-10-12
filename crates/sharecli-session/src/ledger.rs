@@ -43,7 +43,14 @@ impl SessionObservation {
         capabilities: SurfaceCapabilities,
         kind: ObservationKind,
     ) -> Self {
-        Self { seq: 0, observed_at: observed_at.into(), surface, session, capabilities, kind }
+        Self {
+            seq: 0,
+            observed_at: observed_at.into(),
+            surface,
+            session,
+            capabilities,
+            kind,
+        }
     }
 }
 
@@ -75,14 +82,21 @@ mod tests {
 
     #[test]
     fn observation_survives_store_reopen_and_materializes_session() {
-        let suffix = SystemTime::now().duration_since(UNIX_EPOCH).unwrap().as_nanos();
+        let suffix = SystemTime::now()
+            .duration_since(UNIX_EPOCH)
+            .unwrap()
+            .as_nanos();
         let path = std::env::temp_dir().join(format!("sharecli-ledger-{suffix}.sqlite"));
         let session = AgentSession::codex("session-1", "/tmp/project");
         let observation = SessionObservation::new(
             "2026-07-31T00:00:00Z",
             surface("ghostty:1"),
             Some(session.clone()),
-            SurfaceCapabilities { read: true, write: true, ..Default::default() },
+            SurfaceCapabilities {
+                read: true,
+                write: true,
+                ..Default::default()
+            },
             ObservationKind::Discovered,
         );
         let store = SessionStore::open(&path).unwrap();

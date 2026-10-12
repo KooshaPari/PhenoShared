@@ -84,7 +84,11 @@ pub fn scan_agents(source: &dyn ProcSource) -> Vec<DetectedAgent> {
     let mut out = Vec::new();
     for p in source.list() {
         if let Some(family) = match_known_agent(&p.comm, &p.cmdline) {
-            out.push(DetectedAgent { pid: p.pid, family, comm: p.comm });
+            out.push(DetectedAgent {
+                pid: p.pid,
+                family,
+                comm: p.comm,
+            });
         }
     }
     out.sort_by_key(|a| a.pid);
@@ -102,7 +106,11 @@ pub fn walk_agent_ancestors(source: &dyn ProcSource, pid: u32) -> Option<Detecte
             break;
         };
         if let Some(family) = match_known_agent(&proc.comm, &proc.cmdline) {
-            return Some(DetectedAgent { pid: proc.pid, family, comm: proc.comm.clone() });
+            return Some(DetectedAgent {
+                pid: proc.pid,
+                family,
+                comm: proc.comm.clone(),
+            });
         }
         if proc.ppid == 0 || proc.ppid == proc.pid {
             break;
@@ -119,7 +127,9 @@ pub fn is_under_agent(source: &dyn ProcSource, pid: u32) -> bool {
 
 /// Table cell for the `sharecli ps` AGENT column: nearest ancestor family or `"-"`.
 pub fn agent_label_for_pid(source: &dyn ProcSource, pid: u32) -> &'static str {
-    walk_agent_ancestors(source, pid).map(|a| a.family).unwrap_or("-")
+    walk_agent_ancestors(source, pid)
+        .map(|a| a.family)
+        .unwrap_or("-")
 }
 
 /// One system-tool instance detected on the host.
@@ -135,7 +145,11 @@ pub fn scan_system_tools(source: &dyn ProcSource) -> Vec<SystemToolScan> {
     let mut out = Vec::new();
     for p in source.list() {
         if let Some(tool) = match_system_tool(&p.comm, &p.cmdline) {
-            out.push(SystemToolScan { pid: p.pid, tool, comm: p.comm });
+            out.push(SystemToolScan {
+                pid: p.pid,
+                tool,
+                comm: p.comm,
+            });
         }
     }
     out.sort_by_key(|a| a.pid);
@@ -271,16 +285,28 @@ fn build_agent_subtree(
     agent_pids: &std::collections::HashSet<u32>,
 ) -> Option<AgentTreeNode> {
     let proc = by_pid.get(&pid)?;
-    let family =
-        if agent_pids.contains(&pid) { match_known_agent(&proc.comm, &proc.cmdline) } else { None };
-    let mut child_pids: Vec<u32> =
-        by_pid.values().filter(|p| p.ppid == pid).map(|p| p.pid).collect();
+    let family = if agent_pids.contains(&pid) {
+        match_known_agent(&proc.comm, &proc.cmdline)
+    } else {
+        None
+    };
+    let mut child_pids: Vec<u32> = by_pid
+        .values()
+        .filter(|p| p.ppid == pid)
+        .map(|p| p.pid)
+        .collect();
     child_pids.sort_unstable();
     let children = child_pids
         .into_iter()
         .filter_map(|child| build_agent_subtree(child, by_pid, agent_pids))
         .collect();
-    Some(AgentTreeNode { pid, ppid: proc.ppid, comm: proc.comm.clone(), family, children })
+    Some(AgentTreeNode {
+        pid,
+        ppid: proc.ppid,
+        comm: proc.comm.clone(),
+        family,
+        children,
+    })
 }
 
 /// Nearest known-agent ancestor for the current process (hypervisor spawn context).
@@ -303,13 +329,21 @@ fn list_linux_proc() -> Vec<ProcSnapshot> {
             continue;
         };
         let base = ent.path();
-        let comm =
-            std::fs::read_to_string(base.join("comm")).unwrap_or_default().trim().to_string();
+        let comm = std::fs::read_to_string(base.join("comm"))
+            .unwrap_or_default()
+            .trim()
+            .to_string();
         let cmdline_raw = std::fs::read(base.join("cmdline")).unwrap_or_default();
         let cmdline = parse_cmdline(&cmdline_raw);
         let ppid = read_ppid(&base.join("status")).unwrap_or(0);
         let state = read_state_from_stat(&base.join("stat")).unwrap_or('?');
-        out.push(ProcSnapshot { pid, ppid, comm, cmdline, state });
+        out.push(ProcSnapshot {
+            pid,
+            ppid,
+            comm,
+            cmdline,
+            state,
+        });
     }
     out
 }
@@ -350,10 +384,19 @@ fn list_sysinfo_proc() -> Vec<ProcSnapshot> {
         let pid_u = pid.as_u32();
         let ppid = proc.parent().map(|p| p.as_u32()).unwrap_or(0);
         let comm = proc.name().to_string_lossy().into_owned();
-        let cmdline: Vec<String> =
-            proc.cmd().iter().map(|c| c.to_string_lossy().into_owned()).collect();
+        let cmdline: Vec<String> = proc
+            .cmd()
+            .iter()
+            .map(|c| c.to_string_lossy().into_owned())
+            .collect();
         let state = sysinfo_status_to_char(proc.status());
-        out.push(ProcSnapshot { pid: pid_u, ppid, comm, cmdline, state });
+        out.push(ProcSnapshot {
+            pid: pid_u,
+            ppid,
+            comm,
+            cmdline,
+            state,
+        });
     }
     out
 }
@@ -364,8 +407,20 @@ mod tests {
 
     fn tree() -> FakeProcSource {
         FakeProcSource::new(vec![
-            ProcSnapshot { pid: 1, ppid: 0, comm: "init".into(), cmdline: vec![], state: 'R' },
-            ProcSnapshot { pid: 10, ppid: 1, comm: "launchd".into(), cmdline: vec![], state: 'R' },
+            ProcSnapshot {
+                pid: 1,
+                ppid: 0,
+                comm: "init".into(),
+                cmdline: vec![],
+                state: 'R',
+            },
+            ProcSnapshot {
+                pid: 10,
+                ppid: 1,
+                comm: "launchd".into(),
+                cmdline: vec![],
+                state: 'R',
+            },
             ProcSnapshot {
                 pid: 100,
                 ppid: 10,
@@ -421,7 +476,10 @@ mod tests {
         assert_eq!(hit.pid, 100);
         assert!(is_under_agent(&tree(), 300));
         assert!(is_under_agent(&tree(), 200));
-        assert!(!is_under_agent(&tree(), 400), "human zsh MUST not be agent path");
+        assert!(
+            !is_under_agent(&tree(), 400),
+            "human zsh MUST not be agent path"
+        );
     }
 
     #[test]
@@ -468,7 +526,13 @@ mod tests {
     #[test]
     fn build_forests_nested_agent_under_parent() {
         let src = FakeProcSource::new(vec![
-            ProcSnapshot { pid: 1, ppid: 0, comm: "init".into(), cmdline: vec![], state: 'R' },
+            ProcSnapshot {
+                pid: 1,
+                ppid: 0,
+                comm: "init".into(),
+                cmdline: vec![],
+                state: 'R',
+            },
             ProcSnapshot {
                 pid: 10,
                 ppid: 1,
@@ -526,7 +590,10 @@ mod tests {
         use sysinfo::ProcessStatus;
         assert_eq!(sysinfo_status_to_char(ProcessStatus::Run), 'R');
         assert_eq!(sysinfo_status_to_char(ProcessStatus::Sleep), 'S');
-        assert_eq!(sysinfo_status_to_char(ProcessStatus::UninterruptibleDiskSleep), 'D');
+        assert_eq!(
+            sysinfo_status_to_char(ProcessStatus::UninterruptibleDiskSleep),
+            'D'
+        );
         assert_eq!(sysinfo_status_to_char(ProcessStatus::Stop), 'T');
         assert_eq!(sysinfo_status_to_char(ProcessStatus::Zombie), 'Z');
         assert_eq!(sysinfo_status_to_char(ProcessStatus::Tracing), 't');
@@ -547,7 +614,11 @@ mod tests {
     fn state_text_for_pid_unknown_state() {
         let mut map = HashMap::new();
         map.insert(100, '?');
-        assert_eq!(state_text_for_pid(&map, 100), "-", "state '?' MUST display as '-'");
+        assert_eq!(
+            state_text_for_pid(&map, 100),
+            "-",
+            "state '?' MUST display as '-'"
+        );
     }
 
     #[test]
@@ -592,7 +663,13 @@ mod tests {
                 cmdline: vec!["forge".into(), "conversation".into(), "list".into()],
                 state: 'R',
             },
-            ProcSnapshot { pid: 30, ppid: 1, comm: "unknown".into(), cmdline: vec![], state: 'R' },
+            ProcSnapshot {
+                pid: 30,
+                ppid: 1,
+                comm: "unknown".into(),
+                cmdline: vec![],
+                state: 'R',
+            },
         ]);
         let agents = scan_agents(&src);
         assert_eq!(agents.len(), 2);
@@ -603,8 +680,20 @@ mod tests {
     #[test]
     fn walk_agent_ancestors_no_match() {
         let src = FakeProcSource::new(vec![
-            ProcSnapshot { pid: 1, ppid: 0, comm: "init".into(), cmdline: vec![], state: 'R' },
-            ProcSnapshot { pid: 2, ppid: 1, comm: "bash".into(), cmdline: vec![], state: 'R' },
+            ProcSnapshot {
+                pid: 1,
+                ppid: 0,
+                comm: "init".into(),
+                cmdline: vec![],
+                state: 'R',
+            },
+            ProcSnapshot {
+                pid: 2,
+                ppid: 1,
+                comm: "bash".into(),
+                cmdline: vec![],
+                state: 'R',
+            },
         ]);
         assert!(walk_agent_ancestors(&src, 2).is_none());
     }
@@ -613,8 +702,20 @@ mod tests {
     fn walk_agent_ancestors_cycle_prevention() {
         // Create a cycle: pid 1 -> ppid 2, pid 2 -> ppid 1
         let src = FakeProcSource::new(vec![
-            ProcSnapshot { pid: 1, ppid: 2, comm: "a".into(), cmdline: vec![], state: 'R' },
-            ProcSnapshot { pid: 2, ppid: 1, comm: "b".into(), cmdline: vec![], state: 'R' },
+            ProcSnapshot {
+                pid: 1,
+                ppid: 2,
+                comm: "a".into(),
+                cmdline: vec![],
+                state: 'R',
+            },
+            ProcSnapshot {
+                pid: 2,
+                ppid: 1,
+                comm: "b".into(),
+                cmdline: vec![],
+                state: 'R',
+            },
         ]);
         // Should not hang — cycle detection prevents infinite loop
         assert!(walk_agent_ancestors(&src, 1).is_none());
@@ -678,8 +779,20 @@ mod tests {
     #[test]
     fn build_agent_state_map_partial() {
         let src = FakeProcSource::new(vec![
-            ProcSnapshot { pid: 100, ppid: 0, comm: "a".into(), cmdline: vec![], state: 'S' },
-            ProcSnapshot { pid: 200, ppid: 0, comm: "b".into(), cmdline: vec![], state: 'R' },
+            ProcSnapshot {
+                pid: 100,
+                ppid: 0,
+                comm: "a".into(),
+                cmdline: vec![],
+                state: 'S',
+            },
+            ProcSnapshot {
+                pid: 200,
+                ppid: 0,
+                comm: "b".into(),
+                cmdline: vec![],
+                state: 'R',
+            },
         ]);
         let map = build_agent_state_map(&src, &[100, 200, 999]);
         assert_eq!(map.get(&100), Some(&'S'));
@@ -727,8 +840,20 @@ mod tests {
     #[test]
     fn build_agent_forests_only_non_agents() {
         let src = FakeProcSource::new(vec![
-            ProcSnapshot { pid: 1, ppid: 0, comm: "bash".into(), cmdline: vec![], state: 'R' },
-            ProcSnapshot { pid: 2, ppid: 1, comm: "vim".into(), cmdline: vec![], state: 'R' },
+            ProcSnapshot {
+                pid: 1,
+                ppid: 0,
+                comm: "bash".into(),
+                cmdline: vec![],
+                state: 'R',
+            },
+            ProcSnapshot {
+                pid: 2,
+                ppid: 1,
+                comm: "vim".into(),
+                cmdline: vec![],
+                state: 'R',
+            },
         ]);
         assert!(build_agent_forests(&src).is_empty());
     }
@@ -767,7 +892,11 @@ mod tests {
 
     #[test]
     fn detected_agent_clone_and_eq() {
-        let a = DetectedAgent { pid: 1, family: "claude", comm: "claude".into() };
+        let a = DetectedAgent {
+            pid: 1,
+            family: "claude",
+            comm: "claude".into(),
+        };
         let b = a.clone();
         assert_eq!(a, b);
     }

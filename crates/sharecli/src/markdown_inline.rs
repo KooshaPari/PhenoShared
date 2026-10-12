@@ -74,24 +74,24 @@ pub fn render_inline(nodes: &[Inline]) -> String {
                 out.push_str("**");
                 out.push_str(&render_inline(c));
                 out.push_str("**");
-            }
+            },
             Inline::Italic(c) => {
                 out.push('*');
                 out.push_str(&render_inline(c));
                 out.push('*');
-            }
+            },
             Inline::Code(s) => {
                 out.push('`');
                 out.push_str(s);
                 out.push('`');
-            }
+            },
             Inline::Link { text, url } => {
                 out.push('[');
                 out.push_str(&render_inline(text));
                 out.push_str("](");
                 out.push_str(url);
                 out.push(')');
-            }
+            },
         }
     }
     out
@@ -132,7 +132,7 @@ mod tests {
             Inline::Link { text, url } => {
                 assert_eq!(text.len(), 1);
                 assert_eq!(url, "https://example.com");
-            }
+            },
             _ => panic!(),
         }
     }

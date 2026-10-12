@@ -37,7 +37,10 @@ fn fr003_write_serialize_stage_commit_discard_and_pending() {
     ws.stage_bytes(&backing, b"again").expect("stage2");
     ws.discard_pending(&backing).expect("discard");
     assert_eq!(fs::read(&backing).expect("unchanged"), b"staged");
-    assert!(matches!(ws.discard_pending(&backing), Err(WriteSerializeError::NoPending(_))));
+    assert!(matches!(
+        ws.discard_pending(&backing),
+        Err(WriteSerializeError::NoPending(_))
+    ));
 }
 
 /// FR-003 / C01 — WriteSerializeMeters formatting + global record helpers.
@@ -54,7 +57,12 @@ fn fr003_write_serialize_meters_format_and_global_records() {
     assert!(after.commits >= before.commits + 1);
     assert!(after.discards >= before.discards + 1);
 
-    let meters = WriteSerializeMeters { passthrough_writes: 3, stages: 2, commits: 1, discards: 1 };
+    let meters = WriteSerializeMeters {
+        passthrough_writes: 3,
+        stages: 2,
+        commits: 1,
+        discards: 1,
+    };
     let section = meters.format_status_section();
     assert!(!section.is_empty());
 }
@@ -72,19 +80,29 @@ fn fr003_agent_cow_store_multi_agent_pending_and_commit() {
     assert!(store.serialize());
     assert_eq!(store.cow_root(), cow.as_path());
 
-    store.stage_bytes(Some("alpha"), &backing, b"alpha-edit").expect("stage alpha");
-    store.stage_bytes(Some("beta"), &backing, b"beta-edit").expect("stage beta");
+    store
+        .stage_bytes(Some("alpha"), &backing, b"alpha-edit")
+        .expect("stage alpha");
+    store
+        .stage_bytes(Some("beta"), &backing, b"beta-edit")
+        .expect("stage beta");
 
     let pending_a = store.pending_for_agent(Some("alpha")).expect("pending a");
     assert!(!pending_a.is_empty());
     let grouped = store.list_agent_pending().expect("grouped");
     assert!(grouped.len() >= 2);
 
-    store.discard_pending(Some("beta"), &backing).expect("discard beta");
-    store.commit_pending(Some("alpha"), &backing).expect("commit alpha");
+    store
+        .discard_pending(Some("beta"), &backing)
+        .expect("discard beta");
+    store
+        .commit_pending(Some("alpha"), &backing)
+        .expect("commit alpha");
     assert_eq!(fs::read(&backing).expect("committed"), b"alpha-edit");
 
-    let locked = store.with_locked_path(Some("alpha"), &backing, || 42u32).expect("lock");
+    let locked = store
+        .with_locked_path(Some("alpha"), &backing, || 42u32)
+        .expect("lock");
     assert_eq!(locked, 42);
 }
 
@@ -106,8 +124,12 @@ fn fr003_agent_cow_store_commit_all_discard_all() {
     assert_eq!(fs::read(&a).expect("a1"), b"a1");
     assert_eq!(fs::read(&b).expect("b1"), b"b1");
 
-    store.stage_bytes(Some("agent-x"), &a, b"a2").expect("stage a2");
-    let discarded = store.discard_all_for_agent(Some("agent-x")).expect("discard all");
+    store
+        .stage_bytes(Some("agent-x"), &a, b"a2")
+        .expect("stage a2");
+    let discarded = store
+        .discard_all_for_agent(Some("agent-x"))
+        .expect("discard all");
     assert_eq!(discarded.len(), 1);
     assert_eq!(fs::read(&a).expect("still a1"), b"a1");
 }

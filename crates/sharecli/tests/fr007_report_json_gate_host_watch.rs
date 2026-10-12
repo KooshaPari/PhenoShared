@@ -11,25 +11,41 @@ fn bin() -> Command {
     Command::new(env!("CARGO_BIN_EXE_sharecli"))
 }
 
-const HOST_WATCH_KEYS: [&str; 5] =
-    ["fd_count", "net_rx_bytes", "net_tx_bytes", "mem_rss_bytes", "load_1m"];
+const HOST_WATCH_KEYS: [&str; 5] = [
+    "fd_count",
+    "net_rx_bytes",
+    "net_tx_bytes",
+    "mem_rss_bytes",
+    "load_1m",
+];
 
 const GATE_MARKER: &str = "=== Thermal Gate (FR-011) ===";
 const WATCH_MARKER: &str = "=== Host Resource Watch ===";
 
 fn assert_host_watch_object(host: &serde_json::Value) {
     for key in HOST_WATCH_KEYS {
-        assert!(host.get(key).is_some(), "host_watch MUST include {key} (AC-007.40); got: {host}");
+        assert!(
+            host.get(key).is_some(),
+            "host_watch MUST include {key} (AC-007.40); got: {host}"
+        );
     }
 }
 
 fn assert_json_gate_before_host_watch(raw: &str, context: &str) {
     let v: serde_json::Value =
         serde_json::from_str(raw.trim()).expect("{context} MUST emit valid JSON");
-    assert!(v.get("gate").is_some(), "{context} MUST include gate (AC-007.40)");
-    assert!(v.get("host_watch").is_some(), "{context} MUST include host_watch (AC-007.40)");
+    assert!(
+        v.get("gate").is_some(),
+        "{context} MUST include gate (AC-007.40)"
+    );
+    assert!(
+        v.get("host_watch").is_some(),
+        "{context} MUST include host_watch (AC-007.40)"
+    );
     let gate_pos = raw.find("\"gate\"").expect("gate key in raw JSON");
-    let host_pos = raw.find("\"host_watch\"").expect("host_watch key in raw JSON");
+    let host_pos = raw
+        .find("\"host_watch\"")
+        .expect("host_watch key in raw JSON");
     assert!(
         gate_pos < host_pos,
         "{context} MUST serialize gate before host_watch (AC-007.40); got: {raw}"
@@ -64,7 +80,11 @@ fn fr007_report_json_gate_host_watch_shape() {
         .args(["report", "--format", "json"])
         .output()
         .expect("spawn sharecli report --format json");
-    assert!(out.status.success(), "report --format json MUST exit 0; stderr: {:?}", out.stderr);
+    assert!(
+        out.status.success(),
+        "report --format json MUST exit 0; stderr: {:?}",
+        out.stderr
+    );
     let v: serde_json::Value =
         serde_json::from_slice(&out.stdout).expect("report --format json MUST emit valid JSON");
     assert!(
@@ -102,7 +122,11 @@ fn fr007_report_json_stderr_silent() {
         .args(["report", "--format", "json"])
         .output()
         .expect("spawn sharecli report --format json");
-    assert!(out.status.success(), "report --format json MUST exit 0; stderr: {:?}", out.stderr);
+    assert!(
+        out.status.success(),
+        "report --format json MUST exit 0; stderr: {:?}",
+        out.stderr
+    );
     assert_stderr_silent(&out.stderr, "report --format json");
     assert_stderr_no_companion_markers(&out.stderr, "report --format json");
     let raw = String::from_utf8_lossy(&out.stdout);

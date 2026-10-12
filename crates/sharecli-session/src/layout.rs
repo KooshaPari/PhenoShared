@@ -21,7 +21,11 @@ pub enum LayoutNode {
     /// A leaf terminal pane identified by its stable surface ID.
     Pane { surface_id: String },
     /// A binary split. `ratio_millis` is the first child's share in thousandths.
-    Split { axis: LayoutAxis, ratio_millis: u16, children: Vec<LayoutNode> },
+    Split {
+        axis: LayoutAxis,
+        ratio_millis: u16,
+        children: Vec<LayoutNode>,
+    },
 }
 
 /// Durable snapshot of a terminal application's pane topology.
@@ -71,8 +75,12 @@ fn validate_node(node: &LayoutNode, surfaces: &mut HashSet<String>) -> Result<()
             if !surfaces.insert(surface_id.clone()) {
                 anyhow::bail!("layout surface id appears more than once: {surface_id}");
             }
-        }
-        LayoutNode::Split { ratio_millis, children, .. } => {
+        },
+        LayoutNode::Split {
+            ratio_millis,
+            children,
+            ..
+        } => {
             if !(1..=999).contains(ratio_millis) {
                 anyhow::bail!("layout split ratio must be between 1 and 999");
             }
@@ -82,7 +90,7 @@ fn validate_node(node: &LayoutNode, surfaces: &mut HashSet<String>) -> Result<()
             for child in children {
                 validate_node(child, surfaces)?;
             }
-        }
+        },
     }
     Ok(())
 }
@@ -91,7 +99,10 @@ impl SessionStore {
     /// Insert or replace one validated terminal layout snapshot.
     pub fn save_layout(&self, snapshot: &LayoutSnapshot) -> Result<()> {
         snapshot.validate()?;
-        let mut conn = self.conn.lock().map_err(|_| anyhow::anyhow!("session store poisoned"))?;
+        let mut conn = self
+            .conn
+            .lock()
+            .map_err(|_| anyhow::anyhow!("session store poisoned"))?;
         let tx = conn.transaction_with_behavior(TransactionBehavior::Immediate)?;
         ensure_schema(&tx)?;
         tx.execute(
@@ -112,17 +123,28 @@ impl SessionStore {
 
     /// Load a layout snapshot by its durable ID.
     pub fn get_layout(&self, id: &str) -> Result<Option<LayoutSnapshot>> {
-        let conn = self.conn.lock().map_err(|_| anyhow::anyhow!("session store poisoned"))?;
+        let conn = self
+            .conn
+            .lock()
+            .map_err(|_| anyhow::anyhow!("session store poisoned"))?;
         ensure_schema(&conn)?;
         let json: Option<String> = conn
-            .query_row("SELECT snapshot_json FROM layouts WHERE id=?1", [id], |row| row.get(0))
+            .query_row(
+                "SELECT snapshot_json FROM layouts WHERE id=?1",
+                [id],
+                |row| row.get(0),
+            )
             .optional()?;
-        json.map(|value| serde_json::from_str(&value).context("decode layout snapshot")).transpose()
+        json.map(|value| serde_json::from_str(&value).context("decode layout snapshot"))
+            .transpose()
     }
 
     /// List all stored layouts in stable ID order.
     pub fn list_layouts(&self) -> Result<Vec<LayoutSnapshot>> {
-        let conn = self.conn.lock().map_err(|_| anyhow::anyhow!("session store poisoned"))?;
+        let conn = self
+            .conn
+            .lock()
+            .map_err(|_| anyhow::anyhow!("session store poisoned"))?;
         ensure_schema(&conn)?;
         let mut stmt = conn.prepare("SELECT snapshot_json FROM layouts ORDER BY id")?;
         let layouts = stmt

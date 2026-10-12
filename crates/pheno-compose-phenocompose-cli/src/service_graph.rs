@@ -69,7 +69,10 @@ impl RollbackContract {
     }
 }
 
-pub fn plan_lifecycle(manifest: &CompositionManifest, manifest_sha256: &str) -> Result<LifecyclePlan> {
+pub fn plan_lifecycle(
+    manifest: &CompositionManifest,
+    manifest_sha256: &str,
+) -> Result<LifecyclePlan> {
     let order = manifest.service_order()?;
     let mut intents = Vec::with_capacity(order.len() * 2);
     for name in &order {
@@ -158,10 +161,10 @@ where
             Ok(container_id) => {
                 rollback.record_create(&intent.service, container_id.clone());
                 containers.insert(intent.service.clone(), container_id.id);
-            }
+            },
             Err(error) => {
                 return Err((rollback, crate::map_runtime_error(error)));
-            }
+            },
         }
     }
     Ok(containers)
@@ -171,8 +174,8 @@ where
 mod tests {
     use super::*;
     use crate::model::{
-        ManifestKind, Metadata, Platform, ProvenanceFormat, ProvenanceRequirements, RuntimeProvider, RuntimeSpec,
-        Service, Teardown, Toolkit,
+        ManifestKind, Metadata, Platform, ProvenanceFormat, ProvenanceRequirements,
+        RuntimeProvider, RuntimeSpec, Service, Teardown, Toolkit,
     };
     use phenocompose_port_runtime::{Runtime, RuntimeError};
     use phenocompose_port_types::{ContainerId, ContainerStatus, ImageRef};
@@ -211,7 +214,10 @@ mod tests {
                 return Err(RuntimeError::backend("injected spawn failure"));
             }
             let id = format!("{}-{}", self.name, image.as_ref().replace(':', "-"));
-            self.ids.lock().unwrap().insert(self.name.clone(), id.clone());
+            self.ids
+                .lock()
+                .unwrap()
+                .insert(self.name.clone(), id.clone());
             Ok(ContainerId::new(id))
         }
 
@@ -221,7 +227,13 @@ mod tests {
         }
 
         fn status(&self, id: &ContainerId) -> std::result::Result<ContainerStatus, RuntimeError> {
-            if self.ids.lock().unwrap().values().any(|value| value == id.as_ref()) {
+            if self
+                .ids
+                .lock()
+                .unwrap()
+                .values()
+                .any(|value| value == id.as_ref())
+            {
                 Ok(ContainerStatus::Running)
             } else {
                 Ok(ContainerStatus::NotFound)

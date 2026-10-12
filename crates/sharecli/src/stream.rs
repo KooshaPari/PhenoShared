@@ -5,10 +5,17 @@ pub struct Stream<T> {
 }
 impl<T: Clone> Stream<T> {
     pub fn new() -> Self {
-        Self { chunks: vec![Vec::new()], pos: 0, off: 0 }
+        Self {
+            chunks: vec![Vec::new()],
+            pos: 0,
+            off: 0,
+        }
     }
     pub fn write(&mut self, item: T) {
-        self.chunks.last_mut().expect("Stream always has at least one chunk").push(item);
+        self.chunks
+            .last_mut()
+            .expect("Stream always has at least one chunk")
+            .push(item);
     }
     pub fn next(&mut self) -> Option<T> {
         loop {

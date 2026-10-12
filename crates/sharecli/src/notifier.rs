@@ -57,9 +57,16 @@ impl NotificationEvent {
         process_name: impl Into<String>,
         message: impl Into<String>,
     ) -> Self {
-        let timestamp =
-            SystemTime::now().duration_since(UNIX_EPOCH).map(|d| d.as_secs()).unwrap_or(0);
-        Self { kind, process_name: process_name.into(), message: message.into(), timestamp }
+        let timestamp = SystemTime::now()
+            .duration_since(UNIX_EPOCH)
+            .map(|d| d.as_secs())
+            .unwrap_or(0);
+        Self {
+            kind,
+            process_name: process_name.into(),
+            message: message.into(),
+            timestamp,
+        }
     }
 }
 
@@ -80,7 +87,10 @@ pub struct NotifierConfig {
 
 impl Default for NotifierConfig {
     fn default() -> Self {
-        Self { desktop: true, webhooks: vec![] }
+        Self {
+            desktop: true,
+            webhooks: vec![],
+        }
     }
 }
 
@@ -130,10 +140,17 @@ impl Notifier {
 
         #[cfg(feature = "desktop-notifications")]
         {
-            if let Err(e) = notify_rust::Notification::new().summary(&summary).body(&body).show() {
+            if let Err(e) = notify_rust::Notification::new()
+                .summary(&summary)
+                .body(&body)
+                .show()
+            {
                 warn!("notifier: desktop notification failed: {e}");
             } else {
-                info!("notifier: desktop notification sent for '{}'", event.process_name);
+                info!(
+                    "notifier: desktop notification sent for '{}'",
+                    event.process_name
+                );
             }
         }
 
@@ -154,7 +171,7 @@ impl Notifier {
             Err(e) => {
                 warn!("notifier: could not serialize event: {e}");
                 return;
-            }
+            },
         };
 
         #[cfg(feature = "notifications-http")]
@@ -162,13 +179,17 @@ impl Notifier {
             match self.client.post(url).json(&payload).send().await {
                 Ok(resp) if resp.status().is_success() => {
                     info!("notifier: webhook {} → {}", url, resp.status());
-                }
+                },
                 Ok(resp) => {
-                    warn!("notifier: webhook {} returned non-2xx: {}", url, resp.status());
-                }
+                    warn!(
+                        "notifier: webhook {} returned non-2xx: {}",
+                        url,
+                        resp.status()
+                    );
+                },
                 Err(e) => {
                     warn!("notifier: webhook {} POST failed: {e}", url);
-                }
+                },
             }
         }
 
@@ -206,8 +227,11 @@ mod tests {
     // 2. Webhook payload shape: required fields present in JSON
     #[test]
     fn webhook_payload_has_required_fields() {
-        let event =
-            NotificationEvent::new(NotificationKind::ProcessCrashed, "worker-1", "exit code 137");
+        let event = NotificationEvent::new(
+            NotificationKind::ProcessCrashed,
+            "worker-1",
+            "exit code 137",
+        );
         let v = serde_json::to_value(&event).expect("to_value");
         assert!(v.get("kind").is_some(), "missing 'kind'");
         assert!(v.get("process_name").is_some(), "missing 'process_name'");
@@ -227,16 +251,31 @@ mod tests {
     // 4. NotificationKind Display
     #[test]
     fn notification_kind_display() {
-        assert_eq!(NotificationKind::ProcessCrashed.to_string(), "ProcessCrashed");
-        assert_eq!(NotificationKind::HealthCheckFailed.to_string(), "HealthCheckFailed");
-        assert_eq!(NotificationKind::ProcessRestarted.to_string(), "ProcessRestarted");
-        assert_eq!(NotificationKind::ThresholdExceeded.to_string(), "ThresholdExceeded");
+        assert_eq!(
+            NotificationKind::ProcessCrashed.to_string(),
+            "ProcessCrashed"
+        );
+        assert_eq!(
+            NotificationKind::HealthCheckFailed.to_string(),
+            "HealthCheckFailed"
+        );
+        assert_eq!(
+            NotificationKind::ProcessRestarted.to_string(),
+            "ProcessRestarted"
+        );
+        assert_eq!(
+            NotificationKind::ThresholdExceeded.to_string(),
+            "ThresholdExceeded"
+        );
     }
 
     // 5. Notifier constructed with empty webhooks dispatches without panic
     #[tokio::test]
     async fn notifier_empty_webhooks_no_panic() {
-        let cfg = NotifierConfig { desktop: false, webhooks: vec![] };
+        let cfg = NotifierConfig {
+            desktop: false,
+            webhooks: vec![],
+        };
         let notifier = Notifier::new(cfg);
         let event = NotificationEvent::new(
             NotificationKind::ThresholdExceeded,

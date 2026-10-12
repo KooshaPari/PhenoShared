@@ -33,8 +33,9 @@ pub fn append_record(path: &Path, record: &SidecarRecord) -> Result<()> {
     options.create(true).append(true).write(true);
     #[cfg(unix)]
     std::os::unix::fs::OpenOptionsExt::mode(&mut options, 0o600);
-    let mut file =
-        options.open(path).with_context(|| format!("open sidecar {}", path.display()))?;
+    let mut file = options
+        .open(path)
+        .with_context(|| format!("open sidecar {}", path.display()))?;
     #[cfg(unix)]
     {
         let mut permissions = file
@@ -46,8 +47,10 @@ pub fn append_record(path: &Path, record: &SidecarRecord) -> Result<()> {
         file.set_permissions(permissions)
             .with_context(|| format!("protect sidecar {}", path.display()))?;
     }
-    file.write_all(&line).with_context(|| format!("append sidecar {}", path.display()))?;
-    file.sync_data().with_context(|| format!("sync sidecar {}", path.display()))?;
+    file.write_all(&line)
+        .with_context(|| format!("append sidecar {}", path.display()))?;
+    file.sync_data()
+        .with_context(|| format!("sync sidecar {}", path.display()))?;
     Ok(())
 }
 
@@ -74,14 +77,18 @@ impl SidecarStateProvider {
             Err(error) if error.kind() == std::io::ErrorKind::NotFound => return Ok(Vec::new()),
             Err(error) => {
                 return Err(error).with_context(|| format!("read sidecar {}", self.path.display()))
-            }
+            },
         };
         text.lines()
             .enumerate()
             .filter(|(_, line)| !line.trim().is_empty())
             .map(|(line_number, line)| {
                 serde_json::from_str(line).with_context(|| {
-                    format!("parse sidecar {} line {}", self.path.display(), line_number + 1)
+                    format!(
+                        "parse sidecar {} line {}",
+                        self.path.display(),
+                        line_number + 1
+                    )
                 })
             })
             .collect()

@@ -37,7 +37,9 @@ impl ApiRegistry {
         self.routes.push(r);
     }
     pub fn find(&self, method: &RouteMethod, path: &str) -> Option<&Route> {
-        self.routes.iter().find(|r| &r.method == method && r.path == path)
+        self.routes
+            .iter()
+            .find(|r| &r.method == method && r.path == path)
     }
     pub fn routes_by_method(&self, m: &RouteMethod) -> Vec<&Route> {
         self.routes.iter().filter(|r| &r.method == m).collect()
@@ -64,15 +66,27 @@ mod tests {
     #[test]
     fn method_filter() {
         let mut r = ApiRegistry::new();
-        r.add(Route { method: RouteMethod::Get, path: "/a".into(), handler: "".into() });
-        r.add(Route { method: RouteMethod::Post, path: "/b".into(), handler: "".into() });
+        r.add(Route {
+            method: RouteMethod::Get,
+            path: "/a".into(),
+            handler: "".into(),
+        });
+        r.add(Route {
+            method: RouteMethod::Post,
+            path: "/b".into(),
+            handler: "".into(),
+        });
         assert_eq!(r.routes_by_method(&RouteMethod::Get).len(), 1);
         assert_eq!(r.routes_by_method(&RouteMethod::Post).len(), 1);
     }
     #[test]
     fn count() {
         let mut r = ApiRegistry::new();
-        r.add(Route { method: RouteMethod::Get, path: "/".into(), handler: "".into() });
+        r.add(Route {
+            method: RouteMethod::Get,
+            path: "/".into(),
+            handler: "".into(),
+        });
         assert_eq!(r.count(), 1);
     }
     #[test]

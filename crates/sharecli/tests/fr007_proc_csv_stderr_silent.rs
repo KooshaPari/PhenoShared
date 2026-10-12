@@ -111,8 +111,15 @@ fn assert_stderr_no_pool_status_text(stderr: &[u8], context: &str) {
 #[test]
 #[serial_test::serial]
 fn fr007_proc_csv_stderr_silent() {
-    let out = bin().args(["proc", "--csv"]).output().expect("spawn sharecli proc --csv");
-    assert!(out.status.success(), "proc --csv MUST exit 0; stderr: {:?}", out.stderr);
+    let out = bin()
+        .args(["proc", "--csv"])
+        .output()
+        .expect("spawn sharecli proc --csv");
+    assert!(
+        out.status.success(),
+        "proc --csv MUST exit 0; stderr: {:?}",
+        out.stderr
+    );
     assert_stderr_silent(&out.stderr, "proc --csv");
     assert_stderr_no_companion_markers(&out.stderr, "proc --csv");
     assert_stderr_no_pool_status_text(&out.stderr, "proc --csv");
@@ -124,9 +131,15 @@ fn fr007_proc_csv_stderr_silent() {
 #[test]
 #[serial_test::serial]
 fn fr007_proc_tree_csv_stderr_silent() {
-    let out =
-        bin().args(["proc", "--tree", "--csv"]).output().expect("spawn sharecli proc --tree --csv");
-    assert!(out.status.success(), "proc --tree --csv MUST exit 0; stderr: {:?}", out.stderr);
+    let out = bin()
+        .args(["proc", "--tree", "--csv"])
+        .output()
+        .expect("spawn sharecli proc --tree --csv");
+    assert!(
+        out.status.success(),
+        "proc --tree --csv MUST exit 0; stderr: {:?}",
+        out.stderr
+    );
     assert_stderr_silent(&out.stderr, "proc --tree --csv");
     assert_stderr_no_companion_markers(&out.stderr, "proc --tree --csv");
     assert_stderr_no_pool_status_text(&out.stderr, "proc --tree --csv");

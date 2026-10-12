@@ -88,7 +88,11 @@ fn fr007_report_csv_stderr_silent() {
         .args(["report", "--format", "csv"])
         .output()
         .expect("spawn sharecli report --format csv");
-    assert!(out.status.success(), "report --format csv MUST exit 0; stderr: {:?}", out.stderr);
+    assert!(
+        out.status.success(),
+        "report --format csv MUST exit 0; stderr: {:?}",
+        out.stderr
+    );
     assert_stderr_silent(&out.stderr, "report --format csv");
     assert_stderr_no_companion_markers(&out.stderr, "report --format csv");
     assert_csv_body_has_operator_companions(&out.stdout, "report --format csv");

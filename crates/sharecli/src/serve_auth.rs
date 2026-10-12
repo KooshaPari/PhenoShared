@@ -77,7 +77,9 @@ impl ServeAuth {
     pub fn from_env_or_config(serve: &ServeConfig) -> Result<Self, String> {
         if let Ok(token) = std::env::var("SHARECLI_SERVE_TOKEN") {
             if !token.is_empty() {
-                return Ok(Self { mode: AuthMode::Bearer { token } });
+                return Ok(Self {
+                    mode: AuthMode::Bearer { token },
+                });
             }
         }
 
@@ -91,34 +93,51 @@ impl ServeAuth {
             Some("jwt") => {
                 let jwt = resolve_jwt_config(serve)?;
                 let validator = JwtValidator::from_config(&jwt)?;
-                Ok(Self { mode: AuthMode::Jwt(Arc::new(validator)) })
-            }
+                Ok(Self {
+                    mode: AuthMode::Jwt(Arc::new(validator)),
+                })
+            },
             Some("bearer") => {
-                let token =
-                    serve.bearer_token.clone().filter(|s| !s.is_empty()).ok_or_else(|| {
+                let token = serve
+                    .bearer_token
+                    .clone()
+                    .filter(|s| !s.is_empty())
+                    .ok_or_else(|| {
                         "auth_mode=bearer requires serve.bearer_token or SHARECLI_SERVE_TOKEN"
                             .to_string()
                     })?;
-                Ok(Self { mode: AuthMode::Bearer { token } })
-            }
+                Ok(Self {
+                    mode: AuthMode::Bearer { token },
+                })
+            },
             Some("open") | None => {
                 if let Some(token) = serve.bearer_token.as_ref().filter(|s| !s.is_empty()) {
-                    return Ok(Self { mode: AuthMode::Bearer { token: token.clone() } });
+                    return Ok(Self {
+                        mode: AuthMode::Bearer {
+                            token: token.clone(),
+                        },
+                    });
                 }
                 if serve.jwt.is_some() && mode_hint.as_deref() == Some("open") {
-                    return Ok(Self { mode: AuthMode::Open });
+                    return Ok(Self {
+                        mode: AuthMode::Open,
+                    });
                 }
                 // Auto-enable jwt when jwt block present and no bearer.
                 if serve.jwt.is_some() && mode_hint.is_none() {
                     let jwt = resolve_jwt_config(serve)?;
                     let validator = JwtValidator::from_config(&jwt)?;
-                    return Ok(Self { mode: AuthMode::Jwt(Arc::new(validator)) });
+                    return Ok(Self {
+                        mode: AuthMode::Jwt(Arc::new(validator)),
+                    });
                 }
-                Ok(Self { mode: AuthMode::Open })
-            }
-            Some(other) => {
-                Err(format!("unknown serve.auth_mode `{other}` (expected open|bearer|jwt)"))
-            }
+                Ok(Self {
+                    mode: AuthMode::Open,
+                })
+            },
+            Some(other) => Err(format!(
+                "unknown serve.auth_mode `{other}` (expected open|bearer|jwt)"
+            )),
         }
     }
 
@@ -130,8 +149,12 @@ impl ServeAuth {
             .filter(|s| !s.is_empty())
             .or_else(|| config_token.map(str::to_owned).filter(|s| !s.is_empty()));
         match token {
-            Some(token) => Self { mode: AuthMode::Bearer { token } },
-            None => Self { mode: AuthMode::Open },
+            Some(token) => Self {
+                mode: AuthMode::Bearer { token },
+            },
+            None => Self {
+                mode: AuthMode::Open,
+            },
         }
     }
 
@@ -154,8 +177,9 @@ impl ServeAuth {
                 let Some(raw) = header_val else {
                     return Err("missing_authorization".into());
                 };
-                let Some(provided) =
-                    raw.strip_prefix("Bearer ").or_else(|| raw.strip_prefix("bearer "))
+                let Some(provided) = raw
+                    .strip_prefix("Bearer ")
+                    .or_else(|| raw.strip_prefix("bearer "))
                 else {
                     return Err("not_bearer".into());
                 };
@@ -164,18 +188,19 @@ impl ServeAuth {
                 } else {
                     Err("invalid_bearer".into())
                 }
-            }
+            },
             AuthMode::Jwt(v) => {
                 let Some(raw) = header_val else {
                     return Err("missing_authorization".into());
                 };
-                let Some(provided) =
-                    raw.strip_prefix("Bearer ").or_else(|| raw.strip_prefix("bearer "))
+                let Some(provided) = raw
+                    .strip_prefix("Bearer ")
+                    .or_else(|| raw.strip_prefix("bearer "))
                 else {
                     return Err("not_bearer".into());
                 };
                 v.validate(provided.trim()).map(Some)
-            }
+            },
         }
     }
 
@@ -238,17 +263,17 @@ impl JwtValidator {
                     let key = DecodingKey::from_rsa_components(&params.n, &params.e)
                         .map_err(|e| format!("RSA JWK decode failed: {e}"))?;
                     (key, Algorithm::RS256)
-                }
+                },
                 AlgorithmParameters::EllipticCurve(params) => {
                     let key = DecodingKey::from_ec_components(&params.x, &params.y)
                         .map_err(|e| format!("EC JWK decode failed: {e}"))?;
                     (key, Algorithm::ES256)
-                }
+                },
                 other => {
                     return Err(format!(
                         "unsupported JWK algorithm parameters {other:?} (HS* denied)"
                     ));
-                }
+                },
             };
             let alg = match jwk.common.key_algorithm {
                 Some(ka) => key_alg_to_algorithm(ka)?,
@@ -266,7 +291,11 @@ impl JwtValidator {
             }
             keys.push((kid, decoding_key, alg));
         }
-        Ok(Self { issuer: cfg.issuer.clone(), audience: cfg.audience.clone(), keys })
+        Ok(Self {
+            issuer: cfg.issuer.clone(),
+            audience: cfg.audience.clone(),
+            keys,
+        })
     }
 
     fn validate(&self, token: &str) -> Result<String, String> {
@@ -300,10 +329,10 @@ impl JwtValidator {
             match decode::<JwtClaims>(token, key, &validation) {
                 Ok(data) => {
                     return Ok(data.claims.sub.unwrap_or_else(|| "unknown".into()));
-                }
+                },
                 Err(e) => {
                     last_err = map_jwt_error(&e);
-                }
+                },
             }
         }
         Err(last_err)
@@ -344,7 +373,10 @@ pub async fn require_bearer(
         return next.run(req).await;
     }
 
-    let header = req.headers().get(header::AUTHORIZATION).and_then(|v| v.to_str().ok());
+    let header = req
+        .headers()
+        .get(header::AUTHORIZATION)
+        .and_then(|v| v.to_str().ok());
 
     match auth.check_authorization(header) {
         Ok(sub) => {
@@ -354,7 +386,7 @@ pub async fn require_bearer(
             }
             crate::audit_log::emit("auth_ok", body);
             next.run(req).await
-        }
+        },
         Err(reason) => {
             crate::audit_log::emit(
                 "auth_fail",
@@ -365,9 +397,13 @@ pub async fn require_bearer(
                 }),
             );
             let envelope = ErrorEnvelope::unauthorized(auth_failure_message(&reason));
-            (StatusCode::UNAUTHORIZED, [(header::WWW_AUTHENTICATE, "Bearer")], Json(envelope))
+            (
+                StatusCode::UNAUTHORIZED,
+                [(header::WWW_AUTHENTICATE, "Bearer")],
+                Json(envelope),
+            )
                 .into_response()
-        }
+        },
     }
 }
 
@@ -415,14 +451,18 @@ mod tests {
             jwks_path: None,
             jwks: Some(fixture().jwks.to_string()),
         };
-        ServeAuth { mode: AuthMode::Jwt(Arc::new(JwtValidator::from_config(&jwt).expect("jwks"))) }
+        ServeAuth {
+            mode: AuthMode::Jwt(Arc::new(JwtValidator::from_config(&jwt).expect("jwks"))),
+        }
     }
 
     #[test]
     fn public_paths() {
         assert!(is_public_path("/healthz"));
         assert!(is_public_path("/readyz"));
-        assert!(is_public_path("/assets/dashboard/ui/favicons/phenotype.ico"));
+        assert!(is_public_path(
+            "/assets/dashboard/ui/favicons/phenotype.ico"
+        ));
         assert!(!is_public_path("/metrics/prometheus"));
         assert!(!is_public_path("/config"));
     }
@@ -430,7 +470,9 @@ mod tests {
     #[test]
     fn auth_disabled_allows_any() {
         // Construct Open directly — do not call from_env_or_token under parallel llvm-cov.
-        let auth = ServeAuth { mode: AuthMode::Open };
+        let auth = ServeAuth {
+            mode: AuthMode::Open,
+        };
         assert!(auth.check_bearer(None));
         assert!(auth.check_bearer(Some("Bearer nope")));
         assert_eq!(auth.mode_label(), "open");
@@ -439,7 +481,11 @@ mod tests {
     #[test]
     fn auth_enabled_requires_matching_bearer() {
         // Construct Bearer directly so SHARECLI_SERVE_TOKEN races cannot poison assertions.
-        let auth = ServeAuth { mode: AuthMode::Bearer { token: "s3cret".into() } };
+        let auth = ServeAuth {
+            mode: AuthMode::Bearer {
+                token: "s3cret".into(),
+            },
+        };
         assert!(!auth.check_bearer(None));
         assert!(!auth.check_bearer(Some("Bearer wrong")));
         assert!(!auth.check_bearer(Some("Basic s3cret")));
@@ -472,7 +518,9 @@ mod tests {
     fn jwt_valid_rs256() {
         let auth = jwt_auth();
         let token = join_jwt(&fixture().tokens.valid);
-        let sub = auth.check_authorization(Some(&format!("Bearer {token}"))).expect("valid");
+        let sub = auth
+            .check_authorization(Some(&format!("Bearer {token}")))
+            .expect("valid");
         assert_eq!(sub.as_deref(), Some("user-1"));
     }
 
@@ -480,7 +528,9 @@ mod tests {
     fn jwt_expired_rejected() {
         let auth = jwt_auth();
         let token = join_jwt(&fixture().tokens.expired);
-        let err = auth.check_authorization(Some(&format!("Bearer {token}"))).unwrap_err();
+        let err = auth
+            .check_authorization(Some(&format!("Bearer {token}")))
+            .unwrap_err();
         assert_eq!(err, "jwt_expired");
     }
 
@@ -488,7 +538,9 @@ mod tests {
     fn jwt_wrong_audience_rejected() {
         let auth = jwt_auth();
         let token = join_jwt(&fixture().tokens.bad_aud);
-        let err = auth.check_authorization(Some(&format!("Bearer {token}"))).unwrap_err();
+        let err = auth
+            .check_authorization(Some(&format!("Bearer {token}")))
+            .unwrap_err();
         assert_eq!(err, "jwt_invalid_aud");
     }
 
@@ -496,7 +548,9 @@ mod tests {
     fn jwt_wrong_issuer_rejected() {
         let auth = jwt_auth();
         let token = join_jwt(&fixture().tokens.bad_iss);
-        let err = auth.check_authorization(Some(&format!("Bearer {token}"))).unwrap_err();
+        let err = auth
+            .check_authorization(Some(&format!("Bearer {token}")))
+            .unwrap_err();
         assert_eq!(err, "jwt_invalid_iss");
     }
 

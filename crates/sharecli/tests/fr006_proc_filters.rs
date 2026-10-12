@@ -33,15 +33,40 @@ fn bin() -> Command {
 /// FR-006 / AC-006.17 — proc help documents filter flags.
 #[test]
 fn fr006_proc_help_documents_filters() {
-    let out = bin().args(["proc", "--help"]).output().expect("spawn sharecli proc --help");
-    assert!(out.status.success(), "proc --help should exit 0; stderr: {:?}", out.stderr);
+    let out = bin()
+        .args(["proc", "--help"])
+        .output()
+        .expect("spawn sharecli proc --help");
+    assert!(
+        out.status.success(),
+        "proc --help should exit 0; stderr: {:?}",
+        out.stderr
+    );
     let s = String::from_utf8_lossy(&out.stdout);
-    assert!(s.contains("--family"), "proc --help MUST document --family; got: {s}");
-    assert!(s.contains("--min-rss"), "proc --help MUST document --min-rss; got: {s}");
-    assert!(s.contains("--max-rss"), "proc --help MUST document --max-rss; got: {s}");
-    assert!(s.contains("--min-fd"), "proc --help MUST document --min-fd; got: {s}");
-    assert!(s.contains("--max-fd"), "proc --help MUST document --max-fd; got: {s}");
-    assert!(s.contains("--exclude-family"), "proc --help MUST document --exclude-family; got: {s}");
+    assert!(
+        s.contains("--family"),
+        "proc --help MUST document --family; got: {s}"
+    );
+    assert!(
+        s.contains("--min-rss"),
+        "proc --help MUST document --min-rss; got: {s}"
+    );
+    assert!(
+        s.contains("--max-rss"),
+        "proc --help MUST document --max-rss; got: {s}"
+    );
+    assert!(
+        s.contains("--min-fd"),
+        "proc --help MUST document --min-fd; got: {s}"
+    );
+    assert!(
+        s.contains("--max-fd"),
+        "proc --help MUST document --max-fd; got: {s}"
+    );
+    assert!(
+        s.contains("--exclude-family"),
+        "proc --help MUST document --exclude-family; got: {s}"
+    );
 }
 
 /// FR-006 / AC-006.38 — exclude-family filter drops matching agents.
@@ -100,7 +125,13 @@ fn fr006_proc_exclude_family_case_insensitive() {
 #[test]
 fn fr006_proc_tree_exclude_family_filter() {
     let src = FakeProcSource::new(vec![
-        ProcSnapshot { pid: 1, ppid: 0, comm: "init".into(), cmdline: vec![], state: 'R' },
+        ProcSnapshot {
+            pid: 1,
+            ppid: 0,
+            comm: "init".into(),
+            cmdline: vec![],
+            state: 'R',
+        },
         ProcSnapshot {
             pid: 50,
             ppid: 1,
@@ -149,8 +180,11 @@ fn fr006_proc_family_and_exclude_family_rejected() {
         .output()
         .expect("spawn sharecli proc family+exclude-family");
     assert!(!out.status.success(), "family + exclude-family MUST fail");
-    let combined =
-        format!("{}{}", String::from_utf8_lossy(&out.stderr), String::from_utf8_lossy(&out.stdout));
+    let combined = format!(
+        "{}{}",
+        String::from_utf8_lossy(&out.stderr),
+        String::from_utf8_lossy(&out.stdout)
+    );
     assert!(
         combined.contains("family") && combined.contains("exclude"),
         "error MUST mention family/exclude-family; got: {combined}"
@@ -186,8 +220,10 @@ fn fr006_proc_family_filter() {
 /// FR-006 / AC-006.17 — min-rss filter drops agents below threshold.
 #[test]
 fn fr006_proc_min_rss_filter() {
-    let rows =
-        vec![watch_row("claude", 10, 50 * 1_048_576), watch_row("codex", 11, 200 * 1_048_576)];
+    let rows = vec![
+        watch_row("claude", 10, 50 * 1_048_576),
+        watch_row("codex", 11, 200 * 1_048_576),
+    ];
     let filtered = filter_watched_agents(
         &rows,
         &ProcFilter {
@@ -214,7 +250,13 @@ fn fr006_proc_min_rss_filter() {
 #[test]
 fn fr006_proc_tree_family_filter() {
     let src = FakeProcSource::new(vec![
-        ProcSnapshot { pid: 1, ppid: 0, comm: "init".into(), cmdline: vec![], state: 'R' },
+        ProcSnapshot {
+            pid: 1,
+            ppid: 0,
+            comm: "init".into(),
+            cmdline: vec![],
+            state: 'R',
+        },
         ProcSnapshot {
             pid: 50,
             ppid: 1,
@@ -273,8 +315,10 @@ fn fr006_proc_invalid_min_rss_rejected() {
 /// FR-006 / AC-006.27 — max-rss filter drops agents above threshold.
 #[test]
 fn fr006_proc_max_rss_filter() {
-    let rows =
-        vec![watch_row("claude", 10, 50 * 1_048_576), watch_row("codex", 11, 200 * 1_048_576)];
+    let rows = vec![
+        watch_row("claude", 10, 50 * 1_048_576),
+        watch_row("codex", 11, 200 * 1_048_576),
+    ];
     let filtered = filter_watched_agents(
         &rows,
         &ProcFilter {
@@ -331,7 +375,13 @@ fn fr006_proc_rss_band_filter() {
 #[test]
 fn fr006_proc_tree_max_rss_filter() {
     let src = FakeProcSource::new(vec![
-        ProcSnapshot { pid: 1, ppid: 0, comm: "init".into(), cmdline: vec![], state: 'R' },
+        ProcSnapshot {
+            pid: 1,
+            ppid: 0,
+            comm: "init".into(),
+            cmdline: vec![],
+            state: 'R',
+        },
         ProcSnapshot {
             pid: 50,
             ppid: 1,
@@ -377,7 +427,10 @@ fn fr006_proc_tree_max_rss_filter() {
 /// FR-006 / AC-006.28 — min-fd filter drops agents below threshold.
 #[test]
 fn fr006_proc_min_fd_filter() {
-    let rows = vec![watch_row_fd("claude", 10, 100, 5), watch_row_fd("codex", 11, 100, 50)];
+    let rows = vec![
+        watch_row_fd("claude", 10, 100, 5),
+        watch_row_fd("codex", 11, 100, 50),
+    ];
     let filtered = filter_watched_agents(
         &rows,
         &ProcFilter {
@@ -403,7 +456,10 @@ fn fr006_proc_min_fd_filter() {
 /// FR-006 / AC-006.28 — max-fd filter drops agents above threshold.
 #[test]
 fn fr006_proc_max_fd_filter() {
-    let rows = vec![watch_row_fd("claude", 10, 100, 5), watch_row_fd("codex", 11, 100, 50)];
+    let rows = vec![
+        watch_row_fd("claude", 10, 100, 5),
+        watch_row_fd("codex", 11, 100, 50),
+    ];
     let filtered = filter_watched_agents(
         &rows,
         &ProcFilter {
@@ -459,7 +515,10 @@ fn fr006_proc_fd_band_filter() {
 /// FR-006 / AC-006.28 — missing fd_count treated as 0 for min-fd.
 #[test]
 fn fr006_proc_min_fd_treats_missing_as_zero() {
-    let rows = vec![watch_row("claude", 10, 100), watch_row_fd("codex", 11, 100, 10)];
+    let rows = vec![
+        watch_row("claude", 10, 100),
+        watch_row_fd("codex", 11, 100, 10),
+    ];
     let filtered = filter_watched_agents(
         &rows,
         &ProcFilter {
@@ -486,7 +545,13 @@ fn fr006_proc_min_fd_treats_missing_as_zero() {
 #[test]
 fn fr006_proc_tree_max_fd_filter() {
     let src = FakeProcSource::new(vec![
-        ProcSnapshot { pid: 1, ppid: 0, comm: "init".into(), cmdline: vec![], state: 'R' },
+        ProcSnapshot {
+            pid: 1,
+            ppid: 0,
+            comm: "init".into(),
+            cmdline: vec![],
+            state: 'R',
+        },
         ProcSnapshot {
             pid: 50,
             ppid: 1,
@@ -538,7 +603,10 @@ fn fr006_proc_invalid_min_fd_rejected() {
         .expect("spawn sharecli proc --min-fd");
     assert!(!out.status.success(), "invalid --min-fd MUST fail");
     let err = String::from_utf8_lossy(&out.stderr);
-    assert!(err.contains("min-fd") || err.contains("FD"), "error MUST mention min-fd; got: {err}");
+    assert!(
+        err.contains("min-fd") || err.contains("FD"),
+        "error MUST mention min-fd; got: {err}"
+    );
 }
 
 /// FR-006 / AC-006.28 — invalid max-fd exits non-zero.
@@ -550,7 +618,10 @@ fn fr006_proc_invalid_max_fd_rejected() {
         .expect("spawn sharecli proc --max-fd");
     assert!(!out.status.success(), "invalid --max-fd MUST fail");
     let err = String::from_utf8_lossy(&out.stderr);
-    assert!(err.contains("max-fd") || err.contains("FD"), "error MUST mention max-fd; got: {err}");
+    assert!(
+        err.contains("max-fd") || err.contains("FD"),
+        "error MUST mention max-fd; got: {err}"
+    );
 }
 
 /// FR-006 / AC-006.28 — min-fd greater than max-fd fails loudly.
@@ -561,8 +632,11 @@ fn fr006_proc_min_fd_exceeds_max_fd_rejected() {
         .output()
         .expect("spawn sharecli proc min-fd>max-fd");
     assert!(!out.status.success(), "min-fd > max-fd MUST fail");
-    let combined =
-        format!("{}{}", String::from_utf8_lossy(&out.stderr), String::from_utf8_lossy(&out.stdout));
+    let combined = format!(
+        "{}{}",
+        String::from_utf8_lossy(&out.stderr),
+        String::from_utf8_lossy(&out.stdout)
+    );
     assert!(
         combined.contains("min-fd") && combined.contains("max-fd"),
         "error MUST mention both FD bounds; got: {combined}"
@@ -592,8 +666,11 @@ fn fr006_proc_min_rss_exceeds_max_rss_rejected() {
         .output()
         .expect("spawn sharecli proc min>max");
     assert!(!out.status.success(), "min-rss > max-rss MUST fail");
-    let combined =
-        format!("{}{}", String::from_utf8_lossy(&out.stderr), String::from_utf8_lossy(&out.stdout));
+    let combined = format!(
+        "{}{}",
+        String::from_utf8_lossy(&out.stderr),
+        String::from_utf8_lossy(&out.stdout)
+    );
     assert!(
         combined.contains("min-rss") && combined.contains("max-rss"),
         "error MUST mention both RSS bounds; got: {combined}"
@@ -611,7 +688,14 @@ fn watch_row_fd(
     fd: impl Into<Option<u64>>,
 ) -> DetectedAgentWatch {
     DetectedAgentWatch {
-        agent: DetectedAgent { pid, family, comm: family.into() },
-        resource: AgentResourceSample { mem_rss_bytes: rss, fd_count: fd.into() },
+        agent: DetectedAgent {
+            pid,
+            family,
+            comm: family.into(),
+        },
+        resource: AgentResourceSample {
+            mem_rss_bytes: rss,
+            fd_count: fd.into(),
+        },
     }
 }

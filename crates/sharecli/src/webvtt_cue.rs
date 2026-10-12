@@ -52,7 +52,11 @@ pub fn parse_timestamp(s: &str) -> Option<u32> {
     let ms: u32 = ms.parse().ok()?;
     let parts: Vec<&str> = hms.split(':').collect();
     let (h, m, sec) = match parts.as_slice() {
-        [h, m, sec] => (h.parse::<u32>().ok()?, m.parse::<u32>().ok()?, sec.parse::<u32>().ok()?),
+        [h, m, sec] => (
+            h.parse::<u32>().ok()?,
+            m.parse::<u32>().ok()?,
+            sec.parse::<u32>().ok()?,
+        ),
         [m, sec] => (0u32, m.parse::<u32>().ok()?, sec.parse::<u32>().ok()?),
         _ => return None,
     };
@@ -119,7 +123,15 @@ fn parse_cue(
         return Err(format!("end before start: {start_ms}..{end_ms}"));
     }
     let payload = payload_lines.join("\n");
-    Ok(Cue { identifier, timing: CueTiming { start_ms, end_ms, settings }, payload })
+    Ok(Cue {
+        identifier,
+        timing: CueTiming {
+            start_ms,
+            end_ms,
+            settings,
+        },
+        payload,
+    })
 }
 
 /// Parse a complete WebVTT document.

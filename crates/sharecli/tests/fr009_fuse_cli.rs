@@ -41,7 +41,11 @@ fn fr009_cli_fuse_provenance_json() {
         .arg("--json")
         .output()
         .expect("spawn fuse provenance");
-    assert!(out.status.success(), "fuse provenance MUST exit 0; stderr={}", stderr(&out));
+    assert!(
+        out.status.success(),
+        "fuse provenance MUST exit 0; stderr={}",
+        stderr(&out)
+    );
     let body = stdout(&out);
     let v: serde_json::Value = serde_json::from_str(&body).expect("json provenance");
     assert_eq!(v["session_id"], "cli-session-7");
@@ -73,7 +77,11 @@ fn fr009_cli_fuse_provenance_missing_path() {
         .output()
         .expect("spawn fuse provenance");
     assert!(!out.status.success(), "missing path MUST fail");
-    assert!(stderr(&out).contains("does not exist"), "stderr={}", stderr(&out));
+    assert!(
+        stderr(&out).contains("does not exist"),
+        "stderr={}",
+        stderr(&out)
+    );
 }
 
 /// FR-009 / AC-009.11 — library round-trip matches CLI JSON (no mount).
@@ -85,7 +93,12 @@ fn fr009_cli_fuse_provenance_matches_read_provenance() {
     annotate_write_at(&path, "lib-session", 42).expect("stamp");
     let lib = read_provenance(&path).expect("read").expect("present");
 
-    let out = bin().args(["fuse", "provenance"]).arg(&path).arg("--json").output().expect("spawn");
+    let out = bin()
+        .args(["fuse", "provenance"])
+        .arg(&path)
+        .arg("--json")
+        .output()
+        .expect("spawn");
     let v: serde_json::Value = serde_json::from_str(&stdout(&out)).expect("json");
     assert_eq!(v["session_id"], lib.session_id);
     assert_eq!(v["written_at_unix"], lib.written_at_unix);
@@ -94,25 +107,41 @@ fn fr009_cli_fuse_provenance_matches_read_provenance() {
 /// FR-009 / AC-009.17 — `fuse status --json` exposes read-cache + write-serialize meters.
 #[test]
 fn fr009_cli_fuse_status_json() {
-    let out = bin().args(["fuse", "status", "--json"]).output().expect("spawn fuse status");
+    let out = bin()
+        .args(["fuse", "status", "--json"])
+        .output()
+        .expect("spawn fuse status");
     assert!(out.status.success(), "stderr={}", stderr(&out));
     let v: serde_json::Value = serde_json::from_str(&stdout(&out)).expect("json status");
     assert!(v.get("read_cache").is_some(), "must include read_cache");
-    assert!(v.get("write_serialize").is_some(), "must include write_serialize");
+    assert!(
+        v.get("write_serialize").is_some(),
+        "must include write_serialize"
+    );
 }
 
 /// FR-009 / AC-009.17 — `fuse list` with no mounts returns success.
 #[test]
 fn fr009_cli_fuse_list_empty() {
-    let out = bin().args(["fuse", "list"]).output().expect("spawn fuse list");
+    let out = bin()
+        .args(["fuse", "list"])
+        .output()
+        .expect("spawn fuse list");
     assert!(out.status.success(), "stderr={}", stderr(&out));
-    assert!(stdout(&out).contains("no registered mounts"), "stdout={}", stdout(&out));
+    assert!(
+        stdout(&out).contains("no registered mounts"),
+        "stdout={}",
+        stdout(&out)
+    );
 }
 
 /// FR-009 / AC-009.17 — commit without a registered mount fails loudly.
 #[test]
 fn fr009_cli_fuse_commit_requires_mount() {
-    let out = bin().args(["fuse", "commit", "some/path.txt"]).output().expect("spawn fuse commit");
+    let out = bin()
+        .args(["fuse", "commit", "some/path.txt"])
+        .output()
+        .expect("spawn fuse commit");
     assert!(!out.status.success(), "commit without mount MUST fail");
     assert!(
         stderr(&out).contains("no active FUSE mounts") || stderr(&out).contains("registered mount"),
@@ -141,7 +170,10 @@ fn fr009_cli_fuse_mount_rejects_invalid_agent() {
         ])
         .output()
         .expect("spawn fuse mount");
-    assert!(!out.status.success(), "invalid --agent MUST fail (AC-009.21)");
+    assert!(
+        !out.status.success(),
+        "invalid --agent MUST fail (AC-009.21)"
+    );
     assert!(
         stderr(&out).contains("invalid --agent") || stderr(&out).contains("alnum"),
         "stderr={}",
@@ -180,10 +212,19 @@ fn fr009_cli_fuse_mount_rejects_missing_agents_conf() {
 /// FR-009 / AC-009.21 — `fuse mount --help` documents Feb `--cow` / `--no-serialize` / `--agents-conf`.
 #[test]
 fn fr009_cli_fuse_mount_help_documents_feb_flags() {
-    let out = bin().args(["fuse", "mount", "--help"]).output().expect("spawn fuse mount --help");
+    let out = bin()
+        .args(["fuse", "mount", "--help"])
+        .output()
+        .expect("spawn fuse mount --help");
     assert!(out.status.success(), "help MUST exit 0");
     let text = format!("{}{}", stdout(&out), stderr(&out));
-    for flag in ["--cow", "--no-serialize", "--agents-conf", "--agent", "--cow-dir"] {
+    for flag in [
+        "--cow",
+        "--no-serialize",
+        "--agents-conf",
+        "--agent",
+        "--cow-dir",
+    ] {
         assert!(
             text.contains(flag),
             "fuse mount --help MUST document {flag} (AC-009.21); got: {text}"

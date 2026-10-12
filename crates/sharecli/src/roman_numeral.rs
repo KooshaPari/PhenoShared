@@ -72,7 +72,10 @@ pub fn decode(s: &str) -> Result<u32, String> {
         }
     }
     if result < MIN || result > MAX {
-        return Err(format!("decoded value {} is outside [{}, {}]", result, MIN, MAX));
+        return Err(format!(
+            "decoded value {} is outside [{}, {}]",
+            result, MIN, MAX
+        ));
     }
     Ok(result)
 }

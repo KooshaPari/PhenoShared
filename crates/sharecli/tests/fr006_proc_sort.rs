@@ -19,22 +19,45 @@ fn bin() -> Command {
 
 fn watch(pid: u32, family: &'static str, rss: u64, fds: Option<u64>) -> DetectedAgentWatch {
     DetectedAgentWatch {
-        agent: DetectedAgent { pid, family, comm: family.into() },
-        resource: AgentResourceSample { mem_rss_bytes: rss, fd_count: fds },
+        agent: DetectedAgent {
+            pid,
+            family,
+            comm: family.into(),
+        },
+        resource: AgentResourceSample {
+            mem_rss_bytes: rss,
+            fd_count: fds,
+        },
     }
 }
 
 fn tree_root(pid: u32, family: Option<&'static str>) -> AgentTreeNode {
-    AgentTreeNode { pid, ppid: 1, comm: "agent".into(), family, children: vec![] }
+    AgentTreeNode {
+        pid,
+        ppid: 1,
+        comm: "agent".into(),
+        family,
+        children: vec![],
+    }
 }
 
 /// FR-006 / AC-006.19 — proc help documents --sort.
 #[test]
 fn fr006_proc_help_documents_sort() {
-    let out = bin().args(["proc", "--help"]).output().expect("spawn sharecli proc --help");
-    assert!(out.status.success(), "proc --help should exit 0; stderr: {:?}", out.stderr);
+    let out = bin()
+        .args(["proc", "--help"])
+        .output()
+        .expect("spawn sharecli proc --help");
+    assert!(
+        out.status.success(),
+        "proc --help should exit 0; stderr: {:?}",
+        out.stderr
+    );
     let s = String::from_utf8_lossy(&out.stdout);
-    assert!(s.contains("--sort"), "proc --help MUST document --sort; got: {s}");
+    assert!(
+        s.contains("--sort"),
+        "proc --help MUST document --sort; got: {s}"
+    );
 }
 
 /// FR-006 / AC-006.19 — rss sort is descending with pid tie-break.
@@ -46,7 +69,10 @@ fn fr006_proc_sort_rss_descending() {
         watch(30, "aider", 200, Some(2)),
     ];
     let sorted = sort_watched_agents(&rows, ProcSort::Rss, &HashMap::new());
-    assert_eq!(sorted.iter().map(|r| r.agent.pid).collect::<Vec<_>>(), vec![20, 30, 10]);
+    assert_eq!(
+        sorted.iter().map(|r| r.agent.pid).collect::<Vec<_>>(),
+        vec![20, 30, 10]
+    );
 }
 
 /// FR-006 / AC-006.19 — fd sort treats missing FD as zero, descending.
@@ -58,7 +84,10 @@ fn fr006_proc_sort_fd_descending() {
         watch(3, "aider", 100, Some(10)),
     ];
     let sorted = sort_watched_agents(&rows, ProcSort::Fd, &HashMap::new());
-    assert_eq!(sorted.iter().map(|r| r.agent.pid).collect::<Vec<_>>(), vec![2, 3, 1]);
+    assert_eq!(
+        sorted.iter().map(|r| r.agent.pid).collect::<Vec<_>>(),
+        vec![2, 3, 1]
+    );
 }
 
 /// FR-006 / AC-006.19 — pid sort is ascending.
@@ -66,7 +95,10 @@ fn fr006_proc_sort_fd_descending() {
 fn fr006_proc_sort_pid_ascending() {
     let rows = vec![watch(99, "claude", 1, None), watch(1, "codex", 1, None)];
     let sorted = sort_watched_agents(&rows, ProcSort::Pid, &HashMap::new());
-    assert_eq!(sorted.iter().map(|r| r.agent.pid).collect::<Vec<_>>(), vec![1, 99]);
+    assert_eq!(
+        sorted.iter().map(|r| r.agent.pid).collect::<Vec<_>>(),
+        vec![1, 99]
+    );
 }
 
 /// FR-006 / AC-006.19 — tree root forests honor rss sort via live samples.
@@ -76,9 +108,17 @@ fn fr006_proc_sort_tree_roots_by_rss() {
     let mut rss = HashMap::new();
     rss.insert(10, 500_u64);
     rss.insert(20, 100_u64);
-    let sorted =
-        sort_agent_forests(&forests, ProcSort::Rss, &rss, &HashMap::new(), &HashMap::new());
-    assert_eq!(sorted.iter().map(|n| n.pid).collect::<Vec<_>>(), vec![10, 20]);
+    let sorted = sort_agent_forests(
+        &forests,
+        ProcSort::Rss,
+        &rss,
+        &HashMap::new(),
+        &HashMap::new(),
+    );
+    assert_eq!(
+        sorted.iter().map(|n| n.pid).collect::<Vec<_>>(),
+        vec![10, 20]
+    );
 }
 
 /// FR-006 / AC-006.36 — state sort is ascending by letter with pid tie-break.
@@ -94,7 +134,10 @@ fn fr006_proc_sort_state_ascending() {
     state.insert(20, 'R');
     state.insert(30, 'D');
     let sorted = sort_watched_agents(&rows, ProcSort::State, &state);
-    assert_eq!(sorted.iter().map(|r| r.agent.pid).collect::<Vec<_>>(), vec![30, 20, 10]);
+    assert_eq!(
+        sorted.iter().map(|r| r.agent.pid).collect::<Vec<_>>(),
+        vec![30, 20, 10]
+    );
 }
 
 /// FR-006 / AC-006.36 — state sort tie-breaks equal letters by ascending pid.
@@ -105,7 +148,10 @@ fn fr006_proc_sort_state_pid_tiebreak() {
     state.insert(99, 'R');
     state.insert(1, 'R');
     let sorted = sort_watched_agents(&rows, ProcSort::State, &state);
-    assert_eq!(sorted.iter().map(|r| r.agent.pid).collect::<Vec<_>>(), vec![1, 99]);
+    assert_eq!(
+        sorted.iter().map(|r| r.agent.pid).collect::<Vec<_>>(),
+        vec![1, 99]
+    );
 }
 
 /// FR-006 / AC-006.36 — missing state sorts after known letters.
@@ -115,7 +161,10 @@ fn fr006_proc_sort_state_missing_sorts_last() {
     let mut state = HashMap::new();
     state.insert(10, 'D');
     let sorted = sort_watched_agents(&rows, ProcSort::State, &state);
-    assert_eq!(sorted.iter().map(|r| r.agent.pid).collect::<Vec<_>>(), vec![10, 20]);
+    assert_eq!(
+        sorted.iter().map(|r| r.agent.pid).collect::<Vec<_>>(),
+        vec![10, 20]
+    );
 }
 
 /// FR-006 / AC-006.36 — tree root forests honor state sort via live lookup.
@@ -125,26 +174,50 @@ fn fr006_proc_sort_tree_roots_by_state() {
     let mut state = HashMap::new();
     state.insert(10, 'S');
     state.insert(20, 'R');
-    let sorted =
-        sort_agent_forests(&forests, ProcSort::State, &HashMap::new(), &HashMap::new(), &state);
-    assert_eq!(sorted.iter().map(|n| n.pid).collect::<Vec<_>>(), vec![20, 10]);
+    let sorted = sort_agent_forests(
+        &forests,
+        ProcSort::State,
+        &HashMap::new(),
+        &HashMap::new(),
+        &state,
+    );
+    assert_eq!(
+        sorted.iter().map(|n| n.pid).collect::<Vec<_>>(),
+        vec![20, 10]
+    );
 }
 
 /// FR-006 / AC-006.36 — proc help documents state sort key.
 #[test]
 fn fr006_proc_help_documents_sort_state() {
-    let out = bin().args(["proc", "--help"]).output().expect("spawn sharecli proc --help");
-    assert!(out.status.success(), "proc --help should exit 0; stderr: {:?}", out.stderr);
+    let out = bin()
+        .args(["proc", "--help"])
+        .output()
+        .expect("spawn sharecli proc --help");
+    assert!(
+        out.status.success(),
+        "proc --help should exit 0; stderr: {:?}",
+        out.stderr
+    );
     let s = String::from_utf8_lossy(&out.stdout);
-    assert!(s.contains("state"), "proc --help MUST document state sort key; got: {s}");
+    assert!(
+        s.contains("state"),
+        "proc --help MUST document state sort key; got: {s}"
+    );
 }
 
 /// FR-006 / AC-006.19 — invalid sort key exits non-zero.
 #[test]
 fn fr006_proc_sort_invalid_exits_nonzero() {
-    let out =
-        bin().args(["proc", "--sort", "bogus"]).output().expect("spawn sharecli proc --sort bogus");
-    assert!(!out.status.success(), "invalid --sort MUST fail; stdout: {:?}", out.stdout);
+    let out = bin()
+        .args(["proc", "--sort", "bogus"])
+        .output()
+        .expect("spawn sharecli proc --sort bogus");
+    assert!(
+        !out.status.success(),
+        "invalid --sort MUST fail; stdout: {:?}",
+        out.stdout
+    );
     let err = String::from_utf8_lossy(&out.stderr);
     assert!(
         err.contains("rss") || err.contains("sort"),

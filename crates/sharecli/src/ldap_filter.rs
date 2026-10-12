@@ -82,38 +82,38 @@ fn write_filter(f: &Filter, out: &mut String) {
             out.push('=');
             out.push_str(v);
             out.push(')');
-        }
+        },
         Filter::Present(a) => {
             out.push('(');
             out.push_str(a);
             out.push_str("=*)");
-        }
+        },
         Filter::Substring(a, v) => {
             out.push('(');
             out.push_str(a);
             out.push('=');
             out.push_str(v);
             out.push(')');
-        }
+        },
         Filter::And(children) => {
             out.push_str("(&");
             for c in children {
                 write_filter(c, out);
             }
             out.push(')');
-        }
+        },
         Filter::Or(children) => {
             out.push_str("(|");
             for c in children {
                 write_filter(c, out);
             }
             out.push(')');
-        }
+        },
         Filter::Not(inner) => {
             out.push_str("(!");
             write_filter(inner, out);
             out.push(')');
-        }
+        },
     }
 }
 
@@ -151,9 +151,15 @@ impl<'a> Parser<'a> {
             Some(c) if c == ch => {
                 self.pos += ch.len_utf8();
                 Ok(())
-            }
-            Some(c) => Err(format!("expected {:?} at position {}, got {:?}", ch, self.pos, c)),
-            None => Err(format!("expected {:?} at position {}, got EOF", ch, self.pos)),
+            },
+            Some(c) => Err(format!(
+                "expected {:?} at position {}, got {:?}",
+                ch, self.pos, c
+            )),
+            None => Err(format!(
+                "expected {:?} at position {}, got EOF",
+                ch, self.pos
+            )),
         }
     }
 
@@ -183,7 +189,7 @@ impl<'a> Parser<'a> {
                     return Err("AND filter has no children".to_string());
                 }
                 Ok(Filter::And(children))
-            }
+            },
             Some('|') => {
                 self.pos += 1;
                 let mut children = Vec::new();
@@ -198,12 +204,12 @@ impl<'a> Parser<'a> {
                     return Err("OR filter has no children".to_string());
                 }
                 Ok(Filter::Or(children))
-            }
+            },
             Some('!') => {
                 self.pos += 1;
                 let inner = self.parse_filter()?;
                 Ok(Filter::Not(Box::new(inner)))
-            }
+            },
             Some('(') | Some(_) => self.parse_item(),
             None => Err("unexpected EOF in filter".to_string()),
         }
@@ -226,10 +232,13 @@ impl<'a> Parser<'a> {
                     "expected filter operator at position {}, got {:?}",
                     self.pos, c
                 ));
-            }
+            },
             None => {
-                return Err(format!("expected filter operator at position {}, got EOF", self.pos));
-            }
+                return Err(format!(
+                    "expected filter operator at position {}, got EOF",
+                    self.pos
+                ));
+            },
         };
         self.pos += op.len_utf8();
         // Skip the second char of two-char operators (>=, <=, ~=).
@@ -272,11 +281,11 @@ impl<'a> Parser<'a> {
                         "unexpected '(' in assertion value at position {}",
                         self.pos
                     ));
-                }
+                },
                 Some(c) => {
                     out.push(c);
                     self.pos += c.len_utf8();
-                }
+                },
             }
         }
         // Trim surrounding whitespace from the captured value (RFC 4515
@@ -331,7 +340,7 @@ mod tests {
                 assert_eq!(children.len(), 2);
                 assert_eq!(children[0], Filter::Equal("cn".into(), "Alice".into()));
                 assert_eq!(children[1], Filter::Equal("sn".into(), "Smith".into()));
-            }
+            },
             _ => panic!("expected And, got {:?}", f),
         }
         assert_eq!(to_string(&f), "(&(cn=Alice)(sn=Smith))");
@@ -345,7 +354,7 @@ mod tests {
                 assert_eq!(children.len(), 2);
                 assert_eq!(children[0], Filter::Equal("cn".into(), "Alice".into()));
                 assert_eq!(children[1], Filter::Equal("cn".into(), "Bob".into()));
-            }
+            },
             _ => panic!("expected Or, got {:?}", f),
         }
         assert_eq!(to_string(&f), "(|(cn=Alice)(cn=Bob))");
@@ -354,7 +363,10 @@ mod tests {
     #[test]
     fn not_filter() {
         let f = parse("(!(cn=Admin))").expect("parse");
-        assert_eq!(f, Filter::Not(Box::new(Filter::Equal("cn".into(), "Admin".into()))));
+        assert_eq!(
+            f,
+            Filter::Not(Box::new(Filter::Equal("cn".into(), "Admin".into())))
+        );
         assert_eq!(to_string(&f), "(!(cn=Admin))");
     }
 

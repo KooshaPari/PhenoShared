@@ -35,7 +35,9 @@ pub struct RecoveryExecutor {
 
 impl RecoveryExecutor {
     pub fn new(max_parallel: usize) -> Self {
-        Self { max_parallel: max_parallel.max(1) }
+        Self {
+            max_parallel: max_parallel.max(1),
+        }
     }
 
     pub fn dry_run(&self, sessions: &[AgentSession]) -> Vec<RecoveryResult> {
@@ -67,7 +69,10 @@ impl RecoveryExecutor {
                             RecoveryOutcome::LaunchFailed("worker panicked".to_string()),
                         )
                     });
-                    results.push(RecoveryResult { session_id, outcome });
+                    results.push(RecoveryResult {
+                        session_id,
+                        outcome,
+                    });
                 }
             });
         }
@@ -79,8 +84,10 @@ fn launch(session: &AgentSession) -> RecoveryOutcome {
     if !session.auto_resumable() {
         return RecoveryOutcome::SkippedAmbiguous;
     }
-    if !matches!(session.state, SessionState::Active | SessionState::Exited | SessionState::Pending)
-    {
+    if !matches!(
+        session.state,
+        SessionState::Active | SessionState::Exited | SessionState::Pending
+    ) {
         return RecoveryOutcome::UnsupportedSurface;
     }
     if let Err(error) = validate_recipe(&session.resume) {
@@ -192,10 +199,19 @@ mod tests {
 
     #[test]
     fn recovery_result_eq() {
-        let a = RecoveryResult { session_id: "x".into(), outcome: RecoveryOutcome::Resumed };
-        let b = RecoveryResult { session_id: "x".into(), outcome: RecoveryOutcome::Resumed };
+        let a = RecoveryResult {
+            session_id: "x".into(),
+            outcome: RecoveryOutcome::Resumed,
+        };
+        let b = RecoveryResult {
+            session_id: "x".into(),
+            outcome: RecoveryOutcome::Resumed,
+        };
         assert_eq!(a, b);
-        let c = RecoveryResult { session_id: "y".into(), outcome: RecoveryOutcome::DryRun };
+        let c = RecoveryResult {
+            session_id: "y".into(),
+            outcome: RecoveryOutcome::DryRun,
+        };
         assert_ne!(a, c);
     }
 

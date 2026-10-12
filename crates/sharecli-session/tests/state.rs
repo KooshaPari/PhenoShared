@@ -30,10 +30,15 @@ fn surface(id: &str, pid: Option<u32>) -> SurfaceRecord {
 }
 
 fn temp_sidecar() -> PathBuf {
-    let suffix = SystemTime::now().duration_since(UNIX_EPOCH).unwrap().as_nanos();
+    let suffix = SystemTime::now()
+        .duration_since(UNIX_EPOCH)
+        .unwrap()
+        .as_nanos();
     let ordinal = SIDECARE_COUNTER.fetch_add(1, Ordering::Relaxed);
-    std::env::temp_dir()
-        .join(format!("sharecli-sidecar-{}-{suffix}-{ordinal}.jsonl", std::process::id()))
+    std::env::temp_dir().join(format!(
+        "sharecli-sidecar-{}-{suffix}-{ordinal}.jsonl",
+        std::process::id()
+    ))
 }
 
 #[test]
@@ -46,7 +51,9 @@ fn sidecar_returns_latest_exact_surface_and_pid_match() {
     .unwrap();
     let provider = SidecarStateProvider::new(&path);
     assert_eq!(
-        provider.session_id(&surface("pane-1", Some(42)), "codex").unwrap(),
+        provider
+            .session_id(&surface("pane-1", Some(42)), "codex")
+            .unwrap(),
         Some("new".into())
     );
     let _ = fs::remove_file(path);
@@ -61,8 +68,18 @@ fn sidecar_refuses_stale_pid_or_harness_matches() {
     )
     .unwrap();
     let provider = SidecarStateProvider::new(&path);
-    assert_eq!(provider.session_id(&surface("pane-1", Some(7)), "codex").unwrap(), None);
-    assert_eq!(provider.session_id(&surface("pane-1", Some(42)), "forge").unwrap(), None);
+    assert_eq!(
+        provider
+            .session_id(&surface("pane-1", Some(7)), "codex")
+            .unwrap(),
+        None
+    );
+    assert_eq!(
+        provider
+            .session_id(&surface("pane-1", Some(42)), "forge")
+            .unwrap(),
+        None
+    );
     let _ = fs::remove_file(path);
 }
 
@@ -75,7 +92,12 @@ fn newer_pid_mismatch_supersedes_an_older_matching_record() {
     )
     .unwrap();
     let provider = SidecarStateProvider::new(&path);
-    assert_eq!(provider.session_id(&surface("pane-1", Some(42)), "codex").unwrap(), None);
+    assert_eq!(
+        provider
+            .session_id(&surface("pane-1", Some(42)), "codex")
+            .unwrap(),
+        None
+    );
     let _ = fs::remove_file(path);
 }
 
@@ -105,7 +127,9 @@ fn append_record_writes_jsonl_that_provider_reads() {
     .unwrap();
     let provider = SidecarStateProvider::new(&path);
     assert_eq!(
-        provider.session_id(&surface("pane-1", Some(42)), "codex").unwrap(),
+        provider
+            .session_id(&surface("pane-1", Some(42)), "codex")
+            .unwrap(),
         Some("thread-1".into())
     );
     let text = fs::read_to_string(&path).unwrap();

@@ -45,14 +45,19 @@ pub fn parse(input: &str) -> Result<Vec<Entry>, String> {
             }
             continue;
         }
-        let eq = line.find('=').ok_or_else(|| format!("line {}: missing '='", i + 1))?;
+        let eq = line
+            .find('=')
+            .ok_or_else(|| format!("line {}: missing '='", i + 1))?;
         let key_str = line[..eq].trim();
         let value_str = line[eq + 1..].trim();
         let key: KeyPath = key_str.split('.').map(|s| s.trim().to_string()).collect();
         let mut full_key = current_table.clone();
         full_key.extend(key);
         let value = parse_value(value_str)?;
-        out.push(Entry { key: full_key, value });
+        out.push(Entry {
+            key: full_key,
+            value,
+        });
     }
     Ok(out)
 }
@@ -87,8 +92,8 @@ fn parse_value(s: &str) -> Result<Value, String> {
                 ',' if depth == 0 => {
                     items.push(parse_value(inner[start..i].trim())?);
                     start = i + 1;
-                }
-                _ => {}
+                },
+                _ => {},
             }
         }
         let last = inner[start..].trim();
@@ -111,19 +116,22 @@ fn parse_value(s: &str) -> Result<Value, String> {
                 ']' | '}' => depth -= 1,
                 ',' if depth == 0 => {
                     let chunk = inner[start..i].trim();
-                    let eq =
-                        chunk.find('=').ok_or_else(|| format!("inline table entry: {}", chunk))?;
+                    let eq = chunk
+                        .find('=')
+                        .ok_or_else(|| format!("inline table entry: {}", chunk))?;
                     let k = chunk[..eq].trim().to_string();
                     let v = parse_value(chunk[eq + 1..].trim())?;
                     entries.insert(k, v);
                     start = i + 1;
-                }
-                _ => {}
+                },
+                _ => {},
             }
         }
         let last = inner[start..].trim();
         if !last.is_empty() {
-            let eq = last.find('=').ok_or_else(|| format!("inline table entry: {}", last))?;
+            let eq = last
+                .find('=')
+                .ok_or_else(|| format!("inline table entry: {}", last))?;
             let k = last[..eq].trim().to_string();
             let v = parse_value(last[eq + 1..].trim())?;
             entries.insert(k, v);
@@ -173,7 +181,13 @@ mod tests {
     #[test]
     fn root_int() {
         let v = parse("foo = 1").unwrap();
-        assert_eq!(v, vec![Entry { key: vec!["foo".into()], value: Value::Int(1) }]);
+        assert_eq!(
+            v,
+            vec![Entry {
+                key: vec!["foo".into()],
+                value: Value::Int(1)
+            }]
+        );
     }
     #[test]
     fn table_section() {
@@ -184,7 +198,10 @@ mod tests {
     #[test]
     fn dotted_table() {
         let v = parse("[a.b]\nfoo=1\n").unwrap();
-        assert_eq!(v[0].key, vec![String::from("a"), String::from("b"), String::from("foo")]);
+        assert_eq!(
+            v[0].key,
+            vec![String::from("a"), String::from("b"), String::from("foo")]
+        );
     }
     #[test]
     fn string_value() {
@@ -205,7 +222,10 @@ mod tests {
     #[test]
     fn array_value() {
         let v = parse("xs = [1, 2, 3]").unwrap();
-        assert_eq!(v[0].value, Value::Array(vec![Value::Int(1), Value::Int(2), Value::Int(3)]));
+        assert_eq!(
+            v[0].value,
+            Value::Array(vec![Value::Int(1), Value::Int(2), Value::Int(3)])
+        );
     }
     #[test]
     fn inline_table() {

@@ -80,7 +80,10 @@ pub(crate) fn eprint_live_gate_host_watch_sections() -> Result<()> {
     let thermal = ThermalGovernor::new().poll()?;
     let agent_count = count_host_agents();
     eprint!("{}", format_gate_status_section(thermal, agent_count));
-    eprint!("{}", HostResourceWatchJson::capture()?.format_text_section());
+    eprint!(
+        "{}",
+        HostResourceWatchJson::capture()?.format_text_section()
+    );
     let _ = std::io::stderr().flush();
     Ok(())
 }
@@ -199,7 +202,10 @@ pub struct PsAllNdjsonLine {
 }
 
 fn ps_unix_ts_secs() -> u64 {
-    SystemTime::now().duration_since(UNIX_EPOCH).unwrap_or_default().as_secs()
+    SystemTime::now()
+        .duration_since(UNIX_EPOCH)
+        .unwrap_or_default()
+        .as_secs()
 }
 
 /// Emit one compact JSON line and flush (piped stdout is block-buffered; AC-007.49).
@@ -386,7 +392,11 @@ pub fn render_status_csv_body(
     );
     out.push_str("\nrecord,harness,count,memory_mb\n");
     for (h, count, mem) in harness_rows {
-        out.push_str(&format!("harness,{},{},{mem}\n", csv_escape_field(h), count,));
+        out.push_str(&format!(
+            "harness,{},{},{mem}\n",
+            csv_escape_field(h),
+            count,
+        ));
     }
     out.push_str("\nrecord,type,total,idle,max_per_type\n");
     out.push_str(&format!(
@@ -518,7 +528,11 @@ fn print_ps_text_table(
     }
 
     let total_mem: u64 = processes.iter().map(|p| p.memory_mb).sum();
-    println!("\nTotal: {} processes, {} MB memory", processes.len(), total_mem);
+    println!(
+        "\nTotal: {} processes, {} MB memory",
+        processes.len(),
+        total_mem
+    );
 
     if all {
         print_host_agent_scan(proc_source)?;
@@ -542,7 +556,10 @@ async fn render_ps_once(
     if json {
         let payload = build_ps_all_json(project, harness).await?;
         if ndjson {
-            let line = PsAllNdjsonLine { ts: ps_unix_ts_secs(), snapshot: payload };
+            let line = PsAllNdjsonLine {
+                ts: ps_unix_ts_secs(),
+                snapshot: payload,
+            };
             emit_ps_ndjson_line(&line)?;
             eprint_live_gate_host_watch_sections()?;
         } else {
@@ -658,7 +675,7 @@ pub async fn ps(
                 }
             }
             Ok(())
-        }
+        },
     }
 }
 
@@ -760,7 +777,10 @@ pub async fn stop(
             force_kill_preview("all managed processes", count);
             return Ok(());
         }
-        println!("Stopping all managed processes{}...", if force { " (force)" } else { "" });
+        println!(
+            "Stopping all managed processes{}...",
+            if force { " (force)" } else { "" }
+        );
         pool.kill_all().await?;
         println!("All processes stopped.");
         return Ok(());
@@ -771,7 +791,10 @@ pub async fn stop(
             force_kill_preview(&format!("PID {p}"), 1);
             return Ok(());
         }
-        println!("Stopping process {p}{}...", if force { " (force)" } else { "" });
+        println!(
+            "Stopping process {p}{}...",
+            if force { " (force)" } else { "" }
+        );
         pool.kill(p).await?;
         println!("Process {p} stopped.");
         return Ok(());
@@ -842,7 +865,10 @@ async fn render_status_once(verbose: bool, json: bool, csv: bool, ndjson: bool) 
         let mut payload = build_status_json().await?;
         payload.pool = Some(Box::new(build_pool_json().await?));
         if ndjson {
-            let line = StatusNdjsonLine { ts: ps_unix_ts_secs(), snapshot: payload };
+            let line = StatusNdjsonLine {
+                ts: ps_unix_ts_secs(),
+                snapshot: payload,
+            };
             emit_ps_ndjson_line(&line)?;
             eprint_live_gate_host_watch_sections()?;
         } else {
@@ -864,8 +890,10 @@ async fn render_status_once(verbose: bool, json: bool, csv: bool, ndjson: bool) 
             entry.0 += 1;
             entry.1 += proc.memory_mb;
         }
-        let mut harness_rows: Vec<(String, usize, u64)> =
-            by_harness.into_iter().map(|(h, (count, mem))| (h, count, mem)).collect();
+        let mut harness_rows: Vec<(String, usize, u64)> = by_harness
+            .into_iter()
+            .map(|(h, (count, mem))| (h, count, mem))
+            .collect();
         harness_rows.sort_by(|a, b| a.0.cmp(&b.0));
         let runtime = get_shared_runtime();
         let pool_status = runtime.status().await;
@@ -906,14 +934,25 @@ async fn render_status_once(verbose: bool, json: bool, csv: bool, ndjson: bool) 
     println!("\n=== Shared Runtime Pool ===\n");
     println!("{:<10} {:<10} {:<10}", "TYPE", "TOTAL", "IDLE");
     println!("{}", "-".repeat(30));
-    println!("{:<10} {:<10} {:<10}", "node", pool_status.node_total, pool_status.node_idle);
-    println!("{:<10} {:<10} {:<10}", "bun", pool_status.bun_total, pool_status.bun_idle);
+    println!(
+        "{:<10} {:<10} {:<10}",
+        "node", pool_status.node_total, pool_status.node_idle
+    );
+    println!(
+        "{:<10} {:<10} {:<10}",
+        "bun", pool_status.bun_total, pool_status.bun_idle
+    );
     println!("\nMax per type: {}", pool_status.max_per_type);
 
     // Show system memory
     let (used, total) = pool.system_memory_usage().await;
     println!("\n=== System Memory ===\n");
-    println!("Used: {} MB / {} MB ({}%)", used, total, (used * 100) / total);
+    println!(
+        "Used: {} MB / {} MB ({}%)",
+        used,
+        total,
+        (used * 100) / total
+    );
 
     print_live_gate_section()?;
     print_live_host_watch_section()?;
@@ -933,12 +972,18 @@ async fn render_status_once(verbose: bool, json: bool, csv: bool, ndjson: bool) 
         print!("{}", st.format_status_section());
     }
 
-    print!("{}", global_write_serialize_meters().format_status_section());
+    print!(
+        "{}",
+        global_write_serialize_meters().format_status_section()
+    );
 
     if verbose {
         println!("\n=== Detailed Process List ===\n");
         for proc in &processes {
-            println!("PID: {}, Name: {}, Memory: {} MB", proc.pid, proc.name, proc.memory_mb);
+            println!(
+                "PID: {}, Name: {}, Memory: {} MB",
+                proc.pid, proc.name, proc.memory_mb
+            );
             if !proc.cmd.is_empty() {
                 println!("  Cmd: {}", proc.cmd.join(" "));
             }
@@ -990,7 +1035,7 @@ pub async fn status(verbose: bool, json: bool, csv: bool, watch: Option<u64>) ->
                 }
             }
             Ok(())
-        }
+        },
     }
 }
 
@@ -1000,27 +1045,27 @@ pub fn config(cfg_cmd: &ConfigCmd) -> Result<()> {
         ConfigCmd::Init => {
             Config::init()?;
             println!("Configuration initialized.");
-        }
+        },
         ConfigCmd::Validate => {
             let cfg = Config::load()?;
             println!("Configuration is valid.");
             println!("  Projects: {}", cfg.projects.len());
-        }
+        },
         ConfigCmd::Show => {
             let cfg = Config::load()?;
             let serialized = toml::to_string_pretty(&cfg)?;
             println!("{}", serialized);
-        }
+        },
         ConfigCmd::Get { key: _ } => {
             let cfg = Config::load()?;
             println!("Projects:");
             for (name, path) in &cfg.projects {
                 println!("  {} = {}", name, path);
             }
-        }
+        },
         ConfigCmd::Set { .. } => {
             println!("Set not implemented yet.");
-        }
+        },
     }
     Ok(())
 }
@@ -1030,7 +1075,10 @@ pub fn config(cfg_cmd: &ConfigCmd) -> Result<()> {
 /// Used by the bulk project-group operations and exposed for unit testing.
 #[cfg_attr(not(test), allow(dead_code))]
 pub fn filter_by_project<'a>(processes: &'a [ProcessInfo], project: &str) -> Vec<&'a ProcessInfo> {
-    processes.iter().filter(|p| p.project.as_deref() == Some(project)).collect()
+    processes
+        .iter()
+        .filter(|p| p.project.as_deref() == Some(project))
+        .collect()
 }
 
 /// Project management (async — bulk ops need an async runtime)
@@ -1041,14 +1089,14 @@ pub async fn project(proj_cmd: &ProjectCmd) -> Result<()> {
             cfg.projects.insert(name.clone(), expand_path(path));
             cfg.save()?;
             println!("Added project '{}'", name);
-        }
+        },
         ProjectCmd::Remove { name } => {
             let mut cfg = Config::load()?;
             if cfg.projects.remove(name).is_some() {
                 cfg.save()?;
                 println!("Removed project '{}'", name);
             }
-        }
+        },
         ProjectCmd::List => {
             let cfg = Config::load()?;
             if cfg.projects.is_empty() {
@@ -1059,7 +1107,7 @@ pub async fn project(proj_cmd: &ProjectCmd) -> Result<()> {
                     println!("  {} -> {}", name, path);
                 }
             }
-        }
+        },
         ProjectCmd::Show { name } => {
             let cfg = Config::load()?;
             if let Some(path) = cfg.projects.get(name) {
@@ -1067,11 +1115,12 @@ pub async fn project(proj_cmd: &ProjectCmd) -> Result<()> {
                 println!("Path:    {}", path);
                 println!("Exists:  {}", std::path::Path::new(path).exists());
             }
-        }
+        },
         ProjectCmd::Discover { path } => {
             let cfg = config::global();
-            let base =
-                PathBuf::from(expand_path(path.as_deref().unwrap_or(&cfg.paths.discovery_path)));
+            let base = PathBuf::from(expand_path(
+                path.as_deref().unwrap_or(&cfg.paths.discovery_path),
+            ));
             println!("Scanning {:?} for projects...", base);
 
             let mut found = Vec::new();
@@ -1079,8 +1128,11 @@ pub async fn project(proj_cmd: &ProjectCmd) -> Result<()> {
                 for entry in entries.flatten() {
                     let p = entry.path();
                     if p.is_dir() && p.join(".git").exists() {
-                        let name =
-                            p.file_name().and_then(|n| n.to_str()).unwrap_or("unknown").to_string();
+                        let name = p
+                            .file_name()
+                            .and_then(|n| n.to_str())
+                            .unwrap_or("unknown")
+                            .to_string();
                         found.push((name, p.to_string_lossy().to_string()));
                     }
                 }
@@ -1090,11 +1142,13 @@ pub async fn project(proj_cmd: &ProjectCmd) -> Result<()> {
             for (name, path) in &found {
                 println!("  {} -> {}", name, path);
             }
-        }
+        },
         ProjectCmd::Generate { output } => {
             let cfg = config::global();
             let out_path = PathBuf::from(expand_path(
-                output.as_deref().unwrap_or(&cfg.paths.default_compose_output),
+                output
+                    .as_deref()
+                    .unwrap_or(&cfg.paths.default_compose_output),
             ));
 
             let sharewei_port = cfg.port.sharewei_port;
@@ -1119,22 +1173,30 @@ pub async fn project(proj_cmd: &ProjectCmd) -> Result<()> {
             }
 
             std::fs::write(&out_path, &yaml)?;
-            println!("Generated process-compose.yml with {} services", cfg.projects.len());
+            println!(
+                "Generated process-compose.yml with {} services",
+                cfg.projects.len()
+            );
             println!("Written to: {:?}", out_path);
-        }
+        },
         ProjectCmd::Start { name, harness } => {
             project_group_start(name, harness.as_deref()).await?;
-        }
+        },
         ProjectCmd::Stop { name, force, yes } => {
             project_group_stop(name, *force, *yes).await?;
-        }
-        ProjectCmd::Restart { name, harness, force, yes } => {
+        },
+        ProjectCmd::Restart {
+            name,
+            harness,
+            force,
+            yes,
+        } => {
             project_group_stop(name, *force, *yes).await?;
             project_group_start(name, harness.as_deref()).await?;
-        }
+        },
         ProjectCmd::Status { name, json } => {
             project_group_status(name, *json).await?;
-        }
+        },
     }
     Ok(())
 }
@@ -1149,7 +1211,10 @@ async fn project_group_start(name: &str, harness: Option<&str>) -> Result<()> {
     let project_path = if let Some(path) = cfg.projects.get(name) {
         PathBuf::from(expand_path(path))
     } else {
-        anyhow::bail!("Unknown project: '{}'. Add with 'sharecli project add <name> <path>'", name);
+        anyhow::bail!(
+            "Unknown project: '{}'. Add with 'sharecli project add <name> <path>'",
+            name
+        );
     };
 
     if !project_path.exists() {
@@ -1159,7 +1224,10 @@ async fn project_group_start(name: &str, harness: Option<&str>) -> Result<()> {
     let harness_name = harness.unwrap_or("sh");
     let pool = ProcessPool::new();
 
-    println!("Starting '{}' harness for project group '{}'...", harness_name, name);
+    println!(
+        "Starting '{}' harness for project group '{}'...",
+        harness_name, name
+    );
     let info = pool
         .spawn(
             harness_name,
@@ -1170,7 +1238,10 @@ async fn project_group_start(name: &str, harness: Option<&str>) -> Result<()> {
         )
         .await?;
 
-    println!("Affected: 1 process started. PID {} ({})", info.pid, info.name);
+    println!(
+        "Affected: 1 process started. PID {} ({})",
+        info.pid, info.name
+    );
     Ok(())
 }
 
@@ -1206,10 +1277,10 @@ async fn project_group_stop(name: &str, force: bool, yes: bool) -> Result<()> {
                     println!("Stopped {} ({})", proc.pid, proc.name);
                 }
                 stopped += 1;
-            }
+            },
             Err(e) => {
                 failures.push(format!("PID {} ({}): {}", proc.pid, proc.name, e));
-            }
+            },
         }
     }
     progress.finish(&format!("Affected: {stopped}/{total} processes stopped"));
@@ -1250,8 +1321,15 @@ async fn project_group_status(name: &str, json: bool) -> Result<()> {
         return Ok(());
     }
 
-    println!("=== Project '{}' — {} process(es) ===\n", name, processes.len());
-    println!("{:<8} {:<20} {:<12} {:<15}", "PID", "NAME", "MEM(MB)", "HARNESS");
+    println!(
+        "=== Project '{}' — {} process(es) ===\n",
+        name,
+        processes.len()
+    );
+    println!(
+        "{:<8} {:<20} {:<12} {:<15}",
+        "PID", "NAME", "MEM(MB)", "HARNESS"
+    );
     println!("{}", "-".repeat(58));
 
     for proc in &processes {
@@ -1263,7 +1341,11 @@ async fn project_group_status(name: &str, json: bool) -> Result<()> {
     }
 
     let total_mem: u64 = processes.iter().map(|p| p.memory_mb).sum();
-    println!("\nTotal: {} processes, {} MB memory", processes.len(), total_mem);
+    println!(
+        "\nTotal: {} processes, {} MB memory",
+        processes.len(),
+        total_mem
+    );
     Ok(())
 }
 
@@ -1271,7 +1353,10 @@ async fn project_group_status(name: &str, json: bool) -> Result<()> {
 pub async fn run_pool(harness_type: &str, project: &str) -> Result<()> {
     let runtime = get_shared_runtime();
     let result = runtime.run_with_pool(harness_type, project, "").await?;
-    println!("Pooled {} process {} for project {}", harness_type, result.0, project);
+    println!(
+        "Pooled {} process {} for project {}",
+        harness_type, result.0, project
+    );
     println!("Output: {}", result.1);
     Ok(())
 }
@@ -1303,7 +1388,10 @@ async fn render_pool_once(json: bool, csv: bool, ndjson: bool) -> Result<()> {
         let mut payload = build_pool_json().await?;
         payload.status = Some(Box::new(build_status_json().await?));
         if ndjson {
-            let line = PoolNdjsonLine { ts: ps_unix_ts_secs(), snapshot: payload };
+            let line = PoolNdjsonLine {
+                ts: ps_unix_ts_secs(),
+                snapshot: payload,
+            };
             emit_ps_ndjson_line(&line)?;
             eprint_live_gate_host_watch_sections()?;
         } else {
@@ -1325,7 +1413,10 @@ async fn render_pool_once(json: bool, csv: bool, ndjson: bool) -> Result<()> {
     let health = runtime.health_check().await;
 
     println!("=== Shared Runtime Pool Status ===\n");
-    println!("{:<10} {:<10} {:<10} {:<10}", "TYPE", "TOTAL", "IDLE", "MAX");
+    println!(
+        "{:<10} {:<10} {:<10} {:<10}",
+        "TYPE", "TOTAL", "IDLE", "MAX"
+    );
     println!("{}", "-".repeat(40));
     println!(
         "{:<10} {:<10} {:<10} {:<10}",
@@ -1400,7 +1491,7 @@ pub async fn pool_status(json: bool, csv: bool, watch: Option<u64>) -> Result<()
                 }
             }
             Ok(())
-        }
+        },
     }
 }
 
@@ -1439,7 +1530,10 @@ async fn render_health_once(
     if json {
         let payload = build_health_json().await?;
         if ndjson {
-            let line = HealthNdjsonLine { ts: ps_unix_ts_secs(), snapshot: payload };
+            let line = HealthNdjsonLine {
+                ts: ps_unix_ts_secs(),
+                snapshot: payload,
+            };
             emit_ps_ndjson_line(&line)?;
             eprint_live_gate_host_watch_sections()?;
         } else {
@@ -1467,7 +1561,14 @@ async fn render_health_once(
     let pool_status = runtime.status().await;
     let health = runtime.health_check().await;
 
-    println!("\nShared runtime health: {}", if health.healthy { "HEALTHY" } else { "DEGRADED" });
+    println!(
+        "\nShared runtime health: {}",
+        if health.healthy {
+            "HEALTHY"
+        } else {
+            "DEGRADED"
+        }
+    );
 
     if !health.issues.is_empty() {
         println!("\nIssues detected:");
@@ -1543,7 +1644,7 @@ pub async fn health(
                 }
             }
             Ok(())
-        }
+        },
     }
 }
 
@@ -1579,21 +1680,40 @@ pub async fn check_limits(project: &str) -> Result<()> {
 
     println!("=== Resource Limits for '{}' ===\n", project);
 
-    println!("Memory: {} MB / {} MB", check.memory_mb, check.memory_limit_mb);
+    println!(
+        "Memory: {} MB / {} MB",
+        check.memory_mb, check.memory_limit_mb
+    );
     if check.memory_ok {
         println!("  Status: OK");
     } else {
-        println!("  Status: EXCEEDED (over by {} MB)", check.memory_mb - check.memory_limit_mb);
+        println!(
+            "  Status: EXCEEDED (over by {} MB)",
+            check.memory_mb - check.memory_limit_mb
+        );
     }
 
-    println!("\nProcesses: {} / {}", check.process_count, check.max_processes);
+    println!(
+        "\nProcesses: {} / {}",
+        check.process_count, check.max_processes
+    );
     if check.processes_ok {
         println!("  Status: OK");
     } else {
-        println!("  Status: EXCEEDED (over by {})", check.process_count - check.max_processes);
+        println!(
+            "  Status: EXCEEDED (over by {})",
+            check.process_count - check.max_processes
+        );
     }
 
-    println!("\nOverall: {}", if check.overall_ok { "OK" } else { "LIMIT EXCEEDED" });
+    println!(
+        "\nOverall: {}",
+        if check.overall_ok {
+            "OK"
+        } else {
+            "LIMIT EXCEEDED"
+        }
+    );
 
     Ok(())
 }
@@ -1647,7 +1767,9 @@ mod project_group_tests {
         ];
         let result = filter_by_project(&procs, "proj-a");
         assert_eq!(result.len(), 2);
-        assert!(result.iter().all(|p| p.project.as_deref() == Some("proj-a")));
+        assert!(result
+            .iter()
+            .all(|p| p.project.as_deref() == Some("proj-a")));
     }
 
     #[test]

@@ -47,12 +47,23 @@ pub fn is_ipv6(s: &str) -> bool {
     if double_colon_count > 1 {
         return false;
     }
-    let halves: Vec<&str> =
-        if double_colon_count == 1 { s.splitn(2, "::").collect() } else { vec![s] };
+    let halves: Vec<&str> = if double_colon_count == 1 {
+        s.splitn(2, "::").collect()
+    } else {
+        vec![s]
+    };
     let head = halves[0];
     let tail = if halves.len() > 1 { halves[1] } else { "" };
-    let head_parts: Vec<&str> = if head.is_empty() { vec![] } else { head.split(':').collect() };
-    let tail_parts: Vec<&str> = if tail.is_empty() { vec![] } else { tail.split(':').collect() };
+    let head_parts: Vec<&str> = if head.is_empty() {
+        vec![]
+    } else {
+        head.split(':').collect()
+    };
+    let tail_parts: Vec<&str> = if tail.is_empty() {
+        vec![]
+    } else {
+        tail.split(':').collect()
+    };
     if head_parts.len() + tail_parts.len() > 8 {
         return false;
     }

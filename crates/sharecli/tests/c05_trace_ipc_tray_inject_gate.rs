@@ -48,7 +48,10 @@ fn assert_hex_segment(segment: &str, expected_len: usize, label: &str) {
 fn parse_traceparent(header: &str) -> Result<(&str, &str, &str, &str), String> {
     let parts: Vec<&str> = header.split('-').collect();
     if parts.len() != 4 {
-        return Err(format!("traceparent must have 4 dash-separated parts; got {}", parts.len()));
+        return Err(format!(
+            "traceparent must have 4 dash-separated parts; got {}",
+            parts.len()
+        ));
     }
     Ok((parts[0], parts[1], parts[2], parts[3]))
 }
@@ -100,8 +103,14 @@ fn traceparent_header_format() {
     assert_eq!(rebuilt, VALID_TRACEPARENT);
 
     // Reject headers with the wrong number of segments.
-    assert!(parse_traceparent("00-aaa-bbb").is_err(), "3-segment header must be rejected");
-    assert!(parse_traceparent("00-aaa-bbb-ccc-ddd").is_err(), "5-segment header must be rejected");
+    assert!(
+        parse_traceparent("00-aaa-bbb").is_err(),
+        "3-segment header must be rejected"
+    );
+    assert!(
+        parse_traceparent("00-aaa-bbb-ccc-ddd").is_err(),
+        "5-segment header must be rejected"
+    );
 
     // Reject a header whose version is not `"00"`.
     let bad_version = "01-4bf92f3577b34da6a3ce929d0e0e4736-00f067aa0ba902b7-01";
@@ -228,7 +237,10 @@ fn ipc_trace_context_propagation() {
         .and_then(|v| v.as_str())
         .expect("traceparent must be present in decoded envelope");
 
-    assert_eq!(recovered, VALID_TRACEPARENT, "trace context must survive IPC JSON round-trip");
+    assert_eq!(
+        recovered, VALID_TRACEPARENT,
+        "trace context must survive IPC JSON round-trip"
+    );
 
     // Verify the three sub-components are still individually valid.
     let (ver, tid, pid, flags) =
@@ -256,7 +268,10 @@ fn tray_trace_context_passthrough() {
 
     // The forwarded value must be identical.
     let forwarded = extract_traceparent(&outgoing).expect("traceparent must be forwarded by tray");
-    assert_eq!(forwarded, VALID_TRACEPARENT, "tray must pass trace context through unchanged");
+    assert_eq!(
+        forwarded, VALID_TRACEPARENT,
+        "tray must pass trace context through unchanged"
+    );
 
     // --- Multi-hop scenario: operator → tray → IPC ---------------------
     // Build a second-generation traceparent to simulate a child span.

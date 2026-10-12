@@ -68,9 +68,13 @@ fn recovery_plan_keeps_only_fresh_latest_surface_sessions() {
             ObservationKind::Discovered,
         ))
         .unwrap();
-    store.upsert(&AgentSession::codex("legacy-only", "/tmp/project")).unwrap();
+    store
+        .upsert(&AgentSession::codex("legacy-only", "/tmp/project"))
+        .unwrap();
 
-    let plan = SessionService::new(store).recovery_plan(Duration::hours(1)).unwrap();
+    let plan = SessionService::new(store)
+        .recovery_plan(Duration::hours(1))
+        .unwrap();
 
     assert_eq!(plan.len(), 1);
     assert_eq!(plan[0].session_id, "live-id");
@@ -88,7 +92,10 @@ fn recovery_plan_rejects_malformed_observation_time() {
         ))
         .unwrap();
 
-    assert!(SessionService::new(store).recovery_plan(Duration::hours(1)).unwrap().is_empty());
+    assert!(SessionService::new(store)
+        .recovery_plan(Duration::hours(1))
+        .unwrap()
+        .is_empty());
 }
 
 #[test]
@@ -112,7 +119,9 @@ fn future_observation_cannot_replace_current_surface_evidence() {
         ))
         .unwrap();
 
-    let plan = SessionService::new(store).recovery_plan(Duration::hours(1)).unwrap();
+    let plan = SessionService::new(store)
+        .recovery_plan(Duration::hours(1))
+        .unwrap();
     assert_eq!(plan.len(), 1);
     assert_eq!(plan[0].session_id, "current-id");
 }
@@ -138,6 +147,13 @@ fn delayed_older_observation_cannot_replace_newer_surface_evidence() {
         ))
         .unwrap();
 
-    let plan = SessionService::new(store).recovery_plan(Duration::hours(1)).unwrap();
-    assert_eq!(plan.iter().map(|s| s.session_id.as_str()).collect::<Vec<_>>(), ["newer-id"]);
+    let plan = SessionService::new(store)
+        .recovery_plan(Duration::hours(1))
+        .unwrap();
+    assert_eq!(
+        plan.iter()
+            .map(|s| s.session_id.as_str())
+            .collect::<Vec<_>>(),
+        ["newer-id"]
+    );
 }

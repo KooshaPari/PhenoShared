@@ -67,11 +67,19 @@ pub struct Response {
 
 impl Response {
     fn ok(id: u64, result: impl Serialize) -> Self {
-        Self { id, result: serde_json::to_value(result).unwrap_or(Value::Null), error: None }
+        Self {
+            id,
+            result: serde_json::to_value(result).unwrap_or(Value::Null),
+            error: None,
+        }
     }
 
     fn err(id: u64, msg: impl std::fmt::Display) -> Self {
-        Self { id, result: Value::Null, error: Some(msg.to_string()) }
+        Self {
+            id,
+            result: Value::Null,
+            error: Some(msg.to_string()),
+        }
     }
 }
 
@@ -362,10 +370,16 @@ impl Handler {
     pub async fn new() -> Result<Self> {
         let pool = Arc::new(ProcessPool::new());
         let config = Arc::new(RwLock::new(Config::load().unwrap_or_default()));
-        let path =
-            session_database_path(std::env::var_os("SHARECLI_SESSION_DB"), dirs::data_local_dir())?;
+        let path = session_database_path(
+            std::env::var_os("SHARECLI_SESSION_DB"),
+            dirs::data_local_dir(),
+        )?;
         let sessions = Arc::new(SessionStore::open(path)?);
-        Ok(Self { pool, config, sessions })
+        Ok(Self {
+            pool,
+            config,
+            sessions,
+        })
     }
 
     async fn capture_pool_snapshot(
@@ -428,24 +442,29 @@ impl Handler {
                     .and_then(Value::as_str)
                     .ok_or_else(|| anyhow::anyhow!("session.inspect: missing id"))?;
                 Ok(serde_json::to_value(self.sessions.get(id)?)?)
-            }
+            },
 
             "session.observe" => {
                 let observation: SessionObservation = serde_json::from_value(
-                    req.params.get("observation").cloned().unwrap_or_else(|| req.params.clone()),
+                    req.params
+                        .get("observation")
+                        .cloned()
+                        .unwrap_or_else(|| req.params.clone()),
                 )?;
                 let sequence = self.sessions.append_observation(&observation)?;
                 Ok(serde_json::json!({"sequence": sequence, "surface_id": observation.surface.id}))
-            }
+            },
 
             "session.observations" => {
                 let surface_id = req.params.get("surface_id").and_then(Value::as_str);
-                Ok(serde_json::to_value(self.sessions.observations(surface_id)?)?)
-            }
+                Ok(serde_json::to_value(
+                    self.sessions.observations(surface_id)?,
+                )?)
+            },
 
             "session.compact" => {
                 Ok(serde_json::json!({"removed": self.sessions.compact_observations()?}))
-            }
+            },
 
             "layout.list" => Ok(serde_json::to_value(self.sessions.list_layouts()?)?),
 
@@ -456,67 +475,88 @@ impl Handler {
                     .and_then(Value::as_str)
                     .ok_or_else(|| anyhow::anyhow!("layout.inspect: missing id"))?;
                 Ok(serde_json::to_value(self.sessions.get_layout(id)?)?)
-            }
+            },
 
             "layout.save" => {
                 let snapshot: LayoutSnapshot = serde_json::from_value(
-                    req.params.get("snapshot").cloned().unwrap_or_else(|| req.params.clone()),
+                    req.params
+                        .get("snapshot")
+                        .cloned()
+                        .unwrap_or_else(|| req.params.clone()),
                 )?;
                 let id = snapshot.id.clone();
                 self.sessions.save_layout(&snapshot)?;
                 Ok(serde_json::json!({"id": id}))
-            }
+            },
 
             "recovery.plan" => {
                 let max_age_seconds = recovery_max_age_seconds(&req.params)?;
-                Ok(serde_json::to_value(
-                    self.sessions.recovery_plan(Duration::seconds(max_age_seconds as i64))?,
-                )?)
-            }
+                Ok(serde_json::to_value(self.sessions.recovery_plan(
+                    Duration::seconds(max_age_seconds as i64),
+                )?)?)
+            },
 
             "recovery.execute" => {
-                let execute = req.params.get("execute").and_then(Value::as_bool).unwrap_or(false);
-                let max_parallel =
-                    req.params.get("max_parallel").and_then(Value::as_u64).unwrap_or(4) as usize;
+                let execute = req
+                    .params
+                    .get("execute")
+                    .and_then(Value::as_bool)
+                    .unwrap_or(false);
+                let max_parallel = req
+                    .params
+                    .get("max_parallel")
+                    .and_then(Value::as_u64)
+                    .unwrap_or(4) as usize;
                 let max_age_seconds = recovery_max_age_seconds(&req.params)?;
-                let sessions =
-                    self.sessions.recovery_plan(Duration::seconds(max_age_seconds as i64))?;
+                let sessions = self
+                    .sessions
+                    .recovery_plan(Duration::seconds(max_age_seconds as i64))?;
                 let executor = RecoveryExecutor::new(max_parallel);
-                let results =
-                    if execute { executor.execute(&sessions) } else { executor.dry_run(&sessions) };
+                let results = if execute {
+                    executor.execute(&sessions)
+                } else {
+                    executor.dry_run(&sessions)
+                };
                 Ok(serde_json::to_value(results)?)
-            }
+            },
 
             "process.list" => {
                 self.pool.refresh().await;
-                let procs: Vec<ProcessSummary> =
-                    self.pool.list().await.into_iter().map(ProcessSummary::from).collect();
+                let procs: Vec<ProcessSummary> = self
+                    .pool
+                    .list()
+                    .await
+                    .into_iter()
+                    .map(ProcessSummary::from)
+                    .collect();
                 Ok(serde_json::to_value(procs)?)
-            }
+            },
 
             "process.kill" => {
-                let pid: u32 =
-                    req.params["pid"].as_u64().ok_or_else(|| anyhow::anyhow!("missing pid"))?
-                        as u32;
+                let pid: u32 = req.params["pid"]
+                    .as_u64()
+                    .ok_or_else(|| anyhow::anyhow!("missing pid"))?
+                    as u32;
                 self.pool.kill(pid).await?;
                 Ok(Value::Bool(true))
-            }
+            },
 
             "process.kill_all" => {
                 self.pool.kill_all().await?;
                 Ok(Value::Bool(true))
-            }
+            },
 
             "process.cmdline" => {
-                let pid: u32 =
-                    req.params["pid"].as_u64().ok_or_else(|| anyhow::anyhow!("missing pid"))?
-                        as u32;
+                let pid: u32 = req.params["pid"]
+                    .as_u64()
+                    .ok_or_else(|| anyhow::anyhow!("missing pid"))?
+                    as u32;
                 // Per plan §3.3: return empty Vec when the pid is gone or the
                 // cmdline is unreadable. The Swift UI renders "No command line
                 // available" when the list is empty.
                 let cmd = read_pid_cmdline(pid).unwrap_or_default();
                 Ok(serde_json::to_value(CmdlineResponse { cmd })?)
-            }
+            },
 
             "health.status" => {
                 self.pool.refresh().await;
@@ -536,34 +576,35 @@ impl Handler {
                     status,
                 };
                 Ok(serde_json::to_value(snap)?)
-            }
+            },
 
             "pool.status" => {
                 let (gate, host_watch) = capture_gate_host_watch()?;
                 let mut snap = self.capture_pool_snapshot(gate, host_watch).await;
                 snap.status = Some(Box::new(self.capture_status_snapshot().await?));
                 Ok(serde_json::to_value(snap)?)
-            }
+            },
 
             "status.snapshot" => {
                 let mut snap = self.capture_status_snapshot().await?;
                 let (gate, host_watch) = capture_gate_host_watch()?;
                 snap.pool = Some(Box::new(self.capture_pool_snapshot(gate, host_watch).await));
                 Ok(serde_json::to_value(snap)?)
-            }
+            },
 
             "config.get" => {
                 let cfg = self.config.read().await.clone();
                 Ok(serde_json::to_value(cfg)?)
-            }
+            },
 
             "config.set" => {
-                let key =
-                    req.params["key"].as_str().ok_or_else(|| anyhow::anyhow!("missing key"))?;
+                let key = req.params["key"]
+                    .as_str()
+                    .ok_or_else(|| anyhow::anyhow!("missing key"))?;
                 let value = &req.params["value"];
                 self.apply_config_patch(key, value).await?;
                 Ok(Value::Bool(true))
-            }
+            },
 
             "monitoring.report" => {
                 self.pool.refresh().await;
@@ -606,7 +647,7 @@ impl Handler {
                     status,
                 };
                 Ok(serde_json::to_value(snap)?)
-            }
+            },
 
             "log.tail" => {
                 let since_id = req.params["since_id"].as_u64().unwrap_or(0);
@@ -617,7 +658,7 @@ impl Handler {
                     "lines": lines,
                     "last_id": last_id,
                 }))
-            }
+            },
 
             other => Err(anyhow::anyhow!("unknown method: {other}")),
         }
@@ -645,9 +686,11 @@ fn set_nested(val: &mut Value, path: &[&str], new: Value) -> Result<(), String> 
     }
     match val {
         Value::Object(map) => {
-            let entry = map.entry(path[0]).or_insert(Value::Object(serde_json::Map::new()));
+            let entry = map
+                .entry(path[0])
+                .or_insert(Value::Object(serde_json::Map::new()));
             set_nested(entry, &path[1..], new)
-        }
+        },
         _ => Err(format!("expected object at segment '{}'", path[0])),
     }
 }
@@ -707,7 +750,8 @@ fn read_pid_cmdline(pid: u32) -> Result<Vec<String>> {
 fn read_cmdline_from_proc_path(path: &std::path::Path) -> Result<Vec<String>> {
     let mut bytes = Vec::new();
     let mut file = fs::File::open(path).with_context(|| format!("open {}", path.display()))?;
-    file.read_to_end(&mut bytes).with_context(|| format!("read {}", path.display()))?;
+    file.read_to_end(&mut bytes)
+        .with_context(|| format!("read {}", path.display()))?;
 
     // `/proc/.../cmdline` ends with a trailing NUL; split_and_drop leaves
     // one empty trailing token, which we discard.
@@ -825,7 +869,9 @@ mod cmdline_tests {
     #[test]
     fn split_nul_tokens_lossy_for_non_utf8() {
         // 0xFF is not valid UTF-8; we still want to surface the readable part.
-        let bytes: &[u8] = &[b'n', b'o', b'd', b'e', 0, 0xFF, 0xFE, 0, b'd', b'o', b'n', b'e', 0];
+        let bytes: &[u8] = &[
+            b'n', b'o', b'd', b'e', 0, 0xff, 0xfe, 0, b'd', b'o', b'n', b'e', 0,
+        ];
         let got = split_nul_tokens(bytes);
         assert_eq!(got.len(), 3);
         assert_eq!(got[0], "node");
@@ -834,9 +880,14 @@ mod cmdline_tests {
 
     #[test]
     fn cmdline_response_serializes_to_expected_shape() {
-        let r = CmdlineResponse { cmd: vec!["node".into(), "server.js".into()] };
+        let r = CmdlineResponse {
+            cmd: vec!["node".into(), "server.js".into()],
+        };
         let v = serde_json::to_value(&r).unwrap();
-        let arr = v.get("cmd").and_then(|x| x.as_array()).expect("cmd is array");
+        let arr = v
+            .get("cmd")
+            .and_then(|x| x.as_array())
+            .expect("cmd is array");
         assert_eq!(arr.len(), 2);
         assert_eq!(arr[0], "node");
         assert_eq!(arr[1], "server.js");
@@ -854,7 +905,7 @@ mod cmdline_tests {
     #[test]
     fn read_pid_cmdline_returns_empty_for_nonexistent_pid() {
         // Use a wildly high pid that's almost certainly unused.
-        let got = read_pid_cmdline(0x7FFFFFFE).unwrap_or_default();
+        let got = read_pid_cmdline(0x7ffffffe).unwrap_or_default();
         assert!(got.is_empty(), "missing pid must yield empty cmdline");
     }
 }
@@ -890,7 +941,10 @@ mod wire_type_tests {
     #[test]
     fn request_rejects_missing_method() {
         let raw = r#"{"id":1}"#;
-        assert!(serde_json::from_str::<Request>(raw).is_err(), "missing method must fail");
+        assert!(
+            serde_json::from_str::<Request>(raw).is_err(),
+            "missing method must fail"
+        );
     }
 
     /// Response::ok serializes with null error and provided result.
@@ -995,7 +1049,10 @@ mod wire_type_tests {
     fn set_nested_error_on_non_object() {
         let mut val = serde_json::json!({"a": "string"});
         let err = set_nested(&mut val, &["a", "b"], serde_json::json!(1));
-        assert!(err.is_err(), "must fail when 'a' is a string, not an object");
+        assert!(
+            err.is_err(),
+            "must fail when 'a' is a string, not an object"
+        );
     }
 
     /// set_nested with empty path replaces the entire value.
@@ -1018,14 +1075,20 @@ mod wire_type_tests {
     #[test]
     fn recovery_max_age_rejects_below_one() {
         let params = serde_json::json!({"max_age_seconds": 0});
-        assert!(recovery_max_age_seconds(&params).is_err(), "0 must be rejected");
+        assert!(
+            recovery_max_age_seconds(&params).is_err(),
+            "0 must be rejected"
+        );
     }
 
     /// recovery_max_age_seconds rejects values above 604800 (7 days).
     #[test]
     fn recovery_max_age_rejects_above_max() {
         let params = serde_json::json!({"max_age_seconds": 604801});
-        assert!(recovery_max_age_seconds(&params).is_err(), "604801 must be rejected");
+        assert!(
+            recovery_max_age_seconds(&params).is_err(),
+            "604801 must be rejected"
+        );
     }
 
     /// recovery_max_age_seconds accepts boundary value 604800.
@@ -1076,7 +1139,10 @@ mod dispatch_tests {
         assert_eq!(resp.id, 0, "parse error uses id=0");
         assert!(resp.error.is_some(), "must have error");
         let msg = resp.error.unwrap();
-        assert!(msg.contains("parse error"), "must mention parse error: {msg}");
+        assert!(
+            msg.contains("parse error"),
+            "must mention parse error: {msg}"
+        );
     }
 
     /// dispatch with unknown method returns an error response.
@@ -1096,7 +1162,11 @@ mod dispatch_tests {
         let handler = Handler::with_session_store(SessionStore::open_memory().unwrap());
         let raw = r#"{"id":1,"method":"session.list","params":{}}"#;
         let resp = handler.dispatch(raw).await;
-        assert!(resp.error.is_none(), "session.list should not error: {:?}", resp.error);
+        assert!(
+            resp.error.is_none(),
+            "session.list should not error: {:?}",
+            resp.error
+        );
         assert!(resp.result.is_array(), "result must be an array");
     }
 }

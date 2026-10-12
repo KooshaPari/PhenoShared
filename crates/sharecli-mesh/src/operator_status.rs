@@ -22,11 +22,20 @@ pub fn resolve_mesh_queue_path() -> PathBuf {
 fn default_mesh_queue_path() -> PathBuf {
     if let Ok(xdg) = std::env::var("XDG_STATE_HOME") {
         if !xdg.is_empty() {
-            return PathBuf::from(xdg).join("sharecli").join("mesh").join("queue");
+            return PathBuf::from(xdg)
+                .join("sharecli")
+                .join("mesh")
+                .join("queue");
         }
     }
     dirs::home_dir()
-        .map(|home| home.join(".local").join("state").join("sharecli").join("mesh").join("queue"))
+        .map(|home| {
+            home.join(".local")
+                .join("state")
+                .join("sharecli")
+                .join("mesh")
+                .join("queue")
+        })
         .unwrap_or_else(|| PathBuf::from(".local/state/sharecli/mesh/queue"))
 }
 
@@ -49,7 +58,12 @@ impl MaildirStatus {
         }
         let ready = count_queue_files(&new)?;
         let in_flight = count_queue_files(&cur)?;
-        Ok(Some(Self { path, ready, in_flight, pending: ready + in_flight }))
+        Ok(Some(Self {
+            path,
+            ready,
+            in_flight,
+            pending: ready + in_flight,
+        }))
     }
 
     /// Operator-facing status block for `sharecli status` (FR-010 / AC-010.11).

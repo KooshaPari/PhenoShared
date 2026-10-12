@@ -176,7 +176,8 @@ fn call<T: for<'de> Deserialize<'de>>(method: &str, params: serde_json::Value) -
     if let Some(err) = resp.error {
         return Err(anyhow!("IPC error ({method}): {err}"));
     }
-    resp.result.ok_or_else(|| anyhow!("IPC response for {method} had no result"))
+    resp.result
+        .ok_or_else(|| anyhow!("IPC response for {method} had no result"))
 }
 
 #[cfg(not(unix))]
@@ -257,7 +258,11 @@ mod tests {
     fn socket_path_default_ends_with_ipc_sock() {
         std::env::remove_var("SHARECLI_IPC_SOCK");
         let p = socket_path();
-        assert!(p.ends_with("sharecli/ipc.sock"), "unexpected default path: {}", p.display());
+        assert!(
+            p.ends_with("sharecli/ipc.sock"),
+            "unexpected default path: {}",
+            p.display()
+        );
     }
 
     #[test]

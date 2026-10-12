@@ -24,7 +24,9 @@ pub fn extract_number(s: &str, field: &str) -> Option<i64> {
     let needle = format!("\"{}\":", field);
     if let Some(start) = s.find(&needle) {
         let rest = s[start + needle.len()..].trim_start();
-        let end = rest.find(|c: char| !c.is_ascii_digit() && c != '-').unwrap_or(rest.len());
+        let end = rest
+            .find(|c: char| !c.is_ascii_digit() && c != '-')
+            .unwrap_or(rest.len());
         return rest[..end].parse().ok();
     }
     None
@@ -35,7 +37,10 @@ mod tests {
     use super::*;
     #[test]
     fn test_extract_id_present() {
-        assert_eq!(extract_id(r#"{"id":"abc-123","name":"x"}"#), Some("abc-123".into()));
+        assert_eq!(
+            extract_id(r#"{"id":"abc-123","name":"x"}"#),
+            Some("abc-123".into())
+        );
     }
     #[test]
     fn test_extract_id_missing() {
@@ -43,7 +48,10 @@ mod tests {
     }
     #[test]
     fn test_extract_field_present() {
-        assert_eq!(extract_field(r#"{"name":"alice"}"#, "name"), Some("alice".into()));
+        assert_eq!(
+            extract_field(r#"{"name":"alice"}"#, "name"),
+            Some("alice".into())
+        );
     }
     #[test]
     fn test_extract_field_missing() {

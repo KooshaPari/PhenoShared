@@ -25,8 +25,15 @@ fn watch(
     fds: Option<u64>,
 ) -> DetectedAgentWatch {
     DetectedAgentWatch {
-        agent: DetectedAgent { pid, family, comm: comm.into() },
-        resource: AgentResourceSample { mem_rss_bytes: rss, fd_count: fds },
+        agent: DetectedAgent {
+            pid,
+            family,
+            comm: comm.into(),
+        },
+        resource: AgentResourceSample {
+            mem_rss_bytes: rss,
+            fd_count: fds,
+        },
     }
 }
 
@@ -50,7 +57,10 @@ fn fr006_proc_state_export_json_agent_row_includes_state() {
         }
     );
     let json = serde_json::to_string(&agent).expect("serialize AgentProcRow");
-    assert!(json.contains("\"state\":\"S\""), "JSON MUST include state field; got: {json}");
+    assert!(
+        json.contains("\"state\":\"S\""),
+        "JSON MUST include state field; got: {json}"
+    );
 }
 
 /// FR-006 / AC-006.32 — flat CSV header and rows include state column.
@@ -77,7 +87,13 @@ fn fr006_proc_state_export_flat_csv_includes_state_column() {
 #[test]
 fn fr006_proc_state_export_tree_csv_includes_state_column() {
     let src = FakeProcSource::new(vec![
-        ProcSnapshot { pid: 1, ppid: 0, comm: "init".into(), cmdline: vec![], state: 'R' },
+        ProcSnapshot {
+            pid: 1,
+            ppid: 0,
+            comm: "init".into(),
+            cmdline: vec![],
+            state: 'R',
+        },
         ProcSnapshot {
             pid: 50,
             ppid: 1,
@@ -130,11 +146,21 @@ fn fr006_proc_state_export_csv_missing_state_empty_field() {
 /// FR-006 / AC-006.32 — CLI proc --json agent objects expose state key.
 #[test]
 fn fr006_proc_state_export_cli_json_includes_state_key() {
-    let out = bin().args(["proc", "--json"]).output().expect("spawn proc --json");
-    assert!(out.status.success(), "proc --json MUST exit 0; stderr: {:?}", out.stderr);
+    let out = bin()
+        .args(["proc", "--json"])
+        .output()
+        .expect("spawn proc --json");
+    assert!(
+        out.status.success(),
+        "proc --json MUST exit 0; stderr: {:?}",
+        out.stderr
+    );
     let v: serde_json::Value =
         serde_json::from_slice(&out.stdout).expect("proc --json MUST emit valid JSON");
-    let agents = v.get("agents").and_then(|a| a.as_array()).expect("agents array");
+    let agents = v
+        .get("agents")
+        .and_then(|a| a.as_array())
+        .expect("agents array");
     if let Some(first) = agents.first() {
         assert!(
             first.get("state").is_some(),
@@ -146,9 +172,20 @@ fn fr006_proc_state_export_cli_json_includes_state_key() {
 /// FR-006 / AC-006.32 — CLI flat --csv header includes state column.
 #[test]
 fn fr006_proc_state_export_cli_flat_csv_header() {
-    let out = bin().args(["proc", "--csv"]).output().expect("spawn proc --csv");
-    assert!(out.status.success(), "proc --csv MUST exit 0; stderr: {:?}", out.stderr);
-    let first = String::from_utf8_lossy(&out.stdout).lines().next().unwrap_or("").to_string();
+    let out = bin()
+        .args(["proc", "--csv"])
+        .output()
+        .expect("spawn proc --csv");
+    assert!(
+        out.status.success(),
+        "proc --csv MUST exit 0; stderr: {:?}",
+        out.stderr
+    );
+    let first = String::from_utf8_lossy(&out.stdout)
+        .lines()
+        .next()
+        .unwrap_or("")
+        .to_string();
     assert_eq!(
         first, "pid,family,comm,state,mem_rss_bytes,mem_rss,fd_count",
         "CLI flat CSV MUST include state column; got: {first}"
@@ -158,9 +195,20 @@ fn fr006_proc_state_export_cli_flat_csv_header() {
 /// FR-006 / AC-006.32 — CLI tree --csv header includes state column.
 #[test]
 fn fr006_proc_state_export_cli_tree_csv_header() {
-    let out = bin().args(["proc", "--tree", "--csv"]).output().expect("spawn proc --tree --csv");
-    assert!(out.status.success(), "proc --tree --csv MUST exit 0; stderr: {:?}", out.stderr);
-    let first = String::from_utf8_lossy(&out.stdout).lines().next().unwrap_or("").to_string();
+    let out = bin()
+        .args(["proc", "--tree", "--csv"])
+        .output()
+        .expect("spawn proc --tree --csv");
+    assert!(
+        out.status.success(),
+        "proc --tree --csv MUST exit 0; stderr: {:?}",
+        out.stderr
+    );
+    let first = String::from_utf8_lossy(&out.stdout)
+        .lines()
+        .next()
+        .unwrap_or("")
+        .to_string();
     assert_eq!(
         first, "root_index,depth,pid,ppid,family,comm,state,mem_rss_bytes,mem_rss,fd_count",
         "CLI tree CSV MUST include state column; got: {first}"
@@ -170,10 +218,19 @@ fn fr006_proc_state_export_cli_tree_csv_header() {
 /// FR-006 / AC-006.32 — --state filter composes with JSON/CSV export surfaces.
 #[test]
 fn fr006_proc_state_export_composes_with_state_filter() {
-    let out =
-        bin().args(["proc", "--state", "S", "--csv"]).output().expect("spawn proc --state S --csv");
-    assert!(out.status.success(), "proc --state S --csv MUST exit 0; stderr: {:?}", out.stderr);
+    let out = bin()
+        .args(["proc", "--state", "S", "--csv"])
+        .output()
+        .expect("spawn proc --state S --csv");
+    assert!(
+        out.status.success(),
+        "proc --state S --csv MUST exit 0; stderr: {:?}",
+        out.stderr
+    );
     let s = String::from_utf8_lossy(&out.stdout);
     let header = s.lines().next().unwrap_or("");
-    assert!(header.contains("state"), "filtered CSV MUST still expose state column; got: {s}");
+    assert!(
+        header.contains("state"),
+        "filtered CSV MUST still expose state column; got: {s}"
+    );
 }

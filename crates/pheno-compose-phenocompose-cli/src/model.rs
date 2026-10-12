@@ -226,8 +226,8 @@ pub struct Plan {
 
 impl CompositionManifest {
     pub fn parse(input: &str) -> Result<Self> {
-        let manifest: Self =
-            serde_yaml::from_str(input).map_err(|error| CliError::validation("manifest_parse", error.to_string()))?;
+        let manifest: Self = serde_yaml::from_str(input)
+            .map_err(|error| CliError::validation("manifest_parse", error.to_string()))?;
         manifest.validate()?;
         Ok(manifest)
     }
@@ -240,7 +240,10 @@ impl CompositionManifest {
             ));
         }
         if self.metadata.name.trim().is_empty() {
-            return Err(CliError::validation("metadata_name", "metadata.name must not be empty"));
+            return Err(CliError::validation(
+                "metadata_name",
+                "metadata.name must not be empty",
+            ));
         }
         if self.services.is_empty() {
             return Err(CliError::validation(
@@ -296,7 +299,11 @@ impl CompositionManifest {
                     format!("action {name} must declare output_root"),
                 ));
             }
-            if action.output_root.as_ref().is_some_and(|root| root.trim().is_empty()) {
+            if action
+                .output_root
+                .as_ref()
+                .is_some_and(|root| root.trim().is_empty())
+            {
                 return Err(CliError::validation(
                     "action_output_root_empty",
                     format!("action {name} output_root must not be empty"),
@@ -317,7 +324,8 @@ impl CompositionManifest {
     pub fn plan(&self) -> Result<Plan> {
         let mut manifest = self.clone();
         manifest.normalize_gpu_uuids()?;
-        let normalized_value = canonicalize(serde_json::to_value(&manifest).map_err(CliError::json)?);
+        let normalized_value =
+            canonicalize(serde_json::to_value(&manifest).map_err(CliError::json)?);
         let normalized_bytes = serde_json::to_vec(&normalized_value).map_err(CliError::json)?;
         let digest = format!("{:x}", Sha256::digest(normalized_bytes));
         let normalized = serde_json::from_value(normalized_value).map_err(CliError::json)?;
@@ -358,7 +366,13 @@ impl CompositionManifest {
         let mut visiting = BTreeSet::new();
         let mut visited = BTreeSet::new();
         for name in self.services.keys() {
-            visit(name, &self.services, &mut visiting, &mut visited, &mut output)?;
+            visit(
+                name,
+                &self.services,
+                &mut visiting,
+                &mut visited,
+                &mut output,
+            )?;
         }
         Ok(output)
     }
@@ -414,7 +428,7 @@ fn canonicalize(value: Value) -> Value {
                 .map(|(key, value)| (key, canonicalize(value)))
                 .collect();
             Value::Object(sorted.into_iter().collect())
-        }
+        },
         other => other,
     }
 }

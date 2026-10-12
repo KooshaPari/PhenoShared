@@ -48,7 +48,7 @@ impl UpgradeChannel {
             UpgradeChannel::Brew => "brew upgrade sharecli",
             UpgradeChannel::GhReleases => {
                 "curl -fsSL https://github.com/KooshaPari/sharecli/releases/latest"
-            }
+            },
         }
     }
 
@@ -230,8 +230,11 @@ mod tests {
     fn probe_marks_update_available_when_latest_gt_current() {
         let dir = tempfile::tempdir().expect("tempdir");
         std::fs::create_dir_all(dir.path().join("sharecli")).expect("mkdir");
-        std::fs::write(dir.path().join("sharecli").join("upgrade.json"), r#"{"latest":"0.4.0"}"#)
-            .expect("write upgrade.json");
+        std::fs::write(
+            dir.path().join("sharecli").join("upgrade.json"),
+            r#"{"latest":"0.4.0"}"#,
+        )
+        .expect("write upgrade.json");
         let r = probe("0.3.0", UpgradeChannel::Binstall, Some(dir.path())).expect("probe");
         assert_eq!(r.latest.as_deref(), Some("0.4.0"));
         assert!(r.update_available);
@@ -239,9 +242,13 @@ mod tests {
 
     #[test]
     fn channel_install_hint_per_channel() {
-        assert!(UpgradeChannel::CratesIo.install_hint().contains("cargo install"));
+        assert!(UpgradeChannel::CratesIo
+            .install_hint()
+            .contains("cargo install"));
         assert!(UpgradeChannel::Binstall.install_hint().contains("binstall"));
         assert!(UpgradeChannel::Brew.install_hint().contains("brew upgrade"));
-        assert!(UpgradeChannel::GhReleases.install_hint().contains("github.com"));
+        assert!(UpgradeChannel::GhReleases
+            .install_hint()
+            .contains("github.com"));
     }
 }

@@ -39,7 +39,9 @@ pub fn retry_until_success<F: FnMut() -> bool>(policy: RetryPolicy, mut f: F) ->
     let mut attempt = 0;
     while attempt < policy.max_attempts {
         if f() {
-            return RetryOutcome { attempts: attempt + 1 };
+            return RetryOutcome {
+                attempts: attempt + 1,
+            };
         }
         attempt += 1;
     }
@@ -61,7 +63,10 @@ mod tests {
     }
     #[test]
     fn delay_capped() {
-        let p = RetryPolicy { max_delay: Duration::from_millis(200), ..Default::default() };
+        let p = RetryPolicy {
+            max_delay: Duration::from_millis(200),
+            ..Default::default()
+        };
         assert_eq!(compute_delay(5, &p).as_millis(), 200);
     }
     #[test]
@@ -71,7 +76,10 @@ mod tests {
     }
     #[test]
     fn retry_until_max() {
-        let p = RetryPolicy { max_attempts: 3, ..Default::default() };
+        let p = RetryPolicy {
+            max_attempts: 3,
+            ..Default::default()
+        };
         let out = retry_until_success(p, || false);
         assert_eq!(out.attempts, 3);
     }

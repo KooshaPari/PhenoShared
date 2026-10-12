@@ -42,7 +42,13 @@ pub fn resolve(
         return recipe(harness, id, cwd, confidence, EvidenceSource::StateFile);
     }
     if let Some(id) = session_id_from_argv(harness, argv) {
-        return recipe(harness, &id, cwd, ResolutionConfidence::Exact, EvidenceSource::Argv);
+        return recipe(
+            harness,
+            &id,
+            cwd,
+            ResolutionConfidence::Exact,
+            EvidenceSource::Argv,
+        );
     }
     Resolution {
         session: None,
@@ -74,11 +80,15 @@ fn recipe(
                 confidence: ResolutionConfidence::Unavailable,
                 source: EvidenceSource::Unavailable,
             }
-        }
+        },
     };
     let mut session = session;
     session.confidence = confidence;
-    Resolution { session: Some(session), confidence, source }
+    Resolution {
+        session: Some(session),
+        confidence,
+        source,
+    }
 }
 
 fn argv_mentions_id(argv: &[String], id: &str) -> bool {
@@ -112,10 +122,18 @@ mod tests {
 
     #[test]
     fn codex_argv_resolves_exact_recipe() {
-        let result =
-            resolve("codex", "/tmp", &["codex".into(), "resume".into(), "id-1".into()], None, None);
+        let result = resolve(
+            "codex",
+            "/tmp",
+            &["codex".into(), "resume".into(), "id-1".into()],
+            None,
+            None,
+        );
         assert_eq!(result.confidence, ResolutionConfidence::Exact);
-        assert_eq!(result.session.unwrap().resume.argv, vec!["codex", "resume", "id-1"]);
+        assert_eq!(
+            result.session.unwrap().resume.argv,
+            vec!["codex", "resume", "id-1"]
+        );
     }
 
     #[test]
@@ -240,7 +258,13 @@ mod tests {
 
     #[test]
     fn state_id_without_argv_match_is_exact() {
-        let result = resolve("codex", "/tmp", &["codex".into(), "other".into()], Some("sid"), None);
+        let result = resolve(
+            "codex",
+            "/tmp",
+            &["codex".into(), "other".into()],
+            Some("sid"),
+            None,
+        );
         assert_eq!(result.confidence, ResolutionConfidence::Exact);
         assert_eq!(result.source, EvidenceSource::StateFile);
     }

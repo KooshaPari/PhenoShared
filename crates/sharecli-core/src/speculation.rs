@@ -96,12 +96,15 @@ impl SpeculationTracker {
         entry.1 = now;
 
         // Store request details if not already present (first hit).
-        inner.requests.entry(key.0.clone()).or_insert_with(|| SpeculationCandidate {
-            key: key.clone(),
-            argv: argv.to_vec(),
-            cwd: cwd.to_path_buf(),
-            env: env.to_vec(),
-        });
+        inner
+            .requests
+            .entry(key.0.clone())
+            .or_insert_with(|| SpeculationCandidate {
+                key: key.clone(),
+                argv: argv.to_vec(),
+                cwd: cwd.to_path_buf(),
+                env: env.to_vec(),
+            });
     }
 
     /// Drain the top-N speculation candidates whose hit count ≥ threshold
@@ -125,7 +128,9 @@ impl SpeculationTracker {
 
         // Highest frequency first, then stable key order for deterministic truncation.
         scored.sort_by(|(left_count, left_key), (right_count, right_key)| {
-            right_count.cmp(left_count).then_with(|| left_key.cmp(right_key))
+            right_count
+                .cmp(left_count)
+                .then_with(|| left_key.cmp(right_key))
         });
         scored.truncate(SPECULATION_MAX_CANDIDATES);
 
@@ -179,15 +184,15 @@ pub fn spawn_speculation_task(
 
             // Respect thermal gate — never speculate when throttled.
             match thermal_gate.check() {
-                crate::ThermalDecision::Allow => {}
+                crate::ThermalDecision::Allow => {},
                 crate::ThermalDecision::Warn => {
                     debug!("speculation: thermal Warn — skipping cycle");
                     continue;
-                }
+                },
                 crate::ThermalDecision::Refuse => {
                     debug!("speculation: thermal Refuse — skipping cycle");
                     continue;
-                }
+                },
             }
 
             let candidates = tracker.drain_candidates().await;
@@ -195,7 +200,10 @@ pub fn spawn_speculation_task(
                 continue;
             }
 
-            info!(count = candidates.len(), "speculation: pre-executing candidates");
+            info!(
+                count = candidates.len(),
+                "speculation: pre-executing candidates"
+            );
 
             for candidate in candidates {
                 // Skip if the cache already has a fresh entry.
@@ -203,12 +211,12 @@ pub fn spawn_speculation_task(
                     Ok(Some(_)) => {
                         debug!(key = %candidate.key.0, "speculation: cache already warm — skip");
                         continue;
-                    }
-                    Ok(None) => {}
+                    },
+                    Ok(None) => {},
                     Err(e) => {
                         warn!(key = %candidate.key.0, err = %e, "speculation: lookup failed");
                         continue;
-                    }
+                    },
                 }
 
                 // Pre-execute the command.
@@ -234,21 +242,21 @@ pub fn spawn_speculation_task(
                                 "speculation: pre-execute + store ok"
                             );
                         }
-                    }
+                    },
                     Ok(Err(e)) => {
                         warn!(
                             key = %candidate.key.0,
                             err = %e,
                             "speculation: execute failed"
                         );
-                    }
+                    },
                     Err(e) => {
                         error!(
                             key = %candidate.key.0,
                             err = %e,
                             "speculation: spawn_blocking panicked"
                         );
-                    }
+                    },
                 }
             }
         }
@@ -264,8 +272,9 @@ fn speculate_execute(
     cwd: &std::path::Path,
     env: &[(String, String)],
 ) -> Result<CachedResult> {
-    let (program, args) =
-        argv.split_first().ok_or_else(|| anyhow::anyhow!("speculate: argv is empty"))?;
+    let (program, args) = argv
+        .split_first()
+        .ok_or_else(|| anyhow::anyhow!("speculate: argv is empty"))?;
 
     let output = std::process::Command::new(program)
         .args(args)
@@ -324,11 +333,22 @@ mod tests {
         }
 
         let candidates = tracker.drain_candidates().await;
-        assert_eq!(candidates.len(), SPECULATION_MAX_CANDIDATES, "must cap candidates");
-        let keys: Vec<_> = candidates.into_iter().map(|candidate| candidate.key.0).collect();
-        let expected: Vec<_> =
-            (0..SPECULATION_MAX_CANDIDATES).map(|i| format!("key-{i:04}")).collect();
-        assert_eq!(keys, expected, "equal counts must use key order before truncation");
+        assert_eq!(
+            candidates.len(),
+            SPECULATION_MAX_CANDIDATES,
+            "must cap candidates"
+        );
+        let keys: Vec<_> = candidates
+            .into_iter()
+            .map(|candidate| candidate.key.0)
+            .collect();
+        let expected: Vec<_> = (0..SPECULATION_MAX_CANDIDATES)
+            .map(|i| format!("key-{i:04}"))
+            .collect();
+        assert_eq!(
+            keys, expected,
+            "equal counts must use key order before truncation"
+        );
     }
 
     #[tokio::test]
@@ -417,7 +437,10 @@ mod tests {
         let result = speculate_execute(&argv, &cwd, &[]).expect("execute");
         let stdout = String::from_utf8_lossy(&result.stdout).trim().to_string();
         // On macOS, /var may resolve to /private/var via symlink
-        assert!(stdout == "/tmp" || stdout == "/private/tmp", "cwd MUST be /tmp; got: {stdout}");
+        assert!(
+            stdout == "/tmp" || stdout == "/private/tmp",
+            "cwd MUST be /tmp; got: {stdout}"
+        );
     }
 
     #[tokio::test]
@@ -428,14 +451,18 @@ mod tests {
         let key_a = CommandKey("aaa".into());
         let key_b = CommandKey("bbb".into());
 
-        tracker.record_hit(&key_a, &["echo".into()], &cwd, &[]).await;
+        tracker
+            .record_hit(&key_a, &["echo".into()], &cwd, &[])
+            .await;
         assert_eq!(tracker.len().await, 1);
 
         tracker.record_hit(&key_b, &["ls".into()], &cwd, &[]).await;
         assert_eq!(tracker.len().await, 2);
 
         // Same key again doesn't increase count of distinct keys
-        tracker.record_hit(&key_a, &["echo".into()], &cwd, &[]).await;
+        tracker
+            .record_hit(&key_a, &["echo".into()], &cwd, &[])
+            .await;
         assert_eq!(tracker.len().await, 2);
     }
 
@@ -462,16 +489,23 @@ mod tests {
 
         // Low gets exactly threshold hits
         for _ in 0..SPECULATION_THRESHOLD {
-            tracker.record_hit(&key_low, &["low".into()], &cwd, &[]).await;
+            tracker
+                .record_hit(&key_low, &["low".into()], &cwd, &[])
+                .await;
         }
         // High gets threshold + 2
         for _ in 0..(SPECULATION_THRESHOLD + 2) {
-            tracker.record_hit(&key_high, &["high".into()], &cwd, &[]).await;
+            tracker
+                .record_hit(&key_high, &["high".into()], &cwd, &[])
+                .await;
         }
 
         let candidates = tracker.drain_candidates().await;
         assert_eq!(candidates.len(), 2);
-        assert_eq!(candidates[0].key, key_high, "highest frequency MUST come first");
+        assert_eq!(
+            candidates[0].key, key_high,
+            "highest frequency MUST come first"
+        );
         assert_eq!(candidates[1].key, key_low);
     }
 
@@ -506,7 +540,9 @@ mod tests {
             tracker.record_hit(&key_ok, &["ok".into()], &cwd, &[]).await;
         }
         for _ in 0..(SPECULATION_THRESHOLD - 1) {
-            tracker.record_hit(&key_low, &["low".into()], &cwd, &[]).await;
+            tracker
+                .record_hit(&key_low, &["low".into()], &cwd, &[])
+                .await;
         }
 
         let candidates = tracker.drain_candidates().await;

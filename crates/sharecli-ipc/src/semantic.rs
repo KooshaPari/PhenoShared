@@ -17,7 +17,10 @@ pub fn semantic_normalize_argv(argv: &[String], cwd: &Path) -> Vec<String> {
         return Vec::new();
     }
 
-    let cmd = Path::new(&argv[0]).file_name().and_then(|s| s.to_str()).unwrap_or(argv[0].as_str());
+    let cmd = Path::new(&argv[0])
+        .file_name()
+        .and_then(|s| s.to_str())
+        .unwrap_or(argv[0].as_str());
 
     match cmd {
         "ruff" | "mypy" | "pylint" | "flake8" => {
@@ -26,7 +29,7 @@ pub fn semantic_normalize_argv(argv: &[String], cwd: &Path) -> Vec<String> {
                 out.push(normalize_lint_path_arg(arg, cwd));
             }
             out
-        }
+        },
         "git" => argv.to_vec(),
         _ => argv.to_vec(),
     }
@@ -44,7 +47,9 @@ fn normalize_lint_path_arg(arg: &str, cwd: &Path) -> String {
 }
 
 fn canonical_dir(path: &Path) -> Option<String> {
-    std::fs::canonicalize(path).ok().map(|p| p.to_string_lossy().into_owned())
+    std::fs::canonicalize(path)
+        .ok()
+        .map(|p| p.to_string_lossy().into_owned())
 }
 
 #[cfg(test)]
@@ -70,7 +75,10 @@ mod tests {
         std::fs::create_dir(&sub).expect("mkdir src");
         let canonical = std::fs::canonicalize(&sub).expect("canonicalize");
 
-        let argv = vec!["mypy".into(), sub.file_name().unwrap().to_string_lossy().into()];
+        let argv = vec![
+            "mypy".into(),
+            sub.file_name().unwrap().to_string_lossy().into(),
+        ];
         let norm = semantic_normalize_argv(&argv, dir.path());
         assert_eq!(norm[1], canonical.to_string_lossy());
     }

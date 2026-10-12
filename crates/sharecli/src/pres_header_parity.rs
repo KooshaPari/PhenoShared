@@ -56,13 +56,13 @@ pub fn build_ppt_header(version: u16, is_encrypted: bool) -> Vec<u8> {
         _ => 9,
     };
     // Magic.
-    buf[0..8].copy_from_slice(&[0xD0, 0xCF, 0x11, 0xE0, 0xA1, 0xB1, 0x1A, 0xE1]);
+    buf[0..8].copy_from_slice(&[0xd0, 0xcf, 0x11, 0xe0, 0xa1, 0xb1, 0x1a, 0xe1]);
     // CLSID (16 bytes at offset 8) — leave zeros.
     // Minor version (offset 24) — 0.
     // Major version (offset 26).
     buf[26..28].copy_from_slice(&version.to_le_bytes());
     // Byte order (offset 28) — 0xFFFE.
-    buf[28..30].copy_from_slice(&0xFFFEu16.to_le_bytes());
+    buf[28..30].copy_from_slice(&0xfffeu16.to_le_bytes());
     // Sector shift (offset 30).
     buf[30..32].copy_from_slice(&sector_shift.to_le_bytes());
     // Mini sector shift (offset 32) — 6 (required by [MS-CFB] 2.2).
@@ -76,7 +76,7 @@ pub fn build_ppt_header(version: u16, is_encrypted: bool) -> Vec<u8> {
     // Mini stream cutoff (offset 56) — 0x1000.
     buf[56..60].copy_from_slice(&0x0000_1000u32.to_le_bytes());
     // First mini FAT (offset 60) — 0xFFFFFFFE.
-    buf[60..64].copy_from_slice(&0xFFFF_FFFEu32.to_le_bytes());
+    buf[60..64].copy_from_slice(&0xffff_fffeu32.to_le_bytes());
     // Number of mini FAT (offset 64) — 0.
     // First DIFAT (offset 68) — 0.
     // Number of DIFAT (offset 72) — 0.
@@ -113,18 +113,26 @@ pub fn build_v3_default_fixture() -> Vec<u8> {
 /// The overlay bit is preserved verbatim by `build_ppt_header` and can be
 /// inspected via `overlay_encrypted`.
 pub fn assert_round_trip(input: &[u8]) {
-    assert_eq!(input.len(), 512, "header must be 512 bytes, got {}", input.len());
+    assert_eq!(
+        input.len(),
+        512,
+        "header must be 512 bytes, got {}",
+        input.len()
+    );
     let parsed = crate::util::pres_header_parse::parse(input)
         .expect("header must round-trip through parser");
     assert_eq!(parsed.header_size, 512, "header_size must be 512");
     assert_eq!(
         parsed.magic,
-        [0xD0, 0xCF, 0x11, 0xE0, 0xA1, 0xB1, 0x1A, 0xE1],
+        [0xd0, 0xcf, 0x11, 0xe0, 0xa1, 0xb1, 0x1a, 0xe1],
         "magic must match [MS-CFB] 2.2"
     );
     // The CFB header parser sees no encryption bit (none exists per [MS-CFB] 2.2);
     // the overlay we store is an extra-header convention only.
-    assert!(!parsed.is_encrypted, "CFB header alone never reports encrypted");
+    assert!(
+        !parsed.is_encrypted,
+        "CFB header alone never reports encrypted"
+    );
 }
 
 /// Convenience: build a v3 header with `is_encrypted = false` and verify it.
@@ -138,7 +146,10 @@ pub fn build_and_verify_v3() -> Vec<u8> {
 pub fn build_and_verify_v3_encrypted() -> Vec<u8> {
     let buf = build_ppt_header(3, true);
     assert_round_trip(&buf);
-    assert!(overlay_encrypted(&buf), "overlay must reflect is_encrypted=true");
+    assert!(
+        overlay_encrypted(&buf),
+        "overlay must reflect is_encrypted=true"
+    );
     buf
 }
 
@@ -165,7 +176,10 @@ mod tests {
     fn built_v3_header_matches_ms_cfb_magic_at_offset_0() {
         // [MS-CFB] 2.2 — 8-byte signature at the start.
         let buf = build_ppt_header(3, false);
-        assert_eq!(&buf[0..8], &[0xD0, 0xCF, 0x11, 0xE0, 0xA1, 0xB1, 0x1A, 0xE1]);
+        assert_eq!(
+            &buf[0..8],
+            &[0xd0, 0xcf, 0x11, 0xe0, 0xa1, 0xb1, 0x1a, 0xe1]
+        );
     }
 
     #[test]
@@ -189,7 +203,7 @@ mod tests {
         // [MS-CFB] 2.2 — byte-order mark is 0xFFFE (little-endian).
         let buf = build_ppt_header(3, false);
         let bo = u16::from_le_bytes([buf[28], buf[29]]);
-        assert_eq!(bo, 0xFFFE);
+        assert_eq!(bo, 0xfffe);
     }
 
     #[test]
@@ -233,7 +247,7 @@ mod tests {
     #[test]
     fn assert_round_trip_rejects_bad_magic() {
         let mut buf = build_ppt_header(3, false);
-        buf[0] = 0xAB; // corrupt magic
+        buf[0] = 0xab; // corrupt magic
                        // The parser will reject; we expect the parse call inside
                        // assert_round_trip to fail.
         let result = std::panic::catch_unwind(|| assert_round_trip(&buf));

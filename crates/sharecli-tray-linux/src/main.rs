@@ -73,7 +73,7 @@ mod linux {
                         operator_display::format_operator_status_summary(&h.gate, &h.host_watch);
                     let net = operator_display::format_host_net_tray_line(&h.host_watch);
                     format!("{base}\n{op}\n{net}")
-                }
+                },
                 _ => operator_display::format_tray_tooltip_offline_line(&self.gate_visual),
             };
             ksni::ToolTip {
@@ -92,10 +92,17 @@ mod linux {
             let header = match (&self.health, self.connected) {
                 (Some(h), true) => {
                     operator_display::format_tray_menu_header_line(&self.gate_visual, h)
-                }
+                },
                 _ => operator_display::format_tray_menu_header_offline_line(&self.gate_visual),
             };
-            items.push(StandardItem { label: header, enabled: false, ..Default::default() }.into());
+            items.push(
+                StandardItem {
+                    label: header,
+                    enabled: false,
+                    ..Default::default()
+                }
+                .into(),
+            );
             items.push(MenuItem::Separator);
 
             if let Some(h) = &self.health {
@@ -114,8 +121,12 @@ mod linux {
                     for line in operator_display::format_operator_tray_lines(&h.gate, &h.host_watch)
                     {
                         items.push(
-                            StandardItem { label: line, enabled: false, ..Default::default() }
-                                .into(),
+                            StandardItem {
+                                label: line,
+                                enabled: false,
+                                ..Default::default()
+                            }
+                            .into(),
                         );
                     }
                     items.push(MenuItem::Separator);
@@ -127,8 +138,12 @@ mod linux {
                     items.push(MenuItem::Separator);
                     for line in operator_display::format_pool_status_operator_lines(pool, status) {
                         items.push(
-                            StandardItem { label: line, enabled: false, ..Default::default() }
-                                .into(),
+                            StandardItem {
+                                label: line,
+                                enabled: false,
+                                ..Default::default()
+                            }
+                            .into(),
                         );
                     }
                 }
@@ -140,7 +155,14 @@ mod linux {
                 } else {
                     "Start sharecli-ipc to connect".to_string()
                 };
-                items.push(StandardItem { label, enabled: false, ..Default::default() }.into());
+                items.push(
+                    StandardItem {
+                        label,
+                        enabled: false,
+                        ..Default::default()
+                    }
+                    .into(),
+                );
             } else {
                 for proc in &self.processes {
                     let submenu = build_process_submenu(proc);
@@ -148,9 +170,19 @@ mod linux {
                         "{} [{}]{}",
                         proc.name,
                         proc.pid,
-                        proc.project.as_deref().map(|p| format!(" · {p}")).unwrap_or_default(),
+                        proc.project
+                            .as_deref()
+                            .map(|p| format!(" · {p}"))
+                            .unwrap_or_default(),
                     );
-                    items.push(SubMenu { label, submenu, ..Default::default() }.into());
+                    items.push(
+                        SubMenu {
+                            label,
+                            submenu,
+                            ..Default::default()
+                        }
+                        .into(),
+                    );
                 }
             }
 
@@ -239,7 +271,7 @@ mod linux {
                 tray.connected = true;
                 tray.gate_visual =
                     operator_display::resolve_tray_gate_visual_from_gate(&snap.gate, true);
-            }
+            },
             Err(e) => {
                 tracing::debug!("monitoring.report poll failed: {e}");
                 tray.connected = false;
@@ -249,7 +281,7 @@ mod linux {
                 tray.status = None;
                 tray.gate_visual =
                     operator_display::resolve_tray_gate_visual("UNAVAILABLE", "UNAVAILABLE", false);
-            }
+            },
         }
     }
 
@@ -270,10 +302,13 @@ mod linux {
                 eprintln!("sharecli-tray: failed to register StatusNotifierItem: {e}");
                 eprintln!("Is a system tray / AppIndicator host running on this desktop?");
                 std::process::exit(1);
-            }
+            },
         };
         let poll_interval = tray_poll_interval();
-        tracing::info!("sharecli-tray registered; polling every {}s", poll_interval.as_secs());
+        tracing::info!(
+            "sharecli-tray registered; polling every {}s",
+            poll_interval.as_secs()
+        );
 
         loop {
             std::thread::sleep(poll_interval);

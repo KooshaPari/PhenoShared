@@ -79,18 +79,18 @@ impl ConfigWatcher {
                             // send() only errors when all receivers are gone; treat
                             // that as a no-op (the process is shutting down).
                             let _ = reload_tx.send(cfg);
-                        }
+                        },
                         Err(e) => {
                             error!(
                                 "config_watcher: parse error in {:?} — keeping old config: {e}",
                                 path_clone
                             );
-                        }
+                        },
                     }
-                }
+                },
                 Err(e) => {
                     error!("config_watcher: watch error: {e}");
-                }
+                },
             }
         })?;
 
@@ -170,7 +170,7 @@ mod tests {
                 _ => {
                     *guard = Some(now);
                     true
-                }
+                },
             }
         };
 
@@ -182,12 +182,15 @@ mod tests {
                 _ => {
                     *guard = Some(now);
                     true
-                }
+                },
             }
         };
 
         assert!(first_passed, "first event should pass");
-        assert!(!second_passed, "second event within debounce window should be suppressed");
+        assert!(
+            !second_passed,
+            "second event within debounce window should be suppressed"
+        );
     }
 
     #[test]
@@ -208,11 +211,14 @@ mod tests {
                 _ => {
                     *guard = Some(now);
                     true
-                }
+                },
             }
         };
 
-        assert!(passed, "event after debounce window should be allowed through");
+        assert!(
+            passed,
+            "event after debounce window should be allowed through"
+        );
     }
 
     // --- ConfigWatcher::new wires up without panicking ---
@@ -226,7 +232,10 @@ mod tests {
         let (tx, _rx) = watch::channel(initial);
 
         let result = ConfigWatcher::new(f.path().to_path_buf(), tx);
-        assert!(result.is_ok(), "ConfigWatcher::new should succeed for an existing file");
+        assert!(
+            result.is_ok(),
+            "ConfigWatcher::new should succeed for an existing file"
+        );
     }
 
     #[test]

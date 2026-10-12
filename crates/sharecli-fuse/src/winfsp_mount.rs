@@ -28,11 +28,11 @@ use crate::write_serialize_meters::record_passthrough_write;
 fn io_err_to_ntstatus(err: &std::io::Error) -> i32 {
     use std::io::ErrorKind;
     match err.kind() {
-        ErrorKind::NotFound => 0xC000_0034u32 as i32, // OBJECT_NAME_NOT_FOUND
-        ErrorKind::PermissionDenied => 0xC000_0022u32 as i32, // ACCESS_DENIED
-        ErrorKind::AlreadyExists => 0xC000_0035u32 as i32, // OBJECT_NAME_COLLISION
-        ErrorKind::InvalidInput | ErrorKind::InvalidData => 0xC000_000Du32 as i32, // INVALID_PARAMETER
-        _ => 0xC000_0001u32 as i32, // STATUS_UNSUCCESSFUL
+        ErrorKind::NotFound => 0xc000_0034u32 as i32, // OBJECT_NAME_NOT_FOUND
+        ErrorKind::PermissionDenied => 0xc000_0022u32 as i32, // ACCESS_DENIED
+        ErrorKind::AlreadyExists => 0xc000_0035u32 as i32, // OBJECT_NAME_COLLISION
+        ErrorKind::InvalidInput | ErrorKind::InvalidData => 0xc000_000du32 as i32, // INVALID_PARAMETER
+        _ => 0xc000_0001u32 as i32, // STATUS_UNSUCCESSFUL
     }
 }
 
@@ -83,15 +83,21 @@ impl WinfspMountSession {
     ) -> Result<Self> {
         ensure_winfsp()?;
         if !backing.is_dir() {
-            bail!("sharecli-fuse WinFsp: backing is not a directory: {}", backing.display());
+            bail!(
+                "sharecli-fuse WinFsp: backing is not a directory: {}",
+                backing.display()
+            );
         }
         fs::create_dir_all(mountpoint)
             .with_context(|| format!("create mountpoint {}", mountpoint.display()))?;
 
         let mp = mountpoint.to_path_buf();
         let backing = backing.to_path_buf();
-        let session =
-            if session_id.is_empty() { default_session_id() } else { session_id.to_string() };
+        let session = if session_id.is_empty() {
+            default_session_id()
+        } else {
+            session_id.to_string()
+        };
         let stop = Arc::new(AtomicBool::new(false));
         let stop_t = Arc::clone(&stop);
         let ready = Arc::new(AtomicBool::new(false));
@@ -106,7 +112,11 @@ impl WinfspMountSession {
         let started = std::time::Instant::now();
         while started.elapsed() < deadline {
             if ready.load(Ordering::SeqCst) {
-                return Ok(Self { mountpoint: mp, stop, join: Some(join) });
+                return Ok(Self {
+                    mountpoint: mp,
+                    stop,
+                    join: Some(join),
+                });
             }
             if join.is_finished() {
                 match join.join() {
@@ -184,7 +194,8 @@ fn run_host(
         .map_err(|e| anyhow::anyhow!("FileSystemHost::new: {e}"))?;
     host.mount(mountpoint)
         .map_err(|e| anyhow::anyhow!("WinFsp mount {}: {e}", mountpoint.display()))?;
-    host.start().map_err(|e| anyhow::anyhow!("WinFsp host start: {e}"))?;
+    host.start()
+        .map_err(|e| anyhow::anyhow!("WinFsp host start: {e}"))?;
     ready.store(true, Ordering::SeqCst);
 
     while !stop.load(Ordering::SeqCst) {
@@ -213,12 +224,14 @@ impl PassthroughCtx {
         if trimmed.is_empty() || trimmed == "." {
             self.backing.clone()
         } else {
-            self.backing.join(PathBuf::from(trimmed.replace('\\', std::path::MAIN_SEPARATOR_STR)))
+            self.backing.join(PathBuf::from(
+                trimmed.replace('\\', std::path::MAIN_SEPARATOR_STR),
+            ))
         }
     }
 
     fn fill_info(path: &Path, info: &mut OpenFileInfo) -> Result<(), FspError> {
-        let meta = fs::metadata(path).map_err(|_| FspError::NTSTATUS(0xC000000Fu32 as i32))?; // NO_SUCH_FILE
+        let meta = fs::metadata(path).map_err(|_| FspError::NTSTATUS(0xc000000fu32 as i32))?; // NO_SUCH_FILE
         let size = meta.len();
         // Minimal FileInfo population via OpenFileInfo helpers when available.
         // winfsp OpenFileInfo embeds FileInfo — set via as_mut_ptr patterns in examples;
@@ -239,7 +252,7 @@ impl FileSystemContext for PassthroughCtx {
     ) -> Result<FileSecurity, FspError> {
         let path = self.resolve(file_name);
         if !path.exists() {
-            return Err(FspError::NTSTATUS(0xC0000034u32 as i32)); // OBJECT_NAME_NOT_FOUND
+            return Err(FspError::NTSTATUS(0xc0000034u32 as i32)); // OBJECT_NAME_NOT_FOUND
         }
         Ok(FileSecurity {
             reparse: false,
@@ -309,7 +322,7 @@ impl FileSystemContext for PassthroughCtx {
         // WinFsp passes directory bit in create_options; treat existing as file create.
         let is_dir = false;
         if is_dir {
-            fs::create_dir_all(&path).map_err(|_| FspError::NTSTATUS(0xC0000001u32 as i32))?;
+            fs::create_dir_all(&path).map_err(|_| FspError::NTSTATUS(0xc0000001u32 as i32))?;
             Self::fill_info(&path, file_info)?;
             return Ok(FileCtx {
                 path,
@@ -327,9 +340,9 @@ impl FileSystemContext for PassthroughCtx {
             .truncate(true)
             .read(true)
             .open(&path)
-            .map_err(|_| FspError::NTSTATUS(0xC0000001u32 as i32))?;
+            .map_err(|_| FspError::NTSTATUS(0xc0000001u32 as i32))?;
         annotate_write(&path, &self.session_id)
-            .map_err(|_| FspError::NTSTATUS(0xC0000001u32 as i32))?;
+            .map_err(|_| FspError::NTSTATUS(0xc0000001u32 as i32))?;
         record_passthrough_write();
         Self::fill_info(&path, file_info)?;
         Ok(FileCtx {
@@ -346,11 +359,18 @@ impl FileSystemContext for PassthroughCtx {
         buffer: &mut [u8],
         offset: u64,
     ) -> Result<u32, FspError> {
-        let mut guard =
-            context.file.lock().map_err(|_| FspError::NTSTATUS(0xC0000001u32 as i32))?;
-        let file = guard.as_mut().ok_or(FspError::NTSTATUS(0xC0000001u32 as i32))?;
-        file.seek(SeekFrom::Start(offset)).map_err(|_| FspError::NTSTATUS(0xC0000001u32 as i32))?;
-        let n = file.read(buffer).map_err(|_| FspError::NTSTATUS(0xC0000001u32 as i32))?;
+        let mut guard = context
+            .file
+            .lock()
+            .map_err(|_| FspError::NTSTATUS(0xc0000001u32 as i32))?;
+        let file = guard
+            .as_mut()
+            .ok_or(FspError::NTSTATUS(0xc0000001u32 as i32))?;
+        file.seek(SeekFrom::Start(offset))
+            .map_err(|_| FspError::NTSTATUS(0xc0000001u32 as i32))?;
+        let n = file
+            .read(buffer)
+            .map_err(|_| FspError::NTSTATUS(0xc0000001u32 as i32))?;
         Ok(n as u32)
     }
 
@@ -371,9 +391,13 @@ impl FileSystemContext for PassthroughCtx {
         let done: Result<(), FspError> = self
             .cow
             .with_locked_path(None, &path, || {
-                let mut guard =
-                    context.file.lock().map_err(|_| FspError::NTSTATUS(0xC0000001u32 as i32))?;
-                let file = guard.as_mut().ok_or(FspError::NTSTATUS(0xC0000001u32 as i32))?;
+                let mut guard = context
+                    .file
+                    .lock()
+                    .map_err(|_| FspError::NTSTATUS(0xc0000001u32 as i32))?;
+                let file = guard
+                    .as_mut()
+                    .ok_or(FspError::NTSTATUS(0xc0000001u32 as i32))?;
                 if write_to_eof {
                     file.seek(SeekFrom::End(0))
                         .map_err(|e| FspError::NTSTATUS(io_err_to_ntstatus(&e)))?;
@@ -381,12 +405,13 @@ impl FileSystemContext for PassthroughCtx {
                     file.seek(SeekFrom::Start(offset))
                         .map_err(|e| FspError::NTSTATUS(io_err_to_ntstatus(&e)))?;
                 }
-                file.write_all(buffer).map_err(|e| FspError::NTSTATUS(io_err_to_ntstatus(&e)))?;
+                file.write_all(buffer)
+                    .map_err(|e| FspError::NTSTATUS(io_err_to_ntstatus(&e)))?;
                 annotate_write(&path, &session)
-                    .map_err(|_| FspError::NTSTATUS(0xC0000001u32 as i32))?;
+                    .map_err(|_| FspError::NTSTATUS(0xc0000001u32 as i32))?;
                 Ok::<(), FspError>(())
             })
-            .map_err(|_| FspError::NTSTATUS(0xC0000001u32 as i32))?;
+            .map_err(|_| FspError::NTSTATUS(0xc0000001u32 as i32))?;
         done?;
         record_passthrough_write();
         Ok(n)
@@ -403,11 +428,11 @@ impl FileSystemContext for PassthroughCtx {
         let dst = self.resolve(new_file_name);
         if dst.exists() {
             if !replace_if_exists {
-                return Err(FspError::NTSTATUS(0xC0000035u32 as i32)); // OBJECT_NAME_COLLISION
+                return Err(FspError::NTSTATUS(0xc0000035u32 as i32)); // OBJECT_NAME_COLLISION
             }
             let _ = fs::remove_file(&dst);
         }
-        fs::rename(&src, &dst).map_err(|_| FspError::NTSTATUS(0xC0000001u32 as i32))?;
+        fs::rename(&src, &dst).map_err(|_| FspError::NTSTATUS(0xc0000001u32 as i32))?;
         Ok(())
     }
 
@@ -434,42 +459,42 @@ mod tests {
     #[test]
     fn io_err_to_ntstatus_not_found() {
         let err = std::io::Error::new(std::io::ErrorKind::NotFound, "gone");
-        assert_eq!(io_err_to_ntstatus(&err), 0xC000_0034u32 as i32);
+        assert_eq!(io_err_to_ntstatus(&err), 0xc000_0034u32 as i32);
     }
 
     #[test]
     fn io_err_to_ntstatus_permission_denied() {
         let err = std::io::Error::new(std::io::ErrorKind::PermissionDenied, "nope");
-        assert_eq!(io_err_to_ntstatus(&err), 0xC000_0022u32 as i32);
+        assert_eq!(io_err_to_ntstatus(&err), 0xc000_0022u32 as i32);
     }
 
     #[test]
     fn io_err_to_ntstatus_already_exists() {
         let err = std::io::Error::new(std::io::ErrorKind::AlreadyExists, "dup");
-        assert_eq!(io_err_to_ntstatus(&err), 0xC000_0035u32 as i32);
+        assert_eq!(io_err_to_ntstatus(&err), 0xc000_0035u32 as i32);
     }
 
     #[test]
     fn io_err_to_ntstatus_invalid_input() {
         let err = std::io::Error::new(std::io::ErrorKind::InvalidInput, "bad");
-        assert_eq!(io_err_to_ntstatus(&err), 0xC000_000Du32 as i32);
+        assert_eq!(io_err_to_ntstatus(&err), 0xc000_000du32 as i32);
     }
 
     #[test]
     fn io_err_to_ntstatus_invalid_data() {
         let err = std::io::Error::new(std::io::ErrorKind::InvalidData, "corrupt");
-        assert_eq!(io_err_to_ntstatus(&err), 0xC000_000Du32 as i32);
+        assert_eq!(io_err_to_ntstatus(&err), 0xc000_000du32 as i32);
     }
 
     #[test]
     fn io_err_to_ntstatus_other_returns_unsuccessful() {
         let err = std::io::Error::new(std::io::ErrorKind::ConnectionReset, "reset");
-        assert_eq!(io_err_to_ntstatus(&err), 0xC000_0001u32 as i32);
+        assert_eq!(io_err_to_ntstatus(&err), 0xc000_0001u32 as i32);
     }
 
     #[test]
     fn io_err_to_ntstatus_would_block_returns_unsuccessful() {
         let err = std::io::Error::new(std::io::ErrorKind::WouldBlock, "busy");
-        assert_eq!(io_err_to_ntstatus(&err), 0xC000_0001u32 as i32);
+        assert_eq!(io_err_to_ntstatus(&err), 0xc000_0001u32 as i32);
     }
 }

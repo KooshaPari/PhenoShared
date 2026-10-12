@@ -12,7 +12,11 @@ pub fn count_default(input: &str) -> Counts {
 pub fn count_with(input: &str, whitespace: &[u8]) -> Counts {
     let bytes = input.len();
     let chars = input.chars().count();
-    let lines = if input.is_empty() { 0 } else { input.split('\n').count() };
+    let lines = if input.is_empty() {
+        0
+    } else {
+        input.split('\n').count()
+    };
     let mut words = 0usize;
     let mut in_word = false;
     for c in input.chars() {
@@ -24,7 +28,12 @@ pub fn count_with(input: &str, whitespace: &[u8]) -> Counts {
             in_word = false;
         }
     }
-    Counts { bytes, chars, words, lines }
+    Counts {
+        bytes,
+        chars,
+        words,
+        lines,
+    }
 }
 pub fn word_count(input: &str) -> usize {
     count_default(input).words

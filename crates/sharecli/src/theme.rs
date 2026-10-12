@@ -40,7 +40,11 @@ impl Rgb {
             n = (n << 4) | v as u32;
             i += 1;
         }
-        Rgb(((n >> 16) & 0xff) as u8, ((n >> 8) & 0xff) as u8, (n & 0xff) as u8)
+        Rgb(
+            ((n >> 16) & 0xff) as u8,
+            ((n >> 8) & 0xff) as u8,
+            (n & 0xff) as u8,
+        )
     }
 
     /// ANSI 24-bit truecolor escape for this pixel.
@@ -104,7 +108,7 @@ impl Tokens {
             "backbone-2" | "backbone2" | "bb2" | "dark" => Some(Self::BACKBONE2),
             "backbone-2-light" | "backbone2-light" | "bb2-light" | "light" => {
                 Some(Self::BACKBONE2_LIGHT)
-            }
+            },
             _ => None,
         }
     }
@@ -148,7 +152,10 @@ mod tests {
         assert!(Tokens::from_name("Backbone2").is_some());
         assert!(Tokens::from_name("BB2").is_some());
         assert!(Tokens::from_name("light").is_some());
-        assert_eq!(Tokens::from_name("bb2-light").unwrap().variant, ThemeVariant::Backbone2Light);
+        assert_eq!(
+            Tokens::from_name("bb2-light").unwrap().variant,
+            ThemeVariant::Backbone2Light
+        );
         assert!(Tokens::from_name("not-a-family").is_none());
     }
 

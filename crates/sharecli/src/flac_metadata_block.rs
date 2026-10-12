@@ -83,14 +83,17 @@ pub fn parse_blocks(input: &[u8]) -> Result<Vec<MetaBlock>, String> {
         let header = &input[offset..offset + HEADER_SIZE];
         let header_u32 = u32::from_be_bytes([header[0], header[1], header[2], header[3]]);
         let is_last = (header_u32 & 0x8000_0000) != 0;
-        let block_type = ((header_u32 >> 24) & 0x7F) as u8;
-        let length = (header_u32 & 0x00FF_FFFF) as usize;
+        let block_type = ((header_u32 >> 24) & 0x7f) as u8;
+        let length = (header_u32 & 0x00ff_ffff) as usize;
 
         if block_type == BLOCK_TYPE_INVALID {
             return Err(format!("invalid block type 127 at offset {}", offset));
         }
         if block_type >= BLOCK_TYPE_RESERVED_MIN && block_type <= BLOCK_TYPE_RESERVED_MAX {
-            return Err(format!("reserved block type {} at offset {}", block_type, offset));
+            return Err(format!(
+                "reserved block type {} at offset {}",
+                block_type, offset
+            ));
         }
 
         let data_start = offset + HEADER_SIZE;
@@ -107,7 +110,11 @@ pub fn parse_blocks(input: &[u8]) -> Result<Vec<MetaBlock>, String> {
         }
         let data = input[data_start..data_end].to_vec();
 
-        out.push(MetaBlock { is_last, block_type, data });
+        out.push(MetaBlock {
+            is_last,
+            block_type,
+            data,
+        });
         offset = data_end;
 
         if is_last {
@@ -121,7 +128,11 @@ pub fn parse_blocks(input: &[u8]) -> Result<Vec<MetaBlock>, String> {
 /// Parse a STREAMINFO payload (exactly 34 bytes).
 pub fn parse_streaminfo(data: &[u8]) -> Result<StreamInfo, String> {
     if data.len() != STREAMINFO_SIZE {
-        return Err(format!("STREAMINFO must be {} bytes, got {}", STREAMINFO_SIZE, data.len()));
+        return Err(format!(
+            "STREAMINFO must be {} bytes, got {}",
+            STREAMINFO_SIZE,
+            data.len()
+        ));
     }
     let min_block_size = u16::from_be_bytes([data[0], data[1]]);
     let max_block_size = u16::from_be_bytes([data[2], data[3]]);
@@ -132,10 +143,10 @@ pub fn parse_streaminfo(data: &[u8]) -> Result<StreamInfo, String> {
 
     // bytes 10..=13 hold sample_rate(20) | channels-1(3) | bps-1(5) | total_samples_high(4)
     let packed = u32::from_be_bytes([data[10], data[11], data[12], data[13]]);
-    let sample_rate = (packed >> 12) & 0x000F_FFFF;
+    let sample_rate = (packed >> 12) & 0x000f_ffff;
     let channels = (((packed >> 9) & 0x07) as u8) + 1;
-    let bits_per_sample = (((packed >> 4) & 0x1F) as u8) + 1;
-    let total_high = ((packed & 0x0F) as u64) << 32;
+    let bits_per_sample = (((packed >> 4) & 0x1f) as u8) + 1;
+    let total_high = ((packed & 0x0f) as u64) << 32;
     // bytes 14..=17 are total_samples low 32 bits
     let total_low = u32::from_be_bytes([data[14], data[15], data[16], data[17]]) as u64;
     let total_samples = total_high | total_low;
@@ -159,9 +170,9 @@ pub fn parse_streaminfo(data: &[u8]) -> Result<StreamInfo, String> {
 
 /// Build a 4-byte FLAC metadata block header.
 pub fn build_header(is_last: bool, block_type: u8, length: usize) -> [u8; HEADER_SIZE] {
-    let length_u32 = (length & 0x00FF_FFFF) as u32;
+    let length_u32 = (length & 0x00ff_ffff) as u32;
     let last_bit: u32 = if is_last { 0x8000_0000 } else { 0 };
-    let type_bits: u32 = ((block_type as u32) & 0x7F) << 24;
+    let type_bits: u32 = ((block_type as u32) & 0x7f) << 24;
     let header_u32 = last_bit | type_bits | length_u32;
     header_u32.to_be_bytes()
 }
@@ -188,9 +199,9 @@ mod tests {
         v.extend_from_slice(&0u32.to_be_bytes()[1..4]); // min frame 24 bits
         v.extend_from_slice(&0u32.to_be_bytes()[1..4]); // max frame 24 bits
         let mut packed: u32 = 0;
-        packed |= (44100u32 & 0x000F_FFFF) << 12; // sample_rate in top 20 bits
+        packed |= (44100u32 & 0x000f_ffff) << 12; // sample_rate in top 20 bits
         packed |= (1u32 & 0x07) << 9; // channels-1 in next 3 bits
-        packed |= (15u32 & 0x1F) << 4; // bps-1 in next 5 bits
+        packed |= (15u32 & 0x1f) << 4; // bps-1 in next 5 bits
                                        // total_samples high 4 bits = 0
         v.extend_from_slice(&packed.to_be_bytes()); // 4 bytes
         v.extend_from_slice(&0u32.to_be_bytes()); // total_low 4 bytes
@@ -233,7 +244,7 @@ mod tests {
         bytes.extend_from_slice(&build_header(false, BLOCK_TYPE_STREAMINFO, 34));
         bytes.extend_from_slice(&streaminfo_bytes());
         bytes.extend_from_slice(&build_header(true, BLOCK_TYPE_PADDING, 2));
-        bytes.extend_from_slice(&[0xAA, 0xBB]);
+        bytes.extend_from_slice(&[0xaa, 0xbb]);
 
         let blocks = parse_blocks(&bytes).unwrap();
         assert_eq!(blocks.len(), 2);
@@ -242,7 +253,7 @@ mod tests {
         assert_eq!(blocks[0].data.len(), 34);
         assert_eq!(blocks[1].block_type, BLOCK_TYPE_PADDING);
         assert!(blocks[1].is_last);
-        assert_eq!(blocks[1].data, vec![0xAA, 0xBB]);
+        assert_eq!(blocks[1].data, vec![0xaa, 0xbb]);
     }
 
     #[test]
@@ -265,14 +276,14 @@ mod tests {
         // Bytes 10..=13 carry packed (sample_rate|ch|bps|total_high). The
         // low nibble of byte 13 is total_high.
         let mut bytes = streaminfo_bytes();
-        bytes[13] = (bytes[13] & 0xF0) | 0x05;
+        bytes[13] = (bytes[13] & 0xf0) | 0x05;
         // bytes 14..=17 are total_low (32 bits, big-endian).
-        bytes[14] = 0xDE;
-        bytes[15] = 0xAD;
-        bytes[16] = 0xBE;
-        bytes[17] = 0xEF;
+        bytes[14] = 0xde;
+        bytes[15] = 0xad;
+        bytes[16] = 0xbe;
+        bytes[17] = 0xef;
         let info = parse_streaminfo(&bytes).unwrap();
-        assert_eq!(info.total_samples, 0x5_DEAD_BEEF);
+        assert_eq!(info.total_samples, 0x5_dead_beef);
     }
 
     #[test]
@@ -309,13 +320,13 @@ mod tests {
         let h = build_header(true, BLOCK_TYPE_VORBIS_COMMENT, 0x001234);
         let u = u32::from_be_bytes(h);
         assert_eq!(u & 0x8000_0000, 0x8000_0000);
-        assert_eq!((u >> 24) & 0x7F, BLOCK_TYPE_VORBIS_COMMENT as u32);
-        assert_eq!(u & 0x00FF_FFFF, 0x001234);
+        assert_eq!((u >> 24) & 0x7f, BLOCK_TYPE_VORBIS_COMMENT as u32);
+        assert_eq!(u & 0x00ff_ffff, 0x001234);
 
         let h2 = build_header(false, BLOCK_TYPE_PICTURE, 0);
         let u2 = u32::from_be_bytes(h2);
         assert_eq!(u2 & 0x8000_0000, 0);
-        assert_eq!((u2 >> 24) & 0x7F, BLOCK_TYPE_PICTURE as u32);
+        assert_eq!((u2 >> 24) & 0x7f, BLOCK_TYPE_PICTURE as u32);
     }
 
     #[test]
@@ -327,9 +338,9 @@ mod tests {
         bytes.extend_from_slice(&0u32.to_be_bytes()[1..4]); // min frame 24b
         bytes.extend_from_slice(&0u32.to_be_bytes()[1..4]); // max frame 24b
         let mut packed: u32 = 0;
-        packed |= (48000u32 & 0x000F_FFFF) << 12; // sample_rate (top 20)
+        packed |= (48000u32 & 0x000f_ffff) << 12; // sample_rate (top 20)
         packed |= (0u32 & 0x07) << 9; // channels-1
-        packed |= (23u32 & 0x1F) << 4; // bps-1
+        packed |= (23u32 & 0x1f) << 4; // bps-1
                                        // total_samples high nibble = 0 (48000 fits in 36 bits)
         bytes.extend_from_slice(&packed.to_be_bytes()); // bytes 10..=13
         bytes.extend_from_slice(&48000u32.to_be_bytes()); // bytes 14..=17 total_low

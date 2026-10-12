@@ -22,7 +22,10 @@ fn fr007_thermal_tui_gate_parity_rss_refuse() {
 
     let panel = gate_panel_lines(&snap, ThermalLevel::Green, false);
     let panel_text: String = panel.iter().map(|l| l.to_string()).collect();
-    assert!(panel_text.contains("DENY"), "gate panel lines MUST include DENY; got: {panel_text}");
+    assert!(
+        panel_text.contains("DENY"),
+        "gate panel lines MUST include DENY; got: {panel_text}"
+    );
     assert!(
         panel_text.contains(&RSS_REFUSE_BYTES.to_string()),
         "gate panel lines MUST include agent RSS total; got: {panel_text}"
@@ -35,14 +38,26 @@ fn fr007_thermal_tui_gate_parity_rss_refuse() {
     let backend = TestBackend::new(120, 64);
     let mut terminal = Terminal::new(backend).expect("terminal");
     let mut app = App::new(4).with_detected_agents(vec![DetectedAgentWatch {
-        agent: DetectedAgent { pid: 4242, family: "claude", comm: "claude".into() },
-        resource: AgentResourceSample { mem_rss_bytes: RSS_REFUSE_BYTES, fd_count: Some(8) },
+        agent: DetectedAgent {
+            pid: 4242,
+            family: "claude",
+            comm: "claude".into(),
+        },
+        resource: AgentResourceSample {
+            mem_rss_bytes: RSS_REFUSE_BYTES,
+            fd_count: Some(8),
+        },
     }]);
     app.update(ThermalLevel::Green, 1);
 
     terminal.draw(|f| render(f, &app)).expect("draw");
-    let rendered: String =
-        terminal.backend().buffer().content.iter().map(|c| c.symbol().to_string()).collect();
+    let rendered: String = terminal
+        .backend()
+        .buffer()
+        .content
+        .iter()
+        .map(|c| c.symbol().to_string())
+        .collect();
 
     assert!(
         rendered.contains("DENY"),

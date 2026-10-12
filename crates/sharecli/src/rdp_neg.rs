@@ -119,19 +119,31 @@ pub fn parse_request(input: &[u8]) -> Result<(RdpNegReq, &[u8]), String> {
     }
     let req_type = rest[0];
     if req_type != TYPE_RDP_NEG_REQ {
-        return Err(format!("rdp_neg: expected TYPE_RDP_NEG_REQ (0x01), got 0x{:02X}", req_type));
+        return Err(format!(
+            "rdp_neg: expected TYPE_RDP_NEG_REQ (0x01), got 0x{:02X}",
+            req_type
+        ));
     }
     // rest[1] is `flags` per spec; we do not enforce a particular value
     // here because there are known clients that set it non-zero.
     let _flags = rest[1];
     let req_len = u16::from_le_bytes([rest[2], rest[3]]) as usize;
     if req_len != 8 {
-        return Err(format!("rdp_neg: RDPNEG_REQ length must be 8, got {}", req_len));
+        return Err(format!(
+            "rdp_neg: RDPNEG_REQ length must be 8, got {}",
+            req_len
+        ));
     }
     let rdp_protocols = u32::from_le_bytes([rest[4], rest[5], rest[6], rest[7]]);
     let tail = &rest[8..];
 
-    Ok((RdpNegReq { rdp_protocols, cookie }, tail))
+    Ok((
+        RdpNegReq {
+            rdp_protocols,
+            cookie,
+        },
+        tail,
+    ))
 }
 
 /// Parse a raw frame starting with the TPKT header. Returns the same
@@ -139,11 +151,17 @@ pub fn parse_request(input: &[u8]) -> Result<(RdpNegReq, &[u8]), String> {
 /// payload (still inside the TPDU).
 pub fn parse_frame(input: &[u8]) -> Result<(RdpNegReq, &[u8]), String> {
     if input.len() < 4 {
-        return Err(format!("rdp_neg: TPKT header too short (need 4 bytes, got {})", input.len()));
+        return Err(format!(
+            "rdp_neg: TPKT header too short (need 4 bytes, got {})",
+            input.len()
+        ));
     }
     let tpkt_version = input[0];
     if tpkt_version != 0x03 {
-        return Err(format!("rdp_neg: bad TPKT version (want 0x03, got 0x{:02X})", tpkt_version));
+        return Err(format!(
+            "rdp_neg: bad TPKT version (want 0x03, got 0x{:02X})",
+            tpkt_version
+        ));
     }
     let tpkt_length = u16::from_be_bytes([input[2], input[3]]) as usize;
     if tpkt_length < 4 {
@@ -168,7 +186,7 @@ pub fn parse_frame(input: &[u8]) -> Result<(RdpNegReq, &[u8]), String> {
         ));
     }
     let tpdu_payload = &payload[1..1 + tpdu_len];
-    if tpdu_payload.is_empty() || tpdu_payload[0] != 0xE0 {
+    if tpdu_payload.is_empty() || tpdu_payload[0] != 0xe0 {
         return Err(format!(
             "rdp_neg: bad X.224 CR TPDU code (want 0xE0, got 0x{:02X})",
             tpdu_payload.first().copied().unwrap_or(0)
@@ -233,7 +251,7 @@ mod tests {
 
     #[test]
     fn wrong_request_type_rejected() {
-        let bytes = [0xFF, 0x00, 0x08, 0x00, 0x01, 0x00, 0x00, 0x00];
+        let bytes = [0xff, 0x00, 0x08, 0x00, 0x01, 0x00, 0x00, 0x00];
         let err = parse_request(&bytes).expect_err("must reject");
         assert!(err.contains("TYPE_RDP_NEG_REQ"), "got: {}", err);
     }
@@ -282,15 +300,15 @@ mod tests {
         assert!(tpdu_payload_len <= 255);
         let mut tpdu = Vec::new();
         tpdu.push(tpdu_payload_len as u8);
-        tpdu.push(0xE0);
+        tpdu.push(0xe0);
         tpdu.extend_from_slice(&body);
         // TPKT wraps the entire TPDU (header + TPDU).
         let tpkt_payload_len = 4 + tpdu.len();
         let mut frame = Vec::new();
         frame.push(0x03);
         frame.push(0x00);
-        frame.push(((tpkt_payload_len >> 8) & 0xFF) as u8);
-        frame.push((tpkt_payload_len & 0xFF) as u8);
+        frame.push(((tpkt_payload_len >> 8) & 0xff) as u8);
+        frame.push((tpkt_payload_len & 0xff) as u8);
         frame.extend_from_slice(&tpdu);
         let (req, rest) = parse_frame(&frame).expect("parse");
         assert!(rest.is_empty());

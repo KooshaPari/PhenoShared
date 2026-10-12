@@ -39,19 +39,39 @@ fn assert_status_object(status: &serde_json::Value, context: &str) {
 fn assert_health_gate_host_watch_pool_status_order(raw: &str, context: &str) {
     let v: serde_json::Value =
         serde_json::from_str(raw.trim()).expect("{context} MUST emit valid JSON");
-    let gate = v.get("gate").expect("{context} MUST include gate (AC-007.80)");
-    let host = v.get("host_watch").expect("{context} MUST include host_watch (AC-007.80)");
-    let pool = v.get("pool").expect("{context} MUST include pool (AC-007.80)");
-    let status = v.get("status").expect("{context} MUST include status (AC-007.80)");
+    let gate = v
+        .get("gate")
+        .expect("{context} MUST include gate (AC-007.80)");
+    let host = v
+        .get("host_watch")
+        .expect("{context} MUST include host_watch (AC-007.80)");
+    let pool = v
+        .get("pool")
+        .expect("{context} MUST include pool (AC-007.80)");
+    let status = v
+        .get("status")
+        .expect("{context} MUST include status (AC-007.80)");
     assert_pool_object(pool, context);
     assert_status_object(status, context);
-    assert!(gate.get("gate_decision").is_some(), "gate MUST include gate_decision (AC-007.80)");
-    assert!(host.get("load_1m").is_some(), "host_watch MUST include load_1m (AC-007.80)");
+    assert!(
+        gate.get("gate_decision").is_some(),
+        "gate MUST include gate_decision (AC-007.80)"
+    );
+    assert!(
+        host.get("load_1m").is_some(),
+        "host_watch MUST include load_1m (AC-007.80)"
+    );
 
     let gate_pos = raw.find("\"gate\"").expect("gate key in raw JSON");
-    let host_pos = raw.find("\"host_watch\"").expect("host_watch key in raw JSON");
-    let pool_pos = raw.find("\"pool\"").expect("pool key in raw JSON (AC-007.80)");
-    let status_pos = raw.find("\"status\"").expect("status key in raw JSON (AC-007.80)");
+    let host_pos = raw
+        .find("\"host_watch\"")
+        .expect("host_watch key in raw JSON");
+    let pool_pos = raw
+        .find("\"pool\"")
+        .expect("pool key in raw JSON (AC-007.80)");
+    let status_pos = raw
+        .find("\"status\"")
+        .expect("status key in raw JSON (AC-007.80)");
     assert!(
         gate_pos < host_pos && host_pos < pool_pos && pool_pos < status_pos,
         "{context} MUST serialize gate → host_watch → pool → status (AC-007.80); got: {raw}"
@@ -83,7 +103,7 @@ fn fr007_ws_client_health_update_pool_status_decode() {
             assert_eq!(h.status.agents[0].pid, 99);
             assert_eq!(h.status.scanned, 50);
             assert_health_gate_host_watch_pool_status_order(&health, "HealthUpdate wire");
-        }
+        },
         other => panic!("expected HealthUpdate, got {other:?}"),
     }
 }
@@ -93,9 +113,17 @@ fn fr007_ws_client_health_update_pool_status_decode() {
 async fn fr007_ws_client_health_update_live_ipc_wrap() {
     use sharecli_ipc::ws_client::ClientMessage;
 
-    let handler = sharecli_ipc::handler::Handler::new().await.expect("Handler::new");
-    let resp = handler.dispatch(r#"{"id":1,"method":"health.status","params":{}}"#).await;
-    assert!(resp.error.is_none(), "health.status MUST succeed (AC-007.80); err={:?}", resp.error);
+    let handler = sharecli_ipc::handler::Handler::new()
+        .await
+        .expect("Handler::new");
+    let resp = handler
+        .dispatch(r#"{"id":1,"method":"health.status","params":{}}"#)
+        .await;
+    assert!(
+        resp.error.is_none(),
+        "health.status MUST succeed (AC-007.80); err={:?}",
+        resp.error
+    );
     let health = serde_json::to_string(&resp.result).expect("serialize health.status result");
     assert_health_gate_host_watch_pool_status_order(&health, "health.status IPC");
 

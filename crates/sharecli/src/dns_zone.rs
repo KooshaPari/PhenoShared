@@ -104,19 +104,21 @@ pub fn parse(input: &str) -> Result<Zone, (usize, String)> {
         if let Some(rest) = line.strip_prefix('$') {
             // Directive.
             let mut parts = rest.split_whitespace();
-            let directive =
-                parts.next().ok_or((line_no + 1, "empty directive after $".to_string()))?;
-            let value =
-                parts.next().ok_or((line_no + 1, format!("$ {} missing value", directive)))?;
+            let directive = parts
+                .next()
+                .ok_or((line_no + 1, "empty directive after $".to_string()))?;
+            let value = parts
+                .next()
+                .ok_or((line_no + 1, format!("$ {} missing value", directive)))?;
             // Tolerate stray tokens after the value.
             match directive.to_ascii_uppercase().as_str() {
                 "ORIGIN" => origin = value.to_string(),
                 "TTL" => {
                     default_ttl = parse_ttl(value).map_err(|e| (line_no + 1, e))?;
-                }
+                },
                 other => {
                     return Err((line_no + 1, format!("unknown directive: ${}", other)));
-                }
+                },
             }
             continue;
         }
@@ -136,7 +138,10 @@ pub fn parse(input: &str) -> Result<Zone, (usize, String)> {
             name_owned = String::from(if records.is_empty() {
                 "@"
             } else {
-                &records.last().expect("records non-empty in else branch").name
+                &records
+                    .last()
+                    .expect("records non-empty in else branch")
+                    .name
             });
             // Don't consume the token; it's the type.
         } else {
@@ -203,9 +208,19 @@ pub fn parse(input: &str) -> Result<Zone, (usize, String)> {
         if rdata.is_empty() {
             return Err((line_no + 1, format!("missing rdata for {}", type_token)));
         }
-        records.push(Record { name: name_owned, ttl, class, record_type, rdata });
+        records.push(Record {
+            name: name_owned,
+            ttl,
+            class,
+            record_type,
+            rdata,
+        });
     }
-    Ok(Zone { origin, default_ttl, records })
+    Ok(Zone {
+        origin,
+        default_ttl,
+        records,
+    })
 }
 
 /// Returns true iff `s` looks like a record TYPE field (uppercase alphabetic,
@@ -262,7 +277,7 @@ fn parse_ttl(s: &str) -> Result<u32, String> {
                 "W" => 604_800,
                 _ => {
                     return Err(format!("unknown TTL unit: {}", rest));
-                }
+                },
             };
             saw_unit = true;
             break;
@@ -274,8 +289,12 @@ fn parse_ttl(s: &str) -> Result<u32, String> {
     if !saw_unit {
         // Consume the remainder of chars (empty in this case).
     }
-    let v: u64 = digits.parse().map_err(|e| format!("invalid TTL {}: {}", s, e))?;
-    let total = v.checked_mul(unit as u64).ok_or_else(|| format!("TTL overflow: {}", s))?;
+    let v: u64 = digits
+        .parse()
+        .map_err(|e| format!("invalid TTL {}: {}", s, e))?;
+    let total = v
+        .checked_mul(unit as u64)
+        .ok_or_else(|| format!("TTL overflow: {}", s))?;
     if total > u32::MAX as u64 {
         return Err(format!("TTL overflow: {}", s));
     }
@@ -308,8 +327,8 @@ fn unfold(input: &str) -> Vec<String> {
                             }
                             current = current.trim_end().to_string();
                         }
-                    }
-                    _ => {}
+                    },
+                    _ => {},
                 }
             }
             if in_paren == 0 {
@@ -507,6 +526,9 @@ mod tests {
     fn typo_record_type_preserved_as_unknown() {
         let zone = "@ IN WKS 10.0.0.1 tcp http\n";
         let z = parse(zone).expect("parse");
-        assert_eq!(z.records[0].record_type, RecordType::Unknown("WKS".to_string()));
+        assert_eq!(
+            z.records[0].record_type,
+            RecordType::Unknown("WKS".to_string())
+        );
     }
 }

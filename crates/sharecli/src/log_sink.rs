@@ -40,14 +40,20 @@ pub struct LogSink {
 }
 impl LogSink {
     pub fn new(capacity: usize) -> Self {
-        Self { buffer: Arc::new(Mutex::new(VecDeque::new())), capacity }
+        Self {
+            buffer: Arc::new(Mutex::new(VecDeque::new())),
+            capacity,
+        }
     }
     pub fn write(&self, level: LogLevel, msg: impl Into<String>) {
         let mut buf = self.buffer.lock().expect("LogSink buffer mutex poisoned");
         if buf.len() >= self.capacity {
             buf.pop_front();
         }
-        buf.push_back(LogEntry { level, message: msg.into() });
+        buf.push_back(LogEntry {
+            level,
+            message: msg.into(),
+        });
     }
     pub fn info(&self, msg: impl Into<String>) {
         self.write(LogLevel::Info, msg);
@@ -59,10 +65,17 @@ impl LogSink {
         self.write(LogLevel::Error, msg);
     }
     pub fn drain(&self) -> Vec<LogEntry> {
-        self.buffer.lock().expect("LogSink buffer mutex poisoned").drain(..).collect()
+        self.buffer
+            .lock()
+            .expect("LogSink buffer mutex poisoned")
+            .drain(..)
+            .collect()
     }
     pub fn len(&self) -> usize {
-        self.buffer.lock().expect("LogSink buffer mutex poisoned").len()
+        self.buffer
+            .lock()
+            .expect("LogSink buffer mutex poisoned")
+            .len()
     }
     pub fn is_empty(&self) -> bool {
         self.len() == 0
@@ -127,8 +140,11 @@ impl<S: Subscriber> Layer<S> for LogSinkLayer {
         }
         let mut visitor = MessageVisitor(String::new());
         event.record(&mut visitor);
-        let message =
-            if visitor.0.is_empty() { format!("{}", event.metadata().target()) } else { visitor.0 };
+        let message = if visitor.0.is_empty() {
+            format!("{}", event.metadata().target())
+        } else {
+            visitor.0
+        };
         self.sink.write(level, message);
     }
 }

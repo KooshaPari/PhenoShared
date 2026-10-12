@@ -15,11 +15,17 @@ impl Rational {
         if g == 0 {
             return self;
         }
-        Self { num: self.num / g, den: self.den / g }
+        Self {
+            num: self.num / g,
+            den: self.den / g,
+        }
     }
     pub fn add(self, other: Self) -> Self {
-        Self { num: self.num * other.den + other.num * self.den, den: self.den * other.den }
-            .reduce()
+        Self {
+            num: self.num * other.den + other.num * self.den,
+            den: self.den * other.den,
+        }
+        .reduce()
     }
     pub fn to_f64(self) -> f64 {
         self.num as f64 / self.den as f64

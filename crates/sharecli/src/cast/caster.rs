@@ -46,7 +46,11 @@ pub trait Caster: Send + Sync {
 
 /// Probe for an executable on `PATH`. Returns the resolved path or `None`.
 pub fn which(bin: &str) -> Option<std::path::PathBuf> {
-    let exts: &[&str] = if cfg!(windows) { &["", ".exe", ".cmd", ".bat"] } else { &[""] };
+    let exts: &[&str] = if cfg!(windows) {
+        &["", ".exe", ".cmd", ".bat"]
+    } else {
+        &[""]
+    };
     let paths = std::env::var_os("PATH")?;
     for dir in std::env::split_paths(&paths) {
         for ext in exts {
@@ -95,7 +99,11 @@ impl ProcessRunner for SystemRunner {
             .stderr(std::process::Stdio::piped())
             .spawn()?;
         use std::io::Write;
-        child.stdin.take().expect("spawned child must have piped stdin").write_all(stdin)?;
+        child
+            .stdin
+            .take()
+            .expect("spawned child must have piped stdin")
+            .write_all(stdin)?;
         child.wait_with_output()
     }
 }
@@ -127,14 +135,18 @@ impl MockProcessRunner {
         self.commands
             .lock()
             .expect("MockProcessRunner commands mutex poisoned")
-            .push_back((bin.to_string(), args.iter().map(|s| s.to_string()).collect()));
-        self.outputs.lock().expect("MockProcessRunner outputs mutex poisoned").push_back(Ok(
-            std::process::Output {
+            .push_back((
+                bin.to_string(),
+                args.iter().map(|s| s.to_string()).collect(),
+            ));
+        self.outputs
+            .lock()
+            .expect("MockProcessRunner outputs mutex poisoned")
+            .push_back(Ok(std::process::Output {
                 status: std::process::ExitStatus::default(),
                 stdout: Vec::new(),
                 stderr: Vec::new(),
-            },
-        ));
+            }));
     }
 
     /// Create a runner pre-loaded with commands that all succeed.
@@ -156,9 +168,14 @@ impl MockProcessRunner {
             r.commands
                 .lock()
                 .expect("MockProcessRunner commands mutex poisoned")
-                .push_back((bin.to_string(), args.iter().map(|s| s.to_string()).collect()));
+                .push_back((
+                    bin.to_string(),
+                    args.iter().map(|s| s.to_string()).collect(),
+                ));
         }
-        *r.outputs.lock().expect("MockProcessRunner outputs mutex poisoned") =
+        *r.outputs
+            .lock()
+            .expect("MockProcessRunner outputs mutex poisoned") =
             std::collections::VecDeque::from(outputs);
         r
     }
@@ -230,7 +247,9 @@ pub struct GhosttyCaster<R: ProcessRunner = SystemRunner> {
 impl GhosttyCaster<SystemRunner> {
     /// Default constructor — uses real subprocess execution.
     pub fn system() -> Self {
-        Self { runner: SystemRunner }
+        Self {
+            runner: SystemRunner,
+        }
     }
 }
 
@@ -270,12 +289,18 @@ impl<R: ProcessRunner> Caster for GhosttyCaster<R> {
 
         // Step 2: focus the target window (1-indexed).
         let win_idx = addr.window.to_string();
-        if let Err(e) = self.runner.run("ghostty", &["+action", "goto_window", &win_idx]) {
+        if let Err(e) = self
+            .runner
+            .run("ghostty", &["+action", "goto_window", &win_idx])
+        {
             return SendOutcome::Failed(format!("ghostty goto_window failed: {}", e));
         }
 
         // Step 3: paste from clipboard into the now-focused surface.
-        match self.runner.run("ghostty", &["+action", "paste-from-clipboard"]) {
+        match self
+            .runner
+            .run("ghostty", &["+action", "paste-from-clipboard"])
+        {
             Ok(o) if o.status.success() => SendOutcome::Delivered,
             Ok(o) => SendOutcome::Failed(format!(
                 "ghostty paste-from-clipboard exited {}: {}",
@@ -300,7 +325,11 @@ pub struct RetryCaster<C: Caster> {
 
 impl<C: Caster> RetryCaster<C> {
     pub fn new(inner: C, max_attempts: usize, base_delay_ms: u64) -> Self {
-        Self { inner, max_attempts, base_delay_ms }
+        Self {
+            inner,
+            max_attempts,
+            base_delay_ms,
+        }
     }
 }
 
@@ -328,7 +357,7 @@ impl<C: Caster> Caster for RetryCaster<C> {
                         let delay = self.base_delay_ms * (1u64 << (attempt - 1)); // exponential
                         std::thread::sleep(Duration::from_millis(delay));
                     }
-                }
+                },
             }
         }
         last_err
@@ -361,7 +390,9 @@ pub struct WeztermCaster<R: ProcessRunner = SystemRunner> {
 impl WeztermCaster<SystemRunner> {
     /// Default constructor — uses real subprocess execution.
     pub fn system() -> Self {
-        Self { runner: SystemRunner }
+        Self {
+            runner: SystemRunner,
+        }
     }
 }
 
@@ -400,8 +431,10 @@ impl<R: ProcessRunner> Caster for WeztermCaster<R> {
             Ok(v) => v,
             Err(_) => return Ok(None), // non-JSON or empty: degrade
         };
-        let mut matching: Vec<WeztermPane> =
-            panes.into_iter().filter(|p| p.window_id == want_window).collect();
+        let mut matching: Vec<WeztermPane> = panes
+            .into_iter()
+            .filter(|p| p.window_id == want_window)
+            .collect();
         matching.sort_by_key(|p| p.pane_id);
         Ok(matching.into_iter().nth(want_pane_idx).map(|p| p.pane_id))
     }
@@ -414,14 +447,14 @@ impl<R: ProcessRunner> Caster for WeztermCaster<R> {
                     "no wezterm pane matching window:{} pane:{}",
                     addr.window, addr.pane
                 ));
-            }
+            },
             Err(e) => return SendOutcome::Failed(e.to_string()),
         };
         let id_str = pane_id.to_string();
-        match self
-            .runner
-            .run("wezterm", &["cli", "send-text", "--pane-id", &id_str, "--no-paste", text])
-        {
+        match self.runner.run(
+            "wezterm",
+            &["cli", "send-text", "--pane-id", &id_str, "--no-paste", text],
+        ) {
             Ok(o) if o.status.success() => SendOutcome::Delivered,
             Ok(o) => SendOutcome::Failed(format!(
                 "wezterm cli send-text exited {}: {}",
@@ -460,7 +493,7 @@ impl Caster for ClipboardCaster {
                         return SendOutcome::Unsupported(
                             "no clipboard binary (pbcopy/clip/wl-copy/xclip) on PATH".into(),
                         );
-                    }
+                    },
                 },
             }
         };
@@ -508,7 +541,7 @@ pub fn send_with_fallback(
             SendOutcome::Unsupported(msg) => {
                 last_unsupported = Some(format!("{}: {}", label, msg));
                 continue;
-            }
+            },
             _ => return outcome,
         }
     }
@@ -536,7 +569,9 @@ pub struct SshWinTermCaster<R: ProcessRunner = SystemRunner> {
 
 impl SshWinTermCaster<SystemRunner> {
     pub fn system() -> Self {
-        Self { runner: SystemRunner }
+        Self {
+            runner: SystemRunner,
+        }
     }
 }
 
@@ -577,7 +612,13 @@ impl<R: ProcessRunner> Caster for SshWinTermCaster<R> {
         // was introduced in PowerShell 5.0).
         let result = self.runner.run_with_stdin(
             "ssh",
-            &[&ssh_target, "powershell", "-NoProfile", "-Command", "$input | Set-Clipboard"],
+            &[
+                &ssh_target,
+                "powershell",
+                "-NoProfile",
+                "-Command",
+                "$input | Set-Clipboard",
+            ],
             text.as_bytes(),
         );
 
@@ -586,7 +627,7 @@ impl<R: ProcessRunner> Caster for SshWinTermCaster<R> {
                 // Text is on the remote clipboard. The user must now focus
                 // their WT window and paste manually.
                 SendOutcome::NeedsFocus
-            }
+            },
             Ok(o) => SendOutcome::Failed(format!(
                 "ssh winterm exited {}: {}",
                 o.status,
@@ -625,7 +666,10 @@ mod tests {
         let outcome = send_with_fallback(&[(a, "clipboard".to_string())], &addr, "hello");
         // The clipboard caster either delivers (real env) or reports unsupported
         // (no clipboard binary). Either is acceptable here.
-        assert!(matches!(outcome, SendOutcome::Delivered | SendOutcome::Unsupported(_)));
+        assert!(matches!(
+            outcome,
+            SendOutcome::Delivered | SendOutcome::Unsupported(_)
+        ));
     }
 
     #[test]
@@ -696,7 +740,9 @@ mod tests {
     #[test]
     fn mock_process_runner_run_with_stdin_delegates_to_run() {
         let runner = MockProcessRunner::from_ok(&[("bin", &["arg"])]);
-        let out = runner.run_with_stdin("bin", &["arg"], b"input data").unwrap();
+        let out = runner
+            .run_with_stdin("bin", &["arg"], b"input data")
+            .unwrap();
         assert!(out.status.success());
     }
 
@@ -738,7 +784,10 @@ mod tests {
     #[test]
     fn send_outcome_eq() {
         assert_eq!(SendOutcome::Delivered, SendOutcome::Delivered);
-        assert_eq!(SendOutcome::Failed("a".into()), SendOutcome::Failed("a".into()));
+        assert_eq!(
+            SendOutcome::Failed("a".into()),
+            SendOutcome::Failed("a".into())
+        );
         assert_ne!(SendOutcome::Delivered, SendOutcome::NeedsFocus);
     }
 
@@ -836,7 +885,10 @@ mod tests {
         let runner = MockProcessRunner::custom(
             &[
                 ("wezterm", &["cli", "list", "--format", "json"]),
-                ("wezterm", &["cli", "send-text", "--pane-id", "10", "--no-paste", "hello"]),
+                (
+                    "wezterm",
+                    &["cli", "send-text", "--pane-id", "10", "--no-paste", "hello"],
+                ),
             ],
             vec![
                 Ok(std::process::Output {
@@ -928,7 +980,9 @@ mod tests {
                 false
             }
         }
-        let caster = GhosttyCaster { runner: NoGhosttyRunner };
+        let caster = GhosttyCaster {
+            runner: NoGhosttyRunner,
+        };
         let addr = make_addr("mbp", 1, 0);
         let outcome = caster.send(&addr, "test");
         assert!(matches!(outcome, SendOutcome::Unsupported(_)));
@@ -948,7 +1002,10 @@ mod tests {
                 _stdin: &[u8],
             ) -> std::io::Result<std::process::Output> {
                 if bin == "pbcopy" {
-                    Err(std::io::Error::new(std::io::ErrorKind::PermissionDenied, "denied"))
+                    Err(std::io::Error::new(
+                        std::io::ErrorKind::PermissionDenied,
+                        "denied",
+                    ))
                 } else {
                     unimplemented!()
                 }
@@ -957,7 +1014,9 @@ mod tests {
                 bin == "ghostty" || bin == "pbcopy"
             }
         }
-        let caster = GhosttyCaster { runner: PbcopyFailRunner };
+        let caster = GhosttyCaster {
+            runner: PbcopyFailRunner,
+        };
         let addr = make_addr("mbp", 1, 0);
         let outcome = caster.send(&addr, "test");
         assert!(matches!(outcome, SendOutcome::Failed(ref m) if m.contains("pbcopy")));
@@ -980,14 +1039,20 @@ mod tests {
     #[test]
     fn ghostty_send_goto_window_fails() {
         let runner = MockProcessRunner::custom(
-            &[("pbcopy", &[]), ("ghostty", &["+action", "goto_window", "1"])],
+            &[
+                ("pbcopy", &[]),
+                ("ghostty", &["+action", "goto_window", "1"]),
+            ],
             vec![
                 Ok(std::process::Output {
                     status: std::process::ExitStatus::default(),
                     stdout: Vec::new(),
                     stderr: Vec::new(),
                 }),
-                Err(std::io::Error::new(std::io::ErrorKind::NotFound, "not found")),
+                Err(std::io::Error::new(
+                    std::io::ErrorKind::NotFound,
+                    "not found",
+                )),
             ],
         );
         let caster = GhosttyCaster::new(runner);
@@ -1131,7 +1196,13 @@ mod tests {
                 }
             }
         }
-        let rc = RetryCaster::new(FailNTimes { count: AtomicUsize::new(0) }, 3, 1);
+        let rc = RetryCaster::new(
+            FailNTimes {
+                count: AtomicUsize::new(0),
+            },
+            3,
+            1,
+        );
         let addr = make_addr("mbp", 0, 0);
         // 3 attempts: fail, fail, deliver (n=0,1 fail; n=2 delivers)
         assert_eq!(rc.send(&addr, "hi"), SendOutcome::Delivered);
@@ -1206,7 +1277,13 @@ mod tests {
     fn ssh_winterm_ssh_delivers_needs_focus() {
         let runner = MockProcessRunner::from_ok(&[(
             "ssh",
-            &["user@host", "powershell", "-NoProfile", "-Command", "$input | Set-Clipboard"],
+            &[
+                "user@host",
+                "powershell",
+                "-NoProfile",
+                "-Command",
+                "$input | Set-Clipboard",
+            ],
         )]);
         let caster = SshWinTermCaster::new(runner);
         let addr = PaneAddress::parse("mbp:ssh:user@host:0:0").unwrap();
@@ -1219,7 +1296,13 @@ mod tests {
         // For tailscale host, SSH target is {machine}.ts.net
         let runner = MockProcessRunner::from_ok(&[(
             "ssh",
-            &["mbp.ts.net", "powershell", "-NoProfile", "-Command", "$input | Set-Clipboard"],
+            &[
+                "mbp.ts.net",
+                "powershell",
+                "-NoProfile",
+                "-Command",
+                "$input | Set-Clipboard",
+            ],
         )]);
         let caster = SshWinTermCaster::new(runner);
         let addr = PaneAddress::parse("mbp:tailscale:0:0").unwrap();
@@ -1283,15 +1366,22 @@ mod tests {
                 self.outcome.clone()
             }
         }
-        let a_inner =
-            CountingCaster { count: AtomicUsize::new(0), outcome: SendOutcome::Delivered };
-        let b_inner =
-            CountingCaster { count: AtomicUsize::new(0), outcome: SendOutcome::Delivered };
+        let a_inner = CountingCaster {
+            count: AtomicUsize::new(0),
+            outcome: SendOutcome::Delivered,
+        };
+        let b_inner = CountingCaster {
+            count: AtomicUsize::new(0),
+            outcome: SendOutcome::Delivered,
+        };
         let a: std::sync::Arc<dyn Caster> = std::sync::Arc::new(a_inner);
         let b: std::sync::Arc<dyn Caster> = std::sync::Arc::new(b_inner);
         let addr = make_addr("mbp", 0, 0);
-        let outcome =
-            send_with_fallback(&[(a.clone(), "a".into()), (b.clone(), "b".into())], &addr, "x");
+        let outcome = send_with_fallback(
+            &[(a.clone(), "a".into()), (b.clone(), "b".into())],
+            &addr,
+            "x",
+        );
         assert_eq!(outcome, SendOutcome::Delivered);
         // NOTE: We can't access .count on Arc<dyn Caster>, so we verify behavior
         // by checking that the first caster succeeded (SendOutcome::Delivered)

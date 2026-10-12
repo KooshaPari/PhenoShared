@@ -12,7 +12,11 @@ pub fn encode(value: u64, base: u32) -> String {
     let mut out = String::new();
     while v > 0 {
         let d = (v % base as u64) as u32;
-        let c = if d < 10 { b'0' + d as u8 } else { b'a' + (d - 10) as u8 };
+        let c = if d < 10 {
+            b'0' + d as u8
+        } else {
+            b'a' + (d - 10) as u8
+        };
         out.push(c as char);
         v /= base as u64;
     }
@@ -58,7 +62,11 @@ pub fn big_encode(value: &[u32], base: u32) -> String {
             limbs[i] = (v / base as u64) as u32;
             carry = v % base as u64;
         }
-        let c = if carry < 10 { b'0' + carry as u8 } else { b'a' + (carry - 10) as u8 };
+        let c = if carry < 10 {
+            b'0' + carry as u8
+        } else {
+            b'a' + (carry - 10) as u8
+        };
         out.push(c as char);
         while !limbs.is_empty()
             && *limbs.last().expect("limbs non-empty (guard checked above)") == 0

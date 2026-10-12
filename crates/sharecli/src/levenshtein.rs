@@ -73,7 +73,11 @@ pub fn distance(a: &str, b: &str) -> usize {
     for i in 1..=a_chars.len() {
         curr[0] = i; // cost of deleting a's first i chars to reach empty b
         for j in 1..=n {
-            let cost = if a_chars[i - 1] == b_chars[j - 1] { 0 } else { 1 };
+            let cost = if a_chars[i - 1] == b_chars[j - 1] {
+                0
+            } else {
+                1
+            };
             curr[j] = (prev[j] + 1) // deletion
                 .min(curr[j - 1] + 1) // insertion
                 .min(prev[j - 1] + cost); // substitution
@@ -126,13 +130,21 @@ pub fn distance_with_cap(a: &str, b: &str, cap: usize) -> usize {
     let blen = b_chars.len();
 
     // Length-difference lower bound: distance >= |alen - blen|.
-    let len_lb = if alen > blen { alen - blen } else { blen - alen };
+    let len_lb = if alen > blen {
+        alen - blen
+    } else {
+        blen - alen
+    };
     if len_lb > cap {
         return cap + 1;
     }
 
     // Ensure `a` is the shorter one so the DP band stays narrow.
-    let (a_chars, b_chars) = if alen <= blen { (a_chars, b_chars) } else { (b_chars, a_chars) };
+    let (a_chars, b_chars) = if alen <= blen {
+        (a_chars, b_chars)
+    } else {
+        (b_chars, a_chars)
+    };
     let (m, n) = (a_chars.len(), b_chars.len());
 
     // Sentinel for "this cell already exceeds cap".
@@ -164,7 +176,11 @@ pub fn distance_with_cap(a: &str, b: &str, cap: usize) -> usize {
             curr[j] = inf;
         }
         for j in j_lo..=j_hi {
-            let cost = if a_chars[i - 1] == b_chars[j - 1] { 0 } else { 1 };
+            let cost = if a_chars[i - 1] == b_chars[j - 1] {
+                0
+            } else {
+                1
+            };
             let sub = prev[j - 1].saturating_add(cost);
             let del = prev[j] + 1;
             let ins = curr[j - 1] + 1;

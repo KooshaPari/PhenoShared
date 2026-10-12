@@ -27,7 +27,11 @@ pub fn force_unmount(mountpoint: &Path) -> std::io::Result<()> {
     #[cfg(target_os = "linux")]
     {
         for bin in ["fusermount3", "fusermount"] {
-            match std::process::Command::new(bin).arg("-uz").arg(mountpoint).status() {
+            match std::process::Command::new(bin)
+                .arg("-uz")
+                .arg(mountpoint)
+                .status()
+            {
                 Ok(status) if status.success() => return Ok(()),
                 _ => continue,
             }
@@ -35,7 +39,9 @@ pub fn force_unmount(mountpoint: &Path) -> std::io::Result<()> {
     }
     #[cfg(target_os = "macos")]
     {
-        let status = std::process::Command::new("umount").arg(mountpoint).status()?;
+        let status = std::process::Command::new("umount")
+            .arg(mountpoint)
+            .status()?;
         if status.success() {
             return Ok(());
         }
@@ -168,7 +174,10 @@ pub fn verify_mount_smoke_provenance(backing_file: &Path) -> anyhow::Result<()> 
     let prov = read_provenance(backing_file)
         .map_err(|e| anyhow::anyhow!("mount smoke provenance read failed: {e}"))?
         .ok_or_else(|| {
-            anyhow::anyhow!("mount smoke provenance: missing xattrs on {}", backing_file.display())
+            anyhow::anyhow!(
+                "mount smoke provenance: missing xattrs on {}",
+                backing_file.display()
+            )
         })?;
     let expected_session = default_session_id();
     anyhow::ensure!(
@@ -177,7 +186,10 @@ pub fn verify_mount_smoke_provenance(backing_file: &Path) -> anyhow::Result<()> 
         prov.session_id,
         expected_session
     );
-    let now = SystemTime::now().duration_since(UNIX_EPOCH).map(|d| d.as_secs()).unwrap_or(0);
+    let now = SystemTime::now()
+        .duration_since(UNIX_EPOCH)
+        .map(|d| d.as_secs())
+        .unwrap_or(0);
     anyhow::ensure!(
         prov.written_at_unix <= now.saturating_add(5),
         "mount smoke provenance: written_at {} is in the future (now {now})",
@@ -228,7 +240,10 @@ pub fn run_mount_smoke(backing: &Path) -> anyhow::Result<()> {
 
     let new_dir = session.mountpoint().join("smoke-dir");
     std::fs::create_dir(&new_dir)?;
-    anyhow::ensure!(backing.join("smoke-dir").is_dir(), "mount smoke mkdir: backing dir missing");
+    anyhow::ensure!(
+        backing.join("smoke-dir").is_dir(),
+        "mount smoke mkdir: backing dir missing"
+    );
 
     std::fs::remove_file(&new_file)?;
     anyhow::ensure!(

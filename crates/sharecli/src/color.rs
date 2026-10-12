@@ -24,7 +24,11 @@ pub fn hsl_to_rgb(h: f64, s: f64, l: f64) -> (u8, u8, u8) {
         (c, 0.0, x)
     };
     let m = l - c / 2.0;
-    (((r1 + m) * 255.0) as u8, ((g1 + m) * 255.0) as u8, ((b1 + m) * 255.0) as u8)
+    (
+        ((r1 + m) * 255.0) as u8,
+        ((g1 + m) * 255.0) as u8,
+        ((b1 + m) * 255.0) as u8,
+    )
 }
 #[cfg(test)]
 mod tests {

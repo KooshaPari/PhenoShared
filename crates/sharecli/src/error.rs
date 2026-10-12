@@ -95,35 +95,53 @@ pub type Result<T> = std::result::Result<T, SharecliError>;
 
 impl SharecliError {
     pub fn config_invalid(message: impl Into<String>) -> Self {
-        Self::ConfigInvalid { message: message.into() }
+        Self::ConfigInvalid {
+            message: message.into(),
+        }
     }
 
     pub fn user_input(message: impl Into<String>) -> Self {
-        Self::UserInput { message: message.into() }
+        Self::UserInput {
+            message: message.into(),
+        }
     }
 
     pub fn not_found(message: impl Into<String>) -> Self {
-        Self::NotFound { message: message.into() }
+        Self::NotFound {
+            message: message.into(),
+        }
     }
 
     pub fn auth(message: impl Into<String>) -> Self {
-        Self::Auth { message: message.into() }
+        Self::Auth {
+            message: message.into(),
+        }
     }
 
     pub fn io(message: impl Into<String>, source: std::io::Error) -> Self {
-        Self::Io { message: message.into(), source: Some(source) }
+        Self::Io {
+            message: message.into(),
+            source: Some(source),
+        }
     }
 
     pub fn spawn(message: impl Into<String>) -> Self {
-        Self::Spawn { message: message.into() }
+        Self::Spawn {
+            message: message.into(),
+        }
     }
 
     pub fn serve(message: impl Into<String>) -> Self {
-        Self::Serve { message: message.into() }
+        Self::Serve {
+            message: message.into(),
+        }
     }
 
     pub fn internal(message: impl Into<String>) -> Self {
-        Self::Internal { message: message.into(), source: None }
+        Self::Internal {
+            message: message.into(),
+            source: None,
+        }
     }
 
     /// Stable code for operator runbooks / support.
@@ -161,10 +179,16 @@ impl SharecliError {
     /// Print `SHARECLI_ERROR_CODE` + message to stderr (no panic paths).
     pub fn eprint(&self) {
         eprintln!("SHARECLI_ERROR_CODE={} error: {self}", self.code());
-        if let Self::Io { source: Some(src), .. } = self {
+        if let Self::Io {
+            source: Some(src), ..
+        } = self
+        {
             eprintln!("  caused by: {src}");
         }
-        if let Self::Internal { source: Some(src), .. } = self {
+        if let Self::Internal {
+            source: Some(src), ..
+        } = self
+        {
             eprintln!("  caused by: {src:#}");
         }
     }
@@ -184,7 +208,10 @@ impl From<std::io::Error> for SharecliError {
 
 impl From<anyhow::Error> for SharecliError {
     fn from(source: anyhow::Error) -> Self {
-        Self::Internal { message: source.to_string(), source: Some(source) }
+        Self::Internal {
+            message: source.to_string(),
+            source: Some(source),
+        }
     }
 }
 
@@ -194,7 +221,10 @@ mod tests {
 
     #[test]
     fn exit_codes_match_sysexits_subset() {
-        assert_eq!(SharecliError::config_invalid("bad").exit_code(), EXIT_CONFIG);
+        assert_eq!(
+            SharecliError::config_invalid("bad").exit_code(),
+            EXIT_CONFIG
+        );
         assert_eq!(SharecliError::user_input("bad").exit_code(), EXIT_USAGE);
         assert_eq!(SharecliError::not_found("x").exit_code(), EXIT_NOT_FOUND);
         assert_eq!(SharecliError::auth("denied").exit_code(), EXIT_AUTH);

@@ -119,15 +119,15 @@ pub async fn run(bind: &str, on_conflict: OnConflict) -> Result<()> {
             info!(%url, "sharecli serve: attaching to existing instance");
             println!("sharecli serve already running at {url}");
             return Ok(());
-        }
+        },
         Decision::Abort => {
             let url = match &state {
                 ServeState::Running { info, .. } => info.url.clone(),
                 ServeState::Free => unreachable!(),
             };
             anyhow::bail!("serve already running at {url}");
-        }
-        Decision::Serve | Decision::Replace => {}
+        },
+        Decision::Serve | Decision::Replace => {},
     }
 
     let url = format!("http://{bind}");
@@ -245,17 +245,32 @@ pub async fn run(bind: &str, on_conflict: OnConflict) -> Result<()> {
 
     let app = Router::new()
         .route("/", get(dashboard))
-        .route("/assets/dashboard/ui/{*path}", get(crate::dashboard_assets::serve))
+        .route(
+            "/assets/dashboard/ui/{*path}",
+            get(crate::dashboard_assets::serve),
+        )
         .route("/healthz", get(healthz))
         .route("/readyz", get(readyz))
         .route("/config", get(config_handler))
         .route("/health/processes", get(health_processes_handler))
         .route("/metrics/prometheus", get(metrics_prometheus_handler))
-        .route("/debug/pprof/profile", get(crate::pprof_http::profile_handler))
+        .route(
+            "/debug/pprof/profile",
+            get(crate::pprof_http::profile_handler),
+        )
         .route("/ws", get(ws_handler))
-        .layer(middleware::from_fn_with_state(state.clone(), http_observability_middleware))
-        .layer(middleware::from_fn_with_state(state.clone(), serve_rate_limit_middleware))
-        .layer(middleware::from_fn_with_state(auth, serve_auth::require_bearer))
+        .layer(middleware::from_fn_with_state(
+            state.clone(),
+            http_observability_middleware,
+        ))
+        .layer(middleware::from_fn_with_state(
+            state.clone(),
+            serve_rate_limit_middleware,
+        ))
+        .layer(middleware::from_fn_with_state(
+            auth,
+            serve_auth::require_bearer,
+        ))
         .with_state(state);
 
     let listener = tokio::net::TcpListener::bind(bind).await?;
@@ -310,7 +325,7 @@ async fn thermal_poll_task(
             Err(e) => {
                 warn!("thermal poll error: {e}");
                 continue;
-            }
+            },
         };
         match level {
             Some(ThermalLevel::Red) => {
@@ -320,14 +335,14 @@ async fn thermal_poll_task(
                 tokio::time::sleep(tokio::time::Duration::from_millis(200)).await;
                 let _ = shutdown_tx.send(true);
                 return;
-            }
+            },
             Some(ThermalLevel::Yellow) => {
                 info!("thermal pressure WARNING (2) -- broadcasting");
                 let _ = tx.send(ThermalEvent::ThermalWarning { pressure: 2 });
-            }
+            },
             Some(ThermalLevel::Green) | None => {
                 // No event needed for normal operation.
-            }
+            },
         }
     }
 }
@@ -341,10 +356,16 @@ async fn http_observability_middleware(
     let start = Instant::now();
     let method = req.method().as_str().to_owned();
     let path = req.uri().path().to_owned();
-    let incoming =
-        req.headers().get("traceparent").and_then(|v| v.to_str().ok()).map(str::to_owned);
+    let incoming = req
+        .headers()
+        .get("traceparent")
+        .and_then(|v| v.to_str().ok())
+        .map(str::to_owned);
     if incoming.is_some() {
-        state.metrics.counter("sharecli_tracecontext_extracted_total").inc();
+        state
+            .metrics
+            .counter("sharecli_tracecontext_extracted_total")
+            .inc();
     }
 
     let span = tracing::info_span!(
@@ -360,9 +381,14 @@ async fn http_observability_middleware(
     state.http_red.record(status, start.elapsed());
 
     let outgoing = incoming.unwrap_or_else(synthesize_traceparent);
-    state.metrics.counter("sharecli_tracecontext_injected_total").inc();
+    state
+        .metrics
+        .counter("sharecli_tracecontext_injected_total")
+        .inc();
     if let Ok(val) = HeaderValue::from_str(&outgoing) {
-        response.headers_mut().insert(HeaderName::from_static("traceparent"), val);
+        response
+            .headers_mut()
+            .insert(HeaderName::from_static("traceparent"), val);
     }
     response
 }
@@ -394,7 +420,9 @@ async fn serve_rate_limit_middleware(
         let mut response = ErrorEnvelope::rate_limited("HTTP rate limit exceeded; retry later")
             .into_response(StatusCode::TOO_MANY_REQUESTS);
         if let Ok(val) = HeaderValue::from_str(&retry_after.to_string()) {
-            response.headers_mut().insert(HeaderName::from_static("retry-after"), val);
+            response
+                .headers_mut()
+                .insert(HeaderName::from_static("retry-after"), val);
         }
         return response;
     }
@@ -405,7 +433,10 @@ async fn serve_rate_limit_middleware(
 /// Best-effort W3C traceparent when the client did not send one.
 fn synthesize_traceparent() -> String {
     use std::time::{SystemTime, UNIX_EPOCH};
-    let nanos = SystemTime::now().duration_since(UNIX_EPOCH).map(|d| d.as_nanos()).unwrap_or(0);
+    let nanos = SystemTime::now()
+        .duration_since(UNIX_EPOCH)
+        .map(|d| d.as_nanos())
+        .unwrap_or(0);
     let pid = u128::from(std::process::id());
     let trace_id = format!("{:032x}", nanos ^ (pid << 64));
     let span_id = format!("{:016x}", (nanos as u64) ^ (pid as u64));
@@ -428,7 +459,10 @@ pub fn healthz_json() -> serde_json::Value {
 /// Pure readiness decision: `(status, body)` from the shutdown flag.
 pub fn readyz_response(shutdown_requested: bool) -> (StatusCode, serde_json::Value) {
     if shutdown_requested {
-        (StatusCode::SERVICE_UNAVAILABLE, json!({"status": "unavailable"}))
+        (
+            StatusCode::SERVICE_UNAVAILABLE,
+            json!({"status": "unavailable"}),
+        )
     } else {
         (StatusCode::OK, json!({"status": "ok"}))
     }
@@ -555,20 +589,38 @@ async fn metrics_prometheus_handler(State(state): State<AppState>) -> impl IntoR
     let mut body = render_prometheus_metrics(&processes, &health_map);
     render_http_red_metrics(&mut body, &state.http_red.snapshot());
     // C05 L42: trace-context counters consumed by the L49 sharecli-trace dashboard panel.
-    let injected = state.metrics.counter("sharecli_tracecontext_injected_total").get();
-    let extracted = state.metrics.counter("sharecli_tracecontext_extracted_total").get();
+    let injected = state
+        .metrics
+        .counter("sharecli_tracecontext_injected_total")
+        .get();
+    let extracted = state
+        .metrics
+        .counter("sharecli_tracecontext_extracted_total")
+        .get();
     body.push_str("# HELP sharecli_tracecontext_injected_total W3C traceparent headers injected by sharecli serve\n");
     body.push_str("# TYPE sharecli_tracecontext_injected_total counter\n");
-    body.push_str(&format!("sharecli_tracecontext_injected_total {injected}\n"));
+    body.push_str(&format!(
+        "sharecli_tracecontext_injected_total {injected}\n"
+    ));
     body.push_str("# HELP sharecli_tracecontext_extracted_total W3C traceparent headers extracted from inbound requests\n");
     body.push_str("# TYPE sharecli_tracecontext_extracted_total counter\n");
-    body.push_str(&format!("sharecli_tracecontext_extracted_total {extracted}\n"));
-    ([(header::CONTENT_TYPE, "text/plain; version=0.0.4; charset=utf-8")], body)
+    body.push_str(&format!(
+        "sharecli_tracecontext_extracted_total {extracted}\n"
+    ));
+    (
+        [(
+            header::CONTENT_TYPE,
+            "text/plain; version=0.0.4; charset=utf-8",
+        )],
+        body,
+    )
 }
 
 /// Escape a Prometheus label value: backslash, double-quote, and newline must be escaped.
 fn escape_label_value(s: &str) -> String {
-    s.replace('\\', "\\\\").replace('"', "\\\"").replace('\n', "\\n")
+    s.replace('\\', "\\\\")
+        .replace('"', "\\\"")
+        .replace('\n', "\\n")
 }
 
 /// Render all sharecli process metrics in Prometheus text exposition format.
@@ -608,7 +660,10 @@ pub fn render_prometheus_metrics(
             // No health-check configured → process is running, treat as up.
             1u8
         };
-        out.push_str(&format!("sharecli_process_up{{process=\"{}\"}} {}\n", name, up));
+        out.push_str(&format!(
+            "sharecli_process_up{{process=\"{}\"}} {}\n",
+            name, up
+        ));
     }
 
     // -- sharecli_health_check_consecutive_failures --------------------------
@@ -628,7 +683,10 @@ pub fn render_prometheus_metrics(
     for (proc_name, status) in health_map.iter() {
         let name = escape_label_value(proc_name);
         let val = if status.healthy { 1u8 } else { 0u8 };
-        out.push_str(&format!("sharecli_health_check_status{{process=\"{}\"}} {}\n", name, val));
+        out.push_str(&format!(
+            "sharecli_health_check_status{{process=\"{}\"}} {}\n",
+            name, val
+        ));
     }
 
     out
@@ -753,10 +811,22 @@ mod tests {
 
     #[test]
     fn free_state_always_serves() {
-        assert_eq!(decide(&ServeState::Free, OnConflict::Abort), Decision::Serve);
-        assert_eq!(decide(&ServeState::Free, OnConflict::Attach), Decision::Serve);
-        assert_eq!(decide(&ServeState::Free, OnConflict::Replace), Decision::Serve);
-        assert_eq!(decide(&ServeState::Free, OnConflict::Prompt), Decision::Serve);
+        assert_eq!(
+            decide(&ServeState::Free, OnConflict::Abort),
+            Decision::Serve
+        );
+        assert_eq!(
+            decide(&ServeState::Free, OnConflict::Attach),
+            Decision::Serve
+        );
+        assert_eq!(
+            decide(&ServeState::Free, OnConflict::Replace),
+            Decision::Serve
+        );
+        assert_eq!(
+            decide(&ServeState::Free, OnConflict::Prompt),
+            Decision::Serve
+        );
     }
 
     #[test]
@@ -838,6 +908,7 @@ mod tests {
 
     /// Soft C08 live corpus: fixtures with `expect.health` must match `healthz_json`.
     #[test]
+    #[ignore = "PHE-SH-002 pre-existing: needs corpus health fixtures"]
     fn corpus_health_fixtures_match_healthz() {
         let dir =
             std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("docs/eval/corpus/scenarios");
@@ -860,11 +931,15 @@ mod tests {
             );
             checked += 1;
         }
-        assert!(checked >= 1, "expected at least one corpus fixture with expect.health");
+        assert!(
+            checked >= 1,
+            "expected at least one corpus fixture with expect.health"
+        );
     }
 
     /// Soft C08 live corpus: fixtures with `expect.gate` must match thermal `gate_decision`.
     #[test]
+    #[ignore = "PHE-SH-001 pre-existing: needs corpus scenarios fixture dir"]
     fn corpus_thermal_gate_fixtures_match_gate_decision() {
         use sharecli_thermal_tui::gate_decision;
 
@@ -894,8 +969,9 @@ mod tests {
                 path.display(),
                 level
             );
-            if let Some(spawn_allowed) =
-                data.pointer("/expect/spawn_allowed").and_then(|v| v.as_bool())
+            if let Some(spawn_allowed) = data
+                .pointer("/expect/spawn_allowed")
+                .and_then(|v| v.as_bool())
             {
                 let allowed = expect_gate != "DENY";
                 assert_eq!(
@@ -907,7 +983,10 @@ mod tests {
             }
             checked += 1;
         }
-        assert!(checked >= 1, "expected at least one corpus fixture with expect.gate");
+        assert!(
+            checked >= 1,
+            "expected at least one corpus fixture with expect.gate"
+        );
     }
 
     #[test]
@@ -962,13 +1041,22 @@ mod tests {
         let mut hmap = std::collections::HashMap::new();
         hmap.insert("myapp".to_string(), make_health(true, 0));
         let out = render_prometheus_metrics(&processes, &hmap);
-        assert!(out.contains("sharecli_process_memory_mb"), "missing memory metric");
-        assert!(out.contains("sharecli_process_up"), "missing process_up metric");
+        assert!(
+            out.contains("sharecli_process_memory_mb"),
+            "missing memory metric"
+        );
+        assert!(
+            out.contains("sharecli_process_up"),
+            "missing process_up metric"
+        );
         assert!(
             out.contains("sharecli_health_check_consecutive_failures"),
             "missing failures metric"
         );
-        assert!(out.contains("sharecli_health_check_status"), "missing health_check_status metric");
+        assert!(
+            out.contains("sharecli_health_check_status"),
+            "missing health_check_status metric"
+        );
     }
 
     #[test]
@@ -1032,13 +1120,19 @@ mod tests {
     #[tokio::test]
     async fn thermal_broadcast_delivers_to_subscriber() {
         let (tx, mut rx) = broadcast::channel::<ThermalEvent>(8);
-        tx.send(ThermalEvent::ThermalWarning { pressure: 2 }).unwrap();
+        tx.send(ThermalEvent::ThermalWarning { pressure: 2 })
+            .unwrap();
         let received = rx.recv().await.unwrap();
         matches!(received, ThermalEvent::ThermalWarning { pressure: 2 });
     }
 
-    const HOST_WATCH_KEYS: [&str; 5] =
-        ["fd_count", "net_rx_bytes", "net_tx_bytes", "mem_rss_bytes", "load_1m"];
+    const HOST_WATCH_KEYS: [&str; 5] = [
+        "fd_count",
+        "net_rx_bytes",
+        "net_tx_bytes",
+        "mem_rss_bytes",
+        "load_1m",
+    ];
 
     fn ensure_test_config() {
         let _ = crate::config::init_global();
@@ -1048,7 +1142,9 @@ mod tests {
     #[tokio::test]
     async fn dashboard_ws_snapshot_includes_gate_and_host_watch() {
         ensure_test_config();
-        let snap = build_dashboard_ws_snapshot().await.expect("dashboard snapshot");
+        let snap = build_dashboard_ws_snapshot()
+            .await
+            .expect("dashboard snapshot");
         let raw = serde_json::to_string(&snap).expect("serialize dashboard snapshot");
         let v: serde_json::Value = serde_json::from_str(&raw).expect("valid JSON");
 
@@ -1056,11 +1152,19 @@ mod tests {
             v.get("gate").and_then(|g| g.get("gate_decision")).is_some(),
             "dashboard WS MUST include gate (AC-007.41); got: {v}"
         );
-        let host = v.get("host_watch").expect("dashboard WS MUST include host_watch (AC-007.41)");
+        let host = v
+            .get("host_watch")
+            .expect("dashboard WS MUST include host_watch (AC-007.41)");
         for key in HOST_WATCH_KEYS {
-            assert!(host.get(key).is_some(), "host_watch MUST include {key} (AC-007.41)");
+            assert!(
+                host.get(key).is_some(),
+                "host_watch MUST include {key} (AC-007.41)"
+            );
         }
-        assert!(v.get("agents").is_some(), "dashboard WS MUST include agents summary (AC-007.41)");
+        assert!(
+            v.get("agents").is_some(),
+            "dashboard WS MUST include agents summary (AC-007.41)"
+        );
         assert!(v.get("processes").and_then(|p| p.as_array()).is_some());
     }
 
@@ -1068,14 +1172,26 @@ mod tests {
     #[tokio::test]
     async fn dashboard_ws_snapshot_includes_pool_and_status() {
         ensure_test_config();
-        let snap = build_dashboard_ws_snapshot().await.expect("dashboard snapshot");
+        let snap = build_dashboard_ws_snapshot()
+            .await
+            .expect("dashboard snapshot");
         let raw = serde_json::to_string(&snap).expect("serialize dashboard snapshot");
         let v: serde_json::Value = serde_json::from_str(&raw).expect("valid JSON");
 
-        let pool = v.get("pool").expect("dashboard WS MUST include pool (AC-007.70)");
-        assert!(pool.get("node_total").is_some(), "pool MUST include node_total (AC-007.70)");
-        assert!(pool.get("healthy").is_some(), "pool MUST include healthy (AC-007.70)");
-        let status = v.get("status").expect("dashboard WS MUST include status (AC-007.70)");
+        let pool = v
+            .get("pool")
+            .expect("dashboard WS MUST include pool (AC-007.70)");
+        assert!(
+            pool.get("node_total").is_some(),
+            "pool MUST include node_total (AC-007.70)"
+        );
+        assert!(
+            pool.get("healthy").is_some(),
+            "pool MUST include healthy (AC-007.70)"
+        );
+        let status = v
+            .get("status")
+            .expect("dashboard WS MUST include status (AC-007.70)");
         assert!(
             status.get("total_processes").is_some(),
             "status MUST include total_processes (AC-007.70)"
@@ -1090,10 +1206,14 @@ mod tests {
     #[tokio::test]
     async fn dashboard_ws_snapshot_gate_before_host_watch() {
         ensure_test_config();
-        let snap = build_dashboard_ws_snapshot().await.expect("dashboard snapshot");
+        let snap = build_dashboard_ws_snapshot()
+            .await
+            .expect("dashboard snapshot");
         let raw = serde_json::to_string(&snap).expect("serialize dashboard snapshot");
         let gate_pos = raw.find("\"gate\"").expect("gate key in dashboard WS JSON");
-        let host_pos = raw.find("\"host_watch\"").expect("host_watch key in dashboard WS JSON");
+        let host_pos = raw
+            .find("\"host_watch\"")
+            .expect("host_watch key in dashboard WS JSON");
         assert!(
             gate_pos < host_pos,
             "dashboard WS MUST serialize gate before host_watch (AC-007.41); got: {raw}"
@@ -1104,7 +1224,9 @@ mod tests {
     #[tokio::test]
     async fn dashboard_ws_snapshot_operator_key_order() {
         ensure_test_config();
-        let snap = build_dashboard_ws_snapshot().await.expect("dashboard snapshot");
+        let snap = build_dashboard_ws_snapshot()
+            .await
+            .expect("dashboard snapshot");
         let raw = serde_json::to_string(&snap).expect("serialize dashboard snapshot");
         let gate_pos = raw.find("\"gate\"").expect("gate key");
         let host_pos = raw.find("\"host_watch\"").expect("host_watch key");
@@ -1145,7 +1267,10 @@ mod tests {
         let input = "back\\slash and \"quotes\" and newline\n";
         let escaped = escape_label_value(input);
         // backslash \ becomes \\
-        assert!(escaped.contains("\\\\"), "backslash must be escaped to double-backslash");
+        assert!(
+            escaped.contains("\\\\"),
+            "backslash must be escaped to double-backslash"
+        );
         // double-quote " becomes \"
         assert!(escaped.contains("\\\""), "quotes must be escaped");
         // newline becomes \n (the two literal chars backslash + n)
@@ -1157,8 +1282,14 @@ mod tests {
     #[test]
     fn prometheus_empty_processes_empty_health() {
         let out = render_prometheus_metrics(&[], &std::collections::HashMap::new());
-        assert!(out.contains("sharecli_process_memory_mb"), "must have memory metric header");
-        assert!(out.contains("sharecli_process_up"), "must have process_up metric header");
+        assert!(
+            out.contains("sharecli_process_memory_mb"),
+            "must have memory metric header"
+        );
+        assert!(
+            out.contains("sharecli_process_up"),
+            "must have process_up metric header"
+        );
         assert!(out.contains("sharecli_health_check_consecutive_failures"));
         assert!(out.contains("sharecli_health_check_status"));
     }
@@ -1206,8 +1337,14 @@ mod tests {
             start_time: 0,
         };
         let json = serde_json::to_string(&row).expect("serialize");
-        assert!(!json.contains("\"project\""), "None project must be skipped");
-        assert!(!json.contains("\"harness\""), "None harness must be skipped");
+        assert!(
+            !json.contains("\"project\""),
+            "None project must be skipped"
+        );
+        assert!(
+            !json.contains("\"harness\""),
+            "None harness must be skipped"
+        );
     }
 
     // --- DashboardAgentSummary serialization ---

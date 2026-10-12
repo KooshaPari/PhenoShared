@@ -21,10 +21,20 @@ fn bin() -> Command {
 /// FR-006 / AC-006.15 — proc help documents live watch mode.
 #[test]
 fn fr006_proc_help_documents_watch() {
-    let out = bin().args(["proc", "--help"]).output().expect("spawn sharecli proc --help");
-    assert!(out.status.success(), "proc --help should exit 0; stderr: {:?}", out.stderr);
+    let out = bin()
+        .args(["proc", "--help"])
+        .output()
+        .expect("spawn sharecli proc --help");
+    assert!(
+        out.status.success(),
+        "proc --help should exit 0; stderr: {:?}",
+        out.stderr
+    );
     let s = String::from_utf8_lossy(&out.stdout);
-    assert!(s.contains("--watch"), "proc --help MUST document --watch; got: {s}");
+    assert!(
+        s.contains("--watch"),
+        "proc --help MUST document --watch; got: {s}"
+    );
 }
 
 /// FR-006 / AC-006.15 — watch mode prints refresh banner and re-renders inventory.
@@ -51,7 +61,10 @@ fn fr006_proc_watch_renders_twice_before_exit() {
         stdout.contains("Host agents (proc scan)"),
         "watch MUST render inventory header; got: {stdout}"
     );
-    assert!(stdout.contains("[watch]"), "watch MUST print refresh footer; got: {stdout}");
+    assert!(
+        stdout.contains("[watch]"),
+        "watch MUST print refresh footer; got: {stdout}"
+    );
     assert!(
         stdout.matches("Host agents (proc scan)").count() >= 2,
         "watch MUST re-render at least twice before its feature-aware deadline; got {} headers",
@@ -78,7 +91,10 @@ fn fr006_proc_watch_json_emits_valid_payload() {
     }
     let _ = child.wait();
 
-    assert!(stdout.contains("\"agents\""), "watch --json MUST emit agents array; got: {stdout}");
+    assert!(
+        stdout.contains("\"agents\""),
+        "watch --json MUST emit agents array; got: {stdout}"
+    );
     assert!(
         !stdout.contains("[watch]"),
         "watch --json NDJSON MUST keep footer off stdout; got: {stdout}"

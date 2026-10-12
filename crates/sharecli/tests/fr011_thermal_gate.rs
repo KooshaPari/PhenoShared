@@ -45,7 +45,12 @@ async fn fr011_refuse_thermally_throttled() {
     #[cfg(unix)]
     let argv = vec!["echo".to_string(), "gated".to_string()];
     #[cfg(windows)]
-    let argv = vec!["cmd".to_string(), "/C".to_string(), "echo".to_string(), "gated".to_string()];
+    let argv = vec![
+        "cmd".to_string(),
+        "/C".to_string(),
+        "echo".to_string(),
+        "gated".to_string(),
+    ];
 
     let err = hv
         .run(SpawnRequest {

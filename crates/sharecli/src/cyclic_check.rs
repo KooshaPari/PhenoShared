@@ -57,18 +57,18 @@ pub fn crc16_ccitt(data: &[u8], init: u16) -> u16 {
 /// Ethernet frames. The init/finalize inversion is applied internally so
 /// callers can pass raw data and get the canonical CRC-32 value.
 pub fn crc32_ieee(data: &[u8]) -> u32 {
-    let mut crc: u32 = 0xFFFF_FFFF;
+    let mut crc: u32 = 0xffff_ffff;
     for &b in data {
         crc ^= b as u32;
         for _ in 0..8 {
             if crc & 1 != 0 {
-                crc = (crc >> 1) ^ 0xEDB8_8320;
+                crc = (crc >> 1) ^ 0xedb8_8320;
             } else {
                 crc >>= 1;
             }
         }
     }
-    crc ^ 0xFFFF_FFFF
+    crc ^ 0xffff_ffff
 }
 
 #[cfg(test)]
@@ -78,7 +78,7 @@ mod tests {
     #[test]
     fn crc8_known_vectors() {
         // Standard CRC-8 (poly 0x07) test vector: "123456789" -> 0xF4
-        assert_eq!(crc8(b"123456789", 0), 0xF4);
+        assert_eq!(crc8(b"123456789", 0), 0xf4);
     }
 
     #[test]
@@ -104,19 +104,19 @@ mod tests {
     fn crc16_ccitt_xmodem_vector() {
         // XMODEM CRC-16 CCITT (poly 0x1021, init 0x0000) on "123456789" -> 0x31C3
         // Note: standard XMODEM uses init 0x0000 not 0xFFFF here.
-        assert_eq!(crc16_ccitt(b"123456789", 0x0000), 0x31C3);
+        assert_eq!(crc16_ccitt(b"123456789", 0x0000), 0x31c3);
     }
 
     #[test]
     fn crc16_ccitt_false_variant() {
         // The "false" CCITT variant uses init 0xFFFF: same input -> different value
-        assert_ne!(crc16_ccitt(b"123456789", 0xFFFF), 0x31C3);
+        assert_ne!(crc16_ccitt(b"123456789", 0xffff), 0x31c3);
     }
 
     #[test]
     fn crc32_ieee_known_vector() {
         // Standard CRC-32 IEEE 802.3 on "123456789" -> 0xCBF43926
-        assert_eq!(crc32_ieee(b"123456789"), 0xCBF4_3926);
+        assert_eq!(crc32_ieee(b"123456789"), 0xcbf4_3926);
     }
 
     #[test]

@@ -6,10 +6,16 @@ pub struct Stopwatch {
 }
 impl Stopwatch {
     pub fn new() -> Self {
-        Self { start: Instant::now(), laps: Vec::new() }
+        Self {
+            start: Instant::now(),
+            laps: Vec::new(),
+        }
     }
     pub fn start_at(at: Instant) -> Self {
-        Self { start: at, laps: Vec::new() }
+        Self {
+            start: at,
+            laps: Vec::new(),
+        }
     }
     pub fn lap(&mut self) -> Duration {
         let now = Instant::now();

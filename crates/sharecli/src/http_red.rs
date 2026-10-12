@@ -80,15 +80,24 @@ pub fn render_http_red_metrics(out: &mut String, red: &HttpRedSnapshot) {
         "# HELP sharecli_http_requests_total Total HTTP requests handled by sharecli serve\n",
     );
     out.push_str("# TYPE sharecli_http_requests_total counter\n");
-    out.push_str(&format!("sharecli_http_requests_total {}\n", red.requests_total));
+    out.push_str(&format!(
+        "sharecli_http_requests_total {}\n",
+        red.requests_total
+    ));
 
     out.push_str("# HELP sharecli_http_errors_total HTTP responses with status >= 500\n");
     out.push_str("# TYPE sharecli_http_errors_total counter\n");
-    out.push_str(&format!("sharecli_http_errors_total {}\n", red.errors_total));
+    out.push_str(&format!(
+        "sharecli_http_errors_total {}\n",
+        red.errors_total
+    ));
 
     out.push_str("# HELP sharecli_http_unauthorized_total HTTP 401 responses (AuthN failures)\n");
     out.push_str("# TYPE sharecli_http_unauthorized_total counter\n");
-    out.push_str(&format!("sharecli_http_unauthorized_total {}\n", red.unauthorized_total));
+    out.push_str(&format!(
+        "sharecli_http_unauthorized_total {}\n",
+        red.unauthorized_total
+    ));
 
     out.push_str("# HELP sharecli_http_request_duration_ms HTTP request latency in milliseconds\n");
     out.push_str("# TYPE sharecli_http_request_duration_ms histogram\n");
@@ -108,8 +117,14 @@ pub fn render_http_red_metrics(out: &mut String, red: &HttpRedSnapshot) {
         "sharecli_http_request_duration_ms_bucket{{le=\"+Inf\"}} {}\n",
         red.bucket_le_inf
     ));
-    out.push_str(&format!("sharecli_http_request_duration_ms_sum {}\n", red.duration_sum_ms));
-    out.push_str(&format!("sharecli_http_request_duration_ms_count {}\n", red.duration_count));
+    out.push_str(&format!(
+        "sharecli_http_request_duration_ms_sum {}\n",
+        red.duration_sum_ms
+    ));
+    out.push_str(&format!(
+        "sharecli_http_request_duration_ms_count {}\n",
+        red.duration_count
+    ));
 }
 
 #[cfg(test)]

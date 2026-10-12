@@ -82,7 +82,12 @@ async fn fr008_hypervisor_cache_respects_cwd_and_env() {
     #[cfg(unix)]
     let argv = vec!["echo".to_string(), "cwd-env".to_string()];
     #[cfg(windows)]
-    let argv = vec!["cmd".to_string(), "/C".to_string(), "echo".to_string(), "cwd-env".to_string()];
+    let argv = vec![
+        "cmd".to_string(),
+        "/C".to_string(),
+        "echo".to_string(),
+        "cwd-env".to_string(),
+    ];
 
     let cwd_a = root.path().join("a");
     let cwd_b = root.path().join("b");
@@ -98,7 +103,10 @@ async fn fr008_hypervisor_cache_respects_cwd_and_env() {
     let first = hv.run(req_a.clone()).await.expect("first run");
     assert!(!first.from_cache);
     let replay = hv.run(req_a).await.expect("replay same cwd+env");
-    assert!(replay.from_cache, "identical cwd+env MUST hit cache (AC-008.13)");
+    assert!(
+        replay.from_cache,
+        "identical cwd+env MUST hit cache (AC-008.13)"
+    );
 
     let req_b = SpawnRequest {
         argv,
@@ -124,13 +132,21 @@ fn fr008_with_lock_runs_once() {
     let first = cache
         .with_lock(&key, || {
             hits.fetch_add(1, Ordering::SeqCst);
-            Ok(CachedResult { exit_code: 0, stdout: b"once".to_vec(), stderr: vec![] })
+            Ok(CachedResult {
+                exit_code: 0,
+                stdout: b"once".to_vec(),
+                stderr: vec![],
+            })
         })
         .expect("first lock");
     let second = cache
         .with_lock(&key, || {
             hits.fetch_add(1, Ordering::SeqCst);
-            Ok(CachedResult { exit_code: 1, stdout: b"again".to_vec(), stderr: vec![] })
+            Ok(CachedResult {
+                exit_code: 1,
+                stdout: b"again".to_vec(),
+                stderr: vec![],
+            })
         })
         .expect("second lock");
 
@@ -149,8 +165,12 @@ async fn fr008_thermal_gate_before_coalesce() {
     #[cfg(unix)]
     let argv = vec!["echo".to_string(), "should-not-run".to_string()];
     #[cfg(windows)]
-    let argv =
-        vec!["cmd".to_string(), "/C".to_string(), "echo".to_string(), "should-not-run".to_string()];
+    let argv = vec![
+        "cmd".to_string(),
+        "/C".to_string(),
+        "echo".to_string(),
+        "should-not-run".to_string(),
+    ];
 
     let err = hv
         .run(SpawnRequest {
@@ -179,8 +199,12 @@ async fn fr008_second_run_from_cache() {
     #[cfg(unix)]
     let argv = vec!["echo".to_string(), "coalesce".to_string()];
     #[cfg(windows)]
-    let argv =
-        vec!["cmd".to_string(), "/C".to_string(), "echo".to_string(), "coalesce".to_string()];
+    let argv = vec![
+        "cmd".to_string(),
+        "/C".to_string(),
+        "echo".to_string(),
+        "coalesce".to_string(),
+    ];
 
     let req = SpawnRequest {
         argv,
@@ -206,7 +230,14 @@ fn fr008_ttl_stale_entry_is_miss() {
     let key = command_key(&["ttl-probe".into()], dir.path(), &[]);
 
     cache
-        .store(&key, &CachedResult { exit_code: 0, stdout: b"fresh".to_vec(), stderr: vec![] })
+        .store(
+            &key,
+            &CachedResult {
+                exit_code: 0,
+                stdout: b"fresh".to_vec(),
+                stderr: vec![],
+            },
+        )
         .expect("store");
 
     let hit = cache.lookup(&key).expect("lookup").expect("fresh hit");
@@ -223,7 +254,11 @@ fn fr008_ttl_stale_entry_is_miss() {
     let rerun = cache
         .with_lock(&key, || {
             hits.fetch_add(1, Ordering::SeqCst);
-            Ok(CachedResult { exit_code: 0, stdout: b"rerun".to_vec(), stderr: vec![] })
+            Ok(CachedResult {
+                exit_code: 0,
+                stdout: b"rerun".to_vec(),
+                stderr: vec![],
+            })
         })
         .expect("with_lock after TTL");
     assert_eq!(hits.load(Ordering::SeqCst), 1, "stale miss MUST re-run");
@@ -249,7 +284,11 @@ fn fr008_debounce_waits_and_shares() {
         cache_bg
             .store(
                 &key_bg,
-                &CachedResult { exit_code: 0, stdout: b"shared".to_vec(), stderr: vec![] },
+                &CachedResult {
+                    exit_code: 0,
+                    stdout: b"shared".to_vec(),
+                    stderr: vec![],
+                },
             )
             .expect("bg store");
         hits_bg.fetch_add(1, Ordering::SeqCst);
@@ -258,14 +297,24 @@ fn fr008_debounce_waits_and_shares() {
     let result = cache
         .with_lock(&key, || {
             hits.fetch_add(1, Ordering::SeqCst);
-            Ok(CachedResult { exit_code: 1, stdout: b"should-not-run".to_vec(), stderr: vec![] })
+            Ok(CachedResult {
+                exit_code: 1,
+                stdout: b"should-not-run".to_vec(),
+                stderr: vec![],
+            })
         })
         .expect("debounced with_lock");
 
     producer.join().expect("producer join");
 
-    assert_eq!(result.stdout, b"shared", "debounce MUST share in-window result");
-    assert_eq!(result.exit_code, 0, "shared result MUST come from producer, not miss path");
+    assert_eq!(
+        result.stdout, b"shared",
+        "debounce MUST share in-window result"
+    );
+    assert_eq!(
+        result.exit_code, 0,
+        "shared result MUST come from producer, not miss path"
+    );
     assert_eq!(
         hits.load(Ordering::SeqCst),
         1,
@@ -307,13 +356,22 @@ async fn fr008_hypervisor_debounce_waits_and_shares() {
         cache_bg
             .store(
                 &key_bg,
-                &CachedResult { exit_code: 0, stdout: b"shared-hv".to_vec(), stderr: vec![] },
+                &CachedResult {
+                    exit_code: 0,
+                    stdout: b"shared-hv".to_vec(),
+                    stderr: vec![],
+                },
             )
             .expect("bg store");
     });
 
     let outcome = hv
-        .run(SpawnRequest { argv, cwd, env: vec![], queue_priority: QueuePriority::Normal })
+        .run(SpawnRequest {
+            argv,
+            cwd,
+            env: vec![],
+            queue_priority: QueuePriority::Normal,
+        })
         .await
         .expect("debounced hypervisor run");
 
@@ -324,7 +382,10 @@ async fn fr008_hypervisor_debounce_waits_and_shares() {
         "Hypervisor debounce MUST share in-window result (AC-008.6)"
     );
     assert_eq!(outcome.exit_code, 0);
-    assert!(outcome.from_cache, "debounce share MUST surface as from_cache on Hypervisor::run");
+    assert!(
+        outcome.from_cache,
+        "debounce share MUST surface as from_cache on Hypervisor::run"
+    );
 }
 
 /// FR-008 / AC-008.7 — mutating nocache_args bypass coalesce detection.
@@ -386,7 +447,11 @@ fn fr008_slot_queue_serializes() {
     for h in handles {
         h.join().expect("join");
     }
-    assert_eq!(peak.load(Ordering::SeqCst), 1, "AC-008.8: max_concurrent=1 MUST serialize");
+    assert_eq!(
+        peak.load(Ordering::SeqCst),
+        1,
+        "AC-008.8: max_concurrent=1 MUST serialize"
+    );
 }
 
 /// FR-008 / AC-008.9 — Hypervisor nocache path never serves from_cache.
@@ -397,7 +462,11 @@ async fn fr008_hypervisor_nocache_routes_to_queue() {
     let hv = Hypervisor::with_thermal_gate(dir.path(), gate);
 
     #[cfg(unix)]
-    let argv = vec!["echo".to_string(), "--force".to_string(), "nocache".to_string()];
+    let argv = vec![
+        "echo".to_string(),
+        "--force".to_string(),
+        "nocache".to_string(),
+    ];
     #[cfg(windows)]
     let argv = vec![
         "cmd".to_string(),
@@ -415,9 +484,15 @@ async fn fr008_hypervisor_nocache_routes_to_queue() {
         queue_priority: QueuePriority::Normal,
     };
     let first = hv.run(req.clone()).await.expect("first nocache run");
-    assert!(!first.from_cache, "AC-008.9: nocache MUST NOT use coalesce cache");
+    assert!(
+        !first.from_cache,
+        "AC-008.9: nocache MUST NOT use coalesce cache"
+    );
     let second = hv.run(req).await.expect("second nocache run");
-    assert!(!second.from_cache, "AC-008.9: second identical mutating run MUST still bypass cache");
+    assert!(
+        !second.from_cache,
+        "AC-008.9: second identical mutating run MUST still bypass cache"
+    );
     // Queue API is exposed for Hypervisor callers.
     assert_eq!(hv.queue().max_concurrent(), 1);
     assert!(hv.nocache_args().iter().any(|f| f == "--force"));
@@ -600,7 +675,9 @@ async fn fr008_hypervisor_nocache_critical_before_normal() {
             .expect("holder nocache run")
     });
 
-    while !std::fs::read_to_string(&order_path).map(|s| s.contains("holder_start")).unwrap_or(false)
+    while !std::fs::read_to_string(&order_path)
+        .map(|s| s.contains("holder_start"))
+        .unwrap_or(false)
     {
         tokio::time::sleep(Duration::from_millis(5)).await;
     }
@@ -671,11 +748,20 @@ async fn fr008_hypervisor_args_cache_key_mode_ignores_cwd() {
     fs::create_dir_all(&sub_b).expect("mkdir b");
 
     let argv = vec!["/bin/echo".into(), "args-mode-probe".into()];
-    let first = hv.run(SpawnRequest::new(argv.clone(), sub_a, vec![])).await.expect("first run");
+    let first = hv
+        .run(SpawnRequest::new(argv.clone(), sub_a, vec![]))
+        .await
+        .expect("first run");
     assert!(!first.from_cache);
 
-    let second = hv.run(SpawnRequest::new(argv, sub_b, vec![])).await.expect("second run");
-    assert!(second.from_cache, "AC-008.19: Args mode MUST coalesce across different cwd");
+    let second = hv
+        .run(SpawnRequest::new(argv, sub_b, vec![]))
+        .await
+        .expect("second run");
+    assert!(
+        second.from_cache,
+        "AC-008.19: Args mode MUST coalesce across different cwd"
+    );
 }
 
 /// FR-008 / AC-008.20 — semantic normalization applied before Hypervisor cache hash.
@@ -701,7 +787,11 @@ async fn fr008_hypervisor_semantic_coalesces_repeated_lint_dot() {
         vec![],
     );
 
-    let argv = vec![fake_ruff.to_string_lossy().into(), "check".into(), ".".into()];
+    let argv = vec![
+        fake_ruff.to_string_lossy().into(),
+        "check".into(),
+        ".".into(),
+    ];
     let cwd = dir.path().to_path_buf();
 
     let first = hv
@@ -710,7 +800,12 @@ async fn fr008_hypervisor_semantic_coalesces_repeated_lint_dot() {
         .expect("first semantic lint run");
     assert!(!first.from_cache);
 
-    let second =
-        hv.run(SpawnRequest::new(argv, cwd, vec![])).await.expect("second semantic lint run");
-    assert!(second.from_cache, "AC-008.20: semantic lint invocations MUST coalesce on replay");
+    let second = hv
+        .run(SpawnRequest::new(argv, cwd, vec![]))
+        .await
+        .expect("second semantic lint run");
+    assert!(
+        second.from_cache,
+        "AC-008.20: semantic lint invocations MUST coalesce on replay"
+    );
 }

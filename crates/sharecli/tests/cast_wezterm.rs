@@ -48,12 +48,16 @@ impl ProcessRunner for MockProcessRunner {
             args: args.iter().map(|s| s.to_string()).collect(),
         });
         // Pop the next queued response or return a sentinel failure.
-        self.responses.lock().unwrap().pop_front().unwrap_or_else(|| {
-            Err(io::Error::new(
-                io::ErrorKind::UnexpectedEof,
-                "MockProcessRunner out of queued responses",
-            ))
-        })
+        self.responses
+            .lock()
+            .unwrap()
+            .pop_front()
+            .unwrap_or_else(|| {
+                Err(io::Error::new(
+                    io::ErrorKind::UnexpectedEof,
+                    "MockProcessRunner out of queued responses",
+                ))
+            })
     }
 
     fn run_with_stdin(&self, bin: &str, args: &[&str], _stdin: &[u8]) -> io::Result<Output> {
@@ -63,7 +67,11 @@ impl ProcessRunner for MockProcessRunner {
 }
 
 fn ok_output(stdout: &str) -> io::Result<Output> {
-    Ok(Output { status: exit_status(0), stdout: stdout.as_bytes().to_vec(), stderr: Vec::new() })
+    Ok(Output {
+        status: exit_status(0),
+        stdout: stdout.as_bytes().to_vec(),
+        stderr: Vec::new(),
+    })
 }
 
 #[cfg(unix)]
@@ -192,8 +200,10 @@ fn fr_cast_004_handles_non_json_stdout_gracefully() {
 #[test]
 fn fr_cast_004_send_delivers_when_pane_resolves() {
     // Arrange: 2 responses — list returns sample, send returns success.
-    let runner =
-        MockProcessRunner::new(vec![ok_output(SAMPLE_LIST), ok_output_with_status(0, "", "")]);
+    let runner = MockProcessRunner::new(vec![
+        ok_output(SAMPLE_LIST),
+        ok_output_with_status(0, "", ""),
+    ]);
     let caster = WeztermCaster::new(runner.clone());
 
     // Act.
@@ -231,7 +241,7 @@ fn fr_cast_004_send_returns_failed_when_send_text_exits_non_zero() {
     match outcome {
         sharecli::cast::SendOutcome::Failed(msg) => {
             assert!(msg.contains("pane not found"), "msg = {msg}");
-        }
+        },
         other => panic!("expected Failed, got {:?}", other),
     }
 }

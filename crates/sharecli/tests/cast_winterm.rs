@@ -32,8 +32,13 @@ fn send_to_ssh_host_pipes_text_to_remote_clipboard() {
     let addr = PaneAddress::parse("winbox:ssh:<REDACTED>@192.168.1.100:0:0").unwrap();
     let cmds = vec![(
         "ssh",
-        &["<REDACTED>@192.168.1.100", "powershell", "-NoProfile", "-Command", "$input | Set-Clipboard"]
-            as &[&str],
+        &[
+            "<REDACTED>@192.168.1.100",
+            "powershell",
+            "-NoProfile",
+            "-Command",
+            "$input | Set-Clipboard",
+        ] as &[&str],
     )];
     let runner = MockProcessRunner::from_ok(&cmds);
     let caster = SshWinTermCaster::new(runner);
@@ -45,8 +50,13 @@ fn send_to_tailscale_host_pipes_text() {
     let addr = PaneAddress::parse("winbox-ts:tailscale:0:0").unwrap();
     let cmds = vec![(
         "ssh",
-        &["winbox-ts.ts.net", "powershell", "-NoProfile", "-Command", "$input | Set-Clipboard"]
-            as &[&str],
+        &[
+            "winbox-ts.ts.net",
+            "powershell",
+            "-NoProfile",
+            "-Command",
+            "$input | Set-Clipboard",
+        ] as &[&str],
     )];
     let runner = MockProcessRunner::from_ok(&cmds);
     let caster = SshWinTermCaster::new(runner);
@@ -67,11 +77,18 @@ fn send_ssh_failure_propagates() {
     let addr = PaneAddress::parse("winbox:ssh:admin@10.0.0.1:0:0").unwrap();
     let cmds = vec![(
         "ssh",
-        &["admin@10.0.0.1", "powershell", "-NoProfile", "-Command", "$input | Set-Clipboard"]
-            as &[&str],
+        &[
+            "admin@10.0.0.1",
+            "powershell",
+            "-NoProfile",
+            "-Command",
+            "$input | Set-Clipboard",
+        ] as &[&str],
     )];
-    let outputs: Vec<io::Result<Output>> =
-        vec![Err(Error::new(ErrorKind::ConnectionRefused, "connection refused"))];
+    let outputs: Vec<io::Result<Output>> = vec![Err(Error::new(
+        ErrorKind::ConnectionRefused,
+        "connection refused",
+    ))];
     let runner = MockProcessRunner::custom(&cmds, outputs);
     let caster = SshWinTermCaster::new(runner);
     let outcome = caster.send(&addr, "data");
@@ -83,8 +100,13 @@ fn send_ssh_exit_code_failure_propagates() {
     let addr = PaneAddress::parse("winbox:ssh:user@host:0:0").unwrap();
     let cmds = vec![(
         "ssh",
-        &["user@host", "powershell", "-NoProfile", "-Command", "$input | Set-Clipboard"]
-            as &[&str],
+        &[
+            "user@host",
+            "powershell",
+            "-NoProfile",
+            "-Command",
+            "$input | Set-Clipboard",
+        ] as &[&str],
     )];
     let fail_status = std::process::Command::new("false").status().unwrap();
     let outputs: Vec<io::Result<Output>> = vec![Ok(Output {
@@ -107,11 +129,18 @@ fn send_returns_unsupported_when_ssh_not_found() {
     let addr = PaneAddress::parse("winbox:ssh:me@remote:0:0").unwrap();
     let cmds = vec![(
         "ssh",
-        &["me@remote", "powershell", "-NoProfile", "-Command", "$input | Set-Clipboard"]
-            as &[&str],
+        &[
+            "me@remote",
+            "powershell",
+            "-NoProfile",
+            "-Command",
+            "$input | Set-Clipboard",
+        ] as &[&str],
     )];
-    let outputs: Vec<io::Result<Output>> =
-        vec![Err(Error::new(ErrorKind::NotFound, "No such file or directory"))];
+    let outputs: Vec<io::Result<Output>> = vec![Err(Error::new(
+        ErrorKind::NotFound,
+        "No such file or directory",
+    ))];
     let runner = MockProcessRunner::custom(&cmds, outputs);
     let caster = SshWinTermCaster::new(runner);
     let outcome = caster.send(&addr, "data");

@@ -82,8 +82,12 @@ mod tests {
     #[test]
     fn basic_shortest() {
         // 0 -> 1 (w=4), 0 -> 2 (w=5), 1 -> 2 (w=-3), 2 -> 3 (w=2)
-        let edges =
-            [Edge::new(0, 1, 4), Edge::new(0, 2, 5), Edge::new(1, 2, -3), Edge::new(2, 3, 2)];
+        let edges = [
+            Edge::new(0, 1, 4),
+            Edge::new(0, 2, 5),
+            Edge::new(1, 2, -3),
+            Edge::new(2, 3, 2),
+        ];
         let result = bellman_ford(4, &edges, 0);
         let dists = match result {
             BFResult::Distances(d) => d,
@@ -114,7 +118,7 @@ mod tests {
         match bellman_ford(3, &edges, 0) {
             BFResult::NegativeCycle(nodes) => {
                 assert!(nodes.contains(&1) || nodes.contains(&2));
-            }
+            },
             other => panic!("expected cycle, got {:?}", other),
         }
     }
@@ -125,7 +129,10 @@ mod tests {
         let edges = [Edge::new(0, 1, 1), Edge::new(2, 3, 1), Edge::new(3, 2, -3)];
         let dists = match bellman_ford(4, &edges, 0) {
             BFResult::Distances(d) => d,
-            other => panic!("expected distances (cycle not reachable from src), got {:?}", other),
+            other => panic!(
+                "expected distances (cycle not reachable from src), got {:?}",
+                other
+            ),
         };
         assert_eq!(dists[1], 1);
     }

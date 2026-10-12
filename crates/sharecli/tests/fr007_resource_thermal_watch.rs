@@ -36,9 +36,18 @@ fn fr007_thermal_governor_mock_levels() {
 /// FR-007 / AC-007.2 — FakeThermalGate decisions are stable.
 #[test]
 fn fr007_fake_thermal_gate_maps_decisions() {
-    assert_eq!(FakeThermalGate::new(ThermalDecision::Allow).check(), ThermalDecision::Allow);
-    assert_eq!(FakeThermalGate::new(ThermalDecision::Warn).check(), ThermalDecision::Warn);
-    assert_eq!(FakeThermalGate::new(ThermalDecision::Refuse).check(), ThermalDecision::Refuse);
+    assert_eq!(
+        FakeThermalGate::new(ThermalDecision::Allow).check(),
+        ThermalDecision::Allow
+    );
+    assert_eq!(
+        FakeThermalGate::new(ThermalDecision::Warn).check(),
+        ThermalDecision::Warn
+    );
+    assert_eq!(
+        FakeThermalGate::new(ThermalDecision::Refuse).check(),
+        ThermalDecision::Refuse
+    );
 }
 
 /// FR-007 / AC-007.3 — idle heuristic encodes CPU + uptime watch signal.
@@ -55,7 +64,10 @@ fn fr007_process_stats_idle_heuristic() {
 #[test]
 fn fr007_fd_watch_samples_self_fds() {
     let fd_count = sample_self_fds().expect("FD watch MUST succeed on supported OS");
-    assert!(fd_count >= 3, "process MUST have at least stdin/stdout/stderr FDs");
+    assert!(
+        fd_count >= 3,
+        "process MUST have at least stdin/stdout/stderr FDs"
+    );
 
     let sample = ResourceWatchSample::capture().expect("resource watch capture");
     assert!(sample.fd_count >= 3, "capture MUST include live FD count");
@@ -63,7 +75,10 @@ fn fr007_fd_watch_samples_self_fds() {
     let stats = ProcessStats::new(1, "agent", 0, 0.0, 0, 0)
         .with_resource_watch()
         .expect("ProcessStats resource watch");
-    assert!(stats.fd_count >= 3, "ProcessStats MUST carry FD watch signal");
+    assert!(
+        stats.fd_count >= 3,
+        "ProcessStats MUST carry FD watch signal"
+    );
 }
 
 /// FR-007 / AC-007.5 — host net RX/TX watch returns byte counters (not silent zero on failure).
@@ -92,7 +107,10 @@ fn fr007_rss_watch_samples_self_bytes() {
     let stats = ProcessStats::new(1, "agent", 0, 0.0, 0, 0)
         .with_resource_watch()
         .expect("ProcessStats resource watch");
-    assert!(stats.mem_rss_bytes > 0, "ProcessStats MUST carry RSS watch signal");
+    assert!(
+        stats.mem_rss_bytes > 0,
+        "ProcessStats MUST carry RSS watch signal"
+    );
 }
 
 /// FR-007 / AC-007.8 — host load average is sampled (not silent zero on failure).
@@ -102,7 +120,10 @@ fn fr007_load_watch_samples_host_load_1m() {
     assert!(load >= 0.0, "load average MUST be non-negative");
 
     let sample = ResourceWatchSample::capture().expect("resource watch capture");
-    assert!(sample.load_1m >= 0.0, "capture MUST include live load average");
+    assert!(
+        sample.load_1m >= 0.0,
+        "capture MUST include live load average"
+    );
 
     let stats = ProcessStats::new(1, "agent", 0, 0.0, 0, 0)
         .with_resource_watch()
@@ -116,7 +137,10 @@ fn fr007_format_status_section() {
     let sample = ResourceWatchSample::capture().expect("resource watch capture");
     let section = sample.format_status_section();
 
-    assert!(section.contains("=== Host Resource Watch ==="), "got: {section}");
+    assert!(
+        section.contains("=== Host Resource Watch ==="),
+        "got: {section}"
+    );
     assert!(section.contains("Open FDs:"), "got: {section}");
     assert!(section.contains("RSS:"), "got: {section}");
     assert!(section.contains("Load (1m):"), "got: {section}");
@@ -163,9 +187,15 @@ async fn fr007_hypervisor_run_carries_resource_watch() {
         "Hypervisor MUST attach live RSS watch (got {})",
         outcome.resource_watch.mem_rss_bytes
     );
-    assert!(outcome.resource_watch.load_1m >= 0.0, "Hypervisor MUST attach live load watch");
+    assert!(
+        outcome.resource_watch.load_1m >= 0.0,
+        "Hypervisor MUST attach live load watch"
+    );
     // Caller detection is intentionally host-relative: this suite may run
     // beneath Codex or another supported harness. FR-007.6 only requires the
     // independently captured resource-watch fields above.
-    let _ = (outcome.resource_watch.net_rx_bytes, outcome.resource_watch.net_tx_bytes);
+    let _ = (
+        outcome.resource_watch.net_rx_bytes,
+        outcome.resource_watch.net_tx_bytes,
+    );
 }

@@ -64,7 +64,10 @@ mod tests {
     }
     #[test]
     fn split_words_basic() {
-        assert_eq!(split_words("hello world foo"), vec!["hello", "world", "foo"]);
+        assert_eq!(
+            split_words("hello world foo"),
+            vec!["hello", "world", "foo"]
+        );
     }
     #[test]
     fn pad_left_basic() {

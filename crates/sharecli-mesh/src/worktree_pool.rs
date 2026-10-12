@@ -114,7 +114,10 @@ impl WorktreePool {
 
     /// Allocate (or return existing) worktree for `slot_id`.
     pub fn allocate(&self, slot_id: &str) -> Result<WorktreeLease, WorktreePoolError> {
-        let mut leases = self.leases.lock().map_err(|_| WorktreePoolError::Poisoned)?;
+        let mut leases = self
+            .leases
+            .lock()
+            .map_err(|_| WorktreePoolError::Poisoned)?;
         if let Some(existing) = leases.get(slot_id) {
             if existing.path.is_dir() {
                 return Ok(existing.clone());
@@ -127,8 +130,10 @@ impl WorktreePool {
 
         if path.exists() {
             // Stale path from a prior crash — force-remove before re-add.
-            let _ =
-                git(&self.repo_root, &["worktree", "remove", "--force", &path.to_string_lossy()]);
+            let _ = git(
+                &self.repo_root,
+                &["worktree", "remove", "--force", &path.to_string_lossy()],
+            );
             if path.exists() {
                 fs::remove_dir_all(&path)?;
             }
@@ -140,22 +145,35 @@ impl WorktreePool {
             git(&self.repo_root, &["branch", &branch, &self.base_ref])?;
         }
 
-        git(&self.repo_root, &["worktree", "add", &path.to_string_lossy(), &branch])?;
+        git(
+            &self.repo_root,
+            &["worktree", "add", &path.to_string_lossy(), &branch],
+        )?;
 
-        let lease = WorktreeLease { slot_id: slot_id.to_string(), path, branch };
+        let lease = WorktreeLease {
+            slot_id: slot_id.to_string(),
+            path,
+            branch,
+        };
         leases.insert(slot_id.to_string(), lease.clone());
         Ok(lease)
     }
 
     /// Release a previously allocated slot (`git worktree remove --force`).
     pub fn release(&self, slot_id: &str) -> Result<(), WorktreePoolError> {
-        let mut leases = self.leases.lock().map_err(|_| WorktreePoolError::Poisoned)?;
+        let mut leases = self
+            .leases
+            .lock()
+            .map_err(|_| WorktreePoolError::Poisoned)?;
         let lease = leases
             .remove(slot_id)
             .ok_or_else(|| WorktreePoolError::NoAllocation(slot_id.to_string()))?;
 
         let path_str = lease.path.to_string_lossy().into_owned();
-        let remove = git(&self.repo_root, &["worktree", "remove", "--force", &path_str]);
+        let remove = git(
+            &self.repo_root,
+            &["worktree", "remove", "--force", &path_str],
+        );
         if remove.is_err() && lease.path.exists() {
             fs::remove_dir_all(&lease.path)?;
             let _ = git(&self.repo_root, &["worktree", "prune"]);
@@ -170,7 +188,10 @@ impl WorktreePool {
 
     /// Currently tracked slot ids.
     pub fn active_slots(&self) -> Result<Vec<String>, WorktreePoolError> {
-        let leases = self.leases.lock().map_err(|_| WorktreePoolError::Poisoned)?;
+        let leases = self
+            .leases
+            .lock()
+            .map_err(|_| WorktreePoolError::Poisoned)?;
         Ok(leases.keys().cloned().collect())
     }
 }
@@ -188,8 +209,10 @@ fn ensure_git_repo(path: &Path) -> Result<(), WorktreePoolError> {
 }
 
 fn git(cwd: &Path, args: &[&str]) -> Result<String, WorktreePoolError> {
-    let out =
-        git_command(cwd).args(args).output().map_err(|e| WorktreePoolError::Git(e.to_string()))?;
+    let out = git_command(cwd)
+        .args(args)
+        .output()
+        .map_err(|e| WorktreePoolError::Git(e.to_string()))?;
     if out.status.success() {
         Ok(String::from_utf8_lossy(&out.stdout).into_owned())
     } else {
@@ -242,7 +265,10 @@ mod tests {
 
         pool.release("agent-a").expect("release");
         assert!(pool.active_slots().unwrap().is_empty());
-        assert!(!lease.path.exists(), "worktree path must be removed after release");
+        assert!(
+            !lease.path.exists(),
+            "worktree path must be removed after release"
+        );
     }
 
     /// FR-010 / AC-010.8 — non-git root fails loudly.
@@ -259,12 +285,16 @@ mod tests {
         let command = git_command(Path::new("/tmp"));
         for variable in GIT_LOCAL_ENV_VARS {
             assert!(
-                command.get_envs().any(|(key, value)| key == *variable && value.is_none()),
+                command
+                    .get_envs()
+                    .any(|(key, value)| key == *variable && value.is_none()),
                 "{variable} must not leak into a foreign git command"
             );
         }
         assert!(
-            command.get_envs().any(|(key, value)| key == "GIT_NAMESPACE" && value.is_none()),
+            command
+                .get_envs()
+                .any(|(key, value)| key == "GIT_NAMESPACE" && value.is_none()),
             "GIT_NAMESPACE must not leak into a foreign git command"
         );
     }

@@ -6,7 +6,9 @@ pub struct PriorityQueue<T: Ord> {
 }
 impl<T: Ord> PriorityQueue<T> {
     pub fn new() -> Self {
-        Self { heap: BinaryHeap::new() }
+        Self {
+            heap: BinaryHeap::new(),
+        }
     }
     pub fn push(&mut self, v: T) {
         self.heap.push(Reverse(v));

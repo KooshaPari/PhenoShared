@@ -131,7 +131,11 @@ fn fr007_report_text_pool_status_order() {
         .args(["report", "--format", "text"])
         .output()
         .expect("spawn sharecli report --format text");
-    assert!(out.status.success(), "report text MUST exit 0; stderr: {:?}", out.stderr);
+    assert!(
+        out.status.success(),
+        "report text MUST exit 0; stderr: {:?}",
+        out.stderr
+    );
     let stdout = String::from_utf8_lossy(&out.stdout);
     assert_stderr_silent(&out.stderr, "report");
     assert_text_operator_order(&stdout, "report");

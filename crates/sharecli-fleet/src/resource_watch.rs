@@ -31,7 +31,10 @@ impl AgentResourceSample {
     pub fn capture_for_pid(pid: u32) -> Result<Self> {
         let mem_rss_bytes = sample_pid_rss_bytes(pid)?;
         let fd_count = sample_pid_fds(pid).ok();
-        Ok(Self { mem_rss_bytes, fd_count })
+        Ok(Self {
+            mem_rss_bytes,
+            fd_count,
+        })
     }
 }
 
@@ -54,7 +57,10 @@ pub fn watch_detected_agents(agents: &[DetectedAgent]) -> Vec<DetectedAgentWatch
         .filter_map(|agent| {
             AgentResourceSample::capture_for_pid(agent.pid)
                 .ok()
-                .map(|resource| DetectedAgentWatch { agent: agent.clone(), resource })
+                .map(|resource| DetectedAgentWatch {
+                    agent: agent.clone(),
+                    resource,
+                })
         })
         .collect()
 }
@@ -88,21 +94,28 @@ pub fn parse_rss_bytes(input: &str, flag: &str) -> Result<u64> {
     const MIB: u64 = 1_048_576;
     const GIB: u64 = 1_073_741_824;
     if let Some(num) = upper.strip_suffix('G') {
-        let value: f64 =
-            num.trim().parse().map_err(|_| anyhow::anyhow!("invalid {flag} size: {input}"))?;
+        let value: f64 = num
+            .trim()
+            .parse()
+            .map_err(|_| anyhow::anyhow!("invalid {flag} size: {input}"))?;
         return Ok((value * GIB as f64) as u64);
     }
     if let Some(num) = upper.strip_suffix('M') {
-        let value: f64 =
-            num.trim().parse().map_err(|_| anyhow::anyhow!("invalid {flag} size: {input}"))?;
+        let value: f64 = num
+            .trim()
+            .parse()
+            .map_err(|_| anyhow::anyhow!("invalid {flag} size: {input}"))?;
         return Ok((value * MIB as f64) as u64);
     }
     if let Some(num) = upper.strip_suffix('K') {
-        let value: f64 =
-            num.trim().parse().map_err(|_| anyhow::anyhow!("invalid {flag} size: {input}"))?;
+        let value: f64 = num
+            .trim()
+            .parse()
+            .map_err(|_| anyhow::anyhow!("invalid {flag} size: {input}"))?;
         return Ok((value * KIB as f64) as u64);
     }
-    s.parse::<u64>().map_err(|_| anyhow::anyhow!("invalid {flag} size: {input}"))
+    s.parse::<u64>()
+        .map_err(|_| anyhow::anyhow!("invalid {flag} size: {input}"))
 }
 
 impl ResourceWatchSample {
@@ -112,7 +125,13 @@ impl ResourceWatchSample {
         let (net_rx_bytes, net_tx_bytes) = sample_host_net()?;
         let mem_rss_bytes = sample_self_rss_bytes()?;
         let load_1m = sample_host_load_1m()?;
-        Ok(Self { fd_count, net_rx_bytes, net_tx_bytes, mem_rss_bytes, load_1m })
+        Ok(Self {
+            fd_count,
+            net_rx_bytes,
+            net_tx_bytes,
+            mem_rss_bytes,
+            load_1m,
+        })
     }
 
     /// Operator-facing status block for `sharecli status` (FR-007 / AC-007.10).
@@ -198,10 +217,12 @@ fn sample_host_net_impl() -> Result<(u64, u64)> {
         if fields.len() < 9 {
             continue;
         }
-        let rx: u64 =
-            fields[0].parse().with_context(|| format!("invalid RX bytes for interface {iface}"))?;
-        let tx: u64 =
-            fields[8].parse().with_context(|| format!("invalid TX bytes for interface {iface}"))?;
+        let rx: u64 = fields[0]
+            .parse()
+            .with_context(|| format!("invalid RX bytes for interface {iface}"))?;
+        let tx: u64 = fields[8]
+            .parse()
+            .with_context(|| format!("invalid TX bytes for interface {iface}"))?;
         rx_total = rx_total.saturating_add(rx);
         tx_total = tx_total.saturating_add(tx);
     }
@@ -218,7 +239,10 @@ fn sample_host_net_impl() -> Result<(u64, u64)> {
         .output()
         .context("failed to spawn netstat -ib for network watch")?;
     if !output.status.success() {
-        anyhow::bail!("netstat -ib exited with status {}", output.status.code().unwrap_or(-1));
+        anyhow::bail!(
+            "netstat -ib exited with status {}",
+            output.status.code().unwrap_or(-1)
+        );
     }
 
     let stdout =
@@ -235,10 +259,12 @@ fn sample_host_net_impl() -> Result<(u64, u64)> {
         if name == "Name" || name.starts_with("lo") {
             continue;
         }
-        let rx: u64 =
-            cols[6].parse().with_context(|| format!("invalid Ibytes for interface {name}"))?;
-        let tx: u64 =
-            cols[9].parse().with_context(|| format!("invalid Obytes for interface {name}"))?;
+        let rx: u64 = cols[6]
+            .parse()
+            .with_context(|| format!("invalid Ibytes for interface {name}"))?;
+        let tx: u64 = cols[9]
+            .parse()
+            .with_context(|| format!("invalid Obytes for interface {name}"))?;
         rx_total = rx_total.saturating_add(rx);
         tx_total = tx_total.saturating_add(tx);
     }
@@ -329,8 +355,9 @@ fn sample_pid_rss_bytes_impl(pid: u32) -> Result<u64> {
     let pid = Pid::from_u32(pid);
     let mut sys = System::new();
     sys.refresh_processes(ProcessesToUpdate::Some(&[pid]), true);
-    let proc =
-        sys.process(pid).with_context(|| format!("process {pid} not found for RSS sample"))?;
+    let proc = sys
+        .process(pid)
+        .with_context(|| format!("process {pid} not found for RSS sample"))?;
     Ok(proc.memory())
 }
 
@@ -359,8 +386,14 @@ mod tests {
     #[test]
     fn resource_watch_sample_capture() {
         let sample = ResourceWatchSample::capture().expect("resource watch sample");
-        assert!(sample.fd_count >= 3, "process MUST have stdin/stdout/stderr FDs");
-        assert!(sample.mem_rss_bytes > 0, "RSS MUST be non-zero for live process");
+        assert!(
+            sample.fd_count >= 3,
+            "process MUST have stdin/stdout/stderr FDs"
+        );
+        assert!(
+            sample.mem_rss_bytes > 0,
+            "RSS MUST be non-zero for live process"
+        );
         assert!(sample.load_1m >= 0.0, "load average MUST be sampled");
     }
 
@@ -404,21 +437,41 @@ mod tests {
     fn test_agent_resource_sample_self_pid() {
         let pid = std::process::id();
         let sample = AgentResourceSample::capture_for_pid(pid).expect("self PID resource sample");
-        assert!(sample.mem_rss_bytes > 0, "live process MUST have non-zero RSS");
+        assert!(
+            sample.mem_rss_bytes > 0,
+            "live process MUST have non-zero RSS"
+        );
         #[cfg(target_os = "linux")]
-        assert!(sample.fd_count.unwrap_or(0) >= 3, "live process MUST have stdio FDs on Linux");
+        assert!(
+            sample.fd_count.unwrap_or(0) >= 3,
+            "live process MUST have stdio FDs on Linux"
+        );
     }
 
     #[test]
     fn test_sum_detected_agent_rss_bytes() {
         let agents = vec![
             DetectedAgentWatch {
-                agent: DetectedAgent { pid: 1, family: "claude", comm: "claude".into() },
-                resource: AgentResourceSample { mem_rss_bytes: 1_000, fd_count: None },
+                agent: DetectedAgent {
+                    pid: 1,
+                    family: "claude",
+                    comm: "claude".into(),
+                },
+                resource: AgentResourceSample {
+                    mem_rss_bytes: 1_000,
+                    fd_count: None,
+                },
             },
             DetectedAgentWatch {
-                agent: DetectedAgent { pid: 2, family: "forge", comm: "forge".into() },
-                resource: AgentResourceSample { mem_rss_bytes: 2_500, fd_count: None },
+                agent: DetectedAgent {
+                    pid: 2,
+                    family: "forge",
+                    comm: "forge".into(),
+                },
+                resource: AgentResourceSample {
+                    mem_rss_bytes: 2_500,
+                    fd_count: None,
+                },
             },
         ];
         assert_eq!(super::sum_detected_agent_rss_bytes(&agents), 3_500);
@@ -434,8 +487,14 @@ mod tests {
     #[test]
     fn test_parse_rss_bytes() {
         assert_eq!(super::parse_rss_bytes("100", "--min-rss").unwrap(), 100);
-        assert_eq!(super::parse_rss_bytes("50M", "--min-rss").unwrap(), 52_428_800);
-        assert_eq!(super::parse_rss_bytes("1G", "--max-rss").unwrap(), 1_073_741_824);
+        assert_eq!(
+            super::parse_rss_bytes("50M", "--min-rss").unwrap(),
+            52_428_800
+        );
+        assert_eq!(
+            super::parse_rss_bytes("1G", "--max-rss").unwrap(),
+            1_073_741_824
+        );
         assert!(super::parse_rss_bytes("not-a-size", "--max-rss").is_err());
     }
 
@@ -517,21 +576,34 @@ mod tests {
     #[test]
     fn test_parse_rss_bytes_case_insensitive() {
         assert_eq!(super::parse_rss_bytes("50m", "--flag").unwrap(), 52_428_800);
-        assert_eq!(super::parse_rss_bytes("1g", "--flag").unwrap(), 1_073_741_824);
+        assert_eq!(
+            super::parse_rss_bytes("1g", "--flag").unwrap(),
+            1_073_741_824
+        );
         assert_eq!(super::parse_rss_bytes("100k", "--flag").unwrap(), 102_400);
     }
 
     #[test]
     fn test_parse_rss_bytes_error_messages_include_flag() {
         let err = super::parse_rss_bytes("bad", "--my-flag").unwrap_err();
-        assert!(err.to_string().contains("--my-flag"), "error MUST include flag name; got: {err}");
+        assert!(
+            err.to_string().contains("--my-flag"),
+            "error MUST include flag name; got: {err}"
+        );
     }
 
     #[test]
     fn test_sum_detected_agent_rss_single() {
         let agents = vec![DetectedAgentWatch {
-            agent: DetectedAgent { pid: 1, family: "test", comm: "test".into() },
-            resource: AgentResourceSample { mem_rss_bytes: 42_000, fd_count: Some(10) },
+            agent: DetectedAgent {
+                pid: 1,
+                family: "test",
+                comm: "test".into(),
+            },
+            resource: AgentResourceSample {
+                mem_rss_bytes: 42_000,
+                fd_count: Some(10),
+            },
         }];
         assert_eq!(super::sum_detected_agent_rss_bytes(&agents), 42_000);
     }
@@ -540,12 +612,26 @@ mod tests {
     fn test_sum_detected_agent_rss_two_agents() {
         let agents = vec![
             DetectedAgentWatch {
-                agent: DetectedAgent { pid: 1, family: "a", comm: "a".into() },
-                resource: AgentResourceSample { mem_rss_bytes: 1_000, fd_count: None },
+                agent: DetectedAgent {
+                    pid: 1,
+                    family: "a",
+                    comm: "a".into(),
+                },
+                resource: AgentResourceSample {
+                    mem_rss_bytes: 1_000,
+                    fd_count: None,
+                },
             },
             DetectedAgentWatch {
-                agent: DetectedAgent { pid: 2, family: "b", comm: "b".into() },
-                resource: AgentResourceSample { mem_rss_bytes: 2_000, fd_count: None },
+                agent: DetectedAgent {
+                    pid: 2,
+                    family: "b",
+                    comm: "b".into(),
+                },
+                resource: AgentResourceSample {
+                    mem_rss_bytes: 2_000,
+                    fd_count: None,
+                },
             },
         ];
         assert_eq!(super::sum_detected_agent_rss_bytes(&agents), 3_000);
@@ -560,8 +646,11 @@ mod tests {
     #[test]
     fn test_watch_detected_agents_filters_dead() {
         // Use a PID that definitely doesn't exist
-        let agents =
-            vec![DetectedAgent { pid: 2_000_000, family: "test", comm: "nonexistent".into() }];
+        let agents = vec![DetectedAgent {
+            pid: 2_000_000,
+            family: "test",
+            comm: "nonexistent".into(),
+        }];
         let result = super::watch_detected_agents(&agents);
         assert!(result.is_empty(), "dead PID MUST be filtered out by watch");
     }
@@ -569,7 +658,11 @@ mod tests {
     #[test]
     fn test_watch_detected_agents_self_pid() {
         let pid = std::process::id();
-        let agents = vec![DetectedAgent { pid, family: "test", comm: "test-process".into() }];
+        let agents = vec![DetectedAgent {
+            pid,
+            family: "test",
+            comm: "test-process".into(),
+        }];
         let result = super::watch_detected_agents(&agents);
         assert_eq!(result.len(), 1);
         assert_eq!(result[0].agent.pid, pid);

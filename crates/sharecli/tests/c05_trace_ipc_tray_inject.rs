@@ -16,7 +16,10 @@ fn tray_ipc_spawn_injects_traceparent_env() {
     let prev = std::env::var(key).ok();
     let prev_upper = std::env::var("TRACEPARENT").ok();
     std::env::remove_var("TRACEPARENT");
-    std::env::set_var(key, "00-4bf92f3577b34da6a3ce929d0e0e4736-00f067aa0ba902b7-01");
+    std::env::set_var(
+        key,
+        "00-4bf92f3577b34da6a3ce929d0e0e4736-00f067aa0ba902b7-01",
+    );
 
     let (bin, args) = traceparent_child_cmd();
     let mut cmd = Command::new(bin);
@@ -34,7 +37,10 @@ fn tray_ipc_spawn_injects_traceparent_env() {
         std::env::set_var("TRACEPARENT", prev);
     }
 
-    assert_eq!(got, "00-4bf92f3577b34da6a3ce929d0e0e4736-00f067aa0ba902b7-01");
+    assert_eq!(
+        got,
+        "00-4bf92f3577b34da6a3ce929d0e0e4736-00f067aa0ba902b7-01"
+    );
 }
 
 fn traceparent_child_cmd() -> (&'static str, Vec<&'static str>) {
@@ -46,7 +52,12 @@ fn traceparent_child_cmd() -> (&'static str, Vec<&'static str>) {
     {
         (
             "powershell",
-            vec!["-NoProfile", "-NonInteractive", "-Command", "Write-Output $env:TRACEPARENT"],
+            vec![
+                "-NoProfile",
+                "-NonInteractive",
+                "-Command",
+                "Write-Output $env:TRACEPARENT",
+            ],
         )
     }
 }

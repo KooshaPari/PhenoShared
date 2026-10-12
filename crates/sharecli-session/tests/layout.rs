@@ -12,8 +12,12 @@ fn snapshot() -> LayoutSnapshot {
             axis: LayoutAxis::Horizontal,
             ratio_millis: 500,
             children: vec![
-                LayoutNode::Pane { surface_id: "ghostty:1".to_string() },
-                LayoutNode::Pane { surface_id: "ghostty:2".to_string() },
+                LayoutNode::Pane {
+                    surface_id: "ghostty:1".to_string(),
+                },
+                LayoutNode::Pane {
+                    surface_id: "ghostty:2".to_string(),
+                },
             ],
         },
     }
@@ -21,7 +25,10 @@ fn snapshot() -> LayoutSnapshot {
 
 #[test]
 fn layout_snapshot_round_trips_across_store_reopen() {
-    let suffix = SystemTime::now().duration_since(UNIX_EPOCH).unwrap().as_nanos();
+    let suffix = SystemTime::now()
+        .duration_since(UNIX_EPOCH)
+        .unwrap()
+        .as_nanos();
     let path = std::env::temp_dir().join(format!("sharecli-layout-{suffix}.sqlite"));
     let expected = snapshot();
     let store = SessionStore::open(&path).unwrap();
@@ -41,12 +48,20 @@ fn invalid_split_ratio_is_rejected_before_persistence() {
         axis: LayoutAxis::Vertical,
         ratio_millis: 0,
         children: vec![
-            LayoutNode::Pane { surface_id: "ghostty:1".to_string() },
-            LayoutNode::Pane { surface_id: "ghostty:2".to_string() },
+            LayoutNode::Pane {
+                surface_id: "ghostty:1".to_string(),
+            },
+            LayoutNode::Pane {
+                surface_id: "ghostty:2".to_string(),
+            },
         ],
     };
 
-    assert!(store.save_layout(&invalid).unwrap_err().to_string().contains("ratio"));
+    assert!(store
+        .save_layout(&invalid)
+        .unwrap_err()
+        .to_string()
+        .contains("ratio"));
     assert_eq!(store.get_layout("daily").unwrap(), None);
 }
 
@@ -58,10 +73,18 @@ fn duplicate_surface_is_rejected() {
         axis: LayoutAxis::Horizontal,
         ratio_millis: 500,
         children: vec![
-            LayoutNode::Pane { surface_id: "ghostty:1".to_string() },
-            LayoutNode::Pane { surface_id: "ghostty:1".to_string() },
+            LayoutNode::Pane {
+                surface_id: "ghostty:1".to_string(),
+            },
+            LayoutNode::Pane {
+                surface_id: "ghostty:1".to_string(),
+            },
         ],
     };
 
-    assert!(store.save_layout(&invalid).unwrap_err().to_string().contains("more than once"));
+    assert!(store
+        .save_layout(&invalid)
+        .unwrap_err()
+        .to_string()
+        .contains("more than once"));
 }

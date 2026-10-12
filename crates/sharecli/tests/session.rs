@@ -33,13 +33,18 @@ fn missing_zmx_is_degraded() {
 fn ghostty_adapter_never_claims_private_rpc() {
     let caps = GhosttyCapabilities::from_probe(true, false, false);
     assert!(caps.apple_events && !caps.app_intents && !caps.control_socket);
-    assert_eq!(GhosttyAdapter::degraded_reason(&caps), Some("native RPC unavailable"));
+    assert_eq!(
+        GhosttyAdapter::degraded_reason(&caps),
+        Some("native RPC unavailable")
+    );
 }
 
 #[test]
 fn ghostty_control_client_requires_configured_socket() {
     let client = GhosttyControlClient::new("/tmp/sharecli-no-ghostty.sock", Some("token".into()));
-    assert!(client.request("surface.list", serde_json::json!({})).is_err());
+    assert!(client
+        .request("surface.list", serde_json::json!({}))
+        .is_err());
     let caps = GhosttyCapabilities::from_probe(false, false, false).with_control_socket(true);
     assert!(GhosttyAdapter::degraded_reason(&caps).is_none());
 }
@@ -51,7 +56,10 @@ fn ghostty_control_client_decodes_surface_inventory_and_capabilities() {
     use std::os::unix::net::UnixListener;
     use std::time::{SystemTime, UNIX_EPOCH};
 
-    let suffix = SystemTime::now().duration_since(UNIX_EPOCH).unwrap().as_nanos();
+    let suffix = SystemTime::now()
+        .duration_since(UNIX_EPOCH)
+        .unwrap()
+        .as_nanos();
     let socket = std::env::temp_dir().join(format!("sharecli-ghostty-list-{suffix}.sock"));
     let listener = UnixListener::bind(&socket).unwrap();
     let server = std::thread::spawn(move || {
@@ -61,7 +69,9 @@ fn ghostty_control_client_decodes_surface_inventory_and_capabilities() {
         ] {
             let (mut stream, _) = listener.accept().unwrap();
             let mut line = String::new();
-            BufReader::new(stream.try_clone().unwrap()).read_line(&mut line).unwrap();
+            BufReader::new(stream.try_clone().unwrap())
+                .read_line(&mut line)
+                .unwrap();
             stream.write_all(response.as_bytes()).unwrap();
             stream.write_all(b"\n").unwrap();
         }
@@ -81,17 +91,24 @@ fn ghostty_control_client_round_trips_authenticated_io_request() {
     use std::os::unix::net::UnixListener;
     use std::time::{SystemTime, UNIX_EPOCH};
 
-    let suffix = SystemTime::now().duration_since(UNIX_EPOCH).unwrap().as_nanos();
+    let suffix = SystemTime::now()
+        .duration_since(UNIX_EPOCH)
+        .unwrap()
+        .as_nanos();
     let socket = std::env::temp_dir().join(format!("sharecli-ghostty-{suffix}.sock"));
     let listener = UnixListener::bind(&socket).unwrap();
     let server = std::thread::spawn(move || {
         let (mut stream, _) = listener.accept().unwrap();
         let mut line = String::new();
-        BufReader::new(stream.try_clone().unwrap()).read_line(&mut line).unwrap();
+        BufReader::new(stream.try_clone().unwrap())
+            .read_line(&mut line)
+            .unwrap();
         let request: serde_json::Value = serde_json::from_str(&line).unwrap();
         assert_eq!(request["method"], "surface.io.send");
         assert_eq!(request["token"], "test-token");
-        stream.write_all(b"{\"id\":1,\"result\":{\"accepted\":true}}\n").unwrap();
+        stream
+            .write_all(b"{\"id\":1,\"result\":{\"accepted\":true}}\n")
+            .unwrap();
     });
 
     let client = GhosttyControlClient::new(&socket, Some("test-token".into()));
@@ -107,7 +124,10 @@ fn ghostty_control_client_consumes_live_event_and_unsubscribes() {
     use std::os::unix::net::UnixListener;
     use std::time::{SystemTime, UNIX_EPOCH};
 
-    let suffix = SystemTime::now().duration_since(UNIX_EPOCH).unwrap().as_nanos();
+    let suffix = SystemTime::now()
+        .duration_since(UNIX_EPOCH)
+        .unwrap()
+        .as_nanos();
     let socket = std::env::temp_dir().join(format!("sharecli-ghostty-live-{suffix}.sock"));
     let listener = UnixListener::bind(&socket).unwrap();
     let server = std::thread::spawn(move || {
@@ -133,7 +153,9 @@ fn ghostty_control_client_consumes_live_event_and_unsubscribes() {
     });
 
     let client = GhosttyControlClient::new(&socket, None);
-    let mut subscription = client.subscribe_surface(Some("ghostty:1"), None, 1024, 4).unwrap();
+    let mut subscription = client
+        .subscribe_surface(Some("ghostty:1"), None, 1024, 4)
+        .unwrap();
     let event = subscription.next_event().unwrap();
     assert_eq!(event.subscription_id, 1);
     assert_eq!(event.surface_id, "ghostty:1");

@@ -9,7 +9,10 @@ pub enum JsValue {
 }
 impl JsValue {
     pub fn from_json(s: &str) -> Result<Self, String> {
-        let mut p = Parser { s: s.as_bytes().to_vec(), i: 0 };
+        let mut p = Parser {
+            s: s.as_bytes().to_vec(),
+            i: 0,
+        };
         p.skip_ws();
         let v = p.parse_value()?;
         p.skip_ws();
@@ -78,15 +81,15 @@ impl Parser {
             Some(b'n') => {
                 self.expect("null")?;
                 Ok(JsValue::Null)
-            }
+            },
             Some(b't') => {
                 self.expect("true")?;
                 Ok(JsValue::Bool(true))
-            }
+            },
             Some(b'f') => {
                 self.expect("false")?;
                 Ok(JsValue::Bool(false))
-            }
+            },
             Some(b'"') => Ok(JsValue::Str(self.parse_string()?)),
             Some(b'[') => self.parse_array(),
             Some(b'{') => self.parse_object(),
@@ -118,19 +121,19 @@ impl Parser {
                     Some(b'"') => {
                         out.push('"');
                         self.i += 1;
-                    }
+                    },
                     Some(b'\\') => {
                         out.push('\\');
                         self.i += 1;
-                    }
+                    },
                     Some(b'n') => {
                         out.push('\n');
                         self.i += 1;
-                    }
+                    },
                     Some(b't') => {
                         out.push('\t');
                         self.i += 1;
-                    }
+                    },
                     _ => return Err(format!("bad escape at {}", self.i)),
                 }
             } else {
@@ -171,11 +174,11 @@ impl Parser {
             match self.peek() {
                 Some(b',') => {
                     self.i += 1;
-                }
+                },
                 Some(b']') => {
                     self.i += 1;
                     return Ok(JsValue::Arr(arr));
-                }
+                },
                 _ => return Err(format!("expected , or ] at {}", self.i)),
             }
         }
@@ -202,11 +205,11 @@ impl Parser {
             match self.peek() {
                 Some(b',') => {
                     self.i += 1;
-                }
+                },
                 Some(b'}') => {
                     self.i += 1;
                     return Ok(JsValue::Obj(obj));
-                }
+                },
                 _ => return Err(format!("expected , or }} at {}", self.i)),
             }
         }

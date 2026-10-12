@@ -61,7 +61,10 @@ pub fn decode(input: &[u8]) -> Result<QoiImage, String> {
         ));
     }
     if &input[0..4] != b"qoif" {
-        return Err(format!("bad QOI magic: expected 'qoif', got {:?}", &input[0..4]));
+        return Err(format!(
+            "bad QOI magic: expected 'qoif', got {:?}",
+            &input[0..4]
+        ));
     }
 
     let width = u32::from_be_bytes([input[4], input[5], input[6], input[7]]);
@@ -97,7 +100,12 @@ pub fn decode(input: &[u8]) -> Result<QoiImage, String> {
     let mut index: [QoiPixel; 64] = [QoiPixel::default(); 64];
     // Initialize index slot 0 to the all-rgba-zero EXCEPT alpha=255, which
     // is the spec-defined "previous pixel" state before any chunks are read.
-    let initial = QoiPixel { r: 0, g: 0, b: 0, a: 255 };
+    let initial = QoiPixel {
+        r: 0,
+        g: 0,
+        b: 0,
+        a: 255,
+    };
     index[0] = initial;
     let mut prev = initial;
     let mut prev_written = initial;
@@ -113,7 +121,12 @@ pub fn decode(input: &[u8]) -> Result<QoiImage, String> {
             if i + 4 > data_end {
                 return Err("truncated QOI_OP_RGB chunk".to_string());
             }
-            prev = QoiPixel { r: input[i + 1], g: input[i + 2], b: input[i + 3], a: prev.a };
+            prev = QoiPixel {
+                r: input[i + 1],
+                g: input[i + 2],
+                b: input[i + 3],
+                a: prev.a,
+            };
             write_pixel(&mut pixels, prev, channels);
             index[hash_pixel(prev) as usize] = prev;
             prev_written = prev;
@@ -123,14 +136,19 @@ pub fn decode(input: &[u8]) -> Result<QoiImage, String> {
             if i + 5 > data_end {
                 return Err("truncated QOI_OP_RGBA chunk".to_string());
             }
-            prev = QoiPixel { r: input[i + 1], g: input[i + 2], b: input[i + 3], a: input[i + 4] };
+            prev = QoiPixel {
+                r: input[i + 1],
+                g: input[i + 2],
+                b: input[i + 3],
+                a: input[i + 4],
+            };
             write_pixel(&mut pixels, prev, channels);
             index[hash_pixel(prev) as usize] = prev;
             prev_written = prev;
             i += 5;
         } else if (b1 >> 6) == 0b00 {
             // QOI_OP_INDEX: 6-bit index
-            let idx = (b1 & 0x3F) as usize;
+            let idx = (b1 & 0x3f) as usize;
             prev = index[idx];
             write_pixel(&mut pixels, prev, channels);
             prev_written = prev;
@@ -156,9 +174,9 @@ pub fn decode(input: &[u8]) -> Result<QoiImage, String> {
                 return Err("truncated QOI_OP_LUMA chunk".to_string());
             }
             let b2 = input[i + 1];
-            let vg = (b1 & 0x3F) as i32 - 32;
-            let vr = vg + ((b2 >> 4) & 0x0F) as i32 - 8;
-            let vb = vg + (b2 & 0x0F) as i32 - 8;
+            let vg = (b1 & 0x3f) as i32 - 32;
+            let vr = vg + ((b2 >> 4) & 0x0f) as i32 - 8;
+            let vb = vg + (b2 & 0x0f) as i32 - 8;
             prev = QoiPixel {
                 r: prev.r.wrapping_add_signed(vr as i8),
                 g: prev.g.wrapping_add_signed(vg as i8),
@@ -171,7 +189,7 @@ pub fn decode(input: &[u8]) -> Result<QoiImage, String> {
             i += 2;
         } else {
             // 0b11xxxxxx but not RGB/RGBA: must be QOI_OP_RUN
-            let run = (b1 & 0x3F) as usize + 1; // bias: 1..=62
+            let run = (b1 & 0x3f) as usize + 1; // bias: 1..=62
             if run < 1 || run > 62 {
                 return Err(format!("invalid QOI run length: {}", run));
             }
@@ -194,7 +212,13 @@ pub fn decode(input: &[u8]) -> Result<QoiImage, String> {
         ));
     }
 
-    Ok(QoiImage { width, height, channels, colorspace, pixels })
+    Ok(QoiImage {
+        width,
+        height,
+        channels,
+        colorspace,
+        pixels,
+    })
 }
 
 fn write_pixel(buf: &mut Vec<u8>, p: QoiPixel, channels: u8) {
@@ -208,7 +232,7 @@ fn write_pixel(buf: &mut Vec<u8>, p: QoiPixel, channels: u8) {
 
 /// Spec-mandated hash for the running pixel index.
 fn hash_pixel(p: QoiPixel) -> u8 {
-    (p.r ^ p.g ^ p.b ^ p.a) & 0x3F
+    (p.r ^ p.g ^ p.b ^ p.a) & 0x3f
 }
 
 #[cfg(test)]
@@ -432,11 +456,11 @@ mod tests {
         bytes.push(4);
         bytes.push(0);
         bytes.push(QOI_OP_RGBA);
-        bytes.extend_from_slice(&[0x21, 0x1F, 0x2B, 0xFF]);
+        bytes.extend_from_slice(&[0x21, 0x1f, 0x2b, 0xff]);
         bytes.extend_from_slice(&QOI_END_MARKER);
 
         let img = decode(&bytes).unwrap();
-        assert_eq!(&img.pixels[..4], &[0x21, 0x1F, 0x2B, 0xFF]);
+        assert_eq!(&img.pixels[..4], &[0x21, 0x1f, 0x2b, 0xff]);
     }
 
     /// Cross-check: a multi-pixel image where each pixel uses a different

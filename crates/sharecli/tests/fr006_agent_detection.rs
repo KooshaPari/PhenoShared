@@ -27,7 +27,11 @@ fn fr006_pattern_registry_matches_known_names() {
         ("python3", &["-m", "aider"], Some("aider")),
     ];
     for (comm, cmdline, expect) in cases {
-        assert_eq!(match_known_agent(comm, cmdline), expect, "comm={comm:?} cmdline={cmdline:?}");
+        assert_eq!(
+            match_known_agent(comm, cmdline),
+            expect,
+            "comm={comm:?} cmdline={cmdline:?}"
+        );
     }
     assert!(KNOWN_AGENT_FAMILIES.contains(&"claude"));
 }
@@ -50,8 +54,12 @@ async fn fr006_hypervisor_runs_argv_as_is() {
     #[cfg(unix)]
     let argv = vec!["echo".to_string(), "fr006-no-wrap".to_string()];
     #[cfg(windows)]
-    let argv =
-        vec!["cmd".to_string(), "/C".to_string(), "echo".to_string(), "fr006-no-wrap".to_string()];
+    let argv = vec![
+        "cmd".to_string(),
+        "/C".to_string(),
+        "echo".to_string(),
+        "fr006-no-wrap".to_string(),
+    ];
 
     let outcome = hv
         .run(SpawnRequest {
@@ -69,5 +77,8 @@ async fn fr006_hypervisor_runs_argv_as_is() {
     // this suite). Caller observation is orthogonal to the FR-006.3 contract:
     // the child command must still run exactly as supplied.
     let stdout = String::from_utf8_lossy(&outcome.stdout);
-    assert!(stdout.contains("fr006-no-wrap"), "stdout must reflect argv payload, got {stdout:?}");
+    assert!(
+        stdout.contains("fr006-no-wrap"),
+        "stdout must reflect argv payload, got {stdout:?}"
+    );
 }

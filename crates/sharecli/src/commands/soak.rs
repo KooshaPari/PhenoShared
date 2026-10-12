@@ -61,7 +61,12 @@ fn default_scenarios() -> Vec<Scenario> {
         },
         Scenario {
             name: "config-show".into(),
-            command: vec!["sharecli".into(), "config".into(), "show".into(), "--json".into()],
+            command: vec![
+                "sharecli".into(),
+                "config".into(),
+                "show".into(),
+                "--json".into(),
+            ],
             timeout_secs: 10,
         },
     ]
@@ -194,8 +199,9 @@ pub fn run(
         Duration::from_millis((raw.clamp(1.0, 30.0) * 1000.0) as u64)
     });
 
-    let report_path =
-        output_path.map(|p| p.to_path_buf()).unwrap_or_else(|| PathBuf::from(&config.report_file));
+    let report_path = output_path
+        .map(|p| p.to_path_buf())
+        .unwrap_or_else(|| PathBuf::from(&config.report_file));
 
     let total_duration = Duration::from_secs(config.duration_seconds);
     let git_sha = get_git_sha();
@@ -203,8 +209,11 @@ pub fn run(
     let start = Instant::now();
 
     // Per-scenario accumulators: (name, latencies, error_count, max_memory)
-    let mut scenario_runs: Vec<(String, Vec<u64>, u64, u64)> =
-        config.scenarios.iter().map(|s| (s.name.clone(), Vec::new(), 0u64, 0u64)).collect();
+    let mut scenario_runs: Vec<(String, Vec<u64>, u64, u64)> = config
+        .scenarios
+        .iter()
+        .map(|s| (s.name.clone(), Vec::new(), 0u64, 0u64))
+        .collect();
 
     let mut total_requests: u64 = 0;
     let mut total_errors: u64 = 0;
@@ -249,7 +258,10 @@ pub fn run(
             let args = &scenario.command[1..];
 
             let run_start = Instant::now();
-            let result = Command::new(cmd_name).args(args).env("NO_COLOR", "1").output();
+            let result = Command::new(cmd_name)
+                .args(args)
+                .env("NO_COLOR", "1")
+                .output();
 
             let elapsed_ms = run_start.elapsed().as_millis() as u64;
             total_requests += 1;
@@ -269,12 +281,15 @@ pub fn run(
                     if mem > scenario_runs[i].3 {
                         scenario_runs[i].3 = mem;
                     }
-                }
+                },
                 Err(e) => {
                     total_errors += 1;
                     scenario_runs[i].2 += 1;
-                    eprintln!("[soak] scenario '{}' failed to execute: {}", scenario.name, e);
-                }
+                    eprintln!(
+                        "[soak] scenario '{}' failed to execute: {}",
+                        scenario.name, e
+                    );
+                },
             }
         }
 
@@ -289,16 +304,21 @@ pub fn run(
     let finished_at = chrono_timestamp();
     let duration_actual = start.elapsed().as_secs();
 
-    let error_rate =
-        if total_requests > 0 { total_errors as f64 / total_requests as f64 } else { 0.0 };
+    let error_rate = if total_requests > 0 {
+        total_errors as f64 / total_requests as f64
+    } else {
+        0.0
+    };
     let uptime_pct = if total_requests > 0 {
         ((total_requests - total_errors) as f64 / total_requests as f64) * 100.0
     } else {
         100.0
     };
 
-    let mut all_latencies: Vec<u64> =
-        scenario_runs.iter().flat_map(|(_, lats, _, _)| lats.iter().copied()).collect();
+    let mut all_latencies: Vec<u64> = scenario_runs
+        .iter()
+        .flat_map(|(_, lats, _, _)| lats.iter().copied())
+        .collect();
     all_latencies.sort_unstable();
 
     let p50 = percentile(&all_latencies, 50);
@@ -448,7 +468,9 @@ fn get_git_sha() -> String {
         .ok()
         .and_then(|o| {
             if o.status.success() {
-                String::from_utf8(o.stdout).ok().map(|s| s.trim().to_string())
+                String::from_utf8(o.stdout)
+                    .ok()
+                    .map(|s| s.trim().to_string())
             } else {
                 None
             }
@@ -459,7 +481,9 @@ fn get_git_sha() -> String {
 /// Current UTC timestamp in ISO 8601.
 fn chrono_timestamp() -> String {
     use std::time::SystemTime;
-    let now = SystemTime::now().duration_since(SystemTime::UNIX_EPOCH).unwrap_or_default();
+    let now = SystemTime::now()
+        .duration_since(SystemTime::UNIX_EPOCH)
+        .unwrap_or_default();
     let secs = now.as_secs();
     let days = secs / 86400;
     let time_of_day = secs % 86400;
@@ -780,7 +804,10 @@ scenarios:
     #[test]
     fn get_git_sha_returns_nonempty() {
         let sha = get_git_sha();
-        assert!(!sha.is_empty(), "git SHA must not be empty (unless not in a git repo)");
+        assert!(
+            !sha.is_empty(),
+            "git SHA must not be empty (unless not in a git repo)"
+        );
     }
 
     #[test]

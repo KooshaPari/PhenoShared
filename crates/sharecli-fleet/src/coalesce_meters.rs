@@ -17,7 +17,10 @@ impl CoalesceMeters {
     /// Hit rate as an integer percentage in `[0, 100]` (0 when no hit/miss events).
     pub fn hit_rate_pct(self) -> u64 {
         let total = self.hits.saturating_add(self.misses);
-        self.hits.saturating_mul(100).checked_div(total).unwrap_or(0)
+        self.hits
+            .saturating_mul(100)
+            .checked_div(total)
+            .unwrap_or(0)
     }
 
     /// Operator-facing status block for `sharecli status` (FR-008 / AC-008.11).
@@ -80,10 +83,10 @@ pub fn record_coalesce_hit_kind(kind: CoalesceHitKind) {
     match kind {
         CoalesceHitKind::Miss => {
             GLOBAL_COALESCE_MISSES.fetch_add(1, Ordering::Relaxed);
-        }
+        },
         CoalesceHitKind::LockRecheck | CoalesceHitKind::DebounceRecheck => {
             GLOBAL_COALESCE_HITS.fetch_add(1, Ordering::Relaxed);
-        }
+        },
     }
 }
 

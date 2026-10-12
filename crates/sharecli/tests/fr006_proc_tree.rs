@@ -11,7 +11,13 @@ use sharecli_core::{
 
 fn fixture() -> FakeProcSource {
     FakeProcSource::new(vec![
-        ProcSnapshot { pid: 1, ppid: 0, comm: "init".into(), cmdline: vec![], state: 'R' },
+        ProcSnapshot {
+            pid: 1,
+            ppid: 0,
+            comm: "init".into(),
+            cmdline: vec![],
+            state: 'R',
+        },
         ProcSnapshot {
             pid: 50,
             ppid: 1,

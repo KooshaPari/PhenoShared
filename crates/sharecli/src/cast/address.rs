@@ -60,13 +60,22 @@ impl PaneAddress {
 
         let host = parse_host(&host_str)?;
 
-        Ok(PaneAddress { machine: machine.to_string(), host, window, pane })
+        Ok(PaneAddress {
+            machine: machine.to_string(),
+            host,
+            window,
+            pane,
+        })
     }
 }
 
 impl fmt::Display for PaneAddress {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "{}:{}:{}:{}", self.machine, self.host, self.window, self.pane)
+        write!(
+            f,
+            "{}:{}:{}:{}",
+            self.machine, self.host, self.window, self.pane
+        )
     }
 }
 
@@ -92,7 +101,8 @@ impl FromStr for PaneAddress {
 // ---------------------------------------------------------------------------
 
 fn split_once(s: &str, delim: char) -> Option<(&str, &str)> {
-    s.find(delim).map(|idx| (&s[..idx], &s[idx + delim.len_utf8()..]))
+    s.find(delim)
+        .map(|idx| (&s[..idx], &s[idx + delim.len_utf8()..]))
 }
 
 /// Peel trailing `:pane` and `:window` segments from `s` if they are u32.
@@ -133,13 +143,16 @@ fn parse_index(s: &str, label: &'static str) -> anyhow::Result<Option<u32>> {
     if s.starts_with('-') {
         anyhow::bail!("{} index must be non-negative, got '{}'", label, s);
     }
-    let n: u32 = s.parse().map_err(|_| anyhow::anyhow!("{} index out of range: '{}'", label, s))?;
+    let n: u32 = s
+        .parse()
+        .map_err(|_| anyhow::anyhow!("{} index out of range: '{}'", label, s))?;
     Ok(Some(n))
 }
 
 /// `rsplit_once` is unstable; this is the local equivalent.
 fn split_once_rev(s: &str, delim: char) -> Option<(&str, &str)> {
-    s.rfind(delim).map(|idx| (&s[..idx], &s[idx + delim.len_utf8()..]))
+    s.rfind(delim)
+        .map(|idx| (&s[..idx], &s[idx + delim.len_utf8()..]))
 }
 
 fn parse_host(s: &str) -> anyhow::Result<Host> {
@@ -162,8 +175,11 @@ fn parse_host(s: &str) -> anyhow::Result<Host> {
             if host.is_empty() {
                 anyhow::bail!("empty ssh host in '{}'", s);
             }
-            Ok(Host::Ssh { user: user.to_string(), host: host.to_string() })
-        }
+            Ok(Host::Ssh {
+                user: user.to_string(),
+                host: host.to_string(),
+            })
+        },
         other => anyhow::bail!(
             "unknown host '{}' (expected 'local', 'tailscale', or 'ssh:user@host')",
             other
@@ -173,7 +189,8 @@ fn parse_host(s: &str) -> anyhow::Result<Host> {
 
 fn is_valid_machine(s: &str) -> bool {
     !s.is_empty()
-        && s.chars().all(|c| c.is_ascii_alphanumeric() || c == '-' || c == '_' || c == '.')
+        && s.chars()
+            .all(|c| c.is_ascii_alphanumeric() || c == '-' || c == '_' || c == '.')
 }
 
 // ---------------------------------------------------------------------------

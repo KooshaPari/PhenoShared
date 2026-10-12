@@ -101,7 +101,10 @@ impl Sha256 {
         for i in 16..64 {
             let s0 = w[i - 15].rotate_right(7) ^ w[i - 15].rotate_right(18) ^ (w[i - 15] >> 3);
             let s1 = w[i - 2].rotate_right(17) ^ w[i - 2].rotate_right(19) ^ (w[i - 2] >> 10);
-            w[i] = w[i - 16].wrapping_add(s0).wrapping_add(w[i - 7]).wrapping_add(s1);
+            w[i] = w[i - 16]
+                .wrapping_add(s0)
+                .wrapping_add(w[i - 7])
+                .wrapping_add(s1);
         }
         let mut a = self.h[0];
         let mut b = self.h[1];
@@ -114,7 +117,11 @@ impl Sha256 {
         for i in 0..64 {
             let s1 = e.rotate_right(6) ^ e.rotate_right(11) ^ e.rotate_right(25);
             let ch = (e & f) ^ ((!e) & g);
-            let t1 = h.wrapping_add(s1).wrapping_add(ch).wrapping_add(K[i]).wrapping_add(w[i]);
+            let t1 = h
+                .wrapping_add(s1)
+                .wrapping_add(ch)
+                .wrapping_add(K[i])
+                .wrapping_add(w[i]);
             let s0 = a.rotate_right(2) ^ a.rotate_right(13) ^ a.rotate_right(22);
             let mj = (a & b) ^ (a & c) ^ (b & c);
             let t2 = s0.wrapping_add(mj);
@@ -174,8 +181,11 @@ fn hmac_sha256(key: &[u8], msg: &[u8]) -> [u8; SHA256_OUT] {
 /// `HashLen` zero bytes is then used internally). `ikm` is the input
 /// keying material. Returns the PRK of `HashLen` bytes (32 for SHA-256).
 pub fn extract(salt: &[u8], ikm: &[u8]) -> [u8; SHA256_OUT] {
-    let effective_salt: Vec<u8> =
-        if salt.is_empty() { vec![0u8; SHA256_OUT] } else { salt.to_vec() };
+    let effective_salt: Vec<u8> = if salt.is_empty() {
+        vec![0u8; SHA256_OUT]
+    } else {
+        salt.to_vec()
+    };
     hmac_sha256(&effective_salt, ikm)
 }
 
@@ -184,7 +194,12 @@ pub fn extract(salt: &[u8], ikm: &[u8]) -> [u8; SHA256_OUT] {
 /// length (capped at 255 * HashLen per the spec).
 pub fn expand(prk: &[u8; SHA256_OUT], info: &[u8], length: usize) -> Vec<u8> {
     let max = 255 * SHA256_OUT;
-    assert!(length <= max, "HKDF-Expand: requested {} bytes exceeds max {}", length, max);
+    assert!(
+        length <= max,
+        "HKDF-Expand: requested {} bytes exceeds max {}",
+        length,
+        max
+    );
     let mut okm = Vec::with_capacity(length);
     let mut t = Vec::<u8>::new();
     let mut counter: u8 = 1;

@@ -48,7 +48,10 @@ impl Default for WriteSerialize {
 impl WriteSerialize {
     /// Create with a unique staging directory under the process temp dir.
     pub fn new() -> Self {
-        let nanos = SystemTime::now().duration_since(UNIX_EPOCH).map(|d| d.as_nanos()).unwrap_or(0);
+        let nanos = SystemTime::now()
+            .duration_since(UNIX_EPOCH)
+            .map(|d| d.as_nanos())
+            .unwrap_or(0);
         let staging_root =
             std::env::temp_dir().join(format!("sharecli-cow-{}-{}", std::process::id(), nanos));
         Self::with_staging_root(staging_root)
@@ -71,9 +74,14 @@ impl WriteSerialize {
     }
 
     fn lock_arc(&self, path: &Path) -> Result<Arc<Mutex<()>>, WriteSerializeError> {
-        let mut map = self.locks.lock().map_err(|_| WriteSerializeError::Poisoned)?;
-        let entry =
-            map.entry(path.to_path_buf()).or_insert_with(|| Arc::new(Mutex::new(()))).clone();
+        let mut map = self
+            .locks
+            .lock()
+            .map_err(|_| WriteSerializeError::Poisoned)?;
+        let entry = map
+            .entry(path.to_path_buf())
+            .or_insert_with(|| Arc::new(Mutex::new(())))
+            .clone();
         Ok(entry)
     }
 
@@ -111,7 +119,10 @@ impl WriteSerialize {
         file.write_all(contents)?;
         file.sync_all()?;
 
-        let mut pending = self.pending.lock().map_err(|_| WriteSerializeError::Poisoned)?;
+        let mut pending = self
+            .pending
+            .lock()
+            .map_err(|_| WriteSerializeError::Poisoned)?;
         pending.insert(backing, staging);
         record_stage();
         Ok(())
@@ -126,7 +137,10 @@ impl WriteSerialize {
         let _guard = arc.lock().map_err(|_| WriteSerializeError::Poisoned)?;
 
         let staging = {
-            let pending = self.pending.lock().map_err(|_| WriteSerializeError::Poisoned)?;
+            let pending = self
+                .pending
+                .lock()
+                .map_err(|_| WriteSerializeError::Poisoned)?;
             pending
                 .get(&backing_buf)
                 .cloned()
@@ -134,7 +148,10 @@ impl WriteSerialize {
         };
 
         if !staging.exists() {
-            let mut pending = self.pending.lock().map_err(|_| WriteSerializeError::Poisoned)?;
+            let mut pending = self
+                .pending
+                .lock()
+                .map_err(|_| WriteSerializeError::Poisoned)?;
             pending.remove(&backing_buf);
             return Err(WriteSerializeError::NoPending(backing_buf));
         }
@@ -145,15 +162,18 @@ impl WriteSerialize {
 
         // Same-filesystem atomic replace; fall back to copy+remove on EXDEV.
         match fs::rename(&staging, &backing_buf) {
-            Ok(()) => {}
+            Ok(()) => {},
             Err(err) if err.raw_os_error() == Some(libc_exdev()) => {
                 fs::copy(&staging, &backing_buf)?;
                 let _ = fs::remove_file(&staging);
-            }
+            },
             Err(err) => return Err(err.into()),
         }
 
-        let mut pending = self.pending.lock().map_err(|_| WriteSerializeError::Poisoned)?;
+        let mut pending = self
+            .pending
+            .lock()
+            .map_err(|_| WriteSerializeError::Poisoned)?;
         pending.remove(&backing_buf);
         record_commit();
         Ok(())
@@ -168,7 +188,10 @@ impl WriteSerialize {
         let _guard = arc.lock().map_err(|_| WriteSerializeError::Poisoned)?;
 
         let staging = {
-            let mut pending = self.pending.lock().map_err(|_| WriteSerializeError::Poisoned)?;
+            let mut pending = self
+                .pending
+                .lock()
+                .map_err(|_| WriteSerializeError::Poisoned)?;
             pending
                 .remove(&backing_buf)
                 .ok_or_else(|| WriteSerializeError::NoPending(backing_buf.clone()))?
@@ -183,13 +206,19 @@ impl WriteSerialize {
 
     /// Whether `backing` currently has a pending staging file.
     pub fn has_pending(&self, backing: &Path) -> Result<bool, WriteSerializeError> {
-        let pending = self.pending.lock().map_err(|_| WriteSerializeError::Poisoned)?;
+        let pending = self
+            .pending
+            .lock()
+            .map_err(|_| WriteSerializeError::Poisoned)?;
         Ok(pending.contains_key(backing))
     }
 
     /// Backing paths that currently have staged CoW bytes pending commit/discard.
     pub fn pending_backing_paths(&self) -> Result<Vec<PathBuf>, WriteSerializeError> {
-        let pending = self.pending.lock().map_err(|_| WriteSerializeError::Poisoned)?;
+        let pending = self
+            .pending
+            .lock()
+            .map_err(|_| WriteSerializeError::Poisoned)?;
         Ok(pending.keys().cloned().collect())
     }
 }
@@ -231,8 +260,14 @@ mod tests {
         assert_eq!(fs::read(&backing).expect("unchanged"), b"keep-me");
         assert!(!ws.has_pending(&backing).expect("cleared2"));
 
-        assert!(matches!(ws.discard_pending(&backing), Err(WriteSerializeError::NoPending(_))));
-        assert!(matches!(ws.commit_pending(&backing), Err(WriteSerializeError::NoPending(_))));
+        assert!(matches!(
+            ws.discard_pending(&backing),
+            Err(WriteSerializeError::NoPending(_))
+        ));
+        assert!(matches!(
+            ws.commit_pending(&backing),
+            Err(WriteSerializeError::NoPending(_))
+        ));
     }
 
     /// FR-009 / AC-009.5 — same-path writers serialize (no overlapping critical section).

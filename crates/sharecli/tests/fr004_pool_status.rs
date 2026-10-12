@@ -8,7 +8,10 @@ use sharecli::runtime::{PoolStatus, RuntimeHealth, SharedRuntime};
 /// Mirror of the pool table printed by `commands::pool_status`.
 fn format_pool_status(status: &PoolStatus) -> String {
     let mut out = String::from("=== Shared Runtime Pool Status ===\n\n");
-    out.push_str(&format!("{:<10} {:<10} {:<10} {:<10}\n", "TYPE", "TOTAL", "IDLE", "MAX"));
+    out.push_str(&format!(
+        "{:<10} {:<10} {:<10} {:<10}\n",
+        "TYPE", "TOTAL", "IDLE", "MAX"
+    ));
     out.push_str(&format!("{}\n", "-".repeat(40)));
     out.push_str(&format!(
         "{:<10} {:<10} {:<10} {:<10}\n",
@@ -33,7 +36,11 @@ fn format_health_label(health: &RuntimeHealth) -> String {
 fn format_health_probe(health: &RuntimeHealth, pool: &PoolStatus) -> String {
     let mut out = format!(
         "\nShared runtime health: {}\n",
-        if health.healthy { "HEALTHY" } else { "DEGRADED" }
+        if health.healthy {
+            "HEALTHY"
+        } else {
+            "DEGRADED"
+        }
     );
     if health.issues.is_empty() {
         out.push_str("No runtime issues detected.\n");
@@ -70,7 +77,10 @@ async fn fr004_pool_reports_node_and_bun() {
     assert_eq!(status.max_per_type, max_per_type);
 
     let out = format_pool_status(&status);
-    assert!(out.contains("=== Shared Runtime Pool Status ==="), "got: {out}");
+    assert!(
+        out.contains("=== Shared Runtime Pool Status ==="),
+        "got: {out}"
+    );
     assert!(
         out.contains("TYPE")
             && out.contains("TOTAL")
@@ -92,7 +102,10 @@ async fn fr004_health_reports_healthy_or_degraded() {
     let pool = runtime.status().await;
     let live = runtime.health_check().await;
 
-    assert!(live.healthy, "empty shared pool MUST be healthy (no dead/high-mem members)");
+    assert!(
+        live.healthy,
+        "empty shared pool MUST be healthy (no dead/high-mem members)"
+    );
     assert!(live.issues.is_empty());
     assert_eq!(live.node_in_use, 0);
     assert_eq!(live.bun_in_use, 0);
@@ -115,7 +128,10 @@ async fn fr004_health_reports_healthy_or_degraded() {
         degraded_out.contains("DEGRADED"),
         "unhealthy RuntimeHealth MUST print DEGRADED; got: {degraded_out}"
     );
-    assert!(degraded_out.contains("not found"), "issues MUST surface; got: {degraded_out}");
+    assert!(
+        degraded_out.contains("not found"),
+        "issues MUST surface; got: {degraded_out}"
+    );
     assert!(format_health_label(&degraded).contains("DEGRADED"));
     assert!(!format_health_label(&degraded).contains("HEALTHY"));
 }

@@ -51,12 +51,17 @@ fn spawn_container(image: &ImageRef) -> Result<ContainerId, RuntimeError> {
         .map_err(|e| RuntimeError::backend(format!("failed to run container CLI: {e}")))?;
 
     if !output.status.success() {
-        return Err(RuntimeError::backend(command_error("container run", &output)));
+        return Err(RuntimeError::backend(command_error(
+            "container run",
+            &output,
+        )));
     }
 
     let id = String::from_utf8_lossy(&output.stdout).trim().to_owned();
     if id.is_empty() {
-        return Err(RuntimeError::backend("container run returned an empty container id"));
+        return Err(RuntimeError::backend(
+            "container run returned an empty container id",
+        ));
     }
 
     Ok(ContainerId::new(id))
@@ -79,9 +84,15 @@ fn stop_container(id: &ContainerId) -> Result<(), RuntimeError> {
     if output.status.success() {
         Ok(())
     } else if output_mentions_not_found(&output) {
-        Err(RuntimeError::not_found(format!("no container with id {}", id.as_ref())))
+        Err(RuntimeError::not_found(format!(
+            "no container with id {}",
+            id.as_ref()
+        )))
     } else {
-        Err(RuntimeError::backend(command_error("container stop", &output)))
+        Err(RuntimeError::backend(command_error(
+            "container stop",
+            &output,
+        )))
     }
 }
 
@@ -113,7 +124,10 @@ fn container_status(id: &ContainerId) -> Result<ContainerStatus, RuntimeError> {
         .map_err(|e| RuntimeError::backend(format!("failed to list containers: {e}")))?;
 
     if !list.status.success() {
-        return Err(RuntimeError::backend(command_error("container inspect", &inspect)));
+        return Err(RuntimeError::backend(command_error(
+            "container inspect",
+            &inspect,
+        )));
     }
 
     let listing = String::from_utf8_lossy(&list.stdout);

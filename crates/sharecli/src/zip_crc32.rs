@@ -6,7 +6,11 @@ const TABLE: [u32; 256] = {
         let mut c = i as u32;
         let mut j = 0;
         while j < 8 {
-            c = if c & 1 != 0 { 0xedb88320 ^ (c >> 1) } else { c >> 1 };
+            c = if c & 1 != 0 {
+                0xedb88320 ^ (c >> 1)
+            } else {
+                c >> 1
+            };
             j += 1;
         }
         t[i] = c;

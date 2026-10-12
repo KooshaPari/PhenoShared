@@ -64,7 +64,10 @@ fn fr_cast_002_resolve_returns_address_or_none() {
     let addr = PaneAddress::parse("mbp:local:0:2").expect("parse ok");
     reg.register("civis-1", &addr).expect("register ok");
 
-    assert_eq!(reg.resolve("civis-1").expect("resolve ok"), Some(addr.clone()));
+    assert_eq!(
+        reg.resolve("civis-1").expect("resolve ok"),
+        Some(addr.clone())
+    );
     assert_eq!(reg.resolve("missing").expect("resolve ok"), None);
 }
 
@@ -95,7 +98,11 @@ fn fr_cast_002_register_rejects_empty_name() {
     let reg = PaneRegistry::new_in(tmp.path()).expect("registry init");
     let addr = PaneAddress::parse("mbp:local:0:0").expect("parse ok");
     let err = reg.register("", &addr).expect_err("empty name rejected");
-    assert!(err.to_string().contains("name"), "error mentions name: {}", err);
+    assert!(
+        err.to_string().contains("name"),
+        "error mentions name: {}",
+        err
+    );
 }
 
 /// Register rejects names containing control characters or whitespace.
@@ -107,7 +114,12 @@ fn fr_cast_002_register_rejects_invalid_name() {
 
     for bad in ["civis 1", "civis\t1", "civis\n1", "civis\x001"] {
         let err = reg.register(bad, &addr).expect_err("invalid name rejected");
-        assert!(err.to_string().contains("name"), "error mentions name for {:?}: {}", bad, err);
+        assert!(
+            err.to_string().contains("name"),
+            "error mentions name for {:?}: {}",
+            bad,
+            err
+        );
     }
 }
 

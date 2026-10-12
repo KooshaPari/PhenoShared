@@ -7,7 +7,10 @@ pub struct ObjectPool<T> {
 }
 impl<T> ObjectPool<T> {
     pub fn new(capacity: usize) -> Self {
-        Self { items: Arc::new(Mutex::new(VecDeque::new())), capacity }
+        Self {
+            items: Arc::new(Mutex::new(VecDeque::new())),
+            capacity,
+        }
     }
     pub fn put(&self, item: T) -> bool {
         let mut g = self.items.lock().expect("ObjectPool items mutex poisoned");
@@ -19,10 +22,16 @@ impl<T> ObjectPool<T> {
         }
     }
     pub fn take(&self) -> Option<T> {
-        self.items.lock().expect("ObjectPool items mutex poisoned").pop_front()
+        self.items
+            .lock()
+            .expect("ObjectPool items mutex poisoned")
+            .pop_front()
     }
     pub fn available(&self) -> usize {
-        self.items.lock().expect("ObjectPool items mutex poisoned").len()
+        self.items
+            .lock()
+            .expect("ObjectPool items mutex poisoned")
+            .len()
     }
     pub fn capacity(&self) -> usize {
         self.capacity

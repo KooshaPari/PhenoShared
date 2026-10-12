@@ -206,11 +206,15 @@ mod tests {
         };
         let h = CowMountHandle::from_options(&backing, &opts);
         assert!(h.cow_enabled());
-        h.stage_rel_for_agent(Some("agent-a"), Path::new("f.txt"), b"new").unwrap();
+        h.stage_rel_for_agent(Some("agent-a"), Path::new("f.txt"), b"new")
+            .unwrap();
         assert_eq!(fs::read(&target).unwrap(), b"old");
-        h.commit_rel_for_agent(Some("agent-a"), Path::new("f.txt")).unwrap();
+        h.commit_rel_for_agent(Some("agent-a"), Path::new("f.txt"))
+            .unwrap();
         assert_eq!(fs::read(&target).unwrap(), b"new");
-        let prov = crate::read_provenance(&target).unwrap().expect("provenance");
+        let prov = crate::read_provenance(&target)
+            .unwrap()
+            .expect("provenance");
         assert_eq!(prov.session_id, "sess-27");
     }
 
@@ -226,13 +230,21 @@ mod tests {
 
         let cow_on = CowMountHandle::from_options(
             &backing,
-            &InterceptFsOptions { session_id: "s".into(), cow: true, ..Default::default() },
+            &InterceptFsOptions {
+                session_id: "s".into(),
+                cow: true,
+                ..Default::default()
+            },
         );
         assert_eq!(cow_on.cow_root(), backing.join(".sharecli-cow"));
 
         let cow_off = CowMountHandle::from_options(
             &backing,
-            &InterceptFsOptions { session_id: "s".into(), cow: false, ..Default::default() },
+            &InterceptFsOptions {
+                session_id: "s".into(),
+                cow: false,
+                ..Default::default()
+            },
         );
         assert_eq!(cow_off.cow_root(), backing.join(".sharecli-cow-staging"));
     }

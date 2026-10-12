@@ -61,7 +61,10 @@ fn fr002_validate_reports_project_count() {
     let contents = fs::read_to_string(&config_path).expect("read toml");
     let cfg: Config = toml::from_str(&contents).expect("valid TOML");
 
-    let report = format!("Configuration is valid.\n  Projects: {}", cfg.projects.len());
+    let report = format!(
+        "Configuration is valid.\n  Projects: {}",
+        cfg.projects.len()
+    );
     assert!(
         report.contains("Configuration is valid."),
         "validate MUST report success; got: {report}"
@@ -73,5 +76,8 @@ fn fr002_validate_reports_project_count() {
 
     let defaults = Config::default();
     assert_eq!(cfg.projects.len(), defaults.projects.len());
-    assert!(!cfg.projects.is_empty(), "default config MUST register ≥1 project");
+    assert!(
+        !cfg.projects.is_empty(),
+        "default config MUST register ≥1 project"
+    );
 }

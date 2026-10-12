@@ -46,7 +46,10 @@ pub fn default_session_id() -> String {
 
 /// Current Unix epoch seconds (0 if the clock is before the epoch).
 pub fn now_unix_secs() -> u64 {
-    SystemTime::now().duration_since(UNIX_EPOCH).map(|d| d.as_secs()).unwrap_or(0)
+    SystemTime::now()
+        .duration_since(UNIX_EPOCH)
+        .map(|d| d.as_secs())
+        .unwrap_or(0)
 }
 
 /// Annotate `path` with session + timestamp attrs (loud fail on IO errors).
@@ -67,7 +70,11 @@ pub fn annotate_write_at(
         ));
     }
     set_attr(path, ATTR_SESSION, session_id.as_bytes())?;
-    set_attr(path, ATTR_WRITTEN_AT, written_at_unix.to_string().as_bytes())?;
+    set_attr(
+        path,
+        ATTR_WRITTEN_AT,
+        written_at_unix.to_string().as_bytes(),
+    )?;
     Ok(())
 }
 
@@ -97,7 +104,10 @@ pub fn read_provenance(path: &Path) -> std::io::Result<Option<WriteProvenance>> 
             format!("sharecli-fuse provenance: written_at parse: {e}"),
         )
     })?;
-    Ok(Some(WriteProvenance { session_id: session, written_at_unix }))
+    Ok(Some(WriteProvenance {
+        session_id: session,
+        written_at_unix,
+    }))
 }
 
 /// Unix backend: store via `xattr` (wraps `setxattr` / `getxattr`).
@@ -130,7 +140,7 @@ fn set_attr(path: &Path, name: &str, value: &[u8]) -> std::io::Result<()> {
                 std::io::ErrorKind::InvalidInput,
                 format!("sharecli-fuse provenance: unsupported attr {name:?} on Windows"),
             ))
-        }
+        },
     };
     std::fs::write(ads_path(path, stream), value)
 }

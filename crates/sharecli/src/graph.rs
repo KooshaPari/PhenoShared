@@ -5,7 +5,9 @@ pub struct Graph {
 }
 impl Graph {
     pub fn new() -> Self {
-        Self { adj: HashMap::new() }
+        Self {
+            adj: HashMap::new(),
+        }
     }
     pub fn add_node(&mut self, n: usize) {
         self.adj.entry(n).or_default();
@@ -15,7 +17,13 @@ impl Graph {
         self.adj.entry(to).or_default();
     }
     pub fn neighbors(&self, n: usize) -> Vec<usize> {
-        self.adj.get(&n).cloned().unwrap_or_default().into_iter().map(|(n, _)| n).collect()
+        self.adj
+            .get(&n)
+            .cloned()
+            .unwrap_or_default()
+            .into_iter()
+            .map(|(n, _)| n)
+            .collect()
     }
     pub fn bfs(&self, start: usize) -> Vec<usize> {
         let mut visited = HashSet::new();

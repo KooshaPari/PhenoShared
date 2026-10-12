@@ -58,7 +58,9 @@ pub fn parse_address(s: &str) -> Result<Address, String> {
         return Err("empty address".to_string());
     }
     let inner = if let Some(stripped) = s.strip_prefix('<') {
-        let end = stripped.find('>').ok_or_else(|| "missing closing '>'".to_string())?;
+        let end = stripped
+            .find('>')
+            .ok_or_else(|| "missing closing '>'".to_string())?;
         &stripped[..end]
     } else if s.ends_with('>') {
         return Err("address has '>' but no '<'".to_string());
@@ -68,7 +70,11 @@ pub fn parse_address(s: &str) -> Result<Address, String> {
 
     if inner.is_empty() {
         // Empty sender.
-        return Ok(Address { local: String::new(), domain: String::new(), source_route: None });
+        return Ok(Address {
+            local: String::new(),
+            domain: String::new(),
+            source_route: None,
+        });
     }
 
     // Source route: `@a,@b:user@dom`
@@ -83,7 +89,9 @@ pub fn parse_address(s: &str) -> Result<Address, String> {
         (None, inner)
     };
 
-    let at = addr_part.rfind('@').ok_or_else(|| "address has no '@'".to_string())?;
+    let at = addr_part
+        .rfind('@')
+        .ok_or_else(|| "address has no '@'".to_string())?;
     let local = addr_part[..at].to_string();
     let domain = addr_part[at + 1..].to_ascii_lowercase();
     if local.is_empty() {
@@ -92,7 +100,11 @@ pub fn parse_address(s: &str) -> Result<Address, String> {
     if domain.is_empty() {
         return Err("empty domain".to_string());
     }
-    Ok(Address { local, domain, source_route })
+    Ok(Address {
+        local,
+        domain,
+        source_route,
+    })
 }
 
 /// Parse an EHLO/HELO response.

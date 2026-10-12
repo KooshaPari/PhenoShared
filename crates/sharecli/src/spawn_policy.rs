@@ -54,7 +54,10 @@ use crate::config::SpawnPolicyConfig;
 
 /// Returns `true` for harnesses that consume heavy CPU and benefit from throttling.
 pub fn is_build_harness(harness: &str) -> bool {
-    matches!(harness, "cargo" | "rustc" | "build" | "make" | "cmake" | "ninja" | "bazel")
+    matches!(
+        harness,
+        "cargo" | "rustc" | "build" | "make" | "cmake" | "ninja" | "bazel"
+    )
 }
 
 // ---------------------------------------------------------------------------
@@ -87,7 +90,10 @@ impl Drop for BuildPermit {
 impl SpawnPolicy {
     pub fn new(config: SpawnPolicyConfig) -> Self {
         let permits = config.max_concurrent_builds.max(1);
-        Self { semaphore: Arc::new(ZigSemaphore::new(permits)), config }
+        Self {
+            semaphore: Arc::new(ZigSemaphore::new(permits)),
+            config,
+        }
     }
 
     /// Acquire a build slot, blocking (via `spawn_blocking`) until one is free.
@@ -101,7 +107,9 @@ impl SpawnPolicy {
             .await
             .map_err(|e| anyhow::anyhow!("spawn_blocking join: {e}"))??;
 
-        Ok(BuildPermit { semaphore: Arc::clone(&self.semaphore) })
+        Ok(BuildPermit {
+            semaphore: Arc::clone(&self.semaphore),
+        })
     }
 
     /// Try to acquire a build slot without waiting.
@@ -109,7 +117,9 @@ impl SpawnPolicy {
     #[allow(dead_code)]
     pub fn try_acquire_build_permit(&self) -> Option<BuildPermit> {
         match self.semaphore.try_acquire() {
-            Ok(true) => Some(BuildPermit { semaphore: Arc::clone(&self.semaphore) }),
+            Ok(true) => Some(BuildPermit {
+                semaphore: Arc::clone(&self.semaphore),
+            }),
             _ => None,
         }
     }
@@ -155,8 +165,10 @@ impl SpawnPolicy {
     /// * `RUSTC_WRAPPER=sccache` — only when `use_sccache = true` AND `sccache`
     ///   is found on PATH.
     pub fn build_env_overrides(&self) -> Vec<(String, String)> {
-        let mut env =
-            vec![("CARGO_BUILD_JOBS".to_string(), self.config.max_concurrent_builds.to_string())];
+        let mut env = vec![(
+            "CARGO_BUILD_JOBS".to_string(),
+            self.config.max_concurrent_builds.to_string(),
+        )];
 
         if self.config.use_sccache && sccache_on_path() {
             env.push(("RUSTC_WRAPPER".to_string(), "sccache".to_string()));
@@ -212,9 +224,15 @@ mod tests {
         let p = policy(2);
         let _p1 = p.try_acquire_build_permit().expect("first permit");
         let _p2 = p.try_acquire_build_permit().expect("second permit");
-        assert!(p.try_acquire_build_permit().is_none(), "must block at cap=2");
+        assert!(
+            p.try_acquire_build_permit().is_none(),
+            "must block at cap=2"
+        );
         drop(_p1);
-        assert!(p.try_acquire_build_permit().is_some(), "slot freed after drop");
+        assert!(
+            p.try_acquire_build_permit().is_some(),
+            "slot freed after drop"
+        );
     }
 
     /// Cap=2 semaphore: 6 concurrent tokio tasks, verify peak active ≤ 2.
@@ -308,8 +326,15 @@ mod tests {
             use_sccache: false,
         });
         let env = p.build_env_overrides();
-        let jobs = env.iter().find(|(k, _)| k == "CARGO_BUILD_JOBS").map(|(_, v)| v.as_str());
-        assert_eq!(jobs, Some("3"), "CARGO_BUILD_JOBS must match max_concurrent_builds");
+        let jobs = env
+            .iter()
+            .find(|(k, _)| k == "CARGO_BUILD_JOBS")
+            .map(|(_, v)| v.as_str());
+        assert_eq!(
+            jobs,
+            Some("3"),
+            "CARGO_BUILD_JOBS must match max_concurrent_builds"
+        );
     }
 
     // -- sccache wiring ------------------------------------------------------

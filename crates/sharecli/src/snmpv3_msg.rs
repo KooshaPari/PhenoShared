@@ -81,13 +81,22 @@ pub fn parse(input: &[u8]) -> Result<V3Msg, String> {
         return Err("truncated msgVersion".into());
     }
     if input[0] != 0x02 {
-        return Err(format!("msgVersion tag mismatch: expected 0x02 got 0x{:02X}", input[0]));
+        return Err(format!(
+            "msgVersion tag mismatch: expected 0x02 got 0x{:02X}",
+            input[0]
+        ));
     }
     if input[1] != 0x01 {
-        return Err(format!("msgVersion length mismatch: expected 0x01 got 0x{:02X}", input[1]));
+        return Err(format!(
+            "msgVersion length mismatch: expected 0x01 got 0x{:02X}",
+            input[1]
+        ));
     }
     if input[2] != 0x03 {
-        return Err(format!("msgVersion value mismatch: expected 0x03 got 0x{:02X}", input[2]));
+        return Err(format!(
+            "msgVersion value mismatch: expected 0x03 got 0x{:02X}",
+            input[2]
+        ));
     }
     i += 3;
 
@@ -105,10 +114,16 @@ pub fn parse(input: &[u8]) -> Result<V3Msg, String> {
         return Err("truncated msgFlags".into());
     }
     if input[i] != 0x04 {
-        return Err(format!("msgFlags tag mismatch: expected 0x04 got 0x{:02X}", input[i]));
+        return Err(format!(
+            "msgFlags tag mismatch: expected 0x04 got 0x{:02X}",
+            input[i]
+        ));
     }
     if input[i + 1] != 0x01 {
-        return Err(format!("msgFlags length mismatch: expected 0x01 got 0x{:02X}", input[i + 1]));
+        return Err(format!(
+            "msgFlags length mismatch: expected 0x01 got 0x{:02X}",
+            input[i + 1]
+        ));
     }
     let flags_byte = input[i + 2];
     i += 3;
@@ -118,7 +133,10 @@ pub fn parse(input: &[u8]) -> Result<V3Msg, String> {
         return Err("truncated msgSecurityModel".into());
     }
     if input[i] != 0x02 {
-        return Err(format!("msgSecurityModel tag mismatch: expected 0x02 got 0x{:02X}", input[i]));
+        return Err(format!(
+            "msgSecurityModel tag mismatch: expected 0x02 got 0x{:02X}",
+            input[i]
+        ));
     }
     if input[i + 1] != 0x01 {
         return Err(format!(
@@ -152,7 +170,10 @@ pub fn parse(input: &[u8]) -> Result<V3Msg, String> {
         return Err("truncated scopedPDU header".into());
     }
     if input[i] != 0x30 {
-        return Err(format!("scopedPDU tag mismatch: expected 0x30 got 0x{:02X}", input[i]));
+        return Err(format!(
+            "scopedPDU tag mismatch: expected 0x30 got 0x{:02X}",
+            input[i]
+        ));
     }
     let scoped_pdu_value_len = read_constructed_len(input, &mut i, "scopedPDU")?;
     if i + scoped_pdu_value_len > input.len() {
@@ -203,7 +224,10 @@ fn read_int_tlv(
         return Err(format!("truncated {} header", name));
     }
     if input[*i] != 0x02 {
-        return Err(format!("{} tag mismatch: expected 0x02 got 0x{:02X}", name, input[*i]));
+        return Err(format!(
+            "{} tag mismatch: expected 0x02 got 0x{:02X}",
+            name, input[*i]
+        ));
     }
     let len = input[*i + 1] as usize;
     if len == 0 || len > 4 {
@@ -227,7 +251,10 @@ fn read_octet_string_tlv(
         return Err(format!("truncated {} header", name));
     }
     if input[*i] != 0x04 {
-        return Err(format!("{} tag mismatch: expected 0x04 got 0x{:02X}", name, input[*i]));
+        return Err(format!(
+            "{} tag mismatch: expected 0x04 got 0x{:02X}",
+            name, input[*i]
+        ));
     }
     let len_byte = input[*i + 1];
     let (len, header_len) = if len_byte < 0x80 {
@@ -241,9 +268,15 @@ fn read_octet_string_tlv(
         if *i + 4 > input.len() {
             return Err(format!("truncated {} long-form length", name));
         }
-        (((input[*i + 2] as usize) << 8) | (input[*i + 3] as usize), 4)
+        (
+            ((input[*i + 2] as usize) << 8) | (input[*i + 3] as usize),
+            4,
+        )
     } else {
-        return Err(format!("{} unsupported length form: 0x{:02X}", name, len_byte));
+        return Err(format!(
+            "{} unsupported length form: 0x{:02X}",
+            name, len_byte
+        ));
     };
     if *i + header_len + len > input.len() {
         return Err(format!("truncated {} body", name));
@@ -270,9 +303,15 @@ fn read_constructed_len(input: &[u8], i: &mut usize, name: &str) -> Result<usize
         if *i + 4 > input.len() {
             return Err(format!("truncated {} long-form length", name));
         }
-        (((input[*i + 2] as usize) << 8) | (input[*i + 3] as usize), 4)
+        (
+            ((input[*i + 2] as usize) << 8) | (input[*i + 3] as usize),
+            4,
+        )
     } else {
-        return Err(format!("{} unsupported length form: 0x{:02X}", name, len_byte));
+        return Err(format!(
+            "{} unsupported length form: 0x{:02X}",
+            name, len_byte
+        ));
     };
     *i += header_len;
     Ok(len)
@@ -291,7 +330,7 @@ mod tests {
         // msgID: INTEGER 1
         v.extend_from_slice(&[0x02, 0x01, 0x01]);
         // msgMaxSize: INTEGER 1500 (long-form 1 byte would also work; use short-form)
-        v.extend_from_slice(&[0x02, 0x02, 0x05, 0xDC]);
+        v.extend_from_slice(&[0x02, 0x02, 0x05, 0xdc]);
         // msgFlags: OCTET STRING 1 byte
         v.extend_from_slice(&[0x04, 0x01, flags_byte]);
         // msgSecurityModel: INTEGER sec_model
@@ -312,7 +351,7 @@ mod tests {
         } else {
             v.push(0x82);
             v.push((scoped_pdu.len() >> 8) as u8);
-            v.push((scoped_pdu.len() & 0xFF) as u8);
+            v.push((scoped_pdu.len() & 0xff) as u8);
         }
         v.extend_from_slice(scoped_pdu);
         v
@@ -322,8 +361,8 @@ mod tests {
     fn rfc3412_minimal_noauth() {
         // RFC 3412 §6.4 example shape: reportable=1, no auth, no priv.
         // flags = 0b1000_0000 = 0x80 -> security_level=1 (noAuth).
-        let pdu_body = vec![0xA0, 0x1C, 0x02, 0x01, 0x00, 0x02, 0x01, 0x00, 0x30, 0x14];
-        let bytes = build_msg(0x80, 0x03, &[0xDE, 0xAD, 0xBE, 0xEF], &pdu_body);
+        let pdu_body = vec![0xa0, 0x1c, 0x02, 0x01, 0x00, 0x02, 0x01, 0x00, 0x30, 0x14];
+        let bytes = build_msg(0x80, 0x03, &[0xde, 0xad, 0xbe, 0xef], &pdu_body);
         let m = parse(&bytes).expect("parse ok");
         assert_eq!(m.flags_byte_raw, 0x80);
         assert!(m.reportable);
@@ -331,7 +370,7 @@ mod tests {
         assert!(!m.priv_flag);
         assert_eq!(m.security_level, 1);
         assert_eq!(m.security_model, 3);
-        assert_eq!(m.security_params, vec![0xDE, 0xAD, 0xBE, 0xEF]);
+        assert_eq!(m.security_params, vec![0xde, 0xad, 0xbe, 0xef]);
         assert_eq!(m.scoped_pdu, pdu_body);
         assert_eq!(m.data, bytes);
     }
@@ -340,7 +379,7 @@ mod tests {
     fn rfc3412_auth_priv_flags() {
         // authPriv: auth_flag=1 (bit 5), priv_flag=1 (bit 6). security_level=3.
         // 0b0110_0000 = 0x60
-        let pdu_body = vec![0xA0, 0x05, 0x02, 0x01, 0x01];
+        let pdu_body = vec![0xa0, 0x05, 0x02, 0x01, 0x01];
         let m = parse(&build_msg(0x60, 0x03, &[], &pdu_body)).expect("parse ok");
         assert_eq!(m.flags_byte_raw, 0x60);
         assert!(!m.reportable);
@@ -353,7 +392,7 @@ mod tests {
     fn rfc3412_auth_no_priv() {
         // authNoPriv: only auth_flag=1 (bit 5). security_level=2.
         // 0b0010_0000 = 0x20
-        let pdu_body = vec![0xA0, 0x05, 0x02, 0x01, 0x01];
+        let pdu_body = vec![0xa0, 0x05, 0x02, 0x01, 0x01];
         let m = parse(&build_msg(0x20, 0x03, &[], &pdu_body)).expect("parse ok");
         assert!(m.auth_flag);
         assert!(!m.priv_flag);
@@ -363,7 +402,7 @@ mod tests {
     #[test]
     fn flags_zero_is_noauth_no_report() {
         // All-zero flags: no reportable, no auth, no priv, security_level=1.
-        let m = parse(&build_msg(0x00, 0x03, &[], &[0xA0, 0x02, 0x05, 0x00])).expect("parse ok");
+        let m = parse(&build_msg(0x00, 0x03, &[], &[0xa0, 0x02, 0x05, 0x00])).expect("parse ok");
         assert_eq!(m.security_level, 1);
         assert!(!m.reportable);
     }
@@ -372,7 +411,7 @@ mod tests {
     fn wrong_version_is_error() {
         // msgVersion value != 0x03 -> error
         let bytes = vec![
-            0x02, 0x01, 0x02, 0x02, 0x01, 0x01, 0x02, 0x02, 0x05, 0xDC, 0x04, 0x01, 0x00, 0x02,
+            0x02, 0x01, 0x02, 0x02, 0x01, 0x01, 0x02, 0x02, 0x05, 0xdc, 0x04, 0x01, 0x00, 0x02,
             0x01, 0x03, 0x04, 0x00, 0x30, 0x00,
         ];
         assert!(parse(&bytes).is_err());
@@ -380,7 +419,7 @@ mod tests {
 
     #[test]
     fn truncated_input_is_error() {
-        let bytes = build_msg(0x00, 0x03, &[], &[0xA0, 0x00]);
+        let bytes = build_msg(0x00, 0x03, &[], &[0xa0, 0x00]);
         // Lop off the last 4 bytes (well into scopedPDU body).
         assert!(parse(&bytes[..bytes.len() - 4]).is_err());
     }
@@ -388,7 +427,7 @@ mod tests {
     #[test]
     fn bad_flags_tag_is_error() {
         // Replace OCTET STRING tag (0x04) for msgFlags with INTEGER (0x02).
-        let mut bytes = build_msg(0x00, 0x03, &[], &[0xA0, 0x00]);
+        let mut bytes = build_msg(0x00, 0x03, &[], &[0xa0, 0x00]);
         // msgFlags starts after version(3) + msgID(3) + msgMaxSize(4) = offset 10
         bytes[10] = 0x02;
         assert!(parse(&bytes).is_err());
@@ -397,8 +436,8 @@ mod tests {
     #[test]
     fn long_form_octet_string_params() {
         // A security params blob >=128 bytes forces 1-byte long-form length.
-        let big_params = vec![0xAA; 200];
-        let pdu = vec![0xA0, 0x02, 0x05, 0x00];
+        let big_params = vec![0xaa; 200];
+        let pdu = vec![0xa0, 0x02, 0x05, 0x00];
         let m = parse(&build_msg(0x00, 0x03, &big_params, &pdu)).expect("parse ok");
         assert_eq!(m.security_params.len(), 200);
         assert_eq!(m.security_params, big_params);

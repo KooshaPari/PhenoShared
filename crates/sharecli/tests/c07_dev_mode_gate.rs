@@ -37,7 +37,10 @@ fn c07_serve_subcommand_parses() {
         .output()
         .expect("failed to run sharecli --help");
     let help = String::from_utf8_lossy(&output.stdout);
-    assert!(help.contains("serve"), "AC-C07.1: sharecli --help MUST list the `serve` subcommand");
+    assert!(
+        help.contains("serve"),
+        "AC-C07.1: sharecli --help MUST list the `serve` subcommand"
+    );
     assert!(
         help.contains("HTTP") || help.contains("WebSocket") || help.contains("dashboard"),
         "AC-C07.1: serve description MUST mention HTTP/WebSocket/dashboard"
@@ -54,7 +57,9 @@ fn c07_serve_subcommand_parses() {
 /// This mirrors what `sharecli serve --bind 127.0.0.1:0` does internally.
 #[tokio::test]
 async fn c07_dev_mode_binds_local_listener() {
-    let listener = tokio::net::TcpListener::bind("127.0.0.1:0").await.expect("bind to random port");
+    let listener = tokio::net::TcpListener::bind("127.0.0.1:0")
+        .await
+        .expect("bind to random port");
     let addr = listener.local_addr().expect("local_addr");
     assert!(
         addr.ip().is_loopback(),
@@ -64,7 +69,9 @@ async fn c07_dev_mode_binds_local_listener() {
     assert!(addr.port() > 0, "AC-C07.2: OS-assigned port MUST be > 0");
 
     // Verify the port is actually connectable.
-    let stream = tokio::net::TcpStream::connect(addr).await.expect("connect to dev listener");
+    let stream = tokio::net::TcpStream::connect(addr)
+        .await
+        .expect("connect to dev listener");
     drop(stream);
 }
 
@@ -223,7 +230,9 @@ async fn c07_healthz_returns_200_json() {
 
     let app = Router::new().route("/healthz", get(mock_healthz));
 
-    let listener = tokio::net::TcpListener::bind("127.0.0.1:0").await.expect("bind");
+    let listener = tokio::net::TcpListener::bind("127.0.0.1:0")
+        .await
+        .expect("bind");
     let addr = listener.local_addr().expect("addr");
     tokio::spawn(async move {
         axum::serve(listener, app).await.expect("serve");
@@ -235,7 +244,10 @@ async fn c07_healthz_returns_200_json() {
     stream.write_all(request).await.expect("write request");
 
     let mut response = Vec::new();
-    stream.read_to_end(&mut response).await.expect("read response");
+    stream
+        .read_to_end(&mut response)
+        .await
+        .expect("read response");
     let response = String::from_utf8_lossy(&response);
 
     assert!(

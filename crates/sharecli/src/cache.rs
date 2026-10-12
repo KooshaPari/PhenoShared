@@ -12,14 +12,28 @@ pub struct TtlCache<K, V> {
 }
 impl<K: std::hash::Hash + Eq + Clone, V: Clone> TtlCache<K, V> {
     pub fn new(default_ttl: Duration) -> Self {
-        Self { entries: HashMap::new(), default_ttl }
+        Self {
+            entries: HashMap::new(),
+            default_ttl,
+        }
     }
     pub fn put(&mut self, k: K, v: V) {
-        self.entries
-            .insert(k, CacheEntry { value: v, expires_at: Instant::now() + self.default_ttl });
+        self.entries.insert(
+            k,
+            CacheEntry {
+                value: v,
+                expires_at: Instant::now() + self.default_ttl,
+            },
+        );
     }
     pub fn put_with_ttl(&mut self, k: K, v: V, ttl: Duration) {
-        self.entries.insert(k, CacheEntry { value: v, expires_at: Instant::now() + ttl });
+        self.entries.insert(
+            k,
+            CacheEntry {
+                value: v,
+                expires_at: Instant::now() + ttl,
+            },
+        );
     }
     pub fn get(&self, k: &K) -> Option<V> {
         self.entries.get(k).and_then(|e| {

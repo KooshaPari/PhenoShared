@@ -44,7 +44,7 @@ pub extern "C" fn sharecli_ipc_start() -> c_int {
             // Give it a moment to bind the socket.
             std::thread::sleep(std::time::Duration::from_millis(200));
             0
-        }
+        },
         None => 1,
     }
 }
@@ -61,7 +61,9 @@ fn spawn_ipc_sidecar(path: &str) -> std::io::Result<std::process::Child> {
 #[no_mangle]
 pub extern "C" fn sharecli_ipc_socket_path() -> *mut c_char {
     let s = socket_path_str();
-    CString::new(s).map(|c| c.into_raw()).unwrap_or(std::ptr::null_mut())
+    CString::new(s)
+        .map(|c| c.into_raw())
+        .unwrap_or(std::ptr::null_mut())
 }
 
 /// Free a string allocated by this library.
@@ -107,7 +109,9 @@ pub extern "C" fn sharecli_health_json() -> *mut c_char {
     });
 
     match result {
-        Ok(s) => CString::new(s).map(|c| c.into_raw()).unwrap_or(std::ptr::null_mut()),
+        Ok(s) => CString::new(s)
+            .map(|c| c.into_raw())
+            .unwrap_or(std::ptr::null_mut()),
         Err(_) => std::ptr::null_mut(),
     }
 }
@@ -158,7 +162,9 @@ pub extern "C" fn sharecli_request(request_json: *const c_char) -> *mut c_char {
     });
 
     match result {
-        Ok(s) => CString::new(s).map(|c| c.into_raw()).unwrap_or(std::ptr::null_mut()),
+        Ok(s) => CString::new(s)
+            .map(|c| c.into_raw())
+            .unwrap_or(std::ptr::null_mut()),
         Err(_) => std::ptr::null_mut(),
     }
 }
@@ -178,7 +184,7 @@ pub extern "C" fn sharecli_serve_get(url: *const c_char) -> *mut c_char {
             Err(err) => {
                 eprintln!("sharecli_serve_get: url is not valid UTF-8 ({err})");
                 return std::ptr::null_mut();
-            }
+            },
         }
     };
     match sharecli::tray_http::get(url_str) {
@@ -187,12 +193,12 @@ pub extern "C" fn sharecli_serve_get(url: *const c_char) -> *mut c_char {
             Err(err) => {
                 eprintln!("sharecli_serve_get: response contains interior NUL ({err})");
                 std::ptr::null_mut()
-            }
+            },
         },
         Err(err) => {
             eprintln!("sharecli_serve_get: {err:#}");
             std::ptr::null_mut()
-        }
+        },
     }
 }
 
@@ -241,8 +247,9 @@ fn find_sidecar(name: &str) -> Option<String> {
     #[cfg(windows)]
     {
         for cand in &candidates {
-            if let Ok(output) =
-                std::process::Command::new("cmd").args(["/c", "where", cand]).output()
+            if let Ok(output) = std::process::Command::new("cmd")
+                .args(["/c", "where", cand])
+                .output()
             {
                 if output.status.success() {
                     let path = String::from_utf8_lossy(&output.stdout)

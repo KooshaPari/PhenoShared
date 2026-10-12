@@ -22,47 +22,47 @@ pub fn encode(v: &Value, out: &mut Vec<u8>) {
             out.push(0xd1);
             let b = i.to_be_bytes();
             out.extend_from_slice(&b[6..]);
-        }
+        },
         Value::Int(i) if *i >= -2147483648 && *i < 2147483648 => {
             out.push(0xd2);
             let b = i.to_be_bytes();
             out.extend_from_slice(&b[4..]);
-        }
+        },
         Value::Int(i) => {
             out.push(0xd3);
             out.extend_from_slice(&i.to_be_bytes());
-        }
+        },
         Value::UInt(u) if *u < 128 => {
             out.push(*u as u8);
-        }
+        },
         Value::UInt(u) if *u < 256 => {
             out.push(0xcc);
             out.push(*u as u8);
-        }
+        },
         Value::UInt(u) if *u < 65536 => {
             out.push(0xcd);
             out.extend_from_slice(&u.to_be_bytes()[6..]);
-        }
+        },
         Value::UInt(u) if *u < 4_294_967_296 => {
             out.push(0xce);
             out.extend_from_slice(&u.to_be_bytes()[4..]);
-        }
+        },
         Value::UInt(u) => {
             out.push(0xcf);
             out.extend_from_slice(&u.to_be_bytes());
-        }
+        },
         Value::Float(f) => {
             out.push(0xcb);
             out.extend_from_slice(&f.to_be_bytes());
-        }
+        },
         Value::Str(s) => {
             encode_str_header(s.len(), out);
             out.extend_from_slice(s.as_bytes());
-        }
+        },
         Value::Bin(b) => {
             encode_bin_header(b.len(), out);
             out.extend_from_slice(b);
-        }
+        },
         Value::Array(items) => {
             if items.len() < 16 {
                 out.push(0x90 | items.len() as u8);
@@ -76,7 +76,7 @@ pub fn encode(v: &Value, out: &mut Vec<u8>) {
             for item in items {
                 encode(item, out);
             }
-        }
+        },
         Value::Map(entries) => {
             if entries.len() < 16 {
                 out.push(0x80 | entries.len() as u8);
@@ -91,7 +91,7 @@ pub fn encode(v: &Value, out: &mut Vec<u8>) {
                 encode(k, out);
                 encode(v, out);
             }
-        }
+        },
     }
 }
 fn encode_str_header(len: usize, out: &mut Vec<u8>) {
@@ -138,26 +138,31 @@ pub fn decode(input: &[u8]) -> Result<(Value, usize), String> {
                 return Err("bin truncated".into());
             }
             Ok((Value::Bin(input[2..2 + len].to_vec()), 2 + len))
-        }
+        },
         0xcb => {
             if input.len() < 9 {
                 return Err("float too short".into());
             }
-            let bytes: [u8; 8] = input[1..9].try_into().map_err(|_| "bad float".to_string())?;
+            let bytes: [u8; 8] = input[1..9]
+                .try_into()
+                .map_err(|_| "bad float".to_string())?;
             Ok((Value::Float(f64::from_be_bytes(bytes)), 9))
-        }
+        },
         0xcc => {
             if input.len() < 2 {
                 return Err("uint8 too short".into());
             }
             Ok((Value::UInt(input[1] as u64), 2))
-        }
+        },
         0xcd => {
             if input.len() < 3 {
                 return Err("uint16 too short".into());
             }
-            Ok((Value::UInt(u16::from_be_bytes([input[1], input[2]]) as u64), 3))
-        }
+            Ok((
+                Value::UInt(u16::from_be_bytes([input[1], input[2]]) as u64),
+                3,
+            ))
+        },
         0xce => {
             if input.len() < 5 {
                 return Err("uint32 too short".into());
@@ -166,52 +171,58 @@ pub fn decode(input: &[u8]) -> Result<(Value, usize), String> {
                 Value::UInt(u32::from_be_bytes([input[1], input[2], input[3], input[4]]) as u64),
                 5,
             ))
-        }
+        },
         0xcf => {
             if input.len() < 9 {
                 return Err("uint64 too short".into());
             }
             let u = u64::from_be_bytes(input[1..9].try_into().map_err(|_| "bad u64".to_string())?);
             Ok((Value::UInt(u), 9))
-        }
+        },
         0xd0 => {
             if input.len() < 2 {
                 return Err("int8 too short".into());
             }
             Ok((Value::Int(input[1] as i8 as i64), 2))
-        }
+        },
         0xd1 => {
             if input.len() < 3 {
                 return Err("int16 too short".into());
             }
-            Ok((Value::Int(i16::from_be_bytes([input[1], input[2]]) as i64), 3))
-        }
+            Ok((
+                Value::Int(i16::from_be_bytes([input[1], input[2]]) as i64),
+                3,
+            ))
+        },
         0xd2 => {
             if input.len() < 5 {
                 return Err("int32 too short".into());
             }
-            Ok((Value::Int(i32::from_be_bytes([input[1], input[2], input[3], input[4]]) as i64), 5))
-        }
+            Ok((
+                Value::Int(i32::from_be_bytes([input[1], input[2], input[3], input[4]]) as i64),
+                5,
+            ))
+        },
         0xd3 => {
             if input.len() < 9 {
                 return Err("int64 too short".into());
             }
             let i = i64::from_be_bytes(input[1..9].try_into().map_err(|_| "bad i64".to_string())?);
             Ok((Value::Int(i), 9))
-        }
+        },
         0xa0..=0xbf => decode_str(input, 1, (first & 0x1f) as usize),
         0xd9 => {
             if input.len() < 2 {
                 return Err("str8 too short".into());
             }
             decode_str(input, 2, input[1] as usize)
-        }
+        },
         0xda => {
             if input.len() < 3 {
                 return Err("str16 too short".into());
             }
             decode_str(input, 3, u16::from_be_bytes([input[1], input[2]]) as usize)
-        }
+        },
         0xdb => {
             if input.len() < 5 {
                 return Err("str32 too short".into());
@@ -221,14 +232,14 @@ pub fn decode(input: &[u8]) -> Result<(Value, usize), String> {
                 5,
                 u32::from_be_bytes([input[1], input[2], input[3], input[4]]) as usize,
             )
-        }
+        },
         0x90..=0x9f => decode_array(input, 1, (first & 0x0f) as usize),
         0xdc => {
             if input.len() < 3 {
                 return Err("array16 too short".into());
             }
             decode_array(input, 3, u16::from_be_bytes([input[1], input[2]]) as usize)
-        }
+        },
         0xdd => {
             if input.len() < 5 {
                 return Err("array32 too short".into());
@@ -238,14 +249,14 @@ pub fn decode(input: &[u8]) -> Result<(Value, usize), String> {
                 5,
                 u32::from_be_bytes([input[1], input[2], input[3], input[4]]) as usize,
             )
-        }
+        },
         0x80..=0x8f => decode_map(input, 1, (first & 0x0f) as usize),
         0xde => {
             if input.len() < 3 {
                 return Err("map16 too short".into());
             }
             decode_map(input, 3, u16::from_be_bytes([input[1], input[2]]) as usize)
-        }
+        },
         0xdf => {
             if input.len() < 5 {
                 return Err("map32 too short".into());
@@ -255,7 +266,7 @@ pub fn decode(input: &[u8]) -> Result<(Value, usize), String> {
                 5,
                 u32::from_be_bytes([input[1], input[2], input[3], input[4]]) as usize,
             )
-        }
+        },
         0x00..=0x7f => Ok((Value::Int(first as i64), 1)),
         0xe0..=0xff => Ok((Value::Int(first as i8 as i64), 1)),
         other => Err(format!("unsupported marker: 0x{:02x}", other)),
@@ -352,7 +363,10 @@ mod tests {
     }
     #[test]
     fn str() {
-        assert_eq!(roundtrip(&Value::Str("hello".into())), Value::Str("hello".into()));
+        assert_eq!(
+            roundtrip(&Value::Str("hello".into())),
+            Value::Str("hello".into())
+        );
     }
     #[test]
     fn str_long() {
@@ -361,7 +375,10 @@ mod tests {
     }
     #[test]
     fn bin() {
-        assert_eq!(roundtrip(&Value::Bin(vec![1, 2, 3, 4, 5])), Value::Bin(vec![1, 2, 3, 4, 5]));
+        assert_eq!(
+            roundtrip(&Value::Bin(vec![1, 2, 3, 4, 5])),
+            Value::Bin(vec![1, 2, 3, 4, 5])
+        );
     }
     #[test]
     fn array() {

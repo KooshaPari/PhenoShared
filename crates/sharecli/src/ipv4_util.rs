@@ -3,16 +3,23 @@ pub struct IpAddr {
 }
 impl IpAddr {
     pub fn new(a: u8, b: u8, c: u8, d: u8) -> Self {
-        Self { octets: [a, b, c, d] }
+        Self {
+            octets: [a, b, c, d],
+        }
     }
     pub fn to_u32(&self) -> u32 {
         u32::from_be_bytes(self.octets)
     }
     pub fn from_u32(v: u32) -> Self {
-        Self { octets: v.to_be_bytes() }
+        Self {
+            octets: v.to_be_bytes(),
+        }
     }
     pub fn as_string(&self) -> String {
-        format!("{}.{}.{}.{}", self.octets[0], self.octets[1], self.octets[2], self.octets[3])
+        format!(
+            "{}.{}.{}.{}",
+            self.octets[0], self.octets[1], self.octets[2], self.octets[3]
+        )
     }
     pub fn is_loopback(&self) -> bool {
         self.octets[0] == 127

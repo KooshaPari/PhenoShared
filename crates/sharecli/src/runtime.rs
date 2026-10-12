@@ -141,7 +141,10 @@ impl ProcessInfo {
 
         #[cfg(unix)]
         let cwd = {
-            let s = p.cwd().map(|c| c.to_string_lossy().into_owned()).unwrap_or_default();
+            let s = p
+                .cwd()
+                .map(|c| c.to_string_lossy().into_owned())
+                .unwrap_or_default();
             if s.is_empty() {
                 None
             } else {
@@ -179,7 +182,11 @@ impl ProcessInfo {
         Some(ProcessInfo {
             pid: pid.as_u32(),
             name,
-            cmd: p.cmd().iter().map(|s| s.to_string_lossy().into_owned()).collect(),
+            cmd: p
+                .cmd()
+                .iter()
+                .map(|s| s.to_string_lossy().into_owned())
+                .collect(),
             memory_mb: p.memory() / 1024 / 1024,
             start_time: p.start_time(),
             cpu_percent: p.cpu_usage(),
@@ -246,7 +253,12 @@ fn count_threads(pid: u32) -> Option<u32> {
         if !output.status.success() {
             return None;
         }
-        return Some(String::from_utf8_lossy(&output.stdout).lines().skip(1).count() as u32);
+        return Some(
+            String::from_utf8_lossy(&output.stdout)
+                .lines()
+                .skip(1)
+                .count() as u32,
+        );
     }
 
     #[cfg(not(any(target_os = "linux", target_os = "macos")))]
@@ -362,8 +374,10 @@ impl ProcessPool {
         harness: Option<String>,
     ) -> Result<ProcessInfo> {
         // Determine whether the spawn-policy throttle applies to this harness.
-        let is_build =
-            harness.as_deref().map(is_build_harness).unwrap_or_else(|| is_build_harness(cmd));
+        let is_build = harness
+            .as_deref()
+            .map(is_build_harness)
+            .unwrap_or_else(|| is_build_harness(cmd));
 
         // Apply policy when present and harness is a build harness.
         let _permit;
@@ -396,8 +410,11 @@ impl ProcessPool {
         // substrate's `ProcessSpawnSpec` does not yet carry env — apply scoped overrides
         // on a blocking thread so we never hold `set_var` across async yield points
         // (C00 L4 — see `docs/ops/async-shutdown.md`).
-        let spec =
-            ProcessSpawnSpec { program: effective_cmd.clone(), args: effective_args.clone(), cwd };
+        let spec = ProcessSpawnSpec {
+            program: effective_cmd.clone(),
+            args: effective_args.clone(),
+            cwd,
+        };
         let port = self.port.clone();
         let capability = spawn_capability(cmd, &harness);
         let spawn_program = effective_cmd.clone();
@@ -416,7 +433,9 @@ impl ProcessPool {
                 .build()
                 .map_err(|e| anyhow::anyhow!("spawn runtime: {e}"))?;
             rt.block_on(async {
-                port.spawn(&spec).await.map_err(|e| anyhow::anyhow!("spawn {}: {e}", spec.program))
+                port.spawn(&spec)
+                    .await
+                    .map_err(|e| anyhow::anyhow!("spawn {}: {e}", spec.program))
             })
         })
         .await
@@ -426,7 +445,7 @@ impl ProcessPool {
             Err(e) => {
                 emit_spawn_audit(&project, &capability, "denied", None);
                 return Err(anyhow::anyhow!("spawn {spawn_program}: {e}"));
-            }
+            },
         };
 
         let pid = handle.pid;
@@ -436,7 +455,10 @@ impl ProcessPool {
         let info = ProcessInfo {
             pid,
             name: effective_cmd.clone(),
-            cmd: vec![effective_cmd].into_iter().chain(effective_args).collect(),
+            cmd: vec![effective_cmd]
+                .into_iter()
+                .chain(effective_args)
+                .collect(),
             memory_mb: 0,
             start_time: 0,
             cpu_percent: 0.0,
@@ -452,7 +474,10 @@ impl ProcessPool {
             thread_count: None,
         };
 
-        let managed = ManagedProcess { info: info.clone(), handle };
+        let managed = ManagedProcess {
+            info: info.clone(),
+            handle,
+        };
 
         let mut procs = self.processes.write().await;
         procs.insert(pid, managed);
@@ -470,11 +495,11 @@ impl ProcessPool {
             match self.port.kill_group(&managed.handle).await {
                 Ok(()) => {
                     emit_stop_audit(&managed.info.project, &capability, pid, "ok");
-                }
+                },
                 Err(e) => {
                     emit_stop_audit(&managed.info.project, &capability, pid, "denied");
                     return Err(anyhow::anyhow!("kill pid {pid}: {e}"));
-                }
+                },
             }
             procs.remove(&pid);
         }
@@ -492,11 +517,11 @@ impl ProcessPool {
                 Ok(()) => {
                     stopped.push(pid);
                     "ok"
-                }
+                },
                 Err(error) => {
                     failures.push(format!("kill pid {pid}: {error}"));
                     "denied"
-                }
+                },
             };
             emit_stop_audit(&managed.info.project, &capability, pid, outcome);
         }
@@ -513,7 +538,10 @@ impl ProcessPool {
     /// Get system memory usage
     pub async fn system_memory_usage(&self) -> (u64, u64) {
         let sys = self.system.read().await;
-        (sys.used_memory() / 1024 / 1024, sys.total_memory() / 1024 / 1024)
+        (
+            sys.used_memory() / 1024 / 1024,
+            sys.total_memory() / 1024 / 1024,
+        )
     }
 }
 
@@ -552,7 +580,10 @@ impl SharedRuntime {
         let pool = match harness_type {
             "node" => &self.node_pool,
             "bun" => &self.bun_pool,
-            _ => bail!("Unsupported harness type: {}. Use 'node' or 'bun'", harness_type),
+            _ => bail!(
+                "Unsupported harness type: {}. Use 'node' or 'bun'",
+                harness_type
+            ),
         };
 
         let mut pool_guard = pool.write().await;
@@ -631,8 +662,10 @@ impl SharedRuntime {
     ) -> Result<(u32, String)> {
         let pooled = self.acquire(harness_type).await?;
 
-        let output =
-            format!("Using pooled {} process {} for project {}", harness_type, pooled.pid, project);
+        let output = format!(
+            "Using pooled {} process {} for project {}",
+            harness_type, pooled.pid, project
+        );
 
         self.release(harness_type, pooled.pid).await?;
 
@@ -661,7 +694,10 @@ impl SharedRuntime {
                 }
             } else {
                 healthy = false;
-                issues.push(format!("{} (PID {}) not found - may have crashed", p.name, p.pid));
+                issues.push(format!(
+                    "{} (PID {}) not found - may have crashed",
+                    p.name, p.pid
+                ));
             }
         }
 
@@ -762,8 +798,11 @@ impl ProjectResources {
         let mut process_count = 0usize;
 
         for proc in sys.processes().values() {
-            let cmd: Vec<String> =
-                proc.cmd().iter().map(|s| s.to_string_lossy().into_owned()).collect();
+            let cmd: Vec<String> = proc
+                .cmd()
+                .iter()
+                .map(|s| s.to_string_lossy().into_owned())
+                .collect();
             if cmd.iter().any(|c| c.contains(project)) {
                 total_memory += proc.memory() / 1024 / 1024;
                 process_count += 1;
@@ -855,7 +894,13 @@ mod tests {
         drop(system);
         pool.processes.write().await.insert(
             pid,
-            ManagedProcess { info, handle: ProcessHandle { id: Default::default(), pid } },
+            ManagedProcess {
+                info,
+                handle: ProcessHandle {
+                    id: Default::default(),
+                    pid,
+                },
+            },
         );
         pid
     }
@@ -881,7 +926,10 @@ mod tests {
     #[tokio::test]
     async fn kill_all_removes_successful_children_but_retains_failures() {
         let pool = ProcessPool::new();
-        let child = pool.spawn("sleep", &["30".into()], None, None, None).await.unwrap();
+        let child = pool
+            .spawn("sleep", &["30".into()], None, None, None)
+            .await
+            .unwrap();
         let failed_pid = insert_unowned_handle(&pool).await;
         assert!(pool.kill_all().await.is_err());
         let tracked = pool.processes.read().await;
@@ -988,8 +1036,14 @@ mod tests {
     #[test]
     fn proc_state_serializes_lowercase() {
         assert_eq!(serde_json::to_string(&ProcState::Run).unwrap(), "\"run\"");
-        assert_eq!(serde_json::to_string(&ProcState::Sleep).unwrap(), "\"sleep\"");
-        assert_eq!(serde_json::to_string(&ProcState::Zombie).unwrap(), "\"zombie\"");
+        assert_eq!(
+            serde_json::to_string(&ProcState::Sleep).unwrap(),
+            "\"sleep\""
+        );
+        assert_eq!(
+            serde_json::to_string(&ProcState::Zombie).unwrap(),
+            "\"zombie\""
+        );
     }
 
     // -----------------------------------------------------------------------
@@ -1284,8 +1338,13 @@ mod tests {
 
     #[test]
     fn pool_status_clone() {
-        let s =
-            PoolStatus { node_total: 3, node_idle: 1, bun_total: 2, bun_idle: 0, max_per_type: 5 };
+        let s = PoolStatus {
+            node_total: 3,
+            node_idle: 1,
+            bun_total: 2,
+            bun_idle: 0,
+            max_per_type: 5,
+        };
         let cloned = s.clone();
         assert_eq!(cloned.node_total, 3);
         assert_eq!(cloned.bun_idle, 0);
@@ -1317,7 +1376,10 @@ mod tests {
             let key = "_JCODE_TEST_ENV_GUARD_RESTORE_";
             std::env::remove_var(key);
             {
-                let _guard = EnvGuard { key: key.to_string(), prev: None };
+                let _guard = EnvGuard {
+                    key: key.to_string(),
+                    prev: None,
+                };
                 std::env::set_var(key, "temporary");
                 assert_eq!(std::env::var(key).unwrap(), "temporary");
             }
@@ -1332,7 +1394,10 @@ mod tests {
             let key = "_JCODE_TEST_ENV_GUARD_RESTORE_SOME_";
             std::env::set_var(key, "original");
             {
-                let _guard = EnvGuard { key: key.to_string(), prev: Some("original".to_string()) };
+                let _guard = EnvGuard {
+                    key: key.to_string(),
+                    prev: Some("original".to_string()),
+                };
                 std::env::set_var(key, "temporary");
                 assert_eq!(std::env::var(key).unwrap(), "temporary");
             }

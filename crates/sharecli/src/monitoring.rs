@@ -210,8 +210,10 @@ impl MonitoringReport {
         }
 
         if idle > cfg.monitoring.idle_process_threshold {
-            recommendations
-                .push(format!("{} idle processes found. Run 'sharecli prune' to clean up.", idle));
+            recommendations.push(format!(
+                "{} idle processes found. Run 'sharecli prune' to clean up.",
+                idle
+            ));
         }
 
         Self {
@@ -227,7 +229,10 @@ impl MonitoringReport {
 }
 
 fn now_secs() -> u64 {
-    SystemTime::now().duration_since(UNIX_EPOCH).expect("system clock before Unix epoch").as_secs()
+    SystemTime::now()
+        .duration_since(UNIX_EPOCH)
+        .expect("system clock before Unix epoch")
+        .as_secs()
 }
 
 #[cfg(test)]

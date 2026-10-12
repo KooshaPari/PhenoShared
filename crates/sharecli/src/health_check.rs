@@ -42,7 +42,12 @@ pub struct HealthCheckConfig {
 
 impl Default for HealthCheckConfig {
     fn default() -> Self {
-        Self { interval_secs: 30, timeout_secs: 5, failure_threshold: 3, endpoints: vec![] }
+        Self {
+            interval_secs: 30,
+            timeout_secs: 5,
+            failure_threshold: 3,
+            endpoints: vec![],
+        }
     }
 }
 
@@ -84,12 +89,18 @@ impl HealthCheckScheduler {
     /// Create a scheduler backed by the given store (no notifications).
     #[allow(dead_code)] // used by unit tests; serve path uses `with_notifier`
     pub fn new(store: HealthCheckStore) -> Self {
-        Self { store, notifier: None }
+        Self {
+            store,
+            notifier: None,
+        }
     }
 
     /// Create a scheduler with notification dispatch enabled.
     pub fn with_notifier(store: HealthCheckStore, notifier: Arc<Notifier>) -> Self {
-        Self { store, notifier: Some(notifier) }
+        Self {
+            store,
+            notifier: Some(notifier),
+        }
     }
 
     /// Start background polling tasks for every entry in `configs`.
@@ -118,7 +129,11 @@ async fn poll_loop(
     let mut timer = tokio::time::interval(interval);
 
     // Seed an initial status entry.
-    store.lock().await.entry(name.clone()).or_insert_with(HealthStatus::default);
+    store
+        .lock()
+        .await
+        .entry(name.clone())
+        .or_insert_with(HealthStatus::default);
 
     loop {
         timer.tick().await;
@@ -143,17 +158,19 @@ async fn probe_all(
 
     for endpoint in &cfg.endpoints {
         match probe_endpoint(endpoint, timeout).await {
-            Ok(()) => {}
+            Ok(()) => {},
             Err(e) => {
                 all_ok = false;
                 last_error = Some(e);
                 break; // first failure is enough to mark unhealthy
-            }
+            },
         }
     }
 
     let mut map = store.lock().await;
-    let status = map.entry(name.to_string()).or_insert_with(HealthStatus::default);
+    let status = map
+        .entry(name.to_string())
+        .or_insert_with(HealthStatus::default);
     status.last_check = Instant::now();
 
     if all_ok {
@@ -218,7 +235,13 @@ pub async fn probe_endpoint(endpoint: &str, timeout: Duration) -> Result<(), Str
 pub async fn probe_tcp(addr: &str, timeout: Duration) -> Result<(), String> {
     tokio::time::timeout(timeout, TcpStream::connect(addr))
         .await
-        .map_err(|_| format!("TCP connect to '{}' timed out after {}s", addr, timeout.as_secs()))?
+        .map_err(|_| {
+            format!(
+                "TCP connect to '{}' timed out after {}s",
+                addr,
+                timeout.as_secs()
+            )
+        })?
         .map(|_| ())
         .map_err(|e| format!("TCP connect to '{}' failed: {}", addr, e))
 }
@@ -238,16 +261,21 @@ pub async fn probe_http(url: &str, timeout: Duration) -> Result<(), String> {
     };
 
     // Default port 80 when not specified.
-    let addr =
-        if host_port.contains(':') { host_port.to_string() } else { format!("{}:80", host_port) };
+    let addr = if host_port.contains(':') {
+        host_port.to_string()
+    } else {
+        format!("{}:80", host_port)
+    };
 
     let mut stream = tokio::time::timeout(timeout, TcpStream::connect(&addr))
         .await
         .map_err(|_| format!("HTTP connect to '{}' timed out", addr))?
         .map_err(|e| format!("HTTP connect to '{}' failed: {}", addr, e))?;
 
-    let request =
-        format!("GET {} HTTP/1.0\r\nHost: {}\r\nConnection: close\r\n\r\n", path, host_port);
+    let request = format!(
+        "GET {} HTTP/1.0\r\nHost: {}\r\nConnection: close\r\n\r\n",
+        path, host_port
+    );
 
     tokio::time::timeout(timeout, stream.write_all(request.as_bytes()))
         .await
@@ -266,7 +294,10 @@ pub async fn probe_http(url: &str, timeout: Duration) -> Result<(), String> {
         Ok(())
     } else {
         let status_line: String = response.chars().take(32).collect();
-        Err(format!("HTTP probe got non-2xx response: '{}'", status_line.trim()))
+        Err(format!(
+            "HTTP probe got non-2xx response: '{}'",
+            status_line.trim()
+        ))
     }
 }
 
@@ -362,7 +393,10 @@ mod tests {
         }
 
         // A config with no endpoints → all_ok stays true → should recover.
-        let cfg = HealthCheckConfig { endpoints: vec![], ..Default::default() };
+        let cfg = HealthCheckConfig {
+            endpoints: vec![],
+            ..Default::default()
+        };
         // probe_all returns early for empty endpoints; seed directly via store.
         // Instead simulate a successful probe by calling probe_all with a
         // config that has no endpoints (returns before touching failure path).
@@ -400,7 +434,9 @@ mod tests {
                 // Drain the request.
                 let mut buf = [0u8; 512];
                 let _ = stream.read(&mut buf).await;
-                let _ = stream.write_all(b"HTTP/1.0 200 OK\r\nContent-Length: 0\r\n\r\n").await;
+                let _ = stream
+                    .write_all(b"HTTP/1.0 200 OK\r\nContent-Length: 0\r\n\r\n")
+                    .await;
             }
         });
 
@@ -425,7 +461,9 @@ mod tests {
             if let Ok((mut stream, _)) = listener.accept().await {
                 let mut buf = [0u8; 512];
                 let _ = stream.read(&mut buf).await;
-                let _ = stream.write_all(b"HTTP/1.0 500 Internal Server Error\r\n\r\n").await;
+                let _ = stream
+                    .write_all(b"HTTP/1.0 500 Internal Server Error\r\n\r\n")
+                    .await;
             }
         });
 
@@ -449,7 +487,11 @@ mod tests {
             let _ = listener.accept().await;
         });
 
-        let result = probe_tcp(&format!("127.0.0.1:{}", addr.port()), Duration::from_secs(2)).await;
+        let result = probe_tcp(
+            &format!("127.0.0.1:{}", addr.port()),
+            Duration::from_secs(2),
+        )
+        .await;
         assert!(result.is_ok(), "expected Ok, got {:?}", result);
     }
 
@@ -484,7 +526,11 @@ mod tests {
         );
         configs.insert(
             "proc-b".to_string(),
-            HealthCheckConfig { interval_secs: 3600, endpoints: vec![], ..Default::default() },
+            HealthCheckConfig {
+                interval_secs: 3600,
+                endpoints: vec![],
+                ..Default::default()
+            },
         );
         scheduler.start(configs);
 

@@ -172,16 +172,22 @@ impl Lifecycle {
 }
 
 pub trait EvaluationClient {
-    fn execute(&self, request: &EvaluationRequest) -> std::result::Result<EvaluationResult, Box<EvaluationFailure>>;
+    fn execute(
+        &self,
+        request: &EvaluationRequest,
+    ) -> std::result::Result<EvaluationResult, Box<EvaluationFailure>>;
 }
 
 #[derive(Debug, Default)]
 pub struct ProcessEvaluationClient;
 
 impl EvaluationClient for ProcessEvaluationClient {
-    fn execute(&self, request: &EvaluationRequest) -> std::result::Result<EvaluationResult, Box<EvaluationFailure>> {
-        let request_bytes =
-            serde_json::to_vec(request).map_err(|error| EvaluationFailure::new(CliError::json(error), b"", b""))?;
+    fn execute(
+        &self,
+        request: &EvaluationRequest,
+    ) -> std::result::Result<EvaluationResult, Box<EvaluationFailure>> {
+        let request_bytes = serde_json::to_vec(request)
+            .map_err(|error| EvaluationFailure::new(CliError::json(error), b"", b""))?;
         let executable = resolve_nvms_bin();
         let mut child = Command::new(&executable)
             .args(["action", "--request", "-"])
@@ -199,7 +205,10 @@ impl EvaluationClient for ProcessEvaluationClient {
                 b"",
             ));
         };
-        if let Err(error) = stdin.write_all(&request_bytes).and_then(|()| stdin.write_all(b"\n")) {
+        if let Err(error) = stdin
+            .write_all(&request_bytes)
+            .and_then(|()| stdin.write_all(b"\n"))
+        {
             drop(stdin);
             terminate(&mut child);
             return Err(EvaluationFailure::new(
@@ -245,7 +254,7 @@ impl EvaluationClient for ProcessEvaluationClient {
                     &stdout.bytes,
                     &stderr.bytes,
                 ));
-            }
+            },
         };
         let status = match waited {
             Some(status) => status,
@@ -256,7 +265,10 @@ impl EvaluationClient for ProcessEvaluationClient {
                 let mut failure = EvaluationFailure::new(
                     CliError::backend(
                         "nvms_timeout",
-                        format!("NanoVMS exceeded outer timeout; stderr={}", render_stderr(&stderr)),
+                        format!(
+                            "NanoVMS exceeded outer timeout; stderr={}",
+                            render_stderr(&stderr)
+                        ),
                     ),
                     &stdout.bytes,
                     &stderr.bytes,
@@ -264,7 +276,7 @@ impl EvaluationClient for ProcessEvaluationClient {
                 failure.lifecycle.timed_out = true;
                 failure.lifecycle.truncated = stdout.truncated || stderr.truncated;
                 return Err(failure);
-            }
+            },
         };
         let stdout = join_reader(stdout_reader, "nvms_stdout_read")?;
         let stderr = join_reader(stderr_reader, "nvms_stderr_read")?;
@@ -293,7 +305,10 @@ impl EvaluationClient for ProcessEvaluationClient {
         })?;
         match status.code() {
             Some(0) | Some(4) => Ok(result),
-            Some(2) => Err(result_failure(exit_error("nvms_usage", status.code(), &stderr), result)),
+            Some(2) => Err(result_failure(
+                exit_error("nvms_usage", status.code(), &stderr),
+                result,
+            )),
             Some(3) => Err(result_failure(
                 exit_error("nvms_request_rejected", status.code(), &stderr),
                 result,
@@ -302,7 +317,10 @@ impl EvaluationClient for ProcessEvaluationClient {
                 exit_error("nvms_encode_failed", status.code(), &stderr),
                 result,
             )),
-            code => Err(result_failure(exit_error("nvms_process_failed", code, &stderr), result)),
+            code => Err(result_failure(
+                exit_error("nvms_process_failed", code, &stderr),
+                result,
+            )),
         }
     }
 }
@@ -352,7 +370,13 @@ fn join_reader(
 ) -> std::result::Result<BoundedBytes, Box<EvaluationFailure>> {
     handle
         .join()
-        .map_err(|_| EvaluationFailure::new(CliError::backend(code, "NanoVMS output reader panicked"), b"", b""))?
+        .map_err(|_| {
+            EvaluationFailure::new(
+                CliError::backend(code, "NanoVMS output reader panicked"),
+                b"",
+                b"",
+            )
+        })?
         .map_err(|error| EvaluationFailure::new(CliError::io(code, error), b"", b""))
 }
 
@@ -463,8 +487,8 @@ impl LifecycleClient for ProcessLifecycleClient {
         &self,
         request: &ServiceLifecycleRequest,
     ) -> std::result::Result<ServiceLifecycleResult, Box<ServiceLifecycleFailure>> {
-        let request_bytes =
-            serde_json::to_vec(request).map_err(|error| Box::new(ServiceLifecycleFailure {
+        let request_bytes = serde_json::to_vec(request).map_err(|error| {
+            Box::new(ServiceLifecycleFailure {
                 error: CliError::json(error),
                 result: ServiceLifecycleResult {
                     version: SERVICE_LIFECYCLE_VERSION.to_owned(),
@@ -476,7 +500,8 @@ impl LifecycleClient for ProcessLifecycleClient {
                     resolved_provider: String::new(),
                     podman_pipe: request.podman_pipe.clone(),
                 },
-            }))?;
+            })
+        })?;
         let executable = resolve_nvms_bin();
         let mut child = Command::new(&executable)
             .args(["lifecycle", "--request", "-"])
@@ -484,10 +509,12 @@ impl LifecycleClient for ProcessLifecycleClient {
             .stdout(Stdio::piped())
             .stderr(Stdio::piped())
             .spawn()
-            .map_err(|error| Box::new(ServiceLifecycleFailure {
-                error: CliError::io("nvms_spawn", error),
-                result: empty_lifecycle_result(request),
-            }))?;
+            .map_err(|error| {
+                Box::new(ServiceLifecycleFailure {
+                    error: CliError::io("nvms_spawn", error),
+                    result: empty_lifecycle_result(request),
+                })
+            })?;
 
         let Some(mut stdin) = child.stdin.take() else {
             terminate(&mut child);
@@ -496,7 +523,10 @@ impl LifecycleClient for ProcessLifecycleClient {
                 result: empty_lifecycle_result(request),
             }));
         };
-        if let Err(error) = stdin.write_all(&request_bytes).and_then(|()| stdin.write_all(b"\n")) {
+        if let Err(error) = stdin
+            .write_all(&request_bytes)
+            .and_then(|()| stdin.write_all(b"\n"))
+        {
             drop(stdin);
             terminate(&mut child);
             return Err(Box::new(ServiceLifecycleFailure {
@@ -506,52 +536,69 @@ impl LifecycleClient for ProcessLifecycleClient {
         }
         drop(stdin);
 
-        let output = child
-            .wait_with_output()
-            .map_err(|error| Box::new(ServiceLifecycleFailure {
-                error: CliError::io("nvms_wait", error),
-                result: empty_lifecycle_result(request),
-            }))?;
-        let result: ServiceLifecycleResult = serde_json::from_slice(&output.stdout).map_err(|error| {
+        let output = child.wait_with_output().map_err(|error| {
             Box::new(ServiceLifecycleFailure {
-                error: CliError::backend(
-                    "nvms_malformed_response",
-                    format!(
-                        "{error}; stderr={}",
-                        String::from_utf8_lossy(&output.stderr).trim()
-                    ),
-                ),
+                error: CliError::io("nvms_wait", error),
                 result: empty_lifecycle_result(request),
             })
         })?;
+        let result: ServiceLifecycleResult =
+            serde_json::from_slice(&output.stdout).map_err(|error| {
+                Box::new(ServiceLifecycleFailure {
+                    error: CliError::backend(
+                        "nvms_malformed_response",
+                        format!(
+                            "{error}; stderr={}",
+                            String::from_utf8_lossy(&output.stderr).trim()
+                        ),
+                    ),
+                    result: empty_lifecycle_result(request),
+                })
+            })?;
         match output.status.code() {
             Some(0) | Some(4) => Ok(result),
             Some(2) => Err(lifecycle_failure(
-                exit_error("nvms_usage", output.status.code(), &BoundedBytes {
-                    bytes: output.stderr.clone(),
-                    truncated: false,
-                }),
+                exit_error(
+                    "nvms_usage",
+                    output.status.code(),
+                    &BoundedBytes {
+                        bytes: output.stderr.clone(),
+                        truncated: false,
+                    },
+                ),
                 result,
             )),
             Some(3) => Err(lifecycle_failure(
-                exit_error("nvms_request_rejected", output.status.code(), &BoundedBytes {
-                    bytes: output.stderr.clone(),
-                    truncated: false,
-                }),
+                exit_error(
+                    "nvms_request_rejected",
+                    output.status.code(),
+                    &BoundedBytes {
+                        bytes: output.stderr.clone(),
+                        truncated: false,
+                    },
+                ),
                 result,
             )),
             Some(5) => Err(lifecycle_failure(
-                exit_error("nvms_encode_failed", output.status.code(), &BoundedBytes {
-                    bytes: output.stderr.clone(),
-                    truncated: false,
-                }),
+                exit_error(
+                    "nvms_encode_failed",
+                    output.status.code(),
+                    &BoundedBytes {
+                        bytes: output.stderr.clone(),
+                        truncated: false,
+                    },
+                ),
                 result,
             )),
             code => Err(lifecycle_failure(
-                exit_error("nvms_process_failed", code, &BoundedBytes {
-                    bytes: output.stderr.clone(),
-                    truncated: false,
-                }),
+                exit_error(
+                    "nvms_process_failed",
+                    code,
+                    &BoundedBytes {
+                        bytes: output.stderr.clone(),
+                        truncated: false,
+                    },
+                ),
                 result,
             )),
         }
@@ -571,6 +618,9 @@ fn empty_lifecycle_result(request: &ServiceLifecycleRequest) -> ServiceLifecycle
     }
 }
 
-fn lifecycle_failure(error: CliError, result: ServiceLifecycleResult) -> Box<ServiceLifecycleFailure> {
+fn lifecycle_failure(
+    error: CliError,
+    result: ServiceLifecycleResult,
+) -> Box<ServiceLifecycleFailure> {
     Box::new(ServiceLifecycleFailure { error, result })
 }

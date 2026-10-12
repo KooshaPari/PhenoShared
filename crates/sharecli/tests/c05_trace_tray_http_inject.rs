@@ -18,7 +18,10 @@ fn tray_ipc_spawn_injects_traceparent_env() {
     let prev = std::env::var(key).ok();
     let prev_upper = std::env::var("TRACEPARENT").ok();
     std::env::remove_var("TRACEPARENT");
-    std::env::set_var(key, "00-4bf92f3577b34da6a3ce929d0e0e4736-00f067aa0ba902b7-01");
+    std::env::set_var(
+        key,
+        "00-4bf92f3577b34da6a3ce929d0e0e4736-00f067aa0ba902b7-01",
+    );
 
     let (bin, args) = traceparent_child_cmd();
     let mut cmd = Command::new(bin);
@@ -36,7 +39,10 @@ fn tray_ipc_spawn_injects_traceparent_env() {
         std::env::set_var("TRACEPARENT", prev);
     }
 
-    assert_eq!(got, "00-4bf92f3577b34da6a3ce929d0e0e4736-00f067aa0ba902b7-01");
+    assert_eq!(
+        got,
+        "00-4bf92f3577b34da6a3ce929d0e0e4736-00f067aa0ba902b7-01"
+    );
 }
 
 /// Tray dashboard HTTP: `traceparent_http_value` maps operator env for outbound GET.
@@ -47,7 +53,10 @@ fn tray_dashboard_http_maps_traceparent_env() {
     let prev = std::env::var(key).ok();
     let prev_upper = std::env::var("TRACEPARENT").ok();
     std::env::remove_var("TRACEPARENT");
-    std::env::set_var(key, "00-4bf92f3577b34da6a3ce929d0e0e4736-00f067aa0ba902b7-01");
+    std::env::set_var(
+        key,
+        "00-4bf92f3577b34da6a3ce929d0e0e4736-00f067aa0ba902b7-01",
+    );
 
     let out = traceparent_http_value();
 
@@ -60,7 +69,10 @@ fn tray_dashboard_http_maps_traceparent_env() {
         std::env::set_var("TRACEPARENT", prev);
     }
 
-    assert_eq!(out, Some("00-4bf92f3577b34da6a3ce929d0e0e4736-00f067aa0ba902b7-01".to_string()));
+    assert_eq!(
+        out,
+        Some("00-4bf92f3577b34da6a3ce929d0e0e4736-00f067aa0ba902b7-01".to_string())
+    );
 }
 
 /// Serve dashboard HTML embeds `data-traceparent` for in-page fetch propagation.
@@ -69,7 +81,10 @@ fn tray_dashboard_html_injects_traceparent_attribute() {
     let _guard = ENV_LOCK.lock().unwrap();
     let key = "traceparent";
     let prev = std::env::var(key).ok();
-    std::env::set_var(key, "00-4bf92f3577b34da6a3ce929d0e0e4736-00f067aa0ba902b7-01");
+    std::env::set_var(
+        key,
+        "00-4bf92f3577b34da6a3ce929d0e0e4736-00f067aa0ba902b7-01",
+    );
 
     let html = inject_dashboard_traceparent("<html lang=\"en\"><body></body></html>");
 
@@ -95,7 +110,10 @@ fn tray_dashboard_http_get_sends_traceparent_header() {
     let _guard = ENV_LOCK.lock().unwrap();
     let key = "traceparent";
     let prev = std::env::var(key).ok();
-    std::env::set_var(key, "00-4bf92f3577b34da6a3ce929d0e0e4736-00f067aa0ba902b7-01");
+    std::env::set_var(
+        key,
+        "00-4bf92f3577b34da6a3ce929d0e0e4736-00f067aa0ba902b7-01",
+    );
 
     let listener = TcpListener::bind("127.0.0.1:0").expect("bind");
     let addr = listener.local_addr().unwrap();
@@ -129,7 +147,9 @@ fn tray_dashboard_http_get_sends_traceparent_header() {
         std::env::remove_var(key);
     }
 
-    let headers = rx.recv_timeout(Duration::from_secs(5)).expect("headers captured");
+    let headers = rx
+        .recv_timeout(Duration::from_secs(5))
+        .expect("headers captured");
     handle.join().expect("server thread");
     assert_eq!(body, "{\"status\":\"ok\"}");
     assert!(
@@ -146,7 +166,12 @@ fn traceparent_child_cmd() -> (&'static str, Vec<&'static str>) {
     {
         (
             "powershell",
-            vec!["-NoProfile", "-NonInteractive", "-Command", "Write-Output $env:TRACEPARENT"],
+            vec![
+                "-NoProfile",
+                "-NonInteractive",
+                "-Command",
+                "Write-Output $env:TRACEPARENT",
+            ],
         )
     }
 }

@@ -115,7 +115,9 @@ mod tests {
 
     #[test]
     fn dashboard_asset_path_prefix() {
-        assert!(is_dashboard_asset_path("/assets/dashboard/ui/favicons/phenotype.ico"));
+        assert!(is_dashboard_asset_path(
+            "/assets/dashboard/ui/favicons/phenotype.ico"
+        ));
         assert!(!is_dashboard_asset_path("/metrics/prometheus"));
     }
 }

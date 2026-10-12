@@ -64,7 +64,12 @@ fn parse_line(line: &str) -> Result<Entry, String> {
         return Err("empty hostname pattern".into());
     }
 
-    Ok(Entry { markers, pattern, key_type, key_bytes })
+    Ok(Entry {
+        markers,
+        pattern,
+        key_type,
+        key_bytes,
+    })
 }
 
 fn split_host_portion(s: &str) -> Result<(Vec<String>, String), String> {
@@ -150,12 +155,12 @@ fn wildcard_match(pattern: &str, s: &str) -> bool {
                     star_hi = hi;
                     pi += 1;
                     continue;
-                }
+                },
                 b'?' => {
                     pi += 1;
                     hi += 1;
                     continue;
-                }
+                },
                 b'[' => {
                     if let Some((members, allow, next_pi)) = parse_bracket_class(p, pi) {
                         let in_set = members.contains(&h[hi]);
@@ -171,13 +176,13 @@ fn wildcard_match(pattern: &str, s: &str) -> bool {
                         hi += 1;
                         continue;
                     }
-                }
+                },
                 c if c == h[hi] => {
                     pi += 1;
                     hi += 1;
                     continue;
-                }
-                _ => {}
+                },
+                _ => {},
             }
         }
         if let Some(sp) = star_pi {
@@ -262,7 +267,10 @@ mod tests {
 
     #[test]
     fn parses_cert_authority_marker() {
-        let input = format!("@cert-authority *.example.com ssh-ed25519 {}\n", ED25519_KEY);
+        let input = format!(
+            "@cert-authority *.example.com ssh-ed25519 {}\n",
+            ED25519_KEY
+        );
         let entries = parse(&input).unwrap();
         assert_eq!(entries[0].markers, vec!["@cert-authority".to_string()]);
         assert_eq!(entries[0].pattern, "*.example.com");

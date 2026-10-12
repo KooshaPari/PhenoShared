@@ -62,7 +62,10 @@ mod tests {
     }
     #[test]
     fn quote_with_newline() {
-        assert_eq!(write_row(&["a", "line1\nline2", "b"]), "a,\"line1\nline2\",b\n");
+        assert_eq!(
+            write_row(&["a", "line1\nline2", "b"]),
+            "a,\"line1\nline2\",b\n"
+        );
     }
     #[test]
     fn escape_inner_quotes() {

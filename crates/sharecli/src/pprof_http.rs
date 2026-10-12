@@ -53,14 +53,16 @@ pub async fn profile_handler(Query(q): Query<ProfileQuery>) -> Response {
     #[cfg(unix)]
     {
         match capture_pprof_protobuf(seconds).await {
-            Ok(bytes) => {
-                (StatusCode::OK, [(header::CONTENT_TYPE, "application/vnd.google.protobuf")], bytes)
-                    .into_response()
-            }
+            Ok(bytes) => (
+                StatusCode::OK,
+                [(header::CONTENT_TYPE, "application/vnd.google.protobuf")],
+                bytes,
+            )
+                .into_response(),
             Err(err) => {
                 tracing::warn!("pprof capture failed: {err}");
                 ErrorEnvelope::internal().into_response(StatusCode::INTERNAL_SERVER_ERROR)
-            }
+            },
         }
     }
 

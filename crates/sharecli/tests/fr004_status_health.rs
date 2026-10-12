@@ -36,7 +36,10 @@ fn format_status(
 
     let mut out = String::from("=== Process Status ===\n\n");
     out.push_str(&format!("Total: {} processes\n\n", processes.len()));
-    out.push_str(&format!("{:<15} {:<10} {:<15}\n", "HARNESS", "COUNT", "MEMORY(MB)"));
+    out.push_str(&format!(
+        "{:<15} {:<10} {:<15}\n",
+        "HARNESS", "COUNT", "MEMORY(MB)"
+    ));
     out.push_str(&format!("{}\n", "-".repeat(40)));
     for (h, (count, mem)) in &by_harness {
         out.push_str(&format!("{h:<15} {count:<10} {mem:<15}\n"));
@@ -55,11 +58,15 @@ fn format_status(
     ));
     out.push_str(&format!("\nMax per type: {}\n", pool_status.max_per_type));
 
-    let pct = used_mb.saturating_mul(100).checked_div(total_mb).unwrap_or(0);
+    let pct = used_mb
+        .saturating_mul(100)
+        .checked_div(total_mb)
+        .unwrap_or(0);
     out.push_str("\n=== System Memory ===\n\n");
     out.push_str(&format!("Used: {used_mb} MB / {total_mb} MB ({pct}%)\n"));
-    let thermal =
-        ThermalGovernor::with_mock(ThermalLevel::Green).poll().expect("mock thermal poll");
+    let thermal = ThermalGovernor::with_mock(ThermalLevel::Green)
+        .poll()
+        .expect("mock thermal poll");
     out.push_str(&format_gate_status_section(thermal, 0));
     let resource_watch = ResourceWatchSample::capture().expect("resource watch capture");
     out.push_str(&resource_watch.format_status_section());
@@ -124,7 +131,10 @@ async fn fr004_status_prints_harness_table() {
         out.contains("=== Shared Runtime Pool ==="),
         "status MUST include shared-runtime pool table; got: {out}"
     );
-    assert!(out.contains("TYPE") && out.contains("TOTAL") && out.contains("IDLE"), "got: {out}");
+    assert!(
+        out.contains("TYPE") && out.contains("TOTAL") && out.contains("IDLE"),
+        "got: {out}"
+    );
     assert!(
         out.contains("node") && out.contains("bun"),
         "pool rows MUST list node and bun; got: {out}"
@@ -134,7 +144,10 @@ async fn fr004_status_prints_harness_table() {
         out.contains("=== System Memory ===") && out.contains("Used:"),
         "status MUST include system-memory line; got: {out}"
     );
-    assert!(total_mb > 0, "system_memory_usage MUST report a non-zero total");
+    assert!(
+        total_mb > 0,
+        "system_memory_usage MUST report a non-zero total"
+    );
     assert!(
         out.contains("=== Host Resource Watch ===")
             && out.contains("Open FDs:")
@@ -223,8 +236,14 @@ fn fr004_health_status_marks_unhealthy() {
     status.mark_unhealthy("probe timeout");
 
     assert!(!status.healthy, "mark_unhealthy MUST clear healthy");
-    assert_eq!(status.checks_failed, 1, "mark_unhealthy MUST increment checks_failed");
-    assert_eq!(status.checks_passed, passed_before, "mark_unhealthy MUST NOT bump checks_passed");
+    assert_eq!(
+        status.checks_failed, 1,
+        "mark_unhealthy MUST increment checks_failed"
+    );
+    assert_eq!(
+        status.checks_passed, passed_before,
+        "mark_unhealthy MUST NOT bump checks_passed"
+    );
 
     status.mark_unhealthy("second failure");
     assert_eq!(status.checks_failed, 2);
@@ -249,7 +268,10 @@ fn fr004_process_stats_idle_threshold() {
         mem_rss_bytes: 0,
         load_1m: 0.0,
     };
-    assert!(idle.is_idle(threshold), "uptime>threshold and cpu<1.0 MUST be idle");
+    assert!(
+        idle.is_idle(threshold),
+        "uptime>threshold and cpu<1.0 MUST be idle"
+    );
 
     let busy_cpu = ProcessStats {
         pid: 2,
@@ -264,7 +286,10 @@ fn fr004_process_stats_idle_threshold() {
         mem_rss_bytes: 0,
         load_1m: 0.0,
     };
-    assert!(!busy_cpu.is_idle(threshold), "cpu_percent >= 1.0 MUST NOT be idle");
+    assert!(
+        !busy_cpu.is_idle(threshold),
+        "cpu_percent >= 1.0 MUST NOT be idle"
+    );
 
     let too_young = ProcessStats {
         pid: 3,
@@ -279,7 +304,10 @@ fn fr004_process_stats_idle_threshold() {
         mem_rss_bytes: 0,
         load_1m: 0.0,
     };
-    assert!(!too_young.is_idle(threshold), "uptime_seconds <= threshold MUST NOT be idle");
+    assert!(
+        !too_young.is_idle(threshold),
+        "uptime_seconds <= threshold MUST NOT be idle"
+    );
 
     let boundary_ok = ProcessStats {
         pid: 4,

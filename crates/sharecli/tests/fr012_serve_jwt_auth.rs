@@ -60,7 +60,9 @@ fn fr012_valid_jwt_authorized() {
     let auth = jwt_auth();
     assert_eq!(auth.mode_label(), "jwt");
     let token = join_jwt(&fixture().tokens.fr012_valid);
-    let sub = auth.check_authorization(Some(&format!("Bearer {token}"))).expect("valid jwt");
+    let sub = auth
+        .check_authorization(Some(&format!("Bearer {token}")))
+        .expect("valid jwt");
     assert_eq!(sub.as_deref(), Some("fr012-user"));
 }
 
@@ -69,7 +71,9 @@ fn fr012_expired_jwt_rejected() {
     // FR: FR-012 AC-012.2
     let auth = jwt_auth();
     let token = join_jwt(&fixture().tokens.expired);
-    let err = auth.check_authorization(Some(&format!("Bearer {token}"))).unwrap_err();
+    let err = auth
+        .check_authorization(Some(&format!("Bearer {token}")))
+        .unwrap_err();
     assert_eq!(err, "jwt_expired");
 }
 
@@ -79,12 +83,14 @@ fn fr012_wrong_audience_and_issuer_rejected() {
     let auth = jwt_auth();
     let bad_aud = join_jwt(&fixture().tokens.bad_aud);
     assert_eq!(
-        auth.check_authorization(Some(&format!("Bearer {bad_aud}"))).unwrap_err(),
+        auth.check_authorization(Some(&format!("Bearer {bad_aud}")))
+            .unwrap_err(),
         "jwt_invalid_aud"
     );
     let bad_iss = join_jwt(&fixture().tokens.bad_iss);
     assert_eq!(
-        auth.check_authorization(Some(&format!("Bearer {bad_iss}"))).unwrap_err(),
+        auth.check_authorization(Some(&format!("Bearer {bad_iss}")))
+            .unwrap_err(),
         "jwt_invalid_iss"
     );
 }

@@ -51,17 +51,34 @@ fn fr006_ps_agent_label_walks_ancestors() {
 #[test]
 fn fr006_ps_cli_prints_agent_column() {
     let out = bin().args(["ps"]).output().expect("spawn sharecli ps");
-    assert!(out.status.success(), "ps should exit 0; stderr: {:?}", out.stderr);
+    assert!(
+        out.status.success(),
+        "ps should exit 0; stderr: {:?}",
+        out.stderr
+    );
     let s = String::from_utf8_lossy(&out.stdout);
-    assert!(s.contains("AGENT"), "ps MUST include AGENT column; got: {s}");
-    assert!(s.contains("HARNESS"), "ps MUST retain HARNESS column; got: {s}");
+    assert!(
+        s.contains("AGENT"),
+        "ps MUST include AGENT column; got: {s}"
+    );
+    assert!(
+        s.contains("HARNESS"),
+        "ps MUST retain HARNESS column; got: {s}"
+    );
 }
 
 /// FR-006 / AC-006.8 — `--all` surfaces host proc-scan section (may be empty).
 #[test]
 fn fr006_ps_all_includes_host_agent_scan_section() {
-    let out = bin().args(["ps", "--all"]).output().expect("spawn sharecli ps --all");
-    assert!(out.status.success(), "ps --all should exit 0; stderr: {:?}", out.stderr);
+    let out = bin()
+        .args(["ps", "--all"])
+        .output()
+        .expect("spawn sharecli ps --all");
+    assert!(
+        out.status.success(),
+        "ps --all should exit 0; stderr: {:?}",
+        out.stderr
+    );
     let s = String::from_utf8_lossy(&out.stdout);
     assert!(
         s.contains("Host agents (proc scan)"),

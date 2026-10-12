@@ -27,12 +27,26 @@ const SAMPLE: ResourceWatchSample = ResourceWatchSample {
 fn fixture_watched() -> Vec<DetectedAgentWatch> {
     vec![
         DetectedAgentWatch {
-            agent: DetectedAgent { pid: 100, family: "claude", comm: "claude".into() },
-            resource: AgentResourceSample { mem_rss_bytes: 52_428_800, fd_count: Some(24) },
+            agent: DetectedAgent {
+                pid: 100,
+                family: "claude",
+                comm: "claude".into(),
+            },
+            resource: AgentResourceSample {
+                mem_rss_bytes: 52_428_800,
+                fd_count: Some(24),
+            },
         },
         DetectedAgentWatch {
-            agent: DetectedAgent { pid: 101, family: "claude", comm: "node".into() },
-            resource: AgentResourceSample { mem_rss_bytes: 2_097_152, fd_count: None },
+            agent: DetectedAgent {
+                pid: 101,
+                family: "claude",
+                comm: "node".into(),
+            },
+            resource: AgentResourceSample {
+                mem_rss_bytes: 2_097_152,
+                fd_count: None,
+            },
         },
     ]
 }
@@ -63,10 +77,17 @@ fn fixture_state_by_pid() -> HashMap<u32, char> {
 /// FR-006 / AC-006.22 — agent_forest_lines renders proc-scan tree connectors + RSS.
 #[test]
 fn fr006_thermal_tui_agent_forest_lines() {
-    let lines =
-        agent_forest_lines(&fixture_forests(), &fixture_watched(), &fixture_state_by_pid(), false);
+    let lines = agent_forest_lines(
+        &fixture_forests(),
+        &fixture_watched(),
+        &fixture_state_by_pid(),
+        false,
+    );
     let text: String = lines.iter().map(|l| l.to_string()).collect();
-    assert!(text.contains("Forests: 1"), "full layout MUST show forest count; got: {text}");
+    assert!(
+        text.contains("Forests: 1"),
+        "full layout MUST show forest count; got: {text}"
+    );
     assert!(
         text.contains("[100]") && text.contains("claude") && text.contains("RSS 50M"),
         "root MUST show family + RSS; got: {text}"
@@ -80,10 +101,17 @@ fn fr006_thermal_tui_agent_forest_lines() {
 /// FR-006 / AC-006.22 — compact layout keeps flat agent summary (no tree connectors).
 #[test]
 fn fr006_thermal_tui_agent_forest_lines_compact_flat() {
-    let lines =
-        agent_forest_lines(&fixture_forests(), &fixture_watched(), &fixture_state_by_pid(), true);
+    let lines = agent_forest_lines(
+        &fixture_forests(),
+        &fixture_watched(),
+        &fixture_state_by_pid(),
+        true,
+    );
     let text: String = lines.iter().map(|l| l.to_string()).collect();
-    assert!(!text.contains("└──"), "compact MUST NOT render tree connectors; got: {text}");
+    assert!(
+        !text.contains("└──"),
+        "compact MUST NOT render tree connectors; got: {text}"
+    );
     assert!(
         text.contains("claude:100:S@"),
         "compact MUST keep flat summary with state; got: {text}"
@@ -112,8 +140,13 @@ fn fr006_thermal_tui_render_includes_agent_tree() {
     app.update(ThermalLevel::Green, 0);
 
     terminal.draw(|f| render(f, &app)).expect("draw");
-    let rendered: String =
-        terminal.backend().buffer().content.iter().map(|c| c.symbol().to_string()).collect();
+    let rendered: String = terminal
+        .backend()
+        .buffer()
+        .content
+        .iter()
+        .map(|c| c.symbol().to_string())
+        .collect();
 
     assert!(
         rendered.contains("Detected Agents")
@@ -132,8 +165,12 @@ fn fr006_thermal_tui_render_includes_agent_tree() {
 /// FR-006 / AC-006.39 — agent_forest_lines shows state on root and nested child nodes.
 #[test]
 fn fr006_thermal_tui_agent_forest_lines_show_state() {
-    let lines =
-        agent_forest_lines(&fixture_forests(), &fixture_watched(), &fixture_state_by_pid(), false);
+    let lines = agent_forest_lines(
+        &fixture_forests(),
+        &fixture_watched(),
+        &fixture_state_by_pid(),
+        false,
+    );
     let text: String = lines.iter().map(|l| l.to_string()).collect();
     assert!(
         text.contains("[100] S") && text.contains("claude"),
@@ -148,7 +185,12 @@ fn fr006_thermal_tui_agent_forest_lines_show_state() {
 /// FR-006 / AC-006.39 — missing forest state shows `-` on tree nodes.
 #[test]
 fn fr006_thermal_tui_agent_forest_lines_missing_state_dash() {
-    let lines = agent_forest_lines(&fixture_forests(), &fixture_watched(), &HashMap::new(), false);
+    let lines = agent_forest_lines(
+        &fixture_forests(),
+        &fixture_watched(),
+        &HashMap::new(),
+        false,
+    );
     let text: String = lines.iter().map(|l| l.to_string()).collect();
     assert!(
         text.contains("[100] -") && text.contains("[101] -"),

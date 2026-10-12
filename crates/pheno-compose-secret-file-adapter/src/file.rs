@@ -8,8 +8,8 @@ use std::path::{Path, PathBuf};
 use std::sync::{Arc, Mutex};
 
 use super::error::FileSecretStoreError;
-use phenocompose_port_types::{Secret, SecretRef};
 use phenocompose_port_secret::{SecretStore, SecretStoreError};
+use phenocompose_port_types::{Secret, SecretRef};
 
 /// File-backed [`SecretStore`](phenocompose_port_secret::SecretStore)
 /// adapter.
@@ -43,8 +43,7 @@ impl FileSecretStore {
     pub fn open(path: impl Into<PathBuf>) -> Result<Self, FileSecretStoreError> {
         let path = path.into();
         let inner = if path.exists() {
-            let bytes = fs::read(&path)
-                .map_err(|e| FileSecretStoreError::Read(e.to_string()))?;
+            let bytes = fs::read(&path).map_err(|e| FileSecretStoreError::Read(e.to_string()))?;
             if bytes.is_empty() {
                 BTreeMap::new()
             } else {
@@ -88,15 +87,14 @@ impl FileSecretStore {
             .map_err(|e| FileSecretStoreError::Write(e.to_string()))?;
         let tmp = self.path.with_extension("json.tmp");
         {
-            let mut f = fs::File::create(&tmp)
-                .map_err(|e| FileSecretStoreError::Write(e.to_string()))?;
+            let mut f =
+                fs::File::create(&tmp).map_err(|e| FileSecretStoreError::Write(e.to_string()))?;
             f.write_all(&bytes)
                 .map_err(|e| FileSecretStoreError::Write(e.to_string()))?;
             f.sync_all()
                 .map_err(|e| FileSecretStoreError::Write(e.to_string()))?;
         }
-        fs::rename(&tmp, &self.path)
-            .map_err(|e| FileSecretStoreError::Rename(e.to_string()))?;
+        fs::rename(&tmp, &self.path).map_err(|e| FileSecretStoreError::Rename(e.to_string()))?;
         Ok(())
     }
 }
@@ -104,9 +102,7 @@ impl FileSecretStore {
 impl SecretStore for FileSecretStore {
     fn get(&self, r#ref: &SecretRef) -> Result<Secret, SecretStoreError> {
         if r#ref.name.is_empty() {
-            return Err(SecretStoreError::validation(
-                "secret ref name is empty",
-            ));
+            return Err(SecretStoreError::validation("secret ref name is empty"));
         }
         let guard = self.inner.lock().expect("file secret store mutex poisoned");
         guard
@@ -117,9 +113,7 @@ impl SecretStore for FileSecretStore {
 
     fn put(&self, secret: &Secret) -> Result<Secret, SecretStoreError> {
         if secret.r#ref.name.is_empty() {
-            return Err(SecretStoreError::validation(
-                "secret ref name is empty",
-            ));
+            return Err(SecretStoreError::validation("secret ref name is empty"));
         }
         // The file adapter matches the in-memory store: always
         // auto-bump the version, ignoring the incoming
@@ -152,9 +146,7 @@ impl SecretStore for FileSecretStore {
 
     fn delete(&self, r#ref: &SecretRef) -> Result<(), SecretStoreError> {
         if r#ref.name.is_empty() {
-            return Err(SecretStoreError::validation(
-                "secret ref name is empty",
-            ));
+            return Err(SecretStoreError::validation("secret ref name is empty"));
         }
         let mut guard = self.inner.lock().expect("file secret store mutex poisoned");
         guard.remove(&r#ref.locator());

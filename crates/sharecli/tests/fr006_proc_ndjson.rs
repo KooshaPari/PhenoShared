@@ -106,8 +106,9 @@ fn fr006_proc_watch_ndjson_one_line_per_refresh() {
         .spawn()
         .expect("spawn sharecli proc --json --watch 1");
 
-    let (stdout, _) =
-        drain_watch_until(&mut child, |stdout, _| complete_ndjson_line_count(stdout) >= 2);
+    let (stdout, _) = drain_watch_until(&mut child, |stdout, _| {
+        complete_ndjson_line_count(stdout) >= 2
+    });
 
     let lines: Vec<&str> = stdout.lines().filter(|l| !l.is_empty()).collect();
     assert!(
@@ -117,8 +118,14 @@ fn fr006_proc_watch_ndjson_one_line_per_refresh() {
     );
     for line in &lines {
         let v: serde_json::Value = serde_json::from_str(line).expect("each NDJSON line MUST parse");
-        assert!(v.get("ts").and_then(|t| t.as_u64()).is_some(), "line MUST include ts");
-        assert!(v.get("agents").and_then(|a| a.as_array()).is_some(), "line MUST include agents");
+        assert!(
+            v.get("ts").and_then(|t| t.as_u64()).is_some(),
+            "line MUST include ts"
+        );
+        assert!(
+            v.get("agents").and_then(|a| a.as_array()).is_some(),
+            "line MUST include agents"
+        );
     }
 }
 
@@ -141,7 +148,10 @@ fn fr006_proc_watch_ndjson_stdout_is_pipe_clean() {
         !stdout.contains("[watch]"),
         "NDJSON stdout MUST NOT contain watch footer; got: {stdout}"
     );
-    assert!(!stdout.contains("\x1b[2J"), "NDJSON stdout MUST NOT contain terminal clear sequences");
+    assert!(
+        !stdout.contains("\x1b[2J"),
+        "NDJSON stdout MUST NOT contain terminal clear sequences"
+    );
     assert!(
         stderr.contains("[watch]"),
         "watch footer MUST appear on stderr in NDJSON mode; stderr: {stderr}"
@@ -159,15 +169,19 @@ fn fr006_proc_watch_ndjson_agent_rows_include_state_key() {
         .spawn()
         .expect("spawn sharecli proc --json --watch 1");
 
-    let (stdout, _) =
-        drain_watch_until(&mut child, |stdout, _| complete_ndjson_line_count(stdout) >= 1);
+    let (stdout, _) = drain_watch_until(&mut child, |stdout, _| {
+        complete_ndjson_line_count(stdout) >= 1
+    });
 
     let lines: Vec<&str> = stdout.lines().filter(|l| !l.is_empty()).collect();
     let line = lines.first().copied().unwrap_or_else(|| {
         panic!("NDJSON watch MUST emit at least one line before its feature-aware deadline; got: {stdout}");
     });
     let v: serde_json::Value = serde_json::from_str(line).expect("NDJSON line MUST parse");
-    let agents = v.get("agents").and_then(|a| a.as_array()).expect("agents array");
+    let agents = v
+        .get("agents")
+        .and_then(|a| a.as_array())
+        .expect("agents array");
     if let Some(first) = agents.first() {
         assert!(
             first.get("state").is_some(),
@@ -218,9 +232,22 @@ fn fr006_proc_watch_ndjson_line_serializes_agent_state() {
 #[test]
 #[serial_test::serial]
 fn fr006_proc_json_snapshot_not_ndjson() {
-    let out = bin().args(["proc", "--json"]).output().expect("spawn sharecli proc --json");
-    assert!(out.status.success(), "proc --json should exit 0; stderr: {:?}", out.stderr);
+    let out = bin()
+        .args(["proc", "--json"])
+        .output()
+        .expect("spawn sharecli proc --json");
+    assert!(
+        out.status.success(),
+        "proc --json should exit 0; stderr: {:?}",
+        out.stderr
+    );
     let s = String::from_utf8_lossy(&out.stdout);
-    assert!(s.contains('\n'), "one-shot --json MUST remain multi-line pretty JSON; got: {s}");
-    assert!(!s.contains("\"ts\""), "one-shot --json MUST NOT inject ts field; got: {s}");
+    assert!(
+        s.contains('\n'),
+        "one-shot --json MUST remain multi-line pretty JSON; got: {s}"
+    );
+    assert!(
+        !s.contains("\"ts\""),
+        "one-shot --json MUST NOT inject ts field; got: {s}"
+    );
 }

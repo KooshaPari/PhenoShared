@@ -93,11 +93,15 @@ pub fn maybe_ascii(value: &[u8]) -> Option<&str> {
         return None;
     }
     // Trim trailing NUL if present (very common in CDP string TLVs).
-    let trimmed = if value.last() == Some(&0) { &value[..value.len() - 1] } else { value };
+    let trimmed = if value.last() == Some(&0) {
+        &value[..value.len() - 1]
+    } else {
+        value
+    };
     if trimmed.is_empty() {
         return None;
     }
-    if !trimmed.iter().all(|b| (0x20..=0x7E).contains(b)) {
+    if !trimmed.iter().all(|b| (0x20..=0x7e).contains(b)) {
         return None;
     }
     std::str::from_utf8(trimmed).ok()
@@ -139,7 +143,10 @@ mod tests {
         let dev = b"router1.cisco.com\0";
         let body = tlv(0x0001, dev);
         // Verify our test math: length should be dev.len()+4
-        assert_eq!(u16::from_be_bytes([body[2], body[3]]) as usize, dev.len() + 4);
+        assert_eq!(
+            u16::from_be_bytes([body[2], body[3]]) as usize,
+            dev.len() + 4
+        );
         let tlvs = parse(&body).expect("parse ok");
         assert_eq!(tlvs.len(), 1);
         assert_eq!(tlvs[0].type_id, 0x0001);
@@ -151,11 +158,11 @@ mod tests {
         // Meraki APs emit a Meraki-OUI Power negotiation TLV with type 0x001F.
         // The value blob is a sequence of 16-bit little-endian integers per
         // the Meraki private spec. We just verify we round-trip it.
-        let meraki_power = vec![0x01, 0x00, 0x2C, 0x01, 0x00, 0x00];
-        let body = tlv(0x001F, &meraki_power);
+        let meraki_power = vec![0x01, 0x00, 0x2c, 0x01, 0x00, 0x00];
+        let body = tlv(0x001f, &meraki_power);
         let tlvs = parse(&body).expect("parse ok");
         assert_eq!(tlvs.len(), 1);
-        assert_eq!(tlvs[0].type_id, 0x001F);
+        assert_eq!(tlvs[0].type_id, 0x001f);
         assert_eq!(tlvs[0].value, meraki_power);
     }
 
@@ -194,7 +201,7 @@ mod tests {
     #[test]
     fn length_overshoots_buffer_is_error() {
         // Length field claims 20 bytes but only 6 follow.
-        let body = vec![0x00, 0x01, 0x00, 0x14, 0xAA, 0xBB];
+        let body = vec![0x00, 0x01, 0x00, 0x14, 0xaa, 0xbb];
         assert!(parse(&body).is_err());
     }
 
@@ -202,28 +209,28 @@ mod tests {
     fn concatenated_tlvs_with_varied_lengths() {
         // TLV 0x000A Native VLAN, 2-byte value 0x0064 (100).
         let mut body = Vec::new();
-        body.extend_from_slice(&tlv(0x000A, &[0x00, 0x64]));
+        body.extend_from_slice(&tlv(0x000a, &[0x00, 0x64]));
         // TLV 0x000B Duplex, 1-byte value 0x01 (full-duplex).
-        body.extend_from_slice(&tlv(0x000B, &[0x01]));
+        body.extend_from_slice(&tlv(0x000b, &[0x01]));
         // TLV 0x000E MTU, 4-byte value 0x000005DC (1500).
-        body.extend_from_slice(&tlv(0x000E, &[0x00, 0x00, 0x05, 0xDC]));
+        body.extend_from_slice(&tlv(0x000e, &[0x00, 0x00, 0x05, 0xdc]));
         let tlvs = parse(&body).expect("parse ok");
         assert_eq!(tlvs.len(), 3);
-        assert_eq!(tlvs[0].type_id, 0x000A);
+        assert_eq!(tlvs[0].type_id, 0x000a);
         assert_eq!(tlvs[0].value, vec![0x00, 0x64]);
-        assert_eq!(tlvs[1].type_id, 0x000B);
+        assert_eq!(tlvs[1].type_id, 0x000b);
         assert_eq!(tlvs[1].value, vec![0x01]);
-        assert_eq!(tlvs[2].type_id, 0x000E);
-        assert_eq!(tlvs[2].value, vec![0x00, 0x00, 0x05, 0xDC]);
+        assert_eq!(tlvs[2].type_id, 0x000e);
+        assert_eq!(tlvs[2].value, vec![0x00, 0x00, 0x05, 0xdc]);
     }
 
     #[test]
     fn zero_length_value_tlv() {
         // A TLV with value length 0 is structurally allowed (Length=4).
-        let body = vec![0x00, 0x0D, 0x00, 0x04]; // type 0x000D (Power), no value
+        let body = vec![0x00, 0x0d, 0x00, 0x04]; // type 0x000D (Power), no value
         let tlvs = parse(&body).expect("parse ok");
         assert_eq!(tlvs.len(), 1);
-        assert_eq!(tlvs[0].type_id, 0x000D);
+        assert_eq!(tlvs[0].type_id, 0x000d);
         assert!(tlvs[0].value.is_empty());
     }
 
