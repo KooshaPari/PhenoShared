@@ -1,0 +1,141 @@
+name: Reusable Test
+
+on:
+  workflow_call:
+    inputs:
+      working-directory:
+        description: 'Working directory'
+        required: false
+        type: string
+        default: '.'
+      test-profile:
+        description: 'Test profile (e.g. ci / dev / default)'
+        required: false
+        type: string
+        default: 'ci'
+      coverage:
+        description: 'Collect coverage'
+        required: false
+        type: boolean
+        default: false
+      extra-args:
+        description: 'Extra args passed to the test runner'
+        required: false
+        type: string
+        default: ''
+    outputs:
+      language:
+        description: 'Detected primary language'
+        value: ${{ jobs.detect.outputs.lang }}
+      junit-path:
+        description: 'Path to JUnit XML report'
+        value: ${{ jobs.test.outputs.junit }}
+    secrets:
+      INFISICAL_TOKEN:
+        required: false
+
+jobs:
+  detect:
+    runs-on: ubuntu-latest
+    outputs:
+      lang: ${{ steps.detect.outputs.lang }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: detect
+        run: |
+          if [ -f Cargo.toml ]; then echo "lang=rust" >> "$GITHUB_OUTPUT"; \
+          elif [ -f package.json ]; then echo "lang=node" >> "$GITHUB_OUTPUT"; \
+          elif [ -f pyproject.toml ]; then echo "lang=python" >> "$GITHUB_OUTPUT"; \
+          else echo "lang=unknown" >> "$GITHUB_OUTPUT"; fi
+
+  test:
+    needs: detect
+    runs-on: ubuntu-latest
+    outputs:
+      junit: ${{ steps.junit.outputs.path }}
+    defaults:
+      run:
+        working-directory: ${{ inputs.working-directory }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Rust
+        if: needs.detect.outputs.lang == 'rust'
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
+
+      - name: Install cargo-nextest
+        if: needs.detect.outputs.lang == 'rust'
+        uses: taiki-e/install-action@ec94b08fe6c0ecd17efe4f4bfaadd961b3a5b83d
+        with:
+          tool: cargo-nextest
+
+      - name: Setup Node
+        if: needs.detect.outputs.lang == 'node'
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Setup Python
+        if: needs.detect.outputs.lang == 'python'
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Rust nextest
+        if: needs.detect.outputs.lang == 'rust'
+        id: junit
+        run: |
+          set -euo pipefail
+          mkdir -p target/nextest/${{ inputs.test-profile }}
+          cargo nextest run --workspace --profile ${{ inputs.test-profile }} \
+            --retries 2 --test-threads=12 ${{ inputs.extra-args }} \
+            --archive-file target/nextest/${{ inputs.test-profile }}/archive.zip 2>/dev/null || \
+          cargo nextest run --workspace --profile ${{ inputs.test-profile }} \
+            --retries 2 --test-threads=12 ${{ inputs.extra-args }}
+          if [ "${{ inputs.coverage }}" = "true" ]; then
+            cargo llvm-cov nextest --profile ${{ inputs.test-profile }} --workspace --lcov --output-path lcov.info || true
+            echo "lcov=$PWD/lcov.info" >> "$GITHUB_OUTPUT"
+          fi
+          # Always emit a junit path (empty if nextest didn't produce one)
+          JUNIT_PATH="target/nextest/${{ inputs.test-profile }}/junit.xml"
+          if [ -f "$JUNIT_PATH" ]; then
+            echo "path=$JUNIT_PATH" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Node test
+        if: needs.detect.outputs.lang == 'node'
+        id: junit
+        run: |
+          set -euo pipefail
+          if [ -f package.json ] && node -e "require('./package.json').scripts?.test" 2>/dev/null; then
+            npm test --if-present ${{ inputs.extra-args }}
+          else
+            echo "No test script in package.json; skipping."
+          fi
+
+      - name: Python pytest
+        if: needs.detect.outputs.lang == 'python'
+        id: junit
+        run: |
+          set -euo pipefail
+          python -m pip install --quiet pytest pytest-cov
+          mkdir -p reports
+          pytest ${{ inputs.extra-args }} --junitxml=reports/junit.xml
+          echo "path=reports/junit.xml" >> "$GITHUB_OUTPUT"
+
+      - name: Upload JUnit
+        if: always() && steps.junit.outputs.path != ''
+        uses: actions/upload-artifact@v4
+        with:
+          name: junit-${{ inputs.test-profile }}
+          path: ${{ steps.junit.outputs.path }}
+          retention-days: 14
+          if-no-files-found: warn
+
+      - name: Unknown language
+        if: needs.detect.outputs.lang == 'unknown'
+        run: |
+          echo "::warning::No recognized language marker; test step skipped."

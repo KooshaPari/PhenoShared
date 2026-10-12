@@ -1,0 +1,91 @@
+{
+  "_comment_top": "MCP hooks configuration template for harness agents. Each harness (jcode, codex, forge) has its own preferred location and schema; see _comment_install_paths below.",
+  "_comment_version": "v1.0 — initial template, 2026-10-12, instinct shared-integration-kit branch.",
+  "_comment_install_paths": {
+    "jcode": "~/.jcode/hooks.json (or ./.jcode/hooks.json for repo-local)",
+    "codex": "~/.codex/hooks.toml (or ./.codex/hooks.toml for repo-local); convert JSON → TOML",
+    "forge": "~/.forge/hooks.yaml (or ./.forge/hooks.yaml for repo-local); convert JSON → YAML",
+    "claude_code": "~/.claude/settings.json (merge into existing settings.json under \"hooks\")"
+  },
+  "_comment_license": "Same as parent repo (PhenoShared — operator-confirmed MIT/Apache dual).",
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash -c 'case \"$CLAUDE_TOOL_INPUT\" in *\"gh repo delete\"*|*\"git push --force\"*|*\"git reset --hard\"*) echo \"[mcp-hook] BLOCKED destructive command: $CLAUDE_TOOL_INPUT\" >&2; exit 2;; esac'",
+            "timeout": 5000,
+            "_intent": "Block destructive git/gh commands. Adjust the case patterns to match your policy."
+          }
+        ]
+      },
+      {
+        "matcher": "Edit|Write|MultiEdit|apply_patch",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo \"[mcp-hook] Pre-edit — file path: $CLAUDE_TOOL_INPUT_PATH\"",
+            "timeout": 2000,
+            "_intent": "Log edit operations for audit. Set CLAUDE_TOOL_INPUT_PATH or equivalent."
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write|MultiEdit|apply_patch",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "if command -v lefthook >/dev/null 2>&1; then lefthook run pre-commit || echo '[mcp-hook] lefthook pre-commit failed (continuing)'; else echo '[mcp-hook] lefthook not installed; skipping'; fi",
+            "timeout": 60000,
+            "_intent": "Auto-run lefthook after edits to catch fmt/lint issues immediately."
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo \"[mcp-hook] Post-bash — duration: $CLAUDE_TOOL_DURATION_MS ms\"",
+            "timeout": 2000,
+            "_intent": "Log bash command duration."
+          }
+        ]
+      }
+    ],
+    "Notification": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "osascript -e 'display notification \"Agent event\" with title \"jcode\" subtitle \"$CLAUDE_NOTIFICATION_TYPE\"' 2>/dev/null || echo \"[mcp-hook] notification: $CLAUDE_NOTIFICATION_TYPE\"",
+            "timeout": 3000,
+            "_intent": "Desktop notification on harness events. macOS uses osascript; on Linux use notify-send."
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo \"[mcp-hook] agent stopped at $(date -u +%FT%TZ)\"",
+            "timeout": 2000
+          }
+        ]
+      }
+    ]
+  },
+  "_comment_variables": {
+    "$CLAUDE_TOOL_INPUT": "Tool input as a string (may be JSON-encoded).",
+    "$CLAUDE_TOOL_INPUT_PATH": "File path when tool is Edit/Write/MultiEdit.",
+    "$CLAUDE_TOOL_DURATION_MS": "Tool execution duration in milliseconds (PostToolUse).",
+    "$CLAUDE_NOTIFICATION_TYPE": "Type of harness notification (auth, permission_prompt, idle, etc.).",
+    "_note": "Variable names are conventions; each harness may use different names. Test before relying on them."
+  }
+}
