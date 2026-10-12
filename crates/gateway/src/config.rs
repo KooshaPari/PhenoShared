@@ -90,26 +90,40 @@ impl ProviderConfig {
     /// gateway has no provider quota API; it only fails over after HTTP 429.
     pub fn resolve_api_keys(&self) -> Vec<String> {
         if self.api_key_env == "OPENCODE_API_KEY" {
-            if let Ok(value) = std::env::var("OPENCODE_API_KEYS") {
-                let keys: Vec<String> = value
-                    .split(',')
-                    .map(str::trim)
-                    .filter(|key| !key.is_empty())
-                    .map(str::to_owned)
-                    .collect();
-                if !keys.is_empty() {
-                    return keys;
+            match std::env::var("OPENCODE_API_KEYS") {
+                Ok(value) => {
+                    let keys: Vec<String> = value
+                        .split(',')
+                        .map(str::trim)
+                        .filter(|key| !key.is_empty())
+                        .map(str::to_owned)
+                        .collect();
+                    if keys.is_empty() {
+                        eprintln!(
+                            "[gateway] WARNING: OPENCODE_API_KEYS is set but parsed to zero usable keys; falling back to OPENCODE_API_KEY for provider {}",
+                            self.name
+                        );
+                    } else {
+                        return keys;
+                    }
                 }
+                Err(_) => {}
             }
         }
         match std::env::var(&self.api_key_env) {
-            Ok(k) if !k.trim().is_empty() => vec![k],
-            Ok(_) => {
-                eprintln!(
-                    "[gateway] WARNING: env var {} is set but empty; skipping provider {}",
-                    self.api_key_env, self.name
-                );
-                Vec::new()
+            Ok(k) => {
+                let trimmed = k.trim();
+                if trimmed.is_empty() {
+                    eprintln!(
+                        "[gateway] WARNING: env var {} is set but empty; skipping provider {}",
+                        self.api_key_env, self.name
+                    );
+                    Vec::new()
+                } else if trimmed.len() != k.len() {
+                    vec![trimmed.to_owned()]
+                } else {
+                    vec![k]
+                }
             }
             Err(_) => {
                 eprintln!(

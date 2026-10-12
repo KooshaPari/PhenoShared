@@ -193,24 +193,79 @@ pub async fn complete_chat_for_session(
                         Err(error) => return Err(error.to_string()),
                     }
                 }
-                return Err(last_error.map_or_else(
-                    || format!("API key not available for provider {}", primary.name),
-                    |error| error.to_string(),
-                ));
+                return Err(last_error
+                    .map(|error| error.to_string())
+                    .unwrap_or_else(|| {
+                        format!("API key not available for provider {}", primary.name)
+                    }));
             } else {
+                // Provider declares a fallback chain. Try every pooled key for the
+                // primary provider before walking the chain (the chain's own keys
+                // are still resolved per-provider inside the closure). Pooling
+                // takes precedence over the chain so the harness's key rotation
+                // works even when the provider lists fallbacks.
+                let mut pooled_keys = primary.resolve_api_keys();
+                if !pooled_keys.is_empty() {
+                    use std::hash::{Hash, Hasher};
+                    let mut hasher = std::collections::hash_map::DefaultHasher::new();
+                    session_id.hash(&mut hasher);
+                    let start = (hasher.finish() as usize) % pooled_keys.len();
+                    pooled_keys.rotate_left(start);
+                    let mut last_error: Option<String> = None;
+                    for api_key in pooled_keys {
+                        match forward_to_provider(
+                            primary,
+                            &stripped_model,
+                            req,
+                            &api_key,
+                        )
+                        .await
+                        {
+                            Ok(response) => return Ok(response),
+                            Err(error) if error.status == Some(429) => {
+                                last_error = Some(error.to_string());
+                            }
+                            Err(error) => return Err(error.to_string()),
+                        }
+                    }
+                    if let Some(err) = last_error {
+                        return Err(err);
+                    }
+                }
                 let chain = FallbackChain::from_provider_config(primary);
                 let model = stripped_model.clone();
                 let req_clone = req.clone();
                 try_with_fallback(&chain, providers, |p: &ProviderConfig| {
                     let m = model.clone();
                     let r = req_clone.clone();
-                    let key = p.resolve_api_key();
                     let p_clone = p.clone();
                     async move {
-                        let api_key = key.ok_or_else(|| {
-                            format!("API key not available for provider {}", p_clone.name)
-                        })?;
-                        forward_to_provider(&p_clone, &m, &r, &api_key).await.map_err(|e| e.to_string())
+                        // Walk every key in the provider's pool (not just the
+                        // first) so a configured key-rotation works through the
+                        // fallback chain too.
+                        let mut keys = p_clone.resolve_api_keys();
+                        if keys.is_empty() {
+                            return Err(format!(
+                                "API key not available for provider {}",
+                                p_clone.name
+                            ));
+                        }
+                        let mut last_err: Option<String> = None;
+                        for api_key in keys.drain(..) {
+                            match forward_to_provider(&p_clone, &m, &r, &api_key).await {
+                                Ok(response) => return Ok(response),
+                                Err(error) if error.status == Some(429) => {
+                                    last_err = Some(error.to_string());
+                                }
+                                Err(error) => return Err(error.to_string()),
+                            }
+                        }
+                        Err(last_err.unwrap_or_else(|| {
+                            format!(
+                                "API key not available for provider {}",
+                                p_clone.name
+                            )
+                        }))
                     }
                 })
                 .await
@@ -525,10 +580,11 @@ pub async fn complete_chat_stream_for_session(
                     Err(error) => return Err(error.to_string()),
                 }
             }
-            Err(last_error.map_or_else(
-                || format!("API key not available for provider {}", provider.name),
-                |error| error.to_string(),
-            ))
+            Err(last_error
+                .map(|error| error.to_string())
+                .unwrap_or_else(|| {
+                    format!("API key not available for provider {}", provider.name)
+                }))
         }
         ProviderRoute::OmniRoute => {
             // OmniRoute: get a routing decision and synthesise a single-chunk stream

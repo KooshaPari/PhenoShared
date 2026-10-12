@@ -93,6 +93,7 @@ members = [
     "crates/traceability-core",
     "crates/traceability-decorators",
     "crates/trace-gate",
+    "crates/gateway",
 ]
 [workspace.package]
 version = "0.3.10"
@@ -153,10 +154,10 @@ parking_lot = "0.12"
 tokio-stream = "0.1"
 tracing = "0.1"
 tracing-subscriber = { version = "0.3", features = ["env-filter", "json"] }
-tracing-opentelemetry = "0.25"
+tracing-opentelemetry = "0.33"
 opentelemetry = "0.32"
 opentelemetry_sdk = { version = "0.32", features = ["rt-tokio"] }
-opentelemetry-otlp = { version = "0.17", features = ["tonic"] }
+opentelemetry-otlp = { version = "0.32", features = ["grpc-tonic"] }
 fs2 = "0.4"
 libc = "0.2"
 criterion = { version = "0.5", features = ["html_reports"] }

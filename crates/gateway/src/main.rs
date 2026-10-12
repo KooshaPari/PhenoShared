@@ -3,9 +3,9 @@
 use gateway::{serve, GatewayConfig};
 
 /// Wire OTLP exporter (no-op when `OTEL_EXPORTER_OTLP_ENDPOINT` is unset).
-fn init_telemetry() -> opentelemetry_sdk::trace::TracerProvider {
-    use opentelemetry::{global, trace::TracerProvider as _, KeyValue};
-    use opentelemetry_sdk::trace::{Config, RandomIdGenerator, Sampler};
+fn init_telemetry() -> opentelemetry_sdk::trace::SdkTracerProvider {
+    use opentelemetry::{global, trace::TracerProvider as _};
+    use opentelemetry_sdk::trace::{RandomIdGenerator, Sampler};
     use opentelemetry_sdk::Resource;
     use tracing_subscriber::prelude::*;
 
@@ -13,22 +13,20 @@ fn init_telemetry() -> opentelemetry_sdk::trace::TracerProvider {
     // preserve `traceparent`/`tracestate` semantics across service boundaries.
     global::set_text_map_propagator(opentelemetry_sdk::propagation::TraceContextPropagator::new());
 
-    let exporter = opentelemetry_otlp::new_exporter()
-        .tonic()
-        .build_span_exporter()
+    let exporter = opentelemetry_otlp::SpanExporter::builder()
+        .with_tonic()
+        .build()
         .expect("valid OTLP exporter configuration");
 
-    let provider = opentelemetry_sdk::trace::TracerProvider::builder()
-        .with_config(
-            Config::default()
-                .with_sampler(Sampler::TraceIdRatioBased(0.1))
-                .with_id_generator(RandomIdGenerator::default())
-                .with_resource(Resource::new(vec![KeyValue::new(
-                    "service.name",
-                    "substrate-gateway",
-                )])),
-        )
-        .with_batch_exporter(exporter, opentelemetry_sdk::runtime::Tokio)
+    let resource = Resource::builder()
+        .with_service_name("substrate-gateway")
+        .build();
+
+    let provider = opentelemetry_sdk::trace::SdkTracerProvider::builder()
+        .with_resource(resource)
+        .with_sampler(Sampler::TraceIdRatioBased(0.1))
+        .with_id_generator(RandomIdGenerator::default())
+        .with_batch_exporter(exporter)
         .build();
 
     let tracer = provider.tracer("substrate-gateway");

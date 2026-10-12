@@ -513,10 +513,14 @@ async fn chat_completions_handler(
         .and_then(|v| v.to_str().ok())
         .map(|s| s.to_owned())
         .unwrap_or_else(|| uuid::Uuid::new_v4().to_string());
+    // `x-opencode-session` is preferred when present and non-empty, but an empty
+    // header value must not shadow `x-session-id` (callers that send both — the
+    // harness sets both — would otherwise end up routing by an empty key).
     let key_session_id = headers
         .get("x-opencode-session")
-        .or_else(|| headers.get("x-session-id"))
         .and_then(|v| v.to_str().ok())
+        .filter(|s| !s.is_empty())
+        .or_else(|| headers.get("x-session-id").and_then(|v| v.to_str().ok()))
         .unwrap_or(&session_id)
         .to_owned();
 
