@@ -169,7 +169,7 @@ impl RedisSessionStore {
                 let rec: SessionRecord =
                     serde_json::from_str(&s).map_err(|e| redis_io("parse", e))?;
                 Ok(Some(rec))
-            }
+            },
         }
     }
 }
@@ -183,7 +183,9 @@ impl SessionStore for RedisSessionStore {
             ));
         }
         if record.id.is_empty() {
-            return Err(PhenoError::BadRequest("session id must be non-empty".into()));
+            return Err(PhenoError::BadRequest(
+                "session id must be non-empty".into(),
+            ));
         }
 
         let payload = serde_json::to_string(&record).map_err(|e| redis_io("serialize", e))?;
@@ -302,7 +304,7 @@ mod tests {
     async fn empty_url_fails_loud_with_redis_code() {
         let err = RedisSessionStore::connect("").await.unwrap_err();
         assert_eq!(
-            err.unsupported_code(),
+            err.unsupported_code_value(),
             Some(codes::SANDBOX_SESSION_REDIS)
         );
         assert_eq!(err.status_code(), 501);
@@ -313,7 +315,7 @@ mod tests {
     async fn whitespace_url_fails_loud() {
         let err = RedisSessionStore::connect("   ").await.unwrap_err();
         assert_eq!(
-            err.unsupported_code(),
+            err.unsupported_code_value(),
             Some(codes::SANDBOX_SESSION_REDIS)
         );
     }
@@ -325,7 +327,7 @@ mod tests {
             .await
             .unwrap_err();
         assert_eq!(
-            err.unsupported_code(),
+            err.unsupported_code_value(),
             Some(codes::SANDBOX_SESSION_REDIS)
         );
     }
@@ -338,7 +340,7 @@ mod tests {
             .await
             .unwrap_err();
         assert_eq!(
-            err.unsupported_code(),
+            err.unsupported_code_value(),
             Some(codes::SANDBOX_SESSION_REDIS),
             "err = {err:?}"
         );
@@ -352,7 +354,7 @@ mod tests {
         std::env::remove_var("REDIS_URL");
         let err = RedisSessionStore::connect_from_env().await.unwrap_err();
         assert_eq!(
-            err.unsupported_code(),
+            err.unsupported_code_value(),
             Some(codes::SANDBOX_SESSION_REDIS)
         );
         let msg = err.to_string();

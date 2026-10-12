@@ -14,7 +14,9 @@ struct MemStore {
 
 impl MemStore {
     fn new() -> Self {
-        Self { by_id: HashMap::new() }
+        Self {
+            by_id: HashMap::new(),
+        }
     }
 }
 
@@ -51,7 +53,10 @@ fn every_example_template_parses() {
             .unwrap_or_else(|e| panic!("parse {}: {e:?}", path.display()));
         count += 1;
     }
-    assert!(count >= 4, "expected at least 4 starter packs; found {count}");
+    assert!(
+        count >= 4,
+        "expected at least 4 starter packs; found {count}"
+    );
 }
 
 #[test]
@@ -67,7 +72,12 @@ fn every_example_applies_idempotently() {
         let mut store = MemStore::new();
         let n1 = pack.apply(&mut store).expect("first apply");
         let n2 = pack.apply(&mut store).expect("second apply (idempotent)");
-        assert_eq!(n1, n2, "{} upserts differ between first and second apply", path.display());
+        assert_eq!(
+            n1,
+            n2,
+            "{} upserts differ between first and second apply",
+            path.display()
+        );
         assert_eq!(
             store.by_id.len(),
             n1,

@@ -209,7 +209,9 @@ pub struct PortConfig {
 
 impl Default for PortConfig {
     fn default() -> Self {
-        Self { sharewei_port: 3100 }
+        Self {
+            sharewei_port: 3100,
+        }
     }
 }
 
@@ -239,7 +241,11 @@ pub struct DefaultHarnessConfig {
 
 impl Default for DefaultHarnessConfig {
     fn default() -> Self {
-        Self { enabled: true, max_instances: 10, memory_limit_mb: 256 }
+        Self {
+            enabled: true,
+            max_instances: 10,
+            memory_limit_mb: 256,
+        }
     }
 }
 
@@ -253,7 +259,10 @@ pub struct ProjectLimitsConfig {
 
 impl Default for ProjectLimitsConfig {
     fn default() -> Self {
-        Self { memory_limit_mb: 1024, max_processes: 10 }
+        Self {
+            memory_limit_mb: 1024,
+            max_processes: 10,
+        }
     }
 }
 
@@ -267,7 +276,10 @@ pub struct SpawnConfig {
 
 impl Default for SpawnConfig {
     fn default() -> Self {
-        Self { default_harness: "claude".into(), prune_idle_seconds: 300 }
+        Self {
+            default_harness: "claude".into(),
+            prune_idle_seconds: 300,
+        }
     }
 }
 
@@ -308,7 +320,11 @@ pub struct SpawnPolicyConfig {
 
 impl Default for SpawnPolicyConfig {
     fn default() -> Self {
-        Self { nice_level: 10, max_concurrent_builds: 2, use_sccache: false }
+        Self {
+            nice_level: 10,
+            max_concurrent_builds: 2,
+            use_sccache: false,
+        }
     }
 }
 
@@ -318,9 +334,14 @@ impl Default for SpawnPolicyConfig {
 
 fn default_projects() -> HashMap<String, String> {
     let mut projects = HashMap::new();
-    projects
-        .insert("helios-cli".to_string(), "~/CodeProjects/Phenotype/repos/helios-cli".to_string());
-    projects.insert("portage".to_string(), "~/CodeProjects/Phenotype/repos/portage".to_string());
+    projects.insert(
+        "helios-cli".to_string(),
+        "~/CodeProjects/Phenotype/repos/helios-cli".to_string(),
+    );
+    projects.insert(
+        "portage".to_string(),
+        "~/CodeProjects/Phenotype/repos/portage".to_string(),
+    );
     projects.insert(
         "agentapi".to_string(),
         "~/CodeProjects/Phenotype/repos/agentapi-plusplus".to_string(),
@@ -329,7 +350,10 @@ fn default_projects() -> HashMap<String, String> {
         "cliproxy".to_string(),
         "~/CodeProjects/Phenotype/repos/cliproxyapi-plusplus".to_string(),
     );
-    projects.insert("colab".to_string(), "~/CodeProjects/Phenotype/repos/colab".to_string());
+    projects.insert(
+        "colab".to_string(),
+        "~/CodeProjects/Phenotype/repos/colab".to_string(),
+    );
     projects
 }
 
@@ -337,19 +361,35 @@ fn default_harness_configs() -> HashMap<String, DefaultHarnessConfig> {
     let mut m = HashMap::new();
     m.insert(
         "claude".into(),
-        DefaultHarnessConfig { enabled: true, max_instances: 11, memory_limit_mb: 512 },
+        DefaultHarnessConfig {
+            enabled: true,
+            max_instances: 11,
+            memory_limit_mb: 512,
+        },
     );
     m.insert(
         "forge".into(),
-        DefaultHarnessConfig { enabled: true, max_instances: 20, memory_limit_mb: 256 },
+        DefaultHarnessConfig {
+            enabled: true,
+            max_instances: 20,
+            memory_limit_mb: 256,
+        },
     );
     m.insert(
         "node".into(),
-        DefaultHarnessConfig { enabled: true, max_instances: 30, memory_limit_mb: 256 },
+        DefaultHarnessConfig {
+            enabled: true,
+            max_instances: 30,
+            memory_limit_mb: 256,
+        },
     );
     m.insert(
         "bun".into(),
-        DefaultHarnessConfig { enabled: true, max_instances: 10, memory_limit_mb: 384 },
+        DefaultHarnessConfig {
+            enabled: true,
+            max_instances: 10,
+            memory_limit_mb: 384,
+        },
     );
     m
 }
@@ -368,7 +408,9 @@ pub fn init_global() -> &'static Config {
 
 /// Return a reference to the global config (panics if not initialised).
 pub fn global() -> &'static Config {
-    GLOBAL_CONFIG.get().expect("Config not initialised — call config::init_global() first")
+    GLOBAL_CONFIG
+        .get()
+        .expect("Config not initialised — call config::init_global() first")
 }
 
 // ---------------------------------------------------------------------------
@@ -719,7 +761,10 @@ mod tests {
 
         let cfg: Config = toml::from_str(toml_str).expect("parse full TOML");
 
-        assert_eq!(cfg.runtime.node_path.as_deref(), Some("/usr/local/bin/node"));
+        assert_eq!(
+            cfg.runtime.node_path.as_deref(),
+            Some("/usr/local/bin/node")
+        );
         assert_eq!(cfg.runtime.bun_path.as_deref(), Some("/usr/local/bin/bun"));
         assert_eq!(cfg.runtime.max_memory_mb, Some(8192));
         assert_eq!(cfg.runtime.max_processes, Some(50));
@@ -796,7 +841,10 @@ mod tests {
         );
         assert_eq!(cfg.port.sharewei_port, default.port.sharewei_port);
         assert_eq!(cfg.cast.default_transport, default.cast.default_transport);
-        assert_eq!(cfg.cast.handshake_timeout_ms, default.cast.handshake_timeout_ms);
+        assert_eq!(
+            cfg.cast.handshake_timeout_ms,
+            default.cast.handshake_timeout_ms
+        );
         assert_eq!(cfg.spawn_policy.nice_level, default.spawn_policy.nice_level);
         assert_eq!(
             cfg.spawn_policy.max_concurrent_builds,
@@ -856,7 +904,10 @@ mod tests {
         }
         assert_eq!(original.pool.enabled, restored.pool.enabled);
         assert_eq!(original.pool.max_per_type, restored.pool.max_per_type);
-        assert_eq!(original.pool.idle_timeout_secs, restored.pool.idle_timeout_secs);
+        assert_eq!(
+            original.pool.idle_timeout_secs,
+            restored.pool.idle_timeout_secs
+        );
         assert_eq!(
             original.monitoring.health_check_interval_secs,
             restored.monitoring.health_check_interval_secs
@@ -866,9 +917,18 @@ mod tests {
             restored.monitoring.high_memory_threshold_mb
         );
         assert_eq!(original.port.sharewei_port, restored.port.sharewei_port);
-        assert_eq!(original.cast.default_transport, restored.cast.default_transport);
-        assert_eq!(original.cast.handshake_timeout_ms, restored.cast.handshake_timeout_ms);
-        assert_eq!(original.spawn_policy.nice_level, restored.spawn_policy.nice_level);
+        assert_eq!(
+            original.cast.default_transport,
+            restored.cast.default_transport
+        );
+        assert_eq!(
+            original.cast.handshake_timeout_ms,
+            restored.cast.handshake_timeout_ms
+        );
+        assert_eq!(
+            original.spawn_policy.nice_level,
+            restored.spawn_policy.nice_level
+        );
         assert_eq!(
             original.spawn_policy.max_concurrent_builds,
             restored.spawn_policy.max_concurrent_builds
@@ -945,7 +1005,10 @@ mod tests {
         "#;
 
         let cfg: Config = toml::from_str(toml_str).expect("parse health check config");
-        let hc = cfg.health_checks.get("sharewei").expect("sharewei health check");
+        let hc = cfg
+            .health_checks
+            .get("sharewei")
+            .expect("sharewei health check");
         assert_eq!(hc.interval_secs, 15);
         assert_eq!(hc.timeout_secs, 3);
         assert_eq!(hc.failure_threshold, 5);
@@ -1005,7 +1068,10 @@ mod tests {
         "#;
         let cfg: Config = toml::from_str(toml_str).expect("parse");
         assert_eq!(
-            cfg.agent_patterns_path.as_ref().map(|p| p.to_string_lossy().into_owned()).as_deref(),
+            cfg.agent_patterns_path
+                .as_ref()
+                .map(|p| p.to_string_lossy().into_owned())
+                .as_deref(),
             Some("/custom/patterns.toml")
         );
     }
@@ -1077,9 +1143,15 @@ mod tests {
         let serialized = serde_json::to_string(&original).expect("serialize JSON");
         let restored: Config = serde_json::from_str(&serialized).expect("deserialize JSON");
         assert_eq!(original.port.sharewei_port, restored.port.sharewei_port);
-        assert_eq!(original.cast.default_transport, restored.cast.default_transport);
+        assert_eq!(
+            original.cast.default_transport,
+            restored.cast.default_transport
+        );
         assert_eq!(original.pool.enabled, restored.pool.enabled);
-        assert_eq!(original.spawn_policy.nice_level, restored.spawn_policy.nice_level);
+        assert_eq!(
+            original.spawn_policy.nice_level,
+            restored.spawn_policy.nice_level
+        );
     }
 
     #[test]

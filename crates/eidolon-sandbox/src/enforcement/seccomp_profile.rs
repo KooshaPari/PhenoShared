@@ -46,12 +46,12 @@ pub fn parse_seccomp_profile_spec(raw: &str) -> Result<SeccompProfile> {
             // Touch-parse embedded profile so corrupt embeds fail loud.
             let _ = oci_default_allowlist()?;
             Ok(SeccompProfile::OciDefault)
-        }
+        },
         path => {
             let p = PathBuf::from(path);
             validate_custom_profile(&p)?;
             Ok(SeccompProfile::Custom(p))
-        }
+        },
     }
 }
 

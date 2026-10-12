@@ -21,6 +21,7 @@ pub enum MessagingError {
 
 /// Supported messaging providers.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[allow(clippy::upper_case_acronyms)]
 pub enum MessageProvider {
     IMessage,
     SMS,

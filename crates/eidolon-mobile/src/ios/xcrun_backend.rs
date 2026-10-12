@@ -114,9 +114,10 @@ impl XcrunIosDriver {
     /// Ungated (read-only). Returns empty vec when no available devices —
     /// never invents entries.
     pub fn list_devices(&self) -> Result<Vec<DeviceInfo>> {
-        let simctl = self.simctl.as_ref().ok_or_else(|| {
-            ios_unavailable("list_devices", "simctl not resolvable via xcrun")
-        })?;
+        let simctl = self
+            .simctl
+            .as_ref()
+            .ok_or_else(|| ios_unavailable("list_devices", "simctl not resolvable via xcrun"))?;
         let output = Command::new(simctl)
             .args(["list", "devices", "-j"])
             .output()
@@ -153,9 +154,10 @@ impl XcrunIosDriver {
         destination: Option<&str>,
     ) -> Result<String> {
         require_actions_allowed("run_xcodebuild_test")?;
-        let xcodebuild = self.xcodebuild.as_ref().ok_or_else(|| {
-            ios_unavailable("run_xcodebuild_test", "xcodebuild not on PATH")
-        })?;
+        let xcodebuild = self
+            .xcodebuild
+            .as_ref()
+            .ok_or_else(|| ios_unavailable("run_xcodebuild_test", "xcodebuild not on PATH"))?;
         if project.trim().is_empty() || scheme.trim().is_empty() {
             return Err(PhenoError::BadRequest(
                 "run_xcodebuild_test requires non-empty project and scheme".into(),
@@ -291,9 +293,10 @@ impl MobileAutomator for XcrunIosDriver {
     async fn screenshot(&self, path: &str) -> Result<()> {
         require_actions_allowed("screenshot")?;
         let udid = self.require_device()?;
-        let simctl = self.simctl.as_ref().ok_or_else(|| {
-            ios_unavailable("screenshot", "simctl not resolvable")
-        })?;
+        let simctl = self
+            .simctl
+            .as_ref()
+            .ok_or_else(|| ios_unavailable("screenshot", "simctl not resolvable"))?;
         if path.trim().is_empty() {
             return Err(PhenoError::BadRequest(
                 "screenshot path must be non-empty".into(),

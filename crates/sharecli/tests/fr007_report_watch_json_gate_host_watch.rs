@@ -16,8 +16,13 @@ fn bin() -> Command {
 const GATE_MARKER: &str = "=== Thermal Gate (FR-011) ===";
 const WATCH_MARKER: &str = "=== Host Resource Watch ===";
 
-const HOST_WATCH_KEYS: [&str; 5] =
-    ["fd_count", "net_rx_bytes", "net_tx_bytes", "mem_rss_bytes", "load_1m"];
+const HOST_WATCH_KEYS: [&str; 5] = [
+    "fd_count",
+    "net_rx_bytes",
+    "net_tx_bytes",
+    "mem_rss_bytes",
+    "load_1m",
+];
 
 fn assert_gate_before_watch(segment: &str, context: &str) {
     let gate_pos = segment
@@ -35,15 +40,36 @@ fn assert_gate_before_watch(segment: &str, context: &str) {
 fn assert_ndjson_gate_before_host_watch(line: &str, context: &str) {
     let v: serde_json::Value =
         serde_json::from_str(line.trim()).expect("watch NDJSON line MUST be valid JSON");
-    assert!(v.get("ts").is_some(), "{context} MUST include ts (AC-007.42)");
-    assert!(v.get("gate").is_some(), "{context} MUST include gate (AC-007.42)");
-    assert!(v.get("host_watch").is_some(), "{context} MUST include host_watch (AC-007.42)");
-    assert!(v.get("pool").is_some(), "{context} MUST include pool (AC-007.73)");
-    assert!(v.get("status").is_some(), "{context} MUST include status (AC-007.73)");
+    assert!(
+        v.get("ts").is_some(),
+        "{context} MUST include ts (AC-007.42)"
+    );
+    assert!(
+        v.get("gate").is_some(),
+        "{context} MUST include gate (AC-007.42)"
+    );
+    assert!(
+        v.get("host_watch").is_some(),
+        "{context} MUST include host_watch (AC-007.42)"
+    );
+    assert!(
+        v.get("pool").is_some(),
+        "{context} MUST include pool (AC-007.73)"
+    );
+    assert!(
+        v.get("status").is_some(),
+        "{context} MUST include status (AC-007.73)"
+    );
     let gate_pos = line.find("\"gate\"").expect("gate key in NDJSON line");
-    let host_pos = line.find("\"host_watch\"").expect("host_watch key in NDJSON line");
-    let pool_pos = line.find("\"pool\"").expect("pool key in NDJSON line (AC-007.73)");
-    let status_pos = line.find("\"status\"").expect("status key in NDJSON line (AC-007.73)");
+    let host_pos = line
+        .find("\"host_watch\"")
+        .expect("host_watch key in NDJSON line");
+    let pool_pos = line
+        .find("\"pool\"")
+        .expect("pool key in NDJSON line (AC-007.73)");
+    let status_pos = line
+        .find("\"status\"")
+        .expect("status key in NDJSON line (AC-007.73)");
     assert!(
         gate_pos < host_pos && host_pos < pool_pos && pool_pos < status_pos,
         "{context} MUST serialize gate → host_watch → pool → status (AC-007.42/AC-007.73); got: {line}"

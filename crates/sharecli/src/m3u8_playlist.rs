@@ -148,7 +148,11 @@ pub fn write(p: &Playlist) -> String {
         if seg.title.is_empty() {
             s.push_str(&format!("#EXTINF:{},\n", format_duration(seg.duration)));
         } else {
-            s.push_str(&format!("#EXTINF:{},{}\n", format_duration(seg.duration), seg.title));
+            s.push_str(&format!(
+                "#EXTINF:{},{}\n",
+                format_duration(seg.duration),
+                seg.title
+            ));
         }
         s.push_str(&seg.uri);
         s.push('\n');

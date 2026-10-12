@@ -82,12 +82,12 @@ mod tests {
         let err = start_wayland_compositor(&VirtualDisplayConfig::default()).unwrap_err();
         if super::super::platform_is_linux() {
             assert_eq!(
-                err.unsupported_code(),
+                err.unsupported_code_value(),
                 Some(codes::SANDBOX_WAYLAND_COMPOSITOR_UNSUPPORTED)
             );
         } else {
             assert_eq!(
-                err.unsupported_code(),
+                err.unsupported_code_value(),
                 Some(codes::SANDBOX_VIRTUAL_DISPLAY_UNSUPPORTED)
             );
         }

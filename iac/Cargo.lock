@@ -669,12 +669,24 @@ dependencies = [
 ]
 
 [[package]]
+name = "oci-helpers"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "serde",
+ "serde_json",
+ "tokio",
+ "tracing",
+]
+
+[[package]]
 name = "oci-lottery"
 version = "0.1.0"
 dependencies = [
  "anyhow",
  "chrono",
  "clap",
+ "oci-helpers",
  "rand 0.10.2",
  "serde",
  "serde_json",
@@ -691,6 +703,7 @@ dependencies = [
  "chrono",
  "clap",
  "glob",
+ "oci-helpers",
  "reqwest",
  "serde",
  "serde_json",

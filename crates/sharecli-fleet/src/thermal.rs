@@ -31,7 +31,10 @@ impl Default for ThermalGovernor {
 impl ThermalGovernor {
     /// Create a new `ThermalGovernor` that polls the real system.
     pub fn new() -> Self {
-        Self { mock_level: None, _private: () }
+        Self {
+            mock_level: None,
+            _private: (),
+        }
     }
 
     /// Create a `ThermalGovernor` that always returns the given level.
@@ -39,7 +42,10 @@ impl ThermalGovernor {
     /// Intended for downstream tests that need deterministic thermal states
     /// (e.g. verifying that `Red` correctly blocks spawns).
     pub fn with_mock(level: ThermalLevel) -> Self {
-        Self { mock_level: Some(level), _private: () }
+        Self {
+            mock_level: Some(level),
+            _private: (),
+        }
     }
 
     /// Poll the current thermal / memory-pressure level.
@@ -77,7 +83,7 @@ impl ThermalGovernor {
             Err(e) if e.kind() == std::io::ErrorKind::NotFound => {
                 tracing::warn!(error = %e, "thermal_zone0 temp missing; assuming nominal");
                 return Ok(ThermalLevel::Green);
-            }
+            },
             Err(e) => return Err(e.into()),
         };
         // The kernel exposes thermal_zone temp as signed millidegrees Celsius

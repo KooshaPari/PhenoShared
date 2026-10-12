@@ -88,7 +88,10 @@ impl CommandLockStore {
     }
 
     pub fn get(&self, cmd_hash: &str) -> Result<Option<CommandLock>> {
-        Ok(self.read_locks()?.into_iter().find(|lock| lock.cmd_hash == cmd_hash))
+        Ok(self
+            .read_locks()?
+            .into_iter()
+            .find(|lock| lock.cmd_hash == cmd_hash))
     }
 
     pub fn list_all(&self) -> Result<Vec<CommandLock>> {
@@ -155,7 +158,10 @@ impl PriorityTaskQueue {
     ) -> Result<TaskQueueItem> {
         let mut items = self.read_items()?;
         let item = TaskQueueItem {
-            id: format!("task-{}", Utc::now().timestamp_nanos_opt().unwrap_or_default()),
+            id: format!(
+                "task-{}",
+                Utc::now().timestamp_nanos_opt().unwrap_or_default()
+            ),
             command: command.into(),
             priority,
             created_at: Utc::now(),

@@ -16,7 +16,7 @@ fn main() -> Result<()> {
             let started: DateTime<Utc> = e.started_at.parse()?;
             let elapsed = Utc::now() - started;
             println!("{}s", elapsed.num_seconds());
-        }
+        },
     }
     Ok(())
 }

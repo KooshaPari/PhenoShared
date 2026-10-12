@@ -6,6 +6,8 @@ authors = ["Phenotype Team"]
 description = "Shared memory processing for PhenoProc"
 license = "MIT"
 
+[workspace]
+
 [dependencies]
 thiserror = "2.0"
 serde = { version = "1.0", features = ["derive"] }

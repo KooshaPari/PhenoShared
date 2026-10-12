@@ -4,7 +4,10 @@ pub struct DSU {
 }
 impl DSU {
     pub fn new(n: usize) -> Self {
-        Self { parent: (0..n).collect(), rank: vec![0; n] }
+        Self {
+            parent: (0..n).collect(),
+            rank: vec![0; n],
+        }
     }
     pub fn find(&mut self, x: usize) -> usize {
         if self.parent[x] != x {
@@ -25,7 +28,7 @@ impl DSU {
             std::cmp::Ordering::Equal => {
                 self.parent[ry] = rx;
                 self.rank[rx] += 1;
-            }
+            },
         }
     }
     pub fn connected(&mut self, x: usize, y: usize) -> bool {

@@ -39,16 +39,16 @@ pub fn parse_options(input: &[u8]) -> Result<Vec<CoapOption>, String> {
 
     while i < input.len() {
         let first = input[i];
-        if first == 0xFF {
+        if first == 0xff {
             // Payload marker (0xFF is the byte, but in CoAP the first byte
             // equal to 0xFF means payload marker; delta/length would never
             // legitimately be 15/15 since 15 is reserved).
             return Err(
-                "payload marker (0xFF) encountered; remaining bytes belong to payload".into()
+                "payload marker (0xFF) encountered; remaining bytes belong to payload".into(),
             );
         }
-        let delta_nibble = (first >> 4) & 0x0F;
-        let length_nibble = first & 0x0F;
+        let delta_nibble = (first >> 4) & 0x0f;
+        let length_nibble = first & 0x0f;
         i += 1;
 
         let delta = match delta_nibble {
@@ -60,7 +60,7 @@ pub fn parse_options(input: &[u8]) -> Result<Vec<CoapOption>, String> {
                 let v = input[i] as u16;
                 i += 1;
                 v + 13
-            }
+            },
             DELTA_EXT_2_BYTE => {
                 if i + 1 >= input.len() {
                     return Err("truncated extended delta (2-byte)".into());
@@ -68,10 +68,10 @@ pub fn parse_options(input: &[u8]) -> Result<Vec<CoapOption>, String> {
                 let v = u16::from_be_bytes([input[i], input[i + 1]]);
                 i += 2;
                 v + 269
-            }
+            },
             DELTA_PAYLOAD_MARKER => {
                 return Err("delta nibble 15 is reserved (payload marker)".into())
-            }
+            },
             _ => unreachable!(),
         };
 
@@ -84,7 +84,7 @@ pub fn parse_options(input: &[u8]) -> Result<Vec<CoapOption>, String> {
                 let v = input[i] as usize;
                 i += 1;
                 v + 13
-            }
+            },
             LEN_EXT_2_BYTE => {
                 if i + 1 >= input.len() {
                     return Err("truncated extended length (2-byte)".into());
@@ -92,7 +92,7 @@ pub fn parse_options(input: &[u8]) -> Result<Vec<CoapOption>, String> {
                 let v = u16::from_be_bytes([input[i], input[i + 1]]) as usize;
                 i += 2;
                 v + 269
-            }
+            },
             _ => unreachable!(),
         };
 
@@ -107,8 +107,9 @@ pub fn parse_options(input: &[u8]) -> Result<Vec<CoapOption>, String> {
         i += length;
 
         // Option number = previous + delta.  Sum may overflow u16.
-        let number =
-            prev_number.checked_add(delta).ok_or_else(|| "option number overflow".to_string())?;
+        let number = prev_number
+            .checked_add(delta)
+            .ok_or_else(|| "option number overflow".to_string())?;
         prev_number = number;
         out.push(CoapOption { number, value });
     }
@@ -169,9 +170,15 @@ mod tests {
     fn simple_single_option() {
         // Option 11 (Uri-Path) = "a", delta=11, length=1
         // byte 0 = (11<<4) | 1 = 0xB1
-        let bytes = vec![0xB1, b'a'];
+        let bytes = vec![0xb1, b'a'];
         let opts = parse_options(&bytes).unwrap();
-        assert_eq!(opts, vec![CoapOption { number: 11, value: vec![b'a'] }]);
+        assert_eq!(
+            opts,
+            vec![CoapOption {
+                number: 11,
+                value: vec![b'a']
+            }]
+        );
     }
 
     #[test]
@@ -184,8 +191,14 @@ mod tests {
         assert_eq!(
             opts,
             vec![
-                CoapOption { number: 1, value: vec![] },
-                CoapOption { number: 5, value: vec![b'b'] },
+                CoapOption {
+                    number: 1,
+                    value: vec![]
+                },
+                CoapOption {
+                    number: 5,
+                    value: vec![b'b']
+                },
             ]
         );
     }
@@ -200,25 +213,37 @@ mod tests {
     fn extended_delta_one_byte() {
         // First option: number 200 (delta=200, len=0). Delta fits in 1-byte extended (delta - 13 <= 255)
         // byte0 = (13<<4)|0 = 0xD0, then byte 1 = (200 - 13) = 187 = 0xBB
-        let bytes = vec![0xD0, 0xBB];
+        let bytes = vec![0xd0, 0xbb];
         let opts = parse_options(&bytes).unwrap();
-        assert_eq!(opts, vec![CoapOption { number: 200, value: vec![] }]);
+        assert_eq!(
+            opts,
+            vec![CoapOption {
+                number: 200,
+                value: vec![]
+            }]
+        );
     }
 
     #[test]
     fn extended_delta_two_byte() {
         // First option: number 1000 (delta=1000). 1000 > 268, so 2-byte extended.
         // byte0 = (14<<4)|0 = 0xE0, then bytes = 1000-269 = 731 = 0x02DB
-        let bytes = vec![0xE0, 0x02, 0xDB];
+        let bytes = vec![0xe0, 0x02, 0xdb];
         let opts = parse_options(&bytes).unwrap();
-        assert_eq!(opts, vec![CoapOption { number: 1000, value: vec![] }]);
+        assert_eq!(
+            opts,
+            vec![CoapOption {
+                number: 1000,
+                value: vec![]
+            }]
+        );
     }
 
     #[test]
     fn extended_length_one_byte() {
         // Opt 1, value of 100 bytes. Length = 100 > 12, fits 1-byte extended.
         // byte0 = (1<<4)|13 = 0x1D, then byte = 100-13 = 87, then 100 value bytes
-        let mut bytes = vec![0x1D, 87];
+        let mut bytes = vec![0x1d, 87];
         let value: Vec<u8> = (0..100u8).collect();
         bytes.extend_from_slice(&value);
         let opts = parse_options(&bytes).unwrap();
@@ -229,8 +254,8 @@ mod tests {
     fn extended_length_two_byte() {
         // Opt 1, value of 500 bytes. Length = 500 > 268, so 2-byte extended.
         // byte0 = (1<<4)|14 = 0x1E, then bytes = 500-269 = 231 = 0x00E7
-        let mut bytes = vec![0x1E, 0x00, 0xE7];
-        let value: Vec<u8> = (0..500u16).map(|i| (i & 0xFF) as u8).collect();
+        let mut bytes = vec![0x1e, 0x00, 0xe7];
+        let value: Vec<u8> = (0..500u16).map(|i| (i & 0xff) as u8).collect();
         bytes.extend_from_slice(&value);
         let opts = parse_options(&bytes).unwrap();
         assert_eq!(opts, vec![CoapOption { number: 1, value }]);
@@ -241,14 +266,21 @@ mod tests {
         // RFC 7252 Section 5.10.1 example: Uri-Path "coap" + Uri-Path "example"
         //   Segment 1: number 11, delta=11, len=4. byte0 = (11<<4)|4 = 0xB4, value "coap"
         //   Segment 2: number 11, delta=0, len=7. byte0 = (0<<4)|7 = 0x07, value "example"
-        let bytes =
-            vec![0xB4, b'c', b'o', b'a', b'p', 0x07, b'e', b'x', b'a', b'm', b'p', b'l', b'e'];
+        let bytes = vec![
+            0xb4, b'c', b'o', b'a', b'p', 0x07, b'e', b'x', b'a', b'm', b'p', b'l', b'e',
+        ];
         let opts = parse_options(&bytes).unwrap();
         assert_eq!(
             opts,
             vec![
-                CoapOption { number: 11, value: b"coap".to_vec() },
-                CoapOption { number: 11, value: b"example".to_vec() },
+                CoapOption {
+                    number: 11,
+                    value: b"coap".to_vec()
+                },
+                CoapOption {
+                    number: 11,
+                    value: b"example".to_vec()
+                },
             ]
         );
     }
@@ -256,10 +288,22 @@ mod tests {
     #[test]
     fn encode_round_trip() {
         let original = vec![
-            CoapOption { number: 1, value: vec![] },
-            CoapOption { number: 11, value: b"a".to_vec() },
-            CoapOption { number: 200, value: vec![0xAA, 0xBB] },
-            CoapOption { number: 1000, value: vec![0x01] },
+            CoapOption {
+                number: 1,
+                value: vec![],
+            },
+            CoapOption {
+                number: 11,
+                value: b"a".to_vec(),
+            },
+            CoapOption {
+                number: 200,
+                value: vec![0xaa, 0xbb],
+            },
+            CoapOption {
+                number: 1000,
+                value: vec![0x01],
+            },
         ];
         let bytes = encode_options(&original);
         let parsed = parse_options(&bytes).unwrap();
@@ -269,7 +313,7 @@ mod tests {
     #[test]
     fn payload_marker_is_error() {
         // 0xFF marks the start of payload in CoAP; should not be parsed as an option
-        let bytes = vec![0x10, 0xFF];
+        let bytes = vec![0x10, 0xff];
         assert!(parse_options(&bytes).is_err());
     }
 
@@ -283,13 +327,19 @@ mod tests {
     #[test]
     fn repeated_option_zero_delta() {
         // Two Opt 11 entries (Uri-Path = "a", Uri-Path = "b"), second has delta=0
-        let bytes = vec![0xB1, b'a', 0x01, b'b'];
+        let bytes = vec![0xb1, b'a', 0x01, b'b'];
         let opts = parse_options(&bytes).unwrap();
         assert_eq!(
             opts,
             vec![
-                CoapOption { number: 11, value: vec![b'a'] },
-                CoapOption { number: 11, value: vec![b'b'] },
+                CoapOption {
+                    number: 11,
+                    value: vec![b'a']
+                },
+                CoapOption {
+                    number: 11,
+                    value: vec![b'b']
+                },
             ]
         );
     }

@@ -19,7 +19,7 @@ fn main() -> ExitCode {
         Err(e) => {
             eprintln!("eidolon-fetch-uia2: {e}");
             ExitCode::FAILURE
-        }
+        },
     }
 }
 

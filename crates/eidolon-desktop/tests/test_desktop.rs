@@ -37,17 +37,17 @@ fn expected_code() -> &'static str {
 
 fn assert_unsupported(err: PhenoError, method: &str) {
     match err {
-        PhenoError::UnsupportedPlatform { code, message } => {
+        PhenoError::UnsupportedPlatform { code, detail } => {
             assert_eq!(code, expected_code());
             assert!(
-                message.contains(method),
+                detail.contains(method),
                 "expected method {method} in error, got: {message}"
             );
             assert!(
                 message.contains("not implemented"),
                 "expected unimplemented wording, got: {message}"
             );
-        }
+        },
         other => panic!("expected UnsupportedPlatform, got {other:?}"),
     }
 }
@@ -70,7 +70,10 @@ async fn get_viewport_unsupported_cross_platform_labels() {
 async fn screenshot_is_unsupported() {
     let client = make_client("windows");
     assert_unsupported(
-        client.screenshot("/tmp/test-screenshot.png").await.unwrap_err(),
+        client
+            .screenshot("/tmp/test-screenshot.png")
+            .await
+            .unwrap_err(),
         "screenshot",
     );
 }
@@ -100,7 +103,7 @@ async fn record_event_returns_ok() {
 #[tokio::test]
 async fn all_action_methods_fail_loud_with_code() {
     let client = DesktopClient::new("linux");
-    assert_eq!(client.unsupported_code(), expected_code());
+    assert_eq!(client.unsupported_code_value(), expected_code());
 
     let client: Arc<dyn DesktopAutomator> = Arc::new(client);
     for err in [
@@ -115,7 +118,7 @@ async fn all_action_methods_fail_loud_with_code() {
             .await
             .unwrap_err(),
     ] {
-        assert_eq!(err.unsupported_code(), Some(expected_code()));
+        assert_eq!(err.unsupported_code_value(), Some(expected_code()));
         assert_eq!(err.status_code(), 501);
     }
 

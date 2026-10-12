@@ -6,7 +6,9 @@ description = "CLI shell framework for Pheno"
 license = "MIT OR Apache-2.0"
 
 [dependencies]
-tokio = { workspace = true }
+# PHE-SHL-001: add `io-std` so `tokio::io::stdin()` and `tokio::io::stdout()` resolve
+# (workspace tokio dep does not enable it; the crate's `run()` loop needs both).
+tokio = { workspace = true, features = ["io-std"] }
 anyhow = { workspace = true }
 thiserror = { workspace = true }
 serde = { workspace = true }

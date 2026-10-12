@@ -27,25 +27,44 @@ fn bin() -> Command {
 
 fn watch_row(family: &'static str, pid: u32, rss: u64) -> DetectedAgentWatch {
     DetectedAgentWatch {
-        agent: DetectedAgent { pid, family, comm: family.into() },
-        resource: AgentResourceSample { mem_rss_bytes: rss, fd_count: None },
+        agent: DetectedAgent {
+            pid,
+            family,
+            comm: family.into(),
+        },
+        resource: AgentResourceSample {
+            mem_rss_bytes: rss,
+            fd_count: None,
+        },
     }
 }
 
 /// FR-006 / AC-006.25 — proc help documents --ppid.
 #[test]
 fn fr006_proc_ppid_help_documents_flag() {
-    let out = bin().args(["proc", "--help"]).output().expect("spawn sharecli proc --help");
+    let out = bin()
+        .args(["proc", "--help"])
+        .output()
+        .expect("spawn sharecli proc --help");
     assert!(out.status.success());
     let s = String::from_utf8_lossy(&out.stdout);
-    assert!(s.contains("--ppid"), "proc help MUST document --ppid; got: {s}");
+    assert!(
+        s.contains("--ppid"),
+        "proc help MUST document --ppid; got: {s}"
+    );
 }
 
 /// FR-006 / AC-006.25 — ppid filter keeps agents with matching parent PID.
 #[test]
 fn fr006_proc_ppid_filter_keeps_matching_parent() {
     let src = FakeProcSource::new(vec![
-        ProcSnapshot { pid: 1, ppid: 0, comm: "init".into(), cmdline: vec![], state: 'R' },
+        ProcSnapshot {
+            pid: 1,
+            ppid: 0,
+            comm: "init".into(),
+            cmdline: vec![],
+            state: 'R',
+        },
         ProcSnapshot {
             pid: 10,
             ppid: 1,
@@ -102,7 +121,13 @@ fn fr006_proc_ppid_filter_keeps_matching_parent() {
 #[test]
 fn fr006_proc_ppid_composes_with_family() {
     let src = FakeProcSource::new(vec![
-        ProcSnapshot { pid: 1, ppid: 0, comm: "init".into(), cmdline: vec![], state: 'R' },
+        ProcSnapshot {
+            pid: 1,
+            ppid: 0,
+            comm: "init".into(),
+            cmdline: vec![],
+            state: 'R',
+        },
         ProcSnapshot {
             pid: 10,
             ppid: 1,
@@ -146,7 +171,13 @@ fn fr006_proc_ppid_composes_with_family() {
 #[test]
 fn fr006_proc_tree_ppid_filter() {
     let src = FakeProcSource::new(vec![
-        ProcSnapshot { pid: 1, ppid: 0, comm: "init".into(), cmdline: vec![], state: 'R' },
+        ProcSnapshot {
+            pid: 1,
+            ppid: 0,
+            comm: "init".into(),
+            cmdline: vec![],
+            state: 'R',
+        },
         ProcSnapshot {
             pid: 50,
             ppid: 1,
@@ -215,8 +246,11 @@ fn fr006_proc_ppid_rejects_pid_combo() {
         .output()
         .expect("spawn proc --ppid --pid");
     assert!(!out.status.success());
-    let combined =
-        format!("{}{}", String::from_utf8_lossy(&out.stderr), String::from_utf8_lossy(&out.stdout));
+    let combined = format!(
+        "{}{}",
+        String::from_utf8_lossy(&out.stderr),
+        String::from_utf8_lossy(&out.stdout)
+    );
     assert!(
         combined.to_ascii_lowercase().contains("ppid") || combined.contains("--pid"),
         "MUST reject --ppid with --pid; got: {combined}"
@@ -226,16 +260,29 @@ fn fr006_proc_ppid_rejects_pid_combo() {
 /// FR-006 / AC-006.25 — CLI proc --ppid succeeds (may yield empty inventory).
 #[test]
 fn fr006_proc_ppid_cli_exits_zero() {
-    let out = bin().args(["proc", "--ppid", "1"]).output().expect("spawn proc --ppid");
-    assert!(out.status.success(), "proc --ppid MUST exit 0; stderr: {:?}", out.stderr);
+    let out = bin()
+        .args(["proc", "--ppid", "1"])
+        .output()
+        .expect("spawn proc --ppid");
+    assert!(
+        out.status.success(),
+        "proc --ppid MUST exit 0; stderr: {:?}",
+        out.stderr
+    );
 }
 
 /// FR-006 / AC-006.25 — --ppid with --json emits structured inventory.
 #[test]
 fn fr006_proc_ppid_json_shape() {
-    let out =
-        bin().args(["proc", "--ppid", "1", "--json"]).output().expect("spawn proc --ppid --json");
-    assert!(out.status.success(), "proc --ppid --json MUST exit 0; stderr: {:?}", out.stderr);
+    let out = bin()
+        .args(["proc", "--ppid", "1", "--json"])
+        .output()
+        .expect("spawn proc --ppid --json");
+    assert!(
+        out.status.success(),
+        "proc --ppid --json MUST exit 0; stderr: {:?}",
+        out.stderr
+    );
     let v: serde_json::Value =
         serde_json::from_slice(&out.stdout).expect("proc --ppid --json MUST emit valid JSON");
     assert!(v.get("agents").and_then(|a| a.as_array()).is_some());

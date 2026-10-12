@@ -38,19 +38,39 @@ fn assert_status_object(status: &serde_json::Value, context: &str) {
 fn assert_json_gate_host_watch_pool_status_order(raw: &str, context: &str) {
     let v: serde_json::Value =
         serde_json::from_str(raw.trim()).expect("{context} MUST emit valid JSON");
-    let gate = v.get("gate").expect("{context} MUST include gate (AC-007.78)");
-    let host = v.get("host_watch").expect("{context} MUST include host_watch (AC-007.78)");
-    let pool = v.get("pool").expect("{context} MUST include pool (AC-007.78)");
-    let status = v.get("status").expect("{context} MUST include status (AC-007.78)");
+    let gate = v
+        .get("gate")
+        .expect("{context} MUST include gate (AC-007.78)");
+    let host = v
+        .get("host_watch")
+        .expect("{context} MUST include host_watch (AC-007.78)");
+    let pool = v
+        .get("pool")
+        .expect("{context} MUST include pool (AC-007.78)");
+    let status = v
+        .get("status")
+        .expect("{context} MUST include status (AC-007.78)");
     assert_pool_object(pool, context);
     assert_status_object(status, context);
-    assert!(gate.get("gate_decision").is_some(), "gate MUST include gate_decision (AC-007.78)");
-    assert!(host.get("load_1m").is_some(), "host_watch MUST include load_1m (AC-007.78)");
+    assert!(
+        gate.get("gate_decision").is_some(),
+        "gate MUST include gate_decision (AC-007.78)"
+    );
+    assert!(
+        host.get("load_1m").is_some(),
+        "host_watch MUST include load_1m (AC-007.78)"
+    );
 
     let gate_pos = raw.find("\"gate\"").expect("gate key in raw JSON");
-    let host_pos = raw.find("\"host_watch\"").expect("host_watch key in raw JSON");
-    let pool_pos = raw.find("\"pool\"").expect("pool key in raw JSON (AC-007.78)");
-    let status_pos = raw.find("\"status\"").expect("status key in raw JSON (AC-007.78)");
+    let host_pos = raw
+        .find("\"host_watch\"")
+        .expect("host_watch key in raw JSON");
+    let pool_pos = raw
+        .find("\"pool\"")
+        .expect("pool key in raw JSON (AC-007.78)");
+    let status_pos = raw
+        .find("\"status\"")
+        .expect("status key in raw JSON (AC-007.78)");
     assert!(
         gate_pos < host_pos && host_pos < pool_pos && pool_pos < status_pos,
         "{context} MUST serialize gate → host_watch → pool → status (AC-007.78); got: {raw}"
@@ -64,15 +84,21 @@ fn assert_json_gate_host_watch_status_only(raw: &str, context: &str) {
         v.get("node_total").is_some(),
         "{context} top-level MUST include pool panel fields (AC-007.78); got: {v}"
     );
-    let status = v.get("status").expect("{context} MUST include nested status (AC-007.78)");
+    let status = v
+        .get("status")
+        .expect("{context} MUST include nested status (AC-007.78)");
     assert_status_object(status, context);
     assert!(
         v.get("pool").is_none(),
         "{context} MUST NOT include redundant nested pool (AC-007.78)"
     );
 
-    let host_pos = raw.find("\"host_watch\"").expect("host_watch key in raw JSON");
-    let status_pos = raw.rfind("\"status\"").expect("status key in raw JSON (AC-007.78)");
+    let host_pos = raw
+        .find("\"host_watch\"")
+        .expect("host_watch key in raw JSON");
+    let status_pos = raw
+        .rfind("\"status\"")
+        .expect("status key in raw JSON (AC-007.78)");
     assert!(
         host_pos < status_pos,
         "{context} MUST serialize host_watch before nested status (AC-007.78); got: {raw}"
@@ -86,15 +112,21 @@ fn assert_json_gate_host_watch_pool_only(raw: &str, context: &str) {
         v.get("total_processes").is_some(),
         "{context} top-level MUST include proc-scan panel fields (AC-007.78); got: {v}"
     );
-    let pool = v.get("pool").expect("{context} MUST include nested pool (AC-007.78)");
+    let pool = v
+        .get("pool")
+        .expect("{context} MUST include nested pool (AC-007.78)");
     assert_pool_object(pool, context);
     assert!(
         pool.get("status").is_none(),
         "nested pool MUST NOT include cross-sibling status (AC-007.78)"
     );
 
-    let host_pos = raw.find("\"host_watch\"").expect("host_watch key in raw JSON");
-    let pool_pos = raw.rfind("\"pool\"").expect("pool key in raw JSON (AC-007.78)");
+    let host_pos = raw
+        .find("\"host_watch\"")
+        .expect("host_watch key in raw JSON");
+    let pool_pos = raw
+        .rfind("\"pool\"")
+        .expect("pool key in raw JSON (AC-007.78)");
     assert!(
         host_pos < pool_pos,
         "{context} MUST serialize host_watch before nested pool (AC-007.78); got: {raw}"
@@ -104,9 +136,17 @@ fn assert_json_gate_host_watch_pool_only(raw: &str, context: &str) {
 /// FR-007 / AC-007.78 — live `health.status` dispatch embeds pool + status siblings.
 #[tokio::test]
 async fn fr007_ipc_health_status_pool_status_live() {
-    let handler = sharecli_ipc::handler::Handler::new().await.expect("Handler::new");
-    let resp = handler.dispatch(r#"{"id":1,"method":"health.status","params":{}}"#).await;
-    assert!(resp.error.is_none(), "health.status MUST succeed (AC-007.78); err={:?}", resp.error);
+    let handler = sharecli_ipc::handler::Handler::new()
+        .await
+        .expect("Handler::new");
+    let resp = handler
+        .dispatch(r#"{"id":1,"method":"health.status","params":{}}"#)
+        .await;
+    assert!(
+        resp.error.is_none(),
+        "health.status MUST succeed (AC-007.78); err={:?}",
+        resp.error
+    );
     let raw = serde_json::to_string(&resp.result).expect("serialize health.status result");
     assert_json_gate_host_watch_pool_status_order(&raw, "health.status");
 }
@@ -114,9 +154,17 @@ async fn fr007_ipc_health_status_pool_status_live() {
 /// FR-007 / AC-007.78 — live `pool.status` dispatch embeds nested status only.
 #[tokio::test]
 async fn fr007_ipc_pool_status_nested_status_live() {
-    let handler = sharecli_ipc::handler::Handler::new().await.expect("Handler::new");
-    let resp = handler.dispatch(r#"{"id":2,"method":"pool.status","params":{}}"#).await;
-    assert!(resp.error.is_none(), "pool.status MUST succeed (AC-007.78); err={:?}", resp.error);
+    let handler = sharecli_ipc::handler::Handler::new()
+        .await
+        .expect("Handler::new");
+    let resp = handler
+        .dispatch(r#"{"id":2,"method":"pool.status","params":{}}"#)
+        .await;
+    assert!(
+        resp.error.is_none(),
+        "pool.status MUST succeed (AC-007.78); err={:?}",
+        resp.error
+    );
     let raw = serde_json::to_string(&resp.result).expect("serialize pool.status result");
     assert_json_gate_host_watch_status_only(&raw, "pool.status");
 }
@@ -124,9 +172,17 @@ async fn fr007_ipc_pool_status_nested_status_live() {
 /// FR-007 / AC-007.78 — live `status.snapshot` dispatch embeds nested pool only.
 #[tokio::test]
 async fn fr007_ipc_status_snapshot_nested_pool_live() {
-    let handler = sharecli_ipc::handler::Handler::new().await.expect("Handler::new");
-    let resp = handler.dispatch(r#"{"id":3,"method":"status.snapshot","params":{}}"#).await;
-    assert!(resp.error.is_none(), "status.snapshot MUST succeed (AC-007.78); err={:?}", resp.error);
+    let handler = sharecli_ipc::handler::Handler::new()
+        .await
+        .expect("Handler::new");
+    let resp = handler
+        .dispatch(r#"{"id":3,"method":"status.snapshot","params":{}}"#)
+        .await;
+    assert!(
+        resp.error.is_none(),
+        "status.snapshot MUST succeed (AC-007.78); err={:?}",
+        resp.error
+    );
     let raw = serde_json::to_string(&resp.result).expect("serialize status.snapshot result");
     assert_json_gate_host_watch_pool_only(&raw, "status.snapshot");
 }

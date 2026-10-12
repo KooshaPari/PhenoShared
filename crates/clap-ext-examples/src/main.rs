@@ -44,16 +44,16 @@ fn main() -> CliResult<()> {
                 c.force,
                 c.template
             );
-        }
+        },
         Cmd::Validate(c) => {
             tracing::info!("validate: path={:?} strict={}", c.path, c.strict);
-        }
+        },
         Cmd::Version(_) => {
             println!("basic v{}", env!("CARGO_PKG_VERSION"));
-        }
+        },
         Cmd::Run { input } => {
             println!("run: input={} output={}", input, cli.output);
-        }
+        },
     }
     Ok(())
 }

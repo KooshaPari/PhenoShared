@@ -44,12 +44,12 @@ async fn main() -> anyhow::Result<()> {
                     tracing::info!("  ✓ {}", $name);
                     passed += 1;
                     v
-                }
+                },
                 Err(e) => {
                     tracing::error!("  ✗ {}: {:?}", $name, e);
                     failed += 1;
                     return Err(anyhow::anyhow!(e));
-                }
+                },
             }
         };
     }

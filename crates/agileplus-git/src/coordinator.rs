@@ -47,7 +47,7 @@ impl std::fmt::Display for ClaimError {
                     "Worktree already claimed by agent '{}' for WP '{}'",
                     existing_agent, wp_id
                 )
-            }
+            },
             ClaimError::FileScopeOverlap {
                 overlapping_files,
                 other_agent,
@@ -57,7 +57,7 @@ impl std::fmt::Display for ClaimError {
                     "File scope overlap with agent '{}': {:?}",
                     other_agent, overlapping_files
                 )
-            }
+            },
             ClaimError::WorktreeNotFound => write!(f, "Worktree not found"),
         }
     }

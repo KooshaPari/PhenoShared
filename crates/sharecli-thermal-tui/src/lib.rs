@@ -134,7 +134,7 @@ pub fn apply_key_action(app: &mut App, action: KeyAction) {
         KeyAction::FocusPrev => app.focus = app.focus.prev(),
         KeyAction::FocusPanel(panel) => app.focus = panel,
         KeyAction::ToggleHelp => app.show_help_overlay = !app.show_help_overlay,
-        KeyAction::Quit | KeyAction::ForcePoll | KeyAction::Noop => {}
+        KeyAction::Quit | KeyAction::ForcePoll | KeyAction::Noop => {},
     }
 }
 
@@ -231,7 +231,11 @@ pub fn gate_panel_lines(
     compact: bool,
 ) -> Vec<Line<'static>> {
     let decision = snap.gate_decision.as_str();
-    let color = if decision == "DENY" { Color::Red } else { decision_color(thermal) };
+    let color = if decision == "DENY" {
+        Color::Red
+    } else {
+        decision_color(thermal)
+    };
     let decision_span = Span::styled(
         format!("[ {decision} ]"),
         Style::default().fg(color).add_modifier(Modifier::BOLD),
@@ -241,7 +245,10 @@ pub fn gate_panel_lines(
         return vec![Line::from(vec![
             Span::raw(" Gate: "),
             decision_span,
-            Span::raw(format!(" RSS:{} {}", snap.agent_total_rss_bytes, snap.agent_contention)),
+            Span::raw(format!(
+                " RSS:{} {}",
+                snap.agent_total_rss_bytes, snap.agent_contention
+            )),
         ])];
     }
 
@@ -256,7 +263,11 @@ pub fn gate_panel_lines(
     };
 
     vec![
-        Line::from(vec![Span::raw("  Gate decision: "), decision_span, Span::raw(hint)]),
+        Line::from(vec![
+            Span::raw("  Gate decision: "),
+            decision_span,
+            Span::raw(hint),
+        ]),
         Line::from(format!(
             "  Agent RSS total: {} bytes ({})",
             snap.agent_total_rss_bytes,
@@ -269,8 +280,15 @@ pub fn gate_panel_lines(
 /// Lines for the runtime pool operator panel (FR-007 / AC-007.71 TUI slice).
 pub fn pool_panel_lines(pool: Option<PoolOperatorPanel>, compact: bool) -> Vec<Line<'static>> {
     let Some(pool) = pool else {
-        let msg = if compact { " pool unavailable" } else { "  Runtime pool unavailable" };
-        return vec![Line::from(Span::styled(msg, Style::default().fg(Color::DarkGray)))];
+        let msg = if compact {
+            " pool unavailable"
+        } else {
+            "  Runtime pool unavailable"
+        };
+        return vec![Line::from(Span::styled(
+            msg,
+            Style::default().fg(Color::DarkGray),
+        ))];
     };
 
     let summary = format_pool_operator_line(&pool);
@@ -279,8 +297,14 @@ pub fn pool_panel_lines(pool: Option<PoolOperatorPanel>, compact: bool) -> Vec<L
     }
 
     vec![
-        Line::from(format!("  Node idle/total: {}/{}", pool.node_idle, pool.node_total)),
-        Line::from(format!("  Bun idle/total:  {}/{}", pool.bun_idle, pool.bun_total)),
+        Line::from(format!(
+            "  Node idle/total: {}/{}",
+            pool.node_idle, pool.node_total
+        )),
+        Line::from(format!(
+            "  Bun idle/total:  {}/{}",
+            pool.bun_idle, pool.bun_total
+        )),
         Line::from(format!(
             "  Max per type: {} · {}",
             pool.max_per_type,
@@ -295,8 +319,15 @@ pub fn status_panel_lines(
     compact: bool,
 ) -> Vec<Line<'static>> {
     let Some(status) = status else {
-        let msg = if compact { " status unavailable" } else { "  Proc scan status unavailable" };
-        return vec![Line::from(Span::styled(msg, Style::default().fg(Color::DarkGray)))];
+        let msg = if compact {
+            " status unavailable"
+        } else {
+            "  Proc scan status unavailable"
+        };
+        return vec![Line::from(Span::styled(
+            msg,
+            Style::default().fg(Color::DarkGray),
+        ))];
     };
 
     let summary = format_status_operator_line(&status);
@@ -325,7 +356,10 @@ pub fn resource_watch_lines(
         } else {
             "  Resource watch unavailable on this host"
         };
-        return vec![Line::from(Span::styled(msg, Style::default().fg(Color::Red)))];
+        return vec![Line::from(Span::styled(
+            msg,
+            Style::default().fg(Color::Red),
+        ))];
     };
 
     if compact {
@@ -351,19 +385,29 @@ pub fn resource_watch_lines(
 /// Lines for host agent inventory (FR-006 / thermal operator panel).
 pub fn host_agent_lines(agents: &[DetectedAgent], compact: bool) -> Vec<Line<'static>> {
     if agents.is_empty() {
-        let msg = if compact { " agents: none" } else { "  Host agents: none detected" };
+        let msg = if compact {
+            " agents: none"
+        } else {
+            "  Host agents: none detected"
+        };
         return vec![Line::from(Span::raw(msg))];
     }
 
     if compact {
-        let summary =
-            agents.iter().map(|a| format!("{}:{}", a.family, a.pid)).collect::<Vec<_>>().join(" ");
+        let summary = agents
+            .iter()
+            .map(|a| format!("{}:{}", a.family, a.pid))
+            .collect::<Vec<_>>()
+            .join(" ");
         return vec![Line::from(format!(" agents: {summary}"))];
     }
 
     let mut lines = vec![Line::from("  Host agents:")];
     for agent in agents.iter().take(4) {
-        lines.push(Line::from(format!("    {} pid={} ({})", agent.family, agent.pid, agent.comm)));
+        lines.push(Line::from(format!(
+            "    {} pid={} ({})",
+            agent.family, agent.pid, agent.comm
+        )));
     }
     if agents.len() > 4 {
         lines.push(Line::from(format!("    … +{} more", agents.len() - 4)));
@@ -429,8 +473,11 @@ pub fn hypervisor_slot_queue_lines(meters: SlotQueueMeters, compact: bool) -> Ve
 pub fn mesh_maildir_lines(status: Option<MaildirStatus>, compact: bool) -> Vec<Line<'static>> {
     match status {
         Some(st) if compact => {
-            vec![Line::from(format!(" mesh r:{} f:{} p:{}", st.ready, st.in_flight, st.pending))]
-        }
+            vec![Line::from(format!(
+                " mesh r:{} f:{} p:{}",
+                st.ready, st.in_flight, st.pending
+            ))]
+        },
         Some(st) => vec![
             Line::from(format!("  Mesh ready:     {}", st.ready)),
             Line::from(format!("  Mesh in-flight: {}", st.in_flight)),
@@ -488,8 +535,15 @@ pub fn agent_lines(
     compact: bool,
 ) -> Vec<Line<'static>> {
     if agents.is_empty() {
-        let msg = if compact { " none" } else { "  No agent processes detected" };
-        return vec![Line::from(Span::styled(msg, Style::default().fg(Color::DarkGray)))];
+        let msg = if compact {
+            " none"
+        } else {
+            "  No agent processes detected"
+        };
+        return vec![Line::from(Span::styled(
+            msg,
+            Style::default().fg(Color::DarkGray),
+        ))];
     }
 
     if compact {
@@ -508,15 +562,22 @@ pub fn agent_lines(
             })
             .collect::<Vec<_>>()
             .join(" ");
-        let extra =
-            if agents.len() > 2 { format!(" +{}", agents.len() - 2) } else { String::new() };
+        let extra = if agents.len() > 2 {
+            format!(" +{}", agents.len() - 2)
+        } else {
+            String::new()
+        };
         return vec![Line::from(format!(" {summary}{extra}"))];
     }
 
     let mut lines = vec![Line::from(format!("  Agents: {}", agents.len()))];
     for row in agents.iter().take(MAX_AGENT_LINES) {
         let state = state_text_for_pid(state_by_pid, row.agent.pid);
-        let fd = row.resource.fd_count.map(|n| format!(" FD {n}")).unwrap_or_default();
+        let fd = row
+            .resource
+            .fd_count
+            .map(|n| format!(" FD {n}"))
+            .unwrap_or_default();
         lines.push(Line::from(format!(
             "    PID {}  {}  {}  RSS {}{}  ({})",
             row.agent.pid,
@@ -528,7 +589,10 @@ pub fn agent_lines(
         )));
     }
     if agents.len() > MAX_AGENT_LINES {
-        lines.push(Line::from(format!("    … +{} more", agents.len() - MAX_AGENT_LINES)));
+        lines.push(Line::from(format!(
+            "    … +{} more",
+            agents.len() - MAX_AGENT_LINES
+        )));
     }
     lines
 }
@@ -547,7 +611,12 @@ fn format_tree_node_line(
         .get(&node.pid)
         .map(|bytes| format!(" RSS {}", format_rss_bytes(*bytes)))
         .unwrap_or_default();
-    format!("[{}] {state} {family}{}{}", node.pid, rss, format_comm_suffix(&node.comm))
+    format!(
+        "[{}] {state} {family}{}{}",
+        node.pid,
+        rss,
+        format_comm_suffix(&node.comm)
+    )
 }
 
 fn format_comm_suffix(comm: &str) -> String {
@@ -615,18 +684,31 @@ pub fn agent_forest_lines(
     if compact || forests.is_empty() {
         return agent_lines(watched, state_by_pid, compact);
     }
-    let rss_by_pid: HashMap<u32, u64> =
-        watched.iter().map(|row| (row.agent.pid, row.resource.mem_rss_bytes)).collect();
+    let rss_by_pid: HashMap<u32, u64> = watched
+        .iter()
+        .map(|row| (row.agent.pid, row.resource.mem_rss_bytes))
+        .collect();
     let mut lines = vec![Line::from(format!("  Forests: {}", forests.len()))];
     let mut budget = MAX_AGENT_TREE_LINES;
     for (i, root) in forests.iter().enumerate() {
         if budget == 0 {
             if i < forests.len() {
-                lines.push(Line::from(format!("    … +{} more roots", forests.len() - i)));
+                lines.push(Line::from(format!(
+                    "    … +{} more roots",
+                    forests.len() - i
+                )));
             }
             break;
         }
-        append_agent_tree_lines(root, "", true, &rss_by_pid, state_by_pid, &mut lines, &mut budget);
+        append_agent_tree_lines(
+            root,
+            "",
+            true,
+            &rss_by_pid,
+            state_by_pid,
+            &mut lines,
+            &mut budget,
+        );
     }
     lines
 }
@@ -819,7 +901,11 @@ impl App {
         if !self.agent_forests.is_empty() {
             return build_host_forest_state_map(&self.agent_forests);
         }
-        let pids: Vec<u32> = self.detected_agents.iter().map(|row| row.agent.pid).collect();
+        let pids: Vec<u32> = self
+            .detected_agents
+            .iter()
+            .map(|row| row.agent.pid)
+            .collect();
         build_host_agent_state_map(&pids)
     }
 }
@@ -832,13 +918,14 @@ impl App {
 ///
 /// Returns 0 on any error (pgrep missing, etc.) so the TUI degrades gracefully.
 pub fn count_cargo_builds() -> u32 {
-    let output =
-        std::process::Command::new("pgrep").args(["-f", "cargo (build|check|test)"]).output();
+    let output = std::process::Command::new("pgrep")
+        .args(["-f", "cargo (build|check|test)"])
+        .output();
     match output {
         Ok(out) => {
             let s = String::from_utf8_lossy(&out.stdout);
             s.lines().filter(|l| !l.trim().is_empty()).count() as u32
-        }
+        },
         Err(_) => 0,
     }
 }
@@ -893,10 +980,16 @@ pub fn render(frame: &mut Frame, app: &App) {
 }
 
 fn render_title(frame: &mut Frame, area: Rect, compact: bool) {
-    let text = if compact { " thermal" } else { "  sharecli thermal monitor" };
+    let text = if compact {
+        " thermal"
+    } else {
+        "  sharecli thermal monitor"
+    };
     let title = Paragraph::new(Line::from(vec![Span::styled(
         text,
-        Style::default().fg(Color::Cyan).add_modifier(Modifier::BOLD),
+        Style::default()
+            .fg(Color::Cyan)
+            .add_modifier(Modifier::BOLD),
     )]))
     .block(Block::default().borders(Borders::ALL).title(" sharecli "));
     frame.render_widget(title, area);
@@ -915,15 +1008,26 @@ fn render_thermal(frame: &mut Frame, area: Rect, app: &App, compact: bool) {
     };
 
     let mut lines = vec![Line::from(vec![
-        Span::raw(if compact { " P: " } else { "  Pressure level: " }),
-        Span::styled(pressure, Style::default().fg(color).add_modifier(Modifier::BOLD)),
+        Span::raw(if compact {
+            " P: "
+        } else {
+            "  Pressure level: "
+        }),
+        Span::styled(
+            pressure,
+            Style::default().fg(color).add_modifier(Modifier::BOLD),
+        ),
     ])];
     lines.push(Line::from(vec![
         Span::raw("  "),
         Span::styled(thermal_blurb(level, compact), Style::default().fg(color)),
     ]));
 
-    let title = if compact { " Thermal " } else { " Thermal Pressure " };
+    let title = if compact {
+        " Thermal "
+    } else {
+        " Thermal Pressure "
+    };
     let block = Block::default().borders(Borders::ALL).title(title);
     let para = Paragraph::new(lines).block(block);
     frame.render_widget(para, area);
@@ -932,7 +1036,11 @@ fn render_thermal(frame: &mut Frame, area: Rect, app: &App, compact: bool) {
 fn focused_block(title: &str, focused: bool) -> Block<'_> {
     let block = Block::default().borders(Borders::ALL).title(title);
     if focused {
-        block.border_style(Style::default().fg(Color::Cyan).add_modifier(Modifier::BOLD))
+        block.border_style(
+            Style::default()
+                .fg(Color::Cyan)
+                .add_modifier(Modifier::BOLD),
+        )
     } else {
         block
     }
@@ -957,7 +1065,10 @@ fn render_slots(frame: &mut Frame, area: Rect, app: &App, compact: bool) {
     let label = if compact {
         format!(" {}/{} ", app.active_slots, app.slot_cap)
     } else {
-        format!(" Build slots: {}/{} active ", app.active_slots, app.slot_cap)
+        format!(
+            " Build slots: {}/{} active ",
+            app.active_slots, app.slot_cap
+        )
     };
 
     let title = if compact { " Slots " } else { " Build Slots " };
@@ -977,36 +1088,59 @@ fn render_pool_panel(frame: &mut Frame, area: Rect, app: &App, compact: bool) {
 }
 
 fn render_status_panel(frame: &mut Frame, area: Rect, app: &App, compact: bool) {
-    let title = if compact { " Status " } else { " Proc Scan Status " };
+    let title = if compact {
+        " Status "
+    } else {
+        " Proc Scan Status "
+    };
     let lines = status_panel_lines(app.status_panel, compact);
     let block = focused_block(title, app.focus == PanelFocus::Status);
     frame.render_widget(Paragraph::new(lines).block(block), area);
 }
 
 fn render_agents(frame: &mut Frame, area: Rect, app: &App, compact: bool) {
-    let title = if compact { " Agents " } else { " Detected Agents " };
+    let title = if compact {
+        " Agents "
+    } else {
+        " Detected Agents "
+    };
     let state_by_pid = app.agent_panel_state_by_pid();
-    let lines =
-        agent_forest_lines(&app.agent_forests, &app.detected_agents, &state_by_pid, compact);
+    let lines = agent_forest_lines(
+        &app.agent_forests,
+        &app.detected_agents,
+        &state_by_pid,
+        compact,
+    );
     let block = focused_block(title, app.focus == PanelFocus::Agents);
     frame.render_widget(Paragraph::new(lines).block(block), area);
 }
 
 fn render_resource_watch(frame: &mut Frame, area: Rect, app: &App, compact: bool) {
-    let title = if compact { " Watch " } else { " Host Resource Watch " };
+    let title = if compact {
+        " Watch "
+    } else {
+        " Host Resource Watch "
+    };
     let lines = resource_watch_lines(app.resource_watch, compact);
     let block = focused_block(title, app.focus == PanelFocus::HostWatch);
     frame.render_widget(Paragraph::new(lines).block(block), area);
 }
 
 fn render_fuse_coalesce(frame: &mut Frame, area: Rect, app: &App, compact: bool) {
-    let title = if compact { " IO " } else { " Hypervisor IO Meters " };
+    let title = if compact {
+        " IO "
+    } else {
+        " Hypervisor IO Meters "
+    };
     let mut lines = hypervisor_coalesce_lines(app.coalesce_meters, compact);
     lines.extend(hypervisor_slot_queue_lines(app.slot_queue_meters, compact));
     lines.extend(mesh_maildir_lines(app.maildir_status.clone(), compact));
     lines.extend(fuse_coalesce_lines(app.fuse_meters, compact));
     lines.extend(fuse_neg_dentry_lines(app.neg_dentry_meters, compact));
-    lines.extend(fuse_write_serialize_lines(app.write_serialize_meters, compact));
+    lines.extend(fuse_write_serialize_lines(
+        app.write_serialize_meters,
+        compact,
+    ));
     let block = Block::default().borders(Borders::ALL).title(title);
     frame.render_widget(Paragraph::new(lines).block(block), area);
 }
@@ -1098,7 +1232,12 @@ pub fn run_with_pool_status(
     app.poll_operator_meters();
     poll_pool_status_panels(&mut app, poll_pool_status.as_deref_mut());
 
-    let result = event_loop(&mut terminal, &mut app, governor, poll_pool_status.as_deref_mut());
+    let result = event_loop(
+        &mut terminal,
+        &mut app,
+        governor,
+        poll_pool_status.as_deref_mut(),
+    );
 
     // Always restore terminal even on error.
     disable_raw_mode()?;
@@ -1129,13 +1268,13 @@ fn event_loop(
                         app.update(level, slots);
                         app.poll_operator_meters();
                         poll_pool_status_panels(app, poll_pool_status.as_deref_mut());
-                    }
+                    },
                     action => apply_key_action(app, action),
                 },
                 Event::Resize(_, _) => {
                     // Next draw uses the new frame.area().width (compact vs full).
-                }
-                _ => {}
+                },
+                _ => {},
             }
         }
 
@@ -1161,13 +1300,21 @@ mod tests {
     use super::*;
 
     fn key_event(code: KeyCode, modifiers: KeyModifiers) -> KeyEvent {
-        KeyEvent { code, modifiers, kind: KeyEventKind::Press, state: KeyEventState::NONE }
+        KeyEvent {
+            code,
+            modifiers,
+            kind: KeyEventKind::Press,
+            state: KeyEventState::NONE,
+        }
     }
 
     // --- is_quit_key ---
     #[test]
     fn test_is_quit_key_q() {
-        assert!(is_quit_key(&key_event(KeyCode::Char('q'), KeyModifiers::NONE)));
+        assert!(is_quit_key(&key_event(
+            KeyCode::Char('q'),
+            KeyModifiers::NONE
+        )));
     }
 
     #[test]
@@ -1180,30 +1327,48 @@ mod tests {
 
     #[test]
     fn test_thermal_blurb_adapts() {
-        assert_eq!(thermal_blurb(ThermalLevel::Red, true), "[RED] hot — back-pressure");
+        assert_eq!(
+            thermal_blurb(ThermalLevel::Red, true),
+            "[RED] hot — back-pressure"
+        );
         assert!(thermal_blurb(ThermalLevel::Red, false).contains("BACK-PRESSURED"));
     }
 
     #[test]
     fn test_is_quit_key_ctrl_c() {
-        assert!(is_quit_key(&key_event(KeyCode::Char('c'), KeyModifiers::CONTROL)));
+        assert!(is_quit_key(&key_event(
+            KeyCode::Char('c'),
+            KeyModifiers::CONTROL
+        )));
     }
 
     #[test]
     fn test_is_quit_key_other_ignored() {
-        assert!(!is_quit_key(&key_event(KeyCode::Char('a'), KeyModifiers::NONE)));
-        assert!(!is_quit_key(&key_event(KeyCode::Char('c'), KeyModifiers::NONE)));
+        assert!(!is_quit_key(&key_event(
+            KeyCode::Char('a'),
+            KeyModifiers::NONE
+        )));
+        assert!(!is_quit_key(&key_event(
+            KeyCode::Char('c'),
+            KeyModifiers::NONE
+        )));
     }
 
     // --- handle_key matrix (C09 L81.3) ---
     #[test]
     fn test_handle_key_tab_cycles_focus_forward() {
-        assert_eq!(handle_key(&key_event(KeyCode::Tab, KeyModifiers::NONE)), KeyAction::FocusNext);
+        assert_eq!(
+            handle_key(&key_event(KeyCode::Tab, KeyModifiers::NONE)),
+            KeyAction::FocusNext
+        );
     }
 
     #[test]
     fn test_handle_key_shift_tab_cycles_focus_backward() {
-        assert_eq!(handle_key(&key_event(KeyCode::Tab, KeyModifiers::SHIFT)), KeyAction::FocusPrev);
+        assert_eq!(
+            handle_key(&key_event(KeyCode::Tab, KeyModifiers::SHIFT)),
+            KeyAction::FocusPrev
+        );
     }
 
     #[test]
@@ -1283,7 +1448,10 @@ mod tests {
         terminal.draw(|f| render(f, &app)).unwrap();
         let buf = terminal.backend().buffer().clone();
         let rendered: String = buf.content.iter().map(|c| c.symbol().to_string()).collect();
-        assert!(rendered.contains("help"), "footer must document ? help; got: {rendered}");
+        assert!(
+            rendered.contains("help"),
+            "footer must document ? help; got: {rendered}"
+        );
     }
 
     #[test]
@@ -1296,8 +1464,14 @@ mod tests {
         terminal.draw(|f| render(f, &app)).unwrap();
         let buf = terminal.backend().buffer().clone();
         let rendered: String = buf.content.iter().map(|c| c.symbol().to_string()).collect();
-        assert!(rendered.contains("Tab"), "help overlay must list Tab cycle; got: {rendered}");
-        assert!(rendered.contains("agents"), "help overlay must list agents panel");
+        assert!(
+            rendered.contains("Tab"),
+            "help overlay must list Tab cycle; got: {rendered}"
+        );
+        assert!(
+            rendered.contains("agents"),
+            "help overlay must list agents panel"
+        );
     }
 
     #[test]
@@ -1319,8 +1493,12 @@ mod tests {
 
     #[test]
     fn test_status_panel_lines_full() {
-        let status =
-            StatusOperatorPanel { scanned: 50, watched: 1, total_processes: 2, agent_rows: 1 };
+        let status = StatusOperatorPanel {
+            scanned: 50,
+            watched: 1,
+            total_processes: 2,
+            agent_rows: 1,
+        };
         let lines = status_panel_lines(Some(status), false);
         let text: String = lines.iter().map(|l| l.to_string()).collect();
         assert!(text.contains("Scanned:  50"));
@@ -1338,12 +1516,20 @@ mod tests {
             max_per_type: 4,
             healthy: true,
         };
-        let status =
-            StatusOperatorPanel { scanned: 50, watched: 1, total_processes: 2, agent_rows: 1 };
-        let pool_text: String =
-            pool_panel_lines(Some(pool), true).iter().map(|l| l.to_string()).collect();
-        let status_text: String =
-            status_panel_lines(Some(status), true).iter().map(|l| l.to_string()).collect();
+        let status = StatusOperatorPanel {
+            scanned: 50,
+            watched: 1,
+            total_processes: 2,
+            agent_rows: 1,
+        };
+        let pool_text: String = pool_panel_lines(Some(pool), true)
+            .iter()
+            .map(|l| l.to_string())
+            .collect();
+        let status_text: String = status_panel_lines(Some(status), true)
+            .iter()
+            .map(|l| l.to_string())
+            .collect();
         assert!(pool_text.contains("Pool node 2/1 idle · bun 1/0 idle · max 4 · healthy"));
         assert!(status_text.contains("Proc scan 50 · watched 1 · 2 managed · 1 agent row(s)"));
     }
@@ -1412,16 +1598,25 @@ mod tests {
 
         let lines = gate_panel_lines(&snap, ThermalLevel::Green, false);
         let text: String = lines.iter().map(|l| l.to_string()).collect();
-        assert!(text.contains("DENY"), "full gate panel MUST show DENY; got: {text}");
+        assert!(
+            text.contains("DENY"),
+            "full gate panel MUST show DENY; got: {text}"
+        );
         assert!(
             text.contains(&RSS_REFUSE.to_string()),
             "full gate panel MUST show agent RSS total; got: {text}"
         );
-        assert!(text.contains("REFUSE"), "full gate panel MUST show contention; got: {text}");
+        assert!(
+            text.contains("REFUSE"),
+            "full gate panel MUST show contention; got: {text}"
+        );
 
         let compact = gate_panel_lines(&snap, ThermalLevel::Green, true);
         let compact_text: String = compact.iter().map(|l| l.to_string()).collect();
-        assert!(compact_text.contains("DENY"), "compact gate MUST show DENY; got: {compact_text}");
+        assert!(
+            compact_text.contains("DENY"),
+            "compact gate MUST show DENY; got: {compact_text}"
+        );
         assert!(
             compact_text.contains(&RSS_REFUSE.to_string()),
             "compact gate MUST show agent RSS total; got: {compact_text}"
@@ -1560,8 +1755,15 @@ mod tests {
         fds: Option<u64>,
     ) -> DetectedAgentWatch {
         DetectedAgentWatch {
-            agent: DetectedAgent { pid, family, comm: comm.into() },
-            resource: AgentResourceSample { mem_rss_bytes: rss, fd_count: fds },
+            agent: DetectedAgent {
+                pid,
+                family,
+                comm: comm.into(),
+            },
+            resource: AgentResourceSample {
+                mem_rss_bytes: rss,
+                fd_count: fds,
+            },
         }
     }
 
@@ -1605,7 +1807,10 @@ mod tests {
         let agents = vec![agent_watch(100, "claude", "claude", 1_048_576, None)];
         let lines = agent_lines(&agents, &HashMap::new(), false);
         let rendered: String = lines.iter().map(|l| l.to_string()).collect();
-        assert!(rendered.contains("PID 100  -  claude"), "missing state MUST show `-`");
+        assert!(
+            rendered.contains("PID 100  -  claude"),
+            "missing state MUST show `-`"
+        );
     }
 
     #[test]
@@ -1615,7 +1820,10 @@ mod tests {
         state.insert(100, 'S');
         let lines = agent_lines(&agents, &state, true);
         let rendered: String = lines.iter().map(|l| l.to_string()).collect();
-        assert!(rendered.contains("claude:100:S@"), "compact MUST show state after PID");
+        assert!(
+            rendered.contains("claude:100:S@"),
+            "compact MUST show state after PID"
+        );
     }
 
     #[test]
@@ -1656,7 +1864,11 @@ mod tests {
     // --- Headless render smoke test (FakeThermalGate via ThermalGovernor mock) ---
     #[test]
     fn test_host_agent_lines_full() {
-        let agents = vec![DetectedAgent { pid: 42, family: "claude", comm: "claude".into() }];
+        let agents = vec![DetectedAgent {
+            pid: 42,
+            family: "claude",
+            comm: "claude".into(),
+        }];
         let lines = host_agent_lines(&agents, false);
         let rendered: String = lines.iter().map(|l| l.to_string()).collect();
         assert!(rendered.contains("Host agents:") && rendered.contains("claude"));
@@ -1679,9 +1891,22 @@ mod tests {
                 Some(sample),
                 ReadCacheMeters { hits: 2, misses: 1 },
                 NegDentryMeters { hits: 1, misses: 0 },
-                CoalesceMeters { hits: 4, misses: 1, nocache_runs: 2 },
-                SlotQueueMeters { acquires: 3, waits: 2, timeouts: 0 },
-                WriteSerializeMeters { passthrough_writes: 2, stages: 1, commits: 1, discards: 0 },
+                CoalesceMeters {
+                    hits: 4,
+                    misses: 1,
+                    nocache_runs: 2,
+                },
+                SlotQueueMeters {
+                    acquires: 3,
+                    waits: 2,
+                    timeouts: 0,
+                },
+                WriteSerializeMeters {
+                    passthrough_writes: 2,
+                    stages: 1,
+                    commits: 1,
+                    discards: 0,
+                },
             )
             .with_detected_agents(vec![agent_watch(4242, "claude", "claude", 4_096, Some(12))]);
         app.update(ThermalLevel::Green, 0);
@@ -1690,21 +1915,51 @@ mod tests {
         let buf = terminal.backend().buffer().clone();
         // Title must appear somewhere.
         let rendered: String = buf.content.iter().map(|c| c.symbol().to_string()).collect();
-        assert!(rendered.contains("GREEN"), "expected GREEN in rendered output");
-        assert!(rendered.contains("ADMIT"), "expected ADMIT in rendered output");
-        assert!(rendered.contains("Host Resource Watch"), "expected watch panel");
-        assert!(rendered.contains("Runtime Pool"), "expected pool panel (AC-007.71)");
-        assert!(rendered.contains("Proc Scan Status"), "expected status panel (AC-007.71)");
+        assert!(
+            rendered.contains("GREEN"),
+            "expected GREEN in rendered output"
+        );
+        assert!(
+            rendered.contains("ADMIT"),
+            "expected ADMIT in rendered output"
+        );
+        assert!(
+            rendered.contains("Host Resource Watch"),
+            "expected watch panel"
+        );
+        assert!(
+            rendered.contains("Runtime Pool"),
+            "expected pool panel (AC-007.71)"
+        );
+        assert!(
+            rendered.contains("Proc Scan Status"),
+            "expected status panel (AC-007.71)"
+        );
         assert!(rendered.contains("Detected Agents"), "expected agent panel");
         assert!(rendered.contains("PID 4242"), "expected agent row");
-        assert!(rendered.contains("RSS"), "expected per-agent RSS in agent panel");
-        assert!(rendered.contains("Hypervisor IO Meters"), "expected io panel");
+        assert!(
+            rendered.contains("RSS"),
+            "expected per-agent RSS in agent panel"
+        );
+        assert!(
+            rendered.contains("Hypervisor IO Meters"),
+            "expected io panel"
+        );
         assert!(rendered.contains("Open FDs:"), "expected FD watch line");
-        assert!(rendered.contains("Coalesce hits:"), "expected coalesce meters");
-        assert!(rendered.contains("Slot acquires:"), "expected slot queue meters");
+        assert!(
+            rendered.contains("Coalesce hits:"),
+            "expected coalesce meters"
+        );
+        assert!(
+            rendered.contains("Slot acquires:"),
+            "expected slot queue meters"
+        );
         assert!(rendered.contains("Cache hits:"), "expected fuse meters");
         assert!(rendered.contains("Neg hits:"), "expected neg dentry meters");
-        assert!(rendered.contains("Passthrough:"), "expected write-serialize meters");
+        assert!(
+            rendered.contains("Passthrough:"),
+            "expected write-serialize meters"
+        );
     }
 
     #[test]
@@ -1731,7 +1986,10 @@ mod tests {
         let buf = terminal.backend().buffer().clone();
         let rendered: String = buf.content.iter().map(|c| c.symbol().to_string()).collect();
         assert!(rendered.contains("RED"), "expected RED in rendered output");
-        assert!(rendered.contains("DENY"), "expected DENY in rendered output");
+        assert!(
+            rendered.contains("DENY"),
+            "expected DENY in rendered output"
+        );
     }
 
     #[test]
@@ -1757,8 +2015,14 @@ mod tests {
         terminal.draw(|f| render(f, &app)).unwrap();
         let buf = terminal.backend().buffer().clone();
         let rendered: String = buf.content.iter().map(|c| c.symbol().to_string()).collect();
-        assert!(rendered.contains("YELLOW"), "expected YELLOW in rendered output");
-        assert!(rendered.contains("ADMIT"), "expected ADMIT in rendered output");
+        assert!(
+            rendered.contains("YELLOW"),
+            "expected YELLOW in rendered output"
+        );
+        assert!(
+            rendered.contains("ADMIT"),
+            "expected ADMIT in rendered output"
+        );
     }
 
     // --- FakeThermalGate (via ThermalGovernor::with_mock) poll round-trip ---
@@ -1855,73 +2119,125 @@ mod tests {
     #[test]
     fn test_host_agent_lines_truncates_beyond_four() {
         let agents: Vec<DetectedAgent> = (0..5)
-            .map(|i| DetectedAgent { pid: 100 + i, family: "claude", comm: format!("claude-{i}") })
+            .map(|i| DetectedAgent {
+                pid: 100 + i,
+                family: "claude",
+                comm: format!("claude-{i}"),
+            })
             .collect();
         let lines = host_agent_lines(&agents, false);
         let text: String = lines.iter().map(|l| l.to_string()).collect();
-        assert!(text.contains("+1 more"), "5 agents MUST show +1 more; got: {text}");
+        assert!(
+            text.contains("+1 more"),
+            "5 agents MUST show +1 more; got: {text}"
+        );
     }
 
     #[test]
     fn test_host_agent_lines_exactly_four_no_truncation() {
         let agents: Vec<DetectedAgent> = (0..4)
-            .map(|i| DetectedAgent { pid: 100 + i, family: "claude", comm: format!("claude-{i}") })
+            .map(|i| DetectedAgent {
+                pid: 100 + i,
+                family: "claude",
+                comm: format!("claude-{i}"),
+            })
             .collect();
         let lines = host_agent_lines(&agents, false);
         let text: String = lines.iter().map(|l| l.to_string()).collect();
-        assert!(!text.contains("more"), "4 agents MUST NOT truncate; got: {text}");
+        assert!(
+            !text.contains("more"),
+            "4 agents MUST NOT truncate; got: {text}"
+        );
     }
 
     // --- mesh_maildir_lines (C07 L65) ---
     #[test]
     fn test_mesh_maildir_compact_and_full() {
         use std::path::PathBuf;
-        let status =
-            MaildirStatus { path: PathBuf::from("/tmp/q"), ready: 3, in_flight: 2, pending: 5 };
-        let compact: String =
-            mesh_maildir_lines(Some(status.clone()), true).iter().map(|l| l.to_string()).collect();
-        assert!(compact.contains("r:3 f:2 p:5"), "compact MUST show depths; got: {compact}");
+        let status = MaildirStatus {
+            path: PathBuf::from("/tmp/q"),
+            ready: 3,
+            in_flight: 2,
+            pending: 5,
+        };
+        let compact: String = mesh_maildir_lines(Some(status.clone()), true)
+            .iter()
+            .map(|l| l.to_string())
+            .collect();
+        assert!(
+            compact.contains("r:3 f:2 p:5"),
+            "compact MUST show depths; got: {compact}"
+        );
 
-        let full: String =
-            mesh_maildir_lines(Some(status), false).iter().map(|l| l.to_string()).collect();
-        assert!(full.contains("Mesh ready:     3"), "full MUST show ready; got: {full}");
-        assert!(full.contains("Mesh in-flight: 2"), "full MUST show in-flight; got: {full}");
-        assert!(full.contains("Mesh pending:   5"), "full MUST show pending; got: {full}");
+        let full: String = mesh_maildir_lines(Some(status), false)
+            .iter()
+            .map(|l| l.to_string())
+            .collect();
+        assert!(
+            full.contains("Mesh ready:     3"),
+            "full MUST show ready; got: {full}"
+        );
+        assert!(
+            full.contains("Mesh in-flight: 2"),
+            "full MUST show in-flight; got: {full}"
+        );
+        assert!(
+            full.contains("Mesh pending:   5"),
+            "full MUST show pending; got: {full}"
+        );
     }
 
     #[test]
     fn test_mesh_maildir_lines_unavailable() {
-        let text: String = mesh_maildir_lines(None, false).iter().map(|l| l.to_string()).collect();
-        assert!(text.contains("unavailable"), "None MUST render unavailable; got: {text}");
+        let text: String = mesh_maildir_lines(None, false)
+            .iter()
+            .map(|l| l.to_string())
+            .collect();
+        assert!(
+            text.contains("unavailable"),
+            "None MUST render unavailable; got: {text}"
+        );
     }
 
     // --- agent_lines compact overflow + exact cap (C07 L65) ---
     #[test]
     fn test_agent_lines_compact_shows_extra_over_two() {
-        let agents: Vec<DetectedAgentWatch> =
-            (0..3).map(|i| agent_watch(100 + i, "claude", "claude", 1_048_576, None)).collect();
+        let agents: Vec<DetectedAgentWatch> = (0..3)
+            .map(|i| agent_watch(100 + i, "claude", "claude", 1_048_576, None))
+            .collect();
         let lines = agent_lines(&agents, &HashMap::new(), true);
         let text: String = lines.iter().map(|l| l.to_string()).collect();
-        assert!(text.contains("+1"), "3 agents compact MUST show +1; got: {text}");
+        assert!(
+            text.contains("+1"),
+            "3 agents compact MUST show +1; got: {text}"
+        );
     }
 
     #[test]
     fn test_agent_lines_compact_exactly_two_no_extra() {
-        let agents: Vec<DetectedAgentWatch> =
-            (0..2).map(|i| agent_watch(100 + i, "claude", "claude", 1_048_576, None)).collect();
+        let agents: Vec<DetectedAgentWatch> = (0..2)
+            .map(|i| agent_watch(100 + i, "claude", "claude", 1_048_576, None))
+            .collect();
         let lines = agent_lines(&agents, &HashMap::new(), true);
         let text: String = lines.iter().map(|l| l.to_string()).collect();
-        assert!(!text.contains('+'), "2 agents compact MUST NOT add an extra; got: {text}");
+        assert!(
+            !text.contains('+'),
+            "2 agents compact MUST NOT add an extra; got: {text}"
+        );
     }
 
     #[test]
     fn test_agent_lines_full_exactly_cap_no_truncation() {
         // MAX_AGENT_LINES == 4: exact cap MUST NOT render "+N more".
-        let agents: Vec<DetectedAgentWatch> =
-            (0..4).map(|i| agent_watch(100 + i, "claude", "claude", 1_048_576, None)).collect();
+        let agents: Vec<DetectedAgentWatch> = (0..4)
+            .map(|i| agent_watch(100 + i, "claude", "claude", 1_048_576, None))
+            .collect();
         let lines = agent_lines(&agents, &HashMap::new(), false);
         let text: String = lines.iter().map(|l| l.to_string()).collect();
-        assert!(!text.contains("more"), "4 agents MUST NOT truncate; got: {text}");
+        assert!(
+            !text.contains("more"),
+            "4 agents MUST NOT truncate; got: {text}"
+        );
     }
 
     // --- tree-line formatters (C07 L65) ---
@@ -1931,7 +2247,13 @@ mod tests {
         family: Option<&'static str>,
         children: Vec<AgentTreeNode>,
     ) -> AgentTreeNode {
-        AgentTreeNode { pid, ppid: 0, comm: comm.into(), family, children }
+        AgentTreeNode {
+            pid,
+            ppid: 0,
+            comm: comm.into(),
+            family,
+            children,
+        }
     }
 
     #[test]
@@ -1941,14 +2263,20 @@ mod tests {
         let state: HashMap<u32, char> = HashMap::from([(100, 'S')]);
         // family carries a trailing space and rss a leading one, matching the
         // existing render (family + rss + comm suffix concatenated).
-        assert_eq!(format_tree_node_line(&node, &rss, &state), "[100] S claude  RSS 50M (claude)");
+        assert_eq!(
+            format_tree_node_line(&node, &rss, &state),
+            "[100] S claude  RSS 50M (claude)"
+        );
     }
 
     #[test]
     fn test_format_tree_node_sparse_fields() {
         // No family, no RSS entry, empty comm -> no extra tokens, `-` state.
         let node = tree_node(200, "", None, vec![]);
-        assert_eq!(format_tree_node_line(&node, &HashMap::new(), &HashMap::new()), "[200] - ");
+        assert_eq!(
+            format_tree_node_line(&node, &HashMap::new(), &HashMap::new()),
+            "[200] - "
+        );
     }
 
     #[test]
@@ -1981,7 +2309,10 @@ mod tests {
             100,
             "claude",
             Some("claude"),
-            vec![tree_node(101, "sh", None, vec![]), tree_node(102, "bash", None, vec![])],
+            vec![
+                tree_node(101, "sh", None, vec![]),
+                tree_node(102, "bash", None, vec![]),
+            ],
         );
         let mut lines: Vec<Line<'static>> = Vec::new();
         let mut budget = 1usize;
@@ -1994,7 +2325,11 @@ mod tests {
             &mut lines,
             &mut budget,
         );
-        assert_eq!(lines.len(), 1, "budget 1 MUST stop after the root; got {lines:?}");
+        assert_eq!(
+            lines.len(),
+            1,
+            "budget 1 MUST stop after the root; got {lines:?}"
+        );
     }
 
     #[test]
@@ -2003,7 +2338,10 @@ mod tests {
             100,
             "claude",
             Some("claude"),
-            vec![tree_node(101, "sh", None, vec![]), tree_node(102, "bash", None, vec![])],
+            vec![
+                tree_node(101, "sh", None, vec![]),
+                tree_node(102, "bash", None, vec![]),
+            ],
         );
         let mut lines: Vec<Line<'static>> = Vec::new();
         let mut budget = 3usize;
@@ -2016,7 +2354,11 @@ mod tests {
             &mut lines,
             &mut budget,
         );
-        assert_eq!(lines.len(), 3, "root + two children MUST render; got {lines:?}");
+        assert_eq!(
+            lines.len(),
+            3,
+            "root + two children MUST render; got {lines:?}"
+        );
         // Per-line connector assertions: a bare `contains("└── ")` cannot
         // distinguish an is_last inversion (mutant swaps which child gets the
         // elbow), so pin the connectors by line position.
@@ -2035,28 +2377,39 @@ mod tests {
     // --- agent_forest_lines budget / root overflow (C07 L65) ---
     #[test]
     fn test_agent_forest_lines_reports_extra_roots() {
-        let forests: Vec<AgentTreeNode> =
-            (0..5).map(|i| tree_node(100 + i, "claude", Some("claude"), vec![])).collect();
+        let forests: Vec<AgentTreeNode> = (0..5)
+            .map(|i| tree_node(100 + i, "claude", Some("claude"), vec![]))
+            .collect();
         let lines = agent_forest_lines(&forests, &[], &HashMap::new(), false);
         let text: String = lines.iter().map(|l| l.to_string()).collect();
-        assert!(text.contains("+1 more roots"), "5 roots MUST report +1 more; got: {text}");
+        assert!(
+            text.contains("+1 more roots"),
+            "5 roots MUST report +1 more; got: {text}"
+        );
     }
 
     #[test]
     fn test_agent_forest_lines_exact_budget_no_overflow_line() {
         // MAX_AGENT_TREE_LINES == 4 single-node roots: no "+N more roots".
-        let forests: Vec<AgentTreeNode> =
-            (0..4).map(|i| tree_node(100 + i, "claude", Some("claude"), vec![])).collect();
+        let forests: Vec<AgentTreeNode> = (0..4)
+            .map(|i| tree_node(100 + i, "claude", Some("claude"), vec![]))
+            .collect();
         let lines = agent_forest_lines(&forests, &[], &HashMap::new(), false);
         let text: String = lines.iter().map(|l| l.to_string()).collect();
-        assert!(!text.contains("more roots"), "4 roots MUST NOT report more roots; got: {text}");
+        assert!(
+            !text.contains("more roots"),
+            "4 roots MUST NOT report more roots; got: {text}"
+        );
     }
 
     #[test]
     fn test_agent_forest_lines_empty_falls_back_to_agent_lines() {
         let lines = agent_forest_lines(&[], &[], &HashMap::new(), false);
         let text: String = lines.iter().map(|l| l.to_string()).collect();
-        assert!(text.contains("No agent processes detected"), "empty MUST fall back; got: {text}");
+        assert!(
+            text.contains("No agent processes detected"),
+            "empty MUST fall back; got: {text}"
+        );
     }
 
     // --- App::poll_operator_meters / apply_pool_status_panels (C07 L65) ---
@@ -2082,8 +2435,12 @@ mod tests {
             max_per_type: 4,
             healthy: true,
         };
-        let status =
-            StatusOperatorPanel { scanned: 50, watched: 1, total_processes: 2, agent_rows: 1 };
+        let status = StatusOperatorPanel {
+            scanned: 50,
+            watched: 1,
+            total_processes: 2,
+            agent_rows: 1,
+        };
         app.apply_pool_status_panels(Some(pool), Some(status));
         assert_eq!(app.pool_panel, Some(pool));
         assert_eq!(app.status_panel, Some(status));
@@ -2126,12 +2483,22 @@ mod tests {
             max_per_type: 8,
             healthy: false,
         };
-        let status =
-            StatusOperatorPanel { scanned: 10, watched: 2, total_processes: 3, agent_rows: 2 };
+        let status = StatusOperatorPanel {
+            scanned: 10,
+            watched: 2,
+            total_processes: 3,
+            agent_rows: 2,
+        };
         let mut poll: Box<PoolStatusPollFn> = Box::new(move || (Some(pool), Some(status)));
         poll_pool_status_panels(&mut app, Some(poll.as_mut()));
-        assert!(app.pool_panel.is_some(), "poll MUST apply the pool snapshot");
-        assert!(app.status_panel.is_some(), "poll MUST apply the status snapshot");
+        assert!(
+            app.pool_panel.is_some(),
+            "poll MUST apply the pool snapshot"
+        );
+        assert!(
+            app.status_panel.is_some(),
+            "poll MUST apply the status snapshot"
+        );
     }
 
     // --- Additional edge-case tests ---
@@ -2192,8 +2559,16 @@ mod tests {
     #[test]
     fn test_host_agent_lines_with_agents() {
         let agents = vec![
-            DetectedAgent { pid: 100, family: "claude", comm: "claude".into() },
-            DetectedAgent { pid: 200, family: "forge", comm: "forge".into() },
+            DetectedAgent {
+                pid: 100,
+                family: "claude",
+                comm: "claude".into(),
+            },
+            DetectedAgent {
+                pid: 200,
+                family: "forge",
+                comm: "forge".into(),
+            },
         ];
         let lines = host_agent_lines(&agents, false);
         let text: String = lines.iter().map(|l| l.to_string()).collect();
@@ -2204,7 +2579,11 @@ mod tests {
 
     #[test]
     fn test_host_agent_lines_compact_with_agents() {
-        let agents = vec![DetectedAgent { pid: 100, family: "claude", comm: "claude".into() }];
+        let agents = vec![DetectedAgent {
+            pid: 100,
+            family: "claude",
+            comm: "claude".into(),
+        }];
         let lines = host_agent_lines(&agents, true);
         let text: String = lines.iter().map(|l| l.to_string()).collect();
         assert!(text.contains("claude:100"));
@@ -2213,16 +2592,26 @@ mod tests {
     #[test]
     fn test_host_agent_lines_truncates_at_four() {
         let agents: Vec<_> = (0..6)
-            .map(|i| DetectedAgent { pid: 100 + i, family: "test", comm: format!("test-{i}") })
+            .map(|i| DetectedAgent {
+                pid: 100 + i,
+                family: "test",
+                comm: format!("test-{i}"),
+            })
             .collect();
         let lines = host_agent_lines(&agents, false);
         let text: String = lines.iter().map(|l| l.to_string()).collect();
-        assert!(text.contains("+2 more"), "MUST truncate at 4 and show overflow count");
+        assert!(
+            text.contains("+2 more"),
+            "MUST truncate at 4 and show overflow count"
+        );
     }
 
     #[test]
     fn test_fuse_neg_dentry_lines_full() {
-        let meters = NegDentryMeters { hits: 80, misses: 20 };
+        let meters = NegDentryMeters {
+            hits: 80,
+            misses: 20,
+        };
         let lines = fuse_neg_dentry_lines(meters, false);
         let text: String = lines.iter().map(|l| l.to_string()).collect();
         assert!(text.contains("Neg hits:     80"));
@@ -2232,7 +2621,10 @@ mod tests {
 
     #[test]
     fn test_fuse_neg_dentry_lines_compact() {
-        let meters = NegDentryMeters { hits: 80, misses: 20 };
+        let meters = NegDentryMeters {
+            hits: 80,
+            misses: 20,
+        };
         let lines = fuse_neg_dentry_lines(meters, true);
         let text: String = lines.iter().map(|l| l.to_string()).collect();
         assert!(text.contains("neg:80"));
@@ -2241,7 +2633,11 @@ mod tests {
 
     #[test]
     fn test_hypervisor_coalesce_lines_full() {
-        let meters = CoalesceMeters { hits: 90, misses: 10, nocache_runs: 5 };
+        let meters = CoalesceMeters {
+            hits: 90,
+            misses: 10,
+            nocache_runs: 5,
+        };
         let lines = hypervisor_coalesce_lines(meters, false);
         let text: String = lines.iter().map(|l| l.to_string()).collect();
         assert!(text.contains("Coalesce hits:   90"));
@@ -2252,7 +2648,11 @@ mod tests {
 
     #[test]
     fn test_hypervisor_coalesce_lines_compact() {
-        let meters = CoalesceMeters { hits: 90, misses: 10, nocache_runs: 5 };
+        let meters = CoalesceMeters {
+            hits: 90,
+            misses: 10,
+            nocache_runs: 5,
+        };
         let lines = hypervisor_coalesce_lines(meters, true);
         let text: String = lines.iter().map(|l| l.to_string()).collect();
         assert!(text.contains("coalesce:90"));
@@ -2262,7 +2662,11 @@ mod tests {
 
     #[test]
     fn test_hypervisor_slot_queue_lines_full() {
-        let meters = SlotQueueMeters { acquires: 100, waits: 5, timeouts: 2 };
+        let meters = SlotQueueMeters {
+            acquires: 100,
+            waits: 5,
+            timeouts: 2,
+        };
         let lines = hypervisor_slot_queue_lines(meters, false);
         let text: String = lines.iter().map(|l| l.to_string()).collect();
         assert!(text.contains("Slot acquires: 100"));
@@ -2272,7 +2676,11 @@ mod tests {
 
     #[test]
     fn test_hypervisor_slot_queue_lines_compact() {
-        let meters = SlotQueueMeters { acquires: 100, waits: 5, timeouts: 2 };
+        let meters = SlotQueueMeters {
+            acquires: 100,
+            waits: 5,
+            timeouts: 2,
+        };
         let lines = hypervisor_slot_queue_lines(meters, true);
         let text: String = lines.iter().map(|l| l.to_string()).collect();
         assert!(text.contains("slot:100"));
@@ -2282,8 +2690,12 @@ mod tests {
 
     #[test]
     fn test_fuse_write_serialize_lines_full() {
-        let meters =
-            WriteSerializeMeters { passthrough_writes: 50, stages: 30, commits: 25, discards: 5 };
+        let meters = WriteSerializeMeters {
+            passthrough_writes: 50,
+            stages: 30,
+            commits: 25,
+            discards: 5,
+        };
         let lines = fuse_write_serialize_lines(meters, false);
         let text: String = lines.iter().map(|l| l.to_string()).collect();
         assert!(text.contains("Passthrough:  50"));
@@ -2294,8 +2706,12 @@ mod tests {
 
     #[test]
     fn test_fuse_write_serialize_lines_compact() {
-        let meters =
-            WriteSerializeMeters { passthrough_writes: 50, stages: 30, commits: 25, discards: 5 };
+        let meters = WriteSerializeMeters {
+            passthrough_writes: 50,
+            stages: 30,
+            commits: 25,
+            discards: 5,
+        };
         let lines = fuse_write_serialize_lines(meters, true);
         let text: String = lines.iter().map(|l| l.to_string()).collect();
         assert!(text.contains("wr:50"));
@@ -2306,7 +2722,10 @@ mod tests {
 
     #[test]
     fn test_fuse_coalesce_lines_full_100pct() {
-        let meters = ReadCacheMeters { hits: 100, misses: 0 };
+        let meters = ReadCacheMeters {
+            hits: 100,
+            misses: 0,
+        };
         let lines = fuse_coalesce_lines(meters, false);
         let text: String = lines.iter().map(|l| l.to_string()).collect();
         assert!(text.contains("Cache hits:   100"));
@@ -2316,7 +2735,10 @@ mod tests {
 
     #[test]
     fn test_fuse_coalesce_lines_compact() {
-        let meters = ReadCacheMeters { hits: 75, misses: 25 };
+        let meters = ReadCacheMeters {
+            hits: 75,
+            misses: 25,
+        };
         let lines = fuse_coalesce_lines(meters, true);
         let text: String = lines.iter().map(|l| l.to_string()).collect();
         assert!(text.contains("hits:75"));
@@ -2501,8 +2923,15 @@ mod tests {
     #[test]
     fn test_agent_lines_with_agents_full() {
         let agents = vec![DetectedAgentWatch {
-            agent: DetectedAgent { pid: 100, family: "claude", comm: "claude".into() },
-            resource: AgentResourceSample { mem_rss_bytes: 1_000_000, fd_count: Some(10) },
+            agent: DetectedAgent {
+                pid: 100,
+                family: "claude",
+                comm: "claude".into(),
+            },
+            resource: AgentResourceSample {
+                mem_rss_bytes: 1_000_000,
+                fd_count: Some(10),
+            },
         }];
         let state = HashMap::from([(100, 'S')]);
         let lines = agent_lines(&agents, &state, false);
@@ -2516,8 +2945,15 @@ mod tests {
     #[test]
     fn test_agent_lines_with_agents_compact() {
         let agents = vec![DetectedAgentWatch {
-            agent: DetectedAgent { pid: 100, family: "claude", comm: "claude".into() },
-            resource: AgentResourceSample { mem_rss_bytes: 1_000_000, fd_count: None },
+            agent: DetectedAgent {
+                pid: 100,
+                family: "claude",
+                comm: "claude".into(),
+            },
+            resource: AgentResourceSample {
+                mem_rss_bytes: 1_000_000,
+                fd_count: None,
+            },
         }];
         let state = HashMap::new();
         let lines = agent_lines(&agents, &state, true);
@@ -2529,8 +2965,15 @@ mod tests {
     fn test_agent_lines_truncates_at_max() {
         let agents: Vec<_> = (0..6)
             .map(|i| DetectedAgentWatch {
-                agent: DetectedAgent { pid: 100 + i, family: "test", comm: format!("test-{i}") },
-                resource: AgentResourceSample { mem_rss_bytes: 1000, fd_count: None },
+                agent: DetectedAgent {
+                    pid: 100 + i,
+                    family: "test",
+                    comm: format!("test-{i}"),
+                },
+                resource: AgentResourceSample {
+                    mem_rss_bytes: 1000,
+                    fd_count: None,
+                },
             })
             .collect();
         let state = HashMap::new();
@@ -2542,7 +2985,11 @@ mod tests {
     #[test]
     fn test_agent_forest_lines_empty_falls_back() {
         let lines = agent_forest_lines(&[], &[], &HashMap::new(), false);
-        assert!(lines.iter().map(|l| l.to_string()).collect::<String>().contains("No agent"));
+        assert!(lines
+            .iter()
+            .map(|l| l.to_string())
+            .collect::<String>()
+            .contains("No agent"));
     }
 
     #[test]
@@ -2568,8 +3015,15 @@ mod tests {
             }],
         };
         let watched = vec![DetectedAgentWatch {
-            agent: DetectedAgent { pid: 100, family: "claude", comm: "claude".into() },
-            resource: AgentResourceSample { mem_rss_bytes: 500_000, fd_count: None },
+            agent: DetectedAgent {
+                pid: 100,
+                family: "claude",
+                comm: "claude".into(),
+            },
+            resource: AgentResourceSample {
+                mem_rss_bytes: 500_000,
+                fd_count: None,
+            },
         }];
         let state = HashMap::from([(100, 'S'), (200, 'R')]);
         let lines = agent_forest_lines(&[forest], &watched, &state, false);
@@ -2617,6 +3071,10 @@ mod tests {
     }
 
     fn prop_thermal_level() -> impl proptest::strategy::Strategy<Value = ThermalLevel> {
-        proptest::sample::select(vec![ThermalLevel::Green, ThermalLevel::Yellow, ThermalLevel::Red])
+        proptest::sample::select(vec![
+            ThermalLevel::Green,
+            ThermalLevel::Yellow,
+            ThermalLevel::Red,
+        ])
     }
 }

@@ -24,7 +24,7 @@ impl CacheHealthChecker {
                     Ok(pong) if pong == "PONG" => CacheHealth::Healthy,
                     _ => CacheHealth::Unavailable,
                 }
-            }
+            },
             Err(_) => CacheHealth::Unavailable,
         }
     }

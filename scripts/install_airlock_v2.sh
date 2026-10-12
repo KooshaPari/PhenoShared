@@ -27,7 +27,7 @@ if [[ ! -x "${AIRLOCK_V2_BIN}" ]]; then
         echo "[install_airlock_v2] Set PHENOTYPE_PHENOVCS_HOME to the PhenoVCS repo root." >&2
         exit 1
     fi
-    ( cd "${PHENOVCS_HOME}" && cargo build -p airlock-v2 --release )
+    ( cd "${PHENOVCS_HOME}" && cargo build -p airlock-v2 --release --locked )
 fi
 
 # 2) Verify the binary works.

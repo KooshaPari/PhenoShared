@@ -6,24 +6,36 @@ impl Money {
         Self { cents: c }
     }
     pub fn from_dollars(d: f64) -> Self {
-        Self { cents: (d * 100.0).round() as i64 }
+        Self {
+            cents: (d * 100.0).round() as i64,
+        }
     }
     pub fn dollars(&self) -> f64 {
         self.cents as f64 / 100.0
     }
     pub fn add(&self, other: &Money) -> Money {
-        Money { cents: self.cents + other.cents }
+        Money {
+            cents: self.cents + other.cents,
+        }
     }
     pub fn sub(&self, other: &Money) -> Money {
-        Money { cents: self.cents - other.cents }
+        Money {
+            cents: self.cents - other.cents,
+        }
     }
     pub fn mul(&self, factor: f64) -> Money {
-        Money { cents: (self.cents as f64 * factor).round() as i64 }
+        Money {
+            cents: (self.cents as f64 * factor).round() as i64,
+        }
     }
     pub fn split(&self, n: u32) -> Vec<Money> {
         let base = self.cents / n as i64;
         let rem = (self.cents % n as i64) as u32;
-        (0..n).map(|i| Money { cents: base + if i < rem { 1 } else { 0 } }).collect()
+        (0..n)
+            .map(|i| Money {
+                cents: base + if i < rem { 1 } else { 0 },
+            })
+            .collect()
     }
 }
 pub fn fmt_usd(cents: i64) -> String {
@@ -73,12 +85,18 @@ mod tests {
     #[test]
     fn split_even() {
         let parts = Money::from_cents(100).split(4);
-        assert_eq!(parts.iter().map(|m| m.cents).collect::<Vec<_>>(), vec![25, 25, 25, 25]);
+        assert_eq!(
+            parts.iter().map(|m| m.cents).collect::<Vec<_>>(),
+            vec![25, 25, 25, 25]
+        );
     }
     #[test]
     fn split_uneven() {
         let parts = Money::from_cents(100).split(3);
-        assert_eq!(parts.iter().map(|m| m.cents).collect::<Vec<_>>(), vec![34, 33, 33]);
+        assert_eq!(
+            parts.iter().map(|m| m.cents).collect::<Vec<_>>(),
+            vec![34, 33, 33]
+        );
     }
     #[test]
     fn fmt_small() {

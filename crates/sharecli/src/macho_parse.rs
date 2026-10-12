@@ -104,15 +104,27 @@ pub fn parse_header(input: &[u8]) -> Result<MachoHeader, String> {
     let is_64 = matches!(magic, MH_MAGIC_64 | MH_CIGAM_64);
     let native_magic = if is_64 { MH_MAGIC_64 } else { MH_MAGIC };
     if magic != native_magic {
-        return Err(format!("not a native-endian Mach-O (magic=0x{:08x})", magic));
+        return Err(format!(
+            "not a native-endian Mach-O (magic=0x{:08x})",
+            magic
+        ));
     }
     let cpu = CpuType::from_u32(u32::from_be_bytes([input[4], input[5], input[6], input[7]]));
-    let file_type =
-        FileType::from_u32(u32::from_be_bytes([input[8], input[9], input[10], input[11]]));
+    let file_type = FileType::from_u32(u32::from_be_bytes([
+        input[8], input[9], input[10], input[11],
+    ]));
     let n_cmds = u32::from_be_bytes([input[12], input[13], input[14], input[15]]);
     let size_of_cmds = u32::from_be_bytes([input[16], input[17], input[18], input[19]]);
     let flags = u32::from_be_bytes([input[20], input[21], input[22], input[23]]);
-    Ok(MachoHeader { magic, is_64, cpu, file_type, n_cmds, size_of_cmds, flags })
+    Ok(MachoHeader {
+        magic,
+        is_64,
+        cpu,
+        file_type,
+        n_cmds,
+        size_of_cmds,
+        flags,
+    })
 }
 
 pub fn parse_load_commands(input: &[u8]) -> Result<Vec<LoadCommand>, String> {
@@ -128,8 +140,12 @@ pub fn parse_load_commands(input: &[u8]) -> Result<Vec<LoadCommand>, String> {
             return Err("load command truncated".into());
         }
         let cmd = u32::from_be_bytes([input[pos], input[pos + 1], input[pos + 2], input[pos + 3]]);
-        let cmdsize =
-            u32::from_be_bytes([input[pos + 4], input[pos + 5], input[pos + 6], input[pos + 7]]);
+        let cmdsize = u32::from_be_bytes([
+            input[pos + 4],
+            input[pos + 5],
+            input[pos + 6],
+            input[pos + 7],
+        ]);
         out.push(LoadCommand { cmd, cmdsize });
         if cmdsize < 8 {
             return Err(format!("bad cmdsize={}", cmdsize));
@@ -190,7 +206,7 @@ mod tests {
     #[test]
     fn bad_magic() {
         let mut buf = mk_header(MH_MAGIC, 7, 2, 0, 0, 0, false);
-        buf[0] = 0xAB;
+        buf[0] = 0xab;
         assert!(parse_header(&buf).is_err());
     }
     #[test]

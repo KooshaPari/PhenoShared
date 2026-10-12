@@ -52,7 +52,10 @@ async fn fr001_ps_table_columns_present() {
     let pool = ProcessPool::new();
 
     #[cfg(unix)]
-    let info = pool.spawn("sleep", &["1".to_string()], None, None, None).await.expect("spawn ok");
+    let info = pool
+        .spawn("sleep", &["1".to_string()], None, None, None)
+        .await
+        .expect("spawn ok");
     #[cfg(windows)]
     let info = pool
         .spawn(
@@ -74,7 +77,10 @@ async fn fr001_ps_table_columns_present() {
     let processes = pool.list().await;
     assert!(!processes.is_empty(), "pool MUST list the spawned process");
     assert_eq!(processes[0].pid, info.pid);
-    assert!(!processes[0].name.is_empty(), "name column MUST be populated");
+    assert!(
+        !processes[0].name.is_empty(),
+        "name column MUST be populated"
+    );
 
     pool.kill_all().await.unwrap();
 }
@@ -113,10 +119,20 @@ async fn fr001_ps_filter_by_project() {
         .await
         .expect("spawn ok");
 
-    let alpha = pool.find(ProcessFilter::ByProject("alpha".to_string())).await;
-    let beta = pool.find(ProcessFilter::ByProject("beta".to_string())).await;
-    assert!(!alpha.is_empty(), "alpha project MUST match the spawned process");
-    assert!(beta.is_empty(), "beta project MUST NOT match a different project");
+    let alpha = pool
+        .find(ProcessFilter::ByProject("alpha".to_string()))
+        .await;
+    let beta = pool
+        .find(ProcessFilter::ByProject("beta".to_string()))
+        .await;
+    assert!(
+        !alpha.is_empty(),
+        "alpha project MUST match the spawned process"
+    );
+    assert!(
+        beta.is_empty(),
+        "beta project MUST NOT match a different project"
+    );
 
     pool.kill_all().await.unwrap();
 }

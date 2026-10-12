@@ -52,7 +52,9 @@ pub fn list() -> Result<()> {
 /// Reads from the named file, or stdin if `-` / omitted.
 pub fn send(name: &str, file: Option<&str>) -> Result<()> {
     let reg = PaneRegistry::new()?;
-    let addr = reg.resolve(name)?.ok_or_else(|| anyhow!("no pane registered as '{}'", name))?;
+    let addr = reg
+        .resolve(name)?
+        .ok_or_else(|| anyhow!("no pane registered as '{}'", name))?;
 
     let text = match file {
         Some("-") | None => read_stdin()?,
@@ -63,8 +65,14 @@ pub fn send(name: &str, file: Option<&str>) -> Result<()> {
     }
 
     let casters: Vec<(Arc<dyn Caster>, String)> = vec![
-        (Arc::new(RetryCaster::new(WeztermCaster::system(), 3, 200)), "wezterm-retry".to_string()),
-        (Arc::new(RetryCaster::new(GhosttyCaster::system(), 3, 200)), "ghostty-retry".to_string()),
+        (
+            Arc::new(RetryCaster::new(WeztermCaster::system(), 3, 200)),
+            "wezterm-retry".to_string(),
+        ),
+        (
+            Arc::new(RetryCaster::new(GhosttyCaster::system(), 3, 200)),
+            "ghostty-retry".to_string(),
+        ),
         (
             Arc::new(RetryCaster::new(SshWinTermCaster::system(), 2, 1000)),
             "ssh-winterm-retry".to_string(),
@@ -78,7 +86,7 @@ pub fn send(name: &str, file: Option<&str>) -> Result<()> {
         SendOutcome::Delivered | SendOutcome::NeedsFocus => Ok(()),
         SendOutcome::Unsupported(msg) | SendOutcome::Failed(msg) => {
             Err(anyhow!("cast send failed: {}", msg))
-        }
+        },
     }
 }
 
@@ -92,16 +100,16 @@ fn report_outcome(name: &str, addr: &PaneAddress, outcome: &SendOutcome) {
     match outcome {
         SendOutcome::Delivered => {
             println!("Sent to pane '{}' ({})", name, addr);
-        }
+        },
         SendOutcome::NeedsFocus => {
             println!("Pane '{}' needs focus (text delivered to buffer)", name);
-        }
+        },
         SendOutcome::Unsupported(msg) => {
             println!("Cast unsupported for pane '{}': {}", name, msg);
-        }
+        },
         SendOutcome::Failed(msg) => {
             println!("Cast failed for pane '{}': {}", name, msg);
-        }
+        },
     }
 }
 
@@ -111,7 +119,7 @@ pub fn where_file() -> Result<()> {
         Some(p) => {
             println!("{}", p.display());
             Ok(())
-        }
+        },
         None => Err(anyhow!("could not resolve pane-map path")),
     }
 }

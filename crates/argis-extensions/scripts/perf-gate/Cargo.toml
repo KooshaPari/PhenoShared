@@ -6,6 +6,8 @@ description = "Fleet performance gate — evaluates fleet-perf.toml budgets agai
 license = "MIT OR Apache-2.0"
 publish = false
 
+[workspace]
+
 [[bin]]
 name = "perf_gate"
 path = "src/bin/perf_gate.rs"

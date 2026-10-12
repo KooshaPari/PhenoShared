@@ -83,6 +83,8 @@ jobs:
       - uses: Swatinem/rust-cache@v2
       - name: Run benchmarks
         run: |
+          # E1.10: pipefail so a failing bench is not masked by `tee`'s exit status.
+          set -o pipefail
           cargo bench -p agileplus-benchmarks -- --output-format bencher | tee bench.txt
       - name: Compare to baseline
         run: |

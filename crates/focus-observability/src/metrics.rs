@@ -4,9 +4,7 @@
 //! Counters and histograms are thread-safe and can be incremented from any span context.
 
 use parking_lot::RwLock;
-use prometheus::{
-    HistogramVec, IntCounterVec, Registry,
-};
+use prometheus::{HistogramVec, IntCounterVec, Registry};
 use std::sync::Arc;
 use tracing::error;
 
@@ -30,18 +28,12 @@ impl MetricsRegistry {
         let registry = Arc::new(RwLock::new(Registry::new()));
 
         let connector_syncs = IntCounterVec::new(
-            prometheus::Opts::new(
-                "connector_syncs_total",
-                "Total connector sync operations",
-            ),
+            prometheus::Opts::new("connector_syncs_total", "Total connector sync operations"),
             &["connector_id"],
         )?;
 
         let rule_evaluations = IntCounterVec::new(
-            prometheus::Opts::new(
-                "rule_evaluations_total",
-                "Total rule evaluations",
-            ),
+            prometheus::Opts::new("rule_evaluations_total", "Total rule evaluations"),
             &["rule_id"],
         )?;
 
@@ -96,11 +88,11 @@ impl MetricsRegistry {
                     let arc = Arc::new(metrics);
                     *instance = Some(Arc::clone(&arc));
                     arc
-                }
+                },
                 Err(e) => {
                     error!("failed to create global metrics registry: {}", e);
                     panic!("metrics registry initialization failed: {}", e);
-                }
+                },
             }
         }
     }
@@ -166,9 +158,14 @@ mod tests {
         let registry = MetricsRegistry::new().expect("registry creation failed");
         // Increment a counter so we have data
         registry.inc_connector_syncs("test", 1.0);
-        let output = registry.gather_text_format().expect("should gather metrics");
+        let output = registry
+            .gather_text_format()
+            .expect("should gather metrics");
         // Verify metrics were gathered
-        assert!(!output.is_empty(), "metrics output should contain data after increment");
+        assert!(
+            !output.is_empty(),
+            "metrics output should contain data after increment"
+        );
     }
 
     #[test]
@@ -212,10 +209,7 @@ mod tests {
         let m2 = MetricsRegistry::global();
 
         // Both should be the same instance
-        assert_eq!(
-            Arc::as_ptr(&m1) as *const _,
-            Arc::as_ptr(&m2) as *const _
-        );
+        assert_eq!(Arc::as_ptr(&m1) as *const _, Arc::as_ptr(&m2) as *const _);
     }
 
     #[test]

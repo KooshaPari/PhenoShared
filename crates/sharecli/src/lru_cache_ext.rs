@@ -9,7 +9,11 @@ where
     K: std::hash::Hash + Eq + Clone,
 {
     pub fn new(capacity: usize) -> Self {
-        Self { capacity: capacity.max(1), map: HashMap::new(), order: VecDeque::new() }
+        Self {
+            capacity: capacity.max(1),
+            map: HashMap::new(),
+            order: VecDeque::new(),
+        }
     }
     pub fn put(&mut self, key: K, value: V) -> Option<V> {
         let prev = self.map.insert(key.clone(), value);

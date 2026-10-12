@@ -104,9 +104,9 @@ pub fn dfs_sort(n: usize, edges: &[(usize, usize)]) -> Option<Vec<usize>> {
                             color[v] = Color::Gray;
                             stack.push((v, 0));
                             continue 'outer;
-                        }
+                        },
                         Color::Gray => return None,
-                        Color::Black => {}
+                        Color::Black => {},
                     }
                 }
                 // All neighbours processed; mark done and emit post-order.

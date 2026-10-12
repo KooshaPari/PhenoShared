@@ -14,7 +14,7 @@ use eidolon_sandbox::{
 use std::sync::atomic::{AtomicBool, AtomicUsize, Ordering};
 
 fn assert_code(err: PhenoError, expected: &str) {
-    assert_eq!(err.unsupported_code(), Some(expected));
+    assert_eq!(err.unsupported_code_value(), Some(expected));
     assert_eq!(err.status_code(), 501);
 }
 
@@ -113,7 +113,7 @@ async fn enforcing_wrap_fail_loud_inner_still_started() {
         assert_eq!(err.status_code(), 501);
         assert!(outer.inner().start_count.load(Ordering::SeqCst) >= 1);
         assert!(!outer.enforcement_applied());
-        let code = err.unsupported_code().expect("code");
+        let code = err.unsupported_code_value().expect("code");
         assert!(is_enforcement_fail_loud_code(code), "got {code}");
     }
 
@@ -178,7 +178,7 @@ fn apply_enabled_fail_loud_without_live_platform() {
         )
         .unwrap_err();
         assert_eq!(err.status_code(), 501);
-        let code = err.unsupported_code().unwrap();
+        let code = err.unsupported_code_value().unwrap();
         assert!(is_enforcement_fail_loud_code(code), "got {code}");
     }
 

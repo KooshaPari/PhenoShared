@@ -41,9 +41,9 @@ pub use uia2_server::{
 };
 
 #[cfg(feature = "mobile-uia2")]
-pub mod uia2_http;
-#[cfg(feature = "mobile-uia2")]
 mod session_wire;
+#[cfg(feature = "mobile-uia2")]
+pub mod uia2_http;
 #[cfg(feature = "mobile-uia2")]
 mod uia2_session_ext;
 #[cfg(feature = "mobile-uia2")]
@@ -55,9 +55,9 @@ pub use uia2_http::{
 pub mod appium_probe;
 #[cfg(feature = "mobile-appium")]
 pub use appium_probe::{
-    appium_cli_ready, appium_tools_ready, env_appium_url, require_appium_ready,
-    resolve_appium_cli, resolve_appium_home, AppiumProbe, APPIUM_HOME_ENV, APPIUM_PATH_ENV,
-    APPIUM_URL_ENV, DEFAULT_APPIUM_URL,
+    appium_cli_ready, appium_tools_ready, env_appium_url, require_appium_ready, resolve_appium_cli,
+    resolve_appium_home, AppiumProbe, APPIUM_HOME_ENV, APPIUM_PATH_ENV, APPIUM_URL_ENV,
+    DEFAULT_APPIUM_URL,
 };
 
 #[cfg(feature = "mobile-appium-desktop")]
@@ -212,7 +212,10 @@ mod tests {
         assert!(!stub.uiautomator_ready());
         assert!(!stub.adb_ready());
         let err = stub.tap(0, 0).await.unwrap_err();
-        assert_eq!(err.unsupported_code(), Some(codes::MOBILE_ANDROID_STUB));
+        assert_eq!(
+            err.unsupported_code_value(),
+            Some(codes::MOBILE_ANDROID_STUB)
+        );
         assert_eq!(err.status_code(), 501);
     }
 

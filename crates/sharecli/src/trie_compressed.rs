@@ -7,7 +7,10 @@ struct Node {
 }
 impl Node {
     fn new() -> Self {
-        Self { edges: Vec::new(), word: false }
+        Self {
+            edges: Vec::new(),
+            word: false,
+        }
     }
 }
 impl CompressedTrie {
@@ -30,7 +33,11 @@ impl CompressedTrie {
         let mut best: Option<usize> = None;
         let mut best_common = 0usize;
         for (i, (k, _)) in node.edges.iter().enumerate() {
-            let c = k.chars().zip(word.chars()).take_while(|(a, b)| a == b).count();
+            let c = k
+                .chars()
+                .zip(word.chars())
+                .take_while(|(a, b)| a == b)
+                .count();
             if c > best_common {
                 best = Some(i);
                 best_common = c;
@@ -38,9 +45,14 @@ impl CompressedTrie {
         }
         match best {
             None => {
-                node.edges
-                    .push((word.to_string(), Box::new(Node { edges: Vec::new(), word: true })));
-            }
+                node.edges.push((
+                    word.to_string(),
+                    Box::new(Node {
+                        edges: Vec::new(),
+                        word: true,
+                    }),
+                ));
+            },
             Some(i) => {
                 let k_len = node.edges[i].0.chars().count();
                 if best_common == k_len {
@@ -69,7 +81,7 @@ impl CompressedTrie {
                     split.edges.push((r_tail, Box::new(r_child)));
                     node.edges[i] = (old_key.chars().take(best_common).collect(), Box::new(split));
                 }
-            }
+            },
         }
     }
     pub fn contains(&self, word: &str) -> bool {
@@ -82,7 +94,11 @@ impl CompressedTrie {
         for (k, child) in &node.edges {
             let k_len = k.chars().count();
             let w_len = word.chars().count();
-            let common: usize = k.chars().zip(word.chars()).take_while(|(a, b)| a == b).count();
+            let common: usize = k
+                .chars()
+                .zip(word.chars())
+                .take_while(|(a, b)| a == b)
+                .count();
             if common == 0 {
                 continue;
             }

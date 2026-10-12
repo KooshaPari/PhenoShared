@@ -18,7 +18,12 @@ impl SurfaceAdapter for FakeAdapter {
         if self.capability_error_ids.iter().any(|id| id == &surface.id) {
             return Err(anyhow!("capabilities unavailable for {}", surface.id));
         }
-        Ok(SurfaceCapabilities { read: true, write: true, resize: true, ..Default::default() })
+        Ok(SurfaceCapabilities {
+            read: true,
+            write: true,
+            resize: true,
+            ..Default::default()
+        })
     }
 
     fn discover(&self) -> Result<Vec<SurfaceRecord>> {
@@ -61,25 +66,38 @@ fn scan_resolves_codex_argv_and_materializes_session() {
         capability_error_ids: vec![],
     };
 
-    let report =
-        scan_and_record(&adapter, &FakeState::default(), &store, "2026-08-01T01:00:00Z").unwrap();
+    let report = scan_and_record(
+        &adapter,
+        &FakeState::default(),
+        &store,
+        "2026-08-01T01:00:00Z",
+    )
+    .unwrap();
 
     assert_eq!(report.scanned, 1);
     assert_eq!(report.recorded, 1);
     assert!(report.failures.is_empty());
     assert_eq!(report.results[0].kind, ObservationKind::Discovered);
     assert_eq!(report.results[0].session_id.as_deref(), Some("codex-1"));
-    assert_eq!(store.list().unwrap(), vec![AgentSession::codex("codex-1", "/tmp/project")]);
+    assert_eq!(
+        store.list().unwrap(),
+        vec![AgentSession::codex("codex-1", "/tmp/project")]
+    );
 }
 
 #[test]
 fn state_id_is_used_and_corroborated_by_process_argv() {
     let store = SessionStore::open_memory().unwrap();
     let adapter = FakeAdapter {
-        surfaces: vec![surface("pane-2", &["forge", "--conversation-id", "forge-2"])],
+        surfaces: vec![surface(
+            "pane-2",
+            &["forge", "--conversation-id", "forge-2"],
+        )],
         capability_error_ids: vec![],
     };
-    let state = FakeState { ids: HashMap::from([("pane-2".to_string(), "forge-2".to_string())]) };
+    let state = FakeState {
+        ids: HashMap::from([("pane-2".to_string(), "forge-2".to_string())]),
+    };
 
     let report = scan_and_record(&adapter, &state, &store, "2026-08-01T01:00:00Z").unwrap();
 
@@ -98,8 +116,13 @@ fn unknown_process_is_recorded_without_unsafe_resume_recipe() {
         capability_error_ids: vec![],
     };
 
-    let report =
-        scan_and_record(&adapter, &FakeState::default(), &store, "2026-08-01T01:00:00Z").unwrap();
+    let report = scan_and_record(
+        &adapter,
+        &FakeState::default(),
+        &store,
+        "2026-08-01T01:00:00Z",
+    )
+    .unwrap();
 
     assert_eq!(report.recorded, 1);
     assert_eq!(report.results[0].session_id, None);
@@ -137,8 +160,13 @@ fn one_capability_failure_does_not_discard_other_surfaces() {
         capability_error_ids: vec!["pane-bad".to_string()],
     };
 
-    let report =
-        scan_and_record(&adapter, &FakeState::default(), &store, "2026-08-01T01:00:00Z").unwrap();
+    let report = scan_and_record(
+        &adapter,
+        &FakeState::default(),
+        &store,
+        "2026-08-01T01:00:00Z",
+    )
+    .unwrap();
 
     assert_eq!(report.scanned, 2);
     assert_eq!(report.recorded, 1);

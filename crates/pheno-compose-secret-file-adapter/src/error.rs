@@ -4,7 +4,6 @@
 use phenocompose_port_secret::SecretStoreError;
 use thiserror::Error;
 
-
 /// Errors specific to the file-backed secret adapter that
 /// don't fit cleanly into [`SecretStoreError`]. The
 /// `From<FileSecretStoreError> for SecretStoreError`
@@ -26,7 +25,6 @@ pub enum FileSecretStoreError {
     #[error("secrets file rename: {0}")]
     Rename(String),
 }
-
 
 impl From<FileSecretStoreError> for SecretStoreError {
     fn from(e: FileSecretStoreError) -> Self {

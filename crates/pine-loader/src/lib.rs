@@ -351,9 +351,9 @@ mod tests {
         let mut b = vec![0u8; 0x400];
 
         // DOS Header (64 bytes)
-        b[0x00] = 0x4D; // 'M'
-        b[0x01] = 0x5A; // 'Z'
-        write_u32(&mut b, 0x3C, 0x40); // e_lfanew = 0x40
+        b[0x00] = 0x4d; // 'M'
+        b[0x01] = 0x5a; // 'Z'
+        write_u32(&mut b, 0x3c, 0x40); // e_lfanew = 0x40
 
         // PE Signature at 0x40
         b[0x40] = 0x50; // 'P'
@@ -362,24 +362,24 @@ mod tests {
         b[0x43] = 0x00;
 
         // COFF Header (20 bytes) at 0x44
-        write_u16(&mut b, 0x44, 0x14C); // Machine: i386
+        write_u16(&mut b, 0x44, 0x14c); // Machine: i386
         write_u16(&mut b, 0x46, 0x0001); // NumberOfSections: 1
                                          // TimeDateStamp (0x48), PointerToSymbolTable (0x4C), NumberOfSymbols (0x50) = 0
-        write_u16(&mut b, 0x54, 0x00E0); // SizeOfOptionalHeader: 224
+        write_u16(&mut b, 0x54, 0x00e0); // SizeOfOptionalHeader: 224
         write_u16(&mut b, 0x56, 0x0102); // Characteristics: EXECUTABLE_IMAGE | 32BIT_MACHINE
 
         // Optional Header (PE32, 224 bytes) at 0x58
-        write_u16(&mut b, 0x58, 0x010B); // Magic: PE32
-        b[0x5A] = 0x01; // MajorLinkerVersion
+        write_u16(&mut b, 0x58, 0x010b); // Magic: PE32
+        b[0x5a] = 0x01; // MajorLinkerVersion
                         // SizeOfCode: 0x200
-        write_u32(&mut b, 0x5C, 0x200);
+        write_u32(&mut b, 0x5c, 0x200);
         // SizeOfInitializedData: 0x200
         write_u32(&mut b, 0x60, 0x200);
         // SizeOfUninitializedData: 0
         // AddressOfEntryPoint: 0x1000
         write_u32(&mut b, 0x68, 0x1000);
         // BaseOfCode: 0x1000
-        write_u32(&mut b, 0x6C, 0x1000);
+        write_u32(&mut b, 0x6c, 0x1000);
         // BaseOfData: 0x2000
         write_u32(&mut b, 0x70, 0x2000);
         // ImageBase: 0x10000
@@ -387,7 +387,7 @@ mod tests {
         // SectionAlignment: 0x1000
         write_u32(&mut b, 0x78, 0x1000);
         // FileAlignment: 0x200
-        write_u32(&mut b, 0x7C, 0x200);
+        write_u32(&mut b, 0x7c, 0x200);
         // MajorOperatingSystemVersion: 4
         write_u16(&mut b, 0x80, 0x4);
         // MajorSubsystemVersion: 4
@@ -398,28 +398,28 @@ mod tests {
         write_u32(&mut b, 0x94, 0x200);
         // CheckSum: 0
         // Subsystem: 1 (NATIVE)
-        write_u16(&mut b, 0x9C, 0x1);
+        write_u16(&mut b, 0x9c, 0x1);
         // DllCharacteristics: 0
         // SizeOfStackReserve: 0x100000
-        write_u32(&mut b, 0xA0, 0x100000);
+        write_u32(&mut b, 0xa0, 0x100000);
         // SizeOfStackCommit: 0x1000
-        write_u32(&mut b, 0xA4, 0x1000);
+        write_u32(&mut b, 0xa4, 0x1000);
         // SizeOfHeapReserve: 0x100000
-        write_u32(&mut b, 0xA8, 0x100000);
+        write_u32(&mut b, 0xa8, 0x100000);
         // SizeOfHeapCommit: 0x1000
-        write_u32(&mut b, 0xAC, 0x1000);
+        write_u32(&mut b, 0xac, 0x1000);
         // LoaderFlags: 0
         // NumberOfRvaAndSizes: 16
-        write_u32(&mut b, 0xB4, 0x10);
+        write_u32(&mut b, 0xb4, 0x10);
         // Data directories: 16 * 8 = 128 bytes of zeros at 0xB8 (already zeroed)
 
         // Section Header (40 bytes) at 0x58 + 224 = 0x138
         // Name: ".text\0\0\0" (8 bytes)
-        b[0x138] = 0x2E;
+        b[0x138] = 0x2e;
         b[0x139] = 0x74;
-        b[0x13A] = 0x65;
-        b[0x13B] = 0x78;
-        b[0x13C] = 0x74;
+        b[0x13a] = 0x65;
+        b[0x13b] = 0x78;
+        b[0x13c] = 0x74;
         // VirtualSize: 0x200
         write_u32(&mut b, 0x140, 0x200);
         // VirtualAddress: 0x1000
@@ -427,13 +427,13 @@ mod tests {
         // SizeOfRawData: 0x200
         write_u32(&mut b, 0x148, 0x200);
         // PointerToRawData: 0x200
-        write_u32(&mut b, 0x14C, 0x200);
+        write_u32(&mut b, 0x14c, 0x200);
         // PointerToRelocations: 0
         // PointerToLinenumbers: 0
         // NumberOfRelocations: 0
         // NumberOfLinenumbers: 0
         // Characteristics: 0x60000020 (CODE | EXECUTE | READ)
-        write_u32(&mut b, 0x15C, 0x60000020);
+        write_u32(&mut b, 0x15c, 0x60000020);
 
         b
     }

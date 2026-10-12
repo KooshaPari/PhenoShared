@@ -16,7 +16,13 @@ fn bin() -> Command {
 
 fn fixture_forests() -> Vec<AgentTreeNode> {
     let src = FakeProcSource::new(vec![
-        ProcSnapshot { pid: 1, ppid: 0, comm: "init".into(), cmdline: vec![], state: 'R' },
+        ProcSnapshot {
+            pid: 1,
+            ppid: 0,
+            comm: "init".into(),
+            cmdline: vec![],
+            state: 'R',
+        },
         ProcSnapshot {
             pid: 50,
             ppid: 1,
@@ -49,7 +55,11 @@ fn fr006_proc_tree_csv_header_and_depth() {
         lines[0]
     );
     assert_eq!(lines.len(), 3, "MUST emit root + one child row; got: {csv}");
-    assert!(lines[1].starts_with("0,0,50,1,cursor-agent,cursor-agent,,"), "root row: {}", lines[1]);
+    assert!(
+        lines[1].starts_with("0,0,50,1,cursor-agent,cursor-agent,,"),
+        "root row: {}",
+        lines[1]
+    );
     assert!(
         lines[2].starts_with("0,1,51,50,,node,,"),
         "child row MUST be depth 1; got: {}",
@@ -61,7 +71,13 @@ fn fr006_proc_tree_csv_header_and_depth() {
 #[test]
 fn fr006_proc_tree_csv_multiple_roots() {
     let src = FakeProcSource::new(vec![
-        ProcSnapshot { pid: 1, ppid: 0, comm: "init".into(), cmdline: vec![], state: 'R' },
+        ProcSnapshot {
+            pid: 1,
+            ppid: 0,
+            comm: "init".into(),
+            cmdline: vec![],
+            state: 'R',
+        },
         ProcSnapshot {
             pid: 10,
             ppid: 1,
@@ -80,8 +96,11 @@ fn fr006_proc_tree_csv_multiple_roots() {
     let forests = sharecli_fleet::build_agent_forests(&src);
     assert_eq!(forests.len(), 2);
     let csv = render_agent_tree_csv(&forests, &HashMap::new(), &HashMap::new(), &HashMap::new());
-    let roots: Vec<&str> =
-        csv.lines().skip(1).filter(|line| line.split(',').nth(1) == Some("0")).collect();
+    let roots: Vec<&str> = csv
+        .lines()
+        .skip(1)
+        .filter(|line| line.split(',').nth(1) == Some("0"))
+        .collect();
     assert_eq!(roots.len(), 2);
     assert!(roots[0].starts_with("0,0,10,"));
     assert!(roots[1].starts_with("1,0,20,"));
@@ -101,8 +120,15 @@ fn fr006_proc_tree_csv_empty_header_only() {
 /// FR-006 / AC-006.26 — CLI proc --tree --csv succeeds with forest header.
 #[test]
 fn fr006_proc_tree_csv_cli_exits_zero() {
-    let out = bin().args(["proc", "--tree", "--csv"]).output().expect("spawn proc --tree --csv");
-    assert!(out.status.success(), "proc --tree --csv MUST exit 0; stderr: {:?}", out.stderr);
+    let out = bin()
+        .args(["proc", "--tree", "--csv"])
+        .output()
+        .expect("spawn proc --tree --csv");
+    assert!(
+        out.status.success(),
+        "proc --tree --csv MUST exit 0; stderr: {:?}",
+        out.stderr
+    );
     let s = String::from_utf8_lossy(&out.stdout);
     let first = s.lines().next().unwrap_or("");
     assert_eq!(
@@ -119,8 +145,11 @@ fn fr006_proc_tree_csv_rejects_json_combo() {
         .output()
         .expect("spawn proc --tree --csv --json");
     assert!(!out.status.success());
-    let combined =
-        format!("{}{}", String::from_utf8_lossy(&out.stderr), String::from_utf8_lossy(&out.stdout));
+    let combined = format!(
+        "{}{}",
+        String::from_utf8_lossy(&out.stderr),
+        String::from_utf8_lossy(&out.stdout)
+    );
     assert!(
         combined.to_ascii_lowercase().contains("json") || combined.contains("--csv"),
         "MUST reject --tree --csv with --json; got: {combined}"

@@ -41,7 +41,9 @@ impl PaneRegistry {
             fs::create_dir_all(&dir)
                 .with_context(|| format!("create registry dir {}", dir.display()))?;
         }
-        Ok(Self { path: dir.join(FILENAME) })
+        Ok(Self {
+            path: dir.join(FILENAME),
+        })
     }
 
     /// Path to the backing file.
@@ -80,10 +82,9 @@ impl PaneRegistry {
     pub fn resolve(&self, name: &str) -> Result<Option<PaneAddress>> {
         let map = self.load()?;
         match map.entries.get(name) {
-            Some(raw) => Ok(Some(
-                PaneAddress::parse(raw)
-                    .with_context(|| format!("malformed address for pane '{}': {}", name, raw))?,
-            )),
+            Some(raw) => Ok(Some(PaneAddress::parse(raw).with_context(|| {
+                format!("malformed address for pane '{}': {}", name, raw)
+            })?)),
             None => Ok(None),
         }
     }
@@ -117,7 +118,11 @@ fn validate_name(name: &str) -> Result<()> {
     }
     for c in name.chars() {
         if c.is_control() || c.is_whitespace() || c == ':' || c == '/' || c == '\\' {
-            anyhow::bail!("invalid pane name {:?}: contains forbidden character {:?}", name, c);
+            anyhow::bail!(
+                "invalid pane name {:?}: contains forbidden character {:?}",
+                name,
+                c
+            );
         }
     }
     Ok(())
@@ -162,11 +167,15 @@ mod tests {
 
     #[test]
     fn round_trip_via_toml() {
-        let map =
-            PaneMap { entries: BTreeMap::from([("a".to_string(), "mbp:local:0:2".to_string())]) };
+        let map = PaneMap {
+            entries: BTreeMap::from([("a".to_string(), "mbp:local:0:2".to_string())]),
+        };
         let s = toml::to_string(&map).expect("serialise");
         let back: PaneMap = toml::from_str(&s).expect("parse");
-        assert_eq!(back.entries.get("a").map(String::as_str), Some("mbp:local:0:2"));
+        assert_eq!(
+            back.entries.get("a").map(String::as_str),
+            Some("mbp:local:0:2")
+        );
     }
 
     // --- proptest (C07 L66 / T-650) ---

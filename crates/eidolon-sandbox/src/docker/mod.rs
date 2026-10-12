@@ -136,7 +136,7 @@ pub mod probe {
             Ok(o) if o.status.success() => {
                 let version = String::from_utf8_lossy(&o.stdout);
                 !version.trim().is_empty()
-            }
+            },
             _ => false,
         }
     }
@@ -233,7 +233,10 @@ mod tests {
     use super::*;
 
     fn assert_docker_code(err: PhenoError) {
-        assert_eq!(err.unsupported_code(), Some(codes::SANDBOX_DOCKER_STUB));
+        assert_eq!(
+            err.unsupported_code_value(),
+            Some(codes::SANDBOX_DOCKER_STUB)
+        );
         assert_eq!(err.status_code(), 501);
     }
 

@@ -5,20 +5,172 @@ members = [
     "crates/substrate",
     "crates/substrate-core",
     "crates/engine-spec",
+    "crates/eyetracker-camera",
+    "crates/eyetracker-cli",
+    "crates/eyetracker-core",
+    "crates/eyetracker-domain",
+    "crates/eyetracker-ffi",
+    "crates/eyetracker-inference",
+    "crates/eyetracker-math",
+    "crates/dispatch-bridge",
+    "crates/driver-cli",
+    "crates/driver-http",
+    "crates/driver-mcp",
+    "crates/fabric-capture",
+    "crates/fabric-cli",
+    "crates/fabric-daemon",
+    "crates/fabric-frame-transport",
+    "crates/fabric-graph-cli",
+    "crates/fabric-gui",
+    "crates/fabric-orchestrator",
+    "crates/fabric-persist",
+    "crates/fabric-research-ledger",
+    "crates/fabric-surface-mojo",
+    "crates/fabric-terminal",
+    "crates/fabric-tray",
+    "crates/fabric-tui",
+    "crates/fabric-web",
+    "crates/fabric-workspace",
+    "crates/fabric-integration-tests",
+    "crates/nvms-manifest",
+    "crates/omniroute-adapter",
+    "crates/orchestrator",
+    "crates/phenotype-config-core",
+    "crates/phenotype-nvms-adapter",
+    "crates/substrate-tui",
+    "crates/routing-phenotype-router",
+    "crates/teamcomm-smoke",
+    "crates/klipdot-capture",
+    "crates/phenotype-cache-adapter",
+    "crates/eidolon-sandbox",
+    "crates/eidolon-desktop",
+    "crates/eidolon-mobile",
+    "crates/pheno-compose-secret-file-adapter",
+    "crates/pheno-compose-wslc-adapter",
+    "crates/pheno-compose-phenocompose-cli",
+    "crates/pheno-compose-apple-container-adapter",
+    "crates/pheno-compose-plugin-sample",
+    "crates/sharecli-sync",
+    "crates/sharecli-tray-windows",
+    "crates/sharecli-tray-linux",
+    "crates/sharecli-thermal-tui",
+    "crates/sharecli-ffi",
+    "crates/sharecli",
+    "crates/sharecli-ipc",
+    "crates/sharecli-mesh",
+    "crates/sharecli-session",
+    "crates/sharecli-fuse",
+    "crates/sharecli-fleet",
+    "crates/sharecli-core",
+    "crates/spawn-core-sys",
+    "crates/phenotype-contracts",
+    "crates/pine-nvms",
+    "crates/pine-syscall",
+    "crates/pine-loader",
+    "crates/pine-compat",
+    "crates/pine-core",
+    "crates/phenotype-error-macros",
+    "crates/phenotype-test-infra",
+    "crates/phenotype-retry",
+    "crates/phenotype-errors",
+    "crates/phenotype-http-client-core",
+    "crates/phenotype-port-traits",
+    "crates/phenotype-ports-canonical",
+    "crates/phenotype-time",
+    "crates/phenotype-process",
+    "crates/phenotype-dag-core",
+    "crates/phenotype-async-traits",
+    "crates/pheno-compose-port-types",
+    "crates/pheno-compose-port-secret",
+    "crates/pheno-compose-port-runtime",
+    "crates/pheno-compose-port-publisher",
+    "crates/pheno-compose-port-di",
+    "crates/pheno-compose-port-composer",
+    "crates/pheno-compose-plugin-api",
+    "crates/pheno-compose-i18n",
+    "crates/pheno-compose-bindings",
+    "crates/pheno-compose-agentctl",
+    "crates/bifrost-routing",
+    "crates/nexus",
+    "crates/config-schema",
+    "crates/fr-coverage",
+    "crates/doc-link-check",
+    "crates/commit-msg-check",
+
+    "crates/pheno-vcs-core",
+    "crates/worktree-manager",
+    "crates/eidolon-core",
+    "crates/focus-icon-gen",
+    "crates/focus-ci-watcher",
+    "crates/focus-time",
+    "crates/agileplus-error-core",
+    "crates/agileplus-git",
+    "crates/agileplus-triage",
+    "crates/agileplus-cache",
+    "crates/agileplus-events",
+    "crates/agileplus-domain",
+    "crates/agileplus-github",
+    "crates/agileplus-import",
+    "crates/phenotype-error-core",
+    "crates/focus-always-on",
+    "crates/pheno-tracing",
+    "crates/focus-templates",
+    "crates/focus-events",
+    "crates/logkit",
+    "crates/pheno-runtime-config",
+
+
     "crates/engine-forge",
     "crates/transport-file",
     "crates/store-file",
     "crates/substrate-app",
-    "crates/driver-cli",
-    "crates/driver-http",
     "crates/driver-argv",
-    "crates/driver-mcp",
-    "crates/arch-test",
-    "crates/omniroute-adapter",
-    "crates/routing-phenotype-router",
+    # --- E2.4 Pattern A wave 3 batch AX-32 (2026-10-09): dag-scheduler ---
+    "crates/dag-scheduler",
+    # --- E2.4 Pattern A wave 3 batch AX-33 (2026-10-09): fabric-capability + fabric-checker ---
+    "crates/fabric-capability",
+    "crates/fabric-checker",
     "tools/fake-forge",
     "tools/fake-codex-cloud",
     "crates/a2a",
+    # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): phenotype-router ---
+    "crates/phenotype-router",
+    # --- E2.4 Pattern A wave 3 batch AX-27 (2026-10-09): teamcomm-cli ---
+    "crates/teamcomm-cli",
+    # --- E2.4 Pattern A wave 3 batch AX-28 (2026-10-09): arch-test + audit-privacy + bench-guard ---
+    "crates/arch-test",
+    "crates/audit-privacy",
+    "crates/bench-guard",
+    # --- E2.4 Pattern A wave 3 batch AX-29 (2026-10-09): configra-ops + settly ---
+    "crates/configra-ops",
+    # --- E2.4 Pattern A wave 3 batch AX-30 (2026-10-09): 4 cloud-* ---
+    "crates/cloud-codex",
+    "crates/cloud-cursor",
+    "crates/cloud-kilo",
+    "crates/cloud-dispatch-conformance",
+    # --- E2.4 Pattern A wave 3 batch AX-31 (2026-10-09): 5 simple ---
+    "crates/clap-ext",
+    "crates/datakit",
+    "crates/docs-health",
+    # --- E2.4 Pattern A wave 3 batch AX-32 (2026-10-09): dag-scheduler ---
+    # --- E2.4 Pattern A wave 3 batch AX-33 (2026-10-09): fabric-capability + fabric-checker ---
+    # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): klipdot + logkit ---
+    # --- E2.4 Pattern A wave 3 batch AG (2026-10-09): 1 focus-ci-watcher ---
+    "crates/focus-ci-watcher",
+    # --- E2.4 Pattern A wave 3 batch AH (2026-10-09): 1 focus-calendar ---
+    "crates/focus-calendar",
+    # --- E2.4 Pattern A wave 3 batch AI (2026-10-09): 1 focus-crypto + ring workspace dep ---
+    "crates/focus-crypto",
+    # --- E2.4 Pattern A wave 3 batch AJ (2026-10-09): 1 focus-telemetry + url workspace dep ---
+    # --- E2.4 Pattern A wave 3 batch AK (2026-10-09): 1 focus-entitlements + uniffi workspace dep ---
+    "crates/focus-entitlements",
+    # --- E2.4 Pattern A wave 3 batch AL (2026-10-09): 1 focus-icon-gen ---
+    "crates/focus-icon-gen",
+    # --- E2.4 Pattern A wave 3 batch AM (2026-10-09): 1 focus-rules ---
+    "crates/focus-rules",
+    # --- E2.4 Pattern A wave 3 batch AN (2026-10-09): 1 focus-scheduler ---
+    "crates/focus-scheduler",
+    # --- E2.4 Pattern A wave 3 batch AO (2026-10-09): 1 focus-observability ---
     "crates/store-sqlite",
     "crates/supervisor",
     "crates/wave",
@@ -37,44 +189,63 @@ members = [
     "crates/file-watcher",
     "crates/phenotype-mcp",
     "crates/context-budget",
+    # --- E2.4 Pattern A wave 3 batch AX-35 (2026-10-09): 4 more engine-* ---
+
+
     "crates/wave-3lane-tests",
-    "crates/dispatch-bridge",
-    "crates/cloud-dispatch-conformance",
-    "crates/cloud-cursor",
-    "crates/cloud-kilo",
-    "crates/cloud-codex",
-    "crates/substrate-serve-lock",
-    "crates/substrate-tui",
-    "crates/orchestrator",
+    # --- E2.4 Pattern A wave 3 batch AX-31 (2026-10-09): 5 simple ---
+    # --- E2.4 Pattern A wave 3 batch AX-32 (2026-10-09): dag-scheduler ---
+    # --- E2.4 Pattern A wave 3 batch AX-33 (2026-10-09): fabric-capability + fabric-checker ---
     # --- PhenoFabric crates (absorbed 2026-09-16) ---
-    "crates/fabric-capability",
     "crates/fabric-capability-ffi",
-    "crates/fabric-checker",
-    "crates/fabric-graph",
-    "crates/fabric-graph-cli",
-    "crates/fabric-persist",
-    "crates/fabric-daemon",
-    "crates/fabric-cli",
-    "crates/fabric-tray",
-    "crates/fabric-gui",
-    "crates/fabric-web",
-    "crates/fabric-frame-transport",
-    "crates/nvms-manifest",
-    "crates/phenotype-nvms-adapter",
-    "crates/fabric-integration-tests",
-    "crates/fabric-tui",
-    "crates/fabric-workspace",
-    "crates/fabric-surface-mojo",
-    "crates/fabric-orchestrator",
-    "crates/fabric-terminal",
-    "crates/fabric-capture",
-    "crates/fabric-research-ledger",
     "examples/full-demo",
     # --- GFX SDK crates (absorbed from PhenoGfx) ---
     "crates/phenotype-gfx",
+    # --- E2.4 Pattern A wave 3 batch AX-23 (2026-10-09): casbin + voxel ---
+    "crates/phenotype-casbin-wrapper",
     "crates/phenotype-voxel",
+    # --- E2.4 Pattern A wave 3 batch AX-24 (2026-10-09): agileplus-nats + agileplus-graph ---
+    "crates/agileplus-nats",
+    "crates/agileplus-graph",
+    # --- E2.4 Pattern A wave 3 batch AX-25 (2026-10-09): airlock-v2 + anthropic-usage-poll + agent-forecast + a2a ---
+    "crates/airlock-v2",
+    "crates/anthropic-usage-poll",
+    "crates/agent-forecast",
+    # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): phenotype-router ---
+    # --- E2.4 Pattern A wave 3 batch AX-27 (2026-10-09): teamcomm-cli ---
+    # --- E2.4 Pattern A wave 3 batch AX-28 (2026-10-09): arch-test + audit-privacy + bench-guard ---
+    # --- E2.4 Pattern A wave 3 batch AX-29 (2026-10-09): configra-ops + settly ---
+    # --- E2.4 Pattern A wave 3 batch AX-30 (2026-10-09): 4 cloud-* ---
+    # --- E2.4 Pattern A wave 3 batch AX-31 (2026-10-09): 5 simple ---
+    # --- E2.4 Pattern A wave 3 batch AX-32 (2026-10-09): dag-scheduler ---
+    # --- E2.4 Pattern A wave 3 batch AX-33 (2026-10-09): fabric-capability + fabric-checker ---
+    # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): klipdot + logkit ---
+    # --- E2.4 Pattern A wave 3 batch AX-24 (2026-10-09): agileplus-nats + agileplus-graph ---
+    # --- E2.4 Pattern A wave 3 batch AX-25 (2026-10-09): airlock-v2 + anthropic-usage-poll + agent-forecast + a2a ---
+    # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): phenotype-router ---
+    # --- E2.4 Pattern A wave 3 batch AX-27 (2026-10-09): teamcomm-cli ---
+    # --- E2.4 Pattern A wave 3 batch AX-28 (2026-10-09): arch-test + audit-privacy + bench-guard ---
+    # --- E2.4 Pattern A wave 3 batch AX-29 (2026-10-09): configra-ops + settly ---
+    # --- E2.4 Pattern A wave 3 batch AX-30 (2026-10-09): 4 cloud-* ---
+    # --- E2.4 Pattern A wave 3 batch AX-31 (2026-10-09): 5 simple ---
+    # --- E2.4 Pattern A wave 3 batch AX-32 (2026-10-09): dag-scheduler ---
+    # --- E2.4 Pattern A wave 3 batch AX-33 (2026-10-09): fabric-capability + fabric-checker ---
+    # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): klipdot + logkit ---
     # --- PhenoRegistry crates (absorbed from PhenoRegistry) ---
     "crates/phenotype-project-registry",
+    # --- E2.4 Pattern A wave 3 batch AX-22 (2026-10-09): phenotype-gfx ---
+    # --- E2.4 Pattern A wave 3 batch AX-23 (2026-10-09): casbin + voxel ---
+    # --- E2.4 Pattern A wave 3 batch AX-24 (2026-10-09): agileplus-nats + agileplus-graph ---
+    # --- E2.4 Pattern A wave 3 batch AX-25 (2026-10-09): airlock-v2 + anthropic-usage-poll + agent-forecast + a2a ---
+    # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): phenotype-router ---
+    # --- E2.4 Pattern A wave 3 batch AX-27 (2026-10-09): teamcomm-cli ---
+    # --- E2.4 Pattern A wave 3 batch AX-28 (2026-10-09): arch-test + audit-privacy + bench-guard ---
+    # --- E2.4 Pattern A wave 3 batch AX-29 (2026-10-09): configra-ops + settly ---
+    # --- E2.4 Pattern A wave 3 batch AX-30 (2026-10-09): 4 cloud-* ---
+    # --- E2.4 Pattern A wave 3 batch AX-31 (2026-10-09): 5 simple ---
+    # --- E2.4 Pattern A wave 3 batch AX-32 (2026-10-09): dag-scheduler ---
+    # --- E2.4 Pattern A wave 3 batch AX-33 (2026-10-09): fabric-capability + fabric-checker ---
+    # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): klipdot + logkit ---
     "crates/phenotype-service-registry",
     # --- PhenoInfra crates (absorbed from PhenoInfra) ---
     "crates/phenotype-crypto",
@@ -82,28 +253,578 @@ members = [
     "crates/phenotype-policy-engine",
     "crates/phinbox",
     # --- eyetracker crates (absorbed 2026-08-13 from KooshaPari/eyetracker per docket O18) ---
-    "crates/eyetracker-domain",
-    "crates/eyetracker-math",
-    "crates/eyetracker-core",
-    "crates/eyetracker-ffi",
-    "crates/eyetracker-camera",
-    "crates/eyetracker-inference",
-    "crates/eyetracker-cli",
+    # --- E2.4 Pattern A wave 3 batch U (2026-10-09): 2 small libs (phenotype-logging, datakit) ---
+    "crates/phenotype-logging",
+    # --- E2.4 Pattern A wave 3 batch V2 (2026-10-09): 2 eyetracker libs (eyetracker-math, eyetracker-core) ---
+    # --- E2.4 Pattern A wave 3 batch W (2026-10-09): 1 eyetracker lib (eyetracker-camera) ---
+    # --- E2.4 Pattern A wave 3 batch X (2026-10-09): 1 eyetracker lib (eyetracker-inference) ---
+    # --- E2.4 Pattern A wave 3 batch Y (2026-10-09): 1 eyetracker lib (eyetracker-ffi) ---
+    # --- E2.4 Pattern A wave 3 batch Z (2026-10-09): 1 focus lib (focus-release-bot) ---
+    "crates/focus-release-bot",
+    # --- E2.4 Pattern A wave 3 batch AA2 (2026-10-09): 3 small libs (focus-sync-store, substrate-dag, phenotype-casbin-wrapper) ---
+    "crates/focus-sync-store",
+    # --- E2.4 Pattern A wave 3 batch AB2 (2026-10-09): 2 small libs (acceptance-contract, dag-scheduler) ---
+    "crates/acceptance-contract",
+    # --- E2.4 Pattern A wave 3 batch AX-33 (2026-10-09): fabric-capability + fabric-checker ---
+    # --- E2.4 Pattern A wave 3 batch AC (2026-10-09): 1 agileplus lib (agileplus-nats) ---
+    # --- E2.4 Pattern A wave 3 batch AD (2026-10-09): 1 small phenotype lib (bench-guard) ---
+    # --- E2.4 Pattern A wave 3 batch AX-29 (2026-10-09): configra-ops + settly ---
+    # --- E2.4 Pattern A wave 3 batch AX-30 (2026-10-09): 4 cloud-* ---
+    # --- E2.4 Pattern A wave 3 batch AX-31 (2026-10-09): 5 simple ---
+    # --- E2.4 Pattern A wave 3 batch AX-32 (2026-10-09): dag-scheduler ---
+    # --- E2.4 Pattern A wave 3 batch AX-33 (2026-10-09): fabric-capability + fabric-checker ---
+    # --- E2.4 Pattern A wave 3 batch AE (2026-10-09): 1 example lib (clap-ext-examples) ---
+    "crates/clap-ext-examples",
+    # --- E2.4 Pattern A wave 3 batch AF (2026-10-09): 1 substrate-a2a leaf ---
+    # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): phenotype-router ---
+    # --- E2.4 Pattern A wave 3 batch AX-27 (2026-10-09): teamcomm-cli ---
+    # --- E2.4 Pattern A wave 3 batch AX-28 (2026-10-09): arch-test + audit-privacy + bench-guard ---
+    # --- E2.4 Pattern A wave 3 batch AX-29 (2026-10-09): configra-ops + settly ---
+    # --- E2.4 Pattern A wave 3 batch AX-30 (2026-10-09): 4 cloud-* ---
+    # --- E2.4 Pattern A wave 3 batch AX-31 (2026-10-09): 5 simple ---
+    # --- E2.4 Pattern A wave 3 batch AX-32 (2026-10-09): dag-scheduler ---
+    # --- E2.4 Pattern A wave 3 batch AX-33 (2026-10-09): fabric-capability + fabric-checker ---
+    # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): klipdot + logkit ---
+    # --- E2.4 Pattern A wave 3 batch AG (2026-10-09): 1 focus-ci-watcher ---
+    # --- E2.4 Pattern A wave 3 batch AH (2026-10-09): 1 focus-calendar ---
+    # --- E2.4 Pattern A wave 3 batch AI (2026-10-09): 1 focus-crypto + ring workspace dep ---
+    # --- E2.4 Pattern A wave 3 batch AJ (2026-10-09): 1 focus-telemetry + url workspace dep ---
+    # --- E2.4 Pattern A wave 3 batch AK (2026-10-09): 1 focus-entitlements + uniffi workspace dep ---
+    # --- E2.4 Pattern A wave 3 batch AL (2026-10-09): 1 focus-icon-gen ---
+    # --- E2.4 Pattern A wave 3 batch AM (2026-10-09): 1 focus-rules ---
+    # --- E2.4 Pattern A wave 3 batch AN (2026-10-09): 1 focus-scheduler ---
+    # --- E2.4 Pattern A wave 3 batch AO (2026-10-09): 1 focus-observability ---
+    # --- E2.4 Pattern A wave 3 batch W (2026-10-09): 1 eyetracker lib (eyetracker-camera) ---
+    # --- E2.4 Pattern A wave 3 batch X (2026-10-09): 1 eyetracker lib (eyetracker-inference) ---
+    # --- E2.4 Pattern A wave 3 batch Y (2026-10-09): 1 eyetracker lib (eyetracker-ffi) ---
+    # --- E2.4 Pattern A wave 3 batch Z (2026-10-09): 1 focus lib (focus-release-bot) ---
+    # --- E2.4 Pattern A wave 3 batch AA2 (2026-10-09): 3 small libs (focus-sync-store, substrate-dag, phenotype-casbin-wrapper) ---
+    # --- E2.4 Pattern A wave 3 batch AB2 (2026-10-09): 2 small libs (acceptance-contract, dag-scheduler) ---
+    # --- E2.4 Pattern A wave 3 batch AX-33 (2026-10-09): fabric-capability + fabric-checker ---
+    # --- E2.4 Pattern A wave 3 batch AC (2026-10-09): 1 agileplus lib (agileplus-nats) ---
+    # --- E2.4 Pattern A wave 3 batch AD (2026-10-09): 1 small phenotype lib (bench-guard) ---
+    # --- E2.4 Pattern A wave 3 batch AX-29 (2026-10-09): configra-ops + settly ---
+    # --- E2.4 Pattern A wave 3 batch AX-30 (2026-10-09): 4 cloud-* ---
+    # --- E2.4 Pattern A wave 3 batch AX-31 (2026-10-09): 5 simple ---
+    # --- E2.4 Pattern A wave 3 batch AX-32 (2026-10-09): dag-scheduler ---
+    # --- E2.4 Pattern A wave 3 batch AX-33 (2026-10-09): fabric-capability + fabric-checker ---
+    # --- E2.4 Pattern A wave 3 batch AE (2026-10-09): 1 example lib (clap-ext-examples) ---
+    # --- E2.4 Pattern A wave 3 batch AF (2026-10-09): 1 substrate-a2a leaf ---
+    # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): phenotype-router ---
+    # --- E2.4 Pattern A wave 3 batch AX-27 (2026-10-09): teamcomm-cli ---
+    # --- E2.4 Pattern A wave 3 batch AX-28 (2026-10-09): arch-test + audit-privacy + bench-guard ---
+    # --- E2.4 Pattern A wave 3 batch AX-29 (2026-10-09): configra-ops + settly ---
+    # --- E2.4 Pattern A wave 3 batch AX-30 (2026-10-09): 4 cloud-* ---
+    # --- E2.4 Pattern A wave 3 batch AX-31 (2026-10-09): 5 simple ---
+    # --- E2.4 Pattern A wave 3 batch AX-32 (2026-10-09): dag-scheduler ---
+    # --- E2.4 Pattern A wave 3 batch AX-33 (2026-10-09): fabric-capability + fabric-checker ---
+    # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): klipdot + logkit ---
+    # --- E2.4 Pattern A wave 3 batch AG (2026-10-09): 1 focus-ci-watcher ---
+    # --- E2.4 Pattern A wave 3 batch AH (2026-10-09): 1 focus-calendar ---
+    # --- E2.4 Pattern A wave 3 batch AI (2026-10-09): 1 focus-crypto + ring workspace dep ---
+    # --- E2.4 Pattern A wave 3 batch AJ (2026-10-09): 1 focus-telemetry + url workspace dep ---
+    # --- E2.4 Pattern A wave 3 batch AK (2026-10-09): 1 focus-entitlements + uniffi workspace dep ---
+    # --- E2.4 Pattern A wave 3 batch AL (2026-10-09): 1 focus-icon-gen ---
+    # --- E2.4 Pattern A wave 3 batch AM (2026-10-09): 1 focus-rules ---
+    # --- E2.4 Pattern A wave 3 batch AN (2026-10-09): 1 focus-scheduler ---
+    # --- E2.4 Pattern A wave 3 batch AO (2026-10-09): 1 focus-observability ---
+    # --- E2.4 Pattern A wave 3 batch Z (2026-10-09): 1 focus lib (focus-release-bot) ---
+    # --- E2.4 Pattern A wave 3 batch AA2 (2026-10-09): 3 small libs (focus-sync-store, substrate-dag, phenotype-casbin-wrapper) ---
+    # --- E2.4 Pattern A wave 3 batch AB2 (2026-10-09): 2 small libs (acceptance-contract, dag-scheduler) ---
+    # --- E2.4 Pattern A wave 3 batch AX-33 (2026-10-09): fabric-capability + fabric-checker ---
+    # --- E2.4 Pattern A wave 3 batch AC (2026-10-09): 1 agileplus lib (agileplus-nats) ---
+    # --- E2.4 Pattern A wave 3 batch AD (2026-10-09): 1 small phenotype lib (bench-guard) ---
+    # --- E2.4 Pattern A wave 3 batch AX-29 (2026-10-09): configra-ops + settly ---
+    # --- E2.4 Pattern A wave 3 batch AX-30 (2026-10-09): 4 cloud-* ---
+    # --- E2.4 Pattern A wave 3 batch AX-31 (2026-10-09): 5 simple ---
+    # --- E2.4 Pattern A wave 3 batch AX-32 (2026-10-09): dag-scheduler ---
+    # --- E2.4 Pattern A wave 3 batch AX-33 (2026-10-09): fabric-capability + fabric-checker ---
+    # --- E2.4 Pattern A wave 3 batch AE (2026-10-09): 1 example lib (clap-ext-examples) ---
+    # --- E2.4 Pattern A wave 3 batch AF (2026-10-09): 1 substrate-a2a leaf ---
+    # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): phenotype-router ---
+    # --- E2.4 Pattern A wave 3 batch AX-27 (2026-10-09): teamcomm-cli ---
+    # --- E2.4 Pattern A wave 3 batch AX-28 (2026-10-09): arch-test + audit-privacy + bench-guard ---
+    # --- E2.4 Pattern A wave 3 batch AX-29 (2026-10-09): configra-ops + settly ---
+    # --- E2.4 Pattern A wave 3 batch AX-30 (2026-10-09): 4 cloud-* ---
+    # --- E2.4 Pattern A wave 3 batch AX-31 (2026-10-09): 5 simple ---
+    # --- E2.4 Pattern A wave 3 batch AX-32 (2026-10-09): dag-scheduler ---
+    # --- E2.4 Pattern A wave 3 batch AX-33 (2026-10-09): fabric-capability + fabric-checker ---
+    # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): klipdot + logkit ---
+    # --- E2.4 Pattern A wave 3 batch AG (2026-10-09): 1 focus-ci-watcher ---
+    # --- E2.4 Pattern A wave 3 batch AH (2026-10-09): 1 focus-calendar ---
+    # --- E2.4 Pattern A wave 3 batch AI (2026-10-09): 1 focus-crypto + ring workspace dep ---
+    # --- E2.4 Pattern A wave 3 batch AJ (2026-10-09): 1 focus-telemetry + url workspace dep ---
+    # --- E2.4 Pattern A wave 3 batch AK (2026-10-09): 1 focus-entitlements + uniffi workspace dep ---
+    # --- E2.4 Pattern A wave 3 batch AL (2026-10-09): 1 focus-icon-gen ---
+    # --- E2.4 Pattern A wave 3 batch AM (2026-10-09): 1 focus-rules ---
+    # --- E2.4 Pattern A wave 3 batch AN (2026-10-09): 1 focus-scheduler ---
+    # --- E2.4 Pattern A wave 3 batch AO (2026-10-09): 1 focus-observability ---
+    # --- E2.4 Pattern A wave 3 batch X (2026-10-09): 1 eyetracker lib (eyetracker-inference) ---
+    # --- E2.4 Pattern A wave 3 batch Y (2026-10-09): 1 eyetracker lib (eyetracker-ffi) ---
+    # --- E2.4 Pattern A wave 3 batch Z (2026-10-09): 1 focus lib (focus-release-bot) ---
+    # --- E2.4 Pattern A wave 3 batch AA2 (2026-10-09): 3 small libs (focus-sync-store, substrate-dag, phenotype-casbin-wrapper) ---
+    # --- E2.4 Pattern A wave 3 batch AB2 (2026-10-09): 2 small libs (acceptance-contract, dag-scheduler) ---
+    # --- E2.4 Pattern A wave 3 batch AX-33 (2026-10-09): fabric-capability + fabric-checker ---
+    # --- E2.4 Pattern A wave 3 batch AC (2026-10-09): 1 agileplus lib (agileplus-nats) ---
+    # --- E2.4 Pattern A wave 3 batch AD (2026-10-09): 1 small phenotype lib (bench-guard) ---
+    # --- E2.4 Pattern A wave 3 batch AX-29 (2026-10-09): configra-ops + settly ---
+    # --- E2.4 Pattern A wave 3 batch AX-30 (2026-10-09): 4 cloud-* ---
+    # --- E2.4 Pattern A wave 3 batch AX-31 (2026-10-09): 5 simple ---
+    # --- E2.4 Pattern A wave 3 batch AX-32 (2026-10-09): dag-scheduler ---
+    # --- E2.4 Pattern A wave 3 batch AX-33 (2026-10-09): fabric-capability + fabric-checker ---
+    # --- E2.4 Pattern A wave 3 batch AE (2026-10-09): 1 example lib (clap-ext-examples) ---
+    # --- E2.4 Pattern A wave 3 batch AF (2026-10-09): 1 substrate-a2a leaf ---
+    # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): phenotype-router ---
+    # --- E2.4 Pattern A wave 3 batch AX-27 (2026-10-09): teamcomm-cli ---
+    # --- E2.4 Pattern A wave 3 batch AX-28 (2026-10-09): arch-test + audit-privacy + bench-guard ---
+    # --- E2.4 Pattern A wave 3 batch AX-29 (2026-10-09): configra-ops + settly ---
+    # --- E2.4 Pattern A wave 3 batch AX-30 (2026-10-09): 4 cloud-* ---
+    # --- E2.4 Pattern A wave 3 batch AX-31 (2026-10-09): 5 simple ---
+    # --- E2.4 Pattern A wave 3 batch AX-32 (2026-10-09): dag-scheduler ---
+    # --- E2.4 Pattern A wave 3 batch AX-33 (2026-10-09): fabric-capability + fabric-checker ---
+    # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): klipdot + logkit ---
+    # --- E2.4 Pattern A wave 3 batch AG (2026-10-09): 1 focus-ci-watcher ---
+    # --- E2.4 Pattern A wave 3 batch AH (2026-10-09): 1 focus-calendar ---
+    # --- E2.4 Pattern A wave 3 batch AI (2026-10-09): 1 focus-crypto + ring workspace dep ---
+    # --- E2.4 Pattern A wave 3 batch AJ (2026-10-09): 1 focus-telemetry + url workspace dep ---
+    # --- E2.4 Pattern A wave 3 batch AK (2026-10-09): 1 focus-entitlements + uniffi workspace dep ---
+    # --- E2.4 Pattern A wave 3 batch AL (2026-10-09): 1 focus-icon-gen ---
+    # --- E2.4 Pattern A wave 3 batch AM (2026-10-09): 1 focus-rules ---
+    # --- E2.4 Pattern A wave 3 batch AN (2026-10-09): 1 focus-scheduler ---
+    # --- E2.4 Pattern A wave 3 batch AO (2026-10-09): 1 focus-observability ---
+    # --- E2.4 Pattern A wave 3 batch Y (2026-10-09): 1 eyetracker lib (eyetracker-ffi) ---
+    # --- E2.4 Pattern A wave 3 batch Z (2026-10-09): 1 focus lib (focus-release-bot) ---
+    # --- E2.4 Pattern A wave 3 batch AA2 (2026-10-09): 3 small libs (focus-sync-store, substrate-dag, phenotype-casbin-wrapper) ---
+    # --- E2.4 Pattern A wave 3 batch AB2 (2026-10-09): 2 small libs (acceptance-contract, dag-scheduler) ---
+    # --- E2.4 Pattern A wave 3 batch AX-33 (2026-10-09): fabric-capability + fabric-checker ---
+    # --- E2.4 Pattern A wave 3 batch AC (2026-10-09): 1 agileplus lib (agileplus-nats) ---
+    # --- E2.4 Pattern A wave 3 batch AD (2026-10-09): 1 small phenotype lib (bench-guard) ---
+    # --- E2.4 Pattern A wave 3 batch AX-29 (2026-10-09): configra-ops + settly ---
+    # --- E2.4 Pattern A wave 3 batch AX-30 (2026-10-09): 4 cloud-* ---
+    # --- E2.4 Pattern A wave 3 batch AX-31 (2026-10-09): 5 simple ---
+    # --- E2.4 Pattern A wave 3 batch AX-32 (2026-10-09): dag-scheduler ---
+    # --- E2.4 Pattern A wave 3 batch AX-33 (2026-10-09): fabric-capability + fabric-checker ---
+    # --- E2.4 Pattern A wave 3 batch AE (2026-10-09): 1 example lib (clap-ext-examples) ---
+    # --- E2.4 Pattern A wave 3 batch AF (2026-10-09): 1 substrate-a2a leaf ---
+    # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): phenotype-router ---
+    # --- E2.4 Pattern A wave 3 batch AX-27 (2026-10-09): teamcomm-cli ---
+    # --- E2.4 Pattern A wave 3 batch AX-28 (2026-10-09): arch-test + audit-privacy + bench-guard ---
+    # --- E2.4 Pattern A wave 3 batch AX-29 (2026-10-09): configra-ops + settly ---
+    # --- E2.4 Pattern A wave 3 batch AX-30 (2026-10-09): 4 cloud-* ---
+    # --- E2.4 Pattern A wave 3 batch AX-31 (2026-10-09): 5 simple ---
+    # --- E2.4 Pattern A wave 3 batch AX-32 (2026-10-09): dag-scheduler ---
+    # --- E2.4 Pattern A wave 3 batch AX-33 (2026-10-09): fabric-capability + fabric-checker ---
+    # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): klipdot + logkit ---
+    # --- E2.4 Pattern A wave 3 batch AG (2026-10-09): 1 focus-ci-watcher ---
+    # --- E2.4 Pattern A wave 3 batch AH (2026-10-09): 1 focus-calendar ---
+    # --- E2.4 Pattern A wave 3 batch AI (2026-10-09): 1 focus-crypto + ring workspace dep ---
+    # --- E2.4 Pattern A wave 3 batch AJ (2026-10-09): 1 focus-telemetry + url workspace dep ---
+    # --- E2.4 Pattern A wave 3 batch AK (2026-10-09): 1 focus-entitlements + uniffi workspace dep ---
+    # --- E2.4 Pattern A wave 3 batch AL (2026-10-09): 1 focus-icon-gen ---
+    # --- E2.4 Pattern A wave 3 batch AM (2026-10-09): 1 focus-rules ---
+    # --- E2.4 Pattern A wave 3 batch AN (2026-10-09): 1 focus-scheduler ---
+    # --- E2.4 Pattern A wave 3 batch AO (2026-10-09): 1 focus-observability ---
     # --- pm-core crates (restored 2026-09-20 from zz-archive/git-bundles-20260910/phenotype-archive.bundle @ refs/archive/phenotype-pm-core-2026-08-09/heads/master d3277c40; content strictly supersedes the partial traceability-core copy under crates/agile-plus/) ---
     "crates/traceability-core",
     "crates/traceability-decorators",
     "crates/trace-gate",
     "crates/gateway",
-]
+    # --- E2.4 Pattern A wave 1 (2026-10-09): 5 small/leaf crates (connector-testkit deferred; pulls PhenoObservability path-dep not in CI; phenotype-mock deferred; latent Drop+StubFn source bugs) ---
+    # --- E2.4 Pattern A wave 3 batch AX-29 (2026-10-09): configra-ops + settly ---
+    # --- E2.4 Pattern A wave 3 batch AX-30 (2026-10-09): 4 cloud-* ---
+    # --- E2.4 Pattern A wave 3 batch AX-31 (2026-10-09): 5 simple ---
+    # --- E2.4 Pattern A wave 3 batch AX-32 (2026-10-09): dag-scheduler ---
+    # --- E2.4 Pattern A wave 3 batch AX-33 (2026-10-09): fabric-capability + fabric-checker ---
+    # --- E2.4 Pattern A wave 3 batch AE (2026-10-09): 1 example lib (clap-ext-examples) ---
+    # --- E2.4 Pattern A wave 3 batch AF (2026-10-09): 1 substrate-a2a leaf ---
+    # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): phenotype-router ---
+    # --- E2.4 Pattern A wave 3 batch AX-27 (2026-10-09): teamcomm-cli ---
+    # --- E2.4 Pattern A wave 3 batch AX-28 (2026-10-09): arch-test + audit-privacy + bench-guard ---
+    # --- E2.4 Pattern A wave 3 batch AX-29 (2026-10-09): configra-ops + settly ---
+    # --- E2.4 Pattern A wave 3 batch AX-30 (2026-10-09): 4 cloud-* ---
+    # --- E2.4 Pattern A wave 3 batch AX-31 (2026-10-09): 5 simple ---
+    # --- E2.4 Pattern A wave 3 batch AX-32 (2026-10-09): dag-scheduler ---
+    # --- E2.4 Pattern A wave 3 batch AX-33 (2026-10-09): fabric-capability + fabric-checker ---
+    # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): klipdot + logkit ---
+    # --- E2.4 Pattern A wave 3 batch AG (2026-10-09): 1 focus-ci-watcher ---
+    # --- E2.4 Pattern A wave 3 batch AH (2026-10-09): 1 focus-calendar ---
+    # --- E2.4 Pattern A wave 3 batch AI (2026-10-09): 1 focus-crypto + ring workspace dep ---
+    # --- E2.4 Pattern A wave 3 batch AJ (2026-10-09): 1 focus-telemetry + url workspace dep ---
+    # --- E2.4 Pattern A wave 3 batch AK (2026-10-09): 1 focus-entitlements + uniffi workspace dep ---
+    # --- E2.4 Pattern A wave 3 batch AL (2026-10-09): 1 focus-icon-gen ---
+    # --- E2.4 Pattern A wave 3 batch AM (2026-10-09): 1 focus-rules ---
+    # --- E2.4 Pattern A wave 3 batch AN (2026-10-09): 1 focus-scheduler ---
+    # --- E2.4 Pattern A wave 3 batch AO (2026-10-09): 1 focus-observability ---
+    "crates/fuzz-setup",
+    "crates/perfharness",
+    "crates/phenotype-flags",
+    "crates/release-cut",
+    # --- E2.4 Pattern A wave 2 (2026-10-09): 7 small/leaf crates (5 dropped: phenotype-cache-adapter / phenotype-state-machine / phenotype-event-bus / phenotype-macros / phenotype-config-loader all carry MIGRATED.md notes explicitly saying "Do not register as a workspace member") ---
+    "crates/phenotype-git-core",
+    "crates/phenotype-rate-limit",
+    "crates/phenotype-string",
+    # --- E2.4 Pattern A wave 3 batch AX-9 (2026-10-09): shared-config + validation + port-interfaces + telemetry ---
+    "crates/phenotype-shared-config",
+    "crates/phenotype-validation",
+    "crates/phenotype-port-interfaces",
+    "crates/phenotype-telemetry",
+    # --- E2.4 Pattern A wave 3 batch AX-10 (2026-10-09): phenotype-macros ---
+    "crates/phenotype-macros",
+    # --- E2.4 Pattern A wave 3 batch AX-11 (2026-10-09): teamcomm-daemon ---
+    "crates/teamcomm-daemon",
+    # --- E2.4 Pattern A wave 3 batch AX-12 (2026-10-09): teamcomm-client ---
+    "crates/teamcomm-client",
+    # --- E2.4 Pattern A wave 3 batch AX-13 (2026-10-09): teamcomm-mcp ---
+    "crates/teamcomm-mcp",
+    # --- E2.4 Pattern A wave 3 batch AX-14 (2026-10-09): qgate ---
+    "crates/qgate",
+    # --- E2.4 Pattern A wave 3 batch AX-15 (2026-10-09): pheno-forge-smoke ---
+    "crates/pheno-forge-smoke",
+    # --- E2.4 Pattern A wave 3 batch AX-16 (2026-10-09): llm-router ---
+    "crates/llm-router",
+    # --- E2.4 Pattern A wave 3 batch AX-17 (2026-10-09): pheno-context ---
+    "crates/pheno-context",
+    # --- E2.4 Pattern A wave 3 batch AX-18 (2026-10-09): phenotype-config ---
+    "crates/phenotype-config",
+    # --- E2.4 Pattern A wave 3 batch AX-19 (2026-10-09): tooling-obs + journeys-obs ---
+    "crates/phenotype-tooling-observability",
+    "crates/phenotype-journeys-observability",
+    # --- E2.4 Pattern A wave 3 batch AX-20 (2026-10-09): pheno-compose-pheno-config ---
+    "crates/pheno-compose-pheno-config",
+    # --- E2.4 Pattern A wave 3 batch AX-21 (2026-10-09): service-registry + project-registry ---
+    # --- E2.4 Pattern A wave 3 batch AX-22 (2026-10-09): phenotype-gfx ---
+    # --- E2.4 Pattern A wave 3 batch AX-23 (2026-10-09): casbin + voxel ---
+    # --- E2.4 Pattern A wave 3 batch AX-24 (2026-10-09): agileplus-nats + agileplus-graph ---
+    # --- E2.4 Pattern A wave 3 batch AX-25 (2026-10-09): airlock-v2 + anthropic-usage-poll + agent-forecast + a2a ---
+    # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): phenotype-router ---
+    # --- E2.4 Pattern A wave 3 batch AX-27 (2026-10-09): teamcomm-cli ---
+    # --- E2.4 Pattern A wave 3 batch AX-28 (2026-10-09): arch-test + audit-privacy + bench-guard ---
+    # --- E2.4 Pattern A wave 3 batch AX-29 (2026-10-09): configra-ops + settly ---
+    # --- E2.4 Pattern A wave 3 batch AX-30 (2026-10-09): 4 cloud-* ---
+    # --- E2.4 Pattern A wave 3 batch AX-31 (2026-10-09): 5 simple ---
+    # --- E2.4 Pattern A wave 3 batch AX-32 (2026-10-09): dag-scheduler ---
+    # --- E2.4 Pattern A wave 3 batch AX-33 (2026-10-09): fabric-capability + fabric-checker ---
+    # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): klipdot + logkit ---
+    "crates/focus-time",
+    "crates/focus-ui",
+    "crates/phenovcs-observability",
+    # --- E2.4 Pattern A wave 3 batch P (2026-10-09): 3 small libs (pheno-crypto, pheno-net, pheno-testing) ---
+    "crates/pheno-crypto",
+    "crates/pheno-net",
+    "crates/pheno-testing",
+    # --- E2.4 Pattern A wave 3 batch Q (2026-10-09): 4 small libs (focus-mascot, focus-planning, pheno-fs, pheno-terminal) ---
+    "crates/focus-mascot",
+    # --- E2.4 Pattern A wave 3 batch AX (2026-10-09): 1 teamcomm-protocol ---
+    "crates/teamcomm-protocol",
+    # --- E2.4 Pattern A wave 3 batch AX-3 (2026-10-09): 1 phenotype-event-bus ---
+    "crates/phenotype-event-bus",
+    # --- E2.4 Pattern A wave 3 batch AX-4 (2026-10-09): 1 phenotype-state-machine ---
+    "crates/phenotype-state-machine",
+    # --- E2.4 Pattern A wave 3 batch AX-5 (2026-10-09): 1 phenotype-journey-core ---
+    "crates/phenotype-journey-core",
+    # --- E2.4 Pattern A wave 3 batch AX-6 (2026-10-09): 1 phenotype-router-monitor ---
+    "crates/phenotype-router-monitor",
+    # --- E2.4 Pattern A wave 3 batch AX-7 (2026-10-09): phenotype-health + phenotype-iter ---
+    "crates/phenotype-health",
+    "crates/phenotype-iter",
+    # --- E2.4 Pattern A wave 3 batch AX (2026-10-09): 1 substrate-a2a ---
+    # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): phenotype-router ---
+    # --- E2.4 Pattern A wave 3 batch AX-27 (2026-10-09): teamcomm-cli ---
+    # --- E2.4 Pattern A wave 3 batch AX-28 (2026-10-09): arch-test + audit-privacy + bench-guard ---
+    # --- E2.4 Pattern A wave 3 batch AX-29 (2026-10-09): configra-ops + settly ---
+    # --- E2.4 Pattern A wave 3 batch AX-30 (2026-10-09): 4 cloud-* ---
+    # --- E2.4 Pattern A wave 3 batch AX-31 (2026-10-09): 5 simple ---
+    # --- E2.4 Pattern A wave 3 batch AX-32 (2026-10-09): dag-scheduler ---
+    # --- E2.4 Pattern A wave 3 batch AX-33 (2026-10-09): fabric-capability + fabric-checker ---
+    # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): klipdot + logkit ---
+    "crates/focus-planning",
+    "crates/pheno-fs",
+    # --- E2.4 Pattern A wave 3 batch S (2026-10-09): 1 small lib (agileplus-graph) ---
+    # --- E2.4 Pattern A wave 3 batch AX-25 (2026-10-09): airlock-v2 + anthropic-usage-poll + agent-forecast + a2a ---
+    # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): phenotype-router ---
+    # --- E2.4 Pattern A wave 3 batch AX-27 (2026-10-09): teamcomm-cli ---
+    # --- E2.4 Pattern A wave 3 batch AX-28 (2026-10-09): arch-test + audit-privacy + bench-guard ---
+    # --- E2.4 Pattern A wave 3 batch AX-29 (2026-10-09): configra-ops + settly ---
+    # --- E2.4 Pattern A wave 3 batch AX-30 (2026-10-09): 4 cloud-* ---
+    # --- E2.4 Pattern A wave 3 batch AX-31 (2026-10-09): 5 simple ---
+    # --- E2.4 Pattern A wave 3 batch AX-32 (2026-10-09): dag-scheduler ---
+    # --- E2.4 Pattern A wave 3 batch AX-33 (2026-10-09): fabric-capability + fabric-checker ---
+    # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): klipdot + logkit ---
+    # --- E2.4 Pattern A wave 3 batch T4 (2026-10-09): 4 tiny libs (focus-ui, focus-time, phenotype-git-core, eyetracker-domain) ---
+    # --- E2.4 Pattern A wave 3 batch U (2026-10-09): 2 small libs (phenotype-logging, datakit) ---
+    # --- E2.4 Pattern A wave 3 batch V2 (2026-10-09): 2 eyetracker libs (eyetracker-math, eyetracker-core) ---
+    # --- E2.4 Pattern A wave 3 batch W (2026-10-09): 1 eyetracker lib (eyetracker-camera) ---
+    # --- E2.4 Pattern A wave 3 batch X (2026-10-09): 1 eyetracker lib (eyetracker-inference) ---
+    # --- E2.4 Pattern A wave 3 batch Y (2026-10-09): 1 eyetracker lib (eyetracker-ffi) ---
+    # --- E2.4 Pattern A wave 3 batch Z (2026-10-09): 1 focus lib (focus-release-bot) ---
+    # --- E2.4 Pattern A wave 3 batch AA2 (2026-10-09): 3 small libs (focus-sync-store, substrate-dag, phenotype-casbin-wrapper) ---
+    # --- E2.4 Pattern A wave 3 batch AB2 (2026-10-09): 2 small libs (acceptance-contract, dag-scheduler) ---
+    # --- E2.4 Pattern A wave 3 batch AX-33 (2026-10-09): fabric-capability + fabric-checker ---
+    # --- E2.4 Pattern A wave 3 batch AC (2026-10-09): 1 agileplus lib (agileplus-nats) ---
+    # --- E2.4 Pattern A wave 3 batch AD (2026-10-09): 1 small phenotype lib (bench-guard) ---
+    # --- E2.4 Pattern A wave 3 batch AX-29 (2026-10-09): configra-ops + settly ---
+    # --- E2.4 Pattern A wave 3 batch AX-30 (2026-10-09): 4 cloud-* ---
+    # --- E2.4 Pattern A wave 3 batch AX-31 (2026-10-09): 5 simple ---
+    # --- E2.4 Pattern A wave 3 batch AX-32 (2026-10-09): dag-scheduler ---
+    # --- E2.4 Pattern A wave 3 batch AX-33 (2026-10-09): fabric-capability + fabric-checker ---
+    # --- E2.4 Pattern A wave 3 batch AE (2026-10-09): 1 example lib (clap-ext-examples) ---
+    # --- E2.4 Pattern A wave 3 batch AF (2026-10-09): 1 substrate-a2a leaf ---
+    # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): phenotype-router ---
+    # --- E2.4 Pattern A wave 3 batch AX-27 (2026-10-09): teamcomm-cli ---
+    # --- E2.4 Pattern A wave 3 batch AX-28 (2026-10-09): arch-test + audit-privacy + bench-guard ---
+    # --- E2.4 Pattern A wave 3 batch AX-29 (2026-10-09): configra-ops + settly ---
+    # --- E2.4 Pattern A wave 3 batch AX-30 (2026-10-09): 4 cloud-* ---
+    # --- E2.4 Pattern A wave 3 batch AX-31 (2026-10-09): 5 simple ---
+    # --- E2.4 Pattern A wave 3 batch AX-32 (2026-10-09): dag-scheduler ---
+    # --- E2.4 Pattern A wave 3 batch AX-33 (2026-10-09): fabric-capability + fabric-checker ---
+    # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): klipdot + logkit ---
+    # --- E2.4 Pattern A wave 3 batch AG (2026-10-09): 1 focus-ci-watcher ---
+    # --- E2.4 Pattern A wave 3 batch AH (2026-10-09): 1 focus-calendar ---
+    # --- E2.4 Pattern A wave 3 batch AI (2026-10-09): 1 focus-crypto + ring workspace dep ---
+    # --- E2.4 Pattern A wave 3 batch AJ (2026-10-09): 1 focus-telemetry + url workspace dep ---
+    # --- E2.4 Pattern A wave 3 batch AK (2026-10-09): 1 focus-entitlements + uniffi workspace dep ---
+    # --- E2.4 Pattern A wave 3 batch AL (2026-10-09): 1 focus-icon-gen ---
+    # --- E2.4 Pattern A wave 3 batch AM (2026-10-09): 1 focus-rules ---
+    # --- E2.4 Pattern A wave 3 batch AN (2026-10-09): 1 focus-scheduler ---
+    # --- E2.4 Pattern A wave 3 batch AO (2026-10-09): 1 focus-observability ---
+    "crates/sidekick-messaging",
+    # --- E2.4 Pattern A wave 3 batch V2 (2026-10-09): 2 eyetracker libs (eyetracker-math, eyetracker-core) ---
+    # --- E2.4 Pattern A wave 3 batch W (2026-10-09): 1 eyetracker lib (eyetracker-camera) ---
+    # --- E2.4 Pattern A wave 3 batch X (2026-10-09): 1 eyetracker lib (eyetracker-inference) ---
+    # --- E2.4 Pattern A wave 3 batch Y (2026-10-09): 1 eyetracker lib (eyetracker-ffi) ---
+    # --- E2.4 Pattern A wave 3 batch Z (2026-10-09): 1 focus lib (focus-release-bot) ---
+    # --- E2.4 Pattern A wave 3 batch AA2 (2026-10-09): 3 small libs (focus-sync-store, substrate-dag, phenotype-casbin-wrapper) ---
+    # --- E2.4 Pattern A wave 3 batch AB2 (2026-10-09): 2 small libs (acceptance-contract, dag-scheduler) ---
+    # --- E2.4 Pattern A wave 3 batch AX-33 (2026-10-09): fabric-capability + fabric-checker ---
+    # --- E2.4 Pattern A wave 3 batch AC (2026-10-09): 1 agileplus lib (agileplus-nats) ---
+    # --- E2.4 Pattern A wave 3 batch AD (2026-10-09): 1 small phenotype lib (bench-guard) ---
+    # --- E2.4 Pattern A wave 3 batch AX-29 (2026-10-09): configra-ops + settly ---
+    # --- E2.4 Pattern A wave 3 batch AX-30 (2026-10-09): 4 cloud-* ---
+    # --- E2.4 Pattern A wave 3 batch AX-31 (2026-10-09): 5 simple ---
+    # --- E2.4 Pattern A wave 3 batch AX-32 (2026-10-09): dag-scheduler ---
+    # --- E2.4 Pattern A wave 3 batch AX-33 (2026-10-09): fabric-capability + fabric-checker ---
+    # --- E2.4 Pattern A wave 3 batch AE (2026-10-09): 1 example lib (clap-ext-examples) ---
+    # --- E2.4 Pattern A wave 3 batch AF (2026-10-09): 1 substrate-a2a leaf ---
+    # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): phenotype-router ---
+    # --- E2.4 Pattern A wave 3 batch AX-27 (2026-10-09): teamcomm-cli ---
+    # --- E2.4 Pattern A wave 3 batch AX-28 (2026-10-09): arch-test + audit-privacy + bench-guard ---
+    # --- E2.4 Pattern A wave 3 batch AX-29 (2026-10-09): configra-ops + settly ---
+    # --- E2.4 Pattern A wave 3 batch AX-30 (2026-10-09): 4 cloud-* ---
+    # --- E2.4 Pattern A wave 3 batch AX-31 (2026-10-09): 5 simple ---
+    # --- E2.4 Pattern A wave 3 batch AX-32 (2026-10-09): dag-scheduler ---
+    # --- E2.4 Pattern A wave 3 batch AX-33 (2026-10-09): fabric-capability + fabric-checker ---
+    # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): klipdot + logkit ---
+    # --- E2.4 Pattern A wave 3 batch AG (2026-10-09): 1 focus-ci-watcher ---
+    # --- E2.4 Pattern A wave 3 batch AH (2026-10-09): 1 focus-calendar ---
+    # --- E2.4 Pattern A wave 3 batch AI (2026-10-09): 1 focus-crypto + ring workspace dep ---
+    # --- E2.4 Pattern A wave 3 batch AJ (2026-10-09): 1 focus-telemetry + url workspace dep ---
+    # --- E2.4 Pattern A wave 3 batch AK (2026-10-09): 1 focus-entitlements + uniffi workspace dep ---
+    # --- E2.4 Pattern A wave 3 batch AL (2026-10-09): 1 focus-icon-gen ---
+    # --- E2.4 Pattern A wave 3 batch AM (2026-10-09): 1 focus-rules ---
+    # --- E2.4 Pattern A wave 3 batch AN (2026-10-09): 1 focus-scheduler ---
+    # --- E2.4 Pattern A wave 3 batch AO (2026-10-09): 1 focus-observability ---
+    # --- E2.4 Pattern A wave 3 (2026-10-09): 4 small/leaf crates (just-add; no new workspace.dependencies needed) ---
+    "crates/temporal-grounding",
+    "crates/pheno-forge-scaffold",
+    "crates/pheno-errors",
+    # --- E2.4 Pattern A wave 3 batch B (2026-10-09): 4 CLI tools using walkdir (added walkdir 2.5 to [workspace.dependencies]) ---
+    "crates/fr-trace",
+    "crates/legacy-scan",
+    # --- E2.4 Pattern A wave 3 batch D (2026-10-09): 1 trait-definitions lib (phenotype-port-interfaces; added publish=false to [workspace.package]) ---
+    # --- E2.4 Pattern A wave 3 batch E (2026-10-09): 1 flag-definitions lib (pheno-flags; uses pheno-errors from wave 3 batch A) ---
+    "crates/pheno-flags",
+    # --- E2.4 Pattern A wave 3 batch F (2026-10-09): 4 medium libs (focus-domain, focus-release-bot, phenotype-logging, mcp-server) ---
+    "crates/focus-domain",
+    # --- E2.4 Pattern A wave 3 batch AA2 (2026-10-09): 3 small libs (focus-sync-store, substrate-dag, phenotype-casbin-wrapper) ---
+    # --- E2.4 Pattern A wave 3 batch AB2 (2026-10-09): 2 small libs (acceptance-contract, dag-scheduler) ---
+    # --- E2.4 Pattern A wave 3 batch AX-33 (2026-10-09): fabric-capability + fabric-checker ---
+    # --- E2.4 Pattern A wave 3 batch AC (2026-10-09): 1 agileplus lib (agileplus-nats) ---
+    # --- E2.4 Pattern A wave 3 batch AD (2026-10-09): 1 small phenotype lib (bench-guard) ---
+    # --- E2.4 Pattern A wave 3 batch AX-29 (2026-10-09): configra-ops + settly ---
+    # --- E2.4 Pattern A wave 3 batch AX-30 (2026-10-09): 4 cloud-* ---
+    # --- E2.4 Pattern A wave 3 batch AX-31 (2026-10-09): 5 simple ---
+    # --- E2.4 Pattern A wave 3 batch AX-32 (2026-10-09): dag-scheduler ---
+    # --- E2.4 Pattern A wave 3 batch AX-33 (2026-10-09): fabric-capability + fabric-checker ---
+    # --- E2.4 Pattern A wave 3 batch AE (2026-10-09): 1 example lib (clap-ext-examples) ---
+    # --- E2.4 Pattern A wave 3 batch AF (2026-10-09): 1 substrate-a2a leaf ---
+    # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): phenotype-router ---
+    # --- E2.4 Pattern A wave 3 batch AX-27 (2026-10-09): teamcomm-cli ---
+    # --- E2.4 Pattern A wave 3 batch AX-28 (2026-10-09): arch-test + audit-privacy + bench-guard ---
+    # --- E2.4 Pattern A wave 3 batch AX-29 (2026-10-09): configra-ops + settly ---
+    # --- E2.4 Pattern A wave 3 batch AX-30 (2026-10-09): 4 cloud-* ---
+    # --- E2.4 Pattern A wave 3 batch AX-31 (2026-10-09): 5 simple ---
+    # --- E2.4 Pattern A wave 3 batch AX-32 (2026-10-09): dag-scheduler ---
+    # --- E2.4 Pattern A wave 3 batch AX-33 (2026-10-09): fabric-capability + fabric-checker ---
+    # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): klipdot + logkit ---
+    # --- E2.4 Pattern A wave 3 batch AG (2026-10-09): 1 focus-ci-watcher ---
+    # --- E2.4 Pattern A wave 3 batch AH (2026-10-09): 1 focus-calendar ---
+    # --- E2.4 Pattern A wave 3 batch AI (2026-10-09): 1 focus-crypto + ring workspace dep ---
+    # --- E2.4 Pattern A wave 3 batch AJ (2026-10-09): 1 focus-telemetry + url workspace dep ---
+    # --- E2.4 Pattern A wave 3 batch AK (2026-10-09): 1 focus-entitlements + uniffi workspace dep ---
+    # --- E2.4 Pattern A wave 3 batch AL (2026-10-09): 1 focus-icon-gen ---
+    # --- E2.4 Pattern A wave 3 batch AM (2026-10-09): 1 focus-rules ---
+    # --- E2.4 Pattern A wave 3 batch AN (2026-10-09): 1 focus-scheduler ---
+    # --- E2.4 Pattern A wave 3 batch AO (2026-10-09): 1 focus-observability ---
+    "crates/mcp-server",
+    # --- E2.4 Pattern A wave 3 batch G (2026-10-09): 2 small libs (phenotype-contract, anthropic-usage-poll) ---
+    "crates/phenotype-contract",
+    # --- E2.4 Pattern A wave 3 batch H (2026-10-09): 2 small/medium libs (focus-sync-store, focus-asset-fetcher) ---
+    "crates/focus-asset-fetcher",
+    # --- E2.4 Pattern A wave 3 batch AW (2026-10-09): 1 focus-mascot ---
+    # --- E2.4 Pattern A wave 3 batch AX (2026-10-09): 1 teamcomm-protocol ---
+    # --- E2.4 Pattern A wave 3 batch AX-3 (2026-10-09): 1 phenotype-event-bus ---
+    # --- E2.4 Pattern A wave 3 batch AX-4 (2026-10-09): 1 phenotype-state-machine ---
+    # --- E2.4 Pattern A wave 3 batch AX-5 (2026-10-09): 1 phenotype-journey-core ---
+    # --- E2.4 Pattern A wave 3 batch AX-6 (2026-10-09): 1 phenotype-router-monitor ---
+    # --- E2.4 Pattern A wave 3 batch AX-7 (2026-10-09): phenotype-health + phenotype-iter ---
+    # --- E2.4 Pattern A wave 3 batch AX (2026-10-09): 1 substrate-a2a ---
+    # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): phenotype-router ---
+    # --- E2.4 Pattern A wave 3 batch AX-27 (2026-10-09): teamcomm-cli ---
+    # --- E2.4 Pattern A wave 3 batch AX-28 (2026-10-09): arch-test + audit-privacy + bench-guard ---
+    # --- E2.4 Pattern A wave 3 batch AX-29 (2026-10-09): configra-ops + settly ---
+    # --- E2.4 Pattern A wave 3 batch AX-30 (2026-10-09): 4 cloud-* ---
+    # --- E2.4 Pattern A wave 3 batch AX-31 (2026-10-09): 5 simple ---
+    # --- E2.4 Pattern A wave 3 batch AX-32 (2026-10-09): dag-scheduler ---
+    # --- E2.4 Pattern A wave 3 batch AX-33 (2026-10-09): fabric-capability + fabric-checker ---
+    # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): klipdot + logkit ---
+    # --- E2.4 Pattern A wave 3 batch I (2026-10-09): 1 small lib (phenotype-diff) ---
+    "crates/phenotype-diff",
+    # --- E2.4 Pattern A wave 3 batch J (2026-10-09): 1 small lib (configra-ops; logkit deferred) ---
+    # --- E2.4 Pattern A wave 3 batch AX-30 (2026-10-09): 4 cloud-* ---
+    # --- E2.4 Pattern A wave 3 batch AX-31 (2026-10-09): 5 simple ---
+    # --- E2.4 Pattern A wave 3 batch AX-32 (2026-10-09): dag-scheduler ---
+    # --- E2.4 Pattern A wave 3 batch AX-33 (2026-10-09): fabric-capability + fabric-checker ---
+    # --- E2.4 Pattern A wave 3 batch K (2026-10-09): 1 focus-* lib (focus-coaching; secrecy added to workspace) ---
+    "crates/focus-coaching",
+    # --- E2.4 Pattern A wave 3 batch L (2026-10-09): 2 small libs (pheno-schema-port, phenotype-cost-core) ---
+    "crates/pheno-schema-port",
+    "crates/phenotype-cost-core",
+    # --- E2.4 Pattern A wave 3 batch M (2026-10-09): 2 small libs (phenotype-resilience, pheno-cache-adapter) ---
+    "crates/phenotype-resilience",
+    "crates/pheno-cache-adapter",
+    # --- E2.4 Pattern A wave 3 batch N (2026-10-09): 3 small libs (pheno-shell, clap-ext, airlock-v2) ---
+    "crates/pheno-shell",
+    # --- E2.4 Pattern A wave 3 batch O (2026-10-09): 4 small libs (driver-argv, arch-test, sidekick-messaging, phenovcs-observability) ---
+    # --- E2.4 Pattern A wave 3 batch AX-32 (2026-10-09): dag-scheduler ---
+    # --- E2.4 Pattern A wave 3 batch AX-33 (2026-10-09): fabric-capability + fabric-checker ---
+    # --- E2.4 Pattern A wave 3 batch P (2026-10-09): 3 small libs (pheno-crypto, pheno-net, pheno-testing) ---
+    # --- E2.4 Pattern A wave 3 batch Q (2026-10-09): 4 small libs (focus-mascot, focus-planning, pheno-fs, pheno-terminal) ---
+    # --- E2.4 Pattern A wave 3 batch AX (2026-10-09): 1 teamcomm-protocol ---
+    # --- E2.4 Pattern A wave 3 batch AX-3 (2026-10-09): 1 phenotype-event-bus ---
+    # --- E2.4 Pattern A wave 3 batch AX-4 (2026-10-09): 1 phenotype-state-machine ---
+    # --- E2.4 Pattern A wave 3 batch AX-5 (2026-10-09): 1 phenotype-journey-core ---
+    # --- E2.4 Pattern A wave 3 batch AX-6 (2026-10-09): 1 phenotype-router-monitor ---
+    # --- E2.4 Pattern A wave 3 batch AX-7 (2026-10-09): phenotype-health + phenotype-iter ---
+    # --- E2.4 Pattern A wave 3 batch AX (2026-10-09): 1 substrate-a2a ---
+    # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): phenotype-router ---
+    # --- E2.4 Pattern A wave 3 batch AX-27 (2026-10-09): teamcomm-cli ---
+    # --- E2.4 Pattern A wave 3 batch AX-28 (2026-10-09): arch-test + audit-privacy + bench-guard ---
+    # --- E2.4 Pattern A wave 3 batch AX-29 (2026-10-09): configra-ops + settly ---
+    # --- E2.4 Pattern A wave 3 batch AX-30 (2026-10-09): 4 cloud-* ---
+    # --- E2.4 Pattern A wave 3 batch AX-31 (2026-10-09): 5 simple ---
+    # --- E2.4 Pattern A wave 3 batch AX-32 (2026-10-09): dag-scheduler ---
+    # --- E2.4 Pattern A wave 3 batch AX-33 (2026-10-09): fabric-capability + fabric-checker ---
+    # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): klipdot + logkit ---
+    # --- E2.4 Pattern A wave 3 batch R (2026-10-09): 1 focus lib (focus-events) ---
+    # --- E2.4 Pattern A wave 3 batch S (2026-10-09): 1 small lib (agileplus-graph) ---
+    # --- E2.4 Pattern A wave 3 batch AX-25 (2026-10-09): airlock-v2 + anthropic-usage-poll + agent-forecast + a2a ---
+    # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): phenotype-router ---
+    # --- E2.4 Pattern A wave 3 batch AX-27 (2026-10-09): teamcomm-cli ---
+    # --- E2.4 Pattern A wave 3 batch AX-28 (2026-10-09): arch-test + audit-privacy + bench-guard ---
+    # --- E2.4 Pattern A wave 3 batch AX-29 (2026-10-09): configra-ops + settly ---
+    # --- E2.4 Pattern A wave 3 batch AX-30 (2026-10-09): 4 cloud-* ---
+    # --- E2.4 Pattern A wave 3 batch AX-31 (2026-10-09): 5 simple ---
+    # --- E2.4 Pattern A wave 3 batch AX-32 (2026-10-09): dag-scheduler ---
+    # --- E2.4 Pattern A wave 3 batch AX-33 (2026-10-09): fabric-capability + fabric-checker ---
+    # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): klipdot + logkit ---
+    # --- E2.4 Pattern A wave 3 batch T4 (2026-10-09): 4 tiny libs (focus-ui, focus-time, phenotype-git-core, eyetracker-domain) ---
+    # --- E2.4 Pattern A wave 3 batch U (2026-10-09): 2 small libs (phenotype-logging, datakit) ---
+    # --- E2.4 Pattern A wave 3 batch V2 (2026-10-09): 2 eyetracker libs (eyetracker-math, eyetracker-core) ---
+    # --- E2.4 Pattern A wave 3 batch W (2026-10-09): 1 eyetracker lib (eyetracker-camera) ---
+    # --- E2.4 Pattern A wave 3 batch X (2026-10-09): 1 eyetracker lib (eyetracker-inference) ---
+    # --- E2.4 Pattern A wave 3 batch Y (2026-10-09): 1 eyetracker lib (eyetracker-ffi) ---
+    # --- E2.4 Pattern A wave 3 batch Z (2026-10-09): 1 focus lib (focus-release-bot) ---
+    # --- E2.4 Pattern A wave 3 batch AA2 (2026-10-09): 3 small libs (focus-sync-store, substrate-dag, phenotype-casbin-wrapper) ---
+    # --- E2.4 Pattern A wave 3 batch AB2 (2026-10-09): 2 small libs (acceptance-contract, dag-scheduler) ---
+    # --- E2.4 Pattern A wave 3 batch AX-33 (2026-10-09): fabric-capability + fabric-checker ---
+    # --- E2.4 Pattern A wave 3 batch AC (2026-10-09): 1 agileplus lib (agileplus-nats) ---
+    # --- E2.4 Pattern A wave 3 batch AD (2026-10-09): 1 small phenotype lib (bench-guard) ---
+    # --- E2.4 Pattern A wave 3 batch AX-29 (2026-10-09): configra-ops + settly ---
+    # --- E2.4 Pattern A wave 3 batch AX-30 (2026-10-09): 4 cloud-* ---
+    # --- E2.4 Pattern A wave 3 batch AX-31 (2026-10-09): 5 simple ---
+    # --- E2.4 Pattern A wave 3 batch AX-32 (2026-10-09): dag-scheduler ---
+    # --- E2.4 Pattern A wave 3 batch AX-33 (2026-10-09): fabric-capability + fabric-checker ---
+    # --- E2.4 Pattern A wave 3 batch AE (2026-10-09): 1 example lib (clap-ext-examples) ---
+    # --- E2.4 Pattern A wave 3 batch AF (2026-10-09): 1 substrate-a2a leaf ---
+    # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): phenotype-router ---
+    # --- E2.4 Pattern A wave 3 batch AX-27 (2026-10-09): teamcomm-cli ---
+    # --- E2.4 Pattern A wave 3 batch AX-28 (2026-10-09): arch-test + audit-privacy + bench-guard ---
+    # --- E2.4 Pattern A wave 3 batch AX-29 (2026-10-09): configra-ops + settly ---
+    # --- E2.4 Pattern A wave 3 batch AX-30 (2026-10-09): 4 cloud-* ---
+    # --- E2.4 Pattern A wave 3 batch AX-31 (2026-10-09): 5 simple ---
+    # --- E2.4 Pattern A wave 3 batch AX-32 (2026-10-09): dag-scheduler ---
+    # --- E2.4 Pattern A wave 3 batch AX-33 (2026-10-09): fabric-capability + fabric-checker ---
+    # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): klipdot + logkit ---
+    # --- E2.4 Pattern A wave 3 batch AG (2026-10-09): 1 focus-ci-watcher ---
+    # --- E2.4 Pattern A wave 3 batch AH (2026-10-09): 1 focus-calendar ---
+    # --- E2.4 Pattern A wave 3 batch AI (2026-10-09): 1 focus-crypto + ring workspace dep ---
+    # --- E2.4 Pattern A wave 3 batch AJ (2026-10-09): 1 focus-telemetry + url workspace dep ---
+    # --- E2.4 Pattern A wave 3 batch AK (2026-10-09): 1 focus-entitlements + uniffi workspace dep ---
+    # --- E2.4 Pattern A wave 3 batch AL (2026-10-09): 1 focus-icon-gen ---
+    # --- E2.4 Pattern A wave 3 batch AM (2026-10-09): 1 focus-rules ---
+    # --- E2.4 Pattern A wave 3 batch AN (2026-10-09): 1 focus-scheduler ---
+    # --- E2.4 Pattern A wave 3 batch AO (2026-10-09): 1 focus-observability ---
+    "crates/focus-observability",
+    # --- E2.4 Pattern A wave 3 batch AP (2026-10-09): 1 focus-audit ---
+    "crates/focus-audit",
+    # --- E2.4 Pattern A wave 3 batch AQ (2026-10-09): 1 focus-penalties ---
+    "crates/focus-penalties",
+    # --- E2.4 Pattern A wave 3 batch AR (2026-10-09): 1 focus-rewards ---
+    "crates/focus-rewards",
+    # --- E2.4 Pattern A wave 3 batch AT (2026-10-09): 1 focus-policy ---
+    "crates/focus-policy",
+    # --- E2.4 Pattern A wave 3 batch AU (2026-10-09): 1 focus-rituals ---
+    "crates/focus-rituals",
+    # --- E2.4 Pattern A wave 3 batch AV (2026-10-09): 1 focus-asset-fetcher ---
+    # --- E2.4 Pattern A wave 3 batch AW (2026-10-09): 1 focus-mascot ---
+    # --- E2.4 Pattern A wave 3 batch AX (2026-10-09): 1 teamcomm-protocol ---
+    # --- E2.4 Pattern A wave 3 batch AX-3 (2026-10-09): 1 phenotype-event-bus ---
+    # --- E2.4 Pattern A wave 3 batch AX-4 (2026-10-09): 1 phenotype-state-machine ---
+    # --- E2.4 Pattern A wave 3 batch AX-5 (2026-10-09): 1 phenotype-journey-core ---
+    # --- E2.4 Pattern A wave 3 batch AX-6 (2026-10-09): 1 phenotype-router-monitor ---
+    # --- E2.4 Pattern A wave 3 batch AX-7 (2026-10-09): phenotype-health + phenotype-iter ---
+    # --- E2.4 Pattern A wave 3 batch AX (2026-10-09): 1 substrate-a2a ---
+    # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): phenotype-router ---
+    # --- E2.4 Pattern A wave 3 batch AX-27 (2026-10-09): teamcomm-cli ---
+    # --- E2.4 Pattern A wave 3 batch AX-28 (2026-10-09): arch-test + audit-privacy + bench-guard ---
+    # --- E2.4 Pattern A wave 3 batch AX-29 (2026-10-09): configra-ops + settly ---
+    # --- E2.4 Pattern A wave 3 batch AX-30 (2026-10-09): 4 cloud-* ---
+    # --- E2.4 Pattern A wave 3 batch AX-31 (2026-10-09): 5 simple ---
+    # --- E2.4 Pattern A wave 3 batch AX-32 (2026-10-09): dag-scheduler ---
+    # --- E2.4 Pattern A wave 3 batch AX-33 (2026-10-09): fabric-capability + fabric-checker ---
+    # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): klipdot + logkit ---]
 [workspace.package]
 version = "0.3.10"
 edition = "2021"
 authors = ["<REDACTED> <<REDACTED>@phenotype.space>"]
 license = "MIT OR Apache-2.0"
 repository = "https://github.com/KooshaPari/PhenoShared"
+description = "PhenoShared workspace member"
 rust-version = "1.80"
+publish = false
 
 [workspace.dependencies]
+nix = "0.29"
+landlock = "0.4"
+seccompiler = "0.5"
+redis = "0.27"
+bollard = "0.18"
+ureq = "2"
+argon2 = "0.5"
+aes-gcm = "0.10"
+phenotype-error-core = { path = "crates/phenotype-error-core" }
+futures-util = "0.3"
+agileplus-error-core = { path = "crates/agileplus-error-core" }
 substrate-core = { version = "0.3.8", path = "crates/substrate-core" }
 substrate-serve-lock = { version = "0.3.8", path = "crates/substrate-serve-lock" }
 substrate-trace = { version = "0.3.8", path = "crates/substrate-trace" }
@@ -119,10 +840,21 @@ serde_json = "1.0"
 thiserror = "2.0"
 uuid = { version = "1.11", features = ["v4", "serde"] }
 async-trait = "0.1"
-tokio = { version = "1.42", features = ["rt", "rt-multi-thread", "macros", "process", "io-util", "sync", "time", "signal"] }
+tokio = { version = "1.42", features = ["rt", "rt-multi-thread", "macros", "process", "io-util", "sync", "time", "signal", "io-std"]}
+walkdir = "2.5"
+pheno-errors = { version = "0.3.10", path = "crates/pheno-errors" }
 regex = "1.11"
 anyhow = "1.0"
+hex = "0.4"
+sha2 = "0.11"
+serde_yaml = "0.9"
 clap = { version = "4.5", features = ["derive", "env"] }
+unicode-normalization = "0.1"
+proptest = "1"
+comfy-table = "7"
+plist = "1"
+dirs = "5"
+log = "0.4"
 dashmap = "6"
 toml = "1.1"
 
@@ -152,6 +884,11 @@ futures = "0.3"
 futures-core = "0.3"
 parking_lot = "0.12"
 tokio-stream = "0.1"
+tokio-test = "0.4"
+phenotype-cache-adapter = { path = "crates/phenotype-cache-adapter" }
+clap-ext = { path = "crates/clap-ext" }
+arc-swap = "1.7"
+rand = "0.8"
 tracing = "0.1"
 tracing-subscriber = { version = "0.3", features = ["env-filter", "json"] }
 tracing-opentelemetry = "0.33"
@@ -160,6 +897,9 @@ opentelemetry_sdk = { version = "0.32", features = ["rt-tokio"] }
 opentelemetry-otlp = { version = "0.32", features = ["grpc-tonic"] }
 fs2 = "0.4"
 libc = "0.2"
+ring = "0.17"
+url = "2.5"
+uniffi = { version = "0.31", features = ["cli"] }
 criterion = { version = "0.5", features = ["html_reports"] }
 # Use pheno-otel from PhenoObservability v0.1.0 (ADR-037 substrate).
 # Git + tag + subdirectory form pins the crate to a known-good release
@@ -187,7 +927,7 @@ prometheus = { version = "0.14" }
 bevy = { version = "0.18.1", default-features = false, features = ["bevy_asset", "bevy_mesh"] }
 wgpu = { version = "22" }
 pollster = { version = "0.3" }
-
+secrecy = "0.10"
 [workspace.lints.rust]
 unsafe_code = "forbid"
 unused_must_use = "deny"
@@ -197,3 +937,12 @@ opt-level = "z"
 lto = true
 codegen-units = 1
 strip = true
+
+# Offline vendor-patch: lancedb 0.38.0 has a latent bug where src/job.rs uses
+# Error::Http unconditionally, but src/error.rs only defines that variant
+# under #[cfg(feature = "remote")]. Enabling `remote` requires tower-http 0.5.2
+# which is not in the local cargo cache. The vendor copy at .vendor/lancedb
+# gates the job.rs usage under the same cfg so the default build compiles
+# without the remote feature. Drop this patch once lancedb 0.38.1+ is cached.
+[patch.crates-io]
+lancedb = { path = ".vendor/lancedb" }

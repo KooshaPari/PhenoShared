@@ -31,22 +31,20 @@
 //! Docker client expecting guest FS rules; map CPU/memory via engine host
 //! config (already done by `DockerSandboxClient`).
 
-use super::{
-    plan_from_policy, CgroupStatus, LandlockFsRules, LandlockStatus, NamespaceStatus, SeccompStatus,
-};
 #[cfg(feature = "sandbox-cgroup")]
 use super::apply_cgroup;
 #[cfg(feature = "sandbox-landlock")]
 use super::apply_landlock;
-#[cfg(feature = "sandbox-namespaces")]
-use super::{
-    apply_namespaces, park_until_signal, terminate_isolated_child, PidNsSetup,
-};
 #[cfg(feature = "sandbox-seccomp")]
 use super::apply_seccomp;
+#[cfg(feature = "sandbox-namespaces")]
+use super::{apply_namespaces, park_until_signal, terminate_isolated_child, PidNsSetup};
+use super::{
+    plan_from_policy, CgroupStatus, LandlockFsRules, LandlockStatus, NamespaceStatus, SeccompStatus,
+};
 use crate::codes;
-use eidolon_core::security::{validate_sandbox_id, SandboxPolicy};
 use eidolon_core::error::PhenoError;
+use eidolon_core::security::{validate_sandbox_id, SandboxPolicy};
 use eidolon_core::traits::{ResourceUsage, SandboxAutomator, SandboxMetadata};
 use eidolon_core::{AutomationEvent, Result};
 use std::sync::atomic::{AtomicBool, AtomicU32, Ordering};
@@ -110,11 +108,11 @@ pub fn apply_enabled_enforcement(
                 // Block until child finishes remaining hooks (or reports failure).
                 rx.await_ready()?;
                 return Ok(applied);
-            }
+            },
             Some(PidNsSetup::Child(tx)) => {
                 pid_child_setup = Some(tx);
-            }
-            None => {}
+            },
+            None => {},
         }
     }
 
@@ -157,10 +155,10 @@ pub fn apply_enabled_enforcement(
                     // Stay alive so restrict_self / filters remain in force.
                     let _ = applied;
                     park_until_signal();
-                }
+                },
                 Err(_) => {
                     tx.report_failure_and_exit();
-                }
+                },
             }
         }
     }
@@ -381,11 +379,8 @@ mod tests {
 
     #[test]
     fn wrap_rejects_empty_sandbox_id() {
-        let err = EnforcingSandbox::wrap_deny_all(
-            CountingInner::new(),
-            "",
-            SandboxPolicy::default(),
-        );
+        let err =
+            EnforcingSandbox::wrap_deny_all(CountingInner::new(), "", SandboxPolicy::default());
         assert!(matches!(err, Err(PhenoError::BadRequest(_))));
     }
 
@@ -395,7 +390,8 @@ mod tests {
             cpu_cores: 0,
             ..SandboxPolicy::default()
         };
-        let err = apply_enabled_enforcement("s1", &policy, LandlockFsRules::deny_all()).unwrap_err();
+        let err =
+            apply_enabled_enforcement("s1", &policy, LandlockFsRules::deny_all()).unwrap_err();
         assert!(matches!(err, PhenoError::BadRequest(_)));
     }
 
@@ -432,7 +428,7 @@ mod tests {
             assert_eq!(err.status_code(), 501);
             assert!(outer.inner().starts.load(Ordering::SeqCst) >= 1);
             assert!(!outer.enforcement_applied());
-            let code = err.unsupported_code().expect("501 code");
+            let code = err.unsupported_code_value().expect("501 code");
             assert!(
                 is_enforcement_fail_loud_code(code),
                 "unexpected code {code}"

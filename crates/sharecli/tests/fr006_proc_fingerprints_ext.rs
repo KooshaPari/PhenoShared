@@ -20,7 +20,10 @@ fn fr006_amp_comm_matches() {
 /// FR-006 / AC-006.20 — amp via npx wrapper argv.
 #[test]
 fn fr006_amp_npx_wrapper_matches() {
-    assert_eq!(match_known_agent("node", &["npx", "@sourcegraph/amp", "chat"]), Some("amp"));
+    assert_eq!(
+        match_known_agent("node", &["npx", "@sourcegraph/amp", "chat"]),
+        Some("amp")
+    );
 }
 
 /// FR-006 / AC-006.20 — codex via openai-codex package path.
@@ -45,20 +48,29 @@ fn fr006_codex_prefixed_unrelated_path_rejected() {
 /// FR-006 / AC-006.20 — aider via python module argv.
 #[test]
 fn fr006_aider_python_module_matches() {
-    assert_eq!(match_known_agent("python3", &["-m", "aider"]), Some("aider"));
+    assert_eq!(
+        match_known_agent("python3", &["-m", "aider"]),
+        Some("aider")
+    );
 }
 
 /// FR-006 / AC-006.20 — aider-chat fingerprint on node wrapper.
 #[test]
 fn fr006_aider_chat_wrapper_matches() {
-    assert_eq!(match_known_agent("node", &["node_modules/aider-chat/dist/cli.js"]), Some("aider"));
+    assert_eq!(
+        match_known_agent("node", &["node_modules/aider-chat/dist/cli.js"]),
+        Some("aider")
+    );
 }
 
 /// FR-006 / AC-006.20 — cursor-agent via .cursor path segment.
 #[test]
 fn fr006_cursor_agent_dot_cursor_path_matches() {
     assert_eq!(
-        match_known_agent("node", &["/Users/dev/.cursor/extensions/cursor-agent/dist/index.js"]),
+        match_known_agent(
+            "node",
+            &["/Users/dev/.cursor/extensions/cursor-agent/dist/index.js"]
+        ),
         Some("cursor-agent")
     );
 }

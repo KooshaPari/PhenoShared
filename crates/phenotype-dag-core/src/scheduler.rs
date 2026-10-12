@@ -282,7 +282,11 @@ mod tests {
         dag.add_edge("x", "y")?;
         dag.add_edge("x", "z")?;
         let sched = schedule(&dag)?;
-        let all: Vec<&str> = sched.buckets.iter().flat_map(|b| b.iter().copied()).collect();
+        let all: Vec<&str> = sched
+            .buckets
+            .iter()
+            .flat_map(|b| b.iter().copied())
+            .collect();
         assert_eq!(all.len(), 3);
         assert!(all.contains(&"x"));
         assert!(all.contains(&"y"));

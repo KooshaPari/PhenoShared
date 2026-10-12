@@ -47,7 +47,9 @@ impl AgentsConf {
     /// Validate that `agent` is a non-empty sanitized agent id (alnum / `_` / `-`).
     pub fn is_valid_agent_id(agent: &str) -> bool {
         !agent.is_empty()
-            && agent.chars().all(|c| c.is_ascii_alphanumeric() || c == '_' || c == '-')
+            && agent
+                .chars()
+                .all(|c| c.is_ascii_alphanumeric() || c == '_' || c == '-')
     }
 }
 
@@ -61,7 +63,13 @@ pub fn sanitize_agent_id(agent: &str) -> String {
     }
     let out: String = trimmed
         .chars()
-        .map(|c| if c.is_ascii_alphanumeric() || c == '_' || c == '-' { c } else { '_' })
+        .map(|c| {
+            if c.is_ascii_alphanumeric() || c == '_' || c == '-' {
+                c
+            } else {
+                '_'
+            }
+        })
         .collect();
     if out.is_empty() {
         "default".to_string()

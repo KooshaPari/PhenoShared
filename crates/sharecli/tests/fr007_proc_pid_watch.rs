@@ -48,7 +48,10 @@ fn assert_gate_before_watch(segment: &str, context: &str) {
     let watch_pos = segment
         .find(WATCH_MARKER)
         .unwrap_or_else(|| panic!("{context} MUST include host watch section; got: {segment}"));
-    assert!(gate_pos < watch_pos, "{context} MUST print gate before host watch; got: {segment}");
+    assert!(
+        gate_pos < watch_pos,
+        "{context} MUST print gate before host watch; got: {segment}"
+    );
 }
 
 fn assert_text_envelope_order(stdout: &str, context: &str) {
@@ -170,13 +173,27 @@ fn fr007_proc_pid_watch_ndjson_stdout_pipe_clean() {
         let v: serde_json::Value =
             serde_json::from_str(line.trim()).expect("each NDJSON stdout line MUST parse");
         assert!(v.get("ts").is_some(), "NDJSON line MUST include ts");
-        assert!(v.get("pid").is_some(), "NDJSON line MUST include pid detail");
+        assert!(
+            v.get("pid").is_some(),
+            "NDJSON line MUST include pid detail"
+        );
         assert!(v.get("gate").is_some(), "NDJSON line MUST include gate");
-        assert!(v.get("host_watch").is_some(), "NDJSON line MUST include host_watch");
-        assert!(v.get("pool").is_some(), "NDJSON line MUST include pool (AC-007.87)");
-        assert!(v.get("status").is_some(), "NDJSON line MUST include status (AC-007.87)");
+        assert!(
+            v.get("host_watch").is_some(),
+            "NDJSON line MUST include host_watch"
+        );
+        assert!(
+            v.get("pool").is_some(),
+            "NDJSON line MUST include pool (AC-007.87)"
+        );
+        assert!(
+            v.get("status").is_some(),
+            "NDJSON line MUST include status (AC-007.87)"
+        );
         let gate_pos = line.find("\"gate\"").expect("gate key in raw JSON");
-        let host_pos = line.find("\"host_watch\"").expect("host_watch key in raw JSON");
+        let host_pos = line
+            .find("\"host_watch\"")
+            .expect("host_watch key in raw JSON");
         assert!(
             gate_pos < host_pos,
             "NDJSON line MUST serialize gate before host_watch (AC-007.87); got: {line}"

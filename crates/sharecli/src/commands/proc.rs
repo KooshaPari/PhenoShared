@@ -49,7 +49,9 @@ pub fn cmdline_matches_pattern(cmdline: &str, pattern: &str) -> bool {
 }
 
 fn substring_matches_pattern(haystack: &str, pattern: &str) -> bool {
-    haystack.to_ascii_lowercase().contains(&pattern.to_ascii_lowercase())
+    haystack
+        .to_ascii_lowercase()
+        .contains(&pattern.to_ascii_lowercase())
 }
 
 /// Parse `--state <R|S|D|Z|…>` (AC-006.31).
@@ -61,7 +63,10 @@ pub fn parse_proc_state(raw: &str) -> Result<char> {
     if trimmed.len() != 1 {
         bail!("invalid --state value '{raw}'; expected single process state letter (R|S|D|Z|T|…)");
     }
-    let ch = trimmed.chars().next().expect("single-char --state value (length validated above)");
+    let ch = trimmed
+        .chars()
+        .next()
+        .expect("single-char --state value (length validated above)");
     let normalized = match ch {
         'r' | 'R' => 'R',
         's' | 'S' => 'S',
@@ -82,7 +87,9 @@ pub fn parse_proc_state(raw: &str) -> Result<char> {
 
 /// Parse `--min-fd` / `--max-fd` count (non-negative integer).
 pub fn parse_fd_count(raw: &str, flag: &str) -> Result<u64> {
-    let value = raw.parse::<u64>().with_context(|| format!("invalid {flag} value '{raw}'"))?;
+    let value = raw
+        .parse::<u64>()
+        .with_context(|| format!("invalid {flag} value '{raw}'"))?;
     Ok(value)
 }
 
@@ -380,21 +387,21 @@ pub fn sort_watched_agents(
                     .cmp(&a.resource.mem_rss_bytes)
                     .then_with(|| a.agent.pid.cmp(&b.agent.pid))
             });
-        }
+        },
         ProcSort::Fd => {
             rows.sort_by(|a, b| {
                 let fd_a = a.resource.fd_count.unwrap_or(0);
                 let fd_b = b.resource.fd_count.unwrap_or(0);
                 fd_b.cmp(&fd_a).then_with(|| a.agent.pid.cmp(&b.agent.pid))
             });
-        }
+        },
         ProcSort::State => {
             rows.sort_by(|a, b| {
                 state_sort_letter(state_by_pid, a.agent.pid)
                     .cmp(&state_sort_letter(state_by_pid, b.agent.pid))
                     .then_with(|| a.agent.pid.cmp(&b.agent.pid))
             });
-        }
+        },
         ProcSort::Cpu => {
             // Descending CPU usage percent; missing data (0.0) sorts last via PID tie-break.
             rows.sort_by(|a, b| {
@@ -405,20 +412,25 @@ pub fn sort_watched_agents(
                     .unwrap_or(std::cmp::Ordering::Equal)
                     .then_with(|| a.agent.pid.cmp(&b.agent.pid))
             });
-        }
+        },
         ProcSort::Age => {
             // Ascending age in seconds (oldest first); u64::MAX (missing data) sorts last.
             rows.sort_by(|a, b| {
                 let age_a = sample_pid_age_secs(a.agent.pid);
                 let age_b = sample_pid_age_secs(b.agent.pid);
-                age_b.cmp(&age_a).then_with(|| a.agent.pid.cmp(&b.agent.pid))
+                age_b
+                    .cmp(&age_a)
+                    .then_with(|| a.agent.pid.cmp(&b.agent.pid))
             });
-        }
+        },
         ProcSort::Name => {
             rows.sort_by(|a, b| {
-                a.agent.comm.cmp(&b.agent.comm).then_with(|| a.agent.pid.cmp(&b.agent.pid))
+                a.agent
+                    .comm
+                    .cmp(&b.agent.comm)
+                    .then_with(|| a.agent.pid.cmp(&b.agent.pid))
             });
-        }
+        },
     }
     rows
 }
@@ -440,21 +452,21 @@ pub fn sort_agent_forests(
                 let rss_b = rss_by_pid.get(&b.pid).copied().unwrap_or(0);
                 rss_b.cmp(&rss_a).then_with(|| a.pid.cmp(&b.pid))
             });
-        }
+        },
         ProcSort::Fd => {
             roots.sort_by(|a, b| {
                 let fd_a = fd_by_pid.get(&a.pid).copied().unwrap_or(0);
                 let fd_b = fd_by_pid.get(&b.pid).copied().unwrap_or(0);
                 fd_b.cmp(&fd_a).then_with(|| a.pid.cmp(&b.pid))
             });
-        }
+        },
         ProcSort::State => {
             roots.sort_by(|a, b| {
                 state_sort_letter(state_by_pid, a.pid)
                     .cmp(&state_sort_letter(state_by_pid, b.pid))
                     .then_with(|| a.pid.cmp(&b.pid))
             });
-        }
+        },
         ProcSort::Cpu => {
             roots.sort_by(|a, b| {
                 let cpu_a = sample_pid_cpu_percent(a.pid);
@@ -464,17 +476,17 @@ pub fn sort_agent_forests(
                     .unwrap_or(std::cmp::Ordering::Equal)
                     .then_with(|| a.pid.cmp(&b.pid))
             });
-        }
+        },
         ProcSort::Age => {
             roots.sort_by(|a, b| {
                 let age_a = sample_pid_age_secs(a.pid);
                 let age_b = sample_pid_age_secs(b.pid);
                 age_b.cmp(&age_a).then_with(|| a.pid.cmp(&b.pid))
             });
-        }
+        },
         ProcSort::Name => {
             roots.sort_by(|a, b| a.comm.cmp(&b.comm).then_with(|| a.pid.cmp(&b.pid)));
-        }
+        },
     }
     roots
 }
@@ -522,7 +534,10 @@ fn agent_row_matches_filter(
         }
     }
     if let Some(ref pattern) = filter.cmdline {
-        let joined = cmdline_by_pid.get(&row.agent.pid).map(String::as_str).unwrap_or("");
+        let joined = cmdline_by_pid
+            .get(&row.agent.pid)
+            .map(String::as_str)
+            .unwrap_or("");
         if !cmdline_matches_pattern(joined, pattern) {
             return false;
         }
@@ -562,11 +577,17 @@ fn agent_row_matches_filter(
 }
 
 fn rss_map_from_watched(watched: &[DetectedAgentWatch]) -> HashMap<u32, u64> {
-    watched.iter().map(|row| (row.agent.pid, row.resource.mem_rss_bytes)).collect()
+    watched
+        .iter()
+        .map(|row| (row.agent.pid, row.resource.mem_rss_bytes))
+        .collect()
 }
 
 fn fd_map_from_watched(watched: &[DetectedAgentWatch]) -> HashMap<u32, u64> {
-    watched.iter().map(|row| (row.agent.pid, row.resource.fd_count.unwrap_or(0))).collect()
+    watched
+        .iter()
+        .map(|row| (row.agent.pid, row.resource.fd_count.unwrap_or(0)))
+        .collect()
 }
 
 fn apply_sort_watched(
@@ -648,7 +669,10 @@ fn forest_root_matches_filter(
         }
     }
     if let Some(ref pattern) = filter.cmdline {
-        let joined = cmdline_by_pid.get(&root.pid).map(String::as_str).unwrap_or("");
+        let joined = cmdline_by_pid
+            .get(&root.pid)
+            .map(String::as_str)
+            .unwrap_or("");
         if !cmdline_matches_pattern(joined, pattern) {
             return false;
         }
@@ -800,7 +824,10 @@ pub struct ProcDetailNdjsonLine {
 }
 
 fn unix_ts_secs() -> u64 {
-    SystemTime::now().duration_since(UNIX_EPOCH).unwrap_or_default().as_secs()
+    SystemTime::now()
+        .duration_since(UNIX_EPOCH)
+        .unwrap_or_default()
+        .as_secs()
 }
 
 /// Emit one compact JSON line and flush (piped stdout is block-buffered; AC-006.18).
@@ -811,7 +838,10 @@ fn emit_ndjson_line<T: Serialize>(value: &T) -> Result<()> {
 }
 
 fn print_host_watch_text_footer() -> Result<()> {
-    print!("{}", HostResourceWatchJson::capture()?.format_text_section());
+    print!(
+        "{}",
+        HostResourceWatchJson::capture()?.format_text_section()
+    );
     Ok(())
 }
 
@@ -829,7 +859,10 @@ fn eprint_gate_host_watch_stderr_companions(
     agent_count: usize,
 ) -> Result<()> {
     eprint!("{}", format_gate_status_section(thermal, agent_count));
-    eprint!("{}", HostResourceWatchJson::capture()?.format_text_section());
+    eprint!(
+        "{}",
+        HostResourceWatchJson::capture()?.format_text_section()
+    );
     let _ = std::io::stderr().flush();
     Ok(())
 }
@@ -881,7 +914,10 @@ impl AgentProcSnapshot {
         let agent_pids: Vec<u32> = agents.iter().map(|a| a.pid).collect();
         let state_by_pid = build_agent_state_map(&HostProcSource, &agent_pids);
         Ok(Self {
-            agents: watched.iter().map(|row| agent_row_from_watch(row, &state_by_pid)).collect(),
+            agents: watched
+                .iter()
+                .map(|row| agent_row_from_watch(row, &state_by_pid))
+                .collect(),
             scanned: agents.len(),
             watched: watched.len(),
             gate,
@@ -893,7 +929,10 @@ impl AgentProcSnapshot {
 }
 
 fn state_letter_for_pid(state_by_pid: &HashMap<u32, char>, pid: u32) -> String {
-    state_by_pid.get(&pid).map(|ch| ch.to_string()).unwrap_or_default()
+    state_by_pid
+        .get(&pid)
+        .map(|ch| ch.to_string())
+        .unwrap_or_default()
 }
 
 fn state_json_from_char(state: char) -> String {
@@ -956,8 +995,10 @@ pub fn build_proc_detail(source: &dyn ProcSource, pid: u32) -> Result<ProcDetail
     let agent_ancestor = if direct_family.is_some() {
         None
     } else {
-        walk_agent_ancestors(source, pid)
-            .map(|agent| AgentAncestorRef { pid: agent.pid, family: agent.family.to_string() })
+        walk_agent_ancestors(source, pid).map(|agent| AgentAncestorRef {
+            pid: agent.pid,
+            family: agent.family.to_string(),
+        })
     };
     let resource = AgentResourceSample::capture_for_pid(pid)
         .with_context(|| format!("failed to sample RSS/FD for process {pid}"))?;
@@ -1010,8 +1051,14 @@ pub fn render_proc_detail_text(detail: &ProcDetailSnapshot) -> Result<()> {
     } else if let Some(ref ancestor) = detail.agent_ancestor {
         println!("Agent:     {} (pid {})", ancestor.family, ancestor.pid);
     }
-    println!("RSS:       {} ({} bytes)", detail.mem_rss, detail.mem_rss_bytes);
-    let fd = detail.fd_count.map(|n| n.to_string()).unwrap_or_else(|| "-".into());
+    println!(
+        "RSS:       {} ({} bytes)",
+        detail.mem_rss, detail.mem_rss_bytes
+    );
+    let fd = detail
+        .fd_count
+        .map(|n| n.to_string())
+        .unwrap_or_else(|| "-".into());
     println!("FD:        {fd}");
     print!("{}", format_gate_status_from_snapshot(&detail.gate));
     print!("{}", detail.host_watch.format_text_section());
@@ -1043,7 +1090,10 @@ async fn render_pid_detail_once(pid: u32, json: bool, ndjson: bool) -> Result<()
         detail.pool = Some(pool_panel);
         detail.status = Some(status_panel);
         if ndjson {
-            let line = ProcDetailNdjsonLine { ts: unix_ts_secs(), snapshot: detail };
+            let line = ProcDetailNdjsonLine {
+                ts: unix_ts_secs(),
+                snapshot: detail,
+            };
             emit_ndjson_line(&line)?;
             eprint_gate_host_watch_stderr_companions(thermal, scanned_agents.len())?;
             return Ok(());
@@ -1086,7 +1136,10 @@ fn append_tree_csv_row(
     state_by_pid: &HashMap<u32, char>,
 ) {
     let rss = rss_by_pid.get(&node.pid).copied().unwrap_or(0);
-    let fd = fd_by_pid.get(&node.pid).map(|n| n.to_string()).unwrap_or_default();
+    let fd = fd_by_pid
+        .get(&node.pid)
+        .map(|n| n.to_string())
+        .unwrap_or_default();
     let family = node.family.map(csv_escape_field).unwrap_or_default();
     let state = state_letter_for_pid(state_by_pid, node.pid);
     out.push_str(&format!(
@@ -1103,7 +1156,15 @@ fn append_tree_csv_row(
         fd = fd,
     ));
     for child in &node.children {
-        append_tree_csv_row(out, root_index, depth + 1, child, rss_by_pid, fd_by_pid, state_by_pid);
+        append_tree_csv_row(
+            out,
+            root_index,
+            depth + 1,
+            child,
+            rss_by_pid,
+            fd_by_pid,
+            state_by_pid,
+        );
     }
 }
 
@@ -1119,7 +1180,15 @@ pub fn render_agent_tree_csv(
     let mut out = String::from(HEADER);
     out.push('\n');
     for (root_index, root) in forests.iter().enumerate() {
-        append_tree_csv_row(&mut out, root_index, 0, root, rss_by_pid, fd_by_pid, state_by_pid);
+        append_tree_csv_row(
+            &mut out,
+            root_index,
+            0,
+            root,
+            rss_by_pid,
+            fd_by_pid,
+            state_by_pid,
+        );
     }
     if !out.ends_with('\n') {
         out.push('\n');
@@ -1135,7 +1204,11 @@ pub fn render_agent_inventory_csv(
     const HEADER: &str = "pid,family,comm,state,mem_rss_bytes,mem_rss,fd_count";
     let mut out = String::from(HEADER);
     for row in watched {
-        let fd = row.resource.fd_count.map(|n| n.to_string()).unwrap_or_default();
+        let fd = row
+            .resource
+            .fd_count
+            .map(|n| n.to_string())
+            .unwrap_or_default();
         let state = state_letter_for_pid(state_by_pid, row.agent.pid);
         out.push('\n');
         out.push_str(&format!(
@@ -1167,10 +1240,17 @@ pub fn render_agent_inventory(
         }
         return;
     }
-    println!("{:<8} {:<16} {:<6} {:<10} {:<8} COMM", "PID", "FAMILY", "STATE", "RSS", "FD");
+    println!(
+        "{:<8} {:<16} {:<6} {:<10} {:<8} COMM",
+        "PID", "FAMILY", "STATE", "RSS", "FD"
+    );
     println!("{}", "-".repeat(64));
     for row in watched {
-        let fd = row.resource.fd_count.map(|n| n.to_string()).unwrap_or_else(|| "-".into());
+        let fd = row
+            .resource
+            .fd_count
+            .map(|n| n.to_string())
+            .unwrap_or_else(|| "-".into());
         let state = state_text_for_pid(state_by_pid, row.agent.pid);
         println!(
             "{:<8} {:<16} {:<6} {:<10} {:<8} {}",
@@ -1206,14 +1286,23 @@ fn render_tree_node(
     };
     let family = node.family.map(|f| format!("{f} ")).unwrap_or_default();
     let state = state_text_for_pid(state_by_pid, node.pid);
-    println!("{prefix}{connector}[{pid}] {state} {family}{comm}", pid = node.pid, comm = node.comm);
+    println!(
+        "{prefix}{connector}[{pid}] {state} {family}{comm}",
+        pid = node.pid,
+        comm = node.comm
+    );
     let child_prefix = if prefix.is_empty() {
         String::new()
     } else {
         format!("{}{}", prefix, if is_last { "    " } else { "│   " })
     };
     for (i, child) in node.children.iter().enumerate() {
-        render_tree_node(child, &child_prefix, i + 1 == node.children.len(), state_by_pid);
+        render_tree_node(
+            child,
+            &child_prefix,
+            i + 1 == node.children.len(),
+            state_by_pid,
+        );
     }
 }
 
@@ -1291,10 +1380,16 @@ pub async fn render_once(
         };
         if json {
             let (pool_panel, status_panel) = super::fetch_operator_pool_status_siblings().await?;
-            let snap =
-                AgentTreeSnapshot { pool: Some(pool_panel), status: Some(status_panel), ..snap };
+            let snap = AgentTreeSnapshot {
+                pool: Some(pool_panel),
+                status: Some(status_panel),
+                ..snap
+            };
             if ndjson {
-                let line = AgentTreeNdjsonLine { ts: unix_ts_secs(), snapshot: snap };
+                let line = AgentTreeNdjsonLine {
+                    ts: unix_ts_secs(),
+                    snapshot: snap,
+                };
                 emit_ndjson_line(&line)?;
                 eprint_gate_host_watch_stderr_companions(thermal, scanned_agents.len())?;
                 return Ok(());
@@ -1304,7 +1399,10 @@ pub async fn render_once(
         }
         // One-shot `proc --tree` text MUST NOT print gate/host_watch stderr companions (AC-007.34).
         render_agent_tree(&forests, &tree_state_by_pid);
-        print!("{}", format_gate_status_section(thermal, scanned_agents.len()));
+        print!(
+            "{}",
+            format_gate_status_section(thermal, scanned_agents.len())
+        );
         print_host_watch_text_footer()?;
         // AC-007.34 / AC-007.75: gate → host_watch → pool → proc-scan on stdout after tree body.
         super::print_live_pool_status_operator_sections().await?;
@@ -1337,7 +1435,10 @@ pub async fn render_once(
     if json {
         let (pool_panel, status_panel) = super::fetch_operator_pool_status_siblings().await?;
         let snap = AgentProcSnapshot {
-            agents: watched.iter().map(|row| agent_row_from_watch(row, &state_by_pid)).collect(),
+            agents: watched
+                .iter()
+                .map(|row| agent_row_from_watch(row, &state_by_pid))
+                .collect(),
             scanned: scanned_agents.len(),
             watched: watched.len(),
             gate,
@@ -1346,7 +1447,10 @@ pub async fn render_once(
             status: Some(status_panel),
         };
         if ndjson {
-            let line = AgentProcNdjsonLine { ts: unix_ts_secs(), snapshot: snap };
+            let line = AgentProcNdjsonLine {
+                ts: unix_ts_secs(),
+                snapshot: snap,
+            };
             emit_ndjson_line(&line)?;
             eprint_gate_host_watch_stderr_companions(thermal, scanned_agents.len())?;
             return Ok(());
@@ -1356,7 +1460,10 @@ pub async fn render_once(
     }
     // One-shot `proc` text MUST NOT print gate/host_watch stderr companions (AC-007.34).
     render_agent_inventory(&watched, scanned_agents.len(), &state_by_pid);
-    print!("{}", format_gate_status_section(thermal, scanned_agents.len()));
+    print!(
+        "{}",
+        format_gate_status_section(thermal, scanned_agents.len())
+    );
     print_host_watch_text_footer()?;
     // AC-007.34 / AC-007.75: gate → host_watch → pool → proc-scan on stdout after inventory body.
     super::print_live_pool_status_operator_sections().await?;
@@ -1594,7 +1701,7 @@ pub async fn run(
                 }
             }
             Ok(())
-        }
+        },
     }
 }
 
@@ -1619,7 +1726,11 @@ mod tests {
     fn agent_row_from_watch_formats_rss() {
         let row = agent_row_from_watch(
             &DetectedAgentWatch {
-                agent: DetectedAgent { pid: 42, family: "claude", comm: "claude".into() },
+                agent: DetectedAgent {
+                    pid: 42,
+                    family: "claude",
+                    comm: "claude".into(),
+                },
                 resource: sharecli_fleet::AgentResourceSample {
                     mem_rss_bytes: 52_428_800,
                     fd_count: Some(10),
@@ -1741,7 +1852,13 @@ mod tests {
     #[test]
     fn build_forest_state_map_includes_child_pids() {
         let src = FakeProcSource::new(vec![
-            ProcSnapshot { pid: 1, ppid: 0, comm: "init".into(), cmdline: vec![], state: 'R' },
+            ProcSnapshot {
+                pid: 1,
+                ppid: 0,
+                comm: "init".into(),
+                cmdline: vec![],
+                state: 'R',
+            },
             ProcSnapshot {
                 pid: 50,
                 ppid: 1,
@@ -1766,7 +1883,13 @@ mod tests {
     #[test]
     fn tree_json_from_fixture() {
         let src = FakeProcSource::new(vec![
-            ProcSnapshot { pid: 1, ppid: 0, comm: "init".into(), cmdline: vec![], state: 'R' },
+            ProcSnapshot {
+                pid: 1,
+                ppid: 0,
+                comm: "init".into(),
+                cmdline: vec![],
+                state: 'R',
+            },
             ProcSnapshot {
                 pid: 50,
                 ppid: 1,
@@ -1911,8 +2034,15 @@ mod tests {
 
     fn fixture_row(pid: u32, family: &'static str, comm: &str, rss: u64) -> DetectedAgentWatch {
         DetectedAgentWatch {
-            agent: DetectedAgent { pid, family, comm: comm.into() },
-            resource: AgentResourceSample { mem_rss_bytes: rss, fd_count: Some(0) },
+            agent: DetectedAgent {
+                pid,
+                family,
+                comm: comm.into(),
+            },
+            resource: AgentResourceSample {
+                mem_rss_bytes: rss,
+                fd_count: Some(0),
+            },
         }
     }
 
@@ -1933,12 +2063,19 @@ mod tests {
         let inventory = fixture_inventory();
         let sorted = sort_watched_agents(&inventory, ProcSort::Rss, &HashMap::new());
         let limited = limit_watched_agents(sorted, Some(5));
-        assert!(limited.len() <= 5, "--limit 5 MUST cap at 5 rows; got {}", limited.len());
+        assert!(
+            limited.len() <= 5,
+            "--limit 5 MUST cap at 5 rows; got {}",
+            limited.len()
+        );
         // Confirm strict descending RSS order across the limited slice.
         let rss_seq: Vec<u64> = limited.iter().map(|r| r.resource.mem_rss_bytes).collect();
         let mut prev = u64::MAX;
         for rss in &rss_seq {
-            assert!(*rss <= prev, "RSS MUST be descending; saw {rss} after {prev}");
+            assert!(
+                *rss <= prev,
+                "RSS MUST be descending; saw {rss} after {prev}"
+            );
             prev = *rss;
         }
         // First row MUST be the largest RSS fixture (pid 150 = 300M).
@@ -1951,7 +2088,11 @@ mod tests {
         let inventory = fixture_inventory();
         let sorted = sort_watched_agents(&inventory, ProcSort::Pid, &HashMap::new());
         let limited = limit_watched_agents(sorted, Some(3));
-        assert!(limited.len() <= 3, "--limit 3 MUST cap at 3 rows; got {}", limited.len());
+        assert!(
+            limited.len() <= 3,
+            "--limit 3 MUST cap at 3 rows; got {}",
+            limited.len()
+        );
         let pid_seq: Vec<u32> = limited.iter().map(|r| r.agent.pid).collect();
         let mut prev = 0u32;
         for pid in &pid_seq {
@@ -2001,7 +2142,9 @@ mod tests {
     #[test]
     fn proc_sort_unknown_key_lists_new_options() {
         // AC-006.41: error message MUST enumerate cpu/age/name as accepted sort keys.
-        let err = "bogus".parse::<ProcSort>().expect_err("unknown sort key MUST fail");
+        let err = "bogus"
+            .parse::<ProcSort>()
+            .expect_err("unknown sort key MUST fail");
         let msg = err.to_string();
         assert!(msg.contains("cpu"), "error MUST list 'cpu'; got: {msg}");
         assert!(msg.contains("age"), "error MUST list 'age'; got: {msg}");
@@ -2024,7 +2167,11 @@ mod tests {
         let inventory = fixture_inventory();
         let sorted = sort_watched_agents(&inventory, ProcSort::Pid, &HashMap::new());
         let limited = limit_watched_agents(sorted, Some(50));
-        assert_eq!(limited.len(), inventory.len(), "limit MUST NOT pad below inventory size");
+        assert_eq!(
+            limited.len(),
+            inventory.len(),
+            "limit MUST NOT pad below inventory size"
+        );
     }
 
     // ──────────────────────────────────────────────────────────────────────
@@ -2080,7 +2227,10 @@ mod tests {
             ('i', 'I'),
         ] {
             let result = parse_proc_state(&input.to_string()).expect("valid lowercase MUST parse");
-            assert_eq!(result, expected, "lowercase '{input}' must normalize to '{expected}'");
+            assert_eq!(
+                result, expected,
+                "lowercase '{input}' must normalize to '{expected}'"
+            );
         }
     }
 
@@ -2105,7 +2255,10 @@ mod tests {
     #[test]
     fn parse_proc_state_invalid_char_rejected() {
         let err = parse_proc_state("Q").expect_err("invalid char MUST fail");
-        assert!(err.to_string().contains("Q"), "error MUST mention the bad char; got: {err}");
+        assert!(
+            err.to_string().contains("Q"),
+            "error MUST mention the bad char; got: {err}"
+        );
     }
 
     // ──────────────────────────────────────────────────────────────────────
@@ -2122,7 +2275,10 @@ mod tests {
     #[test]
     fn parse_fd_count_invalid_string_rejected() {
         let err = parse_fd_count("abc", "--min-fd").expect_err("non-numeric MUST fail");
-        assert!(err.to_string().contains("abc"), "error MUST mention the bad value; got: {err}");
+        assert!(
+            err.to_string().contains("abc"),
+            "error MUST mention the bad value; got: {err}"
+        );
     }
 
     // ──────────────────────────────────────────────────────────────────────
@@ -2171,7 +2327,12 @@ mod tests {
 
     #[test]
     fn format_cmdline_multiple_elements_joined() {
-        let args = vec!["claude".into(), "serve".into(), "--port".into(), "8080".into()];
+        let args = vec![
+            "claude".into(),
+            "serve".into(),
+            "--port".into(),
+            "8080".into(),
+        ];
         assert_eq!(format_cmdline(&args), "claude serve --port 8080");
     }
 
@@ -2342,7 +2503,10 @@ mod tests {
             fixture_row(10, "claude", "claude", 1_000_000),
             fixture_row(20, "cursor", "cursor-agent", 2_000_000),
         ];
-        let filter = ProcFilter { family: Some("claude".into()), ..Default::default() };
+        let filter = ProcFilter {
+            family: Some("claude".into()),
+            ..Default::default()
+        };
         let filtered = filter_watched_agents(
             &inventory,
             &filter,
@@ -2360,7 +2524,10 @@ mod tests {
             fixture_row(10, "claude", "claude", 1_000_000),
             fixture_row(20, "claude", "node", 2_000_000),
         ];
-        let filter = ProcFilter { comm: Some("node".into()), ..Default::default() };
+        let filter = ProcFilter {
+            comm: Some("node".into()),
+            ..Default::default()
+        };
         let filtered = filter_watched_agents(
             &inventory,
             &filter,
@@ -2416,7 +2583,10 @@ mod tests {
             fixture_row(20, "claude", "claude", 2_000_000),
         ];
         let state_by_pid = HashMap::from([(10, 'R'), (20, 'S')]);
-        let filter = ProcFilter { state: Some('R'), ..Default::default() };
+        let filter = ProcFilter {
+            state: Some('R'),
+            ..Default::default()
+        };
         let filtered = filter_watched_agents(
             &inventory,
             &filter,
@@ -2435,8 +2605,20 @@ mod tests {
     #[test]
     fn limit_agent_forests_none_returns_all() {
         let forests = vec![
-            AgentTreeNode { pid: 10, ppid: 1, comm: "a".into(), family: None, children: vec![] },
-            AgentTreeNode { pid: 20, ppid: 1, comm: "b".into(), family: None, children: vec![] },
+            AgentTreeNode {
+                pid: 10,
+                ppid: 1,
+                comm: "a".into(),
+                family: None,
+                children: vec![],
+            },
+            AgentTreeNode {
+                pid: 20,
+                ppid: 1,
+                comm: "b".into(),
+                family: None,
+                children: vec![],
+            },
         ];
         let result = limit_agent_forests(forests.clone(), None);
         assert_eq!(result.len(), 2);
@@ -2445,9 +2627,27 @@ mod tests {
     #[test]
     fn limit_agent_forests_some_caps() {
         let forests = vec![
-            AgentTreeNode { pid: 10, ppid: 1, comm: "a".into(), family: None, children: vec![] },
-            AgentTreeNode { pid: 20, ppid: 1, comm: "b".into(), family: None, children: vec![] },
-            AgentTreeNode { pid: 30, ppid: 1, comm: "c".into(), family: None, children: vec![] },
+            AgentTreeNode {
+                pid: 10,
+                ppid: 1,
+                comm: "a".into(),
+                family: None,
+                children: vec![],
+            },
+            AgentTreeNode {
+                pid: 20,
+                ppid: 1,
+                comm: "b".into(),
+                family: None,
+                children: vec![],
+            },
+            AgentTreeNode {
+                pid: 30,
+                ppid: 1,
+                comm: "c".into(),
+                family: None,
+                children: vec![],
+            },
         ];
         let result = limit_agent_forests(forests, Some(2));
         assert_eq!(result.len(), 2);
@@ -2462,9 +2662,27 @@ mod tests {
     #[test]
     fn sort_agent_forests_by_name_ascending() {
         let forests = vec![
-            AgentTreeNode { pid: 3, ppid: 1, comm: "zsh".into(), family: None, children: vec![] },
-            AgentTreeNode { pid: 1, ppid: 1, comm: "alpha".into(), family: None, children: vec![] },
-            AgentTreeNode { pid: 2, ppid: 1, comm: "beta".into(), family: None, children: vec![] },
+            AgentTreeNode {
+                pid: 3,
+                ppid: 1,
+                comm: "zsh".into(),
+                family: None,
+                children: vec![],
+            },
+            AgentTreeNode {
+                pid: 1,
+                ppid: 1,
+                comm: "alpha".into(),
+                family: None,
+                children: vec![],
+            },
+            AgentTreeNode {
+                pid: 2,
+                ppid: 1,
+                comm: "beta".into(),
+                family: None,
+                children: vec![],
+            },
         ];
         let result = sort_agent_forests(
             &forests,
@@ -2480,8 +2698,20 @@ mod tests {
     #[test]
     fn sort_agent_forests_by_rss_desc() {
         let forests = vec![
-            AgentTreeNode { pid: 10, ppid: 1, comm: "a".into(), family: None, children: vec![] },
-            AgentTreeNode { pid: 20, ppid: 1, comm: "b".into(), family: None, children: vec![] },
+            AgentTreeNode {
+                pid: 10,
+                ppid: 1,
+                comm: "a".into(),
+                family: None,
+                children: vec![],
+            },
+            AgentTreeNode {
+                pid: 20,
+                ppid: 1,
+                comm: "b".into(),
+                family: None,
+                children: vec![],
+            },
         ];
         let rss_by_pid = HashMap::from([(10, 500), (20, 1000)]);
         let result = sort_agent_forests(
@@ -2506,19 +2736,28 @@ mod tests {
 
     #[test]
     fn proc_filter_active_with_family_is_true() {
-        let f = ProcFilter { family: Some("claude".into()), ..Default::default() };
+        let f = ProcFilter {
+            family: Some("claude".into()),
+            ..Default::default()
+        };
         assert!(f.active());
     }
 
     #[test]
     fn proc_filter_active_with_state_is_true() {
-        let f = ProcFilter { state: Some('R'), ..Default::default() };
+        let f = ProcFilter {
+            state: Some('R'),
+            ..Default::default()
+        };
         assert!(f.active());
     }
 
     #[test]
     fn proc_filter_active_with_rss_bounds_is_true() {
-        let f = ProcFilter { min_rss_bytes: Some(1000), ..Default::default() };
+        let f = ProcFilter {
+            min_rss_bytes: Some(1000),
+            ..Default::default()
+        };
         assert!(f.active());
     }
 
@@ -2533,19 +2772,40 @@ mod tests {
 
     #[test]
     fn proc_sort_from_cli_valid_key() {
-        assert_eq!(ProcSort::from_cli(Some("rss")).unwrap(), Some(ProcSort::Rss));
+        assert_eq!(
+            ProcSort::from_cli(Some("rss")).unwrap(),
+            Some(ProcSort::Rss)
+        );
         assert_eq!(ProcSort::from_cli(Some("fd")).unwrap(), Some(ProcSort::Fd));
-        assert_eq!(ProcSort::from_cli(Some("pid")).unwrap(), Some(ProcSort::Pid));
-        assert_eq!(ProcSort::from_cli(Some("state")).unwrap(), Some(ProcSort::State));
-        assert_eq!(ProcSort::from_cli(Some("cpu")).unwrap(), Some(ProcSort::Cpu));
-        assert_eq!(ProcSort::from_cli(Some("age")).unwrap(), Some(ProcSort::Age));
-        assert_eq!(ProcSort::from_cli(Some("name")).unwrap(), Some(ProcSort::Name));
+        assert_eq!(
+            ProcSort::from_cli(Some("pid")).unwrap(),
+            Some(ProcSort::Pid)
+        );
+        assert_eq!(
+            ProcSort::from_cli(Some("state")).unwrap(),
+            Some(ProcSort::State)
+        );
+        assert_eq!(
+            ProcSort::from_cli(Some("cpu")).unwrap(),
+            Some(ProcSort::Cpu)
+        );
+        assert_eq!(
+            ProcSort::from_cli(Some("age")).unwrap(),
+            Some(ProcSort::Age)
+        );
+        assert_eq!(
+            ProcSort::from_cli(Some("name")).unwrap(),
+            Some(ProcSort::Name)
+        );
     }
 
     #[test]
     fn proc_sort_from_cli_invalid_returns_error() {
         let err = ProcSort::from_cli(Some("bogus")).expect_err("unknown sort key MUST fail");
-        assert!(err.to_string().contains("bogus"), "error MUST mention the bad key; got: {err}");
+        assert!(
+            err.to_string().contains("bogus"),
+            "error MUST mention the bad key; got: {err}"
+        );
     }
 
     // ──────────────────────────────────────────────────────────────────────
@@ -2618,8 +2878,15 @@ mod tests {
     fn agent_row_from_watch_missing_state_is_empty() {
         let row = agent_row_from_watch(
             &DetectedAgentWatch {
-                agent: DetectedAgent { pid: 99, family: "claude", comm: "claude".into() },
-                resource: AgentResourceSample { mem_rss_bytes: 1024, fd_count: None },
+                agent: DetectedAgent {
+                    pid: 99,
+                    family: "claude",
+                    comm: "claude".into(),
+                },
+                resource: AgentResourceSample {
+                    mem_rss_bytes: 1024,
+                    fd_count: None,
+                },
             },
             &HashMap::new(), // no state entries
         );

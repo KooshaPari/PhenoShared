@@ -16,24 +16,43 @@ fn combined(out: &std::process::Output) -> String {
 /// `stop --all --force` without `--yes` MUST preview and exit zero (no kill).
 #[test]
 fn fr004_stop_force_without_yes_previews_and_succeeds() {
-    let out = bin().args(["stop", "--all", "--force"]).output().expect("spawn stop");
+    let out = bin()
+        .args(["stop", "--all", "--force"])
+        .output()
+        .expect("spawn stop");
     assert!(
         out.status.success(),
         "force stop without --yes MUST dry-run successfully; combined={}",
         combined(&out)
     );
     let body = combined(&out);
-    assert!(body.contains("Would force-kill"), "must preview force-kill; body={body}");
-    assert!(body.contains("--yes"), "must hint --yes confirmation; body={body}");
+    assert!(
+        body.contains("Would force-kill"),
+        "must preview force-kill; body={body}"
+    );
+    assert!(
+        body.contains("--yes"),
+        "must hint --yes confirmation; body={body}"
+    );
 }
 
 /// `stop --all --force --yes` on an empty pool MUST succeed without preview gate.
 #[test]
 fn fr004_stop_force_with_yes_on_empty_pool_succeeds() {
-    let out = bin().args(["stop", "--all", "--force", "--yes"]).output().expect("spawn stop");
-    assert!(out.status.success(), "confirmed force stop MUST succeed; combined={}", combined(&out));
+    let out = bin()
+        .args(["stop", "--all", "--force", "--yes"])
+        .output()
+        .expect("spawn stop");
+    assert!(
+        out.status.success(),
+        "confirmed force stop MUST succeed; combined={}",
+        combined(&out)
+    );
     let body = combined(&out);
-    assert!(!body.contains("Would force-kill"), "confirmed stop must not dry-run; body={body}");
+    assert!(
+        !body.contains("Would force-kill"),
+        "confirmed stop must not dry-run; body={body}"
+    );
 }
 
 /// `project stop --force` without `--yes` MUST preview when processes would match.
@@ -54,7 +73,11 @@ fn fr004_project_stop_force_without_yes_previews() {
 #[test]
 fn fr004_quit_alias_stops_all() {
     let out = bin().args(["quit", "--all"]).output().expect("spawn quit");
-    assert!(out.status.success(), "quit alias MUST dispatch to stop; combined={}", combined(&out));
+    assert!(
+        out.status.success(),
+        "quit alias MUST dispatch to stop; combined={}",
+        combined(&out)
+    );
     let body = combined(&out);
     assert!(
         body.contains("All processes stopped."),

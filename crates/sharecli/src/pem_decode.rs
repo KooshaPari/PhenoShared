@@ -55,7 +55,7 @@ pub fn parse(input: &str) -> Result<Vec<PemBlock>, String> {
             Some(l) => l,
             None => {
                 return Err(format!("expected PEM BEGIN marker, got: {:?}", begin_trim));
-            }
+            },
         };
 
         // Collect header lines and base64 body lines until we hit END label.
@@ -78,7 +78,7 @@ pub fn parse(input: &str) -> Result<Vec<PemBlock>, String> {
                         Some(s) => s.trim().to_string(),
                         None => {
                             return Err(format!("malformed END marker: {:?}", trimmed));
-                        }
+                        },
                     };
                     end_label = Some(end_l);
                     break;
@@ -98,7 +98,7 @@ pub fn parse(input: &str) -> Result<Vec<PemBlock>, String> {
                         Some(s) => s.trim().to_string(),
                         None => {
                             return Err(format!("malformed END marker: {:?}", trimmed));
-                        }
+                        },
                     };
                     end_label = Some(end_l);
                     break;
@@ -110,8 +110,11 @@ pub fn parse(input: &str) -> Result<Vec<PemBlock>, String> {
         let end_label = match end_label {
             Some(l) => l,
             None => {
-                return Err(format!("PEM block with label {:?} has no END marker", label));
-            }
+                return Err(format!(
+                    "PEM block with label {:?} has no END marker",
+                    label
+                ));
+            },
         };
 
         if end_label != label {
@@ -126,7 +129,11 @@ pub fn parse(input: &str) -> Result<Vec<PemBlock>, String> {
         // handled per RFC 7468 §2).
         let joined: String = body_lines.join(" ");
         let base64_str: String = joined.split_whitespace().collect::<Vec<_>>().join("");
-        let data = if base64_str.is_empty() { Vec::new() } else { base64_decode(&base64_str)? };
+        let data = if base64_str.is_empty() {
+            Vec::new()
+        } else {
+            base64_decode(&base64_str)?
+        };
 
         // RFC 1421 §4.6.1 step 4 (Proc-Type 4,ENCRYPTED) and RFC 1423
         // §1.1 (DEK-Info header) indicate the body is encrypted. We set
@@ -139,7 +146,12 @@ pub fn parse(input: &str) -> Result<Vec<PemBlock>, String> {
         let dek_info = headers.contains_key("DEK-Info");
         let encrypted = proc_encrypted || dek_info;
 
-        blocks.push(PemBlock { label, headers, data, encrypted });
+        blocks.push(PemBlock {
+            label,
+            headers,
+            data,
+            encrypted,
+        });
     }
 
     Ok(blocks)
@@ -176,11 +188,17 @@ pub(crate) fn base64_decode(s: &str) -> Result<Vec<u8>, String> {
     // when total length mod 4 == 0 (after stripping).
     let len = cleaned.len();
     if len % 4 != 0 {
-        return Err(format!("base64 input length {} is not a multiple of 4", len));
+        return Err(format!(
+            "base64 input length {} is not a multiple of 4",
+            len
+        ));
     }
     let pad_count = cleaned.iter().rev().take_while(|&&b| b == b'=').count();
     if pad_count > 2 {
-        return Err(format!("base64 has {} trailing '=' pads (max 2)", pad_count));
+        return Err(format!(
+            "base64 has {} trailing '=' pads (max 2)",
+            pad_count
+        ));
     }
     // No '=' allowed except trailing padding.
     for &b in &cleaned[..len - pad_count] {
@@ -204,7 +222,7 @@ pub(crate) fn base64_decode(s: &str) -> Result<Vec<u8>, String> {
         bits += 6;
         if bits >= 8 {
             bits -= 8;
-            out.push(((buf >> bits) & 0xFF) as u8);
+            out.push(((buf >> bits) & 0xff) as u8);
         }
     }
 
@@ -265,7 +283,10 @@ mod tests {
         let blocks = parse(pem).expect("parse");
         assert_eq!(blocks.len(), 1);
         assert!(blocks[0].encrypted);
-        assert_eq!(blocks[0].headers.get("Proc-Type").map(|s| s.as_str()), Some("4,ENCRYPTED"));
+        assert_eq!(
+            blocks[0].headers.get("Proc-Type").map(|s| s.as_str()),
+            Some("4,ENCRYPTED")
+        );
         assert_eq!(
             blocks[0].headers.get("DEK-Info").map(|s| s.as_str()),
             Some("AES-256-CBC,0011223344556677")

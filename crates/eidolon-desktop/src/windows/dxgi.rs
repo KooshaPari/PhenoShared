@@ -39,14 +39,13 @@ pub(crate) fn capture_bmp(path: &Path) -> Result<()> {
 }
 
 unsafe fn capture_bmp_inner(path: &Path) -> Result<()> {
-    let factory: IDXGIFactory1 = CreateDXGIFactory1().map_err(|e| {
-        PhenoError::Platform(format!("CreateDXGIFactory1 failed: {e}"))
-    })?;
+    let factory: IDXGIFactory1 = CreateDXGIFactory1()
+        .map_err(|e| PhenoError::Platform(format!("CreateDXGIFactory1 failed: {e}")))?;
 
     let (adapter, output) = primary_output(&factory)?;
-    let output1: IDXGIOutput1 = output.cast().map_err(|e| {
-        PhenoError::Platform(format!("IDXGIOutput1 cast failed: {e}"))
-    })?;
+    let output1: IDXGIOutput1 = output
+        .cast()
+        .map_err(|e| PhenoError::Platform(format!("IDXGIOutput1 cast failed: {e}")))?;
 
     let mut device: Option<ID3D11Device> = None;
     let mut context: Option<ID3D11DeviceContext> = None;
@@ -69,9 +68,9 @@ unsafe fn capture_bmp_inner(path: &Path) -> Result<()> {
     let device = device.ok_or_else(|| PhenoError::Platform("D3D11 device null".into()))?;
     let context = context.ok_or_else(|| PhenoError::Platform("D3D11 context null".into()))?;
 
-    let duplication: IDXGIOutputDuplication = output1.DuplicateOutput(&device).map_err(|e| {
-        PhenoError::Platform(format!("DuplicateOutput failed: {e}"))
-    })?;
+    let duplication: IDXGIOutputDuplication = output1
+        .DuplicateOutput(&device)
+        .map_err(|e| PhenoError::Platform(format!("DuplicateOutput failed: {e}")))?;
 
     let (frame_tex, _frame_info) = acquire_frame(&duplication)?;
     let pixels = copy_texture_bgra(&device, &context, &frame_tex)?;
@@ -103,9 +102,9 @@ unsafe fn primary_output(
                 Ok(o) => o,
                 Err(_) => break,
             };
-            let desc = output.GetDesc().map_err(|e| {
-                PhenoError::Platform(format!("IDXGIOutput::GetDesc failed: {e}"))
-            })?;
+            let desc = output
+                .GetDesc()
+                .map_err(|e| PhenoError::Platform(format!("IDXGIOutput::GetDesc failed: {e}")))?;
             if desc.AttachedToDesktop.as_bool() {
                 return Ok((adapter, output));
             }
@@ -141,7 +140,7 @@ unsafe fn acquire_frame(
                     PhenoError::Platform(format!("IDXGIResource→ID3D11Texture2D cast failed: {e}"))
                 })?;
                 return Ok((texture, frame_info));
-            }
+            },
             Err(e) => {
                 let code = e.code();
                 if code == DXGI_ERROR_WAIT_TIMEOUT {
@@ -149,14 +148,12 @@ unsafe fn acquire_frame(
                     continue;
                 }
                 if code == DXGI_ERROR_ACCESS_LOST {
-                    return Err(PhenoError::Platform(format!(
-                        "DXGI_ERROR_ACCESS_LOST: {e}"
-                    )));
+                    return Err(PhenoError::Platform(format!("DXGI_ERROR_ACCESS_LOST: {e}")));
                 }
                 return Err(PhenoError::Platform(format!(
                     "AcquireNextFrame failed: {e}"
                 )));
-            }
+            },
         }
     }
 
@@ -198,20 +195,13 @@ unsafe fn copy_texture_bgra(
     device
         .CreateTexture2D(&staging_desc, None, Some(&mut staging))
         .map_err(|e| PhenoError::Platform(format!("CreateTexture2D(staging) failed: {e}")))?;
-    let staging =
-        staging.ok_or_else(|| PhenoError::Platform("staging texture null".into()))?;
+    let staging = staging.ok_or_else(|| PhenoError::Platform("staging texture null".into()))?;
 
     context.CopyResource(&staging, src);
 
     let mut mapped = D3D11_MAPPED_SUBRESOURCE::default();
     context
-        .Map(
-            &staging,
-            0,
-            D3D11_MAP_READ,
-            0,
-            Some(&mut mapped as *mut _),
-        )
+        .Map(&staging, 0, D3D11_MAP_READ, 0, Some(&mut mapped as *mut _))
         .map_err(|e| PhenoError::Platform(format!("ID3D11DeviceContext::Map failed: {e}")))?;
 
     let width = desc.Width as usize;

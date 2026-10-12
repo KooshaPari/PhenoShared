@@ -89,9 +89,18 @@ pub fn resolve_tray_gate_visual(
     let (color_hex, badge_label, linux_icon_name, swift_symbol_name) = match severity {
         TrayGateSeverity::Critical => ("#f85149", "Critical", "dialog-error", "flame.fill"),
         TrayGateSeverity::Warning => {
-            let label = if thermal_pressure == "UNAVAILABLE" { "Unavailable" } else { "Warning" };
-            ("#d29922", label, "dialog-warning", "exclamationmark.triangle.fill")
-        }
+            let label = if thermal_pressure == "UNAVAILABLE" {
+                "Unavailable"
+            } else {
+                "Warning"
+            };
+            (
+                "#d29922",
+                label,
+                "dialog-warning",
+                "exclamationmark.triangle.fill",
+            )
+        },
         TrayGateSeverity::Normal => ("#3fb950", "Normal", "utilities-system-monitor", "cpu"),
         TrayGateSeverity::Offline => unreachable!("handled above"),
     };
@@ -142,7 +151,10 @@ pub fn format_gate_tray_line(gate: &GateStatusSnapshot) -> String {
 
 /// Agent RSS companion line (gate snapshot field).
 pub fn format_gate_rss_tray_line(gate: &GateStatusSnapshot) -> String {
-    format!("Agent RSS: {}", format_bytes_compact(gate.agent_total_rss_bytes))
+    format!(
+        "Agent RSS: {}",
+        format_bytes_compact(gate.agent_total_rss_bytes)
+    )
 }
 
 /// Host load / FD / RSS line for tray menus / status bars.
@@ -248,7 +260,10 @@ pub fn format_pool_status_operator_lines(
     pool: &PoolSnapshot,
     status: &StatusSnapshot,
 ) -> Vec<String> {
-    vec![format_pool_tray_line(pool), format_status_snapshot_tray_line(status)]
+    vec![
+        format_pool_tray_line(pool),
+        format_status_snapshot_tray_line(status),
+    ]
 }
 
 #[cfg(test)]

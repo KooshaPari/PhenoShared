@@ -10,6 +10,8 @@ keywords = ["phenotype", "pheno-plugins", "sql"]
 categories = ["database", "development-tools"]
 authors = ["<REDACTED>"]
 
+[workspace]
+
 [dependencies]
 pheno-plugin-core = { path = "../pheno-plugin-core" }
 rusqlite = { version = "0.32", features = ["bundled"] }

@@ -51,9 +51,9 @@ where
                     "Branch '{}' already exists",
                     branch_name.as_str()
                 ))
-            }
+            },
             Err(e) => return WorktreeResult::failure(e.to_string()),
-            _ => {}
+            _ => {},
         }
 
         // Create worktree (start_point defaults to HEAD in the adapter)

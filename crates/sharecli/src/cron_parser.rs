@@ -13,10 +13,16 @@ pub struct CronField {
 }
 impl CronField {
     pub fn any() -> Self {
-        Self { values: (0..=59).collect(), wildcard: true }
+        Self {
+            values: (0..=59).collect(),
+            wildcard: true,
+        }
     }
     pub fn single(v: u8) -> Self {
-        Self { values: vec![v], wildcard: false }
+        Self {
+            values: vec![v],
+            wildcard: false,
+        }
     }
     pub fn matches(&self, v: u8) -> bool {
         self.wildcard || self.values.contains(&v)
@@ -32,7 +38,13 @@ pub fn parse(s: &str) -> Result<CronExpr, String> {
     let dom = parse_field(parts[2], 1, 31)?;
     let month = parse_field(parts[3], 1, 12)?;
     let dow = parse_field(parts[4], 0, 6)?;
-    Ok(CronExpr { minute, hour, dom, month, dow })
+    Ok(CronExpr {
+        minute,
+        hour,
+        dom,
+        month,
+        dow,
+    })
 }
 fn parse_field(s: &str, min: u8, max: u8) -> Result<CronField, String> {
     if s == "*" {

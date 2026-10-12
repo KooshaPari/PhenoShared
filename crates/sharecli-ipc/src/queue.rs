@@ -67,7 +67,9 @@ pub fn resolve_operator_queue_priority(rule_priority: Option<&str>) -> QueuePrio
             return QueuePriority::parse(&raw);
         }
     }
-    rule_priority.map(QueuePriority::parse).unwrap_or(QueuePriority::Normal)
+    rule_priority
+        .map(QueuePriority::parse)
+        .unwrap_or(QueuePriority::Normal)
 }
 
 /// Filesystem-backed N-slot concurrency limiter for a named command lane.
@@ -91,7 +93,12 @@ impl SlotQueue {
 
     /// Create a queue rooted at `root` with `max_concurrent` parallel slots.
     pub fn new(root: impl Into<PathBuf>, max_concurrent: usize) -> Self {
-        Self::with_options(root, max_concurrent.max(1), Self::DEFAULT_TIMEOUT, Self::DEFAULT_POLL)
+        Self::with_options(
+            root,
+            max_concurrent.max(1),
+            Self::DEFAULT_TIMEOUT,
+            Self::DEFAULT_POLL,
+        )
     }
 
     /// Create a queue with explicit timeout / poll settings (tests).
@@ -101,7 +108,12 @@ impl SlotQueue {
         timeout: Duration,
         poll: Duration,
     ) -> Self {
-        Self { root: root.into(), max_concurrent: max_concurrent.max(1), timeout, poll }
+        Self {
+            root: root.into(),
+            max_concurrent: max_concurrent.max(1),
+            timeout,
+            poll,
+        }
     }
 
     pub fn root(&self) -> &Path {
@@ -130,10 +142,19 @@ impl SlotQueue {
         let dir = self.waiting_dir(lane);
         fs::create_dir_all(&dir)
             .with_context(|| format!("create waiting dir {}", dir.display()))?;
-        let now = SystemTime::now().duration_since(UNIX_EPOCH).unwrap_or_default().as_secs();
+        let now = SystemTime::now()
+            .duration_since(UNIX_EPOCH)
+            .unwrap_or_default()
+            .as_secs();
         let seq = WAITER_TICKET_SEQ.fetch_add(1, Ordering::Relaxed);
         // Priority prefix avoids read races when scanning the waiting dir (AC-008.14).
-        let ticket = format!("{:02}.{}.{}.{}", priority.as_u8(), now, std::process::id(), seq);
+        let ticket = format!(
+            "{:02}.{}.{}.{}",
+            priority.as_u8(),
+            now,
+            std::process::id(),
+            seq
+        );
         let path = dir.join(&ticket);
         let tmp = dir.join(format!(".{ticket}.tmp"));
         fs::write(&tmp, format!("{}\n", priority.as_u8()))
@@ -191,7 +212,11 @@ impl SlotQueue {
             return Ok(false);
         }
 
-        let winner = tickets_at_best.iter().min().map(String::as_str).unwrap_or(my_ticket);
+        let winner = tickets_at_best
+            .iter()
+            .min()
+            .map(String::as_str)
+            .unwrap_or(my_ticket);
         Ok(winner == my_ticket)
     }
 
@@ -251,7 +276,7 @@ impl SlotQueue {
                             // Lock releases on drop of lock_file.
                             drop(lock_file);
                             return Ok(value);
-                        }
+                        },
                         Err(_) => continue,
                     }
                 }
@@ -316,7 +341,11 @@ mod tests {
         for h in handles {
             h.join().unwrap();
         }
-        assert_eq!(peak.load(Ordering::SeqCst), 1, "max_concurrent=1 MUST serialize");
+        assert_eq!(
+            peak.load(Ordering::SeqCst),
+            1,
+            "max_concurrent=1 MUST serialize"
+        );
     }
 
     #[test]
@@ -349,7 +378,10 @@ mod tests {
         for h in handles {
             h.join().unwrap();
         }
-        assert!(peak.load(Ordering::SeqCst) >= 2, "max_concurrent=2 MUST allow parallel slots");
+        assert!(
+            peak.load(Ordering::SeqCst) >= 2,
+            "max_concurrent=2 MUST allow parallel slots"
+        );
         assert!(peak.load(Ordering::SeqCst) <= 2);
     }
 
@@ -482,7 +514,10 @@ mod tests {
     fn priority_parse_case_insensitive() {
         assert_eq!(QueuePriority::parse("Critical"), QueuePriority::Critical);
         assert_eq!(QueuePriority::parse("LOW"), QueuePriority::Low);
-        assert_eq!(QueuePriority::parse("Background"), QueuePriority::Background);
+        assert_eq!(
+            QueuePriority::parse("Background"),
+            QueuePriority::Background
+        );
         assert_eq!(QueuePriority::parse("NORMAL"), QueuePriority::Normal);
         assert_eq!(QueuePriority::parse("  High  "), QueuePriority::High);
     }
@@ -528,7 +563,9 @@ mod tests {
     fn with_slot_returns_ok_value() {
         let dir = tempfile::tempdir().unwrap();
         let q = SlotQueue::new(dir.path(), 2);
-        let result = q.with_slot("test-lane", QueuePriority::Normal, || Ok(42)).unwrap();
+        let result = q
+            .with_slot("test-lane", QueuePriority::Normal, || Ok(42))
+            .unwrap();
         assert_eq!(result, 42);
     }
 
@@ -537,9 +574,14 @@ mod tests {
         let dir = tempfile::tempdir().unwrap();
         let q = SlotQueue::new(dir.path(), 2);
         let result: Result<Option<String>, _> =
-            q.with_slot("err-lane", QueuePriority::Normal, || anyhow::bail!("intentional error"));
+            q.with_slot("err-lane", QueuePriority::Normal, || {
+                anyhow::bail!("intentional error")
+            });
         assert!(result.is_err());
-        assert!(result.unwrap_err().to_string().contains("intentional error"));
+        assert!(result
+            .unwrap_err()
+            .to_string()
+            .contains("intentional error"));
     }
 
     #[test]
@@ -548,7 +590,8 @@ mod tests {
         let nested = dir.path().join("nested").join("queue");
         let q = SlotQueue::new(&nested, 1);
         assert!(!nested.exists(), "root must not exist yet");
-        q.with_slot("lane", QueuePriority::Normal, || Ok(())).unwrap();
+        q.with_slot("lane", QueuePriority::Normal, || Ok(()))
+            .unwrap();
         assert!(nested.exists(), "root MUST be created");
     }
 
@@ -602,7 +645,10 @@ mod tests {
         assert_eq!(SlotQueue::ticket_priority("00.123.456.789"), 0);
         assert_eq!(SlotQueue::ticket_priority("02.123.456.789"), 2);
         assert_eq!(SlotQueue::ticket_priority("04.123.456.789"), 4);
-        assert_eq!(SlotQueue::ticket_priority("bad-format"), QueuePriority::Normal.as_u8());
+        assert_eq!(
+            SlotQueue::ticket_priority("bad-format"),
+            QueuePriority::Normal.as_u8()
+        );
     }
 
     #[test]
@@ -639,7 +685,10 @@ mod tests {
             h.join().unwrap();
         }
         // Different lanes with max_concurrent=1 per lane should allow parallel execution
-        assert!(peak.load(Ordering::SeqCst) >= 2, "different lanes MUST allow parallel execution");
+        assert!(
+            peak.load(Ordering::SeqCst) >= 2,
+            "different lanes MUST allow parallel execution"
+        );
     }
 
     #[test]
@@ -711,7 +760,8 @@ mod tests {
                 Duration::from_secs(5),
                 Duration::from_millis(5),
             );
-            q2.with_slot("priority-lane", QueuePriority::Critical, || Ok(())).unwrap();
+            q2.with_slot("priority-lane", QueuePriority::Critical, || Ok(()))
+                .unwrap();
         });
 
         // Give time for waiter ticket to be written

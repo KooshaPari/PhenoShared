@@ -150,7 +150,7 @@ pub(super) fn read_line_with_timeout(
                 if out.len() >= MAX_VSOCK_RESPONSE_BYTES {
                     break;
                 }
-            }
+            },
             Err(e)
                 if e.kind() == std::io::ErrorKind::WouldBlock
                     || e.kind() == std::io::ErrorKind::TimedOut =>
@@ -159,10 +159,10 @@ pub(super) fn read_line_with_timeout(
                     "vsock read timed out after {}ms",
                     timeout.as_millis()
                 )));
-            }
+            },
             Err(e) => {
                 return Err(guest_io_unavailable(format!("vsock read failed: {e}")));
-            }
+            },
         }
     }
     if out.is_empty() {

@@ -97,9 +97,13 @@ mod tests {
 
     #[test]
     fn status_operator_panel_format_csv_companion() {
-        let csv =
-            StatusOperatorPanel { scanned: 5, watched: 3, total_processes: 12, agent_rows: 3 }
-                .format_csv_companion();
+        let csv = StatusOperatorPanel {
+            scanned: 5,
+            watched: 3,
+            total_processes: 12,
+            agent_rows: 3,
+        }
+        .format_csv_companion();
         assert!(
             csv.contains("record,scanned,watched,total_processes,agent_rows"),
             "CSV companion MUST include status header; got: {csv}"

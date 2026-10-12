@@ -22,11 +22,21 @@ pub struct MergeResult {
 
 impl MergeResult {
     fn clean(output: impl Into<String>, used_mergiraf: bool) -> Self {
-        Self { success: true, conflicts: Vec::new(), output: output.into(), used_mergiraf }
+        Self {
+            success: true,
+            conflicts: Vec::new(),
+            output: output.into(),
+            used_mergiraf,
+        }
     }
 
     fn conflicted(output: impl Into<String>, used_mergiraf: bool) -> Self {
-        Self { success: false, conflicts: Vec::new(), output: output.into(), used_mergiraf }
+        Self {
+            success: false,
+            conflicts: Vec::new(),
+            output: output.into(),
+            used_mergiraf,
+        }
     }
 }
 
@@ -41,7 +51,10 @@ pub struct SmartMerger {
 
 impl Default for SmartMerger {
     fn default() -> Self {
-        Self { mergiraf_binary: None, fallback_to_git: true }
+        Self {
+            mergiraf_binary: None,
+            fallback_to_git: true,
+        }
     }
 }
 
@@ -101,7 +114,12 @@ impl SmartMerger {
         output: &Path,
     ) -> MergeResult {
         let mut cmd = Command::new(bin);
-        cmd.arg("merge").arg(base).arg(ours).arg(theirs).arg("-o").arg(output);
+        cmd.arg("merge")
+            .arg(base)
+            .arg(ours)
+            .arg(theirs)
+            .arg("-o")
+            .arg(output);
         match cmd.output() {
             Ok(out) => {
                 let combined = format!(
@@ -115,13 +133,13 @@ impl SmartMerger {
                             let _ = fs::write(output, &out.stdout);
                         }
                         MergeResult::clean(combined, true)
-                    }
+                    },
                     Some(1) => {
                         if !output.exists() && !out.stdout.is_empty() {
                             let _ = fs::write(output, &out.stdout);
                         }
                         MergeResult::conflicted(combined, true)
-                    }
+                    },
                     _ => {
                         // Hard failure — signal fallback by used_mergiraf=false.
                         MergeResult {
@@ -130,9 +148,9 @@ impl SmartMerger {
                             output: combined,
                             used_mergiraf: false,
                         }
-                    }
+                    },
                 }
-            }
+            },
             Err(err) => MergeResult {
                 success: false,
                 conflicts: Vec::new(),
@@ -163,16 +181,22 @@ impl SmartMerger {
                     output: err.to_string(),
                     used_mergiraf: false,
                 };
-            }
+            },
         };
 
-        let cwd = output.parent().map(Path::to_path_buf).unwrap_or_else(|| PathBuf::from("."));
+        let cwd = output
+            .parent()
+            .map(Path::to_path_buf)
+            .unwrap_or_else(|| PathBuf::from("."));
 
         let status = Command::new("git")
             .args([
                 "merge-file",
                 "--diff3",
-                scratch.file_name().and_then(|s| s.to_str()).unwrap_or("scratch"),
+                scratch
+                    .file_name()
+                    .and_then(|s| s.to_str())
+                    .unwrap_or("scratch"),
             ])
             .arg(path_arg_for_cwd(base, &cwd))
             .arg(path_arg_for_cwd(theirs, &cwd))
@@ -194,7 +218,7 @@ impl SmartMerger {
                         } else {
                             MergeResult::conflicted(combined, false)
                         }
-                    }
+                    },
                     Err(err) => {
                         let _ = fs::remove_file(&scratch);
                         MergeResult {
@@ -203,9 +227,9 @@ impl SmartMerger {
                             output: err.to_string(),
                             used_mergiraf: false,
                         }
-                    }
+                    },
                 }
-            }
+            },
             Err(err) => {
                 let _ = fs::remove_file(&scratch);
                 // Last resort: copy ours so callers still have a file.
@@ -216,7 +240,7 @@ impl SmartMerger {
                     output: err.to_string(),
                     used_mergiraf: false,
                 }
-            }
+            },
         }
     }
 }
@@ -234,7 +258,10 @@ fn which_bin(name: &str) -> Option<PathBuf> {
 
 fn path_arg_for_cwd(path: &Path, cwd: &Path) -> String {
     if path.parent() == Some(cwd) {
-        path.file_name().and_then(|s| s.to_str()).unwrap_or(".").to_string()
+        path.file_name()
+            .and_then(|s| s.to_str())
+            .unwrap_or(".")
+            .to_string()
     } else {
         path.to_string_lossy().into_owned()
     }
@@ -243,8 +270,11 @@ fn path_arg_for_cwd(path: &Path, cwd: &Path) -> String {
 fn tempfile_in_parent(output: &Path, ours: &Path) -> std::io::Result<PathBuf> {
     let parent = output.parent().unwrap_or_else(|| Path::new("."));
     fs::create_dir_all(parent)?;
-    let suffix =
-        ours.extension().and_then(|e| e.to_str()).map(|e| format!(".{e}")).unwrap_or_default();
+    let suffix = ours
+        .extension()
+        .and_then(|e| e.to_str())
+        .map(|e| format!(".{e}"))
+        .unwrap_or_default();
     let name = format!(
         ".sharecli-merge-{}{}{}",
         std::process::id(),
@@ -283,7 +313,11 @@ mod tests {
         assert!(!result.used_mergiraf, "must use git fallback");
         assert!(out.exists(), "output must be written");
         // Non-overlapping edits should succeed with git merge-file.
-        assert!(result.success, "expected clean merge, got: {}", result.output);
+        assert!(
+            result.success,
+            "expected clean merge, got: {}",
+            result.output
+        );
         let text = fs::read_to_string(&out).unwrap();
         assert!(text.contains("ours-change"));
         assert!(text.contains("line3-theirs"));
@@ -362,7 +396,9 @@ mod tests {
 
     #[test]
     fn smart_merger_clone_eq() {
-        let m = SmartMerger::new().with_mergiraf_binary("/usr/bin/m").without_git_fallback();
+        let m = SmartMerger::new()
+            .with_mergiraf_binary("/usr/bin/m")
+            .without_git_fallback();
         let cloned = m.clone();
         assert_eq!(m.mergiraf_binary, cloned.mergiraf_binary);
         assert_eq!(m.fallback_to_git, cloned.fallback_to_git);

@@ -12,17 +12,34 @@ fn bin() -> Command {
 /// FR-006 / AC-006.16 — proc help documents --tree.
 #[test]
 fn fr006_proc_help_documents_tree() {
-    let out = bin().args(["proc", "--help"]).output().expect("spawn sharecli proc --help");
-    assert!(out.status.success(), "proc --help should exit 0; stderr: {:?}", out.stderr);
+    let out = bin()
+        .args(["proc", "--help"])
+        .output()
+        .expect("spawn sharecli proc --help");
+    assert!(
+        out.status.success(),
+        "proc --help should exit 0; stderr: {:?}",
+        out.stderr
+    );
     let s = String::from_utf8_lossy(&out.stdout);
-    assert!(s.contains("--tree"), "proc --help MUST document --tree; got: {s}");
+    assert!(
+        s.contains("--tree"),
+        "proc --help MUST document --tree; got: {s}"
+    );
 }
 
 /// FR-006 / AC-006.16 — proc --tree prints forest header.
 #[test]
 fn fr006_proc_tree_prints_forest_header() {
-    let out = bin().args(["proc", "--tree"]).output().expect("spawn sharecli proc --tree");
-    assert!(out.status.success(), "proc --tree should exit 0; stderr: {:?}", out.stderr);
+    let out = bin()
+        .args(["proc", "--tree"])
+        .output()
+        .expect("spawn sharecli proc --tree");
+    assert!(
+        out.status.success(),
+        "proc --tree should exit 0; stderr: {:?}",
+        out.stderr
+    );
     let s = String::from_utf8_lossy(&out.stdout);
     assert!(
         s.contains("Agent process tree (proc scan)"),
@@ -37,7 +54,11 @@ fn fr006_proc_tree_json_shape() {
         .args(["proc", "--tree", "--json"])
         .output()
         .expect("spawn sharecli proc --tree --json");
-    assert!(out.status.success(), "proc --tree --json should exit 0; stderr: {:?}", out.stderr);
+    assert!(
+        out.status.success(),
+        "proc --tree --json should exit 0; stderr: {:?}",
+        out.stderr
+    );
     let v: serde_json::Value =
         serde_json::from_slice(&out.stdout).expect("proc --tree --json MUST emit valid JSON");
     assert!(v.get("forests").and_then(|f| f.as_array()).is_some());

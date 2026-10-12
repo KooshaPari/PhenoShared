@@ -49,7 +49,10 @@ mod macos {
         }
         let result = unsafe { MFMount(channel, mountpoint_c.as_ptr(), options.as_ptr(), true) };
         let errno = io::Error::last_os_error();
-        eprintln!("mfmount-probe: result={result:?} ({}), errno={errno}", result_code(result));
+        eprintln!(
+            "mfmount-probe: result={result:?} ({}), errno={errno}",
+            result_code(result)
+        );
         unsafe {
             let _ = MFChannelClose(channel);
             MFRelease(channel);
@@ -57,7 +60,10 @@ mod macos {
         if matches!(result, MountResult::Success) {
             Ok(())
         } else {
-            anyhow::bail!("MFMount negotiation failed: {result:?} ({})", result_code(result));
+            anyhow::bail!(
+                "MFMount negotiation failed: {result:?} ({})",
+                result_code(result)
+            );
         }
     }
 
@@ -69,7 +75,7 @@ mod macos {
             MountResult::FileSystemExtensionNotFound => "filesystem-extension-not-found",
             MountResult::FileSystemExtensionRequiresApproval => {
                 "filesystem-extension-requires-approval"
-            }
+            },
             MountResult::UnexpectedFailure => "unexpected-failure",
         }
     }
@@ -94,7 +100,10 @@ mod macos {
                 result_code(MountResult::FileSystemExtensionRequiresApproval),
                 "filesystem-extension-requires-approval"
             );
-            assert_eq!(result_code(MountResult::UnexpectedFailure), "unexpected-failure");
+            assert_eq!(
+                result_code(MountResult::UnexpectedFailure),
+                "unexpected-failure"
+            );
         }
     }
 }

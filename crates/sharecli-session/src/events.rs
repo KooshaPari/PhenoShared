@@ -133,7 +133,10 @@ impl SurfaceEventHub {
         let mut state = self.state.lock().expect("surface event hub mutex poisoned");
         state.next_subscription = state.next_subscription.saturating_add(1);
         let subscription_id = state.next_subscription;
-        let next_seq = state.next_seq.saturating_add(1).max(request.from_seq.unwrap_or(1));
+        let next_seq = state
+            .next_seq
+            .saturating_add(1)
+            .max(request.from_seq.unwrap_or(1));
         state.subscriptions.insert(
             subscription_id,
             SubscriptionState {
@@ -183,13 +186,19 @@ impl SurfaceEventHub {
             .subscriptions
             .values()
             .filter(|subscription| {
-                subscription.surface_id.as_deref().is_none_or(|id| id == surface_id)
+                subscription
+                    .surface_id
+                    .as_deref()
+                    .is_none_or(|id| id == surface_id)
             })
             .map(|subscription| subscription.max_chunk_bytes)
             .min()
             .unwrap_or(MAX_EVENT_CHUNK_BYTES);
-        let chunks: Vec<&[u8]> =
-            if bytes.is_empty() { vec![&[]] } else { bytes.chunks(chunk_limit).collect() };
+        let chunks: Vec<&[u8]> = if bytes.is_empty() {
+            vec![&[]]
+        } else {
+            bytes.chunks(chunk_limit).collect()
+        };
         for chunk in chunks {
             seq = seq.saturating_add(1);
             state.next_seq = seq;
@@ -199,7 +208,10 @@ impl SurfaceEventHub {
                 Some(base64::engine::general_purpose::STANDARD.encode(chunk))
             };
             let subscriptions = state.subscriptions.iter_mut().filter(|(_, subscription)| {
-                subscription.surface_id.as_deref().is_none_or(|id| id == surface_id)
+                subscription
+                    .surface_id
+                    .as_deref()
+                    .is_none_or(|id| id == surface_id)
                     && seq >= subscription.from_seq
             });
             for (subscription_id, subscription) in subscriptions {

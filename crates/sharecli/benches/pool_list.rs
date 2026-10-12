@@ -9,8 +9,10 @@ use criterion::{criterion_group, criterion_main, Criterion};
 use sharecli::runtime::ProcessPool;
 
 fn pool_new_list(c: &mut Criterion) {
-    let rt =
-        tokio::runtime::Builder::new_current_thread().enable_all().build().expect("tokio runtime");
+    let rt = tokio::runtime::Builder::new_current_thread()
+        .enable_all()
+        .build()
+        .expect("tokio runtime");
 
     c.bench_function("pool_new_and_list_empty", |b| {
         b.to_async(&rt).iter(|| async {

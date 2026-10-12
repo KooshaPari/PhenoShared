@@ -9,7 +9,9 @@ use super::checks::{na, run_cmd};
 use super::StackDetector;
 
 pub(crate) async fn run_static_analysis(
-    stack: &StackDetector<'_>, root: &Path, cfg: &QGateConfig,
+    stack: &StackDetector<'_>,
+    root: &Path,
+    cfg: &QGateConfig,
 ) -> CheckResult {
     if cfg.is_na("static_analysis") {
         return na("static_analysis", CheckCategory::StaticAnalysis);
@@ -18,9 +20,13 @@ pub(crate) async fn run_static_analysis(
     let mut sa_failed = false;
 
     if stack.has_rust() {
-        let (ok, detail) = run_cmd("cargo", &["clippy", "--workspace", "--", "-D", "warnings"], root)
-            .await
-            .unwrap_or((false, "clippy not found".into()));
+        let (ok, detail) = run_cmd(
+            "cargo",
+            &["clippy", "--workspace", "--", "-D", "warnings"],
+            root,
+        )
+        .await
+        .unwrap_or((false, "clippy not found".into()));
         if !ok {
             sa_failed = true;
             sa_details.push(format!("clippy: {}", detail.lines().next().unwrap_or("")));
@@ -32,7 +38,10 @@ pub(crate) async fn run_static_analysis(
             .unwrap_or((false, "rustfmt not found".into()));
         if !fmt_ok {
             sa_failed = true;
-            sa_details.push(format!("rustfmt: {}", fmt_detail.lines().next().unwrap_or("")));
+            sa_details.push(format!(
+                "rustfmt: {}",
+                fmt_detail.lines().next().unwrap_or("")
+            ));
         } else {
             sa_details.push("rustfmt: ok".into());
         }
@@ -48,7 +57,12 @@ pub(crate) async fn run_static_analysis(
                 .current_dir(root)
                 .output()
                 .await
-                .map(|o| (o.status.success(), String::from_utf8_lossy(&o.stderr).to_string()))
+                .map(|o| {
+                    (
+                        o.status.success(),
+                        String::from_utf8_lossy(&o.stderr).to_string(),
+                    )
+                })
                 .unwrap_or((false, "tsc not found".into()));
             if !tsc_ok {
                 sa_failed = true;
@@ -64,7 +78,10 @@ pub(crate) async fn run_static_analysis(
             .unwrap_or((false, "eslint not found".into()));
         if !lint_ok {
             sa_failed = true;
-            sa_details.push(format!("eslint: {}", lint_detail.lines().next().unwrap_or("")));
+            sa_details.push(format!(
+                "eslint: {}",
+                lint_detail.lines().next().unwrap_or("")
+            ));
         } else {
             sa_details.push("eslint: ok".into());
         }
@@ -85,7 +102,10 @@ pub(crate) async fn run_static_analysis(
             .unwrap_or((false, "ruff not found".into()));
         if !ruff_ok {
             sa_failed = true;
-            sa_details.push(format!("ruff: {}", ruff_detail.lines().next().unwrap_or("")));
+            sa_details.push(format!(
+                "ruff: {}",
+                ruff_detail.lines().next().unwrap_or("")
+            ));
         } else {
             sa_details.push("ruff: ok".into());
         }
@@ -93,7 +113,11 @@ pub(crate) async fn run_static_analysis(
 
     CheckResult {
         category: CheckCategory::StaticAnalysis,
-        status: if sa_failed { CheckStatus::Failed } else { CheckStatus::Passed },
+        status: if sa_failed {
+            CheckStatus::Failed
+        } else {
+            CheckStatus::Passed
+        },
         score: if sa_failed { Some(1.0) } else { Some(0.0) },
         threshold: Some(Thresholds::STATIC_ANALYSIS_ERRORS),
         details: sa_details.join("; "),
@@ -101,7 +125,9 @@ pub(crate) async fn run_static_analysis(
 }
 
 pub(crate) async fn run_security(
-    stack: &StackDetector<'_>, root: &Path, cfg: &QGateConfig,
+    stack: &StackDetector<'_>,
+    root: &Path,
+    cfg: &QGateConfig,
 ) -> CheckResult {
     if cfg.is_na("security") {
         return na("security", CheckCategory::Security);
@@ -109,22 +135,36 @@ pub(crate) async fn run_security(
     let mut sec_failed = false;
     let mut sec_details: Vec<String> = Vec::new();
 
-    let (gl_ok, gl_detail) = run_cmd("gitleaks", &["detect", "--no-git", "--exit-code", "1"], root)
-        .await
-        .unwrap_or((true, "gitleaks not installed — skipping".into()));
+    let (gl_ok, gl_detail) = run_cmd(
+        "gitleaks",
+        &["detect", "--no-git", "--exit-code", "1"],
+        root,
+    )
+    .await
+    .unwrap_or((true, "gitleaks not installed — skipping".into()));
     if !gl_ok {
         sec_failed = true;
-        sec_details.push(format!("gitleaks: {}", gl_detail.lines().next().unwrap_or("")));
+        sec_details.push(format!(
+            "gitleaks: {}",
+            gl_detail.lines().next().unwrap_or("")
+        ));
     } else {
         sec_details.push("gitleaks: ok".into());
     }
 
-    let (sg_ok, sg_detail) = run_cmd("semgrep", &["--config=auto", "--error", "--quiet", "."], root)
-        .await
-        .unwrap_or((true, "semgrep not installed — skipping".into()));
+    let (sg_ok, sg_detail) = run_cmd(
+        "semgrep",
+        &["--config=auto", "--error", "--quiet", "."],
+        root,
+    )
+    .await
+    .unwrap_or((true, "semgrep not installed — skipping".into()));
     if !sg_ok {
         sec_failed = true;
-        sec_details.push(format!("semgrep: {}", sg_detail.lines().next().unwrap_or("")));
+        sec_details.push(format!(
+            "semgrep: {}",
+            sg_detail.lines().next().unwrap_or("")
+        ));
     } else {
         sec_details.push("semgrep: ok".into());
     }
@@ -135,7 +175,10 @@ pub(crate) async fn run_security(
             .unwrap_or((true, "cargo-audit not installed — skipping".into()));
         if !ca_ok {
             sec_failed = true;
-            sec_details.push(format!("cargo-audit: {}", ca_detail.lines().next().unwrap_or("")));
+            sec_details.push(format!(
+                "cargo-audit: {}",
+                ca_detail.lines().next().unwrap_or("")
+            ));
         } else {
             sec_details.push("cargo-audit: ok".into());
         }
@@ -147,7 +190,10 @@ pub(crate) async fn run_security(
             .unwrap_or((true, "bandit not installed — skipping".into()));
         if !bandit_ok {
             sec_failed = true;
-            sec_details.push(format!("bandit: {}", bandit_detail.lines().next().unwrap_or("")));
+            sec_details.push(format!(
+                "bandit: {}",
+                bandit_detail.lines().next().unwrap_or("")
+            ));
         } else {
             sec_details.push("bandit: ok".into());
         }
@@ -155,7 +201,11 @@ pub(crate) async fn run_security(
 
     CheckResult {
         category: CheckCategory::Security,
-        status: if sec_failed { CheckStatus::Failed } else { CheckStatus::Passed },
+        status: if sec_failed {
+            CheckStatus::Failed
+        } else {
+            CheckStatus::Passed
+        },
         score: if sec_failed { Some(1.0) } else { Some(0.0) },
         threshold: Some(Thresholds::SECURITY_HIGH_FINDINGS),
         details: sec_details.join("; "),

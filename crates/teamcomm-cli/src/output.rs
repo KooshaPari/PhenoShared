@@ -58,7 +58,7 @@ pub fn print_session_list(value: &Value) {
                 ],
                 rows,
             );
-        }
+        },
         None => print_json(value),
     }
 }
@@ -89,7 +89,7 @@ pub fn print_reservation_list(value: &Value) {
                 ],
                 rows,
             );
-        }
+        },
         None => print_json(value),
     }
 }
@@ -127,7 +127,7 @@ pub fn print_inbox_list(value: &Value) {
                 ],
                 rows,
             );
-        }
+        },
         None => print_json(value),
     }
 }

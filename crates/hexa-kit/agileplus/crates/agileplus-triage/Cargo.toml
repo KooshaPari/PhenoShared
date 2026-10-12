@@ -10,6 +10,8 @@ keywords = ["phenotype", "hexa", "triage", "backlog"]
 categories = ["development-tools"]
 authors = ["<REDACTED>"]
 
+[workspace]
+
 [lib]
 path = "src/lib.rs"
 

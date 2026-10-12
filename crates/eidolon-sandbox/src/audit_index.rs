@@ -48,7 +48,9 @@ fn event_type_key(t: &AuditEventType) -> String {
 }
 
 fn index_bucket(map: &mut HashMap<String, HashSet<String>>, key: &str, id: &str) {
-    map.entry(key.to_string()).or_default().insert(id.to_string());
+    map.entry(key.to_string())
+        .or_default()
+        .insert(id.to_string());
 }
 
 /// Secondary indexes for [`QueryFilter`] dimensions.
@@ -150,10 +152,7 @@ impl AuditQueryIndexes {
             );
         }
         if let Some(ref actor) = filter.actor {
-            Self::narrow(
-                &mut candidates,
-                Self::lookup_bucket(&self.by_actor, actor),
-            );
+            Self::narrow(&mut candidates, Self::lookup_bucket(&self.by_actor, actor));
         }
         if let Some(ref target) = filter.target {
             Self::narrow(
@@ -338,9 +337,7 @@ mod tests {
         let entries = vec![sample("a", 100, "agent-1", AuditEventType::Other)];
         let mut indexes = AuditQueryIndexes::rebuild(&entries);
         indexes.by_time.clear();
-        indexes
-            .by_time
-            .insert(time_index_key(100, "wrong-id"), ());
+        indexes.by_time.insert(time_index_key(100, "wrong-id"), ());
         let err = indexes.validate(&entries).unwrap_err();
         let msg = format!("{err:?}");
         assert!(msg.contains(codes::SANDBOX_AUDIT_INDEX));

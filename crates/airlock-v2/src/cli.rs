@@ -26,15 +26,11 @@ pub enum Commands {
         repo_path: String,
     },
     /// Remove a repository from the registry.
-    Unregister {
-        repo_path: String,
-    },
+    Unregister { repo_path: String },
     /// List every registered repo.
     List,
     /// Show a one-screen status for a single repo.
-    Status {
-        repo_path: String,
-    },
+    Status { repo_path: String },
     /// Create+push a `wip/<date>-<uuid>` snapshot branch.
     Snapshot {
         repo_path: String,
@@ -112,14 +108,12 @@ pub fn run(cli: &Cli, state_root: &StateRoot) -> Result<i32> {
         Commands::Status { repo_path } => cmd_status(state_root, repo_path),
         Commands::Snapshot { repo_path, message } => {
             cmd_snapshot(state_root, repo_path, message.as_deref())
-        }
+        },
         Commands::Autocommit { dry_run } => cmd_autocommit(state_root, *dry_run),
         Commands::Cleanup { dry_run } => cmd_cleanup(state_root, *dry_run),
         Commands::Daemon { mode } => cmd_daemon(state_root, mode),
         Commands::Audit => cmd_audit(state_root),
-        Commands::Restore { repo_path, branch } => {
-            cmd_restore(state_root, repo_path, branch)
-        }
+        Commands::Restore { repo_path, branch } => cmd_restore(state_root, repo_path, branch),
         Commands::Quickstatus => cmd_quickstatus(state_root),
     }
 }
@@ -127,12 +121,17 @@ pub fn run(cli: &Cli, state_root: &StateRoot) -> Result<i32> {
 fn cmd_register(state_root: &StateRoot, repo_path: &str) -> Result<i32> {
     let repo_path = resolve_repo_path(repo_path)?;
     if !crate::git_ops::is_inside_work_tree(&repo_path)? {
-        println!("[SKIP] {} is not inside a git work tree.", repo_path.display());
+        println!(
+            "[SKIP] {} is not inside a git work tree.",
+            repo_path.display()
+        );
         return Ok(1);
     }
     let mut registry = load(state_root)?;
     let key = repo_path.to_string_lossy().to_string();
-    let remote_url = get_remote_url(&repo_path).unwrap_or(None).unwrap_or_default();
+    let remote_url = get_remote_url(&repo_path)
+        .unwrap_or(None)
+        .unwrap_or_default();
     let primary = primary_branch(&repo_path).unwrap_or_else(|_| "main".to_string());
     upsert_entry(&mut registry, &key, |e| {
         e.remote_url = if remote_url.is_empty() {
@@ -153,7 +152,10 @@ fn cmd_unregister(state_root: &StateRoot, repo_path: &str) -> Result<i32> {
     let key = repo_path.to_string_lossy().to_string();
     let mut registry = load(state_root)?;
     if registry.remove(&key).is_none() {
-        println!("[INFO] {} not in registry; nothing to do.", repo_path.display());
+        println!(
+            "[INFO] {} not in registry; nothing to do.",
+            repo_path.display()
+        );
         return Ok(0);
     }
     save(state_root, &registry)?;
@@ -222,7 +224,7 @@ fn cmd_daemon(state_root: &StateRoot, mode: &str) -> Result<i32> {
         _ => {
             eprintln!("[FAIL] unknown daemon mode: {mode} (use 'autocommit' or 'cleanup')");
             return Ok(2);
-        }
+        },
     };
     // The long-running loop lives in `examples/daemon.rs`. Re-launching
     // here is an alias that prints a hint — the actual loop is

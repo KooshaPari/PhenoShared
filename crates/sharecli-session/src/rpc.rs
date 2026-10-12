@@ -130,17 +130,21 @@ pub async fn dispatch(service: Arc<SessionService>, line: &str) -> Response {
                 result: None,
                 error: Some(error.to_string()),
             }
-        }
+        },
     };
     let outcome = match request.method.as_str() {
-        "session.list" => service.list().map(|v| serde_json::to_value(v).unwrap_or_default()),
+        "session.list" => service
+            .list()
+            .map(|v| serde_json::to_value(v).unwrap_or_default()),
         "session.inspect" => request
             .params
             .get("id")
             .and_then(|v| v.as_str())
             .ok_or_else(|| anyhow::anyhow!("params.id is required"))
             .and_then(|id| {
-                service.inspect(id).map(|v| serde_json::to_value(v).unwrap_or_default())
+                service
+                    .inspect(id)
+                    .map(|v| serde_json::to_value(v).unwrap_or_default())
             }),
         "recovery.plan" => service
             .recovery_plan(Duration::seconds(DEFAULT_RECOVERY_MAX_AGE_SECONDS as i64))
@@ -148,8 +152,16 @@ pub async fn dispatch(service: Arc<SessionService>, line: &str) -> Response {
         method => Err(anyhow::anyhow!("unknown method: {method}")),
     };
     match outcome {
-        Ok(result) => Response { id: request.id, result: Some(result), error: None },
-        Err(error) => Response { id: request.id, result: None, error: Some(error.to_string()) },
+        Ok(result) => Response {
+            id: request.id,
+            result: Some(result),
+            error: None,
+        },
+        Err(error) => Response {
+            id: request.id,
+            result: None,
+            error: Some(error.to_string()),
+        },
     }
 }
 
@@ -181,13 +193,13 @@ async fn dispatch_surface_internal(
         Some(_) => {
             let id = raw.get("id").cloned().unwrap_or(Value::Null);
             return surface_error(id, -32602, "params must be a JSON object".to_string());
-        }
+        },
     };
     let request = match serde_json::from_value::<SurfaceRequest>(raw) {
         Ok(request) => request,
         Err(error) => {
             return surface_error(Value::Null, -32600, format!("invalid request: {error}"))
-        }
+        },
     };
     if request.jsonrpc != JSON_RPC_VERSION {
         return surface_error(
@@ -205,9 +217,12 @@ async fn dispatch_surface_internal(
         events.as_deref(),
     );
     match outcome {
-        Ok(result) => {
-            SurfaceResponse { jsonrpc: JSON_RPC_VERSION, id, result: Some(result), error: None }
-        }
+        Ok(result) => SurfaceResponse {
+            jsonrpc: JSON_RPC_VERSION,
+            id,
+            result: Some(result),
+            error: None,
+        },
         Err((code, message)) => surface_error(id, code, message),
     }
 }
@@ -263,7 +278,7 @@ fn dispatch_surface_method_with_events(
         "surface.list" => {
             let surfaces = control.list().map_err(control_error)?;
             serde_json::to_value(surfaces).map_err(control_error)
-        }
+        },
         "surface.io.send" => {
             let params: SendParams = decode_params(params)?;
             let bytes = match (params.text, params.bytes) {
@@ -274,7 +289,7 @@ fn dispatch_surface_method_with_events(
                         -32602,
                         "exactly one of params.text or params.bytes is required".to_string(),
                     ))
-                }
+                },
             };
             if bytes.len() > MAX_SURFACE_SEND_BYTES {
                 return Err((
@@ -282,9 +297,11 @@ fn dispatch_surface_method_with_events(
                     format!("payload must not exceed {MAX_SURFACE_SEND_BYTES} bytes"),
                 ));
             }
-            control.send(&params.surface_id, &bytes).map_err(control_error)?;
+            control
+                .send(&params.surface_id, &bytes)
+                .map_err(control_error)?;
             Ok(Value::Null)
-        }
+        },
         "surface.io.read" => {
             let params: ReadParams = decode_params(params)?;
             if params.max_bytes > MAX_SURFACE_READ_BYTES {
@@ -293,8 +310,9 @@ fn dispatch_surface_method_with_events(
                     format!("max_bytes must not exceed {MAX_SURFACE_READ_BYTES}"),
                 ));
             }
-            let bytes =
-                control.read(&params.surface_id, params.max_bytes).map_err(control_error)?;
+            let bytes = control
+                .read(&params.surface_id, params.max_bytes)
+                .map_err(control_error)?;
             if bytes.len() > params.max_bytes {
                 return Err((
                     -32000,
@@ -306,27 +324,37 @@ fn dispatch_surface_method_with_events(
                 ));
             }
             serde_json::to_value(ReadResult { bytes }).map_err(control_error)
-        }
+        },
         "surface.io.resize" => {
             let params: ResizeParams = decode_params(params)?;
             if params.rows == 0 || params.cols == 0 {
-                return Err((-32602, "rows and cols must be greater than zero".to_string()));
+                return Err((
+                    -32602,
+                    "rows and cols must be greater than zero".to_string(),
+                ));
             }
-            control.resize(&params.surface_id, params.rows, params.cols).map_err(control_error)?;
+            control
+                .resize(&params.surface_id, params.rows, params.cols)
+                .map_err(control_error)?;
             Ok(Value::Null)
-        }
+        },
         "surface.io.capabilities" => {
             let params: SurfaceIdParams = decode_params(params)?;
-            let capabilities = control.capabilities(&params.surface_id).map_err(control_error)?;
+            let capabilities = control
+                .capabilities(&params.surface_id)
+                .map_err(control_error)?;
             serde_json::to_value(capabilities).map_err(control_error)
-        }
+        },
         "surface.layout.snapshot" => {
             if !params.as_object().is_some_and(|object| object.is_empty()) {
-                return Err((-32602, "surface.layout.snapshot takes no params".to_string()));
+                return Err((
+                    -32602,
+                    "surface.layout.snapshot takes no params".to_string(),
+                ));
             }
             serde_json::to_value(control.snapshot_layout().map_err(control_error)?)
                 .map_err(control_error)
-        }
+        },
         "surface.layout.restore" => {
             #[derive(Deserialize)]
             struct RestoreParams {
@@ -334,9 +362,13 @@ fn dispatch_surface_method_with_events(
             }
             let request: RestoreParams = decode_params(params)?;
             request.snapshot.validate().map_err(control_error)?;
-            serde_json::to_value(control.restore_layout(&request.snapshot).map_err(control_error)?)
-                .map_err(control_error)
-        }
+            serde_json::to_value(
+                control
+                    .restore_layout(&request.snapshot)
+                    .map_err(control_error)?,
+            )
+            .map_err(control_error)
+        },
         "surface.io.subscribe" => {
             let Some(events) = events else {
                 return Err((-32000, "live surface events unavailable".to_string()));
@@ -344,7 +376,7 @@ fn dispatch_surface_method_with_events(
             let request: SurfaceSubscribeRequest = decode_params(params)?;
             let ack = events.subscribe(request).map_err(event_error)?;
             serde_json::to_value(ack).map_err(control_error)
-        }
+        },
         "surface.io.unsubscribe" => {
             let Some(events) = events else {
                 return Err((-32000, "live surface events unavailable".to_string()));
@@ -354,9 +386,11 @@ fn dispatch_surface_method_with_events(
                 subscription_id: u64,
             }
             let request: UnsubscribeParams = decode_params(params)?;
-            let unsubscribed = events.unsubscribe(request.subscription_id).map_err(event_error)?;
+            let unsubscribed = events
+                .unsubscribe(request.subscription_id)
+                .map_err(event_error)?;
             Ok(serde_json::json!({"unsubscribed": unsubscribed}))
-        }
+        },
         _ => Err((-32601, format!("unknown method: {method}"))),
     }
 }

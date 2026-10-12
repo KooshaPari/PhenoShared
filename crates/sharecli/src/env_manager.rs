@@ -21,7 +21,8 @@ impl EnvManager {
         self.get(key).unwrap_or_else(|| default.to_string())
     }
     pub fn require(&self, key: &str) -> Result<String, String> {
-        self.get(key).ok_or_else(|| format!("required env '{}' not set", key))
+        self.get(key)
+            .ok_or_else(|| format!("required env '{}' not set", key))
     }
 }
 
@@ -42,7 +43,10 @@ mod tests {
     #[test]
     fn get_or_default() {
         let e = EnvManager::new();
-        assert_eq!(e.get_or("DEFINITELY_NOT_SET_XYZ123", "fallback"), "fallback");
+        assert_eq!(
+            e.get_or("DEFINITELY_NOT_SET_XYZ123", "fallback"),
+            "fallback"
+        );
     }
     #[test]
     fn require_missing_err() {

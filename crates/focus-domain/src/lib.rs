@@ -190,7 +190,10 @@ mod rigidity_tests {
             _ => panic!("expected FrictionDelay"),
         }
         let ap = Rigidity::Semi(RigidityCost::AccountabilityPing);
-        assert!(matches!(ap.semi_cost(), Some(RigidityCost::AccountabilityPing)));
+        assert!(matches!(
+            ap.semi_cost(),
+            Some(RigidityCost::AccountabilityPing)
+        ));
     }
 
     // Traces to: FR-RIGIDITY-001

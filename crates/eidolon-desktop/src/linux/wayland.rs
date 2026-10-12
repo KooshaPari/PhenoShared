@@ -92,9 +92,8 @@ pub async fn screenshot(path: &str) -> Result<()> {
 /// Viewport size via a temporary non-interactive portal screenshot + PNG IHDR.
 pub async fn viewport() -> Result<Viewport> {
     let dir = std::env::temp_dir().join("eidolon-wayland-viewport");
-    std::fs::create_dir_all(&dir).map_err(|e| {
-        PhenoError::Platform(format!("viewport temp dir {}: {e}", dir.display()))
-    })?;
+    std::fs::create_dir_all(&dir)
+        .map_err(|e| PhenoError::Platform(format!("viewport temp dir {}: {e}", dir.display())))?;
     let tmp = dir.join(format!(
         "vp-{}.png",
         std::time::SystemTime::now()
@@ -109,7 +108,7 @@ pub async fn viewport() -> Result<Viewport> {
         Err(e) => {
             let _ = std::fs::remove_file(&tmp);
             return Err(e);
-        }
+        },
     };
     let _ = std::fs::remove_file(&tmp);
     let (width, height) = dims?;
@@ -123,9 +122,8 @@ pub async fn viewport() -> Result<Viewport> {
 
 /// Read PNG IHDR width/height (big-endian) without an image crate.
 pub(crate) fn png_dimensions(path: &Path) -> Result<(u32, u32)> {
-    let bytes = std::fs::read(path).map_err(|e| {
-        PhenoError::Platform(format!("read portal PNG {}: {e}", path.display()))
-    })?;
+    let bytes = std::fs::read(path)
+        .map_err(|e| PhenoError::Platform(format!("read portal PNG {}: {e}", path.display())))?;
     if bytes.len() < 24 || &bytes[0..8] != b"\x89PNG\r\n\x1a\n" {
         return Err(PhenoError::Platform(format!(
             "portal screenshot is not a PNG (need IHDR for viewport): {}",
@@ -134,9 +132,7 @@ pub(crate) fn png_dimensions(path: &Path) -> Result<(u32, u32)> {
     }
     // IHDR chunk: length(4) + "IHDR"(4) starts at offset 8; width/height at 16/20.
     if &bytes[12..16] != b"IHDR" {
-        return Err(PhenoError::Platform(
-            "portal PNG missing IHDR chunk".into(),
-        ));
+        return Err(PhenoError::Platform("portal PNG missing IHDR chunk".into()));
     }
     let width = u32::from_be_bytes([bytes[16], bytes[17], bytes[18], bytes[19]]);
     let height = u32::from_be_bytes([bytes[20], bytes[21], bytes[22], bytes[23]]);
@@ -160,7 +156,7 @@ mod tests {
         png.extend_from_slice(&1080u32.to_be_bytes());
         png.extend_from_slice(&[8, 2, 0, 0, 0]); // bit depth, color, compression, filter, interlace
         png.extend_from_slice(&0u32.to_be_bytes()); // CRC placeholder
-        // Pad so len >= 24 for the IHDR fields we read (already satisfied).
+                                                    // Pad so len >= 24 for the IHDR fields we read (already satisfied).
         let dir = std::env::temp_dir().join("eidolon-wayland-png-ihdr");
         let _ = std::fs::create_dir_all(&dir);
         let path = dir.join("ihdr.png");
@@ -182,7 +178,7 @@ mod tests {
             "test",
         );
         assert_eq!(
-            err.unsupported_code(),
+            err.unsupported_code_value(),
             Some(codes::DESKTOP_LINUX_WAYLAND_PORTAL_UNAVAILABLE)
         );
     }

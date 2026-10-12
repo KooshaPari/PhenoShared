@@ -4,7 +4,10 @@ pub struct Lazy<T> {
 }
 impl<T> Lazy<T> {
     pub const fn new(init: fn() -> T) -> Self {
-        Self { cell: std::cell::OnceCell::new(), init }
+        Self {
+            cell: std::cell::OnceCell::new(),
+            init,
+        }
     }
     pub fn get(&self) -> &T {
         self.cell.get_or_init(|| (self.init)())

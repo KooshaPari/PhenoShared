@@ -279,10 +279,10 @@ mod tests {
             match value {
                 Some(passphrase) if !passphrase.is_empty() => {
                     std::env::set_var(ENV_PASSPHRASE, passphrase);
-                }
+                },
                 _ => {
                     std::env::remove_var(ENV_PASSPHRASE);
-                }
+                },
             }
         }
         f();

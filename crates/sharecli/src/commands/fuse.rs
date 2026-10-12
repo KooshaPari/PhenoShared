@@ -69,7 +69,10 @@ pub fn provenance(path: &Path, json: bool) -> Result<()> {
         anyhow::bail!("fuse provenance: path does not exist: {}", path.display());
     }
     if path.is_dir() {
-        anyhow::bail!("fuse provenance: path must be a file, not a directory: {}", path.display());
+        anyhow::bail!(
+            "fuse provenance: path must be a file, not a directory: {}",
+            path.display()
+        );
     }
 
     let prov = read_provenance(path)
@@ -84,7 +87,7 @@ pub fn provenance(path: &Path, json: bool) -> Result<()> {
                     "written_at_unix": p.written_at_unix,
                 });
                 println!("{}", serde_json::to_string_pretty(&body)?);
-            }
+            },
             None => println!("null"),
         }
         return Ok(());
@@ -95,11 +98,11 @@ pub fn provenance(path: &Path, json: bool) -> Result<()> {
             println!("path:       {}", path.display());
             println!("session_id: {}", p.session_id);
             println!("written_at: {} (unix)", p.written_at_unix);
-        }
+        },
         None => {
             println!("path:       {}", path.display());
             println!("provenance: (none — no sharecli write xattrs)");
-        }
+        },
     }
     Ok(())
 }
@@ -215,7 +218,7 @@ fn commit_or_discard(
         match (relpath, agent) {
             (None, None) => {
                 anyhow::bail!("fuse {verb}: pass <relpath> and/or --agent <id> (see `fuse list`)");
-            }
+            },
             (Some(rel), _) => {
                 let result = if commit {
                     fs.commit_rel_for_agent(agent, rel)
@@ -230,13 +233,13 @@ fn commit_or_discard(
                             agent.map(|a| format!(" (agent {a})")).unwrap_or_default()
                         );
                         Ok(())
-                    }
+                    },
                     Err(WriteSerializeError::NoPending(p)) => {
                         anyhow::bail!("fuse {verb}: no pending CoW staging for {}", p.display());
-                    }
+                    },
                     Err(e) => Err(e.into()),
                 }
-            }
+            },
             (None, Some(_)) => {
                 let paths = if commit {
                     fs.commit_all_for_agent(agent)?
@@ -244,14 +247,17 @@ fn commit_or_discard(
                     fs.discard_all_for_agent(agent)?
                 };
                 if paths.is_empty() {
-                    println!("fuse {verb}: (no pending for agent {})", agent.unwrap_or("default"));
+                    println!(
+                        "fuse {verb}: (no pending for agent {})",
+                        agent.unwrap_or("default")
+                    );
                 } else {
                     for p in &paths {
                         println!("fuse {verb}: {}", p.display());
                     }
                 }
                 Ok(())
-            }
+            },
         }
     }
     #[cfg(not(any(target_os = "linux", target_os = "macos", windows)))]

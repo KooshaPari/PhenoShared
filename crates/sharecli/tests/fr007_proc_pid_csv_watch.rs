@@ -39,7 +39,10 @@ fn drain_watch_pipes(child: &mut Child, dwell: Duration) -> (String, String) {
     thread::sleep(dwell);
     let _ = child.kill();
     let _ = child.wait();
-    (stdout_reader.join().expect("stdout drain"), stderr_reader.join().expect("stderr drain"))
+    (
+        stdout_reader.join().expect("stdout drain"),
+        stderr_reader.join().expect("stderr drain"),
+    )
 }
 
 fn assert_csv_envelope(frame: &str, context: &str) {
@@ -114,8 +117,13 @@ fn fr007_proc_pid_csv_watch_stderr_silent_and_envelope() {
 fn fr007_proc_pid_csv_json_watch_still_rejected() {
     let self_pid = std::process::id().to_string();
     let out = bin()
-        .args(["proc", "--pid", &self_pid, "--csv", "--json", "--watch", "1"])
+        .args([
+            "proc", "--pid", &self_pid, "--csv", "--json", "--watch", "1",
+        ])
         .output()
         .expect("spawn proc --pid --csv --json --watch");
-    assert!(!out.status.success(), "proc --pid --csv --json --watch MUST fail (AC-007.91)");
+    assert!(
+        !out.status.success(),
+        "proc --pid --csv --json --watch MUST fail (AC-007.91)"
+    );
 }

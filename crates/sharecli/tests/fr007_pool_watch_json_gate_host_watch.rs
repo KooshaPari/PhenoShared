@@ -16,8 +16,13 @@ fn bin() -> Command {
 const GATE_MARKER: &str = "=== Thermal Gate (FR-011) ===";
 const WATCH_MARKER: &str = "=== Host Resource Watch ===";
 
-const HOST_WATCH_KEYS: [&str; 5] =
-    ["fd_count", "net_rx_bytes", "net_tx_bytes", "mem_rss_bytes", "load_1m"];
+const HOST_WATCH_KEYS: [&str; 5] = [
+    "fd_count",
+    "net_rx_bytes",
+    "net_tx_bytes",
+    "mem_rss_bytes",
+    "load_1m",
+];
 
 fn assert_gate_before_watch(segment: &str, context: &str) {
     let gate_pos = segment
@@ -35,11 +40,22 @@ fn assert_gate_before_watch(segment: &str, context: &str) {
 fn assert_ndjson_gate_before_host_watch(line: &str, context: &str) {
     let v: serde_json::Value =
         serde_json::from_str(line.trim()).expect("watch NDJSON line MUST be valid JSON");
-    assert!(v.get("ts").is_some(), "{context} MUST include ts (AC-007.65)");
-    assert!(v.get("gate").is_some(), "{context} MUST include gate (AC-007.65)");
-    assert!(v.get("host_watch").is_some(), "{context} MUST include host_watch (AC-007.65)");
+    assert!(
+        v.get("ts").is_some(),
+        "{context} MUST include ts (AC-007.65)"
+    );
+    assert!(
+        v.get("gate").is_some(),
+        "{context} MUST include gate (AC-007.65)"
+    );
+    assert!(
+        v.get("host_watch").is_some(),
+        "{context} MUST include host_watch (AC-007.65)"
+    );
     let gate_pos = line.find("\"gate\"").expect("gate key in NDJSON line");
-    let host_pos = line.find("\"host_watch\"").expect("host_watch key in NDJSON line");
+    let host_pos = line
+        .find("\"host_watch\"")
+        .expect("host_watch key in NDJSON line");
     assert!(
         gate_pos < host_pos,
         "{context} MUST serialize gate before host_watch (AC-007.65); got: {line}"
@@ -195,7 +211,10 @@ fn fr007_pool_watch_ndjson_gate_order_serializes_fields() {
         },
         status: None,
     };
-    let line = PoolNdjsonLine { ts: 1_700_000_000, snapshot: envelope };
+    let line = PoolNdjsonLine {
+        ts: 1_700_000_000,
+        snapshot: envelope,
+    };
     let json = serde_json::to_string(&line).expect("serialize pool watch NDJSON envelope");
     assert_ndjson_gate_before_host_watch(&json, "PoolNdjsonLine");
 }

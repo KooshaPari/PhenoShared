@@ -20,7 +20,8 @@ impl SamplePlugin {
         }
     }
     pub fn tick(&self) -> usize {
-        self.counter.fetch_add(1, std::sync::atomic::Ordering::SeqCst)
+        self.counter
+            .fetch_add(1, std::sync::atomic::Ordering::SeqCst)
     }
 }
 

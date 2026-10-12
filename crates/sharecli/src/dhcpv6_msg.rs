@@ -120,7 +120,10 @@ pub fn msg_type_name(t: u8) -> Option<&'static str> {
 /// the caller to size buffers exactly).
 pub fn parse(input: &[u8]) -> Result<(Dhcp6Msg, &[u8]), String> {
     if input.len() < 4 {
-        return Err(format!("dhcpv6: header too short (need 4 bytes, got {})", input.len()));
+        return Err(format!(
+            "dhcpv6: header too short (need 4 bytes, got {})",
+            input.len()
+        ));
     }
     let msg_type = input[0];
     let transaction_id = [input[1], input[2], input[3]];
@@ -146,11 +149,21 @@ pub fn parse(input: &[u8]) -> Result<(Dhcp6Msg, &[u8]), String> {
             ));
         }
         let (value, after_option) = after_header.split_at(len);
-        options.push(Dhcp6Option { code, value: value.to_vec() });
+        options.push(Dhcp6Option {
+            code,
+            value: value.to_vec(),
+        });
         rest = after_option;
     }
 
-    Ok((Dhcp6Msg { msg_type, transaction_id, options }, rest))
+    Ok((
+        Dhcp6Msg {
+            msg_type,
+            transaction_id,
+            options,
+        },
+        rest,
+    ))
 }
 
 #[cfg(test)]
@@ -180,17 +193,17 @@ mod tests {
         // Option 1 (CLIENTID) length=4 value=0xDEADBEEF.
         // Option 6 (ORO)     length=4 value=[0x00,0x17,0x00,0x18] (DNS_SERVERS, DOMAIN_LIST).
         let bytes = [
-            0x01, 0xAB, 0xCD, 0xEF, // CLIENTID
-            0x00, 0x01, 0x00, 0x04, 0xDE, 0xAD, 0xBE, 0xEF, // ORO
+            0x01, 0xab, 0xcd, 0xef, // CLIENTID
+            0x00, 0x01, 0x00, 0x04, 0xde, 0xad, 0xbe, 0xef, // ORO
             0x00, 0x06, 0x00, 0x04, 0x00, 0x17, 0x00, 0x18,
         ];
         let (msg, rest) = parse(&bytes).expect("parse");
         assert!(rest.is_empty());
         assert_eq!(msg.msg_type, SOLICIT);
-        assert_eq!(msg.transaction_id, [0xAB, 0xCD, 0xEF]);
+        assert_eq!(msg.transaction_id, [0xab, 0xcd, 0xef]);
         assert_eq!(msg.options.len(), 2);
         assert_eq!(msg.options[0].code, OPTION_CLIENTID);
-        assert_eq!(msg.options[0].value, vec![0xDE, 0xAD, 0xBE, 0xEF]);
+        assert_eq!(msg.options[0].value, vec![0xde, 0xad, 0xbe, 0xef]);
         assert_eq!(msg.options[1].code, OPTION_ORO);
         assert_eq!(msg.options[1].value, vec![0x00, 0x17, 0x00, 0x18]);
     }
@@ -229,7 +242,9 @@ mod tests {
     #[test]
     fn truncated_option_length_rejected() {
         // Header ok, then an option that says length=8 with only 3 bytes of value.
-        let bytes = [0x01, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00, 0x08, 0xAA, 0xBB, 0xCC];
+        let bytes = [
+            0x01, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00, 0x08, 0xaa, 0xbb, 0xcc,
+        ];
         let err = parse(&bytes).expect_err("must reject");
         assert!(err.contains("truncated"), "got: {}", err);
     }
@@ -269,9 +284,9 @@ mod tests {
     fn multiple_options_in_order() {
         // Three options back-to-back to verify ordering and accumulation.
         let bytes = [
-            0x03, 0x00, 0x00, 0x0A, // REQUEST
-            0x00, 0x01, 0x00, 0x02, 0xCA, 0xFE, // CLIENTID
-            0x00, 0x02, 0x00, 0x02, 0xBE, 0xEF, // SERVERID
+            0x03, 0x00, 0x00, 0x0a, // REQUEST
+            0x00, 0x01, 0x00, 0x02, 0xca, 0xfe, // CLIENTID
+            0x00, 0x02, 0x00, 0x02, 0xbe, 0xef, // SERVERID
             0x00, 0x08, 0x00, 0x02, 0x00, 0x64, // ELAPSED_TIME = 100
         ];
         let (msg, rest) = parse(&bytes).expect("parse");

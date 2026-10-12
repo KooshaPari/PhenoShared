@@ -84,7 +84,11 @@ fn fr007_proc_csv_watch_stderr_silent_and_envelope() {
         "proc --csv --watch MUST include [watch] footer comment; got: {stdout}"
     );
     for (idx, frame) in complete_frames.iter().enumerate() {
-        assert_csv_envelope(frame, FLAT_CSV_HEADER, &format!("flat csv watch frame {}", idx + 1));
+        assert_csv_envelope(
+            frame,
+            FLAT_CSV_HEADER,
+            &format!("flat csv watch frame {}", idx + 1),
+        );
     }
 }
 
@@ -118,7 +122,11 @@ fn fr007_proc_tree_csv_watch_stderr_silent_and_envelope() {
         complete_frames.len()
     );
     for (idx, frame) in complete_frames.iter().enumerate() {
-        assert_csv_envelope(frame, TREE_CSV_HEADER, &format!("tree csv watch frame {}", idx + 1));
+        assert_csv_envelope(
+            frame,
+            TREE_CSV_HEADER,
+            &format!("tree csv watch frame {}", idx + 1),
+        );
     }
 }
 
@@ -129,7 +137,10 @@ fn fr007_proc_csv_json_watch_still_rejected() {
         .args(["proc", "--csv", "--json", "--watch", "1"])
         .output()
         .expect("spawn proc --csv --json --watch");
-    assert!(!out.status.success(), "proc --csv --json --watch MUST fail (AC-007.88)");
+    assert!(
+        !out.status.success(),
+        "proc --csv --json --watch MUST fail (AC-007.88)"
+    );
 }
 
 fn drain_watch_until(
@@ -237,7 +248,9 @@ fn fr007_proc_csv_watch_footer_flushed_same_tick() {
         stdout.contains("[watch]"),
         "proc --csv --watch MUST include [watch] footer (AC-007.94); got: {stdout}"
     );
-    let watch_pos = stdout.find("[watch]").expect("[watch] must be present after assert above");
+    let watch_pos = stdout
+        .find("[watch]")
+        .expect("[watch] must be present after assert above");
     let markers_before_footer = stdout[..watch_pos].matches(FRAME_MARKER).count();
     assert_eq!(
         markers_before_footer, 1,

@@ -119,7 +119,7 @@ impl AppiumProbe {
                         format!("AppiumProbe::http_status invalid json: {e}"),
                     )
                 })
-            }
+            },
             Err(ureq::Error::Status(code, resp)) => {
                 let text = resp.into_string().unwrap_or_default();
                 Err(PhenoError::unsupported_platform(
@@ -129,7 +129,7 @@ impl AppiumProbe {
                         text.chars().take(200).collect::<String>()
                     ),
                 ))
-            }
+            },
             Err(e) => Err(PhenoError::unsupported_platform(
                 codes::MOBILE_APPIUM_UNAVAILABLE,
                 format!(
@@ -239,12 +239,15 @@ mod tests {
     fn discover_is_hermetic_without_tools() {
         // May or may not find system appium; must not panic.
         let p = AppiumProbe::discover();
-        assert_eq!(p.tools_present(), p.cli.is_some() || p.url.is_some() || p.home.is_some());
+        assert_eq!(
+            p.tools_present(),
+            p.cli.is_some() || p.url.is_some() || p.home.is_some()
+        );
         if !p.tools_present() {
             assert!(p.effective_url().is_none());
             let err = require_appium_ready().unwrap_err();
             assert_eq!(
-                err.unsupported_code(),
+                err.unsupported_code_value(),
                 Some(codes::MOBILE_APPIUM_UNAVAILABLE)
             );
         }
@@ -299,7 +302,7 @@ mod tests {
         };
         let err = probe.http_status(Duration::from_millis(50)).unwrap_err();
         assert_eq!(
-            err.unsupported_code(),
+            err.unsupported_code_value(),
             Some(codes::MOBILE_APPIUM_UNAVAILABLE)
         );
     }

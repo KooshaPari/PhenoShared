@@ -22,7 +22,10 @@ const HOST_CSV_HEADER: &str = "record,fd_count,net_rx_bytes,net_tx_bytes,mem_rss
 fn fr007_gate_format_csv_companion() {
     let csv =
         gate_status_snapshot_with_rss(ThermalLevel::Yellow, 4, 52_428_800).format_csv_companion();
-    assert!(csv.contains(GATE_CSV_HEADER), "CSV companion MUST include gate header; got: {csv}");
+    assert!(
+        csv.contains(GATE_CSV_HEADER),
+        "CSV companion MUST include gate header; got: {csv}"
+    );
     assert!(
         csv.contains("gate,YELLOW,4,52428800,WARN,"),
         "CSV companion MUST include gate data row; got: {csv}"
@@ -50,11 +53,19 @@ fn fr007_gate_format_csv_companion_explicit_snapshot() {
 #[test]
 #[serial_test::serial]
 fn fr007_proc_csv_gate_companion() {
-    let out = bin().args(["proc", "--csv"]).output().expect("spawn sharecli proc --csv");
-    assert!(out.status.success(), "proc --csv MUST exit 0; stderr: {:?}", out.stderr);
+    let out = bin()
+        .args(["proc", "--csv"])
+        .output()
+        .expect("spawn sharecli proc --csv");
+    assert!(
+        out.status.success(),
+        "proc --csv MUST exit 0; stderr: {:?}",
+        out.stderr
+    );
     let s = String::from_utf8_lossy(&out.stdout);
     assert!(
-        s.lines().any(|line| line == "pid,family,comm,state,mem_rss_bytes,mem_rss,fd_count"),
+        s.lines()
+            .any(|line| line == "pid,family,comm,state,mem_rss_bytes,mem_rss,fd_count"),
         "proc --csv MUST preserve agent header (AC-006.24); got: {s}"
     );
     assert!(
@@ -81,9 +92,15 @@ fn fr007_proc_csv_gate_companion() {
 #[test]
 #[serial_test::serial]
 fn fr007_proc_tree_csv_gate_companion() {
-    let out =
-        bin().args(["proc", "--tree", "--csv"]).output().expect("spawn sharecli proc --tree --csv");
-    assert!(out.status.success(), "proc --tree --csv MUST exit 0; stderr: {:?}", out.stderr);
+    let out = bin()
+        .args(["proc", "--tree", "--csv"])
+        .output()
+        .expect("spawn sharecli proc --tree --csv");
+    assert!(
+        out.status.success(),
+        "proc --tree --csv MUST exit 0; stderr: {:?}",
+        out.stderr
+    );
     let s = String::from_utf8_lossy(&out.stdout);
     assert!(
         s.lines().next().unwrap_or("").starts_with("root_index,"),

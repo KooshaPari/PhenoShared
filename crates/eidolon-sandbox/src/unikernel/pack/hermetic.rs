@@ -1,8 +1,9 @@
 //! Hermetic pack: validate existing artifacts, optional stage, write manifest.
 
 use super::{
-    file_name_or, fill_checksums, pack_io, require_source_file, rootfs_format_label, stage_artifact,
-    PackMethod, PackRequest, PackageManifest, MANIFEST_FILENAME, MANIFEST_SCHEMA_VERSION,
+    file_name_or, fill_checksums, pack_io, require_source_file, rootfs_format_label,
+    stage_artifact, PackMethod, PackRequest, PackageManifest, MANIFEST_FILENAME,
+    MANIFEST_SCHEMA_VERSION,
 };
 use eidolon_core::error::PhenoError;
 use eidolon_core::Result;
@@ -51,7 +52,7 @@ impl HermeticPackBuilder {
                     None
                 };
                 (staged_rootfs, staged_kernel, Some(dir.clone()))
-            }
+            },
             None => (req.rootfs_source.clone(), req.kernel.clone(), None),
         };
 

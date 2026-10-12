@@ -142,7 +142,7 @@ fn bind_socket(path: &Path) -> Result<UnixListener> {
 fn remove_socket_file(path: &Path) {
     match fs::remove_file(path) {
         Ok(()) => info!(path = %path.display(), "removed socket file"),
-        Err(e) if e.kind() == std::io::ErrorKind::NotFound => {}
+        Err(e) if e.kind() == std::io::ErrorKind::NotFound => {},
         Err(e) => warn!(path = %path.display(), error = %e, "failed to remove socket file"),
     }
 }
@@ -158,14 +158,14 @@ async fn install_signal_handlers(tx: watch::Sender<bool>) {
             Err(e) => {
                 error!(error = %e, "failed to install SIGINT handler");
                 return;
-            }
+            },
         };
         let mut sigterm = match signal(SignalKind::terminate()) {
             Ok(s) => s,
             Err(e) => {
                 error!(error = %e, "failed to install SIGTERM handler");
                 return;
-            }
+            },
         };
         tokio::select! {
             _ = sigint.recv()  => info!("SIGINT received"),
@@ -197,11 +197,11 @@ async fn handle_connection(stream: UnixStream, state: AppState) {
             Ok(Err(e)) => {
                 debug!(peer = ?peer, error = %e, "connection read error; closing");
                 return;
-            }
+            },
             Err(_) => {
                 debug!(peer = ?peer, "idle timeout; closing connection");
                 return;
-            }
+            },
         };
         if read == 0 {
             debug!(peer = ?peer, "client closed connection");
@@ -244,7 +244,7 @@ async fn handle_connection(stream: UnixStream, state: AppState) {
                     return;
                 }
                 continue;
-            }
+            },
         };
 
         // Notifications: process but do not reply. M0 only logs them.
@@ -367,7 +367,7 @@ mod tests {
                 Ok(s) => {
                     stream = Some(s);
                     break;
-                }
+                },
                 Err(_) => tokio::time::sleep(Duration::from_millis(20)).await,
             }
         }

@@ -5,6 +5,8 @@ edition = "2021"
 license = "Apache-2.0"
 description = "Local-stub HTTP server that emulates the pheno-forge-plugin sidecars for end-to-end smoke testing"
 
+[workspace]
+
 [[bin]]
 name = "pheno-sidecar-stub"
 path = "src/main.rs"

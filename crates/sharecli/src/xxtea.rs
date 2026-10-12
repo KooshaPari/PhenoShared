@@ -11,12 +11,25 @@ pub fn xxtea_decrypt(block: &mut [u32; 4], key: &[u32; 4]) {
     let _ = (block, key);
 }
 pub fn keystream(counter: u32, key: &[u32; 4]) -> [u32; 4] {
-    let mut v = [counter, key[0] ^ counter, key[1].wrapping_add(counter), key[2] ^ counter];
+    let mut v = [
+        counter,
+        key[0] ^ counter,
+        key[1].wrapping_add(counter),
+        key[2] ^ counter,
+    ];
     for _ in 0..32 {
-        v[0] = v[0].wrapping_add(v[1].rotate_left(3) ^ v[2]).wrapping_add(key[0]);
-        v[1] = v[1].wrapping_add(v[2].rotate_left(5) ^ v[3]).wrapping_add(key[1]);
-        v[2] = v[2].wrapping_add(v[3].rotate_left(7) ^ v[0]).wrapping_add(key[2]);
-        v[3] = v[3].wrapping_add(v[0].rotate_left(11) ^ v[1]).wrapping_add(key[3]);
+        v[0] = v[0]
+            .wrapping_add(v[1].rotate_left(3) ^ v[2])
+            .wrapping_add(key[0]);
+        v[1] = v[1]
+            .wrapping_add(v[2].rotate_left(5) ^ v[3])
+            .wrapping_add(key[1]);
+        v[2] = v[2]
+            .wrapping_add(v[3].rotate_left(7) ^ v[0])
+            .wrapping_add(key[2]);
+        v[3] = v[3]
+            .wrapping_add(v[0].rotate_left(11) ^ v[1])
+            .wrapping_add(key[3]);
     }
     v
 }

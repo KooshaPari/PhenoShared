@@ -60,8 +60,14 @@ fn fr002_load_roundtrips_projects_map() {
         toml::from_str(&fs::read_to_string(&path).expect("read")).expect("deserialize");
 
     assert_eq!(loaded.projects.len(), 2);
-    assert_eq!(loaded.projects.get("demo").map(String::as_str), Some(r"C:\Users\example\demo"));
-    assert_eq!(loaded.projects.get("other").map(String::as_str), Some("/tmp/other"));
+    assert_eq!(
+        loaded.projects.get("demo").map(String::as_str),
+        Some(r"C:\Users\example\demo")
+    );
+    assert_eq!(
+        loaded.projects.get("other").map(String::as_str),
+        Some("/tmp/other")
+    );
     assert_eq!(loaded.runtime.node_path.as_deref(), Some("node"));
     assert_eq!(loaded.runtime.bun_path.as_deref(), Some("bun"));
     assert_eq!(loaded.runtime.max_memory_mb, Some(2048));

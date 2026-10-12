@@ -37,7 +37,7 @@ pub fn diff(old: &str, new: &str) -> UnifiedDiff {
                         }
                         old_count += 1;
                         lines.push(DiffLine::Removed(content));
-                    }
+                    },
                     ChangeTag::Insert => {
                         let idx = change.new_index().unwrap_or(0);
                         if new_start == usize::MAX {
@@ -45,7 +45,7 @@ pub fn diff(old: &str, new: &str) -> UnifiedDiff {
                         }
                         new_count += 1;
                         lines.push(DiffLine::Added(content));
-                    }
+                    },
                     ChangeTag::Equal => {
                         let oi = change.old_index().unwrap_or(0);
                         let ni = change.new_index().unwrap_or(0);
@@ -58,7 +58,7 @@ pub fn diff(old: &str, new: &str) -> UnifiedDiff {
                         old_count += 1;
                         new_count += 1;
                         lines.push(DiffLine::Context(content));
-                    }
+                    },
                 }
             }
         }
@@ -133,7 +133,7 @@ pub fn apply(source: &str, patch: &UnifiedDiff) -> Result<String, DiffError> {
                     }
                     output.push(expected.clone());
                     src_cursor += 1;
-                }
+                },
                 DiffLine::Removed(expected) => {
                     if src_cursor >= source_len {
                         return Err(DiffError::OutOfRange {
@@ -149,10 +149,10 @@ pub fn apply(source: &str, patch: &UnifiedDiff) -> Result<String, DiffError> {
                     }
                     // Drop the line (it's removed)
                     src_cursor += 1;
-                }
+                },
                 DiffLine::Added(line) => {
                     output.push(line.clone());
-                }
+                },
             }
         }
     }
@@ -202,7 +202,7 @@ mod tests {
             .flat_map(|h| &h.lines)
             .filter(|l| matches!(l, DiffLine::Added(_)))
             .collect();
-        assert!(!added.is_empty());
+        assert!(!added.is_empty(), "expected added lines in patch");
     }
 
     #[test]
@@ -217,7 +217,7 @@ mod tests {
             .flat_map(|h| &h.lines)
             .filter(|l| matches!(l, DiffLine::Removed(_)))
             .collect();
-        assert!(!removed.is_empty());
+        assert!(!removed.is_empty(), "expected removed lines in patch");
     }
 
     #[test]

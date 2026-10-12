@@ -6,7 +6,9 @@ use std::path::PathBuf;
 #[derive(Parser)]
 #[command(name = "focalpoint-icon-gen")]
 #[command(about = "Generate FocalPoint app icons for App Store submission")]
-#[command(long_about = "Procedural icon generator: Coachy flame silhouette with gradient background. Renders all required iOS sizes and generates XCAssets Contents.json manifest.")]
+#[command(
+    long_about = "Procedural icon generator: Coachy flame silhouette with gradient background. Renders all required iOS sizes and generates XCAssets Contents.json manifest."
+)]
 struct Args {
     /// Output directory for generated icons (default: ../../apps/ios/FocalPoint/Sources/FocalPointApp/Resources/Assets.xcassets/AppIcon.appiconset/)
     #[arg(short, long)]

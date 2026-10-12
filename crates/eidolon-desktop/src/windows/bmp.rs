@@ -34,7 +34,8 @@ pub(crate) fn write_bmp32(path: &Path, width: u32, height: u32, bgra: &[u8]) -> 
 
     // BITMAPFILEHEADER
     file.write_all(b"BM").map_err(io_platform)?;
-    file.write_all(&file_size.to_le_bytes()).map_err(io_platform)?;
+    file.write_all(&file_size.to_le_bytes())
+        .map_err(io_platform)?;
     file.write_all(&0u16.to_le_bytes()).map_err(io_platform)?;
     file.write_all(&0u16.to_le_bytes()).map_err(io_platform)?;
     file.write_all(&offset.to_le_bytes()).map_err(io_platform)?;
@@ -46,11 +47,13 @@ pub(crate) fn write_bmp32(path: &Path, width: u32, height: u32, bgra: &[u8]) -> 
     file.write_all(&(width as i32).to_le_bytes())
         .map_err(io_platform)?;
     let bi_height = -(height as i32);
-    file.write_all(&bi_height.to_le_bytes()).map_err(io_platform)?;
+    file.write_all(&bi_height.to_le_bytes())
+        .map_err(io_platform)?;
     file.write_all(&1u16.to_le_bytes()).map_err(io_platform)?;
     file.write_all(&32u16.to_le_bytes()).map_err(io_platform)?;
     file.write_all(&0u32.to_le_bytes()).map_err(io_platform)?; // BI_RGB
-    file.write_all(&pixel_bytes.to_le_bytes()).map_err(io_platform)?;
+    file.write_all(&pixel_bytes.to_le_bytes())
+        .map_err(io_platform)?;
     file.write_all(&0i32.to_le_bytes()).map_err(io_platform)?;
     file.write_all(&0i32.to_le_bytes()).map_err(io_platform)?;
     file.write_all(&0u32.to_le_bytes()).map_err(io_platform)?;

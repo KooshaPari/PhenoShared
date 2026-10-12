@@ -31,12 +31,12 @@ use std::collections::HashMap;
 use std::sync::Mutex;
 use thiserror::Error;
 
-pub mod store;
 pub mod error;
+pub mod store;
 
-pub use store::SecretStore;
-pub use error::SecretStoreError;
 use crate::error::validate_ref;
+pub use error::SecretStoreError;
+pub use store::SecretStore;
 
 /// A trivial [`SecretStore`] that always returns
 /// "not found" / "empty list" — used as a default for adapters
@@ -80,7 +80,6 @@ impl SecretStore for NoopSecretStore {
     }
 }
 
-
 /// An in-memory [`SecretStore`] backed by a `HashMap` under a
 /// `Mutex`. Useful for tests and as a default in the DI
 /// container when no persistent backend is configured.
@@ -113,7 +112,10 @@ impl InMemorySecretStore {
     /// Number of stored secrets. Useful for assertions in
     /// tests; not part of the [`SecretStore`] trait.
     pub fn len(&self) -> usize {
-        self.inner.lock().expect("in-memory secret store mutex poisoned").len()
+        self.inner
+            .lock()
+            .expect("in-memory secret store mutex poisoned")
+            .len()
     }
 
     /// `true` if no secrets are stored.
@@ -125,7 +127,10 @@ impl InMemorySecretStore {
 impl SecretStore for InMemorySecretStore {
     fn get(&self, r#ref: &SecretRef) -> Result<Secret, SecretStoreError> {
         validate_ref(r#ref)?;
-        let guard = self.inner.lock().expect("in-memory secret store mutex poisoned");
+        let guard = self
+            .inner
+            .lock()
+            .expect("in-memory secret store mutex poisoned");
         guard
             .get(&r#ref.locator())
             .cloned()
@@ -134,7 +139,10 @@ impl SecretStore for InMemorySecretStore {
 
     fn put(&self, secret: &Secret) -> Result<Secret, SecretStoreError> {
         validate_ref(&secret.r#ref)?;
-        let mut guard = self.inner.lock().expect("in-memory secret store mutex poisoned");
+        let mut guard = self
+            .inner
+            .lock()
+            .expect("in-memory secret store mutex poisoned");
         let key = secret.r#ref.locator();
         let next_version = match guard.get(&key) {
             Some(existing) => existing.version + 1,
@@ -151,13 +159,19 @@ impl SecretStore for InMemorySecretStore {
 
     fn delete(&self, r#ref: &SecretRef) -> Result<(), SecretStoreError> {
         validate_ref(r#ref)?;
-        let mut guard = self.inner.lock().expect("in-memory secret store mutex poisoned");
+        let mut guard = self
+            .inner
+            .lock()
+            .expect("in-memory secret store mutex poisoned");
         guard.remove(&r#ref.locator());
         Ok(())
     }
 
     fn list(&self, namespace: &str) -> Result<Vec<SecretRef>, SecretStoreError> {
-        let guard = self.inner.lock().expect("in-memory secret store mutex poisoned");
+        let guard = self
+            .inner
+            .lock()
+            .expect("in-memory secret store mutex poisoned");
         let mut out: Vec<SecretRef> = guard
             .values()
             .filter(|s| s.r#ref.namespace == namespace)
@@ -174,7 +188,6 @@ impl SecretStore for InMemorySecretStore {
 }
 
 #[cfg(test)]
-
 
 mod tests {
     use super::*;

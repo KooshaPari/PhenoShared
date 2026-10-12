@@ -149,7 +149,10 @@ mod tests {
         // Cannot assert global env; only that require fails when not set to 1.
         if !actions_allowed() {
             let err = require_actions_allowed("tap").unwrap_err();
-            assert_eq!(err.unsupported_code(), Some(codes::MOBILE_ACTIONS_GATED));
+            assert_eq!(
+                err.unsupported_code_value(),
+                Some(codes::MOBILE_ACTIONS_GATED)
+            );
             assert_eq!(err.status_code(), 501);
         }
     }

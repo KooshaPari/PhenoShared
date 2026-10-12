@@ -78,7 +78,7 @@ where
                         return None;
                     }
                     break;
-                }
+                },
             }
         }
 

@@ -58,7 +58,7 @@ fn main() -> anyhow::Result<()> {
                     );
                 }
             }
-        }
+        },
 
         Commands::Create {
             branch,
@@ -83,37 +83,37 @@ fn main() -> anyhow::Result<()> {
                 eprintln!("Failed: {}", error_msg);
                 std::process::exit(1);
             }
-        }
+        },
 
         Commands::Remove { path, force } => {
             service.remove_worktree(&path, force)?;
             info!("Removed worktree: {}", path.display());
             println!("Removed worktree: {}", path.display());
-        }
+        },
 
         Commands::Lock { path, reason } => {
             service.lock_worktree(&path, &reason)?;
             info!("Locked worktree: {}", path.display());
             println!("Locked: {}", path.display());
-        }
+        },
 
         Commands::Unlock { path } => {
             service.unlock_worktree(&path)?;
             info!("Unlocked worktree: {}", path.display());
             println!("Unlocked: {}", path.display());
-        }
+        },
 
         Commands::Prune => {
             service.prune(&repo_path)?;
             info!("Pruned stale worktrees");
             println!("Pruned stale worktree references");
-        }
+        },
 
         Commands::Branch => {
             let branch = service.current_branch(&repo_path)?;
             info!(branch = branch.as_str(), "Queried current branch");
             println!("{}", branch.as_str());
-        }
+        },
 
         // Cleanup commands - simplified, just prune for now
         Commands::Cleanup { dry_run, .. } => {
@@ -125,7 +125,7 @@ fn main() -> anyhow::Result<()> {
                 info!("Pruned stale worktrees via cleanup");
                 println!("Pruned stale worktree references");
             }
-        }
+        },
     }
 
     Ok(())

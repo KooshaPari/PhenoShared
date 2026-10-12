@@ -11,7 +11,7 @@ impl<T: Ord> SortedVec<T> {
             Err(pos) => {
                 self.items.insert(pos, v);
                 true
-            }
+            },
         }
     }
     pub fn contains(&self, v: &T) -> bool {

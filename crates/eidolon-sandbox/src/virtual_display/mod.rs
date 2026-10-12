@@ -309,7 +309,7 @@ mod tests {
         let stub = VirtualDisplayStub::new();
         let err = stub.start().unwrap_err();
         assert_eq!(
-            err.unsupported_code(),
+            err.unsupported_code_value(),
             Some(codes::SANDBOX_VIRTUAL_DISPLAY_UNSUPPORTED)
         );
     }
@@ -320,15 +320,18 @@ mod tests {
         let err = mgr.start().unwrap_err();
         if !platform_is_linux() {
             assert_eq!(
-                err.unsupported_code(),
+                err.unsupported_code_value(),
                 Some(codes::SANDBOX_VIRTUAL_DISPLAY_UNSUPPORTED)
             );
         } else if !probe::xvfb_ready() {
-            assert_eq!(err.unsupported_code(), Some(codes::SANDBOX_XVFB_MISSING));
+            assert_eq!(
+                err.unsupported_code_value(),
+                Some(codes::SANDBOX_XVFB_MISSING)
+            );
         } else {
             assert!(
-                err.unsupported_code() == Some(codes::SANDBOX_VIRTUAL_DISPLAY_STUB)
-                    || err.unsupported_code() == Some(codes::SANDBOX_XVFB_MISSING)
+                err.unsupported_code_value() == Some(codes::SANDBOX_VIRTUAL_DISPLAY_STUB)
+                    || err.unsupported_code_value() == Some(codes::SANDBOX_XVFB_MISSING)
             );
         }
     }
@@ -340,10 +343,13 @@ mod tests {
         let mgr = VirtualDisplayManager::new(cfg).unwrap();
         let err = mgr.start().unwrap_err();
         if platform_is_linux() {
-            assert_eq!(err.unsupported_code(), Some(codes::SANDBOX_VNC_UNSUPPORTED));
+            assert_eq!(
+                err.unsupported_code_value(),
+                Some(codes::SANDBOX_VNC_UNSUPPORTED)
+            );
         } else {
             assert_eq!(
-                err.unsupported_code(),
+                err.unsupported_code_value(),
                 Some(codes::SANDBOX_VIRTUAL_DISPLAY_UNSUPPORTED)
             );
         }

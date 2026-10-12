@@ -175,7 +175,7 @@ impl<T: PlayCuaPort + 'static> SandboxAutomator for PlayCuaDispatcher<T> {
             Some(id) => {
                 tracing::Span::current().record("sandbox_id", id.as_str());
                 with_timeout!(self.config.op_timeout, self.port.metadata(id))
-            }
+            },
             None => Err(eidolon_core::error::PhenoError::Internal(
                 "sandbox not started".into(),
             )),
@@ -204,7 +204,7 @@ impl<T: PlayCuaPort + 'static> SandboxAutomator for PlayCuaDispatcher<T> {
             Some(id) => {
                 tracing::Span::current().record("sandbox_id", id.as_str());
                 with_timeout!(self.config.op_timeout, self.port.stop(id))
-            }
+            },
             None => Ok(()),
         }
     }
@@ -216,7 +216,7 @@ impl<T: PlayCuaPort + 'static> SandboxAutomator for PlayCuaDispatcher<T> {
             Some(id) => {
                 tracing::Span::current().record("sandbox_id", id.as_str());
                 with_timeout!(self.config.op_timeout, self.port.exec(id, cmd))
-            }
+            },
             None => Err(eidolon_core::error::PhenoError::Internal(
                 "sandbox not started".into(),
             )),
@@ -230,7 +230,7 @@ impl<T: PlayCuaPort + 'static> SandboxAutomator for PlayCuaDispatcher<T> {
             Some(id) => {
                 tracing::Span::current().record("sandbox_id", id.as_str());
                 with_timeout!(self.config.op_timeout, self.port.resource_usage(id))
-            }
+            },
             None => Ok(ResourceUsage {
                 cpu_percent: 0.0,
                 memory_mb: 0,

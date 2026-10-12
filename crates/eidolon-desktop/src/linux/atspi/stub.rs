@@ -40,11 +40,7 @@ impl LinuxAtspiAutomator for AtspiStub {
         Err(Self::unsupported("list_nodes"))
     }
 
-    async fn find_by_role(
-        &self,
-        _role: &str,
-        _name: Option<&str>,
-    ) -> Result<Vec<AtspiNode>> {
+    async fn find_by_role(&self, _role: &str, _name: Option<&str>) -> Result<Vec<AtspiNode>> {
         Err(Self::unsupported("find_by_role"))
     }
 
@@ -67,12 +63,12 @@ mod tests {
         let stub = AtspiStub::new();
         let err = stub.list_nodes(1).await.unwrap_err();
         assert_eq!(
-            err.unsupported_code(),
+            err.unsupported_code_value(),
             Some(codes::DESKTOP_LINUX_ATSPI_STUB)
         );
         let err = stub.find_by_role("button", None).await.unwrap_err();
         assert_eq!(
-            err.unsupported_code(),
+            err.unsupported_code_value(),
             Some(codes::DESKTOP_LINUX_ATSPI_STUB)
         );
         let node = AtspiNode {
@@ -85,7 +81,7 @@ mod tests {
         };
         let err = stub.activate(&node).await.unwrap_err();
         assert_eq!(
-            err.unsupported_code(),
+            err.unsupported_code_value(),
             Some(codes::DESKTOP_LINUX_ATSPI_STUB)
         );
     }

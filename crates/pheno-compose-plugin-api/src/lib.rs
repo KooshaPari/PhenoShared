@@ -79,7 +79,10 @@ impl PluginRegistry {
     }
 
     pub fn find(&self, id: PluginId) -> Option<&dyn Plugin> {
-        self.plugins.iter().map(|b| b.as_ref()).find(|p| p.info().id == id)
+        self.plugins
+            .iter()
+            .map(|b| b.as_ref())
+            .find(|p| p.info().id == id)
     }
 
     pub fn len(&self) -> usize {

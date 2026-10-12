@@ -10,6 +10,8 @@ keywords = ["phenotype", "hexa", "event-sourcing", "cqrs"]
 categories = ["data-structures"]
 authors = ["<REDACTED>"]
 
+[workspace]
+
 [lib]
 path = "src/lib.rs"
 

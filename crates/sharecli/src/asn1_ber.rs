@@ -68,7 +68,9 @@ impl fmt::Display for Ber {
 /// reading child TLVs until a 0x00 0x00 end-of-content marker, per X.690
 /// §8.1.3.6.
 pub fn parse(input: &[u8]) -> Result<(Ber, &[u8]), String> {
-    let (first_id, rest) = input.split_first().ok_or_else(|| "empty input".to_string())?;
+    let (first_id, rest) = input
+        .split_first()
+        .ok_or_else(|| "empty input".to_string())?;
 
     // Class lives in bits 7-6 (top 2 bits) of the first identifier byte,
     // not in the bottom 2 bits. X.690 §8.1.2.2.
@@ -83,9 +85,12 @@ pub fn parse(input: &[u8]) -> Result<(Ber, &[u8]), String> {
         let mut acc: u32 = 0;
         let mut cursor = rest;
         loop {
-            let (b, next) =
-                cursor.split_first().ok_or_else(|| "truncated high-tag-number form".to_string())?;
-            acc = acc.checked_shl(7).ok_or_else(|| "high-tag-number overflow".to_string())?
+            let (b, next) = cursor
+                .split_first()
+                .ok_or_else(|| "truncated high-tag-number form".to_string())?;
+            acc = acc
+                .checked_shl(7)
+                .ok_or_else(|| "high-tag-number overflow".to_string())?
                 | (*b as u32) & 0x7f;
             let found_last = (*b & 0x80) == 0;
             cursor = next;
@@ -107,7 +112,11 @@ pub fn parse(input: &[u8]) -> Result<(Ber, &[u8]), String> {
         (Vec::new(), after_eoc, Some(children))
     } else {
         if after_len.len() < len {
-            return Err(format!("truncated value: need {} bytes, have {}", len, after_len.len()));
+            return Err(format!(
+                "truncated value: need {} bytes, have {}",
+                len,
+                after_len.len()
+            ));
         }
         let (contents, trailing) = after_len.split_at(len);
         (contents.to_vec(), trailing, None)
@@ -141,7 +150,9 @@ pub fn parse(input: &[u8]) -> Result<(Ber, &[u8]), String> {
 }
 
 fn read_length(input: &[u8]) -> Result<(usize, &[u8]), String> {
-    let (first, rest) = input.split_first().ok_or_else(|| "missing length octet".to_string())?;
+    let (first, rest) = input
+        .split_first()
+        .ok_or_else(|| "missing length octet".to_string())?;
     if *first < 0x80 {
         return Ok(((*first) as usize, rest));
     }
@@ -153,7 +164,11 @@ fn read_length(input: &[u8]) -> Result<(usize, &[u8]), String> {
         return Err("reserved length form (0x80 | 0)".to_string());
     }
     if rest.len() < n {
-        return Err(format!("truncated long-form length: need {} bytes, have {}", n, rest.len()));
+        return Err(format!(
+            "truncated long-form length: need {} bytes, have {}",
+            n,
+            rest.len()
+        ));
     }
     let (len_bytes, after) = rest.split_at(n);
     let mut len: usize = 0;
@@ -298,12 +313,15 @@ mod tests {
         //   4    = 0x04
         //   3    = 0x03
         //   2    = 0x02
-        let bytes = [0x06, 0x08, 0x2A, 0x86, 0x48, 0xCE, 0x3D, 0x04, 0x03, 0x02];
+        let bytes = [0x06, 0x08, 0x2a, 0x86, 0x48, 0xce, 0x3d, 0x04, 0x03, 0x02];
         let (node, rest) = parse(&bytes).expect("parse");
         assert!(rest.is_empty());
         assert_eq!(node.tag, 0x06);
         // Decoded value bytes must equal the wire form.
-        assert_eq!(node.value, vec![0x2A, 0x86, 0x48, 0xCE, 0x3D, 0x04, 0x03, 0x02]);
+        assert_eq!(
+            node.value,
+            vec![0x2a, 0x86, 0x48, 0xce, 0x3d, 0x04, 0x03, 0x02]
+        );
     }
 
     #[test]
@@ -327,7 +345,7 @@ mod tests {
     fn long_form_length_two_byte() {
         // Length 200 in long form: 0x81 0xC8.
         // Construct a SEQUENCE of length 200 with all-zero body.
-        let mut bytes = vec![0x30, 0x81, 0xC8];
+        let mut bytes = vec![0x30, 0x81, 0xc8];
         bytes.extend(std::iter::repeat(0u8).take(200));
         let (node, rest) = parse(&bytes).expect("parse");
         assert!(rest.is_empty());
@@ -341,7 +359,7 @@ mod tests {
         // First byte: low 5 bits = 0x1F (signals high-tag-number form).
         // Continuation byte: 0x64 (high bit 0 = last byte).
         // Length byte: 0x00 (zero-length contents).
-        let bytes = [0x1F, 0x64, 0x00];
+        let bytes = [0x1f, 0x64, 0x00];
         let (node, _) = parse(&bytes).expect("parse");
         assert_eq!(node.tag_number, 0x64);
     }
@@ -349,7 +367,7 @@ mod tests {
     #[test]
     fn truncated_input_rejected() {
         // Tag 0x02 with length 0x05 but only 2 bytes of contents.
-        let bytes = [0x02, 0x05, 0xAB, 0xCD];
+        let bytes = [0x02, 0x05, 0xab, 0xcd];
         let err = parse(&bytes).expect_err("must reject");
         assert!(err.contains("truncated"), "got: {}", err);
     }
@@ -367,11 +385,11 @@ mod tests {
             constructed: false,
             class: CLASS_UNIVERSAL,
             tag_number: 2,
-            value: vec![0x7F],
+            value: vec![0x7f],
             children: Vec::new(),
         };
         let bytes = encode(&node);
-        assert_eq!(bytes, vec![0x02, 0x01, 0x7F]);
+        assert_eq!(bytes, vec![0x02, 0x01, 0x7f]);
         let (decoded, rest) = parse(&bytes).expect("reparse");
         assert!(rest.is_empty());
         assert_eq!(decoded, node);
@@ -384,7 +402,7 @@ mod tests {
         assert_eq!(bytes[0], 0x04);
         assert_eq!(bytes[1], 0x82);
         assert_eq!(bytes[2], 0x01);
-        assert_eq!(bytes[3], 0x2C);
+        assert_eq!(bytes[3], 0x2c);
         assert_eq!(bytes.len(), 4 + 300);
     }
 
@@ -424,16 +442,18 @@ mod tests {
     #[test]
     fn parse_utf8_string() {
         // UTF8String "héllo" = 68 c3 a9 6c 6c 6f
-        let bytes = [0x0C, 0x06, 0x68, 0xC3, 0xA9, 0x6C, 0x6C, 0x6F];
+        let bytes = [0x0c, 0x06, 0x68, 0xc3, 0xa9, 0x6c, 0x6c, 0x6f];
         let (node, _) = parse(&bytes).expect("parse");
-        assert_eq!(node.tag, 0x0C);
+        assert_eq!(node.tag, 0x0c);
         assert_eq!(node.value, "héllo".as_bytes());
     }
 
     #[test]
     fn parse_ia5_string() {
         // IA5String "[email protected]"
-        let bytes = [0x16, 0x0A, b'a', b'@', b'b', b'.', b'c', b'o', b'm', 0x00, 0x01, 0x02];
+        let bytes = [
+            0x16, 0x0a, b'a', b'@', b'b', b'.', b'c', b'o', b'm', 0x00, 0x01, 0x02,
+        ];
         let (node, _) = parse(&bytes).expect("parse");
         assert_eq!(node.tag, 0x16);
         assert_eq!(node.value, b"a@b.com\x00\x01\x02");
@@ -452,7 +472,7 @@ mod tests {
     fn long_form_length_overflow_rejected() {
         // 9 length bytes of 0xFF = 0xFFFFFFFFFFFFFFFF, but read_length uses
         // usize::checked_shl so on a 32-bit target it returns Err.
-        let bytes = [0x02, 0x84, 0xFF, 0xFF, 0xFF, 0xFF];
+        let bytes = [0x02, 0x84, 0xff, 0xff, 0xff, 0xff];
         let err = parse(&bytes).expect_err("must reject");
         assert!(err.contains("length overflow") || err.contains("truncated"));
     }

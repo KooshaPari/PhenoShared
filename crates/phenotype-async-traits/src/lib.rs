@@ -73,7 +73,7 @@ impl<I: AsyncIterator + Unpin> AsyncIterator for CollectVec<I> {
             Poll::Ready(Some(item)) => {
                 this.items.push(item);
                 Poll::Pending
-            }
+            },
             Poll::Ready(None) => Poll::Ready(None),
             Poll::Pending => Poll::Pending,
         }

@@ -12,11 +12,11 @@
 
 pub mod canonical;
 
+use focus_observability::{AuditSpanAttrs, MetricsRegistry};
 use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha256};
 use std::sync::{Arc, Mutex};
 use std::time::Instant;
-use focus_observability::{AuditSpanAttrs, MetricsRegistry};
 
 /// Sentinel `prev_hash` for the first record in a chain.
 pub const GENESIS_PREV_HASH: &str = "genesis";
@@ -26,7 +26,11 @@ pub enum ChainError {
     #[error("chain is empty")]
     Empty,
     #[error("hash mismatch at index {index}: expected {expected}, got {actual}")]
-    HashMismatch { index: usize, expected: String, actual: String },
+    HashMismatch {
+        index: usize,
+        expected: String,
+        actual: String,
+    },
     #[error("prev_hash link broken at index {index}")]
     PrevHashBroken { index: usize },
 }
@@ -87,7 +91,9 @@ pub struct AuditChain {
 
 impl AuditChain {
     pub fn new() -> Self {
-        Self { records: Vec::new() }
+        Self {
+            records: Vec::new(),
+        }
     }
 
     pub fn len(&self) -> usize {
@@ -100,7 +106,10 @@ impl AuditChain {
 
     /// Return the hash of the tip record, or [`GENESIS_PREV_HASH`] if empty.
     pub fn head_hash(&self) -> &str {
-        self.records.last().map(|r| r.hash.as_str()).unwrap_or(GENESIS_PREV_HASH)
+        self.records
+            .last()
+            .map(|r| r.hash.as_str())
+            .unwrap_or(GENESIS_PREV_HASH)
     }
 
     /// Append a new record, computing its `prev_hash` and `hash`.
@@ -199,7 +208,9 @@ pub fn append_mutation<S: serde::Serialize>(
 ) -> anyhow::Result<AuditRecord> {
     let payload_value = serde_json::to_value(payload)
         .map_err(|e| anyhow::anyhow!("serialize audit payload: {e}"))?;
-    let prev_hash = store.head_hash()?.unwrap_or_else(|| GENESIS_PREV_HASH.to_string());
+    let prev_hash = store
+        .head_hash()?
+        .unwrap_or_else(|| GENESIS_PREV_HASH.to_string());
     let hash =
         AuditRecord::compute_hash(record_type, subject_ref, &now, &prev_hash, &payload_value);
     let record = AuditRecord {
@@ -269,7 +280,9 @@ pub struct InMemoryAuditStore {
 
 impl InMemoryAuditStore {
     pub fn new() -> Self {
-        Self { chain: Mutex::new(AuditChain::new()) }
+        Self {
+            chain: Mutex::new(AuditChain::new()),
+        }
     }
 
     /// Return the most recent `limit` records in newest-first order. Used
@@ -288,8 +301,10 @@ impl InMemoryAuditStore {
 
 impl AuditStore for InMemoryAuditStore {
     fn append(&self, record: AuditRecord) -> anyhow::Result<()> {
-        let mut chain =
-            self.chain.lock().map_err(|e| anyhow::anyhow!("audit chain mutex poisoned: {e}"))?;
+        let mut chain = self
+            .chain
+            .lock()
+            .map_err(|e| anyhow::anyhow!("audit chain mutex poisoned: {e}"))?;
         // Caller-constructed record; trust-but-verify its prev_hash link.
         let expected_prev = chain.head_hash().to_string();
         if record.prev_hash != expected_prev {
@@ -303,8 +318,10 @@ impl AuditStore for InMemoryAuditStore {
     }
 
     fn verify_chain(&self) -> anyhow::Result<bool> {
-        let chain =
-            self.chain.lock().map_err(|e| anyhow::anyhow!("audit chain mutex poisoned: {e}"))?;
+        let chain = self
+            .chain
+            .lock()
+            .map_err(|e| anyhow::anyhow!("audit chain mutex poisoned: {e}"))?;
         match chain.verify() {
             Ok(()) => Ok(true),
             Err(ChainError::Empty) => Ok(true),
@@ -313,9 +330,15 @@ impl AuditStore for InMemoryAuditStore {
     }
 
     fn head_hash(&self) -> anyhow::Result<Option<String>> {
-        let chain =
-            self.chain.lock().map_err(|e| anyhow::anyhow!("audit chain mutex poisoned: {e}"))?;
-        Ok(if chain.is_empty() { None } else { Some(chain.head_hash().to_string()) })
+        let chain = self
+            .chain
+            .lock()
+            .map_err(|e| anyhow::anyhow!("audit chain mutex poisoned: {e}"))?;
+        Ok(if chain.is_empty() {
+            None
+        } else {
+            Some(chain.head_hash().to_string())
+        })
     }
 }
 
@@ -333,7 +356,12 @@ impl AuditSink for InMemoryAuditStore {
 }
 
 /// A single captured mutation: `(record_type, subject_ref, payload, occurred_at)`.
-pub type CapturedRecord = (String, String, serde_json::Value, chrono::DateTime<chrono::Utc>);
+pub type CapturedRecord = (
+    String,
+    String,
+    serde_json::Value,
+    chrono::DateTime<chrono::Utc>,
+);
 
 /// Test helper sink that captures every mutation for later inspection.
 #[derive(Debug, Default)]
@@ -348,12 +376,23 @@ impl CapturingAuditSink {
 
     pub fn snapshot(
         &self,
-    ) -> Vec<(String, String, serde_json::Value, chrono::DateTime<chrono::Utc>)> {
-        self.records.lock().expect("capturing audit sink poisoned").clone()
+    ) -> Vec<(
+        String,
+        String,
+        serde_json::Value,
+        chrono::DateTime<chrono::Utc>,
+    )> {
+        self.records
+            .lock()
+            .expect("capturing audit sink poisoned")
+            .clone()
     }
 
     pub fn len(&self) -> usize {
-        self.records.lock().expect("capturing audit sink poisoned").len()
+        self.records
+            .lock()
+            .expect("capturing audit sink poisoned")
+            .len()
     }
 
     pub fn is_empty(&self) -> bool {
@@ -373,7 +412,12 @@ impl AuditSink for CapturingAuditSink {
             .records
             .lock()
             .map_err(|e| anyhow::anyhow!("capturing audit sink poisoned: {e}"))?;
-        g.push((record_type.to_string(), subject_ref.to_string(), payload, now));
+        g.push((
+            record_type.to_string(),
+            subject_ref.to_string(),
+            payload,
+            now,
+        ));
         Ok(())
     }
 }
@@ -540,14 +584,16 @@ mod tests {
     #[test]
     fn noop_audit_sink_does_nothing_but_succeeds() {
         let sink = NoopAuditSink;
-        sink.record_mutation("x", "y", serde_json::json!({}), ts(0)).unwrap();
+        sink.record_mutation("x", "y", serde_json::json!({}), ts(0))
+            .unwrap();
     }
 
     // Traces to: FR-STATE-004
     #[test]
     fn capturing_sink_captures_record() {
         let sink = CapturingAuditSink::new();
-        sink.record_mutation("policy.built", "user-3", serde_json::json!({"n": 1}), ts(7)).unwrap();
+        sink.record_mutation("policy.built", "user-3", serde_json::json!({"n": 1}), ts(7))
+            .unwrap();
         let snap = sink.snapshot();
         assert_eq!(snap.len(), 1);
         assert_eq!(snap[0].0, "policy.built");
@@ -647,4 +693,3 @@ mod tests {
         assert_eq!(chain.records[2].prev_hash, tier2.hash);
     }
 }
-

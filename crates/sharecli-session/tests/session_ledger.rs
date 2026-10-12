@@ -32,21 +32,34 @@ fn observations_survive_store_reopen() {
     let path = std::env::temp_dir().join(format!(
         "sharecli-session-ledger-{}-{}.sqlite",
         std::process::id(),
-        std::time::SystemTime::now().duration_since(std::time::UNIX_EPOCH).unwrap().as_nanos()
+        std::time::SystemTime::now()
+            .duration_since(std::time::UNIX_EPOCH)
+            .unwrap()
+            .as_nanos()
     ));
 
     {
         let store = SessionStore::open(&path).unwrap();
         store
-            .append_observation(&observation("obs-1", "codex:abc", ResolutionConfidence::Exact))
+            .append_observation(&observation(
+                "obs-1",
+                "codex:abc",
+                ResolutionConfidence::Exact,
+            ))
             .unwrap();
     }
 
     let reopened = SessionStore::open(&path).unwrap();
     let rows = reopened.observations(None).unwrap();
     assert_eq!(rows.len(), 1);
-    let session = rows[0].session.as_ref().expect("observation carries session");
-    assert!(session.auto_resumable(), "Exact-confidence session must be auto-resumable");
+    let session = rows[0]
+        .session
+        .as_ref()
+        .expect("observation carries session");
+    assert!(
+        session.auto_resumable(),
+        "Exact-confidence session must be auto-resumable"
+    );
     assert_eq!(session.confidence, ResolutionConfidence::Exact);
 
     std::fs::remove_file(&path).unwrap();
@@ -65,7 +78,13 @@ fn heuristic_observations_are_persisted_but_not_resumable() {
 
     let rows = store.observations(None).unwrap();
     assert_eq!(rows.len(), 1);
-    let session = rows[0].session.as_ref().expect("observation carries session");
-    assert!(!session.auto_resumable(), "Heuristic-confidence session must not be auto-resumable");
+    let session = rows[0]
+        .session
+        .as_ref()
+        .expect("observation carries session");
+    assert!(
+        !session.auto_resumable(),
+        "Heuristic-confidence session must not be auto-resumable"
+    );
     assert_eq!(session.confidence, ResolutionConfidence::Heuristic);
 }

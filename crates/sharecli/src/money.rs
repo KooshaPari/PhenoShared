@@ -10,10 +10,14 @@ impl Money {
         Self { cents: d * 100 }
     }
     pub fn add(&self, other: Money) -> Money {
-        Money { cents: self.cents + other.cents }
+        Money {
+            cents: self.cents + other.cents,
+        }
     }
     pub fn sub(&self, other: Money) -> Money {
-        Money { cents: self.cents - other.cents }
+        Money {
+            cents: self.cents - other.cents,
+        }
     }
     pub fn is_negative(&self) -> bool {
         self.cents < 0
@@ -40,11 +44,17 @@ mod tests {
     }
     #[test]
     fn add() {
-        assert_eq!(Money::from_dollars(1).add(Money::from_dollars(2)), Money::from_dollars(3));
+        assert_eq!(
+            Money::from_dollars(1).add(Money::from_dollars(2)),
+            Money::from_dollars(3)
+        );
     }
     #[test]
     fn sub() {
-        assert_eq!(Money::from_dollars(5).sub(Money::from_dollars(2)), Money::from_dollars(3));
+        assert_eq!(
+            Money::from_dollars(5).sub(Money::from_dollars(2)),
+            Money::from_dollars(3)
+        );
     }
     #[test]
     fn negative_check() {
@@ -57,7 +67,10 @@ mod tests {
     }
     #[test]
     fn format_dollars() {
-        assert_eq!(Money::from_dollars(3).add(Money::from_cents(45)).format(), "$3.45");
+        assert_eq!(
+            Money::from_dollars(3).add(Money::from_cents(45)).format(),
+            "$3.45"
+        );
     }
     #[test]
     fn format_negative() {

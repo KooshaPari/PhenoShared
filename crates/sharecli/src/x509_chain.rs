@@ -52,7 +52,10 @@ pub fn parse_der(input: &[u8]) -> Result<Cert, String> {
     // TBSCertificate (SEQUENCE)
     let tbs = inner.read_tlv().map_err(|e| e.to_string())?;
     if tbs.tag != 0x30 {
-        return Err(format!("tbsCertificate tag 0x{:02x} (expected 0x30)", tbs.tag));
+        return Err(format!(
+            "tbsCertificate tag 0x{:02x} (expected 0x30)",
+            tbs.tag
+        ));
     }
     let mut tbs_p = Parser::new(tbs.content);
 
@@ -86,7 +89,10 @@ pub fn parse_der(input: &[u8]) -> Result<Cert, String> {
     // signature AlgorithmIdentifier
     let sig_alg = tbs_p.read_tlv().map_err(|e| e.to_string())?;
     if sig_alg.tag != 0x30 {
-        return Err(format!("signature AlgorithmIdentifier tag 0x{:02x}", sig_alg.tag));
+        return Err(format!(
+            "signature AlgorithmIdentifier tag 0x{:02x}",
+            sig_alg.tag
+        ));
     }
     let sig_alg_oid = read_first_oid(sig_alg.content).map_err(|e| e.to_string())?;
 
@@ -234,7 +240,10 @@ impl<'a> Parser<'a> {
         }
         let start = self.pos;
         self.pos += len;
-        Ok(Tlv { tag, content: &self.src[start..start + len] })
+        Ok(Tlv {
+            tag,
+            content: &self.src[start..start + len],
+        })
     }
 }
 
@@ -365,7 +374,10 @@ fn read_validity(p: &mut Parser) -> Result<Validity, ParseError> {
     let na = inner.read_tlv()?;
     let not_before = read_time(nb.tag, nb.content)?;
     let not_after = read_time(na.tag, na.content)?;
-    Ok(Validity { not_before, not_after })
+    Ok(Validity {
+        not_before,
+        not_after,
+    })
 }
 
 fn read_time(tag: u8, content: &[u8]) -> Result<String, ParseError> {
@@ -543,8 +555,14 @@ mod tests {
         let parsed = parse_der(&cert).expect("parse should succeed");
         assert_eq!(parsed.version, 1);
         assert_eq!(parsed.serial, vec![0x01]);
-        assert_eq!(parsed.subject.parts.get("CN").map(|s| s.as_str()), Some("Test"));
-        assert_eq!(parsed.issuer.parts.get("CN").map(|s| s.as_str()), Some("Test"));
+        assert_eq!(
+            parsed.subject.parts.get("CN").map(|s| s.as_str()),
+            Some("Test")
+        );
+        assert_eq!(
+            parsed.issuer.parts.get("CN").map(|s| s.as_str()),
+            Some("Test")
+        );
         assert_eq!(parsed.validity.not_before, "200101000000Z");
         assert_eq!(parsed.validity.not_after, "300101000000Z");
         assert_eq!(parsed.extensions_count, 0);
@@ -827,9 +845,18 @@ mod tests {
         encode_len(&mut cert, inner.len());
         cert.extend(inner);
         let parsed = parse_der(&cert).expect("parse should succeed");
-        assert_eq!(parsed.issuer.parts.get("CN").map(|s| s.as_str()), Some("My CA"));
-        assert_eq!(parsed.issuer.parts.get("O").map(|s| s.as_str()), Some("Org"));
-        assert_eq!(parsed.subject.parts.get("CN").map(|s| s.as_str()), Some("leaf.example.com"));
+        assert_eq!(
+            parsed.issuer.parts.get("CN").map(|s| s.as_str()),
+            Some("My CA")
+        );
+        assert_eq!(
+            parsed.issuer.parts.get("O").map(|s| s.as_str()),
+            Some("Org")
+        );
+        assert_eq!(
+            parsed.subject.parts.get("CN").map(|s| s.as_str()),
+            Some("leaf.example.com")
+        );
         assert_eq!(parsed.serial, vec![0x42]);
         assert!(parsed.issuer.raw.contains("CN=My CA"));
         assert!(parsed.issuer.raw.contains("O=Org"));
@@ -1293,7 +1320,10 @@ mod tests {
         encode_len(&mut cert, inner.len());
         cert.extend(inner);
         let err = parse_der(&cert).unwrap_err();
-        assert!(err.contains("serialNumber"), "error should mention serial: {err}");
+        assert!(
+            err.contains("serialNumber"),
+            "error should mention serial: {err}"
+        );
     }
 
     // --- read_spki_algorithm error path ---
@@ -1377,7 +1407,10 @@ mod tests {
     fn cert_signature_algorithm_is_oid() {
         let cert = minimal_v1_cert();
         let parsed = parse_der(&cert).unwrap();
-        assert!(parsed.signature_algorithm.contains('.'), "sig alg should be dotted OID");
+        assert!(
+            parsed.signature_algorithm.contains('.'),
+            "sig alg should be dotted OID"
+        );
     }
 
     // --- read_name with PrintableString tag ---

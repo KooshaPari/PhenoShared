@@ -38,13 +38,19 @@ impl FleetRegistry {
         let client = async_nats::connect(url)
             .await
             .with_context(|| format!("failed to connect to NATS at {url}"))?;
-        Ok(Self { nats_client: Some(client), subject_prefix: DEFAULT_SUBJECT_PREFIX.to_string() })
+        Ok(Self {
+            nats_client: Some(client),
+            subject_prefix: DEFAULT_SUBJECT_PREFIX.to_string(),
+        })
     }
 
     /// Return a registry without a NATS connection (useful for tests and for
     /// callers that want to attach a client manually later).
     pub fn disconnected() -> Self {
-        Self { nats_client: None, subject_prefix: DEFAULT_SUBJECT_PREFIX.to_string() }
+        Self {
+            nats_client: None,
+            subject_prefix: DEFAULT_SUBJECT_PREFIX.to_string(),
+        }
     }
 
     /// Override the subject prefix on a builder-style chain.
@@ -96,7 +102,10 @@ mod tests {
         };
         let json = serde_json::to_string(&rec).expect("serialize");
         for key in ["device_id", "hostname", "os", "available_slots"] {
-            assert!(json.contains(&format!("\"{key}\"")), "missing {key} in {json}");
+            assert!(
+                json.contains(&format!("\"{key}\"")),
+                "missing {key} in {json}"
+            );
         }
         assert!(json.contains("\"device_id\":\"dev-001\""));
         assert!(json.contains("\"available_slots\":4"));
@@ -125,7 +134,10 @@ mod tests {
         };
         let b = a.clone();
         assert_eq!(a, b);
-        let c = DeviceRecord { device_id: "y".into(), ..a.clone() };
+        let c = DeviceRecord {
+            device_id: "y".into(),
+            ..a.clone()
+        };
         assert_ne!(a, c);
     }
 
@@ -138,15 +150,23 @@ mod tests {
             os: "linux".into(),
             available_slots: 2,
         };
-        let err =
-            reg.register(rec).await.expect_err("register must error without a NATS connection");
-        assert!(err.to_string().contains("not connected"), "unexpected error message: {err}");
+        let err = reg
+            .register(rec)
+            .await
+            .expect_err("register must error without a NATS connection");
+        assert!(
+            err.to_string().contains("not connected"),
+            "unexpected error message: {err}"
+        );
     }
 
     #[tokio::test]
     async fn list_devices_stub_returns_empty() {
         let reg = FleetRegistry::disconnected();
-        let devices = reg.list_devices().await.expect("list_devices stub should be Ok");
+        let devices = reg
+            .list_devices()
+            .await
+            .expect("list_devices stub should be Ok");
         assert!(devices.is_empty());
     }
 

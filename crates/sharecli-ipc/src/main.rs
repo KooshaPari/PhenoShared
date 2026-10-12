@@ -198,7 +198,11 @@ print('PASS: fragmented/pipelined NDJSON, correlation, error envelope, current b
                 .output().unwrap()
         }).await.unwrap();
         server.abort();
-        assert!(result.status.success(), "{}", String::from_utf8_lossy(&result.stderr));
+        assert!(
+            result.status.success(),
+            "{}",
+            String::from_utf8_lossy(&result.stderr)
+        );
         assert!(database.exists());
         println!("{}", String::from_utf8_lossy(&result.stdout));
     }

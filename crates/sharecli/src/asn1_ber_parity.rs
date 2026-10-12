@@ -80,7 +80,7 @@ fn decode_length(bytes: &[u8]) -> Result<(usize, usize), String> {
     if first & 0x80 == 0 {
         return Ok((usize::from(first), 1));
     }
-    let n = (first & 0x7F) as usize;
+    let n = (first & 0x7f) as usize;
     if n == 0 {
         return Err("indefinite length form not supported in parity check".into());
     }
@@ -178,7 +178,7 @@ fn count_immediate_children(value: &[u8]) -> usize {
             Ok((len, len_bytes)) => {
                 i += id_bytes + len_bytes + len;
                 count += 1;
-            }
+            },
             Err(_) => break,
         }
     }
@@ -202,11 +202,19 @@ pub fn parity_report(a: &[u8], b: &[u8]) -> Result<String, String> {
     ));
     out.push_str(&format!(
         "  constructed:   {}\n",
-        if score.constructed_match { "match" } else { "DIFFER" }
+        if score.constructed_match {
+            "match"
+        } else {
+            "DIFFER"
+        }
     ));
     out.push_str(&format!(
         "  length:        {}\n",
-        if score.length_match { "match" } else { "DIFFER" }
+        if score.length_match {
+            "match"
+        } else {
+            "DIFFER"
+        }
     ));
     out.push_str(&format!(
         "  value:         {}\n",
@@ -268,8 +276,8 @@ mod tests {
     #[test]
     fn long_form_length_parses_correctly() {
         // 200-byte OCTET STRING with 2-byte long-form length (0x81 0xC8).
-        let mut a = vec![0x04, 0x81, 0xC8];
-        a.extend(std::iter::repeat(0xAAu8).take(200));
+        let mut a = vec![0x04, 0x81, 0xc8];
+        a.extend(std::iter::repeat(0xaau8).take(200));
         let b = a.clone();
         let s = parity_score(&a, &b).expect("score");
         assert!(s.is_perfect());
@@ -286,7 +294,7 @@ mod tests {
     #[test]
     fn high_tag_number_rejected() {
         // Tag byte with low 5 bits all set = 0x1F triggers high-tag-number form.
-        let bad = vec![0x1F, 0x01, 0x00];
+        let bad = vec![0x1f, 0x01, 0x00];
         assert!(parity_score(&bad, &bad).is_err());
     }
 

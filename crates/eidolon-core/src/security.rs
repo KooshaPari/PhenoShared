@@ -147,14 +147,14 @@ pub fn validate_exec_cmd(cmd: &str) -> Result<(), PhenoError> {
                 return Err(PhenoError::BadRequest(
                     "exec cmd must not contain newline".into(),
                 ));
-            }
+            },
             b'\r' if !cmd.contains('\n') => {
                 // Reject bare CR (CRLF is already rejected via the LF arm).
                 return Err(PhenoError::BadRequest(
                     "exec cmd must not contain bare carriage return".into(),
                 ));
-            }
-            _ => {}
+            },
+            _ => {},
         }
     }
     for needle in FORBIDDEN_EXEC_PATTERNS {
@@ -469,7 +469,7 @@ mod tests {
                 Ok(_) => {
                     f();
                     unreachable!("test expected Err, got Ok")
-                }
+                },
                 Err(e) => e,
             }
         }

@@ -176,7 +176,7 @@ exit 0
             .with_vsock_agent_bin("/no/such/eidolon-vsock-agent-bake");
         let err = run_live_pack(&bin, &req).unwrap_err();
         assert_eq!(
-            err.unsupported_code(),
+            err.unsupported_code_value(),
             Some(codes::SANDBOX_VSOCK_AGENT_MISSING)
         );
         let _ = fs::remove_dir_all(&root);

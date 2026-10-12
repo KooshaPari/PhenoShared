@@ -150,7 +150,7 @@ impl AgreementBackend {
                 } else {
                     AgreementBackend::Jaccard
                 }
-            }
+            },
             other => other.clone(),
         }
     }
@@ -162,7 +162,7 @@ impl AgreementBackend {
             AgreementBackend::Jaccard => Box::new(JaccardScorer),
             AgreementBackend::SentenceTransformer { model } => {
                 Box::new(SentenceTransformerScorer { model })
-            }
+            },
             AgreementBackend::SigLip { model } => Box::new(SigLipScorer { model }),
             AgreementBackend::Auto => Box::new(JaccardScorer), // unreachable
         }
@@ -337,7 +337,7 @@ impl AgreementScorer for SentenceTransformerScorer {
                 let mut fb = JaccardScorer.score(intent, blind, None);
                 fb.backend = format!("jaccard-fallback:{}", self.name());
                 return fb;
-            }
+            },
         };
         // Clamp cosine to [-1, 1] and map to [0, 1] for display overlap.
         let c = cosine.clamp(-1.0, 1.0);
@@ -428,7 +428,7 @@ impl AgreementScorer for SigLipScorer {
                 let mut fb = JaccardScorer.score(intent, blind, None);
                 fb.backend = "jaccard-fallback:siglip-no-image".to_string();
                 return fb;
-            }
+            },
         };
         let raw = match run_siglip(&self.model, intent, &img) {
             Ok(r) => r,
@@ -436,7 +436,7 @@ impl AgreementScorer for SigLipScorer {
                 let mut fb = JaccardScorer.score(intent, blind, None);
                 fb.backend = "jaccard-fallback:siglip".to_string();
                 return fb;
-            }
+            },
         };
         // SigLIP softmax prob is already in [0, 1]; display overlap == raw.
         let status = if raw >= 0.3 {

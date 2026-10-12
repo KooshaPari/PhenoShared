@@ -112,8 +112,14 @@ impl FocalPointConnector {
         let stream = guard
             .as_mut()
             .ok_or_else(|| anyhow::anyhow!("Not connected to FocalPoint bus"))?;
-        let json = serde_json::to_string(event)?;
-        writeln!(stream, "{}", json)?;
+        // Emit the complete newline-delimited frame in a single syscall.
+        // `writeln!` expands to multiple `write_all` calls; if a reader
+        // consumes only part of the frame and closes, the follow-up write
+        // can surface EPIPE even though the payload was delivered. One
+        // atomic write keeps the frame whole and avoids that race.
+        let mut payload = serde_json::to_string(event)?;
+        payload.push('\n');
+        stream.write_all(payload.as_bytes())?;
         stream.flush()?;
         Ok(())
     }
@@ -193,13 +199,17 @@ mod tests {
         c.connect().expect("connect");
         assert!(c.is_connected());
 
-        // Accept a connection in another thread
+        // Accept a connection in another thread. Read a complete
+        // newline-delimited frame: a single `read` can return after the
+        // first segment of the payload, and dropping the stream at that
+        // point makes the writer's next write surface EPIPE.
         let accept = std::thread::spawn(move || {
-            let (mut stream, _) = listener.accept().expect("accept");
-            use std::io::Read;
-            let mut buf = [0u8; 256];
-            let n = stream.read(&mut buf).expect("read");
-            String::from_utf8_lossy(&buf[..n]).to_string()
+            use std::io::BufRead;
+            let (stream, _) = listener.accept().expect("accept");
+            let mut reader = std::io::BufReader::new(stream);
+            let mut line = String::new();
+            reader.read_line(&mut line).expect("read_line");
+            line
         });
 
         c.publish(&dummy_result()).expect("publish");
@@ -225,15 +235,28 @@ mod tests {
         let _ = std::fs::remove_file(&tmp);
         let listener = UnixListener::bind(&tmp).expect("bind listener");
         let c = FocalPointConnector::new(&tmp);
-        c.connect().expect("connect");
 
+        // Synchronize the thread's accept() with the main thread's write so the
+        // test no longer races: if the writer runs first the unix stream can
+        // close the recv side before the listener accepts, surfacing as
+        // EPIPE ("Broken pipe") on the writer. Barrier ensures the listener
+        // thread has entered accept() before we call connect(), which in turn
+        // guarantees the connection is fully established by the time publish
+        // writes.
+        let ready = std::sync::Arc::new(std::sync::Barrier::new(2));
+        let ready_thread = std::sync::Arc::clone(&ready);
         let accept = std::thread::spawn(move || {
-            let (mut stream, _) = listener.accept().expect("accept");
-            use std::io::Read;
-            let mut buf = [0u8; 256];
-            let n = stream.read(&mut buf).expect("read");
-            String::from_utf8_lossy(&buf[..n]).to_string()
+            ready_thread.wait();
+            use std::io::BufRead;
+            let (stream, _) = listener.accept().expect("accept");
+            let mut reader = std::io::BufReader::new(stream);
+            let mut line = String::new();
+            reader.read_line(&mut line).expect("read_line");
+            line
         });
+
+        ready.wait();
+        c.connect().expect("connect");
 
         // No smoothed gaze — should fall back to a raw gaze
         let mut r = dummy_result();

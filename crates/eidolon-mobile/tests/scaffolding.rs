@@ -12,13 +12,13 @@ use eidolon_mobile::{
 };
 
 fn assert_code(err: PhenoError, expected: &str) {
-    assert_eq!(err.unsupported_code(), Some(expected));
+    assert_eq!(err.unsupported_code_value(), Some(expected));
     assert_eq!(err.status_code(), 501);
     match err {
-        PhenoError::UnsupportedPlatform { code, message } => {
+        PhenoError::UnsupportedPlatform { code, detail } => {
             assert_eq!(code, expected);
-            assert!(!message.is_empty());
-        }
+            assert!(!detail.is_empty());
+        },
         other => panic!("expected UnsupportedPlatform, got {other:?}"),
     }
 }
@@ -63,7 +63,10 @@ async fn android_stub_fail_loud() {
         stub.screenshot("/tmp/and.png").await.unwrap_err(),
         codes::MOBILE_ANDROID_STUB,
     );
-    assert_code(stub.tap(1, 2).await.unwrap_err(), codes::MOBILE_ANDROID_STUB);
+    assert_code(
+        stub.tap(1, 2).await.unwrap_err(),
+        codes::MOBILE_ANDROID_STUB,
+    );
 }
 
 #[test]
@@ -122,9 +125,7 @@ fn android_probe_consistency() {
 
 #[test]
 fn uia2_hermetic_parsers_and_missing_apk() {
-    use eidolon_mobile::{
-        parse_package_status, uia2_server, Uia2ApkPaths, DEFAULT_SERVER_PACKAGE,
-    };
+    use eidolon_mobile::{parse_package_status, uia2_server, Uia2ApkPaths, DEFAULT_SERVER_PACKAGE};
 
     let status = parse_package_status(&format!(
         "package:{DEFAULT_SERVER_PACKAGE}\npackage:io.appium.uiautomator2.server.test\n"
@@ -138,20 +139,20 @@ fn uia2_hermetic_parsers_and_missing_apk() {
         // Hermetic: empty roots → fail loud. Real resolve may hit durable cache.
         let err = eidolon_mobile::uia2_assets::resolve_with_roots(None, None).unwrap_err();
         assert_eq!(
-            err.unsupported_code(),
+            err.unsupported_code_value(),
             Some(codes::MOBILE_UIA2_UNAVAILABLE)
         );
         match Uia2ApkPaths::resolve() {
             Ok(paths) => {
                 assert!(paths.server.is_file());
                 assert!(paths.test.is_file());
-            }
+            },
             Err(e) => {
                 assert_eq!(
-                    e.unsupported_code(),
+                    e.unsupported_code_value(),
                     Some(codes::MOBILE_UIA2_UNAVAILABLE)
                 );
-            }
+            },
         }
     }
 }

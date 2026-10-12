@@ -16,8 +16,11 @@ pub fn render(headers: &[&str], rows: &[Vec<&str>]) -> String {
         }
     }
     let mut out = String::new();
-    let head: Vec<String> =
-        headers.iter().enumerate().map(|(i, h)| format!("{:<w$}", h, w = widths[i])).collect();
+    let head: Vec<String> = headers
+        .iter()
+        .enumerate()
+        .map(|(i, h)| format!("{:<w$}", h, w = widths[i]))
+        .collect();
     out.push_str(&head.join(" | "));
     out.push('\n');
     let sep: Vec<String> = widths.iter().map(|w| "-".repeat(*w)).collect();

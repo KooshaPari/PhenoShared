@@ -111,16 +111,24 @@ pub fn verify_checksum(block: &[u8]) -> bool {
     }
     let raw = &block[148..156];
     let end = raw.iter().position(|&b| b == 0).unwrap_or(raw.len());
-    let stored_str = std::str::from_utf8(&raw[..end]).ok().map(|s| s.trim().to_string());
+    let stored_str = std::str::from_utf8(&raw[..end])
+        .ok()
+        .map(|s| s.trim().to_string());
     let stored: u32 = match stored_str.and_then(|s| {
-        u32::from_str_radix(s.trim_start_matches('0'), 8).ok().or_else(|| s.parse().ok())
+        u32::from_str_radix(s.trim_start_matches('0'), 8)
+            .ok()
+            .or_else(|| s.parse().ok())
     }) {
         Some(v) => v,
         None => return false,
     };
     let mut sum: u32 = 0;
     for i in 0..512 {
-        let b = if (148..156).contains(&i) { b' ' } else { block[i] };
+        let b = if (148..156).contains(&i) {
+            b' '
+        } else {
+            block[i]
+        };
         sum += b as u32;
     }
     sum == stored
@@ -128,7 +136,10 @@ pub fn verify_checksum(block: &[u8]) -> bool {
 
 fn read_cstr(b: &[u8]) -> String {
     let end = b.iter().position(|&x| x == 0).unwrap_or(b.len());
-    std::str::from_utf8(&b[..end]).unwrap_or("").trim().to_string()
+    std::str::from_utf8(&b[..end])
+        .unwrap_or("")
+        .trim()
+        .to_string()
 }
 
 fn read_octal(b: &[u8]) -> u64 {

@@ -58,9 +58,11 @@ impl RouterMonitorClient {
     }
 
     pub async fn get_metrics(&self, router_id: &str) -> MonitorResult<RouterMetrics> {
-        let url = self.base_url.join(&format!("/api/v1/routers/{}/metrics", router_id))?;
+        let url = self
+            .base_url
+            .join(&format!("/api/v1/routers/{}/metrics", router_id))?;
         let response = self.client.get(url).send().await?;
-        
+
         if response.status().is_success() {
             Ok(response.json().await?)
         } else {
@@ -73,7 +75,7 @@ impl RouterMonitorClient {
     pub async fn get_all_metrics(&self) -> MonitorResult<Vec<RouterMetrics>> {
         let url = self.base_url.join("/api/v1/routers/metrics")?;
         let response = self.client.get(url).send().await?;
-        
+
         if response.status().is_success() {
             Ok(response.json().await?)
         } else {
@@ -84,9 +86,11 @@ impl RouterMonitorClient {
     }
 
     pub async fn get_status(&self, router_id: &str) -> MonitorResult<RouterStatus> {
-        let url = self.base_url.join(&format!("/api/v1/routers/{}/status", router_id))?;
+        let url = self
+            .base_url
+            .join(&format!("/api/v1/routers/{}/status", router_id))?;
         let response = self.client.get(url).send().await?;
-        
+
         if response.status().is_success() {
             Ok(response.json().await?)
         } else {
@@ -99,7 +103,7 @@ impl RouterMonitorClient {
     pub async fn get_health(&self) -> MonitorResult<HealthResponse> {
         let url = self.base_url.join("/api/v1/health")?;
         let response = self.client.get(url).send().await?;
-        
+
         if response.status().is_success() {
             Ok(response.json().await?)
         } else {

@@ -27,8 +27,7 @@ pub const DESKTOP_LINUX_STUB: &str = "EIDOLON_DESKTOP_LINUX_STUB";
 /// paths (wired). Prefer [`DESKTOP_LINUX_WAYLAND_PORTAL_UNAVAILABLE`] when the
 /// portal is missing, and [`DESKTOP_LINUX_WAYLAND_INPUT_UNSUPPORTED`] when a
 /// session starts without usable Pointer/Keyboard/Screencast stream.
-pub const DESKTOP_LINUX_WAYLAND_UNSUPPORTED: &str =
-    "EIDOLON_DESKTOP_LINUX_WAYLAND_UNSUPPORTED";
+pub const DESKTOP_LINUX_WAYLAND_UNSUPPORTED: &str = "EIDOLON_DESKTOP_LINUX_WAYLAND_UNSUPPORTED";
 
 /// Pure Wayland: xdg-desktop-portal Screenshot / RemoteDesktop / Screencast
 /// unavailable.
@@ -54,8 +53,7 @@ pub const DESKTOP_LINUX_WAYLAND_INPUT_UNSUPPORTED: &str =
 /// Returned when the configured token path cannot be read, written, or
 /// created (permissions, missing `HOME` / `XDG_STATE_HOME`, etc.). Does not
 /// mean the portal is missing — see [`DESKTOP_LINUX_WAYLAND_PORTAL_UNAVAILABLE`].
-pub const DESKTOP_LINUX_WAYLAND_RESTORE_IO: &str =
-    "EIDOLON_DESKTOP_LINUX_WAYLAND_RESTORE_IO";
+pub const DESKTOP_LINUX_WAYLAND_RESTORE_IO: &str = "EIDOLON_DESKTOP_LINUX_WAYLAND_RESTORE_IO";
 
 /// Feature `desktop-linux-atspi` off or non-Linux target.
 ///
@@ -64,8 +62,7 @@ pub const DESKTOP_LINUX_WAYLAND_RESTORE_IO: &str =
 pub const DESKTOP_LINUX_ATSPI_STUB: &str = "EIDOLON_DESKTOP_LINUX_ATSPI_STUB";
 
 /// Feature on but session bus / `org.a11y.atspi` registry unavailable.
-pub const DESKTOP_LINUX_ATSPI_UNAVAILABLE: &str =
-    "EIDOLON_DESKTOP_LINUX_ATSPI_UNAVAILABLE";
+pub const DESKTOP_LINUX_ATSPI_UNAVAILABLE: &str = "EIDOLON_DESKTOP_LINUX_ATSPI_UNAVAILABLE";
 
 /// Non-macOS / non-Win / non-Linux target (e.g. FreeBSD) — no driver planned yet.
 pub const DESKTOP_OTHER_STUB: &str = "EIDOLON_DESKTOP_OTHER_STUB";

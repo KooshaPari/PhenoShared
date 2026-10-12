@@ -462,8 +462,6 @@ enum Commands {
         json: bool,
     },
 
-    /// Undo / restore model (C09 L81.9): inspect or replay the
-
     /// Print the sharecli version
     Version,
     /// Print uninstall guidance and optionally purge local config/state
@@ -593,7 +591,11 @@ enum SessionCmd {
         /// Capture one inventory and exit instead of sleeping
         #[arg(long)]
         once: bool,
-        #[arg(long, env = "SHARECLI_GHOSTTY_SOCKET", default_value = "/tmp/sharecli-ghostty.sock")]
+        #[arg(
+            long,
+            env = "SHARECLI_GHOSTTY_SOCKET",
+            default_value = "/tmp/sharecli-ghostty.sock"
+        )]
         socket: std::path::PathBuf,
         #[arg(long, env = "SHARECLI_GHOSTTY_TOKEN")]
         token: Option<String>,
@@ -608,7 +610,11 @@ enum SessionCmd {
 enum SurfaceCmd {
     /// Write bytes or UTF-8 text to one terminal surface
     Send {
-        #[arg(long, env = "SHARECLI_GHOSTTY_SOCKET", default_value = "/tmp/sharecli-ghostty.sock")]
+        #[arg(
+            long,
+            env = "SHARECLI_GHOSTTY_SOCKET",
+            default_value = "/tmp/sharecli-ghostty.sock"
+        )]
         socket: std::path::PathBuf,
         #[arg(long)]
         surface_id: String,
@@ -621,7 +627,11 @@ enum SurfaceCmd {
     },
     /// Read a bounded output snapshot from one terminal surface
     Read {
-        #[arg(long, env = "SHARECLI_GHOSTTY_SOCKET", default_value = "/tmp/sharecli-ghostty.sock")]
+        #[arg(
+            long,
+            env = "SHARECLI_GHOSTTY_SOCKET",
+            default_value = "/tmp/sharecli-ghostty.sock"
+        )]
         socket: std::path::PathBuf,
         #[arg(long)]
         surface_id: String,
@@ -632,7 +642,11 @@ enum SurfaceCmd {
     },
     /// Resize one terminal surface
     Resize {
-        #[arg(long, env = "SHARECLI_GHOSTTY_SOCKET", default_value = "/tmp/sharecli-ghostty.sock")]
+        #[arg(
+            long,
+            env = "SHARECLI_GHOSTTY_SOCKET",
+            default_value = "/tmp/sharecli-ghostty.sock"
+        )]
         socket: std::path::PathBuf,
         #[arg(long)]
         surface_id: String,
@@ -645,7 +659,11 @@ enum SurfaceCmd {
     },
     /// Follow bounded server-originated output/events from one surface (or all surfaces)
     Watch {
-        #[arg(long, env = "SHARECLI_GHOSTTY_SOCKET", default_value = "/tmp/sharecli-ghostty.sock")]
+        #[arg(
+            long,
+            env = "SHARECLI_GHOSTTY_SOCKET",
+            default_value = "/tmp/sharecli-ghostty.sock"
+        )]
         socket: std::path::PathBuf,
         #[arg(long)]
         surface_id: Option<String>,
@@ -663,7 +681,11 @@ enum SurfaceCmd {
     },
     /// Capture the native Ghostty pane topology as a validated LayoutSnapshot
     LayoutSnapshot {
-        #[arg(long, env = "SHARECLI_GHOSTTY_SOCKET", default_value = "/tmp/sharecli-ghostty.sock")]
+        #[arg(
+            long,
+            env = "SHARECLI_GHOSTTY_SOCKET",
+            default_value = "/tmp/sharecli-ghostty.sock"
+        )]
         socket: std::path::PathBuf,
         /// Write the snapshot to this path instead of stdout
         #[arg(long, short = 'o')]
@@ -675,7 +697,11 @@ enum SurfaceCmd {
     LayoutRestore {
         /// JSON file containing a LayoutSnapshot
         input: std::path::PathBuf,
-        #[arg(long, env = "SHARECLI_GHOSTTY_SOCKET", default_value = "/tmp/sharecli-ghostty.sock")]
+        #[arg(
+            long,
+            env = "SHARECLI_GHOSTTY_SOCKET",
+            default_value = "/tmp/sharecli-ghostty.sock"
+        )]
         socket: std::path::PathBuf,
         #[arg(long, env = "SHARECLI_GHOSTTY_TOKEN")]
         token: Option<String>,
@@ -859,12 +885,12 @@ async fn main() {
             Ok(domain) => {
                 domain.eprint();
                 std::process::exit(i32::from(domain.exit_code()));
-            }
+            },
             Err(err) => {
                 let domain = SharecliError::from(err);
                 domain.eprint();
                 std::process::exit(i32::from(domain.exit_code()));
-            }
+            },
         }
     }
 }
@@ -906,7 +932,11 @@ async fn run() -> Result<()> {
 
         crate::otel::ensure_trace_context_propagator();
 
-        let level = if cli.verbose { tracing::Level::DEBUG } else { tracing::Level::INFO };
+        let level = if cli.verbose {
+            tracing::Level::DEBUG
+        } else {
+            tracing::Level::INFO
+        };
         let json = std::env::var("SHARECLI_LOG_FORMAT")
             .map(|v| v.eq_ignore_ascii_case("json"))
             .unwrap_or(false);
@@ -949,7 +979,9 @@ async fn run() -> Result<()> {
                 .json()
                 .with_ansi(false)
                 .with_writer(file_make_writer);
-            let registry = tracing_subscriber::registry().with(fmt_layer).with(file_layer);
+            let registry = tracing_subscriber::registry()
+                .with(fmt_layer)
+                .with(file_layer);
             if let Some(otel_layer) = crate::otel::try_otel_layer() {
                 registry.with(otel_layer).init();
             } else {
@@ -960,9 +992,12 @@ async fn run() -> Result<()> {
                 .with_ansi(!is_no_color())
                 .with_writer(std::io::stderr)
                 .with_filter(filter);
-            let file_layer =
-                tracing_subscriber::fmt::layer().with_ansi(false).with_writer(file_make_writer);
-            let registry = tracing_subscriber::registry().with(fmt_layer).with(file_layer);
+            let file_layer = tracing_subscriber::fmt::layer()
+                .with_ansi(false)
+                .with_writer(file_make_writer);
+            let registry = tracing_subscriber::registry()
+                .with(fmt_layer)
+                .with(file_layer);
             if let Some(otel_layer) = crate::otel::try_otel_layer() {
                 registry.with(otel_layer).init();
             } else {
@@ -977,18 +1012,54 @@ async fn run() -> Result<()> {
     match &cli.command {
         Commands::Session { cmd } => session_cmd(cmd)?,
         Commands::Surface { cmd } => surface_cmd(cmd)?,
-        Commands::Ps { project, harness, all, json, csv, watch } => {
-            ps(project.as_deref(), harness.as_deref(), *all, *json, *csv, *watch).await?
-        }
-        Commands::Start { project, harness, cwd, args } => {
-            start(project, harness, cwd.as_deref(), args).await?
-        }
-        Commands::Stop { pid, project, harness, all, force, yes } => {
-            stop(*pid, project.as_deref(), harness.as_deref(), *all, *force, *yes).await?
-        }
-        Commands::Status { verbose, json, csv, watch } => {
-            status(*verbose, *json, *csv, *watch).await?
-        }
+        Commands::Ps {
+            project,
+            harness,
+            all,
+            json,
+            csv,
+            watch,
+        } => {
+            ps(
+                project.as_deref(),
+                harness.as_deref(),
+                *all,
+                *json,
+                *csv,
+                *watch,
+            )
+            .await?
+        },
+        Commands::Start {
+            project,
+            harness,
+            cwd,
+            args,
+        } => start(project, harness, cwd.as_deref(), args).await?,
+        Commands::Stop {
+            pid,
+            project,
+            harness,
+            all,
+            force,
+            yes,
+        } => {
+            stop(
+                *pid,
+                project.as_deref(),
+                harness.as_deref(),
+                *all,
+                *force,
+                *yes,
+            )
+            .await?
+        },
+        Commands::Status {
+            verbose,
+            json,
+            csv,
+            watch,
+        } => status(*verbose, *json, *csv, *watch).await?,
         Commands::Proc {
             json,
             csv,
@@ -1028,28 +1099,49 @@ async fn run() -> Result<()> {
                 *ppid,
             )
             .await?
-        }
+        },
         Commands::Config { cmd } => config_cmd(cmd)?,
         Commands::Project { cmd } => project_cmd(cmd).await?,
         Commands::Optimize { apply } => optimize(*apply).await?,
-        Commands::Prune { idle_seconds, force } => {
-            prune(idle_seconds.unwrap_or(config::global().spawn.prune_idle_seconds), *force).await?
-        }
-        Commands::Pool { harness: _, json, csv, watch } => pool_status(*json, *csv, *watch).await?,
-        Commands::Health { harness, json, csv, watch } => {
-            health(harness.as_deref(), *json, *csv, *watch).await?
-        }
+        Commands::Prune {
+            idle_seconds,
+            force,
+        } => {
+            prune(
+                idle_seconds.unwrap_or(config::global().spawn.prune_idle_seconds),
+                *force,
+            )
+            .await?
+        },
+        Commands::Pool {
+            harness: _,
+            json,
+            csv,
+            watch,
+        } => pool_status(*json, *csv, *watch).await?,
+        Commands::Health {
+            harness,
+            json,
+            csv,
+            watch,
+        } => health(harness.as_deref(), *json, *csv, *watch).await?,
         Commands::Run { harness, project } => run_pool(harness, project).await?,
-        Commands::Limits { project, memory, processes } => {
-            set_limits(project, *memory, *processes).await?
-        }
+        Commands::Limits {
+            project,
+            memory,
+            processes,
+        } => set_limits(project, *memory, *processes).await?,
         Commands::Check { project } => check_limits(project).await?,
-        Commands::Report { format, watch, sort } => {
+        Commands::Report {
+            format,
+            watch,
+            sort,
+        } => {
             use std::str::FromStr as _;
             let fmt = commands::report::ReportFormat::from_str(format)?;
             let sort_key = commands::report::SortBy::from_str(sort)?;
             commands::report::run(fmt, *watch, sort_key).await?
-        }
+        },
         Commands::Serve { bind, on_conflict } => {
             use crate::serve_lock::OnConflict;
             let policy = match on_conflict.as_str() {
@@ -1058,7 +1150,7 @@ async fn run() -> Result<()> {
                 _ => OnConflict::Abort,
             };
             serve_run(bind, policy).await?
-        }
+        },
         Commands::Thermal { cap } => {
             let gov = sharecli_fleet::thermal::ThermalGovernor::new();
             // Drive pool/status polling from the main tokio runtime via a
@@ -1073,9 +1165,14 @@ async fn run() -> Result<()> {
             let pool_handle = tokio::runtime::Handle::current();
             std::thread::spawn(move || loop {
                 let (pool, status) = pool_handle.block_on(async {
-                    let pool_panel = crate::commands::build_pool_json().await.ok().map(Into::into);
-                    let status_panel =
-                        crate::commands::build_status_json().await.ok().map(Into::into);
+                    let pool_panel = crate::commands::build_pool_json()
+                        .await
+                        .ok()
+                        .map(Into::into);
+                    let status_panel = crate::commands::build_status_json()
+                        .await
+                        .ok()
+                        .map(Into::into);
                     (pool_panel, status_panel)
                 });
                 if tx.send((pool, status)).is_err() {
@@ -1085,12 +1182,12 @@ async fn run() -> Result<()> {
             });
             let poll_pool_status = move || rx.recv().unwrap_or((None, None));
             thermal_tui::run_with_pool_status(&gov, *cap, Some(Box::new(poll_pool_status)))?;
-        }
+        },
         Commands::Fleet { cmd } => match cmd {
             FleetCmd::Status => fleet_status().await?,
             FleetCmd::Register { name, coordinator } => {
                 fleet_register(name.as_deref(), coordinator).await?
-            }
+            },
         },
         Commands::Mesh { cmd } => match cmd {
             MeshCmd::Status { queue, json } => mesh_cmd::status(queue, *json)?,
@@ -1122,15 +1219,19 @@ async fn run() -> Result<()> {
                         foreground: *foreground,
                     },
                 )?;
-            }
+            },
             FuseCmd::Unmount { mountpoint } => fuse_cmd::unmount(mountpoint)?,
             FuseCmd::Status { json } => fuse_cmd::status(*json)?,
-            FuseCmd::Commit { relpath, mountpoint, agent } => {
-                fuse_cmd::commit(relpath.as_deref(), mountpoint.as_deref(), agent.as_deref())?
-            }
-            FuseCmd::Discard { relpath, mountpoint, agent } => {
-                fuse_cmd::discard(relpath.as_deref(), mountpoint.as_deref(), agent.as_deref())?
-            }
+            FuseCmd::Commit {
+                relpath,
+                mountpoint,
+                agent,
+            } => fuse_cmd::commit(relpath.as_deref(), mountpoint.as_deref(), agent.as_deref())?,
+            FuseCmd::Discard {
+                relpath,
+                mountpoint,
+                agent,
+            } => fuse_cmd::discard(relpath.as_deref(), mountpoint.as_deref(), agent.as_deref())?,
             FuseCmd::List { json } => fuse_cmd::list(*json)?,
             FuseCmd::Provenance { path, json } => fuse_cmd::provenance(path, *json)?,
         },
@@ -1145,17 +1246,21 @@ async fn run() -> Result<()> {
         Commands::Completions { shell } => {
             let mut cmd = Cli::command();
             clap_complete::generate(*shell, &mut cmd, "sharecli", &mut std::io::stdout());
-        }
+        },
         Commands::Man { install } => cli_man(*install)?,
         Commands::Util { cmd } => cmd.run()?,
         Commands::List { json } => cli_list(*json)?,
-        Commands::Undo { limit, json, restore, id } => {
-            commands::undo::run(*limit, *json, *restore, id.clone())?
-        }
+        Commands::Undo {
+            limit,
+            json,
+            restore,
+            id,
+        } => commands::undo::run(*limit, *json, *restore, id.clone())?,
         Commands::Version => cli_version()?,
-        Commands::Uninstall { purge_data, dry_run } => {
-            commands::uninstall::run(*purge_data, *dry_run)?
-        }
+        Commands::Uninstall {
+            purge_data,
+            dry_run,
+        } => commands::uninstall::run(*purge_data, *dry_run)?,
     }
 
     Ok(())
@@ -1207,7 +1312,14 @@ fn session_cmd(cmd: &SessionCmd) -> Result<()> {
         println!("{}", serde_json::to_string_pretty(&store.get_layout(id)?)?);
         return Ok(());
     }
-    if let SessionCmd::Register { surface_id, harness, session_id, pid, state_sidecar } = cmd {
+    if let SessionCmd::Register {
+        surface_id,
+        harness,
+        session_id,
+        pid,
+        state_sidecar,
+    } = cmd
+    {
         let surface_id = surface_id
             .as_deref()
             .filter(|value| !value.trim().is_empty())
@@ -1232,7 +1344,15 @@ fn session_cmd(cmd: &SessionCmd) -> Result<()> {
         println!("{}", serde_json::to_string(&record)?);
         return Ok(());
     }
-    if let SessionCmd::Watch { interval_seconds, once, socket, token, state_sidecar, .. } = cmd {
+    if let SessionCmd::Watch {
+        interval_seconds,
+        once,
+        socket,
+        token,
+        state_sidecar,
+        ..
+    } = cmd
+    {
         run_session_watch(
             &store,
             socket,
@@ -1248,31 +1368,41 @@ fn session_cmd(cmd: &SessionCmd) -> Result<()> {
         SessionCmd::List { .. } => serde_json::to_value(service.list()?)?,
         SessionCmd::Inspect { .. } => {
             serde_json::to_value(service.inspect(operation.expect("id"))?)?
-        }
-        SessionCmd::RecoveryPlan { max_age_seconds, .. } => serde_json::to_value(
+        },
+        SessionCmd::RecoveryPlan {
+            max_age_seconds, ..
+        } => serde_json::to_value(
             service.recovery_plan(chrono::Duration::seconds(*max_age_seconds as i64))?,
         )?,
         SessionCmd::Observations { surface_id, .. } => {
             serde_json::to_value(service.observations(surface_id.as_deref())?)?
-        }
+        },
         SessionCmd::Compact { .. } => serde_json::json!({
             "removed": service.compact_observations()?
         }),
-        SessionCmd::Recover { execute, max_parallel, max_age_seconds, .. } => {
+        SessionCmd::Recover {
+            execute,
+            max_parallel,
+            max_age_seconds,
+            ..
+        } => {
             let sessions =
                 service.recovery_plan(chrono::Duration::seconds(*max_age_seconds as i64))?;
             let executor = RecoveryExecutor::new(*max_parallel);
-            let results =
-                if *execute { executor.execute(&sessions) } else { executor.dry_run(&sessions) };
+            let results = if *execute {
+                executor.execute(&sessions)
+            } else {
+                executor.dry_run(&sessions)
+            };
             serde_json::to_value(results)?
-        }
+        },
         SessionCmd::Observe { .. } => unreachable!("observe handled before service dispatch"),
         SessionCmd::LayoutSave { .. } => {
             unreachable!("layout save handled before service dispatch")
-        }
+        },
         SessionCmd::LayoutList { .. } | SessionCmd::LayoutInspect { .. } => {
             unreachable!("layout operation handled before service dispatch")
-        }
+        },
         SessionCmd::Register { .. } => unreachable!("register handled before service dispatch"),
         SessionCmd::Watch { .. } => unreachable!("watch handled before service dispatch"),
     };
@@ -1290,7 +1420,9 @@ fn run_session_watch(
 ) -> Result<()> {
     let client = GhosttyControlClient::new(socket, token.map(str::to_owned));
     let sidecar = SidecarStateProvider::new(
-        state_sidecar.map(std::path::Path::to_path_buf).unwrap_or_else(default_state_sidecar),
+        state_sidecar
+            .map(std::path::Path::to_path_buf)
+            .unwrap_or_else(default_state_sidecar),
     );
     let interval = std::time::Duration::from_secs(interval_seconds.clamp(1, 3600));
     loop {
@@ -1313,7 +1445,10 @@ fn observe_ghostty_surfaces(
     let observed_at = chrono::Utc::now().to_rfc3339();
     let report = SurfaceObservationScanner::new(client, state, store).scan(&observed_at)?;
     for failure in &report.failures {
-        eprintln!("sharecli session watch: {} unavailable: {}", failure.surface_id, failure.error);
+        eprintln!(
+            "sharecli session watch: {} unavailable: {}",
+            failure.surface_id, failure.error
+        );
     }
     Ok(report.recorded)
 }
@@ -1326,7 +1461,13 @@ fn default_state_sidecar() -> std::path::PathBuf {
 
 fn surface_cmd(cmd: &SurfaceCmd) -> Result<()> {
     match cmd {
-        SurfaceCmd::Send { socket, surface_id, text, bytes, token } => {
+        SurfaceCmd::Send {
+            socket,
+            surface_id,
+            text,
+            bytes,
+            token,
+        } => {
             let client = GhosttyControlClient::new(socket, token.clone());
             if let Some(text) = text {
                 client.send_text(surface_id, text)?;
@@ -1344,19 +1485,30 @@ fn surface_cmd(cmd: &SurfaceCmd) -> Result<()> {
                 anyhow::bail!("surface send requires --text or --bytes");
             }
             println!("{{\"ok\":true}}");
-        }
-        SurfaceCmd::Read { socket, surface_id, max_bytes, token } => {
+        },
+        SurfaceCmd::Read {
+            socket,
+            surface_id,
+            max_bytes,
+            token,
+        } => {
             let client = GhosttyControlClient::new(socket, token.clone());
             println!(
                 "{}",
                 serde_json::to_string_pretty(&client.read_surface(surface_id, *max_bytes)?)?
             );
-        }
-        SurfaceCmd::Resize { socket, surface_id, rows, cols, token } => {
+        },
+        SurfaceCmd::Resize {
+            socket,
+            surface_id,
+            rows,
+            cols,
+            token,
+        } => {
             let client = GhosttyControlClient::new(socket, token.clone());
             client.resize(surface_id, *rows, *cols)?;
             println!("{{\"ok\":true}}");
-        }
+        },
         SurfaceCmd::Watch {
             socket,
             surface_id,
@@ -1387,12 +1539,23 @@ fn surface_cmd(cmd: &SurfaceCmd) -> Result<()> {
             }
             #[cfg(not(unix))]
             {
-                let _ =
-                    (socket, surface_id, from_seq, max_chunk_bytes, queue_capacity, once, token);
+                let _ = (
+                    socket,
+                    surface_id,
+                    from_seq,
+                    max_chunk_bytes,
+                    queue_capacity,
+                    once,
+                    token,
+                );
                 anyhow::bail!("surface watch requires a Unix control socket (macOS/Linux)")
             }
-        }
-        SurfaceCmd::LayoutSnapshot { socket, output, token } => {
+        },
+        SurfaceCmd::LayoutSnapshot {
+            socket,
+            output,
+            token,
+        } => {
             let client = GhosttyControlClient::new(socket, token.clone());
             let snapshot = client.snapshot_layout()?;
             let encoded = serde_json::to_string_pretty(&snapshot)?;
@@ -1405,13 +1568,17 @@ fn surface_cmd(cmd: &SurfaceCmd) -> Result<()> {
             } else {
                 println!("{encoded}");
             }
-        }
-        SurfaceCmd::LayoutRestore { input, socket, token } => {
+        },
+        SurfaceCmd::LayoutRestore {
+            input,
+            socket,
+            token,
+        } => {
             let snapshot: LayoutSnapshot = serde_json::from_str(&std::fs::read_to_string(input)?)?;
             let client = GhosttyControlClient::new(socket, token.clone());
             let report = client.restore_layout(&snapshot)?;
             println!("{}", serde_json::to_string_pretty(&report)?);
-        }
+        },
     }
     Ok(())
 }
@@ -1437,7 +1604,8 @@ fn cli_man(install: bool) -> Result<()> {
 
     let man = Man::new(Cli::command());
     let mut buffer: Vec<u8> = Vec::new();
-    man.render(&mut buffer).map_err(|e| anyhow::anyhow!("man page render failed: {e}"))?;
+    man.render(&mut buffer)
+        .map_err(|e| anyhow::anyhow!("man page render failed: {e}"))?;
     let rendered = String::from_utf8(buffer).map_err(|e| anyhow::anyhow!("man page utf-8: {e}"))?;
 
     if install {
@@ -1463,7 +1631,10 @@ fn cli_man(install: bool) -> Result<()> {
 /// tree + `util_cmd::UtilCmd` variant list.
 fn cli_list(as_json: bool) -> Result<()> {
     let cast_modules: &[(&str, &str)] = &[
-        ("register", "Register a pane: `cast register <name> <address>`"),
+        (
+            "register",
+            "Register a pane: `cast register <name> <address>`",
+        ),
         ("unregister", "Unregister a pane by name"),
         ("list", "List all registered panes"),
         ("send", "Send text to a registered pane (`<name> [file]`)"),
@@ -1471,7 +1642,10 @@ fn cli_list(as_json: bool) -> Result<()> {
     ];
 
     let mesh_modules: &[(&str, &str)] = &[
-        ("status", "Show Maildir queue depth (`mesh status --queue <path>`)"),
+        (
+            "status",
+            "Show Maildir queue depth (`mesh status --queue <path>`)",
+        ),
         (
             "reclaim",
             "Return in-flight tasks for an owner (`mesh reclaim --queue <path> --owner <id>`)",
@@ -1479,14 +1653,32 @@ fn cli_list(as_json: bool) -> Result<()> {
     ];
 
     let fuse_modules: &[(&str, &str)] = &[
-        ("probe", "Read-only KEXT -> FSKit -> non-FUSE backend evidence"),
-        ("mount", "Mount intercept over backing (`fuse mount <backing> <mountpoint> [--cow]`)"),
-        ("unmount", "Unmount registered intercept (`fuse unmount <mountpoint>`)"),
+        (
+            "probe",
+            "Read-only KEXT -> FSKit -> non-FUSE backend evidence",
+        ),
+        (
+            "mount",
+            "Mount intercept over backing (`fuse mount <backing> <mountpoint> [--cow]`)",
+        ),
+        (
+            "unmount",
+            "Unmount registered intercept (`fuse unmount <mountpoint>`)",
+        ),
         ("status", "FUSE read-cache + write-serialize meters"),
-        ("commit", "Commit staged CoW (`fuse commit [relpath] [--agent]`)"),
-        ("discard", "Discard staged CoW (`fuse discard [relpath] [--agent]`)"),
+        (
+            "commit",
+            "Commit staged CoW (`fuse commit [relpath] [--agent]`)",
+        ),
+        (
+            "discard",
+            "Discard staged CoW (`fuse discard [relpath] [--agent]`)",
+        ),
         ("list", "List mounts + pending CoW by agent"),
-        ("provenance", "Read FUSE write xattrs on a backing file (`fuse provenance <path>`)"),
+        (
+            "provenance",
+            "Read FUSE write xattrs on a backing file (`fuse provenance <path>`)",
+        ),
     ];
 
     let util_modules: &[(&str, &str)] = &[
@@ -1517,22 +1709,34 @@ fn cli_list(as_json: bool) -> Result<()> {
 
     println!("sharecli CLI surfaces");
     println!();
-    println!("cast <subcommand>  -- pane casting ({} subcommands)", cast_modules.len());
+    println!(
+        "cast <subcommand>  -- pane casting ({} subcommands)",
+        cast_modules.len()
+    );
     for (n, d) in cast_modules {
         println!("  - {:<11} {}", n, d);
     }
     println!();
-    println!("mesh <subcommand>  -- Maildir task queue ({} subcommands)", mesh_modules.len());
+    println!(
+        "mesh <subcommand>  -- Maildir task queue ({} subcommands)",
+        mesh_modules.len()
+    );
     for (n, d) in mesh_modules {
         println!("  - {:<11} {}", n, d);
     }
     println!();
-    println!("fuse <subcommand>  -- FUSE IO intercept ({} subcommands)", fuse_modules.len());
+    println!(
+        "fuse <subcommand>  -- FUSE IO intercept ({} subcommands)",
+        fuse_modules.len()
+    );
     for (n, d) in fuse_modules {
         println!("  - {:<11} {}", n, d);
     }
     println!();
-    println!("util <subcommand>  -- utility modules ({} subcommands)", util_modules.len());
+    println!(
+        "util <subcommand>  -- utility modules ({} subcommands)",
+        util_modules.len()
+    );
     for (n, d) in util_modules {
         println!("  - {:<11} {}", n, d);
     }
@@ -1582,11 +1786,11 @@ async fn fleet_status() -> Result<()> {
     match sharecli_fleet::connect(DEFAULT_COORDINATOR).await {
         Ok(_client) => {
             println!("Fleet registry: connected to {DEFAULT_COORDINATOR}");
-        }
+        },
         Err(e) => {
             println!("Fleet registry: not connected ({e})");
             println!("  Run `sharecli fleet register` to join the fleet.");
-        }
+        },
     }
     Ok(())
 }
@@ -1610,11 +1814,11 @@ async fn fleet_register(name: Option<&str>, coordinator: &str) -> Result<()> {
                 "Registered device '{}' (os={}, slots={})",
                 record.device_id, record.os, record.available_slots
             );
-        }
+        },
         Err(e) => {
             println!("Registration failed: {e}");
             println!("  Is the NATS coordinator running at '{coordinator}'?");
-        }
+        },
     }
     Ok(())
 }
@@ -1642,14 +1846,14 @@ fn proc_compose_cmd(cmd: &ProcComposeCmd) -> Result<()> {
             let cfg = proc_compose::load_config(&path)?;
             let defs = cfg.to_process_defs();
             proc_compose::print_status(&defs);
-        }
+        },
         ProcComposeCmd::List { file } => {
             let path = resolve_path(file)?;
             let cfg = proc_compose::load_config(&path)?;
             for d in cfg.to_process_defs() {
                 println!("{}", d.name);
             }
-        }
+        },
     }
     Ok(())
 }
@@ -1689,7 +1893,10 @@ async fn optimize(apply: bool) -> Result<()> {
         println!("- Consider reducing max instances per harness");
     }
     if total_mem > 4096 {
-        println!("- Memory usage is high ({} MB). Consider pruning idle processes.", total_mem);
+        println!(
+            "- Memory usage is high ({} MB). Consider pruning idle processes.",
+            total_mem
+        );
     }
 
     if apply {

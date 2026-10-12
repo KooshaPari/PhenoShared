@@ -31,7 +31,7 @@ pub fn bake_agent_then_pack(req: &PackRequest) -> Result<PackageManifest> {
     match bake_req.pack_method {
         PackMethod::MkfsExt4 | PackMethod::VirtMakeFs | PackMethod::DockerToExt4 => {
             live_pack(&bake_req)
-        }
+        },
         PackMethod::Hermetic | PackMethod::DockerExport => Err(PhenoError::BadRequest(
             "bake_agent_then_pack requires PackMethod::MkfsExt4, VirtMakeFs, or DockerToExt4 \
              (stage-only: unikernel::pack::stage_vsock_agent_into_tree; \

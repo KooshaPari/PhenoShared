@@ -74,10 +74,10 @@ fn pct_encode(s: &str) -> String {
         match b {
             b'A'..=b'Z' | b'a'..=b'z' | b'0'..=b'9' | b'-' | b'_' | b'.' | b'~' => {
                 out.push(b as char)
-            }
+            },
             _ => {
                 let _ = write!(out, "%{b:02X}");
-            }
+            },
         }
     }
     out
@@ -104,12 +104,10 @@ impl OAuthPkceFlow {
                 format!("set {OAUTH_AUTHORIZE_URL_ENV} (authorization endpoint)"),
             )
         })?;
-        let client_id = std::env::var(OAUTH_CLIENT_ID_ENV).map_err(|_| {
-            oauth_unavailable("from_env", format!("set {OAUTH_CLIENT_ID_ENV}"))
-        })?;
-        let redirect_uri = std::env::var(OAUTH_REDIRECT_URI_ENV).map_err(|_| {
-            oauth_unavailable("from_env", format!("set {OAUTH_REDIRECT_URI_ENV}"))
-        })?;
+        let client_id = std::env::var(OAUTH_CLIENT_ID_ENV)
+            .map_err(|_| oauth_unavailable("from_env", format!("set {OAUTH_CLIENT_ID_ENV}")))?;
+        let redirect_uri = std::env::var(OAUTH_REDIRECT_URI_ENV)
+            .map_err(|_| oauth_unavailable("from_env", format!("set {OAUTH_REDIRECT_URI_ENV}")))?;
         Self::new(&authorize_url, &client_id, &redirect_uri, scope)
     }
 
@@ -168,10 +166,7 @@ impl OAuthPkceFlow {
 
     /// Parse `code` + `state` from a redirect URL or raw query string.
     pub fn parse_redirect_params(input: &str) -> Result<(String, String)> {
-        let q = input
-            .split_once('?')
-            .map(|(_, q)| q)
-            .unwrap_or(input);
+        let q = input.split_once('?').map(|(_, q)| q).unwrap_or(input);
         let mut map = HashMap::new();
         for pair in q.split('&') {
             if let Some((k, v)) = pair.split_once('=') {
@@ -207,7 +202,10 @@ mod tests {
         let url = flow.authorization_url();
         assert!(url.contains("code_challenge_method=S256"));
         assert!(url.contains("client_id=client-1"));
-        assert_eq!(flow.code_challenge, pkce_s256_challenge(&flow.code_verifier));
+        assert_eq!(
+            flow.code_challenge,
+            pkce_s256_challenge(&flow.code_verifier)
+        );
         flow.validate_state(&flow.state).unwrap();
         assert!(flow.validate_state("nope").is_err());
     }
@@ -231,7 +229,7 @@ mod tests {
         std::env::remove_var(OAUTH_REDIRECT_URI_ENV);
         let err = OAuthPkceFlow::from_env(None).unwrap_err();
         assert_eq!(
-            err.unsupported_code(),
+            err.unsupported_code_value(),
             Some(codes::DESKTOP_SECURITY_UNAVAILABLE)
         );
     }

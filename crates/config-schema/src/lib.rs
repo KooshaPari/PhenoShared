@@ -73,7 +73,7 @@ impl ConfigSchema {
                     return Ok(());
                 }
                 return Err(SchemaError::MissingField(missing[0].name.clone()));
-            }
+            },
         };
 
         for field in &self.fields {
@@ -86,12 +86,12 @@ impl ConfigSchema {
                             got: format!("{:?}", value),
                         });
                     }
-                }
+                },
                 None => {
                     if field.required {
                         return Err(SchemaError::MissingField(field.name.clone()));
                     }
-                }
+                },
             }
         }
         Ok(())

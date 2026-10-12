@@ -56,9 +56,8 @@ fn hermetic_memory_cpu_without_disk() {
 fn hermetic_disk_writes_io_max() {
     let parent = fake_cgroup_tree();
     seed_child_controllers(&parent, "h2");
-    let status =
-        apply_plan_at(&parent, "h2", &base_plan(Some(100)), Some((8, 0)), None)
-            .expect("apply with disk");
+    let status = apply_plan_at(&parent, "h2", &base_plan(Some(100)), Some((8, 0)), None)
+        .expect("apply with disk");
     assert!(status.disk_enforced);
     assert_eq!(
         status.io_max.as_deref(),
@@ -75,7 +74,7 @@ fn hermetic_disk_without_device_fail_loud() {
     seed_child_controllers(&parent, "h3");
     let err = apply_plan_at(&parent, "h3", &base_plan(Some(50)), None, None).unwrap_err();
     assert_eq!(
-        err.unsupported_code(),
+        err.unsupported_code_value(),
         Some(codes::SANDBOX_CGROUP_DISK_UNAVAILABLE)
     );
     let _ = fs::remove_dir_all(&parent);

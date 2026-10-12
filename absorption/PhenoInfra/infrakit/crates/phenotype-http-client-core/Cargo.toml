@@ -8,6 +8,8 @@ repository = "https://github.com/KooshaPari/phenotype-infrakit"
 authors = ["Phenotype Team"]
 description = "Unified HTTP client patterns and pooling strategies for Phenotype ecosystem"
 
+[workspace]
+
 [lib]
 path = "src/lib.rs"
 

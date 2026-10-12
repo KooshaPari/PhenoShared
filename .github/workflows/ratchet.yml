@@ -34,6 +34,10 @@ jobs:
 
       - name: Run tests with coverage
         run: |
+          # E1.10: without pipefail this step's exit status was `tee`'s (always 0),
+          # so a failing test run could not fail the step. The tee is kept for the
+          # log artifact.
+          set -o pipefail
           npm test -- --coverage --coverageReporters=json-summary 2>&1 | tee test-output.log
 
       - name: Read previous coverage

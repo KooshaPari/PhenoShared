@@ -98,7 +98,7 @@ impl From<PortError> for ComposeError {
         match e {
             PortError::Validation(s) | PortError::NotFound(s) | PortError::Transport(s) => {
                 Self::Backend(s)
-            }
+            },
             PortError::Unsupported(s) => Self::Validation(s),
         }
     }
@@ -199,8 +199,7 @@ mod tests {
     #[test]
     fn noop_composer_uses_artifact_name_when_provided() {
         let c = NoopComposer;
-        let m = Manifest::new("phenocommand-web")
-            .with_artifact_name("explicit-artifact:1.0.0");
+        let m = Manifest::new("phenocommand-web").with_artifact_name("explicit-artifact:1.0.0");
         let a = c.compose(&m).unwrap();
         assert_eq!(a.id, "explicit-artifact:1.0.0");
         assert_eq!(a.image, ImageRef::new("explicit-artifact:1.0.0"));
@@ -224,7 +223,10 @@ mod tests {
         let a = c.compose(&m).unwrap();
         assert_eq!(a.tag("channel"), Some("stable"));
         // the `image` tag overrides the default image ref
-        assert_eq!(a.image, ImageRef::new("registry.phenotype/phenocommand/web:0.1.0"));
+        assert_eq!(
+            a.image,
+            ImageRef::new("registry.phenotype/phenocommand/web:0.1.0")
+        );
     }
 
     #[test]

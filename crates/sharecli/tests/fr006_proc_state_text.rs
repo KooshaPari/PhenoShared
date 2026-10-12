@@ -31,7 +31,11 @@ fn fr006_proc_state_text_table_known_state_shows_letter() {
 #[test]
 fn fr006_proc_state_text_cli_table_header_includes_state() {
     let out = bin().args(["proc"]).output().expect("spawn sharecli proc");
-    assert!(out.status.success(), "proc MUST exit 0; stderr: {:?}", out.stderr);
+    assert!(
+        out.status.success(),
+        "proc MUST exit 0; stderr: {:?}",
+        out.stderr
+    );
     let s = String::from_utf8_lossy(&out.stdout);
     // The flat inventory table (and its STATE header) only renders when the
     // host scan detects known agents; agent-less hosts print a placeholder.
@@ -58,7 +62,10 @@ fn fr006_proc_state_text_detail_json_includes_state() {
     let detail = build_proc_detail(&src, pid).expect("build detail");
     assert_eq!(detail.state, "S");
     let json = serde_json::to_string(&detail).expect("serialize ProcDetailSnapshot");
-    assert!(json.contains("\"state\":\"S\""), "proc detail JSON MUST include state; got: {json}");
+    assert!(
+        json.contains("\"state\":\"S\""),
+        "proc detail JSON MUST include state; got: {json}"
+    );
 }
 
 /// FR-006 / AC-006.33 — unknown proc state serializes as empty JSON string.
@@ -85,10 +92,20 @@ fn fr006_proc_state_text_detail_json_missing_state_empty_string() {
 #[test]
 fn fr006_proc_state_text_detail_cli_prints_state_line() {
     let pid = std::process::id();
-    let out = bin().args(["proc", "--pid", &pid.to_string()]).output().expect("spawn proc --pid");
-    assert!(out.status.success(), "proc --pid self MUST exit 0; stderr: {:?}", out.stderr);
+    let out = bin()
+        .args(["proc", "--pid", &pid.to_string()])
+        .output()
+        .expect("spawn proc --pid");
+    assert!(
+        out.status.success(),
+        "proc --pid self MUST exit 0; stderr: {:?}",
+        out.stderr
+    );
     let s = String::from_utf8_lossy(&out.stdout);
-    assert!(s.contains("State:"), "text detail MUST print State line; got: {s}");
+    assert!(
+        s.contains("State:"),
+        "text detail MUST print State line; got: {s}"
+    );
 }
 
 /// FR-006 / AC-006.33 — CLI proc --pid --json includes state key.
@@ -99,8 +116,15 @@ fn fr006_proc_state_text_detail_cli_json_includes_state_key() {
         .args(["proc", "--pid", &pid.to_string(), "--json"])
         .output()
         .expect("spawn proc --pid --json");
-    assert!(out.status.success(), "proc --pid --json MUST exit 0; stderr: {:?}", out.stderr);
+    assert!(
+        out.status.success(),
+        "proc --pid --json MUST exit 0; stderr: {:?}",
+        out.stderr
+    );
     let v: serde_json::Value =
         serde_json::from_slice(&out.stdout).expect("proc --pid --json MUST emit valid JSON");
-    assert!(v.get("state").is_some(), "proc detail JSON MUST include state key; got: {v}");
+    assert!(
+        v.get("state").is_some(),
+        "proc detail JSON MUST include state key; got: {v}"
+    );
 }

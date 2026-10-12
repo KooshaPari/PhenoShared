@@ -285,7 +285,7 @@ fn execute_node(
         true if card.max_soft_score == 0.0 => NodeStatus::Success,
         true if card.max_soft_score > 0.0 && card.soft_percentage < 100.0 => {
             NodeStatus::SoftFailure
-        }
+        },
         true => NodeStatus::Success,
         false => NodeStatus::HardFailure,
     };

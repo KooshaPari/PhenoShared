@@ -36,7 +36,11 @@ fn stderr(out: &std::process::Output) -> String {
 fn quick_start_journey_maps_steps_to_frs() {
     // Step 1 — NFR-001: binary under test runs and identifies as sharecli.
     let ver = bin().arg("-V").output().expect("spawn sharecli -V");
-    assert!(ver.status.success(), "-V MUST exit 0; stderr: {}", stderr(&ver));
+    assert!(
+        ver.status.success(),
+        "-V MUST exit 0; stderr: {}",
+        stderr(&ver)
+    );
     let ver_out = stdout(&ver);
     assert!(
         ver_out.to_lowercase().contains("sharecli"),
@@ -44,7 +48,10 @@ fn quick_start_journey_maps_steps_to_frs() {
     );
 
     // Step 2 — FR-002: config surface exposes init/validate; validate reports projects.
-    let cfg_help = bin().args(["config", "--help"]).output().expect("config --help");
+    let cfg_help = bin()
+        .args(["config", "--help"])
+        .output()
+        .expect("config --help");
     assert!(cfg_help.status.success(), "stderr: {}", stderr(&cfg_help));
     let cfg_help_out = stdout(&cfg_help).to_lowercase();
     assert!(
@@ -52,7 +59,10 @@ fn quick_start_journey_maps_steps_to_frs() {
         "FR-002 journey MUST advertise init+validate; got: {cfg_help_out}"
     );
 
-    let validate = bin().args(["config", "validate"]).output().expect("config validate");
+    let validate = bin()
+        .args(["config", "validate"])
+        .output()
+        .expect("config validate");
     assert!(
         validate.status.success(),
         "config validate MUST exit 0; stderr: {}",
@@ -69,7 +79,10 @@ fn quick_start_journey_maps_steps_to_frs() {
     );
 
     // Step 3 — FR-003: project surface exposes add/list; list is readable.
-    let proj_help = bin().args(["project", "--help"]).output().expect("project --help");
+    let proj_help = bin()
+        .args(["project", "--help"])
+        .output()
+        .expect("project --help");
     assert!(proj_help.status.success(), "stderr: {}", stderr(&proj_help));
     let proj_help_out = stdout(&proj_help).to_lowercase();
     assert!(
@@ -77,8 +90,15 @@ fn quick_start_journey_maps_steps_to_frs() {
         "FR-003 journey MUST advertise add+list; got: {proj_help_out}"
     );
 
-    let list = bin().args(["project", "list"]).output().expect("project list");
-    assert!(list.status.success(), "project list MUST exit 0; stderr: {}", stderr(&list));
+    let list = bin()
+        .args(["project", "list"])
+        .output()
+        .expect("project list");
+    assert!(
+        list.status.success(),
+        "project list MUST exit 0; stderr: {}",
+        stderr(&list)
+    );
     let list_out = stdout(&list);
     assert!(
         list_out.contains("Registered Projects:") || list_out.contains("No projects registered"),
@@ -87,7 +107,11 @@ fn quick_start_journey_maps_steps_to_frs() {
 
     // Step 4 — FR-001: ps prints the process table (empty set is OK).
     let ps = bin().arg("ps").output().expect("ps");
-    assert!(ps.status.success(), "ps MUST exit 0; stderr: {}", stderr(&ps));
+    assert!(
+        ps.status.success(),
+        "ps MUST exit 0; stderr: {}",
+        stderr(&ps)
+    );
     let ps_out = stdout(&ps);
     assert!(
         ps_out.contains("PID") && ps_out.contains("MEM"),
@@ -96,7 +120,11 @@ fn quick_start_journey_maps_steps_to_frs() {
 
     // Step 5 — FR-004: status + health are reachable verify surfaces.
     let status = bin().arg("status").output().expect("status");
-    assert!(status.status.success(), "status MUST exit 0; stderr: {}", stderr(&status));
+    assert!(
+        status.status.success(),
+        "status MUST exit 0; stderr: {}",
+        stderr(&status)
+    );
     let status_out = stdout(&status);
     assert!(
         status_out.contains("Process Status") || status_out.contains("Shared Runtime"),
@@ -104,7 +132,14 @@ fn quick_start_journey_maps_steps_to_frs() {
     );
 
     let health = bin().arg("health").output().expect("health");
-    assert!(health.status.success(), "health MUST exit 0; stderr: {}", stderr(&health));
+    assert!(
+        health.status.success(),
+        "health MUST exit 0; stderr: {}",
+        stderr(&health)
+    );
     let health_out = stdout(&health);
-    assert!(!health_out.trim().is_empty(), "FR-004 health MUST print a probe result; got empty");
+    assert!(
+        !health_out.trim().is_empty(),
+        "FR-004 health MUST print a probe result; got empty"
+    );
 }

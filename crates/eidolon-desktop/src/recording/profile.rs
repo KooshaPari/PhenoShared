@@ -85,7 +85,7 @@ pub fn ffmpeg_capture_args(output_path: &str, profile: QualityProfile) -> Vec<St
     #[cfg(target_os = "macos")]
     {
         let _ = (w, h); // resolution applied post-capture via encode path when needed
-        // avfoundation: screen index 1 is typically the main display; audio omitted.
+                        // avfoundation: screen index 1 is typically the main display; audio omitted.
         args.extend([
             "-y".into(),
             "-f".into(),
@@ -155,12 +155,12 @@ pub fn ffmpeg_capture_args(output_path: &str, profile: QualityProfile) -> Vec<St
 }
 
 /// Build FFmpeg argv for file→file re-encode (software libx264 / libvpx).
-pub fn ffmpeg_encode_args(input_path: &str, output_path: &str, profile: QualityProfile) -> Vec<String> {
-    let mut args = vec![
-        "-y".into(),
-        "-i".into(),
-        input_path.into(),
-    ];
+pub fn ffmpeg_encode_args(
+    input_path: &str,
+    output_path: &str,
+    profile: QualityProfile,
+) -> Vec<String> {
+    let mut args = vec!["-y".into(), "-i".into(), input_path.into()];
 
     if output_path.ends_with(".webm") {
         args.extend([
@@ -214,13 +214,7 @@ pub fn ffmpeg_test_pattern_args(
     let (w, h) = profile.resolution();
     let fps = profile.frame_rate();
     let src = format!("color=c=blue:s={w}x{h}:r={fps}:d={duration_secs}");
-    let mut args = vec![
-        "-y".into(),
-        "-f".into(),
-        "lavfi".into(),
-        "-i".into(),
-        src,
-    ];
+    let mut args = vec!["-y".into(), "-f".into(), "lavfi".into(), "-i".into(), src];
     args.extend([
         "-c:v".into(),
         "libx264".into(),

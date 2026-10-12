@@ -35,14 +35,20 @@ impl ProcTable {
         self.rows.push(r);
     }
     pub fn running_count(&self) -> usize {
-        self.rows.iter().filter(|r| r.status == ProcStatus::Running).count()
+        self.rows
+            .iter()
+            .filter(|r| r.status == ProcStatus::Running)
+            .count()
     }
     pub fn find_by_pid(&self, pid: u32) -> Option<&ProcRow> {
         self.rows.iter().find(|r| r.pid == pid)
     }
     pub fn sort_by_cpu(&mut self) {
-        self.rows
-            .sort_by(|a, b| b.cpu_pct.partial_cmp(&a.cpu_pct).unwrap_or(std::cmp::Ordering::Equal));
+        self.rows.sort_by(|a, b| {
+            b.cpu_pct
+                .partial_cmp(&a.cpu_pct)
+                .unwrap_or(std::cmp::Ordering::Equal)
+        });
     }
     pub fn total_mem_mb(&self) -> u64 {
         self.rows.iter().map(|r| r.mem_mb).sum()

@@ -273,7 +273,7 @@ fn merge_json(a: serde_json::Value, b: serde_json::Value) -> serde_json::Value {
                 x.insert(k, v);
             }
             serde_json::Value::Object(x)
-        }
+        },
         (a, _) => a,
     }
 }

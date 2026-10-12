@@ -86,8 +86,8 @@ impl GitObserver {
                         let _ = tx.send(git_event);
                     }
                 }
-            }
-            _ => {}
+            },
+            _ => {},
         }
     }
 

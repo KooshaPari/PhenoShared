@@ -66,7 +66,7 @@ program exists to find.
 | Was the 20-minute time box hit? | **No.** Workspace compiles totalled ~297 s; full non-member sweep added ~325 s |
 | Non-member manifests that even load | **75 / 515** (440 fail before compilation is attempted) |
 | Non-member manifests that compile | **40 pass / 35 fail** (of the 75 that load) |
-| Non-member crates with *real* compile errors | **4 distinct crates** (6 manifest entries) |
+| Non-member crates with *real* compile errors | **4 distinct crates** (6 manifest entries) — all 4 **fixed** under E2.2, 2026-10-08 (§4.3); no exclusions |
 | Biggest blocker to measuring non-members | **Manifest/workspace configuration, not code**: 292 "believes it's in a workspace when it's not" + 109 `workspace = true` inheritance errors |
 
 The single most important caveat: **`cargo check` is not `cargo build`, and `check` never links an
@@ -312,15 +312,35 @@ Members that **failed to compile: 0**.
 
 ### 4.2 Non-member crates with real compile errors
 
-6 manifest entries, covering **4 distinct crates**:
+6 manifest entries, covering **4 distinct crates**. All four were resolved under
+E2.2 on 2026-10-08 (see §4.3); the `Status` column is a later annotation, the
+`Error` and `Literal text` columns are the original measurement.
 
-| Crate | Error | Literal text |
-| --- | --- | --- |
-| `iac/oci-lottery` | E0432 ×2 | `error[E0432]: unresolved import \`oci_helpers\`` |
-| `iac/oci-post-acquire` | E0432 ×3 | `error[E0432]: unresolved import \`oci_helpers\`` |
-| `iac` (workspace, same root cause) | exit 101 | `error: could not compile \`oci-lottery\` (bin "oci-lottery") due to 2 previous errors` |
-| `crates/argis-extensions/argis-monitor` | E0432, E0624, E0271 | `error[E0432]: unresolved import \`opentelemetry_sdk::trace::TracerProvider\`` / `error[E0624]: associated function \`new\` is private` / `error[E0271]: type mismatch resolving \`<Vec<KeyValue> as IntoIterator>::Item == KeyValue\`` |
-| `crates/hexa-kit/agileplus-agents/crates/agileplus-agent-service` | E0308 | `error[E0308]: mismatched types` → `error: could not compile \`agileplus-agent-service\` (build script) due to 1 previous error` |
+| Crate | Error | Literal text | Status (E2.2, 2026-10-08) |
+| --- | --- | --- | --- |
+| `iac/oci-lottery` | E0432 ×2 | `error[E0432]: unresolved import \`oci_helpers\`` | **FIXED** — 5a5f912a |
+| `iac/oci-post-acquire` | E0432 ×3 | `error[E0432]: unresolved import \`oci_helpers\`` | **FIXED** — 317aed39 |
+| `iac` (workspace, same root cause) | exit 101 | `error: could not compile \`oci-lottery\` (bin "oci-lottery") due to 2 previous errors` | **FIXED** — `cargo check --manifest-path iac/Cargo.toml --offline` → exit 0 |
+| `crates/argis-extensions/argis-monitor` | E0432, E0624, E0271 | `error[E0432]: unresolved import \`opentelemetry_sdk::trace::TracerProvider\`` / `error[E0624]: associated function \`new\` is private` / `error[E0271]: type mismatch resolving \`<Vec<KeyValue> as IntoIterator>::Item == KeyValue\`` | **FIXED** — 2822ef5d |
+| `crates/hexa-kit/agileplus-agents/crates/agileplus-agent-service` | E0308 | `error[E0308]: mismatched types` → `error: could not compile \`agileplus-agent-service\` (build script) due to 1 previous error` | **FIXED** — bde31356 |
+
+### 4.3 E2.2 resolution (2026-10-08)
+
+Four commits, one per crate, each validated by a focused `cargo check --offline`
+that was run and whose exit code is recorded here. All fixes are small,
+source-or-manifest local, and none required exclusion.
+
+| Crate | Root cause | Fix | Validation |
+| --- | --- | --- | --- |
+| `iac/oci-lottery` | `oci_helpers` referenced but never declared in `[dependencies]` | add `oci-helpers` path dependency (1 line) | `cargo check` → **exit 0** |
+| `iac/oci-post-acquire` | same omission, 3 import sites | same 1-line path dependency | `cargo check` → **exit 0** |
+| `crates/argis-extensions/argis-monitor` | `opentelemetry_sdk` pinned at **0.32** while `opentelemetry` / `opentelemetry-otlp` were **0.27**, pulling a second `opentelemetry` into the graph | pin `opentelemetry_sdk` to 0.27 (matches the 0.27-era API `telemetry.rs` targets); lock resolves a single coherent 0.27.x set | `cargo check` → **exit 0** |
+| `crates/hexa-kit/agileplus-agents/crates/agileplus-agent-service` | `compile_protos<P>(&[P], &[P])` requires both slices at the same `P`; includes passed as `&[&PathBuf]` vs protos `&[PathBuf]` | pass `&[proto_root]` (1 line) + document the same-`P` constraint | `cargo check` → **exit 0** (build script regenerates `agileplus.v1.rs`) |
+
+Residual: none of the four is excluded. `iac` workspace root, previously exit
+101, now exits 0. Warnings only (unused `cfg`, dead `init_otlp`/`init_tracing`
+in argis-monitor; dead generated proto structs in agileplus-agent-service) —
+out of scope for E2.2.
 
 Full literal output for the cleanest reproduction:
 

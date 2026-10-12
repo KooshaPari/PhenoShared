@@ -29,14 +29,20 @@ pub fn parse(input: &str) -> Result<Vec<Entry>, String> {
             section = Some(name);
             continue;
         }
-        let eq_pos = line.find('=').ok_or_else(|| format!("line {}: missing '='", i + 1))?;
+        let eq_pos = line
+            .find('=')
+            .ok_or_else(|| format!("line {}: missing '='", i + 1))?;
         let key = line[..eq_pos].trim().to_string();
         let value_raw = line[eq_pos + 1..].trim();
         let value = strip_inline_comment(value_raw).trim().to_string();
         if key.is_empty() {
             return Err(format!("line {}: empty key", i + 1));
         }
-        out.push(Entry { section: section.clone(), key, value });
+        out.push(Entry {
+            section: section.clone(),
+            key,
+            value,
+        });
     }
     Ok(out)
 }
@@ -57,7 +63,9 @@ pub fn group_by_section(entries: &[Entry]) -> BTreeMap<String, BTreeMap<String, 
     let mut map: BTreeMap<String, BTreeMap<String, String>> = BTreeMap::new();
     for e in entries {
         let sec = e.section.clone().unwrap_or_default();
-        map.entry(sec).or_default().insert(e.key.clone(), e.value.clone());
+        map.entry(sec)
+            .or_default()
+            .insert(e.key.clone(), e.value.clone());
     }
     map
 }
@@ -72,14 +80,25 @@ mod tests {
     #[test]
     fn single_kv_no_section() {
         let v = parse("foo = bar").unwrap();
-        assert_eq!(v, vec![Entry { section: None, key: "foo".into(), value: "bar".into() }]);
+        assert_eq!(
+            v,
+            vec![Entry {
+                section: None,
+                key: "foo".into(),
+                value: "bar".into()
+            }]
+        );
     }
     #[test]
     fn section_and_kv() {
         let v = parse("[s]\nfoo=bar\n").unwrap();
         assert_eq!(
             v,
-            vec![Entry { section: Some("s".into()), key: "foo".into(), value: "bar".into() }]
+            vec![Entry {
+                section: Some("s".into()),
+                key: "foo".into(),
+                value: "bar".into()
+            }]
         );
     }
     #[test]

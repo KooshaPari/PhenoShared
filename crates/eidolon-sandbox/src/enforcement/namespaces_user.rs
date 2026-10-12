@@ -46,7 +46,7 @@ pub(crate) fn maps_need_newidmap(maps: &[UserNsIdMap], host_id: u32) -> bool {
         1 => {
             let m = &maps[0];
             m.count > 1 || m.inside != 0 || m.outside != host_id
-        }
+        },
         _ => true,
     }
 }
@@ -62,8 +62,22 @@ pub(crate) fn write_maps(uid_maps: &[UserNsIdMap], gid_maps: &[UserNsIdMap]) -> 
     let euid = unsafe { libc::geteuid() };
     let egid = unsafe { libc::getegid() };
 
-    apply_id_maps("uid", uid_maps, euid, NEWUIDMAP_ENV, "newuidmap", "/proc/self/uid_map")?;
-    apply_id_maps("gid", gid_maps, egid, NEWGIDMAP_ENV, "newgidmap", "/proc/self/gid_map")?;
+    apply_id_maps(
+        "uid",
+        uid_maps,
+        euid,
+        NEWUIDMAP_ENV,
+        "newuidmap",
+        "/proc/self/uid_map",
+    )?;
+    apply_id_maps(
+        "gid",
+        gid_maps,
+        egid,
+        NEWGIDMAP_ENV,
+        "newgidmap",
+        "/proc/self/gid_map",
+    )?;
     Ok(())
 }
 
@@ -103,18 +117,15 @@ fn invoke_newidmap(
         args.push(m.outside.to_string());
         args.push(m.count.to_string());
     }
-    let output = Command::new(&tool)
-        .args(&args)
-        .output()
-        .map_err(|e| {
-            PhenoError::unsupported_platform(
-                codes::SANDBOX_NAMESPACES_UNSUPPORTED,
-                format!(
-                    "spawn {tool:?} for USER ns {kind} map failed: {e} \
+    let output = Command::new(&tool).args(&args).output().map_err(|e| {
+        PhenoError::unsupported_platform(
+            codes::SANDBOX_NAMESPACES_UNSUPPORTED,
+            format!(
+                "spawn {tool:?} for USER ns {kind} map failed: {e} \
                      (install shadow-utils or set {tool_env})"
-                ),
-            )
-        })?;
+            ),
+        )
+    })?;
     if output.status.success() {
         return Ok(());
     }

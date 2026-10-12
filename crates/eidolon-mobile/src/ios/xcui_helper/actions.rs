@@ -38,13 +38,13 @@ fn execute_macos(cmd: &HelperCommand) -> Result<HelperOutput, String> {
             Ok(HelperOutput {
                 stdout: String::new(),
             })
-        }
+        },
         HelperCommand::Swipe { x1, y1, x2, y2, .. } => {
             run_osascript(&AppleScriptXcuiBridge::script_swipe(*x1, *y1, *x2, *y2))?;
             Ok(HelperOutput {
                 stdout: String::new(),
             })
-        }
+        },
         HelperCommand::Text { value, .. } => {
             if value.is_empty() {
                 return Err("text --value must be non-empty".into());
@@ -53,11 +53,11 @@ fn execute_macos(cmd: &HelperCommand) -> Result<HelperOutput, String> {
             Ok(HelperOutput {
                 stdout: String::new(),
             })
-        }
+        },
         HelperCommand::Viewport { udid } => {
             let line = resolve_viewport_line(udid)?;
             Ok(HelperOutput { stdout: line })
-        }
+        },
     }
 }
 
@@ -187,7 +187,7 @@ fn viewport_for_device_type(device_type: &str) -> Option<(u32, u32, f64)> {
         "iPhone-SE-3rd-generation" | "iPhone-SE--3rd-generation-" => Some((375, 667, 2.0)),
         "iPad-Pro-13-inch-M4-Wi-Fi" | "iPad-Pro-12-9-inch-6th-generation-8GB" => {
             Some((1024, 1366, 2.0))
-        }
+        },
         "iPad-Air-11-inch-M2-Wi-Fi" | "iPad-Air-5th-generation" => Some((820, 1180, 2.0)),
         _ => None,
     }

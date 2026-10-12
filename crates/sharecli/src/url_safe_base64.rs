@@ -45,8 +45,16 @@ pub fn encode(input: &[u8]) -> String {
         let n = ((b0 as u32) << 16) | ((b1 as u32) << 8) | (b2 as u32);
         let idx0 = ((n >> 18) & 0x3f) as usize;
         let idx1 = ((n >> 12) & 0x3f) as usize;
-        let idx2 = if chunk.len() > 1 { ((n >> 6) & 0x3f) as usize } else { 64 };
-        let idx3 = if chunk.len() > 2 { (n & 0x3f) as usize } else { 64 };
+        let idx2 = if chunk.len() > 1 {
+            ((n >> 6) & 0x3f) as usize
+        } else {
+            64
+        };
+        let idx3 = if chunk.len() > 2 {
+            (n & 0x3f) as usize
+        } else {
+            64
+        };
         out.push(ALPHABET[idx0] as char);
         out.push(ALPHABET[idx1] as char);
         if chunk.len() > 1 {

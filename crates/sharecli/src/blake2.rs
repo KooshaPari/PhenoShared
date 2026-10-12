@@ -55,11 +55,21 @@ impl Blake2bVar {
     /// Construct a new BLAKE2b hasher with `out_len` bytes of output
     /// (1..=64) and an optional `key` (up to 64 bytes).
     pub fn new(out_len: usize, key: &[u8]) -> Self {
-        assert!((1..=64).contains(&out_len), "BLAKE2b out_len must be 1..=64");
+        assert!(
+            (1..=64).contains(&out_len),
+            "BLAKE2b out_len must be 1..=64"
+        );
         assert!(key.len() <= 64, "BLAKE2b key must be <= 64 bytes");
         let mut h = BLAKE2B_IV;
         h[0] ^= 0x01010000u64 | ((key.len() as u64) << 8) | (out_len as u64);
-        let mut s = Blake2bVar { h, buf: [0u8; BLAKE2B_BLOCK], buf_len: 0, out_len, t0: 0, t1: 0 };
+        let mut s = Blake2bVar {
+            h,
+            buf: [0u8; BLAKE2B_BLOCK],
+            buf_len: 0,
+            out_len,
+            t0: 0,
+            t1: 0,
+        };
         if !key.is_empty() {
             s.buf[..key.len()].copy_from_slice(key);
             s.buf_len = BLAKE2B_BLOCK; // force a compress on next update
@@ -216,11 +226,20 @@ pub struct Blake2sVar {
 
 impl Blake2sVar {
     pub fn new(out_len: usize, key: &[u8]) -> Self {
-        assert!((1..=32).contains(&out_len), "BLAKE2s out_len must be 1..=32");
+        assert!(
+            (1..=32).contains(&out_len),
+            "BLAKE2s out_len must be 1..=32"
+        );
         assert!(key.len() <= 32, "BLAKE2s key must be <= 32 bytes");
         let mut h = BLAKE2S_IV;
         h[0] ^= 0x01010000u32 | ((key.len() as u32) << 8) | (out_len as u32);
-        let mut s = Blake2sVar { h, buf: [0u8; BLAKE2S_BLOCK], buf_len: 0, out_len, t: 0 };
+        let mut s = Blake2sVar {
+            h,
+            buf: [0u8; BLAKE2S_BLOCK],
+            buf_len: 0,
+            out_len,
+            t: 0,
+        };
         if !key.is_empty() {
             s.buf[..key.len()].copy_from_slice(key);
             s.buf_len = BLAKE2S_BLOCK;

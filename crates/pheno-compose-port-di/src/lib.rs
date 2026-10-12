@@ -33,8 +33,8 @@
 #![forbid(unsafe_code)]
 #![deny(missing_docs)]
 
-use phenocompose_port_composer::{Composer, NoopComposer};
 use crate::builder::ContainerBuilder;
+use phenocompose_port_composer::{Composer, NoopComposer};
 use phenocompose_port_publisher::{NoopPublisher, Publisher};
 use phenocompose_port_runtime::{NoopRuntime, Runtime};
 use phenocompose_port_secret::{InMemorySecretStore, SecretStore};
@@ -107,7 +107,6 @@ impl Default for Container {
     }
 }
 
-
 mod tests {
     use super::*;
     use super::*;
@@ -137,7 +136,10 @@ mod tests {
         // we can only compare by name; for the in-memory
         // secret store, the empty list is identical.
         assert_eq!(from_default.composer().name(), from_ctor.composer().name());
-        assert_eq!(from_default.publisher().name(), from_ctor.publisher().name());
+        assert_eq!(
+            from_default.publisher().name(),
+            from_ctor.publisher().name()
+        );
         assert_eq!(from_default.runtime().name(), from_ctor.runtime().name());
         assert_eq!(from_default.secrets().name(), from_ctor.secrets().name());
         assert!(from_ctor.secrets().list("default").unwrap().is_empty());
@@ -205,8 +207,14 @@ mod tests {
     fn default_builder_matches_default_container() {
         let from_default = Container::default();
         let from_builder = ContainerBuilder::new().build();
-        assert_eq!(from_default.composer().name(), from_builder.composer().name());
-        assert_eq!(from_default.publisher().name(), from_builder.publisher().name());
+        assert_eq!(
+            from_default.composer().name(),
+            from_builder.composer().name()
+        );
+        assert_eq!(
+            from_default.publisher().name(),
+            from_builder.publisher().name()
+        );
         assert_eq!(from_default.runtime().name(), from_builder.runtime().name());
         assert_eq!(from_default.secrets().name(), from_builder.secrets().name());
     }
@@ -239,10 +247,7 @@ mod tests {
         assert_eq!(receipt.artifact_id, artifact.id);
 
         // 3. Spawn a container from the artifact's image.
-        let id: ContainerId = c
-            .runtime()
-            .spawn(&artifact.image)
-            .expect("spawn ok");
+        let id: ContainerId = c.runtime().spawn(&artifact.image).expect("spawn ok");
         let status: ContainerStatus = c.runtime().status(&id).expect("status ok");
         assert_eq!(status, ContainerStatus::Running);
 

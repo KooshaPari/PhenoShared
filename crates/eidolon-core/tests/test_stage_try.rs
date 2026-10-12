@@ -170,7 +170,7 @@ async fn virtual_stage_try_methods_route_errors_to_method_variant() {
                 msg.contains("timeout"),
                 "expected message to contain 'timeout', got {msg:?}"
             );
-        }
+        },
         other => panic!("expected StageError::Viewport, got {other:?}"),
     }
 
@@ -178,7 +178,7 @@ async fn virtual_stage_try_methods_route_errors_to_method_variant() {
     match fail.try_screenshot("/tmp/try-fail.png").await {
         Err(StageError::Capture(msg)) => {
             assert!(msg.contains("timeout"), "got {msg:?}");
-        }
+        },
         other => panic!("expected StageError::Capture, got {other:?}"),
     }
 

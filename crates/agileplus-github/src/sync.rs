@@ -113,10 +113,10 @@ impl GitHubSyncAdapter {
             match self.client.get_issue(issue_number).await {
                 Ok(issue) => {
                     changes.push((item_id, issue.state));
-                }
+                },
                 Err(e) => {
                     tracing::warn!("Failed to poll GitHub issue #{}: {}", issue_number, e);
-                }
+                },
             }
         }
 
@@ -148,7 +148,7 @@ fn format_bug_body(item: &BacklogItem) -> String {
 fn hash_content(content: &str) -> String {
     let mut hasher = Sha256::new();
     hasher.update(content.as_bytes());
-    format!("{:x}", hasher.finalize())
+    hex::encode(hasher.finalize())
 }
 
 #[cfg(test)]

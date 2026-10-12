@@ -5,7 +5,11 @@ pub struct TextSlab {
 }
 impl TextSlab {
     pub fn new() -> Self {
-        Self { entries: Vec::new(), free: Vec::new(), next_id: 0 }
+        Self {
+            entries: Vec::new(),
+            free: Vec::new(),
+            next_id: 0,
+        }
     }
     pub fn insert(&mut self, s: impl Into<String>) -> u32 {
         if let Some(id) = self.free.pop() {
@@ -18,7 +22,10 @@ impl TextSlab {
         id
     }
     pub fn get(&self, id: u32) -> Option<&str> {
-        self.entries.get(id as usize).and_then(|e| e.as_ref()).map(|(_, s)| s.as_str())
+        self.entries
+            .get(id as usize)
+            .and_then(|e| e.as_ref())
+            .map(|(_, s)| s.as_str())
     }
     pub fn remove(&mut self, id: u32) -> bool {
         if self.entries.get(id as usize).is_some() {

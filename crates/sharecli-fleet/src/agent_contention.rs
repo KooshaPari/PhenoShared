@@ -20,7 +20,10 @@ pub struct AgentContentionThresholds {
 
 impl Default for AgentContentionThresholds {
     fn default() -> Self {
-        Self { warn_at: 4, refuse_at: 8 }
+        Self {
+            warn_at: 4,
+            refuse_at: 8,
+        }
     }
 }
 
@@ -97,7 +100,10 @@ pub fn count_host_agents() -> usize {
 
 /// Sum RSS across live watched agent PIDs (FR-006 × FR-011).
 pub fn total_watched_agent_rss_bytes() -> u64 {
-    watch_host_agents().iter().map(|row| row.resource.mem_rss_bytes).sum()
+    watch_host_agents()
+        .iter()
+        .map(|row| row.resource.mem_rss_bytes)
+        .sum()
 }
 
 /// Live combined contention tier from proc scan + resource samples.
@@ -239,7 +245,10 @@ mod tests {
 
     #[test]
     fn agent_contention_tier_boundaries() {
-        let t = AgentContentionThresholds { warn_at: 4, refuse_at: 8 };
+        let t = AgentContentionThresholds {
+            warn_at: 4,
+            refuse_at: 8,
+        };
         assert_eq!(agent_contention_tier(0, t), AgentContentionTier::Ok);
         assert_eq!(agent_contention_tier(3, t), AgentContentionTier::Ok);
         assert_eq!(agent_contention_tier(4, t), AgentContentionTier::Warn);
@@ -249,18 +258,34 @@ mod tests {
 
     #[test]
     fn agent_resource_contention_tier_boundaries() {
-        let t =
-            AgentResourceThresholds { warn_total_rss_bytes: 1_000, refuse_total_rss_bytes: 2_000 };
-        assert_eq!(agent_resource_contention_tier(500, t), AgentContentionTier::Ok);
-        assert_eq!(agent_resource_contention_tier(1_000, t), AgentContentionTier::Warn);
-        assert_eq!(agent_resource_contention_tier(2_000, t), AgentContentionTier::Refuse);
+        let t = AgentResourceThresholds {
+            warn_total_rss_bytes: 1_000,
+            refuse_total_rss_bytes: 2_000,
+        };
+        assert_eq!(
+            agent_resource_contention_tier(500, t),
+            AgentContentionTier::Ok
+        );
+        assert_eq!(
+            agent_resource_contention_tier(1_000, t),
+            AgentContentionTier::Warn
+        );
+        assert_eq!(
+            agent_resource_contention_tier(2_000, t),
+            AgentContentionTier::Refuse
+        );
     }
 
     #[test]
     fn combined_tier_takes_max_of_count_and_rss() {
-        let count_t = AgentContentionThresholds { warn_at: 4, refuse_at: 8 };
-        let rss_t =
-            AgentResourceThresholds { warn_total_rss_bytes: 1_000, refuse_total_rss_bytes: 2_000 };
+        let count_t = AgentContentionThresholds {
+            warn_at: 4,
+            refuse_at: 8,
+        };
+        let rss_t = AgentResourceThresholds {
+            warn_total_rss_bytes: 1_000,
+            refuse_total_rss_bytes: 2_000,
+        };
         assert_eq!(
             combined_agent_contention_tier(0, 2_500, count_t, rss_t),
             AgentContentionTier::Refuse,

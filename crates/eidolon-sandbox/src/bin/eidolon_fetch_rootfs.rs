@@ -25,7 +25,7 @@ fn main() -> ExitCode {
         Err(e) => {
             eprintln!("eidolon-fetch-rootfs: {e}");
             ExitCode::FAILURE
-        }
+        },
     }
 }
 
@@ -37,13 +37,13 @@ fn run(args: Vec<String>) -> eidolon_core::Result<()> {
             "-h" | "--help" => {
                 print_help();
                 return Ok(());
-            }
+            },
             "--resolve-only" => fetch = false,
             other => {
                 return Err(eidolon_core::error::PhenoError::BadRequest(format!(
                     "unknown argument {other:?} — try --help"
                 )));
-            }
+            },
         }
         i += 1;
     }
@@ -55,12 +55,12 @@ fn run(args: Vec<String>) -> eidolon_core::Result<()> {
     match effective_release_pin() {
         Ok(Some(pin)) => {
             eprintln!("  active:  {} (env_pin={})", pin.filename, pin.from_env);
-        }
+        },
         Ok(None) => {
             eprintln!(
                 "  active:  <none — set {ROOTFS_ASSET_URL_ENV}+{ROOTFS_ASSET_SHA256_ENV} or publish>"
             );
-        }
+        },
         Err(e) => return Err(e),
     }
     if let Ok(cache) = rootfs_release_cache_dir() {

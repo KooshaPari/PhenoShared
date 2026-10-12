@@ -130,7 +130,10 @@ pub fn format_ci_result(
         };
         categories.insert(
             "Fixed".to_string(),
-            vec![format!("CI **FAILED** for {}\n\n```\n{}\n```", repo_name, truncated)],
+            vec![format!(
+                "CI **FAILED** for {}\n\n```\n{}\n```",
+                repo_name, truncated
+            )],
         );
     }
 
@@ -139,9 +142,12 @@ pub fn format_ci_result(
         if success { "✅" } else { "❌" },
         Utc::now().format("%Y-%m-%d %H:%M UTC")
     ))
-    .with_category(if success { "Added" } else { "Fixed" }, categories
-        .remove(if success { "Added" } else { "Fixed" })
-        .unwrap_or_default())
+    .with_category(
+        if success { "Added" } else { "Fixed" },
+        categories
+            .remove(if success { "Added" } else { "Fixed" })
+            .unwrap_or_default(),
+    )
 }
 
 #[cfg(test)]

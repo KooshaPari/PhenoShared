@@ -48,7 +48,7 @@ jobs:
             libwayland-dev
 
       - name: Run E2E smoke tests
-        run: cargo test -p fabric-integration-tests --test e2e_smoke --no-fail-fast
+        run: cargo test -p fabric-integration-tests --test e2e_smoke --no-fail-fast --locked
 
   # ── E2E daemon start/stop via binary ────────────────────────────────
   e2e-binary:
@@ -84,7 +84,7 @@ jobs:
             libwayland-dev
 
       - name: Build daemon binary
-        run: cargo build -p fabric-daemon --release
+        run: cargo build -p fabric-daemon --release --locked
 
       - name: Start daemon in background
         run: |

@@ -133,8 +133,8 @@ pub fn pack_tag(prop_type: u16, prop_id: u16) -> u32 {
 
 /// Unpack a 32-bit MAPI tag into (type, id).
 pub fn unpack_tag(tag: u32) -> (u16, u16) {
-    let t = (tag & 0xFFFF) as u16;
-    let i = ((tag >> 16) & 0xFFFF) as u16;
+    let t = (tag & 0xffff) as u16;
+    let i = ((tag >> 16) & 0xffff) as u16;
     (t, i)
 }
 
@@ -181,7 +181,9 @@ pub fn parse(input: &[u8], as_32bit: bool) -> Result<Vec<MapiProp>, String> {
         };
         pos += tag_size;
         let flags = u16::from_le_bytes(
-            input[pos..pos + 2].try_into().expect("2-byte flags slice in bounds (validated above)"),
+            input[pos..pos + 2]
+                .try_into()
+                .expect("2-byte flags slice in bounds (validated above)"),
         );
         pos += 2;
         let len = u32::from_le_bytes(
@@ -258,8 +260,8 @@ mod tests {
 
     #[test]
     fn mapi_type_unknown_passthrough() {
-        assert_eq!(MapiType::from_u16(0xABCD), MapiType::Unknown(0xABCD));
-        assert_eq!(MapiType::Unknown(0xABCD).as_u16(), 0xABCD);
+        assert_eq!(MapiType::from_u16(0xabcd), MapiType::Unknown(0xabcd));
+        assert_eq!(MapiType::Unknown(0xabcd).as_u16(), 0xabcd);
     }
 
     // ---- parse (16-bit / as_32bit = false) ----
@@ -283,7 +285,11 @@ mod tests {
     fn parse_two_properties_in_sequence() {
         let mut bytes = Vec::new();
         bytes.extend(prop_bytes(pack_tag(0x001f, 0x0037), 0, b"hi"));
-        bytes.extend(prop_bytes(pack_tag(0x0003, 0x0e08), 0, &42i32.to_le_bytes()));
+        bytes.extend(prop_bytes(
+            pack_tag(0x0003, 0x0e08),
+            0,
+            &42i32.to_le_bytes(),
+        ));
         let props = parse(&bytes, false).unwrap();
         assert_eq!(props.len(), 2);
         assert_eq!(props[0].value, b"hi");
@@ -324,9 +330,9 @@ mod tests {
 
     #[test]
     fn parse_flags_round_trip() {
-        let bytes = prop_bytes(pack_tag(0x0102, 0x0002), 0xCAFE, &[1, 2, 3, 4]);
+        let bytes = prop_bytes(pack_tag(0x0102, 0x0002), 0xcafe, &[1, 2, 3, 4]);
         let props = parse(&bytes, false).unwrap();
-        assert_eq!(props[0].flags, 0xCAFE);
+        assert_eq!(props[0].flags, 0xcafe);
     }
 
     // ---- parse (32-bit / as_32bit = true) ----
@@ -343,7 +349,11 @@ mod tests {
     fn parse_32bit_two_properties() {
         let mut bytes = Vec::new();
         bytes.extend(prop_bytes_32bit(pack_tag(0x001f, 0x0037), 0, b"a"));
-        bytes.extend(prop_bytes_32bit(pack_tag(0x0003, 0x0e08), 1, &7i32.to_le_bytes()));
+        bytes.extend(prop_bytes_32bit(
+            pack_tag(0x0003, 0x0e08),
+            1,
+            &7i32.to_le_bytes(),
+        ));
         let props = parse(&bytes, true).unwrap();
         assert_eq!(props.len(), 2);
         assert_eq!(props[0].flags, 0);

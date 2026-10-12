@@ -35,7 +35,10 @@ fn nocache_append_argv(counter: &Path) -> Vec<String> {
         vec![
             "cmd".to_string(),
             "/C".to_string(),
-            format!("echo.>>\"{}\" & timeout /T 1 /NOBREAK >NUL", counter.display()),
+            format!(
+                "echo.>>\"{}\" & timeout /T 1 /NOBREAK >NUL",
+                counter.display()
+            ),
             "--force".to_string(),
         ]
     }
@@ -62,7 +65,10 @@ async fn e2e_hypervisor_nocache_double_exec_side_effect() {
     let first = hv.run(req.clone()).await.expect("first nocache");
     let second = hv.run(req).await.expect("second nocache");
     assert!(!first.from_cache, "AC-008.10: first MUST NOT be from_cache");
-    assert!(!second.from_cache, "AC-008.10: second MUST NOT be from_cache");
+    assert!(
+        !second.from_cache,
+        "AC-008.10: second MUST NOT be from_cache"
+    );
     assert_eq!(
         counter_len(&counter),
         2,
@@ -87,8 +93,13 @@ async fn e2e_hypervisor_nocache_concurrent_serializes() {
         let argv = argv.clone();
         let cwd = cwd.clone();
         joins.push(tokio::spawn(async move {
-            hv.run(SpawnRequest { argv, cwd, env: vec![], queue_priority: QueuePriority::Normal })
-                .await
+            hv.run(SpawnRequest {
+                argv,
+                cwd,
+                env: vec![],
+                queue_priority: QueuePriority::Normal,
+            })
+            .await
         }));
     }
     let mut outcomes = Vec::new();
@@ -123,11 +134,17 @@ async fn e2e_hypervisor_nocache_isolated_from_coalesce_cache() {
     let hv = allow_hv(dir.path());
 
     #[cfg(unix)]
-    let readonly =
-        vec!["sh".to_string(), "-c".to_string(), format!("printf . >> '{}'", counter.display())];
+    let readonly = vec![
+        "sh".to_string(),
+        "-c".to_string(),
+        format!("printf . >> '{}'", counter.display()),
+    ];
     #[cfg(windows)]
-    let readonly =
-        vec!["cmd".to_string(), "/C".to_string(), format!("echo.>>\"{}\"", counter.display())];
+    let readonly = vec![
+        "cmd".to_string(),
+        "/C".to_string(),
+        format!("echo.>>\"{}\"", counter.display()),
+    ];
 
     let read_req = SpawnRequest {
         argv: readonly,
@@ -138,7 +155,10 @@ async fn e2e_hypervisor_nocache_isolated_from_coalesce_cache() {
     let miss = hv.run(read_req.clone()).await.expect("coalesce miss");
     assert!(!miss.from_cache);
     let hit = hv.run(read_req).await.expect("coalesce hit");
-    assert!(hit.from_cache, "read-only twin MUST hit coalesce (AC-008.4)");
+    assert!(
+        hit.from_cache,
+        "read-only twin MUST hit coalesce (AC-008.4)"
+    );
     assert_eq!(counter_len(&counter), 1, "coalesce MUST run once");
 
     let nocache_req = SpawnRequest {
@@ -148,7 +168,10 @@ async fn e2e_hypervisor_nocache_isolated_from_coalesce_cache() {
         queue_priority: QueuePriority::Normal,
     };
     let mutating = hv.run(nocache_req).await.expect("nocache after coalesce");
-    assert!(!mutating.from_cache, "AC-008.10: nocache MUST NOT reuse coalesce cache");
+    assert!(
+        !mutating.from_cache,
+        "AC-008.10: nocache MUST NOT reuse coalesce cache"
+    );
     assert_eq!(
         counter_len(&counter),
         2,

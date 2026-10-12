@@ -58,7 +58,7 @@ async fn dispatch(method: &str, socket: &Path, params: serde_json::Value) -> any
                 output::print_json(&value);
             }
             Ok(())
-        }
+        },
         Ok(Err(rpc::RpcCallError::MethodNotFound { message })) => {
             // Sessions are not formally M0 placeholders, but the daemon's
             // M0 only includes session.register/deregister/heartbeat. If
@@ -67,7 +67,7 @@ async fn dispatch(method: &str, socket: &Path, params: serde_json::Value) -> any
             Err(anyhow::anyhow!(
                 "daemon does not implement `{method}` yet ({message})"
             ))
-        }
+        },
         Ok(Err(e)) => Err(anyhow::anyhow!(e.to_string())),
         Err(e) => Err(e),
     }

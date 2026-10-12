@@ -30,10 +30,7 @@ impl Uia2HttpClient {
         let mut out = Vec::with_capacity(arr.len());
         for item in arr {
             let el = Self::parse_element_id(item).ok_or_else(|| {
-                uia2_http_err(
-                    "find_elements",
-                    format!("no ELEMENT id in item={item}"),
-                )
+                uia2_http_err("find_elements", format!("no ELEMENT id in item={item}"))
             })?;
             out.push(Uia2Element::new(el));
         }
@@ -63,10 +60,7 @@ impl Uia2HttpClient {
         let body = self.get_json(&url, "get_window_handles")?;
         let value = Self::parse_appium_value(&body)?;
         let arr = value.as_array().ok_or_else(|| {
-            uia2_http_err(
-                "get_window_handles",
-                format!("expected array, got {value}"),
-            )
+            uia2_http_err("get_window_handles", format!("expected array, got {value}"))
         })?;
         arr.iter()
             .map(|v| {
@@ -129,9 +123,9 @@ impl Uia2HttpClient {
         let url = format!("{}/session/{sid}/contexts", self.base_url());
         let body = self.get_json(&url, "get_contexts")?;
         let value = Self::parse_appium_value(&body)?;
-        let arr = value.as_array().ok_or_else(|| {
-            uia2_http_err("get_contexts", format!("expected array, got {value}"))
-        })?;
+        let arr = value
+            .as_array()
+            .ok_or_else(|| uia2_http_err("get_contexts", format!("expected array, got {value}")))?;
         arr.iter()
             .map(|v| {
                 v.as_str().map(str::to_string).ok_or_else(|| {
@@ -147,9 +141,10 @@ impl Uia2HttpClient {
         let url = format!("{}/session/{sid}/context", self.base_url());
         let body = self.get_json(&url, "get_context")?;
         let value = Self::parse_appium_value(&body)?;
-        value.as_str().map(str::to_string).ok_or_else(|| {
-            uia2_http_err("get_context", format!("expected string, got {value}"))
-        })
+        value
+            .as_str()
+            .map(str::to_string)
+            .ok_or_else(|| uia2_http_err("get_context", format!("expected string, got {value}")))
     }
 
     /// `POST /session/:id/context` — switch context (gated).
@@ -263,10 +258,7 @@ mod tests {
                     let method = parts.next().unwrap_or("").to_string();
                     let path = parts.next().unwrap_or("").to_string();
                     let body = raw.split("\r\n\r\n").nth(1).unwrap_or("").to_string();
-                    log_c
-                        .lock()
-                        .unwrap()
-                        .push(format!("{method} {path}"));
+                    log_c.lock().unwrap().push(format!("{method} {path}"));
                     let (code, resp_body) = handler(&method, &path, &body);
                     let resp = format!(
                         "HTTP/1.1 {code} OK\r\nContent-Type: application/json\r\nContent-Length: {}\r\nConnection: close\r\n\r\n{resp_body}",
@@ -304,28 +296,30 @@ mod tests {
             ),
             ("GET", p) if p.ends_with("/screenshot") => {
                 (200, json!({"value": "aGVsbG8="}).to_string())
-            }
+            },
             ("GET", p) if p.ends_with("/timeouts") => (
                 200,
                 json!({"value": {"implicit": 0, "pageLoad": 300000, "script": 30000}}).to_string(),
             ),
-            ("GET", p) if p.ends_with("/contexts") => {
-                (200, json!({"value": ["NATIVE_APP", "WEBVIEW_1"]}).to_string())
-            }
+            ("GET", p) if p.ends_with("/contexts") => (
+                200,
+                json!({"value": ["NATIVE_APP", "WEBVIEW_1"]}).to_string(),
+            ),
             ("GET", p) if p.ends_with("/context") => {
                 (200, json!({"value": "NATIVE_APP"}).to_string())
-            }
+            },
             ("GET", p) if p.ends_with("/window/handles") => {
                 (200, json!({"value": ["w1", "w2"]}).to_string())
-            }
-            ("GET", p) if p.ends_with("/window") => {
-                (200, json!({"value": "w1"}).to_string())
-            }
+            },
+            ("GET", p) if p.ends_with("/window") => (200, json!({"value": "w1"}).to_string()),
             ("GET", p) if p.ends_with("/window/rect") => (
                 200,
                 json!({"value": {"x": 0, "y": 0, "width": 1080, "height": 1920}}).to_string(),
             ),
-            _ => (404, json!({"value": {"error": "unknown", "message": path}}).to_string()),
+            _ => (
+                404,
+                json!({"value": {"error": "unknown", "message": path}}).to_string(),
+            ),
         });
         let c = client(&server.addr);
         let els = c.find_elements("xpath", "//*").expect("find_elements");
@@ -356,7 +350,10 @@ mod tests {
         let err = c
             .perform_actions(&Uia2HttpClient::pointer_tap_actions(10, 20))
             .unwrap_err();
-        assert_eq!(err.unsupported_code(), Some(codes::MOBILE_ACTIONS_GATED));
+        assert_eq!(
+            err.unsupported_code_value(),
+            Some(codes::MOBILE_ACTIONS_GATED)
+        );
     }
 
     #[test]
@@ -371,7 +368,7 @@ mod tests {
     fn unsupported_fails_loud() {
         let err = Uia2HttpClient::unsupported("execute_driver_script");
         assert_eq!(
-            err.unsupported_code(),
+            err.unsupported_code_value(),
             Some(codes::MOBILE_UIA2_UNAVAILABLE)
         );
     }

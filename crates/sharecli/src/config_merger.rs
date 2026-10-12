@@ -29,7 +29,10 @@ pub fn deep_merge(
 mod tests {
     use super::*;
     fn map(items: &[(&str, &str)]) -> HashMap<String, String> {
-        items.iter().map(|(k, v)| (k.to_string(), v.to_string())).collect()
+        items
+            .iter()
+            .map(|(k, v)| (k.to_string(), v.to_string()))
+            .collect()
     }
     #[test]
     fn merge_basic() {

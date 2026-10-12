@@ -47,6 +47,8 @@ runs:
       shell: bash
       working-directory: ${{ inputs.working-directory }}
       run: |
+        # E1.10: pipefail so a compile/bench failure is not masked by `tee`'s exit status.
+        set -o pipefail
         mkdir -p $(dirname ${{ inputs.output-file }})
         cargo bench --no-fail-fast 2>&1 | tee ${{ inputs.output-file }}
 

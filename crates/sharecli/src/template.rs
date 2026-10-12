@@ -5,7 +5,9 @@ pub struct Template {
 }
 impl Template {
     pub fn new(pattern: impl Into<String>) -> Self {
-        Self { pattern: pattern.into() }
+        Self {
+            pattern: pattern.into(),
+        }
     }
     pub fn render(&self, vars: &HashMap<String, String>) -> String {
         let mut out = String::new();

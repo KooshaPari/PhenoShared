@@ -331,12 +331,12 @@ mod tests {
     fn parse_request_rejects_bad_op_and_version() {
         let err = parse_vsock_exec_request(br#"{"v":2,"op":"exec","cmd":"pwd"}"#).unwrap_err();
         assert_eq!(
-            err.unsupported_code(),
+            err.unsupported_code_value(),
             Some(codes::SANDBOX_GUEST_IO_UNAVAILABLE)
         );
         let err = parse_vsock_exec_request(br#"{"v":1,"op":"ping","cmd":"pwd"}"#).unwrap_err();
         assert_eq!(
-            err.unsupported_code(),
+            err.unsupported_code_value(),
             Some(codes::SANDBOX_GUEST_IO_UNAVAILABLE)
         );
     }
@@ -349,7 +349,7 @@ mod tests {
         .unwrap();
         let err = vsock_response_text(&resp).unwrap_err();
         assert_eq!(
-            err.unsupported_code(),
+            err.unsupported_code_value(),
             Some(codes::SANDBOX_GUEST_IO_UNAVAILABLE)
         );
     }
@@ -372,7 +372,7 @@ mod tests {
         {
             let err = result.unwrap_err();
             assert_eq!(
-                err.unsupported_code(),
+                err.unsupported_code_value(),
                 Some(codes::SANDBOX_GUEST_IO_UNAVAILABLE)
             );
         }
@@ -408,7 +408,7 @@ mod tests {
         std::env::remove_var(VSOCK_INTEGRATION_ENV);
         let err = exec_via_vsock(3, 52, "pwd", 100).unwrap_err();
         assert_eq!(
-            err.unsupported_code(),
+            err.unsupported_code_value(),
             Some(codes::SANDBOX_GUEST_IO_UNAVAILABLE)
         );
     }

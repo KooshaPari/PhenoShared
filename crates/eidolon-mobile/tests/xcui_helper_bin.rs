@@ -29,7 +29,11 @@ fn helper_bin_reports_version() {
         .arg("--version")
         .output()
         .expect("spawn helper");
-    assert!(out.status.success(), "stderr={}", String::from_utf8_lossy(&out.stderr));
+    assert!(
+        out.status.success(),
+        "stderr={}",
+        String::from_utf8_lossy(&out.stderr)
+    );
     let stdout = String::from_utf8_lossy(&out.stdout);
     assert!(stdout.contains(HELPER_BIN_NAME), "{stdout}");
 }

@@ -111,11 +111,11 @@ impl CircuitBreaker {
                 if self.failure_count >= self.failure_threshold {
                     self.state = CircuitState::Open;
                 }
-            }
+            },
             CircuitState::HalfOpen => {
                 self.state = CircuitState::Open;
-            }
-            CircuitState::Open => {}
+            },
+            CircuitState::Open => {},
         }
     }
 
@@ -134,11 +134,11 @@ impl CircuitBreaker {
             Ok(v) => {
                 self.record_success();
                 Ok(v)
-            }
+            },
             Err(_) => {
                 self.record_failure();
                 Err(ResilienceError::CircuitOpen)
-            }
+            },
         }
     }
 

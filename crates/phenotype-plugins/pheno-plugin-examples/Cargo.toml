@@ -10,6 +10,8 @@ keywords = ["phenotype", "pheno-plugins", "plugin"]
 categories = ["development-tools"]
 authors = ["<REDACTED>"]
 
+[workspace]
+
 [dependencies]
 pheno-plugin-core = { path = "../pheno-plugin-core" }
 async-trait = "0.1"

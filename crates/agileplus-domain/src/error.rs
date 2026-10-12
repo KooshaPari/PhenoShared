@@ -59,23 +59,23 @@ impl From<CoreDomainError> for DomainError {
             CoreDomainError::Validation(msg) => DomainError::Other(format!("validation: {msg}")),
             CoreDomainError::InvariantViolation(msg) => {
                 DomainError::Other(format!("invariant: {msg}"))
-            }
+            },
             CoreDomainError::NotFound { entity, id } => {
                 DomainError::NotFound(format!("{entity} {id}"))
-            }
+            },
             CoreDomainError::Duplicate { entity, id } => {
                 DomainError::Conflict(format!("duplicate {entity} {id}"))
-            }
+            },
             CoreDomainError::InvalidStateTransition { from, to } => {
                 DomainError::InvalidTransition {
                     from,
                     to,
                     reason: "invalid state transition".to_string(),
                 }
-            }
+            },
             CoreDomainError::NotPermitted(msg) => {
                 DomainError::Other(format!("not permitted: {msg}"))
-            }
+            },
             CoreDomainError::PolicyEvaluation(msg) => DomainError::Other(format!("policy: {msg}")),
             CoreDomainError::Other(msg) => DomainError::Other(msg),
         }
@@ -98,7 +98,7 @@ impl From<DomainError> for CoreDomainError {
                         id: msg,
                     }
                 }
-            }
+            },
             DomainError::Conflict(msg) => CoreDomainError::Other(format!("conflict: {msg}")),
             DomainError::InvalidTransition { from, to, reason } => {
                 if reason == "invalid state transition" {
@@ -106,7 +106,7 @@ impl From<DomainError> for CoreDomainError {
                 } else {
                     CoreDomainError::Other(format!("transition {from} -> {to}: {reason}"))
                 }
-            }
+            },
             DomainError::Other(msg) => CoreDomainError::Other(msg),
             _ => CoreDomainError::Other(err.to_string()),
         }

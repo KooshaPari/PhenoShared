@@ -15,7 +15,14 @@ pub fn luhn_check(digits: &str) -> bool {
     sum % 10 == 0
 }
 pub fn mask(digits: &str) -> String {
-    let last4: String = digits.chars().rev().take(4).collect::<String>().chars().rev().collect();
+    let last4: String = digits
+        .chars()
+        .rev()
+        .take(4)
+        .collect::<String>()
+        .chars()
+        .rev()
+        .collect();
     format!("**** **** **** {}", last4)
 }
 #[cfg(test)]

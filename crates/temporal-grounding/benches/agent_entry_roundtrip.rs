@@ -28,7 +28,6 @@ fn bench_agent_entry_serialize(c: &mut Criterion) {
 
 fn bench_agent_entry_roundtrip(c: &mut Criterion) {
     let entry = build_entry(0);
-    let json = serde_json::to_string(&entry).unwrap();
     c.bench_function("agent_entry_roundtrip", |b| {
         b.iter(|| {
             let s = serde_json::to_string(black_box(&entry)).unwrap();

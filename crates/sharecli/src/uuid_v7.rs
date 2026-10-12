@@ -54,18 +54,18 @@ pub fn generate(timestamp_ms: u64, rand: &mut impl FnMut() -> u8) -> [u8; 16] {
     let mut out = [0u8; 16];
 
     // Bytes 0..6: 48-bit big-endian unix_ts_ms.
-    let ts = timestamp_ms & 0x0000_FFFF_FFFF_FFFFu64;
-    out[0] = ((ts >> 40) & 0xFF) as u8;
-    out[1] = ((ts >> 32) & 0xFF) as u8;
-    out[2] = ((ts >> 24) & 0xFF) as u8;
-    out[3] = ((ts >> 16) & 0xFF) as u8;
-    out[4] = ((ts >> 8) & 0xFF) as u8;
-    out[5] = (ts & 0xFF) as u8;
+    let ts = timestamp_ms & 0x0000_ffff_ffff_ffffu64;
+    out[0] = ((ts >> 40) & 0xff) as u8;
+    out[1] = ((ts >> 32) & 0xff) as u8;
+    out[2] = ((ts >> 24) & 0xff) as u8;
+    out[3] = ((ts >> 16) & 0xff) as u8;
+    out[4] = ((ts >> 8) & 0xff) as u8;
+    out[5] = (ts & 0xff) as u8;
 
     // High nibble of byte 6 -> version (7).
     let mut byte6: u8 = 0x70;
     // Low nibble of byte 6 is the top 4 bits of rand_a.
-    byte6 |= rand() & 0x0F;
+    byte6 |= rand() & 0x0f;
     out[6] = byte6;
 
     // Byte 7: bottom 8 bits of rand_a.
@@ -73,7 +73,7 @@ pub fn generate(timestamp_ms: u64, rand: &mut impl FnMut() -> u8) -> [u8; 16] {
 
     // Byte 8: variant (top two bits = 0b10) + top 6 bits of rand_b.
     let mut byte8: u8 = 0x80; // variant 0b10 -> top two bits set to 10.
-    byte8 |= rand() & 0x3F;
+    byte8 |= rand() & 0x3f;
     out[8] = byte8;
 
     // Bytes 9..16: rand_b (62 bits total, lower 56 fit in bytes 9..15).
@@ -189,7 +189,10 @@ mod tests {
         }
         fn next_byte(&mut self) -> u8 {
             // Numerical Recipes LCG constants; deterministic and well-distributed.
-            self.state = self.state.wrapping_mul(1_664_525).wrapping_add(1_013_904_223);
+            self.state = self
+                .state
+                .wrapping_mul(1_664_525)
+                .wrapping_add(1_013_904_223);
             (self.state >> 16) as u8
         }
     }
@@ -209,8 +212,8 @@ mod tests {
     #[test]
     fn timestamp_ms_extraction() {
         let mut rng = TestRng::new(7);
-        let bytes = generate(0xDEAD_BEEF_CAFEu64, &mut || rng.next_byte());
-        assert_eq!(timestamp_ms(&bytes), 0xDEAD_BEEF_CAFE);
+        let bytes = generate(0xdead_beef_cafeu64, &mut || rng.next_byte());
+        assert_eq!(timestamp_ms(&bytes), 0xdead_beef_cafe);
     }
 
     // 3. Version nibble is always 7 in any generated UUID.
@@ -316,6 +319,6 @@ mod tests {
         let bytes = generate(u64::MAX, &mut || rng.next_byte());
         let ts = timestamp_ms(&bytes);
         // The encoded timestamp is bounded to its low 48 bits, all 1s.
-        assert_eq!(ts, 0x0000_FFFF_FFFF_FFFFu64);
+        assert_eq!(ts, 0x0000_ffff_ffff_ffffu64);
     }
 }

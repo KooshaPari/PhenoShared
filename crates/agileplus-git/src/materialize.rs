@@ -305,7 +305,7 @@ pub fn commit_materialization(
                 .target()
                 .ok_or_else(|| DomainError::Vcs("HEAD reference has no target OID".into()))?;
             Some(repo.find_commit(head_oid).map_err(crate::git_err)?)
-        }
+        },
         Err(e) if e.code() == git2::ErrorCode::UnbornBranch => None,
         Err(e) => return Err(crate::git_err(e)),
     };

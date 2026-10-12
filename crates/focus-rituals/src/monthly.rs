@@ -63,8 +63,7 @@ impl MonthlyRetrospectiveEngine {
         // Aggregate data from event store, wallet, audit — stub for now.
         // Real impl: query event store for month's focus sessions by week,
         // fetch prior month's totals, compute deltas, derive theme.
-        let (total_focus_hours, weekly_breakdown) =
-            (52.0, vec![11.5, 12.0, 13.5, 15.0]); // 4 weeks of activity
+        let (total_focus_hours, weekly_breakdown) = (52.0, vec![11.5, 12.0, 13.5, 15.0]); // 4 weeks of activity
         let tasks_completed = 68;
 
         // Compare to prior month (stub).
@@ -122,7 +121,10 @@ impl MonthlyRetrospectiveEngine {
              Suggest a one-word or two-word theme (e.g., 'momentum', 'breakthrough', 'consistency').",
             total_focus_hours, tasks_completed
         );
-        complete_guarded(self.coaching.as_ref(), &prompt, None, 40).await.ok().flatten()
+        complete_guarded(self.coaching.as_ref(), &prompt, None, 40)
+            .await
+            .ok()
+            .flatten()
     }
 
     async fn ask_monthly_reflection(&self, theme: &str) -> Option<String> {
@@ -130,7 +132,10 @@ impl MonthlyRetrospectiveEngine {
             "The month's theme was '{}'. Write a ≤100-char reflection on growth and next month's focus.",
             theme
         );
-        complete_guarded(self.coaching.as_ref(), &prompt, None, 100).await.ok().flatten()
+        complete_guarded(self.coaching.as_ref(), &prompt, None, 100)
+            .await
+            .ok()
+            .flatten()
     }
 }
 
@@ -152,10 +157,10 @@ fn static_reflection(theme: &str) -> String {
     match theme.to_lowercase().as_str() {
         t if t.contains("momentum") => {
             "You built real momentum this month. Keep the streak alive—compound wins.".to_string()
-        }
+        },
         t if t.contains("execution") => {
             "Exceptional execution. Next month, push for deeper, more complex work.".to_string()
-        }
+        },
         _ => "Solid growth trajectory. Refine your process and push harder next month.".to_string(),
     }
 }
@@ -196,9 +201,11 @@ mod tests {
     async fn monthly_retro_delta_populated() {
         let engine = mk_monthly_engine();
         let retro = engine.generate_monthly_retro(t0()).await.unwrap();
-        assert!(retro.compared_to_prior_month.trend_direction == "up"
-            || retro.compared_to_prior_month.trend_direction == "down"
-            || retro.compared_to_prior_month.trend_direction == "stable");
+        assert!(
+            retro.compared_to_prior_month.trend_direction == "up"
+                || retro.compared_to_prior_month.trend_direction == "down"
+                || retro.compared_to_prior_month.trend_direction == "stable"
+        );
     }
 
     // Traces to: FR-RITUAL-004

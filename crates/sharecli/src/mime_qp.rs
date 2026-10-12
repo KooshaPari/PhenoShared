@@ -22,19 +22,19 @@ pub fn encode(input: &[u8]) -> String {
             b'=' => {
                 out.push_str("=3D");
                 line_len += 3;
-            }
+            },
             b'\r' | b'\n' => {
                 out.push(b as char);
                 line_len += 1;
-            }
+            },
             0x20..=0x7e => {
                 out.push(b as char);
                 line_len += 1;
-            }
+            },
             _ => {
                 out.push_str(&format!("={:02X}", b));
                 line_len += 3;
-            }
+            },
         }
         i += 1;
     }

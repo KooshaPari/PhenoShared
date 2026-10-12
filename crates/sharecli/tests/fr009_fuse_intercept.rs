@@ -63,8 +63,12 @@ fn fr009_inode_map_path_resolution() {
 
     let mut map = InodeMap::new();
     assert_eq!(map.resolve(ROOT_INO), Some(Path::new("")));
-    let (dir_ino, _) = map.lookup_or_alloc(ROOT_INO, OsStr::new("src")).expect("dir");
-    let (file_ino, rel) = map.lookup_or_alloc(dir_ino, OsStr::new("main.rs")).expect("file");
+    let (dir_ino, _) = map
+        .lookup_or_alloc(ROOT_INO, OsStr::new("src"))
+        .expect("dir");
+    let (file_ino, rel) = map
+        .lookup_or_alloc(dir_ino, OsStr::new("main.rs"))
+        .expect("file");
     assert_eq!(rel, PathBuf::from("src/main.rs"));
     assert_eq!(map.resolve(file_ino), Some(Path::new("src/main.rs")));
 }
@@ -84,13 +88,17 @@ fn fr009_read_coalesce_hit_miss_meters() {
     }
 
     let fs = sharecli_fuse::InterceptFs::new(dir.path());
-    let a = fs.read_coalesced_rel(Path::new("hot.txt")).expect("first read");
+    let a = fs
+        .read_coalesced_rel(Path::new("hot.txt"))
+        .expect("first read");
     assert_eq!(a, b"coalesce-me");
     let m1 = fs.cache_meters();
     assert_eq!(m1.misses, 1);
     assert_eq!(m1.hits, 0);
 
-    let b = fs.read_coalesced_rel(Path::new("hot.txt")).expect("second read");
+    let b = fs
+        .read_coalesced_rel(Path::new("hot.txt"))
+        .expect("second read");
     assert_eq!(b, a);
     let m2 = fs.cache_meters();
     assert_eq!(m2.misses, 1);
@@ -135,7 +143,8 @@ fn fr009_write_passthrough_and_cow_commit_discard() {
     let _ = fs.read_coalesced_rel(Path::new("rw.txt")).expect("warm");
     assert_eq!(fs.cache_meters().misses, 1);
 
-    fs.write_rel(Path::new("rw.txt"), 0, b"bbbb").expect("passthrough write must not ENOSYS");
+    fs.write_rel(Path::new("rw.txt"), 0, b"bbbb")
+        .expect("passthrough write must not ENOSYS");
     let after = fs.read_coalesced_rel(Path::new("rw.txt")).expect("reload");
     assert_eq!(after, b"bbbb");
     // Invalidate + reload => second miss.
@@ -152,7 +161,10 @@ fn fr009_write_passthrough_and_cow_commit_discard() {
     fs.discard_rel(Path::new("rw.txt")).expect("discard");
     assert_eq!(fs::read(&file).expect("unchanged"), b"cccc");
 
-    assert!(matches!(fs.discard_rel(Path::new("rw.txt")), Err(WriteSerializeError::NoPending(_))));
+    assert!(matches!(
+        fs.discard_rel(Path::new("rw.txt")),
+        Err(WriteSerializeError::NoPending(_))
+    ));
 }
 
 /// FR-009 / AC-009.6 — write_rel / commit_rel stamp provenance xattrs.
@@ -174,12 +186,16 @@ fn fr009_write_provenance_xattrs() {
     let fs = sharecli_fuse::InterceptFs::with_session(dir.path(), "sess-ac0096");
     assert_eq!(fs.session_id(), "sess-ac0096");
 
-    fs.write_rel(Path::new("prov.txt"), 0, b"live").expect("write_rel");
-    let after_write = read_provenance(&file).expect("read xattr").expect("present");
+    fs.write_rel(Path::new("prov.txt"), 0, b"live")
+        .expect("write_rel");
+    let after_write = read_provenance(&file)
+        .expect("read xattr")
+        .expect("present");
     assert_eq!(after_write.session_id, "sess-ac0096");
     assert!(after_write.written_at_unix > 0);
 
-    fs.stage_rel(Path::new("prov.txt"), b"cowed").expect("stage");
+    fs.stage_rel(Path::new("prov.txt"), b"cowed")
+        .expect("stage");
     fs.commit_rel(Path::new("prov.txt")).expect("commit");
     let after_commit = read_provenance(&file).expect("read").expect("present");
     assert_eq!(after_commit.session_id, "sess-ac0096");
@@ -232,11 +248,14 @@ fn fr009_create_rel_provenance_and_neg_invalidate() {
     assert!(!fs.exists_rel(rel).expect("ENOENT probe"));
     assert_eq!(fs.neg_dentry_meters().misses, 1);
 
-    fs.create_rel(rel, 0o644).expect("create_rel must not ENOSYS");
+    fs.create_rel(rel, 0o644)
+        .expect("create_rel must not ENOSYS");
     assert!(fs.exists_rel(rel).expect("visible after create"));
 
     let backing = dir.path().join("brand-new.txt");
-    let prov = read_provenance(&backing).expect("read").expect("provenance on create");
+    let prov = read_provenance(&backing)
+        .expect("read")
+        .expect("provenance on create");
     assert_eq!(prov.session_id, "sess-create");
 
     let _ = fs.read_coalesced_rel(rel).expect("read after create");
@@ -315,12 +334,22 @@ fn fr009_global_write_serialize_meters() {
     fs.discard_rel(rel).expect("discard");
 
     fs::write(dir.path().join("pw.txt"), b"x").expect("create pw");
-    fs.write_rel(Path::new("pw.txt"), 0, b"hello").expect("passthrough");
+    fs.write_rel(Path::new("pw.txt"), 0, b"hello")
+        .expect("passthrough");
 
     let after = global_write_serialize_meters();
-    assert!(after.stages >= before.stages + 2, "stage_rel MUST increment stages");
-    assert!(after.commits >= before.commits + 1, "commit_rel MUST increment commits");
-    assert!(after.discards >= before.discards + 1, "discard_rel MUST increment discards");
+    assert!(
+        after.stages >= before.stages + 2,
+        "stage_rel MUST increment stages"
+    );
+    assert!(
+        after.commits >= before.commits + 1,
+        "commit_rel MUST increment commits"
+    );
+    assert!(
+        after.discards >= before.discards + 1,
+        "discard_rel MUST increment discards"
+    );
     assert!(
         after.passthrough_writes >= before.passthrough_writes + 1,
         "write_rel MUST increment passthrough_writes"

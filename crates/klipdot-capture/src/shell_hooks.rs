@@ -238,7 +238,7 @@ if [[ -n "$ZSH_VERSION" ]]; then
 fi
 "#,
                 );
-            }
+            },
             "bash" => {
                 integration.push_str(
                     r#"
@@ -254,10 +254,10 @@ if [[ -n "$BASH_VERSION" ]]; then
 fi
 "#,
                 );
-            }
+            },
             _ => {
                 integration.push_str("# Generic shell integration\n");
-            }
+            },
         }
 
         integration
@@ -285,7 +285,7 @@ fi
                     .arg("-n")
                     .arg(&temp_file)
                     .output()
-            }
+            },
         };
 
         // Clean up temporary file
@@ -296,7 +296,7 @@ fi
             Err(e) => {
                 debug!("Shell syntax validation failed: {}", e);
                 Ok(false)
-            }
+            },
         }
     }
 

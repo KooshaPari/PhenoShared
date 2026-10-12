@@ -103,7 +103,11 @@ where
 {
     /// Construct a scanner over an adapter and durable ledger.
     pub fn new(adapter: &'a A, state: &'a S, store: &'a SessionStore) -> Self {
-        Self { adapter, state, store }
+        Self {
+            adapter,
+            state,
+            store,
+        }
     }
 
     /// Discover and append one observation per usable surface.
@@ -127,15 +131,21 @@ where
         anyhow::bail!("observed_at must not be empty")
     }
     let surfaces = adapter.discover().context("discover terminal surfaces")?;
-    let mut report = DiscoveryReport { scanned: surfaces.len(), ..Default::default() };
+    let mut report = DiscoveryReport {
+        scanned: surfaces.len(),
+        ..Default::default()
+    };
     for surface in surfaces {
         let surface_id = surface.id.clone();
         let capabilities = match adapter.capabilities(&surface) {
             Ok(value) => value,
             Err(error) => {
-                report.failures.push(DiscoveryFailure { surface_id, error: error.to_string() });
+                report.failures.push(DiscoveryFailure {
+                    surface_id,
+                    error: error.to_string(),
+                });
                 continue;
-            }
+            },
         };
         let harness = surface_harness(&surface);
         let resolution = if let Some(harness) = harness.as_deref() {
@@ -184,7 +194,10 @@ where
 
 fn surface_harness(surface: &SurfaceRecord) -> Option<String> {
     let executable = surface.process.as_ref()?.argv.first()?;
-    let name = Path::new(executable).file_name()?.to_str()?.to_ascii_lowercase();
+    let name = Path::new(executable)
+        .file_name()?
+        .to_str()?
+        .to_ascii_lowercase();
     match name.as_str() {
         "forge" | "codex" | "opencode" | "kilo" | "cursor" | "cursor-agent" => Some(name),
         _ => None,
@@ -200,5 +213,9 @@ fn surface_process_cwd(surface: &SurfaceRecord) -> std::path::PathBuf {
 }
 
 fn surface_process_argv(surface: &SurfaceRecord) -> Vec<String> {
-    surface.process.as_ref().map(|process| process.argv.clone()).unwrap_or_default()
+    surface
+        .process
+        .as_ref()
+        .map(|process| process.argv.clone())
+        .unwrap_or_default()
 }

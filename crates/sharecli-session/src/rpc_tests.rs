@@ -13,7 +13,10 @@ struct RecordingControl {
 
 impl SurfaceControl for RecordingControl {
     fn send(&self, surface_id: &str, bytes: &[u8]) -> Result<()> {
-        self.sent.lock().unwrap().push((surface_id.to_string(), bytes.to_vec()));
+        self.sent
+            .lock()
+            .unwrap()
+            .push((surface_id.to_string(), bytes.to_vec()));
         Ok(())
     }
 
@@ -23,7 +26,10 @@ impl SurfaceControl for RecordingControl {
     }
 
     fn resize(&self, surface_id: &str, rows: u16, cols: u16) -> Result<()> {
-        self.resized.lock().unwrap().push((surface_id.to_string(), rows, cols));
+        self.resized
+            .lock()
+            .unwrap()
+            .push((surface_id.to_string(), rows, cols));
         Ok(())
     }
 
@@ -121,17 +127,27 @@ async fn surface_send_accepts_an_explicit_byte_vector() {
     .await;
 
     assert_eq!(response.result, Some(Value::Null));
-    assert_eq!(*control.sent.lock().unwrap(), vec![("surface-1".to_string(), vec![0, 255, 10])]);
+    assert_eq!(
+        *control.sent.lock().unwrap(),
+        vec![("surface-1".to_string(), vec![0, 255, 10])]
+    );
 }
 
 #[tokio::test]
 async fn surface_read_returns_a_typed_byte_vector() {
     let control = Arc::new(RecordingControl::default());
-    let response =
-        request(&control, 2, "surface.io.read", json!({"surface_id": "surface-1", "max_bytes": 8}))
-            .await;
+    let response = request(
+        &control,
+        2,
+        "surface.io.read",
+        json!({"surface_id": "surface-1", "max_bytes": 8}),
+    )
+    .await;
 
-    assert_eq!(response.result, Some(json!({"bytes": b"terminal".to_vec()})));
+    assert_eq!(
+        response.result,
+        Some(json!({"bytes": b"terminal".to_vec()}))
+    );
     assert!(response.error.is_none());
 }
 
@@ -147,14 +163,22 @@ async fn surface_resize_forwards_dimensions_without_a_command_string() {
     .await;
 
     assert_eq!(response.result, Some(Value::Null));
-    assert_eq!(*control.resized.lock().unwrap(), vec![("surface-1".to_string(), 42, 120)]);
+    assert_eq!(
+        *control.resized.lock().unwrap(),
+        vec![("surface-1".to_string(), 42, 120)]
+    );
 }
 
 #[tokio::test]
 async fn surface_capabilities_are_returned_from_the_control_contract() {
     let control = Arc::new(RecordingControl::default());
-    let response =
-        request(&control, 4, "surface.io.capabilities", json!({"surface_id": "surface-1"})).await;
+    let response = request(
+        &control,
+        4,
+        "surface.io.capabilities",
+        json!({"surface_id": "surface-1"}),
+    )
+    .await;
 
     assert_eq!(
         response.result,
@@ -171,8 +195,13 @@ async fn surface_capabilities_are_returned_from_the_control_contract() {
 #[tokio::test]
 async fn invalid_surface_params_return_json_rpc_invalid_params() {
     let control = Arc::new(RecordingControl::default());
-    let response =
-        request(&control, 5, "surface.io.resize", json!({"surface_id": "surface-1"})).await;
+    let response = request(
+        &control,
+        5,
+        "surface.io.resize",
+        json!({"surface_id": "surface-1"}),
+    )
+    .await;
 
     assert!(response.result.is_none());
     assert_eq!(response.error.unwrap().code, -32602);
@@ -257,13 +286,25 @@ async fn surface_subscription_lifecycle_returns_ack_and_unsubscribe() {
 #[test]
 fn surface_events_keep_per_surface_sequence_and_wire_envelope() {
     let hub = SurfaceEventHub::new();
-    let ack = hub.subscribe(SurfaceSubscribeRequest::new("surface-1")).unwrap();
-    hub.publish_output("surface-1", b"one", Some("2026-08-02T03:00:00Z".into())).unwrap();
-    hub.publish_output("surface-1", b"two", Some("2026-08-02T03:00:01Z".into())).unwrap();
+    let ack = hub
+        .subscribe(SurfaceSubscribeRequest::new("surface-1"))
+        .unwrap();
+    hub.publish_output("surface-1", b"one", Some("2026-08-02T03:00:00Z".into()))
+        .unwrap();
+    hub.publish_output("surface-1", b"two", Some("2026-08-02T03:00:01Z".into()))
+        .unwrap();
 
     let events = hub.drain(ack.subscription_id, 8).unwrap();
-    assert_eq!(events.iter().map(|event| event.params.seq).collect::<Vec<_>>(), vec![1, 2]);
-    assert!(events.iter().all(|event| event.params.kind == SurfaceEventKind::Output));
+    assert_eq!(
+        events
+            .iter()
+            .map(|event| event.params.seq)
+            .collect::<Vec<_>>(),
+        vec![1, 2]
+    );
+    assert!(events
+        .iter()
+        .all(|event| event.params.kind == SurfaceEventKind::Output));
     let wire = serde_json::to_value(&events[0]).unwrap();
     assert_eq!(wire["jsonrpc"], "2.0");
     assert_eq!(wire["method"], "surface.io.event");
@@ -274,8 +315,9 @@ fn surface_events_keep_per_surface_sequence_and_wire_envelope() {
 #[test]
 fn surface_subscription_overflow_emits_bounded_resync_marker() {
     let hub = SurfaceEventHub::new();
-    let ack =
-        hub.subscribe(SurfaceSubscribeRequest::new("surface-1").with_queue_capacity(2)).unwrap();
+    let ack = hub
+        .subscribe(SurfaceSubscribeRequest::new("surface-1").with_queue_capacity(2))
+        .unwrap();
     hub.publish_output("surface-1", b"one", None).unwrap();
     hub.publish_output("surface-1", b"two", None).unwrap();
     hub.publish_output("surface-1", b"three", None).unwrap();
@@ -332,7 +374,10 @@ async fn unix_server_round_trips_surface_json_rpc() {
             .await
             .unwrap();
     let mut response = String::new();
-    BufReader::new(stream).read_line(&mut response).await.unwrap();
+    BufReader::new(stream)
+        .read_line(&mut response)
+        .await
+        .unwrap();
 
     assert_eq!(
         serde_json::from_str::<Value>(&response).unwrap(),
@@ -350,7 +395,10 @@ async fn unix_event_server_streams_bounded_output_notifications() {
     let socket = std::path::PathBuf::from(format!(
         "/tmp/sharecli-sc-events-{}-{}.sock",
         std::process::id(),
-        std::time::SystemTime::now().duration_since(std::time::UNIX_EPOCH).unwrap().as_nanos()
+        std::time::SystemTime::now()
+            .duration_since(std::time::UNIX_EPOCH)
+            .unwrap()
+            .as_nanos()
     ));
     let control = Arc::new(RecordingControl::default());
     let events = Arc::new(SurfaceEventHub::new());
@@ -382,13 +430,19 @@ async fn unix_event_server_streams_bounded_output_notifications() {
     let subscription_id = ack["result"]["subscription_id"].as_u64().unwrap();
     events.publish_output("surface-1", b"hello", None).unwrap();
     let mut event = String::new();
-    tokio::time::timeout(std::time::Duration::from_secs(1), reader.read_line(&mut event))
-        .await
-        .unwrap()
-        .unwrap();
+    tokio::time::timeout(
+        std::time::Duration::from_secs(1),
+        reader.read_line(&mut event),
+    )
+    .await
+    .unwrap()
+    .unwrap();
     let event: Value = serde_json::from_str(&event).unwrap();
     assert_eq!(event["method"], "surface.io.event");
-    assert_eq!(event["params"]["subscription_id"].as_u64(), Some(subscription_id));
+    assert_eq!(
+        event["params"]["subscription_id"].as_u64(),
+        Some(subscription_id)
+    );
     assert_eq!(event["params"]["event_bytes_base64"], "aGVsbG8=");
     server.abort();
     let _ = std::fs::remove_file(socket);

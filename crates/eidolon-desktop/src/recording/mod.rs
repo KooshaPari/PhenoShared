@@ -19,8 +19,8 @@
 //! See `docs/EXTRACTION_PLAN.md` Phase E and
 //! `docs/consolidation/KDesktopVirt-to-Eidolon.md` Phase E.
 
-mod profile;
 pub mod probe;
+mod profile;
 mod stub;
 
 #[cfg(feature = "desktop-recording")]
@@ -38,9 +38,9 @@ pub use ffmpeg::FfmpegRecorder;
 #[cfg(feature = "desktop-recording")]
 pub use pipeline::{RecordingPipeline, RecordingResult};
 
-use eidolon_core::Result;
 #[cfg(any(test, feature = "desktop-recording"))]
 use eidolon_core::error::PhenoError;
+use eidolon_core::Result;
 #[cfg(any(test, feature = "desktop-recording"))]
 use std::path::Path;
 
@@ -113,7 +113,9 @@ mod unit_tests {
     #[test]
     fn gif_args_end_with_gif_path() {
         let args = ffmpeg_gif_args("/in.mp4", "/out.gif");
-        assert!(args.iter().any(|a| a == "fps=10,scale=480:-1:flags=lanczos"));
+        assert!(args
+            .iter()
+            .any(|a| a == "fps=10,scale=480:-1:flags=lanczos"));
         assert_eq!(args.last().map(String::as_str), Some("/out.gif"));
     }
 

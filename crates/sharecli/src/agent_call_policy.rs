@@ -123,9 +123,11 @@ impl AgentCallPolicy {
             );
         }
 
-        self.admitted_calls.set(self.admitted_calls.get().saturating_add(1));
+        self.admitted_calls
+            .set(self.admitted_calls.get().saturating_add(1));
         if build {
-            self.admitted_builds.set(self.admitted_builds.get().saturating_add(1));
+            self.admitted_builds
+                .set(self.admitted_builds.get().saturating_add(1));
         }
 
         AgentCallDecision {
@@ -146,7 +148,10 @@ impl AgentCallPolicy {
             return command.to_owned();
         }
 
-        let mut positional = words[1..].iter().copied().filter(|word| !word.starts_with('-'));
+        let mut positional = words[1..]
+            .iter()
+            .copied()
+            .filter(|word| !word.starts_with('-'));
         let pattern = positional.next().unwrap_or("");
         let target = match positional.next() {
             Some(".") | None => self.project_root.as_path(),
@@ -181,11 +186,16 @@ fn has_recursive_flag(words: &[&str]) -> bool {
 }
 
 fn is_build_command(command: &str) -> bool {
-    matches!(command.split_whitespace().next(), Some("cargo" | "make" | "just"))
+    matches!(
+        command.split_whitespace().next(),
+        Some("cargo" | "make" | "just")
+    )
 }
 
 fn targets_hazardous_root(command: &str) -> bool {
-    command.split_whitespace().any(|word| is_hazardous_root(Path::new(word)))
+    command
+        .split_whitespace()
+        .any(|word| is_hazardous_root(Path::new(word)))
 }
 
 fn is_hazardous_root(path: &Path) -> bool {

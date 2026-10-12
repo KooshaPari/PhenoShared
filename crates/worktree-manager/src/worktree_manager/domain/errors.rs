@@ -65,15 +65,14 @@ impl From<std::io::Error> for WorktreeError {
 impl From<pheno_vcs_core::VcsError> for WorktreeError {
     fn from(err: pheno_vcs_core::VcsError) -> Self {
         match err {
-            pheno_vcs_core::VcsError::PathNotFound(p) | pheno_vcs_core::VcsError::InvalidPath(p) => {
-                WorktreeError::InvalidPath(p)
-            }
+            pheno_vcs_core::VcsError::PathNotFound(p)
+            | pheno_vcs_core::VcsError::InvalidPath(p) => WorktreeError::InvalidPath(p),
             pheno_vcs_core::VcsError::RefNotFound(r) => WorktreeError::BranchNotFound(r),
             pheno_vcs_core::VcsError::RefExists(r) => WorktreeError::BranchExists(r),
             pheno_vcs_core::VcsError::Backend { message, .. } => WorktreeError::GitError(message),
             pheno_vcs_core::VcsError::Unsupported(m) | pheno_vcs_core::VcsError::Io(m) => {
                 WorktreeError::IoError(m)
-            }
+            },
         }
     }
 }

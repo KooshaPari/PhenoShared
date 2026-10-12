@@ -90,7 +90,7 @@ pub fn init_logging(config: &LoggingConfig) -> anyhow::Result<tracing::Level> {
                 )
                 .try_init()
                 .map_err(|e| anyhow::anyhow!("tracing already initialized: {e}"))?;
-        }
+        },
         LogFormat::Json => {
             registry
                 .with(
@@ -103,7 +103,7 @@ pub fn init_logging(config: &LoggingConfig) -> anyhow::Result<tracing::Level> {
                 )
                 .try_init()
                 .map_err(|e| anyhow::anyhow!("tracing already initialized: {e}"))?;
-        }
+        },
     }
 
     tracing::info!(

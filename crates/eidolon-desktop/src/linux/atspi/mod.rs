@@ -43,11 +43,7 @@ pub trait LinuxAtspiAutomator: Send + Sync {
     async fn list_nodes(&self, max: usize) -> Result<Vec<AtspiNode>>;
 
     /// Find nodes by role (case-insensitive) and optional name substring.
-    async fn find_by_role(
-        &self,
-        role: &str,
-        name: Option<&str>,
-    ) -> Result<Vec<AtspiNode>>;
+    async fn find_by_role(&self, role: &str, name: Option<&str>) -> Result<Vec<AtspiNode>>;
 
     /// Activate via the Action interface (click/press/activate or index 0).
     ///

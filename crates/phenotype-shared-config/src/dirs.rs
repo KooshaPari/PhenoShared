@@ -36,7 +36,7 @@ impl ConfigDir {
                 {
                     None
                 }
-            }
+            },
             Self::User => dirs::config_dir().map(|p| p.join(app_name)),
             Self::App => dirs::config_local_dir().map(|p| p.join(app_name)),
             Self::Cwd => Some(std::env::current_dir().unwrap_or_default()),

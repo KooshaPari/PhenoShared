@@ -6,7 +6,12 @@ pub struct RingBuffer<T> {
 }
 impl<T> RingBuffer<T> {
     pub fn new(capacity: usize) -> Self {
-        Self { data: (0..capacity).map(|_| None).collect(), head: 0, tail: 0, size: 0 }
+        Self {
+            data: (0..capacity).map(|_| None).collect(),
+            head: 0,
+            tail: 0,
+            size: 0,
+        }
     }
     pub fn push(&mut self, v: T) -> Option<T> {
         let evicted = if self.size == self.data.len() {
@@ -38,7 +43,11 @@ impl<T> RingBuffer<T> {
         let mut v = Vec::with_capacity(self.size);
         for i in 0..self.size {
             let idx = (self.head + i) % self.data.len();
-            v.push(self.data[idx].as_ref().expect("slot occupied within size bounds"));
+            v.push(
+                self.data[idx]
+                    .as_ref()
+                    .expect("slot occupied within size bounds"),
+            );
         }
         v
     }

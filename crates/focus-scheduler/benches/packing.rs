@@ -53,7 +53,11 @@ fn create_benchmark_calendar_events(count: usize) -> Vec<CalendarEvent> {
                 starts_at: now() + start_offset,
                 ends_at: now() + start_offset + Duration::minutes(45),
                 source: "calendar".into(),
-                rigidity: if i % 3 == 0 { Rigidity::Hard } else { Rigidity::Soft },
+                rigidity: if i % 3 == 0 {
+                    Rigidity::Hard
+                } else {
+                    Rigidity::Soft
+                },
             }
         })
         .collect()
@@ -72,8 +76,10 @@ fn benchmark_scheduling(c: &mut Criterion) {
                 let scheduler = Scheduler::new(WorkingHoursSpec::default());
                 let tasks = black_box(create_benchmark_tasks(50));
                 let events = black_box(create_benchmark_calendar_events(10));
-                let _sched =
-                    scheduler.plan(&tasks, &events, now(), Duration::hours(24)).await.unwrap();
+                let _sched = scheduler
+                    .plan(&tasks, &events, now(), Duration::hours(24))
+                    .await
+                    .unwrap();
             })
         });
     });
@@ -85,8 +91,10 @@ fn benchmark_scheduling(c: &mut Criterion) {
                 let scheduler = Scheduler::new(WorkingHoursSpec::default());
                 let tasks = black_box(create_benchmark_tasks(100));
                 let events = black_box(create_benchmark_calendar_events(20));
-                let _sched =
-                    scheduler.plan(&tasks, &events, now(), Duration::hours(24)).await.unwrap();
+                let _sched = scheduler
+                    .plan(&tasks, &events, now(), Duration::hours(24))
+                    .await
+                    .unwrap();
             })
         });
     });
@@ -98,8 +106,10 @@ fn benchmark_scheduling(c: &mut Criterion) {
                 let scheduler = Scheduler::new(WorkingHoursSpec::default());
                 let tasks = black_box(create_benchmark_tasks(200));
                 let events = black_box(create_benchmark_calendar_events(40));
-                let _sched =
-                    scheduler.plan(&tasks, &events, now(), Duration::hours(24)).await.unwrap();
+                let _sched = scheduler
+                    .plan(&tasks, &events, now(), Duration::hours(24))
+                    .await
+                    .unwrap();
             })
         });
     });

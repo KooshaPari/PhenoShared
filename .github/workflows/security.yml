@@ -87,7 +87,7 @@ jobs:
       - name: Install Rust toolchain
         uses: dtolnay/rust-toolchain@stable
       - name: Build release binary
-        run: cargo build --release -p driver-cli
+        run: cargo build --release -p driver-cli --locked
       - name: Attest release binary provenance
         uses: actions/attest-build-provenance@v4
         with:

@@ -7,7 +7,9 @@ pub struct Counter {
 }
 impl Counter {
     pub fn new() -> Self {
-        Self { v: AtomicU64::new(0) }
+        Self {
+            v: AtomicU64::new(0),
+        }
     }
     pub fn inc(&self) {
         self.v.fetch_add(1, Ordering::Relaxed);
@@ -30,7 +32,9 @@ pub struct Gauge {
 }
 impl Gauge {
     pub fn new() -> Self {
-        Self { v: AtomicI64::new(0) }
+        Self {
+            v: AtomicI64::new(0),
+        }
     }
     pub fn set(&self, n: i64) {
         self.v.store(n, Ordering::Relaxed);
@@ -51,15 +55,28 @@ pub struct MetricsRegistry {
 }
 impl MetricsRegistry {
     pub fn new() -> Self {
-        Self { counters: Mutex::new(HashMap::new()), gauges: Mutex::new(HashMap::new()) }
+        Self {
+            counters: Mutex::new(HashMap::new()),
+            gauges: Mutex::new(HashMap::new()),
+        }
     }
     pub fn counter(&self, name: &str) -> Arc<Counter> {
-        let mut m = self.counters.lock().expect("MetricsRegistry counters mutex poisoned");
-        m.entry(name.to_string()).or_insert_with(|| Arc::new(Counter::new())).clone()
+        let mut m = self
+            .counters
+            .lock()
+            .expect("MetricsRegistry counters mutex poisoned");
+        m.entry(name.to_string())
+            .or_insert_with(|| Arc::new(Counter::new()))
+            .clone()
     }
     pub fn gauge(&self, name: &str) -> Arc<Gauge> {
-        let mut m = self.gauges.lock().expect("MetricsRegistry gauges mutex poisoned");
-        m.entry(name.to_string()).or_insert_with(|| Arc::new(Gauge::new())).clone()
+        let mut m = self
+            .gauges
+            .lock()
+            .expect("MetricsRegistry gauges mutex poisoned");
+        m.entry(name.to_string())
+            .or_insert_with(|| Arc::new(Gauge::new()))
+            .clone()
     }
 }
 

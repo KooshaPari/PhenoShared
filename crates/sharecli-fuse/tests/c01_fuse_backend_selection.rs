@@ -181,8 +181,14 @@ fn backend_select_is_deterministic_for_same_state() {
     let second = select_backend();
     let third = select_backend();
     restore_env("SHARECLI_FUSE_BACKEND", prev);
-    assert_eq!(first, second, "select_backend drifted between calls 1 and 2");
-    assert_eq!(second, third, "select_backend drifted between calls 2 and 3");
+    assert_eq!(
+        first, second,
+        "select_backend drifted between calls 1 and 2"
+    );
+    assert_eq!(
+        second, third,
+        "select_backend drifted between calls 2 and 3"
+    );
 }
 
 /// Mount failure — when `SHARECLI_FUSE_BACKEND=invalid` is set, the

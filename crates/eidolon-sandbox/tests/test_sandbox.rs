@@ -27,20 +27,20 @@ fn make_client(sandbox_id: &str) -> Arc<dyn SandboxAutomator> {
 }
 
 fn assert_unsupported(err: PhenoError, method: &str, expected_code: &str) {
-    assert_eq!(err.unsupported_code(), Some(expected_code));
+    assert_eq!(err.unsupported_code_value(), Some(expected_code));
     assert_eq!(err.status_code(), 501);
     match err {
-        PhenoError::UnsupportedPlatform { code, message } => {
+        PhenoError::UnsupportedPlatform { code, detail } => {
             assert_eq!(code, expected_code);
             assert!(
-                message.contains(method),
-                "expected method {method} in error, got: {message}"
+                detail.contains(method),
+                "expected method {method} in error, got: {detail}"
             );
             assert!(
-                message.contains("not implemented"),
-                "expected unimplemented wording, got: {message}"
+                detail.contains("not implemented"),
+                "expected unimplemented wording, got: {detail}"
             );
-        }
+        },
         other => panic!("expected UnsupportedPlatform, got {other:?}"),
     }
 }

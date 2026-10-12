@@ -36,7 +36,7 @@ pub fn ntp_to_unix(ntp: u64) -> Option<i64> {
 pub fn unix_to_ntp(unix_secs: i64) -> u64 {
     let ntp_secs = unix_secs.wrapping_add(NTP_UNIX_EPOCH_OFFSET);
     // Wrap the seconds portion to 32 bits; preserve sign-correct modulo.
-    let secs32 = (ntp_secs as u64) & 0xFFFF_FFFF;
+    let secs32 = (ntp_secs as u64) & 0xffff_ffff;
     // Fraction is always 0 for whole-second conversions.
     secs32 << 32
 }
@@ -77,7 +77,7 @@ mod tests {
         // (encoded as 0x83AA7E80 in the high 32 bits).
         let ntp = unix_to_ntp(0);
         assert_eq!(ntp >> 32, 2_208_988_800);
-        assert_eq!(ntp & 0xFFFFFFFF, 0);
+        assert_eq!(ntp & 0xffffffff, 0);
     }
 
     #[test]
@@ -93,7 +93,7 @@ mod tests {
         let ntp = unix_to_ntp(unix);
         // NTP seconds = 1_704_067_200 + 2_208_988_800 = 3_913_056_000
         assert_eq!(ntp >> 32, 3_913_056_000);
-        assert_eq!(ntp & 0xFFFFFFFF, 0);
+        assert_eq!(ntp & 0xffffffff, 0);
         // Round-trip back to Unix.
         assert_eq!(ntp_to_unix(ntp), Some(unix));
     }
@@ -113,7 +113,7 @@ mod tests {
         // RFC 5905 §6 gives the example NTP timestamp for
         // 1972-06-17 19:30:42.123 UTC as 0xC1A0293B.D0000000.
         // Convert to Unix: 1972-06-17 19:30:42 UTC = 776087442 seconds.
-        let ntp: u64 = 0xC1A0_293B_D000_0000;
+        let ntp: u64 = 0xc1a0_293b_d000_0000;
         let unix = ntp_to_unix(ntp).expect("valid NTP timestamp");
         // NTP seconds = 0xC1A0293B = 3_249_904_443
         // Unix = 3_249_904_443 - 2_208_988_800 = 1_040_915_643
@@ -137,7 +137,7 @@ mod tests {
         // Place a known NTP value at offset 4 of a 12-byte packet.
         // NTP seconds = 0x00000001 (1900-01-01 00:00:01),
         // fraction = 0x80000000 (exactly 0.5 seconds).
-        let mut pkt = vec![0xFFu8; 12];
+        let mut pkt = vec![0xffu8; 12];
         pkt[4..12].copy_from_slice(&[0x00, 0x00, 0x00, 0x01, 0x80, 0x00, 0x00, 0x00]);
         let ntp = extract_ntp(&pkt, 4).unwrap();
         assert_eq!(ntp, 0x0000_0001_8000_0000);
@@ -168,6 +168,6 @@ mod tests {
         let ntp = unix_to_ntp(unix);
         // After wrap: 4_449_513_600 mod 2^32 = 154_546_304
         assert_eq!(ntp >> 32, 154_546_304);
-        assert_eq!(ntp & 0xFFFFFFFF, 0);
+        assert_eq!(ntp & 0xffffffff, 0);
     }
 }

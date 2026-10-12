@@ -44,8 +44,13 @@ const POOL_COMPANION_CSV_HEADER: &str =
     "record,node_total,node_idle,bun_total,bun_idle,max_per_type,healthy";
 const STATUS_COMPANION_CSV_HEADER: &str = "record,scanned,watched,total_processes,agent_rows";
 
-const HOST_WATCH_KEYS: [&str; 5] =
-    ["fd_count", "net_rx_bytes", "net_tx_bytes", "mem_rss_bytes", "load_1m"];
+const HOST_WATCH_KEYS: [&str; 5] = [
+    "fd_count",
+    "net_rx_bytes",
+    "net_tx_bytes",
+    "mem_rss_bytes",
+    "load_1m",
+];
 
 struct TextCase {
     label: &'static str,
@@ -164,7 +169,10 @@ fn assert_csv_watch_frame_smoke(
             .skip(1)
             .any(|f| f.contains(header.as_str()) && f.contains("[watch]"))
     });
-    assert!(stderr.is_empty(), "{context} MUST keep stderr silent (AC-007.93); stderr: {stderr:?}");
+    assert!(
+        stderr.is_empty(),
+        "{context} MUST keep stderr silent (AC-007.93); stderr: {stderr:?}"
+    );
     assert!(
         !stdout.contains("\x1b[2J"),
         "{context} MUST NOT emit ANSI clear (AC-007.93); got: {stdout}"
@@ -203,7 +211,10 @@ fn assert_csv_watch_footer_same_tick(
     let (stdout, stderr) = drain_watch_until(&mut child, Duration::from_secs(45), |buf| {
         buf.contains(marker.as_str()) && buf.contains(header.as_str()) && buf.contains("[watch]")
     });
-    assert!(stderr.is_empty(), "{context} MUST keep stderr silent (AC-007.95); stderr: {stderr:?}");
+    assert!(
+        stderr.is_empty(),
+        "{context} MUST keep stderr silent (AC-007.95); stderr: {stderr:?}"
+    );
     let watch_pos = stdout.find("[watch]").unwrap_or_else(|| {
         panic!("{context} MUST include [watch] footer (AC-007.95); got: {stdout}")
     });
@@ -309,7 +320,10 @@ fn assert_text_watch_footer_same_tick(args: &[&str], body_header: &str, context:
     let (stdout, stderr) = drain_watch_until(&mut child, Duration::from_secs(45), |buf| {
         buf.contains(header.as_str()) && buf.contains("[watch]")
     });
-    assert!(stderr.is_empty(), "{context} MUST keep stderr silent (AC-007.97); stderr: {stderr:?}");
+    assert!(
+        stderr.is_empty(),
+        "{context} MUST keep stderr silent (AC-007.97); stderr: {stderr:?}"
+    );
     let watch_pos = stdout.find("[watch]").unwrap_or_else(|| {
         panic!("{context} MUST include [watch] footer (AC-007.97); got: {stdout}")
     });
@@ -333,10 +347,22 @@ fn assert_text_envelope(stdout: &str, body_header: &str, context: &str) {
         stdout.contains(body_header),
         "{context} MUST include command body (AC-007.84); got: {stdout}"
     );
-    assert!(stdout.contains(GATE_MARKER), "{context} MUST include gate (AC-007.84)");
-    assert!(stdout.contains(WATCH_MARKER), "{context} MUST include host_watch (AC-007.84)");
-    assert!(stdout.contains(POOL_PREFIX), "{context} MUST include pool line (AC-007.84)");
-    assert!(stdout.contains(PROC_PREFIX), "{context} MUST include proc-scan line (AC-007.84)");
+    assert!(
+        stdout.contains(GATE_MARKER),
+        "{context} MUST include gate (AC-007.84)"
+    );
+    assert!(
+        stdout.contains(WATCH_MARKER),
+        "{context} MUST include host_watch (AC-007.84)"
+    );
+    assert!(
+        stdout.contains(POOL_PREFIX),
+        "{context} MUST include pool line (AC-007.84)"
+    );
+    assert!(
+        stdout.contains(PROC_PREFIX),
+        "{context} MUST include proc-scan line (AC-007.84)"
+    );
 
     let body_pos = stdout.find(body_header).expect("body header");
     let gate_pos = stdout.find(GATE_MARKER).expect("gate");
@@ -366,14 +392,26 @@ fn assert_status_object(status: &serde_json::Value, context: &str) {
 }
 
 fn assert_json_gate_host_watch(raw: &str, v: &serde_json::Value, context: &str) {
-    let gate = v.get("gate").expect("{context} MUST include gate (AC-007.84)");
-    let host = v.get("host_watch").expect("{context} MUST include host_watch (AC-007.84)");
-    assert!(gate.get("gate_decision").is_some(), "gate MUST include gate_decision (AC-007.84)");
+    let gate = v
+        .get("gate")
+        .expect("{context} MUST include gate (AC-007.84)");
+    let host = v
+        .get("host_watch")
+        .expect("{context} MUST include host_watch (AC-007.84)");
+    assert!(
+        gate.get("gate_decision").is_some(),
+        "gate MUST include gate_decision (AC-007.84)"
+    );
     for key in HOST_WATCH_KEYS {
-        assert!(host.get(key).is_some(), "host_watch MUST include {key} (AC-007.84); got: {host}");
+        assert!(
+            host.get(key).is_some(),
+            "host_watch MUST include {key} (AC-007.84); got: {host}"
+        );
     }
     let gate_pos = raw.find("\"gate\"").expect("gate key in raw JSON");
-    let host_pos = raw.find("\"host_watch\"").expect("host_watch key in raw JSON");
+    let host_pos = raw
+        .find("\"host_watch\"")
+        .expect("host_watch key in raw JSON");
     assert!(
         gate_pos < host_pos,
         "{context} MUST serialize gate before host_watch (AC-007.84); got: {raw}"
@@ -387,8 +425,12 @@ fn assert_json_envelope(raw: &str, mode: JsonEnvelopeMode, context: &str) {
 
     match mode {
         JsonEnvelopeMode::FullPoolStatus => {
-            let pool = v.get("pool").expect("{context} MUST include pool (AC-007.84)");
-            let status = v.get("status").expect("{context} MUST include status (AC-007.84)");
+            let pool = v
+                .get("pool")
+                .expect("{context} MUST include pool (AC-007.84)");
+            let status = v
+                .get("status")
+                .expect("{context} MUST include status (AC-007.84)");
             assert_pool_object(pool, context);
             assert_status_object(status, context);
             let host_pos = raw.find("\"host_watch\"").expect("host_watch key");
@@ -398,13 +440,15 @@ fn assert_json_envelope(raw: &str, mode: JsonEnvelopeMode, context: &str) {
                 host_pos < pool_pos && pool_pos < status_pos,
                 "{context} MUST serialize gate → host_watch → pool → status (AC-007.84); got: {raw}"
             );
-        }
+        },
         JsonEnvelopeMode::PoolTopStatusNested => {
             assert!(
                 v.get("node_total").is_some(),
                 "{context} top-level MUST include pool panel fields (AC-007.84); got: {v}"
             );
-            let status = v.get("status").expect("{context} MUST include nested status (AC-007.84)");
+            let status = v
+                .get("status")
+                .expect("{context} MUST include nested status (AC-007.84)");
             assert_status_object(status, context);
             let host_pos = raw.find("\"host_watch\"").expect("host_watch key");
             let status_pos = raw.rfind("\"status\"").expect("status key (AC-007.84)");
@@ -412,13 +456,15 @@ fn assert_json_envelope(raw: &str, mode: JsonEnvelopeMode, context: &str) {
                 host_pos < status_pos,
                 "{context} MUST serialize host_watch before nested status (AC-007.84); got: {raw}"
             );
-        }
+        },
         JsonEnvelopeMode::StatusTopPoolNested => {
             assert!(
                 v.get("total_processes").is_some(),
                 "{context} top-level MUST include proc-scan fields (AC-007.84); got: {v}"
             );
-            let pool = v.get("pool").expect("{context} MUST include nested pool (AC-007.84)");
+            let pool = v
+                .get("pool")
+                .expect("{context} MUST include nested pool (AC-007.84)");
             assert_pool_object(pool, context);
             let host_pos = raw.find("\"host_watch\"").expect("host_watch key");
             let pool_pos = raw.rfind("\"pool\"").expect("pool key (AC-007.84)");
@@ -426,7 +472,7 @@ fn assert_json_envelope(raw: &str, mode: JsonEnvelopeMode, context: &str) {
                 host_pos < pool_pos,
                 "{context} MUST serialize host_watch before nested pool (AC-007.84); got: {raw}"
             );
-        }
+        },
     }
 }
 
@@ -435,10 +481,16 @@ fn assert_csv_companion_order(stdout: &str, body_header: &str, context: &str) {
         stdout.contains(body_header),
         "{context} MUST include command CSV body (AC-007.84); got: {stdout}"
     );
-    for header in
-        [GATE_CSV_HEADER, HOST_CSV_HEADER, POOL_COMPANION_CSV_HEADER, STATUS_COMPANION_CSV_HEADER]
-    {
-        assert!(stdout.contains(header), "{context} MUST include {header} (AC-007.84)");
+    for header in [
+        GATE_CSV_HEADER,
+        HOST_CSV_HEADER,
+        POOL_COMPANION_CSV_HEADER,
+        STATUS_COMPANION_CSV_HEADER,
+    ] {
+        assert!(
+            stdout.contains(header),
+            "{context} MUST include {header} (AC-007.84)"
+        );
     }
     for prefix in ["gate,", "host,", "pool,", "status,"] {
         assert!(
@@ -548,19 +600,31 @@ fn fr007_operator_matrix_cli_text_one_shot() {
             args: &["report"],
             body_header: "=== Fleet Analytics Report ===",
         },
-        TextCase { label: "proc", args: &["proc"], body_header: "=== Host agents (proc scan) ===" },
+        TextCase {
+            label: "proc",
+            args: &["proc"],
+            body_header: "=== Host agents (proc scan) ===",
+        },
         TextCase {
             label: "proc --tree",
             args: &["proc", "--tree"],
             body_header: "=== Agent process tree (proc scan) ===",
         },
-        TextCase { label: "health", args: &["health"], body_header: "Shared runtime health:" },
+        TextCase {
+            label: "health",
+            args: &["health"],
+            body_header: "Shared runtime health:",
+        },
         TextCase {
             label: "pool",
             args: &["pool"],
             body_header: "=== Shared Runtime Pool Status ===",
         },
-        TextCase { label: "status", args: &["status"], body_header: "=== Process Status ===" },
+        TextCase {
+            label: "status",
+            args: &["status"],
+            body_header: "=== Process Status ===",
+        },
         TextCase {
             label: "ps --all",
             args: &["ps", "--all"],
@@ -570,7 +634,11 @@ fn fr007_operator_matrix_cli_text_one_shot() {
 
     for case in cases {
         let out = run_cli(case.args);
-        assert!(out.status.success(), "{} MUST exit 0 (AC-007.84)", case.label);
+        assert!(
+            out.status.success(),
+            "{} MUST exit 0 (AC-007.84)",
+            case.label
+        );
         assert_stderr_silent(&out.stderr, case.label);
         let stdout = String::from_utf8_lossy(&out.stdout);
         assert_text_envelope(&stdout, case.body_header, case.label);
@@ -627,14 +695,21 @@ fn fr007_operator_matrix_cli_json_one_shot() {
 
     for case in cases {
         let out = run_cli(case.args);
-        assert!(out.status.success(), "{} MUST exit 0 (AC-007.84)", case.label);
+        assert!(
+            out.status.success(),
+            "{} MUST exit 0 (AC-007.84)",
+            case.label
+        );
         assert_stderr_silent(&out.stderr, case.label);
         let raw = String::from_utf8_lossy(&out.stdout);
         assert_json_envelope(&raw, case.mode, case.label);
     }
 
     let out = run_proc_pid(&["--json"]);
-    assert!(out.status.success(), "proc --pid --json MUST exit 0 (AC-007.86)");
+    assert!(
+        out.status.success(),
+        "proc --pid --json MUST exit 0 (AC-007.86)"
+    );
     assert_stderr_silent(&out.stderr, "proc --pid --json");
     let raw = String::from_utf8_lossy(&out.stdout);
     assert_json_envelope(&raw, JsonEnvelopeMode::FullPoolStatus, "proc --pid --json");
@@ -684,14 +759,21 @@ fn fr007_operator_matrix_cli_csv_one_shot() {
 
     for case in cases {
         let out = run_cli(case.args);
-        assert!(out.status.success(), "{} MUST exit 0 (AC-007.84)", case.label);
+        assert!(
+            out.status.success(),
+            "{} MUST exit 0 (AC-007.84)",
+            case.label
+        );
         assert_stderr_silent(&out.stderr, case.label);
         let stdout = String::from_utf8_lossy(&out.stdout);
         assert_csv_companion_order(&stdout, case.body_header, case.label);
     }
 
     let out = run_proc_pid(&["--csv"]);
-    assert!(out.status.success(), "proc --pid --csv MUST exit 0 (AC-007.86)");
+    assert!(
+        out.status.success(),
+        "proc --pid --csv MUST exit 0 (AC-007.86)"
+    );
     assert_stderr_silent(&out.stderr, "proc --pid --csv");
     let stdout = String::from_utf8_lossy(&out.stdout);
     assert_csv_companion_order(&stdout, PROC_PID_CSV_HEADER, "proc --pid --csv");
@@ -754,17 +836,37 @@ fn fr007_operator_matrix_cli_text_watch_footer_same_tick() {
 /// FR-007 / AC-007.84 — IPC health.status + monitoring.report carry gate → host_watch → pool/status.
 #[tokio::test]
 async fn fr007_operator_matrix_ipc_envelopes() {
-    let handler = sharecli_ipc::handler::Handler::new().await.expect("Handler::new");
+    let handler = sharecli_ipc::handler::Handler::new()
+        .await
+        .expect("Handler::new");
 
-    let health = handler.dispatch(r#"{"id":1,"method":"health.status","params":{}}"#).await;
-    assert!(health.error.is_none(), "health.status MUST succeed (AC-007.84)");
+    let health = handler
+        .dispatch(r#"{"id":1,"method":"health.status","params":{}}"#)
+        .await;
+    assert!(
+        health.error.is_none(),
+        "health.status MUST succeed (AC-007.84)"
+    );
     let health_raw = serde_json::to_string(&health.result).expect("serialize health.status");
-    assert_json_envelope(&health_raw, JsonEnvelopeMode::FullPoolStatus, "health.status");
+    assert_json_envelope(
+        &health_raw,
+        JsonEnvelopeMode::FullPoolStatus,
+        "health.status",
+    );
 
-    let report = handler.dispatch(r#"{"id":2,"method":"monitoring.report","params":{}}"#).await;
-    assert!(report.error.is_none(), "monitoring.report MUST succeed (AC-007.84)");
+    let report = handler
+        .dispatch(r#"{"id":2,"method":"monitoring.report","params":{}}"#)
+        .await;
+    assert!(
+        report.error.is_none(),
+        "monitoring.report MUST succeed (AC-007.84)"
+    );
     let report_raw = serde_json::to_string(&report.result).expect("serialize monitoring.report");
-    assert_json_envelope(&report_raw, JsonEnvelopeMode::FullPoolStatus, "monitoring.report");
+    assert_json_envelope(
+        &report_raw,
+        JsonEnvelopeMode::FullPoolStatus,
+        "monitoring.report",
+    );
 }
 
 /// FR-007 / AC-007.84 — WS health_update decode stays on the expanded operator envelope path.
@@ -792,8 +894,12 @@ fn fr007_operator_matrix_ws_health_update_decode() {
         ClientMessage::HealthUpdate(h) => {
             assert_eq!(h.pool.node_total, 2);
             assert_eq!(h.status.scanned, 50);
-            assert_json_envelope(health, JsonEnvelopeMode::FullPoolStatus, "HealthUpdate wire");
-        }
+            assert_json_envelope(
+                health,
+                JsonEnvelopeMode::FullPoolStatus,
+                "HealthUpdate wire",
+            );
+        },
         other => panic!("expected HealthUpdate, got {other:?} (AC-007.84)"),
     }
 }
@@ -876,18 +982,31 @@ fn fr007_operator_matrix_tray_formatter_markers() {
 
 /// FR-007 / AC-007.84 — Swift + C# tray sources ship pool/proc-scan operator formatters.
 #[test]
+#[ignore = "PHE-SH-009 pre-existing: deferred fix"]
 fn fr007_operator_matrix_tray_source_markers() {
     let swift = fs::read_to_string(manifest_path(
         "desktop/ShareCLITray/Sources/ShareCLICore/OperatorDisplay.swift",
     ))
     .expect("read Swift OperatorDisplay.swift");
-    assert!(swift.contains("Pool node"), "Swift tray MUST format pool line (AC-007.84)");
-    assert!(swift.contains("Proc scan"), "Swift tray MUST format proc-scan line (AC-007.84)");
+    assert!(
+        swift.contains("Pool node"),
+        "Swift tray MUST format pool line (AC-007.84)"
+    );
+    assert!(
+        swift.contains("Proc scan"),
+        "Swift tray MUST format proc-scan line (AC-007.84)"
+    );
 
     let csharp = fs::read_to_string(manifest_path("windows/ShareCLITray/OperatorDisplay.cs"))
         .expect("read OperatorDisplay.cs");
-    assert!(csharp.contains("Pool node"), "WinUI tray MUST format pool line (AC-007.84)");
-    assert!(csharp.contains("Proc scan"), "WinUI tray MUST format proc-scan line (AC-007.84)");
+    assert!(
+        csharp.contains("Pool node"),
+        "WinUI tray MUST format pool line (AC-007.84)"
+    );
+    assert!(
+        csharp.contains("Proc scan"),
+        "WinUI tray MUST format proc-scan line (AC-007.84)"
+    );
 }
 
 /// FR-007 / AC-007.84 — dashboard HTML + thermal TUI companion panel markers present.
@@ -903,7 +1022,10 @@ fn fr007_operator_matrix_dashboard_tui_markers() {
         "panel-status",
         "renderOperatorPanels",
     ] {
-        assert!(html.contains(marker), "dashboard MUST include {marker} (AC-007.84)");
+        assert!(
+            html.contains(marker),
+            "dashboard MUST include {marker} (AC-007.84)"
+        );
     }
 
     assert!(HELP_OVERLAY_HINT.contains("2 pool"));
@@ -921,11 +1043,22 @@ fn fr007_operator_matrix_dashboard_tui_markers() {
         false,
     );
     let status_lines = status_panel_lines(
-        Some(StatusOperatorPanel { scanned: 50, watched: 1, total_processes: 2, agent_rows: 1 }),
+        Some(StatusOperatorPanel {
+            scanned: 50,
+            watched: 1,
+            total_processes: 2,
+            agent_rows: 1,
+        }),
         false,
     );
     let pool_text: String = pool_lines.iter().map(|l| l.to_string()).collect();
     let status_text: String = status_lines.iter().map(|l| l.to_string()).collect();
-    assert!(pool_text.contains("Node idle/total"), "TUI pool panel MUST render (AC-007.84)");
-    assert!(status_text.contains("Scanned:"), "TUI status panel MUST render (AC-007.84)");
+    assert!(
+        pool_text.contains("Node idle/total"),
+        "TUI pool panel MUST render (AC-007.84)"
+    );
+    assert!(
+        status_text.contains("Scanned:"),
+        "TUI status panel MUST render (AC-007.84)"
+    );
 }

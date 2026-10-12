@@ -31,18 +31,30 @@ impl PoolIndex {
 
     /// Remove `pid` when present. Returns `true` when removed.
     pub fn remove(&self, pid: u32) -> bool {
-        self.names.write().expect("pool index write lock poisoned").remove(&pid).is_some()
+        self.names
+            .write()
+            .expect("pool index write lock poisoned")
+            .remove(&pid)
+            .is_some()
     }
 
     /// Number of tracked pids.
     pub fn count(&self) -> usize {
-        self.names.read().expect("pool index read lock poisoned").len()
+        self.names
+            .read()
+            .expect("pool index read lock poisoned")
+            .len()
     }
 
     /// Snapshot of tracked pids (sorted for deterministic assertions).
     pub fn pids_sorted(&self) -> Vec<u32> {
-        let mut pids: Vec<u32> =
-            self.names.read().expect("pool index read lock poisoned").keys().copied().collect();
+        let mut pids: Vec<u32> = self
+            .names
+            .read()
+            .expect("pool index read lock poisoned")
+            .keys()
+            .copied()
+            .collect();
         pids.sort_unstable();
         pids
     }
@@ -56,7 +68,9 @@ pub struct RelaxedCounter {
 
 impl RelaxedCounter {
     pub fn new() -> Self {
-        Self { v: AtomicU64::new(0) }
+        Self {
+            v: AtomicU64::new(0),
+        }
     }
 
     pub fn inc(&self) {

@@ -86,8 +86,10 @@ pub fn validate(mnemonic: &str) -> Result<bool, String> {
     // Build a flat bit buffer from the wordlist indices.
     let mut bits: Vec<u8> = Vec::with_capacity(n * 11);
     for w in &words {
-        let idx =
-            WORDLIST.iter().position(|x| x == w).ok_or_else(|| format!("unknown word: {}", w))?;
+        let idx = WORDLIST
+            .iter()
+            .position(|x| x == w)
+            .ok_or_else(|| format!("unknown word: {}", w))?;
         push_bits(&mut bits, idx as u32, 11);
     }
 
@@ -123,7 +125,10 @@ pub fn validate(mnemonic: &str) -> Result<bool, String> {
 pub fn entropy_to_mnemonic(entropy: &[u8]) -> Result<String, String> {
     let ent_bits = entropy.len() * 8;
     if !VALID_ENTROPY_BITS.contains(&ent_bits) {
-        return Err(format!("entropy must be 128/160/192/224/256 bits, got {} bits", ent_bits));
+        return Err(format!(
+            "entropy must be 128/160/192/224/256 bits, got {} bits",
+            ent_bits
+        ));
     }
     let cs_bits = ent_bits / 32;
 
@@ -168,8 +173,10 @@ pub fn mnemonic_to_entropy(mnemonic: &str) -> Result<Vec<u8>, String> {
 
     let mut bits: Vec<u8> = Vec::with_capacity(n * 11);
     for w in &words {
-        let idx =
-            WORDLIST.iter().position(|x| x == w).ok_or_else(|| format!("unknown word: {}", w))?;
+        let idx = WORDLIST
+            .iter()
+            .position(|x| x == w)
+            .ok_or_else(|| format!("unknown word: {}", w))?;
         push_bits(&mut bits, idx as u32, 11);
     }
 

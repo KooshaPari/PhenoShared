@@ -9,7 +9,7 @@ use eidolon_core::{PointerInput, TextInput};
 use eidolon_desktop::codes;
 
 fn assert_code(err: PhenoError, expected: &str) {
-    assert_eq!(err.unsupported_code(), Some(expected));
+    assert_eq!(err.unsupported_code_value(), Some(expected));
     assert_eq!(err.status_code(), 501);
 }
 
@@ -157,25 +157,25 @@ mod linux_driver {
                     );
                 } else {
                     match client.pointer(&PointerInput::click(1, 1)).await {
-                        Ok(()) => {}
+                        Ok(()) => {},
                         Err(err) => {
-                            let code = err.unsupported_code();
+                            let code = err.unsupported_code_value();
                             assert!(
                                 code == Some(codes::DESKTOP_LINUX_WAYLAND_PORTAL_UNAVAILABLE)
                                     || code == Some(codes::DESKTOP_LINUX_WAYLAND_INPUT_UNSUPPORTED),
                                 "unexpected Wayland pointer error: {err:?}"
                             );
-                        }
+                        },
                     }
                 }
                 match client.get_viewport().await {
                     Ok(vp) => assert!(vp.width > 0 && vp.height > 0),
                     Err(err) => {
                         assert_eq!(
-                            err.unsupported_code(),
+                            err.unsupported_code_value(),
                             Some(codes::DESKTOP_LINUX_WAYLAND_PORTAL_UNAVAILABLE)
                         );
-                    }
+                    },
                 }
             } else {
                 let err = client.get_viewport().await.unwrap_err();
@@ -203,7 +203,7 @@ mod wayland_inject_smoke {
 
     fn assert_wayland_inject_miss(err: PhenoError) {
         let code = err
-            .unsupported_code()
+            .unsupported_code_value()
             .expect("Wayland inject miss must be UnsupportedPlatform");
         assert!(
             wayland_inject_miss_codes().contains(&code),
@@ -233,11 +233,11 @@ mod wayland_inject_smoke {
 
         let client = LinuxClient::new().expect("construct");
         match client.pointer(&PointerInput::click(1, 1)).await {
-            Ok(()) => {}
+            Ok(()) => {},
             Err(err) => assert_wayland_inject_miss(err),
         }
         match client.text(&TextInput::keystroke("x")).await {
-            Ok(()) => {}
+            Ok(()) => {},
             Err(err) => assert_wayland_inject_miss(err),
         }
     }
@@ -254,7 +254,7 @@ mod wayland_inject_smoke {
         }
         let client = LinuxClient::new().expect("construct");
         match client.pointer(&PointerInput::click(2, 2)).await {
-            Ok(()) => {}
+            Ok(()) => {},
             Err(err) => assert_wayland_inject_miss(err),
         }
     }
@@ -274,13 +274,13 @@ mod linux_atspi {
             Ok(client) => {
                 assert!(client.atspi_ready());
                 let _ = client.list_nodes(4).await.expect("list after connect");
-            }
+            },
             Err(err) => {
                 assert_eq!(
-                    err.unsupported_code(),
+                    err.unsupported_code_value(),
                     Some(codes::DESKTOP_LINUX_ATSPI_UNAVAILABLE)
                 );
-            }
+            },
         }
     }
 

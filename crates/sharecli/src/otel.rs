@@ -46,14 +46,17 @@ where
     match build_provider() {
         Ok(provider) => {
             let _ = PROVIDER.set(provider);
-            let tracer = PROVIDER.get().expect("provider just set").tracer("sharecli");
+            let tracer = PROVIDER
+                .get()
+                .expect("provider just set")
+                .tracer("sharecli");
             global::set_text_map_propagator(TraceContextPropagator::new());
             Some(OpenTelemetryLayer::new(tracer))
-        }
+        },
         Err(err) => {
             eprintln!("sharecli: OTel init failed ({err}); continuing without OTLP export");
             None
-        }
+        },
     }
 }
 
@@ -96,7 +99,10 @@ fn traceparent_value_from_otel_context() -> Option<String> {
     global::get_text_map_propagator(|prop| {
         prop.inject_context(&Context::current(), &mut CarrierInjector(&mut carrier));
     });
-    carrier.get("traceparent").filter(|v| !v.is_empty()).cloned()
+    carrier
+        .get("traceparent")
+        .filter(|v| !v.is_empty())
+        .cloned()
 }
 
 fn is_w3c_traceparent(value: &str) -> bool {
@@ -123,7 +129,9 @@ fn is_w3c_traceparent(value: &str) -> bool {
         && parent_id != "0000000000000000"
         && flags.len() == 2
         && [version, trace_id, parent_id, flags].iter().all(|field| {
-            field.bytes().all(|byte| byte.is_ascii_hexdigit() && !byte.is_ascii_uppercase())
+            field
+                .bytes()
+                .all(|byte| byte.is_ascii_hexdigit() && !byte.is_ascii_uppercase())
         })
 }
 
@@ -168,7 +176,10 @@ pub fn apply_traceparent_spawn_env(cmd: &mut std::process::Command) {
 fn build_provider() -> Result<SdkTracerProvider, Box<dyn std::error::Error + Send + Sync>> {
     let exporter = SpanExporter::builder().with_http().build()?;
     let resource = Resource::builder().with_service_name("sharecli").build();
-    Ok(SdkTracerProvider::builder().with_batch_exporter(exporter).with_resource(resource).build())
+    Ok(SdkTracerProvider::builder()
+        .with_batch_exporter(exporter)
+        .with_resource(resource)
+        .build())
 }
 
 /// Flush pending spans (best-effort). Call on process shutdown when OTel is on.
@@ -209,7 +220,10 @@ mod tests {
         let prev = std::env::var(key).ok();
         let prev_upper = std::env::var("TRACEPARENT").ok();
         std::env::remove_var("TRACEPARENT");
-        std::env::set_var(key, "00-4bf92f3577b34da6a3ce929d0e0e4736-00f067aa0ba902b7-01");
+        std::env::set_var(
+            key,
+            "00-4bf92f3577b34da6a3ce929d0e0e4736-00f067aa0ba902b7-01",
+        );
 
         let (bin, args) = traceparent_child_cmd();
         let mut cmd = std::process::Command::new(bin);
@@ -227,7 +241,10 @@ mod tests {
             std::env::set_var("TRACEPARENT", prev);
         }
 
-        assert_eq!(got, "00-4bf92f3577b34da6a3ce929d0e0e4736-00f067aa0ba902b7-01");
+        assert_eq!(
+            got,
+            "00-4bf92f3577b34da6a3ce929d0e0e4736-00f067aa0ba902b7-01"
+        );
     }
 
     fn traceparent_child_cmd() -> (&'static str, Vec<&'static str>) {
@@ -239,7 +256,12 @@ mod tests {
         {
             (
                 "powershell",
-                vec!["-NoProfile", "-NonInteractive", "-Command", "Write-Output $env:TRACEPARENT"],
+                vec![
+                    "-NoProfile",
+                    "-NonInteractive",
+                    "-Command",
+                    "Write-Output $env:TRACEPARENT",
+                ],
             )
         }
     }
@@ -251,7 +273,10 @@ mod tests {
         let prev = std::env::var(key).ok();
         let prev_upper = std::env::var("TRACEPARENT").ok();
         std::env::remove_var("TRACEPARENT");
-        std::env::set_var(key, "00-4bf92f3577b34da6a3ce929d0e0e4736-00f067aa0ba902b7-01");
+        std::env::set_var(
+            key,
+            "00-4bf92f3577b34da6a3ce929d0e0e4736-00f067aa0ba902b7-01",
+        );
         let out = traceparent_http_value();
         if let Some(prev) = prev {
             std::env::set_var(key, prev);
@@ -277,8 +302,14 @@ mod tests {
         let upper = "TRACEPARENT";
         let prev_lower = std::env::var(lower).ok();
         let prev_upper = std::env::var(upper).ok();
-        std::env::set_var(lower, "00-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa-bbbbbbbbbbbbbbbb-01");
-        std::env::set_var(upper, "00-cccccccccccccccccccccccccccccccc-dddddddddddddddd-01");
+        std::env::set_var(
+            lower,
+            "00-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa-bbbbbbbbbbbbbbbb-01",
+        );
+        std::env::set_var(
+            upper,
+            "00-cccccccccccccccccccccccccccccccc-dddddddddddddddd-01",
+        );
         let out = traceparent_http_value();
         if let Some(prev) = prev_lower {
             std::env::set_var(lower, prev);
@@ -307,7 +338,10 @@ mod tests {
         let prev_lower = std::env::var(lower).ok();
         let prev_upper = std::env::var(upper).ok();
         std::env::set_var(lower, "not-a-trace\r\nx-injected: true");
-        std::env::set_var(upper, "00-cccccccccccccccccccccccccccccccc-dddddddddddddddd-01");
+        std::env::set_var(
+            upper,
+            "00-cccccccccccccccccccccccccccccccc-dddddddddddddddd-01",
+        );
         let out = traceparent_http_value();
         if let Some(prev) = prev_lower {
             std::env::set_var(lower, prev);
@@ -331,7 +365,10 @@ mod tests {
         let _guard = TEST_ENV_LOCK.lock().unwrap();
         let prev = std::env::var("TRACEPARENT").ok();
         std::env::remove_var("TRACEPARENT");
-        std::env::set_var("traceparent", "00-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa-bbbbbbbbbbbbbbbb-01");
+        std::env::set_var(
+            "traceparent",
+            "00-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa-bbbbbbbbbbbbbbbb-01",
+        );
         let out = traceparent_http_value();
         if let Some(prev) = prev {
             std::env::set_var("TRACEPARENT", prev);
@@ -373,7 +410,10 @@ mod tests {
         let prev = std::env::var(key).ok();
         let prev_upper = std::env::var("TRACEPARENT").ok();
         std::env::remove_var("TRACEPARENT");
-        std::env::set_var(key, "00-4bf92f3577b34da6a3ce929d0e0e4736-00f067aa0ba902b7-01");
+        std::env::set_var(
+            key,
+            "00-4bf92f3577b34da6a3ce929d0e0e4736-00f067aa0ba902b7-01",
+        );
         let out = traceparent_spawn_env();
         if let Some(prev) = prev {
             std::env::set_var(key, prev);

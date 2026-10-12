@@ -117,7 +117,7 @@ pub fn readiness_with_metrics(
             Err(msg) => {
                 overall = HealthStatus::Unhealthy;
                 CheckResult::fail(check.name().to_owned(), msg, started)
-            }
+            },
         };
         results.push(result);
     }

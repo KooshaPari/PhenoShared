@@ -349,18 +349,18 @@ impl StdoutMonitor {
                         println!("📷 {}", info);
                     }
                 }
-            }
+            },
             TuiPreviewMethod::SeparatePane => {
                 // For apps like ranger/lf, show in a way that doesn't interfere
                 println!("🖼️  Image detected: {}", detected_image.path.display());
                 // Could integrate with tmux/screen to show in separate pane
-            }
+            },
             TuiPreviewMethod::Overlay => {
                 // For apps like nvim, show floating overlay
                 let _ = preview_manager
                     .show_preview(&detected_image.path, Some(80), Some(40))
                     .await;
-            }
+            },
             TuiPreviewMethod::External => {
                 // Open in external viewer
                 println!(
@@ -368,7 +368,7 @@ impl StdoutMonitor {
                     detected_image.path.display()
                 );
                 // Could launch external image viewer here
-            }
+            },
             TuiPreviewMethod::None => {
                 // Just log detection
                 debug!(
@@ -376,7 +376,7 @@ impl StdoutMonitor {
                     tui_config.name,
                     detected_image.path.display()
                 );
-            }
+            },
         }
     }
 
@@ -442,15 +442,15 @@ impl StdoutMonitor {
             "Vim" | "Neovim" => {
                 // Preserve most escape sequences for vim
                 line.to_string()
-            }
+            },
             "Ranger" | "LF" | "NNN" => {
                 // File managers - preserve navigation sequences
                 line.to_string()
-            }
+            },
             _ => {
                 // For other TUIs, clean escape sequences for image detection
                 self.escape_sequence_regex.replace_all(line, "").to_string()
-            }
+            },
         }
     }
 
@@ -470,19 +470,19 @@ impl StdoutMonitor {
                 "Ranger" | "LF" | "NNN" => {
                     // File managers often show file paths directly
                     detected.extend(self.detect_file_manager_images(line, line_number));
-                }
+                },
                 "Vim" | "Neovim" => {
                     // Editors might show file names in status lines or command output
                     detected.extend(self.detect_editor_images(line, line_number));
-                }
+                },
                 "w3m" => {
                     // Browser might show image URLs or local paths
                     detected.extend(self.detect_browser_images(line, line_number));
-                }
+                },
                 _ => {
                     // Default detection for other TUIs
                     detected.extend(self.detect_images_in_line(line, line_number));
-                }
+                },
             }
         } else {
             // Standard detection for non-TUI commands
@@ -698,13 +698,13 @@ impl LivePreviewSystem {
                 self.show_floating_preview(&path).await?;
                 self.current_preview = Some(path);
                 Ok(true)
-            }
+            },
             None if self.current_preview.is_some() => {
                 // No image at cursor, hide preview
                 self.hide_floating_preview().await?;
                 self.current_preview = None;
                 Ok(true)
-            }
+            },
             _ => Ok(false), // No change needed
         }
     }

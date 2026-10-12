@@ -41,10 +41,10 @@ impl std::fmt::Display for TopologyError {
             TopologyError::DirectMainCommit => write!(f, "Direct commits to main are blocked"),
             TopologyError::InvalidBranchName { name, reason } => {
                 write!(f, "Invalid branch name '{}': {}", name, reason)
-            }
+            },
             TopologyError::PolicyViolation { message } => {
                 write!(f, "Policy violation: {}", message)
-            }
+            },
         }
     }
 }

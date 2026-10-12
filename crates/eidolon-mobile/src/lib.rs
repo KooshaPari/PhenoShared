@@ -64,16 +64,24 @@ pub use kmobile_bridge::{
     DeviceInfo, DeviceManager, InMemoryDeviceManager, Modality, TestRunReport,
 };
 
-#[cfg(feature = "mobile-ios")]
-pub use ios::XcrunIosDriver;
 #[cfg(feature = "mobile-android")]
 pub use android::AdbAndroidDriver;
 #[cfg(any(feature = "mobile-ios", feature = "mobile-android"))]
 pub use discovery::InstrumentDiscovery;
+#[cfg(feature = "mobile-ios")]
+pub use ios::XcrunIosDriver;
 
+#[cfg(feature = "mobile-appium")]
+pub use android::appium_probe;
 pub use android::probe as android_probe;
 pub use android::uia2_assets;
 pub use android::uia2_server;
+#[cfg(feature = "mobile-appium")]
+pub use android::{
+    appium_cli_ready, appium_tools_ready, env_appium_url, require_appium_ready, resolve_appium_cli,
+    resolve_appium_home, AppiumProbe, APPIUM_HOME_ENV, APPIUM_PATH_ENV, APPIUM_URL_ENV,
+    DEFAULT_APPIUM_URL,
+};
 pub use android::{
     parse_package_status, Uia2ApkPaths, Uia2PackageStatus, Uia2Server, DEFAULT_DEVICE_PORT,
     DEFAULT_RUNNER, DEFAULT_SERVER_PACKAGE, DEFAULT_TEST_PACKAGE,
@@ -82,14 +90,6 @@ pub use android::{
 pub use android::{
     AppiumSessionClient, SessionWireMode, Uia2Element, Uia2HttpClient, DEFAULT_HTTP_HOST,
 };
-#[cfg(feature = "mobile-appium")]
-pub use android::{
-    appium_cli_ready, appium_tools_ready, env_appium_url, require_appium_ready,
-    resolve_appium_cli, resolve_appium_home, AppiumProbe, APPIUM_HOME_ENV, APPIUM_PATH_ENV,
-    APPIUM_URL_ENV, DEFAULT_APPIUM_URL,
-};
-#[cfg(feature = "mobile-appium")]
-pub use android::appium_probe;
 pub use ios::probe as ios_probe;
 
 /// Resolve the stable [`codes`] token for a platform label.

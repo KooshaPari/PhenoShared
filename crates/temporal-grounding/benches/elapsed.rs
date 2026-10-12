@@ -17,8 +17,8 @@ fn random_pairs() -> Vec<(DateTime<Utc>, DateTime<Utc>)> {
     (0..1000)
         .map(|i| {
             // Deterministic pseudo-random spread across +/-30 days.
-            let offset_a = Duration::seconds(((i * 73) % (30 * 86_400)) as i64);
-            let offset_b = Duration::seconds(((i * 211 + 17) % (60 * 86_400)) as i64);
+            let offset_a = Duration::seconds(i64::from((i * 73) % (30 * 86_400)));
+            let offset_b = Duration::seconds(i64::from((i * 211 + 17) % (60 * 86_400)));
             (base + offset_a, base + offset_b)
         })
         .collect()

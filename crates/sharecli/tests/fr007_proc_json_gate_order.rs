@@ -13,10 +13,18 @@ fn bin() -> Command {
 fn assert_json_gate_before_host_watch(raw: &str, context: &str) {
     let v: serde_json::Value =
         serde_json::from_str(raw.trim()).expect("{context} MUST emit valid JSON");
-    assert!(v.get("gate").is_some(), "{context} MUST include gate (AC-007.24)");
-    assert!(v.get("host_watch").is_some(), "{context} MUST include host_watch (AC-007.24)");
+    assert!(
+        v.get("gate").is_some(),
+        "{context} MUST include gate (AC-007.24)"
+    );
+    assert!(
+        v.get("host_watch").is_some(),
+        "{context} MUST include host_watch (AC-007.24)"
+    );
     let gate_pos = raw.find("\"gate\"").expect("gate key in raw JSON");
-    let host_pos = raw.find("\"host_watch\"").expect("host_watch key in raw JSON");
+    let host_pos = raw
+        .find("\"host_watch\"")
+        .expect("host_watch key in raw JSON");
     assert!(
         gate_pos < host_pos,
         "{context} MUST serialize gate before host_watch (AC-007.24); got: {raw}"
@@ -27,8 +35,15 @@ fn assert_json_gate_before_host_watch(raw: &str, context: &str) {
 #[test]
 #[serial_test::serial]
 fn fr007_proc_json_gate_ordering() {
-    let out = bin().args(["proc", "--json"]).output().expect("spawn sharecli proc --json");
-    assert!(out.status.success(), "proc --json MUST exit 0; stderr: {:?}", out.stderr);
+    let out = bin()
+        .args(["proc", "--json"])
+        .output()
+        .expect("spawn sharecli proc --json");
+    assert!(
+        out.status.success(),
+        "proc --json MUST exit 0; stderr: {:?}",
+        out.stderr
+    );
     let raw = String::from_utf8_lossy(&out.stdout);
     assert_json_gate_before_host_watch(&raw, "proc --json");
 }
@@ -41,7 +56,11 @@ fn fr007_proc_tree_json_gate_ordering() {
         .args(["proc", "--tree", "--json"])
         .output()
         .expect("spawn sharecli proc --tree --json");
-    assert!(out.status.success(), "proc --tree --json MUST exit 0; stderr: {:?}", out.stderr);
+    assert!(
+        out.status.success(),
+        "proc --tree --json MUST exit 0; stderr: {:?}",
+        out.stderr
+    );
     let raw = String::from_utf8_lossy(&out.stdout);
     assert_json_gate_before_host_watch(&raw, "proc --tree --json");
 }
@@ -55,7 +74,11 @@ fn fr007_proc_pid_json_gate_ordering() {
         .args(["proc", "--pid", &pid.to_string(), "--json"])
         .output()
         .expect("spawn sharecli proc --pid --json");
-    assert!(out.status.success(), "proc --pid --json MUST exit 0; stderr: {:?}", out.stderr);
+    assert!(
+        out.status.success(),
+        "proc --pid --json MUST exit 0; stderr: {:?}",
+        out.stderr
+    );
     let raw = String::from_utf8_lossy(&out.stdout);
     assert_json_gate_before_host_watch(&raw, "proc --pid --json");
 }

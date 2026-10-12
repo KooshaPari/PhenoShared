@@ -58,7 +58,7 @@ pub struct PresHeader {
 }
 
 /// The 8-byte CFB magic ([MS-CFB] 2.2).
-pub const CFB_MAGIC: [u8; 8] = [0xD0, 0xCF, 0x11, 0xE0, 0xA1, 0xB1, 0x1A, 0xE1];
+pub const CFB_MAGIC: [u8; 8] = [0xd0, 0xcf, 0x11, 0xe0, 0xa1, 0xb1, 0x1a, 0xe1];
 
 /// Legacy PPT files use CFB v3 (sector shift 9 = 512-byte sectors).
 pub const CFB_V3_SECTOR_SHIFT: u16 = 9;
@@ -73,17 +73,23 @@ pub const CFB_V4_SECTOR_SHIFT: u16 = 12;
 /// document-level encryption must read the document summary stream.
 pub fn parse(input: &[u8]) -> Result<PresHeader, String> {
     if input.len() < 512 {
-        return Err(format!("PPT header requires 512 bytes, got {}", input.len()));
+        return Err(format!(
+            "PPT header requires 512 bytes, got {}",
+            input.len()
+        ));
     }
     let mut magic = [0u8; 8];
     magic.copy_from_slice(&input[0..8]);
     if magic != CFB_MAGIC {
-        return Err(format!("invalid CFB magic: expected {:02X?}, got {:02X?}", CFB_MAGIC, magic));
+        return Err(format!(
+            "invalid CFB magic: expected {:02X?}, got {:02X?}",
+            CFB_MAGIC, magic
+        ));
     }
     // CFB header fields, all little-endian per [MS-CFB] 2.2.
     let major_version = u16::from_le_bytes([input[26], input[27]]);
     let byte_order = u16::from_le_bytes([input[28], input[29]]);
-    if byte_order != 0xFFFE {
+    if byte_order != 0xfffe {
         return Err(format!(
             "invalid CFB byte-order mark: expected 0xFFFE, got 0x{:04X}",
             byte_order
@@ -124,7 +130,7 @@ mod tests {
         // Major version (offset 26).
         buf[26..28].copy_from_slice(&major_version.to_le_bytes());
         // Byte order (offset 28) — 0xFFFE little-endian.
-        buf[28..30].copy_from_slice(&0xFFFEu16.to_le_bytes());
+        buf[28..30].copy_from_slice(&0xfffeu16.to_le_bytes());
         // Sector shift (offset 30).
         buf[30..32].copy_from_slice(&sector_shift.to_le_bytes());
         // Mini sector shift (offset 32) — 6.
@@ -138,7 +144,7 @@ mod tests {
         // Mini stream cutoff (offset 56) — 0x1000.
         buf[56..60].copy_from_slice(&0x00001000u32.to_le_bytes());
         // First mini FAT (offset 60) — 0xFFFFFFFE (ENDOFCHAIN).
-        buf[60..64].copy_from_slice(&0xFFFFFFFEu32.to_le_bytes());
+        buf[60..64].copy_from_slice(&0xfffffffeu32.to_le_bytes());
         // Number of mini FAT (offset 64) — 0.
         // First DIFAT (offset 68) — 0.
         // Number of DIFAT (offset 72) — 0.
@@ -151,7 +157,7 @@ mod tests {
     #[test]
     fn cfb_magic_matches_ms_cfb_spec() {
         // [MS-CFB] 2.2 specifies the 8-byte signature.
-        assert_eq!(CFB_MAGIC, [0xD0, 0xCF, 0x11, 0xE0, 0xA1, 0xB1, 0x1A, 0xE1]);
+        assert_eq!(CFB_MAGIC, [0xd0, 0xcf, 0x11, 0xe0, 0xa1, 0xb1, 0x1a, 0xe1]);
     }
 
     // ---- parse ----
@@ -185,7 +191,7 @@ mod tests {
     #[test]
     fn parse_rejects_bad_magic() {
         let mut buf = build_cfb_header(3, CFB_V3_SECTOR_SHIFT);
-        buf[0] = 0xAB;
+        buf[0] = 0xab;
         let err = parse(&buf).unwrap_err();
         assert!(err.contains("magic"), "got: {}", err);
     }

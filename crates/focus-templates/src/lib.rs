@@ -28,7 +28,7 @@ use uuid::Uuid;
 pub mod signing;
 
 // Re-export signing types for convenience
-pub use signing::{verify_pack, verify_pack_bytes, parse_root_pubkey, PHENOTYPE_ROOT_PUBKEYS};
+pub use signing::{parse_root_pubkey, verify_pack, verify_pack_bytes, PHENOTYPE_ROOT_PUBKEYS};
 
 /// Error surface for template-pack operations.
 #[derive(Debug, Error)]
@@ -159,7 +159,10 @@ pub struct ConditionDraft {
 
 impl From<ConditionDraft> for Condition {
     fn from(c: ConditionDraft) -> Self {
-        Condition { kind: c.kind, params: c.params }
+        Condition {
+            kind: c.kind,
+            params: c.params,
+        }
     }
 }
 
@@ -170,18 +173,30 @@ impl From<ConditionDraft> for Condition {
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 #[serde(tag = "type", rename_all = "snake_case")]
 pub enum ActionDraft {
-    GrantCredit { amount: i32 },
-    DeductCredit { amount: i32 },
+    GrantCredit {
+        amount: i32,
+    },
+    DeductCredit {
+        amount: i32,
+    },
     Block {
         profile: String,
         duration_seconds: i64,
         #[serde(default = "default_rigidity")]
         rigidity: RigidityDraft,
     },
-    Unblock { profile: String },
-    StreakIncrement { name: String },
-    StreakReset { name: String },
-    Notify { message: String },
+    Unblock {
+        profile: String,
+    },
+    StreakIncrement {
+        name: String,
+    },
+    StreakReset {
+        name: String,
+    },
+    Notify {
+        message: String,
+    },
 }
 
 #[derive(Debug, Clone, Copy, Serialize, Deserialize, PartialEq, Eq, Default)]
@@ -210,7 +225,11 @@ impl From<ActionDraft> for Action {
         match a {
             ActionDraft::GrantCredit { amount } => Action::GrantCredit { amount },
             ActionDraft::DeductCredit { amount } => Action::DeductCredit { amount },
-            ActionDraft::Block { profile, duration_seconds, rigidity } => Action::Block {
+            ActionDraft::Block {
+                profile,
+                duration_seconds,
+                rigidity,
+            } => Action::Block {
                 profile,
                 duration: Duration::seconds(duration_seconds),
                 rigidity: rigidity.into(),
@@ -314,7 +333,7 @@ impl TemplatePack {
     ) -> Result<usize> {
         // Verify digest first.
         let canonical = signing::canonical_bytes(self)?;
-        let digest = format!("{:x}", sha2::Sha256::digest(&canonical));
+        let digest = hex::encode(sha2::Sha256::digest(&canonical));
         if digest != manifest.sha256 {
             return Err(TemplateError::Verify(format!(
                 "SHA-256 mismatch: expected {}, got {}",
@@ -340,16 +359,20 @@ impl TemplatePack {
                             verified = true;
                             break;
                         }
-                    }
+                    },
                     Err(_) => continue,
                 }
             }
 
             if !verified {
-                return Err(TemplateError::Verify("no trusted key verified the signature".into()));
+                return Err(TemplateError::Verify(
+                    "no trusted key verified the signature".into(),
+                ));
             }
         } else if require_signature {
-            return Err(TemplateError::Verify("pack requires signature but none present".into()));
+            return Err(TemplateError::Verify(
+                "pack requires signature but none present".into(),
+            ));
         }
 
         // Signature verified; apply rules.
@@ -504,7 +527,10 @@ actions = [
     #[test]
     fn apply_propagates_store_error() {
         let pack = TemplatePack::from_toml_str(SAMPLE_TOML).expect("parse");
-        let mut store = MemStore { fail_at: Some(0), ..Default::default() };
+        let mut store = MemStore {
+            fail_at: Some(0),
+            ..Default::default()
+        };
         let err = pack.apply(&mut store).unwrap_err();
         match err {
             TemplateError::Apply(msg) => assert!(msg.contains("boom")),
@@ -543,27 +569,27 @@ author = "x"
 
     #[test]
     fn verify_and_apply_checks_sha256() {
-        
-        
-
         let pack = TemplatePack::from_toml_str(SAMPLE_TOML).expect("parse");
         let digest = signing::digest_pack(&pack).unwrap();
         let mut manifest = TemplatePackManifest {
             id: pack.id.clone(),
             version: pack.version.clone(),
             author: pack.author.clone(),
-            sha256: "badbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadb"
-                .into(),
+            sha256: "badbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadb".into(),
             signature: None,
             signed_by: None,
         };
         let mut store = MemStore::default();
-        let err = pack.verify_and_apply(&mut store, &manifest, &[], false).unwrap_err();
+        let err = pack
+            .verify_and_apply(&mut store, &manifest, &[], false)
+            .unwrap_err();
         assert!(matches!(err, TemplateError::Verify(_)));
 
         // Correct digest should allow apply
         manifest.sha256 = digest;
-        let n = pack.verify_and_apply(&mut store, &manifest, &[], false).unwrap();
+        let n = pack
+            .verify_and_apply(&mut store, &manifest, &[], false)
+            .unwrap();
         assert_eq!(n, 1);
     }
 
@@ -580,7 +606,9 @@ author = "x"
             signed_by: None,
         };
         let mut store = MemStore::default();
-        let err = pack.verify_and_apply(&mut store, &manifest, &[], true).unwrap_err();
+        let err = pack
+            .verify_and_apply(&mut store, &manifest, &[], true)
+            .unwrap_err();
         assert!(matches!(err, TemplateError::Verify(_)));
         assert!(err.to_string().contains("requires signature"));
     }
@@ -609,7 +637,9 @@ author = "x"
         };
 
         let mut store = MemStore::default();
-        let n = pack.verify_and_apply(&mut store, &manifest, &[pubkey_hex], false).unwrap();
+        let n = pack
+            .verify_and_apply(&mut store, &manifest, &[pubkey_hex], false)
+            .unwrap();
         assert_eq!(n, 1);
     }
 
@@ -638,7 +668,9 @@ author = "x"
         };
 
         let mut store = MemStore::default();
-        let err = pack.verify_and_apply(&mut store, &manifest, &[pubkey2_hex], false).unwrap_err();
+        let err = pack
+            .verify_and_apply(&mut store, &manifest, &[pubkey2_hex], false)
+            .unwrap_err();
         assert!(matches!(err, TemplateError::Verify(_)));
     }
 }

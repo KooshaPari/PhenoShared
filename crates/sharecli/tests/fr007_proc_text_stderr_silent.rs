@@ -57,7 +57,11 @@ fn assert_text_body_has_gate_and_host_watch(stdout: &[u8], context: &str) {
 #[serial_test::serial]
 fn fr007_proc_text_stderr_silent() {
     let out = bin().args(["proc"]).output().expect("spawn sharecli proc");
-    assert!(out.status.success(), "proc MUST exit 0; stderr: {:?}", out.stderr);
+    assert!(
+        out.status.success(),
+        "proc MUST exit 0; stderr: {:?}",
+        out.stderr
+    );
     assert_stderr_silent(&out.stderr, "proc");
     assert_stderr_no_companion_markers(&out.stderr, "proc");
     assert_text_body_has_gate_and_host_watch(&out.stdout, "proc");
@@ -67,8 +71,15 @@ fn fr007_proc_text_stderr_silent() {
 #[test]
 #[serial_test::serial]
 fn fr007_proc_tree_text_stderr_silent() {
-    let out = bin().args(["proc", "--tree"]).output().expect("spawn sharecli proc --tree");
-    assert!(out.status.success(), "proc --tree MUST exit 0; stderr: {:?}", out.stderr);
+    let out = bin()
+        .args(["proc", "--tree"])
+        .output()
+        .expect("spawn sharecli proc --tree");
+    assert!(
+        out.status.success(),
+        "proc --tree MUST exit 0; stderr: {:?}",
+        out.stderr
+    );
     assert_stderr_silent(&out.stderr, "proc --tree");
     assert_stderr_no_companion_markers(&out.stderr, "proc --tree");
     assert_text_body_has_gate_and_host_watch(&out.stdout, "proc --tree");
@@ -83,7 +94,11 @@ fn fr007_proc_pid_text_stderr_silent() {
         .args(["proc", "--pid", &pid.to_string()])
         .output()
         .expect("spawn sharecli proc --pid");
-    assert!(out.status.success(), "proc --pid MUST exit 0; stderr: {:?}", out.stderr);
+    assert!(
+        out.status.success(),
+        "proc --pid MUST exit 0; stderr: {:?}",
+        out.stderr
+    );
     assert_stderr_silent(&out.stderr, "proc --pid");
     assert_stderr_no_companion_markers(&out.stderr, "proc --pid");
     assert_text_body_has_gate_and_host_watch(&out.stdout, "proc --pid");

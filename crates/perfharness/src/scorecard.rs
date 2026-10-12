@@ -292,7 +292,7 @@ fn rank_hot_paths(
                         .into(),
                 });
             }
-        }
+        },
         BottleneckClass::Thread => {
             if let Some(sp) = scaled_parallel {
                 paths.push(OptHotPath {
@@ -306,7 +306,7 @@ fn rank_hot_paths(
                         .into(),
                 });
             }
-        }
+        },
         BottleneckClass::MemoryGrowth => {
             paths.push(OptHotPath {
                 description: "RSS grows unboundedly over sequential runs — likely leak or \
@@ -317,7 +317,7 @@ fn rank_hot_paths(
                     mimalloc/jemalloc; arena allocators"
                     .into(),
             });
-        }
+        },
         BottleneckClass::RateLimit => {
             paths.push(OptHotPath {
                 description: "Majority of wall-clock is unavoidable upstream wait".into(),
@@ -325,8 +325,8 @@ fn rank_hot_paths(
                 candidate_tech: "Request batching; streaming responses; speculative prefetch"
                     .into(),
             });
-        }
-        _ => {}
+        },
+        _ => {},
     }
 
     // Always suggest profiler if none available.

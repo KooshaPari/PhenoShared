@@ -86,31 +86,35 @@ pub fn parse_asset_line(line: &str) -> Result<AssetSpec> {
                     return Err(anyhow!("--start requires a value"));
                 }
                 trim_start = Some(parts[i].parse::<f32>().context("--start must be a float")?);
-            }
+            },
             "--duration" => {
                 i += 1;
                 if i >= parts.len() {
                     return Err(anyhow!("--duration requires a value"));
                 }
-                trim_duration = Some(parts[i].parse::<f32>().context("--duration must be a float")?);
-            }
+                trim_duration = Some(
+                    parts[i]
+                        .parse::<f32>()
+                        .context("--duration must be a float")?,
+                );
+            },
             "--pitch" => {
                 i += 1;
                 if i >= parts.len() {
                     return Err(anyhow!("--pitch requires a value"));
                 }
                 pitch = Some(parts[i].parse::<f32>().context("--pitch must be a float")?);
-            }
+            },
             "--gain" => {
                 i += 1;
                 if i >= parts.len() {
                     return Err(anyhow!("--gain requires a value"));
                 }
                 gain = Some(parts[i].parse::<f32>().context("--gain must be a float")?);
-            }
+            },
             _ => {
                 return Err(anyhow!("unknown flag: {}", parts[i]));
-            }
+            },
         }
         i += 1;
     }
@@ -147,7 +151,7 @@ pub fn parse_sound_sources(content: &str) -> Result<Vec<AssetSpec>> {
             Ok(spec) => specs.push(spec),
             Err(_) => {
                 // Silently skip unparseable lines (descriptive text, etc.)
-            }
+            },
         }
     }
 
@@ -245,10 +249,7 @@ fn cache_hit(cache_dir: &Path, asset: &AssetSpec) -> Result<Option<PathBuf>> {
 }
 
 /// Download a single asset; uses cache if URL hash matches.
-pub fn download_asset(
-    asset: &AssetSpec,
-    config: &FetcherConfig,
-) -> Result<PathBuf> {
+pub fn download_asset(asset: &AssetSpec, config: &FetcherConfig) -> Result<PathBuf> {
     // Respect robots.txt conceptually (simple delay)
     std::thread::sleep(Duration::from_millis(config.request_delay_ms));
 

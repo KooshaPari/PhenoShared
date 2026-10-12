@@ -9,12 +9,21 @@ impl BloomFilter {
         let size_bits =
             (-((capacity as f64) * false_positive_rate.ln() / (ln2 * ln2))).ceil() as usize;
         let size_bits = size_bits.max(64);
-        let hash_count =
-            ((size_bits as f64 / capacity.max(1) as f64) * ln2).round().max(1.0) as u32;
-        Self { bits: vec![0u64; (size_bits + 63) / 64], size_bits, hash_count }
+        let hash_count = ((size_bits as f64 / capacity.max(1) as f64) * ln2)
+            .round()
+            .max(1.0) as u32;
+        Self {
+            bits: vec![0u64; (size_bits + 63) / 64],
+            size_bits,
+            hash_count,
+        }
     }
     pub fn from_size(size_bits: usize, hash_count: u32) -> Self {
-        Self { bits: vec![0u64; (size_bits + 63) / 64], size_bits, hash_count }
+        Self {
+            bits: vec![0u64; (size_bits + 63) / 64],
+            size_bits,
+            hash_count,
+        }
     }
     fn hashes<T: std::hash::Hash>(&self, item: &T) -> Vec<usize> {
         use std::hash::{BuildHasher, Hasher, RandomState};
@@ -39,7 +48,9 @@ impl BloomFilter {
         }
     }
     pub fn contains<T: std::hash::Hash>(&self, item: &T) -> bool {
-        self.hashes(item).iter().all(|&pos| (self.bits[pos / 64] >> (pos % 64)) & 1 == 1)
+        self.hashes(item)
+            .iter()
+            .all(|&pos| (self.bits[pos / 64] >> (pos % 64)) & 1 == 1)
     }
     pub fn false_positive_estimate(&self, items_inserted: usize) -> f64 {
         let k = self.hash_count as f64;
@@ -97,6 +108,10 @@ mod tests {
             }
         }
         // should be well under 5% for proper parameters
-        assert!(false_positives < 500, "fp rate too high: {}", false_positives);
+        assert!(
+            false_positives < 500,
+            "fp rate too high: {}",
+            false_positives
+        );
     }
 }

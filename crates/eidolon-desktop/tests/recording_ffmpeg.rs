@@ -7,14 +7,14 @@
 use eidolon_core::error::PhenoError;
 use eidolon_desktop::codes;
 use eidolon_desktop::recording::{
-    ffmpeg_capture_args, ffmpeg_encode_args, ffmpeg_gif_args, probe, QualityProfile,
-    RecordingStub, VideoFormat,
+    ffmpeg_capture_args, ffmpeg_encode_args, ffmpeg_gif_args, probe, QualityProfile, RecordingStub,
+    VideoFormat,
 };
 use eidolon_desktop::DesktopRecorder;
 
 fn assert_recording_unavailable(err: PhenoError) {
     assert_eq!(
-        err.unsupported_code(),
+        err.unsupported_code_value(),
         Some(codes::DESKTOP_RECORDING_UNAVAILABLE)
     );
     assert_eq!(err.status_code(), 501);
@@ -94,11 +94,11 @@ mod with_feature {
                 assert!(probe::ffmpeg_ready());
                 assert!(rec.ffmpeg_ready());
                 assert!(rec.ffmpeg_path().is_file());
-            }
+            },
             Err(err) => {
                 assert!(!probe::ffmpeg_ready());
                 assert_recording_unavailable(err);
-            }
+            },
         }
 
         match RecordingPipeline::try_new() {
@@ -106,11 +106,11 @@ mod with_feature {
                 assert!(probe::ffmpeg_ready());
                 assert!(pipe.ffmpeg_ready());
                 assert!(pipe.ffmpeg_path().is_file());
-            }
+            },
             Err(err) => {
                 assert!(!probe::ffmpeg_ready());
                 assert_recording_unavailable(err);
-            }
+            },
         }
     }
 
@@ -195,7 +195,7 @@ mod with_feature {
                     "integration stop: success={} bytes={} path={:?}",
                     r.success, r.file_size_bytes, r.output_path
                 );
-            }
+            },
             Err(e) => eprintln!("integration stop error (wiring ok): {e}"),
         }
     }

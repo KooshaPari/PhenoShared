@@ -97,7 +97,10 @@ impl ComposedArtifact {
     /// Look up a tag by key. Returns `None` if the key is not
     /// present.
     pub fn tag(&self, key: &str) -> Option<&str> {
-        self.tags.iter().find(|(k, _)| k == key).map(|(_, v)| v.as_str())
+        self.tags
+            .iter()
+            .find(|(k, _)| k == key)
+            .map(|(_, v)| v.as_str())
     }
 }
 
@@ -147,7 +150,11 @@ pub struct PublishReceipt {
 
 impl PublishReceipt {
     /// Construct a publish receipt.
-    pub fn new(artifact_id: impl Into<String>, target: PublishTarget, published_at: impl Into<String>) -> Self {
+    pub fn new(
+        artifact_id: impl Into<String>,
+        target: PublishTarget,
+        published_at: impl Into<String>,
+    ) -> Self {
         Self {
             artifact_id: artifact_id.into(),
             target,

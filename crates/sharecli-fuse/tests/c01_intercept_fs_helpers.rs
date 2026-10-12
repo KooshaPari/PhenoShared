@@ -50,7 +50,9 @@ fn fr003_intercept_fs_exists_and_read_coalesce() {
 
     let bytes = fs.read_coalesced_rel(Path::new("hello.txt")).expect("read");
     assert_eq!(bytes, b"hello-world");
-    let _ = fs.read_coalesced_rel(Path::new("hello.txt")).expect("read hit");
+    let _ = fs
+        .read_coalesced_rel(Path::new("hello.txt"))
+        .expect("read hit");
     let meters = fs.cache_meters();
     assert!(meters.hits + meters.misses >= 1);
 
@@ -86,23 +88,33 @@ fn fr003_intercept_fs_cow_stage_commit_and_write() {
     fs.commit_rel(Path::new("f.txt")).expect("commit");
     assert_eq!(fs::read(backing.join("f.txt")).expect("read"), b"staged");
 
-    fs.stage_rel_for_agent(Some("other"), Path::new("f.txt"), b"other").expect("stage other");
-    fs.discard_rel_for_agent(Some("other"), Path::new("f.txt")).expect("discard");
+    fs.stage_rel_for_agent(Some("other"), Path::new("f.txt"), b"other")
+        .expect("stage other");
+    fs.discard_rel_for_agent(Some("other"), Path::new("f.txt"))
+        .expect("discard");
     assert_eq!(fs::read(backing.join("f.txt")).expect("read"), b"staged");
 
-    fs.stage_rel(Path::new("f.txt"), b"again").expect("stage again");
+    fs.stage_rel(Path::new("f.txt"), b"again")
+        .expect("stage again");
     let committed = fs.commit_all_for_agent(None).expect("commit all");
     assert!(!committed.is_empty());
 
-    fs.stage_rel(Path::new("f.txt"), b"toss").expect("stage toss");
+    fs.stage_rel(Path::new("f.txt"), b"toss")
+        .expect("stage toss");
     let discarded = fs.discard_all_for_agent(None).expect("discard all");
     assert!(!discarded.is_empty());
 
-    fs.create_rel(Path::new("nested/new.txt"), 0o644).expect("create");
+    fs.create_rel(Path::new("nested/new.txt"), 0o644)
+        .expect("create");
     assert!(backing.join("nested/new.txt").is_file());
-    let n = fs.write_rel(Path::new("nested/new.txt"), 0, b"payload").expect("write");
+    let n = fs
+        .write_rel(Path::new("nested/new.txt"), 0, b"payload")
+        .expect("write");
     assert_eq!(n, 7);
-    assert_eq!(fs::read(backing.join("nested/new.txt")).expect("read"), b"payload");
+    assert_eq!(
+        fs::read(backing.join("nested/new.txt")).expect("read"),
+        b"payload"
+    );
 }
 
 /// FR-003 / C01 — empty session id falls back; InterceptFs::new works.
@@ -118,7 +130,10 @@ fn fr003_intercept_fs_defaults_and_empty_session() {
 
     let empty_sess = InterceptFs::with_options(
         &backing,
-        InterceptFsOptions { session_id: String::new(), ..InterceptFsOptions::default() },
+        InterceptFsOptions {
+            session_id: String::new(),
+            ..InterceptFsOptions::default()
+        },
     );
     assert!(!empty_sess.session_id().is_empty());
 }

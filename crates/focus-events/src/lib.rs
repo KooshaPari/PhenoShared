@@ -221,10 +221,16 @@ mod tests {
     fn validate_rejects_out_of_range_confidence() {
         let mut e = sample();
         e.confidence = 1.5;
-        assert_eq!(e.validate().unwrap_err(), EventError::InvalidConfidence(1.5));
+        assert_eq!(
+            e.validate().unwrap_err(),
+            EventError::InvalidConfidence(1.5)
+        );
         let mut e2 = sample();
         e2.confidence = -0.1;
-        assert!(matches!(e2.validate().unwrap_err(), EventError::InvalidConfidence(_)));
+        assert!(matches!(
+            e2.validate().unwrap_err(),
+            EventError::InvalidConfidence(_)
+        ));
     }
 
     // Traces to: FR-EVT-001
@@ -243,9 +249,15 @@ mod tests {
     #[test]
     fn from_manifest_string_canonical_yields_well_known() {
         let et = EventType::from_manifest_string("canvas", "assignment_due");
-        assert!(matches!(et, EventType::WellKnown(WellKnownEventType::AssignmentDue)));
+        assert!(matches!(
+            et,
+            EventType::WellKnown(WellKnownEventType::AssignmentDue)
+        ));
         let et2 = EventType::from_manifest_string("canvas", "AssignmentGraded");
-        assert!(matches!(et2, EventType::WellKnown(WellKnownEventType::AssignmentGraded)));
+        assert!(matches!(
+            et2,
+            EventType::WellKnown(WellKnownEventType::AssignmentGraded)
+        ));
     }
 
     #[test]

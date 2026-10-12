@@ -30,11 +30,11 @@ fn main() -> ExitCode {
         Some(other) => {
             eprintln!("usage: daemon <autocommit|cleanup>  (got: {other:?})");
             return ExitCode::from(2);
-        }
+        },
         None => {
             eprintln!("usage: daemon <autocommit|cleanup>");
             return ExitCode::from(2);
-        }
+        },
     };
 
     let interval = if mode == "autocommit" {
@@ -152,6 +152,15 @@ fn main() -> ExitCode {
     ExitCode::SUCCESS
 }
 
+/// Probe whether a process is alive without sending it a signal.
+///
+/// # Safety
+///
+/// This is a thin FFI wrapper around libc `kill(pid, 0)`. The caller must
+/// ensure `pid` is a valid POSIX PID (i.e. a process the kernel knows
+/// about). The function does not dereference user memory, does not
+/// allocate, and does not modify global state beyond issuing a syscall.
+/// It is async-signal-safe per POSIX.1-2017.
 #[cfg(unix)]
 unsafe fn libc_kill_zero(pid: u32) -> bool {
     // SAFETY: kill(pid, 0) doesn't send a signal; it only checks whether

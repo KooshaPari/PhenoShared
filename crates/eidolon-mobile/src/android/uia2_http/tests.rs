@@ -56,7 +56,7 @@ impl MockServer {
                                     break;
                                 }
                             }
-                        }
+                        },
                         Err(_) => break,
                     }
                     if raw.len() > 1_048_576 {
@@ -116,7 +116,10 @@ fn parse_appium_value_errors_loud() {
         "value": { "error": "no such element", "message": "missing" }
     });
     let err = Uia2HttpClient::parse_appium_value(&body).unwrap_err();
-    assert_eq!(err.unsupported_code(), Some(codes::MOBILE_UIA2_UNAVAILABLE));
+    assert_eq!(
+        err.unsupported_code_value(),
+        Some(codes::MOBILE_UIA2_UNAVAILABLE)
+    );
 }
 
 #[test]
@@ -160,7 +163,7 @@ fn appium_find_element_posts_using_value_against_mock() {
                 })
                 .to_string(),
             )
-        }
+        },
         _ => (
             404,
             json!({"value":{"error":"unknown","message":path}}).to_string(),
@@ -216,14 +219,20 @@ fn click_gated_without_actions_env() {
     }
     let client = Uia2HttpClient::with_base_url("http://127.0.0.1:9").with_session_id("s");
     let err = client.click("el").unwrap_err();
-    assert_eq!(err.unsupported_code(), Some(codes::MOBILE_ACTIONS_GATED));
+    assert_eq!(
+        err.unsupported_code_value(),
+        Some(codes::MOBILE_ACTIONS_GATED)
+    );
 }
 
 #[test]
 fn require_session_fails_loud() {
     let client = Uia2HttpClient::with_base_url("http://127.0.0.1:9");
     let err = client.find_element("id", "x").unwrap_err();
-    assert_eq!(err.unsupported_code(), Some(codes::MOBILE_UIA2_UNAVAILABLE));
+    assert_eq!(
+        err.unsupported_code_value(),
+        Some(codes::MOBILE_UIA2_UNAVAILABLE)
+    );
 }
 
 #[test]
@@ -236,7 +245,10 @@ fn http_error_fails_loud() {
     });
     let client = Uia2HttpClient::with_base_url(&server.addr).with_timeout(Duration::from_secs(2));
     let err = client.status().unwrap_err();
-    assert_eq!(err.unsupported_code(), Some(codes::MOBILE_UIA2_UNAVAILABLE));
+    assert_eq!(
+        err.unsupported_code_value(),
+        Some(codes::MOBILE_UIA2_UNAVAILABLE)
+    );
 }
 
 #[test]

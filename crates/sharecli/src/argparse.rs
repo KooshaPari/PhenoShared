@@ -17,17 +17,28 @@ pub fn parse(args: &[String]) -> Vec<Arg> {
                 });
             } else {
                 if i + 1 < args.len() && !args[i + 1].starts_with("--") {
-                    result
-                        .push(Arg { key: stripped.to_string(), value: Some(args[i + 1].clone()) });
+                    result.push(Arg {
+                        key: stripped.to_string(),
+                        value: Some(args[i + 1].clone()),
+                    });
                     i += 1;
                 } else {
-                    result.push(Arg { key: stripped.to_string(), value: None });
+                    result.push(Arg {
+                        key: stripped.to_string(),
+                        value: None,
+                    });
                 }
             }
         } else if let Some(stripped) = a.strip_prefix("-") {
-            result.push(Arg { key: stripped.to_string(), value: None });
+            result.push(Arg {
+                key: stripped.to_string(),
+                value: None,
+            });
         } else {
-            result.push(Arg { key: a.clone(), value: None });
+            result.push(Arg {
+                key: a.clone(),
+                value: None,
+            });
         }
         i += 1;
     }
@@ -35,7 +46,9 @@ pub fn parse(args: &[String]) -> Vec<Arg> {
 }
 
 pub fn lookup<'a>(args: &'a [Arg], key: &str) -> Option<&'a str> {
-    args.iter().find(|a| a.key == key).and_then(|a| a.value.as_deref())
+    args.iter()
+        .find(|a| a.key == key)
+        .and_then(|a| a.value.as_deref())
 }
 
 pub fn has_flag(args: &[Arg], key: &str) -> bool {

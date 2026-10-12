@@ -10,6 +10,8 @@ keywords = ["daemon", "skills", "sidecar", "ipc", "agent"]
 categories = ["development-tools"]
 rust-version = "1.75"
 
+[workspace]
+
 [[bin]]
 name = "phenotype-daemon"
 path = "src/main.rs"

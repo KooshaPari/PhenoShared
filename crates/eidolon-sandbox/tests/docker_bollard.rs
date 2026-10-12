@@ -6,11 +6,14 @@
 
 use eidolon_core::error::PhenoError;
 use eidolon_sandbox::codes;
-use eidolon_sandbox::{docker_probe, StubDockerOrchestrator};
 use eidolon_sandbox::DockerOrchestrator;
+use eidolon_sandbox::{docker_probe, StubDockerOrchestrator};
 
 fn assert_docker_stub(err: PhenoError) {
-    assert_eq!(err.unsupported_code(), Some(codes::SANDBOX_DOCKER_STUB));
+    assert_eq!(
+        err.unsupported_code_value(),
+        Some(codes::SANDBOX_DOCKER_STUB)
+    );
     assert_eq!(err.status_code(), 501);
 }
 
@@ -45,10 +48,10 @@ mod with_feature {
         match BollardDockerOrchestrator::try_new().await {
             Ok(orch) => {
                 assert!(orch.docker_ready());
-            }
+            },
             Err(err) => {
                 assert_docker_stub(err);
-            }
+            },
         }
     }
 
@@ -60,10 +63,10 @@ mod with_feature {
                 let meta = client.get_metadata().await.expect("metadata");
                 assert_eq!(meta.id, "eidolon-t2-probe");
                 assert_eq!(meta.image, DockerSandboxClient::DEFAULT_IMAGE);
-            }
+            },
             Err(err) => {
                 assert_docker_stub(err);
-            }
+            },
         }
     }
 

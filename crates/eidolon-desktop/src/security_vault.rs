@@ -116,11 +116,9 @@ pub fn open(passphrase: &str, blob: &[u8]) -> Result<Vec<u8>> {
     let ct = &blob[MAGIC.len() + SALT_LEN + NONCE_LEN..];
     let key = derive_key(passphrase, salt)?;
     let cipher = Aes256Gcm::new(Key::<Aes256Gcm>::from_slice(&key));
-    cipher
-        .decrypt(Nonce::from_slice(nonce), ct)
-        .map_err(|_| {
-            vault_unavailable("open", "AES-GCM decrypt failed (bad passphrase or corrupt)")
-        })
+    cipher.decrypt(Nonce::from_slice(nonce), ct).map_err(|_| {
+        vault_unavailable("open", "AES-GCM decrypt failed (bad passphrase or corrupt)")
+    })
 }
 
 /// Seal and write to `path` (creates parent dirs).
@@ -197,7 +195,7 @@ mod tests {
     fn empty_passphrase_fails_loud() {
         let err = seal("", b"x").unwrap_err();
         assert_eq!(
-            err.unsupported_code(),
+            err.unsupported_code_value(),
             Some(codes::DESKTOP_SECURITY_UNAVAILABLE)
         );
     }
@@ -209,7 +207,7 @@ mod tests {
         let err = default_vault_path().unwrap_err();
         std::env::remove_var(VAULT_PATH_ENV);
         assert_eq!(
-            err.unsupported_code(),
+            err.unsupported_code_value(),
             Some(codes::DESKTOP_SECURITY_UNAVAILABLE)
         );
     }

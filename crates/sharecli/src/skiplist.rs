@@ -26,9 +26,17 @@ fn next_rand(state: &mut u64) -> u64 {
 
 impl<K: Ord + Clone, V: Clone> SkipList<K, V> {
     pub fn new() -> Self {
-        let head =
-            Rc::new(RefCell::new(Node { key: None, value: None, forward: vec![None; MAX_LEVEL] }));
-        Self { head, level: 0, rng_state: RefCell::new(0xdeadbeef_cafebabe), len: 0 }
+        let head = Rc::new(RefCell::new(Node {
+            key: None,
+            value: None,
+            forward: vec![None; MAX_LEVEL],
+        }));
+        Self {
+            head,
+            level: 0,
+            rng_state: RefCell::new(0xdeadbeef_cafebabe),
+            len: 0,
+        }
     }
     fn random_level(&self) -> usize {
         let mut lvl = 0;
@@ -59,7 +67,12 @@ impl<K: Ord + Clone, V: Clone> SkipList<K, V> {
                 loop {
                     let next = cur.borrow().forward[i].clone();
                     if let Some(n) = next {
-                        if n.borrow().key.as_ref().expect("skip node key is always set") < &key {
+                        if n.borrow()
+                            .key
+                            .as_ref()
+                            .expect("skip node key is always set")
+                            < &key
+                        {
                             cur = n;
                             continue;
                         }
@@ -85,7 +98,12 @@ impl<K: Ord + Clone, V: Clone> SkipList<K, V> {
             loop {
                 let next = cur.borrow().forward[i].clone();
                 if let Some(n) = next {
-                    if n.borrow().key.as_ref().expect("skip node key is always set") < key {
+                    if n.borrow()
+                        .key
+                        .as_ref()
+                        .expect("skip node key is always set")
+                        < key
+                    {
                         cur = n;
                         continue;
                     }
@@ -95,7 +113,12 @@ impl<K: Ord + Clone, V: Clone> SkipList<K, V> {
         }
         let next = cur.borrow().forward[0].clone();
         if let Some(n) = next {
-            if n.borrow().key.as_ref().expect("skip node key is always set") == key {
+            if n.borrow()
+                .key
+                .as_ref()
+                .expect("skip node key is always set")
+                == key
+            {
                 return n.borrow().value.clone();
             }
         }

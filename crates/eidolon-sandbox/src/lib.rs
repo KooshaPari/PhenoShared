@@ -122,6 +122,8 @@ mod session_redis;
 pub mod unikernel;
 pub mod virtual_display;
 
+#[cfg(feature = "sandbox-audit")]
+pub use audit::FileAuditStore;
 pub use audit::{
     audit_entry_from_automation, AuditConfig, AuditEngine, AuditEntry, AuditEntryBuilder,
     AuditEventType, AuditQueryIndexes, AuditSeverity, AuditStore, ComplianceReport,
@@ -129,45 +131,18 @@ pub use audit::{
     RetentionPolicy, SharedAuditStore, UnavailableAuditStore, INDEX_VERSION,
 };
 pub use auditing::AuditingSandbox;
-#[cfg(feature = "sandbox-audit")]
-pub use audit::FileAuditStore;
 pub use docker::{
     probe as docker_probe, ContainerConfig, DockerOrchestrator, PortMapping, ResourceSnapshot,
     StubDockerOrchestrator,
 };
 #[cfg(feature = "sandbox-docker")]
 pub use docker::{BollardDockerOrchestrator, DockerSandboxClient};
-pub use kvm::{probe as kvm_probe, KvmBackend, KvmStub};
-#[cfg(feature = "sandbox-kvm")]
-pub use kvm::FirecrackerKvmClient;
-pub use nanovm::{probe as nanovm_probe, NanoVmBackend, NanoVmStub};
-#[cfg(feature = "sandbox-nanovm")]
-pub use nanovm::OpsNanoVmClient;
-pub use unikernel::{
-    boot as unikernel_boot, exec as unikernel_exec, pack as unikernel_pack, probe as unikernel_probe,
-    vsock as unikernel_vsock, KernelConfig, LaunchPlan, RootfsConfig, RootfsFormat, UnikernelBackend,
-    UnikernelLaunchConfig, UnikernelStub,
-};
-#[cfg(feature = "sandbox-unikernel")]
-pub use unikernel::UnikernelGuestClient;
-pub use playcua_dispatcher::{NullPlayCuaPort, PlayCuaConfig, PlayCuaDispatcher, PlayCuaPort};
-pub use virtual_display::{
-    probe as virtual_display_probe, VirtualDisplayConfig, VirtualDisplayHandle,
-    VirtualDisplayKind, VirtualDisplayManager, VirtualDisplayStub, XVFB_INTEGRATION_ENV,
-};
-pub use session::{
-    MemorySessionStore, SessionData, SessionRecord, SessionResources, SessionStorage,
-    SessionStore, UnavailableSessionStore,
-};
-#[cfg(feature = "sandbox-session")]
-pub use session::FileSessionStore;
-#[cfg(feature = "sandbox-session-redis")]
-pub use session::RedisSessionStore;
 pub use enforcement::{
     apply_cgroup, apply_enabled_enforcement, apply_isolation, apply_landlock, apply_namespaces,
-    apply_seccomp, cgroup_ready, env_requests_pid_ns, env_requests_pivot_root, env_requests_user_ns,
-    env_requests_user_subids, env_user_ns_maps, landlock_ready, load_oci_allowlist_file,
-    namespaces_ready, parse_id_map_spec, parse_subid_file, oci_default_allowlist, park_until_signal, parse_oci_allowlist, parse_seccomp_profile_spec,
+    apply_seccomp, cgroup_ready, env_requests_pid_ns, env_requests_pivot_root,
+    env_requests_user_ns, env_requests_user_subids, env_user_ns_maps, landlock_ready,
+    load_oci_allowlist_file, namespaces_ready, oci_default_allowlist, park_until_signal,
+    parse_id_map_spec, parse_oci_allowlist, parse_seccomp_profile_spec, parse_subid_file,
     plan_from_policy, profile_label, resolve_pivot_rootfs, resolve_seccomp_profile,
     run_in_namespaces, seccomp_ready, terminate_isolated_child, AppliedEnforcement, CgroupPlan,
     CgroupStatus, EnforcementPlan, EnforcingSandbox, IsolationStatus, LandlockFsRules,
@@ -178,7 +153,32 @@ pub use enforcement::{
 };
 #[cfg(all(feature = "sandbox-namespaces", target_os = "linux"))]
 pub use enforcement::{NEWGIDMAP_ENV, NEWUIDMAP_ENV};
-
+#[cfg(feature = "sandbox-kvm")]
+pub use kvm::FirecrackerKvmClient;
+pub use kvm::{probe as kvm_probe, KvmBackend, KvmStub};
+#[cfg(feature = "sandbox-nanovm")]
+pub use nanovm::OpsNanoVmClient;
+pub use nanovm::{probe as nanovm_probe, NanoVmBackend, NanoVmStub};
+pub use playcua_dispatcher::{NullPlayCuaPort, PlayCuaConfig, PlayCuaDispatcher, PlayCuaPort};
+#[cfg(feature = "sandbox-session")]
+pub use session::FileSessionStore;
+#[cfg(feature = "sandbox-session-redis")]
+pub use session::RedisSessionStore;
+pub use session::{
+    MemorySessionStore, SessionData, SessionRecord, SessionResources, SessionStorage, SessionStore,
+    UnavailableSessionStore,
+};
+#[cfg(feature = "sandbox-unikernel")]
+pub use unikernel::UnikernelGuestClient;
+pub use unikernel::{
+    boot as unikernel_boot, exec as unikernel_exec, pack as unikernel_pack,
+    probe as unikernel_probe, vsock as unikernel_vsock, KernelConfig, LaunchPlan, RootfsConfig,
+    RootfsFormat, UnikernelBackend, UnikernelLaunchConfig, UnikernelStub,
+};
+pub use virtual_display::{
+    probe as virtual_display_probe, VirtualDisplayConfig, VirtualDisplayHandle, VirtualDisplayKind,
+    VirtualDisplayManager, VirtualDisplayStub, XVFB_INTEGRATION_ENV,
+};
 
 /// Resolve the stable [`codes`] token for a backend label.
 pub fn code_for_backend(backend: &str) -> &'static str {

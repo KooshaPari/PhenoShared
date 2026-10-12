@@ -19,7 +19,10 @@ mod tests {
         let service = SessionService::new(store);
         let inspect = service.inspect(&session.id).unwrap().unwrap();
         assert_eq!(inspect.resume.harness, "forge");
-        assert!(service.recovery_plan(chrono::Duration::hours(1)).unwrap().is_empty());
+        assert!(service
+            .recovery_plan(chrono::Duration::hours(1))
+            .unwrap()
+            .is_empty());
     }
 
     #[test]
@@ -28,12 +31,18 @@ mod tests {
             AgentSession::forge("id", "/tmp").resume.argv,
             vec!["forge", "--conversation-id", "id"]
         );
-        assert_eq!(AgentSession::codex("id", "/tmp").resume.argv, vec!["codex", "resume", "id"]);
+        assert_eq!(
+            AgentSession::codex("id", "/tmp").resume.argv,
+            vec!["codex", "resume", "id"]
+        );
         assert_eq!(
             AgentSession::opencode("id", "/tmp").resume.argv,
             vec!["opencode", "--session", "id"]
         );
-        assert_eq!(AgentSession::kilo("id", "/tmp").resume.argv, vec!["kilo", "--session", "id"]);
+        assert_eq!(
+            AgentSession::kilo("id", "/tmp").resume.argv,
+            vec!["kilo", "--session", "id"]
+        );
         assert_eq!(
             AgentSession::cursor("id", "/tmp").resume.argv,
             vec!["cursor-agent", "--resume", "id"]
@@ -110,9 +119,18 @@ mod tests {
     #[test]
     fn resolution_confidence_eq() {
         assert_eq!(ResolutionConfidence::Exact, ResolutionConfidence::Exact);
-        assert_ne!(ResolutionConfidence::Exact, ResolutionConfidence::Corroborated);
-        assert_ne!(ResolutionConfidence::Corroborated, ResolutionConfidence::Heuristic);
-        assert_ne!(ResolutionConfidence::Heuristic, ResolutionConfidence::Unavailable);
+        assert_ne!(
+            ResolutionConfidence::Exact,
+            ResolutionConfidence::Corroborated
+        );
+        assert_ne!(
+            ResolutionConfidence::Corroborated,
+            ResolutionConfidence::Heuristic
+        );
+        assert_ne!(
+            ResolutionConfidence::Heuristic,
+            ResolutionConfidence::Unavailable
+        );
     }
 
     #[test]
@@ -236,8 +254,10 @@ pub struct AgentSession {
 impl AgentSession {
     /// Whether this record has enough evidence for unattended recovery.
     pub fn auto_resumable(&self) -> bool {
-        matches!(self.confidence, ResolutionConfidence::Exact | ResolutionConfidence::Corroborated)
-            && !self.resume.session_id.is_empty()
+        matches!(
+            self.confidence,
+            ResolutionConfidence::Exact | ResolutionConfidence::Corroborated
+        ) && !self.resume.session_id.is_empty()
             && !self.resume.argv.is_empty()
     }
 }
@@ -258,7 +278,12 @@ impl AgentSession {
             harness: harness.clone(),
             session_id: session_id.clone(),
             cwd: cwd.clone(),
-            resume: ResumeRecipe { harness, session_id, cwd, argv },
+            resume: ResumeRecipe {
+                harness,
+                session_id,
+                cwd,
+                argv,
+            },
             confidence: ResolutionConfidence::Exact,
             state: SessionState::Active,
         }
@@ -270,7 +295,9 @@ impl AgentSession {
         })
     }
     pub fn codex(session_id: impl Into<String>, cwd: impl Into<PathBuf>) -> Self {
-        Self::with_recipe("codex", session_id, cwd, |id| vec!["codex".into(), "resume".into(), id])
+        Self::with_recipe("codex", session_id, cwd, |id| {
+            vec!["codex".into(), "resume".into(), id]
+        })
     }
     pub fn opencode(session_id: impl Into<String>, cwd: impl Into<PathBuf>) -> Self {
         Self::with_recipe("opencode", session_id, cwd, |id| {
@@ -278,7 +305,9 @@ impl AgentSession {
         })
     }
     pub fn kilo(session_id: impl Into<String>, cwd: impl Into<PathBuf>) -> Self {
-        Self::with_recipe("kilo", session_id, cwd, |id| vec!["kilo".into(), "--session".into(), id])
+        Self::with_recipe("kilo", session_id, cwd, |id| {
+            vec!["kilo".into(), "--session".into(), id]
+        })
     }
     pub fn cursor(session_id: impl Into<String>, cwd: impl Into<PathBuf>) -> Self {
         Self::with_recipe("cursor-agent", session_id, cwd, |id| {
@@ -302,7 +331,12 @@ impl AgentSession {
             harness: harness.to_string(),
             session_id: session_id.clone(),
             cwd: cwd.clone(),
-            resume: ResumeRecipe { harness: harness.to_string(), session_id, cwd, argv },
+            resume: ResumeRecipe {
+                harness: harness.to_string(),
+                session_id,
+                cwd,
+                argv,
+            },
             confidence: ResolutionConfidence::Exact,
             state: SessionState::Active,
         }
@@ -316,7 +350,10 @@ pub struct SessionStore {
 impl SessionStore {
     pub fn open(path: impl AsRef<Path>) -> Result<Self> {
         let path = path.as_ref();
-        if let Some(parent) = path.parent().filter(|parent| !parent.as_os_str().is_empty()) {
+        if let Some(parent) = path
+            .parent()
+            .filter(|parent| !parent.as_os_str().is_empty())
+        {
             std::fs::create_dir_all(parent).with_context(|| {
                 format!("create session database directory {}", parent.display())
             })?;
@@ -345,24 +382,37 @@ impl SessionStore {
              CREATE INDEX IF NOT EXISTS session_observations_time
                 ON session_observations(observed_at);",
         )?;
-        Ok(Self { conn: Mutex::new(conn) })
+        Ok(Self {
+            conn: Mutex::new(conn),
+        })
     }
     pub fn upsert(&self, session: &AgentSession) -> Result<()> {
-        let conn = self.conn.lock().map_err(|_| anyhow::anyhow!("session store poisoned"))?;
+        let conn = self
+            .conn
+            .lock()
+            .map_err(|_| anyhow::anyhow!("session store poisoned"))?;
         Self::upsert_locked(&conn, session)
     }
     pub fn list(&self) -> Result<Vec<AgentSession>> {
-        let conn = self.conn.lock().map_err(|_| anyhow::anyhow!("session store poisoned"))?;
+        let conn = self
+            .conn
+            .lock()
+            .map_err(|_| anyhow::anyhow!("session store poisoned"))?;
         let mut stmt =
             conn.prepare("SELECT id,harness,session_id,cwd,resume_json,confidence,state FROM sessions ORDER BY id")?;
-        let rows = stmt.query_map([], Self::row)?.collect::<rusqlite::Result<Vec<_>>>()?;
+        let rows = stmt
+            .query_map([], Self::row)?
+            .collect::<rusqlite::Result<Vec<_>>>()?;
         Ok(rows)
     }
 
     /// Build a recovery plan from the newest fresh observation per surface.
     pub fn recovery_plan(&self, max_age: Duration) -> Result<Vec<AgentSession>> {
         if max_age <= Duration::zero() {
-            tracing::error!(?max_age, "recovery plan requested with non-positive max age");
+            tracing::error!(
+                ?max_age,
+                "recovery plan requested with non-positive max age"
+            );
             anyhow::bail!("recovery max age must be positive");
         }
         let now = Utc::now();
@@ -380,7 +430,7 @@ impl SessionStore {
                         "ignoring observation with malformed timestamp"
                     );
                     continue;
-                }
+                },
             };
             if observed_at > now {
                 tracing::warn!(
@@ -412,7 +462,9 @@ impl SessionStore {
             if observation.kind == ObservationKind::Exited {
                 continue;
             }
-            let Some(session) = observation.session else { continue };
+            let Some(session) = observation.session else {
+                continue;
+            };
             if !session.auto_resumable() {
                 continue;
             }
@@ -421,7 +473,10 @@ impl SessionStore {
         Ok(sessions.into_values().collect())
     }
     pub fn get(&self, id: &str) -> Result<Option<AgentSession>> {
-        let conn = self.conn.lock().map_err(|_| anyhow::anyhow!("session store poisoned"))?;
+        let conn = self
+            .conn
+            .lock()
+            .map_err(|_| anyhow::anyhow!("session store poisoned"))?;
         let mut stmt =
             conn.prepare("SELECT id,harness,session_id,cwd,resume_json,confidence,state FROM sessions WHERE id=?1")?;
         let mut rows = stmt.query([id])?;
@@ -430,7 +485,10 @@ impl SessionStore {
 
     /// Append an observation and atomically refresh the materialized session row.
     pub fn append_observation(&self, observation: &SessionObservation) -> Result<i64> {
-        let mut conn = self.conn.lock().map_err(|_| anyhow::anyhow!("session store poisoned"))?;
+        let mut conn = self
+            .conn
+            .lock()
+            .map_err(|_| anyhow::anyhow!("session store poisoned"))?;
         let tx = conn.transaction_with_behavior(TransactionBehavior::Immediate)?;
         tx.execute(
             "INSERT INTO session_observations
@@ -440,7 +498,11 @@ impl SessionStore {
                 observation.observed_at,
                 observation.surface.id,
                 serde_json::to_string(&observation.surface)?,
-                observation.session.as_ref().map(serde_json::to_string).transpose()?,
+                observation
+                    .session
+                    .as_ref()
+                    .map(serde_json::to_string)
+                    .transpose()?,
                 serde_json::to_string(&observation.capabilities)?,
                 serde_json::to_string(&observation.kind)?,
             ],
@@ -455,7 +517,10 @@ impl SessionStore {
 
     /// Read observations in append order, optionally limited to one surface.
     pub fn observations(&self, surface_id: Option<&str>) -> Result<Vec<SessionObservation>> {
-        let conn = self.conn.lock().map_err(|_| anyhow::anyhow!("session store poisoned"))?;
+        let conn = self
+            .conn
+            .lock()
+            .map_err(|_| anyhow::anyhow!("session store poisoned"))?;
         let mut stmt = if surface_id.is_some() {
             conn.prepare("SELECT seq, observed_at, surface_json, session_json, capabilities_json, kind FROM session_observations WHERE surface_id=?1 ORDER BY seq")?
         } else {
@@ -465,14 +530,18 @@ impl SessionStore {
             stmt.query_map([surface_id], Self::observation_row)?
                 .collect::<rusqlite::Result<Vec<_>>>()?
         } else {
-            stmt.query_map([], Self::observation_row)?.collect::<rusqlite::Result<Vec<_>>>()?
+            stmt.query_map([], Self::observation_row)?
+                .collect::<rusqlite::Result<Vec<_>>>()?
         };
         Ok(rows)
     }
 
     /// Compact history while retaining the latest observation for every surface.
     pub fn compact_observations(&self) -> Result<usize> {
-        let mut conn = self.conn.lock().map_err(|_| anyhow::anyhow!("session store poisoned"))?;
+        let mut conn = self
+            .conn
+            .lock()
+            .map_err(|_| anyhow::anyhow!("session store poisoned"))?;
         let tx = conn.transaction_with_behavior(TransactionBehavior::Immediate)?;
         let removed = tx.execute(
             "DELETE FROM session_observations
@@ -549,15 +618,16 @@ impl SessionStore {
                     Box::new(e),
                 )
             })?,
-            session: session_json.map(|value| serde_json::from_str(&value)).transpose().map_err(
-                |e| {
+            session: session_json
+                .map(|value| serde_json::from_str(&value))
+                .transpose()
+                .map_err(|e| {
                     rusqlite::Error::FromSqlConversionFailure(
                         3,
                         rusqlite::types::Type::Text,
                         Box::new(e),
                     )
-                },
-            )?,
+                })?,
             capabilities: serde_json::from_str(&row.get::<_, String>(4)?).map_err(|e| {
                 rusqlite::Error::FromSqlConversionFailure(
                     4,

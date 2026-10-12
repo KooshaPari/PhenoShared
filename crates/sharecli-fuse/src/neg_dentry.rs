@@ -28,7 +28,10 @@ impl NegDentryMeters {
     /// Hit rate as an integer percentage in `[0, 100]` (0 when no events recorded).
     pub fn hit_rate_pct(self) -> u64 {
         let total = self.hits.saturating_add(self.misses);
-        self.hits.saturating_mul(100).checked_div(total).unwrap_or(0)
+        self.hits
+            .saturating_mul(100)
+            .checked_div(total)
+            .unwrap_or(0)
     }
 
     /// Operator-facing status block for `sharecli status` (FR-009 / AC-009.9).
@@ -93,7 +96,12 @@ impl NegativeDentryCache {
 
     /// Empty cache with an explicit TTL (tests / longer operator windows).
     pub fn with_ttl(ttl: Duration) -> Self {
-        Self { entries: HashMap::new(), ttl, hits: AtomicU64::new(0), misses: AtomicU64::new(0) }
+        Self {
+            entries: HashMap::new(),
+            ttl,
+            hits: AtomicU64::new(0),
+            misses: AtomicU64::new(0),
+        }
     }
 
     /// Configured TTL for newly remembered misses.
@@ -116,11 +124,11 @@ impl NegativeDentryCache {
             Some(entry) if entry.expires_at > now => {
                 self.hits.fetch_add(1, Ordering::Relaxed);
                 true
-            }
+            },
             Some(_) => {
                 self.entries.remove(rel);
                 false
-            }
+            },
             None => false,
         }
     }
@@ -128,7 +136,12 @@ impl NegativeDentryCache {
     /// Record that `rel` was confirmed missing (ENOENT) and count a miss.
     pub fn remember_miss(&mut self, rel: PathBuf) {
         self.misses.fetch_add(1, Ordering::Relaxed);
-        self.entries.insert(rel, NegEntry { expires_at: Instant::now() + self.ttl });
+        self.entries.insert(
+            rel,
+            NegEntry {
+                expires_at: Instant::now() + self.ttl,
+            },
+        );
     }
 
     /// Drop a negative entry (e.g. after create / mkdir / rename-into).
@@ -237,7 +250,10 @@ mod tests {
 
     #[test]
     fn neg_dentry_meters_zero_percent() {
-        let m = NegDentryMeters { hits: 0, misses: 10 };
+        let m = NegDentryMeters {
+            hits: 0,
+            misses: 10,
+        };
         let s = m.format_status_section();
         assert!(s.contains("0%"));
     }

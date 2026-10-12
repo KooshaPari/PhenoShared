@@ -156,12 +156,12 @@ impl ClipboardMonitor {
         }
 
         // PNG signature
-        if data.len() >= 8 && data.starts_with(&[0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A]) {
+        if data.len() >= 8 && data.starts_with(&[0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]) {
             return true;
         }
 
         // JPEG signatures (multiple variants)
-        if data.len() >= 3 && data.starts_with(&[0xFF, 0xD8, 0xFF]) {
+        if data.len() >= 3 && data.starts_with(&[0xff, 0xd8, 0xff]) {
             return true;
         }
 
@@ -182,8 +182,8 @@ impl ClipboardMonitor {
 
         // TIFF signatures (big and little endian)
         if data.len() >= 4
-            && (data.starts_with(&[0x49, 0x49, 0x2A, 0x00])
-                || data.starts_with(&[0x4D, 0x4D, 0x00, 0x2A]))
+            && (data.starts_with(&[0x49, 0x49, 0x2a, 0x00])
+                || data.starts_with(&[0x4d, 0x4d, 0x00, 0x2a]))
         {
             return true;
         }
@@ -375,7 +375,7 @@ impl ClipboardMonitor {
                 cmd.output().map_err(|e| {
                     Error::Clipboard(format!("Failed to run wl-paste for image: {}", e))
                 })?
-            }
+            },
             "xclip" => Command::new("xclip")
                 .arg("-selection")
                 .arg("clipboard")
@@ -392,7 +392,7 @@ impl ClipboardMonitor {
                     "Unsupported clipboard tool: {}",
                     tool
                 )));
-            }
+            },
         };
 
         if output.status.success() {
@@ -465,7 +465,7 @@ impl ClipboardMonitor {
                     "Unsupported clipboard tool: {}",
                     tool
                 )));
-            }
+            },
         };
 
         if let Some(stdin) = child.stdin.as_mut() {
@@ -581,11 +581,11 @@ mod tests {
         };
 
         // PNG signature
-        let png_data = vec![0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A];
+        let png_data = vec![0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a];
         assert!(monitor.has_image_signature(&png_data));
 
         // JPEG signature (fixed - need proper JPEG header)
-        let jpeg_data = vec![0xFF, 0xD8, 0xFF, 0xE0, 0x00, 0x10, 0x4A, 0x46];
+        let jpeg_data = vec![0xff, 0xd8, 0xff, 0xe0, 0x00, 0x10, 0x4a, 0x46];
         assert!(monitor.has_image_signature(&jpeg_data));
 
         // Not an image

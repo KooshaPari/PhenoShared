@@ -11,7 +11,7 @@ impl<T: Ord + Clone> SortedSet<T> {
             Err(p) => {
                 self.items.insert(p, v);
                 true
-            }
+            },
         }
     }
     pub fn contains(&self, v: &T) -> bool {
@@ -25,7 +25,7 @@ impl<T: Ord + Clone> SortedSet<T> {
             Ok(p) => {
                 self.items.remove(p);
                 true
-            }
+            },
             Err(_) => false,
         }
     }

@@ -7,7 +7,11 @@ pub struct Lru<K: std::hash::Hash + Eq + Clone, V> {
 }
 impl<K: std::hash::Hash + Eq + Clone, V> Lru<K, V> {
     pub fn new(capacity: usize) -> Self {
-        Self { map: HashMap::new(), order: Vec::new(), capacity }
+        Self {
+            map: HashMap::new(),
+            order: Vec::new(),
+            capacity,
+        }
     }
     pub fn put(&mut self, k: K, v: V) {
         if self.map.contains_key(&k) {

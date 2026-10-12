@@ -39,7 +39,7 @@ impl Discovery {
                 use std::collections::hash_map::RandomState;
                 let idx = (RandomState::new().hash_one(name) as usize) % services.len();
                 Ok(services.into_iter().nth(idx))
-            }
+            },
             Strategy::ConsistentHash => Ok(services.into_iter().next()),
         }
     }

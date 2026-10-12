@@ -31,8 +31,12 @@ async fn fr011_agent_contention_refuses_hypervisor_spawn() {
     #[cfg(unix)]
     let argv = vec!["echo".to_string(), "agent-gated".to_string()];
     #[cfg(windows)]
-    let argv =
-        vec!["cmd".to_string(), "/C".to_string(), "echo".to_string(), "agent-gated".to_string()];
+    let argv = vec![
+        "cmd".to_string(),
+        "/C".to_string(),
+        "echo".to_string(),
+        "agent-gated".to_string(),
+    ];
 
     let err = hv
         .run(SpawnRequest {
@@ -69,7 +73,12 @@ async fn fr011_agent_contention_warn_still_spawns() {
     #[cfg(unix)]
     let argv = vec!["echo".to_string(), "warn-ok".to_string()];
     #[cfg(windows)]
-    let argv = vec!["cmd".to_string(), "/C".to_string(), "echo".to_string(), "warn-ok".to_string()];
+    let argv = vec![
+        "cmd".to_string(),
+        "/C".to_string(),
+        "echo".to_string(),
+        "warn-ok".to_string(),
+    ];
 
     hv.run(SpawnRequest {
         argv,

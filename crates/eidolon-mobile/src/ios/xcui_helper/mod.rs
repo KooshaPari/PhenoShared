@@ -107,7 +107,7 @@ pub fn parse_argv(args: &[String]) -> Result<HelperCommand, String> {
                 .parse()
                 .map_err(|_| "--y must be an integer".to_string())?;
             Ok(HelperCommand::Tap { udid, x, y })
-        }
+        },
         "swipe" => {
             let x1: i32 = require_flag(&flags, "--x1")?
                 .parse()
@@ -128,11 +128,11 @@ pub fn parse_argv(args: &[String]) -> Result<HelperCommand, String> {
                 x2,
                 y2,
             })
-        }
+        },
         "text" => {
             let value = require_flag(&flags, "--value")?;
             Ok(HelperCommand::Text { udid, value })
-        }
+        },
         "viewport" => Ok(HelperCommand::Viewport { udid }),
         "help" | "--help" | "-h" => Err(usage_err("help")),
         other => Err(usage_err(format!("unknown op `{other}`"))),
@@ -282,7 +282,7 @@ pub fn run_main(args: &[String]) -> i32 {
             }
             eprintln!("error: {e}");
             return 2;
-        }
+        },
     };
     match execute(&cmd) {
         Ok(out) => {
@@ -290,11 +290,11 @@ pub fn run_main(args: &[String]) -> i32 {
                 println!("{}", out.stdout.trim_end());
             }
             0
-        }
+        },
         Err(e) => {
             eprintln!("error: {e}");
             1
-        }
+        },
     }
 }
 

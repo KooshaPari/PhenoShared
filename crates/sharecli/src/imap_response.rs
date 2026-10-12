@@ -102,11 +102,15 @@ pub fn parse(input: &str) -> Result<(Vec<FetchItem>, Status), String> {
             // Otherwise it's an untagged response of some other shape
             // (FETCH, LIST, ...). We only care about FETCH here.
             if let Some((seq, after_seq)) = read_u32(rest) {
-                let after_seq =
-                    after_seq.trim_end_matches('\n').trim_end_matches('\r').trim_start();
+                let after_seq = after_seq
+                    .trim_end_matches('\n')
+                    .trim_end_matches('\r')
+                    .trim_start();
                 if let Some(after_fetch) = strip_keyword(after_seq, "FETCH") {
-                    let body =
-                        after_fetch.trim_end_matches('\n').trim_end_matches('\r').trim_start();
+                    let body = after_fetch
+                        .trim_end_matches('\n')
+                        .trim_end_matches('\r')
+                        .trim_start();
                     if let Some(item) = parse_fetch_block(seq, body, &input[line_end..]) {
                         items.push(item);
                     }
@@ -137,7 +141,10 @@ pub fn parse(input: &str) -> Result<(Vec<FetchItem>, Status), String> {
         offset = line_end;
     }
 
-    let status = final_status.unwrap_or(Status { tagged: String::new(), message: String::new() });
+    let status = final_status.unwrap_or(Status {
+        tagged: String::new(),
+        message: String::new(),
+    });
     Ok((items, status))
 }
 
@@ -272,7 +279,12 @@ fn parse_fetch_block(seq: u32, body: &str, rest: &str) -> Option<FetchItem> {
     // Build the inner text from lines[body_start_line..=body_end_line],
     // dropping the outer parens.
     let mut buf = String::new();
-    for (idx, l) in lines.iter().enumerate().take(body_end_line + 1).skip(body_start_line) {
+    for (idx, l) in lines
+        .iter()
+        .enumerate()
+        .take(body_end_line + 1)
+        .skip(body_start_line)
+    {
         let mut s: &str = l;
         if idx == body_start_line {
             // Drop the opening `(`.
@@ -360,7 +372,7 @@ fn parse_fetch_block(seq: u32, body: &str, rest: &str) -> Option<FetchItem> {
                     item.uid = n.parse().ok();
                 }
                 i += 2;
-            }
+            },
             Tok::Word(w) if w == "FLAGS" => {
                 if let Some(Tok::Group(flags)) = toks.get(i + 1) {
                     item.flags = flags
@@ -375,13 +387,13 @@ fn parse_fetch_block(seq: u32, body: &str, rest: &str) -> Option<FetchItem> {
                     item.flags = vec![s.clone()];
                 }
                 i += 2;
-            }
+            },
             Tok::Word(w) if w == "ENVELOPE" => {
                 if i + 1 < toks.len() {
                     item.envelope = token_to_string(&toks[i + 1]);
                 }
                 i += 2;
-            }
+            },
             Tok::Word(w) if w.starts_with("BODY[") => {
                 let kind = w.trim_start_matches("BODY[").trim_end_matches(']');
                 let mut payload = String::new();
@@ -394,10 +406,10 @@ fn parse_fetch_block(seq: u32, body: &str, rest: &str) -> Option<FetchItem> {
                 if kind == "TEXT" || kind.starts_with("HEADER.FIELDS") {
                     item.body_text = payload;
                 }
-            }
+            },
             _ => {
                 i += 1;
-            }
+            },
         }
     }
 
@@ -415,7 +427,7 @@ fn token_to_string(t: &Tok) -> String {
                 .and_then(|x| x.strip_suffix('"'))
                 .unwrap_or(trimmed)
                 .to_string()
-        }
+        },
         Tok::Literal { payload, .. } => payload.clone(),
         Tok::Group(_) => String::new(),
     }
@@ -488,14 +500,14 @@ fn tokenise(buf: &str, rest: &str, rest_offset: &mut usize) -> Vec<Tok> {
                 None => {
                     i += 1;
                     continue;
-                }
+                },
             };
             let count: usize = match buf[i + 1..close].parse() {
                 Ok(n) => n,
                 Err(_) => {
                     i += 1;
                     continue;
-                }
+                },
             };
             let r = &rest[*rest_offset..];
             let take = count.min(r.len());
@@ -547,7 +559,10 @@ mod tests {
         assert_eq!(items.len(), 1);
         assert_eq!(items[0].seq, 5);
         assert_eq!(items[0].uid, Some(1042));
-        assert_eq!(items[0].flags, vec!["\\Seen".to_string(), "\\Answered".to_string()]);
+        assert_eq!(
+            items[0].flags,
+            vec!["\\Seen".to_string(), "\\Answered".to_string()]
+        );
         assert_eq!(status.tagged, "A3");
     }
 
@@ -736,12 +751,21 @@ mod tests {
 
     #[test]
     fn token_to_string_quoted_strips_quotes() {
-        assert_eq!(token_to_string(&Tok::Quoted("\"hi there\"".into())), "hi there");
+        assert_eq!(
+            token_to_string(&Tok::Quoted("\"hi there\"".into())),
+            "hi there"
+        );
     }
 
     #[test]
     fn token_to_string_literal() {
-        assert_eq!(token_to_string(&Tok::Literal { count: 5, payload: "hello".into() }), "hello");
+        assert_eq!(
+            token_to_string(&Tok::Literal {
+                count: 5,
+                payload: "hello".into()
+            }),
+            "hello"
+        );
     }
 
     #[test]
@@ -771,7 +795,7 @@ mod tests {
                 assert_eq!(g.len(), 2);
                 assert_eq!(g[0], Tok::Word("\\Seen".into()));
                 assert_eq!(g[1], Tok::Word("\\Answered".into()));
-            }
+            },
             _ => panic!("expected Group"),
         }
     }
@@ -785,7 +809,7 @@ mod tests {
                 assert_eq!(g.len(), 2);
                 assert!(matches!(g[0], Tok::Group(_)));
                 assert!(matches!(g[1], Tok::Group(_)));
-            }
+            },
             _ => panic!("expected Group"),
         }
     }
@@ -806,7 +830,7 @@ mod tests {
             Tok::Literal { count, payload } => {
                 assert_eq!(*count, 5);
                 assert_eq!(payload, "hello");
-            }
+            },
             _ => panic!("expected Literal"),
         }
     }
@@ -820,7 +844,7 @@ mod tests {
             Tok::Literal { count, payload } => {
                 assert_eq!(*count, 10);
                 assert_eq!(payload, "hi"); // only 2 bytes available
-            }
+            },
             _ => panic!("expected Literal"),
         }
     }

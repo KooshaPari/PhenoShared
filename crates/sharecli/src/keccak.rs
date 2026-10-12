@@ -2,13 +2,15 @@
 // std-only Rust. Reference vectors from NIST FIPS 202 + Keccak team.
 
 // Keccak-p[1600] rho offsets: 5x5 rotation constants indexed row-major.
-const RHO: [u32; 25] =
-    [0, 1, 62, 28, 27, 36, 44, 6, 55, 20, 3, 10, 43, 25, 39, 41, 45, 15, 21, 8, 18, 2, 61, 56, 14];
+const RHO: [u32; 25] = [
+    0, 1, 62, 28, 27, 36, 44, 6, 55, 20, 3, 10, 43, 25, 39, 41, 45, 15, 21, 8, 18, 2, 61, 56, 14,
+];
 // Reference π lane permutation table (FIPS 202). The in-place ρ/π step below
 // uses the closed-form (nx, ny) mapping instead of indexing this table.
 #[allow(dead_code)]
-const PI: [usize; 24] =
-    [10, 7, 11, 17, 18, 3, 5, 16, 8, 21, 24, 19, 22, 23, 20, 4, 15, 13, 6, 9, 2, 12, 14, 1];
+const PI: [usize; 24] = [
+    10, 7, 11, 17, 18, 3, 5, 16, 8, 21, 24, 19, 22, 23, 20, 4, 15, 13, 6, 9, 2, 12, 14, 1,
+];
 const RC: [u64; 24] = [
     0x0000000000000001,
     0x0000000000008082,
@@ -209,7 +211,10 @@ mod tests {
         // SHAKE128("", 32) -> 7f9c2ba4e88f827d616045507605853e d73b8093f6efbc88eb1a6eacfa66ef26
         let v = shake128(b"", 32);
         let s: String = v.iter().map(|b| format!("{:02x}", b)).collect();
-        assert_eq!(s, "7f9c2ba4e88f827d616045507605853ed73b8093f6efbc88eb1a6eacfa66ef26");
+        assert_eq!(
+            s,
+            "7f9c2ba4e88f827d616045507605853ed73b8093f6efbc88eb1a6eacfa66ef26"
+        );
     }
 
     #[test]

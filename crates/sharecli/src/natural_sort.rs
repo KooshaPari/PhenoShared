@@ -42,11 +42,15 @@ pub fn natural_compare(a: &str, b: &str) -> std::cmp::Ordering {
                 let a_digit = av.get(ai).map_or(false, |&x| x.is_ascii_digit());
                 let b_digit = bv.get(bi).map_or(false, |&x| x.is_ascii_digit());
                 if a_digit {
-                    a_val = a_val.saturating_mul(10).saturating_add((av[ai] - b'0') as u64);
+                    a_val = a_val
+                        .saturating_mul(10)
+                        .saturating_add((av[ai] - b'0') as u64);
                     ai += 1;
                 }
                 if b_digit {
-                    b_val = b_val.saturating_mul(10).saturating_add((bv[bi] - b'0') as u64);
+                    b_val = b_val
+                        .saturating_mul(10)
+                        .saturating_add((bv[bi] - b'0') as u64);
                     bi += 1;
                 }
                 if !a_digit && !b_digit {
@@ -84,7 +88,10 @@ mod tests {
     fn file_names_sort_naturally() {
         let files = vec!["file10.txt", "file2.txt", "file1.txt", "file20.txt"];
         let sorted = natural_sort(&files);
-        assert_eq!(sorted, vec!["file1.txt", "file2.txt", "file10.txt", "file20.txt"]);
+        assert_eq!(
+            sorted,
+            vec!["file1.txt", "file2.txt", "file10.txt", "file20.txt"]
+        );
     }
 
     #[test]
@@ -108,7 +115,10 @@ mod tests {
     #[test]
     fn one_is_prefix_of_other() {
         assert_eq!(natural_compare("file", "file1"), std::cmp::Ordering::Less);
-        assert_eq!(natural_compare("file1", "file"), std::cmp::Ordering::Greater);
+        assert_eq!(
+            natural_compare("file1", "file"),
+            std::cmp::Ordering::Greater
+        );
     }
 
     #[test]
@@ -120,6 +130,9 @@ mod tests {
     #[test]
     fn handles_saturation() {
         // Very large numbers saturate; relative order preserved
-        assert_eq!(natural_compare("99999999999999999999", "1"), std::cmp::Ordering::Greater);
+        assert_eq!(
+            natural_compare("99999999999999999999", "1"),
+            std::cmp::Ordering::Greater
+        );
     }
 }

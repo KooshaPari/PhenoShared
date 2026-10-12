@@ -21,7 +21,10 @@ pub struct ValidationError {
 
 impl ValidationError {
     fn new(field: impl Into<String>, message: impl Into<String>) -> Self {
-        Self { field: field.into(), message: message.into() }
+        Self {
+            field: field.into(),
+            message: message.into(),
+        }
     }
 }
 
@@ -80,18 +83,28 @@ pub fn report_and_exit(errors: &[ValidationError]) -> ! {
 
 fn validate_pool(pool: &crate::config::PoolConfig, errors: &mut Vec<ValidationError>) {
     if pool.max_per_type == 0 {
-        errors.push(ValidationError::new("config.pool.max_per_type", "must be greater than 0"));
+        errors.push(ValidationError::new(
+            "config.pool.max_per_type",
+            "must be greater than 0",
+        ));
     }
     if pool.idle_timeout_secs == 0 {
-        errors
-            .push(ValidationError::new("config.pool.idle_timeout_secs", "must be greater than 0"));
+        errors.push(ValidationError::new(
+            "config.pool.idle_timeout_secs",
+            "must be greater than 0",
+        ));
     }
     if pool.idle_timeout_secs > 3600 {
-        errors
-            .push(ValidationError::new("config.pool.idle_timeout_secs", "must be <= 3600 seconds"));
+        errors.push(ValidationError::new(
+            "config.pool.idle_timeout_secs",
+            "must be <= 3600 seconds",
+        ));
     }
     if pool.max_age_secs == 0 {
-        errors.push(ValidationError::new("config.pool.max_age_secs", "must be greater than 0"));
+        errors.push(ValidationError::new(
+            "config.pool.max_age_secs",
+            "must be greater than 0",
+        ));
     }
     if pool.max_age_secs > 86400 {
         errors.push(ValidationError::new(
@@ -100,7 +113,10 @@ fn validate_pool(pool: &crate::config::PoolConfig, errors: &mut Vec<ValidationEr
         ));
     }
     if pool.spawn_delay_ms == 0 {
-        errors.push(ValidationError::new("config.pool.spawn_delay_ms", "must be greater than 0"));
+        errors.push(ValidationError::new(
+            "config.pool.spawn_delay_ms",
+            "must be greater than 0",
+        ));
     }
 }
 
@@ -133,17 +149,25 @@ fn validate_monitoring(mon: &crate::config::MonitoringConfig, errors: &mut Vec<V
 
 fn validate_port(port: &crate::config::PortConfig, errors: &mut Vec<ValidationError>) {
     if port.sharewei_port == 0 {
-        errors.push(ValidationError::new("config.port.sharewei_port", "must be greater than 0"));
+        errors.push(ValidationError::new(
+            "config.port.sharewei_port",
+            "must be greater than 0",
+        ));
     }
 }
 
 fn validate_paths(paths: &crate::config::PathsConfig, errors: &mut Vec<ValidationError>) {
     if paths.discovery_path.trim().is_empty() {
-        errors.push(ValidationError::new("config.paths.discovery_path", "must not be empty"));
+        errors.push(ValidationError::new(
+            "config.paths.discovery_path",
+            "must not be empty",
+        ));
     }
     if paths.default_compose_output.trim().is_empty() {
-        errors
-            .push(ValidationError::new("config.paths.default_compose_output", "must not be empty"));
+        errors.push(ValidationError::new(
+            "config.paths.default_compose_output",
+            "must not be empty",
+        ));
     }
 }
 
@@ -167,7 +191,10 @@ fn validate_project_limits(
 
 fn validate_spawn(spawn: &crate::config::SpawnConfig, errors: &mut Vec<ValidationError>) {
     if spawn.default_harness.trim().is_empty() {
-        errors.push(ValidationError::new("config.spawn.default_harness", "must not be empty"));
+        errors.push(ValidationError::new(
+            "config.spawn.default_harness",
+            "must not be empty",
+        ));
     }
     if spawn.prune_idle_seconds == 0 {
         errors.push(ValidationError::new(
@@ -191,7 +218,10 @@ fn validate_spawn_policy(
 
 fn validate_cast(cast: &crate::config::CastConfig, errors: &mut Vec<ValidationError>) {
     if cast.default_transport.trim().is_empty() {
-        errors.push(ValidationError::new("config.cast.default_transport", "must not be empty"));
+        errors.push(ValidationError::new(
+            "config.cast.default_transport",
+            "must not be empty",
+        ));
     }
     if cast.handshake_timeout_ms == 0 {
         errors.push(ValidationError::new(
@@ -200,7 +230,10 @@ fn validate_cast(cast: &crate::config::CastConfig, errors: &mut Vec<ValidationEr
         ));
     }
     if cast.retry_backoff_ms == 0 {
-        errors.push(ValidationError::new("config.cast.retry_backoff_ms", "must be greater than 0"));
+        errors.push(ValidationError::new(
+            "config.cast.retry_backoff_ms",
+            "must be greater than 0",
+        ));
     }
 }
 
@@ -271,7 +304,9 @@ mod tests {
         let mut cfg = valid_config();
         cfg.paths.discovery_path = "  ".into();
         let errs = validate_config(&cfg);
-        assert!(errs.iter().any(|e| e.field == "config.paths.discovery_path"));
+        assert!(errs
+            .iter()
+            .any(|e| e.field == "config.paths.discovery_path"));
     }
 
     // 5. Multiple simultaneous errors are all collected.
@@ -292,7 +327,9 @@ mod tests {
         let mut cfg = valid_config();
         cfg.monitoring.health_check_interval_secs = 0;
         let errs = validate_config(&cfg);
-        assert!(errs.iter().any(|e| e.field == "config.monitoring.health_check_interval_secs"));
+        assert!(errs
+            .iter()
+            .any(|e| e.field == "config.monitoring.health_check_interval_secs"));
     }
 
     // 7. Zero spawn.prune_idle_seconds (zero timeout) fails.
@@ -301,7 +338,9 @@ mod tests {
         let mut cfg = valid_config();
         cfg.spawn.prune_idle_seconds = 0;
         let errs = validate_config(&cfg);
-        assert!(errs.iter().any(|e| e.field == "config.spawn.prune_idle_seconds"));
+        assert!(errs
+            .iter()
+            .any(|e| e.field == "config.spawn.prune_idle_seconds"));
     }
 
     // 8. health_check_interval_secs > 3600 fails.
@@ -310,7 +349,9 @@ mod tests {
         let mut cfg = valid_config();
         cfg.monitoring.health_check_interval_secs = 3601;
         let errs = validate_config(&cfg);
-        assert!(errs.iter().any(|e| e.field == "config.monitoring.health_check_interval_secs"));
+        assert!(errs
+            .iter()
+            .any(|e| e.field == "config.monitoring.health_check_interval_secs"));
     }
 
     // 9. Zero project_limits.max_processes fails.
@@ -319,7 +360,9 @@ mod tests {
         let mut cfg = valid_config();
         cfg.project_limits.max_processes = 0;
         let errs = validate_config(&cfg);
-        assert!(errs.iter().any(|e| e.field == "config.project_limits.max_processes"));
+        assert!(errs
+            .iter()
+            .any(|e| e.field == "config.project_limits.max_processes"));
     }
 
     // 10. Zero spawn_policy.max_concurrent_builds fails.
@@ -328,7 +371,9 @@ mod tests {
         let mut cfg = valid_config();
         cfg.spawn_policy.max_concurrent_builds = 0;
         let errs = validate_config(&cfg);
-        assert!(errs.iter().any(|e| e.field == "config.spawn_policy.max_concurrent_builds"));
+        assert!(errs
+            .iter()
+            .any(|e| e.field == "config.spawn_policy.max_concurrent_builds"));
     }
 
     // 11. Zero harness max_instances in defaults fails.
@@ -337,10 +382,16 @@ mod tests {
         let mut cfg = valid_config();
         cfg.defaults.insert(
             "testharness".into(),
-            DefaultHarnessConfig { enabled: true, max_instances: 0, memory_limit_mb: 256 },
+            DefaultHarnessConfig {
+                enabled: true,
+                max_instances: 0,
+                memory_limit_mb: 256,
+            },
         );
         let errs = validate_config(&cfg);
-        assert!(errs.iter().any(|e| e.field == "config.defaults.testharness.max_instances"));
+        assert!(errs
+            .iter()
+            .any(|e| e.field == "config.defaults.testharness.max_instances"));
     }
 
     // --- proptest (C07 L66 / T-410 / T-650) ---

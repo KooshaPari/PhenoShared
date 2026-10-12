@@ -14,7 +14,11 @@ pub struct Backoff {
 }
 impl Backoff {
     pub fn new(strategy: BackoffStrategy, base: Duration, max: Duration) -> Self {
-        Self { strategy, base, max }
+        Self {
+            strategy,
+            base,
+            max,
+        }
     }
     pub fn delay_for(&self, attempt: u32) -> Duration {
         // Use u128 to prevent overflow at extreme attempts. FR-003 / C02 L26

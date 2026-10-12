@@ -202,10 +202,7 @@ mod tests {
 
     #[test]
     fn io_max_line_maps_mib_to_bps() {
-        assert_eq!(
-            io_max_line(8, 0, 100),
-            "8:0 rbps=104857600 wbps=104857600"
-        );
+        assert_eq!(io_max_line(8, 0, 100), "8:0 rbps=104857600 wbps=104857600");
         assert_eq!(bytes_per_sec_from_disk_mib(1), 1024 * 1024);
     }
 
@@ -224,7 +221,7 @@ mod tests {
         std::env::set_var(DISK_DEV_ENV, "  ");
         let err = resolve_disk_device().unwrap_err();
         assert_eq!(
-            err.unsupported_code(),
+            err.unsupported_code_value(),
             Some(codes::SANDBOX_CGROUP_DISK_UNAVAILABLE)
         );
         std::env::remove_var(DISK_DEV_ENV);

@@ -44,7 +44,7 @@ mod tests {
         }
         let err = require_actions_allowed("pointer").unwrap_err();
         assert_eq!(
-            err.unsupported_code(),
+            err.unsupported_code_value(),
             Some(codes::DESKTOP_ACTIONS_GATED)
         );
         assert_eq!(err.status_code(), 501);

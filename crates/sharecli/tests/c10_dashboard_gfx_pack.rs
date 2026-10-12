@@ -21,7 +21,10 @@ fn c10_dashboard_html_references_ui_pack_assets() {
         "/assets/dashboard/ui/empty-states/no-results.svg",
         "/assets/dashboard/ui/error-states/disconnect.svg",
     ] {
-        assert!(html.contains(needle), "dashboard.html must reference {needle}");
+        assert!(
+            html.contains(needle),
+            "dashboard.html must reference {needle}"
+        );
     }
 }
 

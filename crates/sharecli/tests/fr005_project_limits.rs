@@ -24,9 +24,15 @@ fn fr005_project_limits_default_values() {
     ensure_config();
     let limits = ProjectLimits::default();
     // AC pins the stock defaults from `ProjectLimitsConfig::default()`.
-    assert_eq!(limits.memory_limit_mb, 1024, "default memory_limit_mb MUST be 1024");
+    assert_eq!(
+        limits.memory_limit_mb, 1024,
+        "default memory_limit_mb MUST be 1024"
+    );
     assert_eq!(limits.max_processes, 10, "default max_processes MUST be 10");
-    assert!(limits.cpu_affinity.is_none(), "default cpu_affinity MUST be None");
+    assert!(
+        limits.cpu_affinity.is_none(),
+        "default cpu_affinity MUST be None"
+    );
 }
 
 /// FR-005 / AC-005.2 — `limits` sets project limits and prints a confirmation.
@@ -37,7 +43,11 @@ async fn fr005_limits_set_persists_values() {
     let memory_mb = 512u64;
     let max_processes = 3usize;
 
-    let limits = ProjectLimits { memory_limit_mb: memory_mb, max_processes, cpu_affinity: None };
+    let limits = ProjectLimits {
+        memory_limit_mb: memory_mb,
+        max_processes,
+        cpu_affinity: None,
+    };
     resources.set_limits(project, limits).await;
 
     let stored = resources.get_limits(project).await;
@@ -84,11 +94,18 @@ async fn fr005_get_limits_returns_default_for_unknown() {
     resources
         .set_limits(
             "widget",
-            ProjectLimits { memory_limit_mb: 256, max_processes: 2, cpu_affinity: None },
+            ProjectLimits {
+                memory_limit_mb: 256,
+                max_processes: 2,
+                cpu_affinity: None,
+            },
         )
         .await;
     let latest = resources.get_limits("widget").await;
-    assert_eq!(latest.memory_limit_mb, 256, "get_limits MUST return most recently set limits");
+    assert_eq!(
+        latest.memory_limit_mb, 256,
+        "get_limits MUST return most recently set limits"
+    );
     assert_eq!(latest.max_processes, 2);
     assert!(latest.cpu_affinity.is_none());
 }

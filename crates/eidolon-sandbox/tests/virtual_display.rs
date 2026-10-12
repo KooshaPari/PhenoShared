@@ -14,13 +14,13 @@ use eidolon_sandbox::{
 };
 
 fn assert_code(err: PhenoError, expected: &str) {
-    assert_eq!(err.unsupported_code(), Some(expected));
+    assert_eq!(err.unsupported_code_value(), Some(expected));
     assert_eq!(err.status_code(), 501);
     match err {
-        PhenoError::UnsupportedPlatform { code, message } => {
+        PhenoError::UnsupportedPlatform { code, detail } => {
             assert_eq!(code, expected);
-            assert!(!message.is_empty());
-        }
+            assert!(!detail.is_empty());
+        },
         other => panic!("expected UnsupportedPlatform, got {other:?}"),
     }
 }
@@ -142,7 +142,7 @@ fn plan_xvfb_hermetic_on_linux_when_tool_present() {
         Ok(plan) => {
             assert!(plan.display.starts_with(':'));
             assert!(!plan.argv.is_empty());
-        }
+        },
         Err(e) => assert_code(e, codes::SANDBOX_XVFB_MISSING),
     }
 }

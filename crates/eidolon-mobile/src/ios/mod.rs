@@ -79,7 +79,10 @@ pub mod probe {
     /// Resolve `simctl` via `xcrun --find simctl` or `PATH`.
     pub fn resolve_simctl() -> Option<PathBuf> {
         if let Some(xcrun) = resolve_xcrun() {
-            let output = Command::new(&xcrun).args(["--find", "simctl"]).output().ok()?;
+            let output = Command::new(&xcrun)
+                .args(["--find", "simctl"])
+                .output()
+                .ok()?;
             if output.status.success() {
                 let path = String::from_utf8_lossy(&output.stdout).trim().to_string();
                 let p = PathBuf::from(&path);
@@ -219,7 +222,7 @@ mod tests {
         assert!(!stub.xctest_ready());
         assert!(!stub.xcrun_ready());
         let err = stub.tap(0, 0).await.unwrap_err();
-        assert_eq!(err.unsupported_code(), Some(codes::MOBILE_IOS_STUB));
+        assert_eq!(err.unsupported_code_value(), Some(codes::MOBILE_IOS_STUB));
         assert_eq!(err.status_code(), 501);
     }
 

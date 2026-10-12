@@ -8,7 +8,11 @@ pub struct RateLimiter {
 }
 impl RateLimiter {
     pub fn new(max_per_window: usize, window: Duration) -> Self {
-        Self { max_per_window, window, hits: Vec::new() }
+        Self {
+            max_per_window,
+            window,
+            hits: Vec::new(),
+        }
     }
     pub fn try_acquire(&mut self) -> bool {
         let now = Instant::now();

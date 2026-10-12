@@ -6,8 +6,8 @@ use std::path::Path;
 use std::process::{Command, Stdio};
 
 use crate::types::{
-    self, BaselineDelta, BaselineEntry, BaselineFile, Probe, ProbeRunResult, Requirement,
-    RequirementResult, workspace_root_of,
+    self, workspace_root_of, BaselineDelta, BaselineEntry, BaselineFile, Probe, ProbeRunResult,
+    Requirement, RequirementResult,
 };
 
 // ---------------------------------------------------------------------------
@@ -195,6 +195,11 @@ fn probe_loc_count(
     })
 }
 
+// PHE-ACP-001: clippy::too_many_arguments — function has 8 args (7 is the
+// default limit). Refactoring to a struct arg would change the public
+// signature; since this is a leaf utility only used internally, we
+// suppress the lint.
+#[allow(clippy::too_many_arguments)]
 fn probe_command_extract(
     req: &Requirement,
     command: &str,
@@ -218,7 +223,7 @@ fn probe_command_extract(
             } else {
                 Value::Null
             }
-        }
+        },
         (_, Some(path_expr)) => types::extract_jsonpath(&output, path_expr)?,
         (None, None) => Value::String(output.trim().to_string()),
     };
@@ -239,10 +244,10 @@ fn probe_command_extract(
         match crate::run_bench_guard_probe(workspace_root_of(cwd)) {
             Ok(bench_msg) => {
                 detail.push_str(&format!(" | delegated_bench_guard={}", bench_msg));
-            }
+            },
             Err(err) => {
                 detail.push_str(&format!(" | delegated_bench_guard=FAILED: {}", err));
-            }
+            },
         }
     }
 
@@ -261,8 +266,8 @@ fn probe_log_absent(
     use_regex: bool,
     expected_absent: bool,
 ) -> Result<ProbeRunResult> {
-    let text = fs::read_to_string(path)
-        .with_context(|| format!("failed to read {}", path.display()))?;
+    let text =
+        fs::read_to_string(path).with_context(|| format!("failed to read {}", path.display()))?;
     let is_present = if use_regex {
         let re = Regex::new(pattern).context("invalid regex")?;
         re.is_match(&text)
@@ -301,7 +306,7 @@ pub(crate) fn compare_with_baseline(
             } else {
                 Some((current / base).clamp(0.0, 1.5))
             }
-        }
+        },
         _ => None,
     };
 

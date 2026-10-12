@@ -217,7 +217,7 @@ fn zpixmap_to_bgra(width: u32, height: u32, depth: u8, data: &[u8]) -> Result<Ve
                 out[dst + 2] = r;
                 out[dst + 3] = 0xff;
             }
-        }
+        },
         16 => {
             if data.len() < pixels * 2 {
                 return Err(PhenoError::Platform(
@@ -236,12 +236,12 @@ fn zpixmap_to_bgra(width: u32, height: u32, depth: u8, data: &[u8]) -> Result<Ve
                 out[dst + 2] = (r << 3) | (r >> 2);
                 out[dst + 3] = 0xff;
             }
-        }
+        },
         other => {
             return Err(PhenoError::Platform(format!(
                 "unsupported X11 root depth {other} for screenshot (need 16/24/32)"
             )));
-        }
+        },
     }
     Ok(out)
 }
@@ -331,7 +331,7 @@ impl DesktopAutomator for LinuxClient {
             match event.action.as_str() {
                 "move" => {
                     move_absolute(conn, screen_num, event.x, event.y)?;
-                }
+                },
                 "press" | "tap" => {
                     move_absolute(conn, screen_num, event.x, event.y)?;
                     fake_input(conn, BUTTON_PRESS_EVENT, detail, root, 0, 0)?;
@@ -339,25 +339,25 @@ impl DesktopAutomator for LinuxClient {
                         std::thread::sleep(std::time::Duration::from_millis(50));
                     }
                     fake_input(conn, BUTTON_RELEASE_EVENT, detail, root, 0, 0)?;
-                }
+                },
                 "release" => {
                     fake_input(conn, BUTTON_RELEASE_EVENT, detail, root, 0, 0)?;
-                }
+                },
                 "long_press" => {
                     move_absolute(conn, screen_num, event.x, event.y)?;
                     fake_input(conn, BUTTON_PRESS_EVENT, detail, root, 0, 0)?;
                     let duration = event.duration_ms.unwrap_or(500);
                     std::thread::sleep(std::time::Duration::from_millis(duration as u64));
                     fake_input(conn, BUTTON_RELEASE_EVENT, detail, root, 0, 0)?;
-                }
+                },
                 "drag" => {
                     fake_input(conn, BUTTON_PRESS_EVENT, detail, root, 0, 0)?;
                     move_absolute(conn, screen_num, event.x, event.y)?;
                     fake_input(conn, BUTTON_RELEASE_EVENT, detail, root, 0, 0)?;
-                }
+                },
                 other => {
                     log::warn!("Unknown pointer action: {other}");
-                }
+                },
             }
 
             log::debug!(
@@ -383,17 +383,17 @@ impl DesktopAutomator for LinuxClient {
             match event.input_type.as_str() {
                 "keystroke" => {
                     inject_text(conn, screen_num, &event.text, delay)?;
-                }
+                },
                 "paste" => {
                     chord_ctrl(conn, root, &map, XK_V)?;
-                }
+                },
                 "clear" => {
                     chord_ctrl(conn, root, &map, XK_A)?;
                     tap_key(conn, root, &map, XK_DELETE)?;
-                }
+                },
                 other => {
                     log::warn!("Unknown text input type: {other}");
-                }
+                },
             }
 
             log::debug!(
@@ -442,7 +442,7 @@ mod tests {
         );
         let err = LinuxClient::require_x11_session().unwrap_err();
         assert_eq!(
-            err.unsupported_code(),
+            err.unsupported_code_value(),
             Some(codes::DESKTOP_LINUX_WAYLAND_UNSUPPORTED)
         );
     }

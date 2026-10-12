@@ -1,7 +1,7 @@
 use clap::{Parser, Subcommand};
 use phenocompose_cli::{
-    apply, down, export_provenance, load_job_provenance, load_manifest, render_plan, run_action, status, CliError,
-    ErrorKind, Result,
+    apply, down, export_provenance, load_job_provenance, load_manifest, render_plan, run_action,
+    status, CliError, ErrorKind, Result,
 };
 use serde::Serialize;
 use std::fs;
@@ -61,21 +61,25 @@ fn execute(cli: Cli) -> Result<()> {
         Commands::Plan { manifest } => {
             let manifest = load_manifest(&manifest)?;
             print_json(&render_plan(&manifest)?)
-        }
+        },
         Commands::Apply { manifest, dry_run } => {
             let manifest = load_manifest(&manifest)?;
             print_json(&apply(manifest, &cli.state_dir, dry_run)?)
-        }
+        },
         Commands::Status { run_id } => print_json(&status(&cli.state_dir, &run_id)?),
         Commands::Down { run_id } => print_json(&down(&cli.state_dir, &run_id)?),
-        Commands::RunAction { run_id, action, job_id } => match run_action(&cli.state_dir, &run_id, &action, &job_id) {
+        Commands::RunAction {
+            run_id,
+            action,
+            job_id,
+        } => match run_action(&cli.state_dir, &run_id, &action, &job_id) {
             Ok(provenance) => print_json(&provenance),
             Err(error) => {
                 if let Ok(provenance) = load_job_provenance(&cli.state_dir, &run_id, &job_id) {
                     print_json(&provenance)?;
                 }
                 Err(error)
-            }
+            },
         },
         Commands::ExportProvenance { run_id, output } => {
             let provenance = export_provenance(&cli.state_dir, &run_id)?;
@@ -84,7 +88,7 @@ fn execute(cli: Cli) -> Result<()> {
             } else {
                 print_json(&provenance)
             }
-        }
+        },
     }
 }
 

@@ -73,9 +73,20 @@ mod tests {
     #[test]
     fn test_pipeline_identity_transform() {
         let pipeline = Pipeline::new(Box::new(|x: i32| x));
-        let input = vec![DataStream::new(10), DataStream::new(20), DataStream::new(30)];
+        let input = vec![
+            DataStream::new(10),
+            DataStream::new(20),
+            DataStream::new(30),
+        ];
         let output = pipeline.run(input);
-        assert_eq!(output, vec![DataStream::new(10), DataStream::new(20), DataStream::new(30)]);
+        assert_eq!(
+            output,
+            vec![
+                DataStream::new(10),
+                DataStream::new(20),
+                DataStream::new(30)
+            ]
+        );
     }
 
     #[test]
@@ -89,6 +100,9 @@ mod tests {
         let result = add_one.run(doubled);
 
         // (1*2)+1=3, (2*2)+1=5, (3*2)+1=7
-        assert_eq!(result, vec![DataStream::new(3), DataStream::new(5), DataStream::new(7)]);
+        assert_eq!(
+            result,
+            vec![DataStream::new(3), DataStream::new(5), DataStream::new(7)]
+        );
     }
 }

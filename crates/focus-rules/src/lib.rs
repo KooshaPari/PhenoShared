@@ -3,7 +3,10 @@
 //! Traces to FR-RULE-001..005.
 
 pub mod builder;
-pub use builder::{describe_dsl, DslActionSpec, DslCatalog, DslConditionSpec, DslParam, DslTriggerSpec, RuleBuilder};
+pub use builder::{
+    describe_dsl, DslActionSpec, DslCatalog, DslConditionSpec, DslParam, DslTriggerSpec,
+    RuleBuilder,
+};
 
 use chrono::{DateTime, Duration, Utc};
 use focus_coaching::{complete_guarded, prompts, CoachingProvider};
@@ -126,8 +129,16 @@ impl PartialEq for Action {
             (GrantCredit { amount: a }, GrantCredit { amount: b }) => a == b,
             (DeductCredit { amount: a }, DeductCredit { amount: b }) => a == b,
             (
-                Block { profile: p1, duration: d1, rigidity: r1 },
-                Block { profile: p2, duration: d2, rigidity: r2 },
+                Block {
+                    profile: p1,
+                    duration: d1,
+                    rigidity: r1,
+                },
+                Block {
+                    profile: p2,
+                    duration: d2,
+                    rigidity: r2,
+                },
             ) => p1 == p2 && d1 == d2 && r1 == r2,
             (Unblock { profile: p1 }, Unblock { profile: p2 }) => p1 == p2,
             (StreakIncrement(a), StreakIncrement(b)) => a == b,
@@ -148,8 +159,14 @@ impl PartialEq for Action {
                 },
             ) => p1 == p2 && d1 == d2 && c1 == c2 && r1 == r2,
             (
-                Intervention { message: m1, severity: s1 },
-                Intervention { message: m2, severity: s2 },
+                Intervention {
+                    message: m1,
+                    severity: s1,
+                },
+                Intervention {
+                    message: m2,
+                    severity: s2,
+                },
             ) => m1 == m2 && s1 == s2,
             (
                 ScheduledUnlockWindow {
@@ -185,7 +202,9 @@ pub struct RuleEngine {
 
 impl RuleEngine {
     pub fn new() -> Self {
-        Self { cooldowns: HashMap::new() }
+        Self {
+            cooldowns: HashMap::new(),
+        }
     }
 
     /// Seed cooldowns (e.g. from persisted state).
@@ -210,25 +229,33 @@ impl RuleEngine {
     ) -> RuleDecision {
         // FR-RULE-001: disabled rules skip.
         if !rule.enabled {
-            return RuleDecision::Skipped { reason: "disabled".into() };
+            return RuleDecision::Skipped {
+                reason: "disabled".into(),
+            };
         }
 
         // FR-RULE-001: trigger must match event.
         match &rule.trigger {
             Trigger::Event(expected) => {
                 if !event_type_matches(&event.event_type, expected) {
-                    return RuleDecision::Skipped { reason: "trigger_mismatch".into() };
+                    return RuleDecision::Skipped {
+                        reason: "trigger_mismatch".into(),
+                    };
                 }
-            }
+            },
             Trigger::Schedule(_) | Trigger::StateChange(_) => {
-                return RuleDecision::Skipped { reason: "non_event_trigger".into() };
-            }
+                return RuleDecision::Skipped {
+                    reason: "non_event_trigger".into(),
+                };
+            },
         }
 
         // FR-RULE-003: evaluate conditions (best-effort built-ins).
         for cond in &rule.conditions {
             if !condition_matches(cond, event) {
-                return RuleDecision::Skipped { reason: format!("condition_failed:{}", cond.kind) };
+                return RuleDecision::Skipped {
+                    reason: format!("condition_failed:{}", cond.kind),
+                };
             }
         }
 
@@ -236,7 +263,9 @@ impl RuleEngine {
         if let Some(cooldown) = rule.cooldown {
             if let Some(last) = self.cooldowns.get(&rule.id) {
                 if now.signed_duration_since(*last) < cooldown {
-                    return RuleDecision::Suppressed { reason: "cooldown".into() };
+                    return RuleDecision::Suppressed {
+                        reason: "cooldown".into(),
+                    };
                 }
             }
         }
@@ -310,22 +339,32 @@ impl RuleEngine {
         now: DateTime<Utc>,
     ) -> RuleDecision {
         if !rule.enabled {
-            return RuleDecision::Skipped { reason: "disabled".into() };
+            return RuleDecision::Skipped {
+                reason: "disabled".into(),
+            };
         }
         let key = match &rule.trigger {
             Trigger::StateChange(k) => k,
-            _ => return RuleDecision::Skipped { reason: "non_state_change_trigger".into() },
+            _ => {
+                return RuleDecision::Skipped {
+                    reason: "non_state_change_trigger".into(),
+                }
+            },
         };
         let b = resolve_path(before, key);
         let a = resolve_path(after, key);
         if b == a {
-            return RuleDecision::Skipped { reason: "no_change".into() };
+            return RuleDecision::Skipped {
+                reason: "no_change".into(),
+            };
         }
         // Cooldown check (identical to event eval).
         if let Some(cooldown) = rule.cooldown {
             if let Some(last) = self.cooldowns.get(&rule.id) {
                 if now.signed_duration_since(*last) < cooldown {
-                    return RuleDecision::Suppressed { reason: "cooldown".into() };
+                    return RuleDecision::Suppressed {
+                        reason: "cooldown".into(),
+                    };
                 }
             }
         }
@@ -368,17 +407,19 @@ impl RuleEngine {
     /// used by the `cron` crate. Examples:
     /// - `"0 0 9 * * *"` — every day at 09:00:00.
     /// - `"0 */15 * * * *"` — every 15 minutes on the minute.
-    pub fn evaluate_schedule_tick(
-        &mut self,
-        rule: &Rule,
-        now: DateTime<Utc>,
-    ) -> RuleDecision {
+    pub fn evaluate_schedule_tick(&mut self, rule: &Rule, now: DateTime<Utc>) -> RuleDecision {
         if !rule.enabled {
-            return RuleDecision::Skipped { reason: "disabled".into() };
+            return RuleDecision::Skipped {
+                reason: "disabled".into(),
+            };
         }
         let cron_spec = match &rule.trigger {
             Trigger::Schedule(s) => s,
-            _ => return RuleDecision::Skipped { reason: "non_schedule_trigger".into() },
+            _ => {
+                return RuleDecision::Skipped {
+                    reason: "non_schedule_trigger".into(),
+                }
+            },
         };
         let schedule = match cron_spec.parse::<cron::Schedule>() {
             Ok(s) => s,
@@ -386,16 +427,24 @@ impl RuleEngine {
                 return RuleDecision::Skipped {
                     reason: format!("bad_cron:{e}"),
                 };
-            }
+            },
         };
         // Most recent scheduled slot at or before `now`.
-        let Some(most_recent) = schedule.after(&(now - chrono::Duration::days(365))).take_while(|t| *t <= now).last() else {
-            return RuleDecision::Skipped { reason: "no_slot_in_window".into() };
+        let Some(most_recent) = schedule
+            .after(&(now - chrono::Duration::days(365)))
+            .take_while(|t| *t <= now)
+            .last()
+        else {
+            return RuleDecision::Skipped {
+                reason: "no_slot_in_window".into(),
+            };
         };
         // Dedupe against cooldown map, treating the slot as the firing key.
         if let Some(last) = self.cooldowns.get(&rule.id) {
             if *last >= most_recent {
-                return RuleDecision::Suppressed { reason: "already_fired_for_slot".into() };
+                return RuleDecision::Suppressed {
+                    reason: "already_fired_for_slot".into(),
+                };
             }
         }
         self.cooldowns.insert(rule.id, most_recent);
@@ -419,7 +468,11 @@ impl RuleEngine {
         indexed.sort_by(|a, b| b.1.priority.cmp(&a.1.priority).then(a.0.cmp(&b.0)));
         for (_, rule) in indexed {
             let decision = self.evaluate(rule, event, now);
-            out.push(PrioritizedDecision { rule_id: rule.id, priority: rule.priority, decision });
+            out.push(PrioritizedDecision {
+                rule_id: rule.id,
+                priority: rule.priority,
+                decision,
+            });
         }
         out
     }
@@ -477,15 +530,20 @@ pub async fn render_llm_explanation(
         event_type_name(&event.event_type),
         payload,
     );
-    match complete_guarded(coaching, &user, Some(prompts::RULE_EXPLANATION_SYSTEM_PROMPT), 220)
-        .await
+    match complete_guarded(
+        coaching,
+        &user,
+        Some(prompts::RULE_EXPLANATION_SYSTEM_PROMPT),
+        220,
+    )
+    .await
     {
         Ok(Some(text)) => Ok(text),
         Ok(None) => Ok(fallback),
         Err(e) => {
             warn!(target: "coaching.fallback", error = %e, "explanation LLM error");
             Ok(fallback)
-        }
+        },
     }
 }
 
@@ -547,8 +605,10 @@ fn condition_matches(cond: &Condition, event: &NormalizedEvent) -> bool {
             let Some(expected) = cond.params.get("value") else {
                 return false;
             };
-            resolve_path(&event.payload, path).map(|v| v == expected).unwrap_or(false)
-        }
+            resolve_path(&event.payload, path)
+                .map(|v| v == expected)
+                .unwrap_or(false)
+        },
         "payload_in" => {
             let Some(path) = cond.params.get("path").and_then(|v| v.as_str()) else {
                 return false;
@@ -559,12 +619,16 @@ fn condition_matches(cond: &Condition, event: &NormalizedEvent) -> bool {
             resolve_path(&event.payload, path)
                 .map(|got| values.iter().any(|v| v == got))
                 .unwrap_or(false)
-        }
+        },
         "payload_gte" | "payload_lte" => {
             let Some(path) = cond.params.get("path").and_then(|v| v.as_str()) else {
                 return false;
             };
-            let key = if cond.kind == "payload_gte" { "min" } else { "max" };
+            let key = if cond.kind == "payload_gte" {
+                "min"
+            } else {
+                "max"
+            };
             let Some(threshold) = cond.params.get(key).and_then(|v| v.as_f64()) else {
                 return false;
             };
@@ -578,13 +642,13 @@ fn condition_matches(cond: &Condition, event: &NormalizedEvent) -> bool {
                     }
                 })
                 .unwrap_or(false)
-        }
+        },
         "payload_exists" => {
             let Some(path) = cond.params.get("path").and_then(|v| v.as_str()) else {
                 return false;
             };
             resolve_path(&event.payload, path).is_some()
-        }
+        },
         "payload_matches" => {
             let Some(path) = cond.params.get("path").and_then(|v| v.as_str()) else {
                 return false;
@@ -599,7 +663,7 @@ fn condition_matches(cond: &Condition, event: &NormalizedEvent) -> bool {
                 .and_then(|v| v.as_str())
                 .map(|s| re.is_match(s))
                 .unwrap_or(false)
-        }
+        },
         "source_eq" => cond
             .params
             .get("source")
@@ -621,13 +685,25 @@ fn condition_matches(cond: &Condition, event: &NormalizedEvent) -> bool {
             .params
             .get("conditions")
             .and_then(|v| v.as_array())
-            .map(|arr| arr.iter().all(|c| parse_sub(c).map(|s| condition_matches(&s, event)).unwrap_or(false)))
+            .map(|arr| {
+                arr.iter().all(|c| {
+                    parse_sub(c)
+                        .map(|s| condition_matches(&s, event))
+                        .unwrap_or(false)
+                })
+            })
             .unwrap_or(false),
         "any_of" => cond
             .params
             .get("conditions")
             .and_then(|v| v.as_array())
-            .map(|arr| arr.iter().any(|c| parse_sub(c).map(|s| condition_matches(&s, event)).unwrap_or(false)))
+            .map(|arr| {
+                arr.iter().any(|c| {
+                    parse_sub(c)
+                        .map(|s| condition_matches(&s, event))
+                        .unwrap_or(false)
+                })
+            })
             .unwrap_or(false),
         "not" => cond
             .params
@@ -651,13 +727,13 @@ fn explain_decision(rule: &Rule, decision: &RuleDecision) -> String {
             } else {
                 rule.explanation_template.clone()
             }
-        }
+        },
         RuleDecision::Suppressed { reason } => {
             format!("Rule '{}' suppressed: {reason}.", rule.name)
-        }
+        },
         RuleDecision::Skipped { reason } => {
             format!("Rule '{}' skipped: {reason}.", rule.name)
-        }
+        },
     }
 }
 
@@ -723,9 +799,16 @@ mod tests {
         let mut eng = RuleEngine::new();
         let mut rule = mk_rule("r", "TaskCompleted", vec![], 0);
         rule.enabled = false;
-        let ev = mk_event(EventType::WellKnown(WellKnownEventType::TaskCompleted), 1.0, json!({}));
+        let ev = mk_event(
+            EventType::WellKnown(WellKnownEventType::TaskCompleted),
+            1.0,
+            json!({}),
+        );
         let now = Utc.with_ymd_and_hms(2026, 1, 1, 12, 0, 0).unwrap();
-        assert!(matches!(eng.evaluate(&rule, &ev, now), RuleDecision::Skipped { .. }));
+        assert!(matches!(
+            eng.evaluate(&rule, &ev, now),
+            RuleDecision::Skipped { .. }
+        ));
     }
 
     // Traces to: FR-RULE-001
@@ -733,7 +816,11 @@ mod tests {
     fn trigger_mismatch_is_skipped() {
         let mut eng = RuleEngine::new();
         let rule = mk_rule("r", "TaskCompleted", vec![], 0);
-        let ev = mk_event(EventType::WellKnown(WellKnownEventType::SleepRecorded), 1.0, json!({}));
+        let ev = mk_event(
+            EventType::WellKnown(WellKnownEventType::SleepRecorded),
+            1.0,
+            json!({}),
+        );
         let now = Utc.with_ymd_and_hms(2026, 1, 1, 12, 0, 0).unwrap();
         match eng.evaluate(&rule, &ev, now) {
             RuleDecision::Skipped { reason } => assert_eq!(reason, "trigger_mismatch"),
@@ -745,13 +832,22 @@ mod tests {
     #[test]
     fn matching_event_fires_rule() {
         let mut eng = RuleEngine::new();
-        let rule = mk_rule("r", "TaskCompleted", vec![Action::GrantCredit { amount: 5 }], 0);
-        let ev = mk_event(EventType::WellKnown(WellKnownEventType::TaskCompleted), 1.0, json!({}));
+        let rule = mk_rule(
+            "r",
+            "TaskCompleted",
+            vec![Action::GrantCredit { amount: 5 }],
+            0,
+        );
+        let ev = mk_event(
+            EventType::WellKnown(WellKnownEventType::TaskCompleted),
+            1.0,
+            json!({}),
+        );
         let now = Utc.with_ymd_and_hms(2026, 1, 1, 12, 0, 0).unwrap();
         match eng.evaluate(&rule, &ev, now) {
             RuleDecision::Fired(actions) => {
                 assert_eq!(actions, vec![Action::GrantCredit { amount: 5 }])
-            }
+            },
             o => panic!("unexpected: {o:?}"),
         }
     }
@@ -760,11 +856,23 @@ mod tests {
     #[test]
     fn cooldown_suppresses_repeat_within_window() {
         let mut eng = RuleEngine::new();
-        let mut rule = mk_rule("r", "TaskCompleted", vec![Action::GrantCredit { amount: 1 }], 0);
+        let mut rule = mk_rule(
+            "r",
+            "TaskCompleted",
+            vec![Action::GrantCredit { amount: 1 }],
+            0,
+        );
         rule.cooldown = Some(Duration::minutes(10));
-        let ev = mk_event(EventType::WellKnown(WellKnownEventType::TaskCompleted), 1.0, json!({}));
+        let ev = mk_event(
+            EventType::WellKnown(WellKnownEventType::TaskCompleted),
+            1.0,
+            json!({}),
+        );
         let t0 = Utc.with_ymd_and_hms(2026, 1, 1, 12, 0, 0).unwrap();
-        assert!(matches!(eng.evaluate(&rule, &ev, t0), RuleDecision::Fired(_)));
+        assert!(matches!(
+            eng.evaluate(&rule, &ev, t0),
+            RuleDecision::Fired(_)
+        ));
         let t1 = t0 + Duration::minutes(5);
         match eng.evaluate(&rule, &ev, t1) {
             RuleDecision::Suppressed { reason } => assert_eq!(reason, "cooldown"),
@@ -776,13 +884,25 @@ mod tests {
     #[test]
     fn cooldown_expires_allows_refire() {
         let mut eng = RuleEngine::new();
-        let mut rule = mk_rule("r", "TaskCompleted", vec![Action::GrantCredit { amount: 1 }], 0);
+        let mut rule = mk_rule(
+            "r",
+            "TaskCompleted",
+            vec![Action::GrantCredit { amount: 1 }],
+            0,
+        );
         rule.cooldown = Some(Duration::minutes(10));
-        let ev = mk_event(EventType::WellKnown(WellKnownEventType::TaskCompleted), 1.0, json!({}));
+        let ev = mk_event(
+            EventType::WellKnown(WellKnownEventType::TaskCompleted),
+            1.0,
+            json!({}),
+        );
         let t0 = Utc.with_ymd_and_hms(2026, 1, 1, 12, 0, 0).unwrap();
         let _ = eng.evaluate(&rule, &ev, t0);
         let t2 = t0 + Duration::minutes(11);
-        assert!(matches!(eng.evaluate(&rule, &ev, t2), RuleDecision::Fired(_)));
+        assert!(matches!(
+            eng.evaluate(&rule, &ev, t2),
+            RuleDecision::Fired(_)
+        ));
     }
 
     // Traces to: FR-RULE-003
@@ -790,14 +910,20 @@ mod tests {
     fn condition_confidence_gate_filters() {
         let mut eng = RuleEngine::new();
         let mut rule = mk_rule("r", "TaskCompleted", vec![], 0);
-        rule.conditions
-            .push(Condition { kind: "confidence_gte".into(), params: json!({"min": 0.9}) });
-        let ev = mk_event(EventType::WellKnown(WellKnownEventType::TaskCompleted), 0.5, json!({}));
+        rule.conditions.push(Condition {
+            kind: "confidence_gte".into(),
+            params: json!({"min": 0.9}),
+        });
+        let ev = mk_event(
+            EventType::WellKnown(WellKnownEventType::TaskCompleted),
+            0.5,
+            json!({}),
+        );
         let now = Utc.with_ymd_and_hms(2026, 1, 1, 12, 0, 0).unwrap();
         match eng.evaluate(&rule, &ev, now) {
             RuleDecision::Skipped { reason } => {
                 assert!(reason.starts_with("condition_failed"))
-            }
+            },
             o => panic!("unexpected: {o:?}"),
         }
     }
@@ -806,7 +932,11 @@ mod tests {
     #[test]
     fn explanation_template_substitutes_placeholders() {
         let rule = mk_rule("MyRule", "TaskCompleted", vec![], 0);
-        let ev = mk_event(EventType::WellKnown(WellKnownEventType::TaskCompleted), 1.0, json!({}));
+        let ev = mk_event(
+            EventType::WellKnown(WellKnownEventType::TaskCompleted),
+            1.0,
+            json!({}),
+        );
         let rendered = RuleEngine::render_explanation(&rule, &ev);
         assert!(rendered.contains("MyRule"));
         assert!(rendered.contains("TaskCompleted"));
@@ -816,8 +946,14 @@ mod tests {
     #[test]
     fn evaluate_all_orders_by_priority_desc() {
         let mut eng = RuleEngine::new();
-        let low =
-            mk_rule("low", "TaskCompleted", vec![Action::Unblock { profile: "games".into() }], 1);
+        let low = mk_rule(
+            "low",
+            "TaskCompleted",
+            vec![Action::Unblock {
+                profile: "games".into(),
+            }],
+            1,
+        );
         let high = mk_rule(
             "high",
             "TaskCompleted",
@@ -828,7 +964,11 @@ mod tests {
             }],
             100,
         );
-        let ev = mk_event(EventType::WellKnown(WellKnownEventType::TaskCompleted), 1.0, json!({}));
+        let ev = mk_event(
+            EventType::WellKnown(WellKnownEventType::TaskCompleted),
+            1.0,
+            json!({}),
+        );
         let now = Utc.with_ymd_and_hms(2026, 1, 1, 12, 0, 0).unwrap();
         let decisions = eng.evaluate_all(&[low, high], &ev, now);
         assert_eq!(decisions.len(), 2);
@@ -840,10 +980,22 @@ mod tests {
     #[test]
     fn trigger_exact_match_against_custom_event_type() {
         let mut eng = RuleEngine::new();
-        let rule = mk_rule("r", "canvas:quiz_posted", vec![Action::GrantCredit { amount: 1 }], 0);
-        let ev = mk_event(EventType::Custom("canvas:quiz_posted".into()), 1.0, json!({}));
+        let rule = mk_rule(
+            "r",
+            "canvas:quiz_posted",
+            vec![Action::GrantCredit { amount: 1 }],
+            0,
+        );
+        let ev = mk_event(
+            EventType::Custom("canvas:quiz_posted".into()),
+            1.0,
+            json!({}),
+        );
         let now = Utc.with_ymd_and_hms(2026, 1, 1, 12, 0, 0).unwrap();
-        assert!(matches!(eng.evaluate(&rule, &ev, now), RuleDecision::Fired(_)));
+        assert!(matches!(
+            eng.evaluate(&rule, &ev, now),
+            RuleDecision::Fired(_)
+        ));
     }
 
     // Traces to: FR-EVT-VOCAB-001, FR-RULE-001
@@ -851,9 +1003,16 @@ mod tests {
     fn trigger_prefix_glob_matches_custom_namespace() {
         let mut eng = RuleEngine::new();
         let rule = mk_rule("r", "canvas:*", vec![Action::GrantCredit { amount: 1 }], 0);
-        let ev = mk_event(EventType::Custom("canvas:quiz_posted".into()), 1.0, json!({}));
+        let ev = mk_event(
+            EventType::Custom("canvas:quiz_posted".into()),
+            1.0,
+            json!({}),
+        );
         let now = Utc.with_ymd_and_hms(2026, 1, 1, 12, 0, 0).unwrap();
-        assert!(matches!(eng.evaluate(&rule, &ev, now), RuleDecision::Fired(_)));
+        assert!(matches!(
+            eng.evaluate(&rule, &ev, now),
+            RuleDecision::Fired(_)
+        ));
     }
 
     // Traces to: FR-EVT-VOCAB-001, FR-RULE-001
@@ -874,8 +1033,17 @@ mod tests {
     fn evaluate_is_deterministic() {
         let mut eng_a = RuleEngine::new();
         let mut eng_b = RuleEngine::new();
-        let rule = mk_rule("r", "TaskCompleted", vec![Action::GrantCredit { amount: 7 }], 0);
-        let ev = mk_event(EventType::WellKnown(WellKnownEventType::TaskCompleted), 1.0, json!({}));
+        let rule = mk_rule(
+            "r",
+            "TaskCompleted",
+            vec![Action::GrantCredit { amount: 7 }],
+            0,
+        );
+        let ev = mk_event(
+            EventType::WellKnown(WellKnownEventType::TaskCompleted),
+            1.0,
+            json!({}),
+        );
         let now = Utc.with_ymd_and_hms(2026, 1, 1, 12, 0, 0).unwrap();
         let a = eng_a.evaluate(&rule, &ev, now);
         let b = eng_b.evaluate(&rule, &ev, now);
@@ -926,7 +1094,9 @@ mod tests {
     #[tokio::test]
     async fn propose_rule_errors_on_garbage() {
         let provider = StubCoachingProvider::single("not even close to json");
-        let err = propose_rule_from_nl("whatever", &provider).await.unwrap_err();
+        let err = propose_rule_from_nl("whatever", &provider)
+            .await
+            .unwrap_err();
         assert!(err.to_string().contains("invalid Rule JSON"));
     }
 
@@ -948,16 +1118,24 @@ mod tests {
             1.0,
             json!({"title": "Essay"}),
         );
-        let out = render_llm_explanation(&rule, &ev, &provider).await.expect("explain");
+        let out = render_llm_explanation(&rule, &ev, &provider)
+            .await
+            .expect("explain");
         assert!(out.contains("+5 credits"));
     }
 
     #[tokio::test]
     async fn render_llm_explanation_falls_back_when_noop() {
         let rule = mk_rule("Reward", "TaskCompleted", vec![], 0);
-        let ev = mk_event(EventType::WellKnown(WellKnownEventType::TaskCompleted), 1.0, json!({}));
+        let ev = mk_event(
+            EventType::WellKnown(WellKnownEventType::TaskCompleted),
+            1.0,
+            json!({}),
+        );
         let provider = NoopCoachingProvider;
-        let out = render_llm_explanation(&rule, &ev, &provider).await.expect("explain");
+        let out = render_llm_explanation(&rule, &ev, &provider)
+            .await
+            .expect("explain");
         assert!(out.contains("Reward"));
     }
 
@@ -983,7 +1161,10 @@ mod tests {
         // 09:00 UTC every day
         let rule = mk_schedule_rule("0 0 9 * * *");
         let now = Utc.with_ymd_and_hms(2026, 4, 23, 9, 30, 0).unwrap();
-        assert!(matches!(eng.evaluate_schedule_tick(&rule, now), RuleDecision::Fired(_)));
+        assert!(matches!(
+            eng.evaluate_schedule_tick(&rule, now),
+            RuleDecision::Fired(_)
+        ));
     }
 
     #[test]
@@ -991,7 +1172,10 @@ mod tests {
         let mut eng = RuleEngine::default();
         let rule = mk_schedule_rule("0 0 9 * * *");
         let now = Utc.with_ymd_and_hms(2026, 4, 23, 9, 30, 0).unwrap();
-        assert!(matches!(eng.evaluate_schedule_tick(&rule, now), RuleDecision::Fired(_)));
+        assert!(matches!(
+            eng.evaluate_schedule_tick(&rule, now),
+            RuleDecision::Fired(_)
+        ));
         let second = eng.evaluate_schedule_tick(&rule, now + Duration::minutes(5));
         assert!(matches!(second, RuleDecision::Suppressed { .. }));
     }
@@ -1002,8 +1186,14 @@ mod tests {
         let rule = mk_schedule_rule("0 0 9 * * *");
         let d1 = Utc.with_ymd_and_hms(2026, 4, 23, 9, 30, 0).unwrap();
         let d2 = Utc.with_ymd_and_hms(2026, 4, 24, 9, 30, 0).unwrap();
-        assert!(matches!(eng.evaluate_schedule_tick(&rule, d1), RuleDecision::Fired(_)));
-        assert!(matches!(eng.evaluate_schedule_tick(&rule, d2), RuleDecision::Fired(_)));
+        assert!(matches!(
+            eng.evaluate_schedule_tick(&rule, d1),
+            RuleDecision::Fired(_)
+        ));
+        assert!(matches!(
+            eng.evaluate_schedule_tick(&rule, d2),
+            RuleDecision::Fired(_)
+        ));
     }
 
     #[test]
@@ -1030,7 +1220,10 @@ mod tests {
 
     // Traces to: FR-RULE-003 (condition DSL)
     fn cond(kind: &str, params: serde_json::Value) -> Condition {
-        Condition { kind: kind.into(), params }
+        Condition {
+            kind: kind.into(),
+            params,
+        }
     }
 
     // Traces to: FR-RULE-006 (evaluation audit trail)
@@ -1039,7 +1232,11 @@ mod tests {
         let mut eng = RuleEngine::default();
         let mut rule = mk_rule("Reward", "TaskCompleted", vec![], 0);
         rule.explanation_template = "Good job on {{event.type}}".into();
-        let ev = mk_event(EventType::WellKnown(WellKnownEventType::TaskCompleted), 1.0, json!({}));
+        let ev = mk_event(
+            EventType::WellKnown(WellKnownEventType::TaskCompleted),
+            1.0,
+            json!({}),
+        );
         let (decision, eval) = eng.evaluate_with_trace(&rule, &ev, Utc::now());
         assert!(matches!(decision, RuleDecision::Fired(_)));
         assert_eq!(eval.rule_id, rule.id);
@@ -1051,7 +1248,11 @@ mod tests {
     fn evaluate_with_trace_skipped_has_reason_explanation() {
         let mut eng = RuleEngine::default();
         let rule = mk_rule("X", "TaskCompleted", vec![], 0);
-        let ev = mk_event(EventType::WellKnown(WellKnownEventType::AssignmentDue), 1.0, json!({}));
+        let ev = mk_event(
+            EventType::WellKnown(WellKnownEventType::AssignmentDue),
+            1.0,
+            json!({}),
+        );
         let (decision, eval) = eng.evaluate_with_trace(&rule, &ev, Utc::now());
         assert!(matches!(decision, RuleDecision::Skipped { .. }));
         assert!(eval.explanation.contains("skipped"));
@@ -1073,13 +1274,30 @@ mod tests {
         let mut eng = RuleEngine::default();
         let rule = {
             let mut r = mk_rule("x", "TaskCompleted", vec![], 0);
-            r.conditions.push(cond("payload_eq", json!({"path":"assignment.late","value":true})));
+            r.conditions.push(cond(
+                "payload_eq",
+                json!({"path":"assignment.late","value":true}),
+            ));
             r
         };
-        let ev_late = mk_event(EventType::WellKnown(WellKnownEventType::TaskCompleted), 1.0, json!({"assignment":{"late":true}}));
-        let ev_not = mk_event(EventType::WellKnown(WellKnownEventType::TaskCompleted), 1.0, json!({"assignment":{"late":false}}));
-        assert!(matches!(eng.evaluate(&rule, &ev_late, Utc::now()), RuleDecision::Fired(_)));
-        assert!(matches!(eng.evaluate(&rule, &ev_not, Utc::now()), RuleDecision::Skipped { .. }));
+        let ev_late = mk_event(
+            EventType::WellKnown(WellKnownEventType::TaskCompleted),
+            1.0,
+            json!({"assignment":{"late":true}}),
+        );
+        let ev_not = mk_event(
+            EventType::WellKnown(WellKnownEventType::TaskCompleted),
+            1.0,
+            json!({"assignment":{"late":false}}),
+        );
+        assert!(matches!(
+            eng.evaluate(&rule, &ev_late, Utc::now()),
+            RuleDecision::Fired(_)
+        ));
+        assert!(matches!(
+            eng.evaluate(&rule, &ev_not, Utc::now()),
+            RuleDecision::Skipped { .. }
+        ));
     }
 
     #[test]
@@ -1087,13 +1305,30 @@ mod tests {
         let mut eng = RuleEngine::default();
         let rule = {
             let mut r = mk_rule("x", "TaskCompleted", vec![], 0);
-            r.conditions.push(cond("payload_in", json!({"path":"status","values":["done","graded"]})));
+            r.conditions.push(cond(
+                "payload_in",
+                json!({"path":"status","values":["done","graded"]}),
+            ));
             r
         };
-        let ev_done = mk_event(EventType::WellKnown(WellKnownEventType::TaskCompleted), 1.0, json!({"status":"done"}));
-        let ev_other = mk_event(EventType::WellKnown(WellKnownEventType::TaskCompleted), 1.0, json!({"status":"draft"}));
-        assert!(matches!(eng.evaluate(&rule, &ev_done, Utc::now()), RuleDecision::Fired(_)));
-        assert!(matches!(eng.evaluate(&rule, &ev_other, Utc::now()), RuleDecision::Skipped { .. }));
+        let ev_done = mk_event(
+            EventType::WellKnown(WellKnownEventType::TaskCompleted),
+            1.0,
+            json!({"status":"done"}),
+        );
+        let ev_other = mk_event(
+            EventType::WellKnown(WellKnownEventType::TaskCompleted),
+            1.0,
+            json!({"status":"draft"}),
+        );
+        assert!(matches!(
+            eng.evaluate(&rule, &ev_done, Utc::now()),
+            RuleDecision::Fired(_)
+        ));
+        assert!(matches!(
+            eng.evaluate(&rule, &ev_other, Utc::now()),
+            RuleDecision::Skipped { .. }
+        ));
     }
 
     #[test]
@@ -1101,20 +1336,42 @@ mod tests {
         let mut eng = RuleEngine::default();
         let gte = {
             let mut r = mk_rule("x", "TaskCompleted", vec![], 0);
-            r.conditions.push(cond("payload_gte", json!({"path":"points","min":80.0})));
+            r.conditions
+                .push(cond("payload_gte", json!({"path":"points","min":80.0})));
             r
         };
         let lte = {
             let mut r = mk_rule("x", "TaskCompleted", vec![], 0);
-            r.conditions.push(cond("payload_lte", json!({"path":"points","max":50.0})));
+            r.conditions
+                .push(cond("payload_lte", json!({"path":"points","max":50.0})));
             r
         };
-        let ev90 = mk_event(EventType::WellKnown(WellKnownEventType::TaskCompleted), 1.0, json!({"points":90.0}));
-        let ev40 = mk_event(EventType::WellKnown(WellKnownEventType::TaskCompleted), 1.0, json!({"points":40.0}));
-        assert!(matches!(eng.evaluate(&gte, &ev90, Utc::now()), RuleDecision::Fired(_)));
-        assert!(matches!(eng.evaluate(&gte, &ev40, Utc::now()), RuleDecision::Skipped { .. }));
-        assert!(matches!(eng.evaluate(&lte, &ev40, Utc::now()), RuleDecision::Fired(_)));
-        assert!(matches!(eng.evaluate(&lte, &ev90, Utc::now()), RuleDecision::Skipped { .. }));
+        let ev90 = mk_event(
+            EventType::WellKnown(WellKnownEventType::TaskCompleted),
+            1.0,
+            json!({"points":90.0}),
+        );
+        let ev40 = mk_event(
+            EventType::WellKnown(WellKnownEventType::TaskCompleted),
+            1.0,
+            json!({"points":40.0}),
+        );
+        assert!(matches!(
+            eng.evaluate(&gte, &ev90, Utc::now()),
+            RuleDecision::Fired(_)
+        ));
+        assert!(matches!(
+            eng.evaluate(&gte, &ev40, Utc::now()),
+            RuleDecision::Skipped { .. }
+        ));
+        assert!(matches!(
+            eng.evaluate(&lte, &ev40, Utc::now()),
+            RuleDecision::Fired(_)
+        ));
+        assert!(matches!(
+            eng.evaluate(&lte, &ev90, Utc::now()),
+            RuleDecision::Skipped { .. }
+        ));
     }
 
     #[test]
@@ -1122,13 +1379,30 @@ mod tests {
         let mut eng = RuleEngine::default();
         let rule = {
             let mut r = mk_rule("x", "TaskCompleted", vec![], 0);
-            r.conditions.push(cond("payload_matches", json!({"path":"url","pattern":r"^https://.*\.edu/"})));
+            r.conditions.push(cond(
+                "payload_matches",
+                json!({"path":"url","pattern":r"^https://.*\.edu/"}),
+            ));
             r
         };
-        let ev_ok = mk_event(EventType::WellKnown(WellKnownEventType::TaskCompleted), 1.0, json!({"url":"https://mit.edu/assign/1"}));
-        let ev_no = mk_event(EventType::WellKnown(WellKnownEventType::TaskCompleted), 1.0, json!({"url":"http://example.com/"}));
-        assert!(matches!(eng.evaluate(&rule, &ev_ok, Utc::now()), RuleDecision::Fired(_)));
-        assert!(matches!(eng.evaluate(&rule, &ev_no, Utc::now()), RuleDecision::Skipped { .. }));
+        let ev_ok = mk_event(
+            EventType::WellKnown(WellKnownEventType::TaskCompleted),
+            1.0,
+            json!({"url":"https://mit.edu/assign/1"}),
+        );
+        let ev_no = mk_event(
+            EventType::WellKnown(WellKnownEventType::TaskCompleted),
+            1.0,
+            json!({"url":"http://example.com/"}),
+        );
+        assert!(matches!(
+            eng.evaluate(&rule, &ev_ok, Utc::now()),
+            RuleDecision::Fired(_)
+        ));
+        assert!(matches!(
+            eng.evaluate(&rule, &ev_no, Utc::now()),
+            RuleDecision::Skipped { .. }
+        ));
     }
 
     #[test]
@@ -1148,12 +1422,33 @@ mod tests {
             ));
             r
         };
-        let yes = mk_event(EventType::WellKnown(WellKnownEventType::TaskCompleted), 1.0, json!({"kind":"a","blocked":false}));
-        let no_blocked = mk_event(EventType::WellKnown(WellKnownEventType::TaskCompleted), 1.0, json!({"kind":"a","blocked":true}));
-        let no_kind = mk_event(EventType::WellKnown(WellKnownEventType::TaskCompleted), 1.0, json!({"kind":"c","blocked":false}));
-        assert!(matches!(eng.evaluate(&rule, &yes, Utc::now()), RuleDecision::Fired(_)));
-        assert!(matches!(eng.evaluate(&rule, &no_blocked, Utc::now()), RuleDecision::Skipped { .. }));
-        assert!(matches!(eng.evaluate(&rule, &no_kind, Utc::now()), RuleDecision::Skipped { .. }));
+        let yes = mk_event(
+            EventType::WellKnown(WellKnownEventType::TaskCompleted),
+            1.0,
+            json!({"kind":"a","blocked":false}),
+        );
+        let no_blocked = mk_event(
+            EventType::WellKnown(WellKnownEventType::TaskCompleted),
+            1.0,
+            json!({"kind":"a","blocked":true}),
+        );
+        let no_kind = mk_event(
+            EventType::WellKnown(WellKnownEventType::TaskCompleted),
+            1.0,
+            json!({"kind":"c","blocked":false}),
+        );
+        assert!(matches!(
+            eng.evaluate(&rule, &yes, Utc::now()),
+            RuleDecision::Fired(_)
+        ));
+        assert!(matches!(
+            eng.evaluate(&rule, &no_blocked, Utc::now()),
+            RuleDecision::Skipped { .. }
+        ));
+        assert!(matches!(
+            eng.evaluate(&rule, &no_kind, Utc::now()),
+            RuleDecision::Skipped { .. }
+        ));
     }
 
     #[test]
@@ -1161,13 +1456,28 @@ mod tests {
         let mut eng = RuleEngine::default();
         let rule = {
             let mut r = mk_rule("x", "TaskCompleted", vec![], 0);
-            r.conditions.push(cond("payload_exists", json!({"path":"maybe"})));
+            r.conditions
+                .push(cond("payload_exists", json!({"path":"maybe"})));
             r
         };
-        let ev_null = mk_event(EventType::WellKnown(WellKnownEventType::TaskCompleted), 1.0, json!({"maybe":null}));
-        let ev_missing = mk_event(EventType::WellKnown(WellKnownEventType::TaskCompleted), 1.0, json!({}));
-        assert!(matches!(eng.evaluate(&rule, &ev_null, Utc::now()), RuleDecision::Fired(_)));
-        assert!(matches!(eng.evaluate(&rule, &ev_missing, Utc::now()), RuleDecision::Skipped { .. }));
+        let ev_null = mk_event(
+            EventType::WellKnown(WellKnownEventType::TaskCompleted),
+            1.0,
+            json!({"maybe":null}),
+        );
+        let ev_missing = mk_event(
+            EventType::WellKnown(WellKnownEventType::TaskCompleted),
+            1.0,
+            json!({}),
+        );
+        assert!(matches!(
+            eng.evaluate(&rule, &ev_null, Utc::now()),
+            RuleDecision::Fired(_)
+        ));
+        assert!(matches!(
+            eng.evaluate(&rule, &ev_missing, Utc::now()),
+            RuleDecision::Skipped { .. }
+        ));
     }
 
     #[test]
@@ -1175,14 +1485,25 @@ mod tests {
         let mut eng = RuleEngine::default();
         let rule = {
             let mut r = mk_rule("x", "TaskCompleted", vec![], 0);
-            r.conditions.push(cond("source_eq", json!({"source":"canvas"})));
+            r.conditions
+                .push(cond("source_eq", json!({"source":"canvas"})));
             r
         };
-        let mut ev = mk_event(EventType::WellKnown(WellKnownEventType::TaskCompleted), 1.0, json!({}));
+        let mut ev = mk_event(
+            EventType::WellKnown(WellKnownEventType::TaskCompleted),
+            1.0,
+            json!({}),
+        );
         ev.connector_id = "canvas".into();
-        assert!(matches!(eng.evaluate(&rule, &ev, Utc::now()), RuleDecision::Fired(_)));
+        assert!(matches!(
+            eng.evaluate(&rule, &ev, Utc::now()),
+            RuleDecision::Fired(_)
+        ));
         ev.connector_id = "gcal".into();
-        assert!(matches!(eng.evaluate(&rule, &ev, Utc::now()), RuleDecision::Skipped { .. }));
+        assert!(matches!(
+            eng.evaluate(&rule, &ev, Utc::now()),
+            RuleDecision::Skipped { .. }
+        ));
     }
 
     // Traces to: FR-RULE-008 (expanded Action catalog)
@@ -1206,7 +1527,10 @@ mod tests {
             InterventionSeverity::Firm,
             InterventionSeverity::Urgent,
         ] {
-            let a = Action::Intervention { message: "take a walk".into(), severity: sev };
+            let a = Action::Intervention {
+                message: "take a walk".into(),
+                severity: sev,
+            };
             let s = serde_json::to_string(&a).unwrap();
             let back: Action = serde_json::from_str(&s).unwrap();
             assert_eq!(a, back);
@@ -1284,7 +1608,10 @@ mod tests {
         let a = json!({"penalty":{"tier":"Clear"}});
         let b = json!({"penalty":{"tier":"Warn"}});
         let c = json!({"penalty":{"tier":"Strict"}});
-        assert!(matches!(eng.evaluate_state_change(&rule, &a, &b, t0), RuleDecision::Fired(_)));
+        assert!(matches!(
+            eng.evaluate_state_change(&rule, &a, &b, t0),
+            RuleDecision::Fired(_)
+        ));
         // 5 min later, another transition → within cooldown.
         let d = eng.evaluate_state_change(&rule, &b, &c, t0 + Duration::minutes(5));
         assert!(matches!(d, RuleDecision::Suppressed { .. }));

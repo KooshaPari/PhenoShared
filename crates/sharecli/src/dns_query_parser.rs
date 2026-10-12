@@ -105,7 +105,7 @@ pub const fn flags_qr(flags: u16) -> bool {
 /// 5 = UPDATE, ...
 #[inline]
 pub const fn flags_opcode(flags: u16) -> u8 {
-    ((flags >> 11) & 0x0F) as u8
+    ((flags >> 11) & 0x0f) as u8
 }
 
 /// AA bit: server is an authority for the zone.
@@ -135,7 +135,7 @@ pub const fn flags_recursion_available(flags: u16) -> bool {
 /// RCODE: 0 = NOERROR, 1 = FORMERR, 2 = SERVFAIL, 3 = NXDOMAIN, ...
 #[inline]
 pub const fn flags_rcode(flags: u16) -> u8 {
-    (flags & 0x000F) as u8
+    (flags & 0x000f) as u8
 }
 
 // ---------- Core parser ----------
@@ -181,14 +181,24 @@ pub fn parse(input: &[u8]) -> Result<Packet, String> {
         let qtype = u16::from_be_bytes([input[cursor], input[cursor + 1]]);
         let qclass = u16::from_be_bytes([input[cursor + 2], input[cursor + 3]]);
         cursor += 4;
-        questions.push(Question { name, qtype, qclass });
+        questions.push(Question {
+            name,
+            qtype,
+            qclass,
+        });
     }
 
     let answers = read_rr_section(input, &mut cursor, header.ancount as usize, "answer")?;
     let authority = read_rr_section(input, &mut cursor, header.nscount as usize, "authority")?;
     let additional = read_rr_section(input, &mut cursor, header.arcount as usize, "additional")?;
 
-    Ok(Packet { header, questions, answers, authority, additional })
+    Ok(Packet {
+        header,
+        questions,
+        answers,
+        authority,
+        additional,
+    })
 }
 
 /// Parse a label-encoded domain name starting at `start`.
@@ -210,13 +220,16 @@ fn read_name(input: &[u8], start: usize) -> Result<(String, usize), String> {
 
     loop {
         if cursor >= input.len() {
-            return Err(format!("name extends past end of message at byte {}", cursor));
+            return Err(format!(
+                "name extends past end of message at byte {}",
+                cursor
+            ));
         }
         let len = input[cursor];
-        match len & 0xC0 {
+        match len & 0xc0 {
             0x00 => {
                 // Plain label
-                let l = (len & 0x3F) as usize;
+                let l = (len & 0x3f) as usize;
                 if l == 0 {
                     // End of name
                     cursor += 1;
@@ -244,13 +257,13 @@ fn read_name(input: &[u8], start: usize) -> Result<(String, usize), String> {
                     .map_err(|e| format!("non-UTF8 label at byte {}: {}", cursor, e))?;
                 out.push_str(&label.to_ascii_lowercase());
                 cursor += l;
-            }
-            0xC0 => {
+            },
+            0xc0 => {
                 // Compression pointer (RFC 1035 §4.1.4)
                 if cursor + 1 >= input.len() {
                     return Err(format!("truncated compression pointer at byte {}", cursor));
                 }
-                let offset = u16::from_be_bytes([len & 0x3F, input[cursor + 1]]) as usize;
+                let offset = u16::from_be_bytes([len & 0x3f, input[cursor + 1]]) as usize;
                 if offset >= cursor {
                     return Err(format!(
                         "compression pointer at byte {} points forward to {}",
@@ -269,16 +282,22 @@ fn read_name(input: &[u8], start: usize) -> Result<(String, usize), String> {
                     ));
                 }
                 cursor = offset;
-            }
+            },
             _ => {
                 // 0x80 (reserved) or 0x40 (extended label, RFC 2673 /
                 // RFC 6891) — not implemented.
-                return Err(format!("unsupported label type 0x{:02x} at byte {}", len, cursor));
-            }
+                return Err(format!(
+                    "unsupported label type 0x{:02x} at byte {}",
+                    len, cursor
+                ));
+            },
         }
 
         if out.len() > MAX_NAME_LENGTH {
-            return Err(format!("name exceeds 255 bytes (truncated at byte {})", cursor));
+            return Err(format!(
+                "name exceeds 255 bytes (truncated at byte {})",
+                cursor
+            ));
         }
     }
 
@@ -301,7 +320,10 @@ fn read_rr_section(
         *cursor = end;
         // TYPE(2) + CLASS(2) + TTL(4) + RDLENGTH(2) = 10 bytes
         if *cursor + 10 > input.len() {
-            return Err(format!("truncated {} record header at byte {}", label, cursor));
+            return Err(format!(
+                "truncated {} record header at byte {}",
+                label, cursor
+            ));
         }
         let rtype = u16::from_be_bytes([input[*cursor], input[*cursor + 1]]);
         let rclass = u16::from_be_bytes([input[*cursor + 2], input[*cursor + 3]]);
@@ -321,7 +343,13 @@ fn read_rr_section(
         }
         let rdata = input[*cursor..*cursor + rdlen].to_vec();
         *cursor += rdlen;
-        out.push(ResourceRecord { name, rtype, rclass, ttl, rdata });
+        out.push(ResourceRecord {
+            name,
+            rtype,
+            rclass,
+            ttl,
+            rdata,
+        });
     }
     Ok(out)
 }
@@ -380,7 +408,7 @@ mod tests {
     #[test]
     fn parses_canonical_response_header_and_answer() {
         let pkt = parse(&example_com_response()).unwrap();
-        assert_eq!(pkt.header.id, 0xABCD);
+        assert_eq!(pkt.header.id, 0xabcd);
         assert_eq!(pkt.header.flags, 0x8180);
         assert!(flags_qr(pkt.header.flags));
         // 0x8180 = QR=1 OPCODE=0 AA=0 TC=0 RD=1 RA=1 RCODE=0
@@ -488,7 +516,10 @@ mod tests {
             // byte 30 is in the middle of the RDATA — pointer is invalid
         ];
         let err = parse(&bytes).unwrap_err();
-        assert!(err.contains("forward") || err.contains("non-UTF8"), "got: {err}");
+        assert!(
+            err.contains("forward") || err.contains("non-UTF8"),
+            "got: {err}"
+        );
     }
 
     #[test]
@@ -507,7 +538,9 @@ mod tests {
     #[test]
     fn empty_message_with_zero_counts_parses() {
         // A header-only DNS message with all counts at zero.
-        let bytes = vec![0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00];
+        let bytes = vec![
+            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+        ];
         let pkt = parse(&bytes).unwrap();
         assert_eq!(pkt.questions.len(), 0);
         assert_eq!(pkt.answers.len(), 0);
@@ -521,8 +554,9 @@ mod tests {
         // the 6-bit length field per RFC 1035 §2.3.4). Build a
         // question name = "aaa...aaa.example.com" where the first
         // label is 63 'a's and the second is "example", "com", root.
-        let mut bytes =
-            vec![0x12, 0x34, 0x01, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00];
+        let mut bytes = vec![
+            0x12, 0x34, 0x01, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+        ];
         bytes.push(63); // 6-bit label length = 63 (legal max)
         for _ in 0..63 {
             bytes.push(b'a');

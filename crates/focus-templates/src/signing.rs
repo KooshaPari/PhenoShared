@@ -59,10 +59,10 @@ fn sort_value(v: serde_json::Value) -> serde_json::Value {
                 out.insert(k, val);
             }
             serde_json::Value::Object(out)
-        }
+        },
         serde_json::Value::Array(arr) => {
             serde_json::Value::Array(arr.into_iter().map(sort_value).collect())
-        }
+        },
         other => other,
     }
 }
@@ -105,7 +105,7 @@ pub fn verify_pack_bytes(
 /// Compute SHA-256 digest of a pack's canonical bytes (hex-encoded).
 pub fn digest_pack(pack: &TemplatePack) -> Result<String, TemplateError> {
     let bytes = canonical_bytes(pack)?;
-    Ok(format!("{:x}", sha2::Sha256::digest(&bytes)))
+    Ok(hex::encode(sha2::Sha256::digest(&bytes)))
 }
 
 /// Extract the first 16 characters of a hex public key (fingerprint for UI).
@@ -117,7 +117,10 @@ pub fn pubkey_fingerprint(hex: &str) -> String {
 /// host app to iterate [`PHENOTYPE_ROOT_PUBKEYS`] at startup.
 pub fn parse_root_pubkey(hex: &str) -> Result<VerifyingKey, TemplateError> {
     if hex.len() != 64 {
-        return Err(TemplateError::Signature(format!("expected 64 hex chars, got {}", hex.len())));
+        return Err(TemplateError::Signature(format!(
+            "expected 64 hex chars, got {}",
+            hex.len()
+        )));
     }
     let mut raw = [0u8; 32];
     for i in 0..32 {

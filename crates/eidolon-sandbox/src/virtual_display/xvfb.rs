@@ -129,15 +129,15 @@ mod tests {
                 assert!(probe::xvfb_ready());
                 assert!(plan.display.starts_with(':'));
                 assert!(plan.argv.iter().any(|a| a.contains('x')));
-            }
+            },
             Err(e) => {
-                let code = e.unsupported_code();
+                let code = e.unsupported_code_value();
                 assert!(
                     code == Some(codes::SANDBOX_VIRTUAL_DISPLAY_UNSUPPORTED)
                         || code == Some(codes::SANDBOX_XVFB_MISSING),
                     "unexpected plan_xvfb error: {e:?}"
                 );
-            }
+            },
         }
     }
 
@@ -153,7 +153,7 @@ mod tests {
             std::env::set_var(XVFB_INTEGRATION_ENV, v);
         }
         assert_eq!(
-            err.unsupported_code(),
+            err.unsupported_code_value(),
             Some(codes::SANDBOX_VIRTUAL_DISPLAY_STUB)
         );
     }

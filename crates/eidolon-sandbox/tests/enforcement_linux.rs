@@ -425,7 +425,7 @@ fn namespaces_live_user_ns_multi_range_or_fail_loud() {
                     status.user_ns_mapped,
                     "multi-range USER ns must report user_ns_mapped on success"
                 );
-            }
+            },
             Err(err) => {
                 let code = match &err {
                     PhenoError::UnsupportedPlatform { code, .. } => code.as_str(),
@@ -436,7 +436,7 @@ fn namespaces_live_user_ns_multi_range_or_fail_loud() {
                     codes::SANDBOX_NAMESPACES_UNSUPPORTED,
                     "multi-range miss must fail loud with namespaces unsupported, not silent skip"
                 );
-            }
+            },
         }
     }
 }

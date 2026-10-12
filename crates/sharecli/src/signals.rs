@@ -15,7 +15,9 @@ pub struct ShutdownFlag {
 }
 impl ShutdownFlag {
     pub fn new() -> Self {
-        Self { flag: Arc::new(AtomicBool::new(false)) }
+        Self {
+            flag: Arc::new(AtomicBool::new(false)),
+        }
     }
     pub fn trigger(&self) {
         self.flag.store(true, Ordering::SeqCst);

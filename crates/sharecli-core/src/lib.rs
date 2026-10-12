@@ -138,7 +138,9 @@ impl Default for SystemThermalGate {
 impl SystemThermalGate {
     /// Create a new gate backed by the real [`ThermalGovernor`].
     pub fn new() -> Self {
-        Self { governor: ThermalGovernor::new() }
+        Self {
+            governor: ThermalGovernor::new(),
+        }
     }
 }
 
@@ -151,7 +153,7 @@ impl ThermalGate for SystemThermalGate {
             Err(e) => {
                 warn!(err = %e, "thermal-gate: poll failed — defaulting to Allow");
                 ThermalDecision::Allow
-            }
+            },
         }
     }
 }
@@ -184,7 +186,10 @@ pub struct AgentAwareThermalGate {
 impl AgentAwareThermalGate {
     /// Gate with live proc scan + resource samples on every check.
     pub fn new(inner: Arc<dyn ThermalGate>, _thresholds: AgentContentionThresholds) -> Self {
-        Self { inner, agent_tier: Arc::new(live_agent_contention_tier) }
+        Self {
+            inner,
+            agent_tier: Arc::new(live_agent_contention_tier),
+        }
     }
 
     /// Test/injection hook — supply a deterministic agent-count-only tier fn.
@@ -329,7 +334,11 @@ impl FuseGuard {
         #[cfg(not(any(target_os = "linux", target_os = "macos")))]
         {
             let _ = (backing, session_id);
-            return Self { mountpoint: None, _tmpdir: None, readiness_marker: None };
+            return Self {
+                mountpoint: None,
+                _tmpdir: None,
+                readiness_marker: None,
+            };
         }
 
         // Linux / macOS: try to start FUSE and wait until it is ready.
@@ -343,8 +352,12 @@ impl FuseGuard {
                     );
                     eprintln!("{msg}");
                     error!("{msg}");
-                    return Self { mountpoint: None, _tmpdir: None, readiness_marker: None };
-                }
+                    return Self {
+                        mountpoint: None,
+                        _tmpdir: None,
+                        readiness_marker: None,
+                    };
+                },
             };
             let mountpoint = tmpdir.path().to_path_buf();
             let backing = backing.to_path_buf();
@@ -360,7 +373,11 @@ impl FuseGuard {
                 );
                 eprintln!("{msg}");
                 error!("{msg}");
-                return Self { mountpoint: None, _tmpdir: None, readiness_marker: None };
+                return Self {
+                    mountpoint: None,
+                    _tmpdir: None,
+                    readiness_marker: None,
+                };
             }
 
             let mp = mountpoint.clone();
@@ -407,8 +424,12 @@ impl FuseGuard {
                             .status();
                     }
                     let _ = std::fs::remove_file(&marker_backing);
-                    Self { mountpoint: None, _tmpdir: None, readiness_marker: None }
-                }
+                    Self {
+                        mountpoint: None,
+                        _tmpdir: None,
+                        readiness_marker: None,
+                    }
+                },
             }
         }
     }
@@ -426,7 +447,10 @@ impl Drop for FuseGuard {
             // which removes the now-empty mountpoint directory).
             #[cfg(target_os = "linux")]
             {
-                let _ = std::process::Command::new("fusermount").arg("-uz").arg(mp).status();
+                let _ = std::process::Command::new("fusermount")
+                    .arg("-uz")
+                    .arg(mp)
+                    .status();
             }
             #[cfg(target_os = "macos")]
             {
@@ -493,7 +517,12 @@ impl SpawnRequest {
         env: Vec<(String, String)>,
         rule_priority: Option<&str>,
     ) -> Self {
-        Self { argv, cwd, env, queue_priority: resolve_operator_queue_priority(rule_priority) }
+        Self {
+            argv,
+            cwd,
+            env,
+            queue_priority: resolve_operator_queue_priority(rule_priority),
+        }
     }
 
     /// Override nocache queue priority for this spawn.
@@ -589,7 +618,11 @@ impl From<CachedResult> for SpawnOutcome {
 
 impl From<SpawnOutcome> for CachedResult {
     fn from(s: SpawnOutcome) -> Self {
-        Self { exit_code: s.exit_code, stdout: s.stdout, stderr: s.stderr }
+        Self {
+            exit_code: s.exit_code,
+            stdout: s.stdout,
+            stderr: s.stderr,
+        }
     }
 }
 
@@ -626,8 +659,10 @@ impl Hypervisor {
     /// Queue root defaults to `{cache_root}/queue` with `max_concurrent = 1`.
     pub fn new(cache_root: impl Into<PathBuf>) -> Self {
         let inner = Arc::new(SystemThermalGate::new());
-        let gate =
-            Arc::new(AgentAwareThermalGate::new(inner, AgentContentionThresholds::default()));
+        let gate = Arc::new(AgentAwareThermalGate::new(
+            inner,
+            AgentContentionThresholds::default(),
+        ));
         Self::with_thermal_gate(cache_root, gate)
     }
 
@@ -649,19 +684,27 @@ impl Hypervisor {
                 semantic: false,
             },
             gate,
-            DEFAULT_NOCACHE_ARGS.iter().map(|s| (*s).to_string()).collect(),
+            DEFAULT_NOCACHE_ARGS
+                .iter()
+                .map(|s| (*s).to_string())
+                .collect(),
         )
     }
 
     /// Production hypervisor from a full [`HypervisorConfig`] (harness rules.conf wiring).
     pub fn from_config(config: HypervisorConfig) -> Self {
         let inner = Arc::new(SystemThermalGate::new());
-        let gate =
-            Arc::new(AgentAwareThermalGate::new(inner, AgentContentionThresholds::default()));
+        let gate = Arc::new(AgentAwareThermalGate::new(
+            inner,
+            AgentContentionThresholds::default(),
+        ));
         Self::with_options(
             config,
             gate,
-            DEFAULT_NOCACHE_ARGS.iter().map(|s| (*s).to_string()).collect(),
+            DEFAULT_NOCACHE_ARGS
+                .iter()
+                .map(|s| (*s).to_string())
+                .collect(),
         )
     }
 
@@ -694,7 +737,14 @@ impl Hypervisor {
             gate.clone(),
         );
 
-        Self { cache, queue, nocache_args, config, thermal_gate: gate, speculation_tracker }
+        Self {
+            cache,
+            queue,
+            nocache_args,
+            config,
+            thermal_gate: gate,
+            speculation_tracker,
+        }
     }
 
     /// Borrow the mutating-path [`SlotQueue`] (Hypervisor API for external callers).
@@ -739,8 +789,9 @@ impl Hypervisor {
         let detected_agent = detect_caller_agent();
         debug!(lane, argv = ?req.argv, "hypervisor::run_queued — queue lane");
         record_nocache_run();
-        let outcome =
-            self.queue.with_slot(lane, req.queue_priority, || spawn_process_sync(&req))?;
+        let outcome = self
+            .queue
+            .with_slot(lane, req.queue_priority, || spawn_process_sync(&req))?;
         Ok(SpawnOutcome {
             exit_code: outcome.exit_code,
             stdout: outcome.stdout,
@@ -829,8 +880,12 @@ impl Hypervisor {
         } else {
             req.argv.clone()
         };
-        let key =
-            command_key_with_mode(self.config.cache_key_mode, &argv_for_key, &req.cwd, &req.env);
+        let key = command_key_with_mode(
+            self.config.cache_key_mode,
+            &argv_for_key,
+            &req.cwd,
+            &req.env,
+        );
         debug!(key = %key.0, argv = ?req.argv, "hypervisor::run");
 
         // Check the cache before acquiring the lock so that we can
@@ -839,7 +894,9 @@ impl Hypervisor {
             debug!(key = %key.0, "hypervisor::run — cache hit");
             record_coalesce_lookup_hit();
             // FR-008: record hit for speculation tracker.
-            self.speculation_tracker.record_hit(&key, &req.argv, &req.cwd, &req.env).await;
+            self.speculation_tracker
+                .record_hit(&key, &req.argv, &req.cwd, &req.env)
+                .await;
             return Ok(SpawnOutcome {
                 exit_code: cached.exit_code,
                 stdout: cached.stdout,
@@ -873,7 +930,10 @@ impl Hypervisor {
         // to modify `req.cwd` inside the `with_lock` closure below.
         let effective_req = fuse_guard
             .mountpoint()
-            .map(|mp| SpawnRequest { cwd: mp.to_path_buf(), ..req.clone() })
+            .map(|mp| SpawnRequest {
+                cwd: mp.to_path_buf(),
+                ..req.clone()
+            })
             .unwrap_or_else(|| req.clone());
 
         // Cache miss — acquire the advisory flock, re-check inside the lock
@@ -890,7 +950,9 @@ impl Hypervisor {
 
         // FR-008: record speculation hit when the lock-wait cache was shared.
         if hit_kind.shared_from_cache() {
-            self.speculation_tracker.record_hit(&key, &req.argv, &req.cwd, &req.env).await;
+            self.speculation_tracker
+                .record_hit(&key, &req.argv, &req.cwd, &req.env)
+                .await;
         }
 
         Ok(SpawnOutcome {
@@ -939,11 +1001,11 @@ impl Hypervisor {
                 ThermalDecision::Allow => {
                     debug!("thermal-gate: Green — spawn allowed");
                     return Ok(());
-                }
+                },
                 ThermalDecision::Warn => {
                     warn!("thermal-gate: Yellow — device is warm, proceeding with spawn");
                     return Ok(());
-                }
+                },
                 ThermalDecision::Refuse => {
                     attempt += 1;
                     // Loud, actionable message — never a silent no-op.
@@ -966,7 +1028,7 @@ impl Hypervisor {
                     }
 
                     tokio::time::sleep(THERMAL_RETRY_SLEEP).await;
-                }
+                },
             }
         }
     }
@@ -978,15 +1040,22 @@ impl Hypervisor {
 
 /// Lane key for SlotQueue routing from argv (basename of argv[0]).
 fn queue_lane_from_argv(argv: &[String]) -> &str {
-    argv.first().map(|s| s.as_str()).unwrap_or("unknown").rsplit('/').next().unwrap_or("unknown")
+    argv.first()
+        .map(|s| s.as_str())
+        .unwrap_or("unknown")
+        .rsplit('/')
+        .next()
+        .unwrap_or("unknown")
 }
 
 /// Spawn `req.argv` synchronously (blocking) and capture its output.
 ///
 /// Used inside `CoalesceCache::with_lock` which takes a synchronous closure.
 fn spawn_process_sync(req: &SpawnRequest) -> Result<SpawnOutcome> {
-    let (program, args) =
-        req.argv.split_first().with_context(|| "spawn_process_sync: argv is empty")?;
+    let (program, args) = req
+        .argv
+        .split_first()
+        .with_context(|| "spawn_process_sync: argv is empty")?;
 
     let output = std::process::Command::new(program)
         .args(args)
@@ -1052,7 +1121,12 @@ mod tests {
         #[cfg(unix)]
         return vec!["echo".to_string(), msg.to_string()];
         #[cfg(windows)]
-        return vec!["cmd".to_string(), "/C".to_string(), "echo".to_string(), msg.to_string()];
+        return vec![
+            "cmd".to_string(),
+            "/C".to_string(),
+            "echo".to_string(),
+            msg.to_string(),
+        ];
     }
 
     /// Hypervisor with Allow gate and no agent-contention wrapper (unit tests).
@@ -1082,7 +1156,10 @@ mod tests {
         assert!(!outcome.from_cache, "first run must not come from cache");
 
         let stdout = String::from_utf8_lossy(&outcome.stdout);
-        assert!(stdout.contains("hello"), "stdout should contain 'hello', got: {stdout:?}");
+        assert!(
+            stdout.contains("hello"),
+            "stdout should contain 'hello', got: {stdout:?}"
+        );
     }
 
     /// (b) A second identical run must return the cached result (`from_cache = true`)
@@ -1107,7 +1184,10 @@ mod tests {
         // Second call — must hit the cache.
         let second = hv.run(req).await.expect("second run");
         assert!(second.from_cache, "second run must come from cache");
-        assert_eq!(second.stdout, first.stdout, "cached stdout must match original");
+        assert_eq!(
+            second.stdout, first.stdout,
+            "cached stdout must match original"
+        );
         assert_eq!(second.exit_code, first.exit_code);
     }
 
@@ -1208,7 +1288,9 @@ mod tests {
         }
 
         let dir = TempDir::new().expect("tempdir");
-        let gate = Arc::new(OneRedThenGreen { calls: AtomicU32::new(0) });
+        let gate = Arc::new(OneRedThenGreen {
+            calls: AtomicU32::new(0),
+        });
         let hv = Hypervisor::with_thermal_gate(dir.path(), gate);
 
         let req = SpawnRequest {
@@ -1219,7 +1301,10 @@ mod tests {
         };
 
         // With `start_paused` tokio::time::sleep resolves immediately in tests.
-        let outcome = hv.run(req).await.expect("should succeed after one RED retry");
+        let outcome = hv
+            .run(req)
+            .await
+            .expect("should succeed after one RED retry");
         assert_eq!(outcome.exit_code, 0);
         let stdout = String::from_utf8_lossy(&outcome.stdout);
         assert!(stdout.contains("recover"));
@@ -1251,19 +1336,26 @@ mod tests {
             Some(mp) => {
                 // FUSE is active — mountpoint must be different from backing.
                 assert_ne!(mp, dir.path(), "mountpoint must differ from backing");
-                assert!(mp.starts_with(std::env::temp_dir()), "mountpoint must be under temp dir");
+                assert!(
+                    mp.starts_with(std::env::temp_dir()),
+                    "mountpoint must be under temp dir"
+                );
                 let probe_found = std::fs::read_dir(mp)
                     .expect("read mountpoint")
                     .filter_map(|e| e.ok())
-                    .any(|e| e.file_name().to_string_lossy().starts_with(FUSE_READY_MARKER));
+                    .any(|e| {
+                        e.file_name()
+                            .to_string_lossy()
+                            .starts_with(FUSE_READY_MARKER)
+                    });
                 assert!(
                     probe_found,
                     "readiness marker must be visible through mountpoint before Some is returned"
                 );
-            }
+            },
             None => {
                 // FUSE not available — best-effort, still valid.
-            }
+            },
         }
     }
 
@@ -1282,11 +1374,16 @@ mod tests {
             let still_mounted = std::fs::read_dir(&mp).ok().is_some_and(|mut rd| {
                 rd.any(|e| {
                     e.ok().is_some_and(|ent| {
-                        ent.file_name().to_string_lossy().starts_with(FUSE_READY_MARKER)
+                        ent.file_name()
+                            .to_string_lossy()
+                            .starts_with(FUSE_READY_MARKER)
                     })
                 })
             });
-            assert!(!still_mounted, "FUSE intercept MUST tear down on guard drop (AC-009.14)");
+            assert!(
+                !still_mounted,
+                "FUSE intercept MUST tear down on guard drop (AC-009.14)"
+            );
         }
     }
 
@@ -1296,10 +1393,17 @@ mod tests {
         let (tx, rx) = mpsc::channel();
         tx.send("simulated mount boom".into()).expect("send");
         let probe = Path::new("/tmp/sharecli-fuse-ready-poll-never");
-        let err =
-            wait_fuse_mount_ready(probe, &rx, Duration::from_secs(2), Duration::from_millis(10))
-                .expect_err("must fail when mount reports error");
-        assert!(err.contains("mount failed"), "loud error must mention mount failure: {err}");
+        let err = wait_fuse_mount_ready(
+            probe,
+            &rx,
+            Duration::from_secs(2),
+            Duration::from_millis(10),
+        )
+        .expect_err("must fail when mount reports error");
+        assert!(
+            err.contains("mount failed"),
+            "loud error must mention mount failure: {err}"
+        );
         assert!(
             err.contains("simulated mount boom"),
             "loud error must include mount message: {err}"
@@ -1311,11 +1415,21 @@ mod tests {
     fn fuse_ready_poll_times_out_loudly_when_probe_missing() {
         let (_tx, rx) = mpsc::channel::<String>();
         let probe = Path::new("/tmp/sharecli-fuse-ready-poll-missing-xyz");
-        let err =
-            wait_fuse_mount_ready(probe, &rx, Duration::from_millis(80), Duration::from_millis(20))
-                .expect_err("must time out when probe never appears");
-        assert!(err.contains("timed out"), "loud error must mention timeout: {err}");
-        assert!(err.contains("sharecli-fuse"), "loud error must identify sharecli-fuse: {err}");
+        let err = wait_fuse_mount_ready(
+            probe,
+            &rx,
+            Duration::from_millis(80),
+            Duration::from_millis(20),
+        )
+        .expect_err("must time out when probe never appears");
+        assert!(
+            err.contains("timed out"),
+            "loud error must mention timeout: {err}"
+        );
+        assert!(
+            err.contains("sharecli-fuse"),
+            "loud error must identify sharecli-fuse: {err}"
+        );
     }
 
     /// Readiness poll succeeds when the probe file becomes readable.
@@ -1329,8 +1443,13 @@ mod tests {
             thread::sleep(Duration::from_millis(30));
             std::fs::write(&probe_bg, b"ready").expect("write probe");
         });
-        wait_fuse_mount_ready(&probe, &rx, Duration::from_secs(2), Duration::from_millis(10))
-            .expect("probe must become ready");
+        wait_fuse_mount_ready(
+            &probe,
+            &rx,
+            Duration::from_secs(2),
+            Duration::from_millis(10),
+        )
+        .expect("probe must become ready");
     }
 
     /// AC-009.12 — FUSE session id is deterministic and keyed from CommandKey prefix.
@@ -1390,11 +1509,20 @@ mod tests {
             None,
         );
 
-        let first = hv.run_queued(req.clone(), "echo").await.expect("first run_queued");
-        assert!(!first.from_cache, "AC-008.16: run_queued MUST NOT use cache on first run");
+        let first = hv
+            .run_queued(req.clone(), "echo")
+            .await
+            .expect("first run_queued");
+        assert!(
+            !first.from_cache,
+            "AC-008.16: run_queued MUST NOT use cache on first run"
+        );
 
         let second = hv.run_queued(req, "echo").await.expect("second run_queued");
-        assert!(!second.from_cache, "AC-008.16: run_queued MUST NOT use cache on replay");
+        assert!(
+            !second.from_cache,
+            "AC-008.16: run_queued MUST NOT use cache on replay"
+        );
         assert_eq!(second.exit_code, 0);
     }
 
@@ -1412,7 +1540,10 @@ mod tests {
             queue_priority: QueuePriority::Normal,
         };
 
-        let outcome = hv.run(req).await.expect("run must succeed with fuse-io wiring");
+        let outcome = hv
+            .run(req)
+            .await
+            .expect("run must succeed with fuse-io wiring");
         assert_eq!(outcome.exit_code, 0);
         assert!(!outcome.from_cache);
         let stdout = String::from_utf8_lossy(&outcome.stdout);
@@ -1422,7 +1553,11 @@ mod tests {
     /// FakeThermalGate::check() must return the decision it was constructed with.
     #[test]
     fn fake_thermal_gate_returns_configured_decision() {
-        for decision in [ThermalDecision::Allow, ThermalDecision::Warn, ThermalDecision::Refuse] {
+        for decision in [
+            ThermalDecision::Allow,
+            ThermalDecision::Warn,
+            ThermalDecision::Refuse,
+        ] {
             let gate = FakeThermalGate::new(decision);
             assert_eq!(gate.check(), decision);
         }
@@ -1490,8 +1625,11 @@ mod tests {
     /// SpawnRequest::new wires queue_priority to Normal (default operator path).
     #[test]
     fn spawn_request_new_defaults_to_normal_priority() {
-        let req =
-            SpawnRequest::new(vec!["cargo".into(), "build".into()], PathBuf::from("/repo"), vec![]);
+        let req = SpawnRequest::new(
+            vec!["cargo".into(), "build".into()],
+            PathBuf::from("/repo"),
+            vec![],
+        );
         assert_eq!(req.queue_priority, QueuePriority::Normal);
         assert_eq!(req.argv, vec!["cargo", "build"]);
         assert_eq!(req.cwd, PathBuf::from("/repo"));
@@ -1577,13 +1715,19 @@ mod tests {
     /// CachedResult -> SpawnOutcome conversion preserves data and sets from_cache=true.
     #[test]
     fn cached_result_to_spawn_outcome_preserves_fields() {
-        let cached =
-            CachedResult { exit_code: 42, stdout: b"hello".to_vec(), stderr: b"err".to_vec() };
+        let cached = CachedResult {
+            exit_code: 42,
+            stdout: b"hello".to_vec(),
+            stderr: b"err".to_vec(),
+        };
         let outcome: SpawnOutcome = cached.into();
         assert_eq!(outcome.exit_code, 42);
         assert_eq!(outcome.stdout, b"hello");
         assert_eq!(outcome.stderr, b"err");
-        assert!(outcome.from_cache, "From<CachedResult> must set from_cache=true");
+        assert!(
+            outcome.from_cache,
+            "From<CachedResult> must set from_cache=true"
+        );
         assert!(outcome.detected_agent.is_none());
         assert!(outcome.fuse_session_id.is_none());
     }
@@ -1666,7 +1810,10 @@ mod tests {
         let hv = allow_hypervisor(dir.path());
         assert_eq!(hv.coalesce_ttl(), CoalesceCache::DEFAULT_TTL);
         assert_eq!(hv.queue_max_concurrent(), 1);
-        assert!(!hv.nocache_args().is_empty(), "default nocache_args should not be empty");
+        assert!(
+            !hv.nocache_args().is_empty(),
+            "default nocache_args should not be empty"
+        );
     }
 
     /// Hypervisor::set_nocache_args replaces the flag list.

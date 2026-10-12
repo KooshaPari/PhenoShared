@@ -43,21 +43,35 @@ pub struct ZigSemaphore {
 impl ZigSemaphore {
     pub fn new(max: usize) -> Self {
         let max = max.max(1);
-        Self { inner: Mutex::new(SemInner { available: max, max }), cond: Condvar::new() }
+        Self {
+            inner: Mutex::new(SemInner {
+                available: max,
+                max,
+            }),
+            cond: Condvar::new(),
+        }
     }
 
     pub fn acquire(&self) -> Result<(), Error> {
-        let mut guard = self.inner.lock().map_err(|_| Error::other("semaphore mutex poisoned"))?;
+        let mut guard = self
+            .inner
+            .lock()
+            .map_err(|_| Error::other("semaphore mutex poisoned"))?;
         while guard.available == 0 {
-            guard =
-                self.cond.wait(guard).map_err(|_| Error::other("semaphore condvar poisoned"))?;
+            guard = self
+                .cond
+                .wait(guard)
+                .map_err(|_| Error::other("semaphore condvar poisoned"))?;
         }
         guard.available -= 1;
         Ok(())
     }
 
     pub fn try_acquire(&self) -> Result<bool, Error> {
-        let mut guard = self.inner.lock().map_err(|_| Error::other("semaphore mutex poisoned"))?;
+        let mut guard = self
+            .inner
+            .lock()
+            .map_err(|_| Error::other("semaphore mutex poisoned"))?;
         if guard.available == 0 {
             return Ok(false);
         }
@@ -66,7 +80,10 @@ impl ZigSemaphore {
     }
 
     pub fn release(&self) -> Result<(), Error> {
-        let mut guard = self.inner.lock().map_err(|_| Error::other("semaphore mutex poisoned"))?;
+        let mut guard = self
+            .inner
+            .lock()
+            .map_err(|_| Error::other("semaphore mutex poisoned"))?;
         if guard.available < guard.max {
             guard.available += 1;
         }

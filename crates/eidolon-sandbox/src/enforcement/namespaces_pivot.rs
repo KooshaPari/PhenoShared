@@ -86,9 +86,8 @@ pub(crate) fn pivot_into(rootfs: &Path) -> Result<()> {
         ))
     })?;
 
-    std::env::set_current_dir("/").map_err(|e| {
-        unsupported(format!("chdir(/) after pivot_root failed: {e}"))
-    })?;
+    std::env::set_current_dir("/")
+        .map_err(|e| unsupported(format!("chdir(/) after pivot_root failed: {e}")))?;
 
     let old_root = Path::new("/").join(PUT_OLD_NAME);
     umount2(&old_root, MntFlags::MNT_DETACH).map_err(|e| {

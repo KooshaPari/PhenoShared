@@ -58,11 +58,7 @@ impl AtspiClient {
             .cache_properties(zbus::proxy::CacheProperties::No)
             .build()
             .await
-            .map_err(|e| {
-                unavailable(format!(
-                    "AT-SPI registry AccessibleProxy build failed: {e}"
-                ))
-            })
+            .map_err(|e| unavailable(format!("AT-SPI registry AccessibleProxy build failed: {e}")))
     }
 
     async fn proxy_for(&self, obj: &ObjectRef) -> Result<AccessibleProxy<'_>> {
@@ -114,8 +110,7 @@ impl AtspiClient {
         })?;
 
         let mut out = Vec::new();
-        let mut stack: Vec<(ObjectRef, usize)> =
-            children.into_iter().map(|c| (c, 1)).collect();
+        let mut stack: Vec<(ObjectRef, usize)> = children.into_iter().map(|c| (c, 1)).collect();
 
         while let Some((obj, depth)) = stack.pop() {
             if out.len() >= cap {
@@ -126,14 +121,14 @@ impl AtspiClient {
                 Err(e) => {
                     log::debug!("AT-SPI skip unreachable child: {e}");
                     continue;
-                }
+                },
             };
             let node = match self.node_from_proxy(&proxy).await {
                 Ok(n) => n,
                 Err(e) => {
                     log::debug!("AT-SPI skip unreadable node: {e}");
                     continue;
-                }
+                },
             };
 
             let role_ok = match role_filter {
@@ -172,11 +167,7 @@ impl LinuxAtspiAutomator for AtspiClient {
         self.walk(max, DEFAULT_MAX_DEPTH, None, None).await
     }
 
-    async fn find_by_role(
-        &self,
-        role: &str,
-        name: Option<&str>,
-    ) -> Result<Vec<AtspiNode>> {
+    async fn find_by_role(&self, role: &str, name: Option<&str>) -> Result<Vec<AtspiNode>> {
         self.walk(DEFAULT_LIST_CAP, DEFAULT_MAX_DEPTH, Some(role), name)
             .await
     }
@@ -242,7 +233,9 @@ fn role_matches(actual: &str, want: &str) -> bool {
 }
 
 fn name_matches(actual: &str, want: &str) -> bool {
-    actual.to_ascii_lowercase().contains(&want.to_ascii_lowercase())
+    actual
+        .to_ascii_lowercase()
+        .contains(&want.to_ascii_lowercase())
 }
 
 fn unavailable(message: impl Into<String>) -> PhenoError {

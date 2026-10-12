@@ -44,7 +44,7 @@ impl fmt::Display for RpcCallError {
         match self {
             RpcCallError::Server { code, message, .. } => {
                 write!(f, "daemon returned error {code}: {message}")
-            }
+            },
             RpcCallError::Transport(s) => write!(f, "transport error: {s}"),
             RpcCallError::MethodNotFound { message } => write!(f, "method not found: {message}"),
         }

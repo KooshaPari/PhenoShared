@@ -588,10 +588,10 @@ fn all_top_100_common_syscalls_present() {
                         number, name, expected_name
                     ));
                 }
-            }
+            },
             None => {
                 missing.push(format!("number {} ({:?}) missing", number, expected_name));
-            }
+            },
         }
     }
 
@@ -620,13 +620,13 @@ fn bidirectional_lookup_for_all_entries() {
                         number, name, expected_name
                     ));
                 }
-            }
+            },
             None => {
                 failures.push(format!(
                     "lookup_name({}) -> None (expected {:?})",
                     number, expected_name
                 ));
-            }
+            },
         }
 
         // name -> number
@@ -638,13 +638,13 @@ fn bidirectional_lookup_for_all_entries() {
                         expected_name, found_num, number
                     ));
                 }
-            }
+            },
             None => {
                 failures.push(format!(
                     "lookup_number({:?}) -> None (expected {})",
                     expected_name, number
                 ));
-            }
+            },
         }
     }
 

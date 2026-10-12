@@ -222,19 +222,19 @@ impl fmt::Display for SmokeError {
         match self {
             SmokeError::BridgeLoad { path, cause } => {
                 write!(f, "failed to load bridge from {path}: {cause}")
-            }
+            },
             SmokeError::SymbolNotFound { name, cause } => {
                 write!(f, "symbol `{name}` not found: {cause}")
-            }
+            },
             SmokeError::BridgeOp { op, detail } => {
                 write!(f, "bridge operation `{op}` failed: {detail}")
-            }
+            },
             SmokeError::CStringConversion { field, cause } => {
                 write!(f, "C string conversion for `{field}` failed: {cause}")
-            }
+            },
             SmokeError::NullPointer { context } => {
                 write!(f, "unexpected null pointer: {context}")
-            }
+            },
         }
     }
 }

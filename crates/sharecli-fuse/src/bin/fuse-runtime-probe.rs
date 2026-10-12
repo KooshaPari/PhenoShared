@@ -24,5 +24,8 @@ fn main() {
         "diagnostic": evidence.selection.diagnostic.map(|diagnostic| diagnostic.message()),
         "non_fuse_fallback": evidence.non_fuse_fallback,
     });
-    println!("{}", serde_json::to_string_pretty(&report).expect("serialize probe report"));
+    println!(
+        "{}",
+        serde_json::to_string_pretty(&report).expect("serialize probe report")
+    );
 }

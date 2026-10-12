@@ -71,7 +71,10 @@ impl AgentCowStore {
         agent: &str,
     ) -> Result<std::sync::MutexGuard<'_, HashMap<String, WriteSerialize>>, WriteSerializeError>
     {
-        let mut map = self.agents.lock().map_err(|_| WriteSerializeError::Poisoned)?;
+        let mut map = self
+            .agents
+            .lock()
+            .map_err(|_| WriteSerializeError::Poisoned)?;
         if !map.contains_key(agent) {
             let root = self.cow_root.join(agent);
             map.insert(agent.to_string(), WriteSerialize::with_staging_root(root));
@@ -183,7 +186,10 @@ impl AgentCowStore {
 
     /// Snapshot of all agents that currently have a store (may include empty pending).
     pub fn list_agent_pending(&self) -> Result<Vec<AgentPending>, WriteSerializeError> {
-        let map = self.agents.lock().map_err(|_| WriteSerializeError::Poisoned)?;
+        let map = self
+            .agents
+            .lock()
+            .map_err(|_| WriteSerializeError::Poisoned)?;
         let mut out = Vec::new();
         for (agent, ws) in map.iter() {
             out.push(AgentPending {
@@ -212,8 +218,10 @@ mod tests {
         fs::write(&backing, b"base").unwrap();
         let cow = AgentCowStore::new(dir.path().join("cow"), "default", true);
 
-        cow.stage_bytes(Some("claude"), &backing, b"from-claude").unwrap();
-        cow.stage_bytes(Some("cursor"), &backing, b"from-cursor").unwrap();
+        cow.stage_bytes(Some("claude"), &backing, b"from-claude")
+            .unwrap();
+        cow.stage_bytes(Some("cursor"), &backing, b"from-cursor")
+            .unwrap();
 
         cow.commit_pending(Some("claude"), &backing).unwrap();
         assert_eq!(fs::read(&backing).unwrap(), b"from-claude");
@@ -289,7 +297,9 @@ mod tests {
     fn agent_cow_with_locked_path_enabled() {
         let dir = tempdir().unwrap();
         let cow = AgentCowStore::new(dir.path().join("cow"), "a", true);
-        let result = cow.with_locked_path(None, Path::new("/test"), || 42).unwrap();
+        let result = cow
+            .with_locked_path(None, Path::new("/test"), || 42)
+            .unwrap();
         assert_eq!(result, 42);
     }
 

@@ -101,7 +101,7 @@ mod tests {
         }
         let err = require_wayland_smoke().unwrap_err();
         assert_eq!(
-            err.unsupported_code(),
+            err.unsupported_code_value(),
             Some(codes::DESKTOP_LINUX_WAYLAND_PORTAL_UNAVAILABLE)
         );
     }
@@ -116,7 +116,7 @@ mod tests {
             } else {
                 let err = result.unwrap_err();
                 assert_eq!(
-                    err.unsupported_code(),
+                    err.unsupported_code_value(),
                     Some(codes::DESKTOP_LINUX_WAYLAND_PORTAL_UNAVAILABLE)
                 );
             }
@@ -125,7 +125,7 @@ mod tests {
         {
             let err = result.unwrap_err();
             assert_eq!(
-                err.unsupported_code(),
+                err.unsupported_code_value(),
                 Some(codes::DESKTOP_LINUX_WAYLAND_PORTAL_UNAVAILABLE)
             );
             assert_eq!(err.status_code(), 501);

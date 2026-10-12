@@ -185,8 +185,11 @@ mod platform {
 
         /// Create with full Feb-parity mount options (`--cow`, `--cow-dir`, …).
         pub fn with_options(backing: &Path, opts: InterceptFsOptions) -> Self {
-            let session_id =
-                if opts.session_id.is_empty() { default_session_id() } else { opts.session_id };
+            let session_id = if opts.session_id.is_empty() {
+                default_session_id()
+            } else {
+                opts.session_id
+            };
             let default_agent = opts.agent.clone().unwrap_or_else(|| session_id.clone());
             let cow_root = opts.cow_dir.unwrap_or_else(|| {
                 if opts.cow {
@@ -195,7 +198,10 @@ mod platform {
                     backing.join(".sharecli-cow-staging")
                 }
             });
-            let agents_conf = opts.agents_conf.as_ref().and_then(|p| AgentsConf::load(p).ok());
+            let agents_conf = opts
+                .agents_conf
+                .as_ref()
+                .and_then(|p| AgentsConf::load(p).ok());
             Self {
                 backing: backing.to_path_buf(),
                 session_id,
@@ -273,14 +279,14 @@ mod platform {
                         neg.invalidate(rel);
                     }
                     Ok(true)
-                }
+                },
                 Err(err) if err.kind() == std::io::ErrorKind::NotFound => {
                     if let Ok(mut neg) = self.neg_dentry.lock() {
                         neg.remember_miss(rel.to_path_buf());
                         crate::neg_dentry::record_global_neg_miss();
                     }
                     Ok(false)
-                }
+                },
                 Err(err) => Err(err),
             }
         }
@@ -295,7 +301,10 @@ mod platform {
         /// Read a relative path through the in-process coalesce cache (no mount).
         pub fn read_coalesced_rel(&self, rel: &Path) -> std::io::Result<Vec<u8>> {
             let abs = abs_under(&self.backing, rel);
-            self.read_cache.lock().expect("read cache lock").read_coalesced(&abs)
+            self.read_cache
+                .lock()
+                .expect("read cache lock")
+                .read_coalesced(&abs)
         }
 
         /// Stage CoW bytes for a relative path (no mount; FR-009 helpers).
@@ -418,7 +427,11 @@ mod platform {
             if let Some(parent) = abs.parent() {
                 fs::create_dir_all(parent)?;
             }
-            OpenOptions::new().write(true).create_new(true).mode(mode).open(&abs)?;
+            OpenOptions::new()
+                .write(true)
+                .create_new(true)
+                .mode(mode)
+                .open(&abs)?;
             self.after_create_at(rel, &abs)
         }
 
@@ -467,8 +480,14 @@ mod platform {
             match fs::metadata(&path) {
                 Ok(meta) => {
                     let attr = Self::metadata_to_attr(ino, &meta);
-                    reply.created(&TTL, &attr, Generation(0), FileHandle(ino), FopenFlags::empty());
-                }
+                    reply.created(
+                        &TTL,
+                        &attr,
+                        Generation(0),
+                        FileHandle(ino),
+                        FopenFlags::empty(),
+                    );
+                },
                 Err(err) => reply.error(Self::io_errno(err)),
             }
         }
@@ -547,7 +566,7 @@ mod platform {
                     }
                     let attr = Self::metadata_to_attr(ino, &meta);
                     reply.entry(&TTL, &attr, Generation(0));
-                }
+                },
                 Err(err) => {
                     if err.kind() == std::io::ErrorKind::NotFound {
                         if let Ok(mut neg) = self.neg_dentry.lock() {
@@ -557,7 +576,7 @@ mod platform {
                     }
                     map.remove_rel(&rel);
                     reply.error(Self::io_errno(err));
-                }
+                },
             }
         }
 
@@ -601,12 +620,14 @@ mod platform {
                     None => {
                         reply.error(Errno::ENOENT);
                         return;
-                    }
+                    },
                 }
             };
             if let Some(new_size) = size {
-                if let Err(err) =
-                    OpenOptions::new().write(true).open(&path).and_then(|f| f.set_len(new_size))
+                if let Err(err) = OpenOptions::new()
+                    .write(true)
+                    .open(&path)
+                    .and_then(|f| f.set_len(new_size))
                 {
                     reply.error(Self::io_errno(err));
                     return;
@@ -625,7 +646,7 @@ mod platform {
                         cache.invalidate(&path);
                     }
                     reply.attr(&TTL, &Self::metadata_to_attr(ino.0, &meta));
-                }
+                },
                 Err(err) => reply.error(Self::io_errno(err)),
             }
         }
@@ -639,7 +660,7 @@ mod platform {
             match fs::metadata(&path) {
                 Ok(meta) if meta.is_file() => {
                     reply.opened(FileHandle(ino.0), FopenFlags::empty());
-                }
+                },
                 Ok(_) => reply.error(Errno::EISDIR),
                 Err(err) => reply.error(Self::io_errno(err)),
             }
@@ -664,10 +685,15 @@ mod platform {
                     None => {
                         reply.error(Errno::ENOENT);
                         return;
-                    }
+                    },
                 }
             };
-            match self.read_cache.lock().expect("read cache").read_slice(&path, offset, size) {
+            match self
+                .read_cache
+                .lock()
+                .expect("read cache")
+                .read_slice(&path, offset, size)
+            {
                 Ok(buf) => reply.data(&buf),
                 Err(err) => reply.error(Self::io_errno(err)),
             }
@@ -693,7 +719,7 @@ mod platform {
                     None => {
                         reply.error(Errno::ENOENT);
                         return;
-                    }
+                    },
                 }
             };
             let payload = data.to_vec();
@@ -712,7 +738,7 @@ mod platform {
                         cache.invalidate(&path);
                     }
                     reply.written(n);
-                }
+                },
                 Ok(Err(err)) => reply.error(Self::io_errno(err)),
                 Err(err) => reply.error(Errno::from(std::io::Error::other(err.to_string()))),
             }
@@ -748,11 +774,15 @@ mod platform {
                     Err(err) => {
                         reply.error(Self::io_errno(err));
                         return;
-                    }
+                    },
                 };
                 let mut entries: Vec<(u64, FileType, std::ffi::OsString)> = Vec::new();
                 entries.push((ino.0, FileType::Directory, std::ffi::OsString::from(".")));
-                entries.push((parent_ino, FileType::Directory, std::ffi::OsString::from("..")));
+                entries.push((
+                    parent_ino,
+                    FileType::Directory,
+                    std::ffi::OsString::from(".."),
+                ));
                 for ent in read_dir.flatten() {
                     let name = ent.file_name();
                     let child_rel = crate::inode_map::join_rel(&rel, &name);
@@ -801,10 +831,10 @@ mod platform {
                     match fs::metadata(&path) {
                         Ok(meta) => {
                             reply.entry(&TTL, &Self::metadata_to_attr(ino, &meta), Generation(0))
-                        }
+                        },
                         Err(err) => reply.error(Self::io_errno(err)),
                     }
-                }
+                },
                 Err(err) => reply.error(Self::io_errno(err)),
             }
         }
@@ -836,7 +866,12 @@ mod platform {
                 }
             }
             let file_mode = mode & !umask;
-            match OpenOptions::new().write(true).create_new(true).mode(file_mode).open(&path) {
+            match OpenOptions::new()
+                .write(true)
+                .create_new(true)
+                .mode(file_mode)
+                .open(&path)
+            {
                 Ok(_file) => {
                     if let Err(err) = self.after_create_at(&rel, &path) {
                         let _ = fs::remove_file(&path);
@@ -844,7 +879,7 @@ mod platform {
                         return;
                     }
                     self.install_created_entry(rel, path, reply);
-                }
+                },
                 Err(err) => reply.error(Self::io_errno(err)),
             }
         }
@@ -880,7 +915,12 @@ mod platform {
                 }
             }
             let file_mode = mode & !umask;
-            match OpenOptions::new().write(true).create_new(true).mode(file_mode).open(&path) {
+            match OpenOptions::new()
+                .write(true)
+                .create_new(true)
+                .mode(file_mode)
+                .open(&path)
+            {
                 Ok(_file) => {
                     if let Err(err) = self.after_create_at(&rel, &path) {
                         let _ = fs::remove_file(&path);
@@ -888,7 +928,7 @@ mod platform {
                         return;
                     }
                     self.install_created_entry_plain(rel, path, reply);
-                }
+                },
                 Err(err) => reply.error(Self::io_errno(err)),
             }
         }
@@ -911,7 +951,7 @@ mod platform {
                     }
                     map.remove_rel(&rel);
                     reply.ok();
-                }
+                },
                 Err(err) => reply.error(Self::io_errno(err)),
             }
         }
@@ -931,7 +971,7 @@ mod platform {
                     }
                     map.remove_rel(&rel);
                     reply.ok();
-                }
+                },
                 Err(err) => reply.error(Self::io_errno(err)),
             }
         }
@@ -970,7 +1010,7 @@ mod platform {
                     }
                     map.rename_rel(&old_rel, new_rel);
                     reply.ok();
-                }
+                },
                 Err(err) => reply.error(Self::io_errno(err)),
             }
         }
@@ -990,7 +1030,11 @@ mod platform {
 
             let attempt = |backend: Option<FuseBackend>| {
                 let config = crate::session_registry::smoke_fuser_config_for_backend(backend);
-                fuser::mount(InterceptFs::with_session(backing, session_id), mountpoint, &config)
+                fuser::mount(
+                    InterceptFs::with_session(backing, session_id),
+                    mountpoint,
+                    &config,
+                )
             };
 
             match select_backend() {
@@ -1012,7 +1056,7 @@ mod platform {
                                 "kernel backend failed: {kernel_err}; FSKit fallback failed: {fskit_err}; {}",
                                 crate::backend::runtime_diagnostics()
                             ))
-                    }
+                    },
                 },
                 FuseBackend::Fskit => attempt(Some(FuseBackend::Fskit)).map_err(|err| {
                     anyhow::anyhow!(
@@ -1102,7 +1146,8 @@ mod platform {
             lock: Option<fuser::LockOwner>,
             reply: ReplyWrite,
         ) {
-            self.0.write(req, ino, fh, offset, data, write_flags, flags, lock, reply);
+            self.0
+                .write(req, ino, fh, offset, data, write_flags, flags, lock, reply);
         }
         fn readdir(
             &self,
@@ -1165,7 +1210,8 @@ mod platform {
             flags: RenameFlags,
             reply: ReplyEmpty,
         ) {
-            self.0.rename(req, parent, name, newparent, newname, flags, reply);
+            self.0
+                .rename(req, parent, name, newparent, newname, flags, reply);
         }
     }
 }
@@ -1320,7 +1366,10 @@ mod tests {
 
     #[test]
     fn neg_dentry_meters_hit_rate_pct_all_hits() {
-        let m = NegDentryMeters { hits: 10, misses: 0 };
+        let m = NegDentryMeters {
+            hits: 10,
+            misses: 0,
+        };
         assert_eq!(m.hit_rate_pct(), 100);
     }
 
@@ -1348,13 +1397,19 @@ mod tests {
 
     #[test]
     fn read_cache_meters_hit_rate_pct_even_split() {
-        let m = ReadCacheMeters { hits: 50, misses: 50 };
+        let m = ReadCacheMeters {
+            hits: 50,
+            misses: 50,
+        };
         assert_eq!(m.hit_rate_pct(), 50);
     }
 
     #[test]
     fn read_cache_meters_hit_rate_pct_all_hits() {
-        let m = ReadCacheMeters { hits: 42, misses: 0 };
+        let m = ReadCacheMeters {
+            hits: 42,
+            misses: 0,
+        };
         assert_eq!(m.hit_rate_pct(), 100);
     }
 
@@ -1364,8 +1419,12 @@ mod tests {
 
     #[test]
     fn write_serialize_meters_format_section() {
-        let m =
-            WriteSerializeMeters { passthrough_writes: 11, stages: 22, commits: 33, discards: 44 };
+        let m = WriteSerializeMeters {
+            passthrough_writes: 11,
+            stages: 22,
+            commits: 33,
+            discards: 44,
+        };
         let s = m.format_status_section();
         assert!(s.contains("=== FUSE Write Serialize ==="));
         assert!(s.contains("Passthrough:  11"));
@@ -1380,23 +1439,35 @@ mod tests {
 
     #[test]
     fn join_rel_empty_parent() {
-        assert_eq!(join_rel(Path::new(""), OsStr::new("child")), PathBuf::from("child"));
+        assert_eq!(
+            join_rel(Path::new(""), OsStr::new("child")),
+            PathBuf::from("child")
+        );
     }
 
     #[test]
     fn join_rel_nonempty_parent() {
-        assert_eq!(join_rel(Path::new("src"), OsStr::new("main.rs")), PathBuf::from("src/main.rs"));
+        assert_eq!(
+            join_rel(Path::new("src"), OsStr::new("main.rs")),
+            PathBuf::from("src/main.rs")
+        );
     }
 
     #[test]
     fn join_rel_deeply_nested() {
-        assert_eq!(join_rel(Path::new("a/b/c"), OsStr::new("d.txt")), PathBuf::from("a/b/c/d.txt"));
+        assert_eq!(
+            join_rel(Path::new("a/b/c"), OsStr::new("d.txt")),
+            PathBuf::from("a/b/c/d.txt")
+        );
     }
 
     #[test]
     fn abs_under_empty_rel() {
         let backing = Path::new("/workspace");
-        assert_eq!(abs_under(backing, Path::new("")), PathBuf::from("/workspace"));
+        assert_eq!(
+            abs_under(backing, Path::new("")),
+            PathBuf::from("/workspace")
+        );
     }
 
     #[test]
@@ -1514,7 +1585,10 @@ mod tests {
 
     #[test]
     fn read_cache_meters_format_section() {
-        let m = ReadCacheMeters { hits: 10, misses: 90 };
+        let m = ReadCacheMeters {
+            hits: 10,
+            misses: 90,
+        };
         let s = m.format_status_section();
         assert!(s.contains("=== FUSE Read Coalesce ==="));
         assert!(s.contains("Cache hits:   10"));
@@ -1641,7 +1715,10 @@ mod tests {
     #[test]
     fn intercept_fs_with_options_serialize_flag() {
         let dir = tempfile::TempDir::new().unwrap();
-        let opts = InterceptFsOptions { serialize: false, ..InterceptFsOptions::default() };
+        let opts = InterceptFsOptions {
+            serialize: false,
+            ..InterceptFsOptions::default()
+        };
         let fs = InterceptFs::with_options(dir.path(), opts);
         assert!(!fs.serialize_writes());
     }
@@ -1650,8 +1727,10 @@ mod tests {
     #[test]
     fn intercept_fs_empty_session_falls_back_to_default() {
         let dir = tempfile::TempDir::new().unwrap();
-        let opts =
-            InterceptFsOptions { session_id: String::new(), ..InterceptFsOptions::default() };
+        let opts = InterceptFsOptions {
+            session_id: String::new(),
+            ..InterceptFsOptions::default()
+        };
         let fs = InterceptFs::with_options(dir.path(), opts);
         // Empty session_id should fall back to a generated default, not remain empty
         assert!(!fs.session_id().is_empty());

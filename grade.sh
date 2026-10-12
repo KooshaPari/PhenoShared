@@ -68,17 +68,17 @@ echo "========================================"
 
 case "$STACK" in
   rust)
-    run_check "build" "cargo build --workspace" 2
-    run_check "test-unit" "cargo test --workspace" 3
+    run_check "build" "cargo build --workspace --locked" 2
+    run_check "test-unit" "cargo test --workspace --locked" 3
     run_check "fmt" "cargo fmt -- --check" 2
-    run_check "clippy" "cargo clippy --workspace --all-targets --all-features -- -D warnings" 2
+    run_check "clippy" "cargo clippy --workspace --all-targets --all-features --locked -- -D warnings" 2
     run_check "deny" "cargo deny check" 1 true
-    run_check "doc" "cargo doc --workspace --no-deps" 1
-    run_check "test-snapshot" "cargo test --workspace -- snapshot" 1 true
-    run_check "test-fuzz" "cargo test --workspace -- fuzz" 1 true
+    run_check "doc" "cargo doc --workspace --no-deps --locked" 1
+    run_check "test-snapshot" "cargo test --workspace --locked -- snapshot" 1 true
+    run_check "test-fuzz" "cargo test --workspace --locked -- fuzz" 1 true
     run_check "coverage" "cargo llvm-cov --workspace --fail-under-lines 85" 2 true
     run_check "audit" "cargo audit" 1 true
-    run_check "bench" "cargo bench --workspace" 1 true
+    run_check "bench" "cargo bench --workspace --locked" 1 true
     ;;
   node)
     run_check "install" "npm ci" 1

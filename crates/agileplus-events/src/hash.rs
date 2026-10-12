@@ -245,7 +245,7 @@ mod tests {
             sequence: 1,
         };
         // Tamper
-        e1.hash[0] ^= 0xFF;
+        e1.hash[0] ^= 0xff;
         assert!(verify_chain(&[e1]).is_err());
     }
 }

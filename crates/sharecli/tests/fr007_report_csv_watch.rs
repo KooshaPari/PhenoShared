@@ -39,7 +39,10 @@ fn drain_watch_pipes(child: &mut Child, dwell: Duration) -> (String, String) {
     thread::sleep(dwell);
     let _ = child.kill();
     let _ = child.wait();
-    (stdout_reader.join().expect("stdout drain"), stderr_reader.join().expect("stderr drain"))
+    (
+        stdout_reader.join().expect("stdout drain"),
+        stderr_reader.join().expect("stderr drain"),
+    )
 }
 
 fn assert_csv_envelope(frame: &str, context: &str) {
@@ -115,5 +118,8 @@ fn fr007_report_csv_watch_zero_interval_rejected() {
         .args(["report", "--format", "csv", "--watch", "0"])
         .output()
         .expect("spawn report --format csv --watch 0");
-    assert!(!out.status.success(), "report --format csv --watch 0 MUST fail (AC-007.90)");
+    assert!(
+        !out.status.success(),
+        "report --format csv --watch 0 MUST fail (AC-007.90)"
+    );
 }

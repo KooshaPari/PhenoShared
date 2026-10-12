@@ -5,5 +5,7 @@ edition = "2021"
 license = "MIT OR Apache-2.0"
 description = "Analytics framework for the Phenotype ecosystem (stub — see MIGRATED.md)"
 
+[workspace]
+
 [lib]
 path = "src/lib.rs"

@@ -16,7 +16,7 @@ use eidolon_core::Result;
 use super::vsock::{VSOCK_CID_ENV, VSOCK_PORT_ENV};
 use crate::codes;
 
-pub const VMADDR_CID_ANY: u32 = 0xFFFF_FFFF;
+pub const VMADDR_CID_ANY: u32 = 0xffff_ffff;
 pub const DEFAULT_AGENT_PORT: u32 = 5252;
 pub const AGENT_ALLOW_SHELL_ENV: &str = "EIDOLON_VSOCK_AGENT_ALLOW_SHELL";
 pub const MAX_CAPTURE_BYTES: usize = 32 * 1024;
@@ -88,7 +88,7 @@ pub fn read_request_line(reader: &mut impl Read, max_bytes: usize) -> Result<Vec
                         "vsock agent request exceeded {max_bytes} bytes"
                     )));
                 }
-            }
+            },
             Err(e)
                 if e.kind() == std::io::ErrorKind::WouldBlock
                     || e.kind() == std::io::ErrorKind::TimedOut =>
@@ -96,12 +96,12 @@ pub fn read_request_line(reader: &mut impl Read, max_bytes: usize) -> Result<Vec
                 return Err(guest_io_unavailable(format!(
                     "vsock agent read timed out: {e}"
                 )));
-            }
+            },
             Err(e) => {
                 return Err(guest_io_unavailable(format!(
                     "vsock agent read failed: {e}"
                 )));
-            }
+            },
         }
     }
     if out.is_empty() {
@@ -219,7 +219,7 @@ pub fn run_main(args: impl IntoIterator<Item = String>) -> i32 {
         Err(e) => {
             eprintln!("eidolon-vsock-agent: {e}");
             1
-        }
+        },
     }
 }
 
@@ -237,7 +237,7 @@ fn run_main_inner(args: impl IntoIterator<Item = String>) -> Result<()> {
             "--help" | "-h" => {
                 print_usage();
                 return Ok(());
-            }
+            },
             "--port" => {
                 i += 1;
                 let p = args
@@ -246,7 +246,7 @@ fn run_main_inner(args: impl IntoIterator<Item = String>) -> Result<()> {
                 cfg.port = p.parse().map_err(|_| {
                     PhenoError::BadRequest(format!("--port must be u32, got {p:?}"))
                 })?;
-            }
+            },
             "--cid" => {
                 i += 1;
                 let c = args
@@ -255,18 +255,18 @@ fn run_main_inner(args: impl IntoIterator<Item = String>) -> Result<()> {
                 cfg.cid = c
                     .parse()
                     .map_err(|_| PhenoError::BadRequest(format!("--cid must be u32, got {c:?}")))?;
-            }
+            },
             "--shell" => {
                 cfg.allow_shell = true;
-            }
+            },
             "--any-cid" => {
                 cfg.cid = VMADDR_CID_ANY;
-            }
+            },
             other => {
                 return Err(PhenoError::BadRequest(format!(
                     "unknown argument {other:?} (try --help)"
                 )));
-            }
+            },
         }
         i += 1;
     }
@@ -394,7 +394,7 @@ mod tests {
         {
             let err = serve(&AgentConfig::default()).unwrap_err();
             assert_eq!(
-                err.unsupported_code(),
+                err.unsupported_code_value(),
                 Some(codes::SANDBOX_GUEST_IO_UNAVAILABLE)
             );
         }

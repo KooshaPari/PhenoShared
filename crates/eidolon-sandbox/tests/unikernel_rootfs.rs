@@ -32,7 +32,7 @@ fn temp_file(name: &str) -> PathBuf {
 }
 
 fn assert_code(err: PhenoError, expected: &str) {
-    assert_eq!(err.unsupported_code(), Some(expected));
+    assert_eq!(err.unsupported_code_value(), Some(expected));
     assert_eq!(err.status_code(), 501);
 }
 
@@ -41,13 +41,19 @@ async fn unikernel_stub_fail_loud() {
     let stub = UnikernelStub::new("uk-it");
     let meta = stub.get_metadata().await.unwrap();
     assert_eq!(meta.image, "stub:unikernel");
-    assert_code(stub.start().await.unwrap_err(), codes::SANDBOX_UNIKERNEL_STUB);
+    assert_code(
+        stub.start().await.unwrap_err(),
+        codes::SANDBOX_UNIKERNEL_STUB,
+    );
 }
 
 #[test]
 fn path_validation_empty_and_missing() {
     let empty = RootfsConfig::new("");
-    assert!(matches!(empty.validate_path(), Err(PhenoError::BadRequest(_))));
+    assert!(matches!(
+        empty.validate_path(),
+        Err(PhenoError::BadRequest(_))
+    ));
 
     let missing = RootfsConfig::new("/nonexistent/eidolon/rootfs-it.ext4");
     assert_code(
@@ -198,10 +204,13 @@ fn launch_plan_rootfs_present_composes_backend_cli() {
             assert_eq!(plan.memory_mib, 256);
             assert!(plan.backend_cli_ready());
             plan.require_ready().expect("artifacts+cli");
-        }
+        },
         Err(err) => {
-            assert_eq!(err.unsupported_code(), Some(codes::SANDBOX_UNIKERNEL_STUB));
-        }
+            assert_eq!(
+                err.unsupported_code_value(),
+                Some(codes::SANDBOX_UNIKERNEL_STUB)
+            );
+        },
     }
     let _ = std::fs::remove_file(&path);
 }
@@ -211,10 +220,7 @@ fn guest_exec_builders_mac_safe() {
     let frame = unikernel_exec::serial_stdin_frame("uname -a");
     assert_eq!(frame, b"uname -a\n");
     let req = unikernel_exec::GuestExecRequest::serial("pwd").expect("req");
-    assert_eq!(
-        req.transport,
-        unikernel_exec::GuestIoTransport::SerialStdio
-    );
+    assert_eq!(req.transport, unikernel_exec::GuestIoTransport::SerialStdio);
     let vsock_frame = eidolon_sandbox::unikernel_vsock::vsock_exec_request_frame("pwd").unwrap();
     assert!(vsock_frame.ends_with(b"\n"));
     let result = unikernel_exec::vsock_connect_spec(3, 52);
@@ -261,16 +267,19 @@ mod feature_tests {
                     // Hermetic start: no live child → GUEST_NOT_RUNNING.
                     let err = client.exec("uname").await.unwrap_err();
                     assert_eq!(
-                        err.unsupported_code(),
+                        err.unsupported_code_value(),
                         Some(codes::SANDBOX_GUEST_NOT_RUNNING)
                     );
                 }
                 let _ = client.stop().await;
-            }
+            },
             Err(err) => {
                 // Missing firecracker on PATH — fail-loud, not silent Ok.
-                assert_eq!(err.unsupported_code(), Some(codes::SANDBOX_UNIKERNEL_STUB));
-            }
+                assert_eq!(
+                    err.unsupported_code_value(),
+                    Some(codes::SANDBOX_UNIKERNEL_STUB)
+                );
+            },
         }
         let _ = std::fs::remove_file(&path);
     }

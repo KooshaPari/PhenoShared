@@ -15,7 +15,11 @@ use crate::inode_map::abs_under;
 /// when `path` is outside the mount subtree (prefix-safe — `/tmp/mount` does not
 /// match `/tmp/mountextra`).
 pub fn remap_mount_to_backing(mountpoint: &Path, backing: &Path, path: &Path) -> Option<PathBuf> {
-    let abs = if path.is_absolute() { path.to_path_buf() } else { mountpoint.join(path) };
+    let abs = if path.is_absolute() {
+        path.to_path_buf()
+    } else {
+        mountpoint.join(path)
+    };
     let rel = strip_mount_prefix(mountpoint, &abs)?;
     Some(abs_under(backing, rel.as_path()))
 }
@@ -25,7 +29,11 @@ fn strip_mount_prefix(mountpoint: &Path, path: &Path) -> Option<PathBuf> {
     let path_comps: Vec<Component<'_>> = path.components().collect();
 
     if path_comps.len() < mount_comps.len() {
-        return if path == mountpoint { Some(PathBuf::new()) } else { None };
+        return if path == mountpoint {
+            Some(PathBuf::new())
+        } else {
+            None
+        };
     }
 
     for (m, p) in mount_comps.iter().zip(path_comps.iter()) {

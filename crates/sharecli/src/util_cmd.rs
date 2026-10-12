@@ -98,7 +98,7 @@ impl UtilCmd {
             UtilCmd::Url(_) => {
                 println!("url_parser: module not present in this crate (skip)");
                 Ok(())
-            }
+            },
             UtilCmd::Uuid(c) => run_uuid(c),
             UtilCmd::Xml(c) => run_xml(c),
             UtilCmd::Markdown(c) => run_markdown(c),
@@ -111,7 +111,7 @@ fn run_base85(c: &Base85Cmd) -> Result<()> {
     match c.action.as_str() {
         "encode" => {
             println!("{}", base85::encode(c.input.as_bytes()));
-        }
+        },
         "decode" => match base85::decode(&c.input) {
             Ok(bytes) => match std::str::from_utf8(&bytes) {
                 Ok(s) => println!("{s}"),
@@ -121,7 +121,7 @@ fn run_base85(c: &Base85Cmd) -> Result<()> {
                         s.push_str(&format!("{:02x}", b));
                     }
                     println!("0x{s}");
-                }
+                },
             },
             Err(e) => anyhow::bail!("decode error: {e}"),
         },
@@ -134,8 +134,11 @@ fn run_csv(c: &CsvCmd) -> Result<()> {
     if c.rows.is_empty() {
         anyhow::bail!("csv: pass at least one --row a b c");
     }
-    let parsed: Vec<Vec<&str>> =
-        c.rows.iter().map(|row| row.split_whitespace().collect()).collect();
+    let parsed: Vec<Vec<&str>> = c
+        .rows
+        .iter()
+        .map(|row| row.split_whitespace().collect())
+        .collect();
     let refs: Vec<&[&str]> = parsed.iter().map(|r| r.as_slice()).collect();
     print!("{}", csv_writer::write_rows(refs));
     // Keep escape_field reachable from the binary (used by tests + CLI demos).
@@ -159,21 +162,21 @@ fn run_hash(c: &HashCmd) -> Result<()> {
         "xxhash3" => {
             let h = xxhash3::hash(c.input.as_bytes());
             println!("xxhash3: 0x{:016x}", h);
-        }
+        },
         "xxtea-encrypt" => {
             let key = parse_key(c.key_hex.as_deref())?;
             let block = block_from_str(&c.input);
             let mut out = block;
             xxtea::xxtea_encrypt(&mut out, &key);
             println!("xxtea-enc: 0x{}", hex_block(&out));
-        }
+        },
         "xxtea-decrypt" => {
             let key = parse_key(c.key_hex.as_deref())?;
             let block = block_from_str(&c.input);
             let mut out = block;
             xxtea::xxtea_decrypt(&mut out, &key);
             println!("xxtea-dec: 0x{}", hex_block(&out));
-        }
+        },
         "xxtea-bytes" => {
             let key16 = parse_key16(c.key_hex.as_deref())?;
             let ct = xxtea::encrypt_bytes(c.input.as_bytes(), &key16);
@@ -181,7 +184,7 @@ fn run_hash(c: &HashCmd) -> Result<()> {
                 .map_err(|e| anyhow::anyhow!("xxtea decrypt: {e}"))?;
             println!("xxtea-bytes-ct-len: {}", ct.len());
             println!("xxtea-bytes-pt: {}", String::from_utf8_lossy(&pt));
-        }
+        },
         other => anyhow::bail!("unknown hash algo '{other}'"),
     }
     Ok(())
@@ -245,7 +248,7 @@ fn run_json(c: &JsonCmd) -> Result<()> {
                 Ok(()) => println!("ok: {:?}", v),
                 Err(e) => println!("ok(value) schema_warn: {e} value={v:?}"),
             }
-        }
+        },
         Err(e) => anyhow::bail!("invalid JSON: {e}"),
     }
     Ok(())
@@ -266,7 +269,7 @@ fn run_uuid(c: &UuidCmd) -> Result<()> {
             } else {
                 apfs_uuid::Uuid::from_hex(s).map_err(|e| anyhow::anyhow!("uuid parse: {e}"))?
             }
-        }
+        },
         _ => apfs_uuid::Uuid::from_bytes(*apfs_uuid::Uuid::nil().as_bytes()),
     };
     println!("hex: {}", u.to_hex_string());
@@ -288,9 +291,16 @@ fn run_markdown(c: &MarkdownCmd) -> Result<()> {
     if c.rows.is_empty() {
         anyhow::bail!("markdown: pass at least one row like 'name|role|'");
     }
-    let parsed: Vec<Vec<&str>> =
-        c.rows.iter().map(|r| r.split('|').filter(|s| !s.is_empty()).collect()).collect();
-    let headers: Vec<&str> = if !parsed.is_empty() { parsed[0].clone() } else { Vec::new() };
+    let parsed: Vec<Vec<&str>> = c
+        .rows
+        .iter()
+        .map(|r| r.split('|').filter(|s| !s.is_empty()).collect())
+        .collect();
+    let headers: Vec<&str> = if !parsed.is_empty() {
+        parsed[0].clone()
+    } else {
+        Vec::new()
+    };
     let body: Vec<Vec<&str>> = parsed.iter().skip(1).cloned().collect();
     println!("{}", md_table::render(&headers, &body));
     Ok(())
@@ -307,7 +317,7 @@ fn run_rng(c: &RngCmd) -> Result<()> {
             for w in &c.words {
                 println!("has({w}): {}", t.contains(w));
             }
-        }
+        },
         "skiplist" => {
             let mut s = skiplist::SkipList::<u64, String>::new();
             println!("skip_empty: {}", s.is_empty());
@@ -323,7 +333,7 @@ fn run_rng(c: &RngCmd) -> Result<()> {
                     None => println!("get({i}): none"),
                 }
             }
-        }
+        },
         other => anyhow::bail!("unknown kind '{other}' (use trie|skiplist)"),
     }
     Ok(())
@@ -335,32 +345,46 @@ mod tests {
 
     #[test]
     fn base85_encode_decode_roundtrip() {
-        let c = Base85Cmd { action: "encode".into(), input: "hello".into() };
+        let c = Base85Cmd {
+            action: "encode".into(),
+            input: "hello".into(),
+        };
         assert!(run_base85(&c).is_ok());
     }
 
     #[test]
     fn base85_decode_action_does_not_panic() {
-        let c = Base85Cmd { action: "decode".into(), input: "@@@".into() };
+        let c = Base85Cmd {
+            action: "decode".into(),
+            input: "@@@".into(),
+        };
         let r = run_base85(&c);
         assert!(r.is_ok() || r.is_err());
     }
 
     #[test]
     fn csv_row_writes_quoted_field() {
-        let c = CsvCmd { rows: vec!["hello world".to_string()] };
+        let c = CsvCmd {
+            rows: vec!["hello world".to_string()],
+        };
         assert!(run_csv(&c).is_ok());
     }
 
     #[test]
     fn crc_returns_consistent_value() {
-        let c = CrcCmd { input: "sharecli".into() };
+        let c = CrcCmd {
+            input: "sharecli".into(),
+        };
         assert!(run_crc(&c).is_ok());
     }
 
     #[test]
     fn hash_xxhash3_algo() {
-        let c = HashCmd { algo: "xxhash3".into(), input: "abc".into(), key_hex: None };
+        let c = HashCmd {
+            algo: "xxhash3".into(),
+            input: "abc".into(),
+            key_hex: None,
+        };
         assert!(run_hash(&c).is_ok());
     }
 
@@ -383,15 +407,23 @@ mod tests {
 
     #[test]
     fn json_parses_well_formed() {
-        let c = JsonCmd { input: r#"{"a":1,"b":[true,null]}"#.into() };
+        let c = JsonCmd {
+            input: r#"{"a":1,"b":[true,null]}"#.into(),
+        };
         assert!(run_json(&c).is_ok());
     }
 
     #[test]
     fn xml_escape_and_unescape() {
-        let e = XmlCmd { action: "escape".into(), input: "<a>&\"b\"</a>".into() };
+        let e = XmlCmd {
+            action: "escape".into(),
+            input: "<a>&\"b\"</a>".into(),
+        };
         assert!(run_xml(&e).is_ok());
-        let u = XmlCmd { action: "unescape".into(), input: "&lt;a&gt;&amp;b&lt;/a&gt;".into() };
+        let u = XmlCmd {
+            action: "unescape".into(),
+            input: "&lt;a&gt;&amp;b&lt;/a&gt;".into(),
+        };
         assert!(run_xml(&u).is_ok());
     }
 
@@ -399,16 +431,23 @@ mod tests {
     fn uuid_nil_and_from_hex() {
         let c = UuidCmd { input: None };
         assert!(run_uuid(&c).is_ok());
-        let c = UuidCmd { input: Some("00112233445566778899aabbccddeeff".into()) };
+        let c = UuidCmd {
+            input: Some("00112233445566778899aabbccddeeff".into()),
+        };
         assert!(run_uuid(&c).is_ok());
     }
 
     #[test]
     fn rng_trie_and_skiplist() {
-        let t =
-            RngCmd { kind: "trie".into(), words: vec!["foo".into(), "bar".into(), "baz".into()] };
+        let t = RngCmd {
+            kind: "trie".into(),
+            words: vec!["foo".into(), "bar".into(), "baz".into()],
+        };
         assert!(run_rng(&t).is_ok());
-        let s = RngCmd { kind: "skiplist".into(), words: vec!["foo".into(), "bar".into()] };
+        let s = RngCmd {
+            kind: "skiplist".into(),
+            words: vec!["foo".into(), "bar".into()],
+        };
         assert!(run_rng(&s).is_ok());
     }
 }

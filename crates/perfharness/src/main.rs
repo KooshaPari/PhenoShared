@@ -123,7 +123,7 @@ async fn main() -> Result<()> {
                 RegimeArg::All | RegimeArg::Individual => {
                     info!("running regime 1: individual");
                     Some(individual::run(&cfg).await?)
-                }
+                },
                 _ => None,
             };
 
@@ -134,7 +134,7 @@ async fn main() -> Result<()> {
                         runs, rss_secs
                     );
                     Some(accumulated::run(&cfg).await?)
-                }
+                },
                 _ => None,
             };
 
@@ -142,7 +142,7 @@ async fn main() -> Result<()> {
                 RegimeArg::All | RegimeArg::ScaledParallel => {
                     info!("running regime 3: scaled-parallel ladder={}", ladder);
                     Some(scaled_parallel::run(&cfg).await?)
-                }
+                },
                 _ => None,
             };
 
@@ -160,13 +160,13 @@ async fn main() -> Result<()> {
                         std::fs::write(&md_path, scorecard.to_markdown())?;
                         info!("markdown report written to {md_path}");
                     }
-                }
+                },
             }
-        }
+        },
 
         Cmd::Selftest => {
             run_selftest().await?;
-        }
+        },
     }
 
     Ok(())

@@ -174,27 +174,27 @@ impl ImagePreviewManager {
             PreviewMethod::ITerm2 => {
                 self.show_iterm2_preview(image_path, max_width, max_height)
                     .await
-            }
+            },
             PreviewMethod::Kitty => {
                 self.show_kitty_preview(image_path, max_width, max_height)
                     .await
-            }
+            },
             PreviewMethod::Sixel => {
                 self.show_sixel_preview(image_path, max_width, max_height)
                     .await
-            }
+            },
             PreviewMethod::ASCII => {
                 self.show_ascii_preview(image_path, max_width, max_height)
                     .await
-            }
+            },
             PreviewMethod::External(viewer) => {
                 self.show_external_preview(viewer, image_path, max_width, max_height)
                     .await
-            }
+            },
             PreviewMethod::None => {
                 warn!("No preview method available for image: {:?}", image_path);
                 self.show_text_info(image_path).await
-            }
+            },
         }
     }
 
@@ -373,14 +373,14 @@ impl ImagePreviewManager {
             "imgcat" => {
                 // imgcat from iTerm2 utilities
                 cmd.arg(image_path);
-            }
+            },
             "catimg" => {
                 // catimg tool
                 if let Some(width) = max_width {
                     cmd.arg("-w").arg(width.to_string());
                 }
                 cmd.arg(image_path);
-            }
+            },
             "timg" => {
                 // timg tool
                 if let Some(width) = max_width {
@@ -388,7 +388,7 @@ impl ImagePreviewManager {
                         .arg(format!("{}x{}", width, max_height.unwrap_or(width)));
                 }
                 cmd.arg(image_path);
-            }
+            },
             "chafa" => {
                 // chafa tool - modern ASCII art generator
                 if let Some(width) = max_width {
@@ -399,7 +399,7 @@ impl ImagePreviewManager {
                 }
                 cmd.arg("--format").arg("symbols");
                 cmd.arg(image_path);
-            }
+            },
             "qlmanage" => {
                 // macOS QuickLook manager
                 cmd.arg("-p").arg(image_path);
@@ -413,7 +413,7 @@ impl ImagePreviewManager {
                 // Spawn QuickLook in background and return immediately
                 let _ = cmd.spawn();
                 return Ok(());
-            }
+            },
             "open" => {
                 // macOS default opener
                 cmd.arg(image_path);
@@ -426,10 +426,10 @@ impl ImagePreviewManager {
                 // Spawn in background
                 let _ = cmd.spawn();
                 return Ok(());
-            }
+            },
             _ => {
                 cmd.arg(image_path);
-            }
+            },
         }
 
         let output = cmd
@@ -552,20 +552,20 @@ impl ImagePreviewManager {
         match &self.preview_method {
             PreviewMethod::ITerm2 | PreviewMethod::Kitty | PreviewMethod::Sixel => {
                 format!("klipdot preview '{}'", image_path.display())
-            }
+            },
             PreviewMethod::External(viewer) => {
                 format!("{} '{}'", viewer, image_path.display())
-            }
+            },
             PreviewMethod::ASCII => {
                 if crate::is_command_available("jp2a") {
                     format!("jp2a --colors '{}'", image_path.display())
                 } else {
                     format!("img2txt '{}'", image_path.display())
                 }
-            }
+            },
             PreviewMethod::None => {
                 format!("file '{}'", image_path.display())
-            }
+            },
         }
     }
 }

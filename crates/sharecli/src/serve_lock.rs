@@ -117,15 +117,25 @@ pub fn decide(state: &ServeState, policy: OnConflict) -> Decision {
 
 /// Default lock directory: `$XDG_RUNTIME_DIR` if set, else the system temp dir.
 fn lock_dir() -> PathBuf {
-    std::env::var_os("XDG_RUNTIME_DIR").map(PathBuf::from).unwrap_or_else(std::env::temp_dir)
+    std::env::var_os("XDG_RUNTIME_DIR")
+        .map(PathBuf::from)
+        .unwrap_or_else(std::env::temp_dir)
 }
 
 /// Well-known pidfile path for a service: `<lock_dir>/<service>.serve.lock`.
 ///
 /// `service` is sanitized (path separators → `_`) so it can't escape `lock_dir`.
 pub fn pidfile_path(service: &str) -> PathBuf {
-    let safe: String =
-        service.chars().map(|c| if matches!(c, '/' | '\\' | ':') { '_' } else { c }).collect();
+    let safe: String = service
+        .chars()
+        .map(|c| {
+            if matches!(c, '/' | '\\' | ':') {
+                '_'
+            } else {
+                c
+            }
+        })
+        .collect();
     lock_dir().join(format!("{safe}.serve.lock"))
 }
 
@@ -196,7 +206,7 @@ pub fn probe(service: &str) -> Result<ServeState> {
 
     let mut buf = String::new();
     match file.read_to_string(&mut buf) {
-        Ok(_) => {}
+        Ok(_) => {},
         Err(e) if exclusively_held => {
             // Windows uses mandatory byte-range locks: an exclusive holder blocks
             // readers on other handles (os error 33). Fall back to the unlocked
@@ -209,7 +219,7 @@ pub fn probe(service: &str) -> Result<ServeState> {
                 )
             })?;
             let _ = e; // primary error was the expected lock conflict
-        }
+        },
         Err(e) => return Err(e).with_context(|| format!("read pidfile {}", path.display())),
     }
 
@@ -219,14 +229,17 @@ pub fn probe(service: &str) -> Result<ServeState> {
         Err(_) if !exclusively_held => return Ok(ServeState::Free),
         Err(e) => {
             return Err(e).with_context(|| format!("parse pidfile {}", path.display()));
-        }
+        },
     };
 
     // The pidfile owner is live if either the lock is currently held exclusively
     // (a running server) or the recorded pid is still alive. Otherwise it's a
     // stale entry from a crashed server that never cleaned up.
     let alive = exclusively_held || pid_alive(info.pid);
-    Ok(ServeState::Running { info, stale: !alive })
+    Ok(ServeState::Running {
+        info,
+        stale: !alive,
+    })
 }
 
 /// Unlocked JSON sidecar next to the locked pidfile (`*.serve.lock` → `*.serve.info`).
@@ -282,14 +295,20 @@ impl ServeLock {
             started_at_unix: now_unix(),
         };
         let mut f = file;
-        f.set_len(0).with_context(|| format!("truncate pidfile {}", path.display()))?;
+        f.set_len(0)
+            .with_context(|| format!("truncate pidfile {}", path.display()))?;
         let bytes = serde_json::to_vec(&info).context("serialize ServeInfo")?;
-        f.write_all(&bytes).with_context(|| format!("write pidfile {}", path.display()))?;
+        f.write_all(&bytes)
+            .with_context(|| format!("write pidfile {}", path.display()))?;
         f.flush().ok();
         // Unlocked sidecar so `probe` can read identity under Windows mandatory locks.
         let _ = fs::write(info_sidecar_path(&path), &bytes);
 
-        Ok(Some(Self { path, file: f, info }))
+        Ok(Some(Self {
+            path,
+            file: f,
+            info,
+        }))
     }
 
     /// The identity written to the pidfile for this lock.
@@ -337,7 +356,11 @@ mod tests {
             let prev = std::env::var_os("XDG_RUNTIME_DIR");
             // SAFETY: only one LockEnv is alive at a time (serialized by ENV_LOCK).
             unsafe { std::env::set_var("XDG_RUNTIME_DIR", dir.path()) };
-            Self { _dir: dir, prev, _guard: guard }
+            Self {
+                _dir: dir,
+                prev,
+                _guard: guard,
+            }
         }
     }
 
@@ -370,7 +393,7 @@ mod tests {
             ServeState::Running { info, stale } => {
                 assert_eq!(info.pid, process::id());
                 assert!(!stale, "live self-held lock must not be stale");
-            }
+            },
             ServeState::Free => panic!("expected Running while lock held"),
         }
     }
@@ -380,7 +403,10 @@ mod tests {
         let _env = LockEnv::new();
         let _first = ServeLock::try_acquire("svc-b", "u1").unwrap().unwrap();
         let second = ServeLock::try_acquire("svc-b", "u2").unwrap();
-        assert!(second.is_none(), "second acquire must fail while first held");
+        assert!(
+            second.is_none(),
+            "second acquire must fail while first held"
+        );
     }
 
     #[test]
@@ -415,7 +441,7 @@ mod tests {
             ServeState::Running { stale, info } => {
                 assert!(stale, "dead-pid pidfile must be stale");
                 assert_eq!(info.pid, 2_000_000_u32);
-            }
+            },
             ServeState::Free => panic!("expected Running{{stale}}"),
         }
 
@@ -426,8 +452,14 @@ mod tests {
 
     #[test]
     fn decide_free_always_serves() {
-        assert_eq!(decide(&ServeState::Free, OnConflict::Prompt), Decision::Serve);
-        assert_eq!(decide(&ServeState::Free, OnConflict::Abort), Decision::Serve);
+        assert_eq!(
+            decide(&ServeState::Free, OnConflict::Prompt),
+            Decision::Serve
+        );
+        assert_eq!(
+            decide(&ServeState::Free, OnConflict::Abort),
+            Decision::Serve
+        );
     }
 
     #[test]

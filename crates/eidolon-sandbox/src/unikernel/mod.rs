@@ -95,7 +95,10 @@ mod tests {
     fn rootfs_missing_fail_loud() {
         let cfg = RootfsConfig::new("/nonexistent/eidolon/rootfs.ext4");
         let err = cfg.require_present().unwrap_err();
-        assert_eq!(err.unsupported_code(), Some(codes::SANDBOX_ROOTFS_MISSING));
+        assert_eq!(
+            err.unsupported_code_value(),
+            Some(codes::SANDBOX_ROOTFS_MISSING)
+        );
         assert_eq!(err.status_code(), 501);
     }
 
@@ -103,7 +106,10 @@ mod tests {
     fn kernel_missing_fail_loud() {
         let cfg = KernelConfig::new("/nonexistent/eidolon/vmlinux");
         let err = cfg.require_present().unwrap_err();
-        assert_eq!(err.unsupported_code(), Some(codes::SANDBOX_KERNEL_MISSING));
+        assert_eq!(
+            err.unsupported_code_value(),
+            Some(codes::SANDBOX_KERNEL_MISSING)
+        );
     }
 
     #[test]
@@ -137,7 +143,10 @@ mod tests {
         )
         .unwrap();
         let err = LaunchPlan::try_from_config(&cfg).unwrap_err();
-        assert_eq!(err.unsupported_code(), Some(codes::SANDBOX_ROOTFS_MISSING));
+        assert_eq!(
+            err.unsupported_code_value(),
+            Some(codes::SANDBOX_ROOTFS_MISSING)
+        );
     }
 
     #[test]
@@ -154,11 +163,14 @@ mod tests {
                 assert!(plan.backend_cli_ready());
                 assert_eq!(plan.rootfs, path);
                 plan.require_ready().expect("ready");
-            }
+            },
             Err(err) => {
                 // CI without firecracker: fail-loud unikernel stub, not silent Ok.
-                assert_eq!(err.unsupported_code(), Some(codes::SANDBOX_UNIKERNEL_STUB));
-            }
+                assert_eq!(
+                    err.unsupported_code_value(),
+                    Some(codes::SANDBOX_UNIKERNEL_STUB)
+                );
+            },
         }
         let _ = std::fs::remove_file(&path);
     }
@@ -181,7 +193,10 @@ mod tests {
     async fn stub_fail_loud() {
         let stub = UnikernelStub::new("uk-stub");
         let err = stub.start().await.unwrap_err();
-        assert_eq!(err.unsupported_code(), Some(codes::SANDBOX_UNIKERNEL_STUB));
+        assert_eq!(
+            err.unsupported_code_value(),
+            Some(codes::SANDBOX_UNIKERNEL_STUB)
+        );
         assert_eq!(err.status_code(), 501);
     }
 }

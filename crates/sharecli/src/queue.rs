@@ -14,7 +14,10 @@ pub struct TaskQueue<T> {
 
 impl<T> TaskQueue<T> {
     pub fn new() -> Self {
-        Self { items: VecDeque::new(), next_id: 0 }
+        Self {
+            items: VecDeque::new(),
+            next_id: 0,
+        }
     }
     pub fn push(&mut self, item: T) -> u64 {
         let id = self.next_id;

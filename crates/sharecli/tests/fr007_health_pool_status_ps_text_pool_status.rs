@@ -131,8 +131,15 @@ fn assert_text_watch_stdout(stdout: &str, frame_header: &str, context: &str) {
 #[test]
 #[serial_test::serial]
 fn fr007_health_text_pool_status_order() {
-    let out = bin().args(["health"]).output().expect("spawn sharecli health");
-    assert!(out.status.success(), "health MUST exit 0; stderr: {:?}", out.stderr);
+    let out = bin()
+        .args(["health"])
+        .output()
+        .expect("spawn sharecli health");
+    assert!(
+        out.status.success(),
+        "health MUST exit 0; stderr: {:?}",
+        out.stderr
+    );
     let stdout = String::from_utf8_lossy(&out.stdout);
     assert_stderr_silent(&out.stderr, "health");
     assert_text_operator_order(&stdout, HEALTH_HEADER, "health");
@@ -160,7 +167,11 @@ fn fr007_health_watch_text_pool_status_order() {
 #[serial_test::serial]
 fn fr007_pool_text_pool_status_order() {
     let out = bin().args(["pool"]).output().expect("spawn sharecli pool");
-    assert!(out.status.success(), "pool MUST exit 0; stderr: {:?}", out.stderr);
+    assert!(
+        out.status.success(),
+        "pool MUST exit 0; stderr: {:?}",
+        out.stderr
+    );
     let stdout = String::from_utf8_lossy(&out.stdout);
     assert_stderr_silent(&out.stderr, "pool");
     assert_text_operator_order(&stdout, POOL_HEADER, "pool");
@@ -187,8 +198,15 @@ fn fr007_pool_watch_text_pool_status_order() {
 #[test]
 #[serial_test::serial]
 fn fr007_status_text_pool_status_order() {
-    let out = bin().args(["status"]).output().expect("spawn sharecli status");
-    assert!(out.status.success(), "status MUST exit 0; stderr: {:?}", out.stderr);
+    let out = bin()
+        .args(["status"])
+        .output()
+        .expect("spawn sharecli status");
+    assert!(
+        out.status.success(),
+        "status MUST exit 0; stderr: {:?}",
+        out.stderr
+    );
     let stdout = String::from_utf8_lossy(&out.stdout);
     assert_stderr_silent(&out.stderr, "status");
     assert_text_operator_order(&stdout, STATUS_HEADER, "status");
@@ -215,8 +233,15 @@ fn fr007_status_watch_text_pool_status_order() {
 #[test]
 #[serial_test::serial]
 fn fr007_ps_all_text_pool_status_order() {
-    let out = bin().args(["ps", "--all"]).output().expect("spawn sharecli ps --all");
-    assert!(out.status.success(), "ps --all MUST exit 0; stderr: {:?}", out.stderr);
+    let out = bin()
+        .args(["ps", "--all"])
+        .output()
+        .expect("spawn sharecli ps --all");
+    assert!(
+        out.status.success(),
+        "ps --all MUST exit 0; stderr: {:?}",
+        out.stderr
+    );
     let stdout = String::from_utf8_lossy(&out.stdout);
     assert_stderr_silent(&out.stderr, "ps --all");
     assert_text_operator_order(&stdout, PS_INVENTORY_HEADER, "ps --all");

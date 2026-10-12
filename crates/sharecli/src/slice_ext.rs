@@ -7,7 +7,10 @@ impl<T> SplitAtInclusive<T> for [T] {
     }
 }
 pub fn chunks_with_remainder<T>(items: &[T], chunk_size: usize) -> Vec<Vec<&T>> {
-    items.chunks(chunk_size).map(|c| c.iter().collect()).collect()
+    items
+        .chunks(chunk_size)
+        .map(|c| c.iter().collect())
+        .collect()
 }
 pub fn windowed<T>(items: &[T], size: usize) -> Vec<&[T]> {
     if size == 0 || size > items.len() {

@@ -8,8 +8,8 @@ use std::process::Command;
 
 // Re-export public types so downstream callers keep the same API.
 pub use types::{
-    AcceptanceContract, BaselineDelta, BaselineEntry, BaselineFile, ExecutionContext,
-    Requirement, RequirementResult, ScoreCard, load_baseline, load_contract, save_baseline,
+    load_baseline, load_contract, save_baseline, AcceptanceContract, BaselineDelta, BaselineEntry,
+    BaselineFile, ExecutionContext, Requirement, RequirementResult, ScoreCard,
 };
 
 // ---------------------------------------------------------------------------
@@ -136,8 +136,13 @@ fn run_quality_gate_delegation(workspace_root: &Path) -> Result<String> {
 fn run_legacy_scan_delegation(workspace_root: &Path) -> Result<String> {
     let output = Command::new("cargo")
         .args([
-            "run", "-p", "legacy-scan", "--", "--path",
-            workspace_root.to_string_lossy().as_ref(), "--json",
+            "run",
+            "-p",
+            "legacy-scan",
+            "--",
+            "--path",
+            workspace_root.to_string_lossy().as_ref(),
+            "--json",
         ])
         .output()?;
 
@@ -153,7 +158,11 @@ pub(crate) fn run_bench_guard_probe(workspace_root: &Path) -> Result<String> {
     let baseline = baseline.to_string_lossy();
     let output = Command::new("cargo")
         .args([
-            "run", "-p", "bench-guard", "--", "--baseline",
+            "run",
+            "-p",
+            "bench-guard",
+            "--",
+            "--baseline",
             baseline.as_ref(),
         ])
         .current_dir(workspace_root)

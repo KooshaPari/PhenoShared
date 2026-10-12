@@ -63,7 +63,10 @@ fn hermetic_build_writes_manifest_and_composes_rootfs_config() {
 fn hermetic_missing_rootfs_fail_loud() {
     let req = PackRequest::hermetic("/no/such/eidolon-pack-rootfs.img", RootfsFormat::Raw);
     let err = HermeticPackBuilder::new().build(&req).unwrap_err();
-    assert_eq!(err.unsupported_code(), Some(codes::SANDBOX_ROOTFS_MISSING));
+    assert_eq!(
+        err.unsupported_code_value(),
+        Some(codes::SANDBOX_ROOTFS_MISSING)
+    );
 }
 
 #[test]
@@ -74,8 +77,8 @@ fn live_pack_without_integration_fail_loud() {
     let req = PackRequest::hermetic(&rootfs, RootfsFormat::Ext4).with_method(PackMethod::MkfsExt4);
     let err = live_pack(&req).unwrap_err();
     assert!(
-        err.unsupported_code() == Some(codes::SANDBOX_ROOTFS_PACK_STUB)
-            || err.unsupported_code() == Some(codes::SANDBOX_ROOTFS_PACK_TOOL_MISSING)
+        err.unsupported_code_value() == Some(codes::SANDBOX_ROOTFS_PACK_STUB)
+            || err.unsupported_code_value() == Some(codes::SANDBOX_ROOTFS_PACK_TOOL_MISSING)
     );
     let _ = fs::remove_file(&rootfs);
 }
@@ -148,44 +151,47 @@ fn checksum_with_feature() {
 }
 
 #[cfg(feature = "sandbox-rootfs-pack")]
-    #[test]
-    fn live_pack_tool_missing_with_integration() {
-        let _g = ENV_LOCK.lock().unwrap();
-        std::env::set_var(PACK_INTEGRATION_ENV, "1");
-        // Point overrides at non-existent paths so PATH tools are ignored.
-        std::env::set_var(tools::MKFS_PATH_ENV, "/no/such/eidolon-mkfs-bin");
-        std::env::set_var(tools::VIRT_MAKE_FS_PATH_ENV, "/no/such/eidolon-virt-make-fs");
-        std::env::set_var(tools::DOCKER_PATH_ENV, "/no/such/eidolon-docker");
+#[test]
+fn live_pack_tool_missing_with_integration() {
+    let _g = ENV_LOCK.lock().unwrap();
+    std::env::set_var(PACK_INTEGRATION_ENV, "1");
+    // Point overrides at non-existent paths so PATH tools are ignored.
+    std::env::set_var(tools::MKFS_PATH_ENV, "/no/such/eidolon-mkfs-bin");
+    std::env::set_var(
+        tools::VIRT_MAKE_FS_PATH_ENV,
+        "/no/such/eidolon-virt-make-fs",
+    );
+    std::env::set_var(tools::DOCKER_PATH_ENV, "/no/such/eidolon-docker");
 
-        let staging = temp_dir("missing-tool");
-        let tree = temp_dir("missing-tree");
-        let err = live_pack(
-            &PackRequest::hermetic(&tree, RootfsFormat::Ext4)
-                .with_method(PackMethod::VirtMakeFs)
-                .with_staging(&staging, false),
-        )
-        .unwrap_err();
-        assert_eq!(
-            err.unsupported_code(),
-            Some(codes::SANDBOX_ROOTFS_PACK_TOOL_MISSING)
-        );
+    let staging = temp_dir("missing-tool");
+    let tree = temp_dir("missing-tree");
+    let err = live_pack(
+        &PackRequest::hermetic(&tree, RootfsFormat::Ext4)
+            .with_method(PackMethod::VirtMakeFs)
+            .with_staging(&staging, false),
+    )
+    .unwrap_err();
+    assert_eq!(
+        err.unsupported_code_value(),
+        Some(codes::SANDBOX_ROOTFS_PACK_TOOL_MISSING)
+    );
 
-        let compose_err = live_pack(
-            &PackRequest::hermetic("alpine:3.19", RootfsFormat::Ext4)
-                .with_method(PackMethod::DockerToExt4)
-                .with_staging(&staging, false),
-        )
-        .unwrap_err();
-        assert_eq!(
-            compose_err.unsupported_code(),
-            Some(codes::SANDBOX_ROOTFS_PACK_TOOL_MISSING),
-            "compose must fail-loud when docker/mkfs missing"
-        );
+    let compose_err = live_pack(
+        &PackRequest::hermetic("alpine:3.19", RootfsFormat::Ext4)
+            .with_method(PackMethod::DockerToExt4)
+            .with_staging(&staging, false),
+    )
+    .unwrap_err();
+    assert_eq!(
+        compose_err.unsupported_code_value(),
+        Some(codes::SANDBOX_ROOTFS_PACK_TOOL_MISSING),
+        "compose must fail-loud when docker/mkfs missing"
+    );
 
-        std::env::remove_var(PACK_INTEGRATION_ENV);
-        std::env::remove_var(tools::MKFS_PATH_ENV);
-        std::env::remove_var(tools::VIRT_MAKE_FS_PATH_ENV);
-        std::env::remove_var(tools::DOCKER_PATH_ENV);
-        let _ = fs::remove_dir_all(&staging);
-        let _ = fs::remove_dir_all(&tree);
-    }
+    std::env::remove_var(PACK_INTEGRATION_ENV);
+    std::env::remove_var(tools::MKFS_PATH_ENV);
+    std::env::remove_var(tools::VIRT_MAKE_FS_PATH_ENV);
+    std::env::remove_var(tools::DOCKER_PATH_ENV);
+    let _ = fs::remove_dir_all(&staging);
+    let _ = fs::remove_dir_all(&tree);
+}

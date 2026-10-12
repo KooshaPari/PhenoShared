@@ -256,8 +256,7 @@ pub const SANDBOX_ROOTFS_RELEASE_UNAVAILABLE: &str = "EIDOLON_SANDBOX_ROOTFS_REL
 /// Emitted by [`crate::virtual_display::VirtualDisplayManager`] /
 /// [`crate::virtual_display::VirtualDisplayStub`] on non-Linux platforms.
 /// Hermetic macOS CI must match this code — never pretend an Xvfb session exists.
-pub const SANDBOX_VIRTUAL_DISPLAY_UNSUPPORTED: &str =
-    "EIDOLON_SANDBOX_VIRTUAL_DISPLAY_UNSUPPORTED";
+pub const SANDBOX_VIRTUAL_DISPLAY_UNSUPPORTED: &str = "EIDOLON_SANDBOX_VIRTUAL_DISPLAY_UNSUPPORTED";
 
 /// Live virtual display spawn is gated off (feature / integration env).
 ///
@@ -292,4 +291,3 @@ pub const SANDBOX_VNC_UNSUPPORTED: &str = "EIDOLON_SANDBOX_VNC_UNSUPPORTED";
 /// desktop automation lives in `eidolon-desktop`; this code is sandbox isolation.
 pub const SANDBOX_WAYLAND_COMPOSITOR_UNSUPPORTED: &str =
     "EIDOLON_SANDBOX_WAYLAND_COMPOSITOR_UNSUPPORTED";
-

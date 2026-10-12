@@ -112,7 +112,12 @@ mod tests {
             // C_n = binom(2n, n) / (n + 1) is the exact closed form for n >= 0.
             let total = binom_u128(2 * n, n).expect("binom2n,n fits");
             let denom = (n + 1) as u128;
-            assert_eq!(total % denom, 0, "n={}: binom(2n,n) not divisible by n+1", n);
+            assert_eq!(
+                total % denom,
+                0,
+                "n={}: binom(2n,n) not divisible by n+1",
+                n
+            );
             let want = total / denom;
             assert_eq!(lhs, want, "n={}", n);
         }

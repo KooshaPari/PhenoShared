@@ -275,8 +275,7 @@ mod tests {
     #[test]
     fn yaml_round_trip_enriched() -> Result<(), Box<dyn std::error::Error>> {
         let schema = enriched_schema()?;
-        let yaml = schema
-            .to_yaml()?;
+        let yaml = schema.to_yaml()?;
         let restored = DagSchema::from_yaml(&yaml)?;
         assert_eq!(
             schema, restored,
@@ -288,8 +287,7 @@ mod tests {
     #[test]
     fn json_round_trip_enriched() -> Result<(), Box<dyn std::error::Error>> {
         let schema = enriched_schema()?;
-        let json = schema
-            .to_json_pretty()?;
+        let json = schema.to_json_pretty()?;
         let restored = DagSchema::from_json(&json)?;
         assert_eq!(
             schema, restored,
@@ -381,12 +379,20 @@ mod tests {
     #[test]
     fn enriched_schema_has_correct_prereqs() -> Result<(), Box<dyn std::error::Error>> {
         let schema = enriched_schema()?;
-        let build_node = schema.nodes.iter().find(|n| n.id == "build").ok_or("build node not found")?;
+        let build_node = schema
+            .nodes
+            .iter()
+            .find(|n| n.id == "build")
+            .ok_or("build node not found")?;
         assert_eq!(build_node.prerequisites.len(), 2);
         assert_eq!(build_node.acceptance.len(), 2);
         assert_eq!(build_node.audit_hooks.len(), 1);
 
-        let deploy_node = schema.nodes.iter().find(|n| n.id == "deploy").ok_or("deploy node not found")?;
+        let deploy_node = schema
+            .nodes
+            .iter()
+            .find(|n| n.id == "deploy")
+            .ok_or("deploy node not found")?;
         assert_eq!(deploy_node.prerequisites.len(), 1);
         assert_eq!(deploy_node.acceptance.len(), 1);
         assert_eq!(deploy_node.audit_hooks.len(), 1);
@@ -401,8 +407,14 @@ mod tests {
         let schema = DagSchema::from_dag(&dag, "1.0.0");
         let reconstructed = schema.into_dag()?;
         assert_eq!(reconstructed.edge_count(), 3);
-        assert_eq!(reconstructed.children_of(&"build".to_string()), Some(&["test".to_string()][..]));
-        assert_eq!(reconstructed.children_of(&"test".to_string()), Some(&["deploy".to_string()][..]));
+        assert_eq!(
+            reconstructed.children_of(&"build".to_string()),
+            Some(&["test".to_string()][..])
+        );
+        assert_eq!(
+            reconstructed.children_of(&"test".to_string()),
+            Some(&["deploy".to_string()][..])
+        );
         Ok(())
     }
 
@@ -447,7 +459,11 @@ mod tests {
         dag.add_edge("a".into(), "b".into())?;
         let schema = DagSchema::from_dag(&dag, "1.0.0");
         // BTreeSet dedup should ensure only one edge a→b.
-        let a_to_b: Vec<_> = schema.edges.iter().filter(|e| e.from == "a" && e.to == "b").collect();
+        let a_to_b: Vec<_> = schema
+            .edges
+            .iter()
+            .filter(|e| e.from == "a" && e.to == "b")
+            .collect();
         assert_eq!(a_to_b.len(), 1, "duplicate edges should be deduplicated");
         Ok(())
     }
@@ -472,7 +488,10 @@ mod tests {
         // Pretty-printed JSON should have newlines.
         assert!(pretty.contains('\n'));
         let compact = schema.to_json()?;
-        assert!(!compact.contains('\n'), "compact JSON should be single line");
+        assert!(
+            !compact.contains('\n'),
+            "compact JSON should be single line"
+        );
         Ok(())
     }
 
@@ -508,7 +527,10 @@ mod tests {
         let restored = DagSchema::from_json(&json)?;
         // Verify metadata survives round-trip.
         let build = restored.nodes.iter().find(|n| n.id == "build").unwrap();
-        assert_eq!(build.description.as_deref(), Some("Compile the application"));
+        assert_eq!(
+            build.description.as_deref(),
+            Some("Compile the application")
+        );
         assert_eq!(build.prerequisites.len(), 2);
         Ok(())
     }

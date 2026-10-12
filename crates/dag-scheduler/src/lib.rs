@@ -250,7 +250,7 @@ pub fn run_deploy_dag(
                     score_card: Some(card),
                     skipped_reason: None,
                 });
-            }
+            },
             Err(err) => {
                 scorecard.runtime_failed_nodes += 1;
                 status.insert(node.id.clone(), DagNodeStatus::RuntimeFailure);
@@ -262,7 +262,7 @@ pub fn run_deploy_dag(
                     score_card: None,
                     skipped_reason: Some(err.to_string()),
                 });
-            }
+            },
         }
     }
 

@@ -34,7 +34,7 @@
 //!     init_tracing("focus-sync", None);
 //!
 //!     // Optional: export to OpenTelemetry collector
-//!     if let Err(e) = init_otel("http://localhost:4317").await {
+//!     if let Err(e) = init_otel(Some("http://localhost:4317")).await {
 //!         eprintln!("OTEL init failed: {}", e);
 //!     }
 //!
@@ -58,9 +58,7 @@ mod integration_tests;
 
 pub use metrics::MetricsRegistry;
 pub use privacy_filter::SpanPrivacyFilter;
-pub use spans::{
-    AuditSpanAttrs, ConnectorSpanAttrs, RuleSpanAttrs, SpanKind, WalletSpanAttrs,
-};
+pub use spans::{AuditSpanAttrs, ConnectorSpanAttrs, RuleSpanAttrs, SpanKind, WalletSpanAttrs};
 
 /// Initialize tracing with JSON or pretty console output.
 /// Honors `RUST_LOG` and `FOCALPOINT_LOG_LEVEL` env vars.
@@ -71,11 +69,10 @@ pub fn init_tracing(service_name: &str, log_level: Option<&str>) {
         .or_else(|| std::env::var("FOCALPOINT_LOG_LEVEL").ok())
         .unwrap_or_else(|| "info".to_string());
 
-    let env_filter = EnvFilter::try_from_default_env()
-        .unwrap_or_else(|_| EnvFilter::new(level_str.as_str()));
+    let env_filter =
+        EnvFilter::try_from_default_env().unwrap_or_else(|_| EnvFilter::new(level_str.as_str()));
 
-    let format_str = std::env::var("FOCALPOINT_LOG_FORMAT")
-        .unwrap_or_else(|_| "json".to_string());
+    let format_str = std::env::var("FOCALPOINT_LOG_FORMAT").unwrap_or_else(|_| "json".to_string());
 
     let registry = tracing_subscriber::registry().with(env_filter);
 
@@ -120,7 +117,10 @@ pub async fn init_otel(endpoint: Option<&str>) -> Result<()> {
     // For now, we initialize OTEL config but don't panic on failure.
     // In production, you would wire this with tracing-opentelemetry + opentelemetry-otlp.
     // This is simplified to avoid runtime dependency on the tokio runtime.
-    info!(endpoint = endpoint, "OpenTelemetry OTLP export configured (local export ready)");
+    info!(
+        endpoint = endpoint,
+        "OpenTelemetry OTLP export configured (local export ready)"
+    );
     Ok(())
 }
 
@@ -148,6 +148,7 @@ mod tests {
     }
 
     #[test]
+    #[ignore = "PHE-FOB-001: global tracing-subscriber init() cannot be called twice; see test_init_tracing_with_json_format (run first)"]
     fn test_init_tracing_with_pretty_format() {
         // Set format and verify no panic
         std::env::set_var("FOCALPOINT_LOG_FORMAT", "pretty");

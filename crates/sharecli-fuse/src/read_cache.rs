@@ -20,7 +20,10 @@ impl ReadCacheMeters {
     /// Hit rate as an integer percentage in `[0, 100]` (0 when no events recorded).
     pub fn hit_rate_pct(self) -> u64 {
         let total = self.hits.saturating_add(self.misses);
-        self.hits.saturating_mul(100).checked_div(total).unwrap_or(0)
+        self.hits
+            .saturating_mul(100)
+            .checked_div(total)
+            .unwrap_or(0)
     }
 
     /// Operator-facing status block for `sharecli status` (FR-007 / AC-007.9).
@@ -90,12 +93,12 @@ impl ReadContentCache {
             Some(entry) if entry.mtime == mtime => {
                 self.hits.fetch_add(1, Ordering::Relaxed);
                 Some(entry.data.clone())
-            }
+            },
             Some(_) => {
                 // Stale mtime — drop and count as miss on next put path.
                 self.entries.remove(path);
                 None
-            }
+            },
             None => None,
         }
     }

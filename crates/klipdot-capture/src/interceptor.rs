@@ -83,19 +83,19 @@ impl TerminalInterceptor {
         match display_server {
             crate::DisplayServer::Wayland => {
                 self.monitor_wayland_tools().await?;
-            }
+            },
             crate::DisplayServer::X11 => {
                 self.monitor_x11_tools().await?;
-            }
+            },
             crate::DisplayServer::MacOS => {
                 self.monitor_macos_tools().await?;
-            }
+            },
             crate::DisplayServer::Unknown => {
                 // Try both
                 let _ = self.monitor_wayland_tools().await;
                 let _ = self.monitor_x11_tools().await;
                 let _ = self.monitor_macos_tools().await;
-            }
+            },
         }
 
         Ok(())
@@ -576,11 +576,11 @@ impl TerminalInterceptor {
         match self.config.get_display_server() {
             crate::DisplayServer::Wayland => {
                 self.add_wayland_screenshot_dirs(&mut scan_dirs).await?;
-            }
+            },
             crate::DisplayServer::MacOS => {
                 self.add_macos_screenshot_dirs(&mut scan_dirs).await?;
-            }
-            _ => {}
+            },
+            _ => {},
         }
 
         for dir in scan_dirs.iter().flatten() {
@@ -604,21 +604,21 @@ impl TerminalInterceptor {
                     if let Some(pictures_dir) = dirs::picture_dir() {
                         dirs.push(Some(pictures_dir.join("Screenshots")));
                     }
-                }
+                },
                 "kde" => {
                     // KDE Spectacle saves to Pictures/Screenshots
                     if let Some(pictures_dir) = dirs::picture_dir() {
                         dirs.push(Some(pictures_dir.join("Screenshots")));
                     }
-                }
+                },
                 "sway" => {
                     // Sway users often save to home directory
                     if let Some(home_dir) = dirs::home_dir() {
                         dirs.push(Some(home_dir.join("Pictures")));
                         dirs.push(Some(home_dir));
                     }
-                }
-                _ => {}
+                },
+                _ => {},
             }
         }
 

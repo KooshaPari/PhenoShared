@@ -1,6 +1,6 @@
-use criterion::{black_box, criterion_group, criterion_main, Criterion};
-use focus_policy::{EnforcementPolicy, BlockProfile, PolicyBuilder};
 use chrono::Utc;
+use criterion::{black_box, criterion_group, criterion_main, Criterion};
+use focus_policy::{BlockProfile, EnforcementPolicy, PolicyBuilder};
 use std::collections::HashMap;
 
 fn policy_builder_creation(c: &mut Criterion) {
@@ -41,9 +41,7 @@ fn block_profile_creation(c: &mut Criterion) {
                 categories: (0..10)
                     .map(|i| format!("category-{}", i))
                     .collect::<Vec<_>>(),
-                exceptions: (0..5)
-                    .map(|i| format!("app-{}", i))
-                    .collect::<Vec<_>>(),
+                exceptions: (0..5).map(|i| format!("app-{}", i)).collect::<Vec<_>>(),
             };
             let _ = black_box(profile);
         });

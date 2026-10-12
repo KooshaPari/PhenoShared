@@ -23,7 +23,13 @@ fn bin() -> Command {
 #[test]
 fn fr006_proc_tree_state_json_node_includes_state() {
     let src = FakeProcSource::new(vec![
-        ProcSnapshot { pid: 1, ppid: 0, comm: "init".into(), cmdline: vec![], state: 'R' },
+        ProcSnapshot {
+            pid: 1,
+            ppid: 0,
+            comm: "init".into(),
+            cmdline: vec![],
+            state: 'R',
+        },
         ProcSnapshot {
             pid: 50,
             ppid: 1,
@@ -47,7 +53,10 @@ fn fr006_proc_tree_state_json_node_includes_state() {
     assert_eq!(root.state, "S");
     assert_eq!(root.children[0].state, "R");
     let json = serde_json::to_string(&root).expect("serialize tree node");
-    assert!(json.contains("\"state\":\"S\""), "tree JSON MUST include state on root; got: {json}");
+    assert!(
+        json.contains("\"state\":\"S\""),
+        "tree JSON MUST include state on root; got: {json}"
+    );
 }
 
 /// FR-006 / AC-006.34 — missing tree JSON state serializes as empty string.
@@ -73,11 +82,21 @@ fn fr006_proc_tree_state_json_missing_state_empty_string() {
 /// FR-006 / AC-006.34 — CLI proc --tree --json forests nodes expose state key.
 #[test]
 fn fr006_proc_tree_state_cli_json_includes_state_key() {
-    let out = bin().args(["proc", "--tree", "--json"]).output().expect("spawn proc --tree --json");
-    assert!(out.status.success(), "proc --tree --json MUST exit 0; stderr: {:?}", out.stderr);
+    let out = bin()
+        .args(["proc", "--tree", "--json"])
+        .output()
+        .expect("spawn proc --tree --json");
+    assert!(
+        out.status.success(),
+        "proc --tree --json MUST exit 0; stderr: {:?}",
+        out.stderr
+    );
     let v: serde_json::Value =
         serde_json::from_slice(&out.stdout).expect("proc --tree --json MUST emit valid JSON");
-    let forests = v.get("forests").and_then(|f| f.as_array()).expect("forests array");
+    let forests = v
+        .get("forests")
+        .and_then(|f| f.as_array())
+        .expect("forests array");
     if let Some(root) = forests.first() {
         assert!(
             root.get("state").is_some(),
@@ -90,7 +109,13 @@ fn fr006_proc_tree_state_cli_json_includes_state_key() {
 #[test]
 fn fr006_proc_tree_forest_state_collects_all_pids() {
     let src = FakeProcSource::new(vec![
-        ProcSnapshot { pid: 1, ppid: 0, comm: "init".into(), cmdline: vec![], state: 'R' },
+        ProcSnapshot {
+            pid: 1,
+            ppid: 0,
+            comm: "init".into(),
+            cmdline: vec![],
+            state: 'R',
+        },
         ProcSnapshot {
             pid: 50,
             ppid: 1,
@@ -123,7 +148,13 @@ fn fr006_proc_tree_forest_state_collects_all_pids() {
 #[test]
 fn fr006_proc_tree_forest_state_map_includes_child_states() {
     let src = FakeProcSource::new(vec![
-        ProcSnapshot { pid: 1, ppid: 0, comm: "init".into(), cmdline: vec![], state: 'R' },
+        ProcSnapshot {
+            pid: 1,
+            ppid: 0,
+            comm: "init".into(),
+            cmdline: vec![],
+            state: 'R',
+        },
         ProcSnapshot {
             pid: 50,
             ppid: 1,
@@ -141,7 +172,11 @@ fn fr006_proc_tree_forest_state_map_includes_child_states() {
     ]);
     let forests = sharecli_fleet::build_agent_forests(&src);
     let agent_only = build_agent_state_map(&src, &[50]);
-    assert_eq!(agent_only.get(&51), None, "agent-only map MUST omit child PID");
+    assert_eq!(
+        agent_only.get(&51),
+        None,
+        "agent-only map MUST omit child PID"
+    );
     let forest_state = build_forest_state_map(&src, &forests);
     assert_eq!(forest_state.get(&50), Some(&'S'));
     assert_eq!(forest_state.get(&51), Some(&'R'));
@@ -153,7 +188,13 @@ fn fr006_proc_tree_forest_state_map_includes_child_states() {
 #[test]
 fn fr006_proc_tree_forest_state_csv_child_row_includes_state() {
     let src = FakeProcSource::new(vec![
-        ProcSnapshot { pid: 1, ppid: 0, comm: "init".into(), cmdline: vec![], state: 'R' },
+        ProcSnapshot {
+            pid: 1,
+            ppid: 0,
+            comm: "init".into(),
+            cmdline: vec![],
+            state: 'R',
+        },
         ProcSnapshot {
             pid: 50,
             ppid: 1,
@@ -182,7 +223,13 @@ fn fr006_proc_tree_forest_state_csv_child_row_includes_state() {
 #[test]
 fn fr006_proc_tree_forest_state_text_child_node_shows_state() {
     let src = FakeProcSource::new(vec![
-        ProcSnapshot { pid: 1, ppid: 0, comm: "init".into(), cmdline: vec![], state: 'R' },
+        ProcSnapshot {
+            pid: 1,
+            ppid: 0,
+            comm: "init".into(),
+            cmdline: vec![],
+            state: 'R',
+        },
         ProcSnapshot {
             pid: 50,
             ppid: 1,
@@ -200,7 +247,11 @@ fn fr006_proc_tree_forest_state_text_child_node_shows_state() {
     ]);
     let forests = sharecli_fleet::build_agent_forests(&src);
     let agent_only = build_agent_state_map(&src, &[50]);
-    assert_eq!(state_text_for_pid(&agent_only, 51), "-", "agent-only map shows `-` for child");
+    assert_eq!(
+        state_text_for_pid(&agent_only, 51),
+        "-",
+        "agent-only map shows `-` for child"
+    );
     let forest_state = build_forest_state_map(&src, &forests);
     assert_eq!(state_text_for_pid(&forest_state, 51), "R");
 }
@@ -208,15 +259,24 @@ fn fr006_proc_tree_forest_state_text_child_node_shows_state() {
 /// FR-006 / AC-006.34 — CLI proc --tree text nodes show state letter after PID.
 #[test]
 fn fr006_proc_tree_state_cli_text_shows_state_on_nodes() {
-    let out = bin().args(["proc", "--tree"]).output().expect("spawn proc --tree");
-    assert!(out.status.success(), "proc --tree MUST exit 0; stderr: {:?}", out.stderr);
+    let out = bin()
+        .args(["proc", "--tree"])
+        .output()
+        .expect("spawn proc --tree");
+    assert!(
+        out.status.success(),
+        "proc --tree MUST exit 0; stderr: {:?}",
+        out.stderr
+    );
     let s = String::from_utf8_lossy(&out.stdout);
     // Only run the state-letter check when the output actually renders PID
     // tree nodes (e.g. "[100] S claude"). The output always contains a
     // bracketed gate decision like "[ADMIT]" plus numeric meter values, so
     // the guard must require a digit immediately after a '['.
-    let has_pid_nodes =
-        s.split('[').skip(1).any(|seg| seg.starts_with(|c: char| c.is_ascii_digit()));
+    let has_pid_nodes = s
+        .split('[')
+        .skip(1)
+        .any(|seg| seg.starts_with(|c: char| c.is_ascii_digit()));
     if has_pid_nodes {
         assert!(
             s.contains("] ")

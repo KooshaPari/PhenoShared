@@ -152,7 +152,7 @@ impl PackageManifest {
                 let cfg = KernelConfig::new(path);
                 cfg.validate_path()?;
                 Ok(Some(cfg))
-            }
+            },
             None => Ok(None),
         }
     }

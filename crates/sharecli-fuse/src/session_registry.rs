@@ -132,7 +132,10 @@ impl FuseMountOptions {
 /// Shared by the platform mount entry points so the session plumbing is
 /// unit-testable without a live FUSE mount.
 pub(crate) fn session_mount_options(session_id: &str) -> FuseMountOptions {
-    FuseMountOptions { session_id: Some(session_id.to_string()), ..Default::default() }
+    FuseMountOptions {
+        session_id: Some(session_id.to_string()),
+        ..Default::default()
+    }
 }
 
 /// Summary of one registered FUSE mount (operator / `fuse list`).
@@ -379,7 +382,13 @@ impl FuseSessionRegistry {
                 std::sync::Arc::clone(&handle),
             )?;
             let mut mounts = self.winfsp_mounts.lock().expect("fuse registry lock");
-            mounts.insert(key, WinfspMountEntry { handle, _session: session });
+            mounts.insert(
+                key,
+                WinfspMountEntry {
+                    handle,
+                    _session: session,
+                },
+            );
             Ok(())
         } else {
             crate::winfsp_mount::mount_blocking(mountpoint, backing, &session_id, handle)
@@ -440,7 +449,10 @@ impl FuseSessionRegistry {
                 mounts.remove(&key)
             };
             if entry.is_none() {
-                anyhow::bail!("fuse unmount: no registered mount at {}", mountpoint.display());
+                anyhow::bail!(
+                    "fuse unmount: no registered mount at {}",
+                    mountpoint.display()
+                );
             }
             let _ = crate::mount_smoke::force_unmount(mountpoint);
             Ok(())
@@ -453,7 +465,10 @@ impl FuseSessionRegistry {
                 mounts.remove(&key)
             };
             if entry.is_none() {
-                anyhow::bail!("fuse unmount: no registered mount at {}", mountpoint.display());
+                anyhow::bail!(
+                    "fuse unmount: no registered mount at {}",
+                    mountpoint.display()
+                );
             }
             drop(entry);
             let _ = crate::mount_smoke::force_unmount(mountpoint);
@@ -479,7 +494,9 @@ impl FuseSessionRegistry {
         mountpoint: Option<&Path>,
     ) -> anyhow::Result<std::sync::Arc<crate::CowMountHandle>> {
         let mounts = self.winfsp_mounts.lock().expect("fuse registry lock");
-        Ok(std::sync::Arc::clone(&resolve_entry(&mounts, mountpoint)?.handle))
+        Ok(std::sync::Arc::clone(
+            &resolve_entry(&mounts, mountpoint)?.handle,
+        ))
     }
 
     #[cfg(not(any(target_os = "linux", target_os = "macos", windows)))]
@@ -548,7 +565,7 @@ fn resolve_entry<'a, V>(
             mounts
                 .get(&key)
                 .ok_or_else(|| anyhow::anyhow!("fuse: no active mount at {}", mp.display()))
-        }
+        },
         None => match mounts.len() {
             0 => anyhow::bail!("fuse: no active FUSE mounts registered (run `fuse mount` first)"),
             1 => Ok(mounts
@@ -571,7 +588,10 @@ trait MountContext {
 impl MountContext for std::io::Result<()> {
     fn with_context_mount(self, mountpoint: &Path) -> anyhow::Result<()> {
         self.map_err(|e| {
-            anyhow::anyhow!("fuse mount: create mountpoint {}: {e}", mountpoint.display())
+            anyhow::anyhow!(
+                "fuse mount: create mountpoint {}: {e}",
+                mountpoint.display()
+            )
         })
     }
 }
@@ -612,7 +632,10 @@ mod default_mount_options_tests {
     fn linux_auto_unmount_pairs_with_non_owner_acl() {
         let config = default_fuser_config();
         assert!(
-            config.mount_options.iter().any(|o| matches!(o, MountOption::AutoUnmount)),
+            config
+                .mount_options
+                .iter()
+                .any(|o| matches!(o, MountOption::AutoUnmount)),
             "Linux MUST include AutoUnmount"
         );
         assert_eq!(
@@ -627,7 +650,10 @@ mod default_mount_options_tests {
     fn macos_skips_auto_unmount_and_keeps_owner_acl() {
         let config = default_fuser_config();
         assert!(
-            !config.mount_options.iter().any(|o| matches!(o, MountOption::AutoUnmount)),
+            !config
+                .mount_options
+                .iter()
+                .any(|o| matches!(o, MountOption::AutoUnmount)),
             "macOS MUST NOT use AutoUnmount (allow_other / kext friction)"
         );
         assert_eq!(config.acl, SessionACL::Owner, "macOS MUST keep Owner ACL");
@@ -642,7 +668,10 @@ mod default_mount_options_tests {
             .iter()
             .any(|option| matches!(option, MountOption::CUSTOM(_))));
         let fskit = smoke_fuser_config_for_backend(Some(FuseBackend::Fskit));
-        assert!(!fskit.mount_options.iter().any(|option| matches!(option, MountOption::CUSTOM(_))));
+        assert!(!fskit
+            .mount_options
+            .iter()
+            .any(|option| matches!(option, MountOption::CUSTOM(_))));
     }
 }
 
@@ -661,7 +690,10 @@ mod registry_no_mount_tests {
     fn fresh_fs(backing: &Path, session_id: &str) -> Arc<InterceptFs> {
         Arc::new(InterceptFs::with_options(
             backing,
-            InterceptFsOptions { session_id: session_id.to_string(), ..Default::default() },
+            InterceptFsOptions {
+                session_id: session_id.to_string(),
+                ..Default::default()
+            },
         ))
     }
 
@@ -677,10 +709,17 @@ mod registry_no_mount_tests {
         // normalize_key) so the fixture stays decoupled from the resolution
         // path under test; on macOS TempDir sits under /var -> /private/var,
         // so the raw path and its canonical form differ.
-        let key = mountpoint.canonicalize().unwrap_or_else(|_| mountpoint.clone());
+        let key = mountpoint
+            .canonicalize()
+            .unwrap_or_else(|_| mountpoint.clone());
         registry.mounts.lock().expect("fuse registry lock").insert(
             key,
-            FuseMountEntry { fs, backing, session_id: session_id.to_string(), _session: None },
+            FuseMountEntry {
+                fs,
+                backing,
+                session_id: session_id.to_string(),
+                _session: None,
+            },
         );
     }
 
@@ -694,7 +733,10 @@ mod registry_no_mount_tests {
     /// default on every call fails this identity check.
     #[test]
     fn global_is_singleton() {
-        assert!(std::ptr::eq(FuseSessionRegistry::global(), FuseSessionRegistry::global()));
+        assert!(std::ptr::eq(
+            FuseSessionRegistry::global(),
+            FuseSessionRegistry::global()
+        ));
     }
 
     /// normalize_key falls back to the given path when canonicalize fails
@@ -728,7 +770,9 @@ mod registry_no_mount_tests {
 
         let listed = registry.list();
         assert_eq!(listed.len(), 1, "got {listed:?}");
-        let canonical = mountpoint.canonicalize().unwrap_or_else(|_| mountpoint.clone());
+        let canonical = mountpoint
+            .canonicalize()
+            .unwrap_or_else(|_| mountpoint.clone());
         assert_eq!(listed[0].mountpoint, canonical);
         assert_eq!(listed[0].backing, backing);
         assert_eq!(listed[0].session_id, "sess-1");
@@ -737,11 +781,18 @@ mod registry_no_mount_tests {
     #[test]
     fn resolve_fs_empty_and_unknown_mountpoint_error() {
         let registry = FuseSessionRegistry::default();
-        let err =
-            registry.resolve_fs(None).err().expect("empty registry MUST error on sole-resolve");
-        assert!(err.to_string().contains("no active FUSE mounts"), "unexpected error: {err}");
+        let err = registry
+            .resolve_fs(None)
+            .err()
+            .expect("empty registry MUST error on sole-resolve");
         assert!(
-            registry.resolve_fs(Some(Path::new("/not/registered/here"))).is_err(),
+            err.to_string().contains("no active FUSE mounts"),
+            "unexpected error: {err}"
+        );
+        assert!(
+            registry
+                .resolve_fs(Some(Path::new("/not/registered/here")))
+                .is_err(),
             "unknown mountpoint MUST error"
         );
     }
@@ -755,13 +806,27 @@ mod registry_no_mount_tests {
 
         let registry = FuseSessionRegistry::default();
         let fs = fresh_fs(&backing, "sess-1");
-        insert_entry(&registry, mountpoint.clone(), Arc::clone(&fs), backing, "sess-1");
+        insert_entry(
+            &registry,
+            mountpoint.clone(),
+            Arc::clone(&fs),
+            backing,
+            "sess-1",
+        );
 
         let sole = registry.resolve_fs(None).expect("sole mount resolves");
-        assert!(Arc::ptr_eq(&fs, &sole), "sole resolve MUST return the registered fs");
+        assert!(
+            Arc::ptr_eq(&fs, &sole),
+            "sole resolve MUST return the registered fs"
+        );
 
-        let by_mp = registry.resolve_fs(Some(&mountpoint)).expect("mountpoint resolves");
-        assert!(Arc::ptr_eq(&fs, &by_mp), "mountpoint resolve MUST return the registered fs");
+        let by_mp = registry
+            .resolve_fs(Some(&mountpoint))
+            .expect("mountpoint resolves");
+        assert!(
+            Arc::ptr_eq(&fs, &by_mp),
+            "mountpoint resolve MUST return the registered fs"
+        );
     }
 
     #[test]
@@ -781,13 +846,22 @@ mod registry_no_mount_tests {
             backing.clone(),
             "sess-a",
         );
-        insert_entry(&registry, mp_b.clone(), fresh_fs(&backing, "sess-b"), backing, "sess-b");
+        insert_entry(
+            &registry,
+            mp_b.clone(),
+            fresh_fs(&backing, "sess-b"),
+            backing,
+            "sess-b",
+        );
 
         assert!(
             registry.resolve_fs(None).is_err(),
             "multiple mounts MUST error without mountpoint"
         );
-        assert!(registry.resolve_fs(Some(&mp_a)).is_ok(), "mountpoint MUST disambiguate");
+        assert!(
+            registry.resolve_fs(Some(&mp_a)).is_ok(),
+            "mountpoint MUST disambiguate"
+        );
     }
 
     /// unmount on an unregistered mountpoint errors before any force-unmount;
@@ -795,7 +869,12 @@ mod registry_no_mount_tests {
     #[test]
     fn unmount_unregistered_errors() {
         let registry = FuseSessionRegistry::default();
-        let err = registry.unmount(Path::new("/never/registered")).expect_err("MUST error");
-        assert!(err.to_string().contains("no registered mount"), "unexpected error: {err}");
+        let err = registry
+            .unmount(Path::new("/never/registered"))
+            .expect_err("MUST error");
+        assert!(
+            err.to_string().contains("no registered mount"),
+            "unexpected error: {err}"
+        );
     }
 }

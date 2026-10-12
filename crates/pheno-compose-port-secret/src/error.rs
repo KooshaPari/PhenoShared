@@ -57,9 +57,7 @@ impl From<PortError> for SecretStoreError {
 
 pub(crate) fn validate_ref(r#ref: &SecretRef) -> Result<(), SecretStoreError> {
     if r#ref.name.is_empty() {
-        return Err(SecretStoreError::validation(
-            "secret ref name is empty",
-        ));
+        return Err(SecretStoreError::validation("secret ref name is empty"));
     }
     Ok(())
 }

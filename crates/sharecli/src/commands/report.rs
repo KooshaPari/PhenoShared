@@ -65,7 +65,10 @@ impl std::str::FromStr for ReportFormat {
             "text" => Ok(Self::Text),
             "json" => Ok(Self::Json),
             "csv" => Ok(Self::Csv),
-            other => anyhow::bail!("unknown format '{}'; expected 'text', 'json', or 'csv'", other),
+            other => anyhow::bail!(
+                "unknown format '{}'; expected 'text', 'json', or 'csv'",
+                other
+            ),
         }
     }
 }
@@ -173,7 +176,10 @@ pub struct FleetReportNdjsonLine {
 }
 
 fn unix_ts_secs() -> u64 {
-    SystemTime::now().duration_since(UNIX_EPOCH).unwrap_or_default().as_secs()
+    SystemTime::now()
+        .duration_since(UNIX_EPOCH)
+        .unwrap_or_default()
+        .as_secs()
 }
 
 /// Emit one compact JSON line and flush (piped stdout is block-buffered; AC-007.42).
@@ -207,15 +213,24 @@ pub fn build_report(
     gate: &GateStatusSnapshot,
     sort: &SortBy,
 ) -> FleetReport {
-    let now = SystemTime::now().duration_since(UNIX_EPOCH).unwrap_or_default().as_secs();
+    let now = SystemTime::now()
+        .duration_since(UNIX_EPOCH)
+        .unwrap_or_default()
+        .as_secs();
 
     let total_memory_mb: u64 = processes.iter().map(|p| p.memory_mb).sum();
 
     // Per-project breakdown
     let mut by_project: HashMap<String, ProjectBreakdown> = HashMap::new();
     for p in processes {
-        let key = p.project.clone().unwrap_or_else(|| "<untagged>".to_string());
-        let entry = by_project.entry(key).or_insert(ProjectBreakdown { count: 0, memory_mb: 0 });
+        let key = p
+            .project
+            .clone()
+            .unwrap_or_else(|| "<untagged>".to_string());
+        let entry = by_project.entry(key).or_insert(ProjectBreakdown {
+            count: 0,
+            memory_mb: 0,
+        });
         entry.count += 1;
         entry.memory_mb += p.memory_mb;
     }
@@ -238,7 +253,11 @@ pub fn build_report(
     let top_consumers = candidates;
 
     // Uptime: time since the earliest process started (0 if no processes)
-    let earliest_start = processes.iter().map(|p| p.start_time).filter(|&t| t > 0).min();
+    let earliest_start = processes
+        .iter()
+        .map(|p| p.start_time)
+        .filter(|&t| t > 0)
+        .min();
     let uptime_seconds = earliest_start.map(|t| now.saturating_sub(t)).unwrap_or(0);
 
     FleetReport {
@@ -281,7 +300,10 @@ fn render_text(report: &FleetReport) {
 
     if !report.top_consumers.is_empty() {
         println!("\n--- Top Memory Consumers ---");
-        println!("{:>8} {:<25} {:<20} {:>12}", "PID", "NAME", "PROJECT", "MEM (MB)");
+        println!(
+            "{:>8} {:<25} {:<20} {:>12}",
+            "PID", "NAME", "PROJECT", "MEM (MB)"
+        );
         println!("{}", "-".repeat(67));
         for tc in &report.top_consumers {
             println!(
@@ -415,7 +437,7 @@ async fn render_once(format: &ReportFormat, sort: &SortBy, ndjson: bool) -> Resu
             super::print_live_gate_section()?;
             super::print_live_host_watch_section()?;
             super::print_live_pool_status_operator_sections().await?;
-        }
+        },
         ReportFormat::Json => {
             // AC-007.40/AC-007.73 one-shot / AC-007.42 watch NDJSON: gate → host_watch → pool → status.
             let (host_watch, pool_json, status_json) = tokio::join!(
@@ -429,17 +451,20 @@ async fn render_once(format: &ReportFormat, sort: &SortBy, ndjson: bool) -> Resu
             if ndjson {
                 let payload =
                     FleetReportJson::from_parts(&report, gate.clone(), host_watch, pool, status);
-                let line = FleetReportNdjsonLine { ts: unix_ts_secs(), snapshot: payload };
+                let line = FleetReportNdjsonLine {
+                    ts: unix_ts_secs(),
+                    snapshot: payload,
+                };
                 emit_ndjson_line(&line)?;
                 super::eprint_live_gate_host_watch_sections()?;
             } else {
                 render_json(&report, &gate, &host_watch, &pool, &status)?;
             }
-        }
+        },
         ReportFormat::Csv => {
             // AC-007.81 one-shot: fleet CSV body → gate → host_watch → pool → status companions.
             render_csv(&report, &gate).await?;
-        }
+        },
     }
 
     Ok(())
@@ -503,7 +528,7 @@ pub async fn run(format: ReportFormat, watch: Option<u64>, sort: SortBy) -> Resu
                 }
             }
             Ok(())
-        }
+        },
     }
 }
 
@@ -617,15 +642,19 @@ mod tests {
         assert_eq!(beta.count, 1);
         assert_eq!(beta.memory_mb, 200);
 
-        let untagged = report.by_project.get("<untagged>").expect("untagged missing");
+        let untagged = report
+            .by_project
+            .get("<untagged>")
+            .expect("untagged missing");
         assert_eq!(untagged.count, 1);
         assert_eq!(untagged.memory_mb, 50);
     }
 
     #[test]
     fn test_top_consumers_order_and_limit() {
-        let procs: Vec<ProcessInfo> =
-            (0u32..8).map(|i| make_proc(i, "proc", None, (i as u64 + 1) * 100, 0)).collect();
+        let procs: Vec<ProcessInfo> = (0u32..8)
+            .map(|i| make_proc(i, "proc", None, (i as u64 + 1) * 100, 0))
+            .collect();
         let report = build_report(&procs, &gate("GREEN", 0, "OK", "ADMIT"), &SortBy::Memory);
 
         assert_eq!(report.top_consumers.len(), 5);
@@ -666,7 +695,11 @@ mod tests {
             make_proc(3, "mango", None, 300, 0),
         ];
         let report = build_report(&procs, &gate("GREEN", 0, "OK", "ADMIT"), &SortBy::Name);
-        let names: Vec<&str> = report.top_consumers.iter().map(|c| c.name.as_str()).collect();
+        let names: Vec<&str> = report
+            .top_consumers
+            .iter()
+            .map(|c| c.name.as_str())
+            .collect();
         assert_eq!(names, vec!["alpha", "mango", "zebra"]);
     }
 
@@ -685,9 +718,24 @@ mod tests {
     #[test]
     fn test_sort_consumers_in_place() {
         let mut consumers = vec![
-            TopConsumer { pid: 1, name: "zebra".into(), project: None, memory_mb: 10 },
-            TopConsumer { pid: 2, name: "alpha".into(), project: None, memory_mb: 50 },
-            TopConsumer { pid: 3, name: "mango".into(), project: None, memory_mb: 30 },
+            TopConsumer {
+                pid: 1,
+                name: "zebra".into(),
+                project: None,
+                memory_mb: 10,
+            },
+            TopConsumer {
+                pid: 2,
+                name: "alpha".into(),
+                project: None,
+                memory_mb: 50,
+            },
+            TopConsumer {
+                pid: 3,
+                name: "mango".into(),
+                project: None,
+                memory_mb: 30,
+            },
         ];
         sort_consumers(&mut consumers, &SortBy::Name);
         assert_eq!(consumers[0].name, "alpha");
@@ -725,7 +773,13 @@ mod tests {
     #[test]
     fn test_render_report_csv_body() {
         let mut by_project = HashMap::new();
-        by_project.insert("alpha".into(), ProjectBreakdown { count: 2, memory_mb: 400 });
+        by_project.insert(
+            "alpha".into(),
+            ProjectBreakdown {
+                count: 2,
+                memory_mb: 400,
+            },
+        );
         let report = FleetReport {
             timestamp: 1_700_000_000,
             uptime_seconds: 3600,
@@ -778,8 +832,13 @@ mod tests {
     fn test_fleet_report_json_from_parts_preserves_fields() {
         use sharecli_fleet::GateStatusSnapshot;
 
-        let by_project =
-            HashMap::from([("alpha".into(), ProjectBreakdown { count: 1, memory_mb: 100 })]);
+        let by_project = HashMap::from([(
+            "alpha".into(),
+            ProjectBreakdown {
+                count: 1,
+                memory_mb: 100,
+            },
+        )]);
         let report = FleetReport {
             timestamp: 1_700_000_000,
             uptime_seconds: 3600,
@@ -852,9 +911,15 @@ mod tests {
         );
         let serialized = serde_json::to_string(&json).expect("serialize");
         assert!(serialized.contains("\"gate\""), "MUST include gate field");
-        assert!(serialized.contains("\"host_watch\""), "MUST include host_watch field");
+        assert!(
+            serialized.contains("\"host_watch\""),
+            "MUST include host_watch field"
+        );
         assert!(serialized.contains("\"pool\""), "MUST include pool field");
-        assert!(serialized.contains("\"status\""), "MUST include status field");
+        assert!(
+            serialized.contains("\"status\""),
+            "MUST include status field"
+        );
     }
 
     // --- CSV body edge cases ---
@@ -884,8 +949,20 @@ mod tests {
     #[test]
     fn test_render_report_csv_body_multiple_projects_sorted() {
         let mut by_project = HashMap::new();
-        by_project.insert("beta".into(), ProjectBreakdown { count: 1, memory_mb: 50 });
-        by_project.insert("alpha".into(), ProjectBreakdown { count: 2, memory_mb: 200 });
+        by_project.insert(
+            "beta".into(),
+            ProjectBreakdown {
+                count: 1,
+                memory_mb: 50,
+            },
+        );
+        by_project.insert(
+            "alpha".into(),
+            ProjectBreakdown {
+                count: 2,
+                memory_mb: 200,
+            },
+        );
         let report = FleetReport {
             timestamp: 1,
             uptime_seconds: 0,
@@ -901,7 +978,10 @@ mod tests {
         let csv = render_report_csv_body(&report);
         let alpha_pos = csv.find("project,alpha").expect("alpha project row");
         let beta_pos = csv.find("project,beta").expect("beta project row");
-        assert!(alpha_pos < beta_pos, "projects MUST be sorted alphabetically");
+        assert!(
+            alpha_pos < beta_pos,
+            "projects MUST be sorted alphabetically"
+        );
     }
 
     #[test]
@@ -931,7 +1011,10 @@ mod tests {
 
     #[test]
     fn test_report_csv_watch_frame_marker_value() {
-        assert_eq!(REPORT_CSV_WATCH_FRAME_MARKER, "# sharecli-report-watch-frame");
+        assert_eq!(
+            REPORT_CSV_WATCH_FRAME_MARKER,
+            "# sharecli-report-watch-frame"
+        );
     }
 
     // --- build_report edge cases ---

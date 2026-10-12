@@ -69,11 +69,11 @@ impl ClientMessage {
         match serde_json::from_str::<Envelope>(raw) {
             Ok(Envelope::ProcessSnapshot { processes }) => {
                 ClientMessage::ProcessSnapshot(processes)
-            }
+            },
             Ok(Envelope::HealthUpdate { health }) => ClientMessage::HealthUpdate(health),
             Ok(Envelope::ThermalEvent { level, message }) => {
                 ClientMessage::ThermalEvent { level, message }
-            }
+            },
             Err(_) => ClientMessage::Unknown(raw.to_owned()),
         }
     }
@@ -91,7 +91,9 @@ pub struct SharecliClient {
 impl SharecliClient {
     /// Create a new client pointing at `url` (e.g. `"ws://127.0.0.1:9000/ws"`).
     pub fn new(url: &str) -> Self {
-        Self { url: url.to_owned() }
+        Self {
+            url: url.to_owned(),
+        }
     }
 
     /// Open a WebSocket connection and return a [`SharecliStream`].
@@ -103,7 +105,9 @@ impl SharecliClient {
         let (ws, _) = connect_async(&self.url)
             .await
             .map_err(|e| anyhow!("WS connect to {}: {e}", self.url))?;
-        Ok(SharecliStream { inner: Box::pin(ws) })
+        Ok(SharecliStream {
+            inner: Box::pin(ws),
+        })
     }
 }
 
@@ -132,11 +136,11 @@ impl Stream for SharecliStream {
                 Poll::Ready(None) => return Poll::Ready(None),
                 Poll::Ready(Some(Err(e))) => {
                     return Poll::Ready(Some(Err(anyhow!("WS error: {e}"))))
-                }
+                },
                 Poll::Ready(Some(Ok(msg))) => match msg {
                     Message::Text(text) => {
                         return Poll::Ready(Some(Ok(ClientMessage::from_json(text.as_str()))))
-                    }
+                    },
                     // Skip ping/pong/binary/close frames and continue polling.
                     _ => continue,
                 },
@@ -186,7 +190,7 @@ mod tests {
                 assert_eq!(procs[0].pid, 42);
                 assert_eq!(procs[0].name, "cargo");
                 assert_eq!(procs[0].memory_mb, 128);
-            }
+            },
             other => panic!("expected ProcessSnapshot, got {other:?}"),
         }
     }
@@ -206,18 +210,23 @@ mod tests {
                 assert!(h.pool.healthy);
                 assert_eq!(h.status.scanned, 50);
                 assert_eq!(h.status.watched, 1);
-                let gate_pos = raw.find("\"gate\"").expect("gate key in health_update JSON");
-                let host_pos =
-                    raw.find("\"host_watch\"").expect("host_watch key in health_update JSON");
-                let pool_pos =
-                    raw.find("\"pool\"").expect("pool key in health_update JSON (AC-007.80)");
-                let status_pos =
-                    raw.find("\"status\"").expect("status key in health_update JSON (AC-007.80)");
+                let gate_pos = raw
+                    .find("\"gate\"")
+                    .expect("gate key in health_update JSON");
+                let host_pos = raw
+                    .find("\"host_watch\"")
+                    .expect("host_watch key in health_update JSON");
+                let pool_pos = raw
+                    .find("\"pool\"")
+                    .expect("pool key in health_update JSON (AC-007.80)");
+                let status_pos = raw
+                    .find("\"status\"")
+                    .expect("status key in health_update JSON (AC-007.80)");
                 assert!(
                     gate_pos < host_pos && host_pos < pool_pos && pool_pos < status_pos,
                     "health_update health MUST serialize gate → host_watch → pool → status (AC-007.80); got: {raw}"
                 );
-            }
+            },
             other => panic!("expected HealthUpdate, got {other:?}"),
         }
     }
@@ -238,7 +247,7 @@ mod tests {
             ClientMessage::ThermalEvent { level, message } => {
                 assert_eq!(level, 2);
                 assert_eq!(message, "CPU above 85C");
-            }
+            },
             other => panic!("expected ThermalEvent, got {other:?}"),
         }
     }
@@ -247,7 +256,10 @@ mod tests {
     fn unknown_type_falls_through() {
         let raw = make_unknown_json();
         let msg = ClientMessage::from_json(&raw);
-        assert!(matches!(msg, ClientMessage::Unknown(_)), "unrecognised type must yield Unknown");
+        assert!(
+            matches!(msg, ClientMessage::Unknown(_)),
+            "unrecognised type must yield Unknown"
+        );
     }
 
     #[test]

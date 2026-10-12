@@ -63,15 +63,12 @@ impl RecordingPipeline {
     }
 
     /// Start screen capture to `output_path`.
-    pub async fn start_recording(
-        &self,
-        output_path: &str,
-        profile: QualityProfile,
-    ) -> Result<()> {
+    pub async fn start_recording(&self, output_path: &str, profile: QualityProfile) -> Result<()> {
         self.recorder.start(output_path, profile).await?;
-        let mut guard = self.started_at.lock().map_err(|_| {
-            PhenoError::Internal("RecordingPipeline mutex poisoned".into())
-        })?;
+        let mut guard = self
+            .started_at
+            .lock()
+            .map_err(|_| PhenoError::Internal("RecordingPipeline mutex poisoned".into()))?;
         *guard = Some((Instant::now(), PathBuf::from(output_path)));
         Ok(())
     }
@@ -79,9 +76,10 @@ impl RecordingPipeline {
     /// Stop the active capture and return size / duration metadata when possible.
     pub async fn stop_recording(&self) -> Result<RecordingResult> {
         let meta = {
-            let mut guard = self.started_at.lock().map_err(|_| {
-                PhenoError::Internal("RecordingPipeline mutex poisoned".into())
-            })?;
+            let mut guard = self
+                .started_at
+                .lock()
+                .map_err(|_| PhenoError::Internal("RecordingPipeline mutex poisoned".into()))?;
             guard.take()
         };
 
@@ -112,7 +110,7 @@ impl RecordingPipeline {
                 } else {
                     Err(e)
                 }
-            }
+            },
         }
     }
 

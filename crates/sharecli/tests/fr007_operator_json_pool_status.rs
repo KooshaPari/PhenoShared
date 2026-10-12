@@ -18,8 +18,13 @@ fn bin() -> Command {
 const GATE_MARKER: &str = "=== Thermal Gate (FR-011) ===";
 const WATCH_MARKER: &str = "=== Host Resource Watch ===";
 
-const HOST_WATCH_KEYS: [&str; 5] =
-    ["fd_count", "net_rx_bytes", "net_tx_bytes", "mem_rss_bytes", "load_1m"];
+const HOST_WATCH_KEYS: [&str; 5] = [
+    "fd_count",
+    "net_rx_bytes",
+    "net_tx_bytes",
+    "mem_rss_bytes",
+    "load_1m",
+];
 
 fn assert_pool_object(pool: &serde_json::Value, context: &str) {
     assert!(
@@ -38,14 +43,26 @@ fn assert_status_object(status: &serde_json::Value, context: &str) {
 }
 
 fn assert_gate_host_watch(raw: &str, v: &serde_json::Value, context: &str) {
-    let gate = v.get("gate").expect("{context} MUST include gate (AC-007.77)");
-    let host = v.get("host_watch").expect("{context} MUST include host_watch (AC-007.77)");
-    assert!(gate.get("gate_decision").is_some(), "gate MUST include gate_decision (AC-007.77)");
+    let gate = v
+        .get("gate")
+        .expect("{context} MUST include gate (AC-007.77)");
+    let host = v
+        .get("host_watch")
+        .expect("{context} MUST include host_watch (AC-007.77)");
+    assert!(
+        gate.get("gate_decision").is_some(),
+        "gate MUST include gate_decision (AC-007.77)"
+    );
     for key in HOST_WATCH_KEYS {
-        assert!(host.get(key).is_some(), "host_watch MUST include {key} (AC-007.77); got: {host}");
+        assert!(
+            host.get(key).is_some(),
+            "host_watch MUST include {key} (AC-007.77); got: {host}"
+        );
     }
     let gate_pos = raw.find("\"gate\"").expect("gate key in raw JSON");
-    let host_pos = raw.find("\"host_watch\"").expect("host_watch key in raw JSON");
+    let host_pos = raw
+        .find("\"host_watch\"")
+        .expect("host_watch key in raw JSON");
     assert!(
         gate_pos < host_pos,
         "{context} MUST serialize gate before host_watch (AC-007.77); got: {raw}"
@@ -56,14 +73,24 @@ fn assert_json_gate_host_watch_pool_status_order(raw: &str, context: &str) {
     let v: serde_json::Value =
         serde_json::from_str(raw.trim()).expect("{context} MUST emit valid JSON");
     assert_gate_host_watch(raw, &v, context);
-    let pool = v.get("pool").expect("{context} MUST include pool (AC-007.77)");
-    let status = v.get("status").expect("{context} MUST include status (AC-007.77)");
+    let pool = v
+        .get("pool")
+        .expect("{context} MUST include pool (AC-007.77)");
+    let status = v
+        .get("status")
+        .expect("{context} MUST include status (AC-007.77)");
     assert_pool_object(pool, context);
     assert_status_object(status, context);
 
-    let host_pos = raw.find("\"host_watch\"").expect("host_watch key in raw JSON");
-    let pool_pos = raw.find("\"pool\"").expect("pool key in raw JSON (AC-007.77)");
-    let status_pos = raw.find("\"status\"").expect("status key in raw JSON (AC-007.77)");
+    let host_pos = raw
+        .find("\"host_watch\"")
+        .expect("host_watch key in raw JSON");
+    let pool_pos = raw
+        .find("\"pool\"")
+        .expect("pool key in raw JSON (AC-007.77)");
+    let status_pos = raw
+        .find("\"status\"")
+        .expect("status key in raw JSON (AC-007.77)");
     assert!(
         host_pos < pool_pos && pool_pos < status_pos,
         "{context} MUST serialize gate → host_watch → pool → status (AC-007.77); got: {raw}"
@@ -78,11 +105,17 @@ fn assert_json_gate_host_watch_status_only(raw: &str, context: &str) {
         v.get("node_total").is_some(),
         "{context} top-level MUST include pool panel fields (AC-007.77); got: {v}"
     );
-    let status = v.get("status").expect("{context} MUST include nested status (AC-007.77)");
+    let status = v
+        .get("status")
+        .expect("{context} MUST include nested status (AC-007.77)");
     assert_status_object(status, context);
 
-    let host_pos = raw.find("\"host_watch\"").expect("host_watch key in raw JSON");
-    let status_pos = raw.rfind("\"status\"").expect("status key in raw JSON (AC-007.77)");
+    let host_pos = raw
+        .find("\"host_watch\"")
+        .expect("host_watch key in raw JSON");
+    let status_pos = raw
+        .rfind("\"status\"")
+        .expect("status key in raw JSON (AC-007.77)");
     assert!(
         host_pos < status_pos,
         "{context} MUST serialize host_watch before nested status (AC-007.77); got: {raw}"
@@ -97,11 +130,17 @@ fn assert_json_gate_host_watch_pool_only(raw: &str, context: &str) {
         v.get("total_processes").is_some(),
         "{context} top-level MUST include proc-scan fields (AC-007.77); got: {v}"
     );
-    let pool = v.get("pool").expect("{context} MUST include nested pool (AC-007.77)");
+    let pool = v
+        .get("pool")
+        .expect("{context} MUST include nested pool (AC-007.77)");
     assert_pool_object(pool, context);
 
-    let host_pos = raw.find("\"host_watch\"").expect("host_watch key in raw JSON");
-    let pool_pos = raw.rfind("\"pool\"").expect("pool key in raw JSON (AC-007.77)");
+    let host_pos = raw
+        .find("\"host_watch\"")
+        .expect("host_watch key in raw JSON");
+    let pool_pos = raw
+        .rfind("\"pool\"")
+        .expect("pool key in raw JSON (AC-007.77)");
     assert!(
         host_pos < pool_pos,
         "{context} MUST serialize host_watch before nested pool (AC-007.77); got: {raw}"
@@ -149,7 +188,10 @@ macro_rules! one_shot_json_test {
         #[test]
         #[serial_test::serial]
         fn $name() {
-            let out = bin().args($args).output().expect(concat!("spawn ", stringify!($name)));
+            let out = bin()
+                .args($args)
+                .output()
+                .expect(concat!("spawn ", stringify!($name)));
             assert!(
                 out.status.success(),
                 "{} MUST exit 0; stderr: {:?}",

@@ -234,11 +234,17 @@ pub fn decode(s: &str) -> Result<(String, Vec<u8>, Variant), String> {
     if has_lower && has_upper {
         return Err("mixed case".into());
     }
-    let normalized = if has_upper { s.to_ascii_lowercase() } else { s.to_string() };
+    let normalized = if has_upper {
+        s.to_ascii_lowercase()
+    } else {
+        s.to_string()
+    };
 
     // Find the '1' separator; it must be present and not be the only
     // character (HRP must be non-empty).
-    let sep_pos = normalized.rfind('1').ok_or_else(|| "no '1' separator".to_string())?;
+    let sep_pos = normalized
+        .rfind('1')
+        .ok_or_else(|| "no '1' separator".to_string())?;
     if sep_pos == 0 {
         return Err("empty HRP".into());
     }
@@ -322,7 +328,10 @@ mod tests {
             20, 3, 17, 2, 29, 3, 12, 29, 3, 4, 15, 24, 20, 6, 14, 30, 22,
         ];
         let s = encode("bc", &data, Variant::Bech32m).expect("encode");
-        assert_eq!(s, "bc1pw508d6qejxtdg4y5r3zarvary0c5xw7kw508d6qejxtdg4y5r3zarvary0c5xw7kt5nd6y");
+        assert_eq!(
+            s,
+            "bc1pw508d6qejxtdg4y5r3zarvary0c5xw7kw508d6qejxtdg4y5r3zarvary0c5xw7kt5nd6y"
+        );
     }
 
     // ---------- decode tests (BIP-173 / BIP-350 vectors) ----------

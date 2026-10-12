@@ -42,27 +42,35 @@ impl RigidityCostSummary {
         match rigidity {
             Rigidity::Hard => {
                 self.hard_violations += 1;
-            }
+            },
             Rigidity::Soft => {
                 self.soft_overrides += 1;
-            }
+            },
             Rigidity::Semi(cost) => match cost {
                 RigidityCost::CreditCost(n) => {
                     *self.semi_cost_spent.entry("credit".into()).or_insert(0) += *n;
-                }
+                },
                 RigidityCost::TierBump => {
                     *self.semi_cost_spent.entry("tier_bump".into()).or_insert(0) += 1;
-                }
+                },
                 RigidityCost::StreakRisk => {
-                    *self.semi_cost_spent.entry("streak_risk".into()).or_insert(0) += 1;
-                }
+                    *self
+                        .semi_cost_spent
+                        .entry("streak_risk".into())
+                        .or_insert(0) += 1;
+                },
                 RigidityCost::FrictionDelay(d) => {
-                    *self.semi_cost_spent.entry("friction_delay_sec".into()).or_insert(0) +=
-                        d.as_secs() as i64;
-                }
+                    *self
+                        .semi_cost_spent
+                        .entry("friction_delay_sec".into())
+                        .or_insert(0) += d.as_secs() as i64;
+                },
                 RigidityCost::AccountabilityPing => {
-                    *self.semi_cost_spent.entry("accountability_ping".into()).or_insert(0) += 1;
-                }
+                    *self
+                        .semi_cost_spent
+                        .entry("accountability_ping".into())
+                        .or_insert(0) += 1;
+                },
             },
         }
     }
@@ -83,7 +91,10 @@ pub struct Schedule {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum ScheduleChange {
     /// A previously-running block ran long; its new end is `new_end`.
-    BlockOverran { task_id: Uuid, new_end: DateTime<Utc> },
+    BlockOverran {
+        task_id: Uuid,
+        new_end: DateTime<Utc>,
+    },
     /// A task was cancelled; its placements are freed.
     TaskCancelled(Uuid),
     /// A new calendar event landed on the timeline.
@@ -108,7 +119,13 @@ impl Default for WorkingHoursSpec {
         Self {
             start: NaiveTime::from_hms_opt(9, 0, 0).expect("invariant: 09:00 is valid"),
             end: NaiveTime::from_hms_opt(17, 0, 0).expect("invariant: 17:00 is valid"),
-            days: vec![Weekday::Mon, Weekday::Tue, Weekday::Wed, Weekday::Thu, Weekday::Fri],
+            days: vec![
+                Weekday::Mon,
+                Weekday::Tue,
+                Weekday::Wed,
+                Weekday::Thu,
+                Weekday::Fri,
+            ],
         }
     }
 }
@@ -124,7 +141,9 @@ pub struct Scheduler {
 
 impl Scheduler {
     pub fn new(working_hours_default: WorkingHoursSpec) -> Self {
-        Self { default_working_hours: working_hours_default }
+        Self {
+            default_working_hours: working_hours_default,
+        }
     }
 
     pub async fn plan(
@@ -138,8 +157,11 @@ impl Scheduler {
 
         // 1. Sort tasks by priority-weight * deadline-urgency multiplier, desc.
         //    Tiebreak: earlier created_at wins (deterministic).
-        let mut indexed: Vec<(usize, f64)> =
-            tasks.iter().enumerate().map(|(i, t)| (i, score(t, now, end_horizon))).collect();
+        let mut indexed: Vec<(usize, f64)> = tasks
+            .iter()
+            .enumerate()
+            .map(|(i, t)| (i, score(t, now, end_horizon)))
+            .collect();
         indexed.sort_by(|a, b| {
             b.1.partial_cmp(&a.1)
                 .unwrap_or(std::cmp::Ordering::Equal)
@@ -156,8 +178,10 @@ impl Scheduler {
             let needed = task.duration.planning_duration();
 
             if needed <= Duration::zero() {
-                unplaced
-                    .push((task.id, UnplacedReason::ConstraintViolation("zero duration".into())));
+                unplaced.push((
+                    task.id,
+                    UnplacedReason::ConstraintViolation("zero duration".into()),
+                ));
                 continue;
             }
 
@@ -189,7 +213,10 @@ impl Scheduler {
             let chunk_target = if task.duration.is_fixed() || !task.chunking.allow_split {
                 needed
             } else {
-                task.chunking.ideal_chunk.min(needed).max(task.chunking.min_chunk)
+                task.chunking
+                    .ideal_chunk
+                    .min(needed)
+                    .max(task.chunking.min_chunk)
             };
 
             let mut remaining = needed;
@@ -227,11 +254,11 @@ impl Scheduler {
                         if !task.chunking.allow_split {
                             break;
                         }
-                    }
+                    },
                     SlotResult::HardBlocked => {
                         hard_conflict = true;
                         break;
-                    }
+                    },
                     SlotResult::Exhausted => break,
                 }
             }
@@ -253,7 +280,12 @@ impl Scheduler {
         assignments.sort_by_key(|b| (b.starts_at, b.task_id));
         unplaced.sort_by_key(|(id, _)| *id);
 
-        Ok(Schedule { assignments, unplaced, rigidity_cost, generated_at: now })
+        Ok(Schedule {
+            assignments,
+            unplaced,
+            rigidity_cost,
+            generated_at: now,
+        })
     }
 
     /// Reflow: take existing schedule, apply changes, recompute minimally.
@@ -275,7 +307,7 @@ impl Scheduler {
             match ch {
                 ScheduleChange::BlockOverran { task_id, new_end } => {
                     overrun_until.insert(*task_id, *new_end);
-                }
+                },
                 ScheduleChange::TaskCancelled(id) => cancelled.push(*id),
                 ScheduleChange::NewCalendarEvent(e) => new_events.push(e.clone()),
                 ScheduleChange::NewTask(t) => new_tasks.push(t.clone()),
@@ -291,7 +323,9 @@ impl Scheduler {
                 // Past; pin it unless overrun extends it (still keep — history).
                 return true;
             }
-            !new_events.iter().any(|e| !e.rigidity.is_soft() && b.overlaps(e.starts_at, e.ends_at))
+            !new_events
+                .iter()
+                .any(|e| !e.rigidity.is_soft() && b.overlaps(e.starts_at, e.ends_at))
         });
 
         // Apply overrun: push the affected task's earliest future block.
@@ -347,7 +381,12 @@ impl Scheduler {
 
         let _ = disturbed; // carried forward as an audit hint; not surfaced yet.
 
-        Ok(Schedule { assignments, unplaced, rigidity_cost: rc, generated_at: now })
+        Ok(Schedule {
+            assignments,
+            unplaced,
+            rigidity_cost: rc,
+            generated_at: now,
+        })
     }
 }
 
@@ -370,7 +409,7 @@ fn score(task: &Task, now: DateTime<Utc>, horizon_end: DateTime<Utc>) -> f64 {
                 m *= 1.5;
             }
             m
-        }
+        },
         Some(_) => 1.0,
     };
     base * mult
@@ -378,15 +417,20 @@ fn score(task: &Task, now: DateTime<Utc>, horizon_end: DateTime<Utc>) -> f64 {
 
 fn extract_working_hours(task: &Task) -> Option<WorkingHoursSpec> {
     task.constraints.iter().find_map(|c| match c {
-        Constraint::WorkingHours { start, end, days } => {
-            Some(WorkingHoursSpec { start: *start, end: *end, days: days.clone() })
-        }
+        Constraint::WorkingHours { start, end, days } => Some(WorkingHoursSpec {
+            start: *start,
+            end: *end,
+            days: days.clone(),
+        }),
         _ => None,
     })
 }
 
 enum SlotResult {
-    Found { start: DateTime<Utc>, end: DateTime<Utc> },
+    Found {
+        start: DateTime<Utc>,
+        end: DateTime<Utc>,
+    },
     HardBlocked,
     Exhausted,
 }
@@ -425,7 +469,7 @@ fn find_free_slot(
                     return SlotResult::Exhausted;
                 }
                 continue;
-            }
+            },
         };
         if cursor < wh_start {
             cursor = wh_start;
@@ -440,7 +484,11 @@ fn find_free_slot(
         let prop_end = cursor + want;
 
         // Check placed + task-local blocks for conflict.
-        if placed.iter().chain(task_blocks.iter()).any(|b| b.overlaps(cursor, prop_end)) {
+        if placed
+            .iter()
+            .chain(task_blocks.iter())
+            .any(|b| b.overlaps(cursor, prop_end))
+        {
             // Jump to the end of the offending block.
             let next = placed
                 .iter()
@@ -460,24 +508,36 @@ fn find_free_slot(
                     // Cannot schedule over a Hard event — jump past it.
                     cursor = ev.ends_at;
                     continue;
-                }
+                },
                 Rigidity::Semi(_) => {
                     rc.charge(&ev.rigidity);
-                    return SlotResult::Found { start: cursor, end: prop_end };
-                }
+                    return SlotResult::Found {
+                        start: cursor,
+                        end: prop_end,
+                    };
+                },
                 Rigidity::Soft => {
                     rc.charge(&ev.rigidity);
-                    return SlotResult::Found { start: cursor, end: prop_end };
-                }
+                    return SlotResult::Found {
+                        start: cursor,
+                        end: prop_end,
+                    };
+                },
             }
         }
 
-        return SlotResult::Found { start: cursor, end: prop_end };
+        return SlotResult::Found {
+            start: cursor,
+            end: prop_end,
+        };
     }
 
     // Distinguish HardBlocked vs Exhausted: if ANY hard event entirely covers
     // [cursor, latest] we treat as hard-blocked.
-    if cal.iter().any(|e| e.rigidity.is_hard() && e.starts_at <= cursor && e.ends_at >= latest) {
+    if cal
+        .iter()
+        .any(|e| e.rigidity.is_hard() && e.starts_at <= cursor && e.ends_at >= latest)
+    {
         SlotResult::HardBlocked
     } else {
         SlotResult::Exhausted
@@ -542,7 +602,11 @@ mod tests {
         Task {
             priority: Priority::new(prio),
             chunking: ChunkingPolicy::atomic(),
-            ..Task::new(title, DurationSpec::fixed(Duration::minutes(minutes)), now())
+            ..Task::new(
+                title,
+                DurationSpec::fixed(Duration::minutes(minutes)),
+                now(),
+            )
         }
     }
 
@@ -566,7 +630,10 @@ mod tests {
     async fn single_task_fits_in_empty_window() {
         let s = scheduler();
         let task = mk_task("write", 60, 0.5);
-        let sched = s.plan(&[task.clone()], &[], now(), Duration::hours(8)).await.unwrap();
+        let sched = s
+            .plan(&[task.clone()], &[], now(), Duration::hours(8))
+            .await
+            .unwrap();
         assert_eq!(sched.assignments.len(), 1);
         assert_eq!(sched.assignments[0].task_id, task.id);
         assert!(sched.unplaced.is_empty());
@@ -578,8 +645,10 @@ mod tests {
         let s = scheduler();
         let low = mk_task("low", 60, 0.2);
         let high = mk_task("high", 60, 0.9);
-        let sched =
-            s.plan(&[low.clone(), high.clone()], &[], now(), Duration::hours(8)).await.unwrap();
+        let sched = s
+            .plan(&[low.clone(), high.clone()], &[], now(), Duration::hours(8))
+            .await
+            .unwrap();
         assert_eq!(sched.assignments.len(), 2);
         // Assignments sorted by start time; high should start earliest.
         assert_eq!(sched.assignments[0].task_id, high.id);
@@ -592,7 +661,10 @@ mod tests {
         let task = mk_task("collide", 120, 0.9);
         // Hard event covers the entire 9–5 window.
         let ev = cal_event("court", 0, 8 * 60, Rigidity::Hard);
-        let sched = s.plan(&[task.clone()], &[ev], now(), Duration::hours(8)).await.unwrap();
+        let sched = s
+            .plan(&[task.clone()], &[ev], now(), Duration::hours(8))
+            .await
+            .unwrap();
         // Either unplaced (HardConflict) or placed after the hard block ends —
         // since hard event covers all working hours today, must be unplaced
         // within 8h horizon.
@@ -609,10 +681,21 @@ mod tests {
     async fn semi_event_costs_but_allows_placement() {
         let s = scheduler();
         let task = mk_task("squeeze", 30, 0.8);
-        let ev = cal_event("standup", 0, 30, Rigidity::Semi(RigidityCost::CreditCost(5)));
-        let sched = s.plan(&[task.clone()], &[ev], now(), Duration::hours(8)).await.unwrap();
+        let ev = cal_event(
+            "standup",
+            0,
+            30,
+            Rigidity::Semi(RigidityCost::CreditCost(5)),
+        );
+        let sched = s
+            .plan(&[task.clone()], &[ev], now(), Duration::hours(8))
+            .await
+            .unwrap();
         assert_eq!(sched.assignments.len(), 1);
-        assert_eq!(sched.rigidity_cost.semi_cost_spent.get("credit").copied(), Some(5));
+        assert_eq!(
+            sched.rigidity_cost.semi_cost_spent.get("credit").copied(),
+            Some(5)
+        );
     }
 
     // Traces to: FR-PLAN-002
@@ -633,9 +716,16 @@ mod tests {
                 now(),
             )
         };
-        let sched = s.plan(&[task.clone()], &[], now(), Duration::hours(8)).await.unwrap();
+        let sched = s
+            .plan(&[task.clone()], &[], now(), Duration::hours(8))
+            .await
+            .unwrap();
         // Task duration p90 = 120 min; max chunk 50 → expect >= 2 chunks.
-        let for_task: Vec<_> = sched.assignments.iter().filter(|b| b.task_id == task.id).collect();
+        let for_task: Vec<_> = sched
+            .assignments
+            .iter()
+            .filter(|b| b.task_id == task.id)
+            .collect();
         assert!(for_task.len() >= 2);
         let total: i64 = for_task.iter().map(|b| b.duration().num_minutes()).sum();
         assert_eq!(total, 120);
@@ -650,7 +740,10 @@ mod tests {
             constraints: vec![Constraint::NoEarlierThan(now() + Duration::hours(5))],
             ..mk_task("afternoon", 30, 0.5)
         };
-        let sched = s.plan(&[task.clone()], &[], now(), Duration::hours(10)).await.unwrap();
+        let sched = s
+            .plan(&[task.clone()], &[], now(), Duration::hours(10))
+            .await
+            .unwrap();
         assert_eq!(sched.assignments.len(), 1);
         assert!(sched.assignments[0].starts_at >= now() + Duration::hours(5));
     }
@@ -661,10 +754,16 @@ mod tests {
         let s = scheduler();
         // 10h task in a 4h horizon.
         let task = mk_task("too_big", 600, 0.5);
-        let sched = s.plan(&[task.clone()], &[], now(), Duration::hours(4)).await.unwrap();
+        let sched = s
+            .plan(&[task.clone()], &[], now(), Duration::hours(4))
+            .await
+            .unwrap();
         assert!(sched.assignments.is_empty());
         assert_eq!(sched.unplaced.len(), 1);
-        assert!(matches!(sched.unplaced[0].1, UnplacedReason::InsufficientTime));
+        assert!(matches!(
+            sched.unplaced[0].1,
+            UnplacedReason::InsufficientTime
+        ));
     }
 
     // Traces to: FR-PLAN-002
@@ -673,11 +772,23 @@ mod tests {
         let s = scheduler();
         let id1 = Uuid::new_v4();
         let id2 = Uuid::new_v4();
-        let t1 = Task { id: id1, ..mk_task("a", 60, 0.5) };
-        let t2 = Task { id: id2, ..mk_task("b", 60, 0.5) };
+        let t1 = Task {
+            id: id1,
+            ..mk_task("a", 60, 0.5)
+        };
+        let t2 = Task {
+            id: id2,
+            ..mk_task("b", 60, 0.5)
+        };
         let tasks = vec![t1, t2];
-        let a = s.plan(&tasks, &[], now(), Duration::hours(8)).await.unwrap();
-        let b = s.plan(&tasks, &[], now(), Duration::hours(8)).await.unwrap();
+        let a = s
+            .plan(&tasks, &[], now(), Duration::hours(8))
+            .await
+            .unwrap();
+        let b = s
+            .plan(&tasks, &[], now(), Duration::hours(8))
+            .await
+            .unwrap();
         assert_eq!(a, b);
     }
 
@@ -687,8 +798,10 @@ mod tests {
         let s = scheduler();
         let t1 = mk_task("keep", 60, 0.5);
         let t2 = mk_task("also_keep", 60, 0.5);
-        let sched =
-            s.plan(&[t1.clone(), t2.clone()], &[], now(), Duration::hours(8)).await.unwrap();
+        let sched = s
+            .plan(&[t1.clone(), t2.clone()], &[], now(), Duration::hours(8))
+            .await
+            .unwrap();
         let starts_before: Vec<_> = sched.assignments.iter().map(|b| b.starts_at).collect();
         let reflow = s.reflow(&sched, &[], now()).await.unwrap();
         let starts_after: Vec<_> = reflow.assignments.iter().map(|b| b.starts_at).collect();
@@ -700,9 +813,15 @@ mod tests {
     async fn reflow_handles_new_task_insertion() {
         let s = scheduler();
         let t1 = mk_task("existing", 60, 0.5);
-        let sched = s.plan(&[t1.clone()], &[], now(), Duration::hours(8)).await.unwrap();
+        let sched = s
+            .plan(&[t1.clone()], &[], now(), Duration::hours(8))
+            .await
+            .unwrap();
         let t2 = mk_task("new", 30, 0.9);
-        let reflow = s.reflow(&sched, &[ScheduleChange::NewTask(t2.clone())], now()).await.unwrap();
+        let reflow = s
+            .reflow(&sched, &[ScheduleChange::NewTask(t2.clone())], now())
+            .await
+            .unwrap();
         assert_eq!(reflow.assignments.len(), 2);
         assert!(reflow.assignments.iter().any(|b| b.task_id == t1.id));
         assert!(reflow.assignments.iter().any(|b| b.task_id == t2.id));
@@ -713,10 +832,15 @@ mod tests {
     async fn reflow_drops_cancelled_task() {
         let s = scheduler();
         let t1 = mk_task("gone", 60, 0.5);
-        let sched = s.plan(&[t1.clone()], &[], now(), Duration::hours(8)).await.unwrap();
+        let sched = s
+            .plan(&[t1.clone()], &[], now(), Duration::hours(8))
+            .await
+            .unwrap();
         assert_eq!(sched.assignments.len(), 1);
-        let reflow =
-            s.reflow(&sched, &[ScheduleChange::TaskCancelled(t1.id)], now()).await.unwrap();
+        let reflow = s
+            .reflow(&sched, &[ScheduleChange::TaskCancelled(t1.id)], now())
+            .await
+            .unwrap();
         assert!(reflow.assignments.is_empty());
     }
 
@@ -724,14 +848,22 @@ mod tests {
     #[tokio::test]
     async fn hard_deadline_bumps_urgency_score() {
         let s = scheduler();
-        let no_dl = Task { priority: Priority::new(0.4), ..mk_task("no_dl", 30, 0.4) };
+        let no_dl = Task {
+            priority: Priority::new(0.4),
+            ..mk_task("no_dl", 30, 0.4)
+        };
         let hard_dl = Task {
             priority: Priority::new(0.4),
             deadline: Deadline::hard(now() + Duration::hours(1)),
             ..mk_task("urgent", 30, 0.4)
         };
         let sched = s
-            .plan(&[no_dl.clone(), hard_dl.clone()], &[], now(), Duration::hours(8))
+            .plan(
+                &[no_dl.clone(), hard_dl.clone()],
+                &[],
+                now(),
+                Duration::hours(8),
+            )
             .await
             .unwrap();
         // Hard-deadline task should be scheduled first.
@@ -777,7 +909,10 @@ mod tests {
     async fn zero_windows_no_placement() {
         let s = scheduler();
         let task = mk_task("nofit", 60, 0.5);
-        let sched = s.plan(&[task.clone()], &[], now(), Duration::zero()).await.unwrap();
+        let sched = s
+            .plan(&[task.clone()], &[], now(), Duration::zero())
+            .await
+            .unwrap();
         assert!(sched.assignments.is_empty());
         assert_eq!(sched.unplaced.len(), 1);
     }
@@ -793,7 +928,10 @@ mod tests {
         ta.created_at = now() - Duration::hours(1);
         tb.created_at = now();
         // When priorities tie, the earlier-created task should be scheduled first
-        let sched = s.plan(&[tb.clone(), ta.clone()], &[], now(), Duration::hours(8)).await.unwrap();
+        let sched = s
+            .plan(&[tb.clone(), ta.clone()], &[], now(), Duration::hours(8))
+            .await
+            .unwrap();
         // ta should start first due to older created_at
         assert_eq!(sched.assignments[0].task_id, ta.id);
     }
@@ -805,7 +943,10 @@ mod tests {
         let task = mk_task("override_soft", 60, 0.8);
         // Soft event covers part of working hours
         let ev = cal_event("meeting", 0, 120, Rigidity::Soft);
-        let sched = s.plan(&[task.clone()], &[ev], now(), Duration::hours(8)).await.unwrap();
+        let sched = s
+            .plan(&[task.clone()], &[ev], now(), Duration::hours(8))
+            .await
+            .unwrap();
         // Task should be placed despite soft conflict
         assert_eq!(sched.assignments.len(), 1);
         assert_eq!(sched.rigidity_cost.soft_overrides, 1);
@@ -823,14 +964,17 @@ mod tests {
                 max_chunk: Duration::minutes(30),
                 ideal_chunk: Duration::minutes(25),
             },
-            ..Task::new(
-                "chunked",
-                DurationSpec::fixed(Duration::minutes(80)),
-                now(),
-            )
+            ..Task::new("chunked", DurationSpec::fixed(Duration::minutes(80)), now())
         };
-        let sched = s.plan(&[task.clone()], &[], now(), Duration::hours(8)).await.unwrap();
-        let chunks: Vec<_> = sched.assignments.iter().filter(|b| b.task_id == task.id).collect();
+        let sched = s
+            .plan(&[task.clone()], &[], now(), Duration::hours(8))
+            .await
+            .unwrap();
+        let chunks: Vec<_> = sched
+            .assignments
+            .iter()
+            .filter(|b| b.task_id == task.id)
+            .collect();
         assert!(chunks.len() >= 3); // 80 min / 30 max = 3+ chunks
         for chunk in &chunks {
             let dur = chunk.duration();
@@ -854,7 +998,12 @@ mod tests {
             ..mk_task("late", 30, 0.5)
         };
         let sched = s
-            .plan(&[late_dl.clone(), early_dl.clone()], &[], now(), Duration::hours(8))
+            .plan(
+                &[late_dl.clone(), early_dl.clone()],
+                &[],
+                now(),
+                Duration::hours(8),
+            )
             .await
             .unwrap();
         // Earlier deadline should be scheduled first (higher urgency)
@@ -870,14 +1019,17 @@ mod tests {
             priority: Priority::new(0.9),
             deadline: Deadline::hard(now() + Duration::hours(8)),
             chunking: ChunkingPolicy::atomic(),
-            ..Task::new(
-                "atomic",
-                DurationSpec::fixed(Duration::minutes(90)),
-                now(),
-            )
+            ..Task::new("atomic", DurationSpec::fixed(Duration::minutes(90)), now())
         };
-        let sched = s.plan(&[task.clone()], &[], now(), Duration::hours(8)).await.unwrap();
-        let task_blocks: Vec<_> = sched.assignments.iter().filter(|b| b.task_id == task.id).collect();
+        let sched = s
+            .plan(&[task.clone()], &[], now(), Duration::hours(8))
+            .await
+            .unwrap();
+        let task_blocks: Vec<_> = sched
+            .assignments
+            .iter()
+            .filter(|b| b.task_id == task.id)
+            .collect();
         // Since allow_split = false, should be 0 or 1 block, not multiple
         assert!(task_blocks.len() <= 1);
     }
@@ -889,7 +1041,10 @@ mod tests {
         // 10-hour task but only 1-hour working window per day
         let big_task = mk_task("giant", 600, 0.9);
         // Single day with just 1 hour available (9–10)
-        let sched = s.plan(&[big_task.clone()], &[], now(), Duration::hours(1)).await.unwrap();
+        let sched = s
+            .plan(&[big_task.clone()], &[], now(), Duration::hours(1))
+            .await
+            .unwrap();
         assert!(sched.assignments.is_empty());
         assert_eq!(sched.unplaced.len(), 1);
     }
@@ -902,7 +1057,10 @@ mod tests {
             constraints: vec![Constraint::NoEarlierThan(now() + Duration::hours(6))],
             ..mk_task("afternoon_only", 30, 0.5)
         };
-        let sched = s.plan(&[constrained.clone()], &[], now(), Duration::hours(10)).await.unwrap();
+        let sched = s
+            .plan(&[constrained.clone()], &[], now(), Duration::hours(10))
+            .await
+            .unwrap();
         assert_eq!(sched.assignments.len(), 1);
         assert!(sched.assignments[0].starts_at >= now() + Duration::hours(6));
     }
@@ -915,7 +1073,10 @@ mod tests {
             constraints: vec![Constraint::NoLaterThan(now() + Duration::hours(4))],
             ..mk_task("early_only", 30, 0.5)
         };
-        let sched = s.plan(&[constrained.clone()], &[], now(), Duration::hours(10)).await.unwrap();
+        let sched = s
+            .plan(&[constrained.clone()], &[], now(), Duration::hours(10))
+            .await
+            .unwrap();
         assert_eq!(sched.assignments.len(), 1);
         assert!(sched.assignments[0].ends_at <= now() + Duration::hours(4));
     }
@@ -931,7 +1092,10 @@ mod tests {
             constraints: vec![Constraint::NoLaterThan(now() + Duration::hours(2))],
             ..mk_task("impossible", 180, 0.9)
         };
-        let sched = s.plan(&[tight.clone()], &[], now(), Duration::hours(8)).await.unwrap();
+        let sched = s
+            .plan(&[tight.clone()], &[], now(), Duration::hours(8))
+            .await
+            .unwrap();
         assert!(sched.assignments.is_empty());
         assert_eq!(sched.unplaced.len(), 1);
     }
@@ -941,11 +1105,17 @@ mod tests {
     async fn reflow_applies_block_overrun() {
         let s = scheduler();
         let t1 = mk_task("run_long", 60, 0.5);
-        let sched = s.plan(&[t1.clone()], &[], now(), Duration::hours(8)).await.unwrap();
+        let sched = s
+            .plan(&[t1.clone()], &[], now(), Duration::hours(8))
+            .await
+            .unwrap();
         assert_eq!(sched.assignments.len(), 1);
         let original_end = sched.assignments[0].ends_at;
         let new_end = original_end + Duration::minutes(30);
-        let overrun = ScheduleChange::BlockOverran { task_id: t1.id, new_end };
+        let overrun = ScheduleChange::BlockOverran {
+            task_id: t1.id,
+            new_end,
+        };
         let reflow = s.reflow(&sched, &[overrun], now()).await.unwrap();
         // Block should be extended
         assert_eq!(reflow.assignments.len(), 1);
@@ -957,12 +1127,21 @@ mod tests {
     async fn reflow_handles_new_calendar_event_blocking() {
         let s = scheduler();
         let t1 = mk_task("scheduled", 60, 0.5);
-        let sched = s.plan(&[t1.clone()], &[], now(), Duration::hours(8)).await.unwrap();
+        let sched = s
+            .plan(&[t1.clone()], &[], now(), Duration::hours(8))
+            .await
+            .unwrap();
         let orig_count = sched.assignments.len();
         // Add a new hard calendar event that overlaps the task
         let hard_event = cal_event("blocking_meeting", 0, 120, Rigidity::Hard);
-        let reflow =
-            s.reflow(&sched, &[ScheduleChange::NewCalendarEvent(hard_event)], now()).await.unwrap();
+        let reflow = s
+            .reflow(
+                &sched,
+                &[ScheduleChange::NewCalendarEvent(hard_event)],
+                now(),
+            )
+            .await
+            .unwrap();
         // Should have fewer or same assignments (depends on overlap timing)
         assert!(reflow.assignments.len() <= orig_count);
     }
@@ -971,11 +1150,23 @@ mod tests {
     #[tokio::test]
     async fn multiple_tasks_priority_ordering() {
         let s = scheduler();
-        let low1 = Task { priority: Priority::new(0.2), ..mk_task("low1", 30, 0.2) };
-        let med = Task { priority: Priority::new(0.5), ..mk_task("med", 30, 0.5) };
-        let high = Task { priority: Priority::new(0.9), ..mk_task("high", 30, 0.9) };
+        let low1 = Task {
+            priority: Priority::new(0.2),
+            ..mk_task("low1", 30, 0.2)
+        };
+        let med = Task {
+            priority: Priority::new(0.5),
+            ..mk_task("med", 30, 0.5)
+        };
+        let high = Task {
+            priority: Priority::new(0.9),
+            ..mk_task("high", 30, 0.9)
+        };
         let tasks = vec![low1.clone(), high.clone(), med.clone()];
-        let sched = s.plan(&tasks, &[], now(), Duration::hours(8)).await.unwrap();
+        let sched = s
+            .plan(&tasks, &[], now(), Duration::hours(8))
+            .await
+            .unwrap();
         // Should schedule all three
         assert_eq!(sched.assignments.len(), 3);
         // High priority should start earliest

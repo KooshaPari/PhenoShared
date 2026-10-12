@@ -31,7 +31,7 @@ sharecli-fleet = { path = "../sharecli-fleet" }
 sharecli-session = { path = "../sharecli-session" }
 
 # IPC server (bin only)
-sharecli = { path = "../../" }
+sharecli = { path = "../sharecli" }
 tokio = { version = "1", features = ["full"] }
 tracing-subscriber = { version = "0.3", features = ["env-filter"] }
 tracing = "0.1"

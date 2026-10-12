@@ -33,6 +33,10 @@ impl Verbosity {
     /// - (default)         → INFO
     /// - `-v`              → DEBUG
     /// - `-vv` (or more)   → TRACE
+    // PHE-CLE-001: clippy::wrong_self_convention on `to_*` with `&self` (Copy type).
+    // Public API used by 60+ external CLIs (worktree-manager, agile-plus, tokn-tokenledger);
+    // keep name + signature stable.
+    #[allow(clippy::wrong_self_convention)]
     pub fn to_filter(&self) -> tracing_subscriber::filter::LevelFilter {
         match (self.verbose, self.quiet) {
             (_, true) => tracing_subscriber::filter::LevelFilter::ERROR,

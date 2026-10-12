@@ -78,7 +78,13 @@ pub fn launch_inspector(server_url: &str) -> Result<PathBuf> {
             || path.to_string_lossy().ends_with(".app")
         {
             Command::new("open")
-                .args(["-a", path.to_str().unwrap_or(""), "--args", "--remote-server-url", url])
+                .args([
+                    "-a",
+                    path.to_str().unwrap_or(""),
+                    "--args",
+                    "--remote-server-url",
+                    url,
+                ])
                 .stdout(Stdio::null())
                 .stderr(Stdio::null())
                 .spawn()
@@ -159,7 +165,7 @@ fn proxy_status(server_url: &str) -> (u16, String) {
             let code = resp.status();
             let body = resp.into_string().unwrap_or_default();
             (code, body)
-        }
+        },
         Err(e) => (502, format!("proxy error: {e}")),
     }
 }
@@ -174,13 +180,9 @@ fn http_response(status: u16, content_type: &str, body: &str) -> String {
 /// Serve the local Appium desktop dashboard (blocking). Returns bind address.
 pub fn serve_dashboard(server_url: &str) -> Result<String> {
     let bind = default_bind();
-    let listener = TcpListener::bind(&bind).map_err(|e| {
-        desktop_unavailable("serve_dashboard", format!("bind {bind}: {e}"))
-    })?;
-    let addr = listener
-        .local_addr()
-        .map(|a| a.to_string())
-        .unwrap_or(bind);
+    let listener = TcpListener::bind(&bind)
+        .map_err(|e| desktop_unavailable("serve_dashboard", format!("bind {bind}: {e}")))?;
+    let addr = listener.local_addr().map(|a| a.to_string()).unwrap_or(bind);
     let server = server_url.trim_end_matches('/').to_string();
     log::info!("Appium desktop dashboard at http://{addr} (upstream {server})");
 
@@ -204,7 +206,10 @@ fn handle_client(mut stream: std::net::TcpStream, server: &str) -> std::io::Resu
     let resp = if line.starts_with("GET /proxy/status") {
         let (code, body) = proxy_status(server);
         http_response(code, "application/json; charset=utf-8", &body)
-    } else if line.starts_with("GET / ") || line.starts_with("GET /HTTP") || line.starts_with("GET /?") {
+    } else if line.starts_with("GET / ")
+        || line.starts_with("GET /HTTP")
+        || line.starts_with("GET /?")
+    {
         http_response(200, "text/html; charset=utf-8", &dashboard_html(server))
     } else if line.starts_with("GET /") {
         http_response(200, "text/html; charset=utf-8", &dashboard_html(server))
@@ -234,7 +239,7 @@ pub fn run() -> Result<(String, Option<PathBuf>)> {
         Err(e) => {
             log::warn!("{e}");
             None
-        }
+        },
     };
     if inspector.is_none() && !probe.tools_present() {
         // Dashboard is up; still warn loudly that no Appium endpoint was discovered.
@@ -276,7 +281,7 @@ mod tests {
         if resolve_inspector().is_none() {
             let err = launch_inspector("http://127.0.0.1:4723").unwrap_err();
             assert_eq!(
-                err.unsupported_code(),
+                err.unsupported_code_value(),
                 Some(codes::MOBILE_APPIUM_UNAVAILABLE)
             );
         }

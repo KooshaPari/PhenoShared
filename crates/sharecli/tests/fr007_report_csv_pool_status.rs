@@ -92,7 +92,10 @@ fn fr007_report_render_csv_body() {
     let gate = gate_status_snapshot(ThermalLevel::Green, 0);
     let report = build_report(&[], &gate, &SortBy::Memory);
     let csv = render_report_csv_body(&report);
-    assert!(csv.contains(SUMMARY_CSV_HEADER), "CSV body MUST include summary header; got: {csv}");
+    assert!(
+        csv.contains(SUMMARY_CSV_HEADER),
+        "CSV body MUST include summary header; got: {csv}"
+    );
     assert!(
         csv.lines().any(|line| line.starts_with("summary,")),
         "CSV body MUST include summary row; got: {csv}"
@@ -107,7 +110,11 @@ fn fr007_report_csv_pool_status_companion() {
         .args(["report", "--format", "csv"])
         .output()
         .expect("spawn sharecli report --format csv");
-    assert!(out.status.success(), "report --format csv MUST exit 0; stderr: {:?}", out.stderr);
+    assert!(
+        out.status.success(),
+        "report --format csv MUST exit 0; stderr: {:?}",
+        out.stderr
+    );
     let s = String::from_utf8_lossy(&out.stdout);
     assert_report_body_precedes_companions(&s, "report --format csv");
     assert_csv_pool_status_companion_order(&s, "report --format csv");
@@ -127,8 +134,12 @@ fn fr007_report_csv_companion_helpers_match_proc_shapes() {
     .format_csv_companion();
     assert!(pool_csv.contains(POOL_CSV_HEADER));
 
-    let status_csv =
-        StatusOperatorPanel { scanned: 1, watched: 0, total_processes: 3, agent_rows: 0 }
-            .format_csv_companion();
+    let status_csv = StatusOperatorPanel {
+        scanned: 1,
+        watched: 0,
+        total_processes: 3,
+        agent_rows: 0,
+    }
+    .format_csv_companion();
     assert!(status_csv.contains(STATUS_CSV_HEADER));
 }

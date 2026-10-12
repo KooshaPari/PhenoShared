@@ -8,8 +8,8 @@
 use eidolon_core::error::PhenoError;
 use eidolon_sandbox::codes;
 use eidolon_sandbox::unikernel_pack::{
-    self, build_canned_rootfs, HermeticPackBuilder, PackMethod, PackRequest, PackageManifest,
-    CannedMode, CannedRootfsRequest, CANNED_TREE_MANIFEST, MANIFEST_FILENAME, PACK_INTEGRATION_ENV,
+    self, build_canned_rootfs, CannedMode, CannedRootfsRequest, HermeticPackBuilder, PackMethod,
+    PackRequest, PackageManifest, CANNED_TREE_MANIFEST, MANIFEST_FILENAME, PACK_INTEGRATION_ENV,
 };
 use eidolon_sandbox::{LaunchPlan, RootfsFormat, UnikernelBackend, UnikernelLaunchConfig};
 use std::fs;
@@ -46,14 +46,13 @@ fn temp_dir(name: &str) -> PathBuf {
 }
 
 fn assert_code(err: PhenoError, expected: &str) {
-    assert_eq!(err.unsupported_code(), Some(expected));
+    assert_eq!(err.unsupported_code_value(), Some(expected));
     assert_eq!(err.status_code(), 501);
 }
 
 fn durable_temp_dir(name: &str) -> PathBuf {
     // Canned API rejects /tmp — use workspace target/.
-    let root = PathBuf::from(env!("CARGO_MANIFEST_DIR"))
-        .join("../../target/canned-rootfs-it");
+    let root = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../target/canned-rootfs-it");
     let path = root.join(format!(
         "{}-{}-{}",
         name,
@@ -116,8 +115,8 @@ fn canned_pack_ext4_gated_without_integration() {
     )
     .unwrap_err();
     assert!(
-        err.unsupported_code() == Some(codes::SANDBOX_ROOTFS_PACK_STUB)
-            || err.unsupported_code() == Some(codes::SANDBOX_ROOTFS_PACK_TOOL_MISSING),
+        err.unsupported_code_value() == Some(codes::SANDBOX_ROOTFS_PACK_STUB)
+            || err.unsupported_code_value() == Some(codes::SANDBOX_ROOTFS_PACK_TOOL_MISSING),
         "expected gated pack, got {err:?}"
     );
 
@@ -143,24 +142,24 @@ fn hermetic_pack_stages_and_feeds_launch_plan() {
     let rootfs_cfg = manifest.to_rootfs_config().unwrap();
     let kernel_cfg = manifest.to_kernel_config().unwrap().unwrap();
 
-    let cfg = UnikernelLaunchConfig::try_new(
-        "pack-plan",
-        UnikernelBackend::Firecracker,
-        rootfs_cfg,
-    )
-    .unwrap()
-    .with_kernel(kernel_cfg)
-    .unwrap();
+    let cfg =
+        UnikernelLaunchConfig::try_new("pack-plan", UnikernelBackend::Firecracker, rootfs_cfg)
+            .unwrap()
+            .with_kernel(kernel_cfg)
+            .unwrap();
 
     match LaunchPlan::try_from_config(&cfg) {
         Ok(plan) => {
             assert_eq!(plan.rootfs, manifest.rootfs);
             assert_eq!(plan.rootfs_format, RootfsFormat::Ext4);
-        }
+        },
         Err(err) => {
             // Host without firecracker: fail-loud stub, not silent Ok.
-            assert_eq!(err.unsupported_code(), Some(codes::SANDBOX_UNIKERNEL_STUB));
-        }
+            assert_eq!(
+                err.unsupported_code_value(),
+                Some(codes::SANDBOX_UNIKERNEL_STUB)
+            );
+        },
     }
 
     let loaded = PackageManifest::read_from(&staging.join(MANIFEST_FILENAME)).unwrap();
@@ -193,10 +192,10 @@ fn live_mkfs_without_env_fail_loud() {
     )
     .unwrap_err();
     assert!(
-        err.unsupported_code() == Some(codes::SANDBOX_ROOTFS_PACK_STUB)
-            || err.unsupported_code() == Some(codes::SANDBOX_ROOTFS_PACK_TOOL_MISSING),
+        err.unsupported_code_value() == Some(codes::SANDBOX_ROOTFS_PACK_STUB)
+            || err.unsupported_code_value() == Some(codes::SANDBOX_ROOTFS_PACK_TOOL_MISSING),
         "unexpected code {:?}",
-        err.unsupported_code()
+        err.unsupported_code_value()
     );
     let _ = fs::remove_file(&rootfs);
 }
@@ -221,7 +220,10 @@ fn documented_pack_codes_stable() {
         codes::SANDBOX_ROOTFS_PACK_TOOL_MISSING,
         "EIDOLON_SANDBOX_ROOTFS_PACK_TOOL_MISSING"
     );
-    assert_eq!(codes::SANDBOX_ROOTFS_PACK_IO, "EIDOLON_SANDBOX_ROOTFS_PACK_IO");
+    assert_eq!(
+        codes::SANDBOX_ROOTFS_PACK_IO,
+        "EIDOLON_SANDBOX_ROOTFS_PACK_IO"
+    );
     assert_eq!(
         codes::SANDBOX_VSOCK_AGENT_MISSING,
         "EIDOLON_SANDBOX_VSOCK_AGENT_MISSING"
@@ -241,9 +243,7 @@ mod feature_tests {
         let _g = ENV_LOCK.lock().unwrap();
         let rootfs = temp_file("cksum-it");
         let manifest = HermeticPackBuilder::new()
-            .build(
-                &PackRequest::hermetic(&rootfs, RootfsFormat::Ext4).with_checksum(true),
-            )
+            .build(&PackRequest::hermetic(&rootfs, RootfsFormat::Ext4).with_checksum(true))
             .expect("checksum");
         let ck = manifest.rootfs_checksum.expect("sha256");
         assert_eq!(ck.algorithm, ChecksumAlgorithm::Sha256);
@@ -260,10 +260,10 @@ mod feature_tests {
         )
         .unwrap_err();
         assert_eq!(
-            live_err.unsupported_code(),
+            live_err.unsupported_code_value(),
             Some(codes::SANDBOX_ROOTFS_PACK_TOOL_MISSING),
             "expected TOOL_MISSING, got {:?}",
-            live_err.unsupported_code()
+            live_err.unsupported_code_value()
         );
         std::env::remove_var(PACK_INTEGRATION_ENV);
         std::env::remove_var(VIRT_MAKE_FS_PATH_ENV);
@@ -304,14 +304,15 @@ mod feature_tests {
                     assert_eq!(m.pack_method, PackMethod::VirtMakeFs);
                     assert!(m.rootfs.is_file());
                     let _ = m.to_rootfs_config().expect("LaunchPlan-ready rootfs");
-                }
+                },
                 Err(err) => {
                     assert!(
-                        err.unsupported_code() == Some(codes::SANDBOX_ROOTFS_PACK_TOOL_MISSING)
+                        err.unsupported_code_value()
+                            == Some(codes::SANDBOX_ROOTFS_PACK_TOOL_MISSING)
                             || err.to_string().contains(codes::SANDBOX_ROOTFS_PACK_IO),
                         "unexpected live virt-make-fs error: {err:?}"
                     );
-                }
+                },
             }
         }
 
@@ -327,15 +328,15 @@ mod feature_tests {
                 Ok(m) => {
                     assert_eq!(m.pack_method, PackMethod::MkfsExt4);
                     assert!(m.rootfs.is_file());
-                }
+                },
                 Err(err) => {
                     assert!(
                         err.to_string().contains(codes::SANDBOX_ROOTFS_PACK_IO)
-                            || err.unsupported_code()
+                            || err.unsupported_code_value()
                                 == Some(codes::SANDBOX_ROOTFS_PACK_TOOL_MISSING),
                         "unexpected live mkfs error: {err:?}"
                     );
-                }
+                },
             }
             let _ = fs::remove_dir_all(&mkfs_stage);
         }
@@ -356,15 +357,15 @@ mod feature_tests {
                     assert_eq!(m.rootfs_format, "raw", "tar must stay Raw");
                     assert!(m.rootfs.is_file());
                     let _ = m.to_rootfs_config().expect("tar rootfs path");
-                }
+                },
                 Err(err) => {
                     assert!(
                         err.to_string().contains(codes::SANDBOX_ROOTFS_PACK_IO)
-                            || err.unsupported_code()
+                            || err.unsupported_code_value()
                                 == Some(codes::SANDBOX_ROOTFS_PACK_TOOL_MISSING),
                         "unexpected live docker export error: {err:?}"
                     );
-                }
+                },
             }
             let _ = fs::remove_dir_all(&docker_stage);
         }
@@ -386,15 +387,15 @@ mod feature_tests {
                     assert!(m.rootfs.is_file());
                     let cfg = m.to_rootfs_config().expect("LaunchPlan-ready Ext4 disk");
                     assert_eq!(cfg.format, RootfsFormat::Ext4);
-                }
+                },
                 Err(err) => {
                     assert!(
                         err.to_string().contains(codes::SANDBOX_ROOTFS_PACK_IO)
-                            || err.unsupported_code()
+                            || err.unsupported_code_value()
                                 == Some(codes::SANDBOX_ROOTFS_PACK_TOOL_MISSING),
                         "unexpected live docker_to_ext4 error: {err:?}"
                     );
-                }
+                },
             }
             let _ = fs::remove_dir_all(&compose_stage);
         }
@@ -408,7 +409,7 @@ mod feature_tests {
             )
             .unwrap_err();
             assert_eq!(
-                err.unsupported_code(),
+                err.unsupported_code_value(),
                 Some(codes::SANDBOX_ROOTFS_PACK_TOOL_MISSING)
             );
         }
@@ -451,7 +452,7 @@ mod feature_tests {
         )
         .unwrap_err();
         assert_eq!(
-            err.unsupported_code(),
+            err.unsupported_code_value(),
             Some(codes::SANDBOX_ROOTFS_PACK_TOOL_MISSING),
             "must fail-loud when mkfs missing even if docker resolves"
         );
@@ -488,16 +489,17 @@ mod feature_tests {
                 let img = result.rootfs_img.expect("ext4 img");
                 assert!(img.is_file());
                 assert_eq!(result.manifest.rootfs_format, "ext4");
-            }
+            },
             Err(e) => {
                 // Live tools can still fail (permissions, etc.) — never silent Ok without img.
                 assert!(
-                    e.unsupported_code() == Some(codes::SANDBOX_ROOTFS_PACK_IO)
-                        || e.unsupported_code() == Some(codes::SANDBOX_ROOTFS_PACK_TOOL_MISSING)
+                    e.unsupported_code_value() == Some(codes::SANDBOX_ROOTFS_PACK_IO)
+                        || e.unsupported_code_value()
+                            == Some(codes::SANDBOX_ROOTFS_PACK_TOOL_MISSING)
                         || matches!(e, PhenoError::Internal(_)),
                     "unexpected live canned failure: {e:?}"
                 );
-            }
+            },
         }
 
         let _ = fs::remove_dir_all(&out);

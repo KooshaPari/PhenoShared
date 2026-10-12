@@ -61,7 +61,9 @@ pub fn parse(input: &[u8], has_iv: bool, icv_len: usize) -> Result<EspPacket, St
     };
 
     // Total fixed tail = pad_len (1) + next_header (1) + icv.
-    let tail_len = 2usize.checked_add(icv_len).ok_or_else(|| "icv_len overflow".to_string())?;
+    let tail_len = 2usize
+        .checked_add(icv_len)
+        .ok_or_else(|| "icv_len overflow".to_string())?;
     if input.len() < offset + tail_len {
         return Err(format!(
             "packet too short for ESP trailer+ICV: need {} more bytes, have {}",
@@ -83,7 +85,10 @@ pub fn parse(input: &[u8], has_iv: bool, icv_len: usize) -> Result<EspPacket, St
         .checked_sub(pad_len as usize)
         .ok_or_else(|| format!("pad_len {} exceeds available bytes", pad_len))?;
     if padding_start < offset {
-        return Err(format!("pad_len {} exceeds available ciphertext region", pad_len));
+        return Err(format!(
+            "pad_len {} exceeds available ciphertext region",
+            pad_len
+        ));
     }
 
     let ciphertext = input[offset..padding_start].to_vec();
@@ -135,16 +140,16 @@ mod tests {
         v.extend(std::iter::repeat(0u8).take(pad_len as usize));
         v.push(pad_len);
         v.push(next_header);
-        v.extend(std::iter::repeat(0xCC).take(icv_len));
+        v.extend(std::iter::repeat(0xcc).take(icv_len));
         v
     }
 
     #[test]
     fn minimal_no_padding_no_icv() {
         // SPI=0xC0FFEE01, Seq=42, payload "abc", no padding, NH=IPPROTO_NONE(59), no ICV
-        let bytes = build(0xC0FFEE01, 42, b"abc", 0, 59, 0);
+        let bytes = build(0xc0ffee01, 42, b"abc", 0, 59, 0);
         let pkt = parse(&bytes, false, 0).unwrap();
-        assert_eq!(pkt.spi, 0xC0FFEE01);
+        assert_eq!(pkt.spi, 0xc0ffee01);
         assert_eq!(pkt.seq, 42);
         assert_eq!(pkt.ciphertext, b"abc");
         assert_eq!(pkt.pad_len, 0);
@@ -161,15 +166,15 @@ mod tests {
         assert_eq!(pkt.pad_len, 4);
         assert_eq!(pkt.next_header, 6); // IPPROTO_TCP
         assert_eq!(pkt.icv.len(), 12);
-        assert!(pkt.icv.iter().all(|&b| b == 0xCC));
+        assert!(pkt.icv.iter().all(|&b| b == 0xcc));
     }
 
     #[test]
     fn spi_seq_extraction() {
         // Verify SPI and Sequence Number are read as big-endian u32.
-        let bytes = build(0xDEADBEEF, 0x01020304, b"x", 0, 4, 0);
+        let bytes = build(0xdeadbeef, 0x01020304, b"x", 0, 4, 0);
         let pkt = parse(&bytes, false, 0).unwrap();
-        assert_eq!(pkt.spi, 0xDEADBEEF);
+        assert_eq!(pkt.spi, 0xdeadbeef);
         assert_eq!(pkt.seq, 0x01020304);
     }
 
@@ -214,7 +219,7 @@ mod tests {
         let mut bytes = Vec::new();
         bytes.extend_from_slice(&1u32.to_be_bytes());
         bytes.extend_from_slice(&2u32.to_be_bytes());
-        bytes.push(0xAA); // one byte of "payload"
+        bytes.push(0xaa); // one byte of "payload"
         bytes.push(100); // pad_len = 100 (impossible)
         bytes.push(59); // next_header
         let err = parse(&bytes, false, 0).unwrap_err();
@@ -224,13 +229,13 @@ mod tests {
     #[test]
     fn encode_decode_round_trip() {
         let original = EspPacket {
-            spi: 0xCAFEBABE,
+            spi: 0xcafebabe,
             seq: 12345,
             iv: vec![],
             ciphertext: b"encrypted-payload".to_vec(),
             pad_len: 3,
             next_header: 6,
-            icv: vec![0xAA; 12],
+            icv: vec![0xaa; 12],
         };
         let bytes = encode(&original);
         let parsed = parse(&bytes, false, 12).unwrap();

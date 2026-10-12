@@ -12,10 +12,26 @@ pub struct Vec3 {
 }
 
 impl Vec3 {
-    pub const ZERO: Vec3 = Vec3 { x: 0.0, y: 0.0, z: 0.0 };
-    pub const X_AXIS: Vec3 = Vec3 { x: 1.0, y: 0.0, z: 0.0 };
-    pub const Y_AXIS: Vec3 = Vec3 { x: 0.0, y: 1.0, z: 0.0 };
-    pub const Z_AXIS: Vec3 = Vec3 { x: 0.0, y: 0.0, z: 1.0 };
+    pub const ZERO: Vec3 = Vec3 {
+        x: 0.0,
+        y: 0.0,
+        z: 0.0,
+    };
+    pub const X_AXIS: Vec3 = Vec3 {
+        x: 1.0,
+        y: 0.0,
+        z: 0.0,
+    };
+    pub const Y_AXIS: Vec3 = Vec3 {
+        x: 0.0,
+        y: 1.0,
+        z: 0.0,
+    };
+    pub const Z_AXIS: Vec3 = Vec3 {
+        x: 0.0,
+        y: 0.0,
+        z: 1.0,
+    };
 
     pub const fn new(x: f64, y: f64, z: f64) -> Self {
         Vec3 { x, y, z }
@@ -26,24 +42,44 @@ impl Vec3 {
     }
 
     pub fn add(self, o: Self) -> Self {
-        Vec3 { x: self.x + o.x, y: self.y + o.y, z: self.z + o.z }
+        Vec3 {
+            x: self.x + o.x,
+            y: self.y + o.y,
+            z: self.z + o.z,
+        }
     }
 
     pub fn sub(self, o: Self) -> Self {
-        Vec3 { x: self.x - o.x, y: self.y - o.y, z: self.z - o.z }
+        Vec3 {
+            x: self.x - o.x,
+            y: self.y - o.y,
+            z: self.z - o.z,
+        }
     }
 
     pub fn scale(self, s: f64) -> Self {
-        Vec3 { x: self.x * s, y: self.y * s, z: self.z * s }
+        Vec3 {
+            x: self.x * s,
+            y: self.y * s,
+            z: self.z * s,
+        }
     }
 
     /// Component-wise multiplication.
     pub fn mul(self, o: Self) -> Self {
-        Vec3 { x: self.x * o.x, y: self.y * o.y, z: self.z * o.z }
+        Vec3 {
+            x: self.x * o.x,
+            y: self.y * o.y,
+            z: self.z * o.z,
+        }
     }
 
     pub fn neg(self) -> Self {
-        Vec3 { x: -self.x, y: -self.y, z: -self.z }
+        Vec3 {
+            x: -self.x,
+            y: -self.y,
+            z: -self.z,
+        }
     }
 
     pub fn dot(self, o: Self) -> f64 {
@@ -78,7 +114,8 @@ impl Vec3 {
 
     /// `normalize` panics on zero length; use `try_normalize` for safety.
     pub fn normalize(self) -> Self {
-        self.try_normalize().expect("Vec3::normalize called on zero vector")
+        self.try_normalize()
+            .expect("Vec3::normalize called on zero vector")
     }
 
     pub fn distance(self, o: Self) -> f64 {
@@ -95,15 +132,27 @@ impl Vec3 {
     }
 
     pub fn min(self, o: Self) -> Self {
-        Vec3 { x: self.x.min(o.x), y: self.y.min(o.y), z: self.z.min(o.z) }
+        Vec3 {
+            x: self.x.min(o.x),
+            y: self.y.min(o.y),
+            z: self.z.min(o.z),
+        }
     }
 
     pub fn max(self, o: Self) -> Self {
-        Vec3 { x: self.x.max(o.x), y: self.y.max(o.y), z: self.z.max(o.z) }
+        Vec3 {
+            x: self.x.max(o.x),
+            y: self.y.max(o.y),
+            z: self.z.max(o.z),
+        }
     }
 
     pub fn abs(self) -> Self {
-        Vec3 { x: self.x.abs(), y: self.y.abs(), z: self.z.abs() }
+        Vec3 {
+            x: self.x.abs(),
+            y: self.y.abs(),
+            z: self.z.abs(),
+        }
     }
 }
 
@@ -179,7 +228,11 @@ mod tests {
         let b = Vec3::new(10.0, 20.0, 30.0);
         assert!(vec_approx_eq(a.lerp(b, 0.0), a, 1e-12));
         assert!(vec_approx_eq(a.lerp(b, 1.0), b, 1e-12));
-        assert!(vec_approx_eq(a.lerp(b, 0.5), Vec3::new(5.0, 10.0, 15.0), 1e-12));
+        assert!(vec_approx_eq(
+            a.lerp(b, 0.5),
+            Vec3::new(5.0, 10.0, 15.0),
+            1e-12
+        ));
     }
 
     #[test]

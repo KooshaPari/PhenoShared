@@ -137,16 +137,16 @@ impl fmt::Display for PluginLoaderError {
         match self {
             PluginLoaderError::LibraryLoadFailed(msg) => {
                 write!(f, "failed to load library: {msg}")
-            }
+            },
             PluginLoaderError::SymbolNotFound(sym) => {
                 write!(f, "symbol not found: {sym}")
-            }
+            },
             PluginLoaderError::InvalidPath(path) => {
                 write!(f, "invalid plugin path: {}", path.display())
-            }
+            },
             PluginLoaderError::DirectoryReadFailed(msg) => {
                 write!(f, "failed to read directory: {msg}")
-            }
+            },
         }
     }
 }

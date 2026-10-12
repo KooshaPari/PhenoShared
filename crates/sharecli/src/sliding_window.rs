@@ -6,7 +6,10 @@ pub struct SlidingWindow<T> {
 }
 impl<T> SlidingWindow<T> {
     pub fn new(capacity: usize) -> Self {
-        Self { items: VecDeque::new(), capacity }
+        Self {
+            items: VecDeque::new(),
+            capacity,
+        }
     }
     pub fn push(&mut self, item: T) {
         self.items.push_back(item);
@@ -40,7 +43,10 @@ mod tests {
         for i in 1..=5 {
             w.push(i);
         }
-        assert_eq!(w.window().iter().copied().collect::<Vec<_>>(), vec![3, 4, 5]);
+        assert_eq!(
+            w.window().iter().copied().collect::<Vec<_>>(),
+            vec![3, 4, 5]
+        );
     }
     #[test]
     fn is_full() {

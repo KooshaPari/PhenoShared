@@ -70,13 +70,13 @@ impl ConfigFormat {
         match self {
             Self::Json => {
                 serde_json::from_str(content).map_err(|e| ConfigError::json_parse(e.to_string()))
-            }
+            },
             #[cfg(feature = "toml")]
             Self::Toml => {
                 let value: toml::Value =
                     toml::from_str(content).map_err(|e| ConfigError::toml_parse(e.to_string()))?;
                 serde_json::to_value(value).map_err(|e| ConfigError::custom("toml", e.to_string()))
-            }
+            },
             #[cfg(not(feature = "toml"))]
             Self::Toml => Err(ConfigError::custom("toml", "TOML feature not enabled")),
             #[cfg(feature = "yaml")]
@@ -84,14 +84,14 @@ impl ConfigFormat {
                 let value: serde_yaml::Value = serde_yaml::from_str(content)
                     .map_err(|e| ConfigError::yaml_parse(e.to_string()))?;
                 serde_json::to_value(value).map_err(|e| ConfigError::custom("yaml", e.to_string()))
-            }
+            },
             #[cfg(not(feature = "yaml"))]
             Self::Yaml => Err(ConfigError::custom("yaml", "YAML feature not enabled")),
             Self::Auto => {
                 serde_json::to_string_pretty(&serde_json::json!({}))
                     .map_err(|_| ConfigError::custom("auto", "could not parse"))?;
                 Self::from_content(content).parse_to_json(content)
-            }
+            },
         }
     }
 
@@ -105,13 +105,13 @@ impl ConfigFormat {
                 let value: toml::Value = serde_json::from_value(value.clone())
                     .map_err(|e| ConfigError::custom("toml", e.to_string()))?;
                 toml::to_string_pretty(&value).map_err(|e| ConfigError::toml_parse(e.to_string()))
-            }
+            },
             #[cfg(not(feature = "toml"))]
             Self::Toml => Err(ConfigError::custom("toml", "TOML feature not enabled")),
             #[cfg(feature = "yaml")]
             Self::Yaml => {
                 serde_yaml::to_string(value).map_err(|e| ConfigError::yaml_parse(e.to_string()))
-            }
+            },
             #[cfg(not(feature = "yaml"))]
             Self::Yaml => Err(ConfigError::custom("yaml", "YAML feature not enabled")),
             Self::Auto => serde_json::to_string_pretty(value)

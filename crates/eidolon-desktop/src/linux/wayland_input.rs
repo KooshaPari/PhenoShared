@@ -98,12 +98,7 @@ async fn select_devices(
         PersistMode::DoNot
     };
     remote
-        .select_devices(
-            session,
-            types,
-            restore.token.as_deref(),
-            persist_mode,
-        )
+        .select_devices(session, types, restore.token.as_deref(), persist_mode)
         .await
         .map_err(|e| map_portal_err("RemoteDesktop SelectDevices failed", e))?;
     Ok(())
@@ -184,7 +179,7 @@ async fn inject_pointer(
     match event.action.as_str() {
         "move" => {
             move_absolute(remote, session, stream_id, event.x, event.y).await?;
-        }
+        },
         "press" | "tap" => {
             move_absolute(remote, session, stream_id, event.x, event.y).await?;
             button(remote, session, btn, KeyState::Pressed).await?;
@@ -192,25 +187,25 @@ async fn inject_pointer(
                 tokio::time::sleep(std::time::Duration::from_millis(50)).await;
             }
             button(remote, session, btn, KeyState::Released).await?;
-        }
+        },
         "release" => {
             button(remote, session, btn, KeyState::Released).await?;
-        }
+        },
         "long_press" => {
             move_absolute(remote, session, stream_id, event.x, event.y).await?;
             button(remote, session, btn, KeyState::Pressed).await?;
             let duration = event.duration_ms.unwrap_or(500);
             tokio::time::sleep(std::time::Duration::from_millis(u64::from(duration))).await;
             button(remote, session, btn, KeyState::Released).await?;
-        }
+        },
         "drag" => {
             button(remote, session, btn, KeyState::Pressed).await?;
             move_absolute(remote, session, stream_id, event.x, event.y).await?;
             button(remote, session, btn, KeyState::Released).await?;
-        }
+        },
         other => {
             log::warn!("Unknown pointer action (Wayland): {other}");
-        }
+        },
     }
     log::debug!(
         "Pointer event executed (Wayland RemoteDesktop): ({}, {}) action={}",
@@ -236,17 +231,17 @@ async fn inject_text(
                     tokio::time::sleep(std::time::Duration::from_millis(u64::from(delay))).await;
                 }
             }
-        }
+        },
         "paste" => {
             chord_ctrl(remote, session, XK_V).await?;
-        }
+        },
         "clear" => {
             chord_ctrl(remote, session, XK_A).await?;
             tap_keysym(remote, session, XK_DELETE).await?;
-        }
+        },
         other => {
             log::warn!("Unknown text input type (Wayland): {other}");
-        }
+        },
     }
     log::debug!(
         "Text input executed (Wayland RemoteDesktop): type={} text={}",
@@ -274,9 +269,7 @@ async fn run_session(
         .await
         .map_err(|e| map_portal_err("RemoteDesktop CreateSession failed", e))?;
 
-    if let Err(e) =
-        select_devices(&remote, &session, need_pointer, need_keyboard, &restore).await
-    {
+    if let Err(e) = select_devices(&remote, &session, need_pointer, need_keyboard, &restore).await {
         let _ = session.close().await;
         return Err(e);
     }
@@ -292,7 +285,7 @@ async fn run_session(
             Err(e) => {
                 let _ = session.close().await;
                 return Err(e);
-            }
+            },
         };
         if let Err(e) = screencast
             .select_sources(
@@ -328,12 +321,12 @@ async fn run_session(
             Err(e) => {
                 let _ = session.close().await;
                 return Err(e);
-            }
+            },
         },
         Err(e) => {
             let _ = session.close().await;
             return Err(e);
-        }
+        },
     };
 
     let granted = selected.devices();
@@ -367,7 +360,7 @@ async fn run_session(
                      (absolute NotifyPointerMotionAbsolute requires a stream \
                      node id)",
                 ));
-            }
+            },
         }
     } else {
         0
@@ -432,7 +425,7 @@ mod tests {
     fn input_gap_uses_stable_code() {
         let err = input_gap("pointer", "test");
         assert_eq!(
-            err.unsupported_code(),
+            err.unsupported_code_value(),
             Some(codes::DESKTOP_LINUX_WAYLAND_INPUT_UNSUPPORTED)
         );
     }

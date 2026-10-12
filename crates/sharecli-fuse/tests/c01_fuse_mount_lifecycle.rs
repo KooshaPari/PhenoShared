@@ -60,7 +60,7 @@ fn live_mount_ready() -> bool {
             let ok = mounted_seed.is_file() && fs::read(&mounted_seed).is_ok();
             drop(session);
             ok
-        }
+        },
         Err(_) => false,
     }
 }
@@ -114,8 +114,14 @@ fn c01_multi_mount_concurrent_isolation() {
     assert_eq!(read_b, b"payload-B", "mount B returned wrong payload");
 
     // Cross-check: A's mount must NOT see B's seed and vice versa.
-    assert!(!mountpoint_a.join(seed_b).exists(), "mount A leaked mount B's seed file");
-    assert!(!mountpoint_b.join(seed_a).exists(), "mount B leaked mount A's seed file");
+    assert!(
+        !mountpoint_a.join(seed_b).exists(),
+        "mount A leaked mount B's seed file"
+    );
+    assert!(
+        !mountpoint_b.join(seed_a).exists(),
+        "mount B leaked mount A's seed file"
+    );
 
     // Drop both sessions (force-unmount via `MountSession::Drop`).
     drop(session_a);
@@ -123,8 +129,14 @@ fn c01_multi_mount_concurrent_isolation() {
 
     // After unmount, backings still contain their original seeds — no
     // mount-point leak recycled user data.
-    assert_eq!(fs::read(backing_a.path().join(seed_a)).expect("backing A"), b"payload-A");
-    assert_eq!(fs::read(backing_b.path().join(seed_b)).expect("backing B"), b"payload-B");
+    assert_eq!(
+        fs::read(backing_a.path().join(seed_a)).expect("backing A"),
+        b"payload-A"
+    );
+    assert_eq!(
+        fs::read(backing_b.path().join(seed_b)).expect("backing B"),
+        b"payload-B"
+    );
 }
 
 /// C01 / lifecycle — open multiple readers on the same FUSE mountpoint at
@@ -222,12 +234,12 @@ fn c01_non_empty_mountpoint_preserves_user_data() {
             // `MountSession::start` — either way the underlying file on
             // disk is what we need to verify after unmount.
             drop(session);
-        }
+        },
         Err(err) => {
             // Mount refused; record the reason but do NOT fail the test
             // yet — we still need to verify the user file is intact.
             eprintln!("c01_non_empty_mountpoint_preserves_user_data: mount refused: {err}");
-        }
+        },
     }
 
     // Belt-and-suspenders: force-unmount any lingering registration, then
@@ -242,7 +254,10 @@ fn c01_non_empty_mountpoint_preserves_user_data() {
 
     // Backing seed must also be intact (mount must not have side-effected
     // the backing root).
-    assert_eq!(fs::read(backing.path().join(seed)).expect("backing seed"), b"preserve-me");
+    assert_eq!(
+        fs::read(backing.path().join(seed)).expect("backing seed"),
+        b"preserve-me"
+    );
 }
 
 /// C01 / lifecycle — re-export of `run_mount_smoke` as a single, named

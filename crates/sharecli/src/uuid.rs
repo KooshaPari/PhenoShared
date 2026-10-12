@@ -1,8 +1,14 @@
 use std::time::{SystemTime, UNIX_EPOCH};
 
 pub fn v7_like() -> String {
-    let ts = SystemTime::now().duration_since(UNIX_EPOCH).map(|d| d.as_millis()).unwrap_or(0);
-    let rand: u64 = (SystemTime::now().elapsed().map(|d| d.subsec_nanos()).unwrap_or(0) as u64)
+    let ts = SystemTime::now()
+        .duration_since(UNIX_EPOCH)
+        .map(|d| d.as_millis())
+        .unwrap_or(0);
+    let rand: u64 = (SystemTime::now()
+        .elapsed()
+        .map(|d| d.subsec_nanos())
+        .unwrap_or(0) as u64)
         ^ 0xdeadbeef_cafebabe;
     format!("{:x}-{:x}", ts, rand)
 }
@@ -13,16 +19,24 @@ pub fn is_valid(s: &str) -> bool {
     }
     let parts: Vec<&str> = s.split('-').collect();
     !parts.is_empty()
-        && parts.iter().all(|p| !p.is_empty() && p.chars().all(|c| c.is_ascii_hexdigit()))
+        && parts
+            .iter()
+            .all(|p| !p.is_empty() && p.chars().all(|c| c.is_ascii_hexdigit()))
 }
 
 pub fn short_id() -> String {
-    let nanos = SystemTime::now().duration_since(UNIX_EPOCH).map(|d| d.subsec_nanos()).unwrap_or(0);
+    let nanos = SystemTime::now()
+        .duration_since(UNIX_EPOCH)
+        .map(|d| d.subsec_nanos())
+        .unwrap_or(0);
     format!("{:08x}", nanos)
 }
 
 pub fn slug() -> String {
-    let ts = SystemTime::now().duration_since(UNIX_EPOCH).map(|d| d.as_secs()).unwrap_or(0);
+    let ts = SystemTime::now()
+        .duration_since(UNIX_EPOCH)
+        .map(|d| d.as_secs())
+        .unwrap_or(0);
     format!("{:x}-{}", ts, short_id())
 }
 

@@ -159,9 +159,9 @@ mod tests {
     #[test]
     fn build_entry_with_flags_non_zero() {
         let tag = 0x0102_0002u32; // PT_BINARY id=0x0002
-        let bytes = build_entry(tag, 0xCAFE, &[1, 2, 3, 4]);
+        let bytes = build_entry(tag, 0xcafe, &[1, 2, 3, 4]);
         // flags as u16 LE
-        assert_eq!(&bytes[4..6], &[0xFE, 0xCA]);
+        assert_eq!(&bytes[4..6], &[0xfe, 0xca]);
         // len = 4
         assert_eq!(&bytes[6..10], &[0x04, 0x00, 0x00, 0x00]);
         assert_eq!(&bytes[10..], &[1, 2, 3, 4]);
@@ -179,7 +179,7 @@ mod tests {
     #[test]
     fn round_trip_with_non_zero_flags() {
         let tag = crate::util::mapi_props::pack_tag(0x0102, 0x0002);
-        assert_round_trip(tag, 0xCAFE, &[0xDE, 0xAD, 0xBE, 0xEF]);
+        assert_round_trip(tag, 0xcafe, &[0xde, 0xad, 0xbe, 0xef]);
     }
 
     #[test]
@@ -191,7 +191,7 @@ mod tests {
     #[test]
     fn round_trip_long_value() {
         let tag = crate::util::mapi_props::pack_tag(0x0102, 0x0002);
-        let value = vec![0xAAu8; 1024];
+        let value = vec![0xaau8; 1024];
         assert_round_trip(tag, 0, &value);
     }
 
@@ -199,7 +199,7 @@ mod tests {
 
     #[test]
     fn build_entry_32bit_tag_layout_repeats_halves() {
-        let tag = 0xAABB_CCDDu32;
+        let tag = 0xaabb_ccddu32;
         let bytes = build_entry_32bit(tag, 0, b"x");
         // First 4 = tag, next 4 = tag (parity fixture repeat)
         assert_eq!(&bytes[0..4], &tag.to_le_bytes());
@@ -221,8 +221,16 @@ mod tests {
     #[test]
     fn stream_round_trip_two_entries() {
         let entries: &[(u32, u16, &[u8])] = &[
-            (crate::util::mapi_props::pack_tag(0x001f, 0x0037), 0, b"hello".as_slice()),
-            (crate::util::mapi_props::pack_tag(0x0003, 0x0e08), 1, &42i32.to_le_bytes()),
+            (
+                crate::util::mapi_props::pack_tag(0x001f, 0x0037),
+                0,
+                b"hello".as_slice(),
+            ),
+            (
+                crate::util::mapi_props::pack_tag(0x0003, 0x0e08),
+                1,
+                &42i32.to_le_bytes(),
+            ),
         ];
         assert_stream_round_trip(entries);
     }
@@ -233,7 +241,7 @@ mod tests {
         let b = crate::util::mapi_props::pack_tag(0x0102, 0x0002);
         let c = crate::util::mapi_props::pack_tag(0x000b, 0x0001);
         let entries: &[(u32, u16, &[u8])] =
-            &[(a, 0, b"a".as_slice()), (b, 1, &[0xFFu8]), (c, 2, &[1u8])];
+            &[(a, 0, b"a".as_slice()), (b, 1, &[0xffu8]), (c, 2, &[1u8])];
         assert_stream_round_trip_32bit(entries);
     }
 
