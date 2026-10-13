@@ -34,3 +34,18 @@ A missing exact transcript is an explicit source-availability gap, not a license
 ## Historical state / no duplicate authority
 
 `docs/sessions/20260908-researchledger-corpus-audit-routing/` remains an earlier session record, **not current status**. The current project card `projects/ResearchLedger.json` refers to an older standalone decision and needs owner-reviewed reconciliation, not an unreviewed destructive rewrite. This ledger supersedes those historical statements *for migration tracking only*; ResearchLedger's canonical claims and private-vault authority remain separate from the fleet catalog.
+
+
+## October 13 continuation: validated execution and successor forensics
+
+- Hosted research corpus verification [run 38469882345](https://github.com/KooshaPari/PhenoShared/actions/runs/38469882345): **success**; checks all 47 persisted hashes and executes the 70 historical offline research tests. Source validation is not application integration.
+- The added `scripts/researchledger/compare_recovery_trees.py` and tests distinguish byte-identical, newer-only, historical-only and changed files. The still-unavailable September 9 object cannot be silently replaced. Exact comparison against that missing source remains **blocked**.
+- `.github/workflows/researchledger-youtube-census-manual.yml` is **manual-dispatch only** and references the reviewed `main` checkout. It will need a restricted `YOUTUBE_API_KEY` secret in **PhenoShared**, then a reviewed merge before live collection. No key transfer or completed refresh is claimed.
+- [PhenoApps #166](https://github.com/KooshaPari/PhenoApps/pull/166) now includes commit `e322cbc9d8d4e2f28695fad10ea7f03ae0b7874d`: it replaces a non-resolving Trunk Action SHA with actual upstream v1.0.4 commit `22e948f7bb9f870bc6c42625585f1ef27e9c5afc`. Prior Trunk rerun failed during action resolution, before repository linting; the new head's checks must be verified separately.
+- A fresh rerun of PhenoApps' former TruffleHog scan [run 35059880205](https://github.com/KooshaPari/PhenoApps/actions/runs/35059880205) concluded **success** on attempt 2. This does not establish passing all current-head security checks.
+- [PhenoShared Benchora absorption record](https://github.com/KooshaPari/PhenoShared/blob/main/docs/absorption/Benchora/README.md) names `phenotype-tooling/Benchora/` as an absorbed Rust-crate copy at `f1f9a025`. The current GitHub destination resolves to **private archived** `KooshaPari/zz-zz-agentcheck-PhenoTooling`, and `Benchora/Cargo.toml` was found there. The former standalone Benchora remote is unavailable; this archival copy is not evidence of the finite-state #107 experimental branch or a live benchmark successor.
+- RepoLedger old identity remains unavailable. Its current registry catalog row claiming active standalone ownership is a **historical snapshot**, not independently verified current disposition.
+
+### Acceptance impact
+
+The research preservation and test-readiness gate is now independently reproducible on GitHub CI. The later corpus source, application ownership integration, destination secret provisioning and live API run, actual LLM benchmark owner/results, monorepo baseline CI, reviewer acceptance and merges remain open. No proposed artifact should be promoted to a canonical live state merely because this migration ledger exists.
