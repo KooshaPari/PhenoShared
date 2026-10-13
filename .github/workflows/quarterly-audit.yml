@@ -6,8 +6,10 @@ on:
     - cron: '0 14 1 1,4,7,10 *'
   workflow_dispatch:
   # Federation entrypoint: the org-wide reusable-workflow federation can invoke
-  # the quarterly audit on demand (e.g. an ad-hoc audit wave) via:
-  #   uses: <REDACTED>/phenotype-org-audits/.github/workflows/quarterly-audit.yml@main
+  # the quarterly audit on demand (e.g. an ad-hoc audit wave). The federation
+  # reference (under a private org that 404s for non-collaborators) lives in
+  # the project wiki; do not put a `uses:` line here, it would be flagged by
+  # the workflow pin integrity check.
   workflow_call:
 
 concurrency:
