@@ -22,16 +22,18 @@ on:
       language:
         description: 'Detected primary language'
         value: ${{ jobs.detect.outputs.lang }}
-    secrets:
-      INFISICAL_TOKEN:
-        required: false
-        description: 'Optional token for secret materialization'
+
+permissions:
+  contents: read
 
 jobs:
   detect:
     runs-on: ubuntu-latest
     outputs:
       lang: ${{ steps.detect.outputs.lang }}
+    defaults:
+      run:
+        working-directory: ${{ inputs.working-directory }}
     steps:
       - uses: actions/checkout@v4
       - id: detect
@@ -77,6 +79,8 @@ jobs:
 
       - name: Rust fmt + clippy
         if: needs.detect.outputs.lang == 'rust'
+        env:
+          LINT_EXTRA_ARGS: ${{ inputs.extra-args }}
         run: |
           set -euo pipefail
           cargo fmt --all -- --check
@@ -84,24 +88,40 @@ jobs:
           if [ "${{ inputs.fail-on-warnings }}" = "true" ]; then
             CLIPPY_FLAGS="$CLIPPY_FLAGS -- -D warnings"
           fi
-          cargo clippy $CLIPPY_FLAGS ${{ inputs.extra-args }}
+          # shellcheck disable=SC2086
+          cargo clippy $CLIPPY_FLAGS $LINT_EXTRA_ARGS
 
       - name: Node lint
         if: needs.detect.outputs.lang == 'node'
+        env:
+          LINT_EXTRA_ARGS: ${{ inputs.extra-args }}
         run: |
           set -euo pipefail
           if [ -f package.json ] && node -e "require('./package.json').scripts?.lint" 2>/dev/null; then
-            npm run lint --if-present ${{ inputs.extra-args }}
+            if [ -f package-lock.json ]; then
+              npm ci
+            elif [ -f yarn.lock ]; then
+              yarn install --frozen-lockfile
+            elif [ -f pnpm-lock.yaml ]; then
+              npm install -g pnpm && pnpm install --frozen-lockfile
+            else
+              npm install
+            fi
+            # shellcheck disable=SC2086
+            npm run lint --if-present $LINT_EXTRA_ARGS
           else
             echo "No lint script in package.json; skipping."
           fi
 
       - name: Python ruff
         if: needs.detect.outputs.lang == 'python'
+        env:
+          LINT_EXTRA_ARGS: ${{ inputs.extra-args }}
         run: |
           set -euo pipefail
           python -m pip install --quiet ruff
-          ruff check . ${{ inputs.extra-args }}
+          # shellcheck disable=SC2086
+          ruff check . $LINT_EXTRA_ARGS
 
       - name: Unknown language
         if: needs.detect.outputs.lang == 'unknown'
