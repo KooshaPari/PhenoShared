@@ -1,6 +1,6 @@
 {
   "_comment_top": "MCP hooks configuration template for harness agents. Each harness (jcode, codex, forge) has its own preferred location and schema; see _comment_install_paths below.",
-  "_comment_version": "v1.0 — initial template, 2026-10-12, instinct shared-integration-kit branch.",
+  "_comment_version": "v1.1 — $CLAUDE_TOOL_INPUT is JSON-encoded; use jq to inspect (2026-10-13, instinct shared-integration-kit).",
   "_comment_install_paths": {
     "jcode": "~/.jcode/hooks.json (or ./.jcode/hooks.json for repo-local)",
     "codex": "~/.codex/hooks.toml (or ./.codex/hooks.toml for repo-local); convert JSON → TOML",
@@ -15,9 +15,9 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash -c 'case \"$CLAUDE_TOOL_INPUT\" in *\"gh repo delete\"*|*\"git push --force\"*|*\"git reset --hard\"*) echo \"[mcp-hook] BLOCKED destructive command: $CLAUDE_TOOL_INPUT\" >&2; exit 2;; esac'",
+            "command": "jq -r 'tostring' \"$CLAUDE_TOOL_INPUT\" 2>/dev/null | grep -qE 'gh repo delete|git push --force|git push --force-with-lease|git reset --hard|git clean -fd|git branch -D' && { echo '[mcp-hook] BLOCKED destructive command' >&2; exit 2; } || true",
             "timeout": 5000,
-            "_intent": "Block destructive git/gh commands. Adjust the case patterns to match your policy."
+            "_intent": "Block destructive git/gh commands. Tool input is JSON; we serialize to a string and grep for the dangerous pattern. `|| true` on the grep is intentional (no match → allow); the explicit exit 2 on a match is what blocks."
           }
         ]
       },
@@ -26,9 +26,9 @@
         "hooks": [
           {
             "type": "command",
-            "command": "echo \"[mcp-hook] Pre-edit — file path: $CLAUDE_TOOL_INPUT_PATH\"",
+            "command": "jq -r '.file_path // .path // empty' \"$CLAUDE_TOOL_INPUT\" 2>/dev/null | xargs -I{} echo \"[mcp-hook] Pre-edit — file path: {}\"",
             "timeout": 2000,
-            "_intent": "Log edit operations for audit. Set CLAUDE_TOOL_INPUT_PATH or equivalent."
+            "_intent": "Log edit operations for audit. Edit/Write/MultiEdit use file_path; apply_patch uses path. jq normalizes the JSON input."
           }
         ]
       }
@@ -39,9 +39,9 @@
         "hooks": [
           {
             "type": "command",
-            "command": "if command -v lefthook >/dev/null 2>&1; then lefthook run pre-commit || echo '[mcp-hook] lefthook pre-commit failed (continuing)'; else echo '[mcp-hook] lefthook not installed; skipping'; fi",
+            "command": "if command -v lefthook >/dev/null 2>&1; then lefthook run pre-commit; else echo '[mcp-hook] lefthook not installed; skipping'; fi",
             "timeout": 60000,
-            "_intent": "Auto-run lefthook after edits to catch fmt/lint issues immediately."
+            "_intent": "Auto-run lefthook after edits to catch fmt/lint issues immediately. NOTE: this runs on every edit; for large edits, set a harness-side throttle. Failures are propagated (no `|| true`); the agent must address the lint findings."
           }
         ]
       },
@@ -62,9 +62,9 @@
         "hooks": [
           {
             "type": "command",
-            "command": "osascript -e 'display notification \"Agent event\" with title \"jcode\" subtitle \"$CLAUDE_NOTIFICATION_TYPE\"' 2>/dev/null || echo \"[mcp-hook] notification: $CLAUDE_NOTIFICATION_TYPE\"",
+            "command": "if [ \"$(uname -s)\" = \"Darwin\" ]; then osascript -e 'display notification \"Agent event\" with title \"jcode\" subtitle \"'\"$CLAUDE_NOTIFICATION_TYPE\"'\"' 2>/dev/null; elif command -v notify-send >/dev/null 2>&1; then notify-send \"jcode\" \"Agent event: $CLAUDE_NOTIFICATION_TYPE\"; else echo \"[mcp-hook] notification: $CLAUDE_NOTIFICATION_TYPE\"; fi",
             "timeout": 3000,
-            "_intent": "Desktop notification on harness events. macOS uses osascript; on Linux use notify-send."
+            "_intent": "Desktop notification on harness events. macOS uses osascript; Linux uses notify-send; otherwise log to stdout."
           }
         ]
       }
@@ -82,8 +82,7 @@
     ]
   },
   "_comment_variables": {
-    "$CLAUDE_TOOL_INPUT": "Tool input as a string (may be JSON-encoded).",
-    "$CLAUDE_TOOL_INPUT_PATH": "File path when tool is Edit/Write/MultiEdit.",
+    "$CLAUDE_TOOL_INPUT": "Tool input as a JSON-encoded string. Use `jq -r '...' \"$CLAUDE_TOOL_INPUT\"` to inspect — do not pattern-match the raw string.",
     "$CLAUDE_TOOL_DURATION_MS": "Tool execution duration in milliseconds (PostToolUse).",
     "$CLAUDE_NOTIFICATION_TYPE": "Type of harness notification (auth, permission_prompt, idle, etc.).",
     "_note": "Variable names are conventions; each harness may use different names. Test before relying on them."
