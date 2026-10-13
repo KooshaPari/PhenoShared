@@ -18,21 +18,23 @@ permissions:
   contents: write
 
 jobs:
+  # Disabled: cross-repo `uses:` reference to
+  # `<REDACTED>/phenotype-fleet-ops/.github/workflows/macos-release.yml@main`
+  # was broken by the 2026-09-16 PII sweep (commit 3b6d8798) and the
+  # target repo is now unreachable (HTTP 404). The job is preserved
+  # as a noop so the workflow file remains syntactically valid;
+  # restore the `uses:` (or vendor the workflow) when the upstream
+  # becomes available again. See docs/audits/PII-SWEEP-DAMAGE.md.
   macos:
-    name: Build, sign, notarize phenotype-omlx
-    uses: <REDACTED>/phenotype-fleet-ops/.github/workflows/macos-release.yml@main
-    with:
-      app-name: phenotype-omlx
-      app-bundle-id: app.phenotype.omlx
-      build-cmd: |
-          cargo build --release --locked --target aarch64-apple-darwin
-          mkdir -p dist/macos
-          cp target/aarch64-apple-darwin/release/phenotype-omlx dist/macos/
-          # No .app bundle yet — distribute as raw binary + DMG for now
-          # (Tauri/Electron wrapper is planned but not implemented)
-      entitlements-file: Entitlements.plist
-      artifact-dir: dist/macos
-      create-dmg: true
-      sign-identity: "Developer ID Application"
-    secrets:
-      INFISICAL_TOKEN: ${{ secrets.INFISICAL_TOKEN }}
+    # Disabled: cross-repo `uses:` reference to
+    # `<REDACTED>/phenotype-fleet-ops/.github/workflows/macos-release.yml@main`
+    # was broken by the 2026-09-16 PII sweep (commit 3b6d8798) and the
+    # target repo is now unreachable (HTTP 404). The job is preserved
+    # as a noop so the workflow file remains syntactically valid;
+    # restore the `uses:` (or vendor the workflow) when the upstream
+    # becomes available again. See docs/audits/PII-SWEEP-DAMAGE.md.
+    name: Build, sign, notarize phenotype-omlx (disabled)
+    runs-on: macos-latest
+    steps:
+      - name: disabled (cross-repo workflow target unreachable)
+        run: echo "macos release job disabled; see jobs-level comment in this file"

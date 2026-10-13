@@ -31,11 +31,14 @@ concurrency:
 
 jobs:
   wcag:
-    uses: <REDACTED>/OmniRoute-3rd/.github/workflows/reusable-a11y.yml@main
-    with:
-      app_name: phenodocs
-      app_dir: '.'
-      dev_command: 'bunx vitepress dev --port 5173'
-      dev_port: 5173
-      spec_glob: 'tests/a11y/**/*.spec.ts'
-    secrets: inherit
+    # Disabled: cross-repo `uses:` reference to
+    # `<REDACTED>/OmniRoute-3rd/.github/workflows/reusable-a11y.yml@main`
+    # was broken by the 2026-09-16 PII sweep (commit 3b6d8798) and the
+    # target repo is now unreachable (HTTP 404). The job is preserved
+    # as a noop so the workflow file remains syntactically valid;
+    # restore the `uses:` (or vendor the workflow) when the upstream
+    # becomes available again. See docs/audits/PII-SWEEP-DAMAGE.md.
+    runs-on: ubuntu-latest
+    steps:
+      - name: disabled (cross-repo workflow target unreachable)
+        run: echo "wcag job disabled; see jobs-level comment in this file"

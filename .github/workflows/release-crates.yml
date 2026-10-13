@@ -35,13 +35,13 @@ jobs:
       PUBLISH_BATCH_START: ${{ github.event.inputs.batch_start || '0' }}
       PUBLISH_BATCH_SIZE: ${{ github.event.inputs.batch_size || '10' }}
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
 
       - name: Install Rust toolchain
-        uses: dtolnay/rust-toolchain@stable
+        uses: dtolnay/rust-toolchain@686976e191b89faba57d3206551f0f330d8cb249
 
       - name: Cache Rust dependencies
-        uses: Swatinem/rust-cache@v2
+        uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6
 
       - name: Publish bounded public crate batch
         run: bash ./scripts/release-crates-publish.sh

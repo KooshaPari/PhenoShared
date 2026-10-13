@@ -26,7 +26,7 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v4
 
       - name: Run OSV Scanner (npm)
-        uses: google/osv-scanner-action@13c39bb3adb1dd15d2d780f77d80b031917fd1a1 # v2.0.0
+        uses: google/osv-scanner-action@98b584ee2ed2da3935ccce10e06739d54cdcd20b  # v2.0.0
         with:
           scan-args: |-
             --lockfile=bun.lock
