@@ -151,7 +151,15 @@ post_install_check() {
   fi
   if want mcp; then
     if [[ -f "$TARGET_DIR/.mcp-hooks.json" ]]; then
-      if python3 -c "import json; json.load(open('$TARGET_DIR/.mcp-hooks.json'))" 2>/dev/null; then
+      local python_bin=""
+      if command -v python3 >/dev/null 2>&1; then
+        python_bin="python3"
+      elif command -v python >/dev/null 2>&1; then
+        python_bin="python"
+      fi
+      if [[ -n "$python_bin" ]] && "$python_bin" -c \
+        'import json, sys; json.load(open(sys.argv[1]))' \
+        "$TARGET_DIR/.mcp-hooks.json" 2>/dev/null; then
         echo "  ✓ .mcp-hooks.json present and valid JSON"
       else
         echo "  ✗ .mcp-hooks.json present but INVALID JSON"
