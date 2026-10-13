@@ -44,6 +44,39 @@ class RecoveryTests(unittest.TestCase):
                 with self.assertRaisesRegex(ValueError, "INVALID_MANIFEST"):
                     recover.verify_zip(zipfile_)
 
+    def test_symlinked_staging_root_rejected(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            real = root / "real"
+            real.mkdir()
+            link = root / "alias"
+            link.symlink_to(real, target_is_directory=True)
+            with self.assertRaisesRegex(ValueError, "DESTINATION_SYMLINK"):
+                recover.safe_destination(link, "docs/a.md")
+
+    def test_symlinked_child_directory_rejected(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            outside = root / "outside"
+            outside.mkdir()
+            base = root / "staged"
+            base.mkdir()
+            (base / "docs").symlink_to(outside, target_is_directory=True)
+            with self.assertRaisesRegex(ValueError, "DESTINATION_PATH_SYMLINK"):
+                recover.safe_destination(base, "docs/README.md")
+            self.assertFalse((outside / "README.md").exists())
+
+    def test_symlinked_final_file_rejected_even_if_content_matches(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            base = root / "staged"
+            base.mkdir()
+            outside = root / "sensitive.md"
+            outside.write_text("same text")
+            (base / "file.md").symlink_to(outside)
+            with self.assertRaisesRegex(ValueError, "DESTINATION_PATH_SYMLINK"):
+                recover.safe_destination(base, "file.md")
+
     def test_historical_bundle_optional(self):
         bundle = Path("/mnt/data/emergent-garden-wave5-verified-handoff.zip")
         if not bundle.is_file():
