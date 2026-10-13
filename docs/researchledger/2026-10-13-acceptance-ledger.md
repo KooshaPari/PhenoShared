@@ -49,3 +49,17 @@ A missing exact transcript is an explicit source-availability gap, not a license
 ### Acceptance impact
 
 The research preservation and test-readiness gate is now independently reproducible on GitHub CI. The later corpus source, application ownership integration, destination secret provisioning and live API run, actual LLM benchmark owner/results, monorepo baseline CI, reviewer acceptance and merges remain open. No proposed artifact should be promoted to a canonical live state merely because this migration ledger exists.
+
+
+## Read-only local-object recovery helper
+
+The remote lookup for `8822aa14baef2a964288076645edcc493c338688` returned 404 under the old ResearchLedger identity and both inspected destination repositories. This is **not proof of missing local Git objects**. The repository now includes `scripts/researchledger/locate_historical_commit.py`, a bounded network-free locator that checks exact commit-object presence across caller-provided clones, worktree hubs and bare repositories. It never fetches, checks out, writes a branch or changes working-tree files. Invoke it on the desk or backup host with explicit root directories, for example:
+
+```sh
+python3 scripts/researchledger/locate_historical_commit.py \\
+  --root ~/CodeProjects/Phenotype/repos \\
+  --root /Volumes/Backup \\
+  --output /tmp/researchledger-git-object-scan.json
+```
+
+**No such desk or backup scan was executed in this ChatGPT session**; only hosted negative-control tests are applicable here. A positive exact-commit result would allow a separately reviewed export of the historical tree; a negative result is scoped to the roots inspected and is not evidence of irrecoverability. This output may contain private local filesystem paths, so do not publish its full receipt in public Git without minimization.
