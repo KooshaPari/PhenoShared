@@ -66,6 +66,11 @@ def stage(archive: Path, destination: Path, expected_sha256=EXPECTED_ZIP_SHA256)
     with zipfile.ZipFile(archive) as bundle:
         contents = verify_zip(bundle)
     included, excluded = [], []
+    if destination.is_symlink():
+        raise ValueError("DESTINATION_SYMLINK")
+    # Verify the destination itself and every existing child component.
+    # A ZIP can be safe while a staging directory contains a malicious symlink.
+    resolved_root = destination.resolve(strict=False)
     # Check all collisions and secret patterns before writing a single file.
     for path, content in contents.items():
         if not chosen(path):
@@ -75,6 +80,13 @@ def stage(archive: Path, destination: Path, expected_sha256=EXPECTED_ZIP_SHA256)
         if any(pattern.search(decoded) for pattern in SECRET_PATTERNS):
             raise ValueError("POTENTIAL_CREDENTIAL " + path)
         target = destination / path
+        component = target
+        while component != destination:
+            if component.is_symlink():
+                raise ValueError("DESTINATION_PATH_SYMLINK " + path)
+            component = component.parent
+        if not target.resolve(strict=False).is_relative_to(resolved_root):
+            raise ValueError("DESTINATION_PATH_ESCAPE " + path)
         if target.exists() and target.read_bytes() != content:
             raise ValueError("DIFFERENT_CONTENT_COLLISION " + path)
         included.append((path, content))
