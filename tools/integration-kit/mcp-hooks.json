@@ -39,9 +39,9 @@
         "hooks": [
           {
             "type": "command",
-            "command": "if command -v lefthook >/dev/null 2>&1; then lefthook run pre-commit; else echo '[mcp-hook] lefthook not installed; skipping'; fi",
-            "timeout": 60000,
-            "_intent": "Auto-run lefthook after edits to catch fmt/lint issues immediately. NOTE: this runs on every edit; for large edits, set a harness-side throttle. Failures are propagated (no `|| true`); the agent must address the lint findings."
+            "command": "FILE=$(jq -r '.file_path // .path // empty' \"$CLAUDE_TOOL_INPUT\" 2>/dev/null); if [ -z \"$FILE\" ] || [ ! -f \"$FILE\" ]; then exit 0; fi; case \"$FILE\" in *.rs) if command -v rustfmt >/dev/null 2>&1; then rustfmt --check \"$FILE\" || rustfmt \"$FILE\"; fi ;; *.py) if command -v ruff >/dev/null 2>&1; then ruff format --check \"$FILE\" || ruff format \"$FILE\"; fi ;; *.ts|*.tsx|*.js|*.jsx|*.mjs|*.cjs) if command -v prettier >/dev/null 2>&1; then prettier --check \"$FILE\" || prettier --write \"$FILE\"; elif command -v npx >/dev/null 2>&1; then npx --no-install prettier --check \"$FILE\" || npx --no-install prettier --write \"$FILE\"; fi ;; *) exit 0 ;; esac",
+            "timeout": 30000,
+            "_intent": "Run a fast, file-scoped formatter pass against the just-edited file (not the full lefthook pre-commit suite). The full suite can run on the next commit. Failures are NOT auto-fixed when --check fails; we attempt the formatter but never block. To gate, run lefthook pre-commit separately."
           }
         ]
       },
