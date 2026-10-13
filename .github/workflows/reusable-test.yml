@@ -9,10 +9,10 @@ on:
         type: string
         default: '.'
       test-profile:
-        description: 'Test profile (e.g. ci / dev / default)'
+        description: 'Test profile (must be defined in .config/nextest.toml or a built-in name like default / ci)'
         required: false
         type: string
-        default: 'ci'
+        default: 'default'
       coverage:
         description: 'Collect coverage'
         required: false
@@ -95,7 +95,7 @@ jobs:
 
       - name: Rust nextest
         if: needs.detect.outputs.lang == 'rust'
-        id: junit
+        id: rust-junit
         env:
           TEST_EXTRA_ARGS: ${{ inputs.extra-args }}
           TEST_PROFILE: ${{ inputs.test-profile }}
@@ -124,7 +124,7 @@ jobs:
 
       - name: Node test
         if: needs.detect.outputs.lang == 'node'
-        id: junit
+        id: node-junit
         env:
           TEST_EXTRA_ARGS: ${{ inputs.extra-args }}
         run: |
@@ -153,7 +153,7 @@ jobs:
 
       - name: Python pytest
         if: needs.detect.outputs.lang == 'python'
-        id: junit
+        id: python-junit
         env:
           TEST_EXTRA_ARGS: ${{ inputs.extra-args }}
         run: |
@@ -165,11 +165,22 @@ jobs:
           echo "path=reports/junit.xml" >> "$GITHUB_OUTPUT"
 
       - name: Upload JUnit
-        if: always() && steps.junit.outputs.path != ''
+        # Only the language matched by `detect` produces a path; the other two
+        # steps are skipped, so their outputs resolve to ''.
+        if: |
+          always() && (
+            steps.rust-junit.outputs.path != '' ||
+            steps.node-junit.outputs.path != '' ||
+            steps.python-junit.outputs.path != ''
+          )
         uses: actions/upload-artifact@v4
         with:
           name: junit-${{ inputs.test-profile }}
-          path: ${{ steps.junit.outputs.path }}
+          # Pick whichever language produced a non-empty path.
+          path: |
+            ${{ steps.rust-junit.outputs.path }}
+            ${{ steps.node-junit.outputs.path }}
+            ${{ steps.python-junit.outputs.path }}
           retention-days: 14
           if-no-files-found: warn
 
