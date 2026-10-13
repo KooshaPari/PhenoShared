@@ -21,8 +21,11 @@ pre-commit:
         if [ -f Cargo.toml ]; then
           cargo fmt --all -- --check
         elif [ -f package.json ]; then
-          npx --no-install prettier --check . 2>/dev/null || \
+          if npx --no-install prettier --check . ; then
+            :
+          else
             npx --no-install eslint --max-warnings 0 .
+          fi
         elif [ -f pyproject.toml ]; then
           if command -v ruff >/dev/null 2>&1; then
             ruff format --check .
@@ -37,10 +40,12 @@ pre-commit:
       run: |
         set -e
         # Lightweight secret scan for staged content.
+        # gitleaks exits non-zero on findings, which must propagate so the commit is blocked.
         if command -v gitleaks >/dev/null 2>&1; then
-          gitleaks protect --staged --redact --no-banner || true
+          gitleaks protect --staged --redact --no-banner
         else
-          echo "[lefthook:secrets] gitleaks not installed; install from https://github.com/gitleaks/gitleaks"
+          echo "[lefthook:secrets] gitleaks not installed; install from https://github.com/gitleaks/gitleaks" >&2
+          exit 1
         fi
 
     trailing-ws:
@@ -74,10 +79,12 @@ pre-push:
       glob: "**/*.{rs,ts,tsx,js,jsx,py}"
       run: |
         set -e
+        # pre-push must keep the nonzero exit on lint failure so the push is blocked.
         if [ -f Cargo.toml ]; then
           cargo clippy --workspace --all-targets -- -D warnings
         elif [ -f package.json ]; then
-          npm run lint --if-present || echo "[lefthook:lint-staged] no lint script"
+          if [ -f package-lock.json ]; then npm ci; elif [ -f yarn.lock ]; then yarn install --frozen-lockfile; elif [ -f pnpm-lock.yaml ]; then npm install -g pnpm && pnpm install --frozen-lockfile; else npm install; fi
+          npm run lint --if-present
         elif [ -f pyproject.toml ]; then
-          ruff check . || echo "[lefthook:lint-staged] ruff failed"
+          ruff check .
         fi
