@@ -60,7 +60,7 @@ jobs:
           artifact-name: sbom.cdx.json
 
       - name: Upload SBOM artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
           name: sbom-monthly-${{ github.event.repository.name }}-${{ github.sha }}
           path: ${{ inputs.repo_path }}/sbom.cdx.json

@@ -26,11 +26,11 @@ jobs:
       pull-requests: write
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
-      - uses: dtolnay/rust-toolchain@nightly
-      - uses: Swatinem/rust-cache@v2
+      - uses: dtolnay/rust-toolchain@f0d5300ba8908d942c808f4d31c08471d7798ba3
+      - uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6
         with:
           workspaces: rust
-      - uses: arduino/setup-protoc@v3
+      - uses: arduino/setup-protoc@c65c819552d16ad3c9b72d9dfd5ba5237b9c906b
         with:
           version: "28.x"
           repo-token: ${{ secrets.GITHUB_TOKEN }}
@@ -48,7 +48,7 @@ jobs:
         continue-on-error: true
       - name: Store benchmark results
         if: steps.check-benches.outputs.has-benches == 'true'
-        uses: benchmark-action/github-action-benchmark@v1
+        uses: benchmark-action/github-action-benchmark@4322e5726e6334590d251fc4f92bec0efafc45dc
         with:
           tool: 'cargo'
           output-file-path: target/criterion/output.txt
