@@ -14,7 +14,9 @@ pre-commit:
   parallel: true
   commands:
     fmt:
-      glob: "**/*.{rs,ts,tsx,js,jsx,mjs,cjs,py}"
+      # The {,**/} prefix lets lefthook match both root-level files (e.g.
+      # ./build.rs) and nested files (e.g. ./crates/foo/src/lib.rs).
+      glob: "{,**/}*.{rs,ts,tsx,js,jsx,mjs,cjs,py}"
       run: |
         set -e
         # Detect language by file presence in repo root.
@@ -50,33 +52,41 @@ pre-commit:
 
     trailing-ws:
       glob: "*.{md,yml,yaml,toml,rs,ts,tsx,js,jsx,py}"
+      # Read staged content from the index (not the worktree) so a developer
+      # who stages trailing whitespace and then removes it without re-staging
+      # gets a clean bill. git diff --check is built-in and matches trailing
+      # whitespace anywhere in the diff (added/modified lines), including in
+      # files whose path contains shell metacharacters or spaces.
       run: |
-        # Strip trailing whitespace from staged lines.
-        if ! git diff --cached --name-only --diff-filter=ACM | xargs -I{} sh -c 'grep -lE " +$" {} 2>/dev/null' | grep -q .; then
-          echo "[lefthook:trailing-ws] clean"
-        else
-          echo "::warning::trailing whitespace detected in staged files"
-          exit 1
+        # Exclude deletions (--diff-filter=ACM keeps Added/Copied/Modified).
+        STAGED=$(git diff --cached --name-only --diff-filter=ACM)
+        if [ -n "$STAGED" ]; then
+          # Build a pathspec: feed via stdin to avoid argv-length issues and
+          # to bypass any shell metacharacters in file names.
+          echo "$STAGED" | git diff --cached --check --stdin
         fi
 
 commit-msg:
   commands:
     conventional:
+      # Lefthook substitutes {1} with the path to the commit-message file
+      # inside `run` commands; bare $1 is the script's own argv, not the hook arg.
       run: |
         set -e
-        MSG_FILE="$1"
+        MSG_FILE="{1}"
         FIRST_LINE=$(head -n1 "$MSG_FILE")
         # Conventional commit: type(scope?): subject
         if ! echo "$FIRST_LINE" | grep -qE '^(feat|fix|chore|docs|style|refactor|perf|test|build|ci|revert|release)(\([^)]+\))?!?: .+'; then
-          echo "::warning::commit title does not match conventional commit format: $FIRST_LINE"
+          echo "::error::commit title does not match conventional commit format: $FIRST_LINE"
           echo "Expected: type(scope?): subject — e.g. feat(auth): add login"
+          exit 1
         fi
 
 pre-push:
   parallel: false
   commands:
     lint-staged:
-      glob: "**/*.{rs,ts,tsx,js,jsx,py}"
+      glob: "{,**/}*.{rs,ts,tsx,js,jsx,py}"
       run: |
         set -e
         # pre-push must keep the nonzero exit on lint failure so the push is blocked.
