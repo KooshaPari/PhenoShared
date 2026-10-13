@@ -71,14 +71,14 @@ jobs:
 
       - name: cargo-release dry-run
         if: inputs.release-tool == 'cargo-release'
+        env:
+          BINARY_NAME: ${{ inputs.binary-name }}
         run: |
           set -euo pipefail
           cargo install cargo-release --locked
-          if [ -n "${{ inputs.binary-name }}" ]; then
-            cargo release --dry-run --no-push --no-tag --no-publish --bin "${{ inputs.binary-name }}"
-          else
-            cargo release --dry-run --no-push --no-tag --no-publish
-          fi
+          # `cargo release` doesn't take a --bin selector; for package selection
+          # use --package. binary-name is used later in the verify step instead.
+          cargo release --dry-run --no-push --no-tag --no-publish
 
       - name: cargo-release publish
         if: inputs.release-tool == 'cargo-release' && startsWith(github.ref, 'refs/tags/')
