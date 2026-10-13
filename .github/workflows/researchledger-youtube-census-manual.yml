@@ -2,7 +2,8 @@ name: ResearchLedger Fresh YouTube Census (manual)
 
 # The credentialed collector runs only from an operator-dispatched, reviewed
 # default-branch revision. A PR or feature-branch push must NEVER receive the
-# YouTube API secret. Workflow dispatch becomes available after merge.
+# YouTube API secret. The key is scoped to the capture step, not the job.
+# Workflow dispatch becomes available after merge.
 on:
   workflow_dispatch:
 
@@ -13,23 +14,12 @@ jobs:
   public-census:
     runs-on: ubuntu-24.04
     timeout-minutes: 15
-    env:
-      YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
     steps:
       - name: Checkout reviewed default-branch collector
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           ref: main
           persist-credentials: false
-
-      - name: Reject unavailable destination credential
-        shell: bash
-        run: |
-          set -euo pipefail
-          if [ -z "${YOUTUBE_API_KEY:-}" ]; then
-            echo "::error::PhenoShared Actions secret YOUTUBE_API_KEY is absent; do not reuse historical data."
-            exit 1
-          fi
 
       - name: Verify pinned collector and negative controls before acquisition
         shell: bash
@@ -41,8 +31,14 @@ jobs:
 
       - name: Collect fresh public API inventory into ephemeral runner storage
         shell: bash
+        env:
+          YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
         run: |
           set -euo pipefail
+          if [ -z "${YOUTUBE_API_KEY:-}" ]; then
+            echo "::error::PhenoShared Actions secret YOUTUBE_API_KEY is absent; no historical data substituted."
+            exit 1
+          fi
           umask 077
           output="$RUNNER_TEMP/eg-census"
           mkdir -p "$output"
