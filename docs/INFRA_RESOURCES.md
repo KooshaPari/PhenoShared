@@ -88,18 +88,19 @@ Do these once at org level. After that a new repo is a template plus a few names
 ### Infisical (reference only)
 - Convention: one Infisical project per product, environments `dev`, `staging`, `prod`, secrets named in UPPER_SNAKE_CASE, shared org values in a separate `org-shared` project and pulled in with secret references.
 - Repos read secrets from Infisical at deploy or runtime (see `crates/fabric-daemon/src/auth/secrets.rs` for the Rust client) and from GitHub Actions secrets for CI. Secret values never go in the repo, in issues, in PRs or in docs.
-- The reusable `trufflehog.yml` and `secret-guard.yml` workflows should be enabled on every repo.
+- `trufflehog.yml` and `secret-guard.yml` should be enabled on every repo. They do not declare a `workflow_call` trigger today, so other repos cannot call them with `uses:`; copy them or add `workflow_call` first.
+- CI needs an `INFISICAL_TOKEN` GitHub Actions secret. The Rust client needs a client ID and client secret. Creating the project and environments is not enough: create a machine identity and store these as secrets in each consuming repo (names only here, never values).
 
 ### GitHub defaults for a new repo
 - Start from the closest template in `crates/hexa-kit/templates/` or copy `.github/` essentials: `CODEOWNERS`, `PULL_REQUEST_TEMPLATE.md`, `ISSUE_TEMPLATE/`, `dependabot.yml`.
-- Call reusable workflows from this repo rather than copying them: `uses: KooshaPari/PhenoShared/.github/workflows/ci.yml@main`.
+- Reuse needs a `workflow_call` trigger. `ci.yml` does not declare one today, so `uses: KooshaPari/PhenoShared/.github/workflows/ci.yml@main` is rejected. Add `on: workflow_call` to the workflow first, or copy it into the new repo.
 - Branch protection on `main`: require a pull request, at least one approval, dismiss stale reviews, require the CI check. Follow `.github/GOVERNANCE.md`.
 - Add the repo to `PhenoRegistry` so the ecosystem map stays accurate.
 - Default branch name `main`. Private by default; make public only when the repo holds nothing private.
 
 ### Checklist
 1. Create repo from template, set branch protection.
-2. Create Infisical project and environments.
+2. Create Infisical project and environments, plus a machine identity; add `INFISICAL_TOKEN` and the client ID and secret to the repo's secrets.
 3. Create D1 database, Worker and (if needed) Pages project with the naming above.
 4. Put private UIs behind Access and verify anonymous access is blocked.
 5. Add the uptime monitor and Sentry project if the product is user-facing.
