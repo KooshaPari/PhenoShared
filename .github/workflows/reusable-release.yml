@@ -9,14 +9,10 @@ on:
         type: string
         default: '.'
       release-tool:
-        description: 'release tool to use'
+        description: 'Release tool: release-please | cargo-release | python-build'
         required: false
-        type: choice
-        default: release-please
-        options:
-          - release-please
-          - cargo-release
-          - python-build
+        type: string
+        default: 'release-please'
       binary-name:
         description: 'Binary to package (Rust)'
         required: false
@@ -32,6 +28,9 @@ on:
       PYPI_TOKEN:
         required: false
         description: 'PyPI token (python-build)'
+
+permissions:
+  contents: read
 
 jobs:
   release:
@@ -55,6 +54,13 @@ jobs:
         with:
           python-version: '3.12'
 
+      - name: Validate release-tool input
+        run: |
+          case "${{ inputs.release-tool }}" in
+            release-please|cargo-release|python-build) ;;
+            *) echo "::error::Invalid release-tool: ${{ inputs.release-tool }} (expected: release-please | cargo-release | python-build)"; exit 2 ;;
+          esac
+
       - name: release-please
         if: inputs.release-tool == 'release-please'
         uses: googleapis/release-please-action@v4
@@ -68,8 +74,11 @@ jobs:
         run: |
           set -euo pipefail
           cargo install cargo-release --locked
-          cargo release --dry-run --no-push --no-tag --no-publish \
-            ${{ inputs.binary-name && format('--bin {0}', inputs.binary-name) || '' }}
+          if [ -n "${{ inputs.binary-name }}" ]; then
+            cargo release --dry-run --no-push --no-tag --no-publish --bin "${{ inputs.binary-name }}"
+          else
+            cargo release --dry-run --no-push --no-tag --no-publish
+          fi
 
       - name: cargo-release publish
         if: inputs.release-tool == 'cargo-release' && startsWith(github.ref, 'refs/tags/')
@@ -77,7 +86,9 @@ jobs:
           CARGO_REGISTRY_TOKEN: ${{ secrets.CARGO_REGISTRY_TOKEN }}
         run: |
           set -euo pipefail
-          cargo release push --no-confirm --token "$CARGO_REGISTRY_TOKEN"
+          # cargo-release reads CARGO_REGISTRY_TOKEN from env; no --token flag.
+          # `cargo release push` is the operator-driven publish; `cargo release` performs the upload.
+          cargo release --no-confirm --tag-prefix ""
 
       - name: python-build
         if: inputs.release-tool == 'python-build'
@@ -89,12 +100,14 @@ jobs:
           python -m build
           twine upload dist/* --token "$PYPI_TOKEN"
 
-      - name: Verify binary build (Rust)
-        if: ${{ inputs.release-tool == 'release-please' || inputs.release-tool == 'cargo-release' }}
+      - name: Verify binary build (cargo-release only)
+        if: inputs.release-tool == 'cargo-release'
+        env:
+          RELEASE_BINARY_NAME: ${{ inputs.binary-name }}
         run: |
           set -euo pipefail
-          if [ -n "${{ inputs.binary-name }}" ]; then
-            cargo build --release --bin "${{ inputs.binary-name }}"
+          if [ -n "$RELEASE_BINARY_NAME" ]; then
+            cargo build --release --bin "$RELEASE_BINARY_NAME"
           else
             cargo build --release --workspace
           fi
