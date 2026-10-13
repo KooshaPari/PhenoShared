@@ -83,6 +83,20 @@ assert_dirs() {
     echo "ERROR: --source $SOURCE_DIR does not contain .github/workflows with reusable-*.yml — is it a kit root?" >&2
     exit 2
   fi
+  # Refuse to install into a system directory. realpath resolves any
+  # ../../ traversal so the check catches paths that resolve into /etc, /usr,
+  # /System, etc. even when spelled as a relative path.
+  local abs_target abs_source
+  abs_target="$(cd "$TARGET_DIR" && pwd -P)"
+  abs_source="$(cd "$SOURCE_DIR" && pwd -P)"
+  case "$abs_target" in
+    /|/bin|/sbin|/usr|/etc|/var|/boot|/System|/Library|/private/etc)
+      echo "ERROR: refusing to install into system directory $abs_target" >&2
+      exit 2
+      ;;
+  esac
+  TARGET_DIR="$abs_target"
+  SOURCE_DIR="$abs_source"
 }
 
 want() {
@@ -100,6 +114,13 @@ copy_file() {
   if [[ -e "$dst" && "$FORCE" != "true" ]]; then
     echo "  SKIP (exists): $rel — re-run with --force to overwrite"
     return 0
+  fi
+  # Reject destination paths that traverse a symlink. Without this check, a
+  # prepared symlink under --target (e.g. .github/workflows/lefthook.yml ->
+  # /etc/anything) would let a forced install write outside the target repo.
+  if [[ -L "$dst" ]] || [[ -e "$dst" && -L "$(dirname "$dst")" ]]; then
+    echo "  REFUSE (symlink): $rel — refusing to overwrite through a symbolic link" >&2
+    return 3
   fi
   if [[ "$DRY_RUN" == "true" ]]; then
     echo "  WOULD COPY: $rel"
@@ -132,8 +153,21 @@ install_mcp() {
 
 install_scripts() {
   echo "[install] scripts → $TARGET_DIR/tools/integration-kit/"
-  copy_file "$SCRIPT_DIR/install.sh" "$TARGET_DIR/tools/integration-kit/install.sh" "tools/integration-kit/install.sh"
-  if [[ "$DRY_RUN" != "true" ]]; then
+  # When --source points to a different kit root, prefer that kit's installer
+  # so the installed version matches the rest of the bundle. Otherwise, copy
+  # the running script (the canonical installer for this checkout).
+  local installer_src="$SCRIPT_DIR/install.sh"
+  if [[ -n "$SOURCE_DIR" && -e "$SOURCE_DIR/tools/integration-kit/install.sh" ]]; then
+    installer_src="$SOURCE_DIR/tools/integration-kit/install.sh"
+  fi
+  copy_file "$installer_src" "$TARGET_DIR/tools/integration-kit/install.sh" "tools/integration-kit/install.sh"
+  if [[ "$DRY_RUN" == "true" ]]; then
+    return 0
+  fi
+  # Only chmod if we actually copied the file (or it exists and --force was used).
+  if [[ -x "$TARGET_DIR/tools/integration-kit/install.sh" ]]; then
+    : # already executable, no-op
+  else
     chmod +x "$TARGET_DIR/tools/integration-kit/install.sh"
   fi
 }
