@@ -11633,10 +11633,13 @@ dependencies = [
 name = "phenotype-observably-macros"
 version = "0.2.0"
 dependencies = [
+ "futures-lite",
  "proc-macro2",
  "quote",
  "syn 2.0.119",
+ "tokio",
  "tracing",
+ "tracing-subscriber",
 ]
 
 [[package]]
