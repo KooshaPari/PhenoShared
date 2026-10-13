@@ -30,15 +30,18 @@ on:
       junit-path:
         description: 'Path to JUnit XML report'
         value: ${{ jobs.test.outputs.junit }}
-    secrets:
-      INFISICAL_TOKEN:
-        required: false
+
+permissions:
+  contents: read
 
 jobs:
   detect:
     runs-on: ubuntu-latest
     outputs:
       lang: ${{ steps.detect.outputs.lang }}
+    defaults:
+      run:
+        working-directory: ${{ inputs.working-directory }}
     steps:
       - uses: actions/checkout@v4
       - id: detect
@@ -71,6 +74,12 @@ jobs:
         with:
           tool: cargo-nextest
 
+      - name: Install cargo-llvm-cov (coverage)
+        if: needs.detect.outputs.lang == 'rust' && inputs.coverage == 'true'
+        uses: taiki-e/install-action@ec94b08fe6c0ecd17efe4f4bfaadd961b3a5b83d
+        with:
+          tool: cargo-llvm-cov
+
       - name: Setup Node
         if: needs.detect.outputs.lang == 'node'
         uses: actions/setup-node@v4
@@ -87,43 +96,72 @@ jobs:
       - name: Rust nextest
         if: needs.detect.outputs.lang == 'rust'
         id: junit
+        env:
+          TEST_EXTRA_ARGS: ${{ inputs.extra-args }}
+          TEST_PROFILE: ${{ inputs.test-profile }}
         run: |
           set -euo pipefail
-          mkdir -p target/nextest/${{ inputs.test-profile }}
-          cargo nextest run --workspace --profile ${{ inputs.test-profile }} \
-            --retries 2 --test-threads=12 ${{ inputs.extra-args }} \
-            --archive-file target/nextest/${{ inputs.test-profile }}/archive.zip 2>/dev/null || \
-          cargo nextest run --workspace --profile ${{ inputs.test-profile }} \
-            --retries 2 --test-threads=12 ${{ inputs.extra-args }}
+          mkdir -p target/nextest
           if [ "${{ inputs.coverage }}" = "true" ]; then
-            cargo llvm-cov nextest --profile ${{ inputs.test-profile }} --workspace --lcov --output-path lcov.info || true
+            # Coverage path: cargo-llvm-cov runs nextest under coverage
+            # shellcheck disable=SC2086
+            cargo llvm-cov nextest --profile "$TEST_PROFILE" --workspace \
+              --retries 2 --lcov --output-path lcov.info $TEST_EXTRA_ARGS
             echo "lcov=$PWD/lcov.info" >> "$GITHUB_OUTPUT"
+          else
+            # shellcheck disable=SC2086
+            cargo nextest run --workspace --profile "$TEST_PROFILE" \
+              --retries 2 --test-threads=12 \
+              --archive-file "target/nextest/${TEST_PROFILE}/archive.zip" $TEST_EXTRA_ARGS
           fi
           # Always emit a junit path (empty if nextest didn't produce one)
-          JUNIT_PATH="target/nextest/${{ inputs.test-profile }}/junit.xml"
+          JUNIT_PATH="target/nextest/${TEST_PROFILE}/junit.xml"
           if [ -f "$JUNIT_PATH" ]; then
             echo "path=$JUNIT_PATH" >> "$GITHUB_OUTPUT"
+          else
+            echo "path=" >> "$GITHUB_OUTPUT"
           fi
 
       - name: Node test
         if: needs.detect.outputs.lang == 'node'
         id: junit
+        env:
+          TEST_EXTRA_ARGS: ${{ inputs.extra-args }}
         run: |
           set -euo pipefail
           if [ -f package.json ] && node -e "require('./package.json').scripts?.test" 2>/dev/null; then
-            npm test --if-present ${{ inputs.extra-args }}
+            if [ -f package-lock.json ]; then
+              npm ci
+            elif [ -f yarn.lock ]; then
+              yarn install --frozen-lockfile
+            elif [ -f pnpm-lock.yaml ]; then
+              npm install -g pnpm && pnpm install --frozen-lockfile
+            else
+              npm install
+            fi
+            # shellcheck disable=SC2086
+            npm test --if-present $TEST_EXTRA_ARGS
+            if [ -f reports/junit.xml ]; then
+              echo "path=reports/junit.xml" >> "$GITHUB_OUTPUT"
+            else
+              echo "path=" >> "$GITHUB_OUTPUT"
+            fi
           else
             echo "No test script in package.json; skipping."
+            echo "path=" >> "$GITHUB_OUTPUT"
           fi
 
       - name: Python pytest
         if: needs.detect.outputs.lang == 'python'
         id: junit
+        env:
+          TEST_EXTRA_ARGS: ${{ inputs.extra-args }}
         run: |
           set -euo pipefail
           python -m pip install --quiet pytest pytest-cov
           mkdir -p reports
-          pytest ${{ inputs.extra-args }} --junitxml=reports/junit.xml
+          # shellcheck disable=SC2086
+          pytest $TEST_EXTRA_ARGS --junitxml=reports/junit.xml
           echo "path=reports/junit.xml" >> "$GITHUB_OUTPUT"
 
       - name: Upload JUnit
