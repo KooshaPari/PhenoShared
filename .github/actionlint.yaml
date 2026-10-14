@@ -13,4 +13,10 @@ self-hosted-runner:
     - blacksmith-2vcpu
     - blacksmith-4vcpu
     - blacksmith-8vcpu
+    # Declared self-hosted runner labels in manual-only runner-probe.yml.
+    # This acknowledges custom labels for static validation; it does not
+    # establish a registered online runner.
+    - podman
+    - wsl2
+    - fedora44
 config-variables: null
