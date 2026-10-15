@@ -26,13 +26,16 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # v4.2.2
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683# v4.2.2
 
       - name: Trunk Check
-        uses: trunk-io/trunk-action@188fcf65e6218570e8dc5d0954e13b132c312a2d  # v1.2.0
+        uses: trunk-io/trunk-action@188fcf65e6218570e8dc5d0954e13b132c312a2d # v1.2.0
+        with:
+          # Artifact-only annotation handling; pull_request GITHUB_TOKEN has no checks:write.
+          save-annotations: "true"
 
       - name: Trunk Upgrade (on schedule only)
         if: github.event_name == 'schedule'
-        uses: trunk-io/trunk-action@188fcf65e6218570e8dc5d0954e13b132c312a2d  # v1.2.0
+        uses: trunk-io/trunk-action@188fcf65e6218570e8dc5d0954e13b132c312a2d# v1.2.0
         with:
           arguments: --upgrade
