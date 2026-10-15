@@ -152,4 +152,4 @@ jobs:
             --body "Daily audit failed. See run: $RUN_URL
 
           This issue is auto-opened by the compute-infra-auditors workflow.
-          Add to the DAG plan (${{ matrix.plan }}) and resolve before next run."
+          Add to the DAG plan (${{ matrix.repo.plan }}) and resolve before next run."
