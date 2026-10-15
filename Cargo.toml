@@ -428,6 +428,7 @@ members = [
     "crates/traceability-core",
     "crates/traceability-decorators",
     "crates/trace-gate",
+    "crates/gateway",
     # --- E2.4 Pattern A wave 1 (2026-10-09): 5 small/leaf crates (connector-testkit deferred; pulls PhenoObservability path-dep not in CI; phenotype-mock deferred; latent Drop+StubFn source bugs) ---
     # --- E2.4 Pattern A wave 3 batch AX-29 (2026-10-09): configra-ops + settly ---
     # --- E2.4 Pattern A wave 3 batch AX-30 (2026-10-09): 4 cloud-* ---
@@ -801,8 +802,7 @@ members = [
     # --- E2.4 Pattern A wave 3 batch AX-31 (2026-10-09): 5 simple ---
     # --- E2.4 Pattern A wave 3 batch AX-32 (2026-10-09): dag-scheduler ---
     # --- E2.4 Pattern A wave 3 batch AX-33 (2026-10-09): fabric-capability + fabric-checker ---
-    # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): klipdot + logkit ---
-]
+    # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): klipdot + logkit ---]
 [workspace.package]
 version = "0.3.10"
 edition = "2021"
@@ -891,10 +891,10 @@ arc-swap = "1.7"
 rand = "0.8"
 tracing = "0.1"
 tracing-subscriber = { version = "0.3", features = ["env-filter", "json"] }
-tracing-opentelemetry = "0.25"
+tracing-opentelemetry = "0.33"
 opentelemetry = "0.32"
 opentelemetry_sdk = { version = "0.32", features = ["rt-tokio"] }
-opentelemetry-otlp = { version = "0.17", features = ["tonic"] }
+opentelemetry-otlp = { version = "0.32", features = ["grpc-tonic"] }
 fs2 = "0.4"
 libc = "0.2"
 ring = "0.17"
