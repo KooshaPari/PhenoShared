@@ -38,9 +38,9 @@ jobs:
         id: check-benches
         run: |
           if [ -d "rust/benches" ] || [ -d "benches" ]; then
-            echo "has-benches=true" >> $GITHUB_OUTPUT
+            echo "has-benches=true" >> "$GITHUB_OUTPUT"
           else
-            echo "has-benches=false" >> $GITHUB_OUTPUT
+            echo "has-benches=false" >> "$GITHUB_OUTPUT"
           fi
       - name: Run benchmarks
         if: steps.check-benches.outputs.has-benches == 'true'

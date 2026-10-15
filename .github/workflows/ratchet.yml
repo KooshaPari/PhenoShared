@@ -44,16 +44,16 @@ jobs:
         id: prev
         run: |
           if [ -f .coverage-baseline ]; then
-            echo "prev=$(cat .coverage-baseline)" >> $GITHUB_OUTPUT
+            echo "prev=$(cat .coverage-baseline)" >> "$GITHUB_OUTPUT"
           else
-            echo "prev=0" >> $GITHUB_OUTPUT
+            echo "prev=0" >> "$GITHUB_OUTPUT"
           fi
 
       - name: Read current coverage
         id: curr
         run: |
           CURRENT=$(cat coverage/coverage-summary.json | jq '.total.lines.pct')
-          echo "curr=$CURRENT" >> $GITHUB_OUTPUT
+          echo "curr=$CURRENT" >> "$GITHUB_OUTPUT"
           echo "Current coverage: $CURRENT%"
 
       - name: Assert coverage ratchet

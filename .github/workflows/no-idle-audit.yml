@@ -33,7 +33,7 @@ jobs:
         run: |
           python scripts/no-idle-audit.py --strict --markdown \
             2>&1 | tee /tmp/audit_report.md
-          exit ${PIPESTATUS[0]}
+          exit "${PIPESTATUS[0]}"
         continue-on-error: true
 
       - name: "Check for violations"
