@@ -1,3 +1,5 @@
+version: 0.1
+
 # =============================================================================
 # Trunk.io — Plugin versions for linting/formatting tools
 # =============================================================================
@@ -8,7 +10,8 @@
 plugins:
   sources:
     - id: trunk
-      ref: v1.2.2
+      ref: v1.6.1
+      uri: https://github.com/trunk-io/plugins
     - id: community
       ref: main
 
