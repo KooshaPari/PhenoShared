@@ -19,7 +19,7 @@ jobs:
         run: |
           echo "::group::host"
           uname -a
-          cat /etc/os-release | head -3
+          head -n 3 /etc/os-release
           echo "::endgroup::"
       - name: Container tooling
         run: |
