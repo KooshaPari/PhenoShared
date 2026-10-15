@@ -1,0 +1,90 @@
+{
+  "_comment_top": "MCP hooks configuration template for harness agents. Each harness (jcode, codex, forge) has its own preferred location and schema; see _comment_install_paths below.",
+  "_comment_version": "v1.1 — $CLAUDE_TOOL_INPUT is JSON-encoded; use jq to inspect (2026-10-13, instinct shared-integration-kit).",
+  "_comment_install_paths": {
+    "jcode": "~/.jcode/hooks.json (or ./.jcode/hooks.json for repo-local)",
+    "codex": "~/.codex/hooks.toml (or ./.codex/hooks.toml for repo-local); convert JSON → TOML",
+    "forge": "~/.forge/hooks.yaml (or ./.forge/hooks.yaml for repo-local); convert JSON → YAML",
+    "claude_code": "~/.claude/settings.json (merge into existing settings.json under \"hooks\")"
+  },
+  "_comment_license": "Same as parent repo (PhenoShared — operator-confirmed MIT/Apache dual).",
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "jq -r 'tostring' \"$CLAUDE_TOOL_INPUT\" 2>/dev/null | grep -qE 'gh repo delete|git push --force|git push --force-with-lease|git reset --hard|git clean -fd|git branch -D' && { echo '[mcp-hook] BLOCKED destructive command' >&2; exit 2; } || true",
+            "timeout": 5000,
+            "_intent": "Block destructive git/gh commands. Tool input is JSON; we serialize to a string and grep for the dangerous pattern. `|| true` on the grep is intentional (no match → allow); the explicit exit 2 on a match is what blocks."
+          }
+        ]
+      },
+      {
+        "matcher": "Edit|Write|MultiEdit|apply_patch",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "jq -r '.file_path // .path // empty' \"$CLAUDE_TOOL_INPUT\" 2>/dev/null | xargs -I{} echo \"[mcp-hook] Pre-edit — file path: {}\"",
+            "timeout": 2000,
+            "_intent": "Log edit operations for audit. Edit/Write/MultiEdit use file_path; apply_patch uses path. jq normalizes the JSON input."
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write|MultiEdit|apply_patch",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "FILE=$(jq -r '.file_path // .path // empty' \"$CLAUDE_TOOL_INPUT\" 2>/dev/null); if [ -z \"$FILE\" ] || [ ! -f \"$FILE\" ]; then exit 0; fi; case \"$FILE\" in *.rs) if command -v rustfmt >/dev/null 2>&1; then rustfmt --check \"$FILE\" || rustfmt \"$FILE\"; fi ;; *.py) if command -v ruff >/dev/null 2>&1; then ruff format --check \"$FILE\" || ruff format \"$FILE\"; fi ;; *.ts|*.tsx|*.js|*.jsx|*.mjs|*.cjs) if command -v prettier >/dev/null 2>&1; then prettier --check \"$FILE\" || prettier --write \"$FILE\"; elif command -v npx >/dev/null 2>&1; then npx --no-install prettier --check \"$FILE\" || npx --no-install prettier --write \"$FILE\"; fi ;; *) exit 0 ;; esac",
+            "timeout": 30000,
+            "_intent": "Run a fast, file-scoped formatter pass against the just-edited file (not the full lefthook pre-commit suite). The full suite can run on the next commit. Failures are NOT auto-fixed when --check fails; we attempt the formatter but never block. To gate, run lefthook pre-commit separately."
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo \"[mcp-hook] Post-bash — duration: $CLAUDE_TOOL_DURATION_MS ms\"",
+            "timeout": 2000,
+            "_intent": "Log bash command duration."
+          }
+        ]
+      }
+    ],
+    "Notification": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "if [ \"$(uname -s)\" = \"Darwin\" ]; then osascript -e 'display notification \"Agent event\" with title \"jcode\" subtitle \"'\"$CLAUDE_NOTIFICATION_TYPE\"'\"' 2>/dev/null; elif command -v notify-send >/dev/null 2>&1; then notify-send \"jcode\" \"Agent event: $CLAUDE_NOTIFICATION_TYPE\"; else echo \"[mcp-hook] notification: $CLAUDE_NOTIFICATION_TYPE\"; fi",
+            "timeout": 3000,
+            "_intent": "Desktop notification on harness events. macOS uses osascript; Linux uses notify-send; otherwise log to stdout."
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo \"[mcp-hook] agent stopped at $(date -u +%FT%TZ)\"",
+            "timeout": 2000
+          }
+        ]
+      }
+    ]
+  },
+  "_comment_variables": {
+    "$CLAUDE_TOOL_INPUT": "Tool input as a JSON-encoded string. Use `jq -r '...' \"$CLAUDE_TOOL_INPUT\"` to inspect — do not pattern-match the raw string.",
+    "$CLAUDE_TOOL_DURATION_MS": "Tool execution duration in milliseconds (PostToolUse).",
+    "$CLAUDE_NOTIFICATION_TYPE": "Type of harness notification (auth, permission_prompt, idle, etc.).",
+    "_note": "Variable names are conventions; each harness may use different names. Test before relying on them."
+  }
+}
