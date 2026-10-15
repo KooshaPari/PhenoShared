@@ -3,6 +3,7 @@
 # names version-pinned upstream plugin linters rather than unsupported custom
 # top-level "linters", "formatters", "cache", "env" and "actions" fields.
 # https://docs.trunk.io/code-quality/overview/linters/manage-linters
+---
 version: 0.1
 
 cli:
