@@ -1,113 +1,37 @@
-# =============================================================================
-# Trunk.io — Plugin versions for linting/formatting tools
-# =============================================================================
-# This file is auto-generated. Run `trunk upgrade` to update.
-# https://docs.trunk.io/check/reference
-# =============================================================================
+# Trunk Check v0.1 configuration, migrated from an invalid legacy dialect.
+# Repo CI retains the actual Trunk action and full lint behavior; this file
+# names version-pinned upstream plugin linters rather than unsupported custom
+# top-level "linters", "formatters", "cache", "env" and "actions" fields.
+# https://docs.trunk.io/code-quality/overview/linters/manage-linters
+---
+version: 0.1
+
+cli:
+  version: 1.22.2
 
 plugins:
   sources:
     - id: trunk
-      ref: v1.2.2
-    - id: community
-      ref: main
+      uri: https://github.com/trunk-io/plugins
+      ref: v1.5.0
 
-# Linters (auto-detected by file type)
-linters:
-  actionlint:
-    enabled: true
-    commands:
-      - name: actionlint
-        run: actionlint ${target}
-        direct_configs:
-          - .github/workflows/*.yml
-  black:
-    enabled: true
-    commands:
-      - name: black
-        run: black --check --line-length 100 ${target}
-        direct_configs:
-          - pyproject.toml
-          - ruff.toml
-  clippy:
-    enabled: true
-    commands:
-      - name: clippy
-        run: cargo clippy --all-targets --all-features -- -D warnings
-  eslint:
-    enabled: true
-    direct_configs:
-      - .eslintrc.*
-      - eslint.config.*
-  golangci-lint:
-    enabled: true
-    direct_configs:
-      - .golangci.yml
-      - .golangci.yaml
-  mypy:
-    enabled: true
-    commands:
-      - name: mypy
-        run: mypy --ignore-missing-imports ${target}
-  ruff:
-    enabled: true
-    commands:
-      - name: ruff
-        run: ruff check --output-format=github ${target}
-        direct_configs:
-          - ruff.toml
-          - pyproject.toml
-  shellcheck:
-    enabled: true
-  taplo:
-    enabled: true
-  yamllint:
-    enabled: true
+# Translation of the existing explicitly enabled language families.
+# Changes to linter versions or enabled families require a separate review.
+lint:
+  enabled:
+    - actionlint@1.7.1
+    - black@24.4.2
+    - clippy@1.78.0
+    - eslint@8.57.0
+    - golangci-lint@1.61.0
+    - mypy@1.10.0
+    - ruff@0.4.5
+    - shellcheck@0.10.0
+    - taplo@0.9.3
+    - yamllint@1.35.1
+    - prettier@3.2.5
+    - rustfmt@1.78.0
 
-# Formatters
-formatters:
-  black:
-    enabled: true
-    commands:
-      - name: black
-        run: black --line-length 100 ${target}
-        direct_configs:
-          - pyproject.toml
-  prettier:
-    enabled: true
-    direct_configs:
-      - .prettierrc
-      - prettier.config.*
-  rustfmt:
-    enabled: true
-    commands:
-      - name: rustfmt
-        run: rustfmt ${target}
-
-# Actions (CI optimization)
-actions:
-  trunk-check:
-    enabled: true
-    size: 5GB
-    memory: 16GB
-    disk: 10GB
-  trunk-merge:
-    enabled: true
-    size: 5GB
-  trunk-push:
-    enabled: true
-    size: 5GB
-
-# Caching
-cache:
-  enabled: true
-  storage: local
-
-# CLI
-cli:
-  version: 1.22.2
-
-# Environment
-env:
-  variables:
-    EDITOR: vim
+# Historical custom command lines had not been accepted by Trunk's config
+# parser. No CI issue suppression, blanket ignore, or false green status is
+# introduced here. Actual plugin execution remains a separate hosted gate.
