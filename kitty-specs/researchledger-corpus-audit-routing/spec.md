@@ -14,11 +14,15 @@ This project-owned specification tracks the registry routing packet originally d
 
 ## Tracking status
 
-This file is a local specification, not proof of live AgilePlus registration. The supported `specify` call accepted the command into its queue, but the subsequent supported `get_feature` returned gRPC `NOT_FOUND`. Registration is PENDING, not verified. No repeat write was submitted. Queue acceptance does not establish governance completion.
+Registration was subsequently verified by the AgilePlus CLI on 2026-09-12: the `specify` call persisted a Created → Specified transition; a separate `list` command confirmed feature ID **3**, slug `researchledger-corpus-audit-routing`, in the `specified` state. Earlier `get_feature` `NOT_FOUND` responses precede registration and are historical. MCP read-back timed out; transport and governance completion remain **unverified**. See merged [PhenoRegistry #566](https://github.com/KooshaPari/PhenoRegistry/pull/566). Do not re-enqueue the feature.
 
 ## Acceptance
 
-- The WBS and inventory links resolve at `8822aa14baef2a964288076645edcc493c338688`.
+- Historical WBS and inventory were observed at `8822aa14baef2a964288076645edcc493c338688` in September. That Git object currently fails access/recovery checks, so **current resolution is not verified**; recover it before treating links as live.
 - Infisical child output contains no fetched environment dump and no secret artifact is uploaded.
 - Hosted validation and reviewer acceptance are recorded for the repair commit.
-- Live feature registration remains an explicit open gate until read back successfully.
+- CLI registration is verified as `specified`; MCP transport and governance acceptance remain explicit open gates.
+
+## Recovery continuity (October 13, 2026)
+
+The old ResearchLedger repository is no longer accessible to the current GitHub connection. [PhenoShared #429](https://github.com/KooshaPari/PhenoShared/pull/429) has staged the verified historical Wave 5 evidence but has **not** integrated the later September research branch. [PhenoApps #166](https://github.com/KooshaPari/PhenoApps/pull/166) remains a separate unmerged application import. The logical ResearchLedger authority must be reconciled across the shared research engine, desktop shell and private source vault; this specification is not proof of completed absorption.
