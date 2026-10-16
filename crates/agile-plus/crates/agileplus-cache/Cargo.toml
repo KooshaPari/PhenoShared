@@ -12,20 +12,6 @@ path = "src/lib.rs"
 default = []
 redis = ["dep:redis", "dep:bb8", "dep:bb8-redis"]
 
-[lib]
-path = "src/lib.rs"
-
-[features]
-default = []
-redis = ["dep:redis", "dep:bb8", "dep:bb8-redis"]
-
-[lib]
-path = "src/lib.rs"
-
-[features]
-default = []
-redis = ["dep:redis", "dep:bb8", "dep:bb8-redis"]
-
 [dependencies]
 agileplus-domain = { path = "../agileplus-domain" }
 redis = { version = "0.27", features = ["aio", "tokio-comp"] }
