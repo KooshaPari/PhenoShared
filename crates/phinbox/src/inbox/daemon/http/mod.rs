@@ -134,19 +134,34 @@ fn handle_connection(
     // A read-only workflow view of the canonical management ledger.
     if target == "/management" || target == "/api/management" {
         if method != "GET" || !stream.peer_addr()?.ip().is_loopback() {
-            return write_response(&mut stream, 403, "Forbidden", "text/plain", b"local GET only");
+            return write_response(
+                &mut stream,
+                403,
+                "Forbidden",
+                "text/plain",
+                b"local GET only",
+            );
         }
         let store = crate::management::Store::open(inbox_root.join("management.sqlite"));
         let result = store.and_then(|store| {
             if target == "/api/management" {
                 Ok(("application/json", serde_json::to_string(&store.list()?)?))
             } else {
-                Ok(("text/html; charset=utf-8", crate::management::web::render(&store)?))
+                Ok((
+                    "text/html; charset=utf-8",
+                    crate::management::web::render(&store)?,
+                ))
             }
         });
         return match result {
             Ok((kind, body)) => write_response(&mut stream, 200, "OK", kind, body.as_bytes()),
-            Err(_) => write_response(&mut stream, 500, "Internal Server Error", "text/plain", b"ledger unavailable"),
+            Err(_) => write_response(
+                &mut stream,
+                500,
+                "Internal Server Error",
+                "text/plain",
+                b"ledger unavailable",
+            ),
         };
     }
 
@@ -219,7 +234,18 @@ fn handle_connection(
                     },
                     _ => match super::form::submit_answer(inbox_root, &id, &buf) {
                         Ok(()) => {
-                            redirect_response(&mut stream, &format!("/inbox/{id}/done"))?;
+                            let deferred = load(inbox_root, &id).ok().is_some_and(|r| {
+                                matches!(
+                                    r.response,
+                                    Some(crate::spec::ElicitResponse::Deferred { .. })
+                                )
+                            });
+                            let location = if deferred {
+                                "/inbox".to_string()
+                            } else {
+                                format!("/inbox/{id}/done")
+                            };
+                            redirect_response(&mut stream, &location)?;
                             None
                         },
                         // Raced the TTL between the settle above and the

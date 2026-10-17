@@ -6,6 +6,7 @@ import SwiftUI
 
 extension DetailView {
     func loadDefaults() {
+        notes = request.spec.notes?.defaultValue ?? ""
         switch request.spec.field {
         case .text(_, let def, _, _, _, _):
             textVal = def ?? ""
@@ -19,8 +20,8 @@ extension DetailView {
             if let idx = defaultIndex, idx >= 0, idx < opts.count {
                 choice = opts[idx].value
             }
-        case .dateTime(_, let def, _):
-            if let def, let parsed = Self.rfc3339Date(def) {
+        case .dateTime(_, let def, let kind):
+            if let def, let parsed = Self.parseDate(def, kind: kind) {
                 dateVal = parsed
             }
         case .unknown:
@@ -134,6 +135,39 @@ struct MaxLengthModifier: ViewModifier {
                 }
         } else {
             content
+        }
+    }
+}
+
+extension DetailView {
+    static func wireDate(_ date: Date, kind: String?) -> String {
+        if kind == "date" || kind == "time" {
+            let formatter = DateFormatter()
+            formatter.locale = Locale(identifier: "en_US_POSIX")
+            formatter.dateFormat = kind == "date" ? "yyyy-MM-dd" : "HH:mm"
+            return formatter.string(from: date)
+        }
+        return ISO8601DateFormatter().string(from: date)
+    }
+    static func parseDate(_ value: String, kind: String?) -> Date? {
+        if kind == "date" || kind == "time" {
+            let formatter = DateFormatter()
+            formatter.locale = Locale(identifier: "en_US_POSIX")
+            formatter.dateFormat = kind == "date" ? "yyyy-MM-dd" : "HH:mm"
+            return formatter.date(from: value)
+        }
+        return rfc3339Date(value)
+    }
+    @ViewBuilder var detailsCard: some View {
+        if let details = request.spec.details {
+            VStack(alignment: .leading, spacing: 10) {
+                if let command = details.command { Text(command).font(.system(.body, design: .monospaced)) }
+                if let reason = details.reason { Text(reason) }
+                ForEach(Array((details.items ?? []).enumerated()), id: \.offset) { _, item in Text(item.display) }
+                ForEach(Array((details.effects ?? []).enumerated()), id: \.offset) { _, effect in Text("Effect: " + effect) }
+            }
+            .textSelection(.enabled)
+            .padding(20).frame(maxWidth: .infinity, alignment: .leading).background(glass)
         }
     }
 }

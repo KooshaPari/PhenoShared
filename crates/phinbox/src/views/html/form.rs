@@ -156,6 +156,31 @@ pub fn render_form_html(req: &PendingRequest) -> String {
     };
     let ago = format_age(unix_now_ms_diff(req.queued_at_ms));
     let widget = render_field_widget(&req.spec.field);
+    let buttons = req.spec.buttons.clone().unwrap_or_default();
+    let confirm = format!(
+        "<button type=submit name=confirm value=ok class=ok>{}</button>",
+        html_escape(&buttons.confirm)
+    );
+    let cancel = format!(
+        "<button type=submit name=cancel value=1 class=cancel formnovalidate>{}</button>",
+        html_escape(&buttons.cancel)
+    );
+    let defer = buttons
+        .defer_label
+        .as_ref()
+        .map(|label| {
+            format!(
+                "<button type=submit name=defer value=ok formnovalidate>{}</button>",
+                html_escape(label)
+            )
+        })
+        .unwrap_or_default();
+    let actions = if buttons.default_is_cancel {
+        format!("{cancel}{defer}{confirm}")
+    } else {
+        format!("{confirm}{defer}{cancel}")
+    };
+    let details = render_details(req.spec.details.as_ref());
     let notes_box = req
         .spec
         .notes
@@ -182,10 +207,8 @@ pub fn render_form_html(req: &PendingRequest) -> String {
          style><body>{nav}<div class=card{urg}><div class=row><div \
          class=row-main><strong>{title}</strong><span class=ago>{ago}</span></div><div \
          class=row-sub><span>{field_kind}</span></div></div></div><main \
-         class=card><h2>{question}</h2><form method=POST action=/inbox/{rid}/answer \
-         class=actions>{widget}{notes_box}<button type=submit name=confirm value=ok \
-         class=ok>Submit</button><button type=submit name=cancel value=1 \
-         class=cancel>Cancel</button></form></main></body></html>",
+         class=card><h2>{question}</h2>{details}<form method=POST action=/inbox/{rid}/answer \
+         class=actions>{widget}{notes_box}{actions}</form></main><script>document.querySelector('form').addEventListener('submit',function(e){{if(e.submitter.name!=='confirm')return;var d=this.querySelector('input[type=datetime-local]');if(d){{d.type='text';d.value=new Date(d.value).toISOString();}}}});</script></body></html>",
         title = html_escape(req.spec.title.as_str()),
         css = full_html_css(),
         nav = NAV_HTML,
@@ -196,6 +219,8 @@ pub fn render_form_html(req: &PendingRequest) -> String {
         question = html_escape(&req.spec.question),
         widget = widget,
         notes_box = notes_box,
+        actions = actions,
+        details = details,
     )
 }
 
@@ -222,4 +247,34 @@ pub fn render_answer_html(_request_id: &str, success: bool, message: &str) -> St
         nav = NAV_HTML,
         message = html_escape(message),
     )
+}
+
+fn render_details(details: Option<&crate::spec::DetailsSpec>) -> String {
+    let Some(details) = details else {
+        return String::new();
+    };
+    let mut html = String::from("<section aria-label='Approval details'>");
+    if let Some(command) = &details.command {
+        html.push_str(&format!("<pre>{}</pre>", html_escape(command)));
+    }
+    if let Some(reason) = &details.reason {
+        html.push_str(&format!("<p>{}</p>", html_escape(reason)));
+    }
+    for item in &details.items {
+        use crate::spec::DetailItem;
+        let text = match item {
+            DetailItem::File { path, action, note } => {
+                format!("{action:?}: {path} {}", note.as_deref().unwrap_or(""))
+            },
+            DetailItem::Text { label, body } => format!("{label}: {body}"),
+            DetailItem::KeyValue { key, value } => format!("{key}: {value}"),
+            DetailItem::Warning { message } => format!("Warning: {message}"),
+        };
+        html.push_str(&format!("<p>{}</p>", html_escape(&text)));
+    }
+    for effect in &details.effects {
+        html.push_str(&format!("<p>Effect: {}</p>", html_escape(effect)));
+    }
+    html.push_str("</section>");
+    html
 }

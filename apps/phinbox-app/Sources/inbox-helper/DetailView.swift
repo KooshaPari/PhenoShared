@@ -23,6 +23,7 @@ struct DetailView: View {
             VStack(alignment: .leading, spacing: 24) {
                 headerCard
                 questionCard
+                detailsCard
                 formCard
                 notesCard
                 actionsRow
@@ -96,7 +97,7 @@ struct DetailView: View {
                     Text(ns.label).font(.headline).foregroundStyle(.white)
                     if ns.required == true { Text("*").foregroundStyle(.red) }
                 }
-                fieldInput(placeholder: "Optional notes...", binding: $notes, multiline: true, maxLength: nil)
+                fieldInput(placeholder: "Optional notes...", binding: $notes, multiline: true, maxLength: ns.maxLength)
             }
         }
     }
@@ -113,14 +114,19 @@ struct DetailView: View {
             Spacer()
             // Cancel button
             Button(cancelLabel) {
-                withAnimation { mgr.selected = nil }
+                submit(action: .cancel)
             }
             .buttonStyle(.plain)
             .padding(.horizontal, 20).padding(.vertical, 10)
             .background(Capsule().fill(Color.white.opacity(0.08))
                 .overlay(Capsule().stroke(Color.white.opacity(0.12))))
+            .disabled(submitting)
             .keyboardShortcut(cancelIsDefault ? .defaultAction : .cancelAction)
 
+            if let label = buttons?.defer_label {
+                Button(label) { submit(action: .defer) }
+                    .disabled(submitting || remainingSeconds == 0)
+            }
             // Confirm / Submit button
             Button(action: send) {
                 HStack(spacing: 8) {
@@ -188,16 +194,19 @@ struct DetailView: View {
     // MARK: - Validation
 
     private var valid: Bool {
+        guard request.expires_at_ms > UInt64(Date().timeIntervalSince1970 * 1000) else { return false }
+        if request.spec.notes?.required == true && notes.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty { return false }
         switch request.spec.field {
         case .choice(_, _, _):
             return choice != nil
 
-        case .text(_, _, _, _, let secret, _):
-            if secret == true { return !textVal.isEmpty }
-            return !textVal.trimmingCharacters(in: .whitespaces).isEmpty
+        case .text(_, _, _, let limit, _, let pattern):
+            if let limit, textVal.count > limit { return false }
+            if let pattern { return textVal.range(of: pattern, options: .regularExpression) != nil }
+            return true
 
-        case .longText(_, _, _):
-            return !textVal.trimmingCharacters(in: .whitespaces).isEmpty
+        case .longText(_, _, let limit):
+            return limit.map { textVal.count <= $0 } ?? true
 
         case .integer(_, let min, let max, _):
             guard let v = Int(intVal) else { return false }
@@ -212,7 +221,7 @@ struct DetailView: View {
             return true
 
         case .unknown:
-            return true
+            return false
         }
     }
 
@@ -231,8 +240,8 @@ struct DetailView: View {
             v = textVal
         case .integer:
             v = intVal
-        case .dateTime:
-            v = ISO8601DateFormatter().string(from: dateVal)
+        case .dateTime(_, _, let kind):
+            v = Self.wireDate(dateVal, kind: kind)
         case .unknown:
             v = ""
         }
@@ -243,4 +252,12 @@ struct DetailView: View {
             submitting = false
         }
     }
+    private func submit(action: RequestTransport.Action) {
+        submitting = true
+        Task {
+            await mgr.submit(request, value: nil, notes: notes.isEmpty ? nil : notes, action: action)
+            submitting = false
+        }
+    }
+
 }

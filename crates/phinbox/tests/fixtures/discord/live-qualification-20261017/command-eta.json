@@ -1,0 +1,10 @@
+{
+  "event_id": "qualification-a8b41cae-eta",
+  "item_id": "qualification-a8b41cae-20261017",
+  "expected_revision": 2,
+  "actor": "qualification-local-operator",
+  "action": {
+    "kind": "set_eta",
+    "value": "archive immediately after verified in-place edit"
+  }
+}

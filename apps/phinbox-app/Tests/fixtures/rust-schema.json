@@ -1,0 +1,306 @@
+[
+  {
+    "request_id": "native-fixture-0",
+    "origin": {
+      "hostname": "candidate",
+      "process": "synthetic",
+      "pid": 1
+    },
+    "spec": {
+      "title": "Synthetic native fixture",
+      "question": "Synthetic decision only",
+      "notes": {
+        "label": "Notes",
+        "required": false,
+        "default": "synthetic-note",
+        "max_length": 200
+      },
+      "buttons": {
+        "cancel": "Cancel",
+        "confirm": "Confirm",
+        "default_is_cancel": true,
+        "defer_label": "Later"
+      },
+      "details": {
+        "command": "synthetic-command",
+        "reason": "synthetic-reason",
+        "items": [
+          {
+            "kind": "file",
+            "path": "synthetic-file",
+            "action": "read",
+            "note": "synthetic-note"
+          }
+        ],
+        "effects": [
+          "synthetic-effect"
+        ]
+      },
+      "urgency": "info",
+      "timeout_secs": 600,
+      "field": {
+        "kind": "boolean",
+        "label": "Confirm",
+        "default": true
+      }
+    },
+    "queued_at_ms": 1792231414984,
+    "expires_at_ms": 1792232014984,
+    "state": "pending"
+  },
+  {
+    "request_id": "native-fixture-1",
+    "origin": {
+      "hostname": "candidate",
+      "process": "synthetic",
+      "pid": 1
+    },
+    "spec": {
+      "title": "Synthetic native fixture",
+      "question": "Synthetic decision only",
+      "notes": {
+        "label": "Notes",
+        "required": false,
+        "default": "synthetic-note",
+        "max_length": 200
+      },
+      "buttons": {
+        "cancel": "Cancel",
+        "confirm": "Confirm",
+        "default_is_cancel": true,
+        "defer_label": "Later"
+      },
+      "details": {
+        "command": "synthetic-command",
+        "reason": "synthetic-reason",
+        "items": [
+          {
+            "kind": "file",
+            "path": "synthetic-file",
+            "action": "read",
+            "note": "synthetic-note"
+          }
+        ],
+        "effects": [
+          "synthetic-effect"
+        ]
+      },
+      "urgency": "info",
+      "timeout_secs": 600,
+      "field": {
+        "kind": "text",
+        "label": "Synthetic secret",
+        "default": "synthetic-default",
+        "secret": true
+      }
+    },
+    "queued_at_ms": 1792231414984,
+    "expires_at_ms": 1792232014984,
+    "state": "pending"
+  },
+  {
+    "request_id": "native-fixture-2",
+    "origin": {
+      "hostname": "candidate",
+      "process": "synthetic",
+      "pid": 1
+    },
+    "spec": {
+      "title": "Synthetic native fixture",
+      "question": "Synthetic decision only",
+      "notes": {
+        "label": "Notes",
+        "required": false,
+        "default": "synthetic-note",
+        "max_length": 200
+      },
+      "buttons": {
+        "cancel": "Cancel",
+        "confirm": "Confirm",
+        "default_is_cancel": true,
+        "defer_label": "Later"
+      },
+      "details": {
+        "command": "synthetic-command",
+        "reason": "synthetic-reason",
+        "items": [
+          {
+            "kind": "file",
+            "path": "synthetic-file",
+            "action": "read",
+            "note": "synthetic-note"
+          }
+        ],
+        "effects": [
+          "synthetic-effect"
+        ]
+      },
+      "urgency": "info",
+      "timeout_secs": 600,
+      "field": {
+        "kind": "long_text",
+        "label": "Long",
+        "default": "long"
+      }
+    },
+    "queued_at_ms": 1792231414984,
+    "expires_at_ms": 1792232014984,
+    "state": "pending"
+  },
+  {
+    "request_id": "native-fixture-3",
+    "origin": {
+      "hostname": "candidate",
+      "process": "synthetic",
+      "pid": 1
+    },
+    "spec": {
+      "title": "Synthetic native fixture",
+      "question": "Synthetic decision only",
+      "notes": {
+        "label": "Notes",
+        "required": false,
+        "default": "synthetic-note",
+        "max_length": 200
+      },
+      "buttons": {
+        "cancel": "Cancel",
+        "confirm": "Confirm",
+        "default_is_cancel": true,
+        "defer_label": "Later"
+      },
+      "details": {
+        "command": "synthetic-command",
+        "reason": "synthetic-reason",
+        "items": [
+          {
+            "kind": "file",
+            "path": "synthetic-file",
+            "action": "read",
+            "note": "synthetic-note"
+          }
+        ],
+        "effects": [
+          "synthetic-effect"
+        ]
+      },
+      "urgency": "info",
+      "timeout_secs": 600,
+      "field": {
+        "kind": "integer",
+        "label": "Count",
+        "min": 1,
+        "max": 10,
+        "default": 3
+      }
+    },
+    "queued_at_ms": 1792231414984,
+    "expires_at_ms": 1792232014984,
+    "state": "pending"
+  },
+  {
+    "request_id": "native-fixture-4",
+    "origin": {
+      "hostname": "candidate",
+      "process": "synthetic",
+      "pid": 1
+    },
+    "spec": {
+      "title": "Synthetic native fixture",
+      "question": "Synthetic decision only",
+      "notes": {
+        "label": "Notes",
+        "required": false,
+        "default": "synthetic-note",
+        "max_length": 200
+      },
+      "buttons": {
+        "cancel": "Cancel",
+        "confirm": "Confirm",
+        "default_is_cancel": true,
+        "defer_label": "Later"
+      },
+      "details": {
+        "command": "synthetic-command",
+        "reason": "synthetic-reason",
+        "items": [
+          {
+            "kind": "file",
+            "path": "synthetic-file",
+            "action": "read",
+            "note": "synthetic-note"
+          }
+        ],
+        "effects": [
+          "synthetic-effect"
+        ]
+      },
+      "urgency": "info",
+      "timeout_secs": 600,
+      "field": {
+        "kind": "choice",
+        "label": "Pick",
+        "options": [
+          {
+            "value": "one",
+            "label": "One"
+          }
+        ],
+        "default_index": 0
+      }
+    },
+    "queued_at_ms": 1792231414984,
+    "expires_at_ms": 1792232014984,
+    "state": "pending"
+  },
+  {
+    "request_id": "native-fixture-5",
+    "origin": {
+      "hostname": "candidate",
+      "process": "synthetic",
+      "pid": 1
+    },
+    "spec": {
+      "title": "Synthetic native fixture",
+      "question": "Synthetic decision only",
+      "notes": {
+        "label": "Notes",
+        "required": false,
+        "default": "synthetic-note",
+        "max_length": 200
+      },
+      "buttons": {
+        "cancel": "Cancel",
+        "confirm": "Confirm",
+        "default_is_cancel": true,
+        "defer_label": "Later"
+      },
+      "details": {
+        "command": "synthetic-command",
+        "reason": "synthetic-reason",
+        "items": [
+          {
+            "kind": "file",
+            "path": "synthetic-file",
+            "action": "read",
+            "note": "synthetic-note"
+          }
+        ],
+        "effects": [
+          "synthetic-effect"
+        ]
+      },
+      "urgency": "info",
+      "timeout_secs": 600,
+      "field": {
+        "kind": "date_time",
+        "label": "Date",
+        "default": "2026-10-17",
+        "picker_kind": "date"
+      }
+    },
+    "queued_at_ms": 1792231414984,
+    "expires_at_ms": 1792232014984,
+    "state": "pending"
+  }
+]

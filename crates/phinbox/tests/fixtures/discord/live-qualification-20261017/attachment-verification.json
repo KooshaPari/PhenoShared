@@ -1,0 +1,16 @@
+{
+  "download_errors": [],
+  "original_matches_verbatim": true,
+  "original_sha256": "dc663c5d0c5c63fb595436d4d199c848c9e1c1f4b3590cae1233a1627df42cd6",
+  "original_bytes": 200,
+  "workflow": {
+    "acknowledged": false,
+    "assignee": null,
+    "eta": "archive immediately after verified in-place edit",
+    "id": "qualification-a8b41cae-20261017",
+    "lane": "native-canary-edited-lane",
+    "revision": 4,
+    "status": "running",
+    "title": "Phinbox native adapter qualification canary 2026-10-17"
+  }
+}
