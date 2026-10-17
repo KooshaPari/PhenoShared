@@ -30,10 +30,6 @@ use serde_json::{json, Value};
 
 /// Bounded stdin size for `phinbox harness codex-permission-request`.
 const STDIN_LIMIT: usize = 1024 * 1024;
-/// Inclusive minimum timeout bound.
-const TIMEOUT_MIN_SECS: u64 = 1;
-/// Inclusive maximum timeout bound.
-const TIMEOUT_MAX_SECS: u64 = 120;
 
 /// Harness subcommand dispatcher — currently exposes the documented Codex
 /// permission-request bridge only. Future harnesses are added here without
@@ -115,13 +111,6 @@ fn deny_envelope(reason: &str) -> Value {
             }
         }
     })
-}
-
-fn deny_envelope_string(reason: &str) -> String {
-    match serde_json::to_string_pretty(&deny_envelope(reason)) {
-        Ok(s) => s,
-        Err(_) => "{}".to_string(),
-    }
 }
 
 /// Bounded Codex permission-request bridge driver.
