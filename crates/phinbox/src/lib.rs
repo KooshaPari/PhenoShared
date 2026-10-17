@@ -19,6 +19,7 @@
 pub mod approval;
 pub mod error;
 pub mod escape;
+pub mod harness;
 pub mod inbox;
 pub mod management;
 pub mod discord;
