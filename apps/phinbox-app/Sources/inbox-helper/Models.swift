@@ -18,6 +18,7 @@ struct ButtonSpec: Decodable, Hashable {
     let cancel: String
     let confirm: String
     let default_is_cancel: Bool?
+    let defer_label: String?
 }
 
 enum FieldSpec: Decodable, Hashable {
@@ -31,7 +32,8 @@ enum FieldSpec: Decodable, Hashable {
 
     enum CodingKeys: String, CodingKey {
         case kind, label, options, placeholder, max_length, secret, pattern
-        case default_value, default_index, min, max, picker_kind
+        case default_value = "default"
+        case default_index, min, max, picker_kind
     }
 
     init(from decoder: Decoder) throws {
@@ -59,7 +61,7 @@ enum FieldSpec: Decodable, Hashable {
             let opts = try c.decode([ChoiceOption].self, forKey: .options)
             self = .choice(label: label, options: opts,
                            defaultIndex: try c.decodeIfPresent(Int.self, forKey: .default_index))
-        case "bool":
+        case "boolean":
             self = .boolean(label: label,
                             defaultValue: try c.decodeIfPresent(Bool.self, forKey: .default_value))
         case "date_time":
@@ -94,7 +96,7 @@ enum FieldSpec: Decodable, Hashable {
         case .longText: return "long_text"
         case .integer:  return "integer"
         case .choice:   return "choice"
-        case .boolean:  return "bool"
+        case .boolean:  return "boolean"
         case .dateTime: return "date_time"
         case .unknown(_, let k): return k
         }
@@ -104,6 +106,9 @@ enum FieldSpec: Decodable, Hashable {
 struct NotesSpec: Decodable, Hashable {
     let label: String
     let required: Bool?
+    let defaultValue: String?
+    let maxLength: Int?
+    enum CodingKeys: String, CodingKey { case label, required; case defaultValue = "default"; case maxLength = "max_length" }
 }
 
 struct PromptSpec: Decodable, Hashable {
@@ -113,6 +118,7 @@ struct PromptSpec: Decodable, Hashable {
     let notes: NotesSpec?
     let urgency: Urgency?
     let buttons: ButtonSpec?
+    let details: DetailsSpec?
 }
 
 struct PendingRequest: Decodable, Identifiable, Hashable {
@@ -146,5 +152,32 @@ enum Urgency: String, Decodable, Comparable {
 
     static func < (lhs: Urgency, rhs: Urgency) -> Bool {
         lhs.sortOrder < rhs.sortOrder
+    }
+}
+
+struct DetailsSpec: Decodable, Hashable {
+    let reason: String?
+    let command: String?
+    let items: [DetailItem]?
+    let effects: [String]?
+}
+struct DetailItem: Decodable, Hashable {
+    let kind: String
+    let path: String?
+    let action: String?
+    let note: String?
+    let label: String?
+    let body: String?
+    let key: String?
+    let value: String?
+    let message: String?
+    var display: String {
+        switch kind {
+        case "file": return "\(action ?? "file"): \(path ?? "")\(note.map { " — " + $0 } ?? "")"
+        case "text": return "\(label ?? ""): \(body ?? "")"
+        case "key_value": return "\(key ?? ""): \(value ?? "")"
+        case "warning": return "Warning: \(message ?? "")"
+        default: return "Unsupported detail: \(kind)"
+        }
     }
 }

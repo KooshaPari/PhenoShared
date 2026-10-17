@@ -7,6 +7,16 @@ import AppKit
 @main
 struct PhinboxApp {
     static func main() {
+        let configuration: InboxConfiguration
+        do { configuration = try InboxConfiguration() }
+        catch { fputs("phinbox: invalid native inbox configuration\n", stderr); exit(2) }
+        if configuration.diagnose {
+            let result = ["root": configuration.root.path, "endpoint": configuration.endpoint.absoluteString,
+                          "title": configuration.windowTitle]
+            if let data = try? JSONSerialization.data(withJSONObject: result, options: [.sortedKeys]),
+               let text = String(data: data, encoding: .utf8) { print(text) }
+            return
+        }
         let app = NSApplication.shared
         app.setActivationPolicy(.regular)
 
@@ -16,7 +26,7 @@ struct PhinboxApp {
             app.applicationIconImage = icon
         }
 
-        let manager: InboxManager = MainActor.assumeIsolated { InboxManager() }
+        let manager: InboxManager = MainActor.assumeIsolated { InboxManager(configuration: configuration) }
 
         // Restore saved window frame
         let savedFrame = UserDefaults.standard.string(forKey: "PhinboxWindowFrame")
@@ -37,7 +47,7 @@ struct PhinboxApp {
             styleMask: [.titled, .closable, .miniaturizable, .resizable],
             backing: .buffered, defer: false
         )
-        window.title = "Phinbox"
+        window.title = configuration.windowTitle
         window.minSize = NSSize(width: 520, height: 400)
         window.isReleasedWhenClosed = false
         window.titlebarAppearsTransparent = false

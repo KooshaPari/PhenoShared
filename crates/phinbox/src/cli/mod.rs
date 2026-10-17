@@ -13,6 +13,7 @@ mod ask;
 mod common;
 mod daemon;
 mod discord;
+mod harness;
 mod inbox;
 mod install;
 mod manage;
@@ -122,6 +123,9 @@ enum Cmd {
     Wait(wait::WaitArgs),
     /// Submit an answer to a queued inbox request via the CLI (no UI).
     Answer(answer::AnswerArgs),
+    /// Bridge harnesses (Codex, Jcode, KCode, Forge/HeliosLite) over the
+    /// ordinary durable inbox queue without changing native policy.
+    Harness(harness::HarnessArgs),
     /// Alias: run the MCP stdio server.
     Serve,
     /// Print version + license info.
@@ -159,6 +163,7 @@ pub fn main() -> ExitCode {
         Cmd::Open(args) => open::cmd_open(args, &inbox_dir),
         Cmd::Wait(args) => wait::cmd_wait(args, &inbox_dir),
         Cmd::Answer(args) => answer::cmd_answer(args, &inbox_dir),
+        Cmd::Harness(args) => harness::cmd_harness(args, &inbox_dir),
         Cmd::Serve => {
             eprintln!(
                 "error: 'serve' is provided by the `phinbox-mcp` binary, not `phinbox`. Run \

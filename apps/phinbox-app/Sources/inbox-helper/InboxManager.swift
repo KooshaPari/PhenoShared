@@ -11,14 +11,15 @@ class InboxManager: ObservableObject {
     @Published var submitError: String?
 
     let inboxDir: URL
+    let configuration: InboxConfiguration
     private var fileSource: DispatchSourceFileSystemObject?
     private var timer: Timer?
     private var debounceWorkItem: DispatchWorkItem?
     nonisolated private static let maxDisplayedRequests = 200
 
-    init() {
-        let home = FileManager.default.homeDirectoryForCurrentUser
-        inboxDir = home.appendingPathComponent("Library/Application Support/phinbox/inbox")
+    init(configuration: InboxConfiguration) {
+        self.configuration = configuration
+        inboxDir = configuration.root.appendingPathComponent("inbox")
     }
 
     deinit {
@@ -37,7 +38,6 @@ class InboxManager: ObservableObject {
         // Perform file I/O on a background thread, then publish on MainActor.
         let dir = inboxDir
         let fm = FileManager.default
-        let expiredDir = dir.appendingPathComponent("expired")
 
         Task.detached { [weak self] in
             guard let self else { return }
@@ -54,22 +54,13 @@ class InboxManager: ObservableObject {
             for f in files where f.pathExtension == "json" {
                 guard let data = try? Data(contentsOf: f),
                       let req = try? JSONDecoder().decode(PendingRequest.self, from: data),
-                      req.state == "pending" else { continue }
+                      ["pending", "seen"].contains(req.state) else { continue }
                 loaded.append(req)
             }
 
-            // Disk cleanup: move expired requests to expired/ subdirectory.
+            // Rust owns expiry/finalization. The native client never moves queue files.
             let nowMs = UInt64(Date().timeIntervalSince1970 * 1000)
-            let expired = loaded.filter { $0.expires_at_ms < nowMs }
-            if !expired.isEmpty {
-                try? fm.createDirectory(at: expiredDir, withIntermediateDirectories: true)
-                for req in expired {
-                    let src = dir.appendingPathComponent("\(req.request_id).json")
-                    let dst = expiredDir.appendingPathComponent("\(req.request_id).json")
-                    try? fm.moveItem(at: src, to: dst)
-                }
-                loaded.removeAll { $0.expires_at_ms < nowMs }
-            }
+            loaded.removeAll { $0.expires_at_ms <= nowMs }
 
             // Urgency sort using the typed enum's Comparable conformance.
             loaded.sort { a, b in
@@ -85,6 +76,7 @@ class InboxManager: ObservableObject {
             await MainActor.run { [weak self] in
                 guard let self else { return }
                 let oldIDs = Set(self.requests.map(\.request_id))
+                if let selected = self.selected, !newIDs.contains(selected.request_id) { self.selected = nil }
                 if newIDs != oldIDs {
                     withAnimation(.spring(response: 0.4)) { self.requests = capped }
                     // Play a subtle beep when new requests arrive.
@@ -98,20 +90,21 @@ class InboxManager: ObservableObject {
         }
     }
 
-    func submit(_ req: PendingRequest, value: String, notes: String?) async {
+    func submit(_ req: PendingRequest, value: String?, notes: String?,
+                action: RequestTransport.Action = .confirm) async {
         submitError = nil
-        var comps = URLComponents(string: "http://127.0.0.1:7117/inbox/\(req.request_id)/answer")!
-        var items = [URLQueryItem(name: "value", value: value), URLQueryItem(name: "confirm", value: "ok")]
-        if let notes, !notes.isEmpty { items.append(URLQueryItem(name: "notes", value: notes)) }
-        comps.queryItems = items
-        var r = URLRequest(url: comps.url!); r.httpMethod = "POST"
         do {
-            let (_, resp) = try await URLSession.shared.data(for: r)
-            if let h = resp as? HTTPURLResponse, h.statusCode == 200 {
-                withAnimation { selected = nil }
-                try? await Task.sleep(for: .seconds(0.5)); refresh()
-            } else { submitError = "Server error" }
-        } catch { submitError = error.localizedDescription }
+            let request = try RequestTransport.request(configuration: configuration,
+                id: req.request_id, action: action, value: value, notes: notes)
+            let (_, response) = try await URLSession.shared.data(for: request)
+            guard let http = response as? HTTPURLResponse, http.statusCode == 200 else {
+                let status = (response as? HTTPURLResponse)?.statusCode ?? 0
+                submitError = "Request refused (HTTP \(status)). Refresh to check expiry or an earlier answer."
+                refresh(); return
+            }
+            withAnimation { selected = nil }
+            refresh()
+        } catch { submitError = "Unable to submit to the local inbox daemon." }
     }
 
     func timeAgo(_ ms: UInt64) -> String {

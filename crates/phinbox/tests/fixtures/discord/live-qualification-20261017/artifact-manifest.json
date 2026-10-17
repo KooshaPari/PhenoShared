@@ -1,0 +1,103 @@
+{
+  "source_commit": "a8b41cae73f07d5aa4737d29411f285fd358f1b4",
+  "files": [
+    {
+      "file": "qualification-summary.json",
+      "remote_raw_sha256": "ef030b9da793843dedfea1459a93def6c6ff954fd8f9e2695bd56f304a405792",
+      "published_sha256": "8f1e0b669f652b8bce6c900bdb04e1a7d065b36d843eea5ff1688b728fc11080",
+      "redaction": "none or JSON formatting"
+    },
+    {
+      "file": "native-commands.json",
+      "remote_raw_sha256": "343930722023c9ac6f65ca307aee6f98314118012c235a46f8beab62fda14314",
+      "published_sha256": "ebfc75a7bde3d27b988ba8004c4b5b0daf49971cd8fbf818ef97ab786bce15de",
+      "redaction": "none or JSON formatting"
+    },
+    {
+      "file": "preflight-metadata.json",
+      "remote_raw_sha256": "b5840f128a1ee6af2a0f87c9d6bcdc4a6dc553ce1a9559bc250cc89fa1313344",
+      "published_sha256": "256ae0d380286fc13b2fe75bf2c769cef91c4c0ccc8cbbc4d7451169429e0c83",
+      "redaction": "none or JSON formatting"
+    },
+    {
+      "file": "canary-thread-map.json",
+      "remote_raw_sha256": "ad7c452d0c992cdae95b2b93af81b72d7f9fcbd2b85f5f448ec364f436c3c0db",
+      "published_sha256": "f9595dd7776128bd7b41e3760e4f1e402918243b6e12f548e05a68e41bf6f2d3",
+      "redaction": "none or JSON formatting"
+    },
+    {
+      "file": "attachment-verification.json",
+      "remote_raw_sha256": "71194b385f9173a0fcfc4c676aba094c5f01162f951cc1464c2f1d214d26630f",
+      "published_sha256": "6f47930ec2383439b73adc788ec788a39e961e4a90757600a82719693daaf518",
+      "redaction": "none or JSON formatting"
+    },
+    {
+      "file": "canary-item.json",
+      "remote_raw_sha256": "267d8bdbf7eec5d05ab0a346c582d8147cc527a7a543ce5999fc668e68082aa6",
+      "published_sha256": "a21de373785c3017a1d2490c04879dfe2a2eecbd5f5e8858a8e2fa9bcc2c2bb6",
+      "redaction": "none or JSON formatting"
+    },
+    {
+      "file": "command-lane.json",
+      "remote_raw_sha256": "83313db038f4de95fd7e4a13bd5974692e549997911629a6fcfb5cfc4fb16ef8",
+      "published_sha256": "926b582d0b4f8fa107d20f7dc36c1f063432875ff7b8accd4ca77a757eb4bd0b",
+      "redaction": "none or JSON formatting"
+    },
+    {
+      "file": "command-eta.json",
+      "remote_raw_sha256": "06b7b0e48f6e1d1432a31979bedec6129e83c4efce92fc01c6faad8afdec93aa",
+      "published_sha256": "d14055c6a6034159e4acedf80bcb8a2cbcef54d071cee2a87bb6acb1eed86717",
+      "redaction": "none or JSON formatting"
+    },
+    {
+      "file": "command-running.json",
+      "remote_raw_sha256": "2e73c145d664965f845312dbf4d63a82e67644b8079441a5f2e01384ae06c15e",
+      "published_sha256": "10cf8835087ce61a95d7d43f8a4eb14afa63e75a40375d41fe3e96af61cee74c",
+      "redaction": "none or JSON formatting"
+    },
+    {
+      "file": "command-close.json",
+      "remote_raw_sha256": "ad49f2b0c68e3a4dc5c3979d20631ffe212ad607fb8a78156a47ad57b68c7d6c",
+      "published_sha256": "4981531ea939c6d667b0ec757d3b5e0023d5aeae733dd66dc147094350110304",
+      "redaction": "none or JSON formatting"
+    },
+    {
+      "file": "state-created.json",
+      "remote_raw_sha256": "396e92d8532ac576d09b5f9a1b688548c6e16fcd9d1a006f44b49c89739e654c",
+      "published_sha256": "106b60e5cc5fa5e546a2de57597182555a0ece348e24f2ba2b44619c0b26f024",
+      "redaction": "Discord CDN signed URL query removed from JSON metadata"
+    },
+    {
+      "file": "state-edited.json",
+      "remote_raw_sha256": "af072906dc7844e7b2a82cc80e23b03c862497a5a681e3888651acfb46320bb8",
+      "published_sha256": "aedd6b5d0bf92f78d1e8fd0872757bc32875ac2c65b5e3b73a4b13b352d8ce40",
+      "redaction": "Discord CDN signed URL query removed from JSON metadata"
+    },
+    {
+      "file": "state-closed.json",
+      "remote_raw_sha256": "dc570e1df057438b9c47e590b39a57f0106e6aca0ef835e77b280764cfa024d5",
+      "published_sha256": "046224235283538485c81c5c4a99e2743622abb8179ad755e6f8d3f5f25e3cb5",
+      "redaction": "Discord CDN signed URL query removed from JSON metadata"
+    },
+    {
+      "file": "build.log",
+      "remote_raw_sha256": "f313343a10bee1d2017813db52e5a851e7c7e68e217df55e3f332aa1f96dbdde",
+      "published_sha256": "f313343a10bee1d2017813db52e5a851e7c7e68e217df55e3f332aa1f96dbdde",
+      "redaction": "none or JSON formatting"
+    },
+    {
+      "file": "focused/Cargo.toml",
+      "remote_raw_sha256": "d516da9a65990e422519f48b44bf236c54e40ead853576270e3f5827cf4dbbec",
+      "published_sha256": "d516da9a65990e422519f48b44bf236c54e40ead853576270e3f5827cf4dbbec",
+      "redaction": "none or JSON formatting"
+    },
+    {
+      "file": "focused/Cargo.lock",
+      "remote_raw_sha256": "75e6a10e85c8f3ed927dd5c3f65e37a26fb7233feda9b68596429b3318d71351",
+      "published_sha256": "75e6a10e85c8f3ed927dd5c3f65e37a26fb7233feda9b68596429b3318d71351",
+      "redaction": "none or JSON formatting"
+    }
+  ],
+  "source_archive_sha256": "29f994911de76cf8af5c1a2104d44fabe00484cb716353f21b7e78274088a90a",
+  "local_receipt_sha256": "48b52195a1a99bee421dce704acc9f55d25deb3b5ec9ca07934fceefaf7ec875"
+}

@@ -1,0 +1,181 @@
+{
+  "thread": {
+    "id": "1560951259635130459",
+    "type": 11,
+    "last_message_id": "1560951259635130459",
+    "flags": 0,
+    "guild_id": "1558641659778961432",
+    "name": "phinbox:qualification-a8b41cae-20261017 Phinbox native adapter qualification canary 2026-10-17",
+    "parent_id": "1560878303286534164",
+    "rate_limit_per_user": 0,
+    "bitrate": 64000,
+    "user_limit": 0,
+    "rtc_region": null,
+    "owner_id": "1558640911297028147",
+    "thread_metadata": {
+      "archived": true,
+      "archive_timestamp": "2026-10-17T09:48:45.117000+00:00",
+      "auto_archive_duration": 1440,
+      "locked": true,
+      "create_timestamp": "2026-10-17T09:43:01.369000+00:00"
+    },
+    "message_count": 0,
+    "member_count": 1,
+    "total_message_sent": 0,
+    "applied_tags": [
+      "1560878303286534166"
+    ],
+    "member": {
+      "id": "1560951259635130459",
+      "user_id": "1558640911297028147",
+      "join_timestamp": "2026-10-17T09:43:01.380000+00:00",
+      "flags": 1,
+      "muted": false,
+      "mute_config": null
+    }
+  },
+  "message": {
+    "type": 0,
+    "content": "**Phinbox native adapter qualification canary 2026-10-17**\nWorkflow: Closed | revision 5\nAcknowledged: false\nLane: native-canary-edited-lane | ETA: archive immediately after verified in-place edit\nAssignee: unassigned\nManagement only; no permission granted.",
+    "mentions": [],
+    "mention_roles": [],
+    "attachments": [
+      {
+        "id": "1560952698923262022",
+        "filename": "original.txt",
+        "size": 200,
+        "url": "https://cdn.discordapp.com/attachments/1560951259635130459/1560952698923262022/original.txt",
+        "proxy_url": "https://media.discordapp.net/attachments/1560951259635130459/1560952698923262022/original.txt",
+        "content_type": "text/plain; charset=utf-8",
+        "content_scan_version": 0
+      },
+      {
+        "id": "1560952699162329209",
+        "filename": "workflow.json",
+        "size": 298,
+        "url": "https://cdn.discordapp.com/attachments/1560951259635130459/1560952699162329209/workflow.json",
+        "proxy_url": "https://media.discordapp.net/attachments/1560951259635130459/1560952699162329209/workflow.json",
+        "content_type": "application/json; charset=utf-8",
+        "content_scan_version": 0
+      }
+    ],
+    "embeds": [
+      {
+        "type": "rich",
+        "footer": {
+          "text": "phinbox:qualification-a8b41cae-20261017"
+        },
+        "content_scan_version": 0
+      }
+    ],
+    "timestamp": "2026-10-17T09:43:01.369000+00:00",
+    "edited_timestamp": "2026-10-17T09:48:44.516000+00:00",
+    "flags": 0,
+    "components": [
+      {
+        "type": 1,
+        "id": 1,
+        "components": [
+          {
+            "type": 2,
+            "id": 2,
+            "custom_id": "phinbox:v1:qualification-a8b41cae-20261017:5:ack",
+            "style": 2,
+            "label": "Acknowledge",
+            "disabled": true
+          },
+          {
+            "type": 2,
+            "id": 3,
+            "custom_id": "phinbox:v1:qualification-a8b41cae-20261017:5:assign",
+            "style": 1,
+            "label": "Assign to me",
+            "disabled": true
+          },
+          {
+            "type": 2,
+            "id": 4,
+            "custom_id": "phinbox:v1:qualification-a8b41cae-20261017:5:defer",
+            "style": 2,
+            "label": "Defer",
+            "disabled": true
+          },
+          {
+            "type": 2,
+            "id": 5,
+            "custom_id": "phinbox:v1:qualification-a8b41cae-20261017:5:close",
+            "style": 4,
+            "label": "Close workflow",
+            "disabled": true
+          }
+        ]
+      },
+      {
+        "type": 1,
+        "id": 6,
+        "components": [
+          {
+            "type": 3,
+            "id": 7,
+            "custom_id": "phinbox:v1:qualification-a8b41cae-20261017:5:status",
+            "min_values": 1,
+            "max_values": 1,
+            "disabled": true,
+            "options": [
+              {
+                "label": "open",
+                "value": "open"
+              },
+              {
+                "label": "running",
+                "value": "running"
+              },
+              {
+                "label": "waiting",
+                "value": "waiting"
+              },
+              {
+                "label": "deferred",
+                "value": "deferred"
+              },
+              {
+                "label": "partial",
+                "value": "partial"
+              },
+              {
+                "label": "blocked",
+                "value": "blocked"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "id": "1560951259635130459",
+    "channel_id": "1560951259635130459",
+    "author": {
+      "id": "1558640911297028147",
+      "username": "Instinct",
+      "avatar": null,
+      "discriminator": "0764",
+      "public_flags": 0,
+      "flags": 0,
+      "bot": true,
+      "banner": null,
+      "accent_color": null,
+      "global_name": null,
+      "avatar_decoration_data": null,
+      "collectibles": null,
+      "display_name_styles": null,
+      "vad_colors": null,
+      "banner_color": null,
+      "clan": null,
+      "primary_guild": null
+    },
+    "pinned": false,
+    "mention_everyone": false,
+    "tts": false,
+    "position": 0
+  },
+  "time_utc": "2026-10-17T09:48:46Z"
+}

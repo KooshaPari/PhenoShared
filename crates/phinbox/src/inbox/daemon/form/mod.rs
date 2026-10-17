@@ -63,6 +63,8 @@ pub(crate) struct FormPayload {
     pub cancel: Option<String>,
     #[serde(default)]
     pub confirm: Option<String>,
+    #[serde(default)]
+    pub defer: Option<String>,
 }
 
 /// Submit an answer to a pending inbox request.
@@ -111,6 +113,44 @@ pub(crate) fn submit_answer(
         .validate()
         .map_err(|e| SubmitError::BadRequest(format!("invalid spec: {e}")))?;
 
+    let intent_count = [
+        payload.cancel.is_some(),
+        payload.confirm.is_some(),
+        payload.defer.is_some(),
+    ]
+    .into_iter()
+    .filter(|set| *set)
+    .count();
+    if intent_count > 1 {
+        return Err(SubmitError::BadRequest("conflicting submit actions".into()));
+    }
+    if payload.defer.is_some() {
+        if req
+            .spec
+            .buttons
+            .as_ref()
+            .and_then(|b| b.defer_label.as_ref())
+            .is_none()
+        {
+            return Err(SubmitError::BadRequest(
+                "this request does not allow defer".into(),
+            ));
+        }
+        req.response = Some(ElicitResponse::Deferred {
+            request_id: req.request_id.clone(),
+            open_url: crate::inbox::daemon::live_url(inbox_root, None)
+                .map(|base| crate::inbox::notify::inbox_open_url_with_base(&base, &req.request_id)),
+            path: Some(
+                req.path_in(&crate::inbox::inbox_pending_dir(inbox_root))
+                    .to_string_lossy()
+                    .into_owned(),
+            ),
+        });
+        crate::inbox::enqueue(inbox_root, &req)
+            .map_err(|e| SubmitError::BadRequest(e.to_string()))?;
+        return Ok(());
+    }
+
     // Determine intent: an explicit `cancel=1` (Cancel button) wins over
     // `confirm=ok` (Submit button) because HTML forms submit the pressed
     // button's name+value, and a click on Cancel won't set confirm.
@@ -127,16 +167,17 @@ pub(crate) fn submit_answer(
 
     // `notes` is a spec field like any other: when the spec marks it required,
     // the form's `required` attribute is a hint, not enforcement.
-    if let Some(notes_spec) = &req.spec.notes {
-        let supplied = payload.notes.as_deref().unwrap_or("");
-        if notes_spec.required && supplied.trim().is_empty() {
-            return Err(SubmitError::BadRequest(format!(
-                "missing required notes: '{}'",
-                notes_spec.label
-            )));
+    if !wants_cancel {
+        if let Some(notes_spec) = &req.spec.notes {
+            let supplied = payload.notes.as_deref().unwrap_or("");
+            if notes_spec.required && supplied.trim().is_empty() {
+                return Err(SubmitError::BadRequest(format!(
+                    "missing required notes: '{}'",
+                    notes_spec.label
+                )));
+            }
         }
     }
-
     if wants_cancel {
         let notes = payload.notes.clone();
         finalize(
@@ -150,6 +191,19 @@ pub(crate) fn submit_answer(
         .map_err(|e| SubmitError::BadRequest(e.to_string()))?;
     } else {
         let v = coerce_field_value(&req.spec.field, &payload)?;
+        if let Some(notes) = &payload.notes {
+            if req
+                .spec
+                .notes
+                .as_ref()
+                .and_then(|n| n.max_length)
+                .is_some_and(|m| notes.chars().count() > m as usize)
+            {
+                return Err(SubmitError::BadRequest(
+                    "notes exceed maximum length".into(),
+                ));
+            }
+        }
         let response = ElicitResponse::Answered {
             value: v,
             notes: payload.notes,
@@ -173,6 +227,7 @@ pub(crate) fn url_decode_form(body: &str) -> FormPayload {
         notes: None,
         cancel: None,
         confirm: None,
+        defer: None,
     };
     for kv in body.split('&').filter(|s| !s.is_empty()) {
         let (k, v) = kv.split_once('=').unwrap_or((kv, ""));
@@ -184,6 +239,7 @@ pub(crate) fn url_decode_form(body: &str) -> FormPayload {
             "notes" => out.notes = Some(v),
             "cancel" => out.cancel = Some(v),
             "confirm" => out.confirm = Some(v),
+            "defer" => out.defer = Some(v),
             _ => {},
         }
     }
@@ -242,8 +298,37 @@ pub(crate) fn coerce_field_value(
     payload: &FormPayload,
 ) -> Result<FieldValue, SubmitError> {
     match field {
-        FieldSpec::Text { .. } => Ok(FieldValue::Text(required_value(payload)?)),
-        FieldSpec::LongText { .. } => Ok(FieldValue::LongText(required_value(payload)?)),
+        FieldSpec::Text {
+            max_length,
+            pattern,
+            ..
+        } => {
+            let raw = required_value(payload)?;
+            if max_length.is_some_and(|m| raw.chars().count() > m as usize) {
+                return Err(SubmitError::BadRequest(
+                    "text exceeds maximum length".into(),
+                ));
+            }
+            if let Some(pattern) = pattern {
+                let valid = regex::Regex::new(pattern)
+                    .map_err(|_| SubmitError::BadRequest("invalid text pattern".into()))?;
+                if !valid.is_match(&raw) {
+                    return Err(SubmitError::BadRequest(
+                        "text does not match pattern".into(),
+                    ));
+                }
+            }
+            Ok(FieldValue::Text(raw))
+        },
+        FieldSpec::LongText { max_length, .. } => {
+            let raw = required_value(payload)?;
+            if max_length.is_some_and(|m| raw.chars().count() > m as usize) {
+                return Err(SubmitError::BadRequest(
+                    "text exceeds maximum length".into(),
+                ));
+            }
+            Ok(FieldValue::LongText(raw))
+        },
         FieldSpec::Choice { options, .. } => {
             let raw = required_value(payload)?;
             let idx = options
@@ -259,7 +344,11 @@ pub(crate) fn coerce_field_value(
             // An unchecked HTML checkbox omits its key entirely, so absence
             // means `false`. The caller has already established that this is a
             // real submission (a submit marker was present).
-            let v = payload.boolean.as_deref().unwrap_or("");
+            let v = payload
+                .boolean
+                .as_deref()
+                .or(payload.value.as_deref())
+                .unwrap_or("");
             match v {
                 "true" | "on" | "1" | "yes" => Ok(FieldValue::Boolean(true)),
                 "false" | "off" | "0" | "no" | "" => Ok(FieldValue::Boolean(false)),
@@ -274,13 +363,10 @@ pub(crate) fn coerce_field_value(
                 .clone()
                 .or_else(|| payload.value.clone())
                 .ok_or_else(|| missing("integer"))?;
-            let n: i64 = raw
-                .trim()
-                .parse()
-                .map_err(|e| SubmitError::BadRequest(format!("not an int: {e}")))?;
-            Ok(FieldValue::Integer(n))
+            crate::spec::coerce(field, &raw).map_err(|e| SubmitError::BadRequest(e.to_string()))
         },
-        FieldSpec::DateTime { .. } => Ok(FieldValue::DateTime(required_value(payload)?)),
+        FieldSpec::DateTime { .. } => crate::spec::coerce(field, &required_value(payload)?)
+            .map_err(|e| SubmitError::BadRequest(e.to_string())),
     }
 }
 
