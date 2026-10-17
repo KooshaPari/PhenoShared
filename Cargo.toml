@@ -784,8 +784,6 @@ members = [
     "crates/focus-policy",
     # --- E2.4 Pattern A wave 3 batch AU (2026-10-09): 1 focus-rituals ---
     "crates/focus-rituals",
-    # --- Phase 5 (AX-58 follow-up 2026-10-13): 1 phenotype-observably-macros vendored from PhenoObservability (CI infra fix) ---
-    "crates/phenotype-observably-macros",
     # --- E2.4 Pattern A wave 3 batch AV (2026-10-09): 1 focus-asset-fetcher ---
     # --- E2.4 Pattern A wave 3 batch AW (2026-10-09): 1 focus-mascot ---
     # --- E2.4 Pattern A wave 3 batch AX (2026-10-09): 1 teamcomm-protocol ---
