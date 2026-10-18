@@ -1,0 +1,190 @@
+name: Reusable Test
+
+on:
+  workflow_call:
+    inputs:
+      working-directory:
+        description: 'Working directory'
+        required: false
+        type: string
+        default: '.'
+      test-profile:
+        description: 'Test profile (must be defined in .config/nextest.toml or a built-in name like default / ci)'
+        required: false
+        type: string
+        default: 'default'
+      coverage:
+        description: 'Collect coverage'
+        required: false
+        type: boolean
+        default: false
+      extra-args:
+        description: 'Extra args passed to the test runner'
+        required: false
+        type: string
+        default: ''
+    outputs:
+      language:
+        description: 'Detected primary language'
+        value: ${{ jobs.detect.outputs.lang }}
+      junit-path:
+        description: 'Path to JUnit XML report'
+        value: ${{ jobs.test.outputs.junit }}
+
+permissions:
+  contents: read
+
+jobs:
+  detect:
+    runs-on: ubuntu-latest
+    outputs:
+      lang: ${{ steps.detect.outputs.lang }}
+    defaults:
+      run:
+        working-directory: ${{ inputs.working-directory }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: detect
+        run: |
+          if [ -f Cargo.toml ]; then echo "lang=rust" >> "$GITHUB_OUTPUT"; \
+          elif [ -f package.json ]; then echo "lang=node" >> "$GITHUB_OUTPUT"; \
+          elif [ -f pyproject.toml ]; then echo "lang=python" >> "$GITHUB_OUTPUT"; \
+          else echo "lang=unknown" >> "$GITHUB_OUTPUT"; fi
+
+  test:
+    needs: detect
+    runs-on: ubuntu-latest
+    outputs:
+      junit: ${{ steps.junit.outputs.path }}
+    defaults:
+      run:
+        working-directory: ${{ inputs.working-directory }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Rust
+        if: needs.detect.outputs.lang == 'rust'
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
+
+      - name: Install cargo-nextest
+        if: needs.detect.outputs.lang == 'rust'
+        uses: taiki-e/install-action@ec94b08fe6c0ecd17efe4f4bfaadd961b3a5b83d
+        with:
+          tool: cargo-nextest
+
+      - name: Install cargo-llvm-cov (coverage)
+        if: needs.detect.outputs.lang == 'rust' && inputs.coverage == 'true'
+        uses: taiki-e/install-action@ec94b08fe6c0ecd17efe4f4bfaadd961b3a5b83d
+        with:
+          tool: cargo-llvm-cov
+
+      - name: Setup Node
+        if: needs.detect.outputs.lang == 'node'
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Setup Python
+        if: needs.detect.outputs.lang == 'python'
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Rust nextest
+        if: needs.detect.outputs.lang == 'rust'
+        id: rust-junit
+        env:
+          TEST_EXTRA_ARGS: ${{ inputs.extra-args }}
+          TEST_PROFILE: ${{ inputs.test-profile }}
+        run: |
+          set -euo pipefail
+          mkdir -p target/nextest
+          if [ "${{ inputs.coverage }}" = "true" ]; then
+            # Coverage path: cargo-llvm-cov runs nextest under coverage
+            # shellcheck disable=SC2086
+            cargo llvm-cov nextest --profile "$TEST_PROFILE" --workspace \
+              --retries 2 --lcov --output-path lcov.info $TEST_EXTRA_ARGS
+            echo "lcov=$PWD/lcov.info" >> "$GITHUB_OUTPUT"
+          else
+            # shellcheck disable=SC2086
+            cargo nextest run --workspace --profile "$TEST_PROFILE" \
+              --retries 2 --test-threads=12 \
+              --archive-file "target/nextest/${TEST_PROFILE}/archive.zip" $TEST_EXTRA_ARGS
+          fi
+          # Always emit a junit path (empty if nextest didn't produce one)
+          JUNIT_PATH="target/nextest/${TEST_PROFILE}/junit.xml"
+          if [ -f "$JUNIT_PATH" ]; then
+            echo "path=$JUNIT_PATH" >> "$GITHUB_OUTPUT"
+          else
+            echo "path=" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Node test
+        if: needs.detect.outputs.lang == 'node'
+        id: node-junit
+        env:
+          TEST_EXTRA_ARGS: ${{ inputs.extra-args }}
+        run: |
+          set -euo pipefail
+          if [ -f package.json ] && node -e "require('./package.json').scripts?.test" 2>/dev/null; then
+            if [ -f package-lock.json ]; then
+              npm ci
+            elif [ -f yarn.lock ]; then
+              yarn install --frozen-lockfile
+            elif [ -f pnpm-lock.yaml ]; then
+              npm install -g pnpm && pnpm install --frozen-lockfile
+            else
+              npm install
+            fi
+            # shellcheck disable=SC2086
+            npm test --if-present $TEST_EXTRA_ARGS
+            if [ -f reports/junit.xml ]; then
+              echo "path=reports/junit.xml" >> "$GITHUB_OUTPUT"
+            else
+              echo "path=" >> "$GITHUB_OUTPUT"
+            fi
+          else
+            echo "No test script in package.json; skipping."
+            echo "path=" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Python pytest
+        if: needs.detect.outputs.lang == 'python'
+        id: python-junit
+        env:
+          TEST_EXTRA_ARGS: ${{ inputs.extra-args }}
+        run: |
+          set -euo pipefail
+          python -m pip install --quiet pytest pytest-cov
+          mkdir -p reports
+          # shellcheck disable=SC2086
+          pytest $TEST_EXTRA_ARGS --junitxml=reports/junit.xml
+          echo "path=reports/junit.xml" >> "$GITHUB_OUTPUT"
+
+      - name: Upload JUnit
+        # Only the language matched by `detect` produces a path; the other two
+        # steps are skipped, so their outputs resolve to ''.
+        if: |
+          always() && (
+            steps.rust-junit.outputs.path != '' ||
+            steps.node-junit.outputs.path != '' ||
+            steps.python-junit.outputs.path != ''
+          )
+        uses: actions/upload-artifact@v4
+        with:
+          name: junit-${{ inputs.test-profile }}
+          # Pick whichever language produced a non-empty path.
+          path: |
+            ${{ steps.rust-junit.outputs.path }}
+            ${{ steps.node-junit.outputs.path }}
+            ${{ steps.python-junit.outputs.path }}
+          retention-days: 14
+          if-no-files-found: warn
+
+      - name: Unknown language
+        if: needs.detect.outputs.lang == 'unknown'
+        run: |
+          echo "::warning::No recognized language marker; test step skipped."
