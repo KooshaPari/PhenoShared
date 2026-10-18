@@ -144,8 +144,3 @@ pull_request_rules:
           - ready-to-merge
 
   # Clean up merged branches
-  - name: Delete head branch after merge
-    conditions:
-      - merged
-    actions:
-      delete_head_branch: {}
