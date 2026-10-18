@@ -1,0 +1,113 @@
+name: Reusable Release
+
+on:
+  workflow_call:
+    inputs:
+      working-directory:
+        description: 'Working directory'
+        required: false
+        type: string
+        default: '.'
+      release-tool:
+        description: 'Release tool: release-please | cargo-release | python-build'
+        required: false
+        type: string
+        default: 'release-please'
+      binary-name:
+        description: 'Binary to package (Rust)'
+        required: false
+        type: string
+        default: ''
+    secrets:
+      RELEASE_PLEASE_TOKEN:
+        required: false
+        description: 'PAT for release-please PR creation'
+      CARGO_REGISTRY_TOKEN:
+        required: false
+        description: 'crates.io token (cargo-release)'
+      PYPI_TOKEN:
+        required: false
+        description: 'PyPI token (python-build)'
+
+permissions:
+  contents: read
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${{ inputs.working-directory }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.RELEASE_PLEASE_TOKEN }}
+
+      - name: Setup Rust
+        if: ${{ inputs.release-tool == 'release-please' || inputs.release-tool == 'cargo-release' }}
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Setup Python
+        if: ${{ inputs.release-tool == 'python-build' }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Validate release-tool input
+        run: |
+          case "${{ inputs.release-tool }}" in
+            release-please|cargo-release|python-build) ;;
+            *) echo "::error::Invalid release-tool: ${{ inputs.release-tool }} (expected: release-please | cargo-release | python-build)"; exit 2 ;;
+          esac
+
+      - name: release-please
+        if: inputs.release-tool == 'release-please'
+        uses: googleapis/release-please-action@v4
+        with:
+          token: ${{ secrets.RELEASE_PLEASE_TOKEN }}
+          release-type: rust
+          package-name: ${{ inputs.binary-name || github.event.repository.name }}
+
+      - name: cargo-release dry-run
+        if: inputs.release-tool == 'cargo-release'
+        env:
+          BINARY_NAME: ${{ inputs.binary-name }}
+        run: |
+          set -euo pipefail
+          cargo install cargo-release --locked
+          # `cargo release` doesn't take a --bin selector; for package selection
+          # use --package. binary-name is used later in the verify step instead.
+          cargo release --dry-run --no-push --no-tag --no-publish
+
+      - name: cargo-release publish
+        if: inputs.release-tool == 'cargo-release' && startsWith(github.ref, 'refs/tags/')
+        env:
+          CARGO_REGISTRY_TOKEN: ${{ secrets.CARGO_REGISTRY_TOKEN }}
+        run: |
+          set -euo pipefail
+          # cargo-release reads CARGO_REGISTRY_TOKEN from env; no --token flag.
+          # `cargo release push` is the operator-driven publish; `cargo release` performs the upload.
+          cargo release --no-confirm --tag-prefix ""
+
+      - name: python-build
+        if: inputs.release-tool == 'python-build'
+        env:
+          PYPI_TOKEN: ${{ secrets.PYPI_TOKEN }}
+        run: |
+          set -euo pipefail
+          python -m pip install --quiet build twine
+          python -m build
+          twine upload dist/* --token "$PYPI_TOKEN"
+
+      - name: Verify binary build (cargo-release only)
+        if: inputs.release-tool == 'cargo-release'
+        env:
+          RELEASE_BINARY_NAME: ${{ inputs.binary-name }}
+        run: |
+          set -euo pipefail
+          if [ -n "$RELEASE_BINARY_NAME" ]; then
+            cargo build --release --bin "$RELEASE_BINARY_NAME"
+          else
+            cargo build --release --workspace
+          fi
