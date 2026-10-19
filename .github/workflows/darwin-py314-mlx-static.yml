@@ -37,7 +37,7 @@ jobs:
           python -m pip install --only-binary=:all: --require-hashes
           -r python/requirements-darwin-py314.txt
       - name: Install research package without dependency resolution
-        run: python -m pip install --no-deps -e python
+        run: python -m pip install --no-deps -e absorption/PhenoMLX-temp/python
       - name: Verify Python and MLX static imports
         run: |
           python - <<'PY'
@@ -55,4 +55,6 @@ jobs:
           assert callable(mx.new_thread_local_stream)
           PY
       - name: Run smoke-model configuration tests
-        run: python -m unittest python/omlx_research/tests/test_smoke_models.py
+        run: >-
+          python -m unittest
+          absorption/PhenoMLX-temp/python/omlx_research/tests/test_smoke_models.py

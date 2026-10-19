@@ -20,6 +20,10 @@ jobs:
         with:
           components: clippy
 
+      - uses: arduino/setup-protoc@v3
+        with:
+          version: "28.x"
+
       - name: Cache cargo registry & build
         uses: actions/cache@v4
         with:
