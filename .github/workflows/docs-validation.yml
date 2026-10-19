@@ -23,7 +23,7 @@ jobs:
       - name: Verify required docs exist
         run: |
           set -euo pipefail
-          for f in README.md docs/ARCHITECTURE.md AGENTS.md; do
+          for f in README.md docs/architecture.md AGENTS.md; do
             if [ -f "$f" ]; then
               echo "✓ $f"
             else
@@ -35,5 +35,5 @@ jobs:
       - name: Check markdown links
         uses: lycheeverse/lychee-action@e7477775783ea5526144ba13e8db5eec57747ce8 # v2
         with:
-          args: --no-progress --exit-code README.md docs/ARCHITECTURE.md docs/PINE-MAIN-ANALYSIS.md docs/acceptance-contracts/.gitkeep
+          args: --no-progress --exit-code README.md docs/architecture.md docs/PINE-MAIN-ANALYSIS.md docs/acceptance-contracts/.gitkeep
         continue-on-error: true

@@ -50,7 +50,7 @@ jobs:
           assert sys.version_info[:2] == (3, 14), sys.version
           assert platform.machine() == "arm64", platform.machine()
           assert importlib.metadata.version("omlx-research") == "0.1.0"
-          assert importlib.metadata.version("mlx") == "0.32.0"
+          assert importlib.metadata.version("mlx") == "0.32.2"
           assert importlib.metadata.version("mlx-lm") == "0.31.3"
           assert callable(mx.new_thread_local_stream)
           PY
