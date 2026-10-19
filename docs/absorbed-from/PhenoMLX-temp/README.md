@@ -1,6 +1,6 @@
 # PhenoMLX-temp
 
-- **Source**: https://github.com/KooshaPari/PhenoMLX-temp
+- **Source**: [KooshaPari/PhenoMLX-temp](https://github.com/KooshaPari/PhenoMLX-temp)
 - **Absorbed**: 2026-09-27
 - **Disposition**: ABSORB → `absorption/PhenoMLX-temp/`
 - **Source commit**: `70529a879715a8078e26eb564f8fc312e1923f57` (2026-09-16)

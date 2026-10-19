@@ -1,6 +1,6 @@
 # phenotype-cvp-audit-2026-09-14
 
-- **Source**: https://github.com/KooshaPari/phenotype-cvp-audit-2026-09-14
+- **Source**: [KooshaPari/phenotype-cvp-audit-2026-09-14](https://github.com/KooshaPari/phenotype-cvp-audit-2026-09-14)
 - **Absorbed**: 2026-09-27
 - **Disposition**: ABSORB → `absorption/phenotype-cvp-audit-2026-09-14/`
 - **Source commit**: `791c278fa16f84fdb857f0cff1566f1f4d3e547c` (2026-09-17)
