@@ -18,7 +18,7 @@ jobs:
       - name: Install Rust toolchain
         uses: dtolnay/rust-toolchain@stable
         with:
-          toolchain: 1.75
+          toolchain: stable
 
       - name: Cache cargo registry and target
         uses: actions/cache@v6
