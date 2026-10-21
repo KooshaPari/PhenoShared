@@ -14,10 +14,10 @@ use std::path::PathBuf;
 /// Resolve `~` prefix to `$HOME`. If the path does not start with `~/`,
 /// returns it unchanged.
 pub fn expand_home(p: &str) -> PathBuf {
-    if let Some(rest) = p.strip_prefix("~/") {
-        if let Some(home) = home_dir() {
-            return home.join(rest);
-        }
+    if let Some(rest) = p.strip_prefix("~/")
+        && let Some(home) = home_dir()
+    {
+        return home.join(rest);
     }
     PathBuf::from(p)
 }
