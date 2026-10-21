@@ -29,7 +29,7 @@ jobs:
         id: osv
         # Advisory scan: findings and scanner failures must not block CI.
         continue-on-error: true
-        uses: google/osv-scanner-action@98b584ee2ed2da3935ccce10e06739d54cdcd20b # v2.0.0
+        uses: google/osv-scanner-action/osv-scanner-action@98b584ee2ed2da3935ccce10e06739d54cdcd20b # v2.0.0
         with:
           scan-args: |-
             --lockfile=bun.lock
