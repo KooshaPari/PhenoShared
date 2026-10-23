@@ -4,7 +4,7 @@ go 1.26.7
 
 require (
 	connectrpc.com/connect v1.21.1
-	github.com/99designs/gqlgen v0.17.93
+	github.com/99designs/gqlgen v0.17.97
 	github.com/bytedance/sonic v1.15.4
 	github.com/fsnotify/fsnotify v1.10.1
 	github.com/go-chi/chi/v5 v5.5.0
@@ -25,7 +25,7 @@ require (
 	github.com/spf13/viper v1.21.0
 	github.com/stretchr/testify v1.12.1
 	github.com/valyala/fasthttp v1.76.0
-	github.com/vektah/gqlparser/v2 v2.5.36
+	github.com/vektah/gqlparser/v2 v2.5.63
 	golang.org/x/crypto v0.58.0
 	golang.org/x/net v0.61.0
 )
@@ -66,7 +66,7 @@ require (
 	github.com/labstack/gommon v0.5.0 // indirect
 	github.com/leodido/go-urn v1.5.0 // indirect
 	github.com/lib/pq v1.12.3 // indirect
-	github.com/mattn/go-colorable v0.1.15 // indirect
+	github.com/mattn/go-colorable v0.1.16 // indirect
 	github.com/mattn/go-isatty v0.0.24 // indirect
 	github.com/molecule-man/go-brrr v1.3.0 // indirect
 	github.com/munnerz/goautoneg v0.0.0-20191010083416-a7dc8b61c822 // indirect
