@@ -366,9 +366,9 @@ mlx==0.32.2 \
     --hash=sha256:fe813a4dee2daa6d5ac496ef25117034728c77fe26f713983a3b406eb6f4e8f0 \
     --hash=sha256:fe8c1ecdad687259944b76d67621b00536b00194557588a4604a45efcd238d8e
     # via -r requirements-darwin-py314.in
-mlx-lm==0.31.3 \
-    --hash=sha256:61eb0e3ba09444f77f874aff295401d7ccd20b39495cbbce0c782a15474ce733 \
-    --hash=sha256:758cfddf1180053b7613db76fad3d246a331a2a905808e1164a275621fc983b8
+mlx-lm==0.32.2 \
+    --hash=sha256:1af8a92f6a141c3e2bf5b0369ac4464203a8e2189c47b9e40d3e921e5b3a1fe9 \
+    --hash=sha256:5c0991248cfff5872503d74f466d2532dd8cb7fb3670cb9be7a06d7305dadc04
     # via -r requirements-darwin-py314.in
 numpy==2.5.1 \
     --hash=sha256:08d60c810432eb83360958dea0999ac4cfb94531ea8efcbf0b7f277c2068aeb2 \
