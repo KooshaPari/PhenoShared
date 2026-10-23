@@ -1,4 +1,4 @@
-cryptography>=42
+cryptography>=50.0.2
 mlx==0.32.2
 mlx-lm==0.31.3
 transformers>=5.20.2
