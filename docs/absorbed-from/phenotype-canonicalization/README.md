@@ -1,6 +1,6 @@
 # phenotype-canonicalization
 
-- **Source**: https://github.com/KooshaPari/phenotype-canonicalization
+- **Source**: [KooshaPari/phenotype-canonicalization](https://github.com/KooshaPari/phenotype-canonicalization)
 - **Absorbed**: 2026-09-27
 - **Disposition**: ABSORB → `absorption/phenotype-canonicalization/`
 - **Source commit**: `570e2c73aff565620a2c518a37d258981a31ca9e` (2026-09-17)

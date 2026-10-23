@@ -28,6 +28,12 @@ jobs:
       - name: Validate ADR headers
         run: |
           for f in docs/adr/*.md; do
-            grep -q '^# ADR ' "$f" || { echo "::error file=$f::missing '# ADR NNN — Title' header"; exit 1; }
-            grep -q '^- \*\*Status:\*\*' "$f" || { echo "::error file=$f::missing Status line"; exit 1; }
+            # ARCHITECTURE.md is the ADR index, not an individual decision record.
+            [ "$f" = docs/adr/ARCHITECTURE.md ] && continue
+            grep -Eq '^# (ADR([[:space:]-]|:)|[0-9]{4}[[:space:]-])' "$f" || {
+              echo "::error file=$f::missing ADR number and title"; exit 1;
+            }
+            grep -Eq '^(- )?\*\*Status:\*\*|^(- )?\*\*Status\*\*:|^## Status$' "$f" || {
+              echo "::error file=$f::missing Status field"; exit 1;
+            }
           done

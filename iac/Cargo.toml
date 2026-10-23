@@ -4,13 +4,15 @@ members = [
     "oci-lottery",
     "oci-post-acquire",
     "tailscale/tailscale-keygen",
+    "observability",
 ]
-# `landing-bootstrap` declares its own `[workspace]` table (intentionally
-# detached — see its Cargo.toml) and uses a different dependency style
-# (`ureq` instead of `reqwest`). It is built and released independently; do
-# not pull it into this workspace.
+# `landing-bootstrap` and `phenotype-logging-stub` declare their own
+# `[workspace]` tables (intentionally detached — see their Cargo.toml files).
+# The former is built and released independently; the latter is a local path
+# dependency for the observability member. Neither belongs to this workspace.
 exclude = [
     "landing-bootstrap",
+    "phenotype-logging-stub",
 ]
 
 # Shared dependency versions for the iac/* Rust crates.
@@ -29,6 +31,7 @@ serde_json = "1.0"
 tokio = { version = "1.52", features = ["rt-multi-thread", "macros", "process", "signal", "time", "fs", "net", "io-util"] }
 tracing = "0.1"
 tracing-subscriber = { version = "0.3", features = ["env-filter", "fmt", "json"] }
+phenotype-logging = { path = "phenotype-logging-stub" }
 chrono = { version = "0.4", features = ["serde"] }
 reqwest = { version = "0.12", features = ["json", "rustls-tls"], default-features = false }
 glob = "0.3"

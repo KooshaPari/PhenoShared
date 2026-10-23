@@ -7,10 +7,13 @@ license = "MIT"
 
 [dependencies]
 prost = "0.13"
-tonic = { workspace = true }
+tonic = { version = "0.12", features = ["transport"] }
 
 [package.metadata.cargo-machete]
 ignored = ["prost"]
 
 [build-dependencies]
-tonic-build = { workspace = true }
+tonic-build = "0.12"
+
+[workspace]
+resolver = "2"

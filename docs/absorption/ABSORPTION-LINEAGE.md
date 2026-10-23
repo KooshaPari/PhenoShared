@@ -86,17 +86,20 @@ to every `ABSORPTION*.md` ledger. Full list, verbatim from
 `git show 8c85d576^:.gitmodules`:
 
 ```
-agileplus-plugin-core agileplus-plugin-git agileplus-plugin-sqlite bare-cua BytePort clikit
-cloud Cmdra Cursora Datamold Dino Docuverse Duple Evalora Flagward Flowra Guardis helios-cli
-helix-logging helMo Hexacore HexaGo hexagon-python hexagon-rs hexagon-ts HexaPy HexaType
-Httpora KaskMan kits KodeVibeGo Kogito nanovms omniroute-temp org-github phenodocs phenoSDK
+agileplus-plugin-core agileplus-plugin-git agileplus-plugin-sqlite bare-cua
+BytePort clikit cloud Cmdra Cursora Datamold Dino Docuverse Duple Evalora
+Flagward Flowra Guardis helios-cli helix-logging helMo Hexacore HexaGo
+hexagon-python hexagon-rs hexagon-ts HexaPy HexaType
+Httpora KaskMan kits KodeVibeGo Kogito nanovms omniroute-temp org-github
+phenodocs phenoSDK
 phenotype-agent-core phenotype-auth-ts phenotype-cipher phenotype-cli-extensions
 phenotype-config-ts phenotype-dep-guard phenotype-docs-engine phenotype-evaluation
 phenotype-forge phenotype-logging-zig phenotype-middleware-py phenotype-patch
 phenotype-research-engine phenotype-sentinel phenotype-skills phenotype-task-engine
 phenotype-templates phenotype-types phenotype-vessel phenotype-xdd-lib Planify
 platforms/thegent-pr882 PolicyStack portage Portalis Profila Queris Quillr
-repos/phenotype-bootstrap repos/phenotype-replication-engine Schemaforge Seedloom sharecli
+repos/phenotype-bootstrap repos/phenotype-replication-engine Schemaforge
+Seedloom sharecli
 template-domain-service-api template-domain-webapp template-lang-elixir-hex template-lang-go
 template-lang-kotlin template-lang-mojo template-lang-python template-lang-rust
 template-lang-swift template-lang-typescript template-lang-zig template-program-ops
@@ -108,7 +111,8 @@ templates/template-lang-python-remote-20260402 templates/template-lang-rust-remo
 templates/template-lang-swift-remote-20260402 templates/template-lang-zig-remote-20260402
 templates/template-program-ops-remote-20260402 thegent-cache thegent-mesh thegent-metrics
 thegent-plugin-host thegent-sharecli thegent-shm thegent-subprocess Tokn Tossy tracely
-Tracera vendor/phenodocs vibeproxy vibeproxy-monitoring-unified worktree-manager zen Zerokit
+Tracera vendor/phenodocs vibeproxy vibeproxy-monitoring-unified
+worktree-manager zen Zerokit
 ```
 
 A handful of these names reappear as absorbed destinations under different paths
@@ -281,6 +285,7 @@ and `tools/kodevibe` were resolved earlier (gate-clean as of 2026-09-20), and
 `crates/agent-user-status` is no longer a local-path claim at all.
 
 ### 2.4 Duplicate destinations (same code, two or three arrivals)
+
 | Code | Copies | Arrivals |
 |---|---|---|
 | `phenotype-router-monitor/src/lib.rs` | **3**, byte-identical (md5 `816d3875…`) | `6016c04a` (2026-04-02, root), `33673213` (`absorption/`), `121f79f6` (`crates/`) |
@@ -298,12 +303,18 @@ and `tools/kodevibe` were resolved earlier (gate-clean as of 2026-09-20), and
 
 Two commits, both 2026-09-16:
 
-* `3b6d8798` `chore: PII sweep — redact names, emails, paths across all files` — 4214 files, 35,813 insertions / 35,813 deletions (pure 1:1 substitution).
-* `eb6fd899` `chore: PII deep-clean pass 2 + GitHub URL restoration` — 1691 files. It restored `github.com/<REDACTED>/…` → `github.com/KooshaPari/…` but **did not** restore bare `<REDACTED>/Repo` source paths.
+* `3b6d8798` `chore: PII sweep — redact names, emails, paths across all files`
+  — 4214 files, 35,813 insertions / 35,813 deletions (pure 1:1 substitution).
+* `eb6fd899` `chore: PII deep-clean pass 2 + GitHub URL restoration` — 1691
+  files. It restored `github.com/<REDACTED>/…` →
+  `github.com/KooshaPari/…` but **did not** restore bare `<REDACTED>/Repo`
+  source paths.
 
-A third commit, `cf914698` (2026-09-17), mechanically sanitised the *filenames* the
-sweep had produced: `com.<REDACTED>.resume-all-*.plist` → `com.REDACTED.resume-all-*.plist`,
-because `<` and `>` are invalid in Windows paths.
+A third commit, `cf914698` (2026-09-17), mechanically sanitised the
+*filenames* the sweep had produced:
+`com.<REDACTED>.resume-all-*.plist` →
+`com.REDACTED.resume-all-*.plist`, because `<` and `>` are invalid in Windows
+paths.
 
 The token is **polysemous**: `<REDACTED>` stands for the GitHub org `KooshaPari`,
 the OS user `kooshapari`, and the bundle-id segment `kooshapari`, interchangeably.
@@ -421,7 +432,8 @@ Files under `crates/` from archived `KooshaPari/PhenoProc` (wave 6, 2026-06-17).
 $ git show 3b6d8798^:docs/absorption/phenotype-pm-core/README.md | sed -n '7,9p'
 | Source repo | `KooshaPari/phenotype-pm-core` |
 | Target repo | `KooshaPari/phenotype-tooling` |
-| Target paths | `crates/traceability-core/`, `crates/traceability-decorators/`, `crates/trace-gate/` |
+| Target paths | `crates/traceability-core/`, `crates/traceability-decorators/`,
+  `crates/trace-gate/` |
 
 $ git ls-tree --name-only 3b6d8798^:absorption/resume-all/launchd | head -1
 com.kooshapari.resume-all-bridge-health.plist
@@ -487,7 +499,8 @@ are `crates/traceability-{core,decorators}`, `crates/trace-gate`,
    §1 independently confirms single-root, no rewrite, no force-push evidence.
 3. **That the import was additive.** Every absorption commit is `--diff-filter=A`
    only; nothing in the absorption cluster deletes >500 files.
-4. **Where each absorption commit put things** — exactly: `git show --name-status --diff-filter=A <hash>`.
+4. **Where each absorption commit put things** — exactly:
+   `git show --name-status --diff-filter=A <hash>`.
 5. **That the PII redaction is reversible.** `git show 3b6d8798^:<path>` for every
    ledger in §3.3. This contradicts the "unrecoverable" verdict at
    `docs/audits/GIT-HISTORY-INTEGRITY.md:174-177`.
