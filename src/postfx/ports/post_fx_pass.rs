@@ -188,13 +188,17 @@ mod tests {
     use super::*;
     use crate::postfx::ports::shader_availability::DefaultPostFxShaderAvailability;
 
-    struct StubPass {
+    /// A small test bloom pass used by the `PostFxPass` contract
+    /// smoke test. It implements the full `PostFxPass` trait and
+    /// covers all six trait methods: name, effect, cost, is_enabled,
+    /// set_enabled, on_setup, on_render, on_dispose, validate_variants.
+    struct BloomTestPass {
         effect: PassEffect,
         cost: f32,
         enabled: bool,
     }
 
-    impl PostFxPass for StubPass {
+    impl PostFxPass for BloomTestPass {
         fn name(&self) -> &str {
             self.effect.name()
         }
@@ -260,19 +264,30 @@ mod tests {
     }
 
     #[test]
-    fn stub_pass_works() {
-        let mut p = StubPass {
+    fn bloom_pass_contract_works() {
+        // Smoke test for the PostFxPass contract: a small Bloom pass
+        // exercises every trait method. The previous `stub_pass_works`
+        // test was a generic placeholder; this version uses a typed
+        // test pass that maps to a real effect (Bloom) and explicitly
+        // covers the enable/disable + on_setup + on_render +
+        // validate_variants round trip.
+        let mut p = BloomTestPass {
             effect: PassEffect::Bloom,
             cost: 0.1,
             enabled: true,
         };
         assert_eq!(p.name(), "Bloom");
+        assert_eq!(p.effect(), PassEffect::Bloom);
+        assert!((p.cost() - 0.1).abs() < f32::EPSILON);
         assert!(p.is_enabled());
         p.set_enabled(false);
         assert!(!p.is_enabled());
+        p.set_enabled(true);
+        assert!(p.is_enabled());
         let ctx = PostFxContext::new(1, 2, 42, PassQuality::High);
         assert!(p.on_setup(&ctx).is_ok());
         assert!(p.on_render(&ctx).is_ok());
+        p.on_dispose();
         let provider = DefaultPostFxShaderAvailability;
         assert!(p.validate_variants(&provider).is_ok());
     }
