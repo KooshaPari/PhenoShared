@@ -1,0 +1,35 @@
+name: ResearchLedger Recovery Validation
+on:
+  push:
+    branches: [docs/researchledger-recovery-20261012]
+    paths:
+      - scripts/researchledger/**
+      - tests/researchledger/**
+      - .github/workflows/researchledger-recovery-validation.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  offline-recovery:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    steps:
+      - name: Checkout exact revision
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - name: Check recovery parser and negative controls
+        run: |
+          set -euo pipefail
+          python3 -m py_compile scripts/researchledger/recover_wave5.py
+          python3 -m unittest discover -s tests/researchledger -p 'test_*.py' -v
+      - name: Check no recovered API data was committed
+        run: |
+          set -euo pipefail
+          test ! -e docs/corpora/emergent-garden/data/youtube-channel-inventory-v1.json
+          test ! -e docs/corpora/emergent-garden/data/youtube-description-edges-v1.json
+          test ! -e docs/corpora/emergent-garden/data/youtube-text-coverage-v1.json
+          echo 'Offline checks only; migration and source refresh remain separate gates.'
