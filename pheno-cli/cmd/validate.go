@@ -62,9 +62,9 @@ func runValidate(cmd *cobra.Command, args []string) error {
 	fmt.Println()
 
 	requiredFiles := map[string]bool{
-		"CLAUDE.md":    true,
-		"AGENTS.md":    true,
-		"SECURITY.md":  false, // Optional
+		"CLAUDE.md":   true,
+		"AGENTS.md":   true,
+		"SECURITY.md": false, // Optional
 	}
 
 	requiredWorkflows := map[string]bool{
