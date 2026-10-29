@@ -139,6 +139,13 @@ pub fn ensure_service_lifecycle_capability(manifest: &CompositionManifest) -> Re
     }
 }
 
+// The error variant carries a `RollbackContract` so a caller can undo a
+// partially applied lifecycle plan. That makes the `Err` variant large, which
+// `clippy::result_large_err` flags. Boxing it here would change the public
+// signature of `execute_lifecycle_plan` and every call site that pattern
+// matches on the error tuple, for no runtime benefit: this function returns
+// once per lifecycle execution, not in a hot loop.
+#[allow(clippy::result_large_err)]
 pub fn execute_lifecycle_plan<'a, R, F>(
     plan: &'a LifecyclePlan,
     services: &'a BTreeMap<String, Service>,

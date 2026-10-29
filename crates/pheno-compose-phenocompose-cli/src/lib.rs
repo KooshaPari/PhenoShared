@@ -1575,9 +1575,22 @@ mod lifecycle_bridge_tests {
     #[test]
     #[ignore = "PHE-PCC-001 pre-existing: needs composition-v0.yaml fixture"]
     fn lifecycle_request_maps_manifest_services_and_intents() {
-        let manifest =
-            CompositionManifest::parse(include_str!("../../../examples/composition-v0.yaml"))
-                .unwrap();
+        // `include_str!` is resolved at compile time, so referencing the
+        // fixture directly made the whole lib-test target fail to compile in
+        // any checkout where the file is absent. The fixture is gitignored
+        // (examples/composition-v0.yaml in .gitignore), so it is missing from
+        // every clean clone and from CI. Read it at run time instead, and
+        // skip when it is not present, so the ignored test no longer breaks
+        // the build for everyone else.
+        let fixture_path = concat!(
+            env!("CARGO_MANIFEST_DIR"),
+            "/../../../examples/composition-v0.yaml"
+        );
+        let Ok(fixture) = std::fs::read_to_string(fixture_path) else {
+            eprintln!("skipping: fixture not present at {fixture_path}");
+            return;
+        };
+        let manifest = CompositionManifest::parse(&fixture).unwrap();
         let plan = manifest.plan().unwrap();
         let lifecycle = plan_lifecycle(&manifest, &plan.manifest_sha256).unwrap();
         let request =
