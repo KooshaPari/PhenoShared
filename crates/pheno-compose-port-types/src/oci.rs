@@ -96,7 +96,11 @@ impl Reference {
     /// `<registry>/<repository>:<tag>` or
     /// `<registry>/<repository>@<digest>` (or both, separated
     /// by both `:` and `@` if both are present).
-    pub fn to_string(&self) -> String {
+    ///
+    /// This is exposed through the [`std::fmt::Display`] implementation, so
+    /// `reference.to_string()` keeps working without an inherent method that
+    /// would shadow `ToString`.
+    fn to_reference_string(&self) -> String {
         let mut s = String::new();
         if let Some(reg) = &self.registry {
             s.push_str(reg);
@@ -117,7 +121,7 @@ impl Reference {
 
 impl std::fmt::Display for Reference {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        f.write_str(&self.to_string())
+        f.write_str(&self.to_reference_string())
     }
 }
 
@@ -227,7 +231,7 @@ fn split_registry(input: &str) -> (Option<String>, String) {
 /// This is a convenience wrapper around [`parse`] that discards
 /// the parsed components and returns a boolean.
 pub fn is_valid(reference: &str) -> bool {
-    parse(reference).map_or(false, |r| r.is_valid())
+    parse(reference).is_ok_and(|r| r.is_valid())
 }
 
 /// Construct a canonical `<registry>/<repository>:<tag>` reference.
