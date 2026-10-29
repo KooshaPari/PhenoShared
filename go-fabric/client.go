@@ -167,16 +167,21 @@ func (c *Client) send(ctx context.Context, msgType string) (json.RawMessage, err
 		return nil, ErrClosed
 	}
 
-	// Apply context deadline to transport timeout if shorter.
-	deadline, ok := ctx.Deadline()
-	if ok {
+	// The effective deadline is the client timeout, or the context deadline
+	// when that is strictly shorter. A longer context deadline must NOT
+	// extend the configured client timeout.
+	timeout := c.timeout
+	if timeout <= 0 {
+		timeout = DefaultConnPoolConfig().Timeout
+	}
+	if deadline, ok := ctx.Deadline(); ok {
 		remaining := time.Until(deadline)
 		if remaining <= 0 {
 			return nil, ErrTimeout
 		}
-		c.pool.timeout = remaining
-	} else {
-		c.pool.timeout = c.timeout
+		if remaining < timeout {
+			timeout = remaining
+		}
 	}
 
 	// Check context cancellation.
@@ -186,8 +191,9 @@ func (c *Client) send(ctx context.Context, msgType string) (json.RawMessage, err
 	default:
 	}
 
-	// Use the transport to send the request.
-	transport := NewTransport(c.pool)
+	// Use the transport to send the request. The timeout is per-request so
+	// concurrent calls with different deadlines cannot race on shared state.
+	transport := NewTransportWithTimeout(c.pool, timeout)
 	raw, err := transport.SendRequest(msgType)
 	if err != nil {
 		return nil, err
