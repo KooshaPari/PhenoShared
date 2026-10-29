@@ -1,0 +1,39 @@
+# Live Go modules in this repository.
+#
+# This file is the single source of truth for which Go modules CI gates.
+# The Go CI job reads it to build its matrix, and
+# scripts/ci/check-go-modules.py fails the build if a go.mod exists that is
+# neither listed here nor covered by an ignore rule.
+#
+# Why an explicit list instead of `find . -name go.mod`:
+# this repository contains Go modules that must NOT be built, including
+# vendored snapshots under _archived/ and absorption/ whose go.mod files
+# contain replace directives pointing at worktrees that no longer exist.
+# A bare find would pick those up and turn any Go CI job red for reasons
+# unrelated to the change under test.
+#
+# Rules for adding an entry:
+#   - the module must pass gofmt, go vet, go test and go build
+#   - the module must be first-class here, not a vendored snapshot
+#   - a vendored snapshot gets a disposition README under
+#     docs/absorbed-from/<name>/README.md and an ABSORPTION_INDEX.md entry
+#     instead of an entry here
+#
+# Format: one module directory per line, relative to the repository root.
+# Blank lines and lines starting with '#' are ignored.
+
+# CLIs under cmd/
+cmd/capprobe
+cmd/checker
+cmd/promptscrape
+cmd/trust
+cmd/wire
+
+# Libraries and services
+agileplus/pheno-cli
+apps/bench-cockpit/server
+crates/argis-extensions/slm-server
+crates/nanovms
+go-fabric
+libs/docslib
+pheno-cli

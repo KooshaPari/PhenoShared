@@ -23,7 +23,17 @@ Repo-sprawl reduction wave — owner repo: **PhenoShared (phenoAI)**. Five stand
 | [PhenoMLX-temp](https://github.com/KooshaPari/PhenoMLX-temp) | ABSORB | [docs/absorbed-from/PhenoMLX-temp/README.md](absorbed-from/PhenoMLX-temp/README.md) | SPR-04 | Temp snapshot; ~646 MB `.cargo-target/` excluded. Canonical source is live `KooshaPari/PhenoMLX`. Source left unarchived pending operator confirmation. |
 | [PhenoInfra](https://github.com/KooshaPari/PhenoInfra) | ABSORB | [docs/absorbed-from/PhenoInfra/README.md](absorbed-from/PhenoInfra/README.md) | SPR-05 | Compute/infra monorepo snapshot; not wired into root workspace. Source repo already archived. |
 
+## Vendored-off-Go-tool disposition wave (2026-10-29)
+
+Vendored-copy disposition pass for a Go tool absorbed outside the `absorption/` flow — owner repo: **PhenoShared (phenoAI)**. Entry recorded so the tree is permanently excluded from CI and from future module sweeps.
+
+| Repo | Disposition | Absorption README | Worklog ref | Notes |
+|------|-------------|-------------------|-------------|-------|
+| [zz-merge-unk-hfscope](https://github.com/KooshaPari/zz-merge-unk-hfscope) | EXCLUDE | [docs/absorbed-from/hfscope/README.md](absorbed-from/hfscope/README.md) | HF-01 | Vendored at `hfscope/` (not `absorption/`); `PROVENANCE.md` declares absorption into PhenoMLX, yet the copy lives here. **Both upstreams deleted** (`KooshaPari/hfscope`, `KooshaPari/zz-merge-unk-hfscope` → "Repository not found"). Absorption incomplete: `cmd/` missing while `go.mod`/`Makefile` reference `cmd/hfscope` + `cmd/hfscope-token`, so `make build` is broken by construction; the `templ.Home` vet failure needs `templ generate` first (gitignored `**/*_templ.go`); 10 files not gofmt-clean. **Excluded from all CI.** Canonical is the external hfscope repo (currently deleted). |
+
 ## Worklog references
+
+- **HF-01** (2026-10-29): `hfscope` vendored-copy disposition — verified both declared upstreams deleted, confirmed `cmd/` absent, `make build` unbuildable, `templ generate` required before vet can pass, and 10 non-gofmt files. Recorded as EXCLUDE (not first-class) and excluded from all CI and module sweeps.
 
 - **SPR-01..SPR-05** (2026-09-27): Repo-sprawl consolidation pass — five standalone repos assessed, absorbed as plain copies under `absorption/`, each given a `PROVENANCE.md` (source repo/commit/date/rationale) and a `docs/absorbed-from/<repo>/README.md` disposition README. Root Cargo workspace re-validated after absorption (`cargo metadata --no-deps` OK). Source repos to be archived after this wave.
 
