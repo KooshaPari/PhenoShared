@@ -178,8 +178,3 @@ crates/sharecli/tests/fr007_tray_monitoring_report_consume.rs.broken
 crates/sharecli/tests/c00_l4_async_shutdown_gate.rs.broken
 crates/sharecli/tests/c00_l5_observability.rs.broken
 crates/sharecli/tests/fr007_thermal_tui_pool_status.rs.broken
-
-# Go CLI build artifacts (cmd/promptscrape)
-cmd/promptscrape/promptscrape
-cmd/promptscrape/promptscrape.exe
-cmd/promptscrape/dist/

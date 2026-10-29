@@ -4,253 +4,85 @@ import (
 	"bufio"
 	"database/sql"
 	"encoding/json"
-	"fmt"
 	"io"
 	"os"
 	"os/exec"
 	"path/filepath"
 	"sort"
 	"strings"
-	"time"
 
 	"github.com/klauspost/compress/zstd"
-	_ "modernc.org/sqlite"
+	_ "github.com/mattn/go-sqlite3"
 )
 
-// codexSQLitePath returns the path of the Codex thread-history database.
-func codexSQLitePath() string {
-	home, err := os.UserHomeDir()
-	if err != nil {
-		return ""
-	}
-	return filepath.Join(home, ".codex", "thread_history_1.sqlite")
-}
-
-// codexRolloutDir returns the directory holding Codex rollout transcripts.
-func codexRolloutDir() string {
-	home, err := os.UserHomeDir()
-	if err != nil {
-		return ""
-	}
-	return filepath.Join(home, ".codex", "sessions")
-}
-
-// extractCodexSQLite reads prompts for a thread from the thread-history database.
-//
-// The database is the authoritative store: it survives rollout-file pruning and
-// carries both the stable item id and the creation timestamp.
 func extractCodexSQLite(threadID string) ([]Prompt, error) {
-	dbPath := codexSQLitePath()
-	if dbPath == "" {
-		return nil, fmt.Errorf("cannot determine home directory")
-	}
-	if _, err := os.Stat(dbPath); err != nil {
-		return nil, fmt.Errorf("codex thread history not found at %s: %w", dbPath, err)
-	}
-
-	db, err := sql.Open("sqlite", "file:"+dbPath+"?mode=ro")
+	home, _ := os.UserHomeDir()
+	dbPath := filepath.Join(home, ".codex", "thread_history_1.sqlite")
+	
+	db, err := sql.Open("sqlite3", "file:"+dbPath+"?mode=ro")
 	if err != nil {
-		return nil, fmt.Errorf("open codex thread history: %w", err)
+		return nil, err
 	}
 	defer db.Close()
-
-	rows, err := db.Query(
-		`SELECT item_id, created_at_ms, item_json
-		 FROM thread_items
-		 WHERE thread_id = ? AND item_type = 'userMessage'
-		 ORDER BY rollout_ordinal`,
-		threadID,
-	)
+	
+	rows, err := db.Query("SELECT turn_id, rollout_ordinal, item_json FROM thread_items WHERE thread_id = ? AND item_type = 'userMessage' ORDER BY rollout_ordinal", threadID)
 	if err != nil {
-		return nil, fmt.Errorf("query codex thread items: %w", err)
+		return nil, err
 	}
 	defer rows.Close()
-
+	
 	var prompts []Prompt
 	for rows.Next() {
-		var itemID string
-		var createdAtMS int64
+		var turnID string
+		var ordinal int
 		var itemJSON string
-		if err := rows.Scan(&itemID, &createdAtMS, &itemJSON); err != nil {
+		if err := rows.Scan(&turnID, &ordinal, &itemJSON); err != nil {
 			continue
 		}
-
-		text := codexUserMessageText(itemJSON)
-		if text == "" {
+		var item map[string]interface{}
+		if json.Unmarshal([]byte(itemJSON), &item) != nil {
 			continue
 		}
-		normalized, keep := normalizePrompt(text)
-		if !keep {
+		content, ok := item["content"].([]interface{})
+		if !ok {
 			continue
 		}
-
-		// One stored message can pack several human prompts (Codex compresses a
-		// resumed turn into a single item). Each gets its own sequence suffix so
-		// the ids stay unique and traceable back to the source item.
-		for i, promptText := range normalized {
-			prompts = append(prompts, Prompt{
-				ID:        codexPromptID(itemID, i, len(normalized)),
-				Timestamp: epochMillisToRFC3339(createdAtMS),
-				Text:      promptText,
-			})
+		for _, c := range content {
+			if cm, ok := c.(map[string]interface{}); ok {
+				if text, ok := cm["text"].(string); ok {
+					if strings.HasPrefix(text, "<environment_context>") || strings.HasPrefix(text, "<permissions instructions>") {
+						continue
+					}
+					if strings.HasPrefix(strings.TrimSpace(text), "<|") {
+						continue
+					}
+					if len(text) < 5 {
+						continue
+					}
+					id := turnID
+					if id == "" {
+						id = threadID + ":" + string(rune(ordinal))
+					}
+					prompts = append(prompts, Prompt{
+						ID:        id,
+						Timestamp: "",
+						Text:      text,
+					})
+					break
+				}
+			}
 		}
-	}
-	if err := rows.Err(); err != nil {
-		return nil, fmt.Errorf("scan codex thread items: %w", err)
 	}
 	return prompts, nil
 }
 
-// codexPromptID builds a unique, traceable id for one extracted prompt.
-//
-// A single stored Codex item can hold several human prompts. The item id is
-// kept as the prefix so the prompt stays traceable back to its source, and a
-// sequence suffix distinguishes the individual prompts.
-func codexPromptID(itemID string, index, total int) string {
-	if total <= 1 {
-		return itemID
-	}
-	return fmt.Sprintf("%s#%d", itemID, index+1)
-}
-
-// codexUserMessageText pulls the first text block out of a stored userMessage.
-func codexUserMessageText(itemJSON string) string {
-	var item struct {
-		Content []struct {
-			Type string `json:"type"`
-			Text string `json:"text"`
-		} `json:"content"`
-	}
-	if err := json.Unmarshal([]byte(itemJSON), &item); err != nil {
-		return ""
-	}
-	for _, c := range item.Content {
-		if c.Type == "text" && strings.TrimSpace(c.Text) != "" {
-			return c.Text
-		}
-	}
-	return ""
-}
-
-// epochMillisToRFC3339 converts a Codex millisecond epoch to an RFC3339 UTC stamp.
-func epochMillisToRFC3339(ms int64) string {
-	if ms <= 0 {
-		return ""
-	}
-	return time.UnixMilli(ms).UTC().Format(time.RFC3339Nano)
-}
-
-// extractCodexRollout reads prompts from the on-disk rollout transcript.
-//
-// This is the fallback for threads whose sqlite history has been pruned or whose
-// rollout file still holds items the projection has not yet consumed.
 func extractCodexRollout(threadID string) ([]Prompt, error) {
-	rollout, err := findCodexRollout(threadID)
-	if err != nil {
-		return nil, err
-	}
-	if rollout == "" {
-		return nil, fmt.Errorf("no codex rollout file found for thread %s", threadID)
-	}
-
-	content, err := readCodexRollout(rollout)
-	if err != nil {
-		return nil, err
-	}
-
-	var prompts []Prompt
-	seen := map[string]bool{}
-	scanner := bufio.NewScanner(strings.NewReader(content))
-	const maxLineSize = 8 * 1024 * 1024
-	scanner.Buffer(make([]byte, 64*1024), maxLineSize)
-
-	for scanner.Scan() {
-		line := scanner.Bytes()
-		if len(line) == 0 {
-			continue
-		}
-		var envelope struct {
-			Type      string `json:"type"`
-			Timestamp string `json:"timestamp"`
-			Payload   struct {
-				Type    string `json:"type"`
-				Role    string `json:"role"`
-				Content []struct {
-					Type string `json:"type"`
-					Text string `json:"text"`
-				} `json:"content"`
-				Metadata *struct {
-					ContentItemKinds []string `json:"content_item_kinds"`
-				} `json:"internal_chat_message_metadata_passthrough"`
-			} `json:"payload"`
-		}
-		if err := json.Unmarshal(line, &envelope); err != nil {
-			continue
-		}
-		if envelope.Type != "response_item" {
-			continue
-		}
-		if envelope.Payload.Type != "message" || envelope.Payload.Role != "user" {
-			continue
-		}
-		// The discriminator that separates a real typed prompt from injected context.
-		if envelope.Payload.Metadata != nil {
-			kinds := envelope.Payload.Metadata.ContentItemKinds
-			if len(kinds) != 1 || kinds[0] != "user.text" {
-				continue
-			}
-		}
-
-		text := ""
-		for _, c := range envelope.Payload.Content {
-			if c.Type == "text" && strings.TrimSpace(c.Text) != "" {
-				text = c.Text
-				break
-			}
-		}
-		if text == "" {
-			continue
-		}
-		normalized, keep := normalizePrompt(text)
-		if !keep {
-			continue
-		}
-
-		id := fmt.Sprintf("%s#%d", threadID, len(prompts)+1)
-		if seen[id] {
-			continue
-		}
-		seen[id] = true
-		for i, promptText := range normalized {
-			prompts = append(prompts, Prompt{
-				ID:        codexPromptID(id, i, len(normalized)),
-				Timestamp: normalizeTimestamp(envelope.Timestamp),
-				Text:      promptText,
-			})
-		}
-	}
-	if err := scanner.Err(); err != nil {
-		return nil, fmt.Errorf("read codex rollout %s: %w", rollout, err)
-	}
-	return prompts, nil
-}
-
-// findCodexRollout locates the rollout transcript file for a thread.
-func findCodexRollout(threadID string) (string, error) {
-	dir := codexRolloutDir()
-	if dir == "" {
-		return "", fmt.Errorf("cannot determine home directory")
-	}
-	if _, err := os.Stat(dir); err != nil {
-		return "", fmt.Errorf("codex sessions directory not found at %s: %w", dir, err)
-	}
-
+	home, _ := os.UserHomeDir()
+	sessionsDir := filepath.Join(home, ".codex", "sessions")
+	
 	var candidates []string
-	err := filepath.Walk(dir, func(path string, info os.FileInfo, err error) error {
+	filepath.Walk(sessionsDir, func(path string, info os.FileInfo, err error) error {
 		if err != nil {
-			return nil
-		}
-		if info.IsDir() {
 			return nil
 		}
 		if strings.Contains(info.Name(), threadID) {
@@ -258,59 +90,104 @@ func findCodexRollout(threadID string) (string, error) {
 		}
 		return nil
 	})
-	if err != nil {
-		return "", fmt.Errorf("walk codex sessions: %w", err)
-	}
+	
 	if len(candidates) == 0 {
-		return "", nil
+		return nil, nil
 	}
 	sort.Strings(candidates)
-	return candidates[len(candidates)-1], nil
-}
-
-// readCodexRollout reads a rollout file, transparently handling zstd compression.
-func readCodexRollout(path string) (string, error) {
-	if !strings.HasSuffix(path, ".zst") {
-		data, err := os.ReadFile(path)
+	rollout := candidates[len(candidates)-1]
+	
+	var content string
+	if strings.HasSuffix(rollout, ".zst") {
+		f, err := os.Open(rollout)
 		if err != nil {
-			return "", fmt.Errorf("read %s: %w", path, err)
+			return nil, err
 		}
-		return string(data), nil
-	}
-
-	f, err := os.Open(path)
-	if err != nil {
-		return "", fmt.Errorf("open %s: %w", path, err)
-	}
-	defer f.Close()
-
-	dec, err := zstd.NewReader(f)
-	if err != nil {
-		// Fall back to the system zstd binary.
-		cmd := exec.Command("zstd", "-d", "-c", path)
-		out, cmdErr := cmd.Output()
-		if cmdErr != nil {
-			return "", fmt.Errorf("decompress %s: %w", path, cmdErr)
+		dec, err := zstd.NewReader(f)
+		if err != nil {
+			// try system zstd
+			f.Close()
+			cmd := exec.Command("zstd", "-d", "-c", rollout)
+			out, err := cmd.Output()
+			if err != nil {
+				return nil, err
+			}
+			content = string(out)
+		} else {
+			data, err := io.ReadAll(dec)
+			dec.Close()
+			f.Close()
+			if err != nil {
+				return nil, err
+			}
+			content = string(data)
 		}
-		return string(out), nil
+	} else {
+		data, err := os.ReadFile(rollout)
+		if err != nil {
+			return nil, err
+		}
+		content = string(data)
 	}
-	defer dec.Close()
-
-	data, err := io.ReadAll(dec)
-	if err != nil {
-		return "", fmt.Errorf("decompress %s: %w", path, err)
+	
+	var prompts []Prompt
+	scanner := bufio.NewScanner(strings.NewReader(content))
+	const maxTokenSize = 1024 * 1024
+	scanner.Buffer(make([]byte, maxTokenSize), maxTokenSize)
+	scanner.Split(bufio.ScanLines)
+	
+	for scanner.Scan() {
+		var obj map[string]interface{}
+		if json.Unmarshal(scanner.Bytes(), &obj) != nil {
+			continue
+		}
+		if obj["type"] != "response_item" {
+			continue
+		}
+		payload, ok := obj["payload"].(map[string]interface{})
+		if !ok {
+			continue
+		}
+		if payload["type"] != "message" || payload["role"] != "user" {
+			continue
+		}
+		// Check discriminator
+		if meta, ok := payload["internal_chat_message_metadata_passthrough"].(map[string]interface{}); ok {
+			if kinds, ok := meta["content_item_kinds"].([]interface{}); ok {
+				if len(kinds) != 1 || kinds[0] != "user.text" {
+					continue
+				}
+			}
+		}
+		contentArr, ok := payload["content"].([]interface{})
+		if !ok {
+			continue
+		}
+		for _, c := range contentArr {
+			if cm, ok := c.(map[string]interface{}); ok {
+				if text, ok := cm["text"].(string); ok {
+					if strings.HasPrefix(text, "<environment_context>") || strings.HasPrefix(text, "<permissions instructions>") {
+						continue
+					}
+					if strings.HasPrefix(strings.TrimSpace(text), "<|") {
+						continue
+					}
+					prompts = append(prompts, Prompt{
+						ID:        threadID,
+						Timestamp: getString(obj, "timestamp"),
+						Text:      text,
+					})
+					break
+				}
+			}
+		}
 	}
-	return string(data), nil
+	return prompts, nil
 }
 
-// normalizeTimestamp converts a Codex ISO timestamp to RFC3339 UTC.
-func normalizeTimestamp(ts string) string {
-	if ts == "" {
-		return ""
+func getString(m map[string]interface{}, key string) string {
+	if v, ok := m[key].(string); ok {
+		return v
 	}
-	parsed, err := time.Parse(time.RFC3339Nano, ts)
-	if err != nil {
-		return ts
-	}
-	return parsed.UTC().Format(time.RFC3339Nano)
+	return ""
 }

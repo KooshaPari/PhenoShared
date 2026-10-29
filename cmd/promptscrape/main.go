@@ -1,15 +1,13 @@
 package main
 
 import (
-	"fmt"
 	"os"
 
-	"github.com/KooshaPari/PhenoShared/cmd/promptscrape/cmd"
+	"github.com/phenotype/phenoShared/cmd/promptscrape/cmd"
 )
 
 func main() {
 	if err := cmd.Execute(); err != nil {
-		fmt.Fprintf(os.Stderr, "error: %v\n", err)
 		os.Exit(1)
 	}
 }

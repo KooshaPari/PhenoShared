@@ -3,40 +3,44 @@ package cmd
 import (
 	"fmt"
 	"os"
+	"path/filepath"
+	"runtime"
 
-	"github.com/KooshaPari/PhenoShared/cmd/promptscrape/internal/installpath"
 	"github.com/spf13/cobra"
 )
 
 var uninstallCmd = &cobra.Command{
 	Use:   "uninstall",
-	Short: "Remove the installed promptscrape binary",
-	Long: `Remove the promptscrape binary from every known install location.
-
-Searched locations: ~/.local/bin, /usr/local/bin, and on Windows
-%LOCALAPPDATA%\bin plus %USERPROFILE%\go\bin.`,
-	RunE: func(cmd *cobra.Command, args []string) error {
-		removed := []string{}
-		for _, dir := range installpath.Candidates() {
-			target := dir + string(os.PathSeparator) + installpath.BinaryName()
-			if _, err := os.Stat(target); err != nil {
-				continue
-			}
-			if err := os.Remove(target); err != nil {
-				fmt.Fprintf(cmd.ErrOrStderr(), "cannot remove %s: %v\n", target, err)
-				continue
-			}
-			removed = append(removed, target)
+	Short: "Uninstall promptscrape from system",
+	Run: func(cmd *cobra.Command, args []string) {
+		home, _ := os.UserHomeDir()
+		var installDirs []string
+		installDirs = append(installDirs, filepath.Join(home, ".local", "bin"))
+		if runtime.GOOS == "windows" {
+			installDirs = append(installDirs, filepath.Join(home, "AppData", "Local", "bin"))
+		} else {
+			installDirs = append(installDirs, "/usr/local/bin")
 		}
 
-		if len(removed) == 0 {
-			fmt.Fprintln(cmd.OutOrStdout(), "promptscrape was not found in any known install location")
-			return nil
+		removed := false
+		for _, dir := range installDirs {
+			target := filepath.Join(dir, "promptscrape")
+			if runtime.GOOS == "windows" {
+				target += ".exe"
+			}
+			if _, err := os.Stat(target); err == nil {
+				if err := os.Remove(target); err != nil {
+					fmt.Fprintf(cmd.ErrOrStderr(), "Failed to remove %s: %v\n", target, err)
+				} else {
+					fmt.Printf("Removed %s\n", target)
+					removed = true
+				}
+			}
 		}
-		for _, path := range removed {
-			fmt.Fprintf(cmd.OutOrStdout(), "Removed %s\n", path)
+
+		if !removed {
+			fmt.Println("promptscrape not found in common install locations")
 		}
-		return nil
 	},
 }
 
