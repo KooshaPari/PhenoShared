@@ -1,3 +1,12 @@
+// Package resolve determines which harness session to scrape.
+//
+// Session ids are never guessed. They are derived from, in order:
+//
+//  1. an explicit id supplied by the caller
+//  2. the JCODE_SESSION_ID environment variable
+//  3. ids embedded in a state HTML file
+//  4. the session whose working directory matches the current directory
+//  5. the most recently updated session
 package resolve
 
 import (
@@ -10,140 +19,140 @@ import (
 	"strings"
 )
 
-var sessionRe = regexp.MustCompile(`(session_[a-z]+_\d{13}_[0-9a-f]{16})`)
-var codexRe = regexp.MustCompile(`([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})`)
+// jcodeSessionRe matches a JCode session id, e.g. session_pig_1792638703385_34d0c212ece1d6b9.
+var jcodeSessionRe = regexp.MustCompile(`session_[a-z]+_\d{13}_[0-9a-f]{16}`)
 
-func FromHTML(htmlPath string) (string, error) {
+// codexUUIDRe matches a Codex thread id, e.g. 01a11ecd-9cb0-7003-acd4-2fa6e255169e.
+var codexUUIDRe = regexp.MustCompile(`[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}`)
+
+// FromHTML returns the candidate session ids embedded in an HTML file.
+//
+// A state HTML can reference several sessions (the JCode lane plus the Codex
+// thread it audited), so every distinct candidate is returned, most frequent
+// first. The caller decides which one to use.
+func FromHTML(htmlPath string) ([]string, error) {
 	content, err := os.ReadFile(htmlPath)
 	if err != nil {
-		return "", err
+		return nil, err
 	}
-	s := string(content)
-	
-	// Try JCode sessions first
-	matches := sessionRe.FindAllString(s, -1)
-	if len(matches) > 0 {
-		// Count occurrences
-		count := map[string]int{}
-		for _, m := range matches {
-			count[m]++
-		}
-		// Return most common
-		type pair struct {
-			k string
-			v int
-		}
-		var pairs []pair
-		for k, v := range count {
-			pairs = append(pairs, pair{k, v})
-		}
-		sort.Slice(pairs, func(i, j int) bool { return pairs[i].v > pairs[j].v })
-		return pairs[0].k, nil
-	}
-	
-	// Try Codex UUIDs
-	matches2 := codexRe.FindAllString(s, -1)
-	if len(matches2) > 0 {
-		count := map[string]int{}
-		for _, m := range matches2 {
-			count[m]++
-		}
-		type pair struct {
-			k string
-			v int
-		}
-		var pairs []pair
-		for k, v := range count {
-			pairs = append(pairs, pair{k, v})
-		}
-		sort.Slice(pairs, func(i, j int) bool { return pairs[i].v > pairs[j].v })
-		return pairs[0].k, nil
-	}
-	
-	return "", nil
+	return FromContent(string(content)), nil
 }
 
+// FromContent returns the candidate session ids found in HTML text.
+func FromContent(s string) []string {
+	counts := map[string]int{}
+	order := []string{}
+
+	record := func(id string) {
+		if id == "" {
+			return
+		}
+		if _, seen := counts[id]; !seen {
+			order = append(order, id)
+		}
+		counts[id]++
+	}
+
+	for _, m := range jcodeSessionRe.FindAllString(s, -1) {
+		record(m)
+	}
+	for _, m := range codexUUIDRe.FindAllString(s, -1) {
+		record(m)
+	}
+
+	sort.SliceStable(order, func(a, b int) bool {
+		return counts[order[a]] > counts[order[b]]
+	})
+	return order
+}
+
+// candidate is one session considered during resolution.
+type candidate struct {
+	id        string
+	updatedAt string
+	working   string
+}
+
+// Current returns the session id for the caller's environment.
+//
+// The JCODE_SESSION_ID environment variable wins, then a session whose working
+// directory matches the current directory, then the most recently updated
+// session.
 func Current() (string, error) {
-	// 1. env var
-	if sid := os.Getenv("JCODE_SESSION_ID"); sid != "" {
+	if sid := strings.TrimSpace(os.Getenv("JCODE_SESSION_ID")); sid != "" {
 		return sid, nil
 	}
-	
-	home, _ := os.UserHomeDir()
-	sessionsDir := filepath.Join(home, ".jcode", "sessions")
-	
-	// 2. try cwd match
-	cwd, _ := os.Getwd()
-	type candidate struct {
-		id        string
-		updatedAt string
-	}
-	var candidates []candidate
-	
-	entries, err := os.ReadDir(sessionsDir)
+
+	dir, err := sessionsDir()
 	if err != nil {
 		return "", err
 	}
-	
+
+	entries, err := os.ReadDir(dir)
+	if err != nil {
+		return "", fmt.Errorf("cannot read %s: %w", dir, err)
+	}
+
+	cwd, cwdErr := os.Getwd()
+
+	var candidates []candidate
+
 	for _, e := range entries {
 		if e.IsDir() || !strings.HasPrefix(e.Name(), "session_") || !strings.HasSuffix(e.Name(), ".json") {
 			continue
 		}
-		if strings.HasSuffix(e.Name(), ".journal.jsonl") || strings.HasSuffix(e.Name(), ".bak") {
-			continue
-		}
-		path := filepath.Join(sessionsDir, e.Name())
-		data, err := os.ReadFile(path)
+		data, err := os.ReadFile(filepath.Join(dir, e.Name()))
 		if err != nil {
 			continue
 		}
 		var sess struct {
 			ID         string `json:"id"`
 			WorkingDir string `json:"working_dir"`
-			Status     string `json:"status"`
 			UpdatedAt  string `json:"updated_at"`
 		}
 		if err := json.Unmarshal(data, &sess); err != nil {
 			continue
 		}
-		if sess.WorkingDir == cwd && (sess.Status == "Active" || sess.Status == "Idle" || sess.Status == "") {
-			candidates = append(candidates, candidate{sess.ID, sess.UpdatedAt})
+		if sess.ID == "" {
+			sess.ID = strings.TrimSuffix(e.Name(), ".json")
+		}
+		candidates = append(candidates, candidate{sess.ID, sess.UpdatedAt, sess.WorkingDir})
+	}
+
+	if len(candidates) == 0 {
+		return "", fmt.Errorf("no jcode sessions found in %s", dir)
+	}
+
+	// Prefer a session running in the current directory.
+	if cwdErr == nil {
+		var matching []candidate
+		for _, c := range candidates {
+			if c.working == cwd {
+				matching = append(matching, c)
+			}
+		}
+		if len(matching) > 0 {
+			sortByUpdatedDesc(matching)
+			return matching[0].id, nil
 		}
 	}
-	
-	if len(candidates) > 0 {
-		sort.Slice(candidates, func(i, j int) bool { return candidates[i].updatedAt > candidates[j].updatedAt })
-		return candidates[0].id, nil
+
+	sortByUpdatedDesc(candidates)
+	return candidates[0].id, nil
+}
+
+// sortByUpdatedDesc orders candidates by most-recently-updated first.
+func sortByUpdatedDesc(candidates []candidate) {
+	sort.SliceStable(candidates, func(a, b int) bool {
+		return candidates[a].updatedAt > candidates[b].updatedAt
+	})
+}
+
+// sessionsDir returns the directory holding JCode session files.
+func sessionsDir() (string, error) {
+	home, err := os.UserHomeDir()
+	if err != nil {
+		return "", fmt.Errorf("cannot determine home directory: %w", err)
 	}
-	
-	// 3. most recent
-	candidates = nil
-	for _, e := range entries {
-		if e.IsDir() || !strings.HasPrefix(e.Name(), "session_") || !strings.HasSuffix(e.Name(), ".json") {
-			continue
-		}
-		if strings.HasSuffix(e.Name(), ".journal.jsonl") || strings.HasSuffix(e.Name(), ".bak") {
-			continue
-		}
-		path := filepath.Join(sessionsDir, e.Name())
-		data, err := os.ReadFile(path)
-		if err != nil {
-			continue
-		}
-		var sess struct {
-			ID        string `json:"id"`
-			UpdatedAt string `json:"updated_at"`
-		}
-		if err := json.Unmarshal(data, &sess); err != nil {
-			continue
-		}
-		candidates = append(candidates, candidate{sess.ID, sess.UpdatedAt})
-	}
-	
-	if len(candidates) > 0 {
-		sort.Slice(candidates, func(i, j int) bool { return candidates[i].updatedAt > candidates[j].updatedAt })
-		return candidates[0].id, nil
-	}
-	
-	return "", fmt.Errorf("no session found")
+	return filepath.Join(home, ".jcode", "sessions"), nil
 }
