@@ -9,16 +9,28 @@ import (
 	"github.com/spf13/cobra"
 )
 
+var uninstallDir string
+
 var uninstallCmd = &cobra.Command{
 	Use:   "uninstall",
 	Short: "Remove the installed promptscrape binary",
 	Long: `Remove the promptscrape binary from every known install location.
 
 Searched locations: ~/.local/bin, /usr/local/bin, and on Windows
-%LOCALAPPDATA%\bin plus %USERPROFILE%\go\bin.`,
+%LOCALAPPDATA%\bin plus %USERPROFILE%\go\bin. Use --dir to remove a binary
+from a custom location.`,
+	Example: `  promptscrape uninstall
+  promptscrape uninstall --dir /opt/promptscrape/bin`,
 	RunE: func(cmd *cobra.Command, args []string) error {
+		dirs := installpath.Candidates()
+		if uninstallDir != "" {
+			// An explicit directory replaces the default search set: the caller
+			// asked for a specific place, not "everywhere I might be".
+			dirs = []string{uninstallDir}
+		}
+
 		removed := []string{}
-		for _, dir := range installpath.Candidates() {
+		for _, dir := range dirs {
 			target := filepath.Join(dir, installpath.BinaryName())
 			if _, err := os.Stat(target); err != nil {
 				continue
@@ -43,4 +55,5 @@ Searched locations: ~/.local/bin, /usr/local/bin, and on Windows
 
 func init() {
 	rootCmd.AddCommand(uninstallCmd)
+	uninstallCmd.Flags().StringVar(&uninstallDir, "dir", "", "Also remove the binary from this directory")
 }
