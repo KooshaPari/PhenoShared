@@ -4,60 +4,81 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
-	"runtime"
 
+	"github.com/KooshaPari/PhenoShared/cmd/promptscrape/internal/installpath"
 	"github.com/spf13/cobra"
 )
 
+var installDir string
+
 var installCmd = &cobra.Command{
 	Use:   "install",
-	Short: "Install promptscrape to system PATH",
-	Long:  "Install the promptscrape binary to ~/.local/bin or /usr/local/bin",
-	Run: func(cmd *cobra.Command, args []string) {
-		// Find current binary
+	Short: "Install promptscrape into a PATH directory",
+	Long: `Copy the running promptscrape binary into a directory on your PATH.
+
+The default target is ~/.local/bin when it exists, otherwise /usr/local/bin
+(on Windows, %LOCALAPPDATA%\bin). Use --dir to override.`,
+	Example: `  promptscrape install
+  promptscrape install --dir ~/.local/bin`,
+	RunE: func(cmd *cobra.Command, args []string) error {
 		execPath, err := os.Executable()
 		if err != nil {
-			exitErr(fmt.Errorf("failed to find executable: %w", err))
+			return fmt.Errorf("cannot locate the running binary: %w", err)
 		}
 
-		// Determine install dir
-		var installDir string
-		home, _ := os.UserHomeDir()
-		localBin := filepath.Join(home, ".local", "bin")
-		if _, err := os.Stat(localBin); err == nil {
-			installDir = localBin
-		} else {
-			if runtime.GOOS == "windows" {
-				installDir = filepath.Join(home, "AppData", "Local", "bin")
-			} else {
-				installDir = "/usr/local/bin"
+		dir := installDir
+		if dir == "" {
+			dir, err = installpath.Preferred()
+			if err != nil {
+				return err
 			}
 		}
 
-		if err := os.MkdirAll(installDir, 0755); err != nil {
-			exitErr(fmt.Errorf("failed to create install dir: %w", err))
+		if err := os.MkdirAll(dir, 0o755); err != nil {
+			return fmt.Errorf("cannot create %s: %w", dir, err)
 		}
 
-		target := filepath.Join(installDir, "promptscrape")
-		if runtime.GOOS == "windows" {
-			target += ".exe"
+		target := dir + string(os.PathSeparator) + installpath.BinaryName()
+		if err := copyExecutable(execPath, target); err != nil {
+			return err
 		}
 
-		// Copy binary
-		data, err := os.ReadFile(execPath)
-		if err != nil {
-			exitErr(fmt.Errorf("failed to read binary: %w", err))
+		fmt.Fprintf(cmd.OutOrStdout(), "Installed %s\n", target)
+		if !onPath(dir) {
+			fmt.Fprintf(cmd.OutOrStdout(), "Note: %s is not on your PATH. Add it with:\n", dir)
+			fmt.Fprintf(cmd.OutOrStdout(), "  export PATH=\"%s:$PATH\"\n", dir)
 		}
-
-		if err := os.WriteFile(target, data, 0755); err != nil {
-			exitErr(fmt.Errorf("failed to install: %w", err))
-		}
-
-		fmt.Printf("Installed to %s\n", target)
-		fmt.Printf("Make sure %s is in your PATH\n", installDir)
+		return nil
 	},
+}
+
+// copyExecutable copies src to dst, preserving the executable bit.
+func copyExecutable(src, dst string) error {
+	data, err := os.ReadFile(src)
+	if err != nil {
+		return fmt.Errorf("cannot read %s: %w", src, err)
+	}
+	mode := os.FileMode(0o755)
+	if info, err := os.Stat(src); err == nil {
+		mode = info.Mode().Perm()
+	}
+	if err := os.WriteFile(dst, data, mode); err != nil {
+		return fmt.Errorf("cannot write %s: %w", dst, err)
+	}
+	return nil
+}
+
+// onPath reports whether dir appears in the PATH environment variable.
+func onPath(dir string) bool {
+	for _, p := range filepath.SplitList(os.Getenv("PATH")) {
+		if p == dir {
+			return true
+		}
+	}
+	return false
 }
 
 func init() {
 	rootCmd.AddCommand(installCmd)
+	installCmd.Flags().StringVar(&installDir, "dir", "", "Directory to install into (default: ~/.local/bin or /usr/local/bin)")
 }
