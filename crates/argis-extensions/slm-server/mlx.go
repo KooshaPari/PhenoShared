@@ -116,4 +116,3 @@ func (b *MLXBackend) Health(ctx context.Context) (*HealthStatus, error) {
 		Model:  b.model,
 	}, nil
 }
-

@@ -78,15 +78,15 @@ func defaultAvailableBytes() uint64 {
 }
 
 type capacityFitResponse struct {
-	Fits               bool    `json:"fits"`
-	VRAMEstimateBytes  uint64  `json:"vram_estimate_bytes"`
-	VRAMEstimateGB     float64 `json:"vram_estimate_gb"`
-	AvailableBytes     uint64  `json:"available_bytes"`
-	AvailableGB        float64 `json:"available_gb"`
-	Params             uint64  `json:"params"`
-	Dtype              string  `json:"dtype"`
-	Source             string  `json:"source"`
-	ModelHint          string  `json:"model_hint,omitempty"`
+	Fits              bool    `json:"fits"`
+	VRAMEstimateBytes uint64  `json:"vram_estimate_bytes"`
+	VRAMEstimateGB    float64 `json:"vram_estimate_gb"`
+	AvailableBytes    uint64  `json:"available_bytes"`
+	AvailableGB       float64 `json:"available_gb"`
+	Params            uint64  `json:"params"`
+	Dtype             string  `json:"dtype"`
+	Source            string  `json:"source"`
+	ModelHint         string  `json:"model_hint,omitempty"`
 }
 
 func capacityFitHandler(w http.ResponseWriter, r *http.Request) {
@@ -112,9 +112,9 @@ func capacityFitHandler(w http.ResponseWriter, r *http.Request) {
 		params, source = paramsFromModelName(model)
 		if params == 0 {
 			_ = json.NewEncoder(w).Encode(map[string]any{
-				"error":  "unknown_model",
-				"model":  model,
-				"hint":   "pass params= explicitly",
+				"error": "unknown_model",
+				"model": model,
+				"hint":  "pass params= explicitly",
 			})
 			return
 		}

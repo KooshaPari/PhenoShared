@@ -42,18 +42,18 @@ var DeferredSuites = []string{
 }
 
 type suiteCoverageRow struct {
-	Suite        string         `json:"suite"`
-	Present      bool           `json:"present"`
-	Variants     map[string]int `json:"variants"`
-	NCells       int            `json:"n_cells"`
-	HasStock     bool           `json:"has_stock"`
-	HasOurs      bool           `json:"has_ours"`
-	ExperimentArms []string     `json:"experiment_arms"`
+	Suite          string         `json:"suite"`
+	Present        bool           `json:"present"`
+	Variants       map[string]int `json:"variants"`
+	NCells         int            `json:"n_cells"`
+	HasStock       bool           `json:"has_stock"`
+	HasOurs        bool           `json:"has_ours"`
+	ExperimentArms []string       `json:"experiment_arms"`
 }
 
 type matrixFile struct {
-	Model   string `json:"model"`
-	Suites  []struct {
+	Model  string `json:"model"`
+	Suites []struct {
 		Suite       string  `json:"suite"`
 		N           int     `json:"n"`
 		Passed      int     `json:"passed"`
@@ -112,19 +112,19 @@ func cellsFromMatrixJSON(raw []byte, variantOverride string) ([]Cell, string, er
 			// Aggregate-only row → one synthetic cell so the suite appears.
 			pass := s.PassAt1
 			out = append(out, Cell{
-				Suite:           s.Suite,
-				TaskID:          "aggregate",
-				Difficulty:      "medium",
-				Variant:         variant,
-				OK:              s.Passed > 0,
-				WallClockS:      s.WallClockS,
-				PassAt1:         pass,
-				GenOk:           pass,
-				PartialCredit:   pass,
+				Suite:            s.Suite,
+				TaskID:           "aggregate",
+				Difficulty:       "medium",
+				Variant:          variant,
+				OK:               s.Passed > 0,
+				WallClockS:       s.WallClockS,
+				PassAt1:          pass,
+				GenOk:            pass,
+				PartialCredit:    pass,
 				FormatCompliance: 1,
-				ScoringMethod:   "matrix_aggregate",
-				ModelName:       mf.Model,
-				Reply:           fmt.Sprintf("matrix aggregate n=%d pass@1=%.3f", s.N, pass),
+				ScoringMethod:    "matrix_aggregate",
+				ModelName:        mf.Model,
+				Reply:            fmt.Sprintf("matrix aggregate n=%d pass@1=%.3f", s.N, pass),
 				Metadata: map[string]string{
 					"source": "matrix.json",
 					"n":      fmt.Sprintf("%d", s.N),

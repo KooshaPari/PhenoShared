@@ -194,4 +194,3 @@ const updateUIHTML = `<!DOCTYPE html>
   </script>
 </body>
 </html>`
-

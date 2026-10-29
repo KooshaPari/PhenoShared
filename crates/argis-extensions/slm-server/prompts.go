@@ -240,4 +240,3 @@ func parseClassifyResponse(content string) ClassifyResponse {
 		Confidence: parsed.Confidence,
 	}
 }
-

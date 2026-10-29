@@ -35,31 +35,31 @@ type evalTotals struct {
 }
 
 type evalSuite struct {
-	Suite        string          `json:"suite"`
-	N            int             `json:"n"`
-	Passed       int             `json:"passed"`
-	PassAt1      float64         `json:"pass_at_1"`
-	EvidenceLabel string         `json:"evidence_label"`
-	TaskResults  []evalTaskResult `json:"task_results"`
+	Suite         string           `json:"suite"`
+	N             int              `json:"n"`
+	Passed        int              `json:"passed"`
+	PassAt1       float64          `json:"pass_at_1"`
+	EvidenceLabel string           `json:"evidence_label"`
+	TaskResults   []evalTaskResult `json:"task_results"`
 }
 
 type evalTaskResult struct {
-	TaskID              string                 `json:"task_id"`
-	Status              string                 `json:"status"`
-	Judge               string                 `json:"judge"`
-	WallClockS          float64                `json:"wall_clock_s"`
-	TokensIn            int                    `json:"tokens_in"`
-	TokensOut           int                    `json:"tokens_out"`
-	FirstTokenLatencyS  float64                `json:"first_token_latency_s"`
-	EnergyJoules        float64                `json:"energy_joules"`
-	RawScore            float64                `json:"raw_score"`
-	FailureReason       []string               `json:"failure_reason"`
+	TaskID               string                 `json:"task_id"`
+	Status               string                 `json:"status"`
+	Judge                string                 `json:"judge"`
+	WallClockS           float64                `json:"wall_clock_s"`
+	TokensIn             int                    `json:"tokens_in"`
+	TokensOut            int                    `json:"tokens_out"`
+	FirstTokenLatencyS   float64                `json:"first_token_latency_s"`
+	EnergyJoules         float64                `json:"energy_joules"`
+	RawScore             float64                `json:"raw_score"`
+	FailureReason        []string               `json:"failure_reason"`
 	AdditionalProperties map[string]interface{} `json:"additionalProperties"`
 }
 
 func looksLikeEvaluationReport(raw []byte) bool {
 	var probe struct {
-		ContractVersion string `json:"contract_version"`
+		ContractVersion string            `json:"contract_version"`
 		Suites          []json.RawMessage `json:"suites"`
 	}
 	if err := json.Unmarshal(raw, &probe); err != nil {
@@ -134,13 +134,13 @@ func resultsFromEvaluationReport(raw []byte) (*ResultsData, error) {
 	return &ResultsData{
 		Summary: Summary{
 			Meta: Meta{
-				Model:          model,
-				MLXURL:         "direct",
-				NSuites:        nSuites,
-				NTasks:         nTasks,
-				Variants:       variants,
-				NCells:         len(cells),
-				Difficulty:     difficulty,
+				Model:      model,
+				MLXURL:     "direct",
+				NSuites:    nSuites,
+				NTasks:     nTasks,
+				Variants:   variants,
+				NCells:     len(cells),
+				Difficulty: difficulty,
 			},
 			ByVariant: byVariant,
 		},
@@ -248,7 +248,7 @@ func cellFromTask(suite, variant string, rep evalReport, tr evalTaskResult, ap m
 
 func summarizeByVariant(cells []Cell) map[string]VariantSummary {
 	type acc struct {
-		n, ok, hall, verifiedN int
+		n, ok, hall, verifiedN                                    int
 		pass, genOk, verified, wall, partial, format, intent, tps float64
 	}
 	m := map[string]*acc{}

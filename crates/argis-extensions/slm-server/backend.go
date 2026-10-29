@@ -50,4 +50,3 @@ type HealthStatus struct {
 	Version   string `json:"version,omitempty"`
 	QueueSize int    `json:"queue_size,omitempty"`
 }
-

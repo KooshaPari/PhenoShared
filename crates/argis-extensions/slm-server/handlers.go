@@ -63,13 +63,13 @@ type CandidateCost struct {
 
 // RouteResponse is the routing response
 type RouteResponse struct {
-	RouteID              string      `json:"route_id"`
-	PrimaryEndpointID    string      `json:"primary_endpoint_id"`
-	FallbackEndpointIDs  []string    `json:"fallback_endpoint_ids"`
-	SLMDefaultEndpointID string      `json:"slm_default_endpoint_id,omitempty"`
-	ToolProfile          ToolProfile `json:"tool_profile"`
-	ContextStrategy      string      `json:"context_strategy"`
-	UsePremiumCodingAgent bool       `json:"use_premium_coding_agent"`
+	RouteID               string      `json:"route_id"`
+	PrimaryEndpointID     string      `json:"primary_endpoint_id"`
+	FallbackEndpointIDs   []string    `json:"fallback_endpoint_ids"`
+	SLMDefaultEndpointID  string      `json:"slm_default_endpoint_id,omitempty"`
+	ToolProfile           ToolProfile `json:"tool_profile"`
+	ContextStrategy       string      `json:"context_strategy"`
+	UsePremiumCodingAgent bool        `json:"use_premium_coding_agent"`
 }
 
 // ToolProfile describes allowed tools
@@ -230,4 +230,3 @@ func writeJSON(w http.ResponseWriter, status int, v interface{}) {
 	w.WriteHeader(status)
 	json.NewEncoder(w).Encode(v)
 }
-

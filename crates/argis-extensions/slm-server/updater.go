@@ -155,4 +155,3 @@ func (u *Updater) VersionInfo() map[string]string {
 		"arch":       runtime.GOARCH,
 	}
 }
-

@@ -113,4 +113,3 @@ func (b *VLLMBackend) Health(ctx context.Context) (*HealthStatus, error) {
 	}
 	return &HealthStatus{Status: "degraded"}, nil
 }
-
