@@ -127,6 +127,14 @@ Or:
 curl -fsSL https://raw.githubusercontent.com/KooshaPari/PhenoShared/main/scripts/uninstall-promptscrape.sh | sh
 ```
 
+Both remove the binary from `~/.local/bin` and `/usr/local/bin` (plus the
+Windows locations). To remove it from a custom install directory instead:
+
+```bash
+promptscrape uninstall --dir /opt/promptscrape/bin
+curl -fsSL .../uninstall-promptscrape.sh | sh -s -- --dir /opt/promptscrape/bin
+```
+
 ## How session resolution works
 
 Session ids are never guessed. They are derived in this order:
