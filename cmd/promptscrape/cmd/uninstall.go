@@ -3,6 +3,7 @@ package cmd
 import (
 	"fmt"
 	"os"
+	"path/filepath"
 
 	"github.com/KooshaPari/PhenoShared/cmd/promptscrape/internal/installpath"
 	"github.com/spf13/cobra"
@@ -18,7 +19,7 @@ Searched locations: ~/.local/bin, /usr/local/bin, and on Windows
 	RunE: func(cmd *cobra.Command, args []string) error {
 		removed := []string{}
 		for _, dir := range installpath.Candidates() {
-			target := dir + string(os.PathSeparator) + installpath.BinaryName()
+			target := filepath.Join(dir, installpath.BinaryName())
 			if _, err := os.Stat(target); err != nil {
 				continue
 			}

@@ -38,7 +38,7 @@ The default target is ~/.local/bin when it exists, otherwise /usr/local/bin
 			return fmt.Errorf("cannot create %s: %w", dir, err)
 		}
 
-		target := dir + string(os.PathSeparator) + installpath.BinaryName()
+		target := filepath.Join(dir, installpath.BinaryName())
 		if err := copyExecutable(execPath, target); err != nil {
 			return err
 		}
