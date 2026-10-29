@@ -16,10 +16,10 @@ import (
 )
 
 type npmPackageJSON struct {
-	Name         string   `json:"name"`
-	Version      string   `json:"version"`
-	Private      bool     `json:"private"`
-	Workspaces   []string `json:"workspaces,omitempty"`
+	Name         string            `json:"name"`
+	Version      string            `json:"version"`
+	Private      bool              `json:"private"`
+	Workspaces   []string          `json:"workspaces,omitempty"`
 	Dependencies map[string]string `json:"dependencies,omitempty"`
 }
 

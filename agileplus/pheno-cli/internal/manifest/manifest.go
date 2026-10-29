@@ -40,11 +40,11 @@ func LoadManifest(path string) (*OrgManifest, error) {
 
 // manifestIndicators maps manifest filenames to their likely language.
 var manifestIndicators = map[string]string{
-	"package.json":    "typescript",
-	"Cargo.toml":      "rust",
-	"go.mod":          "go",
-	"pyproject.toml":  "python",
-	"setup.py":        "python",
+	"package.json":     "typescript",
+	"Cargo.toml":       "rust",
+	"go.mod":           "go",
+	"pyproject.toml":   "python",
+	"setup.py":         "python",
 	"requirements.txt": "python",
 }
 

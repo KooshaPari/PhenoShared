@@ -17,7 +17,7 @@ import (
 )
 
 type cargoToml struct {
-	Package *cargoPackage `toml:"package"`
+	Package   *cargoPackage `toml:"package"`
 	Workspace *struct {
 		Members []string `toml:"members"`
 	} `toml:"workspace"`

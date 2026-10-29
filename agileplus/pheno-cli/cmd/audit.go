@@ -4,10 +4,10 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/spf13/cobra"
 	"github.com/KooshaPari/pheno-cli/internal/audit"
 	"github.com/KooshaPari/pheno-cli/internal/detect"
 	"github.com/KooshaPari/pheno-cli/internal/discover"
+	"github.com/spf13/cobra"
 )
 
 var auditCmd = &cobra.Command{
