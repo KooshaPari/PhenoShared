@@ -183,3 +183,13 @@ crates/sharecli/tests/fr007_thermal_tui_pool_status.rs.broken
 cmd/promptscrape/promptscrape
 cmd/promptscrape/promptscrape.exe
 cmd/promptscrape/dist/
+
+# Go module build artifacts. Each module under cmd/ builds a binary named
+# after its directory, e.g. cmd/checker -> cmd/checker/checker.
+cmd/*/capprobe
+cmd/*/checker
+cmd/*/promptscrape
+cmd/*/trust
+cmd/*/wire
+cmd/*/*.exe
+cmd/*/dist/

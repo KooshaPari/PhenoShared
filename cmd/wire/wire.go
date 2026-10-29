@@ -137,13 +137,13 @@ const (
 
 // validWireErrorCodes is the closed set of accepted WireError.Code values.
 var validWireErrorCodes = map[string]struct{}{
-	WireErrorBadEnvelope:         {},
-	WireErrorUnsupportedMsgType:  {},
-	WireErrorAuthFailed:          {},
-	WireErrorUnknownTenant:       {},
-	WireErrorBadPayload:          {},
-	WireErrorIo:                  {},
-	WireErrorBug:                 {},
+	WireErrorBadEnvelope:        {},
+	WireErrorUnsupportedMsgType: {},
+	WireErrorAuthFailed:         {},
+	WireErrorUnknownTenant:      {},
+	WireErrorBadPayload:         {},
+	WireErrorIo:                 {},
+	WireErrorBug:                {},
 }
 
 // -----------------------------------------------------------------------------
@@ -151,8 +151,8 @@ var validWireErrorCodes = map[string]struct{}{
 // -----------------------------------------------------------------------------
 
 var (
-	envelopeIDRegex  = regexp.MustCompile(`^[0-9a-f]{32}$`)
-	tenantIDRegex    = regexp.MustCompile(`^[a-z0-9-]{1,64}$`)
+	envelopeIDRegex = regexp.MustCompile(`^[0-9a-f]{32}$`)
+	tenantIDRegex   = regexp.MustCompile(`^[a-z0-9-]{1,64}$`)
 
 	// clockSkewTolerance is the bound on |SentAtUnixMs - now|. Tight bound
 	// is R3; ±300s is the initial wedge that still catches 99% of clock
