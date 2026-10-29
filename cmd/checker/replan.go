@@ -112,10 +112,11 @@ func invokeReplan(binaryPath string, req *replanRequest) (*replanResponse, error
 // sees no change.
 //
 // Mapping:
-//   Replaced       → Admit + INFO finding "REPLANNED"
-//   NoReplacement  → Reject + BLOCK finding "REPLAN_NO_REPLACEMENT" + reason
-//   Error          → Reject + BLOCK finding "REPLAN_ERROR" + code+message
-//   Unknown status → Reject + BLOCK finding "REPLAN_UNKNOWN_STATUS"
+//
+//	Replaced       → Admit + INFO finding "REPLANNED"
+//	NoReplacement  → Reject + BLOCK finding "REPLAN_NO_REPLACEMENT" + reason
+//	Error          → Reject + BLOCK finding "REPLAN_ERROR" + code+message
+//	Unknown status → Reject + BLOCK finding "REPLAN_UNKNOWN_STATUS"
 func reportFromReplan(host *Descriptor, resp *replanResponse) Report {
 	switch resp.Status {
 	case "replaced":

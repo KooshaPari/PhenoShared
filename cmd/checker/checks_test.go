@@ -5,11 +5,11 @@ import "testing"
 // host is a minimal helper to build a Descriptor with a compute section.
 func host(cores uint32, memoryBytes uint64) *Descriptor {
 	return &Descriptor{
-		NodeID:       "host-1",
+		NodeID: "host-1",
 		Capabilities: Capabilities{
 			Compute: &ComputeCapabilities{
 				CoresPhysical: cores,
-				MemoryBytes:    memoryBytes,
+				MemoryBytes:   memoryBytes,
 			},
 		},
 	}
@@ -149,7 +149,7 @@ func TestReduce(t *testing.T) {
 
 func TestDeriveRequired(t *testing.T) {
 	m := Manifest{
-		Infra: Infra{Resources: &Resources{CPU: 4.0, Memory: strPtr("1Gi")}},
+		Infra:   Infra{Resources: &Resources{CPU: 4.0, Memory: strPtr("1Gi")}},
 		Network: &Network{Ports: []int{80, 443}},
 		Agent:   &Agent{McpTools: []string{"fs"}},
 	}

@@ -57,8 +57,9 @@ jobs:
             echo "has_python=true" >> "$GITHUB_OUTPUT"
           fi
 
-          # Go: needs go.mod
-          if [ -f "go.mod" ]; then
+          # Go: needs a go.mod at the root or in a nested module directory.
+          # This repo has no root go.mod; every Go module lives under cmd/.
+          if [ -f "go.mod" ] || find . -maxdepth 3 -name "go.mod" -not -path "./node_modules/*" 2>/dev/null | head -1 | grep -q .; then
             echo "has_go=true" >> "$GITHUB_OUTPUT"
           fi
 
@@ -112,22 +113,67 @@ jobs:
         run: ruff format --check . 2>&1 || echo "::warning::format issues (advisory)"
 
   go:
-    name: Go
+    name: Go (${{ matrix.module }})
     needs: detect
     if: needs.detect.outputs.has_go == 'true'
     runs-on: ubuntu-latest
-    continue-on-error: true
+    strategy:
+      fail-fast: false
+      matrix:
+        # Only modules that are green today are gated. The other Go modules in
+        # this repo fail for reasons that predate this job and are tracked
+        # separately:
+        #   agileplus/pheno-cli        missing embed assets (scripts/*)
+        #   crates/argis-extensions    needs Go >= 1.26.7
+        #   _archived/nanovms-core     archived; replace directive points at a
+        #                              deleted worktree
+        #   go-fabric                   TestConnectionRetry needs a live fabric
+        #   hfscope                     templ.Home undefined (separate repo)
+        #   pheno-cli                   templates_test expects 5, finds 39
+        module:
+          - cmd/capprobe
+          - cmd/checker
+          - cmd/promptscrape
+          - cmd/trust
+          - cmd/wire
+          - crates/nanovms
+          - libs/docslib
+    defaults:
+      run:
+        working-directory: ${{ matrix.module }}
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-go@v7
+
+      - uses: actions/setup-go@v5
         with:
-          go-version: "1.22"
+          # Read the version from the module's own go.mod so each module is
+          # built with the toolchain it declares.
+          go-version-file: ${{ matrix.module }}/go.mod
+          # Some modules have no external dependencies and therefore no
+          # go.sum. Point the cache at whichever file exists so setup-go does
+          # not fail on a missing path.
+          cache-dependency-path: |
+            ${{ matrix.module }}/go.sum
+            ${{ matrix.module }}/go.mod
+
       - name: gofmt check
-        run: gofmt -l . 2>&1 || echo "::warning::gofmt issues (advisory)"
+        run: |
+          unformatted="$(gofmt -l .)"
+          if [ -n "$unformatted" ]; then
+            echo "::error::gofmt needed on:"; echo "$unformatted"
+            exit 1
+          fi
+
       - name: go vet
-        run: go vet ./... 2>&1 || echo "::warning::go vet issues (advisory)"
+        run: go vet ./...
+
       - name: go test
-        run: go test ./... 2>&1 || echo "::warning::test failures (advisory)"
+        run: go test -race ./...
+
+      - name: go build
+        # Building the package pattern (not a single main package) writes no
+        # binary into the source tree, so the checkout stays clean.
+        run: go build ./...
 
   typescript:
     name: TS/JS
