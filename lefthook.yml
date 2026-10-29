@@ -1,26 +1,37 @@
-# phenotype-infra pre-commit hooks
+# pheno pre-commit / pre-push hooks
 # Validates locally before pushing to CI
 # Uses Python subprocess instead of shell (Windows compatible)
+#
+# The previous version of this file was headed "phenotype-infra pre-commit
+# hooks" and every command ran `cargo ... -p phenotype-infra`. There is no
+# such package in this repository (it was not a member of [workspace].members
+# and crates/phenotype-infra does not exist), so cargo exited 101 with
+# "package ID specification `phenotype-infra` did not match any packages" and
+# every commit and push to this repo failed the hook.
+#
+# The commands now use this repository's own Makefile targets, which are the
+# same ones the CI hard gate runs (.github/workflows/quality-gate.yml ->
+# `make check`). That keeps local and CI validation aligned.
 
 pre-commit:
   parallel: true
   commands:
     cargo-check:
       glob: "*.rs"
-      run: python -c "import subprocess; r=subprocess.run(['cargo','check','-p','phenotype-infra'], capture_output=True); print(r.stdout.decode()); print(r.stderr.decode()); exit(r.returncode)"
+      run: python -c "import subprocess; r=subprocess.run(['cargo','check','--workspace','--all-targets'], capture_output=True); print(r.stdout.decode()); print(r.stderr.decode()); exit(r.returncode)"
     cargo-fmt:
       glob: "*.rs"
-      run: python -c "import subprocess; r=subprocess.run(['cargo','fmt','--check','-p','phenotype-infra'], capture_output=True); print(r.stdout.decode()); print(r.stderr.decode()); exit(r.returncode)"
+      run: python -c "import subprocess; r=subprocess.run(['cargo','fmt','--all','--check'], capture_output=True); print(r.stdout.decode()); print(r.stderr.decode()); exit(r.returncode)"
     cargo-clippy:
       glob: "*.rs"
-      run: python -c "import subprocess; r=subprocess.run(['cargo','clippy','-p','phenotype-infra','--','-D','warnings'], capture_output=True); print(r.stdout.decode()); print(r.stderr.decode()); exit(r.returncode)"
+      run: python -c "import subprocess; r=subprocess.run(['cargo','clippy','--workspace','--all-targets','--','-D','warnings'], capture_output=True); print(r.stdout.decode()); print(r.stderr.decode()); exit(r.returncode)"
 
 pre-push:
   commands:
     cargo-test:
-      run: python -c "import subprocess; r=subprocess.run(['cargo','test','-p','phenotype-infra'], capture_output=True); print(r.stdout.decode()); print(r.stderr.decode()); exit(r.returncode)"
+      run: python -c "import subprocess; r=subprocess.run(['make','test'], capture_output=True); print(r.stdout.decode()); print(r.stderr.decode()); exit(r.returncode)"
     cargo-deny:
-      run: python -c "import subprocess; r=subprocess.run(['cargo','deny','-p','phenotype-infra','check'], capture_output=True); print(r.stdout.decode()); print(r.stderr.decode()); exit(r.returncode)"
+      run: python -c "import subprocess; r=subprocess.run(['make','deny'], capture_output=True); print(r.stdout.decode()); print(r.stderr.decode()); exit(r.returncode)"
 
 commit-msg:
   commands:
