@@ -208,34 +208,52 @@ jobs:
     steps:
       - name: Aggregate lint gate
         run: |
+          # HARD gates fail this aggregator. ADVISORY gates do not, and cannot
+          # even be observed failing: every advisory job sets
+          # `continue-on-error: true`, so GitHub reports `success` for it even
+          # when its steps fail. Their result is printed for the reader only.
+          #
+          # HARD     : detect, registry-invariant
+          # ADVISORY : cargo-deny, python, go, typescript, security, dep-review
+          #
+          # NOTE: the job id is `dep-review`. An earlier revision read
+          # `needs.dependency-review.result`, which is not a job in this
+          # workflow, so the value was empty and rendered as "?" instead of the
+          # real result, making dep-review failures silently invisible.
           failed=0
           for pair in \
-            "cargo-deny:${{ needs.cargo-deny.result }}" \
-            "python:${{ needs.python.result }}" \
-            "go:${{ needs.go.result }}" \
-            "typescript:${{ needs.typescript.result }}" \
-            "security:${{ needs.security.result }}" \
-            "dep-review:${{ needs.dependency-review.result }}" \
-            "registry-invariant:${{ needs.registry-invariant.result }}" \
+            "detect:${{ needs.detect.result }}:hard" \
+            "registry-invariant:${{ needs.registry-invariant.result }}:hard" \
+            "cargo-deny:${{ needs.cargo-deny.result }}:advisory" \
+            "python:${{ needs.python.result }}:advisory" \
+            "go:${{ needs.go.result }}:advisory" \
+            "typescript:${{ needs.typescript.result }}:advisory" \
+            "security:${{ needs.security.result }}:advisory" \
+            "dep-review:${{ needs.dep-review.result }}:advisory" \
             ; do
             name="${pair%%:*}"
-            result="${pair#*:}"
-            if [ "$result" = "failure" ] || [ "$result" = "cancelled" ]; then
-              echo "  ✗ $name: $result"
+            rest="${pair#*:}"
+            result="${rest%%:*}"
+            kind="${rest##*:}"
+            if [ "$result" = "success" ] || [ "$result" = "skipped" ]; then
+              echo "  ✓ $name: $result ($kind)"
+            elif [ "$kind" = "hard" ]; then
+              # fail-closed: a hard gate that failed, was cancelled, or whose
+              # result could not be resolved fails the aggregator.
+              echo "  ✗ $name: ${result:-<unresolved>} ($kind)"
               failed=$((failed + 1))
-            elif [ "$result" = "success" ] || [ "$result" = "skipped" ]; then
-              echo "  ✓ $name: $result"
             else
-              echo "  ? $name: $result"
+              echo "  ! $name: ${result:-<unresolved>} ($kind, not enforced)"
             fi
           done
           if [ "$failed" -gt 0 ]; then
             echo ""
-            echo "❌ $failed lint check(s) failed"
+            echo "❌ $failed hard gate(s) failed"
             exit 1
           fi
           echo ""
-          echo "✅ All lint checks passed (or were skipped)"
+          echo "✅ All hard gates passed (or were skipped)"
+          echo "   advisory lanes above report success regardless of outcome"
 
   test:
     name: ci / test
@@ -245,5 +263,24 @@ jobs:
     steps:
       - name: Test gate
         run: |
-          # Test gate is currently combined with lint
-          echo "✅ All test stages passed (gated via ci / lint)"
+          # The workspace test suite does NOT run in this workflow, so this
+          # job cannot claim "all tests passed". The single Rust test
+          # authority is .github/workflows/quality-gate.yml -> cargo-check:
+          #   cargo build --workspace --locked
+          #   make check                      (fmt + clippy -D warnings + unit)
+          #   cargo nextest run --workspace    (ci profile, no continue-on-error)
+          # Re-running that suite here would double-bill CI for the same
+          # signal, so this job asserts the gate it genuinely depends on:
+          # ci / lint and its HARD gates (detect, registry-invariant).
+          lint_result="${{ needs.lint.result }}"
+          echo "ci / lint result: ${lint_result:-<unresolved>}"
+          echo "workspace tests: Quality Gate -> cargo-check (separate workflow, authoritative)"
+          echo "advisory lanes (cargo-deny/python/go/typescript/security/dep-review): not enforced"
+          if [ "$lint_result" != "success" ]; then
+            echo ""
+            echo "❌ ci / test: upstream gate ci / lint is ${lint_result:-<unresolved>}, not success"
+            exit 1
+          fi
+          echo ""
+          echo "✅ ci / test: upstream hard gate ci / lint succeeded"
+          echo "   test execution is asserted by Quality Gate -> cargo-check, not here"
