@@ -61,7 +61,6 @@ Each needs a fix before it can be added to `go.modules.txt`.
 
 | Module | Failure |
 |---|---|
-| `agents/phenoagent/pheno-cli-go` | `bootstrap_test.go`: `unknown command "bootstrap"`; `templates_test.go`: expects 5 templates, finds 39. Same two defects fixed in `pheno-cli`, but this copy has not received the fix. |
 | `crates/argis-extensions` | Requires Go >= 1.26.7, which the local toolchain does not provide. CI would resolve this via `go-version-file`, but the module also has 152 gofmt violations and a dependency (`hatchet@v0.112.12`) with the same floor. |
 | `crates/argis-extensions/bifrost/core` | `undefined: schemas.ChatMessageRole`. An incomplete vendored shim, and the local `replace` target of `crates/argis-extensions`. |
 | `crates/hexa-kit/templates/go` | See the templates table above. |
