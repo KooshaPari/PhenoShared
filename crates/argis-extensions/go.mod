@@ -4,7 +4,7 @@ go 1.26.10
 
 require (
 	connectrpc.com/connect v1.21.1
-	github.com/99designs/gqlgen v0.17.97
+	github.com/99designs/gqlgen v0.17.98
 	github.com/bytedance/sonic v1.15.5
 	github.com/fsnotify/fsnotify v1.10.1
 	github.com/go-chi/chi/v5 v5.5.0
@@ -25,7 +25,7 @@ require (
 	github.com/spf13/viper v1.21.0
 	github.com/stretchr/testify v1.12.1
 	github.com/valyala/fasthttp v1.77.0
-	github.com/vektah/gqlparser/v2 v2.5.63
+	github.com/vektah/gqlparser/v2 v2.5.64
 	golang.org/x/crypto v0.58.0
 	golang.org/x/net v0.61.0
 )
@@ -33,7 +33,7 @@ require (
 require (
 	cel.dev/expr v0.25.2 // indirect
 	github.com/Masterminds/semver/v3 v3.5.0 // indirect
-	github.com/agnivade/levenshtein v1.2.1 // indirect
+	github.com/agnivade/levenshtein v1.2.2 // indirect
 	github.com/antlr4-go/antlr/v4 v4.13.1 // indirect
 	github.com/apapsch/go-jsonmerge/v2 v2.0.0 // indirect
 	github.com/beorn7/perks v1.0.1 // indirect
