@@ -29,6 +29,18 @@ jobs:
           components: llvm-tools-preview
       - uses: Swatinem/rust-cache@v2
 
+      # The workspace links against the gtk-rs stack, so glib-sys needs
+      # glib-2.0.pc at build time. Without these the coverage build fails with
+      # "The system library `glib-2.0` required by crate `glib-sys` was not
+      # found", which meant this gate never actually measured anything.
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            pkg-config \
+            libglib2.0-dev \
+            libgtk-3-dev
+
       - name: Install cargo-tarpaulin
         run: cargo install cargo-tarpaulin --locked
 
@@ -49,7 +61,12 @@ jobs:
           path: target/tarpaulin-report/
 
   coverage-iac:
-    name: IAC workspace coverage (service — ≥60%)
+    # The display name states the ENFORCED floor, not an aspiration. This job
+    # previously claimed ">=60%" while actually running --fail-under 10, so a
+    # reader could not tell what was really being gated. The 60% figure is a
+    # target, tracked in docs/sessions/2026-10-30-closure-dag/PLAN.md; raise
+    # the number here only when the measured coverage actually supports it.
+    name: IAC workspace coverage (service — ≥10%)
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
