@@ -317,12 +317,36 @@ a name.
 
 Raising 7.65% → 60% is real test-writing work, not a config change.
 
+## The systemic cause: why three gates were broken and nobody noticed
+
+Measured 2026-10-31: **89 workflow files, 64 of them push-triggered.**
+
+A single push therefore queues 64 workflow runs. Observed queue depth during
+this session: **100 queued, 12 in progress**, sustained, with individual
+`ci.yml` runs on `main` sitting `pending` indefinitely and older runs being
+`cancelled` by the concurrency group as newer commits land.
+
+This is the common cause behind every "broken gate" finding above:
+
+| Gate | Real state | Why it went unnoticed |
+|---|---|---|
+| `Cargo Deny` | never executed a check (dangling manifest) | drowned in ~64 runs/push |
+| `coverage-root` | never produced a number (missing `glib-2.0`) | same |
+| `coverage-iac` | name claimed 60%, enforced 10% | same |
+
+It also explains an observation from the PR triage: nearly every PR carries
+about 20 near-identical failing checks, which is noise rather than signal.
+
+**Consequence for this session: CI confirmation is unobtainable, not
+pending.** Local verification is the only trustworthy evidence available, and
+every claim in this file is backed by a command that was actually run rather
+than by a green check. Reducing the fan-out (consolidating workflows,
+narrowing `paths:` filters) is the highest-leverage follow-up, because until
+the queue drains, no gate in this repo can be trusted to report.
+
 ## Known-outstanding, honest
 
-- **CI confirmation is pending, not passed.** At 2026-10-31T03:14Z there
-  were **100 queued and 10 in-progress** workflow runs for this repo. A
-  single push fans out to roughly 40 workflows, so verification lags well
-  behind commits. Do not read "queued" as "green".
+- 21 local branches remain. `git branch -d` refuses the squash-merged ones
 - `crates/llm-router` had its deps swapped and `cargo check -p llm-router`
   is exit 0, but it was not exercised by any test.
 - `crates/pheno-proc-runtime/pheno-proc-core` still declares private git
