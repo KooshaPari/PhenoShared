@@ -190,60 +190,87 @@ verify in one uninterrupted step, or not at all.
 ## Status
 
 - [x] E0 anchor
-- [~] E1 Cargo Deny: blocker ADVANCED, gate still red (see below)
-- [ ] E2 PR backlog → 0
-- [ ] E3 branches/worktrees pruned
-- [ ] E4 coverage gate resolved or dispositioned
-- [ ] E5 residual Go modules dispositioned/SKIPPED
+- [x] E1 Cargo Deny: both blockers removed locally (`aa12c003`)
+- [x] E2.2 close 8 stale/archived PRs
+- [~] E2.3/E2.4 merge + disposition remaining PRs
+- [~] E3 hygiene: 1 worktree removed; 21 branches need operator decision
+- [~] E4 coverage gate (in progress)
+- [x] E5 residual Go modules dispositioned
 
-## E1 progress — 2026-10-31
+## E1 complete — 2026-10-31
 
-**Landed:** `77a2b01f` (merged to `origin/main` as `24c67a5f`).
+Two commits, both on `origin/main`:
 
-`phenotype-observably-macros` is now an in-repo pass-through proc-macro at
-`crates/observability-macros`, and all 11 manifests point at it. Verified:
-`cargo metadata --no-deps` exit 0, full `cargo metadata` exit 0 (1510
-packages), `cargo check` exit 0 for the macro crate, `focus-always-on` and
-`focus-rituals`. All 13 Go modules still green in CI run `41160408615`.
+| Commit | What |
+|---|---|
+| `77a2b01f` (merged as `24c67a5f`) | in-repo `phenotype-observably-macros` as a pass-through no-op; repointed 11 manifests. Unblocked `cargo metadata`. |
+| `aa12c003` (merged as `4c0b9f9e`) | replaced the no-op with a **real** `tracing::Instrument` implementation, removed every private-repo dependency, deleted dead `crates/integration`. |
 
-**The gate is still red, but the failure moved on.** CI now reports:
+### The macro is now genuinely instrumented, not a no-op
+
+PR #433 had the right idea and was adopted **with two defects corrected**.
+Both were the kind that compile and pass tests while doing nothing:
+
+1. **Lifetime error on `&self`.** It rewrote anonymous lifetimes only for
+   `FnArg::Typed`, so `&self` kept its own lifetime while the return type
+   claimed the inferred one, giving `lifetime may not live long enough` on
+   2 of the 3 `focus-always-on` methods. Fixed by wrapping the function
+   *body* instead of the signature.
+2. **Feature gate emitted into the wrong crate.** It emitted
+   `#[cfg(feature = "tracing")]` into the CONSUMER, but only 2 of the 12
+   dependents declare that feature and neither enables it by default. The
+   default build silently took the pass-through branch, reproducing the
+   exact silent no-op the work exists to remove. Fixed with `cfg!()` inside
+   the macro crate.
+
+Defect 2 is the dangerous one and is recorded on PR #433's closing comment
+so nobody re-merges it.
+
+### Private-repo dependencies removed
+
+`crates/sharecli` pulled `substrate` and `runtime-process`, and
+`crates/llm-router` pulled `substrate-core` and `omniroute-adapter`, from
+`https://github.com/KooshaPari/substrate` — **PRIVATE**, so the CI token
+cannot read it. All four now resolve in-repo.
+
+The earlier E0599 `spawn`/`kill_group` failure was never a missing method.
+The git `substrate` facade and the path `runtime-process` each pulled their
+own `substrate_core`, producing two distinct `ProcessPort` traits. Moving
+BOTH deps to one source removes the duplicate.
+
+### Verified locally
 
 ```
-error: failed to get `runtime-process` as a dependency of package `sharecli v0.8.0`
-  failed to load source for dependency `runtime-process`
+cargo metadata --no-deps --locked              exit 0
+cargo metadata (full)                          exit 0
+cargo check -p phenotype-observably-macros     exit 0
+cargo test  -p phenotype-observably-macros     exit 0, 17 passed, 0 failed
+cargo check -p focus-always-on / -p focus-rituals / -p sharecli
+             / -p runtime-process / -p substrate-core / -p llm-router
+                                               all exit 0
 ```
 
-So the `PhenoObservability` manifest blocker is gone and the next one is
-`crates/sharecli`, which pulls two crates from the **private** repo
-`https://github.com/KooshaPari/substrate`:
+Not verified: `connector-*`, `focus-connectors`, `focus-eval` were
+repointed but are not workspace members, so cargo does not build them.
 
-```toml
-substrate       = { git = "https://github.com/KooshaPari/substrate", default-features = false }
-runtime-process = { git = "https://github.com/KooshaPari/substrate", package = "runtime-process" }
-```
+## Known-outstanding, honest
 
-`gh repo view KooshaPari/substrate` resolves but is **PRIVATE**, so the CI
-token cannot read it and `cargo metadata` fails there while succeeding on a
-developer machine with credentials.
+- **CI confirmation is pending, not passed.** At 2026-10-31T03:14Z there
+  were **100 queued and 10 in-progress** workflow runs for this repo. A
+  single push fans out to roughly 40 workflows, so verification lags well
+  behind commits. Do not read "queued" as "green".
+- `crates/llm-router` had its deps swapped and `cargo check -p llm-router`
+  is exit 0, but it was not exercised by any test.
+- `crates/pheno-proc-runtime/pheno-proc-core` still declares private git
+  deps. It is **not** a workspace member, so it does not block
+  `cargo metadata`, and was deliberately left alone.
+- The coverage gate's enforced floor (10%) is far below its job name
+  (">=60%"). That naming gap is unresolved and is being handled as E4.
+- 21 local branches remain. `git branch -d` refuses the squash-merged ones
+  because their SHAs were rewritten, and `-D` is policy-blocked, so they
+  need an explicit operator decision rather than an agent action.
 
-### Trap: do NOT naively swap to the in-repo crate
 
-`crates/runtime-process` exists in-repo under the same package name, and
-`crates/substrate` exists too, so pointing at them looks like the obvious
-fix. **It does not compile.** Tried and reverted:
-
-```
-error[E0599]: no method named `spawn` found for struct `CommandGroupProcess`
-error[E0599]: no method named `kill_group` found for struct `CommandGroupProcess`
-```
-
-Cause: the in-repo crate implements `ProcessPort` from the **local**
-`substrate_core`, while `sharecli` still takes `substrate` from the **git**
-remote. Two distinct `ProcessPort` traits exist, so the trait methods are not
-in scope on the concrete type. The in-repo crate also has no `kill_group`.
-
-Leaving that swap in would have broken `cargo check -p sharecli`, which is
-exit 0 today. The revert restores it.
 
 **Real fix (separate task):** move `sharecli`'s `substrate` dependency to the
 in-repo `crates/substrate` as well, so one `ProcessPort` exists, then add
