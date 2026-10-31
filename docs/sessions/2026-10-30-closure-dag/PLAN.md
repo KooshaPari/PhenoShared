@@ -253,6 +253,34 @@ cargo check -p focus-always-on / -p focus-rituals / -p sharecli
 Not verified: `connector-*`, `focus-connectors`, `focus-eval` were
 repointed but are not workspace members, so cargo does not build them.
 
+## Cargo Deny: from broken to reporting real findings
+
+This is the substantive outcome of E1, and it is a state change worth being
+precise about.
+
+**Before:** the job never executed a check. It died loading a manifest for a
+path dependency that escaped the repo root, so the gate was decorative.
+
+**After `aa12c003`:** `cargo-deny check` runs to completion and exits 5 with
+
+```
+advisories FAILED, bans ok, licenses FAILED, sources ok
+```
+
+Its findings are now real, and they are fixable or decidable rather than
+infrastructural:
+
+| Class | Finding | Disposition |
+|---|---|---|
+| `unlicensed` | 7 workspace crates declare no `license`: pheno-crypto, pheno-fs, pheno-net, pheno-testing, phenotype-dag-core, sharecli-ffi, teamcomm-smoke | Fix: add `license.workspace = true` (workspace is `MIT OR Apache-2.0`). These crates genuinely should have had one. |
+| `rejected` | `winfsp 0.13.1` and `winfsp-sys 0.12.1` are `GPL-3.0` | **Not a bug.** A real licensing decision. Do not allow-list GPL-3.0 to make the gate green. |
+| `vulnerability` | `crypto-bigint 0.5.5` timing variability, `ctutils 0.4.3` non-constant-time masks | Real RUSTSEC advisories. Fix by update, or record the risk explicitly. Do not silently ignore. |
+| `yanked` | `clipboard-win 5.4.1` | `cargo update -p clipboard-win`. |
+| `advisory-not-detected` | `deny.toml` ignores RUSTSEC-2026-0195 / -0196 match nothing | Dead config; safe to remove. |
+
+The important property: **the gate can no longer be green by accident.** Every
+remaining red is a specific, nameable thing.
+
 ## Known-outstanding, honest
 
 - **CI confirmation is pending, not passed.** At 2026-10-31T03:14Z there
