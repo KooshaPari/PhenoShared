@@ -2,6 +2,7 @@
 name = "sharecli-ffi"
 version = "0.8.0"
 edition = "2021"
+license.workspace = true
 description = "C-ABI FFI surface for sharecli — consumed by Swift macOS tray"
 
 # Produces libsharecli_ffi.dylib (macOS) used by the Swift app via the C header

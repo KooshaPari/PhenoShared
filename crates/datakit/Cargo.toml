@@ -3,6 +3,7 @@ name = "datakit"
 version = "0.1.0"
 description = "Data transformation and ETL framework for the Phenotype ecosystem"
 edition = "2021"
+license.workspace = true
 
 [dependencies]
 

@@ -10,12 +10,6 @@
 yanked = "warn"
 # Ignore specific advisories (add RUSTSEC-XXXX-XXXX here if needed).
 ignore = [
-    # RUSTSEC-2026-0195 / RUSTSEC-2026-0196 — quick-xml < 0.41.0
-    # Transitive dep via eframe 0.31.x -> accesskit -> zbus_xml -> quick-xml ^0.30.
-    # Cannot be patched; upgrading eframe to 0.36.x resolves it.
-    # Risk: LOW (requires malicious local D-Bus service).
-    "RUSTSEC-2026-0195",
-    "RUSTSEC-2026-0196",
     # Unmaintained crates with NO safe upgrade (all evaluated 2026-09-24);
     # each is pinned by an upstream tree we do not control. Revisit when the
     # listed parent ships a replacement.

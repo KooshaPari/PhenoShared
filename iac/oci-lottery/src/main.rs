@@ -12,6 +12,9 @@ mod hooks;
 mod oci;
 mod state;
 
+#[cfg(test)]
+mod test_support;
+
 use std::{path::PathBuf, str::FromStr, time::Duration};
 
 use anyhow::{Context, Result};

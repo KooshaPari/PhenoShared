@@ -2,6 +2,7 @@
 name = "teamcomm-smoke"
 version = "0.1.0"
 edition = "2021"
+license.workspace = true
 description = "Smoke harness for the teamcomm daemon — brings up daemon, exercises wire methods, shuts down"
 
 [dependencies]
