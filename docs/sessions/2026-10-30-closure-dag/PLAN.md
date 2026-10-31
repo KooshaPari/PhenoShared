@@ -281,6 +281,42 @@ infrastructural:
 The important property: **the gate can no longer be green by accident.** Every
 remaining red is a specific, nameable thing.
 
+## Coverage Gate (Tier-2): two defects, neither a coverage shortfall
+
+Same pattern as Cargo Deny — a gate that could not report, mistaken for a
+gate that was failing.
+
+### `coverage-root` has never produced a number
+
+It died in the **build**, before any measurement:
+
+```
+The system library `glib-2.0` required by crate `glib-sys` was not found.
+The file `glib-2.0.pc` needs to be installed and the PKG_CONFIG_PATH
+environment variable must contain its path.
+```
+
+The workspace links the gtk-rs stack, and `coverage.yml` had **no apt-get
+step at all**. Fixed in `ef29396a` by installing `pkg-config`,
+`libglib2.0-dev` and `libgtk-3-dev` before the build. The `>=71%` floor was
+never the problem; the job simply could not compile what it was measuring.
+
+### `coverage-iac` advertised a floor it did not enforce
+
+| | Claimed | Enforced |
+|---|---|---|
+| Job name | `IAC workspace coverage (service — ≥60%)` | — |
+| Actual command | — | `--fail-under 10` |
+| Measured | — | ~7.65% (54/706) |
+
+So it was failing the real 10% floor while the name promised 60%. Renamed to
+`≥10%` in `ef29396a`. That changes no enforcement — the threshold is
+untouched — it removes a false claim. The 60% figure is a **target**, and the
+floor should only be raised when measured coverage supports it, not to match
+a name.
+
+Raising 7.65% → 60% is real test-writing work, not a config change.
+
 ## Known-outstanding, honest
 
 - **CI confirmation is pending, not passed.** At 2026-10-31T03:14Z there
