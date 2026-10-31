@@ -47,22 +47,22 @@ scratch workspaces written by test harnesses.
 
 | Path | Why excluded |
 |---|---|
-| `crates/hexa-kit/templates/go/templates/go` | Template. Its `go.mod` contains the literal placeholder `{{ module_path }}`, not a module path. |
+| `crates/hexa-kit/templates/go` | **EXCLUDE**, structurally. Template source, not buildable code. The real `go.mod` is nested one level deeper, at `crates/hexa-kit/templates/go/templates/go/go.mod`, and it opens with `module {{ module_path }}`; 17 imports across the tree are `"{{ module_path }}/..."` (for example `"{{ module_path }}/domain/entities"`). The placeholders are substituted per generated project, so no gate can ever resolve it. |
 | `crates/hexa-kit/templates/hexagon/go` | Embedded template, not a build target. |
 | `crates/policystack/wrappers/go` | Wrapper fixture. |
 | `servers/external/mcpforge/integrationtests/workspaces/go` | Integration-test fixture workspace. |
 | `servers/external/mcpforge/integrationtests/test-output/**` | Scratch output written by test runs. Gitignored, so the guard skips it automatically. |
 
-## Broken modules needing a real fix
+## Ungated modules: measured blockers and disposition
 
-These are live code with real defects. They are not gated because gating them
-today would fail the build for reasons unrelated to any change under test.
-Each needs a fix before it can be added to `go.modules.txt`.
+These are not gated because gating them today would fail the build for reasons
+unrelated to any change under test. The `Disposition` column distinguishes a
+fixable defect (`NEEDS_FIX`) from a target that can never be gated as written
+(`NOT_GATEABLE`).
 
-| Module | Failure |
-|---|---|
-| `crates/argis-extensions` | Requires Go >= 1.26.7, which the local toolchain does not provide. CI would resolve this via `go-version-file`, but the module also has 152 gofmt violations and a dependency (`hatchet@v0.112.12`) with the same floor. |
-| `crates/argis-extensions/bifrost/core` | `undefined: schemas.ChatMessageRole`. An incomplete vendored shim, and the local `replace` target of `crates/argis-extensions`. |
-| `crates/hexa-kit/templates/go` | See the templates table above. |
-| `servers/external/mcpforge` | `TestDiagnostics/CleanFile` fails after 41s in `internal/lsp`. |
-| `servers/external/ops-mcp` | `go vet` did not complete within 300s. The dependency tree pulls in `nanovms/ops` and `google-cloud`. Needs investigation before it can be gated. |
+| Module | Disposition | Failure |
+|---|---|---|
+| `crates/argis-extensions` | `NEEDS_FIX` | `go.mod` requires `go >= 1.26.10` and declares no `toolchain` line; the local toolchain is go1.26.5, so `go list .` reports `go: go.mod requires go >= 1.26.10 (running go 1.26.5; GOTOOLCHAIN=local)`. CI resolves that floor automatically via setup-go `go-version-file`, so the floor is not what blocks gating. Two real blockers remain: **133** gofmt-violating files, and generated source containing `<REDACTED>` in place of the org segment — `api/graphql/gen/generated.go` carries `githubᚗcomᚋ<REDACTED>ᚋbifrostᚑextensions`, which resolves to nothing. The `hatchet` dependency is `v0.114.8`. |
+| `crates/argis-extensions/bifrost/core` | `NEEDS_FIX` | `undefined: schemas.ChatMessageRole`. An incomplete vendored shim, and the local `replace` target of `crates/argis-extensions`. |
+| `servers/external/mcpforge` | `NOT_GATEABLE` | `TestDiagnostics/CleanFile` fails in `integrationtests/tests/go/diagnostics/` — not in `internal/lsp`, which has no `TestDiagnostics` and passes. Measured: subtest fails in 7.6s (7.9s for the package), not 41s. It fails two ways: the harness needs an external `gopls` binary that no workflow installs (`helpers.go` uses `t.Fatalf` on setup error rather than skipping), and the workspace path is rejected because `component "phenoShared" is listed by macOS as "PhenoShared"`, so the file is reported as `WARNING at L1:C9: No active builds contain .../workspace/clean.go (Source: go list)` where the test expects no diagnostics. |
+| `servers/external/ops-mcp` | `NEEDS_FIX` | `go vet` did not complete within 300s. The dependency tree pulls in `nanovms/ops` and `google-cloud`. Needs investigation before it can be gated. |
