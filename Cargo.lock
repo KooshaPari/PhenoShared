@@ -2404,7 +2404,7 @@ dependencies = [
  "reqwest 0.12.28",
  "serde",
  "serde_json",
- "substrate-core 0.3.10",
+ "substrate-core",
  "thiserror 2.0.20",
  "tokio",
  "uuid",
@@ -2417,7 +2417,7 @@ dependencies = [
  "async-trait",
  "cloud-dispatch-conformance",
  "dotenvy",
- "substrate-core 0.3.10",
+ "substrate-core",
  "tokio",
 ]
 
@@ -2431,7 +2431,7 @@ dependencies = [
  "reqwest 0.12.28",
  "serde",
  "serde_json",
- "substrate-core 0.3.10",
+ "substrate-core",
  "thiserror 2.0.20",
  "tokio",
 ]
@@ -2443,7 +2443,7 @@ dependencies = [
  "async-trait",
  "cloud-codex",
  "serde",
- "substrate-core 0.3.10",
+ "substrate-core",
  "tokio",
  "uuid",
 ]
@@ -2457,7 +2457,7 @@ dependencies = [
  "reqwest 0.12.28",
  "serde",
  "serde_json",
- "substrate-core 0.3.10",
+ "substrate-core",
  "tempfile",
  "tokio",
  "uuid",
@@ -2828,7 +2828,7 @@ dependencies = [
  "async-trait",
  "serde",
  "serde_json",
- "substrate-core 0.3.10",
+ "substrate-core",
  "thiserror 2.0.20",
  "tokio",
  "uuid",
@@ -3840,7 +3840,7 @@ dependencies = [
  "serde",
  "serde_json",
  "substrate-a2a",
- "substrate-core 0.3.10",
+ "substrate-core",
  "thiserror 2.0.20",
  "tokio",
  "tokio-stream",
@@ -3999,7 +3999,7 @@ dependencies = [
  "serde_json",
  "store-file",
  "substrate-app",
- "substrate-core 0.3.10",
+ "substrate-core",
  "substrate-serve-lock",
  "tempfile",
  "tokio",
@@ -4028,7 +4028,7 @@ dependencies = [
  "store-sqlite",
  "substrate-a2a",
  "substrate-app",
- "substrate-core 0.3.10",
+ "substrate-core",
  "tempfile",
  "tokio",
  "tower 0.5.3",
@@ -4061,7 +4061,7 @@ dependencies = [
  "store-sqlite",
  "substrate-a2a",
  "substrate-app",
- "substrate-core 0.3.10",
+ "substrate-core",
  "tempfile",
  "tokio",
  "transport-file",
@@ -4324,7 +4324,7 @@ dependencies = [
  "serde",
  "serde_json",
  "substrate-a2a",
- "substrate-core 0.3.10",
+ "substrate-core",
  "tokio",
  "uuid",
 ]
@@ -4342,7 +4342,7 @@ dependencies = [
  "reqwest 0.12.28",
  "serde",
  "serde_json",
- "substrate-core 0.3.10",
+ "substrate-core",
  "tokio",
  "uuid",
 ]
@@ -4354,7 +4354,7 @@ dependencies = [
  "async-trait",
  "engine-conformance",
  "engine-spec",
- "substrate-core 0.3.10",
+ "substrate-core",
  "tokio",
  "uuid",
 ]
@@ -4366,7 +4366,7 @@ dependencies = [
  "async-trait",
  "engine-conformance",
  "engine-spec",
- "substrate-core 0.3.10",
+ "substrate-core",
  "tokio",
  "uuid",
 ]
@@ -4377,7 +4377,7 @@ version = "0.3.10"
 dependencies = [
  "async-trait",
  "engine-spec",
- "substrate-core 0.3.10",
+ "substrate-core",
  "tokio",
  "uuid",
 ]
@@ -4393,7 +4393,7 @@ dependencies = [
  "regex",
  "serde",
  "serde_json",
- "substrate-core 0.3.10",
+ "substrate-core",
  "tempfile",
  "thiserror 2.0.20",
  "tokio",
@@ -4405,7 +4405,7 @@ name = "engine-spec"
 version = "0.3.10"
 dependencies = [
  "serde",
- "substrate-core 0.3.10",
+ "substrate-core",
 ]
 
 [[package]]
@@ -5137,7 +5137,7 @@ version = "0.3.10"
 dependencies = [
  "async-trait",
  "notify-debouncer-mini",
- "substrate-core 0.3.10",
+ "substrate-core",
  "tempfile",
  "tokio",
  "uuid",
@@ -8917,11 +8917,11 @@ dependencies = [
  "anyhow",
  "async-trait",
  "dashmap 7.0.0-rc2",
- "omniroute-adapter 0.1.0",
+ "omniroute-adapter",
  "reqwest 0.13.5",
  "serde",
  "serde_json",
- "substrate-core 0.1.0",
+ "substrate-core",
  "thiserror 2.0.20",
  "tokio",
  "tracing",
@@ -10353,26 +10353,13 @@ dependencies = [
 
 [[package]]
 name = "omniroute-adapter"
-version = "0.1.0"
-source = "git+https://github.com/KooshaPari/substrate.git?rev=2a54c729eb42335ffc937d4a6da3230b18da3d76#2a54c729eb42335ffc937d4a6da3230b18da3d76"
-dependencies = [
- "async-trait",
- "dotenvy",
- "serde",
- "serde_json",
- "substrate-core 0.1.0",
- "thiserror 2.0.20",
-]
-
-[[package]]
-name = "omniroute-adapter"
 version = "0.3.10"
 dependencies = [
  "async-trait",
  "dotenvy",
  "serde",
  "serde_json",
- "substrate-core 0.3.10",
+ "substrate-core",
  "tempfile",
  "thiserror 2.0.20",
  "tokio",
@@ -11633,9 +11620,13 @@ dependencies = [
 name = "phenotype-observably-macros"
 version = "0.3.10"
 dependencies = [
+ "futures-lite",
  "proc-macro2",
  "quote",
  "syn 2.0.119",
+ "tokio",
+ "tracing",
+ "tracing-subscriber",
 ]
 
 [[package]]
@@ -13619,7 +13610,7 @@ dependencies = [
  "phenotype-router",
  "serde",
  "serde_json",
- "substrate-core 0.3.10",
+ "substrate-core",
  "thiserror 2.0.20",
  "tokio",
 ]
@@ -13675,20 +13666,8 @@ version = "0.3.10"
 dependencies = [
  "async-trait",
  "command-group",
- "substrate-core 0.3.10",
+ "substrate-core",
  "tempfile",
- "tokio",
- "uuid",
-]
-
-[[package]]
-name = "runtime-process"
-version = "0.3.10"
-source = "git+https://github.com/KooshaPari/substrate#79c4ae28536baf1b42a298087d72ee048113a54d"
-dependencies = [
- "async-trait",
- "command-group",
- "substrate-core 0.3.10 (git+https://github.com/KooshaPari/substrate)",
  "tokio",
  "uuid",
 ]
@@ -14479,7 +14458,7 @@ dependencies = [
  "prost 0.12.6",
  "ratatui 0.30.2",
  "reqwest 0.13.5",
- "runtime-process 0.3.10 (git+https://github.com/KooshaPari/substrate)",
+ "runtime-process",
  "serde",
  "serde_json",
  "serde_yaml",
@@ -14496,7 +14475,7 @@ dependencies = [
  "sharecli-tray-linux",
  "sharecli-tray-windows",
  "spawn-core-sys",
- "substrate 0.3.10 (git+https://github.com/KooshaPari/substrate)",
+ "substrate",
  "sysinfo",
  "tempfile",
  "thiserror 2.0.20",
@@ -15021,7 +15000,7 @@ dependencies = [
  "async-trait",
  "serde",
  "serde_json",
- "substrate-core 0.3.10",
+ "substrate-core",
  "tempfile",
  "tokio",
  "uuid",
@@ -15037,7 +15016,7 @@ dependencies = [
  "serde_json",
  "strsim",
  "substrate-a2a",
- "substrate-core 0.3.10",
+ "substrate-core",
  "tempfile",
  "thiserror 2.0.20",
  "uuid",
@@ -15120,16 +15099,8 @@ dependencies = [
  "engine-spec",
  "substrate-a2a",
  "substrate-app",
- "substrate-core 0.3.10",
+ "substrate-core",
  "tokio",
-]
-
-[[package]]
-name = "substrate"
-version = "0.3.10"
-source = "git+https://github.com/KooshaPari/substrate#79c4ae28536baf1b42a298087d72ee048113a54d"
-dependencies = [
- "substrate-core 0.3.10 (git+https://github.com/KooshaPari/substrate)",
 ]
 
 [[package]]
@@ -15150,38 +15121,14 @@ dependencies = [
  "async-trait",
  "engine-spec",
  "serde",
- "substrate-core 0.3.10",
+ "substrate-core",
  "tokio",
  "uuid",
 ]
 
 [[package]]
 name = "substrate-core"
-version = "0.1.0"
-source = "git+https://github.com/KooshaPari/substrate.git?rev=2a54c729eb42335ffc937d4a6da3230b18da3d76#2a54c729eb42335ffc937d4a6da3230b18da3d76"
-dependencies = [
- "async-trait",
- "serde",
- "serde_json",
- "thiserror 2.0.20",
- "uuid",
-]
-
-[[package]]
-name = "substrate-core"
 version = "0.3.10"
-dependencies = [
- "async-trait",
- "serde",
- "serde_json",
- "thiserror 2.0.20",
- "uuid",
-]
-
-[[package]]
-name = "substrate-core"
-version = "0.3.10"
-source = "git+https://github.com/KooshaPari/substrate#79c4ae28536baf1b42a298087d72ee048113a54d"
 dependencies = [
  "async-trait",
  "serde",
@@ -15195,7 +15142,7 @@ name = "substrate-dag"
 version = "0.3.10"
 dependencies = [
  "petgraph 0.8.3",
- "substrate-core 0.3.10",
+ "substrate-core",
 ]
 
 [[package]]
@@ -15204,7 +15151,7 @@ version = "0.3.10"
 dependencies = [
  "chrono",
  "store-sqlite",
- "substrate-core 0.3.10",
+ "substrate-core",
  "thiserror 2.0.20",
  "uuid",
 ]
@@ -15215,7 +15162,7 @@ version = "0.3.10"
 dependencies = [
  "chrono",
  "croner",
- "substrate-core 0.3.10",
+ "substrate-core",
 ]
 
 [[package]]
@@ -15235,7 +15182,7 @@ name = "substrate-skills"
 version = "0.3.10"
 dependencies = [
  "serde_json",
- "substrate-core 0.3.10",
+ "substrate-core",
 ]
 
 [[package]]
@@ -15246,7 +15193,7 @@ dependencies = [
  "reqwest 0.12.28",
  "serde",
  "serde_json",
- "substrate-core 0.3.10",
+ "substrate-core",
  "tokio",
 ]
 
@@ -15265,7 +15212,7 @@ dependencies = [
  "serde_json",
  "signal-hook 0.3.18",
  "signal-hook-tokio",
- "substrate-core 0.3.10",
+ "substrate-core",
  "tokio",
  "tokio-stream",
  "tracing",
@@ -15288,7 +15235,7 @@ dependencies = [
  "serde_json",
  "store-sqlite",
  "substrate-a2a",
- "substrate-core 0.3.10",
+ "substrate-core",
  "tempfile",
  "thiserror 2.0.20",
  "tokio",
@@ -16542,7 +16489,7 @@ dependencies = [
  "async-trait",
  "serde",
  "serde_json",
- "substrate-core 0.3.10",
+ "substrate-core",
  "tempfile",
  "tokio",
  "uuid",
@@ -17351,7 +17298,7 @@ dependencies = [
  "serde_json",
  "store-sqlite",
  "substrate-a2a",
- "substrate-core 0.3.10",
+ "substrate-core",
  "supervisor",
  "thiserror 2.0.20",
  "tokio",
@@ -17364,7 +17311,7 @@ version = "0.3.10"
 dependencies = [
  "async-trait",
  "parking_lot",
- "substrate-core 0.3.10",
+ "substrate-core",
  "tokio",
 ]
 

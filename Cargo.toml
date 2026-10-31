@@ -113,7 +113,7 @@ members = [
     "crates/agileplus-import",
     "crates/phenotype-error-core",
     "crates/focus-always-on",
-    "crates/observability-macros",
+    "crates/phenotype-observably-macros",
     "crates/pheno-tracing",
     "crates/focus-templates",
     "crates/focus-events",

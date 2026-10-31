@@ -16,7 +16,7 @@ focus-penalties = { path = "../focus-penalties" }
 focus-mascot = { path = "../focus-mascot" }
 focus-events = { path = "../focus-events" }
 focus-audit = { path = "../focus-audit" }
-phenotype-observably-macros = { path = "../observability-macros" }
+phenotype-observably-macros = { path = "../phenotype-observably-macros" }
 
 chrono.workspace = true
 uuid.workspace = true

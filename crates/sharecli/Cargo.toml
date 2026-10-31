@@ -48,9 +48,14 @@ serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 toml = "1.1"
 
-# Process management (substrate SDK + adapter)
-substrate = { git = "https://github.com/KooshaPari/substrate", default-features = false }
-runtime-process = { git = "https://github.com/KooshaPari/substrate", package = "runtime-process" }
+# Process management (substrate SDK + adapter).
+# Both resolve to in-workspace crates: the private substrate remote is not
+# readable by the CI token, and mixing a git facade with an adapter from a
+# different substrate_core copy yields two distinct
+# `substrate_core::process_port::ProcessPort` traits, so `spawn`/`kill_group`
+# implemented by the local `CommandGroupProcess` fall out of scope.
+substrate = { path = "../substrate", default-features = false }
+runtime-process = { path = "../runtime-process" }
 sysinfo = "0.39"
 
 # Zig hot core: POSIX semaphore, posix_spawn, setpriority, waitpid
