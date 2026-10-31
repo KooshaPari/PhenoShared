@@ -189,9 +189,80 @@ verify in one uninterrupted step, or not at all.
 
 ## Status
 
-- [ ] E0 anchor
-- [ ] E1 Cargo Deny unblocked
+- [x] E0 anchor
+- [~] E1 Cargo Deny: blocker ADVANCED, gate still red (see below)
 - [ ] E2 PR backlog → 0
 - [ ] E3 branches/worktrees pruned
 - [ ] E4 coverage gate resolved or dispositioned
 - [ ] E5 residual Go modules dispositioned/SKIPPED
+
+## E1 progress — 2026-10-31
+
+**Landed:** `77a2b01f` (merged to `origin/main` as `24c67a5f`).
+
+`phenotype-observably-macros` is now an in-repo pass-through proc-macro at
+`crates/observability-macros`, and all 11 manifests point at it. Verified:
+`cargo metadata --no-deps` exit 0, full `cargo metadata` exit 0 (1510
+packages), `cargo check` exit 0 for the macro crate, `focus-always-on` and
+`focus-rituals`. All 13 Go modules still green in CI run `41160408615`.
+
+**The gate is still red, but the failure moved on.** CI now reports:
+
+```
+error: failed to get `runtime-process` as a dependency of package `sharecli v0.8.0`
+  failed to load source for dependency `runtime-process`
+```
+
+So the `PhenoObservability` manifest blocker is gone and the next one is
+`crates/sharecli`, which pulls two crates from the **private** repo
+`https://github.com/KooshaPari/substrate`:
+
+```toml
+substrate       = { git = "https://github.com/KooshaPari/substrate", default-features = false }
+runtime-process = { git = "https://github.com/KooshaPari/substrate", package = "runtime-process" }
+```
+
+`gh repo view KooshaPari/substrate` resolves but is **PRIVATE**, so the CI
+token cannot read it and `cargo metadata` fails there while succeeding on a
+developer machine with credentials.
+
+### Trap: do NOT naively swap to the in-repo crate
+
+`crates/runtime-process` exists in-repo under the same package name, and
+`crates/substrate` exists too, so pointing at them looks like the obvious
+fix. **It does not compile.** Tried and reverted:
+
+```
+error[E0599]: no method named `spawn` found for struct `CommandGroupProcess`
+error[E0599]: no method named `kill_group` found for struct `CommandGroupProcess`
+```
+
+Cause: the in-repo crate implements `ProcessPort` from the **local**
+`substrate_core`, while `sharecli` still takes `substrate` from the **git**
+remote. Two distinct `ProcessPort` traits exist, so the trait methods are not
+in scope on the concrete type. The in-repo crate also has no `kill_group`.
+
+Leaving that swap in would have broken `cargo check -p sharecli`, which is
+exit 0 today. The revert restores it.
+
+**Real fix (separate task):** move `sharecli`'s `substrate` dependency to the
+in-repo `crates/substrate` as well, so one `ProcessPort` exists, then add
+`kill_group` to `crates/runtime-process` to match what `sharecli` calls
+(`crates/sharecli/src/runtime.rs:495` and `:516`). That is real API
+reconciliation, not a manifest edit, and it needs its own verification pass.
+
+## Tooling gotcha: the `cargo` wrapper eats all output
+
+`~/.local/bin/cargo` returns correct exit codes but **emits zero bytes** of
+stdout/stderr, including for commands that must print (verified with a
+deliberately invalid package: `cargo check -p definitely-not-a-crate` →
+exit 101, 0 bytes). This silently hides every compile error.
+
+Use `~/.cargo/bin/cargo` directly when you need to read errors:
+
+```bash
+~/.cargo/bin/cargo check -p <crate> 2>&1 | grep -m5 '^error'
+```
+
+Exit codes from either binary are trustworthy; only output is lost.
+
