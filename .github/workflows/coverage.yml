@@ -46,7 +46,9 @@ jobs:
             libxcb-xfixes0-dev \
             libxkbcommon-dev \
             libwayland-dev \
-            libssl-dev
+            libssl-dev \
+            zlib1g-dev \
+            libsqlite3-dev
 
       - name: Install Zig (Ubuntu)
         run: |
