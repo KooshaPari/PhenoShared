@@ -335,7 +335,7 @@ mod namespaces_apply;
 mod namespaces_validate;
 
 #[cfg(all(feature = "sandbox-namespaces", target_os = "linux"))]
-pub use namespaces_apply::{apply_plan, run_in_plan};
+pub(crate) use namespaces_apply::{apply_plan, run_in_plan};
 pub use namespaces_validate::{
     env_pivot_rootfs_path, env_requests_pid_ns, env_requests_pivot_root, env_requests_user_ns,
     env_requests_user_subids, env_user_ns_maps, parse_id_map_spec, parse_subid_file,
