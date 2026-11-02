@@ -406,7 +406,7 @@ impl ClipboardMonitor {
                         .all(|c| c.is_ascii_graphic() || c.is_ascii_whitespace())
                 {
                     // This might be binary image data
-                    let base64_content = base64::encode(output.stdout);
+                    let base64_content = base64::encode(&output.stdout);
                     return Ok(Some(base64_content));
                 }
                 return Ok(Some(content.to_string()));
