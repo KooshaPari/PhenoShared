@@ -12,5 +12,13 @@ out = ["Html", "Xml", "Json"]
 output-dir = "target/tarpaulin-report"
 
 [run]
-timeout = 180
+# cargo-tarpaulin parses this field with humantime, so it must be a duration
+# string. The bare integer `180` fails TOML deserialization ("invalid type:
+# integer, expected a duration"), which makes tarpaulin drop the WHOLE config
+# file and fall back to its built-in 60s default test timeout. That 60s budget
+# is a total per-test-binary limit, so any test binary whose tests take longer
+# than 60s in aggregate is killed mid-run with "Error: Timed out waiting for
+# test response" -- which is how the root coverage gate failed on
+# crates/sharecli/tests/fr007_proc_pid_watch.rs (3 x 30s watch dwell = 90s).
+timeout = "180s"
 features = "all"
