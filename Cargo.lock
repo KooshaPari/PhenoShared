@@ -15079,6 +15079,37 @@ dependencies = [
 ]
 
 [[package]]
+name = "substrate-browser-broker"
+version = "0.3.10"
+dependencies = [
+ "axum 0.8.9",
+ "base64 0.22.1",
+ "futures-util",
+ "reqwest 0.12.28",
+ "serde",
+ "serde_json",
+ "substrate-browser",
+ "substrate-browser-cdp",
+ "tempfile",
+ "thiserror 2.0.20",
+ "tokio",
+]
+
+[[package]]
+name = "substrate-browser-cdp"
+version = "0.3.10"
+dependencies = [
+ "base64 0.22.1",
+ "futures-util",
+ "serde",
+ "serde_json",
+ "tempfile",
+ "thiserror 2.0.20",
+ "tokio",
+ "tokio-tungstenite 0.29.0",
+]
+
+[[package]]
 name = "substrate-core"
 version = "0.3.10"
 dependencies = [

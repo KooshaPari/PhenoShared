@@ -39,6 +39,8 @@ members = [
     "crates/phenotype-nvms-adapter",
     "crates/substrate-tui",
     "crates/substrate-browser",
+    "crates/substrate-browser-cdp",
+    "crates/substrate-browser-broker",
     "crates/routing-phenotype-router",
     "crates/teamcomm-smoke",
     "crates/klipdot-capture",
