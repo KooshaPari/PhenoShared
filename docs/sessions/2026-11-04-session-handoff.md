@@ -28,44 +28,56 @@ GOTOOLCHAIN=go1.26.10 GODEBUG=netdns=cgo go build ./...   # ok
 go test ./...                                             # extract 0.232s, resolve 0.696s
 ```
 
-## 3. Coverage gate (the live defect)
+## 3. Coverage gate (closed 2026-11-05)
 
-Root `coverage-root` job fails with `Error: Timed out waiting for test response` on
-`crates/sharecli/tests/fr007_proc_pid_watch.rs`.
+**Green.** Run `41991395939` on `f38101eb`: `completed/success`, both jobs passing.
+`Root workspace coverage (whole workspace — ≥37%)` measured **37.92%, 37053/97715 lines** against the
+enforced 37% floor, in 68 minutes.
 
-Root cause: `tarpaulin.toml` had `timeout = 180`. cargo-tarpaulin deserialises that field with
-`humantime_serde` (`config/mod.rs:98` in 0.37.5), so a bare integer fails TOML deserialisation,
-tarpaulin discards the **whole** config file, and the built-in 60s default applies. That default is
-a per-test-binary budget, and the three watch tests each dwelt 30s.
+Four distinct defects had to be cleared, each one only visible after the previous was fixed — worth
+recording because three of them looked like "the test is flaky" from the outside:
 
-Two commits fix it:
+1. `tarpaulin.toml` held `timeout = 180`, an integer, but the field deserialises via `humantime_serde`
+   (`config/mod.rs:98`). Deserialisation failed, so **tarpaulin discarded the entire config file** and
+   fell back to its built-in 60s per-test-binary default. The three watch cases dwelt 30s each, so the
+   binary was killed at 60s with `Timed out waiting for test response`.
+2. Fixing (1) brought `features = "all"` back to life — a setting that had been inert precisely
+   because the file was being discarded. No crate in the workspace defines a feature named `all`, so
+   `cargo metadata` aborted before a single test ran.
+3. Past both, `golden_snapshots` failed: clap wraps `--help` to the terminal width, the goldens had been
+   generated on a wide tty, and CI wrapped at 100 columns. Feature unification made this worse — a
+   `-p sharecli` build differs from a full-workspace build because another crate enables clap's
+   `wrap_help`. Fixed by making `wrap_help` explicit and pinning `term_width = 100`.
+4. Only then did the suite run clean (646 binaries, zero failures) and reach the real problem: a 71%
+   floor inherited from ADR-040, whose named crates no longer exist.
 
-- `cc6dceed` — watcher capture helper: strict newline-terminated NDJSON records (a truncated tail is
-  a failure, not a log line), bounded `stop_and_reap` using `try_wait` instead of a raw `ESRCH`
-  constant, honest detached-reader reporting, and the three watch cases now run concurrently
-  (30s wall clock instead of 90s) with no `#[serial]`.
+### The commits, in order
+
+- `cc6dceed` — watcher capture helper: strict newline-terminated NDJSON records (a truncated tail is a
+  failure, not a log line), bounded `stop_and_reap` using `try_wait` instead of a raw `ESRCH` constant,
+  honest detached-reader reporting, and the three watch cases now run concurrently (30s wall clock
+  instead of 90s) with no `#[serial]`. `cargo test -p sharecli --test fr007_proc_pid_watch` →
+  9 passed / 0 failed, ~30.06s, twice.
 - `58d51bd3` — `timeout = "180s"`, with the deserialisation evidence recorded in the file.
+- `1f01b931` — drop the invalid `features = "all"` key.
+- `66c963e7` — pin clap's help width and regenerate the goldens.
+- `a5587ba4` — the honest 37% floor, aligned across workflow, `tarpaulin.toml` and `coverage-gate.sh`.
 
-`cargo test -p sharecli --test fr007_proc_pid_watch` → 9 passed / 0 failed, ~30.06s, twice.
+### Run sequence
 
-Pushing that fix surfaced a second, latent defect in the same file: `features = "all"`. It had been
-inert while the config was discarded, and the moment the file parsed again tarpaulin forwarded it to
-cargo, which aborted with `none of the selected packages contains this feature: all` — every crate
-in the workspace lacks a feature by that name. Fixed in `1f01b931` by removing the key; default
-features are what the gate always measured in practice.
+`41394778746` failed on the 60s test timeout → `41943272699` failed at `cargo metadata` on the
+features key (config now being honoured) → `41943965243` ran the whole suite and failed on the golden
+snapshots → `41951143548` ran clean and failed on 71% vs 37.54% → **`41991395939` passed both jobs.**
 
-Sequence, for the record: run 41394778746 failed on the 60s test timeout → run 41943272699 failed
-at `cargo metadata` on `features = "all"` (config now being honoured) → run 41943965243 got past
-metadata and into the coverage run itself.
-
-**Not verified:** the coverage gate itself. It needs Linux (`cargo-tarpaulin` has no macOS
-backend) and the local Colima/Docker daemon is down, so there is no container to run it in.
+Note for the next person: the workflow uses `concurrency.cancel-in-progress`, so any push to main
+during a run kills it. Two of my verification attempts were cancelled by my own doc commits. Batch
+doc changes, push once, then watch.
 
 ## 4. Repo state (read-only census by a subagent; ahead/behind vs last-known remote refs, no fetch)
 
 | Repo | Dirty | Divergence | Note |
 |---|---|---|---|
-| phenoShared | 1 (this doc) | **ahead 2** | the two coverage commits above, unpushed |
+| phenoShared | 0 | level with origin | clean at `f38101eb` |
 | OmniRoute | 54 | `feat/release-line-gap-recovery` ahead 43 | 2 unpushed branches |
 | melosviz | 17 | `feat/production-delivery-extensions` ahead 44; `main` behind 25 | |
 | pheno | 27 | `integrate-20261102` ahead 4 / behind 6; `main` ahead 8 | |
@@ -96,7 +108,7 @@ Scratch worktrees holding earlier hamster work are deleted.
 6. Open decisions that are not code: legal/RUSTSEC dependency dispositions, and the saturated CI
    queue observed earlier.
 
-## 6. CI census at `cd8c0d1c` (nothing above is CI-validated yet)
+## 6. CI census at `cd8c0d1c` (historical snapshot, pre-fix)
 
 Main branch protection has **no required status checks**, so every failure below is invisible at
 merge time. That is the real defect; the individual red jobs are symptoms.
@@ -117,7 +129,7 @@ Also open: 11 PRs, 25 local branches (several `[gone]`), sibling worktree `Pheno
 dirty (7 files) and 154 behind, IAC `fail-under` still 10, 21 branches awaiting `-D` approval,
 89 workflows in the fan-out.
 
-## 7. Where the coverage gate actually stands (run 41951143548)
+## 7. Why 37% and not 71% (decision, 2026-11-05)
 
 The third run got all the way through the suite: **646 test binaries reported `ok`, zero failures**,
 and the whole workspace ran inside the armed 180s budget instead of being killed at 60s. The
