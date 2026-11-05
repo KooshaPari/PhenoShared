@@ -27,7 +27,11 @@ path = "src/lib.rs"
 
 [dependencies]
 # CLI
-clap = { version = "4.5", features = ["derive", "env"] }
+# `wrap_help` is explicit so help output does not depend on whether some other
+# workspace crate happens to unify clap's wrap feature into this build. The
+# golden snapshot tests compare `--help` byte for byte, and feature unification
+# differs between `-p sharecli` and a full-workspace build.
+clap = { version = "4.5", features = ["derive", "env", "wrap_help"] }
 clap_complete = "4"
 clap_mangen = "0.3"
 tokio = { version = "1", features = ["full"] }

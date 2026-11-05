@@ -29,11 +29,13 @@ Commands:
   proc-compose  process-compose.yaml integration
   completions   Generate shell completion script
   man           Generate roff man page for sharecli(1) (clap_mangen)
-  util          Exercise the bundled utility modules (base85, csv, crc, hash, json, sha, uuid, xml, markdown, trie/skiplist)
+  util          Exercise the bundled utility modules (base85, csv, crc, hash, json, sha, uuid, xml,
+                markdown, trie/skiplist)
   list          Enumerate available CLI surfaces (cast modules + utility modules)
   version       Print the sharecli version
   uninstall     Print uninstall guidance and optionally purge local config/state
-  undo          Undo / restore model (C09 L81.9): inspect or replay the operations journal recorded at $XDG_STATE_HOME/sharecli/operations.jsonl
+  undo          Undo / restore model (C09 L81.9): inspect or replay the operations journal recorded
+                at $XDG_STATE_HOME/sharecli/operations.jsonl
   help          Print this message or the help of the given subcommand(s)
 
 Options:
@@ -44,7 +46,8 @@ Options:
           Quiet mode
 
       --theme <NAME>
-          Color theme: `backbone-2` / `bb2` / `dark` (default) or `backbone-2-light` / `light`. Maps to Backbone-2 dark/light families in tokens.css
+          Color theme: `backbone-2` / `bb2` / `dark` (default) or `backbone-2-light` / `light`. Maps
+          to Backbone-2 dark/light families in tokens.css
           
           [default: backbone-2]
 
@@ -54,5 +57,6 @@ Options:
   -V, --version
           Print version
 
-Accessibility (C09): docs/a11y/README.md — NO_COLOR/TERM=dumb degrade ANSI color; FR-004 status via `sharecli status` and GET /health. Degraded-mode notes: docs/a11y/status-and-recovery.md
+Accessibility (C09): docs/a11y/README.md — NO_COLOR/TERM=dumb degrade ANSI color; FR-004 status via
+`sharecli status` and GET /health. Degraded-mode notes: docs/a11y/status-and-recovery.md
 Help & FAQ (C09 L81.13): docs/faq.md — top troubleshooting answers; `man sharecli` after `just man`.
