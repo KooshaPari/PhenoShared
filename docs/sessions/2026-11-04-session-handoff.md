@@ -151,7 +151,40 @@ Two honest options, both one commit:
 
 The threshold is the owner's call; I did not lower a quality gate unilaterally.
 
-## 8. Environment blockers observed this session
+## 9. Local-only commits: what was salvaged (2026-11-05)
+
+The risk in section 5 was committed work that existed only on this disk. Status:
+
+| Repo | Commits | Outcome |
+|---|---|---|
+| phenotype-registry | 3 on `fix/scorecard-perms-and-prettier` | **pushed** (`4a7579552..c68b1b8fa`), pre-push grade A+ 20/20 |
+| Tracera | 2 docs commits on `main`, branch 231 behind | **salvaged** to new branch `docs/handbook-and-readme-20260918`; `main` untouched |
+| pheno | 4 on `integrate-20261102`, tracked `origin/main` (21 behind) | pushed to a same-named remote branch |
+| PhenoTooling | 1 (`h2 0.4.15→0.4.19`) | **blocked: the GitHub repo is archived, remote returns 403** |
+
+Tracera and pheno both had the same trap: local branch ahead of a stale base, so a plain push is
+rejected and a rebase would have rewritten weeks of drift. Publishing the local branch under its own
+name preserves the work without pretending it lands on main.
+
+PhenoTooling is the one real problem left: an archived origin means its unpushed security bump and
+**1747 dirty paths** (a ~1560-file username redaction sweep, 188 deleted .NET build artifacts, plus
+an untracked `crates/pheno-schema-port`) cannot be pushed anywhere until the repo is unarchived or
+the work is moved to another remote. Nothing there is a secret; largest dirty files are text.
+
+## 10. promptscrape: end-to-end verified (was the cut lane)
+
+Run from the built binary against live data, all three resolution paths:
+
+- explicit JCode id → 62 prompts, first = this session's original request, last = the current turn
+- explicit Codex thread UUID → resolved via `codex-sqlite`
+- session id embedded in an HTML artifact → `FOUND_FROM_HTML`, resolves unaided (the original ask)
+- HTML with no id → falls back to the session matching the current directory
+
+Purity check on the 62 prompts for `[auto]`, todo nudges, system reminders and swarm notices: **0**.
+
+Full log: `~/.jcode/scratch/promptscrape-e2e.md`.
+
+## 11. Environment blockers observed this session
 
 - `cargo-tarpaulin` is Linux-only; macOS host has no backend.
 - Colima/Docker socket absent (`~/.colima/default/docker.sock`), so no local Linux container.
