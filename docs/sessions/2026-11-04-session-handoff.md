@@ -117,7 +117,41 @@ Also open: 11 PRs, 25 local branches (several `[gone]`), sibling worktree `Pheno
 dirty (7 files) and 154 behind, IAC `fail-under` still 10, 21 branches awaiting `-D` approval,
 89 workflows in the fan-out.
 
-## 7. Environment blockers observed this session
+## 7. Where the coverage gate actually stands (run 41951143548)
+
+The third run got all the way through the suite: **646 test binaries reported `ok`, zero failures**,
+and the whole workspace ran inside the armed 180s budget instead of being killed at 60s. The
+`fr007_proc_pid_watch` cases no longer time out; the golden snapshots match because the help width is
+now pinned.
+
+It still fails, on the last step, for a reason that is a policy question rather than a defect:
+
+```
+37.54% coverage, 36295/96696 lines covered
+Coverage is below the failure threshold 37.54% < 71.00%
+```
+
+The 71% figure comes from ADR-040, whose tier model names `nanovms-core`, `nvms-ffi`,
+`pheno-config` and `pheno-compose-driver`. **Three of those four crates no longer exist** in the
+repointed workspace, so no tier definition is being applied: `--workspace` simply averages ~200
+crates, including UI/gfx crates with no tests at all (`src/voxel/*`, `src/water/*`) and fake harness
+binaries under `tools/`. A whole-workspace number can never express a per-tier threshold.
+
+Measured for context: `crates/sharecli` 58.5%, `phenotype-gfx` 73.9% (but counted as 0 for its
+voxel/water modules elsewhere), `fabric-graph` 88.4%, `traceability-core` 80.9%,
+`sharecli-fleet` 86.6%, `phenotype-config` 83.3%.
+
+Two honest options, both one commit:
+
+- **Ratchet the floor.** Set `--fail-under` to the measured value and require it never decrease.
+  Cheap, unblocks immediately, but the job keeps a name that claims 71%.
+- **Restore the tier model.** Define the lib/framework package list that ADR-040 actually means,
+  gate those crates at 71%/70% with `--packages`, and let the rest be measured but not gated.
+  Faithful to the ADR, requires choosing the crate list (the old names are gone).
+
+The threshold is the owner's call; I did not lower a quality gate unilaterally.
+
+## 8. Environment blockers observed this session
 
 - `cargo-tarpaulin` is Linux-only; macOS host has no backend.
 - Colima/Docker socket absent (`~/.colima/default/docker.sock`), so no local Linux container.
