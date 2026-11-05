@@ -149,9 +149,18 @@ Two honest options, both one commit:
   gate those crates at 71%/70% with `--packages`, and let the rest be measured but not gated.
   Faithful to the ADR, requires choosing the crate list (the old names are gone).
 
-The threshold is the owner's call; I did not lower a quality gate unilaterally.
+The threshold was decided on 2026-11-05: **ratchet, with an honest label.** A machine-readable tier
+list does not exist anywhere in the repo (the ADR's crate names are gone), so re-enabling 71% would
+have meant inventing a lib/framework classification out of thin air. `a5587ba4` instead:
 
-## 9. Local-only commits: what was salvaged (2026-11-05)
+- renames the job to `Root workspace coverage (whole workspace — ≥37%)`, matching the convention the
+  IAC job already uses ("the display name states the ENFORCED floor")
+- sets `--fail-under 37` in the workflow, `fail-under = 37` in `tarpaulin.toml`, and aligns
+  `scripts/coverage-gate.sh` (root 37, IAC 10) so one number exists in all three places
+- records in each file that the per-tier model needs a machine-readable crate list before the number
+  can rise
+
+## 8. Local-only commits: what was salvaged (2026-11-05)
 
 The risk in section 5 was committed work that existed only on this disk. Status:
 
@@ -171,12 +180,20 @@ Tracera was the genuine case: its 2 docs commits are **not** in `origin/main` an
 so a plain push is rejected and a rebase would rewrite weeks of drift. Publishing them as
 `docs/handbook-and-readme-20260918` preserves them without touching main.
 
-PhenoTooling is the one real problem left: an archived origin means its unpushed security bump and
-**1747 dirty paths** (a ~1560-file username redaction sweep, 188 deleted .NET build artifacts, plus
-an untracked `crates/pheno-schema-port`) cannot be pushed anywhere until the repo is unarchived or
-the work is moved to another remote. Nothing there is a secret; largest dirty files are text.
+PhenoTooling is preserved locally instead, since its origin is read-only. The 1747 dirty paths
+turned out to be a finished redaction sweep (operator identity → `<REDACTED>` across ~1560 files),
+188 deleted .NET `bin`/`obj` DLLs, and one untracked crate; no secrets, and the newest dirty file was
+three weeks old, so nothing was in flight. Actions taken:
 
-## 10. promptscrape: end-to-end verified (was the cut lane)
+- branch `chore/redaction-and-artifact-sweep`, two commits: the sweep itself, then a `.gitignore`
+  rule so the .NET trees cannot come back
+- working tree now clean, original `security/h2-0.4.19-p30` ref untouched
+- full backup at `~/Exports/backups/PhenoTooling-20261104-2359-with-sweep.bundle` (404 MB, `--all`,
+  so every ref including the new one)
+
+Unarchiving the GitHub repo is the only way to get any of it off this disk.
+
+## 9. promptscrape: end-to-end verified (was the cut lane)
 
 Run from the built binary against live data, all three resolution paths:
 
@@ -189,7 +206,7 @@ Purity check on the 62 prompts for `[auto]`, todo nudges, system reminders and s
 
 Full log: `~/.jcode/scratch/promptscrape-e2e.md`.
 
-## 11. Environment blockers observed this session
+## 10. Environment blockers observed this session
 
 - `cargo-tarpaulin` is Linux-only; macOS host has no backend.
 - Colima/Docker socket absent (`~/.colima/default/docker.sock`), so no local Linux container.
