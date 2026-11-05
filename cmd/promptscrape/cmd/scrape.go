@@ -27,9 +27,12 @@ The session id is derived automatically:
   3. the session whose working directory matches the current directory
   4. the most recently updated session
 
-Only real human prompts are returned. Harness-injected context (system
-reminders, environment context, permissions, AGENTS.md) and tool results are
-filtered out.`,
+Only real human prompts are returned. Filtered out: harness-injected context
+(system reminders, environment context, permissions, AGENTS.md), harness
+notices (auto-continuations, todo nudges, background-task and swarm
+notifications, tool-media placeholders, safety-review prompts), tool results
+and rendered agent transcripts. Injected blocks embedded in a genuine prompt
+are stripped, not kept.`,
 	Example: `  promptscrape scrape
   promptscrape scrape ~/Exports/lane-walkthrough.html
   promptscrape scrape --session session_pig_1792638703385_34d0c212ece1d6b9
