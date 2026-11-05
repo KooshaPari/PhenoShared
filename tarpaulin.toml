@@ -21,4 +21,9 @@ output-dir = "target/tarpaulin-report"
 # test response" -- which is how the root coverage gate failed on
 # crates/sharecli/tests/fr007_proc_pid_watch.rs (3 x 30s watch dwell = 90s).
 timeout = "180s"
-features = "all"
+# No `features = "all"` here. That value is not a cargo feature name, and once
+# the config above started parsing again tarpaulin passed it straight through to
+# cargo, which failed the whole job with "none of the selected packages contains
+# this feature: all". The workspace has been building under tarpaulin with
+# default features (the setting never took effect while the file was being
+# discarded), so default features are what the gate measures.
