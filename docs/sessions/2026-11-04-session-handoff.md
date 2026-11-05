@@ -86,7 +86,28 @@ Scratch worktrees holding earlier hamster work are deleted.
 6. Open decisions that are not code: legal/RUSTSEC dependency dispositions, and the saturated CI
    queue observed earlier.
 
-## 6. Environment blockers observed this session
+## 6. CI census at `cd8c0d1c` (nothing above is CI-validated yet)
+
+Main branch protection has **no required status checks**, so every failure below is invisible at
+merge time. That is the real defect; the individual red jobs are symptoms.
+
+| Gate | Run | Failure |
+|---|---|---|
+| Coverage Gate (Tier-2) | 41394778746 | root tarpaulin killed at 60s on `fr007_proc_pid_watch` — addressed by `cc6dceed` + `58d51bd3` |
+| cargo-deny (push) | 41394778751 | advisories: `webpki-roots` RUSTSEC, yanked `chacha20 0.10.1` in `iac/Cargo.lock` |
+| Dependency Audit | 41505842523 | licences: `winfsp-sys` GPL-3.0 (product/legal call) |
+| Security | 41545065359 | `lru 0.12.5` RUSTSEC-2026-0002/0253, `crypto-bigint` RUSTSEC-2026-0387; Gitleaks backlog ~1453 lines |
+| Trufflehog | 41394778729 | workflow bug: `BASE == HEAD` on push to main |
+| Trunk Check | 41394778716 | pinned `trunk-io/trunk-action` SHA no longer resolves |
+| OpenSSF Scorecard | 41394778682 | pinned `github/codeql-action` SHA no longer resolves |
+| Quality Ratchet | 41394778689 | `npm ci` hits `EUNSUPPORTEDPROTOCOL` on `workspace:*` — repo is bun/pnpm |
+| Nightly CVP | 41839290304 | 27 landing errors / 37 sites (workflow demands `src/pages/index.astro`, only 11 have it); docs-3 placeholder `SUP-<...>` at `docs/atlas/portfolio/topic-proposals.json` index 29 |
+
+Also open: 11 PRs, 25 local branches (several `[gone]`), sibling worktree `PhenoShared-d1-nontq`
+dirty (7 files) and 154 behind, IAC `fail-under` still 10, 21 branches awaiting `-D` approval,
+89 workflows in the fan-out.
+
+## 7. Environment blockers observed this session
 
 - `cargo-tarpaulin` is Linux-only; macOS host has no backend.
 - Colima/Docker socket absent (`~/.colima/default/docker.sock`), so no local Linux container.
