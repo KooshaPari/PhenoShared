@@ -48,6 +48,16 @@ Two commits fix it:
 
 `cargo test -p sharecli --test fr007_proc_pid_watch` → 9 passed / 0 failed, ~30.06s, twice.
 
+Pushing that fix surfaced a second, latent defect in the same file: `features = "all"`. It had been
+inert while the config was discarded, and the moment the file parsed again tarpaulin forwarded it to
+cargo, which aborted with `none of the selected packages contains this feature: all` — every crate
+in the workspace lacks a feature by that name. Fixed in `1f01b931` by removing the key; default
+features are what the gate always measured in practice.
+
+Sequence, for the record: run 41394778746 failed on the 60s test timeout → run 41943272699 failed
+at `cargo metadata` on `features = "all"` (config now being honoured) → run 41943965243 got past
+metadata and into the coverage run itself.
+
 **Not verified:** the coverage gate itself. It needs Linux (`cargo-tarpaulin` has no macOS
 backend) and the local Colima/Docker daemon is down, so there is no container to run it in.
 
