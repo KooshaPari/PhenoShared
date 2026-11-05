@@ -159,12 +159,17 @@ The risk in section 5 was committed work that existed only on this disk. Status:
 |---|---|---|
 | phenotype-registry | 3 on `fix/scorecard-perms-and-prettier` | **pushed** (`4a7579552..c68b1b8fa`), pre-push grade A+ 20/20 |
 | Tracera | 2 docs commits on `main`, branch 231 behind | **salvaged** to new branch `docs/handbook-and-readme-20260918`; `main` untouched |
-| pheno | 4 on `integrate-20261102`, tracked `origin/main` (21 behind) | pushed to a same-named remote branch |
+| pheno | 4 on `integrate-20261102` | **not at risk**: `KooshaPari/pheno` redirects to PhenoShared, and the tip is an ancestor of `origin/main`. Branch pushed then deleted again. |
 | PhenoTooling | 1 (`h2 0.4.15→0.4.19`) | **blocked: the GitHub repo is archived, remote returns 403** |
 
-Tracera and pheno both had the same trap: local branch ahead of a stale base, so a plain push is
-rejected and a rebase would have rewritten weeks of drift. Publishing the local branch under its own
-name preserves the work without pretending it lands on main.
+The `pheno` directory turned out to be a **stale clone of this same repository** — GitHub redirects
+`KooshaPari/pheno` to `PhenoShared`, and `git merge-base --is-ancestor` confirms its HEAD is already
+contained in `origin/main`. So those four "unpushed" commits were never at risk; the apparent
+divergence was just an old clone behind main. No action needed there.
+
+Tracera was the genuine case: its 2 docs commits are **not** in `origin/main` and main is 231 behind,
+so a plain push is rejected and a rebase would rewrite weeks of drift. Publishing them as
+`docs/handbook-and-readme-20260918` preserves them without touching main.
 
 PhenoTooling is the one real problem left: an archived origin means its unpushed security bump and
 **1747 dirty paths** (a ~1560-file username redaction sweep, 188 deleted .NET build artifacts, plus
