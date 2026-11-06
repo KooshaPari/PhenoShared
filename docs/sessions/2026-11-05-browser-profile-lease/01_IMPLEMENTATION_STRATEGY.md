@@ -78,3 +78,42 @@ The live tests prove, not simulate:
 5. release seals the generation and lets the next agent take over;
 6. the viewer returns a PNG for the exact lease, 404 for an unknown one, and 401
    without the token.
+
+## Follow-up: lease-fenced handles (2026-11-06)
+
+A later pass changed how callers reach the browser. `BrowserHandle` no longer
+exposes a raw `&mut CdpProvider`. The provider guard is private to the module,
+so a caller can only ask for a named action: `open`, `snapshot`, `click`,
+`type_into`, `wait_for_text`, `screenshot`, `eval`, `title`, `url`, `pid`.
+Authority therefore cannot be held past the check that granted it.
+
+### Lease re-validation
+
+`LeaseGuard` (`src/lease_guard.rs`) re-proves the lease against the on-disk
+`LeaseManager`: the record still exists, it has not expired on the manager's
+clock, and the presented fencing token is still current. Any failure is an
+error; there is no degraded mode.
+
+Each action runs that check twice: before taking the browser, and again after
+the wait for the browser, because waiting may have outlived the lease.
+
+### Bounded waits
+
+The wait for the browser is capped at 30 seconds. A DevTools call that stays
+stuck returns `BrokerError::Busy` instead of wedging `release`, `reap`, or
+`acquire`.
+
+`shutdown()` is bounded on the same budget. `CdpProvider` kills its child on
+drop, so a close that times out cannot leave a live browser behind.
+
+### Module layout
+
+`BrowserHandle` lives in its own module, `src/handle.rs`, and `lib.rs` is 460
+lines, under the 500-line limit.
+
+### Residual risk, still open
+
+- An action already in flight when the lease expires can complete. Enforcement
+  is per-action, not per-CDP-message.
+- Cross-process authority rests on the on-disk lease and its file lock. That
+  path has not been soak-tested.

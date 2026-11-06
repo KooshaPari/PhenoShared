@@ -195,3 +195,69 @@ fn profile_directories_are_owner_only() {
         "browser data directories must not be group/world readable"
     );
 }
+
+#[test]
+fn rejects_path_traversal_in_profile_components() {
+    let dir = tempfile::tempdir().expect("tempdir");
+    let root = dir.path().join("state");
+    let store = ProfileStore::new(&root).expect("store");
+
+    for (principal, profile) in [
+        ("../escape", "work"),
+        ("alice", "../../escape"),
+        ("alice", ".."),
+        ("alice/b", "work"),
+        ("", "work"),
+        ("alice", "Work"),
+    ] {
+        let outcome = store.ensure(principal, profile);
+        assert!(
+            outcome.is_err(),
+            "escaping component {principal:?}/{profile:?} must be refused"
+        );
+    }
+
+    // Nothing was written outside the profiles root.
+    let escaped = dir.path().join("escape");
+    assert!(
+        !escaped.exists(),
+        "a refused component must not create a directory outside the store"
+    );
+}
+
+#[test]
+fn concurrent_generation_creation_does_not_lose_writes() {
+    use std::sync::Arc;
+
+    let dir = tempfile::tempdir().expect("tempdir");
+    let store = Arc::new(ProfileStore::new(dir.path().join("state")).expect("store"));
+    store.ensure("alice", "work").expect("seed");
+
+    let mut handles = Vec::new();
+    for _ in 0..4 {
+        let store = store.clone();
+        handles.push(std::thread::spawn(move || {
+            for _ in 0..5 {
+                store.rotate("alice", "work").expect("rotate");
+            }
+        }));
+    }
+    for handle in handles {
+        handle.join().expect("join");
+    }
+
+    let generations = store.generations("alice", "work").expect("generations");
+    assert_eq!(
+        generations.len(),
+        1 + 4 * 5,
+        "the manifest read-modify-write must not drop concurrent rotations"
+    );
+    let mut ids: Vec<u64> = generations.iter().map(|g| g.id).collect();
+    ids.sort_unstable();
+    ids.dedup();
+    assert_eq!(
+        ids.len(),
+        generations.len(),
+        "generation ids must be unique"
+    );
+}
