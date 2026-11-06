@@ -1,0 +1,23 @@
+name: cargo-semver-checks
+
+permissions: read-all
+
+on:
+  pull_request:
+    paths:
+      - 'Cargo.toml'
+      - 'crates/**/Cargo.toml'
+      - 'crates/**/src/**'
+  workflow_dispatch:
+jobs:
+  semver-checks:
+    if: github.event_name == 'workflow_dispatch' || github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7 # v4.1.1
+        with:
+          fetch-depth: 0
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: obi1kenobi/cargo-semver-checks-action@v2
+        with:
+          package: sidekick-messaging

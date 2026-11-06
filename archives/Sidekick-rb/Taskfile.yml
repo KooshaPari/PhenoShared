@@ -1,0 +1,9 @@
+version: '3'
+tasks:
+  default: { desc: List tasks, cmds: [task --list-all] }
+  build: { desc: cargo build, cmds: [cargo build --workspace] }
+  test: { desc: cargo test, cmds: [cargo test --workspace] }
+  lint: { desc: cargo clippy + fmt --check, cmds: [cargo clippy --workspace -- -D warnings, cargo fmt --check] }
+  fmt: { desc: cargo fmt, cmds: [cargo fmt] }
+  audit: { desc: cargo deny + audit, cmds: [cargo deny check, cargo audit] }
+  ci: { desc: lint + test + audit, cmds: [{task: lint}, {task: test}, {task: audit}] }

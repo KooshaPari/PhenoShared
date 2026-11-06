@@ -1,0 +1,33 @@
+name: cargo-deny
+
+permissions: read-all
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'Cargo.toml'
+      - 'Cargo.lock'
+  push:
+    branches:
+      - main
+    paths:
+      - 'Cargo.toml'
+      - 'Cargo.lock'
+  schedule:
+    - cron: '0 9 * * 1'
+
+jobs:
+  cargo-deny:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Run cargo-deny
+        uses: EmbarkStudios/cargo-deny-action@3c6349835b2b7b196a839186cb8b78e02f7b5f25 # v6
+        with:
+          rust-version: stable

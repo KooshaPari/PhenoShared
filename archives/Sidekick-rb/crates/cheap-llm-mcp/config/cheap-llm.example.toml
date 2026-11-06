@@ -1,0 +1,36 @@
+default_provider = "minimax"
+default_variant = "highspeed"
+# monthly_cost_cap_usd = 50.0
+# cache_ttl_seconds = 300  # dev-loop cache for temp=0 queries; 0 disables
+
+[providers.minimax]
+base_url = "https://api.minimax.io/v1"
+# for China: "https://api.minimaxi.com/v1"
+api_key_env = "MINIMAX_API_KEY"
+default_model = "MiniMax-M2.7-highspeed"
+timeout_s = 120.0
+max_tokens = 8192
+
+[providers.minimax.variants]
+base = "MiniMax-M2.7"
+highspeed = "MiniMax-M2.7-highspeed"
+codex = "MiniMax-M2.7"  # no dedicated codex variant; M2.7 is strong at code
+
+[providers.kimi]
+base_url = "https://api.moonshot.ai/v1"
+api_key_env = "MOONSHOT_API_KEY"
+default_model = "kimi-k2-turbo-preview"
+timeout_s = 120.0
+
+[providers.kimi.variants]
+turbo = "kimi-k2-turbo-preview"
+
+[providers.fireworks]
+base_url = "https://api.fireworks.ai/inference/v1"
+api_key_env = "FIREWORKS_API_KEY"
+default_model = "accounts/fireworks/models/minimax-m2p7"
+timeout_s = 120.0
+
+[providers.fireworks.variants]
+minimax = "accounts/fireworks/models/minimax-m2p7"
+kimi = "accounts/fireworks/models/kimi-k2-instruct"

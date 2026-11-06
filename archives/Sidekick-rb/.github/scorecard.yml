@@ -1,0 +1,11 @@
+# OpenSSF Scorecard configuration
+# Docs: https://github.com/ossf/scorecard
+# Validates supply-chain hygiene signals surfaced on the repo's scorecard page.
+checks:
+  - Branch-Protection
+  - Code-Review
+  - Dangerous-Workflow
+  - Dependency-Update-Tool
+  - SAST
+  - Security-Policy
+  - Token-Permissions

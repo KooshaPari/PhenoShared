@@ -1,0 +1,31 @@
+set shell := ["bash", "-eu", "-o", "pipefail", "-c"]
+
+# List available recipes
+default:
+    just --list
+
+# Start the MCP server in development mode
+dev:
+    PYTHONPATH=src python3 -m cheap_llm_mcp
+
+# Build release artifacts
+build:
+    uv build --wheel --out-dir dist
+
+# Run the test suite
+test:
+    PYTHONPATH=src python3 -m pytest -q
+
+# Run linter
+lint:
+    ruff check src/ tests/
+
+# Apply formatter
+fmt:
+    ruff format src/ tests/
+
+# Remove build artifacts
+clean:
+    rm -rf build dist *.egg-info .pytest_cache .ruff_cache
+    find . -type d -name __pycache__ -prune -exec rm -rf {} +
+    find . -type f -name "*.pyc" -delete

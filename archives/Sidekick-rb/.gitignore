@@ -1,0 +1,5 @@
+crates/sidekick-cheap-llm/
+crates/sidekick-presence/
+
+# Rust build artifacts
+/target

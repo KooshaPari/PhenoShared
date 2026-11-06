@@ -1,0 +1,44 @@
+version: 2
+updates:
+  - package-ecosystem: "cargo"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "tuesday"
+    open-pull-requests-limit: 10
+    labels: ["dependencies", "rust"]
+    groups:
+      patches:
+        applies-to: version-updates
+        update-types: ["patch"]
+      minor:
+        applies-to: version-updates
+        update-types: ["minor"]
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+    labels: ["dependencies", "ci"]
+  - package-ecosystem: "npm"
+    directory: "/docs"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+    labels: ["dependencies", "docs"]
+    ignore:
+      # GHSA-v6wh-96g9-6wx3 (alert #21, launch-editor NTLMv2 hash disclosure) and
+      # GHSA-fx2h-pf6j-xcff (alert #20, vite server.fs.deny bypass): patched only in
+      # vite 6.4.x; vitepress 1.6.4 (latest stable) pins vite ^5.4.14, so 6.x is
+      # unreachable without an incompatible major bump. Revisit when vitepress 2.x
+      # (currently alpha) stabilizes on vite 6.
+      - dependency-name: "vite"
+        versions: [">= 6.0.0, < 6.4.3"]
+      # GHSA-4w7w-66w2-5vf9 (alert #19, vite path traversal in optimized deps .map):
+      # patched in vite 6.4.2; same vitepress 1.6.4 -> vite ^5.4.14 ceiling applies.
+      - dependency-name: "vite"
+        versions: [">= 6.0.0, < 6.4.2"]
+      # GHSA-67mh-4wv8-2f99 (alert #18, esbuild dev server CORS/request issue):
+      # patched in esbuild 0.25.0; vite 5.4.21 (max compatible) pins esbuild ^0.21.3.
+      - dependency-name: "esbuild"
+        versions: [">= 0.25.0"]
