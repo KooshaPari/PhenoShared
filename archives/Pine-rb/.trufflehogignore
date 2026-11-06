@@ -1,0 +1,54 @@
+# TruffleHog ignore patterns
+# Files and patterns to exclude from secrets scanning.
+# TruffleHog v3 supports --exclude-paths which takes a regex file.
+
+# Test fixture files contain real binary data (PE/ELF/Mach-O headers,
+# assembly bytes, syscall tables) that the entropy detector flags as
+# potential secrets. These are well-known public formats, not real
+# credentials.
+
+# All test files (these contain intentional binary fixture data)
+.*/tests/.*\.rs
+.*/tests/.*\.py
+.*/tests/.*\.sh
+.*/tests/.*\.txt
+.*/tests/.*\.bin
+.*/tests/.*\.elf
+.*/tests/.*\.pe
+.*/tests/.*\.macho
+.*/tests/.*\.so
+.*/tests/.*\.dll
+.*/tests/fixtures/.*
+.*/fixtures/.*
+
+# Example/sample code that includes placeholder API keys/tokens
+.*/examples/.*
+.*/example/.*
+
+# Documentation samples
+.*\.md
+README\.md
+.*/CHANGELOG\.md
+
+# License files
+LICENSE
+LICENSE-.*
+NOTICE
+
+# Build artifacts
+target/
+dist/
+build/
+.*\.lock$
+.*\.lockb$
+
+# Generated files
+.*\.generated\.*
+.*/gen/.*
+
+# Vendor/third-party
+vendor/
+third[_-]party/
+node_modules/
+\.cargo/
+\.git/
