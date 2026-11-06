@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" style="display:none">
+  <symbol id="icon-branch" viewBox="0 0 24 24" role="img">
+    <title>Branch</title><desc>branch icon (fluent)</desc>
+    <path d="M18 9a9 9 0 0 1-9 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  </symbol>
+  <symbol id="icon-branch-outline" viewBox="0 0 24 24" role="img">
+    <title>Branch Outline</title><desc>branch outline icon (material)</desc>
+    <path d="M18 9a9 9 0 0 1-9 9" fill="currentColor"/>
+  </symbol>
+  <symbol id="icon-dashboard" viewBox="0 0 24 24" role="img">
+    <title>Dashboard</title><desc>dashboard icon (fluent)</desc>
+    <path d="M3 3h7v9H3z M14 3h7v5h-7z M14 12h7v9h-7z M3 16h7v5H3z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  </symbol>
+  <symbol id="icon-dashboard-outline" viewBox="0 0 24 24" role="img">
+    <title>Dashboard Outline</title><desc>dashboard outline icon (material)</desc>
+    <path d="M3 3h7v9H3z M14 3h7v5h-7z M14 12h7v9h-7z M3 16h7v5H3z" fill="currentColor"/>
+  </symbol>
+  <symbol id="icon-home" viewBox="0 0 24 24" role="img">
+    <title>Home</title><desc>home icon (fluent)</desc>
+    <path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  </symbol>
+  <symbol id="icon-home-outline" viewBox="0 0 24 24" role="img">
+    <title>Home Outline</title><desc>home outline icon (material)</desc>
+    <path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5z" fill="currentColor"/>
+  </symbol>
+  <symbol id="icon-package" viewBox="0 0 24 24" role="img">
+    <title>Package</title><desc>package icon (fluent)</desc>
+    <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  </symbol>
+  <symbol id="icon-package-outline" viewBox="0 0 24 24" role="img">
+    <title>Package Outline</title><desc>package outline icon (material)</desc>
+    <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" fill="currentColor"/>
+  </symbol>
+  <symbol id="icon-plugin" viewBox="0 0 24 24" role="img">
+    <title>Plugin</title><desc>plugin icon (fluent)</desc>
+    <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  </symbol>
+  <symbol id="icon-plugin-outline" viewBox="0 0 24 24" role="img">
+    <title>Plugin Outline</title><desc>plugin outline icon (material)</desc>
+    <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" fill="currentColor"/>
+  </symbol>
+  <symbol id="icon-search" viewBox="0 0 24 24" role="img">
+    <title>Search</title><desc>search icon (fluent)</desc>
+    <path d="M21 21 L16.65 16.65 M11 19a8 8 0 1 0-16 8 8 8 0 0 0 16z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  </symbol>
+  <symbol id="icon-search-outline" viewBox="0 0 24 24" role="img">
+    <title>Search Outline</title><desc>search outline icon (material)</desc>
+    <path d="M21 21 L16.65 16.65 M11 19a8 8 0 1 0-16 8 8 8 0 0 0 16z" fill="currentColor"/>
+  </symbol>
+  <symbol id="icon-settings" viewBox="0 0 24 24" role="img">
+    <title>Settings</title><desc>settings icon (fluent)</desc>
+    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  </symbol>
+  <symbol id="icon-settings-outline" viewBox="0 0 24 24" role="img">
+    <title>Settings Outline</title><desc>settings outline icon (material)</desc>
+    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" fill="currentColor"/>
+  </symbol>
+  <symbol id="icon-terminal" viewBox="0 0 24 24" role="img">
+    <title>Terminal</title><desc>terminal icon (fluent)</desc>
+    <path d="M4 17l6-6-6-6 M12 19h8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  </symbol>
+  <symbol id="icon-terminal-outline" viewBox="0 0 24 24" role="img">
+    <title>Terminal Outline</title><desc>terminal outline icon (material)</desc>
+    <path d="M4 17l6-6-6-6 M12 19h8" fill="currentColor"/>
+  </symbol>
+  <symbol id="icon-user" viewBox="0 0 24 24" role="img">
+    <title>User</title><desc>user icon (fluent)</desc>
+    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  </symbol>
+  <symbol id="icon-user-outline" viewBox="0 0 24 24" role="img">
+    <title>User Outline</title><desc>user outline icon (material)</desc>
+    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" fill="currentColor"/>
+  </symbol>
+  <symbol id="icon-workflow" viewBox="0 0 24 24" role="img">
+    <title>Workflow</title><desc>workflow icon (fluent)</desc>
+    <path d="M16 18l6-6-6-6 M8 6l-6 6 6 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  </symbol>
+  <symbol id="icon-workflow-outline" viewBox="0 0 24 24" role="img">
+    <title>Workflow Outline</title><desc>workflow outline icon (material)</desc>
+    <path d="M16 18l6-6-6-6 M8 6l-6 6 6 12" fill="currentColor"/>
+  </symbol>
+</svg>
