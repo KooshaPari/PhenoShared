@@ -13,6 +13,15 @@ permissions:
 jobs:
   scorecard:
     runs-on: ubuntu-latest
+    # These were referenced by the Check-score and update-badge jobs but never
+    # declared, so actionlint flagged "property score is not defined" and the
+    # downstream jobs silently received empty strings.
+    outputs:
+      score: ${{ steps.audit.outputs.score }}
+      total: ${{ steps.audit.outputs.total }}
+      percentage: ${{ steps.audit.outputs.percentage }}
+      threshold: ${{ steps.audit.outputs.threshold }}
+      passed: ${{ steps.audit.outputs.passed }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -29,6 +38,7 @@ jobs:
           
           # Run audit in JSON mode
           python scripts/scorecard_ci.py . --output json --threshold "$THRESHOLD" --fail-on-drop > scorecard-report.json 2> scorecard-stderr.txt || EXIT_CODE=$?
+          if [ "${EXIT_CODE:-0}" -ne 0 ]; then echo "audit exited ${EXIT_CODE}" >&2; fi
           
           # Extract score
           SCORE=$(python -c "import json; r=json.load(open('scorecard-report.json')); print(r['score'])")
@@ -36,34 +46,40 @@ jobs:
           PCT=$(python -c "import json; r=json.load(open('scorecard-report.json')); print(f\"{r['percentage']:.1f}\")")
           
           # Generate markdown summary
-          echo "## 88-Pillar Scorecard Result" > scorecard-summary.md
-          echo "" >> scorecard-summary.md
-          echo "| Metric | Value |" >> scorecard-summary.md
-          echo "|--------|-------|" >> scorecard-summary.md
-          echo "| **Score** | **${SCORE}/${TOTAL}** (${PCT}%) |" >> scorecard-summary.md
-          echo "| **Threshold** | ${THRESHOLD} |" >> scorecard-summary.md
-          echo "| **Status** | $( [ "$SCORE" -ge "$THRESHOLD" ] && echo "PASS" || echo "FAIL" ) |" >> scorecard-summary.md
-          echo "" >> scorecard-summary.md
+          {
+            echo "## 88-Pillar Scorecard Result"
+            echo ""
+            echo "| Metric | Value |"
+            echo "|--------|-------|"
+            echo "| **Score** | **${SCORE}/${TOTAL}** (${PCT}%) |"
+            echo "| **Threshold** | ${THRESHOLD} |"
+            echo "| **Status** | $( [ "$SCORE" -ge "$THRESHOLD" ] && echo "PASS" || echo "FAIL" ) |"
+            echo ""
+          } > scorecard-summary.md
           
           # List failed pillars
           if [ "$SCORE" -lt "$THRESHOLD" ]; then
-            echo "### Failed Pillars" >> scorecard-summary.md
-            echo "" >> scorecard-summary.md
-            python -c "
+            {
+              echo "### Failed Pillars"
+              echo ""
+              python -c "
           import json
           r = json.load(open('scorecard-report.json'))
           for item in r['results']:
               if not item['passed']:
                   print(f'- [ ] Pillar #{item[\"id\"]}: **{item[\"name\"]}**')
-          " >> scorecard-summary.md
+          "
+            } >> scorecard-summary.md
           fi
           
           # Set outputs
-          echo "score=${SCORE}" >> "$GITHUB_OUTPUT"
-          echo "total=${TOTAL}" >> "$GITHUB_OUTPUT"
-          echo "percentage=${PCT}" >> "$GITHUB_OUTPUT"
-          echo "threshold=${THRESHOLD}" >> "$GITHUB_OUTPUT"
-          echo "passed=$( [ "$SCORE" -ge "$THRESHOLD" ] && echo true || echo false )" >> "$GITHUB_OUTPUT"
+          {
+            echo "score=${SCORE}"
+            echo "total=${TOTAL}"
+            echo "percentage=${PCT}"
+            echo "threshold=${THRESHOLD}"
+            echo "passed=$( [ "$SCORE" -ge "$THRESHOLD" ] && echo true || echo false )"
+          } >> "$GITHUB_OUTPUT"
           
           # Post PR comment if applicable
           if [ "${{ github.event_name }}" = "pull_request" ]; then
@@ -124,7 +140,7 @@ jobs:
             COLOR="red"
           fi
           
-          BADGE_URL="https://img.shields.io/badge/scorecard-${SCORE}%2F${TOTAL}-${COLOR}"
+          BADGE_URL="https://img.shields.io/badge/scorecard-${SCORE}%2F${TOTAL}%20(${PCT}%25)-${COLOR}"
           echo "Badge URL: ${BADGE_URL}"
           
           # Update README badge if it exists
