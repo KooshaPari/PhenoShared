@@ -1,0 +1,9 @@
+This archive was imported without its .github/ directory.
+
+The original contained CI workflow files that reference actions which no longer
+resolve (their repos were deleted), and PhenoShared's pin-integrity and lint
+scanners walk the entire tree. Keeping them would break this repository's own CI
+for no benefit - nested workflows are inert for execution anyway.
+
+To restore: the full original tree is in the recovered repo at
+CodeProjects/temp/recovery-clean-20261106/Quillr-rb-repo

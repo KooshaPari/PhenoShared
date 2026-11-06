@@ -1,0 +1,35 @@
+{
+  "name": "@kooshapari/quillts",
+  "version": "0.1.0",
+  "description": "Phenotype quill library",
+  "license": "MIT",
+  "repository": "https://github.com/KooshaPari/quill",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "scripts": {
+    "build": "tsc",
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage",
+    "lint": "eslint src --ext .ts",
+    "format": "prettier --write \"src/**/*.{ts,json,md}\"",
+    "format:check": "prettier --check \"src/**/*.{ts,json,md}\"",
+    "check": "tsc --noEmit",
+    "typecheck": "tsc --noEmit",
+    "traceability": "node scripts/verify-traceability.mjs",
+    "quality": "npm run format:check && npm run lint && npm run typecheck && npm run test:coverage && npm run traceability && npm run build"
+  },
+  "devDependencies": {
+    "@types/node": "^26.1.0",
+    "@typescript-eslint/eslint-plugin": "^8.62.1",
+    "@typescript-eslint/parser": "^8.62.1",
+    "@vitest/coverage-v8": "^4.1.9",
+    "eslint": "^10.6.0",
+    "prettier": "^3.4.2",
+    "typescript": "^6.0.3",
+    "vitest": "^5.0.0"
+  }
+}

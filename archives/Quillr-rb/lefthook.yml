@@ -1,0 +1,49 @@
+# Lefthook configuration — mirrors .githooks/pre-commit & pre-push
+# Install: lefthook install
+# Manual run: lefthook run pre-commit
+
+pre-commit:
+  parallel: true
+  commands:
+    fr-annotations:
+      glob: "(*_test.rs|tests?/*.rs|*.test.{ts,js,py,go})"
+      run: |
+        for file in {staged_files}; do
+          if ! grep -qE '(// FR:|// @FR|# FR:|# @FR|\* FR:|\* @FR|//fr |#fr )' "$file" 2>/dev/null; then
+            echo "⚠️  No FR annotation found in: $file"
+          fi
+        done
+
+    rustfmt:
+      glob: "*.rs"
+      run: rustfmt --check {staged_files}
+      stage_fixed: true
+
+    clippy:
+      glob: "*.rs"
+      run: cargo clippy --all-features -- -D warnings
+
+    prettier:
+      glob: "*.{ts,tsx,js,jsx,json,md,yml,yaml}"
+      run: npx prettier --check {staged_files}
+
+    ruff:
+      glob: "*.py"
+      run: ruff check {staged_files}
+
+    ruff-format:
+      glob: "*.py"
+      run: ruff format --check {staged_files}
+
+    biome:
+      glob: "*.{ts,tsx,js,jsx,json}"
+      run: npx @biomejs/biome check {staged_files}
+
+pre-push:
+  commands:
+    cargo-test:
+      run: cargo test --all-features
+    cargo-clippy:
+      run: cargo clippy --all-features -- -D warnings
+    cargo-fmt:
+      run: cargo fmt --check
