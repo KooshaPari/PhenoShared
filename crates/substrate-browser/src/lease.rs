@@ -91,7 +91,9 @@ static SEQUENCE: AtomicU64 = AtomicU64::new(0);
 
 fn unique_id() -> String {
     let seq = SEQUENCE.fetch_add(1, Ordering::Relaxed);
-    format!("lease-{:x}-{:x}", now_unix_ms(), seq)
+    // The atomic counter is process-local, so include the pid: two processes
+    // issuing a lease in the same millisecond would otherwise collide.
+    format!("lease-{:x}-{}-{:x}", now_unix_ms(), std::process::id(), seq)
 }
 
 /// Grants, renews, revokes and validates profile leases.
@@ -265,6 +267,12 @@ impl LeaseManager {
 
     /// Validate that `fencing_token` still authorises work under lease `id`.
     pub fn validate(&self, id: &str, fencing_token: u64) -> Result<Lease> {
+        // Read the lease and the fence under one lock: a revoke or a newer grant
+        // landing between the two reads would otherwise let a stale token pass.
+        self.with_lock(|| self.validate_locked(id, fencing_token))
+    }
+
+    fn validate_locked(&self, id: &str, fencing_token: u64) -> Result<Lease> {
         let lease = self.read_lease(id)?;
         let now = self.clock.now_unix_ms();
         if lease.expires_at_unix_ms <= now {

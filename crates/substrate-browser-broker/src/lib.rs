@@ -17,16 +17,44 @@
 //!
 //! Because the live session is keyed by lease id, an observer can ask for *that*
 //! lease's browser rather than guessing which process is which.
+//!
+//! # Fail-closed authority
+//!
+//! [`BrowserHandle`] is cloneable, so holding one does not authorise anything by
+//! itself. Every action re-validates the lease against the on-disk
+//! [`LeaseManager`] (existence, TTL and fencing token), which is the
+//! cross-process authority. Expired, revoked or superseded sessions are purged
+//! and their browser closed when this process is the last owner. Listing
+//! [`Broker::live`] is a hint, not an authorisation: act through
+//! [`Broker::browser`] or [`Broker::screenshot`], which re-check.
+//!
+//! # Lifecycle order
+//!
+//! Release stops the browser **first**, then revokes the lease, then seals the
+//! generation. If the browser cannot be stopped the lease is left in place and
+//! the generation is not sealed, so the profile cannot be handed to a new
+//! holder while an old browser is still running. Every clone of the handle is
+//! also revoked in-process at that moment, so a handle kept by a caller cannot
+//! touch the browser after release even if its lease record outlived the call.
+//!
+//! Remaining limitation: the broker can only stop browsers **it** launched. A
+//! browser left running by a crashed broker process is invisible to this
+//! process; the on-disk lease (advisory lock plus fencing token) is the only
+//! cross-process guard.
 
 #![deny(missing_docs)]
 
+mod handle;
+mod lease_guard;
 mod viewer;
 
 pub use viewer::{router, serve, ViewerConfig};
 
 // Re-exported so callers can build scopes and read leases without taking a
 // second direct dependency.
-pub use substrate_browser::{Lease, Scope};
+pub use handle::BrowserHandle;
+pub use lease_guard::LeaseGuard;
+pub use substrate_browser::{Clock, Lease, Scope};
 
 /// True when a Chrome-family binary is available for the broker to launch.
 pub fn browser_available() -> bool {
@@ -43,7 +71,7 @@ use std::{
 use substrate_browser::{LeaseManager, ProfileStore};
 use substrate_browser_cdp::{CdpError, CdpProvider};
 use thiserror::Error;
-use tokio::sync::{Mutex, RwLock};
+use tokio::sync::RwLock;
 
 /// Errors produced by the broker.
 #[derive(Debug, Error)]
@@ -68,32 +96,37 @@ pub enum BrokerError {
         /// Recorded holder.
         holder: String,
     },
+
+    /// The lease is still valid on disk, but its browser was already stopped
+    /// here (released, expired, superseded, or shut down).
+    #[error("browser for lease {lease} is no longer running")]
+    Released {
+        /// Lease identifier.
+        lease: String,
+    },
+
+    /// The profile already has a live browser in this process.
+    #[error("profile {scope} is already held by lease {lease}")]
+    ProfileBusy {
+        /// Principal and profile.
+        scope: String,
+        /// Lease currently holding it.
+        lease: String,
+    },
+
+    /// The browser was busy with another action for longer than the hold limit.
+    ///
+    /// Reported instead of waiting forever, so a stuck DevTools call cannot
+    /// wedge release, reaping or the next acquire.
+    #[error("browser for lease {lease} did not become available in time")]
+    Busy {
+        /// Lease identifier.
+        lease: String,
+    },
 }
 
 /// Result alias for this crate.
 pub type Result<T> = std::result::Result<T, BrokerError>;
-
-/// A handle to one live browser, shared between the caller and the viewer.
-#[derive(Clone)]
-pub struct BrowserHandle(Arc<Mutex<CdpProvider>>);
-
-impl BrowserHandle {
-    /// Lock the browser for exclusive use.
-    pub async fn lock(&self) -> tokio::sync::MutexGuard<'_, CdpProvider> {
-        self.0.lock().await
-    }
-
-    /// Operating system process id of the backing browser.
-    pub async fn pid(&self) -> Option<u32> {
-        self.0.lock().await.pid()
-    }
-}
-
-impl std::fmt::Debug for BrowserHandle {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        f.debug_struct("BrowserHandle").finish_non_exhaustive()
-    }
-}
 
 /// A live, lease-guarded browser.
 pub struct Acquired {
@@ -121,6 +154,7 @@ struct LiveSession {
     generation: u64,
     holder: String,
     expires_at_unix_ms: u64,
+    guard: LeaseGuard,
     browser: BrowserHandle,
 }
 
@@ -153,8 +187,15 @@ impl Broker {
     ///
     /// Creates `profiles/` and `leases/` beneath it.
     pub fn new(root: impl Into<PathBuf>) -> Result<Self> {
+        Self::with_clock(root, Arc::new(substrate_browser::SystemClock))
+    }
+
+    /// Open a broker whose lease authority uses an injected clock.
+    ///
+    /// Lets callers (and tests) observe TTL expiry without sleeping.
+    pub fn with_clock(root: impl Into<PathBuf>, clock: Arc<dyn Clock>) -> Result<Self> {
         let root = root.into();
-        let leases = Arc::new(LeaseManager::new(root.join("leases"))?);
+        let leases = Arc::new(LeaseManager::with_clock(root.join("leases"), clock)?);
         let store = ProfileStore::with_gate(root.join("profiles"), leases.clone())?;
         Ok(Self {
             root,
@@ -194,8 +235,39 @@ impl Broker {
         ttl: Duration,
     ) -> Result<Acquired> {
         let holder = holder.into();
+
+        // Close anything already expired in this process before deciding what
+        // the profile is free to do next.
+        self.reap_expired().await;
+
+        // One live browser per profile per process: a second launch against the
+        // same user data directory would corrupt it, so refuse while a session
+        // for this profile still exists (even one whose lease is still valid
+        // but whose handle has not been released yet).
+        if let Some(lease) = self
+            .sessions
+            .read()
+            .await
+            .iter()
+            .find(|(_, session)| session.scope.profile_key() == scope.profile_key())
+            .map(|(lease_id, _)| lease_id.clone())
+        {
+            return Err(BrokerError::ProfileBusy {
+                scope: scope.profile_key(),
+                lease,
+            });
+        }
+
         let generation = self.store.ensure(scope.principal(), scope.profile())?;
         let lease = self.leases.grant(scope, holder.clone(), ttl)?;
+        let guard = LeaseGuard::new(self.leases.clone(), &lease);
+
+        // Deny a lease that is already unusable (expired on the shared clock)
+        // before any browser exists.
+        if let Err(err) = guard.check() {
+            let _ = self.leases.revoke(&lease.id);
+            return Err(err);
+        }
 
         let data_dir = self
             .store
@@ -209,7 +281,15 @@ impl Broker {
             },
         };
 
-        let browser = BrowserHandle(Arc::new(Mutex::new(provider)));
+        // The lease can expire while the browser is starting. Never publish or
+        // hand out a browser whose lease is already dead: stop it first.
+        if let Err(err) = guard.check() {
+            let _ = provider.close().await;
+            let _ = self.leases.revoke(&lease.id);
+            return Err(err);
+        }
+
+        let browser = BrowserHandle::new(provider, guard.clone());
         self.sessions.write().await.insert(
             lease.id.clone(),
             LiveSession {
@@ -217,6 +297,7 @@ impl Broker {
                 generation,
                 holder,
                 expires_at_unix_ms: lease.expires_at_unix_ms,
+                guard,
                 browser: browser.clone(),
             },
         );
@@ -241,8 +322,9 @@ impl Broker {
 
     async fn release_inner(&self, acquired: Acquired, holder: Option<String>) -> Result<()> {
         let lease_id = acquired.lease.id.clone();
-        self.sessions.write().await.remove(&lease_id);
 
+        // Authorise before mutating anything: a non-holder must not be able to
+        // tear down somebody else's session as a side effect of a failed call.
         if let Some(holder) = holder {
             if holder != acquired.lease.holder {
                 return Err(BrokerError::NotHolder {
@@ -260,19 +342,34 @@ impl Broker {
         } = acquired;
 
         // Close the browser first: the generation may only be sealed once no
-        // live reader exists.
-        if let Ok(provider) = Arc::try_unwrap(browser.0) {
-            let _ = provider.into_inner().close().await;
-        }
-        let _ = self.leases.revoke(&lease.id);
-        let _ = self
+        // live reader exists. A failure here aborts the release, leaving the
+        // lease and generation in place so the profile cannot be reissued while
+        // the old browser is still running.
+        browser.shutdown().await?;
+        self.sessions.write().await.remove(&lease.id);
+
+        // An already-expired or already-revoked lease counts as revoked; only a
+        // real storage failure is reported. Sealing still runs either way.
+        let revoked = match self.leases.revoke(&lease.id) {
+            Ok(()) => Ok(()),
+            Err(substrate_browser::BrowserError::UnknownLease(_)) => Ok(()),
+            Err(err) => Err(err),
+        };
+        let sealed = self
             .store
             .seal(&lease.principal, &lease.profile, generation);
+        revoked?;
+        sealed?;
         Ok(())
     }
 
-    /// Every live session.
+    /// Every session whose lease is still valid.
+    ///
+    /// Purges expired, revoked and superseded sessions on the way through, so a
+    /// stale entry is never advertised as live. The listing is a hint: actions
+    /// re-validate via [`Broker::authorize`].
     pub async fn live(&self) -> Vec<LiveSessionInfo> {
+        self.reap_expired().await;
         self.sessions
             .read()
             .await
@@ -287,8 +384,52 @@ impl Broker {
             .collect()
     }
 
+    /// Drop sessions whose lease no longer validates, closing each browser when
+    /// this process is the last owner. Returns how many were reaped.
+    pub async fn reap_expired(&self) -> usize {
+        let stale: Vec<(String, BrowserHandle)> = {
+            let sessions = self.sessions.read().await;
+            sessions
+                .iter()
+                .filter(|(_, session)| session.guard.check().is_err())
+                .map(|(id, session)| (id.clone(), session.browser.clone()))
+                .collect()
+        };
+        let reaped = stale.len();
+        for (lease_id, browser) in stale {
+            self.purge(&lease_id, Some(browser)).await;
+        }
+        reaped
+    }
+
+    /// Authorise `lease_id`, returning its current lease record.
+    ///
+    /// A session whose lease expired, was revoked, or was superseded by a later
+    /// grant is purged and the error returned.
+    pub async fn authorize(&self, lease_id: &str) -> Result<Lease> {
+        let session = {
+            let sessions = self.sessions.read().await;
+            sessions
+                .get(lease_id)
+                .map(|session| (session.guard.clone(), session.browser.clone()))
+        };
+        let Some((guard, browser)) = session else {
+            return Err(BrokerError::NoSession(lease_id.to_string()));
+        };
+        match guard.check() {
+            Ok(lease) => Ok(lease),
+            Err(err) => {
+                // Do not revoke: a superseded profile may now belong to a newer
+                // holder, and an expired lease is already inert.
+                self.purge(lease_id, Some(browser)).await;
+                Err(err)
+            },
+        }
+    }
+
     /// The browser for a specific lease.
     pub async fn browser(&self, lease_id: &str) -> Result<BrowserHandle> {
+        self.authorize(lease_id).await?;
         self.sessions
             .read()
             .await
@@ -300,7 +441,19 @@ impl Broker {
     /// Capture the page of the browser holding `lease_id`.
     pub async fn screenshot(&self, lease_id: &str) -> Result<Vec<u8>> {
         let browser = self.browser(lease_id).await?;
-        let mut provider = browser.lock().await;
-        Ok(provider.screenshot().await?)
+        browser.screenshot().await
+    }
+
+    /// Remove a session and close its browser when it is the last owner.
+    async fn purge(&self, lease_id: &str, browser: Option<BrowserHandle>) {
+        if let Some(browser) = browser {
+            // Stops the browser even when callers still hold cloned handles;
+            // a failed stop leaves the browser running, so the session is kept
+            // rather than advertised as free.
+            if browser.shutdown().await.is_err() {
+                return;
+            }
+        }
+        self.sessions.write().await.remove(lease_id);
     }
 }

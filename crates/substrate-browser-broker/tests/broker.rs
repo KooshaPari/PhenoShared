@@ -64,29 +64,37 @@ async fn concurrent_agents_on_separate_profiles_are_storage_isolated() {
 
     assert_ne!(first.data_dir, second.data_dir);
 
-    {
-        let mut page = first.browser.lock().await;
-        page.open(&format!("http://{addr}/")).await.expect("open a");
-        page.eval("localStorage.setItem('who','alice')")
-            .await
-            .expect("set a");
-    }
-    {
-        let mut page = second.browser.lock().await;
-        page.open(&format!("http://{addr}/")).await.expect("open b");
-        let seen = page
-            .eval("localStorage.getItem('who')")
-            .await
-            .expect("get b");
-        assert_eq!(
-            seen,
-            serde_json::Value::Null,
-            "bob must not see alice's storage"
-        );
-        page.eval("localStorage.setItem('who','bob')")
-            .await
-            .expect("set b");
-    }
+    first
+        .browser
+        .open(&format!("http://{addr}/"))
+        .await
+        .expect("open a");
+    first
+        .browser
+        .eval("localStorage.setItem('who','alice')")
+        .await
+        .expect("set a");
+
+    second
+        .browser
+        .open(&format!("http://{addr}/"))
+        .await
+        .expect("open b");
+    let seen = second
+        .browser
+        .eval("localStorage.getItem('who')")
+        .await
+        .expect("get b");
+    assert_eq!(
+        seen,
+        serde_json::Value::Null,
+        "bob must not see alice's storage"
+    );
+    second
+        .browser
+        .eval("localStorage.setItem('who','bob')")
+        .await
+        .expect("set b");
 
     let live = broker.live().await;
     assert_eq!(live.len(), 2, "both sessions should be live and distinct");
@@ -179,10 +187,10 @@ async fn viewer_serves_the_exact_lease_and_rejects_unknown_or_unauthorised() {
         .await
         .expect("acquire");
 
-    {
-        let mut page = held.browser.lock().await;
-        page.open(&format!("http://{addr}/")).await.expect("open");
-    }
+    held.browser
+        .open(&format!("http://{addr}/"))
+        .await
+        .expect("open");
 
     let listener = TcpListener::bind("127.0.0.1:0").await.expect("bind");
     let viewer_addr = listener.local_addr().expect("addr");

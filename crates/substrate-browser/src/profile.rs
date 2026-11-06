@@ -120,8 +120,36 @@ impl ProfileStore {
     }
 
     /// Directory holding one profile's manifest and generations.
+    ///
+    /// Callers must supply components that came from a validated [`crate::Scope`].
+    /// Every I/O entry point re-checks them with [`ProfileStore::checked`] and
+    /// fails closed rather than joining an escaping path.
     pub fn profile_dir(&self, principal: &str, profile: &str) -> PathBuf {
         self.root.join("profiles").join(principal).join(profile)
+    }
+
+    /// Refuse a principal or profile that could escape the store root.
+    fn checked(principal: &str, profile: &str) -> Result<()> {
+        crate::Scope::new(principal, profile, "default")
+            .map(|_| ())
+            .map_err(BrowserError::from)
+    }
+
+    /// Take the store-wide exclusive advisory lock for a read-modify-write.
+    ///
+    /// `manifest.json` is a read-modify-write file: without this, two processes
+    /// can both read generation N, both append, and one write is lost.
+    fn with_lock<T>(&self, body: impl FnOnce() -> Result<T>) -> Result<T> {
+        let file = fs::OpenOptions::new()
+            .create(true)
+            .read(true)
+            .write(true)
+            .truncate(false)
+            .open(self.root.join("profiles.lock"))?;
+        fs2::FileExt::lock_exclusive(&file)?;
+        let outcome = body();
+        let _ = fs2::FileExt::unlock(&file);
+        outcome
     }
 
     /// Data directory for one generation; this is the value to hand a browser
@@ -136,10 +164,12 @@ impl ProfileStore {
     }
 
     fn load(&self, principal: &str, profile: &str) -> Result<Manifest> {
+        Self::checked(principal, profile)?;
         Ok(read_json(&self.manifest_path(principal, profile))?.unwrap_or_default())
     }
 
     fn store(&self, principal: &str, profile: &str, manifest: &Manifest) -> Result<()> {
+        Self::checked(principal, profile)?;
         write_json_atomic(&self.manifest_path(principal, profile), manifest)
     }
 
@@ -188,10 +218,18 @@ impl ProfileStore {
     ///
     /// Creates generation 1 on first use. Idempotent.
     pub fn ensure(&self, principal: &str, profile: &str) -> Result<u64> {
-        if let Some(active) = self.active(principal, profile)? {
-            return Ok(active);
-        }
-        self.create_generation(principal, profile, None, None, true)
+        self.with_lock(|| {
+            if let Some(active) = self.active(principal, profile)? {
+                return Ok(active);
+            }
+            let first = self.data_dir(principal, profile, 1);
+            if first.exists() {
+                return Err(BrowserError::Refused(format!(
+                    "profile {principal}/{profile} has a generation directory but no                      manifest; refusing to adopt unknown browser data"
+                )));
+            }
+            self.create_generation(principal, profile, None, None, true)
+        })
     }
 
     /// The active generation, if the profile exists.
@@ -206,8 +244,10 @@ impl ProfileStore {
 
     /// Create a new empty generation and make it active.
     pub fn rotate(&self, principal: &str, profile: &str) -> Result<u64> {
-        self.refuse_if_leased(principal, profile)?;
-        self.create_generation(principal, profile, None, None, true)
+        self.with_lock(|| {
+            self.refuse_if_leased(principal, profile)?;
+            self.create_generation(principal, profile, None, None, true)
+        })
     }
 
     /// Mark a generation sealed so it may be forked.

@@ -16,7 +16,7 @@ use axum::{
 use base64::Engine;
 use serde_json::json;
 
-use crate::{Broker, Result};
+use crate::{Broker, BrokerError, Result};
 
 /// How to serve the viewer.
 #[derive(Debug, Clone)]
@@ -160,6 +160,10 @@ async fn view(
             "png_base64": base64::engine::general_purpose::STANDARD.encode(png),
         }))
         .into_response(),
+        Err(
+            err
+            @ (BrokerError::NoSession(_) | BrokerError::Released { .. } | BrokerError::State(_)),
+        ) => no_longer_live(err.to_string(), lease_id),
         Err(err) => internal(err.to_string()),
     }
 }
@@ -174,13 +178,22 @@ async fn view_png(
     }
     match state.broker.screenshot(&lease_id).await {
         Ok(png) => ([(header::CONTENT_TYPE, "image/png")], png).into_response(),
-        Err(crate::BrokerError::NoSession(_)) => (
-            StatusCode::NOT_FOUND,
-            Json(json!({ "error": "no live session", "lease_id": lease_id })),
-        )
-            .into_response(),
+        Err(
+            err
+            @ (BrokerError::NoSession(_) | BrokerError::Released { .. } | BrokerError::State(_)),
+        ) => no_longer_live(err.to_string(), lease_id),
         Err(err) => internal(err.to_string()),
     }
+}
+
+/// A lease that no longer validates is indistinguishable from one that never
+/// existed: never disclose a superseded holder's browser.
+fn no_longer_live(detail: String, lease_id: String) -> Response {
+    (
+        StatusCode::NOT_FOUND,
+        Json(json!({ "error": "no live session", "lease_id": lease_id, "detail": detail })),
+    )
+        .into_response()
 }
 
 fn internal(detail: String) -> Response {
