@@ -37,7 +37,7 @@ jobs:
         run: |
           mkdir -p ~/.config/nanovms
           echo '{"test": true}' > ~/.config/nanovms/tokens
-          cd crates/nanovms && go run ./cmd/nanovms/ tier list 2>/dev/null || true
+          ( cd crates/nanovms && go run ./cmd/nanovms/ tier list ) 2>/dev/null || true
           if [ -f ~/.config/nanovms/tokens ]; then
             echo "Config persisted"
           else
