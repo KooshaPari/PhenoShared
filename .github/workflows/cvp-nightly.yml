@@ -87,7 +87,7 @@ jobs:
               errors=$((errors + 1))
             fi
           done
-          echo "Total sites: $(ls -d sites/*-landing 2>/dev/null | wc -l)"
+          echo "Total sites: $(find sites -maxdepth 1 -type d -name '*-landing' 2>/dev/null | wc -l)"
           echo "Errors: $errors"
           exit $errors
 

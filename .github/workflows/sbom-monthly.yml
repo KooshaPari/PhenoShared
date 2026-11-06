@@ -17,12 +17,10 @@ on:
     inputs:
       repo_path:
         description: 'Path within the workspace to the repo root'
-        required: true
         type: string
         default: '.'
       build_system:
         description: 'Build system hint (e.g. rust, node)'
-        required: true
         type: string
         default: 'rust'
   workflow_dispatch:
