@@ -79,8 +79,8 @@ dupes = len(fences) - len(set(fences))
 non_monotonic = sum(1 for a, b in zip(fences, fences[1:]) if b <= a)
 
 # 3. manifest sanity
-# ProfileStore is rooted at <state>/profiles and itself creates a profiles/ dir.
-manifest_path = os.path.join(root, "profiles", "profiles", "alice", "work", "manifest.json")
+# Broker::new roots ProfileStore at <state>, so principals live under <state>/profiles/.
+manifest_path = os.path.join(root, "profiles", "alice", "work", "manifest.json")
 gens = None
 if os.path.exists(manifest_path):
     m = json.load(open(manifest_path))
