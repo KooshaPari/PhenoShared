@@ -1,0 +1,14 @@
+{
+  "coverage": {
+    "data": null,
+    "reason": "<code>docs/reports/coverage.json</code> has not been published yet."
+  },
+  "lint": {
+    "data": null,
+    "reason": "<code>docs/reports/lint.json</code> has not been published yet."
+  },
+  "frTrace": {
+    "data": null,
+    "reason": "<code>docs/reports/fr-trace.json</code> has not been published yet."
+  }
+}

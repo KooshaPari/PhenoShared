@@ -1,0 +1,16 @@
+---
+const code = Astro.url.searchParams.get('code');
+if (!code) return Astro.redirect('/');
+const res = await fetch('https://api.workos.com/user_management/authenticate', {
+  method: 'POST',
+  headers: {'Content-Type': 'application/json'},
+  body: JSON.stringify({code, client_id: import.meta.env.WORKOS_CLIENT_ID, client_secret: import.meta.env.WORKOS_API_KEY, grant_type: 'authorization_code'})
+});
+const data = await res.json();
+if (data.access_token) {
+  Astro.cookies.set('wos-session', data.access_token, {path: '/', httpOnly: true, secure: true, maxAge: 86400});
+  return Astro.redirect('/app');
+}
+return Astro.redirect('/?error=auth_failed');
+---
+<html><body>Authenticating...</body></html>

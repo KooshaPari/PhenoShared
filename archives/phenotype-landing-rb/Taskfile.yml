@@ -1,0 +1,43 @@
+version: "3"
+
+vars:
+  SITES: "agileplus-landing byteport-landing hwledger-landing phenokits-landing projects-landing tasken-landing tracera-landing thegent-landing"
+  ODIN: "odin-landing"
+
+tasks:
+  install:
+    desc: "Install dependencies for all sites"
+    cmds:
+      - for site in {{.SITES}}; do (cd sites/$site && bun install --frozen-lockfile || bun install); done
+
+  build:
+    desc: "Build all Astro sites"
+    cmds:
+      - for site in {{.SITES}}; do echo "=== $site ===" && (cd sites/$site && bun run build); done
+
+  check:
+    desc: "Type-check all Astro sites"
+    cmds:
+      - for site in {{.SITES}}; do echo "=== $site ===" && (cd sites/$site && bunx astro check); done
+
+  lint:
+    desc: "Lint all Astro sites (best-effort)"
+    cmds:
+      - for site in {{.SITES}}; do echo "=== $site ===" && (cd sites/$site && bunx astro check); done
+
+  quality:
+    desc: "Full quality gate: check + build + lint"
+    cmds:
+      - task: check
+      - task: build
+      - task: lint
+
+  clean:
+    desc: "Clean generated artifacts"
+    cmds:
+      - for site in {{.SITES}} {{.ODIN}}; do rm -rf sites/$site/dist sites/$site/.astro; done
+
+  default:
+    desc: "Show available tasks"
+    cmds:
+      - task --list
