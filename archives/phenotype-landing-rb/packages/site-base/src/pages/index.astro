@@ -1,0 +1,144 @@
+---
+import { CTA, Features, Footer, Header, Hero } from '@phenotype/landing-ui';
+import '@phenotype/design-tokens/css';
+
+const navLinks = [
+  { text: 'GitHub', href: 'https://github.com/KooshaPari/Tracera' },
+  { text: 'Releases', href: 'https://github.com/KooshaPari/Tracera/releases' },
+];
+
+const features = [
+  {
+    title: 'Coverage matrix',
+    description:
+      'See requirement-to-artifact coverage across design, implementation, tests, and approvals with Covered, Partial, Missing, Stale, and Conflict states.',
+    icon: '🧭',
+  },
+  {
+    title: 'Impact analysis',
+    description:
+      'Run graph-backed blast-radius checks before merge so reviewers can see exactly which downstream requirements and artifacts a change touches.',
+    icon: '💥',
+  },
+  {
+    title: 'Governance gate',
+    description:
+      'Enforce spec-first release rules in CI: missing acceptance criteria, missing evidence, missing implementation, or missing test coverage blocks the path.',
+    icon: '🛡️',
+  },
+  {
+    title: 'Native exe, 20 endpoints',
+    description:
+      'Ship as a single Rust axum binary with 20 endpoints for traceability workflows, without a Python runtime or service-side scaffold.',
+    icon: '⚙️',
+  },
+];
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Tracera is a requirements traceability and impact analysis landing page for the Phenotype ecosystem."
+    />
+    <title>Tracera - requirements traceability & impact analysis</title>
+  </head>
+  <body>
+    <Header brand="Tracera" links={navLinks} />
+    <main>
+      <Hero
+        title="Tracera — requirements traceability & impact analysis"
+        subtitle="Map every requirement to implementation evidence, surface blast radius before a change ships, and keep governance decisions explicit in CI."
+        cta={{ text: 'Open the repository', href: 'https://github.com/KooshaPari/Tracera' }}
+      />
+
+      <Features title="What Tracera does" features={features} />
+
+      <section class="proof">
+        <div class="container">
+          <p class="eyebrow">Built for traceability-first teams</p>
+          <h2>Keep the spec, implementation, and evidence in the same review loop.</h2>
+          <p>
+            Tracera is designed for projects that need auditable requirement flow from source text to
+            implementation and test evidence. It is intentionally opinionated about gates so drift is visible
+            before merge, not after release.
+          </p>
+        </div>
+      </section>
+
+      <CTA
+        text="View Tracera on GitHub"
+        href="https://github.com/KooshaPari/Tracera"
+        secondary={{ text: 'Browse releases', href: 'https://github.com/KooshaPari/Tracera/releases' }}
+      />
+    </main>
+    <Footer brand="Tracera" links={navLinks} />
+  </body>
+</html>
+
+<style is:global>
+  :root {
+    color-scheme: light;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    margin: 0;
+    font-family: Inter, system-ui, sans-serif;
+    background:
+      radial-gradient(circle at top, rgba(14, 165, 233, 0.12), transparent 40%),
+      linear-gradient(180deg, #ffffff 0%, #f8fafc 58%, #eff6ff 100%);
+    color: var(--pheno-dark, #0f172a);
+  }
+
+  main {
+    display: block;
+  }
+
+  .proof {
+    padding: 1rem 1rem 4rem;
+  }
+
+  .container {
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+
+  .proof .container {
+    padding: 2rem;
+    border: 1px solid color-mix(in srgb, var(--pheno-border, #e2e8f0) 80%, transparent);
+    border-radius: 1.25rem;
+    background: rgba(255, 255, 255, 0.72);
+    box-shadow: 0 20px 45px rgba(15, 23, 42, 0.06);
+    backdrop-filter: blur(14px);
+  }
+
+  .eyebrow {
+    margin: 0 0 0.75rem;
+    color: var(--pheno-primary, #0ea5e9);
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .proof h2 {
+    margin: 0 0 0.75rem;
+    font-size: clamp(1.65rem, 3vw, 2.4rem);
+    line-height: 1.1;
+  }
+
+  .proof p:last-child {
+    margin: 0;
+    max-width: 68ch;
+    color: var(--text-muted, #64748b);
+    font-size: 1.05rem;
+    line-height: 1.7;
+  }
+</style>

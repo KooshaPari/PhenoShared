@@ -1,0 +1,410 @@
+---
+import "../styles/globals.css";
+import reposData from "../../data/repos.json";
+
+type Repo = {
+  name: string;
+  description: string | null;
+  url: string;
+  homepageUrl: string | null;
+  primaryLanguage: { name: string; color: string } | null;
+  pushedAt: string;
+  isArchived: boolean;
+  isFork: boolean;
+  repositoryTopics: { name: string }[] | { nodes: { name: string }[] };
+};
+
+const focusRepos = ["Phenotype", "AgilePlus", "heliosApp", "thegent", "PhenoKits", "phenoShared"];
+const activeRepos = (reposData as Repo[])
+  .filter((repo) => !repo.isArchived && !repo.isFork)
+  .sort((a, b) => new Date(b.pushedAt).getTime() - new Date(a.pushedAt).getTime());
+
+const featuredRepos = focusRepos
+  .map((name) => activeRepos.find((repo) => repo.name === name))
+  .filter((repo): repo is Repo => Boolean(repo));
+
+const recentRepos = activeRepos
+  .filter((repo) => !featuredRepos.some((featured) => featured.name === repo.name))
+  .slice(0, 6);
+
+const languageCount = new Set(
+  activeRepos.map((repo) => repo.primaryLanguage?.name).filter(Boolean),
+).size;
+
+function relTime(iso: string): string {
+  const date = new Date(iso);
+  const days = Math.floor((Date.now() - date.getTime()) / 86_400_000);
+  if (days < 1) return "today";
+  if (days < 30) return `${days}d ago`;
+  if (days < 365) return `${Math.floor(days / 30)}mo ago`;
+  return `${Math.floor(days / 365)}y ago`;
+}
+---
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Koosha Pari - Phenotype</title>
+    <meta
+      name="description"
+      content="Personal hub for Koosha Pari's Phenotype engineering systems, developer tools, and AI-agent infrastructure."
+    />
+  </head>
+  <body class="min-h-screen">
+    <main class="koosha-shell">
+      <nav class="koosha-nav mono">
+        <a href="/">Phenotype</a>
+        <a href="/brand">Brand</a>
+        <a href="/docs">Docs</a>
+        <a href="/otel">OTel</a>
+        <a href="/qa">QA</a>
+      </nav>
+
+      <header class="koosha-hero">
+        <div class="hero-copy">
+          <p class="mono eyebrow">KooshaPari personal layer</p>
+          <h1>Koosha Pari</h1>
+          <p class="lede">
+            Building Phenotype: a portfolio of agent-native developer tools,
+            governance systems, observability surfaces, and production workflows
+            for shipping with autonomous coding agents.
+          </p>
+          <div class="hero-actions">
+            <a href="https://github.com/KooshaPari" target="_blank" rel="noopener">GitHub</a>
+            <a href="/">Project catalog</a>
+            <a href="/brand">Brand map</a>
+            <a href="/docs">Engineering docs</a>
+          </div>
+        </div>
+        <div class="brand-panel" aria-label="Phenotype brand system snapshot">
+          <div class="brand-mark">KP</div>
+          <div class="signal-grid">
+            <span></span><span></span><span></span><span></span>
+            <span></span><span></span><span></span><span></span>
+            <span></span><span></span><span></span><span></span>
+          </div>
+          <dl>
+            <div>
+              <dt>Active repos</dt>
+              <dd>{activeRepos.length}</dd>
+            </div>
+            <div>
+              <dt>Languages</dt>
+              <dd>{languageCount}</dd>
+            </div>
+            <div>
+              <dt>Public layer</dt>
+              <dd>projects.kooshapari.com</dd>
+            </div>
+          </dl>
+        </div>
+      </header>
+
+      <section class="section-band">
+        <div class="section-heading">
+          <p class="mono eyebrow">Operating surfaces</p>
+          <h2>One personal hub over the Phenotype project graph</h2>
+        </div>
+        <div class="surface-grid">
+          <a href="/" class="surface-link">
+            <strong>Project catalog</strong>
+            <span>Active repos, flagships, search, and public project links.</span>
+          </a>
+          <a href="/docs" class="surface-link">
+            <strong>Docs layer</strong>
+            <span>Federated docs from the Phenotype and AgilePlus knowledge base.</span>
+          </a>
+          <a href="/otel" class="surface-link">
+            <strong>Observability</strong>
+            <span>Embedded PhenoObservability traces, metrics, and logs.</span>
+          </a>
+          <a href="/brand" class="surface-link">
+            <strong>Brand map</strong>
+            <span>Landing-site queue, docs promotion, and shared microfrontend infrastructure.</span>
+          </a>
+          <a href="/qa" class="surface-link">
+            <strong>Quality</strong>
+            <span>Build, lint, coverage, and feature traceability snapshots.</span>
+          </a>
+        </div>
+      </section>
+
+      <section class="section-band">
+        <div class="section-heading">
+          <p class="mono eyebrow">Featured systems</p>
+          <h2>Brand anchors</h2>
+        </div>
+        <div class="repo-grid">
+          {featuredRepos.map((repo) => (
+            <article class="repo-card">
+              <div>
+                <h3>{repo.name}</h3>
+                <p>{repo.description ?? "Phenotype project surface."}</p>
+              </div>
+              <div class="repo-meta mono">
+                <span>{repo.primaryLanguage?.name ?? "mixed"}</span>
+                <span>{relTime(repo.pushedAt)}</span>
+              </div>
+              <div class="repo-actions">
+                {repo.homepageUrl && <a href={repo.homepageUrl} target="_blank" rel="noopener">Site</a>}
+                <a href={repo.url} target="_blank" rel="noopener">Repo</a>
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section class="section-band">
+        <div class="section-heading">
+          <p class="mono eyebrow">Current motion</p>
+          <h2>Recently active</h2>
+        </div>
+        <ol class="activity-list">
+          {recentRepos.map((repo) => (
+            <li>
+              <a href={repo.url} target="_blank" rel="noopener">{repo.name}</a>
+              <span>{repo.primaryLanguage?.name ?? "mixed"}</span>
+              <time>{relTime(repo.pushedAt)}</time>
+            </li>
+          ))}
+        </ol>
+      </section>
+    </main>
+
+    <style>
+      .koosha-shell {
+        width: min(1120px, calc(100% - 2rem));
+        margin: 0 auto;
+        padding: 1.25rem 0 4rem;
+      }
+      .koosha-nav {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+        align-items: center;
+        justify-content: flex-end;
+        margin-bottom: 2rem;
+        font-size: 0.78rem;
+      }
+      .koosha-nav a,
+      .hero-actions a,
+      .repo-actions a {
+        border: 1px solid var(--border);
+        border-radius: 0.5rem;
+        padding: 0.55rem 0.75rem;
+        text-decoration: none;
+        transition: border-color .15s, color .15s, background .15s;
+      }
+      .koosha-nav a:hover,
+      .hero-actions a:hover,
+      .repo-actions a:hover {
+        border-color: var(--accent);
+        color: var(--accent);
+      }
+      .koosha-hero {
+        display: grid;
+        grid-template-columns: minmax(0, 1.2fr) minmax(20rem, 0.8fr);
+        gap: clamp(1.25rem, 4vw, 4rem);
+        align-items: center;
+        min-height: 72vh;
+      }
+      .eyebrow {
+        color: var(--accent);
+        font-size: 0.76rem;
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+      }
+      h1 {
+        margin: 0.5rem 0 0;
+        font-size: clamp(3.2rem, 11vw, 7.5rem);
+        line-height: 0.92;
+        font-weight: 800;
+      }
+      .lede {
+        max-width: 44rem;
+        margin-top: 1.25rem;
+        color: var(--fg);
+        font-size: 1.1rem;
+        line-height: 1.75;
+      }
+      .hero-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.7rem;
+        margin-top: 1.6rem;
+      }
+      .hero-actions a:first-child {
+        background: var(--accent);
+        border-color: var(--accent);
+        color: #0a0a0b;
+      }
+      .brand-panel {
+        border: 1px solid var(--border);
+        border-radius: 0.75rem;
+        background: var(--card);
+        min-height: 27rem;
+        padding: 1.25rem;
+        display: grid;
+        grid-template-rows: auto 1fr auto;
+        gap: 1.25rem;
+      }
+      .brand-mark {
+        width: 5.5rem;
+        height: 5.5rem;
+        border: 1px solid var(--accent);
+        border-radius: 0.5rem;
+        display: grid;
+        place-items: center;
+        color: var(--accent);
+        font-size: 2rem;
+        font-weight: 800;
+      }
+      .signal-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 0.55rem;
+        align-self: stretch;
+      }
+      .signal-grid span {
+        border: 1px solid var(--border);
+        border-radius: 0.45rem;
+        background: var(--accent-wash);
+      }
+      .signal-grid span:nth-child(3n + 1) {
+        background: var(--accent-soft);
+        border-color: var(--accent);
+      }
+      .brand-panel dl {
+        display: grid;
+        gap: 0.65rem;
+      }
+      .brand-panel div {
+        display: flex;
+        justify-content: space-between;
+        gap: 1rem;
+        border-top: 1px solid var(--border);
+        padding-top: 0.65rem;
+      }
+      .brand-panel dt {
+        color: var(--muted);
+      }
+      .brand-panel dd {
+        margin: 0;
+        font-weight: 700;
+        text-align: right;
+      }
+      .section-band {
+        border-top: 1px solid var(--border);
+        padding: 3rem 0;
+      }
+      .section-heading {
+        margin-bottom: 1.25rem;
+      }
+      .section-heading h2 {
+        margin: 0.35rem 0 0;
+        font-size: clamp(1.7rem, 4vw, 2.5rem);
+      }
+      .surface-grid,
+      .repo-grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 1rem;
+      }
+      .surface-link,
+      .repo-card {
+        border: 1px solid var(--border);
+        border-radius: 0.65rem;
+        background: var(--card);
+        padding: 1rem;
+      }
+      .surface-link {
+        text-decoration: none;
+        min-height: 9rem;
+      }
+      .surface-link strong,
+      .surface-link span {
+        display: block;
+      }
+      .surface-link span,
+      .repo-card p,
+      .repo-meta,
+      .activity-list span,
+      .activity-list time {
+        color: var(--muted);
+      }
+      .surface-link span {
+        margin-top: 0.55rem;
+        line-height: 1.55;
+      }
+      .repo-card {
+        display: flex;
+        min-height: 14rem;
+        flex-direction: column;
+        justify-content: space-between;
+      }
+      .repo-card h3 {
+        margin: 0;
+        color: var(--accent);
+        font-size: 1.05rem;
+      }
+      .repo-card p {
+        margin: 0.65rem 0 0;
+        line-height: 1.5;
+      }
+      .repo-meta,
+      .repo-actions {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.75rem;
+      }
+      .repo-actions {
+        justify-content: flex-start;
+        margin-top: 1rem;
+      }
+      .repo-actions a {
+        padding: 0.45rem 0.65rem;
+        font-size: 0.78rem;
+      }
+      .activity-list {
+        display: grid;
+        gap: 0.55rem;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+      .activity-list li {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 8rem 6rem;
+        gap: 1rem;
+        align-items: center;
+        border-bottom: 1px solid var(--border);
+        padding: 0.75rem 0;
+      }
+      .activity-list a {
+        color: var(--fg);
+        font-weight: 700;
+        text-decoration: none;
+      }
+      @media (max-width: 900px) {
+        .koosha-hero,
+        .surface-grid,
+        .repo-grid {
+          grid-template-columns: 1fr;
+        }
+        .koosha-hero {
+          min-height: auto;
+          padding: 2rem 0 3rem;
+        }
+        .brand-panel {
+          min-height: 22rem;
+        }
+        .activity-list li {
+          grid-template-columns: 1fr;
+          gap: 0.25rem;
+        }
+      }
+    </style>
+  </body>
+</html>

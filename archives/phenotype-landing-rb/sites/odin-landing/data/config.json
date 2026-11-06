@@ -1,0 +1,19 @@
+{
+  "name": "Odin",
+  "slug": "odin",
+  "domain": "odin.kooshapari.com",
+  "description": "Odin — Phenotype ecosystem project.",
+  "tier": 1,
+  "repo": "KooshaPari/phenotype-landing",
+  "language": "Astro / TypeScript",
+  "license": "MIT",
+  "status": "active",
+  "features": [
+    "Astro-powered landing page",
+    "Phenotype ecosystem integration"
+  ],
+  "links": {
+    "github": "https://github.com/KooshaPari/phenotype-landing"
+  },
+  "badges": []
+}

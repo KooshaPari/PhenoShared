@@ -1,0 +1,846 @@
+---
+import "../../styles/globals.css";
+
+// Read DAG data from the JSON file at build time
+import rawDagData from "../../../data/dag-data.json";
+
+type DagNode = {
+  id: string;
+  label: string;
+  status: string;
+  type?: string;
+  epic?: string;
+  repo?: string;
+  acceptanceCriteria?: string[];
+  auditLog?: { date: string; from: string; to: string; note: string }[];
+  links?: { label: string; url: string }[];
+};
+type DagEdge = { from: string; to: string };
+type DagData = { title: string; description: string; nodes: DagNode[]; edges: DagEdge[] };
+
+const dagData = structuredClone(rawDagData) as DagData;
+
+// Pre-compute status summary at build time
+const statusCounts: Record<string, number> = { completed: 0, "in-progress": 0, pending: 0, failed: 0 };
+for (const n of dagData.nodes) {
+  statusCounts[n.status] = (statusCounts[n.status] || 0) + 1;
+}
+const totalNodes = dagData.nodes.length;
+const totalEdges = dagData.edges.length;
+---
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>DAG Renderer — Phenotype</title>
+    <meta name="description" content="Interactive directed-acyclic graph (DAG) renderer for Phenotype compute/infra epic work breakdown." />
+    <meta property="og:title" content="DAG Renderer — Phenotype" />
+    <meta property="og:description" content="Interactive directed-acyclic graph (DAG) renderer for Phenotype compute/infra epic work breakdown." />
+    <meta property="og:type" content="website" />
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>D</text></svg>" />
+  </head>
+  <body class="min-h-screen flex flex-col">
+    <main class="flex-1 flex flex-col max-w-7xl mx-auto w-full px-4 py-6">
+      <!-- Header -->
+      <header class="mb-4 flex flex-wrap items-center justify-between gap-3">
+        <div>
+          <p class="mono text-xs uppercase tracking-widest text-[var(--accent)] mb-1">
+            <a href="/" class="hover:underline">&larr; Phenotype</a> / DAG renderer
+          </p>
+          <h1 class="text-2xl md:text-3xl font-bold tracking-tight">{dagData.title}</h1>
+          <p class="text-sm text-[var(--muted)] mt-1">{dagData.description}</p>
+        </div>
+        <div class="flex flex-wrap gap-2 mono text-xs">
+          <span class="px-2 py-1 rounded bg-[var(--card)] border border-[var(--border)]">{totalNodes} nodes</span>
+          <span class="px-2 py-1 rounded bg-[var(--card)] border border-[var(--border)]">{totalEdges} edges</span>
+          <span class="px-2 py-1 rounded bg-[var(--card)] border border-[var(--border)]" style="border-left: 3px solid #16a34a">{statusCounts.completed} done</span>
+          <span class="px-2 py-1 rounded bg-[var(--card)] border border-[var(--border)]" style="border-left: 3px solid #2563eb">{statusCounts["in-progress"]} active</span>
+          <span class="px-2 py-1 rounded bg-[var(--card)] border border-[var(--border)]" style="border-left: 3px solid #6b7280">{statusCounts.pending} pending</span>
+          <span class="px-2 py-1 rounded bg-[var(--card)] border border-[var(--border)]" style="border-left: 3px solid #dc2626">{statusCounts.failed} failed</span>
+        </div>
+      </header>
+
+      <!-- Filter toolbar -->
+      <div id="dag-filter-bar" class="mb-3 flex flex-wrap items-center gap-2 text-xs">
+        <select id="dag-filter-repo" class="px-2 py-1.5 rounded bg-[var(--card)] border border-[var(--border)] text-xs min-w-[140px]">
+          <option value="">All repos</option>
+        </select>
+        <select id="dag-filter-epic" class="px-2 py-1.5 rounded bg-[var(--card)] border border-[var(--border)] text-xs min-w-[140px]">
+          <option value="">All epics</option>
+        </select>
+        <input type="text" id="dag-filter-search" placeholder="Search nodes…" class="px-2 py-1.5 rounded bg-[var(--card)] border border-[var(--border)] text-xs min-w-[140px]" />
+        <span id="dag-filter-visible-count" class="text-[var(--muted)]"></span>
+        <span id="dag-filter-count" class="hidden px-1.5 py-0.5 rounded-full bg-[var(--accent)] text-white text-[10px] font-bold">0</span>
+        <button id="dag-filter-clear" class="hidden px-2 py-1 rounded border border-[var(--border)] hover:bg-[var(--accent)] hover:text-white transition-colors">
+          Clear all
+        </button>
+      </div>
+
+      <!-- Legend -->
+      <div class="mb-3 flex flex-wrap gap-4 text-xs text-[var(--muted)] items-center">
+        <span class="flex items-center gap-1">
+          <span class="inline-block w-2.5 h-2.5 rounded-full" style="background:#16a34a"></span> Completed
+        </span>
+        <span class="flex items-center gap-1">
+          <span class="inline-block w-2.5 h-2.5 rounded-full" style="background:#2563eb"></span> In Progress
+        </span>
+        <span class="flex items-center gap-1">
+          <span class="inline-block w-2.5 h-2.5 rounded-full" style="background:#6b7280"></span> Pending
+        </span>
+        <span class="flex items-center gap-1">
+          <span class="inline-block w-2.5 h-2.5 rounded-full" style="background:#dc2626"></span> Failed
+        </span>
+        <span class="ml-auto flex items-center gap-4">
+          <span>Drag to pan &middot; Scroll to zoom &middot; Click to select</span>
+          <button id="dag-close-detail" class="hidden px-2 py-1 rounded text-xs border border-[var(--border)] hover:bg-[var(--accent)] hover:text-white transition-colors" title="Close detail panel (Esc)">
+            Close Panel <kbd class="ml-1 text-[10px] opacity-60">Esc</kbd>
+          </button>
+        </span>
+      </div>
+
+      <!-- Main content area: canvas + detail panel -->
+      <div class="flex-1 flex gap-4 min-h-[500px]">
+        <!-- Canvas -->
+        <div id="dag-canvas" class="flex-1 rounded border border-[var(--border)] bg-[var(--card)]" style="overflow:hidden;min-height:500px"></div>
+
+        <!-- Detail panel (sidebar) -->
+        <aside id="dag-detail-panel" class="hidden w-80 shrink-0 rounded border border-[var(--border)] bg-[var(--card)] overflow-y-auto" style="max-height:calc(100vh - 220px)">
+          <div id="dag-detail-content" class="p-4">
+            <!-- populated by JS -->
+          </div>
+        </aside>
+      </div>
+    </main>
+
+    <!-- Embedded DAG data as JSON (rendered at build time, available before client script) -->
+    <script id="dag-data-json" type="application/json">{JSON.stringify(dagData)}</script>
+
+    <!-- Client-side DAG renderer with drill-down support -->
+    <script>
+    (function() {
+      "use strict";
+
+      /* ── constants ── */
+      var NODE_W = 180;
+      var NODE_H = 48;
+      var LAYER_GAP = 100;
+      var NODE_GAP = 24;
+      var PAD = 60;
+      var ARROW_SIZE = 8;
+
+      var STATUS_COLORS = {
+        completed: { fill: "#16a34a", stroke: "#15803d", text: "#fff", bg: "#052e16" },
+        "in-progress": { fill: "#2563eb", stroke: "#1d4ed8", text: "#fff", bg: "#172554" },
+        pending: { fill: "#6b7280", stroke: "#4b5563", text: "#fff", bg: "#1f2937" },
+        failed: { fill: "#dc2626", stroke: "#b91c1c", text: "#fff", bg: "#450a0a" }
+      };
+      var DEFAULT_STATUS = "pending";
+
+      /* ── module-level state ── */
+      var svg, gMain, gEdges, gNodes;
+      var panX = 0, panY = 0;
+      var scale = 1;
+      var isPanning = false;
+      var panStart = { x: 0, y: 0 };
+      var selectedId = null;
+
+      /* ── layout helpers ── */
+      function topoSort(nodes, edges) {
+        var inDeg = {}, adj = {};
+        var ids = new Set(nodes.map(function(n) { return n.id; }));
+        for (var id of ids) { inDeg[id] = 0; adj[id] = []; }
+        for (var i = 0; i < edges.length; i++) {
+          var e = edges[i];
+          if (!ids.has(e.from) || !ids.has(e.to)) continue;
+          adj[e.from].push(e.to);
+          inDeg[e.to] = (inDeg[e.to] || 0) + 1;
+        }
+        var queue = Object.keys(inDeg).filter(function(id) { return inDeg[id] === 0; });
+        var order = [];
+        while (queue.length) {
+          var id = queue.shift();
+          order.push(id);
+          for (var j = 0; j < (adj[id] || []).length; j++) {
+            var nid = adj[id][j];
+            inDeg[nid]--;
+            if (inDeg[nid] === 0) queue.push(nid);
+          }
+        }
+        return order;
+      }
+
+      function assignLayers(nodes, edges) {
+        var order = topoSort(nodes, edges);
+        var byLayer = {};
+        var layer = {};
+        for (var i = 0; i < nodes.length; i++) { layer[nodes[i].id] = 0; }
+        var adj = {};
+        for (var i = 0; i < edges.length; i++) {
+          var e = edges[i];
+          if (!adj[e.from]) adj[e.from] = [];
+          adj[e.from].push(e.to);
+        }
+        for (var i = 0; i < order.length; i++) {
+          var id = order[i];
+          var l = layer[id] || 0;
+          for (var j = 0; j < (adj[id] || []).length; j++) {
+            var nid = adj[id][j];
+            layer[nid] = Math.max(layer[nid] || 0, l + 1);
+          }
+        }
+        for (var i = 0; i < nodes.length; i++) {
+          var n = nodes[i];
+          var l = layer[n.id] || 0;
+          if (!byLayer[l]) byLayer[l] = [];
+          byLayer[l].push(n);
+        }
+        return byLayer;
+      }
+
+      function computePositions(nodes, edges) {
+        var byLayer = assignLayers(nodes, edges);
+        var pos = {};
+        var layers = Object.keys(byLayer).map(Number).sort(function(a, b) { return a - b; });
+        var maxW = 0;
+        for (var i = 0; i < layers.length; i++) {
+          var l = layers[i];
+          var totalW = byLayer[l].length * NODE_W + (byLayer[l].length - 1) * NODE_GAP;
+          if (totalW > maxW) maxW = totalW;
+        }
+        for (var i = 0; i < layers.length; i++) {
+          var l = layers[i];
+          var ns = byLayer[l];
+          var totalW = ns.length * NODE_W + (ns.length - 1) * NODE_GAP;
+          var startX = (maxW - totalW) / 2;
+          for (var j = 0; j < ns.length; j++) {
+            var n = ns[j];
+            var x = startX + j * (NODE_W + NODE_GAP);
+            var y = l * (NODE_H + LAYER_GAP);
+            pos[n.id] = { x: PAD + x, y: PAD + y, cx: PAD + x + NODE_W / 2, cy: PAD + y + NODE_H / 2 };
+          }
+        }
+        return pos;
+      }
+
+      /* ── rendering ── */
+      function render(dagData, container) {
+        svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+        svg.setAttribute("width", "100%");
+        svg.setAttribute("height", "100%");
+        svg.style.display = "block";
+        svg.style.cursor = "grab";
+        svg.style.background = "var(--card)";
+        container.innerHTML = "";
+        container.appendChild(svg);
+
+        // defs with arrow marker
+        var defs = document.createElementNS("http://www.w3.org/2000/svg", "defs");
+        var marker = document.createElementNS("http://www.w3.org/2000/svg", "marker");
+        marker.setAttribute("id", "dag-arrow");
+        marker.setAttribute("viewBox", "0 0 10 10");
+        marker.setAttribute("refX", "10");
+        marker.setAttribute("refY", "5");
+        marker.setAttribute("markerWidth", String(ARROW_SIZE));
+        marker.setAttribute("markerHeight", String(ARROW_SIZE));
+        marker.setAttribute("orient", "auto-start-reverse");
+        var arrowPath = document.createElementNS("http://www.w3.org/2000/svg", "path");
+        arrowPath.setAttribute("d", "M 0 0 L 10 5 L 0 10 z");
+        arrowPath.setAttribute("fill", "#4b5563");
+        marker.appendChild(arrowPath);
+        defs.appendChild(marker);
+        svg.appendChild(defs);
+
+        gMain = document.createElementNS("http://www.w3.org/2000/svg", "g");
+        gEdges = document.createElementNS("http://www.w3.org/2000/svg", "g");
+        gNodes = document.createElementNS("http://www.w3.org/2000/svg", "g");
+        gMain.appendChild(gEdges);
+        gMain.appendChild(gNodes);
+        svg.appendChild(gMain);
+
+        var pos = computePositions(dagData.nodes, dagData.edges);
+
+        // Draw edges — curved cubic bezier paths between node centers
+        for (var i = 0; i < dagData.edges.length; i++) {
+          var e = dagData.edges[i];
+          var from = pos[e.from];
+          var to = pos[e.to];
+          if (!from || !to) continue;
+          var path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+          var cp1y = from.y + NODE_H + LAYER_GAP / 2;
+          var cp2y = to.y - LAYER_GAP / 2;
+          path.setAttribute("d", "M " + from.cx + " " + (from.y + NODE_H) + " C " + from.cx + " " + cp1y + ", " + to.cx + " " + cp2y + ", " + to.cx + " " + to.y);
+          path.setAttribute("fill", "none");
+          path.setAttribute("stroke", "#4b5563");
+          path.setAttribute("stroke-width", "2");
+          path.setAttribute("marker-end", "url(#dag-arrow)");
+          path.setAttribute("data-from", e.from);
+          path.setAttribute("data-to", e.to);
+          gEdges.appendChild(path);
+        }
+
+        // Draw nodes
+        for (var i = 0; i < dagData.nodes.length; i++) {
+          var n = dagData.nodes[i];
+          var p = pos[n.id];
+          if (!p) continue;
+          var st = STATUS_COLORS[n.status] || STATUS_COLORS[DEFAULT_STATUS];
+          var grp = document.createElementNS("http://www.w3.org/2000/svg", "g");
+          grp.setAttribute("data-id", n.id);
+          grp.style.cursor = "pointer";
+
+          var rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+          rect.setAttribute("x", String(p.x));
+          rect.setAttribute("y", String(p.y));
+          rect.setAttribute("width", String(NODE_W));
+          rect.setAttribute("height", String(NODE_H));
+          rect.setAttribute("rx", "6");
+          rect.setAttribute("fill", st.bg);
+          rect.setAttribute("stroke", st.stroke);
+          rect.setAttribute("stroke-width", "2");
+          rect.classList.add("dag-node-rect");
+          grp.appendChild(rect);
+
+          var text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+          text.setAttribute("x", String(p.cx));
+          text.setAttribute("y", String(p.cy + 1));
+          text.setAttribute("text-anchor", "middle");
+          text.setAttribute("dominant-baseline", "middle");
+          text.setAttribute("fill", st.text);
+          text.setAttribute("font-size", "12");
+          text.setAttribute("font-family", "ui-monospace, SFMono-Regular, monospace");
+          text.textContent = n.label;
+          grp.appendChild(text);
+
+          var badge = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+          badge.setAttribute("cx", String(p.x + 12));
+          badge.setAttribute("cy", String(p.y + NODE_H / 2));
+          badge.setAttribute("r", "5");
+          badge.setAttribute("fill", st.fill);
+          grp.appendChild(badge);
+
+          // closure for click handler
+          (function(nodeId) {
+            grp.addEventListener("click", function() { handleNodeClick(nodeId, dagData); });
+          })(n.id);
+
+          gNodes.appendChild(grp);
+        }
+
+        applyTransform();
+
+        // Pan: drag on empty SVG canvas
+        svg.addEventListener("mousedown", function(ev) {
+          if (ev.target !== svg) return;
+          isPanning = true;
+          panStart = { x: ev.clientX - panX, y: ev.clientY - panY };
+          svg.style.cursor = "grabbing";
+        });
+
+        window.addEventListener("mousemove", function(ev) {
+          if (!isPanning) return;
+          panX = ev.clientX - panStart.x;
+          panY = ev.clientY - panStart.y;
+          applyTransform();
+        });
+
+        window.addEventListener("mouseup", function() {
+          if (isPanning) {
+            isPanning = false;
+            svg.style.cursor = "grab";
+          }
+        });
+
+        // Zoom: mouse wheel
+        svg.addEventListener("wheel", function(ev) {
+          ev.preventDefault();
+          scale = Math.max(0.2, Math.min(5, scale * (ev.deltaY > 0 ? 0.92 : 1.08)));
+          applyTransform();
+        }, { passive: false });
+
+        // Keyboard: Escape closes detail panel
+        window.addEventListener("keydown", function(ev) {
+          if (ev.key === "Escape") {
+            closeDetail();
+          }
+        });
+
+        // Close button
+        var closeBtn = document.getElementById("dag-close-detail");
+        if (closeBtn) {
+          closeBtn.addEventListener("click", closeDetail);
+        }
+
+        // Check for deep-link from URL
+        var params = new URLSearchParams(window.location.search);
+        var deepLinkId = params.get("unit");
+        if (deepLinkId) {
+          var found = dagData.nodes.some(function(n) { return n.id === deepLinkId; });
+          if (found) {
+            selectNode(deepLinkId, dagData);
+          }
+        } else {
+          showInfo(null, dagData);
+        }
+      }
+
+      /* ── transform ── */
+      function applyTransform() {
+        gMain.setAttribute("transform", "translate(" + panX + "," + panY + ") scale(" + scale + ")");
+      }
+
+      /* ── detail panel ── */
+      function handleNodeClick(id, dagData) {
+        selectNode(id, dagData);
+        // Update URL with History API
+        var url = new URL(window.location);
+        url.searchParams.set("unit", id);
+        window.history.pushState({ unit: id }, "", url.toString());
+      }
+
+      function selectNode(id, dagData) {
+        selectedId = id;
+        var rects = gNodes.querySelectorAll(".dag-node-rect");
+        for (var i = 0; i < rects.length; i++) {
+          var r = rects[i];
+          var g = r.parentElement;
+          var nid = g.getAttribute("data-id");
+          var n = findNodeById(nid, dagData);
+          var st = (n && STATUS_COLORS[n.status]) || STATUS_COLORS[DEFAULT_STATUS];
+          if (nid === id) {
+            r.setAttribute("stroke", "#fbbf24");
+            r.setAttribute("stroke-width", "3");
+          } else {
+            r.setAttribute("stroke", st.stroke);
+            r.setAttribute("stroke-width", "2");
+          }
+        }
+        showDetail(id, dagData);
+      }
+
+      function closeDetail() {
+        if (!selectedId) return;
+        selectedId = null;
+        var rects = gNodes.querySelectorAll(".dag-node-rect");
+        for (var i = 0; i < rects.length; i++) {
+          var r = rects[i];
+          var g = r.parentElement;
+          var nid = g.getAttribute("data-id");
+          var n = findNodeById(nid, dagData);
+          var st = (n && STATUS_COLORS[n.status]) || STATUS_COLORS[DEFAULT_STATUS];
+          r.setAttribute("stroke", st.stroke);
+          r.setAttribute("stroke-width", "2");
+        }
+
+        // Hide panel
+        var panel = document.getElementById("dag-detail-panel");
+        if (panel) panel.classList.add("hidden");
+        var closeBtn = document.getElementById("dag-close-detail");
+        if (closeBtn) closeBtn.classList.add("hidden");
+
+        showInfo(null, dagData);
+
+        // Update URL — remove the unit param
+        var url = new URL(window.location);
+        url.searchParams.delete("unit");
+        window.history.pushState({ unit: null }, "", url.toString());
+      }
+
+      /* ── helpers ── */
+      function findNodeById(id, dagData) {
+        for (var j = 0; j < dagData.nodes.length; j++) {
+          if (dagData.nodes[j].id === id) return dagData.nodes[j];
+        }
+        return null;
+      }
+
+      function escapeHtml(str) {
+        var d = document.createElement("div");
+        d.textContent = str;
+        return d.innerHTML;
+      }
+
+      /* ── info bar (no selection) ── */
+      function showInfo(id, dagData) {
+        var info = document.getElementById("dag-info");
+        if (!info) return;
+        if (!id) {
+          info.innerHTML = '<span class="text-[var(--muted)] text-sm">Click a node to see details</span>';
+          return;
+        }
+        var n = findNodeById(id, dagData);
+        if (!n) return;
+        var deps = [], dependents = [];
+        for (var j = 0; j < dagData.edges.length; j++) {
+          var e = dagData.edges[j];
+          if (e.to === n.id) {
+            var src = findNodeById(e.from, dagData);
+            deps.push(src ? escapeHtml(src.label) : e.from);
+          }
+          if (e.from === n.id) {
+            var tgt = findNodeById(e.to, dagData);
+            dependents.push(tgt ? escapeHtml(tgt.label) : e.to);
+          }
+        }
+        var st = STATUS_COLORS[n.status] || STATUS_COLORS[DEFAULT_STATUS];
+
+        var html = '<div class="flex items-center gap-2 mb-1">' +
+          '<span class="font-bold text-sm">' + escapeHtml(n.label) + '</span>' +
+          '<span class="mono text-xs px-2 py-0.5 rounded" style="background:' + st.fill + ';color:#fff">' + escapeHtml(n.status) + '</span>' +
+          '</div>';
+        html += '<p class="text-xs text-[var(--muted)] mt-1">' +
+          (deps.length ? 'Depends on: ' + deps.join(', ') : 'No dependencies (root node)') +
+          '</p>';
+        html += '<p class="text-xs text-[var(--muted)] mt-1">' +
+          (dependents.length ? 'Required by: ' + dependents.join(', ') : 'No dependents (leaf node)') +
+          '</p>';
+        info.innerHTML = html;
+      }
+
+      /* ── detail panel renderer ── */
+      function showDetail(id, dagData) {
+        var n = findNodeById(id, dagData);
+        if (!n) return;
+
+        // Update info bar
+        showInfo(id, dagData);
+
+        // Show panel and close button
+        var panel = document.getElementById("dag-detail-panel");
+        var closeBtn = document.getElementById("dag-close-detail");
+        if (panel) panel.classList.remove("hidden");
+        if (closeBtn) closeBtn.classList.remove("hidden");
+
+        var content = document.getElementById("dag-detail-content");
+        if (!content) return;
+
+        var st = STATUS_COLORS[n.status] || STATUS_COLORS[DEFAULT_STATUS];
+
+        var html = '';
+
+        // ── Header with ID and status ──
+        html += '<div class="flex items-center justify-between mb-3 pb-3 border-b border-[var(--border)]">' +
+          '<div class="flex items-center gap-2">' +
+            '<span class="mono text-xs font-bold text-[var(--accent)]">' + escapeHtml(n.id.toUpperCase()) + '</span>' +
+            '<span class="mono text-xs px-2 py-0.5 rounded" style="background:' + st.fill + ';color:#fff">' + escapeHtml(n.status) + '</span>' +
+          '</div>' +
+        '</div>';
+
+        // ── Unit Metadata ──
+        html += '<section class="mb-3">' +
+          '<h3 class="mono text-xs uppercase tracking-wider text-[var(--muted)] mb-1.5">Unit Metadata</h3>' +
+          '<table class="w-full text-xs">' +
+            '<tr><td class="py-0.5 pr-2 text-[var(--muted)] w-16">ID</td><td class="mono">' + escapeHtml(n.id.toUpperCase()) + '</td></tr>' +
+            '<tr><td class="py-0.5 pr-2 text-[var(--muted)]">Title</td><td>' + escapeHtml(n.label) + '</td></tr>' +
+            (n.type ? '<tr><td class="py-0.5 pr-2 text-[var(--muted)]">Type</td><td><span class="px-1.5 py-0.5 rounded bg-[var(--card)] border border-[var(--border)]">' + escapeHtml(n.type) + '</span></td></tr>' : '') +
+            (n.repo ? '<tr><td class="py-0.5 pr-2 text-[var(--muted)]">Repo</td><td class="mono">' + escapeHtml(n.repo) + '</td></tr>' : '') +
+            (n.epic ? '<tr><td class="py-0.5 pr-2 text-[var(--muted)]">Epic</td><td>' + escapeHtml(n.epic) + '</td></tr>' : '') +
+          '</table>' +
+        '</section>';
+
+        // ── Acceptance Criteria ──
+        html += '<section class="mb-3">' +
+          '<h3 class="mono text-xs uppercase tracking-wider text-[var(--muted)] mb-1.5">Acceptance Criteria</h3>';
+        if (n.acceptanceCriteria && n.acceptanceCriteria.length > 0) {
+          html += '<ul class="text-xs space-y-1">';
+          for (var a = 0; a < n.acceptanceCriteria.length; a++) {
+            html += '<li class="flex items-start gap-1.5">' +
+              '<span class="text-[var(--accent)] mt-0.5">&#10003;</span>' +
+              '<span>' + escapeHtml(n.acceptanceCriteria[a]) + '</span>' +
+            '</li>';
+          }
+          html += '</ul>';
+        } else {
+          html += '<p class="text-xs text-[var(--muted)] italic">No acceptance criteria defined.</p>';
+        }
+        html += '</section>';
+
+        // ── Audit Log (timeline) ──
+        html += '<section class="mb-3">' +
+          '<h3 class="mono text-xs uppercase tracking-wider text-[var(--muted)] mb-1.5">Audit Log</h3>';
+        if (n.auditLog && n.auditLog.length > 0) {
+          html += '<div class="relative pl-4 border-l-2 border-[var(--border)] space-y-2">';
+          for (var al = 0; al < n.auditLog.length; al++) {
+            var entry = n.auditLog[al];
+            var entrySt = STATUS_COLORS[entry.to] || STATUS_COLORS[DEFAULT_STATUS];
+            html += '<div class="relative">' +
+              '<span class="absolute -left-[17px] top-1 w-2.5 h-2.5 rounded-full border-2" style="background:' + entrySt.fill + ';border-color:' + entrySt.stroke + '"></span>' +
+              '<p class="text-[10px] text-[var(--muted)]">' + escapeHtml(entry.date) + '</p>' +
+              '<p class="text-xs">' +
+                '<span class="mono text-[10px] px-1 py-0.5 rounded" style="background:' + (STATUS_COLORS[entry.from] || STATUS_COLORS[DEFAULT_STATUS]).fill + ';color:#fff">' + escapeHtml(entry.from) + '</span>' +
+                ' <span class="text-[var(--muted)]">&#8594;</span> ' +
+                '<span class="mono text-[10px] px-1 py-0.5 rounded" style="background:' + entrySt.fill + ';color:#fff">' + escapeHtml(entry.to) + '</span>' +
+              '</p>' +
+              (entry.note ? '<p class="text-xs text-[var(--muted)] mt-0.5">' + escapeHtml(entry.note) + '</p>' : '') +
+            '</div>';
+          }
+          html += '</div>';
+        } else {
+          html += '<p class="text-xs text-[var(--muted)] italic">No audit entries yet.</p>';
+        }
+        html += '</section>';
+
+        // ── Related Links ──
+        html += '<section class="mb-1">' +
+          '<h3 class="mono text-xs uppercase tracking-wider text-[var(--muted)] mb-1.5">Related Resources</h3>';
+        if (n.links && n.links.length > 0) {
+          html += '<ul class="text-xs space-y-1">';
+          for (var l = 0; l < n.links.length; l++) {
+            html += '<li>' +
+              '<a href="' + escapeHtml(n.links[l].url) + '" target="_blank" rel="noopener noreferrer" class="text-[var(--accent)] hover:underline flex items-center gap-1">' +
+                '<span>' + escapeHtml(n.links[l].label) + '</span>' +
+                '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>' +
+              '</a>' +
+            '</li>';
+          }
+          html += '</ul>';
+        } else {
+          html += '<p class="text-xs text-[var(--muted)] italic">No related resources.</p>';
+        }
+        html += '</section>';
+
+        content.innerHTML = html;
+      }
+
+      /* ── public filter API (consumed by filter toolbar) ── */
+      window.DagRenderer = {
+        getFilterOptions: function(data) {
+          var repos = {}, epics = {};
+          for (var i = 0; i < data.nodes.length; i++) {
+            var n = data.nodes[i];
+            if (n.repo) repos[n.repo] = true;
+            if (n.epic) epics[n.epic] = true;
+          }
+          return {
+            repos: Object.keys(repos).sort(),
+            epics: Object.keys(epics).sort()
+          };
+        },
+
+        applyFilter: function(data, filter) {
+          var repo = (filter.repo || "").trim();
+          var epic = (filter.epic || "").trim();
+          var search = (filter.search || "").trim().toLowerCase();
+
+          // Determine which nodes are visible
+          var visible = {};
+          for (var i = 0; i < data.nodes.length; i++) {
+            var n = data.nodes[i];
+            var match = true;
+            if (repo && n.repo !== repo) match = false;
+            if (epic && n.epic !== epic) match = false;
+            if (search && n.label.toLowerCase().indexOf(search) === -1) match = false;
+            visible[n.id] = match;
+          }
+
+          // Count visible
+          var visCount = 0;
+          for (var id in visible) { if (visible[id]) visCount++; }
+
+          // Show/hide node groups
+          var nodeGroups = gNodes.querySelectorAll("g[data-id]");
+          for (var j = 0; j < nodeGroups.length; j++) {
+            var g = nodeGroups[j];
+            var nid = g.getAttribute("data-id");
+            g.style.display = visible[nid] ? "" : "none";
+          }
+
+          // Show/hide edges based on both endpoints being visible
+          var edgePaths = gEdges.querySelectorAll("path");
+          // If no filter, show all edges
+          var hasFilter = !!(repo || epic || search);
+          if (!hasFilter) {
+            for (var k = 0; k < edgePaths.length; k++) {
+              edgePaths[k].style.display = "";
+            }
+          } else {
+            for (var k = 0; k < edgePaths.length; k++) {
+              var p = edgePaths[k];
+              var f = p.getAttribute("data-from");
+              var t = p.getAttribute("data-to");
+              p.style.display = (visible[f] && visible[t]) ? "" : "none";
+            }
+          }
+
+          // Update filter count badge
+          var countEl = document.getElementById("dag-filter-count");
+          var clearBtn = document.getElementById("dag-filter-clear");
+          if (countEl) {
+            if (hasFilter) {
+              countEl.textContent = String(visCount);
+              countEl.classList.remove("hidden");
+            } else {
+              countEl.classList.add("hidden");
+            }
+          }
+          if (clearBtn) {
+            if (hasFilter) {
+              clearBtn.classList.remove("hidden");
+            } else {
+              clearBtn.classList.add("hidden");
+            }
+          }
+
+          // Update visible count text
+          var visibleSpan = document.getElementById("dag-filter-visible-count");
+          if (visibleSpan) {
+            visibleSpan.textContent = visCount + " / " + data.nodes.length + " nodes";
+          }
+
+          // Highlight search matches
+          window.DagRenderer.highlightSearch(search);
+        },
+
+        highlightSearch: function(term) {
+          var groups = gNodes.querySelectorAll("g[data-id]");
+          for (var i = 0; i < groups.length; i++) {
+            var g = groups[i];
+            var rect = g.querySelector("rect");
+            if (!rect) continue;
+            if (term && g.style.display !== "none") {
+              var txt = g.querySelector("text");
+              var label = txt ? txt.textContent.toLowerCase() : "";
+              if (label.indexOf(term) !== -1) {
+                rect.setAttribute("stroke", "#fbbf24");
+                rect.setAttribute("stroke-width", "3");
+              } else {
+                var nid = g.getAttribute("data-id");
+                var nodeData = findNodeById(nid, window.__dagData);
+                var st = (nodeData && STATUS_COLORS[nodeData.status]) || STATUS_COLORS[DEFAULT_STATUS];
+                rect.setAttribute("stroke", st.stroke);
+                rect.setAttribute("stroke-width", "2");
+              }
+            } else {
+              var nid = g.getAttribute("data-id");
+              var nodeData = findNodeById(nid, window.__dagData);
+              var st = (nodeData && STATUS_COLORS[nodeData.status]) || STATUS_COLORS[DEFAULT_STATUS];
+              rect.setAttribute("stroke", st.stroke);
+              rect.setAttribute("stroke-width", "2");
+            }
+          }
+        }
+      };
+
+      /* ── filter helpers ── */
+      function populateFilterDropdown(selId, options) {
+        var sel = document.getElementById(selId);
+        if (!sel) return;
+        for (var i = 0; i < options.length; i++) {
+          var el = document.createElement("option");
+          el.value = options[i];
+          el.textContent = options[i];
+          sel.appendChild(el);
+        }
+      }
+
+      function initFilters() {
+        var data = window.__dagData;
+        if (!data) return;
+
+        var opts = DagRenderer.getFilterOptions(data);
+        populateFilterDropdown("dag-filter-repo", opts.repos);
+        populateFilterDropdown("dag-filter-epic", opts.epics);
+
+        var url = new URL(window.location);
+        var repoVal = url.searchParams.get("repo") || "";
+        var epicVal = url.searchParams.get("epic") || "";
+        var searchVal = url.searchParams.get("search") || "";
+
+        var repoEl = document.getElementById("dag-filter-repo");
+        var epicEl = document.getElementById("dag-filter-epic");
+        var searchEl = document.getElementById("dag-filter-search");
+        if (repoEl) repoEl.value = repoVal;
+        if (epicEl) epicEl.value = epicVal;
+        if (searchEl) searchEl.value = searchVal;
+
+        if (repoVal || epicVal || searchVal) {
+          DagRenderer.applyFilter(data, { repo: repoVal, epic: epicVal, search: searchVal });
+        }
+
+        var visibleSpan = document.getElementById("dag-filter-visible-count");
+        if (visibleSpan) {
+          visibleSpan.textContent = data.nodes.length + " / " + data.nodes.length + " nodes";
+        }
+
+        if (repoEl) {
+          repoEl.addEventListener("change", function() {
+            var v = repoEl.value;
+            DagRenderer.applyFilter(data, { repo: v, epic: epicEl ? epicEl.value : "", search: searchEl ? searchEl.value : "" });
+            updateFilterUrl({ repo: v, epic: epicEl ? epicEl.value : "", search: searchEl ? searchEl.value : "" });
+          });
+        }
+        if (epicEl) {
+          epicEl.addEventListener("change", function() {
+            var v = epicEl.value;
+            DagRenderer.applyFilter(data, { repo: repoEl ? repoEl.value : "", epic: v, search: searchEl ? searchEl.value : "" });
+            updateFilterUrl({ repo: repoEl ? repoEl.value : "", epic: v, search: searchEl ? searchEl.value : "" });
+          });
+        }
+        if (searchEl) {
+          searchEl.addEventListener("input", function() {
+            var v = searchEl.value;
+            DagRenderer.applyFilter(data, { repo: repoEl ? repoEl.value : "", epic: epicEl ? epicEl.value : "", search: v });
+            updateFilterUrl({ repo: repoEl ? repoEl.value : "", epic: epicEl ? epicEl.value : "", search: v });
+          });
+        }
+        var clearBtn = document.getElementById("dag-filter-clear");
+        if (clearBtn) {
+          clearBtn.addEventListener("click", function() {
+            if (repoEl) repoEl.value = "";
+            if (epicEl) epicEl.value = "";
+            if (searchEl) searchEl.value = "";
+            DagRenderer.applyFilter(data, { repo: "", epic: "", search: "" });
+            updateFilterUrl({ repo: "", epic: "", search: "" });
+          });
+        }
+      }
+
+      function updateFilterUrl(filter) {
+        var url = new URL(window.location);
+        if (filter.repo) url.searchParams.set("repo", filter.repo);
+        else url.searchParams.delete("repo");
+        if (filter.epic) url.searchParams.set("epic", filter.epic);
+        else url.searchParams.delete("epic");
+        if (filter.search) url.searchParams.set("search", filter.search);
+        else url.searchParams.delete("search");
+        window.history.replaceState(null, "", url.toString());
+      }
+
+      /* ── boot on DOMContentLoaded ── */
+      function boot() {
+        var container = document.getElementById("dag-canvas");
+        var scriptEl = document.getElementById("dag-data-json");
+        if (container && scriptEl) {
+          try {
+            var data = JSON.parse(scriptEl.textContent);
+            // Store globally for closeDetail and History API popstate
+            window.__dagData = data;
+            render(data, container);
+            initFilters();
+          } catch (e) {
+            container.innerHTML = '<div class="p-4 text-red-500 text-sm">Failed to load DAG data: ' + e.message + '</div>';
+          }
+        }
+      }
+
+      // ── History API: handle browser back/forward ──
+      window.addEventListener("popstate", function(ev) {
+        if (ev.state && ev.state.unit) {
+          var dagData = window.__dagData;
+          if (dagData) {
+            selectNode(ev.state.unit, dagData);
+          }
+        } else {
+          closeDetail();
+        }
+      });
+
+      if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", boot);
+      } else {
+        boot();
+      }
+    })();
+    </script>
+  </body>
+</html>

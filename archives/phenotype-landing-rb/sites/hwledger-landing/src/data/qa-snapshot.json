@@ -1,0 +1,15 @@
+{
+  "_comment": "Static fallback for /qa panels. Used when the GitHub API is rate-limited (429) or otherwise unreachable at build time. Each panel mirrors the shape ghReport<T>() returns: { data, reason }. Refresh with `bun run data:refresh` once the upstream files exist.",
+  "coverage": {
+    "data": null,
+    "reason": "<code>docs/reports/coverage.json</code> not yet emitted by <code>KooshaPari/hwLedger</code>. Add the file to populate this panel."
+  },
+  "lint": {
+    "data": null,
+    "reason": "<code>docs/reports/lint.json</code> not yet emitted by <code>KooshaPari/hwLedger</code>. Add the file to populate this panel."
+  },
+  "frTrace": {
+    "data": null,
+    "reason": "<code>docs/reports/fr-trace.json</code> not yet emitted by <code>KooshaPari/hwLedger</code>. Add the file to populate this panel."
+  }
+}

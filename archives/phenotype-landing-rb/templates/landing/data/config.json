@@ -1,0 +1,55 @@
+{
+  "brand": {
+    "name": "BytePort",
+    "tagline": "Secure byte-level port forwarding",
+    "description": "BytePort is a secure, high-performance port forwarding solution for modern infrastructure."
+  },
+  "header": {
+    "links": [
+      { "text": "Docs", "href": "#docs" },
+      { "text": "GitHub", "href": "https://github.com/KooshaPari/BytePort" }
+    ]
+  },
+  "hero": {
+    "title": "BytePort",
+    "subtitle": "Secure byte-level port forwarding for modern infrastructure.",
+    "cta": {
+      "text": "Get Started",
+      "href": "#get-started"
+    }
+  },
+  "features": {
+    "title": "Features",
+    "items": [
+      {
+        "title": "Secure",
+        "description": "End-to-end encryption with TLS 1.3.",
+        "icon": "🔒"
+      },
+      {
+        "title": "Fast",
+        "description": "Zero-copy forwarding with kernel bypass.",
+        "icon": "⚡"
+      },
+      {
+        "title": "Observable",
+        "description": "Built-in metrics and tracing.",
+        "icon": "📊"
+      }
+    ]
+  },
+  "cta": {
+    "text": "Deploy Now",
+    "href": "https://github.com/KooshaPari/BytePort",
+    "secondary": {
+      "text": "Read Docs",
+      "href": "#docs"
+    }
+  },
+  "footer": {
+    "links": [
+      { "text": "GitHub", "href": "https://github.com/KooshaPari/BytePort" },
+      { "text": "License", "href": "#license" }
+    ]
+  }
+}

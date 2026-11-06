@@ -1,0 +1,59 @@
+# yaml-language-server: $schema=https://taskfile.dev/schema.json
+version: "3"
+
+vars:
+  RUNTIME:
+    sh: |
+      if [ -f bun.lock ] || [ -f bun.lockb ]; then
+        printf bun
+      elif [ -f pnpm-lock.yaml ]; then
+        printf pnpm
+      elif [ -f yarn.lock ]; then
+        printf yarn
+      else
+        printf npm
+      fi
+  BUILD_CMD: "{{.RUNTIME}} run build"
+  CHECK_CMD:
+    sh: |
+      case "{{.RUNTIME}}" in
+        bun) printf "bunx astro check" ;;
+        pnpm) printf "pnpm exec astro check" ;;
+        yarn) printf "yarn astro check" ;;
+        *) printf "npx astro check" ;;
+      esac
+
+tasks:
+  default:
+    desc: Run the standard Astro validation task
+    cmds:
+      - task: test
+
+  build:
+    desc: Build the Astro site
+    summary: Uses the detected JavaScript package manager and Astro build script.
+    preconditions:
+      - sh: command -v {{.RUNTIME}}
+        msg: "{{.RUNTIME}} is required to build this Astro site."
+    cmds:
+      - "{{.BUILD_CMD}}"
+
+  test:
+    desc: Run site validation checks for the Astro project
+    cmds:
+      - task: lint
+      - task: build
+
+  lint:
+    desc: Run Astro diagnostics and TypeScript checks
+    summary: The repo does not define a dedicated lint script, so Astro check is the canonical validation command.
+    preconditions:
+      - sh: command -v {{.RUNTIME}}
+        msg: "{{.RUNTIME}} is required to run Astro diagnostics."
+    cmds:
+      - "{{.CHECK_CMD}}"
+
+  clean:
+    desc: Remove generated build artifacts
+    cmds:
+      - git clean -fdX -- dist .astro
