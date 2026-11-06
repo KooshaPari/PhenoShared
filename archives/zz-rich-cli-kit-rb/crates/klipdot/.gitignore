@@ -1,0 +1,54 @@
+# Phenotype-org standard .gitignore — Rust
+# Source: https://github.com/KooshaPari/phenotype-tooling/blob/main/templates/gitignore-rust
+
+# Build artifacts
+/target/
+**/*.rs.bk
+Cargo.lock.bak
+
+# Editor
+.idea/
+.vscode/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# ─── Tier-0 additions (orch-v11-019) ────────────────────────────────────────
+# These files were previously committed in error. They are cargo/rustc
+# diagnostic outputs, not source. The actual lint configuration lives in
+# `clippy.toml`. The actual formatter config lives in `rustfmt.toml`.
+
+# Cargo diagnostic JSON (was confused with the clippy lint config)
+/clippy.json
+clippy.json
+
+# Cargo / clippy text-mode diagnostic dumps
+/clippy_full.txt
+/clippy_run.txt
+/clippy_summary.txt
+
+# Parser debug output (was used by p2.py / p3.py)
+/p3_out.txt
+
+# Editor temporary / autosave files
+*~
+*.bak
+*.tmp
+
+# Python tooling cache
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Node tooling (the project ships JS helpers under src/)
+node_modules/
+
+# Coverage / instrumentation (kept out until explicitly adopted)
+coverage/
+*.lcov
+*.profraw

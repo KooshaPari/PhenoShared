@@ -1,0 +1,46 @@
+# gitattributes — Phenotype-org tier-0 hygiene
+# Source: https://github.com/KooshaPari/phenotype-tooling/blob/main/templates/gitattributes
+
+# Normalize line endings for text files
+*               text=auto eol=lf
+
+# Force LF for shell scripts and config files that must be LF on Windows
+*.sh            text eol=lf
+*.zsh           text eol=lf
+*.bash          text eol=lf
+*.yml           text eol=lf
+*.yaml          text eol=lf
+*.toml          text eol=lf
+*.json          text eol=lf
+*.rs            text eol=lf
+Makefile        text eol=lf
+justfile        text eol=lf
+
+# Mark common binary formats explicitly so git can diff them efficiently
+*.png           binary
+*.jpg           binary
+*.jpeg          binary
+*.gif           binary
+*.webp          binary
+*.ico           binary
+*.pdf           binary
+*.zip           binary
+*.gz            binary
+*.tar           binary
+*.tgz           binary
+*.wasm          binary
+*.rlib          binary
+*.rmeta         binary
+*.d             binary
+*.o             binary
+*.a             binary
+*.so            binary
+*.dylib         binary
+*.dll           binary
+*.exe           binary
+
+# Tape scripts are text
+*.tape          text eol=lf
+
+# Whitespace handling for Markdown — preserve trailing spaces in markdown line breaks
+*.md            text eol=lf whitespace=-trailing-space

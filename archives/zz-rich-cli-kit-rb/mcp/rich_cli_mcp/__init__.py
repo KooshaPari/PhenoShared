@@ -1,0 +1,4 @@
+"""rich-cli-mcp — FastMCP wrapper over the `rck` CLI."""
+from .server import build_server, main
+
+__all__ = ["build_server", "main"]

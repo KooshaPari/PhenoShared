@@ -1,0 +1,18 @@
+[package]
+name = "rck-cli"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "Rich-CLI Kit CLI (rck)"
+
+[[bin]]
+name = "rck"
+path = "src/main.rs"
+
+[dependencies]
+rck-core = { path = "../rck-core", version = "0.1.0" }
+anyhow.workspace = true
+clap.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+tokio.workspace = true
