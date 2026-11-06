@@ -1,0 +1,87 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  packages: write
+
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4 # v4.1.1
+        with:
+          fetch-depth: 0
+
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@29eef336d9b2848a0b548edc03f92a220660cdb8
+
+      - name: Cache cargo
+        uses: actions/cache@2c8a9bd7457de244a408f35966fab2fb45fda9c8 # v6.0.0
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+          key: ${{ runner.os }}-cargo-release-${{ hashFiles('**/Cargo.lock') }}
+
+      - name: Build release
+        run: cargo build --release --workspace
+
+      - name: Test release
+        run: cargo test --release --workspace
+
+  release:
+    needs: build
+    runs-on: ubuntu-24.04
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+    steps:
+      - uses: actions/checkout@v4 # v4.1.1
+        with:
+          fetch-depth: 0
+
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@29eef336d9b2848a0b548edc03f92a220660cdb8
+
+      - name: Determine version
+        id: version
+        run: |
+          VERSION=$(grep '^version' Cargo.toml | head -1 | cut -d'"' -f2)
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Publish to crates.io
+        env:
+          CARGO_REGISTRY_TOKEN: ${{ secrets.CARGO_REGISTRY_TOKEN }}
+        run: cargo publish --token "$CARGO_REGISTRY_TOKEN"
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@c9b46fe7aad96a303e41ae3f2b35614778532558 # v2.0.0
+        with:
+          name: ${{ github.ref_name }}
+          tag_name: ${{ github.ref_name }}
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  promote:
+    needs: release
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4 # v4.1.1
+
+      - name: Promote to staging
+        uses: KooshaPari/phenotypeActions/promote@48772d7560c964fff01a209742429f24283e96cf # was: @main
+        with:
+          version: ${{ needs.release.outputs.version }}
+          channel: beta
+          registry: crates.io

@@ -1,0 +1,78 @@
+[workspace]
+resolver = "2"
+
+[package]
+name = "taskkit"
+version = "0.1.0"
+edition = "2021"
+description = "Universal task execution framework with scheduling, workflow orchestration, and plugin support."
+license = "MIT OR Apache-2.0"
+authors = ["Phenotype <dev@kooshapari.com>"]
+readme = "README.md"
+repository = "https://github.com/phenotype-dev/Tasken"
+documentation = "https://docs.rs/taskkit"
+rust-version = "1.75"
+
+[dependencies]
+cron-parser = "0.11"
+petgraph = "0.8.3"
+# Async
+async-trait = "0.1"
+tokio = { version = "1", features = ["full"] }
+futures = "0.3"
+
+# Serialization
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+
+# Time
+chrono = { version = "0.4", features = ["serde"] }
+
+# CLI
+clap = { version = "4.5", features = ["derive"] }
+dotenvy = "0.15"
+libc = "0.2"
+
+# File system watching
+notify = { version = "8", features = ["macos_kqueue"] }
+
+# Error handling
+thiserror = "2.0"
+anyhow = "1.0"
+
+# Utilities
+uuid = { version = "1", features = ["v4", "serde"] }
+dirs = "6"
+
+# Configuration
+envy = "0.4"
+
+# Parsing
+toml = "1.1"
+serde_yaml = "0.9"
+
+# Observability
+# tracing macros are used unconditionally in main.rs and infrastructure.
+tracing = "0.1"
+# tracing-subscriber formats logs; .json() requires the "json" feature.
+tracing-subscriber = { version = "0.3", features = ["env-filter", "registry", "json"] }
+# opentelemetry is opt-in via the `otel` feature.
+opentelemetry = { version = "0.32", optional = true }
+# pheno-otel is an optional Phenotype-internal metrics shim (L62 error rate).
+# The crate is not yet published; enable once ../pheno-otel ships a Cargo.toml.
+# pheno-otel = { path = "../pheno-otel", optional = true }
+
+[dev-dependencies]
+tempfile = "3"
+temp-env = "0.3"
+
+[features]
+default = []
+# Enable OpenTelemetry-compatible span instrumentation on the
+# `infrastructure::otel` module. When enabled, the `tracing` and
+# `opentelemetry` optional dependencies are activated, and the otel.rs
+# module compiles. The OTel abstraction (OtelSpanExt + TracingOtelSpan)
+# is wired into TaskService::run_task and TaskService::execute_workflow,
+# but the actual exporter (stdout, OTLP, etc.) is left to the embedding
+# application — see `infrastructure::otel::init_tracer` for a stub.
+otel = ["dep:opentelemetry"]
