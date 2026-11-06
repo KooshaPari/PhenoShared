@@ -1,0 +1,15 @@
+[workspace]
+members = [
+    "crates/pheno-proc-core",
+    "crates/pheno-proc-dedup",
+    "crates/pheno-proc-queue",
+    "crates/pheno-proc-shm",
+    "crates/pheno-proc-uds",
+]
+resolver = "2"
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+license = "MIT"
+repository = "https://github.com/KooshaPari/PhenoProc"

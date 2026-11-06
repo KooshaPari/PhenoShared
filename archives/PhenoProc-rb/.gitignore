@@ -1,0 +1,5 @@
+
+# Nested git repos (submodules)
+Evalora
+crates/datamold
+crates/guardis

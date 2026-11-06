@@ -1,0 +1,13 @@
+/Users/kooshapari/CodeProjects/Phenotype/repos/phenotype-validation/src/Phenotype.Validation/bin/Debug/net9.0/Phenotype.Validation.deps.json
+/Users/kooshapari/CodeProjects/Phenotype/repos/phenotype-validation/src/Phenotype.Validation/bin/Debug/net9.0/Phenotype.Validation.dll
+/Users/kooshapari/CodeProjects/Phenotype/repos/phenotype-validation/src/Phenotype.Validation/bin/Debug/net9.0/Phenotype.Validation.pdb
+/Users/kooshapari/CodeProjects/Phenotype/repos/phenotype-validation/src/Phenotype.Validation/obj/Debug/net9.0/Phenotype.Validation.csproj.AssemblyReference.cache
+/Users/kooshapari/CodeProjects/Phenotype/repos/phenotype-validation/src/Phenotype.Validation/obj/Debug/net9.0/Phenotype.Validation.GeneratedMSBuildEditorConfig.editorconfig
+/Users/kooshapari/CodeProjects/Phenotype/repos/phenotype-validation/src/Phenotype.Validation/obj/Debug/net9.0/Phenotype.Validation.AssemblyInfoInputs.cache
+/Users/kooshapari/CodeProjects/Phenotype/repos/phenotype-validation/src/Phenotype.Validation/obj/Debug/net9.0/Phenotype.Validation.AssemblyInfo.cs
+/Users/kooshapari/CodeProjects/Phenotype/repos/phenotype-validation/src/Phenotype.Validation/obj/Debug/net9.0/Phenotype.Validation.csproj.CoreCompileInputs.cache
+/Users/kooshapari/CodeProjects/Phenotype/repos/phenotype-validation/src/Phenotype.Validation/obj/Debug/net9.0/Phenotype.Validation.sourcelink.json
+/Users/kooshapari/CodeProjects/Phenotype/repos/phenotype-validation/src/Phenotype.Validation/obj/Debug/net9.0/Phenotype.Validation.dll
+/Users/kooshapari/CodeProjects/Phenotype/repos/phenotype-validation/src/Phenotype.Validation/obj/Debug/net9.0/refint/Phenotype.Validation.dll
+/Users/kooshapari/CodeProjects/Phenotype/repos/phenotype-validation/src/Phenotype.Validation/obj/Debug/net9.0/Phenotype.Validation.pdb
+/Users/kooshapari/CodeProjects/Phenotype/repos/phenotype-validation/src/Phenotype.Validation/obj/Debug/net9.0/ref/Phenotype.Validation.dll
