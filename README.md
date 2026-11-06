@@ -17,3 +17,13 @@ A multi-agent system benefits from separating the surfaces where people interact
 - Validate the complete user-visible workflow, not just component health checks.
 
 The full original document, including its local uncommitted changes and prior history, remains local and is excluded from this public branch.
+
+## Contents
+
+- `PHENOTYPE_ARCHITECTURE.sanitized.md` — a ~158-line sanitized excerpt covering the
+  mental model, the authority-boundary table (private repos abstracted to roles),
+  cross-cutting contracts, and naming/convention rules.
+
+Omitted: the full internal document, its dated session worklogs, repository
+inventory, host paths, identities and credentials. The complete history is
+archived privately, not here.
