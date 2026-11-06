@@ -1,0 +1,18 @@
+[package]
+name = "ports"
+description = "Multi-backend VCS hexagonal ports (git, jj)"
+authors = ["Phenotype"]
+keywords = ["vcs", "hexagonal", "ports"]
+categories = ["development-tools", "version-control"]
+
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[dependencies]
+async-trait = "0.1"
+pheno-vcs-core = { path = "../crates/pheno-vcs-core" }
+
+[dev-dependencies]
+tokio = { version = "1", features = ["macros", "rt"] }

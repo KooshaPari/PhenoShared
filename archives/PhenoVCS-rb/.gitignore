@@ -1,0 +1,51 @@
+# Build artifacts
+target/
+dist/
+build/
+*.o
+*.so
+*.dylib
+*.rlib
+*.rmeta
+
+# Dependencies
+node_modules/
+vendor/
+.venv/
+venv/
+.env
+.env.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+
+# Test
+coverage/
+*.lcov
+.nyc_output/
+
+# Misc
+*.tmp
+*.bak
+*.orig
+
+# ===== Standard auto-generated hygiene ignores (do not edit manually) =====
+.env.*
+!.env.example
+.pytest_cache/
+__pycache__/
+.mypy_cache/
+.ruff_cache/
+# ===== End standard hygiene ignores =====

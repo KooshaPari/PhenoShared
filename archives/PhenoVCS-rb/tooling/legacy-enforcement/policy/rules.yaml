@@ -1,0 +1,15 @@
+# WARN-mode legacy tooling policy (PhenoVCS in-repo copy).
+# Upstream shared host `kooshapari/phenotype` was retired; keep a minimal
+# local policy so CI can still run the gate without an external checkout.
+version: 1
+rules:
+  - id: shell-over-5-lines
+    severity: medium
+    description: Shell scripts should stay ≤5 lines of glue per scripting policy
+    patterns:
+      - "**/*.sh"
+  - id: standalone-python-cli
+    severity: low
+    description: Prefer Rust CLIs over new standalone Python entrypoints
+    patterns:
+      - "**/scripts/**/*.py"
