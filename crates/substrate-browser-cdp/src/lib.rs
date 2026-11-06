@@ -22,6 +22,8 @@ mod provider;
 mod snapshot;
 mod transport;
 
+pub use transport::FenceCheck;
+
 pub use launch::{chrome_binary, ChromeProcess, LaunchOptions};
 pub use provider::CdpProvider;
 pub use snapshot::{AxNode, Snapshot};

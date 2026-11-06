@@ -68,10 +68,10 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                     validated.is_ok()
                 );
                 let _ = leases.revoke(&lease.id);
-            }
+            },
             Err(_) => {
                 refused += 1;
-            }
+            },
         }
     }
 

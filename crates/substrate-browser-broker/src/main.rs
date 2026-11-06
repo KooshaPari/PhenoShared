@@ -14,6 +14,7 @@ struct Args {
     bind: String,
     token: Option<String>,
     headed: bool,
+    principal_tokens: bool,
 }
 
 fn parse_args() -> Result<Args, String> {
@@ -21,6 +22,7 @@ fn parse_args() -> Result<Args, String> {
     let mut bind = "127.0.0.1:8787".to_string();
     let mut token = None;
     let mut headed = false;
+    let mut principal_tokens = false;
 
     let mut args = env::args().skip(1);
     while let Some(arg) = args.next() {
@@ -36,6 +38,7 @@ fn parse_args() -> Result<Args, String> {
                 }
             },
             "--headed" => headed = true,
+            "--principal-tokens" => principal_tokens = true,
             "--help" | "-h" => {
                 println!("{}", HELP);
                 std::process::exit(0);
@@ -49,6 +52,7 @@ fn parse_args() -> Result<Args, String> {
         bind,
         token,
         headed,
+        principal_tokens,
     })
 }
 
@@ -60,6 +64,8 @@ brokerd - lease-guarded browser broker
   --token <value>    require this bearer token
   --token-env <var>  read the bearer token from an environment variable
   --headed           run browsers with a window instead of headless
+  --principal-tokens require <PRINCIPAL>_BROKER_TOKEN env vars and scope each
+                     token to that principal's sessions (overrides --token)
 
 Binding anywhere other than loopback without --token is refused.";
 
@@ -85,7 +91,7 @@ async fn main() -> ExitCode {
         },
     };
 
-    if !is_loopback(&args.bind) && args.token.is_none() {
+    if !is_loopback(&args.bind) && args.token.is_none() && !args.principal_tokens {
         eprintln!(
             "brokerd: refusing to bind {} without a bearer token; \
              pass --token or --token-env",
@@ -107,9 +113,27 @@ async fn main() -> ExitCode {
     let broker = Arc::new(broker);
 
     let address = args.bind.clone();
+    // Per-principal tokens come from `<PRINCIPAL>_BROKER_TOKEN` env vars when
+    // `--principal-tokens` is passed; otherwise the single token applies.
+    let mut principal_tokens = std::collections::BTreeMap::new();
+    if args.principal_tokens {
+        for (key, value) in std::env::vars() {
+            if let Some(principal) = key.strip_suffix("_BROKER_TOKEN") {
+                if !principal.is_empty() && !value.is_empty() {
+                    principal_tokens.insert(principal.to_ascii_lowercase(), value);
+                }
+            }
+        }
+        if principal_tokens.is_empty() {
+            eprintln!("brokerd: --principal-tokens found no <PRINCIPAL>_BROKER_TOKEN env vars");
+            return ExitCode::from(2);
+        }
+    }
+
     let config = ViewerConfig {
         bind: args.bind,
         token: args.token,
+        principal_tokens,
     };
 
     match serve(broker, config).await {

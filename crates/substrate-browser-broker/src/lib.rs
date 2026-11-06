@@ -48,7 +48,7 @@ mod handle;
 mod lease_guard;
 mod viewer;
 
-pub use viewer::{router, serve, ViewerConfig};
+pub use viewer::{router, router_with, serve, ViewerConfig};
 
 // Re-exported so callers can build scopes and read leases without taking a
 // second direct dependency.

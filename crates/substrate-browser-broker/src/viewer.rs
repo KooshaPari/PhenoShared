@@ -24,7 +24,13 @@ pub struct ViewerConfig {
     /// Address to bind, for example `127.0.0.1:8787`.
     pub bind: String,
     /// When set, every request must carry `Authorization: Bearer <token>`.
+    ///
+    /// This single token grants every session. It is kept for local use and for
+    /// backwards compatibility; prefer [`ViewerConfig::principal_tokens`].
     pub token: Option<String>,
+    /// Per-principal tokens. When non-empty, each token sees only its own
+    /// principal's sessions and `token` is ignored.
+    pub principal_tokens: std::collections::BTreeMap<String, String>,
 }
 
 impl ViewerConfig {
@@ -33,7 +39,21 @@ impl ViewerConfig {
         Self {
             bind: bind.into(),
             token: None,
+            principal_tokens: std::collections::BTreeMap::new(),
         }
+    }
+
+    /// Grant `token` access to exactly `principal`'s sessions.
+    ///
+    /// Adding any principal token switches the viewer to per-principal mode,
+    /// where a token can only see leases owned by its own principal.
+    pub fn with_principal_token(
+        mut self,
+        principal: impl Into<String>,
+        token: impl Into<String>,
+    ) -> Self {
+        self.principal_tokens.insert(principal.into(), token.into());
+        self
     }
 
     /// Require a bearer token, for example when binding beyond loopback.
@@ -46,9 +66,71 @@ impl ViewerConfig {
 struct AppState {
     broker: Arc<Broker>,
     token: Option<String>,
+    principal_tokens: std::collections::BTreeMap<String, String>,
+}
+
+/// What a presented credential is allowed to see.
+#[derive(Debug, Clone, PartialEq, Eq)]
+enum Grant {
+    /// Every session (legacy single-token mode, or no token configured).
+    Everything,
+    /// Only the named principal's sessions.
+    Principal(String),
+}
+
+fn constant_time_eq(expected: &str, presented: &str) -> bool {
+    let expected = expected.as_bytes();
+    let presented = presented.as_bytes();
+    if expected.len() != presented.len() {
+        return false;
+    }
+    expected
+        .iter()
+        .zip(presented)
+        .fold(0u8, |acc, (a, b)| acc | (a ^ b))
+        == 0
+}
+
+fn bearer(headers: &HeaderMap) -> Option<&str> {
+    headers
+        .get(header::AUTHORIZATION)
+        .and_then(|value| value.to_str().ok())
+        .and_then(|value| value.strip_prefix("Bearer "))
 }
 
 impl AppState {
+    /// Resolve the credential to the set of sessions it may see.
+    fn grant(&self, headers: &HeaderMap) -> Option<Grant> {
+        if !self.principal_tokens.is_empty() {
+            let presented = bearer(headers)?;
+            for (principal, expected) in &self.principal_tokens {
+                if constant_time_eq(expected, presented) {
+                    return Some(Grant::Principal(principal.clone()));
+                }
+            }
+            return None;
+        }
+        match &self.token {
+            None => Some(Grant::Everything),
+            Some(expected) => {
+                let presented = bearer(headers)?;
+                if constant_time_eq(expected, presented) {
+                    Some(Grant::Everything)
+                } else {
+                    None
+                }
+            },
+        }
+    }
+
+    /// Whether this grant may see a lease owned by `principal`.
+    fn allows(&self, grant: &Grant, principal: &str) -> bool {
+        match grant {
+            Grant::Everything => true,
+            Grant::Principal(owner) => owner == principal,
+        }
+    }
+
     fn authorised(&self, headers: &HeaderMap) -> bool {
         let Some(expected) = &self.token else {
             return true;
@@ -76,7 +158,20 @@ impl AppState {
 
 /// Build the viewer router.
 pub fn router(broker: Arc<Broker>, token: Option<String>) -> Router {
-    let state = Arc::new(AppState { broker, token });
+    router_with(broker, token, std::collections::BTreeMap::new())
+}
+
+/// Build the viewer router with per-principal tokens.
+pub fn router_with(
+    broker: Arc<Broker>,
+    token: Option<String>,
+    principal_tokens: std::collections::BTreeMap<String, String>,
+) -> Router {
+    let state = Arc::new(AppState {
+        broker,
+        token,
+        principal_tokens,
+    });
     Router::new()
         .route("/healthz", get(healthz))
         .route("/v1/leases", get(leases))
@@ -88,7 +183,11 @@ pub fn router(broker: Arc<Broker>, token: Option<String>) -> Router {
 
 /// Serve the viewer until the process is stopped.
 pub async fn serve(broker: Arc<Broker>, config: ViewerConfig) -> Result<()> {
-    let app = router(broker, config.token.clone());
+    let app = router_with(
+        broker,
+        config.token.clone(),
+        config.principal_tokens.clone(),
+    );
     let listener = tokio::net::TcpListener::bind(&config.bind)
         .await
         .map_err(substrate_browser_cdp::CdpError::Io)?;
@@ -111,20 +210,35 @@ async fn healthz() -> Response {
 }
 
 async fn leases(State(state): State<Arc<AppState>>, headers: HeaderMap) -> Response {
-    if !state.authorised(&headers) {
+    let Some(grant) = state.grant(&headers) else {
         return unauthorised();
-    }
+    };
     match state.broker.leases().list() {
-        Ok(list) => Json(json!({ "leases": list })).into_response(),
+        Ok(list) => {
+            let visible: Vec<_> = list
+                .into_iter()
+                .filter(|lease| state.allows(&grant, &lease.principal))
+                .collect();
+            Json(json!({ "leases": visible })).into_response()
+        },
         Err(err) => internal(err.to_string()),
     }
 }
 
+fn scope_principal(scope: &str) -> &str {
+    scope.split('/').next().unwrap_or(scope)
+}
+
 async fn sessions(State(state): State<Arc<AppState>>, headers: HeaderMap) -> Response {
-    if !state.authorised(&headers) {
+    let Some(grant) = state.grant(&headers) else {
         return unauthorised();
-    }
-    Json(json!({ "sessions": state.broker.live().await })).into_response()
+    };
+    let live = state.broker.live().await;
+    let visible: Vec<_> = live
+        .into_iter()
+        .filter(|session| state.allows(&grant, scope_principal(&session.scope)))
+        .collect();
+    Json(json!({ "sessions": visible })).into_response()
 }
 
 async fn view(
@@ -132,9 +246,9 @@ async fn view(
     headers: HeaderMap,
     Path(lease_id): Path<String>,
 ) -> Response {
-    if !state.authorised(&headers) {
+    let Some(grant) = state.grant(&headers) else {
         return unauthorised();
-    }
+    };
 
     let session = state
         .broker
@@ -150,6 +264,16 @@ async fn view(
         )
             .into_response();
     };
+
+    if !state.allows(&grant, scope_principal(&session.scope)) {
+        // 404 rather than 403: a caller should not learn that another
+        // principal's lease exists.
+        return (
+            StatusCode::NOT_FOUND,
+            Json(json!({ "error": "no live session", "lease_id": lease_id })),
+        )
+            .into_response();
+    }
 
     match state.broker.screenshot(&lease_id).await {
         Ok(png) => Json(json!({
@@ -173,8 +297,24 @@ async fn view_png(
     headers: HeaderMap,
     Path(lease_id): Path<String>,
 ) -> Response {
-    if !state.authorised(&headers) {
+    let Some(grant) = state.grant(&headers) else {
         return unauthorised();
+    };
+    // Resolve the owner before touching the browser: a cross-principal read must
+    // not even take the frame.
+    let owner = state
+        .broker
+        .live()
+        .await
+        .into_iter()
+        .find(|session| session.lease_id == lease_id)
+        .map(|session| scope_principal(&session.scope).to_string());
+    if !matches!(&owner, Some(principal) if state.allows(&grant, principal)) {
+        return (
+            StatusCode::NOT_FOUND,
+            Json(json!({ "error": "no live session", "lease_id": lease_id })),
+        )
+            .into_response();
     }
     match state.broker.screenshot(&lease_id).await {
         Ok(png) => ([(header::CONTENT_TYPE, "image/png")], png).into_response(),

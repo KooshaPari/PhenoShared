@@ -14,6 +14,7 @@
 use std::sync::Arc;
 
 use substrate_browser::{Lease, LeaseManager};
+use substrate_browser_cdp::FenceCheck;
 
 use crate::Result;
 
@@ -55,5 +56,14 @@ impl std::fmt::Debug for LeaseGuard {
             .field("lease_id", &self.lease_id)
             .field("fencing_token", &self.fencing_token)
             .finish_non_exhaustive()
+    }
+}
+
+impl FenceCheck for LeaseGuard {
+    fn check(&self) -> std::result::Result<(), String> {
+        // Explicit path: the inherent `check` wins resolution, so name it.
+        LeaseGuard::check(self)
+            .map(|_| ())
+            .map_err(|err| err.to_string())
     }
 }

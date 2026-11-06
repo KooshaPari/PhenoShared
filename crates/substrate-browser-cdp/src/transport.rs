@@ -9,7 +9,10 @@
 //! agent its own browser and its own profile generation, not by multiplexing one
 //! connection.
 
-use std::{sync::atomic::AtomicU64, time::Duration};
+use std::{
+    sync::{atomic::AtomicU64, Arc},
+    time::Duration,
+};
 
 use futures_util::{SinkExt, StreamExt};
 use serde_json::{json, Value};
@@ -22,10 +25,29 @@ type Socket = WebSocketStream<MaybeTlsStream<TcpStream>>;
 
 static CALL_SEQUENCE: AtomicU64 = AtomicU64::new(0);
 
+/// A lease-fencing check invoked before every CDP command.
+///
+/// Implementors return `Err(reason)` when the caller no longer holds the
+/// lease for the browser; the transport refuses to write the frame and
+/// surfaces the reason as a protocol error.
+pub trait FenceCheck: Send + Sync {
+    /// Return `Ok(())` when the fence is satisfied, or `Err(reason)`.
+    fn check(&self) -> std::result::Result<(), String>;
+}
+
+/// Evaluate a fence, returning its failure reason if any.
+fn evaluate_fence(fence: &Option<Arc<dyn FenceCheck>>) -> std::result::Result<(), String> {
+    match fence {
+        Some(fence) => fence.check(),
+        None => Ok(()),
+    }
+}
+
 /// One CDP connection.
 pub struct Cdp {
     socket: Socket,
     timeout: Duration,
+    fence: Option<Arc<dyn FenceCheck>>,
 }
 
 impl std::fmt::Debug for Cdp {
@@ -45,6 +67,7 @@ impl Cdp {
         Ok(Self {
             socket,
             timeout: Duration::from_secs(30),
+            fence: None,
         })
     }
 
@@ -52,6 +75,11 @@ impl Cdp {
     pub fn with_timeout(mut self, timeout: Duration) -> Self {
         self.timeout = timeout;
         self
+    }
+
+    /// Install or clear the lease fence checked before every command.
+    pub fn set_fence(&mut self, fence: Option<Arc<dyn FenceCheck>>) {
+        self.fence = fence;
     }
 
     /// Send one command and wait for its result.
@@ -74,6 +102,9 @@ impl Cdp {
         }
 
         let text = message.to_string();
+        if let Err(reason) = evaluate_fence(&self.fence) {
+            return Err(CdpError::Protocol(reason));
+        }
         self.socket
             .send(Message::Text(text.into()))
             .await
@@ -140,5 +171,45 @@ impl Cdp {
 
             return Ok(value.get("result").cloned().unwrap_or(Value::Null));
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    struct AlwaysOk;
+    impl FenceCheck for AlwaysOk {
+        fn check(&self) -> std::result::Result<(), String> {
+            Ok(())
+        }
+    }
+
+    struct AlwaysErr {
+        reason: String,
+    }
+    impl FenceCheck for AlwaysErr {
+        fn check(&self) -> std::result::Result<(), String> {
+            Err(self.reason.clone())
+        }
+    }
+
+    #[test]
+    fn evaluate_fence_none_is_ok() {
+        assert!(evaluate_fence(&None).is_ok());
+    }
+
+    #[test]
+    fn evaluate_fence_ok_passes() {
+        let f: Option<Arc<dyn FenceCheck>> = Some(Arc::new(AlwaysOk));
+        assert!(evaluate_fence(&f).is_ok());
+    }
+
+    #[test]
+    fn evaluate_fence_err_propagates_reason() {
+        let f: Option<Arc<dyn FenceCheck>> = Some(Arc::new(AlwaysErr {
+            reason: "lease lost".to_string(),
+        }));
+        assert_eq!(evaluate_fence(&f), Err("lease lost".to_string()));
     }
 }
