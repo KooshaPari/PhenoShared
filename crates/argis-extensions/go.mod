@@ -27,7 +27,7 @@ require (
 	github.com/valyala/fasthttp v1.77.0
 	github.com/vektah/gqlparser/v2 v2.5.64
 	golang.org/x/crypto v0.58.0
-	golang.org/x/net v0.61.0
+	golang.org/x/net v0.62.0
 )
 
 require (
