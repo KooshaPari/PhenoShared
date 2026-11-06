@@ -110,8 +110,28 @@ Scratch worktrees holding earlier hamster work are deleted.
 
 ## 6. CI census at `cd8c0d1c` (historical snapshot, pre-fix)
 
-Main branch protection has **no required status checks**, so every failure below is invisible at
-merge time. That is the real defect; the individual red jobs are symptoms.
+Main branch protection previously had **no required status checks at all**, which is why every red
+gate below was invisible at merge time. That has been changed (2026-11-05): `main` now requires
+
+- `Root workspace coverage (whole workspace — ≥37%)`
+- `IAC workspace coverage (service — ≥10%)`
+
+Only those two, because they are the only gates that are provably green *and* guaranteed to run on
+every PR (`coverage.yml` triggers on `pull_request: branches: [main]`). Requiring a check that a path
+filter skips would block merges indefinitely. Existing protections are preserved: linear history,
+no force pushes, no deletions. `enforce_admins` remains **false**, so the owner can still push
+directly while PRs are gated.
+
+Rollback, if required checks ever block a legitimate urgent merge:
+
+```
+gh api -X DELETE repos/KooshaPari/PhenoShared/branches/main/protection/required_status_checks
+```
+
+The remaining reds below (`Coverage ratchet`, `Cargo Deny`, `Dependency audit`, `OSV`, `Lint & Test`,
+`Landing Pages Health`, `Governance`, `Build VitePress`, `E2E daemon binary`) are deliberately **not**
+required: requiring a currently-failing check does not improve quality, it just blocks the repo.
+Fix those first, then add them here one at a time.
 
 | Gate | Run | Failure |
 |---|---|---|
