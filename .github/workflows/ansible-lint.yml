@@ -14,6 +14,6 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
-      - uses: ansible/ansible-lint@262624cd0ab22a4221293216856c59671ce7aa5e  # was: @main
+      - uses: ansible/ansible-lint@9bce2bfb8f4a984e6b13767bc0d6bf0a49492164  # was: @main
         with:
           working_directory: iac/ansible
