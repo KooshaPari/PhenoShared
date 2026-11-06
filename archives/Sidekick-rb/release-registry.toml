@@ -1,0 +1,24 @@
+[collection]
+name = "Sidekick"
+version = "0.0.1"
+repo = "https://github.com/KooshaPari/Sidekick"
+description = "Polyglot Rust + Python workspace of agent utility crates for the Phenotype ecosystem"
+authors = ["Koosha Pari <kooshapari@gmail.com>"]
+license = "Apache-2.0"
+theme = "agent utilities"
+
+[[crate]]
+name = "sidekick-dispatch"
+version = "0.0.1"
+status = "alpha"
+stability = "0.x"
+description = "Multi-provider agent dispatch framework"
+source = "thegent-dispatch"
+
+[[crate]]
+name = "sidekick-messaging"
+version = "0.0.1"
+status = "stub"
+stability = "0.x"
+description = "Multi-provider messaging (iMessage, SMS, email)"
+source = "agent-imessage"

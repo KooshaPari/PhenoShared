@@ -1,0 +1,26 @@
+# Local smoke stack for cheap-llm-mcp
+# Usage (from repo root):
+#   cp .env.example .env   # fill API keys
+#   docker compose -f deploy/docker-compose.yml up --build
+
+services:
+  cheap-llm-mcp:
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile.cheap-llm-mcp
+    image: sidekick/cheap-llm-mcp:local
+    env_file:
+      - ../.env
+    stdin_open: true
+    tty: false
+    stop_grace_period: 10s
+  healthcheck:
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile.cheap-llm-mcp
+    image: sidekick/cheap-llm-mcp:local
+    env_file:
+      - ../.env
+    entrypoint: ["cheap-llm", "doctor"]
+    profiles:
+      - health

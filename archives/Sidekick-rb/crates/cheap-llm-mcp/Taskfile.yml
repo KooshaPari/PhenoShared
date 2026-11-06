@@ -1,0 +1,83 @@
+version: "3"
+
+vars:
+  LANGUAGE:
+    sh: |
+      if test -f pyproject.toml; then
+        echo python
+      elif test -f package.json; then
+        echo javascript
+      elif test -f go.mod; then
+        echo go
+      elif test -f Cargo.toml; then
+        echo rust
+      else
+        echo unknown
+      fi
+
+tasks:
+  default:
+    desc: List available tasks
+    cmds:
+      - task --list
+
+  build:
+    desc: Build the project for the detected language
+    cmds:
+      - |
+        case "{{.LANGUAGE}}" in
+          python)
+            if command -v uv >/dev/null 2>&1; then
+              uv build --wheel --out-dir dist
+            else
+              mkdir -p dist
+              python3 -m pip wheel . --no-deps --wheel-dir dist
+            fi
+            ;;
+          javascript) npm run build ;;
+          go) go build ./... ;;
+          rust) cargo build ;;
+          *) echo "Unsupported language: {{.LANGUAGE}}" >&2; exit 1 ;;
+        esac
+
+  test:
+    desc: Run the test suite for the detected language
+    env:
+      PYTHONPATH: src
+    cmds:
+      - |
+        case "{{.LANGUAGE}}" in
+          python) python3 -m pytest -q ;;
+          javascript) npm test ;;
+          go) go test ./... ;;
+          rust) cargo test ;;
+          *) echo "Unsupported language: {{.LANGUAGE}}" >&2; exit 1 ;;
+        esac
+
+  lint:
+    desc: Run lint checks for the detected language
+    cmds:
+      - |
+        case "{{.LANGUAGE}}" in
+          python) ruff check src/ tests/ ;;
+          javascript) npm run lint ;;
+          go) go vet ./... ;;
+          rust) cargo clippy --all-targets --all-features -- -D warnings ;;
+          *) echo "Unsupported language: {{.LANGUAGE}}" >&2; exit 1 ;;
+        esac
+
+  clean:
+    desc: Remove build and test artifacts
+    cmds:
+      - |
+        case "{{.LANGUAGE}}" in
+          python)
+            rm -rf build dist .coverage .pytest_cache .ruff_cache htmlcov *.egg-info
+            find . -type d -name __pycache__ -prune -exec rm -rf {} +
+            find . -type f -name "*.pyc" -delete
+            ;;
+          javascript) rm -rf dist build coverage .turbo .next node_modules/.cache ;;
+          go) go clean ./... ;;
+          rust) cargo clean ;;
+          *) echo "Unsupported language: {{.LANGUAGE}}" >&2; exit 1 ;;
+        esac
