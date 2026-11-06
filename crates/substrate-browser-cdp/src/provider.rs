@@ -4,7 +4,7 @@
 //! on `Accessibility` and `Runtime`, actions on `DOM` + `Runtime.callFunctionOn`,
 //! captures on `Page.captureScreenshot`.
 
-use std::{collections::BTreeMap, path::Path, time::Duration};
+use std::{collections::BTreeMap, path::Path, sync::Arc, time::Duration};
 
 use base64::Engine;
 use serde_json::{json, Value};
@@ -13,6 +13,7 @@ use crate::{
     launch::{ChromeProcess, LaunchOptions},
     snapshot::{self, Snapshot},
     transport::Cdp,
+    transport::FenceCheck,
     CdpError, Result,
 };
 
@@ -97,6 +98,11 @@ impl CdpProvider {
     /// The devtools session id of the attached page.
     pub fn session_id(&self) -> &str {
         &self.session
+    }
+
+    /// Install or clear the lease fence forwarded to the underlying transport.
+    pub fn set_fence(&mut self, fence: Option<Arc<dyn FenceCheck>>) {
+        self.cdp.set_fence(fence);
     }
 
     /// Operating system process id of the browser backing this provider.

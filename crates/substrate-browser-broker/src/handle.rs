@@ -14,7 +14,7 @@ use std::{
     time::Duration,
 };
 
-use substrate_browser_cdp::CdpProvider;
+use substrate_browser_cdp::{CdpProvider, FenceCheck};
 use tokio::sync::{Mutex, MutexGuard};
 
 use crate::{lease_guard::LeaseGuard, BrokerError, Result};
@@ -32,7 +32,12 @@ pub struct BrowserHandle {
 
 impl BrowserHandle {
     /// Bind a freshly launched browser to the lease that authorised it.
-    pub(crate) fn new(provider: CdpProvider, guard: LeaseGuard) -> Self {
+    pub(crate) fn new(mut provider: CdpProvider, guard: LeaseGuard) -> Self {
+        // Per-message enforcement: the transport re-proves the lease before
+        // every CDP command, so an action that spans several commands cannot
+        // outlive the lease between them.
+        let fence: std::sync::Arc<dyn FenceCheck> = std::sync::Arc::new(guard.clone());
+        provider.set_fence(Some(fence));
         Self {
             provider: Arc::new(Mutex::new(Some(provider))),
             guard,

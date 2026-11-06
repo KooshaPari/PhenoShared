@@ -265,3 +265,116 @@ async fn viewer_serves_the_exact_lease_and_rejects_unknown_or_unauthorised() {
 
     broker.release(held).await.expect("release");
 }
+
+#[tokio::test]
+async fn viewer_scopes_each_token_to_its_own_principal() {
+    if !has_browser() {
+        eprintln!("skipping: no browser");
+        return;
+    }
+
+    let addr = serve_fixture().await;
+    let dir = tempfile::tempdir().expect("tempdir");
+    let broker = Arc::new(Broker::new(dir.path()).expect("broker"));
+
+    let alice_lease = broker
+        .acquire(
+            &Scope::new("alice", "work", "s1").unwrap(),
+            "agent-a",
+            Duration::from_secs(120),
+        )
+        .await
+        .expect("acquire alice");
+    let bob_lease = broker
+        .acquire(
+            &Scope::new("bob", "work", "s1").unwrap(),
+            "agent-b",
+            Duration::from_secs(120),
+        )
+        .await
+        .expect("acquire bob");
+
+    alice_lease
+        .browser
+        .open(&format!("http://{addr}/"))
+        .await
+        .expect("open alice");
+    bob_lease
+        .browser
+        .open(&format!("http://{addr}/"))
+        .await
+        .expect("open bob");
+
+    let mut tokens = std::collections::BTreeMap::new();
+    tokens.insert("alice".to_string(), "token-alice".to_string());
+    tokens.insert("bob".to_string(), "token-bob".to_string());
+
+    let listener = TcpListener::bind("127.0.0.1:0").await.expect("bind");
+    let viewer_addr = listener.local_addr().expect("addr");
+    let app = substrate_browser_broker::router_with(broker.clone(), None, tokens);
+    tokio::spawn(async move {
+        let _ = axum::serve(listener, app).await;
+    });
+    tokio::time::sleep(Duration::from_millis(150)).await;
+
+    let client = reqwest::Client::new();
+    let base = format!("http://{viewer_addr}");
+    let auth = |token: &'static str| ("Authorization".to_string(), format!("Bearer {token}"));
+
+    // No credential at all.
+    assert_eq!(
+        client
+            .get(format!("{base}/v1/sessions"))
+            .send()
+            .await
+            .unwrap()
+            .status(),
+        401
+    );
+
+    // Alice's token sees alice's browser, not bob's.
+    let (k, v) = auth("token-alice");
+    assert_eq!(
+        client
+            .get(format!("{base}/v1/view/{}/png", alice_lease.lease.id))
+            .header(k, v)
+            .send()
+            .await
+            .unwrap()
+            .status(),
+        200
+    );
+    let (k, v) = auth("token-alice");
+    assert_eq!(
+        client
+            .get(format!("{base}/v1/view/{}/png", bob_lease.lease.id))
+            .header(k, v)
+            .send()
+            .await
+            .unwrap()
+            .status(),
+        404,
+        "a principal must not learn that another principal's lease exists"
+    );
+
+    // The listing is filtered to the caller's principal.
+    let (k, v) = auth("token-alice");
+    let sessions: serde_json::Value = client
+        .get(format!("{base}/v1/sessions"))
+        .header(k, v)
+        .send()
+        .await
+        .unwrap()
+        .json()
+        .await
+        .unwrap();
+    let listed = sessions["sessions"].as_array().expect("array");
+    assert_eq!(listed.len(), 1);
+    assert_eq!(
+        listed[0]["scope"].as_str().unwrap().split('/').next(),
+        Some("alice")
+    );
+
+    broker.release(alice_lease).await.expect("release alice");
+    broker.release(bob_lease).await.expect("release bob");
+}

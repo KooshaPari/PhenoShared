@@ -117,3 +117,12 @@ lines, under the 500-line limit.
   is per-action, not per-CDP-message.
 - Cross-process authority rests on the on-disk lease and its file lock. That
   path has not been soak-tested.
+
+## Soak: cross-process lease authority (2026-11-06)
+
+- Harness: `crates/substrate-browser-broker/examples/soak_worker.rs` plus `scripts/soak.sh` (PR 657). N processes, one shared state directory, same profile, TTL chosen to force expiry races.
+- Checks: no two holds with simultaneously-valid fences overlap; no reused fencing token; manifest keeps exactly one generation; no unexpired lease left after revoke.
+- Measured run: 8 processes x 45000 attempts, 68s wall, 2301 holds, 8 distinct holders, 2299 valid at end, 2 expired mid-hold, 0 fence duplicates, 0 overlapping valid holds, 1 generation, 0 leftover leases, PASS.
+- Second profile with 60ms hold and 25ms TTL correctly invalidated every hold (expiry enforcement, not failure).
+- Why the overlap check only counts valid holds: when TTL < hold an expired holder may still be mid-call while a new holder acquires; fencing, not timing, is the safety property.
+- Honest limit: this is a 68 second run, not hours, and it exercises the lease and profile layer, not the browser process itself.
