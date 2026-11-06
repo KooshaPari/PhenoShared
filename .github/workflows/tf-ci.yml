@@ -1,15 +1,32 @@
-name: CI
+name: terminal-fabric-ci
+
+# Historically this workflow built `terminal-fabric-rs` and `tf-win-capture`.
+# Neither crate exists in this repository any more: the tree was repointed and
+# `rust/` now holds `agileplus-proto` only (no `rust/windows-capture`, no
+# `self-update` feature). Every step therefore failed on a missing manifest or
+# feature rather than on a real defect, so the jobs are retargeted at what is
+# actually present. Restore the old steps only together with the crates.
 
 on:
   push:
-    branches: [main]
+    paths:
+      - "rust/**"
+      - ".github/workflows/tf-ci.yml"
   pull_request:
+    paths:
+      - "rust/**"
+      - ".github/workflows/tf-ci.yml"
+  workflow_dispatch:
 
-env:
-  CARGO_TERM_COLOR: always
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
-  lint-and-test:
+  rust:
     name: Lint & Test
     runs-on: ubuntu-latest
     steps:
@@ -26,57 +43,26 @@ jobs:
           path: |
             ~/.cargo/registry
             ~/.cargo/git
-            target
-          key: cargo-${{ runner.os }}-${{ hashFiles('**/Cargo.lock') }}
+            rust/target
+          key: cargo-${{ runner.os }}-${{ hashFiles('rust/Cargo.lock') }}
           restore-keys: cargo-${{ runner.os }}-
 
-      # terminal-fabric-rs has a build script that compiles protobufs and fails
-      # with "Could not find `protoc`" when it is absent. benchmark.yml already
-      # installs it this way; mirror that instead of relying on the runner image.
+      # The crate's build script compiles protobufs and fails with
+      # "Could not find `protoc`" when it is absent.
       - name: Install protoc
         uses: arduino/setup-protoc@v3
         with:
           version: "28.x"
           repo-token: ${{ secrets.GITHUB_TOKEN }}
 
-      # --- rust/ crate (tf-sync, tf-web) ---
-      - name: Clippy (rust workspace)
+      - name: Clippy
         working-directory: rust
         run: cargo clippy --all-targets -- -D warnings
 
-      # The `self-update` variant was dropped: `rust/` now holds agileplus-proto
-      # (the terminal-fabric-rs crate no longer exists in this repo), and that
-      # package has no `self-update` feature, so the flag could only fail.
-
-      - name: Test (rust workspace)
+      - name: Test
         working-directory: rust
         run: cargo test
 
-      - name: Release build (terminal-fabric-rs)
+      - name: Release build
         working-directory: rust
-        run: cargo build --release --no-default-features
-
-      - name: Release build with self-update (terminal-fabric-rs)
-        working-directory: rust
-        run: cargo build --release --features self-update
-
-      # --- rust/windows-capture/ crate (tf-win-capture) ---
-      - name: Clippy (tf-win-capture)
-        working-directory: rust/windows-capture
-        run: cargo clippy --all-targets -- -D warnings
-
-      - name: Clippy with self-update (tf-win-capture)
-        working-directory: rust/windows-capture
-        run: cargo clippy --all-targets --features self-update -- -D warnings
-
-      - name: Test (tf-win-capture)
-        working-directory: rust/windows-capture
-        run: cargo test
-
-      - name: Release build (tf-win-capture)
-        working-directory: rust/windows-capture
         run: cargo build --release
-
-      - name: Release build with self-update (tf-win-capture)
-        working-directory: rust/windows-capture
-        run: cargo build --release --features self-update
