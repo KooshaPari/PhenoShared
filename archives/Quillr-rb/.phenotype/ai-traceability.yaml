@@ -1,0 +1,19 @@
+---
+project: Quillr
+language: TypeScript
+generated: "2026-04-03"
+
+attribution:
+  system: Phenotype Traceability
+  purpose: Feature Requirement (FR) tracking
+
+traceability:
+  cli: AgilePlus/bin/ptrace
+  ci_cd: .github/workflows/traceability.yml
+
+fr_requirements: []
+
+coverage:
+  status: initial
+
+last_updated: "2026-04-03"

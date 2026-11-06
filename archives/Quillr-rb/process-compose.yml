@@ -1,0 +1,38 @@
+version: "0.5"
+
+# Quillr - TypeScript CLI tool
+# Native-first local development orchestration
+
+environment:
+  - NODE_ENV=development
+
+processes:
+  build:
+    command: npm run build
+    depends_on: {}
+    log_location: .logs/build.log
+
+  test:
+    command: npm run test
+    depends_on: {}
+    log_location: .logs/test.log
+
+  lint:
+    command: npm run lint
+    depends_on: {}
+    log_location: .logs/lint.log
+
+  typecheck:
+    command: npm run typecheck
+    depends_on: {}
+    log_location: .logs/typecheck.log
+
+  dev:
+    command: npm run dev
+    depends_on: {}
+    log_location: .logs/dev.log
+
+  bench:
+    command: npm run bench
+    depends_on: {}
+    log_location: .logs/bench.log

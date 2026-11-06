@@ -1,0 +1,22 @@
+[trace-gate]
+# Trace Gate configuration for Quillr
+# Minimum FR coverage requirement for deployment gates
+
+coverage-minimum = 0.85
+strict-mode = true
+
+[exemptions]
+# Test files and mock utilities are exempt from FR traceability
+patterns = [
+  "**/tests/**",
+  "**/test/**",
+  "**/*.test.ts",
+  "**/*.spec.ts",
+  "**/__mocks__/**",
+  "**/mocks/**"
+]
+
+[deployment]
+# Enforce FR coverage gates on PR merges
+required = true
+gate-percentage = 85

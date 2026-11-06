@@ -1,0 +1,22 @@
+# cargo-mutants Configuration
+# https://mutants.rs/
+
+[workspace]
+# Defines the workspace for cargo-mutants
+exclude = [
+    "fuzz/",
+    "benches/",
+    "tests/",
+    "scripts/",
+    "docs/",
+    "archive/",
+    "_logs_32465636950/"
+]
+
+[filter]
+# Only mutate code in the main library crates
+include = ["crates/*/src/**/*.rs"]
+
+[output]
+# Output directory for mutation reports
+dir = "mutants.out"

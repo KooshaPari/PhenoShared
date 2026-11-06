@@ -1,0 +1,99 @@
+name: Benchmarks
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  benchmark:
+    name: TypeScript Benchmarks
+    runs-on: ubuntu-latest
+    outputs:
+      has_benchmarks: ${{ steps.check.outputs.has_benchmarks }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+
+      - name: Install dependencies
+        run: bun install
+
+      - name: Check for benchmarks
+        id: check
+        run: |
+          if [ -d "benchmark" ] || [ -d "benchmarks" ]; then
+            echo "has_benchmarks=true" >> $GITHUB_OUTPUT
+          else
+            echo "has_benchmarks=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Run benchmarks
+        if: steps.check.outputs.has_benchmarks == 'true'
+        run: |
+          mkdir -p benchmark-results
+          bun run benchmark || bun run bench || true
+
+      - name: Upload results
+        if: steps.check.outputs.has_benchmarks == 'true'
+        uses: actions/upload-artifact@v7
+        with:
+          name: quillr-benchmark-results-${{ github.sha }}
+          path: benchmark-results/
+          retention-days: 30
+
+      - name: Comment on PR
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v9
+        continue-on-error: true
+        with:
+          script: |
+            try {
+              await github.rest.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: 'Benchmark results available at: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}'
+              });
+            } catch (error) {
+              console.log('Skipping PR comment due to token permissions (expected for PRs from forks): ' + error.message);
+            }
+
+  benchmark-regression:
+    name: Compare with Main
+    runs-on: ubuntu-latest
+    needs: benchmark
+    if: github.event_name == 'pull_request' && needs.benchmark.outputs.has_benchmarks == 'true'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Download current results
+        uses: actions/download-artifact@v8
+        with:
+          name: quillr-benchmark-results-${{ github.sha }}
+          path: current
+
+      - name: Checkout main
+        run: |
+          git fetch origin main
+          git stash
+          git checkout origin/main
+
+      - name: Run main benchmarks
+        run: |
+          mkdir -p main
+          bun install
+          if [ -d "benchmark" ] || [ -d "benchmarks" ]; then
+            bun run benchmark || bun run bench || true
+          fi
+
+      - name: Compare results
+        run: |
+          echo "=== Benchmark Comparison ==="
+          echo "Main branch results: main/"
+          echo "Current branch results: current/"
