@@ -1,0 +1,6 @@
+[submodule "worktree-manager"]
+	path = worktree-manager
+	url = https://github.com/KooshaPari/worktree-manager.git
+[submodule "crates/byteport"]
+	path = crates/byteport
+	url = https://github.com/KooshaPari/byteport.git
