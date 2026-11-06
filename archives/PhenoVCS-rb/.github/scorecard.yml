@@ -1,0 +1,25 @@
+---
+# OpenSSF Scorecard supply-chain security monitoring
+# Docs: https://github.com/ossf/scorecard-action
+name: scorecard
+on:
+  branch_creation: true
+  schedule:
+    - cron: "30 1 * * 0"
+  push:
+    branches: [main]
+permissions: read-all
+jobs:
+  analysis:
+    name: Scorecard analysis
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run analysis
+        uses: ossf/scorecard-action@05ca7d6ec2d93df63f96b67d5b0f0421a87f39b8
+        with:
+          results_file: results.sarif
+          results_format: sarif
+      - name: Upload to code-scanning
+        uses: github/codeql-action/upload-sarif@4e828ff8d448a8a6e532957b1818a4a11e4e0b7c
+        with:
+          sarif_file: results.sarif

@@ -1,0 +1,59 @@
+name: cargo-semver-checks
+
+on:
+  pull_request:
+    paths:
+      - "**/Cargo.toml"
+      - ".github/workflows/cargo-semver-checks.yml"
+  workflow_dispatch:
+
+jobs:
+  semver-checks:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      # Workspace crates are not on crates.io yet. check-release against the
+      # registry fails with "not found in registry". Use a git baseline when
+      # the package already exists on the PR base; otherwise treat as new API
+      # surface (no prior release to break) and exit successfully.
+      - name: Decide semver baseline
+        id: decide
+        env:
+          MANIFEST: crates/pheno-tracing/Cargo.toml
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: |
+          set -euo pipefail
+          if [ -z "${BASE_SHA}" ]; then
+            BASE_SHA="$(git merge-base HEAD origin/main 2>/dev/null || echo origin/main)"
+          fi
+          echo "base_sha=${BASE_SHA}" >> "$GITHUB_OUTPUT"
+
+          if git cat-file -e "${BASE_SHA}:${MANIFEST}" 2>/dev/null; then
+            echo "mode=git" >> "$GITHUB_OUTPUT"
+            echo "Using git baseline ${BASE_SHA} for pheno-tracing"
+            exit 0
+          fi
+
+          echo "mode=noop" >> "$GITHUB_OUTPUT"
+          echo "pheno-tracing is new relative to ${BASE_SHA} and not on crates.io."
+          echo "No prior public API baseline — semver gate is a no-op for this PR."
+
+      - uses: dtolnay/rust-toolchain@stable
+        if: steps.decide.outputs.mode == 'git'
+
+      - name: Install cargo-semver-checks
+        if: steps.decide.outputs.mode == 'git'
+        run: cargo install cargo-semver-checks --locked --version 0.49.0
+
+      - name: Run cargo-semver-checks (git baseline)
+        if: steps.decide.outputs.mode == 'git'
+        env:
+          BASE_SHA: ${{ steps.decide.outputs.base_sha }}
+        run: |
+          cargo semver-checks check-release \
+            --package pheno-tracing \
+            --manifest-path crates/pheno-tracing/Cargo.toml \
+            --baseline-rev "${BASE_SHA}"

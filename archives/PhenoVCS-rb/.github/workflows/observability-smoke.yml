@@ -1,0 +1,44 @@
+name: observability-smoke
+on:
+  push:
+    branches: [main, feat/t22-*]
+  pull_request:
+
+jobs:
+  otlp-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    services:
+      otel-collector:
+        image: otel/opentelemetry-collector-contrib:0.96.0
+        ports: [4317:4317, 4318:4318]
+        env:
+          OTELCOL_CONFIG: |
+            receivers:
+              otlp:
+                protocols:
+                  grpc:
+                    endpoint: 0.0.0.0:4317
+                  http:
+                    endpoint: 0.0.0.0:4318
+            exporters:
+              logging:
+                verbosity: detailed
+            service:
+              pipelines:
+                traces: { receivers: [otlp], exporters: [logging] }
+                metrics: { receivers: [otlp], exporters: [logging] }
+    steps:
+      - uses: actions/checkout@v7
+      - uses: dtolnay/rust-toolchain@stable
+      - name: Build observability crate
+        run: cargo build -p phenovcs-observability --locked
+      - name: Wait for OTLP gRPC
+        run: |
+          for i in $(seq 1 30); do
+            if (echo > /dev/tcp/localhost/4317) 2>/dev/null; then
+              echo "OTLP gRPC up after ${i}s"; exit 0
+            fi
+            sleep 1
+          done
+          echo "OTLP gRPC never came up"; exit 1
