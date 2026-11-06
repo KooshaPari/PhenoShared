@@ -40,15 +40,15 @@ jobs:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
 
       # --- rust/ crate (tf-sync, tf-web) ---
-      - name: Clippy (terminal-fabric-rs)
+      - name: Clippy (rust workspace)
         working-directory: rust
         run: cargo clippy --all-targets -- -D warnings
 
-      - name: Clippy with self-update (terminal-fabric-rs)
-        working-directory: rust
-        run: cargo clippy --all-targets --features self-update -- -D warnings
+      # The `self-update` variant was dropped: `rust/` now holds agileplus-proto
+      # (the terminal-fabric-rs crate no longer exists in this repo), and that
+      # package has no `self-update` feature, so the flag could only fail.
 
-      - name: Test (terminal-fabric-rs)
+      - name: Test (rust workspace)
         working-directory: rust
         run: cargo test
 
