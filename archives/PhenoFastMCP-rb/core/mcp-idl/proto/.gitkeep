@@ -1,0 +1,7 @@
+This directory intentionally holds the vendored MCP `.proto` files
+referenced by `../rust/build.rs` and `../../../tools/codegen.sh`.
+
+Until at least one `.proto` file is vendored (see `README.md`), the
+Rust crate at `../rust/` will fail to build (`cargo build` reports
+"no protos found in `[proto/]`"). This is the documented precondition
+for the polyglot scaffold — see `../POLYGLOT-STATUS.md`.
