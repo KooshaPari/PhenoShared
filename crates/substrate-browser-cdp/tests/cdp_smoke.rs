@@ -184,30 +184,29 @@ async fn two_browsers_on_separate_data_dirs_do_not_share_storage() {
 
 /// Fence that admits `allowed` commands and then refuses everything.
 struct CountdownFence {
-    remaining: std::sync::atomic::AtomicUsize,
+    remaining: std::sync::atomic::AtomicI64,
 }
 
 impl CountdownFence {
-    fn new(allowed: usize) -> Self {
+    fn new(allowed: i64) -> Self {
         Self {
-            remaining: std::sync::atomic::AtomicUsize::new(allowed),
+            remaining: std::sync::atomic::AtomicI64::new(allowed),
         }
     }
 }
 
 impl substrate_browser_cdp::FenceCheck for CountdownFence {
     fn check(&self) -> Result<(), String> {
+        // Spends one permit. `fetch_sub` returns the value before the
+        // decrement, so a positive return means a permit existed.
         let before = self
             .remaining
-            .fetch_update(
-                std::sync::atomic::Ordering::SeqCst,
-                std::sync::atomic::Ordering::SeqCst,
-                |value| value.checked_sub(1),
-            )
-            .is_ok();
-        if before {
+            .fetch_sub(1, std::sync::atomic::Ordering::SeqCst);
+        if before > 0 {
             Ok(())
         } else {
+            self.remaining
+                .store(0, std::sync::atomic::Ordering::SeqCst);
             Err("fence exhausted".to_string())
         }
     }
