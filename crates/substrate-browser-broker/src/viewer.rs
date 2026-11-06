@@ -130,30 +130,6 @@ impl AppState {
             Grant::Principal(owner) => owner == principal,
         }
     }
-
-    fn authorised(&self, headers: &HeaderMap) -> bool {
-        let Some(expected) = &self.token else {
-            return true;
-        };
-        let Some(presented) = headers
-            .get(header::AUTHORIZATION)
-            .and_then(|value| value.to_str().ok())
-            .and_then(|value| value.strip_prefix("Bearer "))
-        else {
-            return false;
-        };
-        // Constant-time compare keeps the token out of timing oracles.
-        let expected = expected.as_bytes();
-        let presented = presented.as_bytes();
-        if expected.len() != presented.len() {
-            return false;
-        }
-        expected
-            .iter()
-            .zip(presented)
-            .fold(0u8, |acc, (a, b)| acc | (a ^ b))
-            == 0
-    }
 }
 
 /// Build the viewer router.

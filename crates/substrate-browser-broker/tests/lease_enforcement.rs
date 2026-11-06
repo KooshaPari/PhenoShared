@@ -438,3 +438,102 @@ async fn a_lease_that_expires_mid_action_stops_the_action() {
 
     let _ = provider.close().await;
 }
+
+/// Fence that lets the first command through, then revokes the lease through a
+/// SEPARATE lease manager before delegating. That models another process
+/// revoking the hold mid-action, which is a different state transition from
+/// expiry even though it exercises the same fence.
+struct RevokingFence {
+    revoker: Arc<substrate_browser::LeaseManager>,
+    lease_id: String,
+    revoked: AtomicU64,
+    inner: LeaseGuard,
+}
+
+impl substrate_browser_cdp::FenceCheck for RevokingFence {
+    fn check(&self) -> Result<(), String> {
+        let seen = self.revoked.fetch_add(1, Ordering::SeqCst);
+        if seen >= 1 {
+            // Separate manager instance and separate file lock, as another
+            // process would do.
+            let _ = self.revoker.revoke(&self.lease_id);
+        }
+        substrate_browser_cdp::FenceCheck::check(&self.inner)
+    }
+}
+
+#[tokio::test]
+async fn a_lease_revoked_by_another_manager_mid_action_stops_the_action() {
+    if !substrate_browser_broker::browser_available() {
+        eprintln!("skipping: no browser");
+        return;
+    }
+
+    let dir = tempfile::tempdir().expect("tempdir");
+    let root = dir.path().join("leases");
+    let owner = Arc::new(substrate_browser::LeaseManager::new(&root).expect("owner"));
+    let revoker = Arc::new(substrate_browser::LeaseManager::new(&root).expect("revoker"));
+
+    let scope = Scope::new("alice", "work", "s1").unwrap();
+    let lease = owner
+        .grant(&scope, "agent-a", Duration::from_secs(3600))
+        .expect("grant");
+
+    let addr = serve_fixture(
+        "<html><head><title>Revoke</title></head><body>\
+         <button onclick=\"document.title='clicked'\">Go</button></body></html>",
+    )
+    .await;
+
+    let mut provider =
+        substrate_browser_cdp::CdpProvider::launch(dir.path().join("browser2"), true)
+            .await
+            .expect("launch");
+    provider
+        .open(&format!("http://{addr}/"))
+        .await
+        .expect("open");
+
+    let fence = Arc::new(RevokingFence {
+        revoker,
+        lease_id: lease.id.clone(),
+        revoked: AtomicU64::new(0),
+        inner: LeaseGuard::new(owner.clone(), &lease),
+    });
+
+    // First command is authorised: the lease is live at that instant.
+    provider.set_fence(Some(fence.clone()));
+    assert_eq!(
+        provider
+            .eval("1+1")
+            .await
+            .expect("first command authorised"),
+        serde_json::json!(2)
+    );
+
+    // `click` needs two commands; the lease is revoked between them by a
+    // different manager, so the second command must be refused.
+    fence.revoked.store(0, Ordering::SeqCst);
+    let snapshot = provider.snapshot().await.expect("snapshot");
+    let reference = snapshot
+        .elements
+        .iter()
+        .find_map(|node| node.element_ref.clone())
+        .expect("an actionable element");
+
+    fence.revoked.store(0, Ordering::SeqCst);
+    let outcome = provider.click(&reference).await;
+    assert!(
+        outcome.is_err(),
+        "an action must not complete after another manager revoked the lease"
+    );
+
+    provider.set_fence(None);
+    assert_eq!(
+        provider.title().await.expect("title"),
+        "Revoke",
+        "a refused action must not have side effects"
+    );
+
+    let _ = provider.close().await;
+}
