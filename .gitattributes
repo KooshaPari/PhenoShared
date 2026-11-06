@@ -17,3 +17,6 @@ Cargo.lock text -diff
 *.jpg binary
 *.ico binary
 *.pdf binary
+
+# Recovered archives: stored byte-exact, no EOL normalisation.
+archives/** -text -eol
