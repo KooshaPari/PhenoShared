@@ -309,3 +309,132 @@ async fn reap_expired_unpublishes_after_expiry() {
 
     let _ = broker.release(acquired).await;
 }
+
+/// Fence that lets the first command through, then winds the clock past the
+/// lease TTL before delegating. This is the wall-clock expiry case made
+/// deterministic: the lease is valid when the action starts and dead by the
+/// time the action's second command is issued.
+struct ExpiringFence {
+    clock: Arc<ManualClock>,
+    advance_ms: u64,
+    checks: AtomicU64,
+    inner: LeaseGuard,
+}
+
+impl substrate_browser_cdp::FenceCheck for ExpiringFence {
+    fn check(&self) -> Result<(), String> {
+        let seen = self.checks.fetch_add(1, Ordering::SeqCst);
+        if seen >= 1 {
+            self.clock.advance(self.advance_ms);
+        }
+        substrate_browser_cdp::FenceCheck::check(&self.inner)
+    }
+}
+
+async fn serve_fixture(html: &'static str) -> std::net::SocketAddr {
+    use tokio::io::{AsyncReadExt, AsyncWriteExt};
+    let listener = tokio::net::TcpListener::bind("127.0.0.1:0")
+        .await
+        .expect("bind");
+    let addr = listener.local_addr().expect("addr");
+    tokio::spawn(async move {
+        loop {
+            let Ok((mut socket, _)) = listener.accept().await else {
+                break;
+            };
+            tokio::spawn(async move {
+                let mut buffer = [0u8; 4096];
+                let _ = socket.read(&mut buffer).await;
+                let response = format!(
+                    "HTTP/1.1 200 OK\r\nContent-Type: text/html\r\nContent-Length: {}\r\n\
+                     Connection: close\r\n\r\n{}",
+                    html.len(),
+                    html
+                );
+                let _ = socket.write_all(response.as_bytes()).await;
+                let _ = socket.shutdown().await;
+            });
+        }
+    });
+    addr
+}
+
+#[tokio::test]
+async fn a_lease_that_expires_mid_action_stops_the_action() {
+    if !substrate_browser_broker::browser_available() {
+        eprintln!("skipping: no browser");
+        return;
+    }
+
+    let clock = ManualClock::new(9_000_000);
+    let dir = tempfile::tempdir().expect("tempdir");
+    // Same pieces the broker wires: a clocked lease manager, a real browser, and
+    // the lease guard installed as the transport fence.
+    let leases = Arc::new(
+        substrate_browser::LeaseManager::with_clock(dir.path().join("leases"), clock.clone())
+            .expect("lease store"),
+    );
+    let scope = Scope::new("alice", "work", "s1").unwrap();
+    let lease = leases
+        .grant(&scope, "agent-a", Duration::from_secs(60))
+        .expect("grant");
+
+    let addr = serve_fixture(
+        "<html><head><title>Mid</title></head><body>\
+         <button onclick=\"document.title='clicked'\">Go</button></body></html>",
+    )
+    .await;
+
+    let mut provider = substrate_browser_cdp::CdpProvider::launch(dir.path().join("browser"), true)
+        .await
+        .expect("launch");
+    provider
+        .open(&format!("http://{addr}/"))
+        .await
+        .expect("open");
+
+    let fence = Arc::new(ExpiringFence {
+        clock: clock.clone(),
+        advance_ms: 61_000,
+        checks: AtomicU64::new(0),
+        inner: LeaseGuard::new(leases.clone(), &lease),
+    });
+
+    // A single-command action is authorised: only the first check happens and
+    // the lease is still valid at that instant.
+    provider.set_fence(Some(fence.clone()));
+    assert_eq!(
+        provider
+            .eval("1+1")
+            .await
+            .expect("first command authorised"),
+        serde_json::json!(2)
+    );
+
+    // `click` needs two commands. The clock jumps past the TTL between them, so
+    // the second command must be refused.
+    fence.checks.store(0, Ordering::SeqCst);
+    let snapshot = provider.snapshot().await.expect("snapshot");
+    let reference = snapshot
+        .elements
+        .iter()
+        .find_map(|node| node.element_ref.clone())
+        .expect("an actionable element");
+
+    fence.checks.store(0, Ordering::SeqCst);
+    let outcome = provider.click(&reference).await;
+    assert!(
+        outcome.is_err(),
+        "the action must not complete once the lease expired between its commands"
+    );
+
+    // And the title did not change, so the click genuinely did not land.
+    provider.set_fence(None);
+    assert_eq!(
+        provider.title().await.expect("title"),
+        "Mid",
+        "a refused action must not have side effects"
+    );
+
+    let _ = provider.close().await;
+}
