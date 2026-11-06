@@ -1,0 +1,3 @@
+# Clippy configuration for Stashly
+
+avoid-breaking-exported-api = false
