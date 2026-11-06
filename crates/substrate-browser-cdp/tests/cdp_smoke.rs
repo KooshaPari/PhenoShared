@@ -181,3 +181,83 @@ async fn two_browsers_on_separate_data_dirs_do_not_share_storage() {
     first.close().await.expect("close first");
     second.close().await.expect("close second");
 }
+
+/// Fence that admits `allowed` commands and then refuses everything.
+struct CountdownFence {
+    remaining: std::sync::atomic::AtomicUsize,
+}
+
+impl CountdownFence {
+    fn new(allowed: usize) -> Self {
+        Self {
+            remaining: std::sync::atomic::AtomicUsize::new(allowed),
+        }
+    }
+}
+
+impl substrate_browser_cdp::FenceCheck for CountdownFence {
+    fn check(&self) -> Result<(), String> {
+        let before = self
+            .remaining
+            .fetch_update(
+                std::sync::atomic::Ordering::SeqCst,
+                std::sync::atomic::Ordering::SeqCst,
+                |value| value.checked_sub(1),
+            )
+            .is_ok();
+        if before {
+            Ok(())
+        } else {
+            Err("fence exhausted".to_string())
+        }
+    }
+}
+
+#[tokio::test]
+async fn the_fence_is_evaluated_per_command_not_per_action() {
+    if let Some(reason) = skip_reason() {
+        eprintln!("{reason}");
+        return;
+    }
+
+    let addr = serve(FIXTURE).await;
+    let dir = tempfile::tempdir().expect("tempdir");
+    let mut provider = CdpProvider::launch(dir.path(), true).await.expect("launch");
+    provider
+        .open(&format!("http://{addr}/"))
+        .await
+        .expect("open");
+
+    // One command is allowed, then the fence refuses. A single-command action
+    // succeeds; the next command is cut off.
+    provider.set_fence(Some(std::sync::Arc::new(CountdownFence::new(1))));
+    assert_eq!(
+        provider.eval("1+1").await.expect("first command allowed"),
+        serde_json::json!(2)
+    );
+    assert!(
+        provider.eval("1+1").await.is_err(),
+        "the fence must be re-evaluated for the second command"
+    );
+
+    // Re-arm with one command of headroom. `click` needs two CDP commands
+    // (DOM.resolveNode, then Runtime.callFunctionOn), so it must fail partway
+    // through rather than completing on the strength of the first check.
+    provider.set_fence(None);
+    let snapshot = provider.snapshot().await.expect("snapshot");
+    let button = snapshot
+        .elements
+        .iter()
+        .find(|node| node.role == "button" && node.name == "Go")
+        .expect("Go button")
+        .element_ref
+        .clone()
+        .expect("ref");
+
+    provider.set_fence(Some(std::sync::Arc::new(CountdownFence::new(1))));
+    let outcome = provider.click(&button).await;
+    assert!(
+        outcome.is_err(),
+        "a two-command action must not complete when only one command is authorised"
+    );
+}
