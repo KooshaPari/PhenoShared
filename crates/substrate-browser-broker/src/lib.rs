@@ -196,7 +196,10 @@ impl Broker {
     pub fn with_clock(root: impl Into<PathBuf>, clock: Arc<dyn Clock>) -> Result<Self> {
         let root = root.into();
         let leases = Arc::new(LeaseManager::with_clock(root.join("leases"), clock)?);
-        let store = ProfileStore::with_gate(root.join("profiles"), leases.clone())?;
+        // ProfileStore creates its own `profiles/` child inside the root it is
+        // given, so pass the root itself. Passing root/profiles produced the
+        // doubled `profiles/profiles/` layout.
+        let store = ProfileStore::with_gate(root.clone(), leases.clone())?;
         Ok(Self {
             root,
             store,
@@ -259,6 +262,9 @@ impl Broker {
         }
 
         let generation = self.store.ensure(scope.principal(), scope.profile())?;
+        // A broker that crashed mid-hold leaves a record that would block this
+        // profile until its TTL. Reap owners that no longer exist first.
+        let _ = self.leases.reap_dead();
         let lease = self.leases.grant(scope, holder.clone(), ttl)?;
         let guard = LeaseGuard::new(self.leases.clone(), &lease);
 
@@ -387,6 +393,8 @@ impl Broker {
     /// Drop sessions whose lease no longer validates, closing each browser when
     /// this process is the last owner. Returns how many were reaped.
     pub async fn reap_expired(&self) -> usize {
+        // Dead owners are cheap to clear and are not reflected in `sessions`.
+        let _ = self.leases.reap_dead();
         let stale: Vec<(String, BrowserHandle)> = {
             let sessions = self.sessions.read().await;
             sessions

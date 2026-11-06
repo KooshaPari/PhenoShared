@@ -15072,6 +15072,7 @@ name = "substrate-browser"
 version = "0.3.10"
 dependencies = [
  "fs2",
+ "libc",
  "serde",
  "serde_json",
  "tempfile",
@@ -15107,6 +15108,19 @@ dependencies = [
  "thiserror 2.0.20",
  "tokio",
  "tokio-tungstenite 0.29.0",
+]
+
+[[package]]
+name = "substrate-browser-provider"
+version = "0.3.10"
+dependencies = [
+ "base64 0.22.1",
+ "serde",
+ "serde_json",
+ "substrate-browser",
+ "substrate-browser-broker",
+ "tempfile",
+ "tokio",
 ]
 
 [[package]]

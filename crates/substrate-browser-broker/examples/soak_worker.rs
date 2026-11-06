@@ -33,7 +33,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let ttl_ms: u64 = args[5].parse()?;
 
     let leases = Arc::new(LeaseManager::new(root.join("leases"))?);
-    let store = ProfileStore::with_gate(root.join("profiles"), leases.clone())?;
+    // Mirror Broker::new: the store owns the root and creates profiles/ itself.
+    let store = ProfileStore::with_gate(root.clone(), leases.clone())?;
     // Seed the profile so generation bookkeeping is exercised too.
     store.ensure(&principal, &profile)?;
 

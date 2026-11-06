@@ -196,3 +196,42 @@ fn tab_scoped_lease_still_excludes_the_whole_profile() {
         .grant(&other_tab, "agent-b", Duration::from_secs(60))
         .is_err());
 }
+
+#[test]
+fn reaps_leases_whose_process_is_gone() {
+    let (_dir, _clock, leases) = manager();
+    let scope = Scope::new("alice", "work", "s1").unwrap();
+    let live = leases
+        .grant(&scope, "agent-a", Duration::from_secs(600))
+        .unwrap();
+    assert_eq!(live.owner_pid, std::process::id());
+
+    // A live owner must never be reaped.
+    assert_eq!(leases.reap_dead().unwrap(), 0, "live owner was reaped");
+    assert!(leases.validate(&live.id, live.fencing_token).is_ok());
+
+    // Forge a lease owned by a pid that cannot exist.
+    let dead_path = leases.root().join("leases").join("lease-deadbeef.json");
+    std::fs::write(
+        &dead_path,
+        serde_json::json!({
+            "id": "lease-deadbeef",
+            "principal": "alice",
+            "profile": "work",
+            "session": "s1",
+            "tab": null,
+            "holder": "agent-crashed",
+            "fencing_token": 999,
+            "issued_at_unix_ms": 0,
+            "expires_at_unix_ms": u64::MAX,
+            "owner_pid": 4194303
+        })
+        .to_string(),
+    )
+    .unwrap();
+
+    assert_eq!(leases.reap_dead().unwrap(), 1, "dead owner was not reaped");
+    assert!(!dead_path.exists());
+    // The live lease survived.
+    assert!(leases.validate(&live.id, live.fencing_token).is_ok());
+}

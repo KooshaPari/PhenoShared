@@ -70,6 +70,12 @@ pub struct Lease {
     pub issued_at_unix_ms: u64,
     /// Expiry time, milliseconds since the Unix epoch.
     pub expires_at_unix_ms: u64,
+    /// Operating system process that holds this lease.
+    ///
+    /// Defaulted so records written before this field existed still parse;
+    /// such records are never reaped, which fails closed.
+    #[serde(default)]
+    pub owner_pid: u32,
 }
 
 impl Lease {
@@ -86,6 +92,27 @@ impl Lease {
 
 #[derive(Debug, Default, Serialize, Deserialize)]
 struct Fences(std::collections::BTreeMap<String, u64>);
+
+/// Whether `pid` names a live process.
+///
+/// `kill(pid, 0)` performs the permission and existence checks without sending a
+/// signal: it returns 0 when the process exists, and EPERM when it exists but is
+/// owned by another user. Only ESRCH means gone.
+#[cfg(unix)]
+fn pid_is_alive(pid: u32) -> bool {
+    // SAFETY: signal 0 sends nothing; it only performs the existence check.
+    let rc = unsafe { libc::kill(pid as i32, 0) };
+    if rc == 0 {
+        return true;
+    }
+    std::io::Error::last_os_error().raw_os_error() == Some(libc::EPERM)
+}
+
+#[cfg(not(unix))]
+fn pid_is_alive(_pid: u32) -> bool {
+    // No portable check here, so assume alive: never reap on a guess.
+    true
+}
 
 static SEQUENCE: AtomicU64 = AtomicU64::new(0);
 
@@ -220,6 +247,7 @@ impl LeaseManager {
                 fencing_token: self.next_fence(&key)?,
                 issued_at_unix_ms: now,
                 expires_at_unix_ms: now.saturating_add(ttl_ms),
+                owner_pid: std::process::id(),
             };
             self.write_lease(&lease)?;
             Ok(lease)
@@ -290,6 +318,31 @@ impl LeaseManager {
             });
         }
         Ok(lease)
+    }
+
+    /// Remove leases whose owning process is gone.
+    ///
+    /// A broker that crashes leaves its record behind, which would block the
+    /// profile until the TTL elapsed. Liveness is checked with signal 0, so a
+    /// lease held by a live process is never touched.
+    ///
+    /// Returns how many records were removed. On platforms without a pid
+    /// liveness primitive this is a no-op and returns 0: reaping is then bounded
+    /// by [`LeaseManager::sweep_expired`] alone.
+    pub fn reap_dead(&self) -> Result<usize> {
+        self.with_lock(|| {
+            let mut reaped = 0;
+            for lease in self.all_leases()? {
+                if lease.owner_pid == 0 || pid_is_alive(lease.owner_pid) {
+                    continue;
+                }
+                let path = self.leases_dir().join(format!("{}.json", lease.id));
+                if fs::remove_file(path).is_ok() {
+                    reaped += 1;
+                }
+            }
+            Ok(reaped)
+        })
     }
 
     /// Remove expired leases and return how many were reaped.
