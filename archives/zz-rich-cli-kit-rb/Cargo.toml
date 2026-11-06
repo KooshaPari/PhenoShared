@@ -1,0 +1,30 @@
+[workspace]
+resolver = "2"
+members = ["crates/rck-core", "crates/rck-cli"]
+exclude = ["crates/klipdot"]
+
+[workspace.package]
+rust-version = "1.75"
+version = "0.1.0"
+edition = "2021"
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/KooshaPari/rich-cli-kit"
+authors = ["Phenotype org"]
+
+[workspace.dependencies]
+anyhow = "1.0"
+clap = { version = "4.5", features = ["derive"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+tokio = { version = "1.39", features = ["rt", "macros", "io-std", "time", "io-util"] }
+crossterm = "0.29"
+base64 = "0.22"
+image = { version = "0.25", default-features = false, features = ["png", "jpeg"] }
+thiserror = "2.0"
+unicode-width = "0.2"
+unicode-segmentation = "1.12"
+
+[profile.release]
+lto = "thin"
+codegen-units = 1
+

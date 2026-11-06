@@ -1,0 +1,35 @@
+name: Cargo Audit
+permissions:
+  contents: read
+
+on:
+  workflow_dispatch:
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 2 * * 3"
+  push:
+    branches: [main]
+  pull_request:
+jobs:
+  audit:
+    name: Cargo Audit
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v4
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@d1031067263f94b142dd6c0ce24c5eb9d02d52a0 # stable
+        with:
+          toolchain: stable
+
+      - name: Run cargo-audit
+        uses: rustsec/audit-check@858dc40f52ca2b8570b7a997c1c4e35c6fc9a432 # v2
+        with:
+          token: ${{ github.token }}

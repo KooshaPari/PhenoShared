@@ -1,0 +1,25 @@
+name: cargo-machete
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+
+on:
+  push:
+    branches: [main]
+    paths: ['Cargo.toml', '**/Cargo.toml']
+  pull_request:
+    paths: ['Cargo.toml', '**/Cargo.toml']
+  schedule:
+    - cron: '47 6 * * 4'  # weekly Thursday
+  workflow_dispatch:
+permissions:
+  contents: read
+
+
+jobs:
+  machete:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v4
+      - uses: bnjbvr/cargo-machete@f447148733f2e2d3d9f2a4e4ae2b88a9d11f6298 # main

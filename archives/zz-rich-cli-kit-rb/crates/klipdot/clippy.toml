@@ -1,0 +1,22 @@
+# clippy configuration — Phenotype-org tier-0 hygiene
+# Source: https://github.com/KooshaPari/phenotype-tooling/blob/main/templates/clippy-toml
+#
+# Note: a separate `clippy.json` at the repo root is a cargo-message-format
+# build artifact (compiler diagnostic JSON). It is NOT the same as this file
+# and is excluded from VCS via `.gitignore`.
+avoid-breaking-exported-api = false
+blacklisted-names = ["todo", "fixme", "TODO", "FIXME", "Foo", "Bar", "Baz", "Qux"]
+cognitive-complexity-threshold = 30
+too-many-arguments-threshold = 8
+type-complexity-threshold = 250
+single-match-else = true
+missing-docs-in-crate-items = false
+allow-private-module-inception = false
+allow-expect-in-tests = true
+allow-unwrap-in-tests = true
+enable-or-unwrap = "Disallowed"
+needless-late-init = "Warn"
+ref-option = "Warn"
+ptr-arg = "Warn"
+trivially-copy-pass-by-ref = "Warn"
+冗長な補間 = "Disallowed"  # reserved; UTF-8 lint names are validated by clippy at build time

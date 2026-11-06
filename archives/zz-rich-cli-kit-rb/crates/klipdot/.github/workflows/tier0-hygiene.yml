@@ -1,0 +1,51 @@
+name: Tier-0 Hygiene
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  hygiene:
+    name: tier-0 hygiene sweep
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    continue-on-error: true
+    steps:
+      - name: checkout
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5@11bd71901bbe5b1630ceea73d27597364c9af683
+
+      - name: install rust toolchain
+        uses: dtolnay/rust-toolchain@master
+        with:
+          components: rustfmt, clippy
+
+      - name: install cargo-deny
+        run: cargo install --locked cargo-deny
+
+      - name: install cargo-audit
+        run: cargo install --locked cargo-audit
+
+      - name: cache cargo registry
+        uses: Swatinem/rust-cache@v2
+
+      - name: format check
+        run: cargo fmt --all -- --check
+
+      - name: clippy (warnings-as-errors)
+        run: cargo clippy --workspace --all-targets --all-features -- -D warnings
+
+      - name: cargo-deny
+        run: cargo deny check
+
+      - name: cargo-audit
+        run: cargo audit
+
+      - name: pre-commit hooks
+        uses: pre-commit/action@v3.0.1
+        with:
+          extra_args: --all-files

@@ -1,0 +1,43 @@
+# pre-commit-hooks baseline — Phenotype-org tier-0 hygiene
+# Source: https://github.com/KooshaPari/phenotype-tooling/blob/main/templates/pre-commit-rust
+# Usage: pre-commit install
+#
+# All recipes below are idempotent and non-mutating in --check mode. Use
+# `just fmt` to auto-format and `just tier0` to run the full sweep locally.
+
+repos:
+  # ── upstream pre-commit-hooks ────────────────────────────────────────────
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-toml
+      - id: check-json
+      - id: check-added-large-files
+        args: ['--maxkb=2000']
+      - id: check-merge-conflict
+      - id: check-case-conflict
+      - id: mixed-line-ending
+        args: ['--fix=lf']
+
+  # ── rustfmt ──────────────────────────────────────────────────────────────
+  - repo: https://github.com/doublify/pre-commit-rust
+    rev: v1.0
+    hooks:
+      - id: fmt
+        args: ['--all', '--', '--check']
+
+  # ── clippy ───────────────────────────────────────────────────────────────
+  - repo: https://github.com/doublify/pre-commit-rust
+    rev: v1.0
+    hooks:
+      - id: clippy
+        args: ['--workspace', '--all-targets', '--all-features', '--', '-D', 'warnings']
+
+  # ── cargo-deny ───────────────────────────────────────────────────────────
+  - repo: https://github.com/EmbarkStudios/cargo-deny
+    rev: 0.14.5
+    hooks:
+      - id: cargo-deny
