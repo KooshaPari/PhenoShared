@@ -30,6 +30,15 @@ jobs:
           key: cargo-${{ runner.os }}-${{ hashFiles('**/Cargo.lock') }}
           restore-keys: cargo-${{ runner.os }}-
 
+      # terminal-fabric-rs has a build script that compiles protobufs and fails
+      # with "Could not find `protoc`" when it is absent. benchmark.yml already
+      # installs it this way; mirror that instead of relying on the runner image.
+      - name: Install protoc
+        uses: arduino/setup-protoc@v3
+        with:
+          version: "28.x"
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+
       # --- rust/ crate (tf-sync, tf-web) ---
       - name: Clippy (terminal-fabric-rs)
         working-directory: rust

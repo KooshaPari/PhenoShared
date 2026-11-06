@@ -38,8 +38,8 @@ language_rules:
       - "async_await_patterns"
     patterns_to_watch:
       - "^unsafe "
-      - "\.unwrap\(\)"
-      - "\.expect\("
+      - '\.unwrap\(\)'
+      - '\.expect\('
       - "std::panic"
     complexity_threshold: 15  # Cognitive complexity
 
