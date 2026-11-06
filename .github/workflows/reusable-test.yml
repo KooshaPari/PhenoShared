@@ -175,7 +175,7 @@ jobs:
             steps.node-junit.outputs.path != '' ||
             steps.python-junit.outputs.path != ''
           )
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: junit-${{ inputs.test-profile }}
           # Pick whichever language produced a non-empty path.
