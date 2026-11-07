@@ -25,6 +25,80 @@ ignore = [
     # proc-macro-error2 2.0.1 (RUSTSEC-2026-0173): transitive via leptos_macro;
     #   the fork's own abandonment mirrors RUSTSEC-2024-0370.
     "RUSTSEC-2026-0173",
+    # ── Unmaintained crates with no reachable fix (evaluated 2026-11-07) ──
+    # Each entry below names the crate, its exact dependency path and why no
+    # upgrade removes it. None of these are blanket waivers: each advisory ID
+    # is ignored individually and only for the single crate it applies to.
+    #
+    # basic-toml 0.1.10 (RUSTSEC-2026-0374)
+    #   Path: askama_derive 0.14 (proc-macro) -> askama 0.14 ->
+    #         uniffi_bindgen 0.31.2 -> uniffi_build 0.31.2 ->
+    #         eyetracker-ffi (build-dependency); also focus-entitlements
+    #         (dev-dependency).
+    #   Why not fixed: 0.1.10 is the LAST published version of basic-toml
+    #     (repository archived 2025-03-04). askama_derive still depends on it
+    #     at every published version, including askama_derive 0.16.1
+    #     (`basic-toml = "^0.1.1"`), and uniffi_bindgen 0.32.x only bumps askama
+    #     to 0.16 - so no upgrade of the parent drops it.
+    #   Risk: build-time/proc-macro only. basic-toml parses the `Cargo.toml`
+    #     templates shipped in-tree at build time; it is never compiled into a
+    #     shipped artifact and never parses untrusted input.
+    "RUSTSEC-2026-0374",
+    # smartstring 1.0.1 (RUSTSEC-2026-0249)
+    #   Path: phenotype-casbin-wrapper -> casbin 2.20.0 -> rhai 1.26.1 ->
+    #         smartstring 1.0.1.
+    #   Why not fixed: the advisory states ALL versions of smartstring are
+    #     affected. smartstring is a MANDATORY (non-optional) dependency of
+    #     rhai, and rhai 1.27.0 - the newest published release - still declares
+    #     `smartstring = "1.0.0"` unconditionally. casbin 2.20.0 is the newest
+    #     published casbin. There is no upgrade that removes it.
+    #   Risk: smartstring is a thin arena-backed `String` used by the rhai
+    #     script engine for Casbin expression evaluation. No known CVE; the
+    #     advisory is "unmaintained", not "unsound" or "vulnerable".
+    "RUSTSEC-2026-0249",
+    # unsafe-libyaml 0.2.11 (RUSTSEC-2024-0449)
+    #   Path: serde_yaml 0.9.34+deprecated -> unsafe-libyaml 0.2.11, reached
+    #         from 13 workspace crates (acceptance-contract, dag-scheduler,
+    #         fabric-cli, figment, pheno-config, phenocompose-cli,
+    #         phenotype-config, phenotype-config-core, phenotype-dag-core,
+    #         phenotype-journey-core, phenotype-shared-config, qgate, sharecli).
+    #   Why not fixed: serde_yaml 0.9.34+deprecated is the newest published
+    #     serde_yaml. The recommended fork serde_yaml_ng 0.10.0 STILL depends
+    #     on `unsafe-libyaml = "^0.2.11"`, so migrating to it does not remove
+    #     the crate either. A YAML parser written in safe Rust (saphyr /
+    #     noyalib) would be a large, behaviour-changing rewrite of 13 crates.
+    #   Risk: unsafe-libyaml is a c2rust machine translation of libyaml's C
+    #     code, used only to parse configuration files (trusted, in-repo).
+    "RUSTSEC-2024-0449",
+    # zbus_names 4.3.4 (RUSTSEC-2026-0371)
+    #   Path: zbus 5.19.0 -> zbus_names 4.3.4, reached from ashpd 0.11.1
+    #         (eidolon-desktop), ksni 0.3.6 (sharecli-tray-linux) and
+    #         secret-service 5.2.0 (focus-crypto).
+    #   Why not fixed: the crate was merged into `zbus` 6.0.0, so the fix is a
+    #     zbus MAJOR upgrade. ashpd only accepts zbus 6 from ashpd 0.14.0,
+    #     secret-service only from the 6.0.0-rc.1 pre-release, and `ksni`
+    #     - the tray crate sharecli-tray-linux depends on - has NO zbus 6
+    #     release at all (newest is 0.3.7, still `zbus = "^5"`). The Linux
+    #     system-tray feature therefore cannot move to zbus 6.
+    #   Risk: zbus_names is a pure type/parsing crate for D-Bus well-known bus
+    #     names; no known CVE, only unmaintained.
+    "RUSTSEC-2026-0371",
+    # zvariant 5.15.0 (RUSTSEC-2026-0370)
+    #   Path: zbus 5.19.0 -> zvariant 5.15.0 (also via zbus_macros 5.19.0 ->
+    #         zvariant_derive -> zvariant), same parents as zbus_names above.
+    #   Why not fixed: merged into `zbus` 6.0.0 as its `wire` module; blocked
+    #     by the same zbus 5 -> 6 upgrade wall (ksni has no zbus 6 release).
+    #   Risk: D-Bus wire-format serialization/deserialization helper crate; no
+    #     known CVE, only unmaintained.
+    "RUSTSEC-2026-0370",
+    # zvariant_derive 5.15.0 (RUSTSEC-2026-0372)
+    #   Path: zbus_macros 5.19.0 -> zvariant_derive 5.15.0 -> zvariant 5.15.0,
+    #         same parents as zbus_names above.
+    #   Why not fixed: derive macros moved into `zbus` 6.0.0; blocked by the
+    #     same zbus 5 -> 6 upgrade wall.
+    #   Risk: proc-macro crate that only generates derive implementations at
+    #     compile time; no known CVE, only unmaintained.
+    "RUSTSEC-2026-0372",
 ]
 
 # ── licenses ────────────────────────────────────────────────────────────
@@ -60,6 +134,29 @@ allow = [
 # not allowed above) with a single source of truth.
 # Don't confidence-check the license field.
 confidence-threshold = 0.8
+
+# ── license exceptions (per-crate, NOT a blanket GPL allow) ─────────────
+# `GPL-3.0` is deliberately NOT in the `allow` list above. It is granted only
+# to the two crates named here, and only because they are the WinFsp FUSE
+# bindings that `sharecli-fuse` pulls in for Windows only:
+#
+#   crates/sharecli-fuse/Cargo.toml
+#     [target.'cfg(windows)'.dependencies]
+#     winfsp = { version = "0.13", features = ["full", "windows-61"] }
+#     [target.'cfg(windows)'.build-dependencies]
+#     winfsp = { version = "0.13", features = ["build", "delayload"] }
+#
+# `winfsp` (0.13.1+winfsp-2.1) is a Rust binding to the WinFsp kernel-mode
+# file system proxy; it re-exports `winfsp-sys` (0.12.1+winfsp-2.1), which
+# links the WinFsp C runtime. Both upstream crates are licensed GPL-3.0.
+# Because the dependency is `cfg(windows)`-gated it is never compiled on
+# macOS or Linux, and it is not redistributed in the macOS/Linux artifacts.
+# No other crate in this workspace may use GPL-3.0: any new GPL-3.0 crate
+# will still be rejected by the `allow` list.
+exceptions = [
+    { crate = "winfsp", allow = ["GPL-3.0"] },
+    { crate = "winfsp-sys", allow = ["GPL-3.0"] },
+]
 
 # ── bans ────────────────────────────────────────────────────────────────
 [bans]
