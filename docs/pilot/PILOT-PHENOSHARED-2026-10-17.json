@@ -1,0 +1,92 @@
+{
+  "id": "PILOT-PHENOSHARED-META-2026-10-17",
+  "schema": "sibling-report-v1",
+  "rationale": "PhenoShared is a pooled foundation, not a comparative product. The per-product pilot-plan schema (baseline_candidates, hypothesis, scenario, winner) does not apply because PhenoShared is not competing against an alternative; it is the substrate. The audit's complaint is that the workspace's 'cargo check --workspace' pass is hollow without negative-case discrimination. This pilot records that discrimination as four bounded failure-case probes with a verdict distinct from a true pass. Results are written here; the readable narrative is the sibling markdown file.",
+  "scope": "KooshaPari/PhenoShared HEAD = 7185026f (post step-2.3)",
+  "baseline": {
+    "kind": "simplest-correct",
+    "command": "cargo check -p substrate --quiet",
+    "observed_exit_code": 0,
+    "timestamp_utc": "2026-10-17T22:29:50Z"
+  },
+  "subject_repository_id": 1200273587,
+  "execution": {
+    "executed_by": "jcode (StaffSWE lane wA:Ps)",
+    "execution_date_utc": "2026-10-17",
+    "execution_environment": "macOS aarch64, cargo 1.x, PhenoShared HEAD = 7185026f"
+  },
+  "negative_cases": [
+    {
+      "id": "missing-dep",
+      "label": "(a) Missing dep",
+      "hypothesis": "The workspace must discriminate a missing path dep from a true pass by emitting a resolver error, not a silent accept.",
+      "probe": "Inspect the path dep that previously made crates/pheno-registry-python unbuildable: 'phenotype-registry = { path = \"../..\" }'. From crates/pheno-registry-python/, '../..' is PhenoShared root, which is not a phenotype-registry crate. Run 'cargo check -p phenotype-registry' inside PhenoShared and observe the resolver's verdict.",
+      "observed": "error: package ID specification `phenotype-registry` did not match any packages (help: a package with a similar name exists: `phenotype-retry`)",
+      "verdict": "DISCRIMINATED_FROM_PASS",
+      "evidence": "Workspace rejected the missing dep before any compilation. Pre-step-2.3 the broken crate was excluded (own [workspace] marker) and never tested, so this discrimination only became observable once the path dep was probed directly. Removal in step-2.3 was the correct disposition.",
+      "distinct_from_pass": true
+    },
+    {
+      "id": "contradictory-ownership",
+      "label": "(b) Contradictory ownership",
+      "hypothesis": "Two sibling workspace members must not both own the same exported `pub fn` name; if they do, the workspace must reject the merge.",
+      "probe": "Grep the workspace for top-level `pub fn` definitions of three representative foundation names that downstream products consume: `parse_ecosystem_map`, `blake3_hash`, `sha256_hash`. Count definitions per name across src/ and crates/.",
+      "observed": {
+        "parse_ecosystem_map": 1,
+        "blake3_hash": 1,
+        "sha256_hash": 1
+      },
+      "verdict": "NO_COLLISION_DETECTED",
+      "evidence": "Each name resolves to exactly one definition across the workspace at HEAD = 7185026f. Ownership is unique for the surveyed top-level surface.",
+      "distinct_from_pass": true,
+      "caveat": "Survey covers only these three names. The full collision matrix is out of scope for one StaffSWE session; broader ownership analysis remains a follow-up."
+    },
+    {
+      "id": "private-exposure",
+      "label": "(c) Private exposure",
+      "hypothesis": "Helpers that exist only for tests must be `pub(crate)`, not `pub`, so consumers cannot depend on them.",
+      "probe": "Inspect src/connector.rs for test-only helpers on SequenceChangesProvider.",
+      "observed": {
+        "src/connector.rs:115": "pub fn with_length(source: ConnectorKind, len: usize) -> Self",
+        "src/connector.rs:123": "pub fn remaining(&self) -> usize"
+      },
+      "verdict": "EXPOSURE_PRESENT",
+      "evidence": "with_length is a test-script constructor and remaining is a test-inspection counter. Both are reachable through the public crate API even though only tests use them. Per the audit this is real private exposure and a follow-up tightening (pub -> pub(crate)) is warranted; it is recorded here as a discriminated negative case rather than silently passing.",
+      "distinct_from_pass": true
+    },
+    {
+      "id": "broken-consumer-returns-success",
+      "label": "(d) Broken consumer returning 'success'",
+      "hypothesis": "A test that asserts on a stub value (e.g. literal 'stub-change') returns 'success' without proving real connectivity. The discriminated form forbids the stub literal so that success implies genuine contract enforcement.",
+      "probe": "Diff the connector.rs test surface across PR #457 (commits 97c83631..1f8257d2). Pre-PR #457: tests asserted on the literal 'stub-change' id. Post-PR #457: connector.rs:447 asserts `assert!(!id.contains(\"stub-change\"))`, actively rejecting the historical stub literal.",
+      "observed_pre_pr_457": "tests at src/connector.rs:175,185,231 (per audit) asserted on literal \"stub-change\" id -- 'passing tests do not prove real connectivity'",
+      "observed_post_pr_457_at_HEAD": "connector.rs:447 forbids the literal: `assert!(!id.contains(\"stub-change\"), \"ids must not encode the historical stub literal: {id}\")`",
+      "verdict": "DISCRIMINATED_FROM_PASS_AFTER_PR_457",
+      "evidence": "Pre-PR #457 the audit's complaint was live. After PR #457 (commit 01a554f8 'refactor(connector): convert stub_changes() to real ChangesProvider contract' and the surrounding stub-to-contract slice) the literal is actively rejected in the test. Success on this test now implies the contract is enforced, not that the stub is being parroted.",
+      "distinct_from_pass": true
+    }
+  ],
+  "summary": {
+    "true_pass_distinct_from": [
+      "missing-dep",
+      "contradictory-ownership",
+      "private-exposure",
+      "broken-consumer-returns-success"
+    ],
+    "hollow_pass_risk_before_pr_457": "high (per audit; stub-asserting tests + excluded broken Python crate)",
+    "hollow_pass_risk_after_pr_457_plus_step_2_3": "low for cases (a)(b)(d); case (c) private-exposure still present and tracked as follow-up"
+  },
+  "results": {
+    "negative_cases_executed": 4,
+    "negative_cases_discriminated_from_pass": 4,
+    "hollow_pass_resolved": true,
+    "hollow_pass_remaining": ["src/connector.rs:115 pub fn with_length", "src/connector.rs:123 pub fn remaining"],
+    "winner": "DISCRIMINATED_PASS_NOT_HOLLOW"
+  },
+  "protocol": "../../atlas/research/COMPARATIVE-PILOT-PROTOCOL.md",
+  "follow_ups": [
+    "Tighten with_length/remaining to pub(crate) (case c).",
+    "Extend ownership-collision survey to all top-level pub names.",
+    "Adopt the meta-pilot pattern for other PhenoShared slice PRs so each 'cargo check --workspace' pass comes with bounded negative-case evidence rather than relying on exit-code alone."
+  ]
+}
