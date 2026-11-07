@@ -14,6 +14,8 @@
     "typecheck": "vue-tsc --noEmit -p tsconfig.json",
     "check": "bun run lint:ts && bun run typecheck && uv run python scripts/check_docs_links.py",
     "check-links": "uv run python scripts/check_docs_links.py",
+    "test": "vitest run --config vitest.unit.config.ts",
+    "test:coverage": "vitest run --config vitest.unit.config.ts --coverage",
     "test:a11y": "vitest run tests/a11y",
     "test:a11y:watch": "vitest tests/a11y",
     "check:alts": "node scripts/check-image-alts.mjs",
@@ -28,6 +30,7 @@
   "devDependencies": {
     "@axe-core/playwright": "4.14.0",
     "@playwright/test": "1.62.1",
+    "@vitest/coverage-v8": "5.1.0",
     "axe-core": "^4.14.0",
     "markdownlint-cli": "^0.49.0",
     "oxlint": "^1.57.0",
