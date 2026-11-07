@@ -40,6 +40,10 @@ path = "src/bin_app/mod.rs"
 required-features = ["mcp", "tray-native"]
 
 [dependencies]
+rusqlite = { workspace = true }
+reqwest = { workspace = true, features = ["multipart"] }
+futures-util = { workspace = true }
+tokio-tungstenite = { version = "0.28", features = ["rustls-tls-webpki-roots"] }
 clap = { workspace = true, features = ["derive", "env"] }
 serde = { workspace = true, features = ["derive"] }
 serde_json = { workspace = true }

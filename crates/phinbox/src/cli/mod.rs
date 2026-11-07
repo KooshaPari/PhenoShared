@@ -12,8 +12,10 @@ mod answer;
 mod ask;
 mod common;
 mod daemon;
+mod discord;
 mod inbox;
 mod install;
+mod manage;
 mod open;
 mod validate;
 mod wait;
@@ -92,6 +94,8 @@ impl TuiArgs {
 
 #[derive(Debug, Subcommand)]
 enum Cmd {
+    /// Durable workflow management; never submits a permission answer.
+    Manage(manage::ManageArgs),
     /// Render a popup from CLI flags, --from-json, or --from-file.
     Ask(ask::AskArgs),
     /// Print the JSON Schema for `PromptSpec` (or `FieldSpec` / `ElicitResponse`).
@@ -135,6 +139,7 @@ pub fn main() -> ExitCode {
         .unwrap_or_else(phinbox::inbox::default_inbox_root);
 
     let result = match cli.cmd {
+        Cmd::Manage(args) => manage::run(args, &inbox_dir),
         Cmd::Ask(args) => ask::cmd_ask(args, renderer, &inbox_dir),
         Cmd::Schema(args) => {
             common::cmd_schema(args);

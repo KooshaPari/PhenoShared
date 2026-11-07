@@ -131,6 +131,25 @@ fn handle_connection(
     let target = parts.next().unwrap_or("");
     let _version = parts.next().unwrap_or("");
 
+    // A read-only workflow view of the canonical management ledger.
+    if target == "/management" || target == "/api/management" {
+        if method != "GET" || !stream.peer_addr()?.ip().is_loopback() {
+            return write_response(&mut stream, 403, "Forbidden", "text/plain", b"local GET only");
+        }
+        let store = crate::management::Store::open(inbox_root.join("management.sqlite"));
+        let result = store.and_then(|store| {
+            if target == "/api/management" {
+                Ok(("application/json", serde_json::to_string(&store.list()?)?))
+            } else {
+                Ok(("text/html; charset=utf-8", crate::management::web::render(&store)?))
+            }
+        });
+        return match result {
+            Ok((kind, body)) => write_response(&mut stream, 200, "OK", kind, body.as_bytes()),
+            Err(_) => write_response(&mut stream, 500, "Internal Server Error", "text/plain", b"ledger unavailable"),
+        };
+    }
+
     let (rt, id) = parse_route(target);
 
     // Each arm returns the response it decided on, status included; `None`
