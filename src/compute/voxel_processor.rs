@@ -22,7 +22,9 @@
 //!
 //! - `@binding(0)` — uniforms (grid dimensions, operation params).
 //! - `@binding(1)` — voxel data buffer (`array<u32>`, material IDs).
-//! - `@binding(2)` — scratch buffer for double-buffered smooth passes.
+//! - `@binding(2)` — scratch buffer, written from `voxels` at the
+//!   start of the smooth pass so that WGSL's no-read-write-same-buffer
+//!   rule isn't violated. See [`smooth`] for the precise contract.
 
 use serde::{Deserialize, Serialize};
 
@@ -209,14 +211,26 @@ fn carve(@builtin(global_invocation_id) gid: vec3<u32>) {
 }
 
 // Smooth: 3x3x3 neighbourhood averaging pass.
+//
+// Contract: at the start of every invocation, the shader copies
+// `voxels[idx]` into `scratch[idx]`. It then reads from `scratch`
+// (the pre-pass snapshot) for both the neighborhood average and the
+// original-value `mix(...)`. Finally it writes the smoothed result
+// back into `voxels[idx]`. WGSL forbids reading and writing the same
+// storage buffer in a single dispatch when the read is non-trivial
+// (a 3x3x3 neighborhood read), so the scratch buffer is required.
+//
+// For *iterative* smoothing (multiple passes), the engine is
+// responsible for re-running this entry point with the buffer
+// bindings swapped each iteration (voxels <-> scratch) so the
+// previous pass's output becomes the next pass's input.
 @compute @workgroup_size(64, 1, 1)
 fn smooth(@builtin(global_invocation_id) gid: vec3<u32>) {
     let total = uniforms.grid_size_x * uniforms.grid_size_y * uniforms.grid_size_z;
     let idx = gid.x;
     if idx >= total { return; }
 
-    // Copy source to scratch on first invocation (stub — real impl uses
-    // double-buffering or barrier).
+    // Snapshot the pre-pass voxel into the scratch buffer.
     scratch[idx] = voxels[idx];
 
     let coord = vec3<i32>(idx_to_coord(idx));
