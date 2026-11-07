@@ -1,0 +1,80 @@
+name: ResearchLedger Fresh YouTube Census (manual)
+
+# The credentialed collector runs only from an operator-dispatched, reviewed
+# default-branch revision. A PR or feature-branch push must NEVER receive the
+# YouTube API secret. The key is scoped to the capture step, not the job.
+# Workflow dispatch becomes available after merge.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  public-census:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Checkout reviewed default-branch collector
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          ref: main
+          persist-credentials: false
+
+      - name: Verify pinned collector and negative controls before acquisition
+        shell: bash
+        run: |
+          set -euo pipefail
+          src=docs/researchledger/historical-wave5/scripts/research
+          python3 -m py_compile "$src/collect_emergent_garden_youtube.py" "$src/collect_emergent_garden_youtube_v2.py"
+          PYTHONPATH="$src" python3 -m unittest discover -s "$src" -p 'test_emergent_garden_youtube_v2.py' -v
+
+      - name: Collect fresh public API inventory into ephemeral runner storage
+        shell: bash
+        env:
+          YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
+        run: |
+          set -euo pipefail
+          if [ -z "${YOUTUBE_API_KEY:-}" ]; then
+            echo "::error::PhenoShared Actions secret YOUTUBE_API_KEY is absent; no historical data substituted."
+            exit 1
+          fi
+          umask 077
+          output="$RUNNER_TEMP/eg-census"
+          mkdir -p "$output"
+          src=docs/researchledger/historical-wave5/scripts/research
+          PYTHONPATH="$src" python3 "$src/collect_emergent_garden_youtube_v2.py" --output-root "$output" > "$RUNNER_TEMP/eg-census-result.log"
+          python3 - <<'PY'
+          import hashlib, json, os
+          from pathlib import Path
+          root = Path(os.environ["RUNNER_TEMP"]) / "eg-census"
+          status = json.loads((root / "data/youtube-census-status-v1.json").read_text())
+          # Do not mislabel API success as a reconciled inventory.
+          if status["provider"] != "youtube_data_api_v3" or status["state"] != "PASS" or not status["inventory_complete"]:
+              raise SystemExit("PUBLIC_UPLOAD_RECONCILIATION_INCOMPLETE")
+          files = sorted(root.rglob("*.json"))
+          manifest = {
+              "schema_version": "researchledger-public-census-refresh-v1",
+              "provider": status["provider"],
+              "captured_at": status["generated_at"],
+              "refresh_or_delete_by": status["refresh_or_delete_by"],
+              "public_video_count": status["normalized_video_count"],
+              "reconciliation_checks": status["reconciliation"]["checks"],
+              "api_request_count": status["api_request_count"],
+              "scope": "Public API-visible uploads, not private/deleted history",
+              "files": [{"path": str(p.relative_to(root)),
+                         "bytes": p.stat().st_size,
+                         "sha256": hashlib.sha256(p.read_bytes()).hexdigest()} for p in files]
+          }
+          (root / "REFRESH-RECEIPT.json").write_text(json.dumps(manifest, indent=2) + "\n")
+          print(json.dumps({key: manifest[key] for key in ("provider", "captured_at", "refresh_or_delete_by",
+              "public_video_count", "api_request_count")}))
+          PY
+
+      - name: Upload short-lived, nonraw normalized public metadata
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: researchledger-fresh-public-census-${{ github.run_id }}
+          path: ${{ runner.temp }}/eg-census/
+          retention-days: 1
+          if-no-files-found: error

@@ -1,0 +1,62 @@
+name: ResearchLedger Historical Corpus Offline Verification
+
+on:
+  push:
+    branches:
+      - docs/researchledger-recovery-20261012
+    paths:
+      - docs/researchledger/historical-wave5/**
+      - tests/researchledger/**
+      - scripts/researchledger/**
+      - .github/workflows/researchledger-corpus-offline.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  historical-corpus:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - name: Checkout exact research recovery revision
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+
+      - name: Verify preserved bytes and source boundary
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import hashlib
+          import json
+          from pathlib import Path
+
+          root = Path("docs/researchledger/historical-wave5")
+          record = json.loads((root / "PRESERVATION-MANIFEST.json").read_text())
+          items = record["files"]
+          assert len(items) == 47, "Incorrect number of expected preserved entries"
+          assert len({row["path"] for row in items}) == 47
+          for item in items:
+              path = Path(item["path"])
+              assert path.is_relative_to(root)
+              data = path.read_bytes()
+              assert len(data) == item["bytes"], item["path"]
+              assert hashlib.sha256(data).hexdigest() == item["sha256"], item["path"]
+          assert not (root / "docs/corpora/emergent-garden/data/youtube-channel-inventory-v1.json").exists()
+          assert not (root / "docs/corpora/emergent-garden/data/youtube-description-edges-v1.json").exists()
+          print("All 47 historical research files match the preserved SHA-256 manifest.")
+          PY
+
+      - name: Execute historical offline research suite
+        shell: bash
+        run: |
+          set -euo pipefail
+          base=docs/researchledger/historical-wave5/scripts/research
+          python3 -m compileall -q "$base"
+          PYTHONPATH="$base" python3 -m unittest discover -s "$base" -p 'test_*.py' -v
+
+      - name: Verify recovery importer negative controls
+        run: python3 -m unittest discover -s tests/researchledger -p 'test_*.py' -v

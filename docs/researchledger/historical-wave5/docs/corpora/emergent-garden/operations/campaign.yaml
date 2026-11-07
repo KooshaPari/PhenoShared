@@ -1,0 +1,137 @@
+schema_version: "1.0"
+campaign_id: "eg-nested-corpus-2026-09"
+title: "Emergent Garden Nested-Corpus Research"
+status: "planned"
+created_at: "2026-09-04T00:00:00-07:00"
+owner: "KooshaPari"
+scope: "data-mining-research-operations-and-documentation-only"
+
+roots:
+  - source_id: "youtube-channel-emergent-garden"
+    kind: "youtube_channel"
+    uri: "https://www.youtube.com/@EmergentGarden/videos"
+    handle: "@EmergentGarden"
+    acquisition_mode: "COMPLIANT_BASELINE"
+  - source_id: "creator-site-emergent-garden"
+    kind: "creator_site"
+    uri: "https://emergentgarden.io/"
+    acquisition_mode: "PUBLIC_WEB_POLICY_REVIEW"
+
+authority:
+  research: "KooshaPari/ResearchLedger"
+  projections: "KooshaPari/RepoLedger"
+  local_ops: "KooshaPari/local-ops"
+  agent_runtime: "KooshaPari/thegent"
+  session_capture: "KooshaPari/SessionLedger"
+  traceability: "KooshaPari/Tracera"
+  work_management: "KooshaPari/AgilePlus"
+  portfolio_index: "KooshaPari/pheno"
+
+modes:
+  default: "COMPLIANT_BASELINE"
+  allowed:
+    - "COMPLIANT_BASELINE"
+    - "AUTHORIZED_BULK"
+  forbidden:
+    - "UNSUPPORTED_SCRAPE"
+    - "PRIVATE_OR_MEMBER_CONTENT"
+    - "CIRCUMVENTION"
+
+youtube:
+  inventory_provider: "youtube_data_api_v3"
+  handle_resolution: "channels.list?forHandle=@EmergentGarden"
+  upload_enumeration: "playlistItems.list"
+  video_details: "videos.list"
+  canonical_search_method: false
+  api_cache_max_age_days: 30
+  captions_download_expected: false
+  transcript_routes:
+    - "creator_supplied"
+    - "first_party_licensed"
+    - "permissioned_export"
+    - "manual_youtube_ui"
+    - "operator_notes"
+    - "local_asr_supplied_media"
+  prohibited_routes:
+    - "unattended_youtube_scrape"
+    - "undocumented_transcript_endpoint"
+    - "browser_cookie_extraction"
+    - "video_or_audio_download"
+    - "captcha_or_antibot_bypass"
+    - "geo_or_age_bypass"
+
+frontier:
+  max_depth: 4
+  max_nodes_total: 2500
+  initial_deep_batch: 250
+  max_outlinks_per_node: 50
+  max_selected_bibliography_refs_per_paper: 20
+  max_nodes_per_domain: 250
+  checkpoint_every_nodes: 50
+  minimum_expand_score: 12
+  force_review_score: 20
+
+edge_types:
+  - "AUTHOR_DIRECT"
+  - "IMPLEMENTATION"
+  - "PRIMARY_SOURCE"
+  - "DEPENDENCY"
+  - "INFLUENCE"
+  - "EXTENSION"
+  - "CONTEXT"
+  - "INCIDENTAL"
+  - "CONTRADICTS"
+  - "SUPERSEDES"
+  - "DUPLICATES"
+
+evidence_types:
+  - "stated"
+  - "demonstrated"
+  - "observed_in_code"
+  - "cited"
+  - "inferred"
+  - "portfolio_observed"
+  - "hypothesis"
+  - "negative_result"
+
+applicability_classes:
+  - "DIRECTLY_ADOPT"
+  - "ARCHITECTURAL_ANALOGUE"
+  - "EXPERIMENT"
+  - "RESEARCH_LEAD"
+  - "PHILOSOPHICAL_CONVERGENCE"
+  - "CONTRADICTION"
+  - "NOT_APPLICABLE"
+  - "ALREADY_IMPLEMENTED"
+  - "SUPERSEDED_BY_PORTFOLIO"
+  - "INSUFFICIENT_EVIDENCE"
+
+publication:
+  full_transcripts_in_git: false
+  audiovisual_media_in_git: false
+  api_raw_responses_in_git: false
+  private_correspondence_in_git: false
+  derived_notes_allowed: true
+  short_evidence_excerpts_allowed: true
+  source_links_required: true
+  permission_artifact_required_for_full_text: true
+
+github:
+  default_pr_state: "draft"
+  direct_default_branch_commits: false
+  merges: false
+  repository_create_delete_archive_rename: false
+  product_code_changes: false
+  project_pr_relevance_threshold: 32
+  project_research_lead_threshold: 24
+
+quality_gates:
+  - "G0_PREFLIGHT"
+  - "G1_INVENTORY"
+  - "G2_TEXT_COVERAGE"
+  - "G3_DIRECT_GRAPH"
+  - "G4_RECURSIVE_GRAPH"
+  - "G5_SYNTHESIS"
+  - "G6_PORTFOLIO_MAPPING"
+  - "G7_GITHUB_PROJECTION"
+  - "G8_INCREMENTAL_REFRESH"
