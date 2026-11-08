@@ -24,7 +24,7 @@
 |------|-----------------|--------------------------------|
 | Package name | renamed to `forge` | **still `phenotype-forge`** (see `Cargo.toml:2`) |
 | Binary name | renamed to `forge` | **still `phenotype-forge`** (see `Cargo.toml:18-20`, `[[bin]]` block) |
-| Repository URL | moved to `phenotype-dev/forge` | **still `KooshaPari/phenoForge`** (this checkout's `origin` remote) |
+| Repository URL | moved to `phenotype-dev/forge` | **still `<REDACTED>/phenoForge`** (this checkout's `origin` remote) |
 | Source deletion | migrated source removed here | **not removed**; `src/main.rs` and `src/lib.rs` are present |
 
 The migration was recorded in `ARCHIVED.md` but the code rename never

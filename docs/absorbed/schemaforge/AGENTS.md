@@ -19,7 +19,7 @@ Extends: `phenotype-governance/AGENTS.md`
 | **Name** | PROJECT_NAME |
 | **Description** | PROJECT_DESCRIPTION |
 | **Language** | PRIMARY_LANGUAGE |
-| **Location** | `/Users/kooshapari/CodeProjects/Phenotype/repos/PROJECT_NAME` |
+| **Location** | `/Users/<REDACTED>/CodeProjects/Phenotype/repos/PROJECT_NAME` |
 | **Language Stack** | Rust/Python/Go/TypeScript (edition 2021) |
 | **Published** | Internal / crates.io / npm |
 
@@ -30,7 +30,7 @@ Extends: `phenotype-governance/AGENTS.md`
 All work MUST be tracked in AgilePlus:
 
 ```bash
-cd /Users/kooshapari/CodeProjects/Phenotype/repos/.agileplus
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos/.agileplus
 agileplus <command>
 ```
 
