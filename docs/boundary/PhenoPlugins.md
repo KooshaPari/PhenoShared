@@ -4,7 +4,7 @@ role: absorbed
 status: archived
 last_boundary_review: 2026-07-17
 review_cadence: 30d
-absorbed_into: <REDACTED>/pheno
+absorbed_into: &lt;REDACTED&gt;/pheno
 absorbed_on: 2026-07-17
 ---
 

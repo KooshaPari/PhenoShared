@@ -12,7 +12,7 @@
 ## Dependencies
 - 012-github-portfolio-triage (portfolio-wide triage)
 - 018-template-repo-cleanup (template repo relationships)
-- <REDACTED>-stale-repo-triage (stale repo identification)
+- &lt;REDACTED&gt;-stale-repo-triage (stale repo identification)
 
 ## Timeline
 - Phase 1: Week 1-3

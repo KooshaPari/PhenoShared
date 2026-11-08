@@ -304,7 +304,7 @@ These three repos get workflow deployment first:
 - `**/path/to/repo/.snyk` (one per repo with suppressions)
 
 ### GitHub Integration
-- Organization Secrets: https://github.com/organizations/<REDACTED>/settings/secrets/actions
+- Organization Secrets: https://github.com/organizations/&lt;REDACTED&gt;/settings/secrets/actions
 - Workflows: `.github/workflows/snyk-scan.yml` (in each repo)
 - Actions Results: https://github.com/KooshaPari/[repo]/actions
 
@@ -413,7 +413,7 @@ gh auth status       # Logged into GitHub as <REDACTED>
 
 Before you start, verify:
 
-- [ ] You have admin access to <REDACTED> GitHub organization
+- [ ] You have admin access to &lt;REDACTED&gt; GitHub organization
 - [ ] You have a Snyk account (free tier is fine)
 - [ ] All repos are cloned locally at `/Users/<REDACTED>/CodeProjects/Phenotype/repos/`
 - [ ] You're comfortable with command-line tools
@@ -467,7 +467,7 @@ You'll know you've succeeded when:
 | Need | Link |
 |------|------|
 | Snyk App | https://app.snyk.io |
-| GitHub Org Secrets | https://github.com/organizations/<REDACTED>/settings/secrets/actions |
+| GitHub Org Secrets | https://github.com/organizations/&lt;REDACTED&gt;/settings/secrets/actions |
 | AgilePlus Actions | https://github.com/KooshaPari/AgilePlus/actions |
 | heliosCLI Actions | https://github.com/KooshaPari/heliosCLI/actions |
 | phenotype-infrakit Actions | https://github.com/KooshaPari/phenotype-infrakit/actions |

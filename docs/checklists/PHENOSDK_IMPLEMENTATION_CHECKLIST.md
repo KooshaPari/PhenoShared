@@ -229,7 +229,7 @@ export class PhenotypeError extends Error {
 
 - [ ] Create `packages/pheno-resilience/src/event-sourcing/` directory
 - [ ] Create `event-envelope.ts`
-  - [ ] Implement EventEnvelope<T> interface
+  - [ ] Implement EventEnvelope&lt;T> interface
   - [ ] Include: id (UUID), timestamp, sequence, actor, eventType, payload, hash, prevHash
 - [ ] Create `event-store.ts`
   - [ ] Implement EventStore interface with 6 methods

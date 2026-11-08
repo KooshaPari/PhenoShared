@@ -42,11 +42,11 @@ See: [`docs/boundary/phenoEvents.md`](../boundary/phenoEvents.md)
 
 ## Ecosystem Role
 
-<See `ECOSYSTEM_MAP.md` for the canonical ecosystem role.>
+&lt;See `ECOSYSTEM_MAP.md` for the canonical ecosystem role.>
 
 ## Open Questions
 
-- <To be filled from the latest prompt on this repo.>
+- &lt;To be filled from the latest prompt on this repo.>
 
 ## Change Log
 

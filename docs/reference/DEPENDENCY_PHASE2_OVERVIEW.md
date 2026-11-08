@@ -2,7 +2,7 @@
 ## Consolidation, Dead Code Removal & Build Optimization
 
 **Date:** 2026-03-31
-**Repository:** <REDACTED>/phenotype-infrakit
+**Repository:** &lt;REDACTED&gt;/phenotype-infrakit
 **Scope:** Complete Phase 2 work breakdown
 **Status:** 🟡 READY FOR LAUNCH
 

@@ -19,6 +19,7 @@
 import { defineConfig } from 'vitepress'
 import type { ConfigOptions } from '../types/index.ts'
 import { deepMerge } from '../utils/config-merger.ts'
+import { escapeCodeInterpolations } from '../markdown/escape-code-interpolations.ts'
 
 /**
  * Create a VitePress config pre-loaded with the Phenotype keycap theme defaults.
@@ -106,6 +107,9 @@ export function createPhenotypeConfig(options: ConfigOptions) {
         light: 'github-light',
         dark: 'github-dark',
       },
+      // Keep `{{ ... }}` inside code samples from being compiled as Vue
+      // interpolations -- see packages/docs/src/markdown/escape-code-interpolations.ts
+      config: escapeCodeInterpolations,
     },
 
     ignoreDeadLinks: true,

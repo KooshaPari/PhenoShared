@@ -258,7 +258,7 @@ validator.validate("user@company.com")?;
 |------|-------------|--------|-----------|
 | Backward compatibility break | Low | Medium | Keep old validators.rs as bridge module |
 | Performance regression | Low | Medium | Benchmark validators, cache hot paths |
-| Registry contention | Low | Low | Use Lazy<Mutex> for thread-safety |
+| Registry contention | Low | Low | Use Lazy&lt;Mutex> for thread-safety |
 | Complexity of implementation | Medium | Low | Clear trait boundaries, 3 phases reduce scope creep |
 
 ---

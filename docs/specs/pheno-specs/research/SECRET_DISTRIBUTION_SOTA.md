@@ -46,7 +46,7 @@ spec:
 | Aspect | Risk Level | Mitigation |
 |--------|------------|------------|
 | Process listing (ps e) | High | Use files for sensitive values |
-| /proc/<pid>/environ | High | Kernel-level access controls |
+| /proc/&lt;pid>/environ | High | Kernel-level access controls |
 | Core dumps | High | Disable core dumps in production |
 | Shell history | Medium | Space prefix commands |
 | Container image layers | Low | Build-time only, not runtime |

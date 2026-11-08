@@ -265,7 +265,7 @@ Extract sections into internal wiki:
 4. Create AgilePlus specs for Phase 1 libraries
 
 ### Short Term (Next 2 Weeks)
-1. Create `phenotype-contracts` enhancement spec (generic Repository<T>)
+1. Create `phenotype-contracts` enhancement spec (generic Repository&lt;T>)
 2. Create `phenotype-adapters` spec (consolidate cache/secret/repo)
 3. Create `phenotype-event-bus` spec (unified event handling)
 4. Plan Phase 1 execution schedule

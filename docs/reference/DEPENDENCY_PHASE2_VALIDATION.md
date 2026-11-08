@@ -2,7 +2,7 @@
 ## Testing, Measurement & Verification Protocols
 
 **Date Created:** 2026-03-31
-**Repository:** <REDACTED>/phenotype-infrakit
+**Repository:** &lt;REDACTED&gt;/phenotype-infrakit
 **Scope:** Validation procedures for Phase 2 consolidation work
 **Status:** 🟡 READY FOR EXECUTION
 

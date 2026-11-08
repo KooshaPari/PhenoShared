@@ -44,7 +44,7 @@ The HTTP middleware boundary covers:
 
 Quillr was chosen as the reconciliation name because:
 
-1. The <REDACTED>/Quillr repo already subsumed Httpora (2026-06-20)
+1. The &lt;REDACTED&gt;/Quillr repo already subsumed Httpora (2026-06-20)
 2. The README's "Restored: Quillr" header documents the consolidation
 3. The Rust crate kept `httpora-core` (descriptive) while the TS
    client kept `quillts` (brand-flavored)
