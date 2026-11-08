@@ -1,0 +1,25 @@
+# GitGuardian configuration for KooshaPari/PhenoShared
+#
+# Scope: narrow, per-file exceptions only. There is deliberately no blanket
+# ignore for the archival absorption trees, because a future verbatim copy
+# could carry a real credential and a wide ignore would hide it.
+#
+# Each entry below is a fixture, not a live credential. Verified by reading
+# the flagged lines: no real secret value is reproduced here.
+
+ignore:
+  # go-kit development seed data.
+  #   packages/go-kit/migrations/runner.go, func DevelopmentSeedData():
+  #   a struct literal of dev users with Email / Name / Password / Role
+  #   fields (Role: "admin", Role: "user") plus webhook seed rows. The
+  #   "Company Email Password" detector fires on the Email+Password pair
+  #   appearing together in a struct literal.
+  #
+  #   It is seed data for a local development database - by construction the
+  #   credentials are well-known to anyone running the dev seed, which is the
+  #   opposite of a secret. The file is a verbatim archival copy, so it cannot
+  #   be edited without falsifying the copy.
+  - path: docs/absorbed-from-PhenoGoKit/packages/go-kit/migrations/runner.go
+    reason: >-
+      Development seed data: a struct literal of dev users with Email,
+      Name, Password and Role fields. Not a live credential.
