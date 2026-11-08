@@ -16,10 +16,10 @@ use rmcp::{
 };
 use serde::Serialize;
 
+use substrate_browser_broker::BrokerError;
 use substrate_browser_mcp::{
     AcquireParams, BrokerTools, PurgeParams, ReleaseParams, SharedTools, ToolError,
 };
-use substrate_browser_broker::BrokerError;
 
 /// MCP server state: one broker tool surface, shared by all requests.
 #[derive(Clone)]
@@ -31,9 +31,8 @@ pub struct BrowserBrokerMcp {
 }
 
 fn text_json<T: Serialize>(value: &T) -> CallToolResponse {
-    let body = serde_json::to_string_pretty(value).unwrap_or_else(|e| {
-        format!("{{\"kind\":\"Serialization\",\"message\":\"{e}\"}}")
-    });
+    let body = serde_json::to_string_pretty(value)
+        .unwrap_or_else(|e| format!("{{\"kind\":\"Serialization\",\"message\":\"{e}\"}}"));
     CallToolResult::success(vec![ContentBlock::text(body)]).into()
 }
 
@@ -187,10 +186,7 @@ async fn main() -> ExitCode {
             return ExitCode::FAILURE;
         },
     };
-    eprintln!(
-        "browser-broker-mcp: root {}",
-        tools.root().display()
-    );
+    eprintln!("browser-broker-mcp: root {}", tools.root().display());
 
     let server = BrowserBrokerMcp::new(Arc::new(tools));
     let transport = rmcp::transport::io::stdio();

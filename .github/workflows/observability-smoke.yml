@@ -12,14 +12,27 @@ jobs:
   observability-smoke:
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: iac
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v4.1.1
 
+      # Pinned to match rust-toolchain.toml (1.99.0, E1.1/E1.2 2026-10-01),
+      # same as quality-gate.yml. The previous pin was 1.75, which cannot
+      # compile this workspace at all: every iac member is `edition = "2024"`,
+      # which requires rustc >= 1.85.
       - name: Install Rust toolchain
-        uses: dtolnay/rust-toolchain@b725eda525362e7cf34af9a7243cac1e3f01a7ec # stable
+        uses: dtolnay/rust-toolchain@1.99.0
         with:
-          toolchain: stable
+          toolchain: "1.99.0"
 
+      # No Zig, no Go and no gtk-rs system libraries here on purpose: this job
+      # builds the `iac` workspace, whose dependency graph is only
+      # tracing/tracing-subscriber plus the local `phenotype-logging` stub.
+      # `spawn-core-sys` (zig) and `nanovms-core` (go) live in the root
+      # perf-core workspace, not in `iac`, so copying the coverage.yml Ubuntu
+      # apt/setup-go blocks here would add minutes and no coverage.
       - name: Cache cargo registry and target
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6
         with:
@@ -27,22 +40,21 @@ jobs:
             ~/.cargo/registry
             ~/.cargo/git
             iac/target
-          key: ${{ runner.os }}-cargo-${{ hashFiles('iac/Cargo.lock') }}
+          # Hash both the manifest and the lock: `phenotype-infra-observability`
+          # is a workspace member now, so a manifest edit changes the graph.
+          key: ${{ runner.os }}-cargo-observability-${{ hashFiles('iac/Cargo.toml', 'iac/Cargo.lock') }}
           restore-keys: |
-            ${{ runner.os }}-cargo-
+            ${{ runner.os }}-cargo-observability-
 
       - name: Build observability crate
-        working-directory: iac
-        run: cargo build -p phenotype-infra-observability
+        run: cargo build --locked -p phenotype-infra-observability
 
       - name: Test observability crate (TracePort roundtrip)
-        working-directory: iac
-        run: cargo test -p phenotype-infra-observability --no-fail-fast
+        run: cargo test --locked -p phenotype-infra-observability --no-fail-fast
         env:
           RUST_LOG: info,phenotype_infra_observability=debug
 
       - name: Test report
         if: always()
-        working-directory: iac
         run: |
           echo "T22 observability smoke test complete (pheno-tracing 0.1 substrate; OTLP adapter not yet shipped)."

@@ -85,10 +85,7 @@ impl TlsConfig {
     /// `Ok(None)` means "no TLS was requested" and the caller must keep the
     /// existing plain-HTTP behaviour. Anything half-specified is an error, so a
     /// typo can never downgrade a remote bind to cleartext.
-    pub fn from_flags(
-        cert: Option<String>,
-        key: Option<String>,
-    ) -> Result<Option<Self>, TlsError> {
+    pub fn from_flags(cert: Option<String>, key: Option<String>) -> Result<Option<Self>, TlsError> {
         match (cert, key) {
             (None, None) => Ok(None),
             (Some(_), None) => Err(TlsError::Incomplete {

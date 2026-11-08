@@ -1,6 +1,7 @@
 [workspace]
 resolver = "2"
 members = [
+    "observability",
     "oci-lottery",
     "oci-post-acquire",
     "tailscale/tailscale-keygen",
@@ -12,6 +13,10 @@ members = [
 # dependency for the observability member. Neither belongs to this workspace.
 exclude = [
     "landing-bootstrap",
+    # Declares its own `[workspace]` table (same detached-stub rationale as
+    # `landing-bootstrap`). It is consumed as a path dependency, not built as a
+    # workspace member; listing it here keeps cargo from reporting "multiple
+    # workspace roots" for the `observability` crate's `phenotype-logging` dep.
     "phenotype-logging-stub",
 ]
 
@@ -31,6 +36,8 @@ serde_json = "1.0"
 tokio = { version = "1.52", features = ["rt-multi-thread", "macros", "process", "signal", "time", "fs", "net", "io-util"] }
 tracing = "0.1"
 tracing-subscriber = { version = "0.3", features = ["env-filter", "fmt", "json"] }
+# Local, self-contained stub so `iac/*` daemons resolve `phenotype-logging`
+# without a sibling worktree (see iac/phenotype-logging-stub/src/lib.rs).
 phenotype-logging = { path = "phenotype-logging-stub" }
 chrono = { version = "0.4", features = ["serde"] }
 reqwest = { version = "0.12", features = ["json", "rustls-tls"], default-features = false }

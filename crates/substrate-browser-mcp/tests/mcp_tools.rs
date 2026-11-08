@@ -12,8 +12,8 @@ use std::{
 };
 
 use substrate_browser::{Clock, Scope};
-use substrate_browser_mcp::{kind_of, AcquireParams, BrokerTools};
 use substrate_browser_broker::BrokerError;
+use substrate_browser_mcp::{kind_of, AcquireParams, BrokerTools};
 
 /// Controllable clock so TTL expiry is observable without sleeping.
 #[derive(Debug, Clone, Default)]
@@ -45,11 +45,20 @@ fn scope(principal: &str, profile: &str) -> Scope {
 }
 
 /// Grant a lease the way `acquire` does at the authority layer.
-fn grant(tools: &BrokerTools, principal: &str, profile: &str, ttl_ms: u64) -> substrate_browser::Lease {
+fn grant(
+    tools: &BrokerTools,
+    principal: &str,
+    profile: &str,
+    ttl_ms: u64,
+) -> substrate_browser::Lease {
     tools
         .broker()
         .leases()
-        .grant(&scope(principal, profile), "test-holder", Duration::from_millis(ttl_ms))
+        .grant(
+            &scope(principal, profile),
+            "test-holder",
+            Duration::from_millis(ttl_ms),
+        )
         .expect("grant lease")
 }
 
