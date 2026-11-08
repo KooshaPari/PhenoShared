@@ -22,6 +22,18 @@ mod macos {
         UnexpectedFailure = -1,
     }
 
+    // Every `MountResult` value is produced by the MFMount C API, never by Rust
+    // code. Pin the ABI mapping here so the full value domain is referenced and
+    // any discriminant drift is a compile error.
+    const _: [i32; 6] = [
+        MountResult::Success as i32,
+        MountResult::UnsupportedOs as i32,
+        MountResult::HelperToolsInstallationFailed as i32,
+        MountResult::FileSystemExtensionNotFound as i32,
+        MountResult::FileSystemExtensionRequiresApproval as i32,
+        MountResult::UnexpectedFailure as i32,
+    ];
+
     #[link(name = "MFMount", kind = "framework")]
     unsafe extern "C" {
         fn MFChannelCreate() -> Channel;

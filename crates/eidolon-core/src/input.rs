@@ -32,7 +32,7 @@ pub enum InputType {
     Char,
     Key,
     Paste,
-    IME,
+    Ime,
 }
 
 impl fmt::Display for InputType {
@@ -41,7 +41,7 @@ impl fmt::Display for InputType {
             Self::Char => write!(f, "char"),
             Self::Key => write!(f, "key"),
             Self::Paste => write!(f, "paste"),
-            Self::IME => write!(f, "ime"),
+            Self::Ime => write!(f, "ime"),
         }
     }
 }

@@ -54,10 +54,9 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     // Cheap per-process PRNG (xorshift64*). Seeded from pid + wall clock so that
     // concurrent workers draw different jitter sequences, which is the whole
     // point of yielding. No external crates.
-    let mut rng_state = (u64::from(std::process::id()))
-        .wrapping_mul(0x9E37_79B9_7F4A_7C15)
+    let mut rng_state = (u64::from(std::process::id())).wrapping_mul(0x9e37_79b9_7f4a_7c15)
         ^ now_unix_ms()
-        ^ 0xDEAD_BEEF_CAFE_F00D;
+        ^ 0xdead_beef_cafe_f00d;
 
     let mut granted = 0u64;
     let mut refused = 0u64;

@@ -1,5 +1,6 @@
 //! Download/fetch logic for release assets.
 
+#[cfg(any(feature = "sandbox-rootfs-pack", test))]
 use std::fs;
 use std::path::{Path, PathBuf};
 
@@ -10,7 +11,6 @@ use super::{
     effective_release_pin, guard_against_tmp, release_unavailable, ROOTFS_ASSET_SHA256_ENV,
     ROOTFS_ASSET_URL_ENV, ROOTFS_IMG_ENV, ROOTFS_RELEASE_VERSION,
 };
-use crate::codes;
 
 fn env_rootfs_img() -> Option<PathBuf> {
     std::env::var_os(ROOTFS_IMG_ENV).and_then(|v| {
@@ -117,6 +117,7 @@ pub fn fetch_into(dest_dir: &Path) -> Result<()> {
 }
 
 /// Parsed `https://github.com/{owner}/{repo}/releases/download/{tag}/{file}`.
+#[cfg(any(feature = "sandbox-rootfs-pack", test))]
 #[derive(Debug, Clone, PartialEq, Eq)]
 struct GitHubReleaseDownload {
     owner: String,
@@ -125,6 +126,7 @@ struct GitHubReleaseDownload {
     filename: String,
 }
 
+#[cfg(any(feature = "sandbox-rootfs-pack", test))]
 fn parse_github_release_download_url(url: &str) -> Option<GitHubReleaseDownload> {
     let rest = url.strip_prefix("https://github.com/")?;
     let mut parts = rest.split('/');
@@ -151,6 +153,7 @@ fn parse_github_release_download_url(url: &str) -> Option<GitHubReleaseDownload>
     })
 }
 
+#[cfg(feature = "sandbox-rootfs-pack")]
 fn github_auth_token() -> Option<String> {
     std::env::var("GH_TOKEN")
         .or_else(|_| std::env::var("GITHUB_TOKEN"))
@@ -342,6 +345,7 @@ mod tests {
     use std::sync::Mutex;
 
     use super::*;
+    #[cfg(feature = "sandbox-rootfs-pack")]
     use crate::codes;
 
     static ENV_LOCK: Mutex<()> = Mutex::new(());
@@ -384,10 +388,12 @@ mod tests {
 
     #[test]
     fn effective_pin_uses_checkout_when_published() {
+        // `ROOTFS_RELEASE_PUBLISHED` is a compile-time constant; assert it at
+        // compile time instead of with a tautological runtime assertion.
+        const _: () = assert!(super::super::ROOTFS_RELEASE_PUBLISHED);
         let _g = ENV_LOCK.lock().unwrap();
         std::env::remove_var(super::ROOTFS_ASSET_URL_ENV);
         std::env::remove_var(super::ROOTFS_ASSET_SHA256_ENV);
-        assert!(super::super::ROOTFS_RELEASE_PUBLISHED);
         let pin = effective_release_pin().unwrap().expect("checkout pin");
         assert!(!pin.from_env);
         assert_eq!(pin.sha256, super::super::ROOTFS_RELEASE_SHA256);

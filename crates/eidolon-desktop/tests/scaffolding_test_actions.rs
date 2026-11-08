@@ -4,6 +4,14 @@
 //! target_os + env flags. They compile on all platforms but the `#[cfg]`
 //! attributes keep the bodies inactive where the platform is unavailable.
 
+// Without a live backend the file has no tests and no reachable helpers; gate
+// the whole crate so platform-specific imports are not flagged as unused.
+#![cfg(any(
+    all(target_os = "windows", feature = "desktop-windows"),
+    all(target_os = "linux", feature = "desktop-linux"),
+    all(target_os = "linux", feature = "desktop-linux-atspi"),
+))]
+
 use eidolon_core::error::PhenoError;
 use eidolon_core::{PointerInput, TextInput};
 use eidolon_desktop::codes;

@@ -15,9 +15,9 @@ fn fr003_fleet_slot_queue_meters_format() {
     record_slot_wait();
     record_slot_timeout();
     let after = global_slot_queue_meters();
-    assert!(after.acquires >= before.acquires + 1);
-    assert!(after.waits >= before.waits + 1);
-    assert!(after.timeouts >= before.timeouts + 1);
+    assert!(after.acquires > before.acquires);
+    assert!(after.waits > before.waits);
+    assert!(after.timeouts > before.timeouts);
 
     let meters = SlotQueueMeters {
         acquires: 4,
