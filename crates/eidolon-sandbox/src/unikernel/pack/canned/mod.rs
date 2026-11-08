@@ -1,3 +1,4 @@
+#![allow(clippy::doc_lazy_continuation)]
 //! Canned CI/release rootfs disk with `eidolon-vsock-agent` preinstalled.
 //!
 //! Wraps [`super::bake_agent_then_pack`] / [`super::stage_vsock_agent_into_tree`]

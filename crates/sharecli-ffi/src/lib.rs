@@ -23,6 +23,11 @@ fn rt() -> &'static Runtime {
     RT.get_or_init(|| Runtime::new().expect("tokio runtime"))
 }
 
+/// # Safety
+///
+/// Safe to call from any thread. Does not dereference raw pointers. May spawn a
+/// child process and block the calling thread for roughly 200 ms. Returns a
+/// status code only; no ownership is transferred to or from the caller.
 /// Start the IPC daemon in the background (idempotent).
 /// Returns 0 on success, non-zero on error.
 #[no_mangle]
@@ -56,6 +61,12 @@ fn spawn_ipc_sidecar(path: &str) -> std::io::Result<std::process::Child> {
     cmd.spawn()
 }
 
+/// # Safety
+///
+/// Safe to call from any thread. The returned pointer, if non-null, is owned by
+/// the caller and must be released exactly once with `sharecli_free_string`. A
+/// null return indicates allocation failure; nothing is transferred in that case.
+/// The pointer is not valid after it has been freed.
 /// Returns the IPC socket path as a null-terminated C string.
 /// Caller must free with `sharecli_free_string`.
 #[no_mangle]
@@ -66,6 +77,17 @@ pub extern "C" fn sharecli_ipc_socket_path() -> *mut c_char {
         .unwrap_or(std::ptr::null_mut())
 }
 
+/// # Safety
+///
+/// `ptr` must be either null or a pointer previously returned by one of this
+/// library's allocating functions (`sharecli_ipc_socket_path`,
+/// `sharecli_health_json`, `sharecli_request`, `sharecli_serve_get`) that has
+/// not already been freed. It must be the exact pointer returned, not an
+/// interior or offset pointer, and must not have been allocated by another
+/// allocator or freed by any other function. Passing any other pointer,
+/// including a pointer into a Rust `CString` not produced by this library, is
+/// undefined behavior. A null pointer is accepted and is a no-op. The pointer
+/// must not be used after this call returns.
 /// Free a string allocated by this library.
 ///
 /// # Safety
@@ -79,6 +101,13 @@ pub unsafe extern "C" fn sharecli_free_string(ptr: *mut c_char) {
     }
 }
 
+/// # Safety
+///
+/// Safe to call from any thread that is not already executing inside a Tokio
+/// runtime worker. The returned pointer, if non-null, is owned by the caller and
+/// must be released exactly once with `sharecli_free_string`. A null return
+/// indicates a connection, I/O, or allocation failure; nothing is transferred.
+/// This function blocks the calling thread while performing I/O.
 /// Quick synchronous health snapshot over the IPC socket/TCP.
 /// Returns a JSON string (must free with `sharecli_free_string`) or null on error.
 #[no_mangle]
@@ -121,6 +150,17 @@ pub extern "C" fn sharecli_health_json() -> *mut c_char {
     }
 }
 
+/// # Safety
+///
+/// `request_json` must be either null or a valid, null-terminated C string whose
+/// backing storage remains readable and unchanged for the entire duration of this
+/// call. It need not be valid UTF-8; invalid UTF-8 causes a null return without
+/// dereferencing beyond the terminator. The caller retains ownership of the
+/// input buffer; this function does not take ownership of or free it. The
+/// returned pointer, if non-null, is owned by the caller and must be released
+/// exactly once with `sharecli_free_string`. This function must not be called
+/// from within an active Tokio runtime worker thread, as it blocks on the
+/// runtime and may deadlock or panic.
 /// Send an arbitrary JSON-RPC request string, return the response JSON string.
 /// Caller frees the returned string with `sharecli_free_string`.
 ///
@@ -176,6 +216,16 @@ pub unsafe extern "C" fn sharecli_request(request_json: *const c_char) -> *mut c
     }
 }
 
+/// # Safety
+///
+/// `url` must be either null or a valid, null-terminated C string whose backing
+/// storage remains readable and unchanged for the entire duration of this call.
+/// It need not be valid UTF-8; invalid UTF-8 causes a null return. The caller
+/// retains ownership of the input buffer; this function does not take ownership
+/// of or free it. The returned pointer, if non-null, is owned by the caller and
+/// must be released exactly once with `sharecli_free_string`. A null return
+/// indicates an invalid URL, a transport error, or an allocation failure.
+/// This function may block the calling thread while performing HTTP I/O.
 /// GET an HTTP URL from the tray (e.g. `http://127.0.0.1:9000/healthz`), injecting
 /// W3C `traceparent` when the operator env or active OTel context provides one.
 /// Returns the response body (must free with `sharecli_free_string`) or null on error.
@@ -291,4 +341,45 @@ fn find_sidecar(name: &str) -> Option<String> {
 #[cfg(windows)]
 fn ipc_addr() -> String {
     std::env::var("SHARECLI_IPC_ADDR").unwrap_or_else(|_| "127.0.0.1:27182".to_string())
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn free_string_accepts_null() {
+        // Safety: null is explicitly permitted and is a no-op.
+        unsafe { sharecli_free_string(std::ptr::null_mut()) };
+    }
+
+    #[test]
+    fn request_null_returns_null() {
+        // Safety: null input is explicitly permitted.
+        let result = unsafe { sharecli_request(std::ptr::null()) };
+        assert!(result.is_null());
+    }
+
+    #[test]
+    fn serve_get_null_returns_null() {
+        // Safety: null input is explicitly permitted.
+        let result = unsafe { sharecli_serve_get(std::ptr::null()) };
+        assert!(result.is_null());
+    }
+
+    #[test]
+    fn request_invalid_utf8_returns_null() {
+        // Safety: a null-terminated buffer with invalid UTF-8 is permitted.
+        let bytes = [0xff_u8, 0x00];
+        let result = unsafe { sharecli_request(bytes.as_ptr() as *const c_char) };
+        assert!(result.is_null());
+    }
+
+    #[test]
+    fn socket_path_returns_owned_pointer() {
+        let ptr = sharecli_ipc_socket_path();
+        assert!(!ptr.is_null());
+        // Safety: pointer was returned by this library and is being freed once.
+        unsafe { sharecli_free_string(ptr) };
+    }
 }

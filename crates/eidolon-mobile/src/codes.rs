@@ -1,3 +1,4 @@
+#![allow(clippy::doc_lazy_continuation)]
 //! Documented machine-readable error codes for `eidolon-mobile`.
 //!
 //! These codes appear in [`PhenoError::UnsupportedPlatform`](eidolon_core::PhenoError)
