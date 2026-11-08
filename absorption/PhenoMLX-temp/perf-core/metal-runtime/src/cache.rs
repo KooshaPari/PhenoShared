@@ -357,6 +357,27 @@ mod tests {
         assert_eq!(cache.get(ModelId(1), 0, 1).unwrap().shader_source, "second");
     }
 
+    /// MLX-245: a lookup under a different plan_revision must not hit an entry
+    /// stored under a different revision, even when plan_id and fingerprint_hash
+    /// are identical. plan_revision is the model-version dimension of the key.
+    #[test]
+    fn different_plan_revision_is_a_cache_miss() {
+        let cache = PipelineCache::new(EvictionPolicy::Lru, 4);
+        // Insert under plan_revision = 1.
+        cache.insert(ModelId(42), 1, 999, mk(42, 999, "v1-shader"));
+        assert_eq!(cache.stats().size, 1);
+        // Lookup under plan_revision = 2 — same plan_id and fingerprint_hash,
+        // only the revision differs. Must be a miss.
+        let result = cache.get(ModelId(42), 2, 999);
+        assert!(
+            result.is_none(),
+            "cache must not return a v1 entry when queried with revision=2"
+        );
+        assert_eq!(cache.stats().misses, 1, "miss counter must increment");
+        // Original entry is still reachable under revision = 1.
+        assert!(cache.get(ModelId(42), 1, 999).is_some());
+    }
+
     #[test]
     fn fifo_does_not_refresh_on_get() {
         let cache = PipelineCache::new(EvictionPolicy::Fifo, 2);
