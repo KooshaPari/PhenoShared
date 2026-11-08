@@ -52,10 +52,10 @@ fn fr003_write_serialize_meters_format_and_global_records() {
     record_commit();
     record_discard();
     let after = global_write_serialize_meters();
-    assert!(after.passthrough_writes >= before.passthrough_writes + 1);
-    assert!(after.stages >= before.stages + 1);
-    assert!(after.commits >= before.commits + 1);
-    assert!(after.discards >= before.discards + 1);
+    assert!(after.passthrough_writes > before.passthrough_writes);
+    assert!(after.stages > before.stages);
+    assert!(after.commits > before.commits);
+    assert!(after.discards > before.discards);
 
     let meters = WriteSerializeMeters {
         passthrough_writes: 3,

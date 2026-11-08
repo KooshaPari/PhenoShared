@@ -363,8 +363,7 @@ fn c02_pending_by_agent_groups_staged_paths() {
         .expect("stage");
 
     let by_agent = fs.pending_by_agent().expect("pending by agent");
-    let mut names: Vec<(String, Vec<PathBuf>)> =
-        by_agent.into_iter().map(|(a, rels)| (a, rels)).collect();
+    let mut names: Vec<(String, Vec<PathBuf>)> = by_agent.into_iter().collect();
     names.sort_by(|x, y| x.0.cmp(&y.0));
     assert_eq!(names.len(), 2, "got {names:?}");
     assert_eq!(names[0].0, "agent-d");
@@ -530,7 +529,6 @@ fn c02_cow_mount_handle_session_and_pending() {
     let mut names: Vec<(String, Vec<PathBuf>)> = by_agent
         .into_iter()
         .filter(|(_, rels)| !rels.is_empty())
-        .map(|(a, rels)| (a, rels))
         .collect();
     names.sort_by(|x, y| x.0.cmp(&y.0));
     assert_eq!(names.len(), 2, "got {names:?}");

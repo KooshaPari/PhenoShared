@@ -24,7 +24,7 @@ fn file_config_reloads_on_modify() {
     }
 
     let mut file = NamedTempFile::new().unwrap();
-    write!(file, "value = 1\n").unwrap();
+    writeln!(file, "value = 1").unwrap();
     file.flush().unwrap();
     let path = file.path().to_path_buf();
 
@@ -34,7 +34,7 @@ fn file_config_reloads_on_modify() {
     assert_eq!(config.current().value, 1);
 
     // Modify the file
-    write!(file, "value = 42\n").unwrap();
+    writeln!(file, "value = 42").unwrap();
     file.flush().unwrap();
 
     // Wait for notify to fire

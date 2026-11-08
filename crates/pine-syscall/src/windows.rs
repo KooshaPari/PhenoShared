@@ -35,6 +35,14 @@ impl fmt::Display for WindowsSyscallError {
 impl std::error::Error for WindowsSyscallError {}
 
 /// Named identifier for a Windows NT syscall.
+///
+/// Every variant keeps its real `Nt` prefix: these names ARE the Windows API
+/// names (`NtCreateFile`, `NtClose`, ...), and trace/analysis output is matched
+/// against them by humans and by tooling. Stripping the prefix to satisfy a
+/// naming lint would silently rename a syscall-translation vocabulary and make
+/// the mapping back to the documented NT API ambiguous, so the shared prefix is
+/// deliberate and the lint is suppressed here only.
+#[allow(clippy::enum_variant_names)]
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum WindowsSyscallName {
     /// `NtAccessCheck`

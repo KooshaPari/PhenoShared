@@ -75,6 +75,26 @@ jobs:
           # libxdo-dev: fabric-tray links -lxdo at final link (observed 2026-09-27,
           # rust-lld "unable to find library -lxdo" on run 36342217754).
           sudo apt-get install -y pkg-config libgtk-3-dev libxdo-dev
+      # Zig is a build-time requirement, not a test dependency: the
+      # crates/spawn-core-sys build.rs shells out to `zig build` to produce
+      # crates/spawn-core/zig-out/lib/libspawn_core.a and links it. Without zig
+      # on the runner, `cargo build --workspace` dies with
+      # "failed to run `zig build`: No such file or directory (os error 2)"
+      # (observed on run 42356691632, 2026-11-07). Same pinned+verified block
+      # as coverage.yml and perf-core-ci.yml.
+      - name: Install Zig (Ubuntu)
+        run: |
+          sudo snap install zig --classic --channel=latest/stable || {
+            ZIG_VERSION="0.15.2"
+            ZIG_SHA256="02aa270f183da276e5b5920b1dac44a63f1a49e55050ebde3aecc9eb82f93239"
+            curl --fail --location --retry 5 --retry-connrefused --silent --show-error \
+              "https://ziglang.org/download/${ZIG_VERSION}/zig-x86_64-linux-${ZIG_VERSION}.tar.xz" \
+              -o /tmp/zig.tar.xz
+            echo "${ZIG_SHA256}  /tmp/zig.tar.xz" | sha256sum --check --status
+            sudo tar -xf /tmp/zig.tar.xz -C /usr/local/bin --strip-components=1
+            rm /tmp/zig.tar.xz
+          }
+          zig version
       # One Linux-only gate job (E1.8, 2026-10-01): this job is the whole
       # rust gate — real link proof first (E2.1), then `make check` (E1.6:
       # fmt + clippy -D warnings + unit tests), then the cross-target

@@ -67,10 +67,15 @@ pub extern "C" fn sharecli_ipc_socket_path() -> *mut c_char {
 }
 
 /// Free a string allocated by this library.
+///
+/// # Safety
+///
+/// `ptr` must be null or a pointer previously returned by this library that
+/// has not already been freed.
 #[no_mangle]
-pub extern "C" fn sharecli_free_string(ptr: *mut c_char) {
+pub unsafe extern "C" fn sharecli_free_string(ptr: *mut c_char) {
     if !ptr.is_null() {
-        unsafe { drop(CString::from_raw(ptr)) };
+        drop(CString::from_raw(ptr));
     }
 }
 
@@ -118,16 +123,18 @@ pub extern "C" fn sharecli_health_json() -> *mut c_char {
 
 /// Send an arbitrary JSON-RPC request string, return the response JSON string.
 /// Caller frees the returned string with `sharecli_free_string`.
+///
+/// # Safety
+///
+/// `request_json` must be null or point to a valid NUL-terminated C string.
 #[no_mangle]
-pub extern "C" fn sharecli_request(request_json: *const c_char) -> *mut c_char {
+pub unsafe extern "C" fn sharecli_request(request_json: *const c_char) -> *mut c_char {
     if request_json.is_null() {
         return std::ptr::null_mut();
     }
-    let req_str = unsafe {
-        match CStr::from_ptr(request_json).to_str() {
-            Ok(s) => s.to_owned(),
-            Err(_) => return std::ptr::null_mut(),
-        }
+    let req_str = match CStr::from_ptr(request_json).to_str() {
+        Ok(s) => s.to_owned(),
+        Err(_) => return std::ptr::null_mut(),
     };
 
     let result = rt().block_on(async {
@@ -172,20 +179,22 @@ pub extern "C" fn sharecli_request(request_json: *const c_char) -> *mut c_char {
 /// GET an HTTP URL from the tray (e.g. `http://127.0.0.1:9000/healthz`), injecting
 /// W3C `traceparent` when the operator env or active OTel context provides one.
 /// Returns the response body (must free with `sharecli_free_string`) or null on error.
+///
+/// # Safety
+///
+/// `url` must be null or point to a valid NUL-terminated C string.
 #[no_mangle]
-pub extern "C" fn sharecli_serve_get(url: *const c_char) -> *mut c_char {
+pub unsafe extern "C" fn sharecli_serve_get(url: *const c_char) -> *mut c_char {
     if url.is_null() {
         eprintln!("sharecli_serve_get: null url pointer");
         return std::ptr::null_mut();
     }
-    let url_str = unsafe {
-        match CStr::from_ptr(url).to_str() {
-            Ok(s) => s,
-            Err(err) => {
-                eprintln!("sharecli_serve_get: url is not valid UTF-8 ({err})");
-                return std::ptr::null_mut();
-            },
-        }
+    let url_str = match CStr::from_ptr(url).to_str() {
+        Ok(s) => s,
+        Err(err) => {
+            eprintln!("sharecli_serve_get: url is not valid UTF-8 ({err})");
+            return std::ptr::null_mut();
+        },
     };
     match sharecli::tray_http::get(url_str) {
         Ok(body) => match CString::new(body) {

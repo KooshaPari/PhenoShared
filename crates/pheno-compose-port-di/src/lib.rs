@@ -34,10 +34,10 @@
 #![deny(missing_docs)]
 
 use crate::builder::ContainerBuilder;
-use phenocompose_port_composer::{Composer, NoopComposer};
-use phenocompose_port_publisher::{NoopPublisher, Publisher};
-use phenocompose_port_runtime::{NoopRuntime, Runtime};
-use phenocompose_port_secret::{InMemorySecretStore, SecretStore};
+use phenocompose_port_composer::Composer;
+use phenocompose_port_publisher::Publisher;
+use phenocompose_port_runtime::Runtime;
+use phenocompose_port_secret::SecretStore;
 
 pub mod builder;
 
@@ -107,8 +107,8 @@ impl Default for Container {
     }
 }
 
+#[cfg(test)]
 mod tests {
-    use super::*;
     use super::*;
     use phenocompose_port_composer::{ComposeError, CountingComposer, NoopComposer};
     use phenocompose_port_publisher::{PublishError, RecordingPublisher};

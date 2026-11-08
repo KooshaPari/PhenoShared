@@ -36,8 +36,7 @@ fn c10_l99_dashboard_skeleton_markup() {
 
 /// FR-003 / C10 L99 — loading-state contract documented.
 #[test]
-#[ignore = "PHE-SH-009 pre-existing: deferred fix"]
-#[ignore = "PHE-SH-012 pre-existing: needs skeleton states doc fixture"]
+#[ignore = "PHE-SH-009 / PHE-SH-012 pre-existing: deferred fix; needs skeleton states doc fixture"]
 fn c10_l99_loading_states_doc_present() {
     let doc = fs::read_to_string(repo_root().join("docs/visual/loading-states.md"))
         .expect("read loading-states.md");
