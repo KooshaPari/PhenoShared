@@ -116,6 +116,13 @@ jobs:
         uses: EmbarkStudios/cargo-deny-action@v2
         with:
           arguments: --all-features
+          # The action's container is rust:1.85.0-alpine, so rustup's host
+          # triple is x86_64-unknown-linux-musl and the repo's
+          # rust-toolchain.toml channel resolves to the toolchain name
+          # `1.99.0-x86_64-unknown-linux-musl` (a host-triple suffix, not a
+          # declared musl target). Pre-installing that exact version via the
+          # action's rust-version input keeps the resolution deterministic.
+          rust-version: "1.99.0"
 
   python:
     name: Python
