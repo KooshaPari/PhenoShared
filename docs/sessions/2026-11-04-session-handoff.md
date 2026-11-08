@@ -128,10 +128,14 @@ Rollback, if required checks ever block a legitimate urgent merge:
 gh api -X DELETE repos/KooshaPari/PhenoShared/branches/main/protection/required_status_checks
 ```
 
-The remaining reds below (`Coverage ratchet`, `Cargo Deny`, `Dependency audit`, `OSV`, `Lint & Test`,
+The remaining reds below (`Cargo Deny`, `Dependency audit`, `OSV`, `Lint & Test`,
 `Landing Pages Health`, `Governance`, `Build VitePress`, `E2E daemon binary`) are deliberately **not**
 required: requiring a currently-failing check does not improve quality, it just blocks the repo.
 Fix those first, then add them here one at a time.
+
+`Coverage ratchet` is no longer in that list: it was fixed on 2026-11-07 and now runs the repo's real
+JS/TS unit suite (`tests/*.test.ts`) with `bun` and the v8 coverage provider. Its check name changed
+from `Coverage ratchet` to `JS/TS coverage ratchet (no regression vs .coverage-baseline)`.
 
 | Gate | Run | Failure |
 |---|---|---|
@@ -142,7 +146,7 @@ Fix those first, then add them here one at a time.
 | Trufflehog | 41394778729 | workflow bug: `BASE == HEAD` on push to main |
 | Trunk Check | 41394778716 | pinned `trunk-io/trunk-action` SHA no longer resolves |
 | OpenSSF Scorecard | 41394778682 | pinned `github/codeql-action` SHA no longer resolves |
-| Quality Ratchet | 41394778689 | `npm ci` hits `EUNSUPPORTEDPROTOCOL` on `workspace:*` — repo is bun/pnpm |
+| Quality Ratchet | 41394778689 | FIXED 2026-11-07: `npm ci` hit `EUNSUPPORTEDPROTOCOL` on `workspace:*` (repo is bun) and `npm test` had no `test` script; the job now installs with `bun install --frozen-lockfile` and runs the real JS/TS unit suite with coverage. Check renamed to `JS/TS coverage ratchet (no regression vs .coverage-baseline)` |
 | Nightly CVP | 41839290304 | 27 landing errors / 37 sites (workflow demands `src/pages/index.astro`, only 11 have it); docs-3 placeholder `SUP-<...>` at `docs/atlas/portfolio/topic-proposals.json` index 29 |
 
 Also open: 11 PRs, 25 local branches (several `[gone]`), sibling worktree `PhenoShared-d1-nontq`

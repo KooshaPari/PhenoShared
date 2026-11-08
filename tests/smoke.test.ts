@@ -1,3 +1,5 @@
+import { describe, it, expect } from 'vitest'
+
 /**
  * Smoke test — verifies test harness works
  * Traces to: FR-ORG-AUDIT-2026-04-001
