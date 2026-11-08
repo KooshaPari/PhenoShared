@@ -1,0 +1,1 @@
+import{_ as a,o as t,c,ae as r}from"./chunks/framework.BHxsYbCo.js";const _=JSON.parse('{"title":"Technical Specification","description":"","frontmatter":{},"headers":[],"relativePath":"SPEC.md","filePath":"SPEC.md"}'),i={name:"SPEC.md"};function o(n,e,h,d,s,l){return t(),c("div",null,[...e[0]||(e[0]=[r("",10)])])}const u=a(i,[["render",o]]);export{_ as __pageData,u as default};

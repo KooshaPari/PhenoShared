@@ -43,8 +43,8 @@ now added with `tier`, `architecture`, `archetype`, `language`, and `role`.
 ### B. Removed / not-carried-forward
 | Old entry | Reason |
 |-----------|--------|
-| `pheno-mcp-router` (<REDACTED>/pheno-mcp-router) | Repo **archived** on GitHub AND not in the owned-88; not a current owned substrate. Its substrate classification lives in absorption history, not the active owned catalog. |
-| `phenotype-sdk` (<REDACTED>/phenotype-sdk) | **No such live repo** in `gh repo list`. The real owned SDKs are `phenotype-go-sdk` and `phenotype-python-sdk` (both present and active). Replaced by those two concrete entries. |
+| `pheno-mcp-router` (&lt;REDACTED&gt;/pheno-mcp-router) | Repo **archived** on GitHub AND not in the owned-88; not a current owned substrate. Its substrate classification lives in absorption history, not the active owned catalog. |
+| `phenotype-sdk` (&lt;REDACTED&gt;/phenotype-sdk) | **No such live repo** in `gh repo list`. The real owned SDKs are `phenotype-go-sdk` and `phenotype-python-sdk` (both present and active). Replaced by those two concrete entries. |
 
 ### C. Status corrections
 | Repo | Old status | Corrected | Evidence |

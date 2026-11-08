@@ -62,5 +62,4 @@ candidates:
 notes:
   - evidence_registry.yaml updated with Nanbeige4.2 + DiffusionGemma resolve/query rows.
   - Do not interrupt in-flight local/qwen35-08b full TB2 for these.
-  - Next admit after qwen finishes: still LFM then Ornith on current llama-server;
-    Nanbeige only after nanbeige42 fork binary is built and chat-smoked on :8001.
+  - "Next admit after qwen finishes: still LFM then Ornith on current llama-server; Nanbeige only after nanbeige42 fork binary is built and chat-smoked on :8001."

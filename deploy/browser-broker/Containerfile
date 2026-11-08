@@ -1,0 +1,40 @@
+# Browser broker image.
+#
+# The binary is built outside the image on purpose: this workspace has hundreds
+# of crates and a container build would spend most of its time on unrelated
+# targets. Build first, then build the image:
+#
+#   cargo build --release -p substrate-browser-broker
+#   podman build -t localhost/browser-broker -f deploy/browser-broker/Containerfile .
+
+FROM debian:bookworm-slim
+
+RUN apt-get update \
+ && apt-get install -y --no-install-recommends \
+      ca-certificates \
+      chromium \
+      fonts-liberation \
+      tini \
+ && rm -rf /var/lib/apt/lists/*
+
+COPY target/release/brokerd /usr/local/bin/brokerd
+
+# Run unprivileged. Chrome refuses --no-sandbox in some configurations, so give
+# it a user namespace it owns rather than disabling the sandbox.
+RUN useradd --system --create-home --uid 10001 broker \
+ && mkdir -p /var/lib/browser-broker \
+ && chown -R broker:broker /var/lib/browser-broker
+
+ENV CHROME_BIN=/usr/bin/chromium
+
+USER broker
+WORKDIR /home/broker
+VOLUME ["/var/lib/browser-broker"]
+EXPOSE 8787
+
+ENTRYPOINT ["/usr/bin/tini", "--", "/usr/local/bin/brokerd"]
+
+# Binding 0.0.0.0 is only accepted by brokerd when a token is supplied, so the
+# token is not optional here even though the container is meant to sit behind a
+# tunnel.
+CMD ["--root", "/var/lib/browser-broker", "--bind", "0.0.0.0:8787", "--token-env", "BROKER_TOKEN"]

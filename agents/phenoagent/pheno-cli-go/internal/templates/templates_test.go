@@ -1,6 +1,8 @@
 package templates
 
 import (
+	"io/fs"
+	"sort"
 	"strings"
 	"testing"
 )
@@ -73,21 +75,85 @@ func TestRenderTemplate_InvalidName(t *testing.T) {
 func TestListTemplates(t *testing.T) {
 	templates := ListTemplates()
 
-	if len(templates) != 5 {
-		t.Fatalf("expected 5 templates, got %d", len(templates))
+	if len(templates) == 0 {
+		t.Fatal("expected at least one template, got none")
 	}
 
-	expected := []string{
+	// ListTemplates must be sorted and free of duplicates/empties, otherwise
+	// callers cannot rely on it for deterministic discovery.
+	if !sort.StringsAreSorted(templates) {
+		t.Fatalf("ListTemplates result is not sorted: %v", templates)
+	}
+	for i, name := range templates {
+		if name == "" {
+			t.Fatalf("ListTemplates returned an empty name at index %d", i)
+		}
+		if strings.HasSuffix(name, templateExt) {
+			t.Fatalf("ListTemplates returned %q with a %s suffix; names are bare", name, templateExt)
+		}
+		if i > 0 && templates[i-1] == name {
+			t.Fatalf("ListTemplates returned duplicate template %q", name)
+		}
+	}
+
+	// Every advertised template must actually render.
+	ctx := TemplateContext{
+		RepoName:    "test-repo",
+		Language:    "go",
+		Registry:    "npm",
+		RiskProfile: "low",
+	}
+	for _, name := range templates {
+		out, err := RenderTemplate(name, ctx)
+		if err != nil {
+			t.Fatalf("ListTemplates advertised %q but it failed to render: %v", name, err)
+		}
+		if len(out) == 0 {
+			t.Fatalf("advertised template %q rendered empty", name)
+		}
+	}
+
+	// ListTemplates must cover every embedded renderable template, so a newly
+	// added files/*.tpl can never be silently hidden from discovery.
+	entries, err := fs.ReadDir(TemplateFiles, templateDir)
+	if err != nil {
+		t.Fatalf("failed to read embedded %s dir: %v", templateDir, err)
+	}
+	listed := make(map[string]bool, len(templates))
+	for _, name := range templates {
+		listed[name] = true
+	}
+	for _, entry := range entries {
+		if entry.IsDir() || !strings.HasSuffix(entry.Name(), templateExt) {
+			continue
+		}
+		name := strings.TrimSuffix(entry.Name(), templateExt)
+		if staticOnlyTemplates[name] {
+			continue
+		}
+		if !listed[name] {
+			t.Errorf("embedded template %q is missing from ListTemplates", name)
+		}
+	}
+
+	// The bootstrap pipeline (cmd/bootstrap.go, internal/rollout) hard-codes
+	// these template names, so they must always remain available.
+	for _, name := range []string{
 		"mise.toml",
 		"pre-commit.sh",
 		"pre-push.sh",
 		"ci.yml",
 		"release.yml",
-	}
-
-	for i, name := range expected {
-		if templates[i] != name {
-			t.Fatalf("expected template %s at index %d, got %s", name, i, templates[i])
+	} {
+		found := false
+		for _, have := range templates {
+			if have == name {
+				found = true
+				break
+			}
+		}
+		if !found {
+			t.Errorf("bootstrap template %q is missing from ListTemplates", name)
 		}
 	}
 }

@@ -414,9 +414,9 @@ Phase 2B follows phase2a consolidation and focuses on repairing the workspace fo
 **Acceptance Criteria (Detailed):**
 - [ ] trait ForgecodeGenerator { fn forgecode(&self) -> String; }
 - [ ] impl for String: sha256(utf8_bytes).to_hex()
-- [ ] impl for Vec<T>: concatenate all elements' forgecodes, then sha256
+- [ ] impl for Vec&lt;T>: concatenate all elements' forgecodes, then sha256
 - [ ] impl for HashMap<K,V>: sort by key, concatenate all kv forgecodes, then sha256
-- [ ] impl for Option<T>: "None" or T.forgecode()
+- [ ] impl for Option&lt;T>: "None" or T.forgecode()
 - [ ] impl for custom structs: derive macro or manual impl
 - [ ] Test: determinism (same input → same code)
 - [ ] Test: collision resistance (different inputs → different codes with high probability)
@@ -436,10 +436,10 @@ Phase 2B follows phase2a consolidation and focuses on repairing the workspace fo
 - [ ] 3 stage implementations: PreFlight, Deploy, PostValidation
 - [ ] Tests: stage transitions, guard execution, failure handling
 - [ ] Traces: All tests reference FR-PHASE2B-003-*
-- [ ] Integration: Contracts can be composed (Contract<A> + Contract<B>)
+- [ ] Integration: Contracts can be composed (Contract&lt;A> + Contract&lt;B>)
 
 **Acceptance Criteria (Detailed):**
-- [ ] trait BifrostContract { fn validate(&self) -> Result<()>; fn execute(&mut self) -> Result<()>; }
+- [ ] trait BifrostContract \{ fn validate(&self) -> Result<()>; fn execute(&mut self) -> Result<()>; }
 - [ ] struct PreFlightStage; impl stage validation (preconditions)
 - [ ] struct DeployStage; impl actual deployment logic
 - [ ] struct PostValidationStage; impl post-deploy checks
@@ -458,7 +458,7 @@ Phase 2B follows phase2a consolidation and focuses on repairing the workspace fo
 
 **Acceptance Criteria:**
 - [ ] `crates/phenotype-test-infra/` enhanced with:
-  - [ ] MockBuilder<T> for quick test doubles
+  - [ ] MockBuilder&lt;T> for quick test doubles
   - [ ] PropertyTest trait for property-based testing
   - [ ] SpecTrace macro for linking tests to FR specs
   - [ ] Suite of example implementations (MockDB, MockCache, etc.)
@@ -619,7 +619,7 @@ Phase 2C unblocks the router monitoring system (civ) by implementing missing Web
 
 **Acceptance Criteria (Detailed):**
 - [ ] trait Observer { fn on_route_change(&mut self, route: &Route) -> Result<()>; }
-- [ ] trait Observable { fn subscribe(&mut self, obs: Box<dyn Observer>); fn notify_all(&mut self, route: &Route); }
+- [ ] trait Observable { fn subscribe(&mut self, obs: Box&lt;dyn Observer>); fn notify_all(&mut self, route: &Route); }
 - [ ] Tests: Subscribe observer successfully
 - [ ] Tests: Observer notified on route change
 - [ ] Tests: Multiple observers (all notified)

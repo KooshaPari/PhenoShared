@@ -34,7 +34,7 @@ Per `BOUNDARY_OWNERS.md` 5-check gate.
 
 - AuthKit archived 2026-06-18 (X-09 gate pass); Metron tombstoned 2026-06-19 (repo 404 post-absorption; `gh repo archive` N/A)
 - Registry rows updated in disposition-index batch PR
-- **<REDACTED>/pheno archived 2026-06-19** — W18b fleet manifest scan: 0 external `<REDACTED>/pheno` git deps in consumer Cargo.toml/go.mod (gh search + fleet pull verify); chokepoints all `repointed` or `verified-clean`; registry closeout PR
+- **&lt;REDACTED&gt;/pheno archived 2026-06-19** — W18b fleet manifest scan: 0 external `<REDACTED>/pheno` git deps in consumer Cargo.toml/go.mod (gh search + fleet pull verify); chokepoints all `repointed` or `verified-clean`; registry closeout PR
 
 ## pheno archive gate (W18b-G)
 

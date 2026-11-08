@@ -1,11 +1,11 @@
 // SPDX-License-Identifier: MIT OR Apache-2.0
 //! `phenocompose-secret-file-adapter::file` - the file-backed `SecretStore` impl.
 
-use std::collections::{BTreeMap, HashMap};
+use std::collections::BTreeMap;
 use std::fs;
 use std::io::Write;
 use std::path::{Path, PathBuf};
-use std::sync::{Arc, Mutex};
+use std::sync::Mutex;
 
 use super::error::FileSecretStoreError;
 use phenocompose_port_secret::{SecretStore, SecretStoreError};

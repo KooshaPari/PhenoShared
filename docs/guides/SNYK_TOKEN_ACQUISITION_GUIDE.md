@@ -54,7 +54,7 @@ If you don't have a Snyk account:
 - Click **"Sign up with GitHub"**
 - Authorize Snyk to access your GitHub account
 - Review permissions (Snyk needs read access to repos)
-- Click **"Authorize <REDACTED>"**
+- Click **"Authorize &lt;REDACTED&gt;"**
 - You'll be redirected to Snyk dashboard
 
 **Alternative:** Sign up with email:

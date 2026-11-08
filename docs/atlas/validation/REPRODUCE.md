@@ -10,7 +10,7 @@ python scripts/validate_package.py .
 python scripts/estimate_dag.py work/tasks.json
 ```
 
-For each of unit and integration, use a separate coverage database and run only the corresponding test_assurance_<family>.py module:
+For each of unit and integration, use a separate coverage database and run only the corresponding test_assurance_&lt;family>.py module:
 
 ```sh
 python -m coverage run --branch --source=scripts --data-file=/tmp/atlas-coverage-unit -m unittest discover -s tests -p test_assurance_unit.py

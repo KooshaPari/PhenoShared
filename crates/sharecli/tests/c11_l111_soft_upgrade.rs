@@ -99,8 +99,7 @@ fn c11_l111_semver_cmp_is_total_and_stable() {
 /// FR-003 / C11 L111 — operator docs cover all 4 channels and the
 // in-binary roadmap (C11 L111 spec requirement).
 #[test]
-#[ignore = "PHE-SH-014 pre-existing: needs upgrade subcommand wired"]
-#[ignore = "PHE-SH-009 pre-existing: deferred fix"]
+#[ignore = "PHE-SH-014 / PHE-SH-009 pre-existing: needs upgrade subcommand wired; deferred fix"]
 fn c11_l111_operator_docs_cover_all_four_channels_and_roadmap() {
     let auto = std::fs::read_to_string(repo_root().join("docs/ops/auto-update.md"))
         .expect("read auto-update.md");
@@ -143,8 +142,7 @@ fn c11_l111_operator_docs_cover_all_four_channels_and_roadmap() {
 /// picks it up automatically). We also assert the binary is built
 /// (so the operator can actually run `sharecli upgrade --check`).
 #[test]
-#[ignore = "PHE-SH-014 pre-existing: needs upgrade subcommand wired"]
-#[ignore = "PHE-SH-009 pre-existing: deferred fix"]
+#[ignore = "PHE-SH-014 / PHE-SH-009 pre-existing: needs upgrade subcommand wired; deferred fix"]
 fn c11_l111_upgrade_subcommand_is_wired_in_cli() {
     let main = std::fs::read_to_string(repo_root().join("src/main.rs")).expect("read src/main.rs");
     // The Commands enum must have an Upgrade variant.

@@ -48,6 +48,7 @@ func init() {
 	bootstrapCmd.Flags().StringVar(&bootstrapReposDir, "repos-dir", "", "Directory containing repositories (used with --all)")
 	bootstrapCmd.Flags().StringSliceVar(&bootstrapSkip, "skip", nil, "Comma-separated list of repo names to skip (used with --all)")
 	bootstrapCmd.Flags().StringVar(&bootstrapManifest, "manifest", "", "Path to repos.toml manifest (used with --all; auto-detects if omitted)")
+	rootCmd.AddCommand(bootstrapCmd)
 }
 
 func runBootstrap(cmd *cobra.Command, args []string) error {
