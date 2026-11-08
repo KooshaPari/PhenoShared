@@ -1,7 +1,7 @@
 # phenotype-router-spec — Absorption Record
 
 **Date:** 2026-07-17
-**Source:** <REDACTED>/phenotype-router-spec (25KB, 4 schemas + 5 docs + 3 examples)
+**Source:** &lt;REDACTED&gt;/phenotype-router-spec (25KB, 4 schemas + 5 docs + 3 examples)
 **Target:** phenotype-registry `docs/specs/router-protocol/`
 **Disposition:** ABSORB
 

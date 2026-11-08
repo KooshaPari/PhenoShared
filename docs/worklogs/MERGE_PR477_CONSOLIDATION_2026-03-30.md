@@ -2,7 +2,7 @@
 **Timestamp:** 2026-03-30 16:20:19 UTC-7
 **Merge Commit:** `f0ba6b23b58b20b151bcbbe87eb6730984126696`
 **PR:** [#477 - chore: commit dirty files](https://github.com/KooshaPari/phenotype-infrakit/pull/477)
-**Author:** <REDACTED> (Claude Code co-authored)
+**Author:** &lt;REDACTED&gt; (Claude Code co-authored)
 **Status:** MERGED ✅
 
 ---
@@ -302,7 +302,7 @@ The workspace membership list now clearly documents:
 | **Hash** | `f0ba6b23b58b20b151bcbbe87eb6730984126696` |
 | **Parent** | `c164d0460` (fix(state-machine): add type aliases) |
 | **Date** | 2026-03-30 16:20:19 UTC-7 |
-| **Author** | <REDACTED> <42529354+<REDACTED>@users.noreply.github.com> |
+| **Author** | &lt;REDACTED&gt; <42529354+&lt;REDACTED&gt;@users.noreply.github.com> |
 | **Committer** | GitHub <noreply@github.com> (squash merge) |
 | **PR** | #477 |
 | **Branch** | main |

@@ -100,7 +100,7 @@ service-unit rollback: `sudo cp /tmp/psub-gateway.service.bak /etc/systemd/syste
 
 #### Pre-flight
 
-- [ ] Capture the current image tag: `docker inspect --format '{{.Config.Image}}' psub-gateway`.
+- [ ] Capture the current image tag: `docker inspect --format '&#123;{.Config.Image}}' psub-gateway`.
 - [ ] Snapshot the SQLite store directory (bind-mounted into the container):
 
   ```bash

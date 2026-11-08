@@ -255,7 +255,7 @@ Triaged bugs, feature ideas, and tasks queued for future processing.
 | state | TEXT | NOT NULL, DEFAULT 'open' | Backlog state |
 | external_ref | TEXT | nullable | GitHub issue URL or Plane.so item URL |
 | tags | TEXT | nullable, JSON array | User-defined tags |
-| triaged_by | TEXT | NOT NULL | "user" or "agent:<name>" |
+| triaged_by | TEXT | NOT NULL | "user" or "agent:&lt;name>" |
 | created_at | TEXT | NOT NULL | ISO 8601 |
 | updated_at | TEXT | NOT NULL | ISO 8601 |
 
@@ -290,7 +290,7 @@ Audit log for agent sub-command usage (separate from state-transition audit chai
 | wp_id | INTEGER | FK → work_packages.id, nullable | Context WP |
 | command | TEXT | NOT NULL | Sub-command name (e.g., "triage:classify") |
 | args | TEXT | nullable, JSON | Arguments passed |
-| caller | TEXT | NOT NULL | "user" or "agent:<name>" |
+| caller | TEXT | NOT NULL | "user" or "agent:&lt;name>" |
 | result | TEXT | NOT NULL | "success" or "error" |
 | duration_ms | INTEGER | nullable | Execution time |
 | timestamp | TEXT | NOT NULL | ISO 8601 |

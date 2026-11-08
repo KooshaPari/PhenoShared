@@ -92,7 +92,7 @@ Establish three-layer doctrine (governance / platform / engine) and unblocks lan
 | Surface reduction batch 2 | phenotype-registry | merged [#197](https://github.com/KooshaPari/phenotype-registry/pull/197) |
 | Desktop Electrobun spike | OmniRoute | merged ([#74](https://github.com/KooshaPari/OmniRoute/pull/74)) — ADR-ECO-015 |
 | agentapi root SPEC | agentapi-plusplus | merged ([#536](https://github.com/KooshaPari/agentapi-plusplus/pull/536)) — G15 follow-up |
-| pheno archive gate | <REDACTED>/pheno | **archived** 2026-06-19 — W18b org manifest scan pass |
+| pheno archive gate | &lt;REDACTED&gt;/pheno | **archived** 2026-06-19 — W18b org manifest scan pass |
 
 ## G15–G17 closeout (2026-06-18)
 

@@ -19,7 +19,7 @@ P5-6 is **deferred (wave-closure)**. No code migration is planned in this wave.
 ## Disposition
 
 - **gate-focalpoint** row: `fsm: deferred`, note preserved as "867MB vendor; repo archived; manual HexaKit merge deferred"
-- **gate-focalpoint-p5-6-wave-closure** sidecar: `fsm: deferred`, note: "P5-6 wave-closure 2026-06-20: deferred (wave-closure) - superseded by <REDACTED>/thegent PR #1114 consolidation; revisit after #1114 merges."
+- **gate-focalpoint-p5-6-wave-closure** sidecar: `fsm: deferred`, note: "P5-6 wave-closure 2026-06-20: deferred (wave-closure) - superseded by &lt;REDACTED&gt;/thegent PR #1114 consolidation; revisit after #1114 merges."
 
 ## Consumer chokepoints
 

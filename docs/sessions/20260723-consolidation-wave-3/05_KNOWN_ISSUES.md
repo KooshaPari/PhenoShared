@@ -10,4 +10,4 @@
 - The repository-wide ecosystem validator still reports unrelated metadata drift and an unreachable
   `dispatch-mcp` entry.
 - Forgecode’s configured `origin` is `tailcallhq/forgecode`; the local Airlock push was denied.
-  The snapshot was preserved to <REDACTED>’s `fork` namespace, with no force-push or remote rewrite.
+  The snapshot was preserved to &lt;REDACTED&gt;’s `fork` namespace, with no force-push or remote rewrite.
