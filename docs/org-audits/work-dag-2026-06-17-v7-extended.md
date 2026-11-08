@@ -99,7 +99,7 @@ The 2 ⚠ blocked pillars are infrastructure-level work.
 | Task | Pillar | What to build | Effort | Risk |
 |---|---|---|---|---|
 | **C1** | **L66 (git LFS guidance)** | Add a `docs/git-lfs.md` to root monorepo: (a) required LFS objects for monorepo, (b) `git lfs install --local` setup, (c) `git lfs fetch --all` recovery command, (d) `git lfs push origin <ref>` for stranded monorepo branches, (e) submodule LFS pitfalls. Also add `lfs = "true"` to worktree `.gitconfig`. This unblocks monorepo pushes for all 3 strands. | 3h | LOW |
-| **C2** | **L25 (Monorepo polyrepo trade-off)** | Author ADR-026 evaluating the "monorepo with 170+ submodules" architecture decision. Key questions: (a) what % of submodules are actually built? (b) what % have changed in 6 months? (c) is the dispatch cost worth the consistency benefit? (d) is "create <REDACTED>/repos" the right path? Outcomes may be KEEP / DECOMPOSE / EXTRACT. | 4-6h | HIGH (governance-level) |
+| **C2** | **L25 (Monorepo polyrepo trade-off)** | Author ADR-026 evaluating the "monorepo with 170+ submodules" architecture decision. Key questions: (a) what % of submodules are actually built? (b) what % have changed in 6 months? (c) is the dispatch cost worth the consistency benefit? (d) is "create &lt;REDACTED&gt;/repos" the right path? Outcomes may be KEEP / DECOMPOSE / EXTRACT. | 4-6h | HIGH (governance-level) |
 
 **C1 dependency:** None (doc work). Lands first to enable B1-B3 push.
 **C2 dependency:** None (ADR work). Lands in parallel; outcome may unblock B3 or change the strand-recovery plan.
@@ -246,7 +246,7 @@ Co-Authored-By: Claude Opus 4.7 <noreply@anthropic.com>
 | Stranded branches | 4 (3 monorepo + 1 FocalPoint) | 0 | -4 |
 | WIP branches unlanded | 5 | 0 (or 1 pre-existing) | -4 |
 | ADRs | 23 | 27 (+4) | +4 |
-| Repos on <REDACTED> | 4/4 active | 4/4 active + 2-3 stranded recovered | +2-3 |
+| Repos on &lt;REDACTED&gt; | 4/4 active | 4/4 active + 2-3 stranded recovered | +2-3 |
 
 ---
 

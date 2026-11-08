@@ -24,7 +24,7 @@
 
 ## 1. Executive Summary
 
-**v7 is the post-wrap-up engineering backlog for 2026-06-17.** It converts the 5 WIP branches pushed during the wrap-up session (`work-dag-2026-06-17-wrapup.md` T7, T11) into reviewed PRs; recovers the 4 stranded worktrees flagged in the wrap-up audit (P41, P43); delivers the 9-domain, 71-pillar industry-standard audit framework ratified in ADR-024; bumps the worklog schema from v2.0 to v2.1 (ADR-025, due 2026-06-22) adding the `device:` field per ADR-023's device-fit gate; reclassifies the `HwLedger` app-level repo per ADR-023 Rule 3 (app substrate placement); rebases the cleaned branch onto main and pushes; maintains the work DAG and findings live; and executes the **Dmouse92 → <REDACTED> migration** (Track 8, L5-104) per user directive 2026-06-17 — substrate-absorbing 20 Dmouse92 Phenotype repos into 6 <REDACTED> substrate PRs. The plan is owned by the **forge orchestrator** with **parallel `forge` subagent dispatch** (proven working 2026-06-15 18:40 PDT per AGENTS.md § "Key Commands") for the PR-review, pillar-probe, and migration tracks. Total scope: **8 tracks, 38 PRs (operationally meaningful; 40 in the matrix per § 5), ~2 hours wall clock with 4-way parallelism, ~5 hours sequential.** It supersedes v6 (5 tracks, 21 PRs) which is closed.
+**v7 is the post-wrap-up engineering backlog for 2026-06-17.** It converts the 5 WIP branches pushed during the wrap-up session (`work-dag-2026-06-17-wrapup.md` T7, T11) into reviewed PRs; recovers the 4 stranded worktrees flagged in the wrap-up audit (P41, P43); delivers the 9-domain, 71-pillar industry-standard audit framework ratified in ADR-024; bumps the worklog schema from v2.0 to v2.1 (ADR-025, due 2026-06-22) adding the `device:` field per ADR-023's device-fit gate; reclassifies the `HwLedger` app-level repo per ADR-023 Rule 3 (app substrate placement); rebases the cleaned branch onto main and pushes; maintains the work DAG and findings live; and executes the **Dmouse92 → &lt;REDACTED&gt; migration** (Track 8, L5-104) per user directive 2026-06-17 — substrate-absorbing 20 Dmouse92 Phenotype repos into 6 &lt;REDACTED&gt; substrate PRs. The plan is owned by the **forge orchestrator** with **parallel `forge` subagent dispatch** (proven working 2026-06-15 18:40 PDT per AGENTS.md § "Key Commands") for the PR-review, pillar-probe, and migration tracks. Total scope: **8 tracks, 38 PRs (operationally meaningful; 40 in the matrix per § 5), ~2 hours wall clock with 4-way parallelism, ~5 hours sequential.** It supersedes v6 (5 tracks, 21 PRs) which is closed.
 
 ---
 
@@ -39,10 +39,10 @@
 | **T5** | HwLedger Reclassification | P0 | Execute ADR-023 Rule 3 for HwLedger: reclassify app → substrate (or PAUSED+archival), move underlying libs to canonical substrate | 1 ADR-023 update PR, 1 new substrate PR, 1 HwLedger archival PR, 1 migration plan PR | 4 | ~30 min | orchestrator + 1 parallel forge subagent (substrate extract) | T3 done (L25 monorepo decision informs this) |
 | **T6** | Rebase + Push | P0 | Rebase cleaned branch onto main, run pre-push checks, push to origin | 1 rebase + 1 push (no PR; 0 PR count) | 0 | ~5 min | orchestrator | T1-T5 all done |
 | **T7** | Work DAG Maintenance | ongoing | Keep `findings/71-pillar-2026-06-17*.md` and `plans/2026-06-17-v7-dag-stable.md` live; update on any track-state change | 0 PRs (live doc maintenance) | 0 | ongoing | orchestrator | none (parallel to all) |
-| **T8** | Dmouse92 → <REDACTED> Migration | P0 | Substrate-absorption of 20 Dmouse92 Phenotype repos: 4-cluster analysis → 6 substantive code PRs → archive 18 Dmouse92 repos | 6 PRs (pheno-mcp-router#1-3, phenotype-config#1, phenotype-ops#2, dispatch-mcp#1) | 6 | ~30 min parallel (4 subagents) | orchestrator + 4 parallel forge subagents | none (independent) |
+| **T8** | Dmouse92 → &lt;REDACTED&gt; Migration | P0 | Substrate-absorption of 20 Dmouse92 Phenotype repos: 4-cluster analysis → 6 substantive code PRs → archive 18 Dmouse92 repos | 6 PRs (pheno-mcp-router#1-3, phenotype-config#1, phenotype-ops#2, dispatch-mcp#1) | 6 | ~30 min parallel (4 subagents) | orchestrator + 4 parallel forge subagents | none (independent) |
 | | | | | **Total** | **38** | **~2h parallel / ~5h sequential** | | |
 
-**Track 7** is ongoing maintenance, not a discrete deliverable. Tracks T1-T6 are core work; **Track 8 is the new Dmouse92 → <REDACTED> migration track** added 2026-06-17 20:55 PDT per user directive. Total: 8 tracks, 38 PRs.
+**Track 7** is ongoing maintenance, not a discrete deliverable. Tracks T1-T6 are core work; **Track 8 is the new Dmouse92 → &lt;REDACTED&gt; migration track** added 2026-06-17 20:55 PDT per user directive. Total: 8 tracks, 38 PRs.
 
 **Parallelism summary:** Tracks T1, T2, T3, T4, T7, **T8** can all run in parallel from t=0. T5 depends on T3 (L25 monorepo decision from C2 of `work-dag-2026-06-17-v7-extended.md`). T6 is the final serial step that requires all of T1-T5 to be done. **T8 is independent and was added post-hoc on 2026-06-17 per user directive; it has already been executed in parallel with the other tracks and is recorded as DONE.**
 
@@ -168,15 +168,15 @@ The 4-task reclassification sequence:
 
 **Parallelism within Track 7:** All 6 sub-tasks are independent and can run at any time during v7.
 
-### 3.8 Track 8 — Dmouse92 → <REDACTED> Migration (P0, DONE 2026-06-17 20:55 PDT, L5-104/ADR-029)
+### 3.8 Track 8 — Dmouse92 → &lt;REDACTED&gt; Migration (P0, DONE 2026-06-17 20:55 PDT, L5-104/ADR-029)
 
-**User directive (2026-06-17):** *"focus solely on the dmouse92 aspects of work — merge all over to <REDACTED> → then reconcile/absorb to proper repos. e.g. dispatch-mcp should be deleted as it needs to have all remaining work fully absorbed to substrate (The ver on <REDACTED> had this done yesterday, repeat for any dmouse additions worthwhile to migrate)."*
+**User directive (2026-06-17):** *"focus solely on the dmouse92 aspects of work — merge all over to &lt;REDACTED&gt; → then reconcile/absorb to proper repos. e.g. dispatch-mcp should be deleted as it needs to have all remaining work fully absorbed to substrate (The ver on &lt;REDACTED&gt; had this done yesterday, repeat for any dmouse additions worthwhile to migrate)."*
 
-**Approach:** Substrate-absorption (per ADR-013/022/023) — port the substrate-worthy content of each Dmouse92 repo to the canonical <REDACTED> substrate, archive the Dmouse92 repo.
+**Approach:** Substrate-absorption (per ADR-013/022/023) — port the substrate-worthy content of each Dmouse92 repo to the canonical &lt;REDACTED&gt; substrate, archive the Dmouse92 repo.
 
 | Task | Description | P-level | Owner | Dependencies | Acceptance criteria |
 |---|---|---|---|---|---|
-| **T8.1** | Discovery: list all 26 Dmouse92 repos; cross-reference with <REDACTED> to find 20 Phenotype-related | P0 | orchestrator | none | `gh repo list Dmouse92 --limit 200` returns 26; cross-ref matrix built |
+| **T8.1** | Discovery: list all 26 Dmouse92 repos; cross-reference with &lt;REDACTED&gt; to find 20 Phenotype-related | P0 | orchestrator | none | `gh repo list Dmouse92 --limit 200` returns 26; cross-ref matrix built |
 | **T8.2** | Per-cluster analysis: 4 parallel forge subagents (dispatch-mcp / pheno ADR-012 / 14 bulk / forgecode) | P0 | 4 forge subagents | T8.1 | 4 sub-plans written: dispatch-mcp (527 lines), pheno-ADR-012 (414 lines), bulk-rust-ts (999 lines), forgecode (305 lines) |
 | **T8.3** | Substrate publication: `pheno-mcp-router` (local-only) → `<REDACTED>/pheno-mcp-router` (public) | P0 | subagent E | T8.2 | `gh api repos/<REDACTED>/pheno-mcp-router` returns 200; default branch = `chore/l3-57-pheno-plugin-registry-2026-06-11` |
 | **T8.4** | Substrate ports: 6 modules (`tiers/cost/budget/quota/audit/cost_middleware.py`) → `pheno-mcp-router/src/pheno_mcp_router/` | P0 | subagent E | T8.3 | PR [pheno-mcp-router#1](https://github.com/KooshaPari/pheno-mcp-router/pull/1) opened; 187/187 tests pass |
@@ -191,7 +191,7 @@ The 4-task reclassification sequence:
 
 **Parallelism within Track 8:** T8.2 (4 parallel subagents), T8.3 (publish substrate, blocking for T8.4-T8.5), T8.6-T8.8 (independent, can run parallel), T8.9 (auth switch, single orchestrator), T8.10 (governance docs).
 
-**Result:** 6 PRs opened on <REDACTED>, 18 Dmouse92 repos archived, 0 net content loss. ADR-029 ratified.
+**Result:** 6 PRs opened on &lt;REDACTED&gt;, 18 Dmouse92 repos archived, 0 net content loss. ADR-029 ratified.
 
 **Audit doc:** `findings/2026-06-17-L5-104-dmouse92-to-<REDACTED>.md` (364 lines) — full cross-reference matrix + decision matrix + execution log.
 
@@ -311,7 +311,7 @@ T3.1 (schema) → T3.2 (probe) → T3.3 (scorecard) → T3.4 (render)
 
 ## 5. PR Matrix
 
-All 38 PRs across 8 tracks. PR# column uses estimated GitHub PR numbers (<REDACTED>/`<repo>`); actual numbers assigned on PR-open.
+All 38 PRs across 8 tracks. PR# column uses estimated GitHub PR numbers (&lt;REDACTED&gt;/`<repo>`); actual numbers assigned on PR-open.
 
 | PR# | Title | Repo | Track | Status | Owner | Subagent |
 |---|---|---|---|---|---|---|

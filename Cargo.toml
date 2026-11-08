@@ -38,6 +38,11 @@ members = [
     "crates/phenotype-config-core",
     "crates/phenotype-nvms-adapter",
     "crates/substrate-tui",
+    "crates/substrate-browser",
+    "crates/substrate-browser-cdp",
+    "crates/substrate-browser-broker",
+    "crates/substrate-browser-mcp",
+    "crates/substrate-browser-provider",
     "crates/routing-phenotype-router",
     "crates/teamcomm-smoke",
     "crates/klipdot-capture",
@@ -113,6 +118,7 @@ members = [
     "crates/agileplus-import",
     "crates/phenotype-error-core",
     "crates/focus-always-on",
+    "crates/phenotype-observably-macros",
     "crates/pheno-tracing",
     "crates/focus-templates",
     "crates/focus-events",
@@ -802,7 +808,8 @@ members = [
     # --- E2.4 Pattern A wave 3 batch AX-31 (2026-10-09): 5 simple ---
     # --- E2.4 Pattern A wave 3 batch AX-32 (2026-10-09): dag-scheduler ---
     # --- E2.4 Pattern A wave 3 batch AX-33 (2026-10-09): fabric-capability + fabric-checker ---
-    # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): klipdot + logkit ---]
+    # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): klipdot + logkit ---
+]
 [workspace.package]
 version = "0.3.10"
 edition = "2021"

@@ -1,0 +1,22 @@
+[package]
+name = "hook-entry"
+description = "Shared PreToolUse hook — injects budget+quota line into Claude Code agent context"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+authors.workspace = true
+rust-version.workspace = true
+
+[[bin]]
+name = "hook-entry"
+path = "src/main.rs"
+
+[dependencies]
+anyhow = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+phenotype-tooling-observability = { path = "../../crates/phenotype-tooling-observability" }
+# Needed because `#[instrument]` macro expansion resolves to `tracing` in the
+# crate root, even though the macro is re-exported via the observability prelude.
+tracing = { workspace = true }

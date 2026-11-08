@@ -39,7 +39,6 @@ desktop-linux = []
 # wraps: atspi — https://crates.io/crates/atspi
 # AT-SPI a11y tree find/list/activate (Linux session bus). Not full Appium Desktop.
 # Active only on target_os=linux. Fail-loud when bus/registry unavailable.
-# Pin 0.24: MSRV 1.75 matches workspace; atspi ≥0.25 declares rust-version 1.77.2.
 desktop-linux-atspi = ["dep:atspi"]
 # Phase F: EncryptedVault (AES-GCM + Argon2id). wraps: aes-gcm, argon2, rand_core, sha2
 desktop-security-vault = ["dep:aes-gcm", "dep:argon2", "dep:rand_core", "dep:sha2"]
@@ -84,7 +83,7 @@ windows = { version = "0.62", default-features = false, features = [
 x11rb = { version = "0.14", default-features = false, features = ["xtest"] }
 # wraps: ashpd 0.11 — xdg-desktop-portal Screenshot + RemoteDesktop/Screencast
 ashpd = { version = "0.11", default-features = false, features = ["tokio"] }
-atspi = { version = "0.24", default-features = false, features = ["tokio", "zbus"], optional = true }
+atspi = { version = "0.30", default-features = false, features = ["tokio", "zbus"], optional = true }
 
 [dev-dependencies]
 serde_json.workspace = true

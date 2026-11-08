@@ -1,4 +1,4 @@
-# Q2 Quality Ratchet Template
+# Q2 Quality Ratchet
 name: Quality Ratchet
 
 on:
@@ -15,45 +15,86 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  coverage-ratchet:
-    name: Coverage ratchet
+  js-coverage-ratchet:
+    # The display name states what is ENFORCED, not an aspiration (the same
+    # convention the coverage.yml jobs use).
+    #
+    # WHAT THIS JOB USED TO DO, AND WHY IT COULD NOT MEASURE ANYTHING:
+    #   * `npm ci` fails with `EUNSUPPORTEDPROTOCOL: Unsupported URL Type
+    #     "workspace:": workspace:*`. The root package.json declares
+    #     `"@phenotype/docs": "workspace:*"`, which npm cannot resolve at all.
+    #     The repo is bun-managed (`packageManager: bun@1.3.10`), and
+    #     package-lock.json is stale (it still pins vitest 4.1.9 /
+    #     typescript ~5.6.0 while package.json asks for ^5.1.0 / ^7.0.2).
+    #   * `npm test` failed with `Missing script: "test"`. The root
+    #     package.json had no `test` script.
+    #   * `--coverage` could never have loaded a provider: `@vitest/
+    #     coverage-v8` was not a dependency.
+    #   * `.coverage-baseline` was "0", so the ratchet had never established
+    #     a real baseline. The job had never measured anything.
+    #
+    # WHAT IT MEASURES NOW: the repo's real hermetic JS/TS unit suite
+    # (`tests/*.test.ts`, run by `vitest.unit.config.ts`; see that file for
+    # why the a11y specs and the two known-red conformance files are not in
+    # it). Those tests import only source modules and `node:fs`; no browser,
+    # no dev server, no network. Until this job was repaired, NO CI job ran
+    # them at all.
+    #
+    # This is NOT a duplicate of the Rust coverage floor. That is a separate
+    # gate: `.github/workflows/coverage.yml` runs `cargo tarpaulin
+    # --workspace --fail-under 37` over the Rust workspace. This gate
+    # measures the JS/TS surface under `src/`.
+    #
+    # The baseline is raised by a deliberate commit to `.coverage-baseline`,
+    # NOT by this job writing to main. The old "Update baseline on main"
+    # step could never have worked anyway: this workflow grants only
+    # `contents: read`, so its `git push` was rejected and swallowed by
+    # `|| true`. Keeping a step that tries to push to main from a
+    # pull_request-triggered workflow is a privilege-escalation smell, so it
+    # is gone; the floor now moves only through review.
+    name: JS/TS coverage ratchet (no regression vs .coverage-baseline)
     if: github.actor != 'dependabot[bot]'
     runs-on: ubuntu-24.04
     steps:
       - name: Checkout
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
 
-      - name: Setup language
-        uses: actions/setup-node@v6
+      - name: Setup bun
+        uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2
         with:
-          node-version: 20
-          cache: 'npm'
+          bun-version: 1.3.10
 
       - name: Install
-        run: npm ci
+        run: bun install --frozen-lockfile
 
-      - name: Run tests with coverage
+      - name: Run unit tests with coverage
         run: |
-          # E1.10: without pipefail this step's exit status was `tee`'s (always 0),
-          # so a failing test run could not fail the step. The tee is kept for the
-          # log artifact.
+          # Without pipefail this step's exit status was `tee`'s (always 0),
+          # so a failing test run could not fail the step. The tee is kept for
+          # the log artifact.
           set -o pipefail
-          npm test -- --coverage --coverageReporters=json-summary 2>&1 | tee test-output.log
+          bun run test:coverage 2>&1 | tee test-output.log
 
       - name: Read previous coverage
         id: prev
         run: |
-          if [ -f .coverage-baseline ]; then
-            echo "prev=$(cat .coverage-baseline)" >> $GITHUB_OUTPUT
-          else
-            echo "prev=0" >> $GITHUB_OUTPUT
+          if [ ! -f .coverage-baseline ]; then
+            echo "::error::.coverage-baseline is missing, so the ratchet has no floor to enforce"
+            exit 1
           fi
+          PREV=$(cat .coverage-baseline)
+          echo "prev=$PREV" >> "$GITHUB_OUTPUT"
+          echo "Baseline coverage: $PREV%"
 
       - name: Read current coverage
         id: curr
         run: |
-          CURRENT=$(cat coverage/coverage-summary.json | jq '.total.lines.pct')
-          echo "curr=$CURRENT" >> $GITHUB_OUTPUT
+          if [ ! -f coverage/coverage-summary.json ]; then
+            echo "::error::coverage/coverage-summary.json was not produced"
+            exit 1
+          fi
+          CURRENT=$(jq '.total.lines.pct' coverage/coverage-summary.json)
+          echo "curr=$CURRENT" >> "$GITHUB_OUTPUT"
           echo "Current coverage: $CURRENT%"
 
       - name: Assert coverage ratchet
@@ -65,11 +106,3 @@ jobs:
             exit 1
           fi
           echo "Coverage ratchet: ${PREV}% -> ${CURR}% (no regression)"
-
-      - name: Update baseline on main
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-        run: |
-          echo -n "${{ steps.curr.outputs.curr }}" > .coverage-baseline
-          git add .coverage-baseline
-          git commit -m "ci: bump coverage baseline to ${{ steps.curr.outputs.curr }}%" || true
-          git push || true

@@ -86,6 +86,10 @@ impl MemoryAuditStore {
         self.state.read().await.entries.len()
     }
 
+    pub async fn is_empty(&self) -> bool {
+        self.len().await == 0
+    }
+
     /// Secondary indexes (for tests / introspection).
     pub async fn indexes(&self) -> AuditQueryIndexes {
         self.state.read().await.indexes.clone()

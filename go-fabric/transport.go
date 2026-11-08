@@ -16,14 +16,14 @@ import (
 // maximum. Dead connections are detected on read/write and automatically
 // replaced.
 type ConnPool struct {
-	mu       sync.Mutex
-	addr     string
-	conns    chan net.Conn
-	minIdle  int
-	maxIdle  int
-	timeout  time.Duration
-	closed   bool
-	newConn  func() (net.Conn, error)
+	mu      sync.Mutex
+	addr    string
+	conns   chan net.Conn
+	minIdle int
+	maxIdle int
+	timeout time.Duration
+	closed  bool
+	newConn func() (net.Conn, error)
 }
 
 // ConnPoolConfig configures the connection pool.
@@ -185,12 +185,24 @@ func isConnAlive(conn net.Conn) bool {
 
 // Transport handles the wire protocol encoding/decoding over TCP.
 type Transport struct {
-	pool *ConnPool
+	pool    *ConnPool
+	timeout time.Duration
 }
 
-// NewTransport creates a new wire transport.
+// NewTransport creates a wire transport that uses the pool's configured
+// timeout for every request.
 func NewTransport(pool *ConnPool) *Transport {
-	return &Transport{pool: pool}
+	return &Transport{pool: pool, timeout: pool.timeout}
+}
+
+// NewTransportWithTimeout creates a wire transport with its own per-request
+// timeout. This keeps concurrent requests with distinct deadlines isolated
+// instead of mutating shared pool state.
+func NewTransportWithTimeout(pool *ConnPool, timeout time.Duration) *Transport {
+	if timeout <= 0 {
+		timeout = pool.timeout
+	}
+	return &Transport{pool: pool, timeout: timeout}
 }
 
 // SendRequest sends a JSON request message and reads the JSON response.
@@ -215,7 +227,7 @@ func (t *Transport) SendRaw(line string) (json.RawMessage, error) {
 	}()
 
 	// Set write deadline.
-	_ = conn.SetWriteDeadline(time.Now().Add(t.pool.timeout))
+	_ = conn.SetWriteDeadline(time.Now().Add(t.timeout))
 
 	// Write request line + newline.
 	lineBytes := append([]byte(line), '\n')
@@ -227,7 +239,7 @@ func (t *Transport) SendRaw(line string) (json.RawMessage, error) {
 			return nil, fmt.Errorf("transport: reconnect: %w", retryErr)
 		}
 		conn = conn2
-		_ = conn.SetWriteDeadline(time.Now().Add(t.pool.timeout))
+		_ = conn.SetWriteDeadline(time.Now().Add(t.timeout))
 		if _, err := conn.Write(lineBytes); err != nil {
 			conn.Close()
 			return nil, fmt.Errorf("transport: write: %w", err)
@@ -235,7 +247,7 @@ func (t *Transport) SendRaw(line string) (json.RawMessage, error) {
 	}
 
 	// Set read deadline.
-	_ = conn.SetReadDeadline(time.Now().Add(t.pool.timeout))
+	_ = conn.SetReadDeadline(time.Now().Add(t.timeout))
 
 	// Read response line.
 	reader := bufio.NewReader(conn)

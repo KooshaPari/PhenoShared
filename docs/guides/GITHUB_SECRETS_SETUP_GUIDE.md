@@ -59,7 +59,7 @@ Before starting, verify you're in the right place:
 
 #### Step 1: Click "New organization secret"
 
-1. Go to: https://github.com/organizations/<REDACTED>/settings/secrets/actions
+1. Go to: https://github.com/organizations/&lt;REDACTED&gt;/settings/secrets/actions
 2. Click **"New organization secret"** (green button, top right)
 
 #### Step 2: Fill in Secret Details

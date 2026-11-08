@@ -1,7 +1,7 @@
 //! # Tests for Phenotype Contracts
 
 #[cfg(test)]
-mod tests {
+mod contract_tests {
     use crate::models::{Entity, EntityExt, ValueObject};
     use crate::ports::outbound::{CachePort, Error};
 

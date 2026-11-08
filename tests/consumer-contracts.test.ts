@@ -28,6 +28,23 @@ const __filename = fileURLToPath(import.meta.url)
 const __dirname = resolve(__filename, '..')
 const PACKAGE_ROOT = resolve(__dirname, '..')
 
+// The `@phenotype/design` manifest that governs consumers is the one in the
+// installed package, not the monorepo root package.json. This repo absorbed
+// PhenoDesign's sources (commit "chore: absorb PhenoDesign"), which turned
+// the repo root into a `phenodocs` package.json while `@phenotype/design`
+// remained an external, GitHub-pinned dependency (see root package.json
+// `dependencies`). Consumers resolve `@phenotype/design/css/...` through
+// node_modules, so that is the artifact whose manifest we must pin:
+// otherwise this file asserts a contract against a manifest that no longer
+// describes the published package.
+const DESIGN_MANIFEST = join(
+  PACKAGE_ROOT,
+  'node_modules',
+  '@phenotype',
+  'design',
+  'package.json',
+)
+
 // ---------------------------------------------------------------------------
 // CSS asset paths consumers import
 // ---------------------------------------------------------------------------
@@ -115,9 +132,10 @@ describe('@phenotype/design — CSS asset contracts (consumer-facing)', () => {
 // ---------------------------------------------------------------------------
 
 describe('@phenotype/design — package.json exports contract', () => {
-  const pkg = JSON.parse(
-    readFileSync(join(PACKAGE_ROOT, 'package.json'), 'utf8'),
-  ) as {
+  // Read the manifest of the installed, GitHub-pinned `@phenotype/design`
+  // package, the same artifact a consumer resolves. See DESIGN_MANIFEST
+  // above for why the monorepo root package.json is not the right target.
+  const pkg = JSON.parse(readFileSync(DESIGN_MANIFEST, 'utf8')) as {
     name: string
     version: string
     exports: Record<string, unknown>

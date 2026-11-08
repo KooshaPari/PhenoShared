@@ -42,14 +42,14 @@ type ComputeCapabilities struct {
 
 // AcceleratorCapabilities mirrors the accelerator sub-struct.
 type AcceleratorCapabilities struct {
-	Gpus        []GpuInfo `json:"gpus"`
-	NpuPresent  bool      `json:"npu_present"`
+	Gpus       []GpuInfo `json:"gpus"`
+	NpuPresent bool      `json:"npu_present"`
 }
 
 // GpuInfo is one GPU/NPU entry.
 type GpuInfo struct {
-	Vendor string `json:"vendor"`
-	Model  string `json:"model"`
+	Vendor string  `json:"vendor"`
+	Model  string  `json:"model"`
 	VRAM   *uint64 `json:"vram_bytes"`
 }
 
@@ -66,8 +66,8 @@ type PcieCapabilities struct {
 
 // AudioCapabilities mirrors the audio sub-struct.
 type AudioCapabilities struct {
-	Backend    string `json:"backend"`
-	MidiPorts  uint32 `json:"midi_ports"`
+	Backend   string `json:"backend"`
+	MidiPorts uint32 `json:"midi_ports"`
 }
 
 // InputCapabilities is present for JSON-shape parity.
@@ -93,9 +93,9 @@ type NetworkCapabilities struct {
 
 // NetworkInterface mirrors one network entry.
 type NetworkInterface struct {
-	Name     string `json:"name"`
+	Name      string  `json:"name"`
 	LinkSpeed *uint64 `json:"link_speed_mbps"`
-	RDMA     bool   `json:"rdma_capable"`
+	RDMA      bool    `json:"rdma_capable"`
 }
 
 // TopologyCapabilities mirrors the topology sub-struct.

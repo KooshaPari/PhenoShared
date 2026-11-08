@@ -839,7 +839,7 @@ agents:
       max_input_tokens: 8192
       max_output_tokens: 4096
 - name: adapter-cloudflare-74-@cf-meta-llama-3-1-8b-in
-  model_name: @cf/meta/llama-3.1-8b-instruct
+  model_name: "@cf/meta/llama-3.1-8b-instruct"
   kwargs:
     api_base: https://api.cloudflare.com/client/v4/accounts/${CF_ACCOUNT_ID}/ai/run
     llm_kwargs:

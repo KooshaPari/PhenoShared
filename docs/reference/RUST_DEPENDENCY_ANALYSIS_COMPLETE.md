@@ -1,7 +1,7 @@
 # Rust Workspace Dependency Graph Analysis — Complete Report
 
 **Generated:** 2026-03-30
-**Repository:** <REDACTED>/phenotype-infrakit
+**Repository:** &lt;REDACTED&gt;/phenotype-infrakit
 **Scope:** 28 Rust crates
 **Status:** ✅ READY FOR PHASE 2 EXECUTION
 

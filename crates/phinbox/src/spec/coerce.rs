@@ -111,6 +111,64 @@ mod tests {
         }
     }
 
+    /// Regression: a duplicate coercion path once existed in
+    /// `platform::macos::parse`. It did not trim whitespace, so a padded Choice or
+    /// Boolean answer was rejected here-adjacent. Pin the trimming.
+    #[test]
+    fn coerces_choice_and_boolean_with_surrounding_whitespace() {
+        let choice = FieldSpec::Choice {
+            label: "lang".into(),
+            options: vec![
+                ChoiceOption {
+                    value: "rs".into(),
+                    label: "Rust".into(),
+                    description: None,
+                },
+                ChoiceOption {
+                    value: "py".into(),
+                    label: "Python".into(),
+                    description: None,
+                },
+            ],
+            default_index: None,
+        };
+        assert!(matches!(
+            coerce(&choice, "  python  ").unwrap(),
+            FieldValue::Choice { .. }
+        ));
+
+        let boolean = FieldSpec::Boolean {
+            label: "?".into(),
+            default: None,
+        };
+        assert!(matches!(
+            coerce(&boolean, " YES ").unwrap(),
+            FieldValue::Boolean(true)
+        ));
+        assert!(matches!(
+            coerce(&boolean, " on ").unwrap(),
+            FieldValue::Boolean(true)
+        ));
+        assert!(matches!(
+            coerce(&boolean, " off ").unwrap(),
+            FieldValue::Boolean(false)
+        ));
+    }
+
+    /// Regression: the removed duplicate validated a date by string LENGTH only,
+    /// so `"2026-13-45"` was accepted. A date field must reject an impossible date.
+    #[test]
+    fn rejects_impossible_date_not_just_wrong_length() {
+        let spec = FieldSpec::DateTime {
+            label: "d".into(),
+            default: None,
+            picker_kind: DateTimeKind::Date,
+        };
+        assert!(coerce(&spec, "2026-11-06").is_ok());
+        assert!(coerce(&spec, "2026-13-45").is_err());
+        assert!(coerce(&spec, "2026-02-30").is_err());
+    }
+
     #[test]
     fn coerces_boolean_from_button_labels() {
         let spec = FieldSpec::Boolean {

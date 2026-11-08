@@ -36,7 +36,7 @@ mod tests {
     #[test]
     fn result_ok_type_inference() {
         let r: Result<i32> = Ok(42);
-        assert_eq!(r.unwrap(), 42);
+        assert!(matches!(r, Ok(42)));
     }
 
     #[test]
@@ -49,7 +49,7 @@ mod tests {
     fn automation_result_is_result_alias() {
         let a: AutomationResult<bool> = Ok(true);
         let r: Result<bool> = a;
-        assert!(r.unwrap());
+        assert!(matches!(r, Ok(true)));
     }
 
     #[test]

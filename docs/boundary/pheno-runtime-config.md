@@ -33,7 +33,7 @@
 | ------------------ | -------- |
 | File unreadable    | Log + retain previous good state |
 | Parse error        | Log + retain previous good state |
-| Schema drift       | Compile-time error (typed Reloadable<T>) |
+| Schema drift       | Compile-time error (typed Reloadable&lt;T>) |
 | Watcher absent     | Falls back to SIGHUP-only |
 | SIGHUP on Windows  | No-op (cfg-gated) |
 

@@ -127,16 +127,16 @@ Notes:
 
 ## Immediate next commands
 
-- `git -C /Users/<REDACTED>/CodeProjects/Phenotype/repos/cliproxyapi-plusplus
+- `git -C /Users/&lt;REDACTED&gt;/CodeProjects/Phenotype/repos/cliproxyapi-plusplus
   status --short --branch`
 
-- `git -C /Users/<REDACTED>/CodeProjects/Phenotype/repos/cliproxyapi-plusplus
+- `git -C /Users/&lt;REDACTED&gt;/CodeProjects/Phenotype/repos/cliproxyapi-plusplus
   worktree list`
 
-- `for n in $(gh pr list --repo <REDACTED>/cliproxyapi-plusplus --state open
+- `for n in $(gh pr list --repo &lt;REDACTED&gt;/cliproxyapi-plusplus --state open
 
   --json number --jq '.[].number' --limit 60); do gh pr checks $n --repo
-  <REDACTED>/cliproxyapi-plusplus --json name,state; done` (chunked)
+  &lt;REDACTED&gt;/cliproxyapi-plusplus --json name,state; done` (chunked)
 
 - `gh pr checks <PR> --repo <REDACTED>/agentapi-plusplus --json name,state`
 
@@ -171,12 +171,12 @@ Notes:
 
 - `gh auth status`
 
-- `for n in ...; do gh pr list -R <REDACTED>/cliproxyapi-plusplus --state open;
+- `for n in ...; do gh pr list -R &lt;REDACTED&gt;/cliproxyapi-plusplus --state open;
   done`
 
 - `gh pr checks <n> -R <REDACTED>/cliproxyapi-plusplus --json name,state`
 
-- `gh pr view <n> -R <REDACTED>/cliproxyapi-plusplus --json
+- `gh pr view <n> -R &lt;REDACTED&gt;/cliproxyapi-plusplus --json
   reviewDecision,mergeStateStatus,comments,reviews`
 
 - Repeat for `thegent` and `agentapi-plusplus` once online tokens are valid
@@ -208,7 +208,7 @@ Notes:
   and compare PR/head mapping
 
 - `for b in $(git -C
-  /Users/<REDACTED>/CodeProjects/Phenotype/repos/cliproxyapi-plusplus branch |
+  /Users/&lt;REDACTED&gt;/CodeProjects/Phenotype/repos/cliproxyapi-plusplus branch |
   sed 's/^* //'); do`\n `printf "%s\n" "$b"; done` -> map to PR heads
 
 - stale-close sweep command pattern:
@@ -427,7 +427,7 @@ gh pr comment <REDACTED>/thegent 494 --body "@coderabbitai full review" || true
 
 ### Live execution workflow (when `gh` auth is valid)
 
-- `gh pr list -R <REDACTED>/<repo> --state open --json
+- `gh pr list -R &lt;REDACTED&gt;/<repo> --state open --json
   number,headRefName,mergeStateStatus,reviewDecision,isDraft,updatedAt`
 
 - map each `headRefName` to local non-merged branches

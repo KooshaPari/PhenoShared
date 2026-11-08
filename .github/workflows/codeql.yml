@@ -1,12 +1,9 @@
 name: CodeQL
 
 on:
-# push: # DISABLED - CodeQL does not support Rust
-    branches: ["main"]
-# pull_request: # DISABLED - CodeQL does not support Rust
-    branches: ["main"]
-# schedule: # DISABLED - CodeQL does not support Rust
-    - cron: "23 4 * * 2"
+  # push / pull_request / schedule triggers are DISABLED: CodeQL does not
+  # support Rust. Their child keys were left behind when the triggers were
+  # commented out, which made this file invalid YAML.
   workflow_dispatch:
 
 permissions:

@@ -103,8 +103,10 @@ async fn manager_start_fail_loud_contract() {
 
 #[test]
 fn vnc_port_request_fail_loud() {
-    let mut cfg = VirtualDisplayConfig::default();
-    cfg.vnc_port = Some(5900);
+    let cfg = VirtualDisplayConfig {
+        vnc_port: Some(5900),
+        ..VirtualDisplayConfig::default()
+    };
     let mgr = VirtualDisplayManager::new(cfg).unwrap();
     let err = mgr.start().unwrap_err();
     if cfg!(target_os = "linux") {
@@ -116,8 +118,10 @@ fn vnc_port_request_fail_loud() {
 
 #[test]
 fn wayland_isolation_request_fail_loud() {
-    let mut cfg = VirtualDisplayConfig::default();
-    cfg.wayland_isolation = true;
+    let cfg = VirtualDisplayConfig {
+        wayland_isolation: true,
+        ..VirtualDisplayConfig::default()
+    };
     let mgr = VirtualDisplayManager::new(cfg).unwrap();
     let err = mgr.start().unwrap_err();
     if cfg!(target_os = "linux") {

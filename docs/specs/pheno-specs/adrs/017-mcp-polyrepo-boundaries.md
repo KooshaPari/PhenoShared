@@ -3,7 +3,7 @@ id: ADR-017
 title: MCP Polyrepo Boundaries (Framework / Implementations / Runtime)
 status: accepted
 date: 2026-06-17
-author: <REDACTED>
+author: &lt;REDACTED&gt;
 tags: [mcp, governance, polyrepo, architecture]
 ---
 

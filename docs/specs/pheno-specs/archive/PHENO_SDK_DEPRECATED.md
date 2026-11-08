@@ -1,4 +1,4 @@
-# DEPRECATED - Merged into <REDACTED>/HexaKit/python
+# DEPRECATED - Merged into &lt;REDACTED&gt;/HexaKit/python
 
 This repository has been merged into [HexaKit](https://github.com/KooshaPari/HexaKit) as the `python` language kit.
 
