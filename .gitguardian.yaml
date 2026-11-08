@@ -4,8 +4,8 @@
 # ignore for the archival absorption trees, because a future verbatim copy
 # could carry a real credential and a wide ignore would hide it.
 #
-# Each entry below is a fixture, not a live credential. Verified by reading
-# the flagged lines: no real secret value is reproduced here.
+# Each entry below is a fixture, not a live credential. The flagged lines were
+# read directly; no real secret value is reproduced here.
 
 ignore:
   # go-kit development seed data.

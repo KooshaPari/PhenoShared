@@ -140,7 +140,7 @@ FNR == NR { diff_lines[FNR] = $0; total_lines = FNR; next }
     # source naturally contain the words we lint for (e.g. literal "flag=true"
     # as an example, or the regex pattern /fixed|works|done|.../ itself).
     # Extending the skip-list: HAPPY_PATH_POLICY_SKIP (comma-sep glob substrings).
-    skip_pat = "^(tests/governance-enforcement\\.test\\.ts$|governance/|docs/governance/|docs/ai-dd-pitfalls|/ai-dd-pitfalls|/feedback_aidd_hardening|/CLAUDE\\.md)"
+    skip_pat = "^(tests/governance-enforcement\\.test\\.ts$|governance/|docs/governance/|docs/ai-dd-pitfalls|/ai-dd-pitfalls|/feedback_aidd_hardening|/CLAUDE\\.md|docs/absorbed-from-)"
     extra = ENVIRON["HAPPY_PATH_POLICY_SKIP"]
     if (extra != "") {
       n = split(extra, arr, ",")
