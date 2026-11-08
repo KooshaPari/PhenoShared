@@ -44,10 +44,11 @@ cat "$ROOT"/worker-*.err
 
 cat "$ROOT"/worker-*.jsonl >"$ROOT/all.jsonl"
 
-python3 - "$ROOT" <<'PY'
+python3 - "$ROOT" "$WORKERS" <<'PY'
 import json, sys, glob, os
 
 root = sys.argv[1]
+workers_requested = int(sys.argv[2]) if len(sys.argv) > 2 else 0
 rows = []
 for line in open(os.path.join(root, "all.jsonl")):
     line = line.strip()
@@ -131,12 +132,14 @@ if expired_but_held == len(rows) and rows:
     print("NOTE: TTL shorter than hold; every hold correctly expired mid-flight")
 if leftover:
     print(f"WARN: {leftover} lease record(s) left after revoke")
-if len(holders) < 2:
+if workers_requested > 1 and len(holders) < 2:
     print(
-        "NOTE: only 1 distinct holder. Contention was NOT exercised; a worker that "
-        "revokes and immediately re-grants starves the others. Re-run with jitter_ms > 0 "
-        "(5th argument) to open a yield window."
+        f"FAIL: {workers_requested} workers were requested but only {len(holders)} "
+        "ever held the lease. Contention was not exercised, so the overlap check "
+        "had nothing to compare. Re-run with jitter_ms > 0 (5th argument) to open "
+        "a yield window."
     )
+    status = 1
 print("PASS" if status == 0 else "FAILED")
 sys.exit(status)
 PY
