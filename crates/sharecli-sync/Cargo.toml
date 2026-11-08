@@ -8,8 +8,12 @@ license = "MIT"
 [lints.rust]
 unexpected_cfgs = { level = "warn", check-cfg = ["cfg(loom)"] }
 
+# loom's `futures` feature is NOT enabled: this crate only uses
+# `loom::sync::RwLock`, `loom::model` and `loom::thread`. The feature pulls
+# `pin-utils`, which is unmaintained (RUSTSEC-2026-0441, archived 2026-10-01)
+# and has no safe upgrade, so leaving it off keeps the dependency tree clean.
 [target.'cfg(loom)'.dependencies]
-loom = { version = "0.7", features = ["futures"] }
+loom = { version = "0.7" }
 
 [dev-dependencies]
-loom = { version = "0.7", features = ["futures"] }
+loom = { version = "0.7" }
