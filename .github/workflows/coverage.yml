@@ -89,6 +89,8 @@ jobs:
       #
       # This is a PATH exclusion, not a crate exclusion. It cannot hide
       # untested production code because no crate is built out of `docs/`.
+      # Wider paths are deliberately NOT excluded: the `archives/**` snapshots
+      # still contribute 267 coverable lines, and they stay in the denominator.
       - name: Run coverage gate (root workspace)
         run: |
           cargo tarpaulin \
