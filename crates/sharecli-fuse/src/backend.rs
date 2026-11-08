@@ -474,7 +474,7 @@ mod tests {
             backend: FuseBackend::Kernel,
             diagnostic: None,
         };
-        let cloned = sel.clone();
+        let cloned = sel;
         assert_eq!(sel, cloned);
     }
 

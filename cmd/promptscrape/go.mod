@@ -3,7 +3,7 @@ module github.com/KooshaPari/PhenoShared/cmd/promptscrape
 go 1.26.0
 
 require (
-	github.com/klauspost/compress v1.17.9
+	github.com/klauspost/compress v1.18.7
 	github.com/spf13/cobra v1.8.1
 	modernc.org/sqlite v1.61.0
 )

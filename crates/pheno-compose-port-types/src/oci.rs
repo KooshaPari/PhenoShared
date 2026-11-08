@@ -89,39 +89,30 @@ impl Reference {
     pub fn is_valid(&self) -> bool {
         self.tag.is_some() || self.digest.is_some()
     }
-
-    /// Reconstruct the full reference string.
-    ///
-    /// The output follows the standard OCI convention:
-    /// `<registry>/<repository>:<tag>` or
-    /// `<registry>/<repository>@<digest>` (or both, separated
-    /// by both `:` and `@` if both are present).
-    ///
-    /// This is exposed through the [`std::fmt::Display`] implementation, so
-    /// `reference.to_string()` keeps working without an inherent method that
-    /// would shadow `ToString`.
-    fn to_reference_string(&self) -> String {
-        let mut s = String::new();
-        if let Some(reg) = &self.registry {
-            s.push_str(reg);
-            s.push('/');
-        }
-        s.push_str(&self.repository);
-        if let Some(t) = &self.tag {
-            s.push(':');
-            s.push_str(t);
-        }
-        if let Some(d) = &self.digest {
-            s.push('@');
-            s.push_str(d);
-        }
-        s
-    }
 }
 
+/// Reconstruct the full reference string.
+///
+/// The output follows the standard OCI convention:
+/// `<registry>/<repository>:<tag>` or
+/// `<registry>/<repository>@<digest>` (or both, separated
+/// by both `:` and `@` if both are present).
 impl std::fmt::Display for Reference {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        f.write_str(&self.to_reference_string())
+        if let Some(reg) = &self.registry {
+            f.write_str(reg)?;
+            f.write_str("/")?;
+        }
+        f.write_str(&self.repository)?;
+        if let Some(t) = &self.tag {
+            f.write_str(":")?;
+            f.write_str(t)?;
+        }
+        if let Some(d) = &self.digest {
+            f.write_str("@")?;
+            f.write_str(d)?;
+        }
+        Ok(())
     }
 }
 

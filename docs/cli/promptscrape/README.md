@@ -127,6 +127,14 @@ Or:
 curl -fsSL https://raw.githubusercontent.com/KooshaPari/PhenoShared/main/scripts/uninstall-promptscrape.sh | sh
 ```
 
+Both remove the binary from `~/.local/bin` and `/usr/local/bin` (plus the
+Windows locations). To remove it from a custom install directory instead:
+
+```bash
+promptscrape uninstall --dir /opt/promptscrape/bin
+curl -fsSL .../uninstall-promptscrape.sh | sh -s -- --dir /opt/promptscrape/bin
+```
+
 ## How session resolution works
 
 Session ids are never guessed. They are derived in this order:
@@ -167,14 +175,32 @@ These never reach the output:
 
 | Filtered | Why |
 |---|---|
-| `<environment_context>` | harness-injected context |
+| `<environment_context>`, `<project_context>`, `<environment>` | harness-injected context |
 | `<permissions instructions>` | harness-injected context |
 | `<user_instructions>` | harness-injected context |
 | `<system-reminder>` | harness-injected context |
 | `# AGENTS.md` | injected project context |
 | `<\|...` | harness continuation marker |
+| `[auto] ...` | harness auto-continuation prompt |
+| `You have N incomplete todo(s). ...` | harness todo nudge |
+| `turn N xxxxxxxx...` | synthetic probe filler |
+| `🐝 **Swarm await finished**` | swarm tool notification |
+| `**Background task** ...` | background task notification |
+| `[Attached image associated with the preceding tool result: ...]` | tool-media placeholder |
+| `[Older tool screenshot omitted from history ...]` | tool-media placeholder |
+| `[System reminder: ...]` | harness reminder |
+| `null` / `None` / `undefined` placeholders | a null prompt with no human text |
 | tool results | not human input |
 | rendered agent transcripts | agent output, not human input |
+
+Injected blocks are removed **wherever** they appear, not only at the start: a
+genuine prompt with a `<system-reminder>` appended keeps its own text and loses
+the block. If nothing but harness text remains, the message is dropped. An
+unclosed block is treated as running to the end of the message, because a
+truncated reminder is still not human input.
+
+The filter keys on message position, not on vocabulary, so a human asking "why
+does the harness inject a system reminder" is still recorded.
 
 Codex resumes a session by replaying the whole rendered turn -- the agent's
 bullets, its tool transcripts, and the human's own input -- into a single

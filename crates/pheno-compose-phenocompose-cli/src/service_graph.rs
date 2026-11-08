@@ -150,7 +150,7 @@ pub fn execute_lifecycle_plan<'a, R, F>(
     plan: &'a LifecyclePlan,
     services: &'a BTreeMap<String, Service>,
     mut spawn: F,
-) -> std::result::Result<BTreeMap<String, String>, (RollbackContract, CliError)>
+) -> std::result::Result<BTreeMap<String, String>, Box<(RollbackContract, CliError)>>
 where
     R: Runtime + ?Sized + 'a,
     F: FnMut(&'a str, &'a Service) -> &'a R,
@@ -170,7 +170,7 @@ where
                 containers.insert(intent.service.clone(), container_id.id);
             },
             Err(error) => {
-                return Err((rollback, crate::map_runtime_error(error)));
+                return Err(Box::new((rollback, crate::map_runtime_error(error))));
             },
         }
     }
@@ -328,7 +328,7 @@ mod tests {
             }
         })
         .unwrap_err();
-        let (contract, cli_error) = error;
+        let (contract, cli_error) = *error;
         assert_eq!(cli_error.code, "runtime_backend");
         assert_eq!(contract.created_services(), vec!["a"]);
         contract.rollback(&runtime_a);

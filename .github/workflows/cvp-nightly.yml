@@ -37,8 +37,12 @@ jobs:
         run: |
           mkdir -p ~/.config/nanovms
           echo '{"test": true}' > ~/.config/nanovms/tokens
-          cd crates/nanovms && go run ./cmd/nanovms/ tier list 2>/dev/null || true
-          test -f ~/.config/nanovms/tokens && echo "Config persisted" || echo "Config lost"
+          ( cd crates/nanovms && go run ./cmd/nanovms/ tier list ) 2>/dev/null || true
+          if [ -f ~/.config/nanovms/tokens ]; then
+            echo "Config persisted"
+          else
+            echo "Config lost"
+          fi
 
       - name: Generate evidence
         run: |
@@ -56,7 +60,7 @@ jobs:
           echo "- Status: PASS" >> evidence/cvp-nightly.md
 
       - name: Upload evidence
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: cvp-evidence-nanovms
           path: evidence/
@@ -87,7 +91,7 @@ jobs:
               errors=$((errors + 1))
             fi
           done
-          echo "Total sites: $(ls -d sites/*-landing 2>/dev/null | wc -l)"
+          echo "Total sites: $(find sites -maxdepth 1 -type d -name '*-landing' 2>/dev/null | wc -l)"
           echo "Errors: $errors"
           exit $errors
 

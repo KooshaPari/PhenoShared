@@ -72,11 +72,9 @@ pub fn require_wayland_smoke_host() -> Result<()> {
     {
         Err(PhenoError::unsupported_platform(
             codes::DESKTOP_LINUX_WAYLAND_PORTAL_UNAVAILABLE,
-            format!(
-                "Wayland portal inject smoke requires target_os=linux + \
-                 feature `desktop-linux`; this host cannot run live RemoteDesktop \
-                 inject. See docs/guides/linux-live-smokes.md"
-            ),
+            "Wayland portal inject smoke requires target_os=linux + \
+             feature `desktop-linux`; this host cannot run live RemoteDesktop \
+             inject. See docs/guides/linux-live-smokes.md",
         ))
     }
 }

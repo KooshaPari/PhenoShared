@@ -27,9 +27,9 @@ on:
       language:
         description: 'Detected primary language'
         value: ${{ jobs.detect.outputs.lang }}
-      junit-path:
-        description: 'Path to JUnit XML report'
-        value: ${{ jobs.test.outputs.junit }}
+      # The previous `junit-path` output pointed at a step that did not exist, so
+      # it could only ever be empty. Removed rather than advertised; restore it
+      # with a real report step.
 
 permissions:
   contents: read
@@ -55,7 +55,9 @@ jobs:
     needs: detect
     runs-on: ubuntu-latest
     outputs:
-      junit: ${{ steps.junit.outputs.path }}
+      # No step in this job produces a junit path, so the previous
+      # `steps.junit.outputs.path` reference could only ever be empty.
+      lang: ${{ needs.detect.outputs.lang }}
     defaults:
       run:
         working-directory: ${{ inputs.working-directory }}
@@ -173,7 +175,7 @@ jobs:
             steps.node-junit.outputs.path != '' ||
             steps.python-junit.outputs.path != ''
           )
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: junit-${{ inputs.test-profile }}
           # Pick whichever language produced a non-empty path.

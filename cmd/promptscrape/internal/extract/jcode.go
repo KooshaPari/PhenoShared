@@ -204,8 +204,10 @@ func mergeJCodeJournal(path string, add func(jcodeMessage)) error {
 // jcodeUserText extracts the human-authored text from a user message.
 //
 // A user message may carry several content blocks. Tool results arrive in the
-// same role, so only "text" blocks count, and only the first one: JCode puts the
-// human input first and the tool output after it.
+// same role, so only "text" blocks count, and only the first one that carries
+// human input: JCode puts the human input first and the tool output after it,
+// but tool-media placeholders and auto-continuations can occupy that first slot
+// as well. Such a notice is skipped rather than returned as if a human wrote it.
 func jcodeUserText(m jcodeMessage) string {
 	for _, c := range m.Content {
 		if c.Type != "text" {
@@ -213,6 +215,9 @@ func jcodeUserText(m jcodeMessage) string {
 		}
 		text := strings.TrimSpace(c.Text)
 		if text == "" {
+			continue
+		}
+		if isHarnessNotice(text) {
 			continue
 		}
 		return text

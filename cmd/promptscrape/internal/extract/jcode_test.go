@@ -228,3 +228,46 @@ func TestJCodePromptIDUniqueness(t *testing.T) {
 		t.Fatalf("got %d unique ids, want %d", len(seen), total)
 	}
 }
+
+// TestJCodeUserTextSkipsHarnessNoticeBlocks pins the invariant that a tool-media
+// placeholder or auto-continuation occupying the first text block is not
+// reported as human input, and that a later human block is still recovered.
+func TestJCodeUserTextSkipsHarnessNoticeBlocks(t *testing.T) {
+	tests := []struct {
+		name string
+		msg  jcodeMessage
+		want string
+	}{
+		{
+			name: "notice then human text",
+			msg: jcodeMessage{Content: []jcodeContentBlk{
+				{Type: "text", Text: "[Attached image associated with the preceding tool result: screen]"},
+				{Type: "text", Text: "  what is wrong with this screenshot  "},
+			}},
+			want: "what is wrong with this screenshot",
+		},
+		{
+			name: "only notices",
+			msg: jcodeMessage{Content: []jcodeContentBlk{
+				{Type: "text", Text: "[Older tool screenshot omitted from history to bound transcript size: media_type=image/png]"},
+				{Type: "text", Text: "[Attached image associated with the preceding tool result: screen]"},
+			}},
+			want: "",
+		},
+		{
+			name: "auto continuation then tool result",
+			msg: jcodeMessage{Content: []jcodeContentBlk{
+				{Type: "text", Text: "[auto] Continue the work below. Keep the todo up to date."},
+				{Type: "tool_result", Text: "ok"},
+			}},
+			want: "",
+		},
+	}
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			if got := jcodeUserText(tc.msg); got != tc.want {
+				t.Fatalf("jcodeUserText = %q, want %q", got, tc.want)
+			}
+		})
+	}
+}

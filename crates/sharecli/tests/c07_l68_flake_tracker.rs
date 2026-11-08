@@ -16,7 +16,7 @@
 use std::env;
 use std::fs;
 use std::io::Write;
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 use std::process::Command;
 
 fn workspace_root() -> PathBuf {
@@ -42,9 +42,9 @@ fn python_bin() -> Option<String> {
 
 fn run_tracker(
     py: &str,
-    junit_path: &PathBuf,
-    out_path: &PathBuf,
-    baseline_path: Option<&PathBuf>,
+    junit_path: &Path,
+    out_path: &Path,
+    baseline_path: Option<&Path>,
     args: &[&str],
 ) -> std::process::Output {
     let root = workspace_root();

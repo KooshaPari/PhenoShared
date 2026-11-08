@@ -38,4 +38,9 @@ jobs:
           echo "$PWD" >> "$GITHUB_PATH"
 
       - name: Run actionlint
-        run: actionlint -color
+        # SC2129 is a style suggestion ("group these >> redirects"). Several
+        # scripts append conditionally from many branches, where the grouped
+        # form is less readable than the current one, so it is ignored
+        # deliberately rather than silenced per-file. Everything else is
+        # enforced, including real expression and syntax errors.
+        run: actionlint -color -ignore 'SC2129:style'
