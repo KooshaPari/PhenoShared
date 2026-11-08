@@ -46,9 +46,9 @@ Future-compat: block v0.1.6, proc-macro-error2 v2.0.1
 
 ## Orphaned Crates (absorbed but NOT in workspace members)
 
-| Crate | Source Repo | Issue |
-|-------|-------------|-------|
-| `pheno-registry-python` | PhenoRegistry | Broken path dep to `phenotype-registry` (non-existent). Stays orphaned |
+| Crate | Source Repo | Disposition (2026-10-17) |
+|-------|-------------|-------------------------|
+| `pheno-registry-python` | PhenoRegistry | **REMOVED 2026-10-17.** Broken path dep `phenotype-registry = { path = "../.." }` resolves to PhenoShared root, which is not a `phenotype-registry` crate. Crate is excluded (own `[workspace]` marker) and never built. Functionality is duplicated by `src/ecosystem.rs` inside PhenoShared. Removal implies: any future Python SDK must live in the standalone `phenotype-registry` repo (the canonical home), not in this pool. |
 
 ## Non-Rust Absorbed Content
 
@@ -137,7 +137,7 @@ These reference repos NOT absorbed into PhenoShared:
 
 ### Phase B: Integration Cleanup
 1. ~~Add `phenotype-project-registry` and `phenotype-service-registry` to workspace members~~ DONE
-2. ~~Fix or remove `pheno-registry-python` (broken dep)~~ ORPHANED (harmless)
+2. ~~Fix or remove `pheno-registry-python` (broken dep)~~ REMOVED 2026-10-17 (path dep `"../.."` resolves to PhenoShared root which is not a `phenotype-registry` crate; functionality duplicated by `src/ecosystem.rs`; canonical Python SDK belongs in standalone `phenotype-registry` repo, not in this pool).
 3. ~~Resolve git deps that have local copies (PhenoInfra crates)~~ DONE
 4. ~~Update stale origin URLs in absorbed crate manifests~~ DONE (no stale metadata URLs found)
 5. Absorb remaining repos (ResilienceKit, Authvault, PhenoObservability, substrate) or switch their deps to workspace = true
