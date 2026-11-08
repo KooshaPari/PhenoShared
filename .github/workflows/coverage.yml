@@ -13,6 +13,11 @@ on:
     # The doubled load saturated the hosted-runner queue: on 2026-11-08 three
     # coverage runs sat `queued` for over 40 minutes while the required
     # "Root workspace coverage" check stayed pending on every open PR.
+    #
+    # NOTE: this only takes effect for a branch once this change is on `main`.
+    # A push event evaluates the workflow file at the BRANCH's own HEAD, so
+    # until this lands, every other branch still carries the duplicated push
+    # trigger and still runs the whole-workspace build twice.
     branches: [main]
   pull_request:
     branches: [main]
