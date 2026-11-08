@@ -70,11 +70,31 @@ jobs:
       - name: Install cargo-tarpaulin
         run: cargo install cargo-tarpaulin --locked
 
+      # `--exclude-files 'docs/**'` is required because cargo-tarpaulin builds
+      # its denominator by WALKING THE REPO ROOT for `*.rs` and running its AST
+      # source analysis over every file it finds (`collect_tracemap` ->
+      # `get_source_walker` in tarpaulin's `lib.rs`/`path_utils.rs`), not by
+      # asking what the build actually compiled. Files found there that never
+      # get linked still contribute "coverable" lines, all of them uncovered.
+      #
+      # `docs/` holds archived source snapshots kept as documentation — commit
+      # 6e5fa283a (#761) added 198,954 lines of it, of which 4,809 lines across
+      # 186 files were counted as coverable and 0 covered. `cargo metadata`
+      # reports 0 packages under `docs/`, and no Cargo.toml references those
+      # paths, so nothing under `docs/` is compiled by `--workspace`. Counting
+      # it as untested product code is a measurement artifact, not real
+      # uncovered code: without the exclusion the gate measured 36.43%
+      # (37,685/103,434) and failed; with it, 38.21% (37,685/98,625) on the
+      # same instrumented data.
+      #
+      # This is a PATH exclusion, not a crate exclusion. It cannot hide
+      # untested production code because no crate is built out of `docs/`.
       - name: Run coverage gate (root workspace)
         run: |
           cargo tarpaulin \
             --manifest-path Cargo.toml \
             --workspace \
+            --exclude-files 'docs/**' \
             --fail-under 37 \
             --out Xml --out Json \
             --engine llvm \
