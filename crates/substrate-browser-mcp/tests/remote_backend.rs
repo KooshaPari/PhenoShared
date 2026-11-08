@@ -198,6 +198,7 @@ async fn mutations_are_refused_when_a_daemon_is_configured() {
             session: None,
             holder: None,
             ttl_ms: None,
+            annotations: Default::default(),
         })
         .await
         .expect_err("acquire must not invent a local authority");

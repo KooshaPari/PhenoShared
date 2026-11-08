@@ -261,6 +261,7 @@ async fn acquire_rejects_a_zero_ttl_without_launching() {
             session: None,
             holder: None,
             ttl_ms: Some(0),
+            annotations: Default::default(),
         })
         .await
         .expect_err("ttl_ms must be positive");
@@ -284,6 +285,7 @@ async fn acquire_and_release_with_a_real_browser() {
             session: Some("test".into()),
             holder: Some("mcp-test".into()),
             ttl_ms: Some(60_000),
+            annotations: Default::default(),
         })
         .await
         .expect("acquire with a real browser");

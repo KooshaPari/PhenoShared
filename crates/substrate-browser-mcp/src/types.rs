@@ -8,6 +8,28 @@ use serde::{Deserialize, Serialize};
 use substrate_browser::BrowserError;
 use substrate_browser_broker::BrokerError;
 
+/// Harness-injected annotation: why the caller is making this call.
+///
+/// MCP clients - including the agent harness these tools are registered with -
+/// attach `intent` to **every** tool call. The broker has no use for it, but
+/// the parameter structs are `deny_unknown_fields` so that a typo in a
+/// meaningful field is rejected rather than silently ignored. Without an
+/// explicit slot for these annotations, every `broker_acquire`,
+/// `broker_release` and `broker_purge` call failed with
+/// "unknown field `intent`" before it reached the broker.
+///
+/// Accepted and ignored: the annotation is about the caller, not the lease.
+#[derive(Debug, Clone, Default, Deserialize, schemars::JsonSchema)]
+pub struct HarnessAnnotations {
+    /// Harness-injected call annotation. Accepted and ignored.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub intent: Option<String>,
+    /// Harness-injected flag to re-run a result that was withheld for size.
+    /// Accepted and ignored.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub accept_large_output: Option<bool>,
+}
+
 /// Parameters for `broker_acquire`.
 #[derive(Debug, Clone, Deserialize, schemars::JsonSchema)]
 #[serde(deny_unknown_fields)]
@@ -25,6 +47,9 @@ pub struct AcquireParams {
     /// Lease lifetime in milliseconds; defaults to 60000.
     #[serde(default)]
     pub ttl_ms: Option<u64>,
+    /// Caller-supplied annotations, ignored by the broker.
+    #[serde(flatten)]
+    pub annotations: HarnessAnnotations,
 }
 
 /// Parameters for `broker_release`.
@@ -37,6 +62,9 @@ pub struct ReleaseParams {
     ///
     /// A stale token is refused; the lease is never released on a bad token.
     pub fencing_token: u64,
+    /// Caller-supplied annotations, ignored by the broker.
+    #[serde(flatten)]
+    pub annotations: HarnessAnnotations,
 }
 
 /// Parameters for `broker_purge`.
@@ -49,6 +77,9 @@ pub struct PurgeParams {
     pub profile: String,
     /// Must be `true`. Destructive: deletes every generation of the profile.
     pub confirm: bool,
+    /// Caller-supplied annotations, ignored by the broker.
+    #[serde(flatten)]
+    pub annotations: HarnessAnnotations,
 }
 
 /// One active lease, as reported by `broker_status`.
