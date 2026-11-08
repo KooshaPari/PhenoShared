@@ -184,8 +184,7 @@ fn fr007_dashboard_operator_panel_markup() {
 /// FR-007 / AC-007.41 + AC-007.70 — live serve `/ws` snapshot matches operator envelope contract.
 #[test]
 #[serial_test::serial]
-#[ignore = "PHE-SH-018 pre-existing: e2e flakes under parallel workspace load; serve + websocat WS snapshot misses 20s deadline"]
-#[ignore = "PHE-SH-009 pre-existing: deferred fix"]
+#[ignore = "PHE-SH-018 / PHE-SH-009 pre-existing: e2e flakes under parallel workspace load; serve + websocat WS snapshot misses 20s deadline"]
 fn fr007_dashboard_ws_operator_envelope_e2e() {
     if Command::new("websocat").arg("--version").status().is_err() {
         eprintln!("websocat not available; skipping fr007_dashboard_ws_operator_envelope_e2e");

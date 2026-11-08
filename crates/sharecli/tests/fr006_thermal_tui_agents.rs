@@ -143,6 +143,6 @@ fn fr006_thermal_tui_render_includes_agent_panel() {
     assert!(
         rendered.contains("PID 100  S  claude"),
         "flat thermal render MUST show process state after PID (AC-006.40); got excerpt: {}",
-        &rendered.chars().take(500).collect::<String>()
+        rendered.chars().take(500).collect::<String>()
     );
 }

@@ -12,7 +12,6 @@
 use std::sync::Arc;
 
 use eidolon_core::error::PhenoError;
-use eidolon_core::event::Platform;
 use eidolon_core::security::{
     validate_exec_cmd, validate_sandbox_id, NetworkPolicy, SandboxPolicy, EXEC_CMD_MAX_LEN,
     SANDBOX_ID_MAX_LEN,
@@ -20,7 +19,6 @@ use eidolon_core::security::{
 use eidolon_core::traits::SandboxAutomator;
 use eidolon_core::AutomationEvent;
 use eidolon_sandbox::{codes, SandboxClient};
-use Platform::*;
 
 fn make_client(sandbox_id: &str) -> Arc<dyn SandboxAutomator> {
     Arc::new(SandboxClient::new(sandbox_id).expect("test sandbox_id must validate"))

@@ -11,8 +11,7 @@ fn repo_root() -> PathBuf {
 
 /// FR-003 / C01 L11 — matrix cites a retained llvm-cov snapshot with a numeric line %.
 #[test]
-#[ignore = "PHE-SH-003 pre-existing: needs audit/coverage-snapshots/ fixture"]
-#[ignore = "PHE-SH-003 pre-existing: needs audit/governance fixture"]
+#[ignore = "PHE-SH-003 pre-existing: needs audit/coverage-snapshots/ and audit/governance fixture"]
 fn fr003_coverage_matrix_pins_numeric_line_percent() {
     let matrix = fs::read_to_string(repo_root().join("TEST_COVERAGE_MATRIX.md"))
         .expect("read TEST_COVERAGE_MATRIX.md");
@@ -29,8 +28,7 @@ fn fr003_coverage_matrix_pins_numeric_line_percent() {
 
 /// FR-003 / C01 L11 — retained snapshot is machine-readable and matches the matrix pin.
 #[test]
-#[ignore = "PHE-SH-003 pre-existing: needs audit/coverage-snapshots/ fixture"]
-#[ignore = "PHE-SH-003 pre-existing: needs audit/governance fixture"]
+#[ignore = "PHE-SH-003 pre-existing: needs audit/coverage-snapshots/ and audit/governance fixture"]
 fn fr003_coverage_snapshot_artifact_matches_pin() {
     let path = repo_root().join("audit/coverage-snapshots/fa887e9.coverage-snapshot.json");
     let raw = fs::read_to_string(&path).expect("read coverage snapshot artifact");
@@ -56,8 +54,7 @@ fn fr003_coverage_snapshot_artifact_matches_pin() {
 
 /// FR-003 / C01 L11 — coverage workflow retains compact llvm-cov snapshot artifact.
 #[test]
-#[ignore = "PHE-SH-003 pre-existing: needs audit/coverage-snapshots/ fixture"]
-#[ignore = "PHE-SH-003 pre-existing: needs audit/governance fixture"]
+#[ignore = "PHE-SH-003 pre-existing: needs audit/coverage-snapshots/ and audit/governance fixture"]
 fn fr003_coverage_yml_emits_snapshot_artifact() {
     let workflow = fs::read_to_string(repo_root().join(".github/workflows/coverage.yml"))
         .expect("read coverage.yml");
@@ -92,8 +89,7 @@ fn fr003_coverage_yml_emits_snapshot_artifact() {
 
 /// FR-003 / C01 L11 — Wave18 workspace-broad snapshot retained and matches matrix pin.
 #[test]
-#[ignore = "PHE-SH-003 pre-existing: needs audit/coverage-snapshots/ fixture"]
-#[ignore = "PHE-SH-003 pre-existing: needs audit/governance fixture"]
+#[ignore = "PHE-SH-003 pre-existing: needs audit/coverage-snapshots/ and audit/governance fixture"]
 fn fr003_coverage_workspace_broad_snapshot_matches_pin() {
     let path = repo_root().join("audit/coverage-snapshots/d152eda.coverage-snapshot.json");
     let raw = fs::read_to_string(&path).expect("read d152eda coverage snapshot artifact");
@@ -119,8 +115,7 @@ fn fr003_coverage_workspace_broad_snapshot_matches_pin() {
 
 /// FR-003 / C01 L11 — prior workspace-broad pin snapshot retained as historical evidence.
 #[test]
-#[ignore = "PHE-SH-003 pre-existing: needs audit/coverage-snapshots/ fixture"]
-#[ignore = "PHE-SH-003 pre-existing: needs audit/governance fixture"]
+#[ignore = "PHE-SH-003 pre-existing: needs audit/coverage-snapshots/ and audit/governance fixture"]
 fn fr003_coverage_workspace_pin_retained_as_historical() {
     let path = repo_root().join("audit/coverage-snapshots/5d8dc08.coverage-snapshot.json");
     let raw = fs::read_to_string(&path).expect("read 5d8dc08 coverage snapshot artifact");
